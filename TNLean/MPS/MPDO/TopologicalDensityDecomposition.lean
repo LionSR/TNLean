@@ -26,12 +26,15 @@ In a fixed copy configuration, the diagonal entry of the tensor power of the mul
 matrix is the product of the chosen positive weights.  The remaining factor is the recursive
 terminal operator transported back through the adjoint sequential fusion coisometry.  Taking
 the direct sum over all copy configurations gives the density operator in retained vertical
-coordinates.  Applying the adjoint vertical map reconstructs the original density exactly.
+coordinates.  The two global direct-sum factors commute because the multiplicity block is a
+scalar identity in every configuration.  Applying the adjoint vertical map reconstructs the
+original density exactly.
 
 ## References
 
 * [Cirac--Perez-Garcia--Schuch--Verstraete 2017] arXiv:1606.00608,
-  Proposition 4.13, lines 943--951, and the density identity at line 999
+  Proposition 4.13, lines 943--951, and the density and commutator identities
+  at lines 999--1002
 -/
 
 open scoped Matrix BigOperators Kronecker
@@ -204,6 +207,70 @@ def topologicalDensityOperatorSucc (H : BNTFusionTensorClause M) (N : ℕ) :
   Matrix.reindex (H.verticalCopyChainEquiv N).symm
     (H.verticalCopyChainEquiv N).symm
       (Matrix.blockDiagonal' fun p ↦ H.topologicalDensityBlock p)
+
+/-- The all-label multiplicity-weight factor on a positive retained chain.
+
+In each copy-configuration block this is the selected diagonal coefficient of
+`μ⁽⊗ⁿ⁺¹⁾` times the identity on the simple-bond fiber.
+
+Source: arXiv:1606.00608, lines 999--1002. -/
+def topologicalMultiplicityWeightFactorSucc (H : BNTFusionTensorClause M) (N : ℕ) :
+    Matrix (Fin (N + 1) → Fin H.verticalRetainedDim)
+      (Fin (N + 1) → Fin H.verticalRetainedDim) ℂ :=
+  Matrix.reindex (H.verticalCopyChainEquiv N).symm
+    (H.verticalCopyChainEquiv N).symm
+      (Matrix.blockDiagonal' fun p ↦ H.verticalMultiplicityChainWeight p • 1)
+
+/-- The all-label recursive topological factor on a positive retained chain.
+
+Its block in a copy configuration is `Wᴴ Q W`, where `W` is the retained-row
+sequential fusion coisometry.  Thus `Wᴴ` is the source embedding `\tilde U`.
+
+Source: arXiv:1606.00608, lines 999--1002. -/
+def topologicalRecursiveFactorSucc (H : BNTFusionTensorClause M) (N : ℕ) :
+    Matrix (Fin (N + 1) → Fin H.verticalRetainedDim)
+      (Fin (N + 1) → Fin H.verticalRetainedDim) ℂ :=
+  Matrix.reindex (H.verticalCopyChainEquiv N).symm
+    (H.verticalCopyChainEquiv N).symm
+      (Matrix.blockDiagonal' fun p ↦
+        (H.verticalCopyChainFusionCoisometry p)ᴴ *
+          H.verticalCopyChainProjectorQ p *
+            H.verticalCopyChainFusionCoisometry p)
+
+/-- The all-label density operator is the product of its multiplicity-weight and recursive
+topological factors at every positive chain length.
+
+Source: arXiv:1606.00608, lines 999--1002. -/
+theorem topologicalDensityOperatorSucc_eq_multiplicityWeight_mul_recursiveFactor
+    (H : BNTFusionTensorClause M) (N : ℕ) :
+    H.topologicalDensityOperatorSucc N =
+      H.topologicalMultiplicityWeightFactorSucc N *
+        H.topologicalRecursiveFactorSucc N := by
+  unfold topologicalDensityOperatorSucc topologicalMultiplicityWeightFactorSucc
+    topologicalRecursiveFactorSucc topologicalDensityBlock
+  simp only [Matrix.reindex_apply]
+  rw [Matrix.submatrix_mul_equiv, ← Matrix.blockDiagonal'_mul]
+  congr 1
+  funext p
+  simp
+
+/-- The all-label multiplicity-weight factor commutes with the reconstructed recursive
+topological factor at every positive chain length.
+
+Source: arXiv:1606.00608, commutator identity at lines 1000--1002. -/
+theorem topologicalMultiplicityWeightFactorSucc_commutes_recursiveFactor
+    (H : BNTFusionTensorClause M) (N : ℕ) :
+    H.topologicalMultiplicityWeightFactorSucc N *
+        H.topologicalRecursiveFactorSucc N =
+      H.topologicalRecursiveFactorSucc N *
+        H.topologicalMultiplicityWeightFactorSucc N := by
+  unfold topologicalMultiplicityWeightFactorSucc topologicalRecursiveFactorSucc
+  simp only [Matrix.reindex_apply]
+  rw [Matrix.submatrix_mul_equiv, Matrix.submatrix_mul_equiv,
+    ← Matrix.blockDiagonal'_mul, ← Matrix.blockDiagonal'_mul]
+  congr 1
+  funext p
+  simp
 
 /-- The horizontal matrix obtained by fixing the two simple-bond coordinates of one vertical
 BNT tensor.
@@ -513,6 +580,18 @@ def HasTopologicalDensityDecomposition (H : BNTFusionTensorClause M) : Prop :=
       singleKrausMap (sitewisePhysicalMatrix H.verticalCoisometryᴴ (N + 1))
         (H.topologicalDensityOperatorSucc N) = mpo M (N + 1)
 
+/-- The line-1001 commutator for the same all-label factors at every positive chain length.
+
+The parameter `N` represents source chain length `N + 1`.
+
+Source: arXiv:1606.00608, commutator identity at lines 1000--1002. -/
+def HasTopologicalDensityFactorCommutator (H : BNTFusionTensorClause M) : Prop :=
+  ∀ N : ℕ,
+    H.topologicalMultiplicityWeightFactorSucc N *
+        H.topologicalRecursiveFactorSucc N =
+      H.topologicalRecursiveFactorSucc N *
+        H.topologicalMultiplicityWeightFactorSucc N
+
 /-- A chosen BNT fusion clause supplies the complete positive-length line-999 density
 decomposition, with no additional compatibility hypothesis.
 
@@ -523,6 +602,14 @@ theorem hasTopologicalDensityDecomposition (H : BNTFusionTensorClause M) :
   exact ⟨H.singleKrausMap_verticalCoisometry_mpo_eq_topologicalDensityOperatorSucc N,
     H.singleKrausMap_conjTranspose_verticalCoisometry_topologicalDensityOperatorSucc_eq_mpo
       N⟩
+
+/-- A chosen BNT fusion clause satisfies the all-label line-1001 commutator at every
+positive chain length, with no additional compatibility hypothesis.
+
+Source: arXiv:1606.00608, commutator identity at lines 1000--1002. -/
+theorem hasTopologicalDensityFactorCommutator (H : BNTFusionTensorClause M) :
+    H.HasTopologicalDensityFactorCommutator :=
+  H.topologicalMultiplicityWeightFactorSucc_commutes_recursiveFactor
 
 end MPOTensor.BNTFusionTensorClause
 
@@ -549,5 +636,25 @@ theorem exists_topologicalDensityDecomposition_of_isRFPViaTS
     ∃ H : BNTFusionTensorClause M, H.HasTopologicalDensityDecomposition := by
   obtain ⟨H⟩ := HasBNTFusionTensorClause.of_isRFPViaTS M hHorizontal hM hRFP
   exact ⟨H, H.hasTopologicalDensityDecomposition⟩
+
+/-- **All-label density-factor commutator for an RFP MPDO.**
+
+A horizontal-canonical MPDO satisfying the source renormalization fixed-point condition
+admits one BNT fusion clause that gives both the exact all-label density decomposition and
+the commutator between its multiplicity-weight and reconstructed recursive factors at every
+positive chain length.  No caller-supplied fusion clause or compatibility hypothesis is
+required.
+
+Source: arXiv:1606.00608, density decomposition and commutator at lines 999--1002.
+This theorem makes no length-independence, terminal spectral, projector, or Gibbs-state
+assertion. -/
+theorem exists_topologicalDensityDecomposition_and_factorCommutator_of_isRFPViaTS
+    (M : MPOTensor d D) (hHorizontal : IsHorizontalCF M) (hM : IsMPDO M)
+    (hRFP : IsRFPViaTS M) :
+    ∃ H : BNTFusionTensorClause M,
+      H.HasTopologicalDensityDecomposition ∧ H.HasTopologicalDensityFactorCommutator := by
+  obtain ⟨H⟩ := HasBNTFusionTensorClause.of_isRFPViaTS M hHorizontal hM hRFP
+  exact ⟨H, H.hasTopologicalDensityDecomposition,
+    H.hasTopologicalDensityFactorCommutator⟩
 
 end MPOTensor
