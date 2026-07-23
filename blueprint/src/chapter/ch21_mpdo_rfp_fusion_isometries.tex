@@ -1456,10 +1456,9 @@ separate step.
     This is one pairwise step in the recursion of
     \cite[lines~999--1010]{Cirac2016MPDO_arXiv}.
 
-    \textbf{Scope restriction (one fusion layer):} The arbitrary-chain
-    operator, the sequential fusion circuit, and the commuting Gibbs
-    decomposition are not asserted here.  The remaining statements are
-    recorded in
+    \textbf{Scope restriction (one fusion layer):} This entry does not assert
+    the arbitrary-chain recursion described below, nor the vertical-canonical
+    assembly and commuting Gibbs decomposition.  The remaining statements are recorded in
     \path{docs/paper-gaps/cpsv16_topological_projector_recursion.tex}.
 \end{definition}
 
@@ -1510,6 +1509,84 @@ separate step.
     Theorem~\ref{thm:star_projection_coisometric_transport} show that
     $U_{\alpha,\beta}^{\dagger}Q_{\alpha,\beta}U_{\alpha,\beta}$ is an
     orthogonal projection.
+\end{proof}
+
+\begin{definition}[Recursive fusion histories and their sequential circuit]%
+    \label{def:mpdo_topological_projector_recursion}
+    \lean{MPOTensor.BNTFusionCoisometryFamily.FusionHistoryData}
+    \lean{MPOTensor.BNTFusionCoisometryFamily.fusionChainTensor}
+    \lean{MPOTensor.BNTFusionCoisometryFamily.fusionHistoryWeight}
+    \lean{MPOTensor.BNTFusionCoisometryFamily.recursiveProjectorQ}
+    \lean{MPOTensor.BNTFusionCoisometryFamily.sequentialFusionCoisometry}
+    \leanok
+    \uses{def:mpdo_bnt_fusion_coisometry_family}
+    Fix an initial label $\alpha$ and append labels successively along a
+    finite chain.  A fusion history records, at every step, the preceding
+    final label, the new final label, and an index in the corresponding
+    multiplicity space.  If $h$ ends at $\gamma(h)$, let
+    \[
+      w(h)=\prod_r
+        (\chi_{\gamma_{r-1},\beta_r,\gamma_r})_{k_r,k_r}.
+    \]
+    For terminal bond operators $P_\gamma$, define
+    \[
+      Q_N(P)=\bigoplus_h w(h)P_{\gamma(h)}.
+    \]
+    The associated sequential map is obtained by tensoring the preceding
+    map with the identity on the newly appended bond and then applying the
+    active pairwise fusion coisometry in every preceding-history block.
+    This is the recursively typed operator and circuit in
+    \cite[lines~999--1010]{Cirac2016MPDO_arXiv}.
+\end{definition}
+
+\begin{theorem}[Fixed-label recursive fusion identity]%
+    \label{thm:mpdo_topological_projector_recursion}
+    \lean{MPOTensor.BNTFusionCoisometryFamily.%
+        sequentialFusionCoisometry_mul_conjTranspose}
+    \lean{MPOTensor.BNTFusionCoisometryFamily.%
+        sequentialFusionCoisometry_mul_fusionChainTensor_mul_conjTranspose}
+    \lean{MPOTensor.BNTFusionCoisometryFamily.%
+        sequentialFusionCoisometry_mul_physTraceTransfer_mul_conjTranspose}
+    \lean{MPOTensor.BNTFusionCoisometryFamily.recursiveProjectorQ_isStarProjection}
+    \leanok
+    \uses{def:mpdo_topological_projector_recursion,
+        thm:mpdo_bnt_length_independent_zipper}
+    For every initial label and every finite list of appended labels, the
+    sequential fusion map $\widetilde U_N$ is a coisometry.  Letter by letter,
+    it carries the left-associated product tensor to the recursive direct sum:
+    \[
+      \widetilde U_N M_{\alpha,\boldsymbol\beta}^{i,j}
+        \widetilde U_N^\dagger
+      =Q_N\bigl((M_\gamma^{i,j})_\gamma\bigr).
+    \]
+    Consequently, after closing the horizontal operator index,
+    \[
+      \widetilde U_N
+        \operatorname{tr}(M_{\alpha,\boldsymbol\beta})
+        \widetilde U_N^\dagger
+      =Q_N\bigl((\operatorname{tr}(M_\gamma))_\gamma\bigr).
+    \]
+    If the positive trace-power coefficients are independent of the positive
+    chain length and the terminal matrices are self-adjoint idempotents, then
+    this recursive operator is self-adjoint and idempotent.
+
+    \textbf{Scope restriction (fixed initial label):} The theorem proves the
+    recursive fusion and terminal-trace identities for each initial BNT label.
+    It does not yet assemble the vertical-canonical coefficient over all
+    initial labels, identify the resulting matrix with the physical MPDO, or
+    prove the source commutator.  These remaining steps are recorded in
+    \path{docs/paper-gaps/cpsv16_topological_projector_recursion.tex}.
+\end{theorem}
+\begin{proof}\leanok
+    The empty chain is the unique empty fusion history.  For the induction
+    step, tensor the preceding coisometry with the identity on the new bond,
+    apply the induction hypothesis, and then apply the pairwise fusion
+    identity in each history block.  Reindexing the nested direct sum adjoins
+    the new final label and multiplicity coordinate to the preceding history.
+    Summing the letterwise equality over equal physical indices gives the
+    terminal-trace equality.  Under length independence every accumulated
+    coefficient $w(h)$ is one, so self-adjointness and idempotence hold block
+    by block.
 \end{proof}
 
 \begin{definition}[Full-support specialization of one fusion layer]%
