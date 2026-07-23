@@ -2826,6 +2826,32 @@ specialization of that Appendix~D definition.
     $P_{a,b}$ and $P_{b,a}$, which gives the displayed product of ranks.
 \end{proof}
 
+\begin{theorem}[Project-local one-site zero convention]
+    \label{thm:project_local_one_site_parent_hamiltonian_zero}
+    \lean{MPSTensor.parentHamiltonian_two_one_eq_zero}
+    \lean{MPSTensor.parentHamiltonianGroundSpaceES_two_one_eq_top}
+    \leanok
+    For the convention that an $L$-site interaction is zero when $L>N$, the
+    two-site parent Hamiltonian on a one-site periodic chain satisfies
+    \[
+        H_2^{(1)}=0,
+        \qquad
+        \ker H_2^{(1)}=\mathbb C^d.
+    \]
+    This convention is local to the present development.  The two-site terms
+    in \cite[Section~III]{Beigi2012Classification}, source lines 451--514, are
+    not assigned an action when both site labels denote the same site.  The
+    nearest-neighbor condition in
+    \cite[Theorem~3.10(iii)]{Cirac2016MPDO_arXiv}, source lines 534--540, only
+    concerns $N>2$.
+\end{theorem}
+
+\begin{proof}\leanok
+    Since $2>1$, the single translated interaction is zero by the stated
+    convention.  Its sum is therefore zero, and the kernel of the zero
+    operator is the full one-site Hilbert space.
+\end{proof}
+
 \begin{theorem}[Classification of eventually constant weighted sector graphs]
     \label{thm:beigi_eventually_constant_sector_graph}
     \lean{FiniteWeightedDigraph.cyclicEdgeWeight_eq_one}

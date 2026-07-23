@@ -147,6 +147,19 @@ noncomputable def parentHamiltonianGroundSpaceES (A : MPSTensor d D)
   (LinearMap.ker (parentHamiltonian A L N)).map
     (WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).symm.toLinearMap
 
+/-- The one-site ground space for the two-site parent interaction is the full
+one-site Hilbert space under the project's zero convention.
+
+**Scope restriction (one-site chain):** This is a consequence of
+`parentHamiltonian_two_one_eq_zero`. Beigi, arXiv:1105.1019v2, Section III,
+source lines 451--514, does not specify a one-site action for its two-site
+interaction, while CPSV16, arXiv:1606.00608, Theorem 3.10(iii), source lines
+534--540, only uses chain lengths greater than two. This restriction is documented
+in `docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex`. -/
+@[simp] theorem parentHamiltonianGroundSpaceES_two_one_eq_top (A : MPSTensor d D) :
+    parentHamiltonianGroundSpaceES A 2 1 = ⊤ := by
+  simp [parentHamiltonianGroundSpaceES]
+
 /-- The Euclidean-space representative of the parent Hamiltonian. -/
 noncomputable def parentHamiltonianES (A : MPSTensor d D) (L N : ℕ) :
     EuclideanSpace ℂ (Cfg d N) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d N) :=
