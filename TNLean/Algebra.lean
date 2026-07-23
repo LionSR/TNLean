@@ -40,6 +40,7 @@ import TNLean.Algebra.OperatorBlock
 import TNLean.Algebra.OperatorSchmidt
 import TNLean.Algebra.OrthogonalProjection
 import TNLean.Algebra.PerronFrobenius
+import TNLean.Algebra.PiSigmaEquiv
 import TNLean.Algebra.PiTensorProductPhase
 import TNLean.Algebra.PosSemidefSupport
 import TNLean.Algebra.ProjectionTriangularTrace
