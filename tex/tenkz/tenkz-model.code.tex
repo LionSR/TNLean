@@ -1,34 +1,155 @@
-% Input: validated picture, atom, connection, closure, region, and annotation data.
+% Input: validated picture, atom, wire, mark, and frame declarations from front ends.
 % Output: normalized semantic records addressable by picture-local stable identifiers.
-% Owned state: the current resolved-model record sequences and validation phase flag.
-% Invariants: topology is immutable after validation; records contain no user syntax.
+% Owned state: the record store, class sequences, id counter, and validation phase flag.
+% Invariants: records contain no unparsed user syntax; topology is immutable after validation.
 % Next stage: style and geometry resolve metrics and silhouettes from these records.
+%
+% The record classes follow LANGUAGE-1.0.md: PICTURE, ATOM, WIRE, MARK, plus
+% frame records.  Every record is a flat field set stored under "id/field";
+% ids are picture-local ("atom-3", "wire-1", ...), allocated in declaration
+% order.  A record is written exactly once: after \__tenkz_model_validate:
+% the constructors refuse with a coded error until the picture group ends.
 
 \ExplSyntaxOn
-\seq_new:N \l__tenkz_model_atoms_seq
-\seq_new:N \l__tenkz_model_connections_seq
-\seq_new:N \l__tenkz_model_closures_seq
-\seq_new:N \l__tenkz_model_regions_seq
-\seq_new:N \l__tenkz_model_annotations_seq
+
+\seq_new:N \l__tenkz_model_atom_seq
+\seq_new:N \l__tenkz_model_wire_seq
+\seq_new:N \l__tenkz_model_mark_seq
+\seq_new:N \l__tenkz_model_frame_seq
+\prop_new:N \l__tenkz_model_record_prop   % "id/field" -> normalized value
+\prop_new:N \l__tenkz_model_class_prop    % "id" -> class word
+\prop_new:N \l__tenkz_model_picture_prop  % picture-level fields
+\int_new:N  \l__tenkz_model_next_int
 \bool_new:N \l__tenkz_model_validated_bool
-\cs_new_protected:Npn \__tenkz_model_reset:
-  {
-    \seq_clear:N \l__tenkz_model_atoms_seq
-    \seq_clear:N \l__tenkz_model_connections_seq
-    \seq_clear:N \l__tenkz_model_closures_seq
-    \seq_clear:N \l__tenkz_model_regions_seq
-    \seq_clear:N \l__tenkz_model_annotations_seq
-    \bool_set_false:N \l__tenkz_model_validated_bool
-  }
-\cs_new_protected:Npn \__tenkz_model_validate:
-  { \bool_set_true:N \l__tenkz_model_validated_bool }
+\tl_new:N   \l__tenkz_model_last_tl       % id of the most recent record
+\tl_new:N   \l__tenkz_model_scratch_tl
+
 \msg_new:nnn {tenkz}{model-frozen}
   { [TKZ-MODEL-FROZEN]~Topology~cannot~change~after~validation. }
-\cs_new_protected:Npn \__tenkz_model_record_atom:n #1
+\msg_new:nnn {tenkz}{model-malformed}
+  { [TKZ-MODEL-MALFORMED]~A~#1~record~field~must~be~key=value;~got~'#2'. }
+\msg_new:nnn {tenkz}{model-incomplete}
+  { [TKZ-MODEL-INCOMPLETE]~A~#1~record~requires~the~field~'#2'. }
+
+\cs_new_protected:Npn \__tenkz_model_reset:
+  {
+    \seq_clear:N \l__tenkz_model_atom_seq
+    \seq_clear:N \l__tenkz_model_wire_seq
+    \seq_clear:N \l__tenkz_model_mark_seq
+    \seq_clear:N \l__tenkz_model_frame_seq
+    \prop_clear:N \l__tenkz_model_record_prop
+    \prop_clear:N \l__tenkz_model_class_prop
+    \prop_clear:N \l__tenkz_model_picture_prop
+    \int_zero:N \l__tenkz_model_next_int
+    \bool_set_false:N \l__tenkz_model_validated_bool
+    \tl_clear:N \l__tenkz_model_last_tl
+    \cs_set_eq:NN \__tenkz_model_record_atom:n \__tenkz_model_record_atom_live:n
+    \cs_set_eq:NN \__tenkz_model_record_wire:n \__tenkz_model_record_wire_live:n
+    \cs_set_eq:NN \__tenkz_model_record_mark:n \__tenkz_model_record_mark_live:n
+    \cs_set_eq:NN \__tenkz_model_record_frame:n \__tenkz_model_record_frame_live:n
+    \cs_set_eq:NN \__tenkz_model_record_picture:n \__tenkz_model_record_picture_live:n
+  }
+
+% Shared constructor: #1 class word, #2 comma list of required fields,
+% #3 keyval payload.  Values keep one brace group of protection and are
+% stored unexpanded; keys are trimmed by the keyval parser.
+\cs_new_protected:Npn \__tenkz_model_record:nnn #1#2#3
   {
     \bool_if:NTF \l__tenkz_model_validated_bool
       { \msg_error:nn {tenkz}{model-frozen} }
-      { \seq_put_right:Nn \l__tenkz_model_atoms_seq {#1} }
+      {
+        \int_incr:N \l__tenkz_model_next_int
+        \tl_set:Ne \l__tenkz_model_last_tl
+          { #1 - \int_use:N \l__tenkz_model_next_int }
+        \seq_put_right:cV { l__tenkz_model_ #1 _seq } \l__tenkz_model_last_tl
+        \prop_put:NVn \l__tenkz_model_class_prop \l__tenkz_model_last_tl {#1}
+        \keyval_parse:nnn
+          { \msg_error:nnnn {tenkz}{model-malformed} {#1} }
+          { \__tenkz_model_put_field:nn }
+          {#3}
+        \clist_map_inline:nn {#2}
+          {
+            \prop_if_in:NeF \l__tenkz_model_record_prop
+              { \l__tenkz_model_last_tl / ##1 }
+              { \msg_error:nnnn {tenkz}{model-incomplete} {#1} {##1} }
+          }
+      }
   }
+\cs_new_protected:Npn \__tenkz_model_put_field:nn #1#2
+  {
+    \prop_put:Nen \l__tenkz_model_record_prop
+      { \l__tenkz_model_last_tl / #1 } {#2}
+  }
+
+% Public-to-the-package constructors, one per record class.  Field
+% requirements are the LANGUAGE-1.0 minima a record cannot exist without;
+% richer validation belongs to the language stage that produced the
+% declaration.
+\cs_new_protected:Npn \__tenkz_model_record_atom_live:n #1
+  { \__tenkz_model_record:nnn {atom} {kind} {#1} }
+\cs_new_protected:Npn \__tenkz_model_record_wire_live:n #1
+  { \__tenkz_model_record:nnn {wire} {kind} {#1} }
+\cs_new_protected:Npn \__tenkz_model_record_mark_live:n #1
+  { \__tenkz_model_record:nnn {mark} {form} {#1} }
+\cs_new_protected:Npn \__tenkz_model_record_frame_live:n #1
+  { \__tenkz_model_record:nnn {frame} {map} {#1} }
+
+% Picture-level fields merge; the picture is a single record without an id.
+\cs_new_protected:Npn \__tenkz_model_record_picture_live:n #1
+  {
+    \bool_if:NTF \l__tenkz_model_validated_bool
+      { \msg_error:nn {tenkz}{model-frozen} }
+      {
+        \keyval_parse:nnn
+          { \msg_error:nnnn {tenkz}{model-malformed} {picture} }
+          { \__tenkz_model_put_picture_field:nn }
+          {#1}
+      }
+  }
+\cs_new_protected:Npn \__tenkz_model_put_picture_field:nn #1#2
+  { \prop_put:Nnn \l__tenkz_model_picture_prop {#1} {#2} }
+
+% The public names bind to the live bodies; validate rebinds them to the
+% refuser and reset restores them, so reset always yields a writable store.
+\cs_new_eq:NN \__tenkz_model_record_atom:n \__tenkz_model_record_atom_live:n
+\cs_new_eq:NN \__tenkz_model_record_wire:n \__tenkz_model_record_wire_live:n
+\cs_new_eq:NN \__tenkz_model_record_mark:n \__tenkz_model_record_mark_live:n
+\cs_new_eq:NN \__tenkz_model_record_frame:n \__tenkz_model_record_frame_live:n
+\cs_new_eq:NN \__tenkz_model_record_picture:n \__tenkz_model_record_picture_live:n
+
+% Validation freezes the store for the rest of the picture group: the
+% constructors are LOCALLY rebound to the refuser, so the enclosing
+% \group_end: of the picture environment restores them for the next
+% picture.  Freezing is structural, not advisory.
+\cs_new_protected:Npn \__tenkz_model_refuse:n #1
+  { \msg_error:nn {tenkz}{model-frozen} }
+\cs_new_protected:Npn \__tenkz_model_validate:
+  {
+    \bool_set_true:N \l__tenkz_model_validated_bool
+    \cs_set_eq:NN \__tenkz_model_record_atom:n    \__tenkz_model_refuse:n
+    \cs_set_eq:NN \__tenkz_model_record_wire:n    \__tenkz_model_refuse:n
+    \cs_set_eq:NN \__tenkz_model_record_mark:n    \__tenkz_model_refuse:n
+    \cs_set_eq:NN \__tenkz_model_record_frame:n   \__tenkz_model_refuse:n
+    \cs_set_eq:NN \__tenkz_model_record_picture:n \__tenkz_model_refuse:n
+  }
+
+% Accessors for the downstream stages.  \__tenkz_model_get:nnN leaves
+% \q_no_value in the target when the field is absent; the caller decides
+% whether absence is an error at its own altitude.
+\cs_new_protected:Npn \__tenkz_model_get:nnN #1#2#3
+  { \prop_get:NeN \l__tenkz_model_record_prop { #1 / #2 } #3 }
+\cs_new_protected:Npn \__tenkz_model_picture_get:nN #1#2
+  { \prop_get:NnN \l__tenkz_model_picture_prop {#1} #2 }
+\cs_new_protected:Npn \__tenkz_model_count:nN #1#2
+  { \int_set:Nn #2 { \seq_count:c { l__tenkz_model_ #1 _seq } } }
+\cs_new_protected:Npn \__tenkz_model_map_ids:nn #1#2
+  { \seq_map_inline:cn { l__tenkz_model_ #1 _seq } {#2} }
+
+% Expanding constructors for front ends whose addresses live in counters.
+% The variants route through the current (possibly frozen) base meaning.
+\cs_generate_variant:Nn \__tenkz_model_record_atom:n { e }
+\cs_generate_variant:Nn \__tenkz_model_record_mark:n { e }
+\cs_generate_variant:Nn \__tenkz_model_record_wire:n { e }
+
 \ExplSyntaxOff
 \endinput
