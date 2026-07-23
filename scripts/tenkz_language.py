@@ -29,6 +29,35 @@ class Entry:
 
 ARITIES = {"environment": 4, "command": 5, "key": 6, "alias": 4, "example": 3}
 
+BASELINE = ROOT / "tests/tenkz/census-baseline.json"
+
+# The two-ledger vocabulary of the shrink gate (docs/tenkz/SHRINK.md).
+# kernel: the load-bearing surface, hard one-in-one-out budget.
+# sugar(<expansion>): expands mechanically into kernel spellings.
+# alias(<replacement>; sunset=<milestone>): read-old-documents only.
+# escape: sanctioned raw-geometry leak, metered by the escape census.
+_LEDGERS = ("kernel", "sugar", "alias", "escape")
+
+
+def parse_status(status: str) -> tuple[str, str]:
+    """Return (ledger, payload); raise ValueError on unknown vocabulary."""
+    if status in ("kernel", "escape"):
+        return status, ""
+    for ledger in ("sugar", "alias"):
+        if status.startswith(ledger + "(") and status.endswith(")"):
+            return ledger, status[len(ledger) + 1 : -1]
+    raise ValueError(f"unknown ledger status {status!r}")
+
+
+def ledger_split(entries: list[Entry]) -> dict[str, list[tuple[str, ...]]]:
+    split: dict[str, list[tuple[str, ...]]] = {ledger: [] for ledger in _LEDGERS}
+    for entry in entries:
+        if entry.kind != "key":
+            continue
+        ledger, _payload = parse_status(entry.fields[4])
+        split[ledger].append(entry.fields)
+    return split
+
 
 def _group(text: str, start: int) -> tuple[str, int]:
     while start < len(text) and text[start].isspace():
@@ -151,9 +180,49 @@ def check(entries: list[Entry]) -> list[str]:
         errors.append(f"accidental public environments: {', '.join(missing_environments)}")
     if absent_commands:
         errors.append(f"registered commands without declarations: {', '.join(absent_commands)}")
+    kernel_names: set[str] = set()
     for scope, name, value_type, default, status, meaning in by_kind["key"]:
         if not all((scope, name, value_type, default, status, meaning)):
             errors.append(f"incomplete key record: {scope}:{name}")
+        try:
+            ledger, _ = parse_status(status)
+        except ValueError as exc:
+            errors.append(f"{scope}:{name}: {exc}")
+            continue
+        if ledger == "kernel":
+            kernel_names.add(name.replace("~", " "))
+    for scope, name, _vt, _default, status, _meaning in by_kind["key"]:
+        try:
+            ledger, payload = parse_status(status)
+        except ValueError:
+            continue
+        if ledger == "sugar":
+            # Expansion closure: a sugar row must spell its expansion in
+            # kernel vocabulary.  Sugar that cannot expand is kernel in
+            # disguise and fails here.
+            referenced = {
+                token.rstrip("=")
+                for token in re.findall(r"[a-z][a-z ~]*=?", payload)
+                if token.rstrip("=").strip() in kernel_names
+            }
+            if not referenced:
+                errors.append(
+                    f"sugar row {scope}:{name} has no kernel spelling in its "
+                    f"expansion {payload!r}"
+                )
+        if ledger == "alias" and "sunset=" not in payload:
+            errors.append(f"alias row {scope}:{name} carries no sunset milestone")
+    if BASELINE.is_file():
+        baseline = json.loads(BASELINE.read_text(encoding="utf-8"))
+        recorded = baseline["m1_census"]["value"]
+        actual = {ledger: len(rows) for ledger, rows in ledger_split(entries).items()}
+        if actual != recorded:
+            errors.append(
+                f"ledger census {actual} != baseline {recorded}; a change is "
+                "legal only as a shrink-session update or with an "
+                "Extension-gate: #NNNN citation, and either way the baseline "
+                "moves in the same commit"
+            )
     registered_key_names = {row[1].replace("~", " ") for row in by_kind["key"]}
     parser_key_names = _parser_key_names()
     if registered_key_names != parser_key_names:
@@ -163,9 +232,16 @@ def check(entries: list[Entry]) -> list[str]:
             "parser/registry key census mismatch; missing=" + ",".join(missing)
             + "; extra=" + ",".join(extra)
         )
-    if len(_parser_leaf_keys()) != 145:
+    expected_leaves = 145
+    if BASELINE.is_file():
+        expected_leaves = json.loads(BASELINE.read_text(encoding="utf-8"))[
+            "m2_parser_paths"
+        ]["value"]
+    if len(_parser_leaf_keys()) != expected_leaves:
         errors.append(
-            f"parser leaf-key census is {len(_parser_leaf_keys())}; expected 145"
+            f"parser leaf-key census is {len(_parser_leaf_keys())}; expected "
+            f"{expected_leaves} (raise only with an Extension-gate: #NNNN "
+            "citation and the baseline bump in the same commit)"
         )
     examples = {row[0]: row for row in by_kind["example"]}
     registered_commands = {row[0] for row in by_kind["command"]}
@@ -212,8 +288,16 @@ def _tex(value: str) -> str:
 def generate_reference(entries: list[Entry]) -> None:
     commands = [e.fields for e in entries if e.kind == "command"]
     examples = {e.fields[0]: e.fields[1:] for e in entries if e.kind == "example"}
-    keys = [e.fields for e in entries if e.kind == "key" and e.fields[4] == "canonical"]
-    aliases = [e.fields for e in entries if e.kind == "key" and e.fields[4] != "canonical"]
+    keys = [
+        e.fields
+        for e in entries
+        if e.kind == "key" and parse_status(e.fields[4])[0] != "alias"
+    ]
+    aliases = [
+        e.fields
+        for e in entries
+        if e.kind == "key" and parse_status(e.fields[4])[0] == "alias"
+    ]
     value_aliases = [e.fields for e in entries if e.kind == "alias"]
     lines = [
         "% Generated by scripts/tenkz_language.py; do not edit.",
@@ -285,6 +369,9 @@ def main() -> int:
     if args.action == "census":
         census = {kind: sum(e.kind == kind for e in entries) for kind in ARITIES}
         census["parser_leaf_keys"] = len(_parser_leaf_keys())
+        census["ledgers"] = {
+            ledger: len(rows) for ledger, rows in ledger_split(entries).items()
+        }
         print(json.dumps(census, sort_keys=True))
     if errors:
         for error in errors:
