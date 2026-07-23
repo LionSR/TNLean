@@ -46,24 +46,25 @@ The blueprint links the mathematics to its Lean formalization. A reader should b
     should usually be inline with `$...$`; use displayed equations only when the
     expression is long or when several implications must be compared. Avoid
     long paragraphs whose only mathematical content is described in words.
-12. **Label equations a later sentence points back to; reference them with
-    `\ref`, not words.** If a proof or statement needs to point back to a
-    displayed equation later — in the same proof, a later proof, or another
-    statement — display it in a numbered environment with
-    `\label{eq:<chapter-prefix>_...}`. Do not leave such an equation as a bare
-    `\[...\]` display. When referring back to it, cite it with plain
-    `\ref{eq:...}`, not the `\eqref` macro: write `(\ref{eq:foo_bar})`
-    or `Substituting~(\ref{eq:foo_bar}) into...`. This concise parenthesized
-    form avoids repeating the word “equation” while retaining an explicit,
-    stable cross-reference. Do not describe a
-    previously displayed equation in words instead — phrases like "the
-    preceding identity", "the equation above", "the first displayed
-    identity", or "the two equations above" — since a reader cannot tell
-    which equation is meant once another display intervenes, and the
-    reference goes stale silently if a later edit inserts a display between
-    them. A bare `\[...\]` display remains fine for an equation that no later
-    sentence in the file needs to point back to, and for a reference to a
-    display in an external cited source (which has no local `\label`).
+12. **Display selectively; cite displayed equations with `\ref`, not
+    words.** Keep a short, single-step formula inline with `$...$` when it reads
+    naturally in the sentence and is not cited elsewhere. Do not promote a
+    thin conclusion to a numbered display merely to assign it a label. Retain
+    a display for a long formula, a central definition or identity, several
+    cases or conditions, or a genuine derivation. Use `align` for every retained
+    display, including a single-line display; do not introduce new `equation`,
+    `gather`, `multline`, or bare `\[...\]` environments.
+
+    If prose points back to a displayed equation — in the same proof, a later
+    proof, or another chapter — give it a concise
+    `\label{eq:<chapter-prefix>_...}` and cite it with plain `\ref`, never
+    `\eqref`: write `(\ref{eq:foo_bar})` or
+    `Substituting~(\ref{eq:foo_bar}) into...`. This concise parenthesized form
+    avoids repeating the word “equation.” Replace positional phrases such as
+    "the preceding identity", "the equation above", "the first displayed
+    identity", and "the two equations above" with explicit references. The
+    same rule applies across chapters: cite the earlier equation label rather
+    than describing its position or restating its number.
     - **Keep labels concise.** `eq:<chapter-prefix>_<two-to-four-word gist>`
       (e.g. `eq:ph_boundary_scaled`, not
       `eq:ph_boundary_crossing_scaled_boundary_equal_via_intermediate_step`).
@@ -72,15 +73,14 @@ The blueprint links the mathematics to its Lean formalization. A reader should b
       chapter prefix.
     - **Use a multi-line `align` when a display carries more than one
       logically distinct equation.** Do not pack several equalities into one
-      `equation`/`\[...\]` display separated by `\qquad` or commas merely to
-      avoid a second environment. Give each distinct equation its own aligned
-      line (`&=`) and, when either line is referenced later, its own
-      `\label{}` ending in a short line-distinguishing suffix
-      (`_lhs`/`_rhs`, `_plus`/`_minus`, or the varying symbol). A genuine
-      single chain of equalities (`a=b=c=d`) inside one already-labeled
-      display stays one `equation`/`align` block; referring to "the last
-      equality" *within* that same chain is not a violation of this rule —
-      only references that reach for a *different, earlier* display are.
+      line with `\qquad` or commas merely to avoid a line break. Give each
+      distinct equation its own aligned line (`&=`) and, when either line is
+      referenced later, its own `\label{}` ending in a short
+      line-distinguishing suffix (`_lhs`/`_rhs`, `_plus`/`_minus`, or the
+      varying symbol). A genuine single chain of equalities (`a=b=c=d`) stays
+      one aligned derivation. Referring to "the last equality" within that same
+      chain is acceptable; references to a different earlier display must use
+      its label.
 
 ## Proof Sketches Must Match Lean
 This is the most important rule. Every proof in the blueprint must faithfully describe what the Lean proof does:
