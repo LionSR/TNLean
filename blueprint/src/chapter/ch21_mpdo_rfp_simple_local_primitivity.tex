@@ -628,6 +628,26 @@
     diagonal matrix.
 \end{proof}
 
+\begin{theorem}[Rank-one eigenvector resolution of a Hermitian matrix]
+    \label{thm:matrix_hermitian_rank_one_eigenvector_resolution}
+    \lean{Matrix.IsHermitian.eq_sum_eigenvalues_smul_eigenvectorProjection}
+    \leanok
+    Let $A$ be a finite Hermitian matrix. Choose an orthonormal eigenbasis
+    $(u_k)_k$ with eigenvalues $(\lambda_k)_k$, and let
+    $E_k=\ketbra{u_k}{u_k}$ be the rank-one projection onto $u_k$. Then
+    \[
+        A=\sum_k \lambda_k E_k.
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The finite-dimensional spectral theorem gives
+    $A=U\operatorname{diag}(\lambda_k)U^\dagger$, where the columns of $U$ are
+    the vectors $u_k$. Expanding the diagonal matrix as the sum of its
+    rank-one coordinate projections gives the stated identity.
+\end{proof}
+
 \begin{theorem}[PSD trace-power rank-one criterion]
     \label{thm:matrix_psd_trace_power_rank_one}
     \lean{Matrix.PosSemidef.trace_powers_constant_implies_rank_one}

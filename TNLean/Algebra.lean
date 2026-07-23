@@ -19,6 +19,7 @@ import TNLean.Algebra.ComplexPhasePositivity
 import TNLean.Algebra.ConstantPowerSums
 import TNLean.Algebra.DependentBlockDiagonal
 import TNLean.Algebra.DirectedWalkCoboundary
+import TNLean.Algebra.EigenvectorProjection
 import TNLean.Algebra.EventuallyConstantCycleWeights
 import TNLean.Algebra.FinSum
 import TNLean.Algebra.FinTupleEquiv
