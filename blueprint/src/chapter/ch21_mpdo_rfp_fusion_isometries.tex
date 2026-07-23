@@ -1812,6 +1812,119 @@ separate step.
     supplies the same fusion family used in the density decomposition.
 \end{proof}
 
+\begin{definition}[Terminal spectral refinement data]%
+    \label{def:mpdo_terminal_spectral_refinement}
+    \lean{MPOTensor.BNTFusionTensorClause.terminalMatrix}
+    \lean{MPOTensor.BNTFusionTensorClause.TerminalSpectralIndex}
+    \lean{MPOTensor.BNTFusionTensorClause.terminalEigenvalue}
+    \lean{MPOTensor.BNTFusionTensorClause.terminalEigenProjection}
+    \lean{MPOTensor.BNTFusionTensorClause.terminalEigenProjectionFamily}
+    \lean{MPOTensor.BNTFusionTensorClause.%
+        recursiveTerminalEigenProjectorQ}
+    \lean{MPOTensor.BNTFusionTensorClause.%
+        topologicalSpectralProjectorSucc}
+    \lean{MPOTensor.BNTFusionTensorClause.%
+        HasTerminalSpectralProjectorRefinement}
+    \lean{MPOTensor.rfpBNTFusionTensorClause}
+    \leanok
+    \uses{def:mpdo_bnt_fusion_tensor_clause,
+        def:mpdo_topological_density_operator,
+        def:mpdo_topological_projector_recursion}
+    Fix the fusion clause selected by the renormalization fixed-point
+    construction.  For every terminal label $\gamma$, close the horizontal
+    operator leg of $M_\gamma$ to obtain a matrix $K_\gamma$ on its bond
+    space.  Its spectral indices are pairs
+    \[
+      s=(\gamma,k),\qquad
+      0\leq k<D_\gamma.
+    \]
+    Write $\lambda_s$ for the corresponding eigenvalue and $E_s$ for the
+    rank-one spectral projection, extended by zero on terminal labels
+    different from~$\gamma$.  Recursively transport this terminal family
+    through every fusion history, then through the adjoint sequential fusion
+    coisometry, and assemble over all sitewise label and multiplicity
+    configurations.  Denote the resulting all-label operator at positive
+    chain length $N$ by $P_s^{(N)}$.
+\end{definition}
+
+\begin{theorem}[Terminal spectral projectors for a length-independent RFP
+    MPDO]%
+    \label{thm:mpdo_terminal_spectral_projector_refinement}
+    \lean{MPOTensor.BNTFusionTensorClause.terminalEigenvalue_nonneg}
+    \lean{MPOTensor.BNTFusionTensorClause.%
+        topologicalSpectralProjectorSucc_isOrthogonalProjection}
+    \lean{MPOTensor.BNTFusionTensorClause.%
+        topologicalSpectralProjectorSucc_mul_eq_zero}
+    \lean{MPOTensor.BNTFusionTensorClause.%
+        sum_terminalEigenvalue_smul_topologicalSpectralProjectorSucc}
+    \lean{MPOTensor.BNTFusionTensorClause.%
+        topologicalMultiplicityWeightFactorSucc_commutes_spectralProjector}
+    \lean{MPOTensor.BNTFusionTensorClause.%
+        topologicalDensityOperatorSucc_eq_sum_terminalSpectralProjector}
+    \lean{MPOTensor.BNTFusionTensorClause.%
+        hasTerminalSpectralProjectorRefinement}
+    \lean{MPOTensor.terminalSpectralProjectorRefinement_of_isRFPViaTS}
+    \leanok
+    \uses{def:horizontal_cf_mpdo, def:mpdo, def:is_rfp_via_ts,
+        def:mpdo_terminal_spectral_refinement,
+        cor:mpdo_topological_density_factor_commutator}
+    Let $M$ be a matrix product density operator in horizontal canonical form
+    satisfying the renormalization fixed-point condition.  Fix internally the
+    fusion clause supplied by that construction, and suppose that its positive
+    trace-power coefficients are independent of the positive chain length.
+    Then $K_\gamma$ is positive semidefinite for every terminal label, so
+    $\lambda_s\geq0$.  Write the total positive chain length as $N=n+1$,
+    where $n\in\mathbb{N}$ is its predecessor.  For every $N>0$,
+    \[
+      (P_s^{(N)})^\dagger=P_s^{(N)},\qquad
+      (P_s^{(N)})^2=P_s^{(N)},\qquad
+      P_s^{(N)}P_t^{(N)}=0\quad(s\neq t),
+    \]
+    and
+    \[
+      T_N=\sum_s\lambda_s P_s^{(N)},\qquad
+      A_NP_s^{(N)}=P_s^{(N)}A_N.
+    \]
+    Consequently,
+    \[
+      R_N=\sum_s\lambda_s A_NP_s^{(N)}.
+    \]
+    The length-independence assumption here is clause-relative: it is stated
+    on the coefficients of the fixed clause selected from the
+    renormalization fixed-point construction, not on an arbitrary
+    fusion clause.  This theorem stops at
+    \cite[lines~1003--1012]{Cirac2016MPDO_arXiv}; it does not assert the
+    commuting nearest-neighbor Hamiltonian or Gibbs-state conclusion beginning
+    at line~1013.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:mpdo_topological_projector_recursion,
+        thm:mpdo_topological_density_decomposition,
+        cor:mpdo_topological_density_factor_commutator}
+    Positivity of the one-site density operator passes to every fixed BNT
+    block; division by its strictly positive multiplicity weight shows that
+    each $K_\gamma$ is positive semidefinite.  Apply the finite-dimensional
+    spectral theorem to obtain the nonnegative eigenvalues and rank-one
+    orthogonal projections.  Length independence makes every retained fusion
+    coefficient equal to one, so the recursive direct sum preserves
+    idempotence and pairwise orthogonality.  Write $Q_{N,c,s}$ for the
+    recursive spectral block in copy configuration~$c$.  The coisometry
+    identity $W_{N,c}W_{N,c}^\dagger=1$ gives
+    \[
+    \begin{aligned}
+      (W_{N,c}^\dagger Q_{N,c,s}W_{N,c})^\dagger
+        &=W_{N,c}^\dagger Q_{N,c,s}W_{N,c},\\
+      (W_{N,c}^\dagger Q_{N,c,s}W_{N,c})^2
+        &=W_{N,c}^\dagger Q_{N,c,s}W_{N,c}.
+    \end{aligned}
+    \]
+    Thus transport through the adjoint sequential coisometry preserves the
+    projector identities.  Linearity gives the weighted reconstruction of $T_N$.
+    Finally, $A_N$ is scalar on every copy-configuration block, hence it
+    commutes with each $P_s^{(N)}$ and gives the displayed decomposition of
+    $R_N$.
+\end{proof}
+
 \begin{definition}[Full-support specialization of one fusion layer]%
     \label{def:mpdo_full_support_virtual_projector_one_fusion}
     \lean{MPOTensor.BNTFusionIsometryFamily.projectorQBlock}
