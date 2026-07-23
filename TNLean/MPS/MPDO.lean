@@ -101,6 +101,7 @@ import TNLean.MPS.MPDO.EtaPreparation
 import TNLean.MPS.MPDO.FigureEightPairwise
 import TNLean.MPS.MPDO.FirstSiteBlocking
 import TNLean.MPS.MPDO.FixedBondPositivePhysicalSectorConstructor
+import TNLean.MPS.MPDO.FixedBondPositivePhysicalSectorRepresentative
 import TNLean.MPS.MPDO.FixedBondProductEtaTensor
 import TNLean.MPS.MPDO.FixedBondProductTensor
 import TNLean.MPS.MPDO.FusionIsometries
