@@ -1836,7 +1836,7 @@ separate step.
     space.  Its spectral indices are pairs
     \[
       s=(\gamma,k),\qquad
-      1\leq k\leq D_\gamma.
+      0\leq k<D_\gamma.
     \]
     Write $\lambda_s$ for the corresponding eigenvalue and $E_s$ for the
     rank-one spectral projection, extended by zero on terminal labels
@@ -1905,9 +1905,19 @@ separate step.
     spectral theorem to obtain the nonnegative eigenvalues and rank-one
     orthogonal projections.  Length independence makes every retained fusion
     coefficient equal to one, so the recursive direct sum preserves
-    idempotence and pairwise orthogonality.  Transport through the adjoint
-    sequential coisometry preserves these identities because the fusion map
-    is a coisometry.  Linearity gives the weighted reconstruction of $T_N$.
+    idempotence and pairwise orthogonality.  Write $Q_{N,c,s}$ for the
+    recursive spectral block in copy configuration~$c$.  The coisometry
+    identity $W_{N,c}W_{N,c}^\dagger=1$ gives
+    \[
+    \begin{aligned}
+      (W_{N,c}^\dagger Q_{N,c,s}W_{N,c})^\dagger
+        &=W_{N,c}^\dagger Q_{N,c,s}W_{N,c},\\
+      (W_{N,c}^\dagger Q_{N,c,s}W_{N,c})^2
+        &=W_{N,c}^\dagger Q_{N,c,s}W_{N,c}.
+    \end{aligned}
+    \]
+    Thus transport through the adjoint sequential coisometry preserves the
+    projector identities.  Linearity gives the weighted reconstruction of $T_N$.
     Finally, $A_N$ is scalar on every copy-configuration block, hence it
     commutes with each $P_s^{(N)}$ and gives the displayed decomposition of
     $R_N$.
