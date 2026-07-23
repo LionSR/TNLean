@@ -9,11 +9,12 @@ import Mathlib.Analysis.SpecialFunctions.ImproperIntegrals
 import Mathlib.LinearAlgebra.Matrix.Vec
 
 /-!
-# Resolvent integral representation of positive-definite relative entropy
+# Resolvent integral representations of relative entropy
 
 This file proves the scalar logarithmic integral and the finite-dimensional
-spectral identities needed to express positive-definite quantum relative
-entropy through the resolvents of `X ↦ A * X + t • (X * B)`.
+spectral identities needed for resolvent representations of quantum relative
+entropy. It includes the homogeneous Hermitian trace-log identity and the
+coordinate-free resolvent formula for positive-definite matrices.
 
 ## Main results
 
@@ -42,7 +43,10 @@ namespace Matrix
 \[
  \frac{a^2/(a+tb)-b+t b^2/(a+tb)}{1+t}.
 \]
-The coefficient `t` in the last term is essential. -/
+The coefficient `t` in the last term is essential.
+
+This is the scalar normalization `(intspec)` in Jenčová--Ruskai,
+arXiv:0903.2895v4, §2.1, lines 406--413. -/
 noncomputable def relativeEntropyScalar (a b t : ℝ) : ℝ :=
   (a ^ 2 / (a + t * b) - b + t * b ^ 2 / (a + t * b)) / (1 + t)
 
@@ -153,8 +157,8 @@ private theorem relativeEntropyScalar_integrable_and_integral
 /-- The scalar (p=1) relative-entropy resolvent integrand is integrable on
 the positive half-line for positive `a` and `b`.
 
-This is the integrability part of Jenčová--Ruskai,
-arXiv:0903.2895v4, §4. -/
+This is the integrability part of `(intspec)` in Jenčová--Ruskai,
+arXiv:0903.2895v4, §2.1, lines 406--413. -/
 theorem relativeEntropyScalar_integrableOn {a b : ℝ}
     (ha : 0 < a) (hb : 0 < b) :
     IntegrableOn (relativeEntropyScalar a b) (Ioi 0) :=
@@ -166,8 +170,8 @@ theorem relativeEntropyScalar_integrableOn {a b : ℝ}
  \frac{a^2/(a+tb)-b+t b^2/(a+tb)}{1+t}\,dt.
 \]
 
-This is the case `p=1` of the spectral integral in Jenčová--Ruskai,
-arXiv:0903.2895v4, §4.
+This is the scalar normalization `(intspec)` in Jenčová--Ruskai,
+arXiv:0903.2895v4, §2.1, lines 406--413.
 -/
 theorem integral_relativeEntropyScalar {a b : ℝ}
     (ha : 0 < a) (hb : 0 < b) :
@@ -502,8 +506,8 @@ expansion
  \sum_{i,j}\frac{\alpha_i^2}{\alpha_i+t\beta_j}|W_{ij}|^2.
 \]
 
-This is the first resolvent term of Jenčová--Ruskai,
-arXiv:0903.2895v4, §4. -/
+This is the first resolvent term in the matrix lift `(intAB)` of
+Jenčová--Ruskai, arXiv:0903.2895v4, §2.1, lines 423--427. -/
 theorem sourceA_resolvent_quadratic_spectral {A B : Matrix n n ℂ}
     (hA : A.PosDef) (hB : B.PosDef) {t : ℝ} (ht : 0 < t) :
     sourceAResolventQuadratic A B t =
@@ -549,8 +553,8 @@ expansion
  \sum_{i,j}\frac{\beta_j^2}{\alpha_i+t\beta_j}|W_{ij}|^2.
 \]
 
-This is the second resolvent term of Jenčová--Ruskai,
-arXiv:0903.2895v4, §4. -/
+This is the second resolvent term in the matrix lift `(intAB)` of
+Jenčová--Ruskai, arXiv:0903.2895v4, §2.1, lines 423--427. -/
 theorem sourceB_resolvent_quadratic_spectral {A B : Matrix n n ℂ}
     (hA : A.PosDef) (hB : B.PosDef) {t : ℝ} (ht : 0 < t) :
     sourceBResolventQuadratic A B t =
@@ -649,48 +653,52 @@ theorem sourceBResolventQuadratic_continuousOn {A B : Matrix n n ℂ}
     sourceB_resolvent_quadratic_spectral hA hB ht
 
 open scoped Matrix.Norms.L2Operator in
-/-- For positive-definite matrices, relative entropy is the spectral double
-sum
+/-- For Hermitian matrices, the totalized trace-log relative entropy is the
+spectral double sum
 \[
  D(A\Vert B)=\sum_{i,j}\alpha_i
    (\log\alpha_i-\log\beta_j)|W_{ij}|^2.
 \]
 
-This is the finite-dimensional spectral form of Jenčová--Ruskai,
-arXiv:0903.2895v4, §4, specialized to `p=1`. -/
-theorem quantumRelativeEntropy_posDef_spectral {A B : Matrix n n ℂ}
-    (hA : A.PosDef) (hB : B.PosDef) :
+Here the logarithm is Mathlib's totalized `Real.log`: `Real.log 0 = 0`, and
+for a negative eigenvalue `x` its value is `Real.log |x|`. Thus the theorem
+is an algebraic totalized extension to arbitrary Hermitian matrices of the
+strictly positive trace-log identity `(J1)` in Jenčová--Ruskai,
+arXiv:0903.2895v4, lines 277--287. For positive-semidefinite matrices on the
+physical support domain, it gives the usual finite-dimensional spectral
+expression. -/
+theorem quantumRelativeEntropy_spectral {A B : Matrix n n ℂ}
+    (hA : A.IsHermitian) (hB : B.IsHermitian) :
     quantumRelativeEntropy A B =
       ∑ i, ∑ j,
-        hA.isHermitian.eigenvalues i *
-          (Real.log (hA.isHermitian.eigenvalues i) -
-            Real.log (hB.isHermitian.eigenvalues j)) *
+        hA.eigenvalues i *
+          (Real.log (hA.eigenvalues i) -
+            Real.log (hB.eigenvalues j)) *
           Complex.normSq
-            ((star (hA.isHermitian.eigenvectorUnitary : Matrix n n ℂ) *
-              (hB.isHermitian.eigenvectorUnitary : Matrix n n ℂ)) i j) := by
+            ((star (hA.eigenvectorUnitary : Matrix n n ℂ) *
+              (hB.eigenvectorUnitary : Matrix n n ℂ)) i j) := by
   classical
-  let α : n → ℝ := hA.isHermitian.eigenvalues
-  let β : n → ℝ := hB.isHermitian.eigenvalues
+  let α : n → ℝ := hA.eigenvalues
+  let β : n → ℝ := hB.eigenvalues
   let W : Matrix n n ℂ :=
-    star (hA.isHermitian.eigenvectorUnitary : Matrix n n ℂ) *
-      (hB.isHermitian.eigenvectorUnitary : Matrix n n ℂ)
+    star (hA.eigenvectorUnitary : Matrix n n ℂ) *
+      (hB.eigenvectorUnitary : Matrix n n ℂ)
   let P : n → n → ℝ := fun i j => Complex.normSq (W i j)
   have hWrow : W * star W = 1 := by
     simp only [W, star_mul, star_star, Matrix.mul_assoc]
-    rw [← Matrix.mul_assoc
-      (hB.isHermitian.eigenvectorUnitary : Matrix n n ℂ)]
+    rw [← Matrix.mul_assoc (hB.eigenvectorUnitary : Matrix n n ℂ)]
     rw [Unitary.mul_star_self_of_mem
-      hB.isHermitian.eigenvectorUnitary.prop, Matrix.one_mul]
-    exact Unitary.coe_star_mul_self hA.isHermitian.eigenvectorUnitary
+      hB.eigenvectorUnitary.prop, Matrix.one_mul]
+    exact Unitary.coe_star_mul_self hA.eigenvectorUnitary
   have hrow (i : n) : ∑ j, P i j = 1 := by
     exact TNLean.Klein.row_sum_normSq_eq_one hWrow i
   rw [quantumRelativeEntropy_eq_trace_mul_log_sub]
-  have hlogB : CFC.log B = hB.isHermitian.cfc Real.log := by
+  have hlogB : CFC.log B = hB.cfc Real.log := by
     rw [CFC.log]
-    exact Matrix.IsHermitian.cfc_eq hB.isHermitian Real.log
+    exact Matrix.IsHermitian.cfc_eq hB Real.log
   have hself : (Matrix.trace (A * CFC.log A)).re =
       ∑ i, ∑ j, α i * Real.log (α i) * P i j := by
-    have h := vonNeumannEntropy_eq_neg_trace_mul_log hA.isHermitian
+    have h := vonNeumannEntropy_eq_neg_trace_mul_log hA
     rw [vonNeumannEntropy] at h
     have hre : (Matrix.trace (A * CFC.log A)).re =
         ∑ i, α i * Real.log (α i) := by
@@ -707,13 +715,28 @@ theorem quantumRelativeEntropy_posDef_spectral {A B : Matrix n n ℂ}
   have hcross : (Matrix.trace (A * CFC.log B)).re =
       ∑ i, ∑ j, α i * Real.log (β j) * P i j := by
     rw [hlogB, TNLean.Klein.re_trace_mul_cfc_eq_double_sum
-      hA.isHermitian hB.isHermitian Real.log]
+      hA hB Real.log]
   rw [hself, hcross, ← Finset.sum_sub_distrib]
   refine Finset.sum_congr rfl fun i _ => ?_
   rw [← Finset.sum_sub_distrib]
   refine Finset.sum_congr rfl fun j _ => ?_
   simp only [α, β, W, P]
   ring
+
+open scoped Matrix.Norms.L2Operator in
+/-- The positive-definite specialization of
+`quantumRelativeEntropy_spectral`. -/
+theorem quantumRelativeEntropy_posDef_spectral {A B : Matrix n n ℂ}
+    (hA : A.PosDef) (hB : B.PosDef) :
+    quantumRelativeEntropy A B =
+      ∑ i, ∑ j,
+        hA.isHermitian.eigenvalues i *
+          (Real.log (hA.isHermitian.eigenvalues i) -
+            Real.log (hB.isHermitian.eigenvalues j)) *
+          Complex.normSq
+            ((star (hA.isHermitian.eigenvectorUnitary : Matrix n n ℂ) *
+              (hB.isHermitian.eigenvectorUnitary : Matrix n n ℂ)) i j) :=
+  quantumRelativeEntropy_spectral hA.isHermitian hB.isHermitian
 
 open scoped Matrix.Norms.L2Operator in
 /-- Simultaneous multiplication of two positive-definite arguments by a
@@ -737,7 +760,8 @@ theorem quantumRelativeEntropy_smul_posDef {A B : Matrix n n ℂ}
 
 /-- The two-source resolvent integrand for positive-definite relative entropy.
 The source-`B` term carries the coefficient `t` required by the scalar
-representation. -/
+representation. This is the matrix lift `(intAB)` in Jenčová--Ruskai,
+arXiv:0903.2895v4, §2.1, lines 423--427. -/
 noncomputable def relativeEntropyResolventIntegrand
     (A B : Matrix n n ℂ) (t : ℝ) : ℝ :=
   (sourceAResolventQuadratic A B t - (Matrix.trace B).re +
@@ -799,8 +823,8 @@ private lemma relativeEntropyResolventIntegrand_eq_spectral
 /-- The coefficient-correct positive-definite relative-entropy resolvent
 integrand is integrable on `(0, ∞)`.
 
-This is the integrability assertion accompanying Jenčová--Ruskai,
-arXiv:0903.2895v4, §4. -/
+This is the integrability assertion accompanying `(intAB)` in
+Jenčová--Ruskai, arXiv:0903.2895v4, §2.1, lines 423--427. -/
 theorem relativeEntropyResolventIntegrand_integrableOn
     {A B : Matrix n n ℂ} (hA : A.PosDef) (hB : B.PosDef) :
     IntegrableOn (relativeEntropyResolventIntegrand A B) (Ioi 0) := by
@@ -868,8 +892,8 @@ For positive-definite `A` and `B`,
 Both source families, and the coefficient `t` on the source-`B` family, are
 part of the statement.
 
-This is the finite-dimensional specialization of Jenčová--Ruskai,
-arXiv:0903.2895v4, §4, specialized to `p=1`. -/
+This is the finite-dimensional specialization of `(intAB)` in
+Jenčová--Ruskai, arXiv:0903.2895v4, §2.1, lines 423--427. -/
 theorem quantumRelativeEntropy_resolvent_integral
     {A B : Matrix n n ℂ} (hA : A.PosDef) (hB : B.PosDef) :
     quantumRelativeEntropy A B =
