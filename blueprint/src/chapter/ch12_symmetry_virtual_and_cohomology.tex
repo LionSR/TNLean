@@ -172,8 +172,7 @@ on the bond space.
     % contracted index, and a,b are the free west/east virtual indices.
     % Boundary: virtual-west=1 | virtual-east=1 | physical-up=1 |
     % physical-down=0.
-    \begin{align}
-        &
+    \begin{tenkzequation}
         \begin{tenkz}[rows={op:none,ket}]
             \tn[role=operator,up=$i$]{U(g)} \\
             \tn{A}
@@ -192,8 +191,7 @@ on the bond space.
         \begin{tenkz}[physical=up]
             \tnX{X(g)} & \tn[up=$i$]{A} & \tnX{X(g)^{-1}}
         \end{tenkz}.
-        \notag
-    \end{align}
+    \end{tenkzequation}
     Apply Lemma~\ref{lem:gauge_equiv_twisted} to obtain $X(g)$, then
     set $\varphi(g)=1$ in (\ref{eq:symmetry_virtual_equation}).
 \end{proof}
@@ -468,8 +466,7 @@ make this precise and establish the quotient $H^2(G,\C^{\times})$.
     For each $g$, gauge uniqueness gives a nonzero scalar $f(g)$ with
     $X_2(g^{-1})=f(g)\,X_1(g^{-1})$.
     Equivalently, for each fixed $g$ the two local gauges
-    \begin{align}
-        &
+    \begin{tenkzequation}
         % Formula/source: Papers/0802.0447/StringOrder-v10.tex,
         % lines 328--349, gives the unitary u,V specialization
         % (V^\dagger = V^{-1}); the surrounding fundamental theorem supplies
@@ -497,8 +494,7 @@ make this precise and establish the quotient $H^2(G,\C^{\times})$.
             \tnX{X_2(g^{-1})} & \tn[up=$i$]{A} &
             \tnX{X_2(g^{-1})^{-1}}
         \end{tenkz}
-        \notag
-    \end{align}
+    \end{tenkzequation}
     describe the same twisted tensor, so they differ by a scalar.
     Substituting into the projective law
     (\ref{eq:symmetry_projective_law}) and cancelling $X_1(g\cdot h)$
