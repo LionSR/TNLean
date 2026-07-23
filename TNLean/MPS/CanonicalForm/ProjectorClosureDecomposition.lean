@@ -158,22 +158,6 @@ theorem hasInvariantProjectorClosure_compress_of_commutes
   rw [hL, hR] at h4
   exact h4
 
-/-- Word evaluation is intertwined by an isometry that intertwines the letters. -/
-private lemma evalWord_intertwine {n : ℕ} (A : MPSTensor d D) (B : MPSTensor d n)
-    (V : Matrix (Fin D) (Fin n) ℂ) (hInt : ∀ i : Fin d, A i * V = V * B i) :
-    ∀ w : List (Fin d), evalWord A w * V = V * evalWord B w := by
-  intro w
-  induction w with
-  | nil => rw [evalWord_nil, evalWord_nil, Matrix.one_mul, Matrix.mul_one]
-  | cons i w ihw =>
-      rw [evalWord_cons, evalWord_cons]
-      calc A i * evalWord A w * V
-          = A i * (evalWord A w * V) := Matrix.mul_assoc _ _ _
-        _ = A i * (V * evalWord B w) := by rw [ihw]
-        _ = (A i * V) * evalWord B w := (Matrix.mul_assoc _ _ _).symm
-        _ = (V * B i) * evalWord B w := by rw [hInt i]
-        _ = V * (B i * evalWord B w) := Matrix.mul_assoc _ _ _
-
 /-- If isometries with ranges summing to the identity intertwine the tensor
 matrices with corner tensors, then the matrix product vectors of the tensor
 agree with those of the unit-weight direct sum of the corner tensors.

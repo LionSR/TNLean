@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.MatrixAux
 import TNLean.Channel.Irreducible.Growth.KernelDescent
 import TNLean.Channel.Semigroup.ReducibleQDS.GeneratorCompression
 import Mathlib.Analysis.Normed.Algebra.Exponential
@@ -163,22 +164,6 @@ private theorem posSemidef_mulVec_eq_zero_of_not_dot_pos
     exact Complex.ext h_re_zero him_zero
   exact (hM.dotProduct_mulVec_zero_iff v).mp hq_zero
 
--- A vanishing PSD sum forces each summand to vanish.
-private theorem posSemidef_sum_mulVec_eq_zero_of_mem
-    {ι : Type*} {s : Finset ι}
-    {term : ι → Matrix (Fin D) (Fin D) ℂ}
-    (hterm : ∀ i ∈ s, (term i).PosSemidef)
-    {v : Fin D → ℂ} (hv : (∑ i ∈ s, term i) *ᵥ v = 0)
-    {k : ι} (hk : k ∈ s) :
-    (term k) *ᵥ v = 0 := by
-  have hqterm_zero : star v ⬝ᵥ ((term k) *ᵥ v) = 0 := by
-    have hsum_q_zero : ∑ i ∈ s, star v ⬝ᵥ ((term i) *ᵥ v) = 0 := by
-      have := congrArg (fun w => star v ⬝ᵥ w) hv
-      simpa only [sum_mulVec, dotProduct_sum, dotProduct_zero] using this
-    exact (Finset.sum_eq_zero_iff_of_nonneg
-        (fun i hi => (hterm i hi).dotProduct_mulVec_nonneg v)).mp hsum_q_zero k hk
-  exact ((hterm k hk).dotProduct_mulVec_zero_iff v).mp hqterm_zero
-
 -- Evaluates the operator exponential series at a matrix.
 private theorem exp_apply_terms_summable
     (Φ : TNLean.MatrixCLM (Fin D)) (A : Matrix (Fin D) (Fin D) ℂ) :
@@ -264,8 +249,8 @@ theorem exp_truncation_posDef_of_irreducible_cp
   have hterm_zero_F : ∀ k ∈ Finset.range D, ((F ^ k) A) *ᵥ v = 0 := by
     intro k hk
     have hterm_zero : (term k) *ᵥ v = 0 :=
-      posSemidef_sum_mulVec_eq_zero_of_mem
-        (s := Finset.range D) (term := term) (fun i _hi => hterm_psd i) hsum_zero hk
+      Matrix.PosSemidef.mulVec_eq_zero_of_sum_mulVec_eq_zero_of_mem
+        (s := Finset.range D) (B := term) (fun i _hi => hterm_psd i) hsum_zero hk
     change (((k.factorial : ℂ)⁻¹) • ((F ^ k) A)) *ᵥ v = 0 at hterm_zero
     rw [Matrix.smul_mulVec] at hterm_zero
     exact (smul_eq_zero.mp hterm_zero).resolve_left

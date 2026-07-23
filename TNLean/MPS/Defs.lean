@@ -17,6 +17,11 @@ This file contains the core definitions used throughout the MPS development:
 notions of injectivity, block injectivity, and normality. It also proves the
 basic gauge-invariance lemmas for `evalWord`, `SameMPV`, and eventual block
 injectivity.
+
+## Main declarations
+
+* `evalWord` — the matrix product associated with a word of physical indices
+* `evalWord_intertwine` — a rectangular letter intertwiner also intertwines every word
 -/
 
 open scoped Matrix
@@ -44,6 +49,23 @@ def evalWord (A : MPSTensor d D) : List (Fin d) → Matrix (Fin D) (Fin D) ℂ
 /-- The word with head $i$ followed by $w$ evaluates to $A_i$ times the evaluation of $w$. -/
 @[simp] lemma evalWord_cons (A : MPSTensor d D) (i : Fin d) (w : List (Fin d)) :
     evalWord A (i :: w) = A i * evalWord A w := rfl
+
+/-- A rectangular matrix that intertwines every letter of two tensors also intertwines
+all their word evaluations. -/
+lemma evalWord_intertwine {n : ℕ} (A : MPSTensor d D) (B : MPSTensor d n)
+    (V : Matrix (Fin D) (Fin n) ℂ) (hInt : ∀ i : Fin d, A i * V = V * B i) :
+    ∀ w : List (Fin d), evalWord A w * V = V * evalWord B w := by
+  intro w
+  induction w with
+  | nil => rw [evalWord_nil, evalWord_nil, Matrix.one_mul, Matrix.mul_one]
+  | cons i w ih =>
+      rw [evalWord_cons, evalWord_cons]
+      calc
+        A i * evalWord A w * V = A i * (evalWord A w * V) := Matrix.mul_assoc _ _ _
+        _ = A i * (V * evalWord B w) := by rw [ih]
+        _ = (A i * V) * evalWord B w := (Matrix.mul_assoc _ _ _).symm
+        _ = (V * B i) * evalWord B w := by rw [hInt i]
+        _ = V * (B i * evalWord B w) := Matrix.mul_assoc _ _ _
 
 /-- Multiplicativity of word evaluation:
 `evalWord A (w1 ++ w2) = evalWord A w1 * evalWord A w2`. -/
