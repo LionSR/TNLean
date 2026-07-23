@@ -612,11 +612,12 @@ noncomputable def rfpBNTFusionTensorClause (M : MPOTensor d D)
 /-- **Terminal spectral projector refinement for a length-independent RFP
 MPDO.**
 
-The fusion clause is the fixed internal choice
-`rfpBNTFusionTensorClause M hHorizontal hM hRFP`; callers provide no fusion
-clause, spectral data, or projectors.  Length independence is stated on the
-coefficient family of exactly that RFP-derived clause.  This is the present
-clause-relative representation of the source length-independence assumption.
+The fusion clause is fixed by
+`rfpBNTFusionTensorClause M hHorizontal hM hRFP`; no additional fusion clause,
+spectral family, or projector hypothesis is assumed.  Length independence is
+stated on the coefficient family of exactly that RFP-derived clause.  This is
+the present clause-relative representation of the source length-independence
+assumption.
 
 The conclusion supplies the line-999 density decomposition, the line-1001
 factor commutator, and the nonnegative terminal eigenweights with compatible
