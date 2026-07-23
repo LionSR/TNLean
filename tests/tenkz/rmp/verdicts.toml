@@ -1,0 +1,683 @@
+# Per-target verdict ledger for the tenkz RMP benchmark.
+# Schema: scripts/tenkz_rmp.py (load_verdicts).  Any status may be
+# recorded, including failure; the check rejects lies, never gaps.
+schema_version = 1
+campaign_sha256 = "023d1a6d67ad104d04ab70366c4465fca2c36ea0762bf55e74453f6b7222cde8"
+
+[[verdict]]
+id = "rmp-ii-peps-projection"
+status = "unreviewed"
+pairing = "unverified"
+
+[[verdict]]
+id = "rmp-ii-triangle-network"
+status = "unreviewed"
+pairing = "unverified"
+
+[[verdict]]
+id = "rmp-ii-mps-marginal"
+status = "unreviewed"
+pairing = "unverified"
+
+[[verdict]]
+id = "rmp-ii-peps-marginal"
+status = "unreviewed"
+pairing = "unverified"
+
+[[verdict]]
+id = "rmp-ii-mpo-sheet"
+status = "unreviewed"
+pairing = "unverified"
+
+[[verdict]]
+id = "rmp-ii-pepo-sheet"
+status = "unreviewed"
+pairing = "unverified"
+
+[[verdict]]
+id = "rmp-ii-local-purification"
+status = "unreviewed"
+pairing = "unverified"
+
+[[verdict]]
+id = "rmp-ii-mpu-unitarity"
+status = "unreviewed"
+pairing = "unverified"
+
+[[verdict]]
+id = "rmp-ii-mpu-blocking"
+status = "unreviewed"
+pairing = "unverified"
+
+[[verdict]]
+id = "rmp-ii-mpu-splitting"
+status = "unreviewed"
+pairing = "unverified"
+
+[[verdict]]
+id = "rmp-ii-mpu-brickwork"
+status = "unreviewed"
+pairing = "unverified"
+
+[[verdict]]
+id = "rmp-ii-mpu-wrap"
+status = "unreviewed"
+pairing = "unverified"
+
+[[verdict]]
+id = "rmp-ii-mpu-two-shift"
+status = "unreviewed"
+pairing = "unverified"
+
+[[verdict]]
+id = "rmp-ii-mpu-normal-form"
+status = "unreviewed"
+pairing = "unverified"
+
+[[verdict]]
+id = "rmp-ii-reduced-density"
+status = "unreviewed"
+pairing = "unverified"
+
+[[verdict]]
+id = "rmp-ii-spectrum-rho"
+status = "unreviewed"
+pairing = "unverified"
+
+[[verdict]]
+id = "rmp-ii-spectrum-transfer"
+status = "unreviewed"
+pairing = "unverified"
+
+[[verdict]]
+id = "rmp-ii-spectrum-fixed-points"
+status = "unreviewed"
+pairing = "unverified"
+
+[[verdict]]
+id = "rmp-ii-blocking"
+status = "unreviewed"
+pairing = "unverified"
+
+[[verdict]]
+id = "rmp-ii-staircase"
+status = "unreviewed"
+pairing = "unverified"
+
+[[verdict]]
+id = "rmp-ii-circuit"
+status = "unreviewed"
+pairing = "unverified"
+
+[[verdict]]
+id = "rmp-ii-sv17"
+status = "unreviewed"
+pairing = "context-only"
+
+[[verdict]]
+id = "rmp-ii-canonical-left"
+status = "unreviewed"
+pairing = "unverified"
+
+[[verdict]]
+id = "rmp-ii-canonical-right"
+status = "unreviewed"
+pairing = "unverified"
+
+[[verdict]]
+id = "rmp-ii-ortho-right"
+status = "unreviewed"
+pairing = "unverified"
+
+[[verdict]]
+id = "rmp-ii-ortho-left"
+status = "unreviewed"
+pairing = "unverified"
+
+[[verdict]]
+id = "rmp-ii-tangent-projector"
+status = "unreviewed"
+pairing = "wrong-source"
+note = "Comparison page pairs this target with the wrong author figure; repair before judging."
+
+[[verdict]]
+id = "rmp-ii-boundary-lasso"
+status = "unreviewed"
+pairing = "wrong-source"
+note = "Comparison page pairs this target with the wrong author figure; repair before judging."
+
+[[verdict]]
+id = "rmp-ii-boundary-region"
+status = "unreviewed"
+pairing = "unverified"
+
+[[verdict]]
+id = "rmp-ii-boundary-state"
+status = "unreviewed"
+pairing = "unverified"
+
+[[verdict]]
+id = "rmp-ii-rfp-isometry"
+status = "unreviewed"
+pairing = "unverified"
+
+[[verdict]]
+id = "rmp-ii-zcl-mpdo"
+status = "unreviewed"
+pairing = "unverified"
+
+[[verdict]]
+id = "rmp-ii-channels-ts"
+status = "unreviewed"
+pairing = "unverified"
+
+[[verdict]]
+id = "rmp-ii-mpdo-ol"
+status = "unreviewed"
+pairing = "unverified"
+
+[[verdict]]
+id = "rmp-ii-peps-rg"
+status = "unreviewed"
+pairing = "unverified"
+
+[[verdict]]
+id = "rmp-ii-inverse-renormalization"
+status = "unreviewed"
+pairing = "unverified"
+
+[[verdict]]
+id = "rmp-iii-a-symmetry-sector"
+status = "unreviewed"
+pairing = "wrong-source"
+note = "Comparison page pairs this target with the wrong author figure; repair before judging."
+
+[[verdict]]
+id = "rmp-iii-a-f-symbol"
+status = "unreviewed"
+pairing = "unverified"
+
+[[verdict]]
+id = "rmp-iii-a-boundary-algebra-n"
+status = "unreviewed"
+pairing = "source-misrender"
+note = "The extracted author-source panel misrenders; repair extraction before judging."
+
+[[verdict]]
+id = "rmp-iii-a-boundary-algebra"
+status = "unreviewed"
+pairing = "unverified"
+
+[[verdict]]
+id = "rmp-iii-a-pentagon-physical"
+status = "unreviewed"
+pairing = "context-only"
+
+[[verdict]]
+id = "rmp-iii-a-pentagon-mpo"
+status = "unreviewed"
+pairing = "context-only"
+
+[[verdict]]
+id = "rmp-iii-a-pentagon-mixed"
+status = "unreviewed"
+pairing = "context-only"
+
+[[verdict]]
+id = "rmp-iii-a-pentagon-peps"
+status = "unreviewed"
+pairing = "context-only"
+
+[[verdict]]
+id = "rmp-iii-a-fusion-tensor"
+status = "unreviewed"
+pairing = "context-only"
+
+[[verdict]]
+id = "rmp-iii-a-mpo-tensor"
+status = "unreviewed"
+pairing = "context-only"
+
+[[verdict]]
+id = "rmp-iii-a-peps-tensor"
+status = "unreviewed"
+pairing = "context-only"
+
+[[verdict]]
+id = "rmp-iii-a-coproduct"
+status = "unreviewed"
+pairing = "source-misrender"
+note = "The extracted author-source panel misrenders; repair extraction before judging."
+
+[[verdict]]
+id = "rmp-iii-a-pulling-through"
+status = "blocked"
+pairing = "unverified"
+defects = ["text-substitution"]
+missing = ["pulling-through", "rotated-action"]
+case_sha256 = "85cfefb033d051019d6ace7c242539b3199eb872a286e0be6a60d864f091c45b"
+note = "The right-hand side is the literal text 'quarter-turn'; the rotated network is never drawn."
+reviewed = "2026-07-23"
+renderer = "maintainer-page-review-2026-07-23"
+
+[[verdict]]
+id = "rmp-iii-a-commuting-hamiltonian"
+status = "unreviewed"
+pairing = "unverified"
+
+[[verdict]]
+id = "rmp-iii-a-proof-one"
+status = "unreviewed"
+pairing = "unverified"
+
+[[verdict]]
+id = "rmp-iii-a-proof-two"
+status = "unreviewed"
+pairing = "unverified"
+
+[[verdict]]
+id = "rmp-iii-a-proof-three"
+status = "unreviewed"
+pairing = "unverified"
+
+[[verdict]]
+id = "rmp-iii-a-ghz-state"
+status = "unreviewed"
+pairing = "unverified"
+
+[[verdict]]
+id = "rmp-iii-a-ghz-tensor"
+status = "unreviewed"
+pairing = "unverified"
+
+[[verdict]]
+id = "rmp-iii-a-hadamard"
+status = "unreviewed"
+pairing = "unverified"
+
+[[verdict]]
+id = "rmp-iii-a-spt-mpo"
+status = "unreviewed"
+pairing = "unverified"
+
+[[verdict]]
+id = "rmp-iii-a-spt-intertwiner"
+status = "unreviewed"
+pairing = "unverified"
+
+[[verdict]]
+id = "rmp-iii-a-g-injective-projector"
+status = "unreviewed"
+pairing = "unverified"
+
+[[verdict]]
+id = "rmp-iii-a-mpo-action"
+status = "unreviewed"
+pairing = "unverified"
+
+[[verdict]]
+id = "rmp-iii-a-mpo-injective"
+status = "unreviewed"
+pairing = "unverified"
+
+[[verdict]]
+id = "rmp-iii-a-torus-one"
+status = "unreviewed"
+pairing = "unverified"
+
+[[verdict]]
+id = "rmp-iii-a-torus-two"
+status = "unreviewed"
+pairing = "unverified"
+
+[[verdict]]
+id = "rmp-iii-a-torus-three"
+status = "unreviewed"
+pairing = "unverified"
+
+[[verdict]]
+id = "rmp-iii-b-anyon-pair"
+status = "unreviewed"
+pairing = "unverified"
+
+[[verdict]]
+id = "rmp-iii-b-idempotent"
+status = "unreviewed"
+pairing = "unverified"
+
+[[verdict]]
+id = "rmp-iii-b-dyon"
+status = "unreviewed"
+pairing = "unverified"
+
+[[verdict]]
+id = "rmp-iii-b-self-braiding"
+status = "unreviewed"
+pairing = "unverified"
+
+[[verdict]]
+id = "rmp-iii-b-r-tensor-left"
+status = "unreviewed"
+pairing = "unverified"
+
+[[verdict]]
+id = "rmp-iii-b-r-tensor-right"
+status = "unreviewed"
+pairing = "unverified"
+
+[[verdict]]
+id = "rmp-iii-b-braid-one"
+status = "unreviewed"
+pairing = "unverified"
+
+[[verdict]]
+id = "rmp-iii-b-braid-two"
+status = "unreviewed"
+pairing = "unverified"
+
+[[verdict]]
+id = "rmp-iii-b-braid-three"
+status = "unreviewed"
+pairing = "unverified"
+
+[[verdict]]
+id = "rmp-iii-b-braid-four"
+status = "unreviewed"
+pairing = "unverified"
+
+[[verdict]]
+id = "rmp-iii-b-condensation"
+status = "unreviewed"
+pairing = "unverified"
+
+[[verdict]]
+id = "rmp-iv-ground-space-1d"
+status = "unreviewed"
+pairing = "unverified"
+
+[[verdict]]
+id = "rmp-iv-ground-space-2d"
+status = "unreviewed"
+pairing = "unverified"
+
+[[verdict]]
+id = "rmp-iv-intersection-lhs-one"
+status = "unreviewed"
+pairing = "unverified"
+
+[[verdict]]
+id = "rmp-iv-intersection-rhs-one"
+status = "unreviewed"
+pairing = "unverified"
+
+[[verdict]]
+id = "rmp-iv-intersection-lhs-two"
+status = "unreviewed"
+pairing = "unverified"
+
+[[verdict]]
+id = "rmp-iv-intersection-rhs-two"
+status = "unreviewed"
+pairing = "unverified"
+
+[[verdict]]
+id = "rmp-iv-intersection-lhs-three"
+status = "unreviewed"
+pairing = "unverified"
+
+[[verdict]]
+id = "rmp-iv-intersection-rhs-three"
+status = "unreviewed"
+pairing = "unverified"
+
+[[verdict]]
+id = "rmp-iv-intersection-lhs-four"
+status = "unreviewed"
+pairing = "unverified"
+
+[[verdict]]
+id = "rmp-iv-intersection-rhs-four"
+status = "unreviewed"
+pairing = "unverified"
+
+[[verdict]]
+id = "rmp-iv-intersection-lhs-five"
+status = "unreviewed"
+pairing = "unverified"
+
+[[verdict]]
+id = "rmp-iv-intersection-rhs-five"
+status = "unreviewed"
+pairing = "unverified"
+
+[[verdict]]
+id = "rmp-iv-intersection-lhs-six"
+status = "unreviewed"
+pairing = "unverified"
+
+[[verdict]]
+id = "rmp-iv-intersection-rhs-six"
+status = "unreviewed"
+pairing = "unverified"
+
+[[verdict]]
+id = "rmp-app-toric-primal"
+status = "unreviewed"
+pairing = "context-only"
+
+[[verdict]]
+id = "rmp-app-toric-dual"
+status = "unreviewed"
+pairing = "context-only"
+
+[[verdict]]
+id = "rmp-app-czx-state"
+status = "unreviewed"
+pairing = "unverified"
+
+[[verdict]]
+id = "rmp-workbench-ii-newfig7"
+status = "unreviewed"
+pairing = "unverified"
+
+[[verdict]]
+id = "rmp-workbench-ii-projector-on-pta"
+status = "unreviewed"
+pairing = "unverified"
+
+[[verdict]]
+id = "rmp-workbench-ii-peps-rg-workbench"
+status = "unreviewed"
+pairing = "unverified"
+
+[[verdict]]
+id = "rmp-workbench-ii-positive-mpo-old"
+status = "unreviewed"
+pairing = "unverified"
+
+[[verdict]]
+id = "rmp-workbench-ii-peps-gauge-old"
+status = "unreviewed"
+pairing = "unverified"
+
+[[verdict]]
+id = "rmp-workbench-ii-peps-gauge-without-a"
+status = "unreviewed"
+pairing = "unverified"
+
+[[verdict]]
+id = "rmp-workbench-ii-mpu-wrap-second"
+status = "unreviewed"
+pairing = "unverified"
+
+[[verdict]]
+id = "rmp-workbench-ii-v-tensor-definition"
+status = "unreviewed"
+pairing = "unverified"
+
+[[verdict]]
+id = "rmp-workbench-ii-boundary-a-old"
+status = "unreviewed"
+pairing = "unverified"
+
+[[verdict]]
+id = "rmp-workbench-ii-boundary-b-old"
+status = "unreviewed"
+pairing = "unverified"
+
+[[verdict]]
+id = "rmp-workbench-ii-peps-fine-graining"
+status = "unreviewed"
+pairing = "unverified"
+
+[[verdict]]
+id = "rmp-workbench-ii-historical-composite"
+status = "unreviewed"
+pairing = "unverified"
+
+[[verdict]]
+id = "rmp-workbench-iii-eq50"
+status = "unreviewed"
+pairing = "unverified"
+
+[[verdict]]
+id = "rmp-workbench-iii-eq51"
+status = "unreviewed"
+pairing = "unverified"
+
+[[verdict]]
+id = "rmp-workbench-iii-eq52"
+status = "unreviewed"
+pairing = "unverified"
+
+[[verdict]]
+id = "rmp-workbench-iii-diagram-one"
+status = "unreviewed"
+pairing = "unverified"
+
+[[verdict]]
+id = "rmp-workbench-iii-diagram-two"
+status = "unreviewed"
+pairing = "unverified"
+
+[[verdict]]
+id = "rmp-workbench-iii-diagram-three"
+status = "blocked"
+pairing = "unverified"
+defects = ["text-substitution"]
+missing = ["rotated-action", "ring-closure"]
+case_sha256 = "24da4b8228d1a553f9639d7f19ef24de96a59ce873597a4a95fa8cceca3f0531"
+note = "The right-hand side is the literal text 'quarter-turn'; the rotated network is never drawn."
+reviewed = "2026-07-23"
+renderer = "maintainer-page-review-2026-07-23"
+
+[[verdict]]
+id = "rmp-workbench-iii-historical-composite"
+status = "unfaithful"
+pairing = "unverified"
+defects = ["unfaithful-substitution"]
+case_sha256 = "902485aae85a5ba738ece07588b0733c3e4ce97ee6cf5722f8e98808529eaba7"
+note = "Renders a stock PEPS coarse-graining cube unrelated to the target's quarter-turn box-loop equation."
+reviewed = "2026-07-23"
+renderer = "maintainer-page-review-2026-07-23"
+
+[[verdict]]
+id = "rmp-workbench-iii-diagram-four"
+status = "unreviewed"
+pairing = "unverified"
+
+[[verdict]]
+id = "rmp-workbench-iii-eq50-reduced"
+status = "unreviewed"
+pairing = "unverified"
+
+[[verdict]]
+id = "rmp-workbench-iii-dual-reduced"
+status = "unreviewed"
+pairing = "unverified"
+
+[[verdict]]
+id = "rmp-workbench-iii-f-symbol-simplified-a"
+status = "unreviewed"
+pairing = "unverified"
+
+[[verdict]]
+id = "rmp-workbench-iii-mpo-representation"
+status = "unreviewed"
+pairing = "unverified"
+
+[[verdict]]
+id = "rmp-workbench-iii-f-tensor"
+status = "unreviewed"
+pairing = "unverified"
+
+[[verdict]]
+id = "rmp-workbench-iii-eq59-now"
+status = "blocked"
+pairing = "unverified"
+defects = ["text-substitution"]
+missing = ["group-average", "ring-closure"]
+case_sha256 = "a4a006c1ad1a9c999e49effb3519fe93511a6ee3ae18f784870bc6890224c1ba"
+note = "The right-hand side is the literal symbol P_G; the projector network is never drawn."
+reviewed = "2026-07-23"
+renderer = "maintainer-page-review-2026-07-23"
+
+[[verdict]]
+id = "rmp-workbench-iii-ghz-state-workbench"
+status = "unreviewed"
+pairing = "unverified"
+
+[[verdict]]
+id = "rmp-workbench-iii-ghz-up"
+status = "unreviewed"
+pairing = "unverified"
+
+[[verdict]]
+id = "rmp-workbench-iii-g-injective-pull"
+status = "unreviewed"
+pairing = "unverified"
+
+[[verdict]]
+id = "rmp-workbench-iii-intertwining-mpo"
+status = "unreviewed"
+pairing = "unverified"
+
+[[verdict]]
+id = "rmp-workbench-iii-mpo-injective-white"
+status = "unreviewed"
+pairing = "unverified"
+
+[[verdict]]
+id = "rmp-workbench-iii-mpo-on-peps-definition"
+status = "unreviewed"
+pairing = "unverified"
+
+[[verdict]]
+id = "rmp-workbench-iii-eq60-now"
+status = "unreviewed"
+pairing = "unverified"
+
+[[verdict]]
+id = "rmp-workbench-iii-enlarged-mpo-black"
+status = "unreviewed"
+pairing = "unverified"
+
+[[verdict]]
+id = "rmp-workbench-iii-eq59"
+status = "unreviewed"
+pairing = "unverified"
+
+[[verdict]]
+id = "rmp-workbench-iii-g-injective-mpo"
+status = "unreviewed"
+pairing = "unverified"
+
+[[verdict]]
+id = "rmp-workbench-iii-peps-renormalization-one"
+status = "unreviewed"
+pairing = "unverified"
+
+[[verdict]]
+id = "rmp-workbench-iii-peps-renormalization-two"
+status = "unreviewed"
+pairing = "unverified"

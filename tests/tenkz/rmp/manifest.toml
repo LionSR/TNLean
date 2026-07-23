@@ -696,7 +696,7 @@ formula = "^2F ^1F = ^1F ^2F ^2F — a physical string (black, vertical,"
 ink = "Canonical public tenkzfree environment; no raw TikZ."
 boundary = "Resolved by the public environment; open indices remain explicit."
 source = "paper TN-Review-main.tex line 1312; paper-context-only; no author drawing source"
-capabilities = ["coherence", "fusion-tree"]
+capabilities = ["coherence", "free-graph"]
 paper_context_only = true
 fixture = "tests/tenkz/t2_pentagon3.tex"
 placements = [{ order = 41, line = 1312, asset = "fig3_pentagon3.pdf" }]
@@ -711,7 +711,7 @@ formula = "the MPO-wire fusion move c -> (a, b):"
 ink = "Canonical public tenkzfree environment; no raw TikZ."
 boundary = "Resolved by the public environment; open indices remain explicit."
 source = "paper TN-Review-main.tex line 1317; paper-context-only; no author drawing source"
-capabilities = ["coherence", "fusion-tree"]
+capabilities = ["coherence", "free-graph"]
 paper_context_only = true
 fixture = "tests/tenkz/t2_pentagon2.tex"
 placements = [{ order = 42, line = 1317, asset = "fig3_pentagon2.pdf" }]
@@ -726,7 +726,7 @@ formula = "^2F ^3F = ^3F ^2F ^2F — a horizontal MPO string (red,"
 ink = "Canonical public tenkzfree environment; no raw TikZ."
 boundary = "Resolved by the public environment; open indices remain explicit."
 source = "paper TN-Review-main.tex line 1325; paper-context-only; no author drawing source"
-capabilities = ["coherence", "fusion-tree"]
+capabilities = ["coherence", "free-graph"]
 paper_context_only = true
 fixture = "tests/tenkz/t2_pentagon4.tex"
 placements = [{ order = 43, line = 1325, asset = "fig3_pentagon4.pdf" }]
@@ -741,7 +741,7 @@ formula = "^3F ^3F = ^4F ^3F ^3F — re-association of a two-vertex"
 ink = "Canonical public tenkz composition commands; no raw TikZ."
 boundary = "Resolved by the public environment; open indices remain explicit."
 source = "paper TN-Review-main.tex line 1329; paper-context-only; no author drawing source"
-capabilities = ["lattice", "regions", "typed-ports"]
+capabilities = ["coherence", "fusion-tree"]
 paper_context_only = true
 fixture = "tests/tenkz/t2_pentagon5.tex"
 placements = [{ order = 44, line = 1329, asset = "fig3_pentagon5.pdf" }]
@@ -787,7 +787,7 @@ formula = "the trivalent junction of physical/fusion wires around the"
 ink = "Canonical public tenkzfree environment; no raw TikZ."
 boundary = "Resolved by the public environment; open indices remain explicit."
 source = "paper TN-Review-main.tex line 1342; paper-context-only; no author drawing source"
-capabilities = ["lattice", "regions", "typed-ports"]
+capabilities = ["free-graph", "typed-ports"]
 paper_context_only = true
 fixture = "tests/tenkz/t2_peps.tex"
 placements = [{ order = 47, line = 1342, asset = "fig3_peps.pdf" }, { order = 92, line = 2476, asset = "fig3_peps.pdf" }]
@@ -904,7 +904,7 @@ formula = "|CZX> = blocking of (x)_{i,j} |GHZ_ij> ,"
 ink = "Canonical public tenkzlattice environment; no raw TikZ."
 boundary = "Resolved by the public environment; open indices remain explicit."
 source = "paper TN-Review-main.tex line 1446; author source ImagesReview Section III/ImagesReview Section III.tex lines 329-356"
-capabilities = ["grid", "typed-ports"]
+capabilities = ["lattice", "typed-ports"]
 paper_context_only = false
 fixture = "tests/tenkz/t2_czx.tex"
 author_source = "ImagesReview Section III/ImagesReview Section III.tex"
@@ -989,7 +989,7 @@ formula = "P_G = |G|^-1 sum_g L_g on the four virtual legs."
 ink = "Canonical public tenkzfree environment; no raw TikZ."
 boundary = "Resolved by the public environment; open indices remain explicit."
 source = "paper TN-Review-main.tex line 1483; author source ImagesReview Section III/ImagesReview Section III.tex lines 468-520"
-capabilities = ["grid", "typed-ports"]
+capabilities = ["free-graph", "typed-ports"]
 paper_context_only = false
 fixture = "tests/tenkz/t2_eq54_ginj.tex"
 author_source = "ImagesReview Section III/ImagesReview Section III.tex"

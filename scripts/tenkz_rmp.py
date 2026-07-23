@@ -27,7 +27,7 @@ from typing import Any, Iterable, Sequence
 
 REPO = Path(__file__).resolve().parent.parent
 DEFAULT_MANIFEST = REPO / "tests" / "tenkz" / "rmp" / "manifest.toml"
-DEFAULT_VERDICT = REPO / "tests" / "tenkz" / "rmp" / "verdict.toml"
+DEFAULT_VERDICT = REPO / "tests" / "tenkz" / "rmp" / "verdicts.toml"
 BOOK_SOURCE = REPO / "docs" / "tenkz" / "rmp-benchmark.tex"
 BOOK_OUTPUT = REPO / "output" / "pdf" / "tenkz-rmp-benchmark.pdf"
 COMPARE_OUTPUT = REPO / "output" / "pdf" / "tenkz-rmp-comparison.pdf"
@@ -86,6 +86,47 @@ FORBIDDEN_CASE_PATTERNS = (
 )
 
 
+VERDICT_STATUSES = (
+    "unreviewed",
+    "faithful",
+    "cosmetic-gap",
+    "structural-gap",
+    "unfaithful",
+    "blocked",
+)
+PAIRING_STATES = (
+    "unverified",
+    "verified",
+    "wrong-source",
+    "source-misrender",
+    "context-only",
+)
+DEFECT_KINDS = (
+    "label-collision",
+    "open-closure",
+    "text-substitution",
+    "unfaithful-substitution",
+    "weight-mismatch",
+    "boundary-mismatch",
+    "wrong-contraction",
+    "missing-element",
+    "extra-element",
+    "placement-illegible",
+)
+# Structural capability tags map one-to-one onto public constructs; a tag
+# without its construct in the case body is manifest drift, not judgment.
+STRUCTURAL_CAPABILITY_PATTERNS = {
+    "grid": re.compile(r"\\begin\{tenkz\}|\\tnpic\b"),
+    "lattice": re.compile(r"\\begin\{tenkzlattice\}|\\begin\{tenkzplanes\}"),
+    "lattice-preset": re.compile(r"\\begin\{tenkzplanes\}"),
+    "free-graph": re.compile(r"\\begin\{tenkzfree\}"),
+    "fusion-tree": re.compile(r"\\tntree\b|\\begin\{tenkzcd\}"),
+}
+# Statuses that already concede the figure is not a faithful reproduction;
+# automatic defect detection demands consistency from the rest.
+CONCEDING_STATUSES = {"structural-gap", "unfaithful", "blocked"}
+
+
 class RMPError(RuntimeError):
     """A benchmark contract or build step failed."""
 
@@ -123,11 +164,17 @@ class BuildResult:
 
 
 @dataclasses.dataclass(frozen=True)
-class CampaignVerdict:
-    digest: str
-    source: str
-    print_status: str
-    web: str
+class TargetVerdict:
+    id: str
+    status: str
+    pairing: str
+    defects: tuple[str, ...]
+    missing: tuple[str, ...]
+    case_sha256: str | None
+    note: str
+    reviewed: str
+    renderer: str
+    second_viewer: str
 
 
 def fail(message: str) -> None:
@@ -737,24 +784,176 @@ def campaign_digest(targets: Sequence[Target]) -> str:
     return digest.hexdigest()
 
 
-def load_campaign_verdict(targets: Sequence[Target]) -> CampaignVerdict:
-    current = campaign_digest(targets)
+VERDICT_STANZA_KEYS = {
+    "id",
+    "status",
+    "pairing",
+    "defects",
+    "missing",
+    "case_sha256",
+    "note",
+    "reviewed",
+    "renderer",
+    "second_viewer",
+}
+
+
+def string_tuple(value: Any, *, where: str, allowed: tuple[str, ...] | None) -> tuple[str, ...]:
+    if not isinstance(value, list) or not all(isinstance(item, str) for item in value):
+        fail(f"{where} must be a list of strings")
+    if allowed is not None:
+        unknown = sorted(set(value) - set(allowed))
+        if unknown:
+            fail(f"{where} uses unknown entries {unknown}; allowed: {sorted(allowed)}")
+    return tuple(value)
+
+
+def load_verdicts(targets: Sequence[Target]) -> dict[str, TargetVerdict]:
+    """Load and validate the per-target verdict ledger.
+
+    Every target carries exactly one stanza.  Any status may be recorded --
+    including failure; the gate rejects lies (stale hashes, uncountersigned
+    faithful claims, blocked entries that name no missing capability), never
+    the existence of gaps.
+    """
     if not DEFAULT_VERDICT.is_file():
-        return CampaignVerdict("digest-unreviewed", "source review pending", "print pass", "web pending")
+        fail(
+            f"per-target verdict ledger missing: {DEFAULT_VERDICT}; "
+            "every target needs a [[verdict]] stanza (status=unreviewed is legal)"
+        )
     try:
         raw = tomllib.loads(DEFAULT_VERDICT.read_text(encoding="utf-8"))
     except (OSError, UnicodeError, tomllib.TOMLDecodeError) as exc:
-        fail(f"cannot read campaign verdict {DEFAULT_VERDICT}: {exc}")
-    expected = {"version", "target_count", "campaign_sha256", "source", "print", "web", "reviewed"}
-    if set(raw) != expected:
-        fail(f"campaign verdict fields must be exactly {sorted(expected)}")
-    if raw["version"] != 1 or raw["target_count"] != len(targets):
-        return CampaignVerdict("digest-stale", "source review stale", "print stale", "web stale")
-    if raw["campaign_sha256"] != current:
-        return CampaignVerdict("digest-stale", "source review stale", "print stale", "web stale")
-    if (raw["source"], raw["print"], raw["web"]) != ("faithful", "pass", "pass"):
-        fail("current campaign verdict must use source=faithful, print=pass, web=pass")
-    return CampaignVerdict("digest-current", "faithful", "print pass", "web pass")
+        fail(f"cannot read verdict ledger {DEFAULT_VERDICT}: {exc}")
+    allowed_top = {"schema_version", "campaign_sha256", "verdict"}
+    if not set(raw) <= allowed_top:
+        fail(f"verdict ledger top-level keys must be within {sorted(allowed_top)}")
+    if raw.get("schema_version") != 1:
+        fail("verdict ledger schema_version must be 1")
+    stanzas = raw.get("verdict")
+    if not isinstance(stanzas, list) or not stanzas:
+        fail("verdict ledger must contain [[verdict]] stanzas")
+    by_target = {target.id: target for target in targets}
+    verdicts: dict[str, TargetVerdict] = {}
+    for index, stanza in enumerate(stanzas):
+        where = f"verdict[{index}]"
+        if not isinstance(stanza, dict):
+            fail(f"{where} must be a table")
+        unknown = sorted(set(stanza) - VERDICT_STANZA_KEYS)
+        if unknown:
+            fail(f"{where} has unknown keys {unknown}")
+        for key in ("id", "status", "pairing"):
+            if not isinstance(stanza.get(key), str) or not stanza.get(key):
+                fail(f"{where}.{key} must be a nonempty string")
+        identifier = stanza["id"]
+        if identifier not in by_target:
+            fail(f"{where}.id {identifier!r} is not a manifest target")
+        if identifier in verdicts:
+            fail(f"duplicate verdict stanza for {identifier}")
+        status = stanza["status"]
+        pairing = stanza["pairing"]
+        if status not in VERDICT_STATUSES:
+            fail(f"{where}.status {status!r} not in {VERDICT_STATUSES}")
+        if pairing not in PAIRING_STATES:
+            fail(f"{where}.pairing {pairing!r} not in {PAIRING_STATES}")
+        defects = string_tuple(stanza.get("defects", []), where=f"{where}.defects", allowed=DEFECT_KINDS)
+        missing = string_tuple(stanza.get("missing", []), where=f"{where}.missing", allowed=None)
+        for key in ("note", "reviewed", "renderer", "second_viewer"):
+            if key in stanza and not isinstance(stanza[key], str):
+                fail(f"{where}.{key} must be a string")
+        case_sha = stanza.get("case_sha256")
+        if case_sha is not None and not isinstance(case_sha, str):
+            fail(f"{where}.case_sha256 must be a string")
+        verdict = TargetVerdict(
+            id=identifier,
+            status=status,
+            pairing=pairing,
+            defects=defects,
+            missing=missing,
+            case_sha256=case_sha,
+            note=stanza.get("note", ""),
+            reviewed=stanza.get("reviewed", ""),
+            renderer=stanza.get("renderer", ""),
+            second_viewer=stanza.get("second_viewer", ""),
+        )
+        target = by_target[identifier]
+        if status == "blocked" and not missing:
+            fail(f"{where}: blocked requires missing=[...] naming the absent capabilities")
+        if status == "faithful":
+            if not verdict.second_viewer:
+                fail(f"{where}: faithful requires a second_viewer countersign")
+            if pairing != "verified":
+                fail(f"{where}: faithful requires pairing=verified, got {pairing!r}")
+        if status != "unreviewed":
+            if not verdict.reviewed:
+                fail(f"{where}: judged status {status!r} requires a reviewed date")
+            if case_sha is None:
+                fail(f"{where}: judged status {status!r} requires case_sha256")
+        if case_sha is not None:
+            current = sha256(REPO / target.case)
+            if case_sha != current:
+                fail(
+                    f"{where}: stale verdict; case {target.case} changed since review "
+                    f"(recorded {case_sha[:12]}, current {current[:12]}) -- re-review "
+                    "or reset status=unreviewed"
+                )
+        if target.paper_context_only != (pairing == "context-only"):
+            fail(
+                f"{where}: pairing=context-only is required exactly for "
+                "paper-context-only targets"
+            )
+        verdicts[identifier] = verdict
+    missing_ids = sorted(set(by_target) - set(verdicts))
+    if missing_ids:
+        fail("targets without a verdict stanza: " + ", ".join(missing_ids))
+    recorded_campaign = raw.get("campaign_sha256")
+    if isinstance(recorded_campaign, str):
+        current_campaign = campaign_digest(targets)
+        if recorded_campaign != current_campaign:
+            print(
+                "[tenkz rmp] WARNING: campaign inputs changed since the last full "
+                "review; judged verdicts stand on per-case hashes only"
+            )
+    return verdicts
+
+
+def verdict_histogram(verdicts: dict[str, TargetVerdict]) -> dict[str, int]:
+    counts = {status: 0 for status in VERDICT_STATUSES}
+    for verdict in verdicts.values():
+        counts[verdict.status] += 1
+    return counts
+
+
+def validate_verdict_consistency(targets: Sequence[Target], verdicts: dict[str, TargetVerdict]) -> None:
+    """Mechanical checks that need no judgment.
+
+    A detected defect never blocks by itself; a detected defect CONTRADICTING
+    the recorded verdict blocks.  Honesty is cheap, lying is expensive.
+    """
+    problems: list[str] = []
+    for target in targets:
+        body = strip_tex_comments((REPO / target.case).read_text(encoding="utf-8"))
+        verdict = verdicts[target.id]
+        # Literal prose standing in for a declared diagram.
+        if "\\text{" in body:
+            concedes = verdict.status in CONCEDING_STATUSES
+            declared = "text-substitution" in verdict.defects
+            if not (concedes or declared):
+                problems.append(
+                    f"{target.id}: case body typesets \\text{{...}} where the manifest "
+                    "declares diagram ink; record defects=[\"text-substitution\"] or a "
+                    "conceding status"
+                )
+        # Structural capability tags must be witnessed by their construct.
+        for capability in target.capabilities:
+            pattern = STRUCTURAL_CAPABILITY_PATTERNS.get(capability)
+            if pattern is not None and not pattern.search(body):
+                problems.append(
+                    f"{target.id}: capability tag {capability!r} has no matching "
+                    "construct in the case body (manifest drift)"
+                )
+    if problems:
+        fail("verdict consistency failed:\n" + "\n".join(problems))
 
 
 def tex_escape(text: str) -> str:
@@ -773,15 +972,26 @@ def tex_escape(text: str) -> str:
     return "".join(replacements.get(character, character) for character in text)
 
 
+def verdict_detail(verdict: TargetVerdict) -> str:
+    parts: list[str] = []
+    if verdict.defects:
+        parts.append("defects: " + ", ".join(verdict.defects))
+    if verdict.missing:
+        parts.append("missing: " + ", ".join(verdict.missing))
+    if not parts and verdict.note:
+        parts.append(verdict.note)
+    return "; ".join(parts) if parts else "none recorded"
+
+
 def generate_book_index(results: list[BuildResult], destination: Path) -> None:
-    verdict = load_campaign_verdict([result.target for result in results])
+    targets = [result.target for result in results]
+    verdicts = load_verdicts(targets)
+    validate_verdict_consistency(targets, verdicts)
+    counts = verdict_histogram(verdicts)
     lines = [
         "% Generated by scripts/tenkz_rmp.py; do not edit.",
-        r"\RMPSetCampaignVerdict"
-        + "{" + tex_escape(verdict.digest) + "}"
-        + "{" + tex_escape(verdict.source) + "}"
-        + "{" + tex_escape(verdict.print_status) + "}"
-        + "{" + tex_escape(verdict.web) + "}",
+        r"\RMPVerdictSummary"
+        + "".join("{" + str(counts[status]) + "}" for status in VERDICT_STATUSES),
         r"\RMPMethodPages",
     ]
     lines.append(r"\RMPAtlasBegin")
@@ -847,6 +1057,13 @@ def generate_book_index(results: list[BuildResult], destination: Path) -> None:
         first = "".join("{" + tex_escape(field) + "}" for field in fields[:9])
         second = "".join("{" + tex_escape(field) + "}" for field in fields[9:])
         artifact = r"\detokenize{" + result.pdf.as_posix() + "}"
+        verdict = verdicts[target.id]
+        lines.append(
+            r"\RMPCaseVerdict"
+            + "{" + tex_escape(verdict.status) + "}"
+            + "{" + tex_escape(verdict.pairing) + "}"
+            + "{" + tex_escape(verdict_detail(verdict)) + "}"
+        )
         lines.append(
             r"\RMPCaseSpread" + first
             + r"\RMPCaseEvidence" + second
@@ -868,13 +1085,14 @@ def generate_book_index(results: list[BuildResult], destination: Path) -> None:
     lines.append(r"\RMPGrammarIndexEnd")
     lines.append(r"\RMPVerdictTablesBegin")
     for result in results:
+        verdict = verdicts[result.target.id]
         lines.append(
             r"\RMPVerdictRow"
             + "{" + tex_escape(result.target.id) + "}"
-            + "{" + tex_escape(verdict.digest) + "}"
-            + "{" + tex_escape(verdict.source) + "}"
-            + "{" + tex_escape(verdict.print_status) + "}"
-            + "{" + tex_escape(verdict.web) + "}"
+            + "{" + tex_escape(verdict.status) + "}"
+            + "{" + tex_escape(verdict.pairing) + "}"
+            + "{" + tex_escape(", ".join(verdict.defects) or "none") + "}"
+            + "{" + tex_escape(", ".join(verdict.missing) or verdict.note or "none") + "}"
         )
     lines.extend((r"\RMPVerdictTablesEnd", ""))
     destination.write_text("\n".join(lines), encoding="utf-8")
@@ -1301,16 +1519,33 @@ def main() -> int:
         targets = load_manifest(manifest)
         selected = select_targets(targets, args)
         jobs = positive_jobs()
+        # The verdict ledger is validated before any compilation: it covers
+        # every target regardless of selection, and a broken ledger should
+        # fail in seconds, not after 130 builds.
+        verdicts = load_verdicts(targets)
+        validate_verdict_consistency(targets, verdicts)
         if args.command == "compare" and not args.source_root.is_dir():
             fail(f"source root does not exist: {args.source_root}")
         with tempfile.TemporaryDirectory(prefix="tenkz-rmp-") as temporary:
             work = Path(temporary)
             results = compile_targets(selected, work, jobs)
             if args.command == "check":
+                counts = verdict_histogram(verdicts)
+                histogram = " | ".join(
+                    f"{status} {counts[status]}" for status in VERDICT_STATUSES
+                )
+                pairing_counts: dict[str, int] = {state: 0 for state in PAIRING_STATES}
+                for verdict in verdicts.values():
+                    pairing_counts[verdict.pairing] += 1
+                pairing_line = " | ".join(
+                    f"{state} {count}" for state, count in pairing_counts.items() if count
+                )
                 print(
                     "PASS: validated, compiled, linted, and audited "
                     f"{len(results)} RMP target(s)"
                 )
+                print(f"Verdicts: {histogram}")
+                print(f"Pairing:  {pairing_line}")
                 return 0
             if args.command in {"book", "render"}:
                 book = compile_book(results, work)

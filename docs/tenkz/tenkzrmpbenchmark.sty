@@ -40,14 +40,24 @@
       \emph{paper-context-only}; the label never implies a recovered block.
     \item[One source.] The complete listing and the vector rendering on every
       spread consume the same case path recorded in the manifest.
+    \item[Per-target verdicts.] Every spread carries its own reviewed verdict.
+      Current census: \rmpVerdictHistogram.  A gap is a recorded fact, not a
+      failure; only an unrecorded gap fails the check.
   \end{description}
 }
 
-\newcommand\RMPSetCampaignVerdict[4]{%
-  \def\rmpDigestVerdict{#1}%
-  \def\rmpSourceVerdict{#2}%
-  \def\rmpPrintVerdict{#3}%
-  \def\rmpWebVerdict{#4}%
+% Arguments follow VERDICT_STATUSES in scripts/tenkz_rmp.py:
+% unreviewed, faithful, cosmetic-gap, structural-gap, unfaithful, blocked.
+\newcommand\RMPVerdictSummary[6]{%
+  \def\rmpVerdictHistogram{%
+    #2~faithful; #3~cosmetic-gap; #4~structural-gap; #5~unfaithful;
+    #6~blocked; #1~unreviewed}%
+}
+
+\newcommand\RMPCaseVerdict[3]{%
+  \def\rmpVerdictStatus{#1}%
+  \def\rmpVerdictPairing{#2}%
+  \def\rmpVerdictDetail{#3}%
 }
 
 \newcommand\RMPAtlasBegin{%
@@ -161,8 +171,8 @@
     Standalone dimensions & #4 \\
     Case SHA-256 & \nolinkurl{#5} \\
     Fixture SHA-256 & \nolinkurl{#6} \\
-    Verdict & \rmpDigestVerdict; \rmpSourceVerdict; \rmpPrintVerdict;
-      \rmpWebVerdict \\
+    Verdict & \rmpVerdictStatus; pairing \rmpVerdictPairing;
+      \rmpVerdictDetail \\
   \end{tabularx}
 }
 
@@ -176,9 +186,11 @@
 \newcommand\RMPGrammarIndexEnd{\bottomrule\end{longtable}}
 
 \newcommand\RMPVerdictTablesBegin{%
-  \clearpage\section{Derived verdict table}
-  \begin{longtable}{@{}p{58mm}p{38mm}p{32mm}p{34mm}p{55mm}@{}}\toprule
-    Target & Digest & Source & Print & Web \\\midrule\endhead
+  \clearpage\section{Per-target verdict table}
+  \begin{longtable}{@{}p{58mm}p{24mm}p{30mm}
+      >{\RaggedRight\arraybackslash}p{45mm}
+      >{\RaggedRight\arraybackslash}p{60mm}@{}}\toprule
+    Target & Status & Pairing & Defects & Missing / note \\\midrule\endhead
 }
 \newcommand\RMPVerdictRow[5]{\RMPIdentifier{#1} & #2 & #3 & #4 & #5 \\
 }

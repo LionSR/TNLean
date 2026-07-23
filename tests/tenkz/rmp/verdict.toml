@@ -1,7 +1,0 @@
-version = 1
-target_count = 130
-campaign_sha256 = "2fd488d6052181d8a1d819f5e27a2030e4d96ef2702937b3d2b13c684f8afcec"
-source = "faithful"
-print = "pass"
-web = "pass"
-reviewed = "2026-07-22"

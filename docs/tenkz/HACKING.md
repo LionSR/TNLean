@@ -42,12 +42,13 @@ scripts/tenkz_rmp.sh render --all
 scripts/tenkz_rmp.sh compare --all --source-root tex/RMP_TIKZ_SOURCE_CODE
 ```
 
-The reviewed campaign verdict is stored in `tests/tenkz/rmp/verdict.toml`.
-Its digest covers the manifest, every case and mapped fixture, the package
-implementation, the audit/lint/build scripts, and the book style.  The book
-shows `digest-stale` instead of carrying a verdict across any covered change;
-refresh the record only after rerunning the source, print, SVG, and page-review
-gates.
+Per-target verdicts are stored in `tests/tenkz/rmp/verdicts.toml`, one
+stanza per target.  Any status may be recorded, including failure; the check
+rejects lies, never gaps: a stale `case_sha256`, a `faithful` claim without a
+second viewer and a verified pairing, or a `blocked` entry that names no
+missing capability all fail, while recorded gaps merely appear in the book's
+histogram.  A judged verdict pins the SHA-256 of its case; editing the case
+stales exactly that verdict.
 
 The ordinary 257-fixture corpus keeps its existing default interface:
 
