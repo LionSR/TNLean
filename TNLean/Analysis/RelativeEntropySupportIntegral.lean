@@ -239,7 +239,7 @@ Jenčová--Ruskai, arXiv:0903.2895v4, lines 717--720.
 
 The theorem `supportRelativeEntropyLeftRightIntegrand_eq_spectral` identifies
 this expression with the support-projected left-right quadratic form of the
-matrix lift `(intAB)`, lines 423--427. The bridge to the shifted
+matrix lift `(intAB)`, lines 423--427. The passage to the shifted
 relative-modular operator `t 1 + A ⊗ (B⁺)ᵀ` and the singular finite-family
 equality-to-common-resolvent passage remain open. -/
 noncomputable def supportRelativeEntropySpectralIntegrand
