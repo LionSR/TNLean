@@ -31,7 +31,7 @@ two-spin operator around the chain.  This construction has domain $N\geq2$:
 the periodic identification $N+1=1$ identifies site labels, but does not
 identify the two tensor factors on which $h$ acts.
 
-\section{The formalized range}
+\section{The retained-coordinate range}
 
 Let $\mu$ be the strictly positive diagonal one-site multiplicity matrix in
 the retained coordinates.  Define the two-site matrix
@@ -45,7 +45,11 @@ first site of a translated term, hence
   \exp\left(-\sum_i h_{i,i+1}\right)=\mu^{\otimes N}.
 \]
 Combining this equality with the terminal spectral refinement proves the
-displayed Gibbs decomposition for every $N\geq2$.
+retained-coordinate Gibbs decomposition for every $N\geq2$.  Applying the
+adjoint retained-row map reconstructs the physical density operator, but
+does not yet supply a physical-space Hamiltonian and physical-space
+projectors.  That independent gap is recorded in
+\path{docs/paper-gaps/cpsv16_topological_gibbs_physical_complement.tex}.
 
 The terminal spectral sectors are naturally indexed by pairs
 $(\gamma,k)$.  Positivity of every multiplicity shows that one such sector
@@ -75,9 +79,16 @@ The source construction therefore determines the theorem on the domain
 \]
 Theorem~4.15 is printed without stating this lower bound, but its $N=1$
 instance is undefined unless an author or erratum specifies both $H_1$ and
-the coincident-edge convention.  The theorem for $N\geq2$ is the complete
-formalization of the construction supplied by Definition~4.8.  No
-length-one theorem is asserted.
+the coincident-edge convention.  The retained-coordinate theorem resolves
+only this length-domain boundary for the scoped analogue on $N\geq2$.  No
+length-one theorem is asserted, and the physical-coordinate complement
+remains unformalized; see
+\path{docs/paper-gaps/cpsv16_topological_gibbs_physical_complement.tex}.
+
+This printed-domain boundary is independent of the physical-coordinate
+complement described in
+\path{docs/paper-gaps/cpsv16_topological_gibbs_physical_complement.tex}.
+Resolving either question would not resolve the other.
 
 \bibliographystyle{alpha}
 \bibliography{references}
