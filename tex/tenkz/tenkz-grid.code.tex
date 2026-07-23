@@ -1465,10 +1465,16 @@
 \tl_new:N  \l__tenkz_mdb_ob_tl
 \bool_new:N \l__tenkz_mdb_pa_bool
 \bool_new:N \l__tenkz_mdb_pb_bool
+\cs_new:Npn \tenkz_model_dir_word:
+  {
+    \tl_if_empty:NTF \l__tenkz_dir_tl {none}
+      { \str_if_eq:VnTF \l__tenkz_dir_tl {right} {to} {from} }
+  }
 \cs_new_protected:Npn \tenkz_model_derive_bonds:
   {
     \int_step_inline:nn { \l__tenkz_nrows_int }
       {
+        \tenkz_row_dir:nN {##1} \l__tenkz_dir_tl
         \int_zero:N \l__tenkz_mdb_prev_int
         \int_step_inline:nnn {1} { \l__tenkz_ncols_int }
           {
@@ -1498,7 +1504,8 @@
                                   {kind={index},
                                    from={##1-\int_use:N \l__tenkz_mdb_prev_int},
                                    to={##1-####1},
-                                   row={##1},origin={bond}}
+                                   row={##1},origin={bond},
+                                   dir={\tenkz_model_dir_word:}}
                               }
                           }
                       }
