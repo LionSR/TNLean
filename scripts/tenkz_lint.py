@@ -346,6 +346,9 @@ def expand_args(args: list[str]) -> list[Path]:
 # metric table become hard errors and these counts become the ratchet.
 
 RENDER_STAGE_FILES = {"tenkz-render.code.tex"}
+# The metric registry IS the table of named constants; its decimals are
+# the point, not the debt.
+METRIC_TABLE_FILES = {"tenkz-metric.code.tex"}
 # The pgf alternative names DRAWING primitives only; the pgfkeys keyval
 # machinery is parser plumbing that legitimately lives outside the renderer.
 _INK_TOKEN = re.compile(
@@ -367,6 +370,8 @@ def census(repo: Path) -> int:
         ink = decimals = 0
         for line in strip_comments(path.read_text(encoding="utf-8")).splitlines():
             ink += len(_INK_TOKEN.findall(line))
+            if path.name in METRIC_TABLE_FILES:
+                continue
             if not _METRIC_LINE.search(line):
                 decimals += len(_DECIMAL.findall(line))
         ink_total += ink
