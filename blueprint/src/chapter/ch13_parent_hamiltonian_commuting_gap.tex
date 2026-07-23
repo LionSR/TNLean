@@ -3312,9 +3312,18 @@ specialization of that Appendix~D definition.
     \leanok
     The commuting interaction determines Beigi's finite sector graph.  Its
     positive loops span the parent ground space, and the normalized minimal
-    loop tensors are normal renormalization fixed points.  Since the normal
-    tensor $B$ belongs eventually to the span of their periodic matrix product
-    vectors, normal-tensor orthogonality identifies $B$, up to a unit phase and
-    an invertible virtual change of basis, with one of these loop tensors.
+    loop tensors $L_j$ are normal renormalization fixed points.  For the normal
+    representative $B$,
+    \[
+        \forall^\infty N,\quad
+        V^{(N)}(B)
+        \in \operatorname{span}\{V^{(N)}(L_j):j=1,\ldots,g\}.
+    \]
+    Normal-tensor orthogonality applied to this eventual-span relation first
+    identifies the bond dimensions and then gives an index $j$, an invertible
+    matrix $X$, and a scalar $\zeta$ with $|\zeta|=1$ such that
+    \[
+        L_j^i = \zeta X B^i X^{-1}.
+    \]
     Transfer idempotence is preserved by these transformations.
 \end{proof}
