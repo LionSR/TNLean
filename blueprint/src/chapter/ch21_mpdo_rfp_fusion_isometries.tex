@@ -1642,7 +1642,13 @@ separate step.
         =\prod_{n=0}^{N-1}(\mu_{\alpha_n})_{q_n,q_n}.
     \]
     The first label is the initial label of the recursive fusion, while the
-    remaining $N-1$ labels are appended in chain order.  Let $W_{N,c}$ be the
+    remaining labels are appended in the physical order
+    $\alpha_1,\ldots,\alpha_{N-1}$.  The recursive specification records this
+    sequence in the reverse order
+    $(\alpha_{N-1},\ldots,\alpha_1)$, so removing its first entry removes the
+    final physical site.  This reversal affects only the recursive notation:
+    the tensor product and the sequential fusion coisometry remain in the
+    physical order $\alpha_0,\ldots,\alpha_{N-1}$.  Let $W_{N,c}$ be the
     resulting retained-row sequential coisometry for the configuration~$c$,
     and set
     \[
