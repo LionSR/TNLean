@@ -328,8 +328,44 @@ retains the two orientations: if $a\ne b$, then $(a,b)$ and $(b,a)$ are
 distinct ordered cycles, exactly as stated in Beigi, arXiv:1105.1019v2,
 Section~III, equations~(2)--(4), source lines 509--512.  No chain-level
 ground-space equation, eventual degeneracy, or canonical-form datum is assumed
-in these sector-graph theorems.  Only $N=1$ still requires a separate
-periodic-interaction convention and remains open in \ghissue{4400}.
+in these sector-graph theorems.
+
+At $N=1$, Beigi's two-site interaction has no specified action.  The source
+defines $P_{j,j+1}$ on sites $j,j+1$ and then separates the actions of
+$P_{j-1,j}$ and $P_{j,j+1}$ on the middle site; see
+arXiv:1105.1019v2, Section~III, source lines 451--476.  When $N=1$, these site
+labels all coincide, and lines 477--514 do not add a rule for turning the
+two-site operator into a one-site operator.  CPSV16 does not impose such a
+rule: Theorem~3.10(iii), local source lines 534--540, only concerns $N>2$.
+
+The present development uses the project-local convention that an $L$-site
+interaction is zero when $L>N$.  Accordingly,
+\leanid{MPSTensor.parentHamiltonian_two_one_eq_zero} proves
+$H_2^{(1)}=0$, and
+\leanid{MPSTensor.parentHamiltonianGroundSpaceES_two_one_eq_top} proves
+\begin{align}
+  \ker H_2^{(1)}=\mathbb C^d.
+\end{align}
+This convention does not extend Beigi's ordered-cycle equality.  An ordered
+cycle of length one is a self-loop, so the graph expression would instead be
+\begin{align}
+  \sum_a \dim\operatorname{ran}P_{a,a}.
+\end{align}
+The two-site block decomposition imposes no equality between this sum and $d$.
+For example, take
+\begin{align}
+  A^0=\begin{pmatrix}0&1\\0&0\end{pmatrix},
+  \qquad
+  A^1=\begin{pmatrix}0&0\\1&0\end{pmatrix}.
+\end{align}
+Its two-site ground space is spanned by $|01\rangle$ and $|10\rangle$.  The
+corresponding one-dimensional sectors have only the edges $0\to1$ and
+$1\to0$, so the self-loop sum is zero, whereas the project-local one-site
+ground space has dimension $d=2$.  Thus the project-local result is recorded
+separately, while Beigi's
+ordered-cycle theorem remains stated for $N\geq2$.  The source-level one-site
+convention remains open in \ghissue{4400}; \ghissue{4655} records the current
+project-local boundary.
 
 The remaining finite graph comparison in Beigi's Section~IV is now proved
 without an axiom.  For a finite directed graph with nonnegative integral edge weights,
