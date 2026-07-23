@@ -6,18 +6,22 @@ This file provides guidance to AI coding assistants working with code in this re
 
 TNLean is a Lean 4 formalization of the **Fundamental Theorem of Matrix Product States**, **Quantum Wielandt theory**, and finite-dimensional **quantum-channel theory** (following Wolf's *Quantum Channels & Operations*). Built on Mathlib v4.32.0.
 
-## Build Commands
+## Build Commands and Mathlib Cache Policy
+
+**Canonical cache rule:** never rebuild Mathlib from source in a fresh, cloned,
+or cache-cleared worktree. After adding or updating a Mathlib dependency, fetch
+its prebuilt artifacts **before** any `lake build` or local Lean check:
 
 ```bash
-# Fetch pre-built Mathlib oleans (run once, or after toolchain/dependency updates)
+# Fetch pre-built Mathlib artifacts after a Mathlib/toolchain/dependency update.
+# Do this before `lake build` or `lake env lean`; otherwise Mathlib can rebuild
+# from source and take hours.
 lake exe cache get
 
-# Full build
+# Only after the cache fetch succeeds:
 lake build
-
-# Check a single file (fastest feedback loop)
 lake env lean TNLean/Path/To/File.lean
-
+```
 # Check for sorrys/axioms in changed files
 rg -n "sorry|axiom" TNLean/Path/To/File.lean || true
 
@@ -27,7 +31,6 @@ cd blueprint && leanblueprint checkdecls
 # Blueprint web/PDF generation
 cd blueprint && leanblueprint web
 cd blueprint && leanblueprint pdf
-
 ```
 
 ## Lean Toolchain & Dependencies
