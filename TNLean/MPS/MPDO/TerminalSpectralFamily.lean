@@ -69,7 +69,7 @@ theorem terminalMatrix_posSemidef
 retains zero eigenvalues.
 
 Source: arXiv:1606.00608, lines 1010--1012. -/
-noncomputable def terminalEigenvalue
+def terminalEigenvalue
     (H : BNTFusionTensorClause M) (hM : IsMPDO M)
     (s : H.TerminalSpectralIndex) : ℝ :=
   (H.terminalMatrix_posSemidef hM s.1).isHermitian.eigenvalues s.2
@@ -87,7 +87,7 @@ theorem terminalEigenvalue_nonneg
 /-- The rank-one projection onto one eigenvector of a fixed terminal matrix.
 
 Source: arXiv:1606.00608, lines 1010--1012. -/
-noncomputable def terminalEigenvectorProjectionAt
+def terminalEigenvectorProjectionAt
     (H : BNTFusionTensorClause M) (hM : IsMPDO M)
     (γ : Fin H.labelCount) (k : Fin (H.bondDim γ)) :
     Matrix (Fin (H.bondDim γ)) (Fin (H.bondDim γ)) ℂ :=
@@ -107,7 +107,7 @@ theorem terminalEigenvectorProjectionAt_isOrthogonalProjection
 label.
 
 Source: arXiv:1606.00608, lines 1010--1012. -/
-noncomputable def terminalEigenvectorProjection
+def terminalEigenvectorProjection
     (H : BNTFusionTensorClause M) (hM : IsMPDO M)
     (s : H.TerminalSpectralIndex) (γ : Fin H.labelCount) :
     Matrix (Fin (H.bondDim γ)) (Fin (H.bondDim γ)) ℂ :=
