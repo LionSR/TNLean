@@ -2778,7 +2778,7 @@ specialization of that Appendix~D definition.
     \lean{MPSTensor.BeigiSectorGraphData.parentHamiltonianGroundSpaceES_finrank_eq}
     \leanok
     \uses{def:beigi_sector_graph}
-    For every $N>2$, the periodic ground-space dimension is
+    For every $N\geq 2$, the periodic ground-space dimension is
     \[
         \dim\ker H_N
         =
@@ -2787,8 +2787,9 @@ specialization of that Appendix~D definition.
         \dim\operatorname{ran}P_{a_n,a_{n+1}},
     \]
     where the sum is over ordered cycles and the indices are read modulo $N$.
-    This is the specialization to $N>2$ of equations~(3)--(4) of
-    \cite[Section~III]{Beigi2012Classification}.
+    This is equations~(3)--(4) of
+    \cite[Section~III]{Beigi2012Classification} for chains of length at least
+    two.  The one-site periodic interaction requires a separate convention.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -2799,6 +2800,30 @@ specialization of that Appendix~D definition.
     tensor product of the adjacent projectors $P_{a_n,a_{n+1}}$.  Taking the
     trace gives the product of their ranks.  A sequence containing a missing
     edge contributes zero, leaving exactly the displayed ordered-cycle sum.
+\end{proof}
+
+\begin{theorem}[Period-two ordered-cycle ground-space dimension formula]
+    \label{thm:beigi_ordered_cycle_ground_space_dimension_two}
+    \lean{MPSTensor.BeigiSectorGraphData.parentHamiltonianGroundSpaceES_finrank_eq_two}
+    \leanok
+    \uses{def:beigi_sector_graph}
+    At period two, the ground-space dimension is
+    \[
+        \dim\ker H_2
+        =
+        \sum_{\substack{a\to b\\ b\to a}}
+        \dim\operatorname{ran}P_{a,b}\,
+        \dim\operatorname{ran}P_{b,a}.
+    \]
+    The sum is over ordered pairs: if $a\ne b$, then $(a,b)$ and $(b,a)$
+    are distinct summands.  This is the length-two convention stated after
+    equation~(4) of \cite[Section~III]{Beigi2012Classification}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:beigi_ordered_cycle_ground_space_dimension}
+    Specialize the ordered-cycle formula to $N=2$.  Its two cyclic factors are
+    $P_{a,b}$ and $P_{b,a}$, which gives the displayed product of ranks.
 \end{proof}
 
 \begin{theorem}[Classification of eventually constant weighted sector graphs]
