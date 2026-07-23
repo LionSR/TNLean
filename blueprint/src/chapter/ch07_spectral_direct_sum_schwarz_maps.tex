@@ -5,20 +5,22 @@
     \lean{Matrix.directSumMapExtension, Matrix.IsKrausDirectSumMap}
     \leanok
     Let
-    \[
-        \mathcal A=\bigoplus_{i\in I}M_{n_i}(\mathbb C),
-        \qquad
-        \mathcal B=\bigoplus_{j\in J}M_{m_j}(\mathbb C),
-    \]
-    and write $\iota_{\mathcal A},\pi_{\mathcal A}$ and
-    $\iota_{\mathcal B},\pi_{\mathcal B}$ for the corresponding
-    block-diagonal embeddings and diagonal-block compressions.  The canonical
-    full-matrix extension of $T:\mathcal A\to\mathcal B$ is
-    \[
-        \widehat T=\iota_{\mathcal B}\circ T\circ\pi_{\mathcal A}.
-    \]
-    The map $T$ is a direct-sum Kraus map when $\widehat T$ has a Kraus
-    representation.
+    \begin{align}
+        \mathcal A
+        &=\bigoplus_{i\in I}\MN{n_i},
+        &
+        \mathcal B
+        &=\bigoplus_{j\in J}\MN{m_j}.
+        \notag
+    \end{align}
+    Write $\iota_{\mathcal A},\pi_{\mathcal A}$ and $\iota_{\mathcal B},\pi_{\mathcal B}$ for the corresponding
+    block-diagonal embeddings and diagonal-block compressions. The canonical full-matrix extension of $T:\mathcal A\to\mathcal B$ is
+    \begin{align}
+        \widehat T
+        &=\iota_{\mathcal B}\circ T\circ\pi_{\mathcal A}.
+        \label{eq:spectral_ds_kraus_extension}
+    \end{align}
+    The map $T$ is a direct-sum Kraus map when $\widehat T$ has a Kraus representation.
 \end{definition}
 
 % This is the finite-sum complete-positivity implication used for the
@@ -28,69 +30,72 @@
 \begin{lemma}[Composition and trace-adjoint Schwarz for direct-sum Kraus maps]
     \label{lem:direct_sum_kraus_composition_schwarz}
     \lean{Matrix.directSumMapExtension_comp,
-        Matrix.IsKrausDirectSumMap.comp,
-        Matrix.isSchwarzDirectSumMap_of_directSumExtension_isSchwarzMap,
+        Matrix.IsKrausDirectSumMap.comp, Matrix.isSchwarzDirectSumMap_of_directSumExtension_isSchwarzMap,
         Matrix.IsKrausDirectSumMap.directSumTraceAdjointMap_isSchwarz}
     \leanok
     \uses{def:kraus_map_between_direct_sums}
-    For direct-sum Kraus maps
-    $T:\mathcal A\to\mathcal B$ and $S:\mathcal B\to\mathcal C$, one has
-    \[
-        \widehat{S\circ T}=\widehat S\circ\widehat T,
-    \]
-    and $S\circ T$ is again a direct-sum Kraus map.  If an endomorphism
+    For direct-sum Kraus maps $T:\mathcal A\to\mathcal B$ and $S:\mathcal B\to\mathcal C$, one has
+    $\widehat{S\circ T}=\widehat S\circ\widehat T$, and $S\circ T$ is again a direct-sum Kraus map. If an endomorphism
     $T:\mathcal A\to\mathcal A$ has an extension satisfying
-    \[
-        \widehat T(Y^*Y)-\widehat T(Y^*)\widehat T(Y)\succeq0,
-    \]
-    then $T$ satisfies the corresponding inequality in every summand.
-    Finally, if $F:\mathcal A\to\mathcal A$ is a trace-preserving direct-sum
+    \begin{align}
+        \widehat T(Y^*Y)-\widehat T(Y^*)\widehat T(Y)
+        &\succeq0,
+        \label{eq:spectral_ds_extension_schwarz}
+    \end{align}
+    then $T$ satisfies the corresponding inequality in every summand. Finally, if $F:\mathcal A\to\mathcal A$ is a trace-preserving direct-sum
     Kraus map, then its trace adjoint satisfies, for every $X\in\mathcal A$,
-    \[
-        F^*(X^*X)-F^*(X^*)F^*(X)\succeq0
-    \]
+    \begin{align}
+        F^*(X^*X)-F^*(X^*)F^*(X)
+        &\succeq0
+        \label{eq:spectral_ds_adjoint_schwarz}
+    \end{align}
     in every summand.
 \end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:kadison_schwarz_2positive}
     Since $\pi_{\mathcal B}\iota_{\mathcal B}=\id_{\mathcal B}$,
-    \[
+    \begin{align}
         \widehat S\,\widehat T
-        =\iota_{\mathcal C}S\pi_{\mathcal B}
+        &=\iota_{\mathcal C}S\pi_{\mathcal B}
           \iota_{\mathcal B}T\pi_{\mathcal A}
-        =\iota_{\mathcal C}ST\pi_{\mathcal A}
-        =\widehat{S\circ T}.
-    \]
-    If $\widehat T(X)=\sum_i K_iXK_i^*$ and
-    $\widehat S(Y)=\sum_j L_jYL_j^*$, then
-    \[
+          =\iota_{\mathcal C}ST\pi_{\mathcal A}
+          =\widehat{S\circ T}.
+        \notag
+    \end{align}
+    If $\widehat T(X)=\sum_iK_iXK_i^*$ and $\widehat S(Y)=\sum_jL_jYL_j^*$, then
+    \begin{align}
         \widehat{S\circ T}(X)
-          =\sum_{i,j}(L_jK_i)X(L_jK_i)^*,
-    \]
-    which gives the asserted Kraus representation.  For
-    $Y=\iota_{\mathcal A}(X)$, the $i$-th diagonal block of the extension
-    Schwarz inequality is
-    \[
-        \left[\widehat T(Y^*Y)-\widehat T(Y^*)\widehat T(Y)\right]_i
-          =(T(X^*X))_i-(T(X^*))_i(T(X))_i\succeq0,
-    \]
-    which proves the descent assertion.  If $F$ preserves the total trace,
-    then $\widehat F$ preserves the ordinary trace, so $(\widehat F)^*$ is
-    unital.  Complete positivity implies two-positivity for
-    $(\widehat F)^*$, and Kadison--Schwarz gives
-    \[
+        &=\sum_{i,j}(L_jK_i)X(L_jK_i)^*,
+        \notag
+    \end{align}
+    which gives the asserted Kraus representation. For $Y=\iota_{\mathcal A}(X)$, the $i$-th diagonal block of
+    (\ref{eq:spectral_ds_extension_schwarz}) is
+    \begin{align}
+        \left[\widehat T(Y^*Y)
+          -\widehat T(Y^*)\widehat T(Y)\right]_i
+        &=(T(X^*X))_i-(T(X^*))_i(T(X))_i
+          \succeq0,
+        \notag
+    \end{align}
+    which proves the descent assertion. If $F$ preserves the total trace, then $\widehat F$ preserves the ordinary trace, so $(\widehat F)^*$ is
+    unital. Complete positivity implies two-positivity for $(\widehat F)^*$, and Kadison--Schwarz gives
+    \begin{align}
         (\widehat F)^*(Y^*Y)
-          -(\widehat F)^*(Y^*)(\widehat F)^*(Y)\succeq0.
-    \]
-    For $Y=\iota_{\mathcal A}(X)$, use
-    $(\widehat F)^*=\widehat{F^*}$ and project this inequality onto the
-    $i$-th diagonal summand.  The resulting block identity is
-    \[
+          -(\widehat F)^*(Y^*)(\widehat F)^*(Y)
+        &\succeq0.
+        \notag
+    \end{align}
+    For $Y=\iota_{\mathcal A}(X)$, use $(\widehat F)^*=\widehat{F^*}$ and project this inequality onto the
+    $i$-th diagonal summand. The resulting block identity is
+    \begin{align}
         \left[\widehat{F^*}(Y^*Y)
           -\widehat{F^*}(Y^*)\widehat{F^*}(Y)\right]_i
-        =(F^*(X^*X))_i-(F^*(X^*))_i(F^*(X))_i\succeq0.
-    \]
+        &=(F^*(X^*X))_i-(F^*(X^*))_i(F^*(X))_i
+          \succeq0,
+        \notag
+    \end{align}
+    which is (\ref{eq:spectral_ds_adjoint_schwarz}).
 \end{proof}
 
 \begin{theorem}[Mutually inverse CPTP maps give a star equivalence]%
@@ -111,36 +116,32 @@
     \lean{Matrix.directSumTraceAdjointStarAlgEquiv_symm_apply}
     \leanok
     \uses{def:kraus_map_between_direct_sums,
-        lem:direct_sum_rectangular_trace_adjoint}
-    Let $T:\mathcal A\to\mathcal B$ and $S:\mathcal B\to\mathcal A$ be
-    mutually inverse completely positive trace-preserving maps between finite
-    direct sums of full matrix algebras.  Their trace adjoints are mutually
-    inverse unital completely positive maps.  Moreover, for all
-    $X,Y\in\mathcal B$,
-    \[
-        T^*(XY)=T^*(X)T^*(Y),
-        \qquad T^*(X^*)=T^*(X)^*,
-    \]
-    and likewise for $S^*$.  Thus $T^*$ and $S^*$ determine mutually inverse
-    star-algebra equivalences.  This theorem does not yet identify the simple
+        lem:direct_sum_rectangular_trace_adjoint} Let $T:\mathcal A\to\mathcal B$ and $S:\mathcal B\to\mathcal A$ be
+    mutually inverse completely positive trace-preserving maps between finite direct sums of full matrix algebras. Their trace adjoints are mutually
+    inverse unital completely positive maps. Moreover, for all $X,Y\in\mathcal B$,
+    \begin{align}
+        T^*(XY)
+        &=T^*(X)T^*(Y),
+        &
+        T^*(X^*)
+        &=T^*(X)^*,
+        \label{eq:spectral_ds_adjoint_multiplicative}
+    \end{align}
+    and likewise for $S^*$. Thus $T^*$ and $S^*$ determine mutually inverse star-algebra equivalences. This theorem does not yet identify the simple
     summands or their dimensions.
 \end{theorem}
 
 \begin{proof}\leanok
-    Complete positivity and trace preservation make both trace adjoints
-    unital Schwarz maps.  For $F=T^*$ and $G=S^*$, let
-    \[
-        \Delta_F(X)=F(X^*X)-F(X)^*F(X)\succeq0.
-    \]
-    Positivity of $G$ gives $G(\Delta_F(X))\succeq0$.  The Schwarz inequality
-    for $G$, together with $GF=\id$, gives
-    $-G(\Delta_F(X))\succeq0$.  Hence $G(\Delta_F(X))=0$, and injectivity of
-    $G$ implies $\Delta_F(X)=0$.  Polarization of this equality gives
-    multiplicativity.  Positivity gives preservation of the adjoint, so the
-    mutually inverse maps are star-algebra equivalences.  This supplies an
-    algebraic route to the block-classification step for which
+    Complete positivity and trace preservation make both trace adjoints unital Schwarz maps. For $F=T^*$ and $G=S^*$, set
+    $\Delta_F(X)=F(X^*X)-F(X)^*F(X)\succeq0$. Positivity of $G$ gives $G(\Delta_F(X))\succeq0$. The Schwarz inequality
+    for $G$, together with $GF=\id$, gives $-G(\Delta_F(X))\succeq0$. Hence $G(\Delta_F(X))=0$, and injectivity of
+    $G$ implies $\Delta_F(X)=0$. Polarization of this equality gives the
+    first identity in (\ref{eq:spectral_ds_adjoint_multiplicative}).
+    Positivity gives preservation of the adjoint, so the mutually inverse
+    maps are star-algebra equivalences. This supplies an algebraic route to
+    the block-classification step for which
     \cite[Appendix~C.4, line~1997]{Cirac2016MPDO_arXiv} cites
-    \cite[Theorem~8]{WolfPerezGarcia2010Inverse}.  The latter instead uses
+    \cite[Theorem~8]{WolfPerezGarcia2010Inverse}. The latter instead uses
     extreme states and the positive inverse to identify the blocks, then the
     Schwarz condition to exclude transposition.
 \end{proof}
@@ -153,24 +154,31 @@
         thm:dim_preserved}
     Let $\{D_i\}_{i\in I}$ and $\{E_j\}_{j\in J}$ be positive integers, and
     set
-    \[
-        \mathcal A=\prod_{i\in I}M_{D_i}(\C),
-        \qquad
-        \mathcal B=\prod_{j\in J}M_{E_j}(\C).
-    \]
+    \begin{align}
+        \mathcal A
+        &=\prod_{i\in I}\MN{D_i},
+        &
+        \mathcal B
+        &=\prod_{j\in J}\MN{E_j}.
+        \notag
+    \end{align}
     If $T:\mathcal A\to\mathcal B$ and
     $S:\mathcal B\to\mathcal A$ are mutually inverse completely positive
     trace-preserving maps, let $\Phi:\mathcal A\simeq\mathcal B$ be the
-    star-algebra isomorphism obtained from their trace adjoints.  Write $I_i$
+    star-algebra isomorphism obtained from their trace adjoints. Write $I_i$
     and $J_j$ for the block ideals of $\mathcal A$ and $\mathcal B$,
-    respectively.  Then there is an equivalence $\sigma:I\simeq J$ such that
-    \[
-        \Phi(I_i)=J_{\sigma(i)},
-        \qquad
-        D_i=E_{\sigma(i)}
-    \]
-    for every $i\in I$. This is the simple-summand matching conclusion used
-    in \cite[Appendix~C.4, line~1997]{Cirac2016MPDO_arXiv}; the unitary action
+    respectively. Then there is an equivalence $\sigma:I\simeq J$ such that,
+    for every $i\in I$,
+    \begin{align}
+        \Phi(I_i)
+        &=J_{\sigma(i)},
+        &
+        D_i
+        &=E_{\sigma(i)}.
+        \label{eq:spectral_ds_block_matching}
+    \end{align}
+    This is the simple-summand matching conclusion used in
+    \cite[Appendix~C.4, line~1997]{Cirac2016MPDO_arXiv}; the unitary action
     within the paired summands is a separate conclusion.
 \end{theorem}
 
@@ -182,8 +190,8 @@
     trace adjoints determine a star-algebra isomorphism between
     $\mathcal A$ and $\mathcal B$. Theorem~\ref{thm:dim_preserved} applied to
     this isomorphism gives the equivalence~$\sigma$, proves that it carries
-    $I_i$ onto $J_{\sigma(i)}$, and gives the equalities
-    $D_i=E_{\sigma(i)}$.
+    $I_i$ onto $J_{\sigma(i)}$, and gives
+    (\ref{eq:spectral_ds_block_matching}).
 \end{proof}
 
 \begin{theorem}[Unitary Skolem--Noether theorem for complex matrices]%
@@ -192,20 +200,16 @@
     \leanok
     Every star-algebra automorphism $\Phi$ of a nonzero full complex matrix
     algebra is implemented by a unitary: there is a unitary matrix $U$ such
-    that
-    \[
-        \Phi(X)=UXU^*
-    \]
-    for every matrix $X$.
+    that $\Phi(X)=UXU^*$ for every matrix $X$.
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{thm:skolem_noether}
     By Skolem--Noether, there is an invertible matrix $P$ such that
-    $\Phi(X)=PXP^{-1}$.  Preservation of the adjoint implies that $P^*P$
-    commutes with every matrix, hence $P^*P=c\Id$ for a scalar $c$.  Positivity
-    and invertibility give $c>0$.  Therefore $U=c^{-1/2}P$ is unitary and
-    implements the same automorphism.
+    $\Phi(X)=PXP^{-1}$. Preservation of the adjoint implies that $P^*P$
+    commutes with every matrix, hence $P^*P=c\Id$ for a scalar $c$.
+    Positivity and invertibility give $c>0$. Therefore $U=c^{-1/2}P$ is
+    unitary and implements the same automorphism.
 \end{proof}
 
 \begin{theorem}[Unitary action within matched simple summands]%
@@ -218,21 +222,19 @@
     \leanok
     Retain an equivalence $\sigma:I\simeq J$ which matches the block ideals
     of a star-algebra isomorphism
-    \[
-        \Phi:\prod_{i\in I}M_{D_i}(\C)
-        \simeq \prod_{j\in J}M_{E_j}(\C),
-    \]
-    together with equalities $D_i=E_{\sigma(i)}$.  Then there are unitaries
-    $U_i\in M_{E_{\sigma(i)}}(\C)$ such that
-    \[
+    $\Phi:\prod_{i\in I}\MN{D_i}\simeq\prod_{j\in J}\MN{E_j}$,
+    together with equalities $D_i=E_{\sigma(i)}$. Then there are unitaries
+    $U_i\in\MN{E_{\sigma(i)}}$ such that, for every
+    $X\in\MN{D_i}$,
+    \begin{align}
         \Phi(0,\ldots,0,X,0,\ldots,0)_{\sigma(i)}
-        =U_i\,\iota_i(X)\,U_i^*
-    \]
-    for every $X\in M_{D_i}(\C)$, where $\iota_i$ is the reindexing induced
-    by the retained dimension equality.  In particular, this conclusion
-    applies to the trace-adjoint star-algebra isomorphism of any mutually
-    inverse completely positive trace-preserving pair.  This is the
-    blockwise-unitary statement in
+        &=U_i\,\iota_i(X)\,U_i^*,
+        \label{eq:spectral_ds_block_unitary}
+    \end{align}
+    where $\iota_i$ is the reindexing induced by the retained dimension
+    equality. In particular, this conclusion applies to the trace-adjoint
+    star-algebra isomorphism of any mutually inverse completely positive
+    trace-preserving pair. This is the blockwise-unitary statement in
     \cite[Appendix~C.4, line~1997]{Cirac2016MPDO_arXiv}; it does not assert
     the later MPDO multiplicity or coefficient relations.
 \end{theorem}
@@ -242,12 +244,13 @@
         thm:direct_sum_inverse_cptp_star_equiv,
         thm:dim_preserved}
     The restriction of $\Phi$ to a matched block is a star-algebra
-    isomorphism.  After reindexing by $D_i=E_{\sigma(i)}$, it is an
-    automorphism of a full complex matrix algebra.  Skolem--Noether writes
-    this automorphism as conjugation by an invertible matrix $P$.  Preservation
-    of the adjoint implies that $P^*P$ commutes with every matrix and is
-    therefore a positive scalar multiple of the identity.  Dividing $P$ by
-    the positive square root of this scalar produces the required unitary.
+    isomorphism. After reindexing by $D_i=E_{\sigma(i)}$, it is an
+    automorphism of a full complex matrix algebra. Skolem--Noether writes
+    this automorphism as conjugation by an invertible matrix $P$.
+    Preservation of the adjoint implies that $P^*P$ commutes with every
+    matrix and is therefore a positive scalar multiple of the identity.
+    Dividing $P$ by the positive square root of this scalar produces the
+    unitary in (\ref{eq:spectral_ds_block_unitary}).
 \end{proof}
 
 \begin{lemma}[Total trace under unitary action on matched summands]
@@ -255,24 +258,23 @@
     \lean{Matrix.isTracePreservingBetweenDirectSums_of_unitary_block_implementers}
     \leanok
     Let $\Phi:\mathcal A\simeq\mathcal B$ match the simple summands by an
-    equivalence $\sigma:I\simeq J$, with $D_i=E_{\sigma(i)}$.  Suppose that
+    equivalence $\sigma:I\simeq J$, with $D_i=E_{\sigma(i)}$. Suppose that
     there are unitaries $U_i$ satisfying
-    \[
-      \Phi(0,\ldots,0,X,0,\ldots,0)_{\sigma(i)}
-      =U_i\,\iota_i(X)\,U_i^*.
-    \]
+    $\Phi(0,\ldots,0,X,0,\ldots,0)_{\sigma(i)}
+      =U_i\iota_i(X)U_i^*$.
     Then $\Phi$ preserves the total block trace.
 \end{lemma}
 
 \begin{proof}\leanok
     The image of a matrix supported on the $i$-th summand is supported on the
-    $\sigma(i)$-th summand.  Unitary conjugation and reindexing preserve the
+    $\sigma(i)$-th summand. Unitary conjugation and reindexing preserve the
     trace, so
-    \[
-      \sum_j\tr
-        \bigl(\Phi(0,\ldots,0,X,0,\ldots,0)_j\bigr)
-      =\tr(X).
-    \]
+    \begin{align}
+        \sum_j\tr
+          (\Phi(0,\ldots,0,X,0,\ldots,0)_j)
+        &=\tr(X).
+        \notag
+    \end{align}
     Summing this identity over the source summands proves the result.
 \end{proof}
 
@@ -283,41 +285,44 @@
     \leanok
     Let $T:\mathcal A\to\mathcal B$ and $S:\mathcal B\to\mathcal A$ be
     mutually inverse completely positive trace-preserving maps between finite
-    products of nonzero full matrix algebras.  There are an equivalence
+    products of nonzero full matrix algebras. There are an equivalence
     $\sigma:I\simeq J$, equalities $D_i=E_{\sigma(i)}$, and unitaries
-    $U_i\in M_{E_{\sigma(i)}}(\C)$ such that
-    \[
-      T(0,\ldots,0,X,0,\ldots,0)
-      =(0,\ldots,0,U_i\,\iota_i(X)\,U_i^*,0,\ldots,0)
-    \]
-    with the nonzero entry on the right in position $\sigma(i)$, and
-    \[
-      S(0,\ldots,0,Y,0,\ldots,0)
-      =(0,\ldots,0,\iota_i^{-1}(U_i^*YU_i),0,\ldots,0)
-    \]
-    with the entries on the left and right in positions $\sigma(i)$ and $i$,
-    respectively.  These identities hold for every $i\in I$,
-    $X\in M_{D_i}(\C)$, and $Y\in M_{E_{\sigma(i)}}(\C)$.
+    $U_i\in\MN{E_{\sigma(i)}}$ such that
+    \begin{align}
+        T(0,\ldots,0,X,0,\ldots,0)
+        &=(0,\ldots,0,U_i\iota_i(X)U_i^*,0,\ldots,0),
+        \label{eq:spectral_ds_forward_unitary}\\
+        S(0,\ldots,0,Y,0,\ldots,0)
+        &=(0,\ldots,0,\iota_i^{-1}(U_i^*YU_i),0,\ldots,0),
+        \label{eq:spectral_ds_inverse_unitary}
+    \end{align}
+    with the nonzero entry in
+    (\ref{eq:spectral_ds_forward_unitary}) in position $\sigma(i)$ and the
+    entries on the left and right of
+    (\ref{eq:spectral_ds_inverse_unitary}) in positions $\sigma(i)$ and $i$,
+    respectively. These identities hold for every $i\in I$,
+    $X\in\MN{D_i}$, and $Y\in\MN{E_{\sigma(i)}}$.
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{thm:direct_sum_inverse_cptp_star_equiv,
-      thm:direct_sum_star_equiv_block_unitary,
-      lem:direct_sum_block_unitary_trace_preserving,
-      lem:direct_sum_trace_adjoint_star_equiv_inverse,
-      lem:direct_sum_rectangular_trace_adjoint}
+        thm:direct_sum_star_equiv_block_unitary,
+        lem:direct_sum_block_unitary_trace_preserving,
+        lem:direct_sum_trace_adjoint_star_equiv_inverse,
+        lem:direct_sum_rectangular_trace_adjoint}
     Let $\Phi=S^*:\mathcal A\simeq\mathcal B$ be the star-algebra
-    isomorphism obtained from the inverse pair.  Theorem~
-    \ref{thm:direct_sum_star_equiv_block_unitary} supplies $\sigma$, the
-    dimension equalities, and the unitaries for $\Phi$.  Lemma~
-    \ref{lem:direct_sum_block_unitary_trace_preserving} shows that $\Phi$
-    preserves the total trace, hence Lemma~
-    \ref{lem:direct_sum_trace_adjoint_star_equiv_inverse} gives
-    $\Phi^*=\Phi^{-1}$.  On the other hand, involutivity of the trace adjoint
-    gives $\Phi^*=S$.  Therefore $S=\Phi^{-1}$, and the two inverse laws imply
-    $T=\Phi$.  The unitary formula for $\Phi$ gives the asserted formula for
-    $T$, while the inverse formula for $S=\Phi^{-1}$ uses the same summand
-    matching and the same unitaries.
+    isomorphism obtained from the inverse pair.
+    Theorem~\ref{thm:direct_sum_star_equiv_block_unitary} supplies $\sigma$,
+    the dimension equalities, and the unitaries for $\Phi$.
+    Lemma~\ref{lem:direct_sum_block_unitary_trace_preserving} shows that
+    $\Phi$ preserves the total trace, hence
+    Lemma~\ref{lem:direct_sum_trace_adjoint_star_equiv_inverse} gives
+    $\Phi^*=\Phi^{-1}$. On the other hand, involutivity of the trace adjoint
+    gives $\Phi^*=S$. Therefore $S=\Phi^{-1}$, and the two inverse laws imply
+    $T=\Phi$. The unitary formula for $\Phi$ gives
+    (\ref{eq:spectral_ds_forward_unitary}), while the inverse formula for
+    $S=\Phi^{-1}$ gives (\ref{eq:spectral_ds_inverse_unitary}) with the same
+    summand matching and the same unitaries.
 \end{proof}
 
 % Scope restriction documented in
@@ -331,20 +336,21 @@
         thm:positive_retraction_finite_star_algebra}
     Let $T:\MN{D}\to\MN{D}$ be positive and trace preserving, suppose that
     $T^*$ satisfies the Schwarz inequality, and suppose that there is a
-    positive definite matrix $\rho$ satisfying $T(\rho)=\rho$.  Let $P_T$ be
-    the mean-ergodic projection of $T$.  There are positive integers $d_k,m_k$,
-    a unitary $U$, and density matrices $\sigma_k\in\MN{m_k}$ such that
-    \[
+    positive definite matrix $\rho$ satisfying $T(\rho)=\rho$. Let $P_T$ be
+    the mean-ergodic projection of $T$. There are positive integers
+    $d_k,m_k$, a unitary $U$, and density matrices
+    $\sigma_k\in\MN{m_k}$ such that
+    \begin{align}
         U^*\Fix(T^*)U
-        =\bigoplus_k\Id_{m_k}\otimes\MN{d_k}
-    \]
-    and, for every $A\in\MN{D}$,
-    \[
-        P_T^*(A)=U\left(\bigoplus_k\Id_{m_k}\otimes
-        \tr_{m_k}\!\left(
-          (\sigma_k\otimes\Id_{d_k})(U^*AU)_{kk}\right)\right)U^*.
-    \]
-    This is the full-support conditional-expectation step in the proof of
+        &=\bigoplus_k\Id_{m_k}\otimes\MN{d_k},
+        \label{eq:spectral_ds_adjoint_fixed_blocks}\\
+        P_T^*(A)
+        &=U\left(\bigoplus_k\Id_{m_k}\otimes
+          \tr_{m_k}\!\left((\sigma_k\otimes\Id_{d_k})(U^*AU)_{kk}\right)\right)U^*
+        \label{eq:spectral_ds_adjoint_projection}
+    \end{align}
+    for every $A\in\MN{D}$. This is the full-support
+    conditional-expectation step in the proof of
     \cite[Theorem~6.14]{Wolf2012Quantum}.
 \end{theorem}
 
@@ -354,19 +360,21 @@
         thm:fixedPointsStarSubalgebra,
         thm:positive_retraction_finite_star_algebra}
     The map $P_T^*$ is a positive unital idempotent map whose range is
-    $\Fix(T^*)$.  For $A\in\Fix(T^*)$, the
-    Schwarz inequality gives
+    $\Fix(T^*)$. For $A\in\Fix(T^*)$, the Schwarz inequality gives
     $T^*(A^*A)\geq T^*(A)^*T^*(A)=A^*A$, while
-    \[
+    \begin{align}
         \tr\!\left(\rho T^*(A^*A)\right)
-        =\tr\!\left(T(\rho)A^*A\right)
-        =\tr(\rho A^*A).
-    \]
+        &=\tr\!\left(T(\rho)A^*A\right)
+          =\tr(\rho A^*A).
+        \notag
+    \end{align}
     Since $\rho$ is positive definite, these relations imply
-    $T^*(A^*A)=A^*A$.  Hence $\Fix(T^*)$ is a $*$-subalgebra,
-    and $P_T^*$ is a positive retraction onto it.  The blockwise
-    classification of positive retractions gives the unitary, the matrix
-    dimensions, the density matrices $\sigma_k$, and the displayed formula.
+    $T^*(A^*A)=A^*A$. Hence $\Fix(T^*)$ is a $*$-subalgebra, and $P_T^*$ is
+    a positive retraction onto it. The blockwise classification of positive
+    retractions gives the unitary, the matrix dimensions, the density
+    matrices $\sigma_k$, and
+    (\ref{eq:spectral_ds_adjoint_fixed_blocks})--%
+    (\ref{eq:spectral_ds_adjoint_projection}).
 \end{proof}
 
 % Scope restriction and factor-order convention documented in
@@ -379,19 +387,21 @@
     Under the hypotheses of
     Theorem~\ref{thm:adjoint_mean_ergodic_projection_weighted_block_form},
     the mean-ergodic projection of $T$ satisfies
-    \[
-        P_T(B)=U\left(\bigoplus_k \sigma_k\otimes
+    \begin{align}
+        P_T(B)
+        &=U\left(\bigoplus_k\sigma_k\otimes
           \tr_{m_k}((U^*BU)_{kk})\right)U^*.
-    \]
+        \label{eq:spectral_ds_density_projection}
+    \end{align}
     Consequently,
-    \[
+    \begin{align}
         \Fix(T)
-        =U\left(\bigoplus_k \sigma_k\otimes\MN{d_k}\right)U^*.
-    \]
+        &=U\left(\bigoplus_k\sigma_k\otimes\MN{d_k}\right)U^*.
+        \label{eq:spectral_ds_density_fixed_blocks}
+    \end{align}
     Here each summand is written on
-    $\mathbb C^{m_k}\otimes\mathbb C^{d_k}$, so
-    $\tr_{m_k}$ traces the first factor.  This is the
-    full-support part of Equation~(6.63) in
+    $\C^{m_k}\otimes\C^{d_k}$, so $\tr_{m_k}$ traces the first factor. This
+    is the full-support part of Equation~(6.63) in
     \cite[Theorem~6.14]{Wolf2012Quantum}; the density matrices are not yet
     asserted to be positive definite.
 \end{theorem}
@@ -401,16 +411,16 @@
     \uses{thm:adjoint_mean_ergodic_projection_weighted_block_form}
     For one summand, cyclicity of the trace and the defining property of the
     partial trace give
-    \[
-      \tr\!\left(
-        (\sigma_k\otimes\tr_{m_k}B)A\right)
-      =\tr\!\left(
-        B\bigl(\Id_{m_k}\otimes
+    \begin{align}
+        \tr\!\left((\sigma_k\otimes\tr_{m_k}B)A\right)
+        &=\tr\!\left(B\bigl(\Id_{m_k}\otimes
           \tr_{m_k}((\sigma_k\otimes\Id_{d_k})A)\bigr)\right).
-    \]
+        \notag
+    \end{align}
     Summing over the diagonal summands and applying the unitary change of
-    basis proves the displayed formula by nondegeneracy of the trace pairing.
-    Its range consists of the stated density blocks because
+    basis proves (\ref{eq:spectral_ds_density_projection}) by
+    nondegeneracy of the trace pairing. Its range is
+    (\ref{eq:spectral_ds_density_fixed_blocks}) because
     $\tr_{m_k}(\sigma_k\otimes X)=X$.
 \end{proof}
 
@@ -422,83 +432,87 @@
     \leanok
     \uses{thm:direct_sum_full_matrix_extension_compatibility,
         thm:mean_ergodic_projection_density_block_form}
-    Let
-    \[
-        \mathcal A=\bigoplus_{i\in I}M_{n_i}(\mathbb C)
-    \]
-    be a finite direct sum.  Suppose that $T:\mathcal A\to\mathcal A$ is
-    positive and preserves the total trace, that its trace adjoint satisfies
-    the Schwarz inequality, and that $T$ fixes a family $\rho=(\rho_i)_i$
-    with every $\rho_i$ positive definite.  Then there are positive integers
-    $d_k,m_k$, density matrices $\sigma_k\in M_{m_k}(\mathbb C)$, a unitary
-    $U$ on $\bigoplus_i\mathbb C^{n_i}$, and a reindexing of this space by
-    $\bigoplus_k(\mathbb C^{m_k}\otimes\mathbb C^{d_k})$ such that
-    \[
-        T(A)=A
-        \quad\Longleftrightarrow\quad
-        U^*\iota(A)U=\bigoplus_k \sigma_k\otimes X_k
-    \]
-    for some $X_k\in M_{d_k}(\mathbb C)$.  Here $\iota$ is the
-    block-diagonal embedding.  This is the finite-direct-sum fixed-point step
-    used in \cite[Appendix~C.4, lines~1980--1995]{Cirac2016MPDO_arXiv}; it
-    does not assert the channel hypotheses for the particular sector maps in
-    that argument.  This is the full-support restriction: the support
-    reduction and complementary zero summand of the general theorem remain
-    open.
+    Let $\mathcal A=\bigoplus_{i\in I}\MN{n_i}$ be a finite direct sum.
+    Suppose that $T:\mathcal A\to\mathcal A$ is positive and preserves the
+    total trace, that its trace adjoint satisfies the Schwarz inequality,
+    and that $T$ fixes a family $\rho=(\rho_i)_i$ with every $\rho_i$
+    positive definite. Then there are positive integers $d_k,m_k$, density
+    matrices $\sigma_k\in\MN{m_k}$, a unitary $U$ on
+    $\bigoplus_i\C^{n_i}$, and a reindexing of this space by
+    $\bigoplus_k(\C^{m_k}\otimes\C^{d_k})$ such that $T(A)=A$ if and only
+    if there are matrices $X_k\in\MN{d_k}$ satisfying
+    \begin{align}
+        U^*\iota(A)U
+        &=\bigoplus_k\sigma_k\otimes X_k.
+        \label{eq:spectral_ds_fixed_point_form}
+    \end{align}
+    Here $\iota$ is the block-diagonal embedding. This is the
+    finite-direct-sum fixed-point step used in
+    \cite[Appendix~C.4, lines~1980--1995]{Cirac2016MPDO_arXiv}; it does not
+    assert the channel hypotheses for the particular sector maps in that
+    argument. This is the full-support restriction: the support reduction
+    and complementary zero summand of the general theorem remain open.
 \end{theorem}
 
 \begin{proof}
     \leanok
     \uses{thm:direct_sum_full_matrix_extension_compatibility,
         thm:mean_ergodic_projection_density_block_form}
-    Extend $T$ by diagonal compression and block-diagonal embedding.  The
+    Extend $T$ by diagonal compression and block-diagonal embedding. The
     canonical extension is positive and trace preserving, its trace adjoint
     satisfies the Schwarz inequality, and the embedded family $\iota(\rho)$
-    is a positive-definite fixed point.  After choosing a numbered basis of
+    is a positive-definite fixed point. After choosing a numbered basis of
     the finite-dimensional ambient space, apply the full-support
-    density-block theorem.  Simultaneous reindexing preserves positivity,
+    density-block theorem. Simultaneous reindexing preserves positivity,
     trace preservation, the Schwarz inequality, the trace adjoint, and
-    positive definiteness.  Reindexing the resulting unitary and block
-    decomposition back to $\mathcal H$ gives the displayed equivalence.
+    positive definiteness. Reindexing the resulting unitary and block
+    decomposition back to the original space gives
+    (\ref{eq:spectral_ds_fixed_point_form}).
 \end{proof}
 
-Without a full-rank hypothesis on the fixed point, the corner-restricted fixed-point
-$*$-algebra of Theorem~\ref{thm:cornerFixedPointsStarSubalgebra} still carries the block
+Without a full-rank hypothesis on the fixed point, the corner-restricted
+fixed-point $*$-algebra of
+Theorem~\ref{thm:cornerFixedPointsStarSubalgebra} still carries the block
 structure through the compression onto the support sector; this is the
-$\sum_k d_k m_k \le D$ support-sector form of the block representation in
-Equation~(1.39) of~\cite{Wolf2012Quantum} invoked
-by~\cite[Theorem~6.14]{Wolf2012Quantum}. A corner-restricted fixed point extended by
-zero on the complement of the support sector need not be a fixed point of the ambient
-map, so the corner block form does not by itself give the ambient fixed-point space a
-zero-block representation.
+$\sum_kd_km_k\leq D$ support-sector form of the block representation in
+Equation~(1.39) of~\cite{Wolf2012Quantum} invoked by
+\cite[Theorem~6.14]{Wolf2012Quantum}. A corner-restricted fixed point
+extended by zero on the complement of the support sector need not be a fixed
+point of the ambient map, so the corner block form does not by itself give
+the ambient fixed-point space a zero-block representation.
 
 \begin{theorem}[Block form of the corner-restricted fixed points]%
     \label{thm:cornerFixedPoints_block_form}
     \lean{Kraus.cornerFixedPoints_blockDiagonal_iff}
     \leanok
     \uses{def:support_proj, def:kraus_map_channels}
-    Let $E(X) = \sum_i K_i X K_i^{\dagger}$ be a trace-preserving Kraus map on $\MN{D}$,
-    with Heisenberg-picture adjoint $E^*(Y) = \sum_i K_i^{\dagger} Y K_i$, let
-    $\rho \succeq 0$ satisfy
-    $E(\rho) = \rho$, and let $Q$ be the support projection of $\rho$. There are a sector
-    dimension $r \le D$, a number $n$ of blocks, positive dimensions $d_0, \ldots,
-    d_{n-1}$ and multiplicities $m_0, \ldots, m_{n-1}$ with $\sum_k d_k m_k = r$,
-    realized by an explicit identification of the index sets, and an isometry
-    $W : \C^{r} \to \C^{D}$ with $W^{\dagger} W = \Id_{r}$ and $W W^{\dagger} = Q$, such
-    that a matrix $Y \in \MN{D}$ satisfies $Q\,Y\,Q = Y$ and $Q\,E^*(Y)\,Q = Y$ exactly
-    when
-    \[
-        Y \;=\; W \Bigl(\bigoplus_{k=0}^{n-1} \Id_{m_k} \otimes B_k\Bigr) W^{\dagger}
-    \]
-    for some matrices $B_k \in \MN{d_k}$; that is, up to reordering the two tensor
-    factors of each block,
-    \[
-        \{Y \in Q\,\MN{D}\,Q \mid Q\,E^*(Y)\,Q = Y\} \;=\;
-        W \Bigl(\bigoplus_{k=0}^{n-1} \Id_{m_k} \otimes \MN{d_k}\Bigr) W^{\dagger}.
-    \]
+    Let $E(X)=\sum_iK_iXK_i^\dagger$ be a trace-preserving Kraus map on
+    $\MN{D}$, with Heisenberg-picture adjoint
+    $E^*(Y)=\sum_iK_i^\dagger YK_i$, let $\rho\succeq0$ satisfy
+    $E(\rho)=\rho$, and let $Q$ be the support projection of $\rho$. There
+    are a sector dimension $r\leq D$, a number $n$ of blocks, positive
+    dimensions $d_0,\ldots,d_{n-1}$ and multiplicities
+    $m_0,\ldots,m_{n-1}$ with $\sum_kd_km_k=r$, realized by an explicit
+    identification of the index sets, and an isometry
+    $W:\C^r\to\C^D$ with $W^\dagger W=\Id_r$ and $WW^\dagger=Q$, such that
+    a matrix $Y\in\MN{D}$ satisfies $QYQ=Y$ and $QE^*(Y)Q=Y$ exactly when
+    \begin{align}
+        Y
+        &=W\left(\bigoplus_{k=0}^{n-1}
+          \Id_{m_k}\otimes B_k\right)W^\dagger
+        \label{eq:spectral_ds_corner_element}
+    \end{align}
+    for some matrices $B_k\in\MN{d_k}$; that is, up to reordering the two
+    tensor factors of each block,
+    \begin{align}
+        \{Y\in Q\MN{D}Q\mid QE^*(Y)Q=Y\}
+        &=W\left(\bigoplus_{k=0}^{n-1}
+          \Id_{m_k}\otimes\MN{d_k}\right)W^\dagger.
+        \label{eq:spectral_ds_corner_blocks}
+    \end{align}
     The right-hand side is the support-sector block representation in
-    Equation~(1.39) of~\cite{Wolf2012Quantum}; the equivalence characterizes the
-    corner-restricted set, not the ambient fixed-point space.
+    Equation~(1.39) of~\cite{Wolf2012Quantum}; the equivalence characterizes
+    the corner-restricted set, not the ambient fixed-point space.
 \end{theorem}
 
 \begin{proof}
@@ -506,33 +520,35 @@ zero-block representation.
     \uses{thm:support_proj_fixed, thm:supported_corner_compression_isometry,
         thm:compression_on_support_posDef, thm:adjointFixedPoints_block_form}
     Since $\rho$ is a fixed point of $E$, the support projection satisfies
-    $(\Id - Q) K_i Q = 0$ (Theorem~\ref{thm:support_proj_fixed}), so the compressed
-    family $Q K_i Q$ is supported on the corner and trace-preserving there. Compress it
-    to the support sector along the isometry $V : \C^{r} \to \C^{D}$ of
+    $(\Id-Q)K_iQ=0$ by Theorem~\ref{thm:support_proj_fixed}, so the
+    compressed family $QK_iQ$ is supported on the corner and
+    trace-preserving there. Compress it to the support sector along the
+    isometry $V:\C^r\to\C^D$ of
     Theorem~\ref{thm:supported_corner_compression_isometry}, which satisfies
-    $V^{\dagger} V = \Id_{r}$ and $V V^{\dagger} = Q$: the compressed
-    family $C$ is trace-preserving on $\C^{r}$, and the compression
-    $\sigma = V^{\dagger} \rho V$ of $\rho$ is a positive definite fixed point of the
-    compressed Schr\"odinger map (Theorem~\ref{thm:compression_on_support_posDef}). The
-    block form of the Heisenberg-picture fixed points of $C$
-    (Theorem~\ref{thm:adjointFixedPoints_block_form}) yields a unitary
-    $U \in \MN{r}$, dimensions $d_k$ and multiplicities $m_k$ with
-    $\sum_k d_k m_k = r$, and the equivalence between the fixed-point equation on the
-    sector and the block-diagonal conjugation identity. Writing
-    $\Phi(X) := V X V^{\dagger}$ for the compression isomorphism onto the corner and
-    $C^*$ for the Heisenberg-picture adjoint of the compressed family, the
-    corner-restricted fixed-point condition corresponds to the fixed-point equation of
-    the compressed map,
-    \[
-        Q\,E^*\!\bigl(\Phi(X)\bigr)\,Q \;=\; \Phi(X)
-        \quad\Longleftrightarrow\quad
-        C^*(X) \;=\; X,
-    \]
-    so, with $W := V U$, which satisfies
-    $W^{\dagger} W = \Id_r$ and $W W^{\dagger} = Q$, a corner element $Y$ is a
-    corner-restricted fixed point exactly when $Y = W (\bigoplus_k \Id_{m_k} \otimes
-    B_k) W^{\dagger}$ for some blocks $B_k$. Finally $r \le D$ because the isometry $V$
-    embeds $\C^{r}$ into $\C^{D}$.
+    $V^\dagger V=\Id_r$ and $VV^\dagger=Q$. The compressed family $C$ is
+    trace-preserving on $\C^r$, and
+    $\sigma=V^\dagger\rho V$ is a positive definite fixed point of the
+    compressed Schr\"odinger map by
+    Theorem~\ref{thm:compression_on_support_posDef}. The block form of the
+    Heisenberg-picture fixed points of $C$ from
+    Theorem~\ref{thm:adjointFixedPoints_block_form} yields a unitary
+    $U\in\MN{r}$, dimensions $d_k$, and multiplicities $m_k$ with
+    $\sum_kd_km_k=r$.
+
+    Write $\Phi(X):=VXV^\dagger$ for the compression isomorphism onto the
+    corner and $C^*$ for the Heisenberg-picture adjoint of the compressed
+    family. The corner-restricted fixed-point condition corresponds to the
+    fixed-point equation of the compressed map:
+    \begin{align}
+        QE^*\!(\Phi(X))Q=\Phi(X)
+        &\quad\Longleftrightarrow\quad C^*(X)=X.
+        \notag
+    \end{align}
+    With $W:=VU$, which satisfies $W^\dagger W=\Id_r$ and
+    $WW^\dagger=Q$, this equivalence gives
+    (\ref{eq:spectral_ds_corner_element}) and
+    (\ref{eq:spectral_ds_corner_blocks}). Finally, $r\leq D$ because the
+    isometry $V$ embeds $\C^r$ into $\C^D$.
 \end{proof}
 
 \begin{theorem}[Weighted fixed points form a $*$-subalgebra]%
@@ -540,38 +556,40 @@ zero-block representation.
     \lean{Kraus.weightedFixedPointsStarSubalgebra}
     \leanok
     \uses{def:tp_kraus, thm:fixedPointsStarSubalgebra}
-    Let $T(X) = \sum_i K_i X K_i^\dagger$ be trace-preserving, and let
-    $\rho > 0$ satisfy $T(\rho) = \rho$. If
-    \[
-        F_T := \{X \in \MN{D} \mid T(X) = X\},
-    \]
-    then $\rho^{-1/2} F_T \rho^{-1/2}$ is a $*$-subalgebra of $\MN{D}$.
+    Let $T(X)=\sum_iK_iXK_i^\dagger$ be trace-preserving, and let
+    $\rho>0$ satisfy $T(\rho)=\rho$. If
+    $F_T:=\{X\in\MN{D}\mid T(X)=X\}$, then
+    $\rho^{-1/2}F_T\rho^{-1/2}$ is a $*$-subalgebra of $\MN{D}$.
 \end{theorem}
+
 \begin{proof}
     \leanok
     \uses{thm:fixedPointsStarSubalgebra}
-    Set $B_i = \rho^{-1/2} K_i \rho^{1/2}$. The equation $T(\rho) = \rho$
-    implies that the family $\{B_i\}$ is unital, and trace preservation of $T$
-    implies that $\rho$ is a positive-definite fixed point of the adjoint map
-    of the gauged family. Apply Theorem~\ref{thm:fixedPointsStarSubalgebra}
-    to $B$. The identity
-    \[
-        \sum_i B_i X B_i^\dagger = X
-        \iff
-        T(\rho^{1/2} X \rho^{1/2}) = \rho^{1/2} X \rho^{1/2}
-    \]
+    Set $B_i=\rho^{-1/2}K_i\rho^{1/2}$. The equation $T(\rho)=\rho$
+    implies that the family $\{B_i\}$ is unital, and trace preservation of
+    $T$ implies that $\rho$ is a positive-definite fixed point of the
+    adjoint map of the gauged family. Apply
+    Theorem~\ref{thm:fixedPointsStarSubalgebra} to $B$. The equivalence
+    \begin{align}
+        \sum_iB_iXB_i^\dagger=X
+        &\quad\Longleftrightarrow\quad
+        T(\rho^{1/2}X\rho^{1/2})=\rho^{1/2}X\rho^{1/2}
+        \notag
+    \end{align}
     identifies the fixed points of the gauged map with
-    $\rho^{-1/2} F_T \rho^{-1/2}$.
+    $\rho^{-1/2}F_T\rho^{-1/2}$.
 \end{proof}
 
-For a singular fixed point the conjugation is taken with the inverse square root on the
-support of $\rho$, and the conjugated set lives in the corner algebra of the support
-projection. The corollary in~\cite{Wolf2012Quantum} takes a maximum-rank fixed point, for
-which every fixed point of $T$ is supported on the support of $\rho$; the following two
-statements take an arbitrary positive semidefinite fixed point and restrict to the fixed
-points supported on the support of $\rho$. Theorem~\ref{thm:maximalSupport_fixedPoint}
-below supplies a fixed point whose support carries every fixed point, and at such a fixed
-point the restriction disappears
+For a singular fixed point the conjugation is taken with the inverse square
+root on the support of $\rho$, and the conjugated set lives in the corner
+algebra of the support projection. The corollary in~\cite{Wolf2012Quantum}
+takes a maximum-rank fixed point, for which every fixed point of $T$ is
+supported on the support of $\rho$; the following two statements take an
+arbitrary positive semidefinite fixed point and restrict to the fixed points
+supported on the support of $\rho$.
+Theorem~\ref{thm:maximalSupport_fixedPoint} below supplies a fixed point
+whose support carries every fixed point, and at such a fixed point the
+restriction disappears
 (Theorem~\ref{thm:maximalSupport_weightedCorner}).
 % Maintainer note: the restriction history is recorded in
 % docs/paper-gaps/wolf_cor67_maximal_support_restriction.tex.
@@ -581,75 +599,97 @@ point the restriction disappears
     \lean{Kraus.weightedCornerFixedPointsStarSubalgebra}
     \leanok
     \uses{def:tp_kraus, def:support_proj, rem:corner_algebra_star_instances}
-    Let $T(X) = \sum_i K_i X K_i^\dagger$ be trace-preserving, let $\rho \succeq 0$
-    satisfy $T(\rho) = \rho$, and let $Q$ be the support projection of $\rho$. The corner
-    elements $Y \in Q\,\MN{D}\,Q$ such that $\sqrt{\rho}\, Y \sqrt{\rho}$ is a fixed
-    point of $T$ form a $*$-subalgebra of the corner algebra $Q\,\MN{D}\,Q$.
+    Let $T(X)=\sum_iK_iXK_i^\dagger$ be trace-preserving, let
+    $\rho\succeq0$ satisfy $T(\rho)=\rho$, and let $Q$ be the support
+    projection of $\rho$. The corner elements $Y\in Q\MN{D}Q$ such that
+    $\sqrt{\rho}\,Y\sqrt{\rho}$ is a fixed point of $T$ form a
+    $*$-subalgebra of the corner algebra $Q\MN{D}Q$.
 \end{theorem}
 
 \begin{proof}
     \leanok
     \uses{thm:weightedFixedPointsStarSubalgebra,
-        thm:supported_corner_compression_isometry, thm:compression_on_support_posDef,
+        thm:supported_corner_compression_isometry,
+        thm:compression_on_support_posDef,
         thm:support_proj_fixed}
-    Closure under addition, scalars, and conjugation is linearity together with the
-    stability of fixed points under conjugate transposition; the corner unit $Q$ belongs
-    to the set because $\sqrt{\rho}\, Q \sqrt{\rho} = \rho$ is a fixed point, the support
-    projection absorbing the square root: $Q \sqrt{\rho} = \sqrt{\rho} = \sqrt{\rho}\,Q$,
-    since $(\Id - Q)\sqrt{\rho}\,\bigl((\Id - Q)\sqrt{\rho}\bigr)^{\dagger} =
-    (\Id - Q)\rho(\Id - Q) = 0$.
+    Closure under addition, scalars, and conjugation is linearity together
+    with the stability of fixed points under conjugate transposition. The
+    corner unit $Q$ belongs to the set because
+    $\sqrt{\rho}\,Q\sqrt{\rho}=\rho$ is a fixed point. The support projection
+    absorbs the square root, $Q\sqrt{\rho}=\sqrt{\rho}=\sqrt{\rho}\,Q$,
+    since
+    \begin{align}
+        (\Id-Q)\sqrt{\rho}
+          ((\Id-Q)\sqrt{\rho})^\dagger
+        &=(\Id-Q)\rho(\Id-Q)=0.
+        \notag
+    \end{align}
 
-    For closure under multiplication, compress to the support sector: since $\rho$ is a
-    fixed point of $T$, the support projection satisfies $(\Id - Q) K_i Q = 0$
-    (Theorem~\ref{thm:support_proj_fixed}), the compressed family $Q K_i Q$ is
-    trace-preserving on the corner, and the compression along the isometry
-    $V : \C^{r} \to \C^{D}$ of Theorem~\ref{thm:supported_corner_compression_isometry},
-    with $V^{\dagger} V = \Id_r$ and $V V^{\dagger} = Q$, produces a trace-preserving
-    family $C$ on $\C^{r}$ whose Schr\"odinger map has the positive definite fixed point
-    $\sigma = V^{\dagger} \rho V$ (Theorem~\ref{thm:compression_on_support_posDef}). The
-    square root compresses along the isometry,
-    \[
-        \sqrt{\sigma} \;=\; V^{\dagger} \sqrt{\rho}\, V,
-    \]
+    For closure under multiplication, compress to the support sector. Since
+    $\rho$ is a fixed point of $T$, the support projection satisfies
+    $(\Id-Q)K_iQ=0$ by Theorem~\ref{thm:support_proj_fixed}. The compressed
+    family $QK_iQ$ is trace-preserving on the corner, and compression along
+    the isometry $V:\C^r\to\C^D$ of
+    Theorem~\ref{thm:supported_corner_compression_isometry}, with
+    $V^\dagger V=\Id_r$ and $VV^\dagger=Q$, produces a trace-preserving
+    family $C$ on $\C^r$ whose Schr\"odinger map has the positive definite
+    fixed point $\sigma=V^\dagger\rho V$ by
+    Theorem~\ref{thm:compression_on_support_posDef}. The square root
+    compresses along the isometry:
+    \begin{align}
+        \sqrt{\sigma}
+        &=V^\dagger\sqrt{\rho}\,V,
+        \label{eq:spectral_ds_sqrt_compression}
+    \end{align}
     by uniqueness of the positive square root, since
-    $(V^{\dagger}\sqrt{\rho}V)(V^{\dagger}\sqrt{\rho}V)
-    = V^{\dagger}\sqrt{\rho}\,Q\sqrt{\rho}V = \sigma$. Hence for corner-supported $Y$,
-    \[
-        \sqrt{\sigma}\,(V^{\dagger} Y V)\,\sqrt{\sigma}
-        \;=\; V^{\dagger}\,(\sqrt{\rho}\, Y \sqrt{\rho})\,V,
-    \]
-    and the fixed-point equations correspond: for corner-supported $W$ the compressed
-    map evaluates to
-    \[
-        C\bigl(V^{\dagger} W V\bigr) \;=\; V^{\dagger}\,Q\,T(W)\,Q\,V
-        \;=\; V^{\dagger}\,T(W)\,V,
-    \]
-    since $T(W)$ is again corner-supported, so $T(W) = W$ exactly when the compressed
-    map fixes $V^{\dagger} W V$. The set therefore corresponds, element by element, to the weighted
-    fixed points of the compressed family with respect to the positive definite fixed
-    point $\sigma$, which form a $*$-subalgebra by
-    Theorem~\ref{thm:weightedFixedPointsStarSubalgebra}. Closure under multiplication
-    transports back through the correspondence: a corner-supported $Y_j$ satisfies
-    $Y_j Q = Y_j$ (right-multiply $Q Y_j Q = Y_j$ by $Q$ and use $Q^2 = Q$), so
-    \[
-        (V^{\dagger} Y_1 V)(V^{\dagger} Y_2 V)
-        \;=\; V^{\dagger}\, Y_1 (V V^{\dagger})\, Y_2\, V
-        \;=\; V^{\dagger}\, (Y_1 Q)\, Y_2\, V
-        \;=\; V^{\dagger}\,(Y_1 Y_2)\,V,
-    \]
-    and the product of two members corresponds to the product of their compressed
-    images, which lies in the compressed $*$-subalgebra.
+    $(V^\dagger\sqrt{\rho}V)^2
+      =V^\dagger\sqrt{\rho}\,Q\sqrt{\rho}V=\sigma$.
+    Hence, for corner-supported $Y$,
+    \begin{align}
+        \sqrt{\sigma}\,(V^\dagger YV)\sqrt{\sigma}
+        &=V^\dagger(\sqrt{\rho}\,Y\sqrt{\rho})V.
+        \label{eq:spectral_ds_weighted_transport}
+    \end{align}
+    For corner-supported $W$, the compressed map satisfies
+    \begin{align}
+        C(V^\dagger WV)
+        &=V^\dagger QT(W)QV
+          =V^\dagger T(W)V,
+        \notag
+    \end{align}
+    since $T(W)$ is again corner-supported. Thus $T(W)=W$ exactly when the
+    compressed map fixes $V^\dagger WV$. The set therefore corresponds,
+    element by element, to the weighted fixed points of the compressed
+    family with respect to the positive definite fixed point $\sigma$,
+    which form a $*$-subalgebra by
+    Theorem~\ref{thm:weightedFixedPointsStarSubalgebra}.
+
+    Closure under multiplication transports back through the correspondence.
+    A corner-supported $Y_j$ satisfies $Y_jQ=Y_j$, so
+    \begin{align}
+        (V^\dagger Y_1V)(V^\dagger Y_2V)
+        &=V^\dagger Y_1(VV^\dagger)Y_2V
+          =V^\dagger(Y_1Q)Y_2V
+          =V^\dagger(Y_1Y_2)V.
+        \notag
+    \end{align}
+    The product of two members therefore corresponds to the product of
+    their compressed images, which lies in the compressed
+    $*$-subalgebra.
 \end{proof}
 
 Combined with the conjugation correspondence of
-Theorem~\ref{thm:weightedCorner_sqrt_surjective}, the carrier of this $*$-subalgebra
-realizes
-\[
-    \rho^{-1/2}\,\{X \in \MN{D} \mid T(X) = X,\ Q X Q = X\}\,\rho^{-1/2},
-\]
-with the inverse square root taken on the support of $\rho$: the singular case of
-Corollary~6.7 of~\cite{Wolf2012Quantum}, restricted to the fixed points supported on
-the support of $\rho$.
+Theorem~\ref{thm:weightedCorner_sqrt_surjective}, the carrier of this
+$*$-subalgebra realizes
+\begin{align}
+    \rho^{-1/2}
+      \{X\in\MN{D}\mid T(X)=X,\ QXQ=X\}
+      \rho^{-1/2},
+    \notag
+\end{align}
+with the inverse square root taken on the support of $\rho$: the singular
+case of Corollary~6.7 of~\cite{Wolf2012Quantum}, restricted to the fixed
+points supported on the support of $\rho$.
 
 \begin{theorem}[Conjugation by the square root is onto the corner-supported fixed
     points]%
@@ -657,52 +697,60 @@ the support of $\rho$.
     \lean{Kraus.exists_weightedCorner_sqrt_eq_of_fixedPoint}
     \leanok
     \uses{def:tp_kraus, def:support_proj}
-    In the setting of Theorem~\ref{thm:weightedCornerFixedPointsStarSubalgebra}, every
-    fixed point $X$ of $T$ with $Q X Q = X$ arises as $X = \sqrt{\rho}\, Y \sqrt{\rho}$
-    for a corner-supported $Y$ with $\sqrt{\rho}\, Y \sqrt{\rho}$ fixed by $T$.
+    In the setting of
+    Theorem~\ref{thm:weightedCornerFixedPointsStarSubalgebra}, every fixed
+    point $X$ of $T$ with $QXQ=X$ arises as
+    $X=\sqrt{\rho}\,Y\sqrt{\rho}$ for a corner-supported $Y$ with
+    $\sqrt{\rho}\,Y\sqrt{\rho}$ fixed by $T$.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    \uses{thm:supported_corner_compression_isometry, thm:compression_on_support_posDef,
+    \uses{thm:supported_corner_compression_isometry,
+        thm:compression_on_support_posDef,
         thm:support_proj_fixed}
     Compress to the support sector as in the proof of
     Theorem~\ref{thm:weightedCornerFixedPointsStarSubalgebra} and set
-    \[
-        Y \;=\; V\,\bigl(\sqrt{\sigma}^{-1}\,(V^{\dagger} X V)\,
-            \sqrt{\sigma}^{-1}\bigr)\,V^{\dagger},
-    \]
-    where $\sigma = V^{\dagger} \rho V$ is positive definite, so $\sqrt{\sigma}$ is
-    invertible. Then $Y$ is corner-supported, and, writing
-    $Z = \sqrt{\sigma}^{-1}(V^{\dagger} X V)\sqrt{\sigma}^{-1}$ for the compressed
-    middle factor, the transport identity displayed above gives
-    \[
-        V^{\dagger}\bigl(\sqrt{\rho}\,Y\sqrt{\rho}\bigr)V
-        \;=\; \sqrt{\sigma}\,\bigl(V^{\dagger} Y V\bigr)\,\sqrt{\sigma}
-        \;=\; \sqrt{\sigma}\,Z\,\sqrt{\sigma}
-        \;=\; V^{\dagger} X V,
-    \]
-    hence
-    $\sqrt{\rho}\, Y \sqrt{\rho} = Q X Q = X$, both sides being corner-supported. In
-    particular $\sqrt{\rho}\, Y \sqrt{\rho}$ is fixed by $T$.
+    \begin{align}
+        Y
+        &=V\left(\sqrt{\sigma}^{-1}(V^\dagger XV)
+          \sqrt{\sigma}^{-1}\right)V^\dagger,
+        \label{eq:spectral_ds_weighted_preimage}
+    \end{align}
+    where $\sigma=V^\dagger\rho V$ is positive definite, so
+    $\sqrt{\sigma}$ is invertible. Then $Y$ is corner-supported. Writing
+    $Z=\sqrt{\sigma}^{-1}(V^\dagger XV)\sqrt{\sigma}^{-1}$ for the
+    compressed middle factor, (\ref{eq:spectral_ds_weighted_transport})
+    gives
+    \begin{align}
+        V^\dagger(\sqrt{\rho}\,Y\sqrt{\rho})V
+        &=\sqrt{\sigma}\,(V^\dagger YV)\sqrt{\sigma}
+          =\sqrt{\sigma}\,Z\sqrt{\sigma}
+          =V^\dagger XV.
+        \notag
+    \end{align}
+    Hence $\sqrt{\rho}\,Y\sqrt{\rho}=QXQ=X$, since both sides are
+    corner-supported. In particular, $\sqrt{\rho}\,Y\sqrt{\rho}$ is fixed
+    by $T$.
 \end{proof}
 
-The support hypothesis on the fixed points is discharged by exhibiting a fixed point
-whose support carries every fixed point. The first ingredient is that Loewner domination
-transfers the support.
+The support hypothesis on the fixed points is discharged by exhibiting a
+fixed point whose support carries every fixed point. The first ingredient is
+that Loewner domination transfers the support.
 
 \begin{lemma}[The transfer map of a trace-preserving family is a channel]%
     \label{lem:isChannel_transferMap}
     \lean{Kraus.isChannel_transferMap}
     \leanok
     \uses{def:channel, def:tp_kraus}
-    Let $K_0, \ldots, K_{d-1}$ be a trace-preserving Kraus family. The map
-    $E(X) = \sum_i K_i X K_i^{\dagger}$ is a quantum channel.
+    Let $K_0,\ldots,K_{d-1}$ be a trace-preserving Kraus family. The map
+    $E(X)=\sum_iK_iXK_i^\dagger$ is a quantum channel.
 \end{lemma}
+
 \begin{proof}\leanok
     \uses{thm:transfer_channel}
     The trace-preservation hypothesis is the normalization
-    $\sum_i K_i^{\dagger} K_i = \mathbf 1$ of the channel form of the transfer map
+    $\sum_iK_i^\dagger K_i=\Id$ of the channel form of the transfer map
     (Theorem~\ref{thm:transfer_channel}).
 \end{proof}
 
@@ -711,33 +759,31 @@ transfers the support.
     \lean{Kraus.stationaryProj_absorb_of_le_smul}
     \leanok
     \uses{def:support_proj}
-    Let $\rho, P \succeq 0$ and $c\in\C$ with $P \preceq c\rho$, and let $Q$ be the
-    support projection of $\rho$. Then
-    \[
-        Q\,P = P, \qquad P\,Q = P.
-    \]
+    Let $\rho,P\succeq0$ and $c\in\C$ with $P\preceq c\rho$, and let $Q$
+    be the support projection of $\rho$. Then $QP=P$ and $PQ=P$.
 \end{lemma}
 
 \begin{proof}
     \leanok
     \uses{def:support_proj}
-    The support projection absorbs $\rho$, so $(\Id - Q)\rho = 0$ and
-    \[
-        0 \;\preceq\; (\Id - Q)\,P\,(\Id - Q)
-        \;\preceq\; (\Id - Q)\,(c\rho)\,(\Id - Q) \;=\; 0,
-    \]
-    the middle inequality because conjugation by $\Id - Q$ preserves the Loewner order.
-    Hence
-    \[
-        \bigl((\Id - Q)\sqrt{P}\bigr)\bigl((\Id - Q)\sqrt{P}\bigr)^{\dagger}
-        \;=\; (\Id - Q)\,P\,(\Id - Q) \;=\; 0,
-    \]
-    so $(\Id - Q)\sqrt{P} = 0$, and
-    \[
-        (\Id - Q)\,P \;=\; \bigl((\Id - Q)\sqrt{P}\bigr)\sqrt{P} \;=\; 0,
-    \]
-    that is $Q P = P$; taking conjugate transposes gives $P Q = P$ since $P$ and $Q$ are
-    Hermitian.
+    The support projection absorbs $\rho$, so $(\Id-Q)\rho=0$ and
+    \begin{align}
+        0
+        &\preceq(\Id-Q)P(\Id-Q)
+          \preceq(\Id-Q)(c\rho)(\Id-Q)
+          =0,
+        \notag
+    \end{align}
+    because conjugation by $\Id-Q$ preserves the Loewner order. Hence
+    \begin{align}
+        ((\Id-Q)\sqrt{P})
+          ((\Id-Q)\sqrt{P})^\dagger
+        &=(\Id-Q)P(\Id-Q)=0,
+        \notag
+    \end{align}
+    so $(\Id-Q)\sqrt{P}=0$ and
+    $(\Id-Q)P=((\Id-Q)\sqrt{P})\sqrt{P}=0$. Thus $QP=P$; taking conjugate
+    transposes gives $PQ=P$ since $P$ and $Q$ are Hermitian.
 \end{proof}
 
 \begin{theorem}[A fixed point of maximal support from bounded orbits]%
@@ -747,14 +793,11 @@ transfers the support.
     \uses{def:positive_map, def:has_bounded_orbits,
         def:mean_ergodic_projection, def:support_proj}
     Let $T:\MN{D}\to\MN{D}$ be positive and have bounded orbits, and let
-    $T_\infty$ be its mean-ergodic projection.  Then
-    $\rho_0=T_\infty(\Id)$ is positive semidefinite and fixed by $T$.  If
+    $T_\infty$ be its mean-ergodic projection. Then
+    $\rho_0=T_\infty(\Id)$ is positive semidefinite and fixed by $T$. If
     $Q_0$ is the support projection of $\rho_0$, then every fixed point $X$
-    of $T$ satisfies
-    \[
-        Q_0\,X\,Q_0=X.
-    \]
-    This is the bounded-orbit form of the maximal-support argument underlying
+    of $T$ satisfies $Q_0XQ_0=X$. This is the bounded-orbit form of the
+    maximal-support argument underlying
     \cite[Proposition~6.9]{Wolf2012Quantum}.
 \end{theorem}
 
@@ -764,25 +807,26 @@ transfers the support.
         thm:mean_ergodic_bounded_orbits,
         thm:positive_map_conjTranspose, thm:psd_le_trace_smul_one,
         lem:stationaryProj_absorb_of_le}
-    Positivity of the mean-ergodic projection gives $\rho_0\succeq 0$, while
-    its range and idempotence give $T(\rho_0)=\rho_0$.  If $A\succeq0$, then
+    Positivity of the mean-ergodic projection gives $\rho_0\succeq0$, while
+    its range and idempotence give $T(\rho_0)=\rho_0$. If $A\succeq0$, then
     $A\preceq\tr(A)\Id$; applying the positive map $T_\infty$ gives
-    \[
+    \begin{align}
         \tr(A)\rho_0-T_\infty(A)
-        =T_\infty\!\left(\tr(A)\Id-A\right)\succeq0,
-        \qquad
-        T_\infty(A)\preceq\tr(A)\rho_0.
-    \]
+        &=T_\infty\!\left(\tr(A)\Id-A\right)\succeq0,
+        &
+        T_\infty(A)
+        &\preceq\tr(A)\rho_0.
+        \notag
+    \end{align}
     Scalar domination therefore gives
-    \[
-        Q_0\,T_\infty(A)\,Q_0=T_\infty(A).
-    \]
-    For a fixed Hermitian matrix $H$, write $H=H^+-H^-$.  Since
-    $T_\infty(H)=H$, linearity gives
-    \[
-        H=T_\infty(H^+)-T_\infty(H^-),
-    \]
-    so $Q_0HQ_0=H$.  Finally decompose an arbitrary fixed point into two
+    $Q_0T_\infty(A)Q_0=T_\infty(A)$. For a fixed Hermitian matrix $H$,
+    write $H=H^+-H^-$. Since $T_\infty(H)=H$, linearity gives
+    \begin{align}
+        H
+        &=T_\infty(H^+)-T_\infty(H^-),
+        \notag
+    \end{align}
+    so $Q_0HQ_0=H$. Finally, decompose an arbitrary fixed point into two
     Hermitian fixed matrices, using preservation of conjugate transpose, and
     conclude that $Q_0XQ_0=X$.
 \end{proof}
@@ -793,23 +837,20 @@ transfers the support.
     \leanok
     \uses{def:positive_map, def:trace_preserving, def:mean_ergodic_projection,
         def:support_proj}
-    Let $T:\MN{D}\to\MN{D}$ be positive and trace-preserving, and let $T_\infty$ be its
-    mean-ergodic projection. Then $\rho_0=T_\infty(\Id)$ is positive semidefinite and
-    fixed by $T$. With $Q_0$ the support projection of $\rho_0$, every fixed point $X$
-    of $T$ satisfies
-    \[
-        Q_0\, X\, Q_0 = X.
-    \]
-    This is the maximal-support property of fixed points in Section~6.4
-    of~\cite{Wolf2012Quantum}.
+    Let $T:\MN{D}\to\MN{D}$ be positive and trace-preserving, and let
+    $T_\infty$ be its mean-ergodic projection. Then
+    $\rho_0=T_\infty(\Id)$ is positive semidefinite and fixed by $T$. With
+    $Q_0$ the support projection of $\rho_0$, every fixed point $X$ of $T$
+    satisfies $Q_0XQ_0=X$. This is the maximal-support property of fixed
+    points in Section~6.4 of~\cite{Wolf2012Quantum}.
 \end{theorem}
 
 \begin{proof}
     \leanok
     \uses{thm:positive_trace_preserving_mean_ergodic_projection,
         thm:maximalSupport_fixedPoint_of_bounded_orbits}
-    Theorem~\ref{thm:positive_trace_preserving_mean_ergodic_projection} gives
-    bounded orbits.  Apply
+    Theorem~\ref{thm:positive_trace_preserving_mean_ergodic_projection}
+    gives bounded orbits. Apply
     Theorem~\ref{thm:maximalSupport_fixedPoint_of_bounded_orbits}.
 \end{proof}
 
@@ -820,40 +861,42 @@ transfers the support.
     \uses{def:positive_map, def:support_proj,
         lem:stationaryProj_absorb_of_le}
     Let $T:\MN{D}\to\MN{D}$ be positive, and let
-    $\rho\succeq0$ satisfy $T(\rho)=\rho$. If $Q$ is the support projection of
-    $\rho$, then for every $X\in\MN{D}$,
-    \[
-        QXQ=X \quad\Longrightarrow\quad QT(X)Q=T(X).
-    \]
+    $\rho\succeq0$ satisfy $T(\rho)=\rho$. If $Q$ is the support projection
+    of $\rho$, then, for every $X\in\MN{D}$,
+    \begin{align}
+        QXQ=X
+        &\quad\Longrightarrow\quad QT(X)Q=T(X).
+        \label{eq:spectral_ds_support_invariance}
+    \end{align}
 \end{theorem}
 
 \begin{proof}
     \leanok
     \uses{lem:stationaryProj_absorb_of_le}
-    First suppose $A\succeq0$ and $QAQ=A$.  On the support of $\rho$, the
-    matrix $\rho$ is positive definite, so $Q\preceq c\rho$ for some positive
-    scalar $c$.  Moreover,
-    \[
-        A\preceq\tr(A)Q,
-    \]
-    because this follows by compressing
-    $\tr(A)\Id-A\succeq0$ with $Q$.  Positivity and $T(\rho)=\rho$ therefore give
-    \[
-        0\preceq T(A)\preceq c\tr(A)\rho.
-    \]
+    First suppose $A\succeq0$ and $QAQ=A$. On the support of $\rho$, the
+    matrix $\rho$ is positive definite, so $Q\preceq c\rho$ for some
+    positive scalar $c$. Moreover, $A\preceq\tr(A)Q$, because this follows
+    by compressing $\tr(A)\Id-A\succeq0$ with $Q$. Positivity and
+    $T(\rho)=\rho$ therefore give
+    \begin{align}
+        0
+        &\preceq T(A)\preceq c\tr(A)\rho.
+        \notag
+    \end{align}
     Scalar domination transfers the support, hence $QT(A)Q=T(A)$.
-    Write $H_1=X+X^*$ and $H_2=\mathrm{i}(X-X^*)$, so that both matrices are
-    Hermitian and
-    \[
-        X=\tfrac{1}{2}H_1-\tfrac{\mathrm{i}}{2}H_2.
-    \]
-    Setting $A_j^\pm=QH_j^\pm Q$ gives positive matrices with
+
+    Write $H_1=X+X^*$ and $H_2=\mathrm{i}(X-X^*)$, so that both matrices
+    are Hermitian and $X=\tfrac12H_1-\tfrac{\mathrm{i}}2H_2$. Setting
+    $A_j^\pm=QH_j^\pm Q$ gives positive matrices with
     $QA_j^\pm Q=A_j^\pm$ and
-    \[
-        X=\tfrac{1}{2}(A_1^+-A_1^-)-\tfrac{\mathrm{i}}{2}(A_2^+-A_2^-).
-    \]
+    \begin{align}
+        X
+        &=\tfrac12(A_1^+-A_1^-)
+          -\tfrac{\mathrm{i}}2(A_2^+-A_2^-).
+        \notag
+    \end{align}
     Applying the positive-input conclusion to these four matrices and using
-    linearity of $T$ gives the assertion.
+    linearity of $T$ gives (\ref{eq:spectral_ds_support_invariance}).
 \end{proof}
 
 \begin{theorem}[Restriction to full-rank fixed points]%
@@ -863,23 +906,26 @@ transfers the support.
     \uses{thm:maximalSupport_fixedPoint, thm:stationarySupport_restriction}
     Let $T:\MN{D}\to\MN{D}$ be positive and trace preserving, set
     $\rho_0=T_\infty(\Id)$, and let $Q_0$ be the support projection of
-    $\rho_0$. There are a finite-dimensional Hilbert space $\mathcal H$ and an
-    isometry $V:\mathcal H\to\mathbb C^D$ with
+    $\rho_0$. There are a finite-dimensional Hilbert space $\mathcal H$ and
+    an isometry $V:\mathcal H\to\C^D$ with
     $V^*V=\Id_{\mathcal H}$ and $VV^*=Q_0$ such that
-    \[
-        \widetilde T(Y)=V^*T(VYV^*)V
-    \]
-    is positive and trace preserving and has a positive definite fixed point.
-    Moreover,
-    \[
-        T(VYV^*)=V\widetilde T(Y)V^*,
-    \]
-    and
-    \[
+    \begin{align}
+        \widetilde T(Y)
+        &=V^*T(VYV^*)V
+        \label{eq:spectral_ds_support_compression}
+    \end{align}
+    is positive and trace preserving and has a positive definite fixed
+    point. Moreover,
+    \begin{align}
+        T(VYV^*)
+        &=V\widetilde T(Y)V^*,
+        \label{eq:spectral_ds_compression_intertwining}\\
         T(X)=X
-        \quad\Longleftrightarrow\quad
-        \exists\,Y:\widetilde T(Y)=Y,\quad X=VYV^*.
-    \]
+        &\quad\Longleftrightarrow\quad
+        \exists\,Y,\quad
+        \widetilde T(Y)=Y\ \text{ and }\ X=VYV^*.
+        \label{eq:spectral_ds_compression_fixed}
+    \end{align}
     These are Equations~(6.52) and~(6.51), respectively,
     of~\cite{Wolf2012Quantum}. Thus the complementary fixed-point summand
     vanishes.
@@ -888,49 +934,54 @@ transfers the support.
 \begin{proof}
     \leanok
     \uses{thm:maximalSupport_fixedPoint, thm:stationarySupport_restriction}
-    Theorem~\ref{thm:maximalSupport_fixedPoint} gives $\rho_0$ and shows that
-    $Q_0XQ_0=X$ for every fixed point $X$ of $T$. Choose an isometry onto the
-    range of $Q_0$.
-    Positivity follows from positivity of conjugation and of $T$.  The matrix
-    $VYV^*$ is supported on $Q_0$, so the preceding theorem shows that its
-    image is also supported there. Inserting $Q_0=VV^*$ gives
-    \[
+    Theorem~\ref{thm:maximalSupport_fixedPoint} gives $\rho_0$ and shows
+    that $Q_0XQ_0=X$ for every fixed point $X$ of $T$. Choose an isometry
+    onto the range of $Q_0$. Positivity follows from positivity of
+    conjugation and of $T$. The matrix $VYV^*$ is supported on $Q_0$, so
+    Theorem~\ref{thm:stationarySupport_restriction} shows that its image is
+    also supported there. Inserting $Q_0=VV^*$ gives
+    \begin{align}
         T(VYV^*)
-        =Q_0T(VYV^*)Q_0
-        =VV^*T(VYV^*)VV^*
-        =V\widetilde T(Y)V^*.
-    \]
-    By cyclicity of the trace, the isometry identity, and trace preservation of
+        &=Q_0T(VYV^*)Q_0
+          =VV^*T(VYV^*)VV^*
+          =V\widetilde T(Y)V^*,
+        \notag
+    \end{align}
+    which proves (\ref{eq:spectral_ds_compression_intertwining}). By
+    cyclicity of the trace, the isometry identity, and trace preservation of
     $T$,
-    \[
+    \begin{align}
         \tr(\widetilde T(Y))
-        =\tr(V\widetilde T(Y)V^*)
-        =\tr(T(VYV^*))
-        =\tr(VYV^*)
-        =\tr(Y).
-    \]
+        &=\tr(V\widetilde T(Y)V^*)
+          =\tr(T(VYV^*))
+          =\tr(VYV^*)
+          =\tr(Y).
+        \notag
+    \end{align}
     Thus $\widetilde T$ is trace preserving. The compressed point
     $\sigma_0=V^*\rho_0V$ is positive definite. Since
     $V\sigma_0V^*=Q_0\rho_0Q_0=\rho_0$,
-    \[
+    \begin{align}
         \widetilde T(\sigma_0)
-        =V^*T(\rho_0)V
-        =V^*\rho_0V
-        =\sigma_0.
-    \]
+        &=V^*T(\rho_0)V
+          =V^*\rho_0V
+          =\sigma_0.
+        \notag
+    \end{align}
     If $T(X)=X$, then $Q_0XQ_0=X$, and hence
     $X=V(V^*XV)V^*$. Moreover,
-    \[
+    \begin{align}
         \widetilde T(V^*XV)
-        =V^*T\bigl(V(V^*XV)V^*\bigr)V
-        =V^*T(X)V
-        =V^*XV.
-    \]
-    Conversely, if $\widetilde T(Y)=Y$, then the intertwining identity gives
-    \[
-        T(VYV^*)=V\widetilde T(Y)V^*=VYV^*.
-    \]
+        &=V^*T(V(V^*XV)V^*)V
+          =V^*T(X)V
+          =V^*XV.
+        \notag
+    \end{align}
+    Conversely, if $\widetilde T(Y)=Y$, then
+    (\ref{eq:spectral_ds_compression_intertwining}) gives
+    $T(VYV^*)=V\widetilde T(Y)V^*=VYV^*$. These two implications prove
+    (\ref{eq:spectral_ds_compression_fixed}).
 \end{proof}
 
-The next three theorems are generic finite-matrix facts.  They do not depend on
-positive maps, fixed points, or Theorem~6.14 of~\cite{Wolf2012Quantum}.
+The next three theorems are generic finite-matrix facts. They do not depend
+on positive maps, fixed points, or Theorem~6.14 of~\cite{Wolf2012Quantum}.
