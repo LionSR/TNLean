@@ -483,13 +483,15 @@ Consequently the source implication
   \Longrightarrow \text{SAL}
 \]
 is not yet formalized and must not carry a \texttt{\string\leanok} marker.
-The remaining work is structural: construct a positive
-\leanid{MPOTensor.PhysicalSectorFactorization} non-circularly from the
-source-side \leanid{MPOTensor.EtaLocalStructureData}, and supply the
-normality and blocking reduction needed to reach that datum from the printed
-commuting-bond hypotheses.  The explicit factorization and positivity
-assumptions of the proved corollary are marked scope restrictions, not
-additional hypotheses on the source proposition.
+The target-side construction recorded above is now complete for the exact
+selected fixed tensor: its positive physical-sector factorization is
+constructed from the fixed commuting bond in equation \emph{sigmaNK2} at
+source lines~1581--1605.  The remaining work is structural: supply the
+normality and blocking comparison from the original normal MPDO block and
+proportional bond-product hypotheses of Proposition~\emph{4to2}, at source
+lines~1597--1605, to that selected fixed representative.  The explicit
+factorization and positivity assumptions of the proved corollary are marked
+scope restrictions, not additional hypotheses on the source proposition.
 
 \paragraph{Local fix (the later orthogonal-sector statement).}
 The proposition labelled \emph{prop4to2} at source lines~1801--1808 states
@@ -547,11 +549,11 @@ The gap can be removed in the following stages.
 
 \begin{enumerate}
 \item The selected fixed tensor has a positive physical-sector factorization
-constructed non-circularly from the source-side commuting bond; this is
-\leanid{MPOTensor.TranslationInvariantBondData.%
-exists_positive_physicalSectorFactorization_fixedProductTensorData}.
-\item Prove the normality and blocking reduction from the printed
-translation-invariant commuting-bond hypotheses to that $\eta$-local datum.
+constructed non-circularly from the source-side commuting bond, as recorded by
+the fixed-tensor theorem identified above.
+\item Prove the normality and blocking comparison from the original normal
+MPDO block and the printed proportional commuting-bond hypotheses to the
+selected fixed representative.
 Only then may the source proposition receive a formal declaration and a
 \texttt{\string\leanok} marker.
 \end{enumerate}
