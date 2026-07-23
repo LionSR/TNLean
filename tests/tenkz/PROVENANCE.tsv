@@ -280,3 +280,4 @@ zz_siteprobe.tex	standalone	tests/tenkz/zz_siteprobe.tex	compiles, emits tnlog, 
 zz_geomframe.tex	standalone	tests/tenkz/zz_geomframe.tex	compiles, emits tnlog, and passes tenkz_audit
 zz_geomdag.tex	standalone	tests/tenkz/zz_geomdag.tex	compiles, emits tnlog, and passes tenkz_audit
 zz_geomsupport.tex	standalone	tests/tenkz/zz_geomsupport.tex	compiles, emits tnlog, and passes tenkz_audit
+zz_renderslice.tex	standalone	tests/tenkz/zz_renderslice.tex	compiles, emits tnlog, and passes tenkz_audit

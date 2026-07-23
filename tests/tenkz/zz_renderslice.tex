@@ -1,0 +1,10 @@
+% Regression: zz_renderslice — a plain dot chain drawn through the shared geometry and render stages (experiment toggle ON).
+% Formula: |psi> = A B C as a three-site chain; ink parity with the legacy path is pinned by the twin pixel comparison in the S2 landing.
+\documentclass[varwidth=10cm, border=6pt]{standalone}
+\usepackage{tenkz}
+\makeatletter\tenkz@experimentrender\makeatother
+\begin{document}
+\begin{tenkz}[physical=up]
+  \tn{A} & \tn{B} & \tn{C}
+\end{tenkz}
+\end{document}

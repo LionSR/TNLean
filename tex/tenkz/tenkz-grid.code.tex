@@ -1858,9 +1858,25 @@
         {dot}
           {
             \tenkz_map:nn { \l__tenkz_x_dim } { \l__tenkz_y_dim }
-            \node[tensor, \l__tenkz_rolesty_tl]
-              (\tenkz_node_name:nn{#1}{#2})
-              at \tenkz_mpt: {};
+            % the migration experiment: same node, same name, same point --
+            % but the mapped point crosses geometry and the ink primitive
+            \bool_if:NTF \g__tenkz_experiment_render_bool
+              {
+                \__tenkz_geom_frame_declare_rotation:nnnn {gridflat}{0}{0}{0}
+                \__tenkz_geom_place_cell:nnee { cell:#1-#2 } {gridflat}
+                  { \fp_eval:n { \dim_to_fp:n { \l__tenkz_mx_dim }
+                                / \dim_to_fp:n { \tenkz@pitch } } }
+                  { \fp_eval:n { \dim_to_fp:n { \l__tenkz_my_dim }
+                                / \dim_to_fp:n { \tenkz@pitch } } }
+                \__tenkz_render_atom_named:nn { cell:#1-#2 }
+                  { tensor, \l__tenkz_rolesty_tl ,
+                    name = \tenkz_node_name:nn{#1}{#2} }
+              }
+              {
+                \node[tensor, \l__tenkz_rolesty_tl]
+                  (\tenkz_node_name:nn{#1}{#2})
+                  at \tenkz_mpt: {};
+              }
           }
         {box}  { \tenkz_glyph_node:nnn {#1}{#2}{box~tensor} }
         {mpo}  { \tenkz_glyph_node:nnn {#1}{#2}{mpo~tensor} }

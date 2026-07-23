@@ -108,6 +108,22 @@
       { \msg_error:nnn {tenkz}{render-route} {#1} }
   }
 
+% ---------- the migration experiment ----------------------------------------
+% OFF by default.  When set, qualifying legacy paths hand their ink to this
+% stage; the toggle is an internal experiment hook, not public syntax.
+\bool_new:N \g__tenkz_experiment_render_bool
+\cs_new_protected:Npn \tenkz@experimentrender
+  { \bool_gset_true:N \g__tenkz_experiment_render_bool }
+% #1 placement id, #2 the caller's complete option list (style, hue, name)
+\cs_new_protected:Npn \__tenkz_render_atom_named:nn #1#2
+  {
+    \__tenkz_geom_xy:nNN {#1} \l__tenkz_render_x_tl \l__tenkz_render_y_tl
+    \__tenkz_ink_node:nnnn {#2}
+      { \l__tenkz_render_x_tl \tenkz@pitch }
+      { \l__tenkz_render_y_tl \tenkz@pitch }
+      { }
+  }
+
 % ---------- labels ------------------------------------------------------------
 % Text never rotates.  The anchor is a pure function of the outward angle:
 % the label sits beyond the ink along that angle and anchors on its own
