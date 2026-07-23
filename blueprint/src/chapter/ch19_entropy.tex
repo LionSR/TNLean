@@ -2643,9 +2643,9 @@ Theorem~\ref{thm:trace_norm_abs}.
     406--413, and 423--427, respectively.  The support-domain extension is
     given at lines~717--720.
 
-    This theorem concerns the spectral expression $I_{A,B}$.  It does not
-    assert a coordinate-free support-resolvent formula or a finite-family
-    defect identity.
+    This theorem concerns the spectral expression $I_{A,B}$.  The next
+    theorem identifies it with the coordinate-free left-right quadratic form
+    underlying the finite Weyl formula.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -2663,9 +2663,111 @@ Theorem~\ref{thm:trace_norm_abs}.
     theorem identifies the last sum with $D(A\Vert B)$.
 \end{proof}
 
-% Open in #4435: identify the spectral expression above with the
-% coordinate-free support-resolvent quadratic form, then prove the
-% finite-family defect identity.  Neither statement is claimed here.
+\begin{theorem}[Support-domain left-right quadratic representation]
+    \label{thm:relative_entropy_support_left_right_quadratic}
+    \lean{Matrix.PosSemidef.supportInv}
+    \lean{Matrix.supportLeftRightSuperoperator}
+    \lean{Matrix.supportSourceAQuadratic}
+    \lean{Matrix.rawSupportSourceAQuadratic}
+    \lean{Matrix.supportSourceBQuadratic}
+    \lean{Matrix.supportRelativeEntropyLeftRightIntegrand}
+    \lean{Matrix.supportSourceAQuadratic_spectral}
+    \lean{Matrix.supportSourceBQuadratic_spectral}
+    \lean{Matrix.supportRelativeEntropyLeftRightIntegrand_eq_spectral}
+    \lean{Matrix.supportSourceAQuadratic_eq_raw_of_kernel_le}
+    \lean{Matrix.rawSupportSourceAQuadratic_sub_trace_add_sourceB_eq_spectral}
+    \lean{Matrix.supportRelativeEntropyLeftRightIntegrand_continuousOn}
+    \leanok
+    \uses{thm:relative_entropy_support_spectral_integral}
+    Let $A$ and $B$ be positive semidefinite matrices of the same size, let
+    $P_B$ be the orthogonal projection onto the support of $B$, and, for
+    $t>0$, set
+    \[
+        S_t=A\otimes\Id+t(\Id\otimes B^{\top}).
+    \]
+    Write $S_t^+$ for the generalized inverse that vanishes on $\ker S_t$.
+    Define
+    \[
+      Q_{A P_B}(t)
+        =\operatorname{Re}\left\langle
+            \operatorname{vec}((A P_B)^{\top}),
+            S_t^+\operatorname{vec}((A P_B)^{\top})
+          \right\rangle,
+      \qquad
+      Q_B(t)
+        =\operatorname{Re}\left\langle
+            \operatorname{vec}(B^{\top}),
+            S_t^+\operatorname{vec}(B^{\top})
+          \right\rangle.
+    \]
+    With the spectral notation of
+    Theorem~\ref{thm:relative_entropy_support_spectral_integral},
+    \[
+      Q_{A P_B}(t)
+        =\sum_{i,j:\,\beta_j>0}
+          \frac{\alpha_i^2}{\alpha_i+t\beta_j}|w_{ij}|^2,
+      \qquad
+      Q_B(t)
+        =\sum_{i,j:\,\beta_j>0}
+          \frac{\beta_j^2}{\alpha_i+t\beta_j}|w_{ij}|^2.
+    \]
+    Consequently,
+    \[
+      \frac{Q_{A P_B}(t)-\operatorname{Re}\operatorname{Tr}B+tQ_B(t)}{1+t}
+        =I_{A,B}(t).
+    \]
+    This function is continuous on $(0,\infty)$.  If
+    $\ker B\subseteq\ker A$, then $A P_B=A$, so $Q_{A P_B}(t)$ equals the
+    quadratic form with source $\operatorname{vec}(A^{\top})$.
+
+    This is the support-projected form of $(\mathrm{intAB})$ in
+    Jen\v{c}ov\'a--Ruskai, arXiv:0903.2895v4, \S2.1,
+    lines~423--427, with the support convention at lines~717--720.
+\end{theorem}
+
+\begin{proof}\leanok
+    Diagonalize $A$ and $B$ and write $W=U_A^\ast U_B$.  In these coordinates,
+    the two equations
+    \[
+      A X_A+tX_A B=A P_B,
+      \qquad
+      A X_B+tX_B B=B
+    \]
+    have entries
+    \[
+      (U_A^\ast X_AU_B)_{ij}
+        =
+        \begin{cases}
+          \dfrac{\alpha_i}{\alpha_i+t\beta_j}w_{ij},&\beta_j>0,\\
+          0,&\beta_j=0,
+        \end{cases}
+    \]
+    and
+    \[
+      (U_A^\ast X_BU_B)_{ij}
+        =
+        \begin{cases}
+          \dfrac{\beta_j}{\alpha_i+t\beta_j}w_{ij},&\beta_j>0,\\
+          0,&\beta_j=0.
+        \end{cases}
+    \]
+    For every positive semidefinite $S$, the identities
+    $S^+S=SS^+=P_S$ imply that $Sx=b$ gives
+    \[
+        \langle b,S^+b\rangle=\langle b,x\rangle.
+    \]
+    Applying this identity to the two displayed solutions gives the spectral
+    formulas.  Their coefficientwise combination is the scalar function
+    appearing in
+    Lemma~\ref{lem:relative_entropy_scalar_resolvent_integral}.  Continuity
+    follows term by term from the finite sums.
+\end{proof}
+
+% Open in #4435: the singular, support-domain passage from the finite-Weyl
+% equality above to the common-resolvent conclusion remains to be proved.
+% The positive-definite relative-modular theorem and the generic
+% support-residual identity and common-solution theorem below are already
+% established; this comment does not reopen them.
 
 \begin{theorem}[Spectral resolvent representation of relative entropy]
     \label{thm:relative_entropy_resolvent_integral}
