@@ -1997,6 +1997,19 @@
       }
   }
 
+% register the mapped glyph centre as this cell's placement: the frame map
+% has already run, so geometry receives paper-frame pitch units and the
+% frames stay declared for silhouette and label queries downstream
+\cs_new_protected:Npn \tenkz_render_cell_place:nn #1#2
+  {
+    \__tenkz_geom_frame_declare_rotation:nnnn {gridflat}{0}{0}{0}
+    \__tenkz_geom_place_cell:nnee { cell:#1-#2 } {gridflat}
+      { \fp_eval:n { \dim_to_fp:n { \l__tenkz_mx_dim }
+                    / \dim_to_fp:n { \tenkz@pitch } } }
+      { \fp_eval:n { \dim_to_fp:n { \l__tenkz_my_dim }
+                    / \dim_to_fp:n { \tenkz@pitch } } }
+  }
+
 \cs_new:Npn \tenkz_node_name:nn #1#2
   { tz \int_use:N \tenkz@pictureid - #1 - #2 }
 
@@ -2039,25 +2052,13 @@
         {dot}
           {
             \tenkz_map:nn { \l__tenkz_x_dim } { \l__tenkz_y_dim }
-            % the migration experiment: same node, same name, same point --
-            % but the mapped point crosses geometry and the ink primitive
-            \bool_if:NTF \g__tenkz_experiment_render_bool
-              {
-                \__tenkz_geom_frame_declare_rotation:nnnn {gridflat}{0}{0}{0}
-                \__tenkz_geom_place_cell:nnee { cell:#1-#2 } {gridflat}
-                  { \fp_eval:n { \dim_to_fp:n { \l__tenkz_mx_dim }
-                                / \dim_to_fp:n { \tenkz@pitch } } }
-                  { \fp_eval:n { \dim_to_fp:n { \l__tenkz_my_dim }
-                                / \dim_to_fp:n { \tenkz@pitch } } }
-                \__tenkz_render_atom_named:nn { cell:#1-#2 }
-                  { tensor, \l__tenkz_rolesty_tl ,
-                    name = \tenkz_node_name:nn{#1}{#2} }
-              }
-              {
-                \node[tensor, \l__tenkz_rolesty_tl]
-                  (\tenkz_node_name:nn{#1}{#2})
-                  at \tenkz_mpt: {};
-              }
+            % the mapped point crosses geometry and the render stage:
+            % the shared stack owns every dot
+            \tenkz_render_cell_place:nn {#1}{#2}
+            \__tenkz_render_atom_named_pt:nnnn
+              { \dim_use:N \l__tenkz_mx_dim } { \dim_use:N \l__tenkz_my_dim }
+              { \tenkz_node_name:nn{#1}{#2} }
+              { tensor, \l__tenkz_rolesty_tl }
           }
         {box}  { \tenkz_glyph_node:nnn {#1}{#2}{box~tensor} }
         {mpo}  { \tenkz_glyph_node:nnn {#1}{#2}{mpo~tensor} }
@@ -2267,13 +2268,16 @@ code=combined-side|value=\tl_to_str:N \l__tenkz_fcombined_tl}
 \cs_new_protected:Npn \tenkz_glyph_node_aux:nnn #1#2#3
   {
     % (x, y) is the glyph centre in the LOGICAL frame; the frame map
-    % places it (glyph shapes never rotate -- text stays upright)
+    % places it, then geometry and the render stage own the ink
+    % (glyph shapes never rotate -- text stays upright)
     \tenkz_map:nn { \l__tenkz_x_dim } { \l__tenkz_y_dim }
-    \node[#3]
-      (\tenkz_node_name:nn{#1}{#2})
-      at \tenkz_mpt:
+    \tenkz_render_cell_place:nn {#1}{#2}
+    \__tenkz_render_atom_labelled_pt:nnnnn
+      { \dim_use:N \l__tenkz_mx_dim } { \dim_use:N \l__tenkz_my_dim }
+      { \tenkz_node_name:nn{#1}{#2} }
+      { #3 }
       { $\tenkz@labelsize \tl_use:N \l__tenkz_gstrut_tl
-        \tl_use:N \l__tenkz_cell_tl$ };
+        \tl_use:N \l__tenkz_cell_tl$ }
   }
 \cs_generate_variant:Nn \tenkz_glyph_node_aux:nnn { nnV }
 % the per-skin glyph strut: rectangular skins keep \tenkz@glyphstrut (boxes

@@ -1,8 +1,7 @@
-% Regression: zz_renderslice — a plain dot chain drawn through the shared geometry and render stages (experiment toggle ON).
+% Regression: zz_renderslice — a plain dot chain drawn through the shared geometry and render stages (the production dot path).
 % Formula: |psi> = A B C as a three-site chain; ink parity with the legacy path is pinned by the twin pixel comparison in the S2 landing.
 \documentclass[varwidth=10cm, border=6pt]{standalone}
 \usepackage{tenkz}
-\makeatletter\tenkz@experimentrender\makeatother
 \begin{document}
 \ExplSyntaxOn
 \cs_new_eq:NN \__tenkz_test_derive_bonds: \tenkz_model_derive_bonds:
