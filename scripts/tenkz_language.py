@@ -29,6 +29,132 @@ class Entry:
 
 ARITIES = {"environment": 4, "command": 5, "key": 6, "alias": 4, "example": 3}
 
+BASELINE = ROOT / "tests/tenkz/census-baseline.json"
+
+# The two-ledger vocabulary of the shrink gate (docs/tenkz/SHRINK.md).
+# kernel: the load-bearing surface, hard one-in-one-out budget.
+# sugar(<expansion>): expands mechanically into kernel spellings.
+# alias(<replacement>; sunset=<milestone>): read-old-documents only.
+# escape: sanctioned raw-geometry leak, metered by the escape census.
+_LEDGERS = ("kernel", "sugar", "alias", "escape")
+MILESTONES = ("0.8", "0.9", "1.0")
+
+
+def parse_status(status: str) -> tuple[str, str]:
+    """Return (ledger, payload); raise ValueError on unknown vocabulary."""
+    if status in ("kernel", "escape"):
+        return status, ""
+    for ledger in ("sugar", "alias"):
+        if status.startswith(ledger + "(") and status.endswith(")"):
+            return ledger, status[len(ledger) + 1 : -1]
+    raise ValueError(f"unknown ledger status {status!r}")
+
+
+def parse_alias_payload(payload: str) -> tuple[str, str]:
+    """Return an alias replacement and its supported sunset milestone."""
+    match = re.fullmatch(r"(.+?)\s*;\s*sunset=([^;\s]+)", payload)
+    if match is None:
+        raise ValueError(
+            "alias payload must be '<replacement>; sunset=<milestone>'"
+        )
+    replacement, sunset = match.groups()
+    if sunset not in MILESTONES:
+        raise ValueError(
+            f"unsupported alias sunset {sunset!r}; expected one of "
+            + ", ".join(MILESTONES)
+        )
+    return replacement.strip(), sunset
+
+
+def parse_value_alias_sunset(meaning: str) -> str:
+    """Return the milestone carried by a value-alias description."""
+    match = re.search(r"(?:^|\s)Sunset\s+([^.\s]+(?:\.[^.\s]+)?)\.\s*$", meaning)
+    if match is None:
+        raise ValueError("value alias description carries no final 'Sunset M.'")
+    sunset = match.group(1)
+    if sunset not in MILESTONES:
+        raise ValueError(
+            f"unsupported value-alias sunset {sunset!r}; expected one of "
+            + ", ".join(MILESTONES)
+        )
+    return sunset
+
+
+def ledger_split(entries: list[Entry]) -> dict[str, list[tuple[str, ...]]]:
+    split: dict[str, list[tuple[str, ...]]] = {ledger: [] for ledger in _LEDGERS}
+    for entry in entries:
+        if entry.kind != "key":
+            continue
+        ledger, _payload = parse_status(entry.fields[4])
+        split[ledger].append(entry.fields)
+    return split
+
+
+def public_census(entries: list[Entry]) -> dict[str, int]:
+    """Registry surface counted by M1, including commands and environments."""
+    split = ledger_split(entries)
+    return {
+        **{ledger: len(split[ledger]) for ledger in _LEDGERS},
+        "commands": sum(entry.kind == "command" for entry in entries),
+        "environments": sum(entry.kind == "environment" for entry in entries),
+    }
+
+
+def _split_top_level_commas(text: str) -> list[str]:
+    """Split a registry expression without cutting commas inside braces."""
+    parts: list[str] = []
+    start = 0
+    depth = 0
+    index = 0
+    while index < len(text):
+        char = text[index]
+        if char == "\\":
+            index += 2
+            continue
+        if char in "{[(":
+            depth += 1
+        elif char in "}])":
+            depth -= 1
+            if depth < 0:
+                raise ValueError(f"unbalanced registry expression {text!r}")
+        elif char == "," and depth == 0:
+            parts.append(text[start:index].strip())
+            start = index + 1
+        index += 1
+    if depth:
+        raise ValueError(f"unbalanced registry expression {text!r}")
+    parts.append(text[start:].strip())
+    return parts
+
+
+def parse_key_expression(expression: str) -> list[tuple[str, str | None]]:
+    """Parse a complete comma-separated key or key=value expression."""
+    parsed: list[tuple[str, str | None]] = []
+    for fragment in _split_top_level_commas(expression):
+        match = re.fullmatch(r"([a-z][a-z ~]*?)(?:\s*=(.*))?", fragment)
+        if match is None:
+            raise ValueError(f"invalid key-expression fragment {fragment!r}")
+        name, value = match.groups()
+        parsed.append((name.replace("~", " ").strip(), value))
+    if not parsed:
+        raise ValueError("empty key expression")
+    return parsed
+
+
+def _enum_value_error(
+    target: str,
+    value: str | None,
+    target_record: tuple[str, str],
+) -> str | None:
+    """Describe an invalid explicit enum value in a registry rewrite."""
+    if value is None:
+        return None
+    value_type = target_record[1]
+    enum = re.fullmatch(r"enum\(([^)]*)\)", value_type)
+    if enum is not None and value not in enum.group(1).split("|"):
+        return f"replacement value {value!r} for {target!r} is not in {value_type}"
+    return None
+
 
 def _group(text: str, start: int) -> tuple[str, int]:
     while start < len(text) and text[start].isspace():
@@ -151,9 +277,117 @@ def check(entries: list[Entry]) -> list[str]:
         errors.append(f"accidental public environments: {', '.join(missing_environments)}")
     if absent_commands:
         errors.append(f"registered commands without declarations: {', '.join(absent_commands)}")
+    key_vocabulary: dict[tuple[str, str], tuple[str, str]] = {}
     for scope, name, value_type, default, status, meaning in by_kind["key"]:
         if not all((scope, name, value_type, default, status, meaning)):
             errors.append(f"incomplete key record: {scope}:{name}")
+        try:
+            ledger, _ = parse_status(status)
+        except ValueError as exc:
+            errors.append(f"{scope}:{name}: {exc}")
+            continue
+        key_vocabulary[(scope, name.replace("~", " "))] = (ledger, value_type)
+    for scope, name, _vt, _default, status, _meaning in by_kind["key"]:
+        try:
+            ledger, payload = parse_status(status)
+        except ValueError:
+            continue
+        if ledger == "sugar":
+            # Expansion closure: a sugar row must spell its expansion in
+            # kernel vocabulary.  Sugar that cannot expand is kernel in
+            # disguise and fails here.
+            try:
+                expansion = parse_key_expression(payload)
+            except ValueError as exc:
+                errors.append(
+                    f"sugar row {scope}:{name} has invalid expansion: {exc}"
+                )
+                continue
+            unknown = [
+                token
+                for token, _value in expansion
+                if key_vocabulary.get((scope, token), ("", ""))[0] != "kernel"
+            ]
+            if unknown:
+                errors.append(
+                    f"sugar row {scope}:{name} expansion names non-kernel "
+                    f"token(s): {', '.join(unknown)}"
+                )
+                continue
+            for target, value in expansion:
+                value_error = _enum_value_error(
+                    target,
+                    value,
+                    key_vocabulary[(scope, target)],
+                )
+                if value_error is not None:
+                    errors.append(f"sugar row {scope}:{name} {value_error}")
+        if ledger == "alias":
+            try:
+                replacement, _sunset = parse_alias_payload(payload)
+                targets = parse_key_expression(replacement)
+            except ValueError as exc:
+                errors.append(f"alias row {scope}:{name}: {exc}")
+                continue
+            unknown = [
+                token
+                for token, _value in targets
+                if key_vocabulary.get((scope, token), ("", ""))[0]
+                not in {"kernel", "sugar"}
+            ]
+            if unknown:
+                errors.append(
+                    f"alias row {scope}:{name} replacement names unknown "
+                    f"token(s): {', '.join(unknown)}"
+                )
+                continue
+            for target, value in targets:
+                value_error = _enum_value_error(
+                    target,
+                    value,
+                    key_vocabulary[(scope, target)],
+                )
+                if value_error is not None:
+                    errors.append(f"alias row {scope}:{name} {value_error}")
+    for scope, spelling, replacement, meaning in by_kind["alias"]:
+        try:
+            parse_value_alias_sunset(meaning)
+        except ValueError as exc:
+            errors.append(f"value alias {scope}:{spelling}: {exc}")
+        try:
+            targets = parse_key_expression(replacement)
+        except ValueError as exc:
+            errors.append(f"value alias {scope}:{spelling}: {exc}")
+            continue
+        if len(targets) != 1 or targets[0][1] in (None, ""):
+            errors.append(
+                f"value alias {scope}:{spelling} replacement must be one key=value"
+            )
+            continue
+        target, value = targets[0]
+        target_record = key_vocabulary.get((scope, target))
+        if target_record is None or target_record[0] not in {"kernel", "sugar"}:
+            errors.append(
+                f"value alias {scope}:{spelling} replacement key {target!r} "
+                "is not registered vocabulary"
+            )
+            continue
+        value_error = _enum_value_error(target, value, target_record)
+        if value_error is not None:
+            errors.append(
+                f"value alias {scope}:{spelling} {value_error}"
+            )
+    if BASELINE.is_file():
+        baseline = json.loads(BASELINE.read_text(encoding="utf-8"))
+        recorded = baseline["m1_census"]["value"]
+        actual = public_census(entries)
+        if actual != recorded:
+            errors.append(
+                f"ledger census {actual} != baseline {recorded}; a change is "
+                "legal only as a shrink-session update or with an "
+                "Extension-gate: #NNNN citation, and either way the baseline "
+                "moves in the same commit"
+            )
     registered_key_names = {row[1].replace("~", " ") for row in by_kind["key"]}
     parser_key_names = _parser_key_names()
     if registered_key_names != parser_key_names:
@@ -163,9 +397,16 @@ def check(entries: list[Entry]) -> list[str]:
             "parser/registry key census mismatch; missing=" + ",".join(missing)
             + "; extra=" + ",".join(extra)
         )
-    if len(_parser_leaf_keys()) != 145:
+    expected_leaves = 145
+    if BASELINE.is_file():
+        expected_leaves = json.loads(BASELINE.read_text(encoding="utf-8"))[
+            "m2_parser_paths"
+        ]["value"]
+    if len(_parser_leaf_keys()) != expected_leaves:
         errors.append(
-            f"parser leaf-key census is {len(_parser_leaf_keys())}; expected 145"
+            f"parser leaf-key census is {len(_parser_leaf_keys())}; expected "
+            f"{expected_leaves} (raise only with an Extension-gate: #NNNN "
+            "citation and the baseline bump in the same commit)"
         )
     examples = {row[0]: row for row in by_kind["example"]}
     registered_commands = {row[0] for row in by_kind["command"]}
@@ -212,8 +453,16 @@ def _tex(value: str) -> str:
 def generate_reference(entries: list[Entry]) -> None:
     commands = [e.fields for e in entries if e.kind == "command"]
     examples = {e.fields[0]: e.fields[1:] for e in entries if e.kind == "example"}
-    keys = [e.fields for e in entries if e.kind == "key" and e.fields[4] == "canonical"]
-    aliases = [e.fields for e in entries if e.kind == "key" and e.fields[4] != "canonical"]
+    keys = [
+        e.fields
+        for e in entries
+        if e.kind == "key" and parse_status(e.fields[4])[0] != "alias"
+    ]
+    aliases = [
+        e.fields
+        for e in entries
+        if e.kind == "key" and parse_status(e.fields[4])[0] == "alias"
+    ]
     value_aliases = [e.fields for e in entries if e.kind == "alias"]
     lines = [
         "% Generated by scripts/tenkz_language.py; do not edit.",
@@ -285,6 +534,9 @@ def main() -> int:
     if args.action == "census":
         census = {kind: sum(e.kind == kind for e in entries) for kind in ARITIES}
         census["parser_leaf_keys"] = len(_parser_leaf_keys())
+        census["ledgers"] = {
+            ledger: len(rows) for ledger, rows in ledger_split(entries).items()
+        }
         print(json.dumps(census, sort_keys=True))
     if errors:
         for error in errors:
