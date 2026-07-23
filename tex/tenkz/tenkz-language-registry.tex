@@ -93,102 +93,103 @@
   {An unknown face, type, skin, or duplicate command is a hard error.}
 
 % scope, canonical spelling, value type, default, status, meaning
-\__tenkz_language_registry_key:nnnnnn {setup}{pitch}{length}{11mm}{canonical}{Base metric.}
-\__tenkz_language_registry_key:nnnnnn {setup}{compact}{flag}{false}{canonical}{Compact metric profile.}
-\__tenkz_language_registry_key:nnnnnn {setup}{inline}{flag}{false}{canonical}{Inline metric profile.}
-\__tenkz_language_registry_key:nnnnnn {setup}{tensor style}{enum(dot|box)}{dot}{canonical}{Default atom silhouette.}
-\__tenkz_language_registry_key:nnnnnn {setup}{species}{name-list}{empty}{canonical}{Semantic species declarations.}
-\__tenkz_language_registry_key:nnnnnn {picture}{rows}{row-list}{wire}{canonical}{Grid row topology.}
-\__tenkz_language_registry_key:nnnnnn {picture}{physical}{enum(up|down|updown|none)}{none}{canonical}{One-row physical topology.}
-\__tenkz_language_registry_key:nnnnnn {picture}{sandwich}{flag}{false}{canonical}{Ket-over-bra row preset.}
-\__tenkz_language_registry_key:nnnnnn {picture}{boundary}{enum(open|none|periodic)}{open}{canonical}{All-side boundary policy.}
-\__tenkz_language_registry_key:nnnnnn {picture}{west}{side-policy}{inherit}{canonical}{West boundary policy.}
-\__tenkz_language_registry_key:nnnnnn {picture}{east}{side-policy}{inherit}{canonical}{East boundary policy.}
-\__tenkz_language_registry_key:nnnnnn {picture}{north}{side-policy}{inherit}{canonical}{North boundary policy.}
-\__tenkz_language_registry_key:nnnnnn {picture}{south}{side-policy}{inherit}{canonical}{South boundary policy.}
-\__tenkz_language_registry_key:nnnnnn {picture}{frame}{frame-enum}{flat}{canonical}{Picture coordinate frame.}
-\__tenkz_language_registry_key:nnnnnn {picture}{trace style}{enum(racetrack|hooks)}{racetrack}{canonical}{Closure rendering policy.}
-\__tenkz_language_registry_key:nnnnnn {picture}{trace}{cell-set|physical}{empty}{canonical}{Closed interface segments.}
-\__tenkz_language_registry_key:nnnnnn {picture}{open}{cell-set}{empty}{canonical}{Open interface segments.}
-\__tenkz_language_registry_key:nnnnnn {picture}{bond dir}{enum(right|left)}{none}{canonical}{Connection orientation.}
-\__tenkz_language_registry_key:nnnnnn {picture}{west label}{math}{empty}{canonical}{West boundary label.}
-\__tenkz_language_registry_key:nnnnnn {picture}{east label}{math}{empty}{canonical}{East boundary label.}
-\__tenkz_language_registry_key:nnnnnn {picture}{bond label}{math-and-range}{empty}{canonical}{Connection annotation.}
-\__tenkz_language_registry_key:nnnnnn {picture}{align}{row}{midline}{canonical}{Math-axis row.}
-\__tenkz_language_registry_key:nnnnnn {picture}{layer sep}{number}{1}{canonical}{Layer separation factor.}
-\__tenkz_language_registry_key:nnnnnn {picture}{cols}{positive-integer}{3}{canonical}{Lattice column count.}
-\__tenkz_language_registry_key:nnnnnn {picture}{site}{enum(dot|none)}{dot}{canonical}{Default lattice-site ink.}
-\__tenkz_language_registry_key:nnnnnn {picture}{sheets}{positive-integer|role-list}{1}{canonical}{Lattice sheet topology.}
-\__tenkz_language_registry_key:nnnnnn {picture}{outer legs}{enum(both|top|bottom|none)}{none}{canonical}{Sheet exterior ports.}
-\__tenkz_language_registry_key:nnnnnn {picture}{sheet sep}{number}{1}{canonical}{Projected sheet separation.}
-\__tenkz_language_registry_key:nnnnnn {picture}{pairing}{flag}{false}{canonical}{Pair adjacent lattice sheets.}
-\__tenkz_language_registry_key:nnnnnn {picture}{plane lean}{enum(east|west)}{east}{canonical}{Projected-plane lean.}
-\__tenkz_language_registry_key:nnnnnn {picture}{plane rise}{length}{metric}{canonical}{Projected row rise.}
-\__tenkz_language_registry_key:nnnnnn {picture}{plane slant}{length}{metric}{canonical}{Projected column slant.}
-\__tenkz_language_registry_key:nnnnnn {picture}{col vector}{dimension-pair}{frame}{canonical}{Expert projected column basis.}
-\__tenkz_language_registry_key:nnnnnn {picture}{row vector}{dimension-pair}{frame}{canonical}{Expert projected row basis.}
-\__tenkz_language_registry_key:nnnnnn {picture}{sheet vector}{dimension-pair}{frame}{canonical}{Expert projected sheet basis.}
-\__tenkz_language_registry_key:nnnnnn {picture}{maps}{flag}{false}{canonical}{Typed-map layout.}
-\__tenkz_language_registry_key:nnnnnn {picture}{polygon}{positive-integer}{empty}{canonical}{Coherence polygon layout.}
-\__tenkz_language_registry_key:nnnnnn {picture}{radius}{length}{metric}{canonical}{Coherence polygon radius.}
-\__tenkz_language_registry_key:nnnnnn {object}{dot}{flag}{policy}{canonical}{Dot silhouette.}
-\__tenkz_language_registry_key:nnnnnn {object}{box}{flag}{policy}{canonical}{Box silhouette.}
-\__tenkz_language_registry_key:nnnnnn {object}{pill}{flag}{policy}{canonical}{Pill silhouette.}
-\__tenkz_language_registry_key:nnnnnn {object}{mpo}{flag}{policy}{canonical}{MPO silhouette.}
-\__tenkz_language_registry_key:nnnnnn {object}{ring}{flag}{false}{canonical}{Ring silhouette.}
-\__tenkz_language_registry_key:nnnnnn {object}{boundary}{flag}{false}{canonical}{Boundary silhouette.}
-\__tenkz_language_registry_key:nnnnnn {object}{tri}{enum(l|r)}{empty}{canonical}{Canonical isometry silhouette.}
-\__tenkz_language_registry_key:nnnnnn {object}{wide}{positive-integer}{1}{canonical}{Column span.}
-\__tenkz_language_registry_key:nnnnnn {object}{wires}{positive-integer}{1}{canonical}{Wire-row span.}
-\__tenkz_language_registry_key:nnnnnn {object}{combined}{enum(west|east)}{empty}{canonical}{Combined virtual face.}
-\__tenkz_language_registry_key:nnnnnn {object}{span}{positive-integer}{2}{canonical}{Fusion-row span.}
-\__tenkz_language_registry_key:nnnnnn {object}{up at}{slot-list}{center}{canonical}{Upper face ports.}
-\__tenkz_language_registry_key:nnnnnn {object}{down at}{slot-list}{center}{canonical}{Lower face ports.}
-\__tenkz_language_registry_key:nnnnnn {object}{west at}{slot-list}{rows}{canonical}{West face ports.}
-\__tenkz_language_registry_key:nnnnnn {object}{east at}{slot-list}{rows}{canonical}{East face ports.}
-\__tenkz_language_registry_key:nnnnnn {object}{up}{math-list}{empty}{canonical}{Upper port labels.}
-\__tenkz_language_registry_key:nnnnnn {object}{down}{math-list}{empty}{canonical}{Lower port labels.}
-\__tenkz_language_registry_key:nnnnnn {object}{role}{semantic-role}{empty}{canonical}{Semantic theme role.}
-\__tenkz_language_registry_key:nnnnnn {object}{species}{declared-name}{empty}{canonical}{Semantic species.}
-\__tenkz_language_registry_key:nnnnnn {object}{label pos}{compass}{auto}{canonical}{Object label policy.}
-\__tenkz_language_registry_key:nnnnnn {object}{label shift}{dimension-pair}{zero}{canonical}{Object label adjustment.}
-\__tenkz_language_registry_key:nnnnnn {object}{ports}{typed-port-list}{empty}{canonical}{Free-atom typed ports.}
-\__tenkz_language_registry_key:nnnnnn {object}{no legs}{flag}{false}{canonical}{Suppress physical ports.}
-\__tenkz_language_registry_key:nnnnnn {object}{removed}{flag}{false}{canonical}{Remove a lattice atom.}
-\__tenkz_language_registry_key:nnnnnn {object}{name}{identifier}{generated}{canonical}{Stable semantic name.}
-\__tenkz_language_registry_key:nnnnnn {object}{tree style}{enum(wire|ribbon)}{wire}{canonical}{Fusion-tree strand style.}
-\__tenkz_language_registry_key:nnnnnn {connection}{route}{enum(straight|hv|vh|arc)}{straight}{canonical}{Connection route family.}
-\__tenkz_language_registry_key:nnnnnn {connection}{dir}{flag}{false}{canonical}{Connection direction.}
-\__tenkz_language_registry_key:nnnnnn {connection}{out}{angle}{automatic}{canonical}{Arc departure angle.}
-\__tenkz_language_registry_key:nnnnnn {connection}{in}{angle}{automatic}{canonical}{Arc arrival angle.}
-\__tenkz_language_registry_key:nnnnnn {connection}{label}{math}{empty}{canonical}{Connection label.}
-\__tenkz_language_registry_key:nnnnnn {connection}{role}{semantic-role}{empty}{canonical}{Connection theme role.}
-\__tenkz_language_registry_key:nnnnnn {connection}{species}{declared-name}{empty}{canonical}{Connection species.}
-\__tenkz_language_registry_key:nnnnnn {connection}{fused}{flag}{false}{canonical}{Doubled connection.}
-\__tenkz_language_registry_key:nnnnnn {connection}{from}{address}{empty}{canonical}{Arrow source.}
-\__tenkz_language_registry_key:nnnnnn {connection}{to}{address}{empty}{canonical}{Arrow target.}
-\__tenkz_language_registry_key:nnnnnn {connection}{distinguished}{flag}{false}{canonical}{Distinguished lattice edge.}
-\__tenkz_language_registry_key:nnnnnn {connection}{none}{flag}{false}{canonical}{Suppress a lattice edge.}
-\__tenkz_language_registry_key:nnnnnn {connection}{style}{style-name}{empty}{canonical}{Named lattice-edge style.}
-\__tenkz_language_registry_key:nnnnnn {region}{slot}{enum(selected|secondary|complement|collar|neutral)}{selected}{canonical}{Region semantic slot.}
-\__tenkz_language_registry_key:nnnnnn {region}{outline}{flag}{false}{canonical}{Outline-only region.}
-\__tenkz_language_registry_key:nnnnnn {region}{inset}{number}{0}{canonical}{Nested-region inset.}
-\__tenkz_language_registry_key:nnnnnn {region}{label}{math}{empty}{canonical}{Region label.}
-\__tenkz_language_registry_key:nnnnnn {region}{label pos}{compass}{auto}{canonical}{Region label policy.}
-\__tenkz_language_registry_key:nnnnnn {region}{name}{identifier}{generated}{canonical}{Addressable region name.}
-\__tenkz_language_registry_key:nnnnnn {region}{group}{name-list}{empty}{canonical}{Free-graph region members.}
-\__tenkz_language_registry_key:nnnnnn {annotation}{brace above}{flag}{false}{canonical}{Brace annotation above a span.}
-\__tenkz_language_registry_key:nnnnnn {annotation}{brace below}{flag}{false}{canonical}{Brace annotation below a span.}
-\__tenkz_language_registry_key:nnnnnn {annotation}{box}{flag}{false}{canonical}{Boxed span annotation.}
-\__tenkz_language_registry_key:nnnnnn {annotation}{label pos}{compass}{auto}{canonical}{Span-label position.}
-\__tenkz_language_registry_key:nnnnnn {atom-declaration}{skin}{enum(dot|box|pill|mpo)}{dot}{canonical}{Declared atom silhouette.}
+\__tenkz_language_registry_key:nnnnnn {setup}{pitch}{length}{11mm}{kernel}{Base metric.}
+\__tenkz_language_registry_key:nnnnnn {setup}{compact}{flag}{false}{sugar(pitch=0.8 of the base pitch)}{Compact metric profile.}
+\__tenkz_language_registry_key:nnnnnn {setup}{inline}{flag}{false}{sugar(pitch=0.62 of the base pitch)}{Inline metric profile.}
+\__tenkz_language_registry_key:nnnnnn {setup}{tensor style}{enum(dot|box)}{dot}{kernel}{Default atom silhouette.}
+\__tenkz_language_registry_key:nnnnnn {setup}{species}{name-list}{empty}{kernel}{Semantic species declarations.}
+\__tenkz_language_registry_key:nnnnnn {picture}{rows}{row-list}{wire}{kernel}{Grid row topology.}
+\__tenkz_language_registry_key:nnnnnn {picture}{physical}{enum(up|down|updown|none)}{none}{sugar(rows; expander over the row list)}{One-row physical topology.}
+\__tenkz_language_registry_key:nnnnnn {picture}{sandwich}{flag}{false}{sugar(rows={ket,op,bra})}{Ket-over-bra row preset.}
+\__tenkz_language_registry_key:nnnnnn {picture}{boundary}{enum(open|none|periodic)}{open}{sugar(west= east= north= south=)}{All-side boundary policy.}
+\__tenkz_language_registry_key:nnnnnn {picture}{west}{side-policy}{inherit}{kernel}{West boundary policy.}
+\__tenkz_language_registry_key:nnnnnn {picture}{east}{side-policy}{inherit}{kernel}{East boundary policy.}
+\__tenkz_language_registry_key:nnnnnn {picture}{north}{side-policy}{inherit}{kernel}{North boundary policy.}
+\__tenkz_language_registry_key:nnnnnn {picture}{south}{side-policy}{inherit}{kernel}{South boundary policy.}
+\__tenkz_language_registry_key:nnnnnn {picture}{frame}{frame-enum}{flat}{kernel}{Picture coordinate frame.}
+\__tenkz_language_registry_key:nnnnnn {picture}{trace style}{enum(racetrack|hooks)}{racetrack}{kernel}{Closure rendering policy.}
+\__tenkz_language_registry_key:nnnnnn {picture}{trace}{cell-set|physical}{empty}{kernel}{Closed interface segments.}
+\__tenkz_language_registry_key:nnnnnn {picture}{open}{cell-set}{empty}{kernel}{Open interface segments.}
+\__tenkz_language_registry_key:nnnnnn {picture}{bond dir}{enum(right|left)}{none}{kernel}{Connection orientation.}
+\__tenkz_language_registry_key:nnnnnn {picture}{west label}{math}{empty}{kernel}{West boundary label.}
+\__tenkz_language_registry_key:nnnnnn {picture}{east label}{math}{empty}{kernel}{East boundary label.}
+\__tenkz_language_registry_key:nnnnnn {picture}{bond label}{math-and-range}{empty}{kernel}{Connection annotation.}
+\__tenkz_language_registry_key:nnnnnn {picture}{align}{row}{midline}{kernel}{Math-axis row.}
+\__tenkz_language_registry_key:nnnnnn {picture}{layer sep}{number}{1}{kernel}{Layer separation factor.}
+\__tenkz_language_registry_key:nnnnnn {picture}{cols}{positive-integer}{3}{kernel}{Lattice column count.}
+\__tenkz_language_registry_key:nnnnnn {picture}{site}{enum(dot|none)}{dot}{kernel}{Default lattice-site ink.}
+\__tenkz_language_registry_key:nnnnnn {picture}{sheets}{positive-integer|role-list}{1}{kernel}{Lattice sheet topology.}
+\__tenkz_language_registry_key:nnnnnn {picture}{outer legs}{enum(both|top|bottom|none)}{none}{kernel}{Sheet exterior ports.}
+\__tenkz_language_registry_key:nnnnnn {picture}{sheet sep}{number}{1}{kernel}{Projected sheet separation.}
+\__tenkz_language_registry_key:nnnnnn {picture}{pairing}{flag}{false}{kernel}{Pair adjacent lattice sheets.}
+\__tenkz_language_registry_key:nnnnnn {picture}{plane lean}{enum(east|west)}{east}{kernel}{Projected-plane lean.}
+\__tenkz_language_registry_key:nnnnnn {picture}{plane rise}{length}{metric}{escape}{Projected row rise.}
+\__tenkz_language_registry_key:nnnnnn {picture}{plane slant}{length}{metric}{escape}{Projected column slant.}
+\__tenkz_language_registry_key:nnnnnn {picture}{col vector}{dimension-pair}{frame}{escape}{Expert projected column basis.}
+\__tenkz_language_registry_key:nnnnnn {picture}{row vector}{dimension-pair}{frame}{escape}{Expert projected row basis.}
+\__tenkz_language_registry_key:nnnnnn {picture}{sheet vector}{dimension-pair}{frame}{escape}{Expert projected sheet basis.}
+\__tenkz_language_registry_key:nnnnnn {picture}{maps}{flag}{false}{kernel}{Typed-map layout.}
+\__tenkz_language_registry_key:nnnnnn {picture}{polygon}{positive-integer}{empty}{kernel}{Coherence polygon layout.}
+\__tenkz_language_registry_key:nnnnnn {picture}{radius}{length}{metric}{escape}{Coherence polygon radius.}
+\__tenkz_language_registry_key:nnnnnn {object}{dot}{flag}{policy}{kernel}{Dot silhouette.}
+\__tenkz_language_registry_key:nnnnnn {object}{box}{flag}{policy}{kernel}{Box silhouette.}
+\__tenkz_language_registry_key:nnnnnn {object}{pill}{flag}{policy}{kernel}{Pill silhouette.}
+\__tenkz_language_registry_key:nnnnnn {object}{mpo}{flag}{policy}{kernel}{MPO silhouette.}
+\__tenkz_language_registry_key:nnnnnn {object}{ring}{flag}{false}{kernel}{Ring silhouette.}
+\__tenkz_language_registry_key:nnnnnn {object}{boundary}{flag}{false}{kernel}{Boundary silhouette.}
+\__tenkz_language_registry_key:nnnnnn {object}{tri}{enum(l|r)}{empty}{kernel}{Canonical isometry silhouette.}
+\__tenkz_language_registry_key:nnnnnn {object}{wide}{positive-integer}{1}{kernel}{Column span.}
+\__tenkz_language_registry_key:nnnnnn {object}{wires}{positive-integer}{1}{kernel}{Wire-row span.}
+\__tenkz_language_registry_key:nnnnnn {object}{combined}{enum(west|east)}{empty}{kernel}{Combined virtual face.}
+\__tenkz_language_registry_key:nnnnnn {object}{span}{positive-integer}{2}{kernel}{Fusion-row span.}
+\__tenkz_language_registry_key:nnnnnn {object}{up at}{slot-list}{center}{kernel}{Upper face ports.}
+\__tenkz_language_registry_key:nnnnnn {object}{down at}{slot-list}{center}{kernel}{Lower face ports.}
+\__tenkz_language_registry_key:nnnnnn {object}{west at}{slot-list}{rows}{kernel}{West face ports.}
+\__tenkz_language_registry_key:nnnnnn {object}{east at}{slot-list}{rows}{kernel}{East face ports.}
+\__tenkz_language_registry_key:nnnnnn {object}{up}{math-list}{empty}{kernel}{Upper port labels.}
+\__tenkz_language_registry_key:nnnnnn {object}{down}{math-list}{empty}{kernel}{Lower port labels.}
+\__tenkz_language_registry_key:nnnnnn {object}{role}{semantic-role}{empty}{kernel}{Semantic theme role.}
+\__tenkz_language_registry_key:nnnnnn {object}{species}{declared-name}{empty}{kernel}{Semantic species.}
+\__tenkz_language_registry_key:nnnnnn {object}{label pos}{compass}{auto}{kernel}{Object label policy.}
+\__tenkz_language_registry_key:nnnnnn {object}{label shift}{dimension-pair}{zero}{escape}{Object label adjustment.}
+\__tenkz_language_registry_key:nnnnnn {object}{ports}{typed-port-list}{empty}{kernel}{Free-atom typed ports.}
+\__tenkz_language_registry_key:nnnnnn {object}{no legs}{flag}{false}{kernel}{Suppress physical ports.}
+\__tenkz_language_registry_key:nnnnnn {object}{removed}{flag}{false}{kernel}{Remove a lattice atom.}
+\__tenkz_language_registry_key:nnnnnn {object}{name}{identifier}{generated}{kernel}{Stable semantic name.}
+\__tenkz_language_registry_key:nnnnnn {object}{tree style}{enum(wire|ribbon)}{wire}{kernel}{Fusion-tree strand style.}
+\__tenkz_language_registry_key:nnnnnn {connection}{route}{enum(straight|hv|vh|arc)}{straight}{kernel}{Connection route family.}
+\__tenkz_language_registry_key:nnnnnn {connection}{dir}{flag}{false}{kernel}{Connection direction.}
+\__tenkz_language_registry_key:nnnnnn {connection}{out}{angle}{automatic}{escape}{Arc departure angle.}
+\__tenkz_language_registry_key:nnnnnn {connection}{in}{angle}{automatic}{escape}{Arc arrival angle.}
+\__tenkz_language_registry_key:nnnnnn {connection}{label}{math}{empty}{kernel}{Connection label.}
+\__tenkz_language_registry_key:nnnnnn {connection}{role}{semantic-role}{empty}{kernel}{Connection theme role.}
+\__tenkz_language_registry_key:nnnnnn {connection}{species}{declared-name}{empty}{kernel}{Connection species.}
+\__tenkz_language_registry_key:nnnnnn {connection}{fused}{flag}{false}{kernel}{Doubled connection.}
+\__tenkz_language_registry_key:nnnnnn {connection}{from}{address}{empty}{kernel}{Arrow source.}
+\__tenkz_language_registry_key:nnnnnn {connection}{to}{address}{empty}{kernel}{Arrow target.}
+\__tenkz_language_registry_key:nnnnnn {connection}{distinguished}{flag}{false}{kernel}{Distinguished lattice edge.}
+\__tenkz_language_registry_key:nnnnnn {connection}{none}{flag}{false}{kernel}{Suppress a lattice edge.}
+\__tenkz_language_registry_key:nnnnnn {connection}{style}{style-name}{empty}{kernel}{Named lattice-edge style.}
+\__tenkz_language_registry_key:nnnnnn {region}{slot}{enum(selected|secondary|complement|collar|neutral)}{selected}{kernel}{Region semantic slot.}
+\__tenkz_language_registry_key:nnnnnn {region}{outline}{flag}{false}{kernel}{Outline-only region.}
+\__tenkz_language_registry_key:nnnnnn {region}{inset}{number}{0}{kernel}{Nested-region inset.}
+\__tenkz_language_registry_key:nnnnnn {region}{label}{math}{empty}{kernel}{Region label.}
+\__tenkz_language_registry_key:nnnnnn {region}{label pos}{compass}{auto}{kernel}{Region label policy.}
+\__tenkz_language_registry_key:nnnnnn {region}{name}{identifier}{generated}{kernel}{Addressable region name.}
+\__tenkz_language_registry_key:nnnnnn {region}{group}{name-list}{empty}{kernel}{Free-graph region members.}
+\__tenkz_language_registry_key:nnnnnn {annotation}{brace above}{flag}{false}{kernel}{Brace annotation above a span.}
+\__tenkz_language_registry_key:nnnnnn {annotation}{brace below}{flag}{false}{kernel}{Brace annotation below a span.}
+\__tenkz_language_registry_key:nnnnnn {annotation}{box}{flag}{false}{kernel}{Boxed span annotation.}
+\__tenkz_language_registry_key:nnnnnn {annotation}{label pos}{compass}{auto}{kernel}{Span-label position.}
+\__tenkz_language_registry_key:nnnnnn {atom-declaration}{skin}{enum(dot|box|pill|mpo)}{dot}{kernel}{Declared atom silhouette.}
 
-% Compatibility spellings are data, never tutorial vocabulary.
-\__tenkz_language_registry_key:nnnnnn {picture}{periodic}{flag}{false}{alias(boundary=periodic)}{Legacy periodic closure.}
-\__tenkz_language_registry_key:nnnnnn {picture}{chain axis}{enum(east|south)}{east}{alias(frame)}{Legacy frame spelling.}
-\__tenkz_language_registry_key:nnnnnn {object}{legs at}{slot-list}{center}{alias(up at,down at)}{Legacy shared physical ports.}
-\__tenkz_language_registry_key:nnnnnn {object}{rows}{positive-integer}{2}{alias(span)}{Legacy fusion span.}
-\__tenkz_language_registry_key:nnnnnn {picture}{boundary legs}{flag}{false}{alias(boundary=open)}{Legacy lattice boundary spelling.}
-\__tenkz_language_registry_key:nnnnnn {region}{label at}{compass}{auto}{alias(label pos)}{Legacy region-label spelling.}
+% Compatibility spellings are data, never tutorial vocabulary.  Every alias
+% carries its sunset milestone; the sunset executes as a corpus rewrite.
+\__tenkz_language_registry_key:nnnnnn {picture}{periodic}{flag}{false}{alias(boundary=periodic; sunset=1.0)}{Legacy periodic closure.}
+\__tenkz_language_registry_key:nnnnnn {picture}{chain axis}{enum(east|south)}{east}{alias(frame; sunset=1.0)}{Legacy frame spelling.}
+\__tenkz_language_registry_key:nnnnnn {object}{legs at}{slot-list}{center}{alias(up at,down at; sunset=1.0)}{Legacy shared physical ports.}
+\__tenkz_language_registry_key:nnnnnn {object}{rows}{positive-integer}{2}{alias(span; sunset=1.0)}{Legacy fusion span.}
+\__tenkz_language_registry_key:nnnnnn {picture}{boundary legs}{flag}{false}{alias(boundary=open; sunset=1.0)}{Legacy lattice boundary spelling.}
+\__tenkz_language_registry_key:nnnnnn {region}{label at}{compass}{auto}{alias(label pos; sunset=1.0)}{Legacy region-label spelling.}
 \__tenkz_language_registry_alias:nnnn {connection}{route=curve}{route=arc}
-  {Legacy curved-route value.}
+  {Legacy curved-route value. Sunset 1.0.}
