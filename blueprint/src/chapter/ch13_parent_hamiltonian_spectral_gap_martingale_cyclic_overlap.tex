@@ -6,19 +6,21 @@
         rem:euclidean_local_projector_ingredients, lem:transported_es_local_projections}
     For a fixed chain length $N$, suppose the Hilbert-space local terms
     $h_{i,\mathrm{ES}}$ satisfy the ordered row-sum estimate
-    \begin{equation}\label{eq:ph_ordered_rowsum_estimate}
+    \begin{align}
         \re\langle h_{i,\mathrm{ES}} v,h_{j,\mathrm{ES}}v\rangle
-        \ge -(1-\gamma)c_{ij}\re\langle h_{i,\mathrm{ES}}v,v\rangle
+        &\ge -(1-\gamma)c_{ij}\re\langle h_{i,\mathrm{ES}}v,v\rangle
         \qquad (i\ne j),
-    \end{equation}
+        \label{eq:ph_ordered_rowsum_estimate}
+    \end{align}
     with $\sum_{j\ne i}c_{ij}\le1$ and $\gamma\le1$. Then the
     Hilbert-space parent Hamiltonian satisfies
-    \[
+    \begin{align}
         \gamma\re\langle H_{N,L}^{\mathrm{ES}}v,v\rangle
-        \le
+        &\le
         \re\langle H_{N,L}^{\mathrm{ES}}v,
         H_{N,L}^{\mathrm{ES}}v\rangle
-    \]
+        \notag
+    \end{align}
     for every vector $v$.
 \end{lemma}
 
@@ -38,14 +40,10 @@
     \uses{lem:parent_hamiltonian_ordered_rowsum_quadratic,
         lem:parent_hamiltonian_es_quadratic_reduction, lem:transported_es_local_projections}
     Assume uniformly for every $N\ge2L$ that the Hilbert-space local terms
-    satisfy the ordered row-sum estimate~(\ref{eq:ph_ordered_rowsum_estimate})
-    with $\gamma=1/(4L)$. If $L>1$, then
-    $1/(4L)>0$ and, for every
+    satisfy the ordered row-sum estimate (\ref{eq:ph_ordered_rowsum_estimate})
+    with $\gamma=1/(4L)$. If $L>1$, then $1/(4L)>0$ and, for every
     $v\in(\mathcal G_{N,L}^{\mathrm{ES}}(A))^\perp$,
-    \[
-        \frac{1}{4L}\|v\|\le
-        \|H_{N,L}^{\mathrm{ES}}(A)v\|.
-    \]
+    $\frac{1}{4L}\|v\| \le \|H_{N,L}^{\mathrm{ES}}(A)v\|$.
 \end{lemma}
 
 \begin{proof}
@@ -70,23 +68,20 @@
         lem:transported_es_local_projections}
     Assume uniformly for every $N\ge2L$ that the Hilbert-space local terms satisfy
     the anticommutator martingale estimate
-    \[
+    \begin{align}
         \re\langle h_{i,\mathrm{ES}}v,h_{j,\mathrm{ES}}v\rangle
         +\re\langle h_{j,\mathrm{ES}}v,h_{i,\mathrm{ES}}v\rangle
-        \ge
-        -c_{ij}\Bigl(1-\frac{1}{4L}\Bigr)
-        \bigl(
-        \re\langle h_{i,\mathrm{ES}}v,v\rangle
+        &\ge
+        -c_{ij}\left(1-\frac{1}{4L}\right)
+        \bigl(    \re\langle h_{i,\mathrm{ES}}v,v\rangle
         +\re\langle h_{j,\mathrm{ES}}v,v\rangle
         \bigr)
-    \]
+        \notag
+    \end{align}
     for $i\ne j$, with row and column coefficient sums bounded by one. If
     $L>1$, then $1/(4L)>0$ and, for every
     $v\in(\mathcal G_{N,L}^{\mathrm{ES}}(A))^\perp$,
-    \[
-        \frac{1}{4L}\|v\|\le
-        \|H_{N,L}^{\mathrm{ES}}(A)v\|.
-    \]
+    $\frac{1}{4L}\|v\| \le \|H_{N,L}^{\mathrm{ES}}(A)v\|$.
 \end{lemma}
 
 \begin{proof}
@@ -110,16 +105,16 @@
     the overlap relation on local windows has at most $m$ off-diagonal
     neighbours in each row and in each column. If non-overlapping local terms
     have non-negative anticommutator form, and overlapping local terms satisfy
-    \[
+    \begin{align}
         \re\langle h_{i,\mathrm{ES}}v,h_{j,\mathrm{ES}}v\rangle
         +\re\langle h_{j,\mathrm{ES}}v,h_{i,\mathrm{ES}}v\rangle
-        \ge
-        -\Bigl(1-\frac{1}{4L}\Bigr)\frac{1}{m}
-        \bigl(
-        \re\langle h_{i,\mathrm{ES}}v,v\rangle
+        &\ge
+        -\left(1-\frac{1}{4L}\right)\frac{1}{m}
+        \bigl(    \re\langle h_{i,\mathrm{ES}}v,v\rangle
         +\re\langle h_{j,\mathrm{ES}}v,v\rangle
         \bigr),
-    \]
+        \notag
+    \end{align}
     then the explicit norm lower bound with constant $1/(4L)$ follows for
     vectors in $(\mathcal G_{N,L}^{\mathrm{ES}}(A))^\perp$.
 \end{lemma}
@@ -143,14 +138,16 @@
     overlapping off-diagonal windows in each row. If non-overlapping local terms
     have non-negative ordered cross terms, and overlapping local terms satisfy
     the one-sided ordered cross-term estimate
-    \[
+    \begin{align}
         \re\langle h_{i,\mathrm{ES}}v,h_{j,\mathrm{ES}}v\rangle
-        \ge -(1-\gamma)\frac{1}{m}
+        &\ge -(1-\gamma)\frac{1}{m}
         \re\langle h_{i,\mathrm{ES}}v,v\rangle,
-    \]
+        \notag
+    \end{align}
     and the Hilbert-space local terms are symmetric projections, then the
-    Hilbert-space Hamiltonian satisfies $H_{N,L}^{\mathrm{ES}}{}^2\ge
-        \gamma H_{N,L}^{\mathrm{ES}}$ as a quadratic form.
+    Hilbert-space Hamiltonian satisfies
+    $H_{N,L}^{\mathrm{ES}}{}^2\ge\gamma H_{N,L}^{\mathrm{ES}}$ as a quadratic
+    form.
 \end{lemma}
 
 \begin{proof}
@@ -170,11 +167,12 @@
     predicate on local windows has at most $m$ overlapping off-diagonal windows in
     each row, non-overlapping local terms have non-negative ordered cross terms,
     and overlapping local terms satisfy
-    \[
+    \begin{align}
         \|h_{i,\mathrm{ES}}(h_{j,\mathrm{ES}}v)\|
-        \le (1-\gamma)\frac{1}{m}\|h_{i,\mathrm{ES}}v\|.
-    \]
-    Then $H_{N,L}^{\mathrm{ES}}{}^2\ge \gamma H_{N,L}^{\mathrm{ES}}$ as a
+        &\le (1-\gamma)\frac{1}{m}\|h_{i,\mathrm{ES}}v\|.
+        \notag
+    \end{align}
+    Then $H_{N,L}^{\mathrm{ES}}{}^2\ge\gamma H_{N,L}^{\mathrm{ES}}$ as a
     quadratic form. The same conclusion holds from a separate coefficient $\eta$
     satisfying $\eta\le(1-\gamma)/m$.
 \end{lemma}
@@ -196,10 +194,7 @@
     \leanok
     \uses{rem:cyclic_window_operators}
     For a length-$L$ cyclic window on $\Fin{N}$ starting at $i$, its support is
-    \[
-        S_i=\{i,i+1,\ldots,i+L-1\}\pmod N,
-    \]
-    with repeated visits counted once.
+    $S_i=\{i,i+1,\ldots,i+L-1\}\pmod N$, with repeated visits counted once.
 \end{definition}
 
 \begin{lemma}[Cyclic-window support offsets]
@@ -209,11 +204,7 @@
     \uses{def:cyclic_window_support}
     If $L\le N$, then a site $k$ belongs to the cyclic support $S_i$ exactly when
     its cyclic offset from $i$ is below $L$:
-    \[
-        k\in S_i
-        \quad\Longleftrightarrow\quad
-        (k-i)\bmod N < L.
-    \]
+    $k\in S_i \quad\Longleftrightarrow\quad (k-i)\bmod N < L$.
 \end{lemma}
 
 \begin{proof}
@@ -254,18 +245,15 @@
         lem:transported_es_nonoverlap_positive}
     If $L\le N$ and the cyclic supports $S_i$ and $S_j$ do not meet, then the
     Hilbert-space local terms have non-negative ordered cross term:
-    \[
-        0\le\re\langle h_{i,\mathrm{ES}}v,
-        h_{j,\mathrm{ES}}v\rangle.
-    \]
+    $0\le\re\langle h_{i,\mathrm{ES}}v,h_{j,\mathrm{ES}}v\rangle$.
 \end{lemma}
 
 \begin{proof}
     \leanok
     \uses{lem:cyclic_window_support_offsets, lem:transported_es_nonoverlap_positive}
-    The support-offset characterization converts failure of $S_i\cap S_j\ne\varnothing$
-    into site-disjointness of the two cyclic windows. The disjoint-window
-    positivity lemma then applies.
+    The support-offset characterization converts failure of
+    $S_i\cap S_j\ne\varnothing$ into site-disjointness of the two cyclic windows.
+    The disjoint-window positivity lemma then applies.
 \end{proof}
 
 \begin{lemma}[Cyclic-window overlap row cardinality]
@@ -273,10 +261,8 @@
     \lean{MPSTensor.cyclicWindowsOverlap_card_le}
     \leanok
     \uses{def:cyclic_window_support, def:cyclic_windows_overlap}
-    If $2L\le N$ and $L>1$, then for every $i\in\Fin{N}$,
-    \[
-        \#\{j\ne i: i\sim_L j\}\le 2(L-1).
-    \]
+    If $2L\le N$ and $L>1$, then, for every $i\in\Fin{N}$,
+    $\#\{j\ne i: i\sim_L j\} \le 2(L-1)$.
 \end{lemma}
 
 \begin{proof}
@@ -306,8 +292,9 @@
 \begin{proof}
     \leanok
     The fixed-chain finite-overlap reduction gives the required quadratic-form
-    estimate for every admissible $N$. Lemma~\ref{lem:parent_hamiltonian_es_quadratic_reduction}
-    converts that estimate to the norm lower bound.
+    estimate for every admissible $N$.
+    Lemma~\ref{lem:parent_hamiltonian_es_quadratic_reduction} converts that
+    estimate to the norm lower bound.
 \end{proof}
 
 \begin{lemma}[Parent-Hamiltonian gap from a cyclic-window martingale estimate]
@@ -320,11 +307,12 @@
     Fix $L>1$ and let $i\sim_L j$ mean that the cyclic supports of the
     length-$L$ windows at $i$ and $j$ meet. Suppose uniformly for every
     $N\ge2L$ that overlapping off-diagonal terms satisfy
-    \begin{equation}\label{eq:ph_cyclic_window_overlap_estimate}
+    \begin{align}
         \re\langle h_{i,\mathrm{ES}}v,h_{j,\mathrm{ES}}v\rangle
-        \ge -(1-\tfrac{1}{4L})\frac{1}{2(L-1)}
+        &\ge -(1-\tfrac{1}{4L})\frac{1}{2(L-1)}
         \re\langle h_{i,\mathrm{ES}}v,v\rangle.
-    \end{equation}
+        \label{eq:ph_cyclic_window_overlap_estimate}
+    \end{align}
     Then $1/(4L)>0$, and the explicit norm lower bound with constant $1/(4L)$
     follows for vectors in $(\mathcal G_{N,L}^{\mathrm{ES}}(A))^\perp$.
 \end{lemma}
@@ -342,8 +330,9 @@
     do not meet, the corresponding windows are site-disjoint, so
     Lemma~\ref{lem:cyclic_window_nonoverlap_positive} gives the required
     non-negative ordered cross term. Apply
-    Lemma~\ref{lem:parent_hamiltonian_finite_overlap_ordered_cross_term_gap} with these
-    facts and the overlapping-window estimate~(\ref{eq:ph_cyclic_window_overlap_estimate}).
+    Lemma~\ref{lem:parent_hamiltonian_finite_overlap_ordered_cross_term_gap} with
+    these facts and the overlapping-window
+    estimate (\ref{eq:ph_cyclic_window_overlap_estimate}).
 \end{proof}
 
 \begin{lemma}[Parent-Hamiltonian gap from an overlapping cyclic martingale estimate]
@@ -354,11 +343,12 @@
     Fix $L>1$ and let $i\sim_L j$ mean that the cyclic supports of the
     length-$L$ windows at $i$ and $j$ meet. Suppose uniformly for every
     $N\ge2L$ that overlapping off-diagonal terms satisfy
-    \begin{equation}\label{eq:ph_cyclic_overlap_ordered_cross_term}
+    \begin{align}
         \re\langle h_{i,\mathrm{ES}}v,h_{j,\mathrm{ES}}v\rangle
-        \ge -(1-\tfrac{1}{4L})\frac{1}{2(L-1)}
+        &\ge -(1-\tfrac{1}{4L})\frac{1}{2(L-1)}
         \re\langle h_{i,\mathrm{ES}}v,v\rangle.
-    \end{equation}
+        \label{eq:ph_cyclic_overlap_ordered_cross_term}
+    \end{align}
     Then the explicit norm lower bound with constant $1/(4L)$ follows for
     vectors in $(\mathcal G_{N,L}^{\mathrm{ES}}(A))^\perp$.
 \end{lemma}
@@ -366,11 +356,12 @@
 \begin{proof}
     \leanok
     \uses{lem:parent_hamiltonian_cyclic_window_ordered_cross_term_gap}
-    Apply Lemma~\ref{lem:parent_hamiltonian_cyclic_window_ordered_cross_term_gap}.
-    Its non-overlap positivity and finite-family hypotheses are already internal to
-    the preceding reduction; the overlapping estimate
-    (\ref{eq:ph_cyclic_overlap_ordered_cross_term}) supplies its remaining ordered
-    cross-term condition.
+    Apply
+    Lemma~\ref{lem:parent_hamiltonian_cyclic_window_ordered_cross_term_gap}.
+    Its non-overlap positivity and finite-family hypotheses are already internal
+    to the preceding reduction; the overlapping
+    estimate (\ref{eq:ph_cyclic_overlap_ordered_cross_term}) supplies its
+    remaining ordered cross-term condition.
 \end{proof}
 
 \begin{lemma}[Parent-Hamiltonian gap from a cyclic anticommutator estimate]
@@ -383,16 +374,16 @@
     Fix $L>1$ and let $i\sim_L j$ mean that the cyclic supports of the
     length-$L$ windows at $i$ and $j$ meet. Suppose uniformly for every
     $N\ge2L$ that overlapping off-diagonal terms satisfy
-    \[
+    \begin{align}
         \re\langle h_{i,\mathrm{ES}}v,h_{j,\mathrm{ES}}v\rangle
         +\re\langle h_{j,\mathrm{ES}}v,h_{i,\mathrm{ES}}v\rangle
-        \ge
-        -\Bigl(1-\frac{1}{4L}\Bigr)\frac{1}{2(L-1)}
-        \bigl(
-        \re\langle h_{i,\mathrm{ES}}v,v\rangle
+        &\ge
+        -\left(1-\frac{1}{4L}\right)\frac{1}{2(L-1)}
+        \bigl(    \re\langle h_{i,\mathrm{ES}}v,v\rangle
         +\re\langle h_{j,\mathrm{ES}}v,v\rangle
         \bigr).
-    \]
+        \notag
+    \end{align}
     Then the explicit norm lower bound with constant $1/(4L)$ follows for
     vectors in $(\mathcal G_{N,L}^{\mathrm{ES}}(A))^\perp$.
 \end{lemma}
@@ -415,11 +406,12 @@
         rem:projection_geometry_rowsum_identities}
     Fix $L>1$. Suppose uniformly for every $N\ge2L$ and every overlapping
     off-diagonal pair that
-    \[
+    \begin{align}
         \|h_{i,\mathrm{ES}}(h_{j,\mathrm{ES}}v)\|
-        \le (1-\tfrac{1}{4L})\frac{1}{2(L-1)}
+        &\le (1-\tfrac{1}{4L})\frac{1}{2(L-1)}
         \|h_{i,\mathrm{ES}}v\|.
-    \]
+        \notag
+    \end{align}
     Then the explicit norm lower bound with constant $1/(4L)$ follows for
     vectors in $(\mathcal G_{N,L}^{\mathrm{ES}}(A))^\perp$.
 \end{lemma}
@@ -428,25 +420,23 @@
     \leanok
     \uses{lem:parent_hamiltonian_cyclic_overlap_ordered_cross_term_gap,
         rem:projection_geometry_rowsum_identities}
-    For an overlapping pair, Cauchy--Schwarz and $h_{i,\mathrm{ES}}^2
-    =h_{i,\mathrm{ES}}$ give
-    \[
-        \begin{aligned}
+    For an overlapping pair, Cauchy--Schwarz and
+    $h_{i,\mathrm{ES}}^2=h_{i,\mathrm{ES}}$ give
+    \begin{align}
         \re\langle h_{i,\mathrm{ES}}v,h_{j,\mathrm{ES}}v\rangle
-        &=
-        \re\langle h_{i,\mathrm{ES}}v,
-            h_{i,\mathrm{ES}}h_{j,\mathrm{ES}}v\rangle\\
-        &\ge
-        -\|h_{i,\mathrm{ES}}v\|\,
-            \|h_{i,\mathrm{ES}}h_{j,\mathrm{ES}}v\|\\
-        &\ge
-        -\Bigl(1-\frac{1}{4L}\Bigr)\frac{1}{2(L-1)}
-            \|h_{i,\mathrm{ES}}v\|^2\\
-        &=
-        -\Bigl(1-\frac{1}{4L}\Bigr)\frac{1}{2(L-1)}
-            \re\langle h_{i,\mathrm{ES}}v,v\rangle .
-        \end{aligned}
-    \]
+        &= \re\langle h_{i,\mathrm{ES}}v,
+            h_{i,\mathrm{ES}}h_{j,\mathrm{ES}}v\rangle
+        \notag\\
+        &\ge -\|h_{i,\mathrm{ES}}v\|
+            \|h_{i,\mathrm{ES}}h_{j,\mathrm{ES}}v\|
+        \notag\\
+        &\ge -\left(1-\frac{1}{4L}\right)\frac{1}{2(L-1)}
+            \|h_{i,\mathrm{ES}}v\|^2
+        \notag\\
+        &= -\left(1-\frac{1}{4L}\right)\frac{1}{2(L-1)}
+            \re\langle h_{i,\mathrm{ES}}v,v\rangle.
+        \notag
+    \end{align}
     This is the ordered lower bound used by the preceding overlapping-cyclic
     martingale reduction.
 \end{proof}
@@ -462,22 +452,19 @@
         lem:parent_hamiltonian_es_quadratic_reduction}
     Fix $L>1$, and let $m=2(L-1)$. Suppose uniformly for every $N\ge2L$ and every
     overlapping off-diagonal pair that
-    \[
+    \begin{align}
         \|h_{i,\mathrm{ES}}(h_{j,\mathrm{ES}}v)\|
-        \le \eta\,\|h_{i,\mathrm{ES}}v\|.
-    \]
+        &\le \eta\,\|h_{i,\mathrm{ES}}v\|.
+        \notag
+    \end{align}
     If $\gamma>0$, $\gamma\le1$, and $\eta\le(1-\gamma)/m$, then $0<\gamma$
     and, for every admissible $N$ and every
     $v\in(\mathcal G_{N,L}^{\mathrm{ES}}(A))^\perp$,
-    \[
-        \gamma\|v\|\le \|H_{N,L}^{\mathrm{ES}}(A)v\|.
-    \]
-    In particular, if
-    $\eta\ge0$ and $\eta m<1$, then $0<1-\eta m$ and, for every admissible $N$
-    and every $v\in(\mathcal G_{N,L}^{\mathrm{ES}}(A))^\perp$,
-    \[
-        (1-\eta m)\|v\|\le \|H_{N,L}^{\mathrm{ES}}(A)v\|.
-    \]
+    $\gamma\|v\| \le \|H_{N,L}^{\mathrm{ES}}(A)v\|$.
+    In particular, if $\eta\ge0$ and $\eta m<1$, then $0<1-\eta m$ and, for
+    every admissible $N$ and every
+    $v\in(\mathcal G_{N,L}^{\mathrm{ES}}(A))^\perp$,
+    $(1-\eta m)\|v\| \le \|H_{N,L}^{\mathrm{ES}}(A)v\|$.
     This strict compression form is a norm-compression sufficient condition, not
     the principal-angle estimate itself. It is a sufficient strengthening of the
     anticommutator martingale estimate in
@@ -510,17 +497,16 @@
         lem:parent_hamiltonian_es_quadratic_reduction}
     Fix $L>1$, and let $m=2(L-1)$. Suppose uniformly for every $N\ge2L$ and every
     overlapping off-diagonal pair that
-    \[
+    \begin{align}
         \|h_{i,\mathrm{ES}}(h_{j,\mathrm{ES}}v)\|
-        \le \eta\,\|h_{j,\mathrm{ES}}v\|,
-    \]
+        &\le \eta\,\|h_{j,\mathrm{ES}}v\|,
+        \notag
+    \end{align}
     that is, a bound $\|h_{i,\mathrm{ES}}h_{j,\mathrm{ES}}\|\le\eta$ on the
-    operator-product norm. If $\gamma>0$, $\gamma\le1$, and $\eta\le(1-\gamma)/m$,
-    then $0<\gamma$ and, for every admissible $N$ and every
-    $v\in(\mathcal G_{N,L}^{\mathrm{ES}}(A))^\perp$,
-    \[
-        \gamma\|v\|\le \|H_{N,L}^{\mathrm{ES}}(A)v\|.
-    \]
+    operator-product norm. If $\gamma>0$, $\gamma\le1$, and
+    $\eta\le(1-\gamma)/m$, then $0<\gamma$ and, for every admissible $N$ and
+    every $v\in(\mathcal G_{N,L}^{\mathrm{ES}}(A))^\perp$,
+    $\gamma\|v\| \le \|H_{N,L}^{\mathrm{ES}}(A)v\|$.
     In particular, if $\eta\ge0$ and $\eta m<1$, then $0<1-\eta m$ and the same
     norm bound holds with $\gamma=1-\eta m$.
 
@@ -549,7 +535,7 @@
     Remark~\ref{rem:projection_geometry_rowsum_identities} turns the
     operator-product bound into the per-pair anticommutator estimate with
     coefficient $(1-\gamma)/m$, using the hypothesis
-    $\eta \le (1-\gamma)/m$; the anticommutator finite-overlap reduction then
+    $\eta\le(1-\gamma)/m$; the anticommutator finite-overlap reduction then
     gives the quadratic-form estimate with the chosen $\gamma$, and the positive
     quadratic-form criterion converts it to the norm lower bound. The strict form
     is the same statement with $\gamma=1-\eta m$, so the coefficient is then

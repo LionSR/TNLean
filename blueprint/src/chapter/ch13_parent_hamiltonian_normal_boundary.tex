@@ -4,41 +4,34 @@ This section implements the inverting-and-growing-back reduction from
 \cite[Section~IV.C]{Cirac2021Matrix}: a commutation or annihilation relation
 for length-$m$ word products is reduced to the injectivity length $L_0$, then
 used in the periodic-boundary closure-property step. Throughout,
-$A^w := A^{i_1}\cdots
-A^{i_L}$ denotes the product along a word $w = (i_1,\ldots,i_L)$, $\Gamma_N$
-sends a boundary matrix to its open-chain vector, and $A$ being
-\emph{$L_0$-block-injective} means $\spn\{A^u : |u|=L_0\} = \MN{D}$, so a
-relation valid on every length-$L_0$ product extends by linearity to all of
-$\MN{D}$.
+$A^w := A^{i_1}\cdots A^{i_L}$ denotes the product along a word
+$w = (i_1,\ldots,i_L)$, $\Gamma_N$ sends a boundary matrix to its open-chain
+vector, and $A$ being \emph{$L_0$-block-injective} means
+$\spn\{A^u : |u|=L_0\} = \MN{D}$, so a relation valid on every length-$L_0$
+product extends by linearity to all of $\MN{D}$.
 
 \begin{theorem}[Common right factor from suffix equations]
     \label{thm:block_word_strip_right_factor}
     \lean{MPSTensor.exists_right_factor_of_block_word_compatibility}
     \leanok
     \uses{def:l_blk_injective}
-    Assume $A$ is $L_0$-block-injective with $L_0 > 0$. Let $\{Z_u\}_{|u|=L_0}$
-    be a family indexed by words of length $L_0$. If for some $K \ge 0$ and every
-    suffix word $w$ of length $K$ there exists $Y_w \in \MN{D}$ such that,
-    for every word $u$ of length~$L_0$,
-    \[
-        Z_u A^w = A^u Y_w,
-    \]
-    then there exists $X \in \MN{D}$ with $Z_u = A^u X$ for every word $u$ of
-    length $L_0$.
+    Assume $A$ is $L_0$-block-injective with $L_0 > 0$. Let
+    $\{Z_u\}_{|u|=L_0}$ be a family indexed by words of length $L_0$. If, for
+    some $K \ge 0$ and every suffix word $w$ of length $K$, there exists
+    $Y_w \in \MN{D}$ such that $Z_u A^w = A^u Y_w$ for every word $u$ of
+    length~$L_0$, then there exists $X \in \MN{D}$ with $Z_u = A^u X$ for
+    every word $u$ of length $L_0$.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    Induct on $K$. For $K = 0$ the empty suffix gives $Z_u = A^u Y_{\emptyset}$.
-    For the successor step, fix the first physical index $i$ and apply the
-    induction hypothesis to the shortened suffix. This gives a matrix $X_i$
-    satisfying
-    \[
-        Z_u A^i = A^u X_i
-    \]
-    for every word $u$ of length $L_0$. Extending this letter equation to all
-    length-$L_0$ words and decomposing $\Id$ in the spanning family
-    $\{A^u : |u| = L_0\}$ yields a common factor $X$.
+    Induct on $K$. For $K = 0$, the empty suffix gives
+    $Z_u = A^u Y_{\emptyset}$. For the successor step, fix the first physical
+    index $i$ and apply the induction hypothesis to the shortened suffix. This
+    gives a matrix $X_i$ satisfying $Z_u A^i = A^u X_i$ for every word $u$ of
+    length $L_0$. Extending this letter equation to all length-$L_0$ words and
+    decomposing $\Id$ in the spanning family $\{A^u : |u| = L_0\}$ yields a
+    common factor $X$.
 \end{proof}
 
 \begin{theorem}[Common boundary matrix from spanning word identities]
@@ -48,38 +41,19 @@ $\MN{D}$.
     \uses{def:word_span}
     Let $A$ be a tensor whose length-$K$ word products span $\MN{D}$. Let
     $\{F_b\}_{b\in B}$ and $\{Z_b\}_{b\in B}$ be two families of matrices. If,
-    for every length-$K$ word $w$, there is a matrix $Y_w$ such that, for every
-    $b\in B$,
-    \[
-        Z_b A^w=F_bY_w,
-    \]
-    then there is a single matrix $Y$ such that, for every $b\in B$,
-    \[
-        Z_b=F_bY.
-    \]
+    for every length-$K$ word $w$, there is a matrix $Y_w$ such that
+    $Z_b A^w = F_bY_w$ for every $b\in B$, then there is a single matrix $Y$
+    such that $Z_b = F_bY$ for every $b\in B$.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    Suppose $Z_bM_1=F_bY_1$ and $Z_bM_2=F_bY_2$ for every $b\in B$. Then
-    \[
-        Z_b(M_1+M_2)
-        =
-        Z_bM_1+Z_bM_2
-        =
-        F_b(Y_1+Y_2).
-    \]
-    For a scalar $c$,
-    \[
-        Z_b(cM_1)
-        =
-        cZ_bM_1
-        =
-        F_b(cY_1).
-    \]
-    Thus the displayed identity holds for every matrix in the span of the
-    length-$K$ word products. Since this span is all of $\MN{D}$, apply it
-    to the identity matrix.
+    Suppose $Z_bM_1 = F_bY_1$ and $Z_bM_2 = F_bY_2$ for every $b\in B$. Then
+    $Z_b(M_1+M_2) = Z_bM_1+Z_bM_2 = F_b(Y_1+Y_2)$.
+    For a scalar $c$, one similarly has
+    $Z_b(cM_1) = cZ_bM_1 = F_b(cY_1)$. Thus the identity holds for every
+    matrix in the span of the length-$K$ word products. Since this span is all
+    of $\MN{D}$, apply it to the identity matrix.
 \end{proof}
 
 \begin{theorem}[Injectivity-length commutation from length-$m$ commutation]
@@ -96,9 +70,7 @@ $\MN{D}$.
     \leanok
     Write each length-$m$ word as a concatenation $uw$ with $|u| = L_0$ and
     $|w| = m - L_0$. The hypothesis gives
-    \[
-        X A^u A^w = A^u A^w X = A^u (A^w X).
-    \]
+    $X A^u A^w = A^u A^w X = A^u(A^w X)$.
     Thus the family $Z_u := X A^u$ satisfies the hypothesis of
     Theorem~\ref{thm:block_word_strip_right_factor}. One obtains
     $X A^u = A^u R$ for all $|u| = L_0$. Decomposing $\Id$ in the span of the
@@ -126,16 +98,16 @@ $\MN{D}$.
     \label{lem:word_commutation_multiple_lengths}
     \lean{MPSTensor.commutes_words_mul_of_commutes_words}
     \leanok
-    If a boundary matrix $X$ commutes with every word product of length $m$, then
-    it commutes with every word product whose length is a multiple $q\,m$.
+    If a boundary matrix $X$ commutes with every word product of length $m$,
+    then it commutes with every word product whose length is a multiple $q\,m$.
 \end{lemma}
 
 \begin{proof}
     \leanok
     Proceed by induction on $q$. For $q=0$, the claim is trivial. For the
     inductive step, let a word of length $(q+1)m$ be given and write it as a
-    length-$m$ prefix followed by a length-$q\,m$ suffix. The prefix commutes with
-    $X$ by hypothesis, and the suffix commutes by the induction hypothesis.
+    length-$m$ prefix followed by a length-$q\,m$ suffix. The prefix commutes
+    with $X$ by hypothesis, and the suffix commutes by the induction hypothesis.
 \end{proof}
 
 \begin{lemma}[Padded complement annihilation]
@@ -144,25 +116,25 @@ $\MN{D}$.
         MPSTensor.eq_zero_of_evalWord_mul_eq_zero_of_isNBlkInjective_of_le_mul}
     \leanok
     \uses{def:l_blk_injective}
-    If $A$ is $L_0$-block-injective, $q \ge 1$, and $k \le qL_0$, then the
-    two one-sided annihilation statements are:
-    \[
-        Z A^w = 0 \quad (|w|=k) \qquad\Longrightarrow\qquad Z=0.
-    \]
-    The left-handed form is
-    \[
-        A^w Z = 0 \quad (|w|=k) \qquad\Longrightarrow\qquad Z=0.
-    \]
+    If $A$ is $L_0$-block-injective, $q \ge 1$, and $k \le qL_0$, then the two
+    one-sided annihilation statements are
+    \begin{align}
+        Z A^w = 0 \quad (|w|=k)
+        &\qquad\Longrightarrow\qquad Z=0, \notag\\
+        A^w Z = 0 \quad (|w|=k)
+        &\qquad\Longrightarrow\qquad Z=0. \notag
+    \end{align}
+    The second implication is the left-handed form.
 \end{lemma}
 
 \begin{proof}
     \leanok
-    The hypothesis $\spn\{A^u: |u|=L_0\}=\MN{D}$ implies the same spanning
-    statement at every positive multiple $qL_0$. Each length-$qL_0$ word factors
-    as a length-$k$ prefix followed by padding, so $Z$ annihilates all generators
-    of the full span and hence annihilates the identity.
-    For the left-handed form, factor each length-$qL_0$ word as a prefix followed
-    by a length-$k$ suffix and use the same spanning argument.
+    The hypothesis $\spn\{A^u : |u|=L_0\}=\MN{D}$ implies the same spanning
+    statement at every positive multiple $qL_0$. Each length-$qL_0$ word
+    factors as a length-$k$ prefix followed by padding, so $Z$ annihilates all
+    generators of the full span and hence annihilates the identity. For the
+    left-handed form, factor each length-$qL_0$ word as a prefix followed by a
+    length-$k$ suffix and use the same spanning argument.
 \end{proof}
 
 \begin{lemma}[One-sided boundary matrices are unique]
@@ -172,26 +144,20 @@ $\MN{D}$.
     \leanok
     \uses{def:l_blk_injective, lem:padded_complement_annihilation,
         lem:wordspan_blk_inj}
-    Let $A$ be $L_0$-block-injective with $L_0>0$.  If two boundary matrices
+    Let $A$ be $L_0$-block-injective with $L_0>0$. If two boundary matrices
     have the same product with every one-site tensor on one fixed side, then the
     two boundary matrices are equal.
 \end{lemma}
 
 \begin{proof}
     \leanok
-    If $Y_1 A^j = Y_2 A^j$ for every physical index $j$, then for every
-    nonempty word $w$, induction on the word gives
-    \[
-        Y_1 A^w = Y_2 A^w.
-    \]
-    Since $A$ is $L_0$-block-injective,
-    \[
-        \spn\{A^w : |w|=L_0\}=\MN{D}.
-    \]
-    Thus the left multiplication maps $M\mapsto Y_1 M$ and
-    $M\mapsto Y_2 M$ are equal on $\MN{D}$, and evaluating on the identity
-    gives $Y_1=Y_2$.  The other one-sided statement is the same argument, with
-    right multiplication in place of left multiplication.
+    If $Y_1 A^j = Y_2 A^j$ for every physical index $j$, then induction on the
+    word gives $Y_1 A^w = Y_2 A^w$ for every nonempty word $w$. Since $A$ is
+    $L_0$-block-injective, $\spn\{A^w : |w|=L_0\}=\MN{D}$. Thus the left
+    multiplication maps $M\mapsto Y_1 M$ and $M\mapsto Y_2 M$ are equal on
+    $\MN{D}$, and evaluating them on the identity gives $Y_1=Y_2$. The other
+    one-sided statement follows by the same argument, with right multiplication
+    in place of left multiplication.
 \end{proof}
 
 \begin{lemma}[Generator commutation from length-$m$ commutation]
@@ -213,11 +179,9 @@ $\MN{D}$.
     \lean{MPSTensor.groundSpaceMap_mem_mpvSubmodule_of_isNBlkInjective_of_long_word_commutes}
     \leanok
     \uses{def:mpv_submodule, thm:block_word_strip_central}
-    Let $A$ be injective after blocking $L_0>0$ sites, and let $m \ge L_0$.
-    If a boundary matrix $X$ commutes with every length-$m$ word product, then
-    \[
-        \Gamma_N(X)\in\spn\{V^{(N)}(A)\}.
-    \]
+    Let $A$ be injective after blocking $L_0>0$ sites, and let $m \ge L_0$. If
+    a boundary matrix $X$ commutes with every length-$m$ word product, then
+    $\Gamma_N(X)\in\spn\{V^{(N)}(A)\}$.
 \end{theorem}
 
 \begin{proof}
@@ -235,9 +199,7 @@ $\MN{D}$.
         thm:ground_space_map_mpv_of_long_word_commutes}
     Let $A$ be injective after blocking $L_0>0$ sites. If $X$ commutes with
     every word product of some positive length $m$, then
-    \[
-        \Gamma_N(X)\in\spn\{V^{(N)}(A)\}.
-    \]
+    $\Gamma_N(X)\in\spn\{V^{(N)}(A)\}$.
 \end{theorem}
 
 \begin{proof}
@@ -253,22 +215,19 @@ $\MN{D}$.
     \leanok
     \uses{lem:common_middle_same_witness_commutation,
         thm:ground_space_map_mpv_of_positive_word_commutes}
-    Let $A$ be injective after blocking $L_0>0$ sites. Suppose there are matrices
-    $Y_\mu$ such that
-    \[
-        A^\mu A^b X = Y_\mu A^b,
-        \qquad
-        X A^a A^\mu = A^a Y_\mu,
-    \]
+    Let $A$ be injective after blocking $L_0>0$ sites. Suppose there are
+    matrices $Y_\mu$ such that
+    \begin{align}
+        A^\mu A^b X &= Y_\mu A^b, \notag\\
+        X A^a A^\mu &= A^a Y_\mu, \notag
+    \end{align}
     for every pair of physical letters $a,b$. Then
-    \[
-        \Gamma_N(X)\in\spn\{V^{(N)}(A)\}.
-    \]
+    $\Gamma_N(X)\in\spn\{V^{(N)}(A)\}$.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    The identities in~(\ref{eq:ph_common_middle_one_sided}) give commutation
+    The identities in (\ref{eq:ph_common_middle_one_sided}) give commutation
     with all words of length $|\mu|+2$, a positive length. The positive-length
     containment theorem then applies.
 \end{proof}
@@ -282,32 +241,26 @@ $\MN{D}$.
     Let $A$ be injective after blocking $L_0>0$ sites, and fix a physical letter
     $\eta$ used outside the complementary sites. Suppose that, for every
     boundary condition $\tau$ and every physical letter $j$,
-    \[
-        C^+_\tau A^jX=Y^+_\tau A^j,
-        \qquad
-        XA^jC^-_\tau=A^jY^-_\tau,
-    \]
+    \begin{align}
+        C^+_\tau A^jX &= Y^+_\tau A^j, \notag\\
+        XA^jC^-_\tau &= A^jY^-_\tau, \notag
+    \end{align}
     where $C^+_\tau$ and $C^-_\tau$ are the complementary words exposed by the
     two boundary-crossing cyclic windows. Suppose also that the two boundary
     matrices satisfy
-    \[
-        Y^+_{\tau^+_\eta(\mu)} = Y^-_{\tau^-_\eta(\mu)},
-    \]
-    for every word $\mu$ on the complementary sites, then
-    \[
-        \Gamma_N(X)\in\spn\{V^{(N)}(A)\}.
-    \]
+    $Y^+_{\tau^+_\eta(\mu)} = Y^-_{\tau^-_\eta(\mu)}$,
+    for every word $\mu$ on the complementary sites. Then
+    $\Gamma_N(X)\in\spn\{V^{(N)}(A)\}$.
 \end{theorem}
 
 \begin{proof}
     \leanok
     Lemma~\ref{lem:two_sided_middle_of_wrapped_witness_comparison} gives a
     family $Y_\mu$ satisfying
-    \[
-        A^\mu A^bX=Y_\mu A^b,
-        \qquad
-        XA^aA^\mu=A^aY_\mu.
-    \]
+    \begin{align}
+        A^\mu A^bX &= Y_\mu A^b, \notag\\
+        XA^aA^\mu &= A^aY_\mu. \notag
+    \end{align}
     Theorem~\ref{thm:ground_space_map_mpv_of_common_middle} applies.
 \end{proof}
 
@@ -322,22 +275,14 @@ $\MN{D}$.
     $N \ge 2$ and $L_0 < L \le N$. Suppose that, for every physical letter
     $\eta$ used in the two boundary conditions and every boundary matrix
     obtained from an $N$-site chain ground state, the identities
-    \[
-        A^\mu A^j X = Y^+_{\tau^+_\eta(\mu)}A^j,
-        \qquad
-        X A^j A^\mu = A^jY^-_{\tau^-_\eta(\mu)},
-    \]
+    \begin{align}
+        A^\mu A^j X &= Y^+_{\tau^+_\eta(\mu)}A^j, \notag\\
+        X A^j A^\mu &= A^jY^-_{\tau^-_\eta(\mu)}, \notag
+    \end{align}
     hold for every physical letter $j$ and every complementary word $\mu$, and
     are supplemented, for every $\mu$, by
-    \[
-        Y^+_{\tau^+_\eta(\mu)}
-        =
-        Y^-_{\tau^-_\eta(\mu)}.
-    \]
-    Then
-    \[
-        \mathcal G_{N,L}(A)\subseteq \spn\{V^{(N)}(A)\}.
-    \]
+    $Y^+_{\tau^+_\eta(\mu)} = Y^-_{\tau^-_\eta(\mu)}$.
+    Then $\mathcal G_{N,L}(A)\subseteq \spn\{V^{(N)}(A)\}$.
 \end{theorem}
 
 \begin{proof}
@@ -347,17 +292,14 @@ $\MN{D}$.
         thm:ground_space_map_mpv_of_wrapped_witness_comparison}
     The cyclic-to-open-chain reduction writes any chain ground state as
     $\Gamma_N(X)$. The two boundary-crossing cyclic windows give
-    \[
-        A^\mu A^jX=Y^+_{\tau^+_\eta(\mu)}A^j,
-        \qquad
-        XA^jA^\mu=A^jY^-_{\tau^-_\eta(\mu)}.
-    \]
-    Together with
-    \[
+    \begin{align}
+        A^\mu A^jX
+        &= Y^+_{\tau^+_\eta(\mu)}A^j, \notag\\
+        XA^jA^\mu
+        &= A^jY^-_{\tau^-_\eta(\mu)}, \notag\\
         Y^+_{\tau^+_\eta(\mu)}
-        =
-        Y^-_{\tau^-_\eta(\mu)},
-    \]
+        &= Y^-_{\tau^-_\eta(\mu)}. \notag
+    \end{align}
     Theorem~\ref{thm:ground_space_map_mpv_of_wrapped_witness_comparison}
     finishes.
 \end{proof}
