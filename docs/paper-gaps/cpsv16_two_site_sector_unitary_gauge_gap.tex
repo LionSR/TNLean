@@ -117,40 +117,197 @@ retained product corner, while \path{exists_originalCornerFamily} requires the
 unitary one-site/two-site identification before transporting such corners back
 to the original representatives.
 
-\section{Missing minimal-realization statement}
+\section{The exact tensor-attached map}
 
-The missing implication is a positive minimal-realization theorem.  In
-mathematical terms, it would state that if a horizontally canonical tensor
-generates positive operators at every length and its positive-length closed
-chains agree with those of a positive weighted direct sum of normal tensors,
-then the exact normal representatives of that direct sum admit isometric
-physical inclusions whose compressions recover the corresponding positive
-weighted tensor letters.  Applied to the algebra-side sum at
-lines~2049--2051, this would produce \eqref{eq:raw-corner} without assuming
-\eqref{eq:gram-scalar}.
+The missing assertion is more specific than a general positive
+minimal-realization principle.  Write $d_\alpha$ for the bond dimension of
+$M_\alpha$, and let $r_{\alpha\beta\gamma}$ be the number of diagonal entries
+of $\chi_{\alpha,\beta,\gamma}$.  For fixed $\alpha,\beta$, set
+\[
+  \mathcal K_{\alpha\beta}
+  =\bigoplus_\gamma\bigoplus_{k=1}^{r_{\alpha\beta\gamma}}
+    \mathbb C^{d_\gamma}.
+\]
+The coordinate inclusion of the $(\gamma,k)$ summand is
+\[
+  J_{\alpha\beta\gamma k}\colon
+    \mathbb C^{d_\gamma}\longrightarrow\mathcal K_{\alpha\beta}.
+\]
+It satisfies
+\begin{equation}
+  J_{\alpha\beta\gamma k}^\dagger J_{\alpha\beta\gamma k}
+  =\mathbf 1
+  \label{eq:J-isometry}
+\end{equation}
+and, for every vertical letter $v$,
+\begin{equation}
+  J_{\alpha\beta\gamma k}^\dagger
+  \left(
+    \bigoplus_\eta
+      \chi_{\alpha,\beta,\eta}\otimes M_\eta^v
+  \right)
+  J_{\alpha\beta\gamma k}
+  =\chi_{\alpha,\beta,\gamma,k}M_\gamma^v.
+  \label{eq:J-compression}
+\end{equation}
+Thus the required tensor-attached information is not merely the trace-power
+coefficient $\operatorname{tr}(\chi_{\alpha,\beta,\gamma}^L)$.  One needs the
+map which places the corresponding copy of $M_\gamma$ inside the same local
+two-site product tensor.
 
-No current theorem derives this physical realization from positive-length
-closed-chain equality, and the cited source passage does not supply a separate
-proof of the lift made at line~2048.  This records a missing justification, not
-a counterexample: the desired implication may hold, but it requires a proof
-that is absent from both the cited passage and the current formal results.
+To see the orientation of this map, suppose there were a coisometry
+\[
+  F_{\alpha\beta}\colon
+    \mathbb C^{d_\alpha}\otimes\mathbb C^{d_\beta}
+      \longrightarrow\mathcal K_{\alpha\beta}
+\]
+such that
+\begin{equation}
+  F_{\alpha\beta}F_{\alpha\beta}^\dagger=\mathbf 1
+  \label{eq:F-coisometry}
+\end{equation}
+and
+\begin{equation}
+  F_{\alpha\beta}(M_\alpha M_\beta)^v
+    F_{\alpha\beta}^\dagger
+  =
+  \bigoplus_\eta
+    \chi_{\alpha,\beta,\eta}\otimes M_\eta^v.
+  \label{eq:F-compression}
+\end{equation}
+Here $(M_\alpha M_\beta)^v$ denotes the two-site product letter.  The source
+calls $F_{\alpha\beta}$ an isometry; with the displayed orientation its
+adjoint is the isometric inclusion into the product bond space.
 
-\section{Elimination plan}
+Let
+\[
+  W_{\alpha i}\colon\mathbb C^{d_\alpha}\longrightarrow\mathbb C^d,
+  \qquad
+  W_{\beta j}\colon\mathbb C^{d_\beta}\longrightarrow\mathbb C^d
+\]
+be the one-site physical inclusions belonging to positive weights
+$\mu_{\alpha,i}$ and $\mu_{\beta,j}$.  Then the map into the bond space of the
+two-site blocking has the forced orientation
+\begin{equation}
+  V_{\alpha\beta\gamma ijk}
+  =
+  (W_{\alpha i}\otimes W_{\beta j})
+  F_{\alpha\beta}^\dagger J_{\alpha\beta\gamma k}.
+  \label{eq:V-composition}
+\end{equation}
+Equations~\eqref{eq:J-isometry} and \eqref{eq:F-coisometry}, together with the
+isometry of the two $W$ maps, give
+\begin{equation}
+  V_{\alpha\beta\gamma ijk}^\dagger
+  V_{\alpha\beta\gamma ijk}=\mathbf 1.
+  \label{eq:V-isometry}
+\end{equation}
+The one-site corner equations and
+\eqref{eq:J-compression}--\eqref{eq:F-compression} give
+\begin{equation}
+  V_{\alpha\beta\gamma ijk}^\dagger
+  \widetilde M_{[2]}^v
+  V_{\alpha\beta\gamma ijk}
+  =
+  \mu_{\alpha,i}\mu_{\beta,j}
+  \chi_{\alpha,\beta,\gamma,k}M_\gamma^v.
+  \label{eq:V-compression}
+\end{equation}
+All three scalar factors on the right are positive.
 
-The unitary conclusion is tracked in
-\href{https://github.com/LionSR/TNLean/issues/4645}{issue 4645}, and the missing
-physical realization is tracked in
-\href{https://github.com/LionSR/TNLean/issues/4648}{issue 4648}.  A faithful
-completion must prove the minimal-realization statement above, obtain the two
-physical corners without assuming a Gram identity, and then specialize the
-positivity argument of \path{Prop:IV.12}.  Rescaling the retained invertible
-gauge will then give a unitary gauge without adding a left-canonical,
-preassembled-corner, or preassembled-gauge hypothesis.
+This calculation identifies the precise circularity.  The existence of the
+maps $F_{\alpha\beta}$ satisfying
+\eqref{eq:F-coisometry}--\eqref{eq:F-compression} is condition~(iii) of
+Theorem~IV.13.  It may prove that condition~(iii) implies condition~(ii), but it
+cannot be used in the proof that condition~(ii) implies condition~(i).
+Condition~(ii) gives only the closed-chain identity
+\[
+  O_L(M_\alpha)O_L(M_\beta)
+  =
+  \sum_\gamma
+    \operatorname{tr}(\chi_{\alpha,\beta,\gamma}^L)O_L(M_\gamma).
+\]
+It does not provide $F_{\alpha\beta}$, the local inclusion
+$F_{\alpha\beta}^\dagger J_{\alpha\beta\gamma k}$, or the compression
+\eqref{eq:V-compression}.  Appendix~C.4, lines~2048--2057, uses this missing
+local identification when it treats the algebra-side sum as a physical
+vertical canonical form and then invokes Proposition~4.13,
+lines~1898--1921.
 
-Until that common-target contract is proved, the formal declaration and its
-blueprint entry are explicitly restricted to phase-one invertible conjugacy.
-Issues 4645 and 4648 therefore remain open, and the full line-2057 unitary
-upgrade remains unformalized.
+\section{Closed chains do not determine the physical inclusion}
+
+There is also a direct obstruction to the previously proposed generic
+minimal-realization statement.  Let $A$ be a matrix-valued tensor whose
+letters contain the identity and the matrix units.  Its letters span
+$\mathcal M_2(\mathbb C)$, so $A$ is normal in the matrix-product-tensor
+sense.  Set
+\[
+  X=\begin{pmatrix}2&0\\0&1\end{pmatrix},
+  \qquad
+  B^v=XA^vX^{-1}.
+\]
+Similarity preserves every closed-chain trace, so $A$ and $B$ have the same
+positive-length closed chains.  The coefficient may be chosen to be the
+positive number one.
+
+Suppose that this information alone produced a square isometry $V$ and a
+positive scalar $c$ satisfying
+\[
+  V^\dagger B^vV=cA^v
+\]
+for every letter $v$.  The identity letter gives $c=1$.  Since a square
+isometry is unitary, the displayed equality says that conjugation by
+$V^\dagger X$ fixes every matrix in $\mathcal M_2(\mathbb C)$.  Hence
+$V^\dagger X$ is scalar, and therefore $X^\dagger X$ is scalar.  This
+contradicts
+\[
+  X^\dagger X=\begin{pmatrix}4&0\\0&1\end{pmatrix}.
+\]
+Consequently positive coefficients and positive-length closed-chain equality,
+including the relation formalized as
+\leanid{MPSTensor.SameMPV}\ensuremath{{}_{2}}\leanid{Pos}, do not determine an
+isometric physical realization of a chosen representative.  This
+counterexample does not rule out a theorem using additional tensor-attached
+marked information; it shows that such information must be stated and proved
+explicitly.
+
+\section{Faithful target and remaining boundary}
+
+For a matched label $\gamma$, let $A_\gamma$ be the algebra-side
+representative and let $X_\gamma$ be the exact invertible gauge to the chosen
+two-site representative.  The source-faithful target of
+\href{https://github.com/LionSR/TNLean/issues/4648}{issue 4648} is the marked
+Figure~8 identity
+\begin{equation}
+  \operatorname{gramDressing}(X_\gamma,A_\gamma)
+  =
+  \operatorname{gramDressing}(\mathbf 1,A_\gamma),
+  \label{eq:gram-dressing-target}
+\end{equation}
+derived from the tensor-attached algebra clause, horizontal canonical form,
+and positivity of the matrix product operators, without assuming
+$F_{\alpha\beta}$ or a raw corner of the form \eqref{eq:V-compression}.
+Equivalently, for every vertical letter $v$,
+\[
+  (X_\gamma^\dagger X_\gamma)A_\gamma^v
+  (X_\gamma^\dagger X_\gamma)^{-1}=A_\gamma^v.
+\]
+Normality then implies \eqref{eq:gram-scalar}.
+
+The subsequent rescaling of $X_\gamma$ to a unitary gauge belongs to
+\href{https://github.com/LionSR/TNLean/issues/4645}{issue 4645}.  Until
+\eqref{eq:gram-dressing-target} has been proved without condition~(iii), the
+formal declaration and its blueprint entry remain restricted to phase-one
+invertible conjugacy.  Issues 4648 and 4645 remain open, and the full
+line~2057 unitary conclusion remains unformalized.
+
+\section{Verdict}
+
+\textbf{Verdict: open gap.}  The Gram-dressing identity
+\eqref{eq:gram-dressing-target} has not been derived from condition~(ii)
+alone.  Appendix~C.4 therefore does not presently justify the line~2057
+unitary conclusion without the additional local map supplied by
+condition~(iii).
 
 \bibliographystyle{alpha}
 \bibliography{references}
