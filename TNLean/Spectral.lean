@@ -12,11 +12,16 @@ import TNLean.Spectral.CrossCorrelation
 import TNLean.Spectral.FrobeniusNorm
 import TNLean.Spectral.GaugeConstruction
 import TNLean.Spectral.MPVOverlapDecay
+import TNLean.Spectral.MPVOverlapDecayRect
 import TNLean.Spectral.MPVOverlapTrace
 import TNLean.Spectral.MixedTransfer
 import TNLean.Spectral.PrimitiveOverlap
 import TNLean.Spectral.QuantitativeGap
 import TNLean.Spectral.TraceExpansion
 import TNLean.Spectral.TransferOperatorGap
+import TNLean.Spectral.TransferOperatorGapCommon
+import TNLean.Spectral.TransferOperatorGapInjective
 import TNLean.Spectral.TransferOperatorGapNT
+import TNLean.Spectral.TransferOperatorGapNormalized
 import TNLean.Spectral.TransferOperatorGapRect
+import TNLean.Spectral.TransferOperatorGapRectNormalized

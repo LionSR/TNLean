@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.BNT.Basic
 import TNLean.MPS.FundamentalTheorem.Proportional
-import TNLean.Spectral.TransferOperatorGapRect
+import TNLean.Spectral.TransferOperatorGapInjective
 import TNLean.MPS.Overlap.Basic
 import TNLean.MPS.Overlap.CastLemmas
 import TNLean.MPS.Overlap.CastDecay
