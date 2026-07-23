@@ -182,6 +182,7 @@ class TargetVerdict:
     reviewed: str
     renderer: str
     second_viewer: str
+    pairing_by: str
 
 
 def fail(message: str) -> None:
@@ -894,6 +895,7 @@ def load_verdicts(targets: Sequence[Target]) -> dict[str, TargetVerdict]:
             reviewed=stanza.get("reviewed", ""),
             renderer=stanza.get("renderer", ""),
             second_viewer=stanza.get("second_viewer", ""),
+            pairing_by=stanza.get("pairing_by", ""),
         )
         target = by_target[identifier]
         if status == "blocked" and not missing:

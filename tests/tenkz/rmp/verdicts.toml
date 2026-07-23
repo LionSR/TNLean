@@ -2,7 +2,7 @@
 # Schema: scripts/tenkz_rmp.py (load_verdicts).  Any status may be
 # recorded, including failure; the check rejects lies, never gaps.
 schema_version = 1
-campaign_sha256 = "c3a99ff8f53510351babcf3dd39484a032a5fe7b7870b0854f30a2031f942034"
+campaign_sha256 = "42dc917309993cce67409cbe7846508cc5dc0ce6836fa4d92cd44174e42305cb"
 
 [[verdict]]
 id = "rmp-ii-peps-projection"
