@@ -69,7 +69,13 @@ TARGET_REQUIRED = {
     "paper_context_only",
     "placements",
 }
-TARGET_OPTIONAL = {"fixture", "author_source", "author_lines", "equivalent_to"}
+TARGET_OPTIONAL = {
+    "fixture",
+    "author_source",
+    "author_lines",
+    "equivalent_to",
+    "extraction_override",
+}
 FORBIDDEN_CASE_PATTERNS = (
     (re.compile(r"\\documentclass\b|\\usepackage\b|\\begin\{document\}"),
      "case must be a preamble-free fragment"),
@@ -149,6 +155,7 @@ class Target:
     author_source: Path | None
     author_lines: str | None
     equivalent_to: str | None
+    extraction_override: str | None
 
 
 @dataclasses.dataclass(frozen=True)
@@ -354,6 +361,13 @@ def load_manifest(path: Path) -> list[Target]:
             )
             if equivalent_to == target_id:
                 fail(f"{where}.equivalent_to cannot name the target itself")
+        extraction_override = None
+        if "extraction_override" in raw:
+            extraction_override = nonempty_string(
+                raw["extraction_override"], field=f"{where}.extraction_override"
+            )
+            if author_lines is None:
+                fail(f"{where}.extraction_override requires author_lines")
         targets.append(
             Target(
                 id=target_id,
@@ -372,12 +386,14 @@ def load_manifest(path: Path) -> list[Target]:
                 author_source=author_source,
                 author_lines=author_lines,
                 equivalent_to=equivalent_to,
+                extraction_override=extraction_override,
             )
         )
     validate_census(targets)
     for target in targets:
         validate_case(target)
     validate_distinct_case_bodies(targets)
+    validate_author_ranges(targets)
     return targets
 
 
@@ -1281,7 +1297,57 @@ def transactional_render(
 
 def line_range(text: str) -> tuple[int, int]:
     start, separator, end = text.partition("-")
-    return int(start), int(end if separator else start)
+    first, last = int(start), int(end if separator else start)
+    if first < 1 or last < first:
+        fail(f"author line range {text!r} is not an ascending 1-based range")
+    return first, last
+
+
+def validate_author_ranges(targets: Sequence[Target]) -> None:
+    """Author line ranges within one corpus must not collide.
+
+    The workbench archives the published targets' blocks and sub-blocks, so
+    cross-corpus sharing is by design.  Within one corpus, a partial overlap
+    means a block boundary is wrong on at least one side -- the mechanism
+    behind every superimposed author panel found in review -- and an
+    identical range is legal only when every owner records
+    extraction_override: a shared composite block is a decision, never an
+    accident.
+    """
+    by_key: dict[tuple[str, Path], list[Target]] = {}
+    for target in targets:
+        if target.author_source is not None and target.author_lines is not None:
+            by_key.setdefault((target.corpus, target.author_source), []).append(target)
+    problems: list[str] = []
+    for (corpus, source), owners in sorted(by_key.items()):
+        spans = sorted(
+            (line_range(target.author_lines), target.id, target) for target in owners
+        )
+        for ((a_start, a_end), _, first), ((b_start, b_end), _, second) in zip(
+            spans, spans[1:]
+        ):
+            if b_start > a_end:
+                continue
+            if (a_start, a_end) == (b_start, b_end):
+                undeclared = [
+                    target.id
+                    for target in (first, second)
+                    if target.extraction_override is None
+                ]
+                if undeclared:
+                    problems.append(
+                        f"{corpus} {source.as_posix()}: {first.id} and "
+                        f"{second.id} share lines {a_start}-{a_end} without "
+                        "extraction_override on " + ", ".join(undeclared)
+                    )
+            else:
+                problems.append(
+                    f"{corpus} {source.as_posix()}: {first.id} "
+                    f"({a_start}-{a_end}) and {second.id} ({b_start}-{b_end}) "
+                    "overlap"
+                )
+    if problems:
+        fail("author line ranges collide:\n" + "\n".join(problems))
 
 
 def extract_author_block(target: Target, source_root: Path, destination: Path) -> None:

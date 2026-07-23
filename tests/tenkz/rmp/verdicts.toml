@@ -2,7 +2,7 @@
 # Schema: scripts/tenkz_rmp.py (load_verdicts).  Any status may be
 # recorded, including failure; the check rejects lies, never gaps.
 schema_version = 1
-campaign_sha256 = "023d1a6d67ad104d04ab70366c4465fca2c36ea0762bf55e74453f6b7222cde8"
+campaign_sha256 = "50d12a899c05646fc1945722707264e5abe7b92289b1b814bb772af72d6a2633"
 
 [[verdict]]
 id = "rmp-ii-peps-projection"
@@ -137,14 +137,14 @@ pairing = "unverified"
 [[verdict]]
 id = "rmp-ii-tangent-projector"
 status = "unreviewed"
-pairing = "wrong-source"
-note = "Comparison page pairs this target with the wrong author figure; repair before judging."
+pairing = "unverified"
+note = "Author line range corrected in the harness repair; awaiting the pairing sweep."
 
 [[verdict]]
 id = "rmp-ii-boundary-lasso"
 status = "unreviewed"
-pairing = "wrong-source"
-note = "Comparison page pairs this target with the wrong author figure; repair before judging."
+pairing = "unverified"
+note = "Author line range corrected in the harness repair; awaiting the pairing sweep."
 
 [[verdict]]
 id = "rmp-ii-boundary-region"
@@ -188,10 +188,13 @@ pairing = "unverified"
 
 [[verdict]]
 id = "rmp-iii-a-symmetry-sector"
-status = "unreviewed"
-pairing = "wrong-source"
-note = "Comparison page pairs this target with the wrong author figure; repair before judging."
-
+status = "structural-gap"
+pairing = "unverified"
+defects = ["wrong-contraction"]
+case_sha256 = "f26371091985278de8fc2bc3b93ee63f542ec371ba86c3183b1b7947de3cefca"
+note = "The author block faithfully draws the string-order expectation of S_(alpha,g); the case draws a plain periodic MPS instead. Redraw the case to the string-order object once the kernel lands."
+reviewed = "2026-07-23"
+renderer = "maintainer-page-review-2026-07-23"
 [[verdict]]
 id = "rmp-iii-a-f-symbol"
 status = "unreviewed"
@@ -200,8 +203,8 @@ pairing = "unverified"
 [[verdict]]
 id = "rmp-iii-a-boundary-algebra-n"
 status = "unreviewed"
-pairing = "source-misrender"
-note = "The extracted author-source panel misrenders; repair extraction before judging."
+pairing = "unverified"
+note = "Superposed multi-panel range narrowed to the single panel in the harness repair; awaiting the pairing sweep."
 
 [[verdict]]
 id = "rmp-iii-a-boundary-algebra"
@@ -246,8 +249,8 @@ pairing = "context-only"
 [[verdict]]
 id = "rmp-iii-a-coproduct"
 status = "unreviewed"
-pairing = "source-misrender"
-note = "The extracted author-source panel misrenders; repair extraction before judging."
+pairing = "unverified"
+note = "Superposed multi-panel range narrowed to the single panel in the harness repair; awaiting the pairing sweep."
 
 [[verdict]]
 id = "rmp-iii-a-pulling-through"
