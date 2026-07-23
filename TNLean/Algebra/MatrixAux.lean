@@ -756,17 +756,11 @@ theorem mulVec_eq_zero_left
     (hA : A.PosSemidef) (hB : B.PosSemidef)
     (v : n → ℂ) (hv : (A + B) *ᵥ v = 0) :
     A *ᵥ v = 0 := by
-  have hqf : star v ⬝ᵥ ((A + B) *ᵥ v) = 0 := by rw [hv]; simp
-  rw [add_mulVec, dotProduct_add] at hqf
-  have h1_re := hA.re_dotProduct_nonneg v
-  have h2_re := hB.re_dotProduct_nonneg v
-  have h3_re : (star v ⬝ᵥ (A *ᵥ v)).re + (star v ⬝ᵥ (B *ᵥ v)).re = 0 := by
-    have := congr_arg Complex.re hqf; simpa using this
-  change 0 ≤ (star v ⬝ᵥ (A *ᵥ v)).re at h1_re
-  change 0 ≤ (star v ⬝ᵥ (B *ᵥ v)).re at h2_re
-  have hre : (star v ⬝ᵥ (A *ᵥ v)).re = 0 := by linarith
-  exact (hA.dotProduct_mulVec_zero_iff v).mp
-    (Complex.ext hre (hA.isHermitian.im_star_dotProduct_mulVec_self v))
+  let C : Fin 2 → Matrix n n ℂ := fun i ↦ if i = 0 then A else B
+  apply mulVec_eq_zero_of_sum_mulVec_eq_zero (B := C) ?_ ?_ 0
+  · intro i
+    fin_cases i <;> simp [C, hA, hB]
+  · simpa [C] using hv
 
 /-- For PSD matrices `A` and `B`, `ker(A + B) ⊆ ker(B)`. -/
 theorem mulVec_eq_zero_right
