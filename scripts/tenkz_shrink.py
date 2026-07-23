@@ -18,27 +18,40 @@ import argparse
 import json
 import re
 import statistics
+import subprocess
 import sys
+import tomllib
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from tenkz_language import (  # noqa: E402
     Entry,
+    MILESTONES,
     ledger_split,
     load_registry,
+    parse_alias_payload,
     parse_status,
+    parse_value_alias_sunset,
+    public_census,
     _parser_leaf_keys,
 )
 
 ROOT = Path(__file__).resolve().parents[1]
 BASELINE = ROOT / "tests/tenkz/census-baseline.json"
 SHRINK_LEDGER = ROOT / "docs/tenkz/SHRINK.md"
-RMP_CASES = sorted(ROOT.glob("tests/tenkz/rmp/*/cases/*.tex"))
+RMP_MANIFEST = ROOT / "tests/tenkz/rmp/manifest.toml"
 BLUEPRINT = sorted(ROOT.glob("blueprint/src/chapter/*.tex"))
 
 # Alias sunsets execute at their milestone; milestones this project uses.
-MILESTONES = ("0.8", "0.9", "1.0")
 CURRENT_MILESTONE = "0.8"
+
+_SCOPE_COMMANDS = {
+    "picture": ("tnpic",),
+    "object": ("tn", "tnX", "tnfuse", "tndots", "tnsite", "tnput", "tntree"),
+    "connection": ("tncut", "tnedge", "tnjoin", "tnarrow"),
+    "region": ("tnregion",),
+    "annotation": ("tnspan",),
+}
 
 
 def strip_comments(text: str) -> str:
@@ -53,9 +66,42 @@ def strip_comments(text: str) -> str:
     return "\n".join(out)
 
 
+def manifest_case_paths() -> list[Path]:
+    """Return the frozen RMP denominator after checking it against the manifest."""
+    data = tomllib.loads(RMP_MANIFEST.read_text(encoding="utf-8"))
+    expected = data.get("corpus", {}).get("total_targets")
+    if expected != 130:
+        raise ValueError(f"RMP manifest total_targets is {expected!r}; expected 130")
+    raw_targets = data.get("target")
+    if not isinstance(raw_targets, list):
+        raise ValueError("RMP manifest has no [[target]] records")
+    cases: list[Path] = []
+    for index, target in enumerate(raw_targets, 1):
+        case = target.get("case") if isinstance(target, dict) else None
+        if not isinstance(case, str):
+            raise ValueError(f"RMP manifest target {index} has no case path")
+        path = ROOT / case
+        if not path.is_file():
+            raise ValueError(f"RMP manifest case does not exist: {case}")
+        cases.append(path)
+    if len(cases) != expected or len(set(cases)) != expected:
+        raise ValueError("RMP manifest case paths are not 130 distinct files")
+    discovered = set(ROOT.glob("tests/tenkz/rmp/*/cases/*.tex"))
+    if set(cases) != discovered:
+        missing = sorted(str(path.relative_to(ROOT)) for path in set(cases) - discovered)
+        extra = sorted(str(path.relative_to(ROOT)) for path in discovered - set(cases))
+        raise ValueError(
+            "RMP case set differs from manifest; missing="
+            + ",".join(missing)
+            + "; extra="
+            + ",".join(extra)
+        )
+    return cases
+
+
 def consumer_files() -> dict[Path, str]:
     files: dict[Path, str] = {}
-    for path in RMP_CASES:
+    for path in manifest_case_paths():
         files[path] = strip_comments(path.read_text(encoding="utf-8"))
     for path in BLUEPRINT:
         text = path.read_text(encoding="utf-8")
@@ -75,25 +121,139 @@ def _command_pattern(name: str) -> re.Pattern[str]:
     return re.compile(rf"\\{re.escape(name)}(?![a-zA-Z])")
 
 
+def _group_payload(text: str, start: int, opener: str, closer: str) -> tuple[str, int] | None:
+    """Read one balanced TeX group, preserving nested braces in options."""
+    if start >= len(text) or text[start] != opener:
+        return None
+    depth = 1
+    brace_depth = 0
+    index = start + 1
+    while index < len(text):
+        char = text[index]
+        if char == "\\":
+            index += 2
+            continue
+        if opener == "[":
+            if char == "{":
+                brace_depth += 1
+            elif char == "}":
+                brace_depth -= 1
+            elif char == "[" and brace_depth == 0:
+                depth += 1
+            elif char == "]" and brace_depth == 0:
+                depth -= 1
+        elif char == opener:
+            depth += 1
+        elif char == closer:
+            depth -= 1
+        if depth == 0:
+            return text[start + 1 : index], index + 1
+        index += 1
+    return None
+
+
+def _skip_space_and_star(text: str, start: int) -> int:
+    while start < len(text) and text[start].isspace():
+        start += 1
+    if start < len(text) and text[start] == "*":
+        start += 1
+        while start < len(text) and text[start].isspace():
+            start += 1
+    return start
+
+
+def _command_options(text: str, name: str) -> list[str]:
+    payloads: list[str] = []
+    for match in _command_pattern(name).finditer(text):
+        start = _skip_space_and_star(text, match.end())
+        group = _group_payload(text, start, "[", "]")
+        if group is not None:
+            payloads.append(group[0])
+    return payloads
+
+
+def _environment_options(text: str) -> list[str]:
+    payloads: list[str] = []
+    pattern = re.compile(r"\\begin\{tenkz(?:cd|lattice|free|planes)?\}")
+    for match in pattern.finditer(text):
+        start = _skip_space_and_star(text, match.end())
+        group = _group_payload(text, start, "[", "]")
+        if group is not None:
+            payloads.append(group[0])
+    return payloads
+
+
+def _brace_argument(text: str, name: str, argument: int) -> list[str]:
+    payloads: list[str] = []
+    for match in _command_pattern(name).finditer(text):
+        start = _skip_space_and_star(text, match.end())
+        groups: list[str] = []
+        while len(groups) < argument:
+            group = _group_payload(text, start, "{", "}")
+            if group is None:
+                break
+            groups.append(group[0])
+            start = _skip_space_and_star(text, group[1])
+        if len(groups) == argument:
+            payloads.append(groups[-1])
+    return payloads
+
+
+def scoped_consumer_text(corpus: dict[Path, str]) -> dict[str, dict[Path, str]]:
+    """Option text grouped by the registry scope that owns each key."""
+    scoped = {
+        scope: {} for scope in (
+            "setup",
+            "picture",
+            "object",
+            "connection",
+            "region",
+            "annotation",
+            "atom-declaration",
+        )
+    }
+    for path, text in corpus.items():
+        scoped["picture"][path] = "\n".join(
+            [*_environment_options(text), *_command_options(text, "tnpic")]
+        )
+        for scope, commands in _SCOPE_COMMANDS.items():
+            if scope == "picture":
+                continue
+            scoped[scope][path] = "\n".join(
+                option
+                for command in commands
+                for option in _command_options(text, command)
+            )
+        scoped["setup"][path] = "\n".join(_brace_argument(text, "tnset", 1))
+        scoped["atom-declaration"][path] = "\n".join(
+            _brace_argument(text, "tndeclareatom", 2)
+        )
+    return scoped
+
+
 def row_consumers(entries: list[Entry], corpus: dict[Path, str]) -> dict[str, set[str]]:
     """Distinct consumer files per registry row, keyed by a stable row id."""
     consumers: dict[str, set[str]] = {}
+    scoped = scoped_consumer_text(corpus)
     for entry in entries:
         if entry.kind == "key":
             scope, name = entry.fields[0], entry.fields[1].replace("~", " ")
             row_id = f"key:{scope}:{name}"
             pattern = _key_pattern(name)
+            sources = scoped[scope]
         elif entry.kind == "command":
             row_id = f"command:{entry.fields[0]}"
             pattern = _command_pattern(entry.fields[0])
+            sources = corpus
         elif entry.kind == "environment":
             row_id = f"environment:{entry.fields[0]}"
             pattern = re.compile(rf"\\begin\{{{re.escape(entry.fields[0])}\}}")
+            sources = corpus
         else:
             continue
         hits = {
             str(path.relative_to(ROOT))
-            for path, text in corpus.items()
+            for path, text in sources.items()
             if pattern.search(text)
         }
         consumers[row_id] = hits
@@ -108,24 +268,52 @@ def escape_rows(entries: list[Entry]) -> list[tuple[str, str]]:
     ]
 
 
-def meters(entries: list[Entry], corpus: dict[Path, str]) -> dict[str, dict]:
-    split = ledger_split(entries)
-    consumers = row_consumers(entries, corpus)
+def alias_records(entries: list[Entry]) -> list[tuple[str, str, str | None]]:
+    """Return key and value aliases with normalized IDs and parsed sunsets."""
+    records: list[tuple[str, str, str | None]] = []
+    for entry in entries:
+        if entry.kind == "key":
+            ledger, payload = parse_status(entry.fields[4])
+            if ledger != "alias":
+                continue
+            try:
+                _replacement, sunset = parse_alias_payload(payload)
+            except ValueError:
+                sunset = None
+            records.append(
+                (entry.fields[0], entry.fields[1].replace("~", " "), sunset)
+            )
+        elif entry.kind == "alias":
+            try:
+                sunset = parse_value_alias_sunset(entry.fields[3])
+            except ValueError:
+                sunset = None
+            records.append(
+                (entry.fields[0], entry.fields[1].replace("~", " "), sunset)
+            )
+    return records
 
+
+def meters(entries: list[Entry], corpus: dict[Path, str]) -> dict[str, dict]:
     escape_usage = 0
     for scope, name in escape_rows(entries):
         pattern = _key_pattern(name)
         escape_usage += sum(len(pattern.findall(text)) for text in corpus.values())
 
+    cases = manifest_case_paths()
     case_lengths = [
-        len([line for line in strip_comments(p.read_text(encoding="utf-8")).splitlines() if line.strip()])
-        for p in RMP_CASES
+        len(
+            [
+                line
+                for line in strip_comments(path.read_text(encoding="utf-8")).splitlines()
+                if line.strip()
+            ]
+        )
+        for path in cases
     ]
 
-    aliases = split["alias"]
-    sunsets_missing = sum(
-        1 for fields in aliases if "sunset=" not in parse_status(fields[4])[1]
-    )
+    aliases = alias_records(entries)
+    sunsets_missing = sum(sunset is None for _scope, _spelling, sunset in aliases)
 
     # M6: the overload co-meter.  (a) one name, several scopes, different
     # value types; (b) union value types; (c) one enum word shared by
@@ -149,9 +337,10 @@ def meters(entries: list[Entry], corpus: dict[Path, str]) -> dict[str, dict]:
 
     return {
         "m1_census": {
-            "definition": "registry key rows per ledger; kernel is one-in-one-out,"
-            " the total never rises between shrink sessions",
-            "value": {ledger: len(rows) for ledger, rows in split.items()},
+            "definition": "registry key rows per ledger plus public commands and"
+            " environments; kernel is one-in-one-out and the total never rises"
+            " between shrink sessions",
+            "value": public_census(entries),
         },
         "m2_parser_paths": {
             "definition": "public leaf keys installed by the TeX parsers;"
@@ -169,8 +358,8 @@ def meters(entries: list[Entry], corpus: dict[Path, str]) -> dict[str, dict]:
             "value": round(statistics.mean(case_lengths), 2),
         },
         "m5_aliases": {
-            "definition": "alias rows and sunset compliance; near zero at the"
-            " 1.0 freeze",
+            "definition": "key and value alias rows plus sunset compliance; near"
+            " zero at the 1.0 freeze",
             "value": {"count": len(aliases), "missing_sunset": sunsets_missing},
         },
         "m6_overloads": {
@@ -276,18 +465,16 @@ def flags(entries: list[Entry], corpus: dict[Path, str]) -> list[dict[str, str]]
                 }
             )
 
-    # Alias sunsets due at or before the current milestone.
-    for fields in split["alias"]:
-        payload = parse_status(fields[4])[1]
-        match = re.search(r"sunset=([0-9.]+)", payload)
-        if match and MILESTONES.index(match.group(1)) <= MILESTONES.index(
-            CURRENT_MILESTONE
+    # Key and value alias sunsets due at or before the current milestone.
+    for scope, spelling, sunset in alias_records(entries):
+        if (
+            sunset is not None
+            and MILESTONES.index(sunset) <= MILESTONES.index(CURRENT_MILESTONE)
         ):
             raised.append(
                 {
-                    "id": f"flag:sunset:{fields[0]}:{fields[1]}",
-                    "detail": f"alias {fields[0]}:{fields[1]} sunset {match.group(1)}"
-                    " is due",
+                    "id": f"flag:sunset:{scope}:{spelling}",
+                    "detail": f"alias {scope}:{spelling} sunset {sunset} is due",
                 }
             )
     return raised
@@ -295,13 +482,148 @@ def flags(entries: list[Entry], corpus: dict[Path, str]) -> list[dict[str, str]]
 
 def latest_session_section(text: str) -> str:
     sections = re.split(r"(?m)^## ", text)
-    # Markdown tables escape the pipe; verdict matching sees the raw id.
-    return sections[-1].replace("\\|", "|") if len(sections) > 1 else ""
+    return sections[-1] if len(sections) > 1 else ""
+
+
+def session_verdict_ids(section: str) -> set[str]:
+    """Parse exact flag IDs from two-column verdict table rows."""
+    verdicts: set[str] = set()
+    placeholder = "\0PIPE\0"
+    for line in section.splitlines():
+        if not line.startswith("|"):
+            continue
+        cells = [
+            cell.replace(placeholder, "|").strip()
+            for cell in line.replace("\\|", placeholder).strip("|").split("|")
+        ]
+        if (
+            len(cells) >= 2
+            and cells[0].startswith("flag:")
+            and cells[1]
+            and not set(cells[1]) <= {"-", ":"}
+        ):
+            verdicts.add(cells[0])
+    return verdicts
+
+
+def baseline_at_ref(ref: str) -> dict | None:
+    """Read the baseline committed at a Git ref, or None before Session 0."""
+    result = subprocess.run(
+        ["git", "show", f"{ref}:tests/tenkz/census-baseline.json"],
+        cwd=ROOT,
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        check=False,
+    )
+    if result.returncode:
+        exists = subprocess.run(
+            ["git", "cat-file", "-e", f"{ref}^{{commit}}"],
+            cwd=ROOT,
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+            check=False,
+        )
+        if exists.returncode:
+            raise ValueError(f"base ref does not resolve: {ref}")
+        return None
+    return json.loads(result.stdout)
+
+
+def extension_cited(ref: str) -> bool:
+    """Whether the PR diff carries the numeric extension-gate citation."""
+    result = subprocess.run(
+        ["git", "diff", "--merge-base", ref, "HEAD", "--"],
+        cwd=ROOT,
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        check=False,
+    )
+    if result.returncode:
+        raise ValueError(f"cannot diff against base ref {ref}: {result.stderr.strip()}")
+    return re.search(r"Extension-gate:\s*#[0-9]+", result.stdout) is not None
+
+
+def _m1_total(snapshot: dict) -> int:
+    return sum(snapshot["m1_census"]["value"].values())
+
+
+def ratchet_errors(current: dict, previous: dict, *, has_extension: bool) -> list[str]:
+    """Compare the checked-in baseline with its pre-change counterpart."""
+    errors: list[str] = []
+    current_m1 = current["m1_census"]["value"]
+    previous_m1 = previous["m1_census"]["value"]
+
+    def extension_guard(grew: bool, meter: str) -> None:
+        if grew and not has_extension:
+            errors.append(f"{meter} increased without an Extension-gate: #NNNN citation")
+
+    extension_guard(_m1_total(current) > _m1_total(previous), "M1 total")
+    extension_guard(
+        current_m1.get("kernel", 0) > previous_m1.get("kernel", 0),
+        "M1 kernel",
+    )
+    for surface in ("commands", "environments"):
+        extension_guard(
+            current_m1.get(surface, 0) > previous_m1.get(surface, 0),
+            f"M1 {surface}",
+        )
+    extension_guard(
+        current["m2_parser_paths"]["value"] > previous["m2_parser_paths"]["value"],
+        "M2 parser paths",
+    )
+    if current["m3_escape_usage"]["value"] > previous["m3_escape_usage"]["value"]:
+        errors.append("M3 escape usage increased")
+    if current["m4_lines_per_case"]["value"] > previous["m4_lines_per_case"]["value"]:
+        errors.append("M4 mean lines per frozen case increased")
+    current_m5 = current["m5_aliases"]["value"]
+    previous_m5 = previous["m5_aliases"]["value"]
+    if current_m5["count"] > previous_m5["count"]:
+        errors.append("M5 alias count increased")
+    if current_m5["missing_sunset"]:
+        errors.append("M5 contains aliases without a valid sunset")
+    for name, value in current["m6_overloads"]["value"].items():
+        if value > previous["m6_overloads"]["value"][name]:
+            errors.append(f"M6 overload component {name} increased")
+    return errors
+
+
+def evaluate_gate(
+    entries: list[Entry],
+    corpus: dict[Path, str],
+    baseline: dict,
+    previous: dict | None,
+    verdicts: set[str],
+    *,
+    has_extension: bool,
+) -> tuple[str, list[str]]:
+    """Return the gate branch and any failures."""
+    actual = meters(entries, corpus)
+    if actual != baseline:
+        return "baseline-mismatch", [
+            "computed meters differ from tests/tenkz/census-baseline.json"
+        ]
+    if previous is not None:
+        errors = ratchet_errors(baseline, previous, has_extension=has_extension)
+        if errors:
+            return "ratchet", errors
+        if _m1_total(baseline) < _m1_total(previous):
+            return "decreased", []
+    raised = flags(entries, corpus)
+    unanswered = [flag for flag in raised if flag["id"] not in verdicts]
+    return "verdicts", [
+        f"no verdict for {flag['id']} ({flag['detail']})" for flag in unanswered
+    ]
 
 
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("action", choices=("meters", "flags", "gate"))
+    parser.add_argument(
+        "--base-ref",
+        help="pre-change Git ref whose baseline supplies the per-PR ratchet",
+    )
     args = parser.parse_args()
     entries = load_registry()
     corpus = consumer_files()
@@ -314,35 +636,46 @@ def main() -> int:
             print(f"{flag['id']}  --  {flag['detail']}")
         print(f"{len(raised)} flag(s)")
         return 0
-    # gate: census strictly decreased, or every flag has a session verdict.
+    # gate: enforce the per-PR ratchet, then accept a census decrease or
+    # structured verdict rows for every current flag.
     if not BASELINE.is_file():
         print("tenkz-shrink: FAIL: no census baseline; run Session 0 first", file=sys.stderr)
         return 1
     baseline = json.loads(BASELINE.read_text(encoding="utf-8"))
-    recorded_total = sum(baseline["m1_census"]["value"].values())
-    actual_total = sum(len(rows) for rows in ledger_split(entries).values())
-    if actual_total < recorded_total:
-        print(
-            f"tenkz-shrink: PASS: census decreased {recorded_total} -> {actual_total}"
-        )
-        return 0
     section = (
         latest_session_section(SHRINK_LEDGER.read_text(encoding="utf-8"))
         if SHRINK_LEDGER.is_file()
         else ""
     )
-    unanswered = [flag for flag in raised if flag["id"] not in section]
-    if unanswered:
-        for flag in unanswered:
-            print(
-                f"tenkz-shrink: FAIL: no verdict for {flag['id']} ({flag['detail']})",
-                file=sys.stderr,
-            )
+    try:
+        previous = baseline_at_ref(args.base_ref) if args.base_ref else None
+        has_extension = extension_cited(args.base_ref) if previous is not None else False
+    except ValueError as exc:
+        print(f"tenkz-shrink: FAIL: {exc}", file=sys.stderr)
         return 1
-    print(
-        f"tenkz-shrink: PASS: census stable at {actual_total} and all"
-        f" {len(raised)} flag(s) carry verdicts"
+    branch, failures = evaluate_gate(
+        entries,
+        corpus,
+        baseline,
+        previous,
+        session_verdict_ids(section),
+        has_extension=has_extension,
     )
+    if failures:
+        for failure in failures:
+            print(f"tenkz-shrink: FAIL: {failure}", file=sys.stderr)
+        return 1
+    if branch == "decreased":
+        assert previous is not None
+        print(
+            f"tenkz-shrink: PASS: census decreased "
+            f"{_m1_total(previous)} -> {_m1_total(baseline)}"
+        )
+    else:
+        print(
+            f"tenkz-shrink: PASS: census stable at {_m1_total(baseline)} and all"
+            f" {len(raised)} flag(s) carry verdicts"
+        )
     return 0
 
 

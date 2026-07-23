@@ -37,6 +37,7 @@ BASELINE = ROOT / "tests/tenkz/census-baseline.json"
 # alias(<replacement>; sunset=<milestone>): read-old-documents only.
 # escape: sanctioned raw-geometry leak, metered by the escape census.
 _LEDGERS = ("kernel", "sugar", "alias", "escape")
+MILESTONES = ("0.8", "0.9", "1.0")
 
 
 def parse_status(status: str) -> tuple[str, str]:
@@ -49,6 +50,36 @@ def parse_status(status: str) -> tuple[str, str]:
     raise ValueError(f"unknown ledger status {status!r}")
 
 
+def parse_alias_payload(payload: str) -> tuple[str, str]:
+    """Return an alias replacement and its supported sunset milestone."""
+    match = re.fullmatch(r"(.+?)\s*;\s*sunset=([^;\s]+)", payload)
+    if match is None:
+        raise ValueError(
+            "alias payload must be '<replacement>; sunset=<milestone>'"
+        )
+    replacement, sunset = match.groups()
+    if sunset not in MILESTONES:
+        raise ValueError(
+            f"unsupported alias sunset {sunset!r}; expected one of "
+            + ", ".join(MILESTONES)
+        )
+    return replacement.strip(), sunset
+
+
+def parse_value_alias_sunset(meaning: str) -> str:
+    """Return the milestone carried by a value-alias description."""
+    match = re.search(r"(?:^|\s)Sunset\s+([^.\s]+(?:\.[^.\s]+)?)\.\s*$", meaning)
+    if match is None:
+        raise ValueError("value alias description carries no final 'Sunset M.'")
+    sunset = match.group(1)
+    if sunset not in MILESTONES:
+        raise ValueError(
+            f"unsupported value-alias sunset {sunset!r}; expected one of "
+            + ", ".join(MILESTONES)
+        )
+    return sunset
+
+
 def ledger_split(entries: list[Entry]) -> dict[str, list[tuple[str, ...]]]:
     split: dict[str, list[tuple[str, ...]]] = {ledger: [] for ledger in _LEDGERS}
     for entry in entries:
@@ -57,6 +88,28 @@ def ledger_split(entries: list[Entry]) -> dict[str, list[tuple[str, ...]]]:
         ledger, _payload = parse_status(entry.fields[4])
         split[ledger].append(entry.fields)
     return split
+
+
+def public_census(entries: list[Entry]) -> dict[str, int]:
+    """Registry surface counted by M1, including commands and environments."""
+    split = ledger_split(entries)
+    return {
+        **{ledger: len(split[ledger]) for ledger in _LEDGERS},
+        "commands": sum(entry.kind == "command" for entry in entries),
+        "environments": sum(entry.kind == "environment" for entry in entries),
+    }
+
+
+def _sugar_expansion_tokens(payload: str) -> list[str]:
+    """Extract the kernel key spellings from a sugar expansion expression."""
+    expansion = payload.partition(";")[0].strip()
+    tokens = [
+        match.group(1).replace("~", " ").strip()
+        for match in re.finditer(r"(?:^|,|\s)([a-z][a-z ~]*?)\s*=", expansion)
+    ]
+    if not tokens and re.fullmatch(r"[a-z][a-z ~]*", expansion):
+        tokens.append(expansion.replace("~", " ").strip())
+    return tokens
 
 
 def _group(text: str, start: int) -> tuple[str, int]:
@@ -180,7 +233,7 @@ def check(entries: list[Entry]) -> list[str]:
         errors.append(f"accidental public environments: {', '.join(missing_environments)}")
     if absent_commands:
         errors.append(f"registered commands without declarations: {', '.join(absent_commands)}")
-    kernel_names: set[str] = set()
+    kernel_keys: set[tuple[str, str]] = set()
     for scope, name, value_type, default, status, meaning in by_kind["key"]:
         if not all((scope, name, value_type, default, status, meaning)):
             errors.append(f"incomplete key record: {scope}:{name}")
@@ -190,7 +243,7 @@ def check(entries: list[Entry]) -> list[str]:
             errors.append(f"{scope}:{name}: {exc}")
             continue
         if ledger == "kernel":
-            kernel_names.add(name.replace("~", " "))
+            kernel_keys.add((scope, name.replace("~", " ")))
     for scope, name, _vt, _default, status, _meaning in by_kind["key"]:
         try:
             ledger, payload = parse_status(status)
@@ -200,22 +253,34 @@ def check(entries: list[Entry]) -> list[str]:
             # Expansion closure: a sugar row must spell its expansion in
             # kernel vocabulary.  Sugar that cannot expand is kernel in
             # disguise and fails here.
-            referenced = {
-                token.rstrip("=")
-                for token in re.findall(r"[a-z][a-z ~]*=?", payload)
-                if token.rstrip("=").strip() in kernel_names
-            }
-            if not referenced:
+            tokens = _sugar_expansion_tokens(payload)
+            unknown = [
+                token for token in tokens if (scope, token) not in kernel_keys
+            ]
+            if not tokens:
                 errors.append(
                     f"sugar row {scope}:{name} has no kernel spelling in its "
                     f"expansion {payload!r}"
                 )
-        if ledger == "alias" and "sunset=" not in payload:
-            errors.append(f"alias row {scope}:{name} carries no sunset milestone")
+            elif unknown:
+                errors.append(
+                    f"sugar row {scope}:{name} expansion names non-kernel "
+                    f"token(s): {', '.join(unknown)}"
+                )
+        if ledger == "alias":
+            try:
+                parse_alias_payload(payload)
+            except ValueError as exc:
+                errors.append(f"alias row {scope}:{name}: {exc}")
+    for scope, spelling, _replacement, meaning in by_kind["alias"]:
+        try:
+            parse_value_alias_sunset(meaning)
+        except ValueError as exc:
+            errors.append(f"value alias {scope}:{spelling}: {exc}")
     if BASELINE.is_file():
         baseline = json.loads(BASELINE.read_text(encoding="utf-8"))
         recorded = baseline["m1_census"]["value"]
-        actual = {ledger: len(rows) for ledger, rows in ledger_split(entries).items()}
+        actual = public_census(entries)
         if actual != recorded:
             errors.append(
                 f"ledger census {actual} != baseline {recorded}; a change is "

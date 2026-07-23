@@ -1,8 +1,10 @@
 {
   "m1_census": {
-    "definition": "registry key rows per ledger; kernel is one-in-one-out, the total never rises between shrink sessions",
+    "definition": "registry key rows per ledger plus public commands and environments; kernel is one-in-one-out and the total never rises between shrink sessions",
     "value": {
       "alias": 6,
+      "commands": 18,
+      "environments": 5,
       "escape": 9,
       "kernel": 75,
       "sugar": 5
@@ -21,9 +23,9 @@
     "value": 15.14
   },
   "m5_aliases": {
-    "definition": "alias rows and sunset compliance; near zero at the 1.0 freeze",
+    "definition": "key and value alias rows plus sunset compliance; near zero at the 1.0 freeze",
     "value": {
-      "count": 6,
+      "count": 7,
       "missing_sunset": 0
     }
   },

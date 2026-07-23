@@ -34,16 +34,17 @@ environments carry no registry status field; their ledger lives in this
 ledger's tables and in the baseline JSON. Ceilings are set at these
 actuals; the ratchet does the aspiring.
 
-Baseline meters: M1 {kernel 75, sugar 5, escape 9, alias 6} · M2 145 ·
-M3 297 · M4 15.14 · M5 {6 aliases, 0 missing sunsets} · M6 {3 multi-typed
-names, 2 union types, 5 shared enum words}.
+Baseline meters: M1 {kernel 75, sugar 5, escape 9, alias 6, commands 18,
+environments 5} · M2 145 · M3 297 · M4 15.14 · M5 {7 aliases (six key,
+one value), 0 missing sunsets} · M6 {3 multi-typed names, 2 union types,
+5 shared enum words}.
 
 M3's 297 escape occurrences are dominated by `out=`/`in=` in the free-graph
 benchmark cases — the measured cost of hand-routed arcs, burned down by the
 strings landing (#4701, #4705). M6's baseline names the overloads the 1.0
 kernel deletes; it must never rise on the way there.
 
-### Verdicts on the 38 baseline flags
+### Verdicts on the 55 baseline flags
 
 Low-consumer rows. The demand corpus is the benchmark plus the blueprint;
 rows below three consumers either carry a dated justification or die at
@@ -56,27 +57,44 @@ their named landing.
 | flag:consumers:command:tnfuse | demoted at the language landing: a prelude-declared fuse atom (`LANGUAGE-1.0` §9); expiry 0.9 |
 | flag:consumers:command:tnset | keep-because: document-scope policy lives in preambles, which the demand corpus excludes by design; expiry 1.0 |
 | flag:consumers:environment:tenkzplanes | sugar preset over the lattice frame; dies as an environment at S4; expiry 0.9 |
+| flag:consumers:key:annotation:box | folds into mark form `enclosure` at the language landing; expiry 0.9 |
 | flag:consumers:key:annotation:brace above | folds into mark forms `brace-above`/`brace-below` at the language landing; expiry 0.9 |
+| flag:consumers:key:annotation:brace below | folds into mark form `brace-below` at the language landing; expiry 0.9 |
+| flag:consumers:key:annotation:label pos | moves unchanged to the mark record at the language landing; re-measure at 0.9 |
 | flag:consumers:key:atom-declaration:skin | keep-because: rides `\tndeclareatom`, same exclusion; expiry 1.0 |
 | flag:consumers:key:connection:distinguished | keep-because: two consumers today, torus redraws add more (#4702); re-measure at 0.9 |
 | flag:consumers:key:connection:fused | respelled `weight=double` at the language landing; expiry 0.9 |
+| flag:consumers:key:connection:none | dies at the language landing: omit the wire record, or use atom `void=sealed`; expiry 0.9 |
+| flag:consumers:key:connection:style | dies with the lattice edge-style pass-through at S3; expiry 0.9 |
 | flag:consumers:key:object:combined | folds into the ports grammar at the language landing; expiry 0.9 |
 | flag:consumers:key:object:east at | folds into the ports grammar; expiry 0.9 |
 | flag:consumers:key:object:west at | folds into the ports grammar; expiry 0.9 |
 | flag:consumers:key:object:name | keep-because: addressing becomes load-bearing for every S2+ landing (wires, marks, groups); re-measure at 0.9 |
+| flag:consumers:key:object:no legs | folds into the skin and typed-port grammar at the language landing; expiry 0.9 |
+| flag:consumers:key:object:removed | becomes atom `void=sealed` at the language landing; expiry 0.9 |
+| flag:consumers:key:object:span | folds into `ports=` and `wires=` at the language landing; expiry 0.9 |
+| flag:consumers:key:object:species | keep-because: semantic species is a kernel atom field; role consumers move here at the language landing; re-measure at 0.9 |
 | flag:consumers:key:object:tree style | dies with the cd dialect at S4; expiry 0.9 |
 | flag:consumers:key:picture:align | keep-because: the only math-axis control until `tenkzeq` lands (#4703); expiry 0.9 |
 | flag:consumers:key:picture:bond dir | tombstoned at S4 in favour of wire `dir=`; expiry 0.9 |
 | flag:consumers:key:picture:layer sep | folds into the metric/size classes at the equation landing; expiry 0.9 |
+| flag:consumers:key:picture:north | keep-because: the four side policies are one kernel concept and north is required by two-dimensional frames; re-measure at 0.9 |
+| flag:consumers:key:picture:open | keep-because: explicit open cell sets are the kernel counterpart of `trace=`; S2 redraws add consumers; re-measure at 0.9 |
+| flag:consumers:key:picture:pairing | folds into declared skin pairings and wires at the language landing; expiry 0.9 |
 | flag:consumers:key:picture:plane lean | folds into `frame=` subkeys at S3; expiry 0.9 |
 | flag:consumers:key:picture:polygon | dies with the cd dialect at S4; expiry 0.9 |
 | flag:consumers:key:picture:sheet sep | folds into `frame=` subkeys at S3; expiry 0.9 |
 | flag:consumers:key:picture:sheets | keep-because: the 2+1D lattice mechanism; condensation/czx redraws consume it (#4704); re-measure at 0.9 |
+| flag:consumers:key:picture:site | dies with the lattice dialect at S3; frame population creates ordinary atoms; expiry 0.9 |
+| flag:consumers:key:picture:south | keep-because: the four side policies are one kernel concept and south is required by two-dimensional frames; re-measure at 0.9 |
 | flag:consumers:key:picture:trace style | default flips to the cap idiom at S2 and the key dies with it; expiry 0.9 |
 | flag:consumers:key:region:group | folds into address sets at the language landing; expiry 0.9 |
 | flag:consumers:key:region:name | keep-because: same addressing argument as object:name; re-measure at 0.9 |
+| flag:consumers:key:setup:compact | dies at the equation landing (math-style sensing and `size=`, #4703); expiry 0.9 |
 | flag:consumers:key:setup:inline | dies at the equation landing (math-style sensing, #4703); expiry 0.9 |
 | flag:consumers:key:setup:pitch | keep-because: the metric anchor is set in preambles, excluded from demand counting by design; expiry 1.0 |
+| flag:consumers:key:setup:species | moves to `\tndeclare{species}` at the language landing; expiry 0.9 |
+| flag:consumers:key:setup:tensor style | becomes atom `skin=` at the language landing; expiry 0.9 |
 
 Merge candidates and lonely types. The detector confirms the compression
 review from the outside: the angle pair and the one-off types are the 0.7
