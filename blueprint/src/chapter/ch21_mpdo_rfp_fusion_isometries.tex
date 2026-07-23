@@ -1628,6 +1628,44 @@ separate step.
     virtual product is the word evaluation of the original tensor.
 \end{proof}
 
+\begin{theorem}[Positivity of the terminal transfer matrices]%
+    \label{thm:mpdo_terminal_transfer_positivity}
+    \lean{MPOTensor.BNTFusionTensorClause.%
+        physTraceTransfer_verticalBNTMPO_posSemidef}
+    \leanok
+    \uses{def:mpdo, def:mpdo_bnt_fusion_tensor_clause,
+        def:mpo_physical_trace_transfer,
+        lem:mpdo_sitewise_physical_coordinate_congruence}
+    Let $M$ be a matrix product density operator, and choose a vertical
+    canonical decomposition with basis tensors $M_\gamma$ and positive
+    diagonal multiplicity matrices $\mu_\gamma$.  Then every terminal
+    transfer matrix
+    \[
+        T_\gamma=\operatorname{tr}(M_\gamma)
+    \]
+    is positive semidefinite.  This supplies the positivity needed for the
+    spectral decomposition invoked in
+    \cite[lines~1010--1016]{Cirac2016MPDO_arXiv}; it asserts neither that
+    $T_\gamma$ is a projection nor the subsequent spectral, Hamiltonian, or
+    Gibbs decomposition.
+
+    \textbf{Local fix (terminal trace orientation):} The trace closes the
+    horizontal operator leg and leaves the two bond indices of $M_\gamma$
+    open.  See
+    \path{docs/paper-gaps/cpsv16_topological_projector_recursion.tex}.
+\end{theorem}
+\begin{proof}\leanok
+    At chain length one, conjugating the positive density operator by the
+    retained-row vertical coisometry preserves positivity.  Fix a label
+    $\gamma$ and a diagonal coordinate $q$ of $\mu_\gamma$.  The corresponding
+    principal block is
+    \[
+        (\mu_\gamma)_{q,q}\,T_\gamma.
+    \]
+    Since $(\mu_\gamma)_{q,q}>0$, multiplication by its reciprocal proves
+    $T_\gamma\geq0$.
+\end{proof}
+
 \begin{definition}[All-label recursive density operator]%
     \label{def:mpdo_topological_density_operator}
     \lean{MPOTensor.BNTFusionTensorClause.verticalMultiplicityChainWeight}

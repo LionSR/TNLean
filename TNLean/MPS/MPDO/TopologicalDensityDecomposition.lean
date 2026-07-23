@@ -37,7 +37,7 @@ original density exactly.
   at lines 999--1002
 -/
 
-open scoped Matrix BigOperators Kronecker
+open scoped Matrix BigOperators Kronecker ComplexOrder
 
 noncomputable section
 
@@ -418,6 +418,52 @@ theorem changePhysicalBasis_verticalCoisometry_copy_ne
     Equiv.symm_symm, Equiv.apply_symm_apply,
     Matrix.blockDiagonal'_apply_ne _ _ _ hpq, Pi.zero_apply,
     Matrix.zero_apply] using hAssembled
+
+/-- The terminal physical-trace transfer of every vertical basis tensor is positive
+semidefinite.  It is obtained by restricting the positive one-site density operator to one
+positive multiplicity coordinate and removing its strictly positive scalar weight.
+
+Source: arXiv:1606.00608, the terminal matrices and their spectral decomposition at
+lines 1010--1012.  This positivity result supplies the spectral decomposition used before the
+projector and commuting Gibbs conclusions at lines 1013--1016; it assumes neither length
+independence nor any spectral or projection property.
+
+**Local fix (terminal trace orientation):** The physical trace closes the horizontal operator
+leg of the vertical basis tensor and leaves its bond pair open.  This is documented in
+`docs/paper-gaps/cpsv16_topological_projector_recursion.tex`. -/
+theorem physTraceTransfer_verticalBNTMPO_posSemidef
+    (H : BNTFusionTensorClause M) (hM : IsMPDO M) (γ : Fin H.labelCount) :
+    (physTraceTransfer (verticalBNTMPO (H.tensor γ))).PosSemidef := by
+  classical
+  let q : Fin (H.multiplicity γ) := ⟨0, H.multiplicity_pos γ⟩
+  let p : H.VerticalCopy := ⟨γ, q⟩
+  let e : Fin (H.bondDim γ) → (Fin 1 → Fin H.verticalRetainedDim) :=
+    fun x _ ↦
+      (verticalCopyCoordinateEquiv H.bondDim H.multiplicity).symm ⟨p, x⟩
+  have hRetained :
+      (mpo (changePhysicalBasis H.verticalCoisometry M) 1).PosSemidef := by
+    rw [← singleKrausMap_sitewisePhysicalMatrix_mpo]
+    exact (singleKrausMap_isKrausCP _).map_posSemidef (hM 1 zero_lt_one)
+  have hPrincipalEq :
+      (mpo (changePhysicalBasis H.verticalCoisometry M) 1).submatrix e e =
+        H.weight γ q • physTraceTransfer (verticalBNTMPO (H.tensor γ)) := by
+    ext x y
+    simp only [Matrix.submatrix_apply, mpo_apply, mpoMatrixEntry, List.ofFn_succ,
+      List.ofFn_zero, evalWord_cons, evalWord_nil, Matrix.mul_one, e]
+    rw [H.changePhysicalBasis_verticalCoisometry_copy_same]
+    rw [Matrix.trace_smul, Matrix.smul_apply]
+    congr 1
+    simp [p, Matrix.trace, physTraceTransfer, Matrix.sum_apply, verticalCopyChainLetter,
+      verticalBNTMPO]
+  have hScaled :
+      (H.weight γ q • physTraceTransfer (verticalBNTMPO (H.tensor γ))).PosSemidef := by
+    rw [← hPrincipalEq]
+    exact hRetained.submatrix e
+  have hUnscaled :
+      ((H.weight γ q)⁻¹ •
+        (H.weight γ q • physTraceTransfer (verticalBNTMPO (H.tensor γ)))).PosSemidef :=
+    hScaled.smul (inv_nonneg_of_nonneg (H.weight_pos γ q).le)
+  simpa only [inv_smul_smul₀ (H.weight_pos γ q).ne'] using hUnscaled
 
 /-- The recursive line-999 block has the fixed-copy closed-chain matrix entries.
 
