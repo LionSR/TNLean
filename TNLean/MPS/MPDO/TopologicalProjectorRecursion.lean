@@ -122,7 +122,8 @@ abbrev FusionHistoryIndex (Fam : BNTFusionCoisometryFamily Λ p)
     Fin (Fam.bondDim (fusionHistoryFinalLabel Fam α previous h))
 
 /-- The bond dimension of the left-associated product tensor attached to a reverse fusion list.
--/
+
+Source: arXiv:1606.00608, lines 999--1010. -/
 def fusionChainBondDim (Fam : BNTFusionCoisometryFamily Λ p) (α : Λ) : List Λ → ℕ
   | [] => Fam.bondDim α
   | β :: previous => fusionChainBondDim Fam α previous * Fam.bondDim β
@@ -612,30 +613,6 @@ theorem sequentialFusionCoisometry_mul_conjTranspose
             (sequentialFusionCoisometry_mul_conjTranspose Fam α previous)]
           rw [Matrix.mul_one]
         _ = 1 := appendFusionSecondStage_mul_conjTranspose Fam α β previous
-
-/-- There is a unique fusion history before any label has been appended. -/
-private theorem emptyFusionHistory_eq
-    (Fam : BNTFusionCoisometryFamily Λ p) (α : Λ)
-    (h h' : FusionHistory Fam α []) : h = h' := by
-  rcases h with ⟨γ, h⟩
-  rcases h' with ⟨γ', h'⟩
-  have hγ : γ = α := fusionHistoryFinalLabel_empty Fam α ⟨γ, h⟩
-  have hγ' : γ' = α := fusionHistoryFinalLabel_empty Fam α ⟨γ', h'⟩
-  subst γ
-  subst γ'
-  have hh : h = ULift.up ⟨0, by simp⟩ := by
-    apply ULift.ext
-    apply Fin.ext
-    have hlt : h.down.val < 1 := by simpa using h.down.isLt
-    exact Nat.eq_zero_of_le_zero (Nat.le_of_lt_succ hlt)
-  have hh' : h' = ULift.up ⟨0, by simp⟩ := by
-    apply ULift.ext
-    apply Fin.ext
-    have hlt : h'.down.val < 1 := by simpa using h'.down.isLt
-    exact Nat.eq_zero_of_le_zero (Nat.le_of_lt_succ hlt)
-  subst h
-  subst h'
-  rfl
 
 /-- At the empty fusion list, the recursive block is the initial terminal matrix expressed in
 the history coordinates. -/
