@@ -207,6 +207,19 @@ noncomputable def parentHamiltonian (A : MPSTensor d D) (L N : ℕ) :
     NSiteSpace d N →ₗ[ℂ] NSiteSpace d N :=
   ∑ i : Fin N, localTerm A L N i
 
+/-- The two-site parent Hamiltonian on a one-site periodic chain is zero under
+the project's convention for a local interaction larger than the chain.
+
+**Scope restriction (one-site chain):** Beigi, arXiv:1105.1019v2, Section III,
+source lines 451--514, defines each interaction on two neighboring sites but
+does not specify its action when those sites coincide. The zero value here is
+the convention in `localTerm`, not a one-site case of Beigi's ordered-cycle
+formula. CPSV16, arXiv:1606.00608, Theorem 3.10(iii), source lines 534--540,
+only uses chain lengths greater than two. -/
+@[simp] theorem parentHamiltonian_two_one_eq_zero (A : MPSTensor d D) :
+    parentHamiltonian A 2 1 = 0 := by
+  simp [parentHamiltonian, localTerm]
+
 /-- Frustration-free ground-state condition for the parent model:
 every local term annihilates the candidate vector. -/
 def IsFrustrationFree (A : MPSTensor d D) (L N : ℕ) (ψ : NSiteSpace d N) : Prop :=
