@@ -518,6 +518,7 @@ specialization of that Appendix~D definition.
 \end{definition}
 
 \begin{remark}[Elementary consequences of the commuting definition]
+    \label{rem:nncph_ground_spaces_decomposition}
     \lean{MPSTensor.IsNNCPH.isCommutingParentHam}
     \lean{MPSTensor.IsNNCPHGroundState.isNNCPH}
     \lean{MPSTensor.IsNNCPHGroundState.isFrustrationFree}
@@ -1189,6 +1190,41 @@ specialization of that Appendix~D definition.
     injectivity and the injective periodic-chain theorem identify its chain
     space with the line spanned by $V^{(N)}(A_j)$. The finite-volume kernel
     identity completes the proof.
+\end{proof}
+
+\begin{theorem}[Forward NNCPH ground spaces for distinct multiplicity-one RFP sectors]%
+    \label{thm:rfp_multiplicity_one_bnt_has_nncph_ground_spaces}
+    \lean{MPSTensor.IsBNTCanonicalForm.rfp_implies_hasNNCPHGroundSpaces_basisDirectSum}
+    \leanok
+    \uses{def:sector_bnt_cf, def:mps_transfer_idempotence,
+        def:has_nncph_ground_spaces}
+    Let $A_1,\ldots,A_g$ be the distinct basis tensors of a BNT canonical
+    form, and let $B=\bigoplus_{j=1}^g A_j$ contain one copy of every basis
+    tensor. If $B$ is a renormalization fixed point, then for every $N>2$ its
+    translated two-site parent interactions commute and
+    \[
+        H_2^{(N)}(B)V^{(N)}(B)=0,
+        \qquad
+        \ker H_2^{(N)}(B)
+        =\spn\bigl\{V^{(N)}(A_j):j=1,\ldots,g\bigr\}.
+    \]
+    Hence $B$ satisfies the all-chain nearest-neighbor commuting
+    parent-Hamiltonian ground-space condition. This is the multiplicity-one
+    distinct-sector forward implication in
+    \cite[Definition~3.9 and Theorem~3.10]{Cirac2016MPDO_arXiv}. It does not
+    include repeated copies or arbitrary raw sector weights.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:rfp_multiplicity_one_bnt_nncph,
+        thm:rfp_multiplicity_one_bnt_parent_ground_spaces,
+        rem:nncph_ground_spaces_decomposition}
+    Theorem~\ref{thm:rfp_multiplicity_one_bnt_nncph} gives pairwise
+    commutation of the translated two-site interactions for every $N>2$.
+    The parent-Hamiltonian construction gives the zero-energy equation.
+    Theorem~\ref{thm:rfp_multiplicity_one_bnt_parent_ground_spaces} identifies
+    its kernel with the span of the periodic matrix product vectors of the
+    distinct sectors. These are the three clauses of the all-chain condition.
 \end{proof}
 
 \begin{theorem}[Cyclic trace expansion for a closed MPS chain]\label{thm:trace_eval_word_eq_sum_cyclic}
