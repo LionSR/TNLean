@@ -3,7 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Spectral.TransferOperatorGap
+import TNLean.Spectral.MPVOverlapDecayRect
+import TNLean.Spectral.TransferOperatorGapNormalized
 import TNLean.Spectral.GaugeConstruction
 import TNLean.Channel.PerronFrobenius.Existence
 import TNLean.MPS.Irreducible.FormII

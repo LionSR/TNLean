@@ -173,7 +173,7 @@ lemma mixedTransferMap₂_same_dim {d D : ℕ} (A B : MPSTensor d D) :
   ext X
   simp only [mixedTransferMap₂_apply, mixedTransferMap_apply]
 
-/-- The same-dimension bridge is preserved by iteration. -/
+/-- The equal-dimension identification is preserved by iteration. -/
 @[simp]
 lemma mixedTransferMap₂_pow_same_dim {d D : ℕ} (A B : MPSTensor d D) (n : ℕ) :
     (mixedTransferMap₂ A B) ^ n = (mixedTransferMap A B) ^ n := by
