@@ -1,0 +1,146 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+
+\input{./command}
+
+\title{The Physical Complement in the Topological Gibbs Decomposition}
+\author{}
+\date{2026-07-23}
+
+\begin{document}
+\maketitle
+
+\section{Source statement}
+
+The theorem following Theorem~4.14 in
+\cite[lines~1013--1016]{Cirac2016MPDO_arXiv} states an equality on the
+physical chain:
+\begin{equation}
+  \rho^{(N)}(M)
+    =\sum_{i=1}^{d}\lambda_iP_i^{(N)}e^{-H_N},
+  \qquad
+  [P_i^{(N)},e^{-H_N}]=0.
+  \label{eq:physical-gibbs}
+\end{equation}
+Here the $P_i^{(N)}$ are orthogonal projections on the physical Hilbert
+space, and $H_N=\sum_jh_{j,j+1}$ is a translationally invariant commuting
+nearest-neighbor Hamiltonian on that space.
+
+The preceding derivation first applies the vertical canonical form from
+Proposition~4.13 and then suppresses the resulting local change of
+coordinates.  The formal vertical map is a retained-row coisometry
+\[
+  V:\mathbb C^d\longrightarrow\mathbb C^s,
+  \qquad
+  VV^\dagger=I_s,
+  \qquad
+  V^\dagger V=E.
+\]
+The projection $E$ need not be the identity because the original physical
+space may contain a zero sector.  This is documented in
+\path{docs/paper-gaps/cpgsv17_vertical_isometry_zero_sector.tex}.
+
+\section{Retained-coordinate theorem}
+
+Let $k$ be the diagonal logarithmic multiplicity energy on
+$\mathbb C^s$.  For every $N\geq2$, the formalized two-site interaction on
+the retained space is
+\[
+  h=k\otimes I.
+\]
+Its periodic translates commute and satisfy
+\[
+  \exp\left(-\sum_jh_{j,j+1}\right)=\mu^{\otimes N}.
+\]
+The terminal spectral projections on the retained chain commute with this
+factor and give
+\begin{equation}
+  R_N=\sum_i\lambda_iP_{i,\mathrm{ret}}^{(N)}
+    e^{-H_{N,\mathrm{ret}}}.
+  \label{eq:retained-gibbs}
+\end{equation}
+Applying $(V^\dagger)^{\otimes N}$ and $V^{\otimes N}$ to the two sides of
+\eqref{eq:retained-gibbs} reconstructs $\rho^{(N)}(M)$ exactly.
+
+This reconstruction is not equation~\eqref{eq:physical-gibbs}.  The
+Hamiltonian $H_{N,\mathrm{ret}}$ and the projections
+$P_{i,\mathrm{ret}}^{(N)}$ act on $(\mathbb C^s)^{\otimes N}$, whereas the
+operators in equation~\eqref{eq:physical-gibbs} must act on
+$(\mathbb C^d)^{\otimes N}$.
+
+\section{Failure of direct compression and a finite physical extension}
+
+Direct transport of the retained Gibbs factor gives
+\[
+  V^\dagger e^{-k}V.
+\]
+This matrix vanishes on $(I-E)\mathbb C^d$ and is singular whenever
+$E\neq I$.  It therefore cannot equal the exponential of a finite matrix on
+the physical one-site space.
+
+A viable physical extension begins with
+\begin{equation}
+  k_{\mathrm{phys}}=V^\dagger kV,
+  \qquad
+  e^{-k_{\mathrm{phys}}}
+    =V^\dagger e^{-k}V+(I-E).
+  \label{eq:physical-energy-extension}
+\end{equation}
+The complementary summand supplies finite Gibbs weight one.  If
+$H_{L,\mathrm{phys}}$ is the sum of the periodic translates of
+$k_{\mathrm{phys}}\otimes I$, then
+\begin{equation}
+  e^{-H_{L,\mathrm{phys}}}
+    =\bigotimes_{j=1}^{L}
+      \left(V^\dagger e^{-k}V+I-E\right).
+  \label{eq:physical-chain-extension}
+\end{equation}
+This differs from the false global equality
+\[
+  e^{-H_{L,\mathrm{phys}}}
+    =(V^\dagger)^{\otimes L}e^{-H_{L,\mathrm{ret}}}V^{\otimes L},
+\]
+whose right-hand side vanishes on every complementary or mixed sector.
+
+The physical projectors are naturally defined by
+\[
+  \widehat P_i^{(N)}
+    =(V^\dagger)^{\otimes N}
+      P_{i,\mathrm{ret}}^{(N)}V^{\otimes N}.
+\]
+They are supported on $E^{\otimes N}$ and therefore annihilate every
+complementary and mixed-sector contribution.  The coisometry identity gives
+their projection identities, while equation~\eqref{eq:physical-chain-extension}
+reduces their commutation and the physical density formula to the retained
+equalities.  This finite physical extension is mathematically available; the
+remaining gap is its formalization.
+
+\section{Elimination plan}
+
+The missing formalization consists of the following steps.
+
+\begin{enumerate}
+  \item Prove equation~\eqref{eq:physical-energy-extension} from
+    $VV^\dagger=I_s$.
+  \item Define a fixed physical two-site interaction from
+    $k_{\mathrm{phys}}$ and prove the periodic exponential identity for every
+    chain length at least two.
+  \item Transport the retained terminal projections to the physical chain
+    and prove their projection and commutation identities.
+  \item Combine these identities with exact vertical reconstruction to obtain
+    equation~\eqref{eq:physical-gibbs}.
+\end{enumerate}
+
+The separate one-site ambiguity in the two-site periodic interaction is
+recorded in
+\path{docs/paper-gaps/cpsv16_topological_gibbs_length_one.tex}.  Resolving
+either gap does not resolve the other.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}
