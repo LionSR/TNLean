@@ -1635,6 +1635,9 @@ separate step.
     \lean{MPOTensor.BNTFusionTensorClause.verticalCopyChainProjectorQ}
     \lean{MPOTensor.BNTFusionTensorClause.topologicalDensityBlock}
     \lean{MPOTensor.BNTFusionTensorClause.topologicalDensityOperatorSucc}
+    \lean{MPOTensor.BNTFusionTensorClause.%
+        topologicalMultiplicityWeightFactorSucc}
+    \lean{MPOTensor.BNTFusionTensorClause.topologicalRecursiveFactorSucc}
     \leanok
     \uses{def:mpdo_topological_projector_recursion,
         def:mpdo_bnt_fusion_tensor_clause,
@@ -1669,6 +1672,13 @@ separate step.
     $W_{N,c}^\dagger$.
     The all-label recursive density operator is the direct sum of these blocks
     over every sitewise label and diagonal coordinate; denote it by $R_N$.
+    On the same direct-sum coordinates, define
+    \[
+      A_N=\bigoplus_c m(c)I_c,
+      \qquad
+      T_N=\bigoplus_c W_{N,c}^{\dagger}Q_{N,c}W_{N,c}.
+    \]
+    Then $R_N=A_NT_N$.
     Its scalar coefficients are precisely the selected diagonal coefficients
     of the factor $\mu^{\otimes N}$ in
     \cite[line~999]{Cirac2016MPDO_arXiv}; the identities mentioned there act on
@@ -1682,6 +1692,7 @@ separate step.
     \lean{MPOTensor.BNTFusionTensorClause.%
         singleKrausMap_conjTranspose_verticalCoisometry_topologicalDensityOperatorSucc_eq_mpo}
     \lean{MPOTensor.BNTFusionTensorClause.HasTopologicalDensityDecomposition}
+    \lean{MPOTensor.BNTFusionTensorClause.hasTopologicalDensityDecomposition}
     \lean{MPOTensor.exists_topologicalDensityDecomposition_of_isRFPViaTS}
     \leanok
     \uses{def:horizontal_cf_mpdo, def:mpdo, def:is_rfp_via_ts,
@@ -1725,6 +1736,43 @@ separate step.
     identity and its exact reverse identity, then sum over all configurations.
     The local reconstruction identity, applied at every site, gives the stated
     adjoint reconstruction of the original density operator.
+\end{proof}
+
+\begin{corollary}[All-label density-factor commutator]%
+    \label{cor:mpdo_topological_density_factor_commutator}
+    \lean{MPOTensor.BNTFusionTensorClause.%
+        topologicalDensityOperatorSucc_eq_multiplicityWeight_mul_recursiveFactor}
+    \lean{MPOTensor.BNTFusionTensorClause.%
+        topologicalMultiplicityWeightFactorSucc_commutes_recursiveFactor}
+    \lean{MPOTensor.BNTFusionTensorClause.HasTopologicalDensityFactorCommutator}
+    \lean{MPOTensor.BNTFusionTensorClause.hasTopologicalDensityFactorCommutator}
+    \lean{MPOTensor.exists_topologicalDensityDecomposition_and_factorCommutator_of_isRFPViaTS}
+    \leanok
+    \uses{def:horizontal_cf_mpdo, def:mpdo, def:is_rfp_via_ts,
+        def:mpdo_topological_density_operator,
+        thm:mpdo_topological_density_decomposition}
+    Let $M$ be a matrix product density operator in horizontal canonical form
+    and suppose that it satisfies the renormalization fixed-point condition.
+    One choice of the vertical canonical decomposition and fusion
+    coisometries satisfies, for every $N>0$,
+    \[
+      R_N=A_NT_N,
+      \qquad
+      A_NT_N=T_NA_N.
+    \]
+    Equivalently, $[A_N,T_N]=0$, as asserted in
+    \cite[lines~1000--1002]{Cirac2016MPDO_arXiv}.  No additional compatibility
+    hypothesis is imposed.  This statement makes no length-independence,
+    terminal spectral, projection, Hamiltonian, or Gibbs-state assertion.
+\end{corollary}
+\begin{proof}\leanok
+    \uses{thm:mpdo_rfp_to_bnt_fusion_tensor}
+    In every sitewise copy configuration, the factor $A_N$ is the scalar
+    $m(c)$ times the identity on the corresponding simple-bond space.
+    It therefore commutes with
+    $W_{N,c}^{\dagger}Q_{N,c}W_{N,c}$.  Multiplication of the two direct sums
+    proves both identities.  The renormalization fixed-point condition
+    supplies the same fusion family used in the density decomposition.
 \end{proof}
 
 \begin{definition}[Full-support specialization of one fusion layer]%
