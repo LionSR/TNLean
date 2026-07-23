@@ -3,8 +3,9 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.MPDO.PhysicalSectorProductRealization
+import TNLean.Algebra.ListProduct
 import TNLean.MPS.MPDO.PhysicalSectorBondTwoSite
+import TNLean.MPS.MPDO.PhysicalSectorProductRealization
 
 /-!
 # Physical transport of the sector product realization
@@ -90,41 +91,6 @@ private theorem physicalCoordinateMatrixN_coisometry
   congr 1
   exact propext funext_iff.symm
 
-private theorem list_prod_sum_ofFn {a n : Type*} [Fintype a]
-    [Fintype n] [DecidableEq n] {N : ℕ}
-    (f : (i : Fin N) → a → Matrix n n ℂ) :
-    (List.ofFn fun i : Fin N ↦ ∑ x : a, f i x).prod =
-      ∑ x : Fin N → a, (List.ofFn fun i : Fin N ↦ f i (x i)).prod := by
-  classical
-  induction N with
-  | zero => simp
-  | succ N ih =>
-      rw [List.ofFn_succ, List.prod_cons]
-      simp only [ih]
-      rw [Finset.sum_mul]
-      simp_rw [Finset.mul_sum]
-      have h := Fintype.sum_equiv
-        (Fin.consEquiv fun _ : Fin (N + 1) ↦ a)
-        (fun p : a × (Fin N → a) ↦
-          f 0 p.1 * (List.ofFn fun i : Fin N ↦ f i.succ (p.2 i)).prod)
-        (fun x : Fin (N + 1) → a ↦
-          (List.ofFn fun i : Fin (N + 1) ↦ f i (x i)).prod)
-        (fun p ↦ by simp [List.ofFn_succ])
-      rw [Fintype.sum_prod_type] at h
-      exact h
-
-private theorem list_prod_smul_ofFn {n : Type*} [Fintype n]
-    [DecidableEq n] {N : ℕ} (c : Fin N → ℂ)
-    (A : Fin N → Matrix n n ℂ) :
-    (List.ofFn fun i : Fin N ↦ c i • A i).prod =
-      (∏ i : Fin N, c i) • (List.ofFn A).prod := by
-  induction N with
-  | zero => simp
-  | succ N ih =>
-      simp only [List.ofFn_succ, List.prod_cons, ih, Fin.prod_univ_succ,
-        Matrix.smul_mul, Matrix.mul_smul, smul_smul]
-      rw [mul_comm (c 0)]
-
 private def braKetFunctionsEquiv {i a b : Type*} :
     ((i → b) × (i → a)) ≃ (i → a × b) :=
   (Equiv.prodComm _ _).trans (Equiv.arrowProdEquivProdArrow i (fun _ ↦ a) (fun _ ↦ b)).symm
@@ -140,10 +106,10 @@ private theorem evalWord_changePhysicalBasis_ofFn {e : ℕ}
             (List.ofFn fun i : Fin N ↦ (x i).2) := by
   rw [MPOTensor.evalWord_ofFn]
   simp_rw [changePhysicalBasis_apply_eq_sum]
-  rw [list_prod_sum_ofFn]
+  rw [List.prod_ofFn_sum]
   apply Finset.sum_congr rfl
   intro x _
-  rw [list_prod_smul_ofFn, MPOTensor.evalWord_ofFn]
+  rw [List.prod_ofFn_smul, MPOTensor.evalWord_ofFn]
 
 /-- The length-`N` MPO transforms by the sitewise physical coordinate
 matrix.

@@ -3,6 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.ListProduct
+import TNLean.MPS.Core.CyclicTrace
 import TNLean.MPS.FundamentalTheorem.Basic
 import TNLean.MPS.Core.Blocking
 
@@ -131,32 +133,13 @@ lemma evalWord_twistedTensor_ofFn
         ∑ v : Fin L → Fin d,
           (∏ k : Fin L, (U g) (b k) (v k)) • evalWord A (List.ofFn v) := by
   classical
-  intro L
-  induction L with
-  | zero =>
-    intro b
-    simp only [List.ofFn_zero, evalWord_nil]
-    rw [Fintype.sum_unique]
-    simp only [Finset.univ_eq_empty, Finset.prod_empty, one_smul]
-  | succ L ih =>
-    intro b
-    rw [List.ofFn_succ, evalWord_cons, twistedTensor, ih (fun i => b i.succ)]
-    -- Head sum times tail sum; distribute and reindex over `Fin.cons`.
-    rw [Finset.sum_mul]
-    -- Reindex the sum over `Fin (L+1) → Fin d` via `Fin.consEquiv`.
-    rw [← (Fin.consEquiv (fun _ : Fin (L + 1) => Fin d)).sum_comp]
-    rw [Fintype.sum_prod_type]
-    refine Finset.sum_congr rfl (fun a _ => ?_)
-    rw [Matrix.smul_mul, Finset.mul_sum, Finset.smul_sum]
-    refine Finset.sum_congr rfl (fun w _ => ?_)
-    -- Evaluate the consed word and the product over `Fin (L+1)`.
-    have heval : evalWord A (List.ofFn ((Fin.consEquiv fun _ : Fin (L + 1) => Fin d) (a, w)))
-        = A a * evalWord A (List.ofFn w) := by
-      simp only [Fin.consEquiv_apply, List.ofFn_succ, Fin.cons_zero, evalWord_cons,
-        Fin.cons_succ]
-    rw [heval]
-    simp only [Fin.consEquiv_apply, Fin.cons_zero, Fin.cons_succ, Fin.prod_univ_succ,
-      Matrix.mul_smul, smul_smul]
+  intro L b
+  rw [evalWord_ofFn_eq_prod]
+  simp_rw [twistedTensor]
+  rw [List.prod_ofFn_sum]
+  apply Finset.sum_congr rfl
+  intro v _
+  rw [List.prod_ofFn_smul, evalWord_ofFn_eq_prod]
 
 /-- Twisting by `blockKronAction` agrees with blocking the twisted tensor:
 `twistedTensor (blockTensor A L) (blockKronAction L U) g = blockTensor

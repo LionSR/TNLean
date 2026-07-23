@@ -3,6 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.ListProduct
+import TNLean.MPS.Core.CyclicTrace
 import TNLean.MPS.Periodic.Symmetry.Theorem41Defs
 
 /-!
@@ -57,43 +59,12 @@ theorem evalWord_sum_smul_ofFn
       evalWord (fun τ' : Fin m => ∑ σ' : Fin d, W τ' σ' • B σ') (List.ofFn τ) =
         ∑ σ : Fin N → Fin d,
           (∏ k : Fin N, W (τ k) (σ k)) • evalWord B (List.ofFn σ) := by
-  intro N
-  induction N with
-  | zero =>
-      intro τ
-      classical
-      simp
-  | succ N ih =>
-      intro τ
-      classical
-      rw [List.ofFn_succ, evalWord_cons]
-      rw [ih (fun i : Fin N => τ i.succ)]
-      rw [Finset.sum_mul_sum]
-      let eqv : (Fin d × (Fin N → Fin d)) ≃ (Fin (N + 1) → Fin d) :=
-        Fin.consEquiv (fun _ => Fin d)
-      have hreindex :
-          (∑ σ : Fin (N + 1) → Fin d,
-              (∏ k : Fin (N + 1), W (τ k) (σ k)) • evalWord B (List.ofFn σ)) =
-            ∑ p : Fin d × (Fin N → Fin d),
-              (∏ k : Fin (N + 1), W (τ k) ((eqv p) k)) • evalWord B (List.ofFn (eqv p)) :=
-        (Fintype.sum_equiv eqv
-          (f := fun p : Fin d × (Fin N → Fin d) =>
-            (∏ k : Fin (N + 1), W (τ k) ((eqv p) k)) • evalWord B (List.ofFn (eqv p)))
-          (g := fun σ : Fin (N + 1) → Fin d =>
-            (∏ k : Fin (N + 1), W (τ k) (σ k)) • evalWord B (List.ofFn σ))
-          (by intro p; rfl)).symm
-      rw [hreindex, ← Fintype.sum_prod_type']
-      refine Finset.sum_congr rfl ?_
-      rintro ⟨i, σt⟩ _
-      have hprod :
-          (∏ k : Fin (N + 1), W (τ k) ((eqv (i, σt)) k)) =
-            W (τ 0) i * ∏ k : Fin N, W (τ k.succ) (σt k) := by
-        rw [Fin.prod_univ_succ]
-        simp [eqv, Fin.consEquiv]
-      have hList :
-          List.ofFn (eqv (i, σt)) = i :: List.ofFn σt := by
-        simp [eqv, Fin.consEquiv]
-      rw [hprod, hList, evalWord_cons, smul_mul_smul_comm]
+  classical
+  intro N τ
+  rw [evalWord_ofFn_eq_prod, List.prod_ofFn_sum]
+  apply Finset.sum_congr rfl
+  intro σ _
+  rw [List.prod_ofFn_smul, evalWord_ofFn_eq_prod]
 
 private theorem mpv_sum_smul_ofFn
     {m : ℕ} (B : MPSTensor d D) (W : Matrix (Fin m) (Fin d) ℂ)

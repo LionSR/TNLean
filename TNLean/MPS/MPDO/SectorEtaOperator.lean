@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.PiSigmaEquiv
 import TNLean.MPS.MPDO.SectorEtaContraction
 
 /-!
@@ -46,19 +47,6 @@ Source: arXiv:1606.00608, Appendix C.2, lines 1434--1464. -/
 abbrev SectorChainIndex (hη : EtaStructure ρ) (N : ℕ) :=
   Σ k : Fin N → Fin hη.m, SectorFiber hη k
 
-private def piSigmaEquiv
-    {ι : Type*} {α : ι → Type*} {β : (i : ι) → α i → Type*} :
-    ((i : ι) → Σ a, β i a) ≃
-      Σ a : (i : ι) → α i, (i : ι) → β i (a i) where
-  toFun x := ⟨fun i => (x i).1, fun i => (x i).2⟩
-  invFun x i := ⟨x.1 i, x.2 i⟩
-  left_inv x := by
-    funext i
-    exact Sigma.eta (x i)
-  right_inv x := by
-    obtain ⟨a, b⟩ := x
-    rfl
-
 /-- The sitewise Hayashi decomposition identifies physical chain indices with
 a sector configuration and an index in the corresponding sector fiber.
 
@@ -66,7 +54,7 @@ Source: arXiv:1606.00608, Appendix C.2, lines 1434--1464. -/
 def sectorChainEquiv (hη : EtaStructure ρ) (N : ℕ) :
     (Fin N → Fin d) ≃ SectorChainIndex hη N :=
   (Equiv.piCongrRight fun _ : Fin N => hη.decompB).trans
-    piSigmaEquiv
+    Equiv.piSigmaEquiv
 
 /-- Forming the congruence $U\kappa_{\beta,\alpha}U^\dagger$ on every local
 MPO matrix leaves the horizontal bond space unchanged. When $U$ is unitary,

@@ -27,6 +27,7 @@ import TNLean.Algebra.GramMatrixLI
 import TNLean.Algebra.HermitianHelpers
 import TNLean.Algebra.IrreducibleTensorAction
 import TNLean.Algebra.KroneckerFactorPositivity
+import TNLean.Algebra.ListProduct
 import TNLean.Algebra.MatrixAux
 import TNLean.Algebra.MatrixGramUnitary
 import TNLean.Algebra.MatrixOperatorSpace
@@ -39,6 +40,7 @@ import TNLean.Algebra.OperatorBlock
 import TNLean.Algebra.OperatorSchmidt
 import TNLean.Algebra.OrthogonalProjection
 import TNLean.Algebra.PerronFrobenius
+import TNLean.Algebra.PiSigmaEquiv
 import TNLean.Algebra.PiTensorProductPhase
 import TNLean.Algebra.PosSemidefSupport
 import TNLean.Algebra.ProjectionTriangularTrace

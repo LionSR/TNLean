@@ -21,13 +21,23 @@ arbitrary chain.  In the notation of lines~995--1010 of
 \cite{Cirac2016MPDO_arXiv}, this gives
 \begin{equation}
   \rho^{(N)}(M)
-    \simeq_{\mathrm{LU}}
+    \simeq_{\mathrm{loc.\ iso.}}
       \mu^{\otimes N}\,\widetilde U Q_N\widetilde U^\dagger,
   \label{eq:source-chain-decomposition}
 \end{equation}
-where $\simeq_{\mathrm{LU}}$ denotes local-unitary equivalence through the
-single-site unitaries of Proposition~4.13, and $\widetilde U$ is a sequential
-circuit assembled from the pairwise fusion maps.  The same passage asserts
+where $\simeq_{\mathrm{loc.\ iso.}}$ denotes the source's local-isometry
+relation from Proposition~4.13, and $\widetilde U$ is a sequential circuit
+assembled from the pairwise fusion maps.
+
+\paragraph{Local fix (rectangular vertical map).}
+The retained nonzero sectors may have smaller dimension than the original
+one-site space.  Accordingly, the formal vertical map is a rectangular
+retained-row coisometry, and local equivalence means the pair of exact forward
+and reconstruction equations, not conjugation by a square unitary.  This
+point is documented in
+\path{docs/paper-gaps/cpgsv17_vertical_isometry_zero_sector.tex}.
+
+The same passage asserts
 \begin{equation}
   [\mu^{\otimes N},\widetilde U Q_N\widetilde U^\dagger]=0.
   \label{eq:source-commutator}
@@ -46,7 +56,7 @@ length-independent form stated at lines~1013--1016:
 where $H_N$ is a translationally invariant commuting nearest-neighbor
 Hamiltonian and the $P_i^{(N)}$ are orthogonal projections.
 
-\section{The formalized recursion through fixed labels}
+\section{The formalized recursion and all-label density decomposition}
 
 For terminal orthogonal projections $P_\gamma$, one pairwise fusion step is
 the direct sum
@@ -78,7 +88,8 @@ The pairwise fusion identity therefore gives the well-typed equality
 \end{equation}
 Moreover, $U_{\alpha,\beta}U_{\alpha,\beta}^{\dagger}=I$ implies that
 $U_{\alpha,\beta}^{\dagger}Q_{\alpha,\beta}U_{\alpha,\beta}$ is an
-orthogonal projection whenever $Q_{\alpha,\beta}$ is one.  The older family
+orthogonal projection whenever $Q_{\alpha,\beta}$ is an orthogonal projection.
+The older family
 \leanid{MPOTensor.BNTFusionIsometryFamily} proves the same one-layer statement
 under the additional full-support hypothesis.  This is a specialization, not
 a construction with a different terminal space.
@@ -97,10 +108,12 @@ in \path{Papers/1606.00608/MPDO_O_L_A_.png} and
 \eqref{eq:one-layer-terminal-fusion} restores the latter contraction.
 
 The pairwise construction has now been iterated along an arbitrary finite
-chain with a fixed initial label.  A fusion history records the intermediate
-labels and multiplicity indices, its weight is the product of the selected
-diagonal entries of the structure matrices, and its terminal space is the
-bond space of its final label.  The resulting recursively typed operator is
+chain with a fixed initial label.  For total chain length $N\geq1$, the
+appended-label list has length $N-1$; the symbols $Q_N$ and $W_N$ below refer
+to this total chain length.  A fusion history records the intermediate labels
+and multiplicity indices, its weight is the product of the selected diagonal
+entries of the structure matrices, and its terminal space is the bond space
+of its final label.  The resulting recursively typed operator is
 \begin{equation}
   Q_N(P)=\bigoplus_h w(h)P_{\gamma(h)}.
   \label{eq:formalized-recursive-q}
@@ -111,36 +124,88 @@ product tensor to \eqref{eq:formalized-recursive-q}, with terminal block
 $P_\gamma=M_\gamma^{i,j}$.  Summing over equal physical indices proves the
 fixed-label terminal-trace identity
 \begin{equation}
-  \widetilde U_N\,
-    \operatorname{tr}(M_{\alpha,\boldsymbol\beta})\,
-    \widetilde U_N^\dagger
+  W_N\operatorname{tr}(M_{\alpha,\boldsymbol\beta})W_N^\dagger
   =Q_N\bigl((\operatorname{tr}(M_\gamma))_\gamma\bigr).
   \label{eq:formalized-fixed-label-trace}
 \end{equation}
 Under length independence every history weight is one; consequently
 $Q_N(P)$ is an orthogonal projection whenever every terminal matrix
-$P_\gamma$ is one.
+$P_\gamma$ is an orthogonal projection.  The source embedding
+$\widetilde U_N$ is $W_N^\dagger$, the adjoint of this retained-row
+coisometry; exact reverse fusion uses the active-support reconstruction of
+Appendix~C.4, lines~2020--2029, as documented in
+\path{docs/paper-gaps/cpsv16_figure11_fusion_coisometry.tex}.
+
+The vertical canonical form has now also been assembled over every initial
+label and every multiplicity coordinate.  For a sitewise configuration
+$c=((\alpha_n,q_n))_{n=0}^{N-1}$, put
+\begin{equation}
+  m(c)=\prod_{n=0}^{N-1}(\mu_{\alpha_n})_{q_n,q_n}.
+  \label{eq:mu-chain-weight}
+\end{equation}
+The first label is the initial label in the preceding recursion, and the
+remaining $N-1$ labels are the appended list.  If $W_{N,c}$ denotes the
+resulting retained-row sequential coisometry, set
+\begin{equation}
+  Q_{N,c}=Q_N\bigl((\operatorname{tr}(M_\gamma))_\gamma\bigr).
+  \label{eq:configuration-terminal-q}
+\end{equation}
+The retained density block is
+\begin{equation}
+  m(c)\,W_{N,c}^\dagger Q_{N,c}W_{N,c}.
+  \label{eq:retained-density-block}
+\end{equation}
+Thus the embedding $\widetilde U$ in
+\eqref{eq:source-chain-decomposition} is the adjoint $W_{N,c}^\dagger$ of the
+coisometry used by the formalization.  This orientation agrees with
+\path{docs/paper-gaps/cpsv16_figure11_fusion_coisometry.tex}.
+
+Let $V$ be the rectangular vertical coisometry of Proposition~4.13 and let
+$R_N$ be the direct sum of \eqref{eq:retained-density-block} over all
+configurations~$c$.  For every $N>0$, the formalization proves both
+\begin{equation}
+  V^{\otimes N}\rho^{(N)}(M)(V^{\otimes N})^\dagger=R_N
+  \quad\text{and}\quad
+  ((V^\dagger)^{\otimes N})R_NV^{\otimes N}=\rho^{(N)}(M).
+  \label{eq:formalized-all-label-density}
+\end{equation}
+\paragraph{Local fix (rectangular vertical map).}
+The reverse identity uses the exact one-site reconstruction from the retained
+nonzero sectors in Proposition~4.13 and Appendix~C.4, lines~2020--2029, not a
+full-support or square-unitary assumption.  The rectangular zero-sector point
+is documented in
+\path{docs/paper-gaps/cpgsv17_vertical_isometry_zero_sector.tex}.  Equation
+\eqref{eq:mu-chain-weight} is exactly the selected diagonal coefficient of
+$\mu^{\otimes N}$.  Hence
+\eqref{eq:formalized-all-label-density} proves the density identity at
+line~999 with the source chain length~$N$ and no additional
+compatibility hypothesis.
+
+The assembled operator is
+\leanid{MPOTensor.BNTFusionTensorClause.topologicalDensityOperatorSucc}.  Its
+argument is one less than the positive source chain length.  The
+source-facing existence theorem is
+\leanid{MPOTensor.exists_topologicalDensityDecomposition_of_isRFPViaTS}; it
+chooses one vertical decomposition and proves both equalities in
+\eqref{eq:formalized-all-label-density} for every positive~$N$.
 
 \section{Remaining proof}
 
-Equations \eqref{eq:source-chain-decomposition}--
-\eqref{eq:source-gibbs-decomposition} are not consequences of the fixed-label
-recursion alone.  A faithful proof still requires:
+The all-label density identity
+\eqref{eq:source-chain-decomposition} is now formalized.  It does not by itself
+imply the next commutator or the later spectral statement.  A faithful proof
+of the remainder still requires:
 \begin{enumerate}
-  \item the vertical-canonical assembly over the initial BNT labels, including
-    the factor $\mu^{\otimes N}$, and the identification of the assembled
-    matrix with the physical density operator in
-    \eqref{eq:source-chain-decomposition};
-  \item the commutator identity \eqref{eq:source-commutator} for that assembled
+  \item the commutator identity \eqref{eq:source-commutator} for the assembled
     operator;
   \item the terminal spectral decomposition and its compatibility with the
     recursive sectors;
   \item the construction of the commuting nearest-neighbor Hamiltonian and
     the projections in \eqref{eq:source-gibbs-decomposition}.
 \end{enumerate}
-These steps are tracked in \ghissue{3950}.  Until they are proved, the
-fixed-label recursion must not be cited as the vertical-canonical decomposition
-or the commuting Gibbs theorem of lines~995--1016.
+The formalized density identity must not be cited as the commutator or the
+commuting Gibbs theorem of lines~1001--1016 until these remaining steps are
+proved.
 
 \bibliographystyle{alpha}
 \bibliography{references}
