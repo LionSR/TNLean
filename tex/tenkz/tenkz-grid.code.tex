@@ -430,17 +430,24 @@
 % `bond label = {$D$ at 1-2}` or `bond label = {$D$}` (defaults to bond 1-2)
 \cs_new_protected:Npn \tenkz_bond_label:n #1
   { \tl_if_in:nnTF {#1} { at } { \tenkz_bond_label:w #1 \q_stop }
-      { \seq_put_right:Nn \l__tenkz_bondlabels_seq { {#1}{1}{2} } } }
+      { \tenkz_bond_label_store:nnn {#1}{1}{2} } }
 \cs_new_protected:Npn \tenkz_bond_label:w #1 at #2 - #3 \q_stop
-  { \seq_put_right:Nn \l__tenkz_bondlabels_seq { {#1}{#2}{#3} } }
+  { \tenkz_bond_label_store:nnn {#1}{#2}{#3} }
+\cs_new_protected:Npn \tenkz_bond_label_store:nnn #1#2#3
+  {
+    \seq_put_right:Nn \l__tenkz_bondlabels_seq { {#1}{#2}{#3} }
+    \__tenkz_model_record_mark:n
+      {form={label},at={bond-#2-#3},label={#1}}
+  }
 
 % ---------- cell commands (record; draw later) ----------
 \cs_new:Npn \tenkz_cell_key:
   { \int_use:N \l__tenkz_row_int - \int_use:N \l__tenkz_col_int }
 \cs_new_protected:Npn \tenkz_record:nnn #1#2#3
   {
-    \__tenkz_model_record_atom:n
-      {kind={#1},options={\exp_not:n{#2}},label={\exp_not:n{#3}}}
+    \__tenkz_model_record_atom:e
+      {kind={#1},at={\tenkz_cell_key:},
+       options={\exp_not:n{#2}},label={\exp_not:n{#3}}}
     \prop_put:Nen \l__tenkz_kind_prop  { \tenkz_cell_key: } {#1}
     \prop_put:Nen \l__tenkz_opts_prop  { \tenkz_cell_key: } {#2}
     \prop_put:Nen \l__tenkz_label_prop { \tenkz_cell_key: } {#3}
@@ -525,12 +532,22 @@
         { \l__tenkz_spanlabelpos_tl }
         { \exp_not:n{#3} }
         { \bool_if:NTF \l__tenkz_spanoptsvalid_bool {1}{0} } }
+    % Mark-record shadow; the span form vocabulary normalizes with the
+    % language-stage landing.
+    \__tenkz_model_record_mark:e
+      {form={span},style={\l__tenkz_spankind_tl},
+       at={\int_use:N \l__tenkz_row_int - \int_use:N \l__tenkz_col_int},
+       span={\l__tenkz_spanlength_tl},label={\exp_not:n{#3}}}
   }
 \NewDocumentCommand \tncut { O{} m }
   {
     \seq_put_right:Ne \l__tenkz_cuts_seq
       { { \int_use:N \l__tenkz_row_int }{ \int_use:N \l__tenkz_col_int }
         { \exp_not:n{#2} } }
+    \__tenkz_model_record_mark:e
+      {form={cut},
+       at={\int_use:N \l__tenkz_row_int - \int_use:N \l__tenkz_col_int},
+       label={\exp_not:n{#2}}}
   }
 
 % ---------- per-cell option keys ----------
@@ -1410,6 +1427,7 @@
   {
     \group_begin:
     \__tenkz_model_reset:
+    \__tenkz_model_record_picture:n { lang = {grid} }
     \prop_clear:N \l__tenkz_kind_prop
     \prop_clear:N \l__tenkz_label_prop
     \prop_clear:N \l__tenkz_opts_prop
