@@ -80,17 +80,6 @@ abbrev TopologicalSectorBond (H : BNTFusionTensorClause M) {N : ℕ}
     (q : TopologicalDensitySector H N) :=
   (n : Fin (N + 1)) → Fin (H.bondDim (q n).1)
 
-private def piSnocEquiv {N : ℕ} {α : Fin (N + 1) → Type*} :
-    ((n : Fin (N + 1)) → α n) ≃
-      ((n : Fin N) → α n.castSucc) × α (Fin.last N) where
-  toFun x := ⟨Fin.init x, x (Fin.last N)⟩
-  invFun x := Fin.snoc x.1 x.2
-  left_inv x := Fin.snoc_init_self x
-  right_inv x := by
-    apply Prod.ext
-    · exact Fin.init_snoc x.2 x.1
-    · exact Fin.snoc_last x.2 x.1
-
 /-- The bond dimension stored on the tensor-attached clause is the bond dimension of its
 fusion family. -/
 private def attachedBondEquiv (H : BNTFusionTensorClause M) (α : Fin H.labelCount) :
@@ -117,13 +106,14 @@ def fusionChainBondEquiv (H : BNTFusionTensorClause M) :
           H.toBNTFusionCoisometryFamily (topologicalFusionInitial H q)
             (topologicalFusionPrevious H q))
   | 0, q =>
-      (piSnocEquiv.trans (Equiv.uniqueProd _ _)).trans
+      (((Fin.snocEquiv _).symm.trans (Equiv.prodComm _ _)).trans
+        (Equiv.uniqueProd _ _)).trans
         (finCongr (by
           simp [topologicalFusionInitial, topologicalFusionPrevious,
             BNTFusionCoisometryFamily.fusionChainBondDim]
           rfl))
   | N + 1, q =>
-      piSnocEquiv.trans <|
+      ((Fin.snocEquiv _).symm.trans (Equiv.prodComm _ _)).trans <|
         (((fusionChainBondEquiv H
           (fun n : Fin (N + 1) => q n.castSucc)).prodCongr
             (attachedBondEquiv H (q (Fin.last (N + 1))).1)).trans finProdFinEquiv)
