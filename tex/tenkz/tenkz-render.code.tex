@@ -53,6 +53,15 @@
 % emitted verbatim.
 \cs_new_protected:Npn \__tenkz_render_stroke:nn #1#2
   { \__tenkz_ink_path:nn {#1} {#2} }
+% A coordinator-decided label node: #1 option tokens, #2 position tokens,
+% #3 content tokens.  The named form threads the positional node name --
+% pgf registers positional names before option processing, and name=
+% inside the option list perturbs border-path arithmetic by a scaled
+% point (see \__tenkz_ink_node_named:nnnnn).
+\cs_new_protected:Npn \__tenkz_render_labelnode:nnn #1#2#3
+  { \node[#1] at #2 {#3}; }
+\cs_new_protected:Npn \__tenkz_render_labelnode_named:nnnn #1#2#3#4
+  { \node[#1] (#2) at #3 {#4}; }
 
 % ---------- skins ------------------------------------------------------------
 % The six kernel skins resolve to the calibrated styles of tenkz-core; a
