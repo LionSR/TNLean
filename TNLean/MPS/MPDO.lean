@@ -79,6 +79,7 @@ import TNLean.MPS.MPDO.CompleteZipperFusionFourfold
 import TNLean.MPS.MPDO.CompleteZipperFusionInverse
 import TNLean.MPS.MPDO.CompleteZipperFusionPentagon
 import TNLean.MPS.MPDO.CompleteZipperFusionSupport
+import TNLean.MPS.MPDO.CyclicActiveAreaLaw
 import TNLean.MPS.MPDO.CyclicActiveCutCoordinates
 import TNLean.MPS.MPDO.CyclicActiveCutRegrouping
 import TNLean.MPS.MPDO.CyclicActiveCutStates
