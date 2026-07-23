@@ -25,5 +25,6 @@ CmdLine
   -n 38  # Punctuation-before-quotes heuristic.
   -n 39  # Double-space heuristic.
   -n 40  # Punctuation around inline math heuristic.
+  -n 35  # \mathrm{<cmdname>} heuristic; false positive on multi-letter subscripts.
   -n 45  # Display-math delimiter heuristic.
 }
