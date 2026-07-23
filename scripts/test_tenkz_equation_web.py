@@ -46,7 +46,10 @@ def _tenkzequation_bodies(source: str) -> list[str]:
 def _assert_source_linked_groups(repo_root: Path) -> None:
     """Pin every migrated sibling-picture row to its TeX source wrapper."""
     symmetry = (
-        repo_root / "blueprint/src/chapter/ch12_symmetry.tex"
+        repo_root / "blueprint/src/chapter/ch12_symmetry_virtual_and_cohomology.tex"
+    ).read_text(encoding="utf-8")
+    symmetry += (
+        repo_root / "blueprint/src/chapter/ch12_symmetry_string_order.tex"
     ).read_text(encoding="utf-8")
     symmetry_bodies = _tenkzequation_bodies(symmetry)
     symmetry_anchors = (

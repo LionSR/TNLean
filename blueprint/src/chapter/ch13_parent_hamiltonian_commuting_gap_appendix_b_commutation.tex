@@ -1,0 +1,614 @@
+\begin{theorem}[Commutation of adjacent two-site basic support projectors]
+    \label{thm:appendixB_two_site_basic_support_projectors_commute}
+    \lean{MPSTensor.AppendixBStructuralData.twoSiteBasicSupportProjection_commute_lifts}
+    \leanok
+    \uses{thm:appendixB_virtual_bond_projectors_commute,
+        thm:appendixB_physical_isometry_tensor_power,
+        thm:appendixB_two_site_basic_support_projector}
+    Let $(P_2)_{01}$ and $(P_2)_{12}$ be the two adjacent placements of the
+    two-site basic support projector on three physical sites.  Then
+    \[
+        (P_2)_{01}(P_2)_{12}=(P_2)_{12}(P_2)_{01}.
+    \]
+    This is the local three-site consequence of the parent-space construction
+    and the basic-vector form in
+    \cite[Definition~3.9, Equations~(3.16)--(3.18), and
+    Appendix~B]{Cirac2016MPDO_arXiv}.  It does not assert commutation for every
+    chain length.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The one-site map $U$ is an isometry.  The preceding range identity
+    therefore identifies the physical projector with the isometric transport
+    of the virtual bond projector:
+    \[
+        P_2=U^{\otimes2}P_\varphi (U^*)^{\otimes2}.
+    \]
+    On three sites, multiplication of the two adjacent transports cancels the
+    middle factors by $U^*U=1$.  Consequently their products are
+    \[
+        U^{\otimes3}P_{01}P_{12}(U^*)^{\otimes3}
+        \quad\text{and}\quad
+        U^{\otimes3}P_{12}P_{01}(U^*)^{\otimes3},
+    \]
+    respectively.  They agree by
+    Theorem~\ref{thm:appendixB_virtual_bond_projectors_commute}.
+    The following support-location schematic records the one-site embedding
+    and the two overlapping physical supports.  It does not depict the
+    doubled $U\cdots U^*$ operator networks in the identities above.
+    % Schematic formula: U_0--\varphi_{01}--U_1--\varphi_{12}--U_2, with
+    % virtual supports around each \varphi bond and overlapping physical
+    % supports around sites 01 and 12.
+    % Ink-to-index: U_r maps its two virtual half-indices to the upper physical
+    % index.  Each \varphi dot carries a rank-one virtual bond.  The inner red
+    % regions are P_{01},P_{12}; the two overlapping blue outlines are the
+    % transported physical supports (P_2)_{01},(P_2)_{12}.
+    % Contractions: the four U--\varphi joins are the internal virtual sums.
+    % The two outer virtual and three upper physical indices remain free.
+    % Boundary signature: (virtual-west, virtual-east, physical-up,
+    % physical-down)=(1,1,3,0).  Regions are annotations, not contractions.
+    % Source verdict: Equation (3.18) and II_RFP_MPS.png supply the local
+    % isometric bond geometry.  Lines 1305--1307 state only that RFP implies a
+    % nearest-neighbor commuting parent Hamiltonian immediately from the
+    % structure; the explicit adjacent-projector transport is a blueprint
+    % algebraic elaboration, and the schematic marks only its support geometry.
+    \begin{center}
+        \begin{tenkzfree}
+            \tnput[boundary, ports={east:virtual}]
+                {transportLeft}{(-12mm,0)}{}
+            \tnput[box, ports={west:virtual,east:virtual,north:physical}]
+                {transportUzero}{(0,0)}{U_0}
+            \tnput[dot, ports={west:virtual,east:virtual},
+                label pos=south]
+                {transportPhiZero}{(16mm,0)}{\varphi_{01}}
+            \tnput[box, ports={west:virtual,east:virtual,north:physical}]
+                {transportUone}{(32mm,0)}{U_1}
+            \tnput[dot, ports={west:virtual,east:virtual},
+                label pos=south]
+                {transportPhiOne}{(48mm,0)}{\varphi_{12}}
+            \tnput[box, ports={west:virtual,east:virtual,north:physical}]
+                {transportUtwo}{(64mm,0)}{U_2}
+            \tnput[boundary, ports={west:virtual}]
+                {transportRight}{(76mm,0)}{}
+            \tnput[boundary, ports={south:physical}]
+                {transportPhysicalZero}{(0,14mm)}{}
+            \tnput[boundary, ports={south:physical}]
+                {transportPhysicalOne}{(32mm,14mm)}{}
+            \tnput[boundary, ports={south:physical}]
+                {transportPhysicalTwo}{(64mm,14mm)}{}
+            \tnjoin[name=transportOuterLeft]
+                {transportLeft.east}{transportUzero.west}
+            \tnjoin[name=transportZeroLeft]
+                {transportUzero.east}{transportPhiZero.west}
+            \tnjoin[name=transportZeroRight]
+                {transportPhiZero.east}{transportUone.west}
+            \tnjoin[name=transportOneLeft]
+                {transportUone.east}{transportPhiOne.west}
+            \tnjoin[name=transportOneRight]
+                {transportPhiOne.east}{transportUtwo.west}
+            \tnjoin[name=transportOuterRight]
+                {transportUtwo.east}{transportRight.west}
+            \tnjoin[name=transportPhysicalJoinZero]
+                {transportUzero.north}{transportPhysicalZero.south}
+            \tnjoin[name=transportPhysicalJoinOne]
+                {transportUone.north}{transportPhysicalOne.south}
+            \tnjoin[name=transportPhysicalJoinTwo]
+                {transportUtwo.north}{transportPhysicalTwo.south}
+            \tnregion[slot=selected, label={$\supp(P_{01})$},
+                label pos=south,
+                name=transportVirtualZero]{transportPhiZero}
+            \tnregion[slot=selected, label={$\supp(P_{12})$},
+                label pos=south,
+                name=transportVirtualOne]{transportPhiOne}
+            \tnregion[slot=secondary, outline,
+                label={$\supp((P_2)_{01})$},
+                label pos=north west, name=transportPhysicalRegionZero]
+                {transportUzero,transportUone,transportZeroLeft,
+                 transportZeroRight,transportVirtualZero}
+            \tnregion[slot=secondary, outline,
+                label={$\supp((P_2)_{12})$},
+                label pos=north east, name=transportPhysicalRegionOne]
+                {transportUone,transportUtwo,transportOneLeft,
+                 transportOneRight,transportVirtualOne}
+        \end{tenkzfree}
+    \end{center}
+\end{proof}
+
+\begin{definition}[Appendix B \(AX\) coefficient representative]
+    \label{def:appendixB_qax}
+    \lean{MPSTensor.AppendixBStructuralData.appendixBQAXOnCoeffSpace}
+    \leanok
+    \uses{def:appendixB_two_site_basic_space, def:parent_interaction}
+    The \(AX\) coefficient-space representative is, before the \(AX\)-lift,
+    the canonical two-site parent interaction of the core tensor:
+    \[
+        \widehat Q_{AX}=q_2(A_{\mathrm{core}}).
+    \]
+    The source projector \(Q_{AX}\) of Definition~D.2 acts on
+    \(\mathcal H_A\otimes\mathcal H_X\).  The displayed operator is the
+    two-site coefficient representative that will be placed on the \(AX\) face;
+    it is not by itself the construction of that source projector.
+\end{definition}
+
+\begin{definition}[Appendix B \(XB\) coefficient representative]
+    \label{def:appendixB_qxb}
+    \lean{MPSTensor.AppendixBStructuralData.appendixBQXBOnCoeffSpace}
+    \leanok
+    \uses{def:appendixB_qax}
+    The \(XB\) coefficient-space representative is, before the \(XB\)-lift, the
+    same coefficient-space representative:
+    \[
+        \widehat Q_{XB}=\widehat Q_{AX}.
+    \]
+    The source projector \(Q_{XB}\) of Definition~D.2 acts on
+    \(\mathcal H_X\otimes\mathcal H_B\).  The displayed operator is the
+    coefficient representative later placed on the \(XB\) face.
+\end{definition}
+
+\begin{theorem}[The (AX) factor action]
+    \label{thm:appendixB_qax_factor_action}
+    \lean{MPSTensor.AppendixBStructuralData.appendixBQAX_factor_action}
+    \leanok
+    \uses{def:appendixB_qax, thm:pair_lift_kronecker_matrices}
+    On the homogeneous three-single-site coefficient space
+    $(\C^d)^{\otimes3}$, the hatted Appendix~B (AX) representative acts as
+    \[
+        [\widehat Q_{AX}]_{AX}=[\widehat Q_{AX}]\otimes I_d.
+    \]
+    This equation gives the coefficient-factor specialization of the left
+    local action in \cite[Definition~D.2]{Cirac2016MPDO_arXiv}.  It does not
+    construct a projector for an arbitrary factorization
+    $\mathcal H_A\otimes\mathcal H_X\otimes\mathcal H_B$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Apply the left identity in
+    Theorem~\ref{thm:pair_lift_kronecker_matrices} to $\widehat Q_{AX}$.
+\end{proof}
+
+\begin{theorem}[The (XB) factor action]
+    \label{thm:appendixB_qxb_factor_action}
+    \lean{MPSTensor.AppendixBStructuralData.appendixBQXB_factor_action}
+    \leanok
+    \uses{def:appendixB_qxb, thm:pair_lift_kronecker_matrices}
+    On the homogeneous three-single-site coefficient space
+    $(\C^d)^{\otimes3}$, the hatted Appendix~B (XB) representative acts as
+    \[
+        [\widehat Q_{XB}]_{XB}=I_d\otimes[\widehat Q_{XB}].
+    \]
+    This equation gives the coefficient-factor specialization of the right
+    local action in \cite[Definition~D.2]{Cirac2016MPDO_arXiv}.  It does not
+    construct a projector for an arbitrary factorization
+    $\mathcal H_A\otimes\mathcal H_X\otimes\mathcal H_B$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Apply the right identity in
+    Theorem~\ref{thm:pair_lift_kronecker_matrices} to $\widehat Q_{XB}$.
+\end{proof}
+
+\begin{lemma}[Appendix B coefficient representatives and the parent interaction]
+    \label{lem:appendixB_qax_qxb_parent_interaction}
+    \lean{MPSTensor.AppendixBStructuralData.appendixBQAXOnCoeffSpace_eq_parentInteraction}
+    \lean{MPSTensor.AppendixBStructuralData.appendixBQXBOnCoeffSpace_eq_parentInteraction}
+    \leanok
+    \uses{lem:appendixB_basis_change_parent_interaction, def:appendixB_qax,
+        def:appendixB_qxb}
+    As coefficient-space representatives,
+    \[
+        \widehat Q_{AX}=q_2(A),\qquad \widehat Q_{XB}=q_2(A).
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Both operators are \(q_2(A_{\mathrm{core}})\), and the Appendix~B basis
+    change leaves \(q_2\) unchanged.
+\end{proof}
+
+\begin{lemma}[Appendix B two-site representative idempotents]
+    \label{lem:appendixB_qax_qxb_idempotent}
+    \lean{MPSTensor.AppendixBStructuralData.appendixBQAXOnCoeffSpace_idempotent}
+    \lean{MPSTensor.AppendixBStructuralData.appendixBQXBOnCoeffSpace_idempotent}
+    \leanok
+    \uses{lem:parent_interaction_idempotent,
+        lem:appendixB_qax_qxb_parent_interaction}
+    The two Appendix~B two-site coefficient representatives are idempotent:
+    \[
+        \widehat Q_{AX}^{2}=\widehat Q_{AX},\qquad
+        \widehat Q_{XB}^{2}=\widehat Q_{XB}.
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    By the preceding identification, both representatives are the canonical
+    two-site parent interaction \(q_2(A)\).  The latter is an orthogonal
+    projector, hence is idempotent.
+\end{proof}
+
+\begin{theorem}[Appendix B overlapping two-site commutation]
+    \label{thm:appendixB_overlapping_two_site_commutation}
+    \lean{MPSTensor.AppendixBStructuralData.hasOverlappingTwoSiteCommutation}
+    \leanok
+    \uses{thm:appendixB_two_site_basic_support_projectors_commute,
+        thm:appendixB_two_site_basic_support_projector,
+        lem:appendixB_qax_qxb_idempotent,
+        def:overlapping_two_site_supports}
+    The two Appendix~B coefficient representatives satisfy
+    \[
+        \widehat Q_{AX}^{\,2}=\widehat Q_{AX},
+        \qquad
+        \widehat Q_{XB}^{\,2}=\widehat Q_{XB},
+    \]
+    and their adjacent actions on the common three-site coefficient space
+    commute:
+    \[
+        (\widehat Q_{AX})_{AX}(\widehat Q_{XB})_{XB}
+        =
+        (\widehat Q_{XB})_{XB}(\widehat Q_{AX})_{AX}.
+    \]
+    Thus they satisfy the algebraic overlapping two-site condition of
+    Definition~\ref{def:overlapping_two_site_supports}.  This is the
+    coefficient-space analogue of the projector-and-commutator part of
+    \cite[Definition~D.2]{Cirac2016MPDO_arXiv}.  The hatted maps have not yet
+    been identified with the source projectors on the explicitly factored
+    spaces.  By itself the result does not prove the kernel-intersection
+    equation in that definition and makes no assertion for every chain length.
+    The coefficient-space kernel equation is established in the next two
+    results.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Both coefficient representatives are the complement $1-P_2$ of the
+    two-site basic support projector.  Their idempotency was established in
+    Lemma~\ref{lem:appendixB_qax_qxb_idempotent}.  Since the two adjacent lifts
+    of $P_2$ commute, their complementary lifts commute as well.
+\end{proof}
+
+\begin{theorem}[Three-site intersection of adjacent parent kernels]
+    \label{thm:three_site_ground_space_adjacent_parent_kernels}
+    \lean{MPSTensor.adjacent_localTerm_eq_zero_iff_mem_groundSpace_succ}
+    \lean{MPSTensor.groundSpace_three_eq_adjacent_twoSite_parent_kernels}
+    \leanok
+    \uses{thm:local_term_two_three_ax_xb_lifts,
+        thm:ground_space_intersection, def:parent_interaction, def:injective}
+    If $A$ is injective, then
+    \[
+        G_3(A)
+        =
+        \ker\bigl(q_2(A)_{AX}\bigr)
+        \cap
+        \ker\bigl(q_2(A)_{XB}\bigr).
+    \]
+    More generally, on $L+1$ sites, simultaneous annihilation by the two
+    adjacent length-$L$ parent interactions is equivalent to membership in
+    $G_{L+1}(A)$ whenever $A$ is injective and $L>1$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    By Theorem~\ref{thm:ground_space_intersection}, a three-site vector belongs
+    to $G_3(A)$ exactly when its restrictions to both adjacent pairs belong to
+    $G_2(A)$.  Since $\ker q_2(A)=G_2(A)$, this is equivalent to annihilation
+    by both adjacent terms.  Theorem~\ref{thm:local_term_two_three_ax_xb_lifts}
+    identifies these terms with the two displayed lifts.
+\end{proof}
+
+\begin{theorem}[Appendix B coefficient-space analogue of the Appendix D kernel datum]
+    \label{thm:appendixB_definition_d2_coefficient_analogue}
+    \lean{MPSTensor.AppendixBStructuralData.hasAppendixD2ParentCommutingHamiltonian}
+    \lean{MPSTensor.rfp_hasAppendixD2ParentCommutingHamiltonian_of_leftCanonical}
+    \leanok
+    \uses{thm:appendixB_overlapping_two_site_commutation,
+        thm:three_site_ground_space_adjacent_parent_kernels,
+        lem:appendixB_qax_qxb_parent_interaction}
+    Let $A$ be injective and let an Appendix~B structural datum be fixed.  Put
+    \[
+        \widehat K_{AXB}=G_3(A),\qquad
+        \widehat Q_{AX}=q_2(A),\qquad \widehat Q_{XB}=q_2(A),
+    \]
+    with the two copies of $q_2(A)$ lifted to the indicated faces of the
+    three-site coefficient space.  Then
+    \[
+        [ (\widehat Q_{AX})_{AX}, (\widehat Q_{XB})_{XB}]=0,
+        \qquad
+        \widehat K_{AXB}
+        =\ker\bigl((\widehat Q_{AX})_{AX}\bigr)
+          \cap\ker\bigl((\widehat Q_{XB})_{XB}\bigr).
+    \]
+    These are the coefficient-space analogues of the idempotence, commutation,
+    and kernel-intersection equations in
+    \cite[Definition~D.2]{Cirac2016MPDO_arXiv}.  The hatted operators are not
+    identified here with the source projectors on
+    $\mathcal H_A\otimes\mathcal H_X$ and
+    $\mathcal H_X\otimes\mathcal H_B$.  For a normal left-canonical RFP tensor,
+    injectivity follows from the RFP structural theorem and is not an
+    additional hypothesis.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Idempotency and commutation are
+    Theorem~\ref{thm:appendixB_overlapping_two_site_commutation}.  The two
+    coefficient representatives are $q_2(A)$, and
+    Theorem~\ref{thm:three_site_ground_space_adjacent_parent_kernels} supplies
+    the remaining kernel equation.
+    % Source-scope note: this Appendix D corollary is not the argument printed
+    % for RFP => NNCPH.  The proof at source lines 1305--1307 instead refers
+    % directly to the structural characterization.
+\end{proof}
+
+\begin{theorem}[Transport of the three-site commutator]
+    \label{thm:three_site_commutator_chain_transport}
+    \lean{MPSTensor.cyclicRestrictₗ_three_localTerm_left}
+    \lean{MPSTensor.cyclicRestrictₗ_three_localTerm_right}
+    \lean{MPSTensor.localTerm_adjacent_twoSite_commute_of_threeSite_zero_one_commute}
+    \leanok
+    \uses{def:local_term_parent}
+    Suppose the first two length-two parent interactions commute on the
+    three-site chain:
+    \[
+        h_0^{(3)}h_1^{(3)}=h_1^{(3)}h_0^{(3)}.
+    \]
+    Then, for every $N>2$ and every $i\in\mathbb Z/N\mathbb Z$, the two
+    adjacent translates commute:
+    \[
+        h_i^{(N)}h_{i+1}^{(N)}=h_{i+1}^{(N)}h_i^{(N)}.
+    \]
+    For each exterior configuration $\tau$, let $R_{i,\tau}^{(3)}$ restrict to
+    the cyclic three-site window beginning at $i$.  It intertwines the two
+    $N$-site terms with the two three-site terms:
+    \[
+        R_{i,\tau}^{(3)}h_i^{(N)}=h_0^{(3)}R_{i,\tau}^{(3)},\qquad
+        R_{i,\tau}^{(3)}h_{i+1}^{(N)}=h_1^{(3)}R_{i,\tau}^{(3)}.
+    \]
+    % Formula and contraction set: the two intertwining identities above are
+    % the complete transport statement.  Restriction fixes every exterior
+    % physical index to tau and leaves the three-site window free; there is no
+    % tensor-network contraction beyond those algebraic evaluations.
+    % Ink-to-index and boundary signature after demotion: there is no diagram
+    % ink.  R_{i,tau}^{(3)} has an N-site input and a three-site output, while
+    % h_i^{(N)},h_{i+1}^{(N)} and h_0^{(3)},h_1^{(3)} act on the spaces shown in
+    % the displayed equations.
+    % Source verdict: lines 1305--1307 only call RFP=>NNCPH immediate from the
+    % structural characterization.  They do not state the explicit adjacent
+    % projector or restriction lemmas used here; those are blueprint algebraic
+    % elaborations.  The old ring schematic added unsupported source ink.
+    Thus the same local $A\!X\!B$ calculation is placed at every cyclic
+    translate through the two restriction identities above.
+    The hypothesis $N>2$ is essential to this transport: at $N=2$ the two
+    cyclic windows contain the same sites in opposite orders.  This case
+    is not part of \cite[Theorem~3.10]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:local_term_parent}
+    Restrict an $N$-site vector to the cyclic window $(i,i+1,i+2)$ while
+    holding all other physical indices fixed.  Window extraction and
+    replacement identify the two restricted local terms with
+    $h_0^{(3)}$ and $h_1^{(3)}$.  Apply the three-site commutator to the
+    restricted vector and then evaluate at the original three-site
+    configuration.  Replacing a window by the values extracted from that
+    configuration recovers the original $N$-site configuration.
+\end{proof}
+
+\begin{theorem}[Appendix B adjacent commutation on periodic chains]
+    \label{thm:appendixB_adjacent_chain_commutation}
+    \lean{MPSTensor.AppendixBStructuralData.adjacent_twoSite_localTerms_commute}
+    \leanok
+    \uses{thm:appendixB_overlapping_two_site_commutation,
+        thm:three_site_commutator_chain_transport}
+    For every Appendix~B structural datum and every periodic chain of length
+    $N>2$, the adjacent translated length-two parent interactions commute.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Theorem~\ref{thm:appendixB_overlapping_two_site_commutation} gives the
+    three-site commutator, and
+    Theorem~\ref{thm:three_site_commutator_chain_transport} places it at every
+    adjacent pair on the periodic chain.
+\end{proof}
+
+\begin{definition}[Appendix B local-projector family]
+    \label{def:appendixB_chain_local_projectors}
+    \lean{MPSTensor.AppendixBStructuralData.hasProductPairLocalProjectors}
+    \leanok
+    \uses{thm:appendixB_adjacent_chain_commutation,
+        lem:nncph_from_adjacent_two_site_commutation}
+    For an Appendix~B structural datum and a periodic chain of length $N>2$,
+    set
+    \[
+        p_i=h_i^{(N)},\qquad i\in\mathbb Z/N\mathbb Z,
+    \]
+    where $h_i^{(N)}$ is the translated length-two parent interaction.  These
+    maps are idempotent and commute pairwise: adjacent commutation follows from
+    Theorem~\ref{thm:appendixB_adjacent_chain_commutation}, while disjoint
+    length-two interactions commute by locality.
+\end{definition}
+
+\begin{theorem}[Left-canonical RFP commutation and zero energy]
+    \label{thm:left_canonical_rfp_chain_commutation}
+    \lean{MPSTensor.AppendixBStructuralData.isNNCPH}
+    \lean{MPSTensor.rfp_implies_nncph_of_leftCanonical}
+    \lean{MPSTensor.rfp_implies_nncph_ground_state_of_leftCanonical}
+    \leanok
+    \uses{def:appendixB_chain_local_projectors}
+    A normal left-canonical renormalization fixed-point tensor of nonzero
+    virtual dimension has pairwise
+    commuting length-two parent interactions on every periodic chain of length
+    $N>2$, and its periodic matrix product vector is annihilated by every such
+    interaction.  The removal of the left-canonical hypothesis and the
+    ground-space spanning equation in
+    \cite[Definition~3.9]{Cirac2016MPDO_arXiv} remain separate.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The Appendix~B structural theorem supplies the datum used in
+    Definition~\ref{def:appendixB_chain_local_projectors}.  Its commuting
+    idempotents are precisely the translated parent interactions.  The
+    standard frustration-free identity shows that each interaction annihilates
+    the periodic matrix product vector.
+\end{proof}
+
+\begin{lemma}[Appendix B overlapping condition from the lifted commutator]
+    \label{lem:appendixB_overlapping_condition_from_lift_commutator}
+    \lean{MPSTensor.AppendixBStructuralData.hasOverlappingTwoSiteCommutation_of_commute_lifts}
+    \leanok
+    \uses{def:overlapping_two_site_supports, lem:appendixB_qax_qxb_idempotent}
+    Suppose the lifted \(AX\) and \(XB\) representatives commute:
+    \[
+        (\widehat Q_{AX})_{AX}(\widehat Q_{XB})_{XB}
+        =
+        (\widehat Q_{XB})_{XB}(\widehat Q_{AX})_{AX}.
+    \]
+    Then \(\widehat Q_{AX}\) and \(\widehat Q_{XB}\) satisfy the algebraic
+    overlapping two-site condition of
+    Definition~\ref{def:overlapping_two_site_supports}.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    The idempotency clauses are supplied by
+    Lemma~\ref{lem:appendixB_qax_qxb_idempotent}.  The only remaining clause
+    in Definition~\ref{def:overlapping_two_site_supports} is exactly the
+    displayed lifted commutator.
+\end{proof}
+
+\begin{lemma}[Definition D.2 projectors identified with Appendix B representatives]
+    \label{lem:appendixB_d2_projectors_identified_with_representatives}
+    \lean{MPSTensor.AppendixBStructuralData.hasOverlappingTwoSiteCommutation_of_appendixD2_identified_projectors}
+    \lean{MPSTensor.AppendixBStructuralData.localTerm_two_three_zero_one_commute_of_appendixD2_identified_projectors}
+    \leanok
+    \uses{def:overlapping_two_site_supports, def:appendixB_qax,
+        def:appendixB_qxb, lem:appendixB_overlapping_condition_parent_terms}
+    Let $Q_{AX}$ and $Q_{XB}$ be the two-site coefficient-space transports of
+    source projectors satisfying the Definition~D.2 local condition on
+    $A X B$.  If these transported projectors agree with the Appendix~B
+    coefficient representatives,
+    \[
+        Q_{AX}=\widehat Q_{AX},
+        \qquad
+        Q_{XB}=\widehat Q_{XB},
+    \]
+    then $\widehat Q_{AX}$ and $\widehat Q_{XB}$ satisfy the algebraic
+    overlapping two-site condition of
+    Definition~\ref{def:overlapping_two_site_supports}.  Consequently,
+    \[
+        h_0^{(3)}(A,2)h_1^{(3)}(A,2)
+        =
+        h_1^{(3)}(A,2)h_0^{(3)}(A,2).
+    \]
+    % Maintainer note: this conditional identification statement does not
+    % construct $Q_{AX}$ and $Q_{XB}$ from the Appendix~B basic-vector form.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Rewriting the two projectors in the Definition~D.2 condition as
+    $\widehat Q_{AX}$ and $\widehat Q_{XB}$ gives the algebraic overlapping
+    condition.  The three-site commutation is then
+    Lemma~\ref{lem:appendixB_overlapping_condition_parent_terms}.
+\end{proof}
+
+\begin{lemma}[Three-site lifts of the Appendix B coefficient representatives]
+    \label{lem:appendixB_three_site_parent_lifts}
+    \lean{MPSTensor.AppendixBStructuralData.localTerm_two_three_zero_eq_appendixBQAXOnCoeffSpace_lift}
+    \lean{MPSTensor.AppendixBStructuralData.localTerm_two_three_one_eq_appendixBQXBOnCoeffSpace_lift}
+    \leanok
+    \uses{thm:local_term_two_three_ax_xb_lifts,
+        lem:appendixB_qax_qxb_parent_interaction}
+    On the three-site \(A,X,B\) window, the two adjacent length-two local terms
+    are the two local lifts
+    \[
+        h_0^{(3)}(A,2)=(\widehat Q_{AX})_{AX},\qquad
+        h_1^{(3)}(A,2)=(\widehat Q_{XB})_{XB}.
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Apply the three-site local-term identities to \(q_2(A)\), and
+    replace \(q_2(A)\) by \(\widehat Q_{AX}\) or \(\widehat Q_{XB}\) using the
+    preceding two-site identifications.
+\end{proof}
+
+\begin{lemma}[Appendix B overlapping condition gives three-site local-term commutation]
+    \label{lem:appendixB_overlapping_condition_parent_terms}
+    \lean{MPSTensor.AppendixBStructuralData.localTerm_two_three_zero_one_commute_of_overlapping}
+    \leanok
+    \uses{lem:appendixB_three_site_parent_lifts}
+    If the Appendix~B \(AX\) and \(XB\) coefficient representatives satisfy the
+    overlapping two-site commutation datum
+    \[
+        \widehat Q_{AX}^2=\widehat Q_{AX},\qquad
+        \widehat Q_{XB}^2=\widehat Q_{XB},\qquad
+        (\widehat Q_{AX})_{AX}(\widehat Q_{XB})_{XB}
+        =
+        (\widehat Q_{XB})_{XB}(\widehat Q_{AX})_{AX},
+    \]
+    then the corresponding first two translated length-two local terms on the
+    three-site window commute:
+    \[
+        h_0^{(3)}(A,2)h_1^{(3)}(A,2)
+        =
+        h_1^{(3)}(A,2)h_0^{(3)}(A,2).
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    By Lemma~\ref{lem:appendixB_three_site_parent_lifts}, the two translated
+    local terms are exactly the \(AX\) and \(XB\) lifts of
+    \(\widehat Q_{AX}\) and \(\widehat Q_{XB}\).  The displayed equality is
+    therefore the commutation clause of the overlapping two-site datum.
+\end{proof}
+
+\begin{lemma}[Appendix B lifted commutator gives three-site local-term commutation]
+    \label{lem:appendixB_lift_commutator_parent_terms}
+    \lean{MPSTensor.AppendixBStructuralData.localTerm_two_three_zero_one_commute_of_commute_lifts}
+    \lean{MPSTensor.AppendixBStructuralData.localTerm_two_three_zero_one_commute_of_appendixD2}
+    \leanok
+    \uses{lem:appendixB_overlapping_condition_from_lift_commutator,
+        lem:appendixB_overlapping_condition_parent_terms}
+    If the Appendix~B \(AX\) and \(XB\) coefficient representatives satisfy the lifted
+    Definition~D.2 commutator
+    \[
+        (\widehat Q_{AX})_{AX}(\widehat Q_{XB})_{XB}
+        =
+        (\widehat Q_{XB})_{XB}(\widehat Q_{AX})_{AX},
+    \]
+    then the corresponding first two translated length-two local terms on the
+    three-site window commute:
+    \[
+        h_0^{(3)}(A,2)h_1^{(3)}(A,2)
+        =
+        h_1^{(3)}(A,2)h_0^{(3)}(A,2).
+    \]
+    The same conclusion holds if one supplies a Definition~D.2-shaped local
+    condition whose two operators are these coefficient-space representatives,
+    rather than the source projectors themselves.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    The lifted commutator, together with the Appendix~B idempotency already
+    recorded above, gives the overlapping two-site commutation datum.  A supplied
+    Definition~D.2-shaped local condition on the coefficient representatives
+    implies the same conclusion by retaining its commutation clause and not using
+    the kernel-intersection condition
+    \[
+        K_{AXB}
+        =
+        \ker\bigl((\widehat Q_{AX})_{AX}\bigr)
+        \cap
+        \ker\bigl((\widehat Q_{XB})_{XB}\bigr).
+    \]
+\end{proof}
