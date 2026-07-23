@@ -18,10 +18,16 @@
 \msg_new:nnn {tenkz}{render-route}
   { [TKZ-RENDER-ROUTE]~no~route~named~'#1' }
 
+% No layers: ink order is the fixed class order wires -> atoms -> marks,
+% stated here as the stage invariant.  A backgrounds layer is the paint-order
+% crutch of token-ordered emitters; a model-ordered renderer never needs one.
 % ---------- ink primitives (the only mark-makers) ---------------------------
 % #1 tikz option list, #2 x dim expr, #3 y dim expr, #4 node content
+% Coordinates stay UNBRACED: a braced component forces the full pgfmath
+% parse and loses one scaled point against the direct-dimension shortcut;
+% callers never pass top-level commas.
 \cs_new_protected:Npn \__tenkz_ink_node:nnnn #1#2#3#4
-  { \node[#1] at ( {#2} , {#3} ) {#4}; }
+  { \node[#1] at ( #2 , #3 ) {#4}; }
 % #1 tikz option list, #2 full path specification
 \cs_new_protected:Npn \__tenkz_ink_path:nn #1#2
   { \draw[#1] #2 ; }
@@ -116,20 +122,42 @@
       { \msg_error:nnn {tenkz}{render-route} {#1} }
   }
 
-% ---------- the migration experiment ----------------------------------------
-% OFF by default.  When set, qualifying legacy paths hand their ink to this
-% stage; the toggle is an internal experiment hook, not public syntax.
-\bool_new:N \g__tenkz_experiment_render_bool
-\cs_new_protected:Npn \tenkz@experimentrender
-  { \bool_gset_true:N \g__tenkz_experiment_render_bool }
+% ---------- named atoms -------------------------------------------------------
 % #1 placement id, #2 the caller's complete option list (style, hue, name)
+% The pt-exact entry: the caller passes the frame-mapped point verbatim
+% (\dim_use strings), so the emitted coordinate is byte-identical to the
+% legacy node's -- the pitch-fraction placement registered alongside it
+% serves geometry queries, not ink.  The fraction route-trip is exact only
+% to one scaled point, which the pixel gate rejects.
+% Positional node names: pgf registers a positional (name) before option
+% processing; name= inside the option list perturbs the border-path
+% arithmetic by a scaled point, which the pixel gate sees.
+\cs_new_protected:Npn \__tenkz_ink_node_named:nnnnn #1#2#3#4#5
+  { \node[#1] (#2) at ( #3 , #4 ) {#5}; }
+\cs_new_protected:Npn \__tenkz_render_atom_named_pt:nnnn #1#2#3#4
+  { \__tenkz_ink_node_named:nnnnn {#4} {#3} {#1} {#2} { } }
+\cs_new_protected:Npn \__tenkz_render_atom_labelled_pt:nnnnn #1#2#3#4#5
+  { \__tenkz_ink_node_named:nnnnn {#4} {#3} {#1} {#2} {#5} }
 \cs_new_protected:Npn \__tenkz_render_atom_named:nn #1#2
   {
     \__tenkz_geom_xy:nNN {#1} \l__tenkz_render_x_tl \l__tenkz_render_y_tl
     \__tenkz_ink_node:nnnn {#2}
-      { \l__tenkz_render_x_tl \tenkz@pitch }
-      { \l__tenkz_render_y_tl \tenkz@pitch }
+      { \fp_to_decimal:n { \l__tenkz_render_x_tl * \dim_to_fp:n { \tenkz@pitch } } pt }
+      { \fp_to_decimal:n { \l__tenkz_render_y_tl * \dim_to_fp:n { \tenkz@pitch } } pt }
       { }
+  }
+
+% ---------- labelled atoms ----------------------------------------------------
+% #1 placement id, #2 the caller's complete option list (style, hue, name),
+% #3 the node content -- the caller owns the tokens, so the typeset body is
+% identical to the legacy node's
+\cs_new_protected:Npn \__tenkz_render_atom_labelled:nnn #1#2#3
+  {
+    \__tenkz_geom_xy:nNN {#1} \l__tenkz_render_x_tl \l__tenkz_render_y_tl
+    \__tenkz_ink_node:nnnn {#2}
+      { \fp_to_decimal:n { \l__tenkz_render_x_tl * \dim_to_fp:n { \tenkz@pitch } } pt }
+      { \fp_to_decimal:n { \l__tenkz_render_y_tl * \dim_to_fp:n { \tenkz@pitch } } pt }
+      {#3}
   }
 
 % ---------- labels ------------------------------------------------------------

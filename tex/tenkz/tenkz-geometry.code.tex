@@ -263,6 +263,11 @@
   }
 
 % ---------- silhouettes as support functions --------------------------------
+% Wire-endpoint contract for the coming weight vocabulary: each strand of a
+% double/bundle wire trims against the support ALONG ITS OWN OFFSET LINE,
+% never the centerline -- for a circle of radius r and lateral offset g the
+% endpoint sits at (+-g, -sqrt(r^2 - g^2)).  The support query answers this
+% generally; no per-shape anchor tables.
 % Support of a skin rotated by theta, queried along direction d, in pitch
 % units.  Arguments are family, half-extents, corner radius, theta, and d.
 % A roundrect caller supplies the radius of the live rendered skin, normalized
