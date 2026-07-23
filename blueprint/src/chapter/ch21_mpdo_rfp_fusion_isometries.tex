@@ -1623,6 +1623,18 @@ separate step.
 \begin{theorem}[All-label topological-projector density identity]%
     \label{thm:mpdo_topological_projector_density}
     \lean{MPOTensor.exists_topologicalProjectorDensity_of_isRFPViaTS}
+    \lean{MPOTensor.BNTFusionCoisometryFamily.%
+        conjTranspose_sequentialFusionCoisometry_mul_recursiveProjectorQ_mul}
+    \lean{MPOTensor.BNTFusionCoisometryFamily.%
+        conjTranspose_sequentialFusionCoisometry_mul_recursiveProjectorQ_physTrace_mul}
+    \lean{MPOTensor.BNTFusionTensorClause.%
+        changePhysicalBasis_conjTranspose_verticalCoisometry}
+    \lean{MPOTensor.BNTFusionTensorClause.%
+        reindex_mpo_changePhysicalBasis_eq_allLabelDensity}
+    \lean{MPOTensor.BNTFusionTensorClause.%
+        allLabelDensity_eq_verticalWeightTensorPower_mul_topologicalProjectorFactor}
+    \lean{MPOTensor.BNTFusionTensorClause.%
+        reindex_mpo_changePhysicalBasis_eq_verticalWeightTensorPower_mul}
     \leanok
     \uses{def:mpdo_topological_projector_density,
         thm:mpdo_rfp_to_bnt_fusion_tensor,

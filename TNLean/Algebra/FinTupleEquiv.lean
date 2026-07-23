@@ -9,11 +9,12 @@ import Mathlib.Logic.Equiv.Fin.Basic
 import Mathlib.Tactic.FinCases
 
 /-!
-# Equivalences for finite tuples
+# Equivalences for finite tuples and dependent coordinates
 
-This file records canonical product coordinates for functions on finite index
-types.  It includes right-associated coordinates in lengths three and four,
-and equivalences separating the first one or two coordinates from a tuple of
+This file records product coordinates used for finite tuples and their
+dependent label--fiber descriptions.  It includes a pointwise dependent-sum
+reassociation, right-associated coordinates in lengths three and four, and
+equivalences separating the first one or two coordinates from a tuple of
 arbitrary remaining length.
 
 ## Main definitions
@@ -40,11 +41,13 @@ arbitrary remaining length.
 The fixed-length product coordinates are right-associated and are constructed
 recursively from Mathlib's `finTwoArrowEquiv` using `Fin.consEquiv`.  The
 variable-length equivalences use `Fin.consEquiv` to separate the prescribed
-initial coordinates from the remaining tuple.
+initial coordinates from the remaining tuple.  The pointwise dependent-sum
+equivalence is stated for an arbitrary index type so that finite-chain
+coordinates can reuse it without duplicating the same reassociation.
 
 ## Tags
 
-finite tuples, equivalence, product coordinates
+finite tuples, dependent functions, sigma types, equivalence, product coordinates
 -/
 
 namespace Equiv
