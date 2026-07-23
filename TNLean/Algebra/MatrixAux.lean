@@ -47,7 +47,10 @@ Extracted from various files for reusability.
   vanishes only if every summand vanishes
 - `Matrix.eq_zero_of_sum_conjTranspose_mul_self_eq_zero`: the conjugate-transpose
   variant
-- `Matrix.PosSemidef.mulVec_eq_zero_left/right`: kernel containment for PSD matrix sums
+- `Matrix.PosSemidef.mulVec_eq_zero_of_sum_mulVec_eq_zero`: kernel containment for
+  finite sums of positive-semidefinite matrices
+- `Matrix.PosSemidef.mulVec_eq_zero_left/right`: binary specializations of kernel
+  containment for positive-semidefinite sums
 - `Matrix.PosSemidef.eq_nonneg_smul_vecMulVec_of_le_smul_vecMulVec`: a positive
   semidefinite matrix below a rank-one matrix belongs to the same nonnegative ray
 - `Matrix.faithfulDensity`: the faithful uniform density matrix on a nonempty
@@ -715,16 +718,43 @@ section KernelPSD
 
 open Matrix
 
-variable {D : ℕ}
+variable {n : Type*} [Fintype n]
 
 namespace Matrix.PosSemidef
+
+/-- If a finite sum of positive-semidefinite matrices annihilates a vector,
+then every summand in the finite set annihilates that vector. -/
+theorem mulVec_eq_zero_of_sum_mulVec_eq_zero_of_mem
+    {ι : Type*} {s : Finset ι} {B : ι → Matrix n n ℂ}
+    (hB : ∀ i ∈ s, (B i).PosSemidef)
+    {v : n → ℂ} (hv : (∑ i ∈ s, B i) *ᵥ v = 0)
+    {k : ι} (hk : k ∈ s) :
+    B k *ᵥ v = 0 := by
+  have hqk : star v ⬝ᵥ (B k *ᵥ v) = 0 := by
+    have hsum : ∑ i ∈ s, star v ⬝ᵥ (B i *ᵥ v) = 0 := by
+      have h := congrArg (fun w ↦ star v ⬝ᵥ w) hv
+      simpa only [sum_mulVec, dotProduct_sum, dotProduct_zero] using h
+    exact (Finset.sum_eq_zero_iff_of_nonneg
+      (fun i hi ↦ (hB i hi).dotProduct_mulVec_nonneg v)).mp hsum k hk
+  exact ((hB k hk).dotProduct_mulVec_zero_iff v).mp hqk
+
+/-- If a finite sum of positive-semidefinite matrices annihilates a vector,
+then every matrix in the family annihilates that vector. -/
+theorem mulVec_eq_zero_of_sum_mulVec_eq_zero
+    {ι : Type*} [Fintype ι] {B : ι → Matrix n n ℂ}
+    (hB : ∀ i, (B i).PosSemidef)
+    {v : n → ℂ} (hv : (∑ i, B i) *ᵥ v = 0)
+    (i : ι) :
+    B i *ᵥ v = 0 :=
+  mulVec_eq_zero_of_sum_mulVec_eq_zero_of_mem
+    (s := Finset.univ) (fun j _ ↦ hB j) hv (Finset.mem_univ i)
 
 /-- For PSD matrices `A` and `B`, `ker(A + B) ⊆ ker(A)`.
 Proof: `v†(A+B)v = v†Av + v†Bv = 0` with both nonneg implies `v†Av = 0`. -/
 theorem mulVec_eq_zero_left
-    {A B : Matrix (Fin D) (Fin D) ℂ}
+    {A B : Matrix n n ℂ}
     (hA : A.PosSemidef) (hB : B.PosSemidef)
-    (v : Fin D → ℂ) (hv : (A + B) *ᵥ v = 0) :
+    (v : n → ℂ) (hv : (A + B) *ᵥ v = 0) :
     A *ᵥ v = 0 := by
   have hqf : star v ⬝ᵥ ((A + B) *ᵥ v) = 0 := by rw [hv]; simp
   rw [add_mulVec, dotProduct_add] at hqf
@@ -740,11 +770,13 @@ theorem mulVec_eq_zero_left
 
 /-- For PSD matrices `A` and `B`, `ker(A + B) ⊆ ker(B)`. -/
 theorem mulVec_eq_zero_right
-    {A B : Matrix (Fin D) (Fin D) ℂ}
+    {A B : Matrix n n ℂ}
     (hA : A.PosSemidef) (hB : B.PosSemidef)
-    (v : Fin D → ℂ) (hv : (A + B) *ᵥ v = 0) :
+    (v : n → ℂ) (hv : (A + B) *ᵥ v = 0) :
     B *ᵥ v = 0 := by
   exact mulVec_eq_zero_left hB hA v (by simpa [add_comm] using hv)
+
+variable {D : ℕ}
 
 /-- A positive semidefinite matrix dominated by a scalar multiple of the rank-one matrix
 $\psi\psi^*$ is itself a nonnegative scalar multiple of $\psi\psi^*$. -/
