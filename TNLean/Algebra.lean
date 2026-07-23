@@ -19,6 +19,7 @@ import TNLean.Algebra.ComplexPhasePositivity
 import TNLean.Algebra.ConstantPowerSums
 import TNLean.Algebra.DependentBlockDiagonal
 import TNLean.Algebra.DirectedWalkCoboundary
+import TNLean.Algebra.EigenvectorProjection
 import TNLean.Algebra.EventuallyConstantCycleWeights
 import TNLean.Algebra.FinSum
 import TNLean.Algebra.FinTupleEquiv
@@ -49,7 +50,6 @@ import TNLean.Algebra.ScalarCommutant
 import TNLean.Algebra.ScalarPowerSumIdentity
 import TNLean.Algebra.SkolemNoether
 import TNLean.Algebra.SkolemNoetherUnitary
-import TNLean.Algebra.SpectralProjection
 import TNLean.Algebra.SpinCover
 import TNLean.Algebra.StarSubalgebraBlockDiagonal
 import TNLean.Algebra.StarSubalgebraBlockForm
