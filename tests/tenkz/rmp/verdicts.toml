@@ -2,189 +2,390 @@
 # Schema: scripts/tenkz_rmp.py (load_verdicts).  Any status may be
 # recorded, including failure; the check rejects lies, never gaps.
 schema_version = 1
-campaign_sha256 = "50d12a899c05646fc1945722707264e5abe7b92289b1b814bb772af72d6a2633"
+campaign_sha256 = "42dc917309993cce67409cbe7846508cc5dc0ce6836fa4d92cd44174e42305cb"
 
 [[verdict]]
 id = "rmp-ii-peps-projection"
-status = "unreviewed"
+status = "structural-gap"
 pairing = "unverified"
+defects = ["missing-element"]
+case_sha256 = "8988128ff431b1160e79e74c42cafec9d542663e0b59def46b84e48c373654f9"
+reviewed = "2026-07-23"
+renderer = "maintainer-page-review-2026-07-23"
+note = "projections/entangled-bond layer absent from the tenkz panel"
 
 [[verdict]]
 id = "rmp-ii-triangle-network"
-status = "unreviewed"
-pairing = "unverified"
+status = "cosmetic-gap"
+pairing = "verified"
+pairing_by = "pairing-sweep-two-viewers-2026-07-23"
+defects = ["label-collision", "weight-mismatch"]
+case_sha256 = "0f6df027e29727895cdb3d2c233999cdd04b6530d88d80a1cc6e91a2cb7439da"
+reviewed = "2026-07-23"
+renderer = "maintainer-page-review-2026-07-23"
+note = "labels touch legs; twice as loose as source; wants n-valent primitive"
 
 [[verdict]]
 id = "rmp-ii-mps-marginal"
-status = "unreviewed"
-pairing = "unverified"
+status = "cosmetic-gap"
+pairing = "verified"
+pairing_by = "pairing-sweep-two-viewers-2026-07-23"
+defects = ["weight-mismatch"]
+case_sha256 = "f266cf32bb636d071f2d373184fe893c96c8352ea44d9c12207e914e3861d041"
+reviewed = "2026-07-23"
+renderer = "maintainer-page-review-2026-07-23"
+note = "traced-out style heavy; wants the minimal closure idiom"
 
 [[verdict]]
 id = "rmp-ii-peps-marginal"
-status = "unreviewed"
-pairing = "unverified"
+status = "cosmetic-gap"
+pairing = "verified"
+pairing_by = "pairing-sweep-two-viewers-2026-07-23"
+defects = ["weight-mismatch"]
+case_sha256 = "ef273f5280f7e3d25102bff6a83a4d843a298020b615a43f8d50f69f4b9f89ea"
+reviewed = "2026-07-23"
+renderer = "maintainer-page-review-2026-07-23"
+note = "trace loops as tall brackets vs compact loops"
 
 [[verdict]]
 id = "rmp-ii-mpo-sheet"
-status = "unreviewed"
+status = "cosmetic-gap"
 pairing = "unverified"
+defects = ["label-collision"]
+case_sha256 = "c3882e18c2eda6cc2b65170ab3609a56fe9c74db894266ba776af679b1fb55d8"
+reviewed = "2026-07-23"
+renderer = "maintainer-page-review-2026-07-23"
+note = "wire label a overlaps ink"
 
 [[verdict]]
 id = "rmp-ii-pepo-sheet"
-status = "unreviewed"
-pairing = "unverified"
+status = "faithful"
+pairing = "verified"
+pairing_by = "pairing-sweep-two-viewers-2026-07-23"
+case_sha256 = "3af77fde1def2ea1dd5b575c13d5051c96b2e53bcb3a46b171188f7b11ca2520"
+reviewed = "2026-07-23"
+renderer = "maintainer-page-review-2026-07-23"
+second_viewer = "pairing-sweep-two-viewers-2026-07-23"
+note = "maintainer: OK"
 
 [[verdict]]
 id = "rmp-ii-local-purification"
-status = "unreviewed"
-pairing = "unverified"
+status = "cosmetic-gap"
+pairing = "verified"
+pairing_by = "pairing-sweep-two-viewers-2026-07-23"
+defects = ["weight-mismatch"]
+case_sha256 = "cb8efea89861560dc5255d7910610cd50e8fa908b1453c6e749b20c52fe0b79f"
+reviewed = "2026-07-23"
+renderer = "maintainer-page-review-2026-07-23"
+note = "X and X^-1 blocks must be the same size"
 
 [[verdict]]
 id = "rmp-ii-mpu-unitarity"
-status = "unreviewed"
-pairing = "unverified"
+status = "faithful"
+pairing = "verified"
+pairing_by = "pairing-sweep-two-viewers-2026-07-23"
+case_sha256 = "b3e5d217a433d84880b7ca05113b21ec4887fc47ff2db68a54fbd3831d536c97"
+reviewed = "2026-07-23"
+renderer = "maintainer-page-review-2026-07-23"
+second_viewer = "pairing-sweep-two-viewers-2026-07-23"
+note = "maintainer: good"
 
 [[verdict]]
 id = "rmp-ii-mpu-blocking"
-status = "unreviewed"
-pairing = "unverified"
+status = "faithful"
+pairing = "verified"
+pairing_by = "pairing-sweep-two-viewers-2026-07-23"
+case_sha256 = "0be536610dfe95052234c171ef0498c064da12624846bde1eef7756e88f701aa"
+reviewed = "2026-07-23"
+renderer = "maintainer-page-review-2026-07-23"
+second_viewer = "pairing-sweep-two-viewers-2026-07-23"
+note = "maintainer: good; a/b spacing explicitly not to pre-optimize"
 
 [[verdict]]
 id = "rmp-ii-mpu-splitting"
-status = "unreviewed"
-pairing = "unverified"
+status = "cosmetic-gap"
+pairing = "verified"
+pairing_by = "pairing-sweep-two-viewers-2026-07-23"
+defects = ["label-collision"]
+case_sha256 = "a4aeb03fed76a057ce34e2cd28e91f0f9c59349247ff98b1861656f5f31ee169"
+reviewed = "2026-07-23"
+renderer = "maintainer-page-review-2026-07-23"
+note = "labels overlap the diagram on one side"
 
 [[verdict]]
 id = "rmp-ii-mpu-brickwork"
-status = "unreviewed"
-pairing = "unverified"
+status = "structural-gap"
+pairing = "verified"
+pairing_by = "pairing-sweep-two-viewers-2026-07-23"
+defects = ["wrong-contraction"]
+case_sha256 = "049609e0f915ef085445a70bccb9117452963b7d84aae8b4d9b95e0044fe72af"
+reviewed = "2026-07-23"
+renderer = "maintainer-page-review-2026-07-23"
+note = "the two sides depict different contractions"
 
 [[verdict]]
 id = "rmp-ii-mpu-wrap"
-status = "unreviewed"
-pairing = "unverified"
+status = "cosmetic-gap"
+pairing = "verified"
+pairing_by = "pairing-sweep-two-viewers-2026-07-23"
+defects = ["weight-mismatch"]
+case_sha256 = "71e33253f892d8625d11f2fc3cf2b2fcb61e03a571cab593286674f659ffc1aa"
+reviewed = "2026-07-23"
+renderer = "maintainer-page-review-2026-07-23"
+note = "ring not a regular square; less symmetric than source"
 
 [[verdict]]
 id = "rmp-ii-mpu-two-shift"
-status = "unreviewed"
-pairing = "unverified"
+status = "blocked"
+pairing = "verified"
+pairing_by = "pairing-sweep-two-viewers-2026-07-23"
+defects = ["missing-element"]
+missing = ["crossing-order"]
+case_sha256 = "058359354801f856e388fd33565901f017132bcddaaf8065c149dbced2658ebe"
+reviewed = "2026-07-23"
+renderer = "maintainer-page-review-2026-07-23"
+note = "inter-row shift wires decoupled; needs declared crossings"
 
 [[verdict]]
 id = "rmp-ii-mpu-normal-form"
-status = "unreviewed"
-pairing = "unverified"
+status = "cosmetic-gap"
+pairing = "verified"
+pairing_by = "pairing-sweep-two-viewers-2026-07-23"
+defects = ["weight-mismatch"]
+case_sha256 = "6c844825ba68725144fe3b05f10106e09c638168347b4390b8db6e63cb6b7d07"
+reviewed = "2026-07-23"
+renderer = "maintainer-page-review-2026-07-23"
+note = "heavy solid S-curve vs compact dotted arc (\"graceful strings\")"
 
 [[verdict]]
 id = "rmp-ii-reduced-density"
 status = "unreviewed"
 pairing = "unverified"
+note = "Judged faithful in the maintainer review; awaiting pairing verification."
 
 [[verdict]]
 id = "rmp-ii-spectrum-rho"
-status = "unreviewed"
-pairing = "unverified"
+status = "faithful"
+pairing = "verified"
+pairing_by = "pairing-sweep-two-viewers-2026-07-23"
+case_sha256 = "5118d3e382b305a12414f08aae1aba96f18fa509f8a0d4e4109c83107bcb6d5b"
+reviewed = "2026-07-23"
+renderer = "maintainer-page-review-2026-07-23"
+second_viewer = "pairing-sweep-two-viewers-2026-07-23"
+note = "maintainer: perfect"
 
 [[verdict]]
 id = "rmp-ii-spectrum-transfer"
-status = "unreviewed"
-pairing = "unverified"
+status = "cosmetic-gap"
+pairing = "verified"
+pairing_by = "pairing-sweep-two-viewers-2026-07-23"
+defects = ["weight-mismatch"]
+case_sha256 = "26978c9f3079060c1ce6afd5fac110977268d5fd1ad66019fad9e30e9a636471"
+reviewed = "2026-07-23"
+renderer = "maintainer-page-review-2026-07-23"
+note = "rhoL/rhoR tails need the designed tail idiom"
 
 [[verdict]]
 id = "rmp-ii-spectrum-fixed-points"
-status = "unreviewed"
+status = "structural-gap"
 pairing = "unverified"
+defects = ["wrong-contraction"]
+case_sha256 = "2c45ba59b4bdc8516fed1ee7b73b4524fdf81a58f1425fb311684e4f45cb4309"
+reviewed = "2026-07-23"
+renderer = "maintainer-page-review-2026-07-23"
+note = "LHS unfaithful to source"
 
 [[verdict]]
 id = "rmp-ii-blocking"
-status = "unreviewed"
+status = "structural-gap"
 pairing = "unverified"
+defects = ["wrong-contraction"]
+case_sha256 = "1489833e4ebc0e26a3e33bcb81efedd3115bd6641b91c7eaf157a44c213d818c"
+reviewed = "2026-07-23"
+renderer = "maintainer-page-review-2026-07-23"
+note = "draws site-doubling instead of the isometry definition"
 
 [[verdict]]
 id = "rmp-ii-staircase"
-status = "unreviewed"
-pairing = "unverified"
+status = "cosmetic-gap"
+pairing = "verified"
+pairing_by = "pairing-sweep-two-viewers-2026-07-23"
+case_sha256 = "190e519121d10a5fb5f5fa373f4293f743620f4b3595a398f4f2ccee9b1a9811"
+reviewed = "2026-07-23"
+renderer = "maintainer-page-review-2026-07-23"
+note = "vertically mirrored vs source; V-glyph aspect"
 
 [[verdict]]
 id = "rmp-ii-circuit"
-status = "unreviewed"
-pairing = "unverified"
+status = "structural-gap"
+pairing = "verified"
+pairing_by = "pairing-sweep-two-viewers-2026-07-23"
+defects = ["wrong-contraction"]
+case_sha256 = "014f811e3ab4a6f1c85636e3a416394fa86575541e5b841397ab7e60c27ea3c3"
+reviewed = "2026-07-23"
+renderer = "maintainer-page-review-2026-07-23"
+note = "rotated 90 degrees and shallower than the source tree"
 
 [[verdict]]
 id = "rmp-ii-sv17"
-status = "unreviewed"
+status = "faithful"
 pairing = "context-only"
+case_sha256 = "1f29afbd32053e8764085987943dc510fdb7b8a0d140096292cb1edabee29c23"
+reviewed = "2026-07-23"
+renderer = "maintainer-page-review-2026-07-23"
+second_viewer = "visual-referee-2026-07-23"
+note = "context-only; renders cleanly"
 
 [[verdict]]
 id = "rmp-ii-canonical-left"
-status = "unreviewed"
-pairing = "unverified"
+status = "faithful"
+pairing = "verified"
+pairing_by = "pairing-sweep-two-viewers-2026-07-23"
+case_sha256 = "0d3e5c647ea147b9c0edbdf017c310de7123b6f229ea68ffad1555e8987ea42a"
+reviewed = "2026-07-23"
+renderer = "maintainer-page-review-2026-07-23"
+second_viewer = "pairing-sweep-two-viewers-2026-07-23"
+note = "maintainer: better than the authors"
 
 [[verdict]]
 id = "rmp-ii-canonical-right"
-status = "unreviewed"
-pairing = "unverified"
+status = "faithful"
+pairing = "verified"
+pairing_by = "pairing-sweep-two-viewers-2026-07-23"
+case_sha256 = "914fc865bf38348f73ca0be3c67346ee8d71d324def113055bfc2fb81dfeecd4"
+reviewed = "2026-07-23"
+renderer = "maintainer-page-review-2026-07-23"
+second_viewer = "pairing-sweep-two-viewers-2026-07-23"
+note = "better than the authors"
 
 [[verdict]]
 id = "rmp-ii-ortho-right"
-status = "unreviewed"
-pairing = "unverified"
+status = "faithful"
+pairing = "verified"
+pairing_by = "pairing-sweep-two-viewers-2026-07-23"
+case_sha256 = "fedb3832dd51af76a742bb68fb91b8345c576fa93a52d19bbb6cde7a59cf53b0"
+reviewed = "2026-07-23"
+renderer = "maintainer-page-review-2026-07-23"
+second_viewer = "pairing-sweep-two-viewers-2026-07-23"
+note = "better than the authors"
 
 [[verdict]]
 id = "rmp-ii-ortho-left"
-status = "unreviewed"
-pairing = "unverified"
+status = "cosmetic-gap"
+pairing = "verified"
+pairing_by = "pairing-sweep-two-viewers-2026-07-23"
+defects = ["weight-mismatch"]
+case_sha256 = "977c8d627e82eecff53f1ac6ef81ef9400c292103911e88a7034e9a935b1782b"
+reviewed = "2026-07-23"
+renderer = "maintainer-page-review-2026-07-23"
+note = "thin wires vs bold source; end of the \"better\" run"
 
 [[verdict]]
 id = "rmp-ii-tangent-projector"
-status = "unreviewed"
-pairing = "unverified"
-note = "Author line range corrected in the harness repair; awaiting the pairing sweep."
+status = "faithful"
+pairing = "verified"
+pairing_by = "pairing-sweep-two-viewers-2026-07-23"
+case_sha256 = "6a84c0b03e9931405d2b90a41cc88af7338aef278f22a97381db42066ed652ca"
+reviewed = "2026-07-23"
+renderer = "maintainer-page-review-2026-07-23"
+second_viewer = "pairing-sweep-two-viewers-2026-07-23"
+note = "pairing repaired; topology matches the PT(A) block"
 
 [[verdict]]
 id = "rmp-ii-boundary-lasso"
-status = "unreviewed"
-pairing = "unverified"
-note = "Author line range corrected in the harness repair; awaiting the pairing sweep."
+status = "cosmetic-gap"
+pairing = "verified"
+pairing_by = "pairing-sweep-two-viewers-2026-07-23"
+case_sha256 = "c3469c8df54faed6ef783e68d1fbe4c3c396a16cbaa90213bbe9407071628e45"
+reviewed = "2026-07-23"
+renderer = "maintainer-page-review-2026-07-23"
+note = "pairing repaired; species hues differ from source palette"
 
 [[verdict]]
 id = "rmp-ii-boundary-region"
-status = "unreviewed"
-pairing = "unverified"
+status = "cosmetic-gap"
+pairing = "verified"
+pairing_by = "pairing-sweep-two-viewers-2026-07-23"
+case_sha256 = "ad3812a87de279f5319438162711503aa6dd7812d5c8a44a960c08887811a0c7"
+reviewed = "2026-07-23"
+renderer = "maintainer-page-review-2026-07-23"
+note = "region contour parallelogram vs ellipse; leg arrows absent"
 
 [[verdict]]
 id = "rmp-ii-boundary-state"
-status = "unreviewed"
-pairing = "unverified"
+status = "cosmetic-gap"
+pairing = "verified"
+pairing_by = "pairing-sweep-two-viewers-2026-07-23"
+case_sha256 = "01d1d4f957c3506e3293d6197cb5459f75ce91fa36ae56ea1ecad7759909a871"
+reviewed = "2026-07-23"
+renderer = "maintainer-page-review-2026-07-23"
+note = "sigma_dR brace vs dotted box; matches otherwise"
 
 [[verdict]]
 id = "rmp-ii-rfp-isometry"
-status = "unreviewed"
-pairing = "unverified"
+status = "structural-gap"
+pairing = "verified"
+pairing_by = "pairing-sweep-two-viewers-2026-07-23"
+defects = ["wrong-contraction"]
+case_sha256 = "61f481524ba4af1d4b9d3bb98ada0651dbd424364de23e88d5ff7ee18aa0e076"
+reviewed = "2026-07-23"
+renderer = "maintainer-page-review-2026-07-23"
+note = "maintainer: mathematically wrong"
 
 [[verdict]]
 id = "rmp-ii-zcl-mpdo"
-status = "unreviewed"
-pairing = "unverified"
+status = "cosmetic-gap"
+pairing = "verified"
+pairing_by = "pairing-sweep-two-viewers-2026-07-23"
+defects = ["weight-mismatch"]
+case_sha256 = "9273907dc0394e4424b0bc89b861160edd46f95ad4e4ab88cd80e543a0f2e70f"
+reviewed = "2026-07-23"
+renderer = "maintainer-page-review-2026-07-23"
+note = "racetrack trace vs the source's compact caps"
 
 [[verdict]]
 id = "rmp-ii-channels-ts"
-status = "unreviewed"
-pairing = "unverified"
+status = "cosmetic-gap"
+pairing = "verified"
+pairing_by = "pairing-sweep-two-viewers-2026-07-23"
+case_sha256 = "22cc8f7da57020c0db895ecd2c9eaa1fabce722fe6e9f1cc074f85fc2d186266"
+reviewed = "2026-07-23"
+renderer = "maintainer-page-review-2026-07-23"
+note = "straight double-arrow vs curved arcs"
 
 [[verdict]]
 id = "rmp-ii-mpdo-ol"
-status = "unreviewed"
-pairing = "unverified"
+status = "cosmetic-gap"
+pairing = "verified"
+pairing_by = "pairing-sweep-two-viewers-2026-07-23"
+defects = ["extra-element"]
+case_sha256 = "e0c403318a91b0c7f4b3b06be8ae017b1d38fecf42e77dd9868fa93048bd9038"
+reviewed = "2026-07-23"
+renderer = "maintainer-page-review-2026-07-23"
+note = "should be vertically more compact; drop the not-in-source contrast diagram"
 
 [[verdict]]
 id = "rmp-ii-peps-rg"
-status = "unreviewed"
-pairing = "unverified"
+status = "structural-gap"
+pairing = "verified"
+pairing_by = "pairing-sweep-two-viewers-2026-07-23"
+defects = ["wrong-contraction"]
+case_sha256 = "c76a3968b52c4343185ff0775463f9cd233ffb57fbf53634587bf7d8ed280549"
+reviewed = "2026-07-23"
+renderer = "maintainer-page-review-2026-07-23"
+note = "LHS unfaithful"
 
 [[verdict]]
 id = "rmp-ii-inverse-renormalization"
-status = "unreviewed"
-pairing = "unverified"
+status = "blocked"
+pairing = "verified"
+pairing_by = "pairing-sweep-two-viewers-2026-07-23"
+defects = ["missing-element"]
+missing = ["rotated-action"]
+case_sha256 = "40ffc634b2cddec8ec6961b21a70de9788aedbd7c5323c9d21ba71c2e809b036"
+reviewed = "2026-07-23"
+renderer = "maintainer-page-review-2026-07-23"
+note = "diagonal X legs and skewed plaquette flattened"
 
 [[verdict]]
 id = "rmp-iii-a-symmetry-sector"
@@ -192,427 +393,855 @@ status = "structural-gap"
 pairing = "unverified"
 defects = ["wrong-contraction"]
 case_sha256 = "f26371091985278de8fc2bc3b93ee63f542ec371ba86c3183b1b7947de3cefca"
-note = "The author block faithfully draws the string-order expectation of S_(alpha,g); the case draws a plain periodic MPS instead. Redraw the case to the string-order object once the kernel lands."
 reviewed = "2026-07-23"
 renderer = "maintainer-page-review-2026-07-23"
+note = "already judged: case draws a plain MPS; author block is the string-order object"
+
 [[verdict]]
 id = "rmp-iii-a-f-symbol"
-status = "unreviewed"
+status = "blocked"
 pairing = "unverified"
+defects = ["missing-element"]
+missing = ["strings"]
+case_sha256 = "99c6f69e3a18e781849a40a90adf434d4c68fec53d858f044bbcd5cfc05145da"
+reviewed = "2026-07-23"
+renderer = "maintainer-page-review-2026-07-23"
+note = "author draws the MPO/anyon-string realization; abstract tree substituted"
 
 [[verdict]]
 id = "rmp-iii-a-boundary-algebra-n"
-status = "unreviewed"
-pairing = "unverified"
-note = "Superposed multi-panel range narrowed to the single panel in the harness repair; awaiting the pairing sweep."
+status = "faithful"
+pairing = "verified"
+pairing_by = "pairing-sweep-two-viewers-2026-07-23"
+case_sha256 = "bc97fd1c0d926ed9d06f9dfe127d1655fe2c77e037043fa537691e47a6d4e1b2"
+reviewed = "2026-07-23"
+renderer = "maintainer-page-review-2026-07-23"
+second_viewer = "pairing-sweep-two-viewers-2026-07-23"
+note = "pairing repaired; Tr[X A_1..A_N] matches"
 
 [[verdict]]
 id = "rmp-iii-a-boundary-algebra"
-status = "unreviewed"
-pairing = "unverified"
+status = "faithful"
+pairing = "verified"
+pairing_by = "pairing-sweep-two-viewers-2026-07-23"
+case_sha256 = "ced39bbf276f82ed44d539ef0f578627bb25024e41248cda7be175624495da7c"
+reviewed = "2026-07-23"
+renderer = "maintainer-page-review-2026-07-23"
+second_viewer = "pairing-sweep-two-viewers-2026-07-23"
+note = "pairing repaired; Tr[X A] matches"
 
 [[verdict]]
 id = "rmp-iii-a-pentagon-physical"
-status = "unreviewed"
+status = "faithful"
 pairing = "context-only"
+case_sha256 = "83a897788195e599dedbf1b60b37dd636077ef589d2233857e3c789bf8a21254"
+reviewed = "2026-07-23"
+renderer = "maintainer-page-review-2026-07-23"
+second_viewer = "visual-referee-2026-07-23"
+note = "context-only; clean"
 
 [[verdict]]
 id = "rmp-iii-a-pentagon-mpo"
-status = "unreviewed"
+status = "faithful"
 pairing = "context-only"
+case_sha256 = "ccd9a6551aab19286dd2fdf7d749a20c4cf1bcbdf284a80e70233c5ee8a996a8"
+reviewed = "2026-07-23"
+renderer = "maintainer-page-review-2026-07-23"
+second_viewer = "visual-referee-2026-07-23"
+note = "context-only; clean"
 
 [[verdict]]
 id = "rmp-iii-a-pentagon-mixed"
-status = "unreviewed"
+status = "faithful"
 pairing = "context-only"
+case_sha256 = "a31a2eb25381bffca5788fb3ee9ccbd416d1ae02197fbe6196b76be076aeb618"
+reviewed = "2026-07-23"
+renderer = "maintainer-page-review-2026-07-23"
+second_viewer = "visual-referee-2026-07-23"
+note = "context-only; clean"
 
 [[verdict]]
 id = "rmp-iii-a-pentagon-peps"
-status = "unreviewed"
+status = "faithful"
 pairing = "context-only"
+case_sha256 = "8a902cf83f1be0c4bb70838bb467472f8fc2c3ea9369a2f038f6fe7ca91101a8"
+reviewed = "2026-07-23"
+renderer = "maintainer-page-review-2026-07-23"
+second_viewer = "visual-referee-2026-07-23"
+note = "context-only; clean"
 
 [[verdict]]
 id = "rmp-iii-a-fusion-tensor"
-status = "unreviewed"
+status = "faithful"
 pairing = "context-only"
+case_sha256 = "d070c2349288bac38b385c9e58819adfc750686f2adfede73abf349983187f4f"
+reviewed = "2026-07-23"
+renderer = "maintainer-page-review-2026-07-23"
+second_viewer = "visual-referee-2026-07-23"
+note = "context-only; clean"
 
 [[verdict]]
 id = "rmp-iii-a-mpo-tensor"
-status = "unreviewed"
+status = "faithful"
 pairing = "context-only"
+case_sha256 = "2b5e04f00e637719ddec11b167a55f335dea0baac820797a5fa7469460dc927c"
+reviewed = "2026-07-23"
+renderer = "maintainer-page-review-2026-07-23"
+second_viewer = "visual-referee-2026-07-23"
+note = "context-only; clean"
 
 [[verdict]]
 id = "rmp-iii-a-peps-tensor"
-status = "unreviewed"
+status = "faithful"
 pairing = "context-only"
+case_sha256 = "b654bbd19226029be99434ae2905737491f172f711178f6ce5ad3d1a92aee617"
+reviewed = "2026-07-23"
+renderer = "maintainer-page-review-2026-07-23"
+second_viewer = "visual-referee-2026-07-23"
+note = "context-only; clean"
 
 [[verdict]]
 id = "rmp-iii-a-coproduct"
 status = "unreviewed"
 pairing = "unverified"
-note = "Superposed multi-panel range narrowed to the single panel in the harness repair; awaiting the pairing sweep."
+note = "Judged faithful in the maintainer review; awaiting pairing verification."
 
 [[verdict]]
 id = "rmp-iii-a-pulling-through"
 status = "blocked"
-pairing = "unverified"
+pairing = "verified"
+pairing_by = "pairing-sweep-two-viewers-2026-07-23"
 defects = ["text-substitution"]
 missing = ["pulling-through", "rotated-action"]
 case_sha256 = "85cfefb033d051019d6ace7c242539b3199eb872a286e0be6a60d864f091c45b"
-note = "The right-hand side is the literal text 'quarter-turn'; the rotated network is never drawn."
 reviewed = "2026-07-23"
 renderer = "maintainer-page-review-2026-07-23"
+note = "already judged"
 
 [[verdict]]
 id = "rmp-iii-a-commuting-hamiltonian"
-status = "unreviewed"
-pairing = "unverified"
+status = "cosmetic-gap"
+pairing = "verified"
+pairing_by = "pairing-sweep-two-viewers-2026-07-23"
+case_sha256 = "7f707b192b0fa0a8fad77b997a4bf765c334bedc408c12db2800c5add9ee74e6"
+reviewed = "2026-07-23"
+renderer = "maintainer-page-review-2026-07-23"
+note = "h glyph style differs"
 
 [[verdict]]
 id = "rmp-iii-a-proof-one"
-status = "unreviewed"
+status = "structural-gap"
 pairing = "unverified"
+defects = ["wrong-contraction"]
+case_sha256 = "ce982e9a8edb037b3b40993f1768990a19369cca12ecfc03d5e3eb70c393a2f6"
+reviewed = "2026-07-23"
+renderer = "maintainer-page-review-2026-07-23"
+note = "RHS lacks the V_alpha copy-dot; LHS rearranged"
 
 [[verdict]]
 id = "rmp-iii-a-proof-two"
-status = "unreviewed"
-pairing = "unverified"
+status = "cosmetic-gap"
+pairing = "verified"
+pairing_by = "pairing-sweep-two-viewers-2026-07-23"
+case_sha256 = "9460b8ab72b5e0cbc1953ed65a35b3f5f8fefc73b0a8c4a72ee2852f01e047e6"
+reviewed = "2026-07-23"
+renderer = "maintainer-page-review-2026-07-23"
+note = "bond hue and box size"
 
 [[verdict]]
 id = "rmp-iii-a-proof-three"
-status = "unreviewed"
-pairing = "unverified"
+status = "structural-gap"
+pairing = "verified"
+pairing_by = "pairing-sweep-two-viewers-2026-07-23"
+defects = ["missing-element"]
+case_sha256 = "028a826ddb9653a3e0b48d2e47cd2524e645411bb724943a7e64fc6aa9aa00a0"
+reviewed = "2026-07-23"
+renderer = "maintainer-page-review-2026-07-23"
+note = "stacked fusion flattened to one row"
 
 [[verdict]]
 id = "rmp-iii-a-ghz-state"
-status = "unreviewed"
-pairing = "unverified"
+status = "blocked"
+pairing = "verified"
+pairing_by = "pairing-sweep-two-viewers-2026-07-23"
+defects = ["missing-element"]
+missing = ["rotated-action"]
+case_sha256 = "d7e01a4af1c1938249be940e8aebf76d3a1eea42ae83f03efd1e7eab2ad4cfc5"
+reviewed = "2026-07-23"
+renderer = "maintainer-page-review-2026-07-23"
+note = "slanted brick lattice + directed legs axis-aligned"
 
 [[verdict]]
 id = "rmp-iii-a-ghz-tensor"
-status = "unreviewed"
+status = "cosmetic-gap"
 pairing = "unverified"
+case_sha256 = "25e9eb9e6cb2dc636f04572fad6fa3146d7c63511d96559a479c09fe32087008"
+reviewed = "2026-07-23"
+renderer = "maintainer-page-review-2026-07-23"
+note = "box-G vs copy-dot; diagonal leg angle"
 
 [[verdict]]
 id = "rmp-iii-a-hadamard"
-status = "unreviewed"
+status = "cosmetic-gap"
 pairing = "unverified"
+case_sha256 = "4ade62aa7efa99c2d6b5b492641675d8d3be9fbf00e0149aa23c1692136c101d"
+reviewed = "2026-07-23"
+renderer = "maintainer-page-review-2026-07-23"
+note = "H matrix correct; shared author block (#4706)"
 
 [[verdict]]
 id = "rmp-iii-a-spt-mpo"
-status = "unreviewed"
-pairing = "unverified"
+status = "blocked"
+pairing = "verified"
+pairing_by = "pairing-sweep-two-viewers-2026-07-23"
+defects = ["placement-illegible"]
+missing = ["rotated-action", "strings"]
+case_sha256 = "85081030efcafb9593790da97409eef7b4b6b9799cc0c4ce2ca5916626830d1c"
+reviewed = "2026-07-23"
+renderer = "maintainer-page-review-2026-07-23"
+note = "45-degree double strand as axis-aligned stubs"
 
 [[verdict]]
 id = "rmp-iii-a-spt-intertwiner"
-status = "unreviewed"
-pairing = "unverified"
+status = "cosmetic-gap"
+pairing = "verified"
+pairing_by = "pairing-sweep-two-viewers-2026-07-23"
+case_sha256 = "1bdccc57799b015c97bc3a5d8e0d7e280b2c1437424c0d4aa85319702331c912"
+reviewed = "2026-07-23"
+renderer = "maintainer-page-review-2026-07-23"
+note = "mirrored operator order; small glyphs"
 
 [[verdict]]
 id = "rmp-iii-a-g-injective-projector"
-status = "unreviewed"
+status = "blocked"
 pairing = "unverified"
+defects = ["missing-element"]
+missing = ["strings", "group-average"]
+case_sha256 = "1c058a3d5d0553c3121dce40d646e6d3e732cba57fe772f1e0041355adaaf9a2"
+reviewed = "2026-07-23"
+renderer = "maintainer-page-review-2026-07-23"
+note = "winding MPO strands inexpressible; author range is #4706-class"
 
 [[verdict]]
 id = "rmp-iii-a-mpo-action"
-status = "unreviewed"
-pairing = "unverified"
+status = "cosmetic-gap"
+pairing = "verified"
+pairing_by = "pairing-sweep-two-viewers-2026-07-23"
+case_sha256 = "87d6e9b7ba2129d73c271eb82e625b1407a8d073c98f183362a0e6ac080c1708"
+reviewed = "2026-07-23"
+renderer = "maintainer-page-review-2026-07-23"
+note = "diagonal physical leg straightened"
 
 [[verdict]]
 id = "rmp-iii-a-mpo-injective"
-status = "unreviewed"
-pairing = "unverified"
+status = "cosmetic-gap"
+pairing = "verified"
+pairing_by = "pairing-sweep-two-viewers-2026-07-23"
+case_sha256 = "30617b8e1fdb292715b021007cc570a324a8ec7a59024e0795b643620f731a52"
+reviewed = "2026-07-23"
+renderer = "maintainer-page-review-2026-07-23"
+note = "ring topology preserved; hatching and hue lost"
 
 [[verdict]]
 id = "rmp-iii-a-torus-one"
-status = "unreviewed"
+status = "blocked"
 pairing = "unverified"
+defects = ["wrong-contraction"]
+missing = ["torus-cycle"]
+case_sha256 = "ad55da62240244c4b39dc7032776cfddf2527c4627794f4b256ff8dc13957b8a"
+reviewed = "2026-07-23"
+renderer = "maintainer-page-review-2026-07-23"
+note = "winding drawn as a lens figure"
 
 [[verdict]]
 id = "rmp-iii-a-torus-two"
-status = "unreviewed"
-pairing = "unverified"
+status = "blocked"
+pairing = "verified"
+pairing_by = "pairing-sweep-two-viewers-2026-07-23"
+defects = ["wrong-contraction"]
+missing = ["torus-cycle", "crossing-order"]
+case_sha256 = "3b7baa6deaba935b1c793583f2661e75984d914bf0e863a31941a137f8ec429f"
+reviewed = "2026-07-23"
+renderer = "maintainer-page-review-2026-07-23"
+note = "crossing string operators + resolution missing"
 
 [[verdict]]
 id = "rmp-iii-a-torus-three"
-status = "unreviewed"
+status = "blocked"
 pairing = "unverified"
+defects = ["wrong-contraction"]
+missing = ["torus-cycle", "string-slide"]
+case_sha256 = "d089fc838c7e3e85dd1696757bb3955cbbff27b131697955b16fcc965d2fe7c0"
+reviewed = "2026-07-23"
+renderer = "maintainer-page-review-2026-07-23"
+note = "torus and winding collapsed"
 
 [[verdict]]
 id = "rmp-iii-b-anyon-pair"
-status = "unreviewed"
-pairing = "unverified"
+status = "structural-gap"
+pairing = "verified"
+pairing_by = "pairing-sweep-two-viewers-2026-07-23"
+defects = ["missing-element"]
+case_sha256 = "a01f800ccbb791105d63aa7968f5ea18c5005493189b14da0ecf22361dd2f28b"
+reviewed = "2026-07-23"
+renderer = "maintainer-page-review-2026-07-23"
+note = "maintainer: big mistakes from here through condensation; endpoints unmarked"
 
 [[verdict]]
 id = "rmp-iii-b-idempotent"
-status = "unreviewed"
-pairing = "unverified"
+status = "structural-gap"
+pairing = "verified"
+pairing_by = "pairing-sweep-two-viewers-2026-07-23"
+defects = ["wrong-contraction"]
+case_sha256 = "444d7860cce886f2a48ef98bb851aa054db2b8bd96919118394a1a8c667efdae"
+reviewed = "2026-07-23"
+renderer = "maintainer-page-review-2026-07-23"
+note = "maintainer: very bad"
 
 [[verdict]]
 id = "rmp-iii-b-dyon"
-status = "unreviewed"
-pairing = "unverified"
+status = "blocked"
+pairing = "verified"
+pairing_by = "pairing-sweep-two-viewers-2026-07-23"
+defects = ["missing-element", "extra-element"]
+missing = ["marked-region", "open-string"]
+case_sha256 = "49f0b014bf4aecc6aca21d82d0f83edb205726706a64659e4c0912bf4349be94"
+reviewed = "2026-07-23"
+renderer = "maintainer-page-review-2026-07-23"
+note = "region + charge tile lost; spurious box added"
 
 [[verdict]]
 id = "rmp-iii-b-self-braiding"
-status = "unreviewed"
-pairing = "unverified"
+status = "blocked"
+pairing = "verified"
+pairing_by = "pairing-sweep-two-viewers-2026-07-23"
+defects = ["wrong-contraction"]
+missing = ["crossing-order"]
+case_sha256 = "4df0138b91a06d6fab005a8a99dfbd94f7f18a2e0b10a857191c34f36d8fbb8b"
+reviewed = "2026-07-23"
+renderer = "maintainer-page-review-2026-07-23"
+note = "twist rendered without crossings"
 
 [[verdict]]
 id = "rmp-iii-b-r-tensor-left"
-status = "unreviewed"
-pairing = "unverified"
+status = "blocked"
+pairing = "verified"
+pairing_by = "pairing-sweep-two-viewers-2026-07-23"
+defects = ["missing-element"]
+missing = ["multi-strand-braid", "crossing-order"]
+case_sha256 = "d7f136d878873c32365636c404a84b87ede71460c7e2967648bca5e1554bf036"
+reviewed = "2026-07-23"
+renderer = "maintainer-page-review-2026-07-23"
+note = "winding strings on lattice reduced to a bare tree"
 
 [[verdict]]
 id = "rmp-iii-b-r-tensor-right"
-status = "unreviewed"
-pairing = "unverified"
+status = "blocked"
+pairing = "verified"
+pairing_by = "pairing-sweep-two-viewers-2026-07-23"
+defects = ["missing-element"]
+missing = ["braid-resolver", "crossing-order"]
+case_sha256 = "19252fba00503eee1b25ced1943c06fb6a12a91eabf6590a23d5f805bd5110ba"
+reviewed = "2026-07-23"
+renderer = "maintainer-page-review-2026-07-23"
+note = "same"
 
 [[verdict]]
 id = "rmp-iii-b-braid-one"
-status = "unreviewed"
-pairing = "unverified"
+status = "blocked"
+pairing = "verified"
+pairing_by = "pairing-sweep-two-viewers-2026-07-23"
+defects = ["missing-element"]
+missing = ["multi-strand-braid", "crossing-order"]
+case_sha256 = "c7a1758d65d89f59258be5be21458b228f5fe1c5b15f76c0519f60e1984c863e"
+reviewed = "2026-07-23"
+renderer = "maintainer-page-review-2026-07-23"
+note = "a braid with no crossing"
 
 [[verdict]]
 id = "rmp-iii-b-braid-two"
-status = "unreviewed"
+status = "blocked"
 pairing = "unverified"
+defects = ["wrong-contraction"]
+missing = ["crossing-order"]
+case_sha256 = "fc29d9924a6e86485b779cda198b53924b9e74c84aa4703e9b9bfc639d53e535"
+reviewed = "2026-07-23"
+renderer = "maintainer-page-review-2026-07-23"
+note = "crossing drawn but over/under unmarked"
 
 [[verdict]]
 id = "rmp-iii-b-braid-three"
-status = "unreviewed"
-pairing = "unverified"
+status = "blocked"
+pairing = "verified"
+pairing_by = "pairing-sweep-two-viewers-2026-07-23"
+defects = ["wrong-contraction"]
+missing = ["braid-resolver", "crossing-order"]
+case_sha256 = "0a9f7566c25c03a8d4de4bf82ec92b33b2a6e92f1d1f1f3912235aa9af0912a1"
+reviewed = "2026-07-23"
+renderer = "maintainer-page-review-2026-07-23"
+note = "over/under ambiguous"
 
 [[verdict]]
 id = "rmp-iii-b-braid-four"
-status = "unreviewed"
-pairing = "unverified"
+status = "blocked"
+pairing = "verified"
+pairing_by = "pairing-sweep-two-viewers-2026-07-23"
+defects = ["wrong-contraction"]
+missing = ["braid-resolver", "crossing-order"]
+case_sha256 = "ce85620ec67b9b2862677bcdfb1893fd0cf26c689f2af28b93b1ad5da6457780"
+reviewed = "2026-07-23"
+renderer = "maintainer-page-review-2026-07-23"
+note = "same"
 
 [[verdict]]
 id = "rmp-iii-b-condensation"
-status = "unreviewed"
-pairing = "unverified"
+status = "structural-gap"
+pairing = "verified"
+pairing_by = "pairing-sweep-two-viewers-2026-07-23"
+defects = ["wrong-contraction"]
+case_sha256 = "13ab0c2cf47fa64682f5a923a9cc94e35438296e9d9a8e5d9de4dda0ba63a2c4"
+reviewed = "2026-07-23"
+renderer = "maintainer-page-review-2026-07-23"
+note = "2.5D condensation lattice drawn as a 3D cube; markers lost"
 
 [[verdict]]
 id = "rmp-iv-ground-space-1d"
-status = "unreviewed"
-pairing = "unverified"
+status = "cosmetic-gap"
+pairing = "verified"
+pairing_by = "pairing-sweep-two-viewers-2026-07-23"
+case_sha256 = "897bac424747512a20bb9defaf3ffd25807273057953b87b8aa0ca12dcbcd4fa"
+reviewed = "2026-07-23"
+renderer = "maintainer-page-review-2026-07-23"
+note = "X glyph small; tighter than source"
 
 [[verdict]]
 id = "rmp-iv-ground-space-2d"
-status = "unreviewed"
-pairing = "unverified"
+status = "cosmetic-gap"
+pairing = "verified"
+pairing_by = "pairing-sweep-two-viewers-2026-07-23"
+case_sha256 = "69043b767a17af580641d0b709578714f36f37ed0c19af657c89a5643e589b5b"
+reviewed = "2026-07-23"
+renderer = "maintainer-page-review-2026-07-23"
+note = "border hue; arrowed legs absent"
 
 [[verdict]]
 id = "rmp-iv-intersection-lhs-one"
-status = "unreviewed"
-pairing = "unverified"
+status = "blocked"
+pairing = "verified"
+pairing_by = "pairing-sweep-two-viewers-2026-07-23"
+defects = ["placement-illegible"]
+missing = ["enclosure-marks"]
+case_sha256 = "45361eb14513b7826b57e8556d58fdcc3ae99aca36ee3b2f3e1d69fa13956e0b"
+reviewed = "2026-07-23"
+renderer = "maintainer-page-review-2026-07-23"
+note = "maintainer: extremely bad; the R wrap operator"
 
 [[verdict]]
 id = "rmp-iv-intersection-rhs-one"
-status = "unreviewed"
-pairing = "unverified"
+status = "blocked"
+pairing = "verified"
+pairing_by = "pairing-sweep-two-viewers-2026-07-23"
+missing = ["enclosure-marks"]
+case_sha256 = "9c58483f0d1b1199ef75967f8adbc388908609769ebed569c3f1c2cd8ec8da17"
+reviewed = "2026-07-23"
+renderer = "maintainer-page-review-2026-07-23"
+note = "\"these R are failing\""
 
 [[verdict]]
 id = "rmp-iv-intersection-lhs-two"
-status = "unreviewed"
-pairing = "unverified"
+status = "blocked"
+pairing = "verified"
+pairing_by = "pairing-sweep-two-viewers-2026-07-23"
+missing = ["enclosure-marks"]
+case_sha256 = "30324eb05ae2b8b115737bfd997c040f2f46c42553893636e273c2d1a94e714b"
+reviewed = "2026-07-23"
+renderer = "maintainer-page-review-2026-07-23"
+note = "wrap drawn as a crossing"
 
 [[verdict]]
 id = "rmp-iv-intersection-rhs-two"
-status = "unreviewed"
-pairing = "unverified"
+status = "blocked"
+pairing = "verified"
+pairing_by = "pairing-sweep-two-viewers-2026-07-23"
+missing = ["enclosure-marks"]
+case_sha256 = "0248394b94248758d3d66cb05a041c26a3998fc3d0f2553c3ab356b0a6e309bf"
+reviewed = "2026-07-23"
+renderer = "maintainer-page-review-2026-07-23"
+note = "spurious crossing over R"
 
 [[verdict]]
 id = "rmp-iv-intersection-lhs-three"
-status = "unreviewed"
-pairing = "unverified"
+status = "blocked"
+pairing = "verified"
+pairing_by = "pairing-sweep-two-viewers-2026-07-23"
+missing = ["enclosure-marks"]
+case_sha256 = "1200a65c22b30b2052700cd25dec611c7c7e6508b407a945faee4f52310867d9"
+reviewed = "2026-07-23"
+renderer = "maintainer-page-review-2026-07-23"
+note = "crossing near the L edge"
 
 [[verdict]]
 id = "rmp-iv-intersection-rhs-three"
-status = "unreviewed"
-pairing = "unverified"
+status = "blocked"
+pairing = "verified"
+pairing_by = "pairing-sweep-two-viewers-2026-07-23"
+missing = ["enclosure-marks"]
+case_sha256 = "0260f3aee3ffd1141c5a80ab42bac6426a3292a4d8c1dac932e0e1bc3943c9c1"
+reviewed = "2026-07-23"
+renderer = "maintainer-page-review-2026-07-23"
+note = "wrap routing"
 
 [[verdict]]
 id = "rmp-iv-intersection-lhs-four"
-status = "unreviewed"
-pairing = "unverified"
+status = "blocked"
+pairing = "verified"
+pairing_by = "pairing-sweep-two-viewers-2026-07-23"
+defects = ["boundary-mismatch"]
+missing = ["enclosure-marks"]
+case_sha256 = "cb341aa7dd37f15d5c60463f6c6b045d2ff4cb93f9a391c75028e69b1afc6065"
+reviewed = "2026-07-23"
+renderer = "maintainer-page-review-2026-07-23"
+note = "open-leg count differs from source"
 
 [[verdict]]
 id = "rmp-iv-intersection-rhs-four"
-status = "unreviewed"
-pairing = "unverified"
+status = "blocked"
+pairing = "verified"
+pairing_by = "pairing-sweep-two-viewers-2026-07-23"
+missing = ["enclosure-marks"]
+case_sha256 = "c9af76a99a4965c00f149cba37d4f4580aefec1a8f269b44dbfebcc70b3d49f3"
+reviewed = "2026-07-23"
+renderer = "maintainer-page-review-2026-07-23"
+note = "layout and wrap"
 
 [[verdict]]
 id = "rmp-iv-intersection-lhs-five"
-status = "unreviewed"
+status = "blocked"
 pairing = "unverified"
+missing = ["enclosure-marks"]
+case_sha256 = "b78d7d2d6cf88f96b0b643d3ef0a1c603ea37b5055df82f34f25635efdccb6e5"
+reviewed = "2026-07-23"
+renderer = "maintainer-page-review-2026-07-23"
+note = "wrap leg drawn straight"
 
 [[verdict]]
 id = "rmp-iv-intersection-rhs-five"
-status = "unreviewed"
-pairing = "unverified"
+status = "blocked"
+pairing = "verified"
+pairing_by = "pairing-sweep-two-viewers-2026-07-23"
+missing = ["enclosure-marks"]
+case_sha256 = "2c5cfa360094943cd5c5e2af0c070fcd702cde2141a13dab1d821a51ef3c6c06"
+reviewed = "2026-07-23"
+renderer = "maintainer-page-review-2026-07-23"
+note = "cup routing"
 
 [[verdict]]
 id = "rmp-iv-intersection-lhs-six"
-status = "unreviewed"
-pairing = "unverified"
+status = "structural-gap"
+pairing = "verified"
+pairing_by = "pairing-sweep-two-viewers-2026-07-23"
+defects = ["extra-element", "wrong-contraction"]
+case_sha256 = "588dfde26a9915ce2abc5ef822954ad51ecbc4996a9a130a5a255c1ec29324f9"
+reviewed = "2026-07-23"
+renderer = "maintainer-page-review-2026-07-23"
+note = "nesting drawn as overlap plus an invented lattice"
 
 [[verdict]]
 id = "rmp-iv-intersection-rhs-six"
-status = "unreviewed"
-pairing = "unverified"
+status = "structural-gap"
+pairing = "verified"
+pairing_by = "pairing-sweep-two-viewers-2026-07-23"
+defects = ["extra-element", "wrong-contraction"]
+case_sha256 = "e2e87f9e10390dcc0882bafdb325f54e01aae9db38ee27b3a09d714e8cca54d7"
+reviewed = "2026-07-23"
+renderer = "maintainer-page-review-2026-07-23"
+note = "same"
 
 [[verdict]]
 id = "rmp-app-toric-primal"
-status = "unreviewed"
+status = "faithful"
 pairing = "context-only"
+case_sha256 = "5639e57125658cac6eca5a5663b8f3543ea67b49c97d66e69a7e917a3d7790b0"
+reviewed = "2026-07-23"
+renderer = "maintainer-page-review-2026-07-23"
+second_viewer = "visual-referee-2026-07-23"
+note = "context-only; clean"
 
 [[verdict]]
 id = "rmp-app-toric-dual"
-status = "unreviewed"
+status = "faithful"
 pairing = "context-only"
+case_sha256 = "9e7ddc2b7a21c08e98d61c2cbda4fc8b0767283b3ceb4565f77693417fe1e8be"
+reviewed = "2026-07-23"
+renderer = "maintainer-page-review-2026-07-23"
+second_viewer = "visual-referee-2026-07-23"
+note = "context-only; clean"
 
 [[verdict]]
 id = "rmp-app-czx-state"
-status = "unreviewed"
-pairing = "unverified"
+status = "blocked"
+pairing = "verified"
+pairing_by = "pairing-sweep-two-viewers-2026-07-23"
+defects = ["wrong-contraction", "missing-element"]
+missing = ["cluster-groups"]
+case_sha256 = "bdbdf45f743a2b544b58802b09de53fcbc46add0c7711bec0b3d88b00d8aed88"
+reviewed = "2026-07-23"
+renderer = "maintainer-page-review-2026-07-23"
+note = "maintainer: totally wrong; composite sites + doubled bonds"
 
 [[verdict]]
 id = "rmp-workbench-ii-newfig7"
-status = "unreviewed"
+status = "cosmetic-gap"
 pairing = "unverified"
+case_sha256 = "6adb6ff0a12cce208ea5ebab9bcb06238cc2702572a15acd081b92338c424b08"
+reviewed = "2026-07-23"
+renderer = "maintainer-page-review-2026-07-23"
+note = "crossing-gadget styling"
 
 [[verdict]]
 id = "rmp-workbench-ii-projector-on-pta"
-status = "unreviewed"
-pairing = "unverified"
+status = "cosmetic-gap"
+pairing = "verified"
+pairing_by = "pairing-sweep-two-viewers-2026-07-23"
+defects = ["missing-element"]
+case_sha256 = "e8ad89a1f8b3158a78b8b74581d9edf617fc4ee2ee4485701a4a36ab7ecabe44"
+reviewed = "2026-07-23"
+renderer = "maintainer-page-review-2026-07-23"
+note = "2 vs 4 triangles per side; connector glyph"
 
 [[verdict]]
 id = "rmp-workbench-ii-peps-rg-workbench"
-status = "unreviewed"
+status = "blocked"
 pairing = "unverified"
+defects = ["missing-element"]
+missing = ["equation-composition"]
+case_sha256 = "923608f9b92ec96093e3310794f87b1607e279f5b56a64f1a0ef5b4cb4237bbb"
+reviewed = "2026-07-23"
+renderer = "maintainer-page-review-2026-07-23"
+note = "(a)-(d) derivation panels collapsed"
 
 [[verdict]]
 id = "rmp-workbench-ii-positive-mpo-old"
-status = "unreviewed"
-pairing = "unverified"
+status = "cosmetic-gap"
+pairing = "verified"
+pairing_by = "pairing-sweep-two-viewers-2026-07-23"
+case_sha256 = "4c2158b5624f3c55075ceac8471ea302a9575fe2c3a789724907b97f93fe2df0"
+reviewed = "2026-07-23"
+renderer = "maintainer-page-review-2026-07-23"
+note = "box size and rounding"
 
 [[verdict]]
 id = "rmp-workbench-ii-peps-gauge-old"
-status = "unreviewed"
-pairing = "unverified"
+status = "cosmetic-gap"
+pairing = "verified"
+pairing_by = "pairing-sweep-two-viewers-2026-07-23"
+case_sha256 = "9546502bf73b5861af39a9367687ed6bab6fc71741b646601ce65229a31e1009"
+reviewed = "2026-07-23"
+renderer = "maintainer-page-review-2026-07-23"
+note = "45-degree legs partially axis-aligned; wire routing"
 
 [[verdict]]
 id = "rmp-workbench-ii-peps-gauge-without-a"
-status = "unreviewed"
-pairing = "unverified"
+status = "cosmetic-gap"
+pairing = "verified"
+pairing_by = "pairing-sweep-two-viewers-2026-07-23"
+case_sha256 = "190b34d0fd21a97c79e8a2ff219703e577ca47355206afced641f377c41755c1"
+reviewed = "2026-07-23"
+renderer = "maintainer-page-review-2026-07-23"
+note = "same family"
 
 [[verdict]]
 id = "rmp-workbench-ii-mpu-wrap-second"
-status = "unreviewed"
-pairing = "unverified"
+status = "blocked"
+pairing = "verified"
+pairing_by = "pairing-sweep-two-viewers-2026-07-23"
+defects = ["missing-element"]
+missing = ["strings"]
+case_sha256 = "3971438b30e9fc677a79919087c56771458fb00db29e74417ab7574c5ecb13cf"
+reviewed = "2026-07-23"
+renderer = "maintainer-page-review-2026-07-23"
+note = "inter-row wrap wires absent"
 
 [[verdict]]
 id = "rmp-workbench-ii-v-tensor-definition"
-status = "unreviewed"
-pairing = "unverified"
+status = "structural-gap"
+pairing = "verified"
+pairing_by = "pairing-sweep-two-viewers-2026-07-23"
+defects = ["missing-element"]
+case_sha256 = "7096365a7c57c845e1878f6847e134e8809889b209a22b6d5780076419a812a7"
+reviewed = "2026-07-23"
+renderer = "maintainer-page-review-2026-07-23"
+note = "l^(1/2) weight node omitted; connectivity straightened"
 
 [[verdict]]
 id = "rmp-workbench-ii-boundary-a-old"
-status = "unreviewed"
-pairing = "unverified"
+status = "cosmetic-gap"
+pairing = "verified"
+pairing_by = "pairing-sweep-two-viewers-2026-07-23"
+case_sha256 = "575952d40a1297f6e5650434d8a745d14bda1020135397d138ea0818efd80904"
+reviewed = "2026-07-23"
+renderer = "maintainer-page-review-2026-07-23"
+note = "region shape, arrows, Rbar label"
 
 [[verdict]]
 id = "rmp-workbench-ii-boundary-b-old"
-status = "unreviewed"
-pairing = "unverified"
+status = "cosmetic-gap"
+pairing = "verified"
+pairing_by = "pairing-sweep-two-viewers-2026-07-23"
+case_sha256 = "e333b5a110e04660983f04483144b443bb84b26c9059e44ff7f2065469ea2ed2"
+reviewed = "2026-07-23"
+renderer = "maintainer-page-review-2026-07-23"
+note = "color coding lost"
 
 [[verdict]]
 id = "rmp-workbench-ii-peps-fine-graining"
-status = "unreviewed"
+status = "blocked"
 pairing = "unverified"
+defects = ["missing-element"]
+missing = ["equation-composition"]
+case_sha256 = "e786d70146e02303415e0309cbe33681332bce0a00584a2f1653130adeef3ce7"
+reviewed = "2026-07-23"
+renderer = "maintainer-page-review-2026-07-23"
+note = "(a)-(d) panels missing"
 
 [[verdict]]
 id = "rmp-workbench-ii-historical-composite"
-status = "unreviewed"
-pairing = "unverified"
+status = "cosmetic-gap"
+pairing = "verified"
+pairing_by = "pairing-sweep-two-viewers-2026-07-23"
+case_sha256 = "e0f583574a77e83053676015333adf0365df0e27959fe0fde545a906f2c328e1"
+reviewed = "2026-07-23"
+renderer = "maintainer-page-review-2026-07-23"
+note = "3D cube vs flat tilted grid idiom"
 
 [[verdict]]
 id = "rmp-workbench-iii-eq50"
-status = "unreviewed"
+status = "structural-gap"
 pairing = "unverified"
+defects = ["missing-element"]
+case_sha256 = "86fc66482074e8e1fdf16864d9c40ad3d94b8a67d7d191b84f82d9b43afc712c"
+reviewed = "2026-07-23"
+renderer = "maintainer-page-review-2026-07-23"
+note = "up/down legs dropped from the box"
 
 [[verdict]]
 id = "rmp-workbench-iii-eq51"
-status = "unreviewed"
+status = "structural-gap"
 pairing = "unverified"
+defects = ["open-closure", "missing-element"]
+case_sha256 = "44e6ca743aeeafb0394b64121d5392d0cb78fe7e79597faaf23ebe9709d9aa7e"
+reviewed = "2026-07-23"
+renderer = "maintainer-page-review-2026-07-23"
+note = "trace ring drawn open; box legs dropped"
 
 [[verdict]]
 id = "rmp-workbench-iii-eq52"
-status = "unreviewed"
+status = "structural-gap"
 pairing = "unverified"
+defects = ["open-closure", "missing-element"]
+case_sha256 = "4d67bf463023dc2ed4d3f3b9f03dc0afb90cedfcc4fb9bb76c1e44eb370322ce"
+reviewed = "2026-07-23"
+renderer = "maintainer-page-review-2026-07-23"
+note = "same"
 
 [[verdict]]
 id = "rmp-workbench-iii-diagram-one"
-status = "unreviewed"
+status = "structural-gap"
 pairing = "unverified"
+defects = ["open-closure"]
+case_sha256 = "a4899c88acc370816e830d33ef03289d4adfbb0a5e5f997698a41fb2fad5d8c8"
+reviewed = "2026-07-23"
+renderer = "maintainer-page-review-2026-07-23"
+note = "maintainer: wrong; ring closures missing on both sides"
 
 [[verdict]]
 id = "rmp-workbench-iii-diagram-two"
-status = "unreviewed"
+status = "structural-gap"
 pairing = "unverified"
+defects = ["missing-element"]
+case_sha256 = "cba1899ccb9ddfb772157668cf9a94962f36fa478fe51c759cefeac32fc5735d"
+reviewed = "2026-07-23"
+renderer = "maintainer-page-review-2026-07-23"
+note = "box node and legs omitted; loop reoriented"
 
 [[verdict]]
 id = "rmp-workbench-iii-diagram-three"
 status = "blocked"
-pairing = "unverified"
+pairing = "verified"
+pairing_by = "pairing-sweep-two-viewers-2026-07-23"
 defects = ["text-substitution"]
 missing = ["rotated-action", "ring-closure"]
 case_sha256 = "24da4b8228d1a553f9639d7f19ef24de96a59ce873597a4a95fa8cceca3f0531"
-note = "The right-hand side is the literal text 'quarter-turn'; the rotated network is never drawn."
 reviewed = "2026-07-23"
 renderer = "maintainer-page-review-2026-07-23"
+note = "already judged"
 
 [[verdict]]
 id = "rmp-workbench-iii-historical-composite"
 status = "unfaithful"
-pairing = "unverified"
+pairing = "verified"
+pairing_by = "pairing-sweep-two-viewers-2026-07-23"
 defects = ["unfaithful-substitution"]
 case_sha256 = "902485aae85a5ba738ece07588b0733c3e4ce97ee6cf5722f8e98808529eaba7"
-note = "Renders a stock PEPS coarse-graining cube unrelated to the target's quarter-turn box-loop equation."
 reviewed = "2026-07-23"
 renderer = "maintainer-page-review-2026-07-23"
+note = "already judged"
 
 [[verdict]]
 id = "rmp-workbench-iii-diagram-four"
-status = "unreviewed"
-pairing = "unverified"
+status = "structural-gap"
+pairing = "verified"
+pairing_by = "pairing-sweep-two-viewers-2026-07-23"
+defects = ["wrong-contraction"]
+case_sha256 = "563c8a8fd39ec16eba232305f2ac1461ea56cde51d89e78194e137d587537feb"
+reviewed = "2026-07-23"
+renderer = "maintainer-page-review-2026-07-23"
+note = "ring connectivity drawn as a star"
 
 [[verdict]]
 id = "rmp-workbench-iii-eq50-reduced"
-status = "unreviewed"
+status = "cosmetic-gap"
 pairing = "unverified"
+case_sha256 = "5b90fa07664e275aabdcdb21371470a1304849918a0f0792c20546ab4a76273e"
+reviewed = "2026-07-23"
+renderer = "maintainer-page-review-2026-07-23"
+note = "rail weight; added labels"
 
 [[verdict]]
 id = "rmp-workbench-iii-dual-reduced"
-status = "unreviewed"
+status = "cosmetic-gap"
 pairing = "unverified"
+case_sha256 = "a343efad41230e93e3f63f900b6f364833a7eae0d314b1bd6381e90f1eb4c779"
+reviewed = "2026-07-23"
+renderer = "maintainer-page-review-2026-07-23"
+note = "glyphs; RHS factor order is cyclic-equivalent"
 
 [[verdict]]
 id = "rmp-workbench-iii-f-symbol-simplified-a"
 status = "unreviewed"
 pairing = "unverified"
+note = "author-panel content mismatch is a pairing question; resolve in the sweep"
 
 [[verdict]]
 id = "rmp-workbench-iii-mpo-representation"
-status = "unreviewed"
-pairing = "unverified"
+status = "structural-gap"
+pairing = "verified"
+pairing_by = "pairing-sweep-two-viewers-2026-07-23"
+defects = ["missing-element"]
+case_sha256 = "6662a6585538ff91fed601a06c111feb7dcdaf591c9c149fcaa1461e931c5233"
+reviewed = "2026-07-23"
+renderer = "maintainer-page-review-2026-07-23"
+note = "physical legs and colored virtual index dropped"
 
 [[verdict]]
 id = "rmp-workbench-iii-f-tensor"
-status = "unreviewed"
-pairing = "unverified"
+status = "cosmetic-gap"
+pairing = "verified"
+pairing_by = "pairing-sweep-two-viewers-2026-07-23"
+case_sha256 = "842bc38e521fc1add17fc5403e25e8145c39cee9f1448d15257bdc91ba7e6f3a"
+reviewed = "2026-07-23"
+renderer = "maintainer-page-review-2026-07-23"
+note = "explicit F box vs boxless smooth crossing"
 
 [[verdict]]
 id = "rmp-workbench-iii-eq59-now"
@@ -621,66 +1250,126 @@ pairing = "unverified"
 defects = ["text-substitution"]
 missing = ["group-average", "ring-closure"]
 case_sha256 = "a4a006c1ad1a9c999e49effb3519fe93511a6ee3ae18f784870bc6890224c1ba"
-note = "The right-hand side is the literal symbol P_G; the projector network is never drawn."
 reviewed = "2026-07-23"
 renderer = "maintainer-page-review-2026-07-23"
+note = "already judged"
 
 [[verdict]]
 id = "rmp-workbench-iii-ghz-state-workbench"
-status = "unreviewed"
+status = "blocked"
 pairing = "unverified"
+defects = ["missing-element"]
+missing = ["staggered-sites"]
+case_sha256 = "f8084905eb3db9149a415ce492dad3d4c5d71d816279849d827ce1080b09fc0a"
+reviewed = "2026-07-23"
+renderer = "maintainer-page-review-2026-07-23"
+note = "staggering and arrow legs flattened"
 
 [[verdict]]
 id = "rmp-workbench-iii-ghz-up"
-status = "unreviewed"
+status = "cosmetic-gap"
 pairing = "unverified"
+case_sha256 = "38c5f34dffa691a0b97ff194f5396a36a559240ba89653ec84489fb0b9f734a9"
+reviewed = "2026-07-23"
+renderer = "maintainer-page-review-2026-07-23"
+note = "glyph and leg geometry"
 
 [[verdict]]
 id = "rmp-workbench-iii-g-injective-pull"
-status = "unreviewed"
+status = "blocked"
 pairing = "unverified"
+defects = ["missing-element"]
+missing = ["pulling-through", "strings"]
+case_sha256 = "8d68e821ae5f684af03548f9c7afbff60dae2b7f255dc70a9ad2dc84457606af"
+reviewed = "2026-07-23"
+renderer = "maintainer-page-review-2026-07-23"
+note = "g string, hatched legs, U_g node absent"
 
 [[verdict]]
 id = "rmp-workbench-iii-intertwining-mpo"
-status = "unreviewed"
+status = "cosmetic-gap"
 pairing = "unverified"
+case_sha256 = "d6904f1387f4ab0e8a6925f3716a71124513dbb0a44077a94956a45505a1d41b"
+reviewed = "2026-07-23"
+renderer = "maintainer-page-review-2026-07-23"
+note = "line weight only"
 
 [[verdict]]
 id = "rmp-workbench-iii-mpo-injective-white"
-status = "unreviewed"
+status = "blocked"
 pairing = "unverified"
+defects = ["missing-element"]
+missing = ["pulling-through", "strings"]
+case_sha256 = "b5ec1826dc126e0cbcb646e9638335cfed25390950644c5773267277ef0fffcf"
+reviewed = "2026-07-23"
+renderer = "maintainer-page-review-2026-07-23"
+note = "colored strings replaced by boxes"
 
 [[verdict]]
 id = "rmp-workbench-iii-mpo-on-peps-definition"
-status = "unreviewed"
+status = "cosmetic-gap"
 pairing = "unverified"
+case_sha256 = "76283c7990a62292a05603f8d17ccb097db5fa31300b24aaf1d68a231d7509e6"
+reviewed = "2026-07-23"
+renderer = "maintainer-page-review-2026-07-23"
+note = "hatching, hue, center placement"
 
 [[verdict]]
 id = "rmp-workbench-iii-eq60-now"
-status = "unreviewed"
+status = "structural-gap"
 pairing = "unverified"
+defects = ["missing-element"]
+case_sha256 = "908d8c8b0703575cd1b50e22ffc04aca284ad5ceb46ceb4103146ef85938eaa5"
+reviewed = "2026-07-23"
+renderer = "maintainer-page-review-2026-07-23"
+note = "dagger insertions dropped; diagonals axis-aligned"
 
 [[verdict]]
 id = "rmp-workbench-iii-enlarged-mpo-black"
-status = "unreviewed"
+status = "structural-gap"
 pairing = "unverified"
+defects = ["open-closure", "missing-element"]
+case_sha256 = "0929257dd040618dfe78b74f0f95971d43619bc96ee5d23bf2a397d4ee34246c"
+reviewed = "2026-07-23"
+renderer = "maintainer-page-review-2026-07-23"
+note = "ring open; legs dropped"
 
 [[verdict]]
 id = "rmp-workbench-iii-eq59"
-status = "unreviewed"
+status = "blocked"
 pairing = "unverified"
+defects = ["wrong-contraction"]
+missing = ["torus-cycle", "strings"]
+case_sha256 = "7db4fda71b564be5465f92bd10bf3c47e756e1327b6166b8d1050f07dcbc7ece"
+reviewed = "2026-07-23"
+renderer = "maintainer-page-review-2026-07-23"
+note = "torus with wound strings collapsed to a two-box loop"
 
 [[verdict]]
 id = "rmp-workbench-iii-g-injective-mpo"
-status = "unreviewed"
+status = "cosmetic-gap"
 pairing = "unverified"
+case_sha256 = "a01130b8ea5e8d09d982e5cee990561f8b42cb6d1a3fb18be81b3ef49ff73be8"
+reviewed = "2026-07-23"
+renderer = "maintainer-page-review-2026-07-23"
+note = "circles to squares; leg stubs dropped"
 
 [[verdict]]
 id = "rmp-workbench-iii-peps-renormalization-one"
-status = "unreviewed"
+status = "structural-gap"
 pairing = "unverified"
+defects = ["wrong-contraction"]
+case_sha256 = "b66bf731a47fed9136a546454685f449953f4cc083d1f8c4cd086036229ee727"
+reviewed = "2026-07-23"
+renderer = "maintainer-page-review-2026-07-23"
+note = "plaquette rotated to a diamond; hatched bonds lost"
 
 [[verdict]]
 id = "rmp-workbench-iii-peps-renormalization-two"
-status = "unreviewed"
+status = "structural-gap"
 pairing = "unverified"
+defects = ["missing-element", "extra-element"]
+case_sha256 = "5c51bc00cddf72446d1cf45a67c7ad986439c6305a5c07e08657c14341fe2557"
+reviewed = "2026-07-23"
+renderer = "maintainer-page-review-2026-07-23"
+note = "lattice replaced by a cube and arrow"

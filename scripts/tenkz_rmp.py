@@ -182,6 +182,7 @@ class TargetVerdict:
     reviewed: str
     renderer: str
     second_viewer: str
+    pairing_by: str
 
 
 def fail(message: str) -> None:
@@ -804,6 +805,7 @@ VERDICT_STANZA_KEYS = {
     "id",
     "status",
     "pairing",
+    "pairing_by",
     "defects",
     "missing",
     "case_sha256",
@@ -874,9 +876,11 @@ def load_verdicts(targets: Sequence[Target]) -> dict[str, TargetVerdict]:
             fail(f"{where}.pairing {pairing!r} not in {PAIRING_STATES}")
         defects = string_tuple(stanza.get("defects", []), where=f"{where}.defects", allowed=DEFECT_KINDS)
         missing = string_tuple(stanza.get("missing", []), where=f"{where}.missing", allowed=None)
-        for key in ("note", "reviewed", "renderer", "second_viewer"):
+        for key in ("note", "reviewed", "renderer", "second_viewer", "pairing_by"):
             if key in stanza and not isinstance(stanza[key], str):
                 fail(f"{where}.{key} must be a string")
+        if pairing == "verified" and not stanza.get("pairing_by"):
+            fail(f"{where}: pairing=verified requires pairing_by naming the viewers")
         case_sha = stanza.get("case_sha256")
         if case_sha is not None and not isinstance(case_sha, str):
             fail(f"{where}.case_sha256 must be a string")
@@ -891,6 +895,7 @@ def load_verdicts(targets: Sequence[Target]) -> dict[str, TargetVerdict]:
             reviewed=stanza.get("reviewed", ""),
             renderer=stanza.get("renderer", ""),
             second_viewer=stanza.get("second_viewer", ""),
+            pairing_by=stanza.get("pairing_by", ""),
         )
         target = by_target[identifier]
         if status == "blocked" and not missing:
@@ -898,7 +903,9 @@ def load_verdicts(targets: Sequence[Target]) -> dict[str, TargetVerdict]:
         if status == "faithful":
             if not verdict.second_viewer:
                 fail(f"{where}: faithful requires a second_viewer countersign")
-            if pairing != "verified":
+            # context-only targets have no author panel to mispair; their
+            # pairing is vacuously settled.
+            if pairing not in ("verified", "context-only"):
                 fail(f"{where}: faithful requires pairing=verified, got {pairing!r}")
         if status != "unreviewed":
             if not verdict.reviewed:
