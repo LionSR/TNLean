@@ -2053,6 +2053,8 @@ separate step.
     site]%
     \label{thm:mpdo_physical_coordinate_gibbs_at_least_two}
     \uses{thm:mpdo_topological_gibbs_at_least_two}
+    \lean{MPOTensor.physicalTopologicalGibbsDecomposition_of_isRFPViaTS}
+    \leanok
     Let $M$ be as in
     Theorem~\ref{thm:mpdo_topological_gibbs_at_least_two}.  There are
     nonnegative numbers $\lambda_1,\ldots,\lambda_d$ and one fixed Hermitian
@@ -2073,11 +2075,31 @@ separate step.
           e^{-\widehat H_L}.
     \]
 
-    This target is not yet marked complete.  The retained-coordinate theorem
-    does not construct $\widehat P_i^{(L)}$ or $\widehat H_L$ on the
-    complementary physical sectors; see
+    \textbf{Local fix (physical complement):}
+    the retained one-site energy is compressed to physical coordinates and
+    extended by zero energy on the orthogonal complement.  The retained
+    projectors are transported through the adjoint sitewise coisometry.  See
     \path{docs/paper-gaps/cpsv16_topological_gibbs_physical_complement.tex}.
 \end{theorem}
+\begin{proof}\leanok
+    Put $V$ for the retained-row coisometry and $k$ for the retained
+    logarithmic multiplicity energy.  The physical energy
+    $K=V^\dagger kV$ is Hermitian and
+    \[
+      e^{-K}=V^\dagger e^{-k}V+(I-V^\dagger V).
+    \]
+    Taking the fixed two-site term $K\otimes I$, its periodic translates act
+    on separate one-site factors, hence commute, and their exponential is the
+    tensor power of the displayed physical weight.
+
+    For the sitewise coisometry $W=V^{\otimes L}$, transport each retained
+    projector by $\widehat P_i^{(L)}=W^\dagger P_i^{(L)}W$.  The identity
+    $WW^\dagger=I$ preserves self-adjointness, idempotence, and pairwise
+    orthogonality.  The one-site intertwining identities transport the
+    retained commutator to the physical Gibbs factor.  Applying the same
+    identities term by term to the retained density decomposition, and then
+    using exact adjoint reconstruction, gives the stated physical sum.
+\end{proof}
 
 \begin{remark}[Printed length-one domain boundary]%
     \label{rem:mpdo_topological_gibbs_length_one_boundary}
@@ -2090,9 +2112,9 @@ separate step.
     Theorem~4.15 is printed without an explicit lower bound on $L$, but its
     $L=1$ instance is therefore undefined without an author or erratum
     convention.  The source construction is defined for $L\geq2$, and no
-    length-one theorem is asserted.  The retained-coordinate theorem above
-    proves its scoped analogue on this domain; the physical-coordinate
-    complement remains open.  See
+    length-one theorem is asserted.  The physical-coordinate theorem above
+    proves the result on this domain; the undefined length-one convention
+    remains open.  See
     \path{docs/paper-gaps/cpsv16_topological_gibbs_physical_complement.tex}
     and
     \path{docs/paper-gaps/cpsv16_topological_gibbs_length_one.tex}.
