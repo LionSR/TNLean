@@ -239,6 +239,19 @@ operators into a cyclic scalar weight in the transformed one-site coordinates,
 then conjugates the resulting tensor back through the same one-site unitary.
 It uses only positivity and commutation of the periodic translates.
 
+The selected fixed tensor now carries the same positive physical-sector
+factorization used in its construction.  More precisely,
+\leanid{MPOTensor.TranslationInvariantBondData.%
+exists_positive_physicalSectorFactorization_fixedProductTensorData}
+gives a factorization of the exact tensor in
+\leanid{MPOTensor.TranslationInvariantBondData.fixedProductTensorData};
+its neighboring operators are positive semidefinite and its reconstructed
+physical bond is the original commuting bond.  Thus no equality of closed
+matrix-product operators is used to replace one local tensor by another.
+This completes the fixed-representative construction only.  It neither
+factorizes the original source tensor nor proves a normality or blocking
+comparison between that tensor and the selected fixed tensor.
+
 The coordinate qualification is necessary.  In physical dimension $d=2$, let
 $X$ be the Pauli flip and $B=\Id+X\otimes X$.  Then $B\succeq0$, all periodic
 translates commute, and
@@ -518,10 +531,11 @@ uses ZCL.
 Proposition~\emph{4to2} is classified as a structural-bridge gap.  The
 fourth-region factorization, the Markov decomposition at every admissible cut,
 the all-cut entropy argument, and transport to the original physical basis are
-complete under an explicit positive physical-sector factorization.  The
-non-circular construction of that factorization from the source-side
-$\eta$-local structure, together with the normality and blocking reduction,
-remains.  The later
+complete under an explicit positive physical-sector factorization.  The exact
+fixed tensor selected from the source-side commuting bond now has such a
+factorization, with positive neighboring operators and the original physical
+bond.  The remaining gap is the normality and blocking comparison between the
+original source tensor and that selected fixed tensor.  The later
 orthogonal direct-sum implication is likewise formalized only as a
 scope-restricted theorem assuming sectorwise SAL.  It neither supplies that
 sectorwise premise nor proves the printed assertion that the GSNNCH form alone
@@ -532,8 +546,10 @@ implies SAL.
 The gap can be removed in the following stages.
 
 \begin{enumerate}
-\item Construct a positive physical-sector factorization non-circularly from
-the source-side $\eta$-local structure.
+\item The selected fixed tensor has a positive physical-sector factorization
+constructed non-circularly from the source-side commuting bond; this is
+\leanid{MPOTensor.TranslationInvariantBondData.%
+exists_positive_physicalSectorFactorization_fixedProductTensorData}.
 \item Prove the normality and blocking reduction from the printed
 translation-invariant commuting-bond hypotheses to that $\eta$-local datum.
 Only then may the source proposition receive a formal declaration and a
