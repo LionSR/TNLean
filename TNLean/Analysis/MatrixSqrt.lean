@@ -28,6 +28,7 @@ theory development.
 * `Matrix.PosSemidef.blockDiagonal'`: a finite dependent block diagonal of
   positive-semidefinite matrices is positive semidefinite.
 * `Matrix.PosSemidef.supportInvSqrt`: the inverse square root on the support.
+* `Matrix.PosSemidef.supportInv`: the generalized inverse on the support.
 * `Matrix.PosDef.supportInvSqrt_eq_inv_sqrt`: agreement with the ordinary
   inverse square root for positive-definite matrices.
 * `Matrix.PosSemidef.supportInvSqrt_smul`: compatibility with positive scaling.
@@ -35,6 +36,8 @@ theory development.
   unital left tensor embedding.
 * `Matrix.PosSemidef.supportInvSqrt_sq_mul_self` and
   `Matrix.PosSemidef.self_mul_supportInvSqrt_sq`: generalized-inverse identities.
+* `Matrix.PosSemidef.star_dotProduct_supportInv_mulVec_eq_of_mulVec_eq`:
+  evaluation of a support-inverse pairing from any solution.
 -/
 
 open scoped Matrix ComplexOrder MatrixOrder Kronecker
@@ -100,12 +103,28 @@ noncomputable def PosSemidef.supportInvSqrt {ρ : Matrix n n ℂ}
     (hρ : ρ.PosSemidef) : Matrix n n ℂ :=
   hρ.isHermitian.cfc fun x ↦ if x ≠ 0 then (Real.sqrt x)⁻¹ else 0
 
+/-- The generalized inverse of a positive-semidefinite matrix on its support:
+the zero eigenspace is sent to zero and every positive eigenvalue \(x\) is sent
+to \(x^{-1}\).
+
+This is the generalized-inverse convention of Jenčová--Ruskai,
+arXiv:0903.2895v4, lines 255--261. -/
+noncomputable def PosSemidef.supportInv {ρ : Matrix n n ℂ}
+    (hρ : ρ.PosSemidef) : Matrix n n ℂ :=
+  hρ.supportInvSqrt * hρ.supportInvSqrt
+
 /-- The support inverse square root is Hermitian. -/
 theorem PosSemidef.supportInvSqrt_isHermitian {ρ : Matrix n n ℂ}
     (hρ : ρ.PosSemidef) : hρ.supportInvSqrt.IsHermitian := by
   rw [PosSemidef.supportInvSqrt, ← hρ.isHermitian.cfc_eq]
   exact Matrix.isHermitian_iff_isSelfAdjoint.mpr
     (cfc_predicate (fun x : ℝ ↦ if x ≠ 0 then (Real.sqrt x)⁻¹ else 0) ρ)
+
+/-- The generalized inverse on the support is Hermitian. -/
+theorem PosSemidef.supportInv_isHermitian {ρ : Matrix n n ℂ}
+    (hρ : ρ.PosSemidef) : hρ.supportInv.IsHermitian := by
+  simpa only [PosSemidef.supportInv, hρ.supportInvSqrt_isHermitian.eq] using
+    Matrix.isHermitian_conjTranspose_mul_self hρ.supportInvSqrt
 
 /-- The support inverse square root is positive semidefinite.
 
@@ -286,6 +305,44 @@ theorem PosSemidef.self_mul_supportInvSqrt_sq
     hρ.supportInvSqrt_isHermitian.eq,
     hρ.isHermitian.supportProj_isHermitian.eq] using
       congrArg Matrix.conjTranspose hρ.supportInvSqrt_sq_mul_self
+
+/-- The generalized inverse multiplied by the original matrix is the support
+projection. -/
+theorem PosSemidef.supportInv_mul_self
+    {ρ : Matrix n n ℂ} (hρ : ρ.PosSemidef) :
+    hρ.supportInv * ρ = hρ.isHermitian.supportProj := by
+  simpa only [PosSemidef.supportInv] using hρ.supportInvSqrt_sq_mul_self
+
+/-- The original matrix multiplied by its generalized inverse is the support
+projection. -/
+theorem PosSemidef.self_mul_supportInv
+    {ρ : Matrix n n ℂ} (hρ : ρ.PosSemidef) :
+    ρ * hρ.supportInv = hρ.isHermitian.supportProj := by
+  simpa only [PosSemidef.supportInv] using hρ.self_mul_supportInvSqrt_sq
+
+/-- If \(Sx=b\) for a positive-semidefinite matrix \(S\), then pairing \(b\)
+with the support-generalized-inverse solution gives the pairing with \(x\):
+\[
+  \langle b,S^+b\rangle=\langle b,x\rangle .
+\]
+No choice of \(x\) is involved in the value, since \(b\) lies in the support
+of \(S\). -/
+theorem PosSemidef.star_dotProduct_supportInv_mulVec_eq_of_mulVec_eq
+    {S : Matrix n n ℂ} (hS : S.PosSemidef) (b x : n → ℂ)
+    (hx : S *ᵥ x = b) :
+    star b ⬝ᵥ (hS.supportInv *ᵥ b) = star b ⬝ᵥ x := by
+  let P := hS.isHermitian.supportProj
+  have hb : P *ᵥ b = b := by
+    rw [← hx, mulVec_mulVec]
+    exact congrArg (fun M : Matrix n n ℂ ↦ M *ᵥ x)
+      hS.isHermitian.supportProj_mul_self
+  calc
+    star b ⬝ᵥ (hS.supportInv *ᵥ b) =
+        star b ⬝ᵥ (P *ᵥ x) := by
+      rw [← hx, mulVec_mulVec, hS.supportInv_mul_self]
+    _ = star (P *ᵥ b) ⬝ᵥ x := by
+      rw [hS.isHermitian.supportProj_isHermitian.star_mulVec_dotProduct]
+    _ = star b ⬝ᵥ x := by rw [hb]
 
 /-- A finite dependent block diagonal of positive-semidefinite matrices is
 positive semidefinite. -/
