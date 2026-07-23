@@ -136,6 +136,7 @@ jobs:
       module_policy: ${{ steps.filter.outputs.module_policy }}
       blueprint: ${{ steps.filter.outputs.blueprint }}
       corpus: ${{ steps.filter.outputs.corpus }}
+      shrink: ${{ steps.filter.outputs.shrink }}
       workflow: ${{ steps.filter.outputs.workflow }}
     steps:
       - uses: dorny/paths-filter@v3
@@ -189,8 +190,52 @@ jobs:
               - 'scripts/tenkz_render_corpus.py'
               - 'scripts/test_tenkz_corpus_provenance.py'
               - 'scripts/test_tenkz_corpus_render.py'
+            shrink:
+              - 'blueprint/src/chapter/**'
+              - 'tex/tenkz/**'
+              - 'tests/tenkz/**'
+              - 'docs/tenkz/**'
+              - 'scripts/tenkz_language.py'
+              - 'scripts/tenkz_lint.py'
+              - 'scripts/tenkz_shrink.py'
+              - 'scripts/test_tenkz_shrink.py'
             workflow:
               - '.github/workflows/pr-ci.yml'
+
+  tenkz-shrink:
+    name: Check tenkz shrink ratchets
+    needs: changes
+    if: |
+      !cancelled() && (
+        github.event_name != 'pull_request' ||
+        needs.changes.outputs.shrink == 'true' ||
+        needs.changes.outputs.workflow == 'true'
+      )
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+
+      - name: Check language and shrink contracts
+        env:
+          BASE_REF: origin/${{ github.event.pull_request.base.ref }}
+        run: |
+          python3 scripts/tenkz_language.py check
+          python3 scripts/test_tenkz_shrink.py
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            git fetch --no-tags origin \
+              "+refs/heads/${{ github.event.pull_request.base.ref }}:refs/remotes/origin/${{ github.event.pull_request.base.ref }}"
+            python3 scripts/tenkz_shrink.py gate --base-ref "$BASE_REF"
+          else
+            python3 scripts/tenkz_shrink.py gate
+          fi
 
   tenkz-corpus:
     name: Check tenkz regression corpus
@@ -372,19 +417,6 @@ jobs:
               'blueprint/src/**/*.tex' 'blueprint/src/*.tex')
           fi
           echo "has_changed_lean=$has_changed_lean" >> "$GITHUB_OUTPUT"
-
-      - name: Check tenkz language and shrink gate
-        if: env.TEX_CHANGED == 'true'
-        env:
-          BASE_REF: origin/${{ github.event.pull_request.base.ref }}
-        run: |
-          python3 scripts/tenkz_language.py check
-          python3 scripts/test_tenkz_shrink.py
-          if [ "${{ github.event_name }}" = "pull_request" ]; then
-            python3 scripts/tenkz_shrink.py gate --base-ref "$BASE_REF"
-          else
-            python3 scripts/tenkz_shrink.py gate
-          fi
 
       - name: Set up Lean toolchain
         id: lean-setup
