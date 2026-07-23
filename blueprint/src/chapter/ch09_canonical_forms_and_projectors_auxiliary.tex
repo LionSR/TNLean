@@ -1,0 +1,584 @@
+\section{Translation-invariant canonical form}
+
+\begin{theorem}[Translation-invariant canonical form]%
+    \label{thm:pgvwc07_ti_canonical_form}
+    \lean{MPSTensor.exists_pgvwc07_normalized_exact_form_after_rescaling_allow_empty}
+    \leanok
+    % Source: PerezGarcia2007Matrix, Theorem 4.
+    % Block decomposition, three block conditions, and bond-dimension bound.
+    % Proof order to preserve: spectral-radius normalization and full-rank
+    % fixed-point gauge; invariant support projection from a singular positive
+    % fixed point; finite-ring trace split into supported/orthogonal summands;
+    % iteration via a non-scalar fixed point; dual fixed point and final unitary
+    % diagonalization. Derive the invariant support before any abstract
+    % block-splitting lemma.
+    Let $A$ be a translation-invariant MPS representation of bond
+    dimension $D$. There is a positive scalar $s$ and a finite family of
+    blocks $A_k$, possibly empty, such that the globally rescaled tensor
+    $s^{-1}A$ has the same MPV coefficients on every positive-length ring as
+    \[
+        \bigoplus_k \mu_k A_k^i.
+    \]
+    The weights are positive and satisfy $1\geq |\mu_k|$; if the family is
+    nonempty, then some weight has norm $1$. For each block,
+    \[
+        \sum_i A_k^i(A_k^i)^\dagger = \Id,
+        \qquad
+        \sum_i (A_k^i)^\dagger \Lambda_k A_k^i = \Lambda_k,
+    \]
+    where $\Lambda_k$ is diagonal, positive, and full-rank. Each block has
+    positive bond dimension. Moreover the only fixed points of
+    $\E_{A_k}(X)=\sum_i A_k^iX(A_k^i)^\dagger$ are the scalar multiples of
+    $\Id$: for every $X$,
+    \[
+        \E_{A_k}(X)=X \Longrightarrow  \exists\,c\in\C,  X = c\,\Id.
+    \]
+    The total bond dimension of the decomposition is at most $D$.
+
+    This is the positive-length form of
+    \cite[Theorem~4]{PerezGarcia2007Matrix}, with the global
+    spectral-radius normalization step made explicit.
+\end{theorem}
+
+\begin{remark}[Source proof order]\label{rem:pgvwc07_ti_canonical_source_order}
+    The proof follows
+    \cite[Theorem~4]{PerezGarcia2007Matrix} in order: normalize the
+    spectral radius and use a full-rank positive fixed point to obtain the unital
+    gauge; derive the invariant support projection from a singular positive fixed
+    point by the positivity contradiction; split the finite-ring trace into the
+    supported and orthogonal summands; iterate, using a non-scalar fixed point to
+    split further until each block has only scalar fixed points; and finally
+    repeat the fixed-point argument for the dual map and diagonalize the
+    resulting full-rank positive fixed point by a unitary gauge. The
+    primitive-block results below are used only after their hypotheses have been
+    obtained from this argument.
+\end{remark}
+
+\begin{remark}[CPSV blocked canonical form (source statement)]%
+    \label{rem:cpgsv_canonical_form_source}
+    % Maintainer source anchors:
+    % Papers/1606.00608/MPDO-22-12-17-2.tex: blocking removes periodic peripheral
+    % components; normal-tensor and canonical-form definition eq:II_CF1 with the
+    % weight normalization; any tensor becomes canonical after blocking. The
+    % phase-class quotient used by the BNT supplier is prop:char-BNT, restated in
+    % Appendix A. The two-layer expansion is eq:II_ABasicTensors/decBSV.
+    % Papers/2011.12127/TN-Review-main.tex: invariant-subspace reduction; period
+    % removal; def:4:normal-tensor-mps and eq:II_CF1; BNT
+    % definition/characterization; two-layer BNT/copy display.
+    The blocked canonical-form reduction of
+    \cite[Section~2.3]{Cirac2016MPDO_arXiv} and
+    \cite[Section~IV.A]{Cirac2021Matrix} states that an arbitrary
+    translation-invariant MPS tensor becomes, after blocking by some period
+    $p\ge 1$, the direct sum of an all-zero summand and a weighted family of
+    normal tensors $\bigoplus_k \mu_k B_k$ with $|\mu_k|\le 1$ and at least one
+    $|\mu_k|=1$. The closest proved results here are
+    Theorem~\ref{thm:tp_primitive_blockdecomp} and
+    Theorem~\ref{thm:paperbnt_supplier_after_blocking}; the source upper
+    normalization $|\mu_k|\le 1$ with a unit-modulus witness is the one
+    remaining input, recorded in
+    Remark~\ref{rem:arbitrary_input_reduction_gap}.
+\end{remark}
+
+\section{Normal tensors and canonical forms}\label{sec:cpsv_canonical_defs}
+
+This section records the CPSV definitions of \emph{normal tensor} and
+\emph{canonical form} from~\cite{Cirac2016MPDO_arXiv}. The basis of normal
+tensors is stated in Chapter~\ref{ch:bnt}. Write
+\[
+    \sigma_\partial(\E) = \{\lambda \in \sigma(\E) : |\lambda| = r(\E)\}
+\]
+for the peripheral spectrum of a transfer map $\E$, where $r(\E)$ is its
+spectral radius. The stronger predicates used later
+(Definition~\ref{def:is_normal_canonical_form} and the canonical-form predicate
+of Chapter~\ref{ch:bnt}) add left-canonical normalization and spectral
+primitivity. The weight moduli are taken non-increasing, not strictly
+decreasing; equal-modulus and repeated-copy sectors are retained and compared by
+the coefficient argument of Chapter~\ref{ch:bnt}.
+
+\begin{definition}[CPSV normal tensor (NT)]\label{def:nt_cpsv}
+    \lean{MPSTensor.IsNormalTensor}
+    \leanok
+    A tensor $A$ of physical dimension $d$ and bond dimension $D$ is a
+    \emph{normal tensor} if, after the spectral-radius normalization
+    of~\cite{Cirac2016MPDO_arXiv}, (i)~$A$ admits no nontrivial invariant
+    orthogonal projection and (ii)~the associated CPM
+    $\E_A(X) = \sum_i A^i X (A^i)^\dagger$ has spectral radius
+    $r(\E_A)=1$ and peripheral spectrum $\sigma_\partial(\E_A)=\{1\}$.
+\end{definition}
+
+\begin{remark}
+    Condition~(i) cannot be dropped. A reducible tensor may have peripheral
+    spectrum $\{1\}$ while still admitting a nontrivial invariant projection, so
+    condition~(ii) alone does not characterize normality.
+\end{remark}
+
+The CPSV \emph{canonical form} (CF) of a tensor $A$ is the normal-block
+decomposition
+\[
+    A^i \cong \bigoplus_{k=1}^r \mu_k A_k^i
+\]
+with weights normalized by $|\mu_k| \le 1$ and with at least one $|\mu_k|=1$;
+see \cite[Section~2.3]{Cirac2016MPDO_arXiv}. In the statements below the
+structural part is supplied by the stronger normal canonical form of
+Definition~\ref{def:is_normal_canonical_form}, and the global weight
+normalization is invoked as a separate source hypothesis where needed.
+
+\begin{remark}[Relation to the strong predicates]
+    A tensor $A$ which is irreducible
+    (Definition~\ref{def:irreducible_tensor}), has transfer map of spectral
+    radius one, and has primitive transfer map is normal in the sense of
+    Definition~\ref{def:nt_cpsv}. The reverse
+    implications from the stronger predicates of
+    Definition~\ref{def:is_normal_canonical_form} and of Chapter~\ref{ch:bnt}
+    require the fundamental-theorem step or the algebraic-to-spectral normality
+    equivalence, established later.
+\end{remark}
+
+\subsection{Normalization conventions}\label{sec:transfer_map_normalization}
+
+\begin{remark}[Scalar normalization conventions]
+    The reductions use four scalar facts: scaling preserves injectivity; the
+    transfer map under a scalar~$\zeta$ rescales by $|\zeta|^2$; unit-modulus
+    phase rescaling preserves $\sum_i (A^i)^\dagger A^i = \Id$; and the MPV of a
+    weighted block-diagonal tensor factorizes as
+    $\mu_k^N V^{(N)}(A_k)_\sigma = \eta_k^N |\mu_k|^N V^{(N)}(A_k)_\sigma$ with
+    $\eta_k := \mu_k/|\mu_k|$.
+
+    Left-canonical normalization is required before the blocks can be compared.
+    Without it the implication
+    $\mc{V}(\bigoplus_k \mu_k A_k) = \mc{V}(\bigoplus_k \mu_k B_k)
+        \Rightarrow \forall k,\ \mc{V}(A_k)=\mc{V}(B_k)$
+    already fails for two scalar blocks: for $\mu=(1,2)$, $A=(1,3/2)$,
+    $B=(3,1/2)$ the two direct sums generate identical MPV families but the first
+    blocks differ at $N=1$. Left-canonical normalization removes this particular
+    ambiguity; the sectors are then matched, up to a permutation, by the exact
+    fixed-length linear independence of Chapter~\ref{ch:bnt}, which requires no
+    ordering of the weight moduli.
+\end{remark}
+
+
+\section{Projector criteria and decomposition auxiliaries}
+
+\begin{definition}[Invariant-projector closure]
+    \label{def:invariant_projector_closure}
+    \lean{MPSTensor.HasInvariantProjectorClosure}
+    \leanok
+    \uses{def:mps_tensor}
+    An MPS tensor $A$ has \emph{invariant-projector closure} if every
+    orthogonal projection $P$ satisfying $PA^i=PA^iP$ for all~$i$ also
+    satisfies $A^iP=PA^iP$ for all~$i$.
+    This is the projector hypothesis in the sufficient condition for canonical
+    form of \cite[Section~2]{Cirac2016MPDO_arXiv}.
+\end{definition}
+
+\begin{theorem}[Invariant projections are reducing under projector closure]
+    \label{thm:invariant_projector_closure_commutes}
+    \lean{MPSTensor.commutes_of_hasInvariantProjectorClosure_of_lowerZero}
+    \leanok
+    \uses{def:invariant_projector_closure}
+    Suppose that $A$ has invariant-projector closure and that $P$ is an
+    orthogonal projection satisfying $(\Id-P)A^iP=0$ for all~$i$. Then $P$
+    reduces every tensor matrix: $PA^i=A^iP$ for all~$i$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:invariant_projector_closure}
+    The lower-corner equation gives
+    \[
+        (\Id-P)A^i=(\Id-P)A^i(\Id-P).
+    \]
+    Applying projector closure to $\Id-P$ gives
+    $A^i(\Id-P)=(\Id-P)A^i(\Id-P)$, hence the upper corner
+    $PA^i(\Id-P)$ also vanishes. Therefore
+    \[
+        PA^i=PA^iP=A^iP.
+    \]
+\end{proof}
+
+\begin{theorem}[Invariant-projector closure gives a reducing projection]
+    \label{thm:exists_reducing_projection_of_invariant_projector}
+    \lean{MPSTensor.exists_reducing_projection_of_hasInvariantProj}
+    \leanok
+    \uses{def:has_inv_proj, def:invariant_projector_closure}
+    If $A$ has invariant-projector closure and admits a nontrivial invariant
+    projection, then it admits a nontrivial orthogonal projection commuting
+    with every $A^i$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:invariant_projector_closure_commutes}
+    Apply Theorem~\ref{thm:invariant_projector_closure_commutes} to the
+    projection supplied by Definition~\ref{def:has_inv_proj}.
+\end{proof}
+
+\begin{lemma}[Support isometry of an orthogonal projection]
+    \label{lem:projection_support_isometry}
+    \lean{IsOrthogonalProjection.exists_support_isometry}
+    \leanok
+    \uses{def:orthogonal_projection_channel}
+    Every orthogonal projection $P$ on $\C^D$ factors through an isometry:
+    there are $n \in \N$ and $V \in \C^{D \times n}$ with
+    $V^\dagger V = \Id$, $V V^\dagger = P$, and $n = \tr(P)$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Since $P$ is Hermitian and idempotent, its eigenvalues are $0$ and $1$,
+    and unitary diagonalization gives
+    \[
+        P = U \diag(\underbrace{1, \ldots, 1}_{n}, 0, \ldots, 0)\, U^\dagger
+    \]
+    with $U$ unitary and $n = \tr(P)$. The matrix $V \in \C^{D \times n}$
+    formed by the first $n$ columns of $U$ satisfies $V^\dagger V = \Id$ and
+    $V V^\dagger = P$.
+\end{proof}
+
+\begin{lemma}[Corner tensors inherit projector closure]
+    \label{lem:projector_closure_corner}
+    \lean{MPSTensor.hasInvariantProjectorClosure_compress_of_commutes}
+    \leanok
+    \uses{def:invariant_projector_closure, def:orthogonal_projection_channel}
+    Let $A$ have invariant-projector closure, and let $V$ be an isometry,
+    $V^\dagger V = \Id$, whose range projection $V V^\dagger$ commutes with
+    every $A^i$. Then the corner tensor $B^i = V^\dagger A^i V$ again has
+    invariant-projector closure.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{def:invariant_projector_closure}
+    Let $Q$ be an orthogonal projection with $Q B^i = Q B^i Q$ for all~$i$.
+    Then $V Q V^\dagger$ is an orthogonal projection. Commutation of
+    $V V^\dagger$ with each $A^i$ gives $V^\dagger A^i = B^i V^\dagger$, so
+    left-invariance of $Q$ yields
+    \[
+        (V Q V^\dagger) A^i
+        = V Q B^i V^\dagger
+        = V Q B^i Q V^\dagger
+        = (V Q V^\dagger) A^i (V Q V^\dagger).
+    \]
+    Projector closure for $A$ yields
+    $A^i (V Q V^\dagger) = (V Q V^\dagger) A^i (V Q V^\dagger)$, and
+    compressing both sides between $V^\dagger$ and $V$ returns
+    $B^i Q = Q B^i Q$.
+\end{proof}
+
+\begin{lemma}[Matrix product vectors split along an isometric partition]
+    \label{lem:mpv_partition_isometries}
+    \lean{MPSTensor.sameMPV₂_toTensorFromBlocks_of_isometry_family}
+    \leanok
+    \uses{def:same_mpv2, def:block_diagonal_tensor}
+    Let $V_1, \ldots, V_r$ be isometries, $V_k^\dagger V_k = \Id$, with
+    $\sum_k V_k V_k^\dagger = \Id$, and suppose $A^i V_k = V_k B_k^i$ for
+    some tensors $B_1, \ldots, B_r$. Then
+    $\mc{V}(A) = \mc{V}(\bigoplus_{k=1}^r B_k)$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    The intertwining relation propagates from letters to words, so
+    $A^w V_k = V_k B_k^w$ for every word $w$. Inserting the partition of
+    unity $\sum_k V_k V_k^\dagger = \Id$ into the trace and cycling gives
+    \[
+        \tr(A^w)
+        = \sum_{k=1}^r \tr\bigl(V_k^\dagger A^w V_k\bigr)
+        = \sum_{k=1}^r \tr\bigl(B_k^w\bigr),
+    \]
+    which is the matrix product vector of the direct sum.
+\end{proof}
+
+\begin{theorem}[Decomposition into irreducible corners under projector closure]
+    \label{thm:projector_closure_irreducible_corners}
+    \lean{MPSTensor.exists_irreducible_blockDecomp_with_isometry_of_hasInvariantProjectorClosure}
+    \leanok
+    \uses{def:invariant_projector_closure, def:irreducible_tensor,
+        def:same_mpv2, def:block_diagonal_tensor}
+    Suppose $A$ has invariant-projector closure. Then there are isometries
+    $V_1, \ldots, V_r$ with $V_k^\dagger V_k = \Id$, pairwise orthogonal
+    ranges, and $\sum_k V_k V_k^\dagger = \Id$, such that
+    $A^i V_k = V_k A_k^i$ for the corner tensors
+    $A_k^i = V_k^\dagger A^i V_k$, every corner tensor $A_k$ is irreducible,
+    and $\mc{V}(A) = \mc{V}(\bigoplus_{k=1}^r A_k)$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:has_inv_proj, thm:invariant_projector_closure_commutes,
+        lem:projection_support_isometry, lem:projector_closure_corner,
+        lem:mpv_partition_isometries}
+    Strong induction on the bond dimension. If $A$ is irreducible, the single
+    corner $V = \Id$ suffices. Otherwise $A$ has a nontrivial invariant
+    projection $P$, which commutes with every $A^i$ by
+    Theorem~\ref{thm:invariant_projector_closure_commutes}. Factoring
+    $P = V_1 V_1^\dagger$ and $\Id - P = V_2 V_2^\dagger$ through support
+    isometries (Lemma~\ref{lem:projection_support_isometry}) splits $A$ into
+    two corner tensors of strictly smaller bond dimension: for $j = 1, 2$,
+    commutation gives
+    \[
+        A^i V_j = V_j \bigl(V_j^\dagger A^i V_j\bigr),
+    \]
+    and each corner inherits invariant-projector closure by
+    Lemma~\ref{lem:projector_closure_corner}. The two recursively obtained
+    families are combined; ranges from different corners are orthogonal since
+    $V_1^\dagger P = V_1^\dagger$ and $(\Id - P) V_2 = V_2$ give
+    \[
+        V_1^\dagger V_2 = V_1^\dagger P (\Id - P) V_2 = 0.
+    \]
+    The equality of matrix product vectors is
+    Lemma~\ref{lem:mpv_partition_isometries}.
+\end{proof}
+
+\begin{definition}[No nontrivial periodic vectors]
+    \label{def:no_periodic_vectors}
+    \lean{MPSTensor.HasNoPeriodicVectors}
+    \leanok
+    \uses{def:mps_tensor, def:transfer_map, def:irreducible_tensor}
+    An MPS tensor $A$ has \emph{no nontrivial $p$-periodic vectors} if, for
+    every isometry $V$ with $V^\dagger V = \Id$ and $A^i V = V B^i$ for
+    all~$i$ with $B$ irreducible (equivalently, for every restriction $B$ of
+    $A$ to a minimal invariant subspace), and for every $\rho > 0$ and
+    $r > 0$ with $\E_B(\rho) = r\rho$, every eigenvalue of $\E_B$ of modulus
+    $r$ equals~$r$.
+    The eigenvalue $r$ is the spectral radius of $\E_B$
+    (Theorem~\ref{thm:spectral_radius_pf_irred}), so the condition states
+    that no block of the invariant-subspace decomposition
+    of~\cite[Section~2]{Cirac2016MPDO_arXiv}, rescaled to spectral radius
+    one, has a peripheral eigenvalue $e^{2\pi i q/p} \neq 1$. Eigenvectors
+    with such eigenvalues are the $p$-periodic vectors
+    of~\cite[Section~2]{Cirac2016MPDO_arXiv}.
+\end{definition}
+
+\begin{lemma}[Transfer map of an intertwined corner]
+    \label{lem:transfer_map_corner_intertwine}
+    \lean{MPSTensor.transferMap_conj_of_intertwine}
+    \lean{MPSTensor.hasEigenvalue_transferMap_of_intertwine}
+    \leanok
+    \uses{def:transfer_map}
+    Let $V$ satisfy $A^i V = V B^i$ for all~$i$. Then for every $X$,
+    \[
+        \E_A(V X V^\dagger) = V \E_B(X) V^\dagger.
+    \]
+    If moreover $V^\dagger V = \Id$, then every eigenvalue of $\E_B$ is an
+    eigenvalue of $\E_A$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Expanding $\E_A(V X V^\dagger)$ termwise, the intertwining
+    $A^i V = V B^i$ and its adjoint
+    $V^\dagger (A^i)^\dagger = (B^i)^\dagger V^\dagger$ move both factors
+    past $V$ and $V^\dagger$. For the eigenvalue statement, if
+    $\E_B(X) = \mu X$ with $X \neq 0$, then
+    $\E_A(V X V^\dagger) = \mu\, V X V^\dagger$, and $V X V^\dagger \neq 0$
+    because compressing with the isometry returns
+    $V^\dagger (V X V^\dagger) V = X$.
+\end{proof}
+
+\begin{lemma}[Perron eigenpair of a nonzero irreducible tensor]
+    \label{lem:irreducible_transfer_perron_pair}
+    \lean{MPSTensor.exists_posDef_transferMap_eigenvector_of_irreducible}
+    \leanok
+    \uses{def:irreducible_tensor, def:transfer_map}
+    Let $B$ be an irreducible MPS tensor of positive bond dimension, not all
+    of whose matrices vanish. Then there are $\rho > 0$ and $r > 0$ with
+    $\E_B(\rho) = r\rho$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{thm:pf_eigenvector_existence, def:irreducible_cp}
+    Irreducibility of the tensor makes the transfer map an irreducible
+    completely positive map, and a nonzero matrix makes it nonzero, so it
+    does not annihilate any nonzero PSD matrix. The Perron--Frobenius theorem
+    for positive maps (Theorem~\ref{thm:pf_eigenvector_existence}) gives a
+    nonzero PSD eigenvector with eigenvalue $r > 0$, and irreducibility
+    upgrades it to a positive-definite one
+    (\cite[Theorem~6.3(2)]{Wolf2012Quantum}).
+\end{proof}
+
+\begin{lemma}[Spectral normalization of an irreducible block]
+    \label{lem:irreducible_block_spectral_normalization}
+    \lean{MPSTensor.isNormalTensor_invSqrt_smul_of_unique_peripheral}
+    \leanok
+    \uses{def:irreducible_tensor, def:transfer_map, def:nt_cpsv}
+    Let $B$ be an irreducible MPS tensor of positive bond dimension with
+    $\E_B(\rho) = r\rho$ for some $\rho > 0$ and $r > 0$, and suppose every
+    eigenvalue of $\E_B$ of modulus $r$ equals $r$. Then $r^{-1/2} B$ is a
+    normal tensor.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{def:nt_cpsv, thm:spectral_radius_pf_irred}
+    The rescaling identity
+    \[
+        \E_{r^{-1/2}B}(X) = r^{-1}\,\E_B(X)
+    \]
+    gives $\E_{r^{-1/2}B}(\rho) = r^{-1}\cdot r\rho = \rho$, so $\rho$ is a
+    positive-definite fixed point of $\E_{r^{-1/2}B}$. The rescaled map remains
+    irreducible and completely positive, so
+    Theorem~\ref{thm:spectral_radius_pf_irred} identifies its spectral radius
+    with the eigenvalue one. The eigenvalues of modulus one of
+    $\E_{r^{-1/2}B}$ are the eigenvalues of $\E_B$ of modulus $r$, divided by
+    $r$; by hypothesis the only such eigenvalue is one, so the peripheral
+    eigenvalue set is $\{1\}$. Irreducibility is unchanged by a nonzero
+    rescaling.
+\end{proof}
+
+\begin{lemma}[Canonical inclusion of a dependent direct summand]
+    \label{lem:matrix_sigma_block_inclusion}
+    \lean{Matrix.sigmaBlockInclusion}
+    \lean{Matrix.sigmaBlockInclusion_isometry}
+    \lean{Matrix.blockDiagonal'_mul_sigmaBlockInclusion}
+    \lean{Matrix.sigmaBlockInclusion_conjTranspose_mul_blockDiagonal'}
+    \lean{Matrix.sigmaBlockInclusion_compression}
+    \lean{Matrix.blockDiagonal'_eq_sum_sigmaBlockInclusion}
+    \lean{Matrix.blockDiagonal'_commute_sigmaBlockInclusion_rangeProjection}
+    \leanok
+    Let $E_k:H_k\to\bigoplus_l H_l$ be the canonical inclusion and let
+    $B=\bigoplus_l B_l$. Then
+    \[
+        E_k^\dagger E_k=1,
+        \qquad
+        BE_k=E_kB_k,
+        \qquad
+        E_k^\dagger B=B_kE_k^\dagger,
+        \qquad
+        E_k^\dagger BE_k=B_k,
+        \qquad
+        B=\sum_k E_kB_kE_k^\dagger.
+    \]
+    In particular, $B$ commutes with the range projection $E_kE_k^\dagger$.
+\end{lemma}
+\begin{proof}\leanok
+    These identities follow directly from the defining block-diagonal
+    entries. The commutation relation follows by combining the two
+    intertwining identities.
+\end{proof}
+
+\begin{lemma}[Canonical hypotheses descend to dependent direct summands]
+    \label{lem:canonical_hypotheses_dependent_direct_summand}
+    \lean{MPSTensor.projectorClosure_and_noPeriodicVectors_block_of_reindex_eq_blockDiagonal}
+    \leanok
+    \uses{lem:matrix_sigma_block_inclusion,
+      def:invariant_projector_closure, def:no_periodic_vectors}
+    Suppose that, after a change of coordinates, $A$ is the dependent direct
+    sum of tensors $B_k$.  If $A$ has invariant-projector closure and no
+    nontrivial periodic vectors, then every $B_k$ has both properties.  The
+    assertion also applies to summands of dimension zero.
+\end{lemma}
+
+\begin{proof}\leanok
+    Transport the canonical inclusion of the $k$th summand back to the bond
+    coordinates of $A$.  This is an isometry which intertwines $B_k$ with
+    $A$ on both sides, and its range projection commutes with every letter of
+    $A$.  Projector closure therefore descends by exact compression.  A
+    periodic vector of $B_k$ would embed through the same isometry as a
+    periodic vector of $A$.
+\end{proof}
+
+\begin{lemma}[Closed-chain equality from an exact isometric decomposition]
+    \label{lem:same_mpv_exact_isometric_decomposition}
+    \lean{MPSTensor.sameMPV₂Pos_toTensorFromBlocks_of_reconstruction}
+    \leanok
+    \uses{def:same_mpv2_pos, def:block_diagonal_tensor}
+    Suppose that isometries $V_k$ satisfy
+    \[
+      V_k^\dagger A^i=(\mu_kB_k^i)V_k^\dagger,
+      \qquad
+      A^i=\sum_k V_k(\mu_kB_k^i)V_k^\dagger.
+    \]
+    Then $A$ and $\bigoplus_k\mu_kB_k$ have the same matrix product vectors
+    at every positive length.
+\end{lemma}
+
+\begin{proof}\leanok
+    Expand the first letter by the reconstruction formula.  In each summand,
+    move the remaining word through $V_k^\dagger$ using the intertwining
+    relation.  Cyclicity of trace places $V_k^\dagger V_k=1$ next to the
+    weighted block word, leaving precisely its closed-chain trace.
+\end{proof}
+
+\begin{theorem}[Sufficient condition for canonical form]
+    \label{thm:projector_closure_canonical_form}
+    \lean{MPSTensor.%
+        exists_normalTensor_blockDecomp_with_isometry_of_hasInvariantProjectorClosure}
+    \lean{MPSTensor.exists_normalTensor_blockDecomp_sameMPV₂Pos_of_hasInvariantProjectorClosure}
+    \leanok
+    \uses{def:invariant_projector_closure, def:no_periodic_vectors,
+        def:nt_cpsv, def:same_mpv2_pos, def:block_diagonal_tensor}
+    Suppose $A$ has invariant-projector closure and no nontrivial
+    $p$-periodic vectors. Then there are normal tensors $A_1, \ldots, A_r$
+    of positive bond dimensions $D_1, \ldots, D_r$ with $\sum_k D_k \le D$,
+    and nonzero weights $\mu_1, \ldots, \mu_r$, such that
+    \[
+        \mc{V}^+(A) = \mc{V}^+\Bigl(\bigoplus_{k=1}^r \mu_k A_k\Bigr).
+    \]
+    Moreover, there are isometries $V_k:\mathbb C^{D_k}\to\mathbb C^D$
+    with pairwise orthogonal ranges such that
+    \[
+        A^iV_k=V_k(\mu_k A_k^i),
+        \qquad
+        A^i=\sum_k V_k(\mu_k A_k^i)V_k^\dagger.
+    \]
+    This is the sufficient condition for canonical form
+    of~\cite[Section~2]{Cirac2016MPDO_arXiv}, with that paper's convention
+    $\sum_k D_k \le D$ allowing zero blocks: a corner of $A$ carrying the
+    zero tensor cannot be rescaled to spectral radius one and is omitted
+    because it vanishes at every positive length.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:projector_closure_irreducible_corners,
+        lem:irreducible_transfer_perron_pair,
+        lem:irreducible_block_spectral_normalization}
+    Decompose $A$ into irreducible corners $B_k$ along isometries $V_k$
+    (Theorem~\ref{thm:projector_closure_irreducible_corners}); every matrix
+    product vector coefficient of $A$ is the sum of those of the corners. A
+    corner whose matrices all vanish contributes nothing at positive length
+    and is dropped. Every remaining corner has a Perron eigenpair
+    $\E_{B_k}(\rho_k) = r_k \rho_k$
+    (Lemma~\ref{lem:irreducible_transfer_perron_pair}). The absence of
+    $p$-periodic vectors, applied to the corner $B_k$, gives that every
+    eigenvalue of $\E_{B_k}$ of modulus $r_k$ equals $r_k$, so
+    $A_k := r_k^{-1/2} B_k$ is normal
+    (Lemma~\ref{lem:irreducible_block_spectral_normalization}). Setting
+    $\mu_k := r_k^{1/2}$ gives $\mu_k A_k = B_k$ at the level of matrices,
+    so for every word $w$ of positive length $N$ the weight cancels,
+    \[
+        \mu_k^N \tr\bigl(A_k^w\bigr)
+        = \bigl(r_k^{1/2}\bigr)^N \bigl(r_k^{-1/2}\bigr)^N \tr\bigl(B_k^w\bigr)
+        = \tr\bigl(B_k^w\bigr),
+    \]
+    and summing over $k$ identifies the positive-length coefficients of
+    $\bigoplus_k \mu_k A_k$ with those of $A$. The kept dimensions satisfy
+    $\sum_k D_k \le \sum_k \tr(V_k V_k^\dagger) = \tr(\Id) = D$.
+\end{proof}
+
+\begin{theorem}[Non-scalar fixed point gives a further split]%
+    \label{thm:unital_nonscalar_fixed_point_split}
+    \lean{MPSTensor.exists_singular_posSemidef_fixedPoint_of_unital_nonScalar_fixedPoint}
+    \lean{MPSTensor.exists_twoBlock_decomp_of_unital_nonScalar_fixedPoint}
+    \leanok
+    \uses{def:transfer_map, def:same_mpv2, thm:two_block_decomp}
+    Suppose $A$ is unital, $\E_A(\Id)=\Id$. If $X$ is a Hermitian fixed point of
+    $\E_A$ which is not a scalar multiple of $\Id$, then there is a nonzero PSD
+    fixed point $\rho$ which is not positive definite, and consequently $A$
+    admits a two-block MPV-equivalent decomposition with both block dimensions
+    strictly smaller than $D$. This is the fixed-point shift and further
+    decomposition step in
+    \cite[Theorem~4]{PerezGarcia2007Matrix}.
+\end{theorem}
+
+\begin{proof}\leanok
+    Let $\lambda_{\max}$ be the largest eigenvalue of $X$. Then
+    $\rho := \lambda_{\max}\Id - X$ is positive semidefinite, singular, and
+    nonzero (since $X$ is not scalar), and unitality with the fixed-point
+    equation for $X$ gives $\E_A(\rho)=\rho$. Apply
+    Theorem~\ref{thm:two_block_decomp}. The non-scalar hypothesis is needed
+    because scalar multiples of $\Id$ are fixed by every unital map and yield no
+    nontrivial support projection.
+\end{proof}
