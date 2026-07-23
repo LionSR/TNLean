@@ -380,6 +380,32 @@ def test_prechange_ratchet_requires_extension_citation() -> None:
     )
 
 
+def test_census_correction_requires_unchanged_parser_surface() -> None:
+    baseline = json.loads((ROOT / "tests/tenkz/census-baseline.json").read_text())
+    current = copy.deepcopy(baseline)
+    previous = copy.deepcopy(baseline)
+    current["m1_census"]["value"]["kernel"] += 3
+    current["m6_overloads"]["value"]["multi_typed_names"] += 1
+    assert tenkz_shrink.ratchet_errors(
+        current,
+        previous,
+        has_extension=False,
+    )
+    assert not tenkz_shrink.ratchet_errors(
+        current,
+        previous,
+        has_extension=False,
+        has_census_correction=True,
+    )
+    current["m2_parser_paths"]["value"] += 1
+    assert tenkz_shrink.ratchet_errors(
+        current,
+        previous,
+        has_extension=False,
+        has_census_correction=True,
+    )
+
+
 def test_extension_citation_comes_only_from_added_lines() -> None:
     patch = """--- a/old
 +++ b/new

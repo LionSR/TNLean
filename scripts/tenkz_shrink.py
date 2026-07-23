@@ -709,24 +709,70 @@ def extension_cited(ref: str) -> bool:
     )
 
 
+def census_correction_cited(ref: str) -> bool:
+    """Whether added diff lines cite a reviewed census correction."""
+    result = subprocess.run(
+        ["git", "diff", "--merge-base", ref, "HEAD", "--"],
+        cwd=ROOT,
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        check=False,
+    )
+    if result.returncode:
+        raise ValueError(f"cannot diff against base ref {ref}: {result.stderr.strip()}")
+    return (
+        re.search(
+            r"Census-correction:\s*#[0-9]+",
+            added_diff_text(result.stdout),
+        )
+        is not None
+    )
+
+
 def _m1_total(snapshot: dict) -> int:
     return sum(snapshot["m1_census"]["value"].values())
 
 
-def ratchet_errors(current: dict, previous: dict, *, has_extension: bool) -> list[str]:
+def ratchet_errors(
+    current: dict,
+    previous: dict,
+    *,
+    has_extension: bool,
+    has_census_correction: bool = False,
+) -> list[str]:
     """Compare the checked-in baseline with its pre-change counterpart."""
     errors: list[str] = []
     current_m1 = current["m1_census"]["value"]
     previous_m1 = previous["m1_census"]["value"]
+    parser_paths_unchanged = (
+        current["m2_parser_paths"]["value"]
+        == previous["m2_parser_paths"]["value"]
+    )
+    correction_allowed = has_census_correction and parser_paths_unchanged
 
-    def extension_guard(grew: bool, meter: str) -> None:
-        if grew and not has_extension:
+    def extension_guard(
+        grew: bool,
+        meter: str,
+        *,
+        allow_correction: bool = False,
+    ) -> None:
+        if (
+            grew
+            and not has_extension
+            and not (allow_correction and correction_allowed)
+        ):
             errors.append(f"{meter} increased without an Extension-gate: #NNNN citation")
 
-    extension_guard(_m1_total(current) > _m1_total(previous), "M1 total")
+    extension_guard(
+        _m1_total(current) > _m1_total(previous),
+        "M1 total",
+        allow_correction=True,
+    )
     extension_guard(
         current_m1.get("kernel", 0) > previous_m1.get("kernel", 0),
         "M1 kernel",
+        allow_correction=True,
     )
     for surface in ("commands", "environments"):
         extension_guard(
@@ -748,7 +794,10 @@ def ratchet_errors(current: dict, previous: dict, *, has_extension: bool) -> lis
     if current_m5["missing_sunset"]:
         errors.append("M5 contains aliases without a valid sunset")
     for name, value in current["m6_overloads"]["value"].items():
-        if value > previous["m6_overloads"]["value"][name]:
+        if (
+            value > previous["m6_overloads"]["value"][name]
+            and not correction_allowed
+        ):
             errors.append(f"M6 overload component {name} increased")
     return errors
 
@@ -761,6 +810,7 @@ def evaluate_gate(
     verdicts: set[str],
     *,
     has_extension: bool,
+    has_census_correction: bool = False,
 ) -> tuple[str, list[str]]:
     """Return the gate branch and any failures."""
     actual = meters(entries, corpus)
@@ -769,7 +819,12 @@ def evaluate_gate(
             "computed meters differ from tests/tenkz/census-baseline.json"
         ]
     if previous is not None:
-        errors = ratchet_errors(baseline, previous, has_extension=has_extension)
+        errors = ratchet_errors(
+            baseline,
+            previous,
+            has_extension=has_extension,
+            has_census_correction=has_census_correction,
+        )
         if errors:
             return "ratchet", errors
         if _m1_total(baseline) < _m1_total(previous):
@@ -814,6 +869,11 @@ def main() -> int:
     try:
         previous = baseline_at_ref(args.base_ref) if args.base_ref else None
         has_extension = extension_cited(args.base_ref) if previous is not None else False
+        has_census_correction = (
+            census_correction_cited(args.base_ref)
+            if previous is not None
+            else False
+        )
         previous_ledger = ledger_at_ref(args.base_ref) if args.base_ref else None
     except ValueError as exc:
         print(f"tenkz-shrink: FAIL: {exc}", file=sys.stderr)
@@ -833,6 +893,7 @@ def main() -> int:
         previous,
         session_verdict_ids(section),
         has_extension=has_extension,
+        has_census_correction=has_census_correction,
     )
     if failures:
         for failure in failures:
