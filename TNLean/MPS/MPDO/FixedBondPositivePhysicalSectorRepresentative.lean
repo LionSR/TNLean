@@ -28,7 +28,7 @@ statement is asserted.
   456--476.
 -/
 
-open scoped ComplexOrder Matrix
+open scoped ComplexOrder
 
 namespace MPOTensor.TranslationInvariantBondData
 
