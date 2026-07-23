@@ -46,7 +46,7 @@ length-independent form stated at lines~1013--1016:
 where $H_N$ is a translationally invariant commuting nearest-neighbor
 Hamiltonian and the $P_i^{(N)}$ are orthogonal projections.
 
-\section{The formalized one-layer statement}
+\section{The formalized recursion through fixed labels}
 
 For terminal orthogonal projections $P_\gamma$, one pairwise fusion step is
 the direct sum
@@ -96,25 +96,51 @@ in \path{Papers/1606.00608/MPDO_O_L_A_.png} and
 \path{Papers/1606.00608/MPDO_Structure.png}.  Equation
 \eqref{eq:one-layer-terminal-fusion} restores the latter contraction.
 
+The pairwise construction has now been iterated along an arbitrary finite
+chain with a fixed initial label.  A fusion history records the intermediate
+labels and multiplicity indices, its weight is the product of the selected
+diagonal entries of the structure matrices, and its terminal space is the
+bond space of its final label.  The resulting recursively typed operator is
+\begin{equation}
+  Q_N(P)=\bigoplus_h w(h)P_{\gamma(h)}.
+  \label{eq:formalized-recursive-q}
+\end{equation}
+The sequential product of active fusion coisometries is formalized together
+with its coisometry identity.  It carries every letter of the left-associated
+product tensor to \eqref{eq:formalized-recursive-q}, with terminal block
+$P_\gamma=M_\gamma^{i,j}$.  Summing over equal physical indices proves the
+fixed-label terminal-trace identity
+\begin{equation}
+  \widetilde U_N\,
+    \operatorname{tr}(M_{\alpha,\boldsymbol\beta})\,
+    \widetilde U_N^\dagger
+  =Q_N\bigl((\operatorname{tr}(M_\gamma))_\gamma\bigr).
+  \label{eq:formalized-fixed-label-trace}
+\end{equation}
+Under length independence every history weight is one; consequently
+$Q_N(P)$ is an orthogonal projection whenever every terminal matrix
+$P_\gamma$ is one.
+
 \section{Remaining proof}
 
 Equations \eqref{eq:source-chain-decomposition}--
-\eqref{eq:source-gibbs-decomposition} are not consequences of the one-layer
-projection calculation alone.  A faithful proof still requires:
+\eqref{eq:source-gibbs-decomposition} are not consequences of the fixed-label
+recursion alone.  A faithful proof still requires:
 \begin{enumerate}
-  \item a recursively typed family $Q_N$ and the corresponding sequential
-    product of active-support fusion coisometries;
-  \item the arbitrary-chain local-unitary equivalence
+  \item the vertical-canonical assembly over the initial BNT labels, including
+    the factor $\mu^{\otimes N}$, and the identification of the assembled
+    matrix with the physical density operator in
     \eqref{eq:source-chain-decomposition};
-  \item the commutator identity \eqref{eq:source-commutator};
+  \item the commutator identity \eqref{eq:source-commutator} for that assembled
+    operator;
   \item the terminal spectral decomposition and its compatibility with the
     recursive sectors;
   \item the construction of the commuting nearest-neighbor Hamiltonian and
     the projections in \eqref{eq:source-gibbs-decomposition}.
 \end{enumerate}
 These steps are tracked in \ghissue{3950}.  Until they are proved, the
-one-layer projection theorem must not be cited as the arbitrary-chain theorem
-of lines~999--1016.
+fixed-label recursion must not be cited as the vertical-canonical decomposition
+or the commuting Gibbs theorem of lines~995--1016.
 
 \bibliographystyle{alpha}
 \bibliography{references}
