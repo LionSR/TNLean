@@ -1,0 +1,19 @@
+% Target: rmp-ii-zcl-mpdo
+% Formula: For E = tr_phys(M), the zero-correlation condition is E composed with E = E.
+% Ink: Canonical public tenkz environment; no raw TikZ.
+% Boundary: Every physical pair is traced; only the west and east virtual ends remain
+%   open.
+% Source: paper TN-Review-main.tex line 939; author source ImagesReview Section
+%   II/ImagesReview Section II.tex lines 702-713
+% Capabilities: grid, typed-ports
+\[
+  % LHS: E . E - two physically-traced tensors sharing one virtual bond
+  \begin{tenkz}[physical=updown, trace=physical]
+    \tn[mpo]{M} & \tn[mpo]{M}
+  \end{tenkz}
+  \;=\;
+  % RHS: E - one physically-traced tensor
+  \begin{tenkz}[physical=updown, trace=physical]
+    \tn[mpo]{M}
+  \end{tenkz}
+\]

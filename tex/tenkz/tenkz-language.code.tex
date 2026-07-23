@@ -1,0 +1,165 @@
+% Input: the executable registry and document-level setup declarations.
+% Output: public setup commands, shared picture keys, aliases, and diagnostics.
+% Owned state: registry records, atom descriptors, and language validation state.
+% Invariants: public syntax is normalized before any model or geometry mutation.
+% Next stage: tenkz-model.code.tex receives validated semantic records.
+
+\ExplSyntaxOn
+\seq_new:N \g__tenkz_language_environments_seq
+\seq_new:N \g__tenkz_language_commands_seq
+\seq_new:N \g__tenkz_language_keys_seq
+\seq_new:N \g__tenkz_language_aliases_seq
+\seq_new:N \g__tenkz_language_examples_seq
+\prop_new:N \g__tenkz_language_atom_skin_prop
+\prop_new:N \g__tenkz_language_atom_ports_prop
+\prop_new:N \g__tenkz_language_atom_options_prop
+\tl_new:N \l__tenkz_language_atom_skin_tl
+\tl_new:N \l__tenkz_language_atom_ports_tl
+\tl_new:N \l__tenkz_language_atom_options_tl
+\bool_new:N \l__tenkz_language_valid_bool
+
+\cs_new_protected:Npn \__tenkz_language_registry_environment:nnnn #1#2#3#4
+  { \seq_gput_right:Nn \g__tenkz_language_environments_seq {{#1}{#2}{#3}{#4}} }
+\cs_new_protected:Npn \__tenkz_language_registry_command:nnnnn #1#2#3#4#5
+  { \seq_gput_right:Nn \g__tenkz_language_commands_seq {{#1}{#2}{#3}{#4}{#5}} }
+\cs_new_protected:Npn \__tenkz_language_registry_key:nnnnnn #1#2#3#4#5#6
+  { \seq_gput_right:Nn \g__tenkz_language_keys_seq {{#1}{#2}{#3}{#4}{#5}{#6}} }
+\cs_new_protected:Npn \__tenkz_language_registry_alias:nnnn #1#2#3#4
+  { \seq_gput_right:Nn \g__tenkz_language_aliases_seq {{#1}{#2}{#3}{#4}} }
+\cs_new_protected:Npn \__tenkz_language_registry_example:nnn #1#2#3
+  { \seq_gput_right:Nn \g__tenkz_language_examples_seq {{#1}{#2}{#3}} }
+\input{tenkz-language-registry.tex}
+
+\msg_new:nnn {tenkz} {language-value}
+  { [TKZ-LANGUAGE-INVALID-VALUE]~#1 }
+\msg_new:nnn {tenkz} {atom-name}
+  {
+    [TKZ-ATOM-INVALID-NAME]~The~first~argument~of~
+    \token_to_str:N \tndeclareatom~must~be~an~undefined~control~sequence.
+  }
+\msg_new:nnn {tenkz} {atom-port}
+  {
+    [TKZ-ATOM-INVALID-PORT]~got~'#1';~expected~west|east:virtual~or~
+    up|down:physical.
+  }
+\msg_new:nnn {tenkz} {region-slot}
+  {
+    [TKZ-REGION-UNKNOWN-SLOT]~got~'#1';~expected~
+    selected|secondary|complement|collar|neutral.
+  }
+
+\cs_new_protected:Npn \tnset #1 { \pgfqkeys{/tenkz}{#1} }
+\pgfkeys{
+  /tenkz/.is~family,
+  /tenkz/pitch/.code={\tenkz@basepitch=#1\relax
+                      \tenkz@pitch=\tenkz@basepitch},
+  /tenkz/compact/.code={\tenkz@pitch=0.8\tenkz@basepitch},
+  /tenkz/inline/.code={\tenkz@pitch=0.62\tenkz@basepitch
+                       \let\tenkz@labelsize\scriptscriptstyle
+                       \let\tenkz@r@physleg\tenkz@r@inlinephysleg
+                       \let\tenkz@r@labelclear\tenkz@r@inlinelabelclear},
+  /tenkz/tensor~style/.is~choice,
+  /tenkz/tensor~style/dot/.code={\def\tenkz@tensorstyle{dot}%
+                                  \def\tenkz@tensorskin{tensor}},
+  /tenkz/tensor~style/box/.code={\def\tenkz@tensorstyle{box}%
+                                  \def\tenkz@tensorskin{box~tensor}},
+  /tenkz/species/.code={\tenkz_species_declare:n{#1}},
+}
+
+\cs_new_protected:Npn \__tenkz_language_install_forward_one:nn #1#2
+  {
+    \str_case:nnF {#2}
+      {
+        {pitch}        {\pgfkeys{/tenkz/#1/pitch/.code=
+                          {\pgfqkeys{/tenkz}{pitch=##1}}}}
+        {compact}      {\pgfkeys{/tenkz/#1/compact/.code=
+                          {\pgfqkeys{/tenkz}{compact}}}}
+        {inline}       {\pgfkeys{/tenkz/#1/inline/.code=
+                          {\pgfqkeys{/tenkz}{inline}}}}
+        {tensor~style} {\pgfkeys{/tenkz/#1/tensor~style/.code=
+                          {\pgfqkeys{/tenkz}{tensor~style=##1}}}}
+        {species}      {\pgfkeys{/tenkz/#1/species/.code=
+                          {\pgfqkeys{/tenkz}{species={##1}}}}}
+      }
+      { \msg_error:nnn {tenkz}{language-value}
+          {internal~shared~key~'#2'~for~scope~'#1'} }
+  }
+\cs_new_protected:Npn \tenkz_install_core_forwards:nn #1#2
+  { \clist_map_inline:nn {#2} { \__tenkz_language_install_forward_one:nn {#1}{##1} } }
+
+\pgfkeys{
+  /tenkz/declare~atom/.is~family,
+  /tenkz/declare~atom/skin/.is~choice,
+  /tenkz/declare~atom/skin/dot/.code={\tl_set:Nn \l__tenkz_language_atom_skin_tl {dot}},
+  /tenkz/declare~atom/skin/box/.code={\tl_set:Nn \l__tenkz_language_atom_skin_tl {box}},
+  /tenkz/declare~atom/skin/pill/.code={\tl_set:Nn \l__tenkz_language_atom_skin_tl {pill}},
+  /tenkz/declare~atom/skin/mpo/.code={\tl_set:Nn \l__tenkz_language_atom_skin_tl {mpo}},
+  /tenkz/declare~atom/ports/.store~in=\l__tenkz_language_atom_ports_tl,
+  /tenkz/declare~atom/.unknown/.code={
+    \bool_set_false:N \l__tenkz_language_valid_bool
+    \msg_error:nnn {tenkz}{language-value}
+      {atom~descriptor~key~'\pgfkeyscurrentname'}},
+}
+\cs_new_protected:Npn \__tenkz_language_validate_port:n #1
+  {
+    \regex_extract_once:nnNTF
+      { \A \s* (west|east|up|down) : (virtual|physical) \s* \Z }
+      {#1} \l_tmpa_seq
+      {
+        \str_case_e:nnF
+          { \seq_item:Nn \l_tmpa_seq {2} : \seq_item:Nn \l_tmpa_seq {3} }
+          {
+            {west:virtual} { }
+            {east:virtual} { }
+            {up:physical}  { }
+            {down:physical}{ }
+          }
+          { \bool_set_false:N \l__tenkz_language_valid_bool
+            \msg_error:nnn {tenkz}{atom-port}{#1} }
+        \bool_if:NT \l__tenkz_language_valid_bool
+          {
+            \tl_if_empty:NF \l__tenkz_language_atom_options_tl
+              { \tl_put_right:Nn \l__tenkz_language_atom_options_tl {,} }
+            \tl_put_right:Ne \l__tenkz_language_atom_options_tl
+              { \seq_item:Nn \l_tmpa_seq {2} ~at=center }
+          }
+      }
+      { \bool_set_false:N \l__tenkz_language_valid_bool
+        \msg_error:nnn {tenkz}{atom-port}{#1} }
+  }
+\cs_new_protected:Npn \__tenkz_language_use_atom:nnn #1#2#3
+  {
+    \prop_get:NnN \g__tenkz_language_atom_skin_prop {#1} \l_tmpa_tl
+    \prop_get:NnN \g__tenkz_language_atom_options_prop {#1} \l_tmpb_tl
+    \tl_if_blank:nTF {#2}
+      { \use:e { \exp_not:N \tn [\l_tmpa_tl,\l_tmpb_tl] {\exp_not:n{#3}} } }
+      { \use:e { \exp_not:N \tn [\l_tmpa_tl,\l_tmpb_tl,\exp_not:n{#2}] {\exp_not:n{#3}} } }
+  }
+\cs_new_protected:Npn \__tenkz_language_declare_atom:Nn #1#2
+  {
+    \bool_set_true:N \l__tenkz_language_valid_bool
+    \tl_set:Nn \l__tenkz_language_atom_skin_tl {dot}
+    \tl_clear:N \l__tenkz_language_atom_ports_tl
+    \tl_clear:N \l__tenkz_language_atom_options_tl
+    \cs_if_exist:NT #1
+      { \bool_set_false:N \l__tenkz_language_valid_bool
+        \msg_error:nn {tenkz}{atom-name} }
+    \pgfqkeys{/tenkz/declare~atom}{#2}
+    \clist_map_inline:Vn \l__tenkz_language_atom_ports_tl
+      { \__tenkz_language_validate_port:n {##1} }
+    \bool_if:NT \l__tenkz_language_valid_bool
+      {
+        \prop_gput:NnV \g__tenkz_language_atom_skin_prop
+          {\cs_to_str:N #1} \l__tenkz_language_atom_skin_tl
+        \prop_gput:NnV \g__tenkz_language_atom_ports_prop
+          {\cs_to_str:N #1} \l__tenkz_language_atom_ports_tl
+        \prop_gput:NnV \g__tenkz_language_atom_options_prop
+          {\cs_to_str:N #1} \l__tenkz_language_atom_options_tl
+        \exp_args:Nc \NewDocumentCommand {\cs_to_str:N #1} { O{} m }
+          { \__tenkz_language_use_atom:nnn {\cs_to_str:N #1} {##1}{##2} }
+      }
+  }
+\NewDocumentCommand \tndeclareatom { m m }
+  { \__tenkz_language_declare_atom:Nn #1 {#2} }
+\ExplSyntaxOff
+\endinput

@@ -1,0 +1,23 @@
+% Target: rmp-workbench-iii-mpo-injective-white
+% Formula: A virtual MPO corner pulls through a white PEPS tensor unchanged.
+% Ink: Canonical public tenkzfree PEPS star with before-and-after corner paths.
+% Boundary: Five PEPS legs and two MPO string ends remain open on each side.
+% Source: author source ImagesReview Section III/ImagesReview Section III.tex
+%   lines 501-520; archival output MPOInjPEPSwhite.pdf
+% Capabilities: free-graph, pulling-through, open-string
+\[
+  \begin{tenkzfree}
+    \tnput[dot]{A}{(0mm,0mm)}{A}
+    \tnput[box]{w}{(-9mm,0mm)}{} \tnput[box]{s}{(0mm,-9mm)}{}
+    \tnjoin{-17mm,0mm}{w.west} \tnjoin{w.east}{A.west}
+    \tnjoin{0mm,-17mm}{s.south} \tnjoin{s.north}{A.south}
+    \tnjoin[route=arc,out=0,in=-90]{w.north}{s.east}
+  \end{tenkzfree}
+  =\begin{tenkzfree}
+    \tnput[dot]{A}{(0mm,0mm)}{A}
+    \tnput[box]{n}{(0mm,9mm)}{} \tnput[box]{e}{(9mm,0mm)}{}
+    \tnjoin{A.north}{n.south} \tnjoin{n.north}{0mm,17mm}
+    \tnjoin{A.east}{e.west} \tnjoin{e.east}{17mm,0mm}
+    \tnjoin[route=arc,out=0,in=90]{n.east}{e.north}
+  \end{tenkzfree}.
+\]

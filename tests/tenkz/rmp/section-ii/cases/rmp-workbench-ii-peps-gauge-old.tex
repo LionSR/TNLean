@@ -1,0 +1,58 @@
+% Target: rmp-workbench-ii-peps-gauge-old
+% Formula: One marked virtual input on A is carried to three marked outputs on B.
+% Ink: Canonical public tenkzfree environment; no raw TikZ.
+% Boundary: Both PEPS atoms keep four virtual and one physical leg open; the marked
+%   branch has one incoming and three outgoing virtual endpoints.
+% Source: author source ImagesReview Section II/ImagesReview Section II.tex lines
+%   358-373; archival output sec2fig7old.pdf
+% Capabilities: free-graph, typed-ports
+\[
+  \underset{A}{\begin{tenkzfree}
+    \tnput[dot,ports={north:virtual,south:virtual,east:virtual,west:virtual,
+      north east:physical}]{a}{(0mm,0mm)}{}
+    \tnput[boundary,ports={east:virtual}]{aw}{(-8mm,0mm)}{}
+    \tnput[boundary,ports={west:virtual}]{ae}{(8mm,0mm)}{}
+    \tnput[boundary,ports={south:virtual}]{an}{(0mm,8mm)}{}
+    \tnput[boundary,ports={north:virtual}]{as}{(0mm,-8mm)}{}
+    \tnput[boundary,ports={south west:physical}]{ap}{(5mm,7mm)}{}
+    \tnjoin{aw.east}{a.west} \tnjoin{a.east}{ae.west}
+    \tnjoin{an.south}{a.north} \tnjoin{a.south}{as.north}
+    \tnjoin{a.north east}{ap.south west}
+    \tnput[dot,role=marked,ports={north:virtual,south:virtual}]
+      {g}{(-4mm,0mm)}{}
+    \tnput[boundary,ports={south:virtual}]{gi}{(-4mm,8mm)}{}
+    \tnput[boundary,ports={north:virtual}]{go}{(-4mm,-8mm)}{}
+    \tnjoin[role=marked]{gi.south}{g.north}
+    \tnjoin[role=marked]{g.south}{go.north}
+  \end{tenkzfree}}
+  \;=\;
+  \underset{B}{\begin{tenkzfree}
+    \tnput[dot,ports={north:virtual,south:virtual,east:virtual,west:virtual,
+      north east:physical}]{b}{(0mm,0mm)}{}
+    \tnput[boundary,ports={east:virtual}]{bw}{(-8mm,0mm)}{}
+    \tnput[boundary,ports={west:virtual}]{be}{(8mm,0mm)}{}
+    \tnput[boundary,ports={south:virtual}]{bn}{(0mm,8mm)}{}
+    \tnput[boundary,ports={north:virtual}]{bs}{(0mm,-8mm)}{}
+    \tnput[boundary,ports={south west:physical}]{bp}{(5mm,7mm)}{}
+    \tnjoin{bw.east}{b.west} \tnjoin{b.east}{be.west}
+    \tnjoin{bn.south}{b.north} \tnjoin{b.south}{bs.north}
+    \tnjoin{b.north east}{bp.south west}
+    \tnput[dot,role=marked,
+      ports={west:virtual,north:virtual,east:virtual,south:virtual}]
+      {gS}{(0mm,-6mm)}{}
+    \tnput[dot,role=marked,ports={west:virtual,east:virtual}]
+      {gE}{(9mm,0mm)}{}
+    \tnput[dot,role=marked,ports={south:virtual,north:virtual}]
+      {gN}{(0mm,6mm)}{}
+    \tnput[boundary,ports={east:virtual}]{gin}{(-8mm,-10mm)}{}
+    \tnput[boundary,ports={north:virtual}]{goutS}{(0mm,-11mm)}{}
+    \tnput[boundary,ports={west:virtual}]{goutE}{(13mm,0mm)}{}
+    \tnput[boundary,ports={south:virtual}]{goutN}{(0mm,11mm)}{}
+    \tnjoin[role=marked,route=vh]{gin.east}{gS.west}
+    \tnjoin[role=marked,route=hv]{gS.east}{gE.west}
+    \tnjoin[role=marked,route=arc,out=0,in=180]{gS.north}{gN.south}
+    \tnjoin[role=marked]{gS.south}{goutS.north}
+    \tnjoin[role=marked]{gE.east}{goutE.west}
+    \tnjoin[role=marked]{gN.north}{goutN.south}
+  \end{tenkzfree}}
+\]

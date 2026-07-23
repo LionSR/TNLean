@@ -36,7 +36,8 @@ lives beside it and always in the `%` comments.
    one cell-set algebra, in every tier. A new capability extends the
    existing vocabulary (Tufte, *Beautiful Evidence* 76–77) or it waits.
 3. **Measured, not budgeted.** Clearance questions go through the
-   silhouette resolver plus the one daylight constant (DESIGN.md §18).
+   silhouette resolver plus the one daylight constant (historical rationale:
+   `history/DESIGN.md` §18).
    Never add a constant that predicts what another pass draws.
 4. **Verification is visual.** Exit codes do not review figures — render
    and look, against the cited paper's own figure when one exists.
@@ -52,19 +53,19 @@ lives beside it and always in the `%` comments.
 
 ## Where everything lives
 
-- `docs/tenkz/DESIGN.md` — the consolidated specification (§0–18).
-- `docs/tenkz/HACKING.md` — canonical build commands and the expl3/pgf
-  pitfalls that have each shipped a bug. Read before editing any
-  `.code.tex`.
-- `docs/tenkz/MIGRATION-MAP.md`, `DEMOLITION.md` — the completed catalogue
-  migration and demolition record.
-- `docs/tenkz/manual2.tex` + `chapters2/` — the manual, second edition;
-  at 0.9 it becomes the binding contract.
+- `docs/tenkz/LANGUAGE.md` — the public mental model and semantic rules.
+- `tex/tenkz/tenkz-language-registry.tex` — the executable vocabulary.
+- `docs/tenkz/manual2.tex` + `chapters2/` — the compact citable manual and
+  generated canonical reference.
+- `docs/tenkz/ARCHITECTURE.md` — internal pipeline and ownership boundaries.
+- `docs/tenkz/HACKING.md` — build and debugging procedure; read it before
+  editing any `.code.tex`.
+- `docs/tenkz/history/` — superseded design proposals, reviews, migration
+  inventories, and 0.6 worklists; historical context, not current syntax.
 - GitHub milestones 0.6–1.0 with their issues — the sequence. The spine
   is the stack landing (#4151); after it, only small PRs off `main`.
-- `tex/tenkz/*.code.tex` — five modules: core (metric, styles, events),
-  grid (the chain grammar), lattice (projected frames, 2+1D), cd (typed
-  maps, trees), free (typed ports).
+- `tex/tenkz/*.code.tex` — staged implementation from language and model
+  through style, geometry, dialect layout, rendering, and events.
 
 ## How to decide
 

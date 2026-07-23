@@ -1,0 +1,19 @@
+% Target: rmp-ii-spectrum-rho
+% Formula: eig(rho_n), where rho_n = Tr[rho^R A^n rho^L (A^*)^n].
+% Ink: Canonical public tenkz environment; no raw TikZ.
+% Boundary: Both virtual ends close through rho^R and rho^L; the physical ket-bra legs
+%   remain open.
+% Source: paper TN-Review-main.tex line 425; author source ImagesReview Section
+%   II/ImagesReview Section II.tex lines 484-499
+% Capabilities: grid, typed-ports
+\[
+  \mathrm{eig}\left(
+  % the rho_n racetrack: open legs (nopair), both virtual ends closed
+  % through the on-bend fixed points rho^R (west) and rho^L (east)
+  \begin{tenkz}[rows={ket:nopair, bra},
+                west={cup=$\rho^R$}, east={cup=$\rho^L$}]
+    \tn{} & \tn{} & \tn{} & \tn{}\\
+    \tn*{} & \tn*{} & \tn*{} & \tn*{}
+  \end{tenkz}
+  \right)
+\]

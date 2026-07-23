@@ -1,0 +1,23 @@
+% Target: rmp-iii-b-braid-four
+% Formula: R_{i,b} and R_{j,a} resolve the final two-string braid.
+% Ink: Canonical public tenkzfree stacked resolver boxes and open braid strands.
+% Boundary: Two lattice rails and four string endpoints are open.
+% Source: paper TN-Review-main.tex line 1680; author source ImagesReview Section
+%   III/ImagesReview Section III.tex lines 900-924
+% Capabilities: free-graph, braid-resolver, crossing-order
+\[
+  \begin{tenkzfree}
+    \tnput[dot]{j}{(0mm,11mm)}{j}
+    \tnput[box]{Rja}{(8mm,4mm)}{\mathcal R_{j,a}}
+    \tnput[box]{Rib}{(8mm,-4mm)}{\mathcal R_{i,b}}
+    \tnput[dot]{i}{(0mm,-11mm)}{i}
+    \tnjoin{-10mm,11mm}{j.west} \tnjoin{j.east}{18mm,11mm}
+    \tnjoin{-10mm,-11mm}{i.west} \tnjoin{i.east}{18mm,-11mm}
+    \tnjoin[route=arc, out=-90, in=135]{j.south}{Rja.north west}
+    \tnjoin{Rja.south}{Rib.north}
+    \tnjoin[route=arc, out=225, in=90]{Rib.south west}{i.north}
+    \tnjoin{-10mm,0mm}{Rja.west}
+    \tnjoin{Rja.east}{18mm,16mm}
+    \tnjoin{Rib.east}{18mm,-16mm}
+  \end{tenkzfree}
+\]

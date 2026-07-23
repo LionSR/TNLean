@@ -1,0 +1,28 @@
+% Target: rmp-iii-a-mpo-action
+% Formula: u_g on the physical leg equals w_g,v_g actions on four virtual legs.
+% Ink: Canonical public tenkzfree PEPS star with five explicit action atoms.
+% Boundary: The transformed tensor keeps four virtual and one physical open legs.
+% Source: paper TN-Review-main.tex line 1492; author source ImagesReview Section
+%   III/ImagesReview Section III.tex lines 538-552
+% Capabilities: free-graph, virtual-action, typed-ports
+\[
+  \begin{tenkzfree}
+    \tnput[dot]{A}{(0mm,0mm)}{A}
+    \tnput[ring]{u}{(0mm,10mm)}{u_g}
+    \tnjoin{-14mm,0mm}{A.west} \tnjoin{A.east}{14mm,0mm}
+    \tnjoin{0mm,-14mm}{A.south} \tnjoin{A.north}{u.south}
+    \tnjoin{u.north}{0mm,18mm}
+  \end{tenkzfree}
+  =
+  \begin{tenkzfree}
+    \tnput[dot]{A}{(0mm,0mm)}{A}
+    \tnput[ring]{w}{(-10mm,0mm)}{w_g}
+    \tnput[ring]{wd}{(10mm,0mm)}{w_g^\dagger}
+    \tnput[ring]{v}{(0mm,10mm)}{v_g}
+    \tnput[ring]{vd}{(0mm,-10mm)}{v_g^\dagger}
+    \tnjoin{-18mm,0mm}{w.west} \tnjoin{w.east}{A.west}
+    \tnjoin{A.east}{wd.west} \tnjoin{wd.east}{18mm,0mm}
+    \tnjoin{0mm,-18mm}{vd.south} \tnjoin{vd.north}{A.south}
+    \tnjoin{A.north}{v.south} \tnjoin{v.north}{0mm,18mm}
+  \end{tenkzfree}.
+\]

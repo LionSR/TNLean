@@ -1,0 +1,15 @@
+% Target: rmp-iv-ground-space-2d
+% Formula: |psi(X)> = sum_{s} X( {beta_r} ) C( prod_r A^{s_r} ) |s>,
+% Ink: Canonical public tenkzlattice environment; no raw TikZ.
+% Boundary: Resolved by the public environment; open indices remain explicit.
+% Source: paper TN-Review-main.tex line 2006; author source ImagesReview Section
+%   IV/ImagesReview Section IV.tex lines 55-70
+% Capabilities: lattice, regions, typed-ports
+\[
+  |\psi(X)\rangle \;=\;
+  \begin{tenkzlattice}[rows=4, cols=4, frame=oblique,
+                       physical=up, boundary=open]
+    \tnregion[outline, inset=1]{(1-4,1-4)}
+    \tnregion[outline, label=$X$, label pos=north east]{(1-4,1-4)}
+  \end{tenkzlattice}
+\]

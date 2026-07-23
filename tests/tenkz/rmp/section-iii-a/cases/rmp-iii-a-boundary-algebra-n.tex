@@ -1,0 +1,13 @@
+% Target: rmp-iii-a-boundary-algebra-n
+% Formula: A^(N) = {Tr[X A_1...A_N] : X} is the size-N MPO algebra.
+% Ink: Canonical public tenkz periodic N-site word with boundary matrix X.
+% Boundary: The virtual word is traced; all N physical indices are open.
+% Source: paper TN-Review-main.tex line 1298; author source ImagesReview Section
+%   III/ImagesReview Section III.tex lines 133-163
+% Capabilities: grid, periodic-closure, boundary-insertion
+\[
+  \mathcal A^{(N)}=\left\{
+  \begin{tenkz}[physical=up, boundary=periodic, tensor style=box]
+    \tnX{X} & \tn{A_1} & \tn{A_2} & \tndots & \tn{A_N}
+  \end{tenkz}:X\right\}.
+\]

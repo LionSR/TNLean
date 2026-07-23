@@ -1,0 +1,20 @@
+% Target: rmp-workbench-iii-eq60-now
+% Formula: u_g on the physical leg pulls through to w_g and v_g virtual actions.
+% Ink: Canonical public tenkzfree PEPS star with physical and virtual rings.
+% Boundary: Five transformed tensor legs remain open.
+% Source: author source ImagesReview Section III/ImagesReview Section III.tex
+%   lines 538-552; archival output Eq60now.pdf
+% Capabilities: free-graph, virtual-action, typed-ports
+\[
+  \begin{tenkzfree}
+    \tnput[dot]{A}{(0mm,0mm)}{A} \tnput[ring]{u}{(0mm,9mm)}{u_g}
+    \tnjoin{-14mm,0mm}{A.west} \tnjoin{A.east}{14mm,0mm}
+    \tnjoin{0mm,-14mm}{A.south} \tnjoin{A.north}{u.south}
+  \end{tenkzfree}
+  =\begin{tenkzfree}
+    \tnput[dot]{A}{(0mm,0mm)}{A}
+    \tnput[ring]{w}{(-9mm,0mm)}{w_g} \tnput[ring]{v}{(0mm,9mm)}{v_g}
+    \tnjoin{-16mm,0mm}{w.west} \tnjoin{w.east}{A.west}
+    \tnjoin{A.east}{16mm,0mm} \tnjoin{A.north}{v.south}
+  \end{tenkzfree}.
+\]

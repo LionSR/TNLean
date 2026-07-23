@@ -1,0 +1,16 @@
+% Target: rmp-workbench-iii-eq59
+% Formula: A marked MPO loop winds around a noncontractible torus cycle.
+% Ink: Canonical public tenkzfree closed loop with one crossing insertion i.
+% Boundary: The MPO cycle is closed; the torus diagram is scalar.
+% Source: author source ImagesReview Section III/ImagesReview Section III.tex
+%   lines 563-603; archival output Eq59.pdf
+% Capabilities: free-graph, torus-cycle, crossing-tensor
+\[
+  \begin{tenkzfree}
+    \tnput[box]{i}{(0mm,-7mm)}{i}
+    \tnput[mpo]{w}{(-13mm,0mm)}{} \tnput[mpo]{e}{(13mm,0mm)}{}
+    \tnjoin[route=arc,out=90,in=90]{w.north}{e.north}
+    \tnjoin[route=arc,out=-90,in=-90]{e.south}{w.south}
+    \tnjoin{w.east}{i.west} \tnjoin{i.east}{e.west}
+  \end{tenkzfree}.
+\]

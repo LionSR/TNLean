@@ -1,4 +1,8 @@
-% tenkz-cd — L2b: the commutative-diagram sub-language.
+% Input: validated map, fusion-tree, and coherence-diagram declarations.
+% Output: normalized typed connections and cd-specific layout ink.
+% Owned state: parsed trees, map matrices, polygon slots, and arrow declarations.
+% Invariants: labels and topology validate before any measured layout pass.
+% Next stage: shared event services emit the resolved model used for rendering.
 %
 %   \tntree[keys]{(((a\,b)_x\,c)_y\,d)_e}
 %       a fusion tree from a parenthesization word: leaves on a top
@@ -801,7 +805,7 @@
     \tl_put_right:Nn \l__tenkzcd_body_tl {#1}
     \peek_meaning_remove:NTF \q__tenkzcd_map_scan_stop
       { }
-      { \tenkz_cd_measure_map_label_aux }
+      { \__tenkz_cd_measure_map_label_aux: }
   }
 
 % Tag each scanned declaration in the copied matrix body.  The tag and its
@@ -811,7 +815,7 @@
 \cs_new_protected:Npn \tenkz_cd_mark_map:n #1
   { \int_gset:Nn \g__tenkzcd_mapordinal_int {#1} }
 
-\NewDocumentCommand \tenkz_cd_measure_map_label_aux { s O{} m }
+\NewDocumentCommand \__tenkz_cd_measure_map_label_aux: { s O{} m }
   {
     \int_incr:N \l__tenkzcd_mapdecls_int
     % Box registers are allocated once per declaration ordinal, but their

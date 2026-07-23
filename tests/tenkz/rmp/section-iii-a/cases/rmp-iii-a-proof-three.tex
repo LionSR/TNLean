@@ -1,0 +1,16 @@
+% Target: rmp-iii-a-proof-three
+% Formula: V_beta V_alpha = lambda(alpha,beta;gamma) V_gamma F_alpha,beta^gamma.
+% Ink: Canonical public tenkz equation comparing sequential and fused reductions.
+% Boundary: Both reduction networks expose the same MPO and MPS interfaces.
+% Source: paper TN-Review-main.tex line 1412; author source ImagesReview Section
+%   III/ImagesReview Section III.tex lines 386-411
+% Capabilities: grid, local-intertwiner, fusion-map
+\[
+  \begin{tenkz}[rows={op:operator}, tensor style=box]
+    \tn{\alpha} & \tnX{V_\alpha} & \tn{\beta} & \tnX{V_\beta}
+  \end{tenkz}
+  =\lambda(\alpha,\beta;\gamma)
+  \begin{tenkz}[rows={op:operator}, tensor style=box]
+    \tn{\alpha,\beta} & \tnX{F_{\alpha\beta}^{\gamma}} & \tnX{V_\gamma}
+  \end{tenkz}.
+\]

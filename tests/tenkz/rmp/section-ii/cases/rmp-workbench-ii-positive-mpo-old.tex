@@ -1,0 +1,43 @@
+% Target: rmp-workbench-ii-positive-mpo-old
+% Formula: O = X^-1 (sum_k A^k tensor conjugate(A^k)) X.
+% Ink: Canonical public tenkzfree environment; no raw TikZ.
+% Boundary: O has four open ports; each capsule branches one outer virtual leg into
+%   the two A rails, whose physical legs form one open vertical line.
+% Source: author source ImagesReview Section II/ImagesReview Section II.tex lines
+%   317-335; archival output sec2fig6old.pdf
+% Capabilities: free-graph, typed-ports
+\[
+  \begin{tenkzfree}
+    \tnput[box,ports={north:physical,south:physical,east:virtual,west:virtual}]
+      {O}{(0mm,0mm)}{O}
+    \tnput[boundary,ports={south:physical}]{n}{(0mm,9mm)}{}
+    \tnput[boundary,ports={north:physical}]{s}{(0mm,-9mm)}{}
+    \tnput[boundary,ports={east:virtual}]{w}{(-9mm,0mm)}{}
+    \tnput[boundary,ports={west:virtual}]{e}{(9mm,0mm)}{}
+    \tnjoin{n.south}{O.north} \tnjoin{O.south}{s.north}
+    \tnjoin{w.east}{O.west} \tnjoin{O.east}{e.west}
+  \end{tenkzfree}
+  \;=\;
+  \begin{tenkzfree}
+    \tnput[pill,ports={west:virtual,north east:virtual,south east:virtual}]
+      {xi}{(-14mm,0mm)}{X^{-1}}
+    \tnput[box,ports={west:virtual,east:virtual,north:physical,south:physical}]
+      {A}{(0mm,5mm)}{A}
+    \tnput[box,ports={west:virtual,east:virtual,north:physical,south:physical}]
+      {Ab}{(0mm,-5mm)}{\bar A}
+    \tnput[pill,ports={north west:virtual,south west:virtual,east:virtual}]
+      {x}{(14mm,0mm)}{X}
+    \tnput[boundary,ports={east:virtual}]{w}{(-24mm,0mm)}{}
+    \tnput[boundary,ports={west:virtual}]{e}{(24mm,0mm)}{}
+    \tnput[boundary,ports={south:physical}]{n}{(0mm,13mm)}{}
+    \tnput[boundary,ports={north:physical}]{s}{(0mm,-13mm)}{}
+    \tnjoin{w.east}{xi.west}
+    \tnjoin[route=arc,out=0,in=180]{xi.north east}{A.west}
+    \tnjoin[route=arc,out=0,in=180]{xi.south east}{Ab.west}
+    \tnjoin[route=arc,out=0,in=180]{A.east}{x.north west}
+    \tnjoin[route=arc,out=0,in=180]{Ab.east}{x.south west}
+    \tnjoin{x.east}{e.west}
+    \tnjoin{n.south}{A.north} \tnjoin{A.south}{Ab.north}
+    \tnjoin{Ab.south}{s.north}
+  \end{tenkzfree}
+\]

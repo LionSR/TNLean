@@ -1,0 +1,16 @@
+% Target: rmp-workbench-iii-eq59-now
+% Formula: |G|^-1 sum_g of four L_g actions is the G-injective projector.
+% Ink: Canonical public tenkzfree four inward L_g actions and projector ring.
+% Boundary: Four directed virtual legs are open; the projector ring is closed.
+% Source: author source ImagesReview Section III/ImagesReview Section III.tex
+%   lines 305-328; archival output Eq59now.pdf
+% Capabilities: free-graph, group-average, ring-closure
+\[
+  \frac1{|G|}\sum_{g\in G}
+  \begin{tenkzfree}
+    \tnput[ring]{n}{(0mm,8mm)}{L_g} \tnput[ring]{e}{(8mm,0mm)}{L_g}
+    \tnput[ring]{s}{(0mm,-8mm)}{L_g} \tnput[ring]{w}{(-8mm,0mm)}{L_g}
+    \tnjoin[dir]{0mm,16mm}{n.north} \tnjoin[dir]{16mm,0mm}{e.east}
+    \tnjoin[dir]{0mm,-16mm}{s.south} \tnjoin[dir]{-16mm,0mm}{w.west}
+  \end{tenkzfree}=P_G.
+\]

@@ -1,0 +1,30 @@
+% Target: rmp-iii-a-mpo-injective
+% Formula: A PEPS tensor equals its virtual MPO ring pulled around the tensor.
+% Ink: Canonical public tenkzfree PEPS star and four-site MPO closure.
+% Boundary: Five PEPS legs remain open; the surrounding MPO is closed.
+% Source: paper TN-Review-main.tex line 1505; author source ImagesReview Section
+%   III/ImagesReview Section III.tex lines 521-537
+% Capabilities: free-graph, ring-closure, pulling-through
+\[
+  \begin{tenkzfree}
+    \tnput[dot]{A}{(0mm,0mm)}{A}
+    \tnjoin{-14mm,0mm}{A.west} \tnjoin{A.east}{14mm,0mm}
+    \tnjoin{0mm,-14mm}{A.south} \tnjoin{A.north}{0mm,14mm}
+    \tnjoin{A}{0mm,7mm}
+  \end{tenkzfree}
+  =
+  \begin{tenkzfree}
+    \tnput[dot]{A}{(0mm,0mm)}{A}
+    \tnput[mpo]{W}{(-10mm,0mm)}{}
+    \tnput[mpo]{N}{(0mm,10mm)}{}
+    \tnput[mpo]{E}{(10mm,0mm)}{}
+    \tnput[mpo]{S}{(0mm,-10mm)}{}
+    \tnjoin[route=arc, out=90, in=180]{W.north}{N.west}
+    \tnjoin[route=arc, out=0, in=90]{N.east}{E.north}
+    \tnjoin[route=arc, out=-90, in=0]{E.south}{S.east}
+    \tnjoin[route=arc, out=180, in=-90]{S.west}{W.south}
+    \tnjoin{-18mm,0mm}{W.west} \tnjoin{E.east}{18mm,0mm}
+    \tnjoin{0mm,-18mm}{S.south} \tnjoin{N.north}{0mm,18mm}
+    \tnjoin{A}{0mm,7mm}
+  \end{tenkzfree}.
+\]

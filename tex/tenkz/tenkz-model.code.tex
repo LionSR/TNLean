@@ -1,0 +1,34 @@
+% Input: validated picture, atom, connection, closure, region, and annotation data.
+% Output: normalized semantic records addressable by picture-local stable identifiers.
+% Owned state: the current resolved-model record sequences and validation phase flag.
+% Invariants: topology is immutable after validation; records contain no user syntax.
+% Next stage: style and geometry resolve metrics and silhouettes from these records.
+
+\ExplSyntaxOn
+\seq_new:N \l__tenkz_model_atoms_seq
+\seq_new:N \l__tenkz_model_connections_seq
+\seq_new:N \l__tenkz_model_closures_seq
+\seq_new:N \l__tenkz_model_regions_seq
+\seq_new:N \l__tenkz_model_annotations_seq
+\bool_new:N \l__tenkz_model_validated_bool
+\cs_new_protected:Npn \__tenkz_model_reset:
+  {
+    \seq_clear:N \l__tenkz_model_atoms_seq
+    \seq_clear:N \l__tenkz_model_connections_seq
+    \seq_clear:N \l__tenkz_model_closures_seq
+    \seq_clear:N \l__tenkz_model_regions_seq
+    \seq_clear:N \l__tenkz_model_annotations_seq
+    \bool_set_false:N \l__tenkz_model_validated_bool
+  }
+\cs_new_protected:Npn \__tenkz_model_validate:
+  { \bool_set_true:N \l__tenkz_model_validated_bool }
+\msg_new:nnn {tenkz}{model-frozen}
+  { [TKZ-MODEL-FROZEN]~Topology~cannot~change~after~validation. }
+\cs_new_protected:Npn \__tenkz_model_record_atom:n #1
+  {
+    \bool_if:NTF \l__tenkz_model_validated_bool
+      { \msg_error:nn {tenkz}{model-frozen} }
+      { \seq_put_right:Nn \l__tenkz_model_atoms_seq {#1} }
+  }
+\ExplSyntaxOff
+\endinput

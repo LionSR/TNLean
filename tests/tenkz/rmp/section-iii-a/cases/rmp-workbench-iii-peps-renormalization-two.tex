@@ -1,0 +1,16 @@
+% Target: rmp-workbench-iii-peps-renormalization-two
+% Formula: A 2x2 PEPS block renormalizes to one effective four-leg tensor.
+% Ink: Canonical public tenkzlattice block-to-site equation.
+% Boundary: Both sides expose one effective leg in each lattice direction.
+% Source: author source ImagesReview Section III/ImagesReview Section III.tex
+%   lines 631-643; archival output PEPSrenom2.pdf
+% Capabilities: lattice, blocking, equation-composition
+\[
+  \begin{tenkzlattice}[rows=2,cols=2,frame=oblique,outer legs=both]
+    \tnsite{(1,1)} \tnsite{(1,2)} \tnsite{(2,1)} \tnsite{(2,2)}
+  \end{tenkzlattice}
+  \longmapsto
+  \begin{tenkzlattice}[rows=1,cols=1,frame=oblique,outer legs=both]
+    \tnsite{(1,1)}
+  \end{tenkzlattice}.
+\]

@@ -1,0 +1,19 @@
+% Target: rmp-workbench-ii-peps-fine-graining
+% Formula: One PEPS tensor is fine-grained into a 2x2 tensor patch.
+% Ink: Canonical public tenkzlattice environments; no raw TikZ.
+% Boundary: The one-site and 2x2 sheets expose matching outer virtual and physical
+%   boundaries.
+% Source: author source ImagesReview Section II/ImagesReview Section II.tex lines
+%   742-800; archival output figrenorm2D.pdf
+% Capabilities: lattice, typed-ports
+\[
+  \begin{tenkzlattice}[rows=1,cols=1,frame=oblique,physical=up,
+                       outer legs=both]
+    \tnsite{(1,1)}
+  \end{tenkzlattice}
+  \;\longrightarrow\;
+  \begin{tenkzlattice}[rows=2,cols=2,frame=oblique,physical=up,
+                       outer legs=both]
+    \tnsite{(1,1)}
+  \end{tenkzlattice}
+\]

@@ -1,4 +1,8 @@
-% tenkz-grid — L2a: the contraction grid.
+% Input: validated grid picture options and cell commands.
+% Output: normalized atoms/connections/closures plus grid-specific layout ink.
+% Owned state: grid rows, cells, topology, coordinates, and boundary signature.
+% Invariants: all syntax validation finishes before measurement and drawing.
+% Next stage: shared event services emit the resolved model used for rendering.
 %
 %   \begin{tenkz}[keys]  cell & cell & ... \\ ...  \end{tenkz}
 %   \tnpic[keys]{cells}
@@ -435,6 +439,8 @@
   { \int_use:N \l__tenkz_row_int - \int_use:N \l__tenkz_col_int }
 \cs_new_protected:Npn \tenkz_record:nnn #1#2#3
   {
+    \__tenkz_model_record_atom:n
+      {kind={#1},options={\exp_not:n{#2}},label={\exp_not:n{#3}}}
     \prop_put:Nen \l__tenkz_kind_prop  { \tenkz_cell_key: } {#1}
     \prop_put:Nen \l__tenkz_opts_prop  { \tenkz_cell_key: } {#2}
     \prop_put:Nen \l__tenkz_label_prop { \tenkz_cell_key: } {#3}
@@ -1403,6 +1409,7 @@
 \cs_new_protected:Npn \tenkz_render:nn #1#2
   {
     \group_begin:
+    \__tenkz_model_reset:
     \prop_clear:N \l__tenkz_kind_prop
     \prop_clear:N \l__tenkz_label_prop
     \prop_clear:N \l__tenkz_opts_prop
@@ -1459,6 +1466,7 @@
     \tenkz_record_traces:
     % map the interface-addressed open=/trace= segments to rows
     \tenkz_record_interfaces:
+    \__tenkz_model_validate:
     \tenkz@beginpicture{grid}
     \tenkz_emit_tracefacewarnings:
     \tenkz_draw:

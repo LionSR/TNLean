@@ -1,0 +1,21 @@
+% Target: rmp-ii-rfp-isometry
+% Formula: A^{i_1} A^{i_2} = sum_j U_{(i_1 i_2),j} A^j.
+% Ink: Canonical public tenkz environment; no raw TikZ.
+% Boundary: Both sides keep the outer virtual legs and the two blocked physical outputs
+%   open.
+% Source: paper TN-Review-main.tex line 914; author source ImagesReview Section
+%   II/ImagesReview Section II.tex lines 685-701
+% Capabilities: grid, typed-ports
+\[
+  % LHS: A^{i_1} A^{i_2} - two MPS tensors, one open up leg each
+  \begin{tenkz}[physical=up]
+    \tn[box]{A} & \tn[box]{A}
+  \end{tenkz}
+  \;=\;
+  % RHS: sum_j U_{(i_1 i_2), j} A^j - U keeps one leg per blocked
+  % site; the vertical U-A bond is the summed physical index j
+  \begin{tenkz}[rows={op:none, ket}]
+    \tn[pill, wide=2, down at={1,2}]{U} & \\
+    \tn[box, wide=2]{A} &
+  \end{tenkz}
+\]

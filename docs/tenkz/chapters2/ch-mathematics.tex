@@ -1,292 +1,41 @@
-% chapters2/ch-mathematics.tex — the mathematics of the pictures.
-%
-% The semantics chapter: every piece of tenkz ink is assigned its
-% mathematical meaning before the tutorial teaches any drawing.
-% Diagrams are adapted from the v0.5 acceptance corpus
-% (boundary_test, cups_test, channel_test, atoms_test); the
-% reading-order convention follows arXiv:1804.04964, the arrow
-% semantics follow the RMP figures (arXiv:2011.12127).
-\section{The mathematics of the pictures}\label{ch:mathematics}
+% Installation and the public mental model.
+\section{Install and read the language}\label{ch:install}
 
-A \pkg{} picture denotes a tensor, and the denotation is fixed by a
-short dictionary: ink that protrudes is an index left open; ink that
-closes is an index summed over.  This chapter states the dictionary
-once --- stubs, boundary signatures, traces against cups, the
-conjugate layer, directed bonds --- and every later chapter points
-back to it.  One object runs through the
-chapter, the quantum channel $\mathcal{E}_A$, because the channel
-exercises every entry of the dictionary.
+The complete installation is two lines:
 
-% ---------------------------------------------------------------------
-\subsection{An open index is protruding ink}\label{sec:stubs}
+\begin{Verbatim}[fontsize=\small,frame=leftline]
+\usepackage{tenkz}
+\begin{tenkz}[physical=up] \tn{A} & \tn{B} \end{tenkz}
+\end{Verbatim}
 
-A $D\times D$ matrix has a row index and a column index, and its
-picture must show them: \pkg{} draws each open virtual index as a stub
-protruding from the end of its wire, and stubs are the default.  A
-matrix product must look like a matrix.  Stubs can be named at their
-tips with \tnkey{west label} and \tnkey{east label}:
+For a repository checkout, put \tnfile{tex/tenkz/} on
+\texttt{TEXINPUTS}; for an archived article, ship \tnfile{tenkz.sty} and
+its package files beside the source.  XeLaTeX is the reference engine for
+print and for the XDV-to-SVG web route.
 
-\begin{tnexample}[
-    formula   = {(B^{i})_{\alpha\beta}},
-    caption   = {a matrix shows its indices},
-    index     = {Three protruding ends, three indices: the west and
-                 east stubs are the matrix indices $\alpha$ and
-                 $\beta$; the up leg is the physical index $i$.},
-    signature = {boundary|virtual-west=1|virtual-east=1|physical-up=1|physical-down=0},
-    label     = {ex:stub-matrix},
-  ]
-% (B^i)_{alpha beta}: one matrix for each physical index i;
-% the stubs are the matrix indices, named at their tips
-\begin{tenkz}[physical=up, west label=$\alpha$,
-              east label=$\beta$]
-  \tn[up=$i$]{B}
-\end{tenkz}
-\end{tnexample}
+The language contract is one sentence:
 
-The dictionary cuts both ways: a picture with \emph{no} open legs
-denotes a scalar --- never a matrix, never a state.  Sealing the ends
-of a row is therefore an assertion about the object, not a tidier
-drawing, and \tnkey{boundary=none} is the deliberate opt-in for
-objects that are closed.\sidenote{\tnkey{boundary=open} became
-the default in \pkg{}~0.5; bare chains used to render sealed.  The
-flip removed a class of wrong pictures: transfer maps drawn as
-scalars, gauge equations whose left-hand sides were vectors.}
+\begin{quote}\large
+A picture chooses one layout; its options declare topology and policy; its
+body declares atoms, connections, regions, and annotations.
+\end{quote}
 
-% ---------------------------------------------------------------------
-\subsection{Boundary signatures}\label{sec:signatures}
+Read a source in that order.  The environment chooses the placement grammar.
+Its optional argument states facts shared by the picture.  Body commands
+declare records; they do not perform an imperative drawing procedure.
 
-Counting open ends decides what kind of object a picture denotes, so
-\pkg{} counts them on every compile.  Each picture appends its
-\emph{boundary signature} to the \tnfile{.tnlog} event stream beside
-the PDF: the number of open virtual indices at the west and at the
-east side, and the number of open physical legs pointing up and
-down.\sidenote{The signature is the last of a picture's
-\tnfile{.tnlog} events, after its \tnlogline{atom}, \tnlogline{bond},
-\tnlogline{cup}, and \tnlogline{trace} lines.  The margin of each
-example in this chapter quotes the signature line the picture
-writes.}  Two pictures may stand on the two sides of an equals sign
-only if their signatures agree --- an equality between a matrix and a
-scalar is not a false equation but a malformed one.  The gauge
-transformation is the canonical well-formed example:
+Five classes cover the public vocabulary: \emph{atoms}; \emph{connections
+and closures}; \emph{regions and annotations}; \emph{composition}; and
+\emph{setup and extension}.  A command declares an object in one of those
+classes.  A key modifies the record being declared.  This distinction keeps
+the grammar small enough to read from source.
 
-\begin{tnexample}[
-    formula   = {B^{i} = X A^{i} X^{-1}},
-    caption   = {a well-formed gauge equation},
-    index     = {The \tncmd{tnX} capsules are matrices riding the
-                 wire, not sites: they add no legs.  Each side exposes
-                 one west stub, one east stub, one up leg, so both
-                 pictures write the same signature line.},
-    signature = {boundary|virtual-west=1|virtual-east=1|physical-up=1|physical-down=0},
-    label     = {ex:gauge-eq},
-  ]
-% B^i = X A^i X^{-1}: both sides expose one west stub, one
-% east stub, one physical leg -- the signatures agree
-\[
-  \begin{tenkz}[physical=up]
-    \tn[up=$i$]{B}
-  \end{tenkz}
-  \;=\;
-  \begin{tenkz}[physical=up]
-    \tnX{X} & \tn[up=$i$]{A} & \tnX{X^{-1}}
-  \end{tenkz}
-\]
-\end{tnexample}
+Scope is explicit.  \tncmd{tnset} is document scope; an environment option is
+picture scope; an atom option is object scope; and a join or side-policy
+option is connection scope.  A shared key name has one value type and one
+meaning in every environment that exposes it.
 
-Delete \tnval{physical=up} from one side of Example~\ref{ex:gauge-eq},
-or seal one side's boundary, and the two signature lines diverge; a
-referee --- human or script --- compares the two lines instead of
-squinting at ink.  Matching signatures are necessary, not sufficient:
-they count open ends but do not name them.  The counting half is the
-half a machine checks.
-
-% ---------------------------------------------------------------------
-\subsection{Two closures: the trace and the cup}\label{sec:trace-cup}
-
-Two different pieces of ink close an index, and they are not
-interchangeable.  \tnkey{periodic} closes a row \emph{to itself}: the
-east end of the wire returns to the west end, which is the trace over
-that row's virtual space.
-
-\begin{tnexample}[
-    formula   = {\operatorname{Tr}(A^{i}B^{j})},
-    caption   = {the trace: a row closed to itself},
-    index     = {The return wire re-enters the row it left, so no
-                 virtual stub survives.  The physical stubs do: the
-                 picture is one number for each pair $i,j$.},
-    signature = {boundary|virtual-west=0|virtual-east=0|physical-up=2|physical-down=0},
-    label     = {ex:trace-row},
-  ]
-% Tr(A^i B^j): periodic returns the row's east end to its
-% west end -- the virtual index is summed, i and j stay open
-\begin{tenkz}[periodic, physical=up]
-  \tn[up=$i$]{A} & \tn[up=$j$]{B}
-\end{tenkz}
-\end{tnexample}
-
-\tnkey{west=cup} and \tnkey{east=cup} close a row \emph{into its
-neighbour}: on the closed side, the ends of two adjacent rows are bent
-into one continuous wire.  That is the contraction tying a ket layer
-to its bra layer --- the topology of orthonormality conditions, fixed
-points, and expectation values --- and it is not a trace:
-
-\begin{tnexample}[
-    formula   = {\sum_s (A_L^{s})^{\dagger} A_L^{s} = 1},
-    caption   = {the cup: a layer closed into its neighbour},
-    index     = {\tnkey{west=cup} bends the ket wire into the bra
-                 wire, summing the shared left index; the sandwich
-                 pairing sums $s$.  The right-hand side is the bare
-                 cup: the identity on the open east pair.  Both sides
-                 write the same signature line.},
-    signature = {boundary|virtual-west=0|virtual-east=2|physical-up=0|physical-down=0},
-    label     = {ex:ortho-cup},
-  ]
-% sum_s (A_L^s)^dagger A_L^s = 1 : the sandwich sums the
-% physical index s; west=cup ties ket to bra on the left;
-% the bare cup on the right is the identity on the east pair
-\[
-  \begin{tenkz}[sandwich, west=cup]
-    \tn{A_L}\\
-    \tn*{A_L}
-  \end{tenkz}
-  \;=\;
-  \begin{tenkz}[rows={wire,wire}, west=cup]
-    \tnghost{}\\
-    \tnghost{}
-  \end{tenkz}
-\]
-\end{tnexample}
-
-Row to self against row to row: the trace is a racetrack around one
-row, the cup a bend between two.  The bare cup on the right of
-Example~\ref{ex:ortho-cup} is drawn over \tnval{rows=\{wire,wire\}}
-with \tncmd{tnghost} cells, so the bend has wires to tie.  A cup can
-also carry a matrix on its apex, as in
-\tnkey{east=\{cup=$\rho^R$\}}; the fixed-point and density-matrix
-diagrams of \S\ref{ch:rmp} live on that key.
-
-% ---------------------------------------------------------------------
-\subsection{The conjugate layer}\label{sec:conjugate}
-
-The starred cell \tncmd{tn*} denotes the complex conjugate
-$\overline{A}$, and its label is overlined automatically.  Layer order
-is part of the meaning: rows are read top to bottom, ket above bra,
-and \tnkey{sandwich} abbreviates \tnval{rows=\{ket, bra\}}, pairing
-the physical legs site by site.  The two-layer object built this way
-is the transfer map:
-
-\begin{tnexample}[
-    formula   = {\mathcal{E}_A = \sum_i A^{i}\otimes\overline{A^{i}}},
-    caption   = {the transfer map, unapplied},
-    index     = {Four stubs: the east pair is the input slot, the
-                 west pair the output --- as for any matrix, whose
-                 column index is contracted on multiplication and
-                 whose row index survives.  A map on the doubled
-                 virtual space is a matrix, and the picture keeps a
-                 matrix's worth of open ends.},
-    signature = {boundary|virtual-west=2|virtual-east=2|physical-up=0|physical-down=0},
-    label     = {ex:transfer-open},
-  ]
-% E_A = sum_i A^i (x) conj(A^i): a map on the doubled
-% virtual space, so all four virtual legs stay open
-\begin{tenkz}[sandwich]
-  \tn{A} \\
-  \tn*{A}
-\end{tenkz}
-\end{tnexample}
-
-No dagger is ever drawn.\sidenote{arXiv:1804.04964: ``the virtual
-bonds of the tensors $A_i$ read from left to right, thus the loops
-\dots\ read clockwise; hence the transpose.''}  The formula
-$\mathcal{E}_A(X)=\sum_i A^i X A^{i\dagger}$ contains a conjugate
-transpose, but the picture contains only the conjugate.  The star is
-ink; the transpose is reading order: a \pkg{} picture reads left to
-right, and a wire traversed against the reading direction contributes
-its matrix transposed.  The convention is document-level: stated
-once, never drawn.  It is the convention of arXiv:1804.04964, whose
-figures are arrow-free and whose only transpose bookkeeping is a
-footnote.
-
-\begin{tnexample}[
-    formula   = {\mathcal{E}_A(X) = \sum_i A^{i} X A^{i\dagger}},
-    caption   = {the channel applied to $X$},
-    index     = {$X$ rides the east cup: the input slot is consumed
-                 and virtual-east drops to $0$.  The west pair stays
-                 open --- the output is a matrix.  The vertical wire
-                 is the summed physical index $i$.  Read around the
-                 bend: $A^i$ west to east, then $X$, then the bra
-                 wire back --- $A^i X A^{i\dagger}$ in the order
-                 written.},
-    signature = {boundary|virtual-west=2|virtual-east=0|physical-up=0|physical-down=0},
-    label     = {ex:channel-x},
-  ]
-% E_A(X) = sum_i A^i X (A^i)^dagger : X rides the east cup
-% (the input); the west pair stays open (the output is a
-% matrix); the dagger is the star plus the transpose from
-% traversing the bra wire against the reading order
-\begin{tenkz}[sandwich, east={cup=$X$}]
-  \tn{A} \\
-  \tn*{A}
-\end{tenkz}
-\end{tnexample}
-
-Together, Examples \ref{ex:transfer-open} and \ref{ex:channel-x} give
-the manual's canonical channel spelling, previewed as
-Example~\ref{ex:channel-applied}: the unapplied map is
-\tnval{[sandwich]} --- four stubs, a matrix on the doubled space ---
-and the applied map adds \tnval{east=\{cup=$X$\}} and nothing else,
-consuming the input slot alone.  The input is the east cup because
-the input of a matrix is its column index: the west cup instead
-contracts the row indices and applies the adjoint map
-$\mathcal{E}_A^{*}(X)=\sum_i A^{i\dagger}XA^{i}$ ---
-Example~\ref{ex:ortho-cup} is exactly
-$\mathcal{E}_A^{*}(\mathbf{1})=\mathbf{1}$ for a left-canonical
-tensor.  Never seal the west pair of the applied channel: closing it
-too would turn the picture into $\operatorname{Tr}\mathcal{E}_A(X)$,
-a scalar.
-
-% ---------------------------------------------------------------------
-\subsection{Directed bonds}\label{sec:directed}
-
-Most bonds need no direction.  When the distinction between a space
-$V$ and its dual $V^{*}$ carries the mathematics --- representation
-flow along the virtual line of a symmetric MPO --- the bond takes an
-arrow: out of a tensor the leg carries $V$, into a tensor $V^{*}$,
-and a contraction joins an out to an in.  Reversing an arrow is
-mathematics, not decoration: it replaces the representation carried by
-the bond with its dual --- for a group representation, the inverse.
-
-\begin{tnmultiples}[
-    caption  = {one bond, three directions},
-    formula  = {A^{i}A^{j}},
-    index    = {The barb sits mid-bond.  Out of a tensor the leg
-                carries $V$; into a tensor, $V^{*}$.  The reversed
-                arrow is the dual (inverse) representation.  Boundary
-                signatures do not yet record direction; see
-                \S\ref{ch:trouble}.},
-    variants = {{undirected}{},
-                {bond dir=right}{bond dir=right},
-                {bond dir=left}{bond dir=left}},
-    label    = {ex:bond-dir},
-  ]
-% arrow out of a tensor = V, arrow in = V*;
-% reversing the arrow = the dual (inverse) representation
-\begin{tenkz}[physical=up, variant]
-  \tn[up=$i$]{A} & \tn[up=$j$]{A}
-\end{tenkz}
-\end{tnmultiples}
-
-The whole picture takes \tnkey{bond dir=right} or \tnval{left}; a
-single row takes the \tnkey{rows=} modifier \tnval{dir right} or
-\tnval{dir left}; a single join in free placement takes
-\tncmd{tnjoin}\tnval{[dir]}, whose argument order gives the
-direction.  On a \tnkey{periodic} ring the barb rides the return wire.
-
-Direction, chirality, and reading order are three devices with three
-jobs, and only the first takes arrows.  Draw arrows when the bond
-itself is directed; they survive rotation and reflection, where
-positional conventions die.  Use the chirality of a glyph ---
-\tnkey{tri=l} against \tnkey{tri=r}, the side a fusion bar combines
-toward --- when the object, not the bond, has an orientation: an
-isometry's domain and codomain need no arrows.  Leave everything else
-to reading order, the arrow-free regime of \S\ref{sec:conjugate}:
-left to right on the page, transposes in the text, no ink.
+Open ink is mathematical data.  A matrix keeps its two virtual indices; a
+map keeps input and output indices; a scalar has none.  Closing a picture for
+neatness changes the object.  The versioned \tnfile{.tnlog} records the
+resolved model and boundary signature used for rendering.

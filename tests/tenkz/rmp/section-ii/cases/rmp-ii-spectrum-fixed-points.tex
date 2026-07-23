@@ -1,0 +1,23 @@
+% Target: rmp-ii-spectrum-fixed-points
+% Formula: eig(rho^L rho^R) = eig(rho^R rho^L).
+% Ink: Canonical public tenkz environment; no raw TikZ.
+% Boundary: Each fixed-point factor has one cup closure and two virtual ends open on
+%   the other side.
+% Source: paper TN-Review-main.tex line 429; author source ImagesReview Section
+%   II/ImagesReview Section II.tex lines 519-534
+% Capabilities: grid, typed-ports
+\[
+  \mathrm{eig}\left(
+  \begin{tenkz}[rows={ket:nopair,bra}, boundary=none, west=cup]
+    \tnX[wires=2]{\rho^L}\\
+    &
+  \end{tenkz}
+  \right)
+  \;=\;
+  \mathrm{eig}\left(
+  \begin{tenkz}[rows={ket:nopair,bra}, boundary=none, east=cup]
+    \tnX[wires=2]{\rho^R}\\
+    &
+  \end{tenkz}
+  \right)
+\]
