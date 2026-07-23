@@ -14,6 +14,16 @@ rank-one spectral decompositions. This file indexes all eigenvectors across
 all BNT labels, including zero-eigenvalue modes, and extends each eigenvector
 projection by zero to the other labels.
 
+## Main definitions
+
+* `TerminalSpectralIndex`: the dependent type of a BNT label and a terminal
+  eigenvector index.
+* `terminalMatrix`: the terminal matrix at a fixed BNT label.
+* `terminalEigenvalue`: the eigenvalue attached to a terminal spectral index.
+* `terminalEigenvectorProjectionAt`: the local rank-one eigenvector projection.
+* `terminalEigenvectorProjection`: the projection extended by zero to the
+  other labels.
+
 ## Main statements
 
 * `MPOTensor.BNTFusionTensorClause.terminalEigenvalue_nonneg`: every terminal
