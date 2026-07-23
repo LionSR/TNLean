@@ -36,11 +36,13 @@ quantum channel, determinant bound, positive map, trace-preserving map
 -/
 open scoped Matrix ComplexOrder MatrixOrder BigOperators Kronecker Matrix.Norms.Frobenius
 open Matrix
-open ChannelDeterminant.Internal
 
 variable {d : ℕ}
 
 section WolfStatements
+
+local notation "MatrixAlg" => ChannelDeterminant.Internal.MatrixAlg
+local notation "MatrixEnd" => ChannelDeterminant.Internal.MatrixEnd
 
 variable {T : MatrixEnd d}
 
@@ -283,7 +285,8 @@ theorem channelDet_norm_le_one_of_positive_tracePreserving
     intro μ hμ
     exact positiveTracePreserving_eigenvalue_norm_le_one (d := d) hPos hTP μ
       (Module.End.hasEigenvalue_iff_mem_spectrum.2
-        ((AlgEquiv.spectrum_eq (LinearMap.toMatrixAlgEquiv (matrixSpaceBasis d)) T) ▸
+        ((AlgEquiv.spectrum_eq (LinearMap.toMatrixAlgEquiv
+            (ChannelDeterminant.Internal.matrixSpaceBasis d)) T) ▸
           Matrix.mem_spectrum_of_isRoot_charpoly
             ((Polynomial.mem_roots (channelMatrix T).charpoly_monic.ne_zero).1 hμ)))
 

@@ -1,0 +1,19 @@
+% Target: rmp-workbench-iii-diagram-four
+% Formula: The closed four-leg tensor equals Delta^3 of the local map.
+% Ink: Canonical public tenkzfree four-arm tensor and local-map expression.
+% Boundary: The four-arm side is closed; the local-map side is virtual-scalar.
+% Source: author source ImagesReview Section III/ImagesReview Section III.tex
+%   lines 198-210; archival output Dia4.pdf
+% Capabilities: free-graph, four-arm-closure, coproduct
+\[
+  \begin{tenkzfree}
+    \tnput[ring]{l}{(0mm,0mm)}{\lambda}
+    \tnput[box]{n}{(0mm,8mm)}{} \tnput[box]{e}{(8mm,0mm)}{}
+    \tnput[box]{s}{(0mm,-8mm)}{} \tnput[box]{w}{(-8mm,0mm)}{}
+    \tnjoin{l.north}{n.south} \tnjoin{l.east}{e.west}
+    \tnjoin{l.south}{s.north} \tnjoin{l.west}{w.east}
+  \end{tenkzfree}
+  =\Delta^3\!\left(
+    \begin{tenkz}[boundary=periodic]\tnX{\lambda}&\tn{}\end{tenkz}
+  \right).
+\]

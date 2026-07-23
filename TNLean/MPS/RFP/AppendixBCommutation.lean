@@ -295,15 +295,19 @@ private theorem AppendixBStructuralData.replaceVirtualBond12_eq_iff
 
 /-! ### Matrices of the physical and virtual two-site transports -/
 
-/-- The one-site physical isometry in the pair-index basis. -/
-private noncomputable def AppendixBStructuralData.physicalIsometryMatrix
+/-- The one-site physical isometry in the pair-index basis.
+
+Source: arXiv:1606.00608, equation `eq:III_isometry`, lines 549--554. -/
+noncomputable def AppendixBStructuralData.physicalIsometryMatrix
     {A : MPSTensor d D} (hStruct : AppendixBStructuralData A) :
     Matrix (Fin d) (Fin D × Fin D) ℂ :=
   fun i p ↦ hStruct.U i p.1 p.2
 
 /-- The reindexed two-site tensor-power matrix is the Kronecker square of the
-one-site physical isometry. -/
-private theorem AppendixBStructuralData.physicalIsometryTensorPower_two_matrix
+one-site physical isometry.
+
+Source: arXiv:1606.00608, equations (3.16)--(3.18), lines 549--578. -/
+theorem AppendixBStructuralData.physicalIsometryTensorPower_two_matrix
     {A : MPSTensor d D} (hStruct : AppendixBStructuralData A) :
     Matrix.reindex (finTwoArrowEquiv (Fin d)) (finTwoArrowEquiv (Fin D × Fin D))
         (LinearMap.toMatrix' (hStruct.physicalIsometryTensorPower 2)) =
@@ -316,8 +320,10 @@ private theorem AppendixBStructuralData.physicalIsometryTensorPower_two_matrix
     Pi.single_apply, Fin.prod_univ_two]
 
 /-- The reindexed two-site coefficient-adjoint matrix is the Kronecker square
-of the conjugate transpose of the one-site physical isometry. -/
-private theorem AppendixBStructuralData.physicalIsometryTensorPowerLeftInverse_two_matrix
+of the conjugate transpose of the one-site physical isometry.
+
+Source: arXiv:1606.00608, equations (3.16)--(3.18), lines 549--578. -/
+theorem AppendixBStructuralData.physicalIsometryTensorPowerLeftInverse_two_matrix
     {A : MPSTensor d D} (hStruct : AppendixBStructuralData A) :
     Matrix.reindex (finTwoArrowEquiv (Fin D × Fin D)) (finTwoArrowEquiv (Fin d))
         (LinearMap.toMatrix' (hStruct.physicalIsometryTensorPowerLeftInverse 2)) =
@@ -330,8 +336,10 @@ private theorem AppendixBStructuralData.physicalIsometryTensorPowerLeftInverse_t
     Pi.single_apply, Fin.prod_univ_two, Matrix.conjTranspose_apply]
 
 /-- The reindexed two-site transported matrix is the virtual bond matrix
-sandwiched by the Kronecker square of the physical isometry. -/
-private theorem AppendixBStructuralData.transportedTwoSiteBondProjection_matrix
+sandwiched by the Kronecker square of the physical isometry.
+
+Source: arXiv:1606.00608, equations (3.16)--(3.18), lines 549--578. -/
+theorem AppendixBStructuralData.transportedTwoSiteBondProjection_matrix
     {A : MPSTensor d D} (hStruct : AppendixBStructuralData A) :
     Matrix.reindex (finTwoArrowEquiv (Fin d)) (finTwoArrowEquiv (Fin d))
         (LinearMap.toMatrix' hStruct.transportedTwoSiteBondProjection) =
@@ -418,8 +426,10 @@ private theorem AppendixBStructuralData.rightVirtualBondProjection_matrix
       appendixBLastPairCfg, finThreeArrowEquiv, finTwoArrowEquiv,
       Pi.single_apply, hs]
 
-/-- The two standard pair matrices of the virtual bond projector commute. -/
-private theorem AppendixBStructuralData.virtualPairMatrices_comm
+/-- The two standard pair matrices of the virtual bond projector commute.
+
+Source: arXiv:1606.00608, Appendix B, lines 1305--1307. -/
+theorem AppendixBStructuralData.virtualPairMatrices_comm
     {A : MPSTensor d D} (hStruct : AppendixBStructuralData A) :
     appendixBLeftPairMatrix (Matrix.reindex (finTwoArrowEquiv (Fin D × Fin D))
           (finTwoArrowEquiv (Fin D × Fin D))

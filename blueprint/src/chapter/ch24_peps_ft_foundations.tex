@@ -74,6 +74,109 @@ together with the local inverse it provides.
     the corresponding bond space of dimension $D_e$.
 \end{definition}
 
+\begin{definition}[Splitting and reindexing virtual configurations]
+    \label{def:peps_virtual_config_split_reindex}
+    \lean{TNLean.PEPS.virtualConfigSplit}
+    \lean{TNLean.PEPS.virtualConfigCongr}
+    \leanok
+    \uses{def:peps_virtual_config}
+    A predicate on the edges splits a virtual configuration canonically into
+    its restrictions to the selected and unselected edges.  An equality
+    between two bond-dimension families also induces a canonical reindexing
+    between their virtual configurations.
+\end{definition}
+
+\begin{theorem}[Evaluation laws for splitting and reindexing]
+    \label{thm:peps_virtual_config_split_reindex_apply}
+    \lean{TNLean.PEPS.virtualConfigSplit_fst_apply}
+    \lean{TNLean.PEPS.virtualConfigSplit_snd_apply}
+    \lean{TNLean.PEPS.virtualConfigCongr_apply}
+    \lean{TNLean.PEPS.virtualConfigSplit_mergeVirtualConfig}
+    \lean{TNLean.PEPS.virtualConfigCongr_mergeVirtualConfig}
+    \leanok
+    \uses{def:peps_virtual_config_split_reindex, def:peps_virtual_config_merge}
+    The two restrictions recover the original edge labels on their respective
+    domains.  Reindexing acts edgewise by the corresponding identification of
+    bond indices, commutes with piecewise merging, and splitting a piecewise
+    merge recovers its selected and unselected inputs.
+\end{theorem}
+\begin{proof}\leanok
+    Each identity follows by evaluating at an edge and distinguishing whether
+    that edge satisfies the selection predicate.
+\end{proof}
+
+\begin{definition}[Piecewise and regionwise merge of virtual configurations]
+    \label{def:peps_virtual_config_merge}
+    \lean{TNLean.PEPS.mergeVirtualConfig}
+    \lean{TNLean.PEPS.regionMerge}
+    \leanok
+    \uses{def:peps_virtual_config}
+    Given two virtual configurations and a predicate on edges, their
+    \emph{piecewise merge} reads the first configuration on selected edges and
+    the second configuration elsewhere.  For a vertex region, the
+    \emph{regionwise merge} selects precisely the edges incident to that
+    region.
+\end{definition}
+
+\begin{theorem}[Readback laws for merged configurations]
+    \label{thm:peps_virtual_config_merge_readback}
+    \lean{TNLean.PEPS.mergeVirtualConfig_of_pos}
+    \lean{TNLean.PEPS.mergeVirtualConfig_of_neg}
+    \lean{TNLean.PEPS.mergeVirtualConfig_self}
+    \lean{TNLean.PEPS.regionMerge_of_incident}
+    \lean{TNLean.PEPS.regionMerge_of_not_incident}
+    \leanok
+    \uses{def:peps_virtual_config_merge}
+    A piecewise merge reads the first input on a selected edge and the second
+    input on an unselected edge; merging a configuration with itself leaves it
+    unchanged.  In particular, a regionwise merge reads the first input on
+    region-incident edges and the second input on all remaining edges.
+\end{theorem}
+\begin{proof}\leanok
+    Evaluate the merge at an edge and use the defining alternative according
+    to whether the edge is selected.
+\end{proof}
+
+\begin{theorem}[Vertex products through a regionwise merge]
+    \label{thm:peps_region_merge_products}
+    \lean{TNLean.PEPS.regionProd_eq_merge}
+    \lean{TNLean.PEPS.regionProd_p2_eq_merge_of_incident_agree}
+    \lean{TNLean.PEPS.complementProd_eq_merge}
+    \leanok
+    \uses{def:peps_virtual_config_merge}
+    The vertex product on a region reads the first input of its regionwise
+    merge.  A product on a second region reads the second input whenever the
+    two configurations agree on edges incident to both regions.  Consequently,
+    agreement on the boundary of a region lets the complementary product read
+    the second input through the same merge.
+\end{theorem}
+\begin{proof}\leanok
+    Compare the local tensor entry at every vertex.  Each incident edge is
+    read from the prescribed input, while an edge incident to both regions is
+    handled by the assumed agreement; a boundary edge is exactly the
+    corresponding special case for a region and its complement.
+\end{proof}
+
+\begin{theorem}[Constant-cardinality fiber sum]
+    \label{thm:peps_config_fiber_sum}
+    \lean{TNLean.PEPS.sum_comp_of_config_fiber_card}
+    \leanok
+    \uses{def:peps_virtual_config}
+    Let a finite set map to the virtual configurations so that every fiber has
+    cardinality $n$.  For every function $g$ into an additive commutative
+    monoid,
+    \[
+        \sum_x g(m(x)) = n\mathbin{\boldsymbol{\cdot}}
+            \sum_{\eta} g(\eta),
+    \]
+    where the first sum ranges over the finite set and the second over all
+    virtual configurations.
+\end{theorem}
+\begin{proof}\leanok
+    Group the first sum by the value of $m$.  Each grouped summand is repeated
+    exactly $n$ times by the common fiber-cardinality hypothesis.
+\end{proof}
+
 \begin{definition}[PEPS state coefficient]
     \label{def:peps_stateCoeff}
     \lean{TNLean.PEPS.stateCoeff}

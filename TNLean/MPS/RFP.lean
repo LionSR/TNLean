@@ -16,6 +16,7 @@ import TNLean.MPS.RFP.BNTOrthogonality
 import TNLean.MPS.RFP.BNTWeightCounterexample
 import TNLean.MPS.RFP.BeigiEventuallyConstantSectorGraph
 import TNLean.MPS.RFP.BeigiGroundSpaceDimension
+import TNLean.MPS.RFP.BeigiLoopBNTIdentification
 import TNLean.MPS.RFP.BeigiLoopFixedPoint
 import TNLean.MPS.RFP.BeigiLoopInjectivity
 import TNLean.MPS.RFP.BeigiLoopSchmidtSupport
@@ -29,8 +30,10 @@ import TNLean.MPS.RFP.Decorrelation
 import TNLean.MPS.RFP.Defs
 import TNLean.MPS.RFP.KroneckerTransport
 import TNLean.MPS.RFP.NNCPHGroundSpace
+import TNLean.MPS.RFP.NNCPHGroundSpacesMultiSector
 import TNLean.MPS.RFP.NNCPHMultiSector
 import TNLean.MPS.RFP.PhaseMultiplicityCounterexample
+import TNLean.MPS.RFP.ResidualFamilyCommutation
 import TNLean.MPS.RFP.ResidualFamilySupport
 import TNLean.MPS.RFP.ResidualIsometry
 import TNLean.MPS.RFP.ResidualWordSpan

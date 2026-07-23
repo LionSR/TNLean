@@ -1,0 +1,31 @@
+% Target: rmp-workbench-ii-historical-composite
+% Formula: The archival composite pairs one-to-two MPS and one-to-four PEPS splittings.
+% Ink: Canonical public tenkz and tenkzlattice environments; no raw TikZ.
+% Boundary: Both archival arrows preserve their open virtual and physical boundary
+%   signatures.
+% Source: author source ImagesReview Section II/ImagesReview Section II.tex lines
+%   801-831; archival output ImagesReview Section II.pdf
+% Capabilities: grid, lattice, typed-ports
+\[
+  \begin{gathered}
+    (a)\quad
+    \begin{tenkz}[physical=up]
+      \tn{}
+    \end{tenkz}
+    \;\longrightarrow\;
+    \begin{tenkz}[physical=up]
+      \tn{} & \tn{}
+    \end{tenkz}
+    \\[1em]
+    (b)\quad
+    \begin{tenkzlattice}[rows=1,cols=1,frame=oblique,physical=up,
+                         outer legs=both]
+      \tnsite{(1,1)}
+    \end{tenkzlattice}
+    \;\longrightarrow\;
+    \begin{tenkzlattice}[rows=2,cols=2,frame=oblique,physical=up,
+                         outer legs=both]
+      \tnsite{(1,1)}
+    \end{tenkzlattice}
+  \end{gathered}
+\]

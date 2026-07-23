@@ -518,6 +518,7 @@ specialization of that Appendix~D definition.
 \end{definition}
 
 \begin{remark}[Elementary consequences of the commuting definition]
+    \label{rem:nncph_ground_spaces_decomposition}
     \lean{MPSTensor.IsNNCPH.isCommutingParentHam}
     \lean{MPSTensor.IsNNCPHGroundState.isNNCPH}
     \lean{MPSTensor.IsNNCPHGroundState.isFrustrationFree}
@@ -1103,6 +1104,53 @@ specialization of that Appendix~D definition.
     two.
 \end{proof}
 
+\begin{theorem}[Commuting nearest-neighbor terms for distinct multiplicity-one RFP sectors]%
+    \label{thm:rfp_multiplicity_one_bnt_nncph}
+    \lean{MPSTensor.IsBNTCanonicalForm.rfp_implies_nncph_basisDirectSum}
+    \leanok
+    \uses{def:sector_bnt_cf, def:mps_transfer_idempotence, def:is_nncph,
+        lem:nncph_from_adjacent_two_site_commutation}
+    Let $A_1,\ldots,A_g$ be the distinct basis tensors of a BNT canonical
+    form, and let $B=\bigoplus_{j=1}^g A_j$ contain one copy of every basis
+    tensor. If $B$ is a renormalization fixed point, then for every $N>2$
+    its translated two-site parent interactions commute pairwise. Thus $B$
+    satisfies the nearest-neighbor commuting parent-Hamiltonian condition.
+
+    This statement treats one copy of every distinct sector. It does not
+    include repeated copies or arbitrary raw sector weights.
+\end{theorem}
+
+\begin{proof}\leanok
+    The fixed-point equation gives residual tensors $U_j$ whose matrix-entry
+    columns form one orthonormal family on the disjoint union of the sector
+    matrix spaces. On the tensor square of this disjoint union, let $Q$ be the
+    sum of the sector bond projectors, extended by zero between unequal
+    sectors. Write $L_j$ and $R_j$ for the left and right overlapping lifts
+    of the sector-$j$ bond projector. The single-sector relation and the
+    mixed-sector orthogonality give
+    \[
+        L_jR_j=R_jL_j,
+        \qquad
+        L_jR_k=0=R_jL_k \quad (j\ne k),
+    \]
+    where the latter identities follow from the shared one-site factor
+    $E_j^*E_k=0$ for the canonical summand inclusions $E_j$. Summing over the
+    sectors shows that the two adjacent placements of $Q$ commute.
+
+    If $U$ is the common isometry, then transport gives the identity
+    \[
+        (U\otimes U)Q(U^*\otimes U^*)=P_{G_2(B)},
+    \]
+    since the range on either side is
+    \[
+        \bigvee_j G_2(A_j)=G_2(B).
+    \]
+    Hence it is the complement of the canonical two-site parent interaction
+    of $B$. The two adjacent three-site parent terms therefore commute.
+    Cyclic transport gives adjacent commutation on every chain with $N>2$;
+    disjoint local terms commute by locality, which proves the claim.
+\end{proof}
+
 \begin{theorem}[Nearest-neighbor parent ground spaces for distinct multiplicity-one RFP sectors]%
     \label{thm:rfp_multiplicity_one_bnt_parent_ground_spaces}
     \lean{MPSTensor.IsBNTCanonicalForm.rfp_hasParentHamiltonianGroundSpaceSpanning_basisDirectSum}
@@ -1142,6 +1190,41 @@ specialization of that Appendix~D definition.
     injectivity and the injective periodic-chain theorem identify its chain
     space with the line spanned by $V^{(N)}(A_j)$. The finite-volume kernel
     identity completes the proof.
+\end{proof}
+
+\begin{theorem}[Forward NNCPH ground spaces for distinct multiplicity-one RFP sectors]%
+    \label{thm:rfp_multiplicity_one_bnt_has_nncph_ground_spaces}
+    \lean{MPSTensor.IsBNTCanonicalForm.rfp_implies_hasNNCPHGroundSpaces_basisDirectSum}
+    \leanok
+    \uses{def:sector_bnt_cf, def:mps_transfer_idempotence,
+        def:has_nncph_ground_spaces}
+    Let $A_1,\ldots,A_g$ be the distinct basis tensors of a BNT canonical
+    form, and let $B=\bigoplus_{j=1}^g A_j$ contain one copy of every basis
+    tensor. If $B$ is a renormalization fixed point, then for every $N>2$ its
+    translated two-site parent interactions commute and
+    \[
+        H_2^{(N)}(B)V^{(N)}(B)=0,
+        \qquad
+        \ker H_2^{(N)}(B)
+        =\spn\bigl\{V^{(N)}(A_j):j=1,\ldots,g\bigr\}.
+    \]
+    Hence $B$ satisfies the all-chain nearest-neighbor commuting
+    parent-Hamiltonian ground-space condition. This is the multiplicity-one
+    distinct-sector forward implication in
+    \cite[Definition~3.9 and Theorem~3.10]{Cirac2016MPDO_arXiv}. It does not
+    include repeated copies or arbitrary raw sector weights.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:rfp_multiplicity_one_bnt_nncph,
+        thm:rfp_multiplicity_one_bnt_parent_ground_spaces,
+        rem:nncph_ground_spaces_decomposition}
+    Theorem~\ref{thm:rfp_multiplicity_one_bnt_nncph} gives pairwise
+    commutation of the translated two-site interactions for every $N>2$.
+    The parent-Hamiltonian construction gives the zero-energy equation.
+    Theorem~\ref{thm:rfp_multiplicity_one_bnt_parent_ground_spaces} identifies
+    its kernel with the span of the periodic matrix product vectors of the
+    distinct sectors. These are the three clauses of the all-chain condition.
 \end{proof}
 
 \begin{theorem}[Cyclic trace expansion for a closed MPS chain]\label{thm:trace_eval_word_eq_sum_cyclic}
@@ -2695,7 +2778,7 @@ specialization of that Appendix~D definition.
     \lean{MPSTensor.BeigiSectorGraphData.parentHamiltonianGroundSpaceES_finrank_eq}
     \leanok
     \uses{def:beigi_sector_graph}
-    For every $N>2$, the periodic ground-space dimension is
+    For every $N\geq 2$, the periodic ground-space dimension is
     \[
         \dim\ker H_N
         =
@@ -2704,8 +2787,9 @@ specialization of that Appendix~D definition.
         \dim\operatorname{ran}P_{a_n,a_{n+1}},
     \]
     where the sum is over ordered cycles and the indices are read modulo $N$.
-    This is the specialization to $N>2$ of equations~(3)--(4) of
-    \cite[Section~III]{Beigi2012Classification}.
+    This is equations~(3)--(4) of
+    \cite[Section~III]{Beigi2012Classification} for chains of length at least
+    two.  The one-site periodic interaction requires a separate convention.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -2716,6 +2800,56 @@ specialization of that Appendix~D definition.
     tensor product of the adjacent projectors $P_{a_n,a_{n+1}}$.  Taking the
     trace gives the product of their ranks.  A sequence containing a missing
     edge contributes zero, leaving exactly the displayed ordered-cycle sum.
+\end{proof}
+
+\begin{theorem}[Period-two ordered-cycle ground-space dimension formula]
+    \label{thm:beigi_ordered_cycle_ground_space_dimension_two}
+    \lean{MPSTensor.BeigiSectorGraphData.parentHamiltonianGroundSpaceES_finrank_eq_two}
+    \leanok
+    \uses{def:beigi_sector_graph}
+    At period two, the ground-space dimension is
+    \[
+        \dim\ker H_2
+        =
+        \sum_{\substack{a\to b\\ b\to a}}
+        \dim\operatorname{ran}P_{a,b}\,
+        \dim\operatorname{ran}P_{b,a}.
+    \]
+    The sum is over ordered pairs: if $a\ne b$, then $(a,b)$ and $(b,a)$
+    are distinct summands.  This is the length-two convention stated after
+    equation~(4) of \cite[Section~III]{Beigi2012Classification}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:beigi_ordered_cycle_ground_space_dimension}
+    Specialize the ordered-cycle formula to $N=2$.  Its two cyclic factors are
+    $P_{a,b}$ and $P_{b,a}$, which gives the displayed product of ranks.
+\end{proof}
+
+\begin{theorem}[Project-local one-site zero convention]
+    \label{thm:project_local_one_site_parent_hamiltonian_zero}
+    \lean{MPSTensor.parentHamiltonian_two_one_eq_zero}
+    \lean{MPSTensor.parentHamiltonianGroundSpaceES_two_one_eq_top}
+    \leanok
+    For the convention that an $L$-site interaction is zero when $L>N$, the
+    two-site parent Hamiltonian on a one-site periodic chain satisfies
+    \[
+        H_2^{(1)}=0,
+        \qquad
+        \ker H_2^{(1)}=\mathbb C^d.
+    \]
+    This convention is local to the present development.  The two-site terms
+    in \cite[Section~III]{Beigi2012Classification}, source lines 451--514, are
+    not assigned an action when both site labels denote the same site.  The
+    nearest-neighbor condition in
+    \cite[Theorem~3.10(iii)]{Cirac2016MPDO_arXiv}, source lines 534--540, only
+    concerns $N>2$.
+\end{theorem}
+
+\begin{proof}\leanok
+    Since $2>1$, the single translated interaction is zero by the stated
+    convention.  Its sum is therefore zero, and the kernel of the zero
+    operator is the full one-site Hilbert space.
 \end{proof}
 
 \begin{theorem}[Classification of eventually constant weighted sector graphs]
@@ -3173,10 +3307,10 @@ specialization of that Appendix~D definition.
 
 \begin{theorem}[All-chain nearest-neighbor commuting parent-Hamiltonian ground spaces imply a renormalization fixed point]\label{thm:nncph_implies_rfp}
     \lean{MPSTensor.nncph_implies_rfp}
-    \lean{Axioms.beigi_nncph_to_rfp}
     \leanok
     \uses{def:mps_transfer_idempotence, def:bnt, def:has_nncph_ground_spaces,
-        def:normal}
+        def:normal, thm:beigi_loop_product_states_span_ground_space,
+        thm:beigi_normalized_minimal_loop_tensor_rfp}
     Let $B$ be normal and in left-canonical form. Suppose that the family
     \(A_j\) is a BNT for \(B\), and that the nearest-neighbor parent
     Hamiltonian of \(B\) has the
@@ -3193,9 +3327,29 @@ specialization of that Appendix~D definition.
         \operatorname{span}\{V^{(N)}(A_j):j=1,\ldots,g\}.
     \]
     Then $B$ is a renormalization fixed point.
-    At present this reverse implication remains an unproved hypothesis,
-    representing Beigi's one-dimensional
-    nearest-neighbor commuting-Hamiltonian ground-space theorem and the
-    identification of the resulting locally orthogonal states with the BNT of
-    $B$.
+
+    This is the normal left-canonical representative case of the reverse
+    implication in Theorem~3.10 of \cite{Cirac2016MPDO_arXiv}.  The source
+    theorem is stated for a tensor in canonical form; the unrestricted
+    canonical-form statement is not asserted here.
 \end{theorem}
+
+\begin{proof}
+    \leanok
+    The commuting interaction determines Beigi's finite sector graph.  Its
+    positive loops span the parent ground space, and the normalized minimal
+    loop tensors $L_j$ are normal renormalization fixed points.  For the normal
+    representative $B$,
+    \[
+        \forall^\infty N,\quad
+        V^{(N)}(B)
+        \in \operatorname{span}\{V^{(N)}(L_j):j=1,\ldots,g\}.
+    \]
+    Normal-tensor orthogonality applied to this eventual-span relation first
+    identifies the bond dimensions and then gives an index $j$, an invertible
+    matrix $X$, and a scalar $\zeta$ with $|\zeta|=1$ such that
+    \[
+        L_j^i = \zeta X B^i X^{-1}.
+    \]
+    Transfer idempotence is preserved by these transformations.
+\end{proof}

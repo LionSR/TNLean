@@ -1,0 +1,17 @@
+% Target: rmp-iii-b-anyon-pair
+% Formula: |psi(a,a^*)> is an open anyon string with endpoints i and i^*.
+% Ink: Canonical public tenkzlattice sites and distinguished path edges.
+% Boundary: The 3x3 PEPS patch is open; the anyon string has two endpoints.
+% Source: paper TN-Review-main.tex line 1645; author source ImagesReview Section
+%   III/ImagesReview Section III.tex lines 644-660
+% Capabilities: lattice, path-string, marked-endpoints
+\[
+  \begin{tenkzlattice}[rows=3, cols=3, frame=oblique, physical=up]
+    \tnsite{(1,1)}
+    \tnsite{(1,2)} \tnsite{(1,3)}
+    \tnsite{(2,1)} \tnsite{(2,2)} \tnsite{(2,3)}
+    \tnsite{(3,1)} \tnsite{(3,2)} \tnsite{(3,3)}
+    \tnedge[role=operator]{(1,1)-(2,2)}
+    \tnedge[role=operator]{(2,2)-(3,3)}
+  \end{tenkzlattice}_{\ i^*\rightarrow a\rightarrow i}
+\]

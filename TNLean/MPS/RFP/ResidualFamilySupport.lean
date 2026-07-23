@@ -245,6 +245,19 @@ theorem twoSiteBondSupportProjection_eq_complement
   rw [Submodule.starProjection_orthogonal_val]
   simp
 
+/-- The canonical two-site support projector of the direct sum is
+idempotent.
+
+Source: arXiv:1606.00608, parent construction, lines 511--524. -/
+theorem twoSiteBondSupportProjection_idempotent
+    (B : (j : Fin r) → MPSTensor d (dim j)) :
+    twoSiteBondSupportProjection B * twoSiteBondSupportProjection B =
+      twoSiteBondSupportProjection B := by
+  rw [twoSiteBondSupportProjection_eq_complement]
+  change IsIdempotentElem (1 - parentInteraction (directSumTensor B) 2)
+  exact (show IsIdempotentElem (parentInteraction (directSumTensor B) 2) from
+    parentInteraction_idempotent (directSumTensor B) 2).one_sub
+
 end ResidualFamilyAppendixBData
 
 namespace IsBNTCanonicalForm

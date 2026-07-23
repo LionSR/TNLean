@@ -56,7 +56,8 @@ Advisories (never affect the exit code):
                        an ellipsis cell: a closed word of generic length n
                        drawn with every site reads as fixed length.
   repeated-topology    Identical canonical atom+bond content in several
-                       pictures: the figure is a candidate `\\tndefine`.
+                       pictures: review ordinary TeX composition.  Repetition
+                       alone never extends the public grammar.
   dialect-mismatch     An event kind foreign to its picture's language
                        (each sub-language owns its event dialect).
   unknown-event/lang   Forward-compatibility notes.
@@ -510,7 +511,7 @@ FIELD_VALIDATORS: dict[str, dict[str, Callable[[str], bool]]] = {
              "mode": _enum("removed")},
     "region": {"picture": _is_int, "lang": _enum("free", "lattice"),
                "slot": _enum("selected", "secondary", "complement",
-                             "collar", "group"),
+                             "collar", "neutral", "group"),
                "cells": _is_region_cell_list, "members": _any,
                "outline": _enum("0", "1"), "name": _any},
     "edge": {"picture": _is_int, "from": _is_lattice_cell,
@@ -1443,7 +1444,7 @@ class Audit:
         for pic in self.pictures:
             atoms = [e for e in pic.content() if e.kind == "atom"]
             if len(atoms) < 2:
-                continue  # a lone bead repeated is not worth a \tndefine
+                continue  # a repeated lone bead needs no composition review
             groups.setdefault((pic.lang, canonical_hash(pic)), []).append(pic)
         for (lang, digest), pics in sorted(groups.items(),
                                            key=lambda kv: kv[1][0].ident):
@@ -1474,7 +1475,7 @@ class Audit:
             ids = ", ".join(str(p.ident) for p in pics)
             self.adv("repeated-topology", self.log_path.name,
                      f"pictures {ids} (lang={lang}) share canonical topology "
-                     f"{digest}; consider a \\tndefine")
+                     f"{digest}; keep it inline or use ordinary TeX composition")
 
     def check_periodic_dots(self) -> None:
         for idx, pic in enumerate(self.pictures):

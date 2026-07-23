@@ -1,0 +1,17 @@
+% Target: rmp-workbench-iii-peps-renormalization-one
+% Formula: Four PEPS tensors occupy the edges of one renormalization plaquette.
+% Ink: Canonical public tenkzfree square with four edge-centred PEPS atoms.
+% Boundary: Eight external half-edges remain open around the plaquette.
+% Source: author source ImagesReview Section III/ImagesReview Section III.tex
+%   lines 622-630; archival output PEPSrenorm1.pdf
+% Capabilities: free-graph, four-site-plaquette, renormalization
+\[
+  \begin{tenkzfree}
+    \tnput[box]{n}{(0mm,8mm)}{} \tnput[box]{e}{(8mm,0mm)}{}
+    \tnput[box]{s}{(0mm,-8mm)}{} \tnput[box]{w}{(-8mm,0mm)}{}
+    \tnjoin{n.east}{e.north} \tnjoin{e.south}{s.east}
+    \tnjoin{s.west}{w.south} \tnjoin{w.north}{n.west}
+    \tnjoin{n.north}{0mm,16mm} \tnjoin{e.east}{16mm,0mm}
+    \tnjoin{0mm,-16mm}{s.south} \tnjoin{-16mm,0mm}{w.west}
+  \end{tenkzfree}.
+\]

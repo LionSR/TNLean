@@ -8,7 +8,6 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.Axioms
 
-import TNLean.Axioms.Beigi
 import TNLean.Axioms.BrouwerFixedPoint
 import TNLean.Axioms.Entropy
 import TNLean.Axioms.LiebSubBoundary

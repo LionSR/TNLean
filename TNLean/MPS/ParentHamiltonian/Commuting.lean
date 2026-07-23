@@ -9,7 +9,6 @@ import TNLean.MPS.Periodic.Defs
 import TNLean.MPS.RFP.CommutingBridge
 import TNLean.MPS.RFP.Defs
 import TNLean.MPS.RFP.StructuralForm
-import TNLean.Axioms.Beigi
 
 /-!
 # Commuting parent Hamiltonians
@@ -61,8 +60,9 @@ clause from Definition 3.9.
   the all-chain source condition is equivalently all-chain nearest-neighbor
   commutation together with the ground-space spanning clause of
   arXiv:1606.00608, Definition 3.9.
-* `MPSTensor.nncph_implies_rfp` — axiom-backed reverse implication from the
-  all-chain NNCPH ground-space condition to RFP.
+* `MPSTensor.nncph_implies_rfp` is proved downstream in
+  `TNLean.MPS.RFP.BeigiLoopBNTIdentification`, after the Beigi loop construction
+  and its comparison with normal tensors are available.
 
 ## References
 
@@ -462,40 +462,5 @@ theorem IsCommutingParentHam.ham_comm_localTerm {A : MPSTensor d D} {L N : ℕ}
   congr 1
   ext j : 1
   exact _h j i
-
-/-- **Theorem 3.10(iii)⟹(i)** (arXiv:1606.00608): all-chain
-nearest-neighbor commuting parent-Hamiltonian ground spaces imply RFP in the
-present axiom-backed theorem.
-Gated on S. Beigi, *J. Phys. A: Math. Theor.* **45** (2012) 025306 —
-the ground-space characterization of commuting nearest-neighbor 1D
-Hamiltonians with finite degeneracy (`Axioms.beigi_nncph_to_rfp`).
-
-The hypothesis `IsBNT B r dim A` identifies the family \(A_j\) as the BNT of
-the original tensor \(B\). The hypothesis `HasNNCPHGroundSpaces B A` is the
-source all-chain condition: for every \(N>2\), the length-two translated parent
-terms commute, the periodic MPS vector \(V^{(N)}(B)\) has zero energy, and
-\[
-  \ker H_2^{(N)}(B)=\operatorname{span}\{V^{(N)}(A_j):j=1,\ldots,g\}.
-\]
-
-Note: with the present Lean definition, `IsTransferIdempotent` is a normalization-sensitive
-idempotence equation for `transferMap A`, whereas `IsNNCPH` is invariant under
-nonzero scalar rescaling of the tensor. A final theorem should therefore include
-a normalization hypothesis, such as `IsLeftCanonical A`, before applying the
-commuting-Hamiltonian ground-space characterization. -/
-theorem nncph_implies_rfp (B : MPSTensor d D) [NeZero D]
-    {r : ℕ} {dim : Fin r → ℕ} (A : (j : Fin r) → MPSTensor d (dim j))
-    (hBNT : IsBNT B r dim A)
-    (hNNCPH : HasNNCPHGroundSpaces B A)
-    (hNT : IsNormal B)
-    (hLeft : IsLeftCanonical B) :
-    IsTransferIdempotent B := by
-  refine Axioms.beigi_nncph_to_rfp B A hBNT hNT hLeft ?_ ?_ ?_
-  · intro N hN i j
-    exact (hNNCPH N hN).isNNCPH i j
-  · intro N hN
-    exact (hNNCPH N hN).isFrustrationFree
-  · intro N hN
-    exact (hNNCPH N hN).groundSpaceSpanning
 
 end MPSTensor

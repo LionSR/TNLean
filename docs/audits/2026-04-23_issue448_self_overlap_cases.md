@@ -5,8 +5,8 @@ cyclic-sector `hLift` and orthogonal-corner rigidity
 
 Target files re-read for this retry:
 - `TNLean/MPS/Periodic/Overlap/SelfOverlap.lean`
-- `TNLean/MPS/Periodic/Overlap/Case1.lean`
-- `TNLean/MPS/Periodic/Overlap/Case2.lean`
+- `TNLean/MPS/Periodic/Overlap/DifferentPeriod.lean`
+- `TNLean/MPS/Periodic/Overlap/NoSectorMatch.lean`
 - `TNLean/MPS/Periodic/Overlap/Dichotomy.lean`
 - `Papers/1708.00029/main.tex` (Appendix A, especially lines 908–960)
 - issue #448 and its full comment history
@@ -21,12 +21,12 @@ Worktree / branch used:
 than the issue title suggests
 
 On current `main`:
-- `TNLean/MPS/Periodic/Overlap/Case1.lean` has **no** `sorry`
+- `TNLean/MPS/Periodic/Overlap/DifferentPeriod.lean` has **no** `sorry`
 - `periodicOverlap_tendsto_zero_of_ne_period` is already proved
 
 So the remaining work inside issue #448 is now concentrated in:
 - the self-overlap file `SelfOverlap.lean`
-- the same-period / no-sector-match file `Case2.lean`
+- the same-period / no-sector-match file `NoSectorMatch.lean`
 - the two final wrappers in `Dichotomy.lean`
 
 ### 2. Remaining `sorry`-backed declarations in the Case 1–2 split files
@@ -39,10 +39,10 @@ numbers here, since these files are still moving on current `main`.
 - `not_gaugePhaseEquiv_of_orthogonal_cyclicSector_traces`
 - `periodicSelfOverlap_tendsto`
 
-#### `TNLean/MPS/Periodic/Overlap/Case1.lean`
+#### `TNLean/MPS/Periodic/Overlap/DifferentPeriod.lean`
 - none
 
-#### `TNLean/MPS/Periodic/Overlap/Case2.lean`
+#### `TNLean/MPS/Periodic/Overlap/NoSectorMatch.lean`
 - `exists_nondecaying_sectorOverlap_of_blockedGaugePhaseEquiv_cyclicDecomp`
 - `exists_sector_match_of_gaugePhaseEquiv`
 - `not_gaugePhaseEquiv_of_no_sector_match`
@@ -118,7 +118,7 @@ rigidity** theorem, not on a local tactic search failure.
 
 This is the finite-sum / asymptotic extraction step
 `exists_nondecaying_sectorOverlap_of_blockedGaugePhaseEquiv_cyclicDecomp`
-in `Case2.lean`.
+in `NoSectorMatch.lean`.
 
 The purely algebraic part is straightforward: exactly as in the self-overlap
 proof, `hA_mpv` and `hB_mpv` expand the blocked mixed overlap into the finite

@@ -77,7 +77,7 @@ theorem isRegionBoundaryEdge_of_disjoint_incident (S T : Finset V)
 omit [Fintype V] [DecidableRel G.Adj] in
 /-- A boundary edge of `R` has at least one endpoint in `R`. -/
 theorem isRegionBoundaryEdge_touches (R : Finset V) {f : Edge G}
-    (hf : IsRegionBoundaryEdge (G := G) R f) : f.1.1 ∈ R ∨ f.1.2 ∈ R := by
+    (hf : IsRegionBoundaryEdge (G := G) R f) : IsRegionIncidentEdge (G := G) R f := by
   rcases hf with ⟨h1, _⟩ | ⟨_, h2⟩
   · exact Or.inl h1
   · exact Or.inr h2

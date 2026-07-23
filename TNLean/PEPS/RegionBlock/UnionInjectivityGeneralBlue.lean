@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.RegionBlock.UnionInjectivityGeneral
+import TNLean.PEPS.ConfigurationCalculus
 
 /-!
 # The general union lemma: the blue-side fiber-collapse factorization
@@ -13,6 +14,14 @@ blue-side mirror of the complement-side fiber-collapse factorization, over a bar
 `ThreeBlockGeometry`. Together with that file it supplies both factorizations the
 two-step inverse application of Lemma `injective_union` (arXiv:1804.04964, Section 3,
 lines 1324--1400 of `Papers/1804.04964/paper_normal.tex`) consumes.
+
+## Implementation notes
+
+The blue-side results are obtained from the complement-side results by interchanging
+the blue and complement blocks of `ThreeBlockGeometry`. The operation
+`ThreeBlockGeometry.swapBlueComplement` records this mathematical symmetry once; its
+reducible projections let later coupling identities unfold to the corresponding
+blue/complement formulas.
 
 ## References
 
@@ -32,6 +41,56 @@ variable {G : SimpleGraph V} [DecidableRel G.Adj] {d : ℕ}
 variable {A : Tensor G d}
 variable (g : ThreeBlockGeometry V)
 
+/-- Exchange the blue and complement roles while leaving the red block fixed.
+
+This geometry involution, rather than square-lattice coordinate swap, is the exact
+symmetry of the declarations below: they hold for an arbitrary graph and exchange two
+configuration fibers, not two coordinate axes. -/
+abbrev ThreeBlockGeometry.swapBlueComplement (g : ThreeBlockGeometry V) :
+    ThreeBlockGeometry V where
+  red := g.red
+  blue := g.complement
+  complement := g.blue
+  red_disjoint_blue := g.red_disjoint_complement
+  red_disjoint_complement := g.red_disjoint_blue
+  blue_disjoint_complement := g.blue_disjoint_complement.symm
+  cover_univ := by rw [← g.cover_univ]; ac_rfl
+
+omit [LinearOrder V] in
+/-- Swapping the blue and complement blocks leaves the red block unchanged. -/
+@[simp] theorem ThreeBlockGeometry.swapBlueComplement_red :
+    g.swapBlueComplement.red = g.red := rfl
+
+omit [LinearOrder V] in
+/-- The blue block after swapping is the original complement block. -/
+@[simp] theorem ThreeBlockGeometry.swapBlueComplement_blue :
+    g.swapBlueComplement.blue = g.complement := rfl
+
+omit [LinearOrder V] in
+/-- The complement block after swapping is the original blue block. -/
+@[simp] theorem ThreeBlockGeometry.swapBlueComplement_complement :
+    g.swapBlueComplement.complement = g.blue := rfl
+
+omit [LinearOrder V] in
+/-- The physical configuration on the swapped complement agrees with the original fused
+configuration after interchanging the blue and complement arguments. -/
+@[simp] theorem ThreeBlockGeometry.swapBlueComplement_complPhysical
+    (σblue : RegionPhysicalConfig (V := V) (d := d) g.blue)
+    (σcompl : RegionPhysicalConfig (V := V) (d := d) g.complement) :
+    g.swapBlueComplement.complPhysical σcompl σblue =
+      g.complPhysical σblue σcompl := by
+  funext w
+  by_cases hb : w.1 ∈ g.blue
+  · have hc : w.1 ∉ g.complement := fun hw ↦
+      (Finset.disjoint_left.mp g.blue_disjoint_complement) hb hw
+    simp [ThreeBlockGeometry.complPhysical, swapBlueComplement, hb, hc]
+  · have hc : w.1 ∈ g.complement := by
+      have hbc : w.1 ∈ g.blue ∪ g.complement := by
+        rw [← g.sdiff_red_eq_blue_union_complement]
+        exact w.2
+      exact (Finset.mem_union.mp hbc).resolve_left hb
+    simp [ThreeBlockGeometry.complPhysical, swapBlueComplement, hb, hc]
+
 /-- The complement vertex product reads a global configuration only through the
 complement-incident edges, so it agrees with the configuration merged along the blue
 block, provided the two configurations agree on the blue boundary. This is the blue
@@ -47,17 +106,7 @@ theorem ThreeBlockGeometry.complProd_eq_regionMerge_blue
     (∏ w : {w : V // w ∈ g.complement}, A.component w.1 (fun ie => p.2 ie.1) (σcompl w)) =
       ∏ w : {w : V // w ∈ g.complement},
         A.component w.1 (fun ie => regionMerge (G := G) A g.blue p ie.1) (σcompl w) := by
-  classical
-  apply regionProd_subtype_congr
-  intro ie hie
-  by_cases hinc : IsRegionIncidentEdge (G := G) g.blue ie
-  · have hbdry : IsRegionBoundaryEdge (G := G) g.blue ie :=
-      isRegionBoundaryEdge_of_disjoint_incident (G := G) g.complement g.blue
-        g.blue_disjoint_complement.symm hie hinc
-    rw [regionMerge, if_pos hinc]
-    have := congrFun hp ⟨ie, hbdry⟩
-    simpa [regionBoundaryLabel] using this.symm
-  · rw [regionMerge, if_neg hinc]
+  exact g.swapBlueComplement.blueProd_eq_regionMerge_complement σcompl p hp
 
 /-- On a boundary edge of the host `univ \ red`, the complement-side configuration
 `p.2` agrees with the configuration merged along the blue block, provided the pair
@@ -73,33 +122,8 @@ theorem ThreeBlockGeometry.hostLabel_p2_eq_hostLabel_regionMerge_blue
     regionBoundaryLabel (G := G) A (Finset.univ \ g.red) p.2 =
       regionBoundaryLabel (G := G) A (Finset.univ \ g.red)
         (regionMerge (G := G) A g.blue p) := by
-  classical
-  funext f
-  simp only [regionBoundaryLabel_apply]
-  by_cases hinc : IsRegionIncidentEdge (G := G) g.blue f.1
-  · -- A blue-incident host boundary edge is a boundary edge of the blue block.
-    have hbdry : IsRegionBoundaryEdge (G := G) g.blue f.1 := by
-      rcases f.2 with ⟨h1host, h2nothost⟩ | ⟨h1nothost, h2host⟩
-      · have h2red : f.1.1.2 ∈ g.red := by
-          have := h2nothost; rw [Finset.mem_sdiff] at this; push Not at this
-          exact this (Finset.mem_univ _)
-        have h2notblue : f.1.1.2 ∉ g.blue := fun hb =>
-          (Finset.disjoint_left.mp g.red_disjoint_blue) h2red hb
-        rcases hinc with hb1 | hb2
-        · refine Or.inl ⟨hb1, h2notblue⟩
-        · exact absurd hb2 h2notblue
-      · have h1red : f.1.1.1 ∈ g.red := by
-          have := h1nothost; rw [Finset.mem_sdiff] at this; push Not at this
-          exact this (Finset.mem_univ _)
-        have h1notblue : f.1.1.1 ∉ g.blue := fun hb =>
-          (Finset.disjoint_left.mp g.red_disjoint_blue) h1red hb
-        rcases hinc with hb1 | hb2
-        · exact absurd hb1 h1notblue
-        · refine Or.inr ⟨h1notblue, hb2⟩
-    rw [regionMerge, if_pos hinc]
-    have := congrFun hp ⟨f.1, hbdry⟩
-    simpa [regionBoundaryLabel] using this.symm
-  · rw [regionMerge, if_neg hinc]
+  simpa [swapBlueComplement] using
+    g.swapBlueComplement.hostLabel_p2_eq_hostLabel_regionMerge_complement p hp
 open scoped Classical in
 /-- **The host-relative blue fiber cardinality.** The blue mirror of
 `threeBlockFiber_card`: among the blue-boundary-agreeing pairs whose complement-side
@@ -118,32 +142,9 @@ theorem ThreeBlockGeometry.threeBlockBlueFiber_card
             regionMerge (G := G) A g.blue p = η))).card =
       if regionBoundaryLabel (G := G) A (Finset.univ \ g.red) η = bdry then
         regionInteriorBondProd (G := G) A g.blue else 0 := by
-  classical
-  by_cases hcompat : regionBoundaryLabel (G := G) A (Finset.univ \ g.red) η = bdry
-  · rw [if_pos hcompat]
-    rw [show (Finset.univ.filter (fun p : VirtualConfig A × VirtualConfig A =>
-          regionBoundaryLabel (G := G) A (Finset.univ \ g.red) p.2 = bdry ∧
-            (regionBoundaryLabel (G := G) A g.blue p.1 =
-                regionBoundaryLabel (G := G) A g.blue p.2 ∧
-              regionMerge (G := G) A g.blue p = η))) =
-        Finset.univ.filter (fun p : VirtualConfig A × VirtualConfig A =>
-          (regionBoundaryLabel (G := G) A g.blue p.1 =
-              regionBoundaryLabel (G := G) A g.blue p.2 ∧
-            regionMerge (G := G) A g.blue p = η)) from ?_]
-    · exact regionFiber_card (G := G) A g.blue η
-    · refine Finset.filter_congr (fun p _ => ?_)
-      constructor
-      · rintro ⟨_, hagree, hmerge⟩; exact ⟨hagree, hmerge⟩
-      · rintro ⟨hagree, hmerge⟩
-        refine ⟨?_, hagree, hmerge⟩
-        rw [g.hostLabel_p2_eq_hostLabel_regionMerge_blue p hagree,
-          hmerge, hcompat]
-  · rw [if_neg hcompat]
-    rw [Finset.card_eq_zero, Finset.filter_eq_empty_iff]
-    rintro p _ ⟨hhost, hagree, hmerge⟩
-    apply hcompat
-    rw [← hmerge,
-      ← g.hostLabel_p2_eq_hostLabel_regionMerge_blue p hagree, hhost]
+  simpa [swapBlueComplement] using
+    g.swapBlueComplement.threeBlockFiber_card bdry η
+
 open scoped Classical in
 /-- **The host-relative blue merge collapse.** The blue mirror of
 `threeBlockDoubleSum_eq_smul_single`: the blue-boundary-agreeing double sum of the
@@ -174,102 +175,9 @@ theorem ThreeBlockGeometry.threeBlockDoubleSum_eq_smul_single_blue
               A.component w.1 (fun ie => ζ ie.1) (σblue w)) *
             ∏ w : {w : V // w ∈ g.complement},
               A.component w.1 (fun ie => ζ ie.1) (σcompl w) := by
-  classical
-  rw [show (∑ p ∈ Finset.univ.filter
-        (fun p : VirtualConfig A × VirtualConfig A =>
-          regionBoundaryLabel (G := G) A (Finset.univ \ g.red) p.2 = bdry ∧
-            regionBoundaryLabel (G := G) A g.blue p.1 =
-              regionBoundaryLabel (G := G) A g.blue p.2),
-      (∏ w : {w : V // w ∈ g.blue},
-          A.component w.1 (fun ie => p.1 ie.1) (σblue w)) *
-        ∏ w : {w : V // w ∈ g.complement},
-          A.component w.1 (fun ie => p.2 ie.1) (σcompl w)) =
-      ∑ p ∈ Finset.univ.filter
-        (fun p : VirtualConfig A × VirtualConfig A =>
-          regionBoundaryLabel (G := G) A (Finset.univ \ g.red) p.2 = bdry ∧
-            regionBoundaryLabel (G := G) A g.blue p.1 =
-              regionBoundaryLabel (G := G) A g.blue p.2),
-        (∏ w : {w : V // w ∈ g.blue},
-            A.component w.1 (fun ie => regionMerge (G := G) A g.blue p ie.1) (σblue w)) *
-          ∏ w : {w : V // w ∈ g.complement},
-            A.component w.1
-              (fun ie => regionMerge (G := G) A g.blue p ie.1) (σcompl w) from ?_]
-  · rw [← Finset.sum_fiberwise (Finset.univ.filter
-        (fun p : VirtualConfig A × VirtualConfig A =>
-          regionBoundaryLabel (G := G) A (Finset.univ \ g.red) p.2 = bdry ∧
-            regionBoundaryLabel (G := G) A g.blue p.1 =
-              regionBoundaryLabel (G := G) A g.blue p.2))
-      (fun p => regionMerge (G := G) A g.blue p)
-      (fun p =>
-        (∏ w : {w : V // w ∈ g.blue},
-            A.component w.1 (fun ie => regionMerge (G := G) A g.blue p ie.1) (σblue w)) *
-          ∏ w : {w : V // w ∈ g.complement},
-            A.component w.1
-              (fun ie => regionMerge (G := G) A g.blue p ie.1) (σcompl w))]
-    rw [show (regionInteriorBondProd (G := G) A g.blue •
-          ∑ ζ ∈ Finset.univ.filter
-              (fun ζ : VirtualConfig A =>
-                regionBoundaryLabel (G := G) A (Finset.univ \ g.red) ζ = bdry),
-            (∏ w : {w : V // w ∈ g.blue},
-                A.component w.1 (fun ie => ζ ie.1) (σblue w)) *
-              ∏ w : {w : V // w ∈ g.complement},
-                A.component w.1 (fun ie => ζ ie.1) (σcompl w)) =
-        ∑ η : VirtualConfig A,
-          regionInteriorBondProd (G := G) A g.blue •
-            (if regionBoundaryLabel (G := G) A (Finset.univ \ g.red) η = bdry then
-              (∏ w : {w : V // w ∈ g.blue},
-                  A.component w.1 (fun ie => η ie.1) (σblue w)) *
-                ∏ w : {w : V // w ∈ g.complement},
-                  A.component w.1 (fun ie => η ie.1) (σcompl w)
-              else 0) from ?_]
-    · refine Finset.sum_congr rfl (fun η _ => ?_)
-      rw [Finset.filter_filter,
-        Finset.sum_congr rfl (g := fun _ =>
-            (∏ w : {w : V // w ∈ g.blue},
-                A.component w.1 (fun ie => η ie.1) (σblue w)) *
-              ∏ w : {w : V // w ∈ g.complement},
-                A.component w.1 (fun ie => η ie.1) (σcompl w))
-          (fun p hp => by rw [Finset.mem_filter] at hp; rw [hp.2.2]),
-        Finset.sum_const]
-      rw [show (Finset.univ.filter (fun p : VirtualConfig A × VirtualConfig A =>
-            (regionBoundaryLabel (G := G) A (Finset.univ \ g.red) p.2 = bdry ∧
-                regionBoundaryLabel (G := G) A g.blue p.1 =
-                  regionBoundaryLabel (G := G) A g.blue p.2) ∧
-              regionMerge (G := G) A g.blue p = η)) =
-          Finset.univ.filter (fun p : VirtualConfig A × VirtualConfig A =>
-            regionBoundaryLabel (G := G) A (Finset.univ \ g.red) p.2 = bdry ∧
-              (regionBoundaryLabel (G := G) A g.blue p.1 =
-                  regionBoundaryLabel (G := G) A g.blue p.2 ∧
-                regionMerge (G := G) A g.blue p = η)) from by
-          refine Finset.filter_congr (fun p _ => ?_); tauto,
-        g.threeBlockBlueFiber_card bdry η]
-      by_cases hcompat : regionBoundaryLabel (G := G) A (Finset.univ \ g.red) η = bdry
-      · rw [if_pos hcompat, if_pos hcompat]
-      · rw [if_neg hcompat, if_neg hcompat, zero_smul, smul_zero]
-    · rw [Finset.smul_sum, ← Finset.sum_filter_add_sum_filter_not Finset.univ
-          (fun η : VirtualConfig A =>
-            regionBoundaryLabel (G := G) A (Finset.univ \ g.red) η = bdry)]
-      rw [show (∑ η ∈ Finset.univ.filter
-            (fun η : VirtualConfig A =>
-              ¬ regionBoundaryLabel (G := G) A (Finset.univ \ g.red) η = bdry),
-          regionInteriorBondProd (G := G) A g.blue •
-            (if regionBoundaryLabel (G := G) A (Finset.univ \ g.red) η = bdry then
-              (∏ w : {w : V // w ∈ g.blue},
-                  A.component w.1 (fun ie => η ie.1) (σblue w)) *
-                ∏ w : {w : V // w ∈ g.complement},
-                  A.component w.1 (fun ie => η ie.1) (σcompl w)
-              else 0)) = 0 from ?_,
-        add_zero]
-      · refine Finset.sum_congr rfl (fun η hη => ?_)
-        rw [Finset.mem_filter] at hη
-        rw [if_pos hη.2]
-      · refine Finset.sum_eq_zero (fun η hη => ?_)
-        rw [Finset.mem_filter] at hη
-        rw [if_neg hη.2, smul_zero]
-  · refine Finset.sum_congr rfl (fun p hp => ?_)
-    rw [Finset.mem_filter] at hp
-    rw [regionProd_eq_merge (G := G) A g.blue σblue p,
-      g.complProd_eq_regionMerge_blue σcompl p hp.2.2]
+  exact
+    g.swapBlueComplement.threeBlockDoubleSum_eq_smul_single bdry σcompl σblue
+
 open scoped Classical in
 /-- **The complement coupling coefficient.** The blue mirror of
 `threeBlockBlueCoeff`: the complement vertex product summed over all global
@@ -283,11 +191,7 @@ noncomputable def ThreeBlockGeometry.threeBlockComplCoeff
     (bdry : RegionBoundaryConfig (G := G) A (Finset.univ \ g.red))
     (σcompl : RegionPhysicalConfig (V := V) (d := d) g.complement)
     (bβ : RegionBoundaryConfig (G := G) A g.blue) : ℂ :=
-  ∑ q ∈ Finset.univ.filter
-      (fun q : VirtualConfig A =>
-        regionBoundaryLabel (G := G) A (Finset.univ \ g.red) q = bdry ∧
-          regionBoundaryLabel (G := G) A g.blue q = bβ),
-    ∏ w : {w : V // w ∈ g.complement}, A.component w.1 (fun ie => q ie.1) (σcompl w)
+  g.swapBlueComplement.threeBlockBlueCoeff bdry σcompl bβ
 
 open scoped Classical in
 /-- **The host-relative blue decoupling.** The blue mirror of
@@ -314,33 +218,8 @@ theorem ThreeBlockGeometry.threeBlockDoubleSum_eq_complCoeff_sum_blue
       ∑ bβ : RegionBoundaryConfig (G := G) A g.blue,
         regionBlockedWeight (G := G) A g.blue bβ σblue *
           g.threeBlockComplCoeff bdry σcompl bβ := by
-  classical
-  rw [← Finset.sum_fiberwise (Finset.univ.filter
-      (fun p : VirtualConfig A × VirtualConfig A =>
-        regionBoundaryLabel (G := G) A (Finset.univ \ g.red) p.2 = bdry ∧
-          regionBoundaryLabel (G := G) A g.blue p.1 =
-            regionBoundaryLabel (G := G) A g.blue p.2))
-    (fun p => regionBoundaryLabel (G := G) A g.blue p.1)
-    (fun p =>
-      (∏ w : {w : V // w ∈ g.blue},
-          A.component w.1 (fun ie => p.1 ie.1) (σblue w)) *
-        ∏ w : {w : V // w ∈ g.complement},
-          A.component w.1 (fun ie => p.2 ie.1) (σcompl w))]
-  refine Finset.sum_congr rfl (fun bβ _ => ?_)
-  rw [regionBlockedWeight, threeBlockComplCoeff, Finset.sum_mul_sum]
-  rw [Finset.filter_filter, ← Finset.sum_product']
-  refine Finset.sum_congr ?_ (fun _ _ => rfl)
-  ext x
-  rcases x with ⟨p, q⟩
-  constructor
-  · intro hpq
-    simp only [Finset.mem_filter, Finset.mem_univ, true_and, Finset.mem_product] at hpq ⊢
-    obtain ⟨⟨hhost, hagree⟩, hbβ⟩ := hpq
-    exact ⟨hbβ, hhost, hbβ ▸ hagree.symm⟩
-  · intro hpq
-    simp only [Finset.mem_filter, Finset.mem_univ, true_and, Finset.mem_product] at hpq ⊢
-    obtain ⟨hp, hhost, hq⟩ := hpq
-    exact ⟨⟨hhost, hp.trans hq.symm⟩, hp⟩
+  exact
+    g.swapBlueComplement.threeBlockDoubleSum_eq_blueCoeff_sum bdry σcompl σblue
 
 namespace ThreeBlockGeometry
 
@@ -363,13 +242,10 @@ theorem regionInteriorBondProd_smul_regionBlockedWeight_threeBlockComplPhysical_
       ∑ bβ : RegionBoundaryConfig (G := G) A g.blue,
         g.threeBlockComplCoeff bdry σcompl bβ •
           regionBlockedWeight (G := G) A g.blue bβ σblue := by
-  classical
-  rw [g.regionBlockedWeight_complPhysical_eq bdry σblue σcompl]
-  rw [smul_eq_mul, ← nsmul_eq_mul,
-    ← g.threeBlockDoubleSum_eq_smul_single_blue bdry σblue σcompl,
-    g.threeBlockDoubleSum_eq_complCoeff_sum_blue bdry σblue σcompl]
-  refine Finset.sum_congr rfl (fun bβ _ => ?_)
-  rw [smul_eq_mul, mul_comm]
+  rw [← g.swapBlueComplement_complPhysical σblue σcompl]
+  exact
+    ThreeBlockGeometry.regionInteriorBondProd_smul_regionBlockedWeight_threeBlockComplPhysical
+      g.swapBlueComplement bdry σcompl σblue
 
 end ThreeBlockGeometry
 

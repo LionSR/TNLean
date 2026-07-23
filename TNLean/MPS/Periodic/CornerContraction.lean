@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.ListProduct
 import TNLean.MPS.Periodic.CornerTransition
 
 /-!
@@ -132,37 +133,7 @@ recovery identity `eq:Omegauprop`.  We therefore state it for a general
 
 section AbstractContraction
 
-variable {R : Type*} [Ring R] {J : Type*} [Fintype J]
-
-/-- Ordered noncommutative distributivity: the ordered product of finite sums is
-the sum, over all choices, of the ordered products of the chosen summands.  This
-is the combinatorial core of applying the tensor of inverses
-`Ω_{u+1} ⊗ ⋯ ⊗ Ω_u` to a concatenated matrix product. -/
-theorem ofFn_prod_sum {m : ℕ} (f : Fin m → J → R) :
-    (List.ofFn (fun k : Fin m => ∑ j : J, f k j)).prod
-      = ∑ ρ : Fin m → J, (List.ofFn (fun k => f k (ρ k))).prod := by
-  classical
-  induction m with
-  | zero => simp
-  | succ m ih =>
-    rw [List.ofFn_succ, List.prod_cons, ih (fun k => f k.succ), Finset.sum_mul_sum]
-    rw [← Equiv.sum_comp (Fin.consEquiv (fun _ : Fin (m + 1) => J)), Fintype.sum_prod_type]
-    refine Finset.sum_congr rfl (fun j _ => Finset.sum_congr rfl (fun ρ' _ => ?_))
-    rw [List.ofFn_succ, List.prod_cons]
-    simp [Fin.consEquiv]
-
-variable [Algebra ℂ R]
-
-/-- The scalars pull out of an ordered product: `∏_k (s_k • M_k) = (∏_k s_k) •
-∏_k M_k`.  This collects the inverse coefficients of the contraction into a
-single scalar in front of each chosen ordered product. -/
-theorem ofFn_prod_smul {m : ℕ} (s : Fin m → ℂ) (M : Fin m → R) :
-    (List.ofFn (fun k : Fin m => s k • M k)).prod = (∏ k, s k) • (List.ofFn M).prod := by
-  induction m with
-  | zero => simp
-  | succ m ih =>
-    rw [List.ofFn_succ, List.prod_cons, ih (fun k => s k.succ) (fun k => M k.succ),
-      smul_mul_smul_comm, Fin.prod_univ_succ, List.ofFn_succ, List.prod_cons]
+variable {R : Type*} [Ring R] [Algebra ℂ R] {J : Type*} [Fintype J]
 
 /-- **The `Ω`-contraction** (arXiv:1708.00029, Appendix A, lines 1057--1062).
 
@@ -192,11 +163,11 @@ theorem ofFn_contraction {m : ℕ} (A X : Fin m → R) (G : Fin m → J → R)
   calc (List.ofFn (fun k => A k * X k)).prod
       = (List.ofFn (fun k => ∑ j, c k (X k) j • (A k * G k j))).prod := by simp_rw [hf]
     _ = ∑ ρ : Fin m → J, (List.ofFn (fun k => c k (X k) (ρ k) • (A k * G k (ρ k)))).prod :=
-        ofFn_prod_sum (fun k j => c k (X k) j • (A k * G k j))
+        List.prod_ofFn_sum (fun k j => c k (X k) j • (A k * G k j))
     _ = ∑ ρ : Fin m → J,
           (∏ k, c k (X k) (ρ k)) • (List.ofFn (fun k => A k * G k (ρ k))).prod :=
         Finset.sum_congr rfl (fun ρ _ =>
-          ofFn_prod_smul (fun k => c k (X k) (ρ k)) (fun k => A k * G k (ρ k)))
+          List.prod_ofFn_smul (fun k => c k (X k) (ρ k)) (fun k => A k * G k (ρ k)))
 
 end AbstractContraction
 

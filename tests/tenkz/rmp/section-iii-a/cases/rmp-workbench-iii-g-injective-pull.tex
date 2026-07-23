@@ -1,0 +1,21 @@
+% Target: rmp-workbench-iii-g-injective-pull
+% Formula: A virtual g-string pulls through a G-injective PEPS tensor.
+% Ink: Canonical public tenkzfree PEPS star with opposite g-string corners.
+% Boundary: Five PEPS legs and two g-string ends remain open on each side.
+% Source: author source ImagesReview Section III/ImagesReview Section III.tex
+%   lines 414-447; archival output Ginjpullt.pdf
+% Capabilities: free-graph, pulling-through, open-string
+\[
+  \begin{tenkzfree}
+    \tnput[dot]{A}{(0mm,0mm)}{A}
+    \tnjoin{-15mm,0mm}{A.west} \tnjoin{A.east}{15mm,0mm}
+    \tnjoin{0mm,-15mm}{A.south} \tnjoin{A.north}{0mm,15mm}
+    \tnjoin[route=arc,out=45,in=225]{-12mm,-10mm}{10mm,12mm}
+  \end{tenkzfree}_{g}
+  =\begin{tenkzfree}
+    \tnput[dot]{A}{(0mm,0mm)}{A}
+    \tnjoin{-15mm,0mm}{A.west} \tnjoin{A.east}{15mm,0mm}
+    \tnjoin{0mm,-15mm}{A.south} \tnjoin{A.north}{0mm,15mm}
+    \tnjoin[route=arc,out=-45,in=135]{-12mm,10mm}{10mm,-12mm}
+  \end{tenkzfree}_{g}.
+\]

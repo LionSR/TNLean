@@ -33,6 +33,7 @@ import TNLean.Analysis.PosSemidefCommute
 import TNLean.Analysis.ProbabilityEntropy
 import TNLean.Analysis.ProjectionGeometry
 import TNLean.Analysis.RelativeEntropyResolventIntegral
+import TNLean.Analysis.RelativeEntropySupportIntegral
 import TNLean.Analysis.ResolventFunctionalCalculus
 import TNLean.Analysis.RpowConvexity
 import TNLean.Analysis.SchattenNorm

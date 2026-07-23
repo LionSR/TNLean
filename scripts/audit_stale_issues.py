@@ -519,15 +519,18 @@ def _self_test(repo_root: Path) -> int:
     misclassifying the axiom or field.  Used by CI and by human reviewers to
     verify the tool works on a fresh checkout without talking to GitHub.
     """
-    beigi_path = repo_root / "TNLean" / "Axioms" / "Beigi.lean"
-    beigi_line = 0
-    for idx, line in enumerate(beigi_path.read_text(errors="replace").splitlines(), start=1):
-        if re.match(r"\s*axiom\s+beigi_nncph_to_rfp\b", line):
-            beigi_line = idx
+    entropy_path = repo_root / "TNLean" / "Axioms" / "Entropy.lean"
+    entropy_line = 0
+    for idx, line in enumerate(entropy_path.read_text(errors="replace").splitlines(), start=1):
+        if re.match(r"\s*axiom\s+hayashi_ssa_equality_characterization_forward\b", line):
+            entropy_line = idx
             break
-    if beigi_line == 0:
+    if entropy_line == 0:
         print("self-test FAILED:", file=sys.stderr)
-        print("  - could not locate beigi_nncph_to_rfp axiom line", file=sys.stderr)
+        print(
+            "  - could not locate hayashi_ssa_equality_characterization_forward axiom line",
+            file=sys.stderr,
+        )
         return 1
 
     synthetic = {
@@ -535,10 +538,11 @@ def _self_test(repo_root: Path) -> int:
         "title": "[self-test] synthetic audit fixture",
         "url": "https://example.invalid/issue/0",
         "body": (
-            f"Refers to `TNLean/Axioms/Beigi.lean:{beigi_line}`, "
+            f"Refers to `TNLean/Axioms/Entropy.lean:{entropy_line}`, "
             "`TNLean/Does/Not/Exist.lean:10`, and to "
             "`definitely_not_a_real_declaration`.\n"
-            "Also cites the sanctioned axiom `Axioms.beigi_nncph_to_rfp`.\n"
+            "Also cites the sanctioned axiom "
+            "`hayashi_ssa_equality_characterization_forward`.\n"
             "Also cites the structure field "
             "`AppendixBProductPairExtraction.localProjectors`.\n"
             "Also mentions `scripts/audit_stale_issues.py` (should be ignored)."
@@ -555,11 +559,11 @@ def _self_test(repo_root: Path) -> int:
         problems.append(
             f"expected missing-decl flag, got: {r.missing_decls!r}"
         )
-    if ("TNLean/Axioms/Beigi.lean", beigi_line) in r.non_sorry_lines:
+    if ("TNLean/Axioms/Entropy.lean", entropy_line) in r.non_sorry_lines:
         problems.append(
             "axiom line was incorrectly flagged as no longer unproved"
         )
-    if "Axioms.beigi_nncph_to_rfp" in r.missing_decls:
+    if "hayashi_ssa_equality_characterization_forward" in r.missing_decls:
         problems.append(
             "sanctioned axiom was incorrectly flagged as a missing declaration"
         )
