@@ -25,7 +25,7 @@ geometry, metered by M3; every use names a core-grammar gap).
 
 ## Session 0 — 2026-07-23 (baseline; classification of the 0.7 registry)
 
-Classification of all 95 key rows: **76 kernel · 4 sugar · 9 escape ·
+Classification of all 98 key rows: **79 kernel · 4 sugar · 9 escape ·
 6 alias**. Sugar expansions follow the 0.6 alias table (`sandwich`,
 `physical=`, `boundary=`, `compact`). `inline` remains kernel because its
 label style and clearance effects have no independent target keys. Escape
@@ -35,17 +35,17 @@ environments carry no registry status field; their ledger lives in this
 ledger's tables and in the baseline JSON. Ceilings are set at these
 actuals; the ratchet does the aspiring.
 
-Baseline meters: M1 {kernel 76, sugar 4, escape 9, alias 6, commands 18,
+Baseline meters: M1 {kernel 79, sugar 4, escape 9, alias 6, commands 18,
 environments 5} · M2 145 · M3 296 · M4 15.14 · M5 {7 aliases (six key,
-one value), 0 missing sunsets} · M6 {3 multi-typed names, 2 union types,
-5 shared enum words}.
+one value), 0 missing sunsets} · M6 {4 multi-typed names, 2 union types,
+8 shared enum words}.
 
 M3's 296 escape occurrences are dominated by `out=`/`in=` in the free-graph
 benchmark cases — the measured cost of hand-routed arcs, burned down by the
 strings landing (#4701, #4705). M6's baseline names the overloads the 1.0
 kernel deletes; it must never rise on the way there.
 
-### Verdicts on the 56 baseline flags
+### Verdicts on the 57 baseline flags
 
 Low-consumer rows. The demand corpus is the benchmark plus the blueprint;
 rows below three consumers either carry a dated justification or die at
@@ -61,15 +61,17 @@ their named landing.
 | flag:consumers:key:annotation:box | folds into mark form `enclosure` at the language landing; expiry 0.9 |
 | flag:consumers:key:annotation:brace above | folds into mark forms `brace-above`/`brace-below` at the language landing; expiry 0.9 |
 | flag:consumers:key:annotation:label pos | moves unchanged to the mark record at the language landing; expiry 0.9 |
+| flag:consumers:key:atom-declaration:ports | keep-because: declared atoms require an explicit typed-port schema at the extension door; permanent |
 | flag:consumers:key:atom-declaration:skin | keep-because: rides `\tndeclareatom`, same exclusion; expiry 1.0 |
 | flag:consumers:key:connection:distinguished | keep-because: two consumers today, torus redraws add more (#4702); expiry 0.9 |
 | flag:consumers:key:connection:fused | respelled `weight=double` at the language landing; expiry 0.9 |
+| flag:consumers:key:connection:name | keep-because: addressing becomes load-bearing for every S2+ landing (wires, marks, groups); expiry 0.9 |
 | flag:consumers:key:connection:none | dies at the language landing: omit the wire record, or use atom `void=sealed`; expiry 0.9 |
 | flag:consumers:key:connection:style | dies with the lattice edge-style pass-through at S3; expiry 0.9 |
 | flag:consumers:key:object:combined | folds into the ports grammar at the language landing; expiry 0.9 |
 | flag:consumers:key:object:east at | folds into the ports grammar; expiry 0.9 |
 | flag:consumers:key:object:west at | folds into the ports grammar; expiry 0.9 |
-| flag:consumers:key:object:name | keep-because: addressing becomes load-bearing for every S2+ landing (wires, marks, groups); expiry 0.9 |
+| flag:consumers:key:object:physical | folds into the typed-port grammar at the language landing; expiry 0.9 |
 | flag:consumers:key:object:removed | becomes atom `void=sealed` at the language landing; expiry 0.9 |
 | flag:consumers:key:object:span | folds into `ports=` and `wires=` at the language landing; expiry 0.9 |
 | flag:consumers:key:object:species | keep-because: semantic species is a kernel atom field; role consumers move here at the language landing; expiry 0.9 |
@@ -110,7 +112,6 @@ grammar's own testimony against itself.
 | flag:lonely-type:row | keep: `align=` holds it until tenkzeq; expiry 0.9 |
 | flag:lonely-type:row-list | keep: `rows=` is kernel and audit-load-bearing; permanent |
 | flag:lonely-type:style-name | dies with the lattice edge-style pass-through at S3; expiry 0.9 |
-| flag:lonely-type:typed-port-list | keep: ports are the kernel's typing mechanism; permanent |
 
 Sugar-shaped commands and sunsets.
 
@@ -127,6 +128,7 @@ Sugar-shaped commands and sunsets.
 | flag:sunset:object:rows | executes at the 1.0 freeze with the alias sweep |
 | flag:sunset:picture:boundary legs | executes at the 1.0 freeze with the alias sweep |
 | flag:sunset:region:label at | executes at the 1.0 freeze with the alias sweep |
+| flag:sunset:connection:route=curve | executes at the 1.0 freeze with the alias sweep |
 
 Agenda handed to the 0.8 session: the S2/S3/S4 deaths listed above are
 verified against these flag ids; any survivor re-raises automatically.

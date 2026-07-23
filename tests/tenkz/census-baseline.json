@@ -6,7 +6,7 @@
       "commands": 18,
       "environments": 5,
       "escape": 9,
-      "kernel": 76,
+      "kernel": 79,
       "sugar": 4
     }
   },
@@ -32,8 +32,8 @@
   "m6_overloads": {
     "definition": "names with several value types + union types + enum words shared across enums; must never rise",
     "value": {
-      "multi_typed_names": 3,
-      "shared_enum_words": 5,
+      "multi_typed_names": 4,
+      "shared_enum_words": 8,
       "union_types": 2
     }
   }

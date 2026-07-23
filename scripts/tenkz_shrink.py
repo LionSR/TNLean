@@ -276,6 +276,7 @@ def scoped_option_groups(
         scoped["setup"][path] = [
             *_brace_argument(text, "tnset", 1),
             *picture_options,
+            *_command_options(text, "tntree"),
         ]
         scoped["atom-declaration"][path] = _brace_argument(
             text, "tndeclareatom", 2

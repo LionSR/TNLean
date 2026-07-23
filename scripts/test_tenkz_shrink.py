@@ -115,6 +115,27 @@ def test_sugar_expansion_checks_every_token() -> None:
     ), errors
 
 
+def test_parser_registry_census_preserves_scopes() -> None:
+    entries = tenkz_shrink.load_registry()
+    moved = [
+        Entry(
+            entry.kind,
+            ("picture", *entry.fields[1:]),
+        )
+        if entry.kind == "key"
+        and entry.fields[0] == "annotation"
+        and entry.fields[1] == "brace above"
+        else entry
+        for entry in entries
+    ]
+    errors = check(moved)
+    assert any(
+        "missing=annotation:brace above" in error
+        and "extra=picture:brace above" in error
+        for error in errors
+    ), errors
+
+
 def test_alias_replacements_are_registered_vocabulary() -> None:
     entries = tenkz_shrink.load_registry()
     for replacement in ("does not exist", " "):
