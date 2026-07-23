@@ -237,12 +237,11 @@ expression because the terms with `β_j = 0` vanish by
 implements the support convention in the positive-semidefinite extension of
 Jenčová--Ruskai, arXiv:0903.2895v4, lines 717--720.
 
-This is a spectral-coordinate expression. It has not yet been identified
-with the coordinate-free form of the matrix lift `(intAB)`, lines 423--427.
-In the corresponding singular formula, `B⁺` occurs inside the shifted
-operator `t 1 + A ⊗ (B⁺)ᵀ`; for `t > 0`, the inverse of that shifted
-operator on the support is an ordinary inverse, not a pseudoinverse of the
-shifted operator. -/
+The theorem `supportRelativeEntropyLeftRightIntegrand_eq_spectral` identifies
+this expression with the support-projected left-right quadratic form of the
+matrix lift `(intAB)`, lines 423--427. The passage to the shifted
+relative-modular operator `t 1 + A ⊗ (B⁺)ᵀ` and the singular finite-family
+equality-to-common-resolvent passage remain open. -/
 noncomputable def supportRelativeEntropySpectralIntegrand
     {A B : Matrix n n ℂ} (hA : A.PosSemidef) (hB : B.PosSemidef)
     (t : ℝ) : ℝ :=
