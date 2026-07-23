@@ -218,7 +218,7 @@ All three scalar factors on the right are positive.
 This calculation identifies the precise circularity.  The existence of the
 maps $F_{\alpha\beta}$ satisfying
 \eqref{eq:F-coisometry}--\eqref{eq:F-compression} is condition~(iii) of
-Theorem~4.14.  It may prove that condition~(iii) implies condition~(ii), but it
+Theorem~IV.13.  It may prove that condition~(iii) implies condition~(ii), but it
 cannot be used in the proof that condition~(ii) implies condition~(i).
 Condition~(ii) gives only the closed-chain identity
 \[
@@ -264,7 +264,7 @@ contradicts
 \]
 Consequently positive coefficients and positive-length closed-chain equality,
 including the relation formalized as
-\texttt{MPSTensor.SameMPV}\ensuremath{{}_{2}}\texttt{Pos}, do not determine an
+\leanid{MPSTensor.SameMPV}\ensuremath{{}_{2}}\leanid{Pos}, do not determine an
 isometric physical realization of a chosen representative.  This
 counterexample does not rule out a theorem using additional tensor-attached
 marked information; it shows that such information must be stated and proved
@@ -299,6 +299,14 @@ The subsequent rescaling of $X_\gamma$ to a unitary gauge belongs to
 formal declaration and its blueprint entry remain restricted to phase-one
 invertible conjugacy.  Issues 4648 and 4645 remain open, and the full
 line~2057 unitary conclusion remains unformalized.
+
+\section{Verdict}
+
+\textbf{Verdict: open gap.}  The Gram-dressing identity
+\eqref{eq:gram-dressing-target} has not been derived from condition~(ii)
+alone.  Appendix~C.4 therefore does not presently justify the line~2057
+unitary conclusion without the additional local map supplied by
+condition~(iii).
 
 \bibliographystyle{alpha}
 \bibliography{references}
