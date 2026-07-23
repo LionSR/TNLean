@@ -1,0 +1,23 @@
+% Target: rmp-ii-ortho-left
+% Formula: sum_s (A_L^s)^dagger A_L^s = 1.
+% Ink: Canonical public tenkz environment; no raw TikZ.
+% Boundary: The west cup contracts the left indices; the east ket-bra pair remains
+%   open.
+% Source: paper TN-Review-main.tex line 663; author source ImagesReview Section
+%   II/ImagesReview Section II.tex lines 181-191
+% Capabilities: grid, typed-ports
+\[
+  % LHS: ket A_L over bra conj(A_L); physical s pairs automatically
+  % (sandwich); west=cup contracts the shared left index.
+  \begin{tenkz}[sandwich, west=cup]
+    \tn[tri=l]{A_L}\\
+    \tn*[tri=l]{A_L}
+  \end{tenkz}
+  \;=\;
+  % RHS: the identity on the open (beta, beta') pair - a bare cup; the
+  % ghosts are the wire endpoints (the suite idiom for a glyph-free wire).
+  \begin{tenkz}[rows={wire,wire}, west=cup]
+    \tnghost{}\\
+    \tnghost{}
+  \end{tenkz}
+\]

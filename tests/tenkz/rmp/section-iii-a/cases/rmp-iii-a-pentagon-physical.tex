@@ -1,0 +1,30 @@
+% Target: rmp-iii-a-pentagon-physical
+% Formula: ^2F ^1F = ^1F ^2F ^2F — a physical string (black, vertical,
+% Ink: Canonical public tenkzfree environment; no raw TikZ.
+% Boundary: Resolved by the public environment; open indices remain explicit.
+% Source: paper TN-Review-main.tex line 1312; paper-context-only; no author drawing
+%   source
+% Capabilities: coherence, free-graph
+\[
+  \begin{tenkzfree}
+    % the splitting vertex; incoming MPO wire from the west, two out east
+    \tnput[dot, ports={west:virtual}]{V}{(0,0)}{}
+    \tnjoin[dir]{-16mm,0mm}{V.west}
+    \tnjoin[dir, route=arc, out=40, in=180]{V.north east}{15mm,8mm}
+    \tnjoin[dir, route=arc, out=-40, in=180]{V.south east}{15mm,-8mm}
+    % the physical string, west of the vertex, crossing the incoming wire
+    \tnjoin[dir]{-9mm,-7mm}{-9mm,7mm}
+  \end{tenkzfree}
+  \;=\;
+  \begin{tenkzfree}
+    \tnput[dot, ports={west:virtual}]{W}{(0,0)}{}
+    \tnjoin[dir]{-13mm,0mm}{W.west}
+    \tnjoin[dir, route=arc, out=40, in=180]{W.north east}{19mm,8mm}
+    \tnjoin[dir, route=arc, out=-40, in=180]{W.south east}{19mm,-8mm}
+    % the string, now east of the vertex, crossing BOTH split wires
+    \tnjoin[dir]{13mm,-13mm}{13mm,13mm}
+  \end{tenkzfree}
+\]
+\[
+  {}^{2}F\,{}^{1}F \;=\; {}^{1}F\,{}^{2}F\,{}^{2}F
+\]

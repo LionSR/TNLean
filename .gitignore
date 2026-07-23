@@ -78,6 +78,7 @@ Scratch/
 /docs/tenkz/*.exm
 /docs/tenkz/*.tnlog
 /docs/tenkz/manual2.pdf
+/output/pdf/tenkz-*.pdf
 
 # Nested Lake artifacts in vendored local packages
 External/**/.lake/

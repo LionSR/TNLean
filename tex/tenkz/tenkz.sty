@@ -1,4 +1,8 @@
-% tenkz — tensor-network diagrams for the TNLean blueprint.
+% Input: public tenkz syntax and the package's staged implementation files.
+% Output: picture environments, composition wrappers, and setup declarations.
+% Owned state: none; this file is a logic-free dependency and stage load map.
+% Invariants: language loads before model, shared services, and dialect renderers.
+% Next stage: tenkz-language.code.tex validates and registers public syntax.
 %
 % The four sub-languages: the contraction grid (tenkz, \tnpic),
 % commutative diagrams (tenkzcd: polygon mode and \tntree),
@@ -7,13 +11,15 @@
 % one key vocabulary across the tiers: frame=, the side-policy
 % alphabet (west=/east=), and the contraction cell-sets (open=/trace=).
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{tenkz}[2026/07/17 v0.6 Declarative tensor-network diagrams]
+\ProvidesPackage{tenkz}[2026/07/22 v0.7 Declarative tensor-network diagrams]
 
 \RequirePackage{tikz}
 \RequirePackage{tikz-cd}
 \usetikzlibrary{calc,arrows.meta,backgrounds,decorations.pathreplacing,
   decorations.markings,fit,shapes.geometric}
 
+\input{tenkz-language.code.tex}
+\input{tenkz-model.code.tex}
 \input{tenkz-core.code.tex}
 \input{tenkz-grid.code.tex}
 \input{tenkz-cd.code.tex}

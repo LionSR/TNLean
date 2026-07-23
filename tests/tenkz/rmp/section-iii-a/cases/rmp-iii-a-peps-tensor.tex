@@ -1,0 +1,19 @@
+% Target: rmp-iii-a-peps-tensor
+% Formula: the trivalent junction of physical/fusion wires around the
+% Ink: Canonical public tenkzfree environment; no raw TikZ.
+% Boundary: Resolved by the public environment; open indices remain explicit.
+% Source: paper TN-Review-main.tex line 1342; paper-context-only; no author drawing
+%   source
+% Capabilities: free-graph, typed-ports
+\[
+  \begin{tenkzfree}
+    \tnput[dot, label pos=south, ports={north:physical}]{m}{(0,-15mm)}{m}
+    \tnput[dot, label pos=east,  ports={south:physical}]{k}{(0,0)}{k}
+    \tnput[dot, label pos=north]{j}{(-13mm,13mm)}{j}
+    \tnput[dot, label pos=north]{n}{(13mm,13mm)}{n}
+    % gamma: m -> k, then the split alpha: k -> j and beta: k -> n
+    \tnjoin[dir, label=\gamma]{m.north}{k.south}
+    \tnjoin[dir, label=\alpha]{k.north west}{j.south east}
+    \tnjoin[dir, label=\beta]{k.north east}{n.south west}
+  \end{tenkzfree}
+\]

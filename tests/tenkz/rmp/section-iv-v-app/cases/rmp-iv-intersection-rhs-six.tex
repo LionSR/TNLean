@@ -1,0 +1,14 @@
+% Target: rmp-iv-intersection-rhs-six
+% Formula: A two-dimensional L-boundary window surrounds its retained interior.
+% Ink: The retained A--B patch is outlined inside the L boundary window.
+% Boundary: The outer L window cuts virtual bonds; every lattice site remains open.
+% Source: paper TN-Review-main.tex line 2084; author source ImagesReview Section
+%   IV/ImagesReview Section IV.tex lines 173-190 (growing back L)
+% Capabilities: lattice, regions, typed-ports
+\[
+  \begin{tenkzlattice}[rows=2, cols=3, frame=oblique, physical=up]
+    \tnsite[label=$A$]{(1,1)} \tnsite[label=$B$]{(1,2)}
+    \tnregion[outline, inset=1]{(1-2,1-2)}
+    \tnregion[outline, label=$L$, label pos=south east]{(1-2,1-3)}
+  \end{tenkzlattice}
+\]

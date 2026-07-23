@@ -1,0 +1,8 @@
+\documentclass{standalone}
+\usepackage{tenkz}
+\tndeclareatom{\tnprojector}{skin=box,ports={west:virtual,east:virtual}}
+\begin{document}
+\begin{tenkz}[rows={wire}]
+  \tn{A} & \tnprojector{P} & \tn{B}
+\end{tenkz}
+\end{document}

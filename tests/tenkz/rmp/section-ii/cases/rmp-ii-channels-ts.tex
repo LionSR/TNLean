@@ -1,0 +1,18 @@
+% Target: rmp-ii-channels-ts
+% Formula: The two-site and one-site MPDO tensors are related by channels T and S.
+% Ink: Canonical public tenkz environment; no raw TikZ.
+% Boundary: Both MPDO words keep west/east virtual and up/down physical legs open.
+% Source: paper TN-Review-main.tex line 955; author source ImagesReview Section
+%   II/ImagesReview Section II.tex lines 714-727
+% Capabilities: grid, typed-ports
+\[
+  % two-site MPDO word: M--M, all four physical legs open
+  \begin{tenkz}[physical=updown]
+    \tn[box]{M} & \tn[box]{M}
+  \end{tenkz}
+  \;\;\overset{\mathcal{T}}{\underset{\mathcal{S}}{\leftrightarrows}}\;\;
+  % one-site MPDO tensor M
+  \begin{tenkz}[physical=updown]
+    \tn[box]{M}
+  \end{tenkz}
+\]

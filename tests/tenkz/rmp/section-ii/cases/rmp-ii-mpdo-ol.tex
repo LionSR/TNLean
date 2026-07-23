@@ -1,0 +1,23 @@
+% Target: rmp-ii-mpdo-ol
+% Formula: O_L(M) is the length-L periodic MPDO transfer word.
+% Ink: Canonical public tenkz environment; no raw TikZ.
+% Boundary: Periodic closure seals the virtual word; each M keeps its two physical
+%   operator legs open.
+% Source: paper TN-Review-main.tex line 968; author source ImagesReview Section
+%   II/ImagesReview Section II.tex lines 728-741
+% Capabilities: grid, typed-ports
+\[
+  O_L(M) \;=\;
+  \begin{tenkz}[frame=vertical, physical=updown, boundary=periodic]
+    \tn[box]{M} & \tndots & \tn[box]{M}
+  \end{tenkz}
+\]
+
+racetrack override, for contrast:
+\[
+  O_L(M) \;=\;
+  \begin{tenkz}[frame=vertical, physical=updown,
+                boundary=periodic, trace style=racetrack]
+    \tn[box]{M} & \tndots & \tn[box]{M}
+  \end{tenkz}
+\]

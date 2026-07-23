@@ -1,0 +1,25 @@
+% Target: rmp-workbench-ii-boundary-b-old
+% Formula: B^Ibar = sigma^B U^B_Ibar on the complementary boundary.
+% Ink: Canonical public tenkz environment; no raw TikZ.
+% Boundary: The A factorization opens east; the B factorization opens west; physical
+%   legs stay open.
+% Source: author source ImagesReview Section II/ImagesReview Section II.tex lines
+%   618-649; archival output Figboundary-theory (b)old.pdf
+% Capabilities: grid, typed-ports
+\[
+  \begin{tenkz}[physical=up,west=none]
+    \tn{A^I}
+  \end{tenkz}
+  \;=\;
+  \begin{tenkz}[physical=up,west=none]
+    \tn[box]{U^A_I} & \tnX[label pos=north]{\sigma^A}
+  \end{tenkz}
+  \qquad
+  \begin{tenkz}[physical=up,east=none]
+    \tn{B^{\bar I}}
+  \end{tenkz}
+  \;=\;
+  \begin{tenkz}[physical=up,east=none]
+    \tnX[label pos=south]{\sigma^B} & \tn[box]{U^B_{\bar I}}
+  \end{tenkz}
+\]

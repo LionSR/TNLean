@@ -1,0 +1,45 @@
+% Target: rmp-ii-mpu-wrap
+% Formula: The MPU implements the left-moving shift operator.
+% Ink: Canonical public tenkzfree environment; no raw TikZ.
+% Boundary: Four upper and four lower legs are open; the alternating turns leave
+%   one virtual endpoint open at each end.
+% Source: paper TN-Review-main.tex line 391; author source ImagesReview Section
+%   II/ImagesReview Section II.tex lines 465-472
+% Capabilities: free-graph, typed-ports
+\[
+  \begin{tenkzfree}
+    \tnput[box,ports={north:virtual,south:virtual,east:virtual,west:virtual}]
+      {s1}{(0mm,0mm)}{}
+    \tnput[box,ports={north:virtual,south:virtual,east:virtual,west:virtual}]
+      {s2}{(14mm,0mm)}{}
+    \tnput[box,ports={north:virtual,south:virtual,east:virtual,west:virtual}]
+      {s3}{(28mm,0mm)}{}
+    \tnput[box,ports={north:virtual,south:virtual,east:virtual,west:virtual}]
+      {s4}{(42mm,0mm)}{}
+    \tnput[boundary,ports={south:virtual}]{n1}{(0mm,9mm)}{}
+    \tnput[boundary,ports={south:virtual}]{n2}{(14mm,9mm)}{}
+    \tnput[boundary,ports={south:virtual}]{n3}{(28mm,9mm)}{}
+    \tnput[boundary,ports={south:virtual}]{n4}{(42mm,9mm)}{}
+    \tnput[boundary,ports={north:virtual}]{b1}{(0mm,-9mm)}{}
+    \tnput[boundary,ports={north:virtual}]{b2}{(14mm,-9mm)}{}
+    \tnput[boundary,ports={north:virtual}]{b3}{(28mm,-9mm)}{}
+    \tnput[boundary,ports={north:virtual}]{b4}{(42mm,-9mm)}{}
+    \tnput[boundary,ports={east:virtual}]{w}{(-7mm,0mm)}{}
+    \tnput[boundary,ports={west:virtual}]{e}{(49mm,0mm)}{}
+    \tnjoin{n1.south}{s1.north} \tnjoin{s1.south}{b1.north}
+    \tnjoin{n2.south}{s2.north} \tnjoin{s2.south}{b2.north}
+    \tnjoin{n3.south}{s3.north} \tnjoin{s3.south}{b3.north}
+    \tnjoin{n4.south}{s4.north} \tnjoin{s4.south}{b4.north}
+    \tnjoin[route=arc,out=-90,in=180]{s1.north}{s1.east}
+    \tnjoin[route=arc,out=90,in=0]{s1.south}{s1.west}
+    \tnjoin[route=arc,out=-90,in=180]{s2.north}{s2.east}
+    \tnjoin[route=arc,out=90,in=0]{s2.south}{s2.west}
+    \tnjoin[route=arc,out=-90,in=180]{s3.north}{s3.east}
+    \tnjoin[route=arc,out=90,in=0]{s3.south}{s3.west}
+    \tnjoin[route=arc,out=-90,in=180]{s4.north}{s4.east}
+    \tnjoin[route=arc,out=90,in=0]{s4.south}{s4.west}
+    \tnjoin{w.east}{s1.west} \tnjoin{s1.east}{s2.west}
+    \tnjoin{s2.east}{s3.west} \tnjoin{s3.east}{s4.west}
+    \tnjoin{s4.east}{e.west}
+  \end{tenkzfree}
+\]

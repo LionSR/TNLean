@@ -1,0 +1,17 @@
+% Target: rmp-workbench-iii-g-injective-mpo
+% Formula: Four local MPO tensors meet at one G-injective plaquette.
+% Ink: Canonical public tenkzfree square of four labelled MPO atoms.
+% Boundary: Eight labelled virtual half-edges remain open around the plaquette.
+% Source: author source ImagesReview Section III/ImagesReview Section III.tex
+%   lines 604-621; archival output GinjMPO.pdf
+% Capabilities: free-graph, four-site-plaquette, sector-labels
+\[
+  \begin{tenkzfree}
+    \tnput[mpo]{nw}{(-7mm,7mm)}{a,h}
+    \tnput[mpo]{ne}{(7mm,7mm)}{b,c}
+    \tnput[mpo]{se}{(7mm,-7mm)}{d,e}
+    \tnput[mpo]{sw}{(-7mm,-7mm)}{f,g}
+    \tnjoin{nw.east}{ne.west} \tnjoin{ne.south}{se.north}
+    \tnjoin{se.west}{sw.east} \tnjoin{sw.north}{nw.south}
+  \end{tenkzfree}.
+\]

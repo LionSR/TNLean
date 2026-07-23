@@ -1,0 +1,19 @@
+% Target: rmp-workbench-ii-boundary-a-old
+% Formula: A^I = U^A_I sigma^A on the region boundary.
+% Ink: Canonical public tenkzlattice region and tenkz boundary atoms.
+% Boundary: The lattice exterior is open; the reduced A-B pair seals its outer virtual
+%   sides.
+% Source: author source ImagesReview Section II/ImagesReview Section II.tex lines
+%   597-617; archival output Figboundary-theory (a)old.pdf
+% Capabilities: grid, lattice, regions, typed-ports
+\[
+  \begin{tenkzlattice}[rows=5,cols=6,frame=oblique,physical=up,
+                       outer legs=both]
+    \tnregion[label=$R$,label pos=center]{(2-4,2-5)}
+  \end{tenkzlattice}
+  \;=\;
+  \begin{tenkz}[physical=up,boundary=none,
+                bond label={$\partial R$ at 1-2}]
+    \tn[label pos=south]{A^I} & \tn[label pos=south]{B^{\bar I}}
+  \end{tenkz}
+\]

@@ -1,0 +1,19 @@
+% Target: rmp-workbench-iii-f-tensor
+% Formula: F relates sectors b,c,d,e around the crossing of a and c.
+% Ink: Canonical public tenkzfree directed crossing with six sector labels.
+% Boundary: Four diagonal sector pairs and two directed axes remain open.
+% Source: author source ImagesReview Section III/ImagesReview Section III.tex
+%   lines 259-288; archival output tensorF.pdf
+% Capabilities: free-graph, directed-crossing, sector-labels
+\[
+  \begin{tenkzfree}
+    \tnput[box]{F}{(0mm,0mm)}{F}
+    \tnput[dot]{b}{(-9mm,-7mm)}{b} \tnput[dot]{e}{(-9mm,7mm)}{e}
+    \tnput[dot]{f}{(9mm,-7mm)}{f} \tnput[dot]{d}{(9mm,7mm)}{d}
+    \tnjoin[dir,label=$a$]{-18mm,0mm}{F.west}
+    \tnjoin[dir,label=$c$]{0mm,-16mm}{F.south}
+    \tnjoin{F.north}{0mm,16mm} \tnjoin{F.east}{18mm,0mm}
+    \tnjoin{b.north east}{F.south west} \tnjoin{e.south east}{F.north west}
+    \tnjoin{F.south east}{f.north west} \tnjoin{F.north east}{d.south west}
+  \end{tenkzfree}.
+\]

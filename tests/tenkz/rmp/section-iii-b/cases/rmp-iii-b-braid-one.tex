@@ -1,0 +1,20 @@
+% Target: rmp-iii-b-braid-one
+% Formula: The first braid panel moves string a past anyon i and string b.
+% Ink: Canonical public tenkzfree two-rail patch with two crossing strings.
+% Boundary: Four lattice legs and four string endpoints are open.
+% Source: paper TN-Review-main.tex line 1675; author source ImagesReview Section
+%   III/ImagesReview Section III.tex lines 799-825
+% Capabilities: free-graph, multi-strand-braid, crossing-order
+\[
+  \begin{tenkzfree}
+    \tnput[dot]{j}{(0mm,-8mm)}{j}
+    \tnput[dot]{i}{(12mm,-8mm)}{i}
+    \tnput[dot]{a}{(6mm,8mm)}{a}
+    \tnput[dot]{b}{(-4mm,8mm)}{b}
+    \tnjoin{-10mm,-8mm}{j.west} \tnjoin{i.east}{22mm,-8mm}
+    \tnjoin{-10mm,8mm}{b.west} \tnjoin{a.east}{22mm,8mm}
+    \tnjoin[route=arc, out=-90, in=90]{j.south}{0mm,-16mm}
+    \tnjoin[route=arc, out=90, in=-90]{j.north}{b.south}
+    \tnjoin[route=arc, out=-90, in=90]{a.south}{i.north}
+  \end{tenkzfree}
+\]

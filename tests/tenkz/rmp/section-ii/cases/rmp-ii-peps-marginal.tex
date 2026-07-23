@@ -1,0 +1,18 @@
+% Target: rmp-ii-peps-marginal
+% Formula: marginals rho_kept = Tr_traced |psi><psi|.
+% Ink: Canonical public tenkzlattice, tenkzplanes environments; no raw TikZ.
+% Boundary: The state sheet is open; the doubled sheet traces the declared complement.
+% Source: paper TN-Review-main.tex line 331; author source ImagesReview Section
+%   II/ImagesReview Section II.tex lines 269-304
+% Capabilities: lattice, typed-ports
+\[
+\begin{gathered}
+  \begin{tenkzlattice}[rows=4, cols=4, frame=oblique, physical=up]
+    \tnsite{(1,1)}
+  \end{tenkzlattice}
+  \\[1em]
+  \begin{tenkzplanes}[rows=4, cols=4, sheets={ket, bra},
+                      open={(1-4,1-3)}, trace={(1-4,4)}]
+  \end{tenkzplanes}
+\end{gathered}
+\]
