@@ -32,8 +32,11 @@ namespace MPOTensor.PhysicalSectorFactorization
 variable {d D : ℕ} {K : MPOTensor d D}
 
 /-- The eta ordering `(right, left)` of a physical sector, encoded by the
-existing finite sector coordinates. -/
-private noncomputable def etaSectorFinEquiv
+existing finite sector coordinates.
+
+Source: arXiv:1606.00608, Appendix C.2, equation `sigmaNK2`, lines
+1581--1589. -/
+noncomputable def etaSectorFinEquiv
     (F : PhysicalSectorFactorization K) :
     Matrix.EtaSiteIndex F.sectorCount F.leftDim F.rightDim ≃
       Fin (Fintype.card (SectorSiteIndex F)) :=
@@ -294,8 +297,11 @@ noncomputable def sectorBond (F : PhysicalSectorFactorization K) :
   rfl
 
 /-- In eta pair coordinates, the physical-sector bond has the neighboring
-operator decomposition required by cyclic eta transport. -/
-private theorem sectorCoordinateBond_etaPair_decomposition
+operator decomposition required by cyclic eta transport.
+
+Source: arXiv:1606.00608, Appendix C.2, equation `sigmaNK2`, lines
+1581--1589; Beigi, arXiv:1105.1019v2, Section III. -/
+theorem sectorCoordinateBond_etaPair_decomposition
     (F : PhysicalSectorFactorization K) :
     Matrix.reindex (Matrix.etaPairSpatialBlockEquiv F.etaSectorFinEquiv).symm
         (Matrix.etaPairSpatialBlockEquiv F.etaSectorFinEquiv).symm
