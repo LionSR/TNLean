@@ -66,7 +66,7 @@ physical chain with the direct sum of its sector fibers.
 Source: arXiv:1606.00608, Appendix C.2, lines 1435--1450. -/
 def sectorChainEquiv (F : PhysicalSectorFactorization K) (N : ℕ) :
     (Fin N → Fin d) ≃ SectorChainIndex F N :=
-  (Equiv.piCongrRight fun _ : Fin N ↦ F.sectorEquiv).trans piSigmaEquiv
+  (Equiv.piCongrRight fun _ : Fin N ↦ F.sectorEquiv).trans Equiv.piSigmaEquiv
 
 /-- The cyclic product of neighboring contractions in one sector fiber. Its
 factor at site `n` acts on the right factor of sector `k n` and the left
