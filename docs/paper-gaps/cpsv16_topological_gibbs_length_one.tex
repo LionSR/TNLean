@@ -7,7 +7,7 @@
 
 \input{./command}
 
-\title{The Length-One Boundary of the Topological Gibbs Decomposition}
+\title{The Domain Boundary of the Topological Gibbs Decomposition}
 \author{}
 \date{2026-07-23}
 
@@ -16,8 +16,7 @@
 
 \section{Source range}
 
-The final paragraph of the proof following Theorem~4.14 in
-\cite[lines~1013--1016]{Cirac2016MPDO_arXiv} writes
+Theorem~4.15 in \cite[lines~999--1016]{Cirac2016MPDO_arXiv} writes
 \[
   \rho^{(N)}(M)
     =\sum_{i=1}^{d}\lambda_iP_i^{(N)}e^{-H_N},
@@ -26,9 +25,11 @@ The final paragraph of the proof following Theorem~4.14 in
 \]
 where $H_N=\sum_i h_{i,i+1}$ is a translationally invariant commuting
 nearest-neighbor Hamiltonian.  Definition~4.8
-\cite[lines~831--850]{Cirac2016MPDO_arXiv} defines the local interaction by
+\cite[lines~829--847]{Cirac2016MPDO_arXiv} defines the local interaction by
 letting a matrix $h$ act on the first two spins and translating that
-two-spin operator around the chain.
+two-spin operator around the chain.  This construction has domain $N\geq2$:
+the periodic identification $N+1=1$ identifies site labels, but does not
+identify the two tensor factors on which $h$ acts.
 
 \section{The formalized range}
 
@@ -58,21 +59,25 @@ self-adjoint idempotents and commute with the Gibbs factor, so this gives
 exactly $d$ summands without asserting that the number of nonzero terminal
 sectors equals~$d$.
 
-\section{Length one}
+\section{Printed domain boundary}
 
-At $N=1$, Definition~4.8 supplies neither a two-spin window nor a convention
-for the coincident periodic bond $h_{1,1}$.  Replacing it by the one-site
-matrix $\operatorname{diag}(-\log\mu)$, or collapsing the two tensor factors,
-would add a convention not stated in the cited passage.  The formal theorem
-therefore has the following explicit scope restriction:
+At $N=1$, Definition~4.8 supplies neither an operator on the one-site Hilbert
+space nor a convention for the coincident periodic bond $h_{1,1}$.  In
+particular, it gives no map from two-site operators to one-site operators and
+no multiplicity for the self-edge.  Replacing $h$ by
+$\operatorname{diag}(-\log\mu)$, tracing out a tensor factor, restricting to a
+diagonal subspace, or otherwise collapsing the two tensor factors would add a
+convention absent from the cited passage.
+
+The source-defined theorem therefore has the explicit domain
 \[
   N\geq2.
 \]
-The unrestricted source statement remains unmarked until a source-supported
-length-one convention is identified.  Such a convention would remove the
-restriction by defining $H_1$ and proving
-$e^{-H_1}=\mu$; no other part of the terminal spectral argument needs to
-change.
+Theorem~4.15 is printed without stating this lower bound, but its $N=1$
+instance is undefined unless an author or erratum specifies both $H_1$ and
+the coincident-edge convention.  The theorem for $N\geq2$ is the complete
+formalization of the construction supplied by Definition~4.8.  No
+length-one theorem is asserted.
 
 \bibliographystyle{alpha}
 \bibliography{references}
