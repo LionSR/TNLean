@@ -96,5 +96,6 @@ blueprint/src/.tenkz_svg_cache/
 blueprint/src/.tenkz_svg_cache/*
 .tenkz_svg_cache
 output/
+.tn_svg_cache/
 
 tex/RMP_TIKZ_SOURCE_CODE
