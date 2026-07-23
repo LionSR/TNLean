@@ -163,11 +163,11 @@ theorem ofFn_contraction {m : ℕ} (A X : Fin m → R) (G : Fin m → J → R)
   calc (List.ofFn (fun k => A k * X k)).prod
       = (List.ofFn (fun k => ∑ j, c k (X k) j • (A k * G k j))).prod := by simp_rw [hf]
     _ = ∑ ρ : Fin m → J, (List.ofFn (fun k => c k (X k) (ρ k) • (A k * G k (ρ k)))).prod :=
-        List.ofFn_prod_sum (fun k j => c k (X k) j • (A k * G k j))
+        List.prod_ofFn_sum (fun k j => c k (X k) j • (A k * G k j))
     _ = ∑ ρ : Fin m → J,
           (∏ k, c k (X k) (ρ k)) • (List.ofFn (fun k => A k * G k (ρ k))).prod :=
         Finset.sum_congr rfl (fun ρ _ =>
-          List.ofFn_prod_smul (fun k => c k (X k) (ρ k)) (fun k => A k * G k (ρ k)))
+          List.prod_ofFn_smul (fun k => c k (X k) (ρ k)) (fun k => A k * G k (ρ k)))
 
 end AbstractContraction
 

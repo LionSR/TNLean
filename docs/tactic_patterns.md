@@ -67,12 +67,14 @@ abstracted — record why, so it is not re-proposed).
 - **Pattern:** induction on the length to distribute an ordered `List.ofFn` product over
   finite sums, or to extract scalar coefficients from such a product.
 - **Seen:** the sum identity occurred in `SitewisePhysicalMatrix.lean`,
-  `PhysicalSectorProductTransport.lean`, and `CornerContraction.lean`; the scalar identity
-  also occurred in `TopologicalDensityDecomposition.lean`.
-- **Abstraction:** `List.ofFn_prod_sum` and `List.ofFn_prod_smul` in
+  `PhysicalSectorProductTransport.lean`, `CornerContraction.lean`,
+  `MPS/Symmetry/Defs.lean`, and `MPS/Periodic/Symmetry/Theorem41Forward.lean`;
+  the scalar identity also occurred in `TopologicalDensityDecomposition.lean`.
+- **Abstraction:** `List.prod_ofFn_sum` and `List.prod_ofFn_smul` in
   `TNLean/Algebra/ListProduct.lean`.
 - **Notes:** the common statements hold over arbitrary semirings, and each application
-  imports the algebra module directly.
+  imports the algebra module directly.  The two older symmetry proofs now pass through
+  `evalWord_ofFn_eq_prod` and these shared identities.
 
 ---
 

@@ -107,12 +107,6 @@ def verticalMultiplicityChainWeight (H : BNTFusionTensorClause M) {N : ℕ}
     (p : Fin (N + 1) → H.VerticalCopy) : ℂ :=
   ∏ n : Fin (N + 1), H.weight (p n).1 (p n).2
 
-/-- Restriction of a fixed-copy chain fibre to all sites except the last one. -/
-private def verticalCopyChainFiberInit (H : BNTFusionTensorClause M) {N : ℕ}
-    (p : Fin (N + 2) → H.VerticalCopy) (x : H.VerticalCopyChainFiber p) :
-    H.VerticalCopyChainFiber (Fin.init p) :=
-  fun i ↦ x i.castSucc
-
 /-- The canonical left-associated product coordinates of a fixed BNT-copy chain.
 
 Source: arXiv:1606.00608, recursive fusion at lines 999--1010. -/
@@ -242,9 +236,9 @@ theorem fusionChainTensor_apply_verticalCopyChainBondEquiv
         verticalBNTMPO]
   | N + 1, p, x, y, a, b => by
       let xInit : H.VerticalCopyChainFiber (Fin.init p) :=
-        H.verticalCopyChainFiberInit p x
+        Fin.init x
       let yInit : H.VerticalCopyChainFiber (Fin.init p) :=
-        H.verticalCopyChainFiberInit p y
+        Fin.init y
       change mulTensor
           (H.toBNTFusionCoisometryFamily.fusionChainTensor
             ((Fin.init p) 0).1 (H.reverseAppendedLabels (Fin.init p)))
@@ -400,7 +394,7 @@ theorem mpo_changePhysicalBasis_verticalCoisometry_copy_block
   rw [mpo_apply, mpoMatrixEntry, evalWord_ofFn]
   simp_rw [H.verticalCopyChainEquiv_symm_apply]
   simp_rw [H.changePhysicalBasis_verticalCoisometry_copy_same]
-  rw [List.ofFn_prod_smul, Matrix.trace_smul,
+  rw [List.prod_ofFn_smul, Matrix.trace_smul,
     H.topologicalDensityBlock_apply_eq_weight_mul_trace]
   rfl
 

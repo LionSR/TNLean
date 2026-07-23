@@ -85,8 +85,7 @@ def etaCyclicEdgeEquiv {K N d : ℕ} [NeZero N] (dl dr : Fin K → ℕ)
     (etaCyclicEdgeEquiv dl dr e).symm ⟨k, x⟩ n =
       e ⟨k n, (etaFixedSectorCyclicEdgeEquiv dl dr k).symm x n⟩ := by
   apply e.symm.injective
-  simp [etaCyclicEdgeEquiv, Equiv.piCongrRight, Equiv.sigmaCongrRight,
-    Equiv.piSigmaEquiv]
+  simp [etaCyclicEdgeEquiv, Equiv.piCongrRight, Equiv.sigmaCongrRight]
 
 end Matrix
 
