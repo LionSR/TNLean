@@ -1177,7 +1177,8 @@
     \lean{MPOTensor.PhysicalSectorFactorization.isSAL_of_isSourceZCL}
     \leanok
     \uses{thm:mpdo_cyclic_active_markov_all_cuts,
-      thm:mpdo_all_cut_markov_implies_sal}
+      thm:mpdo_all_cut_markov_implies_sal,
+      thm:mpdo_physical_support_restriction_sal}
     Let $\mathcal K$ have positive bond dimension and be injective, and let
     $F$ be a physical-sector factorization of $\mathcal K$.  Suppose every
     neighboring operator $\eta^F_{q,h}$ is positive semidefinite.  If the
@@ -1187,8 +1188,8 @@
     % **Scope restriction (physical-sector factorization):** The theorem
     % assumes the factorization F and positivity of every neighboring
     % operator.  CPSV16 Proposition 4to2, lines 1597--1619, starts instead
-    % from a translation-invariant commuting bond.  The missing bridge is
-    % recorded in docs/paper-gaps/cpsv16_commuting_form_to_sal.tex.
+    % from a translation-invariant commuting bond.  The missing non-circular
+    % construction is recorded in docs/paper-gaps/cpsv16_commuting_form_to_sal.tex.
 \end{theorem}
 
 \begin{proof}\leanok
