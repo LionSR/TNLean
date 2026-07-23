@@ -1,0 +1,27 @@
+% Regression: zz_geomsupport — silhouette support functions for the four skin families and the set fold.
+% Formula: geometry-only; asserts through geomprobe events, no ink.
+\documentclass[varwidth=10cm, border=6pt]{standalone}
+\usepackage{tenkz}
+\begin{document}
+\ExplSyntaxOn
+\tl_new:N \l_probe_s_tl
+% a rect rotated 45 degrees reaches sqrt(2)/2 along east at half-extents 1/2
+\__tenkz_geom_probe:nn {rect-45-east}
+  { s = \__tenkz_geom_round:n { \__tenkz_geom_support:nnnnn {rect}{1/2}{1/2}{45}{0} } }
+\__tenkz_geom_probe:nn {circle-any}
+  { s = \__tenkz_geom_round:n { \__tenkz_geom_support:nnnnn {circle}{1/4}{0}{10}{77} } }
+\__tenkz_geom_probe:nn {roundrect-0-east}
+  { s = \__tenkz_geom_round:n { \__tenkz_geom_support:nnnnn {roundrect}{1/2}{1/4}{0}{0} } }
+% the east-pointing triangle read from the west sees its base corners
+\__tenkz_geom_probe:nn {triangle-west}
+  { s = \__tenkz_geom_round:n { \__tenkz_geom_support:nnnnn {triangle}{1/2}{1/4}{0}{180} } }
+% the fold: a dot at the origin and a box a pitch east, queried east
+\seq_new:N \l_probe_set_seq
+\seq_put_right:Nn \l_probe_set_seq { {circle}{1/12}{0}{0}{0}{0} }
+\seq_put_right:Nn \l_probe_set_seq { {rect}{1/5}{1/5}{0}{1}{0} }
+\__tenkz_geom_support_max:nnN {l_probe_set_seq} {0} \l_probe_s_tl
+\__tenkz_geom_probe:nn {fold-east}
+  { s = \__tenkz_geom_round:n { \l_probe_s_tl } }
+\ExplSyntaxOff
+geometry silhouette probe
+\end{document}
