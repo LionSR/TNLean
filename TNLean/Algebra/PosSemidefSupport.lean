@@ -20,6 +20,8 @@ are specializations of that construction.
   eigenspaces of a Hermitian matrix.
 * `Matrix.IsHermitian.supportProj_mul_self` and
   `Matrix.IsHermitian.mul_supportProj_self`: absorption on both sides.
+* `Matrix.IsHermitian.mul_supportProj_eq_self_of_mulVec_kernel_le`: right
+  absorption under kernel inclusion.
 * `Matrix.PosSemidef.supportProj`: the positive-semidefinite specialization.
 * `Matrix.PosSemidef.isOrthogonalProjection_supportProj`: orthogonality of the
   positive-semidefinite support projection.
@@ -144,6 +146,24 @@ theorem supportProj_mul_self (hA : A.IsHermitian) : hA.supportProj * A = A := by
 theorem mul_supportProj_self (hA : A.IsHermitian) : A * hA.supportProj = A := by
   have h2 := congrArg Matrix.conjTranspose hA.supportProj_mul_self
   rwa [Matrix.conjTranspose_mul, hA.supportProj_isHermitian.eq, hA.eq] at h2
+
+/-- If the kernel of a Hermitian matrix \(A\) is contained in the kernel of a
+matrix \(B\), then the support projection of \(A\) absorbs \(B\) on the
+right. -/
+theorem mul_supportProj_eq_self_of_mulVec_kernel_le
+    (hA : A.IsHermitian) {B : Matrix n n ℂ}
+    (hker : ∀ v : n → ℂ, A *ᵥ v = 0 → B *ᵥ v = 0) :
+    B * hA.supportProj = B := by
+  have hAcomp : A * (1 - hA.supportProj) = 0 := by
+    rw [Matrix.mul_sub, Matrix.mul_one, hA.mul_supportProj_self, sub_self]
+  have hBcomp : B * (1 - hA.supportProj) = 0 := by
+    rw [Matrix.ext_iff_mulVec]
+    intro v
+    rw [Matrix.zero_mulVec, ← Matrix.mulVec_mulVec]
+    apply hker
+    rw [Matrix.mulVec_mulVec, hAcomp, Matrix.zero_mulVec]
+  rw [Matrix.mul_sub, Matrix.mul_one, sub_eq_zero] at hBcomp
+  exact hBcomp.symm
 
 /-- The complementary projection of the support of a Hermitian matrix is
 Hermitian. -/
