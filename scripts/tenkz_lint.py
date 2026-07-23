@@ -338,7 +338,41 @@ def expand_args(args: list[str]) -> list[Path]:
     return uniq
 
 
+# --- Implementation census (advisory) ---------------------------------------
+#
+# Two debt meters over tex/tenkz/*.code.tex, reported per file and never
+# fatal.  The rebuild drives both to zero: once the renderer stage exists,
+# ink primitives outside RENDER_STAGE_FILES and decimal literals outside the
+# metric table become hard errors and these counts become the ratchet.
+
+RENDER_STAGE_FILES = {"tenkz-render.code.tex"}
+_INK_TOKEN = re.compile(r"\\(?:draw|path|node|fill|filldraw|shade|pgf[a-z@]*)\b")
+_DECIMAL = re.compile(r"(?<![\w@.])\d*\.\d+")
+_METRIC_LINE = re.compile(r"tenkz@r@|tenkz@basepitch|tenkz@pitch")
+
+
+def census(repo: Path) -> int:
+    ink_total = decimal_total = 0
+    for path in sorted((repo / "tex" / "tenkz").glob("*.code.tex")):
+        if path.name in RENDER_STAGE_FILES:
+            continue
+        ink = decimals = 0
+        for line in strip_comments(path.read_text(encoding="utf-8")).splitlines():
+            ink += len(_INK_TOKEN.findall(line))
+            if not _METRIC_LINE.search(line):
+                decimals += len(_DECIMAL.findall(line))
+        ink_total += ink
+        decimal_total += decimals
+        print(f"tenkz-census: {path.name}: {ink} ink token(s), "
+              f"{decimals} decimal literal(s) outside the metric table")
+    print(f"tenkz-census: WARN totals: {ink_total} ink token(s) outside the "
+          f"render stage, {decimal_total} stray decimal literal(s)")
+    return 0
+
+
 def main(argv: list[str]) -> int:
+    if "--census" in argv:
+        return census(Path(__file__).resolve().parent.parent)
     args = [a for a in argv if not a.startswith("-")]
     if "-h" in argv or "--help" in argv or not args:
         print(__doc__.strip().splitlines()[0])
