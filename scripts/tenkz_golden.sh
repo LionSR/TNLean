@@ -19,6 +19,10 @@ REPO=$(CDPATH='' cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)
 CORPUS="$REPO/tests/tenkz"
 GOLDEN="$CORPUS/golden-events.sha256"
 JOBS=${TENKZ_CORPUS_JOBS:-8}
+if [[ ! "$JOBS" =~ ^[1-9][0-9]*$ ]]; then
+  echo "FAIL: TENKZ_CORPUS_JOBS must be a positive integer, got '$JOBS'" >&2
+  exit 1
+fi
 MODE=snapshot
 
 case "${1:-}" in
