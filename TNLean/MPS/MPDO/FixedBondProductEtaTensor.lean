@@ -136,10 +136,10 @@ noncomputable def fixedProductTensorData (data : TranslationInvariantBondData d)
 exact matrix-product representation with positive bond dimension, independent
 of the chain length.
 
-This theorem is an existence-only interface.  Downstream constructions that
-need the retained positive physical sectors must use `fixedProductTensorData`
-and `fixedProductTensorDataPhysicalSectorFactorization`; an arbitrary choice
-from this `Nonempty` proposition carries no such selection contract.
+This theorem asserts existence without specifying a representative.  The
+distinguished representative `fixedProductTensorData` carries the factorization
+`fixedProductTensorDataPhysicalSectorFactorization`; an arbitrary witness of
+this proposition need not be that representative.
 
 This proves only the finite representation of the product.  It does not assert
 that the representing tensor is normal and does not constrain the positive

@@ -42,32 +42,36 @@ private abbrev EtaRightMatrixUnitIndex {K : ℕ} (dr : Fin K → ℕ) :=
 private abbrev EtaLeftMatrixUnitIndex {K : ℕ} (dl : Fin K → ℕ) :=
   Σ h : Fin K, Fin (dl h) × Fin (dl h)
 
-/-- A nonempty virtual index for the matrix-unit expansion of all neighboring
-operators.  The inactive `Unit` state handles the empty physical space without
-an additional hypothesis.
+/-- The virtual index for the matrix-unit expansion of all neighboring
+operators.
 
 Source: arXiv:1606.00608, equation `sigmaNK2`, lines 1581--1589. -/
 private abbrev EtaFactorIndex {K : ℕ} (dl dr : Fin K → ℕ) :=
-  Unit ⊕ (EtaRightMatrixUnitIndex dr × EtaLeftMatrixUnitIndex dl)
+  EtaRightMatrixUnitIndex dr × EtaLeftMatrixUnitIndex dl
+
+/-- A nonempty physical space gives a genuine matrix-unit virtual index.
+
+Source: arXiv:1606.00608, equation `sigmaNK2`, lines 1581--1589. -/
+private theorem etaFactorIndex_nonempty {K : ℕ} (dl dr : Fin K → ℕ)
+    (e : Matrix.EtaSiteIndex K dl dr ≃ Fin d) (hd : d ≠ 0) :
+    Nonempty (EtaFactorIndex dl dr) := by
+  let z := e.symm ⟨0, Nat.pos_of_ne_zero hd⟩
+  exact ⟨(⟨z.1, (z.2.1, z.2.1)⟩, ⟨z.1, (z.2.2, z.2.2)⟩)⟩
 
 private noncomputable def etaRightFactor {K : ℕ} {dl dr : Fin K → ℕ}
     (η : (q h : Fin K) →
       Matrix (Fin (dr q) × Fin (dl h)) (Fin (dr q) × Fin (dl h)) ℂ)
     (q : Fin K) (a : EtaFactorIndex dl dr) :
     Matrix (Fin (dr q)) (Fin (dr q)) ℂ :=
-  fun r r' ↦ match a with
-    | Sum.inl _ => 0
-    | Sum.inr z =>
-      if ⟨q, (r, r')⟩ = z.1 then
-        η z.1.1 z.2.1 (z.1.2.1, z.2.2.1) (z.1.2.2, z.2.2.2)
-      else 0
+  fun r r' ↦
+    if ⟨q, (r, r')⟩ = a.1 then
+      η a.1.1 a.2.1 (a.1.2.1, a.2.2.1) (a.1.2.2, a.2.2.2)
+    else 0
 
 private noncomputable def etaLeftFactor {K : ℕ} {dl dr : Fin K → ℕ}
     (h : Fin K) (a : EtaFactorIndex dl dr) :
     Matrix (Fin (dl h)) (Fin (dl h)) ℂ :=
-  fun l l' ↦ match a with
-    | Sum.inl _ => 0
-    | Sum.inr z => if ⟨h, (l, l')⟩ = z.2 then 1 else 0
+  fun l l' ↦ if ⟨h, (l, l')⟩ = a.2 then 1 else 0
 
 private theorem sum_etaRightFactor_mul_etaLeftFactor {K : ℕ}
     {dl dr : Fin K → ℕ}
@@ -77,8 +81,7 @@ private theorem sum_etaRightFactor_mul_etaLeftFactor {K : ℕ}
     ∑ a : EtaFactorIndex dl dr,
         etaRightFactor η q a r r' * etaLeftFactor h a l l' =
       η q h (r, l) (r', l') := by
-  simp [etaRightFactor, etaLeftFactor, Fintype.sum_sum_type,
-    Fintype.sum_prod_type]
+  simp [etaRightFactor, etaLeftFactor, Fintype.sum_prod_type]
 
 private noncomputable def etaFactorFinEquiv {K : ℕ} (dl dr : Fin K → ℕ) :
     Fin (Fintype.card (EtaFactorIndex dl dr)) ≃ EtaFactorIndex dl dr :=
@@ -429,6 +432,32 @@ private theorem positiveEtaPhysicalSectorFactorization_physicalBond_eq
   exact (Matrix.reindex (finTwoArrowEquiv (Fin d))
     (finTwoArrowEquiv (Fin d))).symm_apply_apply data.bond
 
+/-- The unique tensor on the empty physical space with one virtual state.
+
+Source: arXiv:1606.00608, equation `sigmaNK2`, lines 1581--1589. -/
+private def emptyPhysicalTensor : MPOTensor 0 1 :=
+  fun i _ _ _ ↦ Fin.elim0 i
+
+/-- The zero-sector factorization of the tensor on the empty physical space.
+
+Source: arXiv:1606.00608, equation `sigmaNK2`, lines 1581--1589. -/
+private noncomputable def emptyPhysicalSectorFactorization :
+    PhysicalSectorFactorization emptyPhysicalTensor where
+  sectorCount := 0
+  leftDim := Fin.elim0
+  rightDim := Fin.elim0
+  leftDim_pos := fun k ↦ Fin.elim0 k
+  rightDim_pos := fun k ↦ Fin.elim0 k
+  sectorEquiv := Equiv.equivOfIsEmpty _ _
+  physicalIsometry := 1
+  physicalIsometry_isometry := by simp
+  leftTensor := fun k ↦ Fin.elim0 k
+  rightTensor := fun k ↦ Fin.elim0 k
+  factorization := by
+    intro beta alpha
+    ext x
+    exact Fin.elim0 x.1
+
 /-- A fixed-product tensor bundled with the positive physical-sector
 factorization retained by its constructor.
 
@@ -449,12 +478,41 @@ structure PositivePhysicalSectorFixedProductTensorData
   neighboring_pos :
     ∀ q h, (factorization.neighboringOperator q h).PosSemidef
 
+/-- The fixed-product representative on the empty physical space.
+
+It has one virtual state and no physical sectors.
+
+Source: arXiv:1606.00608, equation `sigmaNK2`, lines 1581--1589. -/
+private noncomputable def emptyPositivePhysicalSectorFixedProductTensorData
+    (data : TranslationInvariantBondData 0) :
+    PositivePhysicalSectorFixedProductTensorData data := by
+  let repr : FixedProductTensorData data := {
+    bondDim := 1
+    bondDim_pos := by omega
+    tensor := emptyPhysicalTensor
+    mpo_eq_product := by
+      intro N hN
+      ext sigma tau
+      exact Fin.elim0 (sigma ⟨0, by omega⟩) }
+  let F : PhysicalSectorFactorization repr.tensor :=
+    emptyPhysicalSectorFactorization
+  have hbond : F.physicalBond = data.bond := by
+    ext sigma tau
+    exact Fin.elim0 (sigma 0)
+  exact {
+    repr := repr
+    factorization := F
+    physicalBond_eq := hbond
+    neighboring_pos := by
+      intro q
+      change Fin 0 at q
+      exact Fin.elim0 q }
+
 /-- Every positive commuting bond has a fixed-product representative whose
 constructor retains a positive physical-sector factorization.
 
-No nonempty-physical-space hypothesis is needed.  When `d = 0`, the spatial
-decomposition has no sectors and the inactive virtual state still gives a
-positive bond dimension.
+No nonempty-physical-space hypothesis is needed.  When `d = 0`, a separate
+one-dimensional virtual tensor carries the zero-sector factorization.
 
 Source: arXiv:1606.00608, equation `sigmaNK2`, lines 1581--1605; Beigi,
 arXiv:1105.1019v2, Lemma 2.1 and Section III. -/
@@ -462,33 +520,37 @@ theorem nonempty_positivePhysicalSectorFixedProductTensorData
     (data : TranslationInvariantBondData d) :
     Nonempty (PositivePhysicalSectorFixedProductTensorData data) := by
   classical
-  obtain ⟨K, dl, dr, e, U, η, hU, hdl, hdr, hη, hB⟩ :=
-    data.exists_positive_eta_pairBond_decomposition
-  let tensor := positiveEtaPhysicalTensor dl dr e U η
-  let F : PhysicalSectorFactorization tensor :=
-    positiveEtaPhysicalSectorFactorization dl dr e U η hU hdl hdr
-  have hneighbor (q h : Fin K) : F.neighboringOperator q h = η q h :=
-    positiveEtaPhysicalSectorFactorization_neighboringOperator
-      dl dr e U η hU hdl hdr q h
-  have hbond : F.physicalBond = data.bond :=
-    positiveEtaPhysicalSectorFactorization_physicalBond_eq
-      data dl dr e U η hU hdl hdr hB
-  let repr : FixedProductTensorData data := {
-    bondDim := Fintype.card (EtaFactorIndex dl dr)
-    bondDim_pos := Fintype.card_pos_iff.mpr ⟨Sum.inl ()⟩
-    tensor := tensor
-    mpo_eq_product := by
-      intro N hN
-      rw [F.mpo_eq_product_physicalBond hN, hbond]
-      rfl }
-  refine ⟨{
-    repr := repr
-    factorization := F
-    physicalBond_eq := hbond
-    neighboring_pos := ?_ }⟩
-  intro q h
-  rw [hneighbor q h]
-  exact hη q h
+  by_cases hd : d = 0
+  · subst d
+    exact ⟨emptyPositivePhysicalSectorFixedProductTensorData data⟩
+  · obtain ⟨K, dl, dr, e, U, η, hU, hdl, hdr, hη, hB⟩ :=
+      data.exists_positive_eta_pairBond_decomposition
+    let tensor := positiveEtaPhysicalTensor dl dr e U η
+    let F : PhysicalSectorFactorization tensor :=
+      positiveEtaPhysicalSectorFactorization dl dr e U η hU hdl hdr
+    have hneighbor (q h : Fin K) : F.neighboringOperator q h = η q h :=
+      positiveEtaPhysicalSectorFactorization_neighboringOperator
+        dl dr e U η hU hdl hdr q h
+    have hbond : F.physicalBond = data.bond :=
+      positiveEtaPhysicalSectorFactorization_physicalBond_eq
+        data dl dr e U η hU hdl hdr hB
+    let repr : FixedProductTensorData data := {
+      bondDim := Fintype.card (EtaFactorIndex dl dr)
+      bondDim_pos := Fintype.card_pos_iff.mpr
+        (etaFactorIndex_nonempty dl dr e hd)
+      tensor := tensor
+      mpo_eq_product := by
+        intro N hN
+        rw [F.mpo_eq_product_physicalBond hN, hbond]
+        rfl }
+    refine ⟨{
+      repr := repr
+      factorization := F
+      physicalBond_eq := hbond
+      neighboring_pos := ?_ }⟩
+    intro q h
+    rw [hneighbor q h]
+    exact hη q h
 
 /-- The selected fixed-product construction retaining its positive
 physical-sector witness.
