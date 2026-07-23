@@ -154,7 +154,8 @@ one-site Hilbert space under the project's zero convention.
 `parentHamiltonian_two_one_eq_zero`. Beigi, arXiv:1105.1019v2, Section III,
 source lines 451--514, does not specify a one-site action for its two-site
 interaction, while CPSV16, arXiv:1606.00608, Theorem 3.10(iii), source lines
-534--540, only uses chain lengths greater than two. -/
+534--540, only uses chain lengths greater than two. This restriction is documented
+in `docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex`. -/
 @[simp] theorem parentHamiltonianGroundSpaceES_two_one_eq_top (A : MPSTensor d D) :
     parentHamiltonianGroundSpaceES A 2 1 = ⊤ := by
   simp [parentHamiltonianGroundSpaceES]

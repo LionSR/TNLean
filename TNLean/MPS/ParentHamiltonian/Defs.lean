@@ -183,8 +183,8 @@ second replacement. -/
 
 **Important:** When \(L > N\) the definition returns `0`, which makes
 `parentHamiltonian` trivially zero and `IsFrustrationFree` vacuously true.
-All meaningful lemmas in `Basic.lean` carry an explicit \(L ≤ N\)
-hypothesis, so this degenerate branch is never reached in verified results.
+The lemmas in `Basic.lean` carry an explicit \(L ≤ N\) hypothesis; the one-site
+two-site result below records the \(L > N\) convention separately.
 
 For \(f\) and output configuration \(\sigma\):
 ```
@@ -215,7 +215,8 @@ source lines 451--514, defines each interaction on two neighboring sites but
 does not specify its action when those sites coincide. The zero value here is
 the convention in `localTerm`, not a one-site case of Beigi's ordered-cycle
 formula. CPSV16, arXiv:1606.00608, Theorem 3.10(iii), source lines 534--540,
-only uses chain lengths greater than two. -/
+only uses chain lengths greater than two. This restriction is documented in
+`docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex`. -/
 @[simp] theorem parentHamiltonian_two_one_eq_zero (A : MPSTensor d D) :
     parentHamiltonian A 2 1 = 0 := by
   simp [parentHamiltonian, localTerm]
