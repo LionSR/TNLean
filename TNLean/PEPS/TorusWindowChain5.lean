@@ -193,35 +193,6 @@ blue block taken to be the injective completed corner `Q`, it expresses the `σ_
 of the corner extension's coupling as a `Q`-blocked combination, the form `Q` injectivity
 inverts. -/
 
-/-- The blue/complement swap of a three-block geometry: the same red block with the blue and
-complement blocks interchanged.  Its host `univ \ red` is unchanged, so a host boundary
-configuration of `g` is a host boundary configuration of the swap.
-
-Source: arXiv:1804.04964, Section 3, Lemma `injective_union`, lines 1324--1400 of
-`Papers/1804.04964/paper_normal.tex`; `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`,
-Step 3. -/
-def ThreeBlockGeometry.swapBlueComplement (g : ThreeBlockGeometry V) :
-    ThreeBlockGeometry V where
-  red := g.red
-  blue := g.complement
-  complement := g.blue
-  red_disjoint_blue := g.red_disjoint_complement
-  red_disjoint_complement := g.red_disjoint_blue
-  blue_disjoint_complement := g.blue_disjoint_complement.symm
-  cover_univ := by rw [← g.cover_univ]; ac_rfl
-
-omit [DecidableRel G.Adj] in
-@[simp] theorem ThreeBlockGeometry.swapBlueComplement_red (g : ThreeBlockGeometry V) :
-    g.swapBlueComplement.red = g.red := rfl
-
-omit [DecidableRel G.Adj] in
-@[simp] theorem ThreeBlockGeometry.swapBlueComplement_blue (g : ThreeBlockGeometry V) :
-    g.swapBlueComplement.blue = g.complement := rfl
-
-omit [DecidableRel G.Adj] in
-@[simp] theorem ThreeBlockGeometry.swapBlueComplement_complement (g : ThreeBlockGeometry V) :
-    g.swapBlueComplement.complement = g.blue := rfl
-
 /-- The blue coupling of `g` is the complement coupling of the swapped geometry: both filter
 the global configurations on the host label `bdry` and the `g.complement` boundary label
 `bc'` and take the product over `g.blue`.
@@ -273,7 +244,6 @@ theorem ThreeBlockGeometry.crossingBondProd_smul_threeBlockBlueCoeff_eq
   rw [g.threeBlockBlueCoeff_eq_swap_threeBlockComplCoeff bdry σblue bc',
     g.swapBlueComplement.blueRedCrossingBondProd_smul_threeBlockComplCoeff_eq
       bdry bc' σblue]
-  rfl
 
 /-! ### The `S ⊔ Q` assembly bridge
 
