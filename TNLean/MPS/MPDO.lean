@@ -211,6 +211,7 @@ import TNLean.MPS.MPDO.ThermodynamicLimitCounterexample
 import TNLean.MPS.MPDO.TopologicalDensityDecomposition
 import TNLean.MPS.MPDO.TopologicalProjectorRecursion
 import TNLean.MPS.MPDO.TopologicalProjectors
+import TNLean.MPS.MPDO.TopologicalTerminalSpectral
 import TNLean.MPS.MPDO.TwoSiteVerticalCanonicalForm
 import TNLean.MPS.MPDO.VerticalBNT
 import TNLean.MPS.MPDO.VerticalBNTConstruction
