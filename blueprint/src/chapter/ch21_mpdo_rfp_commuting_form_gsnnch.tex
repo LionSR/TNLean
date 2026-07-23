@@ -1172,6 +1172,38 @@
     sum to one.
 \end{proof}
 
+\begin{theorem}[Physical-sector factorization and ZCL imply SAL]
+    \label{thm:mpdo_physical_sector_factorization_zcl_sal}
+    \lean{MPOTensor.PhysicalSectorFactorization.isSAL_of_isSourceZCL}
+    \leanok
+    \uses{def:mpdo_physical_sector_factorization, def:mpo_source_zcl,
+      def:is_sal, def:mpdo}
+    Let $\mathcal K$ be injective and have source zero correlation length.
+    Suppose that $\mathcal K$ admits a physical-sector factorization whose
+    neighboring operators $\eta_{k,h}$ are positive semidefinite.  Then
+    $\mathcal K$ saturates the area law.
+
+    % Scope restriction (physical-sector factorization): the source theorem
+    % assumes a single translation-invariant commuting positive bond, not an
+    % explicit physical-sector factorization. The remaining implication is
+    % recorded in docs/paper-gaps/cpsv16_commuting_form_to_sal.tex.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpdo_cyclic_active_markov_all_cuts,
+      thm:mpdo_all_cut_markov_implies_sal}
+    In physical-sector coordinates, positivity of the neighboring operators
+    makes every positive-length periodic operator positive semidefinite, while
+    source zero correlation length makes its trace strictly positive.
+    Theorem~\ref{thm:mpdo_cyclic_active_markov_all_cuts} supplies a quantum
+    Markov decomposition at each admissible cut.  Hence
+    Theorem~\ref{thm:mpdo_all_cut_markov_implies_sal} gives saturation of the
+    area law in these coordinates.  The physical-coordinate inclusion is an
+    isometry, so it preserves the nonzero spectra of every periodic operator
+    and every contiguous marginal.  Their entropies, and therefore saturation
+    of the area law, are unchanged.
+\end{proof}
+
 \begin{theorem}[A translation-invariant commuting bond and ZCL imply SAL]
     \label{thm:mpdo_translation_invariant_commuting_form_zcl_sal}
     \notready

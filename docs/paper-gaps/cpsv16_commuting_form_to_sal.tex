@@ -453,9 +453,24 @@ left and right path factors, and collecting their trace products gives
 \leanid{MPOTensor.PhysicalSectorFactorization.%
 exists_hayashiMarkovDecomposition_cyclicActiveCut_of_isSourceZCL}.  Thus the
 Markov decomposition for arbitrary left and right lengths is available in the
-physical-sector coordinates.  Substitution of the admissible entropy-cut
-lengths and transport to the original basis remain part of issue \#4175.  The
-older conditional theorem
+physical-sector coordinates.  Substituting the admissible lengths
+$A=m-1$ and $C=N-m-1$ gives every cut required by the entropy theorem.
+Positivity of the neighboring operators makes the sector-coordinate periodic
+operators positive semidefinite, and source ZCL makes their traces strictly
+positive.  The all-cut entropy theorem therefore proves SAL in these
+coordinates.  Since the physical-coordinate inclusion is isometric, the
+nonzero spectra of every periodic operator and marginal agree with those in
+the original physical basis.  The resulting scope-restricted implication is
+now formalized.\footnote{Formal declaration:
+\leanid{MPOTensor.PhysicalSectorFactorization.isSAL_of_isSourceZCL} in
+\doclink{TNLean/MPS/MPDO/CyclicActiveMarkov}.}
+
+This theorem assumes the physical-sector factorization explicitly.  It does
+not derive that factorization from the single translation-invariant commuting
+bond in Proposition~\emph{4to2}.  It also assumes one-site injectivity, whereas
+the source starts with a normal tensor; completing the source implication
+requires passing to an injective blocking and transporting SAL through that
+blocking.  The older conditional theorem
 \leanid{Matrix.eta_fourth_region_trace_formula} remains a coordinate model for
 a one-step rank-one coefficient; it is not used to identify $T_C$ with
 $T_C^2$.
@@ -467,13 +482,12 @@ Consequently the source implication
   \Longrightarrow \text{SAL}
 \]
 is not yet formalized and must not carry a \texttt{\string\leanok} marker.
-The remaining work is to transport the all-cut witnesses from the
-physical-sector coordinates back to the original physical basis and apply the
-final entropy-theoretic step: quantum Markov decompositions at all admissible
-cuts imply SAL.\footnote{This is
-\leanid{MPOTensor.isSAL_of_quantumMarkovDecomposition_tripartite_m}.} Its
-direct-sum hypothesis is a marked scope restriction, not an additional
-hypothesis on the source proposition.
+The entropy-theoretic step and physical-basis transport are complete under the
+explicit physical-sector-factorization hypothesis.  The remaining work is to
+derive such a factorization from the source commuting-bond hypothesis and to
+relate the normal, possibly blocked source tensor to the injective theorem
+above.  The explicit factorization is a marked scope restriction, not an
+additional hypothesis on the source proposition.
 
 \paragraph{Local fix (the later orthogonal-sector statement).}
 The proposition labelled \emph{prop4to2} at source lines~1801--1808 states
@@ -512,23 +526,27 @@ direct-sum implication.  It neither derives the sectorwise SAL premise nor
 uses ZCL.
 
 \paragraph{Verdict.}
-Proposition~\emph{4to2} is classified as a transport gap.  The fourth-region
-factorization and the Markov decomposition at every admissible cut have been
-proved in physical-sector coordinates.  Transport to the original physical
-basis and the final application of the all-cut entropy theorem remain.  The later
-orthogonal direct-sum implication is likewise formalized only as a
-scope-restricted theorem assuming sectorwise SAL.  It neither supplies that
-sectorwise premise nor proves the printed assertion that the GSNNCH form alone
-implies SAL.
+Proposition~\emph{4to2} remains an open implication gap.  Under an explicit
+positive physical-sector factorization and one-site injectivity, the
+fourth-region factorization, the Markov decomposition at every admissible cut,
+the all-cut entropy argument, and physical-basis transport now prove SAL.  This
+is a scope-restricted theorem, since the source assumes only the commuting-bond
+form and normality.  The later orthogonal direct-sum implication is likewise
+formalized only as a scope-restricted theorem assuming sectorwise SAL.  It
+neither supplies that sectorwise premise nor proves the printed assertion that
+the GSNNCH form alone implies SAL.
 
 \section{Elimination plan}
 
 The gap can be removed in the following stages.
 
 \begin{enumerate}
-\item Transport the proved physical-sector all-cut Markov witnesses through
-the physical isometry to the original physical basis.
-\item Apply the all-cut Markov theorem.  Only then may the source proposition
+\item Derive a positive physical-sector factorization from the fixed
+translation-invariant commuting bond and its common one-site spatial
+decomposition.
+\item Pass from the source normal tensor to an injective blocking and prove the
+required invariance of SAL under blocking.
+\item Apply the restricted theorem above.  Only then may the source proposition
 receive a formal declaration and a \texttt{\string\leanok} marker.
 \end{enumerate}
 
