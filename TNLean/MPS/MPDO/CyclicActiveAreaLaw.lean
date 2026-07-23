@@ -33,7 +33,7 @@ Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
 **Scope restriction (physical-sector factorization):** The theorem assumes the
 physical-sector factorization and positivity of its neighboring operators.
 The source derives this structure from a translation-invariant commuting bond.
-The missing non-circular bridge is documented in
+The missing non-circular construction is documented in
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 theorem isSAL_of_isSourceZCL (F : PhysicalSectorFactorization K) [NeZero D]
     (hK : K.IsInjective)
