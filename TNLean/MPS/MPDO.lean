@@ -175,6 +175,7 @@ import TNLean.MPS.MPDO.PhysicalSupportBondTransport
 import TNLean.MPS.MPDO.PhysicalSupportProductTransport
 import TNLean.MPS.MPDO.PhysicalSupportRestriction
 import TNLean.MPS.MPDO.PhysicalSupportSALTransport
+import TNLean.MPS.MPDO.PositiveMinimalRealizationCounterexample
 import TNLean.MPS.MPDO.PostBlockedRepresentativeSpan
 import TNLean.MPS.MPDO.PureAreaLaw
 import TNLean.MPS.MPDO.PureRFPSAL
