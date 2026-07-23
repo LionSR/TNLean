@@ -1109,19 +1109,68 @@
     two trace factors by $\lambda^{-1}$ gives the normalized identity.
 \end{proof}
 
-% Tracked in https://github.com/LionSR/TNLean/issues/4445.
-\begin{remark}[Open fourth-region coordinate identification]
-    \notready
-    Theorem~\ref{thm:mpdo_source_zcl_iterated_marginal_stability} gives the
-    required equality of normalized marginals, while
-    Theorem~\ref{thm:mpdo_cyclic_active_three_boundary_trace} and
-    Theorem~\ref{thm:mpdo_cyclic_active_deletion} give the local coefficient
-    and the deletion of vanishing cyclic summands.  It remains to
-    transport the marginal equality through the complete physical-sector
-    direct sum, retaining the two outer partial traces.  This must be done
-    without identifying $T_C$ with $T_C^2$ or $T_C$ with the unreduced Beigi
-    matrix.
-\end{remark}
+\begin{theorem}[Cyclic-active fourth-region factorization]
+    \label{thm:mpdo_cyclic_active_fourth_region_factorization}
+    \lean{MPOTensor.PhysicalSectorFactorization.%
+      exists_cyclicActiveFourthRegion_formula_of_isSourceZCL}
+    \leanok
+    \uses{thm:mpdo_source_zcl_iterated_marginal_stability,
+      thm:mpdo_cyclic_active_three_boundary_trace,
+      thm:mpdo_cyclic_active_deletion}
+    Let $\mathcal K$ be injective and have source zero correlation length,
+    and suppose its neighboring operators are positive semidefinite.  There
+    are $\lambda>0$ and strictly positive functions $a,b$ on the
+    cyclic-active sectors, normalized by $a\mathbin{\boldsymbol\cdot}b=1$,
+    such that every fourth-region marginal is a direct sum over retained
+    sector words of the unchanged interior neighboring product tensored with
+    the separated left and right boundary factors determined by $a$ and $b$.
+
+    % Local fix (cyclic-active restriction): the coefficient being factorized
+    % is $(\lambda^{-1}T_C)^2$, obtained from one additional source-ZCL
+    % marginal replacement and three traced boundary sites. No equality
+    % between $T_C$ and $T_C^2$ is used. This correction is recorded in
+    % docs/paper-gaps/cpsv16_commuting_form_to_sal.tex.
+\end{theorem}
+
+\begin{proof}\leanok
+    The additional marginal replacement leaves the retained interior product
+    unchanged and produces the two-step coefficient on the cyclic-active
+    sectors.  Its positive rank-one factorization separates the two surviving
+    boundary sums.  All sector words leaving the cyclic-active support vanish
+    before the two outer partial traces are evaluated.
+\end{proof}
+
+\begin{theorem}[Cyclic-active Markov decomposition at every cut]
+    \label{thm:mpdo_cyclic_active_markov_all_cuts}
+    \lean{MPOTensor.PhysicalSectorFactorization.%
+      exists_hayashiMarkovDecomposition_cyclicActiveCut_of_isSourceZCL}
+    \leanok
+    \uses{thm:mpdo_cyclic_active_fourth_region_factorization,
+      def:hayashi_markov_decomposition}
+    Under the hypotheses of
+    Theorem~\ref{thm:mpdo_cyclic_active_fourth_region_factorization}, for
+    arbitrary $A,C\geq 0$, the fourth-region marginal on consecutive regions
+    of lengths $A$, $1$, and $C$ admits a Hayashi Markov decomposition.
+    The middle site decomposes as the direct sum of its left and right sector
+    factors.  Each block is the tensor product of normalized positive left
+    and right path states, and its probability is the product of their
+    unnormalized traces divided by the positive periodic normalization.
+
+    % Local fix (cyclic-active restriction): the block weights and path states
+    % arise from the factorization of $(\lambda^{-1}T_C)^2$ described above.
+    % This correction is recorded in
+    % docs/paper-gaps/cpsv16_commuting_form_to_sal.tex.
+\end{theorem}
+
+\begin{proof}\leanok
+    Separate the retained chain at the distinguished middle site.  The
+    retained neighboring factors split into the left and right path products,
+    while the two cyclic endpoint factors become their respective boundary
+    matrices.  Normalize each positive block by its trace, using an arbitrary
+    trace-one positive matrix when the block vanishes.  The trace-one identity
+    for the full marginal shows that the resulting nonnegative block weights
+    sum to one.
+\end{proof}
 
 \begin{theorem}[A translation-invariant commuting bond and ZCL imply SAL]
     \label{thm:mpdo_translation_invariant_commuting_form_zcl_sal}

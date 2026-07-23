@@ -3,10 +3,13 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.KroneckerFactorPositivity
 import TNLean.MPS.MPDO.PhysicalSectorChainDecomposition
 import TNLean.MPS.MPDO.PhysicalSectorPositiveBond
 import TNLean.MPS.MPDO.CommutingForm
 import TNLean.MPS.MPDO.CommutingBondEtaCyclicCore
+
+open scoped ComplexOrder Matrix
 
 /-!
 # Product realization from physical-sector coordinates
@@ -37,7 +40,7 @@ private noncomputable def etaSectorFinEquiv
   (Equiv.sigmaCongrRight fun _ ↦ Equiv.prodComm _ _).trans F.sectorFinEquiv.symm
 
 /-- The pointwise finite encoding of the transformed physical chain. -/
-private noncomputable def physicalConfigEquiv
+noncomputable def physicalConfigEquiv
     (F : PhysicalSectorFactorization K) (N : ℕ) :
     (Fin N → Fin d) ≃ (Fin N → Fin (Fintype.card (SectorSiteIndex F))) :=
   Equiv.arrowCongr (Equiv.refl (Fin N)) F.physicalFinEquiv
@@ -45,14 +48,24 @@ private noncomputable def physicalConfigEquiv
 /-- The finite sector-coordinate chain is the transformed physical chain,
 followed by the sector decomposition already used in the all-length chain
 decomposition. -/
-private noncomputable def sectorCoordinateChainEquiv
+noncomputable def sectorCoordinateChainEquiv
     (F : PhysicalSectorFactorization K) (N : ℕ) :
     (Fin N → Fin (Fintype.card (SectorSiteIndex F))) ≃ SectorChainIndex F N :=
   (F.physicalConfigEquiv N).symm.trans (F.sectorChainEquiv N)
 
+@[simp] theorem sectorCoordinateChainEquiv_symm_apply
+    (F : PhysicalSectorFactorization K) (N : ℕ)
+    (k : Fin N → Fin F.sectorCount) (x : F.SectorChainFiber k)
+    (n : Fin N) :
+    (F.sectorCoordinateChainEquiv N).symm ⟨k, x⟩ n =
+      F.sectorFinEquiv.symm ⟨k n, x n⟩ := by
+  simp [sectorCoordinateChainEquiv, physicalConfigEquiv,
+    physicalFinEquiv, sectorChainEquiv]
+  rfl
+
 /-- Encoding the transformed one-site physical indices by `Fin` commutes with
 forming the periodic MPO. -/
-private theorem mpo_sectorCoordinateTensor_eq_reindex_conjugatePhysical
+theorem mpo_sectorCoordinateTensor_eq_reindex_conjugatePhysical
     (F : PhysicalSectorFactorization K) (N : ℕ) :
     mpo F.sectorCoordinateTensor N =
       Matrix.reindex (F.physicalConfigEquiv N) (F.physicalConfigEquiv N)
@@ -67,7 +80,7 @@ all-length physical-sector chain decomposition.
 
 Source: arXiv:1606.00608, Appendix C.2, equation `sigmaNK2`, lines
 1581--1588. -/
-private theorem reindex_mpo_sectorCoordinateTensor_eq_blockDiagonal
+theorem reindex_mpo_sectorCoordinateTensor_eq_blockDiagonal
     (F : PhysicalSectorFactorization K) {N : ℕ} [NeZero N] :
     Matrix.reindex (F.sectorCoordinateChainEquiv N)
         (F.sectorCoordinateChainEquiv N) (mpo F.sectorCoordinateTensor N) =
@@ -83,7 +96,7 @@ private theorem reindex_mpo_sectorCoordinateTensor_eq_blockDiagonal
 
 Source: arXiv:1606.00608, Appendix C.2, equation `sigmaNK2`, lines
 1586--1589. -/
-private def cyclicEdgeEquiv (F : PhysicalSectorFactorization K) {N : ℕ} [NeZero N]
+def cyclicEdgeEquiv (F : PhysicalSectorFactorization K) {N : ℕ} [NeZero N]
     (k : Fin N → Fin F.sectorCount) :
     ((n : Fin N) → SectorIndex F (k n)) ≃
       ((n : Fin N) → NeighborIndex F (k n) (k (n + 1))) :=
@@ -98,7 +111,7 @@ private def cyclicEdgeEquiv (F : PhysicalSectorFactorization K) {N : ℕ} [NeZer
               (finCongr (congrArg F.leftDim
                 (congrArg k (finRotate_apply n))))
 
-@[simp] private theorem cyclicEdgeEquiv_apply
+@[simp] theorem cyclicEdgeEquiv_apply
     (F : PhysicalSectorFactorization K) {N : ℕ} [NeZero N]
     (k : Fin N → Fin F.sectorCount)
     (x : (n : Fin N) → SectorIndex F (k n)) (n : Fin N) :
@@ -109,7 +122,7 @@ private def cyclicEdgeEquiv (F : PhysicalSectorFactorization K) {N : ℕ} [NeZer
     change ((x (finRotate N n)).1 : ℕ) = ((x (n + 1)).1 : ℕ)
     rw [finRotate_apply]
 
-@[simp] private theorem cyclicEdgeEquiv_symm_edge
+@[simp] theorem cyclicEdgeEquiv_symm_edge
     (F : PhysicalSectorFactorization K) {N : ℕ} [NeZero N]
     (k : Fin N → Fin F.sectorCount)
     (x : (n : Fin N) → NeighborIndex F (k n) (k (n + 1)))
@@ -236,6 +249,30 @@ private theorem reindex_mpo_sectorCoordinateTensor_sectorEdgeChainEquiv
       (F.reindex_cyclicNeighboringProduct_cyclicEdgeEquiv k) x) y
   · rw [Matrix.blockDiagonal'_apply_ne _ _ _ hkh,
       Matrix.blockDiagonal'_apply_ne _ _ _ hkh]
+
+/-- Positivity of all neighbouring blocks makes every positive-length
+sector-coordinate periodic operator positive semidefinite. -/
+theorem mpo_sectorCoordinateTensor_posSemidef
+    (F : PhysicalSectorFactorization K) {N : ℕ} [NeZero N]
+    (hpos : ∀ q h, (F.neighboringOperator q h).PosSemidef) :
+    (mpo F.sectorCoordinateTensor N).PosSemidef := by
+  classical
+  rw [← Matrix.posSemidef_submatrix_equiv
+    (M := mpo F.sectorCoordinateTensor N) (F.sectorEdgeChainEquiv N).symm]
+  change (Matrix.reindex (F.sectorEdgeChainEquiv N) (F.sectorEdgeChainEquiv N)
+    (mpo F.sectorCoordinateTensor N)).PosSemidef
+  rw [F.reindex_mpo_sectorCoordinateTensor_sectorEdgeChainEquiv]
+  apply Matrix.PosSemidef.blockDiagonal'
+  intro k
+  have heq :
+      (fun x y ↦ ∏ n : Fin N,
+        F.neighboringOperator (k n) (k (n + 1)) (x n) (y n)) =
+        Matrix.finKronecker (fun n : Fin N ↦
+          F.neighboringOperator (k n) (k (n + 1))) := by
+    ext x y
+    simp [Matrix.finKronecker_apply]
+  rw [heq]
+  exact Matrix.finKronecker_posSemidef _ fun n ↦ hpos _ _
 
 /-- The sector-coordinate bond indexed by two-site configurations. -/
 noncomputable def sectorBond (F : PhysicalSectorFactorization K) :

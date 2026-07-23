@@ -79,6 +79,16 @@ import TNLean.MPS.MPDO.CompleteZipperFusionFourfold
 import TNLean.MPS.MPDO.CompleteZipperFusionInverse
 import TNLean.MPS.MPDO.CompleteZipperFusionPentagon
 import TNLean.MPS.MPDO.CompleteZipperFusionSupport
+import TNLean.MPS.MPDO.CyclicActiveCutCoordinates
+import TNLean.MPS.MPDO.CyclicActiveCutRegrouping
+import TNLean.MPS.MPDO.CyclicActiveCutStates
+import TNLean.MPS.MPDO.CyclicActiveFourthRegion
+import TNLean.MPS.MPDO.CyclicActiveFourthRegionContraction
+import TNLean.MPS.MPDO.CyclicActiveFourthRegionFormula
+import TNLean.MPS.MPDO.CyclicActiveMarkov
+import TNLean.MPS.MPDO.CyclicActiveMarkovDecomposition
+import TNLean.MPS.MPDO.CyclicActiveMarkovNormalization
+import TNLean.MPS.MPDO.CyclicActiveRetainedCoordinates
 import TNLean.MPS.MPDO.CyclicActiveSectorRestriction
 import TNLean.MPS.MPDO.CyclicActiveThreeBoundaryTrace
 import TNLean.MPS.MPDO.CyclicEdgeWeightTensor

@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import Mathlib.Analysis.Complex.Basic
 import Mathlib.Analysis.Complex.Order
+import Mathlib.Analysis.Matrix.Order
 import Mathlib.Analysis.RCLike.Basic
 import Mathlib.LinearAlgebra.Matrix.Kronecker
 import Mathlib.LinearAlgebra.Matrix.PosDef
@@ -31,6 +32,8 @@ a complex matrix is determined by its quadratic form.
   the Hermitian property is automatic.
 - `Matrix.star_dotProduct_kronecker_mulVec_prod`: on a product vector the
   quadratic form of a Kronecker product factors.
+- `Matrix.finKronecker_posSemidef`: a finite Kronecker product of positive
+  semidefinite matrices is positive semidefinite.
 - `Matrix.exists_smul_posSemidef_of_kronecker_posSemidef`: the positive
   rescaling of the two factors of a nonzero positive semidefinite Kronecker
   product.
@@ -293,6 +296,38 @@ def finKronecker {N : ℕ} {α : Fin N → Type*} [∀ n, Fintype (α n)]
     (A : (n : Fin N) → Matrix (α n) (α n) ℂ) (x y : (n : Fin N) → α n) :
     finKronecker A x y = ∏ n, A n (x n) (y n) :=
   rfl
+
+/-- A finite Kronecker product of positive semidefinite matrices is positive
+semidefinite. -/
+theorem finKronecker_posSemidef :
+    ∀ {N : ℕ} {I : Fin N → Type*} [∀ i, Fintype (I i)]
+      (M : (i : Fin N) → Matrix (I i) (I i) ℂ),
+      (∀ i, (M i).PosSemidef) → (finKronecker M).PosSemidef := by
+  intro N
+  induction N with
+  | zero =>
+      intro I _ M hM
+      have hOne : finKronecker M = 1 := by
+        ext x y
+        have hxy : x = y := Subsingleton.elim x y
+        subst y
+        simp [finKronecker_apply]
+      rw [hOne]
+      exact PosSemidef.one
+  | succ N ih =>
+      intro I _ M hM
+      have htail := ih (Fin.tail M) (fun i ↦ hM i.succ)
+      have hprod := (hM 0).kronecker htail
+      rw [← posSemidef_submatrix_equiv (M := finKronecker M) (Fin.consEquiv I)]
+      have heq :
+          (finKronecker M).submatrix (Fin.consEquiv I) (Fin.consEquiv I) =
+            M 0 ⊗ₖ finKronecker (Fin.tail M) := by
+        ext ⟨a, x⟩ ⟨b, y⟩
+        rw [Matrix.submatrix_apply, finKronecker_apply,
+          Matrix.kroneckerMap_apply, Fin.prod_univ_succ]
+        simp [Fin.cons_zero, Fin.cons_succ, finKronecker_apply, Fin.tail]
+      rw [heq]
+      exact hprod
 
 /-- A finite Kronecker product of nonzero matrices is nonzero: the entry at a
 choice of nonzero-witnessing row/column pair for each factor is itself

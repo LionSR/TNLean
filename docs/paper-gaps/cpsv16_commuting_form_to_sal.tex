@@ -443,13 +443,22 @@ shows that an arbitrary linear coordinate contraction preserves the deletion
 of every vanishing cyclic summand.  Thus the proved rank-one statement
 supplies the separating boundary coefficient in this three-boundary form.
 
-What remains is to transport the normalized marginal equality through the
-complete physical-sector direct sum while retaining the two outer partial
-traces, extract an explicit outer-product factorization of the restricted
-$\widehat T^2$, and construct the direct-sum Markov decomposition.  The
-present conditional theorem
-\leanid{Matrix.eta_fourth_region_trace_formula} still assumes a factorization
-of the one-step matrix and cannot be discharged directly by the new theorem.
+The normalized marginal equality has now been transported through the complete
+physical-sector direct sum while retaining the two outer partial traces.  The
+result is
+\leanid{MPOTensor.PhysicalSectorFactorization.%
+exists_cyclicActiveFourthRegion_formula_of_isSourceZCL}.  Separating the
+retained chain at an arbitrary distinguished site, normalizing the positive
+left and right path factors, and collecting their trace products gives
+\leanid{MPOTensor.PhysicalSectorFactorization.%
+exists_hayashiMarkovDecomposition_cyclicActiveCut_of_isSourceZCL}.  Thus the
+Markov decomposition for arbitrary left and right lengths is available in the
+physical-sector coordinates.  Substitution of the admissible entropy-cut
+lengths and transport to the original basis remain part of issue \#4175.  The
+older conditional theorem
+\leanid{Matrix.eta_fourth_region_trace_formula} remains a coordinate model for
+a one-step rank-one coefficient; it is not used to identify $T_C$ with
+$T_C^2$.
 
 Consequently the source implication
 \[
@@ -458,8 +467,10 @@ Consequently the source implication
   \Longrightarrow \text{SAL}
 \]
 is not yet formalized and must not carry a \texttt{\string\leanok} marker.
-The formal development proves only the final entropy-theoretic step: quantum
-Markov decompositions at all admissible cuts imply SAL.\footnote{This is
+The remaining work is to transport the all-cut witnesses from the
+physical-sector coordinates back to the original physical basis and apply the
+final entropy-theoretic step: quantum Markov decompositions at all admissible
+cuts imply SAL.\footnote{This is
 \leanid{MPOTensor.isSAL_of_quantumMarkovDecomposition_tripartite_m}.} Its
 direct-sum hypothesis is a marked scope restriction, not an additional
 hypothesis on the source proposition.
@@ -501,9 +512,10 @@ direct-sum implication.  It neither derives the sectorwise SAL premise nor
 uses ZCL.
 
 \paragraph{Verdict.}
-Proposition~\emph{4to2} is classified as an open gap.  The proved implication
-from quantum Markov decompositions at every admissible cut to SAL is a scope
-restriction that isolates only its final entropy-theoretic step.  The later
+Proposition~\emph{4to2} is classified as a transport gap.  The fourth-region
+factorization and the Markov decomposition at every admissible cut have been
+proved in physical-sector coordinates.  Transport to the original physical
+basis and the final application of the all-cut entropy theorem remain.  The later
 orthogonal direct-sum implication is likewise formalized only as a
 scope-restricted theorem assuming sectorwise SAL.  It neither supplies that
 sectorwise premise nor proves the printed assertion that the GSNNCH form alone
@@ -514,14 +526,8 @@ implies SAL.
 The gap can be removed in the following stages.
 
 \begin{enumerate}
-\item Transport the proved second ZCL marginal replacement through the
-complete physical-sector direct sum.  Retain the two outer partial traces and
-insert the proved middle coefficient $\widehat T^2$.  The general linear
-deletion theorem already shows that discarded cyclic summands remain zero;
-the missing step is the dependent direct-sum reindexing of the full marginal.
-\item Extract an explicit outer-product factorization of
-$\widehat T^2$, separate the two remaining boundary sector sums, and construct
-the quantum Markov decomposition at each admissible cut.
+\item Transport the proved physical-sector all-cut Markov witnesses through
+the physical isometry to the original physical basis.
 \item Apply the all-cut Markov theorem.  Only then may the source proposition
 receive a formal declaration and a \texttt{\string\leanok} marker.
 \end{enumerate}

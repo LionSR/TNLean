@@ -658,6 +658,42 @@ theorem normalized_cyclicActiveSectorTraceMatrix_rank_pow_two_eq_one
     |>.smul_of_pos (inv_pos.mpr hlam)
     |>.rank_pow_two_eq_one_of_pow_two_eq_pow_three hpow
 
+/-- Source ZCL gives a strictly positive rank-one factorization of the
+normalized two-step trace coefficient on cyclic-active sectors:
+\[
+  (\lambda^{-1}T_C)^2 = a b^{\mathsf T},
+  \qquad a_q>0,\quad b_h>0,\quad a\mathbin{\cdot}b=1.
+\]
+
+Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
+1606--1617.
+
+**Local fix (cyclic-active restriction):** The factors belong to the square
+of the restricted trace matrix.  This does not identify that square with the
+one-step matrix printed at source line 1613 or with the unreduced Beigi
+matrix.  See `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
+theorem exists_normalized_cyclicActiveSectorTraceMatrix_pos_factorization_of_isSourceZCL
+    (F : PhysicalSectorFactorization K) [NeZero D] (hK : K.IsInjective)
+    (hpos : ∀ k h, (F.neighboringOperator k h).PosSemidef)
+    (hZCL : K.IsSourceZCL) :
+    ∃ lam : ℝ, 0 < lam ∧
+      ∃ a b : F.CyclicActiveSector → ℝ,
+        (∀ q, 0 < a q) ∧ (∀ h, 0 < b h) ∧
+          (lam⁻¹ • F.cyclicActiveSectorTraceMatrix) ^ 2 =
+            Matrix.vecMulVec a b ∧
+          a ⬝ᵥ b = 1 := by
+  obtain ⟨lam, hlam, hpow, _⟩ :=
+    F.cyclicActiveSectorTraceMatrix_normalized_relations_of_isSourceZCL
+      hK hpos hZCL
+  letI : Nonempty F.CyclicActiveSector := F.nonempty_cyclicActiveSector hK
+  have hprimitive :
+      Matrix.IsPrimitive (lam⁻¹ • F.cyclicActiveSectorTraceMatrix) :=
+    (F.cyclicActiveSectorTraceMatrix_isPrimitive hK hpos)
+      |>.smul_of_pos (inv_pos.mpr hlam)
+  obtain ⟨a, b, ha, hb, hab, hdot⟩ :=
+    hprimitive.exists_pos_pow_two_eq_vecMulVec_of_pow_two_eq_pow_three hpow
+  exact ⟨lam, hlam, a, b, ha, hb, hab, hdot⟩
+
 /-- Source ZCL makes the normalized two-step trace coefficient on the
 cyclic-active sectors rank one.
 
