@@ -1,0 +1,181 @@
+\section{Cumulative span to word span}\label{sec:cumspan_to_wordspan}
+
+Cumulative spanning ($T_N(A) = \MN{D}$, the union of word spans
+of all lengths~$\le N$) is weaker than normality
+($S_L(A) = \MN{D}$ for a single length~$L$).
+An aperiodicity hypothesis upgrades cumulative spanning to a single-length word
+span.
+
+\begin{remark}[Aperiodicity condition]\label{rem:aperiodicity}\leanok
+    We say $A$ satisfies the \emph{aperiodicity condition}
+    if $\Id \in S_1(A)$, i.e.\ the identity matrix lies in the
+    span of the Kraus operators $\{A^i\}_{i=0}^{d-1}$.
+    This is an additional hypothesis. The one-sided TP normalization
+    $\sum_i (A^i)^\dagger A^i = \Id$ does \emph{not} imply
+    $\Id \in S_1(A)$; it only gives a quadratic identity among the
+    Kraus operators.
+    The aperiodicity condition is kept explicit in this section for
+    generality.
+    For the primitive condition with positive-definite fixed point
+    (peripheral-spectrum primitivity together with a positive-definite
+    fixed point), normality follows directly from Wolf's primitivity
+    equivalence (Theorem~\ref{thm:wolf_6_8_conjunction}) without passing
+    through aperiodicity.
+\end{remark}
+
+\begin{remark}[Counterexample: cumulative spanning does not imply normality]%
+    \label{rem:cumspan_counterexample}\leanok
+    In $\MN{2}$, let $A^0 = E_{12}$ and $A^1 = E_{21}$
+    (the off-diagonal matrix units).
+    Then $\algspn(A) = \MN{2}$ and $T_2(A) = \MN{2}$,
+    but the word spans alternate:
+    $S_n(A)$ contains only off-diagonal matrices for odd~$n$
+    and only diagonal matrices for even~$n$.
+    Hence $S_n(A) \neq \MN{2}$ for every~$n$,
+    and $A$ is not normal.
+    The aperiodicity condition $\Id \in S_1(A)$ fails:
+    $S_1(A) = \spn_{\C}\{E_{12}, E_{21}\}$.
+\end{remark}
+
+\begin{theorem}[Word span monotonicity from aperiodicity]%
+    \label{thm:wordspan_mono_aperiodic}
+    \lean{MPSTensor.wordSpan_mono_succ_of_one_mem_wordSpan_one}
+    \leanok
+    \uses{def:word_span}
+    If $\Id \in S_1(A)$, then
+    $S_n(A) \le S_{n+1}(A)$ for all~$n$.
+\end{theorem}
+
+\begin{proof}\leanok\uses{lem:word_span_mul}
+    For any $M \in S_n(A)$,
+    $M = M \cdot \Id \in S_n(A) \cdot S_1(A) \subseteq S_{n+1}(A)$
+    by Lemma~\ref{lem:word_span_mul}.
+\end{proof}
+
+\begin{theorem}[Homogeneous word-span propagation under normalization]%
+    \label{thm:wordspan_propagation_unital}
+    \lean{MPSTensor.wordSpan_succ_eq_top_of_unital_of_wordSpan_eq_top}
+    \lean{MPSTensor.wordSpan_eq_top_of_ge_of_unital}
+    \lean{MPSTensor.isNBlkInjective_of_ge_of_unital}
+    \leanok
+    \uses{def:word_span, def:l_blk_injective}
+    Suppose
+    \[
+        \sum_a A_aA_a^\dagger=\Id
+        \qquad\text{and}\qquad
+        S_L(A)=\MN{D}.
+    \]
+    Then, for every \(m\ge L\),
+    \[
+        S_m(A)=\MN{D}.
+    \]
+    Equivalently, \(L\)-block injectivity propagates to every larger
+    homogeneous length.
+\end{theorem}
+
+\begin{proof}\leanok\uses{lem:word_span_mul}
+    If \(S_n(A)=\MN{D}\), then for any \(X\in\MN{D}\),
+    \[
+        X
+        =
+        \left(\sum_a A_aA_a^\dagger\right)X
+        =
+        \sum_a A_a(A_a^\dagger X).
+    \]
+    Since \(A_a^\dagger X\in S_n(A)\), each summand lies in
+    \(S_1(A)S_n(A)\subseteq S_{n+1}(A)\). Thus
+    \(S_{n+1}(A)=\MN{D}\). Iterating this one-step implication gives the
+    result for all \(m\ge L\).
+\end{proof}
+
+\begin{theorem}[Cumulative span equals word span under aperiodicity]%
+    \label{thm:cumspan_eq_wordspan}
+    \lean{MPSTensor.cumulativeSpan_eq_wordSpan_of_one_mem_wordSpan_one}
+    \leanok
+    \uses{def:cumulative_span, def:word_span}
+    If $\Id \in S_1(A)$, then
+    $T_n(A) = S_n(A)$ for all~$n$.
+\end{theorem}
+
+\begin{proof}\leanok\uses{thm:wordspan_mono_aperiodic}
+    By Theorem~\ref{thm:wordspan_mono_aperiodic},
+    the word spans are monotone: $S_0 \le S_1 \le \cdots$.
+    The supremum $T_n = S_0 + \cdots + S_n$ therefore equals the
+    largest term~$S_n$.
+\end{proof}
+
+\begin{theorem}[Cumulative spanning plus aperiodicity implies normality]%
+    \label{thm:cumspan_to_normal}
+    \lean{MPSTensor.isNormal_of_cumulativeSpan_eq_top_of_aperiodic}
+    \leanok
+    \uses{def:normal, def:cumulative_span, def:word_span}
+    If $T_N(A) = \MN{D}$ and $\Id \in S_1(A)$, then $A$ is normal.
+\end{theorem}
+
+\begin{proof}\leanok\uses{thm:cumspan_eq_wordspan}
+    By Theorem~\ref{thm:cumspan_eq_wordspan},
+    $S_N(A) = T_N(A) = \MN{D}$.
+\end{proof}
+
+\begin{theorem}[Algebra span plus aperiodicity implies normality]%
+    \label{thm:algspan_to_normal}
+    \lean{MPSTensor.isNormal_of_algSpan_eq_top_of_aperiodic}
+    \leanok
+    \uses{def:normal, def:alg_span, def:word_span}
+    If $\algspn(A) = \MN{D}$ and $\Id \in S_1(A)$,
+    then $A$ is normal.
+\end{theorem}
+
+\begin{proof}\leanok\uses{thm:cumspan_to_normal}
+    Since $\algspn(A) = \MN{D}$,
+    there exists $N$ with $T_N(A) = \MN{D}$
+    (by the ascending chain condition on finite-dimensional subspaces).
+    Apply Theorem~\ref{thm:cumspan_to_normal}.
+\end{proof}
+
+\begin{remark}[Normal canonical form avoids the aperiodicity step]\label{rem:d1_bypasses_aperiodicity}
+    The aperiodicity results in Section~\ref{sec:cumspan_to_wordspan} are needed only for the
+    block-injective argument through Definition~\ref{def:normal}, where one upgrades cumulative
+    spanning to eventual block injectivity. The normal-canonical theory used later in
+    Chapters~\ref{ch:canonical}--\ref{ch:bnt} does not pass through this step:
+    it works directly with irreducible TP-normalized blocks whose blocked transfer maps
+    are primitive and, once the corresponding weighted block data are available,
+    places them in normal canonical form in the sense of~%
+    \cite{Cirac2016MPDO_arXiv}. There are analogous cumulative-span lemmas for
+    blocked irreducible tensors and eigenvector-spreading arguments, but they are
+    not needed for the implication stated below.
+\end{remark}
+
+\section{Block injectivity from TP/primitive/irreducible blocks}%
+\label{sec:ch07_block_inj_from_tp_primitive_irred}
+
+\begin{theorem}[TP-primitive irreducible tensor is injective after blocking]%
+    \label{thm:tp_primitive_irred_block_injective}
+    \lean{MPSTensor.exists_pos_blockTensor_isInjective_of_tp_primitive_irreducible}
+    \leanok
+    \uses{thm:normal_tp_primitive_irred,
+        lem:one_block_injective_of_injective,
+        cor:blk_inj_zero_dim_one}
+    Let $A$ be a left-canonical MPS tensor with $D > 0$, irreducible tensor,
+    and primitive transfer map.
+    Then some positive blocking $A^{[L]}$ is one-site injective.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:normal_tp_primitive_irred,
+        lem:one_block_injective_of_injective,
+        cor:blk_inj_zero_dim_one}
+    If $D=1$, trace preservation gives a nonzero one-site Kraus matrix, and
+    every nonzero scalar matrix spans $\MN{1}$; hence $A$ is one-site
+    injective, so Lemma~\ref{lem:one_block_injective_of_injective} gives the
+    positive witness $L=1$. Suppose now that $D\geq 2$. The normality theorem
+    (Theorem~\ref{thm:normal_tp_primitive_irred}) gives a block-injectivity
+    witness $L$. If $L=0$, Corollary~\ref{cor:blk_inj_zero_dim_one} would
+    force $D=1$, a contradiction. Thus $L>0$, and the blocked-chain
+    equivalence identifies this $L$-block injectivity with one-site injectivity
+    of the blocked tensor $A^{[L]}$.
+\end{proof}
+
+\begin{remark}
+    Blocking preserves normality by Theorem~\ref{thm:isNormal_blockTensor}.
+\end{remark}
