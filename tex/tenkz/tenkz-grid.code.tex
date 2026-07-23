@@ -1385,11 +1385,29 @@
 % cells before validation so the implicit-bond pass sees wide, tall, and
 % fusion continuations without depending on the later node-placement pass.
 \tl_new:N \l__tenkz_mdo_kind_tl
+\cs_new_protected:Npn \tenkz_validate_fuse_combined:
+  {
+    \tl_if_empty:NF \l__tenkz_fcombined_tl
+      {
+        \bool_lazy_or:nnF
+          { \str_if_eq_p:Vn \l__tenkz_fcombined_tl {west} }
+          { \str_if_eq_p:Vn \l__tenkz_fcombined_tl {east} }
+          {
+            \bool_set_false:N \l__tenkz_celloptsvalid_bool
+            \PackageError{tenkz}
+              {combined=\tl_use:N \l__tenkz_fcombined_tl
+                \c_space_tl is~not~a~fusion~side}
+              {Use~combined=west~or~combined=east~on~a~fusion~bar.}
+          }
+      }
+  }
 \cs_new_protected:Npn \tenkz_model_record_owner:nn #1#2
   {
     \tenkz_get:NnN \l__tenkz_opts_prop {#1-#2} \l_tmpa_tl
     \exp_args:NV \tenkz_cell_opts:n \l_tmpa_tl
-    \bool_if:NT \l__tenkz_celloptsvalid_bool
+    \str_if_eq:VnT \l__tenkz_mdo_kind_tl {fuse}
+      { \tenkz_validate_fuse_combined: }
+    \bool_if:NTF \l__tenkz_celloptsvalid_bool
       {
         \str_case:Vn \l__tenkz_mdo_kind_tl
           {
@@ -1438,6 +1456,7 @@
               }
           }
       }
+      { \prop_remove:Nn \l__tenkz_kind_prop {#1-#2} }
   }
 \cs_new_protected:Npn \tenkz_model_record_owners:
   {
@@ -1861,21 +1880,7 @@
         % domain is closed.  Reject an impossible bar side before allocating
         % measured ink, registering its cells, or emitting topology events.
         \str_if_eq:VnT \l__tenkz_kind_tl {fuse}
-          {
-            \tl_if_empty:NF \l__tenkz_fcombined_tl
-              {
-                \bool_lazy_or:nnF
-                  { \str_if_eq_p:Vn \l__tenkz_fcombined_tl {west} }
-                  { \str_if_eq_p:Vn \l__tenkz_fcombined_tl {east} }
-                  {
-                    \bool_set_false:N \l__tenkz_celloptsvalid_bool
-                    \PackageError{tenkz}
-                      {combined=\tl_use:N \l__tenkz_fcombined_tl
-                        \c_space_tl is~not~a~fusion~side}
-                      {Use~combined=west~or~combined=east~on~a~fusion~bar.}
-                  }
-              }
-          }
+          { \tenkz_validate_fuse_combined: }
         \bool_if:NTF \l__tenkz_celloptsvalid_bool
           {
             \tenkz_get:NnN \l__tenkz_label_prop {#1-#2} \l_tmpb_tl
