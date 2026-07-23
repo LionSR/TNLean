@@ -168,6 +168,17 @@
 \tl_new:N \l__tenkz_geom_xa_tl \tl_new:N \l__tenkz_geom_ya_tl
 \tl_new:N \l__tenkz_geom_xb_tl \tl_new:N \l__tenkz_geom_yb_tl
 
+\cs_new_protected:Npn \__tenkz_geom_reset:
+  {
+    \prop_clear:N \l__tenkz_geom_frame_prop
+    \prop_clear:N \l__tenkz_geom_framekind_prop
+    \prop_clear:N \l__tenkz_geom_req_prop
+    \prop_clear:N \l__tenkz_geom_x_prop
+    \prop_clear:N \l__tenkz_geom_y_prop
+    \prop_clear:N \l__tenkz_geom_state_prop
+    \seq_clear:N \l__tenkz_geom_trail_seq
+  }
+
 \cs_new_protected:Npn \__tenkz_geom_place_cell:nnnn #1#2#3#4
   { \prop_put:Nnn \l__tenkz_geom_req_prop {#1} { {cell}{#2}{#3}{#4} } }
 \cs_generate_variant:Nn \__tenkz_geom_place_cell:nnnn { nnee }
