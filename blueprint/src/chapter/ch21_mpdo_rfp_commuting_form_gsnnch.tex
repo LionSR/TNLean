@@ -472,8 +472,7 @@
         def:mpdo_eta_local_structure_data,
         def:mpdo_fixed_bond_product_tensor,
         thm:mpdo_commuting_bond_positive_eta_decomposition,
-        thm:mpdo_eta_pair_bond_cyclic_product_transport,
-        thm:mpdo_cyclic_edge_weight_tensor}
+        thm:mpdo_eta_pair_bond_cyclic_product_transport}
     Let $B\geq0$ be a two-site bond whose periodic translates commute.  There
     is a positive integer $R$ and a matrix-product tensor $C$ of virtual
     dimension $R$, both independent of the chain length, such that for every
@@ -487,23 +486,33 @@
     is required.
 \end{theorem}
 
+% Blueprint deferral (#4664): the following constructor-support declarations
+% are intentionally not tagged here as completed results:
+% MPOTensor.TranslationInvariantBondData.
+%   PositivePhysicalSectorFixedProductTensorData,
+% MPOTensor.TranslationInvariantBondData.
+%   nonempty_positivePhysicalSectorFixedProductTensorData,
+% MPOTensor.TranslationInvariantBondData.
+%   fixedProductTensorDataPhysicalSectorFactorization_physicalBond_eq,
+% MPOTensor.TranslationInvariantBondData.
+%   fixedProductTensorDataPhysicalSectorFactorization_neighboring_pos,
+% MPOTensor.PhysicalSectorFactorization.etaSectorFinEquiv, and
+% MPOTensor.PhysicalSectorFactorization.
+%   sectorCoordinateBond_etaPair_decomposition.
+% Issue #4664 owns their paper-facing blueprint entries and source audit.
+
 \begin{proof}\leanok
     \uses{thm:mpdo_commuting_bond_positive_eta_decomposition,
-        thm:mpdo_eta_pair_bond_cyclic_product_transport,
-        thm:mpdo_cyclic_edge_weight_tensor}
+        thm:mpdo_eta_pair_bond_cyclic_product_transport}
     Choose Beigi's chain-independent one-site unitary and the positive
-    neighboring operators $\eta_{q,h}$.  In the resulting sector coordinates,
-    the entries of the bond product are
-    \[
-        \prod_{n=0}^{N-1}
-        (\eta_{k_n,k_{n+1}})_{(r_n,l_{n+1}),(r_n',l_{n+1}')},
-    \]
-    with weight zero unless the ket and bra sector labels agree at each site.
-    The cyclic edge-weight tensor generates this product at every length.
-    Conjugating that tensor by the inverse one-site coordinate change gives
-    $C$ in the original physical coordinates.  Tensor-power unitary
-    conjugation carries its closed operators to the products of the original
-    translates of $B$.
+    neighboring operators $\eta_{q,h}$.  Expand every $\eta_{q,h}$ in matrix
+    units, separating each coefficient into a right factor at one site and a
+    left matrix unit at the next.  Their common finite index gives a positive
+    virtual dimension, with one inactive state covering the empty physical
+    space.  Contracting adjacent factors reconstructs every
+    $\eta_{q,h}$, hence the physical-sector bond is exactly $B$.  The cyclic
+    contraction formula then gives the product of the translates of $B$ at
+    every length $N\geq2$.
 \end{proof}
 
 \begin{remark}[The scalar edge formula depends on the one-site coordinates]

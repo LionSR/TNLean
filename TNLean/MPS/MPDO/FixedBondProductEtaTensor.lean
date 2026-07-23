@@ -10,9 +10,11 @@ import TNLean.MPS.MPDO.FixedBondProductTensor
 /-!
 # Fixed matrix-product tensors from neighboring operators
 
-This file represents the cyclic neighboring-operator decomposition of a fixed
-commuting bond by one matrix-product tensor.  The virtual dimension is
-independent of the chain length.
+This file records the cyclic edge-weight identity and exposes the selected
+fixed-product tensor constructed from positive physical sectors.  Its retained
+factorization reconstructs the input commuting bond and has positive
+neighboring operators.  The virtual dimension is independent of the chain
+length.
 
 ## Main definitions and statements
 
@@ -20,7 +22,13 @@ independent of the chain length.
 * `reindex_mpo_cyclicEdgeWeightTensor_etaCyclicEdgeWeight` identifies its
   closed operator in sector-edge coordinates.
 * `TranslationInvariantBondData.fixedProductTensorData` constructs an exact
-  fixed tensor for an arbitrary positive commuting bond.
+  selected fixed tensor for an arbitrary positive commuting bond.
+* `TranslationInvariantBondData.fixedProductTensorDataPhysicalSectorFactorization`
+  retains the positive physical-sector factorization of the selected tensor.
+* `fixedProductTensorDataPhysicalSectorFactorization_physicalBond_eq`
+  identifies its reconstructed bond with the input bond.
+* `fixedProductTensorDataPhysicalSectorFactorization_neighboring_pos`
+  records positivity of its neighboring operators.
 
 ## References
 
@@ -114,9 +122,24 @@ theorem reindex_mpo_cyclicEdgeWeightTensor_etaCyclicEdgeWeight
 
 namespace TranslationInvariantBondData
 
+/-- A chosen exact matrix-product representation of the fixed commuting-bond
+product.  This is the representative whose positive physical sectors are
+exposed by `fixedProductTensorDataPhysicalSectorFactorization`.
+
+Source: arXiv:1606.00608, Appendix C.2, equation `sigmaNK2` and Proposition
+`4to2`, lines 1581--1605; Beigi, arXiv:1105.1019v2, Lemma 2.1. -/
+noncomputable def fixedProductTensorData (data : TranslationInvariantBondData d) :
+    FixedProductTensorData data :=
+  data.positivePhysicalSectorFixedProductTensorData.repr
+
 /-- Every positive fixed bond whose periodic translates commute has one
 exact matrix-product representation with positive bond dimension, independent
 of the chain length.
+
+This theorem is an existence-only interface.  Downstream constructions that
+need the retained positive physical sectors must use `fixedProductTensorData`
+and `fixedProductTensorDataPhysicalSectorFactorization`; an arbitrary choice
+from this `Nonempty` proposition carries no such selection contract.
 
 This proves only the finite representation of the product.  It does not assert
 that the representing tensor is normal and does not constrain the positive
@@ -125,19 +148,8 @@ realization scalar of the source MPO.
 Source: arXiv:1606.00608, Appendix C.2, equation `sigmaNK2` and Proposition
 `4to2`, lines 1581--1605; Beigi, arXiv:1105.1019v2, Lemma 2.1. -/
 theorem nonempty_fixedProductTensorData (data : TranslationInvariantBondData d) :
-    Nonempty (FixedProductTensorData data) := by
-  exact Nonempty.map
-    PositivePhysicalSectorFixedProductTensorData.repr
-    data.nonempty_positivePhysicalSectorFixedProductTensorData
-
-/-- A chosen exact matrix-product representation of the fixed commuting-bond
-product.
-
-Source: arXiv:1606.00608, Appendix C.2, equation `sigmaNK2` and Proposition
-`4to2`, lines 1581--1605; Beigi, arXiv:1105.1019v2, Lemma 2.1. -/
-noncomputable def fixedProductTensorData (data : TranslationInvariantBondData d) :
-    FixedProductTensorData data :=
-  data.positivePhysicalSectorFixedProductTensorData.repr
+    Nonempty (FixedProductTensorData data) :=
+  ⟨data.fixedProductTensorData⟩
 
 /-- The positive physical-sector factorization retained by the exact selected
 fixed-product tensor.
