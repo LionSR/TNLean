@@ -1,0 +1,38 @@
+{
+  "m1_census": {
+    "definition": "registry key rows per ledger; kernel is one-in-one-out, the total never rises between shrink sessions",
+    "value": {
+      "alias": 6,
+      "escape": 9,
+      "kernel": 75,
+      "sugar": 5
+    }
+  },
+  "m2_parser_paths": {
+    "definition": "public leaf keys installed by the TeX parsers; an increase requires an Extension-gate citation",
+    "value": 145
+  },
+  "m3_escape_usage": {
+    "definition": "occurrences of escape-ledger spellings in the demand corpus; every occurrence names a core-grammar gap",
+    "value": 297
+  },
+  "m4_lines_per_case": {
+    "definition": "mean non-comment non-blank lines over the frozen 130 benchmark cases; the fidelity meter against fake shrink",
+    "value": 15.14
+  },
+  "m5_aliases": {
+    "definition": "alias rows and sunset compliance; near zero at the 1.0 freeze",
+    "value": {
+      "count": 6,
+      "missing_sunset": 0
+    }
+  },
+  "m6_overloads": {
+    "definition": "names with several value types + union types + enum words shared across enums; must never rise",
+    "value": {
+      "multi_typed_names": 3,
+      "shared_enum_words": 5,
+      "union_types": 2
+    }
+  }
+}
