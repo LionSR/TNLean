@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.FinTupleEquiv
 import TNLean.MPS.MPDO.PhysicalSectorCoordinateTransport
 import TNLean.MPS.MPDO.TopologicalProjectorRecursion
 import TNLean.MPS.MPDO.VerticalProductPairBlocks
@@ -149,19 +150,6 @@ def fusionChainBondEquiv (H : BNTFusionTensorClause M) :
         (fusionChainBondEquiv H (fun n : Fin (N + 1) => q n.castSucc) (Fin.init x),
           attachedBondEquiv H (q (Fin.last (N + 1))).1 (x (Fin.last (N + 1)))) :=
   rfl
-
-private def piSigmaEquiv
-    {ι : Type*} {α : ι → Type*} {β : (i : ι) → α i → Type*} :
-    ((i : ι) → (a : α i) × β i a) ≃
-      (a : (i : ι) → α i) × ((i : ι) → β i (a i)) where
-  toFun x := ⟨fun i => (x i).1, fun i => (x i).2⟩
-  invFun x i := ⟨x.1 i, x.2 i⟩
-  left_inv x := by
-    funext i
-    exact Sigma.eta (x i)
-  right_inv x := by
-    obtain ⟨a, b⟩ := x
-    rfl
 
 /-- Apply the retained vertical coordinate change at every site and group the result by its
 label and multiplicity sector. -/
