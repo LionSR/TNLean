@@ -574,11 +574,28 @@
 
 \begin{proof}\leanok
     Take the physical-sector factorization retained with $C$.  Its defining
-    one-site identity gives the displayed factorization of
-    $C_{\beta,\alpha}$, and the adjacent contraction of its right and left
-    factors gives $\eta_{q,h}$.  These neighboring operators are positive
-    semidefinite.  The retained bond identity says that transporting the
-    sector-coordinate bond through $U_2^\dagger$ reconstructs $B$ exactly.
+    one-site identity is
+    \[
+        U C_{\beta,\alpha}U^\dagger
+        =
+        \bigoplus_q L_\beta(q)\otimes R_\alpha(q).
+    \]
+    Contracting the adjacent right and left factors gives
+    \[
+        \eta_{q,h}=\sum_a R_a(q)\otimes L_a(h)\succeq0,
+    \]
+    where positivity is the retained neighboring-operator property.  Finally,
+    the retained bond identity is
+    \[
+        B
+        =
+        U_2^\dagger
+        \left[
+          \bigoplus_{q,h}
+          \Id_{H_q^L\otimes H_h^R}\otimes\eta_{q,h}
+        \right]
+        U_2.
+    \]
 \end{proof}
 
 \begin{remark}[The scalar edge formula depends on the one-site coordinates]
