@@ -471,8 +471,7 @@
     \uses{def:mpdo_translation_invariant_bond_data,
         def:mpdo_eta_local_structure_data,
         def:mpdo_fixed_bond_product_tensor,
-        thm:mpdo_commuting_bond_positive_eta_decomposition,
-        thm:mpdo_eta_pair_bond_cyclic_product_transport}
+        thm:mpdo_commuting_bond_positive_eta_decomposition}
     Let $B\geq0$ be a two-site bond whose periodic translates commute.  There
     is a positive integer $R$ and a matrix-product tensor $C$ of virtual
     dimension $R$, both independent of the chain length, such that for every
@@ -480,10 +479,8 @@
     \[
         \rho^{(N)}(C)=\prod_{n=0}^{N-1}B_{n,n+1}.
     \]
-    When $d>0$, the construction has $R=d^2$; when $d=0$, one may take
-    $R=1$.
-    No normality, zero-correlation-length, or scalar normalization hypothesis
-    is required.
+    The construction gives a positive $R$ independent of $N$.  No normality,
+    zero-correlation-length, or scalar normalization hypothesis is required.
 \end{theorem}
 
 % Blueprint deferral (#4664): the following constructor-support declarations
@@ -502,8 +499,7 @@
 % Issue #4664 owns their paper-facing blueprint entries and source audit.
 
 \begin{proof}\leanok
-    \uses{thm:mpdo_commuting_bond_positive_eta_decomposition,
-        thm:mpdo_eta_pair_bond_cyclic_product_transport}
+    \uses{thm:mpdo_commuting_bond_positive_eta_decomposition}
     Choose Beigi's chain-independent one-site unitary and the positive
     neighboring operators $\eta_{q,h}$.  Expand every $\eta_{q,h}$ in matrix
     units, separating each coefficient into a right factor at one site and a
