@@ -141,6 +141,21 @@ def parse_key_expression(expression: str) -> list[tuple[str, str | None]]:
     return parsed
 
 
+def _enum_value_error(
+    target: str,
+    value: str | None,
+    target_record: tuple[str, str],
+) -> str | None:
+    """Describe an invalid explicit enum value in a registry rewrite."""
+    if value is None:
+        return None
+    value_type = target_record[1]
+    enum = re.fullmatch(r"enum\(([^)]*)\)", value_type)
+    if enum is not None and value not in enum.group(1).split("|"):
+        return f"replacement value {value!r} for {target!r} is not in {value_type}"
+    return None
+
+
 def _group(text: str, start: int) -> tuple[str, int]:
     while start < len(text) and text[start].isspace():
         start += 1
@@ -316,6 +331,15 @@ def check(entries: list[Entry]) -> list[str]:
                     f"alias row {scope}:{name} replacement names unknown "
                     f"token(s): {', '.join(unknown)}"
                 )
+                continue
+            for target, value in targets:
+                value_error = _enum_value_error(
+                    target,
+                    value,
+                    key_vocabulary[(scope, target)],
+                )
+                if value_error is not None:
+                    errors.append(f"alias row {scope}:{name} {value_error}")
     for scope, spelling, replacement, meaning in by_kind["alias"]:
         try:
             parse_value_alias_sunset(meaning)
@@ -339,12 +363,10 @@ def check(entries: list[Entry]) -> list[str]:
                 "is not registered vocabulary"
             )
             continue
-        value_type = target_record[1]
-        enum = re.fullmatch(r"enum\(([^)]*)\)", value_type)
-        if enum is not None and value not in enum.group(1).split("|"):
+        value_error = _enum_value_error(target, value, target_record)
+        if value_error is not None:
             errors.append(
-                f"value alias {scope}:{spelling} replacement value {value!r} "
-                f"is not in {value_type}"
+                f"value alias {scope}:{spelling} {value_error}"
             )
     if BASELINE.is_file():
         baseline = json.loads(BASELINE.read_text(encoding="utf-8"))

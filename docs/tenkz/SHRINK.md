@@ -25,16 +25,17 @@ geometry, metered by M3; every use names a core-grammar gap).
 
 ## Session 0 — 2026-07-23 (baseline; classification of the 0.7 registry)
 
-Classification of all 95 key rows: **75 kernel · 5 sugar · 9 escape ·
+Classification of all 95 key rows: **76 kernel · 4 sugar · 9 escape ·
 6 alias**. Sugar expansions follow the 0.6 alias table (`sandwich`,
-`physical=`, `boundary=`, `compact`, `inline`). Escape rows are the raw
-lengths, angles, and dimension pairs (`label shift`, `out`, `in`,
+`physical=`, `boundary=`, `compact`). `inline` remains kernel because its
+label style and clearance effects have no independent target keys. Escape
+rows are the raw lengths, angles, and dimension pairs (`label shift`, `out`, `in`,
 `col/row/sheet vector`, `plane rise/slant`, `radius`). Commands and
 environments carry no registry status field; their ledger lives in this
 ledger's tables and in the baseline JSON. Ceilings are set at these
 actuals; the ratchet does the aspiring.
 
-Baseline meters: M1 {kernel 75, sugar 5, escape 9, alias 6, commands 18,
+Baseline meters: M1 {kernel 76, sugar 4, escape 9, alias 6, commands 18,
 environments 5} · M2 145 · M3 296 · M4 15.14 · M5 {7 aliases (six key,
 one value), 0 missing sunsets} · M6 {3 multi-typed names, 2 union types,
 5 shared enum words}.
@@ -44,7 +45,7 @@ benchmark cases — the measured cost of hand-routed arcs, burned down by the
 strings landing (#4701, #4705). M6's baseline names the overloads the 1.0
 kernel deletes; it must never rise on the way there.
 
-### Verdicts on the 56 baseline flags
+### Verdicts on the 55 baseline flags
 
 Low-consumer rows. The demand corpus is the benchmark plus the blueprint;
 rows below three consumers either carry a dated justification or die at
@@ -69,7 +70,6 @@ their named landing.
 | flag:consumers:key:object:east at | folds into the ports grammar; expiry 0.9 |
 | flag:consumers:key:object:west at | folds into the ports grammar; expiry 0.9 |
 | flag:consumers:key:object:name | keep-because: addressing becomes load-bearing for every S2+ landing (wires, marks, groups); expiry 0.9 |
-| flag:consumers:key:object:no legs | folds into the skin and typed-port grammar at the language landing; expiry 0.9 |
 | flag:consumers:key:object:removed | becomes atom `void=sealed` at the language landing; expiry 0.9 |
 | flag:consumers:key:object:span | folds into `ports=` and `wires=` at the language landing; expiry 0.9 |
 | flag:consumers:key:object:species | keep-because: semantic species is a kernel atom field; role consumers move here at the language landing; expiry 0.9 |
@@ -88,11 +88,8 @@ their named landing.
 | flag:consumers:key:picture:trace style | dies at S2 when the default flips to the cap idiom; expiry 0.9 |
 | flag:consumers:key:region:group | folds into address sets at the language landing; expiry 0.9 |
 | flag:consumers:key:region:name | keep-because: same addressing argument as object:name; expiry 0.9 |
-| flag:consumers:key:setup:compact | dies at the equation landing (math-style sensing and `size=`, #4703); expiry 0.9 |
 | flag:consumers:key:setup:inline | dies at the equation landing (math-style sensing, #4703); expiry 0.9 |
 | flag:consumers:key:setup:pitch | keep-because: the metric anchor is set in preambles, excluded from demand counting by design; expiry 1.0 |
-| flag:consumers:key:setup:species | moves to `\tndeclare{species}` at the language landing; expiry 0.9 |
-| flag:consumers:key:setup:tensor style | becomes atom `skin=` at the language landing; expiry 0.9 |
 
 Merge candidates and lonely types. The detector confirms the compression
 review from the outside: the angle pair and the one-off types are the 0.7
@@ -100,7 +97,10 @@ grammar's own testimony against itself.
 
 | flag | verdict |
 |---|---|
+| flag:cooccur:annotation:box+label pos | confirmed merge: enclosure geometry and label placement become one mark record at the language landing; expiry 0.9 |
+| flag:cooccur:connection:from+to | keep-because: source and target are distinct endpoints of one wire record, not duplicate controls; permanent |
 | flag:cooccur:connection:in+out | confirmed merge: `out=`/`in=` are one concept (a hand-routed arc) and both die at S4 when declared routes land; expiry 0.9 (#4705) |
+| flag:cooccur:object:east at+west at | confirmed merge: the two endpoint selectors become one ports record at the language landing; expiry 0.9 |
 | flag:lonely-type:cell-set | keep: the cell-set algebra is kernel and gains consumers as `open=` spreads; expiry 0.9 |
 | flag:lonely-type:cell-set\|physical | dies at the language landing with the union type (M6); expiry 0.9 |
 | flag:lonely-type:frame-enum | becomes the frame-spec type at the language landing; expiry 0.9 |

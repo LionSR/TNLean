@@ -235,6 +235,19 @@ def _brace_argument(text: str, name: str, argument: int) -> list[str]:
 
 def scoped_consumer_text(corpus: dict[Path, str]) -> dict[str, dict[Path, str]]:
     """Option text grouped by the registry scope that owns each key."""
+    return {
+        scope: {
+            path: "\n,\n".join(payloads)
+            for path, payloads in by_path.items()
+        }
+        for scope, by_path in scoped_option_groups(corpus).items()
+    }
+
+
+def scoped_option_groups(
+    corpus: dict[Path, str],
+) -> dict[str, dict[Path, list[str]]]:
+    """Individual option payloads grouped by their registry scope."""
     scoped = {
         scope: {} for scope in (
             "setup",
@@ -247,20 +260,27 @@ def scoped_consumer_text(corpus: dict[Path, str]) -> dict[str, dict[Path, str]]:
         )
     }
     for path, text in corpus.items():
-        scoped["picture"][path] = "\n".join(
-            [*_environment_options(text), *_command_options(text, "tnpic")]
-        )
+        picture_options = [
+            *_environment_options(text),
+            *_command_options(text, "tnpic"),
+        ]
+        scoped["picture"][path] = picture_options
         for scope, commands in _SCOPE_COMMANDS.items():
             if scope == "picture":
                 continue
-            scoped[scope][path] = "\n".join(
+            scoped[scope][path] = [
                 option
                 for command in commands
                 for option in _command_options(text, command)
-            )
-        scoped["setup"][path] = "\n".join(_brace_argument(text, "tnset", 1))
-        scoped["atom-declaration"][path] = "\n".join(
-            _brace_argument(text, "tndeclareatom", 2)
+            ]
+        # Setup keys are legal both in \tnset and in each picture family's
+        # option list through the shared forwarders.
+        scoped["setup"][path] = [
+            *_brace_argument(text, "tnset", 1),
+            *picture_options,
+        ]
+        scoped["atom-declaration"][path] = _brace_argument(
+            text, "tndeclareatom", 2
         )
     return scoped
 
@@ -432,7 +452,7 @@ def flags(entries: list[Entry], corpus: dict[Path, str]) -> list[dict[str, str]]
                 }
             )
 
-    # 100% co-occurring same-scope key pairs across at least five consumers.
+    # 100% co-occurring same-scope key pairs across at least five invocations.
     key_rows = [
         (fields[0], fields[1].replace("~", " "))
         for fields in (e.fields for e in entries if e.kind == "key")
@@ -440,19 +460,29 @@ def flags(entries: list[Entry], corpus: dict[Path, str]) -> list[dict[str, str]]
     by_scope: dict[str, list[str]] = {}
     for scope, name in key_rows:
         by_scope.setdefault(scope, []).append(name)
+    groups = scoped_option_groups(corpus)
     for scope, names in sorted(by_scope.items()):
+        invocations: dict[str, set[tuple[Path, int]]] = {}
+        for name in names:
+            pattern = _key_pattern(name)
+            invocations[name] = {
+                (path, index)
+                for path, payloads in groups[scope].items()
+                for index, payload in enumerate(payloads)
+                if pattern.search(payload)
+            }
         for i, first in enumerate(sorted(names)):
-            hits_first = consumers.get(f"key:{scope}:{first}", set())
+            hits_first = invocations[first]
             if len(hits_first) < 5:
                 continue
             for second in sorted(names)[i + 1 :]:
-                hits_second = consumers.get(f"key:{scope}:{second}", set())
+                hits_second = invocations[second]
                 if hits_first and hits_first == hits_second:
                     raised.append(
                         {
                             "id": f"flag:cooccur:{scope}:{first}+{second}",
                             "detail": f"{scope} keys '{first}' and '{second}' share"
-                            f" all {len(hits_first)} consumers",
+                            f" all {len(hits_first)} invocations",
                         }
                     )
 
@@ -584,6 +614,40 @@ def baseline_at_ref(ref: str) -> dict | None:
             raise ValueError(f"base ref does not resolve: {ref}")
         return None
     return json.loads(result.stdout)
+
+
+def ledger_at_ref(ref: str) -> str | None:
+    """Read the shrink ledger at a Git ref, or None before Session 0."""
+    result = subprocess.run(
+        ["git", "show", f"{ref}:docs/tenkz/SHRINK.md"],
+        cwd=ROOT,
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        check=False,
+    )
+    if result.returncode:
+        exists = subprocess.run(
+            ["git", "cat-file", "-e", f"{ref}^{{commit}}"],
+            cwd=ROOT,
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+            check=False,
+        )
+        if exists.returncode:
+            raise ValueError(f"base ref does not resolve: {ref}")
+        return None
+    return result.stdout
+
+
+def ledger_history_errors(current: str, previous: str | None) -> list[str]:
+    """Require every pre-change ledger byte to remain an exact prefix."""
+    if previous is not None and not current.startswith(previous):
+        return [
+            "docs/tenkz/SHRINK.md rewrites pre-change history; "
+            "shrink sessions are append-only"
+        ]
+    return []
 
 
 def added_diff_text(patch: str) -> str:
@@ -721,8 +785,17 @@ def main() -> int:
     try:
         previous = baseline_at_ref(args.base_ref) if args.base_ref else None
         has_extension = extension_cited(args.base_ref) if previous is not None else False
+        previous_ledger = ledger_at_ref(args.base_ref) if args.base_ref else None
     except ValueError as exc:
         print(f"tenkz-shrink: FAIL: {exc}", file=sys.stderr)
+        return 1
+    ledger_failures = ledger_history_errors(
+        SHRINK_LEDGER.read_text(encoding="utf-8"),
+        previous_ledger,
+    )
+    if ledger_failures:
+        for failure in ledger_failures:
+            print(f"tenkz-shrink: FAIL: {failure}", file=sys.stderr)
         return 1
     branch, failures = evaluate_gate(
         entries,

@@ -132,6 +132,27 @@ def test_alias_replacements_are_registered_vocabulary() -> None:
         in error
         for error in errors
     ), errors
+    changed_key_alias = [
+        Entry(
+            entry.kind,
+            (
+                *entry.fields[:4],
+                "alias(boundary=bogus; sunset=1.0)",
+                entry.fields[5],
+            ),
+        )
+        if entry.kind == "key"
+        and entry.fields[0] == "picture"
+        and entry.fields[1] == "periodic"
+        else entry
+        for entry in entries
+    ]
+    errors = check(changed_key_alias)
+    assert any(
+        "alias row picture:periodic replacement value 'bogus'"
+        in error
+        for error in errors
+    ), errors
 
 
 def test_bare_key_pattern_accepts_end_of_options() -> None:
@@ -152,6 +173,44 @@ def test_escape_usage_is_scoped_to_picture_options() -> None:
     assert sum(
         len(pattern.findall(text)) for text in scoped["picture"].values()
     ) == 1
+
+
+def test_setup_consumers_include_picture_options() -> None:
+    path = ROOT / "synthetic.tex"
+    corpus = {
+        path: (
+            r"\tnset{pitch=10mm} "
+            r"\begin{tenkz}[compact]\tn{A}\end{tenkz} "
+            r"\tnpic[inline, tensor style=box]{\tn{B}}"
+        )
+    }
+    scoped = tenkz_shrink.scoped_consumer_text(corpus)["setup"][path]
+    for key in ("pitch", "compact", "inline", "tensor style"):
+        assert tenkz_shrink._key_pattern(key).search(scoped), key
+
+
+def test_cooccurrence_is_measured_per_invocation() -> None:
+    entries = [
+        Entry(
+            "key",
+            ("connection", "label", "math", "empty", "kernel", "Label."),
+        ),
+        Entry(
+            "key",
+            ("connection", "role", "name", "empty", "kernel", "Role."),
+        ),
+    ]
+    corpus = {
+        ROOT / f"synthetic-{index}.tex": (
+            rf"\tnedge[label=x]{{a{index}}}{{b{index}}} "
+            rf"\tnedge[role=wire]{{c{index}}}{{d{index}}}"
+        )
+        for index in range(5)
+    }
+    assert not any(
+        flag["id"] == "flag:cooccur:connection:label+role"
+        for flag in tenkz_shrink.flags(entries, corpus)
+    )
 
 
 def test_command_signatures_are_balanced_and_include_optionless_uses() -> None:
@@ -285,6 +344,18 @@ def test_extension_citation_comes_only_from_added_lines() -> None:
         tenkz_shrink.added_diff_text(patch + "+Extension-gate: #3456\n")
         .splitlines()[-1]
         == "Extension-gate: #3456"
+    )
+
+
+def test_ledger_history_is_append_only() -> None:
+    previous = "# The shrink ledger\n\n## Session 0\nold verdict\n"
+    assert not tenkz_shrink.ledger_history_errors(
+        previous + "\n## Session 1\nnew verdict\n",
+        previous,
+    )
+    assert tenkz_shrink.ledger_history_errors(
+        previous.replace("old verdict", "rewritten verdict"),
+        previous,
     )
 
 
