@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Algebra.FinTupleEquiv
+import TNLean.Algebra.MatrixAux
 import TNLean.MPS.MPDO.PhysicalSectorCoordinateTransport
 import TNLean.MPS.MPDO.TopologicalProjectorRecursion
 import TNLean.MPS.MPDO.VerticalProductPairBlocks
@@ -295,18 +296,6 @@ private theorem reindex_physTraceTransfer_fusionChainTensor_apply
   intro a _
   exact fusionChainTensor_apply_fusionChainBondEquiv H q x y a a
 
-private theorem prod_ofFn_smul_matrix {n N : ℕ}
-    (c : Fin N → ℂ) (A : Fin N → Matrix (Fin n) (Fin n) ℂ) :
-    (List.ofFn fun i => c i • A i).prod =
-      (∏ i, c i) • (List.ofFn A).prod := by
-  induction N with
-  | zero =>
-      simp
-  | succ N ih =>
-      rw [List.ofFn_succ, List.prod_cons, List.ofFn_succ, List.prod_cons,
-        Fin.prod_univ_succ, ih]
-      rw [Matrix.smul_mul, Matrix.mul_smul, smul_smul]
-
 @[simp] theorem topologicalDensityChainEquiv_symm_apply
     (H : BNTFusionTensorClause M) (N : ℕ)
     (q : TopologicalDensitySector H N) (x : TopologicalSectorBond H q)
@@ -401,7 +390,7 @@ theorem reindex_mpo_changePhysicalBasis_eq_allLabelDensity
               H.tensor (q i).1 (finProdFinEquiv (a, b)) (x i) (y i))
       exact changePhysicalBasis_verticalCopy_same H (q i) (x i) (y i)
     simp_rw [hlocal]
-    rw [prod_ofFn_smul_matrix, Matrix.trace_smul]
+    rw [Matrix.list_prod_smul_ofFn, Matrix.trace_smul]
     unfold allLabelDensity
     rw [Matrix.blockDiagonal'_apply_eq]
     simp only [Matrix.smul_apply, smul_eq_mul, topologicalSectorWeight]

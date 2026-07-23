@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.MatrixAux
 import TNLean.MPS.MPDO.PhysicalSectorProductRealization
 import TNLean.MPS.MPDO.PhysicalSectorBondTwoSite
 
@@ -113,18 +114,6 @@ private theorem list_prod_sum_ofFn {a n : Type*} [Fintype a]
       rw [Fintype.sum_prod_type] at h
       exact h
 
-private theorem list_prod_smul_ofFn {n : Type*} [Fintype n]
-    [DecidableEq n] {N : ℕ} (c : Fin N → ℂ)
-    (A : Fin N → Matrix n n ℂ) :
-    (List.ofFn fun i : Fin N ↦ c i • A i).prod =
-      (∏ i : Fin N, c i) • (List.ofFn A).prod := by
-  induction N with
-  | zero => simp
-  | succ N ih =>
-      simp only [List.ofFn_succ, List.prod_cons, ih, Fin.prod_univ_succ,
-        Matrix.smul_mul, Matrix.mul_smul, smul_smul]
-      rw [mul_comm (c 0)]
-
 private def braKetFunctionsEquiv {i a b : Type*} :
     ((i → b) × (i → a)) ≃ (i → a × b) :=
   (Equiv.prodComm _ _).trans (Equiv.arrowProdEquivProdArrow i (fun _ ↦ a) (fun _ ↦ b)).symm
@@ -143,7 +132,7 @@ private theorem evalWord_changePhysicalBasis_ofFn {e : ℕ}
   rw [list_prod_sum_ofFn]
   apply Finset.sum_congr rfl
   intro x _
-  rw [list_prod_smul_ofFn, MPOTensor.evalWord_ofFn]
+  rw [Matrix.list_prod_smul_ofFn, MPOTensor.evalWord_ofFn]
 
 /-- The length-`N` MPO transforms by the sitewise physical coordinate
 matrix.

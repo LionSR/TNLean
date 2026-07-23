@@ -30,6 +30,8 @@ Extracted from various files for reusability.
   trace form of the Frobenius norm
 - `Matrix.trace_conjTranspose_mul_self_kronecker`: Hilbert--Schmidt trace-form
   multiplicativity for Kronecker products
+- `Matrix.list_prod_smul_ofFn`: pull sitewise scalar factors out of an ordered
+  finite matrix product
 - `Matrix.piProduct_mulVec_pureTensor`: a dependent product of matrices acts
   componentwise on a pure tensor
 - `Matrix.reindex_mulVec`: matrix reindexing intertwines matrix--vector action
@@ -63,6 +65,20 @@ Extracted from various files for reusability.
 open scoped Matrix BigOperators ComplexOrder Kronecker Matrix.Norms.Frobenius MatrixOrder
 
 namespace Matrix
+
+/-! ## Ordered finite matrix products -/
+
+/-- Pull sitewise scalar factors out of an ordered finite matrix product. -/
+theorem list_prod_smul_ofFn {n : Type*} [Fintype n] [DecidableEq n]
+    {N : ℕ} (c : Fin N → ℂ) (A : Fin N → Matrix n n ℂ) :
+    (List.ofFn fun i : Fin N ↦ c i • A i).prod =
+      (∏ i : Fin N, c i) • (List.ofFn A).prod := by
+  induction N with
+  | zero => simp
+  | succ N ih =>
+      simp only [List.ofFn_succ, List.prod_cons, ih, Fin.prod_univ_succ,
+        Matrix.smul_mul, Matrix.mul_smul, smul_smul]
+      rw [mul_comm (c 0)]
 
 /-! ## Hermitian matrix action -/
 
