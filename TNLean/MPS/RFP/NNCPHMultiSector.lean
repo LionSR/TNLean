@@ -378,11 +378,8 @@ theorem rfp_hasParentHamiltonianGroundSpaceSpanning_basisDirectSum
   · letI : NeZero d := ⟨hd⟩
     letI : ∀ j : Fin P.basisCount, NeZero (P.basisDim j) :=
       fun j ↦ ⟨(hCF.basis_dim_pos j).ne'⟩
-    have hnormal : ∀ j : Fin P.basisCount, IsNormal (P.basis j) := by
-      intro j
-      exact isNormal_of_irreducible_leftCanonical_selfOverlap_tendsto_one
-        (P.basis j) (hCF.basis_irreducible j) (hCF.basis_left_canonical j)
-          (hCF.basis_normalized_self_overlap j)
+    have hnormal : ∀ j : Fin P.basisCount, IsNormal (P.basis j) :=
+      hCF.basis_isNormal
     have hOne : WordTupleSpanTop P.basis 1 :=
       wordTupleSpanTop_one_of_isTransferIdempotent_directSum P.basis
         hnormal hCF.basis_irreducible hCF.basis_left_canonical
