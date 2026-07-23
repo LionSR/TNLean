@@ -31,8 +31,6 @@ absent from `IsBNT`.
 * `IsCPSVBasisOfNormalTensors.isBNT`: a CPSV16 BNT gives an algebraic BNT;
 * `IsBNT.of_sameMPV₂Pos`: transport an algebraic BNT along positive-length MPV
   equality;
-* `IsBNTCanonicalForm.basis_isNormal`: every canonical-form basis block is
-  algebraically normal;
 * `IsBNTCanonicalForm.isBNT`: forget a canonical form to its algebraic BNT.
 
 ## References
