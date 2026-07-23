@@ -3281,10 +3281,10 @@ specialization of that Appendix~D definition.
 
 \begin{theorem}[All-chain nearest-neighbor commuting parent-Hamiltonian ground spaces imply a renormalization fixed point]\label{thm:nncph_implies_rfp}
     \lean{MPSTensor.nncph_implies_rfp}
-    \lean{Axioms.beigi_nncph_to_rfp}
     \leanok
     \uses{def:mps_transfer_idempotence, def:bnt, def:has_nncph_ground_spaces,
-        def:normal}
+        def:normal, thm:beigi_loop_product_states_span_ground_space,
+        thm:beigi_normalized_minimal_loop_tensor_rfp}
     Let $B$ be normal and in left-canonical form. Suppose that the family
     \(A_j\) is a BNT for \(B\), and that the nearest-neighbor parent
     Hamiltonian of \(B\) has the
@@ -3301,9 +3301,20 @@ specialization of that Appendix~D definition.
         \operatorname{span}\{V^{(N)}(A_j):j=1,\ldots,g\}.
     \]
     Then $B$ is a renormalization fixed point.
-    At present this reverse implication remains an unproved hypothesis,
-    representing Beigi's one-dimensional
-    nearest-neighbor commuting-Hamiltonian ground-space theorem and the
-    identification of the resulting locally orthogonal states with the BNT of
-    $B$.
+
+    This is the normal left-canonical representative case of the reverse
+    implication in Theorem~3.10 of \cite{Cirac2016MPDO_arXiv}.  The source
+    theorem is stated for a tensor in canonical form; the unrestricted
+    canonical-form statement is not asserted here.
 \end{theorem}
+
+\begin{proof}
+    \leanok
+    The commuting interaction determines Beigi's finite sector graph.  Its
+    positive loops span the parent ground space, and the normalized minimal
+    loop tensors are normal renormalization fixed points.  Since the normal
+    tensor $B$ belongs eventually to the span of their periodic matrix product
+    vectors, normal-tensor orthogonality identifies $B$, up to a unit phase and
+    an invertible virtual change of basis, with one of these loop tensors.
+    Transfer idempotence is preserved by these transformations.
+\end{proof}
