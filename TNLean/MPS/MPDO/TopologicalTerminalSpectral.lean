@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.EigenvectorProjection
 import TNLean.MPS.MPDO.TopologicalDensityDecomposition
 
 /-!
@@ -68,7 +69,7 @@ Source: arXiv:1606.00608, lines 1009--1012. -/
 def terminalEigenProjection (H : BNTFusionTensorClause M) (hM : IsMPDO M)
     (s : H.TerminalSpectralIndex) :
     Matrix (Fin (H.bondDim s.1)) (Fin (H.bondDim s.1)) ℂ :=
-  (H.physTraceTransfer_verticalBNTMPO_posSemidef hM s.1).isHermitian.eigenProjection s.2
+  (H.physTraceTransfer_verticalBNTMPO_posSemidef hM s.1).isHermitian.eigenvectorProjection s.2
 
 /-- Terminal eigenvalues are nonnegative.
 
@@ -85,7 +86,7 @@ theorem terminalEigenProjection_isOrthogonalProjection
     (H : BNTFusionTensorClause M) (hM : IsMPDO M)
     (s : H.TerminalSpectralIndex) :
     IsOrthogonalProjection (H.terminalEigenProjection hM s) :=
-  Matrix.IsHermitian.eigenProjection_isOrthogonalProjection
+  Matrix.IsHermitian.isOrthogonalProjection_eigenvectorProjection
     (H.physTraceTransfer_verticalBNTMPO_posSemidef hM s.1).isHermitian s.2
 
 /-- Distinct spectral components of one terminal matrix are orthogonal.
@@ -96,7 +97,7 @@ theorem terminalEigenProjection_mul_eq_zero (H : BNTFusionTensorClause M)
     {i j : Fin (H.bondDim γ)} (hij : i ≠ j) :
     H.terminalEigenProjection hM ⟨γ, i⟩ *
         H.terminalEigenProjection hM ⟨γ, j⟩ = 0 :=
-  Matrix.IsHermitian.eigenProjection_mul_eq_zero
+  Matrix.IsHermitian.eigenvectorProjection_mul_eq_zero_of_ne
     (H.physTraceTransfer_verticalBNTMPO_posSemidef hM γ).isHermitian hij
 
 /-- Each terminal bond matrix is the nonnegative weighted sum of its rank-one
@@ -111,8 +112,8 @@ theorem terminalMatrix_eq_sum_eigenvalue_smul_projection
         (H.terminalEigenvalue hM ⟨γ, k⟩ : ℂ) •
           H.terminalEigenProjection hM ⟨γ, k⟩ := by
   simpa [terminalMatrix, terminalEigenvalue, terminalEigenProjection] using
-    (Matrix.IsHermitian.sum_eigenvalues_smul_eigenProjection
-      (H.physTraceTransfer_verticalBNTMPO_posSemidef hM γ).isHermitian).symm
+    (Matrix.IsHermitian.eq_sum_eigenvalues_smul_eigenvectorProjection
+      (H.physTraceTransfer_verticalBNTMPO_posSemidef hM γ).isHermitian)
 
 /-- The terminal family supported at one label and one spectral index.
 
