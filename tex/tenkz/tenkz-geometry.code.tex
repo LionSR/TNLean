@@ -76,7 +76,7 @@
       { \msg_error:nnn {tenkz}{geom-unknown-frame} {#1} }
     \str_if_eq:VnF \l__tenkz_geom_tmp_tl {#2}
       {
-        \msg_error:nnnnn {tenkz}{geom-frame-kind} {#1}
+        \msg_error:nnxxxx {tenkz}{geom-frame-kind} {#1}
           { \l__tenkz_geom_tmp_tl } {#3} {#2}
       }
   }
@@ -264,50 +264,57 @@
 
 % ---------- silhouettes as support functions --------------------------------
 % Support of a skin rotated by theta, queried along direction d, in pitch
-% units.  Families: circle (hx = radius), rect (half-extents), roundrect
-% (rect shrunk by the house corner radius, then re-inflated), triangle
-% (isoceles, apex east: vertex max is exact for polygons).
-\cs_new:Npn \__tenkz_geom_support:nnnnn #1#2#3#4#5
+% units.  Arguments are family, half-extents, corner radius, theta, and d.
+% A roundrect caller supplies the radius of the live rendered skin, normalized
+% to pitch units; the other families ignore that slot.  Families: circle
+% (hx = radius), rect (half-extents), roundrect (rect shrunk by its actual
+% corner radius, then re-inflated), triangle (isoceles, apex east: vertex max
+% is exact for polygons).
+\cs_new:Npn \__tenkz_geom_support:nnnnnn #1#2#3#4#5#6
   {
     \str_case:nnF {#1}
       {
         {circle} { (#2) }
         {rect}
-          { abs( (#2) * cosd((#5)-(#4)) ) + abs( (#3) * sind((#5)-(#4)) ) }
+          { abs( (#2) * cosd((#6)-(#5)) ) + abs( (#3) * sind((#6)-(#5)) ) }
         {roundrect}
           {
-            abs( ( (#2) - \__tenkz_geom_rr:nn{#2}{#3} ) * cosd((#5)-(#4)) )
-            + abs( ( (#3) - \__tenkz_geom_rr:nn{#2}{#3} ) * sind((#5)-(#4)) )
-            + \__tenkz_geom_rr:nn{#2}{#3}
+            abs( ( (#2) - \__tenkz_geom_rr:nnn{#4}{#2}{#3} )
+              * cosd((#6)-(#5)) )
+            + abs( ( (#3) - \__tenkz_geom_rr:nnn{#4}{#2}{#3} )
+              * sind((#6)-(#5)) )
+            + \__tenkz_geom_rr:nnn{#4}{#2}{#3}
           }
         {triangle}
           {
             max(
-              (#2) * cosd((#5)-(#4)) ,
-              - (#2) * cosd((#5)-(#4)) + (#3) * sind((#5)-(#4)) ,
-              - (#2) * cosd((#5)-(#4)) - (#3) * sind((#5)-(#4)) )
+              (#2) * cosd((#6)-(#5)) ,
+              - (#2) * cosd((#6)-(#5)) + (#3) * sind((#6)-(#5)) ,
+              - (#2) * cosd((#6)-(#5)) - (#3) * sind((#6)-(#5)) )
           }
       }
       { \msg_expandable_error:nnn {tenkz}{geom-family} {#1} 0 }
   }
-\cs_new:Npn \__tenkz_geom_rr:nn #1#2
-  { min( \__tenkz_metric_ratio:n {corner} , (#1) , (#2) ) }
+\cs_new:Npn \__tenkz_geom_rr:nnn #1#2#3
+  { min( (#1) , (#2) , (#3) ) }
 
-% fold max-support over a set of {family}{hx}{hy}{theta}{cx}{cy} records:
+% fold max-support over {family}{hx}{hy}{radius}{theta}{cx}{cy} records:
 % each contributes its centre's reach plus its shape's support
 \cs_new_protected:Npn \__tenkz_geom_support_max:nnN #1#2#3
   {
     \tl_set:Nn #3 { -10000 }
     \seq_map_inline:cn {#1}
-      { \__tenkz_geom_support_max_one:nnnnnnnN ##1 {#2} #3 }
+      { \__tenkz_geom_support_max_one:nnnnnnnnN ##1 {#2} #3 }
   }
-\cs_new_protected:Npn \__tenkz_geom_support_max_one:nnnnnnnN #1#2#3#4#5#6#7#8
+\cs_new_protected:Npn \__tenkz_geom_support_max_one:nnnnnnnnN
+    #1#2#3#4#5#6#7#8#9
   {
-    \tl_set:Ne #8
+    \tl_set:Ne #9
       { \fp_eval:n
-          { max( #8 ,
-                 (#5) * cosd(#7) + (#6) * sind(#7)
-                 + \__tenkz_geom_support:nnnnn {#1}{#2}{#3}{#4}{#7} ) } }
+          { max( #9 ,
+                 (#6) * cosd(#8) + (#7) * sind(#8)
+                 + \__tenkz_geom_support:nnnnnn
+                     {#1}{#2}{#3}{#4}{#5}{#8} ) } }
   }
 
 % ---------- probes -----------------------------------------------------------
