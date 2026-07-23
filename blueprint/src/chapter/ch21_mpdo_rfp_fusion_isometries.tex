@@ -2030,18 +2030,20 @@ separate step.
     reconstruction of the retained density operator.
 \end{proof}
 
-\begin{theorem}[Source Gibbs statement at every positive length]%
-    \label{thm:mpdo_topological_gibbs_all_positive_lengths}
-    \uses{thm:mpdo_topological_gibbs_at_least_two}
-    Under the hypotheses of
-    Theorem~\ref{thm:mpdo_topological_gibbs_at_least_two}, the same conclusion
-    holds for every $L>0$, including $L=1$.
+\begin{remark}[Printed length-one domain boundary]%
+    \label{rem:mpdo_topological_gibbs_length_one_boundary}
+    Definition~4.8 of \cite{Cirac2016MPDO_arXiv} lets a local operator act on
+    the first two spins and translates it around the periodic chain.  Thus its
+    construction has domain $L\geq2$.  The periodic identification $L+1=1$
+    identifies site labels, but supplies neither a map from two-site operators
+    to one-site operators nor a multiplicity for the coincident edge.
 
-    The cited passage does not specify how the two-site local term is
-    interpreted on a one-site periodic chain.  Consequently this unrestricted
-    source statement is not yet marked complete; see
+    Theorem~4.15 is printed without an explicit lower bound on $L$, but its
+    $L=1$ instance is therefore undefined without an author or erratum
+    convention.  The preceding theorem covers the complete domain of
+    Definition~4.8; no length-one theorem is asserted.  See
     \path{docs/paper-gaps/cpsv16_topological_gibbs_length_one.tex}.
-\end{theorem}
+\end{remark}
 
 \begin{definition}[Full-support specialization of one fusion layer]%
     \label{def:mpdo_full_support_virtual_projector_one_fusion}
