@@ -65,8 +65,6 @@ theorem isSAL_of_isSourceZCL
     apply isSAL_of_quantumMarkovDecomposition_tripartite_m
       F.sectorCoordinateTensor hCoordinateMPDO hCoordinateTrace
     intro N m hm1 hmN
-    dsimp only
-    have hmN' : m ≤ N := hmN.trans (Nat.div_le_self N 2)
     let A := m - 1
     let C := N - m - 1
     have htotal : A + C + 2 = N := by
