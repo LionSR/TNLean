@@ -63,6 +63,19 @@ abstracted — record why, so it is not re-proposed).
   are 30 and 44 declaration/proof lines. Including the dependency-neutral module split,
   the refactor removes 364 source lines overall (865 additions, 1229 deletions).
 
+### list_ofFn_products — promoted
+- **Pattern:** induction on the length to distribute an ordered `List.ofFn` product over
+  finite sums, or to extract scalar coefficients from such a product.
+- **Seen:** the sum identity occurred in `SitewisePhysicalMatrix.lean`,
+  `PhysicalSectorProductTransport.lean`, `CornerContraction.lean`,
+  `MPS/Symmetry/Defs.lean`, and `MPS/Periodic/Symmetry/Theorem41Forward.lean`;
+  the scalar identity also occurred in `TopologicalDensityDecomposition.lean`.
+- **Abstraction:** `List.prod_ofFn_sum` and `List.prod_ofFn_smul` in
+  `TNLean/Algebra/ListProduct.lean`.
+- **Notes:** the common statements hold over arbitrary semirings, and each application
+  imports the algebra module directly.  The two older symmetry proofs now pass through
+  `evalWord_ofFn_eq_prod` and these shared identities.
+
 ---
 
 ## Completed refactors
