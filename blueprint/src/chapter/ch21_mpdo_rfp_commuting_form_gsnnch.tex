@@ -1172,6 +1172,34 @@
     sum to one.
 \end{proof}
 
+\begin{theorem}[Physical-sector factorization and ZCL imply SAL]
+    \label{thm:mpdo_physical_sector_factorization_zcl_sal}
+    \lean{MPOTensor.PhysicalSectorFactorization.isSAL_of_isSourceZCL}
+    \leanok
+    \uses{thm:mpdo_cyclic_active_markov_all_cuts,
+      thm:mpdo_all_cut_markov_implies_sal}
+    Let $\mathcal K$ have positive bond dimension and be injective, and let
+    $F$ be a physical-sector factorization of $\mathcal K$.  Suppose every
+    neighboring operator $\eta^F_{q,h}$ is positive semidefinite.  If the
+    physical-trace transfer of $\mathcal K$ has source zero correlation
+    length, then $\mathcal K$ saturates the area law.
+
+    % **Scope restriction (physical-sector factorization):** The theorem
+    % assumes the factorization F and positivity of every neighboring
+    % operator.  CPSV16 Proposition 4to2, lines 1597--1619, starts instead
+    % from a translation-invariant commuting bond.  The missing bridge is
+    % recorded in docs/paper-gaps/cpsv16_commuting_form_to_sal.tex.
+\end{theorem}
+
+\begin{proof}\leanok
+    Positivity of the neighboring operators makes every nonempty
+    sector-coordinate chain operator positive.  Source zero correlation
+    length makes its trace nonzero.  Apply the preceding theorem with
+    $A=m-1$ and $C=N-m-1$ at every admissible cut, then use the all-cut
+    Markov criterion.  Finally transport saturation through the physical
+    isometry of $F$.
+\end{proof}
+
 \begin{theorem}[A translation-invariant commuting bond and ZCL imply SAL]
     \label{thm:mpdo_translation_invariant_commuting_form_zcl_sal}
     \notready

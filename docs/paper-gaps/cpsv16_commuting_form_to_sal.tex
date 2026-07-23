@@ -453,9 +453,12 @@ left and right path factors, and collecting their trace products gives
 \leanid{MPOTensor.PhysicalSectorFactorization.%
 exists_hayashiMarkovDecomposition_cyclicActiveCut_of_isSourceZCL}.  Thus the
 Markov decomposition for arbitrary left and right lengths is available in the
-physical-sector coordinates.  Substitution of the admissible entropy-cut
-lengths and transport to the original basis remain part of issue \#4175.  The
-older conditional theorem
+physical-sector coordinates.  Substituting the admissible entropy-cut lengths,
+applying the all-cut Markov criterion, and transporting through the physical
+isometry gives
+\leanid{MPOTensor.PhysicalSectorFactorization.isSAL_of_isSourceZCL}.
+The cut calculation and basis transport are therefore complete under an
+explicit positive physical-sector factorization.  The older conditional theorem
 \leanid{Matrix.eta_fourth_region_trace_formula} remains a coordinate model for
 a one-step rank-one coefficient; it is not used to identify $T_C$ with
 $T_C^2$.
@@ -467,13 +470,13 @@ Consequently the source implication
   \Longrightarrow \text{SAL}
 \]
 is not yet formalized and must not carry a \texttt{\string\leanok} marker.
-The remaining work is to transport the all-cut witnesses from the
-physical-sector coordinates back to the original physical basis and apply the
-final entropy-theoretic step: quantum Markov decompositions at all admissible
-cuts imply SAL.\footnote{This is
-\leanid{MPOTensor.isSAL_of_quantumMarkovDecomposition_tripartite_m}.} Its
-direct-sum hypothesis is a marked scope restriction, not an additional
-hypothesis on the source proposition.
+The remaining work is structural: construct a positive
+\leanid{MPOTensor.PhysicalSectorFactorization} non-circularly from the
+source-side \leanid{MPOTensor.EtaLocalStructureData}, and supply the
+normality and blocking reduction needed to reach that datum from the printed
+commuting-bond hypotheses.  The explicit factorization and positivity
+assumptions of the proved corollary are marked scope restrictions, not
+additional hypotheses on the source proposition.
 
 \paragraph{Local fix (the later orthogonal-sector statement).}
 The proposition labelled \emph{prop4to2} at source lines~1801--1808 states
@@ -512,10 +515,13 @@ direct-sum implication.  It neither derives the sectorwise SAL premise nor
 uses ZCL.
 
 \paragraph{Verdict.}
-Proposition~\emph{4to2} is classified as a transport gap.  The fourth-region
-factorization and the Markov decomposition at every admissible cut have been
-proved in physical-sector coordinates.  Transport to the original physical
-basis and the final application of the all-cut entropy theorem remain.  The later
+Proposition~\emph{4to2} is classified as a structural-bridge gap.  The
+fourth-region factorization, the Markov decomposition at every admissible cut,
+the all-cut entropy argument, and transport to the original physical basis are
+complete under an explicit positive physical-sector factorization.  The
+non-circular construction of that factorization from the source-side
+$\eta$-local structure, together with the normality and blocking reduction,
+remains.  The later
 orthogonal direct-sum implication is likewise formalized only as a
 scope-restricted theorem assuming sectorwise SAL.  It neither supplies that
 sectorwise premise nor proves the printed assertion that the GSNNCH form alone
@@ -526,10 +532,12 @@ implies SAL.
 The gap can be removed in the following stages.
 
 \begin{enumerate}
-\item Transport the proved physical-sector all-cut Markov witnesses through
-the physical isometry to the original physical basis.
-\item Apply the all-cut Markov theorem.  Only then may the source proposition
-receive a formal declaration and a \texttt{\string\leanok} marker.
+\item Construct a positive physical-sector factorization non-circularly from
+the source-side $\eta$-local structure.
+\item Prove the normality and blocking reduction from the printed
+translation-invariant commuting-bond hypotheses to that $\eta$-local datum.
+Only then may the source proposition receive a formal declaration and a
+\texttt{\string\leanok} marker.
 \end{enumerate}
 
 \bibliographystyle{alpha}
