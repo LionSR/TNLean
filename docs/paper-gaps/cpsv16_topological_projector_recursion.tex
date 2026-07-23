@@ -107,6 +107,25 @@ in \path{Papers/1606.00608/MPDO_O_L_A_.png} and
 \path{Papers/1606.00608/MPDO_Structure.png}.  Equation
 \eqref{eq:one-layer-terminal-fusion} restores the latter contraction.
 
+For a matrix product density operator, each terminal matrix in this
+orientation is now proved positive semidefinite:
+\begin{equation}
+  \operatorname{tr}(M_\gamma)\geq 0.
+  \label{eq:formalized-terminal-positivity}
+\end{equation}
+Indeed, at chain length one the retained vertical congruence preserves
+positivity.  Restricting to one label $\gamma$ and one diagonal coordinate
+$q$ of its positive multiplicity matrix gives the principal block
+\begin{equation}
+  (\mu_\gamma)_{q,q}\operatorname{tr}(M_\gamma)\geq0.
+\end{equation}
+Since $(\mu_\gamma)_{q,q}>0$, division by this scalar proves
+\eqref{eq:formalized-terminal-positivity}.  This is formalized by
+\leanid{MPOTensor.BNTFusionTensorClause.physTraceTransfer_verticalBNTMPO_posSemidef}.
+It supplies the positivity needed for the spectral decomposition invoked at
+lines~1010--1016, but does not assert that the terminal matrices are
+projections.
+
 The pairwise construction has now been iterated along an arbitrary finite
 chain with a fixed initial label.  For total chain length $N\geq1$, the
 appended-label list has length $N-1$; the symbols $Q_N$ and $W_N$ below refer
@@ -224,14 +243,15 @@ The all-label density identity
 \eqref{eq:source-commutator} are now formalized.  A faithful proof of the
 remainder still requires:
 \begin{enumerate}
-  \item the terminal spectral decomposition and its compatibility with the
-    recursive sectors;
+  \item the spectral refinement of the positive terminal matrices into
+    orthogonal projections and its compatibility with the recursive sectors;
   \item the construction of the commuting nearest-neighbor Hamiltonian and
     the projections in \eqref{eq:source-gibbs-decomposition}.
 \end{enumerate}
-The formalized commutator must not be cited as the terminal spectral
-refinement or the commuting Gibbs theorem of lines~1003--1016 until these
-remaining steps are proved.
+The positivity statement
+\eqref{eq:formalized-terminal-positivity} and the formalized commutator must
+not be cited as the terminal spectral refinement or the commuting Gibbs
+theorem of lines~1003--1016 until these remaining steps are proved.
 
 \bibliographystyle{alpha}
 \bibliography{references}
