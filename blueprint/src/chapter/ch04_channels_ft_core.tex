@@ -12,6 +12,7 @@
     We use the Loewner order on matrices: $X \le Y$ means
     $Y - X \ge 0$.
 \end{remark}
+
 \begin{definition}[Completely positive map]\label{def:cp_map}
     \lean{IsCPMap}
     \leanok
@@ -19,9 +20,11 @@
     if it admits a \emph{Kraus representation}: there exist operators
     $\{K_i\}_{i=0}^{r-1}$ with $K_i \in \MN{D}$ such that, for every
     $X \in \MN{D}$,
-    \[
-        E(X) = \sum_{i=0}^{r-1} K_i X K_i^\dagger.
-    \]
+    \begin{align}
+        E(X)
+        &= \sum_{i=0}^{r-1} K_i X K_i^\dagger.
+        \label{eq:channel_kraus_representation}
+    \end{align}
     By Choi's theorem, this is equivalent
     to $E \otimes \id_n$ being positive for all~$n$.
 \end{definition}
@@ -83,7 +86,7 @@
     \uses{def:peripheral_spectrum, def:peripheral_eigenvalues}
     The spectral-radius convention of
     Definition~\ref{def:peripheral_spectrum} is the usual bounded-operator
-    notion. For channels the spectral radius is $1$, so the channel arguments
+    notion. For channels the spectral radius is~$1$, so the channel arguments
     below use the unit-circle set of Definition~\ref{def:peripheral_eigenvalues}.
 \end{remark}
 

@@ -38,9 +38,11 @@
     \lean{Matrix.reductionMap}
     \leanok
     The reduction map on $\MN{D}$, for $k\in\N$, is
-    \[
-        T_k(X)=\tr(X)\Id-k^{-1}X.
-    \]
+    \begin{align}
+        T_k(X)
+        &=\tr(X)\Id-k^{-1}X.
+        \label{eq:channel_reduction_map}
+    \end{align}
 \end{definition}
 
 \begin{theorem}[The first reduction map is positive]
@@ -52,12 +54,10 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    If $X\ge 0$, diagonalize $X$.  Its eigenvalues
-    $\lambda_1,\ldots,\lambda_D$ are nonnegative, and for each $j$,
-    \[
-        \lambda_j\le \sum_{i=1}^D \lambda_i=\tr(X).
-    \]
-    Therefore all eigenvalues of $\tr(X)\Id-X$ are nonnegative.
+    If $X\ge 0$, diagonalize $X$. Its eigenvalues
+    $\lambda_1,\ldots,\lambda_D$ are non-negative, and each satisfies
+    $\lambda_j\le \sum_{i=1}^D\lambda_i=\tr(X)$. Therefore all eigenvalues
+    of $\tr(X)\Id-X$ are non-negative.
 \end{proof}
 
 \begin{theorem}[Self-duality of the reduction map]
@@ -66,17 +66,17 @@
     \leanok
     \uses{def:reduction_map}
     The reduction map is self-dual for the trace pairing:
-    \[
-        \tr(T_k(\rho)X)=\tr(\rho T_k(X)).
-    \]
+    \begin{align}
+        \tr(T_k(\rho)X)
+        &=\tr(\rho T_k(X)).
+        \label{eq:channel_reduction_self_dual}
+    \end{align}
 \end{theorem}
 
 \begin{proof}\leanok
-    Expand both sides using
-    $T_k(Y)=\tr(Y)\Id-k^{-1}Y$ and bilinearity of the trace.  Both sides are
-    \[
-        \tr(\rho)\tr(X)-k^{-1}\tr(\rho X).
-    \]
+    Expanding both sides of (\ref{eq:channel_reduction_self_dual}) using
+    (\ref{eq:channel_reduction_map}) and bilinearity of the trace gives
+    $\tr(\rho)\tr(X)-k^{-1}\tr(\rho X)$ in each case.
 \end{proof}
 
 \begin{theorem}[Choi matrix of the reduction map]
@@ -84,17 +84,18 @@
     \lean{ChoiJamiolkowski.choiMatrix_reductionMap}
     \leanok
     \uses{def:reduction_map}
-    For $D\ge 1$, the Choi matrix of
-    $T_k(X)=\tr(X)\Id-k^{-1}X$ is
-    \[
-        \tau(T_k)=D^{-1}\Id-k^{-1}\ket{\Omega}\bra{\Omega}.
-    \]
+    For $D\ge 1$, the Choi matrix of the reduction map is
+    \begin{align}
+        \tau(T_k)
+        &=D^{-1}\Id-k^{-1}\ket{\Omega}\bra{\Omega}.
+        \label{eq:channel_reduction_choi}
+    \end{align}
 \end{theorem}
 
 \begin{proof}\leanok
     The trace term sends the $(a,b)$ slice of
     $\ket{\Omega}\bra{\Omega}$ to its trace times the identity, giving
-    the contribution $D^{-1}\Id$.  The second term is the Choi matrix of
+    the contribution $D^{-1}\Id$. The second term is the Choi matrix of
     $k^{-1}$ times the identity map, namely
     $k^{-1}\ket{\Omega}\bra{\Omega}$.
 \end{proof}
@@ -107,23 +108,19 @@
     \leanok
     \uses{def:cp_map, def:positive_map, def:trace_preserving, def:channel}
     For every $X\in\MN{D}$, the conjugation filter
-    \[
-        \rho\longmapsto X\rho X^\dagger
-    \]
-    is completely positive, hence positive.  Therefore, if
-    $T:\MN{D}\to\MN{D}$ is positive, then
-    $\rho\mapsto T(X\rho X^\dagger)$ is positive.  If in addition
+    $\rho\mapsto X\rho X^\dagger$ is completely positive, hence positive.
+    Therefore, if $T:\MN{D}\to\MN{D}$ is positive, then
+    $\rho\mapsto T(X\rho X^\dagger)$ is positive. If in addition
     $X^\dagger X=\Id$, then the conjugation filter is trace-preserving and
     hence is a quantum channel.
 \end{theorem}
 
 \begin{proof}\leanok
-    Complete positivity follows from the single Kraus operator $X$.
-    Positivity follows immediately.  If $X^\dagger X=\Id$, cyclicity of trace
-    gives
-    \[
-        \tr(X\rho X^\dagger)=\tr(X^\dagger X\rho)=\tr(\rho).
-    \]
+    Complete positivity follows from the Kraus representation
+    (\ref{eq:channel_kraus_representation}) with the single Kraus operator
+    $X$. Positivity follows immediately. If $X^\dagger X=\Id$, cyclicity of
+    the trace gives
+    $\tr(X\rho X^\dagger)=\tr(X^\dagger X\rho)=\tr(\rho)$.
 \end{proof}
 
 \begin{definition}[Positive map between matrix algebras]
@@ -131,7 +128,7 @@
     A linear map $T : \MN{D} \to \MN{D'}$ between matrix algebras of
     possibly different dimensions is \emph{positive} if $T(X) \ge 0$
     whenever $X \ge 0$, where $X \ge 0$ means that $X$ is positive
-    semidefinite.  For $D' = D$ this is the notion of
+    semidefinite. For $D' = D$ this is the notion of
     Definition~\ref{def:positive_map}.
 \end{definition}
 
@@ -139,7 +136,7 @@
     \label{def:trace_preserving_rectangular}
     A linear map $T : \MN{D} \to \MN{D'}$ between matrix algebras of
     possibly different dimensions is \emph{trace-preserving} if
-    $\tr(T(X)) = \tr(X)$ for all $X$.  For $D' = D$ this is the notion of
+    $\tr(T(X)) = \tr(X)$ for all $X$. For $D' = D$ this is the notion of
     Definition~\ref{def:trace_preserving}.
 \end{definition}
 
@@ -149,16 +146,21 @@
     \leanok
     \uses{def:trace_preserving_rectangular, def:trace_pairing_adjoint}
     Let $T:\MN{D}\to\MN{D'}$ be a linear map and let $X\in\MN{D}$ satisfy
-    $X^\dagger T^*(\Id)X=\Id$.  Then for every $\rho\in\MN{D}$,
-    \[
-        \tr\!\bigl(T(X\rho X^\dagger)\bigr) = \tr(\rho).
-    \]
+    $X^\dagger T^*(\Id)X=\Id$. Then, for every $\rho\in\MN{D}$,
+    \begin{align}
+        \tr\!(T(X\rho X^\dagger))
+        &=\tr(\rho).
+    \end{align}
 \end{lemma}
 
 \begin{proof}\leanok
-    Expanding with the trace-pairing adjoint,
-    $\tr(T(X\rho X^\dagger))=\tr(X\rho X^\dagger\,T^*(\Id))
-    =\tr(\rho\,X^\dagger T^*(\Id)X)=\tr(\rho)$.
+    Expanding with the trace-pairing adjoint gives
+    \begin{align}
+        \tr\!(T(X\rho X^\dagger))
+        &=\tr\!(X\rho X^\dagger T^*(\Id))
+        =\tr\!(\rho X^\dagger T^*(\Id)X)
+        =\tr(\rho).
+    \end{align}
 \end{proof}
 
 \begin{theorem}[Filtered trace-normalization criterion]
@@ -170,31 +172,25 @@
         thm:conjugation_filters_preserve_positivity}
     Let $T:\MN{D}\to\MN{D'}$ be a positive map between matrix algebras of
     possibly different dimensions, and let $X\in\MN{D}$ satisfy
-    \[
-        X^\dagger T^*(\Id)X=\Id,
-    \]
-    where $T^*$ is the trace-pairing adjoint.  Then
-    \[
-        \rho\longmapsto T(X\rho X^\dagger)
-    \]
-    is positive and trace-preserving.
+    $X^\dagger T^*(\Id)X=\Id$, where $T^*$ is the trace-pairing adjoint.
+    Then $\rho\mapsto T(X\rho X^\dagger)$ is positive and trace-preserving.
 
     This is the algebraic trace-normalization step in the proof of
     \cite[Chapter~3, Lemma ``Making positive maps trace preserving'']
-    {Wolf2012Quantum}.  The inverse-square-root choice is recorded in the
+    {Wolf2012Quantum}. The inverse-square-root choice is recorded in the
     next theorem.
 \end{theorem}
 
 \begin{proof}\leanok
     Positivity follows because $X\rho X^\dagger$ is positive whenever
-    $\rho$ is positive, and $T$ is positive.  For trace preservation, use the
-    trace-pairing adjoint identity and cyclicity of trace:
-    \[
-        \tr(T(X\rho X^\dagger))
-        =\tr(T^*(\Id)X\rho X^\dagger)
-        =\tr(X^\dagger T^*(\Id)X\rho)
+    $\rho$ is positive, and $T$ is positive. For trace preservation, the
+    trace-pairing adjoint identity and cyclicity of the trace give
+    \begin{align}
+        \tr\!(T(X\rho X^\dagger))
+        &=\tr\!(T^*(\Id)X\rho X^\dagger)
+        =\tr\!(X^\dagger T^*(\Id)X\rho)
         =\tr(\rho).
-    \]
+    \end{align}
 \end{proof}
 
 \begin{lemma}[Normalizing conjugation by inverse square root]
@@ -202,22 +198,17 @@
     \lean{Matrix.conjTranspose_inv_sqrt_mul_self_mul_inv_sqrt_eq_one_of_posDef}
     \leanok
     \uses{}
-    Let $A\in\MN{D}$ be positive definite and set $S=A^{1/2}$.  Then
-    \[
-        (S^{-1})^\dagger A S^{-1}=\Id .
-    \]
+    Let $A\in\MN{D}$ be positive definite and set $S=A^{1/2}$. Then
+    \begin{align}
+        (S^{-1})^\dagger A S^{-1}
+        &=\Id.
+    \end{align}
 \end{lemma}
 
 \begin{proof}\leanok
-    Since $A$ is positive definite, $S$ is invertible and self-adjoint.
-    Moreover $S^2=A$.  Therefore
-    \[
-        (S^{-1})^\dagger A S^{-1}
-        =
-        S^{-1}S^2S^{-1}
-        =
-        \Id .
-    \]
+    Since $A$ is positive definite, $S$ is invertible and self-adjoint, and
+    $S^2=A$. Therefore
+    $(S^{-1})^\dagger A S^{-1}=S^{-1}S^2S^{-1}=\Id$.
 \end{proof}
 
 \begin{lemma}[Inverse square root of a positive definite matrix is invertible]
@@ -242,28 +233,18 @@
         def:trace_pairing_adjoint,
         thm:filtered_trace_normalization_criterion, lem:conj_inv_sqrt_normalizes}
     Let $T:\MN{D}\to\MN{D'}$ be a positive map such that $T^*(\Id)$ is positive
-    definite.  Put
-    \[
-        X=(T^*(\Id))^{-1/2}.
-    \]
-    Then
-    \[
-        \rho\longmapsto T(X\rho X^\dagger)
-    \]
-    is positive and trace-preserving.
+    definite. Put $X=(T^*(\Id))^{-1/2}$. Then
+    $\rho\mapsto T(X\rho X^\dagger)$ is positive and trace-preserving.
 \end{theorem}
 
 \begin{proof}\leanok
-    Let $S=(T^*(\Id))^{1/2}$.  Since $T^*(\Id)$ is positive definite, $S$ is
-    invertible and self-adjoint, and $S^2=T^*(\Id)$.  For $X=S^{-1}$,
-    \[
+    Let $S=(T^*(\Id))^{1/2}$. Since $T^*(\Id)$ is positive definite, $S$ is
+    invertible and self-adjoint, and $S^2=T^*(\Id)$. For $X=S^{-1}$,
+    \begin{align}
         X^\dagger T^*(\Id)X
-        =
-        S^{-1}S^2S^{-1}
-        =
-        \Id .
-    \]
-    The preceding trace-normalization criterion applies.
+        &=S^{-1}S^2S^{-1}=\Id.
+    \end{align}
+    Theorem~\ref{thm:filtered_trace_normalization_criterion} applies.
 \end{proof}
 
 \begin{lemma}[Making positive maps trace preserving]
@@ -275,12 +256,8 @@
         thm:trace_normalization_inverse_square_root,
         lem:pos_def_inv_sqrt_invertible}
     Let $T:\MN{D}\to\MN{D'}$ be a positive map for which $T^*(\Id)$ is
-    positive definite.  Then there exists an invertible $X\in\MN{D}$ such
-    that
-    \[
-        \rho\longmapsto T(X\rho X^\dagger)
-    \]
-    is a trace-preserving positive map
+    positive definite. Then there exists an invertible $X\in\MN{D}$ such
+    that $\rho\mapsto T(X\rho X^\dagger)$ is a trace-preserving positive map
     \cite[Chapter~3, Lemma ``Making positive maps trace preserving'']
     {Wolf2012Quantum}.
 \end{lemma}
@@ -288,7 +265,8 @@
 \begin{proof}\leanok
     Take $X=(T^*(\Id))^{-1/2}$, which is invertible by
     Lemma~\ref{lem:pos_def_inv_sqrt_invertible} because $T^*(\Id)$ is
-    positive definite.  By the preceding theorem,
+    positive definite. By
+    Theorem~\ref{thm:trace_normalization_inverse_square_root},
     $\rho\mapsto T(X\rho X^\dagger)$ is positive and trace-preserving.
 \end{proof}
 
@@ -297,15 +275,17 @@
     \lean{Matrix.PosSemidef.trace_smul_one_sub_self_posSemidef}
     \leanok
     Let $D\geq 1$ and let $P\in\MN{D}$ be positive semidefinite. Then
-    \[
-        P\preceq \tr(P)\Id.
-    \]
+    \begin{align}
+        P
+        &\preceq \tr(P)\Id.
+        \label{eq:channel_psd_trace_bound}
+    \end{align}
 \end{theorem}
 
 \begin{proof}\leanok
-    Diagonalize $P$ with nonnegative eigenvalues $\lambda_1,\ldots,\lambda_D$.
-    Each eigenvalue is bounded above by their sum $\tr(P)$, so every eigenvalue
-    of $\tr(P)\Id-P$ is nonnegative.
+    Diagonalize $P$ with non-negative eigenvalues
+    $\lambda_1,\ldots,\lambda_D$. Each is at most their sum $\tr(P)$, so
+    every eigenvalue of $\tr(P)\Id-P$ is non-negative.
 \end{proof}
 
 \begin{theorem}[Forward Lorentz-cone trace inequality]
@@ -313,34 +293,34 @@
     \lean{Matrix.PosSemidef.trace_sq_re_le_trace_re_sq}
     \leanok
     If $A \in \MN{D}$ is positive semidefinite, then
-    \[
-        \re\tr(A^2) \le \left(\re\tr(A)\right)^2 .
-    \]
+    \begin{align}
+        \re\tr(A^2)
+        &\le \left(\re\tr(A)\right)^2.
+        \label{eq:channel_lorentz_forward}
+    \end{align}
 \end{theorem}
 
 \begin{proof}\leanok
-    Diagonalize $A$ with nonnegative eigenvalues $\lambda_i$. Then
-    $\tr(A^2)=\sum_i \lambda_i^2$ and $\tr(A)=\sum_i \lambda_i$, so the
-    desired inequality is
-    \[
-        \sum_i \lambda_i^2 \le \left(\sum_i \lambda_i\right)^2 ,
-    \]
-    which follows because all mixed products are nonnegative.
+    Diagonalize $A$ with non-negative eigenvalues $\lambda_i$. Then
+    $\tr(A^2)=\sum_i\lambda_i^2$ and $\tr(A)=\sum_i\lambda_i$, so the desired
+    inequality is $\sum_i\lambda_i^2\le(\sum_i\lambda_i)^2$, which follows
+    because all mixed products are non-negative.
 \end{proof}
 
-\begin{theorem}[Trace-nonnegative Lorentz-cone converse]
+\begin{theorem}[Trace-non-negative Lorentz-cone converse]
     \label{thm:trace_nonnegative_lorentz_cone_converse}
     \lean{Matrix.IsHermitian.posSemidef_of_trace_re_nonneg_of_card_sub_one_mul_trace_sq_re_le}
     \leanok
     Let $A\in\MN{D}$ be Hermitian and suppose that
     $\re\tr(A)\ge0$. If
-    \[
+    \begin{align}
         (D-1)\re\tr(A^2)
-        \le \left(\re\tr(A)\right)^2 ,
-    \]
+        &\le \left(\re\tr(A)\right)^2,
+        \label{eq:channel_lorentz_converse}
+    \end{align}
     then $A$ is positive semidefinite.
 
-    This is the trace-nonnegative form of the converse in
+    This is the trace-non-negative form of the converse in
     \cite[Proposition~3.9]{Wolf2012Quantum}. The unrestricted squared
     implication printed there is false without a trace sign condition; this is
     recorded in
@@ -349,18 +329,17 @@
 
 \begin{proof}\leanok
     Diagonalize $A$ with real eigenvalues $\lambda_i$. Suppose that some
-    eigenvalue $\lambda_0$ is negative. Let
-    \[
-        T=\sum_i\lambda_i,\qquad R=\sum_{i\ne 0}\lambda_i .
-    \]
-    Since $T\ge0$ and $T=\lambda_0+R$, one has $T<R$, and hence $T^2<R^2$.
-    Cauchy's inequality gives
-    \[
-        R^2\le (D-1)\sum_{i\ne 0}\lambda_i^2
-            \le (D-1)\sum_i\lambda_i^2,
-    \]
-    contradicting the assumed Lorentz inequality. Thus all eigenvalues are
-    nonnegative.
+    eigenvalue $\lambda_0$ is negative. Set
+    $T=\sum_i\lambda_i$ and $R=\sum_{i\ne 0}\lambda_i$. Since $T\ge0$ and
+    $T=\lambda_0+R$, one has $T<R$, and hence $T^2<R^2$. Cauchy's inequality
+    gives
+    \begin{align}
+        R^2
+        &\le (D-1)\sum_{i\ne 0}\lambda_i^2
+        \le (D-1)\sum_i\lambda_i^2,
+    \end{align}
+    contradicting (\ref{eq:channel_lorentz_converse}). Thus all eigenvalues
+    are non-negative.
 \end{proof}
 
 \begin{definition}[Sum of the largest eigenvalues]
@@ -368,22 +347,24 @@
     \lean{Matrix.IsHermitian.kyFanNorm}
     \leanok
     Let $A\in\MN{D}$ be Hermitian with eigenvalues
-    $\lambda_1\ge\lambda_2\ge\cdots\ge\lambda_D$ listed in decreasing order. For
-    $0\le k\le D$ set
-    \[
-        S_k(A) = \sum_{i=1}^{k}\lambda_i ,
-    \]
-    the sum of the $k$ largest (signed) eigenvalues. Indices beyond $D$ contribute
-    zero, so the value stabilizes at $\re\tr(A)$ once $k$ reaches
+    $\lambda_1\ge\lambda_2\ge\cdots\ge\lambda_D$ listed in decreasing order.
+    For $0\le k\le D$, set
+    \begin{align}
+        S_k(A)
+        &=\sum_{i=1}^{k}\lambda_i.
+        \label{eq:channel_largest_eigenvalue_sum}
+    \end{align}
+    This is the sum of the $k$ largest signed eigenvalues. Indices beyond $D$
+    contribute zero, so the value stabilizes at $\re\tr(A)$ once $k$ reaches
     $D$.
 
-    The \emph{Ky-Fan $k$-norm} $\|A\|_{(k)}$ is by definition the sum of the $k$
-    largest \emph{singular values} of $A$. It agrees with $S_k(A)$ exactly when
-    $A$ is positive semidefinite, where eigenvalues and singular values coincide;
-    for an indefinite Hermitian $A$ the two differ (for $A=\diag(1,-2)$ one has
-    $S_1(A)=1$ but $\|A\|_{(1)}=2$). The results below concern $S_k(A)$ for
-    arbitrary Hermitian $A$, so on the positive-semidefinite cone they are
-    statements about the Ky-Fan norm.
+    The \emph{Ky-Fan $k$-norm} $\|A\|_{(k)}$ is by definition the sum of the
+    $k$ largest \emph{singular values} of $A$. It agrees with $S_k(A)$ exactly
+    when $A$ is positive semidefinite, where eigenvalues and singular values
+    coincide; for an indefinite Hermitian $A$ the two differ. For
+    $A=\diag(1,-2)$, one has $S_1(A)=1$ but $\|A\|_{(1)}=2$. The results below
+    concern $S_k(A)$ for arbitrary Hermitian $A$, so on the
+    positive-semidefinite cone they are statements about the Ky-Fan norm.
 \end{definition}
 
 \begin{theorem}[Achievability of the largest-eigenvalue sum]
@@ -391,16 +372,13 @@
     \lean{Matrix.IsHermitian.exists_isProj_trace_eq_kyFanNorm}
     \leanok
     \uses{def:ky_fan_norm}
-    For every Hermitian $A\in\MN{D}$ and every $k\ge0$ there is an orthogonal
-    projection $P$ of rank $\min(k,D)$ with
-    \[
-        \re\tr(PA) = S_k(A) .
-    \]
+    For every Hermitian $A\in\MN{D}$ and every $k\ge0$, there is an orthogonal
+    projection $P$ of rank $\min(k,D)$ with $\re\tr(PA)=S_k(A)$.
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{def:ky_fan_norm}
-    Diagonalize $A=U\,\diag(\lambda_i)\,U^\dagger$ and take $P$ to be the
+    Diagonalize $A=U\diag(\lambda_i)U^\dagger$ and take $P$ to be the
     projection onto the span of the eigenvectors with the $\min(k,D)$ largest
     eigenvalues. Then $\re\tr(PA)=\sum_{i\le k}\lambda_i=S_k(A)$.
 \end{proof}
@@ -410,26 +388,24 @@
     \lean{Matrix.IsHermitian.trace_mul_re_le_kyFanNorm}
     \leanok
     \uses{def:ky_fan_norm}
-    For every Hermitian $A\in\MN{D}$ and every orthogonal projection $P$ of rank
-    $k<D$,
-    \[
-        \re\tr(PA) \le S_k(A) .
-    \]
+    For every Hermitian $A\in\MN{D}$ and every orthogonal projection $P$ of
+    rank $k<D$, one has $\re\tr(PA)\le S_k(A)$.
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{def:ky_fan_norm}
-    Conjugating $P$ by $U$ gives an orthogonal projection $Q$ of the same rank,
-    and $\re\tr(PA)=\sum_i w_i\lambda_i$ where $w_i$ are the
-    diagonal entries of $Q$. Each $w_i$ lies in $[0,1]$ and the weights sum to
-    $\tr P = k$. With the threshold $c=\lambda_{k+1}$,
-    \[
-        \sum_{i\le k}\lambda_i - \sum_i w_i\lambda_i
-            = \sum_{i\le k}(\lambda_i-c)(1-w_i)
-                + \sum_{i>k}(c-\lambda_i)w_i \ge 0 ,
-    \]
-    since for $i\le k$ the eigenvalues dominate $c$ while $1-w_i\ge0$, and for
-    $i>k$ they are dominated by $c$ while $w_i\ge0$.
+    Conjugating $P$ by $U$ gives an orthogonal projection $Q$ of the same
+    rank, and $\re\tr(PA)=\sum_iw_i\lambda_i$, where $w_i$ are the diagonal
+    entries of $Q$. Each $w_i$ lies in $[0,1]$ and the weights sum to
+    $\tr(P)=k$. With the threshold $c=\lambda_{k+1}$,
+    \begin{align}
+        \sum_{i\le k}\lambda_i-\sum_iw_i\lambda_i
+        &=\sum_{i\le k}(\lambda_i-c)(1-w_i)
+          +\sum_{i>k}(c-\lambda_i)w_i
+        \ge0,
+    \end{align}
+    since for $i\le k$ the eigenvalues dominate $c$ while $1-w_i\ge0$, and
+    for $i>k$ they are dominated by $c$ while $w_i\ge0$.
 \end{proof}
 
 \begin{theorem}[Ky Fan's maximum principle]
@@ -437,25 +413,27 @@
     \lean{Matrix.IsHermitian.kyFanNorm_eq_sup_trace}
     \leanok
     \uses{def:ky_fan_norm, thm:ky_fan_achievability, thm:ky_fan_upper_bound}
-    Let $A\in\MN{D}$ be Hermitian and $0\le k<D$. Then the sum of its $k$ largest
-    eigenvalues is the largest value of $\re\tr(PA)$ attained by an
+    Let $A\in\MN{D}$ be Hermitian and $0\le k<D$. Then the sum of its $k$
+    largest eigenvalues is the largest value of $\re\tr(PA)$ attained by an
     orthogonal projection $P$ of rank $k$:
-    \[
-        S_k(A) = \max_{P^2=P=P^\dagger,\ \tr P = k}
-            \re\tr(PA) .
-    \]
+    \begin{align}
+        S_k(A)
+        &=\max_{\substack{P^2=P=P^\dagger\\ \tr(P)=k}}\re\tr(PA).
+        \label{eq:channel_ky_fan_maximum}
+    \end{align}
     This is Ky Fan's maximum principle \cite{Fan1949Theorem}; see also
     \cite[Problem~I.6.15, Exercise~II.1.13]{Bhatia1997Matrix}. For a positive
     semidefinite $A$, where $S_k(A)$ coincides with the Ky-Fan norm
-    $\|A\|_{(k)}$, it gives the extremal overlap of \cite[Lemma~3.1]{Wolf2012Quantum}.
+    $\|A\|_{(k)}$, it gives the extremal overlap of
+    \cite[Lemma~3.1]{Wolf2012Quantum}.
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{thm:ky_fan_achievability, thm:ky_fan_upper_bound}
-    The achievability half (Theorem~\ref{thm:ky_fan_achievability}) provides a
-    rank-$k$ projection whose trace against $A$ equals $S_k(A)$, so the value is
-    attained. The upper bound (Theorem~\ref{thm:ky_fan_upper_bound}) shows that no
-    rank-$k$ projection exceeds it. Hence $S_k(A)$ is the maximum.
+    Theorem~\ref{thm:ky_fan_achievability} provides a rank-$k$ projection
+    whose trace against $A$ equals $S_k(A)$, so the value is attained.
+    Theorem~\ref{thm:ky_fan_upper_bound} shows that no rank-$k$ projection
+    exceeds it. Hence $S_k(A)$ is the maximum.
 \end{proof}
 
 \begin{definition}[Maps preserving the positive semidefinite cone]
@@ -485,9 +463,10 @@
     Conjugation by any matrix preserves positive semidefiniteness, and the
     transpose of a positive semidefinite matrix is positive semidefinite, so
     both maps send the cone into itself. For surjectivity onto the cone, given
-    a positive semidefinite $A$ set $W=Y^{-1}A(Y^{-1})^\dagger$, which is again
-    positive semidefinite. Then $YWY^\dagger=A$ proves the conjugation case,
-    and $Y(W^T)^TY^\dagger=A$ proves the transpose case, with $W$ and $W^T$
+    a positive semidefinite $A$, set
+    $W=Y^{-1}A(Y^{-1})^\dagger$, which is again positive semidefinite. Then
+    $YWY^\dagger=A$ proves the conjugation case, and
+    $Y(W^T)^TY^\dagger=A$ proves the transpose case, with $W$ and $W^T$
     positive semidefinite.
 \end{proof}
 
@@ -508,9 +487,10 @@
     semidefinite. By Theorem~\ref{thm:choi_transpose_flip}, this Choi matrix is
     $D^{-1}F$. For the antisymmetric vector
     $v=\ket{01}-\ket{10}$,
-    \[
-        \bra{v}\,D^{-1}F\,\ket{v} = -\frac{2}{D} < 0,
-    \]
+    \begin{align}
+        \bra{v}\,D^{-1}F\,\ket{v}
+        &=-\frac{2}{D}<0,
+    \end{align}
     contradicting positive semidefiniteness.
 \end{proof}
 
@@ -522,18 +502,17 @@
     Let $E : \MN{D} \to \MN{D}$ be completely positive in the Kraus sense.
     For every $k$ and every positive block matrix
     $M \in M_k(\MN{D})$, the entrywise image
-    \[
-        (E(M_{ab}))_{a,b}
-    \]
-    is again positive in $M_k(\MN{D})$.
+    $(E(M_{ab}))_{a,b}$ is again positive in $M_k(\MN{D})$.
 \end{theorem}
 
 \begin{proof}\leanok
-    Write $E(X)=\sum_i K_i X K_i^\dagger$.  For each $i$, let $d_i$ be
-    the block-diagonal matrix with $K_i$ on every diagonal block.  Then
-    \[
-        (E(M_{ab}))_{a,b}=\sum_i d_i M d_i^\dagger .
-    \]
+    Write $E$ in the Kraus form (\ref{eq:channel_kraus_representation}).
+    For each $i$, let $d_i$ be the block-diagonal matrix with $K_i$ on every
+    diagonal block. Then
+    \begin{align}
+        (E(M_{ab}))_{a,b}
+        &=\sum_i d_i M d_i^\dagger.
+    \end{align}
     Each term on the right is positive because conjugation preserves
     positivity, and a finite sum of positive matrices is positive.
 \end{proof}
@@ -561,9 +540,10 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    If $X \ge 0$, then each summand $K_i X K_i^\dagger \ge 0$
-    (conjugation preserves positive semidefiniteness),
-    so the sum is PSD.
+    By the Kraus representation (\ref{eq:channel_kraus_representation}), if
+    $X \ge 0$, then each summand $K_i X K_i^\dagger \ge 0$ because
+    conjugation preserves positive semidefiniteness. Hence their sum is
+    positive semidefinite.
 \end{proof}
 
 \begin{theorem}[Channels are positive]\label{thm:channel_positive}
@@ -609,28 +589,29 @@
     \lean{densityMatrices, mem_densityMatrices}
     \leanok
     The set of \emph{density matrices} in $\MN{D}$ is
-    \[
-        \mc{D}_D =  \{\rho \in \MN{D} : \rho \ge 0,  \tr(\rho) = 1\}.
-    \]
+    \begin{align}
+        \mc{D}_D
+        &=\{\rho \in \MN{D} : \rho \ge 0,\ \tr(\rho) = 1\}.
+        \label{eq:channel_density_matrices}
+    \end{align}
 \end{definition}
 
 \begin{theorem}[Density matrices are compact]\label{thm:density_compact}
     \lean{densityMatrices_isCompact}
     \leanok
     \uses{def:density_matrices}
-    $\mc{D}_D$ is compact (in the entry-wise topology on $\MN{D}$).
+    $\mc{D}_D$ is compact in the entrywise topology on $\MN{D}$.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    The PSD cone is closed
-    (preimage of the closed non-negative cone under continuous
-    quadratic forms), and if $\rho \ge 0$ with $\tr(\rho) = 1$
-    then each entry satisfies $|\rho_{ij}|^2 \le \rho_{ii}\rho_{jj} \le 1$:
-    the diagonal entries are non-negative and sum to~$1$, and the
-    off-diagonal bound is the PSD Cauchy--Schwarz inequality.
-    Hence the matrix entries are uniformly bounded, and Heine--Borel
-    gives compactness.
+    The positive semidefinite cone is closed, being the preimage of the closed
+    non-negative cone under continuous quadratic forms. If $\rho \ge 0$ with
+    $\tr(\rho) = 1$, then each entry satisfies
+    $|\rho_{ij}|^2 \le \rho_{ii}\rho_{jj} \le 1$: the diagonal entries are
+    non-negative and sum to~$1$, and the off-diagonal bound is the positive
+    semidefinite Cauchy--Schwarz inequality. Hence the matrix entries are
+    uniformly bounded, and Heine--Borel gives compactness.
 \end{proof}
 
 \begin{theorem}[Density matrices are convex]\label{thm:density_convex}
@@ -641,7 +622,8 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    Convex combination of PSD matrices is PSD, and trace is linear.
+    A convex combination of positive semidefinite matrices is positive
+    semidefinite, and the trace is linear.
 \end{proof}
 
 \begin{theorem}[Density matrices are nonempty]\label{thm:density_nonempty}
@@ -652,19 +634,19 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    $\frac{1}{D} \Id_D$ is a density matrix.
+    $\frac{1}{D}\Id_D$ is a density matrix.
 \end{proof}
 
 \begin{theorem}[Channels preserve density matrices]\label{thm:channel_preserves_density}
     \lean{IsChannel.map_densityMatrices}
     \leanok
     \uses{def:channel, def:density_matrices}
-    If $E$ is a quantum channel, then $E(\mc{D}_D) \subseteq \mc{D}_D$.
+    If $E$ is a quantum channel, then
+    $E(\mc{D}_D) \subseteq \mc{D}_D$.
 \end{theorem}
 
 \begin{proof}\leanok\uses{thm:cp_is_positive}
-    Complete positivity implies positivity
-    (Theorem~\ref{thm:cp_is_positive}),
-    so $E(\rho) \ge 0$; trace preservation gives
-    $\tr(E(\rho)) = \tr(\rho) = 1$.
+    Complete positivity implies positivity by
+    Theorem~\ref{thm:cp_is_positive}, so $E(\rho) \ge 0$; trace preservation
+    gives $\tr(E(\rho)) = \tr(\rho) = 1$.
 \end{proof}

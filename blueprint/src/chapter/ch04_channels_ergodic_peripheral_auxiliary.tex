@@ -7,17 +7,13 @@
     \leanok
     \uses{def:orthogonal_projection_channel}
     For a complex square matrix, the two descriptions
-    $P = P^\dagger$, $P^2=P$ and $P^* = P$, $P^2=P$ are equivalent.
+    $P=P^\dagger$, $P^2=P$ and $P^*=P$, $P^2=P$ are equivalent.
 \end{theorem}
 
 \begin{proof}\leanok
     Since the involution on $\MN{D}$ is conjugate transpose,
-    $P^* = P^\dagger$. Therefore
-    \[
-        P^\dagger = P,\; P^2 = P
-        \iff
-        P^* = P,\; P^2 = P.
-    \]
+    $P^*=P^\dagger$. Therefore $P^\dagger=P$, $P^2=P$ if and only if
+    $P^*=P$, $P^2=P$.
 \end{proof}
 
 \begin{theorem}[Coisometric transport of a star projection]
@@ -25,19 +21,20 @@
     \lean{IsStarProjection.conjTranspose_mul_mul_of_mul_conjTranspose_eq_one}
     \leanok
     Let $Q$ be a self-adjoint idempotent on a finite-dimensional space, and
-    let $U$ be a coisometry onto that space, so that $UU^\dagger=\Id$.  Then
+    let $U$ be a coisometry onto that space, so that $UU^\dagger=\Id$. Then
     $U^\dagger Q U$ is self-adjoint and idempotent.
 \end{theorem}
 
 \begin{proof}\leanok
     Self-adjointness follows from
-    $(U^\dagger Q U)^\dagger=U^\dagger Q^\dagger U=U^\dagger Q U$.  Moreover,
-    \[
+    $(U^\dagger Q U)^\dagger=U^\dagger Q^\dagger U=U^\dagger Q U$.
+    Idempotence follows from
+    \begin{align}
         (U^\dagger Q U)^2
-        =U^\dagger Q(UU^\dagger)QU
+        &=U^\dagger Q(UU^\dagger)QU
         =U^\dagger Q^2U
         =U^\dagger Q U.
-    \]
+    \end{align}
 \end{proof}
 
 \begin{lemma}[Pairwise orthogonality from a projection resolution]
@@ -46,21 +43,19 @@
     \leanok
     \uses{def:orthogonal_projection_channel}
     Let $(Q_k)_k$ be a finite family of orthogonal projections satisfying
-    $\sum_k Q_k=\Id$.  If $k\ne\ell$, then $Q_kQ_\ell=0$.
+    $\sum_k Q_k=\Id$. If $k\ne\ell$, then $Q_kQ_\ell=0$.
 \end{lemma}
 
 \begin{proof}\leanok
     Multiplying the resolution of the identity on both sides by $Q_k$ gives
-    \[
-        \sum_j Q_kQ_jQ_k=Q_k.
-    \]
-    Each summand is positive semidefinite because
+    $\sum_j Q_kQ_jQ_k=Q_k$. Each summand is positive semidefinite because
     $Q_kQ_jQ_k=(Q_jQ_k)^*(Q_jQ_k)$, while the $j=k$ summand is already $Q_k$.
     Subtracting that term and taking traces gives
-    \[
-        0=\sum_{j\ne k}\tr\bigl((Q_jQ_k)^*(Q_jQ_k)\bigr)
-         =\sum_{j\ne k}\lVert Q_jQ_k\rVert_{\mathrm F}^{2}.
-    \]
+    \begin{align}
+        0
+        &=\sum_{j\ne k}\tr((Q_jQ_k)^*(Q_jQ_k))
+        =\sum_{j\ne k}\lVert Q_jQ_k\rVert_{\mathrm F}^{2}.
+    \end{align}
     Hence $Q_jQ_k=0$ for $j\ne k$, and taking adjoints gives $Q_kQ_j=0$.
 \end{proof}
 
@@ -76,12 +71,8 @@
 
 \begin{proof}\leanok
     In the involutive algebra $\MN{D}$, $P$ satisfies $P^\dagger=P$ and
-    $P^2=P$. Hence
-    \[
-        (\Id-P)^\dagger=\Id-P,\qquad
-        (\Id-P)^2=\Id-2P+P^2=\Id-P .
-    \]
-    Thus $\Id-P$ is an orthogonal projection.
+    $P^2=P$. Hence $(\Id-P)^\dagger=\Id-P$ and
+    $(\Id-P)^2=\Id-2P+P^2=\Id-P$. Thus $\Id-P$ is an orthogonal projection.
 \end{proof}
 
 \begin{theorem}[Injectivity implies irreducibility]\label{thm:injective_irreducible}
@@ -94,40 +85,42 @@
 
 \begin{proof}
     \leanok
-    If $P$ is an invariant projection for $\E_A$,
-    then $(\Id - P) A^i P = 0$ for all~$i$.
-    Since the $\{A^i\}$ span $\MN{D}$,
-    $(\Id - P) M P = 0$ for all $M$,
-    so $P = 0$ or $P = \Id$.
+    If $P$ is an invariant projection for $\E_A$, then
+    $(\Id-P)A^iP=0$ for all~$i$. Since the $\{A^i\}$ span $\MN{D}$,
+    $(\Id-P)MP=0$ for all~$M$, so $P=0$ or $P=\Id$.
 \end{proof}
 
 \begin{theorem}[Transfer map is CP]\label{thm:transfer_cp}
     \lean{MPSTensor.transferMap_isCPMap}
     \leanok
     \uses{def:transfer_map, def:cp_map}
-    The transfer map $\E_A(X) = \sum_i A^i X (A^i)^\dagger$
+    The transfer map $\E_A(X)=\sum_i A^iX(A^i)^\dagger$
     is completely positive.
 \end{theorem}
 
 \begin{proof}\leanok
-    It is already written in Kraus form, with Kraus operators $\{A^i\}$.
+    It is already written in the Kraus form
+    (\ref{eq:channel_kraus_representation}), with Kraus operators
+    $\{A^i\}$.
 \end{proof}
 
 \begin{theorem}[Transfer map is a channel]\label{thm:transfer_channel}
     \lean{MPSTensor.transferMap_isChannel}
     \leanok
     \uses{def:transfer_map, def:channel}
-    If $\sum_i (A^i)^\dagger A^i = \Id$, then the transfer map
-    $\E_A(X) = \sum_i A^i X (A^i)^\dagger$
-    is a quantum channel (CPTP).
+    If $\sum_i(A^i)^\dagger A^i=\Id$, then the transfer map
+    $\E_A(X)=\sum_i A^iX(A^i)^\dagger$ is a quantum channel (CPTP).
 \end{theorem}
 
 \begin{proof}\leanok\uses{thm:transfer_cp}
-    Complete positivity is the observation of Theorem~\ref{thm:transfer_cp}.
-    Trace preservation:
-    $\tr(\E_A(X)) = \sum_i \tr(A^i X (A^i)^\dagger)
-        = \tr((\sum_i (A^i)^\dagger A^i) X) = \tr(X)$
-    by cyclicity and the normalization hypothesis.
+    Complete positivity is Theorem~\ref{thm:transfer_cp}. Trace preservation
+    follows by cyclicity and the normalization hypothesis:
+    \begin{align}
+        \tr(\E_A(X))
+        &=\sum_i\tr(A^iX(A^i)^\dagger)
+        =\tr\!\left(\left(\sum_i(A^i)^\dagger A^i\right)X\right)
+        =\tr(X).
+    \end{align}
 \end{proof}
 
 \section{Ces\`aro fixed-point theorem}
@@ -137,21 +130,30 @@
     \leanok
     The \emph{Ces\`aro mean} of a linear map $E$ at order $N$,
     applied to a starting matrix $\rho_0$, is
-    \[
-        \sigma_N =   \frac{1}{N} \sum_{n=0}^{N-1} E^n(\rho_0).
-    \]
+    \begin{align}
+        \sigma_N
+        &=\frac{1}{N}\sum_{n=0}^{N-1}E^n(\rho_0).
+        \label{eq:channel_cesaro_mean}
+    \end{align}
 \end{definition}
 
 \begin{theorem}[Ces\`aro telescope]\label{thm:cesaro_telescope}
     \lean{cesaroMean_telescope}
     \leanok
     \uses{def:cesaro_mean}
-    $E(\sigma_N) - \sigma_N = \frac{1}{N}(E^N(\rho_0) - \rho_0)$.
+    The Ces\`aro mean satisfies
+    \begin{align}
+        E(\sigma_N)-\sigma_N
+        &=\frac{1}{N}(E^N(\rho_0)-\rho_0).
+        \label{eq:channel_cesaro_telescope}
+    \end{align}
 \end{theorem}
 
 \begin{proof}\leanok\uses{def:cesaro_mean}
-    Telescoping: $E(\sigma_N) = \frac{1}{N}\sum_{n=1}^{N} E^n(\rho_0)$
-    and subtracting $\sigma_N$ cancels all but the first and last terms.
+    Applying $E$ to (\ref{eq:channel_cesaro_mean}) gives
+    $E(\sigma_N)=N^{-1}\sum_{n=1}^{N}E^n(\rho_0)$.
+    Subtracting $\sigma_N$ cancels all but the first and last terms, yielding
+    (\ref{eq:channel_cesaro_telescope}).
 \end{proof}
 
 \begin{definition}[Bounded-orbit endomorphism]
@@ -161,10 +163,7 @@
     Let $\mathbb K$ denote either $\R$ or $\C$, and let $V$ be a normed
     vector space over $\mathbb K$. A linear endomorphism $f:V\to V$ has
     \emph{bounded orbits} if, for every $x\in V$, the set
-    \[
-        \{f^n x:n\in\N\}
-    \]
-    is bounded.
+    $\{f^n x:n\in\N\}$ is bounded.
 \end{definition}
 
 \begin{lemma}[Ces\`aro averages of range elements]
@@ -173,20 +172,14 @@
     \leanok
     \uses{def:has_bounded_orbits}
     Let $f:V\to V$ have bounded orbits. If
-    $x\in\range(f-\Id_V)$, then
-    \[
-        A_N(x)\longrightarrow 0.
-    \]
+    $x\in\range(f-\Id_V)$, then $A_N(x)\longrightarrow 0$.
 \end{lemma}
 
 \begin{proof}\leanok
     \uses{def:has_bounded_orbits}
     Write $x=(f-\Id_V)y$. Telescoping gives
-    \[
-        A_N(x)=\frac{f^N y-y}{N}.
-    \]
-    Boundedness of the orbit of $y$ makes the numerator bounded, so the
-    right-hand side tends to zero.
+    $A_N(x)=(f^Ny-y)/N$. Boundedness of the orbit of $y$ makes the
+    numerator bounded, so the right-hand side tends to zero.
 \end{proof}
 
 \begin{lemma}[Complementarity of the fixed-point space]
@@ -197,17 +190,19 @@
     \uses{def:has_bounded_orbits, lem:mean_ergodic_range_limit}
     Let $V$ be finite-dimensional and let $f:V\to V$ have bounded orbits.
     Then
-    \[
-        V=\ker(f-\Id_V)\oplus\range(f-\Id_V).
-    \]
+    \begin{align}
+        V
+        &=\ker(f-\Id_V)\oplus\range(f-\Id_V).
+        \label{eq:channel_mean_ergodic_decomp}
+    \end{align}
 \end{lemma}
 
 \begin{proof}\leanok
     \uses{def:has_bounded_orbits, lem:mean_ergodic_range_limit}
     If $z$ belongs to both summands, then $A_N(z)=z$ because
     $z\in\ker(f-\Id_V)$, while Lemma~\ref{lem:mean_ergodic_range_limit} gives
-    $A_N(z)\to 0$. Hence $z=0$. Rank--nullity then gives the asserted
-    complementarity.
+    $A_N(z)\to0$. Hence $z=0$. Rank--nullity then gives
+    (\ref{eq:channel_mean_ergodic_decomp}).
 \end{proof}
 
 \begin{definition}[Mean-ergodic projection]
@@ -217,7 +212,8 @@
     \uses{def:has_bounded_orbits, lem:mean_ergodic_complementarity}
     Let $V$ be finite-dimensional and let $f:V\to V$ have bounded orbits.
     The \emph{mean-ergodic projection} $P_f:V\to V$ is the projection onto
-    $\ker(f-\Id_V)$ along $\range(f-\Id_V)$.
+    $\ker(f-\Id_V)$ along $\range(f-\Id_V)$ in
+    (\ref{eq:channel_mean_ergodic_decomp}).
 \end{definition}
 
 \begin{theorem}[Finite-dimensional mean-ergodic theorem]
@@ -232,16 +228,21 @@
     \leanok
     \uses{def:has_bounded_orbits, def:mean_ergodic_projection}
     Let $V$ be finite-dimensional and let $f:V\to V$ have bounded orbits.
-    For every $x\in V$, the Ces\`aro averages
-    \[
-        A_N(x)=\frac{1}{N}\sum_{n=0}^{N-1}f^n x
-    \]
-    converge to $P_f x$. Moreover,
-    \[
-        \range(P_f)=\ker(f-\Id_V),\qquad
-        P_f^2=P_f,\qquad fP_f=P_f=P_f f,
-    \]
-    and $P_f x=x$ if and only if $f x=x$.
+    For every $x\in V$, the Ces\`aro averages satisfy
+    \begin{align}
+        A_N(x)
+        &=\frac{1}{N}\sum_{n=0}^{N-1}f^nx
+        \longrightarrow P_fx.
+        \label{eq:channel_mean_ergodic_limit}
+    \end{align}
+    Moreover,
+    \begin{align}
+        \range(P_f)&=\ker(f-\Id_V), \notag\\
+        P_f^2&=P_f, \notag\\
+        fP_f&=P_f=P_ff.
+        \label{eq:channel_mean_ergodic_properties}
+    \end{align}
+    and $P_fx=x$ if and only if $fx=x$.
     The complex matrix specialization underlying
     \cite[Equation~(6.14)]{Wolf2012Quantum} is given below.
 \end{theorem}
@@ -250,25 +251,21 @@
     \uses{def:has_bounded_orbits, lem:mean_ergodic_range_limit,
         lem:mean_ergodic_complementarity, def:mean_ergodic_projection}
     By Lemma~\ref{lem:mean_ergodic_complementarity}, decompose
-    \[
-        x=P_f x+(x-P_f x),\qquad
-        P_f x\in\ker(f-\Id_V),\qquad
-        x-P_f x\in\range(f-\Id_V).
-    \]
-    The fixed component has constant Ces\`aro averages, whereas the averages of
-    the second component tend to zero by
-    Lemma~\ref{lem:mean_ergodic_range_limit}. Thus $A_N(x)\to P_f x$. Since
-    \[
-        P_f x\in\ker(f-\Id_V),
-        \qquad f(P_f x)=P_f x,
-    \]
-    we have $fP_f=P_f$. Moreover,
-    \[
-        (f-\Id_V)x\in\range(f-\Id_V),
-        \qquad P_f\bigl((f-\Id_V)x\bigr)=0,
-    \]
-    so $P_f(fx)=P_f x$ and hence $P_f f=P_f$. The range and idempotence
-    identities follow directly from the projection construction.
+    \begin{align}
+        x&=P_fx+(x-P_fx), \notag\\
+        P_fx&\in\ker(f-\Id_V), \notag\\
+        x-P_fx&\in\range(f-\Id_V).
+    \end{align}
+    The fixed component has constant Ces\`aro averages, whereas the averages
+    of the second component tend to zero by
+    Lemma~\ref{lem:mean_ergodic_range_limit}. This proves
+    (\ref{eq:channel_mean_ergodic_limit}). Since
+    $P_fx\in\ker(f-\Id_V)$, one has $f(P_fx)=P_fx$, and hence
+    $fP_f=P_f$. Also, $(f-\Id_V)x\in\range(f-\Id_V)$ and
+    $P_f((f-\Id_V)x)=0$, so $P_f(fx)=P_fx$ and hence $P_ff=P_f$.
+    The range and idempotence identities in
+    (\ref{eq:channel_mean_ergodic_properties}) follow directly from the
+    projection construction.
 \end{proof}
 
 \begin{theorem}[Positive mean-ergodic projection]
@@ -282,8 +279,9 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    Every Ces\`aro average is positive. Therefore, for $X\ge 0$, closedness of
-    the positive cone and convergence of the averages give $P_T(X)\ge 0$.
+    Every Ces\`aro average is positive. Therefore, for $X\ge0$, closedness of
+    the positive cone and convergence in
+    (\ref{eq:channel_mean_ergodic_limit}) give $P_T(X)\ge0$.
 \end{proof}
 
 \begin{theorem}[Trace-preserving mean-ergodic projection]
@@ -321,19 +319,18 @@
     \lean{IsPositiveMap.hasBoundedOrbits_of_traceNonincreasing}
     \leanok
     \uses{def:positive_map, def:has_bounded_orbits}
-    Let $T:\MN{D}\to\MN{D}$ be positive and trace nonincreasing.  Then the
-    forward orbit $\{T^n(X):n\geq 0\}$ is bounded for every $X\in\MN{D}$.
+    Let $T:\MN{D}\to\MN{D}$ be positive and trace nonincreasing. Then the
+    forward orbit $\{T^n(X):n\geq0\}$ is bounded for every $X\in\MN{D}$.
     This is the trace-nonincreasing form of
     \cite[Proposition~6.3]{Wolf2012Quantum}.
 \end{theorem}
 
 \begin{proof}\leanok
-    For $X\succeq 0$, positivity and induction on $n$ give
-    \[
-        T^n(X)\succeq 0,
-        \qquad
-        \tr(T^n(X))\leq\tr(X).
-    \]
+    For $X\succeq0$, positivity and induction on $n$ give
+    \begin{align}
+        T^n(X)&\succeq0, \notag\\
+        \tr(T^n(X))&\leq\tr(X).
+    \end{align}
     Thus the orbit lies in a bounded trace section of the positive cone.
     Apply this to the positive and negative parts of a Hermitian matrix, and
     then write an arbitrary matrix as a complex linear combination of two
@@ -354,11 +351,11 @@
     Let $T:\MN{D}\to\MN{D}$ be positive and trace-preserving. Then $T$ has
     bounded orbits, and its mean-ergodic projection $P_T$ is positive and
     trace-preserving. Its range is precisely the fixed-point space of $T$:
-    \[
-        \range(P_T)=\ker(T-\Id),
-        \qquad
-        P_T(X)=X \iff T(X)=X.
-    \]
+    \begin{align}
+        \range(P_T)&=\ker(T-\Id), \notag\\
+        P_T(X)=X&\iff T(X)=X.
+        \label{eq:channel_positive_mean_ergodic}
+    \end{align}
     If $T(\Id)=\Id$, then $P_T(\Id)=\Id$.
     This is the Ces\`aro projection $T_\infty$ of
     \cite[Proposition~6.3 and Equation~(6.14)]{Wolf2012Quantum}.
@@ -372,8 +369,9 @@
         thm:unital_mean_ergodic_projection}
     Trace preservation implies trace nonincrease, so
     Theorem~\ref{thm:positive_trace_nonincreasing_bounded_orbits} gives
-    bounded orbits.  Theorem~\ref{thm:mean_ergodic_bounded_orbits} then gives
-    the projection and its fixed-point characterization.  Its positivity,
+    bounded orbits. Theorem~\ref{thm:mean_ergodic_bounded_orbits} then gives
+    the projection and the fixed-point characterization
+    (\ref{eq:channel_positive_mean_ergodic}). Its positivity,
     trace preservation, and behavior on the identity follow from the three
     preceding theorems.
 \end{proof}
@@ -386,20 +384,19 @@
     On any finite full matrix algebra, a linear endomorphism $S$ is
     trace-preserving if and only if its trace-pairing adjoint fixes the
     identity:
-    \[
-        (\forall X,\; \tr(S(X))=\tr(X))
-        \quad\Longleftrightarrow\quad
-        S^*(\Id)=\Id.
-    \]
+    \begin{align}
+        (\forall X,\ \tr(S(X))=\tr(X))
+        &\quad\Longleftrightarrow\quad S^*(\Id)=\Id.
+        \label{eq:channel_tp_adjoint_unital}
+    \end{align}
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{thm:trace_pairing_adjoint_identity, thm:trace_nondeg}
     The trace-pairing identity gives
-    \[
-        \tr(S^*(\Id)X)=\tr(S(X)).
-    \]
-    The equivalence follows from nondegeneracy of the trace pairing.
+    $\tr(S^*(\Id)X)=\tr(S(X))$. The equivalence
+    (\ref{eq:channel_tp_adjoint_unital}) follows from nondegeneracy of the
+    trace pairing.
 \end{proof}
 
 \begin{theorem}[Adjoint mean-ergodic projection]
@@ -412,47 +409,42 @@
     Let $T:\MN{D}\to\MN{D}$ have bounded orbits, let $P_T$ be its
     mean-ergodic projection, and let $P_T^*$ be the trace-pairing adjoint of
     $P_T$. Then
-    \[
-        (P_T^*)^2=P_T^*,
-        \qquad
-        \range(P_T^*)=\ker(T^*-\Id),
-    \]
-    and
-    \[
-        P_T^*(Y)=Y\quad\Longleftrightarrow\quad T^*(Y)=Y.
-    \]
+    \begin{align}
+        (P_T^*)^2&=P_T^*, \notag\\
+        \range(P_T^*)&=\ker(T^*-\Id).
+        \label{eq:channel_adjoint_mean_ergodic}
+    \end{align}
+    and $P_T^*(Y)=Y$ if and only if $T^*(Y)=Y$.
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{thm:trace_pairing_adjoint_identity, thm:trace_nondeg,
         thm:mean_ergodic_bounded_orbits}
     Since $P_T^2=P_T$, the trace-pairing identity gives
-    $(P_T^*)^2=P_T^*$.  If $T^*(Y)=Y$, decompose
-    \[
-        X-P_T(X)=(T-\Id)(Z).
-    \]
-    Then
-    \[
-        \tr\bigl(Y(X-P_T(X))\bigr)
-        =\tr\bigl((T^*(Y)-Y)Z\bigr)=0.
-    \]
-    Nondegeneracy of the trace pairing gives $P_T^*(Y)=Y$.  Conversely,
+    $(P_T^*)^2=P_T^*$. If $T^*(Y)=Y$, decompose
+    $X-P_T(X)=(T-\Id)(Z)$. Then
+    \begin{align}
+        \tr(Y(X-P_T(X)))
+        &=\tr((T^*(Y)-Y)Z)=0.
+    \end{align}
+    Nondegeneracy of the trace pairing gives $P_T^*(Y)=Y$. Conversely,
     $P_TT=P_T$ implies $T^*P_T^*=P_T^*$, so every fixed point of $P_T^*$ is a
     fixed point of $T^*$:
-    \[
+    \begin{align}
         P_T^*(Y)=Y
-        \quad\Longrightarrow\quad
+        &\quad\Longrightarrow\quad
         T^*(Y)=T^*(P_T^*(Y))=P_T^*(Y)=Y.
-    \]
+    \end{align}
     Hence
-    \[
+    \begin{align}
         Y\in\range(P_T^*)
-        \quad\Longleftrightarrow\quad P_T^*(Y)=Y
+        &\quad\Longleftrightarrow\quad P_T^*(Y)=Y
         \quad\Longleftrightarrow\quad T^*(Y)=Y
         \quad\Longleftrightarrow\quad Y\in\ker(T^*-\Id).
-    \]
+    \end{align}
     The first equivalence uses idempotence, and the second is the fixed-point
-    equivalence proved above.
+    equivalence proved above. This proves
+    (\ref{eq:channel_adjoint_mean_ergodic}).
 \end{proof}
 
 \begin{theorem}[Positive unital adjoint Ces\`aro retraction]
@@ -463,14 +455,15 @@
         thm:trace_preserving_iff_trace_adjoint_unital,
         thm:adjoint_mean_ergodic_projection,
         thm:trace_pairing_adjoint_positive}
-    Let $T:\MN{D}\to\MN{D}$ be positive and trace-preserving.  The trace
+    Let $T:\MN{D}\to\MN{D}$ be positive and trace-preserving. The trace
     adjoint $P_T^*$ of its mean-ergodic projection is positive, unital, and
-    idempotent.  It is a retraction onto the adjoint fixed-point space:
-    \[
-        P_T^*(\Id)=\Id,
-        \qquad (P_T^*)^2=P_T^*,
-        \qquad \range(P_T^*)=\ker(T^*-\Id),
-    \]
+    idempotent. It is a retraction onto the adjoint fixed-point space:
+    \begin{align}
+        P_T^*(\Id)&=\Id, \notag\\
+        (P_T^*)^2&=P_T^*, \notag\\
+        \range(P_T^*)&=\ker(T^*-\Id).
+        \label{eq:channel_adjoint_cesaro_retraction}
+    \end{align}
     and $P_T^*(Y)=Y$ if and only if $T^*(Y)=Y$.
     This is the adjoint projection used in the proof of
     \cite[Theorem~6.14]{Wolf2012Quantum}.
@@ -478,10 +471,11 @@
 
 \begin{proof}\leanok
     Theorem~\ref{thm:positive_trace_preserving_mean_ergodic_projection} makes
-    $P_T$ positive and trace-preserving.  Positivity passes to its trace
+    $P_T$ positive and trace-preserving. Positivity passes to its trace
     adjoint, while
     Theorem~\ref{thm:trace_preserving_iff_trace_adjoint_unital} gives
-    $P_T^*(\Id)=\Id$.  The remaining assertions are
+    $P_T^*(\Id)=\Id$. The remaining assertions in
+    (\ref{eq:channel_adjoint_cesaro_retraction}) are
     Theorem~\ref{thm:adjoint_mean_ergodic_projection}.
 \end{proof}
 
@@ -489,57 +483,56 @@
     \lean{IsPositiveMap.posPart_negPart_fixed_of_hermitian_fixedPoint}
     \leanok
     \uses{def:positive_map, def:trace_preserving}
-    Let $E$ be a positive trace-preserving linear map and let $X = E(X)$ be a Hermitian
-    fixed point. Let $P_+=X^+$ and $P_-=X^-$ be its canonical positive and negative
-    parts. Thus $X=P_+-P_-$, $P_\pm\geq0$, and $P_+P_-=P_-P_+=0$.
-    Then $E(P_+) = P_+$ and $E(P_-) = P_-$.
+    Let $E$ be a positive trace-preserving linear map and let $X=E(X)$ be a
+    Hermitian fixed point. Let $P_+=X^+$ and $P_-=X^-$ be its canonical
+    positive and negative parts. Thus $X=P_+-P_-$, $P_\pm\geq0$, and
+    $P_+P_-=P_-P_+=0$. Then $E(P_+)=P_+$ and $E(P_-)=P_-$.
     This is \cite[Proposition~6.8]{Wolf2012Quantum}.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    The fixed-point equation gives a common difference
-    \[
-        Y=E(P_+)-P_+=E(P_-)-P_-.
-    \]
-    Hence $P_++Y$ and $P_-+Y$ are positive semidefinite, while trace
-    preservation gives $\tr(Y)=0$. Diagonalize $P_+$. Since
-    $P_+P_-=P_-P_+=0$, each eigenvector belongs to the kernel of $P_+$ or to
-    the kernel of $P_-$. Positivity of the corresponding matrix $P_++Y$ or
-    $P_-+Y$ shows that every diagonal coefficient of $Y$ in this basis is
-    nonnegative. Their sum is $\tr(Y)=0$, so every such coefficient vanishes.
-    A positive semidefinite matrix with a zero diagonal coefficient annihilates
-    the corresponding basis vector. Applying this to $P_++Y$ or $P_-+Y$ shows
-    that $Y$ annihilates the entire eigenbasis. Thus $Y=0$, and consequently
-    $E(P_\pm)=P_\pm$.
+    The fixed-point equation gives the common difference
+    $Y=E(P_+)-P_+=E(P_-)-P_-$. Hence $P_++Y$ and $P_-+Y$ are positive
+    semidefinite, while trace preservation gives $\tr(Y)=0$. Diagonalize
+    $P_+$. Since $P_+P_-=P_-P_+=0$, each eigenvector belongs to the kernel
+    of $P_+$ or to the kernel of $P_-$. Positivity of the corresponding
+    matrix $P_++Y$ or $P_-+Y$ shows that every diagonal coefficient of $Y$
+    in this basis is non-negative. Their sum is $\tr(Y)=0$, so every such
+    coefficient vanishes. A positive semidefinite matrix with a zero diagonal
+    coefficient annihilates the corresponding basis vector. Applying this to
+    $P_++Y$ or $P_-+Y$ shows that $Y$ annihilates the entire eigenbasis.
+    Thus $Y=0$, and consequently $E(P_\pm)=P_\pm$.
 \end{proof}
 
 \begin{theorem}[Ces\`aro fixed-point theorem]\label{thm:cesaro_fixedpoint}
     \lean{IsChannel.exists_posSemidef_fixedPoint}
     \leanok
     \uses{def:channel, def:density_matrices, def:cesaro_mean}
-    Every quantum channel $E : \MN{D} \to \MN{D}$ (with $D \ge 1$)
-    has a nonzero positive semidefinite fixed point:
-    there exists $\rho \ge 0$, $\rho \neq 0$, with $E(\rho) = \rho$.
+    Every quantum channel $E:\MN{D}\to\MN{D}$, with $D\geq1$, has a nonzero
+    positive semidefinite fixed point: there exists $\rho\geq0$, $\rho\neq0$,
+    with $E(\rho)=\rho$.
 \end{theorem}
 
 \begin{proof}
     \leanok
     \uses{thm:density_compact, thm:density_nonempty,
         thm:channel_preserves_density, thm:cesaro_telescope}
-    Start with any $\rho_0 \in \mc{D}_D$
+    Start with any $\rho_0\in\mc{D}_D$
     (Theorem~\ref{thm:density_nonempty}).
     Each Ces\`aro mean $\sigma_N$ lies in $\mc{D}_D$
     by applying channel preservation to every iterate, adding positive
     semidefinite matrices, rescaling by the positive average factor, and using
     trace linearity.
     By compactness (Theorem~\ref{thm:density_compact}),
-    extract a convergent subsequence
-    $\sigma_{N_k} \to \rho$.
-    The telescope identity (Theorem~\ref{thm:cesaro_telescope})
-    gives
-    $\|E(\sigma_N) - \sigma_N\| = \frac{1}{N}\|E^N(\rho_0) - \rho_0\| \to 0$,
-    so $E(\rho) = \rho$ by continuity.
+    extract a convergent subsequence $\sigma_{N_k}\to\rho$.
+    The telescope identity (\ref{eq:channel_cesaro_telescope}) gives
+    \begin{align}
+        \lVert E(\sigma_N)-\sigma_N\rVert
+        &=\frac{1}{N}\lVert E^N(\rho_0)-\rho_0\rVert
+        \longrightarrow0,
+    \end{align}
+    so $E(\rho)=\rho$ by continuity.
     In~\cite[Theorem~6.11]{Wolf2012Quantum}, existence is proved
     via Brouwer's fixed-point theorem; we use the Ces\`aro
     argument instead.
@@ -550,12 +543,14 @@
 \begin{definition}[Fixed-point projection]\label{def:fixed_point_proj}
     \lean{fixedPointProj}
     \leanok
-    Given a linear map $E : \MN{D} \to \MN{D}$ and a fixed point
-    $\rho$ with $E(\rho) = \rho$ and $\tr(\rho) \neq 0$,
+    Given a linear map $E:\MN{D}\to\MN{D}$ and a fixed point
+    $\rho$ with $E(\rho)=\rho$ and $\tr(\rho)\neq0$,
     the \emph{fixed-point projection} is the rank-one map
-    \[
-        P(X) =  \frac{\tr(X)}{\tr(\rho)} \rho.
-    \]
+    \begin{align}
+        P(X)
+        &=\frac{\tr(X)}{\tr(\rho)}\rho.
+        \label{eq:channel_fixed_point_proj}
+    \end{align}
     This projects onto the span of $\rho$ along the kernel of the
     trace functional. When the fixed point is unique up to scaling,
     this span is the full fixed-point space.
@@ -565,23 +560,24 @@
     \lean{pow_eq_fixedPointProj_add_compl_pow}
     \leanok
     \uses{def:fixed_point_proj, def:trace_preserving}
-    If $E$ is trace-preserving and $E(\rho) = \rho$, then
-    for $n \ge 1$,
-    \[
-        E^n =  P + (E - P)^n,
-    \]
+    If $E$ is trace-preserving and $E(\rho)=\rho$, then, for $n\geq1$,
+    \begin{align}
+        E^n
+        &=P+(E-P)^n,
+        \label{eq:channel_power_decomp}
+    \end{align}
     where $P$ is the fixed-point projection.
 \end{theorem}
 
 \begin{proof}
     \leanok
     \uses{def:fixed_point_proj}
-    $P$ is idempotent ($P^2 = P$), the fixed-point relation
-    $E(\rho) = \rho$ gives $E \circ P = P$, and
-    trace preservation gives $P \circ E = P$.
-    These imply $(E-P) \circ P = 0$ and $P \circ (E-P) = 0$,
-    so in the binomial expansion of $(P + (E-P))^n$
-    all cross terms vanish, leaving $E^n = P^n + (E-P)^n = P + (E-P)^n$.
+    By (\ref{eq:channel_fixed_point_proj}), $P$ is idempotent.
+    The fixed-point relation $E(\rho)=\rho$ gives $E\circ P=P$, and trace
+    preservation gives $P\circ E=P$. These imply
+    $(E-P)\circ P=0$ and $P\circ(E-P)=0$, so in the binomial expansion of
+    $(P+(E-P))^n$ all cross terms vanish, yielding
+    (\ref{eq:channel_power_decomp}).
 \end{proof}
 
 \section{Additional results on peripheral spectrum and primitivity}
@@ -590,12 +586,12 @@
     \lean{one_mem_peripheralEigenvalues}
     \leanok
     \uses{def:peripheral_eigenvalues}
-    If $E$ has a nonzero fixed point $\rho \neq 0$ with $E(\rho) = \rho$,
+    If $E$ has a nonzero fixed point $\rho\neq0$ with $E(\rho)=\rho$,
     then $1$ is a peripheral eigenvalue of $E$.
 \end{theorem}
 
 \begin{proof}\leanok
-    $\rho$ is an eigenvector with eigenvalue~$1$, and $|1| = 1$.
+    $\rho$ is an eigenvector with eigenvalue~$1$, and $|1|=1$.
 \end{proof}
 
 \begin{theorem}[Finiteness of peripheral eigenvalues]\label{thm:peripheral_finite}
@@ -615,41 +611,37 @@
     \lean{peripheral_isRootOfUnity_of_pow_eigenvalue}
     \leanok
     \uses{def:peripheral_eigenvalues}
-    Let $E$ be a linear endomorphism on a finite-dimensional
-    space.
-    If $\mu$ is a peripheral eigenvalue of $E$
-    and $\mu^n$ is an eigenvalue of $E$ for every $n \ge 1$,
-    then $\mu$ is a root of unity.
+    Let $E$ be a linear endomorphism on a finite-dimensional space.
+    If $\mu$ is a peripheral eigenvalue of $E$ and $\mu^n$ is an eigenvalue
+    of $E$ for every $n\geq1$, then $\mu$ is a root of unity.
 \end{theorem}
 
 \begin{proof}
     \leanok
     Since $\mu^n$ is an eigenvalue for every positive~$n$,
     the pigeonhole principle on the finite eigenvalue set gives
-    $\mu^a = \mu^b$ for some $a \neq b$, hence $\mu^{|a-b|} = 1$.
+    $\mu^a=\mu^b$ for some $a\neq b$, hence $\mu^{|a-b|}=1$.
 \end{proof}
 
 \begin{theorem}[Peripheral powers imply root of unity]\label{thm:peripheral_powers}
     \lean{peripheral_isRootOfUnity_of_closed_powers}
     \leanok
     \uses{def:peripheral_eigenvalues}
-    If the set of peripheral eigenvalues of a linear
-    endomorphism~$E$ on a finite-dimensional space is
-    \emph{closed under powers}
-    ($\mu \in \mathrm{peripheral}(E)$
-    and $n \ge 1$ imply
-    $\mu^n \in \mathrm{peripheral}(E)$),
-    then every peripheral eigenvalue is a root of unity.
+    If the set of peripheral eigenvalues of a linear endomorphism~$E$ on a
+    finite-dimensional space is \emph{closed under powers}
+    ($\mu\in\mathrm{peripheral}(E)$ and $n\geq1$ imply
+    $\mu^n\in\mathrm{peripheral}(E)$), then every peripheral eigenvalue is a
+    root of unity.
 \end{theorem}
 
 \begin{proof}
     \leanok
     \uses{thm:peripheral_roots_of_unity}
     The closure hypothesis provides
-    $\mu^n \in \mathrm{peripheral}(E)$ for all positive~$n$,
+    $\mu^n\in\mathrm{peripheral}(E)$ for all positive~$n$,
     which in particular means $\mu^n$ is an eigenvalue.
     Theorem~\ref{thm:peripheral_roots_of_unity} then gives
-    $\mu^p = 1$ for some $p > 0$.
+    $\mu^p=1$ for some $p>0$.
 \end{proof}
 
 \subsection{Periodicity removal by powering}\label{subsec:periodicity_removal_power}
@@ -666,10 +658,10 @@
 \begin{lemma}[Common exponent for a finite set of roots of unity]\label{lem:common_power_eq_one}
     \lean{exists_common_power_eq_one_of_finite}
     \leanok
-    Let $s \subseteq \C$ be a finite set.
-    Assume that for every $\mu \in s$ there exists an exponent $p_\mu > 0$
-    with $\mu^{p_\mu} = 1$.
-    Then there exists $p > 0$ such that $\mu^p = 1$ for all $\mu \in s$.
+    Let $s\subseteq\C$ be a finite set.
+    Assume that for every $\mu\in s$ there exists an exponent $p_\mu>0$
+    with $\mu^{p_\mu}=1$.
+    Then there exists $p>0$ such that $\mu^p=1$ for all $\mu\in s$.
 \end{lemma}
 
 \begin{proof}\leanok
@@ -680,21 +672,20 @@
     \lean{peripheralEigenvalues_pow_eq_singleton}
     \leanok
     \uses{def:peripheral_eigenvalues}
-    Let $E : \MN{D} \to \MN{D}$ be a linear map, and assume that $E$ has a
-    nonzero fixed point $\rho \neq 0$.
-    Let $p > 0$.
-    If every peripheral eigenvalue $\mu$ of $E$ satisfies $\mu^p = 1$,
-    then $\mathrm{peripheral}(E^p) = \{1\}$.
+    Let $E:\MN{D}\to\MN{D}$ be a linear map, and assume that $E$ has a
+    nonzero fixed point $\rho\neq0$. Let $p>0$.
+    If every peripheral eigenvalue $\mu$ of $E$ satisfies $\mu^p=1$,
+    then $\mathrm{peripheral}(E^p)=\{1\}$.
 \end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:one_peripheral}
-    The fixed point $\rho$ gives $1 \in \mathrm{peripheral}(E^p)$.
-    For the reverse inclusion, let $\nu \in \mathrm{peripheral}(E^p)$.
-    Spectral mapping gives $\nu = \mu^p$ for some $\mu \in \sigma(E)$.
-    From $|\nu| = 1$ and $p > 0$ we obtain $|\mu| = 1$, hence
-    $\mu \in \mathrm{peripheral}(E)$.
-    The hypothesis $\mu^p = 1$ then forces $\nu = 1$.
+    The fixed point $\rho$ gives $1\in\mathrm{peripheral}(E^p)$.
+    For the reverse inclusion, let $\nu\in\mathrm{peripheral}(E^p)$.
+    Spectral mapping gives $\nu=\mu^p$ for some $\mu\in\spec(E)$.
+    From $|\nu|=1$ and $p>0$ we obtain $|\mu|=1$, hence
+    $\mu\in\mathrm{peripheral}(E)$.
+    The hypothesis $\mu^p=1$ then forces $\nu=1$.
 \end{proof}
 
 For a normalized MPS tensor, the transfer map is naturally trace-preserving but need
@@ -720,15 +711,16 @@ both unital and trace-preserving.
     \lean{KadisonSchwarz.krausMap, KadisonSchwarz.krausAdjointMap,
         KadisonSchwarz.IsUnitalKraus, KadisonSchwarz.IsTPKraus}
     \leanok
-    For operators $\{K_i\}_{i=0}^{d-1} \subseteq \MN{D}$, the associated
+    For operators $\{K_i\}_{i=0}^{d-1}\subseteq\MN{D}$, the associated
     \emph{Kraus map} and \emph{adjoint Kraus map} are
-    \[
-        E(X) = \sum_i K_i X K_i^\dagger,
-        \qquad
-        E^*(X) = \sum_i K_i^\dagger X K_i.
-    \]
-    The Kraus family is \emph{unital} when $\sum_i K_i K_i^\dagger = \Id$ and
-    \emph{trace-preserving} when $\sum_i K_i^\dagger K_i = \Id$.
+    \begin{align}
+        E(X)&=\sum_iK_iXK_i^\dagger, \notag\\
+        E^*(X)&=\sum_iK_i^\dagger XK_i.
+        \label{eq:channel_kraus_maps}
+    \end{align}
+    The Kraus family is \emph{unital} when
+    $\sum_iK_iK_i^\dagger=\Id$ and \emph{trace-preserving} when
+    $\sum_iK_i^\dagger K_i=\Id$.
 \end{definition}
 
 \begin{theorem}[Kadison--Schwarz inequality]
@@ -736,19 +728,21 @@ both unital and trace-preserving.
     \lean{KadisonSchwarz.kadison_schwarz}
     \leanok
     \uses{def:kraus_map_channels}
-    Let $E(X) = \sum_i K_i X K_i^\dagger$ be a unital Kraus map.
-    Then for every $X \in \MN{D}$,
-    \[
-        E(X^\dagger X) \ge E(X)^\dagger E(X).
-    \]
+    Let $E(X)=\sum_iK_iXK_i^\dagger$ be a unital Kraus map.
+    Then, for every $X\in\MN{D}$,
+    \begin{align}
+        E(X^\dagger X)
+        &\geq E(X)^\dagger E(X).
+        \label{eq:channel_kadison_schwarz}
+    \end{align}
     This is \cite[Equation~(5.2)]{Wolf2012Quantum}.
 \end{theorem}
 
 \begin{proof}\leanok
     Apply the unital completely positive map entrywise to the positive
-    $2 \times 2$ block matrix
-    $\bigl(\begin{smallmatrix} X^\dagger X & X^\dagger \\ X & \Id
-        \end{smallmatrix}\bigr)$ and take the Schur complement of the lower-right block.
+    $2\times2$ block matrix
+    $(\begin{smallmatrix}X^\dagger X&X^\dagger\\X&\Id\end{smallmatrix})$
+    and take the Schur complement of the lower-right block.
 \end{proof}
 
 \begin{theorem}[Hilbert--Schmidt contraction]
@@ -756,17 +750,19 @@ both unital and trace-preserving.
     \lean{KadisonSchwarz.hilbertSchmidt_contraction}
     \leanok
     \uses{def:kraus_map_channels, thm:kadison_schwarz_channels}
-    If a Kraus map is both unital and trace-preserving, then
-    \[
-        \tr(E(X)^\dagger E(X)) \le \tr(X^\dagger X)
-    \]
-    for all $X \in \MN{D}$.
+    If a Kraus map is both unital and trace-preserving, then, for every
+    $X\in\MN{D}$,
+    \begin{align}
+        \tr(E(X)^\dagger E(X))
+        &\leq\tr(X^\dagger X).
+        \label{eq:channel_hs_contraction}
+    \end{align}
 \end{theorem}
 
 \begin{proof}\leanok\uses{thm:kadison_schwarz_channels}
     The Kadison--Schwarz gap is positive semidefinite by
-    Theorem~\ref{thm:kadison_schwarz_channels}. Trace preservation then identifies
-    the traces of its two terms.
+    (\ref{eq:channel_kadison_schwarz}). Trace preservation then identifies
+    the traces of its two terms, giving (\ref{eq:channel_hs_contraction}).
 \end{proof}
 
 \begin{theorem}[KS gap decomposition]
@@ -775,17 +771,20 @@ both unital and trace-preserving.
     \leanok
     \uses{def:kraus_map_channels}
     For a unital Kraus map,
-    \[
-        E(X^\dagger X) - E(X)^\dagger E(X)
-        = \sum_i R_i^\dagger R_i,
-        \qquad
-        R_i := X K_i^\dagger - K_i^\dagger E(X).
-    \]
+    \begin{align}
+        E(X^\dagger X)-E(X)^\dagger E(X)
+        &=\sum_iR_i^\dagger R_i,
+        \label{eq:channel_ks_gap}\\
+        R_i
+        &:=XK_i^\dagger-K_i^\dagger E(X).
+        \label{eq:channel_ks_remainder}
+    \end{align}
 \end{theorem}
 
 \begin{proof}\leanok
-    Expand the right-hand side, distribute the products, and use
-    $\sum_i K_i K_i^\dagger = \Id$ to recover the Kadison--Schwarz gap.
+    Expand the right-hand side of (\ref{eq:channel_ks_gap}), substitute
+    (\ref{eq:channel_ks_remainder}), distribute the products, and use
+    $\sum_iK_iK_i^\dagger=\Id$ to recover the Kadison--Schwarz gap.
 \end{proof}
 
 \begin{theorem}[KS equality implies Kraus commutation]
@@ -794,15 +793,20 @@ both unital and trace-preserving.
     \leanok
     \uses{thm:ks_gap_decomp_channels}
     Let $E$ be a unital Kraus map.
-    If $E(X^\dagger X) = E(X)^\dagger E(X)$, then, for every~$i$,
-    \[
-        X K_i^\dagger = K_i^\dagger E(X).
-    \]
+    If $E(X^\dagger X)=E(X)^\dagger E(X)$, then, for every~$i$,
+    \begin{align}
+        XK_i^\dagger
+        &=K_i^\dagger E(X).
+        \label{eq:channel_ks_kraus_relation}
+    \end{align}
 \end{theorem}
 
 \begin{proof}\leanok\uses{thm:ks_gap_decomp_channels}
-    The Kadison--Schwarz gap is a sum of positive semidefinite terms
-    $\sum_i R_i^\dagger R_i$. If the gap vanishes, each $R_i$ must vanish.
+    By (\ref{eq:channel_ks_gap}), the Kadison--Schwarz gap is a sum of
+    positive semidefinite terms $\sum_iR_i^\dagger R_i$. If the gap
+    vanishes, each $R_i$ must vanish. Substitution in
+    (\ref{eq:channel_ks_remainder}) gives
+    (\ref{eq:channel_ks_kraus_relation}).
 \end{proof}
 
 \begin{theorem}[KS equality for peripheral eigenvectors]
@@ -811,16 +815,19 @@ both unital and trace-preserving.
     \leanok
     \uses{def:kraus_map_channels, thm:kadison_schwarz_channels}
     Let $E$ be a Kraus map that is both unital and trace-preserving.
-    If $E(X) = \mu X$ with $|\mu| = 1$, then
-    \[
-        E(X^\dagger X) = E(X)^\dagger E(X).
-    \]
+    If $E(X)=\mu X$ with $|\mu|=1$, then
+    \begin{align}
+        E(X^\dagger X)
+        &=E(X)^\dagger E(X).
+        \label{eq:channel_ks_peripheral}
+    \end{align}
 \end{theorem}
 
 \begin{proof}\leanok
     The Kadison--Schwarz gap is positive semidefinite by
-    Theorem~\ref{thm:kadison_schwarz_channels}. Trace preservation and the relation
-    $E(X)=\mu X$ with $|\mu|=1$ show that its trace is zero, hence the gap vanishes.
+    (\ref{eq:channel_kadison_schwarz}). Trace preservation and
+    $E(X)=\mu X$ with $|\mu|=1$ show that its trace is zero, hence the gap
+    vanishes and (\ref{eq:channel_ks_peripheral}) follows.
 \end{proof}
 
 \begin{theorem}[Left multiplicative identity from KS equality]
@@ -829,15 +836,20 @@ both unital and trace-preserving.
     \leanok
     \uses{thm:kraus_commute_channels}
     Let $E$ be a unital Kraus map.
-    If $E(X^\dagger X) = E(X)^\dagger E(X)$, then for every $Y \in \MN{D}$,
-    \[
-        E(X^\dagger Y) = E(X)^\dagger E(Y).
-    \]
+    If $E(X^\dagger X)=E(X)^\dagger E(X)$, then, for every
+    $Y\in\MN{D}$,
+    \begin{align}
+        E(X^\dagger Y)
+        &=E(X)^\dagger E(Y).
+        \label{eq:channel_left_multiplicative}
+    \end{align}
 \end{theorem}
 
 \begin{proof}\leanok\uses{thm:kraus_commute_channels}
-    The commutation relation of Theorem~\ref{thm:kraus_commute_channels}
-    lets one move $X^\dagger$ past each Kraus operator inside the sum.
+    The relation (\ref{eq:channel_ks_kraus_relation}) lets one move
+    $X^\dagger$ past each Kraus operator inside the sum
+    (\ref{eq:channel_kraus_maps}), yielding
+    (\ref{eq:channel_left_multiplicative}).
 \end{proof}
 
 \begin{definition}[Multiplicative domain]
@@ -876,43 +888,45 @@ matching the weighted-trace argument in
     \lean{MPSTensor.peripheralEigenvalues_pow_mem_of_irreducible_unital_of_adjoint_fixedPoint}
     \leanok
     \uses{def:kraus_map_channels, def:irreducible_cp}
-    Let $E(X) = \sum_i K_i X K_i^\dagger$ be a Kraus map that is
-    unital ($\sum_i K_i K_i^\dagger = \Id$), and assume:
+    Let $E(X)=\sum_iK_iXK_i^\dagger$ be a Kraus map that is
+    unital ($\sum_iK_iK_i^\dagger=\Id$), and assume:
     \begin{enumerate}
-        \item the adjoint Kraus map $E^*(X) = \sum_i K_i^\dagger X K_i$
-              has a positive definite fixed point $\rho > 0$, and
+        \item the adjoint Kraus map $E^*(X)=\sum_iK_i^\dagger XK_i$
+              has a positive definite fixed point $\rho>0$, and
         \item $E$ is irreducible.
     \end{enumerate}
     Then $\mathrm{peripheral}(E)$ is closed under powers:
-    if $\mu \in \mathrm{peripheral}(E)$ then $\mu^n \in \mathrm{peripheral}(E)$
-    for every $n \in \N$.
+    if $\mu\in\mathrm{peripheral}(E)$, then
+    $\mu^n\in\mathrm{peripheral}(E)$ for every $n\in\N$.
 \end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:kadison_schwarz_channels, thm:psd_fp_pd_irred,
         thm:kraus_commute_channels, thm:left_multiplicative_identity_channels}
-    Let $E(X) = \mu X$ with $|\mu| = 1$, and set
-    $G := E(X^\dagger X) - E(X)^\dagger E(X)$.
-    By Kadison--Schwarz, $G \ge 0$.
-    Since $E^*(\rho) = \rho$,
-    \[
+    Let $E(X)=\mu X$ with $|\mu|=1$, and set
+    $G:=E(X^\dagger X)-E(X)^\dagger E(X)$.
+    By (\ref{eq:channel_kadison_schwarz}), $G\geq0$.
+    Since $E^*(\rho)=\rho$,
+    \begin{align}
         \tr(\rho G)
-        = \tr(\rho E(X^\dagger X)) - \tr(\rho E(X)^\dagger E(X))
-        = \tr(E^*(\rho) X^\dagger X) - \tr(\rho E(X)^\dagger E(X))
-        = \tr(\rho X^\dagger X) - |\mu|^2 \tr(\rho X^\dagger X)
-        = 0.
-    \]
-    Thus the trace of the Kadison--Schwarz gap against the adjoint
-    fixed point vanishes. Because $\rho > 0$ and $G \ge 0$, this forces
-    $G = 0$, so $E(X^\dagger X) = E(X)^\dagger E(X)$.
-    Hence $X^\dagger X$ is a PSD fixed point, which is
+        &=\tr(\rho E(X^\dagger X))
+          -\tr(\rho E(X)^\dagger E(X)) \notag\\
+        &=\tr(E^*(\rho)X^\dagger X)
+          -\tr(\rho E(X)^\dagger E(X)) \notag\\
+        &=\tr(\rho X^\dagger X)
+          -|\mu|^2\tr(\rho X^\dagger X)
+        =0.
+    \end{align}
+    Because $\rho>0$ and $G\geq0$, this forces $G=0$, so
+    $E(X^\dagger X)=E(X)^\dagger E(X)=X^\dagger X$.
+    Hence $X^\dagger X$ is a positive semidefinite fixed point, which is
     positive definite by irreducibility
-    (Theorem~\ref{thm:psd_fp_pd_irred}).
-    So $X$ is invertible.
-    By Theorem~\ref{thm:kraus_commute_channels} (KS equality implies Kraus commutation),
-    $X$ commutes with each Kraus operator; iterating via the left
-    multiplicative identity (Theorem~\ref{thm:left_multiplicative_identity_channels})
-    gives $E(X^n) = \mu^n X^n$, so $\mu^n$ is peripheral.
+    (Theorem~\ref{thm:psd_fp_pd_irred}). Thus $X$ is invertible.
+    Theorem~\ref{thm:kraus_commute_channels} gives the corresponding
+    intertwining relation with each Kraus operator. Iterating the
+    multiplicative identity of
+    Theorem~\ref{thm:left_multiplicative_identity_channels} gives
+    $E(X^n)=\mu^nX^n$, so $\mu^n$ is peripheral.
 \end{proof}
 
 \begin{theorem}[Roots of unity via adjoint fixed point]%
@@ -920,9 +934,9 @@ matching the weighted-trace argument in
     \lean{MPSTensor.peripheral_isRootOfUnity_of_irreducible_unital_of_adjoint_fixedPoint}
     \leanok
     \uses{def:kraus_map_channels, def:irreducible_cp, def:peripheral_eigenvalues}
-    Let $E(X) = \sum_i K_i X K_i^\dagger$ be a Kraus map that is
+    Let $E(X)=\sum_iK_iXK_i^\dagger$ be a Kraus map that is
     unital, and assume that the adjoint Kraus map
-    $E^*(X) = \sum_i K_i^\dagger X K_i$ has a positive definite fixed
+    $E^*(X)=\sum_iK_i^\dagger XK_i$ has a positive definite fixed
     point and that $E$ is irreducible.
     Then every peripheral eigenvalue of $E$ is a root of unity.
 \end{theorem}
@@ -939,7 +953,7 @@ matching the weighted-trace argument in
     and Theorem~\ref{thm:peripheral_roots_irred_fp}
     cover the bi-canonical (unital + TP) case as well:
     trace preservation gives
-    $E^*(\Id) = \Id$, which is a positive definite fixed
+    $E^*(\Id)=\Id$, which is a positive definite fixed
     point of the adjoint.
     The adjoint-fixed-point formulation matches the
     argument in \cite[Appendix~A]{Cirac2016MPDO_arXiv},
@@ -959,6 +973,6 @@ matching the weighted-trace argument in
     \leanok
     \uses{def:peripheral_eigenvalues}
     The \emph{period} of a channel $E$ is the number of
-    peripheral eigenvalues (counted without multiplicity):
-    $p(E) := |\mathrm{peripheral}(E)|$.
+    peripheral eigenvalues, counted without multiplicity:
+    $p(E):=|\mathrm{peripheral}(E)|$.
 \end{definition}
