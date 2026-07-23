@@ -462,6 +462,63 @@ private theorem appendFusionFirstStage_apply
     Matrix.sum_apply, Matrix.smul_apply, Matrix.kroneckerMap_apply, smul_eq_mul,
     Finset.mul_sum, mul_assoc]
 
+/-- Reconstructing through the first append stage recovers the product tensor before the
+preceding histories were compressed. -/
+private theorem appendFusionFirstStage_reconstruction
+    (Fam : BNTFusionCoisometryFamily Λ p) (α β : Λ) (previous : List Λ)
+    (A : MPOTensor p (fusionChainBondDim Fam α previous))
+    (W : Matrix (FusionHistoryIndex Fam α previous)
+      (Fin (fusionChainBondDim Fam α previous)) ℂ)
+    (hW : ∀ i j : Fin p,
+      Wᴴ * recursiveProjectorQ Fam (fun γ => Fam.tensor γ i j) α previous * W =
+        A i j)
+    (i k : Fin p) :
+    (appendFusionFirstStage Fam α β previous W)ᴴ *
+        (Matrix.blockDiagonal' fun h : FusionHistory Fam α previous =>
+          fusionHistoryWeight Fam α previous h.1 h.2 •
+            mulTensor (Fam.tensor (fusionHistoryFinalLabel Fam α previous h))
+              (Fam.tensor β) i k) *
+        appendFusionFirstStage Fam α β previous W =
+      mulTensor A (Fam.tensor β) i k := by
+  have hBlocks (j : Fin p) :
+      Wᴴ *
+          (Matrix.blockDiagonal' fun h : FusionHistory Fam α previous =>
+            fusionHistoryWeight Fam α previous h.1 h.2 •
+              Fam.tensor (fusionHistoryFinalLabel Fam α previous h) i j) *
+          W =
+        A i j := by
+    simpa only [recursiveProjectorQ] using hW i j
+  have hProductBlocks :
+      (Matrix.blockDiagonal' fun h : FusionHistory Fam α previous =>
+        fusionHistoryWeight Fam α previous h.1 h.2 •
+          mulTensor (Fam.tensor (fusionHistoryFinalLabel Fam α previous h))
+            (Fam.tensor β) i k) =
+        Matrix.blockDiagonal' fun h : FusionHistory Fam α previous =>
+          (∑ j : Fin p,
+            (fusionHistoryWeight Fam α previous h.1 h.2 •
+              Fam.tensor (fusionHistoryFinalLabel Fam α previous h) i j) ⊗ₖ
+                Fam.tensor β j k).submatrix finProdFinEquiv.symm finProdFinEquiv.symm := by
+    apply congrArg Matrix.blockDiagonal'
+    funext h
+    ext x y
+    simp only [Matrix.submatrix_apply, finProdFinEquiv_symm_apply, mulTensor_apply,
+      Matrix.sum_apply, Matrix.smul_apply, Matrix.kroneckerMap_apply, smul_eq_mul,
+      Finset.mul_sum, mul_assoc]
+  unfold appendFusionFirstStage
+  rw [Matrix.conjTranspose_submatrix]
+  rw [hProductBlocks]
+  rw [← appendHistoryBond_sum_blockDiagonal Fam α β previous
+    (fun h j => fusionHistoryWeight Fam α previous h.1 h.2 •
+      Fam.tensor (fusionHistoryFinalLabel Fam α previous h) i j)
+    (fun j => Fam.tensor β j k)]
+  rw [
+    Matrix.submatrix_mul_equiv _ _ _ (appendHistoryBondEquiv Fam α β previous).symm _,
+    Matrix.submatrix_mul_equiv _ _ _ (appendHistoryBondEquiv Fam α β previous).symm _,
+    Matrix.mul_sum, Matrix.sum_mul]
+  simp_rw [Matrix.conjTranspose_kronecker, ← Matrix.mul_kronecker_mul,
+    Matrix.conjTranspose_one, Matrix.one_mul, Matrix.mul_one, hBlocks]
+  exact (mulTensor_apply A (Fam.tensor β) i k).symm
+
 /-- The second circuit stage when a label is appended: the direct sum of the active fusion
 coisometries over all preceding histories. -/
 private noncomputable def appendFusionSecondStage
@@ -520,6 +577,43 @@ private theorem appendFusionSecondStage_apply
   rw [hBlocks]
   exact appendFusionOutput_blockDiagonal Fam α β previous
     (fun γ => Fam.tensor γ i k)
+
+/-- Reconstructing through the second append stage recovers the preceding-history product
+blocks. -/
+private theorem appendFusionSecondStage_reconstruction
+    (Fam : BNTFusionCoisometryFamily Λ p) (α β : Λ) (previous : List Λ)
+    (i k : Fin p) :
+    (appendFusionSecondStage Fam α β previous)ᴴ *
+        recursiveProjectorQ Fam (fun γ => Fam.tensor γ i k) α (β :: previous) *
+        appendFusionSecondStage Fam α β previous =
+      Matrix.blockDiagonal' fun h : FusionHistory Fam α previous =>
+        fusionHistoryWeight Fam α previous h.1 h.2 •
+          mulTensor (Fam.tensor (fusionHistoryFinalLabel Fam α previous h))
+            (Fam.tensor β) i k := by
+  unfold appendFusionSecondStage
+  rw [Matrix.conjTranspose_submatrix]
+  rw [← appendFusionOutput_blockDiagonal Fam α β previous
+    (fun γ => Fam.tensor γ i k)]
+  rw [
+    Matrix.submatrix_mul_equiv _ _ _ (appendFusionOutputEquiv Fam α β previous).symm _,
+    Matrix.submatrix_mul_equiv _ _ _ (appendFusionOutputEquiv Fam α β previous).symm _,
+    Matrix.blockDiagonal'_conjTranspose, ← Matrix.blockDiagonal'_mul,
+    ← Matrix.blockDiagonal'_mul]
+  change
+    (Matrix.blockDiagonal' fun h : FusionHistory Fam α previous =>
+      (Fam.fusionCoisometry (fusionHistoryFinalLabel Fam α previous h) β)ᴴ *
+        (fusionHistoryWeight Fam α previous h.1 h.2 •
+          Matrix.blockDiagonal' fun γ =>
+            Fam.chi.matrix (fusionHistoryFinalLabel Fam α previous h) β γ ⊗ₖ
+              Fam.tensor γ i k) *
+        Fam.fusionCoisometry (fusionHistoryFinalLabel Fam α previous h) β) =
+      Matrix.blockDiagonal' fun h : FusionHistory Fam α previous =>
+        fusionHistoryWeight Fam α previous h.1 h.2 •
+          mulTensor (Fam.tensor (fusionHistoryFinalLabel Fam α previous h))
+            (Fam.tensor β) i k
+  apply congrArg Matrix.blockDiagonal'
+  funext h
+  rw [Matrix.mul_smul, Matrix.smul_mul, Fam.reconstruction]
 
 /-- The sequential active fusion coisometry for a left-associated chain.
 
@@ -685,6 +779,56 @@ theorem sequentialFusionCoisometry_mul_fusionChainTensor_mul_conjTranspose
         _ = recursiveProjectorQ Fam (fun γ => Fam.tensor γ i k) α (β :: previous) :=
           appendFusionSecondStage_apply Fam α β previous i k
 
+/-- The sequential fusion circuit reconstructs each product letter from its recursive
+history block.
+
+Source: arXiv:1606.00608, the factor
+$\widetilde U Q\widetilde U^\dagger$ at line 999. -/
+theorem conjTranspose_sequentialFusionCoisometry_mul_recursiveProjectorQ_mul
+    (Fam : BNTFusionCoisometryFamily Λ p) (α : Λ) :
+    ∀ (previous : List Λ) (i k : Fin p),
+      (sequentialFusionCoisometry Fam α previous)ᴴ *
+          recursiveProjectorQ Fam (fun γ => Fam.tensor γ i k) α previous *
+          sequentialFusionCoisometry Fam α previous =
+        fusionChainTensor Fam α previous i k
+  | [], i, k => by
+      unfold sequentialFusionCoisometry fusionChainTensor
+      rw [recursiveProjectorQ_empty]
+      rw [Matrix.conjTranspose_submatrix,
+        Matrix.submatrix_mul_equiv, Matrix.submatrix_mul_equiv,
+        Matrix.conjTranspose_one]
+      change (1 : Matrix (Fin (Fam.bondDim α)) (Fin (Fam.bondDim α)) ℂ) *
+          Fam.tensor α i k * 1 = Fam.tensor α i k
+      rw [Matrix.one_mul, Matrix.mul_one]
+  | β :: previous, i, k => by
+      let W := sequentialFusionCoisometry Fam α previous
+      let F := appendFusionFirstStage Fam α β previous W
+      let S := appendFusionSecondStage Fam α β previous
+      change (S * F)ᴴ *
+          recursiveProjectorQ Fam (fun γ => Fam.tensor γ i k) α (β :: previous) *
+          (S * F) =
+        mulTensor (fusionChainTensor Fam α previous) (Fam.tensor β) i k
+      rw [Matrix.conjTranspose_mul]
+      calc
+        (Fᴴ * Sᴴ) *
+              recursiveProjectorQ Fam (fun γ => Fam.tensor γ i k) α (β :: previous) *
+              (S * F) =
+            Fᴴ * (Sᴴ *
+              recursiveProjectorQ Fam (fun γ => Fam.tensor γ i k) α (β :: previous) *
+              S) * F := by
+          simp only [Matrix.mul_assoc]
+        _ = Fᴴ *
+              (Matrix.blockDiagonal' fun h : FusionHistory Fam α previous =>
+                fusionHistoryWeight Fam α previous h.1 h.2 •
+                  mulTensor (Fam.tensor (fusionHistoryFinalLabel Fam α previous h))
+                    (Fam.tensor β) i k) * F := by
+          rw [appendFusionSecondStage_reconstruction Fam α β previous i k]
+        _ = mulTensor (fusionChainTensor Fam α previous) (Fam.tensor β) i k :=
+          appendFusionFirstStage_reconstruction Fam α β previous
+            (fusionChainTensor Fam α previous) W
+            (conjTranspose_sequentialFusionCoisometry_mul_recursiveProjectorQ_mul
+              Fam α previous) i k
+
 /-- Closing the physical operator letter after sequential fusion gives the recursive operator
 whose terminal blocks are the fixed-label physical-trace transfers.
 
@@ -706,5 +850,32 @@ theorem sequentialFusionCoisometry_mul_physTraceTransfer_mul_conjTranspose
       Finset.smul_sum]
   · simp only [Matrix.sum_apply, Matrix.blockDiagonal'_apply_ne _ _ _ hh,
       Finset.sum_const_zero]
+
+/-- Closing the reconstructed recursive block recovers the fixed-label physical-trace
+transfer.
+
+Source: arXiv:1606.00608, the factor
+$\widetilde U Q\widetilde U^\dagger$ at line 999. -/
+theorem conjTranspose_sequentialFusionCoisometry_mul_recursiveProjectorQ_physTrace_mul
+    (Fam : BNTFusionCoisometryFamily Λ p) (α : Λ) (previous : List Λ) :
+    (sequentialFusionCoisometry Fam α previous)ᴴ *
+          recursiveProjectorQ Fam (fun γ => physTraceTransfer (Fam.tensor γ)) α previous *
+          sequentialFusionCoisometry Fam α previous =
+      physTraceTransfer (fusionChainTensor Fam α previous) := by
+  rw [physTraceTransfer]
+  have hQ :
+      recursiveProjectorQ Fam (fun γ => physTraceTransfer (Fam.tensor γ)) α previous =
+        ∑ i : Fin p,
+          recursiveProjectorQ Fam (fun γ => Fam.tensor γ i i) α previous := by
+    unfold recursiveProjectorQ physTraceTransfer
+    ext ⟨h, b⟩ ⟨h', b'⟩
+    by_cases hh : h = h'
+    · subst h'
+      simp only [Matrix.sum_apply, Matrix.blockDiagonal'_apply_eq, Matrix.smul_apply,
+        Finset.smul_sum]
+    · simp only [Matrix.sum_apply, Matrix.blockDiagonal'_apply_ne _ _ _ hh,
+        Finset.sum_const_zero]
+  rw [hQ, Matrix.mul_sum, Matrix.sum_mul]
+  simp_rw [conjTranspose_sequentialFusionCoisometry_mul_recursiveProjectorQ_mul Fam α]
 
 end MPOTensor.BNTFusionCoisometryFamily

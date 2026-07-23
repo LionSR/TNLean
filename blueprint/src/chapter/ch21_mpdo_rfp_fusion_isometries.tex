@@ -1589,6 +1589,87 @@ separate step.
     by block.
 \end{proof}
 
+\begin{definition}[All-label vertical density factors]%
+    \label{def:mpdo_topological_projector_density}
+    \lean{MPOTensor.BNTFusionTensorClause.topologicalDensityChainEquiv}
+    \lean{MPOTensor.BNTFusionTensorClause.topologicalSectorWeight}
+    \lean{MPOTensor.BNTFusionTensorClause.verticalWeightTensorPower}
+    \lean{MPOTensor.BNTFusionTensorClause.topologicalProjectorFactor}
+    \lean{MPOTensor.BNTFusionTensorClause.allLabelDensity}
+    \leanok
+    \uses{def:mpdo_topological_projector_recursion}
+    For a positive chain length, choose at every site a vertical-canonical
+    label and one copy in its multiplicity space.  The corresponding
+    coefficient is the product of the selected diagonal entries of $\mu$.
+    On the product bond space for that label sequence, let
+    \[
+      R_{\boldsymbol\alpha}
+        =\widetilde U_{\boldsymbol\alpha}^{\dagger}
+          Q_{\boldsymbol\alpha}
+          \widetilde U_{\boldsymbol\alpha}.
+    \]
+    The diagonal weight and recursive factor over all label sequences are
+    \[
+      \mu_L=\bigoplus_{\boldsymbol\alpha}
+        \mu_{\boldsymbol\alpha}I,
+      \qquad
+      R_L=\bigoplus_{\boldsymbol\alpha}R_{\boldsymbol\alpha}.
+    \]
+    Here the displayed adjoints reflect that the retained-row fusion map in
+    the present convention is the adjoint of the circuit convention used in
+    the source.
+\end{definition}
+
+\begin{theorem}[All-label topological-projector density identity]%
+    \label{thm:mpdo_topological_projector_density}
+    \lean{MPOTensor.BNTFusionCoisometryFamily.%
+        conjTranspose_sequentialFusionCoisometry_mul_recursiveProjectorQ_mul}
+    \lean{MPOTensor.BNTFusionCoisometryFamily.%
+        conjTranspose_sequentialFusionCoisometry_mul_recursiveProjectorQ_physTrace_mul}
+    \lean{MPOTensor.BNTFusionTensorClause.%
+        changePhysicalBasis_conjTranspose_verticalCoisometry}
+    \lean{MPOTensor.BNTFusionTensorClause.%
+        reindex_mpo_changePhysicalBasis_eq_allLabelDensity}
+    \lean{MPOTensor.BNTFusionTensorClause.%
+        allLabelDensity_eq_verticalWeightTensorPower_mul_topologicalProjectorFactor}
+    \lean{MPOTensor.BNTFusionTensorClause.%
+        reindex_mpo_changePhysicalBasis_eq_verticalWeightTensorPower_mul}
+    \leanok
+    \uses{def:mpdo_topological_projector_density,
+        thm:mpdo_topological_projector_recursion}
+    In the vertical direct-sum coordinates, the density over all label and
+    multiplicity sectors satisfies
+    \[
+      \rho_L^{\mathrm{vert}}=\mu_LR_L.
+    \]
+    Equivalently, in each label sector the fixed-label physical-trace
+    transfer is reconstructed as
+    $\widetilde U_{\boldsymbol\alpha}^{\dagger}
+      Q_{\boldsymbol\alpha}\widetilde U_{\boldsymbol\alpha}$, and its scalar
+    coefficient is the corresponding diagonal entry of $\mu^{\otimes L}$.
+    The sitewise retained vertical coisometry sends the physical density
+    operator to this direct sum, while applying its adjoint reconstructs the
+    original local tensor.
+    This is the density identity at
+    \cite[line~999]{Cirac2016MPDO_arXiv}.
+
+    \textbf{Scope restriction (vertical direct-sum coordinates):} The theorem
+    does not prove the commutator at lines~1000--1002, the terminal spectral
+    refinement, or the commuting-Hamiltonian statement.  These remaining
+    steps are recorded in
+    \path{docs/paper-gaps/cpsv16_topological_projector_recursion.tex}.
+\end{theorem}
+\begin{proof}\leanok
+    The vertical-canonical forward identity makes different label sectors
+    vanish and identifies each diagonal sector with its multiplicity weight
+    times the corresponding product tensor.  Its reconstruction identity
+    recovers the original tensor after applying the adjoint coisometry.
+    Apply the reverse recursive-fusion identity in every fixed-label sector.
+    Matrix multiplication of the two block-diagonal factors then reduces to
+    scalar multiplication by the product of the selected diagonal entries of
+    $\mu$.
+\end{proof}
+
 \begin{definition}[Full-support specialization of one fusion layer]%
     \label{def:mpdo_full_support_virtual_projector_one_fusion}
     \lean{MPOTensor.BNTFusionIsometryFamily.projectorQBlock}
