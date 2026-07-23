@@ -124,10 +124,15 @@ and transporting the resulting three-site relation around the periodic chain
 proves
 \leanid{MPSTensor.IsBNTCanonicalForm.}
 \hspace{0pt}\leanid{rfp_implies_nncph_basisDirectSum}.
-This result uses no comparison, crossing, repeated-copy, raw-weight, or
-externally supplied commutation hypothesis.
+Combining this commutation result with the spanning theorem gives the complete
+all-chain condition at the same scope, recorded by
+\leanid{MPSTensor.IsBNTCanonicalForm.}
+\hspace{0pt}\leanid{rfp_implies_hasNNCPHGroundSpaces_basisDirectSum}.
+This implication uses only BNT canonical form and transfer idempotence of the
+whole multiplicity-one direct sum. It uses no comparison, crossing,
+repeated-copy, raw-weight, or externally supplied commutation hypothesis.
 
-These reductions alone do not prove the full source theorem.  The
+This scope-restricted implication does not prove the full source theorem.  The
 ground-space spanning condition for repeated copies and arbitrary raw sector
 weights, the three-way equivalence with ZCL, the complete canonical-form
 hypotheses from the source statement, and the identification of Beigi's loop
@@ -252,9 +257,11 @@ The residual-family bond-projector argument independently proves the
 commutation clause
 \leanid{MPSTensor.IsBNTCanonicalForm.}
 \hspace{0pt}\leanid{rfp_implies_nncph_basisDirectSum}.
-Together these are precisely the multiplicity-one distinct-sector forward
-case. They do not assert the result for repeated copies or arbitrary raw
-weights.
+Their conjunction is recorded by
+\leanid{MPSTensor.IsBNTCanonicalForm.}
+\hspace{0pt}\leanid{rfp_implies_hasNNCPHGroundSpaces_basisDirectSum}.
+This is precisely the multiplicity-one distinct-sector forward case. It does
+not assert the result for repeated copies or arbitrary raw weights.
 The reverse theorem requires both the explicit BNT relation
 \leanid{MPSTensor.IsBNT} and the named all-chain condition
 \leanid{MPSTensor.HasNNCPHGroundSpaces}, but the implication still depends on
