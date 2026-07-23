@@ -1666,6 +1666,74 @@ separate step.
     $T_\gamma\geq0$.
 \end{proof}
 
+\begin{theorem}[Spectral resolution of the terminal matrices]%
+    \label{thm:mpdo_terminal_spectral_family}
+    \lean{MPOTensor.BNTFusionTensorClause.terminalMatrix_eq_sum}
+    \lean{MPOTensor.BNTFusionTensorClause.sum_terminalEigenvectorProjection}
+    \lean{MPOTensor.BNTFusionTensorClause.%
+        terminalEigenvectorProjection_mul_eq_zero_of_ne}
+    \lean{MPOTensor.BNTFusionTensorClause.%
+        terminalEigenvectorProjection_isOrthogonalProjection}
+    \lean{MPOTensor.BNTFusionTensorClause.terminalEigenvalue_nonneg}
+    \lean{MPOTensor.BNTFusionTensorClause.terminalMatrix_posSemidef}
+    \lean{MPOTensor.BNTFusionTensorClause.TerminalSpectralIndex}
+    \lean{MPOTensor.BNTFusionTensorClause.terminalMatrix}
+    \lean{MPOTensor.BNTFusionTensorClause.terminalEigenvalue}
+    \lean{MPOTensor.BNTFusionTensorClause.terminalEigenvectorProjectionAt}
+    \lean{MPOTensor.BNTFusionTensorClause.terminalEigenvectorProjection}
+    \leanok
+    \uses{thm:mpdo_terminal_transfer_positivity,
+        thm:matrix_hermitian_rank_one_eigenvector_resolution}
+    Let $M$ be a matrix product density operator, and choose a BNT fusion
+    clause for $M$.  For each final label $\gamma$, let $D_\gamma$ be its
+    bond dimension and let
+    $T_\gamma=\operatorname{tr}(M_\gamma)$ be the terminal matrix.  Set
+    \[
+        {\cal S}=\bigsqcup_\delta\{(\delta,k):0\leq k<D_\delta\}.
+    \]
+    Choose a complete orthonormal eigenbasis
+    $(v_{\delta,k})_{k=0}^{D_\delta-1}$ of each $T_\delta$, with eigenvalues
+    $\lambda_{\delta,k}$, and retain the vectors whose eigenvalue is zero.
+    For $s=(\delta,k)\in{\cal S}$ define, at every final label $\gamma$,
+    \[
+        P_s^{(\gamma)}
+        =
+        \begin{cases}
+          \ketbra{v_{\delta,k}}{v_{\delta,k}},&\delta=\gamma,\\
+          0,&\delta\neq\gamma.
+        \end{cases}
+    \]
+    Then $\lambda_s\geq0$, every $P_s^{(\gamma)}$ is an orthogonal projection,
+    and for distinct $s,t\in{\cal S}$,
+    \[
+        P_s^{(\gamma)}P_t^{(\gamma)}=0.
+    \]
+    For every final label $\gamma$ these projections satisfy
+    \[
+        \sum_{s\in{\cal S}}P_s^{(\gamma)}=I_{D_\gamma},
+        \qquad
+        T_\gamma
+        =\sum_{s\in{\cal S}}\lambda_sP_s^{(\gamma)}.
+    \]
+    This pointwise statement assumes neither the renormalization fixed-point
+    condition nor length independence of the fusion coefficients.  It is the
+    pointwise terminal spectral resolution underlying
+    \cite[lines~1010--1012]{Cirac2016MPDO_arXiv}; no recursive transport or
+    Hamiltonian conclusion is asserted here.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:mpdo_terminal_transfer_positivity,
+        thm:matrix_hermitian_rank_one_eigenvector_resolution}
+    Theorem~\ref{thm:mpdo_terminal_transfer_positivity} gives
+    $T_\delta\geq0$, so its eigenvalues are nonnegative.  Apply the
+    rank-one eigenvector resolution to every $T_\delta$.  Projections from
+    distinct eigenbasis vectors are orthogonal, and their sum is the
+    identity.  Extending each projection by zero makes every sum at a fixed
+    label $\gamma$ reduce to the summand $\delta=\gamma$, which gives both
+    displayed identities.
+\end{proof}
+
 \begin{definition}[All-label recursive density operator]%
     \label{def:mpdo_topological_density_operator}
     \lean{MPOTensor.BNTFusionTensorClause.verticalMultiplicityChainWeight}
