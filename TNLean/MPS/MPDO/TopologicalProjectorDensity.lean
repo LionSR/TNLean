@@ -18,6 +18,8 @@ multiplicity copy.  The diagonal coefficient is the corresponding entry of
 `μ^{⊗ (N + 1)}`.  The second factor reconstructs each fixed-label transfer from the recursive
 operator `Q`.
 
+Throughout, a declaration indexed by `N` describes the source chain of positive length `N + 1`.
+
 The conditional core proves the density identity in the direct-sum coordinates selected by
 a `BNTFusionTensorClause`.  The source-facing corollary obtains such a clause from the
 horizontal-canonical MPDO and renormalization fixed-point hypotheses of arXiv:1606.00608,
