@@ -518,6 +518,7 @@ specialization of that Appendix~D definition.
 \end{definition}
 
 \begin{remark}[Elementary consequences of the commuting definition]
+    \label{rem:nncph_ground_spaces_decomposition}
     \lean{MPSTensor.IsNNCPH.isCommutingParentHam}
     \lean{MPSTensor.IsNNCPHGroundState.isNNCPH}
     \lean{MPSTensor.IsNNCPHGroundState.isFrustrationFree}
@@ -1216,7 +1217,8 @@ specialization of that Appendix~D definition.
 
 \begin{proof}\leanok
     \uses{thm:rfp_multiplicity_one_bnt_nncph,
-        thm:rfp_multiplicity_one_bnt_parent_ground_spaces}
+        thm:rfp_multiplicity_one_bnt_parent_ground_spaces,
+        rem:nncph_ground_spaces_decomposition}
     Theorem~\ref{thm:rfp_multiplicity_one_bnt_nncph} gives pairwise
     commutation of the translated two-site interactions for every $N>2$.
     The parent-Hamiltonian construction gives the zero-energy equation.
