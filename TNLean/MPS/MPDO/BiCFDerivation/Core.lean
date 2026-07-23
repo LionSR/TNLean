@@ -3,8 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.MPS.FundamentalTheorem.ProductAlgebra
 import TNLean.MPS.MPDO.PerCopyHorizontalCF
-import TNLean.PiAlgebra.Construction
 import Mathlib.LinearAlgebra.Finsupp.LinearCombination
 import Mathlib.LinearAlgebra.Prod
 import Mathlib.RingTheory.Noetherian.Defs
