@@ -639,18 +639,19 @@ theorem mem_ker_parentHamiltonian_of_groundBondProduct_mulVec_eq_self
   simpa [parentHamiltonianES, transport, complementProductTransport] using h
 
 /-- Beigi's finite-chain ground-space dimension formula: for a periodic chain
-of length greater than two, the dimension is the sum over ordered cyclic
+of length at least two, the dimension is the sum over ordered cyclic
 sector sequences of the products of the adjacent edge-ground-space
 dimensions.
 
 **Scope restriction (chain length):** Beigi's equations (3)--(4) apply to all
-periodic lengths, whereas this theorem treats the range `N > 2` used by the
-NNCPH clause of arXiv:1606.00608, Theorem 3.10(iii). Documented in
+periodic lengths, whereas this theorem treats `2 ≤ N`; the one-site periodic
+interaction convention remains open. Documented in
 `docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex`.
 
-Source: Beigi, arXiv:1105.1019v2, Section III, equations (3)--(4), page 4. -/
+Source: Beigi, arXiv:1105.1019v2, Section III, equations (2)--(4), source
+lines 451--512. -/
 theorem parentHamiltonianGroundSpaceES_finrank_eq
-    (F : BeigiSectorGraphData A) {N : ℕ} (hN : 2 < N) :
+    (F : BeigiSectorGraphData A) {N : ℕ} (hN : 2 ≤ N) :
     letI : NeZero N := ⟨by omega⟩
     Module.finrank ℂ (parentHamiltonianGroundSpaceES A 2 N) =
       ∑ c : F.OrderedCycle N,
@@ -682,6 +683,22 @@ theorem parentHamiltonianGroundSpaceES_finrank_eq
       exact Submodule.finrank_eq_zero.mpr hbot
     _ = ∑ c : {k // cycle k}, weight c.1 := by
       exact Finset.sum_subtype (Finset.univ.filter cycle) (by simp) weight
+
+/-- Beigi's ordered-cycle ground-space dimension formula at period two.  The
+two cyclic windows traverse the same pair of sites in opposite orders, so
+`(a, b)` and `(b, a)` remain distinct ordered cycles when `a ≠ b`.
+
+Source: Beigi, arXiv:1105.1019v2, Section III, equations (2)--(4), source
+lines 451--512; the period-two ordered-cycle convention is explicit at source
+lines 509--512. -/
+theorem parentHamiltonianGroundSpaceES_finrank_eq_two
+    (F : BeigiSectorGraphData A) :
+    Module.finrank ℂ (parentHamiltonianGroundSpaceES A 2 2) =
+      ∑ c : F.OrderedCycle 2,
+        ∏ n : Fin 2,
+          Module.finrank ℂ (F.edgeGroundSpace (c.1 n) (c.1 (n + 1))) := by
+  apply F.parentHamiltonianGroundSpaceES_finrank_eq (N := 2)
+  omega
 
 end BeigiSectorGraphData
 
