@@ -360,16 +360,24 @@ _DECIMAL = re.compile(r"(?<![\w@.])\d*\.\d+")
 # Only metric-table DEFINITIONS are exempt; a stray literal multiplying a
 # metric macro in drawing code is exactly the debt this meter measures.
 _METRIC_LINE = re.compile(r"\\def\\tenkz@(?:r@[a-z]+|basepitch|pitch)\b|\\tenkz@pitch=")
+_RENDER_PRIMITIVE_REF = re.compile(r"\\__tenkz_ink_[A-Za-z@:_]+")
 
 
 def census(repo: Path) -> int:
     ink_total = decimal_total = 0
+    primitive_violations: list[tuple[Path, int, str]] = []
     for path in sorted((repo / "tex" / "tenkz").glob("*.code.tex")):
         if path.name in RENDER_STAGE_FILES:
             continue
         ink = decimals = 0
-        for line in strip_comments(path.read_text(encoding="utf-8")).splitlines():
+        for lineno, line in enumerate(
+            strip_comments(path.read_text(encoding="utf-8")).splitlines(), 1
+        ):
             ink += len(_INK_TOKEN.findall(line))
+            primitive_violations.extend(
+                (path, lineno, match.group())
+                for match in _RENDER_PRIMITIVE_REF.finditer(line)
+            )
             if path.name in METRIC_TABLE_FILES:
                 continue
             if not _METRIC_LINE.search(line):
@@ -380,7 +388,13 @@ def census(repo: Path) -> int:
               f"{decimals} decimal literal(s) outside the metric table")
     print(f"tenkz-census: WARN totals: {ink_total} ink token(s) outside the "
           f"render stage, {decimal_total} stray decimal literal(s)")
-    return 0
+    for path, lineno, primitive in primitive_violations:
+        print(
+            f"{path}:{lineno}: FAIL: render primitive {primitive} is owned by "
+            "tenkz-render.code.tex",
+            file=sys.stderr,
+        )
+    return 1 if primitive_violations else 0
 
 
 def main(argv: list[str]) -> int:

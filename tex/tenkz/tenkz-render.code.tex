@@ -4,12 +4,12 @@
 % Invariants:  no parsing, no topology, no recovery; label text never rotates.
 % Next stage:  events serialize the same records this stage consumed.
 %
-% LOAD-ORDER LOCKOUT.  This file is loaded LAST by tenkz.sty, and the ink
-% primitives below are created here with \cs_new.  A language, model, or
-% dialect file that references them fails at package load with an undefined
-% control sequence -- drawing outside the render stage is impossible by
-% construction, not by review.  (The legacy dialect renderers predate the
-% lockout and burn down with stages S2-S4; the census meters watch them.)
+% RENDER-PRIMITIVE LOCKOUT.  This file is loaded LAST by tenkz.sty, and the
+% ink primitives below are created here with \cs_new.  Load order documents
+% the dependency direction; scripts/tenkz_lint.py --census enforces it by
+% rejecting any \__tenkz_ink_ reference outside this file.  (The legacy
+% dialect renderers predate the lockout and burn down with stages S2-S4;
+% the separate raw-ink census meters watch them.)
 
 \ExplSyntaxOn
 
@@ -47,14 +47,22 @@
 % from geometry in pitch units; only here do they meet the pitch dimension.
 \tl_new:N \l__tenkz_render_x_tl
 \tl_new:N \l__tenkz_render_y_tl
+\tl_new:N \l__tenkz_render_content_tl
 \cs_new_protected:Npn \__tenkz_render_atom:nnn #1#2#3
   {
     \__tenkz_geom_xy:nNN {#2} \l__tenkz_render_x_tl \l__tenkz_render_y_tl
+    \str_case:nnF {#1}
+      {
+        {dot}  { \tl_clear:N \l__tenkz_render_content_tl }
+        {dots} { \tl_set:Nn \l__tenkz_render_content_tl { $\cdots$ } }
+        {none} { \tl_clear:N \l__tenkz_render_content_tl }
+      }
+      { \tl_set:Nn \l__tenkz_render_content_tl {#3} }
     \__tenkz_ink_node:nnnn
       { \__tenkz_render_skin_style:n {#1} }
       { \l__tenkz_render_x_tl \tenkz@pitch }
       { \l__tenkz_render_y_tl \tenkz@pitch }
-      { \str_if_eq:nnTF {#1} {dots} { $\cdots$ } {#3} }
+      { \l__tenkz_render_content_tl }
   }
 
 % Draw one wire between resolved placements: #1 route word, #2 from id,
@@ -149,6 +157,7 @@
 % never sees a direction function.
 \dim_new:N \l__tenkz_render_dx_dim
 \dim_new:N \l__tenkz_render_dy_dim
+\dim_new:N \l__tenkz_render_label_inner_sep_dim
 \cs_new_protected:Npn \__tenkz_render_label:nnnn #1#2#3#4
   {
     \__tenkz_geom_xy:nNN {#1} \l__tenkz_render_x_tl \l__tenkz_render_y_tl
@@ -156,10 +165,12 @@
       { \fp_to_decimal:n { cosd(#2) } \__tenkz_dim:n {#3} }
     \dim_set:Nn \l__tenkz_render_dy_dim
       { \fp_to_decimal:n { sind(#2) } \__tenkz_dim:n {#3} }
+    \dim_set:Nn \l__tenkz_render_label_inner_sep_dim
+      { \__tenkz_dim:n {labelclear} / 2 }
     \__tenkz_ink_node:nnnn
       {
         anchor = \__tenkz_render_label_anchor:n {#2} ,
-        inner~sep = 0.5 \__tenkz_dim:n {labelclear}
+        inner~sep = \l__tenkz_render_label_inner_sep_dim
       }
       { \l__tenkz_render_x_tl \tenkz@pitch + \l__tenkz_render_dx_dim }
       { \l__tenkz_render_y_tl \tenkz@pitch + \l__tenkz_render_dy_dim }

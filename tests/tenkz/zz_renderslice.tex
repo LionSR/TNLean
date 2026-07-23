@@ -4,6 +4,20 @@
 \usepackage{tenkz}
 \makeatletter\tenkz@experimentrender\makeatother
 \begin{document}
+\ExplSyntaxOn
+\cs_new_eq:NN \__tenkz_test_derive_bonds: \tenkz_model_derive_bonds:
+\cs_set_protected:Npn \tenkz_model_derive_bonds:
+  {
+    \__tenkz_test_derive_bonds:
+    \__tenkz_model_count:nN {wire} \l_tmpa_int
+    \int_compare:nNnF {\l_tmpa_int} = {2}
+      {
+        \PackageError{tenkz-test}
+          {Expected~two~model~WIRE~records;~got~\int_use:N\l_tmpa_int}
+          {Grid~ownership~must~be~resolved~before~bond~derivation.}
+      }
+  }
+\ExplSyntaxOff
 \begin{tenkz}[physical=up]
   \tn{A} & \tn{B} & \tn{C}
 \end{tenkz}
