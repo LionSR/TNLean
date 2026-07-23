@@ -49,6 +49,7 @@ import TNLean.Algebra.ScalarCommutant
 import TNLean.Algebra.ScalarPowerSumIdentity
 import TNLean.Algebra.SkolemNoether
 import TNLean.Algebra.SkolemNoetherUnitary
+import TNLean.Algebra.SpectralProjection
 import TNLean.Algebra.SpinCover
 import TNLean.Algebra.StarSubalgebraBlockDiagonal
 import TNLean.Algebra.StarSubalgebraBlockForm
