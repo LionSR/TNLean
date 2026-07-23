@@ -51,12 +51,12 @@ case = "tests/tenkz/rmp/section-ii/cases/rmp-ii-mps-marginal.tex"
 formula = "marginals rho_kept = Tr_traced |psi><psi|."
 ink = "Canonical public tenkz environment; no raw TikZ."
 boundary = "The state has five open physical legs; the marginal traces the last two ket-bra pairs."
-source = "paper TN-Review-main.tex line 327; author source ImagesReview Section II/ImagesReview Section II.tex lines 269-304"
+source = "paper TN-Review-main.tex line 327; author source ImagesReview Section II/ImagesReview Section II.tex lines 269-286"
 capabilities = ["grid", "typed-ports"]
 paper_context_only = false
 fixture = "tests/tenkz/rmpfig2_test.tex"
 author_source = "ImagesReview Section II/ImagesReview Section II.tex"
-author_lines = "269-304"
+author_lines = "269-286"
 placements = [{ order = 3, line = 327, asset = "fig2_fig2-pepe_sec2fig4aMPS.pdf" }]
 
 [[target]]
@@ -68,12 +68,12 @@ case = "tests/tenkz/rmp/section-ii/cases/rmp-ii-peps-marginal.tex"
 formula = "marginals rho_kept = Tr_traced |psi><psi|."
 ink = "Canonical public tenkzlattice, tenkzplanes environments; no raw TikZ."
 boundary = "The state sheet is open; the doubled sheet traces the declared complement."
-source = "paper TN-Review-main.tex line 331; author source ImagesReview Section II/ImagesReview Section II.tex lines 269-304"
+source = "paper TN-Review-main.tex line 331; author source ImagesReview Section II/ImagesReview Section II.tex lines 287-304"
 capabilities = ["lattice", "typed-ports"]
 paper_context_only = false
 fixture = "tests/tenkz/rmpfig2_test.tex"
 author_source = "ImagesReview Section II/ImagesReview Section II.tex"
-author_lines = "269-304"
+author_lines = "287-304"
 placements = [{ order = 4, line = 331, asset = "fig2_fig2-pepe_secfig4bPEPS.pdf" }]
 
 [[target]]
@@ -91,6 +91,7 @@ paper_context_only = false
 fixture = "tests/tenkz/t2_mpo.tex"
 author_source = "ImagesReview Section II/ImagesReview Section II.tex"
 author_lines = "305-316"
+extraction_override = "shared composite block; per-panel split pending"
 placements = [{ order = 5, line = 361, asset = "fig2_fig2-pepe_sec2fig5MPO.pdf" }]
 
 [[target]]
@@ -108,6 +109,7 @@ paper_context_only = false
 fixture = "tests/tenkz/t2_pepo5.tex"
 author_source = "ImagesReview Section II/ImagesReview Section II.tex"
 author_lines = "305-316"
+extraction_override = "shared composite block; per-panel split pending"
 placements = [{ order = 6, line = 363, asset = "fig2_fig2-pepe_sec2fig5PEPO.pdf" }]
 
 [[target]]
@@ -261,6 +263,7 @@ paper_context_only = false
 fixture = "tests/tenkz/hard03_v3.tex"
 author_source = "ImagesReview Section II/ImagesReview Section II.tex"
 author_lines = "484-499"
+extraction_override = "shared composite block; per-panel split pending"
 placements = [{ order = 15, line = 421, asset = "fig2_fig2-pepe_sec2fig8.pdf" }]
 
 [[target]]
@@ -278,6 +281,7 @@ paper_context_only = false
 fixture = "tests/tenkz/hard04_v3.tex"
 author_source = "ImagesReview Section II/ImagesReview Section II.tex"
 author_lines = "484-499"
+extraction_override = "shared composite block; per-panel split pending"
 placements = [{ order = 16, line = 425, asset = "fig2_fig2-pepe_fig9-1.pdf" }]
 
 [[target]]
@@ -457,12 +461,12 @@ case = "tests/tenkz/rmp/section-ii/cases/rmp-ii-tangent-projector.tex"
 formula = "P_T(A) = sum_i P_L^(i-1) tensor I_i tensor P_R^(i+1) - sum_i P_L^i tensor P_R^(i+1)."
 ink = "Canonical public tenkz and tenkzfree environments; no raw TikZ."
 boundary = "Each block closes only at its internal cup; the identity wire and all displayed outer and physical endpoints stay open."
-source = "paper TN-Review-main.tex line 667; author source ImagesReview Section II/ImagesReview Section II.tex lines 572-589"
+source = "paper TN-Review-main.tex line 667; author source ImagesReview Section II/ImagesReview Section II.tex lines 208-236"
 capabilities = ["grid", "free-graph", "typed-ports"]
 paper_context_only = false
 fixture = "tests/tenkz/hard10_v3.tex"
 author_source = "ImagesReview Section II/ImagesReview Section II.tex"
-author_lines = "572-589"
+author_lines = "208-236"
 placements = [{ order = 27, line = 667, asset = "fig2_fig2-pepe_PTA.pdf" }]
 
 [[target]]
@@ -474,12 +478,12 @@ case = "tests/tenkz/rmp/section-ii/cases/rmp-ii-boundary-lasso.tex"
 formula = "A^I = U^A_I sigma^A and B^Ibar = sigma^B U^B_Ibar."
 ink = "Canonical public tenkz environment; no raw TikZ."
 boundary = "The A lasso seals its west side; the B lasso seals its east side; physical legs stay open."
-source = "paper TN-Review-main.tex line 804; author source ImagesReview Section II/ImagesReview Section II.tex lines 597-617"
+source = "paper TN-Review-main.tex line 804; author source ImagesReview Section II/ImagesReview Section II.tex lines 618-649"
 capabilities = ["grid", "typed-ports"]
 paper_context_only = false
 fixture = "tests/tenkz/t2_lassodef.tex"
 author_source = "ImagesReview Section II/ImagesReview Section II.tex"
-author_lines = "597-617"
+author_lines = "618-649"
 placements = [{ order = 28, line = 804, asset = "fig2_fig2-pepe_Figboundary-theorya-1.pdf" }]
 
 [[target]]
@@ -491,12 +495,12 @@ case = "tests/tenkz/rmp/section-ii/cases/rmp-ii-boundary-region.tex"
 formula = "|psi> = sum_{I,Ibar} A^I_{partial R} B^Ibar_{partial R}."
 ink = "Canonical public tenkzlattice, tenkz environments; no raw TikZ."
 boundary = "The sheet exterior is open; the reduced pair seals outer virtual sides at partial R."
-source = "paper TN-Review-main.tex line 806; author source ImagesReview Section II/ImagesReview Section II.tex lines 650-684"
+source = "paper TN-Review-main.tex line 806; author source ImagesReview Section II/ImagesReview Section II.tex lines 597-617"
 capabilities = ["grid", "lattice", "regions", "typed-ports"]
 paper_context_only = false
 fixture = "tests/tenkz/t2_lassoC.tex"
 author_source = "ImagesReview Section II/ImagesReview Section II.tex"
-author_lines = "650-684"
+author_lines = "597-617"
 placements = [{ order = 29, line = 806, asset = "fig2_fig2-pepe_Figboundary-theoryc.pdf" }]
 
 [[target]]
@@ -508,12 +512,12 @@ case = "tests/tenkz/rmp/section-ii/cases/rmp-ii-boundary-state.tex"
 formula = "rho_R factorizes through the A and B boundary lassos and sigma_partial R."
 ink = "Canonical public tenkz environment; no raw TikZ."
 boundary = "The east cup closes the virtual pair, the west side is sealed, and physical legs stay open."
-source = "paper TN-Review-main.tex line 807; author source ImagesReview Section II/ImagesReview Section II.tex lines 618-649"
+source = "paper TN-Review-main.tex line 807; author source ImagesReview Section II/ImagesReview Section II.tex lines 650-684"
 capabilities = ["grid", "typed-ports"]
 paper_context_only = false
 fixture = "tests/tenkz/t2_rhoR.tex"
 author_source = "ImagesReview Section II/ImagesReview Section II.tex"
-author_lines = "618-649"
+author_lines = "650-684"
 placements = [{ order = 30, line = 807, asset = "fig2_fig2-pepe_Figboundary-theoryb-1.pdf" }]
 
 [[target]]
@@ -661,12 +665,12 @@ case = "tests/tenkz/rmp/section-iii-a/cases/rmp-iii-a-boundary-algebra-n.tex"
 formula = "A^(N) = {Tr[X A_1...A_N] : X} is the size-N MPO algebra."
 ink = "Canonical public tenkz periodic N-site word with boundary matrix X."
 boundary = "The virtual word is traced; all N physical indices are open."
-source = "paper TN-Review-main.tex line 1298; author source ImagesReview Section III/ImagesReview Section III.tex lines 133-163"
+source = "paper TN-Review-main.tex line 1298; author source ImagesReview Section III/ImagesReview Section III.tex lines 136-143"
 capabilities = ["grid", "periodic-closure", "boundary-insertion"]
 paper_context_only = false
 fixture = "tests/tenkz/t2_ared_loop.tex"
 author_source = "ImagesReview Section III/ImagesReview Section III.tex"
-author_lines = "133-163"
+author_lines = "136-143"
 placements = [{ order = 39, line = 1298, asset = "fig3_fig3-pepe_ANred.pdf" }]
 
 [[target]]
@@ -678,12 +682,12 @@ case = "tests/tenkz/rmp/section-iii-a/cases/rmp-iii-a-boundary-algebra.tex"
 formula = "A = {Tr[X A] : X} is the size-independent local MPO algebra."
 ink = "Canonical public tenkz one-site periodic word with boundary matrix X."
 boundary = "The virtual index is traced; the one physical index is open."
-source = "paper TN-Review-main.tex line 1302; author source ImagesReview Section III/ImagesReview Section III.tex lines 133-163"
+source = "paper TN-Review-main.tex line 1302; author source ImagesReview Section III/ImagesReview Section III.tex lines 144-149"
 capabilities = ["grid", "periodic-closure", "boundary-insertion"]
 paper_context_only = false
 fixture = "tests/tenkz/t2_ared.tex"
 author_source = "ImagesReview Section III/ImagesReview Section III.tex"
-author_lines = "133-163"
+author_lines = "144-149"
 placements = [{ order = 40, line = 1302, asset = "fig3_fig3-pepe_Ared.pdf" }]
 
 [[target]]
@@ -801,12 +805,12 @@ case = "tests/tenkz/rmp/section-iii-a/cases/rmp-iii-a-coproduct.tex"
 formula = "Delta sends the local boundary element XA to the two-site word XAA."
 ink = "Canonical public tenkz equation between one-site and two-site words."
 boundary = "Both sides have one open west and one open east virtual index."
-source = "paper TN-Review-main.tex line 1350; author source ImagesReview Section III/ImagesReview Section III.tex lines 133-248"
+source = "paper TN-Review-main.tex line 1350; author source ImagesReview Section III/ImagesReview Section III.tex lines 150-163"
 capabilities = ["grid", "equation-composition", "boundary-insertion"]
 paper_context_only = false
 fixture = "tests/tenkz/t2_ared_loop.tex"
 author_source = "ImagesReview Section III/ImagesReview Section III.tex"
-author_lines = "133-248"
+author_lines = "150-163"
 placements = [{ order = 48, line = 1350, asset = "fig3_fig3-pepe_DeltaAred.pdf" }]
 
 [[target]]
@@ -824,6 +828,7 @@ paper_context_only = false
 fixture = "tests/tenkz/t2_eq50_pull.tex"
 author_source = "ImagesReview Section III/ImagesReview Section III.tex"
 author_lines = "414-447"
+extraction_override = "shared composite block; per-panel split pending"
 placements = [{ order = 49, line = 1356, asset = "fig3_fig3-pepe_eq50redarrows.pdf" }]
 
 [[target]]
@@ -926,6 +931,7 @@ paper_context_only = false
 fixture = "tests/tenkz/t2_czx.tex"
 author_source = "ImagesReview Section III/ImagesReview Section III.tex"
 author_lines = "357-362"
+extraction_override = "shared composite block; per-panel split pending"
 placements = [{ order = 55, line = 1449, asset = "fig3_fig3-pepe_ghzdown.pdf" }]
 
 [[target]]
@@ -943,6 +949,7 @@ paper_context_only = false
 fixture = "tests/tenkz/t2_czx.tex"
 author_source = "ImagesReview Section III/ImagesReview Section III.tex"
 author_lines = "357-362"
+extraction_override = "shared composite block; per-panel split pending"
 placements = [{ order = 56, line = 1449, asset = "fig3_fig3-pepe_Hmatrix.pdf" }]
 
 [[target]]
@@ -960,6 +967,7 @@ paper_context_only = false
 fixture = "tests/tenkz/t2_sptmpo_cross.tex"
 author_source = "ImagesReview Section III/ImagesReview Section III.tex"
 author_lines = "414-447"
+extraction_override = "shared composite block; per-panel split pending"
 placements = [{ order = 57, line = 1459, asset = "fig3_fig3-pepe_newSPTMPO.pdf" }]
 
 [[target]]
@@ -1056,12 +1064,12 @@ case = "tests/tenkz/rmp/section-iii-a/cases/rmp-iii-a-torus-two.tex"
 formula = "Enlarged horizontal O_g and vertical O_h strings cross on the PEPS."
 ink = "Canonical public tenkzlattice with orthogonal distinguished MPO paths."
 boundary = "The 5x5 PEPS patch is open; both MPO strings cross its boundary."
-source = "paper TN-Review-main.tex line 1594; author source ImagesReview Section III/ImagesReview Section III.tex lines 572-603"
+source = "paper TN-Review-main.tex line 1594; author source ImagesReview Section III/ImagesReview Section III.tex lines 572-602"
 capabilities = ["lattice", "orthogonal-strings", "crossing-tensor"]
 paper_context_only = false
 fixture = "tests/tenkz/t2_sptintertwin.tex"
 author_source = "ImagesReview Section III/ImagesReview Section III.tex"
-author_lines = "572-603"
+author_lines = "572-602"
 placements = [{ order = 63, line = 1594, asset = "fig3_fig3-pepe_Eq62.pdf" }]
 
 [[target]]
@@ -1073,12 +1081,12 @@ case = "tests/tenkz/rmp/section-iii-a/cases/rmp-iii-a-torus-three.tex"
 formula = "Sliding O_g through O_h conjugates h to ghg^{-1} at the crossing."
 ink = "Canonical public tenkzfree before-and-after crossing equation."
 boundary = "Four MPO string ends are open on each side of the equation."
-source = "paper TN-Review-main.tex line 1605; author source ImagesReview Section III/ImagesReview Section III.tex lines 563-603"
+source = "paper TN-Review-main.tex line 1605; author source ImagesReview Section III/ImagesReview Section III.tex lines 563-571"
 capabilities = ["free-graph", "crossing-tensor", "string-slide"]
 paper_context_only = false
 fixture = "tests/tenkz/t2_sptintertwin.tex"
 author_source = "ImagesReview Section III/ImagesReview Section III.tex"
-author_lines = "563-603"
+author_lines = "563-571"
 placements = [{ order = 64, line = 1605, asset = "fig3_fig3-pepe_neweq60.pdf" }]
 
 [[target]]
@@ -1600,6 +1608,7 @@ capabilities = ["lattice", "typed-ports"]
 paper_context_only = false
 author_source = "ImagesReview Section II/ImagesReview Section II.tex"
 author_lines = "742-800"
+extraction_override = "shared composite block; per-panel split pending"
 placements = []
 fixture = "tests/tenkz/t2_rgfp4.tex"
 
@@ -1729,6 +1738,7 @@ capabilities = ["lattice", "typed-ports"]
 paper_context_only = false
 author_source = "ImagesReview Section II/ImagesReview Section II.tex"
 author_lines = "742-800"
+extraction_override = "shared composite block; per-panel split pending"
 placements = []
 fixture = "tests/tenkz/t2_renorm13.tex"
 
@@ -1842,6 +1852,7 @@ capabilities = ["free-graph", "rotated-action", "ring-closure"]
 paper_context_only = false
 author_source = "ImagesReview Section III/ImagesReview Section III.tex"
 author_lines = "170-197"
+extraction_override = "shared composite block; per-panel split pending"
 placements = []
 
 [[target]]
@@ -1858,6 +1869,7 @@ capabilities = ["lattice", "regions", "typed-ports"]
 paper_context_only = false
 author_source = "ImagesReview Section III/ImagesReview Section III.tex"
 author_lines = "170-197"
+extraction_override = "shared composite block; per-panel split pending"
 placements = []
 
 [[target]]
