@@ -100,16 +100,45 @@ def public_census(entries: list[Entry]) -> dict[str, int]:
     }
 
 
-def _sugar_expansion_tokens(payload: str) -> list[str]:
-    """Extract the kernel key spellings from a sugar expansion expression."""
-    expansion = payload.partition(";")[0].strip()
-    tokens = [
-        match.group(1).replace("~", " ").strip()
-        for match in re.finditer(r"(?:^|,|\s)([a-z][a-z ~]*?)\s*=", expansion)
-    ]
-    if not tokens and re.fullmatch(r"[a-z][a-z ~]*", expansion):
-        tokens.append(expansion.replace("~", " ").strip())
-    return tokens
+def _split_top_level_commas(text: str) -> list[str]:
+    """Split a registry expression without cutting commas inside braces."""
+    parts: list[str] = []
+    start = 0
+    depth = 0
+    index = 0
+    while index < len(text):
+        char = text[index]
+        if char == "\\":
+            index += 2
+            continue
+        if char in "{[(":
+            depth += 1
+        elif char in "}])":
+            depth -= 1
+            if depth < 0:
+                raise ValueError(f"unbalanced registry expression {text!r}")
+        elif char == "," and depth == 0:
+            parts.append(text[start:index].strip())
+            start = index + 1
+        index += 1
+    if depth:
+        raise ValueError(f"unbalanced registry expression {text!r}")
+    parts.append(text[start:].strip())
+    return parts
+
+
+def parse_key_expression(expression: str) -> list[tuple[str, str | None]]:
+    """Parse a complete comma-separated key or key=value expression."""
+    parsed: list[tuple[str, str | None]] = []
+    for fragment in _split_top_level_commas(expression):
+        match = re.fullmatch(r"([a-z][a-z ~]*?)(?:\s*=(.*))?", fragment)
+        if match is None:
+            raise ValueError(f"invalid key-expression fragment {fragment!r}")
+        name, value = match.groups()
+        parsed.append((name.replace("~", " ").strip(), value))
+    if not parsed:
+        raise ValueError("empty key expression")
+    return parsed
 
 
 def _group(text: str, start: int) -> tuple[str, int]:
@@ -233,7 +262,7 @@ def check(entries: list[Entry]) -> list[str]:
         errors.append(f"accidental public environments: {', '.join(missing_environments)}")
     if absent_commands:
         errors.append(f"registered commands without declarations: {', '.join(absent_commands)}")
-    kernel_keys: set[tuple[str, str]] = set()
+    key_vocabulary: dict[tuple[str, str], tuple[str, str]] = {}
     for scope, name, value_type, default, status, meaning in by_kind["key"]:
         if not all((scope, name, value_type, default, status, meaning)):
             errors.append(f"incomplete key record: {scope}:{name}")
@@ -242,8 +271,7 @@ def check(entries: list[Entry]) -> list[str]:
         except ValueError as exc:
             errors.append(f"{scope}:{name}: {exc}")
             continue
-        if ledger == "kernel":
-            kernel_keys.add((scope, name.replace("~", " ")))
+        key_vocabulary[(scope, name.replace("~", " "))] = (ledger, value_type)
     for scope, name, _vt, _default, status, _meaning in by_kind["key"]:
         try:
             ledger, payload = parse_status(status)
@@ -253,30 +281,71 @@ def check(entries: list[Entry]) -> list[str]:
             # Expansion closure: a sugar row must spell its expansion in
             # kernel vocabulary.  Sugar that cannot expand is kernel in
             # disguise and fails here.
-            tokens = _sugar_expansion_tokens(payload)
-            unknown = [
-                token for token in tokens if (scope, token) not in kernel_keys
-            ]
-            if not tokens:
+            try:
+                expansion = parse_key_expression(payload)
+            except ValueError as exc:
                 errors.append(
-                    f"sugar row {scope}:{name} has no kernel spelling in its "
-                    f"expansion {payload!r}"
+                    f"sugar row {scope}:{name} has invalid expansion: {exc}"
                 )
-            elif unknown:
+                continue
+            unknown = [
+                token
+                for token, _value in expansion
+                if key_vocabulary.get((scope, token), ("", ""))[0] != "kernel"
+            ]
+            if unknown:
                 errors.append(
                     f"sugar row {scope}:{name} expansion names non-kernel "
                     f"token(s): {', '.join(unknown)}"
                 )
         if ledger == "alias":
             try:
-                parse_alias_payload(payload)
+                replacement, _sunset = parse_alias_payload(payload)
+                targets = parse_key_expression(replacement)
             except ValueError as exc:
                 errors.append(f"alias row {scope}:{name}: {exc}")
-    for scope, spelling, _replacement, meaning in by_kind["alias"]:
+                continue
+            unknown = [
+                token
+                for token, _value in targets
+                if key_vocabulary.get((scope, token), ("", ""))[0]
+                not in {"kernel", "sugar"}
+            ]
+            if unknown:
+                errors.append(
+                    f"alias row {scope}:{name} replacement names unknown "
+                    f"token(s): {', '.join(unknown)}"
+                )
+    for scope, spelling, replacement, meaning in by_kind["alias"]:
         try:
             parse_value_alias_sunset(meaning)
         except ValueError as exc:
             errors.append(f"value alias {scope}:{spelling}: {exc}")
+        try:
+            targets = parse_key_expression(replacement)
+        except ValueError as exc:
+            errors.append(f"value alias {scope}:{spelling}: {exc}")
+            continue
+        if len(targets) != 1 or targets[0][1] in (None, ""):
+            errors.append(
+                f"value alias {scope}:{spelling} replacement must be one key=value"
+            )
+            continue
+        target, value = targets[0]
+        target_record = key_vocabulary.get((scope, target))
+        if target_record is None or target_record[0] not in {"kernel", "sugar"}:
+            errors.append(
+                f"value alias {scope}:{spelling} replacement key {target!r} "
+                "is not registered vocabulary"
+            )
+            continue
+        value_type = target_record[1]
+        enum = re.fullmatch(r"enum\(([^)]*)\)", value_type)
+        if enum is not None and value not in enum.group(1).split("|"):
+            errors.append(
+                f"value alias {scope}:{spelling} replacement value {value!r} "
+                f"is not in {value_type}"
+            )
     if BASELINE.is_file():
         baseline = json.loads(BASELINE.read_text(encoding="utf-8"))
         recorded = baseline["m1_census"]["value"]

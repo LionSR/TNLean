@@ -75,23 +75,96 @@ def test_alias_records_include_values_and_normalize_ids() -> None:
 
 def test_sugar_expansion_checks_every_token() -> None:
     entries = tenkz_shrink.load_registry()
-    changed = [
+    for fragment in ("completely bogus", "bogus2", "Bogus", "completely-bogus"):
+        changed = [
+            Entry(
+                entry.kind,
+                (*entry.fields[:4], f"sugar(rows=, {fragment}=)", entry.fields[5]),
+            )
+            if entry.kind == "key"
+            and entry.fields[0] == "picture"
+            and entry.fields[1] == "physical"
+            else entry
+            for entry in entries
+        ]
+        errors = check(changed)
+        assert any("sugar row picture:physical" in error for error in errors), (
+            fragment,
+            errors,
+        )
+
+
+def test_alias_replacements_are_registered_vocabulary() -> None:
+    entries = tenkz_shrink.load_registry()
+    for replacement in ("does not exist", " "):
+        changed = [
+            Entry(
+                entry.kind,
+                (
+                    *entry.fields[:4],
+                    f"alias({replacement}; sunset=1.0)",
+                    entry.fields[5],
+                ),
+            )
+            if entry.kind == "key"
+            and entry.fields[0] == "picture"
+            and entry.fields[1] == "chain axis"
+            else entry
+            for entry in entries
+        ]
+        errors = check(changed)
+        assert any("alias row picture:chain axis" in error for error in errors), (
+            replacement,
+            errors,
+        )
+    changed_value = [
         Entry(
             entry.kind,
-            (*entry.fields[:4], "sugar(rows=, completely bogus=)", entry.fields[5]),
+            (entry.fields[0], entry.fields[1], "route=bogus", entry.fields[3]),
         )
-        if entry.kind == "key"
-        and entry.fields[0] == "picture"
-        and entry.fields[1] == "physical"
+        if entry.kind == "alias" and entry.fields[1] == "route=curve"
         else entry
         for entry in entries
     ]
-    errors = check(changed)
+    errors = check(changed_value)
     assert any(
-        "picture:physical expansion names non-kernel token(s): completely bogus"
+        "value alias connection:route=curve replacement value 'bogus'"
         in error
         for error in errors
     ), errors
+
+
+def test_bare_key_pattern_accepts_end_of_options() -> None:
+    pattern = tenkz_shrink._key_pattern("open")
+    assert pattern.search("rows=wire, open")
+    assert pattern.search("open, rows=wire")
+    assert pattern.search("open")
+
+
+def test_escape_usage_is_scoped_to_picture_options() -> None:
+    path = ROOT / "synthetic.tex"
+    corpus = {
+        path: "The spectral radius, then "
+        r"\begin{tenkz}[rows=wire, radius=2]\tn{A}\end{tenkz}"
+    }
+    scoped = tenkz_shrink.scoped_consumer_text(corpus)
+    pattern = tenkz_shrink._key_pattern("radius")
+    assert sum(
+        len(pattern.findall(text)) for text in scoped["picture"].values()
+    ) == 1
+
+
+def test_command_signatures_are_balanced_and_include_optionless_uses() -> None:
+    source = r"\tnarrow[east at={1,2}, dir]{x} \tnarrow{x} \tntree{LR}"
+    assert tenkz_shrink._command_invocations(source, "tnarrow") == [
+        "east at={1,2}, dir",
+        None,
+    ]
+    assert tenkz_shrink._top_level_option_parts("east at={1,2}, dir") == [
+        "east at={1,2}",
+        "dir",
+    ]
+    assert tenkz_shrink._command_invocations(source, "tntree") == [None]
 
 
 def test_meters_shape() -> None:
@@ -200,12 +273,29 @@ def test_prechange_ratchet_requires_extension_citation() -> None:
     )
 
 
+def test_extension_citation_comes_only_from_added_lines() -> None:
+    patch = """--- a/old
++++ b/new
+-Extension-gate: #1234
+ context Extension-gate: #2345
++ordinary addition
+"""
+    assert "Extension-gate" not in tenkz_shrink.added_diff_text(patch)
+    assert (
+        tenkz_shrink.added_diff_text(patch + "+Extension-gate: #3456\n")
+        .splitlines()[-1]
+        == "Extension-gate: #3456"
+    )
+
+
 def test_verdict_parser_requires_an_exact_table_row() -> None:
     section = """Agenda mentions flag:consumers:key:picture:open.
 
 | flag | verdict |
 |---|---|
 | flag:consumers:key:picture:open-ended | keep; expiry 0.9 |
+| flag:bad-keep | keep-because: needed |
+| flag:nonsense | nonsense; expiry 0.9 |
 """
     assert tenkz_shrink.session_verdict_ids(section) == {
         "flag:consumers:key:picture:open-ended"

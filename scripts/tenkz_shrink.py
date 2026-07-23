@@ -114,7 +114,10 @@ def _key_pattern(name: str) -> re.Pattern[str]:
     escaped = re.escape(name)
     # A key appears as `name=` or as a bare flag word inside an option list;
     # word boundaries keep `in=` from matching `\tnjoin=` style noise.
-    return re.compile(rf"(?<![\\a-zA-Z@]){escaped}\s*=|(?<![\\a-zA-Z@]){escaped}(?=[,\]])")
+    return re.compile(
+        rf"(?<![\\a-zA-Z@]){escaped}\s*=|"
+        rf"(?<![\\a-zA-Z@]){escaped}(?=\s*(?:,|$))"
+    )
 
 
 def _command_pattern(name: str) -> re.Pattern[str]:
@@ -162,14 +165,45 @@ def _skip_space_and_star(text: str, start: int) -> int:
     return start
 
 
-def _command_options(text: str, name: str) -> list[str]:
-    payloads: list[str] = []
+def _command_invocations(text: str, name: str) -> list[str | None]:
+    """Return one optional-argument payload per command invocation."""
+    payloads: list[str | None] = []
     for match in _command_pattern(name).finditer(text):
         start = _skip_space_and_star(text, match.end())
         group = _group_payload(text, start, "[", "]")
-        if group is not None:
-            payloads.append(group[0])
+        payloads.append(group[0] if group is not None else None)
     return payloads
+
+
+def _command_options(text: str, name: str) -> list[str]:
+    return [
+        payload
+        for payload in _command_invocations(text, name)
+        if payload is not None
+    ]
+
+
+def _top_level_option_parts(payload: str) -> list[str]:
+    """Split an option payload on commas outside balanced groups."""
+    parts: list[str] = []
+    start = 0
+    depth = 0
+    index = 0
+    while index < len(payload):
+        char = payload[index]
+        if char == "\\":
+            index += 2
+            continue
+        if char in "{[(":
+            depth += 1
+        elif char in "}])":
+            depth -= 1
+        elif char == "," and depth == 0:
+            parts.append(payload[start:index].strip())
+            start = index + 1
+        index += 1
+    parts.append(payload[start:].strip())
+    return [part for part in parts if part]
 
 
 def _environment_options(text: str) -> list[str]:
@@ -296,9 +330,12 @@ def alias_records(entries: list[Entry]) -> list[tuple[str, str, str | None]]:
 
 def meters(entries: list[Entry], corpus: dict[Path, str]) -> dict[str, dict]:
     escape_usage = 0
+    scoped = scoped_consumer_text(corpus)
     for scope, name in escape_rows(entries):
         pattern = _key_pattern(name)
-        escape_usage += sum(len(pattern.findall(text)) for text in corpus.values())
+        escape_usage += sum(
+            len(pattern.findall(text)) for text in scoped[scope].values()
+        )
 
     cases = manifest_case_paths()
     case_lengths = [
@@ -446,13 +483,15 @@ def flags(entries: list[Entry], corpus: dict[Path, str]) -> list[dict[str, str]]
         name = entry.fields[0]
         signatures: set[str] = set()
         uses = 0
-        pattern = re.compile(rf"\\{re.escape(name)}\s*\[([^\]]*)\]")
         for text in corpus.values():
-            for options in pattern.findall(text):
+            for options in _command_invocations(text, name):
                 uses += 1
+                if options is None:
+                    signatures.add("")
+                    continue
                 keys = sorted(
                     part.split("=")[0].strip()
-                    for part in options.split(",")
+                    for part in _top_level_option_parts(options)
                     if part.strip()
                 )
                 signatures.add(",".join(keys))
@@ -489,6 +528,18 @@ def session_verdict_ids(section: str) -> set[str]:
     """Parse exact flag IDs from two-column verdict table rows."""
     verdicts: set[str] = set()
     placeholder = "\0PIPE\0"
+    decision = re.compile(
+        r"^(?:keep-because|keep|dies|demoted|folds|respelled|becomes|moves|"
+        r"confirmed(?:\s+merge)?|tombstoned|sugar preset|executes)\b"
+    )
+    expiry = re.compile(
+        r"\bexpiry\s+(?:" + "|".join(re.escape(item) for item in MILESTONES) + r")\b"
+    )
+    executes = re.compile(
+        r"^executes at the (?:"
+        + "|".join(re.escape(item) for item in MILESTONES)
+        + r") freeze\b"
+    )
     for line in section.splitlines():
         if not line.startswith("|"):
             continue
@@ -496,12 +547,17 @@ def session_verdict_ids(section: str) -> set[str]:
             cell.replace(placeholder, "|").strip()
             for cell in line.replace("\\|", placeholder).strip("|").split("|")
         ]
-        if (
-            len(cells) >= 2
-            and cells[0].startswith("flag:")
-            and cells[1]
-            and not set(cells[1]) <= {"-", ":"}
-        ):
+        if len(cells) < 2 or not cells[0].startswith("flag:"):
+            continue
+        body = cells[1]
+        if not decision.search(body):
+            continue
+        has_lifetime = (
+            expiry.search(body) is not None
+            or re.search(r"\bpermanent\b", body) is not None
+            or executes.search(body) is not None
+        )
+        if has_lifetime:
             verdicts.add(cells[0])
     return verdicts
 
@@ -530,6 +586,15 @@ def baseline_at_ref(ref: str) -> dict | None:
     return json.loads(result.stdout)
 
 
+def added_diff_text(patch: str) -> str:
+    """Return only added content lines from a unified Git patch."""
+    return "\n".join(
+        line[1:]
+        for line in patch.splitlines()
+        if line.startswith("+") and not line.startswith("+++")
+    )
+
+
 def extension_cited(ref: str) -> bool:
     """Whether the PR diff carries the numeric extension-gate citation."""
     result = subprocess.run(
@@ -542,7 +607,13 @@ def extension_cited(ref: str) -> bool:
     )
     if result.returncode:
         raise ValueError(f"cannot diff against base ref {ref}: {result.stderr.strip()}")
-    return re.search(r"Extension-gate:\s*#[0-9]+", result.stdout) is not None
+    return (
+        re.search(
+            r"Extension-gate:\s*#[0-9]+",
+            added_diff_text(result.stdout),
+        )
+        is not None
+    )
 
 
 def _m1_total(snapshot: dict) -> int:
