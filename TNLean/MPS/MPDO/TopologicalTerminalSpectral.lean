@@ -375,7 +375,6 @@ theorem topologicalSpectralProjectorSucc_mul_eq_zero
     funext p
     exact H.topologicalSpectralProjectorBlock_mul_eq_zero hM hLI p hst
   rw [hFamily, Matrix.blockDiagonal'_zero]
-  ext i j
   rfl
 
 /-- Summing all spectral families with their terminal eigenvalues reconstructs
@@ -389,8 +388,7 @@ theorem sum_terminalEigenvalue_smul_projectionFamily
         (H.terminalEigenvalue hM s : ℂ) •
           H.terminalEigenProjectionFamily hM s γ =
       H.terminalMatrix γ := by
-  rw [Fintype.sum_sigma]
-  rw [Finset.sum_eq_single γ]
+  rw [Fintype.sum_sigma, Finset.sum_eq_single γ]
   · simpa [terminalEigenProjectionFamily] using
       (H.terminalMatrix_eq_sum_eigenvalue_smul_projection hM γ).symm
   · intro α _ hαγ
