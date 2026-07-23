@@ -400,6 +400,27 @@ def test_verdict_parser_requires_an_exact_table_row() -> None:
     }
 
 
+def test_verdict_parser_rejects_expired_lifetimes() -> None:
+    section = """| flag | verdict |
+|---|---|
+| flag:old-expiry | keep-because: old; expiry 0.8 |
+| flag:current-expiry | keep-because: current; expiry 0.9 |
+| flag:future-expiry | keep-because: future; expiry 1.0 |
+| flag:old-execution | executes at the 0.8 freeze |
+| flag:future-execution | executes at the 1.0 freeze |
+| flag:doctrine | keep-because: doctrine; permanent |
+"""
+    assert tenkz_shrink.session_verdict_ids(
+        section,
+        current_milestone="0.9",
+    ) == {
+        "flag:current-expiry",
+        "flag:future-expiry",
+        "flag:future-execution",
+        "flag:doctrine",
+    }
+
+
 def test_gate_passes_now() -> None:
     subprocess.run([sys.executable, str(SCRIPT), "gate"], check=True)
 

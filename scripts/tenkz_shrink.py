@@ -563,8 +563,15 @@ def latest_session_section(text: str) -> str:
     return sections[-1] if len(sections) > 1 else ""
 
 
-def session_verdict_ids(section: str) -> set[str]:
-    """Parse exact flag IDs from two-column verdict table rows."""
+def session_verdict_ids(
+    section: str,
+    *,
+    current_milestone: str = CURRENT_MILESTONE,
+) -> set[str]:
+    """Parse unexpired flag verdicts from two-column table rows."""
+    if current_milestone not in MILESTONES:
+        raise ValueError(f"unsupported current milestone {current_milestone!r}")
+    current_index = MILESTONES.index(current_milestone)
     verdicts: set[str] = set()
     placeholder = "\0PIPE\0"
     decision = re.compile(
@@ -572,10 +579,12 @@ def session_verdict_ids(section: str) -> set[str]:
         r"confirmed(?:\s+merge)?|tombstoned|sugar preset|executes)\b"
     )
     expiry = re.compile(
-        r"\bexpiry\s+(?:" + "|".join(re.escape(item) for item in MILESTONES) + r")\b"
+        r"\bexpiry\s+("
+        + "|".join(re.escape(item) for item in MILESTONES)
+        + r")\b"
     )
     executes = re.compile(
-        r"^executes at the (?:"
+        r"^executes at the ("
         + "|".join(re.escape(item) for item in MILESTONES)
         + r") freeze\b"
     )
@@ -591,10 +600,20 @@ def session_verdict_ids(section: str) -> set[str]:
         body = cells[1]
         if not decision.search(body):
             continue
+        expiry_match = expiry.search(body)
+        executes_match = executes.search(body)
+        expiry_valid = (
+            expiry_match is not None
+            and MILESTONES.index(expiry_match.group(1)) >= current_index
+        )
+        executes_valid = (
+            executes_match is not None
+            and MILESTONES.index(executes_match.group(1)) >= current_index
+        )
         has_lifetime = (
-            expiry.search(body) is not None
+            expiry_valid
             or re.search(r"\bpermanent\b", body) is not None
-            or executes.search(body) is not None
+            or executes_valid
         )
         if has_lifetime:
             verdicts.add(cells[0])
