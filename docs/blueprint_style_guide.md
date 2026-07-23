@@ -52,9 +52,10 @@ The blueprint links the mathematics to its Lean formalization. A reader should b
     statement — display it in a numbered environment with
     `\label{eq:<chapter-prefix>_...}`. Do not leave such an equation as a bare
     `\[...\]` display. When referring back to it, cite it with plain
-    `\ref{eq:...}`, not the `\eqref` macro: write `equation~\ref{eq:foo_bar}`
-    or `Substituting~\ref{eq:foo_bar} into...`, matching the existing house
-    convention (`Lemma~\ref{...}`, `Theorem~\ref{...}`). Do not describe a
+    `\ref{eq:...}`, not the `\eqref` macro: write `(\ref{eq:foo_bar})`
+    or `Substituting~(\ref{eq:foo_bar}) into...`. This concise parenthesized
+    form avoids repeating the word “equation” while retaining an explicit,
+    stable cross-reference. Do not describe a
     previously displayed equation in words instead — phrases like "the
     preceding identity", "the equation above", "the first displayed
     identity", or "the two equations above" — since a reader cannot tell
