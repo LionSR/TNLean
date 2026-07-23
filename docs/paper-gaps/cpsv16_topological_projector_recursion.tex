@@ -135,7 +135,13 @@ the adjoint of the circuit convention in
 \eqref{eq:formalized-all-label-density}.
 The sitewise vertical coisometry sends the physical MPO to this all-label
 matrix, and the adjoint coordinate change reconstructs the original tensor
-from the source reconstruction identity.  Thus
+from the source reconstruction identity.  For a matrix product density
+operator in horizontal canonical form satisfying the renormalization
+fixed-point condition, the formalized implication from Theorem~4.14(i) to
+Theorem~4.14(iii) supplies the required fusion clause.  The source-facing
+statement
+\leanid{MPOTensor.exists_topologicalProjectorDensity_of_isRFPViaTS}
+composes that implication with the all-label identity.  Thus
 \eqref{eq:formalized-all-label-density} completes the positive-length density
 identity at source line~999 in the retained vertical direct-sum coordinates;
 no additional local identification remains to be supplied.

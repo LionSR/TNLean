@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Algebra.FinTupleEquiv
 import TNLean.Algebra.MatrixAux
+import TNLean.MPS.MPDO.BNTFusionTensorClauseFromRFP
 import TNLean.MPS.MPDO.PhysicalSectorCoordinateTransport
 import TNLean.MPS.MPDO.TopologicalProjectorRecursion
 import TNLean.MPS.MPDO.VerticalProductPairBlocks
@@ -17,15 +18,19 @@ multiplicity copy.  The diagonal coefficient is the corresponding entry of
 `μ^{⊗ (N + 1)}`.  The second factor reconstructs each fixed-label transfer from the recursive
 operator `Q`.
 
-The result is the density identity at line 999 of arXiv:1606.00608 in the direct-sum
-coordinates selected by a `BNTFusionTensorClause`.  It does not prove the following
-commutator, the terminal spectral refinement, or the commuting-Hamiltonian theorem.
+The conditional core proves the density identity in the direct-sum coordinates selected by
+a `BNTFusionTensorClause`.  The source-facing corollary obtains such a clause from the
+horizontal-canonical MPDO and renormalization fixed-point hypotheses of arXiv:1606.00608,
+Theorem 4.14, and thereby proves the density identity at line 999.  It does not prove the
+following commutator, the terminal spectral refinement, or the commuting-Hamiltonian theorem.
 
 ## Main result
 
 * `reindex_mpo_changePhysicalBasis_eq_verticalWeightTensorPower_mul`:
   the positive-length physical density, in the retained vertical coordinates, is
   `μ^{⊗ (N + 1)}` times the reconstructed recursive operator.
+* `MPOTensor.exists_topologicalProjectorDensity_of_isRFPViaTS`:
+  the source hypotheses supply a vertical decomposition for which that identity holds.
 
 ## References
 
@@ -160,7 +165,7 @@ def topologicalDensityChainEquiv (H : BNTFusionTensorClause M) (N : ℕ) :
         verticalCopyDim H.bondDim H.multiplicity q)) ≃
       (q : TopologicalDensitySector H N) × TopologicalSectorBond H q :=
   (Equiv.piCongrRight fun _ : Fin (N + 1) =>
-    verticalCopyCoordinateEquiv H.bondDim H.multiplicity).trans piSigmaEquiv
+    verticalCopyCoordinateEquiv H.bondDim H.multiplicity).trans Equiv.piSigmaEquiv
 
 /-- The diagonal entry of `μ^{⊗ (N + 1)}` selected by a sector.
 
@@ -462,3 +467,29 @@ theorem reindex_mpo_changePhysicalBasis_eq_verticalWeightTensorPower_mul
   exact allLabelDensity_eq_verticalWeightTensorPower_mul_topologicalProjectorFactor H N
 
 end MPOTensor.BNTFusionTensorClause
+
+namespace MPOTensor
+
+open BNTFusionTensorClause
+
+/-- A horizontal-canonical matrix product density operator satisfying the
+renormalization fixed-point condition admits vertical direct-sum coordinates in which every
+positive-length density is the tensor-power weight times the reconstructed recursive
+operator.
+
+Source: CPSV16, Theorem 4.14(i),(iii) and the recursive density identity at line 999,
+lines 972--999 of `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
+theorem exists_topologicalProjectorDensity_of_isRFPViaTS
+    (M : MPOTensor d D) (hHorizontal : IsHorizontalCF M) (hM : IsMPDO M)
+    (hRFP : IsRFPViaTS M) :
+    ∃ H : BNTFusionTensorClause M, ∀ N : ℕ,
+      Matrix.reindex (BNTFusionTensorClause.topologicalDensityChainEquiv H N)
+          (BNTFusionTensorClause.topologicalDensityChainEquiv H N)
+          (mpo (changePhysicalBasis H.verticalCoisometry M) (N + 1)) =
+        BNTFusionTensorClause.verticalWeightTensorPower H N *
+          BNTFusionTensorClause.topologicalProjectorFactor H N := by
+  obtain ⟨H⟩ :=
+    HasBNTFusionTensorClause.of_isRFPViaTS M hHorizontal hM hRFP
+  exact ⟨H, reindex_mpo_changePhysicalBasis_eq_verticalWeightTensorPower_mul H⟩
+
+end MPOTensor
