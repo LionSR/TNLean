@@ -474,12 +474,12 @@
     classification gives
     \[
         \E_B(Y)=P_\rho(Y)
-        =\frac{\operatorname{tr}(Y)}{\operatorname{tr}(\rho)}\rho.
+        =\frac{\tr(Y)}{\tr(\rho)}\rho.
     \]
     Set
     \[
         \Lambda_\alpha
-          =\sqrt{\frac{D\rho_{\alpha,\alpha}}{\operatorname{tr}(\rho)}},
+          =\sqrt{\frac{D\rho_{\alpha,\alpha}}{\tr(\rho)}},
         \qquad
         E_{\alpha,\beta}=D^{-1/2}e_{\alpha,\beta},
         \qquad
@@ -1526,7 +1526,7 @@ of the per-block theorem above.
     the periodic chain by complementary gaps of lengths $n_1,n_2$.  Their
     two-observable expectation is
     \[
-        \operatorname{Tr}_{\MN{D}}\!\left(
+        \Tr_{\MN{D}}\!\left(
         \E_{O_2}\circ\E_A^{n_2}\circ\E_{O_1}\circ\E_A^{n_1}
         \right).
     \]
@@ -1545,10 +1545,10 @@ of the per-block theorem above.
     every $m_1,m_2\geq0$ satisfying
     $n_1+n_2=m_1+m_2$, one has
     \[
-      \operatorname{Tr}_{\MN{D}}\!\left(
+      \Tr_{\MN{D}}\!\left(
         \E_{O_2}\circ\E_A^{n_2}\circ\E_{O_1}\circ\E_A^{n_1}\right)
       =
-      \operatorname{Tr}_{\MN{D}}\!\left(
+      \Tr_{\MN{D}}\!\left(
         \E_{O_2}\circ\E_A^{m_2}\circ\E_{O_1}\circ\E_A^{m_1}\right).
     \]
     Thus either region may be translated without crossing the other. Zero
@@ -1574,10 +1574,10 @@ of the per-block theorem above.
     is unchanged upon replacing these gaps by positive $m_1,m_2$ satisfying
     $n_1+n_2=m_1+m_2$:
     \[
-      \operatorname{Tr}_{\MN{D}}\!\left(
+      \Tr_{\MN{D}}\!\left(
         \E_{O_2}\circ\E_A^{n_2}\circ\E_{O_1}\circ\E_A^{n_1}\right)
       =
-      \operatorname{Tr}_{\MN{D}}\!\left(
+      \Tr_{\MN{D}}\!\left(
         \E_{O_2}\circ\E_A^{m_2}\circ\E_{O_1}\circ\E_A^{m_1}\right).
     \]
     This is the transfer-matrix form of
@@ -1611,13 +1611,13 @@ of the per-block theorem above.
     $\E_A^{n_1}=\E_A^{n_2}=\E_A^{m_1}=\E_A^{m_2}=\E_A$ in the two-observable
     transfer formula gives
     \[
-      \operatorname{Tr}_{\MN{D}}\!\left(
+      \Tr_{\MN{D}}\!\left(
         \E_{O_2}\circ\E_A^{n_2}\circ\E_{O_1}\circ\E_A^{n_1}\right)
       =
-      \operatorname{Tr}_{\MN{D}}\!\left(
+      \Tr_{\MN{D}}\!\left(
         \E_{O_2}\circ\E_A\circ\E_{O_1}\circ\E_A\right)
       =
-      \operatorname{Tr}_{\MN{D}}\!\left(
+      \Tr_{\MN{D}}\!\left(
         \E_{O_2}\circ\E_A^{m_2}\circ\E_{O_1}\circ\E_A^{m_1}\right).
     \]
 \end{proof}
@@ -1656,8 +1656,8 @@ of the per-block theorem above.
     $X=Z\rho^{-1}$, the second insertion $N$, and separations $2$ and $1$.
     The identical disconnected terms cancel.  Thus, for every $N$,
     \[
-        \operatorname{tr}\!\left(N\E_A^2(Z)\right)
-        =\operatorname{tr}\!\left(N\E_A(Z)\right).
+        \tr\!\left(N\E_A^2(Z)\right)
+        =\tr\!\left(N\E_A(Z)\right).
     \]
     Nondegeneracy of the trace pairing yields
     $\E_A^2(Z)=\E_A(Z)$ for every $Z$, hence $\E_A^2=\E_A$.
@@ -1689,10 +1689,10 @@ of the per-block theorem above.
     \[
         \begin{aligned}
         C(X,Y;n)
-        &=\operatorname{tr}\!\left(Y\E_A^n(X\rho^R)\right)
-          -\operatorname{tr}(X\rho^R)\operatorname{tr}(Y\rho^R)\\
-        &=\operatorname{tr}\!\left(Y\E_A(X\rho^R)\right)
-          -\operatorname{tr}(X\rho^R)\operatorname{tr}(Y\rho^R)\\
+        &=\tr\!\left(Y\E_A^n(X\rho^R)\right)
+          -\tr(X\rho^R)\tr(Y\rho^R)\\
+        &=\tr\!\left(Y\E_A(X\rho^R)\right)
+          -\tr(X\rho^R)\tr(Y\rho^R)\\
         &=C(X,Y;1).
         \end{aligned}
     \]

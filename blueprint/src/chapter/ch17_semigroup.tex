@@ -1674,7 +1674,7 @@ which shows that such generators have the standard Lindblad form.
     Let $L$ be a GKSL generator in Lindblad form with Hamiltonian $H$
     and Lindblad operators $\{L_j\}$.
     Define the adjoint generator $L^*$ by
-    $\operatorname{tr}(\rho\,L^*(A)) = \operatorname{tr}(L(\rho)\,A)$.
+    $\tr(\rho\,L^*(A)) = \tr(L(\rho)\,A)$.
     If $L$ has a faithful stationary state $\rho_0 > 0$ with $L(\rho_0) = 0$,
     then for any $A$:
     \[
@@ -1690,7 +1690,7 @@ which shows that such generators have the standard Lindblad form.
     \leanok
     From $L^*(A) = 0$ and $L^*(A^\dagger) = 0$, compute
     $L^*(A^\dagger A) = \sum_j [A, L_j]^\dagger [A, L_j]$.
-    Faithfulness of $\rho_0$ and $\operatorname{tr}(\rho_0 L^*(A^\dagger A)) = 0$
+    Faithfulness of $\rho_0$ and $\tr(\rho_0 L^*(A^\dagger A)) = 0$
     force $[A, L_j] = 0$ for all $j$.
     Similarly $[A, L_j^\dagger] = 0$, and then $L^*(A) = 0$ directly gives
     $[A, H] = 0$.
@@ -2063,7 +2063,7 @@ The four equivalent reducibility conditions of
     \uses{def:kossakowski_rank, def:has_block_upper_triangular_lindblad}
     If the Kossakowski rank satisfies
     \[
-        \operatorname{rank}(C) + d \ge d^2 + 1,
+        \rank(C) + d \ge d^2 + 1,
     \]
     then no block-upper-triangular Lindblad form exists.
 \end{theorem}

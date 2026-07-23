@@ -1532,9 +1532,9 @@ in both cases.
     Evaluate the translated equality on the word $\beta\alpha$, where
     $|\beta|=K$. Cyclicity of the trace gives
     \[
-        \sum_j\operatorname{tr}(X_jA^j_\alpha A^j_\beta)
+        \sum_j\tr(X_jA^j_\alpha A^j_\beta)
         =
-        \sum_j\operatorname{tr}(A^j_\alpha Y_jA^j_\beta).
+        \sum_j\tr(A^j_\alpha Y_jA^j_\beta).
     \]
     The simultaneous spanning hypothesis separates the blocks and gives the
     asserted matrix identities.
@@ -1590,10 +1590,10 @@ in both cases.
     $\alpha$ of length $L_0$, comparison of the two decompositions against
     every complementary word $w$ of length $N-L_0$ gives
     \[
-        \sum_j\operatorname{tr}
+        \sum_j\tr
         \bigl((\mu_j^NX_j)A^j_\alpha A^j_w\bigr)
         =
-        \sum_j\operatorname{tr}
+        \sum_j\tr
         \bigl(A^j_\alpha(\mu_j^NY_j)A^j_w\bigr).
     \]
     The length bound and
@@ -1606,10 +1606,11 @@ in both cases.
     \]
     Since the words of length $L_0$ span each block matrix algebra, evaluation
     at the identity gives
-    \[
+    \begin{equation}\label{eq:ph_boundary_crossing_scaled}
         \mu_j^NX_j=\mu_j^NY_j.
-    \]
-    The preceding relation therefore says that $\mu_j^NX_j$ commutes with every
+    \end{equation}
+    Equation~(\ref{eq:ph_boundary_crossing_scaled}) therefore says
+    that $\mu_j^NX_j$ commutes with every
     word of length $L_0$, and consequently with every one-site matrix. The boundary
     condition may then be moved across every interval crossing the cut, which
     places each block component in its periodic chain space. This is the
@@ -1704,7 +1705,7 @@ in both cases.
     \[
         \ker H_L^{(N)}\!\left(\bigoplus_j\mu_jA_j\right)
         \subseteq
-        \operatorname{span}\{V^{(N)}(A_j):1\le j\le g\}.
+        \spn\{V^{(N)}(A_j):1\le j\le g\}.
     \]
 \end{corollary}
 

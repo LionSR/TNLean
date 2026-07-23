@@ -97,7 +97,7 @@ and combines them into the commutation $X A^j = A^j X$.
     Suppose $\psi=\Gamma_{M+1}(X)$, and suppose matrices $Y_i(\tau)$ represent
     the length-$(L_0+1)$ cyclic restrictions
     \[
-        \operatorname{Res}^{\tau}_{i,L_0+1}(\psi)
+        \Res^{\tau}_{i,L_0+1}(\psi)
         =
         \Gamma_{L_0+1}(Y_i(\tau)).
     \]
@@ -132,7 +132,7 @@ and combines them into the commutation $X A^j = A^j X$.
     Suppose $\psi=\Gamma_{M+1}(X)$, and suppose matrices $Y_i(\tau)$ represent
     the length-$(L_0+1)$ cyclic restrictions
     \[
-        \operatorname{Res}^{\tau}_{i,L_0+1}(\psi)
+        \Res^{\tau}_{i,L_0+1}(\psi)
         =
         \Gamma_{L_0+1}(Y_i(\tau)).
     \]
@@ -184,15 +184,15 @@ and combines them into the commutation $X A^j = A^j X$.
     The same outside-site calculation gives, for any $\rho$ with
     $\rho_{k+L_0}=\mu_k$,
     \[
-        \operatorname{Res}^{\rho}_{M,L_0+1}\psi
+        \Res^{\rho}_{M,L_0+1}\psi
         =
-        \operatorname{Res}^{\tau^+_\eta(\mu)}_{M,L_0+1}\psi,
+        \Res^{\tau^+_\eta(\mu)}_{M,L_0+1}\psi,
     \]
     and, for any $\rho$ with $\rho_{k+1}=\mu_k$,
     \[
-        \operatorname{Res}^{\rho}_{M+1-L_0,L_0+1}\psi
+        \Res^{\rho}_{M+1-L_0,L_0+1}\psi
         =
-        \operatorname{Res}^{\tau^-_\eta(\mu)}_{M+1-L_0,L_0+1}\psi.
+        \Res^{\tau^-_\eta(\mu)}_{M+1-L_0,L_0+1}\psi.
     \]
 \end{proof}
 
@@ -211,9 +211,9 @@ and combines them into the commutation $X A^j = A^j X$.
     Suppose two length-$(L_0+1)$ restrictions of a state $\psi$ at the same
     cyclic support are represented by
     \[
-        \operatorname{Res}^{\rho}_{i,L_0+1}\psi=\Gamma_{L_0+1}(Y_\rho),
+        \Res^{\rho}_{i,L_0+1}\psi=\Gamma_{L_0+1}(Y_\rho),
         \qquad
-        \operatorname{Res}^{\tau}_{i,L_0+1}\psi=\Gamma_{L_0+1}(Y_\tau).
+        \Res^{\tau}_{i,L_0+1}\psi=\Gamma_{L_0+1}(Y_\tau).
     \]
     If these two restrictions are equal, then for every physical letter $j$,
     \[
@@ -255,7 +255,7 @@ and combines them into the commutation $X A^j = A^j X$.
     Let $\psi$ be a state on the chain of length $M+1$, and let the matrices
     $Y_i(\tau)$ represent its length-$(L_0+1)$ cyclic restrictions:
     \[
-        \operatorname{Res}^{\tau}_{i,L_0+1}(\psi)
+        \Res^{\tau}_{i,L_0+1}(\psi)
         =
         \Gamma_{L_0+1}(Y_i(\tau)).
     \]
@@ -305,7 +305,7 @@ and combines them into the commutation $X A^j = A^j X$.
     Let $\psi$ be a state on the chain of length $M+1$, and let the matrices
     $Y_i(\tau)$ represent its length-$(L_0+1)$ cyclic restrictions:
     \[
-        \operatorname{Res}^{\tau}_{i,L_0+1}(\psi)
+        \Res^{\tau}_{i,L_0+1}(\psi)
         =
         \Gamma_{L_0+1}(Y_i(\tau)).
     \]
@@ -336,17 +336,19 @@ and combines them into the commutation $X A^j = A^j X$.
     \leanok
     Fix $j$ and $\sigma$. Lemma~\ref{lem:boundary_assignment_first_letter_products}
     gives
-    \[
+    \begin{align}
         Y_M(\rho^+_{j,\sigma})A^j
-        =
+        &=
         Y_M(\tau^+_\eta(\mu))A^j,
-        \qquad
+        \label{eq:ph_first_letter_plus}\\
         Y_{M+1-L_0}(\rho^-_{j,\sigma})A^j
-        =
+        &=
         Y_{M+1-L_0}(\tau^-_\eta(\mu))A^j.
-    \]
-    Multiply the two identities on the right by $A^\sigma$ and use the assumed
-    product equation for the chosen pair $j,\sigma$.
+        \label{eq:ph_first_letter_minus}
+    \end{align}
+    Multiply equations~(\ref{eq:ph_first_letter_plus}) and
+    (\ref{eq:ph_first_letter_minus}) on the right by $A^\sigma$ and use
+    the assumed product equation for the chosen pair $j,\sigma$.
 \end{proof}
 
 \begin{lemma}[Endpoint words for the periodic-boundary windows]
@@ -360,7 +362,7 @@ and combines them into the commutation $X A^j = A^j X$.
     length-$(L_0+1)$ cyclic restrictions beginning at the sites
     $M+1-L_0+r$:
     \[
-        \operatorname{Res}^{\rho}_{M+1-L_0+r,L_0+1}\psi
+        \Res^{\rho}_{M+1-L_0+r,L_0+1}\psi
         =
         \Gamma_{L_0+1}(Y_r(\rho)).
     \]
@@ -398,7 +400,7 @@ and combines them into the commutation $X A^j = A^j X$.
     $\psi$ be a state on the chain of length $M+1$, and suppose matrices
     $Y_i(\rho)$ represent the length-$(L_0+1)$ cyclic restrictions
     \[
-        \operatorname{Res}^{\rho}_{i,L_0+1}(\psi)
+        \Res^{\rho}_{i,L_0+1}(\psi)
         =
         \Gamma_{L_0+1}(Y_i(\rho)).
     \]
@@ -489,7 +491,7 @@ and combines them into the commutation $X A^j = A^j X$.
     $\psi$ be a state on the chain of length $M+1$, and suppose matrices
     $Y_i(\rho)$ represent the length-$(L_0+1)$ cyclic restrictions
     \[
-        \operatorname{Res}^{\rho}_{i,L_0+1}(\psi)
+        \Res^{\rho}_{i,L_0+1}(\psi)
         =
         \Gamma_{L_0+1}(Y_i(\rho)).
     \]

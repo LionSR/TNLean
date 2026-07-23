@@ -304,7 +304,7 @@ Section~\ref{sec:peps_edge_kernel_gauges}.
     \uses{def:peps_virtualConfigEquivEdgeBoundary,
         thm:peps_edgeLeftLocalConfig_eq_of_boundaryMatches,
         thm:peps_edgeRightLocalConfig_eq_of_boundaryMatches}
-    Write $\operatorname{Coeff}_A(\sigma)$ for the PEPS state coefficient and
+    Write $\Coeff_A(\sigma)$ for the PEPS state coefficient and
     $C_A(e;\sigma)$ for the edge-blocked coefficient, and put $e=(u,v)$ and
     $M_e=V\setminus\{u,v\}$. The equivalence
     $\omega\leftrightarrow(\beta,\omega_{M_e})$ between global virtual
@@ -323,7 +323,7 @@ Section~\ref{sec:peps_edge_kernel_gauges}.
     \]
     Under the equivalence, $\omega|_u=\beta_u$ and $\omega|_v=\beta_v$; the
     inner sum over $\omega_{M_e}$ is exactly $C_{A,M_e}(\beta,\sigma|_{M_e})$.
-    Thus $C_A(e;\sigma)=\operatorname{Coeff}_A(\sigma)$.
+    Thus $C_A(e;\sigma)=\Coeff_A(\sigma)$.
 \end{proof}
 
 \begin{theorem}[Identity insertion equals the PEPS coefficient]%
@@ -353,7 +353,7 @@ Section~\ref{sec:peps_edge_kernel_gauges}.
     leaves only the diagonal $a=b$, and the open-middle reindexing gives
     $C^{\mathrm{open}}_{A,M_e}(\lambda,\rho;\sigma|_{M_e})
         =C_{A,M_e}(a,\lambda,\rho;\sigma|_{M_e})$. Hence
-    $C_A(e,\Id;\sigma)=C_A(e;\sigma)=\operatorname{Coeff}_A(\sigma)$.
+    $C_A(e,\Id;\sigma)=C_A(e;\sigma)=\Coeff_A(\sigma)$.
 \end{proof}
 
 \begin{theorem}[Same state gives the same edge-blocked coefficients]%
@@ -369,9 +369,9 @@ Section~\ref{sec:peps_edge_kernel_gauges}.
     \[
         C_A(e;\sigma)
         =
-        \operatorname{Coeff}_A(\sigma)
+        \Coeff_A(\sigma)
         =
-        \operatorname{Coeff}_B(\sigma)
+        \Coeff_B(\sigma)
         =
         C_B(e;\sigma).
     \]
@@ -391,9 +391,9 @@ Section~\ref{sec:peps_edge_kernel_gauges}.
     \[
         C_A(e,\Id;\sigma)
         =
-        \operatorname{Coeff}_A(\sigma)
+        \Coeff_A(\sigma)
         =
-        \operatorname{Coeff}_B(\sigma)
+        \Coeff_B(\sigma)
         =
         C_B(e,\Id;\sigma).
     \]
@@ -465,10 +465,10 @@ Section~\ref{sec:peps_edge_kernel_gauges}.
     \[
         T_{A,\{v\}}(\eta,\sigma)=A_v(\eta,\sigma).
     \]
-    Its injectivity is $\operatorname{inj}(T_{A,\{v\}})$. The comparison with a
+    Its injectivity is $\inj(T_{A,\{v\}})$. The comparison with a
     region-injectivity predicate $\kappa$ records the implication
     \[
-        \operatorname{inj}(T_{A,\{v\}})\Longrightarrow\kappa(\{v\}).
+        \inj(T_{A,\{v\}})\Longrightarrow\kappa(\{v\}).
     \]
 \end{definition}
 
@@ -498,7 +498,7 @@ Section~\ref{sec:peps_edge_kernel_gauges}.
     If $A$ is vertex-injective, then every singleton blocked tensor is
     injective. For every vertex $v$,
     \[
-        \operatorname{inj}(T_{A,\{v\}}).
+        \inj(T_{A,\{v\}}).
     \]
 \end{theorem}
 \begin{proof}\leanok
@@ -506,10 +506,10 @@ Section~\ref{sec:peps_edge_kernel_gauges}.
     \[
         T_{A,\{v\}}(\eta,\sigma)=A_v(\eta,\sigma).
     \]
-    Thus $\operatorname{inj}(A_v)$ is exactly
-    $\operatorname{inj}(T_{A,\{v\}})$. Vertex injectivity gives
-    $\forall v,\operatorname{inj}(A_v)$, and therefore
-    $\forall v,\operatorname{inj}(T_{A,\{v\}})$. For a fixed $v$, this is the
+    Thus $\inj(A_v)$ is exactly
+    $\inj(T_{A,\{v\}})$. Vertex injectivity gives
+    $\forall v,\inj(A_v)$, and therefore
+    $\forall v,\inj(T_{A,\{v\}})$. For a fixed $v$, this is the
     displayed assertion.
 \end{proof}
 
@@ -523,7 +523,7 @@ Section~\ref{sec:peps_edge_kernel_gauges}.
     Assume that a region-injectivity predicate $\kappa$ satisfies, for every
     vertex $v$,
     \[
-        \operatorname{inj}(T_{A,\{v\}})\Longrightarrow\kappa(\{v\}).
+        \inj(T_{A,\{v\}})\Longrightarrow\kappa(\{v\}).
     \]
     Then, for every vertex $v$,
     \[
@@ -533,8 +533,8 @@ Section~\ref{sec:peps_edge_kernel_gauges}.
 \begin{proof}\leanok
     For each $v$, the preceding theorem gives
     $A\text{ vertex-injective}\Longrightarrow
-        \operatorname{inj}(T_{A,\{v\}})$. The comparison hypothesis gives
-    $\operatorname{inj}(T_{A,\{v\}})\Longrightarrow\kappa(\{v\})$. Their
+        \inj(T_{A,\{v\}})$. The comparison hypothesis gives
+    $\inj(T_{A,\{v\}})\Longrightarrow\kappa(\{v\})$. Their
     composition is the claimed implication.
 \end{proof}
 
@@ -545,7 +545,7 @@ Section~\ref{sec:peps_edge_kernel_gauges}.
     \uses{thm:peps_singletonRegionInjectivityFromVertexInjectivity,
         lem:peps_regionInjectivityUnionClosure_finite}
     Assume that $\kappa$ satisfies singleton comparison and union closure:
-    $\operatorname{inj}(T_{A,\{v\}})\Longrightarrow\kappa(\{v\})$ for every
+    $\inj(T_{A,\{v\}})\Longrightarrow\kappa(\{v\})$ for every
     vertex $v$, and
     $\kappa(R)\wedge\kappa(S)\Longrightarrow\kappa(R\cup S)$. If $A$ is
     vertex-injective, then every nonempty finite region $R$ satisfies
@@ -582,7 +582,7 @@ Section~\ref{sec:peps_edge_kernel_gauges}.
 \end{theorem}
 \begin{proof}\leanok
     If $e=(u,v)$, vertex injectivity gives
-    $\operatorname{inj}(T_{A,u})$ and $\operatorname{inj}(T_{A,v})$, which are
+    $\inj(T_{A,u})$ and $\inj(T_{A,v})$, which are
     the left and right endpoint tensor maps of the edge-blocked chain.
 \end{proof}
 
@@ -599,7 +599,7 @@ Section~\ref{sec:peps_edge_kernel_gauges}.
 \begin{proof}\leanok
     For each $e=(u,v)$, Theorem~\ref{thm:peps_edgeBlockedEndpointTensorMaps_injective}
     gives
-    $\operatorname{inj}(T_{A,u})\wedge\operatorname{inj}(T_{A,v})$.
+    $\inj(T_{A,u})\wedge\inj(T_{A,v})$.
 \end{proof}
 
 \begin{theorem}[Reducing edge-blocked injectivity to the middle block]%
@@ -614,12 +614,12 @@ Section~\ref{sec:peps_edge_kernel_gauges}.
 \end{theorem}
 \begin{proof}\leanok
     Let $e=(u,v)$ and put $M_e=V\setminus\{u,v\}$. The endpoint theorem supplies
-    $\operatorname{inj}(T_{A,u})$ and $\operatorname{inj}(T_{A,v})$, while the
-    hypothesis is $\operatorname{inj}(T_{A,M_e})$. Hence
+    $\inj(T_{A,u})$ and $\inj(T_{A,v})$, while the
+    hypothesis is $\inj(T_{A,M_e})$. Hence
     \[
-        \operatorname{inj}(T_{A,u})
-        \wedge \operatorname{inj}(T_{A,M_e})
-        \wedge \operatorname{inj}(T_{A,v}).
+        \inj(T_{A,u})
+        \wedge \inj(T_{A,M_e})
+        \wedge \inj(T_{A,v}).
     \]
 \end{proof}
 
@@ -635,12 +635,12 @@ Section~\ref{sec:peps_edge_kernel_gauges}.
 \end{theorem}
 \begin{proof}\leanok
     For each $e=(u,v)$, put $M_e=V\setminus\{u,v\}$. Vertex injectivity gives
-    $\operatorname{inj}(T_{A,u})$ and $\operatorname{inj}(T_{A,v})$, while the
-    hypothesis gives $\operatorname{inj}(T_{A,M_e})$. Hence
+    $\inj(T_{A,u})$ and $\inj(T_{A,v})$, while the
+    hypothesis gives $\inj(T_{A,M_e})$. Hence
     \[
-        \operatorname{inj}(T_{A,u})\wedge
-        \operatorname{inj}(T_{A,M_e})\wedge
-        \operatorname{inj}(T_{A,v})
+        \inj(T_{A,u})\wedge
+        \inj(T_{A,M_e})\wedge
+        \inj(T_{A,v})
     \]
     is the injectivity assertion for the edge-blocked three-site chain at $e$.
 \end{proof}
@@ -660,13 +660,13 @@ Section~\ref{sec:peps_edge_kernel_gauges}.
 \end{theorem}
 \begin{proof}\leanok
     Let $e=(u,v)$ and put $M_e=V\setminus\{u,v\}$. The comparison gives
-    $\kappa(M_e)\Longrightarrow\operatorname{inj}(T_{A,M_e})$. Vertex injectivity
-    supplies $\operatorname{inj}(T_{A,u})$ and $\operatorname{inj}(T_{A,v})$.
+    $\kappa(M_e)\Longrightarrow\inj(T_{A,M_e})$. Vertex injectivity
+    supplies $\inj(T_{A,u})$ and $\inj(T_{A,v})$.
     The preceding reduction then gives
     \[
-        \operatorname{inj}(T_{A,u})\wedge
-        \operatorname{inj}(T_{A,M_e})\wedge
-        \operatorname{inj}(T_{A,v}).
+        \inj(T_{A,u})\wedge
+        \inj(T_{A,M_e})\wedge
+        \inj(T_{A,v}).
     \]
 \end{proof}
 
@@ -684,8 +684,8 @@ Section~\ref{sec:peps_edge_kernel_gauges}.
 \begin{proof}\leanok
     For each edge $e=(u,v)$, put $M_e=V\setminus\{u,v\}$. The hypotheses give
     $\kappa(M_e)$. The comparison implication
-    $\kappa(M_e)\Longrightarrow\operatorname{inj}(T_{A,M_e})$ yields
-    $\operatorname{inj}(T_{A,M_e})$ for every edge.
+    $\kappa(M_e)\Longrightarrow\inj(T_{A,M_e})$ yields
+    $\inj(T_{A,M_e})$ for every edge.
 \end{proof}
 
 \begin{theorem}[All edge-blocked chains from middle-region injectivity]%
@@ -705,13 +705,13 @@ Section~\ref{sec:peps_edge_kernel_gauges}.
 \begin{proof}\leanok
     For every edge $e=(u,v)$, put $M_e=V\setminus\{u,v\}$. The region
     hypothesis gives $\kappa(M_e)$, and the comparison gives
-    $\kappa(M_e)\Longrightarrow\operatorname{inj}(T_{A,M_e})$. Vertex
-    injectivity gives $\operatorname{inj}(T_{A,u})$ and
-    $\operatorname{inj}(T_{A,v})$. Thus
+    $\kappa(M_e)\Longrightarrow\inj(T_{A,M_e})$. Vertex
+    injectivity gives $\inj(T_{A,u})$ and
+    $\inj(T_{A,v})$. Thus
     \[
-        \operatorname{inj}(T_{A,u})\wedge
-        \operatorname{inj}(T_{A,M_e})\wedge
-        \operatorname{inj}(T_{A,v}).
+        \inj(T_{A,u})\wedge
+        \inj(T_{A,M_e})\wedge
+        \inj(T_{A,v}).
     \]
 \end{proof}
 
@@ -724,14 +724,14 @@ Section~\ref{sec:peps_edge_kernel_gauges}.
     Let $e=(u,v)$ and put $M_e=V\setminus\{u,v\}$. Assume $M_e\ne\varnothing$.
     Assume also singleton comparison, union closure for $\kappa$, and the
     comparison
-    $\kappa(M_e)\Longrightarrow\operatorname{inj}(T_{A,M_e})$. If $A$ is
+    $\kappa(M_e)\Longrightarrow\inj(T_{A,M_e})$. If $A$ is
     vertex-injective, then the edge-middle tensor family $T_{A,M_e}$ is
     injective.
 \end{theorem}
 \begin{proof}\leanok
     The finite-region theorem applied to
     $M_e=\bigcup_{w\in M_e}\{w\}$ gives $\kappa(M_e)$. The edge-middle
-    comparison sends this to $\operatorname{inj}(T_{A,M_e})$.
+    comparison sends this to $\inj(T_{A,M_e})$.
 \end{proof}
 
 \begin{theorem}[One edge-blocked chain from singleton regions, nonempty middle case]%
@@ -745,7 +745,7 @@ Section~\ref{sec:peps_edge_kernel_gauges}.
     edge-blocked three-site chain at $e$.
 \end{theorem}
 \begin{proof}\leanok
-    The preceding theorem gives $\operatorname{inj}(T_{A,M_e})$. The endpoint
+    The preceding theorem gives $\inj(T_{A,M_e})$. The endpoint
     reduction combines this middle-tensor injectivity with vertex injectivity
     at $u$ and $v$.
 \end{proof}
@@ -773,10 +773,10 @@ Section~\ref{sec:peps_edge_kernel_gauges}.
         thm:peps_edgeBlockedThreeSiteInjective_all_of_singletons,
         def:peps_edgeMiddleRegionInjectivityComparison}
     Assume singleton comparison, union closure for $\kappa$, the comparison
-    $\kappa(M_e)\Longrightarrow\operatorname{inj}(T_{A,M_e})$, and vertex
+    $\kappa(M_e)\Longrightarrow\inj(T_{A,M_e})$, and vertex
     injectivity of $A$. If $2<|V|$, then
     $V\setminus\{u,v\}\ne\varnothing$ for every edge $e=(u,v)$, and these
-    hypotheses give $\operatorname{inj}(T_{A,V\setminus\{u,v\}})$ and
+    hypotheses give $\inj(T_{A,V\setminus\{u,v\}})$ and
     edge-blocked three-site injectivity at every edge.
 \end{theorem}
 \begin{proof}\leanok

@@ -1234,7 +1234,7 @@ specialization of that Appendix~D definition.
     $A^{\sigma_0}\cdots A^{\sigma_{L-1}}$ is the sum over cyclic virtual-index
     configurations:
     \[
-        \operatorname{tr}(A^{\sigma_0}\cdots A^{\sigma_{L-1}})
+        \tr(A^{\sigma_0}\cdots A^{\sigma_{L-1}})
         =
         \sum_{\alpha_0,\ldots,\alpha_{L-1}}
         \prod_{t=0}^{L-1}
@@ -1247,7 +1247,7 @@ specialization of that Appendix~D definition.
     \leanok
     The trace is the diagonal sum:
     \[
-        \operatorname{tr}(A^{\sigma_0}\cdots A^{\sigma_{L-1}})
+        \tr(A^{\sigma_0}\cdots A^{\sigma_{L-1}})
         =
         \sum_{\alpha_0}
         (A^{\sigma_0}\cdots A^{\sigma_{L-1}})_{\alpha_0,\alpha_0}.
@@ -1529,10 +1529,10 @@ specialization of that Appendix~D definition.
                 {bondUone.north}{bondPhysicalOne.south}
             \tnjoin[name=bondPhysicalJoinTwo]
                 {bondUtwo.north}{bondPhysicalTwo.south}
-            \tnregion[slot=selected, label={$\operatorname{supp}(P_{01})$},
+            \tnregion[slot=selected, label={$\supp(P_{01})$},
                 label pos=south,
                 name=bondProjectorZero]{bondPhiZero}
-            \tnregion[slot=selected, label={$\operatorname{supp}(P_{12})$},
+            \tnregion[slot=selected, label={$\supp(P_{12})$},
                 label pos=south,
                 name=bondProjectorOne]{bondPhiOne}
         \end{tenkzfree}
@@ -1577,7 +1577,7 @@ specialization of that Appendix~D definition.
     \]
     Consequently,
     \[
-        \operatorname{ran}(U^{\otimes2}I_\varphi)=G_2(\Lambda U).
+        \ran(U^{\otimes2}I_\varphi)=G_2(\Lambda U).
     \]
 \end{theorem}
 
@@ -1590,7 +1590,7 @@ specialization of that Appendix~D definition.
         U^i_{a,b}U^j_{b,c}\lambda_b\lambda_aY_{c,a}.
     \]
     Expanding
-    $\operatorname{tr}((\Lambda U^i)(\Lambda U^j)Y)$ gives the same sum, so
+    $\tr((\Lambda U^i)(\Lambda U^j)Y)$ gives the same sum, so
     the two maps agree after the weighted boundary parametrization. Since that
     parametrization is surjective, their ranges are equal.
 \end{proof}
@@ -1616,8 +1616,8 @@ specialization of that Appendix~D definition.
     \[
         P_2^2=P_2,
         \qquad
-        \operatorname{ran}(P_2)
-        =\operatorname{ran}(U^{\otimes2}I_\varphi)
+        \ran(P_2)
+        =\ran(U^{\otimes2}I_\varphi)
         =G_2(\Lambda U),
         \qquad
         P_2=1-q_2(\Lambda U).
@@ -1631,13 +1631,13 @@ specialization of that Appendix~D definition.
     \uses{thm:appendixB_two_site_basic_embedding_range}
     Orthogonal projection onto $G_2(\Lambda U)$ has that subspace as its range.
     The preceding theorem identifies this range with
-    $\operatorname{ran}(U^{\otimes2}I_\varphi)$.  Orthogonal projection onto
+    $\ran(U^{\otimes2}I_\varphi)$.  Orthogonal projection onto
     the complementary subspace is $q_2(\Lambda U)$, hence
     $P_2=1-q_2(\Lambda U)$. Since $q_2(\Lambda U)^2=q_2(\Lambda U)$,
     \[
         P_2^2=(1-q_2(\Lambda U))^2=1-q_2(\Lambda U)=P_2.
     \]
-    If $\psi$ lies in $\operatorname{ran}(U^{\otimes2}I_\varphi)$, then
+    If $\psi$ lies in $\ran(U^{\otimes2}I_\varphi)$, then
     $\psi\in G_2(\Lambda U)=\ker q_2(\Lambda U)$, and therefore
     \[
         q_2(\Lambda U)\psi=0,
@@ -1700,12 +1700,12 @@ specialization of that Appendix~D definition.
     Moreover, the equal-sector bond embedding and the physical support
     projector satisfy
     \[
-        \operatorname{ran}(I_{\mathrm{res}})
+        \ran(I_{\mathrm{res}})
         =\sum_j G_2(B_j)
         =G_2\!\left(\bigoplus_j B_j\right),
         \qquad
-        \operatorname{ran}(P_{2,\mathrm{res}})
-        =\operatorname{ran}(I_{\mathrm{res}}),
+        \ran(P_{2,\mathrm{res}})
+        =\ran(I_{\mathrm{res}}),
     \]
     and
     \[
@@ -1828,19 +1828,19 @@ specialization of that Appendix~D definition.
                 {transportUone.north}{transportPhysicalOne.south}
             \tnjoin[name=transportPhysicalJoinTwo]
                 {transportUtwo.north}{transportPhysicalTwo.south}
-            \tnregion[slot=selected, label={$\operatorname{supp}(P_{01})$},
+            \tnregion[slot=selected, label={$\supp(P_{01})$},
                 label pos=south,
                 name=transportVirtualZero]{transportPhiZero}
-            \tnregion[slot=selected, label={$\operatorname{supp}(P_{12})$},
+            \tnregion[slot=selected, label={$\supp(P_{12})$},
                 label pos=south,
                 name=transportVirtualOne]{transportPhiOne}
             \tnregion[slot=secondary, outline,
-                label={$\operatorname{supp}((P_2)_{01})$},
+                label={$\supp((P_2)_{01})$},
                 label pos=north west, name=transportPhysicalRegionZero]
                 {transportUzero,transportUone,transportZeroLeft,
                  transportZeroRight,transportVirtualZero}
             \tnregion[slot=secondary, outline,
-                label={$\operatorname{supp}((P_2)_{12})$},
+                label={$\supp((P_2)_{12})$},
                 label pos=north east, name=transportPhysicalRegionOne]
                 {transportUone,transportUtwo,transportOneLeft,
                  transportOneRight,transportVirtualOne}
@@ -2688,7 +2688,7 @@ specialization of that Appendix~D definition.
         \mathbf 1_{a,l}\otimes P_{a,b}\otimes\mathbf 1_{b,r},
     \]
     where each $P_{a,b}$ is an orthogonal projector.  The directed edge
-    $a\to b$ is present precisely when $\operatorname{ran}P_{a,b}$ is nonzero.
+    $a\to b$ is present precisely when $\ran P_{a,b}$ is nonzero.
     An ordered cycle of length $N$ is a sequence $(a_0,\ldots,a_{N-1})$ for
     which every cyclically adjacent edge $a_n\to a_{n+1}$ is present.  Cyclic
     rotations are not identified.  This is the graph following equation~(2)
@@ -2784,7 +2784,7 @@ specialization of that Appendix~D definition.
         =
         \sum_{(a_0,\ldots,a_{N-1})}
         \prod_{n=0}^{N-1}
-        \dim\operatorname{ran}P_{a_n,a_{n+1}},
+        \dim\ran P_{a_n,a_{n+1}},
     \]
     where the sum is over ordered cycles and the indices are read modulo $N$.
     This is equations~(3)--(4) of
@@ -2812,8 +2812,8 @@ specialization of that Appendix~D definition.
         \dim\ker H_2
         =
         \sum_{\substack{a\to b\\ b\to a}}
-        \dim\operatorname{ran}P_{a,b}\,
-        \dim\operatorname{ran}P_{b,a}.
+        \dim\ran P_{a,b}\,
+        \dim\ran P_{b,a}.
     \]
     The sum is over ordered pairs: if $a\ne b$, then $(a,b)$ and $(b,a)$
     are distinct summands.  This is the length-two convention stated after
@@ -2927,7 +2927,7 @@ specialization of that Appendix~D definition.
     \leanok
     \uses{def:beigi_sector_graph}
     Let $a\to a$ be a positive loop and choose a nonzero vector
-    $\varphi_a\in\operatorname{ran}P_{a,a}$.  In sector coordinates define
+    $\varphi_a\in\ran P_{a,a}$.  In sector coordinates define
     the matrix product tensor
     \[
         (C_a^{(r,l)})_{x,y}=\delta_{x,l}\,\varphi_a(r,y),
@@ -3036,7 +3036,7 @@ specialization of that Appendix~D definition.
         def:mps_transfer_idempotence}
     The transfer map of the unnormalized coordinate tensor is
     \[
-        \mathcal E_a(Z)=\operatorname{tr}(X_a^*X_aZ)Y_aY_a^*,
+        \mathcal E_a(Z)=\tr(X_a^*X_aZ)Y_aY_a^*,
         \qquad
         \mathcal E_a^2=\nu_a^2\mathcal E_a.
     \]
@@ -3049,8 +3049,8 @@ specialization of that Appendix~D definition.
     Summing the Kraus terms over the loop-sector coordinates gives the stated
     rank-one formula.  Cyclicity of the trace and $\Phi_a=X_aY_a$ give
     \[
-        \operatorname{tr}(X_a^*X_aY_aY_a^*)
-          =\operatorname{tr}(\Phi_a^*\Phi_a)=\nu_a^2.
+        \tr(X_a^*X_aY_aY_a^*)
+          =\tr(\Phi_a^*\Phi_a)=\nu_a^2.
     \]
     Scaling every letter by $\nu_a^{-1}$ scales the transfer map by
     $\nu_a^{-2}$, which makes it idempotent.  A unitary change of physical
@@ -3111,10 +3111,10 @@ specialization of that Appendix~D definition.
     then for a physical configuration
     $s=(s_0,\ldots,s_{N-1})$ one has
     \[
-        \operatorname{tr}(A_a^{s_0}\cdots A_a^{s_{N-1}})
+        \tr(A_a^{s_0}\cdots A_a^{s_{N-1}})
         =\sum_{t\in\{0,\ldots,d-1\}^N}
           \left(\prod_{n=0}^{N-1}U_{s_n,t_n}\right)
-          \operatorname{tr}(C_a^{t_0}\cdots C_a^{t_{N-1}}).
+          \tr(C_a^{t_0}\cdots C_a^{t_{N-1}}).
     \]
     Substitution of the preceding cyclic coefficient formula gives the stated
     sitewise-unitary image.
@@ -3225,7 +3225,7 @@ specialization of that Appendix~D definition.
     \]
     Thus only the constant cyclic sector sequence contributes.  On this block,
     $\widetilde Q_N$ is the tensor product of the edge projectors.  Since
-    $\varphi_a\in\operatorname{ran}P_{a,a}$,
+    $\varphi_a\in\ran P_{a,a}$,
     \[
         \widetilde Q_N\Phi_a
         =P_{a,a}^{\otimes N}\Phi_a
@@ -3264,7 +3264,7 @@ specialization of that Appendix~D definition.
     For every $N>2$, the positive-loop product states form a nonzero pairwise
     orthogonal family and
     \[
-        \operatorname{span}\{\Psi_a^{(N)}:a\to a\text{ is a positive loop}\}
+        \spn\{\Psi_a^{(N)}:a\to a\text{ is a positive loop}\}
         =\ker H_N.
     \]
     In particular, the same conclusion holds under the BNT and all-chain
@@ -3324,7 +3324,7 @@ specialization of that Appendix~D definition.
     \[
         \ker H_2^{(N)}(B)
         =
-        \operatorname{span}\{V^{(N)}(A_j):j=1,\ldots,g\}.
+        \spn\{V^{(N)}(A_j):j=1,\ldots,g\}.
     \]
     Then $B$ is a renormalization fixed point.
 
@@ -3343,7 +3343,7 @@ specialization of that Appendix~D definition.
     \[
         \forall^\infty N,\quad
         V^{(N)}(B)
-        \in \operatorname{span}\{V^{(N)}(L_j):j=1,\ldots,g\}.
+        \in \spn\{V^{(N)}(L_j):j=1,\ldots,g\}.
     \]
     Normal-tensor orthogonality applied to this eventual-span relation first
     identifies the bond dimensions and then gives an index $j$, an invertible

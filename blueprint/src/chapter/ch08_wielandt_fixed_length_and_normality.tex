@@ -1,0 +1,828 @@
+\section{Fixed-length matrix spanning}\label{sec:lemma2b}
+
+The preceding sections establish the cumulative-spanning part of the
+Lemma~2(a) argument from~\cite{Sanz2010Quantum}:
+eigenvector spreading gives a cumulative vector span $K_{D-1}(A,\varphi) = \C^D$.
+The next stage is to pass to a span at one fixed length,
+namely to find $n_0$ such that $S_{n_0}(A) = \MN{D}$
+(i.e.\ word products of \emph{exactly} one length span all matrices).
+
+\begin{definition}[Fixed-length vector span]\label{def:vector_spread_span}
+    \lean{MPSTensor.vectorSpreadSpan}
+    \leanok
+    \uses{def:mps_tensor, def:eval_word}
+    The \emph{fixed-length vector span} at length~$n$ is
+    \[
+        H_n(A, \varphi) = \spn_{\C}\{A^w \varphi : |w| = n\}
+        \subseteq \C^D.
+    \]
+    This is $S_n(A)\ket{\varphi}$ in the notation
+    of~\cite{Sanz2010Quantum}.
+\end{definition}
+
+\begin{lemma}[Word span products]\label{lem:word_span_mul}
+    \lean{MPSTensor.wordSpan_mul_le}
+    \leanok
+    \uses{def:word_span}
+    $S_m(A) \cdot S_n(A) \subseteq S_{m+n}(A)$:
+    the product of word spans at lengths $m$ and $n$
+    is contained in the word span at length $m + n$.
+\end{lemma}
+
+\begin{proof}\leanok
+    Every product $A^{w_1} A^{w_2}$ with $|w_1| = m$
+    and $|w_2| = n$ equals $A^{w_1 w_2}$ with $|w_1 w_2| = m + n$.
+\end{proof}
+
+\begin{lemma}[Eigenvector padding]\label{lem:eigenvector_padding}
+    \lean{MPSTensor.cumulativeVectorSpan_eq_vectorSpreadSpan_of_eigenvector}
+    \leanok
+    \uses{def:cumulative_vector_span, def:vector_spread_span}
+    Suppose $A^{i_0} \varphi = \mu \varphi$ with $\mu \neq 0$.
+    Then for all~$n$,
+    \[
+        K_n(A, \varphi) = H_n(A, \varphi).
+    \]
+    In particular, if $K_n(A,\varphi) = \C^D$ then
+    already $H_n(A,\varphi) = \C^D$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Any word $w$ with $|w| \le n$ can be padded to exact
+    length~$n$ by appending $n - |w|$ copies of the index~$i_0$.
+    The eigenvector relation gives
+    $A^{w \cdot i_0^k} \varphi = \mu^k \cdot A^w \varphi$,
+    so the padded vector is a nonzero scalar multiple
+    of the original.
+    Hence every generator of $K_n$ lies in $H_n$.
+    The reverse inclusion $H_n \le K_n$ is immediate.
+\end{proof}
+
+\begin{theorem}[Fixed-length vector spanning implies matrix spanning]%
+    \label{thm:lemma2b_assembly}
+    \lean{MPSTensor.wordSpan_eq_top_of_vectorSpreadSpan_eq_top_of_rankOneBasis}
+    \leanok
+    \uses{def:word_span, def:vector_spread_span}
+    Assume:
+    \begin{enumerate}
+        \item $H_n(A, \varphi) = \C^D$
+              (length-$n$ word products applied to $\varphi$
+              span all of~$\C^D$), and
+        \item for each standard basis vector $e_j$,
+              the rank-one operator
+              $\ketbra{\varphi}{e_j}$
+              lies in $S_m(A)$.
+    \end{enumerate}
+    Then $S_{n+m}(A) = \MN{D}$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{lem:word_span_mul}
+    Fix a matrix unit $E_{ij}$.
+    By hypothesis~(1), there exists $M_i \in S_n(A)$
+    with $M_i \varphi = e_i$.
+    By hypothesis~(2), $\ketbra{\varphi}{e_j} \in S_m(A)$.
+    Their product satisfies
+    \[
+        M_i \cdot \ketbra{\varphi}{e_j}
+        = \ketbra{M_i \varphi}{e_j}
+        = \ketbra{e_i}{e_j}
+        = E_{ij},
+    \]
+    and $E_{ij} \in S_{n+m}(A)$ by
+    Lemma~\ref{lem:word_span_mul}.
+    Since the matrix units span $\MN{D}$,
+    $S_{n+m}(A) = \MN{D}$.
+\end{proof}
+
+\begin{lemma}[Blocking transfer]\label{lem:blocking_transfer}
+    \lean{MPSTensor.wordSpan_eq_top_of_blockTensor_wordSpan_eq_top}
+    \lean{MPSTensor.isNBlkInjective_iff_blockTensor_isInjective}
+    \leanok
+    \uses{def:word_span, def:blocked_tensor}
+    If the blocked tensor $A^{[L]}$ satisfies
+    $S_n(A^{[L]}) = \MN{D}$,
+    then $S_{nL}(A) = \MN{D}$.
+    In particular, $A$ is $L$-block injective if and only if $A^{[L]}$ is
+    one-site injective.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Each length-$n$ word in the blocked alphabet
+    $\{0, \ldots, d^L - 1\}$ decodes to a length-$nL$ word
+    in the original alphabet $\{0, \ldots, d-1\}$,
+    so $S_n(A^{[L]}) \subseteq S_{nL}(A)$.
+    For $n=1$, the $d^L$ blocked letters are indexed by the length-$L$ words
+    of $A$, giving
+    \[
+        S_1(A^{[L]})=S_L(A),
+    \]
+    which proves the stated equivalence.
+\end{proof}
+
+
+\begin{theorem}[Bounded injective blocking for left-canonical normal tensors]%
+    \label{thm:bounded_injective_blocking_normal_left_canonical}
+    \lean{MPSTensor.exists_pos_blockTensor_isInjective_le_pow_four_of_isNormal_leftCanonical}
+    \leanok
+    \uses{def:normal, def:blocked_tensor, thm:wielandt_bound}
+    Let $A$ be a left-canonical normal MPS tensor with bond dimension $D > 0$.
+    Then there is a positive blocking length $L \le D^4$ such that the blocked
+    tensor $A^{[L]}$ is one-site injective.
+
+    This is the blocked-injectivity form of the quantum Wielandt input used in
+    the Fundamental Theorem for translation-invariant tensors. It corresponds to the statement
+    in \cite[Section~II, line~332]{Cirac2016MPDO_arXiv} that every normal tensor
+    becomes injective after at most $D^4$ blockings, using the index estimate of~%
+    \cite[Theorem~1]{Sanz2010Quantum}. The Lean statement includes the
+    left-canonical/trace-preserving hypothesis because that is the canonical-form
+    context in which the blocked-injectivity input is consumed.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The proof uses the full-Kraus-rank index bound from the quantum Wielandt
+    inequality. Since $A$ is normal, the index is attained; the one-step Kraus
+    rank is nonzero in the left-canonical case, so the bound
+    $(D^2 - \rank S_1(A) + 1)D^2$ is at most $D^4$. The passage from
+    exact word-span fullness to injectivity of the blocked tensor is
+    Lemma~\ref{lem:blocking_transfer}.
+\end{proof}
+
+\begin{theorem}[Exact quantum-Wielandt blocking length]
+    \label{thm:exact_pow_four_block_injectivity_normal_left_canonical}
+    \lean{MPSTensor.isNBlkInjective_pow_four_of_isNormal_leftCanonical}
+    \leanok
+    \uses{thm:bounded_injective_blocking_normal_left_canonical,
+        lem:blocking_transfer,
+        thm:wordspan_blk_inj_succ}
+    Let $A$ be a left-canonical normal MPS tensor with bond dimension $D>0$.
+    Then
+    \[
+        S_{D^4}(A)=\MN{D};
+    \]
+    equivalently, $A$ is $D^4$-block injective.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:bounded_injective_blocking_normal_left_canonical,
+        lem:blocking_transfer,
+        thm:wordspan_blk_inj_succ}
+    Choose $L$ with $0<L\leq D^4$ and $S_L(A)=\MN{D}$, and write
+    \[
+        D^4=L+k.
+    \]
+    Induction on $k$, using positive-length propagation at each step, gives
+    $S_{L+k}(A)=\MN{D}$.
+\end{proof}
+
+\begin{theorem}[Common exact block-injectivity length]
+    \label{thm:common_exact_block_injectivity_normal_left_canonical}
+    \lean{MPSTensor.%
+        exists_common_isNBlkInjective_of_isNormal_leftCanonical}
+    \leanok
+    \uses{def:l_blk_injective, def:normal,
+        thm:bounded_injective_blocking_normal_left_canonical}
+    Let $(A_j)_{j=1}^g$ be a finite family of positive-bond-dimension,
+    left-canonical normal tensors. There is a positive integer $L$ such that
+    every $A_j$ is $L$-block injective.
+\end{theorem}
+
+\begin{proof}\leanok
+    Apply
+    Theorem~\ref{thm:bounded_injective_blocking_normal_left_canonical} to each
+    block. The product of the finitely many positive lengths is a common
+    positive multiple, and exact block injectivity persists under positive
+    multiples.
+\end{proof}
+
+\begin{corollary}[Uniform injective blocking for separated normal-canonical families]%
+    \label{cor:uniform_injective_blocking_normal_bnt}
+    \lean{MPSTensor.IsNormalCanonicalFormBNT.exists_common_blockTensor_isInjective,
+        MPSTensor.exists_common_blockTensor_isInjective_two_of_isNormalCanonicalFormBNT}
+    \leanok
+    \uses{thm:normal_tp_primitive_irred,
+        thm:bounded_injective_blocking_normal_left_canonical}
+    Let $(A_x)_{x \in X}$ be a finite separated normal-canonical family whose
+    blocks have positive virtual bond dimension. Then there is a positive
+    integer $L$ such that every blocked tensor $A_x^{[L]}$ is one-site
+    injective. The same conclusion holds simultaneously for two finite
+    separated normal-canonical families whose blocks have positive virtual bond
+    dimension.
+
+    Here the family is a basis of normal-canonical representatives in the sense
+    of Definition~\ref{def:normal_cf_bnt}; the blocks are distinct and the weight
+    moduli are non-increasing but need not be strictly ordered. It assumes that
+    the representative family has already been selected; it does not reconstruct
+    the full CPSV sector decomposition with repeated copies inside one sector.
+    The restriction is recorded in
+    \path{docs/paper-gaps/ft_one_copy_scope_restriction.tex}.
+\end{corollary}
+
+\begin{proof}
+    \leanok
+    Apply Theorem~\ref{thm:bounded_injective_blocking_normal_left_canonical}
+    to each block. Taking the product of the finitely many resulting positive
+    blocking lengths gives a common positive multiple, and injectivity persists
+    under positive further blocking.
+\end{proof}
+
+\begin{remark}[Relation with the rank-one extraction lemma]\label{rem:lemma2b_status}\leanok
+    In~\cite{Sanz2010Quantum}, Lemma~2(b) combines a rank-one
+    extraction for fixed-length spans with a product
+    argument turning fixed-length vector spanning into fixed-length
+    matrix spanning.
+    Theorem~\ref{thm:lemma2b_assembly} is the second step.
+    Theorem~\ref{thm:rankone_extraction_blockTensor} supplies the
+    rank-one hypothesis in blocked form, and
+    Theorem~\ref{thm:wielandt_lemma2b} then gives a blocked,
+    fixed-length word-span saturation result.
+\end{remark}
+
+\begin{remark}[Use of the quantum Wielandt theorem in the MPS route]
+    The source papers use the quantum Wielandt theorem as an input converting
+    normality into injectivity after blocking. In the notation of this chapter,
+    the input has two distinct conclusions. First,
+    Theorem~\ref{thm:wielandt_bound} gives cumulative saturation
+    $T_{D^2}(A)=\MN{D}$. This alone is not the injectivity statement used in
+    canonical form, because injectivity requires products of one fixed length.
+    Second, Lemma~2(b) of~\cite{Sanz2010Quantum}, in the form of
+    Theorem~\ref{thm:wielandt_lemma2b}, supplies a length $N$ for which
+    $S_N(A)=\MN{D}$. This is the statement that matches the injectivity of
+    $\Gamma_N$ and can be transported through blocking by
+    Lemma~\ref{lem:blocking_transfer}. Thus any later use of Wielandt in the
+    Fundamental Theorem must specify whether it is using cumulative span,
+    exact-length span, or the blocked version of the exact-length conclusion.
+\end{remark}
+
+\section{Blocked tensor and rectangular span}\label{sec:rectangular_span}
+
+This section extends the Lemma~2(b) argument to the
+\emph{blocked tensor}~$A^{[L]}$ and develops the ``rectangular span''
+used to produce rank-one elements.
+
+\begin{theorem}[Blocking preserves normality]\label{thm:isNormal_blockTensor}
+    \lean{MPSTensor.isNormal_blockTensor_of_isNormal}
+    \leanok
+    \uses{def:normal, def:blocked_tensor}
+    If $A$ is normal and $L > 0$, then the blocked tensor
+    $A^{[L]}$ is also normal.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:word_span_le_blockTensor, lem:word_span_mul}
+    Choose $N$ with $S_N(A) = \MN{D}$. Then $\Id \in S_N(A)$.
+    For any $M \in S_N(A)$, write
+    $\Id = \sum_r c_r A^{w_r}$ with each $|w_r| = N$.
+    Then
+    \begin{equation}\label{eq:wld_blocknormal_self_inclusion}
+        M = M \cdot \Id = \sum_r c_r M A^{w_r}
+        \in S_N(A) \cdot S_N(A) \subseteq S_{2N}(A)
+    \end{equation}
+    by Lemma~\ref{lem:word_span_mul}.
+    Iterating the inclusion~(\ref{eq:wld_blocknormal_self_inclusion}) gives
+    $S_N(A) \subseteq S_{kN}(A)$
+    for every $k \ge 1$; taking $k = L$ yields
+    $\MN{D} = S_N(A) \subseteq S_{NL}(A)$.
+    By Lemma~\ref{lem:word_span_le_blockTensor},
+    $S_{NL}(A) \subseteq S_N(A^{[L]})$,
+    so $S_N(A^{[L]}) = \MN{D}$.
+\end{proof}
+
+\begin{lemma}[Chunking: word span embeds into blocked word span]%
+    \label{lem:word_span_le_blockTensor}
+    \lean{MPSTensor.wordSpan_le_wordSpan_blockTensor}
+    \leanok
+    \uses{def:word_span, def:blocked_tensor}
+    $S_{nL}(A) \subseteq S_n(A^{[L]})$ for all $n, L$.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:word_span_mul}
+    Every length-$nL$ word in the original alphabet
+    can be split into $n$ consecutive chunks of length~$L$,
+    each of which is a single blocked Kraus operator.
+    By induction on~$n$, using the word span product lemma
+    (Lemma~\ref{lem:word_span_mul}).
+\end{proof}
+
+\begin{theorem}[Word eigenvector gives blocked eigenvector]%
+    \label{thm:blockTensor_single_eigenvector}
+    \lean{MPSTensor.blockTensor_single_eigenvector}
+    \leanok
+    \uses{def:blocked_tensor}
+    If $A^{w_0} \varphi = \mu \varphi$ for a word $w_0$
+    of length~$L$, then
+    $(A^{[L]})^{j_0} \varphi = \mu \varphi$,
+    where $j_0$ is the encoded blocked index corresponding
+    to $w_0$.
+\end{theorem}
+
+\begin{proof}\leanok
+    By definition, $(A^{[L]})^{j_0} = A^{w_0}$.
+\end{proof}
+
+\begin{theorem}[Blocked fixed-length matrix spanning]\label{thm:wielandt_blocked_assembly}
+    \lean{MPSTensor.wielandt_blocked_assembly}
+    \leanok
+    \uses{def:word_span, def:normal, def:blocked_tensor}
+    Suppose $A$ is normal and $L > 0$, and we have:
+    \begin{enumerate}
+        \item a word $w_0$ of length $L$ with eigenvector
+              $A^{w_0} \varphi = \mu \varphi$
+              ($\mu \neq 0$, $\varphi \neq 0$),
+        \item a word $\tau_0$ of length $L$ with transpose
+              eigenvector
+              $(A^{\tau_0})^T \psi = \nu \psi$
+              ($\nu \neq 0$, $\psi \neq 0$),
+        \item a rank-one element
+              $\varphi \psi^T \in S_m(A^{[L]})$
+              for some $m$.
+    \end{enumerate}
+    Then there exists $N$ such that $S_N(A) = \MN{D}$.
+
+    \noindent\emph{Remark.}
+    The proof gives the explicit bound $N = ((D{-}1) + m + (D{-}1)) \cdot L$;
+    the statement above gives only the existential conclusion.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:isNormal_blockTensor, thm:blockTensor_single_eigenvector,
+        thm:eigenvector_spreading, lem:blocking_transfer,
+        thm:lemma2b_assembly}
+    Apply Theorem~\ref{thm:lemma2b_assembly} to the
+    blocked tensor $A^{[L]}$,
+    which is normal by Theorem~\ref{thm:isNormal_blockTensor}.
+    The eigenvector and transpose eigenvector are transferred
+    to single-index eigenvectors of $A^{[L]}$ by
+    Theorem~\ref{thm:blockTensor_single_eigenvector}.
+    Transfer back to the original tensor via
+    Lemma~\ref{lem:blocking_transfer}.
+\end{proof}
+
+\begin{theorem}[Rank-one extraction for blocked tensor]%
+    \label{thm:rankone_extraction_blockTensor}
+    \lean{MPSTensor.exists_rankOne_mem_wordSpan_blockTensor}
+    \leanok
+    \uses{def:word_span, def:normal, def:blocked_tensor}
+    Suppose $A$ is normal and $N_0 \ge 1$ with
+    $S_{N_0}(A) = \MN{D}$.
+    Then there exist words $\sigma_0, \tau_0$ of length~$N_0$,
+    nonzero vectors $\varphi, \psi$, nonzero scalars $\mu, \nu$,
+    and $m \in \N$ such that:
+    \begin{enumerate}
+        \item $A^{\sigma_0} \varphi = \mu \varphi$,
+        \item $(A^{\tau_0})^T \psi = \nu \psi$,
+        \item $\varphi \psi^T \in S_m(A^{[N_0]})$.
+    \end{enumerate}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:blocked_tensor, thm:isNormal_blockTensor,
+        thm:eigenvector_from_trace}
+    Set $B = A^{[N_0]}$.
+    Since $S_{N_0}(A) = \MN{D}$, we have $S_1(B) = \MN{D}$
+    by definition of the blocked tensor.
+    Hence $\Id \in S_1(B)$, so in the nontrivial case $D \ge 1$
+    not all blocked generators can have trace zero.
+    Choose $j_0$ with $\tr(B^{j_0}) \neq 0$.
+    By Theorem~\ref{thm:eigenvector_from_trace},
+    $B^{j_0}$ has a nonzero eigenvector $\varphi$
+    with eigenvalue $\mu \neq 0$.
+    Writing $j_0$ as the blocked index corresponding to a word
+    $\sigma_0$ of length~$N_0$ gives
+    $A^{\sigma_0} \varphi = \mu \varphi$.
+    Applying the same argument to the transpose blocked tensor gives
+    a word $\tau_0$ of length~$N_0$, a nonzero vector $\psi$,
+    and $\nu \neq 0$ with $(A^{\tau_0})^T \psi = \nu \psi$.
+    Since $A$ is normal and $N_0 \ge 1$,
+    the blocked tensor $B$ is normal by
+    Theorem~\ref{thm:isNormal_blockTensor}.
+    Therefore there exists $M$ with $S_M(B) = \MN{D}$.
+    In particular $\varphi \psi^T \in S_M(B)$.
+    Taking $m = M$ proves~(3).
+\end{proof}
+
+\begin{theorem}[Fixed-length word-span saturation via blocking]\label{thm:wielandt_lemma2b}
+    \lean{MPSTensor.wielandt_lemma2b}
+    \leanok
+    \uses{def:word_span, def:normal}
+    If $A$ is a normal MPS tensor with bond dimension~$D$,
+    then there exists $N$ such that $S_N(A) = \MN{D}$.
+    This gives the fixed-length spanning conclusion corresponding to
+    \cite[Lemma~2(b)]{Sanz2010Quantum}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:rankone_extraction_blockTensor,
+        thm:wielandt_blocked_assembly}
+    By normality, some $N_0$ has $S_{N_0}(A) = \MN{D}$.
+    If $N_0 = 0$ we are done.
+    Otherwise, Theorem~\ref{thm:rankone_extraction_blockTensor}
+    produces eigenvectors and a rank-one element
+    $\varphi \psi^T \in S_m(A^{[N_0]})$.
+    Theorem~\ref{thm:wielandt_blocked_assembly} then gives
+    $S_{((D-1) + m + (D-1)) \cdot N_0}(A) = \MN{D}$.
+\end{proof}
+
+\begin{remark}[Blocking argument for fixed-length spanning]%
+    \label{rem:blocked_lemma2b_gap}\leanok
+    Theorem~\ref{thm:wielandt_lemma2b} is obtained by first extracting a
+    rank-one operator in a blocked tensor
+    (Theorem~\ref{thm:rankone_extraction_blockTensor}) and then
+    applying the fixed-length matrix-spanning theorem
+    (Theorem~\ref{thm:wielandt_blocked_assembly}).
+    Thus the fixed-length span of $A$ is reached through a blocked
+    auxiliary tensor rather than by a direct unblocked argument.
+\end{remark}
+
+\section{Primitive MPS tensors}
+
+\begin{definition}[Primitive MPS tensor]\label{def:primitive_mps}
+    \lean{MPSTensor.IsPrimitiveMPS}
+    \leanok
+    \uses{def:mps_tensor, def:transfer_map, def:fixed_point_proj}
+    Assume $D > 0$.
+    A tensor $A$ together with a matrix $\rho \in \MN{D}$ is
+    \emph{primitive} if
+    \[
+        \sum_i (A^i)^\dagger A^i = \Id,
+        \qquad \rho \ge 0,
+        \qquad \rho \neq 0,
+        \qquad \E_A(\rho) = \rho,
+    \]
+    and, if $P$ is the fixed-point projection associated to $\rho$,
+    then $\rho_{\mathrm{spec}}(\E_A - P) < 1$.
+    When the choice of $\rho$ is irrelevant, we simply say that $A$
+    is a primitive MPS tensor.
+    This is weaker than the primitive condition of~\cite{Sanz2010Quantum}, which requires
+    $\rho > 0$; see Remark~\ref{rem:prim_definition_mismatch}.
+    The stronger positive-definite hypothesis is imposed separately in
+    Lemma~\ref{lem:primitive_implies_irreducible}
+    and Theorem~\ref{thm:normal_from_primitive_posdef}.
+\end{definition}
+
+\begin{theorem}[Primitive overlap convergence]\label{thm:prim_overlap_one}
+    \lean{MPSTensor.IsPrimitiveMPS.overlap_tendsto_one}
+    \leanok
+    \uses{def:primitive_mps, def:mpv_overlap}
+    If $A$ is a primitive MPS tensor, then
+    $O_{AA}(N) \to 1$.
+\end{theorem}
+
+\begin{proof}\leanok\uses{thm:primitive_overlap}
+    The claim follows from the self-overlap convergence under a
+    complementary transfer-map gap
+    (Theorem~\ref{thm:primitive_overlap}).
+\end{proof}
+
+\begin{theorem}[Peripheral primitivity and irreducibility give normalized overlap]
+    \label{thm:peripheral_primitive_irreducible_overlap_one}
+    \lean{MPSTensor.%
+        overlap_tendsto_one_of_peripheralPrimitive_of_irreducible}
+    \leanok
+    \uses{def:primitive_channel, def:irreducible_tensor, def:mpv_overlap}
+    Let $A$ have positive bond dimension and satisfy
+    \[
+        \sum_i (A^i)^\dagger A^i=I.
+    \]
+    If $A$ is tensor-irreducible and the transfer map is primitive, then
+    $O_{AA}(N)\to1$.
+\end{theorem}
+
+\begin{proof}\leanok\uses{thm:prim_overlap_one}
+    Irreducible Perron--Frobenius theory supplies a nonzero positive fixed
+    point. Peripheral primitivity gives a strict spectral-radius bound on the
+    complementary transfer map. Thus $A$ is a primitive MPS tensor, and
+    Theorem~\ref{thm:prim_overlap_one} applies.
+\end{proof}
+
+\section{Primitivity and normality}
+
+Throughout this section, primitivity means the condition of
+Definition~\ref{def:primitive_mps}: the tensor is in TP gauge,
+it has a nonzero PSD fixed point, and the complementary map has
+spectral radius $< 1$.
+
+\begin{lemma}[Primitive MPS tensors have nonzero word products]\label{lem:prim_nonzero_word}
+    \lean{MPSTensor.exists_nonzero_evalWord_of_isPrimitiveMPS}
+    \leanok
+    \uses{def:primitive_mps, def:eval_word}
+    If $A$ is a primitive MPS tensor,
+    then for every $n \ge 0$ there exists a word $w$ of length
+    \emph{exactly}~$n$ with $A^w \neq 0$.
+\end{lemma}
+
+\begin{proof}\leanok
+    The PSD fixed point $\rho$ of $\E_A$ satisfies
+    $\E_A^n(\rho) = \rho \neq 0$.
+    Since $\E_A^n(\rho) = \sum_{|w|=n} A^w \rho (A^w)^\dagger$,
+    at least one summand is nonzero, hence some $A^w \neq 0$.
+\end{proof}
+
+\begin{lemma}[Iterated transfer does not vanish]\label{lem:transfer_pow_ne_zero}
+    \lean{MPSTensor.transferMap_pow_ne_zero_of_isPrimitiveMPS}
+    \leanok
+    \uses{def:primitive_mps, def:transfer_map}
+    If $A$ is a primitive MPS tensor, then
+    $\E_A^n \neq 0$ for all $n \ge 0$.
+\end{lemma}
+
+\begin{proof}\leanok\uses{lem:prim_nonzero_word}
+    By Lemma~\ref{lem:prim_nonzero_word},
+    there exists a word~$w$ of length~$n$ with $A^w \neq 0$,
+    so $\E_A^n(\rho)$ has a nonzero summand.
+\end{proof}
+
+\subsection{From primitivity to normality}\label{subsec:prim_to_normal}
+
+The primitivity condition of Definition~\ref{def:primitive_mps}
+combines TP normalization, a nonzero PSD fixed point, and a complementary
+transfer-map gap. It is connected to normality through the following results.
+
+\begin{lemma}[Fixed-point uniqueness from a complementary transfer-map gap]%
+    \label{lem:fixedpoint_unique_spectral}
+    \lean{MPSTensor.IsPrimitiveMPS.fixedPoint_unique}
+    \leanok
+    \uses{def:primitive_mps}
+    If $A$ is a primitive MPS tensor
+    with PSD fixed point $\rho$,
+    then every fixed point $\sigma$ of $\E_A$ is proportional
+    to $\rho$: $\sigma = \frac{\tr(\sigma)}{\tr(\rho)} \rho$.
+\end{lemma}
+
+\begin{proof}\leanok
+    Set $\sigma' = \sigma - \frac{\tr(\sigma)}{\tr(\rho)} \rho$.
+    Then $\tr(\sigma') = 0$ and $(\E_A - P_\rho)(\sigma') = \sigma'$.
+    If $\sigma' \neq 0$, then $1$ is an eigenvalue of $\E_A - P_\rho$,
+    contradicting the complementary transfer-map gap
+    $\rho_{\mathrm{spec}}(\E_A - P_\rho) < 1$.
+\end{proof}
+
+\begin{lemma}[Complement powers tend to zero]%
+    \label{lem:complement_pow_zero}
+    \lean{MPSTensor.IsPrimitiveMPS.complement_pow_tendsto_zero}
+    \leanok
+    \uses{def:primitive_mps}
+    If $A$ is a primitive MPS tensor with PSD fixed point $\rho$,
+    then $(\E_A - P_\rho)^n \to 0$ in operator norm.
+\end{lemma}
+
+\begin{proof}\leanok
+    The spectral radius of $\E_A - P_\rho$ is strictly less
+    than $1$ by the complementary transfer-map gap hypothesis.
+    Apply the general result that powers of an operator
+    with spectral radius $< 1$ tend to zero.
+\end{proof}
+
+\begin{remark}[Primitivity: transfer-map gap vs.\ positive definiteness]%
+    \label{rem:prim_definition_mismatch}\leanok
+    The primitivity condition used in Section~\ref{subsec:prim_to_normal}
+    has three parts: TP normalization $\sum_i (A^i)^\dagger A^i = \Id$,
+    a nonzero PSD fixed point $\rho$, and the complementary transfer-map gap
+    $\rho_{\mathrm{spec}}(\E_A - P_\rho) < 1$.
+    The notion of ``primitive'' in
+    \cite[Proposition~3]{Sanz2010Quantum} additionally requires
+    $\rho$ to be positive definite (full rank).
+    Without positive definiteness, the transfer-map gap condition alone
+    does \emph{not} imply irreducibility or normality.
+    A counterexample is $D = 2$, $\rho = \diag(1,0)$.
+
+    With the additional hypothesis $\rho > 0$,
+    Lemma~\ref{lem:primitive_implies_irreducible} gives
+    irreducibility.
+    Together with the Burnside argument below
+    (Section~\ref{subsec:burnside_full_span})
+    and Theorem~\ref{thm:algspan_to_normal}, one obtains
+    \[
+        \text{primitive} + \rho \text{ positive definite}
+        \Rightarrow
+        \text{irreducible}
+        \Rightarrow
+        \algspn(A) = \MN{D}
+        \Rightarrow
+        \text{normal}.
+    \]
+    The last step uses the aperiodicity condition
+    $\Id \in S_1(A)$ from Remark~\ref{rem:aperiodicity}.
+    After restoring the positive-definite hypothesis,
+    \cite[Proposition~3]{Sanz2010Quantum} identifies that
+    primitive/strongly irreducible condition with eventual full
+    Kraus rank, i.e. with our notion of normality.
+\end{remark}
+
+\subsection{Primitive implies irreducible}\label{subsec:prim_implies_irred}
+
+\begin{lemma}[Primitive tensors with positive-definite fixed point are irreducible]%
+    \label{lem:primitive_implies_irreducible}
+    \lean{MPSTensor.isIrreducibleTensor_of_isPrimitiveMPS_of_posDef}
+    \leanok
+    \uses{def:primitive_mps, def:irreducible_tensor}
+    If $A$ is a primitive MPS tensor with PSD fixed point $\rho$
+    and $\rho$ is positive definite, then $A$ is an irreducible tensor.
+    This is part of~\cite[Proposition~3]{Sanz2010Quantum}
+    (see also \cite[Section~2.3]{Cirac2016MPDO_arXiv}).
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{def:has_inv_proj, lem:complement_pow_zero}
+    By contrapositive.
+    Assume $A$ has an invariant projection~$P$
+    ($P \neq 0$, $P \neq \Id$, $(\Id - P) A^i P = 0$ for all~$i$).
+    Set $\sigma = P \rho P$.
+    \begin{enumerate}
+        \item \emph{Invariance of $\sigma$ under $\E_A^n$:}
+              the projection relation
+              $(\Id - P) A^i P = 0$ implies
+              $(\Id - P) \cdot \E_A^n(\sigma) = 0$ for all~$n$
+              (by induction on~$n$).
+        \item \emph{Convergence:}
+              By Lemma~\ref{lem:complement_pow_zero},
+              $\E_A^n(\sigma) \to \frac{\tr(\sigma)}{\tr(\rho)} \rho$.
+              Hence
+              $(\Id - P) \cdot \frac{\tr(\sigma)}{\tr(\rho)} \rho = 0$.
+        \item \emph{Nonzero scalar:}
+              Since $P \neq 0$ and $\rho$ is positive definite,
+              $\tr(P \rho P) > 0$, so
+              $\frac{\tr(\sigma)}{\tr(\rho)} \neq 0$.
+              Therefore $(\Id - P) \rho = 0$.
+        \item \emph{Contradiction:}
+              Since $\rho$ is positive definite, it is a unit
+              in $\MN{D}$.
+              From $(\Id - P) \rho = 0$ we get $\Id - P = 0$,
+              i.e.\ $P = \Id$, contradicting $P \neq \Id$.
+    \end{enumerate}
+\end{proof}
+
+\subsection{From irreducibility to full spanning via Burnside's theorem}
+\label{subsec:burnside_full_span}
+
+The irreducibility condition (Definition~\ref{def:irreducible_tensor}) is formulated
+in terms of invariant \emph{projections}.
+For Burnside-style arguments it is more natural to work with invariant
+\emph{subspaces} of $\C^D$ under the Kraus operators.
+
+\begin{definition}[Algebra span]\label{def:alg_span}
+    \lean{MPSTensor.algSpan}\leanok
+    \uses{def:mps_tensor}
+    For an MPS tensor $A$, let $\algspn(A)$ be the unital
+    $\C$-subalgebra of $\MN{D}$ generated by the matrices $\{A^i\}_{i=0}^{d-1}$:
+    \[
+        \algspn(A)
+        = \C\langle A^i : i = 0, \ldots, d-1\rangle
+        \subseteq \MN{D}.
+    \]
+\end{definition}
+
+\begin{definition}[Invariant submodule]\label{def:invariant_submodule}
+    \lean{MPSTensor.IsInvariantSubmodule}\leanok
+    \uses{def:mps_tensor}
+    A subspace $W \le \C^D$ is \emph{$A$-invariant} if
+    $A^i W \subseteq W$ for every $i$.
+\end{definition}
+
+\begin{definition}[Irreducible action]\label{def:irreducible_action}
+    \lean{MPSTensor.IsIrreducibleAction}\leanok
+    \uses{def:invariant_submodule}
+    The Kraus operators of $A$ act \emph{irreducibly} on $\C^D$ if every
+    $A$-invariant subspace is trivial, i.e. equal to $0$ or to $\C^D$.
+\end{definition}
+
+\begin{theorem}[Irreducible tensor implies irreducible action]\label{thm:irreducible_tensor_to_action}
+    \lean{MPSTensor.isIrreducibleAction_of_isIrreducibleTensor}\leanok
+    \uses{def:irreducible_tensor, def:irreducible_action}
+    If $A$ is irreducible as a tensor (Definition~\ref{def:irreducible_tensor}),
+    then the Kraus operators act irreducibly on $\C^D$
+    (Definition~\ref{def:irreducible_action}).
+\end{theorem}
+
+\begin{proof}\leanok
+    Let $W \le \C^D$ be an $A$-invariant subspace.
+    In finite dimension the orthogonal projection $P$ onto $W$ exists.
+    Invariance of $W$ implies $(\Id - P) A^i P = 0$ for all~$i$.
+    Thus $P$ is a nontrivial invariant projection unless $W = 0$ or $W = \C^D$,
+    contradicting irreducibility of the tensor.
+\end{proof}
+
+\begin{theorem}[Burnside's theorem for Kraus algebras]\label{thm:burnside_matrix}
+    \lean{MPSTensor.burnside_matrix}\leanok
+    \uses{def:alg_span, def:irreducible_action}
+    Assume $D > 0$.
+    If $A$ acts irreducibly on $\C^D$, then the generated unital subalgebra is the
+    full matrix algebra:
+    \[
+        \algspn(A) = \MN{D}.
+    \]
+    This is the complex finite-dimensional case of Burnside's theorem
+    (equivalently, Jacobson's density theorem); see~\cite{Jacobson2009BasicAlgebraII}.
+\end{theorem}
+
+\begin{proof}\leanok
+    Transport $\algspn(A)$ along the algebra equivalence
+    $\MN{D} \simeq_{\C} \End_{\C}(\C^D)$.
+    The irreducible-action hypothesis makes $\C^D$ a simple module for this
+    algebra.
+    Over the algebraically closed field $\C$, Schur's lemma identifies the
+    endomorphisms commuting with the action with scalars, and Jacobson density
+    then forces the action map to be surjective onto all of
+    $\End_{\C}(\C^D)$.
+\end{proof}
+
+\begin{remark}\leanok
+    This Burnside/Jacobson-density step is a substantial external algebraic
+    ingredient in the chapter. We use it here as the finite-dimensional complex
+    Burnside theorem, namely the statement that an irreducible matrix algebra
+    action already generates the full endomorphism algebra.
+\end{remark}
+
+\subsection{From primitivity to strong irreducibility and normality}%
+\label{subsec:prim_normality_connection}
+
+The results in this subsection remove the aperiodicity assumption
+from the normality conclusions.
+They connect primitivity in Definition~\ref{def:primitive_mps},
+formulated via a complementary transfer-map gap, directly to normality
+(eventually full Kraus rank),
+using the convergence of the transfer-map iterates to the
+projection onto the fixed-point subspace.
+
+\begin{lemma}[Primitive tensors with positive-definite fixed point have irreducible transfer map]%
+    \label{lem:irreducible_map_from_primitive}
+    \lean{MPSTensor.isIrreducibleMap_of_isPrimitiveMPS_of_posDef}
+    \leanok
+    \uses{def:primitive_mps}
+    If $A$ is a primitive MPS tensor with positive-definite fixed
+    point~$\rho$, then the transfer map $\E_A$ is irreducible.
+
+    The proof uses fixed-point uniqueness
+    (Lemma~\ref{lem:fixedpoint_unique_spectral}):
+    every PSD fixed point is proportional to $\rho$,
+    so Wolf's criterion for irreducibility
+    (positive-definite fixed point implies irreducibility)
+    applies directly.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:fixedpoint_unique_spectral}
+    By Lemma~\ref{lem:fixedpoint_unique_spectral},
+    if $\sigma \ge 0$ and $\E_A(\sigma) = \sigma$, then
+    $\sigma = \frac{\tr(\sigma)}{\tr(\rho)} \rho$.
+    Since $\rho > 0$, Wolf's uniqueness criterion for
+    irreducibility applies.
+\end{proof}
+
+\begin{lemma}[Primitive tensors with positive-definite fixed point are strongly irreducible]%
+    \label{lem:strongly_irred_from_primitive}
+    \lean{MPSTensor.isStronglyIrreduciblePaper_of_isPrimitiveMPS_of_posDef}
+    \leanok
+    \uses{def:primitive_mps}
+    If $A$ is a primitive MPS tensor with positive-definite fixed
+    point~$\rho$, then $A$ is strongly irreducible in the sense of~%
+    \cite[Proposition~3(c)]{Sanz2010Quantum}:
+    $\E_A$ is irreducible, the fixed point $\rho$ is positive
+    definite, and the peripheral spectrum of $\E_A$ is $\{1\}$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:irreducible_map_from_primitive, thm:prim_overlap_one}
+    Combine Lemma~\ref{lem:irreducible_map_from_primitive}
+    (irreducibility) with the peripheral-spectrum primitivity from
+    the transfer-map gap hypothesis
+    (Theorem~\ref{thm:prim_overlap_one}).
+\end{proof}
+
+\begin{theorem}[Primitive MPS with positive-definite fixed point is normal]%
+    \label{thm:normal_from_primitive_posdef}
+    \lean{MPSTensor.isNormal_of_isPrimitiveMPS_with_posDef}
+    \leanok
+    \uses{def:primitive_mps, def:normal}
+    If $A$ is a primitive MPS tensor with positive-definite fixed
+    point~$\rho$, then $A$ is normal
+    (has eventually full Kraus rank).
+    No aperiodicity assumption is needed.
+
+    This is the key connection between primitivity in
+    Definition~\ref{def:primitive_mps}, formulated via a complementary
+    transfer-map gap, and normality; it removes the need for the
+    aperiodicity-based argument.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{lem:strongly_irred_from_primitive, thm:wolf_6_8_conjunction}
+    By Lemma~\ref{lem:strongly_irred_from_primitive},
+    $A$ is strongly irreducible, i.e.\ primitive in Wolf's sense.
+    Under normalization, Theorem~\ref{thm:wolf_6_8_conjunction}
+    identifies this primitivity condition directly with normality
+    (equivalently, eventual full Kraus rank).
+\end{proof}

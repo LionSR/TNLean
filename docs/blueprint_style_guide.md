@@ -46,6 +46,40 @@ The blueprint links the mathematics to its Lean formalization. A reader should b
     should usually be inline with `$...$`; use displayed equations only when the
     expression is long or when several implications must be compared. Avoid
     long paragraphs whose only mathematical content is described in words.
+12. **Display selectively; cite displayed equations with `\ref`, not
+    words.** Keep a short, single-step formula inline with `$...$` when it reads
+    naturally in the sentence and is not cited elsewhere. Do not promote a
+    thin conclusion to a numbered display merely to assign it a label. Retain
+    a display for a long formula, a central definition or identity, several
+    cases or conditions, or a genuine derivation. Use `align` for every retained
+    display, including a single-line display; do not introduce new `equation`,
+    `gather`, `multline`, or bare `\[...\]` environments.
+
+    If prose points back to a displayed equation — in the same proof, a later
+    proof, or another chapter — give it a concise
+    `\label{eq:<chapter-prefix>_...}` and cite it with plain `\ref`, never
+    `\eqref`: write `(\ref{eq:foo_bar})` or
+    `Substituting~(\ref{eq:foo_bar}) into...`. This concise parenthesized form
+    avoids repeating the word “equation.” Replace positional phrases such as
+    "the preceding identity", "the equation above", "the first displayed
+    identity", and "the two equations above" with explicit references. The
+    same rule applies across chapters: cite the earlier equation label rather
+    than describing its position or restating its number.
+    - **Keep labels concise.** `eq:<chapter-prefix>_<two-to-four-word gist>`
+      (e.g. `eq:ph_boundary_scaled`, not
+      `eq:ph_boundary_crossing_scaled_boundary_equal_via_intermediate_step`).
+      Reuse the surrounding entry's own label as the prefix gist rather than
+      re-describing the whole statement; drop words already implied by the
+      chapter prefix.
+    - **Keep aligned derivations dense.** A short equality chain such as
+      `$a=b=c=d$` should normally occupy one aligned line, not four lines with
+      one equality per line. Break a derivation across lines only when the
+      intermediate expressions are long, independently referenced, or require
+      separate explanation. If a display carries several logically distinct
+      equations, give each its own aligned line rather than joining them with
+      `\qquad` or commas. Give a line its own `\label{}` only when that line is
+      independently cited. References to a different earlier display must use
+      its label.
 
 ## Proof Sketches Must Match Lean
 This is the most important rule. Every proof in the blueprint must faithfully describe what the Lean proof does:

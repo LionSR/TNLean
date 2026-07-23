@@ -1,0 +1,883 @@
+\section{Irreducible-block auxiliaries}
+
+\begin{theorem}[Scalar fixed points in an irreducible unital block]%
+    \label{thm:irreducible_unital_scalar_fixed_point}
+    \lean{MPSTensor.fixed_eq_scalar_of_isIrreducibleTensor_unital}
+    \leanok
+    \uses{def:transfer_map, def:irreducible_tensor}
+    If $A$ is irreducible and unital, $\E_A(\Id)=\Id$, and $\E_A(X)=X$, then $X$
+    is a scalar multiple of $\Id$. This is the final fixed-point assertion in the
+    proof of \cite[Theorem~4]{PerezGarcia2007Matrix}.
+\end{theorem}
+
+\begin{proof}\leanok
+    Tensor irreducibility gives irreducibility of the completely positive
+    transfer map. By Wolf's Theorem~6.6 for irreducible unital Kraus maps, every
+    fixed point is scalar.
+\end{proof}
+
+\begin{theorem}[Unital gauge from a full-rank Perron--Frobenius eigenvector]%
+    \label{thm:unital_gauge_of_pd_fixed_point}
+    \lean{MPSTensor.spectralUnitalGauge_isUnital_of_transferMap_eigenvector}
+    \lean{MPSTensor.unitalGauge_isUnital_of_transferMap_fixedPoint}
+    \lean{MPSTensor.sameMPV_unitalGauge}
+    \leanok
+    \uses{def:transfer_map}
+    Let $\rho$ be positive definite with $\E_A(\rho)=r\rho$ for some $r>0$. For
+    $B^i := r^{-1/2}\rho^{-1/2}A^i\rho^{1/2}$,
+    \begin{equation}\label{eq:canon_unital_gauge_identity}
+        \sum_i B^i(B^i)^\dagger = \Id.
+    \end{equation}
+    If $r=1$, then the unscaled gauge $B^i := \rho^{-1/2}A^i\rho^{1/2}$ is unital
+    and generates the same MPV family as $A$. This is the spectral-radius
+    normalization and full-rank fixed-point gauge of
+    \cite[Theorem~4]{PerezGarcia2007Matrix}.
+\end{theorem}
+
+\begin{proof}\leanok
+    The positive square root of $\rho$ is invertible. Substituting
+    $B^i=r^{-1/2}\rho^{-1/2}A^i\rho^{1/2}$ into $\sum_i B^i(B^i)^\dagger$ and
+    using $\E_A(\rho)=r\rho$ gives
+    (\ref{eq:canon_unital_gauge_identity}). For $r=1$ the change from $A$ to $B$
+    is a similarity, so cyclicity of the trace gives equality of all MPV
+    coefficients.
+\end{proof}
+
+\begin{lemma}[Range factorization of the support projection]
+    \label{lem:support_proj_range_factorization}
+    \lean{MPSTensor.exists_supportProj_eq_mul}
+    \lean{MPSTensor.supportProj_mul_left_eq_self}
+    \lean{MPSTensor.one_sub_supportProj_mul_mul_supportProj_eq_zero}
+    \leanok
+    \uses{def:support_proj}
+    The support projection $\pi$ of a positive semidefinite matrix $\rho$
+    factors as $\pi=\rho W$ for a spectral pseudo-inverse $W$, witnessing
+    that the range of $\pi$ is the range of $\rho$.  For a rectangular
+    matrix $Y$, the support projection $\pi$ of $YY^\dagger$ fixes $Y$,
+    $\pi Y=Y$; and whenever $AY=YG$ for some matrix $G$ --- that is, $A$
+    maps the range of $Y$ into itself --- the one-sided invariance
+    $(\Id-\pi)A\pi=0$ holds.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{def:support_proj}
+    In the spectral decomposition
+    $\rho=U\diag(\lambda)U^\dagger$ take
+    $W=U\diag(\lambda^{+})U^\dagger$, where $\lambda^{+}$ inverts the
+    positive eigenvalues and vanishes on the kernel; then
+    $\rho W=U\diag(\mathbf 1_{\lambda>0})U^\dagger=\pi$.  From
+    $\pi(YY^\dagger)=YY^\dagger$ the matrix
+    $((\Id-\pi)Y)((\Id-\pi)Y)^\dagger$ vanishes, hence $\pi Y=Y$.
+    Finally $(\Id-\pi)A\pi=(\Id-\pi)AY(Y^\dagger W)
+    =(\Id-\pi)Y\,G(Y^\dagger W)=0$.
+\end{proof}
+
+\begin{theorem}[Irreducibility under rescaled conjugation]
+    \label{thm:irreducible_tensor_smul_conj}
+    \lean{MPSTensor.isIrreducibleTensor_smul_conj}
+    \leanok
+    \uses{def:irreducible_tensor, def:support_proj,
+        lem:support_proj_range_factorization}
+    Let $B$ be an irreducible tensor, let $X$ be invertible, and let
+    $c\ne 0$.  Then the rescaled conjugated tensor with letters
+    $c\,X^{-1}B^vX$ is irreducible.  In particular the rescaled unital
+    gauge of an irreducible tensor is irreducible; this is the
+    normalization of \cite[lines~224--225]{Cirac2016MPDO_arXiv} applied to
+    an irreducible corner.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{lem:support_proj_range_factorization}
+    An invariant orthogonal projection $P\notin\{0,\Id\}$ of the
+    conjugated tensor makes the columns of $Y=XP$ span a subspace invariant
+    under every letter of $B$: $B^vY=YG_v$ with
+    $G_v=X^{-1}B^vXP$.  The support projection of $YY^\dagger$ is then a
+    nontrivial invariant orthogonal projection of $B$ by
+    Lemma~\ref{lem:support_proj_range_factorization}: it is nonzero
+    because $Y\ne 0$, and it is not the identity because any nonzero
+    vector of the kernel of $P$ transports through $(X^\dagger)^{-1}$ to
+    the kernel of $YY^\dagger$.  This contradicts irreducibility of $B$.
+\end{proof}
+
+\begin{theorem}[Unital Schwarz data for an irreducible corner]
+    \label{thm:spectral_unital_gauge_schwarz_setup}
+    \lean{MPSTensor.spectralUnitalGauge_schwarz_setup}
+    \leanok
+    \uses{def:irreducible_tensor, def:transfer_map,
+        thm:unital_gauge_of_pd_fixed_point, thm:irreducible_tensor_smul_conj}
+    Let $B$ be an irreducible tensor with a positive definite transfer
+    eigenvector, $\E_B(\rho)=r\rho$ with $\rho>0$ and $r>0$.  Then the
+    rescaled unital gauge $K^v=r^{-1/2}\rho^{-1/2}B^v\rho^{1/2}$ is a
+    unital Kraus family, is an irreducible tensor with an irreducible
+    transfer map, and its adjoint map has a positive definite fixed point.
+    These are the hypotheses of the cyclic decomposition of the peripheral
+    spectrum, \cite[Theorem~6.6]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:unital_gauge_of_pd_fixed_point, thm:irreducible_tensor_smul_conj,
+        thm:psd_fp_pd_irred}
+    Unitality is Theorem~\ref{thm:unital_gauge_of_pd_fixed_point};
+    irreducibility is Theorem~\ref{thm:irreducible_tensor_smul_conj}.  The
+    adjoint of a unital family is trace preserving, so its transfer map is
+    a channel and has a positive semidefinite fixed point by the Ces\`aro
+    argument; irreducibility of the adjoint map upgrades the fixed point to
+    a positive definite one.
+\end{proof}
+
+\begin{lemma}[Eigenvalue transport to the unital gauge]
+    \label{lem:eigenvalue_transport_unital_gauge}
+    \lean{MPSTensor.hasEigenvalue_transferMap_spectralUnitalGauge}
+    \leanok
+    \uses{def:transfer_map}
+    In the setting of
+    Theorem~\ref{thm:spectral_unital_gauge_schwarz_setup}, every transfer
+    eigenvalue $\mu$ of $B$ becomes the transfer eigenvalue $\mu/r$ of the
+    rescaled unital gauge: the gauge conjugates the transfer map by the
+    congruence with $\rho^{1/2}$ and divides it by $r$.  In particular the
+    peripheral eigenvalues $e^{2\pi iq/p}$ of
+    \cite[lines~225--230]{Cirac2016MPDO_arXiv} arise from the transfer
+    eigenvalues of modulus $r$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    If $\E_B(Z)=\mu Z$ then
+    $Z'=\rho^{-1/2}Z\rho^{-1/2}$ is nonzero and satisfies
+    $\E_K(Z')=(\mu/r)Z'$ by direct computation.
+\end{proof}
+
+\begin{theorem}[Unitary diagonal positive fixed point in TP gauge]\label{thm:form_II}
+    \lean{MPSTensor.exists_unitary_diag_posDef_fixedPoint_of_TP_of_isIrreducibleTensor}
+    \leanok
+    \uses{def:irreducible_tensor, def:tp_kraus}
+    Let $A$ be an irreducible MPS tensor with $\sum_i (A^i)^\dagger A^i = \Id$ and
+    $D > 0$. Then there exist a unitary $U$ and a diagonal positive definite
+    $\Lambda$ such that, for $B^i := U^\dagger A^i U$,
+    \[
+        \sum_i (B^i)^\dagger B^i = \Id,
+        \qquad
+        \E_B(\Lambda) = \Lambda.
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:psd_fp_pd_irred}
+    The TP hypothesis makes $\E_A$ a channel with a nonzero PSD fixed point.
+    Irreducibility makes $\E_A$ an irreducible CP map, and
+    Theorem~\ref{thm:psd_fp_pd_irred} upgrades the fixed point to positive
+    definite. The spectral theorem diagonalizes it by a unitary conjugation,
+    which preserves the TP normalization.
+\end{proof}
+
+\begin{remark}[Burnside input for cumulative spanning]\leanok
+    \uses{thm:irreducible_tensor_to_action, thm:burnside_matrix,
+        lem:algspan_cumulative_span}
+    The passage from irreducible tensors to full algebra spanning first passes
+    through the irreducible action on $\C^D$. Burnside's theorem then says that
+    the resulting irreducible subalgebra of $\MN{D}$ is all of $\MN{D}$. Once
+    the algebra span is full, finite-dimensionality gives a single cumulative
+    span that already equals $\MN{D}$.
+\end{remark}
+
+\begin{lemma}[The algebra span reaches a finite cumulative span]\label{lem:algspan_cumulative_span}
+    \lean{MPSTensor.exists_cumulativeSpan_eq_top_of_algSpan_eq_top}
+    \leanok
+    \uses{def:alg_span, def:cumulative_span}
+    If the generated unital algebra satisfies $\algspn(A) = \MN{D}$,
+    then there exists $N$ such that $T_N(A) = \MN{D}$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Every element of $\algspn(A)$ lies in some cumulative span $T_n(A)$:
+    the generators lie in $T_1(A)$, scalar multiples of the identity lie in
+    $T_0(A)$, and the family $\{T_n(A)\}_{n \ge 0}$ is closed under addition
+    and under multiplication with lengths adding.
+    Since $\MN{D}$ is finite-dimensional, the ascending chain
+    $T_0(A) \subseteq T_1(A) \subseteq \cdots$ stabilizes, so one can choose a
+    single $N$ with $T_N(A) = \MN{D}$.
+\end{proof}
+
+\begin{lemma}[Irreducible action gives an irreducible tensor]\label{lem:irreducible_action_to_tensor}
+    \lean{MPSTensor.isIrreducibleTensor_of_isIrreducibleAction}
+    \leanok
+    \uses{def:irreducible_action, def:irreducible_tensor}
+    If the letters of $A$ act irreducibly on $\C^D$, then $A$ has no nontrivial
+    invariant orthogonal projection.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    If $P$ were a nontrivial invariant orthogonal projection, then its range
+    would be invariant under every letter of $A$.
+    Irreducibility of the action forces this range to be either $0$ or all of
+    $\C^D$, so $P$ must be $0$ or $\Id$, a contradiction.
+\end{proof}
+
+\section{Normal canonical form}\label{sec:normal_canonical_form}
+
+This section fixes the two canonical-form predicates used downstream: the
+block-injective form of Definition~\ref{def:is_canonical_form} and the spectral
+\emph{normal} canonical form of Definition~\ref{def:is_normal_canonical_form}. It
+then records how the self-overlap clause and gauge-phase equivalence follow from
+primitivity, and closes with the periodicity-removal step that produces primitive
+transfer maps.
+
+Recall from Definition~\ref{def:mpv_overlap}
+and Lemma~\ref{thm:overlap_trace} that the bilinear overlap is
+\[
+    O_{AB}(N) = \sum_{\sigma \in \{0,\ldots,d{-}1\}^N}
+    V^{(N)}(A)_\sigma \overline{V^{(N)}(B)_\sigma} = \Tr(F_{AB}^N).
+\]
+This notation enters the self-overlap clause of the canonical-form predicate
+below.
+
+\begin{definition}[Canonical form conditions]\label{def:is_canonical_form}
+    \lean{MPSTensor.IsCanonicalForm}
+    \leanok
+    \uses{def:injective}
+    A collection of scaling factors $(\mu_k)_{k=1}^r$ and
+    block tensors $(A_k)_{k=1}^r$ satisfies the
+    \emph{canonical form conditions} if:
+    \begin{enumerate}
+        \item each $A_k$ is injective,
+        \item each $A_k$ satisfies the TP normalization
+              $\sum_i (A_k^i)^\dagger A_k^i = \Id$,
+        \item the moduli are non-increasing:
+              $|\mu_1| \ge |\mu_2| \ge \cdots \ge |\mu_r|$,
+        \item all $\mu_k \neq 0$,
+        \item every block bond dimension is positive: $D_k \ge 1$ for every~$k$,
+        \item the self-overlap converges: $O_{A_k A_k}(N) \to 1$
+              for each~$k$.
+    \end{enumerate}
+    Only this one-sided normalization is assumed;
+    no unital condition is assumed here.
+    Condition~(6) is a primitivity hypothesis:
+    for a primitive channel
+    (\cite[Theorem~6.7(3)]{Wolf2012Quantum}),
+    $T^n(\rho) \to \rho_\infty$ for every initial state,
+    which forces the self-overlap to converge to~$1$.
+    See also~\cite[Theorem~6.8]{Wolf2012Quantum}
+    for the completely-positive characterisation
+    and Chapter~\ref{ch:spectral} for the transfer-operator gap
+    proof.
+\end{definition}
+
+% rem:pgvwc07_vs_local_cf (deleted): Definition~\ref{def:is_canonical_form} is a
+% local/conditional predicate assuming injectivity and the self-overlap limit;
+% it is not the source canonical-form existence or uniqueness theorem of
+% \cite[Theorem~4]{PerezGarcia2007Matrix}.
+
+\begin{remark}[Normalization convention]\label{rem:tp_vs_unital}
+    \cite[Theorem~4]{PerezGarcia2007Matrix} uses the unital gauge
+    $\sum_i A_k^i (A_k^i)^\dagger = \Id$; here the blocks are in the dual TP gauge
+    $\sum_i (A_k^i)^\dagger A_k^i = \Id$. A positive-definite fixed point of the
+    adjoint transfer map provides the change of gauge between the two
+    (Theorem~\ref{thm:left_canonical_gauge}).
+\end{remark}
+
+\begin{definition}[Normal canonical form conditions]\label{def:is_normal_canonical_form}
+    \lean{MPSTensor.IsNormalCanonicalForm}\leanok
+    \uses{def:irreducible_tensor, def:primitive_channel, def:tp_kraus}
+    Scaling factors $(\mu_k)_{k=1}^r$ and block tensors $(A_k)_{k=1}^r$ satisfy
+    the \emph{normal canonical form conditions} if:
+    \begin{enumerate}
+        \item each $A_k$ is irreducible,
+        \item each $A_k$ satisfies $\sum_i (A_k^i)^\dagger A_k^i = \Id$,
+        \item each $\E_{A_k}$ is primitive
+              (equivalently, $\sigma_\partial(\E_{A_k}) = \{1\}$),
+        \item $|\mu_1| \ge |\mu_2| \ge \cdots \ge |\mu_r|$,
+        \item all $\mu_k \neq 0$,
+        \item all bond dimensions are positive.
+    \end{enumerate}
+    Here ``normal'' is the spectral sense of~\cite{Cirac2016MPDO_arXiv}, which
+    by~\cite[Proposition~3]{Sanz2010Quantum} is equivalent to the eventual
+    block-injectivity formulation of Definition~\ref{def:normal}.
+\end{definition}
+
+% The weight moduli are non-increasing, not strictly decreasing; equal-modulus
+% and repeated-copy sectors are compared by the sector-coefficient construction
+% of Chapter~\ref{ch:bnt} (Definition~\ref{def:mpv_phase_class_data}, supplier
+% Theorem~\ref{thm:paperbnt_supplier_prepared}), where a repeated sector
+% contributes the power sum $c_N^{(j)} = \sum_q \mu_{j,q}^N$.
+
+\begin{theorem}[Self-overlap is derived in normal canonical form]%
+    \label{thm:ncf_overlap_tendsto_one}
+    \lean{MPSTensor.IsNormalCanonicalForm.overlap_tendsto_one}\leanok
+    \uses{def:is_normal_canonical_form, def:mpv_overlap}
+    If $(\mu_k, A_k)$ satisfies the normal canonical form conditions, then
+    $O_{A_k A_k}(N) \to 1$ for every block~$k$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:is_normal_canonical_form, thm:primitive_compl_lt_one, thm:primitive_overlap}
+    Fix a block~$k$. Irreducibility and the TP normalization give a nonzero
+    positive semidefinite fixed point $\rho$ of $\E_{A_k}$ with fixed-point
+    projector $P$; primitivity gives the complementary gap
+    $\rho_{\spec}(\E_{A_k}-P) < 1$ (Theorem~\ref{thm:primitive_compl_lt_one}).
+    Theorem~\ref{thm:primitive_overlap} then yields $O_{A_k A_k}(N) \to 1$.
+\end{proof}
+
+\begin{remark}
+    See Theorem~\ref{thm:modulus_one_gauge_irr_tp} for the modulus-one
+    eigenvalue rigidity statement for irreducible trace-preserving blocks.
+\end{remark}
+
+\begin{lemma}[Mixed-transfer spectral radius from unit-modulus overlap]%
+    \label{lem:overlap_norm_one_implies_spectral_radius_ge_one}
+    \lean{MPSTensor.mixedTransferSpectralRadius_ge_one_of_mpvOverlap_norm_tendsto_one}
+    \leanok
+    \uses{def:mpv_overlap}
+    Let $A$ and $B$ have the same bond dimension. If
+    $\|\braket{V^{(N)}(A)}{V^{(N)}(B)}\| \to 1$, then the mixed transfer map has
+    spectral radius at least $1$.
+\end{lemma}
+\begin{proof}\leanok
+    If the mixed transfer spectral radius were $<1$, the iterated mixed transfer
+    map would tend to zero in operator norm, hence so would its trace; via
+    $\Tr(F_{AB}^N) = \braket{V^{(N)}(A)}{V^{(N)}(B)}$ the overlap would tend
+    to~$0$, contradicting the hypothesis.
+\end{proof}
+
+\begin{theorem}[Gauge-phase equivalence from unit-modulus overlap]%
+    \label{thm:nt_overlap_norm_one_gauge}
+    \lean{MPSTensor.gaugePhaseEquiv_of_overlap_norm_tendsto_one_of_irreducible_TP}
+    \leanok
+    \uses{def:irreducible_tensor, def:tp_kraus, def:gauge_phase_equiv,
+        def:mpv_overlap}
+    Let $A$ and $B$ be irreducible MPS tensors of the same bond dimension with
+    $\sum_i (A^i)^\dagger A^i = \Id$ and $\sum_i (B^i)^\dagger B^i = \Id$. If
+    $\|\braket{V^{(N)}(A)}{V^{(N)}(B)}\| \to 1$, then $A$ and~$B$ are gauge-phase
+    equivalent.
+    % Same-bond-dimension case of \cite[Lemma~equalMPS]{Cirac2016MPDO_arXiv};
+    % proportionality of MPVs is not assumed.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:overlap_norm_one_implies_spectral_radius_ge_one,
+        thm:modulus_one_gauge_irr_tp}
+    By Lemma~\ref{lem:overlap_norm_one_implies_spectral_radius_ge_one} the mixed
+    transfer spectral radius is at least~$1$, and
+    Theorem~\ref{thm:modulus_one_gauge_irr_tp} then gives gauge-phase equivalence.
+\end{proof}
+
+\subsection{Canonical form from primitivity}\label{sec:canonical_from_primitivity}
+
+A normal block needs a primitive transfer map; an irreducible TP block may still
+have peripheral spectrum larger than $\{1\}$, namely the roots of unity coming
+from its period. Blocking by the least common multiple of those periods raises the
+transfer map to a power whose peripheral spectrum is $\{1\}$, removing the
+periodicity. In~\cite{Cirac2021Matrix} this is the passage from irreducibility to
+primitivity by blocking to period one.
+% rem:primitivity_reduces_assumptions / "two ways" (deleted): once
+% peripheral-spectrum primitivity is known, the overlap-convergence hypothesis is
+% redundant, derived from the transfer-map gap of Chapter~\ref{ch:spectral}; these
+% are statements about blocks already in normal form, not the arbitrary-input
+% existence theorem of \cite[Theorem~4]{PerezGarcia2007Matrix}.
+
+\begin{theorem}[Blocking yields a peripheral-spectrum primitive transfer map]\label{thm:blocking_primitivity}
+    \lean{MPSTensor.exists_blockTensor_isPrimitive_of_TP_of_isIrreducibleTensor}
+    \leanok
+    \uses{def:blocked_tensor, def:transfer_map, def:primitive_channel,
+        def:tp_kraus, def:irreducible_tensor}
+    Let $A$ be an irreducible MPS tensor with $D > 0$ and
+    $\sum_i (A^i)^\dagger A^i = \Id$. Then there exists a blocking length $p > 0$
+    such that $\sigma_\partial(\E_{A^{[p]}}) = \{1\}$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peripheral_roots_irred_fp, thm:peripheral_finite,
+        lem:common_power_eq_one, lem:peripheral_pow_singleton}
+    Pass to the conjugate-transposed Kraus family $K_i := (A^i)^\dagger$, which is
+    unital with irreducible Kraus map. The TP fixed-point theorem for $\E_A$
+    provides a positive definite fixed point for the adjoint of $K$, so
+    Theorem~\ref{thm:peripheral_roots_irred_fp} shows every peripheral eigenvalue
+    is a root of unity. Since $\sigma_\partial(\E_A)$ is finite
+    (Theorem~\ref{thm:peripheral_finite}),
+    Lemma~\ref{lem:common_power_eq_one} gives a common exponent $p$ with
+    $\mu^p = 1$ for all $\mu \in \sigma_\partial(\E_A)$, and
+    Lemma~\ref{lem:peripheral_pow_singleton} gives
+    $\sigma_\partial(\E_A^p) = \{1\}$. Blocking by $p$ takes the $p$th power of
+    the transfer map, so $\E_{A^{[p]}}$ is primitive.
+\end{proof}
+
+\begin{remark}\label{rem:blocking_primitivity_appendixA}
+    Theorem~\ref{thm:blocking_primitivity} is the periodicity-removal-by-blocking
+    step of~\cite[Appendix~A]{Cirac2016MPDO_arXiv} for an irreducible block
+    already in TP gauge.
+\end{remark}
+
+\section{Left-canonical and dual diagonalization of irreducible blocks}%
+\label{sec:canonical_construction_1606}
+
+Each irreducible block in trace-preserving gauge admits the PGVWC07 unital
+orientation together with a diagonal positive-definite dual fixed point
+(Theorem~\ref{thm:CFII_data}, the Perron--Frobenius gauge of
+Chapter~\ref{ch:qpf}, and
+Theorem~\ref{thm:irreducible_unital_scalar_fixed_point}); the full PGVWC07
+canonical form is Theorem~\ref{thm:pgvwc07_ti_canonical_form}.
+
+\begin{theorem}[Left-canonical normalization for irreducible TP blocks]%
+    \label{thm:CFII_data}
+    \lean{MPSTensor.exists_CFII_data_of_TP_of_isIrreducibleTensor}
+    \leanok
+    \uses{def:irreducible_tensor}
+    Let $A$ be an irreducible MPS tensor in TP gauge
+    ($\sum_i (A^i)^\dagger A^i = \Id$) with $D > 0$. Then there exist a unitary
+    $U$ and a diagonal positive definite $\Lambda$ such that:
+    \begin{enumerate}
+        \item $B^i := U^\dagger A^i U$ is TP,
+        \item $\E_B(\Lambda) = \Lambda$,
+        \item $\Lambda$ is diagonal and positive definite,
+        \item $A$ and $B$ generate the same MPV family.
+    \end{enumerate}
+    This is the left-canonical normalization step (Canonical Form~II)
+    of~\cite[Appendix~A]{Cirac2016MPDO_arXiv}. The unitary conjugation is a
+    second step inside TP gauge, performed only after TP normalization.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:form_II, thm:samempv_unitary}
+    Theorem~\ref{thm:form_II} provides the unitary and the diagonal PD fixed
+    point, and unitary conjugation preserves trace-preservation and the MPV
+    family (Theorem~\ref{thm:samempv_unitary}).
+\end{proof}
+
+\begin{theorem}[Dual diagonalization for irreducible unital blocks]%
+    \label{thm:pgvwc07_dual_diag_unital}
+    \lean{MPSTensor.exists_unitary_diag_posDef_adjointFixedPoint_of_unital_of_isIrreducibleTensor}
+    \leanok
+    \uses{def:irreducible_tensor}
+    Let $A$ be an irreducible MPS tensor in unital gauge
+    $\sum_i A^i(A^i)^\dagger=\Id$ with $D>0$. Then there exist a unitary $U$ and a
+    diagonal positive definite $\Lambda$ such that, for $B^i:=U^\dagger A^iU$,
+    \begin{equation}\label{eq:canon_dual_diag_unital_pair}
+        \sum_i B^i(B^i)^\dagger=\Id,
+        \qquad
+        \sum_i (B^i)^\dagger\Lambda B^i=\Lambda,
+    \end{equation}
+    and $A$, $B$ generate the same MPV family. This is the dual-map fixed-point
+    and unitary-diagonalization step of
+    \cite[Theorem~4]{PerezGarcia2007Matrix}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:CFII_data, thm:samempv_unitary}
+    Apply Theorem~\ref{thm:CFII_data} to the conjugate-transposed family
+    $i\mapsto (A^i)^\dagger$: unitality of $A$ is trace preservation for this
+    family, whose transfer map is the dual of $\E_A$. Translating back gives the
+    equations~(\ref{eq:canon_dual_diag_unital_pair}).
+\end{proof}
+
+\begin{lemma}[Common scalar rescaling of block weights]%
+    \label{lem:mpv_to_tensor_from_blocks_weight_mul_left}
+    \lean{MPSTensor.mpv_toTensorFromBlocks_weight_mul_left}
+    \leanok
+    Multiplying every block weight in a block-diagonal MPS tensor by a scalar $c$
+    multiplies every length-$N$ MPV coefficient by $c^N$.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpv_decomposition}
+    Expand the block-diagonal MPV coefficient as a finite sum over blocks and
+    factor $c^N$ out of the sum.
+\end{proof}
+
+\begin{theorem}[Normal canonical form from a primitive block decomposition]%
+    \label{thm:exists_normal_canonical_form}
+    \lean{MPSTensor.exists_normalCanonicalForm_of_primitive_blockDecomp}
+    \leanok
+    \uses{def:is_normal_canonical_form, def:blocked_tensor}
+    Suppose $A$ generates the same MPV family as $\bigoplus_k \mu_k A_k$, and that
+    each $A_k$ is irreducible, satisfies $\sum_i (A_k^i)^\dagger A_k^i = \Id$, and
+    has primitive transfer map, all $\mu_k \neq 0$, and all bond dimensions are
+    positive. Then there exist a blocking length $p > 0$, weights $(\nu_k)$, and
+    blocked tensors $(B_k)$ such that $A^{[p]}$ generates the same MPV family as
+    $\bigoplus_k \nu_k B_k$, and $(\nu_k, B_k)$ satisfies the normal canonical
+    form conditions. The weight moduli need not be distinct; equal-modulus blocks
+    are allowed.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:is_normal_canonical_form}
+    The given blocks are already primitive, so take $p = 1$. Reorder the blocks by
+    non-increasing weight modulus, with ties allowed, and set $\nu_k := \mu_k$ and
+    $B_k := A_k$ in that order. Irreducibility, TP normalization, primitivity,
+    nonzero weights, and positive bond dimensions are preserved, so the reordered
+    family satisfies Definition~\ref{def:is_normal_canonical_form} and generates
+    the same MPV family as~$A$.
+\end{proof}
+
+\begin{remark}[Scope of Theorem~\ref{thm:exists_normal_canonical_form}]
+    Theorem~\ref{thm:exists_normal_canonical_form} assumes all six block
+    hypotheses in advance and produces the normal canonical form by reordering.
+    It is not the arbitrary-input existence theorem
+    of~\cite[Section~2.3]{Cirac2016MPDO_arXiv}; that primitive-block reduction,
+    including its structural bond-dimension bound, is
+    Theorem~\ref{thm:tp_primitive_blockdecomp} in
+    Section~\ref{sec:reduction_to_normal_form}.
+\end{remark}
+
+
+\section{Support compression and period-removal auxiliaries}
+
+\begin{theorem}[Supported corner compression with a support isometry]%
+    \label{thm:supported_corner_compression_isometry}
+    \lean{MPSTensor.exists_compressedTensor_of_supported_projection_with_letter_and_isometry}
+    \leanok
+    \uses{def:support_proj}
+    Let $A$ be a tensor normalized on the support of an orthogonal projection
+    $P$, so that $P A^i P=A^i$ and
+    $\sum_i (A^i)^\dagger A^i=P$. Then there are a corner tensor $C$, a
+    linear isomorphism
+    \[
+        \varphi:\MN{\dim C}\xrightarrow{\sim} P\MN{D}P,
+    \]
+    and a rectangular isometry $V:\C^{\dim C}\to\C^D$ such that
+    \[
+        V^\dagger V=\Id,\qquad VV^\dagger=P,\qquad
+        \varphi(X)=VXV^\dagger.
+    \]
+    Moreover $\varphi(C^i)=A^i$ for every physical letter, and for every word
+    $\sigma=(\sigma_1,\ldots,\sigma_N)$,
+    \[
+        V^{(N)}(C)_\sigma
+        = \tr\!\bigl(P A^{\sigma_1}\cdots A^{\sigma_N}\bigr).
+    \]
+    \begin{proof}\leanok
+        Diagonalize the projection $P$ by a unitary change of basis.  The
+        inclusion of the support coordinates gives a rectangular isometry $V$
+        with $V^\dagger V=\Id$ and $VV^\dagger=P$.  Compress the letters of
+        $A$ to this support and let $\varphi$ be the corresponding corner
+        isomorphism.  The support relation $P A^iP=A^i$ gives the
+        corner-letter identity. For each word
+        $\sigma=(\sigma_1,\ldots,\sigma_N)$ the MPV component is obtained from
+        the trace computation
+        \[
+            V^{(N)}(C)_\sigma
+            =\tr(C^{\sigma_1}\cdots C^{\sigma_N})
+            =\tr(V^\dagger A^{\sigma_1}\cdots A^{\sigma_N}V)
+            =\tr(PA^{\sigma_1}\cdots A^{\sigma_N}).
+        \]
+        The final equality uses cyclicity of the trace and $VV^\dagger=P$.
+    \end{proof}
+\end{theorem}
+
+\begin{theorem}[Commuting projections give sector isometries]%
+    \label{thm:commuting_projection_block_decomp_isometry}
+    \lean{MPSTensor.exists_blockDecomp_of_commuting_projections_with_letter_and_isometry}
+    \leanok
+    \uses{thm:supported_corner_compression_isometry}
+    Let a left-canonical tensor $A$ commute with a family of orthogonal
+    projections $(P_k)$ summing to $\Id$. Then $A$ decomposes into compressed
+    sector tensors $(C_k)$, with a unit-weight direct-sum MPV decomposition,
+    corner isomorphisms $\varphi_k:\MN{\dim C_k}\to P_k\MN{D}P_k$, and
+    rectangular isometries $V_k$ satisfying
+    \[
+        V_k^\dagger V_k=\Id,\qquad V_kV_k^\dagger=P_k,\qquad
+        \varphi_k(X)=V_kXV_k^\dagger .
+    \]
+    The sector letters obey
+    $\varphi_k(C_k^i)=P_k A^i P_k$.
+    \begin{proof}\leanok
+        Apply Theorem~\ref{thm:supported_corner_compression_isometry} to the
+        compression of $A$ on each sector $P_k$.  Orthogonality and
+        $\sum_k P_k=\Id$ give the direct-sum decomposition. For every word
+        $\sigma=(\sigma_1,\ldots,\sigma_N)$ the partition of unity gives
+        \[
+            V^{(N)}(A)_\sigma
+            =\tr\!\Bigl((\sum_k P_k)A^{\sigma_1}\cdots A^{\sigma_N}\Bigr)
+            =\sum_k\tr(P_kA^{\sigma_1}\cdots A^{\sigma_N})
+            =\sum_k V^{(N)}(C_k)_\sigma,
+        \]
+        which is the unit-weight matrix-product-vector identity.
+    \end{proof}
+\end{theorem}
+
+\begin{theorem}[Adjoint-fixed projections give sector isometries]%
+    \label{thm:adjoint_fixed_projection_block_decomp_isometry}
+    \lean{MPSTensor.exists_blockDecomp_of_adjoint_fixed_projections_with_letter_and_isometry}
+    \leanok
+    \uses{thm:commuting_projection_block_decomp_isometry}
+    Let $A$ be left-canonical and let $(P_k)$ be orthogonal projections
+    summing to $\Id$ and fixed by the adjoint transfer map. Then the same
+    sector decomposition and support isometries of
+    Theorem~\ref{thm:commuting_projection_block_decomp_isometry} exist. In
+    particular, the adjoint fixed-point condition $\E_A^\dagger(P_k)=P_k$
+    gives
+    \[
+        P_k A^i=A^i P_k,
+    \]
+    which gives the corner-letter identity
+    \[
+        \varphi_k(C_k^i)=P_k A^i P_k.
+    \]
+    \begin{proof}\leanok
+        \uses{thm:commuting_projection_block_decomp_isometry}
+        The fixed-point equation $\E_A^\dagger(P_k)=P_k$, together with
+        left-canonicality $\sum_i (A^i)^\dagger A^i=\Id$, places $P_k$ in the
+        multiplicative domain of $\E_A^\dagger$, forcing
+        \[
+            P_k A^i=A^i P_k
+        \]
+        for every letter $A^i$.  The result then follows from
+        Theorem~\ref{thm:commuting_projection_block_decomp_isometry}.
+    \end{proof}
+\end{theorem}
+
+\begin{theorem}[Spectral cyclic sectors with support isometries]%
+    \label{thm:cyclic_sector_decomp_after_blocking_isometry}
+    \lean{MPSTensor.exists_cyclic_sector_decomp_after_blocking_with_letter_and_isometry}
+    \leanok
+    \uses{thm:peripheral_cyclic_structure,
+        thm:adjoint_fixed_projection_block_decomp_isometry}
+    Let $A$ be a left-canonical irreducible tensor, and suppose the adjoint
+    transfer map $\E_{A^\dagger}$ has a positive-definite fixed point, is
+    irreducible as a positive map, and has peripheral spectrum
+    \[
+        \sigma_\partial(\E_{A^\dagger})
+        =
+        \{\gamma^j : j\in \Z/m\Z\}
+    \]
+    for a primitive $m$th root of unity $\gamma$, with $m\ge 1$. Then the
+    spectral cyclic-sector decomposition of $A^{[m]}$ has compression maps
+    which may be chosen with rectangular support isometries $V_k$ satisfying
+    \[
+        V_k^\dagger V_k=\Id,\qquad V_kV_k^\dagger=P_k,\qquad
+        \varphi_k(X)=V_kXV_k^\dagger .
+    \]
+    These isometries also realize the blocked corner letters
+    $\varphi_k(C_k^\alpha)=P_k(A^{[m]})^\alpha P_k$.
+    \begin{proof}\leanok
+        \uses{thm:peripheral_cyclic_structure,
+            thm:adjoint_fixed_projection_block_decomp_isometry}
+        The cyclic peripheral-spectrum decomposition applied to
+        $\E_{A^\dagger}$ provides projections $P_k$ satisfying
+        $\E_{A^\dagger}(P_{k+1})=P_k$.  Iterating $m$ times gives
+        $(\E_{A^\dagger})^m(P_k)=P_k$, and the identity
+        $(\E_{A^\dagger})^m=\E_{(A^{[m]})^\dagger}$ shows that each $P_k$ is
+        fixed by the adjoint transfer map of $A^{[m]}$. Applying
+        Theorem~\ref{thm:adjoint_fixed_projection_block_decomp_isometry} to
+        that blocked tensor gives the compressed sector tensors and the
+        support isometries.
+    \end{proof}
+\end{theorem}
+
+\subsection{Reduction to primitive blocks}%
+\label{sec:reduction_to_normal_form}
+
+This subsection completes the reduction after period removal. A
+TP-primitive-irreducible block is normal, and an arbitrary tensor becomes, after a
+positive blocking length, a weighted family of left-canonical primitive blocks
+whose total bond dimension is bounded by the original bond dimension. For two
+tensors with the same MPV family, the cyclic sectors can be expressed over one
+common blocked alphabet, which is the form used by the Fundamental Theorem.
+
+\begin{theorem}[TP-primitive irreducible tensor is normal]%
+    \label{thm:normal_tp_primitive_irred}
+    \lean{MPSTensor.isNormal_of_tp_primitive_irreducible}
+    \leanok
+    \uses{def:primitive_mps, def:irreducible_tensor, def:normal}
+    Let $A$ be a left-canonical MPS tensor with $D > 0$, irreducible transfer
+    map, and peripheral spectrum $\{1\}$. Then $A$ is normal.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:normal_from_primitive_posdef, thm:psd_fp_pd_irred}
+    Irreducibility upgrades the PSD fixed point to positive definite
+    (Theorem~\ref{thm:psd_fp_pd_irred}), and
+    Theorem~\ref{thm:normal_from_primitive_posdef} then gives normality.
+\end{proof}
+
+An arbitrary translation-invariant tensor reduces, after blocking, to a weighted
+direct sum of primitive irreducible blocks.
+
+\begin{theorem}[Arbitrary tensor to primitive block decomposition]%
+    \label{thm:tp_primitive_blockdecomp}
+    \lean{MPSTensor.exists_tp_primitive_blockDecomp_after_blocking}
+    \leanok
+    \uses{def:blocked_tensor, def:same_mpv2_pos}
+    For any MPS tensor $A$, there exist $p\ge 1$, nonzero weights
+    $(\mu_k)_{k=1}^r$, and blocks $(B_k)_{k=1}^r$ such
+    that, for every blocked $\sigma$ of positive length $N$,
+    \[
+        V^{(N)}\!(A^{[p]})_\sigma
+        = V^{(N)}\!(\textstyle\bigoplus_{k=1}^{r} \mu_k B_k)_\sigma.
+    \]
+    The retained block dimensions satisfy $\sum_{k=1}^{r}D_k\le D$. Each block
+    is left-canonical and primitive,
+    \[
+        \sum_i (B_k^i)^\dagger B_k^i = \Id,
+        \qquad
+        \sigma_\partial(\E_{B_k})=\{1\},
+    \]
+    and each bond dimension is positive.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:tp_gauge_arbitrary, thm:common_blocking_period,
+        lem:block_weights_ne_zero,
+        thm:same_mpv2_pos_block_tensor_to_tensor_from_blocks}
+    Theorem~\ref{thm:tp_gauge_arbitrary} supplies the left-canonical nontrivial
+    blocks, the positive-length equality, and the bound $\sum_kD_k\le D$.
+    Theorem~\ref{thm:common_blocking_period} provides a common blocking period
+    $p$ making all transfer maps primitive,
+    Lemma~\ref{lem:block_weights_ne_zero} keeps the blocked weights nonzero, and
+    Lemma~\ref{thm:same_mpv2_pos_block_tensor_to_tensor_from_blocks} carries
+    the positive-length equality through blocking.
+\end{proof}
+
+\begin{theorem}[Unconditional common primitive block decompositions]%
+    \label{thm:unconditional_common_primitive_irreducible_blocks}
+    \lean{MPSTensor.unconditional_commonPrimitiveIrreducibleBlocks}
+    \leanok
+    \uses{thm:ft_after_blocking_common_length_common_sector_theorem,
+        thm:common_blocked_cyclic_sector_reindexed_nonzero_part,
+        def:same_mpv2_pos}
+    Let $A$ and $B$ have the same MPV family at every positive length. Then there is a positive blocking
+    length at which both blocked tensors have the same positive-length MPV
+    family as weighted direct sums of trace-preserving, primitive,
+    tensor-irreducible blocks with positive bond dimensions and nonzero weights.
+    The two weighted nonzero-sector families have the same positive-length MPV
+    family.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:ft_after_blocking_common_length_common_sector_theorem,
+        thm:common_blocked_cyclic_sector_reindexed_nonzero_part}
+    Apply
+    Theorem~\ref{thm:ft_after_blocking_common_length_common_sector_theorem} to
+    choose the common blocking length and the two common cyclic-sector families.
+    For either one of these families, write $G_k$ for its cyclic-sector blocks,
+    and write $(\nu_x,C_x)$ for the weights and blocks of the flattened
+    common-sector family from
+    Lemma~\ref{thm:common_blocked_cyclic_sector_reindexed_nonzero_part}. The
+    common-alphabet nonzero-part identity gives, for every length $N$ and
+    blocked word $\sigma$,
+    \[
+        V^{(N)}\!(\textstyle\bigoplus_k \mu_k^p G_k^{[p]})_\sigma
+        =
+        V^{(N)}\!(\textstyle\bigoplus_x \nu_x C_x)_\sigma ,
+    \]
+    Applying this on the two sides of the comparison yields a positive length
+    $p$ and weighted primitive block families such that, for every $N\ge 1$ and
+    blocked word $\sigma$,
+    \[
+        V^{(N)}\!(A^{[p]})_\sigma
+        =
+        V^{(N)}\!(\textstyle\bigoplus_x \mu^A_x A_x)_\sigma,
+        \qquad
+        V^{(N)}\!(B^{[p]})_\sigma
+        =
+        V^{(N)}\!(\textstyle\bigoplus_y \mu^B_y B_y)_\sigma,
+    \]
+    with the two weighted nonzero parts equal at every positive length. The
+    structural properties and the nonvanishing of the weights come from the
+    common-sector families.
+\end{proof}
+
+A weighted block sum with distinct sectors is the simplest sector decomposition:
+one block per sector, each of multiplicity one. Equal-modulus and repeated-copy
+sectors are not single scalar powers, already for $A = C \oplus (-C)$ with
+$V^{(N)}(A)_\sigma = (1 + (-1)^N)\,V^{(N)}(C)_\sigma$; they are compared by the
+basis-of-normal-tensors construction of Chapter~\ref{ch:bnt}.
+
+\begin{definition}[Single-copy sector decomposition]
+    \label{def:trivial_sector_decomp}
+    \lean{MPSTensor.trivialSectorDecomp}
+    \leanok
+    \uses{def:sector_weight_data}
+    Given nonzero weights $(\mu_k)_{k=1}^r$ and blocks $(B_k)_{k=1}^r$, the
+    \emph{single-copy sector decomposition} has $r$ sectors, one basis block
+    $B_k$ per sector, multiplicity~$1$, and sector weight $\mu_k$. As a finite
+    sum,
+    \[
+        \sum_{k=1}^{r} \mu_k^{\,N} V^{(N)}(B_k)_\sigma
+        =  V^{(N)}\!(\textstyle\bigoplus_k \mu_k B_k)_\sigma.
+    \]
+\end{definition}
+
+\begin{lemma}[Single-copy sector decomposition preserves the represented family]
+    \label{lem:trivial_sector_decomp_same_mpv}
+    \lean{MPSTensor.sameMPV₂_trivialSectorDecomp}
+    \leanok
+    \uses{def:trivial_sector_decomp}
+    The single-copy sector decomposition of $(\mu_k,B_k)_k$ represents the same
+    MPS family as $\bigoplus_k \mu_k B_k$.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:trivial_sector_decomp}
+    Expanding the sector decomposition gives $\sum_k \mu_k^N V^{(N)}(B_k)_\sigma$,
+    the finite block-sum expression for $\bigoplus_k \mu_k B_k$.
+\end{proof}
+
+
+\section{Further weighted-block identities}
+
+\begin{lemma}[Canonical form from peripheral primitivity]%
+    \label{thm:canonical_from_primitive}
+    \lean{MPSTensor.IsCanonicalForm.of_peripheral_primitive}
+    \leanok
+    \uses{def:is_canonical_form, def:injective, def:tp_kraus,
+        def:primitive_channel}
+    Let $(\mu_k,A_k)_{k=1}^r$ be nonzero weights and injective left-canonical
+    blocks with positive bond dimensions, non-increasing moduli
+    $|\mu_1|\ge\cdots\ge|\mu_r|>0$, and $\sigma_\partial(\E_{A_k}) = \{1\}$. Then
+    $(\mu_k,A_k)_{k=1}^r$ satisfies the canonical-form conditions of
+    Definition~\ref{def:is_canonical_form}, and $O_{A_k A_k}(N) \to 1$ for every
+    $k$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{def:is_canonical_form, thm:primitive_compl_lt_one, thm:primitive_overlap}
+    The injectivity, left-canonical equation, weight ordering, and nonzero-weight
+    clauses are exactly the hypotheses.  For each block, peripheral primitivity
+    gives the complementary spectral gap
+    $\rho_{\spec}(\E_{A_k}-P) < 1$ by Theorem~\ref{thm:primitive_compl_lt_one}.
+    Theorem~\ref{thm:primitive_overlap} then yields $O_{A_k A_k}(N)\to 1$.
+\end{proof}
+
+\begin{lemma}[Common-alphabet flattening]%
+    \label{thm:common_blocked_cyclic_sector_reindexed_samempv}
+    \lean{MPSTensor.CommonBlockedCyclicSectorFamily.reindexed_sameMPV₂}\leanok
+    \uses{thm:exists_common_blocked_cyclic_sector_family}
+    With $p = m_k e_k$ for each $k$, the iterated blocked tensor
+    $(B_k^{[m_k]})^{[e_k]}$ agrees with $B_k^{[p]}$ in MPV family, after the
+    canonical identification of the $p$-blocked alphabet $d^{[p]}$ with the
+    $e_k$-fold tensor power of the $m_k$-blocked alphabet $d^{[m_k]}$.
+\end{lemma}
+
+\begin{lemma}[Reindexed nonzero-part identity]%
+    \label{thm:common_blocked_cyclic_sector_reindexed_nonzero_part}
+    \lean{MPSTensor.CommonBlockedCyclicSectorFamily.reindexed_nonzero_part}\leanok
+    \uses{thm:common_blocked_cyclic_sector_reindexed_samempv,
+        thm:common_blocked_cyclic_sector_block_tensor_common_reindexed}
+    The powered nonzero-part decomposition
+    $\bigoplus_k \mu_k^p B_k^{[p]}$ carries over under the common-alphabet
+    identification of
+    Lemma~\ref{thm:common_blocked_cyclic_sector_reindexed_samempv}: the
+    common-alphabet sectors have the same nonzero-part decomposition as the direct
+    $p$-blocked tensors.
+\end{lemma}
+
+\begin{lemma}[Direct blocking in the common alphabet]%
+    \label{thm:common_blocked_cyclic_sector_block_tensor_common_reindexed}
+    \lean{MPSTensor.CommonBlockedCyclicSectorFamily.blockTensor_sameMPV₂_commonReindexedBlock}\leanok
+    For every original block $B_k$, direct blocking at the common length
+    $p=m_k e_k$ agrees, as an MPV family, with the same block transported to the
+    common blocked alphabet. Write $\widetilde B_k$ for this common-alphabet
+    image. Then
+    \[
+        V^{(N)}\!(B_k^{[p]})_\sigma
+        =
+        V^{(N)}\!(\widetilde B_k)_\sigma.
+    \]
+\end{lemma}
