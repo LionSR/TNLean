@@ -1,4 +1,3 @@
-
 A translationally invariant PEPS lives on a torus: a finite square lattice whose
 opposite boundaries are identified, so that the two coordinates are read modulo
 the periods $n$ and $m$.
@@ -53,10 +52,7 @@ site-independent tensor and produces the global phase of
     The discrete $n\times m$ torus has vertex set $\Z/n\Z\times\Z/m\Z$.
     Its graph joins $(x,y)$ to $(x+1,y)$ and to $(x,y+1)$, with the
     coordinates read cyclically. Translation by $(a,b)$ is the graph
-    automorphism
-    \[
-        \tau_{a,b}(x,y)=(x+a,y+b).
-    \]
+    automorphism $\tau_{a,b}(x,y)=(x+a,y+b)$.
     The induced action on edges sends an edge with unordered endpoint pair
     $\{u,v\}$ to the edge with unordered endpoint pair
     $\{\tau_{a,b}(u),\tau_{a,b}(v)\}$; in particular it preserves the
@@ -74,12 +70,10 @@ site-independent tensor and produces the global phase of
     \uses{def:peps_tensor, def:peps_torus_geometry_translation}
     Let $\phi:G\simeq G'$ be a graph isomorphism. The transported tensor
     $A^\phi$ on $G'$ has bond dimension
-    \[
-        D^\phi_{e'}=D_{\phi^{-1}(e')}
-    \]
-    at every edge $e'$ of $G'$. Its local tensor at $w\in G'$ is the local
-    tensor of $A$ at $\phi^{-1}(w)$, with virtual indices moved through the
-    incident-edge bijection induced by $\phi$.
+    $D^\phi_{e'}=D_{\phi^{-1}(e')}$ at every edge $e'$ of $G'$. Its local
+    tensor at $w\in G'$ is the local tensor of $A$ at $\phi^{-1}(w)$, with
+    virtual indices moved through the incident-edge bijection induced by
+    $\phi$.
 \end{definition}
 
 \begin{theorem}[State coefficient under transport]%
@@ -89,18 +83,14 @@ site-independent tensor and produces the global phase of
     \uses{def:peps_stateCoeff, def:peps_tensor_transport}
     For every graph isomorphism $\phi:G\simeq G'$ and every physical
     configuration $\sigma$ on the vertices of $G'$,
-    \[
-        \Coeff_{A^\phi}(\sigma)
-        =
-        \Coeff_{A}(\sigma\circ\phi).
-    \]
+    $\Coeff_{A^\phi}(\sigma)=\Coeff_A(\sigma\circ\phi)$.
 \end{theorem}
 \begin{proof}\leanok
     The edge bijection induced by $\phi$ identifies virtual configurations
     of $A^\phi$ with virtual configurations of $A$. After this change of
     summation variables, the local factor at $w\in G'$ becomes the local
     factor of $A$ at $\phi^{-1}(w)$. Reindexing the finite product over
-    vertices by $\phi$ gives the displayed coefficient equality.
+    vertices by $\phi$ gives the coefficient equality.
 \end{proof}
 
 \begin{theorem}[Transport preserves equality of PEPS states]%
@@ -115,15 +105,13 @@ site-independent tensor and produces the global phase of
 \end{theorem}
 \begin{proof}\leanok
     By Theorem~\ref{thm:peps_stateCoeff_transport},
-    \[
+    \begin{align}
         \Coeff_{A^\phi}(\sigma)
-        =
-        \Coeff_{A}(\sigma\circ\phi)
-        =
-        \Coeff_{B}(\sigma\circ\phi)
-        =
-        \Coeff_{B^\phi}(\sigma),
-    \]
+        &=\Coeff_A(\sigma\circ\phi)
+          =\Coeff_B(\sigma\circ\phi)
+          =\Coeff_{B^\phi}(\sigma),
+        \notag
+    \end{align}
     where the middle equality is the assumed equality of state coefficients.
 \end{proof}
 
@@ -133,12 +121,9 @@ site-independent tensor and produces the global phase of
     \leanok
     \uses{def:peps_tensor_transport, def:peps_torus_geometry_translation}
     A PEPS tensor $A$ on the discrete torus is translation invariant if
-    \[
-        A^{\tau_{a,b}} = A
-    \]
-    for every translation $\tau_{a,b}$. This formalizes the setting of
-    \cite[Theorem~3]{Molnar2018NormalPEPS}, where one tensor is repeated at
-    every site of a periodic lattice.
+    $A^{\tau_{a,b}}=A$ for every translation $\tau_{a,b}$. This formalizes
+    the setting of \cite[Theorem~3]{Molnar2018NormalPEPS}, where one tensor
+    is repeated at every site of a periodic lattice.
 \end{definition}
 
 \begin{theorem}[State coefficient of a translation-invariant torus tensor]%
@@ -147,23 +132,18 @@ site-independent tensor and produces the global phase of
     \leanok
     \uses{def:peps_torus_translation_invariant,
         thm:peps_stateCoeff_transport}
-    If $A$ is translation invariant on the discrete torus, then for every
-    translation $\tau_{a,b}$ and every physical configuration $\sigma$,
-    \[
-        \Coeff_{A}(\sigma\circ\tau_{a,b})
-        =
-        \Coeff_{A}(\sigma).
-    \]
+    If $A$ is translation invariant on the discrete torus, then
+    $\Coeff_A(\sigma\circ\tau_{a,b})=\Coeff_A(\sigma)$ for every translation
+    $\tau_{a,b}$ and every physical configuration $\sigma$.
 \end{theorem}
 \begin{proof}\leanok
     Theorem~\ref{thm:peps_stateCoeff_transport} gives
-    \[
-        \Coeff_{A}(\sigma\circ\tau_{a,b})
-        =
-        \Coeff_{A^{\tau_{a,b}}}(\sigma)
-        =
-        \Coeff_{A}(\sigma),
-    \]
+    \begin{align}
+        \Coeff_A(\sigma\circ\tau_{a,b})
+        &=\Coeff_{A^{\tau_{a,b}}}(\sigma)
+          =\Coeff_A(\sigma),
+        \notag
+    \end{align}
     where the second equality substitutes $A^{\tau_{a,b}}=A$ from translation
     invariance.
 \end{proof}
@@ -176,15 +156,11 @@ site-independent tensor and produces the global phase of
     \leanok
     \uses{def:peps_torus_geometry_translation}
     A bond-dimension function on the torus is orientation-uniform with
-    horizontal dimension $D_h$ and vertical dimension $D_v$ if, for every
-    horizontal edge $e_h$ and every vertical edge $e_v$,
-    \[
-        D_{e_h}=D_h,
-        \qquad
-        D_{e_v}=D_v.
-    \]
-    The reference horizontal edge is the right edge at the origin, and the
-    reference vertical edge is the up edge at the origin.
+    horizontal dimension $D_h$ and vertical dimension $D_v$ if
+    $D_{e_h}=D_h$ for every horizontal edge $e_h$ and $D_{e_v}=D_v$ for
+    every vertical edge $e_v$. The reference horizontal edge is the right
+    edge at the origin, and the reference vertical edge is the up edge at
+    the origin.
 \end{definition}
 
 \begin{theorem}[Translation invariance gives orientation-uniform bond dimensions]%
@@ -204,28 +180,22 @@ site-independent tensor and produces the global phase of
     If $A$ is translation invariant on the discrete torus, then its bond
     dimensions are orientation-uniform. Explicitly, with
     $D_h=D_{e_h}$ at the reference right edge $e_h$ and
-    $D_v=D_{e_v}$ at the reference up edge $e_v$, for every horizontal
-    edge $f_h$ and every vertical edge $f_v$,
-    \[
-        D_{f_h}=D_h,
-        \qquad
-        D_{f_v}=D_v.
-    \]
+    $D_v=D_{e_v}$ at the reference up edge $e_v$, one has
+    $D_{f_h}=D_h$ for every horizontal edge $f_h$ and $D_{f_v}=D_v$ for
+    every vertical edge $f_v$.
 \end{theorem}
 \begin{proof}\leanok
     Translation invariance gives $A^{\tau_{a,b}}=A$, hence
     $D_A(\tau_{a,b}(e))=D_A(e)$ for every edge $e$. Every horizontal edge
     $f_h$ has the form $f_h=\tau_{a,b}(e_h)$ for a translate of the reference
     right edge, so
-    \[
+    \begin{align}
         D_{f_h}
-        =
-        D_A(\tau_{a,b}(e_h))
-        =
-        D_A(e_h)
-        =
-        D_h.
-    \]
+        &=D_A(\tau_{a,b}(e_h))
+          =D_A(e_h)
+          =D_h.
+        \notag
+    \end{align}
     The same argument with the reference up edge gives $D_{f_v}=D_v$.
 \end{proof}
 
@@ -241,10 +211,7 @@ site-independent tensor and produces the global phase of
     $a+2L\le n$ and $2K\le m$. Let $e$ be the horizontal reference edge
     from $(a+L-1,b+K-1)$ to $(a+L,b+K-1)$, and let $W_j$ be the $j$th
     staircase window based at $s$. Then the left endpoint
-    \[
-        u=(a+L-1,b+K-1)
-    \]
-    lies in $W_j$ if and only if $1\le j$.
+    $u=(a+L-1,b+K-1)$ lies in $W_j$ if and only if $1\le j$.
 \end{lemma}
 \begin{proof}\leanok
     The endpoint formula gives the two coordinate distances from the corner:
@@ -257,11 +224,8 @@ site-independent tensor and produces the global phase of
     \label{lem:peps_reference_edge_right_endpoint_staircase_window}
     \lean{TNLean.PEPS.referenceEdge_rightEndpoint_mem_staircaseWindow}
     \leanok
-    In the same notation, the right endpoint
-    \[
-        w=(a+L,b+K-1)
-    \]
-    lies in $W_j$ if and only if $j<L$.
+    In the same notation, the right endpoint $w=(a+L,b+K-1)$ lies in $W_j$
+    if and only if $j<L$.
 \end{lemma}
 \begin{proof}\leanok
     The right endpoint has column distance $L$ and row distance $K-1$ from

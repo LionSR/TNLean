@@ -12,33 +12,30 @@
     \leanok
     \uses{def:peps_torus_geometry_translation}
     Fix a horizontal reference edge and write the staircase corner as
-    $s=(a,b)$.  For coordinate intervals write
-    \[
-        I(u,v)=\{t\mid u\le t<v\}.
-    \]
+    $s=(a,b)$. For coordinate intervals write
+    $I(u,v)=\{t\mid u\le t<v\}$.
     The two end windows of the overlapping-window chain are
-    \[
-        W_{\mathrm{left}}=I(a,a+L)\times I(b,b+K),
-        \qquad
+    \begin{align}
+        W_{\mathrm{left}}
+        &=I(a,a+L)\times I(b,b+K), \notag\\
         W_{\mathrm{right}}
-        =I(a+L,a+2L)\times I(b+K-1,b+2K-1).
-    \]
-    Their end pair is $S=W_{\mathrm{left}}\cup W_{\mathrm{right}}$.  The
+        &=I(a+L,a+2L)\times I(b+K-1,b+2K-1).
+        \notag
+    \end{align}
+    Their end pair is $S=W_{\mathrm{left}}\cup W_{\mathrm{right}}$. The
     staircase patch is the union
-    \[
-        P=
-        \bigl(I(a,a+2L)\times I(b+K-1,b+2K-1)\bigr)
+    \begin{align}
+        P
+        &=
+        (I(a,a+2L)\times I(b+K-1,b+2K-1))
         \cup
-        \bigl(I(a,a+L)\times I(b,b+2K-1)\bigr),
-    \]
+        (I(a,a+L)\times I(b,b+2K-1)),
+        \notag
+    \end{align}
     and the corner cut out by the two end windows is
-    \[
-        C=I(a,a+L)\times I(b+K,b+2K-1).
-    \]
+    $C=I(a,a+L)\times I(b+K,b+2K-1)$.
     Completing $C$ by one row gives the $L\times K$ rectangle
-    \[
-        \widehat C=I(a,a+L)\times I(b+K,b+2K).
-    \]
+    $\widehat C=I(a,a+L)\times I(b+K,b+2K)$.
     These cyclic rectangles are the regions used in the staircase chaining and
     corner-stripping step of
     \cite[proof sketch, lines~2320--2445]{Molnar2018NormalPEPS}.
@@ -50,10 +47,7 @@
     \leanok
     \uses{def:peps_horizontal_staircase_patch}
     If $2L\le W$, then the two end windows of the horizontal staircase are
-    disjoint:
-    \[
-        W_{\mathrm{left}}\cap W_{\mathrm{right}}=\varnothing.
-    \]
+    disjoint: $W_{\mathrm{left}}\cap W_{\mathrm{right}}=\varnothing$.
 \end{lemma}
 \begin{proof}
     \leanok
@@ -69,11 +63,8 @@
     \leanok
     \uses{def:peps_horizontal_staircase_patch}
     Under the one-orientation $L\times K$ torus-window injectivity hypotheses,
-    the two end windows and the completed corner are injective regions:
-    \[
-        W_{\mathrm{left}},\quad W_{\mathrm{right}},\quad \widehat C
-        \quad\text{are injective.}
-    \]
+    the three regions $W_{\mathrm{left}}$, $W_{\mathrm{right}}$, and
+    $\widehat C$ are injective.
 \end{lemma}
 \begin{proof}
     \leanok
@@ -90,17 +81,13 @@
     \uses{def:peps_horizontal_staircase_patch,
         lem:peps_horizontal_staircase_end_pair_disjoint}
     If $L,K>0$, $2L\le W$, and $2K\le H$, then the corner is disjoint from
-    the end pair and the patch decomposes as
-    \[
-        P=S\cup C,
-        \qquad
-        P\setminus S=C.
-    \]
+    the end pair and the patch decomposes as $P=S\cup C$, with
+    $P\setminus S=C$.
 \end{lemma}
 \begin{proof}
     \leanok
     In the no-wraparound rectangle, the rows and columns of the two end
-    windows and the corner are the displayed intervals above.  The interval
+    windows and the corner are the displayed intervals above. The interval
     calculation gives the disjointness and identifies every point of $P$ with
     either an end-window point or a corner point.
 \end{proof}
@@ -202,18 +189,16 @@
         the region comparison applies to the gauge-absorbed tensor: comparing
         the corner region with its one-site completion yields proportionality
         scalars $c_R$ and $c_S$ such that, with $\lambda=c_S/c_R$,
-        \[
+        \begin{align}
             A_v(\eta,\sigma)
-            =
-            \lambda\,
-            \bigl(\text{gauge action of }X\text{ on }B\bigr)_v(\eta,\sigma).
-        \]
+            &=
+            \lambda
+            (\text{gauge action of }X\text{ on }B)_v(\eta,\sigma).
+            \notag
+        \end{align}
         Translation covariance carries the same scalars to every site. Taking
         the product over all vertices and using the invariance of the closed
-        state coefficient gives
-        \[
-            \lambda^{nm}=1.
-        \]
+        state coefficient gives $\lambda^{nm}=1$.
     \end{proof}
 \end{theorem}
 
@@ -233,28 +218,28 @@
     gauge-absorbed region block linearly independent. If, in addition, a single
     comparison region whose block and complement block are both blocked-tensor
     injective is supplied, then $\lambda$ raised to the number of torus sites is one:
-    \[
-        \lambda^{nm}=1.
-    \]
+    $\lambda^{nm}=1$.
 \end{corollary}
 \begin{proof}\leanok
     At each of the $nm$ sites $v$ the inserted-site scalar extraction of
     Corollary~\ref{cor:peps_component_eq_gaugeVertex_of_twoBlockProportional} turns
     the two two-block proportionalities into the per-vertex gauge relation
-    \[
+    \begin{align}
         A_v(\eta,\sigma)
-        =
+        &=
         \lambda\,\widetilde B_v(\eta,\sigma),
-    \]
+        \notag
+    \end{align}
     where $\widetilde B_v$ is the gauge action of $X$ on $B$ at $v$. Contracting
     both sides over the whole torus pulls one factor of $\lambda$ out of each of
     the $nm$ sites, so the closed torus contractions of $A$ and of $\widetilde B$
     satisfy
-    \[
+    \begin{align}
         \langle A\rangle_{\mathrm{torus}}
-        =
-        \lambda^{nm}\,\langle \widetilde B\rangle_{\mathrm{torus}}.
-    \]
+        &=
+        \lambda^{nm} \langle \widetilde B\rangle_{\mathrm{torus}}.
+        \notag
+    \end{align}
     The single comparison region and its complement being injective makes this
     common torus contraction nonzero; by hypothesis the quotient
     $c_S(v)/c_R(v)$ is the same scalar $\lambda$ at every site, so
@@ -271,12 +256,12 @@
     equal and positive bond dimensions, generating the same state, and such
     that every contiguous
     $2\times 3$ and $3\times 2$ coordinate rectangle of either tensor is
-    injective.  Let $X$ and $X'$ be two families of invertible matrices, one
+    injective. Let $X$ and $X'$ be two families of invertible matrices, one
     on each edge of the torus, and let $e$ be an edge at which both families
     realize the absorbed inserted-coefficient equality: inserting any matrix
     on the edge $e$ of $A$ gives the same coefficient as inserting it on the
     edge $e$ of the gauge-absorbed $B$, for every physical configuration.
-    Then the two families are proportional at $e$: $X'_e = c\cdot X_e$ for a
+    Then the two families are proportional at $e$: $X'_e=c\cdot X_e$ for a
     nonzero scalar $c$.
     This is the uniqueness clause of \cite[Theorem~3]{Molnar2018NormalPEPS}
     read at one edge, at the source's sizes $n,m\geq 7$ as in
@@ -291,19 +276,21 @@
         a comparison region having $e$ as its single boundary edge on which
         the second tensor and its complement are injective; the union closure
         of injective regions follows from the positive bond dimensions and
-        Lemma~\ref{lem:peps_injectiveRegion_union_pos}.  The bare-edge
+        Lemma~\ref{lem:peps_injectiveRegion_union_pos}. The bare-edge
         absorbed equality of each family lifts to the region
         inserted-coefficient identity over this region, with the inserted
         matrix conjugated by the orientation-adapted absorption of the
-        family's matrix at $e$.  The region-insertion transfer map is
+        family's matrix at $e$. The region-insertion transfer map is
         determined by this identity, so both orientation-adapted absorbing
-        matrices induce the same conjugation on every bond matrix:
-        \[
+        matrices induce the same conjugation on every bond matrix. Thus, for
+        every bond matrix $N$,
+        \begin{align}
             X_{\mathrm{abs}}\,N\,X_{\mathrm{abs}}^{-1}
-            =
-            X'_{\mathrm{abs}}\,N\,\bigl(X'_{\mathrm{abs}}\bigr)^{-1}
-            \qquad\text{for every bond matrix }N.
-        \]
+            &=
+            X'_{\mathrm{abs}}\,N
+            (X'_{\mathrm{abs}})^{-1}.
+            \notag
+        \end{align}
         A matrix commuting with the full bond matrix algebra is a scalar
         multiple of the identity, so $X'_{\mathrm{abs}}=c\,X_{\mathrm{abs}}$
         for some $c\ne0$. Unwinding the orientation adaptation gives
@@ -321,16 +308,16 @@
     realizing the absorbed inserted-coefficient equality at every edge, and
     suppose moreover that both families are translation covariant: the matrix
     at any translate of an edge is the matrix at the edge, transposed-inverted
-    exactly when the translation swaps the stored endpoint order.  Then there
+    exactly when the translation swaps the stored endpoint order. Then there
     are nonzero scalars $c_h$ and $c_v$ such that on every horizontal edge
     stored in the natural cyclic order (the stored second endpoint is the
-    cyclic right neighbour of the first) $X'_e = c_h\cdot X_e$, on every
+    cyclic right neighbour of the first) $X'_e=c_h\cdot X_e$, on every
     horizontal edge wrapping the seam (stored with swapped endpoints)
-    $X'_e = c_h^{-1}\cdot X_e$, and likewise on the vertical class with $c_v$.
+    $X'_e=c_h^{-1}\cdot X_e$, and likewise on the vertical class with $c_v$.
     The inversion on the seam is forced by the ordered-edge convention: the
     covariance carries the transposed inverse of the class matrix onto a seam
     edge, and the transposed inverse of a proportionality inverts its
-    constant.  A single constant on the whole class is therefore not the true
+    constant. A single constant on the whole class is therefore not the true
     statement in this convention; this is the class form of the uniqueness
     clause of \cite[Theorem~3]{Molnar2018NormalPEPS}.
     \begin{proof}
@@ -338,33 +325,29 @@
         \uses{thm:torusAbsorbedGauge_unique_scalar}
         The constants are the per-edge scalars of
         Theorem~\ref{thm:torusAbsorbedGauge_unique_scalar} at the two
-        reference edges.  Every edge of a class is the translate of its
+        reference edges. Every edge of a class is the translate of its
         reference edge by a unique translation $\tau$. At an interior edge,
         covariance gives $X_e=\tau\cdot X_{\mathrm{ref}}$, hence
-        \[
+        \begin{align}
             X'_e
-            =
+            &=
             \tau\cdot X'_{\mathrm{ref}}
-            =
-            \tau\cdot(c_h\,X_{\mathrm{ref}})
-            =
-            c_h\,(\tau\cdot X_{\mathrm{ref}})
-            =
-            c_h\,X_e.
-        \]
-        At a seam edge, covariance gives $X_e=(X_{\mathrm{ref}})^{-\top}$,
-        hence
-        \[
+            =\tau\cdot(c_h\,X_{\mathrm{ref}})
+            =c_h\,(\tau\cdot X_{\mathrm{ref}})
+            =c_h\,X_e.
+            \notag
+        \end{align}
+        At a seam edge, covariance gives
+        $X_e=(X_{\mathrm{ref}})^{-\top}$, hence
+        \begin{align}
             X'_e
-            =
+            &=
             (X'_{\mathrm{ref}})^{-\top}
-            =
-            (c_h\,X_{\mathrm{ref}})^{-\top}
-            =
-            c_h^{-1}(X_{\mathrm{ref}})^{-\top}
-            =
-            c_h^{-1}X_e.
-        \]
+            =(c_h\,X_{\mathrm{ref}})^{-\top}
+            =c_h^{-1}(X_{\mathrm{ref}})^{-\top}
+            =c_h^{-1}X_e.
+            \notag
+        \end{align}
         The marker $e_{1,x}+1=e_{2,x}$ distinguishes the two branches, and the
         vertical class is identical with $c_v$ in place of $c_h$.
     \end{proof}
@@ -380,16 +363,16 @@
     equal and positive bond dimensions, generating the same state, and such
     that every contiguous
     $2\times 3$ and $3\times 2$ coordinate rectangle of either tensor is
-    injective.  Suppose the families $X$ and $X'$ of invertible matrices, one
+    injective. Suppose the families $X$ and $X'$ of invertible matrices, one
     on each edge, each realize the per-vertex relation of
     Theorem~\ref{thm:fundamentalTheorem_normalTorusPEPS_unconditional}: at
     every site the tensor $A$ equals $\lambda$ (respectively $\lambda'$)
-    times the gauge action of the family on $B$, with $\lambda^{nm} = 1$
-    (respectively $\lambda'^{nm} = 1$).  Then the two families are
-    proportional at every edge: $X'_e = c\cdot X_e$ for a nonzero scalar $c$
+    times the gauge action of the family on $B$, with $\lambda^{nm}=1$
+    (respectively $\lambda'^{nm}=1$). Then the two families are
+    proportional at every edge: $X'_e=c\cdot X_e$ for a nonzero scalar $c$
     depending on the edge.
     This is the uniqueness clause of \cite[Theorem~3]{Molnar2018NormalPEPS}
-    read against the displayed relation $B = \lambda\cdot(X,Y)A$ itself, at
+    read against the displayed relation $B=\lambda\cdot(X,Y)A$ itself, at
     the source's sizes $n,m\geq 7$.
     \begin{proof}
         \leanok
@@ -397,7 +380,7 @@
             def:peps_edgeInsertedCoeff}
         The inserted-edge coefficient is multilinear in the site tensors, one
         factor per site, so the per-vertex relation scales every inserted
-        coefficient by $\lambda^{nm} = 1$: each family realizes the absorbed
+        coefficient by $\lambda^{nm}=1$: each family realizes the absorbed
         inserted-coefficient equality at every edge.
         Theorem~\ref{thm:torusAbsorbedGauge_unique_scalar} then gives the
         proportionality at each edge.

@@ -1,4 +1,3 @@
-
 The pieces now combine. The blocking hypotheses of a normal PEPS, that the
 tensors are injective after blocking around every edge and that each site
 separates two injective regions whose complements are also injective, are what
@@ -149,7 +148,7 @@ product states, and the square lattice.
     \leanok
     \uses{def:peps_regionInjectivityData}
     For two region-injectivity assignments on the same vertex set, a region is
-    doubly injective when it is injective for each of the two.  The general
+    doubly injective when it is injective for each of the two. The general
     normal theorem blocks two states by one shared geometry, and its final
     comparison contracts both tensors over the same regions, so its blocking
     hypotheses are instantiated at the doubly injective assignment of the two
@@ -166,30 +165,30 @@ product states, and the square lattice.
     positive physical dimension and positive bond dimensions, generating the
     same state and satisfying the normal blocking hypotheses at the doubly
     injective assignment of the two tensors, with each distinguished edge the
-    only edge of the graph joining its two adjacent blocks.  Then the bond
+    only edge of the graph joining its two adjacent blocks. Then the bond
     dimensions of $A$ and $B$ agree on every edge.
     In the source the equality is part of the isomorphism lemma of
     \cite[Section~3]{Molnar2018NormalPEPS}: the insertion correspondence
     $X\mapsto Y$ on the chosen bond is an algebra isomorphism between the two
     full bond matrix algebras, so the bond dimensions on the two sides agree;
     the normal case inherits the argument through the blocked three-site
-    chains.  The single-crossing condition is the source's blocking around an
+    chains. The single-crossing condition is the source's blocking around an
     edge made explicit: the chosen edge is the entire bond between the first
     two parties of the blocked chain.
     \begin{proof}
         \leanok
         \uses{thm:peps_edgeBlockedThreeSiteInjective,
             thm:peps_edgeBlockedInsertionAlgebraIsomorphism}
-        Fix an edge.  Blocking both networks into the shared three regions
+        Fix an edge. Blocking both networks into the shared three regions
         around it produces two three-site chains on the three-vertex complete
         graph whose super-sites carry the blocked-region weight families,
-        injective by hypothesis.  Each coarse state coefficient is a positive
+        injective by hypothesis. Each coarse state coefficient is a positive
         merge-collapse constant, a product of bond dimensions over the edges
         not incident to each region, times the corresponding original state
         coefficient, so the two coarse states are proportional with ratio the
-        two constants.  Multiplying one super-site of each chain by the other
+        two constants. Multiplying one super-site of each chain by the other
         chain's constant yields chains with equal states, unchanged bond
-        dimensions, and the super-site injectivities preserved.  The matched
+        dimensions, and the super-site injectivities preserved. The matched
         matrix insertions on the distinguished coarse bond of the two scaled
         chains form an algebra isomorphism between the two full bond matrix
         algebras
@@ -214,35 +213,37 @@ product states, and the square lattice.
         def:peps_regionInjectivityDataPair, def:GaugeEquivPEPS}
     Let $A$ and $B$ be PEPS tensors on a connected finite simple graph with
     the same positive physical dimension and positive bond dimensions,
-    generating the same state.  Suppose the normal blocking
+    generating the same state. Suppose the normal blocking
     hypotheses hold at the doubly injective assignment of the two tensors:
     around every edge the network blocks into three doubly injective regions
     with the edge endpoints in the first two, and every site admits two doubly
     injective regions, with doubly injective complements, differing exactly at
-    that site.  Suppose moreover that at every edge the distinguished edge is
-    the only edge of the graph joining its two adjacent blocks.  Then the
+    that site. Suppose moreover that at every edge the distinguished edge is
+    the only edge of the graph joining its two adjacent blocks. Then the
     defining tensors are related by a local gauge: there are invertible
     matrices, one on each edge, whose endpoint actions transform $A_v$ into
     $B_v$ at every vertex, with no leftover scalar.
     The shared blocking gives a common tripartition for the two tensors, with
-    all three regions injective for both.  For an edge $e$ between the first
+    all three regions injective for both. For an edge $e$ between the first
     two regions, the coefficient transfer $T_e$ supplied by the three-site
     isomorphism argument satisfies
-    \[
+    \begin{align}
         C_A(R_1,e,X;\sigma,\tau)
-        =C_B(R_1,e,T_e(X);\sigma,\tau),
-        \qquad
-        T_e(X)=Z_e\,\iota_e(X)\,Z_e^{-1}
-    \]
+        &=C_B(R_1,e,T_e(X);\sigma,\tau),
+        \notag\\
+        T_e(X)
+        &=Z_e\,\iota_e(X)\,Z_e^{-1},
+        \notag
+    \end{align}
     for an invertible $Z_e$ and every virtual insertion $X$ on $e$.
     The single-crossing hypothesis identifies $e$ with the entire bond between
     $R_1$ and $R_2$, so $Z_e$ acts on the original edge.
     The equality of the bond dimensions is not assumed; it follows from the
     blocking hypotheses by
-    Theorem~\ref{thm:peps_bondDim_eq_of_normalBlocking}.  Positive bond
+    Theorem~\ref{thm:peps_bondDim_eq_of_normalBlocking}. Positive bond
     dimensions are required in the injectivity argument, while connectivity
     permits the per-vertex constants to be absorbed into the edge gauges; see
-    Theorem~\ref{thm:fundamentalTheorem_PEPS}.  This is the blocking argument
+    Theorem~\ref{thm:fundamentalTheorem_PEPS}. This is the blocking argument
     of \cite[Section~4]{Molnar2018NormalPEPS}.
     % Source-faithful reading: Section 4 of \cite{Molnar2018NormalPEPS} uses
     % one common blocking of the two states and enlarges the endpoint regions
@@ -257,22 +258,22 @@ product states, and the square lattice.
         Theorem~\ref{thm:peps_bondDim_eq_of_normalBlocking}.
         The union closure of injective regions for either tensor follows from
         the positive bond dimensions and
-        Lemma~\ref{lem:peps_injectiveRegion_union_pos}.  At every edge the
+        Lemma~\ref{lem:peps_injectiveRegion_union_pos}. At every edge the
         shared blocking datum restricts to a datum for each tensor over the
         same three regions, so the per-edge gauge of the region insertion
         transfer (Theorem~\ref{thm:peps_region_edge_gauge_of_coeff_transfer})
         and its orientation-adapted absorption give a family of invertible
         matrices realizing the absorbed inserted-coefficient equality at every
-        edge.  A gauge preserves blocked-region linear independence, so at
+        edge. A gauge preserves blocked-region linear independence, so at
         every site the one-site comparison applies to the gauge-absorbed
         tensor: comparing the smaller region with its one-site completion
         yields two proportionality scalars whose ratio is a nonzero scalar
         $\lambda_v$ with $A_v$ equal to $\lambda_v$ times the gauge action on
-        $B$ at $v$.  When the smaller region is empty its block is the count
+        $B$ at $v$. When the smaller region is empty its block is the count
         of global virtual configurations, and when the completion is the full
         vertex set its block is the closed state coefficient; in these
         degenerate cases the proportionality holds with scalar one, and every
-        other comparison region has a boundary edge by connectivity.  The
+        other comparison region has a boundary edge by connectivity. The
         per-vertex relations against the nonzero closed state force
         $\prod_v \lambda_v = 1$, so on the connected graph a spanning-tree
         construction realizes the reciprocals of the scalars as oriented
@@ -291,12 +292,12 @@ product states, and the square lattice.
     Let $A$ and $B$ be PEPS tensors on a finite simple graph with equal bond
     dimensions, the bond dimensions of the first tensor positive, satisfying
     the normal blocking hypotheses at the doubly injective assignment of the
-    two tensors.  Suppose two families of invertible matrices, one on each
+    two tensors. Suppose two families of invertible matrices, one on each
     edge, each realize the scalar-free gauge relation of
     Theorem~\ref{thm:fundamentalTheorem_normalPEPS_connected}: at every vertex
-    the endpoint actions of the family transform $A_v$ into $B_v$.  Then the
+    the endpoint actions of the family transform $A_v$ into $B_v$. Then the
     two families are proportional at every edge: $X'_e = c\cdot X_e$ for a
-    nonzero scalar $c$ depending on the edge.  This is the uniqueness clause
+    nonzero scalar $c$ depending on the edge. This is the uniqueness clause
     of the general normal-PEPS theorem in
     \cite[Section~4]{Molnar2018NormalPEPS}, following its Theorem~3, read
     against the scalar-free relation; neither equality of the two states nor
@@ -310,7 +311,7 @@ product states, and the square lattice.
         inserted coefficient of $B$ equal the corresponding inserted
         coefficient of the gauge-absorbed $A$: each family realizes the
         absorbed inserted-coefficient equality at every edge, with the roles
-        of the two tensors exchanged.  On the first block of the edge's frame,
+        of the two tensors exchanged. On the first block of the edge's frame,
         whose blocked map and complement blocked map are injective for $A$ by
         the blocking hypotheses and union closure
         (Lemma~\ref{lem:peps_injectiveRegion_union_pos}), the region insertion

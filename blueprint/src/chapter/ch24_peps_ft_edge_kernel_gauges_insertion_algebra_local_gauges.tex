@@ -4,13 +4,14 @@
     \leanok
     \uses{def:peps_edgeInsertedCoeff}
     For two PEPS tensors $A$ and $B$ and an edge $e$, this property is
-    \[
+    \begin{align}
         \exists \Phi_e:\MN{D_A(e)}
         \simeq_{\mathrm{alg}}
         \MN{D_B(e)},\qquad
         \forall \sigma,\ \forall X\in\MN{D_A(e)},\quad
         C_A(e,\sigma,X)=C_B(e,\sigma,\Phi_e(X)).
-    \]
+        \notag
+    \end{align}
 \end{definition}
 
 \begin{theorem}[Edge-blocked insertion algebra isomorphism]%
@@ -31,13 +32,14 @@
     % positive bond dimensions from injectivity; see
     % docs/paper-gaps/peps_injective_ft_section3_route.tex.
     Then
-    \[
+    \begin{align}
         \exists \Phi_e:\MN{D_A(e)}
         \simeq_{\mathrm{alg}}
         \MN{D_B(e)},\qquad
         \forall \sigma,\ \forall X\in\MN{D_A(e)},\quad
         C_A(e,\sigma,X)=C_B(e,\sigma,\Phi_e(X)).
-    \]
+        \notag
+    \end{align}
     This is the edge-blocked form of the algebra isomorphism $X\mapsto Y$ in
     \cite[Section~3]{Molnar2018NormalPEPS}:
     % Formula: C_A(e,X;sigma)=C_B(e,Y;sigma) for the corresponding three-site
@@ -50,7 +52,7 @@
         \tnpic[periodic, physical=up]{%
             \tn[up=$\sigma_1$]{A_1} & \tnX{X} &
             \tn[up=$\sigma_2$]{A_2} & \tn[up=$\sigma_3$]{A_3}}
-        \(\;=\;\)
+        $=$
         \tnpic[periodic, physical=up]{%
             \tn[up=$\sigma_1$]{B_1} & \tnX{Y} &
             \tn[up=$\sigma_2$]{B_2} & \tn[up=$\sigma_3$]{B_3}}
@@ -62,79 +64,77 @@
     Write $C_{\mathrm{mid}}^A$ and $C_{\mathrm{mid}}^B$ for the open middle
     weights of the two edge-blocked chains. For every physical configuration
     $\sigma$, endpoint realization of $X$ and equality of the PEPS states give
-    \[
+    \begin{align}
         C_A(e,\sigma,X)
-        =
+        &=
         \sum_{\beta}
-        O_1(A_u(\beta_u))_{\sigma_u}\,
-        C_{\mathrm{mid}}^A(\sigma;\beta_{\mathrm{L}},\beta_{\mathrm{R}})\,
+        O_1(A_u(\beta_u))_{\sigma_u}
+        C_{\mathrm{mid}}^A(\sigma;\beta_{\mathrm{L}},\beta_{\mathrm{R}})
         (A_v(\beta_v))_{\sigma_v}
-        =
+        \notag\\
+        &=
         \sum_{\beta}
-        O_1(B_u(\beta_u))_{\sigma_u}\,
-        C_{\mathrm{mid}}^B(\sigma;\beta_{\mathrm{L}},\beta_{\mathrm{R}})\,
-        (B_v(\beta_v))_{\sigma_v}
-    \]
+        O_1(B_u(\beta_u))_{\sigma_u}
+        C_{\mathrm{mid}}^B(\sigma;\beta_{\mathrm{L}},\beta_{\mathrm{R}})
+        (B_v(\beta_v))_{\sigma_v},
+        \notag
+    \end{align}
     and
-    \[
+    \begin{align}
         C_A(e,\sigma,X)
-        =
+        &=
         \sum_{\beta}
-        (A_u(\beta_u))_{\sigma_u}\,
-        C_{\mathrm{mid}}^A(\sigma;\beta_{\mathrm{L}},\beta_{\mathrm{R}})\,
+        (A_u(\beta_u))_{\sigma_u}
+        C_{\mathrm{mid}}^A(\sigma;\beta_{\mathrm{L}},\beta_{\mathrm{R}})
         O_2(A_v(\beta_v))_{\sigma_v}
-        =
+        \notag\\
+        &=
         \sum_{\beta}
-        (B_u(\beta_u))_{\sigma_u}\,
-        C_{\mathrm{mid}}^B(\sigma;\beta_{\mathrm{L}},\beta_{\mathrm{R}})\,
+        (B_u(\beta_u))_{\sigma_u}
+        C_{\mathrm{mid}}^B(\sigma;\beta_{\mathrm{L}},\beta_{\mathrm{R}})
         O_2(B_v(\beta_v))_{\sigma_v}.
-    \]
+        \notag
+    \end{align}
     Therefore, for every physical configuration $\sigma$,
-    \[
+    \begin{align}
         \sum_{\beta}
-        O_1(B_u(\beta_u))_{\sigma_u}\,
-        C_{\mathrm{mid}}^B(\sigma;\beta_{\mathrm{L}},\beta_{\mathrm{R}})\,
+        O_1(B_u(\beta_u))_{\sigma_u}
+        C_{\mathrm{mid}}^B(\sigma;\beta_{\mathrm{L}},\beta_{\mathrm{R}})
         (B_v(\beta_v))_{\sigma_v}
-        =
+        &=
         \sum_{\beta}
-        (B_u(\beta_u))_{\sigma_u}\,
-        C_{\mathrm{mid}}^B(\sigma;\beta_{\mathrm{L}},\beta_{\mathrm{R}})\,
+        (B_u(\beta_u))_{\sigma_u}
+        C_{\mathrm{mid}}^B(\sigma;\beta_{\mathrm{L}},\beta_{\mathrm{R}})
         O_2(B_v(\beta_v))_{\sigma_v}.
-    \]
+        \notag
+    \end{align}
     The positive-bond physical-to-virtual recovery applied to the second
-    edge-blocked chain gives a matrix $Y\in\MN{D_B(e)}$ such that, for every
-    physical configuration $\sigma$,
-    \[
-        C_A(e,\sigma,X)=C_B(e,\sigma,Y).
-    \]
-    Thus $X\mapsto Y$ gives the required coefficient correspondence.  Denote
-    this correspondence by $T$.  For every physical configuration $\sigma$,
-    \[
-        \begin{aligned}
-            C_B(e,\sigma,T(X+X'))
-             & =
-            C_A(e,\sigma,X+X')
-            =
-            C_A(e,\sigma,X)+C_A(e,\sigma,X') \\
-             & =
-            C_B(e,\sigma,T(X)+T(X')),
-        \end{aligned}
-    \]
-    and similarly \(T(cX)=cT(X)\).  The multiplicative identity is read from
+    edge-blocked chain gives a matrix $Y\in\MN{D_B(e)}$ such that
+    $C_A(e,\sigma,X)=C_B(e,\sigma,Y)$ for every physical configuration
+    $\sigma$.
+    Thus $X\mapsto Y$ gives the required coefficient correspondence. Denote
+    this correspondence by $T$. For every physical configuration $\sigma$,
+    \begin{align}
+        C_B(e,\sigma,T(X+X'))
+        &=C_A(e,\sigma,X+X')
+        \notag\\
+        &=C_A(e,\sigma,X)+C_A(e,\sigma,X')
+        \notag\\
+        &=C_B(e,\sigma,T(X)+T(X')).
+        \notag
+    \end{align}
+    Similarly, $T(cX)=cT(X)$. The multiplicative identity is read from
     the inserted two-endpoint realization:
-    \[
+    \begin{align}
         C_B(e,\sigma,T(XX'))
-        =
-        C_A(e,\sigma,XX')
-        =
-        C_B(e,\sigma,T(X)T(X')).
-    \]
+        =C_A(e,\sigma,XX')
+        =C_B(e,\sigma,T(X)T(X')).
+        \notag
+    \end{align}
     The unit satisfies
-    \[
-        C_B(e,\sigma,T(1))=C_A(e,\sigma,1)=C_B(e,\sigma,1).
-    \]
+    $C_B(e,\sigma,T(1))=C_A(e,\sigma,1)=C_B(e,\sigma,1)$.
     Theorem~\ref{thm:peps_edgeInsertedCoeff_injective} identifies the inserted
-    matrices in these coefficient identities.  Exchanging $A$ and $B$ gives the
+    matrices in these coefficient identities. Exchanging $A$ and $B$ gives the
     inverse correspondence, hence a $\C$-algebra isomorphism.
 \end{proof}
 
@@ -143,12 +143,12 @@
     \lean{MPSTensor.matrixAlgEquiv_fin_eq}
     \leanok
     If the full matrix algebras $\MN{D}$ and $\MN{E}$ are isomorphic as
-    $\C$-algebras, then $D = E$.
+    $\C$-algebras, then $D=E$.
 \end{theorem}
 
 \begin{proof}\leanok
-    The isomorphism preserves complex vector-space dimension, and $\dim_{\C}
-        \MN{D} = D^2$, $\dim_{\C} \MN{E} = E^2$, so $D = E$.
+    The isomorphism preserves complex vector-space dimension, and
+    $\dim_{\C}\MN{D}=D^2$ and $\dim_{\C}\MN{E}=E^2$, so $D=E$.
 \end{proof}
 
 \begin{theorem}[Matrix-algebra isomorphisms are inner after identifying size]%
@@ -156,18 +156,20 @@
     \lean{MPSTensor.matrixAlgEquiv_inner_of_fin}
     \leanok
     \uses{thm:matrixAlgEquiv_fin_eq, thm:skolem_noether}
-    Let $\varphi : \MN{D} \to \MN{E}$ be a $\C$-algebra isomorphism. Then
-    $D = E$; let $h$ denote this equality and $\iota_h : \MN{D} \to \MN{E}$ the
-    canonical index-relabelling isomorphism. There is $X \in \GL_{E}(\C)$ with
-    $\varphi(M) = X\,\iota_h(M)\,X^{-1}$ for all $M \in \MN{D}$.
+    Let $\varphi:\MN{D}\to\MN{E}$ be a $\C$-algebra isomorphism. Then
+    $D=E$; let $h$ denote this equality and
+    $\iota_h:\MN{D}\to\MN{E}$ the canonical index-relabelling isomorphism.
+    There is $X\in\GL_E(\C)$ with
+    $\varphi(M)=X\iota_h(M)X^{-1}$ for all $M\in\MN{D}$.
 \end{theorem}
 
 \begin{proof}\leanok
-    By Theorem~\ref{thm:matrixAlgEquiv_fin_eq}, $D = E$, so $\iota_h$ is defined.
-    Then $\varphi \circ \iota_h^{-1}$ is a $\C$-algebra automorphism of $\MN{E}$,
-    and Skolem--Noether (Theorem~\ref{thm:skolem_noether}) gives $X \in
-        \GL_{E}(\C)$ with $(\varphi \circ \iota_h^{-1})(N) = X N X^{-1}$; evaluating
-    at $N = \iota_h(M)$ gives $\varphi(M) = X\,\iota_h(M)\,X^{-1}$.
+    By Theorem~\ref{thm:matrixAlgEquiv_fin_eq}, $D=E$, so $\iota_h$ is defined.
+    Then $\varphi\circ\iota_h^{-1}$ is a $\C$-algebra automorphism of
+    $\MN{E}$, and Skolem--Noether
+    (Theorem~\ref{thm:skolem_noether}) gives $X\in\GL_E(\C)$ with
+    $(\varphi\circ\iota_h^{-1})(N)=XNX^{-1}$. Evaluating at
+    $N=\iota_h(M)$ gives $\varphi(M)=X\iota_h(M)X^{-1}$.
 \end{proof}
 
 \begin{theorem}[Edge gauge from the insertion algebra isomorphism]%
@@ -192,9 +194,7 @@
     % Type verdict: an endomorphism of the B-side edge bond space.
     % Boundary signature: not applicable to the displayed algebra; no tensor
     % boundary is asserted by this formula.
-    \[
-        Y=Z_e\,\phi_{h_e}(X)\,Z_e^{-1}.
-    \]
+    $Y=Z_e\phi_{h_e}(X)Z_e^{-1}$.
     This is the finite-dimensional matrix-algebra step in
     \cite[Section~3]{Molnar2018NormalPEPS}.
 \end{theorem}
@@ -216,23 +216,18 @@
     virtual bond of $A$ has positive dimension. Then there is a family
     $X_e\in\GL(D_A(e))$ such that, for every edge $e$, there is a
     $\C$-algebra isomorphism
-    \[
-        \Phi_e:\MN{D_A(e)}\longrightarrow\MN{D_B(e)}
-    \]
-    satisfying, for every physical configuration $\sigma$ and matrix $M$,
-    \[
-        C_A(e,\sigma,M)=C_B(e,\sigma,\Phi_e(M)),
-    \]
-    and, writing $\phi_{h_e}:\MN{D_A(e)}\to\MN{D_B(e)}$ for the algebra
-    isomorphism induced by the dimension equality on $e$,
-    \[
-        \Phi_e(M)=\phi_{h_e}\!\left(X_eMX_e^{-1}\right).
-    \]
+    $\Phi_e:\MN{D_A(e)}\to\MN{D_B(e)}$ satisfying
+    $C_A(e,\sigma,M)=C_B(e,\sigma,\Phi_e(M))$ for every physical configuration
+    $\sigma$ and matrix $M$. Writing
+    $\phi_{h_e}:\MN{D_A(e)}\to\MN{D_B(e)}$ for the algebra
+    isomorphism induced by the dimension equality on $e$, one has
+    $\Phi_e(M)=\phi_{h_e}(X_eMX_e^{-1})$.
 \end{theorem}
 
 \begin{proof}\leanok
     Vertex injectivity and positivity give edge-blocked three-site injectivity
-    for $A$ and $B$ at each edge. Theorem~\ref{thm:peps_edgeBlockedInsertionAlgebraIsomorphism}
+    for $A$ and $B$ at each edge.
+    Theorem~\ref{thm:peps_edgeBlockedInsertionAlgebraIsomorphism}
     gives the algebra isomorphism $\Phi_e$ preserving inserted coefficients.
     Theorem~\ref{thm:peps_edgeGaugeFromInsertionAlgebraIsomorphism} realizes
     $\Phi_e$ by conjugation, and the bond-dimension equality transports the
@@ -257,10 +252,8 @@
     Then the bond dimensions agree on $e$, $D_A(e)=D_B(e)$, and there are an
     invertible edge matrix $Z\in\GL(D_B(e))$ and a forward map $\mathrm{fwd}$
     given by the conjugation
-    \[
-        \mathrm{fwd}(M)=Z\,\phi_{h_e}(M)\,Z^{-1},
-    \]
-    where $\phi_{h_e}:\MN{D_A(e)}\to\MN{D_B(e)}$ is the reindexing induced by the
+    $\mathrm{fwd}(M)=Z\phi_{h_e}(M)Z^{-1}$, where
+    $\phi_{h_e}:\MN{D_A(e)}\to\MN{D_B(e)}$ is the reindexing induced by the
     bond-dimension equality on $e$. No single-vertex injectivity is used; the
     only injectivity hypotheses are the blocked-region injectivities of the
     interior blocking data and the red and host injectivities of $B$.
@@ -269,11 +262,9 @@
 \begin{proof}\leanok
     The translated horizontal frame supplies, for both $A$ and $B$, the one-edge
     interior blocking datum. Because the red, blue, and complementary blocks are
-    coordinate regions, independent of the tensor, the two data share them,
-    \[
-        R_A = R_B,\qquad B_A = B_B,\qquad C_A = C_B,
-    \]
-    and the distinguished edge $e$ is the unique crossing edge of the red and
+    coordinate regions, independent of the tensor, the two data share them:
+    $R_A=R_B$, $B_A=B_B$, and $C_A=C_B$.
+    The distinguished edge $e$ is the unique crossing edge of the red and
     blue blocks. Applying the per-edge gauge construction from a one-edge
     blocking datum to the two blocking data yields the bond-dimension equality on
     $e$ and the conjugating gauge $Z$.
@@ -291,7 +282,7 @@
     edge $e$, the bond dimensions agree on $e$, $D_A(e)=D_B(e)$, and there are an
     invertible edge matrix $Z\in\GL(D_B(e))$ and a forward map $\mathrm{fwd}$
     given by the conjugation
-    $\mathrm{fwd}(M)=Z\,\phi_{h_e}(M)\,Z^{-1}$, with
+    $\mathrm{fwd}(M)=Z\phi_{h_e}(M)Z^{-1}$, with
     $\phi_{h_e}:\MN{D_A(e)}\to\MN{D_B(e)}$ the reindexing induced by the
     bond-dimension equality on $e$.
 \end{theorem}
@@ -322,13 +313,14 @@
     $\Pi^A_v=\mathcal T^A_vL^A_v$. The factorized local gauge datum consists
     of the following two identities for local virtual configurations
     $\eta,\eta'$:
-    \[
-        \Pi^A_v B_v(\eta,-)=B_v(\eta,-),
-        \qquad
+    \begin{align}
+        \Pi^A_v B_v(\eta,-)
+        &=B_v(\eta,-),
+        \notag\\
         L^A_vB_v(\eta,-)(\eta')
-        =
-        \prod_{e\ni v}X_e(\eta_e,\eta'_e),
-    \]
+        &=\prod_{e\ni v}X_e(\eta_e,\eta'_e),
+        \notag
+    \end{align}
     with $X_e\in\GL(D_A(e))$ on each incident edge. This is the local output
     required from the blocked-middle reduction in
     \cite[Section~3]{Molnar2018NormalPEPS}.
@@ -341,12 +333,14 @@
     The blocked-middle local gauge formula at $v$ is the assertion that there
     are matrices $X_e\in\GL(D_A(e))$, one on each incident edge, such that for
     all local virtual configurations $\eta$ and physical indices $\sigma$,
-    \[
+    \begin{align}
         B_v(\eta,\sigma)
         =
         \sum_{\eta'}
-        \left(\prod_{e\ni v}X_e(\eta_e,\eta'_e)\right)A_v(\eta',\sigma).
-    \]
+        \left(\prod_{e\ni v}X_e(\eta_e,\eta'_e)\right)
+        A_v(\eta',\sigma).
+        \notag
+    \end{align}
 \end{definition}
 
 \begin{theorem}[Blocked-middle formula implies factorized local gauge]%
@@ -365,25 +359,18 @@
     $c_\eta(\eta')=\prod_{e\ni v}X_e(\eta_e,\eta'_e)$. The displayed
     blocked-middle formula is precisely
     $B_v(\eta,-)=\mathcal T^A_vc_\eta$. Hence
-    \[
+    \begin{align}
         \Pi^A_vB_v(\eta,-)
-        =
-        \Pi^A_v\mathcal T^A_vc_\eta
-        =
-        \mathcal T^A_vc_\eta
-        =
-        B_v(\eta,-),
-    \]
-    and
-    \[
+        &=\Pi^A_v\mathcal T^A_vc_\eta
+          =\mathcal T^A_vc_\eta
+          =B_v(\eta,-),
+        \notag\\
         L^A_vB_v(\eta,-)(\eta')
-        =
-        L^A_v\mathcal T^A_vc_\eta(\eta')
-        =
-        c_\eta(\eta')
-        =
-        \prod_{e\ni v}X_e(\eta_e,\eta'_e).
-    \]
+        &=L^A_v\mathcal T^A_vc_\eta(\eta')
+          =c_\eta(\eta')
+          =\prod_{e\ni v}X_e(\eta_e,\eta'_e).
+        \notag
+    \end{align}
 \end{proof}
 
 \begin{theorem}[Blocked-middle formula gives a local gauge formula]%
@@ -396,12 +383,14 @@
     Suppose that the edge-centred three-site reduction supplies invertible
     matrices $X_e$ on the incident edges of $v$ such that, for all local virtual
     configurations $\eta$ and physical indices $\sigma$,
-    \[
+    \begin{align}
         B_v(\eta,\sigma)
         =
         \sum_{\eta'}
-        \left(\prod_{e\ni v} X_e(\eta_e,\eta'_e)\right)A_v(\eta',\sigma).
-    \]
+        \left(\prod_{e\ni v}X_e(\eta_e,\eta'_e)\right)
+        A_v(\eta',\sigma).
+        \notag
+    \end{align}
     Then the same family $X_e$ is a local gauge at $v$:
     % Formula: the displayed component identity above is the local gauge formula.
     % Ink-to-index/type verdict: its boundary is (V,P)=(deg(v),1).  No matching
@@ -415,12 +404,13 @@
     $L^A_vB_v(\eta,-)(\eta')=\prod_{e\ni v}X_e(\eta_e,\eta'_e)$. Since
     $\Pi^A_vB_v(\eta,-)=B_v(\eta,-)$ and
     $\Pi^A_v=\mathcal T^A_vL^A_v$,
-    \[
+    \begin{align}
         B_v(\eta,\sigma)
-        =
-        \sum_{\eta'}L^A_vB_v(\eta,-)(\eta')A_v(\eta',\sigma)
-        =
-        \sum_{\eta'}
-        \left(\prod_{e\ni v}X_e(\eta_e,\eta'_e)\right)A_v(\eta',\sigma).
-    \]
+        &=\sum_{\eta'}L^A_vB_v(\eta,-)(\eta')A_v(\eta',\sigma)
+        \notag\\
+        &=\sum_{\eta'}
+        \left(\prod_{e\ni v}X_e(\eta_e,\eta'_e)\right)
+        A_v(\eta',\sigma).
+        \notag
+    \end{align}
 \end{proof}

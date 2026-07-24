@@ -3,9 +3,9 @@
 The source states its Lemma~5 for site-dependent tensors: five sites
 carrying tensors $A_1, \ldots, A_5$ whose two-site windows are injective.
 The entries above specialize to one repeated tensor; the remaining entries
-of this section formalize the site-dependent setting itself.  A closed
+of this section formalize the site-dependent setting itself. A closed
 chain carries one tensor per site, windows are arcs of consecutive sites,
-and the closed-chain corollary delivers one gauge per bond.  Throughout,
+and the closed-chain corollary delivers one gauge per bond. Throughout,
 all sites share one physical dimension $d$ and all bonds one bond
 dimension $D$; the source poses no restriction on the local dimensions of
 the site-dependent tensors, and the uniform-dimension restriction is
@@ -20,16 +20,17 @@ recorded in the route note
     \leanok
     \uses{def:non_ti_chain}
     Let a closed chain on $n \ge 1$ sites carry one tensor of $D \times D$
-    matrices over physical dimension $d$ per site, $A_0, \dots, A_{n-1}$.
-    The \emph{arc product} of a word $x = x_1 \cdots x_\ell$ read from
+    matrices over physical dimension $d$ per site, $A_0, \ldots, A_{n-1}$.
+    The \emph{arc product} of a word $x=x_1\cdots x_\ell$ read from
     site $s$ is
-    \[
-        A_{(s)}^{x} = A_{s}^{x_1}\, A_{s+1}^{x_2} \cdots
-        A_{s+\ell-1}^{x_\ell},
-    \]
-    site indices cyclic.  The chain is \emph{window injective at length
-        $L$} when, for every site $s$, the arc products of the length-$L$
-    words read from $s$ span the full matrix algebra.  This is the
+    \begin{align}
+        A_{(s)}^{x}
+        &=A_s^{x_1}A_{s+1}^{x_2}\cdots A_{s+\ell-1}^{x_\ell},
+        \notag
+    \end{align}
+    with site indices read cyclically. The chain is \emph{window injective
+        at length $L$} when, for every site $s$, the arc products of the
+    length-$L$ words read from $s$ span the full matrix algebra. This is the
     site-dependent setting of the closing section of
     \cite{Molnar2018NormalPEPS} (``Normal MPS: alternative proof''): an
     MPS on five sites in which the blocking of any two consecutive tensors
@@ -42,8 +43,8 @@ recorded in the route note
     \leanok
     \uses{def:chain_arc_window_injective, def:injective}
     If every tensor in a closed chain is injective, then the chain is
-    window injective at length \(1\).  Indeed, the length-one arc products
-    at site \(s\) are precisely the matrices of the tensor at site \(s\).
+    window injective at length~$1$. Indeed, the length-one arc products
+    at site $s$ are precisely the matrices of the tensor at site $s$.
 \end{lemma}
 \begin{proof}\leanok
     The family of length-one words is identified with the physical alphabet.
@@ -57,9 +58,9 @@ recorded in the route note
     \leanok
     \uses{def:chain_arc_window_injective}
     Let a site-dependent chain on $n \ge 1$ sites be window injective at
-    length $L$ with $0 < L$.  Then for every $m \ge L$ and every site $s$,
+    length $L$ with $0<L$. Then for every $m \ge L$ and every site $s$,
     the arc products of the length-$m$ words read from $s$ span the full
-    matrix algebra.  This is the site-dependent form of the remark that
+    matrix algebra. This is the site-dependent form of the remark that
     any region of at least the blocking size is injective
     (\cite{Molnar2018NormalPEPS}, closing section,
     cf.\ Lemma~\ref{lem:isNBlkInjective_of_le}).
@@ -68,9 +69,9 @@ recorded in the route note
     \uses{def:chain_arc_window_injective}
     Write the identity as a combination of window products at the starting
     site and peel the leading letter of each: any matrix becomes a
-    combination of terms $A_s^{i}\,(W P)$ with $W$ an arc product of
-    length $L - 1$ read from $s + 1$.  Each factor $W P$ is a combination
-    of length-$m$ arc products read from $s + 1$ by induction, so each
+    combination of terms $A_s^i(WP)$ with $W$ an arc product of
+    length $L-1$ read from $s+1$. Each factor $WP$ is a combination
+    of length-$m$ arc products read from $s+1$ by induction, so each
     term is a combination of length-$(m+1)$ arc products read from $s$.
 \end{proof}
 
@@ -81,52 +82,50 @@ recorded in the route note
     \lean{MPSChainTensor.eq_of_span_mul_left}
     \leanok
     \uses{def:chain_arc_window_injective}
-    Let $0 < L$ with $2L + 1 \le n$, let the closed chain on $n$ sites
+    Let $0<L$ with $2L+1\le n$, let the closed chain on $n$ sites
     carry one tensor of $D \times D$ matrices per site, window injective
-    at length $L$, and fix a site $r$.  Let $C_0, \ldots, C_L$ be deformed
-    window tensors around the bond $(r+L-1,\, r+L)$: each $C_j$ assigns a
+    at length $L$, and fix a site $r$. Let $C_0, \ldots, C_L$ be deformed
+    window tensors around the bond $(r+L-1,r+L)$: each $C_j$ assigns a
     matrix to every word of length $L$, read as replacing the blocked
-    tensor of the $L$-site window starting at site $r + j$.  Suppose the
+    tensor of the $L$-site window starting at site $r+j$. Suppose the
     deformed states agree for consecutive window positions: for every
-    $j < L$, every prefix $p$ of $j$ sites read from $r$, every assignment
-    $u$ on the $L + 1$ sites covered by the two windows, and every suffix
+    $j<L$, every prefix $p$ of $j$ sites read from $r$, every assignment
+    $u$ on the $L+1$ sites covered by the two windows, and every suffix
     $s$ on the remaining sites,
-    \[
-        \tr\bigl(A_{(r)}^{p}\, C_j(u_1 \cdots u_L)\,
-        A_{r+j+L}^{u_{L+1}}\, A_{(r+j+L+1)}^{s}\bigr)
-        = \tr\bigl(A_{(r)}^{p}\, A_{r+j}^{u_1}\,
-        C_{j+1}(u_2 \cdots u_{L+1})\, A_{(r+j+L+1)}^{s}\bigr).
-    \]
+    \begin{align}
+        &\tr\bigl(A_{(r)}^p C_j(u_1\cdots u_L)
+        A_{r+j+L}^{u_{L+1}}A_{(r+j+L+1)}^s\bigr)
+        \notag\\
+        &\qquad
+        =\tr\bigl(A_{(r)}^p A_{r+j}^{u_1}
+        C_{j+1}(u_2\cdots u_{L+1})A_{(r+j+L+1)}^s\bigr).
+        \notag
+    \end{align}
     Then the deformation is a virtual operation on the bond: there is a
-    matrix $X$ with
-    \[
-        C_0(a) = A_{(r)}^{a}\, X
-        \quad\text{and}\quad
-        C_L(b) = X\, A_{(r+L)}^{b}
-    \]
-    for all length-$L$ words $a$, $b$, and $X$ is unique.  This is
-    Lemma~5 of \cite{Molnar2018NormalPEPS} in the site-dependent setting
-    in which the source states it, with the deformed window tensors
-    arising as physical operators contracted with the blocked windows
-    they act on; Lemma~\ref{lem:overlapWindow_exists_bondOperator} is its
-    constant specialization.
+    matrix $X$ with $C_0(a)=A_{(r)}^aX$ and
+    $C_L(b)=XA_{(r+L)}^b$ for all length-$L$ words $a$, $b$, and $X$
+    is unique. This is Lemma~5 of \cite{Molnar2018NormalPEPS} in the
+    site-dependent setting in which the source states it, with the deformed
+    window tensors arising as physical operators contracted with the blocked
+    windows they act on; Lemma~\ref{lem:overlapWindow_exists_bondOperator}
+    is its constant specialization.
 \end{lemma}
 \begin{proof}\leanok
     \uses{lem:isWindowInjective_arc_span, def:chain_arc_window_injective}
-    Comparing the windows at $j$ and $j + 1$ through the complementary
-    arc of $n - L - 1 \ge L$ sites, whose arc products span by
+    Comparing the windows at $j$ and $j+1$ through the complementary
+    arc of $n-L-1\ge L$ sites, whose arc products span by
     Lemma~\ref{lem:isWindowInjective_arc_span}, strips the state equality
     to the letter level:
-    $C_j(u_1 \cdots u_L)\,A_{r+j+L}^{u_{L+1}} =
-        A_{r+j}^{u_1}\,C_{j+1}(u_2 \cdots u_{L+1})$ on every window of
-    $L + 1$ sites.  Chaining the $L$ relations along the $2L$ sites
+    $C_j(u_1\cdots u_L)A_{r+j+L}^{u_{L+1}}
+    =A_{r+j}^{u_1}C_{j+1}(u_2\cdots u_{L+1})$ on every window of
+    $L+1$ sites. Chaining the $L$ relations along the $2L$ sites
     flanking the bond turns the leftmost window into the rightmost one:
-    $C_0(a)\,A_{(r+L)}^{b} = A_{(r)}^{a}\,C_L(b)$ for all length-$L$
-    words.  Writing the identity as a combination
-    $\sum_b \alpha_b A_{(r+L)}^{b} = I$, the matrix
-    $X := \sum_b \alpha_b\,C_L(b)$ satisfies $A_{(r)}^{a} X = C_0(a)$;
+    $C_0(a)A_{(r+L)}^b=A_{(r)}^aC_L(b)$ for all length-$L$
+    words. Writing the identity as a combination
+    $\sum_b\alpha_bA_{(r+L)}^b=\Id$, the matrix
+    $X:=\sum_b\alpha_bC_L(b)$ satisfies $A_{(r)}^aX=C_0(a)$;
     the mirrored combination of the $C_0$-family collapses onto the same
-    matrix, giving $X\,A_{(r+L)}^{b} = C_L(b)$, and stripping the
+    matrix, giving $XA_{(r+L)}^b=C_L(b)$, and stripping the
     spanning factors makes $X$ unique.
 \end{proof}
 
@@ -136,17 +135,16 @@ recorded in the route note
     \leanok
     \uses{def:chain_arc_window_injective, def:non_ti_chain}
     Let two site-dependent chains $A$, $B$ on $n$ sites generate the same
-    closed-chain state, let $k + q = n$, and suppose the $A$-arc products
+    closed-chain state, let $k+q=n$, and suppose the $A$-arc products
     of length $k$ read from a site $s$ and of length $q$ read from
-    $s + k$ each span the full matrix algebra.  Then there is a linear
+    $s+k$ each span the full matrix algebra. Then there is a linear
     map $\Lambda$ of the matrix algebra with
-    $\Lambda(A_{(s)}^{x}) = B_{(s)}^{x}$ for every word $x$ of length
-    $k$.
+    $\Lambda(A_{(s)}^x)=B_{(s)}^x$ for every word $x$ of length $k$.
 \end{lemma}
 \begin{proof}\leanok
     \uses{lem:exists_mpvTransport, def:chain_arc_window_injective}
     As for one repeated tensor (Lemma~\ref{lem:exists_mpvTransport}):
-    pair the matrix algebra against the complementary arc products.  The
+    pair the matrix algebra against the complementary arc products. The
     pairing is injective on the $A$-side by spanning and trace
     nondegeneracy, and the two pairings match on the spanning arc family
     because both compute closed-chain coefficients of total length $n$,
@@ -161,36 +159,34 @@ recorded in the route note
     \lean{MPSChainTensor.insertionHom_unique}
     \leanok
     \uses{def:chain_arc_window_injective, def:non_ti_chain}
-    Let $0 < L$ with $2L + 1 \le n$, let $A$ and $B$ be site-dependent
+    Let $0<L$ with $2L+1\le n$, let $A$ and $B$ be site-dependent
     chains on $n$ sites, each window injective at length $L$, generating
-    the same closed-chain state, and fix a site $r$.  Then there is a
+    the same closed-chain state, and fix a site $r$. Then there is a
     linear map $\Phi$ of the matrix algebra, unital and multiplicative,
-    such that for every matrix $X$ and every word $w$ of length $n$,
-    \[
-        \tr\bigl(X\, A_{(r+L)}^{w}\bigr)
-        = \tr\bigl(\Phi(X)\, B_{(r+L)}^{w}\bigr),
-    \]
-    and $\Phi$ is the unique linear map with this pairing property.  This
-    is the closing clause of Lemma~5 of \cite{Molnar2018NormalPEPS} — the
-    maps $O_1 \mapsto X$ and $O_3^T \mapsto X$ are uniquely defined and
-    are algebra homomorphisms — in the site-dependent setting of the
-    source, with the algebra structure carried by the insertions: $\Phi$
-    sends an insertion on the bond $(r+L-1,\, r+L)$ of the first chain to
-    the bond operator extracted on the second.
+    such that
+    $\tr(XA_{(r+L)}^w)=\tr(\Phi(X)B_{(r+L)}^w)$ for every matrix $X$
+    and every word $w$ of length $n$, and $\Phi$ is the unique linear map
+    with this pairing property. This is the closing clause of Lemma~5 of
+    \cite{Molnar2018NormalPEPS}---the maps $O_1\mapsto X$ and
+    $O_3^T\mapsto X$ are uniquely defined and are algebra
+    homomorphisms---in the site-dependent setting of the source, with the
+    algebra structure carried by the insertions: $\Phi$ sends an insertion
+    on the bond $(r+L-1,r+L)$ of the first chain to the bond operator
+    extracted on the second.
 \end{lemma}
 \begin{proof}\leanok
     \uses{lem:chain_overlapWindow_exists_bondOperator,
         lem:exists_arcTransport, lem:isWindowInjective_arc_span}
     A virtual insertion $X$ on the bond is realized on each of the
-    $L + 1$ overlapping windows around it by deformed window tensors
-    placing $X$ after the first $L - j$ letters of the window starting at
-    site $r + j$.  Each deformation is transported to the second chain by
+    $L+1$ overlapping windows around it by deformed window tensors
+    placing $X$ after the first $L-j$ letters of the window starting at
+    site $r+j$. Each deformation is transported to the second chain by
     the arc transport at its own starting site
     (Lemma~\ref{lem:exists_arcTransport}); the same-state hypothesis
     makes the transported deformations generate one common state, and the
     bond-operator extraction
     (Lemma~\ref{lem:chain_overlapWindow_exists_bondOperator}) produces
-    $\Phi(X)$.  Uniqueness of the bond operator makes $\Phi$ linear,
+    $\Phi(X)$. Uniqueness of the bond operator makes $\Phi$ linear,
     unital and multiplicative; the pairing against all closed-chain words
     follows by expanding the insertion over the window products, and pins
     $\Phi$ through the spanning arcs of length $n$
@@ -203,16 +199,13 @@ recorded in the route note
     \lean{MPSChainTensor.exists_conjugation_of_sameState}
     \leanok
     \uses{def:chain_arc_window_injective, def:non_ti_chain}
-    Let $0 < L$ with $2L + 1 \le n$, and let $A$ and $B$ be
+    Let $0<L$ with $2L+1\le n$, and let $A$ and $B$ be
     site-dependent chains on $n$ sites with a common positive bond dimension,
-    each window injective at length
-    $L$, generating the same closed-chain state.  Then for every site $p$
-    there is an invertible matrix $Z$ with
-    \[
-        B_{(p)}^{w} = Z\, A_{(p)}^{w}\, Z^{-1}
-    \]
-    for every word $w$ of length $n$.  The statement for one repeated
-    tensor is Lemma~\ref{lem:exists_conjugation_of_mpv_eq}.
+    each window injective at length $L$, generating the same closed-chain
+    state. Then for every site $p$ there is an invertible matrix $Z$ with
+    $B_{(p)}^w=ZA_{(p)}^wZ^{-1}$ for every word $w$ of length $n$. The
+    statement for one repeated tensor is
+    Lemma~\ref{lem:exists_conjugation_of_mpv_eq}.
 \end{lemma}
 \begin{proof}\leanok
     \uses{lem:chain_exists_insertionHom, thm:skolem_noether}
@@ -231,20 +224,16 @@ recorded in the route note
     \lean{TNLean.PEPS.fundamentalTheorem_normalMPSChain_of_overlap}
     \leanok
     \uses{def:chain_arc_window_injective, def:non_ti_chain}
-    Let $0 < L$ with $2L + 1 \le n$, and let $A$ and $B$ be
+    Let $0<L$ with $2L+1\le n$, and let $A$ and $B$ be
     site-dependent chains on $n$ sites with a common positive bond dimension,
-    each window injective at length
-    $L$, generating the same closed-chain state.  Then the chains are
-    gauge equivalent: there are invertible matrices $Z_v$, one per bond
-    of the closed chain, with
-    \[
-        B_v^i = Z_v\, A_v^i\, Z_{v+1}^{-1}
-    \]
-    for every site $v$ and every $i$, indices cyclic.  This is the
-    closed-chain corollary of the closing section of
-    \cite{Molnar2018NormalPEPS} assembled from its site-dependent
-    Lemma~5 at every bond; the source displays the corollary for
-    translation-invariant tensors
+    each window injective at length $L$, generating the same closed-chain
+    state. Then the chains are gauge equivalent: there are invertible
+    matrices $Z_v$, one per bond of the closed chain, with
+    $B_v^i=Z_vA_v^iZ_{v+1}^{-1}$ for every site $v$ and every $i$, with
+    indices read cyclically. This is the closed-chain corollary of the
+    closing section of \cite{Molnar2018NormalPEPS} assembled from its
+    site-dependent Lemma~5 at every bond; the source displays the corollary
+    for translation-invariant tensors
     (Corollary~\ref{cor:fundamentalTheorem_normalMPS_translationInvariant_of_overlap}),
     with the site-dependent Lemma~5 as its engine.
 \end{corollary}
@@ -255,21 +244,20 @@ recorded in the route note
     The per-bond conjugations
     (Lemma~\ref{lem:chain_exists_conjugation_of_sameState}) give window
     covariance with nonzero scalars: on every arc of $m$ sites with
-    $L \le m$ and $m + L \le n$, the conjugation at the near end
+    $L\le m$ and $m+L\le n$, the conjugation at the near end
     intertwines the arc products of the two chains across the far bond,
     the bond-operator extraction
     (Lemma~\ref{lem:chain_overlapWindow_exists_bondOperator}) produces
     the connecting matrix, and the conjugation at the far end pins it to
     a nonzero scalar multiple of the gauge there through the centralizer
     of the full matrix algebra, so
-    $B_{(p)}^{u} = c_{p,m} \cdot Z_p\, A_{(p)}^{u}\, Z_{p+m}^{-1}$ on all
-    length-$m$ words $u$.  Comparing the covariance on windows of lengths
-    $L + 1$ and $L$ through the spanning window products leaves the
-    letterwise relation $B_v^i = \mu_v\, Z_v\, A_v^i\, Z_{v+1}^{-1}$ with
-    nonzero scalars $\mu_v$; iterating it once around the closed chain
-    against a nonzero arc product forces $\prod_v \mu_v = 1$, and
-    dressing the gauges with the partial products of the scalars absorbs
-    them, including across the seam.
+    $B_{(p)}^u=c_{p,m}Z_pA_{(p)}^uZ_{p+m}^{-1}$ on all length-$m$
+    words $u$. Comparing the covariance on windows of lengths $L+1$ and
+    $L$ through the spanning window products leaves the letterwise relation
+    $B_v^i=\mu_vZ_vA_v^iZ_{v+1}^{-1}$ with nonzero scalars $\mu_v$;
+    iterating it once around the closed chain against a nonzero arc product
+    forces $\prod_v\mu_v=1$, and dressing the gauges with the partial
+    products of the scalars absorbs them, including across the seam.
 \end{proof}
 
 \begin{theorem}[Cyclic gauges preserve closed-chain states]%
@@ -278,21 +266,18 @@ recorded in the route note
     \lean{MPSChainTensor.GaugeEquiv.sameState}
     \leanok
     \uses{def:chain_arc_window_injective, def:non_ti_chain}
-    Let \(A_0,\ldots,A_{n-1}\) and \(B_0,\ldots,B_{n-1}\) be two
+    Let $A_0,\ldots,A_{n-1}$ and $B_0,\ldots,B_{n-1}$ be two
     site-dependent closed chains with a cyclic gauge relation
-    \[
-        B_v^i = Z_v\, A_v^i\, Z_{v+1}^{-1}
-    \]
-    at every site.  Then they generate the same closed-chain state.  More
-    generally, the product along any arc is conjugated by the two gauges on
-    the boundary bonds of that arc; for a full turn around the chain the
-    two boundary bonds coincide, and cyclicity of trace removes the
-    remaining conjugation.
+    $B_v^i=Z_vA_v^iZ_{v+1}^{-1}$ at every site. Then they generate the
+    same closed-chain state. More generally, the product along any arc is
+    conjugated by the two gauges on the boundary bonds of that arc; for a
+    full turn around the chain the two boundary bonds coincide, and
+    cyclicity of trace removes the remaining conjugation.
 \end{theorem}
 \begin{proof}\leanok
-    Iterate the sitewise gauge relation along the arc.  Consecutive
+    Iterate the sitewise gauge relation along the arc. Consecutive
     boundary matrices cancel, leaving only the gauges at the two ends.
-    For a word of length \(n\) read from the first site, the two ends are
+    For a word of length $n$ read from the first site, the two ends are
     the same bond, so the closed trace is invariant under the resulting
     conjugation.
 \end{proof}
@@ -303,24 +288,21 @@ recorded in the route note
     \leanok
     \uses{cor:fundamentalTheorem_normalMPSChain_of_overlap,
         lem:isWindowInjective_one_of_isInjective}
-    Let \(A_0,\ldots,A_{n-1}\) and \(B_0,\ldots,B_{n-1}\) be two
-    site-dependent closed chains on \(n \ge 3\) sites, with common physical
-    dimension and common positive bond dimension.  Suppose every local tensor in
-    both chains is injective and the two closed-chain states are equal.
-    Then there are invertible matrices \(Z_0,\ldots,Z_{n-1}\), one per
-    bond of the closed chain, such that
-    \[
-        B_v^i = Z_v\, A_v^i\, Z_{v+1}^{-1}
-    \]
-    for every site \(v\) and every physical index \(i\), with indices read
-    cyclically.  This is the \(L=1\), uniform-dimension instance of
+    Let $A_0,\ldots,A_{n-1}$ and $B_0,\ldots,B_{n-1}$ be two
+    site-dependent closed chains on $n\ge3$ sites, with common physical
+    dimension and common positive bond dimension. Suppose every local tensor
+    in both chains is injective and the two closed-chain states are equal.
+    Then there are invertible matrices $Z_0,\ldots,Z_{n-1}$, one per bond
+    of the closed chain, such that $B_v^i=Z_vA_v^iZ_{v+1}^{-1}$ for every
+    site $v$ and every physical index $i$, with indices read cyclically.
+    This is the $L=1$, uniform-dimension instance of
     \cite[Theorem~\textup{thm:inj\_MPS}, lines~688--725]{Molnar2018NormalPEPS}.
 \end{corollary}
 \begin{proof}\leanok
     \uses{cor:fundamentalTheorem_normalMPSChain_of_overlap,
         lem:isWindowInjective_one_of_isInjective}
     Apply Corollary~\ref{cor:fundamentalTheorem_normalMPSChain_of_overlap}
-    with \(L=1\).  The size condition becomes \(n \ge 3\), and
+    with $L=1$. The size condition becomes $n\ge3$, and
     Lemma~\ref{lem:isWindowInjective_one_of_isInjective} converts the
     sitewise injectivity hypotheses into the required window-injectivity
     hypotheses.
@@ -331,11 +313,11 @@ recorded in the route note
     \lean{MPSChainTensor.cyclicShift}
     \lean{MPSChainTensor.IsCyclicShiftInvariantState}
     \leanok
-    For a closed chain \(A_0,\ldots,A_{n-1}\), its cyclic shift is the
-    chain whose \(v\)-th tensor is \(A_{v+1}\), with indices read modulo
-    \(n\).  The generated state is cyclic-shift invariant when the
-    closed-chain state of \(A_0,\ldots,A_{n-1}\) agrees with that of
-    \(A_1,\ldots,A_{n-1},A_0\).
+    For a closed chain $A_0,\ldots,A_{n-1}$, its cyclic shift is the
+    chain whose $v$-th tensor is $A_{v+1}$, with indices read modulo
+    $n$. The generated state is cyclic-shift invariant when the
+    closed-chain state of $A_0,\ldots,A_{n-1}$ agrees with that of
+    $A_1,\ldots,A_{n-1},A_0$.
 \end{definition}
 
 \begin{corollary}[Gauge comparison with the cyclic shift]%
@@ -344,21 +326,18 @@ recorded in the route note
     \leanok
     \uses{cor:fundamentalTheorem_injectiveMPSChain_of_sameState,
         def:mps_chain_cyclic_shift}
-    Let \(A_0,\ldots,A_{n-1}\) be an injective site-dependent closed chain
-    with positive bond dimension on \(n\ge 3\) sites.  If its generated state
-    is invariant under the
-    cyclic shift \(A_v\mapsto A_{v+1}\), then there are invertible matrices
-    \(Z_0,\ldots,Z_{n-1}\), one per bond, such that
-    \[
-        A_{v+1}^i = Z_v\, A_v^i\, Z_{v+1}^{-1}
-    \]
-    for every site \(v\) and physical index \(i\).  This is the first
-    comparison step in the Applications-section translation-invariant
-    description corollary of \cite[lines~1807--1824]{Molnar2018NormalPEPS}.
+    Let $A_0,\ldots,A_{n-1}$ be an injective site-dependent closed chain
+    with positive bond dimension on $n\ge3$ sites. If its generated state
+    is invariant under the cyclic shift $A_v\mapsto A_{v+1}$, then there
+    are invertible matrices $Z_0,\ldots,Z_{n-1}$, one per bond, such that
+    $A_{v+1}^i=Z_vA_v^iZ_{v+1}^{-1}$ for every site $v$ and physical
+    index $i$. This is the first comparison step in the
+    Applications-section translation-invariant description corollary of
+    \cite[lines~1807--1824]{Molnar2018NormalPEPS}.
 \end{corollary}
 \begin{proof}\leanok
     Apply Corollary~\ref{cor:fundamentalTheorem_injectiveMPSChain_of_sameState}
-    to the chain and its cyclic shift.  Injectivity is preserved by the
+    to the chain and its cyclic shift. Injectivity is preserved by the
     shift, and the state equality is exactly the cyclic-shift invariance
     hypothesis.
 \end{proof}
@@ -368,20 +347,17 @@ recorded in the route note
     \lean{MPSChainTensor.exists_gauge_to_first_of_cyclicShift_gaugeEquiv}
     \leanok
     \uses{def:mps_chain_cyclic_shift}
-    Suppose a closed chain \(A_0,\ldots,A_{n-1}\) is gauge equivalent to its
-    cyclic shift.  Then for every site \(v\) there are invertible matrices
-    \(L_v\) and \(R_v\) such that
-    \[
-        A_v^i = L_v\, A_0^i\, R_v^{-1}
-    \]
-    for every physical index \(i\).  This is the telescoping step in
+    Suppose a closed chain $A_0,\ldots,A_{n-1}$ is gauge equivalent to its
+    cyclic shift. Then for every site $v$ there are invertible matrices
+    $L_v$ and $R_v$ such that $A_v^i=L_vA_0^iR_v^{-1}$ for every
+    physical index $i$. This is the telescoping step in
     \cite[lines~1828--1862]{Molnar2018NormalPEPS}, where the products denoted
-    \(L_i\) and \(R_i\) express all tensors through the first one.
+    $L_i$ and $R_i$ express all tensors through the first one.
 \end{corollary}
 \begin{proof}\leanok
     Write the cyclic-shift gauge relation from one site to the next and
-    iterate it along the chain.  At the first site one takes
-    \(L_0=R_0=I\); passing from \(v\) to \(v+1\) multiplies the left and
+    iterate it along the chain. At the first site one takes
+    $L_0=R_0=\Id$; passing from $v$ to $v+1$ multiplies the left and
     right virtual factors by the adjacent gauges.
 \end{proof}
 
@@ -391,16 +367,13 @@ recorded in the route note
     \leanok
     \uses{cor:fundamentalTheorem_injectiveMPSChain_cyclicShift,
         cor:exists_gauge_to_first_of_cyclicShift_gaugeEquiv}
-    Let \(A_0,\ldots,A_{n-1}\) be an injective site-dependent closed chain
-    with positive bond dimension on \(n\ge 3\) sites.  If its generated state
-    is invariant under the
-    cyclic translation of the sites, then for every site \(v\) there are
-    invertible matrices \(L_v\) and \(R_v\) such that
-    \[
-        A_v^i = L_v\, A_0^i\, R_v^{-1}
-    \]
-    for every physical index \(i\).  This is the uniform-bond-dimension form
-    of the \(L_v,R_v\) step in the Applications-section proof of
+    Let $A_0,\ldots,A_{n-1}$ be an injective site-dependent closed chain
+    with positive bond dimension on $n\ge3$ sites. If its generated state
+    is invariant under the cyclic translation of the sites, then for every
+    site $v$ there are invertible matrices $L_v$ and $R_v$ such that
+    $A_v^i=L_vA_0^iR_v^{-1}$ for every physical index $i$. This is the
+    uniform-bond-dimension form of the $L_v,R_v$ step in the
+    Applications-section proof of
     \cite[lines~1803--1890]{Molnar2018NormalPEPS}.
 \end{corollary}
 \begin{proof}\leanok
@@ -415,22 +388,22 @@ recorded in the route note
     \leanok
     \uses{cor:fundamentalTheorem_injectiveMPSChain_cyclicShift,
         def:mps_chain_cyclic_shift}
-    Let \(A_0,\ldots,A_{n-1}\) be an injective site-dependent closed chain on
-    \(n\ge 3\) sites, with one physical dimension \(d\) and one positive bond
-    dimension \(D\).  If the closed-chain state is invariant under the cyclic shift
-    \(A_v\mapsto A_{v+1}\), then there is an injective tensor \(B\), with bond
-    dimension \(D\), such that for every physical configuration \(\sigma\),
-    \[
-        \tr\!\left(
-            A_0^{\sigma_0}\cdots A_{n-1}^{\sigma_{n-1}}\right)
-        =
-        \tr\!\left(
-            B^{\sigma_0}\cdots B^{\sigma_{n-1}}\right).
-    \]
+    Let $A_0,\ldots,A_{n-1}$ be an injective site-dependent closed chain on
+    $n\ge3$ sites, with one physical dimension $d$ and one positive bond
+    dimension $D$. If the closed-chain state is invariant under the cyclic
+    shift $A_v\mapsto A_{v+1}$, then there is an injective tensor $B$,
+    with bond dimension $D$, such that, for every physical configuration
+    $\sigma$,
+    \begin{align}
+        \tr\!\left(A_0^{\sigma_0}\cdots A_{n-1}^{\sigma_{n-1}}\right)
+        &=
+        \tr\!\left(B^{\sigma_0}\cdots B^{\sigma_{n-1}}\right).
+        \notag
+    \end{align}
 
     This is the uniform-bond-dimension target corresponding to the
     Applications-section corollary of
-    \cite[lines~1803--1890]{Molnar2018NormalPEPS}.  The source also concludes
+    \cite[lines~1803--1890]{Molnar2018NormalPEPS}. The source also concludes
     that all bond dimensions of the original site-dependent representation are
     equal; in the present uniform-dimension statement that clause has already
     been built into the setting.
@@ -438,16 +411,16 @@ recorded in the route note
 \begin{proof}\leanok
     Apply Corollary~\ref{cor:fundamentalTheorem_injectiveMPSChain_cyclicShift}
     to compare the chain with its cyclic shift, giving one invertible gauge
-    $Z_v$ per bond with $A_{v+1}^i=Z_v\,A_v^i\,Z_{v+1}^{-1}$.  Telescoping
+    $Z_v$ per bond with $A_{v+1}^i=Z_vA_v^iZ_{v+1}^{-1}$. Telescoping
     the gauges into the running products $P_m=Z_{m-1}\cdots Z_0$ expresses
-    every tensor through the first, $A_m^i=P_m\,(A_0^i Z_0)\,P_{m+1}^{-1}$, so
+    every tensor through the first, $A_m^i=P_m(A_0^iZ_0)P_{m+1}^{-1}$, so
     the closed trace collapses to
-    $\tr(B^{\sigma_0}\cdots B^{\sigma_{n-1}} P_n^{-1})$ with the
-    tentative repeated tensor $B=A_0 Z_0$.  Reading the gauge relation across
+    $\tr(B^{\sigma_0}\cdots B^{\sigma_{n-1}}P_n^{-1})$ with the
+    tentative repeated tensor $B=A_0Z_0$. Reading the gauge relation across
     the seam $A_{n+1}\equiv A_0$ shows that the loop product $P_n$ commutes
     with the full matrix algebra spanned by $B$, hence is a scalar
-    $\lambda\ne 0$.  Since $\mathbb{C}$ is algebraically closed there is an
-    $n$-th root $c^n=\lambda^{-1}$; the rescaled tensor $c\,B$ is still
+    $\lambda\ne0$. Since $\C$ is algebraically closed, there is an
+    $n$-th root $c^n=\lambda^{-1}$; the rescaled tensor $cB$ is still
     injective and its constant chain generates the same closed state.
 \end{proof}
 
@@ -459,28 +432,20 @@ recorded in the route note
         thm:fundamentalTheorem_PEPS, def:peps_torus_translation_invariant,
         def:peps_torus_uniform_bond_dim,
         thm:peps_stateCoeff_translationInvariant}
-    Let \(A\) be an injective PEPS on the discrete torus with orientation-uniform
-    bond dimensions, horizontal dimension \(D_h\) and vertical dimension \(D_v\),
-    and positive bond dimensions.  If the generated state is invariant under all
-    lattice translations \(\tau_{a,b}\), that is, for every translation and every
-    physical configuration \(\sigma\),
-    \[
-        \Coeff_{A}(\sigma\circ\tau_{a,b})
-        =
-        \Coeff_{A}(\sigma),
-    \]
-    then there is an injective torus tensor \(B\), with the same orientation-uniform
-    bond dimensions \(D_h\) and \(D_v\), whose constant (site-independent) family
-    generates the same state: for every physical configuration \(\sigma\),
-    \[
-        \Coeff_{A}(\sigma)
-        =
-        \Coeff_{B}(\sigma).
-    \]
+    Let $A$ be an injective PEPS on the discrete torus with orientation-uniform
+    bond dimensions, horizontal dimension $D_h$ and vertical dimension $D_v$,
+    and positive bond dimensions. If the generated state is invariant under all
+    lattice translations $\tau_{a,b}$, that is,
+    $\Coeff_A(\sigma\circ\tau_{a,b})=\Coeff_A(\sigma)$ for every translation
+    and every physical configuration $\sigma$, then there is an injective
+    torus tensor $B$, with the same orientation-uniform bond dimensions $D_h$
+    and $D_v$, whose constant (site-independent) family generates the same
+    state: $\Coeff_A(\sigma)=\Coeff_B(\sigma)$ for every physical
+    configuration $\sigma$.
 
     This is the uniform-bond-dimension target corresponding to the
     Applications-section 2D corollary of
-    \cite[lines~1892--1894]{Molnar2018NormalPEPS}.  The source additionally
+    \cite[lines~1892--1894]{Molnar2018NormalPEPS}. The source additionally
     concludes that all vertical bond dimensions agree and all horizontal bond
     dimensions agree; in the present orientation-uniform setting those two
     clauses have already been built into the bond-dimension type, so they carry
@@ -489,69 +454,106 @@ recorded in the route note
 \begin{proof}
     The source states this corollary without proof, remarking only that the
     one-dimensional argument extends; the route below is that intended
-    extension.  Write \(A^{(j,k)}\) for the site tensor at lattice position
-    \((j,k)\), with horizontal virtual legs of dimension \(D_h\) and vertical
-    virtual legs of dimension \(D_v\).  Comparing the state with its
-    \(\tau_{1,0}\)-translate through the injective PEPS Fundamental Theorem
+    extension. Write $A^{(j,k)}$ for the site tensor at lattice position
+    $(j,k)$, with horizontal virtual legs of dimension $D_h$ and vertical
+    virtual legs of dimension $D_v$. Comparing the state with its
+    $\tau_{1,0}$-translate through the injective PEPS Fundamental Theorem
     (Theorem~\ref{thm:fundamentalTheorem_PEPS}) produces, on each horizontal
-    edge, invertible \(D_h\times D_h\) gauges \(X^{(j,k)}_h\) with
-    \[
-        A^{(j+1,k)} = \bigl(X^{(j,k)}_h\bigr)^{-1}\, A^{(j,k)}\, X^{(j+1,k)}_h,
-    \]
+    edge, invertible $D_h\times D_h$ gauges $X_h^{(j,k)}$ with
+    \begin{align}
+        A^{(j+1,k)}
+        &=
+        (X_h^{(j,k)})^{-1}
+        A^{(j,k)}X_h^{(j+1,k)},
+        \notag
+    \end{align}
     acting on the two horizontal virtual legs, and comparing with the
-    \(\tau_{0,1}\)-translate produces, on each vertical edge, invertible
-    \(D_v\times D_v\) gauges \(X^{(j,k)}_v\) with
-    \[
-        A^{(j,k+1)} = \bigl(X^{(j,k)}_v\bigr)^{-1}\, A^{(j,k)}\, X^{(j,k+1)}_v.
-    \]
+    $\tau_{0,1}$-translate produces, on each vertical edge, invertible
+    $D_v\times D_v$ gauges $X_v^{(j,k)}$ with
+    \begin{align}
+        A^{(j,k+1)}
+        &=
+        (X_v^{(j,k)})^{-1}
+        A^{(j,k)}X_v^{(j,k+1)}.
+        \notag
+    \end{align}
     Telescoping the horizontal gauges along a row reduces each site to the
-    leftmost one,
-    \[
-        A^{(j,k)} = \bigl(L^{(j,k)}_h\bigr)^{-1}\, A^{(0,k)}\, R^{(j,k)}_h,
-        \qquad
-        L^{(j,k)}_h = X^{(0,k)}_h\cdots X^{(j-1,k)}_h,
-        \quad
-        R^{(j,k)}_h = X^{(1,k)}_h\cdots X^{(j,k)}_h,
-    \]
+    leftmost one:
+    \begin{align}
+        A^{(j,k)}
+        &=
+        (L_h^{(j,k)})^{-1}
+        A^{(0,k)}R_h^{(j,k)},
+        \notag\\
+        L_h^{(j,k)}
+        &=
+        X_h^{(0,k)}\cdots X_h^{(j-1,k)},
+        \notag\\
+        R_h^{(j,k)}
+        &=
+        X_h^{(1,k)}\cdots X_h^{(j,k)},
+        \notag
+    \end{align}
     and the periodic boundary condition closes the row product into a single
-    residual virtual operation, the 2D analogue of the one-dimensional identity
-    \(R_vL_{v+1}^{-1}=Z_0^{-1}\):
-    \[
-        R^{(j,k)}_h\,\bigl(L^{(j+1,k)}_h\bigr)^{-1} = \bigl(X^{(0,k)}_h\bigr)^{-1}.
-    \]
+    residual virtual operation, the 2D analog of the one-dimensional
+    identity $R_vL_{v+1}^{-1}=Z_0^{-1}$:
+    \begin{align}
+        R_h^{(j,k)}
+        (L_h^{(j+1,k)})^{-1}
+        &=
+        (X_h^{(0,k)})^{-1}.
+        \notag
+    \end{align}
     The same telescoping closes each column, yielding one residual vertical
-    operation.  Absorbing the two residual gauges into the corner site gives a
-    single repeated tensor
-    \[
-        B = \bigl(X^{(0,0)}_v\bigr)^{-1}\,\bigl(X^{(0,0)}_h\bigr)^{-1}\, A^{(0,0)},
-    \]
-    whose constant family generates the same state.  The one-dimensional
+    operation. Absorbing the two residual gauges into the corner site gives
+    a single repeated tensor
+    \begin{align}
+        B
+        &=
+        (X_v^{(0,0)})^{-1}
+        (X_h^{(0,0)})^{-1}
+        A^{(0,0)},
+        \notag
+    \end{align}
+    whose constant family generates the same state. The one-dimensional
     telescoping closure is stated as
     Corollary~\ref{cor:exists_constant_injectiveMPS_of_cyclicShiftInvariantState}.
-    What remains is the two-directional PEPS assembly.  If
-    \[
-        H_{j,k}=R^{(j,k)}_h\bigl(L^{(j+1,k)}_h\bigr)^{-1},
-        \qquad
-        V_{j,k}=R^{(j,k)}_v\bigl(L^{(j,k+1)}_v\bigr)^{-1},
-    \]
-    are the residual horizontal and vertical operations, the horizontal residual
-    acts on \(\mathbb C^{D_h}\) and the vertical residual acts on
-    \(\mathbb C^{D_v}\).  The missing plaquette flatness identity must therefore
+    What remains is the two-directional PEPS assembly. Define the residual
+    horizontal and vertical operations by
+    \begin{align}
+        H_{j,k}
+        &=
+        R_h^{(j,k)}
+        (L_h^{(j+1,k)})^{-1},
+        \notag\\
+        V_{j,k}
+        &=
+        R_v^{(j,k)}
+        (L_v^{(j,k+1)})^{-1}.
+        \notag
+    \end{align}
+    The horizontal residual acts on $\C^{D_h}$ and the vertical residual acts
+    on $\C^{D_v}$. The missing plaquette flatness identity must therefore
     be stated after placing them on the corner space
-    \(\mathbb C^{D_h}\otimes\mathbb C^{D_v}\).  Equivalently, after the row and
-    column telescopings make \(H_{j,k}=H_k\) and \(V_{j,k}=V_j\), one must prove
-    \[
-        (H_k\otimes I_{D_v})(I_{D_h}\otimes V_{j+1})
-        =
-        \lambda_{j,k}\,(I_{D_h}\otimes V_j)(H_{k+1}\otimes I_{D_v})
-    \]
-    for nonzero scalars \(\lambda_{j,k}\).  The scalar phases must also close
-    around the two periodic seams,
-    \[
-        \prod_{k\in\mathbb Z/N_v\mathbb Z}\lambda_{j,k}=1,
-        \qquad
-        \prod_{j\in\mathbb Z/N_h\mathbb Z}\lambda_{j,k}=1.
-    \]
+    $\C^{D_h}\otimes\C^{D_v}$. Equivalently, after the row and column
+    telescopings make $H_{j,k}=H_k$ and $V_{j,k}=V_j$, one must prove, for
+    nonzero scalars $\lambda_{j,k}$,
+    \begin{align}
+        (H_k\otimes\Id_{D_v})(\Id_{D_h}\otimes V_{j+1})
+        &=
+        \lambda_{j,k}
+        (\Id_{D_h}\otimes V_j)(H_{k+1}\otimes\Id_{D_v}).
+        \notag
+    \end{align}
+    The scalar phases must also close around the two periodic seams:
+    \begin{align}
+        \prod_{k\in\Z/N_v\Z}\lambda_{j,k}
+        &=1,
+        \notag\\
+        \prod_{j\in\Z/N_h\Z}\lambda_{j,k}
+        &=1.
+        \notag
+    \end{align}
     These identities are then absorbed into this single repeated 2D tensor.
 \end{proof}
 
@@ -563,36 +565,28 @@ recorded in the route note
         def:chain_arc_window_injective}
     Under the positive-bond-dimension hypotheses of
     Corollary~\ref{cor:fundamentalTheorem_injectiveMPSChain_of_sameState},
-    suppose \(Z_v\) and \(Z'_v\) are two families of invertible matrices
-    satisfying
-    \[
-        B_v^i = Z_v\, A_v^i\, Z_{v+1}^{-1}
-        \quad\text{and}\quad
-        B_v^i = Z'_v\, A_v^i\, (Z'_{v+1})^{-1}
-    \]
-    for every \(v,i\).  Then there is a single nonzero scalar \(c\) such
-    that \(Z'_v = c Z_v\) for every bond \(v\).  This is the uniqueness
-    clause in \cite[line~724]{Molnar2018NormalPEPS}.
+    suppose $Z_v$ and $Z'_v$ are two families of invertible matrices
+    satisfying $B_v^i=Z_vA_v^iZ_{v+1}^{-1}$ and
+    $B_v^i=Z'_vA_v^i(Z'_{v+1})^{-1}$ for every $v,i$. Then there is a
+    single nonzero scalar $c$ such that $Z'_v=cZ_v$ for every bond $v$.
+    This is the uniqueness clause in
+    \cite[line~724]{Molnar2018NormalPEPS}.
 \end{theorem}
 \begin{proof}\leanok
-    For each bond put \(C_v = Z_v^{-1}Z'_v\).  Comparing the two gauge
-    relations gives
-    \[
-        C_v A_v^i = A_v^i C_{v+1}
-    \]
-    for every local matrix.  Since the matrices of \(A_v\) span the full
-    matrix algebra, evaluating this identity on the identity matrix gives
-    \(C_v=C_{v+1}\); hence all \(C_v\) are one common matrix.  The same
-    relation then says that this common matrix commutes with the full
-    matrix algebra, so it is a scalar matrix.  Its invertibility makes the
-    scalar nonzero.
+    For each bond put $C_v=Z_v^{-1}Z'_v$. Comparing the two gauge
+    relations gives $C_vA_v^i=A_v^iC_{v+1}$ for every local matrix.
+    Since the matrices of $A_v$ span the full matrix algebra, evaluating
+    this identity on the identity matrix gives $C_v=C_{v+1}$; hence all
+    $C_v$ are one common matrix. The same relation then says that this
+    common matrix commutes with the full matrix algebra, so it is a scalar
+    matrix. Its invertibility makes the scalar nonzero.
 \end{proof}
 
-Two remarks place these statements against \cite{Molnar2018NormalPEPS}.  The
+Two remarks place these statements against \cite{Molnar2018NormalPEPS}. The
 injective matrix product states of the opening section of
-\cite{Molnar2018NormalPEPS} are the case $L = 1$, in which a single tensor
+\cite{Molnar2018NormalPEPS} are the case $L=1$, in which a single tensor
 already spans the matrix algebra; the corollaries above contain them at
-$n \ge 3$, with no separate argument needed.  The site-dependent results are
+$n\ge3$, with no separate argument needed. The site-dependent results are
 stated for one physical dimension $d$ and one bond dimension $D$ around the
 chain, while \cite{Molnar2018NormalPEPS} places no restriction on the local
 dimensions; this uniform-dimension restriction is the only narrowing.
@@ -640,5 +634,5 @@ dimensions; this uniform-dimension restriction is the only narrowing.
     \leanok
     \uses{def:edgeScalarAt}
     An edge-scalar family is vertex-balanced when
-    $\prod_{e\ni v} c_{v,e}=1$ for every vertex $v$.
+    $\prod_{e\ni v}c_{v,e}=1$ for every vertex $v$.
 \end{definition}
