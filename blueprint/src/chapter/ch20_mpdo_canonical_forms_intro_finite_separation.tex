@@ -12,24 +12,30 @@
     An MPO tensor is in \emph{horizontal canonical form} if its doubled-index
     MPS tensor is a BNT sector decomposition with an independent gauge on
     every repeated copy:
-    \[
-        M^{ab}=\bigoplus_{j=0}^{g-1}\bigoplus_{q=0}^{r_j-1}
+    \begin{align}
+        M^{ab}
+        &=\bigoplus_{j=0}^{g-1}\bigoplus_{q=0}^{r_j-1}
         \mu_{j,q}X_{j,q}A_j^{ab}X_{j,q}^{-1}.
-    \]
+        \label{eq:mpdo_horizontal_cf}
+    \end{align}
     Here the $A_j$ are the distinct minimal representatives, $r_j>0$, and
     every weight $\mu_{j,q}$ is nonzero, $|\mu_{j,q}|\leq1$, and at least
-    one weight has modulus one.  The BNT hypotheses include
+    one weight has modulus one. The BNT hypotheses include
     irreducibility, left-canonicality, normalized self-overlap, eventual
     linear independence of the representative MPV families, and the
     exclusion of similarity up to phase between distinct representatives.
     Repeated gauge-equivalent copies are retained over the same representative
-    rather than separated as distinct blocks.  The total bond dimension of
-    the displayed direct sum is exactly $D$.  Equivalently, with the
+    rather than separated as distinct blocks. The total bond dimension of
+    the displayed direct sum is exactly $D$. Equivalently, with the
     block-diagonal matrix $X=\bigoplus_{j,q}X_{j,q}$,
-    \[
-        M^{ab}=X\left[\bigoplus_{j,q}\mu_{j,q}A_j^{ab}\right]X^{-1},
-        \qquad X=\bigoplus_{j,q}X_{j,q}.
-    \]
+    \begin{align}
+        M^{ab}
+        &=X\left[\bigoplus_{j,q}\mu_{j,q}A_j^{ab}\right]X^{-1},
+        \notag\\
+        X
+        &=\bigoplus_{j,q}X_{j,q}.
+        \notag
+    \end{align}
     This is the canonical form and its BNT decomposition in
     \cite[lines~237--246 and 281--301]{Cirac2016MPDO_arXiv}.
 \end{definition}
@@ -42,14 +48,13 @@
     An MPO tensor has a \emph{horizontal-canonical-form MPV representation} if
     its doubled-index MPS tensor generates the same positive-length MPV family as a
     BNT canonical form
-    \[
-        \bigoplus_{j=0}^{g-1}\bigoplus_{q=0}^{r_j-1}\mu_{j,q}A_j.
-    \]
+    $\bigoplus_{j=0}^{g-1}\bigoplus_{q=0}^{r_j-1}\mu_{j,q}A_j$.
     Its length-$N$ matrix product vector is
-    \[
+    \begin{align}
         \sum_{j=0}^{g-1}
         \left(\sum_{q=0}^{r_j-1}\mu_{j,q}^{N}\right)V^{(N)}(A_j).
-    \]
+        \label{eq:mpdo_horizontal_mpv}
+    \end{align}
     This is the MPV-level decomposition in
     \cite[Section~2.3, lines~298--301]{Cirac2016MPDO_arXiv}.
 \end{definition}
@@ -72,9 +77,7 @@
 
 \begin{figure}[ht]
     \centering
-    \[
-        K=X\left(\bigoplus_j\mathcal K_j\right)X^{-1}
-    \]
+    $K=X\left(\bigoplus_j\mathcal K_j\right)X^{-1}$
     \begin{center}
         % K = X ( bigoplus_j K_j ) X^{-1}  [CPSV16 eq. (CFK), lines 1660-1665]:
         % the horizontal canonical form of the doubled tensor K as a gauge
@@ -93,7 +96,7 @@
         \begin{tenkz}[physical=updown]
             \tn{K}
         \end{tenkz}
-        $\;=\;$
+        $ = $
         \begin{tenkz}[physical=updown]
             \tnX{X} & \tn{\bigoplus_j\mathcal K_j} & \tnX{X^{-1}}
         \end{tenkz}
@@ -120,9 +123,7 @@
     vertically viewed tensor $\widetilde M$ has its letters indexed by the
     horizontal bond pair $(a,b)$, and each letter is the operator on the
     physical space with matrix elements
-    \[
-        (\widetilde M_{ab})_{ij} = M^{ij}_{ab}.
-    \]
+    $(\widetilde M_{ab})_{ij}=M^{ij}_{ab}$.
     Concatenating $\widetilde M$ vertically generates the matrix product
     vectors of the vertical direction.
 \end{definition}
@@ -137,10 +138,11 @@
     \uses{def:vertical_tensor_mpdo, def:mpo_adjoint_tensor}
     Adjunction exchanges the two oriented horizontal bond indices in the
     vertical view:
-    \[
+    \begin{align}
         \widetilde{M^\dagger}_{a,b}
-        = (\widetilde M_{b,a})^\dagger.
-    \]
+        &=(\widetilde M_{b,a})^\dagger.
+        \label{eq:mpdo_adjoint_reflection}
+    \end{align}
 \end{lemma}
 
 \begin{proof}
@@ -157,17 +159,21 @@
     An MPO tensor is in \emph{vertical canonical form} if there are a basis of
     normal tensors $\{M_\alpha\}_\alpha$ for its vertically viewed tensor
     $\widetilde M$, positive diagonal matrices
-    $\mu_\alpha=\diag(\omega_{\alpha,0},\dots,\omega_{\alpha,r_\alpha-1})$
+    $\mu_\alpha=\diag(\omega_{\alpha,0},\ldots,\omega_{\alpha,r_\alpha-1})$
     with $r_\alpha\geq1$,
     and a matrix $U$ from the physical space onto the retained nonzero sector
     space such that
-    \[
-        U\widetilde MU^\dagger=B,
-        \qquad
-        \widetilde M=U^\dagger B U,
-        \qquad
-        B=\bigoplus_\alpha \mu_\alpha\otimes M_\alpha.
-    \]
+    \begin{align}
+        U\widetilde MU^\dagger
+        &=B,
+        \notag\\
+        \widetilde M
+        &=U^\dagger B U,
+        \notag\\
+        B
+        &=\bigoplus_\alpha \mu_\alpha\otimes M_\alpha.
+        \label{eq:mpdo_vertical_cf}
+    \end{align}
     This is the conclusion of
     \cite[Proposition~4.13, lines~1863--1870]{Cirac2016MPDO_arXiv}.
     In this orientation $UU^\dagger=I$ on the retained space, while
@@ -206,7 +212,7 @@
             \tn[wide=3]{\widetilde M} & & \\
             \tn[pill, wide=3, legs at={1,2,3}]{U^\dagger} & &
         \end{tenkz}
-        $\;=\;\displaystyle\bigoplus_\alpha\;$
+        $ = \bigoplus_\alpha $
         \begin{tenkzfree}
             \tnput[box]{mu}{(10mm,7mm)}{\mu_\alpha}
             \tnput[box, ports={west:virtual, east:virtual, north:physical,
@@ -259,20 +265,22 @@
     word evaluation of $A_k$ along a word $w \in \{0,\ldots,d{-}1\}^L$. The
     finite-length spanning hypothesis is that the tuple-valued evaluations
     span the full product algebra of block matrices,
-    \[
+    \begin{align}
         \spn_{\C}\bigl\{\,(A_k^w)_k
             : w \in \{0,\ldots,d{-}1\}^L\,\bigr\}
-        = \textstyle\prod_k \MN{D_k}.
-    \]
+        &=\textstyle\prod_k \MN{D_k}.
+        \label{eq:mpdo_word_tuple_span}
+    \end{align}
     The corresponding finite-length separation property is that some length
     $L$ makes the trace pairing against block words nondegenerate: there is
     a length $L$ such that, for every tuple $(\Delta_k)_k$ of block
     matrices,
-    \[
+    \begin{align}
         \Bigl(\forall\, w \in \{0,\ldots,d{-}1\}^L,\
             \textstyle\sum_k \tr(\Delta_k A_k^w) = 0\Bigr)
-        \implies \forall k,\ \Delta_k = 0.
-    \]
+        &\implies \forall k,\ \Delta_k = 0.
+        \label{eq:mpdo_finite_separation}
+    \end{align}
     Spanning at length~$L$ gives separation at the same length: a trace
     functional that vanishes on every tuple $(A_k^w)_k$ vanishes on their
     span, hence on the whole product algebra, so nondegeneracy of the
@@ -283,9 +291,7 @@
 
     The spanning hypothesis has an equivalent entrywise form. For a block
     index $k$ and matrix entry $(a,b)$, let
-    \[
-        w \longmapsto (A_k^w)_{a,b}
-    \]
+    $w\longmapsto(A_k^w)_{a,b}$
     be the corresponding scalar word family, indexed jointly by the triple
     $(k,a,b)$. Linear independence of this scalar family already implies
     the spanning condition, hence the separation property, and hence the
@@ -306,24 +312,29 @@
     \cite[lines~340--345]{Cirac2016MPDO_arXiv} gives a concrete sufficient
     criterion for the spanning condition: a common length $L$ with every
     block $L$-block-injective, together with a length $S$ at which, for
-    every $k$, there is a coefficient family $(c_w)_{w \in
-    \{0,\ldots,d{-}1\}^S}$ with
-    \[
-        \sum_w c_w A_k^w = \Id,
-        \qquad
-        \forall\, j\neq k,\ \sum_w c_w A_j^w = 0.
-    \]
+    every $k$, there is a coefficient family
+    $(c_w)_{w\in\{0,\ldots,d{-}1\}^S}$ with
+    \begin{align}
+        \sum_w c_w A_k^w
+        &=\Id,
+        \notag\\
+        \sum_w c_w A_j^w
+        &=0
+        \quad(j\neq k).
+        \notag
+    \end{align}
     Concatenating the injective prefix with this finite selector family
     produces the spanning condition at length $L+S$, hence the separation
     property and the older per-copy trace-separation hypotheses.
 \end{remark}
 
 The inverse tensor of a block-injective canonical form satisfies
-\[
+\begin{align}
     \sum_p(\mathcal K_j^p)_{\alpha,\beta}
     (K^{-1,p}_{j'})_{\alpha',\beta'}
-    =\delta_{\alpha,\alpha'}\delta_{\beta,\beta'}\delta_{j,j'}.
-\]
+    &=\delta_{\alpha,\alpha'}\delta_{\beta,\beta'}\delta_{j,j'}.
+    \label{eq:mpdo_inverse_tensor}
+\end{align}
 Writing $K=X(\bigoplus_j\mathcal K_j)X^{-1}$ in this contraction places the
 gauges on the virtual legs of $K$ and identifies the block index of
 $\mathcal K_j$ with the label $j$:
@@ -362,7 +373,7 @@ $\mathcal K_j$ with the label $j$:
         \tnjoin{biOutOne.south}{biInvOne.north}
         \tnjoin{biInvOne.south}{biKOne.north}
     \end{tenkzfree}
-    $\;=\;$
+    $ = $
     % Panel 2 resolves each virtual boundary index into the tensor leg and
     % the j- and q-rails used by the block decomposition.  X and X^{-1}
     % have two distinct downward legs: one terminates at the j-dot and the
@@ -435,7 +446,7 @@ $\mathcal K_j$ with the label $j$:
         \tnjoin{biXqTwo.east}{biXinvqTwo.west}
         \tnjoin{biXinvqTwo.east}{biQTwoEast.west}
     \end{tenkzfree}
-    $\;=\;$
+    $ = $
     % Panel 3 is the componentwise identity.  The inward virtual legs of X
     % and X^{-1} form the two matrix-unit hooks: each hook is one continuous
     % virtual edge, the left open tip points west, and the right open tip
@@ -502,10 +513,7 @@ $\mathcal K_j$ with the label $j$:
         \tnjoin{biXinvqThree.east}{biQThreeEast.west}
     \end{tenkzfree}
 \end{tenkzequation}
-Consequently,
-\[
-    K^{-1}K=\bigoplus_j\Id_j.
-\]
+Consequently, $K^{-1}K=\bigoplus_j\Id_j$.
 This is the inverse identity in
 \cite[Appendix~C.2, lines~1666--1670]{Cirac2016MPDO_arXiv}.
 
@@ -524,11 +532,9 @@ This is the inverse identity in
     \leanok
     \uses{rem:word_tuple_span_top}
     If the common injective prefix has length $L$ and the selector has length
-    $S$, concatenation gives simultaneous words of length $L+S$.  For every
+    $S$, concatenation gives simultaneous words of length $L+S$. For every
     tuple $(X_j)_j$, the resulting coefficients satisfy
-    \[
-        \sum_{|w|=L+S}c_w A_j^w=X_j.
-    \]
+    $\sum_{|w|=L+S}c_w A_j^w=X_j$.
     Hence the simultaneous word tuples span the product algebra, and
     nondegeneracy of the trace pairing gives finite-length trace separation.
 \end{proof}
@@ -547,9 +553,7 @@ This is the inverse identity in
     \leanok
     \uses{def:l_blk_injective, rem:word_tuple_span_top}
     For every matrix $X$, block injectivity gives coefficients such that
-    \[
-        X=\sum_{|w|=L}c_wA_0^w.
-    \]
+    $X=\sum_{|w|=L}c_wA_0^w$.
     Since the family has only the block $A_0$, this is precisely the required
     simultaneous word-tuple spanning identity.
 \end{proof}
@@ -582,10 +586,7 @@ This is the inverse identity in
     injective length is $D^4$. If $g=1$, ordinary block injectivity gives the
     simultaneous span at length $D^4$.
 
-    Suppose $g\geq2$. Since
-    \[
-        D^4\leq D^4+1\leq3(D^4+1),
-    \]
+    Suppose $g\geq2$. Since $D^4\leq D^4+1\leq3(D^4+1)$,
     Theorem~\ref{thm:wordspan_blk_inj_succ} propagates block injectivity to
     the latter two lengths. Lemma~\ref{lem:direct_sum_two_block_dimension_step}
     then gives the full pair span at length $3(D^4+1)$ for every pair of
@@ -594,25 +595,25 @@ This is the inverse identity in
     with $M_k=X_k$ and $M_j=0$ for a chosen anchor block $j$. For every
     $\ell\notin\{k,j\}$, choose an identity--zero selector $N^{(\ell)}$ and
     form
-    \[
-        C_t=M_t\prod_{\ell\notin\{k,j\}}N^{(\ell)}_t.
-    \]
+    $C_t=M_t\prod_{\ell\notin\{k,j\}}N^{(\ell)}_t$.
     Since $N^{(\ell)}_k=I$ and $N^{(\ell)}_\ell=0$,
-    \[
-        C_k=X_k,\qquad C_j=0,\qquad
-        C_\ell=M_\ell(\cdots)0(\cdots)=0
+    \begin{align}
+        C_k
+        &=X_k,
+        \notag\\
+        C_j
+        &=0,
+        \notag\\
+        C_\ell
+        &=M_\ell(\cdots)0(\cdots)=0
         \quad(\ell\notin\{k,j\}).
-    \]
+        \notag
+    \end{align}
     Thus $C$ is supported only on block $k$. Summing over $k$ gives the full
-    simultaneous span at length
-    \[
-        N=3(g-1)(D^4+1).
-    \]
+    simultaneous span at length $N=3(g-1)(D^4+1)$.
     Each representative has positive dimension and occurs at least once, so
     $g\leq D$. Hence
-    \[
-        N\leq3(D-1)(D^4+1)\leq3D^5,
-    \]
+    $N\leq3(D-1)(D^4+1)\leq3D^5$,
     where the last inequality follows from $D-1\leq D^4$.
     This is the bound in
     \cite[lines~340--345]{Cirac2016MPDO_arXiv}.
