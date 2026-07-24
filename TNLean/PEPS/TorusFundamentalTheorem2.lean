@@ -16,9 +16,11 @@ import TNLean.PEPS.NormalBondDimension
 
 This file proves the torus Fundamental Theorem with no conditional per-vertex hypothesis: from
 the source hypotheses alone --- translation
-invariance, matched bond dimensions, positive bonds, the same state, the
+invariance, positive bonds, the same state, the
 rectangular-injectivity hypotheses (the union closure of injective regions is derived from the
-positive bonds), and the source's own sizes `n, m ≥ 7` --- it produces a per-edge gauge family
+positive bonds, and the bond-dimension equality from the rectangular-injectivity hypotheses
+via `bondDim_eq_of_normalTorusRectangle`), and the source's own sizes `n, m ≥ 7` --- it
+produces a per-edge gauge family
 `X` and a single scalar `λ` with
 
 * the translation covariance of `X` (the faithful torus form of the source's *"the same matrix
@@ -263,13 +265,16 @@ theorem bondDim_eq_of_normalTorusRectangle
 /-- **Unconditional normal PEPS Fundamental Theorem on the torus.**
 
 For a translation-invariant pair `A`, `B` on the discrete `n × m` torus with `n, m ≥ 7` (the
-source's own sizes), matched bond dimensions, positive bonds, the same state, and both
+source's own sizes), positive bonds, the same state, and both
 satisfying the rectangular-injectivity hypotheses,
+the bond dimensions of `A` and `B` agree on every edge and
 there are a translation-covariant per-edge gauge family `X` realizing the
 bare-edge absorbed equality at every edge, and a single scalar `λ` with the per-vertex relation
 `A_v = λ · (gauge action of B at v)` at every torus vertex and `λ^{width·height} = 1`.  The
 union closure of injective regions is derived from the positive bonds
-(`regionInjectivityUnionClosure_of_overlap`), not assumed.
+(`regionInjectivityUnionClosure_of_overlap`), and the bond-dimension equality is derived
+from the rectangular injectivity hypotheses (`bondDim_eq_of_normalTorusRectangle`); neither
+is assumed.
 
 This is the torus form of Theorem 3 (arXiv:1804.04964, Section 3, lines 1453--1471 of
 `Papers/1804.04964/paper_normal.tex`): `B = λ · (X, Y\text{-action on } A)` with
@@ -298,10 +303,11 @@ theorem fundamentalTheorem_normalTorusPEPS_unconditional
     (hBr : NormalTorusRectangleInjectivityHypotheses
       (regionInjectivityDataOf (G := torusGraph width height) B))
     (hw : 7 ≤ width) (hh : 7 ≤ height)
-    (hbond : A.bondDim = B.bondDim) (hAB : SameState A B) (hd : 0 < d)
+    (hAB : SameState A B) (hd : 0 < d)
     (hposA : ∀ g : Edge (torusGraph width height), 0 < A.bondDim g)
     (hposB : ∀ g : Edge (torusGraph width height), 0 < B.bondDim g) :
-    ∃ X : (e : Edge (torusGraph width height)) → GL (Fin (B.bondDim e)) ℂ,
+    ∃ (hbond : A.bondDim = B.bondDim)
+        (X : (e : Edge (torusGraph width height)) → GL (Fin (B.bondDim e)) ℂ),
       IsTranslationCovariantGaugeFamily B X ∧
       (∀ (e : Edge (torusGraph width height)) (σ : TorusVertex width height → Fin d)
         (N : Matrix (Fin (A.bondDim e)) (Fin (A.bondDim e)) ℂ),
@@ -323,6 +329,9 @@ theorem fundamentalTheorem_normalTorusPEPS_unconditional
   have hUB : RegionInjectivityUnionClosure
       (regionInjectivityDataOf (G := torusGraph width height) B) :=
     regionInjectivityUnionClosure_of_overlap B hposB
+  -- The bond-dimension equality, from the rectangular injectivity hypotheses.
+  have hbond : A.bondDim = B.bondDim :=
+    bondDim_eq_of_normalTorusRectangle hA hB hAr hBr hUA hUB hw hh hAB hd hposA hposB
   -- The translation-covariant absorbed gauge family, at the seam-touching reference anchors.
   obtain ⟨X, hXcov, hedge⟩ := exists_torusCovariantAbsorbedGaugeFamily
     (xhStart := width - 5) (yhStart := height - 5) (xvStart := width - 5) (yvStart := height - 5)
@@ -388,7 +397,7 @@ theorem fundamentalTheorem_normalTorusPEPS_unconditional
   -- The per-vertex relation with the single ratio `λ = c_S / c_R`.
   have hPV := component_eq_gaugeVertex_of_cornerProportional hA hB hXcov hbond hposA hw hh
     hcR0 hRB hcRprop hcSprop
-  exact ⟨X, hXcov, hedge, cS / cR, hPV,
+  exact ⟨hbond, X, hXcov, hedge, cS / cR, hPV,
     lambda_pow_card_torus_eq_one A B cornerRegion hRA hCRA hposA hAB X hbond (cS / cR) hPV⟩
 
 end PEPS
