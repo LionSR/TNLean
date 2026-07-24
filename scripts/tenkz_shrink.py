@@ -291,6 +291,16 @@ def scoped_option_groups(
     return scoped
 
 
+def _scope_groups(
+    groups: dict[str, dict[Path, list[str]]], scope: str
+) -> dict[Path, list[str]]:
+    if scope in groups:
+        return groups[scope]
+    if scope.startswith("kernel-"):
+        return {}
+    raise KeyError(f"unknown registry scope: {scope}")
+
+
 def row_consumers(entries: list[Entry], corpus: dict[Path, str]) -> dict[str, set[str]]:
     """Distinct consumer files per registry row, keyed by a stable row id."""
     consumers: dict[str, set[str]] = {}
@@ -304,7 +314,7 @@ def row_consumers(entries: list[Entry], corpus: dict[Path, str]) -> dict[str, se
             # tenure flags they raise carry session verdicts instead.
             hits = {
                 str(path.relative_to(ROOT))
-                for path, payloads in scoped.get(scope, {}).items()
+                for path, payloads in _scope_groups(scoped, scope).items()
                 if any(
                     name in _option_key_names(payload)
                     for payload in payloads
@@ -489,7 +499,7 @@ def flags(entries: list[Entry], corpus: dict[Path, str]) -> list[dict[str, str]]
         for name in names:
             invocations[name] = {
                 (path, index)
-                for path, payloads in groups.get(scope, {}).items()
+                for path, payloads in _scope_groups(groups, scope).items()
                 for index, payload in enumerate(payloads)
                 if name in _option_key_names(payload)
             }

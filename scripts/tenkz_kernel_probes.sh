@@ -115,11 +115,19 @@ grep -Fq '|name=C|physical=up' "$WORK/r_physical_policy.tnlog" || {
   echo "FAIL: physical=up did not reach the carrying frame atom" >&2
   exit 1
 }
+grep -Fq '|name=V|' "$WORK/r_physical_policy.tnlog" || {
+  echo "FAIL: the sealed-void atom disappeared from the model" >&2
+  exit 1
+}
 if grep -F '|name=V|' "$WORK/r_physical_policy.tnlog" |
    grep -Fq '|physical='; then
   echo "FAIL: physical policy reached a sealed void" >&2
   exit 1
 fi
+grep -Fq '|cluster-of=C|' "$WORK/r_physical_policy.tnlog" || {
+  echo "FAIL: the cluster sub-atom disappeared from the model" >&2
+  exit 1
+}
 if grep -F '|cluster-of=C|' "$WORK/r_physical_policy.tnlog" |
    grep -Fq '|physical='; then
   echo "FAIL: physical policy reached a cluster sub-atom" >&2
@@ -308,7 +316,43 @@ grep -Fq 'result=mismatch' "$WORK/n_bundle_signature.tnlog" || {
   echo "FAIL: bundle signature mismatch was not recorded" >&2
   exit 1
 }
-echo "PASS: twenty-eight review regressions hold"
+
+for arity_negative in n_missing_relation n_dangling_relation; do
+  source="$KERNEL/negative/$arity_negative.tex"
+  if ( cd "$WORK" &&
+       TEXINPUTS="$REPO/tex/tenkz//:" \
+         timeout 120 xelatex -interaction=nonstopmode -halt-on-error \
+         "$source" >"$WORK/$arity_negative.transcript" 2>&1 ); then
+    echo "FAIL: malformed equation $arity_negative was accepted" >&2
+    exit 1
+  fi
+  grep -Fq '[TKZ-EQ-ARITY]' "$WORK/$arity_negative.transcript" || {
+    echo "FAIL: $arity_negative lacked TKZ-EQ-ARITY" >&2
+    exit 1
+  }
+  grep -Fq 'result=malformed|reason=relation-count' \
+    "$WORK/$arity_negative.tnlog" || {
+    echo "FAIL: $arity_negative did not record its relation-count failure" >&2
+    exit 1
+  }
+done
+
+off_count=$(grep -c 'result=off' "$WORK/r_multiple_off.tnlog" || true)
+[ "$off_count" -eq 2 ] || {
+  echo "FAIL: multiple equation opt-outs did not each emit an event" >&2
+  exit 1
+}
+grep -Fq 'check|relation=1|result=off|reason=first' \
+  "$WORK/r_multiple_off.tnlog" || {
+  echo "FAIL: the first equation opt-out was not preserved" >&2
+  exit 1
+}
+grep -Fq 'check|relation=3|result=off|reason=third' \
+  "$WORK/r_multiple_off.tnlog" || {
+  echo "FAIL: the later equation opt-out was silently dropped" >&2
+  exit 1
+}
+echo "PASS: thirty-one review regressions hold"
 
 fail=0
 for pair in s1 s2 s3 s4 s5 s6 s7 s8; do

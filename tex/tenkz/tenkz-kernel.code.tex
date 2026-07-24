@@ -57,6 +57,9 @@
 \msg_new:nnn {tenkz}{kernel-signature-prose}
   { [TKZ-EQ-SIGNATURE]~panels~#1~and~#2~include~prose;~
     checked~relations~require~diagrams~unless~the~relation~is~opted~out. }
+\msg_new:nnn {tenkz}{kernel-equation-arity}
+  { [TKZ-EQ-ARITY]~an~equation~with~#1~panel(s)~has~#2~relation~glyph(s);~
+    expected~one~fewer~relation~than~panels~and~at~least~two~panels. }
 \msg_new:nnn {tenkz}{kernel-cellset}
   { [TKZ-LANG-CELLSET]~#1=#2~is~not~a~cell-set~of~
     (interface,column)~terms~(record~#3). }
@@ -1738,17 +1741,20 @@
     \prop_get:NnN \l__tenkz_kernel_stage_prop {check} \l__tenkz_kernel_scratch_tl
     \quark_if_no_value:NF \l__tenkz_kernel_scratch_tl
       {
-        \exp_args:NnV \regex_extract_once:nnNT
+        \exp_args:NnV \regex_extract_all:nnN
           { off \s* = \s* \{ \s* (\d+) \s* : \s* ([^\}]*) \} }
           \l__tenkz_kernel_scratch_tl
           \l__tenkz_kernel_match_seq
+        \int_step_inline:nnnn {2} {3}
+          { \seq_count:N \l__tenkz_kernel_match_seq }
           {
             \clist_put_right:Ne \l__tenkz_kernel_check_off_clist
-              { \seq_item:Nn \l__tenkz_kernel_match_seq {2} }
+              { \seq_item:Nn \l__tenkz_kernel_match_seq {##1} }
             \__tenkz_kernel_event:n
               {
-                check|relation=\seq_item:Nn \l__tenkz_kernel_match_seq {2}
-                |result=off|reason=\seq_item:Nn \l__tenkz_kernel_match_seq {3}
+                check|relation=\seq_item:Nn \l__tenkz_kernel_match_seq {##1}
+                |result=off
+                |reason=\seq_item:Nn \l__tenkz_kernel_match_seq { ##1 + 1 }
               }
           }
       }
@@ -1763,6 +1769,24 @@
   { \seq_gput_right:Nn \g__tenkz_kernel_rel_gseq { = } }
 \cs_new_protected:Npn \__tenkz_kernel_eq_end:
   {
+    \int_set:Nn \l_tmpa_int { \seq_count:N \g__tenkz_kernel_panel_gseq }
+    \int_set:Nn \l_tmpb_int { \seq_count:N \g__tenkz_kernel_rel_gseq }
+    \bool_set_false:N \l_tmpa_bool
+    \int_compare:nNnT { \l_tmpa_int } < {2}
+      { \bool_set_true:N \l_tmpa_bool }
+    \int_compare:nNnF { \l_tmpb_int } = { \l_tmpa_int - 1 }
+      { \bool_set_true:N \l_tmpa_bool }
+    \bool_if:NT \l_tmpa_bool
+      {
+        \__tenkz_kernel_event:n
+          {
+            check|result=malformed|reason=relation-count
+            |panels=\int_use:N \l_tmpa_int
+            |relations=\int_use:N \l_tmpb_int
+          }
+        \msg_error:nnee {tenkz}{kernel-equation-arity}
+          { \int_use:N \l_tmpa_int } { \int_use:N \l_tmpb_int }
+      }
     \int_step_inline:nn { \seq_count:N \g__tenkz_kernel_rel_gseq }
       {
         \int_compare:nNnT {##1 + 1} <
