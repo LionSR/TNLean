@@ -23,6 +23,8 @@
   { [TKZ-METRIC-UNKNOWN]~no~metric~entry~named~'#1' }
 \msg_new:nnn {tenkz}{metric-redeclared}
   { [TKZ-METRIC-REDECLARED]~metric~entry~'#1'~already~exists }
+\msg_new:nnn {tenkz}{metric-legacy-kind}
+  { [TKZ-METRIC-LEGACY-KIND]~length~metric~'#1'~has~a~ratio-style~legacy~macro }
 \msg_new:nnnn {tenkz}{metric-drift}
   { [TKZ-METRIC-DRIFT]~registry~'#1'~and~its~legacy~macro~disagree }
   { Registry~value~#2;~legacy~value~#3.~One~truth,~two~spellings:~fix~one. }
@@ -34,6 +36,21 @@
     \prop_gput:Nnn \g__tenkz_metric_value_prop {#2} {#3}
     \prop_gput:Nnn \g__tenkz_metric_kind_prop  {#2} {#1}
     \prop_gput:Nnn \g__tenkz_metric_why_prop   {#2} {#4}
+    % A registry-first entry mints the kind-correct legacy spelling; a
+    % legacy-first entry keeps its \def and the drift assertion holds the
+    % two equal.  Ratios use \tenkz@r@<name>; absolute lengths use
+    % \tenkz@<name> and must never acquire the ratio spelling.
+    \str_if_eq:nnTF {#1} {ratio}
+      {
+        \cs_if_exist:cF { tenkz@r@#2 }
+          { \cs_new:cpn { tenkz@r@#2 } {#3} }
+      }
+      {
+        \cs_if_exist:cF { tenkz@#2 }
+          { \cs_new:cpn { tenkz@#2 } {#3} }
+        \cs_if_exist:cT { tenkz@r@#2 }
+          { \msg_error:nnn {tenkz}{metric-legacy-kind} {#2} }
+      }
   }
 \cs_new_protected:Npn \__tenkz_metric_declare:nnn #1#2#3
   { \__tenkz_metric_declare_aux:nnnn {ratio} {#1} {#2} {#3} }
@@ -92,6 +109,21 @@
   { open~index:~longer~than~a~leg,~shorter~than~a~bond;~also~the~cup~reach }
 \__tenkz_metric_declare:nnn {daylight} {0.15}
   { the~one~gap~between~a~silhouette~and~closure~or~annotation~ink }
+\__tenkz_metric_declare:nnn {cupmouth} {0.04}
+  { horizontal~lead-in~of~a~trace~mouth:~just~enough~bend~to~read~as~a~turn }
+\__tenkz_metric_declare:nnn {cupdepth} {0.50}
+  { racetrack~half-depth:~the~closure~clears~half~a~cell~beyond~the~word }
+\__tenkz_metric_declare:nnn {wireclear} {0.30}
+  { lateral~escape~of~an~interrupted~wire~around~an~on-wire~glyph }
+\__tenkz_metric_declare:nnn {regioncorner} {0.10}
+  { region-loop~corner~radius:~tighter~than~a~glyph~corner~so~a~nested~
+    boundary~reads~as~an~outline,~not~a~pill }
+\__tenkz_metric_declare:nnn {slantmin} {0.30}
+  { plane~slant~floor:~below~it~depth~bonds~steepen~past~61~degrees~and~
+    become~confusable~with~vertical~physical~legs }
+\__tenkz_metric_declare:nnn {slantmax} {0.65}
+  { plane~slant~cap:~above~it~a~receding~row~lands~on~the~next~row's~
+    sites~under~rotation }
 \__tenkz_metric_declare:nnn {labelclear} {0.12}
   { one~clearance~for~every~label~band }
 \__tenkz_metric_declare:nnn {dotlabelband} {0.30}

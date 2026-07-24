@@ -612,8 +612,8 @@
   {
     \cs_set:Npn \tenkz@r@planeslant {#1}
     \bool_lazy_and:nnF
-      { \fp_compare_p:nNn {#1} > {0.30} }
-      { \fp_compare_p:nNn {#1} < {0.65} }
+      { \fp_compare_p:nNn {#1} > {\tenkz@r@slantmin} }
+      { \fp_compare_p:nNn {#1} < {\tenkz@r@slantmax} }
       {
         \msg_warning:nnn { tenkz } { plane-slant-band } {#1}
         \tenkz@event{warning|picture=\the\tenkz@pictureid|%
@@ -1693,14 +1693,16 @@
 \dim_new:N \l__tenkzl_cupbly_dim
 \dim_new:N \l__tenkzl_cupbcx_dim
 \dim_new:N \l__tenkzl_cupbcy_dim
-\dim_new:N \l__tenkzl_cupdx_dim
-\dim_new:N \l__tenkzl_cupdy_dim
-\dim_new:N \l__tenkzl_cupnorm_dim
-\dim_new:N \l__tenkzl_cupsil_dim
+% Corridor measures live in the shared geometry service; the lattice keeps
+% its historical spellings as bridges so every call site reads unchanged.
+\cs_new_eq:NN \l__tenkzl_cupdx_dim   \l__tenkz_geom_cor_dx_dim
+\cs_new_eq:NN \l__tenkzl_cupdy_dim   \l__tenkz_geom_cor_dy_dim
+\cs_new_eq:NN \l__tenkzl_cupnorm_dim \l__tenkz_geom_cor_norm_dim
+\cs_new_eq:NN \l__tenkzl_cupsil_dim  \l__tenkz_geom_cor_sil_dim
 \dim_new:N \l__tenkzl_cupproj_dim
 \dim_new:N \l__tenkzl_cupbulge_dim
-\dim_new:N \l__tenkzl_cuptransmin_dim
-\dim_new:N \l__tenkzl_cuptransmax_dim
+\cs_new_eq:NN \l__tenkzl_cuptransmin_dim \l__tenkz_geom_cor_tmin_dim
+\cs_new_eq:NN \l__tenkzl_cuptransmax_dim \l__tenkz_geom_cor_tmax_dim
 \dim_new:N \l__tenkzl_cuptransmid_dim
 \dim_new:N \l__tenkzl_cuptranstarget_dim
 \dim_new:N \l__tenkzl_cuplane_dim
@@ -1810,30 +1812,19 @@
             \dim_set:Nn \l__tenkzl_cupdy_dim
               { -\l__tenkzl_ayy_tl \l__tenkzl_lp_dim } }
       }
-    \dim_set:Nn \l__tenkzl_cupnorm_dim
-      { \fp_to_dim:n
-          { sqrt( \l__tenkzl_cupdx_dim ^ 2 + \l__tenkzl_cupdy_dim ^ 2 ) } }
+    \__tenkz_geom_corridor_axis:nn
+      { \l__tenkzl_cupdx_dim } { \l__tenkzl_cupdy_dim }
   }
 
 % Project paper point (#1,#2) onto the current side's outward unit axis.
 \cs_new_protected:Npn \tenkzl_side_cup_project:NNN #1#2#3
-  {
-    \dim_set:Nn #3
-      { \fp_to_dim:n
-          { ( #1 * \l__tenkzl_cupdx_dim + #2 * \l__tenkzl_cupdy_dim )
-              / \l__tenkzl_cupnorm_dim } }
-  }
+  { \__tenkz_geom_corridor_along:nnN {#1} {#2} #3 }
 
 % Project a paper point onto the unit axis perpendicular to the current
 % side direction.  Together with \tenkzl_side_cup_project:NNN this is an
 % orthonormal paper-frame coordinate system for obstacle routing.
 \cs_new_protected:Npn \tenkzl_side_cup_project_trans:NNN #1#2#3
-  {
-    \dim_set:Nn #3
-      { \fp_to_dim:n
-          { ( -#1 * \l__tenkzl_cupdy_dim + #2 * \l__tenkzl_cupdx_dim )
-              / \l__tenkzl_cupnorm_dim } }
-  }
+  { \__tenkz_geom_corridor_trans:nnN {#1} {#2} #3 }
 
 \cs_new_protected:Npn \tenkzl_side_cup_site_silhouette:nnn #1#2#3
   {
@@ -1841,14 +1832,8 @@
       {
         \tenkzl_xyz:nnnNN {#1}{#2}{#3}
           \l__tenkzl_cupax_dim \l__tenkzl_cupay_dim
-        \tenkzl_side_cup_project_trans:NNN
-          \l__tenkzl_cupax_dim \l__tenkzl_cupay_dim \l__tenkzl_cupproj_dim
-        \dim_set:Nn \l__tenkzl_cuptransmin_dim
-          { \dim_min:nn { \l__tenkzl_cuptransmin_dim }
-              { \l__tenkzl_cupproj_dim } }
-        \dim_set:Nn \l__tenkzl_cuptransmax_dim
-          { \dim_max:nn { \l__tenkzl_cuptransmax_dim }
-              { \l__tenkzl_cupproj_dim } }
+        \__tenkz_geom_corridor_include_trans:nn
+          { \l__tenkzl_cupax_dim } { \l__tenkzl_cupay_dim }
       }
   }
 
@@ -1883,9 +1868,7 @@
 \cs_new_protected:Npn \tenkzl_side_cup_silhouette:n #1
   {
     \tenkzl_side_cup_direction:n {#1}
-    \dim_set:Nn \l__tenkzl_cupsil_dim { -\c_max_dim }
-    \dim_set:Nn \l__tenkzl_cuptransmin_dim { \c_max_dim }
-    \dim_set:Nn \l__tenkzl_cuptransmax_dim { -\c_max_dim }
+    \__tenkz_geom_corridor_reset:
     % Named loop registers make the row/column/sheet ownership explicit;
     % nested inline placeholders are too easy to permute at this depth.
     \int_step_variable:nnNn {0} { \l__tenkzl_sheets_int - 1 }
@@ -2211,16 +2194,7 @@
 % projections.  The side direction has already passed through the single
 % lattice frame map, so this is metric resolution rather than a second map.
 \cs_new_protected:Npn \tenkzl_side_cup_from_projections:NNNN #1#2#3#4
-  {
-    \dim_set:Nn #3
-      { \fp_to_dim:n
-          { ( #1 * \l__tenkzl_cupdx_dim - #2 * \l__tenkzl_cupdy_dim )
-              / \l__tenkzl_cupnorm_dim } }
-    \dim_set:Nn #4
-      { \fp_to_dim:n
-          { ( #1 * \l__tenkzl_cupdy_dim + #2 * \l__tenkzl_cupdx_dim )
-              / \l__tenkzl_cupnorm_dim } }
-  }
+  { \__tenkz_geom_corridor_point:nnNN {#1} {#2} #3 #4 }
 
 \cs_new_protected:Npn \tenkzl_draw_side_cup_at:nnn #1#2#3
   {
@@ -2519,9 +2493,7 @@
 \cs_new_protected:Npn \tenkzl_trace_silhouette:n #1
   {
     \tenkzl_side_cup_direction:n {#1}
-    \dim_set:Nn \l__tenkzl_cupsil_dim { -\c_max_dim }
-    \dim_set:Nn \l__tenkzl_cuptransmin_dim { \c_max_dim }
-    \dim_set:Nn \l__tenkzl_cuptransmax_dim { -\c_max_dim }
+    \__tenkz_geom_corridor_reset:
     \int_step_variable:nnNn {0}{\l__tenkzl_sheets_int - 1}
       \l__tenkzl_cupscansheet_int
       {
@@ -3158,7 +3130,7 @@
         % The metric radius is the fallback.  Semantic style extensions from
         % the execute-once environment body arrive through #1 and must remain
         % free to replace it.
-        \__tenkz_render_stroke:nn { rounded~corners=\tenkz@dim{0.10}, #1,
+        \__tenkz_render_stroke:nn { rounded~corners=\tenkz@dim{\tenkz@r@regioncorner}, #1,
                even~odd~rule }
       { \l__tenkzl_path_tl }
       }
