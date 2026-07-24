@@ -85,13 +85,12 @@ case = "tests/tenkz/rmp/section-ii/cases/rmp-ii-mpo-sheet.tex"
 formula = "The 4-valent MPO tensor has directed virtual wire a: j -> k."
 ink = "Canonical public tenkz, tenkzfree environments; no raw TikZ."
 boundary = "West/east virtual and north/south physical ports are open in both depictions."
-source = "paper TN-Review-main.tex line 361; author source ImagesReview Section II/ImagesReview Section II.tex lines 305-316"
+source = "paper TN-Review-main.tex line 361; author source ImagesReview Section II/ImagesReview Section II.tex lines 305-309"
 capabilities = ["grid", "free-graph", "typed-ports"]
 paper_context_only = false
 fixture = "tests/tenkz/t2_mpo.tex"
 author_source = "ImagesReview Section II/ImagesReview Section II.tex"
-author_lines = "305-316"
-extraction_override = "shared composite block; per-panel split pending"
+author_lines = "305-309"
 placements = [{ order = 5, line = 361, asset = "fig2_fig2-pepe_sec2fig5MPO.pdf" }]
 
 [[target]]
@@ -103,13 +102,12 @@ case = "tests/tenkz/rmp/section-ii/cases/rmp-ii-pepo-sheet.tex"
 formula = "O = sum_{s,s'} C(prod_r M_r^{s_r s'_r}) |s_1..s_N><s'_1..s'_N|."
 ink = "Canonical public tenkzlattice environment; no raw TikZ."
 boundary = "All sheet-edge virtual legs and both physical operator legs per site are open."
-source = "paper TN-Review-main.tex line 363; author source ImagesReview Section II/ImagesReview Section II.tex lines 305-316"
+source = "paper TN-Review-main.tex line 363; author source ImagesReview Section II/ImagesReview Section II.tex lines 311-314"
 capabilities = ["lattice", "typed-ports"]
 paper_context_only = false
 fixture = "tests/tenkz/t2_pepo5.tex"
 author_source = "ImagesReview Section II/ImagesReview Section II.tex"
-author_lines = "305-316"
-extraction_override = "shared composite block; per-panel split pending"
+author_lines = "311-314"
 placements = [{ order = 6, line = 363, asset = "fig2_fig2-pepe_sec2fig5PEPO.pdf" }]
 
 [[target]]
@@ -263,7 +261,7 @@ paper_context_only = false
 fixture = "tests/tenkz/hard03_v3.tex"
 author_source = "ImagesReview Section II/ImagesReview Section II.tex"
 author_lines = "484-499"
-extraction_override = "shared composite block; per-panel split pending"
+extraction_override = "shared racetrack; the spectrum panel adds only the eig wrapper"
 placements = [{ order = 15, line = 421, asset = "fig2_fig2-pepe_sec2fig8.pdf" }]
 
 [[target]]
@@ -281,7 +279,7 @@ paper_context_only = false
 fixture = "tests/tenkz/hard04_v3.tex"
 author_source = "ImagesReview Section II/ImagesReview Section II.tex"
 author_lines = "484-499"
-extraction_override = "shared composite block; per-panel split pending"
+extraction_override = "shared racetrack; the spectrum panel adds only the eig wrapper"
 placements = [{ order = 16, line = 425, asset = "fig2_fig2-pepe_fig9-1.pdf" }]
 
 [[target]]
@@ -822,13 +820,12 @@ case = "tests/tenkz/rmp/section-iii-a/cases/rmp-iii-a-pulling-through.tex"
 formula = "The full MPO-algebra string pulls through the PEPS plaquette."
 ink = "Canonical public tenkzfree four-arm ring before-and-after equation."
 boundary = "Four external PEPS legs and two MPO string ends remain open."
-source = "paper TN-Review-main.tex line 1356; author source ImagesReview Section III/ImagesReview Section III.tex lines 414-447"
+source = "paper TN-Review-main.tex line 1356; author source ImagesReview Section III/ImagesReview Section III.tex lines 170-197"
 capabilities = ["free-graph", "pulling-through", "rotated-action"]
 paper_context_only = false
 fixture = "tests/tenkz/t2_eq50_pull.tex"
 author_source = "ImagesReview Section III/ImagesReview Section III.tex"
-author_lines = "414-447"
-extraction_override = "shared composite block; per-panel split pending"
+author_lines = "170-197"
 placements = [{ order = 49, line = 1356, asset = "fig3_fig3-pepe_eq50redarrows.pdf" }]
 
 [[target]]
@@ -925,13 +922,12 @@ case = "tests/tenkz/rmp/section-iii-a/cases/rmp-iii-a-ghz-tensor.tex"
 formula = "G_down = |0000> + |1111> is the four-leg GHZ copy tensor."
 ink = "Canonical public tenkz four-leg box with one physical orientation."
 boundary = "Two virtual and two physical GHZ indices remain open."
-source = "paper TN-Review-main.tex line 1449; author source ImagesReview Section III/ImagesReview Section III.tex lines 357-362"
+source = "paper TN-Review-main.tex line 1449; author source ImagesReview Section III/ImagesReview Section III.tex lines 357-358"
 capabilities = ["grid", "four-leg-atom", "typed-ports"]
 paper_context_only = false
 fixture = "tests/tenkz/t2_czx.tex"
 author_source = "ImagesReview Section III/ImagesReview Section III.tex"
-author_lines = "357-362"
-extraction_override = "shared composite block; per-panel split pending"
+author_lines = "357-358"
 placements = [{ order = 55, line = 1449, asset = "fig3_fig3-pepe_ghzdown.pdf" }]
 
 [[target]]
@@ -943,13 +939,12 @@ case = "tests/tenkz/rmp/section-iii-a/cases/rmp-iii-a-hadamard.tex"
 formula = "H = 2^-1/2 [[1,1],[1,-1]] is the local Hadamard map."
 ink = "Canonical public tenkz one-input one-output matrix box."
 boundary = "Exactly one input and one output matrix index remain open."
-source = "paper TN-Review-main.tex line 1449; author source ImagesReview Section III/ImagesReview Section III.tex lines 357-362"
+source = "paper TN-Review-main.tex line 1449; author source ImagesReview Section III/ImagesReview Section III.tex lines 359-360"
 capabilities = ["grid", "map-atom", "typed-ports"]
 paper_context_only = false
 fixture = "tests/tenkz/t2_czx.tex"
 author_source = "ImagesReview Section III/ImagesReview Section III.tex"
-author_lines = "357-362"
-extraction_override = "shared composite block; per-panel split pending"
+author_lines = "359-360"
 placements = [{ order = 56, line = 1449, asset = "fig3_fig3-pepe_Hmatrix.pdf" }]
 
 [[target]]
@@ -961,13 +956,12 @@ case = "tests/tenkz/rmp/section-iii-a/cases/rmp-iii-a-spt-mpo.tex"
 formula = "Pulling O_g through A deposits the physical action U_g on A."
 ink = "Canonical public tenkzfree PEPS star, crossing boxes, and g-string arcs."
 boundary = "Four virtual legs, one physical leg, and two g-string ends are open."
-source = "paper TN-Review-main.tex line 1459; author source ImagesReview Section III/ImagesReview Section III.tex lines 414-447"
+source = "paper TN-Review-main.tex line 1459; author source ImagesReview Section III/ImagesReview Section III.tex lines 414-444"
 capabilities = ["free-graph", "pulling-through", "crossing-order"]
 paper_context_only = false
 fixture = "tests/tenkz/t2_sptmpo_cross.tex"
 author_source = "ImagesReview Section III/ImagesReview Section III.tex"
-author_lines = "414-447"
-extraction_override = "shared composite block; per-panel split pending"
+author_lines = "414-444"
 placements = [{ order = 57, line = 1459, asset = "fig3_fig3-pepe_newSPTMPO.pdf" }]
 
 [[target]]
@@ -1608,7 +1602,6 @@ capabilities = ["lattice", "typed-ports"]
 paper_context_only = false
 author_source = "ImagesReview Section II/ImagesReview Section II.tex"
 author_lines = "742-800"
-extraction_override = "shared composite block; per-panel split pending"
 placements = []
 fixture = "tests/tenkz/t2_rgfp4.tex"
 
@@ -1733,12 +1726,12 @@ case = "tests/tenkz/rmp/section-ii/cases/rmp-workbench-ii-peps-fine-graining.tex
 formula = "One PEPS tensor is fine-grained into a 2x2 tensor patch."
 ink = "Canonical public tenkzlattice environments; no raw TikZ."
 boundary = "The one-site and 2x2 sheets expose matching outer virtual and physical boundaries."
-source = "author source ImagesReview Section II/ImagesReview Section II.tex lines 742-800; archival output figrenorm2D.pdf"
+source = "author source ImagesReview Section II/ImagesReview Section II.tex lines 801-831; archival output figrenorm2D.pdf"
 capabilities = ["lattice", "typed-ports"]
 paper_context_only = false
 author_source = "ImagesReview Section II/ImagesReview Section II.tex"
-author_lines = "742-800"
-extraction_override = "shared composite block; per-panel split pending"
+author_lines = "801-831"
+extraction_override = "shared archival sheet; fine-graining is panel (b) of the historical composite"
 placements = []
 fixture = "tests/tenkz/t2_renorm13.tex"
 
@@ -1756,6 +1749,7 @@ capabilities = ["grid", "lattice", "typed-ports"]
 paper_context_only = false
 author_source = "ImagesReview Section II/ImagesReview Section II.tex"
 author_lines = "801-831"
+extraction_override = "shared archival sheet; fine-graining is panel (b) of the historical composite"
 placements = []
 
 [[target]]
@@ -1852,7 +1846,7 @@ capabilities = ["free-graph", "rotated-action", "ring-closure"]
 paper_context_only = false
 author_source = "ImagesReview Section III/ImagesReview Section III.tex"
 author_lines = "170-197"
-extraction_override = "shared composite block; per-panel split pending"
+extraction_override = "shared archival drawing; the historical PDF reuses the complete Diagram3 equality"
 placements = []
 
 [[target]]
@@ -1869,7 +1863,7 @@ capabilities = ["lattice", "regions", "typed-ports"]
 paper_context_only = false
 author_source = "ImagesReview Section III/ImagesReview Section III.tex"
 author_lines = "170-197"
-extraction_override = "shared composite block; per-panel split pending"
+extraction_override = "shared archival drawing; the historical PDF reuses the complete Diagram3 equality"
 placements = []
 
 [[target]]
@@ -2011,11 +2005,11 @@ case = "tests/tenkz/rmp/section-iii-a/cases/rmp-workbench-iii-ghz-up.tex"
 formula = "The upward GHZ copy tensor identifies its four binary indices."
 ink = "Canonical public tenkz four-leg atom with upward copy orientation."
 boundary = "Two virtual and two physical copy indices remain open."
-source = "author source ImagesReview Section III/ImagesReview Section III.tex lines 357-362; archival output ghzup.pdf"
+source = "author source ImagesReview Section III/ImagesReview Section III.tex lines 357-358; archival output ghzup.pdf"
 capabilities = ["grid", "four-leg-atom", "typed-ports"]
 paper_context_only = false
 author_source = "ImagesReview Section III/ImagesReview Section III.tex"
-author_lines = "357-362"
+author_lines = "357-358"
 placements = []
 
 [[target]]
@@ -2027,11 +2021,11 @@ case = "tests/tenkz/rmp/section-iii-a/cases/rmp-workbench-iii-g-injective-pull.t
 formula = "A virtual g-string pulls through a G-injective PEPS tensor."
 ink = "Canonical public tenkzfree PEPS star with opposite g-string corners."
 boundary = "Five PEPS legs and two g-string ends remain open on each side."
-source = "author source ImagesReview Section III/ImagesReview Section III.tex lines 414-447; archival output Ginjpullt.pdf"
+source = "author source ImagesReview Section III/ImagesReview Section III.tex lines 414-444; archival output Ginjpullt.pdf"
 capabilities = ["free-graph", "pulling-through", "open-string"]
 paper_context_only = false
 author_source = "ImagesReview Section III/ImagesReview Section III.tex"
-author_lines = "414-447"
+author_lines = "414-444"
 placements = []
 fixture = "tests/tenkz/t2_eq50_pull.tex"
 
