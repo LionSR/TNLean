@@ -57,6 +57,8 @@
 \msg_new:nnn {tenkz}{kernel-cellset}
   { [TKZ-LANG-CELLSET]~#1=#2~is~not~a~cell-set~of~
     (interface,column)~terms~(record~#3). }
+\msg_new:nnn {tenkz}{kernel-sugar-value}
+  { [TKZ-LANG-SUGAR]~#1=#2~is~malformed;~expected~#3~(record~#4). }
 
 % ---------- kernel state -----------------------------------------------------
 
@@ -551,7 +553,8 @@
 \cs_new_protected:Npn \__tenkz_kernel_desugar_lattice:n #1
   {
     \__tenkz_kernel_sugar:n {lattice}
-    \regex_extract_once:nnNT { \A \s* (\d+) \s* x \s* (\d+) \s* \Z } {#1}
+    \regex_extract_once:nnNTF
+      { \A \s* ([1-9]\d*) \s* x \s* ([1-9]\d*) \s* \Z } {#1}
       \l__tenkz_kernel_match_seq
       {
         \tl_clear:N \l_tmpa_tl
@@ -566,21 +569,36 @@
             cols = { \seq_item:Nn \l__tenkz_kernel_match_seq {3} }
           }
       }
+      {
+        \msg_error:nneeee {tenkz}{kernel-sugar-value}
+          {lattice} {#1} {positive~rows x positive~columns} {picture}
+      }
   }
 \cs_new_protected:Npn \__tenkz_kernel_desugar_ring:n #1
   {
     \__tenkz_kernel_sugar:n {ring}
-    \keys_set:nn {tenkz-kernel-picture}
-      { rows = {wire}, frame = circle, west = trace, east = trace }
-    \keys_set:ne {tenkz-kernel-picture} { cols = {#1} }
+    \regex_match:nnTF { \A \s* [1-9]\d* \s* \Z } {#1}
+      {
+        \keys_set:nn {tenkz-kernel-picture}
+          { rows = {wire}, frame = circle, west = trace, east = trace }
+        \keys_set:ne {tenkz-kernel-picture} { cols = {#1} }
+      }
+      {
+        \msg_error:nneeee {tenkz}{kernel-sugar-value}
+          {ring} {#1} {a~positive~column~count} {picture}
+      }
   }
 \cs_new_protected:Npn \__tenkz_kernel_desugar_surface:n #1
   {
     \__tenkz_kernel_sugar:n {surface}
-    \str_if_eq:nnT {#1} {torus}
+    \str_if_eq:nnTF {#1} {torus}
       {
         \keys_set:nn {tenkz-kernel-picture}
           { west = trace, east = trace, north = trace, south = trace }
+      }
+      {
+        \msg_error:nneeee {tenkz}{kernel-sugar-value}
+          {surface} {#1} {torus} {picture}
       }
   }
 
@@ -590,11 +608,18 @@
 \cs_new_protected:Npn \__tenkz_kernel_desugar_cluster:n #1
   {
     \__tenkz_kernel_sugar:n {cluster}
-    \__tenkz_kernel_stage_put:nn {cluster} {#1}
+    \regex_match:nnTF
+      { \A \s* [1-9]\d* \s* x \s* [1-9]\d* \s* \Z } {#1}
+      { \__tenkz_kernel_stage_put:nn {cluster} {#1} }
+      {
+        \msg_error:nneeee {tenkz}{kernel-sugar-value}
+          {cluster} {#1} {positive~rows x positive~columns} {atom}
+      }
   }
 \cs_new_protected:Npn \__tenkz_kernel_cluster_expand:nn #1#2
   {
-    \regex_extract_once:nnNT { \A \s* (\d+) \s* x \s* (\d+) \s* \Z } {#2}
+    \regex_extract_once:nnNTF
+      { \A \s* ([1-9]\d*) \s* x \s* ([1-9]\d*) \s* \Z } {#2}
       \l__tenkz_kernel_match_seq
       {
         \int_gincr:N \g__tenkz_kernel_group_int
@@ -617,6 +642,10 @@
                   { #1 - ##1 - ####1 } { \tl_use:N \l__tenkz_model_last_tl }
               }
           }
+      }
+      {
+        \msg_error:nneeee {tenkz}{kernel-sugar-value}
+          {cluster} {#2} {positive~rows x positive~columns} {#1}
       }
   }
 
@@ -1087,6 +1116,24 @@
 
 % bonds=grid is topology, not rendering shorthand.  It materializes one
 % addressable WIRE record for every horizontal and vertical adjacent pair.
+\tl_new:N \l__tenkz_kernel_cell_atom_tl
+\tl_new:N \l__tenkz_kernel_cell_void_tl
+\prg_new_conditional:Npnn \__tenkz_kernel_cell_sealed:nn #1#2 { p, T, F, TF }
+  {
+    \prop_get:NeN \l__tenkz_kernel_cell_prop {#1-#2}
+      \l__tenkz_kernel_cell_atom_tl
+    \quark_if_no_value:NTF \l__tenkz_kernel_cell_atom_tl
+      { \prg_return_false: }
+      {
+        \__tenkz_model_get:nnN
+          { \tl_use:N \l__tenkz_kernel_cell_atom_tl }
+          {void}
+          \l__tenkz_kernel_cell_void_tl
+        \str_if_eq:VnTF \l__tenkz_kernel_cell_void_tl {sealed}
+          { \prg_return_true: }
+          { \prg_return_false: }
+      }
+  }
 \cs_new_protected:Npn \__tenkz_kernel_grid_wire:nnnn #1#2#3#4
   {
     \__tenkz_model_record_wire:e
@@ -1111,8 +1158,17 @@
           {
             \int_step_inline:nn { \__tenkz_kernel_cols: - 1 }
               {
-                \__tenkz_kernel_grid_wire:nnnn
-                  {##1}{####1}{##1}{\int_eval:n {####1 + 1}}
+                \bool_set_false:N \l_tmpa_bool
+                \__tenkz_kernel_cell_sealed:nnT {##1}{####1}
+                  { \bool_set_true:N \l_tmpa_bool }
+                \__tenkz_kernel_cell_sealed:nnT
+                  {##1}{\int_eval:n {####1 + 1}}
+                  { \bool_set_true:N \l_tmpa_bool }
+                \bool_if:NF \l_tmpa_bool
+                  {
+                    \__tenkz_kernel_grid_wire:nnnn
+                      {##1}{####1}{##1}{\int_eval:n {####1 + 1}}
+                  }
               }
           }
         \int_step_inline:nn { \__tenkz_kernel_rows: - 1 }
@@ -1125,6 +1181,11 @@
                   { \bool_set_true:N \l_tmpa_bool }
                 \prop_if_in:NeT \l__tenkz_kernel_open_cell_prop
                   {##1-####1}
+                  { \bool_set_true:N \l_tmpa_bool }
+                \__tenkz_kernel_cell_sealed:nnT {##1}{####1}
+                  { \bool_set_true:N \l_tmpa_bool }
+                \__tenkz_kernel_cell_sealed:nnT
+                  {\int_eval:n {##1 + 1}}{####1}
                   { \bool_set_true:N \l_tmpa_bool }
                 \bool_if:NF \l_tmpa_bool
                   {
@@ -1394,16 +1455,24 @@
               { \seq_item:Nn \g__tenkz_kernel_panel_gseq {##1} }
             \tl_set:Ne \l_tmpb_tl
               { \seq_item:Nn \g__tenkz_kernel_panel_gseq { ##1 + 1 } }
-            \str_if_eq:eeF { \tl_use:N \l_tmpa_tl } { \tl_use:N \l_tmpb_tl }
+            \str_if_eq:eeTF { \tl_use:N \l_tmpa_tl } { \tl_use:N \l_tmpb_tl }
               {
+                \__tenkz_kernel_event:n
+                  {
+                    check|relation=##1|result=equal
+                    |signature=\tl_use:N \l_tmpa_tl
+                  }
+              }
+              {
+                \__tenkz_kernel_event:n
+                  {
+                    check|relation=##1|result=mismatch
+                    |left=\tl_use:N \l_tmpa_tl
+                    |right=\tl_use:N \l_tmpb_tl
+                  }
                 \msg_error:nneeee {tenkz}{kernel-signature}
                   {##1} { \int_eval:n { ##1 + 1 } }
                   { \tl_use:N \l_tmpa_tl } { \tl_use:N \l_tmpb_tl }
-              }
-            \__tenkz_kernel_event:n
-              {
-                check|relation=##1|result=equal
-                |signature=\tl_use:N \l_tmpa_tl
               }
             }
           }
@@ -1420,9 +1489,12 @@
 % declared: two brace groups follow or none do.
 \NewDocumentCommand \tnwire { O{} }
   {
-    \peek_catcode:NTF \c_group_begin_token
-      { \__tenkz_kernel_tnwire:nnn {#1} }
-      { \__tenkz_kernel_tnwire:nnn {#1} { } { } }
+    \peek_remove_spaces:n
+      {
+        \peek_catcode:NTF \c_group_begin_token
+          { \__tenkz_kernel_tnwire:nnn {#1} }
+          { \__tenkz_kernel_tnwire:nnn {#1} { } { } }
+      }
   }
 \NewDocumentCommand \tnmark { O{} m m }
   { \__tenkz_kernel_tnmark:nnn {#1} {#2} {#3} }

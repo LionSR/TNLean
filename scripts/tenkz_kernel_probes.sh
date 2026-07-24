@@ -90,6 +90,14 @@ physical_trace_count=$(
   echo "FAIL: trace=physical did not materialize one closure per column" >&2
   exit 1
 }
+grep -Fq '|from=' "$WORK/r_spaced_wire.tnlog" || {
+  echo "FAIL: whitespace before positional wire ends changed wire arity" >&2
+  exit 1
+}
+if grep -Fq '|origin=grid|' "$WORK/r_sealed_void.tnlog"; then
+  echo "FAIL: a sealed void retained an incident generated grid bond" >&2
+  exit 1
+fi
 replaced_bond_count=$(
   grep -c '|name=bond-1-2-2-2|origin=grid|' "$WORK/r_cell_policy.tnlog"
 )
@@ -111,7 +119,48 @@ grep -Fq '[TKZ-LANG-ADDRESS]' "$WORK/n_diagonal_port.transcript" || {
   tail -20 "$WORK/n_diagonal_port.transcript" >&2
   exit 1
 }
-echo "PASS: eight review regressions hold"
+
+signature_negative="$KERNEL/negative/n_signature_mismatch.tex"
+if ( cd "$WORK" &&
+     TEXINPUTS="$REPO/tex/tenkz//:" \
+       timeout 120 xelatex -interaction=nonstopmode -halt-on-error \
+       "$signature_negative" >"$WORK/n_signature_mismatch.transcript" 2>&1 ); then
+  echo "FAIL: unequal panel signatures were accepted" >&2
+  exit 1
+fi
+grep -Fq '[TKZ-EQ-SIGNATURE]' "$WORK/n_signature_mismatch.transcript" || {
+  echo "FAIL: signature mismatch lacked TKZ-EQ-SIGNATURE" >&2
+  exit 1
+}
+grep -Fq 'result=mismatch' "$WORK/n_signature_mismatch.tnlog" || {
+  echo "FAIL: signature mismatch was not recorded before the hard error" >&2
+  exit 1
+}
+if grep -Fq 'result=equal' "$WORK/n_signature_mismatch.tnlog"; then
+  echo "FAIL: signature mismatch emitted a false equal verdict" >&2
+  exit 1
+fi
+
+for sugar_negative in \
+  n_malformed_sugar \
+  n_malformed_surface \
+  n_malformed_cluster \
+  n_malformed_ring
+do
+  source="$KERNEL/negative/$sugar_negative.tex"
+  if ( cd "$WORK" &&
+       TEXINPUTS="$REPO/tex/tenkz//:" \
+         timeout 120 xelatex -interaction=nonstopmode -halt-on-error \
+         "$source" >"$WORK/$sugar_negative.transcript" 2>&1 ); then
+    echo "FAIL: malformed sugar in $sugar_negative was accepted" >&2
+    exit 1
+  fi
+  grep -Fq '[TKZ-LANG-SUGAR]' "$WORK/$sugar_negative.transcript" || {
+    echo "FAIL: $sugar_negative lacked TKZ-LANG-SUGAR" >&2
+    exit 1
+  }
+done
+echo "PASS: thirteen review regressions hold"
 
 fail=0
 for pair in s1 s2 s3 s4 s5 s6 s7 s8; do

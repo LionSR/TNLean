@@ -62,6 +62,7 @@ _PARSER_FAMILY_SCOPE = {
     "kernel-mark": "kernel-mark",
     "kernel-setup": "kernel-setup",
     "kernel-declare": "kernel-declare",
+    "kernel-declare-atom": "atom-declaration",
 }
 _SETUP_FORWARDS = {
     "grid": {"pitch", "compact", "inline", "tensor style", "species"},
@@ -275,11 +276,15 @@ def _parser_leaf_keys_from_texts(texts: Iterable[str]) -> set[tuple[str, str]]:
     return leaves
 
 
+# Extension-gate: #4687; Census-correction: #4753 includes hyphenated
+# kernel families in the parser-path census.
 _KERNEL_HELPER = re.compile(
     r"\\__tenkz_kernel_(?:value:nnn|choice:nnnn|flag:nnn)\s*"
-    r"\{\s*tenkz-kernel-([a-z]+)\s*\}\s*\{\s*([^}]+?)\s*\}"
+    r"\{\s*tenkz-kernel-([a-z]+(?:-[a-z]+)*)\s*\}\s*\{\s*([^}]+?)\s*\}"
 )
-_KERNEL_BLOCK = re.compile(r"\\keys_define:nn\s*\{\s*tenkz-kernel-([a-z]+)\s*\}")
+_KERNEL_BLOCK = re.compile(
+    r"\\keys_define:nn\s*\{\s*tenkz-kernel-([a-z]+(?:-[a-z]+)*)\s*\}"
+)
 _KERNEL_LINE = re.compile(
     r"^\s*([a-z][a-z ~-]*?)\s*\.(?:code:n|meta:n|choices:nn)\s*="
 )

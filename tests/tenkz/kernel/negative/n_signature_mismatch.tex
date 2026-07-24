@@ -1,0 +1,16 @@
+% Negative regression: an unequal panel boundary records mismatch, never equal.
+\documentclass{standalone}
+\usepackage{tenkz}
+\makeatletter
+\ExplSyntaxOn
+\file_input:n { tenkz-kernel.code.tex }
+\ExplSyntaxOff
+\makeatother
+\begin{document}
+\tenkzkernel
+\begin{tenkzeq}[check={signature}]
+  \begin{tenkz}[rows={ket}, cols=1, bonds=none, physical=up]\end{tenkz}
+  =
+  \begin{tenkz}[rows={ket}, cols=1, bonds=none, physical=down]\end{tenkz}
+\end{tenkzeq}
+\end{document}
