@@ -19,16 +19,40 @@
     \label{thm:cp_implies_two_positive}
     \lean{IsCPMap.is2PositiveMap}
     \leanok
-    \uses{def:cp_map}
+    \uses{def:cp_map, def:k_positive_map}
     Every completely positive map is two-positive.
 \end{theorem}
+
+\begin{proof}
+    \leanok
+    Let $E(X)=\sum_i K_iXK_i^\dagger$ be a Kraus representation. For every
+    $Y\geq0$ in $\MN{D}\otimes\MN{2}$,
+    \[
+        (E\otimes\id_2)(Y)
+        =\sum_i (K_i\otimes\Id_2)Y(K_i\otimes\Id_2)^\dagger\geq0,
+    \]
+    because each summand is positive semidefinite. Thus
+    $E\otimes\id_2$ is positive, so $E$ is two-positive.
+\end{proof}
 
 \begin{theorem}[Two-positive implies positive]
     \label{thm:two_positive_implies_positive}
     \lean{Is2PositiveMap.isPositiveMap}
     \leanok
+    \uses{def:positive_map, def:k_positive_map}
     Every two-positive map is positive.
 \end{theorem}
+
+\begin{proof}
+    \leanok
+    If $X\geq0$, then $X\otimes E_{11}\geq0$ in
+    $\MN{D}\otimes\MN{2}$. Two-positivity gives
+    \[
+        (E\otimes\id_2)(X\otimes E_{11})=E(X)\otimes E_{11}\geq0.
+    \]
+    Its $(1,1)$ corner is $E(X)$, hence $E(X)\geq0$. Therefore $E$ is
+    positive.
+\end{proof}
 
 \begin{definition}[Unital linear map]
     \lean{KadisonSchwarz.IsUnitalMap}
@@ -60,7 +84,7 @@
     block matrices by
     \begin{align}
         E^{(k)}(X)_{(i,p),(j,q)}
-        &=E((X_{(a,p),(b,q)})_{a,b})_{i,j}.
+         & =E((X_{(a,p),(b,q)})_{a,b})_{i,j}.
         \label{eq:schwarz_blockwise_ampliation}
     \end{align}
 \end{definition}
@@ -176,7 +200,7 @@
     \begin{align}
         \max_{\substack{\SR(\psi)\le n\\ \|\psi\|=1}}
         |\braket{\phi}{\psi}|^2
-        &=\|\rho\|_{(n)}.
+         & =\|\rho\|_{(n)}.
         \label{eq:schwarz_maximal_schmidt_overlap}
     \end{align}
     Because $\rho$ is positive semidefinite, this norm is the sum of its $n$
@@ -201,7 +225,7 @@
     for the Frobenius pairing gives
     \begin{align}
         |\tr(C^\dagger B)|^2
-        &=|\tr((PC)^\dagger B)|^2
+         & =|\tr((PC)^\dagger B)|^2
         \le \tr\!((PC)^\dagger(PC))\tr(B^\dagger B)
         =\tr(P\rho).
         \notag
@@ -216,14 +240,14 @@
     largest eigenvalues, so $\tr(P_n\rho)=\|\rho\|_{(n)}$, and set
     \begin{align}
         B
-        &=\|\rho\|_{(n)}^{-1/2}P_nC.
+         & =\|\rho\|_{(n)}^{-1/2}P_nC.
         \label{eq:schwarz_schmidt_overlap_witness}
     \end{align}
     Then $\rank(B)\le\rank(P_n)=n$ and
     $\tr(B^\dagger B)=\|\rho\|_{(n)}^{-1}\tr(P_n\rho)=1$, while
     \begin{align}
         |\tr(C^\dagger B)|^2
-        &=\|\rho\|_{(n)}^{-1}|\tr(P_n\rho)|^2
+         & =\|\rho\|_{(n)}^{-1}|\tr(P_n\rho)|^2
         =\|\rho\|_{(n)}.
         \notag
     \end{align}
@@ -243,7 +267,7 @@
     $\rho$:
     \begin{align}
         \max_{\|\psi\|=1}|\braket{\phi}{\psi}|^2
-        &=\|\rho\|_{(D)}.
+         & =\|\rho\|_{(D)}.
         \label{eq:schwarz_maximal_overlap_top}
     \end{align}
     The maximum is attained at $\psi=\phi$. The Ky-Fan $D$-norm sums all
@@ -310,7 +334,7 @@
     eigenvectors $\phi_i$, the expectation in a vector $\psi$ expands as
     \begin{align}
         \bra{\psi}\tau\ket{\psi}
-        &=\sum_i\nu_i|\braket{\phi_i}{\psi}|^2.
+         & =\sum_i\nu_i|\braket{\phi_i}{\psi}|^2.
         \label{eq:schwarz_eigenbasis_rayleigh}
     \end{align}
 \end{lemma}
@@ -331,7 +355,7 @@
     eigenvector overlaps recover the squared norm of $\psi$:
     \begin{align}
         \sum_i|\braket{\phi_i}{\psi}|^2
-        &=\|\psi\|^2.
+         & =\|\psi\|^2.
         \label{eq:schwarz_eigenbasis_parseval}
     \end{align}
 \end{lemma}
@@ -360,7 +384,7 @@
     \begin{align}
         \nu_0+\sum_{i:\nu_i\le0}
         (\nu_i-\nu_0)\|\rho_i\|_{(n)}
-        &\le\bra{\psi}\tau\ket{\psi}.
+         & \le\bra{\psi}\tau\ket{\psi}.
         \label{eq:schwarz_spectral_schmidt_lower}
     \end{align}
     Hence the same bound holds for the infimum over such vectors. This is the
@@ -375,13 +399,13 @@
         thm:maximal_overlap_schmidt_rank}
     By (\ref{eq:schwarz_eigenbasis_rayleigh}),
     $\bra{\psi}\tau\ket{\psi}
-    =\sum_i\nu_i|\braket{\phi_i}{\psi}|^2$, while
+        =\sum_i\nu_i|\braket{\phi_i}{\psi}|^2$, while
     (\ref{eq:schwarz_eigenbasis_parseval}) gives
     $\sum_i|\braket{\phi_i}{\psi}|^2=\|\psi\|^2=1$. Subtracting $\nu_0$
     times the latter from the former gives
     \begin{align}
         \bra{\psi}\tau\ket{\psi}
-        &=\nu_0+\sum_i(\nu_i-\nu_0)
+         & =\nu_0+\sum_i(\nu_i-\nu_0)
         |\braket{\phi_i}{\psi}|^2.
         \label{eq:schwarz_spectral_lower_expansion}
     \end{align}
@@ -405,7 +429,7 @@
     there is a normalized vector $\psi$ of Schmidt rank at most $n$ with
     \begin{align}
         \bra{\psi}\tau\ket{\psi}
-        &\le\nu+(\nu_j-\nu)\|\rho_j\|_{(n)}.
+         & \le\nu+(\nu_j-\nu)\|\rho_j\|_{(n)}.
         \label{eq:schwarz_spectral_schmidt_upper}
     \end{align}
     Hence the infimum over such vectors lies below that value. Taking $\nu$
@@ -425,13 +449,13 @@
     (\ref{eq:schwarz_spectral_lower_expansion}) gives
     \begin{align}
         \bra{\psi}\tau\ket{\psi}
-        &=\nu+\sum_i(\nu_i-\nu)|\braket{\phi_i}{\psi}|^2.
+         & =\nu+\sum_i(\nu_i-\nu)|\braket{\phi_i}{\psi}|^2.
         \notag
     \end{align}
     Every factor $\nu_i-\nu$ is nonpositive, so all terms are nonpositive and
     keeping only the $i=j$ term gives
     $\bra{\psi}\tau\ket{\psi}
-    \le\nu+(\nu_j-\nu)|\braket{\phi_j}{\psi}|^2$.
+        \le\nu+(\nu_j-\nu)|\braket{\phi_j}{\psi}|^2$.
     Theorem~\ref{thm:maximal_overlap_schmidt_rank} supplies a normalized
     $\psi$ of Schmidt rank at most $n$ attaining
     $|\braket{\phi_j}{\psi}|^2=\|\rho_j\|_{(n)}$; at that vector the
@@ -456,7 +480,7 @@
     $\bra{\psi}\tau\ket{\psi}=\nu_{\min}$. Together they give
     \begin{align}
         \inf_{\|\psi\|=1}\bra{\psi}\tau\ket{\psi}
-        &=\nu_{\min}.
+         & =\nu_{\min}.
         \label{eq:schwarz_spectral_schmidt_top}
     \end{align}
     There is no Schmidt-rank restriction. Together with
@@ -497,7 +521,7 @@
     $\sum_i\ketbra{\phi_i}{\phi_i}$, and
     \begin{align}
         E^{(k)}\!\left(\sum_i\ketbra{\phi_i}{\phi_i}\right)
-        &=\sum_iE^{(k)}(\ketbra{\phi_i}{\phi_i})\ge0.
+         & =\sum_iE^{(k)}(\ketbra{\phi_i}{\phi_i})\ge0.
         \notag
     \end{align}
     by linearity of $E^{(k)}$, the hypothesis, and closure of the positive
@@ -514,7 +538,7 @@
     compression in the blockwise ampliation index convention has entries
     \begin{align}
         C_{(i,p),(j,q)}
-        &=\sum_{a,b}X_{a,p}\tau_{(i,a),(j,b)}
+         & =\sum_{a,b}X_{a,p}\tau_{(i,a),(j,b)}
         \overline{X_{b,q}}.
         \label{eq:schwarz_right_choi_compression}
     \end{align}
@@ -529,7 +553,7 @@
     $\C^D\otimes\C^D$ to $\C^D\otimes\C^k$ with entries
     \begin{align}
         (R_X)_{(i,p),(j,a)}
-        &=\delta_{i,j}X_{a,p}.
+         & =\delta_{i,j}X_{a,p}.
         \label{eq:schwarz_right_tensor_factor}
     \end{align}
 \end{definition}
@@ -542,7 +566,7 @@
     If $\tau$ is the Choi matrix of $T$, then
     \begin{align}
         R_X\tau R_X^\dagger
-        &=C_T(X),
+         & =C_T(X),
         \label{eq:schwarz_right_tensor_sandwich}
     \end{align}
     where $C_T(X)$ is the right-factor Choi compression by $X$.
@@ -556,7 +580,7 @@
         \sum_{r,s,a,b}
         \delta_{i,r}X_{a,p}\tau_{(r,a),(s,b)}
         \delta_{j,s}\overline{X_{b,q}}
-        &=\sum_{a,b}X_{a,p}\tau_{(i,a),(j,b)}
+         & =\sum_{a,b}X_{a,p}\tau_{(i,a),(j,b)}
         \overline{X_{b,q}}.
         \notag
     \end{align}
@@ -571,7 +595,7 @@
     For $X\in\MN{D,k}(\C)$, the vector
     \begin{align}
         \psi_X
-        &=\left(D^{-1/2}X_{i,p}\right)_{(i,p)}
+         & =\left(D^{-1/2}X_{i,p}\right)_{(i,p)}
         \in\C^D\otimes\C^k
         \label{eq:schwarz_compressed_omega}
     \end{align}
@@ -612,9 +636,9 @@
     $X\in\MN{D}(\C)$ such that
     \begin{align}
         \psi_{(i,p)}
-        &=D^{-1/2}X_{i,p}, \notag\\
+         & =D^{-1/2}X_{i,p}, \notag \\
         \rank X
-        &=\SR(\psi).
+         & =\SR(\psi).
         \label{eq:schwarz_square_schmidt_representative}
     \end{align}
     In particular, if $\SR(\psi)\le r$, then $X$ may be chosen with
@@ -696,7 +720,7 @@
     For $X\in\MN{D,k}(\C)$ and $\eta\in\C^D\otimes\C^k$,
     \begin{align}
         \langle\eta,C_T(X)\eta\rangle
-        &=\langle R_X^\dagger\eta,\tau_T R_X^\dagger\eta\rangle.
+         & =\langle R_X^\dagger\eta,\tau_T R_X^\dagger\eta\rangle.
         \label{eq:schwarz_right_compression_quadratic}
     \end{align}
 \end{theorem}
@@ -706,7 +730,7 @@
     Substituting (\ref{eq:schwarz_right_tensor_sandwich}) gives
     \begin{align}
         \langle\eta,R_X\tau_T R_X^\dagger\eta\rangle
-        &=\langle R_X^\dagger\eta,\tau_T R_X^\dagger\eta\rangle.
+         & =\langle R_X^\dagger\eta,\tau_T R_X^\dagger\eta\rangle.
         \notag
     \end{align}
 \end{proof}
@@ -802,16 +826,16 @@
     block of $\ketbra{\psi}{\psi}$ is
     \begin{align}
         (\ketbra{\psi}{\psi})_{(\cdot,p),(\cdot,q)}
-        &=D^{-1}\sum_{a,b}X_{a,p}\overline{X_{b,q}}E_{a,b}.
+         & =D^{-1}\sum_{a,b}X_{a,p}\overline{X_{b,q}}E_{a,b}.
         \notag
     \end{align}
     Hence
     \begin{align}
         T\!\left(D^{-1}\sum_{a,b}
-        X_{a,p}\overline{X_{b,q}}E_{a,b}\right)_{i,j}
-        &=D^{-1}\sum_{a,b}X_{a,p}\overline{X_{b,q}}
-        (T(E_{a,b}))_{i,j} \notag\\
-        &=\sum_{a,b}X_{a,p}\tau_{(i,a),(j,b)}
+           X_{a,p}\overline{X_{b,q}}E_{a,b}\right)_{i,j}
+         & =D^{-1}\sum_{a,b}X_{a,p}\overline{X_{b,q}}
+                                   (T(E_{a,b}))_{i,j} \notag \\
+         & =\sum_{a,b}X_{a,p}\tau_{(i,a),(j,b)}
         \overline{X_{b,q}}.
         \notag
     \end{align}
@@ -838,7 +862,7 @@
     Lemma~\ref{lem:rank_one_ampliation_choi_compression} in the form
     \begin{align}
         (T\otimes\id_k)(\ketbra{\psi_X}{\psi_X})
-        &=C_T(X).
+         & =C_T(X).
         \label{eq:schwarz_ampliation_compression}
     \end{align}
     Conversely, given a vector $\psi$ on the ampliated space, take
@@ -862,7 +886,7 @@
     $X\in\MN{D,k}(\C)$,
     \begin{align}
         R_X\tau R_X^\dagger
-        &\ge0,
+         & \ge0,
         \label{eq:schwarz_k_positive_choi_sandwich}
     \end{align}
     where $\tau$ is the Choi matrix of $T$.
@@ -909,7 +933,7 @@
     $R_XR_P=R_X$. Therefore
     \begin{align}
         R_X\tau R_X^\dagger
-        &=R_X(R_P\tau R_P^\dagger)R_X^\dagger,
+         & =R_X(R_P\tau R_P^\dagger)R_X^\dagger,
         \label{eq:schwarz_fixed_rectangular_compression}
     \end{align}
     which is positive because positive semidefiniteness is preserved under
