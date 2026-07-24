@@ -1,4 +1,4 @@
-% Regression: a chain-positioned wide atom claims its full cell span.
+% Negative regression: two records may not claim the same frame cell.
 \documentclass{standalone}
 \usepackage{tenkz}
 \makeatletter
@@ -8,10 +8,8 @@
 \makeatother
 \begin{document}
 \tenkzkernel
-\begin{tenkz}[rows={ket}, cols=3, bonds=grid]
-  \tn[wide=2, name=W]{W}
-  &
-  \tn[name=N]{N}
+\begin{tenkz}[rows={wire}, cols=2, bonds=none]
+  \tn[at=(1,1), wide=2, name=W]{W}
+  \tn[at=(1,2), name=N]{N}
 \end{tenkz}
-\mbox{parsed}
 \end{document}

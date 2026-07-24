@@ -78,6 +78,11 @@ grep -Fq '|name=bond-1-2-1-3|origin=grid|' \
   echo "FAIL: a wide atom lost its external horizontal grid bond" >&2
   exit 1
 }
+grep -Fq '|addr=(1,3)|kind=tn|label=N|name=N' \
+  "$WORK/r_wide_chain.tnlog" || {
+  echo "FAIL: chain placement after a wide atom reused its claimed span" >&2
+  exit 1
+}
 if grep -Fq '|name=bond-1-1-2-1|origin=grid|' \
     "$WORK/r_tall_grid.tnlog"; then
   echo "FAIL: a multi-wire atom received an internal vertical grid bond" >&2
@@ -311,8 +316,21 @@ do
     exit 1
   }
 done
-grep -Fq '(node ' "$WORK/n_noncell_leg.transcript" || {
+grep -Eq '\(node addr-[0-9]+\)' "$WORK/n_noncell_leg.transcript" || {
   echo "FAIL: the non-cell leg rejection dropped its node context" >&2
+  exit 1
+}
+
+occupied_negative="$KERNEL/negative/n_occupied_span.tex"
+if ( cd "$WORK" &&
+     TEXINPUTS="$REPO/tex/tenkz//:" \
+       timeout 120 xelatex -interaction=nonstopmode -halt-on-error \
+       "$occupied_negative" >"$WORK/n_occupied_span.transcript" 2>&1 ); then
+  echo "FAIL: overlapping atom spans were accepted" >&2
+  exit 1
+fi
+grep -Fq '[TKZ-LANG-OCCUPANCY]' "$WORK/n_occupied_span.transcript" || {
+  echo "FAIL: overlapping atom spans lacked TKZ-LANG-OCCUPANCY" >&2
   exit 1
 }
 
@@ -410,7 +428,7 @@ grep -Fq 'check|relation=3|result=off|reason=third' \
   echo "FAIL: the later equation opt-out was silently dropped" >&2
   exit 1
 }
-echo "PASS: thirty-six review regressions hold"
+echo "PASS: thirty-eight review regressions hold"
 
 fail=0
 for pair in s1 s2 s3 s4 s5 s6 s7 s8; do

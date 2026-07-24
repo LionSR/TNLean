@@ -63,6 +63,9 @@
 \msg_new:nnn {tenkz}{kernel-cellset}
   { [TKZ-LANG-CELLSET]~#1=#2~is~not~a~cell-set~of~
     (interface,column)~terms~(record~#3). }
+\msg_new:nnn {tenkz}{kernel-cell-occupied}
+  { [TKZ-LANG-OCCUPANCY]~cell~(#1,#2)~belongs~to~record~#3;~
+    record~#4~cannot~claim~it. }
 \msg_new:nnn {tenkz}{kernel-sugar-value}
   { [TKZ-LANG-SUGAR]~#1=#2~is~malformed;~expected~#3~(record~#4). }
 \msg_new:nnn {tenkz}{kernel-cluster-name}
@@ -87,12 +90,15 @@
 \bool_new:N \l__tenkz_kernel_strict_bool
 \bool_new:N \l__tenkz_kernel_ineq_bool        % inside tenkzeq
 \bool_new:N \l__tenkz_kernel_check_bundles_bool
+\bool_new:N \l__tenkz_kernel_claim_collision_bool
 \clist_new:N \l__tenkz_kernel_check_off_clist % relations opted out of check=
 \tl_new:N   \l__tenkz_kernel_scratch_tl
 \tl_new:N   \l__tenkz_kernel_sig_tl
 \tl_new:N   \l__tenkz_kernel_slot_tl
 \tl_new:N   \l__tenkz_kernel_child_tl
+\tl_new:N   \l__tenkz_kernel_parent_tl
 \tl_new:N   \l__tenkz_kernel_bundle_item_tl
+\tl_new:N   \l__tenkz_kernel_claim_owner_tl
 \seq_new:N  \l__tenkz_kernel_stack_seq        % operand stack (see shelf notes)
 \seq_new:N  \l__tenkz_kernel_bundle_seq
 \seq_new:N  \l__tenkz_kernel_bundle_match_seq
@@ -303,17 +309,22 @@
     \__tenkz_kernel_addr_operand:VN \l__tenkz_kernel_scratch_tl
       \l__tenkz_kernel_scratch_tl
     \tl_set:NV \l__tenkz_kernel_child_tl \l__tenkz_kernel_scratch_tl
-    \seq_pop:NN \l__tenkz_kernel_stack_seq #2
+    \seq_pop:NN \l__tenkz_kernel_stack_seq \l__tenkz_kernel_parent_tl
     \prop_get:NeN \l__tenkz_kernel_node_prop
       { \l__tenkz_kernel_child_tl / kind } \l_tmpa_tl
-    \str_if_eq:VnF \l_tmpa_tl {cell}
+    \str_if_eq:VnTF \l_tmpa_tl {cell}
+      {
+        \__tenkz_kernel_node_put:NnV
+          \l__tenkz_kernel_parent_tl {cell} \l__tenkz_kernel_child_tl
+      }
       {
         \msg_error:nneeee {tenkz}{kernel-address-operand}
           { \__tenkz_kernel_node_item:Nn \l__tenkz_kernel_child_tl {text} }
           {#1} { a~cell }
+          { \tl_use:N \l__tenkz_kernel_parent_tl }
         \msg_line_context:
       }
-    \__tenkz_kernel_node_put:NnV #2 {cell} \l__tenkz_kernel_child_tl
+    \tl_set:NV #2 \l__tenkz_kernel_parent_tl
   }
 
 \cs_new_protected:Npn \__tenkz_kernel_addr_port:nN #1#2
@@ -991,6 +1002,8 @@
           { \l__tenkz_kernel_row_int }
           { \l__tenkz_kernel_col_int }
           \l__tenkz_model_last_tl
+        \int_add:Nn \l__tenkz_kernel_col_int
+          { \l__tenkz_kernel_claim_cols_int - 1 }
       }
       {
         \prop_remove:Nn \l__tenkz_kernel_stage_prop {at}
@@ -1043,11 +1056,12 @@
     \prop_get:NnN \l__tenkz_kernel_stage_prop {wide} \l_tmpa_tl
     \quark_if_no_value:NF \l_tmpa_tl
       { \int_set:Nn \l__tenkz_kernel_claim_cols_int {\l_tmpa_tl} }
+    \bool_set_false:N \l__tenkz_kernel_claim_collision_bool
     \int_step_inline:nn { \l__tenkz_kernel_claim_rows_int }
       {
         \int_step_inline:nn { \l__tenkz_kernel_claim_cols_int }
           {
-            \prop_put:Nee \l__tenkz_kernel_cell_prop
+            \prop_get:NeN \l__tenkz_kernel_cell_prop
               {
                 \int_eval:n
                   { \l__tenkz_kernel_claim_row_int + ##1 - 1 }
@@ -1055,7 +1069,40 @@
                 \int_eval:n
                   { \l__tenkz_kernel_claim_col_int + ####1 - 1 }
               }
-              { \tl_use:N #3 }
+              \l__tenkz_kernel_claim_owner_tl
+            \quark_if_no_value:NF \l__tenkz_kernel_claim_owner_tl
+              {
+                \bool_set_true:N \l__tenkz_kernel_claim_collision_bool
+                \msg_error:nneeee {tenkz}{kernel-cell-occupied}
+                  {
+                    \int_eval:n
+                      { \l__tenkz_kernel_claim_row_int + ##1 - 1 }
+                  }
+                  {
+                    \int_eval:n
+                      { \l__tenkz_kernel_claim_col_int + ####1 - 1 }
+                  }
+                  { \tl_use:N \l__tenkz_kernel_claim_owner_tl }
+                  { \tl_use:N #3 }
+              }
+          }
+      }
+    \bool_if:NF \l__tenkz_kernel_claim_collision_bool
+      {
+        \int_step_inline:nn { \l__tenkz_kernel_claim_rows_int }
+          {
+            \int_step_inline:nn { \l__tenkz_kernel_claim_cols_int }
+              {
+                \prop_put:Nee \l__tenkz_kernel_cell_prop
+                  {
+                    \int_eval:n
+                      { \l__tenkz_kernel_claim_row_int + ##1 - 1 }
+                    -
+                    \int_eval:n
+                      { \l__tenkz_kernel_claim_col_int + ####1 - 1 }
+                  }
+                  { \tl_use:N #3 }
+              }
           }
       }
   }
