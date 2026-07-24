@@ -850,14 +850,6 @@ namespace MPOTensor
 
 variable {d : ℕ} {r : ℕ} {dim : Fin r → ℕ} {μ : Fin r → ℂ}
 
-/-- Forgetting the structure fields of `HorizontalCFData` leaves the bare `HasBiCF`
-property on the block family. -/
-theorem HorizontalCFData.toHasBiCF
-    {A : (k : Fin r) → MPSTensor d (dim k)}
-    (hCF : HorizontalCFData (d := d) μ A) :
-    MPSTensor.HasBiCF A :=
-  hCF.biCF
-
 /-- A finite-length block-separation hypothesis yields `HorizontalCFData`. -/
 theorem horizontalCFData_of_wordTupleSpanTop
     (A : (k : Fin r) → MPSTensor d (dim k))

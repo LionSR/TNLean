@@ -161,41 +161,6 @@ theorem coe_finRotate_pow {N : ℕ} (p : ℕ) (i : Fin N) :
   | succ k ih =>
     rw [Function.iterate_succ_apply', coe_finRotate_mod, ih, Nat.mod_add_mod, Nat.add_assoc]
 
-/-- **Cyclic shift by `p` swaps the first `p` coordinates to the back.**
-For `x : Fin p → α` and `y : Fin q → α`, shifting `append x y` by `p` yields
-`append y x` (after the `Fin (p + q) ≃ Fin (q + p)` length cast). This is the
-configuration-level form of the periodic MPDO's translation invariance. -/
-theorem append_comp_finRotate_pow {α : Type*} {p q : ℕ}
-    (x : Fin p → α) (y : Fin q → α) :
-    (Fin.append x y) ∘ ((finRotate (p + q) : Fin (p + q) → Fin (p + q))^[p])
-      = (Fin.append y x) ∘ Fin.cast (Nat.add_comm p q) := by
-  funext i
-  simp only [Function.comp_apply]
-  rcases lt_or_ge i.val q with hiq | hiq
-  · have hm : (finRotate (p + q) : Fin (p + q) → Fin (p + q))^[p] i
-        = Fin.natAdd p ⟨i.val, hiq⟩ := by
-      apply Fin.ext
-      rw [coe_finRotate_pow, Nat.mod_eq_of_lt (by omega)]
-      simp only [Fin.natAdd_mk]; omega
-    have hc : Fin.cast (Nat.add_comm p q) i = Fin.castAdd p ⟨i.val, hiq⟩ := by
-      apply Fin.ext; simp
-    rw [hm, hc, Fin.append_right, Fin.append_left]
-  · have hm : (finRotate (p + q) : Fin (p + q) → Fin (p + q))^[p] i
-        = Fin.castAdd q ⟨i.val - q, by omega⟩ := by
-      apply Fin.ext
-      rw [coe_finRotate_pow, Nat.mod_eq_sub_mod (by omega), Nat.mod_eq_of_lt (by omega)]
-      simp only [Fin.castAdd_mk]; omega
-    have hc : Fin.cast (Nat.add_comm p q) i = Fin.natAdd q ⟨i.val - q, by omega⟩ := by
-      apply Fin.ext; simp only [Fin.val_cast, Fin.natAdd_mk]; omega
-    rw [hm, hc, Fin.append_left, Fin.append_right]
-
-/-- The length cast commutes with the `p`-fold cyclic shift. -/
-theorem cast_comp_finRotate_pow {N M : ℕ} (h : N = M) (p : ℕ) :
-    (Fin.cast h) ∘ ((finRotate N : Fin N → Fin N)^[p])
-      = ((finRotate M : Fin M → Fin M)^[p]) ∘ (Fin.cast h) := by
-  subst h
-  rfl
-
 /-- **Window-to-prefix configuration identity.** Placing the `m`-block `u` at the
 front (with `z, x` after) equals placing it in the middle (with `x` before and
 `z` after) composed with the `p`-fold cyclic shift, where `p = |x|`. This is the

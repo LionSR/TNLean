@@ -376,25 +376,6 @@ theorem ketLeftMul_bntSectorProjection_basis
     (bntSectorProjection_mul_physicalSlice_self hC hρ hη hR s β α) a) b
   simpa only [Matrix.mul_apply, physicalSlice] using h
 
-/-- The matching BNT projection fixes the bra index of its normal
-representative.
-
-Source: arXiv:1606.00608, Appendix C.2, lines 1733--1770. -/
-theorem braRightMul_bntSectorProjection_basis
-    {K : (s : Fin g) → MPOTensor d (dim s)}
-    {R : (s : Fin g) → Matrix (Fin (dim s)) (Fin (dim s)) ℂ}
-    {ρ : Matrix (Fin d × Fin d × Fin d) (Fin d × Fin d × Fin d) ℂ}
-    {C : Matrix (MPSTensor.BlockEntryIndex dim) (Fin d × Fin d) ℂ}
-    (hC : MPSTensor.IsMPOBlockLeftInverse K C)
-    (hρ : IsThreeSiteFamilyClosure K R ρ) (hη : EtaStructure ρ)
-    (hR : ∀ s : Fin g, R s ≠ 0) (s : Fin g) :
-    (K s).braRightMul (bntSectorProjection hC hρ hη hR s) = K s := by
-  ext a b β α
-  simp only [braRightMul, Matrix.sum_apply, Matrix.smul_apply, smul_eq_mul]
-  have h := congrFun (congrFun
-    (physicalSlice_mul_bntSectorProjection_self hC hρ hη hR s β α) a) b
-  simpa only [Matrix.mul_apply, physicalSlice, mul_comm] using h
-
 /-- The BNT-labelled physical projectors select the matching normal sector:
 the corner `P_s K_i P_t` vanishes if `s ≠ t` or `i ≠ s`.
 

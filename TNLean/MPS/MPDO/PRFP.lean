@@ -164,11 +164,6 @@ the two-map mixed-state RFP condition of Definition 4.1. -/
 def IsPRFPWithTracePreservingSpinReduction (M : MPOTensor d D) : Prop :=
   IsPRFP M
 
-/-- A purification RFP supplies the global purification-RFP witness. -/
-theorem IsPRFP.hasPurificationRFPWitness {M : MPOTensor d D}
-    (h : IsPRFP M) : HasPurificationRFPWitness M :=
-  h
-
 /-- A purification RFP with trace-preserving spin reduction carries the
 purification-RFP predicate. -/
 theorem IsPRFPWithTracePreservingSpinReduction.isPRFP {M : MPOTensor d D}
@@ -188,22 +183,5 @@ theorem IsPRFPWithTracePreservingSpinReduction.hasTracePreservingSpinReduction
   ∃ dK : ℕ, HasTracePreservingSpinReduction d dK := by
   rcases h with ⟨dK, _D', _A, _hglobal, _hRFP⟩
   exact ⟨dK, MPOTensor.hasTracePreservingSpinReduction d dK⟩
-
-/-- A purification-RFP witness contains a purifying tensor satisfying the global
-purification equation. -/
-theorem HasPurificationRFPWitness.hasGlobalPurificationEquation {M : MPOTensor d D}
-    (h : HasPurificationRFPWitness M) :
-    ∃ (dK D' : ℕ) (A : Fin d → Fin dK → Matrix (Fin D') (Fin D') ℂ),
-      HasGlobalPurificationEquation M A := by
-  rcases h with ⟨dK, D', A, hglobal, _hRFP⟩
-  exact ⟨dK, D', A, hglobal⟩
-
-/-- A purification-RFP witness contains a pure-state RFP purifying tensor. -/
-theorem HasPurificationRFPWitness.purifying_isTransferIdempotent {M : MPOTensor d D}
-    (h : HasPurificationRFPWitness M) :
-    ∃ (dK D' : ℕ) (A : Fin d → Fin dK → Matrix (Fin D') (Fin D') ℂ),
-      MPSTensor.IsTransferIdempotent (purificationTensor A) := by
-  rcases h with ⟨dK, D', A, _hglobal, hRFP⟩
-  exact ⟨dK, D', A, hRFP⟩
 
 end MPOTensor

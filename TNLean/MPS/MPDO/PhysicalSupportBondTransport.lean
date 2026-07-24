@@ -132,13 +132,6 @@ theorem liftedBond_supported (F : PhysicalSupportRestrictionData P K)
     sitewisePhysicalMatrix_isometry F.inclusion F.inclusion_isometry 2,
     Matrix.one_mul]
 
-/-- The physical support obtained from an SAL tensor has positive dimension.
-Thus no zero-dimensional restricted physical space occurs in the application
-of Proposition C.8. -/
-theorem supportDim_pos (F : PhysicalSupportRestrictionData P K)
-    (hSAL : IsSAL K) : 0 < F.supportDim :=
-  physicalDim_pos_of_isSAL _ (F.restricted_isSAL hSAL)
-
 /-- Proposition C.8 applied on the injective physical support supplies a
 positive two-site bond whose lift to the ambient physical space is supported
 on the prescribed two-site sector.
