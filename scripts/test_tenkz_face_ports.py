@@ -145,6 +145,44 @@ SOURCE = r"""
   }
 \bool_new:N \g__tenkzl_test_fallback_label_bool
 \bool_new:N \g__tenkzl_test_fallback_escape_called_bool
+\bool_new:N \g__tenkzl_test_closure_records_bool
+\int_new:N \g__tenkzl_test_expected_cups_int
+\int_new:N \g__tenkzl_test_expected_traces_int
+\int_new:N \g__tenkzl_test_actual_cups_int
+\int_new:N \g__tenkzl_test_actual_traces_int
+\cs_new_protected:Npn \tenkzClosureRecordProbe #1#2
+  {
+    \bool_gset_true:N \g__tenkzl_test_closure_records_bool
+    \int_gset:Nn \g__tenkzl_test_expected_cups_int {#1}
+    \int_gset:Nn \g__tenkzl_test_expected_traces_int {#2}
+  }
+\cs_new_protected:Npn \__tenkzl_test_count_cup:n #1
+  { \int_gincr:N \g__tenkzl_test_actual_cups_int }
+\cs_new_protected:Npn \__tenkzl_test_count_trace:n #1
+  { \int_gincr:N \g__tenkzl_test_actual_traces_int }
+\cs_new_eq:NN \__tenkzl_test_model_validate: \__tenkz_model_validate:
+\cs_set_protected:Npn \__tenkz_model_validate:
+  {
+    \bool_if:NT \g__tenkzl_test_closure_records_bool
+      {
+        \int_gzero:N \g__tenkzl_test_actual_cups_int
+        \int_gzero:N \g__tenkzl_test_actual_traces_int
+        \__tenkz_model_map_wires_origin:nN {cup}
+          \__tenkzl_test_count_cup:n
+        \__tenkz_model_map_wires_origin:nN {trace}
+          \__tenkzl_test_count_trace:n
+        \int_compare:nNnF
+          {\g__tenkzl_test_actual_cups_int} =
+          {\g__tenkzl_test_expected_cups_int}
+          { \tex_errmessage:D { lattice~cup~records~were~not~frozen } }
+        \int_compare:nNnF
+          {\g__tenkzl_test_actual_traces_int} =
+          {\g__tenkzl_test_expected_traces_int}
+          { \tex_errmessage:D { lattice~trace~records~were~not~frozen } }
+        \bool_gset_false:N \g__tenkzl_test_closure_records_bool
+      }
+    \__tenkzl_test_model_validate:
+  }
 \cs_new_protected:Npn \tenkzFallbackLabelProbe
   {
     \bool_gset_true:N \g__tenkzl_test_fallback_label_bool
@@ -814,6 +852,7 @@ SOURCE = r"""
 \begin{tenkzlattice}[
     rows=1, cols=1, sheets=1, boundary=none,
     col vector={8mm,8mm}, row vector={0mm,-8mm}, east=trace]
+  \tenkzClosureRecordProbe{0}{1}
   \tenkzFallbackLabelProbe
   \tnsite[label=$L_{\partial}^{\mathrm{east}}$]{(1,1,0)}
 \end{tenkzlattice}
@@ -823,6 +862,7 @@ SOURCE = r"""
     rows=1, cols=1, sheets={ket,bra}, boundary=none,
     outer legs=none, north={cup=$M_{\mathrm{boundary}}$},
     west=trace, east=trace]
+  \tenkzClosureRecordProbe{1}{2}
   \tenkzObstacleProbe{14}
 \end{tenkzlattice}
 % Region and distinguished-edge labels are live body obstacles too; both
@@ -873,6 +913,7 @@ SOURCE = r"""
 \begin{tenkzlattice}[
     rows=2, cols=2, sheets=1, boundary=none,
     west=trace, east=trace]
+  \tenkzClosureRecordProbe{0}{2}
   \tenkzRoutingBasisProbe
   \tnsite[removed]{(1,2,0)}
 \end{tenkzlattice}

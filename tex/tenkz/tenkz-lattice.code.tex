@@ -1457,6 +1457,8 @@
         sheets={\int_use:N \l__tenkzl_sheets_int} }
     \tenkzl_model_record_sites:
     \tenkzl_model_record_bonds:
+    \tenkzl_model_record_cups:
+    \tenkzl_model_record_traces:
     \tenkzl_model_record_edges:
     \tenkzl_model_record_regions:
     \__tenkz_model_validate:
@@ -1566,6 +1568,207 @@
         to={\tenkz_cs_cellkey:nnn {\int_eval:n {#3}}{\int_eval:n {#4}}
           {\int_eval:n {\l__tenkzl_model_bond_sheet_int}}},
         style={bond} }
+  }
+
+% Side cups and periodic traces are closure WIREs.  Their endpoint survival
+% and pairing state are frozen before validation; the later ink pass only
+% resolves the measured corridor around already-rendered labels.
+\cs_new_protected:Npn \tenkzl_model_record_cups:
+  {
+    \tenkzl_model_record_cups_side:n {west}
+    \tenkzl_model_record_cups_side:n {east}
+    \tenkzl_model_record_cups_side:n {north}
+    \tenkzl_model_record_cups_side:n {south}
+  }
+\cs_new_protected:Npn \tenkzl_model_record_cups_side:n #1
+  {
+    \tenkzl_side_policy:nN {#1} \l__tenkzl_tmp_tl
+    \str_if_eq:VnT \l__tenkzl_tmp_tl {cup}
+      {
+        \tenkzl_if_cup_stack:T
+          {
+            \tenkzl_side_cup_matrix:nN {#1} \l__tenkzl_tmp_tl
+            \str_case:nn {#1}
+              {
+                {west}
+                  { \int_step_inline:nn {\l__tenkzl_nrows_int}
+                      { \tenkzl_model_record_cup_at:nnn {west}{##1}{1} } }
+                {east}
+                  { \int_step_inline:nn {\l__tenkzl_nrows_int}
+                      { \tenkzl_model_record_cup_at:nnn {east}{##1}
+                          {\l__tenkzl_ncols_int} } }
+                {north}
+                  { \int_step_inline:nn {\l__tenkzl_ncols_int}
+                      { \tenkzl_model_record_cup_at:nnn {north}{1}{##1} } }
+                {south}
+                  { \int_step_inline:nn {\l__tenkzl_ncols_int}
+                      { \tenkzl_model_record_cup_at:nnn {south}
+                          {\l__tenkzl_nrows_int}{##1} } }
+              }
+          }
+      }
+  }
+\cs_new_protected:Npn \tenkzl_model_record_cup_at:nnn #1#2#3
+  {
+    \bool_set:Nn \l__tenkzl_cupaexists_bool
+      { \tenkzl_endpoint_exists_p:nnn {#2}{#3}{0} }
+    \bool_set:Nn \l__tenkzl_cupbexists_bool
+      { \tenkzl_endpoint_exists_p:nnn {#2}{#3}{1} }
+    \bool_if:NTF \l__tenkzl_cupaexists_bool
+      {
+        \bool_if:NTF \l__tenkzl_cupbexists_bool
+          {
+            \__tenkz_model_record_wire:e
+              { kind={index}, origin={cup}, state={complete}, side={#1},
+                from={\tenkz_cs_cellkey:nnn {#2}{#3}{0}},
+                to={\tenkz_cs_cellkey:nnn {#2}{#3}{1}},
+                matrix={\exp_not:V \l__tenkzl_tmp_tl} }
+          }
+          {
+            \__tenkz_model_record_wire:e
+              { kind={index}, origin={cup}, state={incomplete}, side={#1},
+                from={\tenkz_cs_cellkey:nnn {#2}{#3}{0}},
+                matrix={\exp_not:V \l__tenkzl_tmp_tl} }
+          }
+      }
+      {
+        \bool_if:NT \l__tenkzl_cupbexists_bool
+          {
+            \__tenkz_model_record_wire:e
+              { kind={index}, origin={cup}, state={incomplete}, side={#1},
+                from={\tenkz_cs_cellkey:nnn {#2}{#3}{1}},
+                matrix={\exp_not:V \l__tenkzl_tmp_tl} }
+          }
+      }
+  }
+
+\cs_new_protected:Npn \tenkzl_model_record_traces:
+  {
+    \tenkzl_model_record_trace_axis:nn {west}{east}
+    \tenkzl_model_record_trace_axis:nn {north}{south}
+  }
+\int_new:N \l__tenkzl_model_trace_sheet_int
+\int_new:N \l__tenkzl_model_trace_slot_int
+\cs_new_protected:Npn \tenkzl_model_record_trace_axis:nn #1#2
+  {
+    \tenkzl_side_trace:nTF {#1}
+      {
+        \tenkzl_side_trace:nTF {#2}
+          { \tenkzl_model_record_paired_trace_axis:nn {#1}{#2} }
+          { \tenkzl_model_record_trace_stubs:nn {#1}{#1-#2} }
+      }
+      {
+        \tenkzl_side_trace:nT {#2}
+          { \tenkzl_model_record_trace_stubs:nn {#2}{#1-#2} }
+      }
+  }
+\cs_new_protected:Npn \tenkzl_model_record_paired_trace_axis:nn #1#2
+  {
+    \int_step_variable:nnNn {0}{\l__tenkzl_sheets_int - 1}
+      \l__tenkzl_model_trace_sheet_int
+      {
+        \str_if_eq:nnTF {#1}{west}
+          {
+            \int_step_variable:nnNn {1}{\l__tenkzl_nrows_int}
+              \l__tenkzl_model_trace_slot_int
+              {
+                \tenkzl_model_record_trace_at:nnnnnn
+                  {west}{east}{\l__tenkzl_model_trace_slot_int}{1}
+                  {\l__tenkzl_model_trace_slot_int}{\l__tenkzl_ncols_int}
+              }
+          }
+          {
+            \int_step_variable:nnNn {1}{\l__tenkzl_ncols_int}
+              \l__tenkzl_model_trace_slot_int
+              {
+                \tenkzl_model_record_trace_at:nnnnnn
+                  {north}{south}{1}{\l__tenkzl_model_trace_slot_int}
+                  {\l__tenkzl_nrows_int}{\l__tenkzl_model_trace_slot_int}
+              }
+          }
+      }
+  }
+\cs_new_protected:Npn \tenkzl_model_record_trace_at:nnnnnn #1#2#3#4#5#6
+  {
+    \bool_set:Nn \l_tmpa_bool
+      { \tenkzl_endpoint_exists_p:nnn
+          {#3}{#4}{\l__tenkzl_model_trace_sheet_int} }
+    \bool_set:Nn \l_tmpb_bool
+      { \tenkzl_endpoint_exists_p:nnn
+          {#5}{#6}{\l__tenkzl_model_trace_sheet_int} }
+    \bool_if:NTF \l_tmpa_bool
+      {
+        \bool_if:NTF \l_tmpb_bool
+          {
+            \__tenkz_model_record_wire:e
+              { kind={index}, origin={trace}, state={complete}, axis={#1-#2},
+                side-a={#1}, side-b={#2},
+                sheet={\int_eval:n {\l__tenkzl_model_trace_sheet_int}},
+                slot={\int_eval:n {\l__tenkzl_model_trace_slot_int}},
+                from={\tenkz_cs_cellkey:nnn {#3}{#4}
+                  {\int_eval:n {\l__tenkzl_model_trace_sheet_int}}},
+                to={\tenkz_cs_cellkey:nnn {#5}{#6}
+                  {\int_eval:n {\l__tenkzl_model_trace_sheet_int}}} }
+          }
+          {
+            \tenkzl_model_record_trace_stub:nnnnn
+              {incomplete}{#1}{#1-#2}{#3}{#4}
+          }
+      }
+      {
+        \bool_if:NT \l_tmpb_bool
+          {
+            \tenkzl_model_record_trace_stub:nnnnn
+              {incomplete}{#2}{#1-#2}{#5}{#6}
+          }
+      }
+  }
+\cs_new_protected:Npn \tenkzl_model_record_trace_stubs:nn #1#2
+  {
+    \int_step_variable:nnNn {0}{\l__tenkzl_sheets_int - 1}
+      \l__tenkzl_model_trace_sheet_int
+      {
+        \str_case:nn {#1}
+          {
+            {west}
+              { \int_step_variable:nnNn {1}{\l__tenkzl_nrows_int}
+                  \l__tenkzl_model_trace_slot_int
+                  { \tenkzl_model_record_trace_stub_if_exists:nnnn
+                      {west}{#2}{\l__tenkzl_model_trace_slot_int}{1} } }
+            {east}
+              { \int_step_variable:nnNn {1}{\l__tenkzl_nrows_int}
+                  \l__tenkzl_model_trace_slot_int
+                  { \tenkzl_model_record_trace_stub_if_exists:nnnn
+                      {east}{#2}{\l__tenkzl_model_trace_slot_int}
+                      {\l__tenkzl_ncols_int} } }
+            {north}
+              { \int_step_variable:nnNn {1}{\l__tenkzl_ncols_int}
+                  \l__tenkzl_model_trace_slot_int
+                  { \tenkzl_model_record_trace_stub_if_exists:nnnn
+                      {north}{#2}{1}{\l__tenkzl_model_trace_slot_int} } }
+            {south}
+              { \int_step_variable:nnNn {1}{\l__tenkzl_ncols_int}
+                  \l__tenkzl_model_trace_slot_int
+                  { \tenkzl_model_record_trace_stub_if_exists:nnnn
+                      {south}{#2}{\l__tenkzl_nrows_int}
+                      {\l__tenkzl_model_trace_slot_int} } }
+          }
+      }
+  }
+\cs_new_protected:Npn \tenkzl_model_record_trace_stub_if_exists:nnnn #1#2#3#4
+  {
+    \tenkzl_endpoint_exists:nnnT
+      {#3}{#4}{\l__tenkzl_model_trace_sheet_int}
+      { \tenkzl_model_record_trace_stub:nnnnn {stub}{#1}{#2}{#3}{#4} }
+  }
+\cs_new_protected:Npn \tenkzl_model_record_trace_stub:nnnnn #1#2#3#4#5
+  {
+    \__tenkz_model_record_wire:e
+      { kind={index}, origin={trace}, state={#1}, axis={#3}, side={#2},
+        sheet={\int_eval:n {\l__tenkzl_model_trace_sheet_int}},
+        slot={\int_eval:n {\l__tenkzl_model_trace_slot_int}},
+        from={\tenkz_cs_cellkey:nnn {#4}{#5}
+          {\int_eval:n {\l__tenkzl_model_trace_sheet_int}}} }
   }
 
 % Explicit \tnedge declarations become ordinary WIRE records; `origin=edge`
@@ -1731,29 +1934,45 @@
               }
               {
                 \tenkzl_side_cup_silhouette:n {#1}
-                \str_case:nn {#1}
-                  {
-                    {west}
-                      { \int_step_inline:nn { \l__tenkzl_nrows_int }
-                          { \tenkzl_draw_side_cup_at:nnn {west}{##1}{1} } }
-                    {east}
-                      { \int_step_inline:nn { \l__tenkzl_nrows_int }
-                          { \tenkzl_draw_side_cup_at:nnn {east}{##1}
-                              { \l__tenkzl_ncols_int } } }
-                    {north}
-                      { \int_step_inline:nn { \l__tenkzl_ncols_int }
-                          { \tenkzl_draw_side_cup_at:nnn {north}{1}{##1} } }
-                    {south}
-                      { \int_step_inline:nn { \l__tenkzl_ncols_int }
-                          { \tenkzl_draw_side_cup_at:nnn {south}
-                              { \l__tenkzl_nrows_int }{##1} } }
-                  }
+                \tl_set:Nn \l__tenkzl_model_filter_tl {#1}
+                \__tenkz_model_map_wires_origin:nN {cup}
+                  \tenkzl_draw_cup_record:n
               }
           }
           {
             \msg_warning:nnn {tenkz}{lattice-side-cup-stack} {#1}
             \tenkz@event{warning|picture=\the\tenkz@pictureid|%
               code=side-cup-stack|side=#1}
+          }
+      }
+  }
+
+\tl_new:N \l__tenkzl_model_filter_tl
+\tl_new:N \l__tenkzl_model_state_tl
+\tl_new:N \l__tenkzl_model_side_tl
+\tl_new:N \l__tenkzl_model_matrix_tl
+\cs_new_protected:Npn \tenkzl_draw_cup_record:n #1
+  {
+    \__tenkz_model_get:nnN {#1} {side} \l__tenkzl_model_side_tl
+    \tl_if_eq:NNT \l__tenkzl_model_side_tl \l__tenkzl_model_filter_tl
+      {
+        \__tenkz_model_get:nnN {#1} {state} \l__tenkzl_model_state_tl
+        \tenkzl_model_decode_from:n {#1}
+        \str_if_eq:VnTF \l__tenkzl_model_state_tl {complete}
+          {
+            \__tenkz_model_get:nnN {#1} {matrix} \l__tenkzl_model_matrix_tl
+            \tl_set_eq:NN \l__tenkzl_tmp_tl \l__tenkzl_model_matrix_tl
+            \tenkzl_draw_complete_side_cup_at:VVV
+              \l__tenkzl_model_side_tl
+              \l__tenkzl_model_from_row_tl
+              \l__tenkzl_model_from_col_tl
+          }
+          {
+            \tenkzl_draw_incomplete_side_cup_at:VVVV
+              \l__tenkzl_model_side_tl
+              \l__tenkzl_model_from_row_tl
+              \l__tenkzl_model_from_col_tl
+              \l__tenkzl_model_from_sheet_tl
           }
       }
   }
@@ -2281,25 +2500,8 @@
 \cs_new_protected:Npn \tenkzl_side_cup_from_projections:NNNN #1#2#3#4
   { \__tenkz_geom_corridor_point:nnNN {#1} {#2} #3 #4 }
 
-\cs_new_protected:Npn \tenkzl_draw_side_cup_at:nnn #1#2#3
-  {
-    \bool_set:Nn \l__tenkzl_cupaexists_bool
-      { \tenkzl_endpoint_exists_p:nnn {#2}{#3}{0} }
-    \bool_set:Nn \l__tenkzl_cupbexists_bool
-      { \tenkzl_endpoint_exists_p:nnn {#2}{#3}{1} }
-    \bool_if:NTF \l__tenkzl_cupaexists_bool
-      {
-        \bool_if:NTF \l__tenkzl_cupbexists_bool
-          { \tenkzl_draw_complete_side_cup_at:nnn {#1}{#2}{#3} }
-          { \tenkzl_draw_incomplete_side_cup_at:nnnn {#1}{#2}{#3}{0} }
-      }
-      { \bool_if:NT \l__tenkzl_cupbexists_bool
-          { \tenkzl_draw_incomplete_side_cup_at:nnnn {#1}{#2}{#3}{1} } }
-  }
-
 \cs_new_protected:Npn \tenkzl_draw_complete_side_cup_at:nnn #1#2#3
   {
-        \tenkzl_side_cup_matrix:nN {#1} \l__tenkzl_tmp_tl
         \tenkzl_side_point:nnnnnNN {#1}{#2}{#3}{0}{0pt}
           \l__tenkzl_cupax_dim \l__tenkzl_cupay_dim
         \tenkzl_side_point:nnnnnNN {#1}{#2}{#3}{0}
@@ -2356,6 +2558,7 @@
           side=#1|cell=\int_eval:n {#2}-\int_eval:n {#3}|sheet-a=0|sheet-b=1|%
           matrix=\tl_if_blank:VTF \l__tenkzl_tmp_tl {0}{1}}
   }
+\cs_generate_variant:Nn \tenkzl_draw_complete_side_cup_at:nnn { VVV }
 
 \cs_new_protected:Npn \tenkzl_draw_incomplete_side_cup_at:nnnn #1#2#3#4
   {
@@ -2378,6 +2581,7 @@
       code=side-cup-incomplete|side=#1|cell=\int_eval:n {#2}-\int_eval:n {#3}|%
       sheet=#4}
   }
+\cs_generate_variant:Nn \tenkzl_draw_incomplete_side_cup_at:nnnn { VVVV }
 
 \cs_new_protected:Npn \tenkzl_draw_side_cup_matrix:nnn #1#2#3
   {
@@ -2475,7 +2679,14 @@
     \msg_warning:nnnn {tenkz}{lattice-side-trace-unpaired}{#1}{#2}
     \tenkz@event{warning|picture=\the\tenkz@pictureid|%
       code=side-trace-unpaired|side=#1|opposite=#2}
-    \tenkzl_draw_trace_side_stubs:n {#1}
+    \str_case:nnF {#1}
+      {
+        {east}  { \tl_set:Nn \l__tenkzl_model_filter_tl {#2-#1} }
+        {south} { \tl_set:Nn \l__tenkzl_model_filter_tl {#2-#1} }
+      }
+      { \tl_set:Nn \l__tenkzl_model_filter_tl {#1-#2} }
+    \__tenkz_model_map_wires_origin:nN {trace}
+      \tenkzl_draw_unpaired_trace_record:n
   }
 
 \cs_new_protected:Npn \tenkzl_draw_paired_trace_axis:nnn #1#2#3
@@ -2494,43 +2705,115 @@
         \msg_warning:nnn {tenkz}{lattice-side-trace-zero-vector}{#1/#2}
         \tenkz@event{warning|picture=\the\tenkz@pictureid|%
           code=side-trace-zero-vector|axis=#1-#2}
-        \tenkzl_draw_trace_side_stubs:n {#1}
-        \tenkzl_draw_trace_side_stubs:n {#2}
+        \tl_set:Nn \l__tenkzl_model_filter_tl {#1-#2}
+        \__tenkz_model_map_wires_origin:nN {trace}
+          \tenkzl_draw_degenerate_trace_record:n
       }
       {
         \tenkzl_trace_silhouette:n {#3}
-        \str_if_eq:nnTF {#1}{west}
+        \tl_set:Nn \l__tenkzl_model_filter_tl {#1-#2}
+        \__tenkz_model_map_wires_origin:nN {trace}
+          \tenkzl_draw_trace_record:n
+      }
+  }
+
+\tl_new:N \l__tenkzl_model_axis_tl
+\tl_new:N \l__tenkzl_model_sidea_tl
+\tl_new:N \l__tenkzl_model_sideb_tl
+\tl_new:N \l__tenkzl_model_sheet_tl
+\tl_new:N \l__tenkzl_model_slot_tl
+\cs_new_protected:Npn \tenkzl_trace_record_matches:nT #1#2
+  {
+    \__tenkz_model_get:nnN {#1} {axis} \l__tenkzl_model_axis_tl
+    \tl_if_eq:NNT \l__tenkzl_model_axis_tl \l__tenkzl_model_filter_tl {#2}
+  }
+\cs_new_protected:Npn \tenkzl_load_trace_record:n #1
+  {
+    \__tenkz_model_get:nnN {#1} {state} \l__tenkzl_model_state_tl
+    \__tenkz_model_get:nnN {#1} {sheet} \l__tenkzl_model_sheet_tl
+    \__tenkz_model_get:nnN {#1} {slot} \l__tenkzl_model_slot_tl
+    \int_set:Nn \l__tenkzl_trsheet_int {\l__tenkzl_model_sheet_tl}
+    \int_set:Nn \l__tenkzl_trslot_int {\l__tenkzl_model_slot_tl}
+    \str_if_eq:VnTF \l__tenkzl_model_axis_tl {west-east}
+      {
+        \int_set:Nn \l__tenkzl_trordinal_int
+          { \l__tenkzl_trsheet_int * \l__tenkzl_nrows_int
+            + \l__tenkzl_trslot_int - 1 }
+      }
+      {
+        \int_set:Nn \l__tenkzl_trordinal_int
+          { \l__tenkzl_trsheet_int * \l__tenkzl_ncols_int
+            + \l__tenkzl_trslot_int - 1 }
+      }
+  }
+\cs_new_protected:Npn \tenkzl_draw_trace_record:n #1
+  {
+    \tenkzl_trace_record_matches:nT {#1}
+      {
+        \tenkzl_load_trace_record:n {#1}
+        \str_if_eq:VnTF \l__tenkzl_model_state_tl {complete}
           {
-            \int_step_variable:nnNn {0}{\l__tenkzl_sheets_int - 1}
-              \l__tenkzl_trsheet_int
-              {
-                \int_step_variable:nnNn {1}{\l__tenkzl_nrows_int}
-                  \l__tenkzl_trslot_int
-                  {
-                    \int_set:Nn \l__tenkzl_trordinal_int
-                      { \l__tenkzl_trsheet_int * \l__tenkzl_nrows_int
-                        + \l__tenkzl_trslot_int - 1 }
-                    \tenkzl_draw_trace_at:nnnnnn {west}{east}
-                      {\l__tenkzl_trslot_int}{1}
-                      {\l__tenkzl_trslot_int}{\l__tenkzl_ncols_int}
-                  }
-              }
+            \__tenkz_model_get:nnN {#1} {side-a} \l__tenkzl_model_sidea_tl
+            \__tenkz_model_get:nnN {#1} {side-b} \l__tenkzl_model_sideb_tl
+            \tenkzl_model_decode_wire:n {#1}
+            \tenkzl_draw_complete_trace_at:VVVVVV
+              \l__tenkzl_model_sidea_tl
+              \l__tenkzl_model_sideb_tl
+              \l__tenkzl_model_from_row_tl
+              \l__tenkzl_model_from_col_tl
+              \l__tenkzl_model_to_row_tl
+              \l__tenkzl_model_to_col_tl
           }
           {
-            \int_step_variable:nnNn {0}{\l__tenkzl_sheets_int - 1}
-              \l__tenkzl_trsheet_int
-              {
-                \int_step_variable:nnNn {1}{\l__tenkzl_ncols_int}
-                  \l__tenkzl_trslot_int
-                  {
-                    \int_set:Nn \l__tenkzl_trordinal_int
-                      { \l__tenkzl_trsheet_int * \l__tenkzl_ncols_int
-                        + \l__tenkzl_trslot_int - 1 }
-                    \tenkzl_draw_trace_at:nnnnnn {north}{south}
-                      {1}{\l__tenkzl_trslot_int}
-                      {\l__tenkzl_nrows_int}{\l__tenkzl_trslot_int}
-                  }
-              }
+            \__tenkz_model_get:nnN {#1} {side} \l__tenkzl_model_side_tl
+            \tenkzl_model_decode_from:n {#1}
+            \tenkzl_draw_incomplete_trace_at:VVVV
+              \l__tenkzl_model_side_tl
+              \l__tenkzl_model_from_row_tl
+              \l__tenkzl_model_from_col_tl
+              \l__tenkzl_model_axis_tl
+          }
+      }
+  }
+\cs_new_protected:Npn \tenkzl_draw_unpaired_trace_record:n #1
+  {
+    \tenkzl_trace_record_matches:nT {#1}
+      {
+        \tenkzl_load_trace_record:n {#1}
+        \__tenkz_model_get:nnN {#1} {side} \l__tenkzl_model_side_tl
+        \tenkzl_model_decode_from:n {#1}
+        \tenkzl_draw_trace_stub_at:VVV
+          \l__tenkzl_model_side_tl
+          \l__tenkzl_model_from_row_tl
+          \l__tenkzl_model_from_col_tl
+      }
+  }
+\cs_new_protected:Npn \tenkzl_draw_degenerate_trace_record:n #1
+  {
+    \tenkzl_trace_record_matches:nT {#1}
+      {
+        \tenkzl_load_trace_record:n {#1}
+        \str_if_eq:VnTF \l__tenkzl_model_state_tl {complete}
+          {
+            \__tenkz_model_get:nnN {#1} {side-a} \l__tenkzl_model_sidea_tl
+            \__tenkz_model_get:nnN {#1} {side-b} \l__tenkzl_model_sideb_tl
+            \tenkzl_model_decode_wire:n {#1}
+            \tenkzl_draw_trace_stub_at:VVV
+              \l__tenkzl_model_sidea_tl
+              \l__tenkzl_model_from_row_tl
+              \l__tenkzl_model_from_col_tl
+            \tenkzl_draw_trace_stub_at:VVV
+              \l__tenkzl_model_sideb_tl
+              \l__tenkzl_model_to_row_tl
+              \l__tenkzl_model_to_col_tl
+          }
+          {
+            \__tenkz_model_get:nnN {#1} {side} \l__tenkzl_model_side_tl
+            \tenkzl_model_decode_from:n {#1}
+            \tenkzl_draw_trace_stub_at:VVV
+              \l__tenkzl_model_side_tl
+              \l__tenkzl_model_from_row_tl
+              \l__tenkzl_model_from_col_tl
           }
       }
   }
@@ -2661,22 +2944,6 @@
           {\l__tenkzl_cupproj_dim + \tenkz@dim{\tenkz@r@daylight}} }
   }
 
-\cs_new_protected:Npn \tenkzl_draw_trace_at:nnnnnn #1#2#3#4#5#6
-  {
-    \bool_set:Nn \l_tmpa_bool
-      { \tenkzl_endpoint_exists_p:nnn {#3}{#4}{\l__tenkzl_trsheet_int} }
-    \bool_set:Nn \l_tmpb_bool
-      { \tenkzl_endpoint_exists_p:nnn {#5}{#6}{\l__tenkzl_trsheet_int} }
-    \bool_if:NTF \l_tmpa_bool
-      {
-        \bool_if:NTF \l_tmpb_bool
-          { \tenkzl_draw_complete_trace_at:nnnnnn {#1}{#2}{#3}{#4}{#5}{#6} }
-          { \tenkzl_draw_incomplete_trace_at:nnnn {#1}{#3}{#4}{#1-#2} }
-      }
-      { \bool_if:NT \l_tmpb_bool
-          { \tenkzl_draw_incomplete_trace_at:nnnn {#2}{#5}{#6}{#1-#2} } }
-  }
-
 \cs_new_protected:Npn \tenkzl_draw_complete_trace_at:nnnnnn #1#2#3#4#5#6
   {
     % An earlier incomplete endpoint may have used the shared projection
@@ -2792,6 +3059,7 @@
       from=\int_eval:n {#3}-\int_eval:n {#4}|%
       to=\int_eval:n {#5}-\int_eval:n {#6}}
   }
+\cs_generate_variant:Nn \tenkzl_draw_complete_trace_at:nnnnnn { VVVVVV }
 
 % If label avoidance moved an escape point transversely, move both that point
 % and its tip another #1 daylight bands in the same label-free direction.
@@ -2859,6 +3127,7 @@
       code=side-trace-incomplete|axis=#4|sheet=\int_eval:n
       {\l__tenkzl_trsheet_int}|slot=\int_eval:n {\l__tenkzl_trslot_int}|side=#1}
   }
+\cs_generate_variant:Nn \tenkzl_draw_incomplete_trace_at:nnnn { VVVV }
 
 \cs_new_protected:Npn \tenkzl_draw_trace_stub_at:nnn #1#2#3
   {
@@ -2891,57 +3160,7 @@
       (\dim_use:N \l__tenkzl_trasx_dim,\dim_use:N \l__tenkzl_trasy_dim) --
       (\dim_use:N \l__tenkzl_tratx_dim,\dim_use:N \l__tenkzl_traty_dim)}
   }
-
-\cs_new_protected:Npn \tenkzl_draw_trace_side_stubs:n #1
-  {
-    \int_step_variable:nnNn {0}{\l__tenkzl_sheets_int - 1}
-      \l__tenkzl_trsheet_int
-      {
-        \str_case:nn {#1}
-          {
-            {west} { \int_step_variable:nnNn {1}{\l__tenkzl_nrows_int}
-              \l__tenkzl_trslot_int
-              { \int_set:Nn \l__tenkzl_trordinal_int
-                  { \l__tenkzl_trsheet_int * \l__tenkzl_nrows_int
-                    + \l__tenkzl_trslot_int - 1 }
-                \tenkzl_endpoint_exists:nnnT
-                  {\l__tenkzl_trslot_int}{1}{\l__tenkzl_trsheet_int}
-                  { \tenkzl_draw_trace_stub_at:nnn {west}
-                      {\l__tenkzl_trslot_int}{1} } } }
-            {east} { \int_step_variable:nnNn {1}{\l__tenkzl_nrows_int}
-              \l__tenkzl_trslot_int
-              { \int_set:Nn \l__tenkzl_trordinal_int
-                  { \l__tenkzl_trsheet_int * \l__tenkzl_nrows_int
-                    + \l__tenkzl_trslot_int - 1 }
-                \tenkzl_endpoint_exists:nnnT
-                  {\l__tenkzl_trslot_int}{\l__tenkzl_ncols_int}
-                  {\l__tenkzl_trsheet_int}
-                  { \tenkzl_draw_trace_stub_at:nnn {east}
-                      {\l__tenkzl_trslot_int}
-                      {\l__tenkzl_ncols_int} } } }
-            {north} { \int_step_variable:nnNn {1}{\l__tenkzl_ncols_int}
-              \l__tenkzl_trslot_int
-              { \int_set:Nn \l__tenkzl_trordinal_int
-                  { \l__tenkzl_trsheet_int * \l__tenkzl_ncols_int
-                    + \l__tenkzl_trslot_int - 1 }
-                \tenkzl_endpoint_exists:nnnT
-                  {1}{\l__tenkzl_trslot_int}{\l__tenkzl_trsheet_int}
-                  { \tenkzl_draw_trace_stub_at:nnn {north}{1}
-                      {\l__tenkzl_trslot_int} } } }
-            {south} { \int_step_variable:nnNn {1}{\l__tenkzl_ncols_int}
-              \l__tenkzl_trslot_int
-              { \int_set:Nn \l__tenkzl_trordinal_int
-                  { \l__tenkzl_trsheet_int * \l__tenkzl_ncols_int
-                    + \l__tenkzl_trslot_int - 1 }
-                \tenkzl_endpoint_exists:nnnT {\l__tenkzl_nrows_int}
-                  {\l__tenkzl_trslot_int}
-                  {\l__tenkzl_trsheet_int}
-                  { \tenkzl_draw_trace_stub_at:nnn {south}
-                      {\l__tenkzl_nrows_int}
-                      {\l__tenkzl_trslot_int} } } }
-          }
-      }
-  }
+\cs_generate_variant:Nn \tenkzl_draw_trace_stub_at:nnn { VVV }
 
 % removed-site events.  The audit rebuilds region set-algebra from these
 % events: a removed site leaves the header's cell universe, so every
@@ -3322,10 +3541,9 @@
 \tl_new:N \l__tenkzl_model_to_row_tl
 \tl_new:N \l__tenkzl_model_to_col_tl
 \tl_new:N \l__tenkzl_model_to_sheet_tl
-\cs_new_protected:Npn \tenkzl_model_decode_wire:n #1
+\cs_new_protected:Npn \tenkzl_model_decode_from:n #1
   {
     \__tenkz_model_get:nnN {#1} {from} \l__tenkzl_model_from_tl
-    \__tenkz_model_get:nnN {#1} {to}   \l__tenkzl_model_to_tl
     \exp_args:NV \tenkzl_cellkey_sheet:nN
       \l__tenkzl_model_from_tl \l__tenkzl_hsel_int
     \tl_set:Ne \l__tenkzl_model_from_row_tl
@@ -3334,6 +3552,11 @@
       { \seq_item:Nn \l__tenkzl_parts_seq {2} }
     \tl_set:Ne \l__tenkzl_model_from_sheet_tl
       { \int_use:N \l__tenkzl_hsel_int }
+  }
+\cs_new_protected:Npn \tenkzl_model_decode_wire:n #1
+  {
+    \tenkzl_model_decode_from:n {#1}
+    \__tenkz_model_get:nnN {#1} {to} \l__tenkzl_model_to_tl
     \exp_args:NV \tenkzl_cellkey_sheet:nN
       \l__tenkzl_model_to_tl \l__tenkzl_hsel_int
     \tl_set:Ne \l__tenkzl_model_to_row_tl
