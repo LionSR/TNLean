@@ -102,13 +102,12 @@
 \tl_new:N \l__tenkz_bonddir_tl
 \tl_new:N \l__tenkz_dir_tl
 \tl_new:N \l__tenkz_dirmarks_tl
-% \tnskip holes: pending-west-stub flag of the bond scan, the deferred
-% east-stub column (a gap frees the indices facing it only once a later
-% tensor proves it INTERIOR -- a run reaching the row end belongs to the
-% side policy), and a scratch tl for partner-cell kinds at pairing
-% interfaces
-\bool_new:N \l__tenkz_hole_bool
-\int_new:N \l__tenkz_pendeast_int
+% \tnskip holes are record-time facts (\tenkz_model_derive_gapstubs:);
+% the walk reads them where it once threaded pending-east and hole flags.
+% Scratch: the flushed east-stub column, a partner-cell kind tl, and the
+% legacy-combined marker that still owns its pairing commit.
+\tl_new:N \l__tenkz_gapeast_tl
+\bool_new:N \l__tenkz_bond_legacy_bool
 \tl_new:N \l__tenkz_pkind_tl
 % The FRAME (frame=).  ONE linear map routes every drawn coordinate
 % from the logical frame (columns run east, rows descend) to the paper
@@ -1698,6 +1697,74 @@
       }
   }
 
+% Interior-gap stubs become record-time facts.  A \tnskip run is interior
+% exactly when owners exist on both sides; then the pre-gap tensor's east
+% index and the post-gap tensor's west index face the gap and stay OPEN.
+% A run reaching the row's end has no tensor beyond it: the facing index
+% is the row's BOUNDARY index and the side policy already owns it.  The
+% draw pass reads these facts where it once threaded pending-east and
+% hole flags through the walk; port checks stay at draw time so sparse
+% fusion faces keep suppressing their undeclared slots in one place.
+\prop_new:N \l__tenkz_gapstub_prop
+\int_new:N \l__tenkz_mgs_prev_int
+\bool_new:N \l__tenkz_mgs_gap_bool
+\tl_new:N \l__tenkz_mgs_kind_tl
+\cs_new_protected:Npn \tenkz_model_derive_gapstubs:
+  {
+    \prop_clear:N \l__tenkz_gapstub_prop
+    \int_step_inline:nn { \l__tenkz_nrows_int }
+      {
+        \int_zero:N \l__tenkz_mgs_prev_int
+        \bool_set_false:N \l__tenkz_mgs_gap_bool
+        \int_step_inline:nnn {1} { \l__tenkz_ncols_int }
+          {
+            \tenkz_get:NeN \l__tenkz_kind_prop {##1-####1} \l__tenkz_mgs_kind_tl
+            \str_if_eq:VnTF \l__tenkz_mgs_kind_tl {skip}
+              {
+                \int_compare:nNnT { \l__tenkz_mgs_prev_int } > {0}
+                  { \bool_set_true:N \l__tenkz_mgs_gap_bool }
+              }
+              {
+                \prop_if_in:NeT \l__tenkz_owner_prop {##1-####1}
+                  {
+                    \bool_if:NT \l__tenkz_mgs_gap_bool
+                      {
+                        \prop_put:Nee \l__tenkz_gapstub_prop {##1-####1}
+                          { \int_use:N \l__tenkz_mgs_prev_int }
+                      }
+                    \bool_set_false:N \l__tenkz_mgs_gap_bool
+                    \int_set:Nn \l__tenkz_mgs_prev_int {####1}
+                  }
+              }
+          }
+      }
+  }
+
+% Virtual pairing is a fact of the derived bond WIRE records, not of ink
+% commit order: both endpoint faces of every origin=bond record are paired.
+% The legacy-combined fallback keeps its commit-time entry until fused
+% attachments land as records.
+\tl_new:N \l__tenkz_mvp_from_tl
+\tl_new:N \l__tenkz_mvp_to_tl
+\tl_new:N \l__tenkz_mvp_origin_tl
+\cs_new_protected:Npn \tenkz_model_fill_virtualpaired:
+  {
+    \prop_clear:N \l__tenkz_virtualpaired_prop
+    \__tenkz_model_map_ids:nn {wire}
+      {
+        \__tenkz_model_get:nnN {##1}{origin} \l__tenkz_mvp_origin_tl
+        \str_if_eq:eeT { \tl_use:N \l__tenkz_mvp_origin_tl } {bond}
+          {
+            \__tenkz_model_get:nnN {##1}{from} \l__tenkz_mvp_from_tl
+            \__tenkz_model_get:nnN {##1}{to} \l__tenkz_mvp_to_tl
+            \prop_put:Nen \l__tenkz_virtualpaired_prop
+              { \tl_use:N \l__tenkz_mvp_from_tl -east } {}
+            \prop_put:Nen \l__tenkz_virtualpaired_prop
+              { \tl_use:N \l__tenkz_mvp_to_tl -west } {}
+          }
+      }
+  }
+
 \msg_new:nnn {tenkz}{model-bond-label}
   {
     [TKZ-MODEL-UNRESOLVED-BOND]~Bond~label~target~'#1'~has~no~
@@ -1748,10 +1815,17 @@
 \cs_new_protected:Npn \tenkz_model_derive_closures:
   {
     \prop_clear:N \l__tenkz_cuprow_prop
+    % frame=vertical prunes cups, physical traces, and pair-trace loops at
+    % draw start; deriving their records here would hand the record-driven
+    % passes ink the prune no longer guards.  Skip the derivations; the
+    % booleans and props stay set so the prune's legacy warnings still fire.
+    \bool_if:NF \l__tenkz_vertical_bool
+      {
     \bool_if:NT \l__tenkz_closew_bool
       { \tenkz_model_derive_cups_side:nnN {west}{first} \l__tenkz_closewmat_tl }
     \bool_if:NT \l__tenkz_closee_bool
       { \tenkz_model_derive_cups_side:nnN {east}{last} \l__tenkz_closeemat_tl }
+      }
     % the periodic wrap runs when BOTH side policies say trace; the style
     % (racetrack|hooks) is presentation and resolves at draw
     \str_if_eq:VnT \l__tenkz_westpol_tl {trace}
@@ -1768,7 +1842,8 @@
       }
     % physical trace loops (trace=physical): single-row words only; the
     % multirow warning stays with the draw pass
-    \bool_if:NT \l__tenkz_ptrace_bool
+    \bool_lazy_and:nnT
+      { ! \l__tenkz_vertical_bool } { \l__tenkz_ptrace_bool }
       {
         \int_compare:nNnT { \l__tenkz_nrows_int } = {1}
           {
@@ -1790,19 +1865,22 @@
           }
       }
     % pair trace loops (trace= cell-sets over ket/bra pairs)
-    \int_step_inline:nn { \l__tenkz_nrows_int }
+    \bool_if:NF \l__tenkz_vertical_bool
       {
-        \int_step_inline:nnn {1} { \l__tenkz_ncols_int }
+        \int_step_inline:nn { \l__tenkz_nrows_int }
           {
-            \prop_if_in:NeT \l__tenkz_trcell_prop {##1-####1}
+            \int_step_inline:nnn {1} { \l__tenkz_ncols_int }
               {
-                \tenkz_leg_candidate:nnT {##1}{####1}
+                \prop_if_in:NeT \l__tenkz_trcell_prop {##1-####1}
                   {
-                    \tenkz_leg_candidate:nnT { \int_eval:n{##1+1} }{####1}
+                    \tenkz_leg_candidate:nnT {##1}{####1}
                       {
-                        \__tenkz_model_record_wire:e
-                          {kind={index},origin={pairtrace},
-                           row={\int_eval:n{##1}},col={####1}}
+                        \tenkz_leg_candidate:nnT { \int_eval:n{##1+1} }{####1}
+                          {
+                            \__tenkz_model_record_wire:e
+                              {kind={index},origin={pairtrace},
+                               row={\int_eval:n{##1}},col={####1}}
+                          }
                       }
                   }
               }
@@ -1976,6 +2054,8 @@
     \tenkz_record_interfaces:
     \tenkz_model_record_owners:
     \tenkz_model_derive_bonds:
+    \tenkz_model_derive_gapstubs:
+    \tenkz_model_fill_virtualpaired:
     \tenkz_model_validate_bond_labels:
     \tenkz_model_derive_closures:
     \__tenkz_model_validate:
@@ -2919,14 +2999,11 @@ code=combined-side|value=\tl_to_str:N \l__tenkz_fcombined_tl}
   {
     \int_zero:N \l__tenkz_internalvw_int
     \int_zero:N \l__tenkz_internalve_int
-    \prop_clear:N \l__tenkz_virtualpaired_prop
     \int_step_inline:nn { \l__tenkz_nrows_int }
       {
         \tenkz_row_wirestyle:nN {##1} \l__tenkz_cell_tl
         \tenkz_row_dir:nN {##1} \l__tenkz_dir_tl
         \tenkz_dir_marks:NN \l__tenkz_cell_tl \l__tenkz_dirmarks_tl
-        \bool_set_false:N \l__tenkz_hole_bool
-        \int_zero:N \l__tenkz_pendeast_int
         % connect consecutive occupied columns
         \int_zero:N \l_tmpa_int
         \int_step_inline:nnn {1} { \l__tenkz_ncols_int }
@@ -2948,11 +3025,6 @@ code=combined-side|value=\tl_to_str:N \l__tenkz_fcombined_tl}
                 % row).  The east stub is therefore DEFERRED until a later
                 % tensor proves the gap interior, and the west stub draws
                 % only when ink preceded the run.
-                \int_compare:nNnT { \l_tmpa_int } > {0}
-                  {
-                    \int_set_eq:NN \l__tenkz_pendeast_int \l_tmpa_int
-                    \bool_set_true:N \l__tenkz_hole_bool
-                  }
                 \int_zero:N \l_tmpa_int
                 \tenkz@event{hole|picture=\the\tenkz@pictureid|row=##1|col=####1}
               }
@@ -3026,9 +3098,13 @@ picture=\the\tenkz@pictureid|code=combined-attach|row=##1}
                                   {west} \l__tenkz_pb_tl
                                 \bool_set_false:N
                                   \l__tenkz_bond_rendered_bool
+                                \bool_set_false:N
+                                  \l__tenkz_bond_legacy_bool
                                 \bool_if:NTF
                                   \l__tenkz_combined_attach_bool
                                   {
+                                    \bool_set_true:N
+                                      \l__tenkz_bond_legacy_bool
                                     % This warning-only compatibility path is
                                     % intentionally absent from the frozen
                                     % model: one centred multi-row face is not
@@ -3116,13 +3192,19 @@ picture=\the\tenkz@pictureid|code=combined-attach|row=##1}
                                   }
                                 \bool_if:NT \l__tenkz_bond_rendered_bool
                                   {
-                                    % Pairing and events commit only after ink.
-                                    \prop_put:Nen
-                                      \l__tenkz_virtualpaired_prop
-                                      {##1-\int_use:N\l_tmpa_int-east} {}
-                                    \prop_put:Nen
-                                      \l__tenkz_virtualpaired_prop
-                                      {##1-####1-west} {}
+                                    % The record fill owns pairing; the
+                                    % legacy-combined fallback has no WIRE
+                                    % record yet, so its pairing commits
+                                    % here until fused attachments land.
+                                    \bool_if:NT \l__tenkz_bond_legacy_bool
+                                      {
+                                        \prop_put:Nen
+                                          \l__tenkz_virtualpaired_prop
+                                          {##1-\int_use:N\l_tmpa_int-east} {}
+                                        \prop_put:Nen
+                                          \l__tenkz_virtualpaired_prop
+                                          {##1-####1-west} {}
+                                      }
                                     \tenkz@event{bond|picture=\the\tenkz@pictureid|row=##1|from=\int_use:N\l_tmpa_int|to=####1|dir=\tenkz_dir_word:|role=\tenkz_rowrole_word:|species=\tenkz_rowspec_word:}
                                   }
                                   }
@@ -3134,30 +3216,25 @@ picture=\the\tenkz@pictureid|code=combined-attach|row=##1}
                               }
                           }
                       }
-                    % first tensor after an interior hole: flush the
-                    % deferred east stub of the tensor before the gap,
-                    % then this tensor's west index faces the gap and
-                    % stays open
-                    \bool_lazy_and:nnT
-                      { \l__tenkz_hole_bool }
-                      { \int_compare_p:nNn { \l_tmpa_int } = {0} }
+                    % first tensor after an interior hole: the derived
+                    % gap-stub fact names the pre-gap tensor whose east
+                    % index it frees; this tensor's west index faces the
+                    % gap and stays open
+                    \prop_get:NeNT \l__tenkz_gapstub_prop {##1-####1}
+                        \l__tenkz_gapeast_tl
                       {
-                        \int_compare:nNnT { \l__tenkz_pendeast_int } > {0}
+                        \tenkz_cell_virtual_row_port:nnnN {##1}
+                          {\tl_use:N \l__tenkz_gapeast_tl}{east}
+                          \l_tmpa_bool
+                        \bool_if:NT \l_tmpa_bool
                           {
-                            \tenkz_cell_virtual_row_port:nnnN {##1}
-                              {\int_use:N\l__tenkz_pendeast_int}{east}
-                              \l_tmpa_bool
-                            \bool_if:NT \l_tmpa_bool
-                              {
-                                \tenkz_anchor:nnnN
-                                  {##1}{\int_use:N\l__tenkz_pendeast_int}
-                                  {east} \l__tenkz_pa_tl
-                                \__tenkz_render_stroke:nn
-                                  { \tl_use:N \l__tenkz_cell_tl }
-                                  { \l__tenkz_pa_tl --
-                                    ++\tenkz_stub_vec:n{east} }
-                              }
-                            \int_zero:N \l__tenkz_pendeast_int
+                            \tenkz_anchor:nnnN
+                              {##1}{\tl_use:N \l__tenkz_gapeast_tl}
+                              {east} \l__tenkz_pa_tl
+                            \__tenkz_render_stroke:nn
+                              { \tl_use:N \l__tenkz_cell_tl }
+                              { \l__tenkz_pa_tl --
+                                ++\tenkz_stub_vec:n{east} }
                           }
                         \tenkz_cell_virtual_row_port:nnnN {##1}{####1}{west}
                           \l_tmpa_bool
@@ -3169,7 +3246,6 @@ picture=\the\tenkz@pictureid|code=combined-attach|row=##1}
                               { \tl_use:N \l__tenkz_cell_tl }
                               { \l__tenkz_pb_tl -- ++\tenkz_stub_vec:n{west} }
                           }
-                        \bool_set_false:N \l__tenkz_hole_bool
                       }
                     \int_set:Nn \l_tmpa_int { ####1 }
                   }
