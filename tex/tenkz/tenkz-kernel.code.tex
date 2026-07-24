@@ -78,6 +78,7 @@
 \int_new:N  \g__tenkz_kernel_group_int        % group frame serial
 \int_new:N  \l__tenkz_kernel_row_int          % chain cursor
 \int_new:N  \l__tenkz_kernel_col_int
+\int_new:N  \l__tenkz_kernel_row_advance_int  % maximum implicit span on current row
 \int_new:N  \l__tenkz_kernel_node_int         % address node serial
 \prop_new:N \l__tenkz_kernel_node_prop        % "id/field" -> value
 \prop_new:N \l__tenkz_kernel_named_prop       % user name -> record id
@@ -86,6 +87,7 @@
 \prop_new:N \l__tenkz_kernel_cell_prop        % "r-c" -> atom id (occupancy)
 \prop_new:N \l__tenkz_kernel_trace_cell_prop  % "interface-col" -> traced segment
 \prop_new:N \l__tenkz_kernel_open_cell_prop   % "interface-col" -> opened segment
+\prop_new:N \g__tenkz_kernel_setup_prop       % setup inherited by later pictures
 \bool_new:N \l__tenkz_kernel_trace_physical_bool
 \bool_new:N \l__tenkz_kernel_strict_bool
 \bool_new:N \l__tenkz_kernel_ineq_bool        % inside tenkzeq
@@ -1026,6 +1028,12 @@
           \l__tenkz_model_last_tl
         \int_add:Nn \l__tenkz_kernel_col_int
           { \l__tenkz_kernel_claim_cols_int - 1 }
+        \int_set:Nn \l__tenkz_kernel_row_advance_int
+          {
+            \int_max:nn
+              { \l__tenkz_kernel_row_advance_int }
+              { \l__tenkz_kernel_claim_rows_int }
+          }
       }
       {
         \prop_remove:Nn \l__tenkz_kernel_stage_prop {at}
@@ -1266,6 +1274,8 @@
   {
     \prop_clear:N \l__tenkz_kernel_stage_prop
     \__tenkz_kernel_keys:nn { tenkz-kernel-setup } {#1}
+    \prop_map_inline:Nn \l__tenkz_kernel_stage_prop
+      { \prop_put:Nnn \g__tenkz_kernel_setup_prop {##1} {##2} }
     \prop_clear:N \l__tenkz_kernel_stage_prop
   }
 
@@ -1851,8 +1861,11 @@
     \seq_clear:N \l__tenkz_kernel_stack_seq
     \int_set:Nn \l__tenkz_kernel_row_int { 1 }
     \int_set:Nn \l__tenkz_kernel_col_int { 1 }
+    \int_set:Nn \l__tenkz_kernel_row_advance_int { 1 }
     \int_zero:N \l__tenkz_kernel_node_int
     \__tenkz_kernel_keys:nn { tenkz-kernel-picture } {#1}
+    \prop_map_inline:Nn \g__tenkz_kernel_setup_prop
+      { \prop_put:Nnn \l__tenkz_kernel_stage_prop {##1} {##2} }
     % Equation policy is the shared outer context, so it overrides a
     % conflicting panel spelling.  `check` was removed by eq_begin and never
     % becomes a picture field.
@@ -1902,8 +1915,10 @@
   { \int_incr:N \l__tenkz_kernel_col_int }
 \cs_new_protected:Npn \__tenkz_kernel_newrow:
   {
-    \int_incr:N \l__tenkz_kernel_row_int
+    \int_add:Nn \l__tenkz_kernel_row_int
+      { \l__tenkz_kernel_row_advance_int }
     \int_set:Nn \l__tenkz_kernel_col_int { 1 }
+    \int_set:Nn \l__tenkz_kernel_row_advance_int { 1 }
   }
 \NewDocumentCommand \__tenkz_kernel_tn_cmd { O{} m }
   { \__tenkz_kernel_tn:nn {#1} {#2} }
