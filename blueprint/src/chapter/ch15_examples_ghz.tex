@@ -10,43 +10,41 @@ non-injective, renormalization-fixed-point MPS.
     \uses{def:mps_tensor}
     Set $d = D = 2$. The GHZ tensor is the family
     $\{A^0, A^1\} \subset \MN{2}$ defined by
-    \[
-        A^0 = \ketbra{0}{0} = \diag(1,0),
+    \begin{align}
+        A^0 &= \ketbra{0}{0} = \diag(1,0),
         \qquad
         A^1 = \ketbra{1}{1} = \diag(0,1).
-    \]
-    For a system of $N$ sites the resulting MPV is the GHZ state
-    \[
+        \notag
+    \end{align}
+    For a system of $N$ sites, the resulting MPV is the GHZ state
+    \begin{align}
         \ket{\mathrm{GHZ}_N}
-        = \ket{0}^{\otimes N} + \ket{1}^{\otimes N}.
-    \]
+        &= \ket{0}^{\otimes N} + \ket{1}^{\otimes N}.
+        \notag
+    \end{align}
 \end{definition}
 
 \begin{definition}[Two-site computational vector]\label{def:two_site_ket}
     \lean{MPSTensor.twoSiteKet}
     \leanok
     For $a,b\in\{0,1\}$, the vector
-    \[
-        \ket{ab}\in(\{0,1\}^{2}\to\C)
-    \]
-    is the indicator of the configuration
-    \[
-        (\sigma_1,\sigma_2)=(a,b).
-    \]
+    $\ket{ab}\in(\{0,1\}^{2}\to\C)$ is the indicator of the configuration
+    $(\sigma_1,\sigma_2)=(a,b)$.
 \end{definition}
 
 \begin{definition}[Constant product vector]\label{def:constant_ket}
     \lean{MPSTensor.constantKet}
     \leanok
     For $a\in\{0,1\}$ and $N\ge0$,
-    \[
+    \begin{align}
         \ket{a}^{\otimes N}(\sigma_1,\ldots,\sigma_N)
-        =
+        &=
         \begin{cases}
             1, & (\sigma_1,\ldots,\sigma_N)=(a,\ldots,a), \\
             0, & \text{otherwise}.
         \end{cases}
-    \]
+        \notag
+    \end{align}
 \end{definition}
 
 \begin{theorem}[GHZ transfer map is idempotent]\label{thm:ghz_transfer_idempotent}
@@ -58,10 +56,8 @@ non-injective, renormalization-fixed-point MPS.
 
 \begin{proof}
     \leanok
-    The transfer map acts by
-    $\E_A(X)_{ij} = \delta_{ij} X_{ij}$
-    (extraction of the diagonal).
-    This operation is idempotent.
+    The transfer map acts by $\E_A(X)_{ij} = \delta_{ij} X_{ij}$
+    (extraction of the diagonal). This operation is idempotent.
 \end{proof}
 
 \begin{theorem}[GHZ tensor is an RFP]\label{thm:ghz_is_rfp}
@@ -101,8 +97,8 @@ non-injective, renormalization-fixed-point MPS.
     Let $\Z_2 = \{1, \sigma_x\}$ act on $\C^2$ by the Pauli-$X$
     matrix~$\sigma_x$. The GHZ tensor is on-site symmetric under this
     action: for each $g \in \Z_2$, the twisted tensor $\widetilde A_g$
-    defines the same MPV family as $A$, i.e.\ $\mc V(A)=\mc V(\widetilde
-        A_g)$.
+    defines the same MPV family as $A$, i.e.\
+    $\mc V(A)=\mc V(\widetilde A_g)$.
 \end{theorem}
 
 \begin{proof}
@@ -127,7 +123,7 @@ non-injective, renormalization-fixed-point MPS.
     \lean{MPSTensor.ghz_virtual_Z2_symmetric}
     \leanok
     \uses{def:ghz_tensor, def:ghz_virtual_z2_action}
-    The matrix $\sigma_z$ commutes with every GHZ matrix $A^i$.  A non-scalar
+    The matrix $\sigma_z$ commutes with every GHZ matrix $A^i$. A non-scalar
     matrix commuting with all $A^i$ is the hallmark of a non-injective
     ($\Z_2$-injective) tensor: the on-site symmetry of
     Theorem~\ref{thm:ghz_z2_symmetric} swaps the two one-dimensional injective
@@ -158,7 +154,7 @@ non-injective, renormalization-fixed-point MPS.
 \begin{remark}
     A primitive (injective) tensor has a one-dimensional transfer-map
     fixed-point space, spanned by a positive matrix that equals the identity only
-    in a normalized gauge.  That the GHZ transfer map fixes the additional
+    in a normalized gauge. That the GHZ transfer map fixes the additional
     non-scalar operator $\sigma_z$ is the transfer-matrix signature of the extra
     non-decaying mode behind its long-range ferromagnetic correlations.
 \end{remark}
@@ -169,7 +165,7 @@ non-injective, renormalization-fixed-point MPS.
     \uses{def:is_zcl, thm:ghz_is_rfp, thm:zcl_iff_idempotent_transfer}
     The GHZ tensor has zero correlation length: its idempotent transfer map
     (Theorem~\ref{thm:ghz_is_rfp}) gives correlations independent of the
-    separation.  This contrasts with the AKLT state
+    separation. This contrasts with the AKLT state
     (Theorem~\ref{thm:aklt_correlation_length}), whose subleading eigenvalue
     $-\tfrac13$ produces a finite correlation length $1/\log 3$.
 \end{theorem}
@@ -177,8 +173,8 @@ non-injective, renormalization-fixed-point MPS.
 \begin{proof}
     \leanok
     \uses{thm:zcl_iff_idempotent_transfer, thm:ghz_is_rfp}
-    The claim follows from the idempotence of the GHZ transfer map and the equivalence
-    of zero correlation length with transfer-map idempotence
+    The claim follows from the idempotence of the GHZ transfer map and the
+    equivalence of zero correlation length with transfer-map idempotence
     (Theorem~\ref{thm:zcl_iff_idempotent_transfer}).
 \end{proof}
 

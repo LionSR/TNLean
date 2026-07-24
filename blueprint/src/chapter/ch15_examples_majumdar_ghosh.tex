@@ -7,7 +7,7 @@ $H=\sum \boldsymbol{S}_i\cdot\boldsymbol{S}_{i+1}
 +\tfrac12\sum\boldsymbol{S}_i\cdot\boldsymbol{S}_{i+2}$.
 On an even periodic chain it is the symmetric superposition of the two
 nearest-neighbour singlet coverings $(1,2)(3,4)\cdots$ and
-$(2,3)(4,5)\cdots(N,1)$, the one-dimensional analogue of a
+$(2,3)(4,5)\cdots(N,1)$, the one-dimensional analog of a
 resonating valence-bond state.
 
 \begin{definition}[Majumdar--Ghosh tensor]\label{def:majumdar_ghosh_tensor}
@@ -16,16 +16,25 @@ resonating valence-bond state.
     \uses{def:mps_tensor}
     Set $d = 2$ (spin-$\tfrac12$) and $D = 3$. The Majumdar--Ghosh tensor is
     the family $\{A^0, A^1\} \subset \MN{3}$ defined by
-    \[
-        A^0 =
-        \begin{pmatrix} 0 & 1 & 0 \\ 0 & 0 & 0 \\ \tfrac1{\sqrt2} & 0 & 0 \end{pmatrix},
+    \begin{align}
+        A^0 &=
+        \begin{pmatrix}
+            0 & 1 & 0 \\
+            0 & 0 & 0 \\
+            \tfrac1{\sqrt2} & 0 & 0
+        \end{pmatrix},
         \qquad
         A^1 =
-        \begin{pmatrix} 0 & 0 & 1 \\ -\tfrac1{\sqrt2} & 0 & 0 \\ 0 & 0 & 0 \end{pmatrix}.
-    \]
+        \begin{pmatrix}
+            0 & 0 & 1 \\
+            -\tfrac1{\sqrt2} & 0 & 0 \\
+            0 & 0 & 0
+        \end{pmatrix}.
+        \notag
+    \end{align}
     The three bond levels are the two spin-$\tfrac12$ values of an open singlet
     partner together with the closed inter-dimer link; the relative sign
-    $-\tfrac1{\sqrt2}$ is the antisymmetry of the singlet.  The equality between
+    $-\tfrac1{\sqrt2}$ is the antisymmetry of the singlet. The equality between
     the matrix product vectors of these matrices and the even-ring dimer
     superposition, with normalization and cyclic convention fixed, is a separate
     verification, not part of this definition.
@@ -36,8 +45,8 @@ resonating valence-bond state.
     \lean{MPSTensor.majumdarGhosh_left_canonical}
     \leanok
     \uses{def:majumdar_ghosh_tensor}
-    The Majumdar--Ghosh tensor is isometric: $(A^0)^\dagger A^0 + (A^1)^\dagger A^1
-    = \mathbb 1$.
+    The Majumdar--Ghosh tensor is isometric:
+    $(A^0)^\dagger A^0 + (A^1)^\dagger A^1 = \Id$.
 \end{theorem}
 
 \begin{proof}
@@ -53,13 +62,13 @@ resonating valence-bond state.
     \leanok
     \uses{def:majumdar_ghosh_tensor, def:transfer_map}
     The transfer map of the Majumdar--Ghosh tensor sends the identity to the
-    diagonal matrix $\E_A(\mathbb 1) = \diag(2, \tfrac12, \tfrac12)$.
+    diagonal matrix $\E_A(\Id) = \diag(2, \tfrac12, \tfrac12)$.
 \end{theorem}
 
 \begin{proof}
     \leanok
     Substitute the two matrices in
-    $\E_A(\mathbb 1)=A^0(A^0)^\dagger+A^1(A^1)^\dagger$ and multiply.
+    $\E_A(\Id)=A^0(A^0)^\dagger+A^1(A^1)^\dagger$ and multiply.
 \end{proof}
 
 \begin{theorem}[Majumdar--Ghosh tensor is not injective]%
@@ -84,7 +93,7 @@ resonating valence-bond state.
     \leanok
     \uses{def:majumdar_ghosh_tensor, def:normal}
     The Majumdar--Ghosh tensor is not normal: no blocking length makes the
-    products of that length span the full matrix algebra~$\MN{3}$.  This
+    products of that length span the full matrix algebra~$\MN{3}$. This
     non-normality is the algebraic signature expected from the two-periodic
     dimer-covering structure.
 \end{theorem}
@@ -92,30 +101,37 @@ resonating valence-bond state.
 \begin{proof}
     \leanok
     The bond carries a two-periodic grading with complementary support sets
-    $\{(0,1),(0,2),(1,0),(2,0)\}$ and $\{(0,0),(1,1),(1,2),(2,1),(2,2)\}$ that
-    are exchanged by left multiplication with a generator. Let $E_{ij}$ denote
-    the $(i,j)$ matrix unit. Then, for every blocking length $N$,
-    \begin{align*}
+    \begin{align}
+        &\{(0,1),(0,2),(1,0),(2,0)\}, \notag\\
+        &\{(0,0),(1,1),(1,2),(2,1),(2,2)\}.
+        \notag
+    \end{align}
+    Left multiplication with a generator exchanges these sets. Let $E_{ij}$
+    denote the $(i,j)$ matrix
+    unit. Then, for every blocking length $N$,
+    \begin{align}
         N\text{ odd}
         &\Rightarrow
-        \bigl(\forall w,\ |w|=N \Rightarrow (A^w)_{22}=0\bigr)
+        (\forall w,\ |w|=N \Rightarrow (A^w)_{22}=0)
         \Rightarrow
-        E_{22}\notin\spn_{\C}\{A^w: |w|=N\},\\
+        E_{22}\notin\spn_{\C}\{A^w: |w|=N\},
+        \notag\\
         N\text{ even}
         &\Rightarrow
-        \bigl(\forall w,\ |w|=N \Rightarrow (A^w)_{10}=0\bigr)
+        (\forall w,\ |w|=N \Rightarrow (A^w)_{10}=0)
         \Rightarrow
         E_{10}\notin\spn_{\C}\{A^w: |w|=N\}.
-    \end{align*}
+        \notag
+    \end{align}
     Hence no fixed-length word span is all of $\MN{3}$.
 \end{proof}
 
 \begin{remark}\label{rem:majumdar_ghosh_bond_dimension}
     The review writes the tensor in the valence-bond shorthand
     $A = [\ket0((02|+(20|) + \ket1((12|+(21|)]\otimes Y$ with the singlet
-    $Y = \left(\begin{smallmatrix}0 & -1 \\ 1 & 0\end{smallmatrix}\right)$.  Read
-    literally as $(ab| = \ketbra{a}{b}$ on a separate three-level factor tensored
-    with the two-level singlet space, that shorthand would describe a
+    $Y = \left(\begin{smallmatrix}0 & -1 \\ 1 & 0\end{smallmatrix}\right)$.
+    Read literally as $(ab| = \ketbra{a}{b}$ on a separate three-level factor
+    tensored with the two-level singlet space, that shorthand would describe a
     six-dimensional bond. Its two-site contractions do not have the singlet-pair
     support pattern: same-letter traces can be nonzero while opposite-letter
     traces vanish. The shorthand is therefore treated here as a schematic of the
@@ -128,12 +144,12 @@ resonating valence-bond state.
 \end{remark}
 
 The remaining target for the Majumdar--Ghosh example is the ground-space
-description of its parent Hamiltonian.  Because the tensor is non-normal
+description of its parent Hamiltonian. Because the tensor is non-normal
 (Theorem~\ref{thm:majumdar_ghosh_not_normal}) with a two-periodic bond grading,
 its periodic ground space is governed by the block-diagonal boundary-condition
 machinery for non-normal tensors
 (Section~\ref{sec:block_diagonal_boundary_closing}) rather than by the injective
-single-state result.  Thus the relevant target is the following range-three
+single-state result. Thus the relevant target is the following range-three
 periodic ground-space statement.
 
 \begin{theorem}[Two-fold dimer degeneracy of the Majumdar--Ghosh ground space]%
@@ -144,14 +160,13 @@ periodic ground-space statement.
     On an even periodic chain of length $N = 2m\ge4$, let
     $H_{N,\mathrm{MG}}^{(3)}$ be the range-three parent Hamiltonian of the
     Majumdar--Ghosh tensor, the periodic sum of translates of the local
-    projector with kernel $\mathcal G_3(A_{\mathrm{MG}})$.  Then
+    projector with kernel $\mathcal G_3(A_{\mathrm{MG}})$. Then
     $H_{N,\mathrm{MG}}^{(3)}$ has a two-dimensional ground space, spanned by
     the two nearest-neighbour singlet coverings
     $(1,2)(3,4)\cdots(N-1,N)$ and $(2,3)(4,5)\cdots(N,1)$.
     This two-fold degeneracy reflects the spontaneous breaking of the one-site
     translation symmetry of the spin-$\tfrac12$ chain
-    $H=\sum \boldsymbol{S}_i\cdot\boldsymbol{S}_{i+1}
-    +\tfrac12\sum\boldsymbol{S}_i\cdot\boldsymbol{S}_{i+2}$
+    $H=\sum \boldsymbol{S}_i\cdot\boldsymbol{S}_{i+1} +\tfrac12\sum\boldsymbol{S}_i\cdot\boldsymbol{S}_{i+2}$
     of \cite{Cirac2021Matrix}.
 \end{theorem}
 
