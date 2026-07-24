@@ -44,7 +44,7 @@ def main() -> int:
 \tntree{((ab)c)}
 \end{Verbatim}
 \begin{Verbatim}
-\verb|\documentclass{standalone}| \usepackagewrapper{foo} \tntree{(ab)}
+\verb|\documentclass{standalone}| \documentclasswrapper \usepackagewrapper{foo} \tntree{(ab)}
 \end{Verbatim}
 \begin{Verbatim}
 shell command % \tntree{commented}
@@ -81,7 +81,9 @@ shell command % \tntree{commented}
         raise AssertionError("tnmultiples variants were not installed independently")
     if r"\tntree" not in extracted[2].document:
         raise AssertionError("a registry command in Verbatim was not recognized as TeX")
-    if extracted[3].document.count(r"\documentclass") != 2:
+    if not extracted[3].document.startswith(r"\documentclass{article}") or (
+        r"\documentclasswrapper" not in extracted[3].document
+    ):
         raise AssertionError("a documentclass spelling inside verb was executed")
     multiline_package = extracted[4].document
     if multiline_package.index("]{graphicx}") > multiline_package.index(
@@ -125,6 +127,28 @@ shell command % \tntree{commented}
 """
     if r"\input" in DOCTEST._mask_display_environments(displayed_input):
         raise AssertionError("a displayed input spelling remained in the structural graph")
+    with tempfile.TemporaryDirectory(prefix="tenkz-doctest-graph-") as tmp:
+        manual_dir = Path(tmp)
+        chapters = manual_dir / "chapters2"
+        chapters.mkdir()
+        root = manual_dir / "manual2.tex"
+        child = chapters / "child.tex"
+        root.write_text(r"\input{chapters2/child}", encoding="utf-8")
+        child.write_text("", encoding="utf-8")
+        original_manual = DOCTEST.MANUAL
+        original_manual_dir = DOCTEST.MANUAL_DIR
+        original_chapters = DOCTEST.CHAPTERS
+        DOCTEST.MANUAL = root
+        DOCTEST.MANUAL_DIR = manual_dir
+        DOCTEST.CHAPTERS = chapters
+        try:
+            sources = DOCTEST._manual_sources()
+        finally:
+            DOCTEST.MANUAL = original_manual
+            DOCTEST.MANUAL_DIR = original_manual_dir
+            DOCTEST.CHAPTERS = original_chapters
+    if {source.resolve() for source in sources} != {root.resolve(), child.resolve()}:
+        raise AssertionError("the manual root or a traversed source was omitted")
 
     print("PASS: tenkz manual doctest extraction and reference coverage")
     return 0

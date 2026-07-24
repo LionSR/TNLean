@@ -320,7 +320,7 @@ def _variant_definitions(variant_style: str) -> list[str]:
 def _standalone_document(body: str, variant_style: str | None = None) -> str:
     body = body.strip()
     scan_body = _mask_inline_verbatim(body)
-    has_document_class = _find_uncommented(scan_body, r"\documentclass", 0) >= 0
+    has_document_class = _find_control_word(scan_body, "documentclass", 0) >= 0
     has_document = (
         _find_uncommented(scan_body, r"\begin{document}", 0) >= 0
         and _find_uncommented(scan_body, r"\end{document}", 0) >= 0
@@ -399,15 +399,14 @@ def extract_displayed_examples(path: Path) -> list[Example]:
 
 def displayed_examples() -> list[Example]:
     examples: list[Example] = []
-    for path in _manual_chapter_sources():
+    for path in _manual_sources():
         examples.extend(extract_displayed_examples(path))
     return examples
 
 
-def _manual_chapter_sources() -> list[Path]:
+def _manual_sources() -> list[Path]:
     pending = [MANUAL]
     visited: set[Path] = set()
-    chapters: set[Path] = set()
     input_pattern = re.compile(r"\\input\s*\{([^{}]+)\}")
     while pending:
         source = pending.pop()
@@ -424,9 +423,7 @@ def _manual_chapter_sources() -> list[Path]:
             if not included.is_file():
                 raise ValueError(f"{source}: missing manual input {relative}")
             pending.append(included)
-            if included.is_relative_to(CHAPTERS):
-                chapters.add(included)
-    return sorted(chapters)
+    return sorted(visited)
 
 
 def reference_examples() -> list[Example]:
