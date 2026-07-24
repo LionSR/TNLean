@@ -288,7 +288,9 @@ def _blank_range(masked: list[str], start: int, end: int) -> None:
 
 def _mask_false_branches(text: str) -> str:
     masked = list(text)
-    scan = strip_comments(_mask_display_environments(text))
+    scan = _display_comment_scan(
+        _mask_macro_definitions(text, strict=False)
+    )
     primitive_conditionals = (
         "if", "ifcat", "ifnum", "ifdim", "ifodd", "ifvmode", "ifhmode",
         "ifmmode", "ifinner", "ifvoid", "ifhbox", "ifvbox", "ifx", "ifeof",
@@ -300,13 +302,24 @@ def _mask_false_branches(text: str) -> str:
     )
     newif_matches = list(newif_pattern.finditer(scan))
     declared_conditionals = [match.group(1) for match in newif_matches]
-    primitive_pattern = "|".join(primitive_conditionals)
     let_pattern = re.compile(
-        rf"\\let\s*\\(if[A-Za-z@]+)\s*=?\s*\\({primitive_pattern})"
+        r"\\let\s*\\(if[A-Za-z@]+)\s*=?\s*\\(if[A-Za-z@]+)"
         r"(?![A-Za-z@])"
     )
     let_matches = list(let_pattern.finditer(scan))
-    aliased_conditionals = [match.group(1) for match in let_matches]
+    known_conditionals = set((*primitive_conditionals, *declared_conditionals))
+    while True:
+        additions = {
+            match.group(1)
+            for match in let_matches
+            if match.group(2) in known_conditionals
+        } - known_conditionals
+        if not additions:
+            break
+        known_conditionals.update(additions)
+    aliased_conditionals = sorted(
+        known_conditionals - set(primitive_conditionals) - set(declared_conditionals)
+    )
     conditionals = (
         *primitive_conditionals,
         *declared_conditionals,
@@ -326,7 +339,11 @@ def _mask_false_branches(text: str) -> str:
     index = 0
     while index < len(tokens):
         token = tokens[index]
-        if token.group(0) != r"\iffalse" or _is_escaped(scan, token.start()):
+        if (
+            token.group(0) != r"\iffalse"
+            or token.start() in declaration_operands
+            or _is_escaped(scan, token.start())
+        ):
             index += 1
             continue
         depth = 1
@@ -345,25 +362,50 @@ def _mask_false_branches(text: str) -> str:
     return "".join(masked)
 
 
-def _tex_file_exists(relative: Path, source_dir: Path) -> bool:
-    roots = [source_dir, MANUAL_DIR, ROOT / "tex" / "tenkz"]
+def _tex_search_roots(source_dir: Path) -> list[tuple[Path, bool]]:
+    roots = [
+        (source_dir, True),
+        (MANUAL_DIR, True),
+        (ROOT / "tex" / "tenkz", True),
+    ]
     for entry in os.environ.get("TEXINPUTS", "").split(":"):
+        recursive = entry.endswith("//")
         normalized = entry.removesuffix("//")
         if normalized:
-            roots.append(Path(normalized))
-    for root in dict.fromkeys(path.resolve() for path in roots if path.is_dir()):
+            roots.append((Path(normalized), recursive))
+    unique: dict[Path, bool] = {}
+    for root, recursive in roots:
+        if root.is_dir():
+            resolved = root.resolve()
+            unique[resolved] = unique.get(resolved, False) or recursive
+    return list(unique.items())
+
+
+def _resolve_tex_file(relative: Path, source_dir: Path) -> Path | None:
+    for root, recursive in _tex_search_roots(source_dir):
         if (root / relative).is_file():
-            return True
-        if any(candidate.is_file() for candidate in root.rglob(relative.as_posix())):
-            return True
-    return False
+            return (root / relative).resolve()
+        if recursive:
+            candidate = next(
+                (
+                    path
+                    for path in root.rglob(relative.as_posix())
+                    if path.is_file()
+                ),
+                None,
+            )
+            if candidate is not None:
+                return candidate.resolve()
+    return None
+
+
+def _tex_file_exists(relative: Path, source_dir: Path) -> bool:
+    return _resolve_tex_file(relative, source_dir) is not None
 
 
 def _mask_inactive_file_branches(text: str, source_dir: Path) -> str:
     masked = list(text)
-    scan = _mask_nonexecuted_tokens(
-        strip_comments(_mask_display_environments(text))
-    )
+    scan = _mask_nonexecuted_tokens(_display_comment_scan(text))
     pattern = re.compile(r"\\IfFileExists(?![A-Za-z@])")
     offset = 0
     while match := pattern.search(scan, offset):
@@ -395,9 +437,15 @@ def _mask_inactive_file_branches(text: str, source_dir: Path) -> str:
     return "".join(masked)
 
 
-def _mask_macro_definitions(text: str) -> str:
+def _display_comment_scan(text: str) -> str:
+    return strip_comments(
+        _mask_inline_verbatim(_mask_display_environments(text))
+    )
+
+
+def _mask_macro_definitions(text: str, *, strict: bool = True) -> str:
     masked = list(text)
-    scan = strip_comments(_mask_display_environments(text))
+    scan = _display_comment_scan(text)
     pattern = re.compile(
         r"\\(?:(?:new|renew|provide)command|(?:g|e|x)?def)\*?(?![A-Za-z@])"
     )
@@ -433,16 +481,22 @@ def _mask_macro_definitions(text: str) -> str:
         if cursor >= len(scan) or scan[cursor] != "{":
             offset = match.end()
             continue
-        end, _ = _read_braced(scan, cursor)
+        try:
+            end, _ = _read_braced(scan, cursor)
+        except ValueError:
+            if strict:
+                raise
+            offset = match.end()
+            continue
         _blank_range(masked, cursor, end)
         offset = end
     return "".join(masked)
 
 
 def _mask_inert_tex(text: str, source_dir: Path) -> str:
-    without_macros = _mask_macro_definitions(text)
-    without_false_branches = _mask_false_branches(without_macros)
-    return _mask_inactive_file_branches(without_false_branches, source_dir)
+    without_false_branches = _mask_false_branches(text)
+    without_macros = _mask_macro_definitions(without_false_branches)
+    return _mask_inactive_file_branches(without_macros, source_dir)
 
 
 def _mask_nonexecuted_tokens(text: str) -> str:
@@ -620,8 +674,8 @@ def _manual_sources() -> list[Path]:
             relative = Path(target)
             if not relative.suffix:
                 relative = relative.with_suffix(".tex")
-            included = (MANUAL_DIR / relative).resolve()
-            if not included.is_file():
+            included = _resolve_tex_file(relative, source.parent)
+            if included is None:
                 raise ValueError(f"{source}: missing manual input {relative}")
             pending.append(included)
     return sorted(visited)
