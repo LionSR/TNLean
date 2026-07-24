@@ -158,7 +158,9 @@
 \__tenkz_language_registry_key:nnnnnn {object}{no legs}{flag}{false}{kernel}{Suppress physical ports.}
 \__tenkz_language_registry_key:nnnnnn {object}{removed}{flag}{false}{kernel}{Remove a lattice atom.}
 \__tenkz_language_registry_key:nnnnnn {object}{tree style}{enum(wire|ribbon)}{wire}{kernel}{Fusion-tree strand style.}
-\__tenkz_language_registry_key:nnnnnn {connection}{route}{enum(straight|orth|arc)}{straight}{kernel}{Connection route family.}
+% The active 0.7 parser still accepts hv/vh during coexistence.  They are
+% migration-only values; the canonical 1.0 route family spells both `orth`.
+\__tenkz_language_registry_key:nnnnnn {connection}{route}{enum(straight|orth|arc)}{straight}{kernel}{Connection route family; 0.7 compatibility also accepts hv/vh until S4.}
 \__tenkz_language_registry_key:nnnnnn {connection}{dir}{direction-policy}{false}{kernel}{Connection direction.}
 \__tenkz_language_registry_key:nnnnnn {connection}{out}{angle}{automatic}{escape}{Arc departure angle.}
 \__tenkz_language_registry_key:nnnnnn {connection}{in}{angle}{automatic}{escape}{Arc arrival angle.}
