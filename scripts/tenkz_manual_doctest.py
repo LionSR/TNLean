@@ -178,10 +178,11 @@ def _is_tenkz_verbatim(body: str) -> bool:
     command_pattern = "|".join(re.escape(command) for command in commands)
     environment_pattern = "|".join(re.escape(environment) for environment in environments)
     packages, _ = _extract_usepackages(body)
+    uncommented = _strip_tex_comments(body)
     return bool(
         any("tenkz" in _package_names(package) for package in packages)
-        or re.search(rf"\\(?:{command_pattern})(?![A-Za-z@:_])", body)
-        or re.search(rf"\\begin\{{(?:{environment_pattern})\}}", body)
+        or re.search(rf"\\(?:{command_pattern})(?![A-Za-z@:_])", uncommented)
+        or re.search(rf"\\begin\{{(?:{environment_pattern})\}}", uncommented)
     )
 
 
