@@ -27,20 +27,32 @@ class Example:
     document: str
 
 
+def _is_escaped(text: str, offset: int) -> bool:
+    backslashes = 0
+    cursor = offset - 1
+    while cursor >= 0 and text[cursor] == "\\":
+        backslashes += 1
+        cursor -= 1
+    return backslashes % 2 == 1
+
+
 def _read_optional_argument(text: str, offset: int) -> tuple[int, str | None]:
     while offset < len(text) and text[offset].isspace():
         offset += 1
     if offset == len(text) or text[offset] != "[":
         return offset, None
 
-    depth = 0
-    for index in range(offset, len(text)):
-        if text[index] == "[" and (index == 0 or text[index - 1] != "\\"):
-            depth += 1
-        elif text[index] == "]" and (index == 0 or text[index - 1] != "\\"):
-            depth -= 1
-            if depth == 0:
-                return index + 1, text[offset + 1:index]
+    brace_depth = 0
+    for index in range(offset + 1, len(text)):
+        escaped = _is_escaped(text, index)
+        if text[index] == "{" and not escaped:
+            brace_depth += 1
+        elif text[index] == "}" and not escaped:
+            brace_depth -= 1
+            if brace_depth < 0:
+                raise ValueError("unbalanced brace in optional environment argument")
+        elif text[index] == "]" and not escaped and brace_depth == 0:
+            return index + 1, text[offset + 1:index]
     raise ValueError("unterminated optional environment argument")
 
 
@@ -48,23 +60,18 @@ def _split_top_level(text: str) -> list[str]:
     pieces: list[str] = []
     start = 0
     brace_depth = 0
-    bracket_depth = 0
     for index, character in enumerate(text):
-        escaped = index > 0 and text[index - 1] == "\\"
+        escaped = _is_escaped(text, index)
         if character == "{" and not escaped:
             brace_depth += 1
         elif character == "}" and not escaped:
             brace_depth -= 1
-        elif character == "[" and not escaped:
-            bracket_depth += 1
-        elif character == "]" and not escaped:
-            bracket_depth -= 1
-        elif character == "," and brace_depth == 0 and bracket_depth == 0:
+        elif character == "," and brace_depth == 0:
             pieces.append(text[start:index].strip())
             start = index + 1
-        if brace_depth < 0 or bracket_depth < 0:
+        if brace_depth < 0:
             raise ValueError("unbalanced option group")
-    if brace_depth or bracket_depth:
+    if brace_depth:
         raise ValueError("unbalanced option group")
     pieces.append(text[start:].strip())
     return pieces
@@ -77,7 +84,7 @@ def _read_braced(text: str, offset: int) -> tuple[int, str]:
         raise ValueError("expected braced group")
     depth = 0
     for index in range(offset, len(text)):
-        escaped = index > 0 and text[index - 1] == "\\"
+        escaped = _is_escaped(text, index)
         if text[index] == "{" and not escaped:
             depth += 1
         elif text[index] == "}" and not escaped:
@@ -136,10 +143,46 @@ def _is_tenkz_verbatim(body: str) -> bool:
     )
 
 
+def _is_commented(text: str, offset: int) -> bool:
+    line_start = text.rfind("\n", 0, offset) + 1
+    line = text[line_start:offset]
+    for index, character in enumerate(line):
+        if character == "%" and not _is_escaped(line, index):
+            return True
+    return False
+
+
+def _find_uncommented(text: str, marker: str, offset: int) -> int:
+    while True:
+        found = text.find(marker, offset)
+        if found < 0 or not _is_commented(text, found):
+            return found
+        offset = found + len(marker)
+
+
+def _variant_definitions(variant_style: str) -> list[str]:
+    return [
+        rf"\pgfqkeys{{/tenkz/grid}}{{variant/.style={{{variant_style}}}}}",
+        rf"\pgfqkeys{{/tenkz/cell}}{{variant/.style={{{variant_style}}}}}",
+    ]
+
+
 def _standalone_document(body: str, variant_style: str | None = None) -> str:
+    body = body.strip()
+    has_document_class = bool(re.search(r"\\documentclass(?:\[.*?\])?\{", body))
+    has_document = r"\begin{document}" in body and r"\end{document}" in body
+    if has_document_class:
+        if not has_document:
+            raise ValueError("displayed document class has no complete document body")
+        if variant_style is None:
+            return body + "\n"
+        begin = body.index(r"\begin{document}")
+        definitions = "\n".join(_variant_definitions(variant_style)) + "\n"
+        return body[:begin] + definitions + body[begin:] + "\n"
+
     preamble: list[str] = []
     content: list[str] = []
-    for line in body.strip().splitlines():
+    for line in body.splitlines():
         if line.lstrip().startswith(r"\usepackage"):
             preamble.append(line.strip())
         else:
@@ -147,12 +190,7 @@ def _standalone_document(body: str, variant_style: str | None = None) -> str:
     if not any(r"\usepackage{tenkz}" in line for line in preamble):
         preamble.append(r"\usepackage{tenkz}")
     if variant_style is not None:
-        preamble.extend(
-            [
-                rf"\pgfqkeys{{/tenkz/grid}}{{variant/.style={{{variant_style}}}}}",
-                rf"\pgfqkeys{{/tenkz/cell}}{{variant/.style={{{variant_style}}}}}",
-            ]
-        )
+        preamble.extend(_variant_definitions(variant_style))
     return "\n".join(
         [
             r"\documentclass{article}",
@@ -175,10 +213,13 @@ def extract_displayed_examples(path: Path) -> list[Example]:
     offset = 0
     ordinal = 0
     while match := begin_pattern.search(text, offset):
+        if _is_commented(text, match.start()):
+            offset = match.end()
+            continue
         environment = match.group(1)
         body_start, options = _read_optional_argument(text, match.end())
         end_marker = rf"\end{{{environment}}}"
-        body_end = text.find(end_marker, body_start)
+        body_end = _find_uncommented(text, end_marker, body_start)
         if body_end < 0:
             line = text.count("\n", 0, match.start()) + 1
             raise ValueError(f"{path}:{line}: missing {end_marker}")
