@@ -658,6 +658,130 @@
     condition of \cite[lines~2113--2117]{Cirac2021Matrix}.
 \end{definition}
 
+\begin{lemma}[BNT block separation with an injective prefix]
+    \label{lem:bnt_direct_sum_injective_prefix_word_span}
+    \lean{MPSTensor.hasPairBlockSeparatingWords_threeBlock_of_blocksNotGaugePhaseEquiv_c1}
+    \lean{MPSTensor.propBlockInjective_of_blocksNotGaugePhaseEquiv_directSum_c1}
+    \lean{MPSTensor.wordTupleSpanTop_of_blocksNotGaugePhaseEquiv_directSum_selectors_c1}
+    \lean{MPSTensor.exists_wordTupleSpanTop_of_blocksNotGaugePhaseEquiv_directSum_selectors_c1}
+    \leanok
+    \uses{def:bnt_cpsv, def:blockwise_product_word_span}
+    Let $A^1,\ldots,A^r$ be normalized representatives of a basis of normal
+    tensors: each representative is irreducible, the family is left-canonical,
+    the self-overlaps are normalized, and no two distinct same-dimensional
+    representatives are gauge-phase equivalent. Fix $L_0>0$. Assume that, for
+    every block $j$, the map
+    \begin{align}
+        \Gamma_{L_0}^{A^j}:\MN{D_j} &\longrightarrow (\C^d)^{\otimes L_0},
+        \notag\\
+        X &\longmapsto \sum_{|u|=L_0}\tr(XA^j_u)\ket{u}
+        \notag
+    \end{align}
+    is injective, and that the homogeneous word spans at the two source
+    lengths are full:
+    \begin{align}
+        \spn\{A^j_u:|u|=L_0+1\} &= \MN{D_j},
+        \notag\\
+        \spn\{A^j_v:|v|=3(L_0+1)\} &= \MN{D_j}.
+        \notag
+    \end{align}
+    Then, for every ordered pair $k\ne j$, there are coefficients
+    $c^{k,j}_\omega$ such that
+    \begin{align}
+        \sum_{|\omega|=3(L_0+1)} c^{k,j}_\omega A^k_\omega &= \Id,
+        \notag\\
+        \sum_{|\omega|=3(L_0+1)} c^{k,j}_\omega A^j_\omega &= 0.
+        \notag
+    \end{align}
+    The simultaneous block-word tuples at length
+    $(L_0+1)+3(r-1)(L_0+1)$ span the full product algebra
+    $\prod_{j=1}^r \MN{D_j}$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{def:bnt_cpsv, def:blockwise_product_word_span}
+    Put $\ell=L_0+1$ and $S=3\ell$, and write
+    $\mathcal G_n^q=\operatorname{ran}\Gamma_n^{A^q}$. Fix $k\ne j$.
+    We first prove
+    \begin{align}
+        \mathcal G_S^k\cap\mathcal G_S^j&=\{0\}.
+        \notag
+    \end{align}
+    Indeed, suppose that a nonzero vector belonged to both spaces and choose
+    boundary matrices $X$ and $Y$ for its two trace representations. Then
+    $X\ne0$ and the equality of the representations is the homogeneous
+    three-block relation
+    \begin{align}
+        \tr(XA^k_{uvw})-\tr(YA^j_{uvw})&=0
+        \qquad (|u|=|v|=|w|=\ell).
+        \notag
+    \end{align}
+    The three-block factorization and length-$\ell$ block injectivity turn
+    this relation into an inclusion of local spaces. After orienting the pair
+    so that the first bond dimension is at least the second, it gives
+    $\mathcal G_\ell^k\subseteq\mathcal G_\ell^j$. The full length-$\ell$
+    word spans and the nondegeneracy of the matrix trace pairing make both
+    maps $\Gamma_\ell^{A^q}$ injective. Consequently,
+    \begin{align}
+        D_k^2
+        &=\dim\mathcal G_\ell^k
+        \leq \dim\mathcal G_\ell^j
+        =D_j^2.
+        \notag
+    \end{align}
+    The chosen ordering forces equality, so $D_k=D_j$ and
+    $\mathcal G_\ell^k=\mathcal G_\ell^j$. Using the injective
+    length-$L_0$ boundary maps to close chains, injective uniqueness then makes
+    the periodic matrix product vectors of the two normalized irreducible
+    blocks proportional at arbitrarily large lengths. The BNT hypotheses exclude
+    this: proportionality of normalized irreducible representatives forces a
+    gauge-phase equivalence, whereas distinct same-dimensional representatives
+    were assumed not to be gauge-phase equivalent. This contradiction proves
+    the displayed trivial-intersection identity. If the bond dimensions are
+    unequal, the same dimension inequality is already the contradiction.
+
+    The full length-$S$ word spans similarly make each $\Gamma_S^{A^q}$
+    injective. Hence
+    \begin{align}
+        \Phi_{k,j}:\MN{D_k}\oplus\MN{D_j}
+        &\longrightarrow (\C^d)^{\otimes S},
+        \notag\\
+        (X,Y)&\longmapsto
+        \Gamma_S^{A^k}(X)+\Gamma_S^{A^j}(Y)
+        \notag
+    \end{align}
+    is injective. All spaces are finite-dimensional, so its dual is
+    surjective. Under the nondegenerate trace pairings, that dual sends word
+    coefficients $(c_\omega)_\omega$ to
+    \begin{align}
+        \left(\sum_{|\omega|=S}c_\omega A^k_\omega,
+        \sum_{|\omega|=S}c_\omega A^j_\omega\right).
+        \notag
+    \end{align}
+    Surjectivity at $(\Id,0)$ gives the asserted pair selector.
+
+    For fixed $k$, multiply its selectors against the other $r-1$ blocks.
+    Concatenation multiplies word evaluations, so this gives coefficients
+    $b_v^{(k)}$ at length $(r-1)S$ satisfying
+    \begin{align}
+        \sum_{|v|=(r-1)S}b_v^{(k)}A^j_v
+        &=\delta_{j,k}\Id.
+        \notag
+    \end{align}
+    Given $X_k\in\MN{D_k}$, the full length-$\ell$ word span writes
+    $X_k=\sum_{|u|=\ell}a_u^{(k)}A^k_u$. Concatenating this expansion with the
+    selector realizes the tuple supported at $k$ with value $X_k$, at the
+    exact length
+    \begin{align}
+        \ell+(r-1)S
+        &=(L_0+1)+3(r-1)(L_0+1).
+        \notag
+    \end{align}
+    Summing these supported tuples over $k$ yields every element of the stated
+    product algebra.
+\end{proof}
+
 \begin{theorem}[Simultaneous one-letter span after blocking a BNT]
     \label{thm:cpsv_bnt_blocked_simultaneous_span}
     \lean{MPSTensor.IsCPSVBasisOfNormalTensors.%
@@ -683,25 +807,35 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:cpsv_normal_tp_gauge,
+    \uses{lem:cpsv_bnt_block_dimensions_positive,
+        thm:cpsv_bnt_blocks_not_gaugePhaseEquiv,
+        thm:cpsv_normal_tp_gauge,
         thm:normal_tp_primitive_irred,
         thm:common_exact_block_injectivity_normal_left_canonical,
         thm:wordspan_blk_inj_succ,
         thm:peripheral_primitive_irreducible_overlap_one,
-        lem:gauge_invariance_block_injective}
-    Eventual linear independence implies $D_j>0$ for every $j$ and excludes
-    gauge-phase equivalence between two distinct blocks. Put every block in a
-    trace-preserving gauge. Normality gives a common positive length $p$ at
-    which every gauged block is $p$-block injective; this injectivity persists
-    at all larger lengths. Pairwise direct-sum separation at lengths $p$,
-    $p+1$, and $3(p+1)$ gives, for each ordered pair of distinct blocks, a
-    length-$3(p+1)$ polynomial equal to the identity on the first block and
-    zero on the second. Multiplying the $g-1$ pairwise polynomials gives a
-    selector for each block. Combining these selectors with the common
-    length-$p$ word spans yields the full product-algebra span at
-    $L=p+(g-1)3(p+1)$. Conjugation by the Perron gauges preserves this span.
-    Finally, a one-letter evaluation of $A_j^{[L]}$ is precisely a length-$L$
-    word evaluation of $A_j$.
+        lem:gauge_invariance_block_injective,
+        lem:bnt_direct_sum_injective_prefix_word_span}
+    Every block has positive bond dimension, and distinct blocks are not
+    gauge-phase equivalent after equal bond dimensions are identified. Put
+    each block in its trace-preserving Perron gauge. The gauged blocks are
+    irreducible and primitive, form a left-canonical family, and have
+    normalized self-overlaps. Choose a common positive length $p$ at which
+    every gauged block is block-injective. Positive-length propagation gives
+    block injectivity at $p+1$ and at $3(p+1)$; equivalently, the corresponding
+    homogeneous word spans are full, while the length-$p$ trace map is
+    injective. Thus all hypotheses of the preceding
+    Lemma~\ref{lem:bnt_direct_sum_injective_prefix_word_span} hold with
+    $L_0=p$. Applying it gives the full simultaneous product-algebra span at
+    the exact length
+    \begin{align}
+        L&=(p+1)+3(g-1)(p+1).
+        \notag
+    \end{align}
+    Conjugation by the Perron gauges preserves this span, since it conjugates
+    each component matrix by an invertible map. Finally, a one-letter
+    evaluation of $A_j^{[L]}$ is precisely a length-$L$ word evaluation of
+    $A_j$, which proves the asserted blocked one-letter span.
 \end{proof}
 
 Let $A$ be a tensor in canonical form, and let $A_1,\ldots,A_g$ be a basis of
