@@ -355,3 +355,9 @@ close dies there.
 | flag:cooccur:object:east at+west at | confirmed merge: the two endpoint selectors become one ports record at the language landing; expiry 0.9 (re-affirmed 2026-07-24) |
 | flag:lonely-type:cell-set\|physical | dies at the language landing with the union type (M6); expiry 0.9 (re-affirmed 2026-07-24) |
 | flag:lonely-type:positive-integer\|role-list | dies at the language landing with the union type (M6); expiry 0.9 (re-affirmed 2026-07-24) |
+| flag:sugar-shaped:command:tngroup | keep-because: a group is the composition grammar for one transform over several atoms and wires, not atom sugar; permanent (re-affirmed 2026-07-25) |
+
+`Extension-gate: #4700` (2026-07-25) adds one shared `frame=` concept at group
+and object
+scope. The picture spelling already exists; the new parser paths make the
+same rotation type composable without adding a second transform vocabulary.

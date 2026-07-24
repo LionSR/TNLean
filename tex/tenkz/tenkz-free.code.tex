@@ -96,11 +96,12 @@
   }
 \cs_new_protected:Npn \tenkz_free_inscribed_node_aux:nnnn #1#2#3#4
   {
-    \node[#1] (#2) at #3
+    \__tenkz_render_labelnode_named:nnnn
+      {#1} {#2} {#3}
       {
         \__tenkz_frame_upright:n
           {$\tenkz@labelsize \tenkz@glyphstrut #4$}
-      };
+      }
   }
 \tl_new:N \l__tenkz_fbound_tl    % measured glyph + external-label box
 \tl_new:N \g__tenkz_free_atom_record_tl

@@ -44,6 +44,7 @@ _PARSER_FAMILY_SCOPE = {
     "grid": "picture",
     "lattice": "picture",
     "cd": "picture",
+    "free": "picture",
     "cell": "object",
     "put": "object",
     "tree": "object",
@@ -68,6 +69,7 @@ _PARSER_FAMILY_SCOPE = {
 _SETUP_FORWARDS = {
     "grid": {"pitch", "compact", "inline", "tensor style", "species"},
     "lattice": {"pitch", "compact", "inline", "tensor style", "species"},
+    "free": {"pitch", "compact", "inline", "tensor style", "species"},
     "cd": {"pitch", "compact", "inline", "tensor style", "species"},
     "tree": {"pitch", "compact", "inline"},
 }

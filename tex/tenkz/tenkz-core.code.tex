@@ -1147,21 +1147,41 @@
   \ifdim\tenkz@bboxya>\tenkz@bboxymax \tenkz@bboxymax=\tenkz@bboxya\fi}
 \def\tenkz@emitglyphgeometry#1{%
   \begingroup
-  \iftenkz@frameglyphrotated
-    \pgfextractx{\tenkz@bboxxmin}{\pgfpointanchor{#1}{north east}}%
-    \pgfextracty{\tenkz@bboxymin}{\pgfpointanchor{#1}{north east}}%
-    \tenkz@bboxxmax=\tenkz@bboxxmin
-    \tenkz@bboxymax=\tenkz@bboxymin
-    \tenkz@bboxincludeanchor{#1}{north west}%
-    \tenkz@bboxincludeanchor{#1}{south east}%
-    \tenkz@bboxincludeanchor{#1}{south west}%
-  \else
-    \pgfextractx{\tenkz@bboxxmin}{\pgfpointanchor{#1}{west}}%
-    \pgfextractx{\tenkz@bboxxmax}{\pgfpointanchor{#1}{east}}%
-    \pgfextracty{\tenkz@bboxymin}{\pgfpointanchor{#1}{south}}%
-    \pgfextracty{\tenkz@bboxymax}{\pgfpointanchor{#1}{north}}%
-  \fi
   \def\tenkz@circle{circle}%
+  \ifx\tenkz@glyphshape\tenkz@circle
+    % A circle's rotated corner anchors are not its axis extrema.  Recover
+    % its invariant radius from the transformed centre-to-east vector.
+    \pgfextractx{\tenkz@bboxxmin}{\pgfpointanchor{#1}{center}}%
+    \pgfextracty{\tenkz@bboxymin}{\pgfpointanchor{#1}{center}}%
+    \pgfextractx{\tenkz@bboxxa}{\pgfpointanchor{#1}{east}}%
+    \pgfextracty{\tenkz@bboxya}{\pgfpointanchor{#1}{east}}%
+    \advance\tenkz@bboxxa by -\tenkz@bboxxmin
+    \advance\tenkz@bboxya by -\tenkz@bboxymin
+    \pgfmathparse
+      {veclen(\strip@pt\tenkz@bboxxa,\strip@pt\tenkz@bboxya)}%
+    \tenkz@bboxxa=\pgfmathresult pt
+    \tenkz@bboxxmax=\tenkz@bboxxmin
+    \advance\tenkz@bboxxmin by -\tenkz@bboxxa
+    \advance\tenkz@bboxxmax by \tenkz@bboxxa
+    \tenkz@bboxymax=\tenkz@bboxymin
+    \advance\tenkz@bboxymin by -\tenkz@bboxxa
+    \advance\tenkz@bboxymax by \tenkz@bboxxa
+  \else
+    \iftenkz@frameglyphrotated
+      \pgfextractx{\tenkz@bboxxmin}{\pgfpointanchor{#1}{north east}}%
+      \pgfextracty{\tenkz@bboxymin}{\pgfpointanchor{#1}{north east}}%
+      \tenkz@bboxxmax=\tenkz@bboxxmin
+      \tenkz@bboxymax=\tenkz@bboxymin
+      \tenkz@bboxincludeanchor{#1}{north west}%
+      \tenkz@bboxincludeanchor{#1}{south east}%
+      \tenkz@bboxincludeanchor{#1}{south west}%
+    \else
+      \pgfextractx{\tenkz@bboxxmin}{\pgfpointanchor{#1}{west}}%
+      \pgfextractx{\tenkz@bboxxmax}{\pgfpointanchor{#1}{east}}%
+      \pgfextracty{\tenkz@bboxymin}{\pgfpointanchor{#1}{south}}%
+      \pgfextracty{\tenkz@bboxymax}{\pgfpointanchor{#1}{north}}%
+    \fi
+  \fi
   \ifx\tenkz@glyphshape\tenkz@circle
     \ifdim\tenkz@glyphouterxsep<\tenkz@glyphouterysep
       \tenkz@glyphouterxsep=\tenkz@glyphouterysep

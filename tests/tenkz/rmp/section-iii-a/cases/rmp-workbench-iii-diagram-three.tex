@@ -1,12 +1,12 @@
 % Target: rmp-workbench-iii-diagram-three
 % Formula: The north-west and south-east rotated boundary actions agree.
-% Ink: Canonical public tenkzfree four-arm closures with lambda insertions.
+% Ink: Canonical public rotated tenkzfree closure with a lambda insertion.
 % Boundary: Each side has four directed external legs and one closed inner ring.
 % Source: author source ImagesReview Section III/ImagesReview Section III.tex
 %   lines 170-197; archival output Dia3.pdf
 % Capabilities: free-graph, rotated-action, ring-closure
 \[
-  \begin{tenkzfree}
+  \begin{tenkzfree}\tngroup[frame={rotate=90}]{
     \tnput[ring]{l}{(-6mm,6mm)}{\lambda}
     \tnput[box]{n}{(0mm,10mm)}{} \tnput[box]{w}{(-10mm,0mm)}{}
     \tnput[box]{s}{(0mm,-10mm)}{} \tnput[box]{e}{(10mm,0mm)}{}
@@ -17,6 +17,6 @@
     \tnjoin[route=arc, out=180, in=-90]{s.west}{w.south}
     \tnjoin[route=arc, out=90, in=180]{w.north}{l.west}
     \tnjoin{l.east}{n.west}
-  \end{tenkzfree}
+  }\end{tenkzfree}
   =\text{quarter-turn}.
 \]

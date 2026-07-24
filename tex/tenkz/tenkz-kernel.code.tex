@@ -3323,7 +3323,8 @@
       { \A \s* crossing \s+ of \s+ (.+) \s+ and \s+ (.+) \Z }
       \l__tenkz_kernel_r_tl \l__tenkz_kernel_match_seq
       {
-        % Freeze both captures before crossid reuses the match sequence.
+        % crossid itself uses the shared regex scratch sequence, so preserve
+        % both operands before resolving either one.
         \tl_set:Ne \l__tenkz_kernel_r_b_tl
           { \seq_item:Nn \l__tenkz_kernel_match_seq {2} }
         \tl_set:Ne \l__tenkz_kernel_r_c_tl
@@ -3332,25 +3333,13 @@
           \l__tenkz_kernel_r_b_tl \l__tenkz_kernel_r_b_tl
         \exp_args:NV \__tenkz_kernel_r_crossid:nN
           \l__tenkz_kernel_r_c_tl \l__tenkz_kernel_r_c_tl
-        \__tenkz_string_count:nnN
-          { tenkz-bead- \tl_use:N \l__tenkz_kernel_r_b_tl }
-          { tenkz-bead- \tl_use:N \l__tenkz_kernel_r_c_tl }
-          \l_tmpa_int
-        \int_compare:nNnT { \l_tmpa_int } > { 0 }
-          {
-            \pgf@process { \pgfpointintersectionsolution {1} }
-            \fp_set:Nn \l__tenkz_kernel_r_x_fp
-              {
-                \dim_to_fp:n { \pgf@x }
-                / \dim_to_fp:n { \use:c {tenkz@pitch} }
-              }
-            \fp_set:Nn \l__tenkz_kernel_r_y_fp
-              {
-                \dim_to_fp:n { \pgf@y }
-                / \dim_to_fp:n { \use:c {tenkz@pitch} }
-              }
-            \__tenkz_kernel_r_mark_label_ink:n {#1}
-          }
+        \exp_args:NnVV \__tenkz_kernel_r_crossing:nnn
+          {kernel-mark-crossing}
+          \l__tenkz_kernel_r_b_tl
+          \l__tenkz_kernel_r_c_tl
+        \__tenkz_geom_xy:nNN {kernel-mark-crossing}
+          \l__tenkz_kernel_r_x_fp \l__tenkz_kernel_r_y_fp
+        \__tenkz_kernel_r_mark_label_ink:n {#1}
       }
       {
         \__tenkz_kernel_addr:VN \l__tenkz_kernel_r_tl \l__tenkz_kernel_r_node_tl
