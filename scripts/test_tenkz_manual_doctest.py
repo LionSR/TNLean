@@ -60,8 +60,11 @@ shell command % \tntree{commented}
 % \begin{tnexample}
 % \begin{tenkz} \tn{commented} \end{tenkz}
 % \end{tnexample}
+\newif\ifdraft
 \iffalse
+\ifdraft
 \ifthenelse{ignored}{ignored}{ignored}
+\fi
 \begin{tnexample}
 \begin{tenkz} \tn{false-branch} \end{tenkz}
 \end{tnexample}
@@ -173,9 +176,12 @@ shell command % \tntree{commented}
         child = chapters / "child.tex"
         root.write_text(
             "\\newcommand{\\optionalchapter}{\\input{missing.tex}}\n"
-            "\\IfFileExists{chapters2/missing-generated.tex}"
+            "\\verb|\\IfFileExists| \\string\\IfFileExists \\\\IfFileExists\n"
+            "\\IfFileExists{chapters2/% continued\nchild.tex}"
+            "{\\IfFileExists{chapters2/missing-generated.tex}"
             "{\\input{chapters2/missing-generated.tex}}"
-            "{\\input chapters2/child}\n",
+            "{\\input chapters2/child}}"
+            "{\\input{chapters2/also-missing.tex}}\n",
             encoding="utf-8",
         )
         child.write_text("", encoding="utf-8")

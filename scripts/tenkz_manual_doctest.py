@@ -289,12 +289,16 @@ def _blank_range(masked: list[str], start: int, end: int) -> None:
 def _mask_false_branches(text: str) -> str:
     masked = list(text)
     scan = strip_comments(text)
-    conditionals = (
+    primitive_conditionals = (
         "if", "ifcat", "ifnum", "ifdim", "ifodd", "ifvmode", "ifhmode",
         "ifmmode", "ifinner", "ifvoid", "ifhbox", "ifvbox", "ifx", "ifeof",
         "iftrue", "iffalse", "ifcase", "ifdefined", "ifcsname", "iffontchar",
         "ifincsname",
     )
+    declared_conditionals = re.findall(
+        r"\\newif\s*\\(if[A-Za-z@]+)(?![A-Za-z@])", scan
+    )
+    conditionals = (*primitive_conditionals, *declared_conditionals)
     tokens = list(
         re.finditer(
             r"\\(?:" + "|".join(conditionals) + r"|fi)(?![A-Za-z@])",
@@ -322,10 +326,13 @@ def _mask_false_branches(text: str) -> str:
 
 def _mask_inactive_file_branches(text: str) -> str:
     masked = list(text)
-    scan = strip_comments(text)
+    scan = _mask_nonexecuted_tokens(strip_comments(text))
     pattern = re.compile(r"\\IfFileExists(?![A-Za-z@])")
     offset = 0
     while match := pattern.search(scan, offset):
+        if _is_escaped(scan, match.start()):
+            offset = match.end()
+            continue
         cursor = _skip_space_and_comments(scan, match.end())
         file_start = cursor
         file_end, filename = _read_braced(scan, file_start)
@@ -333,16 +340,23 @@ def _mask_inactive_file_branches(text: str) -> str:
         true_end, _ = _read_braced(scan, true_start)
         false_start = _skip_space_and_comments(scan, true_end)
         false_end, _ = _read_braced(scan, false_start)
-        relative = Path(filename.strip())
+        normalized_filename = re.sub(r"\s+", "", strip_comments(filename))
+        relative = Path(normalized_filename)
         candidates = [MANUAL_DIR / relative]
         if not relative.suffix:
             candidates.append(MANUAL_DIR / relative.with_suffix(".tex"))
         if any(candidate.is_file() for candidate in candidates):
+            active_start, active_end = true_start, true_end
             _blank_range(masked, match.start(), true_start + 1)
             _blank_range(masked, true_end - 1, false_end)
         else:
+            active_start, active_end = false_start, false_end
             _blank_range(masked, match.start(), false_start + 1)
             _blank_range(masked, false_end - 1, false_end)
+        active = text[active_start + 1 : active_end - 1]
+        masked[active_start + 1 : active_end - 1] = _mask_inactive_file_branches(
+            active
+        )
         offset = false_end
     return "".join(masked)
 
