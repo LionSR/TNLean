@@ -201,6 +201,7 @@ jobs:
               - 'tex/tenkz/**'
               - 'tests/tenkz/**'
               - 'docs/tenkz/chapters2/**'
+              - 'docs/tenkz/tenkzmanual2.sty'
               - 'scripts/tenkz_manual_doctest.py'
               - 'scripts/test_tenkz_manual_doctest.py'
               - 'scripts/tenkz_audit.py'

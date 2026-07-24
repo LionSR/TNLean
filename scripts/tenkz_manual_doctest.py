@@ -36,14 +36,50 @@ def _is_escaped(text: str, offset: int) -> bool:
     return backslashes % 2 == 1
 
 
+def _strip_tex_comments(text: str) -> str:
+    output: list[str] = []
+    offset = 0
+    while offset < len(text):
+        if text[offset] == "%" and not _is_escaped(text, offset):
+            newline = text.find("\n", offset)
+            if newline < 0:
+                break
+            output.append("\n")
+            offset = newline + 1
+        else:
+            output.append(text[offset])
+            offset += 1
+    return "".join(output)
+
+
+def _skip_space_and_comments(text: str, offset: int) -> int:
+    while offset < len(text):
+        if text[offset].isspace():
+            offset += 1
+        elif text[offset] == "%" and not _is_escaped(text, offset):
+            newline = text.find("\n", offset)
+            if newline < 0:
+                return len(text)
+            offset = newline + 1
+        else:
+            break
+    return offset
+
+
 def _read_optional_argument(text: str, offset: int) -> tuple[int, str | None]:
-    while offset < len(text) and text[offset].isspace():
-        offset += 1
+    offset = _skip_space_and_comments(text, offset)
     if offset == len(text) or text[offset] != "[":
         return offset, None
 
     brace_depth = 0
-    for index in range(offset + 1, len(text)):
+    index = offset + 1
+    while index < len(text):
+        if text[index] == "%" and not _is_escaped(text, index):
+            newline = text.find("\n", index)
+            if newline < 0:
+                break
+            index = newline + 1
+            continue
         escaped = _is_escaped(text, index)
         if text[index] == "{" and not escaped:
             brace_depth += 1
@@ -52,7 +88,8 @@ def _read_optional_argument(text: str, offset: int) -> tuple[int, str | None]:
             if brace_depth < 0:
                 raise ValueError("unbalanced brace in optional environment argument")
         elif text[index] == "]" and not escaped and brace_depth == 0:
-            return index + 1, text[offset + 1:index]
+            return index + 1, _strip_tex_comments(text[offset + 1:index])
+        index += 1
     raise ValueError("unterminated optional environment argument")
 
 
@@ -169,14 +206,17 @@ def _variant_definitions(variant_style: str) -> list[str]:
 
 def _standalone_document(body: str, variant_style: str | None = None) -> str:
     body = body.strip()
-    has_document_class = bool(re.search(r"\\documentclass(?:\[.*?\])?\{", body))
-    has_document = r"\begin{document}" in body and r"\end{document}" in body
+    has_document_class = _find_uncommented(body, r"\documentclass", 0) >= 0
+    has_document = (
+        _find_uncommented(body, r"\begin{document}", 0) >= 0
+        and _find_uncommented(body, r"\end{document}", 0) >= 0
+    )
     if has_document_class:
         if not has_document:
             raise ValueError("displayed document class has no complete document body")
         if variant_style is None:
             return body + "\n"
-        begin = body.index(r"\begin{document}")
+        begin = _find_uncommented(body, r"\begin{document}", 0)
         definitions = "\n".join(_variant_definitions(variant_style)) + "\n"
         return body[:begin] + definitions + body[begin:] + "\n"
 
@@ -315,7 +355,10 @@ def compile_example(example: Example, engine: str, work: Path) -> None:
     driver = case_dir / "example.tex"
     driver.write_text(example.document, encoding="utf-8")
     env = os.environ.copy()
-    env["TEXINPUTS"] = f"{ROOT / 'tex' / 'tenkz'}//:{env.get('TEXINPUTS', '')}"
+    env["TEXINPUTS"] = (
+        f"{example.source.parent}//:{ROOT / 'tex' / 'tenkz'}//:"
+        f"{env.get('TEXINPUTS', '')}"
+    )
     run = subprocess.run(
         [engine, "-interaction=nonstopmode", "-halt-on-error", driver.name],
         cwd=case_dir,
