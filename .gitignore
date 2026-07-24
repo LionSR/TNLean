@@ -99,3 +99,6 @@ output/
 .tn_svg_cache/
 
 tex/RMP_TIKZ_SOURCE_CODE
+
+# Python bytecode (general)
+__pycache__/

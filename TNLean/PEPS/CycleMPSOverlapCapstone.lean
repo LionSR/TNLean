@@ -27,7 +27,7 @@ translation-invariant MPS on `n ≥ 2L + 1` sites — two matrix tensors, each
   `fundamentalTheorem_normalMPS` delegates to it for its `n ≥ 2L + 1` bound.
 
 The uniqueness clause of the source corollary — the gauge `Z` is unique up
-to a multiplicative constant — needs no system size and is delivered here
+to a multiplicative constant — needs no system size and is proved here
 as `fundamentalTheorem_normalMPS_translationInvariant_gauge_unique`.
 
 The route specializes the site-dependent closed-chain capstone
@@ -645,7 +645,7 @@ chain at `n ≥ 2L + 1`, per-bond form** (arXiv:1804.04964, Section
 `normal_alt`, the corollary after Lemma 5, lines 2256--2295 of
 `Papers/1804.04964/paper_normal.tex`).
 
-The per-bond gauge family delivered by `fundamentalTheorem_normalMPS` at
+The per-bond gauge family given by `fundamentalTheorem_normalMPS` at
 `n ≥ 3L` exists already at the source's `n ≥ 2L + 1`: invertible matrices
 `Z_v`, one per bond of the closed chain, with `B^i = Z_v⁻¹ A^i Z_{v+1}` at
 every site.  The family dresses the single gauge of the strengthened
