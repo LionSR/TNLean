@@ -6,6 +6,7 @@ from __future__ import annotations
 import argparse
 import os
 import re
+import shutil
 import subprocess
 import tempfile
 from dataclasses import dataclass
@@ -22,6 +23,74 @@ CHAPTERS = ROOT / "docs" / "tenkz" / "chapters2"
 REGISTRY = ROOT / "tex" / "tenkz" / "tenkz-language-registry.tex"
 REFERENCE = CHAPTERS / "generated-language-reference.tex"
 DISPLAY_ENVIRONMENTS = ("tnexample", "tnmultiples", "Verbatim")
+TEX_PRIMITIVE_CONDITIONALS = (
+    "if", "ifcat", "ifnum", "ifdim", "ifodd", "ifvmode", "ifhmode",
+    "ifmmode", "ifinner", "ifvoid", "ifhbox", "ifvbox", "ifx", "ifeof",
+    "iftrue", "iffalse", "ifcase", "ifdefined", "ifcsname", "iffontchar",
+    "ifincsname",
+)
+LATEX_CORE_CONDITIONAL_FALLBACK = ("if@twocolumn",)
+
+
+@cache
+def _latex_format_conditionals() -> tuple[str, ...]:
+    known = set(LATEX_CORE_CONDITIONAL_FALLBACK)
+    if not shutil.which("kpsewhich") or not shutil.which("xelatex"):
+        return tuple(sorted(known))
+    lookup = subprocess.run(
+        ["kpsewhich", "latex.ltx"],
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.DEVNULL,
+        timeout=15,
+    )
+    source = Path(lookup.stdout.strip())
+    if lookup.returncode != 0 or not source.is_file():
+        return tuple(sorted(known))
+    candidates = sorted(
+        set(re.findall(r"\\(if[A-Za-z@]+)", source.read_text(encoding="utf-8")))
+    )
+    with tempfile.TemporaryDirectory(prefix="tenkz-format-conditionals-") as tmp:
+        work = Path(tmp)
+        probe = work / "probe.tex"
+        lines = [r"\documentclass{article}"]
+        lines.extend(
+            rf"\typeout{{TENKZ-COND-{index}="
+            rf"\expandafter\meaning\csname {name}\endcsname}}"
+            for index, name in enumerate(candidates)
+        )
+        lines.append(r"\stop")
+        probe.write_text("\n".join(lines) + "\n", encoding="utf-8")
+        result = subprocess.run(
+            [
+                "xelatex",
+                "-interaction=batchmode",
+                f"-output-directory={work}",
+                probe.as_posix(),
+            ],
+            text=True,
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+            timeout=30,
+        )
+        log = work / "probe.log"
+        if result.returncode != 0 or not log.is_file():
+            return tuple(sorted(known))
+        meanings = {
+            int(index): meaning.strip()
+            for index, meaning in re.findall(
+                r"^TENKZ-COND-(\d+)=(.*)$",
+                log.read_text(encoding="utf-8", errors="replace"),
+                re.MULTILINE,
+            )
+        }
+    primitive_meanings = {rf"\{name}" for name in TEX_PRIMITIVE_CONDITIONALS}
+    known.update(
+        name
+        for index, name in enumerate(candidates)
+        if meanings.get(index) in primitive_meanings
+    )
+    return tuple(sorted(known))
 
 
 @dataclass(frozen=True)
@@ -141,10 +210,10 @@ def _registry_vocabulary() -> tuple[list[str], list[str]]:
     return commands, environments
 
 
-def _is_tenkz_verbatim(body: str) -> bool:
+def _is_tenkz_verbatim(body: str, source_dir: Path) -> bool:
     commands, environments = _registry_vocabulary()
     environment_pattern = "|".join(re.escape(environment) for environment in environments)
-    packages, _ = _extract_usepackages(body)
+    packages, _ = _extract_usepackages(body, source_dir)
     scan = _mask_nonexecuted_tokens(strip_comments(body))
     environment_matches = re.finditer(
         rf"\\begin\{{(?:{environment_pattern})\}}", scan
@@ -216,11 +285,12 @@ def _mask_inline_verbatim(text: str) -> str:
     return "".join(masked)
 
 
-def _extract_usepackages(body: str) -> tuple[list[str], str]:
+def _usepackage_ranges(body: str, source_dir: Path) -> list[tuple[int, int]]:
     ranges: list[tuple[int, int]] = []
     offset = 0
     marker = r"\usepackage"
-    scan_body = _mask_nonexecuted_tokens(body)
+    executable = _mask_inert_tex(body, source_dir)
+    scan_body = _mask_nonexecuted_tokens(executable)
     while (start := _find_control_word(scan_body, "usepackage", offset)) >= 0:
         cursor = _skip_space_and_comments(body, start + len(marker))
         if cursor < len(body) and body[cursor] == "[":
@@ -229,7 +299,11 @@ def _extract_usepackages(body: str) -> tuple[list[str], str]:
         end, _ = _read_braced(body, cursor)
         ranges.append((start, end))
         offset = end
+    return ranges
 
+
+def _extract_usepackages(body: str, source_dir: Path) -> tuple[list[str], str]:
+    ranges = _usepackage_ranges(body, source_dir)
     packages = [body[start:end].strip() for start, end in ranges]
     chunks: list[str] = []
     offset = 0
@@ -282,32 +356,201 @@ def _blank_range(masked: list[str], start: int, end: int) -> None:
             masked[index] = " "
 
 
-def _mask_false_branches(text: str) -> str:
+def _mask_false_branches(
+    text: str, inherited_conditionals: tuple[str, ...] = ()
+) -> str:
     masked = list(text)
-    scan = strip_comments(text)
-    tokens = list(re.finditer(r"\\(?:if[A-Za-z@]*|fi)(?![A-Za-z@])", scan))
-    index = 0
-    while index < len(tokens):
-        token = tokens[index]
-        if token.group(0) != r"\iffalse" or _is_escaped(scan, token.start()):
-            index += 1
+    scan = _display_comment_scan(text)
+    start_scan = _display_comment_scan(
+        _mask_macro_definitions(text, strict=False)
+    )
+    newif_pattern = re.compile(
+        r"\\newif\s*\\(if[A-Za-z@]+)(?![A-Za-z@])"
+    )
+    newif_matches = list(newif_pattern.finditer(start_scan))
+    let_pattern = re.compile(
+        r"\\let\s*\\(if[A-Za-z@]+)\s*=?\s*\\(if[A-Za-z@]*)"
+        r"(?![A-Za-z@])"
+    )
+    let_matches = list(let_pattern.finditer(start_scan))
+    declaration_operands = {
+        match.start(group) - 1
+        for match in (*newif_matches, *let_matches)
+        for group in range(1, len(match.groups()) + 1)
+    }
+    false_tokens = list(re.finditer(r"\\iffalse(?![A-Za-z@])", start_scan))
+    for token in false_tokens:
+        if (
+            masked[token.start()] != "\\"
+            or token.start() in declaration_operands
+            or start_scan[token.start() : token.end()] != token.group(0)
+            or _is_escaped(scan, token.start())
+        ):
             continue
+        active_newifs = [
+            match
+            for match in newif_matches
+            if match.start() < token.start() and masked[match.start()] == "\\"
+        ]
+        active_lets = [
+            match
+            for match in let_matches
+            if match.start() < token.start() and masked[match.start()] == "\\"
+        ]
+        declared_conditionals = [match.group(1) for match in active_newifs]
+        known_conditionals = set(
+            (
+                *TEX_PRIMITIVE_CONDITIONALS,
+                *_latex_format_conditionals(),
+                *inherited_conditionals,
+                *declared_conditionals,
+            )
+        )
+        while True:
+            additions = {
+                match.group(1)
+                for match in active_lets
+                if match.group(2) in known_conditionals
+            } - known_conditionals
+            if not additions:
+                break
+            known_conditionals.update(additions)
+        tokens = list(
+            re.finditer(
+                r"\\(?:"
+                + "|".join(sorted(known_conditionals, key=len, reverse=True))
+                + r"|fi)(?![A-Za-z@])",
+                scan[token.start() :],
+            )
+        )
         depth = 1
-        cursor = index + 1
+        cursor = 1
         while cursor < len(tokens) and depth:
             nested = tokens[cursor]
-            if not _is_escaped(scan, nested.start()):
+            nested_start = token.start() + nested.start()
+            if (
+                nested_start not in declaration_operands
+                and not _is_escaped(scan, nested_start)
+            ):
                 depth += -1 if nested.group(0) == r"\fi" else 1
             cursor += 1
-        end = tokens[cursor - 1].end() if depth == 0 else len(text)
+        end = (
+            token.start() + tokens[cursor - 1].end()
+            if depth == 0
+            else len(text)
+        )
         _blank_range(masked, token.start(), end)
-        index = cursor
     return "".join(masked)
 
 
-def _mask_macro_definitions(text: str) -> str:
+def _tex_search_roots(source_dir: Path) -> list[tuple[Path, bool]]:
+    roots = [
+        (source_dir, True),
+        (MANUAL_DIR, True),
+        (ROOT / "tex" / "tenkz", True),
+    ]
+    for entry in os.environ.get("TEXINPUTS", "").split(":"):
+        recursive = entry.endswith("//")
+        normalized = entry.removesuffix("//")
+        if normalized:
+            roots.append((Path(normalized), recursive))
+    unique: dict[Path, bool] = {}
+    for root, recursive in roots:
+        if root.is_dir():
+            resolved = root.resolve()
+            unique[resolved] = unique.get(resolved, False) or recursive
+    return list(unique.items())
+
+
+def _resolve_tex_file(relative: Path, source_dir: Path) -> Path | None:
+    for root, recursive in _tex_search_roots(source_dir):
+        if (root / relative).is_file():
+            return (root / relative).resolve()
+        if recursive:
+            candidate = next(
+                (
+                    path
+                    for path in root.rglob(relative.as_posix())
+                    if path.is_file()
+                ),
+                None,
+            )
+            if candidate is not None:
+                return candidate.resolve()
+    if shutil.which("kpsewhich"):
+        lookup = subprocess.run(
+            ["kpsewhich", relative.as_posix()],
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.DEVNULL,
+            timeout=15,
+        )
+        resolved = Path(lookup.stdout.strip())
+        if lookup.returncode == 0 and resolved.is_file():
+            return resolved.resolve()
+    return None
+
+
+def _tex_file_exists(relative: Path, source_dir: Path) -> bool:
+    return _resolve_tex_file(relative, source_dir) is not None
+
+
+def _mask_inactive_file_branches(
+    text: str,
+    source_dir: Path,
+    inherited_conditionals: tuple[str, ...] = (),
+) -> str:
     masked = list(text)
-    scan = strip_comments(text)
+    pattern = re.compile(r"\\IfFileExists(?![A-Za-z@])")
+    offset = 0
+    while True:
+        current = "".join(masked)
+        structural = _mask_macro_definitions(
+            _mask_false_branches(current, inherited_conditionals), strict=False
+        )
+        scan = _mask_nonexecuted_tokens(_display_comment_scan(structural))
+        match = pattern.search(scan, offset)
+        if match is None:
+            break
+        if _is_escaped(scan, match.start()):
+            offset = match.end()
+            continue
+        cursor = _skip_space_and_comments(scan, match.end())
+        file_start = cursor
+        file_end, filename = _read_braced(scan, file_start)
+        true_start = _skip_space_and_comments(scan, file_end)
+        true_end, _ = _read_braced(scan, true_start)
+        false_start = _skip_space_and_comments(scan, true_end)
+        false_end, _ = _read_braced(scan, false_start)
+        normalized_filename = re.sub(r"\s+", "", strip_comments(filename))
+        relative = Path(normalized_filename)
+        if _tex_file_exists(relative, source_dir):
+            active_start, active_end = true_start, true_end
+            _blank_range(masked, match.start(), true_start + 1)
+            _blank_range(masked, true_end - 1, false_end)
+        else:
+            active_start, active_end = false_start, false_end
+            _blank_range(masked, match.start(), false_start + 1)
+            _blank_range(masked, false_end - 1, false_end)
+        active = current[active_start + 1 : active_end - 1]
+        masked[active_start + 1 : active_end - 1] = (
+            _mask_inactive_file_branches(
+                active, source_dir, inherited_conditionals
+            )
+        )
+        offset = false_end
+    return "".join(masked)
+
+
+def _display_comment_scan(text: str) -> str:
+    return strip_comments(
+        _mask_inline_verbatim(_mask_display_environments(text))
+    )
+
+
+def _mask_macro_definitions(text: str, *, strict: bool = True) -> str:
+    masked = list(text)
+    scan = _display_comment_scan(text)
     pattern = re.compile(
         r"\\(?:(?:new|renew|provide)command|(?:g|e|x)?def)\*?(?![A-Za-z@])"
     )
@@ -343,14 +586,31 @@ def _mask_macro_definitions(text: str) -> str:
         if cursor >= len(scan) or scan[cursor] != "{":
             offset = match.end()
             continue
-        end, _ = _read_braced(scan, cursor)
+        try:
+            end, _ = _read_braced(scan, cursor)
+        except ValueError:
+            if strict:
+                raise
+            offset = match.end()
+            continue
         _blank_range(masked, cursor, end)
         offset = end
     return "".join(masked)
 
 
-def _mask_inert_tex(text: str) -> str:
-    return _mask_macro_definitions(_mask_false_branches(text))
+def _mask_inert_tex(
+    text: str,
+    source_dir: Path,
+    inherited_conditionals: tuple[str, ...] = (),
+) -> str:
+    selected_file_branches = _mask_inactive_file_branches(
+        text, source_dir, inherited_conditionals
+    )
+    without_false_branches = _mask_false_branches(
+        selected_file_branches, inherited_conditionals
+    )
+    without_macros = _mask_macro_definitions(without_false_branches)
+    return without_macros
 
 
 def _mask_nonexecuted_tokens(text: str) -> str:
@@ -361,6 +621,16 @@ def _mask_nonexecuted_tokens(text: str) -> str:
         for index in range(match.start(), match.end()):
             if masked[index] != "\n":
                 masked[index] = " "
+    scan = "".join(masked)
+    offset = 0
+    while (start := _find_control_word(scan, "detokenize", offset)) >= 0:
+        cursor = _skip_space_and_comments(scan, start + len(r"\detokenize"))
+        if cursor >= len(scan) or scan[cursor] != "{":
+            offset = cursor
+            continue
+        end, _ = _read_braced(scan, cursor)
+        _blank_range(masked, start, end)
+        offset = end
     return "".join(masked)
 
 
@@ -370,19 +640,20 @@ def _has_executable_command(text: str, command: str) -> bool:
     return any(not _is_escaped(scan, match.start()) for match in pattern.finditer(scan))
 
 
-def _instrument_command(document: str, command: str) -> tuple[str, str]:
-    packages, _ = _extract_usepackages(document)
-    declaration = next(
+def _instrument_command(
+    document: str, command: str, source_dir: Path
+) -> tuple[str, str]:
+    selected = next(
         (
-            package
-            for package in packages
-            if "tenkz" in _package_names(package)
+            (start, end)
+            for start, end in _usepackage_ranges(document, source_dir)
+            if "tenkz" in _package_names(document[start:end])
         ),
         None,
     )
-    if declaration is None:
+    if selected is None:
         raise ValueError(f"reference for \\{command} does not load tenkz")
-    end = document.find(declaration) + len(declaration)
+    _, end = selected
     marker = f"TENKZ-DOCTEST-EXECUTED-{command}"
     original = f"tenkzdoctestoriginal{command}"
     instrumentation = "\n".join(
@@ -410,7 +681,9 @@ def _variant_definitions(variant_style: str) -> list[str]:
     ]
 
 
-def _standalone_document(body: str, variant_style: str | None = None) -> str:
+def _standalone_document(
+    body: str, source_dir: Path, variant_style: str | None = None
+) -> str:
     body = body.strip()
     scan_body = _mask_nonexecuted_tokens(body)
     has_document_class = _find_control_word(scan_body, "documentclass", 0) >= 0
@@ -427,7 +700,7 @@ def _standalone_document(body: str, variant_style: str | None = None) -> str:
         definitions = "\n".join(_variant_definitions(variant_style)) + "\n"
         return body[:begin] + definitions + body[begin:] + "\n"
 
-    preamble, content = _extract_usepackages(body)
+    preamble, content = _extract_usepackages(body, source_dir)
     if not any("tenkz" in _package_names(package) for package in preamble):
         preamble.append(r"\usepackage{tenkz}")
     if variant_style is not None:
@@ -445,9 +718,13 @@ def _standalone_document(body: str, variant_style: str | None = None) -> str:
     )
 
 
-def extract_displayed_examples(path: Path) -> list[Example]:
+def extract_displayed_examples(
+    path: Path, inherited_conditionals: tuple[str, ...] = ()
+) -> list[Example]:
     text = path.read_text(encoding="utf-8")
-    scan_text = _mask_inert_tex(text)
+    scan_text = _mask_inert_tex(
+        text, path.parent, inherited_conditionals
+    )
     begin_pattern = re.compile(
         r"^[ \t]*\\begin\{(" + "|".join(DISPLAY_ENVIRONMENTS) + r")\}",
         re.MULTILINE,
@@ -469,7 +746,9 @@ def extract_displayed_examples(path: Path) -> list[Example]:
         body_end = end_match.start()
         body = text[body_start:body_end].strip()
         offset = end_match.end()
-        if environment == "Verbatim" and not _is_tenkz_verbatim(body):
+        if environment == "Verbatim" and not _is_tenkz_verbatim(
+            body, path.parent
+        ):
             continue
         line = text.count("\n", 0, match.start()) + 1
         variants = (
@@ -485,7 +764,9 @@ def extract_displayed_examples(path: Path) -> list[Example]:
                     label=f"manual-{_source_label(path)}-{ordinal}{suffix}",
                     source=path,
                     line=line,
-                    document=_standalone_document(body, variant_style),
+                    document=_standalone_document(
+                        body, path.parent, variant_style
+                    ),
                 )
             )
     return examples
@@ -493,23 +774,77 @@ def extract_displayed_examples(path: Path) -> list[Example]:
 
 def displayed_examples() -> list[Example]:
     examples: list[Example] = []
-    for path in _manual_sources():
-        examples.extend(extract_displayed_examples(path))
+    for path, inherited_conditionals in _manual_source_contexts():
+        examples.extend(extract_displayed_examples(path, inherited_conditionals))
     return examples
 
 
-def _manual_sources() -> list[Path]:
-    pending = [MANUAL]
-    visited: set[Path] = set()
+def _conditionals_before(
+    text: str,
+    offset: int,
+    inherited_conditionals: tuple[str, ...],
+    source_dir: Path,
+) -> tuple[str, ...]:
+    selected_file_branches = _mask_inactive_file_branches(
+        text, source_dir, inherited_conditionals
+    )
+    executable = _display_comment_scan(
+        _mask_macro_definitions(
+            _mask_false_branches(
+                selected_file_branches, inherited_conditionals
+            ),
+            strict=False,
+        )
+    )
+    newif_pattern = re.compile(r"\\newif\s*\\(if[A-Za-z@]+)(?![A-Za-z@])")
+    let_pattern = re.compile(
+        r"\\let\s*\\(if[A-Za-z@]+)\s*=?\s*\\(if[A-Za-z@]*)"
+        r"(?![A-Za-z@])"
+    )
+    newifs = [
+        match
+        for match in newif_pattern.finditer(executable)
+        if match.start() < offset
+    ]
+    lets = [
+        match for match in let_pattern.finditer(executable) if match.start() < offset
+    ]
+    known = set(
+        (
+            *TEX_PRIMITIVE_CONDITIONALS,
+            *_latex_format_conditionals(),
+            *inherited_conditionals,
+        )
+    )
+    known.update(match.group(1) for match in newifs)
+    while True:
+        additions = {
+            match.group(1) for match in lets if match.group(2) in known
+        } - known
+        if not additions:
+            break
+        known.update(additions)
+    return tuple(sorted(known - set(TEX_PRIMITIVE_CONDITIONALS)))
+
+
+def _manual_source_contexts() -> list[tuple[Path, tuple[str, ...]]]:
+    pending = [(MANUAL, ())]
+    visited: dict[Path, tuple[str, ...]] = {}
     input_pattern = re.compile(r"\\input(?![A-Za-z@])")
     while pending:
-        source = pending.pop()
+        source, inherited_conditionals = pending.pop()
         if source in visited:
             continue
-        visited.add(source)
+        visited[source] = inherited_conditionals
         raw = source.read_text(encoding="utf-8")
         text = strip_comments(
-            _mask_inline_verbatim(_mask_display_environments(_mask_inert_tex(raw)))
+            _mask_inline_verbatim(
+                _mask_display_environments(
+                    _mask_inert_tex(
+                        raw, source.parent, inherited_conditionals
+                    )
+                )
+            )
         )
         for match in input_pattern.finditer(text):
             if _is_escaped(text, match.start()):
@@ -527,11 +862,25 @@ def _manual_sources() -> list[Path]:
             relative = Path(target)
             if not relative.suffix:
                 relative = relative.with_suffix(".tex")
-            included = (MANUAL_DIR / relative).resolve()
-            if not included.is_file():
+            included = _resolve_tex_file(relative, source.parent)
+            if included is None:
                 raise ValueError(f"{source}: missing manual input {relative}")
-            pending.append(included)
-    return sorted(visited)
+            pending.append(
+                (
+                    included,
+                    _conditionals_before(
+                        raw,
+                        match.start(),
+                        inherited_conditionals,
+                        source.parent,
+                    ),
+                )
+            )
+    return sorted(visited.items())
+
+
+def _manual_sources() -> list[Path]:
+    return [source for source, _ in _manual_source_contexts()]
 
 
 def reference_examples() -> list[Example]:
@@ -575,7 +924,9 @@ def reference_examples() -> list[Example]:
             raise ValueError(
                 f"{source}: example mapped to \\{command} does not invoke that command"
             )
-        instrumented, marker = _instrument_command(document, command)
+        instrumented, marker = _instrument_command(
+            document, command, source.parent
+        )
         examples.append(
             Example(
                 label=f"reference-{command}",
@@ -595,7 +946,7 @@ def compile_example(example: Example, engine: str, work: Path) -> None:
     driver.write_text(example.document, encoding="utf-8")
     env = os.environ.copy()
     env["TEXINPUTS"] = (
-        f"{example.source.parent}//:{ROOT / 'tex' / 'tenkz'}//:"
+        f"{example.source.parent}//:{MANUAL_DIR}//:{ROOT / 'tex' / 'tenkz'}//:"
         f"{env.get('TEXINPUTS', '')}"
     )
     run = subprocess.run(
