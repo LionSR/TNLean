@@ -1,0 +1,571 @@
+\section{Kernel of the adjoint Liouvillian}
+\label{sec:liouvillian_kernel}
+%% ---------------------------------------------------------
+
+%% Source: \cite[Section~7.1, Theorem~7.2]{Wolf2012Quantum}.
+
+\begin{definition}[Faithful stationary state]
+    \label{def:has_faithful_stationary_state_ch12}
+    \lean{HasFaithfulStationaryState}\leanok
+    A generator $L$ has a faithful stationary state if there exists a positive definite
+    density matrix $\rho_0$ with $L(\rho_0)=0$.
+\end{definition}
+
+\begin{definition}[Adjoint dissipator]
+    \label{def:adjoint_dissipator_ch12}
+    \lean{LindbladForm.adjointDissipator}\leanok
+    \uses{def:lindblad_form}
+    For a Lindblad operator $L_j$, the adjoint dissipator on observables is
+    \begin{align}
+        \mathcal{D}_{L_j}^*(A)
+        &=L_j^\dagger A L_j
+          -\tfrac12 L_j^\dagger L_j A
+          -\tfrac12 A L_j^\dagger L_j.
+        \label{eq:semigroup_adjoint_dissipator}
+    \end{align}
+\end{definition}
+
+\begin{definition}[Adjoint generator]
+    \label{def:adjoint_generator_ch12}
+    \lean{LindbladForm.toAdjointLinearMap}\leanok
+    \uses{def:lindblad_form, def:adjoint_dissipator_ch12}
+    The adjoint generator of a Lindblad form is
+    \begin{align}
+        L^*(A)
+        &=i[H,A]+\sum_j\mathcal{D}_{L_j}^*(A).
+        \label{eq:semigroup_adjoint_generator}
+    \end{align}
+\end{definition}
+
+\begin{theorem}[Trace-pairing characterization of the adjoint generator]
+    \label{thm:trace_pairing_adjoint_generator_ch12}
+    \lean{LindbladForm.trace_mul_toAdjointLinearMap_eq_trace_toLinearMap_mul}\leanok
+    \uses{def:adjoint_generator_ch12, def:lindblad_form}
+    For every density matrix $\rho$ and every observable $A$,
+    \begin{align}
+        \tr(\rho L^*(A))
+        &=\tr(L(\rho)A).
+        \label{eq:semigroup_trace_pairing}
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Expand the Schr\"odinger and Heisenberg formulas and apply cyclicity of the trace term by term.
+\end{proof}
+
+\begin{definition}[Commutant of the Lindblad data]
+    \label{def:commutant_ch12}
+    \lean{LindbladForm.commutant}\leanok
+    \uses{def:lindblad_form}
+    The commutant of a Lindblad form is the set of matrices commuting with $H$,
+    with every Lindblad operator $L_j$, and with every adjoint $L_j^\dagger$.
+\end{definition}
+
+\begin{definition}[Adjoint kernel]
+    \label{def:adjoint_kernel_ch12}
+    \lean{LindbladForm.adjointKernel}\leanok
+    \uses{def:adjoint_generator_ch12}
+    The adjoint kernel is the set of observables $A$ satisfying $L^*(A)=0$.
+\end{definition}
+
+\begin{theorem}[Commutant lies in the adjoint kernel]
+    \label{thm:commutant_subset_adjointKernel_ch12}
+    \lean{LindbladForm.mem_adjointKernel_of_mem_commutant,
+        LindbladForm.commutant_subset_adjointKernel}\leanok
+    \uses{def:adjoint_generator_ch12, def:commutant_ch12, def:adjoint_kernel_ch12}
+    If an observable commutes with $H$, with every $L_j$, and with every
+    $L_j^\dagger$, then it lies in $\ker(L^*)$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The Hamiltonian commutator term vanishes, and each adjoint dissipator
+    $\mathcal{D}_{L_j}^*(A)$ is zero under the commutation hypotheses.
+\end{proof}
+
+\begin{theorem}[Adjoint kernel lies in the commutant]
+    \label{thm:adjointKernel_eq_commutant}
+    \lean{LindbladForm.mem_commutant_of_mem_adjointKernel_of_hasFaithfulStationaryState}\leanok
+    \uses{def:lindblad_form, def:has_faithful_stationary_state_ch12,
+        def:commutant_ch12, def:adjoint_kernel_ch12}
+    Let $L$ be a GKSL generator in Lindblad form with Hamiltonian $H$
+    and Lindblad operators $\{L_j\}$.
+    Define the adjoint generator $L^*$ by
+    (\ref{eq:semigroup_trace_pairing}).
+    If $L$ has a faithful stationary state $\rho_0>0$ with $L(\rho_0)=0$,
+    then, for any $A$, the condition $L^*(A)=0$ implies, for every $j$,
+    \begin{align}
+        [A,H]=[A,L_j]=[A,L_j^\dagger]
+        &=0.
+        \label{eq:semigroup_kernel_commutators}
+    \end{align}
+    That is, $\ker(L^*)\subseteq\{H,L_j,L_j^\dagger\}'$.
+    This is \cite[Theorem~7.2]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    From $L^*(A)=0$ and $L^*(A^\dagger)=0$, compute
+    $L^*(A^\dagger A)=\sum_j[A,L_j]^\dagger[A,L_j]$.
+    Faithfulness of $\rho_0$ and
+    $\tr(\rho_0L^*(A^\dagger A))=0$
+    force $[A,L_j]=0$ for all $j$.
+    Similarly, $[A,L_j^\dagger]=0$, and then $L^*(A)=0$ directly gives
+    $[A,H]=0$.
+\end{proof}
+
+\begin{theorem}[Adjoint kernel equals the commutant]
+    \label{thm:adjointKernel_eq_commutant_full}
+    \lean{LindbladForm.adjointKernel_eq_commutant_of_hasFaithfulStationaryState}\leanok
+    \uses{thm:adjointKernel_eq_commutant, def:commutant_ch12, def:adjoint_kernel_ch12}
+    Under the same hypotheses as
+    Theorem~\ref{thm:adjointKernel_eq_commutant},
+    \begin{align}
+        \ker(L^*)
+        &=\{H,L_j,L_j^\dagger\}'.
+        \label{eq:semigroup_kernel_commutant}
+    \end{align}
+    That is, the adjoint kernel equals the commutant of
+    $\{H,L_j,L_j^\dagger\}$.
+    This is \cite[Theorem~7.2]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:adjointKernel_eq_commutant}
+    The inclusion $\supseteq$ is the easy direction
+    (commutant elements are in the kernel by a direct calculation).
+    The reverse inclusion $\subseteq$ is
+    Theorem~\ref{thm:adjointKernel_eq_commutant}.
+\end{proof}
+
+%% ---------------------------------------------------------
+\section{Reducibility of quantum dynamical semigroups}
+\label{sec:qds_reducibility}
+%% ---------------------------------------------------------
+
+%% Source: \cite[Section~7.1.2, Proposition~7.6]{Wolf2012Quantum}.
+
+The four equivalent reducibility conditions of
+\cite[Proposition~7.6]{Wolf2012Quantum} are as follows.
+
+\begin{definition}[Nontrivial projection]
+    \label{def:is_nontrivial_projection_ch12}
+    \lean{IsNontrivialProjection}\leanok
+    A projection is nontrivial if it is orthogonal and neither $0$ nor $\Id$.
+\end{definition}
+
+\begin{definition}[Rank-deficient fixed density]\label{def:has_rank_deficient_fixed_density}
+    \lean{HasRankDeficientFixedDensity}\leanok
+    \uses{def:is_nontrivial_projection_ch12, def:exp_semigroup_ch12}
+    Condition~(1): there exists a density matrix $\rho_0$ with nontrivial
+    kernel such that $e^{tL}(\rho_0)=\rho_0$ for all $t\ge0$.
+\end{definition}
+
+\begin{definition}[Rank-deficient kernel element]\label{def:has_rank_deficient_kernel_element}
+    \lean{HasRankDeficientKernelElement}\leanok
+    \uses{def:is_nontrivial_projection_ch12}
+    Condition~(2): there exists a density matrix $\rho_0$ with nontrivial
+    kernel satisfying $L(\rho_0)=0$.
+\end{definition}
+
+\begin{definition}[Invariant compression]\label{def:has_invariant_compression}
+    \lean{HasInvariantCompression}\leanok
+    \uses{def:is_nontrivial_projection_ch12, def:exp_semigroup_ch12}
+    Condition~(3): there exists a nontrivial orthogonal projector $P$ such
+    that $e^{tL}(P\MN{D}P)\subseteq P\MN{D}P$ for all $t\ge0$.
+\end{definition}
+
+\begin{definition}[Block-upper-triangular Lindblad form]
+    \label{def:has_block_upper_triangular_lindblad}
+    \lean{HasBlockUpperTriangularLindblad}\leanok
+    \uses{def:is_nontrivial_projection_ch12, def:lindblad_form}
+    Condition~(4): there exists a nontrivial projector $P$ and a Lindblad form
+    $(H,\{L_j\})$ for $L$ such that $(\Id-P)L_jP=0$ and
+    $(\Id-P)\kappa P=0$ for all $j$, where
+    $\kappa=iH+\frac{1}{2}\sum_jL_j^\dagger L_j$.
+\end{definition}
+
+\begin{definition}[Generator-preserved compression]
+    \label{def:generator_preserves_compression_ch12}
+    \lean{GeneratorPreservesCompression}\leanok
+    \uses{def:has_invariant_compression}
+    For a projection $P$, the generator preserves the compression
+    $P\MN{D}P$ if, for every $X\in\MN{D}$,
+    \begin{align}
+        P L(PXP)P
+        &=L(PXP).
+        \label{eq:semigroup_generator_compression}
+    \end{align}
+\end{definition}
+
+\begin{definition}[Reducible quantum dynamical semigroup]
+    \label{def:is_reducible_qds_ch12}
+    \lean{IsReducibleQDS}\leanok
+    \uses{def:has_invariant_compression}
+    A quantum dynamical semigroup is reducible if it has a nontrivial invariant compression.
+\end{definition}
+
+\begin{theorem}[Semigroup invariance implies generator invariance]
+    \label{thm:generator_preserves_compression_from_semigroup_ch12}
+    \lean{generatorPreservesCompression_of_semigroupPreservesCompression}\leanok
+    \uses{def:generator_preserves_compression_ch12, def:has_invariant_compression}
+    If the semigroup preserves $P\MN{D}P$ for all non-negative times, then the generator
+    preserves the same compression.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Differentiate the identity
+    $Pe^{tL}(PXP)P=e^{tL}(PXP)$ at $t=0$.
+\end{proof}
+
+\begin{theorem}[Generator invariance implies semigroup invariance]
+    \label{thm:semigroup_preserves_compression_from_generator_ch12}
+    \lean{semigroup_preserves_compression_of_generator}\leanok
+    \uses{def:generator_preserves_compression_ch12, def:has_invariant_compression}
+    If the generator preserves $P\MN{D}P$, then so does the exponential semigroup
+    $e^{tL}$ for every $t\ge0$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Apply the compression map termwise to the exponential series. Every iterate of $L$
+    preserves the compression, so the whole series does as well.
+\end{proof}
+
+\begin{theorem}[Reducibility as a generator-level criterion]
+    \label{thm:isReducibleQDS_iff_generator_preserves_compression_ch12}
+    \lean{isReducibleQDS_iff_generator_preserves_compression}\leanok
+    \uses{def:is_reducible_qds_ch12, def:generator_preserves_compression_ch12}
+    A quantum dynamical semigroup is reducible if and only if its generator preserves some
+    nontrivial compression.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:generator_preserves_compression_from_semigroup_ch12,
+        thm:semigroup_preserves_compression_from_generator_ch12}
+    Combine Theorems~\ref{thm:generator_preserves_compression_from_semigroup_ch12}
+    and~\ref{thm:semigroup_preserves_compression_from_generator_ch12}.
+\end{proof}
+
+\begin{theorem}[Rank-deficient fixed densities and kernel elements]
+    \label{thm:wolf_prop_7_6_one_iff_two}
+    \lean{wolf_prop_7_6_one_iff_two}\leanok
+    \uses{def:has_rank_deficient_fixed_density,
+        def:has_rank_deficient_kernel_element}
+    A rank-deficient density matrix is a fixed point of $e^{tL}$ for all
+    $t\ge0$ if and only if it lies in $\ker L$.
+    This is \cite[Proposition~7.6, (1)$\Leftrightarrow$(2)]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}\leanok
+    The equivalence $L(\rho)=0\iff e^{tL}(\rho)=\rho$ for all $t\ge0$
+    follows from the generator--semigroup correspondence: differentiate
+    at $t=0$ for the forward direction, and exponentiate for the reverse.
+\end{proof}
+
+\begin{theorem}[A rank-deficient fixed density yields an invariant compression]
+    \label{thm:wolf_prop_7_6_one_implies_three}
+    \lean{wolf_prop_7_6_one_implies_three}\leanok
+    \uses{def:has_rank_deficient_fixed_density,
+        def:has_invariant_compression, def:is_gksl_generator}
+    If $L$ is a GKSL generator and there exists a rank-deficient fixed
+    density matrix, then the semigroup preserves a nontrivial compression.
+    This is \cite[Proposition~7.6, (1)$\Rightarrow$(3)]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}\leanok
+    Let $\rho_0$ be a rank-deficient fixed density.
+    Let $P$ be the support projection of $\rho_0$.
+    Since $\rho_0$ is rank-deficient, $P\neq\Id$;
+    since $\rho_0\neq0$, $P\neq0$.
+    Channel positivity and trace preservation force $e^{tL}$ to
+    preserve $P\MN{D}P$.
+\end{proof}
+
+\begin{theorem}[Invariant compression yields block-upper-triangular Lindblad data]
+    \label{thm:hasBlockUpperTriangularLindblad_of_hasInvariantCompression_ch12}
+    \lean{hasBlockUpperTriangularLindblad_of_hasInvariantCompression}\leanok
+    \uses{def:has_invariant_compression, def:has_block_upper_triangular_lindblad,
+        def:is_gksl_generator, def:generator_preserves_compression_ch12}
+    If a GKSL generator preserves a nontrivial compression, then its Lindblad data can be chosen
+    block-upper-triangular with respect to that compression.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:generator_preserves_compression_from_semigroup_ch12}
+    First pass from semigroup invariance to generator invariance by
+    Theorem~\ref{thm:generator_preserves_compression_from_semigroup_ch12}.
+    The generator-level vanishing condition forces $(\Id-P)L_jP=0$ and
+    $(\Id-P)\kappa P=0$ through the sum-of-squares identity.
+\end{proof}
+
+\begin{theorem}[Block-upper-triangular Lindblad data yield invariant compression]
+    \label{thm:hasInvariantCompression_of_hasBlockUpperTriangularLindblad_ch12}
+    \lean{hasInvariantCompression_of_hasBlockUpperTriangularLindblad}\leanok
+    \uses{def:has_invariant_compression, def:has_block_upper_triangular_lindblad,
+        def:generator_preserves_compression_ch12}
+    If the Lindblad data are block-upper-triangular with respect to a nontrivial projection,
+    then the associated semigroup preserves that compression.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:semigroup_preserves_compression_from_generator_ch12}
+    The block-upper-triangular relations imply generator-level compression invariance; then apply
+    Theorem~\ref{thm:semigroup_preserves_compression_from_generator_ch12}.
+\end{proof}
+
+\begin{theorem}[Invariant compression and triangular Lindblad data]
+    \label{thm:wolf_prop_7_6_three_iff_four}
+    \lean{wolf_prop_7_6_three_implies_four, wolf_prop_7_6_four_implies_three}\leanok
+    \uses{def:has_invariant_compression,
+        def:has_block_upper_triangular_lindblad, def:is_gksl_generator}
+    For a GKSL generator $L$, the semigroup preserves a nontrivial
+    compression if and only if the Lindblad data can be chosen
+    block-upper-triangular.
+    This is \cite[Proposition~7.6, (3)$\Leftrightarrow$(4)]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:hasBlockUpperTriangularLindblad_of_hasInvariantCompression_ch12,
+        thm:hasInvariantCompression_of_hasBlockUpperTriangularLindblad_ch12}
+    Combine Theorems~\ref{thm:hasInvariantCompression_of_hasBlockUpperTriangularLindblad_ch12}
+    and~\ref{thm:hasBlockUpperTriangularLindblad_of_hasInvariantCompression_ch12}.
+\end{proof}
+
+\begin{theorem}[Triangular Lindblad data give deficient kernels]
+    \label{thm:blockUpperTriangular_implies_rankDeficient}
+    \lean{hasRankDeficientKernelElement_of_hasBlockUpperTriangularLindblad}\leanok
+    \uses{def:has_block_upper_triangular_lindblad,
+        def:has_rank_deficient_kernel_element, def:is_gksl_generator}
+    If the Lindblad data of a GKSL generator are block-upper-triangular
+    with respect to some nontrivial projector $P$,
+    then there exists a density matrix $\rho_0$ with nontrivial kernel
+    satisfying $L(\rho_0)=0$.
+    This is \cite[Proposition~7.6, (4)$\Rightarrow$(2)]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The block-upper-triangular structure implies $L$ preserves the
+    compression $P\MN{D}P$.
+    Therefore the semigroup $e^{tL}$ also preserves $P\MN{D}P$
+    for all $t\ge0$.
+    By the Brouwer fixed-point theorem, $e^{(1/m)L}$ has a fixed
+    density matrix $\rho_m$ supported in $P\MN{D}P$ for each $m$.
+    Passing to a subsequential limit gives a density matrix
+    $\rho_0$ with $P\rho_0P=\rho_0$ and $L(\rho_0)=0$.
+    Since $P\neq\Id$, the matrix $\rho_0$ has nontrivial kernel.
+\end{proof}
+
+\begin{theorem}[Equivalent formulations of reducibility]
+    \label{thm:wolf_prop_7_6_full}
+    \lean{wolf_prop_7_6_full_equivalence}\leanok
+    \uses{def:is_gksl_generator, def:has_rank_deficient_fixed_density,
+        def:has_rank_deficient_kernel_element,
+        def:has_invariant_compression,
+        def:has_block_upper_triangular_lindblad}
+    For a GKSL generator $L:\MN{D}\to\MN{D}$, the four conditions
+    \begin{enumerate}
+        \item rank-deficient fixed density,
+        \item rank-deficient kernel element,
+        \item invariant compression, and
+        \item block-upper-triangular Lindblad form
+    \end{enumerate}
+    are equivalent.
+    This is \cite[Proposition~7.6]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:wolf_prop_7_6_one_iff_two,
+        thm:wolf_prop_7_6_one_implies_three,
+        thm:wolf_prop_7_6_three_iff_four,
+        thm:blockUpperTriangular_implies_rankDeficient}
+    The cycle (1)$\leftrightarrow$(2), (1)$\to$(3),
+    (3)$\leftrightarrow$(4), and (4)$\to$(2) closes
+    the equivalence chain.
+\end{proof}
+
+%% Source: \cite[Corollary~7.2]{Wolf2012Quantum}.
+
+\subsection{Sufficient conditions for non-reducibility}
+\label{sec:cor_7_2_sufficient_conditions}
+
+\begin{definition}[Lindblad span]\label{def:lindblad_span}
+    \lean{lindbladSpan}\leanok
+    \uses{def:lindblad_form}
+    The $\C$-linear span of the Lindblad operators $\{L_j\}$.
+\end{definition}
+
+\begin{definition}[Hermitian-closed Lindblad span]\label{def:is_lindblad_span_hermitian_closed}
+    \lean{IsLindbladSpanHermitianClosed}\leanok
+    \uses{def:lindblad_span}
+    The span of the Lindblad operators is closed under Hermitian conjugation,
+    i.e.\ it forms a $*$-subspace of $\MN{D}$.
+\end{definition}
+
+\begin{definition}[Trivial Lindblad commutant]\label{def:has_lindblad_span_trivial_commutant}
+    \lean{HasLindbladSpanTrivialCommutant}\leanok
+    \uses{def:lindblad_form}
+    The commutant of the Lindblad family $\{L_j\}'$ equals $\C\cdot\Id$,
+    i.e.\ the Lindblad operators act irreducibly on $\MN{D}$.
+\end{definition}
+
+\begin{definition}[Kossakowski rank]\label{def:kossakowski_rank}
+    \lean{kossakowskiRank}\leanok
+    \uses{def:lindblad_form}
+    The minimal number of Lindblad operators across all GKSL representations
+    of $L$, which equals the rank of the Kossakowski matrix in the
+    orthonormal-basis representation.
+\end{definition}
+
+\begin{theorem}[$\kappa$ block vanishing from generator compression]%
+    \label{thm:kappa_block_generator_compression}
+    \lean{kappa_block_of_generatorPreservesCompression}\leanok
+    \uses{def:lindblad_form, def:has_block_upper_triangular_lindblad}
+    Let $(H,\{L_j\})$ be a Lindblad form with
+    $\kappa=iH+\tfrac{1}{2}\sum_jL_j^\dagger L_j$, and let $P$ be an
+    orthogonal projection such that the generator preserves the compression
+    $P\MN{D}P$.
+    If $(\Id-P)L_jP=0$ for every $j$, then $(\Id-P)\kappa P=0$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:lindblad_form}
+    From $L=\varphi-\kappa(\cdot)-(\cdot)\kappa^\dagger$ and
+    $(\Id-P)L(P)=0$: the $(\Id-P)\varphi(P)$ term vanishes because each
+    $(\Id-P)L_jP=0$, and the $(\Id-P)(P\kappa^\dagger)$ term vanishes
+    because $(\Id-P)P=0$. What remains is $(\Id-P)\kappa P=0$.
+\end{proof}
+
+\begin{theorem}[Full algebra generation forbids block-upper-triangular form]%
+    \label{thm:full_algebra_gen_no_block_ut}
+    \lean{full_algebra_generation_implies_no_blockUpperTriangular}\leanok
+    \uses{def:lindblad_form, def:has_block_upper_triangular_lindblad,
+        thm:kappa_block_generator_compression}
+    Let $(H,\{L_j\})$ be a Lindblad form.
+    If the algebra generated by $\{L_j\}$ and $\kappa$ is the entire
+    matrix algebra $\MN{D}$, then the Lindblad data do not admit a
+    block-upper-triangular decomposition.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:kappa_block_generator_compression}
+    Assume for contradiction that a block-upper-triangular decomposition
+    exists with nontrivial projection $P$.
+    By Theorem~\ref{thm:kappa_block_generator_compression},
+    $(\Id-P)\kappa P=0$.
+    Induction on elements of the subalgebra shows
+    $(\Id-P)AP=0$ for every generator. Since the generated algebra is
+    all of $\MN{D}$, every matrix satisfies $(\Id-P)AP=0$, forcing
+    $P=0$ or $P=\Id$---a contradiction.
+\end{proof}
+
+\begin{theorem}[Hermitian span with trivial commutant forbids triangular form]%
+    \label{thm:herm_span_trivial_commutant_no_block_ut}
+    \lean{hermitian_span_trivial_commutant_implies_no_blockUpperTriangular}\leanok
+    \uses{def:lindblad_form, def:is_lindblad_span_hermitian_closed,
+        def:has_lindblad_span_trivial_commutant,
+        def:has_block_upper_triangular_lindblad}
+    If the Lindblad span is closed under Hermitian conjugation and its
+    commutant is $\C\cdot\Id$, then the Lindblad data do not admit a
+    block-upper-triangular decomposition.
+\end{theorem}
+
+\begin{proof}\leanok
+    Assume for contradiction that a block-upper-triangular decomposition
+    exists with nontrivial projection $P$. The block vanishing
+    $(\Id-P)L_jP=0$ and Hermitian closure give $PL_j(\Id-P)=0$ as
+    well, so $[P,L_j]=0$ for all $j$. But then $P$ lies in the
+    commutant of the Lindblad span, contradicting triviality.
+\end{proof}
+
+\begin{theorem}[Large Kossakowski rank forbids block-upper-triangular form]
+    \label{thm:large_kossakowski_rank_no_block_ut_ch12}
+    \lean{large_kossakowski_rank_implies_no_blockUpperTriangular}\leanok
+    \uses{def:kossakowski_rank, def:has_block_upper_triangular_lindblad}
+    If the Kossakowski rank satisfies $\rank(C)+d\ge d^2+1$, then no
+    block-upper-triangular Lindblad form exists.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    A block-upper-triangular traceless Lindblad family lies in a proper subspace whose dimension is
+    at most $d^2-d$. The formal rank minimization argument then contradicts the large-rank bound.
+\end{proof}
+
+\begin{theorem}[No block-upper-triangular Lindblad form implies non-reducibility]
+    \label{thm:not_isReducibleQDS_of_no_blockUpperTriangular_ch12}
+    \lean{not_isReducibleQDS_of_no_blockUpperTriangular_lindblad}\leanok
+    \uses{def:is_reducible_qds_ch12, def:has_block_upper_triangular_lindblad,
+        thm:hasBlockUpperTriangularLindblad_of_hasInvariantCompression_ch12}
+    If a GKSL generator admits no block-upper-triangular Lindblad form, then the associated
+    quantum dynamical semigroup is not reducible.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    A reducible semigroup would have an invariant compression, and
+    Theorem~\ref{thm:hasBlockUpperTriangularLindblad_of_hasInvariantCompression_ch12}
+    would then produce a block-upper-triangular Lindblad form.
+\end{proof}
+
+\begin{theorem}[Full algebra generation implies non-reducibility]
+    \label{thm:not_isReducible_of_generates_full_algebra}
+    \lean{not_isReducible_of_generates_full_algebra}\leanok
+    \uses{def:is_gksl_generator, def:lindblad_form,
+        thm:full_algebra_gen_no_block_ut,
+        thm:not_isReducibleQDS_of_no_blockUpperTriangular_ch12}
+    If the algebra generated by $\{L_j\}$ and $\kappa$ is the entire
+    matrix algebra $\MN{D}$, then the QDS is not reducible.
+    This is \cite[Corollary~7.2(1)]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:full_algebra_gen_no_block_ut,
+        thm:not_isReducibleQDS_of_no_blockUpperTriangular_ch12}
+    By Theorem~\ref{thm:full_algebra_gen_no_block_ut}, no block-upper-triangular
+    decomposition exists. Then apply
+    Theorem~\ref{thm:not_isReducibleQDS_of_no_blockUpperTriangular_ch12}.
+\end{proof}
+
+\begin{theorem}[Hermitian span and trivial commutant imply non-reducibility]
+    \label{thm:not_isReducible_of_hermitian_span_trivial_commutant}
+    \lean{not_isReducible_of_hermitian_span_trivial_commutant}\leanok
+    \uses{def:is_gksl_generator, def:is_lindblad_span_hermitian_closed,
+        def:has_lindblad_span_trivial_commutant,
+        thm:herm_span_trivial_commutant_no_block_ut,
+        thm:not_isReducibleQDS_of_no_blockUpperTriangular_ch12}
+    If the Lindblad span is Hermitian-closed and its commutant is trivial,
+    then the QDS is not reducible.
+    This is \cite[Corollary~7.2(2)]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:herm_span_trivial_commutant_no_block_ut,
+        thm:not_isReducibleQDS_of_no_blockUpperTriangular_ch12}
+    By Theorem~\ref{thm:herm_span_trivial_commutant_no_block_ut}, no
+    block-upper-triangular decomposition exists. Then apply
+    Theorem~\ref{thm:not_isReducibleQDS_of_no_blockUpperTriangular_ch12}.
+\end{proof}
+
+\begin{theorem}[Large Kossakowski rank implies non-reducibility]
+    \label{thm:not_isReducible_of_kossakowski_rank_ge}
+    \lean{not_isReducible_of_kossakowski_rank_ge}\leanok
+    \uses{def:is_gksl_generator, def:kossakowski_rank,
+        thm:large_kossakowski_rank_no_block_ut_ch12,
+        thm:not_isReducibleQDS_of_no_blockUpperTriangular_ch12}
+    If $\rank(C)>d^2-d$, then the QDS is not reducible.
+    This is \cite[Corollary~7.2(3)]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}\leanok
+    The rank hypothesis rules out block-upper-triangular Lindblad data by
+    Theorem~\ref{thm:large_kossakowski_rank_no_block_ut_ch12}. Then apply
+    Theorem~\ref{thm:not_isReducibleQDS_of_no_blockUpperTriangular_ch12}.
+\end{proof}

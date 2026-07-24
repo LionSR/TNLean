@@ -8,16 +8,17 @@
     This structure records the local ingredients of
     \cite[Appendix~C.2]{Cirac2016MPDO_arXiv}: a normalized three-site reduced
     state with equality in strong subadditivity, the resulting Markov
-    decomposition, and a primitive matrix $T$ satisfying
-    \[
-        \tr(T)=1,
-        \qquad
-        \tr(T^m)=\tr(T)
-    \]
-    for every positive integer $m$, together with a rank-one factorization
-    \[
-        T = a b^\top, \qquad a \cdot b = 1.
-    \]
+    decomposition, and a primitive matrix $T$ with trace one and, for every
+    positive integer $m$, equal positive-power traces:
+    \begin{align}
+        \tr(T)&=1, \notag\\
+        \tr(T^m)&=\tr(T), \notag
+    \end{align}
+    together with a rank-one factorization
+    \begin{align}
+        T&=ab^\top, \notag\\
+        a\cdot b&=1. \notag
+    \end{align}
 \end{definition}
 
 % **Refuted:** the source-selected four-sector tensor in
@@ -30,19 +31,15 @@
     \notready
     \uses{def:is_sal, def:mpo_source_zcl,
         thm:mpdo_active_trace_matrix_zcl_relations}
-    Let ${\cal K}$ be an injective matrix product density operator tensor
+    Let $\mathcal K$ be an injective matrix product density operator tensor
     satisfying the strong area law and zero correlation length. For the
     neighboring operators obtained from its inverse-map sector decomposition,
-    define
-    \[
-        T_{k,h}=\tr(\eta_{k,h}).
-    \]
-    Then there are real families $(a_k)_k$ and $(b_k)_k$ such that
-    \[
-        T_{k,h}=a_kb_h,
-        \qquad
-        \sum_k a_kb_k=1.
-    \]
+    define $T_{k,h}=\tr(\eta_{k,h})$. Then there are real families $(a_k)_k$
+    and $(b_k)_k$ such that
+    \begin{align}
+        T_{k,h}&=a_kb_h, \notag\\
+        \sum_k a_kb_k&=1. \notag
+    \end{align}
     This is Lemma~C.5 at
     \cite[Appendix~C.2, lines~1473--1499]{Cirac2016MPDO_arXiv}.
 \end{lemma}
@@ -63,41 +60,37 @@
     There is an injective matrix product density operator tensor satisfying
     the strong area law and source zero correlation length whose
     source-selected inverse-map factorization has positive semidefinite
-    neighboring operators and a primitive trace-one active trace matrix
-    \(T\), but for which
-    \[
-        \nexists\,a,b,\qquad T_{k,h}=a_kb_h.
-    \]
-    Equivalently, for the corresponding closed sector tensors \(L,Q\),
-    \[
-        Q(1-LQ)L=T-T^2\ne0.
-    \]
-    Thus the rank-one conclusion in Lemma~C.5 is false under its printed
-    hypotheses.
+    neighboring operators and a primitive trace-one active trace matrix $T$,
+    but for which there are no families $a,b$ satisfying
+    $T_{k,h}=a_kb_h$ for all $k,h$. Equivalently, for the corresponding closed
+    sector tensors $L,Q$, one has $Q(1-LQ)L=T-T^2\ne0$. Thus the rank-one
+    conclusion in Lemma~C.5 is false under its printed hypotheses.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    The four physical sectors are one-dimensional.  Their cyclic transition
-    law is doubly stochastic.  After tracing one site, conditioning on the
+    The four physical sectors are one-dimensional. Their cyclic transition
+    law is doubly stochastic. After tracing one site, conditioning on the
     middle physical label gives, at every admissible cut,
-    \[
-      \rho_{ABC}
-      =\bigoplus_{k=0}^{3}\frac14\,
-        \rho^{L}_{A,k}\otimes\rho^{R}_{k,C}.
-    \]
+    \begin{align}
+        \rho_{ABC}
+        &=\bigoplus_{k=0}^{3}\frac14
+          \rho^{L}_{A,k}\otimes\rho^{R}_{k,C}. \notag
+    \end{align}
     Thus the reduced state has a four-sector quantum-Markov decomposition and
-    the tensor satisfies the strong area law.  Its physical-trace
-    transfer is the idempotent matrix \(LQ\), so it has source zero correlation
-    length.  The explicit Hayashi decomposition and inverse map recover the
-    displayed tensors \(L,Q\).  The active trace matrix is primitive and has
-    trace one, but direct multiplication gives \(T^2\ne T\).  If
-    \(T=ab^{\mathsf T}\), then
-    \[
-      T^2=a(b^{\mathsf T}a)b^{\mathsf T}
-         =\left(\sum_k a_kb_k\right)T=T,
-    \]
-    where the last equality uses \(\tr(T)=1\).  Hence \(T\) has no rank-one
+    the tensor satisfies the strong area law. Its physical-trace
+    transfer is the idempotent matrix $LQ$, so it has source zero correlation
+    length. The explicit Hayashi decomposition and inverse map recover the
+    displayed tensors $L,Q$. The active trace matrix is primitive and has
+    trace one, but direct multiplication gives $T^2\ne T$. If
+    $T=ab^\top$, then
+    \begin{align}
+        T^2
+        &=a(b^\top a)b^\top
+          =\left(\sum_k a_kb_k\right)T
+          =T, \notag
+    \end{align}
+    where the last equality uses $\tr(T)=1$. Hence $T$ has no rank-one
     factorization.
 \end{proof}
 
@@ -123,20 +116,17 @@
         thm:mpdo_inverse_map_hayashi_sector_comparison}
     There is a four-sector, bond-dimension-two tensor with a refined Hayashi
     decomposition whose four sectors are one-dimensional and have weight
-    $1/4$.  Its three-site state is diagonal, with
-    \[
+    $1/4$. Its three-site state is diagonal, with
+    \begin{align}
         \rho(i,j,k;i',j',k')
-        =\delta_{(i,j,k),(i',j',k')}\,
-          \frac14(QL)_{i,j}(QL)_{j,k}.
-    \]
-    The normalized four-site tail is $LQ$.  For this tail, the inverse-map
-    construction recovers the closed sector tensors $L$ and $Q$ exactly.  Its
+        &=\delta_{(i,j,k),(i',j',k')}
+          \frac14(QL)_{i,j}(QL)_{j,k}. \notag
+    \end{align}
+    The normalized four-site tail is $LQ$. For this tail, the inverse-map
+    construction recovers the closed sector tensors $L$ and $Q$ exactly. Its
     neighboring operators therefore coincide with those obtained directly
-    from $L$ and $Q$, while
-    \[
-        Q(1-LQ)L\ne0.
-    \]
-    The inverse-map construction is the one in
+    from $L$ and $Q$, while $Q(1-LQ)L\ne0$. The inverse-map construction is
+    the one in
     \cite[Appendix~C.2, lines~1413--1455]{Cirac2016MPDO_arXiv}.
 \end{theorem}
 
@@ -144,17 +134,17 @@
     \leanok
     Write $S_i=L_{\mathord\bullet i}Q_{i\mathord\bullet}$ for the four physical
     slices, and let $f_i(a,b)$ be their dual coefficients, so that
-    \[
-        \sum_{i=0}^{3}f_i(a,b)S_i=E_{ab}.
-    \]
+    \begin{align}
+        \sum_{i=0}^{3}f_i(a,b)S_i&=E_{ab}. \notag
+    \end{align}
     With $T=QL$, $p_k=1/4$, and $(LQ)_{00}=1$, the two inverse-map contractions
     are
-    \[
+    \begin{align}
         (LQ)_{00}^{-1}p_k\sum_{i=0}^{3}f_i(0,\beta)T_{ik}
-        =\frac14\bigl(4L_{\beta k}\bigr)=L_{\beta k},
-        \qquad
-        \sum_{i=0}^{3}f_i(\alpha,0)T_{ki}=Q_{k\alpha}.
-    \]
+        &=\frac14(4L_{\beta k})=L_{\beta k}, \notag\\
+        \sum_{i=0}^{3}f_i(\alpha,0)T_{ki}
+        &=Q_{k\alpha}. \notag
+    \end{align}
     Hence the neighboring operators are those obtained directly from $L$ and
     $Q$, and direct multiplication gives $Q(1-LQ)L\ne0$.
 \end{proof}
@@ -173,16 +163,15 @@
     \notready
     \uses{lem:mpdo_sal_zcl_rank_one_trace_matrix,
         thm:mpdo_active_trace_matrix_zcl_relations}
-    Let ${\cal K}$ be an injective matrix product density operator tensor
+    Let $\mathcal K$ be an injective matrix product density operator tensor
     satisfying the strong area law and zero correlation length. Then there are
     an isometry, closed sector tensors, positive neighboring operators
     $\eta_{k,h}$, and real families $(a_k)_k,(b_k)_k$ such that the inverse-map
     sector decomposition holds and
-    \[
-        \tr(\eta_{k,h})=a_kb_h,
-        \qquad
-        \sum_k a_kb_k=1.
-    \]
+    \begin{align}
+        \tr(\eta_{k,h})&=a_kb_h, \notag\\
+        \sum_k a_kb_k&=1. \notag
+    \end{align}
     This is the structural corollary at
     \cite[Appendix~C.2, lines~1501--1505]{Cirac2016MPDO_arXiv}.
 \end{corollary}
@@ -202,21 +191,17 @@
         thm:psd_trace_powers_rank_one_t, thm:pairing_idempotent_rank_one_t}
     There are two sufficient forms of the local conclusion associated with
     \cite[Lemmas~C.2, C.4, and~C.5]{Cirac2016MPDO_arXiv}. In the first,
-    $T$ is positive semidefinite,
-    $\tr(T)=1$, and
-    $\tr(T^m)=1$ for every positive integer $m$; the spectral
-    theorem then gives
-    \[
-        T = a b^\top, \qquad a \cdot b = 1.
-    \]
-    In the second, $T$ is the sector trace matrix of linearly independent
-    sector tensors satisfying the zero-correlation-length pairing identity.
-    This identity implies $T^2=T$, so trace one gives the same rank-one
-    factorization. In this second form the constancy of the positive-power
-    traces is a conclusion rather than an assumption.
+    $T$ is positive semidefinite, $\tr(T)=1$, and $\tr(T^m)=1$ for every
+    positive integer $m$; the spectral theorem then gives the rank-one
+    factorization $T=ab^\top$ with $a\cdot b=1$. In the second, $T$ is the
+    sector trace matrix of linearly independent sector tensors satisfying the
+    zero-correlation-length pairing identity. This identity implies $T^2=T$,
+    so trace one gives the same rank-one factorization. In this second form the
+    constancy of the positive-power traces is a conclusion rather than an
+    assumption.
 \end{theorem}
 
-The physical supports are locally orthogonal:
+For $x\ne y$, the physical supports are locally orthogonal:
 \begin{center}
     % Formula: (\mathcal K_y^*\mathcal K_x)^{ij}_{a_y a_x;b_y b_x}
     % = \sum_q (\mathcal K_y^*)^{iq}_{a_y b_y}
@@ -233,7 +218,7 @@ The physical supports are locally orthogonal:
         \tn[mpo]{\mathcal K_y} \\
         \tn[mpo]{\mathcal K_x}
     \end{tenkz}
-    $\;=\;0\qquad(x\ne y)$
+    $ = 0$
 \end{center}
 In contraction notation, local orthogonality is
 $\mathcal K_y^*\mathcal K_x=0$ whenever $x\ne y$.
@@ -241,12 +226,12 @@ This is \cite[Theorem~4.9(iv), lines~863--868]{Cirac2016MPDO_arXiv}.
 
 Expanding $\sum_jP_j=\Id$ on both physical indices and using the local
 orthogonality relations leaves only the diagonal term:
-\[
+\begin{align}
     \mathcal K_i
-    =\sum_{j,j'}P_j\,\mathcal K_i\,P_{j'}
-    =P_i\,\mathcal K_i
-    =\mathcal K_i\,P_i
-\]
+    &=\sum_{j,j'}P_j\,\mathcal K_i\,P_{j'}
+      =P_i\,\mathcal K_i
+      =\mathcal K_i\,P_i. \notag
+\end{align}
 \begin{center}
     % K_i = sum_{j,j'} P_j K_i P_{j'} = P_i K_i = K_i P_i: each
     % sector tensor absorbs its own projector.  All four terms
@@ -258,18 +243,18 @@ orthogonality relations leaves only the diagonal term:
     \begin{tenkz}[physical=updown]
         \tn[mpo]{K_i}
     \end{tenkz}
-    $\;=\;\displaystyle\sum_{j,j'}$
+    $ = \sum_{j,j'}$
     \begin{tenkz}[rows={op:none, op, op:none}]
         \tn[mpo]{P_j} \\
         \tn[mpo]{K_i} \\
         \tn[mpo]{P_{j'}}
     \end{tenkz}
-    $\;=\;$
+    $ = $
     \begin{tenkz}[rows={op:none, op}]
         \tn[mpo]{P_i} \\
         \tn[mpo]{K_i}
     \end{tenkz}
-    $\;=\;$
+    $ = $
     \begin{tenkz}[rows={op, op:none}]
         \tn[mpo]{K_i} \\
         \tn[mpo]{P_i}
@@ -300,11 +285,10 @@ This is the calculation in
     have mutually orthogonal physical supports. Moreover, each basis tensor
     has an inverse-map sector decomposition with positive neighboring
     operators $\eta_{k,h}$ and real families $(a_k)_k,(b_k)_k$ satisfying
-    \[
-        \tr(\eta_{k,h})=a_kb_h,
-        \qquad
-        \sum_k a_kb_k=1.
-    \]
+    \begin{align}
+        \tr(\eta_{k,h})&=a_kb_h, \notag\\
+        \sum_k a_kb_k&=1. \notag
+    \end{align}
     This is implication (ii)$\Rightarrow$(iv) of
     \cite[Theorem~4.9 and Appendix~C.2, lines~1740--1788]
       {Cirac2016MPDO_arXiv}. The separate standing biCF and BNT hypotheses are

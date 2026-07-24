@@ -122,17 +122,18 @@ Section~\ref{sec:peps_edge_kernel_gauges}.
     % instead drew the unfixed family.  No exact standalone picture occurs in
     % Papers/1804.04964/paper_normal.tex; see the Section 3 route recorded in
     % docs/paper-gaps/peps_injective_ft_section3_route.tex.
-    \[
+    \begin{align}
         C_A(e,X;\sigma)
-        =
+        &=
         \sum_{\beta}
-        A_u(\beta_u,\sigma_u)\,
-        X_{\beta_{e,u},\beta_{e,v}}\,
+        A_u(\beta_u,\sigma_u)
+        X_{\beta_{e,u},\beta_{e,v}}
         C^{\mathrm{open}}_{A,M_e}
             (\beta_{\widehat e,u},\beta_{\widehat e,v};
-             \sigma|_{M_e})\,
+             \sigma|_{M_e})
         A_v(\beta_v,\sigma_v).
-    \]
+        \notag
+    \end{align}
 \end{definition}
 
 \begin{theorem}[Middle tensor reindexing for an opened edge]%
@@ -164,9 +165,9 @@ Section~\ref{sec:peps_edge_kernel_gauges}.
     the ordinary edge-boundary sum.
 \end{theorem}
 \begin{proof}\leanok
-    Substitute the identity matrix entry $\mathbf{1}_{a,a}=1$ and apply the
+    Substitute the identity matrix entry $\Id_{a,a}=1$ and apply the
     reindexing
-    \(C_{A,M_e}(\beta)=C^{\mathrm{open}}_{A,M_e}(\beta)\)
+    $C_{A,M_e}(\beta)=C^{\mathrm{open}}_{A,M_e}(\beta)$
     from Theorem~\ref{thm:peps_edgeMiddleWeight_eq_edgeOpenMiddleWeight}.
 \end{proof}
 
@@ -181,7 +182,7 @@ Section~\ref{sec:peps_edge_kernel_gauges}.
     to its diagonal part.
 \end{theorem}
 \begin{proof}\leanok
-    For $a\ne b$, the identity matrix entry $\mathbf{1}_{a,b}=0$ makes the
+    For $a\ne b$, the identity matrix entry $\Id_{a,b}=0$ makes the
     inserted summand vanish.
 \end{proof}
 
@@ -200,16 +201,17 @@ Section~\ref{sec:peps_edge_kernel_gauges}.
 \begin{proof}\leanok
     Split the inserted-boundary sum according to whether the two bond indices
     $a,b$ agree:
-    \[
-        C_A(e,\mathbf{1};\sigma)
-        =
+    \begin{align}
+        C_A(e,\Id;\sigma)
+        &=
         \sum_{\beta:\,a=b}
-            A_u(\beta_u,\sigma_u)\,
-            C^{\mathrm{open}}_{A,M_e}(\beta,\sigma|_{M_e})\,
+            A_u(\beta_u,\sigma_u)
+            C^{\mathrm{open}}_{A,M_e}(\beta,\sigma|_{M_e})
             A_v(\beta_v,\sigma_v)
         +\sum_{\beta:\,a\ne b}0.
-    \]
-    The off-diagonal sum vanishes because $\mathbf{1}_{a,b}=0$ for $a\ne b$,
+        \notag
+    \end{align}
+    The off-diagonal sum vanishes because $\Id_{a,b}=0$ for $a\ne b$,
     and the diagonal sum reindexes to $C_A(e;\sigma)$ through the equivalence
     between diagonal inserted-boundary configurations and ordinary
     edge-boundary configurations.
@@ -272,7 +274,7 @@ Section~\ref{sec:peps_edge_kernel_gauges}.
                 {blockAtwo,blockAthree,blockAfour,
                  blockTwoThree,blockThreeFour}
         \end{tenkzfree}
-        \(\quad\rightsquigarrow\quad\)
+        $\quad\rightsquigarrow\quad$
         \tnpic[periodic, physical=up]{%
             \tn[label pos=south]{A'_1} &
             \tn[label pos=south]{A'_2} &
@@ -310,17 +312,18 @@ Section~\ref{sec:peps_edge_kernel_gauges}.
     $\omega\leftrightarrow(\beta,\omega_{M_e})$ between global virtual
     configurations and an edge boundary configuration with a compatible middle
     configuration rewrites the PEPS coefficient as
-    \[
+    \begin{align}
         \sum_{\omega}
         A_u(\omega|_u,\sigma_u)
         \left(\prod_{x\in M_e}A_x(\omega|_x,\sigma_x)\right)
         A_v(\omega|_v,\sigma_v)
-        =
+        &=
         \sum_{\beta}
         A_u(\beta_u,\sigma_u)
         C_{A,M_e}(\beta,\sigma|_{M_e})
         A_v(\beta_v,\sigma_v).
-    \]
+        \notag
+    \end{align}
     Under the equivalence, $\omega|_u=\beta_u$ and $\omega|_v=\beta_v$; the
     inner sum over $\omega_{M_e}$ is exactly $C_{A,M_e}(\beta,\sigma|_{M_e})$.
     Thus $C_A(e;\sigma)=\Coeff_A(\sigma)$.
@@ -338,15 +341,16 @@ Section~\ref{sec:peps_edge_kernel_gauges}.
 \begin{proof}\leanok
     Let $e=(u,v)$ and put $M_e=V\setminus\{u,v\}$. With $\Id$ inserted on $e$, the
     inserted-boundary sum is
-    \[
+    \begin{align}
         C_A(e,\Id;\sigma)
-        =
+        &=
         \sum_{a,b,\lambda,\rho}
         \delta_{a,b}
         A_u(a,\lambda;\sigma_u)
         C^{\mathrm{open}}_{A,M_e}(\lambda,\rho;\sigma|_{M_e})
         A_v(b,\rho;\sigma_v).
-    \]
+        \notag
+    \end{align}
     Here $a,b$ are the two copies of the distinguished bond index, while
     $\lambda,\rho$ are the remaining virtual configurations at $u$ and $v$.
     The factor $\delta_{a,b}$
@@ -366,15 +370,7 @@ Section~\ref{sec:peps_edge_kernel_gauges}.
 \end{theorem}
 \begin{proof}\leanok
     For every physical configuration $\sigma$,
-    \[
-        C_A(e;\sigma)
-        =
-        \Coeff_A(\sigma)
-        =
-        \Coeff_B(\sigma)
-        =
-        C_B(e;\sigma).
-    \]
+    $C_A(e;\sigma)=\Coeff_A(\sigma)=\Coeff_B(\sigma)=C_B(e;\sigma)$.
 \end{proof}
 
 \begin{theorem}[Same state gives the same identity insertions]%
@@ -388,15 +384,8 @@ Section~\ref{sec:peps_edge_kernel_gauges}.
 \end{theorem}
 \begin{proof}\leanok
     For every physical configuration $\sigma$,
-    \[
-        C_A(e,\Id;\sigma)
-        =
-        \Coeff_A(\sigma)
-        =
-        \Coeff_B(\sigma)
-        =
-        C_B(e,\Id;\sigma).
-    \]
+    $C_A(e,\Id;\sigma)=\Coeff_A(\sigma)
+        =\Coeff_B(\sigma)=C_B(e,\Id;\sigma)$.
 \end{proof}
 
 \begin{definition}[Middle tensor family at an edge]%
@@ -462,14 +451,10 @@ Section~\ref{sec:peps_edge_kernel_gauges}.
     \uses{def:peps_regionInjectivityData}
     For a singleton block $\{v\}$, the blocked physical index is the original
     physical index and the blocked tensor is
-    \[
-        T_{A,\{v\}}(\eta,\sigma)=A_v(\eta,\sigma).
-    \]
+    $T_{A,\{v\}}(\eta,\sigma)=A_v(\eta,\sigma)$.
     Its injectivity is $\inj(T_{A,\{v\}})$. The comparison with a
     region-injectivity predicate $\kappa$ records the implication
-    \[
-        \inj(T_{A,\{v\}})\Longrightarrow\kappa(\{v\}).
-    \]
+    $\inj(T_{A,\{v\}})\Longrightarrow\kappa(\{v\})$.
 \end{definition}
 
 \begin{theorem}[Singleton comparison for a vertex-injective tensor]%
@@ -496,16 +481,11 @@ Section~\ref{sec:peps_edge_kernel_gauges}.
     \leanok
     \uses{def:IsVertexInjective, def:peps_singletonRegionTensor}
     If $A$ is vertex-injective, then every singleton blocked tensor is
-    injective. For every vertex $v$,
-    \[
-        \inj(T_{A,\{v\}}).
-    \]
+    injective. For every vertex $v$, $\inj(T_{A,\{v\}})$.
 \end{theorem}
 \begin{proof}\leanok
     For $R=\{v\}$, the contraction defining $T_{A,R}$ has one factor. Hence
-    \[
-        T_{A,\{v\}}(\eta,\sigma)=A_v(\eta,\sigma).
-    \]
+    $T_{A,\{v\}}(\eta,\sigma)=A_v(\eta,\sigma)$.
     Thus $\inj(A_v)$ is exactly
     $\inj(T_{A,\{v\}})$. Vertex injectivity gives
     $\forall v,\inj(A_v)$, and therefore
@@ -521,14 +501,9 @@ Section~\ref{sec:peps_edge_kernel_gauges}.
     \uses{def:IsVertexInjective, def:peps_singletonRegionTensor,
         thm:peps_singletonRegionTensorInjective}
     Assume that a region-injectivity predicate $\kappa$ satisfies, for every
-    vertex $v$,
-    \[
-        \inj(T_{A,\{v\}})\Longrightarrow\kappa(\{v\}).
-    \]
+    vertex $v$, $\inj(T_{A,\{v\}})\Longrightarrow\kappa(\{v\})$.
     Then, for every vertex $v$,
-    \[
-        A\text{ vertex-injective}\Longrightarrow\kappa(\{v\}).
-    \]
+    $A\text{ vertex-injective}\Longrightarrow\kappa(\{v\})$.
 \end{theorem}
 \begin{proof}\leanok
     For each $v$, the preceding theorem gives
@@ -597,8 +572,8 @@ Section~\ref{sec:peps_edge_kernel_gauges}.
     edge.
 \end{theorem}
 \begin{proof}\leanok
-    For each $e=(u,v)$, Theorem~\ref{thm:peps_edgeBlockedEndpointTensorMaps_injective}
-    gives
+    For each $e=(u,v)$,
+    Theorem~\ref{thm:peps_edgeBlockedEndpointTensorMaps_injective} gives
     $\inj(T_{A,u})\wedge\inj(T_{A,v})$.
 \end{proof}
 
@@ -616,11 +591,7 @@ Section~\ref{sec:peps_edge_kernel_gauges}.
     Let $e=(u,v)$ and put $M_e=V\setminus\{u,v\}$. The endpoint theorem supplies
     $\inj(T_{A,u})$ and $\inj(T_{A,v})$, while the
     hypothesis is $\inj(T_{A,M_e})$. Hence
-    \[
-        \inj(T_{A,u})
-        \wedge \inj(T_{A,M_e})
-        \wedge \inj(T_{A,v}).
-    \]
+    $\inj(T_{A,u})\wedge\inj(T_{A,M_e})\wedge\inj(T_{A,v})$.
 \end{proof}
 
 \begin{theorem}[All edge-blocked chains from middle-tensor injectivity]%
@@ -637,11 +608,7 @@ Section~\ref{sec:peps_edge_kernel_gauges}.
     For each $e=(u,v)$, put $M_e=V\setminus\{u,v\}$. Vertex injectivity gives
     $\inj(T_{A,u})$ and $\inj(T_{A,v})$, while the
     hypothesis gives $\inj(T_{A,M_e})$. Hence
-    \[
-        \inj(T_{A,u})\wedge
-        \inj(T_{A,M_e})\wedge
-        \inj(T_{A,v})
-    \]
+    $\inj(T_{A,u})\wedge\inj(T_{A,M_e})\wedge\inj(T_{A,v})$
     is the injectivity assertion for the edge-blocked three-site chain at $e$.
 \end{proof}
 
@@ -663,11 +630,7 @@ Section~\ref{sec:peps_edge_kernel_gauges}.
     $\kappa(M_e)\Longrightarrow\inj(T_{A,M_e})$. Vertex injectivity
     supplies $\inj(T_{A,u})$ and $\inj(T_{A,v})$.
     The preceding reduction then gives
-    \[
-        \inj(T_{A,u})\wedge
-        \inj(T_{A,M_e})\wedge
-        \inj(T_{A,v}).
-    \]
+    $\inj(T_{A,u})\wedge\inj(T_{A,M_e})\wedge\inj(T_{A,v})$.
 \end{proof}
 
 \begin{theorem}[Middle tensors from all middle regions]%
@@ -708,11 +671,7 @@ Section~\ref{sec:peps_edge_kernel_gauges}.
     $\kappa(M_e)\Longrightarrow\inj(T_{A,M_e})$. Vertex
     injectivity gives $\inj(T_{A,u})$ and
     $\inj(T_{A,v})$. Thus
-    \[
-        \inj(T_{A,u})\wedge
-        \inj(T_{A,M_e})\wedge
-        \inj(T_{A,v}).
-    \]
+    $\inj(T_{A,u})\wedge\inj(T_{A,M_e})\wedge\inj(T_{A,v})$.
 \end{proof}
 
 \begin{theorem}[Edge-middle tensor from singleton regions, nonempty middle case]%
@@ -780,7 +739,8 @@ Section~\ref{sec:peps_edge_kernel_gauges}.
     edge-blocked three-site injectivity at every edge.
 \end{theorem}
 \begin{proof}\leanok
-    For each $e=(u,v)$, Theorem~\ref{thm:peps_edgeMiddleVertices_nonempty_of_two_lt_card}
+    For each $e=(u,v)$,
+    Theorem~\ref{thm:peps_edgeMiddleVertices_nonempty_of_two_lt_card}
     gives $V\setminus\{u,v\}\ne\varnothing$. Apply the preceding all-edge
     singleton theorem.
 \end{proof}

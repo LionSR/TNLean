@@ -44,7 +44,7 @@ $\prod_{e\ni v}c_{v,e}=1$.
         \tnjoin{balanceLast.330}{balanceLastBoundary.150}
         \tnjoin{balanceVertex.north}{balancePhysical.south}
     \end{tenkzfree}
-    \qquad $\displaystyle\prod_{e\ni v}c_{v,e}=1$.
+    \qquad $\prod_{e\ni v}c_{v,e}=1$.
 \end{center}
 Two gauge families related by such an assignment give the same gauge
 equivalence, which is the precise sense in which the gauges of the Fundamental
@@ -77,7 +77,7 @@ constant.
 \begin{proof}\leanok
     At the lower endpoint this is ordinary multiplication of the edge scalars.
     At the upper endpoint, $(c_ed_e)^{-1}=c_e^{-1}d_e^{-1}$ because the
-    edge scalars lie in $\mathbb C^\times$.
+    edge scalars lie in $\C^\times$.
 \end{proof}
 
 \begin{theorem}[Inversion of oriented edge scalars]%
@@ -118,8 +118,9 @@ constant.
 
 \begin{proof}\leanok
     For every vertex $v$,
-    $\prod_{e\ni v}(cd)_{v,e}=
-        (\prod_{e\ni v}c_{v,e})(\prod_{e\ni v}d_{v,e})=1\cdot 1=1$.
+    $\prod_{e\ni v}(cd)_{v,e}
+    =(\prod_{e\ni v}c_{v,e})(\prod_{e\ni v}d_{v,e})
+    =1\cdot 1=1$.
 \end{proof}
 
 \begin{theorem}[Inverse of balanced edge scalars]%
@@ -133,8 +134,8 @@ constant.
 
 \begin{proof}\leanok
     For every vertex $v$,
-    $\prod_{e\ni v}(c^{-1})_{v,e}=
-        (\prod_{e\ni v}c_{v,e})^{-1}=1^{-1}=1$.
+    $\prod_{e\ni v}(c^{-1})_{v,e}
+    =(\prod_{e\ni v}c_{v,e})^{-1}=1^{-1}=1$.
 \end{proof}
 
 \begin{theorem}[Reflexivity of balanced edge-scalar equivalence]%
@@ -343,17 +344,15 @@ remaining $v$-incident edges determine $\eta$ completely.
     Let $A$ and a comparison tensor $C$ share their bond dimensions and have
     positive bond dimensions, and suppose the $R$-blocked family of $C$ is linearly
     independent. If the blocked weights satisfy the two region proportionalities
-    \[
-        A_R = c_R\,C_R,
-        \qquad
-        A_S = c_S\,C_S
-    \]
-    over $R$ and over $S=R\cup\{v\}$, with $c_R\ne 0$, then the
-    inserted-site tensors are proportional with ratio $c_S/c_R$ at every local
-    configuration $\eta$ at $v$ and every physical index $\sigma$:
-    \[
-        A_v(\eta,\sigma) = \frac{c_S}{c_R}\,C_v(\eta,\sigma).
-    \]
+    $A_R=c_R C_R$ and $A_S=c_S C_S$ over $R$ and over $S=R\cup\{v\}$,
+    with $c_R\ne 0$, then the inserted-site tensors are proportional with ratio
+    $c_S/c_R$ at every local configuration $\eta$ at $v$ and every physical
+    index $\sigma$:
+    \begin{align}
+        A_v(\eta,\sigma)
+        &=\frac{c_S}{c_R}\,C_v(\eta,\sigma).
+        \label{eq:peps_inserted_ratio}
+    \end{align}
 \end{theorem}
 \begin{proof}\leanok
     Write $b(\mu,\eta)$ for the label that a local configuration $\eta$ at $v$,
@@ -362,23 +361,25 @@ remaining $v$-incident edges determine $\eta$ completely.
     inserted-site factorization reads each blocked weight of $S$ as the
     inserted-site tensor summed against the $R$-boundary-label blocked weight of
     $R$ over the local configurations consistent with $\mu$:
-    \[
+    \begin{align}
         m\,A_S(\mu,\sigma)
-        =
+        &=
         \sum_{\eta\ \text{consistent with}\ \mu}
-        A_v\bigl(\eta,\sigma(v)\bigr)\,
-        A_R\bigl(b(\mu,\eta),\sigma|_R\bigr),
-    \]
-    and likewise for $C$. Feeding both proportionalities through this
-    factorization, cancelling the nonzero $m$, and substituting the
-    $R$-proportionality leaves, for every base label $\mu$, a vanishing
-    combination of the $R$-blocked family of $C$ with coefficient
+        A_v(\eta,\sigma(v))
+        A_R(b(\mu,\eta),\sigma|_R),
+        \label{eq:peps_insert_factorization}
+    \end{align}
+    and likewise for $C$. Feeding both proportionalities through
+    (\ref{eq:peps_insert_factorization}), cancelling the nonzero $m$, and
+    substituting the $R$-proportionality leaves, for every base label $\mu$, a
+    vanishing combination of the $R$-blocked family of $C$ with coefficient
     $c_R\,A_v(\eta)-c_S\,C_v(\eta)$ summed over the consistent local
     configurations. By
     Lemma~\ref{lem:peps_localConfig_eq_of_insertConsistent} the consistent
     configurations inject into their $R$-boundary labels, so linear independence
     of the $R$-blocked family separates the combination to one term, forcing
-    $c_R\,A_v(\eta,\sigma)=c_S\,C_v(\eta,\sigma)$ and hence the displayed ratio.
+    $c_R\,A_v(\eta,\sigma)=c_S\,C_v(\eta,\sigma)$ and hence
+    (\ref{eq:peps_inserted_ratio}).
 \end{proof}
 
 \begin{corollary}[Per-vertex gauge relation from two two-block proportionalities]%
@@ -394,17 +395,18 @@ remaining $v$-incident edges determine $\eta$ completely.
     proportionalities of the blocked weights of $A$ and $C$ over $R$ and over
     $S=R\cup\{v\}$ hold, with ratios $c_R$ and $c_S$ and with $c_R\ne 0$, then the
     per-vertex gauge relation
-    \[
+    \begin{align}
         A_v(\eta,\sigma)
-        =
-        \frac{c_S}{c_R}\,C_v(\eta,\sigma)
-    \]
-    holds at every local configuration $\eta$ at $v$ and every physical index $\sigma$.
+        &=\frac{c_S}{c_R}\,C_v(\eta,\sigma)
+        \label{eq:peps_vertex_gauge_ratio}
+    \end{align}
+    holds at every local configuration $\eta$ at $v$ and every physical index
+    $\sigma$.
 \end{corollary}
 \begin{proof}\leanok
     The two-block proportionalities are exactly the region proportionalities of
     Theorem~\ref{thm:peps_component_eq_of_regionProportional} for the gauge-absorbed
     comparison tensor. The reindexed inserted-site tensor of that comparison tensor
-    is the gauge action of $X$ on $B$ at $v$, so the extraction reads as the
-    displayed gauge relation.
+    is the gauge action of $X$ on $B$ at $v$, so the extraction gives
+    (\ref{eq:peps_vertex_gauge_ratio}).
 \end{proof}

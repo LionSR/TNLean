@@ -1,0 +1,238 @@
+\section{Parent Hamiltonian statements for the examples}\label{sec:example_parent_hamiltonians}
+%% ===================================================================
+
+The parent-Hamiltonian construction of \cite[lines~1988--2000]{Cirac2021Matrix},
+reviewed in Chapter~\ref{ch:parent_hamiltonian}, is recorded here in the form
+\begin{align}
+    \mathcal G_L(A)
+    &=
+    \left\{\sum_{i_1,\ldots,i_L}
+        \tr(A^{i_1}\cdots A^{i_L}X)
+        \ket{i_1\cdots i_L}
+        : X\in \MN{D}\right\}.
+    \notag
+\end{align}
+Thus
+\begin{align}
+    \ker h_L &= \mathcal G_L(A), \notag\\
+    H_N^{(L)} &= \sum_i (h_L)_i.
+    \notag
+\end{align}
+We write $\GS(H)=\ker(H-E_0(H)\Id)$ for the ground eigenspace.
+
+\begin{theorem}[GHZ two-site parent space]\label{thm:ghz_ground_space_two}
+    \lean{MPSTensor.ghz_groundSpace_two_eq_span}
+    \leanok
+    \uses{def:ghz_tensor, def:ground_space_parent, def:two_site_ket}
+    For the GHZ tensor $A$ of Definition~\ref{def:ghz_tensor},
+    \begin{align}
+        \mathcal G_2(A)
+        &=
+        \spn_{\C}\{\ket{00},\ket{11}\}.
+        \notag
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:ghz_tensor, def:ground_space_map, def:ground_space_parent,
+        def:two_site_ket}
+    By definition,
+    $\Gamma_2(X)(\sigma_1,\sigma_2)
+    =\tr(A^{\sigma_1}A^{\sigma_2}X)$.
+    For the GHZ matrices $A^0=\diag(1,0)$ and $A^1=\diag(0,1)$, whenever
+    $\sigma_1\ne\sigma_2$, one has $A^{\sigma_1}A^{\sigma_2}=0$. Hence
+    $\Gamma_2(X)=X_{00}\ket{00}+X_{11}\ket{11}$, and the image of~$\Gamma_2$
+    is $\spn_{\C}\{\ket{00},\ket{11}\}$.
+\end{proof}
+
+\begin{theorem}[Constant GHZ product vectors satisfy the cyclic constraints]
+    \label{thm:constant_ket_mem_ghz_chain_ground_space}
+    \lean{MPSTensor.constantKet_mem_ghz_chainGroundSpace}
+    \leanok
+    \uses{def:ghz_tensor, def:chain_ground_space, def:constant_ket,
+        thm:ghz_ground_space_two}
+    For $N\ge2$ and $a\in\{0,1\}$, one has
+    $\ket{a}^{\otimes N}\in\mathcal G_{N,2}(A_{\mathrm{GHZ}})$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:ghz_ground_space_two}
+    For a cyclic nearest-neighbour window and outside assignment $\tau$, set
+    $R_{i,\tau}:=\left.\ket{a}^{\otimes N}\right|_{[i,i+1],\tau}$.
+    For $b,c\in\{0,1\}$ with $b\ne c$, the completed configuration is not
+    constant, hence $R_{i,\tau}(b,c)=0$. Therefore
+    \begin{align}
+        R_{i,\tau}
+        &\in
+        \{v:v(0,1)=v(1,0)=0\}
+        =
+        \spn_{\C}\{\ket{00},\ket{11}\}
+        =
+        \mathcal G_2(A_{\mathrm{GHZ}}),
+        \notag
+    \end{align}
+    so $\ket{a}^{\otimes N}\in\mathcal G_{N,2}(A_{\mathrm{GHZ}})$.
+\end{proof}
+
+\begin{theorem}[GHZ periodic nearest-neighbour ground space]
+    \label{thm:ghz_chain_ground_space_two}
+    \lean{MPSTensor.ghz_chainGroundSpace_two_eq_constant_span}
+    \leanok
+    \uses{def:ghz_tensor, def:chain_ground_space, def:constant_ket,
+        thm:ghz_ground_space_two}
+    For $N\ge2$, the common nearest-neighbour cyclic ground space of the GHZ
+    tensor satisfies
+    \begin{align}
+        \mathcal G_{N,2}(A_{\mathrm{GHZ}})
+        &=
+        \spn_{\C}\{
+            \ket{0}^{\otimes N},
+            \ket{1}^{\otimes N}
+        \}.
+        \notag
+    \end{align}
+    This is the cyclic-window form of the two-fold degeneracy in
+    \cite[line~2205]{Cirac2021Matrix}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:ghz_ground_space_two,
+        thm:constant_ket_mem_ghz_chain_ground_space}
+    Let $\psi\in\mathcal G_{N,2}(A_{\mathrm{GHZ}})$. For every cyclic
+    nearest-neighbour window and outside assignment $\tau$, one has
+    \begin{align}
+        \left.\psi\right|_{[i,i+1],\tau}
+        &\in
+        \mathcal G_2(A_{\mathrm{GHZ}})
+        =
+        \spn_{\C}\{\ket{00},\ket{11}\}.
+        \notag
+    \end{align}
+    Taking the outside assignment from the word $\sigma$ gives
+    $\left.\psi\right|_{[i,i+1],\sigma}
+    (\sigma_i,\sigma_{i+1})=\psi(\sigma)$.
+    Hence a mixed nearest-neighbour word has zero coefficient:
+    $\sigma_i\ne\sigma_{i+1}\Longrightarrow\psi(\sigma)=0$.
+    A nonconstant binary cyclic word has a mixed edge:
+    $\sigma\notin\{(0,\ldots,0),(1,\ldots,1)\}
+    \Longrightarrow\exists i,\ \sigma_i\ne\sigma_{i+1}$.
+    Therefore
+    \begin{align}
+        \psi
+        &=
+        \psi(0,\ldots,0)\ket{0}^{\otimes N}
+        +
+        \psi(1,\ldots,1)\ket{1}^{\otimes N}.
+        \notag
+    \end{align}
+    Conversely, Theorem~\ref{thm:constant_ket_mem_ghz_chain_ground_space}
+    gives
+    $\ket{0}^{\otimes N},\ket{1}^{\otimes N}
+    \in\mathcal G_{N,2}(A_{\mathrm{GHZ}})$, and hence their span lies in
+    $\mathcal G_{N,2}(A_{\mathrm{GHZ}})$.
+\end{proof}
+
+\begin{remark}[GHZ parent interaction]\label{rem:ghz_parent_interaction}
+    For the GHZ tensor of Definition~\ref{def:ghz_tensor},
+    \begin{align}
+        \mathcal G_2(A)
+        &= \spn\{\ket{00},\ket{11}\}, \notag\\
+        h_{\mathrm{GHZ}}
+        &= \ketbra{01}{01}+\ketbra{10}{10}
+        = \Id-\ketbra{00}{00}-\ketbra{11}{11}.
+        \notag
+    \end{align}
+    The periodic nearest-neighbour parent Hamiltonian therefore satisfies
+    \begin{align}
+        H_{\mathrm{GHZ},N}
+        &= \sum_i (h_{\mathrm{GHZ}})_i, \notag\\
+        \ker H_{\mathrm{GHZ},N}
+        &= \spn\{\ket{0}^{\otimes N},\ket{1}^{\otimes N}\},
+        \notag
+    \end{align}
+    using the cyclic-window equality
+    $\mathcal G_{N,2}(A_{\mathrm{GHZ}})
+    =\spn\{\ket{0}^{\otimes N},\ket{1}^{\otimes N}\}$ from
+    Theorem~\ref{thm:ghz_chain_ground_space_two}.
+    This is the ferromagnetic Ising parent Hamiltonian
+    \cite[lines~1194--1196 and line~2205]{Cirac2021Matrix};
+    see also \cite[Section~3]{FernandezGonzalez2015Uncle} for the displayed
+    two-site space and interaction.
+\end{remark}
+
+\begin{remark}[Cluster-state stabilizer convention]\label{rem:cluster_stabilizer_convention}
+    The one-dimensional cluster tensor in Definition~\ref{def:cluster_tensor}
+    is the reflected convention of the tensor displayed in
+    \cite[lines~2364--2369]{Cirac2021Matrix}. The sourced stabilizer is
+    $K_i^{ZXZ}=\sigma^z_i\sigma^x_{i+1}\sigma^z_{i+2}$.
+    The corresponding positive parent interaction is
+    \begin{align}
+        h_i^{ZXZ}
+        &= \frac12(\Id-K_i^{ZXZ}), \notag\\
+        H_{\mathrm{cl},N}^{ZXZ}
+        &= \sum_i h_i^{ZXZ}, \notag\\
+        \dim\ker H_{\mathrm{cl},N}^{ZXZ}
+        &= 1
+        \notag
+    \end{align}
+    \cite[local TeX lines~374--387]{PerezGarcia2007Matrix}. Thus an $XZX$
+    formula should be used for this tensor only after establishing an
+    equivalence such as
+    \begin{align}
+        U H_{\mathrm{cl},N}^{ZXZ} U^\dagger
+        &= H_{\mathrm{cl},N}^{XZX}, \notag\\
+        T H_{\mathrm{cl},N}^{ZXZ} T^{-1}
+        &= H_{\mathrm{cl},N}^{XZX}.
+        \notag
+    \end{align}
+\end{remark}
+
+\begin{remark}[AKLT parent Hamiltonian and edge modes]\label{rem:aklt_parent_hamiltonian}
+    For the AKLT tensor of Definition~\ref{def:aklt_tensor}, let
+    $\mathcal G_{[a,b]}$ denote the local ground space on sites
+    $a,\ldots,b$. Then $L_0=2$, and the three-site intersection property is
+    \begin{align}
+        (\mathcal G_{[1,2]}\otimes\mathcal H_3)
+        \cap(\mathcal H_1\otimes\mathcal G_{[2,3]})
+        &= \mathcal G_{[1,3]}.
+        \notag
+    \end{align}
+    This is the dimensionally explicit form of the identity in
+    \cite[line~2095]{Cirac2021Matrix}. The displayed local spin-chain
+    Hamiltonian is
+    \begin{align}
+        H_{\mathrm{AKLT},N}
+        &=
+        \sum_i
+        \left(\vec S_i\cdot\vec S_{i+1}
+            +\frac13(\vec S_i\cdot\vec S_{i+1})^2\right),
+        \notag
+    \end{align}
+    up to an additive constant
+    \cite[local TeX lines~340--349]{PerezGarcia2007Matrix};
+    \cite[lines~2126--2130]{Schuch2011Phases}. The spin-$2$ projector form
+    is related to the polynomial Hamiltonian by the spin-addition identity
+    \begin{align}
+        P^{(2)}_{i,i+1}
+        &=
+        \frac12
+        \left(\vec S_i\cdot\vec S_{i+1}
+            +\frac13(\vec S_i\cdot\vec S_{i+1})^2
+            +\frac23\Id\right)
+        \notag
+    \end{align}
+    for two spin-$1$ particles. For open boundary conditions and $N\geq2$,
+    \begin{align}
+        \dim\GS(H_{\mathrm{AKLT},N}^{\mathrm{open}})
+        &= 4, \notag\\
+        \dim\bigl(\GS(H_{\mathrm{AKLT},N}^{\mathrm{open}})
+            \cap\mathcal H_{S=0}
+        \bigr)
+        &= 1
+        \notag
+    \end{align}
+    \cite[lines~1169--1174]{Cirac2021Matrix}.
+\end{remark}

@@ -10,25 +10,29 @@
     \uses{def:mpo_tensor}
     A density operator on a periodic chain is a Gibbs state of a
     nearest-neighbor commuting Hamiltonian if
-    \[
+    \begin{align}
         \rho^{(N)}
-        \propto
+        &\propto
         \bigoplus_x n_x
         \exp\!\left(-\sum_{j=1}^N\tau_j(h^{(x)})\right),
-        \qquad n_x\in\N,
-    \]
+        \notag\\
+        n_x&\in\N,
+        \notag
+    \end{align}
     where the one-site spaces belonging to distinct labels $x$ are
     orthogonal and
     $[h^{(x)},\tau_1(h^{(x)})]=0$. With the projector-limit convention of
     \cite[Definition~4.8, lines~829--850]{Cirac2016MPDO_arXiv}, this is
     equivalently
-    \[
+    \begin{align}
         \rho^{(N)}
-        \propto
+        &\propto
         \bigoplus_x n_x
         \prod_{j=1}^N\tau_j(B^{(x)}),
-        \qquad B^{(x)}\geq0,
-    \]
+        \notag\\
+        B^{(x)}&\geq0,
+        \notag
+    \end{align}
     with commuting neighboring translates. The orthogonal sum and the
     multiplicities are part of the definition. Definition~4.8 decomposes the
     global Hilbert space into the uniform product sectors and requires the
@@ -49,9 +53,7 @@ Definition~\ref{def:mpdo_source_gsnnch}; the converse comparison is not used.
     For a fixed chain length $N \ge 2$, this consists of one positive
     semidefinite two-site operator $B\ge0$ whose translated copies commute
     pairwise on the periodic $N$-site chain:
-    \[
-        [B_{i,i+1},B_{j,j+1}]=0.
-    \]
+    $[B_{i,i+1},B_{j,j+1}]=0$.
 \end{definition}
 
 \begin{definition}[Single-bond commuting form]
@@ -63,10 +65,12 @@ Definition~\ref{def:mpdo_source_gsnnch}; the converse comparison is not used.
     every $N \ge 2$ there is a two-site operator $B$ as in
     Definition~\ref{def:mpdo_commuting_form_data} and a constant $c>0$ such
     that
-    \[
-        \rho^{(N)}(M)=c\prod_{i=0}^{N-1}B_{i,i+1}.
-    \]
-    The bond in this chainwise condition may depend on $N$.  It is therefore
+    \begin{align}
+        \rho^{(N)}(M)
+        &=c\prod_{i=0}^{N-1}B_{i,i+1}.
+        \notag
+    \end{align}
+    The bond in this chainwise condition may depend on $N$. It is therefore
     weaker than the single translation-invariant bond family used in the
     proposition at
     \cite[Appendix~C.2, lines~1597--1619]{Cirac2016MPDO_arXiv}.
@@ -82,11 +86,17 @@ Definition~\ref{def:mpdo_source_gsnnch}; the converse comparison is not used.
     \uses{def:mpdo_has_commuting_form}
     This condition asks, for every chain length $N\geq2$, for one positive
     bond on the full two-site space and one positive normalization such that
-    \[
-        \rho^{(N)}(M)=c\prod_{i=0}^{N-1}B_{i,i+1},
-        \qquad c>0,\qquad B\ge0,
-        \qquad [B_{i,i+1},B_{j,j+1}]=0.
-    \]
+    \begin{align}
+        \rho^{(N)}(M)
+        &=c\prod_{i=0}^{N-1}B_{i,i+1},
+        \notag\\
+        c&>0,
+        \notag\\
+        B&\ge0,
+        \notag\\
+        [B_{i,i+1},B_{j,j+1}]&=0.
+        \notag
+    \end{align}
     This auxiliary condition contains no explicit sector labels or
     multiplicities.
 \end{definition}
@@ -113,10 +123,7 @@ Definition~\ref{def:mpdo_source_gsnnch}; the converse comparison is not used.
     \leanok
     \uses{def:mpdo_has_commuting_bond_product, def:mpo_is_zcl}
     This is the conjunction of the single-bond condition with the
-    doubled-index transfer identity
-    \[
-        \E_M\circ\E_M=\E_M.
-    \]
+    doubled-index transfer identity $\E_M\circ\E_M=\E_M$.
     The source physical-trace condition is
     Definition~\ref{def:mpo_source_zcl}.
 \end{definition}
@@ -162,13 +169,15 @@ Definition~\ref{def:mpdo_source_gsnnch}; the converse comparison is not used.
     \leanok
     \uses{def:mpdo_source_gsnnch}
     Let $P$ be an orthogonal one-site projection and let $K$ be an MPO tensor
-    fixed by compression with $P$ on its two physical indices.  A physical
+    fixed by compression with $P$ on its two physical indices. A physical
     support restriction consists of a dimension $e$ and an isometry
     $V:\C^e\longrightarrow\C^d$ such that
-    \[
-        V^*V=1,
-        \qquad VV^*=P,
-    \]
+    \begin{align}
+        V^*V&=\Id,
+        \notag\\
+        VV^*&=P,
+        \notag
+    \end{align}
     for which the restricted tensor $K_P=V^*KV$ is injective and its
     inclusion into the ambient physical space recovers $K$ exactly.
 \end{definition}
@@ -182,35 +191,40 @@ Definition~\ref{def:mpdo_source_gsnnch}; the converse comparison is not used.
     \uses{def:mpdo_physical_support_restriction}
     Suppose that the source BNT projectors have been constructed after the
     common physical blocking, and let $\mathcal K_s$ be the normal
-    representative with its common copy weight absorbed.  Then
+    representative with its common copy weight absorbed. Then
     $\mathcal K_s$ admits a physical support restriction to the range of
-    $P_s$.  In particular, for some isometry $V_s$,
-    \[
-        V_sV_s^*=P_s,
-        \qquad
-        \mathcal K_s=V_s(V_s^*\mathcal K_sV_s)V_s^*,
-    \]
+    $P_s$. In particular, for some isometry $V_s$,
+    \begin{align}
+        V_sV_s^*&=P_s,
+        \notag\\
+        \mathcal K_s
+        &=V_s(V_s^*\mathcal K_sV_s)V_s^*,
+        \notag
+    \end{align}
     and the restricted tensor $V_s^*\mathcal K_sV_s$ is injective.
 \end{theorem}
 
 \begin{proof}\leanok
     The projector identity $P_s\mathcal K_sP_s=\mathcal K_s$ gives an
-    isometric inclusion of its range.  The simultaneous one-site spanning
+    isometric inclusion of its range. The simultaneous one-site spanning
     condition makes each normal representative injective, and multiplication
-    by its nonzero common weight preserves injectivity.  Write
-    $K_{P_s}=V_s^*\mathcal K_sV_s$.  Each ambient matrix slice satisfies
-    \[
+    by its nonzero common weight preserves injectivity. Write
+    $K_{P_s}=V_s^*\mathcal K_sV_s$. Each ambient matrix slice satisfies
+    \begin{align}
         (\mathcal K_s)_{ij}
-        =\sum_{p,q}(V_s)_{ip}\,\overline{(V_s)_{jq}}\,(K_{P_s})_{pq}.
-    \]
+        &=\sum_{p,q}(V_s)_{ip}
+          \overline{(V_s)_{jq}}\,(K_{P_s})_{pq}.
+        \notag
+    \end{align}
     Hence
-    \[
-        \spn\{(\mathcal K_s)_{ij}\}_{i,j}
-        \subseteq
-        \spn\{(K_{P_s})_{pq}\}_{p,q}.
-    \]
+    \begin{align}
+        \spn_{\C}\{(\mathcal K_s)_{ij}\}_{i,j}
+        &\subseteq
+        \spn_{\C}\{(K_{P_s})_{pq}\}_{p,q}.
+        \notag
+    \end{align}
     The left-hand side is the full virtual matrix algebra, so $K_{P_s}$ is
-    injective.  The two isometry identities give the exact reconstruction.
+    injective. The two isometry identities give the exact reconstruction.
 \end{proof}
 
 \begin{theorem}[SAL passes to the physical support restriction]
@@ -226,16 +240,17 @@ Definition~\ref{def:mpdo_source_gsnnch}; the converse comparison is not used.
 \begin{proof}\leanok
     On a chain of every positive length, the sitewise inclusion
     $V^{\otimes N}$ is an isometry and
-    \[
+    \begin{align}
         \rho^{(N)}(K)
-        =V^{\otimes N}\rho^{(N)}(K_P)(V^{\otimes N})^*.
-    \]
-    The trace is therefore unchanged.  After a contiguous marginal is
+        &=V^{\otimes N}\rho^{(N)}(K_P)(V^{\otimes N})^*.
+        \notag
+    \end{align}
+    The trace is therefore unchanged. After a contiguous marginal is
     taken, the isometry on the traced-out sites disappears, while the
-    isometry on the retained sites remains.  Thus every block marginal of
+    isometry on the retained sites remains. Thus every block marginal of
     $K$ is an isometric conjugate of the corresponding marginal of $K_P$.
     Their nonzero spectra, and hence their entropies and mutual
-    informations, coincide.  The consecutive equalities defining SAL for
+    informations, coincide. The consecutive equalities defining SAL for
     $K$ consequently give those for $K_P$.
 \end{proof}
 
@@ -245,40 +260,40 @@ Definition~\ref{def:mpdo_source_gsnnch}; the converse comparison is not used.
     \leanok
     \uses{thm:mpdo_physical_support_restriction_sal}
     Let $K=V K_P V^*$ be a physical support restriction of an MPO tensor
-    satisfying SAL.  Proposition~C.8 applied to the injective tensor $K_P$
+    satisfying SAL. Proposition~C.8 applied to the injective tensor $K_P$
     gives a positive two-site bond $B_P$ whose cyclic translates commute
-    pairwise on every periodic chain of length $N\geq 2$.  Its lift
+    pairwise on every periodic chain of length $N\geq 2$. Its lift
     $B=V^{\otimes 2}B_P(V^{\otimes 2})^*$ is positive, its cyclic translates
     commute pairwise on every such ambient chain, and
-    \[
-        (P\otimes P)B(P\otimes P)=B.
-    \]
+    $(P\otimes P)B(P\otimes P)=B$.
     Moreover, for every $N\geq2$ one has the exact identity
-    \[
-        \rho^{(N)}(K)=\prod_{i=0}^{N-1}B_{i,i+1}.
-    \]
+    \begin{align}
+        \rho^{(N)}(K)
+        &=\prod_{i=0}^{N-1}B_{i,i+1}.
+        \notag
+    \end{align}
 \end{theorem}
 
 \begin{proof}\leanok
     The preceding theorem gives SAL for the injective restricted tensor, so
-    Proposition~C.8 supplies its positive bond.  Since $V^*V=1$, positivity
-    is preserved under conjugation by $V^{\otimes 2}$.  Moreover,
+    Proposition~C.8 supplies its positive bond. Since $V^*V=\Id$, positivity
+    is preserved under conjugation by $V^{\otimes 2}$. Also,
     $V^{\otimes 2}(V^{\otimes 2})^*=P\otimes P$; multiplying the lifted bond
     by this projection on either side therefore leaves it unchanged.
 
-    It remains to prove commutativity after the lift.  On a three-site chain,
+    It remains to prove commutativity after the lift. On a three-site chain,
     isometric conjugation carries the product of two adjacent restricted bonds
-    to the product of their lifted bonds.  The restricted product is Hermitian
-    because its positive factors commute.  Its conjugate is therefore
+    to the product of their lifted bonds. The restricted product is Hermitian
+    because its positive factors commute. Its conjugate is therefore
     Hermitian; since the lifted factors are Hermitian, their product equals
-    the product in the reverse order.  The two-site periodic chain is handled
-    by the same argument with the two oppositely oriented bonds.  Locality and
+    the product in the reverse order. The two-site periodic chain is handled
+    by the same argument with the two oppositely oriented bonds. Locality and
     cyclic translation then give pairwise commutativity for every $N\geq 2$.
 
     Finally, isometric conjugation preserves every nonempty product of
-    restricted bonds.  The image of each restricted bond is the corresponding
+    restricted bonds. The image of each restricted bond is the corresponding
     lifted bond multiplied by the projection onto the range of
-    $V^{\otimes N}$.  The support projections contributed by the first
+    $V^{\otimes N}$. The support projections contributed by the first
     $N-1$ bonds cover all sites and leave the full commuting product fixed.
     Hence the range projection disappears, and the restricted finite-chain
     product identity becomes the asserted ambient identity, still with
@@ -295,15 +310,20 @@ Definition~\ref{def:mpdo_source_gsnnch}; the converse comparison is not used.
     An orthogonally supported family of commuting sector products consists of
     pairwise orthogonal one-site projections $P_x$ and positive two-site
     operators $B^{(x)}$ such that
-    \[
-        (P_x\otimes P_x)B^{(x)}(P_x\otimes P_x)=B^{(x)},
-        \qquad
-        [\tau_i(B^{(x)}),\tau_j(B^{(x)})]=0,
-    \]
+    \begin{align}
+        (P_x\otimes P_x)B^{(x)}(P_x\otimes P_x)
+        &=B^{(x)},
+        \notag\\
+        [\tau_i(B^{(x)}),\tau_j(B^{(x)})]
+        &=0,
+        \notag
+    \end{align}
     and, for every $N\geq2$,
-    \[
-        \rho^{(N)}(K_x)=\prod_{i=0}^{N-1}\tau_i(B^{(x)}).
-    \]
+    \begin{align}
+        \rho^{(N)}(K_x)
+        &=\prod_{i=0}^{N-1}\tau_i(B^{(x)}).
+        \notag
+    \end{align}
     Together with natural multiplicities $n_x$, these objects determine the
     corresponding finite-chain sector decomposition in
     Definition~\ref{def:mpdo_source_gsnnch}.
@@ -319,28 +339,31 @@ Definition~\ref{def:mpdo_source_gsnnch}; the converse comparison is not used.
         def:mpdo_orthogonal_commuting_sector_family}
     Suppose that the BNT physical projectors $P_x$ have been selected and
     that every common-weight-absorbed representative $\mathcal K_x$
-    satisfies SAL.  Then there are positive two-site bonds $B^{(x)}$ such
+    satisfies SAL. Then there are positive two-site bonds $B^{(x)}$ such
     that the projections $P_x$ are pairwise orthogonal,
-    \[
-        (P_x\otimes P_x)B^{(x)}(P_x\otimes P_x)=B^{(x)},
-    \]
+    \begin{align}
+        (P_x\otimes P_x)B^{(x)}(P_x\otimes P_x)
+        &=B^{(x)},
+        \notag
+    \end{align}
     all cyclic translates of each $B^{(x)}$ commute pairwise, and, for every
     $N\geq2$,
-    \[
+    \begin{align}
         \rho^{(N)}(\mathcal K_x)
-          =\prod_{i=0}^{N-1}\tau_i(B^{(x)}).
-    \]
+        &=\prod_{i=0}^{N-1}\tau_i(B^{(x)}).
+        \notag
+    \end{align}
     Thus the absorbed BNT representatives have an orthogonally supported
     family of commuting sector products with normalization scalar one.
 \end{theorem}
 
 \begin{proof}\leanok
-    Restrict $\mathcal K_x$ isometrically to the range of $P_x$.  The
+    Restrict $\mathcal K_x$ isometrically to the range of $P_x$. The
     restricted tensor is injective and satisfies SAL, so Proposition~C.8
-    gives its positive commuting bond product.  Apply
+    gives its positive commuting bond product. Apply
     Theorem~\ref{thm:mpdo_physical_support_restriction_bond} in every sector.
     The lifted bond is supported on $P_x\otimes P_x$ and realizes
-    $\mathcal K_x$ exactly.  The BNT projector construction gives
+    $\mathcal K_x$ exactly. The BNT projector construction gives
     $P_xP_y=0$ for $x\ne y$, which completes the sector family.
 \end{proof}
 
@@ -354,22 +377,26 @@ Definition~\ref{def:mpdo_source_gsnnch}; the converse comparison is not used.
         def:mpdo_orthogonal_commuting_sector_family}
     Suppose that $\{K_x\}_{x=0}^{g-1}$ has an orthogonally supported family
     of commuting sector products and that, for every $N\geq2$,
-    \[
-        \rho^{(N)}(M)=\sum_{x=0}^{g-1}n_x\rho^{(N)}(K_x),
-        \qquad n_x\in\N.
-    \]
+    \begin{align}
+        \rho^{(N)}(M)
+        &=\sum_{x=0}^{g-1}n_x\rho^{(N)}(K_x),
+        \notag\\
+        n_x&\in\N.
+        \notag
+    \end{align}
     Then $M$ has the explicit GSNNCH sector form with outer sectors $x$ and
     natural multiplicities $n_x$.
 \end{theorem}
 
 \begin{proof}\leanok
     For each $N\geq2$, the represented unnormalized sector sum is
-    \[
+    \begin{align}
         \sum_{x=0}^{g-1}n_x
           \prod_{i=0}^{N-1}\tau_i(B^{(x)})
-        =\sum_{x=0}^{g-1}n_x\rho^{(N)}(K_x)
-        =\rho^{(N)}(M).
-    \]
+        &=\sum_{x=0}^{g-1}n_x\rho^{(N)}(K_x)
+         =\rho^{(N)}(M).
+        \notag
+    \end{align}
     Thus the positive proportionality constant in
     Definition~\ref{def:mpdo_source_gsnnch} is one.
 \end{proof}
@@ -381,25 +408,29 @@ Definition~\ref{def:mpdo_source_gsnnch}; the converse comparison is not used.
     \uses{def:is_sal}
     Let $\{K_x\}_{x=0}^{g-1}$ be a nonempty finite family of MPO tensors,
     let $n_x$ be positive natural numbers, and let $P_x$ be pairwise
-    orthogonal one-site projections.  Suppose that, for every $N>0$,
-    \[
-        \rho^{(N)}(M)=\sum_{x=0}^{g-1}n_x\rho^{(N)}(K_x).
-    \]
+    orthogonal one-site projections. Suppose that, for every $N>0$,
+    \begin{align}
+        \rho^{(N)}(M)
+        &=\sum_{x=0}^{g-1}n_x\rho^{(N)}(K_x).
+        \notag
+    \end{align}
     For $N\geq2$ and $1\leq L\leq N$, write
     $\widehat\rho_{x,N,L}$ for the normalized marginal of
-    $\rho^{(N)}(K_x)$ on the first $L$ sites.  Assume that the sector label is
+    $\rho^{(N)}(K_x)$ on the first $L$ sites. Assume that the sector label is
     visible on the first retained site:
-    \[
-        \bigl(P_x\otimes\Id^{\otimes(L-1)}\bigr)
-          \widehat\rho_{x,N,L}=\widehat\rho_{x,N,L}.
-    \]
+    \begin{align}
+        (P_x\otimes\Id^{\otimes(L-1)})
+          \widehat\rho_{x,N,L}
+        &=\widehat\rho_{x,N,L}.
+        \notag
+    \end{align}
     If every $K_x$ satisfies SAL, then $M$ satisfies SAL.
 
     This is the conditional last inference in the proposition at
-    \cite[Appendix~C.2, lines~1801--1808]{Cirac2016MPDO_arXiv}.  It assumes
-    sectorwise SAL.  The printed proposition states the conclusion from the
+    \cite[Appendix~C.2, lines~1801--1808]{Cirac2016MPDO_arXiv}. It assumes
+    sectorwise SAL. The printed proposition states the conclusion from the
     GSNNCH form alone, but its proof invokes the single-sector proposition at
-    lines~1597--1619, whose hypotheses include ZCL.  The theorem here does not
+    lines~1597--1619, whose hypotheses include ZCL. The theorem here does not
     supply that omitted sectorwise implication.
 \end{theorem}
 
@@ -408,29 +439,37 @@ Definition~\ref{def:mpdo_source_gsnnch}; the converse comparison is not used.
         def:mpdo_vertical_one_site_actions,
         lem:mpdo_orthogonal_commuting_sector_marginal_support}
     For fixed $N$, put
-    \[
-        p_x=\frac{n_x\tr(\rho^{(N)}(K_x))}
+    \begin{align}
+        p_x
+        &=\frac{n_x\tr(\rho^{(N)}(K_x))}
           {\tr(\rho^{(N)}(M))}.
-    \]
+        \notag
+    \end{align}
     Positivity of the chain operators, positivity of $n_x$, and nonemptiness
-    of the family give $p_x>0$ and a nonzero normalization for $M$.  Every
+    of the family give $p_x>0$ and a nonzero normalization for $M$. Every
     nonempty normalized marginal decomposes as
-    \[
-        \widehat\rho_{N,L}(M)=\sum_x p_x\widehat\rho_{x,N,L}.
-    \]
-    Put $Q_x=P_x\otimes\Id^{\otimes(L-1)}$.  The support identity gives
+    \begin{align}
+        \widehat\rho_{N,L}(M)
+        &=\sum_x p_x\widehat\rho_{x,N,L}.
+        \notag
+    \end{align}
+    Put $Q_x=P_x\otimes\Id^{\otimes(L-1)}$. The support identity gives
     $Q_x\widehat\rho_{x,N,L}=\widehat\rho_{x,N,L}$, while $P_xP_y=0$ for
-    $x\ne y$ gives $Q_xQ_y=0$.  Thus the summands have pairwise annihilating
-    supports.  Hence
-    \[
-        S_L(M)=\sum_x\bigl(-p_x\log p_x+p_xS_L(K_x)\bigr).
-    \]
+    $x\ne y$ gives $Q_xQ_y=0$. Thus the summands have pairwise annihilating
+    supports. Hence
+    \begin{align}
+        S_L(M)
+        &=\sum_x(-p_x\log p_x+p_xS_L(K_x)).
+        \notag
+    \end{align}
     Substitution in $I_L=S_L+S_{N-L}-S_N$ gives
-    \[
-        I_L(M)= -\sum_xp_x\log p_x+\sum_xp_xI_L(K_x).
-    \]
+    \begin{align}
+        I_L(M)
+        &=-\sum_xp_x\log p_x+\sum_xp_xI_L(K_x).
+        \notag
+    \end{align}
     The first sum is independent of $L$, while sectorwise SAL gives
-    $I_L(K_x)=I_{L+1}(K_x)$ for every $x$.  Therefore
+    $I_L(K_x)=I_{L+1}(K_x)$ for every $x$. Therefore
     $I_L(M)=I_{L+1}(M)$ throughout the SAL range.
 \end{proof}
 
@@ -442,18 +481,20 @@ Definition~\ref{def:mpdo_source_gsnnch}; the converse comparison is not used.
         def:mpdo_vertical_one_site_actions}
     Suppose that $K_x$ is the periodic product of translates of a positive
     two-site operator $B_x$, and that $B_x$ is supported on
-    $P_x\otimes P_x$.  If $N\geq2$ and $1\leq L\leq N$, then the normalized
+    $P_x\otimes P_x$. If $N\geq2$ and $1\leq L\leq N$, then the normalized
     marginal of $K_x$ on the first $L$ sites satisfies
-    \[
-        \bigl(P_x\otimes\Id^{\otimes(L-1)}\bigr)
-          \widehat\rho_{x,N,L}=\widehat\rho_{x,N,L}.
-    \]
+    \begin{align}
+        (P_x\otimes\Id^{\otimes(L-1)})
+          \widehat\rho_{x,N,L}
+        &=\widehat\rho_{x,N,L}.
+        \notag
+    \end{align}
 \end{lemma}
 
 \begin{proof}\leanok
     The first translated bond is fixed by multiplication by $P_x$ on its
-    first tensor factor.  Hence the full periodic product is fixed by the
-    corresponding one-site action.  Taking the partial trace over the final
+    first tensor factor. Hence the full periodic product is fixed by the
+    corresponding one-site action. Taking the partial trace over the final
     $N-L$ sites preserves this identity.
 \end{proof}
 
@@ -468,9 +509,11 @@ Definition~\ref{def:mpdo_source_gsnnch}; the converse comparison is not used.
     commuting sector family realize the tensors $K_x$, and let $n_x$ be
     positive natural numbers.
     Suppose that, for every $N>0$,
-    \[
-        \rho^{(N)}(M)=\sum_x n_x\rho^{(N)}(K_x).
-    \]
+    \begin{align}
+        \rho^{(N)}(M)
+        &=\sum_x n_x\rho^{(N)}(K_x).
+        \notag
+    \end{align}
     If every $K_x$ satisfies SAL, then $M$ satisfies SAL.
 \end{corollary}
 
@@ -487,18 +530,16 @@ Definition~\ref{def:mpdo_source_gsnnch}; the converse comparison is not used.
     \leanok
     \uses{cor:mpdo_orthogonal_commuting_sector_sum_sal,def:same_mpv2_pos}
     Let $M$ have a nonempty basis-of-normal-tensors decomposition with
-    positive copy numbers $n_x$ and copy-independent weights $\mu_x$.  Put
+    positive copy numbers $n_x$ and copy-independent weights $\mu_x$. Put
     $K_x=\mu_xA_x$, and suppose that the decomposition generates the same
-    positive-length matrix product vectors as $M$.  If an independently
+    positive-length matrix product vectors as $M$. If an independently
     supplied orthogonally supported commuting sector family realizes the
     tensors $K_x$, and every $K_x$ satisfies SAL, then $M$ satisfies SAL.
 \end{corollary}
 
 \begin{proof}\leanok
     The positive-length canonical-form identity gives
-    \[
-        \rho^{(N)}(M)=\sum_x n_x\rho^{(N)}(K_x).
-    \]
+    $\rho^{(N)}(M)=\sum_x n_x\rho^{(N)}(K_x)$.
     Apply Corollary~\ref{cor:mpdo_orthogonal_commuting_sector_sum_sal}.
 \end{proof}
 
@@ -510,21 +551,23 @@ Definition~\ref{def:mpdo_source_gsnnch}; the converse comparison is not used.
         thm:mpdo_orthogonal_commuting_sectors_gsnnch}
     Let $M$ be an MPO tensor and let its BNT canonical form have normal
     representatives $A_x$, copy numbers $n_x$, and copy-independent weights
-    $\mu_x$.  Put $\mathcal K_x=\mu_xA_x$, and assume that this canonical form
+    $\mu_x$. Put $\mathcal K_x=\mu_xA_x$, and assume that this canonical form
     generates the same matrix product vectors as $M$ at every positive length.
     If the representatives $\mathcal K_x$ have orthogonally supported
     commuting sector products, then
-    \[
-        \rho^{(N)}(M)=\sum_x n_x\rho^{(N)}(\mathcal K_x)
-    \]
-    gives the explicit GSNNCH form with the BNT copy numbers $n_x$ as its
+    \begin{align}
+        \rho^{(N)}(M)
+        &=\sum_x n_x\rho^{(N)}(\mathcal K_x).
+        \notag
+    \end{align}
+    This gives the explicit GSNNCH form with the BNT copy numbers $n_x$ as its
     natural multiplicities.
 \end{corollary}
 
 \begin{proof}\leanok
     Apply
     Theorem~\ref{thm:mpdo_orthogonal_commuting_sectors_gsnnch} to the
-    positive-length BNT decomposition.  Its coefficients are exactly the
+    positive-length BNT decomposition. Its coefficients are exactly the
     copy numbers $n_x$ after the common weights have been absorbed.
 \end{proof}
 
@@ -537,20 +580,22 @@ Definition~\ref{def:mpdo_source_gsnnch}; the converse comparison is not used.
         cor:mpdo_bnt_orthogonal_commuting_sectors_gsnnch}
     Let $M$ be an MPO tensor and let its BNT canonical form have normal
     representatives $A_x$, copy numbers $n_x$, and copy-independent weights
-    $\mu_x$.  Put $\mathcal K_x=\mu_xA_x$, and assume that this canonical form
+    $\mu_x$. Put $\mathcal K_x=\mu_xA_x$, and assume that this canonical form
     generates the same matrix product vectors as $M$ at every positive length.
     Equivalently, for every $N>0$,
-    \[
-        \rho^{(N)}(M)=\sum_x n_x\rho^{(N)}(\mathcal K_x).
-    \]
+    \begin{align}
+        \rho^{(N)}(M)
+        &=\sum_x n_x\rho^{(N)}(\mathcal K_x).
+        \notag
+    \end{align}
     Under the BNT projector-selection hypotheses, if every $\mathcal K_x$
-    satisfies SAL, then $M$ has the source GSNNCH form.  Its outer sectors are
+    satisfies SAL, then $M$ has the source GSNNCH form. Its outer sectors are
     the BNT sectors and its natural multiplicities are the copy numbers $n_x$.
 \end{corollary}
 
 \begin{proof}\leanok
     Theorem~\ref{thm:mpdo_bnt_sector_sal_commuting_family} supplies the
-    orthogonally supported commuting sector products.  Apply
+    orthogonally supported commuting sector products. Apply
     Corollary~\ref{cor:mpdo_bnt_orthogonal_commuting_sectors_gsnnch}.
 \end{proof}
 
@@ -563,10 +608,11 @@ Definition~\ref{def:mpdo_source_gsnnch}; the converse comparison is not used.
     embedded at base site $i$, and let $r$ denote the cyclic shift of
     sites. Reindexing both chain configurations by $r$ carries the embedded
     operator to its translate at the shifted base site:
-    \[
-        \tau_i(B)[\sigma\circ r,\,\eta\circ r]
-        = \tau_{r(i)}(B)[\sigma,\eta].
-    \]
+    \begin{align}
+        \tau_i(B)[\sigma\circ r, \eta\circ r]
+        &=\tau_{r(i)}(B)[\sigma,\eta].
+        \notag
+    \end{align}
 \end{lemma}
 
 \begin{proof}\leanok
@@ -582,9 +628,7 @@ Definition~\ref{def:mpdo_source_gsnnch}; the converse comparison is not used.
     \uses{def:mpdo_source_gsnnch, lem:mpdo_gsnnch_shift_transport}
     For every sector $x$ of an explicit GSNNCH decomposition and every finite
     chain length $N\geq2$, all cyclic translates of the sector bond commute:
-    \[
-        [\tau_i(B^{(x)}),\tau_j(B^{(x)})]=0 .
-    \]
+    $[\tau_i(B^{(x)}),\tau_j(B^{(x)})]=0$.
 \end{lemma}
 
 \begin{proof}\leanok
@@ -595,10 +639,8 @@ Definition~\ref{def:mpdo_source_gsnnch}; the converse comparison is not used.
     times to the neighboring commutation
     $[\tau_0(B^{(x)}),\tau_1(B^{(x)})]=0$ of
     Definition~\ref{def:mpdo_source_gsnnch} gives
-    \[
-        [\tau_p(B^{(x)}),\tau_{p+1}(B^{(x)})]=0
-    \]
-    for every $p$, which covers all overlapping pairs.
+    $[\tau_p(B^{(x)}),\tau_{p+1}(B^{(x)})]=0$ for every $p$, which covers all
+    overlapping pairs.
 \end{proof}
 
 \begin{lemma}[Positivity of the sector-bond translates]
@@ -615,9 +657,11 @@ Definition~\ref{def:mpdo_source_gsnnch}; the converse comparison is not used.
 \begin{proof}\leanok
     In the coordinates given by the window-plus-complement splitting of the
     chain, the embedded operator decomposes as
-    \[
-        \tau_i(B)\;\cong\;B\otimes\operatorname{Id}_{\mathrm{comp}},
-    \]
+    \begin{align}
+        \tau_i(B)
+        &\cong B\otimes\Id_{\mathrm{comp}},
+        \notag
+    \end{align}
     where the identity acts on the cyclic complement of the window. A tensor
     product of positive semidefinite operators is positive semidefinite, and
     $B^{(x)}\geq0$ by Definition~\ref{def:mpdo_source_gsnnch}.
@@ -634,19 +678,20 @@ Definition~\ref{def:mpdo_source_gsnnch}; the converse comparison is not used.
     Each sector product $\prod_{j=1}^N\tau_j(B^{(x)})$ of an explicit GSNNCH
     decomposition is positive semidefinite; hence so are the represented
     operator
-    \[
+    \begin{align}
         \bigoplus_x n_x \prod_{j=1}^N\tau_j(B^{(x)})
-    \]
+        \notag
+    \end{align}
     and every chain operator equal to a positive multiple of it.
 \end{lemma}
 
 \begin{proof}\leanok
     A product of pairwise commuting positive semidefinite matrices is
     positive semidefinite: for two commuting factors $A$ and $B$, the square
-    root of $A$ commutes with $B$, so $AB=\sqrt A\,B\,\sqrt A\geq 0$, as
-    congruence by $\sqrt A$ preserves positive semidefiniteness; iterate
-    along the product. Each sector product is such a product
-    by Lemmas~\ref{lem:mpdo_gsnnch_translate_pos}
+    root of $A$ commutes with $B$, so
+    $AB=\sqrt A\,B\,\sqrt A\geq 0$, as congruence by $\sqrt A$ preserves
+    positive semidefiniteness; iterate along the product. Each sector product
+    is such a product by Lemmas~\ref{lem:mpdo_gsnnch_translate_pos}
     and~\ref{lem:mpdo_gsnnch_bond_translates_comm}, and the sum with natural
     coefficients preserves positivity.
 \end{proof}

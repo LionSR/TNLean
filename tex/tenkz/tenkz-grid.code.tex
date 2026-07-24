@@ -1486,11 +1486,29 @@
 % cells before validation so the implicit-bond pass sees wide, tall, and
 % fusion continuations without depending on the later node-placement pass.
 \tl_new:N \l__tenkz_mdo_kind_tl
+\cs_new_protected:Npn \tenkz_validate_fuse_combined:
+  {
+    \tl_if_empty:NF \l__tenkz_fcombined_tl
+      {
+        \bool_lazy_or:nnF
+          { \str_if_eq_p:Vn \l__tenkz_fcombined_tl {west} }
+          { \str_if_eq_p:Vn \l__tenkz_fcombined_tl {east} }
+          {
+            \bool_set_false:N \l__tenkz_celloptsvalid_bool
+            \PackageError{tenkz}
+              {combined=\tl_use:N \l__tenkz_fcombined_tl
+                \c_space_tl is~not~a~fusion~side}
+              {Use~combined=west~or~combined=east~on~a~fusion~bar.}
+          }
+      }
+  }
 \cs_new_protected:Npn \tenkz_model_record_owner:nn #1#2
   {
     \tenkz_get:NnN \l__tenkz_opts_prop {#1-#2} \l_tmpa_tl
     \exp_args:NV \tenkz_cell_opts:n \l_tmpa_tl
-    \bool_if:NT \l__tenkz_celloptsvalid_bool
+    \str_if_eq:VnT \l__tenkz_mdo_kind_tl {fuse}
+      { \tenkz_validate_fuse_combined: }
+    \bool_if:NTF \l__tenkz_celloptsvalid_bool
       {
         \str_case:Vn \l__tenkz_mdo_kind_tl
           {
@@ -1539,6 +1557,7 @@
               }
           }
       }
+      { \prop_remove:Nn \l__tenkz_kind_prop {#1-#2} }
   }
 \cs_new_protected:Npn \tenkz_model_record_owners:
   {
@@ -1564,17 +1583,39 @@
 \tl_new:N  \l__tenkz_mdb_kind_tl
 \tl_new:N  \l__tenkz_mdb_oa_tl
 \tl_new:N  \l__tenkz_mdb_ob_tl
+\tl_new:N  \l__tenkz_mdb_style_tl
 \bool_new:N \l__tenkz_mdb_pa_bool
 \bool_new:N \l__tenkz_mdb_pb_bool
+\bool_new:N \l__tenkz_mdb_combined_bool
 \cs_new:Npn \tenkz_model_dir_word:
   {
     \tl_if_empty:NTF \l__tenkz_dir_tl {none}
       { \str_if_eq:VnTF \l__tenkz_dir_tl {right} {to} {from} }
   }
+\cs_new:Npn \tenkz_model_bond_name:nnn #1#2#3
+  {
+    \int_compare:nNnT {#1} = {1}
+      { ,name={bond-\int_eval:n{#2}-\int_eval:n{#3}} }
+  }
+\cs_new_protected:Npn \tenkz_model_note_combined_face:
+  {
+    \str_if_eq:VnT \l__tenkz_faceports_tl {center}
+      {
+        \bool_lazy_or:nnT
+          {
+            \bool_lazy_or_p:nn
+              { \str_if_eq_p:Vn \l_tmpa_tl {fuse} }
+              { \str_if_eq_p:Vn \l_tmpa_tl {fusec} }
+          }
+          { \int_compare_p:nNn { \l__tenkz_cwires_int } > {1} }
+          { \bool_set_true:N \l__tenkz_mdb_combined_bool }
+      }
+  }
 \cs_new_protected:Npn \tenkz_model_derive_bonds:
   {
     \int_step_inline:nn { \l__tenkz_nrows_int }
       {
+        \tenkz_row_wirestyle:nN {##1} \l__tenkz_mdb_style_tl
         \tenkz_row_dir:nN {##1} \l__tenkz_dir_tl
         \int_zero:N \l__tenkz_mdb_prev_int
         \int_step_inline:nnn {1} { \l__tenkz_ncols_int }
@@ -1593,20 +1634,33 @@
                           {##1-####1} \l__tenkz_mdb_ob_tl
                         \tl_if_eq:NNF \l__tenkz_mdb_oa_tl \l__tenkz_mdb_ob_tl
                           {
+                            \bool_set_false:N \l__tenkz_mdb_combined_bool
                             \tenkz_cell_virtual_row_port:nnnN {##1}
                               {\int_use:N \l__tenkz_mdb_prev_int}{east}
                               \l__tenkz_mdb_pa_bool
+                            \tenkz_model_note_combined_face:
                             \tenkz_cell_virtual_row_port:nnnN {##1}
                               {####1}{west} \l__tenkz_mdb_pb_bool
+                            \tenkz_model_note_combined_face:
                             \bool_lazy_and:nnT
-                              { \l__tenkz_mdb_pa_bool } { \l__tenkz_mdb_pb_bool }
+                              {
+                                \bool_lazy_and_p:nn
+                                  { \l__tenkz_mdb_pa_bool }
+                                  { \l__tenkz_mdb_pb_bool }
+                              }
+                              { ! \l__tenkz_mdb_combined_bool }
                               {
                                 \__tenkz_model_record_wire:e
                                   {kind={index},
                                    from={##1-\int_use:N \l__tenkz_mdb_prev_int},
                                    to={##1-####1},
                                    row={##1},origin={bond},
-                                   dir={\tenkz_model_dir_word:}}
+                                   dir={\tenkz_model_dir_word:},
+                                   style={\tl_use:N \l__tenkz_mdb_style_tl},
+                                   role={\tenkz_rowrole_word:},
+                                   species={\tenkz_rowspec_word:}
+                                   \tenkz_model_bond_name:nnn {##1}
+                                     {\l__tenkz_mdb_prev_int}{####1}}
                               }
                           }
                       }
@@ -1615,6 +1669,37 @@
               }
           }
       }
+  }
+
+\msg_new:nnn {tenkz}{model-bond-label}
+  {
+    [TKZ-MODEL-UNRESOLVED-BOND]~Bond~label~target~'#1'~has~no~
+    derived~row-1~WIRE~record.
+  }
+\bool_new:N \l__tenkz_mbl_found_bool
+\tl_new:N \l__tenkz_mbl_target_tl
+\tl_new:N \l__tenkz_mbl_name_tl
+\cs_new_protected:Npn \tenkz_model_validate_bond_label:nnn #1#2#3
+  {
+    \tl_set:Ne \l__tenkz_mbl_target_tl
+      { bond-\int_eval:n{#2}-\int_eval:n{#3} }
+    \bool_set_false:N \l__tenkz_mbl_found_bool
+    \__tenkz_model_map_ids:nn {wire}
+      {
+        \__tenkz_model_get:nnN {##1}{name} \l__tenkz_mbl_name_tl
+        \quark_if_no_value:NF \l__tenkz_mbl_name_tl
+          {
+            \tl_if_eq:NNT \l__tenkz_mbl_name_tl \l__tenkz_mbl_target_tl
+              { \bool_set_true:N \l__tenkz_mbl_found_bool }
+          }
+      }
+    \bool_if:NF \l__tenkz_mbl_found_bool
+      { \msg_error:nnV {tenkz}{model-bond-label} \l__tenkz_mbl_target_tl }
+  }
+\cs_new_protected:Npn \tenkz_model_validate_bond_labels:
+  {
+    \seq_map_inline:Nn \l__tenkz_bondlabels_seq
+      { \tenkz_model_validate_bond_label:nnn ##1 }
   }
 
 % ---------- closure derivation (record phase) ----------
@@ -1792,6 +1877,7 @@
 \cs_new_protected:Npn \tenkz_render:nn #1#2
   {
     \group_begin:
+    \__tenkz_geom_reset:
     \__tenkz_model_reset:
     \__tenkz_model_record_picture:n { lang = {grid} }
     \prop_clear:N \l__tenkz_kind_prop
@@ -1853,6 +1939,7 @@
     \tenkz_model_record_owners:
     \tenkz_model_derive_bonds:
     \tenkz_model_derive_closures:
+    \tenkz_model_validate_bond_labels:
     \__tenkz_model_validate:
     \tenkz@beginpicture{grid}
     \tenkz_emit_tracefacewarnings:
@@ -2090,21 +2177,7 @@
         % domain is closed.  Reject an impossible bar side before allocating
         % measured ink, registering its cells, or emitting topology events.
         \str_if_eq:VnT \l__tenkz_kind_tl {fuse}
-          {
-            \tl_if_empty:NF \l__tenkz_fcombined_tl
-              {
-                \bool_lazy_or:nnF
-                  { \str_if_eq_p:Vn \l__tenkz_fcombined_tl {west} }
-                  { \str_if_eq_p:Vn \l__tenkz_fcombined_tl {east} }
-                  {
-                    \bool_set_false:N \l__tenkz_celloptsvalid_bool
-                    \PackageError{tenkz}
-                      {combined=\tl_use:N \l__tenkz_fcombined_tl
-                        \c_space_tl is~not~a~fusion~side}
-                      {Use~combined=west~or~combined=east~on~a~fusion~bar.}
-                  }
-              }
-          }
+          { \tenkz_validate_fuse_combined: }
         \bool_if:NTF \l__tenkz_celloptsvalid_bool
           {
             \tenkz_get:NnN \l__tenkz_label_prop {#1-#2} \l_tmpb_tl
@@ -2684,6 +2757,10 @@ code=combined-side|value=\tl_to_str:N \l__tenkz_fcombined_tl}
 % the wire record backing the bond about to ink, and its recorded direction
 \tl_new:N \l__tenkz_bondrec_tl
 \tl_new:N \l__tenkz_bonddirw_tl
+\tl_new:N \l__tenkz_bondstyle_tl
+\tl_new:N \l__tenkz_bonddirmarks_tl
+\bool_new:N \l__tenkz_bond_rendered_bool
+\bool_new:N \l__tenkz_combined_attach_bool
 \cs_generate_variant:Nn \__tenkz_model_get:nnN { e }
 
 % extract a `species=<name>' row mod from the str-normalized mods #1
@@ -2869,12 +2946,34 @@ code=combined-side|value=\tl_to_str:N \l__tenkz_fcombined_tl}
                                 % is not yet drawn, so warn and keep the
                                 % per-row bonds (juxtapose two pictures
                                 % abutting at the fused stub instead)
+                                \bool_set_false:N
+                                  \l__tenkz_combined_attach_bool
                                 \tenkz_cell_combined:nnnN {##1}
-                                  {\int_use:N\l_tmpa_int}{east} \l_tmpa_bool
-                                \bool_if:NF \l_tmpa_bool
-                                  { \tenkz_cell_combined:nnnN {##1}{####1}
-                                      {west} \l_tmpa_bool }
-                                \bool_if:NT \l_tmpa_bool
+                                  {\int_use:N\l_tmpa_int}{east}
+                                  \l__tenkz_combined_attach_bool
+                                \bool_if:NF
+                                  \l__tenkz_combined_attach_bool
+                                  {
+                                    \tenkz_cell_fuse_combined:nnnN {##1}
+                                      {\int_use:N\l_tmpa_int}{east}
+                                      \l__tenkz_combined_attach_bool
+                                  }
+                                \bool_if:NF
+                                  \l__tenkz_combined_attach_bool
+                                  {
+                                    \tenkz_cell_combined:nnnN {##1}{####1}
+                                      {west}
+                                      \l__tenkz_combined_attach_bool
+                                  }
+                                \bool_if:NF
+                                  \l__tenkz_combined_attach_bool
+                                  {
+                                    \tenkz_cell_fuse_combined:nnnN {##1}
+                                      {####1}{west}
+                                      \l__tenkz_combined_attach_bool
+                                  }
+                                \bool_if:NT
+                                  \l__tenkz_combined_attach_bool
                                   {
                                     \msg_warning:nne {tenkz}{combined-attach}
                                       {##1}
@@ -2885,41 +2984,107 @@ picture=\the\tenkz@pictureid|code=combined-attach|row=##1}
                                   {east} \l__tenkz_pa_tl
                                 \tenkz_anchor:nnnN {##1}{####1}
                                   {west} \l__tenkz_pb_tl
-                                % the WIRE record is authoritative: a bond
-                                % with no record, or a record whose dir
-                                % disagrees with the scan, is a coded error
-                                \__tenkz_model_wire_by_ends:eeN
-                                  {##1-\int_use:N\l_tmpa_int}{##1-####1}
-                                  \l__tenkz_bondrec_tl
-                                \quark_if_no_value:NTF \l__tenkz_bondrec_tl
-                                  { \msg_error:nnee {tenkz}{render-nowire}
-                                      {##1-\int_use:N\l_tmpa_int}{##1-####1} }
+                                \bool_set_false:N
+                                  \l__tenkz_bond_rendered_bool
+                                \bool_if:NTF
+                                  \l__tenkz_combined_attach_bool
                                   {
-                                    \__tenkz_model_get:enN
-                                      { \tl_use:N \l__tenkz_bondrec_tl }
-                                      {dir} \l__tenkz_bonddirw_tl
-                                    \str_if_eq:eeF
-                                      { \tl_use:N \l__tenkz_bonddirw_tl }
-                                      { \tenkz_model_dir_word: }
-                                      { \msg_error:nneee {tenkz}{render-wiredir}
-                                          { \tl_use:N \l__tenkz_bondrec_tl }
-                                          { \tl_use:N \l__tenkz_bonddirw_tl }
-                                          { \tenkz_model_dir_word: } }
+                                    % This warning-only compatibility path is
+                                    % intentionally absent from the frozen
+                                    % model: one centred multi-row face is not
+                                    % duplicated into row WIREs.  Keep its
+                                    % legacy ink until fused attachments land.
                                     \__tenkz_render_bond:ennnn
-                                      { \tl_use:N \l__tenkz_bondrec_tl }
+                                      { legacy-combined }
                                       { \tl_use:N \l__tenkz_cell_tl }
                                       { \tl_use:N \l__tenkz_dirmarks_tl }
                                       { \l__tenkz_pa_tl }
                                       { \l__tenkz_pb_tl }
+                                    \bool_set_true:N
+                                      \l__tenkz_bond_rendered_bool
                                   }
-                                % Boundary accounting consumes these exact
-                                % bond facts rather than repeating the
-                                % consecutive-owner scan.
-                                \prop_put:Nen \l__tenkz_virtualpaired_prop
-                                  {##1-\int_use:N\l_tmpa_int-east} {}
-                                \prop_put:Nen \l__tenkz_virtualpaired_prop
-                                  {##1-####1-west} {}
-                                \tenkz@event{bond|picture=\the\tenkz@pictureid|row=##1|from=\int_use:N\l_tmpa_int|to=####1|dir=\tenkz_dir_word:|role=\tenkz_rowrole_word:|species=\tenkz_rowspec_word:}
+                                  {
+                                    % Ordinary bonds are model-authoritative.
+                                    % A missing record commits no ink, pairing,
+                                    % or event side effects under nonstop mode.
+                                    \__tenkz_model_wire_by_ends:eeN
+                                      {##1-\int_use:N\l_tmpa_int}{##1-####1}
+                                      \l__tenkz_bondrec_tl
+                                    \quark_if_no_value:NTF
+                                      \l__tenkz_bondrec_tl
+                                      {
+                                        \msg_error:nnee {tenkz}{render-nowire}
+                                          {##1-\int_use:N\l_tmpa_int}
+                                          {##1-####1}
+                                      }
+                                      {
+                                        \__tenkz_model_get:enN
+                                          { \tl_use:N \l__tenkz_bondrec_tl }
+                                          {dir} \l__tenkz_bonddirw_tl
+                                        \str_if_eq:eeF
+                                          { \tl_use:N \l__tenkz_bonddirw_tl }
+                                          { \tenkz_model_dir_word: }
+                                          {
+                                            \msg_error:nneee
+                                              {tenkz}{render-wiredir}
+                                              {
+                                                \tl_use:N
+                                                  \l__tenkz_bondrec_tl
+                                              }
+                                              {
+                                                \tl_use:N
+                                                  \l__tenkz_bonddirw_tl
+                                              }
+                                              { \tenkz_model_dir_word: }
+                                          }
+                                        \str_case:VnF
+                                          \l__tenkz_bonddirw_tl
+                                          {
+                                            {none}
+                                              { \tl_clear:N
+                                                  \l__tenkz_dir_tl }
+                                            {to}
+                                              { \tl_set:Nn
+                                                  \l__tenkz_dir_tl {right} }
+                                            {from}
+                                              { \tl_set:Nn
+                                                  \l__tenkz_dir_tl {left} }
+                                          }
+                                          { \tl_clear:N \l__tenkz_dir_tl }
+                                        \tenkz_dir_marks:NN
+                                          \l__tenkz_cell_tl
+                                          \l__tenkz_bonddirmarks_tl
+                                        \__tenkz_model_get:enN
+                                          { \tl_use:N \l__tenkz_bondrec_tl }
+                                          {style} \l__tenkz_bondstyle_tl
+                                        \__tenkz_render_bond:ennnn
+                                          {
+                                            \tl_use:N \l__tenkz_bondrec_tl
+                                          }
+                                          {
+                                            \tl_use:N \l__tenkz_bondstyle_tl
+                                          }
+                                          {
+                                            \tl_use:N
+                                              \l__tenkz_bonddirmarks_tl
+                                          }
+                                          { \l__tenkz_pa_tl }
+                                          { \l__tenkz_pb_tl }
+                                        \bool_set_true:N
+                                          \l__tenkz_bond_rendered_bool
+                                      }
+                                  }
+                                \bool_if:NT \l__tenkz_bond_rendered_bool
+                                  {
+                                    % Pairing and events commit only after ink.
+                                    \prop_put:Nen
+                                      \l__tenkz_virtualpaired_prop
+                                      {##1-\int_use:N\l_tmpa_int-east} {}
+                                    \prop_put:Nen
+                                      \l__tenkz_virtualpaired_prop
+                                      {##1-####1-west} {}
+                                    \tenkz@event{bond|picture=\the\tenkz@pictureid|row=##1|from=\int_use:N\l_tmpa_int|to=####1|dir=\tenkz_dir_word:|role=\tenkz_rowrole_word:|species=\tenkz_rowspec_word:}
+                                  }
                                   }
                                   { \tenkz_draw_unmatched_virtual:nnn {##1}
                                       {\int_use:N\l_tmpa_int}{east} } }

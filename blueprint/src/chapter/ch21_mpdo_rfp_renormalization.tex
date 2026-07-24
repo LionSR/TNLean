@@ -1,7 +1,7 @@
 \section{Preliminaries for physical renormalization}
 
 We first collect the transfer-map, channel, and physical-closure notions used
-to state the mixed-state renormalization condition.  The renormalization fixed
+to state the mixed-state renormalization condition. The renormalization fixed
 point of \cite[Definition~4.1]{Cirac2016MPDO_arXiv} is stated in the next
 section.
 
@@ -10,9 +10,10 @@ section.
     \leanok
     \uses{def:mpo_transfer_map}
     An MPO tensor $M$ has \emph{transfer-map idempotence} if
-    \[
-        \E_M \circ \E_M = \E_M.
-    \]
+    \begin{align}
+        \E_M\circ\E_M&=\E_M.
+        \notag
+    \end{align}
 \end{definition}
 
 % The definition above is transfer-map idempotence, distinct from the paper's
@@ -25,9 +26,10 @@ section.
     A linear map $\mathcal S$ between matrix algebras is \emph{completely
     positive in rectangular Kraus form} if there are finitely many operators
     $A_i:H\to K$ such that
-    \[
-        \mathcal S(X)=\sum_i A_iXA_i^\dagger.
-    \]
+    \begin{align}
+        \mathcal S(X)&=\sum_i A_iXA_i^\dagger.
+        \notag
+    \end{align}
     No trace-preservation normalization is imposed.
 \end{definition}
 
@@ -46,7 +48,7 @@ section.
     \leanok
     \uses{def:is_kraus_cp, def:is_kraus_cptp}
     A map in rectangular Kraus form sends positive semidefinite matrices to
-    positive semidefinite matrices.  Every trace-preserving completely positive
+    positive semidefinite matrices. Every trace-preserving completely positive
     Kraus map is a completely positive Kraus map.
 \end{lemma}
 
@@ -70,9 +72,9 @@ section.
     \leanok
     A linear map $\mathcal{S}$ between matrix algebras is \emph{trace-preserving
         completely positive} if it has a Kraus form
-    $\mathcal{S}(X) = \sum_{i} A_i X A_i^\dagger$ with $\sum_i A_i^\dagger A_i = I$.
-    The Kraus operators may be rectangular, so the input and output dimensions
-    need not agree.
+    $\mathcal{S}(X)=\sum_i A_iXA_i^\dagger$ with
+    $\sum_i A_i^\dagger A_i=I$. The Kraus operators may be rectangular, so the
+    input and output dimensions need not agree.
 \end{definition}
 
 \begin{theorem}[Trace preservation completes a Kraus channel]
@@ -86,12 +88,9 @@ section.
 
 \begin{proof}\leanok
     If $(A_i)_i$ is a Kraus family, trace preservation and cyclicity give
-    \[
-        \tr\left(\left(\sum_i A_i^\dagger A_i\right)X\right)
-        =\tr(X)
-    \]
-    for every $X$.  Nondegeneracy of the trace pairing implies
-    $\sum_i A_i^\dagger A_i=\mathbf 1$.
+    $\tr((\sum_i A_i^\dagger A_i)X)=\tr(X)$ for every $X$.
+    Nondegeneracy of the trace pairing implies
+    $\sum_i A_i^\dagger A_i=\Id$.
 \end{proof}
 
 \begin{theorem}[Trace preservation from a Kraus resolution]
@@ -105,14 +104,15 @@ section.
 
 \begin{proof}
     \leanok
-    If $\mathcal S(X)=\sum_a A_a X A_a^\dagger$ and
+    If $\mathcal S(X)=\sum_a A_aXA_a^\dagger$ and
     $\sum_a A_a^\dagger A_a=I$, cyclicity gives
-    \[
+    \begin{align}
         \tr\mathcal S(X)
-        =\sum_a\tr(A_aXA_a^\dagger)
-        =\tr\left(\left(\sum_a A_a^\dagger A_a\right)X\right)
-        =\tr X.
-    \]
+        &=\sum_a\tr(A_aXA_a^\dagger)
+          =\tr\left(\left(\sum_a A_a^\dagger A_a\right)X\right)
+          =\tr X.
+        \notag
+    \end{align}
 \end{proof}
 
 \begin{lemma}[Positivity preservation for Kraus maps]
@@ -129,13 +129,13 @@ section.
     \lean{isKrausCPTP_id}
     \leanok
     \uses{def:is_kraus_cptp}
-    The identity map $\mathrm{id}(X) = X$ is trace-preserving completely positive,
-    with single Kraus operator $A_0 = I$.
+    The identity map $\id(X)=X$ is trace-preserving completely positive,
+    with single Kraus operator $A_0=I$.
 \end{lemma}
 \begin{proof}
     \leanok
-    Take $r = 1$, $A_0 = I$; then $\mathrm{id}(X) = I X I^\dagger = X$ and
-    $A_0^\dagger A_0 = I$.
+    Take $r=1$ and $A_0=I$; then $\id(X)=IXI^\dagger=X$ and
+    $A_0^\dagger A_0=I$.
 \end{proof}
 
 \begin{theorem}[Conjugation by an isometry is trace-preserving completely positive]
@@ -145,11 +145,12 @@ section.
     \uses{def:is_kraus_cptp}
     Let $H$ and $K$ be finite-dimensional complex vector spaces, and let
     $V:H\to K$ satisfy $V^\dagger V=I_H$. Then the map
-    \[
-        \Phi_V:\End_{\C}(H)\longrightarrow
-          \End_{\C}(K),
-        \qquad \Phi_V(X)=VXV^\dagger,
-    \]
+    \begin{align}
+        \Phi_V:\End_{\C}(H)&\longrightarrow\End_{\C}(K),
+        \notag\\
+        \Phi_V(X)&=VXV^\dagger,
+        \notag
+    \end{align}
     is trace-preserving and completely positive. This is the general
     one-isometry form of the local basis change used in
     \cite[Appendix~C.2, lines~1439 and~1520]{Cirac2016MPDO_arXiv}.
@@ -165,9 +166,10 @@ section.
     \lean{singleKrausMap}
     \leanok
     For a rectangular matrix $V:H\to K$, define the linear map
-    \[
-      \Phi_V(X)=VXV^\dagger.
-    \]
+    \begin{align}
+        \Phi_V(X)&=VXV^\dagger.
+        \notag
+    \end{align}
 \end{definition}
 
 \begin{lemma}[Evaluation of the single-Kraus map]
@@ -203,9 +205,11 @@ section.
     Let $e:I\simeq J$ be an equivalence of index sets. The associated
     matrix reindexing is the linear map
     $R_e:\C^{I\times I}\to\C^{J\times J}$ determined by
-    \[
-        \bigl[R_e(X)\bigr]_{j,j'}=X_{e^{-1}(j),e^{-1}(j')}.
-    \]
+    \begin{align}
+        [R_e(X)]_{j,j'}
+        &=X_{e^{-1}(j),e^{-1}(j')}.
+        \notag
+    \end{align}
 \end{definition}
 
 \begin{theorem}[Equivalence reindexing is trace-preserving completely positive]
@@ -219,10 +223,7 @@ section.
 \begin{proof}
     \leanok
     Let $P_e:\C^I\to\C^J$ be the permutation matrix of $e$. Then
-    \[
-        R_e(X)=P_eXP_e^\dagger,
-        \qquad P_e^\dagger P_e=I_{\C^I}.
-    \]
+    $R_e(X)=P_eXP_e^\dagger$ and $P_e^\dagger P_e=I_{\C^I}$.
     The claim follows from the preceding isometry lemma.
 \end{proof}
 
@@ -236,20 +237,21 @@ section.
     \uses{def:is_kraus_cptp}
     The composition of two trace-preserving completely positive maps is again
     trace-preserving completely positive. If $\mathcal{S}$ has Kraus operators
-    $A_i$ and $\mathcal{T}$ has Kraus operators $B_j$, then $\mathcal{S} \circ
-    \mathcal{T}$ has Kraus operators $A_i B_j$.
+    $A_i$ and $\mathcal{T}$ has Kraus operators $B_j$, then
+    $\mathcal{S}\circ\mathcal{T}$ has Kraus operators $A_iB_j$.
 \end{lemma}
 \begin{proof}
     \leanok
-    The Kraus form of the composite is
-    $(\mathcal{S} \circ \mathcal{T})(X) = \sum_{i,j} (A_i B_j) X (A_i B_j)^\dagger$,
-    and the resolution of identity follows from those of $\mathcal{S}$ and
-    $\mathcal{T}$:
-    \[
-        \sum_{i,j} (A_i B_j)^\dagger (A_i B_j)
-        = \sum_{j} B_j^\dagger \Bigl( \sum_{i} A_i^\dagger A_i \Bigr) B_j
-        = \sum_{j} B_j^\dagger B_j = I.
-    \]
+    The Kraus form of the composite and its resolution of the identity are
+    \begin{align}
+        (\mathcal{S}\circ\mathcal{T})(X)
+        &=\sum_{i,j}(A_iB_j)X(A_iB_j)^\dagger,
+        \notag\\
+        \sum_{i,j}(A_iB_j)^\dagger(A_iB_j)
+        &=\sum_j B_j^\dagger\left(\sum_i A_i^\dagger A_i\right)B_j
+          =\sum_j B_j^\dagger B_j=I.
+        \notag
+    \end{align}
 \end{proof}
 
 \begin{lemma}[Composition of completely positive rectangular Kraus maps]
@@ -258,7 +260,7 @@ section.
     \leanok
     \uses{def:is_kraus_cp}
     The composition of two completely positive rectangular Kraus maps is
-    completely positive.  If the two families are $(A_i)_i$ and $(B_j)_j$,
+    completely positive. If the two families are $(A_i)_i$ and $(B_j)_j$,
     the composite family is $(A_iB_j)_{i,j}$.
 \end{lemma}
 
@@ -270,11 +272,12 @@ section.
     Let $\mathcal S:\End_{\C}(H)\to
         \End_{\C}(K)$ be trace-preserving and completely positive,
     and let $R$ be another finite-dimensional space. Then
-    \[
+    \begin{align}
         \mathcal S\otimes\id_R:
-        \End_{\C}(H\otimes R)\longrightarrow
+        \End_{\C}(H\otimes R)&\longrightarrow
         \End_{\C}(K\otimes R)
-    \]
+        \notag
+    \end{align}
     is trace-preserving and completely positive. If $(A_a)_a$ is a Kraus
     family for $\mathcal S$, then
     $(A_a\otimes I_R)_a$ is a Kraus family for its tensor extension.
@@ -282,16 +285,18 @@ section.
 \begin{proof}
     \leanok
     The tensor extension has the Kraus form
-    \[
+    \begin{align}
         (\mathcal S\otimes\id_R)(X)
-        =\sum_a (A_a\otimes I_R)X(A_a\otimes I_R)^\dagger.
-    \]
+        &=\sum_a(A_a\otimes I_R)X(A_a\otimes I_R)^\dagger.
+        \notag
+    \end{align}
     Its normalization follows from that of the original family:
-    \[
-        \sum_a (A_a\otimes I_R)^\dagger(A_a\otimes I_R)
-        =\left(\sum_a A_a^\dagger A_a\right)\otimes I_R
-        =I_H\otimes I_R.
-    \]
+    \begin{align}
+        \sum_a(A_a\otimes I_R)^\dagger(A_a\otimes I_R)
+        &=\left(\sum_a A_a^\dagger A_a\right)\otimes I_R
+          =I_H\otimes I_R.
+        \notag
+    \end{align}
 \end{proof}
 
 \begin{definition}[Rectangular Kraus map]
@@ -301,9 +306,10 @@ section.
     Let $I$ be a finite index set, let $J$ be an arbitrary index set, and let
     $(A_a\in\C^{J\times I})_a$ be a finite family of matrices. Its
     rectangular Kraus map is
-    \[
-        \Phi_A(X)=\sum_a A_aXA_a^{\dagger}.
-    \]
+    \begin{align}
+        \Phi_A(X)&=\sum_a A_aXA_a^\dagger.
+        \notag
+    \end{align}
 \end{definition}
 
 \begin{theorem}[Rectangular Kraus resolution]
@@ -312,10 +318,8 @@ section.
     \leanok
     \uses{def:is_kraus_cptp, def:mpdo_rectangular_kraus_map}
     Let $(A_a:H\to K)_a$ be a finite family of rectangular operators. If
-    \[
-        \sum_a A_a^\dagger A_a=I_H,
-    \]
-    then $X\mapsto\sum_a A_aXA_a^\dagger$ is trace-preserving and completely
+    $\sum_a A_a^\dagger A_a=I_H$, then
+    $X\mapsto\sum_a A_aXA_a^\dagger$ is trace-preserving and completely
     positive.
 \end{theorem}
 \begin{proof}\leanok
@@ -343,10 +347,8 @@ section.
 \begin{proof}
     \leanok
     Reindexing the finite sum gives
-    \[
-        \sum_{b\in I'}A_{e^{-1}(b)}X A_{e^{-1}(b)}^\dagger
-        =\sum_{a\in I}A_aXA_a^\dagger.
-    \]
+    $\sum_{b\in I'}A_{e^{-1}(b)}XA_{e^{-1}(b)}^\dagger
+    =\sum_{a\in I}A_aXA_a^\dagger$.
 \end{proof}
 
 \begin{definition}[Orthogonally controlled Kraus map]
@@ -359,10 +361,11 @@ section.
     $(A_{k,a}:H_k\to K_k)_a$ be a finite family of operators, and let
     $\widetilde A_{k,a}:H\to K$ agree with $A_{k,a}$ on $H_k$ and vanish on
     every other summand. The orthogonally controlled Kraus map is
-    \[
+    \begin{align}
         \mathcal C(X)
-        =\sum_{k,a}\widetilde A_{k,a}X\widetilde A_{k,a}^{\dagger}.
-    \]
+        &=\sum_{k,a}\widetilde A_{k,a}X\widetilde A_{k,a}^\dagger.
+        \notag
+    \end{align}
     In particular, $\mathcal C(X)_{kl}=0$ for $k\ne l$. This is the sector
     control in the definitions of $\mathcal T_1$ and $\mathcal S_1$ in
     \cite[Appendix~C.2, lines~1523--1535 and~1548--1555]
@@ -376,24 +379,19 @@ section.
     \uses{def:mpdo_controlled_kraus_map,
       def:mpdo_rectangular_kraus_map}
     Let $X_{kk}:H_k\to H_k$ denote the $k$th diagonal block of $X$. Then
-    \[
+    \begin{align}
         \mathcal C(X)_{kk}
-        =\sum_a A_{k,a}X_{kk}A_{k,a}^\dagger
-        =\Phi_{A_k}(X_{kk}).
-    \]
+        &=\sum_a A_{k,a}X_{kk}A_{k,a}^\dagger
+          =\Phi_{A_k}(X_{kk}).
+        \notag
+    \end{align}
 \end{theorem}
 \begin{proof}
     \leanok
     If $j\ne k$, then every zero-extended Kraus operator satisfies
-    \[
-      [\widetilde A_{j,a}X\widetilde A_{j,a}^\dagger]
-        _{(k,b),(k,c)}=0.
-    \]
+    $[\widetilde A_{j,a}X\widetilde A_{j,a}^\dagger]_{(k,b),(k,c)}=0$.
     Hence only the $j=k$ terms survive, and
-    \[
-      [\mathcal C(X)]_{kk}
-      =\sum_a A_{k,a}X_{kk}A_{k,a}^\dagger.
-    \]
+    $[\mathcal C(X)]_{kk}=\sum_a A_{k,a}X_{kk}A_{k,a}^\dagger$.
 \end{proof}
 
 \begin{theorem}[Off-diagonal blocks of an orthogonally controlled map]
@@ -406,10 +404,7 @@ section.
 \begin{proof}
     \leanok
     For every $(j,a)$ and $k\ne l$, the zero-extended operator satisfies
-    \[
-      [\widetilde A_{j,a}X\widetilde A_{j,a}^\dagger]
-        _{(k,b),(l,c)}=0.
-    \]
+    $[\widetilde A_{j,a}X\widetilde A_{j,a}^\dagger]_{(k,b),(l,c)}=0$.
     Therefore $[\mathcal C(X)]_{kl}=\sum_{j,a}0=0$.
 \end{proof}
 
@@ -420,22 +415,20 @@ section.
     \uses{def:mpdo_controlled_kraus_map,
         def:is_kraus_cptp}
     Suppose that for every $k$ the sectorwise Kraus family resolves the
-    identity:
-    \[
-        \sum_a A_{k,a}^{\dagger}A_{k,a}=I_{H_k}.
-    \]
-    Then the orthogonally controlled map $\mathcal C$ is
-    trace-preserving and completely positive.
+    identity, $\sum_a A_{k,a}^\dagger A_{k,a}=I_{H_k}$. Then the
+    orthogonally controlled map $\mathcal C$ is trace-preserving and completely
+    positive.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{thm:mpdo_rectangular_kraus_map_cptp}
     Each embedded operator has support in one summand, and therefore
-    \[
-        \sum_{k,a}\widetilde A_{k,a}^{\dagger}\widetilde A_{k,a}
-        =\bigoplus_k\left(\sum_a A_{k,a}^{\dagger}A_{k,a}\right)
-        =\bigoplus_k I_{H_k}=I_H.
-    \]
+    \begin{align}
+        \sum_{k,a}\widetilde A_{k,a}^\dagger\widetilde A_{k,a}
+        &=\bigoplus_k\left(\sum_a A_{k,a}^\dagger A_{k,a}\right)
+          =\bigoplus_k I_{H_k}=I_H.
+        \notag
+    \end{align}
     Apply Theorem~\ref{thm:mpdo_rectangular_kraus_map_cptp} to the combined
     rectangular Kraus family $(\widetilde A_{k,a})_{k,a}$.
 \end{proof}
@@ -446,11 +439,11 @@ section.
     \leanok
     For a matrix $X$ on $A\otimes B$, the right partial trace is the linear map
     from matrices on $A\otimes B$ to matrices on $A$ given by
-    \[
-        \bigl[\tr_{B}(X)\bigr]_{ij}
-        =
-        \sum_{k}X_{(i,k),(j,k)}.
-    \]
+    \begin{align}
+        [\tr_B(X)]_{ij}
+        &=\sum_k X_{(i,k),(j,k)}.
+        \notag
+    \end{align}
     After the retained and discarded subspins have been regrouped as
     $A\otimes B$, this is the partial-trace ingredient of the maps
     $\mathcal T_0$ and $\mathcal S_0$ in
@@ -463,17 +456,13 @@ section.
     \leanok
     \uses{def:mpdo_right_partial_trace_map}
     For square matrices $X$ on $A$ and $Y$ on $B$,
-    \[
-        \tr_B(X\otimes Y)=\tr(Y)X.
-    \]
+    $\tr_B(X\otimes Y)=\tr(Y)X$.
 \end{theorem}
 \begin{proof}
     \leanok
     For all $i,j$,
-    \[
-      [\tr_B(X\otimes Y)]_{ij}
-      =\sum_t X_{ij}Y_{tt}=\tr(Y)X_{ij}.
-    \]
+    $[\tr_B(X\otimes Y)]_{ij}
+    =\sum_t X_{ij}Y_{tt}=\tr(Y)X_{ij}$.
 \end{proof}
 
 \begin{lemma}[The right partial trace is trace-preserving completely positive]
@@ -482,7 +471,7 @@ section.
     \leanok
     \uses{def:mpdo_right_partial_trace_map,
         def:is_kraus_cptp}
-    The map $\tr_{B}$ is trace-preserving and completely positive for arbitrary
+    The map $\tr_B$ is trace-preserving and completely positive for arbitrary
     finite-dimensional spaces $A$ and $B$.
 \end{lemma}
 
@@ -491,15 +480,13 @@ section.
     \uses{thm:mpdo_rectangular_kraus_map_cptp}
     For each basis vector $e_k$ of $B$, define
     $V_k:A\otimes B\to A$ by
-    \[
-        V_k(e_i\otimes e_\ell)=\delta_{k\ell}e_i.
-    \]
-    Then
-    \[
-        \sum_k V_k X V_k^\dagger=\tr_{B}(X),
-        \qquad
-        \sum_k V_k^\dagger V_k=I_{A\otimes B}.
-    \]
+    $V_k(e_i\otimes e_\ell)=\delta_{k\ell}e_i$. Then
+    \begin{align}
+        \sum_k V_kXV_k^\dagger&=\tr_B(X),
+        \notag\\
+        \sum_k V_k^\dagger V_k&=I_{A\otimes B}.
+        \notag
+    \end{align}
     Theorem~\ref{thm:mpdo_rectangular_kraus_map_cptp} applies.
 \end{proof}
 
@@ -507,11 +494,12 @@ section.
     \label{def:mpdo_state_preparation_map}
     \lean{Matrix.preparationMap}
     \leanok
-    Let $\rho$ be a matrix on a finite-dimensional space $B$.  The
+    Let $\rho$ be a matrix on a finite-dimensional space $B$. The
     state-preparation map from matrices on $A$ to matrices on $A\otimes B$ is
-    \[
-        \mathcal P_\rho(X)=X\otimes\rho.
-    \]
+    \begin{align}
+        \mathcal P_\rho(X)&=X\otimes\rho.
+        \notag
+    \end{align}
     This is the elementary preparation operation used in the maps
     $\mathcal T_1$ and $\mathcal S_1$ of
     \cite[Appendix~C.2, lines~1527--1533 and~1551--1555]{Cirac2016MPDO_arXiv}.
@@ -523,9 +511,7 @@ section.
     \leanok
     Let $R=\sqrt\rho$. For an orthonormal basis $(e_j)_j$ of $B$, define
     rectangular operators $A_j:A\to A\otimes B$ by
-    \[
-        A_j(e_a)=e_a\otimes Re_j.
-    \]
+    $A_j(e_a)=e_a\otimes Re_j$.
 \end{definition}
 
 \begin{theorem}[Kraus action of state preparation]
@@ -536,18 +522,20 @@ section.
       def:mpdo_state_preparation_map,
       def:mpdo_state_preparation_kraus}
     If $\rho\succeq0$ and $A_j(e_a)=e_a\otimes\sqrt\rho\,e_j$, then
-    \[
-        \sum_j A_jXA_j^\dagger=X\otimes\rho.
-    \]
+    \begin{align}
+        \sum_j A_jXA_j^\dagger&=X\otimes\rho.
+        \notag
+    \end{align}
 \end{theorem}
 \begin{proof}
     \leanok
     Put $R=\sqrt\rho$. Since $R$ is Hermitian and $R^2=\rho$, the
     $((a,s),(b,t))$ entry of the left-hand side is
-    \[
+    \begin{align}
         X_{ab}\sum_jR_{sj}\overline{R_{tj}}
-        =X_{ab}(R^2)_{st}=X_{ab}\rho_{st}.
-    \]
+        &=X_{ab}(R^2)_{st}=X_{ab}\rho_{st}.
+        \notag
+    \end{align}
 \end{proof}
 
 \begin{theorem}[Preparation Kraus operators resolve the identity]
@@ -556,18 +544,13 @@ section.
     \leanok
     \uses{def:mpdo_state_preparation_kraus}
     If $\rho\geq0$ and $\tr(\rho)=1$, then
-    \[
-        \sum_j A_j^\dagger A_j=I_A.
-    \]
+    $\sum_j A_j^\dagger A_j=I_A$.
 \end{theorem}
 \begin{proof}
     \leanok
     Since $R$ is Hermitian and $R^2=\rho$, the diagonal entries of the sum are
-    \[
-        \sum_{j,t}\overline{R_{tj}}R_{tj}
-        =\tr(R^2)=\tr(\rho)=1,
-    \]
-    while its off-diagonal entries vanish.
+    $\sum_{j,t}\overline{R_{tj}}R_{tj}
+    =\tr(R^2)=\tr(\rho)=1$, while its off-diagonal entries vanish.
 \end{proof}
 
 \begin{lemma}[Positive state preparation is completely positive]
@@ -577,7 +560,7 @@ section.
     \uses{def:is_kraus_cp, def:mpdo_state_preparation_map,
       thm:mpdo_state_preparation_kraus_action}
     If $\rho\geq0$, then the map $X\mapsto X\otimes\rho$ is completely
-    positive.  No trace normalization is required.
+    positive. No trace normalization is required.
 \end{lemma}
 
 \begin{lemma}[State preparation is trace-preserving completely positive]
@@ -613,13 +596,12 @@ section.
     \uses{def:mpo_eval_word}
     For an MPO tensor $M$, a length $N$, and a virtual operator $X$, define the
     physical operator $M_N(X)$ by
-    \[
+    \begin{align}
         M_N(X)_{\boldsymbol i,\boldsymbol j}
-        =
-        \tr\!\left(
-          M^{i_0j_0} M^{i_1j_1}\cdots M^{i_{N-1}j_{N-1}} X
-        \right).
-    \]
+        &=
+        \tr\!\left(M^{i_0j_0}M^{i_1j_1}\cdots M^{i_{N-1}j_{N-1}}X\right).
+        \notag
+    \end{align}
     This is linear in $X$. The displayed order chooses the cut of the cyclic
     virtual contraction immediately before the first site, so that $X$ follows
     the last site. The one- and two-site operators are constructed in
@@ -635,21 +617,19 @@ section.
     \leanok
     \uses{def:phys_close, def:mpo_family}
     Closing the virtual legs with the identity gives the periodic MPO
-    operator:
-    \[
-        M_N(1)=\rho^{(N)}(M).
-    \]
+    operator: $M_N(1)=\rho^{(N)}(M)$.
 \end{lemma}
 
 \begin{proof}
     \leanok
     For every pair of physical words $\sigma,\tau$,
-    \[
+    \begin{align}
         M_N(1)_{\sigma,\tau}
-          = \tr\!\left(M^{\sigma,\tau}\cdot 1\right)
-          = \tr\!\left(M^{\sigma,\tau}\right)
-          = \rho^{(N)}(M)_{\sigma,\tau}. \qedhere
-    \]
+        &=\tr\!\left(M^{\sigma,\tau}\cdot1\right)
+          =\tr\!\left(M^{\sigma,\tau}\right)
+          =\rho^{(N)}(M)_{\sigma,\tau}.
+        \notag
+    \end{align}
 \end{proof}
 
 \begin{theorem}[One- and two-site physical closures]
@@ -661,12 +641,14 @@ section.
     Under the canonical identifications of one-site configurations with
     physical indices and two-site configurations with pairs of physical
     indices,
-    \[
-        M_1(X)_{i,j}=\tr(M^{ij} X),
-        \qquad
+    \begin{align}
+        M_1(X)_{i,j}
+        &=\tr(M^{ij}X),
+        \notag\\
         M_2(X)_{(i_0,i_1),(j_0,j_1)}
-        =\tr(M^{i_0j_0} M^{i_1j_1} X).
-    \]
+        &=\tr(M^{i_0j_0}M^{i_1j_1}X).
+        \notag
+    \end{align}
 \end{theorem}
 \begin{proof}
     \leanok
@@ -682,10 +664,11 @@ section.
     \leanok
     \uses{def:phys_close}
     The general three-site physical closure has coefficients
-    \[
+    \begin{align}
         M_3(X)_{(i_0,(i_1,i_2)),(j_0,(j_1,j_2))}
-        =\tr(M^{i_0j_0} M^{i_1j_1} M^{i_2j_2} X).
-    \]
+        &=\tr(M^{i_0j_0}M^{i_1j_1}M^{i_2j_2}X).
+        \notag
+    \end{align}
     For $M=\mathcal K$, this is the operator $\mathcal K_3(X)$ in
     \cite[Proposition~C.7, lines~1510--1516]{Cirac2016MPDO_arXiv}.
 \end{lemma}
@@ -698,7 +681,7 @@ section.
 \section{Renormalization fixed points}
 
 The following is the mixed-state fixed-point condition of
-\cite[Definition~4.1]{Cirac2016MPDO_arXiv}.  Its two local channels extend to
+\cite[Definition~4.1]{Cirac2016MPDO_arXiv}. Its two local channels extend to
 every longer periodic chain by acting on the first one or two sites and leaving
 the remaining sites unchanged.
 
@@ -709,10 +692,11 @@ the remaining sites unchanged.
     \uses{def:mpo_tensor, def:is_kraus_cptp, def:phys_close}
     An MPO tensor $M$ is a \emph{renormalization fixed point} if there exist two
     trace-preserving completely positive maps $\mathcal{S}, \mathcal{T}$ on the
-    physical indices such that $\mathcal{S}[M_2(X)] = M_1(X)$ and
-    $\mathcal{T}[M_1(X)] = M_2(X)$ for every virtual operator $X$, where
-    $M_1(X)_{ij} = \tr(M^{ij} X)$ and
-    $M_2(X)_{(i_1 i_2)(j_1 j_2)} = \tr(M^{i_1 j_1} M^{i_2 j_2} X)$ are the one-
+    physical indices such that $\mathcal{S}[M_2(X)]=M_1(X)$ and
+    $\mathcal{T}[M_1(X)]=M_2(X)$ for every virtual operator $X$, where
+    $M_1(X)_{ij}=\tr(M^{ij}X)$ and
+    $M_2(X)_{(i_1i_2)(j_1j_2)}
+    =\tr(M^{i_1j_1}M^{i_2j_2}X)$ are the one-
     and two-site physical operators obtained by closing one or two tensors with
     $X$. This condition is distinct from idempotence of the doubled-index
     transfer map for general mixed states. Its source zero-correlation-length
@@ -769,7 +753,7 @@ the remaining sites unchanged.
       finAddTwoArrowEquiv}
     \leanok
     Let $R_1$ identify an $(N+1)$-tuple with its first coordinate and the
-    remaining $N$-tuple.  Let $R_2$ identify an $(N+2)$-tuple with its first
+    remaining $N$-tuple. Let $R_2$ identify an $(N+2)$-tuple with its first
     two coordinates and the remaining $N$-tuple.
 \end{definition}
 
@@ -779,16 +763,17 @@ the remaining sites unchanged.
       MPOTensor.coarsenFirstTwoSites}
     \leanok
     \uses{def:finite_tuple_regroupings}
-    Let $N$ count the sites that are left unchanged.  For physical maps
+    Let $N$ count the sites that are left unchanged. For physical maps
     $\mathcal T:M_d\to M_{d^2}$ and $\mathcal S:M_{d^2}\to M_d$, define
-    \[
-       \widehat{\mathcal T}_N
-       =\mathcal T\otimes\id_{d^N},
-       \qquad
-       \widehat{\mathcal S}_N
-       =\mathcal S\otimes\id_{d^N},
-    \]
-    using $R_1$ and $R_2$.  Thus $N=0$ leaves no spectator site, but the
+    \begin{align}
+        \widehat{\mathcal T}_N
+        &=\mathcal T\otimes\id_{d^N},
+        \notag\\
+        \widehat{\mathcal S}_N
+        &=\mathcal S\otimes\id_{d^N},
+        \notag
+    \end{align}
+    using $R_1$ and $R_2$. Thus $N=0$ leaves no spectator site, but the
     maps still act on a one-site or two-site operator; no empty ring occurs.
 \end{definition}
 
@@ -801,21 +786,24 @@ the remaining sites unchanged.
     \leanok
     \uses{def:finite_tuple_regroupings}
     For a physical word $\sigma$ of length $N+1$,
-    \[
-      R_1(\sigma)=\bigl(\sigma_0,(\sigma_1,\ldots,\sigma_N)\bigr),
-      \qquad
-      R_1^{-1}\bigl(i,(a_1,\ldots,a_N)\bigr)=(i,a_1,\ldots,a_N).
-    \]
+    \begin{align}
+        R_1(\sigma)
+        &=(\sigma_0,(\sigma_1,\ldots,\sigma_N)),
+        \notag\\
+        R_1^{-1}(i,(a_1,\ldots,a_N))
+        &=(i,a_1,\ldots,a_N).
+        \notag
+    \end{align}
     For a physical word $\sigma$ of length $N+2$,
-    \[
-      R_2(\sigma)
-        =\bigl((\sigma_0,\sigma_1),(\sigma_2,\ldots,\sigma_{N+1})\bigr),
-    \]
-    and
-    \[
-      R_2^{-1}\bigl((i,j),(a_1,\ldots,a_N)\bigr)
-        =(i,j,a_1,\ldots,a_N).
-    \]
+    \begin{align}
+        R_2(\sigma)
+        &=\bigl((\sigma_0,\sigma_1),
+            (\sigma_2,\ldots,\sigma_{N+1})\bigr),
+        \notag\\
+        R_2^{-1}((i,j),(a_1,\ldots,a_N))
+        &=(i,j,a_1,\ldots,a_N).
+        \notag
+    \end{align}
 \end{lemma}
 
 \begin{proof}
@@ -839,13 +827,14 @@ the remaining sites unchanged.
     If $(K_j)_j$ are Kraus operators for $\mathcal T$ with
     $\sum_j K_j^\dagger K_j=I_d$, then the localized map has Kraus operators
     $K_j\otimes I_{d^N}$, and
-    \[
-      \sum_j (K_j\otimes I_{d^N})^\dagger(K_j\otimes I_{d^N})
-        =\left(\sum_j K_j^\dagger K_j\right)\otimes I_{d^N}
-        =I_d\otimes I_{d^N}.
-    \]
+    \begin{align}
+        \sum_j(K_j\otimes I_{d^N})^\dagger(K_j\otimes I_{d^N})
+        &=\left(\sum_j K_j^\dagger K_j\right)\otimes I_{d^N}
+          =I_d\otimes I_{d^N}.
+        \notag
+    \end{align}
     The two regroupings are unitary conjugations and preserve complete
-    positivity and the trace.  The argument for $\mathcal S$ is identical.
+    positivity and the trace. The argument for $\mathcal S$ is identical.
 \end{proof}
 
 \begin{theorem}[Global action of the renormalization maps]
@@ -859,13 +848,16 @@ the remaining sites unchanged.
     \uses{def:phys_close, def:is_rfp_via_ts,
       def:mpdo_global_renormalization_maps}
     Suppose that $\mathcal S[M_2(X)]=M_1(X)$ and
-    $\mathcal T[M_1(X)]=M_2(X)$ for every virtual operator $X$.  Then, for
+    $\mathcal T[M_1(X)]=M_2(X)$ for every virtual operator $X$. Then, for
     every $N$ and $X$,
-    \[
-      \widehat{\mathcal S}_N[M_{N+2}(X)]=M_{N+1}(X),
-      \qquad
-      \widehat{\mathcal T}_N[M_{N+1}(X)]=M_{N+2}(X).
-    \]
+    \begin{align}
+        \widehat{\mathcal S}_N[M_{N+2}(X)]
+        &=M_{N+1}(X),
+        \notag\\
+        \widehat{\mathcal T}_N[M_{N+1}(X)]
+        &=M_{N+2}(X).
+        \notag
+    \end{align}
     In particular, these identities hold for every periodic MPO operator.
     Hence the two maps supplied by a renormalization fixed point act on rings
     of every length as required in the proof of
@@ -878,27 +870,32 @@ the remaining sites unchanged.
       lem:phys_close_identity}
     For words $u,v$ on the $N$ spectator sites, write $M^{u,v}$ for their
     virtual word evaluation and write $[Y]^{(r)}_{u,v}$ for the block of an
-    operator $Y$ on the first $r$ sites.  Regrouping the first site gives
-    \[
-      [M_{N+1}(X)]^{(1)}_{u,v}=M_1(M^{u,v}X).
-    \]
+    operator $Y$ on the first $r$ sites. Regrouping the first site gives
+    \begin{align}
+        [M_{N+1}(X)]^{(1)}_{u,v}
+        &=M_1(M^{u,v}X).
+        \notag
+    \end{align}
     Therefore
-    \[
-      \mathcal T\bigl([M_{N+1}(X)]^{(1)}_{u,v}\bigr)
-        =M_2(M^{u,v}X)
-        =[M_{N+2}(X)]^{(2)}_{u,v}.
-    \]
-    Equality of all blocks proves the refinement identity.  Interchanging
+    \begin{align}
+        \mathcal T([M_{N+1}(X)]^{(1)}_{u,v})
+        &=M_2(M^{u,v}X)
+          =[M_{N+2}(X)]^{(2)}_{u,v}.
+        \notag
+    \end{align}
+    Equality of all blocks proves the refinement identity. Interchanging
     $M_1$, $M_2$ and using $\mathcal S[M_2(Y)]=M_1(Y)$ proves the coarsening
-    identity.  Setting $X=1$ and using
+    identity. Setting $X=1$ and using
     $M_N(1)=\rho^{(N)}(M)$
     (Lemma~\ref{lem:phys_close_identity}) gives the periodic-ring identities
-    \[
-      \widehat{\mathcal T}_N[\rho^{(N+1)}(M)]
-        =\rho^{(N+2)}(M),\qquad
-      \widehat{\mathcal S}_N[\rho^{(N+2)}(M)]
-        =\rho^{(N+1)}(M).
-    \]
+    \begin{align}
+        \widehat{\mathcal T}_N[\rho^{(N+1)}(M)]
+        &=\rho^{(N+2)}(M),
+        \notag\\
+        \widehat{\mathcal S}_N[\rho^{(N+2)}(M)]
+        &=\rho^{(N+1)}(M).
+        \notag
+    \end{align}
 \end{proof}
 
 \section{Pure-state recovery inside the MPO formalism}
@@ -907,12 +904,13 @@ the remaining sites unchanged.
     \lean{MPSTensor.toMPOTensor}
     \leanok
     \uses{def:mps_tensor, def:mpo_tensor}
-    An MPS tensor $A = \{A^i\}_{i=0}^{d-1}$ determines an MPO tensor by
+    An MPS tensor $A=\{A^i\}_{i=0}^{d-1}$ determines an MPO tensor by
     placing $A^i$ on the diagonal in the bra and ket indices:
-    \[
-        M^{ij} = \delta_{ij} A^i.
-    \]
-    Equivalently, $M^{ii} = A^i$ and $M^{ij} = 0$ for $i \ne j$.
+    \begin{align}
+        M^{ij}&=\delta_{ij}A^i.
+        \notag
+    \end{align}
+    Equivalently, $M^{ii}=A^i$ and $M^{ij}=0$ for $i\ne j$.
 \end{definition}
 
 \begin{theorem}[Transfer map of the diagonal pure-state embedding]%
@@ -921,18 +919,15 @@ the remaining sites unchanged.
     \leanok
     \uses{def:to_mpo_tensor, def:mpo_transfer_map, def:transfer_map}
     The transfer map of the diagonal MPO associated to $A$ agrees with the
-    original MPS transfer map:
-    \[
-        \E_{A^{\mathrm{MPO}}} = \E_A.
-    \]
+    original MPS transfer map: $\E_{A^{\mathrm{MPO}}}=\E_A$.
 \end{theorem}
 
 \begin{proof}
     \leanok
     \uses{def:to_mpo_tensor, def:mpo_transfer_map, def:transfer_map}
     In the double sum defining $\E_{A^{\mathrm{MPO}}}$, all off-diagonal terms
-    vanish because $M^{ij} = 0$ for $i \ne j$, while the diagonal terms are
-    exactly $A^i X (A^i)^\dagger$. Thus only the sum over $i$ remains, which
+    vanish because $M^{ij}=0$ for $i\ne j$, while the diagonal terms are
+    exactly $A^iX(A^i)^\dagger$. Thus only the sum over $i$ remains, which
     is the defining formula for $\E_A$.
 \end{proof}
 
@@ -944,12 +939,13 @@ the remaining sites unchanged.
         thm:to_mpo_transfer_map}
     For an MPS tensor $A$, the diagonal MPO embedding has idempotent transfer
     map if and only if $A$ is an RFP:
-    \[
+    \begin{align}
         \E_{A^{\mathrm{MPO}}}\circ\E_{A^{\mathrm{MPO}}}
-        = \E_{A^{\mathrm{MPO}}}
-        \iff
+        =\E_{A^{\mathrm{MPO}}}
+        &\iff
         \E_A\circ\E_A=\E_A.
-    \]
+        \notag
+    \end{align}
 \end{theorem}
 
 \begin{proof}
