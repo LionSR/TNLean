@@ -31,7 +31,7 @@
     Idempotence follows from
     \begin{align}
         (U^\dagger Q U)^2
-        &=U^\dagger Q(UU^\dagger)QU
+         & =U^\dagger Q(UU^\dagger)QU
         =U^\dagger Q^2U
         =U^\dagger Q U.
         \notag
@@ -54,7 +54,7 @@
     Subtracting that term and taking traces gives
     \begin{align}
         0
-        &=\sum_{j\ne k}\tr((Q_jQ_k)^*(Q_jQ_k))
+         & =\sum_{j\ne k}\tr((Q_jQ_k)^*(Q_jQ_k))
         =\sum_{j\ne k}\lVert Q_jQ_k\rVert_{\mathrm F}^{2}.
         \notag
     \end{align}
@@ -119,7 +119,7 @@
     follows by cyclicity and the normalization hypothesis:
     \begin{align}
         \tr(\E_A(X))
-        &=\sum_i\tr(A^iX(A^i)^\dagger)
+         & =\sum_i\tr(A^iX(A^i)^\dagger)
         =\tr\!\left(\left(\sum_i(A^i)^\dagger A^i\right)X\right)
         =\tr(X).
         \notag
@@ -135,7 +135,7 @@
     applied to a starting matrix $\rho_0$, is
     \begin{align}
         \sigma_N
-        &=\frac{1}{N}\sum_{n=0}^{N-1}E^n(\rho_0).
+         & =\frac{1}{N}\sum_{n=0}^{N-1}E^n(\rho_0).
         \label{eq:channel_cesaro_mean}
     \end{align}
 \end{definition}
@@ -147,7 +147,7 @@
     The Ces\`aro mean satisfies
     \begin{align}
         E(\sigma_N)-\sigma_N
-        &=\frac{1}{N}(E^N(\rho_0)-\rho_0).
+         & =\frac{1}{N}(E^N(\rho_0)-\rho_0).
         \label{eq:channel_cesaro_telescope}
     \end{align}
 \end{theorem}
@@ -195,7 +195,7 @@
     Then
     \begin{align}
         V
-        &=\ker(f-\Id_V)\oplus\range(f-\Id_V).
+         & =\ker(f-\Id_V)\oplus\range(f-\Id_V).
         \label{eq:channel_mean_ergodic_decomp}
     \end{align}
 \end{lemma}
@@ -234,15 +234,15 @@
     For every $x\in V$, the Ces\`aro averages satisfy
     \begin{align}
         A_N(x)
-        &=\frac{1}{N}\sum_{n=0}^{N-1}f^nx
+         & =\frac{1}{N}\sum_{n=0}^{N-1}f^nx
         \longrightarrow P_fx.
         \label{eq:channel_mean_ergodic_limit}
     \end{align}
     Moreover,
     \begin{align}
-        \range(P_f)&=\ker(f-\Id_V), \notag\\
-        P_f^2&=P_f, \notag\\
-        fP_f&=P_f=P_ff.
+        \range(P_f) & =\ker(f-\Id_V), \notag \\
+        P_f^2       & =P_f, \notag           \\
+        fP_f        & =P_f=P_ff.
         \label{eq:channel_mean_ergodic_properties}
     \end{align}
     and $P_fx=x$ if and only if $fx=x$.
@@ -255,9 +255,9 @@
         lem:mean_ergodic_complementarity, def:mean_ergodic_projection}
     By Lemma~\ref{lem:mean_ergodic_complementarity}, decompose
     \begin{align}
-        x&=P_fx+(x-P_fx), \notag\\
-        P_fx&\in\ker(f-\Id_V), \notag\\
-        x-P_fx&\in\range(f-\Id_V).
+        x      & =P_fx+(x-P_fx), \notag   \\
+        P_fx   & \in\ker(f-\Id_V), \notag \\
+        x-P_fx & \in\range(f-\Id_V).
     \end{align}
     The fixed component has constant Ces\`aro averages, whereas the averages
     of the second component tend to zero by
@@ -269,52 +269,6 @@
     The range and idempotence identities in
     (\ref{eq:channel_mean_ergodic_properties}) follow directly from the
     projection construction.
-\end{proof}
-
-\begin{theorem}[Positive mean-ergodic projection]
-    \label{thm:positive_mean_ergodic_projection}
-    \lean{IsPositiveMap.meanErgodicProjection_isPositiveMap}
-    \leanok
-    \uses{def:positive_map, def:mean_ergodic_projection,
-        thm:mean_ergodic_bounded_orbits}
-    Let $T:\MN{D}\to\MN{D}$ be positive and have bounded orbits. Then its
-    mean-ergodic projection $P_T$ is positive.
-\end{theorem}
-
-\begin{proof}\leanok
-    Every Ces\`aro average is positive. Therefore, for $X\ge0$, closedness of
-    the positive cone and convergence in
-    (\ref{eq:channel_mean_ergodic_limit}) give $P_T(X)\ge0$.
-\end{proof}
-
-\begin{theorem}[Trace-preserving mean-ergodic projection]
-    \label{thm:trace_preserving_mean_ergodic_projection}
-    \lean{IsTracePreservingMap.meanErgodicProjection_isTracePreservingMap}
-    \leanok
-    \uses{def:trace_preserving, def:mean_ergodic_projection,
-        thm:mean_ergodic_bounded_orbits}
-    Let $T:\MN{D}\to\MN{D}$ be trace-preserving and have bounded orbits.
-    Then its mean-ergodic projection $P_T$ is trace-preserving.
-\end{theorem}
-
-\begin{proof}\leanok
-    Every nonempty Ces\`aro average preserves the trace. Convergence of the
-    averages and continuity of the trace therefore give
-    $\tr(P_T(X))=\tr(X)$.
-\end{proof}
-
-\begin{theorem}[Identity under the mean-ergodic projection]
-    \label{thm:unital_mean_ergodic_projection}
-    \lean{LinearMap.HasBoundedOrbits.meanErgodicProjection_one}
-    \leanok
-    \uses{def:mean_ergodic_projection, thm:mean_ergodic_bounded_orbits}
-    Let $T:\MN{D}\to\MN{D}$ have bounded orbits. If $T(\Id)=\Id$, then
-    $P_T(\Id)=\Id$.
-\end{theorem}
-
-\begin{proof}\leanok
-    The identity is a fixed point of $T$, so the fixed-point characterization
-    of the mean-ergodic projection gives the conclusion.
 \end{proof}
 
 \begin{theorem}[Bounded orbits from trace nonincrease]
@@ -331,8 +285,8 @@
 \begin{proof}\leanok
     For $X\succeq0$, positivity and induction on $n$ give
     \begin{align}
-        T^n(X)&\succeq0, \notag\\
-        \tr(T^n(X))&\leq\tr(X).
+        T^n(X)      & \succeq0, \notag \\
+        \tr(T^n(X)) & \leq\tr(X).
     \end{align}
     Thus the orbit lies in a bounded trace section of the positive cone.
     Apply this to the positive and negative parts of a Hermitian matrix, and
@@ -355,8 +309,8 @@
     bounded orbits, and its mean-ergodic projection $P_T$ is positive and
     trace-preserving. Its range is precisely the fixed-point space of $T$:
     \begin{align}
-        \range(P_T)&=\ker(T-\Id), \notag\\
-        P_T(X)=X&\iff T(X)=X.
+        \range(P_T) & =\ker(T-\Id), \notag \\
+        P_T(X)=X    & \iff T(X)=X.
         \label{eq:channel_positive_mean_ergodic}
     \end{align}
     If $T(\Id)=\Id$, then $P_T(\Id)=\Id$.
@@ -374,83 +328,11 @@
     Theorem~\ref{thm:positive_trace_nonincreasing_bounded_orbits} gives
     bounded orbits. Theorem~\ref{thm:mean_ergodic_bounded_orbits} then gives
     the projection and the fixed-point characterization
-    (\ref{eq:channel_positive_mean_ergodic}). Its positivity,
-    trace preservation, and behavior on the identity follow from the three
-    preceding theorems.
-\end{proof}
-
-\begin{theorem}[Trace preservation and the trace adjoint]
-    \label{thm:trace_preserving_iff_trace_adjoint_unital}
-    \lean{isTracePreservingMap_iff_traceAdjointMap_one}
-    \leanok
-    \uses{def:trace_preserving, def:trace_pairing_adjoint}
-    On any finite full matrix algebra, a linear endomorphism $S$ is
-    trace-preserving if and only if its trace-pairing adjoint fixes the
-    identity:
-    \begin{align}
-        (\forall X,\ \tr(S(X))=\tr(X))
-        &\quad\Longleftrightarrow\quad S^*(\Id)=\Id.
-        \label{eq:channel_tp_adjoint_unital}
-    \end{align}
-\end{theorem}
-
-\begin{proof}\leanok
-    \uses{thm:trace_pairing_adjoint_identity, thm:trace_nondeg}
-    The trace-pairing identity gives
-    $\tr(S^*(\Id)X)=\tr(S(X))$. The equivalence
-    (\ref{eq:channel_tp_adjoint_unital}) follows from nondegeneracy of the
-    trace pairing.
-\end{proof}
-
-\begin{theorem}[Adjoint mean-ergodic projection]
-    \label{thm:adjoint_mean_ergodic_projection}
-    \lean{LinearMap.HasBoundedOrbits.traceAdjointMap_meanErgodicProjection_apply_eq_self_iff,
-        LinearMap.HasBoundedOrbits.traceAdjointMap_meanErgodicProjection_apply_self,
-        LinearMap.HasBoundedOrbits.range_traceAdjointMap_meanErgodicProjection}
-    \leanok
-    \uses{def:mean_ergodic_projection, thm:mean_ergodic_bounded_orbits}
-    Let $T:\MN{D}\to\MN{D}$ have bounded orbits, let $P_T$ be its
-    mean-ergodic projection, and let $P_T^*$ be the trace-pairing adjoint of
-    $P_T$. Then
-    \begin{align}
-        (P_T^*)^2&=P_T^*, \notag\\
-        \range(P_T^*)&=\ker(T^*-\Id).
-        \label{eq:channel_adjoint_mean_ergodic}
-    \end{align}
-    and $P_T^*(Y)=Y$ if and only if $T^*(Y)=Y$.
-\end{theorem}
-
-\begin{proof}\leanok
-    \uses{thm:trace_pairing_adjoint_identity, thm:trace_nondeg,
-        thm:mean_ergodic_bounded_orbits}
-    Since $P_T^2=P_T$, the trace-pairing identity gives
-    $(P_T^*)^2=P_T^*$. If $T^*(Y)=Y$, decompose
-    $X-P_T(X)=(T-\Id)(Z)$. Then
-    \begin{align}
-        \tr(Y(X-P_T(X)))
-        &=\tr((T^*(Y)-Y)Z)=0.
-        \notag
-    \end{align}
-    Nondegeneracy of the trace pairing gives $P_T^*(Y)=Y$. Conversely,
-    $P_TT=P_T$ implies $T^*P_T^*=P_T^*$, so every fixed point of $P_T^*$ is a
-    fixed point of $T^*$:
-    \begin{align}
-        P_T^*(Y)=Y
-        &\quad\Longrightarrow\quad
-        T^*(Y)=T^*(P_T^*(Y))=P_T^*(Y)=Y.
-        \notag
-    \end{align}
-    Hence
-    \begin{align}
-        Y\in\range(P_T^*)
-        &\quad\Longleftrightarrow\quad P_T^*(Y)=Y
-        \quad\Longleftrightarrow\quad T^*(Y)=Y
-        \quad\Longleftrightarrow\quad Y\in\ker(T^*-\Id).
-        \notag
-    \end{align}
-    The first equivalence uses idempotence, and the second is the fixed-point
-    equivalence proved above. This proves
-    (\ref{eq:channel_adjoint_mean_ergodic}).
+    (\ref{eq:channel_positive_mean_ergodic}). Its positivity follows from
+    Theorem~\ref{thm:positive_mean_ergodic_projection}, trace preservation
+    from Theorem~\ref{thm:trace_preserving_mean_ergodic_projection}, and its
+    behavior on the identity from
+    Theorem~\ref{thm:unital_mean_ergodic_projection}.
 \end{proof}
 
 \begin{theorem}[Positive unital adjoint Ces\`aro retraction]
@@ -465,9 +347,9 @@
     adjoint $P_T^*$ of its mean-ergodic projection is positive, unital, and
     idempotent. It is a retraction onto the adjoint fixed-point space:
     \begin{align}
-        P_T^*(\Id)&=\Id, \notag\\
-        (P_T^*)^2&=P_T^*, \notag\\
-        \range(P_T^*)&=\ker(T^*-\Id).
+        P_T^*(\Id)    & =\Id, \notag    \\
+        (P_T^*)^2     & =P_T^*, \notag  \\
+        \range(P_T^*) & =\ker(T^*-\Id).
         \label{eq:channel_adjoint_cesaro_retraction}
     \end{align}
     and $P_T^*(Y)=Y$ if and only if $T^*(Y)=Y$.
@@ -522,20 +404,20 @@
 
 \begin{proof}
     \leanok
-    \uses{thm:density_compact, thm:density_nonempty,
+    \uses{thm:density_compact, thm:density_convex, thm:density_nonempty,
         thm:channel_preserves_density, thm:cesaro_telescope}
     Start with any $\rho_0\in\mc{D}_D$
     (Theorem~\ref{thm:density_nonempty}).
-    Each Ces\`aro mean $\sigma_N$ lies in $\mc{D}_D$
-    by applying channel preservation to every iterate, adding positive
-    semidefinite matrices, rescaling by the positive average factor, and using
-    trace linearity.
+    By Theorem~\ref{thm:channel_preserves_density}, every iterate
+    $E^n(\rho_0)$ lies in $\mc{D}_D$. For $N\geq1$,
+    Theorem~\ref{thm:density_convex} therefore places the finite average
+    $\sigma_N$ in $\mc{D}_D$.
     By compactness (Theorem~\ref{thm:density_compact}),
     extract a convergent subsequence $\sigma_{N_k}\to\rho$.
     The telescope identity (\ref{eq:channel_cesaro_telescope}) gives
     \begin{align}
         \lVert E(\sigma_N)-\sigma_N\rVert
-        &=\frac{1}{N}\lVert E^N(\rho_0)-\rho_0\rVert
+         & =\frac{1}{N}\lVert E^N(\rho_0)-\rho_0\rVert
         \longrightarrow0,
         \notag
     \end{align}
@@ -555,7 +437,7 @@
     the \emph{fixed-point projection} is the rank-one map
     \begin{align}
         P(X)
-        &=\frac{\tr(X)}{\tr(\rho)}\rho.
+         & =\frac{\tr(X)}{\tr(\rho)}\rho.
         \label{eq:channel_fixed_point_proj}
     \end{align}
     This projects onto the span of $\rho$ along the kernel of the
@@ -570,7 +452,7 @@
     If $E$ is trace-preserving and $E(\rho)=\rho$, then, for $n\geq1$,
     \begin{align}
         E^n
-        &=P+(E-P)^n,
+         & =P+(E-P)^n,
         \label{eq:channel_power_decomp}
     \end{align}
     where $P$ is the fixed-point projection.
@@ -721,8 +603,8 @@ both unital and trace-preserving.
     For operators $\{K_i\}_{i=0}^{d-1}\subseteq\MN{D}$, the associated
     \emph{Kraus map} and \emph{adjoint Kraus map} are
     \begin{align}
-        E(X)&=\sum_iK_iXK_i^\dagger, \notag\\
-        E^*(X)&=\sum_iK_i^\dagger XK_i.
+        E(X)   & =\sum_iK_iXK_i^\dagger, \notag \\
+        E^*(X) & =\sum_iK_i^\dagger XK_i.
         \label{eq:channel_kraus_maps}
     \end{align}
     The Kraus family is \emph{unital} when
@@ -739,7 +621,7 @@ both unital and trace-preserving.
     Then, for every $X\in\MN{D}$,
     \begin{align}
         E(X^\dagger X)
-        &\geq E(X)^\dagger E(X).
+         & \geq E(X)^\dagger E(X).
         \label{eq:channel_kadison_schwarz}
     \end{align}
     This is \cite[Equation~(5.2)]{Wolf2012Quantum}.
@@ -761,7 +643,7 @@ both unital and trace-preserving.
     $X\in\MN{D}$,
     \begin{align}
         \tr(E(X)^\dagger E(X))
-        &\leq\tr(X^\dagger X).
+         & \leq\tr(X^\dagger X).
         \label{eq:channel_hs_contraction}
     \end{align}
 \end{theorem}
@@ -770,28 +652,6 @@ both unital and trace-preserving.
     The Kadison--Schwarz gap is positive semidefinite by
     (\ref{eq:channel_kadison_schwarz}). Trace preservation then identifies
     the traces of its two terms, giving (\ref{eq:channel_hs_contraction}).
-\end{proof}
-
-\begin{theorem}[KS gap decomposition]
-    \label{thm:ks_gap_decomp_channels}
-    \lean{KadisonSchwarz.ks_gap_eq_sum_squares}
-    \leanok
-    \uses{def:kraus_map_channels}
-    For a unital Kraus map,
-    \begin{align}
-        E(X^\dagger X)-E(X)^\dagger E(X)
-        &=\sum_iR_i^\dagger R_i,
-        \label{eq:channel_ks_gap}\\
-        R_i
-        &:=XK_i^\dagger-K_i^\dagger E(X).
-        \label{eq:channel_ks_remainder}
-    \end{align}
-\end{theorem}
-
-\begin{proof}\leanok
-    Expand the right-hand side of (\ref{eq:channel_ks_gap}), substitute
-    (\ref{eq:channel_ks_remainder}), distribute the products, and use
-    $\sum_iK_iK_i^\dagger=\Id$ to recover the Kadison--Schwarz gap.
 \end{proof}
 
 \begin{theorem}[KS equality implies Kraus commutation]
@@ -803,14 +663,19 @@ both unital and trace-preserving.
     If $E(X^\dagger X)=E(X)^\dagger E(X)$, then, for every~$i$,
     \begin{align}
         XK_i^\dagger
-        &=K_i^\dagger E(X).
+         & =K_i^\dagger E(X).
         \label{eq:channel_ks_kraus_relation}
     \end{align}
 \end{theorem}
 
 \begin{proof}\leanok\uses{thm:ks_gap_decomp_channels}
-    By (\ref{eq:channel_ks_gap}), the Kadison--Schwarz gap is a sum of
-    positive semidefinite terms $\sum_iR_i^\dagger R_i$. If the gap
+    Theorem~\ref{thm:ks_gap_decomp_channels} gives the sum-of-squares formula
+    \begin{align}
+        E(X^\dagger X)-E(X)^\dagger E(X)
+         & =\sum_iR_i^\dagger R_i.
+        \notag
+    \end{align}
+    Every summand is positive semidefinite. If the gap
     vanishes, each $R_i$ must vanish. Substitution in
     (\ref{eq:channel_ks_remainder}) gives
     (\ref{eq:channel_ks_kraus_relation}).
@@ -825,7 +690,7 @@ both unital and trace-preserving.
     If $E(X)=\mu X$ with $|\mu|=1$, then
     \begin{align}
         E(X^\dagger X)
-        &=E(X)^\dagger E(X).
+         & =E(X)^\dagger E(X).
         \label{eq:channel_ks_peripheral}
     \end{align}
 \end{theorem}
@@ -847,7 +712,7 @@ both unital and trace-preserving.
     $Y\in\MN{D}$,
     \begin{align}
         E(X^\dagger Y)
-        &=E(X)^\dagger E(Y).
+         & =E(X)^\dagger E(Y).
         \label{eq:channel_left_multiplicative}
     \end{align}
 \end{theorem}
@@ -916,12 +781,12 @@ matching the weighted-trace argument in
     Since $E^*(\rho)=\rho$,
     \begin{align}
         \tr(\rho G)
-        &=\tr(\rho E(X^\dagger X))
-          -\tr(\rho E(X)^\dagger E(X)) \notag\\
-        &=\tr(E^*(\rho)X^\dagger X)
-          -\tr(\rho E(X)^\dagger E(X)) \notag\\
-        &=\tr(\rho X^\dagger X)
-          -|\mu|^2\tr(\rho X^\dagger X)
+         & =\tr(\rho E(X^\dagger X))
+        -\tr(\rho E(X)^\dagger E(X)) \notag \\
+         & =\tr(E^*(\rho)X^\dagger X)
+        -\tr(\rho E(X)^\dagger E(X)) \notag \\
+         & =\tr(\rho X^\dagger X)
+        -|\mu|^2\tr(\rho X^\dagger X)
         =0.
     \end{align}
     Because $\rho>0$ and $G\geq0$, this forces $G=0$, so
