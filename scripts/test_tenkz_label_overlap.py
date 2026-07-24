@@ -1340,7 +1340,8 @@ def main() -> int:
                          "tenkz_brick_face:nnnNn"):
             start = grid_source.index(f"\\cs_new_protected:Npn \\{function}")
             excerpt = grid_source[start:start + 7000]
-            if "\\node[tn~label" not in excerpt:
+            if "\\node[tn~label" not in excerpt and \
+               "\\__tenkz_render_labelnode:nnn" not in excerpt:
                 raise AssertionError(f"{function} bypasses the audited label style")
 
         core_source = (ROOT / "tex/tenkz/tenkz-core.code.tex").read_text(

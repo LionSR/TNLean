@@ -1,7 +1,7 @@
 % Input: validated picture, atom, wire, mark, and frame declarations from front ends.
 % Output: normalized semantic records addressable by picture-local stable identifiers.
 % Owned state: the record store, class sequences, id counter, and validation phase flag.
-% Invariants: records contain no unparsed user syntax; topology is immutable after validation.
+% Invariants: records are normalized before validation; topology is immutable after validation.
 % Next stage: style and geometry resolve metrics and silhouettes from these records.
 %
 % The record classes follow LANGUAGE-1.0.md: PICTURE, ATOM, WIRE, MARK, plus
@@ -81,6 +81,16 @@
       { \l__tenkz_model_last_tl / #1 } {#2}
   }
 
+% Complete a staged record field after a front end has consumed its whole
+% declaration scope.  Policy-sensitive syntax cannot be normalized while the
+% body is still establishing that policy; validation remains the hard freeze.
+\cs_new_protected:Npn \__tenkz_model_complete:nnn #1#2#3
+  {
+    \bool_if:NTF \l__tenkz_model_validated_bool
+      { \msg_error:nn {tenkz}{model-frozen} }
+      { \prop_put:Nee \l__tenkz_model_record_prop {#1/#2} {#3} }
+  }
+
 % Public-to-the-package constructors, one per record class.  Field
 % requirements are the LANGUAGE-1.0 minima a record cannot exist without;
 % richer validation belongs to the language stage that produced the
@@ -144,6 +154,26 @@
   { \int_set:Nn #2 { \seq_count:c { l__tenkz_model_ #1 _seq } } }
 \cs_new_protected:Npn \__tenkz_model_map_ids:nn #1#2
   { \seq_map_inline:cn { l__tenkz_model_ #1 _seq } {#2} }
+
+% Locate the wire record joining from=#1 to to=#2; leaves the record id in
+% #3, or \q_no_value when the derivation recorded no such wire.  Linear in
+% the wire count -- pictures hold tens of wires, not thousands.
+\tl_new:N \l__tenkz_model_probe_tl
+\cs_new_protected:Npn \__tenkz_model_wire_by_ends:nnN #1#2#3
+  {
+    \tl_set:Nn #3 { \q_no_value }
+    \seq_map_inline:Nn \l__tenkz_model_wire_seq
+      {
+        \__tenkz_model_get:nnN {##1} {from} \l__tenkz_model_probe_tl
+        \str_if_eq:eeT { \tl_use:N \l__tenkz_model_probe_tl } {#1}
+          {
+            \__tenkz_model_get:nnN {##1} {to} \l__tenkz_model_probe_tl
+            \str_if_eq:eeT { \tl_use:N \l__tenkz_model_probe_tl } {#2}
+              { \tl_set:Nn #3 {##1} \seq_map_break: }
+          }
+      }
+  }
+\cs_generate_variant:Nn \__tenkz_model_wire_by_ends:nnN { ee }
 
 % Expanding constructors for front ends whose addresses live in counters.
 % The variants route through the current (possibly frozen) base meaning.
