@@ -221,21 +221,21 @@
     \begin{scope}[local~bounding~box=\l__tenkz_fbound_tl]
       \str_case:Vn \l__tenkz_fshape_tl
         {
-          {dot}  { \__tenkz_render_free_node:nnnn
+          {dot}  { \__tenkz_render_labelnode_named:nnnn
                      {tensor, \l__tenkz_frolesty_tl} {#2} {#3} {}
                    \tl_if_blank:nF {#4}
                      { \exp_args:NV \tenkz_free_dot_label:nnn
                          \l__tenkz_flpos_tl {#2} {#4} } }
-          {box}  { \__tenkz_render_free_node:nnnn
+          {box}  { \__tenkz_render_labelnode_named:nnnn
                      {box~tensor, \l__tenkz_frolesty_tl} {#2} {#3}
                      { $\tenkz@labelsize \tenkz@glyphstrut #4$ } }
-          {pill} { \__tenkz_render_free_node:nnnn
+          {pill} { \__tenkz_render_labelnode_named:nnnn
                      {pill~tensor, \l__tenkz_frolesty_tl} {#2} {#3}
                      { $\tenkz@labelsize \tenkz@glyphstrut #4$ } }
-          {mpo}  { \__tenkz_render_free_node:nnnn
+          {mpo}  { \__tenkz_render_labelnode_named:nnnn
                      {mpo~tensor, \l__tenkz_frolesty_tl} {#2} {#3}
                      { $\tenkz@labelsize \tenkz@glyphstrut #4$ } }
-          {ring} { \__tenkz_render_free_node:nnnn
+          {ring} { \__tenkz_render_labelnode_named:nnnn
                      {on-wire~matrix, \l__tenkz_frolesty_tl} {#2} {#3}
                      { $\tenkz@labelsize \tenkz@glyphstrut #4$ } }
           {boundary}
