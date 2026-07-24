@@ -360,6 +360,35 @@ grep -Fq '[TKZ-LANG-OCCUPANCY]' "$WORK/n_occupied_span.transcript" || {
   exit 1
 }
 
+picture_check_negative="$KERNEL/negative/n_picture_check.tex"
+if ( cd "$WORK" &&
+     TEXINPUTS="$REPO/tex/tenkz//:" \
+       timeout 120 xelatex -interaction=nonstopmode -halt-on-error \
+       "$picture_check_negative" >"$WORK/n_picture_check.transcript" 2>&1 ); then
+  echo "FAIL: picture-scoped check= was accepted" >&2
+  exit 1
+fi
+grep -Fq '[TKZ-EQ-CHECK-SCOPE]' "$WORK/n_picture_check.transcript" || {
+  echo "FAIL: picture-scoped check= lacked TKZ-EQ-CHECK-SCOPE" >&2
+  exit 1
+}
+
+for span_negative in n_nonpositive_span n_nonnumeric_span; do
+  source="$KERNEL/negative/$span_negative.tex"
+  if ( cd "$WORK" &&
+       TEXINPUTS="$REPO/tex/tenkz//:" \
+         timeout 120 xelatex -interaction=nonstopmode -halt-on-error \
+         "$source" >"$WORK/$span_negative.transcript" 2>&1 ); then
+    echo "FAIL: invalid atom span in $span_negative was accepted" >&2
+    exit 1
+  fi
+  grep -Fq '[TKZ-ATOM-POSITIVE-INTEGER]' \
+    "$WORK/$span_negative.transcript" || {
+    echo "FAIL: $span_negative lacked TKZ-ATOM-POSITIVE-INTEGER" >&2
+    exit 1
+  }
+done
+
 weight_negative="$KERNEL/negative/n_malformed_weight.tex"
 if ( cd "$WORK" &&
      TEXINPUTS="$REPO/tex/tenkz//:" \
@@ -454,7 +483,7 @@ grep -Fq 'check|relation=3|result=off|reason=third' \
   echo "FAIL: the later equation opt-out was silently dropped" >&2
   exit 1
 }
-echo "PASS: forty-two review regressions hold"
+echo "PASS: forty-five review regressions hold"
 
 fail=0
 for pair in s1 s2 s3 s4 s5 s6 s7 s8; do

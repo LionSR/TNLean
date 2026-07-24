@@ -71,6 +71,12 @@
 \msg_new:nnn {tenkz}{kernel-cluster-name}
   { [TKZ-LANG-CLUSTER-NAME]~cluster=#1~requires~name=~
     so~its~sub-atoms~are~addressable~(record~#2). }
+\msg_new:nnn {tenkz}{kernel-check-scope}
+  { [TKZ-EQ-CHECK-SCOPE]~check=#1~belongs~to~tenkzeq~options,~
+    not~a~picture~(record~picture). }
+\msg_new:nnn {tenkz}{kernel-atom-positive}
+  { [TKZ-ATOM-POSITIVE-INTEGER]~#1=#2~must~be~a~positive~integer~
+    (record~#3). }
 
 % ---------- kernel state -----------------------------------------------------
 
@@ -525,6 +531,21 @@
     \keys_define:nn {#1}
       { #2 .code:n = { \__tenkz_kernel_stage_put:nn {#3} {##1} } }
   }
+\cs_new_protected:Npn \__tenkz_kernel_positive_integer:nnn #1#2#3
+  {
+    \keys_define:nn {#1}
+      {
+        #2 .code:n =
+          {
+            \regex_match:nnTF { \A \s* [1-9]\d* \s* \Z } {##1}
+              { \__tenkz_kernel_stage_put:nn {#3} {##1} }
+              {
+                \msg_error:nneee {tenkz}{kernel-atom-positive}
+                  {#2} {##1} { \tl_use:N \l__tenkz_model_last_tl }
+              }
+          }
+      }
+  }
 \cs_new_protected:Npn \__tenkz_kernel_flag:nnn #1#2#3
   {
     \keys_define:nn {#1}
@@ -601,8 +622,10 @@
 % ---------- atom keys ------------------------------------------------------------
 
 \__tenkz_kernel_value:nnn   { tenkz-kernel-atom } { skin } { skin }
-\__tenkz_kernel_value:nnn   { tenkz-kernel-atom } { wide } { wide }
-\__tenkz_kernel_value:nnn   { tenkz-kernel-atom } { wires } { wires }
+\__tenkz_kernel_positive_integer:nnn
+  { tenkz-kernel-atom } { wide } { wide }
+\__tenkz_kernel_positive_integer:nnn
+  { tenkz-kernel-atom } { wires } { wires }
 \__tenkz_kernel_value:nnn   { tenkz-kernel-atom } { at } { at }
 \__tenkz_kernel_value:nnn   { tenkz-kernel-atom } { name } { name }
 \__tenkz_kernel_value:nnn   { tenkz-kernel-atom } { ports } { ports }
@@ -1864,6 +1887,16 @@
     \int_set:Nn \l__tenkz_kernel_row_advance_int { 1 }
     \int_zero:N \l__tenkz_kernel_node_int
     \__tenkz_kernel_keys:nn { tenkz-kernel-picture } {#1}
+    % check= belongs to the equation wrapper.  A valid tenkzeq consumes it
+    % before any panel begins, so seeing it here always means picture scope.
+    \prop_get:NnN
+      \l__tenkz_kernel_stage_prop {check} \l__tenkz_kernel_scratch_tl
+    \quark_if_no_value:NF \l__tenkz_kernel_scratch_tl
+      {
+        \msg_error:nne {tenkz}{kernel-check-scope}
+          { \tl_use:N \l__tenkz_kernel_scratch_tl }
+        \prop_remove:Nn \l__tenkz_kernel_stage_prop {check}
+      }
     \prop_map_inline:Nn \g__tenkz_kernel_setup_prop
       { \prop_put:Nnn \l__tenkz_kernel_stage_prop {##1} {##2} }
     % Equation policy is the shared outer context, so it overrides a

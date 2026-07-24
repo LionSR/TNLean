@@ -79,8 +79,8 @@ frame-generated bonds.
 | Key | Type | Values | Default | Diagnostic family |
 |---|---|---|---|---|
 | `skin=` | identifier | a declared skin; defaults §2.8 | theme default (`dot`) | `TKZ-SKIN-*` |
-| `wide=` | integer | — | 1 | `TKZ-ATOM-*` |
-| `wires=` | integer | — | 1 | `TKZ-ATOM-*` |
+| `wide=` | positive-integer | — | 1 | `TKZ-ATOM-*` |
+| `wires=` | positive-integer | — | 1 | `TKZ-ATOM-*` |
 | `at=` | address | — | next chain cell | `TKZ-ADDR-*` |
 | `name=` | identifier | — | generated | `TKZ-NAME-*` |
 | `ports=` | typed-port-list | — | from skin | `TKZ-PORT-*` |
