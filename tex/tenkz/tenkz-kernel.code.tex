@@ -2008,11 +2008,8 @@
 
 % ---------- placement resolution --------------------------------------------------------------
 % The picture frame: logical (row, col) to page (x, y) with rows downward.
-% The offset stays zero while the enclosure mark still maps (r, c) to a
-% rectangle by hand instead of asking the frame: shifting the frame alone
-% would slide the atoms out from under their own enclosures.
 \cs_new_protected:Npn \__tenkz_kernel_r_frame:
-  { \__tenkz_geom_frame_declare_affine:nnnnnnn {kpic} {0}{1}{-1}{0} {0}{0} }
+  { \__tenkz_geom_frame_declare_affine:nnnnnnn {kpic} {0}{1}{-1}{0} {-1}{1} }
 
 \cs_generate_variant:Nn \__tenkz_geom_place_rel:nnnn { nnee, nVee, neee }
 \cs_generate_variant:Nn \__tenkz_geom_place_mid:nnn { nVV, nee }
@@ -3368,14 +3365,40 @@
         \( \s* (\d+) \s* , \s* (\d+) \s* \) \s* \Z }
       \l__tenkz_kernel_r_tl \l__tenkz_kernel_match_seq
       {
-        \fp_set:Nn \l__tenkz_kernel_r_x_fp
-          { \seq_item:Nn \l__tenkz_kernel_match_seq {3} }
+        \tl_set:Ne \l__tenkz_kernel_r_row_tl
+          {
+            ( \seq_item:Nn \l__tenkz_kernel_match_seq {2} ,
+              \seq_item:Nn \l__tenkz_kernel_match_seq {3} )
+          }
+        \tl_set:Ne \l__tenkz_kernel_r_col_tl
+          {
+            ( \seq_item:Nn \l__tenkz_kernel_match_seq {4} ,
+              \seq_item:Nn \l__tenkz_kernel_match_seq {5} )
+          }
+        \__tenkz_kernel_addr:VN \l__tenkz_kernel_r_row_tl
+          \l__tenkz_kernel_r_node_tl
+        \__tenkz_kernel_r_node:V \l__tenkz_kernel_r_node_tl
+        \__tenkz_kernel_r_xy:nNN
+          { \tl_use:N \l__tenkz_kernel_r_node_tl }
+          \l__tenkz_kernel_r_x_fp \l__tenkz_kernel_r_y_fp
+        \__tenkz_kernel_addr:VN \l__tenkz_kernel_r_col_tl
+          \l__tenkz_kernel_r_node_tl
+        \__tenkz_kernel_r_node:V \l__tenkz_kernel_r_node_tl
+        \__tenkz_kernel_r_xy:nNN
+          { \tl_use:N \l__tenkz_kernel_r_node_tl }
+          \l__tenkz_kernel_r_xb_fp \l__tenkz_kernel_r_yb_fp
+        \fp_set:Nn \l__tenkz_kernel_r_xc_fp
+          { min( \l__tenkz_kernel_r_x_fp , \l__tenkz_kernel_r_xb_fp ) }
         \fp_set:Nn \l__tenkz_kernel_r_xb_fp
-          { \seq_item:Nn \l__tenkz_kernel_match_seq {5} }
+          { max( \l__tenkz_kernel_r_x_fp , \l__tenkz_kernel_r_xb_fp ) }
+        \fp_set:Nn \l__tenkz_kernel_r_x_fp
+          { \l__tenkz_kernel_r_xc_fp }
+        \fp_set:Nn \l__tenkz_kernel_r_yc_fp
+          { min( \l__tenkz_kernel_r_y_fp , \l__tenkz_kernel_r_yb_fp ) }
         \fp_set:Nn \l__tenkz_kernel_r_yb_fp
-          { - \seq_item:Nn \l__tenkz_kernel_match_seq {2} }
+          { max( \l__tenkz_kernel_r_y_fp , \l__tenkz_kernel_r_yb_fp ) }
         \fp_set:Nn \l__tenkz_kernel_r_y_fp
-          { - \seq_item:Nn \l__tenkz_kernel_match_seq {4} }
+          { \l__tenkz_kernel_r_yc_fp }
         \fp_set:Nn \l__tenkz_kernel_r_reach_fp
           { \__tenkz_metric_ratio:n {enclosepad} }
       }
