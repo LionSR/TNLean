@@ -11,9 +11,11 @@
     $(k,h)$, the neighboring operator contracts the right sector tensor of
     one site with the left sector tensor of the following site over the
     virtual bond they share:
-    \[
-        \eta_{k,h}=\sum_{\gamma}(r_k)_{\gamma}\otimes(l_h)_{\gamma}.
-    \]
+    \begin{align}
+        \eta_{k,h}
+        &=\sum_{\gamma}(r_k)_{\gamma}\otimes(l_h)_{\gamma}.
+        \notag
+    \end{align}
     It acts on the neighboring bond space $B_k^{R}\otimes B_h^{L}$. This is
     the operator displayed in
     \cite[Appendix~C.2, lines~1441--1445]{Cirac2016MPDO_arXiv}.
@@ -28,21 +30,17 @@
     sectors $k,h$ and virtual indices $\beta_1,\alpha_3$, contracting the
     shared virtual bond of two neighboring factorized slices leaves the
     neighboring operator between the outer sector tensors:
-    \[
-        \begin{aligned}
+    \begin{align}
         &\sum_{\gamma}
-        \left[U_B\kappa_{\beta_1,\gamma}U_B^\dagger
-        \right]_{(k,l_1,r_1),(k,l_1',r_1')} \\
-        &\qquad {}\cdot
-        \left[U_B\kappa_{\gamma,\alpha_3}U_B^\dagger
-        \right]_{(h,l_2,r_2),(h,l_2',r_2')} \\
+        \left[U_B\kappa_{\beta_1,\gamma}U_B^\dagger\right]_{(k,l_1,r_1),(k,l_1',r_1')}
+        \left[U_B\kappa_{\gamma,\alpha_3}U_B^\dagger\right]_{(h,l_2,r_2),(h,l_2',r_2')}
+        \notag\\
         &\quad =
         \left[(l_k)_{\beta_1}\right]_{l_1,l_1'}
-        \left[\eta_{k,h}\right]_{(r_1,l_2),(r_1',l_2')} \\
-        &\qquad {}\cdot
+        \left[\eta_{k,h}\right]_{(r_1,l_2),(r_1',l_2')}
         \left[(r_h)_{\alpha_3}\right]_{r_2,r_2'}.
-        \end{aligned}
-    \]
+        \notag
+    \end{align}
     This is the single-bond step of the identity assembling
     $\bigotimes_{n}\eta_{k_n,k_{n+1}}$ from the factorized chain in
     \cite[Appendix~C.2, lines~1446--1449]{Cirac2016MPDO_arXiv}.
@@ -55,11 +53,14 @@
     (Theorem~\ref{thm:mpdo_sector_factorization}) into each slice, the
     outer sector tensors decouple from the bond sum, and the inner sum over
     the shared bond $\gamma$ reads
-    \[
-        \sum_{\gamma}\bigl[(r_k)_{\gamma}\bigr]_{r_1,r_1'}\,
-        \bigl[(l_h)_{\gamma}\bigr]_{l_2,l_2'}
-        =\bigl[\eta_{k,h}\bigr]_{(r_1,l_2),(r_1',l_2')}
-    \]
+    \begin{align}
+        \sum_{\gamma}
+        [(r_k)_{\gamma}]_{r_1,r_1'}
+        [(l_h)_{\gamma}]_{l_2,l_2'}
+        &=
+        [\eta_{k,h}]_{(r_1,l_2),(r_1',l_2')},
+        \notag
+    \end{align}
     by definition of the neighboring operator.
 \end{proof}
 
@@ -78,18 +79,21 @@
       MPOTensor.PhysicalSectorFactorization.transformedPhysicalSlice_apply_ne}
     \leanok
     \uses{def:mpo_tensor}
-    A physical-sector factorization of an MPO tensor ${\cal K}$ consists of a
+    A physical-sector factorization of an MPO tensor $\mc K$ consists of a
     finite decomposition
-    \[
-      \mathbb C^d\simeq\bigoplus_k(B_k^L\otimes B_k^R),
-    \]
+    \begin{align}
+        \C^d
+        &\simeq\bigoplus_k(B_k^L\otimes B_k^R),
+        \notag
+    \end{align}
     whose left and right factors are nonzero,
     an isometry $U$ on the physical space, and matrix families
     $(l_k)_\beta$ and $(r_k)_\alpha$ such that every physical slice satisfies
-    \[
-      U\kappa_{\beta,\alpha}U^\dagger
-      =\bigoplus_k(l_k)_\beta\otimes(r_k)_\alpha.
-    \]
+    \begin{align}
+        U\kappa_{\beta,\alpha}U^\dagger
+        &=\bigoplus_k(l_k)_\beta\otimes(r_k)_\alpha.
+        \notag
+    \end{align}
     No positivity, trace factorization, or quantum-Markov decomposition is
     included in this datum. This is the factorization displayed in
     \cite[Appendix~C.2, lines~1381--1388]{Cirac2016MPDO_arXiv}.
@@ -103,10 +107,11 @@
     \uses{def:mpdo_physical_sector_factorization}
     For sectors $k,h$, contract the common virtual index of the right and
     left sector tensors:
-    \[
-      \eta_{k,h}
-      =\sum_a(r_k)_a\otimes(l_h)_a.
-    \]
+    \begin{align}
+        \eta_{k,h}
+        &=\sum_a(r_k)_a\otimes(l_h)_a.
+        \notag
+    \end{align}
     This is an operator on $B_k^R\otimes B_h^L$. Positivity is not part of
     this definition; it is a separate hypothesis in Proposition~C.7.
 \end{definition}
@@ -120,9 +125,11 @@
     For a sector $k$ and physical matrix indices $x,y$ in its summand, let
     $A_{k;x,y}\in\MN{D}$ be the corresponding entry of the
     sector-coordinate tensor. For a set $S$ of sectors, define
-    \[
-        {\cal A}_S=\spn\{A_{k;x,y}:k\in S\}.
-    \]
+    \begin{align}
+        \mc A_S
+        &=\spn\{A_{k;x,y}:k\in S\}.
+        \notag
+    \end{align}
     These are the matrix spaces associated with the physical projections in
     \cite[Appendix~C.2, lines~1463--1467]{Cirac2016MPDO_arXiv}.
 \end{definition}
@@ -135,16 +142,10 @@
     \leanok
     \uses{def:mpdo_minimal_neighboring_operator,
       def:mpdo_one_site_sector_matrix_space}
-    Let $S$ and $C$ be sets of sectors. If
-    \[
-        \eta_{k,h}=0\qquad(k\in S,\ h\in C),
-    \]
-    then
-    \[
-        XY=0\qquad(X\in{\cal A}_S,\ Y\in{\cal A}_C).
-    \]
-    No conclusion in the reverse product order is asserted. This is the
-    directed local-orthogonality implication used in
+    Let $S$ and $C$ be sets of sectors. If $\eta_{k,h}=0$ for every
+    $k\in S$ and $h\in C$, then $XY=0$ for every $X\in\mc A_S$ and
+    $Y\in\mc A_C$. No conclusion in the reverse product order is asserted.
+    This is the directed local-orthogonality implication used in
     \cite[Appendix~C.2, lines~1463--1470]{Cirac2016MPDO_arXiv}.
 \end{theorem}
 
@@ -152,11 +153,12 @@
     \leanok
     Expand two generating matrices in sector coordinates. Their product has
     entries
-    \[
-      \sum_{\gamma}
+    \begin{align}
+        \sum_{\gamma}
         (l_k)_\beta (r_k)_\gamma
         (l_h)_\gamma (r_h)_\alpha.
-    \]
+        \notag
+    \end{align}
     The middle contraction is a matrix entry of $\eta_{k,h}$ and therefore
     vanishes. Bilinearity extends the conclusion from the generators to the
     two linear spans.
@@ -168,12 +170,13 @@
     \leanok
     \uses{def:mpdo_physical_sector_factorization,
       def:mpdo_minimal_neighboring_operator}
-    Let $z_k\in\mathbb C$ satisfy $|z_k|=1$ for every sector. Replacing
-    \[
-        (l_k)_a\longmapsto z_k(l_k)_a,
-        \qquad
-        (r_k)_a\longmapsto z_k^{-1}(r_k)_a
-    \]
+    Let $z_k\in\C$ satisfy $|z_k|=1$ for every sector. Replacing
+    \begin{align}
+        (l_k)_a&\longmapsto z_k(l_k)_a,
+        \notag\\
+        (r_k)_a&\longmapsto z_k^{-1}(r_k)_a
+        \notag
+    \end{align}
     leaves every physical-slice factorization unchanged.
 \end{definition}
 
@@ -188,13 +191,11 @@
     \uses{def:mpdo_physical_sector_rephasing,
       def:mpdo_minimal_neighboring_operator}
     Vertex rephasing transforms the neighboring operators by
-    \[
-        \eta_{k,h}\longmapsto z_k^{-1}z_h\,\eta_{k,h}.
-    \]
-    It leaves every sector virtual matrix unchanged, preserves the nonzero
-    neighboring support, and leaves every complete cyclic product of
-    neighboring operators unchanged. These are the rephasing identities used
-    in \cite[Appendix~C.2, lines~1434--1450]{Cirac2016MPDO_arXiv}.
+    $\eta_{k,h}\longmapsto z_k^{-1}z_h\,\eta_{k,h}$. It leaves every sector
+    virtual matrix unchanged, preserves the nonzero neighboring support, and
+    leaves every complete cyclic product of neighboring operators unchanged.
+    These are the rephasing identities used in
+    \cite[Appendix~C.2, lines~1434--1450]{Cirac2016MPDO_arXiv}.
 \end{theorem}
 
 \begin{definition}[Vanishing right tensors on inactive sectors]
@@ -207,25 +208,28 @@
     Let $S$ be a set of active sectors in a physical-sector factorization,
     and suppose that $(l_k)_\beta=0$ for every $k\notin S$ and every $\beta$.
     Retain every physical summand and define
-    \[
-        \widehat l_k=l_k,
-        \qquad
-        \widehat r_k=
+    \begin{align}
+        \widehat l_k&=l_k,
+        \notag\\
+        \widehat r_k&=
         \begin{cases}
-          r_k,&k\in S,\\
-          0,&k\notin S.
+            r_k,&k\in S,\\
+            0,&k\notin S.
         \end{cases}
-    \]
+        \notag
+    \end{align}
     Then $\widehat l_k\otimes\widehat r_k=l_k\otimes r_k$ for every $k$,
     so the physical-slice factorization is unchanged. The neighboring
     operators become
-    \[
-        \widehat\eta_{k,h}=
+    \begin{align}
+        \widehat\eta_{k,h}
+        &=
         \begin{cases}
-          \eta_{k,h},&k\in S,\\
-          0,&k\notin S.
+            \eta_{k,h},&k\in S,\\
+            0,&k\notin S.
         \end{cases}
-    \]
+        \notag
+    \end{align}
     This is the reparameterization freedom in the factorization and
     neighboring contraction of
     \cite[Appendix~C.2, lines~1434--1445]{Cirac2016MPDO_arXiv}.
@@ -238,11 +242,11 @@
     \uses{thm:mpdo_sector_factorization,
       def:mpdo_physical_sector_factorization,
       lem:mpdo_trace_one_nonempty}
-    Let ${\cal K}$ be injective, let $\rho$ be its three-site closure against
+    Let $\mc K$ be injective, let $\rho$ be its three-site closure against
     a virtual tail $R$, and choose a Hayashi decomposition of $\rho$. Fix
     outer indices such that $R_{\beta_3,\alpha_1}\ne0$. The inverse-map
     tensors $l_k,r_k$, together with the Hayashi physical decomposition and
-    unitary, determine a physical-sector factorization of ${\cal K}$.
+    unitary, determine a physical-sector factorization of $\mc K$.
 
     The left and right factor spaces are nonzero because the corresponding
     Hayashi density matrices have trace one; their nonzero dimensions are
@@ -261,9 +265,11 @@
       def:mpdo_minimal_neighboring_operator}
     For all sectors $k,h$, the neighboring contraction of the resulting
     physical-sector factorization is the inverse-map operator
-    \[
-      \eta_{k,h}=\sum_\gamma (r_k)_\gamma\otimes(l_h)_\gamma.
-    \]
+    \begin{align}
+        \eta_{k,h}
+        &=\sum_\gamma (r_k)_\gamma\otimes(l_h)_\gamma.
+        \notag
+    \end{align}
     This is equation \texttt{etarl} in
     \cite[Appendix~C.2, lines~1441--1445]{Cirac2016MPDO_arXiv}.
 \end{theorem}
@@ -277,15 +283,16 @@
       lem:mpdo_sector_tensor_left_zero_of_weight_zero}
     In the inverse-map factorization, retain every physical sector and its
     factor spaces, and set
-    \[
-        \widehat l_k=l_k,
-        \qquad
-        \widehat r_k=
+    \begin{align}
+        \widehat l_k&=l_k,
+        \notag\\
+        \widehat r_k&=
         \begin{cases}
-          r_k,&p_k\ne0,\\
-          0,&p_k=0.
+            r_k,&p_k\ne0,\\
+            0,&p_k=0.
         \end{cases}
-    \]
+        \notag
+    \end{align}
     The physical-slice factorization is unchanged. This treats the
     zero-weight freedom left by the Hayashi decomposition used in
     \cite[Appendix~C.2, lines~1415--1445]{Cirac2016MPDO_arXiv}.
@@ -299,13 +306,15 @@
     \uses{def:mpdo_zero_weight_reparameterized_inverse_map_factorization,
       thm:mpdo_inverse_map_factorization_neighboring_operator}
     The neighboring operators of the reparameterized factorization are
-    \[
-        \widehat\eta_{k,h}=
+    \begin{align}
+        \widehat\eta_{k,h}
+        &=
         \begin{cases}
-          \eta_{k,h},&p_k\ne0,\\
-          0,&p_k=0.
+            \eta_{k,h},&p_k\ne0,\\
+            0,&p_k=0.
         \end{cases}
-    \]
+        \notag
+    \end{align}
     Thus a zero-weight sector has no outgoing support edge. Since
     $p_h=0$ also gives $l_h=0$, it has no incoming support edge either.
 \end{theorem}
@@ -343,21 +352,27 @@
       def:mpdo_minimal_neighboring_operator}
     Let $N\geq1$. For a cyclic sector configuration
     $k=(k_0,\ldots,k_{N-1})$, write
-    \[
-      I_k=\prod_{n=0}^{N-1}(B_{k_n}^L\times B_{k_n}^R).
-    \]
+    \begin{align}
+        I_k
+        &=\prod_{n=0}^{N-1}(B_{k_n}^L\times B_{k_n}^R).
+        \notag
+    \end{align}
     Applying the one-site sector decomposition at every site gives a
     bijection
-    \[
-      \Phi_N:\{0,\ldots,d-1\}^N
-        \longrightarrow\coprod_{k_0,\ldots,k_{N-1}}I_k.
-    \]
+    \begin{align}
+        \Phi_N:\Fin{d}^{\,N}
+        &\longrightarrow
+        \coprod_{k_0,\ldots,k_{N-1}}I_k.
+        \notag
+    \end{align}
     On $I_k$, define the cyclic neighboring product by
-    \[
-      \Omega_k(x,y)=\prod_{n=0}^{N-1}
+    \begin{align}
+        \Omega_k(x,y)
+        &=\prod_{n=0}^{N-1}
         \eta_{k_n,k_{n+1}}
-        \bigl((x_n^R,x_{n+1}^L),(y_n^R,y_{n+1}^L)\bigr),
-    \]
+        ((x_n^R,x_{n+1}^L),(y_n^R,y_{n+1}^L)),
+        \notag
+    \end{align}
     where site labels are read modulo $N$.
 \end{definition}
 
@@ -370,11 +385,11 @@
     Suppose that the physical-sector factorization is given. For every
     $N\geq1$, the physically transformed MPO is block diagonal in the cyclic
     sector configurations, and
-    \[
-      \reindex_{\Phi_N}
-        \bigl(M_N(\widetilde{\cal K})\bigr)
-      =\bigoplus_{k_0,\ldots,k_{N-1}}\Omega_k.
-    \]
+    \begin{align}
+        \reindex_{\Phi_N}(M_N(\widetilde{\mc K}))
+        &=\bigoplus_{k_0,\ldots,k_{N-1}}\Omega_k.
+        \notag
+    \end{align}
     This is the all-length algebraic decomposition in
     \cite[Appendix~C.2, lines~1435--1450]{Cirac2016MPDO_arXiv}, conditional
     here on the displayed physical-sector factorization. It does not assert
@@ -385,11 +400,12 @@
     \leanok
     Fix a sector configuration $k$ and entries $x,y\in I_k$. Expanding the
     closed horizontal contraction gives
-    \[
-      \sum_g\prod_n
+    \begin{align}
+        \sum_g\prod_n
         (l_{k_n})_{g_n}(x_n^L,y_n^L)
         (r_{k_n})_{g_{n+1}}(x_n^R,y_n^R).
-    \]
+        \notag
+    \end{align}
     Cyclically shifting the summation variables and collecting the factors
     with the same horizontal index turns this expression into
     $\Omega_k(x,y)$. If the row and column sector configurations differ,
@@ -406,11 +422,12 @@
       thm:mpdo_physical_sector_chain_decomposition}
     Every injective MPO tensor satisfying SAL admits a physical-sector
     factorization such that, for every $N\geq1$ and every cyclic sector
-    configuration $k=(k_0,\ldots,k_{N-1})$,
-    \[
-      \bigotimes_{n=0}^{N-1}\eta_{k_n,k_{n+1}}\geq0,
-      \qquad k_N=k_0.
-    \]
+    configuration $k=(k_0,\ldots,k_{N-1})$ with $k_N=k_0$,
+    \begin{align}
+        \bigotimes_{n=0}^{N-1}\eta_{k_n,k_{n+1}}
+        &\geq0.
+        \notag
+    \end{align}
     This is the projected-chain inequality in
     \cite[Appendix~C.2, Lemma~C.4, lines~1446--1450]{Cirac2016MPDO_arXiv}.
     It does not assert positivity of the individual neighboring operators.
@@ -438,10 +455,11 @@
     \uses{def:mpdo_physical_sector_factorization}
     For an arbitrary virtual matrix $X$, define the outer boundary operator
     on $B_k^L\otimes B_h^R$ by
-    \[
-      B_{k,h}(X)
-      =\sum_{a,b}X_{b,a}\,(l_k)_a\otimes(r_h)_b.
-    \]
+    \begin{align}
+        B_{k,h}(X)
+        &=\sum_{a,b}X_{b,a}\,(l_k)_a\otimes(r_h)_b.
+        \notag
+    \end{align}
     The map $X\mapsto B_{k,h}(X)$ is complex-linear. No positivity of $X$ or
     $B_{k,h}(X)$ is assumed.
 \end{definition}
@@ -459,11 +477,12 @@
     Definition~\ref{def:mpdo_physical_sector_factorization}. Form the
     two-site closure of this sector-coordinate tensor, restrict it to the
     physical sectors $(k,h)$, and reindex its physical factors by
-    \[
-      ((L_k,R_k),(L_h,R_h))
-      \longmapsto ((L_k,R_h),(R_k,L_h)).
-    \]
-    Denote the resulting matrix by ${\cal K}_{2;k,h}(X)$.
+    \begin{align}
+        ((L_k,R_k),(L_h,R_h))
+        &\longmapsto ((L_k,R_h),(R_k,L_h)).
+        \notag
+    \end{align}
+    Denote the resulting matrix by $\mc K_{2;k,h}(X)$.
 \end{definition}
 
 \begin{theorem}[Two-site closure factorization]
@@ -474,10 +493,11 @@
       def:mpdo_minimal_neighboring_operator,
       def:mpdo_sector_boundary_operator}
     For every virtual matrix $X$ and every sector pair $(k,h)$,
-    \[
-      {\cal K}_{2;k,h}(X)
-      =B_{k,h}(X)\otimes\eta_{k,h}.
-    \]
+    \begin{align}
+        \mc K_{2;k,h}(X)
+        &=B_{k,h}(X)\otimes\eta_{k,h}.
+        \notag
+    \end{align}
 \end{theorem}
 \begin{proof}
     \leanok
@@ -490,13 +510,14 @@
     $((\lambda_k,\rho_h),(\rho_k,\lambda_h))$ and
     $((\lambda'_k,\rho'_h),(\rho'_k,\lambda'_h))$, the virtual trace expands
     as the scalar
-    \[
-      \sum_{a,b,c}X_{b,a}
-      [(l_k)_a]_{\lambda_k,\lambda'_k}
-      [(r_k)_c]_{\rho_k,\rho'_k}
-      [(l_h)_c]_{\lambda_h,\lambda'_h}
-      [(r_h)_b]_{\rho_h,\rho'_h}.
-    \]
+    \begin{align}
+        \sum_{a,b,c}X_{b,a}
+        [(l_k)_a]_{\lambda_k,\lambda'_k}
+        [(r_k)_c]_{\rho_k,\rho'_k}
+        [(l_h)_c]_{\lambda_h,\lambda'_h}
+        [(r_h)_b]_{\rho_h,\rho'_h}.
+        \notag
+    \end{align}
     Commuting scalar factors and collecting the sums over $(a,b)$ and $c$
     gives respectively $B_{k,h}(X)$ and $\eta_{k,h}$.
 \end{proof}
@@ -512,12 +533,13 @@
     First pass to the physical basis selected by $U$ and form the three-site
     closure of the resulting sector-coordinate tensor. Restrict this closure
     to the sectors $(k,l,h)$ and reindex its physical factors by
-    \[
-      ((L_k,R_k),((L_l,R_l),(L_h,R_h)))
-      \longmapsto
-      ((L_k,R_h),((R_k,L_l),(R_l,L_h))).
-    \]
-    Denote the resulting matrix by ${\cal K}_{3;k,l,h}(X)$.
+    \begin{align}
+        ((L_k,R_k),((L_l,R_l),(L_h,R_h)))
+        &\longmapsto
+        ((L_k,R_h),((R_k,L_l),(R_l,L_h))).
+        \notag
+    \end{align}
+    Denote the resulting matrix by $\mc K_{3;k,l,h}(X)$.
 \end{definition}
 
 \begin{theorem}[Three-site closure factorization]
@@ -528,11 +550,12 @@
       def:mpdo_minimal_neighboring_operator,
       def:mpdo_sector_boundary_operator}
     For every virtual matrix $X$ and fixed sectors $(k,l,h)$,
-    \[
-      {\cal K}_{3;k,l,h}(X)
-      =B_{k,h}(X)\otimes
-        \bigl(\eta_{k,l}\otimes\eta_{l,h}\bigr).
-    \]
+    \begin{align}
+        \mc K_{3;k,l,h}(X)
+        &=B_{k,h}(X)\otimes
+        (\eta_{k,l}\otimes\eta_{l,h}).
+        \notag
+    \end{align}
     \begin{center}
         % K_{3;k,l,h}(X) = B_{k,h}(X) (x) eta_{k,l} (x) eta_{l,h}: the
         % three-site closure of the sector-restricted MPO chain, after
@@ -589,15 +612,16 @@
     At the regrouped matrix entry indexed by
     $((\lambda_k,\rho_h),((\rho_k,\lambda_l),(\rho_l,\lambda_h)))$ and its
     primed counterpart, the left-hand side is the scalar
-    \[
-      \sum_{a,b,c,e}X_{b,a}
-      [(l_k)_a]_{\lambda_k,\lambda'_k}
-      [(r_k)_c]_{\rho_k,\rho'_k}
-      [(l_l)_c]_{\lambda_l,\lambda'_l}
-      [(r_l)_e]_{\rho_l,\rho'_l}
-      [(l_h)_e]_{\lambda_h,\lambda'_h}
-      [(r_h)_b]_{\rho_h,\rho'_h}.
-    \]
+    \begin{align}
+        \sum_{a,b,c,e}X_{b,a}
+        [(l_k)_a]_{\lambda_k,\lambda'_k}
+        [(r_k)_c]_{\rho_k,\rho'_k}
+        [(l_l)_c]_{\lambda_l,\lambda'_l}
+        [(r_l)_e]_{\rho_l,\rho'_l}
+        [(l_h)_e]_{\lambda_h,\lambda'_h}
+        [(r_h)_b]_{\rho_h,\rho'_h}.
+        \notag
+    \end{align}
     Reordering the four finite sums separates the $(a,b)$ boundary
     contraction from the neighboring contractions indexed by $c$ and $e$,
     which gives the three factors on the right-hand side.
@@ -609,10 +633,12 @@
     \leanok
     \uses{def:mpdo_minimal_neighboring_operator}
     For every outer-sector pair $(k,h)$, define
-    \[
-      \Omega_{k,h}=\bigoplus_l
-        \bigl(\eta_{k,l}\otimes\eta_{l,h}\bigr).
-    \]
+    \begin{align}
+        \Omega_{k,h}
+        &=\bigoplus_l
+        (\eta_{k,l}\otimes\eta_{l,h}).
+        \notag
+    \end{align}
     This is the direct sum of the two neighboring contractions appearing in
     the three-site closure factorization
     \cite[Appendix~C.2, lines~1510--1516]{Cirac2016MPDO_arXiv}.
@@ -622,9 +648,11 @@
     \centering
     \begin{minipage}{0.41\textwidth}
       \centering
-      \[
-          \mathfrak R_2({\cal K}_2(X))_{k,h}=a_kb_hB_{k,h}(X)
-      \]
+      \begin{align}
+          \mathfrak R_2(\mc K_2(X))_{k,h}
+          &=a_kb_hB_{k,h}(X).
+          \notag
+      \end{align}
       \begin{center}
           % R_2(K_2(X))_{k,h} = a_kb_h B_{k,h}(X): the two-site
           % closure, restricted to sector pair (k,h) and traced over
@@ -655,10 +683,11 @@
     \end{minipage}\hfill
     \begin{minipage}{0.56\textwidth}
       \centering
-      \[
-          \mathfrak R_3({\cal K}_3(X))_{k,l,h}
-          =B_{k,h}(X)\otimes\eta_{k,l}\otimes\eta_{l,h}
-      \]
+      \begin{align}
+          \mathfrak R_3(\mc K_3(X))_{k,l,h}
+          &=B_{k,h}(X)\otimes\eta_{k,l}\otimes\eta_{l,h}.
+          \notag
+      \end{align}
     \end{minipage}
     \caption{First each slice is conjugated by $U$ and expressed in the
     corresponding sector coordinates. After restriction to fixed sectors and
@@ -682,11 +711,12 @@
     \uses{def:mpdo_minimal_neighboring_operator}
     Suppose that every neighboring operator is positive semidefinite and that
     there are real numbers $a_k,b_h$ such that
-    \[
-      \tr(\eta_{k,h})=a_kb_h,
-      \qquad
-      \sum_k a_kb_k=1.
-    \]
+    \begin{align}
+        \tr(\eta_{k,h})&=a_kb_h,
+        \notag\\
+        \sum_k a_kb_k&=1.
+        \notag
+    \end{align}
     These are precisely the remaining hypotheses used in the construction of
     Proposition~C.7 after the physical-sector factorization has been fixed
     \cite[Appendix~C.2, lines~1389--1403]{Cirac2016MPDO_arXiv}.
@@ -702,11 +732,12 @@
     Assume the neighboring-operator trace factorization of
     Definition~\ref{def:mpdo_neighboring_trace_factorization}. Then, for every
     outer-sector pair $(k,h)$,
-    \[
-      \tr(\Omega_{k,h})
-      =\sum_l\tr(\eta_{k,l})\tr(\eta_{l,h})
-      =a_kb_h.
-    \]
+    \begin{align}
+        \tr(\Omega_{k,h})
+        &=\sum_l\tr(\eta_{k,l})\tr(\eta_{l,h})
+         =a_kb_h.
+        \notag
+    \end{align}
     This is the normalization used in the coarse-graining channel of
     \cite[Appendix~C.2]{Cirac2016MPDO_arXiv}, lines~1547--1555.
 \end{theorem}
@@ -716,12 +747,13 @@
     \uses{def:mpdo_neighboring_trace_factorization}
     The trace of a direct sum is the sum of the traces of its blocks, and the
     trace of a tensor product is the product of the traces. Hence
-    \[
-      \tr(\Omega_{k,h})
-      =\sum_l(a_kb_l)(a_lb_h)
-      =a_kb_h\sum_l a_lb_l
-      =a_kb_h.
-    \]
+    \begin{align}
+        \tr(\Omega_{k,h})
+        &=\sum_l(a_kb_l)(a_lb_h)
+         =a_kb_h\sum_l a_lb_l
+         =a_kb_h.
+        \notag
+    \end{align}
 \end{proof}
 
 \begin{theorem}[Partial traces of the sector closures]
@@ -735,17 +767,19 @@
       thm:mpdo_three_site_sector_closure_factorization,
       def:mpdo_neighboring_trace_factorization}
     For every virtual matrix $X$,
-    \[
-      \tr_{R_k\otimes L_h}\!\left({\cal K}_{2;k,h}(X)\right)
-      =\tr(\eta_{k,h})B_{k,h}(X)
-      =a_kb_h B_{k,h}(X).
-    \]
+    \begin{align}
+        \tr_{R_k\otimes L_h}\!\left(\mc K_{2;k,h}(X)\right)
+        &=\tr(\eta_{k,h})B_{k,h}(X)
+         =a_kb_h B_{k,h}(X).
+        \notag
+    \end{align}
     Similarly,
-    \[
-      \tr_{(R_k\otimes L_l)\otimes(R_l\otimes L_h)}
-        \!\left({\cal K}_{3;k,l,h}(X)\right)
-      =\tr(\eta_{k,l})\tr(\eta_{l,h})B_{k,h}(X),
-    \]
+    \begin{align}
+        \tr_{(R_k\otimes L_l)\otimes(R_l\otimes L_h)}
+        \!\left(\mc K_{3;k,l,h}(X)\right)
+        &=\tr(\eta_{k,l})\tr(\eta_{l,h})B_{k,h}(X),
+        \notag
+    \end{align}
     and summing the scalar coefficient over $l$ gives $a_kb_h$.
 \end{theorem}
 
@@ -755,9 +789,10 @@
       thm:mpdo_three_site_sector_closure_factorization}
     The partial trace of $A\otimes B$ is $\tr(B)A$. The two-site identity
     follows immediately. For three sites, the coefficient is
-    \[
-      \sum_l (a_kb_l)(a_lb_h)
-      =a_k\left(\sum_l a_lb_l\right)b_h
-      =a_kb_h.
-    \]
+    \begin{align}
+        \sum_l (a_kb_l)(a_lb_h)
+        &=a_k\left(\sum_l a_lb_l\right)b_h
+         =a_kb_h.
+        \notag
+    \end{align}
 \end{proof}

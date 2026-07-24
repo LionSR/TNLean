@@ -21,11 +21,10 @@
     \uses{def:mpdo_explicit_eta_operators}
     Let $(\eta_{k,h})$ be a positive neighboring-operator family. A rank-one
     trace factorization consists of real families $(a_k)$ and $(b_h)$ such that
-    \[
-        \tr(\eta_{k,h})=a_kb_h,
-        \qquad
-        \sum_l a_lb_l=1.
-    \]
+    \begin{align}
+        \tr(\eta_{k,h}) &= a_kb_h, \notag\\
+        \sum_l a_lb_l &= 1. \notag
+    \end{align}
     These identities occur in
     \cite[Appendix~C.2, lines~1395--1402]{Cirac2016MPDO_arXiv}.
 \end{definition}
@@ -37,10 +36,10 @@
     \leanok
     \uses{def:mpdo_explicit_eta_operators}
     For sectors $k,h$, define the positive-operator candidate
-    \[
+    \begin{align}
         \Omega_{k,h}
-        =\bigoplus_l\bigl(\eta_{k,l}\otimes\eta_{l,h}\bigr).
-    \]
+        &=\bigoplus_l(\eta_{k,l}\otimes\eta_{l,h}). \notag
+    \end{align}
     The summand indexed by $l$ acts on
     $(B_k^R\otimes B_l^L)\otimes(B_l^R\otimes B_h^L)$.
     This is the operator adjoined by $\mathcal T_{k,h}$ in
@@ -73,13 +72,8 @@
 \begin{proof}
     \leanok
     For every $l$, positivity is preserved by the Kronecker product:
-    \[
-        \eta_{k,l}\succeq 0,
-        \qquad
-        \eta_{l,h}\succeq 0
-        \quad\Longrightarrow\quad
-        \eta_{k,l}\otimes\eta_{l,h}\succeq 0.
-    \]
+    $\eta_{k,l}\succeq 0$ and $\eta_{l,h}\succeq 0$ imply
+    $\eta_{k,l}\otimes\eta_{l,h}\succeq 0$.
     Apply Theorem~\ref{thm:matrix_pos_semidef_block_diagonal} to the family
     $(\eta_{k,l}\otimes\eta_{l,h})_l$.
 \end{proof}
@@ -91,27 +85,26 @@
     \leanok
     \uses{def:mpdo_eta_omega, def:mpdo_eta_rank_one_trace_factorization}
     The trace is
-    \[
+    \begin{align}
         \tr(\Omega_{k,h})
-        =\sum_l\tr(\eta_{k,l})\tr(\eta_{l,h}).
-    \]
+        &=\sum_l\tr(\eta_{k,l})\tr(\eta_{l,h}). \notag
+    \end{align}
     Under the rank-one trace factorization, this becomes
-    \[
+    \begin{align}
         \tr(\Omega_{k,h})
-        =a_kb_h\sum_l a_lb_l
-        =a_kb_h.
-    \]
+        &=a_kb_h\sum_l a_lb_l=a_kb_h. \notag
+    \end{align}
     This is the trace calculation in
     \cite[Appendix~C.2, lines~1531--1535]{Cirac2016MPDO_arXiv}.
 \end{theorem}
 \begin{proof}
     \leanok
     The direct-sum and Kronecker trace identities give
-    \[
+    \begin{align}
         \tr(\Omega_{k,h})
-        =\sum_l\tr\bigl(\eta_{k,l}\otimes\eta_{l,h}\bigr)
-        =\sum_l\tr(\eta_{k,l})\tr(\eta_{l,h}).
-    \]
+        &=\sum_l\tr(\eta_{k,l}\otimes\eta_{l,h})
+          =\sum_l\tr(\eta_{k,l})\tr(\eta_{l,h}). \notag
+    \end{align}
     Substitute
     $\tr(\eta_{k,h})=a_kb_h$ and $\sum_l a_lb_l=1$.
 \end{proof}
@@ -124,24 +117,15 @@
     \leanok
     \uses{thm:mpdo_eta_omega_pos, thm:mpdo_eta_omega_trace,
       def:mpdo_eta_rank_one_trace_factorization}
-    Every product $a_kb_h$ is nonnegative. If $a_kb_h=0$, then
-    \[
-        \eta_{k,h}=0,
-        \qquad
-        \Omega_{k,h}=0.
-    \]
+    Every product $a_kb_h$ is non-negative. If $a_kb_h=0$, then
+    $\eta_{k,h}=0$ and $\Omega_{k,h}=0$.
 \end{theorem}
 \begin{proof}
     \leanok
-    Since $\eta_{k,h}\succeq 0$, its trace is nonnegative, and hence
+    Since $\eta_{k,h}\succeq 0$, its trace is non-negative, and hence
     $a_kb_h=\tr(\eta_{k,h})\geq 0$. If $a_kb_h=0$, then
-    \[
-        \eta_{k,h}\succeq 0,
-        \qquad
-        \tr(\eta_{k,h})=a_kb_h=0
-        \quad\Longrightarrow\quad
-        \eta_{k,h}=0.
-    \]
+    $\eta_{k,h}\succeq 0$ and $\tr(\eta_{k,h})=a_kb_h=0$, which imply
+    $\eta_{k,h}=0$.
     The same implication gives $\Omega_{k,h}=0$ because
     $\Omega_{k,h}\succeq 0$ and
     $\tr(\Omega_{k,h})=a_kb_h=0$.
@@ -154,11 +138,12 @@
     \leanok
     \uses{def:mpdo_eta_omega, def:mpdo_eta_rank_one_trace_factorization}
     With the convention $0^{-1}=0$, define for every pair $(k,h)$
-    \[
-        \widehat\eta_{k,h}=(a_kb_h)^{-1}\eta_{k,h},
-        \qquad
-        \widehat\Omega_{k,h}=(a_kb_h)^{-1}\Omega_{k,h}.
-    \]
+    \begin{align}
+        \widehat\eta_{k,h}
+        &=(a_kb_h)^{-1}\eta_{k,h}, \notag\\
+        \widehat\Omega_{k,h}
+        &=(a_kb_h)^{-1}\Omega_{k,h}. \notag
+    \end{align}
     These operators are normalized when the pair is active, namely when
     $a_kb_h\ne0$.
 \end{definition}
@@ -176,16 +161,10 @@
 \begin{proof}
     \leanok
     By Theorem~\ref{thm:mpdo_eta_zero_weight}, $a_kb_h\geq 0$, and hence
-    $(a_kb_h)^{-1}\geq 0$. Therefore
-    \[
-        \eta_{k,h}\succeq 0,
-        \qquad
-        (a_kb_h)^{-1}\geq 0
-        \quad\Longrightarrow\quad
-        \widehat\eta_{k,h}
-        =(a_kb_h)^{-1}\eta_{k,h}\succeq 0,
-    \]
-    and the identical argument applies to $\widehat\Omega_{k,h}$.
+    $(a_kb_h)^{-1}\geq 0$. Since $\eta_{k,h}\succeq 0$ and
+    $\Omega_{k,h}\succeq 0$, multiplication by $(a_kb_h)^{-1}$ gives
+    $\widehat\eta_{k,h}\succeq 0$ and
+    $\widehat\Omega_{k,h}\succeq 0$.
 \end{proof}
 
 \begin{theorem}[Normalized active preparations]
@@ -201,11 +180,10 @@
     If $a_kb_h\ne0$, then $\widehat\eta_{k,h}$ and
     $\widehat\Omega_{k,h}$ have trace one.
     Consequently the maps
-    \[
-        X\longmapsto X\otimes\widehat\eta_{k,h},
-        \qquad
-        X\longmapsto X\otimes\widehat\Omega_{k,h}
-    \]
+    \begin{align}
+        X&\longmapsto X\otimes\widehat\eta_{k,h}, \notag\\
+        X&\longmapsto X\otimes\widehat\Omega_{k,h} \notag
+    \end{align}
     are trace-preserving and completely positive. These are the individual
     preparations $\mathcal S_{k,h}$ and $\mathcal T_{k,h}$ in
     \cite[Appendix~C.2, lines~1527--1535 and~1551--1555]
@@ -214,12 +192,9 @@
 \begin{proof}
     \leanok
     On an active pair,
-    \[
-        \tr(\widehat\eta_{k,h})
-        =(a_kb_h)^{-1}\tr(\eta_{k,h})
-        =(a_kb_h)^{-1}a_kb_h
-        =1.
-    \]
+    $\tr(\widehat\eta_{k,h})
+      =(a_kb_h)^{-1}\tr(\eta_{k,h})
+      =(a_kb_h)^{-1}a_kb_h=1$.
     Likewise, $\tr(\widehat\Omega_{k,h})=1$ follows from
     $\tr(\Omega_{k,h})=a_kb_h$.
     Apply Lemma~\ref{lem:mpdo_state_preparation_cptp} to each operator.
@@ -250,13 +225,9 @@
 \begin{proof}
     \leanok
     A matrix on an empty index space has trace zero. Hence
-    \[
-      \tr(\rho_k^R)=1
-      \Longrightarrow \dim(B_k^R\otimes C)>0
-      \Longrightarrow \dim B_k^R>0,
-    \]
-    and the same argument applied to $\rho_k^L$ gives
-    $d_k^L>0$.
+    $\tr(\rho_k^R)=1$ implies
+    $\dim(B_k^R\otimes C)>0$, which implies $\dim B_k^R>0$,
+    and the same argument applied to $\rho_k^L$ gives $d_k^L>0$.
 \end{proof}
 
 \begin{lemma}[Existence of a Hayashi sector]
@@ -268,10 +239,7 @@
 \end{lemma}
 \begin{proof}
     \leanok
-    The sector weights satisfy
-    \[
-      \sum_k p_k=1\Longrightarrow m>0.
-    \]
+    The sector-weight identity $\sum_k p_k=1$ implies $m>0$.
 \end{proof}
 
 \begin{lemma}[Nonemptiness of the neighboring auxiliary spaces]
@@ -297,9 +265,9 @@
     \lean{Matrix.faithfulDensity}
     \leanok
     On a nonzero finite-dimensional space $H$, define
-    \[
-        \tau_H=\frac{1}{\dim H}I_H.
-    \]
+    \begin{align}
+        \tau_H&=\frac{1}{\dim H}I_H. \notag
+    \end{align}
 \end{definition}
 
 \begin{theorem}[The uniform density matrix is faithful and normalized]
@@ -327,16 +295,16 @@
       lem:mpdo_hayashi_auxiliary_nonempty,
       def:mpdo_faithful_uniform_density}
     For every sector pair define
-    \[
-        \overline\eta_{k,h}=
+    \begin{align}
+        \overline\eta_{k,h}
+        &=
         \begin{cases}
           \widehat\eta_{k,h},&a_kb_h\ne0,\\
           \tau_{B_k^R\otimes B_h^L},&a_kb_h=0,
-        \end{cases}
-        \qquad
+        \end{cases} \notag\\
         \overline{\mathcal S}_{k,h}(X)
-        =X\otimes\overline\eta_{k,h}.
-    \]
+        &=X\otimes\overline\eta_{k,h}. \notag
+    \end{align}
     On an active pair this is precisely the preparation
     $\mathcal S_{k,h}$ of
     \cite[Appendix~C.2, lines~1551--1555]{Cirac2016MPDO_arXiv}; the second
@@ -364,17 +332,16 @@
 \begin{proof}
     \leanok
     The two branches give
-    \[
-      a_kb_h\ne0\Longrightarrow
+    \begin{align}
+      a_kb_h\ne0
+      &\Longrightarrow
       \overline\eta_{k,h}=\widehat\eta_{k,h}\succeq0,
-      \quad \tr(\overline\eta_{k,h})=1,
-    \]
-    and
-    \[
-      a_kb_h=0\Longrightarrow
+      \quad \tr(\overline\eta_{k,h})=1, \notag\\
+      a_kb_h=0
+      &\Longrightarrow
       \overline\eta_{k,h}=\tau_{B_k^R\otimes B_h^L}\succ0,
-      \quad \tr(\overline\eta_{k,h})=1.
-    \]
+      \quad \tr(\overline\eta_{k,h})=1. \notag
+    \end{align}
     The state-preparation result applies in either case.
 \end{proof}
 
@@ -388,20 +355,20 @@
       lem:mpdo_hayashi_auxiliary_nonempty,
       def:mpdo_faithful_uniform_density}
     For every sector pair define
-    \[
+    \begin{align}
         \mathcal H^{\Omega}_{k,h}
-        =\bigoplus_l
-          (B_k^R\otimes B_l^L)\otimes(B_l^R\otimes B_h^L),
-        \qquad
-        \overline\Omega_{k,h}=
+        &=
+        \bigoplus_l
+          (B_k^R\otimes B_l^L)\otimes(B_l^R\otimes B_h^L), \notag\\
+        \overline\Omega_{k,h}
+        &=
         \begin{cases}
           \widehat\Omega_{k,h},&a_kb_h\ne0,\\
           \tau_{\mathcal H^{\Omega}_{k,h}},&a_kb_h=0,
-        \end{cases}
-        \qquad
+        \end{cases} \notag\\
         \overline{\mathcal T}_{k,h}(X)
-        =X\otimes\overline\Omega_{k,h}.
-    \]
+        &=X\otimes\overline\Omega_{k,h}. \notag
+    \end{align}
     Thus $\mathcal H^{\Omega}_{k,h}$ is the carrier space, whereas
     $\Omega_{k,h}$, $\widehat\Omega_{k,h}$, and
     $\overline\Omega_{k,h}$ are operators on it: respectively the
@@ -432,18 +399,17 @@
 \end{theorem}
 \begin{proof}
     \leanok
-    On the active branch,
-    \[
-      a_kb_h\ne0\Longrightarrow
+    The two branches give
+    \begin{align}
+      a_kb_h\ne0
+      &\Longrightarrow
       \overline\Omega_{k,h}=\widehat\Omega_{k,h}\succeq0,
-      \quad \tr(\overline\Omega_{k,h})=1,
-    \]
-    while on the inactive branch,
-    \[
-      a_kb_h=0\Longrightarrow
+      \quad \tr(\overline\Omega_{k,h})=1, \notag\\
+      a_kb_h=0
+      &\Longrightarrow
       \overline\Omega_{k,h}=\tau_{\mathcal H^{\Omega}_{k,h}}\succ0,
-      \quad \tr(\overline\Omega_{k,h})=1.
-    \]
+      \quad \tr(\overline\Omega_{k,h})=1. \notag
+    \end{align}
     The state-preparation result therefore applies to
     $\overline{\mathcal T}_{k,h}$.
 \end{proof}
@@ -457,11 +423,11 @@
       def:mpdo_controlled_kraus_map}
     Let $H=\bigoplus_{k,h}H_{k,h}$. Orthogonally controlling the completed
     preparations over the sector pairs gives a map
-    \[
+    \begin{align}
         \overline{\mathcal S}_1(X)
-        =\sum_{k,h,a}\widetilde A_{k,h,a}X
-          \widetilde A_{k,h,a}^{\dagger},
-    \]
+        &=\sum_{k,h,a}\widetilde A_{k,h,a}X
+          \widetilde A_{k,h,a}^{\dagger}, \notag
+    \end{align}
     where $(A_{k,h,a})_a$ is a Kraus family for
     $\overline{\mathcal S}_{k,h}$ and the tilde denotes its extension by zero
     outside $H_{k,h}$. Thus the map discards inter-sector coherences and
@@ -477,11 +443,11 @@
     \uses{def:mpdo_completed_eta_controlled_map,
       def:mpdo_completed_eta_preparation}
     If $X_{k,h}$ is the $(k,h)$ diagonal block of $X$, then
-    \[
+    \begin{align}
       [\overline{\mathcal S}_1(X)]_{k,h}
-      =\overline{\mathcal S}_{k,h}(X_{k,h})
-      =X_{k,h}\otimes\overline\eta_{k,h}.
-    \]
+      &=\overline{\mathcal S}_{k,h}(X_{k,h})
+       =X_{k,h}\otimes\overline\eta_{k,h}. \notag
+    \end{align}
 \end{theorem}
 \begin{proof}
     \leanok
@@ -489,16 +455,13 @@
       thm:mpdo_rectangular_kraus_map_equiv,
       thm:mpdo_state_preparation_kraus_action}
     The diagonal-block formula and invariance under Kraus-index relabeling give
-    \[
+    \begin{align}
       [\overline{\mathcal S}_1(X)]_{k,h}
-      =\Phi_{\widetilde A_{k,h}}(X_{k,h})
-      =\Phi_{A_{k,h}}(X_{k,h}).
-    \]
-    The preparation Kraus identity then gives
-    \[
+      &=\Phi_{\widetilde A_{k,h}}(X_{k,h})
+       =\Phi_{A_{k,h}}(X_{k,h}), \notag\\
       \Phi_{A_{k,h}}(X_{k,h})
-      =X_{k,h}\otimes\overline\eta_{k,h}.
-    \]
+      &=X_{k,h}\otimes\overline\eta_{k,h}. \notag
+    \end{align}
 \end{proof}
 
 \begin{theorem}[The globally controlled neighboring-state preparation is
@@ -516,11 +479,11 @@
 \begin{proof}
     \leanok
     If $(A_{k,h,a})_a$ is the sectorwise Kraus family, then
-    \[
+    \begin{align}
       \sum_{k,h,a}\widetilde A_{k,h,a}^{\dagger}\widetilde A_{k,h,a}
-      =\bigoplus_{k,h}\left(\sum_a A_{k,h,a}^{\dagger}A_{k,h,a}\right)
-      =\bigoplus_{k,h}I_{H_{k,h}}=I_H.
-    \]
+      &=\bigoplus_{k,h}\left(\sum_a A_{k,h,a}^{\dagger}A_{k,h,a}\right)
+       =\bigoplus_{k,h}I_{H_{k,h}}=I_H. \notag
+    \end{align}
     Thus the controlled Kraus family is trace-preserving.
 \end{proof}
 
@@ -532,11 +495,11 @@
       def:mpdo_state_preparation_kraus,
       def:mpdo_controlled_kraus_map}
     Orthogonally controlling the completed direct-sum preparations gives
-    \[
+    \begin{align}
         \overline{\mathcal T}_1(X)
-        =\sum_{k,h,a}\widetilde B_{k,h,a}X
-          \widetilde B_{k,h,a}^{\dagger},
-    \]
+        &=\sum_{k,h,a}\widetilde B_{k,h,a}X
+          \widetilde B_{k,h,a}^{\dagger}, \notag
+    \end{align}
     where $(B_{k,h,a})_a$ is a Kraus family for
     $\overline{\mathcal T}_{k,h}$. This map discards inter-sector coherences
     and, on active sectors, is the sector-control formula for $\mathcal T_1$
@@ -550,11 +513,11 @@
     \uses{def:mpdo_completed_omega_controlled_map,
       def:mpdo_completed_omega_preparation}
     If $X_{k,h}$ is the $(k,h)$ diagonal block of $X$, then
-    \[
+    \begin{align}
       [\overline{\mathcal T}_1(X)]_{k,h}
-      =\overline{\mathcal T}_{k,h}(X_{k,h})
-      =X_{k,h}\otimes\overline\Omega_{k,h}.
-    \]
+      &=\overline{\mathcal T}_{k,h}(X_{k,h})
+       =X_{k,h}\otimes\overline\Omega_{k,h}. \notag
+    \end{align}
 \end{theorem}
 \begin{proof}
     \leanok
@@ -562,16 +525,13 @@
       thm:mpdo_rectangular_kraus_map_equiv,
       thm:mpdo_state_preparation_kraus_action}
     The diagonal-block formula and invariance under Kraus-index relabeling give
-    \[
+    \begin{align}
       [\overline{\mathcal T}_1(X)]_{k,h}
-      =\Phi_{\widetilde B_{k,h}}(X_{k,h})
-      =\Phi_{B_{k,h}}(X_{k,h}).
-    \]
-    The preparation Kraus identity then gives
-    \[
+      &=\Phi_{\widetilde B_{k,h}}(X_{k,h})
+       =\Phi_{B_{k,h}}(X_{k,h}), \notag\\
       \Phi_{B_{k,h}}(X_{k,h})
-      =X_{k,h}\otimes\overline\Omega_{k,h}.
-    \]
+      &=X_{k,h}\otimes\overline\Omega_{k,h}. \notag
+    \end{align}
 \end{proof}
 
 \begin{theorem}[The globally controlled direct-sum preparation is
@@ -589,11 +549,11 @@
 \begin{proof}
     \leanok
     For the sectorwise Kraus family $(B_{k,h,a})_a$,
-    \[
+    \begin{align}
       \sum_{k,h,a}\widetilde B_{k,h,a}^{\dagger}\widetilde B_{k,h,a}
-      =\bigoplus_{k,h}\left(\sum_a B_{k,h,a}^{\dagger}B_{k,h,a}\right)
-      =\bigoplus_{k,h}I_{H_{k,h}}=I_H.
-    \]
+      &=\bigoplus_{k,h}\left(\sum_a B_{k,h,a}^{\dagger}B_{k,h,a}\right)
+       =\bigoplus_{k,h}I_{H_{k,h}}=I_H. \notag
+    \end{align}
     The orthogonal-control theorem now gives the claim.
 \end{proof}
 

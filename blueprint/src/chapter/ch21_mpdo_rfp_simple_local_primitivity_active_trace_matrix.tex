@@ -10,19 +10,23 @@
     family constitutes explicit neighboring $\eta$-data. The source obtains
     the positivity from the projected chain identity: writing
     $\tilde\sigma
-    = U^{\dagger\otimes N}\,\sigma^{(N)}({\cal K})\,U^{\otimes N}$
+    = U^{\dagger\otimes N} \sigma^{(N)}({\cal K})\,U^{\otimes N}$
     for the $N$-site operator in the sector basis and $Q_k$ for the
     projector onto the $k$-th sector of the physical splitting, every
     cyclic sector assignment $k_1,\ldots,k_N$ (with $k_{N+1}=k_1$) satisfies
-    \[
-        0\le\bigl[Q_{k_1}\otimes\cdots\otimes Q_{k_N}\bigr]\,\tilde\sigma\,
-        \bigl[Q_{k_1}\otimes\cdots\otimes Q_{k_N}\bigr]
+    \begin{align}
+        0
+        &\leq
+        [Q_{k_1}\otimes\cdots\otimes Q_{k_N}]
+        \tilde\sigma
+        [Q_{k_1}\otimes\cdots\otimes Q_{k_N}]
         =\bigotimes_{n=1}^{N}\eta_{k_n,k_{n+1}},
-    \]
+        \notag
+    \end{align}
     and the sector tensors can be chosen so that each factor is positive
     semidefinite \cite[Appendix~C.2, lines~1446--1450]{Cirac2016MPDO_arXiv}.
     The all-length sector identity is
-    Theorem~\ref{thm:mpdo_sector_adapted_decomposition}.  That algebraic
+    Theorem~\ref{thm:mpdo_sector_adapted_decomposition}. That algebraic
     identity does not by itself choose coherent positive representatives for
     all neighboring pairs, so positive semidefiniteness remains a hypothesis
     on the chosen representatives here.
@@ -42,9 +46,11 @@
     Definition~\ref{def:mpdo_explicit_eta_of_sector_tensors}, the trace
     matrix of the explicit $\eta$-data is the pairing of the closed sector
     tensors:
-    \[
-        T_{k,h}=\tr(\eta_{k,h})=(r_k|l_h).
-    \]
+    \begin{align}
+        T_{k,h}
+        &=\tr(\eta_{k,h})=(r_k|l_h).
+        \notag
+    \end{align}
 \end{theorem}
 
 \begin{proof}
@@ -59,13 +65,9 @@
     \lean{Matrix.IsIrreducible.%
       isPrimitive_of_pow_two_diagonal_pos_of_pow_three_diagonal_pos}
     \leanok
-    Let $T$ be a nonnegative irreducible matrix on a finite index set. If
-    \[
-        (T^2)_{k,k}>0
-        \qquad\text{and}\qquad
-        (T^3)_{k,k}>0
-    \]
-    for every index $k$, then $T$ is primitive.
+    Let $T$ be a non-negative irreducible matrix on a finite index set. If
+    $(T^2)_{k,k}>0$ and $(T^3)_{k,k}>0$ for every index $k$, then $T$ is
+    primitive.
 \end{theorem}
 
 \begin{proof}
@@ -88,20 +90,23 @@
     \leanok
     \uses{def:mpdo_one_site_sector_matrix_space,
       def:mpdo_minimal_neighboring_operator}
-    For sector weights $p_k$, let
-    $I_*=\{k:p_k\ne0\}$.  The one-site matrices and their spaces on $I_*$
-    are
-    \[
+    For sector weights $p_k$, let $I_*=\{k:p_k\ne0\}$. The one-site matrices
+    and their spaces on $I_*$ are
+    \begin{align}
         A_{k;x,y},
-        \qquad
-        {\cal A}_S=\spn\{A_{k;x,y}:k\in S\},
+        \notag\\
+        {\cal A}_S
+        &=\spn\{A_{k;x,y}:k\in S\},
         \qquad S\subseteq I_*.
-    \]
+        \notag
+    \end{align}
     The real trace matrix on this index set is
-    \[
-        T^*_{k,h}=\re\tr(\eta_{k,h}),
+    \begin{align}
+        T^*_{k,h}
+        &=\re\tr(\eta_{k,h}),
         \qquad k,h\in I_*.
-    \]
+        \notag
+    \end{align}
     Only the trace matrix is restricted: the physical direct sum still
     contains every zero-weight summand.
 \end{definition}
@@ -116,12 +121,10 @@
     \uses{def:mpdo_active_sector_trace_matrix,
       thm:mpdo_sector_virtual_matrix_spanning}
     For every sector entry, the one-site matrix used in the directed-cut
-    argument equals the virtual matrix used in the spanning argument.  If all
+    argument equals the virtual matrix used in the spanning argument. If all
     sector virtual matrices span $\MN{D}$ and the matrices in every
     zero-weight sector vanish, then
-    \[
-        \spn\{A_{k;x,y}:k\in I_*\}=\MN{D}.
-    \]
+    $\spn\{A_{k;x,y}:k\in I_*\}=\MN{D}$.
 \end{theorem}
 
 \begin{theorem}[Complementary active-sector spaces]%
@@ -136,12 +139,10 @@
       thm:mpdo_active_one_site_matrix_spanning,
       thm:mpdo_directed_cut_one_site_spaces}
     Suppose that the active one-site matrices span $\MN{D}$ and each active
-    sector contains a nonzero such matrix.  For every $S\subseteq I_*$,
-    \[
-        {\cal A}_S+{\cal A}_{I_*\setminus S}=\MN{D},
-    \]
-    and both spaces are nonzero when the corresponding sector sets are
-    nonempty.  If $\eta_{k,h}=0$ for $k\in S$ and $h\in C$, then
+    sector contains a nonzero such matrix. For every $S\subseteq I_*$,
+    ${\cal A}_S+{\cal A}_{I_*\setminus S}=\MN{D}$, and both spaces are
+    nonzero when the corresponding sector sets are nonempty. If
+    $\eta_{k,h}=0$ for $k\in S$ and $h\in C$, then
     ${\cal A}_S{\cal A}_C=0$.
 \end{theorem}
 
@@ -155,22 +156,24 @@
     \uses{thm:mpdo_active_sector_complementary_spaces,
       lem:matrix_one_sided_product_obstruction}
     Suppose that the active one-site matrices span $\MN{D}$ and each active
-    sector contains a nonzero such matrix.  Then for every $k,h\in I_*$ there
+    sector contains a nonzero such matrix. Then for every $k,h\in I_*$ there
     is a directed walk
-    \[
+    \begin{align}
         k=k_0\longrightarrow k_1\longrightarrow\cdots
         \longrightarrow k_m=h,
-        \qquad \eta_{k_j,k_{j+1}}\ne0.
-    \]
-    In particular, every active sector has an outgoing nonzero neighboring
-    operator.
+        \notag
+    \end{align}
+    such that $\eta_{k_j,k_{j+1}}\ne0$. In particular, every active sector
+    has an outgoing nonzero neighboring operator.
 \end{theorem}
 
 \begin{figure}[ht]
     \centering
-    \[
-        P_j\mathcal K_iP_{j^\prime}=0\quad\text{unless }i=j=j^\prime
-    \]
+    \begin{align}
+        P_j\mathcal K_iP_{j^\prime}
+        &=0\quad\text{unless }i=j=j^\prime.
+        \notag
+    \end{align}
     \begin{center}
         % P_j K_i P_{j'} = 0 unless i=j=j': the sector-projector sandwich of a
         % BNT element K_i.  Three `op' rows compose vertically: P_j's own down
@@ -187,23 +190,23 @@
             \tn[mpo]{\mathcal K_i} \\
             \tn[mpo]{P_{j^\prime}}
         \end{tenkz}
-        $\;=\;0\quad\text{unless }i=j=j^\prime$
+        $ = 0\quad\text{unless }i=j=j^\prime$
     \end{center}
     \caption{The local-orthogonality contraction of
-    \cite[Appendix~C.2, lines~1457--1470]{Cirac2016MPDO_arXiv}.  After
+    \cite[Appendix~C.2, lines~1457--1470]{Cirac2016MPDO_arXiv}. After
     decomposing the sector trace matrix into primitive components, the source
     assumes that two components occur, obtains two locally orthogonal
-    summands, and chooses orthogonal projectors $P_1$ and $P_2$.  The
+    summands, and chooses orthogonal projectors $P_1$ and $P_2$. The
     displayed identity gives the cross contractions
     $P_1{\cal K}P_2=P_2{\cal K}P_1=0$, and the corresponding two-site
-    contraction also vanishes.  For
+    contraction also vanishes. For
     ${\cal A}_i=\spn\{\tr(XP_i{\cal K}P_i):X\}$, these vanishings and
     injectivity imply
     ${\cal A}_1+{\cal A}_2=\MN{D}$ and
     ${\cal A}_1{\cal A}_2=0$, a contradiction.
     Theorem~\ref{thm:mpdo_active_neighboring_support_strongly_connected} does
     not construct $P_1$ or $P_2$: an arbitrary reachability cut
-    $I_*=S\sqcup C$ supplies only ${\cal A}_S{\cal A}_C=0$.  The common final
+    $I_*=S\sqcup C$ supplies only ${\cal A}_S{\cal A}_C=0$. The common final
     step is the same one-sided obstruction: two nonzero matrix spaces cannot
     sum to $\MN{D}$ while their ordered products vanish.}
     \label{fig:mpdo_local_orthogonality}
@@ -216,10 +219,8 @@
     \leanok
     \uses{def:mpdo_active_sector_trace_matrix}
     If every neighboring operator is positive semidefinite, then $T^*$ is
-    entrywise nonnegative and
-    \[
-        T^*_{k,h}>0\quad\Longleftrightarrow\quad\eta_{k,h}\ne0.
-    \]
+    entrywise non-negative and
+    $T^*_{k,h}>0\Longleftrightarrow\eta_{k,h}\ne0$.
 \end{theorem}
 
 % **Local fix (periodicity):** the source blocks to remove periodic
@@ -235,17 +236,16 @@
     \uses{thm:mpdo_active_one_site_matrix_spanning,
       thm:mpdo_active_trace_matrix_positive_entries}
     Suppose that the active one-site matrices span $\MN{D}$ and each active
-    sector contains a nonzero such matrix.  For every $k\in I_*$ there is an
+    sector contains a nonzero such matrix. For every $k\in I_*$ there is an
     $h\in I_*$ such that
-    \[
-        \eta_{k,h}\ne0,
-        \qquad
-        \eta_{h,k}\ne0.
-    \]
+    \begin{align}
+        \eta_{k,h}&\ne0,
+        \notag\\
+        \eta_{h,k}&\ne0.
+        \notag
+    \end{align}
     If the neighboring operators are positive semidefinite, then
-    \[
-        (T^{*2})_{k,k}>0.
-    \]
+    $(T^{*2})_{k,k}>0$.
 \end{theorem}
 
 \begin{theorem}[Irreducibility of the active trace matrix]%
@@ -256,7 +256,7 @@
       thm:mpdo_active_trace_matrix_positive_entries}
     Suppose that the neighboring operators are positive semidefinite, the
     active one-site matrices span $\MN{D}$, and each active sector contains a
-    nonzero such matrix.  Then the nonnegative matrix $T^*$ is irreducible.
+    nonzero such matrix. Then the non-negative matrix $T^*$ is irreducible.
 \end{theorem}
 
 % **Local fix (periodicity):** the source blocks to remove periodic
@@ -310,10 +310,12 @@
     Theorem~\ref{thm:mpdo_eta_coherent_positive_choice}. Restrict the sector
     index to the positive-weight summands of the Hayashi decomposition. Then
     positive semidefiniteness makes every neighboring trace real and
-    nonnegative, and the matrix
-    \[
-        T^*_{k,h}=\re\tr(\eta_{k,h})
-    \]
+    non-negative, and the matrix
+    \begin{align}
+        T^*_{k,h}
+        &=\re\tr(\eta_{k,h})
+        \notag
+    \end{align}
     is primitive. Zero-weight summands remain in the physical direct sum but
     are not indices of $T^*$.
 
@@ -363,22 +365,19 @@
     zero correlation length. Then there are a physical-sector factorization,
     weights $p_k\geq0$ with $\sum_k p_k=1$, and positive semidefinite
     neighboring operators $\eta_{k,h}$ such that the active trace matrix
-    \[
-        T^*_{k,h}=\re\tr(\eta_{k,h}),
+    \begin{align}
+        T^*_{k,h}
+        &=\re\tr(\eta_{k,h}),
         \qquad k,h\in I_*:=\{j:p_j\ne0\},
-    \]
+        \notag
+    \end{align}
     is primitive. There is also a real number $\lambda>0$ for which, upon
-    setting $\widehat T^*:=\lambda^{-1}T^*$,
-    \[
-        (\widehat T^*)^2=(\widehat T^*)^3.
-    \]
-    For every positive integer $N$,
-    \[
-        \tr((\widehat T^*)^N)=\tr(\widehat T^*).
-    \]
-    Thus the primitivity and the two normalized identities concern the same
-    active, positively rephased trace matrix. No idempotence, rank-one, or
-    semisimplicity conclusion is asserted.
+    setting $\widehat T^*:=\lambda^{-1}T^*$, one has
+    $(\widehat T^*)^2=(\widehat T^*)^3$. For every positive integer $N$,
+    $\tr((\widehat T^*)^N)=\tr(\widehat T^*)$. Thus the primitivity and the
+    two normalized identities concern the same active, positively rephased
+    trace matrix. No idempotence, rank-one, or semisimplicity conclusion is
+    asserted.
 \end{theorem}
 
 \begin{proof}
@@ -388,22 +387,25 @@
     Choose the coherent sector phases from
     Theorem~\ref{thm:mpdo_sector_trace_matrix_primitive}. For the resulting
     factorization, let $L$ have columns
-    $\bigl(\tr((l_h)_\beta)\bigr)_\beta$ and let $Q$ have rows
-    $\bigl(\tr((r_k)_\alpha)\bigr)_\alpha$, with both indices restricted to
+    $(\tr((l_h)_\beta))_\beta$ and let $Q$ have rows
+    $(\tr((r_k)_\alpha))_\alpha$, with both indices restricted to
     $I_*$. The left tensor vanishes when $p_k=0$, so the rectangular product
     $LQ$ is the full physical-trace transfer. Source zero correlation length
     therefore makes $\lambda^{-1}LQ$ idempotent for some $\lambda>0$.
 
     Positivity of the neighboring operators makes their traces real, and
     hence $QL$ is the complexification of $T^*$. Associativity and cyclicity
-    of trace give
-    \[
-        (\lambda^{-1}QL)^2=(\lambda^{-1}QL)^3,
-        \qquad
-        \tr((\lambda^{-1}QL)^N)=\tr(\lambda^{-1}QL)
-    \]
-    for every $N\geq1$. Injectivity of the real-to-complex inclusion gives
-    the two real matrix identities.
+    of trace give, for every $N\geq1$,
+    \begin{align}
+        (\lambda^{-1}QL)^2
+        &=(\lambda^{-1}QL)^3,
+        \notag\\
+        \tr((\lambda^{-1}QL)^N)
+        &=\tr(\lambda^{-1}QL).
+        \notag
+    \end{align}
+    Injectivity of the real-to-complex inclusion gives the two real matrix
+    identities.
 \end{proof}
 
 \begin{theorem}[Virtual spanning does not force active-sector idempotence]
@@ -421,70 +423,73 @@
     sectors and weights $p_k$ such that the following statements hold
     simultaneously: the tensor is injective and has source zero correlation
     length; its physical-trace transfer is idempotent; the weights satisfy
-    \[
-        \forall k\in\{0,1,2,3\},\quad p_k=\frac14,
-        \qquad
-        \forall k\in\{0,1,2,3\},\quad 0\leq p_k,
-        \qquad
-        \sum_{k=0}^{3}p_k=1;
-    \]
+    \begin{align}
+        p_k&=\frac14
+        &&\text{for every }k\in\{0,1,2,3\},
+        \notag\\
+        0&\leq p_k
+        &&\text{for every }k\in\{0,1,2,3\},
+        \notag\\
+        \sum_{k=0}^{3}p_k&=1;
+        \notag
+    \end{align}
     its sector virtual matrices span $\MN{2}$; every neighboring operator is
     positive semidefinite; and its active trace matrix is primitive and has
-    trace one.  Nevertheless, if
+    trace one. Nevertheless, if
     $S=LQ$ is the physical-trace transfer and $T=QL$ is the active trace matrix,
-    then
-    \[
-        Q(1-S)L=T-T^2\ne0.
-    \]
-    In particular, full virtual-matrix spanning does not by itself imply that
-    the active trace matrix is idempotent.
+    then $Q(1-S)L=T-T^2\ne0$. In particular, full virtual-matrix spanning does
+    not by itself imply that the active trace matrix is idempotent.
 \end{theorem}
 
 \begin{proof}
     \leanok
     Take
-    \[
-      L=\begin{pmatrix}
-        \frac14&\frac14&\frac14&\frac14\\
-        1&-1&1&-1
-      \end{pmatrix},
-      \qquad
-      Q=\begin{pmatrix}
-        1&\frac18\\
-        1&\frac18\\
-        1&-\frac18\\
-        1&-\frac18
-      \end{pmatrix}.
-    \]
+    \begin{align}
+        L&=\begin{pmatrix}
+            \frac14&\frac14&\frac14&\frac14\\
+            1&-1&1&-1
+        \end{pmatrix},
+        \notag\\
+        Q&=\begin{pmatrix}
+            1&\frac18\\
+            1&\frac18\\
+            1&-\frac18\\
+            1&-\frac18
+        \end{pmatrix}.
+        \notag
+    \end{align}
     For each $k$, the $k$th sector virtual matrix is the outer product of the
-    $k$th column of $L$ with the $k$th row of $Q$.  Their four coordinate
+    $k$th column of $L$ with the $k$th row of $Q$. Their four coordinate
     functions are proportional to the Walsh functions $1,x,y,xy$ on four
-    points.  More explicitly, the matrix whose columns are their coordinates
-    in the order $(00,01,10,11)$ has determinant $-1/64$.  Hence they form a
-    basis of $\MN{2}$.  Placing them on the
+    points. More explicitly, the matrix whose columns are their coordinates
+    in the order $(00,01,10,11)$ has determinant $-1/64$. Hence they form a
+    basis of $\MN{2}$. Placing them on the
     diagonal physical entries gives an injective tensor and a physical-sector factorization with
     scalar sectors.
 
     Direct multiplication gives
-    \[
-      LQ=\begin{pmatrix}1&0\\0&0\end{pmatrix},
-      \qquad
-      QL=\begin{pmatrix}
-        \frac38&\frac18&\frac38&\frac18\\
-        \frac38&\frac18&\frac38&\frac18\\
-        \frac18&\frac38&\frac18&\frac38\\
-        \frac18&\frac38&\frac18&\frac38
-      \end{pmatrix}.
-    \]
+    \begin{align}
+        LQ
+        &=\begin{pmatrix}
+            1&0\\
+            0&0
+        \end{pmatrix},
+        \notag\\
+        QL
+        &=\begin{pmatrix}
+            \frac38&\frac18&\frac38&\frac18\\
+            \frac38&\frac18&\frac38&\frac18\\
+            \frac18&\frac38&\frac18&\frac38\\
+            \frac18&\frac38&\frac18&\frac38
+        \end{pmatrix}.
+        \notag
+    \end{align}
     Thus $LQ$ is idempotent, whereas every entry of $QL$ is strictly positive,
-    so $QL$ is primitive.  Its trace is one.  Since each sector is
+    so $QL$ is primitive. Its trace is one. Since each sector is
     one-dimensional, the neighboring operators are the scalar matrices
-
-    \[
-        \eta_{k,h}=\begin{pmatrix}(QL)_{k,h}\end{pmatrix}\succeq0.
-    \]
+    $\eta_{k,h}=\begin{pmatrix}(QL)_{k,h}\end{pmatrix}\succeq0$.
 
     The $(0,1)$ entry of $(QL)^2$ is $1/4$, while the corresponding entry of
-    $QL$ is $1/8$.  Hence $QL$ is not idempotent, and associativity gives
+    $QL$ is $1/8$. Hence $QL$ is not idempotent, and associativity gives
     $Q(1-LQ)L=QL-(QL)^2\ne0$.
 \end{proof}

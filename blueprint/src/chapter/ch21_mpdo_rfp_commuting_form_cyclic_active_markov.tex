@@ -1,4 +1,3 @@
-
 \begin{lemma}[Marginal stability under source zero correlation length]
     \label{lem:mpdo_source_zcl_marginal_stability}
     \lean{MPOTensor.%
@@ -7,25 +6,22 @@
       reducedBlockState_succ_succ_eq_succ_of_isSourceZCL}
     \leanok
     \uses{def:mpo_source_zcl, lem:mpdo_trace_loop_chain}
-    Let $M$ have source zero correlation length.  For every $N\geq0$, the
+    Let $M$ have source zero correlation length. For every $N\geq0$, the
     normalized $N$-site marginal obtained by tracing two sites from
     $\sigma^{(N+2)}(M)$ equals the normalized $N$-site marginal obtained by
     tracing one site from $\sigma^{(N+1)}(M)$.
 
     This is the first replacement at
-    \cite[Appendix~C.2, line~1613]{Cirac2016MPDO_arXiv}.  It does not imply
+    \cite[Appendix~C.2, line~1613]{Cirac2016MPDO_arXiv}. It does not imply
     the rank-one trace factorization asserted later on that line.
 \end{lemma}
 
 \begin{proof}\leanok
     Write $E=\mathcal T_M$ and choose $\lambda>0$ such that
-    $E^2=\lambda E$.  For physical configurations $u,v$ of length $N$, the
+    $E^2=\lambda E$. For physical configurations $u,v$ of length $N$, the
     two marginal matrix elements are
-    \[
-        \frac{\tr(M^{u,v}E^2)}{\tr(E^{N+2})}
-        \quad\text{and}\quad
-        \frac{\tr(M^{u,v}E)}{\tr(E^{N+1})}.
-    \]
+    $\tr(M^{u,v}E^2)/\tr(E^{N+2})$ and
+    $\tr(M^{u,v}E)/\tr(E^{N+1})$.
     The numerator and denominator on the left are respectively $\lambda$
     times those on the right, and source zero correlation length makes the
     denominator on the right nonzero.
@@ -39,7 +35,7 @@
     \lean{MPOTensor.reducedBlockState_add_three_eq_succ_of_isSourceZCL}
     \leanok
     \uses{lem:mpdo_source_zcl_marginal_stability}
-    Let $M$ have source zero correlation length.  For every $L\geq0$, the
+    Let $M$ have source zero correlation length. For every $L\geq0$, the
     normalized $L$-site marginal obtained by tracing three sites from
     $\sigma^{(L+3)}(M)$ equals the normalized $L$-site marginal obtained by
     tracing one site from $\sigma^{(L+1)}(M)$.
@@ -47,7 +43,7 @@
 
 \begin{proof}\leanok
     First retain $L+1$ sites and apply
-    Lemma~\ref{lem:mpdo_source_zcl_marginal_stability}.  Trace the last of
+    Lemma~\ref{lem:mpdo_source_zcl_marginal_stability}. Trace the last of
     these retained sites, and then apply the same lemma while retaining $L$
     sites.
 \end{proof}
@@ -58,13 +54,14 @@
     \leanok
     A rank-one trace factorization of neighboring matrices $\eta_{q,h}$
     consists of real numbers $a_q,b_h$ such that
-    \[
-        \tr(\eta_{q,h})=a_qb_h,
-        \qquad
-        \sum_q a_qb_q=1.
-    \]
+    \begin{align}
+        \tr(\eta_{q,h})&=a_qb_h,
+        \notag\\
+        \sum_q a_qb_q&=1.
+        \notag
+    \end{align}
     The factorization is an explicit assumption; it is not deduced from zero
-    correlation length.  It is the factorization invoked at
+    correlation length. It is the factorization invoked at
     \cite[Appendix~C.2, line~1613]{Cirac2016MPDO_arXiv}.
     % Scope restriction documented in
     % docs/paper-gaps/cpsv16_commuting_form_to_sal.tex.
@@ -76,19 +73,22 @@
     \leanok
     \uses{def:mpdo_generic_eta_rank_one_trace_factorization,
         def:mpdo_right_partial_trace_map, def:partial_trace_left}
-    Suppose $\eta_{q,h}$ has a rank-one trace factorization.  For fixed
+    Suppose $\eta_{q,h}$ has a rank-one trace factorization. For fixed
     boundary sectors $u,v$, set
-    \[
-        R_{u,q}=\tr_{H_{q,l}}(\eta_{u,q}),
-        \qquad
-        L_{h,v}=\tr_{H_{h,r}}(\eta_{h,v}).
-    \]
+    \begin{align}
+        R_{u,q}&=\tr_{H_{q,l}}(\eta_{u,q}),
+        \notag\\
+        L_{h,v}&=\tr_{H_{h,r}}(\eta_{h,v}).
+        \notag
+    \end{align}
     Then
-    \[
+    \begin{align}
         \sum_{q,h}\tr(\eta_{q,h})(R_{u,q}\otimes L_{h,v})
-        =\left(\sum_q a_qR_{u,q}\right)\otimes
-          \left(\sum_h b_hL_{h,v}\right).
-    \]
+        &=
+        \left(\sum_q a_qR_{u,q}\right)\otimes
+        \left(\sum_h b_hL_{h,v}\right).
+        \notag
+    \end{align}
     This is the corrected edge contraction at
     \cite[Appendix~C.2, lines~1613--1617]{Cirac2016MPDO_arXiv}.
 \end{lemma}
@@ -111,28 +111,29 @@
     \uses{def:mpdo_generic_eta_rank_one_trace_factorization,
         def:mpdo_right_partial_trace_map, def:partial_trace_left}
     Let $\eta_{q,h}$ be arbitrary matrices on
-    $H_{q,r}\otimes H_{h,l}$ with a rank-one trace factorization.  For a
+    $H_{q,r}\otimes H_{h,l}$ with a rank-one trace factorization. For a
     nonempty retained sector word $k=(k_0,\ldots,k_{L-1})$, write
-    \[
-        P_k=\bigotimes_{n=0}^{L-2}\eta_{k_n,k_{n+1}},
-        \qquad
-        R_{u,q}=\tr_{H_{q,l}}(\eta_{u,q}),
-        \qquad
-        L_{h,v}=\tr_{H_{h,r}}(\eta_{h,v}).
-    \]
+    \begin{align}
+        P_k&=\bigotimes_{n=0}^{L-2}\eta_{k_n,k_{n+1}},
+        \notag\\
+        R_{u,q}&=\tr_{H_{q,l}}(\eta_{u,q}),
+        \notag\\
+        L_{h,v}&=\tr_{H_{h,r}}(\eta_{h,v}).
+        \notag
+    \end{align}
     The edge contraction corresponding to tracing the two boundary sites of
     the longer cyclic chain is
-    \[
-    \begin{aligned}
+    \begin{align}
         &\bigoplus_k P_k\otimes
           \sum_{q,h}\tr(\eta_{q,h})
-            \bigl(R_{k_{L-1},q}\otimes L_{h,k_0}\bigr)\\
+            (R_{k_{L-1},q}\otimes L_{h,k_0})
+        \notag\\
         &\quad=
           \bigoplus_k P_k\otimes
           \left(\sum_q a_qR_{k_{L-1},q}\right)\otimes
           \left(\sum_h b_hL_{h,k_0}\right).
-    \end{aligned}
-    \]
+        \notag
+    \end{align}
     This is the edge-coordinate interpretation of the displayed
     fourth-region trace in
     \cite[Appendix~C.2, lines~1606 and 1613--1617]{Cirac2016MPDO_arXiv}.
@@ -141,7 +142,7 @@
 \begin{proof}\leanok
     \uses{lem:mpdo_eta_two_boundary_contraction_separated}
     Apply Lemma~\ref{lem:mpdo_eta_two_boundary_contraction_separated} for
-    each retained sector word.  Tensor with the unchanged product $P_k$ and
+    each retained sector word. Tensor with the unchanged product $P_k$ and
     take the direct sum over $k$.
 \end{proof}
 
@@ -149,7 +150,7 @@
     The theorem applies, in particular, to the positive chain-independent
     neighboring family supplied by
     Theorem~\ref{thm:mpdo_eta_local_sigma_nk2}, once the rank-one trace
-    factorization is given.  It does not derive that factorization, identify
+    factorization is given. It does not derive that factorization, identify
     this two-boundary contraction with a one-site marginal, or prove a Markov
     decomposition or saturation of the area law.
 \end{remark}
@@ -164,79 +165,92 @@
     There is an injective normal tensor $\mathcal K$, of physical dimension two
     and bond dimension one, which generates MPDOs and has source zero
     correlation length, together with one positive two-site bond $B$ whose
-    translates commute.  For every $N\geq2$,
-    \[
-        \sigma^{(N)}(\mathcal K)=\prod_{i=0}^{N-1}B_{i,i+1},
-    \]
+    translates commute. For every $N\geq2$,
+    \begin{align}
+        \sigma^{(N)}(\mathcal K)
+        &=\prod_{i=0}^{N-1}B_{i,i+1},
+        \notag
+    \end{align}
     while the trace matrix of a chosen two-sector Beigi factorization is
-    \[
-        T=\begin{pmatrix}1&0\\0&0\end{pmatrix}.
-    \]
+    \begin{align}
+        T&=\begin{pmatrix}1&0\\0&0\end{pmatrix}.
+        \notag
+    \end{align}
     In particular, $T$ is not primitive.
 
     This shows that primitivity cannot be inferred for an arbitrary selected
     factorization in the step suggested at
-    \cite[Appendix~C.2, line~1613]{Cirac2016MPDO_arXiv}.  The same tensor also
+    \cite[Appendix~C.2, line~1613]{Cirac2016MPDO_arXiv}. The same tensor also
     has a one-sector factorization with positive semidefinite neighboring
-    operator and primitive trace matrix.  Hence the example does not exclude a
+    operator and primitive trace matrix. Hence the example does not exclude a
     source-faithful minimal or visible-sector selection, and it does not
     disprove the stated commuting-form-to-SAL implication.
 \end{theorem}
 
 \begin{proof}\leanok
-    Let $\mathcal K^{0,0}=1$ and let all other physical entries vanish.  The
-    matrices $\{\mathcal K^{i,j}\}_{i,j=0}^1$ span $M_1(\mathbb C)$.  For every
+    Let $\mathcal K^{0,0}=1$ and let all other physical entries vanish. The
+    matrices $\{\mathcal K^{i,j}\}_{i,j=0}^1$ span $M_1(\mathbb C)$. For every
     $X\in M_1(\mathbb C)$, the doubled-index transfer $\mathcal E_{\mathcal K}$
     and the physical-trace transfer $P_{\mathcal K}$ satisfy
-    \[
-        \mathcal E_{\mathcal K}(X)=X,
-        \qquad P_{\mathcal K}=I_1,
-        \qquad P_{\mathcal K}^2=P_{\mathcal K}.
-    \]
+    \begin{align}
+        \mathcal E_{\mathcal K}(X)&=X,
+        \notag\\
+        P_{\mathcal K}&=I_1,
+        \notag\\
+        P_{\mathcal K}^2&=P_{\mathcal K}.
+        \notag
+    \end{align}
     Hence $\mathcal K$ is injective and normal and has source zero correlation
-    length.  Decompose the physical space nonminimally as
-    $\mathbb C\oplus\mathbb C$.  With $w_0=1$ and $w_1=0$, take both sector
-    factors to be the scalar $w_k$ in sector $k$.  The neighboring operators
+    length. Decompose the physical space nonminimally as
+    $\mathbb C\oplus\mathbb C$. With $w_0=1$ and $w_1=0$, take both sector
+    factors to be the scalar $w_k$ in sector $k$. The neighboring operators
     are
-    \[
-        \eta_{k,h}=w_kw_h I_1=\delta_{k,0}\delta_{h,0}I_1\succeq0.
-    \]
+    \begin{align}
+        \eta_{k,h}
+        &=w_kw_h I_1
+          =\delta_{k,0}\delta_{h,0}I_1
+          \succeq0.
+        \notag
+    \end{align}
     In the sector coordinates the corresponding physical bond is
-    \[
-        B=\sum_{k,h} I_{H_L^{(k)}}\otimes\eta_{k,h}\otimes
-        I_{H_R^{(h)}}
-        =I_{H_L^{(0)}}\otimes I_1\otimes I_{H_R^{(0)}}.
-    \]
+    \begin{align}
+        B
+        &=\sum_{k,h}\Id_{H_L^{(k)}}\otimes\eta_{k,h}\otimes
+          \Id_{H_R^{(h)}}
+        \notag\\
+        &=\Id_{H_L^{(0)}}\otimes I_1\otimes\Id_{H_R^{(0)}}.
+        \notag
+    \end{align}
     Since only the all-zero physical-index word contributes, the
     factorization identity is
-    \[
-        \sigma^{(N)}(\mathcal K)=\prod_{i=0}^{N-1}B_{i,i+1}
-        \qquad (N\geq2).
-    \]
+    \begin{align}
+        \sigma^{(N)}(\mathcal K)
+        &=\prod_{i=0}^{N-1}B_{i,i+1}.
+        \notag
+    \end{align}
     Consequently,
-    \[
-        T_{k,h}=\tr(\eta_{k,h})=\delta_{k,0}\delta_{h,0},
-        \qquad
-        T=\begin{pmatrix}1&0\\0&0\end{pmatrix}.
-    \]
+    \begin{align}
+        T_{k,h}
+        &=\tr(\eta_{k,h})
+          =\delta_{k,0}\delta_{h,0},
+        \notag\\
+        T&=\begin{pmatrix}1&0\\0&0\end{pmatrix}.
+        \notag
+    \end{align}
     For every $n\geq1$,
-    \[
-        T^n=\begin{pmatrix}1&0\\0&0\end{pmatrix}.
-    \]
+    $T^n=\begin{pmatrix}1&0\\0&0\end{pmatrix}$.
     Thus no positive power has all entries strictly positive, so $T$ is not
-    primitive.  For the alternative factorization, take one sector
+    primitive. For the alternative factorization, take one sector
     $B^L=\mathbb C^2$ and $B^R=\mathbb C$, with
-
-    \[
-        l=\begin{pmatrix}1&0\\0&0\end{pmatrix},
-        \qquad r=(1).
-    \]
+    \begin{align}
+        l&=\begin{pmatrix}1&0\\0&0\end{pmatrix},
+        \notag\\
+        r&=(1).
+        \notag
+    \end{align}
     Its sole neighboring operator is
     $\widehat\eta_{0,0}=\diag(1,0)\succeq0$, and hence its trace
-    matrix is
-    \[
-        \widehat T=\bigl(\tr(\widehat\eta_{0,0})\bigr)=(1).
-    \]
+    matrix is $\widehat T=(\tr(\widehat\eta_{0,0}))=(1)$.
     Every positive power of $\widehat T$ equals $(1)$, so this one-sector
     trace matrix is primitive.
 \end{proof}
@@ -257,19 +271,17 @@
       def:mpdo_minimal_neighboring_operator}
     For a physical-sector factorization with neighboring operators
     $\eta_{k,h}$, retain a sector $k$ when there is a sector $h$ such that
-    \[
-        \eta_{k,h}\ne0,
-        \qquad h\leadsto k,
-    \]
-    where $\leadsto$ denotes reachability by nonzero neighboring operators.
+    $\eta_{k,h}\ne0$ and $h\leadsto k$, where $\leadsto$ denotes reachability
+    by nonzero neighboring operators.
     The first edge $k\to h$ is explicit, so the resulting closed walk has
-    positive length even when the return path is empty.  The set $C$ of
+    positive length even when the return path is empty. The set $C$ of
     retained sectors is therefore exactly the set of vertices occurring in
     positive-length directed cycles, in the sense of
-    \cite[Section~III]{Beigi2012Classification}.  Define
-    \[
-        T_{k,h}=\re\tr(\eta_{k,h})\qquad(k,h\in C).
-    \]
+    \cite[Section~III]{Beigi2012Classification}. Define, for $k,h\in C$,
+    \begin{align}
+        T_{k,h}&=\re\tr(\eta_{k,h}).
+        \notag
+    \end{align}
     For positive semidefinite neighboring operators the trace is real, so
     $T_{k,h}=\tr(\eta_{k,h})$, and $T_{k,h}>0$ is equivalent to
     $\eta_{k,h}\ne0$.
@@ -291,23 +303,18 @@
     \uses{def:mpdo_cyclic_active_sector,
       def:mpdo_physical_sector_chain_coordinates}
     Let $N\geq1$ and let $k=(k_0,\ldots,k_{N-1})$ be a cyclic sector
-    configuration.  If $k_n\notin C$ for some $n$, then
-    \[
-        \Omega_k=0.
-    \]
+    configuration. If $k_n\notin C$ for some $n$, then $\Omega_k=0$.
     Thus deleting the sectors outside $C$ leaves every finite cyclic
-    neighboring product unchanged.  For every linear contraction $\Phi$,
+    neighboring product unchanged. For every linear contraction $\Phi$,
     including a composition of reindexings and partial traces,
-    \[
-        \Omega_k=0 \quad\Longrightarrow\quad \Phi(\Omega_k)=0.
-    \]
+    $\Omega_k=0$ implies $\Phi(\Omega_k)=0$.
 \end{theorem}
 
 \begin{proof}\leanok
     If $\Omega_k\ne0$, each factor $\eta_{k_n,k_{n+1}}$ is nonzero; otherwise
-    every matrix entry of the product vanishes.  Starting with the edge
+    every matrix entry of the product vanishes. Starting with the edge
     $k_n\to k_{n+1}$ and following the remaining cyclic edges gives a return
-    path to $k_n$.  Hence every $k_n$ belongs to $C$.  The last assertion is
+    path to $k_n$. Hence every $k_n$ belongs to $C$. The last assertion is
     the linear identity $\Phi(0)=0$.
 \end{proof}
 
@@ -330,46 +337,41 @@
     \leanok
     \uses{def:injective, def:mpdo_cyclic_active_sector}
     Suppose that the virtual dimension is positive, the MPO tensor is
-    injective, and every $\eta_{k,h}$ is positive semidefinite.  Then $C$ is
-    nonempty and the matrix $T$ is primitive.  More precisely, $T$ is
+    injective, and every $\eta_{k,h}$ is positive semidefinite. Then $C$ is
+    nonempty and the matrix $T$ is primitive. More precisely, $T$ is
     irreducible and every $k\in C$ satisfies
-    \[
-        (T^2)_{k,k}>0,
-        \qquad
-        (T^3)_{k,k}>0.
-    \]
+    \begin{align}
+        (T^2)_{k,k}&>0,
+        \notag\\
+        (T^3)_{k,k}&>0.
+        \notag
+    \end{align}
 \end{theorem}
 
 \begin{proof}\leanok
     The virtual matrices of all physical sectors span the full matrix
-    algebra.  If $A=A_k^{xy}$ is nonzero, nondegeneracy of the trace pairing
-    gives a virtual matrix $B=A_q^{uv}$ such that
-    \[
-        \tr(AB)\ne0.
-    \]
+    algebra. If $A=A_k^{xy}$ is nonzero, nondegeneracy of the trace pairing
+    gives a virtual matrix $B=A_q^{uv}$ such that $\tr(AB)\ne0$.
     Cyclicity gives $\tr(BA)=\tr(AB)\ne0$, and therefore
-    \[
-        \eta_{k,q}\ne0,
-        \qquad
-        \eta_{q,k}\ne0.
-    \]
+    $\eta_{k,q}\ne0$ and $\eta_{q,k}\ne0$.
     Thus a sector containing a nonzero virtual matrix lies on a directed
-    two-cycle.  Hence every virtual matrix outside $C$ vanishes, and the
+    two-cycle. Hence every virtual matrix outside $C$ vanishes, and the
     virtual matrices belonging to $C$ still span the full algebra.
 
     If a proper directed cut separated two nonempty subsets $C_1,C_2$ of
     $C$, let $V_{C_i}$ denote the span of the virtual matrices in $C_i$.
     Absence of an edge across the cut gives
-    \[
-        V_{C_1}V_{C_2}=\{0\},
-        \qquad
-        V_{C_1}+V_{C_2}=M_D(\mathbb C).
-    \]
-    Both spaces contain a nonzero matrix.  This contradicts the one-sided
+    \begin{align}
+        V_{C_1}V_{C_2}&=\{0\},
+        \notag\\
+        V_{C_1}+V_{C_2}&=M_D(\mathbb C).
+        \notag
+    \end{align}
+    Both spaces contain a nonzero matrix. This contradicts the one-sided
     product obstruction for two nonzero subspaces whose sum is the full
-    matrix algebra.  Thus $T$ is irreducible.  The same trace pairing gives a
+    matrix algebra. Thus $T$ is irreducible. The same trace pairing gives a
     two-edge return through each sector and closes every retained edge
-    through a third retained sector.  These yield the displayed positive
+    through a third retained sector. These yield the displayed positive
     diagonal entries of $T^2$ and $T^3$; the coprime return lengths imply
     primitivity.
 \end{proof}
@@ -394,36 +396,30 @@
       thm:matrix_primitive_pow_two_rank_one}
     Under the hypotheses of
     Theorem~\ref{thm:mpdo_cyclic_active_trace_matrix_primitive}, suppose that
-    the physical-trace transfer has source zero correlation length.  There is
+    the physical-trace transfer has source zero correlation length. There is
     a number $\lambda>0$ such that, with $\widehat T=\lambda^{-1}T$,
-    \[
-        \widehat T^2=\widehat T^3,
-        \qquad
-        \rank(\widehat T^2)=1,
-    \]
-    and for every $m\geq1$,
-    \[
-        \tr(\widehat T^m)=\tr(\widehat T).
-    \]
-    The matrix $\widehat T^2$ is the two-step coefficient
-    \[
-        (\widehat T^2)_{k,h}
-        =\sum_{q\in C}\widehat T_{k,q}\widehat T_{q,h}
-    \]
-    by matrix multiplication.  The assertion neither identifies
+    \begin{align}
+        \widehat T^2&=\widehat T^3,
+        \notag\\
+        \rank(\widehat T^2)&=1,
+        \notag
+    \end{align}
+    and $\tr(\widehat T^m)=\tr(\widehat T)$ for every $m\geq1$.
+    By matrix multiplication, the two-step coefficient is
+    $(\widehat T^2)_{k,h}=\sum_{q\in C}\widehat T_{k,q}\widehat T_{q,h}$. The assertion neither identifies
     $\widehat T$ with $\widehat T^2$ nor implies that the unreduced Beigi trace
     matrix is primitive or rank one.
 \end{theorem}
 
 \begin{proof}\leanok
-    Set the left sector tensor equal to zero outside $C$.  The preceding span
+    Set the left sector tensor equal to zero outside $C$. The preceding span
     argument shows that this does not change the physical tensor, and the
-    neighboring operators with both indices in $C$ are unchanged.  The
+    neighboring operators with both indices in $C$ are unchanged. The
     source zero-correlation-length relation, transported through this
     restricted factorization, gives
-    $\widehat T^2=\widehat T^3$ on the cyclic-active indices.  By
+    $\widehat T^2=\widehat T^3$ on the cyclic-active indices. By
     Theorem~\ref{thm:mpdo_cyclic_active_trace_matrix_primitive},
-    $\widehat T$ is primitive.  Its square is therefore a strictly positive
+    $\widehat T$ is primitive. Its square is therefore a strictly positive
     idempotent matrix and has rank one.
 \end{proof}
 
@@ -445,44 +441,47 @@
     \uses{def:mpdo_cyclic_active_sector,
       thm:mpdo_sector_closure_partial_traces}
     Let $C$ be the set of cyclic-active sectors and suppose that every
-    neighboring operator is positive semidefinite.  For $q,h\in C$,
-    \[
+    neighboring operator is positive semidefinite. For $q,h\in C$,
+    \begin{align}
         \sum_{r\in C}\tr(\eta_{q,r})\tr(\eta_{r,h})
-        =(T_C^2)_{q,h}.
-    \]
+        &=(T_C^2)_{q,h}.
+        \notag
+    \end{align}
     More generally, if $B_{q,h}(X)$ denotes the outer boundary operator in
     the three-site closure, then
-    \[
-      \sum_{r\in C}\tr_{\mathrm{mid}}
-        \bigl(B_{q,h}(X)\otimes\eta_{q,r}\otimes\eta_{r,h}\bigr)
-      =(T_C^2)_{q,h}B_{q,h}(X).
-    \]
-    Here $\tr_{\mathrm{mid}}$ traces both neighboring factors.  No equality
+    \begin{align}
+        \sum_{r\in C}\tr_{\mathrm{mid}}
+        (B_{q,h}(X)\otimes\eta_{q,r}\otimes\eta_{r,h})
+        &=(T_C^2)_{q,h}B_{q,h}(X).
+        \notag
+    \end{align}
+    Here $\tr_{\mathrm{mid}}$ traces both neighboring factors. No equality
     between $T_C$ and $T_C^2$ is asserted.
 
     For every $\lambda\in\R$, set
-    $\widehat T_C=\lambda^{-1}T_C$.  The same calculation with each fully
+    $\widehat T_C=\lambda^{-1}T_C$. The same calculation with each fully
     traced edge multiplied by $\lambda^{-1}$ gives
-    \[
-      \sum_{r\in C}
-        \lambda^{-1}\tr(\eta_{q,r})\,
+    \begin{align}
+        \sum_{r\in C}
+        \lambda^{-1}\tr(\eta_{q,r})
         \lambda^{-1}\tr(\eta_{r,h})
-      =(\widehat T_C^2)_{q,h}.
-    \]
+        &=(\widehat T_C^2)_{q,h}.
+        \notag
+    \end{align}
 \end{theorem}
 
 \begin{proof}\leanok
-    Positivity makes each $\tr(\eta_{a,b})$ real.  Expanding matrix
+    Positivity makes each $\tr(\eta_{a,b})$ real. Expanding matrix
     multiplication gives
-    \[
-      (T_C^2)_{q,h}=\sum_{r\in C}(T_C)_{q,r}(T_C)_{r,h}
-      =\sum_{r\in C}\tr(\eta_{q,r})\tr(\eta_{r,h}).
-    \]
+    \begin{align}
+        (T_C^2)_{q,h}
+        &=\sum_{r\in C}(T_C)_{q,r}(T_C)_{r,h}
+         =\sum_{r\in C}\tr(\eta_{q,r})\tr(\eta_{r,h}).
+        \notag
+    \end{align}
     The partial trace of the fixed-sector three-site closure is
-    \[
-      \tr(\eta_{q,r})\tr(\eta_{r,h})B_{q,h}(X).
-    \]
-    Summing over $r\in C$ proves the second identity.  Multiplying each of the
+    $\tr(\eta_{q,r})\tr(\eta_{r,h})B_{q,h}(X)$.
+    Summing over $r\in C$ proves the second identity. Multiplying each of the
     two trace factors by $\lambda^{-1}$ gives the normalized identity.
 \end{proof}
 
@@ -495,7 +494,7 @@
       thm:mpdo_cyclic_active_three_boundary_trace,
       thm:mpdo_cyclic_active_deletion}
     Let $\mathcal K$ be injective and have source zero correlation length,
-    and suppose its neighboring operators are positive semidefinite.  There
+    and suppose its neighboring operators are positive semidefinite. There
     are $\lambda>0$ and strictly positive functions $a,b$ on the
     cyclic-active sectors, normalized by $a\mathbin{\boldsymbol\cdot}b=1$,
     such that every fourth-region marginal is a direct sum over retained
@@ -512,8 +511,8 @@
 \begin{proof}\leanok
     The additional marginal replacement leaves the retained interior product
     unchanged and produces the two-step coefficient on the cyclic-active
-    sectors.  Its positive rank-one factorization separates the two surviving
-    boundary sums.  All sector words leaving the cyclic-active support vanish
+    sectors. Its positive rank-one factorization separates the two surviving
+    boundary sums. All sector words leaving the cyclic-active support vanish
     before the two outer partial traces are evaluated.
 \end{proof}
 
@@ -529,7 +528,7 @@
     arbitrary $A,C\geq 0$, the fourth-region marginal on consecutive regions
     of lengths $A$, $1$, and $C$ admits a Hayashi Markov decomposition.
     The middle site decomposes as the direct sum of its left and right sector
-    factors.  Each block is the tensor product of normalized positive left
+    factors. Each block is the tensor product of normalized positive left
     and right path states, and its probability is the product of their
     unnormalized traces divided by the positive periodic normalization.
 
@@ -540,12 +539,12 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    Separate the retained chain at the distinguished middle site.  The
+    Separate the retained chain at the distinguished middle site. The
     retained neighboring factors split into the left and right path products,
     while the two cyclic endpoint factors become their respective boundary
-    matrices.  Normalize each positive block by its trace, using an arbitrary
-    trace-one positive matrix when the block vanishes.  The trace-one identity
-    for the full marginal shows that the resulting nonnegative block weights
+    matrices. Normalize each positive block by its trace, using an arbitrary
+    trace-one positive matrix when the block vanishes. The trace-one identity
+    for the full marginal shows that the resulting non-negative block weights
     sum to one.
 \end{proof}
 
@@ -557,8 +556,8 @@
       thm:mpdo_all_cut_markov_implies_sal,
       thm:mpdo_physical_support_restriction_sal}
     Let $\mathcal K$ have positive bond dimension and be injective, and let
-    $F$ be a physical-sector factorization of $\mathcal K$.  Suppose every
-    neighboring operator $\eta^F_{q,h}$ is positive semidefinite.  If the
+    $F$ be a physical-sector factorization of $\mathcal K$. Suppose every
+    neighboring operator $\eta^F_{q,h}$ is positive semidefinite. If the
     physical-trace transfer of $\mathcal K$ has source zero correlation
     length, then $\mathcal K$ saturates the area law.
 
@@ -573,10 +572,10 @@
 
 \begin{proof}\leanok
     Positivity of the neighboring operators makes every nonempty
-    sector-coordinate chain operator positive.  Source zero correlation
-    length makes its trace nonzero.  Apply the preceding theorem with
+    sector-coordinate chain operator positive. Source zero correlation
+    length makes its trace nonzero. Apply the preceding theorem with
     $A=m-1$ and $C=N-m-1$ at every admissible cut, then use the all-cut
-    Markov criterion.  Finally transport saturation through the physical
+    Markov criterion. Finally transport saturation through the physical
     isometry of $F$.
 \end{proof}
 
@@ -585,13 +584,15 @@
     \notready
     \uses{def:mpdo_eta_local_structure_data, def:mpo_source_zcl,
         def:is_sal, def:mpdo, def:mpdo_injective_inverse_layer}
-    Let $\mathcal K$ be an injective normal tensor generating MPDOs.  Suppose
+    Let $\mathcal K$ be an injective normal tensor generating MPDOs. Suppose
     that there is one
     positive two-site bond $B$ whose translates commute and, for every
     $N\geq2$, a constant $c_N>0$ such that
-    \[
-        \sigma^{(N)}(\mathcal K)=c_N\prod_{i=0}^{N-1}B_{i,i+1}.
-    \]
+    \begin{align}
+        \sigma^{(N)}(\mathcal K)
+        &=c_N\prod_{i=0}^{N-1}B_{i,i+1}.
+        \notag
+    \end{align}
     If the physical-trace transfer of $\mathcal K$ has zero correlation
     length, then $\mathcal K$ saturates the area law.
 
@@ -648,19 +649,25 @@
     Suppose that $K$ satisfies $\mathrm{SAL}(K)$ and admits a physical-sector
     factorization whose neighboring operators $\eta_{k,h}$ are simultaneously
     positive semidefinite. The associated two-site bond is
-    \begin{equation}\label{eq:mpdo_eta_bond_assembly}
-        B=\sum_{k,h}
-        \operatorname{Id}_{H_L^{(k)}}\otimes
+    \begin{align}
+        B&=\sum_{k,h}
+        \Id_{H_L^{(k)}}\otimes
         \eta_{k,h}\otimes
-        \operatorname{Id}_{H_R^{(h)}},
-        \qquad B\ge 0,
-    \end{equation}
-    and, for every $N\ge 2$,
-    \begin{equation}\label{eq:mpdo_eta_product_form}
-        \sigma^{(N)}(K)=c_N\prod_{n=1}^{N}B_{n,n+1},
-        \qquad c_N>0,\qquad
-        [B_{i,i+1},B_{j,j+1}]=0.
-    \end{equation}
+        \Id_{H_R^{(h)}},
+        \label{eq:mpdo_eta_bond_assembly}\\
+        B&\geq0,
+        \notag
+    \end{align}
+    and, for every $N\geq2$,
+    \begin{align}
+        \sigma^{(N)}(K)
+        &=c_N\prod_{n=1}^{N}B_{n,n+1},
+        \label{eq:mpdo_eta_product_form}\\
+        c_N&>0,
+        \notag\\
+        [B_{i,i+1},B_{j,j+1}]&=0.
+        \notag
+    \end{align}
     Under this hypothesis,
     Theorem~\ref{thm:mpdo_eta_local_structure_of_positive_physical_sector_factorization}
     gives the $\eta$-local structure and proves

@@ -1,42 +1,44 @@
-
 \begin{definition}[Complete zipper fusion family]%
     \label{def:mpdo_complete_zipper_fusion_family}
     \lean{MPOTensor.CompleteZipperFusionFamily}
     \leanok
     \uses{def:mpo_tensor}
-    Let $\Lambda$ be a finite set.  A \emph{complete zipper fusion family}
+    Let $\Lambda$ be a finite set. A \emph{complete zipper fusion family}
     consists of positive bond dimensions $D_a$, MPO blocks
-    $B_a^{ij}\in M_{D_a}(\mathbb C)$, fusion multiplicities $N_{ab}^{c}$,
+    $B_a^{ij}\in\MN{D_a}$, fusion multiplicities $N_{ab}^{c}$,
     and matrices
-    \[
-        X^c_{ab,\mu}:\mathbb C^{D_c}\longrightarrow
-          \mathbb C^{D_a}\otimes\mathbb C^{D_b},
-        \qquad
-        X^{c+}_{ab,\mu}:\mathbb C^{D_a}\otimes\mathbb C^{D_b}
-          \longrightarrow\mathbb C^{D_c}.
-    \]
+    \begin{align}
+        X^c_{ab,\mu}&:\C^{D_c}\longrightarrow
+          \C^{D_a}\otimes\C^{D_b}, \notag\\
+        X^{c+}_{ab,\mu}&:\C^{D_a}\otimes\C^{D_b}
+          \longrightarrow\C^{D_c}. \notag
+    \end{align}
     The matrices $X^{c+}_{ab,\mu}$ are independently chosen left inverses,
-    not adjoints.  For all labels and multiplicity indices,
-    \[
+    not adjoints. For all labels and multiplicity indices,
+    \begin{align}
         X^{d+}_{ab,\nu}X^c_{ab,\mu}
-          =\delta_{cd}\delta_{\mu\nu}1_{D_c}.
-    \]
+        &=\delta_{cd}\delta_{\mu\nu}\Id_{D_c}.
+        \label{eq:rfp_fusion_biorthogonality}
+    \end{align}
     The opposite product
     $P_{ab}=\sum_{c,\mu}X^c_{ab,\mu}X^{c+}_{ab,\mu}$ is the projector onto
     the product-MPO support; it need not be the identity on the ambient bond
-    space.  Every product-MPO letter is reconstructed on this support:
-    \[
+    space. Every product-MPO letter is reconstructed on this support:
+    \begin{align}
         B_{ab}^{ik}
-          =\sum_{c,\mu}X^c_{ab,\mu}B_c^{ik}X^{c+}_{ab,\mu}.
-    \]
+        &=\sum_{c,\mu}X^c_{ab,\mu}B_c^{ik}X^{c+}_{ab,\mu}.
+        \label{eq:rfp_fusion_reconstruction}
+    \end{align}
     Writing $B_{ab}^{ik}=\sum_j B_a^{ij}\otimes B_b^{jk}$, the two zipper
     identities are
-    \[
-    \begin{aligned}
-        B_{ab}^{ik}X^c_{ab,\mu}&=X^c_{ab,\mu}B_c^{ik},\\
-        X^{c+}_{ab,\mu}B_{ab}^{ik}&=B_c^{ik}X^{c+}_{ab,\mu}.
-    \end{aligned}
-    \]
+    \begin{align}
+        B_{ab}^{ik}X^c_{ab,\mu}
+        &=X^c_{ab,\mu}B_c^{ik},
+        \label{eq:rfp_zipper_synthesis}\\
+        X^{c+}_{ab,\mu}B_{ab}^{ik}
+        &=B_c^{ik}X^{c+}_{ab,\mu}.
+        \label{eq:rfp_zipper_analysis}
+    \end{align}
     Each block is injective, and the labelled block-letter matrix has a common
     left inverse: its contraction with $B_d^{ij}$ is
     $\delta_{cd}E_{xy}$ on the block selected by $(c,x,y)$.
@@ -57,31 +59,31 @@
         thm:mpdo_one_letter_simultaneous_inverse,
         def:mpdo_complete_zipper_fusion_family}
     Suppose that the labelled tensors of a length-independent fusion family
-    form a source basis of normal tensors.  There is one common positive
-    blocking at which they determine a complete zipper fusion family.  Its
+    form a source basis of normal tensors. There is one common positive
+    blocking at which they determine a complete zipper fusion family. Its
     bond dimensions are the original labelled bond dimensions, its fusion
     multiplicities are
-    \[
-        N_{\alpha\beta}^{\gamma}
-          =\dim\chi_{\alpha,\beta,\gamma},
-    \]
+    $N_{\alpha\beta}^{\gamma}=\dim\chi_{\alpha,\beta,\gamma}$,
     its synthesis map is the adjoint of $U_{\alpha,\beta}$, and its analysis
     map is $U_{\alpha,\beta}$, after the canonical identification
-    $\mathbb C^{D_\alpha D_\beta}
-      \cong\mathbb C^{D_\alpha}\otimes\mathbb C^{D_\beta}$.
+    $\C^{D_\alpha D_\beta}
+      \cong\C^{D_\alpha}\otimes\C^{D_\beta}$.
     In particular, the two zipper identities, literal reconstruction,
     injectivity, and the simultaneous block-letter inverse are conclusions;
     none is an additional hypothesis.
 \end{theorem}
 \begin{proof}\leanok
-    Length independence makes every chi matrix the identity.  Use the common
+    Length independence makes every chi matrix the identity. Use the common
     positive BNT blocking for the labelled tensors and transport the fusion
-    equation through it.  Pair completeness gives
-    $U_{\alpha,\beta}U_{\alpha,\beta}^{\dagger}=1$, so analysis followed by
-    synthesis is the identity.  The other three matrix identities are the
-    two transported zipper equations and the reconstruction equation.  The
-    common one-letter product-algebra span supplies both block injectivity and
-    the simultaneous block-letter inverse.  These data are exactly those of
+    equation through it. Pair completeness gives
+    $U_{\alpha,\beta}U_{\alpha,\beta}^{\dagger}=\Id$, so analysis followed by
+    synthesis is the identity. The other three matrix identities are the
+    transported zipper identities
+    (\ref{eq:rfp_zipper_synthesis}) and
+    (\ref{eq:rfp_zipper_analysis}) and the reconstruction identity
+    (\ref{eq:rfp_fusion_reconstruction}). The common one-letter
+    product-algebra span supplies both block injectivity and the simultaneous
+    block-letter inverse. These data are exactly those of
     Definition~\ref{def:mpdo_complete_zipper_fusion_family}.
 \end{proof}
 
@@ -92,9 +94,10 @@
     \uses{def:mpdo_complete_zipper_fusion_family}
     Fix a final label $d$. Summing the diagonal matrix-unit coefficients of
     the simultaneous block inverse defines
-    \[
-        s_d(i,j)=\sum_{x=0}^{D_d-1}C_{(d,x,x),(i,j)}.
-    \]
+    \begin{align}
+        s_d(i,j)
+        &=\sum_{x=0}^{D_d-1}C_{(d,x,x),(i,j)}. \notag
+    \end{align}
     Here $C_{(d,x,y),(i,j)}$ denotes the coefficient of the simultaneous
     block inverse corresponding to the matrix unit $E_{xy}$ in block $d$.
 \end{definition}
@@ -106,19 +109,20 @@
     \leanok
     \uses{def:mpdo_complete_zipper_final_block_selector}
     The one-letter selector satisfies
-    \[
+    \begin{align}
         \sum_{i,j}s_d(i,j)B_e^{ij}
-        =\begin{cases}
-            I_{D_d},&e=d,\\
+        &=
+        \begin{cases}
+            \Id_{D_d},&e=d,\\
             0,&e\ne d.
-          \end{cases}
-    \]
+        \end{cases} \notag
+    \end{align}
     Thus one physical letter selects the identity on the chosen final block
     and annihilates every other final block.
 \end{lemma}
 \begin{proof}\leanok
     Apply the simultaneous block inverse entrywise and sum over the diagonal
-    matrix units of block $d$. If $e=d$, their sum is $I_{D_d}$; if
+    matrix units of block $d$. If $e=d$, their sum is $\Id_{D_d}$; if
     $e\ne d$, every term vanishes.
 \end{proof}
 
@@ -134,66 +138,69 @@
     \uses{def:mpdo_complete_zipper_fusion_family,
         lem:mpdo_complete_zipper_final_block_selector,
         lem:matrix_kronecker_identity_cancellation}
-    Fix $a,b,c,d\in\Lambda$.  There is an invertible matrix
-    \[
+    Fix $a,b,c,d\in\Lambda$. There is an invertible matrix
+    \begin{align}
         F^{abc}_d:
-        \bigoplus_e\mathbb C^{N_{ab}^{e}}\otimes
-          \mathbb C^{N_{ec}^{d}}
-        \longrightarrow
-        \bigoplus_f\mathbb C^{N_{bc}^{f}}\otimes
-          \mathbb C^{N_{af}^{d}}
-    \]
+        \bigoplus_e\C^{N_{ab}^{e}}\otimes\C^{N_{ec}^{d}}
+        &\longrightarrow
+        \bigoplus_f\C^{N_{bc}^{f}}\otimes\C^{N_{af}^{d}} \notag
+    \end{align}
     whose rows are indexed by $(f,\lambda,\sigma)$ and whose columns are
-    indexed by $(e,\mu,\nu)$.  Its entries satisfy
-    \[
-        (X^e_{ab,\mu}\otimes1)X^d_{ec,\nu}
-        =\sum_{f,\lambda,\sigma}
+    indexed by $(e,\mu,\nu)$. Its entries satisfy
+    \begin{align}
+        (X^e_{ab,\mu}\otimes\Id)X^d_{ec,\nu}
+        &=
+        \sum_{f,\lambda,\sigma}
           (F^{abc}_d)^{f\lambda\sigma}_{e\mu\nu}
-          (1\otimes X^f_{bc,\lambda})X^d_{af,\sigma}.
-    \]
-    The matrix in the opposite orientation is its two-sided inverse.  This is
+          (\Id\otimes X^f_{bc,\lambda})X^d_{af,\sigma}.
+        \label{eq:rfp_printed_fmove}
+    \end{align}
+    The matrix in the opposite orientation is its two-sided inverse. This is
     the printed $F$-move of \cite[Section~3.4]{Bultinck2017Anyons}.
 \end{theorem}
 \begin{proof}\leanok
     \uses{def:mpdo_complete_zipper_final_block_selector,
         lem:matrix_kronecker_identity_cancellation}
     Form the full left- and right-associated synthesis matrices $L$ and $R$
-    and their analysis matrices $L^+$ and $R^+$.  Applying the reconstruction
-    equation twice to the two associative decompositions gives
-    \[
-        B_{abc}^{il}=L D_{\mathrm L}^{il}L^+
+    and their analysis matrices $L^+$ and $R^+$. Applying
+    (\ref{eq:rfp_fusion_reconstruction}) twice to the two associative
+    decompositions gives
+    \begin{align}
+        B_{abc}^{il}
+        &=L D_{\mathrm L}^{il}L^+
           =R D_{\mathrm R}^{il}R^+.
-    \]
-    Contract this equality with the one-letter final-block selector from
-    Definition~\ref{def:mpdo_complete_zipper_final_block_selector}. The two
+        \label{eq:rfp_triple_reconstruction}
+    \end{align}
+    Contracting (\ref{eq:rfp_triple_reconstruction}) with the one-letter
+    final-block selector from
+    Definition~\ref{def:mpdo_complete_zipper_final_block_selector}, the two
     direct sums $D_{\mathrm L}$ and $D_{\mathrm R}$ both contract to the
-    identity.
-    Consequently,
-    \[
-        P:=LL^+=RR^+,
-        \qquad L^+L=R^+R=1.
-    \]
+    identity. Consequently,
+    \begin{align}
+        P&:=LL^+=RR^+,
+        \label{eq:rfp_triple_support}\\
+        L^+L&=R^+R=\Id. \notag
+    \end{align}
     Hence $R^+L$ changes left-tree coordinates into right-tree coordinates and
-    \[
-        R(R^+L)=(RR^+)L=PL=(LL^+)L=L.
-    \]
-    Its opposite-oriented comparison is $L^+R$.  Using the same support
-    identity,
-    \[
-        (R^+L)(L^+R)=R^+PR=1,
-        \qquad
-        (L^+R)(R^+L)=L^+PL=1.
-    \]
-    The zipper identities show that $R^+L$ intertwines the direct sums of the
-    final-block letters.  The simultaneous block inverse annihilates its
-    corners with different final labels.  On the $d$-diagonal corner,
-    injectivity gives
-    \[
-        (R^+L)_d=F^{abc}_d\otimes1_{D_d}.
-    \]
-    Restricting $R(R^+L)=L$ to this corner gives the displayed $F$-move.
+    \begin{align}
+        R(R^+L)
+        &=(RR^+)L=PL=(LL^+)L=L. \notag
+    \end{align}
+    Its opposite-oriented comparison is $L^+R$. Using
+    (\ref{eq:rfp_triple_support}),
+    \begin{align}
+        (R^+L)(L^+R)&=R^+PR=\Id, \notag\\
+        (L^+R)(R^+L)&=L^+PL=\Id. \notag
+    \end{align}
+    The zipper identities (\ref{eq:rfp_zipper_synthesis}) and
+    (\ref{eq:rfp_zipper_analysis}) show that $R^+L$ intertwines the direct
+    sums of the final-block letters. The simultaneous block inverse annihilates
+    its corners with different final labels. On the $d$-diagonal corner,
+    injectivity gives $(R^+L)_d=F^{abc}_d\otimes\Id_{D_d}$.
+    Restricting $R(R^+L)=L$ to this corner gives
+    (\ref{eq:rfp_printed_fmove}).
     The corresponding fixed-final corner of $L^+R$, together with
-    $(R^+L)(L^+R)=1=(L^+R)(R^+L)$, gives amplified inverse identities.
+    $(R^+L)(L^+R)=\Id=(L^+R)(R^+L)$, gives amplified inverse identities.
     Lemma~\ref{lem:matrix_kronecker_identity_cancellation} removes the
     nonempty bond-space identity factor and yields the two inverse identities
     for $F^{abc}_d$.
@@ -204,16 +211,17 @@
     % Each internal-edge label records the intermediate charge together with
     % its multiplicity coordinate; the root-edge label records the final
     % charge and the multiplicity coordinate of the second fusion.
-    \[
+    \begin{align}
         \tntree{((a\,b)_{e,\mu}\,c)_{d,\nu}}
-        =\sum_{f,\lambda,\sigma}
-          (F^{abc}_{d})^{f\lambda\sigma}_{e\mu\nu}\,
-          \tntree{(a\,(b\,c)_{f,\lambda})_{d,\sigma}}
-    \]
-    \caption{The source-oriented $F$-move.  The left-associated fusion tensor
-        is expanded in the right-associated fusion basis.  The upper indices
+        &=
+        \sum_{f,\lambda,\sigma}
+          (F^{abc}_{d})^{f\lambda\sigma}_{e\mu\nu}
+          \tntree{(a\,(b\,c)_{f,\lambda})_{d,\sigma}}. \notag
+    \end{align}
+    \caption{The source-oriented $F$-move. The left-associated fusion tensor
+        is expanded in the right-associated fusion basis. The upper indices
         $(f,\lambda,\sigma)$ label the rows of $F^{abc}_d$, and the lower
-        indices $(e,\mu,\nu)$ label its columns.  This is the printed-$F$
+        indices $(e,\mu,\nu)$ label its columns. This is the printed-$F$
         row/column convention used here for
         \cite[Section~3.4]{Bultinck2017Anyons}.}
     \label{fig:mpdo_complete_zipper_printed_fmove}
@@ -260,16 +268,16 @@
     \leanok
     \uses{def:mpdo_complete_zipper_fusion_family,
         thm:mpdo_complete_zipper_printed_fmove}
-    Fix labels $a,b,c,d,e$.  The five fusion trees in equation~(33) of
+    Fix labels $a,b,c,d,e$. The five fusion trees in equation~(33) of
     \cite{Bultinck2017Anyons} determine five multiplicity spaces and five
-    synthesis maps into the fourfold bond space.  These spaces use the integer
+    synthesis maps into the fourfold bond space. These spaces use the integer
     multiplicities $N_{ab}^{c}$ of the complete zipper family, rather than the
     weighted positive-diagonal coordinates introduced earlier.
 
     Each edge of the pentagon carries the printed $F$-matrix for the affected
     triple tensor factor and the identity on the untouched multiplicity
-    factor.  The three upper edges and the two lower edges define composites
-    in the forward orientation.  Replacing each edge by its inverse defines
+    factor. The three upper edges and the two lower edges define composites
+    in the forward orientation. Replacing each edge by its inverse defines
     the opposite-oriented composites whose entries occur literally in
     equation~(33).
 \end{definition}
@@ -293,7 +301,7 @@
       \tnarrow*[from=3, to=2]{F^{abj}_{e}}
     \end{tenkzcd}
     \caption{The five complete zipper fusion trees of
-        \cite[Section~3.4, equation~(33)]{Bultinck2017Anyons}.  Each arrow is
+        \cite[Section~3.4, equation~(33)]{Bultinck2017Anyons}. Each arrow is
         a printed $F$-move, with right-tree coordinates indexing rows and
         left-tree coordinates indexing columns.}
     \label{fig:mpdo_complete_zipper_fusion_pentagon}
@@ -311,33 +319,35 @@
         thm:mpdo_complete_zipper_printed_fmove,
         lem:matrix_kronecker_identity_cancellation}
     The three-edge and two-edge composites of the forward printed
-    $F$-matrices are equal.  The corresponding composites of the inverse
-    $F$-matrices are also equal.  In the upper/lower convention of
+    $F$-matrices are equal. The corresponding composites of the inverse
+    $F$-matrices are also equal. In the upper/lower convention of
     \cite[equation~(33)]{Bultinck2017Anyons}, the latter equality is
-    \begin{align*}
+    \begin{align}
       &\sum_{h,\sigma,\lambda,\omega}
         (F^{abc}_{g})^{f\mu\nu}_{h\sigma\lambda}
         (F^{ahd}_{e})^{g\lambda\rho}_{i\omega\kappa}
-        (F^{bcd}_{i})^{h\sigma\omega}_{j\gamma\delta} \\
+        (F^{bcd}_{i})^{h\sigma\omega}_{j\gamma\delta} \notag\\
       &\hspace{3em}=
         \sum_{\tau}
         (F^{fcd}_{e})^{g\nu\rho}_{j\gamma\tau}
-        (F^{abj}_{e})^{f\mu\tau}_{i\delta\kappa},
-    \end{align*}
-    where every displayed entry denotes the inverse of the forward matrix in
-    the $F$-move convention.
+        (F^{abj}_{e})^{f\mu\tau}_{i\delta\kappa}.
+        \label{eq:rfp_fusion_pentagon}
+    \end{align}
+    Every displayed entry denotes the inverse of the forward matrix in the
+    $F$-move convention.
 \end{theorem}
 \begin{proof}\leanok
     \uses{lem:matrix_kronecker_identity_cancellation}
     Apply the elementary three-block $F$-move along each of the five edges.
     Both paths give the same expansion in the right-associated fourfold
     fusion map. Its analysis map is a left inverse, by three successive
-    applications of fusion-tensor biorthogonality. This gives equality after
+    applications of fusion-tensor biorthogonality
+    (\ref{eq:rfp_fusion_biorthogonality}). This gives equality after
     tensoring with the identity on the nonzero final bond space, and
     Lemma~\ref{lem:matrix_kronecker_identity_cancellation} gives equality of
     the forward composites. The reverse composites are two-sided inverses of
-    this common matrix, hence they coincide. Taking a matrix entry gives the
-    displayed identity.
+    this common matrix, hence they coincide. Taking a matrix entry gives
+    (\ref{eq:rfp_fusion_pentagon}).
 \end{proof}
 
 \begin{theorem}[Coherence of four bond-coordinate reassociations]%
@@ -350,47 +360,46 @@
     \uses{def:mpdo_operator_product_associator,
         def:mpdo_bnt_fusion_isometry_family}
     Fix four labels $\alpha,\beta,\gamma,\delta$ in a BNT fusion-isometry
-    family, and write
-    \[
-        A=\{1,\ldots,D_\alpha\},\quad
-        B=\{1,\ldots,D_\beta\},\quad
-        C=\{1,\ldots,D_\gamma\},\quad
-        D=\{1,\ldots,D_\delta\}
-    \]
-    for their bond-coordinate sets.  Let
-    \[
-        r_{X,Y,Z}:((X\times Y)\times Z)\longrightarrow
-          X\times(Y\times Z)
-    \]
-    denote the canonical reassociation.  Define
-    \[
-    \begin{aligned}
-        r_1&=r_{A,B,C}\times 1_D,&
-        r_2&=r_{A,B\times C,D},&
-        r_3&=1_A\times r_{B,C,D},\\
-        s_1&=r_{A\times B,C,D},&
-        s_2&=r_{A,B,C\times D}.&&
-    \end{aligned}
-    \]
+    family, and write $A=\{1,\ldots,D_\alpha\}$,
+    $B=\{1,\ldots,D_\beta\}$, $C=\{1,\ldots,D_\gamma\}$, and
+    $D=\{1,\ldots,D_\delta\}$ for their bond-coordinate sets. Let
+    \begin{align}
+        r_{X,Y,Z}:((X\times Y)\times Z)
+        &\longrightarrow X\times(Y\times Z) \notag
+    \end{align}
+    denote the canonical reassociation. Define
+    \begin{align}
+        r_1&=r_{A,B,C}\times\Id_D, \notag\\
+        r_2&=r_{A,B\times C,D}, \notag\\
+        r_3&=\Id_A\times r_{B,C,D}, \notag\\
+        s_1&=r_{A\times B,C,D}, \notag\\
+        s_2&=r_{A,B,C\times D}. \notag
+    \end{align}
     The three-edge and two-edge reassociations from
     $(((A\times B)\times C)\times D)$ to
     $A\times(B\times(C\times D))$ coincide:
-    \[
-        r_3\circ r_2\circ r_1=s_2\circ s_1.
-    \]
+    \begin{align}
+        r_3\circ r_2\circ r_1
+        &=s_2\circ s_1.
+        \label{eq:rfp_bond_reassociation}
+    \end{align}
     If $P(r)_{x,y}=1$ when $r(x)=y$ and is zero otherwise, then the
     corresponding coordinate-permutation matrices satisfy
-    \[
-        P(r_1)P(r_2)P(r_3)=P(s_1)P(s_2).
-    \]
+    \begin{align}
+        P(r_1)P(r_2)P(r_3)
+        &=P(s_1)P(s_2).
+        \label{eq:rfp_bond_permutation}
+    \end{align}
     These are equalities of Cartesian bond-coordinate identifications only;
     they are distinct from the fusion-multiplicity identity in
     Theorem~\ref{thm:mpdo_complete_zipper_fusion_pentagon}.
 \end{theorem}
 \begin{proof}\leanok
     Every element $(((a,b),c),d)$ is sent by either composite to
-    $(a,(b,(c,d)))$.  The first equality follows.  The identity
-    $P(v\circ u)=P(u)P(v)$ then turns it into the stated matrix equality.
+    $(a,(b,(c,d)))$. This proves (\ref{eq:rfp_bond_reassociation}). The
+    identity $P(v\circ u)=P(u)P(v)$ then turns
+    (\ref{eq:rfp_bond_reassociation}) into
+    (\ref{eq:rfp_bond_permutation}).
 \end{proof}
 
 \begin{figure}[ht]
@@ -413,8 +422,8 @@
     \caption{The five parenthesizations of four bond-coordinate factors.
         The upper path is the three-edge composite
         $r_3\circ r_2\circ r_1$, and the lower path is the two-edge composite
-        $s_2\circ s_1$.  This figure depicts only canonical Cartesian
-        reassociation.  It does not contain fusion multiplicity spaces or
+        $s_2\circ s_1$. This figure depicts only canonical Cartesian
+        reassociation. It does not contain fusion multiplicity spaces or
         $F$-matrices.}
     \label{fig:mpdo_fourfold_bond_coordinate_reassociation}
 \end{figure}

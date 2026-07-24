@@ -9,26 +9,24 @@
         lem:mpdo_doubled_phys_trace_transfer_to_mps,
         lem:mpdo_doubled_phys_trace_transfer_blockwise}
     Suppose a tensor with zero correlation length is gauge-equivalent, through
-    block-diagonal copy gauges, to an assembled sector decomposition.  There
+    block-diagonal copy gauges, to an assembled sector decomposition. There
     is a scalar $\lambda>0$ such that every copy satisfies
-    \[
+    \begin{align}
       (\mu_{j,q}\mathcal T_{A_j})^2
-        =\lambda\mu_{j,q}\mathcal T_{A_j}.
-    \]
+        &=\lambda\mu_{j,q}\mathcal T_{A_j}.
+      \label{eq:rfp_block_zcl}
+    \end{align}
     This is the block equation in
     \cite[Appendix~C.2, lines~1652--1657]{Cirac2016MPDO_arXiv}.
 \end{lemma}
 
 \begin{proof}\leanok
     Write $\mathcal T_M=G\mathcal T_SG^{-1}$, where $G$ is the induced
-    block-diagonal gauge.  The equation
+    block-diagonal gauge. The equation
     $\mathcal T_M^2=\lambda\mathcal T_M$ therefore becomes
     $\mathcal T_S^2=\lambda\mathcal T_S$ after conjugation by $G^{-1}$.
     Restriction to the $(j,q)$-th diagonal block gives
-    \[
-      (\mu_{j,q}\mathcal T_{A_j})^2
-        =\lambda\mu_{j,q}\mathcal T_{A_j}.
-    \]
+    (\ref{eq:rfp_block_zcl}).
 \end{proof}
 
 \begin{theorem}[Copy independence for a non-nilpotent sector decomposition]
@@ -48,26 +46,24 @@
 
 \begin{proof}\leanok
     Zero correlation length states
-    $\mathcal T_M^{2}=\lambda\,\mathcal T_M$ with $\lambda>0$.  If
+    $\mathcal T_M^{2}=\lambda\mathcal T_M$ with $\lambda>0$. If
     $\mathcal T_M=X\mathcal T_SX^{-1}$ is the block-diagonal gauge to the
     transfer of the assembled sector decomposition, then cancellation of
-    $X$ and $X^{-1}$ gives
-    \[
-        \mathcal T_S^{2}=\lambda\,\mathcal T_S.
-    \]
+    $X$ and $X^{-1}$ gives $\mathcal T_S^{2}=\lambda\mathcal T_S$.
     By
     Lemmas~\ref{lem:mpdo_doubled_phys_trace_transfer_to_mps}
-    and~\ref{lem:mpdo_doubled_phys_trace_transfer_blockwise} the identity
+    and~\ref{lem:mpdo_doubled_phys_trace_transfer_blockwise}, the identity
     descends to every copy:
-    \[
-        \mu_{j,q}^{2}\,\mathcal T_{A_{j}}^{2}
-        =\lambda\,\mu_{j,q}\,\mathcal T_{A_{j}},
-        \qquad\text{hence}\qquad
-        \mathcal T_{A_{j}}^{2}
-        =\frac{\lambda}{\mu_{j,q}}\,\mathcal T_{A_{j}}.
-    \]
+    \begin{align}
+        \mu_{j,q}^{2}\mathcal T_{A_j}^{2}
+        &=\lambda\mu_{j,q}\mathcal T_{A_j},
+        \notag\\
+        \mathcal T_{A_j}^{2}
+        &=\frac{\lambda}{\mu_{j,q}}\mathcal T_{A_j}.
+        \notag
+    \end{align}
     The left side does not depend on $q$, and
-    $\mathcal T_{A_{j}}\ne0$ because it is not nilpotent, so
+    $\mathcal T_{A_j}\ne0$ because it is not nilpotent, so
     $\lambda/\mu_{j,q}$ is independent of $q$, which gives
     $\mu_{j,q}=\mu_{j,q'}$.
 \end{proof}
@@ -98,9 +94,10 @@
     Suppose the weights over each representative do not depend on the copy
     index. Choose the common weight $\mu_j$ from any copy over $j$ and absorb
     it into the representative:
-    \[
-        \mathcal K_j=\mu_j A_j.
-    \]
+    \begin{align}
+        \mathcal K_j&=\mu_j A_j.
+        \notag
+    \end{align}
     This is the convention of
     \cite[Appendix~C.2, equation~CFK, lines~1660--1665]
       {Cirac2016MPDO_arXiv}.
@@ -127,9 +124,10 @@
       def:sector_weight_data, lem:mpdo_copy_weight_eq_common_weight}
     Let $r_j$ be the number of horizontal copies of representative $j$. Then
     its coefficient on a chain of length $N$ is
-    \[
-        \sum_q\mu_{j,q}^{N}=r_j\mu_j^{N}.
-    \]
+    \begin{align}
+        \sum_q\mu_{j,q}^{N}&=r_j\mu_j^{N}.
+        \notag
+    \end{align}
     Thus the natural multiplicity is the horizontal copy count $r_j$.
 \end{theorem}
 
@@ -145,9 +143,10 @@
     \uses{def:sector_weight_data,
       thm:mpdo_common_weight_coefficient}
     The common weight is nonzero, and hence for every chain length $N$,
-    \[
-        q_j=\sum_q\mu_{j,q}^{N}=r_j\mu_j^{N}\ne0.
-    \]
+    \begin{align}
+        q_j=\sum_q\mu_{j,q}^{N}&=r_j\mu_j^{N}\ne0.
+        \notag
+    \end{align}
     This is the coefficient nonvanishing used in the choice
     $m_j=q_j\widetilde m_j$ in
     \cite[Appendix~C.2, lines~1714--1718]{Cirac2016MPDO_arXiv}.
@@ -156,7 +155,7 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    The distinguished copy weight is nonzero by the sector data.  Since
+    The distinguished copy weight is nonzero by the sector data. Since
     $r_j>0$, both factors in $r_j\mu_j^N$ are nonzero.
 \end{proof}
 
@@ -173,21 +172,20 @@
       thm:mpdo_common_weight_coefficient_ne_zero}
     Suppose the weights over each representative are independent of the copy
     index, and none of the physical-trace transfers
-    $\mathcal B_j=\sum_i A_j^{ii}$ is nilpotent.  There is one positive tail
+    $\mathcal B_j=\sum_i A_j^{ii}$ is nilpotent. There is one positive tail
     length $L$ such that, for every representative $A_j$, some virtual indices
     $\alpha,\beta$ satisfy
-    \[
-        \widetilde m_j
-        =\bigl[\mathcal B_j^L\bigr]_{\alpha,\beta}
-        \ne0.
-    \]
+    $\widetilde m_j=[\mathcal B_j^L]_{\alpha,\beta}\ne0$.
     At total chain length $L+3$, the corresponding copy coefficient is
-    $q_j=\sum_q\mu_{j,q}^{L+3}\ne0$.  Thus the three-site closing matrix
-    \[
-        R_j=q_j\mathcal B_j^L
-    \]
-    has the nonzero entry
-    $(R_j)_{\alpha,\beta}=q_j\widetilde m_j\ne0$.
+    $q_j=\sum_q\mu_{j,q}^{L+3}\ne0$. Thus the three-site closing matrix
+    satisfies
+    \begin{align}
+        R_j&=q_j\mathcal B_j^L,
+        \notag\\
+        (R_j)_{\alpha,\beta}
+        &=q_j\widetilde m_j\ne0.
+        \notag
+    \end{align}
     This is the traced-tail selection made in
     \cite[Appendix~C.2, lines~1714--1718]{Cirac2016MPDO_arXiv}.
 \end{theorem}
@@ -195,8 +193,8 @@
 \begin{proof}\leanok
     Since $\mathcal B_j$ is not nilpotent, every positive power of
     $\mathcal B_j$ is nonzero; in particular, one common positive power has a
-    nonzero entry for every $j$.  The preceding theorem supplies the nonzero
-    coefficient at length $L+3$.  Therefore its product with the selected
+    nonzero entry for every $j$. The preceding theorem supplies the nonzero
+    coefficient at length $L+3$. Therefore its product with the selected
     entry of $\mathcal B_j^L$ is nonzero.
 \end{proof}
 
@@ -209,9 +207,10 @@
       thm:mpdo_common_weight_coefficient}
     After absorbing the common weight, the matrix product vector of the
     assembled tensor is
-    \[
-        \mathcal V_N(S)=\sum_j r_j\,\mathcal V_N(\mathcal K_j).
-    \]
+    \begin{align}
+        \mathcal V_N(S)&=\sum_j r_j\mathcal V_N(\mathcal K_j).
+        \notag
+    \end{align}
     This is equation~CFK of
     \cite[Appendix~C.2, lines~1660--1665]{Cirac2016MPDO_arXiv}; the same
     multiplicities occur in equation~sigmaNKj of
@@ -230,29 +229,30 @@
     \lean{MPOTensor.outerInverseContraction}
     \leanok
     Let $(\mathcal K_s)_s$ be a finite family of MPO tensors, with
-    $\mathcal K_s^{ij}\in M_{D_s}(\C)$, and let $R_s\in M_{D_s}(\C)$.
+    $\mathcal K_s^{ij}\in\MN{D_s}$, and let $R_s\in\MN{D_s}$.
     A three-site operator is a family closure when
-    \[
+    \begin{align}
         \rho_{i_1i_2i_3,j_1j_2j_3}
-        =\sum_s\tr\!\left(
-          \mathcal K_s^{i_1j_1}\mathcal K_s^{i_2j_2}
+        &=\sum_s\tr\!\left(\mathcal K_s^{i_1j_1}\mathcal K_s^{i_2j_2}
           \mathcal K_s^{i_3j_3}R_s\right).
-    \]
+        \notag
+    \end{align}
     Given a simultaneous left inverse $C$ as in
     Theorem~\ref{thm:mpdo_one_letter_simultaneous_inverse}, contracting $C$
     against the first and third physical sites of $\rho$ defines the outer
     inverse contraction
-    \[
+    \begin{align}
         (\Gamma_{x,y})_{i_2j_2}
-        =\sum_{i_1,j_1,i_3,j_3}
+        &=\sum_{i_1,j_1,i_3,j_3}
           C_{x,(i_1,j_1)}C_{y,(i_3,j_3)}
           \rho_{(i_1,i_2,i_3),(j_1,j_2,j_3)}.
-    \]
+        \notag
+    \end{align}
     The closure is the sector-sum form of the displayed equation for
     $\sigma_3^{(N)}$ in
     \cite[Appendix~C.2, lines~1343--1348]{Cirac2016MPDO_arXiv}, used with the
     block-canonical tensor in the Case II calculation at
-    \cite[Appendix~C.2, lines~1726--1732]{Cirac2016MPDO_arXiv}.  The outer
+    \cite[Appendix~C.2, lines~1726--1732]{Cirac2016MPDO_arXiv}. The outer
     contraction is the sector-family form of the Case I contraction in
     \cite[Appendix~C.2, lines~1415--1438]{Cirac2016MPDO_arXiv}; the same
     construction is used with sector projectors at lines~1719--1725.
@@ -273,21 +273,23 @@
     representation $S$, the copy weights over each representative agree, the
     physical-trace transfers
     $\mathcal B_j=\sum_iA_j^{ii}$ are not nilpotent, and the original tensor
-    satisfies SAL.  After identifying length-three configurations with
+    satisfies SAL. After identifying length-three configurations with
     ordered triples, the normalized three-site marginal of the four-site
     state is the family closure
-    \[
+    \begin{align}
       (\sigma^{(4)}_3)_{i_1i_2i_3,j_1j_2j_3}
-      =\sum_j\tr\!\left(
-        A_j^{i_1j_1}A_j^{i_2j_2}A_j^{i_3j_3}\widehat R_j\right),
-    \]
+      &=\sum_j\tr\!\left(A_j^{i_1j_1}A_j^{i_2j_2}A_j^{i_3j_3}\widehat R_j\right),
+      \notag
+    \end{align}
     where
-    \[
+    \begin{align}
       \widehat R_j
-      =\tr(\rho^{(4)})^{-1}q_j\mathcal B_j,
-      \qquad q_j=\sum_q\mu_{j,q}^{4}.
-    \]
-    Every $\widehat R_j$ is nonzero.  More generally, a tail of length $L$
+      &=\tr(\rho^{(4)})^{-1}q_j\mathcal B_j,
+      \notag\\
+      q_j&=\sum_q\mu_{j,q}^{4}.
+      \notag
+    \end{align}
+    Every $\widehat R_j$ is nonzero. More generally, a tail of length $L$
     gives
     $\widehat R_j=\tr(\rho^{(L+3)})^{-1}q_j\mathcal B_j^L$.
     This is the normalized traced-tail expansion used in
@@ -297,9 +299,9 @@
 \begin{proof}\leanok
     Equality of the positive-length matrix-product-vector families expands every
     matrix entry of the original operator as the sum of the BNT entries with
-    coefficients $q_j$.  Summing the diagonal physical configurations of the
-    tail gives $\mathcal B_j^L$.  The global normalization multiplies every
-    closing matrix by $\tr(\rho^{(L+3)})^{-1}$.  At $L=1$, SAL makes this
+    coefficients $q_j$. Summing the diagonal physical configurations of the
+    tail gives $\mathcal B_j^L$. The global normalization multiplies every
+    closing matrix by $\tr(\rho^{(L+3)})^{-1}$. At $L=1$, SAL makes this
     scalar nonzero, copy independence makes $q_j$ nonzero, and
     nonnilpotence makes $\mathcal B_j$ nonzero.
 \end{proof}
@@ -312,17 +314,15 @@
     \uses{def:mpdo_three_site_family_closure,
       def:mpdo_block_left_inverse}
     Let $x=(s,\alpha_1,\beta_1)$ and
-    $y=(t,\alpha_3,\beta_3)$.  For a three-site family closure and a
+    $y=(t,\alpha_3,\beta_3)$. For a three-site family closure and a
     simultaneous left inverse, the outer inverse contraction vanishes when
-    $s\ne t$.  When $s=t$, it is
-    \[
-        (\mathcal K_s^{i_2j_2})_{\beta_1,\alpha_3}
-        (R_s)_{\beta_3,\alpha_1}.
-    \]
+    $s\ne t$. When $s=t$, it is
+    $(\mathcal K_s^{i_2j_2})_{\beta_1,\alpha_3}
+    (R_s)_{\beta_3,\alpha_1}$.
     In particular, the contraction retains precisely one entry of the middle
     physical slice and one entry of the closing matrix, with the orientation
-    shown above.  This is the sector-family form of the Case I contraction in
-    \cite[Appendix~C.2, lines~1415--1438]{Cirac2016MPDO_arXiv}.  The
+    shown above. This is the sector-family form of the Case I contraction in
+    \cite[Appendix~C.2, lines~1415--1438]{Cirac2016MPDO_arXiv}. The
     basis-of-normal-tensors inverse is constructed at lines~1666--1676 and the
     resulting contraction is used in the Case II calculation at
     lines~1719--1732 of the same appendix.
@@ -333,21 +333,24 @@
 
 \begin{proof}\leanok
     Expand the family closure and interchange the finite sector and physical
-    sums.  For $x=(x_s,x_\alpha,x_\beta)$, the inverse identity is
-    \[
+    sums. For $x=(x_s,x_\alpha,x_\beta)$, the inverse identity is
+    \begin{align}
         \sum_{i,j} C_{x,(i,j)}\mathcal K_s^{ij}
-        =\begin{cases}
+        &=
+        \begin{cases}
           E_{x_\alpha,x_\beta},&x_s=s,\\
           0,&x_s\ne s.
         \end{cases}
-    \]
-    Hence distinct labels give zero.  For equal labels, the remaining trace is
-    \[
+        \notag
+    \end{align}
+    Hence distinct labels give zero. For equal labels, the remaining trace is
+    \begin{align}
         \tr\!\left(E_{\alpha_1,\beta_1}\mathcal K_s^{i_2j_2}
           E_{\alpha_3,\beta_3}R_s\right)
-        =(\mathcal K_s^{i_2j_2})_{\beta_1,\alpha_3}
+        &=(\mathcal K_s^{i_2j_2})_{\beta_1,\alpha_3}
           (R_s)_{\beta_3,\alpha_1}.
-    \]
+        \notag
+    \end{align}
 \end{proof}
 
 \begin{corollary}[Three-site collapse from the one-letter span]

@@ -1,35 +1,37 @@
-
 \begin{theorem}[Unitary relabelling of transported vertical sectors]
     \label{thm:mpdo_transported_vertical_sector_unitary_relabeling}
     \lean{MPOTensor.transportedVerticalSector_exists_unitaryBlockEquiv}
     \leanok
     Under the hypotheses of Theorem~
     \ref{thm:mpdo_transported_vertical_sector_composites_identity}, write
-    \[
-      \mathcal A_1=\prod_{\alpha}M_{D^{(1)}_\alpha}(\C),
-      \qquad
-      \mathcal A_2=\prod_{\beta}M_{D^{(2)}_\beta}(\C).
-    \]
+    \begin{align}
+      \mathcal A_1&=\prod_{\alpha}\MN{D^{(1)}_\alpha},
+      &
+      \mathcal A_2&=\prod_{\beta}\MN{D^{(2)}_\beta}.
+      \notag
+    \end{align}
     There are an equivalence $\sigma$ of the two sector index sets, equalities
     $D^{(1)}_\alpha=D^{(2)}_{\sigma(\alpha)}$, and unitaries
-    $V_\alpha\in M_{D^{(2)}_{\sigma(\alpha)}}(\C)$ such that
-    \[
+    $V_\alpha\in \MN{D^{(2)}_{\sigma(\alpha)}}$ such that
+    \begin{align}
       \widetilde T(0,\ldots,0,X,0,\ldots,0)
-      =(0,\ldots,0,V_\alpha\,\iota_\alpha(X)\,V_\alpha^*,0,\ldots,0),
-    \]
+      &=(0,\ldots,0,V_\alpha\,\iota_\alpha(X)\,V_\alpha^*,0,\ldots,0),
+      \notag
+    \end{align}
     where the nonzero entry on the right is in position $\sigma(\alpha)$, and
-    \[
+    \begin{align}
       \widetilde S(0,\ldots,0,Y,0,\ldots,0)
-      =(0,\ldots,0,\iota_\alpha^{-1}
+      &=(0,\ldots,0,\iota_\alpha^{-1}
         (V_\alpha^*YV_\alpha),0,\ldots,0),
-    \]
+      \notag
+    \end{align}
     where the entries on the left and right are in positions $\sigma(\alpha)$
-    and $\alpha$, respectively.  These identities hold for every
-    $X\in M_{D^{(1)}_\alpha}(\C)$ and
-    $Y\in M_{D^{(2)}_{\sigma(\alpha)}}(\C)$.
+    and $\alpha$, respectively. These identities hold for every
+    $X\in \MN{D^{(1)}_\alpha}$ and
+    $Y\in \MN{D^{(2)}_{\sigma(\alpha)}}$.
     Here $\iota_\alpha$ is the reindexing induced by the displayed dimension
-    equality.  These are the mutually inverse unitary formulas of
-    \cite[Appendix~C.4, line~1997]{Cirac2016MPDO_arXiv}.  They make no assertion
+    equality. These are the mutually inverse unitary formulas of
+    \cite[Appendix~C.4, line~1997]{Cirac2016MPDO_arXiv}. They make no assertion
     about the multiplicities, weights, or coefficient identity at
     lines~2001--2008.
 \end{theorem}
@@ -41,10 +43,10 @@
       thm:mpdo_transported_vertical_sector_composites_schwarz,
       thm:mpdo_transported_vertical_sector_composites_identity}
     The two basis-of-normal-tensors decompositions have positive matrix
-    dimensions.  The transported maps are completely positive and preserve
+    dimensions. The transported maps are completely positive and preserve
     the total block trace, and the preceding theorem gives both inverse laws.
     Apply Theorem~\ref{thm:direct_sum_inverse_cptp_forward_unitary} to this
-    pair.  Its equivalence of summands, dimension equalities, and unitary
+    pair. Its equivalence of summands, dimension equalities, and unitary
     matrices give the two displayed formulas without changing the chosen
     relabelling.
 \end{proof}
@@ -57,27 +59,25 @@
     \ref{thm:mpdo_transported_vertical_sector_unitary_relabeling}, let
     $\mu_\alpha$ and $\nu_\beta$ be the positive diagonal multiplicity
     matrices in the one-site and two-site vertical canonical forms, and set
-    \[
-      m_\alpha=\tr(\mu_\alpha),
-      \qquad
-      n_\beta=\tr(\nu_\beta).
-    \]
+    $m_\alpha=\tr(\mu_\alpha)$ and $n_\beta=\tr(\nu_\beta)$.
     For every horizontal bond matrix $X$ and every sector $\alpha$,
-    \[
+    \begin{align}
       A^{(2)}_{\sigma(\alpha)}(X)
-      =\frac{m_\alpha}{n_{\sigma(\alpha)}}
-        V_\alpha\,
-        \iota_\alpha\bigl(A^{(1)}_\alpha(X)\bigr)V_\alpha^*.
-    \]
+      &=\frac{m_\alpha}{n_{\sigma(\alpha)}}
+        V_\alpha
+        \iota_\alpha(A^{(1)}_\alpha(X))V_\alpha^*.
+      \notag
+    \end{align}
     Consequently, for every tensor letter $a$,
-    \[
+    \begin{align}
       A^{(2)}_{\sigma(\alpha),a}
-      =\frac{m_\alpha}{n_{\sigma(\alpha)}}
+      &=\frac{m_\alpha}{n_{\sigma(\alpha)}}
         V_\alpha\,\iota_\alpha
-          \bigl(A^{(1)}_{\alpha,a}\bigr)V_\alpha^*.
-    \]
+          (A^{(1)}_{\alpha,a})V_\alpha^*.
+      \notag
+    \end{align}
     This is the coefficient identity in
-    \cite[Appendix~C.4, lines~2001--2008]{Cirac2016MPDO_arXiv}.  It compares
+    \cite[Appendix~C.4, lines~2001--2008]{Cirac2016MPDO_arXiv}. It compares
     the traces of the multiplicity matrices; it does not assert equality of
     their dimensions or of their individual diagonal entries.
 \end{theorem}
@@ -88,12 +88,13 @@
       thm:mpdo_transported_vertical_sector_unitary_relabeling,
       thm:mpdo_transported_vertical_sector_maps}
     Decompose the weighted contraction family into its individual matrix
-    summands.  At the summand paired with $\alpha$, the unitary formula gives
-    \[
+    summands. At the summand paired with $\alpha$, the unitary formula gives
+    \begin{align}
       m_\alpha V_\alpha
-        \iota_\alpha\bigl(A^{(1)}_\alpha(X)\bigr)V_\alpha^*
-      =n_{\sigma(\alpha)}A^{(2)}_{\sigma(\alpha)}(X).
-    \]
+        \iota_\alpha(A^{(1)}_\alpha(X))V_\alpha^*
+      &=n_{\sigma(\alpha)}A^{(2)}_{\sigma(\alpha)}(X).
+      \notag
+    \end{align}
     Positivity of $\nu_{\sigma(\alpha)}$ makes
     $n_{\sigma(\alpha)}$ nonzero, so division gives the first identity.
     Taking $X$ to be a matrix unit gives the tensor-letter identity.
@@ -113,35 +114,32 @@
       def:vertical_cf_mpdo, def:mpdo_two_site_blocking}
     Under the hypotheses and with the sector correspondence of Theorem~
     \ref{thm:mpdo_transported_vertical_sector_coefficient_comparison}, let
-    \(B\) be the vertical reading of the two-site blocking, and write
-    \[
-      O_L(A)=\Tr_{\mathrm{bond}}
-        \bigl(A_{i_1}\cdots A_{i_L}\bigr)
-    \]
-    for the length-$L$ closed-chain operator.  If $L>0$, then the same
+    $B$ be the vertical reading of the two-site blocking, and write
+    $O_L(A)=\Tr_{\mathrm{bond}}(A_{i_1}\cdots A_{i_L})$
+    for the length-$L$ closed-chain operator. If $L>0$, then the same
     equivalence $\sigma$, dimension identifications, and unitaries appearing
     in the tensor-letter identity satisfy
-    \[
-    \begin{aligned}
+    \begin{align}
       O_L(B)
       &=\sum_\alpha
         \left(\frac{m_\alpha}{n_{\sigma(\alpha)}}\right)^L
         \tr\!\left(\nu_{\sigma(\alpha)}^L\right)
-        O_L\!\left(A^{(1)}_\alpha\right), \\
+        O_L\!\left(A^{(1)}_\alpha\right),
+      \notag\\
       O_L(B)
       &=\sum_{\alpha,\beta}
         \tr(\mu_\alpha^L)
         \tr(\mu_\beta^L)
         O_L\!\left(A^{(1)}_\alpha\right)
         O_L\!\left(A^{(1)}_\beta\right).
-    \end{aligned}
-    \]
+      \notag
+    \end{align}
     These are the two representations in
     \cite[Appendix~C.4, lines~2011--2018]{Cirac2016MPDO_arXiv}.
 
     \textbf{Local fix (blocked coefficient exponent):} CPSV16 Appendix C.4,
-    line~2013 prints $m_\gamma^L/n_\gamma$.  The line-2008 tensor scaling and
-    line~2040 give $(m_\gamma/n_\gamma)^L$.  This is documented in
+    line~2013 prints $m_\gamma^L/n_\gamma$. The line-2008 tensor scaling and
+    line~2040 give $(m_\gamma/n_\gamma)^L$. This is documented in
     \path{docs/paper-gaps/cpsv16_blocked_operator_trace_ratio_exponent.tex}.
 \end{theorem}
 
@@ -149,28 +147,22 @@
     \uses{thm:mpdo_operator_product_mpo, lem:mpv_vertical_assembled,
       thm:mpdo_transported_vertical_sector_coefficient_comparison}
     The two-site vertical canonical form first gives
-    \[
-      O_L(B)=\sum_\delta
-        \tr(\nu_\delta^L)
-        O_L\!\left(A^{(2)}_\delta\right).
-    \]
-    Reindex this sum by $\delta=\sigma(\alpha)$.  The tensor-letter identity
+    $O_L(B)=\sum_\delta\tr(\nu_\delta^L)
+    O_L(A^{(2)}_\delta)$.
+    Reindex this sum by $\delta=\sigma(\alpha)$. The tensor-letter identity
     from the preceding theorem multiplies every letter of
     $A^{(1)}_\alpha$ by
-    $m_\alpha/n_{\sigma(\alpha)}$.  Along a chain of length $L$ this scalar
+    $m_\alpha/n_{\sigma(\alpha)}$. Along a chain of length $L$ this scalar
     therefore occurs to the power $L$; unitary conjugation and the bond-index
-    identification leave the closing trace unchanged.  This proves the first
+    identification leave the closing trace unchanged. This proves the first
     formula.
 
     For the second formula, the vertical reading of a two-site block is the
-    product tensor of two copies of the one-site vertical reading.  Closed
-    chains turn this tensor product into multiplication of operators.  Expand
+    product tensor of two copies of the one-site vertical reading. Closed
+    chains turn this tensor product into multiplication of operators. Expand
     each copy by the one-site vertical canonical form,
-    \[
-      O_L(\widetilde M)=\sum_\alpha
-        \tr(\mu_\alpha^L)
-        O_L\!\left(A^{(1)}_\alpha\right),
-    \]
+    $O_L(\widetilde M)=\sum_\alpha
+    \tr(\mu_\alpha^L)O_L(A^{(1)}_\alpha)$,
     and distribute the product of the two finite sums.
 \end{proof}
 
@@ -185,20 +177,20 @@
     \uses{thm:mpdo_blocked_vertical_operator_representations,
       def:mpdo_two_site_blocking}
     Suppose that the vertical reading of $M$ is reconstructed from a retained
-    tensor $A$ by a coisometry $U$.  The two-site blocking is then reconstructed
+    tensor $A$ by a coisometry $U$. The two-site blocking is then reconstructed
     from the product of two copies of $A$ by the Kronecker square of $U$.
     Moreover, if $M$ is horizontally canonical and generates positive
     operators, this retained product tensor has invariant-projector closure
-    and has no nontrivial periodic vectors.  No full-support assumption is
+    and has no nontrivial periodic vectors. No full-support assumption is
     imposed on the retained bond space.
 \end{theorem}
 
 \begin{proof}\leanok
-    The Kronecker square of a coisometry is again a coisometry.  Expanding a
+    The Kronecker square of a coisometry is again a coisometry. Expanding a
     blocked vertical letter gives the product of the two one-site
     reconstructions and hence the asserted exact compression formula.
     Horizontal canonical form and positivity are preserved by two-site
-    blocking.  Invariant-projector closure descends to an exact reducing
+    blocking. Invariant-projector closure descends to an exact reducing
     compression, while a periodic vector in the compression would embed
     isometrically as a periodic vector of the blocked vertical tensor.
 \end{proof}
@@ -213,14 +205,11 @@
     \uses{thm:mpdo_retained_vertical_product_canonical_hypotheses,
       lem:canonical_hypotheses_dependent_direct_summand}
     In the retained coordinates, the product tensor is the orthogonal direct
-    sum over ordered pairs of BNT copies.  Its summand indexed by
+    sum over ordered pairs of BNT copies. Its summand indexed by
     $((\alpha,q),(\beta,r))$ is
-    \[
-      \mu_{\alpha,q}\mu_{\beta,r}
-      \bigl(M_\alpha M_\beta\bigr).
-    \]
+    $\mu_{\alpha,q}\mu_{\beta,r}(M_\alpha M_\beta)$.
     Every such summand has invariant-projector closure and has no nontrivial
-    periodic vectors.  This includes zero-dimensional summands and requires
+    periodic vectors. This includes zero-dimensional summands and requires
     no nonvanishing assumption on the displayed scalar.
 \end{theorem}
 
@@ -228,8 +217,8 @@
     The canonical inclusion of a dependent direct-sum block is an isometry.
     After transporting this inclusion through the retained-coordinate
     equivalence, it intertwines the chosen summand with the full retained
-    product tensor on both sides.  Its range projection therefore commutes
-    with every tensor letter.  Invariant-projector closure descends by exact
+    product tensor on both sides. Its range projection therefore commutes
+    with every tensor letter. Invariant-projector closure descends by exact
     compression, and any periodic vector of the summand would embed as a
     periodic vector of the full retained product.
 \end{proof}
@@ -242,15 +231,15 @@
       thm:projector_closure_canonical_form}
     For every ordered pair of retained BNT copies, the weighted product tensor
     has an exact orthogonal decomposition into positive multiples of normal
-    tensors.  The corresponding corner isometries are retained, intertwine in
-    both directions, and reconstruct every tensor letter.  The active family
+    tensors. The corresponding corner isometries are retained, intertwine in
+    both directions, and reconstruct every tensor letter. The active family
     is allowed to be empty; in particular, no normal block is introduced for
     a zero-dimensional or identically zero copy-pair tensor.
 \end{theorem}
 
 \begin{proof}\leanok
     Apply the canonical-form sufficient condition to the invariant-projector
-    closure and periodic-exclusion properties of the preceding theorem.  Its
+    closure and periodic-exclusion properties of the preceding theorem. Its
     spectral construction discards precisely the corners on which every
     letter vanishes and retains the isometry of every nonzero corner.
 \end{proof}
@@ -266,9 +255,9 @@
     \uses{thm:mpdo_weighted_vertical_product_block_normal_decomposition}
     A retained-product spectral family records, simultaneously for every
     ordered pair of retained BNT copies, all nonzero normal corners, their
-    positive spectral coefficients, and their local isometries.  Its active
+    positive spectral coefficients, and their local isometries. Its active
     labels form the dependent union of the local corner families; this union
-    is enumerated by a single finite type.  The local isometries and their
+    is enumerated by a single finite type. The local isometries and their
     inclusions remain part of the data, and their range projections can be
     formed when needed.
 \end{definition}
@@ -303,43 +292,41 @@
       lem:matrix_sigma_block_inclusion}
     Suppose that the one-site vertical tensor has the stated exact
     coisometric reconstruction, that $M$ is horizontally canonical, and that
-    $M$ generates positive operators.  Then simultaneous retained-product
-    spectral data exist.  In copy coordinates, the assembled vertical tensor
-    is the direct sum of the weighted simple blocks.  The canonical inclusion
+    $M$ generates positive operators. Then simultaneous retained-product
+    spectral data exist. In copy coordinates, the assembled vertical tensor
+    is the direct sum of the weighted simple blocks. The canonical inclusion
     of each copy is an isometry, intertwines in both directions, and its
-    compression selects exactly that weighted block.  Likewise, the canonical
+    compression selects exactly that weighted block. Likewise, the canonical
     inclusion of a copy pair, followed by its local corner isometry, is an
     isometry into the retained product bond space and intertwines in both
-    directions.  Composing once more with the adjoint of the squared vertical
+    directions. Composing once more with the adjoint of the squared vertical
     coisometry gives an isometry into the bond space of the blocked vertical
-    tensor.  Under the exact coisometric reconstruction, these ambient
+    tensor. Under the exact coisometric reconstruction, these ambient
     inclusions intertwine each active weighted corner with the blocked
-    vertical tensor in both directions.  In particular, if $J_j$ is the
+    vertical tensor in both directions. In particular, if $J_j$ is the
     ambient inclusion of an active corner, then
-    \[
-      J_j^\dagger\,\mathcal V(M^{(2)})^iJ_j=\lambda_jA_j^i.
-    \]
+    $J_j^\dagger\mathcal V(M^{(2)})^iJ_j=\lambda_jA_j^i$.
     These explicit composite inclusions retain the range projections required
     for the sector-weight comparison.
 \end{theorem}
 
 \begin{proof}\leanok
-    In copy coordinates the assembled tensor is block diagonal.  The
+    In copy coordinates the assembled tensor is block diagonal. The
     canonical dependent-sum inclusion is an isometry, and the two
     block-diagonal intertwining identities give its forward, adjoint, and
     compression formulas.
     Choose the exact normal-corner decomposition of every copy-pair tensor.
     The canonical copy-pair inclusions are isometries and select the weighted
-    diagonal blocks of the retained product tensor.  Composition with each
+    diagonal blocks of the retained product tensor. Composition with each
     local isometry gives the retained inclusion and both intertwining
-    identities.  Finally, write the blocked vertical tensor as
-    $T=W^\dagger CW$ and the ambient inclusion as $J=W^\dagger R$.  The
+    identities. Finally, write the blocked vertical tensor as
+    $T=W^\dagger CW$ and the ambient inclusion as $J=W^\dagger R$. The
     coisometry identity $WW^\dagger=1$ transports both retained intertwining
     identities from $C$ to $T$; the compression identity then follows from
     $J^\dagger J=1$.
-    For any blocked BNT label, choose its first multiplicity copy.  Composing
+    For any blocked BNT label, choose its first multiplicity copy. Composing
     its canonical inclusion with the adjoint reconstruction coisometry gives
-    an isometric reference corner of the blocked vertical tensor.  Transport
+    an isometric reference corner of the blocked vertical tensor. Transport
     along an equality of bond dimensions preserves its isometry and exact
     compression formula.
 \end{proof}
@@ -371,17 +358,22 @@
       lem:matrix_sigma_block_inclusion,
       lem:same_mpv_exact_isometric_decomposition}
     Enumerate the dependent family of active corners by a single finite label
-    set.  The resulting coefficients are positive, the blocks are normal, and
-    the inclusion ranges are pairwise orthogonal.  For every tensor letter,
-    \[
-      C^i=\sum_j W_j\bigl(\lambda_j A_j^i\bigr)W_j^\dagger,
-      \qquad
-      W_j^\dagger W_l=\delta_{jl},
-      \qquad
-      C^iW_j=W_j(\lambda_jA_j^i),
-      \qquad
-      W_j^\dagger C^i=(\lambda_jA_j^i)W_j^\dagger.
-    \]
+    set. The resulting coefficients are positive, the blocks are normal, and
+    the inclusion ranges are pairwise orthogonal. For every tensor letter,
+    \begin{align}
+      C^i
+      &=\sum_j W_j(\lambda_j A_j^i)W_j^\dagger,
+      \notag\\
+      W_j^\dagger W_l
+      &=\delta_{jl},
+      \notag\\
+      C^iW_j
+      &=W_j(\lambda_jA_j^i),
+      \notag\\
+      W_j^\dagger C^i
+      &=(\lambda_jA_j^i)W_j^\dagger.
+      \notag
+    \end{align}
     Each compression $W_j^\dagger C^iW_j$ is
     $\lambda_jA_j^i$, and $C$ has the same positive-length closed chains as
     the finite direct sum $\bigoplus_j\lambda_jA_j$.
@@ -389,10 +381,10 @@
 
 \begin{proof}\leanok
     First reconstruct the retained product as the sum of its canonical
-    copy-pair blocks.  Substitute the exact local spectral reconstruction in
+    copy-pair blocks. Substitute the exact local spectral reconstruction in
     every pair, distribute the two inclusion maps across the finite sums, and
-    identify the iterated sum with the dependent active-label sum.  Finally
-    transport this sum through the active-label enumeration.  Isometry,
+    identify the iterated sum with the dependent active-label sum. Finally
+    transport this sum through the active-label enumeration. Isometry,
     orthogonality, intertwining, and compression are inherited by composition;
     the closed-chain equality follows from the exact isometric reconstruction.
     This is the active-corner decomposition in
@@ -412,37 +404,39 @@ exists_flatBlockedBNTComparison}
       thm:cpsv_bnt_characterization}
     Suppose that the one-site vertical tensor has the stated exact
     coisometric reconstruction, and let $(A^{(2)}_\gamma)_\gamma$ be a basis
-    of normal tensors for the blocked vertical tensor.  For every active
+    of normal tensors for the blocked vertical tensor. For every active
     product corner $A_j$ there are a label $\gamma(j)$, an equality of bond
     dimensions, an invertible matrix $X_j$, and a scalar $\zeta_j$ of modulus
-    one such that
-    \[
-      A_j^i=\zeta_jX_jA^{(2),i}_{\gamma(j)}X_j^{-1}
-    \]
-    after transporting the blocked tensor along the dimension equality.  The
-    choices may be made simultaneously.  No converse coverage or surjectivity
-    of $j\mapsto\gamma(j)$ is asserted.
+    one such that, after transporting the blocked tensor along the dimension
+    equality,
+    \begin{align}
+      A_j^i
+      &=\zeta_jX_jA^{(2),i}_{\gamma(j)}X_j^{-1}.
+      \notag
+    \end{align}
+    The choices may be made simultaneously. No converse coverage or
+    surjectivity of $j\mapsto\gamma(j)$ is asserted.
 
     \textbf{Scope restriction (active product BNT):} The conclusion gives
-    only one-way coverage of active product corners.  It does not assert that
-    every blocked BNT label occurs.  This is documented in
+    only one-way coverage of active product corners. It does not assert that
+    every blocked BNT label occurs. This is documented in
     \path{docs/paper-gaps/cpsv16_bnt_uniqueness_zero_coefficient.tex}.
 
     \textbf{Local fix (per-pair support):} Appendix~C.4, lines~2011--2029 of
     \cite{Cirac2016MPDO_arXiv} compares a sum over all retained copy pairs and
-    does not isolate a fixed pair.  Here fixed-pair support follows from the
+    does not isolate a fixed pair. Here fixed-pair support follows from the
     exact squared reconstruction and the canonical direct-sum corner; a zero
-    pair contributes an empty active family.  See
+    pair contributes an empty active family. See
     \path{docs/paper-gaps/cpsv16_figure11_per_pair_support.tex}.
 \end{theorem}
 
 \begin{proof}\leanok
     The squared coisometric reconstruction gives equality of all
     positive-length closed chains between the blocked vertical tensor and the
-    retained product.  Transport the blocked basis of normal tensors along
-    this equality.  Proposition~2.7, applied to the flattened positive normal
+    retained product. Transport the blocked basis of normal tensors along
+    this equality. Proposition~2.7, applied to the flattened positive normal
     decomposition, then covers each active corner by a blocked BNT tensor up
-    to an invertible gauge and a unit-modulus phase.  Classical choice makes
+    to an invertible gauge and a unit-modulus phase. Classical choice makes
     these comparisons simultaneous.
 \end{proof}
 
@@ -462,19 +456,19 @@ referenceInclusion_isometry}
       lem:matrix_sigma_block_inclusion}
     Assume that every blocked BNT label has positive multiplicity and that the
     blocked vertical tensor has the exact coisometric reconstruction
-    $T=U_2^\dagger C_2U_2$.  Let $E_{\gamma,0}$ be the canonical inclusion of
+    $T=U_2^\dagger C_2U_2$. Let $E_{\gamma,0}$ be the canonical inclusion of
     the first copy of label $\gamma$, and put
-    $F_\gamma=U_2^\dagger E_{\gamma,0}$.  Then $F_\gamma$ is an isometry,
+    $F_\gamma=U_2^\dagger E_{\gamma,0}$. Then $F_\gamma$ is an isometry,
     intertwines $T$ with the distinguished weighted BNT copy in both
-    directions, and compresses $T$ to that copy exactly.  For an active
+    directions, and compresses $T$ to that copy exactly. For an active
     product corner covered by $\gamma$, transport $F_\gamma$ along the stated
-    equality of bond dimensions.  The transported map remains an isometry and
+    equality of bond dimensions. The transported map remains an isometry and
     obeys the corresponding transported compression identity.
 \end{theorem}
 
 \begin{proof}\leanok
     The copy inclusion is isometric and selects one diagonal block of the
-    assembled tensor.  Inserting $T=U_2^\dagger C_2U_2$ and
+    assembled tensor. Inserting $T=U_2^\dagger C_2U_2$ and
     $U_2U_2^\dagger=1$ gives both intertwining identities and compression.
     Transport along equality of bond dimensions preserves these equations.
 \end{proof}
@@ -490,23 +484,20 @@ activeCoefficient_mul_phase_pos}
       thm:mpdo_grouped_sector_compression_nonzero,
       thm:mpdo_sector_weight_pos}
     Suppose that $M$ is horizontally canonical and generates positive
-    operators.  Assume exact coisometric reconstructions of its one-site and
+    operators. Assume exact coisometric reconstructions of its one-site and
     blocked vertical tensors, positive multiplicities and weights for the
-    blocked BNT, and normality of its BNT representatives.  For every active
-    product corner $j$, one has
-    \[
-      0<\lambda_j\zeta_j.
-    \]
+    blocked BNT, and normality of its BNT representatives. For every active
+    product corner $j$, one has $0<\lambda_j\zeta_j$.
 \end{theorem}
 
 \begin{proof}\leanok
     Compare two isometric corners of the blocked vertical tensor carrying the
-    same normal representative.  The distinguished blocked copy has positive
-    weight by hypothesis.  The active corner has weight
+    same normal representative. The distinguished blocked copy has positive
+    weight by hypothesis. The active corner has weight
     $\lambda_j\zeta_j$ by its exact compression and gauge--phase identity.
     This scalar is nonzero because $\lambda_j>0$ and $|\zeta_j|=1$.
     Normality gives a nonzero range-projection corner; horizontal canonicality
-    separates it at some finite chain length.  The sector-weight comparison
+    separates it at some finite chain length. The sector-weight comparison
     with the distinguished reference corner then yields
     $\lambda_j\zeta_j>0$.
 \end{proof}
@@ -526,19 +517,22 @@ exists_unitaryNormalization}
       thm:normal_tensor_gram_rigidity}
     Under the hypotheses of the preceding positivity theorem, for every
     active product corner $j$ there is a real number $\omega_j>0$ such that
-    \[
-      X_j^\dagger X_j=\omega_j\Id,
-      \qquad
-      \omega_j^{-1/2}X_j\in\mathrm{U}(D_j).
-    \]
+    \begin{align}
+      X_j^\dagger X_j
+      &=\omega_j\Id,
+      \notag\\
+      \omega_j^{-1/2}X_j
+      &\in\mathrm{U}(D_j).
+      \notag
+    \end{align}
 \end{theorem}
 
 \begin{proof}\leanok
     Apply the Figure~8 comparison to the active corner and the distinguished
-    blocked reference corner.  Both coefficients are positive, so horizontal
+    blocked reference corner. Both coefficients are positive, so horizontal
     canonicality and positivity identify their Gram-dressed normal tensors.
     Normal-tensor rigidity then makes $X_j^\dagger X_j$ a positive real
-    multiple of the identity.  Division by the positive square root gives a
+    multiple of the identity. Division by the positive square root gives a
     unitary matrix.
 \end{proof}
 
@@ -550,14 +544,14 @@ exists_unitaryNormalization}
     An original-label corner family for the retained product records, for
     every active corner of each copy pair, an original one-site BNT label, a
     positive coefficient, and an isometric inclusion into the raw product
-    bond space.  Distinct corners belonging to one copy pair have orthogonal
-    ranges.  Each inclusion intertwines the raw product tensor with the stated
+    bond space. Distinct corners belonging to one copy pair have orthogonal
+    ranges. Each inclusion intertwines the raw product tensor with the stated
     positive multiple of its original BNT representative, and the resulting
     corners reconstruct every tensor letter exactly.
 
     \textbf{Local fix (Figure-11 fixed-pair support):} A copy pair with no
     active corner is represented by an empty family; no unsupported corner is
-    inserted.  See
+    inserted. See
     \path{docs/paper-gaps/cpsv16_figure11_per_pair_support.tex}.
 \end{definition}
 
@@ -575,36 +569,37 @@ exists_unitaryNormalization}
     Let the active product corners be covered by blocked BNT representatives,
     let the blocked representatives be identified with the original BNT by
     the trace-ratio unitary conjugacies, and suppose that the active
-    gauge--phase coefficients are positive.  If
+    gauge--phase coefficients are positive. If
     $X_j^\dagger X_j=\omega_j\Id$ with $\omega_j>0$, then every retained copy
-    pair has an original-label corner family.  Its coefficient at an active
+    pair has an original-label corner family. Its coefficient at an active
     corner is
-    \[
+    \begin{align}
       \frac{\lambda_j\zeta_j}{w_{\alpha,q}w_{\beta,r}}
       \frac{\tr D_{\gamma(j)}}
            {\tr D^{(2)}_{\sigma(\gamma(j))}},
-    \]
-    which is positive.  The normalized inclusions are isometries with
+      \notag
+    \end{align}
+    which is positive. The normalized inclusions are isometries with
     pairwise orthogonal ranges, intertwine the raw product tensor with these
     positive multiples of the original BNT representatives, and reconstruct
     every raw product letter exactly.
 
     \textbf{Local fix (Figure-11 fixed-pair support):} Empty active families
-    remain empty.  Exact weighted reconstruction and positivity of the outer
-    copy weight imply that the corresponding raw product vanishes.  See
+    remain empty. Exact weighted reconstruction and positivity of the outer
+    copy weight imply that the corresponding raw product vanishes. See
     \path{docs/paper-gaps/cpsv16_figure11_per_pair_support.tex}.
 \end{theorem}
 
 \begin{proof}\leanok
     Transport each local inclusion first by the normalized active comparison
     gauge and then by the unitary identifying the blocked representative with
-    its original one-site label.  The first normalization preserves isometry
-    and orthogonality; the second unitary transport does likewise.  The two
+    its original one-site label. The first normalization preserves isometry
+    and orthogonality; the second unitary transport does likewise. The two
     conjugacy equations give the stated coefficient and intertwining identity.
     Positivity follows from the active gauge--phase coefficient, the two
     positive multiplicity traces, and the positive outer copy weight.
     Conjugating each corner term through the two transports recovers its local
-    spectral term.  Summing these identities gives the weighted
+    spectral term. Summing these identities gives the weighted
     reconstruction, and cancellation of the nonzero outer weight gives the
     raw reconstruction.
 \end{proof}
@@ -618,37 +613,41 @@ toBNTFusionCoisometryFamily}
       def:mpdo_bnt_fusion_coisometry_family,
       thm:vertical_sector_coisometry}
     Given an original-label corner family, choose the distinguished retained
-    copy of every BNT label.  For fixed
+    copy of every BNT label. For fixed
     labels $\alpha,\beta$, let the multiplicity of $\gamma$ be the number of
     active corners of the distinguished copy pair whose original label is
     $\gamma$, and put the corresponding positive corner coefficients on the
-    diagonal of $\chi_{\alpha,\beta,\gamma}$.  The block row of the adjoints
+    diagonal of $\chi_{\alpha,\beta,\gamma}$. The block row of the adjoints
     of the corner inclusions, regrouped by these label fibers, defines a
-    fusion coisometry.  It satisfies
-    \[
-      \chi_{\alpha,\beta,\gamma;r}>0,
-      \qquad
-      U_{\alpha,\beta}U_{\alpha,\beta}^\dagger=1,
-      \qquad
+    fusion coisometry. It satisfies
+    \begin{align}
+      \chi_{\alpha,\beta,\gamma;r}
+      &>0,
+      \notag\\
+      U_{\alpha,\beta}U_{\alpha,\beta}^\dagger
+      &=1,
+      \notag\\
       U_{\alpha,\beta}(M_\alpha M_\beta)^{ij}
         U_{\alpha,\beta}^\dagger
-        =\bigoplus_\gamma
+      &=\bigoplus_\gamma
           \chi_{\alpha,\beta,\gamma}\otimes M_\gamma^{ij},
-    \]
+      \notag
+    \end{align}
     together with the exact reconstruction
-    \[
+    \begin{align}
       (M_\alpha M_\beta)^{ij}
-        =U_{\alpha,\beta}^\dagger
+      &=U_{\alpha,\beta}^\dagger
           \left(\bigoplus_\gamma
             \chi_{\alpha,\beta,\gamma}\otimes M_\gamma^{ij}\right)
           U_{\alpha,\beta}.
-    \]
+      \notag
+    \end{align}
     Empty label fibers contribute zero-dimensional diagonal blocks.
     This is the decomposition of CPSV16, Appendix C.4, lines 2020--2029.
 
     \textbf{Scope restriction (active product BNT):} Only active product
-    corners are retained.  A label absent from the distinguished copy pair
-    has zero fusion multiplicity.  See
+    corners are retained. A label absent from the distinguished copy pair
+    has zero fusion multiplicity. See
     \path{docs/paper-gaps/cpsv16_bnt_uniqueness_zero_coefficient.tex}.
 
     \textbf{Local fix (Figure-11 fixed-pair support):} The distinguished copy
@@ -656,19 +655,19 @@ toBNTFusionCoisometryFamily}
     See \path{docs/paper-gaps/cpsv16_figure11_per_pair_support.tex}.
 
     \textbf{Local fix (Figure-11 fusion coisometry):} The retained-row map is
-    a coisometry onto the active direct sum.  Exact reconstruction includes
-    any common zero corner discarded by the forward map.  See
+    a coisometry onto the active direct sum. Exact reconstruction includes
+    any common zero corner discarded by the forward map. See
     \path{docs/paper-gaps/cpsv16_figure11_fusion_coisometry.tex}.
 \end{theorem}
 
 \begin{proof}\leanok
     For each distinguished copy pair, form the block row from the adjoints of
-    its pairwise orthogonal isometric corner inclusions.  The block-row
-    identity makes this map a coisometry.  Its forward conjugation is block
+    its pairwise orthogonal isometric corner inclusions. The block-row
+    identity makes this map a coisometry. Its forward conjugation is block
     diagonal over the active corners, while the corner reconstruction gives
-    the reverse identity.  Regrouping the active-corner sum by the original
+    the reverse identity. Regrouping the active-corner sum by the original
     label turns each label fiber into the diagonal matrix whose entries are
-    precisely the positive corner coefficients.  These identities are valid
+    precisely the positive corner coefficients. These identities are valid
     without separate cases when a fiber or the whole active family is empty.
 \end{proof}
 
@@ -688,41 +687,43 @@ toBNTFusionCoisometryFamily}
     decompositions and the two completely positive, trace-preserving
     physical-closure transport identities, assume that the one-site tensor
     is in horizontal canonical form and defines a matrix product density
-    operator.  Then there are positive diagonal multiplicity matrices
+    operator. Then there are positive diagonal multiplicity matrices
     $\chi_{\alpha,\beta,\gamma}$ and matrices $U_{\alpha,\beta}$ such that
     every diagonal entry is positive and
-    \[
-      U_{\alpha,\beta}U_{\alpha,\beta}^{\dagger}=1,
-    \]
-    \[
+    \begin{align}
+      U_{\alpha,\beta}U_{\alpha,\beta}^{\dagger}
+      &=1,
+      \notag\\
       U_{\alpha,\beta}(M_\alpha M_\beta)^{ij}
         U_{\alpha,\beta}^{\dagger}
-        =\bigoplus_\gamma
+      &=\bigoplus_\gamma
           \chi_{\alpha,\beta,\gamma}\otimes M_\gamma^{ij},
-    \]
+      \notag
+    \end{align}
     while the exact reconstruction is
-    \[
+    \begin{align}
       (M_\alpha M_\beta)^{ij}
-        =U_{\alpha,\beta}^{\dagger}
+      &=U_{\alpha,\beta}^{\dagger}
           \left(\bigoplus_\gamma
             \chi_{\alpha,\beta,\gamma}\otimes M_\gamma^{ij}\right)
           U_{\alpha,\beta}.
-    \]
+      \notag
+    \end{align}
     This is the positive fusion decomposition of CPSV16, Appendix C.4,
     lines 2020--2029.
 
     \textbf{Scope restriction (active product BNT):} Only active product
-    corners occur.  A label absent from a fixed product pair has zero fusion
-    multiplicity.  See
+    corners occur. A label absent from a fixed product pair has zero fusion
+    multiplicity. See
     \path{docs/paper-gaps/cpsv16_bnt_uniqueness_zero_coefficient.tex}.
 
     \textbf{Local fix (Figure-11 fixed-pair support):} A fixed product pair
-    may have no active corner, and no unsupported sector is inserted.  See
+    may have no active corner, and no unsupported sector is inserted. See
     \path{docs/paper-gaps/cpsv16_figure11_per_pair_support.tex}.
 
     \textbf{Local fix (Figure-11 fusion coisometry):} The retained-row map is
     a coisometry onto the active direct sum, and its adjoint gives the exact
-    reconstruction.  See
+    reconstruction. See
     \path{docs/paper-gaps/cpsv16_figure11_fusion_coisometry.tex}.
 \end{theorem}
 
@@ -731,9 +732,9 @@ toBNTFusionCoisometryFamily}
     corners and compare these corners with the two-site vertical basis.
     Positivity of matrix product density operators makes every resulting
     scalar positive, while the Gram comparison normalizes each gauge to a
-    unitary.  The inverse vertical-sector transport then returns the corners
-    to the original one-site labels.  Their orthogonal isometric inclusions
-    form the rows of $U_{\alpha,\beta}$.  Grouping these rows by the original
+    unitary. The inverse vertical-sector transport then returns the corners
+    to the original one-site labels. Their orthogonal isometric inclusions
+    form the rows of $U_{\alpha,\beta}$. Grouping these rows by the original
     label gives the positive diagonal matrices $\chi_{\alpha,\beta,\gamma}$;
     corner intertwining and corner reconstruction give the two displayed
     identities.
@@ -748,44 +749,43 @@ toBNTFusionCoisometryFamily}
       thm:mpdo_transported_vertical_product_positive_fusion_decomposition}
     Let $M$ be in horizontal canonical form, generate matrix product density
     operators, and satisfy the renormalization fixed-point condition of
-    Definition~\ref{def:is_rfp_via_ts}.  Then one may choose a vertical basis
+    Definition~\ref{def:is_rfp_via_ts}. Then one may choose a vertical basis
     of normal tensors $\{M_\alpha\}_\alpha$ for which there are positive
     diagonal matrices $\chi_{\alpha,\beta,\gamma}$ and matrices
-    $U_{\alpha,\beta}$.  Every diagonal entry of
+    $U_{\alpha,\beta}$. Every diagonal entry of
     $\chi_{\alpha,\beta,\gamma}$ is positive, and
-    \[
-      U_{\alpha,\beta}U_{\alpha,\beta}^{\dagger}=1,
-    \]
-    \[
+    \begin{align}
+      U_{\alpha,\beta}U_{\alpha,\beta}^{\dagger}
+      &=1,
+      \notag\\
       U_{\alpha,\beta}(M_\alpha M_\beta)^{ij}
         U_{\alpha,\beta}^{\dagger}
-        =\bigoplus_\gamma
+      &=\bigoplus_\gamma
           \chi_{\alpha,\beta,\gamma}\otimes M_\gamma^{ij},
-    \]
-    and
-    \[
+      \notag\\
       (M_\alpha M_\beta)^{ij}
-        =U_{\alpha,\beta}^{\dagger}
+      &=U_{\alpha,\beta}^{\dagger}
           \left(\bigoplus_\gamma
             \chi_{\alpha,\beta,\gamma}\otimes M_\gamma^{ij}\right)
           U_{\alpha,\beta}.
-    \]
+      \notag
+    \end{align}
     Thus the original renormalization fixed-point, horizontal-canonical, and
     matrix-product-density-operator assumptions suffice for the positive
     fusion decomposition of CPSV16, Appendix C.4, lines 2020--2029.
 
     \textbf{Scope restriction (active product BNT):} Only active product
-    corners occur.  A label absent from a fixed product pair has zero fusion
-    multiplicity.  See
+    corners occur. A label absent from a fixed product pair has zero fusion
+    multiplicity. See
     \path{docs/paper-gaps/cpsv16_bnt_uniqueness_zero_coefficient.tex}.
 
     \textbf{Local fix (Figure-11 fixed-pair support):} A fixed product pair
-    may have no active corner, and no unsupported sector is inserted.  See
+    may have no active corner, and no unsupported sector is inserted. See
     \path{docs/paper-gaps/cpsv16_figure11_per_pair_support.tex}.
 
     \textbf{Local fix (Figure-11 fusion coisometry):} The retained-row map is
     a coisometry onto the active direct sum, and its adjoint gives the exact
-    reconstruction.  See
+    reconstruction. See
     \path{docs/paper-gaps/cpsv16_figure11_fusion_coisometry.tex}.
 \end{theorem}
 
@@ -794,7 +794,7 @@ toBNTFusionCoisometryFamily}
     each case the literal basis-of-normal-tensors assertion, the positive
     multiplicity matrices, and both coisometric decomposition identities.
     Unpack the two completely positive, trace-preserving maps in the
-    renormalization fixed-point condition.  The preceding transported-sector
+    renormalization fixed-point condition. The preceding transported-sector
     theorem then supplies the positive diagonal family, the row
     coisometries, the forward fusion identity, and exact reconstruction for
     the chosen one-site vertical basis.
@@ -807,10 +807,7 @@ toBNTFusionCoisometryFamily}
     \uses{def:phys_close, def:mpdo_two_site_blocking,
       def:mpdo_four_site_physical_closure}
     After identifying two blocked physical indices with four original
-    indices, one has
-    \[
-        \bigl(K^{[2]}\bigr)_2(X)=K_4(X).
-    \]
+    indices, one has $(K^{[2]})_2(X)=K_4(X)$.
 \end{theorem}
 
 \begin{proof}\leanok

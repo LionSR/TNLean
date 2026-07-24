@@ -1,4 +1,3 @@
-
 \begin{theorem}[Rank of diagonal coefficients across a periodic cut]
     \label{thm:mpo_diagonal_cut_rank}
     \lean{MPOTensor.diagonalCutMatrix,
@@ -8,26 +7,27 @@
     Split a periodic chain into consecutive blocks of lengths $L$ and $R$.
     For words $x\in\{0,\ldots,d-1\}^L$ and
     $y\in\{0,\ldots,d-1\}^R$, set
-    \[
+    \begin{align}
       P_{x,y}
-      =\tr\!\left(
-        M^{x_0x_0}\cdots M^{x_{L-1}x_{L-1}}
-        M^{y_0y_0}\cdots M^{y_{R-1}y_{R-1}}
-      \right).
-    \]
+      &=
+      \tr\!\left(M^{x_0x_0}\cdots M^{x_{L-1}x_{L-1}}
+        M^{y_0y_0}\cdots M^{y_{R-1}y_{R-1}}\right).
+      \notag
+    \end{align}
     Then the ordinary complex rank of $P$ satisfies
-    \[
-      \rank_{\C} P\le D^2.
-    \]
+    $\rank_{\C}P\le D^2$.
 \end{theorem}
 \begin{proof}\leanok
     \uses{lem:mpo_eval_word_append}
-    For each word, write $A_x=M^{x_0x_0}\cdots M^{x_{L-1}x_{L-1}}$
-    and $B_y=M^{y_0y_0}\cdots M^{y_{R-1}y_{R-1}}$.  The identity
-    \[
-      P_{x,y}=\tr(A_xB_y)
-      =\sum_{a,b=0}^{D-1}(A_x)_{ab}(B_y)_{ba}
-    \]
+    For each word, write
+    $A_x=M^{x_0x_0}\cdots M^{x_{L-1}x_{L-1}}$ and
+    $B_y=M^{y_0y_0}\cdots M^{y_{R-1}y_{R-1}}$. The identity
+    \begin{align}
+      P_{x,y}
+      &=\tr(A_xB_y)
+       =\sum_{a,b=0}^{D-1}(A_x)_{ab}(B_y)_{ba}
+      \notag
+    \end{align}
     factors $P$ through the $D^2$-dimensional space indexed by pairs $(a,b)$.
 \end{proof}
 
@@ -36,10 +36,7 @@
     \lean{Matrix.rank_smul_of_ne_zero}
     \leanok
     Let $K$ be a field, let $A$ be a finite matrix over $K$, and let
-    $a\in K$ be nonzero.  Then
-    \[
-      \rank_{K}(aA)=\rank_{K}A.
-    \]
+    $a\in K$ be nonzero. Then $\rank_{K}(aA)=\rank_{K}A$.
 \end{theorem}
 \begin{proof}\leanok
     Multiplication by $a$ identifies the column spaces, with inverse given by
@@ -52,16 +49,13 @@
     \leanok
     Let $K\subseteq L$ be a faithful field extension, let
     $\iota:K\hookrightarrow L$ be the inclusion, and let $A$ be a finite
-    matrix over $K$.  Then
-    \[
-      \rank_{L}\!\left((\iota(A_{ij}))_{ij}\right)
-      =\rank_{K} A.
-    \]
+    matrix over $K$. Then
+    $\rank_{L}\!\left((\iota(A_{ij}))_{ij}\right)=\rank_{K}A$.
 \end{theorem}
 \begin{proof}\leanok
     For every finite selection of columns, the selected columns are linearly
     independent over $K$ if and only if their scalar extensions are linearly
-    independent over $L$.  Selecting a basis from each column space proves the
+    independent over $L$. Selecting a basis from each column space proves the
     two rank inequalities.
 \end{proof}
 
@@ -71,19 +65,21 @@
       Matrix.rowMarginal,
       Matrix.columnMarginal}
     \leanok
-    Let $X$ and $Y$ be finite sets.  A matrix
+    Let $X$ and $Y$ be finite sets. A matrix
     $P=(P_{x,y})_{x\in X,y\in Y}$ is a joint probability distribution if
-    \[
-      \forall x\in X,\ \forall y\in Y,\qquad P_{x,y}\geq0,
-      \qquad
-      \sum_{x\in X}\sum_{y\in Y}P_{x,y}=1.
-    \]
+    $P_{x,y}\geq0$ for every $x\in X$ and $y\in Y$, and
+    \begin{align}
+      \sum_{x\in X}\sum_{y\in Y}P_{x,y}
+      &=1.
+      \notag
+    \end{align}
     Its row and column marginals are respectively
-    \[
-      p_x=\sum_{y\in Y}P_{x,y},
-      \qquad
-      q_y=\sum_{x\in X}P_{x,y}.
-    \]
+    \begin{align}
+      p_x&=\sum_{y\in Y}P_{x,y},
+      \notag\\
+      q_y&=\sum_{x\in X}P_{x,y}.
+      \notag
+    \end{align}
 \end{definition}
 
 \begin{definition}[Entropy and classical mutual information]
@@ -92,18 +88,16 @@
       Entropy.classicalMutualInformation}
     \leanok
     \uses{def:finite_joint_distribution_marginals}
-    For $t>0$, set $h(t)=-t\log t$, and set $h(0)=0$.  The entropy of a
+    For $t>0$, set $h(t)=-t\log t$, and set $h(0)=0$. The entropy of a
     probability distribution $a=(a_z)_{z\in Z}$ on a finite set is
-    \[
-      H(a)=\sum_{z\in Z}h(a_z).
-    \]
-    For a joint probability distribution $P$ with row and column marginals
-    $p$ and $q$, put
-    \[
-      H(P)=\sum_{x\in X}\sum_{y\in Y}h(P_{x,y}),
-      \qquad
-      I(X:Y)_P=H(p)+H(q)-H(P).
-    \]
+    $H(a)=\sum_{z\in Z}h(a_z)$. For a joint probability distribution $P$
+    with row and column marginals $p$ and $q$, put
+    \begin{align}
+      H(P)&=\sum_{x\in X}\sum_{y\in Y}h(P_{x,y}),
+      \notag\\
+      I(X:Y)_P&=H(p)+H(q)-H(P).
+      \notag
+    \end{align}
 \end{definition}
 
 \begin{lemma}[Entropy is bounded by the logarithm of the support cardinality]
@@ -112,23 +106,25 @@
     \leanok
     \uses{def:finite_classical_mutual_information}
     Let $p=(p_z)_{z\in Z}$ be a probability distribution on a finite set $Z$.
-    Define $h(t)=-t\log t$ for $t>0$ and $h(0)=0$.  Then
+    Define $h(t)=-t\log t$ for $t>0$ and $h(0)=0$. Then
     \begin{align}
       \sum_{z\in Z}h(p_z)
-      \leq
+      &\leq
       \log\left\lvert\{z\in Z:p_z\neq0\}\right\rvert.
+      \notag
     \end{align}
 \end{lemma}
 \begin{proof}\leanok
-    Let $k=\lvert\{z\in Z:p_z\neq0\}\rvert$.  Jensen's inequality for the
+    Let $k=\lvert\{z\in Z:p_z\neq0\}\rvert$. Jensen's inequality for the
     concave function $h$, with uniform weights on the support, gives
     \begin{align}
       \frac{1}{k}\sum_{\substack{z\in Z\\p_z\neq0}}h(p_z)
       &\leq
       h\left(\frac{1}{k}
-        \sum_{\substack{z\in Z\\p_z\neq0}}p_z\right)\\
-      &=h\left(\frac{1}{k}\right)
+        \sum_{\substack{z\in Z\\p_z\neq0}}p_z\right)
+       =h\left(\frac{1}{k}\right)
        =\frac{\log k}{k}.
+      \notag
     \end{align}
     Multiplication by $k$ proves the result, since values outside the support
     contribute $h(0)=0$.
@@ -140,45 +136,43 @@
     \leanok
     \uses{def:finite_classical_mutual_information}
     Let $X$ and $Y$ be finite sets and let $P=(P_{x,y})_{x\in X,y\in Y}$
-    be a joint probability distribution.  With natural logarithms,
-    \[
-        I(X:Y)_P\leq \log\rank_{\R}P.
-    \]
-    Equivalently, with logarithms to base two,
+    be a joint probability distribution. With natural logarithms,
+    $I(X:Y)_P\leq\log\rank_{\R}P$. Equivalently, with logarithms to base two,
     $2^{I(X:Y)_P}\leq\rank_{\R}P$.
 \end{theorem}
 \begin{proof}\leanok
     \uses{lem:probability_entropy_le_log_card_support}
-    This is Theorem~4.1 of \cite{Riazanov2017PSDRank}.  If the number of
+    This is Theorem~4.1 of \cite{Riazanov2017PSDRank}. If the number of
     nonzero rows exceeds the ordinary real rank, choose a nontrivial real
-    linear relation among those rows.  Nonnegativity forces the relation to
-    have coefficients of both signs.  Rescaling each row by
-    $1+\varepsilon\beta_x$ gives two endpoint distributions.  For every
+    linear relation among those rows. Nonnegativity forces the relation to
+    have coefficients of both signs. Rescaling each row by
+    $1+\varepsilon\beta_x$ gives two endpoint distributions. For every
     $y\in Y$, the row relation gives
-    \[
+    \begin{align}
       \sum_x(1+\varepsilon\beta_x)P_{x,y}
-      =\sum_xP_{x,y}
+      &=\sum_xP_{x,y}
         +\varepsilon\underbrace{\sum_x\beta_xP_{x,y}}_{=0}
-      =\sum_xP_{x,y}.
-    \]
+       =\sum_xP_{x,y}.
+      \notag
+    \end{align}
     Thus each endpoint preserves every column marginal, removes at least one
     row, and has no larger rank.
     Write $h(t)=-t\log t$ for $t>0$, with $h(0)=0$, and put
-    $m=\min_x\beta_x<0<M=\max_x\beta_x$.  Then
+    $m=\min_x\beta_x<0<M=\max_x\beta_x$. Then
     \begin{align}
       I(X:Y)_{P^{(\varepsilon)}}
-      &=I(X:Y)_P+\varepsilon S(\beta),\\
+      &=I(X:Y)_P+\varepsilon S(\beta),
+      \notag\\
       S(\beta)
-      &=\sum_x\beta_x\left(
-        h(p_x)-\sum_y h(P_{x,y})
-      \right).
+      &=\sum_x\beta_x\left(h(p_x)-\sum_y h(P_{x,y})\right).
+      \notag
     \end{align}
     If $S(\beta)\geq0$, choose $\varepsilon=-m^{-1}\geq0$; otherwise choose
-    $\varepsilon=-M^{-1}\leq0$.  In either case
+    $\varepsilon=-M^{-1}\leq0$. In either case
     $\varepsilon S(\beta)\geq0$, so the selected endpoint has mutual
     information no smaller than the original distribution.
     Repeating the construction leaves at most
-    $\rank_{\R}P$ nonzero rows.  Finally,
+    $\rank_{\R}P$ nonzero rows. Finally,
     $I(X:Y)\leq H(X)$, and the entropy of a distribution supported on $k$
     points is at most $\log k$.
 \end{proof}
@@ -192,22 +186,18 @@
       thm:matrix_rank_smul,
       thm:matrix_rank_scalar_extension}
     Let $D\geq1$, and let $W$ be a real diagonal coefficient matrix across a
-    periodic cut of an MPO with bond dimension $D$.  Suppose its scalar
+    periodic cut of an MPO with bond dimension $D$. Suppose its scalar
     extension to $\C$ is the cut matrix $P^{\C}$ from
     Theorem~\ref{thm:mpo_diagonal_cut_rank}.
     If $Z>0$ and $P=Z^{-1}W$ is a joint probability distribution, then
-    \[
-      I(X:Y)_P\leq2\log D.
-    \]
+    $I(X:Y)_P\leq2\log D$.
 \end{theorem}
 \begin{proof}\leanok
     Normalization does not change real rank by
-    Theorem~\ref{thm:matrix_rank_smul}.  Faithful scalar extension does
+    Theorem~\ref{thm:matrix_rank_smul}. Faithful scalar extension does
     not change rank by Theorem~\ref{thm:matrix_rank_scalar_extension}; hence
     Theorem~\ref{thm:mpo_diagonal_cut_rank} gives
-    \[
-      \rank_{\R}P\leq D^2.
-    \]
+    $\rank_{\R}P\leq D^2$.
     Theorem~\ref{thm:classical_mutual_information_le_log_rank} gives
     $I(X:Y)_P\leq\log\rank_{\R}P$, and monotonicity of the
     logarithm gives the result.
@@ -223,14 +213,17 @@
     \leanok
     \uses{def:mpo_tensor}
     For a chain of length $N=L+R$, call $\rho^{(N)}(M)$ diagonal if
-    $\rho^{(N)}(M)_{u,v}=0$ whenever $u\ne v$.  Call $M$ globally diagonal if
-    $\rho^{(N)}(M)$ is diagonal for every $N>0$.  For configurations $x$ and
+    $\rho^{(N)}(M)_{u,v}=0$ whenever $u\ne v$. Call $M$ globally diagonal if
+    $\rho^{(N)}(M)$ is diagonal for every $N>0$. For configurations $x$ and
     $y$ on the two consecutive blocks, define
-    \[
-      W_{x,y}=\re\rho^{(L+R)}(M)_{(x,y),(x,y)},\qquad
-      Z=\sum_{x,y}W_{x,y},\qquad
-      \widehat P=Z^{-1}W.
-    \]
+    \begin{align}
+      W_{x,y}&=\re\rho^{(L+R)}(M)_{(x,y),(x,y)},
+      \notag\\
+      Z&=\sum_{x,y}W_{x,y},
+      \notag\\
+      \widehat P&=Z^{-1}W.
+      \notag
+    \end{align}
 \end{definition}
 
 \begin{lemma}[Diagonal coefficient mass and trace]
@@ -239,19 +232,18 @@
     \leanok
     \uses{def:mpo_normalized_diagonal_cut_distribution}
     For every MPO tensor $M$ and cut lengths $L,R$, the total diagonal
-    coefficient mass satisfies
-    \[
-      Z=\re\tr\rho^{(L+R)}(M).
-    \]
+    coefficient mass satisfies $Z=\re\tr\rho^{(L+R)}(M)$.
 \end{lemma}
 \begin{proof}\leanok
     Pairing each configuration $\sigma$ on $L+R$ sites with its unique block
     split $(x,y)$ on $L$ and $R$ sites gives
-    \[
-      Z=\sum_{x,y}W_{x,y}
-      =\sum_\sigma\re\rho^{(L+R)}(M)_{\sigma,\sigma}
-      =\re\tr\rho^{(L+R)}(M).
-    \]
+    \begin{align}
+      Z
+      &=\sum_{x,y}W_{x,y}
+       =\sum_\sigma\re\rho^{(L+R)}(M)_{\sigma,\sigma}
+       =\re\tr\rho^{(L+R)}(M).
+      \notag
+    \end{align}
 \end{proof}
 
 \begin{theorem}[Classical estimate for a positive diagonal finite-chain operator]
@@ -264,25 +256,21 @@
     \leanok
     \uses{def:mpo_normalized_diagonal_cut_distribution,
       thm:mpo_diagonal_cut_rank}
-    Let $D\geq1$.  Suppose that $\rho^{(L+R)}(M)$ is diagonal and positive
-    semidefinite, and that $Z>0$.  Then $W_{x,y}\geq0$, the scalar extension of
+    Let $D\geq1$. Suppose that $\rho^{(L+R)}(M)$ is diagonal and positive
+    semidefinite, and that $Z>0$. Then $W_{x,y}\geq0$, the scalar extension of
     $W$ to $\C$ is the diagonal cut matrix of
     Theorem~\ref{thm:mpo_diagonal_cut_rank}, and $\widehat P$ is a joint
-    probability distribution.  Its classical mutual information satisfies
-    \[
-      I(X:Y)_{\widehat P}\leq2\log D.
-    \]
+    probability distribution. Its classical mutual information satisfies
+    $I(X:Y)_{\widehat P}\leq2\log D$.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:mpo_diagonal_cut_classical_mutual_information}
-    Positive semidefiniteness makes every diagonal entry real and nonnegative,
+    Positive semidefiniteness makes every diagonal entry real and non-negative,
     so $W_{x,y}\geq0$ and its scalar extension recovers the complex diagonal
-    cut matrix.  Since $Z$ is the sum of the entries of $W$,
-    \[
-      \sum_{x,y}\widehat P_{x,y}
-      =Z^{-1}\sum_{x,y}W_{x,y}=1.
-    \]
-    Thus $\widehat P$ is a joint probability distribution.  Diagonality says
+    cut matrix. Since $Z$ is the sum of the entries of $W$,
+    $\sum_{x,y}\widehat P_{x,y}
+      =Z^{-1}\sum_{x,y}W_{x,y}=1$.
+    Thus $\widehat P$ is a joint probability distribution. Diagonality says
     that these coefficients constitute the full classical finite-chain state,
     and Theorem~\ref{thm:mpo_diagonal_cut_classical_mutual_information} gives
     the bound.
@@ -293,12 +281,9 @@
     \lean{MPOTensor.diagonalMPDO_classicalMutualInformation_le_two_log}
     \leanok
     Let $D\geq1$, and let $M$ generate diagonal positive semidefinite operators
-    at every positive chain length.  If $L+R>0$ and the trace at length $L+R$
+    at every positive chain length. If $L+R>0$ and the trace at length $L+R$
     is positive, then the classical mutual information of its normalized
-    diagonal coefficients satisfies
-    \[
-      I(X:Y)\leq2\log D.
-    \]
+    diagonal coefficients satisfies $I(X:Y)\leq2\log D$.
 \end{corollary}
 \begin{proof}\leanok
     \uses{thm:mpo_diagonal_finite_chain_classical_mutual_information,
@@ -306,10 +291,12 @@
     Global diagonality and positivity give the fixed-length hypotheses of
     Theorem~\ref{thm:mpo_diagonal_finite_chain_classical_mutual_information}.
     Since the chain operator is diagonal,
-    \[
-      Z=\sum_{x,y}W_{x,y}
-      =\re\tr\rho^{(L+R)}(M),
-    \]
+    \begin{align}
+      Z
+      &=\sum_{x,y}W_{x,y}
+       =\re\tr\rho^{(L+R)}(M),
+      \notag
+    \end{align}
     so the trace positivity hypothesis supplies the required normalization.
 \end{proof}
 
@@ -319,12 +306,13 @@
       Matrix.operatorSchmidtRank, Matrix.operatorSchmidtRank_minimal}
     \leanok
     For a bipartite density operator
-    $\rho\in\mathcal M_{d_A}\otimes\mathcal M_{d_B}$, its
+    $\rho\in\MN{d_A}\otimes\MN{d_B}$, its
     \emph{operator-Schmidt rank} is the least integer $r$ for which there are
-    matrices $A_t\in\mathcal M_{d_A}$ and $B_t\in\mathcal M_{d_B}$ satisfying
-    \[
-        \rho=\sum_{t=1}^{r}A_t\otimes B_t.
-    \]
+    matrices $A_t\in\MN{d_A}$ and $B_t\in\MN{d_B}$ satisfying
+    \begin{align}
+        \rho&=\sum_{t=1}^{r}A_t\otimes B_t.
+        \notag
+    \end{align}
     No Hermiticity or positivity condition is imposed on the factors. This is
     the definition in \cite[Equation~(1)]{DeLasCuevas2019Separability}; the
     same formula defines the rank of an arbitrary complex bipartite matrix.
@@ -337,17 +325,15 @@
       Matrix.operatorSchmidtRank_minimal}
     \leanok
     \uses{def:bipartite_operator_schmidt_rank}
-    Write $\rho_{ij}\in\mathcal M_{d_B}$ for the blocks determined by a basis
+    Write $\rho_{ij}\in\MN{d_B}$ for the blocks determined by a basis
     of the first factor, and define
-    \[
-        \mathcal R_\rho(X)=\sum_{i,j}X_{ij}\rho_{ij}.
-    \]
-    Then
-    \[
+    $\mathcal R_\rho(X)=\sum_{i,j}X_{ij}\rho_{ij}$. Then
+    \begin{align}
         \operatorname{OSR}(\rho)
-        =\dim\range\mathcal R_\rho
-        =\dim\spn\{\rho_{ij}:1\leq i,j\leq d_A\}.
-    \]
+        &=\dim\range\mathcal R_\rho
+         =\dim\spn\{\rho_{ij}:1\leq i,j\leq d_A\}.
+        \notag
+    \end{align}
 \end{theorem}
 \begin{proof}\leanok
     The range of $\mathcal R_\rho$ is the span of the blocks. If
@@ -371,14 +357,14 @@
     faithful. Choose an eigenbasis in which
     $\tr_B\rho=\diag(p_1,\ldots,p_{d_A})$ with
     every $p_i>0$, and define the linear map $\Phi_\rho$ on matrix units by
-    \[
-        \Phi_\rho(E_{ij})=\frac{\rho_{ij}}{\sqrt{p_ip_j}}.
-    \]
+    \begin{align}
+        \Phi_\rho(E_{ij})
+        &=\frac{\rho_{ij}}{\sqrt{p_ip_j}}.
+        \notag
+    \end{align}
     Then $\Phi_\rho$ is completely positive and trace preserving,
-    \[
-        \dim\range\Phi_\rho=\operatorname{OSR}(\rho),
-    \]
-    and application of $\Phi_\rho$ to the first half of
+    $\dim\range\Phi_\rho=\operatorname{OSR}(\rho)$, and application of
+    $\Phi_\rho$ to the first half of
     $\sum_{i,j}\sqrt{p_ip_j}\,E_{ij}\otimes E_{ij}$, followed by restoring the
     order of the two factors, reconstructs $\rho$.
 \end{theorem}
@@ -394,17 +380,17 @@
 
 \begin{remark}[Boundedness of the mutual information]
     The proof of Proposition~4.5 of \cite{Cirac2016MPDO_arXiv} invokes the
-    uniform estimate $I_L \le 4\log D$ for every MPDO. Its cited argument,
-    however, treats mixed
-    tensor-network states obtained from local completely positive maps
-    \cite{Wolf2008AreaLaws}. After purifying those maps, data processing and
-    the pure-state boundary estimate give
-    \[
+    uniform estimate $I_L\leq4\log D$ for every MPDO. Its cited argument,
+    however, treats mixed tensor-network states obtained from local completely
+    positive maps \cite{Wolf2008AreaLaws}. After purifying those maps, data
+    processing and the pure-state boundary estimate give
+    \begin{align}
         I(A:B)_{\rho}
-        \le I(A:B)_{\lvert\Psi\rangle\langle\Psi\rvert}
-        =2S(A)_{\lvert\Psi\rangle\langle\Psi\rvert}
-        \le 2\lvert\partial A\rvert\log D.
-    \]
+        &\leq I(A:B)_{\ketbra{\Psi}{\Psi}}
+         =2S(A)_{\ketbra{\Psi}{\Psi}}
+         \leq2\lvert\partial A\rvert\log D.
+        \notag
+    \end{align}
     A periodic one-dimensional interval has two boundary bonds, and hence the
     last expression is $4\log D$. A general positive MPO need not admit this
     local purification.
@@ -418,7 +404,7 @@
     unrestricted estimate therefore requires a direct operator-Schmidt
     argument not supplied by the cited proof.
 
-    Diagonal operators cannot violate the finite-chain estimate.  Indeed,
+    Diagonal operators cannot violate the finite-chain estimate. Indeed,
     Theorem~\ref{thm:mpo_diagonal_finite_chain_classical_mutual_information}
     bounds by $2\log D$ the classical mutual information of the normalized
     diagonal coefficients whenever the finite-chain operator is diagonal and
@@ -443,21 +429,21 @@
     \leanok
     \uses{def:mps_tensor, def:von_neumann_entropy}
     For an MPS tensor $A$, a system size $N$, and a block length $L\le N$, let
-    \[
+    \begin{align}
         \sigma^{(N)}(A)
-        =
+        &=
         \frac{\ketbra{V^{(N)}(A)}{V^{(N)}(A)}}{\|V^{(N)}(A)\|^2},
-        \qquad
-        \rho_L^{(N)}(A) = \tr_{N\setminus L}\!\bigl[\sigma^{(N)}(A)\bigr]
-    \]
+        \notag\\
+        \rho_L^{(N)}(A)
+        &=\tr_{N\setminus L}\![\sigma^{(N)}(A)]
+        \notag
+    \end{align}
     denote the normalized state and the reduced state of the first $L$ spins.
     The $L$-block entropy is
-    \[
-        S_L^{(N)}(A) = S\bigl(\rho_L^{(N)}(A)\bigr).
-    \]
+    $S_L^{(N)}(A)=S(\rho_L^{(N)}(A))$.
     The tensor saturates the area law if
-    $S_L^{(N)}(A) = S_{L+1}^{(N)}(A)$ for all
-    $1 \le L < \lfloor N/2 \rfloor$ and all $N$.
+    $S_L^{(N)}(A)=S_{L+1}^{(N)}(A)$ for all
+    $1\le L<\lfloor N/2\rfloor$ and all $N$.
     This is \cite[Definition~3.13, line~600]{Cirac2016MPDO_arXiv}.
 \end{definition}
 
@@ -465,11 +451,9 @@
     \lean{doubledTensor}
     \leanok
     \uses{def:mps_tensor, def:mpo_tensor}
-    For an MPS tensor $A$ on bond space $\mathbb{C}^D$, define the associated
-    MPO tensor $M$ on bond space $\mathbb{C}^{D^2}$ by
-    \[
-        M^{ij} = A^i \otimes \overline{A^j}.
-    \]
+    For an MPS tensor $A$ on bond space $\C^D$, define the associated
+    MPO tensor $M$ on bond space $\C^{D^2}$ by
+    $M^{ij}=A^i\otimes\overline{A^j}$.
     This is the single-ancilla purification tensor of
     \cite{Cirac2016MPDO_arXiv}.
 \end{definition}
@@ -480,11 +464,13 @@
     \uses{def:mps_tensor, def:mpo_family, def:doubled_tensor}
     For an MPS tensor $A$, the pure-state operator
     $\ketbra{V^{(N)}(A)}{V^{(N)}(A)}$ equals the MPDO generated by the tensor
-    $M^{ij} = A^i \otimes \overline{A^j}$, acting on a bond space of
+    $M^{ij}=A^i\otimes\overline{A^j}$, acting on a bond space of
     dimension $D^2$:
-    \[
-        \rho^{(N)}\bigl(A \otimes \bar A\bigr) = \ketbra{V^{(N)}(A)}{V^{(N)}(A)}.
-    \]
+    \begin{align}
+        \rho^{(N)}(A\otimes\bar A)
+        &=\ketbra{V^{(N)}(A)}{V^{(N)}(A)}.
+        \notag
+    \end{align}
     This is the single-ancilla case of the purification picture of
     \cite{Cirac2016MPDO_arXiv}; it lets the MPDO block-entropy
     theory apply to pure-state block entropies.
@@ -492,14 +478,11 @@
 \begin{proof}\leanok
     The word evaluation of the doubled tensor is the Kronecker product of the
     word evaluation of $A$ and its conjugate,
-    \[
-        M^{\sigma,\tau} = A^\sigma \otimes \overline{A^\tau},
-    \]
+    $M^{\sigma,\tau}=A^\sigma\otimes\overline{A^\tau}$,
     so its trace factors as
-    $\tr(M^{\sigma,\tau}) = \tr(A^\sigma)\,\overline{\tr(A^\tau)}$, i.e.\
-    \[
-        \overline{V^{(N)}(A)_\tau}\,V^{(N)}(A)_\sigma,
-    \]
+    $\tr(M^{\sigma,\tau})
+      =\tr(A^\sigma) \overline{\tr(A^\tau)}
+      =\overline{V^{(N)}(A)_\tau}\,V^{(N)}(A)_\sigma$,
     the corresponding matrix element of
     $\ketbra{V^{(N)}(A)}{V^{(N)}(A)}$.
 \end{proof}
@@ -509,45 +492,40 @@
     \lean{blockEntropy_doubledTensor}
     \leanok
     \uses{lem:mpo_doubled, def:block_entropy, def:pure_sal}
-    For an MPS tensor $A$, system size $N$, and block length $L \le N$, the MPDO
-    block entropy of the tensor $M^{ij} = A^i \otimes \overline{A^j}$ agrees
+    For an MPS tensor $A$, system size $N$, and block length $L\le N$, the MPDO
+    block entropy of the tensor $M^{ij}=A^i\otimes\overline{A^j}$ agrees
     with the pure-state block entropy:
-    \[
-        S_L^{(N)}(M) = S_L^{(N)}(A).
-    \]
+    $S_L^{(N)}(M)=S_L^{(N)}(A)$.
 \end{lemma}
 \begin{proof}\leanok
     Lemma~\ref{lem:mpo_doubled} gives
-    $\rho^{(N)}(M) = \ketbra{V^{(N)}(A)}{V^{(N)}(A)}$, hence
-    \[
+    $\rho^{(N)}(M)=\ketbra{V^{(N)}(A)}{V^{(N)}(A)}$, hence
+    \begin{align}
         \sigma^{(N)}(M)
-        =
+        &=
         \frac{\rho^{(N)}(M)}{\tr[\rho^{(N)}(M)]}
         =
         \frac{\ketbra{V^{(N)}(A)}{V^{(N)}(A)}}{\|V^{(N)}(A)\|^2}
         =
         \sigma^{(N)}(A).
-    \]
+        \notag
+    \end{align}
     Therefore the reduced block states agree:
-    \[
+    \begin{align}
         \rho_L^{(N)}(M)
+        &=
+        \tr_{N\setminus L}\![\sigma^{(N)}(M)]
         =
-        \tr_{N\setminus L}\!\bigl[\sigma^{(N)}(M)\bigr]
-        =
-        \tr_{N\setminus L}\!\bigl[\sigma^{(N)}(A)\bigr]
+        \tr_{N\setminus L}\![\sigma^{(N)}(A)]
         =
         \rho_L^{(N)}(A).
-    \]
+        \notag
+    \end{align}
     Thus
-    \[
-        S_L^{(N)}(M)
-        =
-        S\bigl(\rho_L^{(N)}(M)\bigr)
-        =
-        S\bigl(\rho_L^{(N)}(A)\bigr)
-        =
-        S_L^{(N)}(A).
-    \]
+    $S_L^{(N)}(M)
+      =S(\rho_L^{(N)}(M))
+      =S(\rho_L^{(N)}(A))
+      =S_L^{(N)}(A)$.
 \end{proof}
 
 \begin{lemma}[Schmidt symmetry of the block entropy]\label{lem:schmidt_symmetry}
@@ -556,39 +534,39 @@
     \uses{def:pure_sal}
     For an MPS tensor $A$ and a block length $L\le N$, the block entropies of a
     block and its complement coincide:
-    \[
-        S_L^{(N)}(A) = S_{N-L}^{(N)}(A).
-    \]
+    $S_L^{(N)}(A)=S_{N-L}^{(N)}(A)$.
 \end{lemma}
 \begin{proof}\leanok
-    The reduced state of the first $L$ spins is $\rho_L \propto W W^\dagger$, where
-    $W$ is the matrix of amplitudes $\langle u\,w\,|\,V^{(N)}(A)\rangle$ with $u$ the
+    The reduced state of the first $L$ spins is $\rho_L\propto WW^\dagger$, where
+    $W$ is the matrix of amplitudes $\bra{u\,w}V^{(N)}(A)\rangle$ with $u$ the
     first $L$ spins and $w$ the remaining $N-L$. By cyclic invariance of the
-    amplitudes, the reduced state of the complement is $\propto \overline{W^\dagger W}$.
-    Cyclic invariance of the entropy, $S(WW^\dagger) = S(W^\dagger W)$, together with
-    invariance of the entropy under entrywise conjugation of a Hermitian matrix,
-    $S(\overline{W^\dagger W}) = S(W^\dagger W)$, gives
-    $S_L^{(N)}(A) = S_{N-L}^{(N)}(A)$.
+    amplitudes, the reduced state of the complement is
+    $\propto\overline{W^\dagger W}$.
+    Cyclic invariance of the entropy,
+    $S(WW^\dagger)=S(W^\dagger W)$, together with invariance of the entropy
+    under entrywise conjugation of a Hermitian matrix,
+    $S(\overline{W^\dagger W})=S(W^\dagger W)$, gives
+    $S_L^{(N)}(A)=S_{N-L}^{(N)}(A)$.
 \end{proof}
 
 \begin{proposition}[Pure-state area-law monotonicity]\label{prop:pure_area_monotone}
     \lean{pureBlockEntropy_monotone}
     \leanok
     \uses{def:pure_sal, lem:schmidt_symmetry, lem:blockEntropy_doubledTensor}
-    Let $A$ be an MPS tensor with $V^{(N)}(A)\neq 0$. For every block length $L$
-    with $2L+1\le N$ (covering $1\le L<\lfloor N/2\rfloor$),
-    \[
-        S_L^{(N)}(A) \le S_{L+1}^{(N)}(A).
-    \]
-    This is the pure-state area law of \cite[Section~3, line~599]{Cirac2016MPDO_arXiv}.
+    Let $A$ be an MPS tensor with $V^{(N)}(A)\neq0$. For every block length $L$
+    with $2L+1\le N$, covering $1\le L<\lfloor N/2\rfloor$,
+    $S_L^{(N)}(A)\le S_{L+1}^{(N)}(A)$.
+    This is the pure-state area law of
+    \cite[Section~3, line~599]{Cirac2016MPDO_arXiv}.
 \end{proposition}
 \begin{proof}\leanok
     \uses{prop:mutual_info_monotone}
-    Apply the block-entropy form of strong subadditivity (the inequality
-    underlying Proposition~\ref{prop:mutual_info_monotone}) to the purification
-    MPDO of $A$, giving $S_{N-L} + S_L \le S_{L+1} + S_{N-L-1}$. By the Schmidt
-    symmetry $S_{N-L} = S_L$ and $S_{N-L-1} = S_{L+1}$, this reduces to
-    $S_L \le S_{L+1}$.
+    Apply the block-entropy form of strong subadditivity, the inequality
+    underlying Proposition~\ref{prop:mutual_info_monotone}, to the purification
+    MPDO of $A$, giving
+    $S_{N-L}+S_L\le S_{L+1}+S_{N-L-1}$. By the Schmidt
+    symmetry $S_{N-L}=S_L$ and $S_{N-L-1}=S_{L+1}$, this reduces to
+    $S_L\le S_{L+1}$.
 \end{proof}
 
 \begin{lemma}[Operator-Schmidt Gram is a transfer-map power]
@@ -600,43 +578,65 @@
     Let $A$ be an MPS tensor of bond dimension $D$. For a length-$\ell$
     configuration $\sigma$ and a length-$m$ configuration $\tau$, write the
     operator-Schmidt factors as
-    \[
-        (L_\ell)_{\sigma,(a_1,a_2)} = (A^\sigma)_{a_1a_2},
-        \qquad
-        (R_m)_{(p_1,p_2),\tau} = (A^\tau)_{p_2p_1}.
-    \]
+    \begin{align}
+        (L_\ell)_{\sigma,(a_1,a_2)}
+        &=(A^\sigma)_{a_1a_2},
+        \notag\\
+        (R_m)_{(p_1,p_2),\tau}
+        &=(A^\tau)_{p_2p_1}.
+        \notag
+    \end{align}
     The $D^2\times D^2$ Gram matrix of the left factor equals the $\ell$-fold
     transfer map evaluated on a matrix unit:
-    \[
-        \bigl(L_\ell^\dagger L_\ell\bigr)_{(a_1,a_2),(b_1,b_2)}
-            = \sum_{\sigma}\overline{(A^\sigma)_{a_1 a_2}}\,(A^\sigma)_{b_1 b_2}
-            = \bigl(\mathbb{E}_A^{\,\ell}(\ketbra{b_2}{a_2})\bigr)_{b_1,a_1},
-    \]
-    the sum running over length-$\ell$ configurations $\sigma$. The Gram of the
-    right factor $R_m$ of an $m$-spin complement satisfies the bond-swapped
+    \begin{align}
+        (L_\ell^\dagger L_\ell)_{(a_1,a_2),(b_1,b_2)}
+        &=
+        \sum_{\sigma}\overline{(A^\sigma)_{a_1a_2}}
+            (A^\sigma)_{b_1b_2}
+        \notag\\
+        &=
+        (\E_A^{\,\ell}(\ketbra{b_2}{a_2}))_{b_1,a_1},
+        \notag
+    \end{align}
+    where the sum runs over length-$\ell$ configurations $\sigma$. The Gram of
+    the right factor $R_m$ of an $m$-spin complement satisfies the bond-swapped
     identity
-    \[
-        \bigl(R_m R_m^\dagger\bigr)_{(p_1,p_2),(q_1,q_2)}
-            = \sum_{\tau}(A^\tau)_{p_2 p_1}\,
-                \overline{(A^\tau)_{q_2 q_1}}
-            = \bigl(\mathbb{E}_A^{\,m}(\ketbra{p_1}{q_1})\bigr)_{p_2,q_2},
-    \]
-    the sum running over length-$m$ configurations $\tau$.
+    \begin{align}
+        (R_mR_m^\dagger)_{(p_1,p_2),(q_1,q_2)}
+        &=
+        \sum_{\tau}(A^\tau)_{p_2p_1}
+            \overline{(A^\tau)_{q_2q_1}}
+        \notag\\
+        &=
+        (\E_A^{\,m}(\ketbra{p_1}{q_1}))_{p_2,q_2},
+        \notag
+    \end{align}
+    where the sum runs over length-$m$ configurations $\tau$.
 \end{lemma}
 \begin{proof}\leanok
     The left Gram entry is
-    $\sum_\sigma \overline{(A^\sigma)_{a_1 a_2}}\,(A^\sigma)_{b_1 b_2}$
+    $\sum_\sigma\overline{(A^\sigma)_{a_1a_2}}(A^\sigma)_{b_1b_2}$
     by definition of $L_\ell$. Expanding
-    $\mathbb{E}_A^{\,\ell}(\ketbra{b_2}{a_2})
-        = \sum_\sigma A^\sigma\,\ketbra{b_2}{a_2}\,(A^\sigma)^\dagger$
+    \begin{align}
+        \E_A^{\,\ell}(\ketbra{b_2}{a_2})
+        &=
+        \sum_\sigma
+        A^\sigma\ketbra{b_2}{a_2}(A^\sigma)^\dagger
+        \notag
+    \end{align}
     and reading off the $(b_1,a_1)$ entry gives the same sum, since
-    $\bigl(A^\sigma\,\ketbra{b_2}{a_2}\,(A^\sigma)^\dagger\bigr)_{b_1,a_1}
-        = (A^\sigma)_{b_1 b_2}\,\overline{(A^\sigma)_{a_1 a_2}}$.
+    \begin{align}
+        \bigl(      A^\sigma\ketbra{b_2}{a_2}(A^\sigma)^\dagger
+        \bigr)_{b_1,a_1}
+        &=
+        (A^\sigma)_{b_1b_2}
+        \overline{(A^\sigma)_{a_1a_2}}.
+        \notag
+    \end{align}
     The right-factor formula is the same expansion with the two boundary bonds
     interchanged: the $(p,q)$ entry of $R_mR_m^\dagger$ is
-    $\sum_\tau (A^\tau)_{p_2p_1}\overline{(A^\tau)_{q_2q_1}}$, which is the
-    $(p_2,q_2)$ entry of
-    $\mathbb{E}_A^{\,m}(\ketbra{p_1}{q_1})$.
+    $\sum_\tau(A^\tau)_{p_2p_1}\overline{(A^\tau)_{q_2q_1}}$, which is the
+    $(p_2,q_2)$ entry of $\E_A^{\,m}(\ketbra{p_1}{q_1})$.
 \end{proof}
 
 \begin{lemma}[RFP collapse of the operator-Schmidt Grams]
@@ -645,19 +645,20 @@
         MPSTensor.schmidtRight_gram_eq_of_isTransferIdempotent}
     \leanok
     \uses{def:mps_transfer_idempotence, lem:schmidt_gram_transfer_power}
-    Let $A$ be a renormalization fixed point. For every $L\ge 1$ and
-    $m\ge 1$, the operator-Schmidt Grams of the $L$-block and of the
+    Let $A$ be a renormalization fixed point. For every $L\ge1$ and
+    $m\ge1$, the operator-Schmidt Grams of the $L$-block and of the
     $m$-site complement are the one-site Grams:
-    \[
-        L_L^\dagger L_L = L_1^\dagger L_1,
-        \qquad
-        R_mR_m^\dagger = R_1R_1^\dagger .
-    \]
+    \begin{align}
+        L_L^\dagger L_L&=L_1^\dagger L_1,
+        \notag\\
+        R_mR_m^\dagger&=R_1R_1^\dagger.
+        \notag
+    \end{align}
 \end{lemma}
 \begin{proof}\leanok
     By definition, a renormalization fixed point satisfies
-    $\mathbb{E}_A^{\,2}=\mathbb{E}_A$, so $\mathbb{E}_A^{\,k}=\mathbb{E}_A$ for
-    every $k\ge 1$. Applying Lemma~\ref{lem:schmidt_gram_transfer_power} to the
+    $\E_A^{\,2}=\E_A$, so $\E_A^{\,k}=\E_A$ for
+    every $k\ge1$. Applying Lemma~\ref{lem:schmidt_gram_transfer_power} to the
     left and right Gram entries gives the two displayed identities.
 \end{proof}
 
@@ -669,28 +670,31 @@
     Let $A$ be an MPS tensor, let $L\le N$, put $m=N-L$, and write
     $c=(\tr\rho^{(N)})^{-1}$. Then the pure block entropy is the
     charpoly-root entropy sum of the $D^2\times D^2$ bond environment:
-    \[
+    \begin{align}
         S_L^{(N)}(A)
-        =
+        &=
         \sum_{\lambda\in
             \operatorname{roots}\chi_{c\,(R_mR_m^\dagger)(L_L^\dagger L_L)}}
-            -\re(\lambda)\log\re(\lambda),
-    \]
-    with roots counted with algebraic multiplicity.
+            -\re(\lambda)\log\re(\lambda).
+        \notag
+    \end{align}
+    The roots are counted with algebraic multiplicity.
 \end{lemma}
 \begin{proof}\leanok
     The reduced block state has the exact factorization
-    \[
+    \begin{align}
         \rho_L^{(N)}(A)
-        =
-        c\,L_L(R_mR_m^\dagger)L_L^\dagger .
-    \]
+        &=
+        c\,L_L(R_mR_m^\dagger)L_L^\dagger.
+        \notag
+    \end{align}
     Cyclic invariance of the charpoly-root entropy sum gives
-    \[
-        S\bigl(c\,L_L(R_mR_m^\dagger)L_L^\dagger\bigr)
-            =
-        S\bigl(c\,(R_mR_m^\dagger)(L_L^\dagger L_L)\bigr),
-    \]
+    \begin{align}
+        S(c\,L_L(R_mR_m^\dagger)L_L^\dagger)
+        &=
+        S(c\,(R_mR_m^\dagger)(L_L^\dagger L_L)),
+        \notag
+    \end{align}
     which is the displayed formula.
 \end{proof}
 
@@ -704,10 +708,7 @@
     If an MPS tensor $A$ is a renormalization fixed point, then it saturates the
     area law: for every chain length $N$ and every block length
     $1\le L<\lfloor N/2\rfloor$, the pure-state block entropy is constant in the
-    block size,
-    \[
-        S_L^{(N)}(A) = S_{L+1}^{(N)}(A).
-    \]
+    block size, $S_L^{(N)}(A)=S_{L+1}^{(N)}(A)$.
     The source statement is
     \cite[Proposition~3.14, lines~606--608]{Cirac2016MPDO_arXiv}.
     It assumes canonical form; the theorem above is the stronger pure-state
@@ -717,35 +718,43 @@
     \uses{lem:pure_block_entropy_env_charpoly, lem:rfp_schmidt_gram_collapse}
     Write $c=(\tr\rho^{(N)})^{-1}$. Lemma~\ref{lem:pure_block_entropy_env_charpoly}
     computes the entropy from the bond environment:
-    \[
+    \begin{align}
         S_L^{(N)}(A)
-        =
+        &=
         \sum_{\lambda\in
             \operatorname{roots}\chi_{c\,(R_{N-L}R_{N-L}^\dagger)
                 (L_L^\dagger L_L)}}
             -\re(\lambda)\log\re(\lambda).
-    \]
+        \notag
+    \end{align}
     Since $1\le L<\lfloor N/2\rfloor$, the four lengths
     $L$, $L+1$, $N-L$, and $N-(L+1)$ are positive. The RFP Gram-collapse lemma
     gives
-    \[
-        L_L^\dagger L_L=L_1^\dagger L_1,\qquad
-        L_{L+1}^\dagger L_{L+1}=L_1^\dagger L_1,
-    \]
-    and
-    \[
-        R_{N-L}R_{N-L}^\dagger=R_1R_1^\dagger,\qquad
-        R_{N-(L+1)}R_{N-(L+1)}^\dagger=R_1R_1^\dagger .
-    \]
+    \begin{align}
+        L_L^\dagger L_L
+        &=L_1^\dagger L_1,
+        \notag\\
+        L_{L+1}^\dagger L_{L+1}
+        &=L_1^\dagger L_1,
+        \notag\\
+        R_{N-L}R_{N-L}^\dagger
+        &=R_1R_1^\dagger,
+        \notag\\
+        R_{N-(L+1)}R_{N-(L+1)}^\dagger
+        &=R_1R_1^\dagger.
+        \notag
+    \end{align}
     Therefore the two bond environments agree:
-    \[
+    \begin{align}
         (R_{N-L}R_{N-L}^\dagger)(L_L^\dagger L_L)
-        =
+        &=
         (R_1R_1^\dagger)(L_1^\dagger L_1)
-        =
+        \notag\\
+        &=
         (R_{N-(L+1)}R_{N-(L+1)}^\dagger)
-            (L_{L+1}^\dagger L_{L+1}).
-    \]
+        (L_{L+1}^\dagger L_{L+1}).
+        \notag
+    \end{align}
     The scalar $c$ depends only on $N$, so the two charpoly-root entropy sums
     are equal. Hence $S_L^{(N)}(A)=S_{L+1}^{(N)}(A)$.
 \end{proof}
@@ -757,9 +766,13 @@
     \uses{thm:rfp-saturates-area-law, lem:pure_sal_const}
     If an MPS tensor $A$ is a renormalization fixed point, then all block entropies
     in the range $1\le L\le\lfloor N/2\rfloor$ coincide:
-    \[
-        S_1^{(N)}(A) = S_2^{(N)}(A) = \cdots = S_{\lfloor N/2\rfloor}^{(N)}(A).
-    \]
+    \begin{align}
+        S_1^{(N)}(A)
+        &=S_2^{(N)}(A)
+         =\cdots
+         =S_{\lfloor N/2\rfloor}^{(N)}(A).
+        \notag
+    \end{align}
     This is the explicit constant-entropy chain of the area-law saturation
     \cite[Definition~3.13, line~600]{Cirac2016MPDO_arXiv}, under the fixed-point
     hypothesis.
@@ -769,10 +782,8 @@
     The fixed point saturates the area law
     (Theorem~\ref{thm:rfp-saturates-area-law}), so by the telescoping of
     saturation (Lemma~\ref{lem:pure_sal_const}) the block entropies at any two
-    lengths $1\le L, L'\le\lfloor N/2\rfloor$ agree:
-    \[
-        S_L^{(N)}(A) = S_{L'}^{(N)}(A).
-    \]
+    lengths $1\le L,L'\le\lfloor N/2\rfloor$ agree:
+    $S_L^{(N)}(A)=S_{L'}^{(N)}(A)$.
 \end{proof}
 
 \begin{lemma}[Operator-Schmidt rank bound]\label{lem:operator_schmidt_rank}
@@ -782,13 +793,21 @@
     reduced state $\rho_L^{(N)}(A)$ of the first $L$ spins has rank at most $D^2$.
 \end{lemma}
 \begin{proof}\leanok
-    The reduced state is $\rho_L \propto W W^\dagger$, where the amplitude matrix
-    $W(u, w) = \langle u\,w\,|\,V^{(N)}(A)\rangle = \tr
-        \bigl(A^{u_1}\cdots A^{u_L}\, A^{w_1}\cdots A^{w_{N-L}}\bigr)$ factors through
-    the two bond pairs cut by the block boundary. Writing the trace as a sum over
-    the bond index pair $(a, b)\in\{1,\dots,D\}^2$ exhibits $W = L'R'$ with $L'$
-    having $D^2$ columns, so $\rank\rho_L \le \rank W
-        \le D^2$.
+    The reduced state is $\rho_L\propto WW^\dagger$, where the amplitude matrix
+    \begin{align}
+        W(u,w)
+        &=
+        \bra{u\,w}V^{(N)}(A)\rangle
+        =
+        \tr\!\bigl(      A^{u_1}\cdots A^{u_L}
+          A^{w_1}\cdots A^{w_{N-L}}
+        \bigr)
+        \notag
+    \end{align}
+    factors through the two bond pairs cut by the block boundary. Writing the
+    trace as a sum over the bond index pair
+    $(a,b)\in\{1,\ldots,D\}^2$ exhibits $W=L'R'$ with $L'$ having $D^2$
+    columns, so $\rank\rho_L\leq\rank W\leq D^2$.
 \end{proof}
 
 \begin{lemma}[The reduced pure block state is a density matrix]
@@ -796,14 +815,14 @@
     \lean{MPSTensor.reducedPureBlockState_posSemidef, MPSTensor.reducedPureBlockState_trace}
     \leanok
     \uses{def:pure_sal}
-    For an MPS tensor $A$ with $V^{(N)}(A)\neq 0$, the reduced state $\rho_L^{(N)}(A)$ of
-    the first $L$ spins is a density matrix: it is positive semidefinite and has unit
-    trace.
+    For an MPS tensor $A$ with $V^{(N)}(A)\neq0$, the reduced state
+    $\rho_L^{(N)}(A)$ of the first $L$ spins is a density matrix: it is positive
+    semidefinite and has unit trace.
 \end{lemma}
 \begin{proof}\leanok
     Positive semidefiniteness is preserved by the partial trace of the positive
-    semidefinite normalized pure state, and the partial trace preserves the trace, which
-    the normalization fixes to one.
+    semidefinite normalized pure state, and the partial trace preserves the trace,
+    which the normalization fixes to one.
 \end{proof}
 
 \begin{proposition}[Pure-state area-law upper bound]\label{prop:pure_area_upper}
@@ -811,12 +830,9 @@
     \leanok
     \uses{lem:operator_schmidt_rank, lem:trace_one_positive_rank,
         thm:entropy_le_log_rank, lem:reduced_pure_block_state_density}
-    Let $A$ be an MPS tensor of bond dimension $D\ge 1$ with $V^{(N)}(A)\neq 0$.
-    For every block length $L\le N$,
-    \[
-        S_L^{(N)}(A) \le 2\log D,
-    \]
-    uniformly in $L$ and $N$. This is the area law of
+    Let $A$ be an MPS tensor of bond dimension $D\geq1$ with
+    $V^{(N)}(A)\neq0$. For every block length $L\le N$,
+    $S_L^{(N)}(A)\leq2\log D$, uniformly in $L$ and $N$. This is the area law of
     \cite[Section~3, line~599]{Cirac2016MPDO_arXiv}: the block entropy is bounded
     by a constant independent of the block size.
 \end{proposition}
@@ -827,7 +843,7 @@
     (Lemma~\ref{lem:reduced_pure_block_state_density}), so its rank is positive
     by Lemma~\ref{lem:trace_one_positive_rank}. Its rank is at most $D^2$ by
     Lemma~\ref{lem:operator_schmidt_rank}. The rank bound on the entropy gives
-    $S_L^{(N)}(A)\le\log(D^2)=2\log D$.
+    $S_L^{(N)}(A)\leq\log(D^2)=2\log D$.
 \end{proof}
 
 \begin{lemma}[Nonnegativity of the pure-state block entropy]
@@ -835,14 +851,15 @@
     \lean{MPSTensor.pureBlockEntropy_nonneg}
     \leanok
     \uses{def:pure_sal, thm:entropy_nonneg, lem:reduced_pure_block_state_density}
-    For an MPS tensor $A$ with $V^{(N)}(A)\neq 0$ and every block length $L\le N$,
-    the pure-state block entropy is nonnegative: $0 \le S_L^{(N)}(A)$.
+    For an MPS tensor $A$ with $V^{(N)}(A)\neq0$ and every block length
+    $L\le N$, the pure-state block entropy is non-negative:
+    $0\le S_L^{(N)}(A)$.
 \end{lemma}
 \begin{proof}\leanok
     \uses{lem:reduced_pure_block_state_density}
     The reduced state $\rho_L^{(N)}(A)$ is a density matrix
     (Lemma~\ref{lem:reduced_pure_block_state_density}), and the von Neumann
-    entropy of a density matrix is nonnegative.
+    entropy of a density matrix is non-negative.
 \end{proof}
 
 \begin{lemma}[Full-block pure-state entropy vanishes]
@@ -850,19 +867,18 @@
     \lean{pureBlockEntropy_full}
     \leanok
     \uses{def:pure_sal}
-    For an MPS tensor $A$ with $V^{(N)}(A)\neq 0$, the entropy of the whole chain
-    vanishes:
-    \[
-        S_N^{(N)}(A) = 0 .
-    \]
+    For an MPS tensor $A$ with $V^{(N)}(A)\neq0$, the entropy of the whole chain
+    vanishes: $S_N^{(N)}(A)=0$.
 \end{lemma}
 \begin{proof}\leanok
-    The normalized operator is the rank-one pure state
-    \[
-        \frac{\ket{V^{(N)}(A)}\bra{V^{(N)}(A)}}
-        {\langle V^{(N)}(A), V^{(N)}(A)\rangle} ,
-    \]
-    after reindexing the full block. A pure state has von Neumann entropy zero.
+    After reindexing the full block, the normalized operator is the rank-one
+    pure state
+    \begin{align}
+        \frac{\ketbra{V^{(N)}(A)}{V^{(N)}(A)}}
+        {\braket{V^{(N)}(A)}{V^{(N)}(A)}}.
+        \notag
+    \end{align}
+    A pure state has von Neumann entropy zero.
 \end{proof}
 
 \begin{lemma}[Empty-block pure-state entropy vanishes]
@@ -870,13 +886,14 @@
     \lean{MPSTensor.pureBlockEntropy_empty}
     \leanok
     \uses{def:pure_sal, lem:pure_entropy_full, lem:schmidt_symmetry}
-    For an MPS tensor $A$ with $V^{(N)}(A)\neq 0$, the pure-state block entropy of the
-    empty block vanishes: $S_0^{(N)}(A) = 0$.
+    For an MPS tensor $A$ with $V^{(N)}(A)\neq0$, the pure-state block entropy of
+    the empty block vanishes: $S_0^{(N)}(A)=0$.
 \end{lemma}
 \begin{proof}\leanok
     \uses{lem:pure_entropy_full, lem:schmidt_symmetry}
-    By the Schmidt symmetry $S_0^{(N)}(A) = S_{N}^{(N)}(A)$, and the entropy of the full
-    system vanishes for a pure state (Lemma~\ref{lem:pure_entropy_full}).
+    By the Schmidt symmetry $S_0^{(N)}(A)=S_N^{(N)}(A)$, and the entropy of the
+    full system vanishes for a pure state
+    (Lemma~\ref{lem:pure_entropy_full}).
 \end{proof}
 
 \begin{lemma}[Saturation telescopes to a constant block entropy]
@@ -885,10 +902,8 @@
     \leanok
     \uses{def:pure_sal, lem:finite_interval_constancy}
     If an MPS tensor $A$ saturates the area law, then the block entropies
-    coincide for all $1\le L, L'\le \lfloor N/2\rfloor$:
-    \[
-        S_L^{(N)}(A) = S_{L'}^{(N)}(A) .
-    \]
+    coincide for all $1\le L,L'\le\lfloor N/2\rfloor$:
+    $S_L^{(N)}(A)=S_{L'}^{(N)}(A)$.
 \end{lemma}
 \begin{proof}\leanok
     \uses{def:pure_sal, lem:finite_interval_constancy}
@@ -903,35 +918,31 @@
     \lean{mutualInfoChain_doubledTensor}
     \leanok
     \uses{lem:pure_entropy_full, lem:schmidt_symmetry, lem:blockEntropy_doubledTensor}
-    For an MPS tensor $A$ with $V^{(N)}(A)\neq 0$, the mutual information of the
+    For an MPS tensor $A$ with $V^{(N)}(A)\neq0$, the mutual information of the
     purification MPDO equals twice the pure-state block entropy:
-    \[
-        I_L = 2\,S_L^{(N)}(A).
-    \]
+    $I_L=2S_L^{(N)}(A)$.
 \end{lemma}
 \begin{proof}\leanok
-    By definition $I_L = S_L + S_{N-L} - S_N$ for the generated state. The global
+    By definition, $I_L=S_L+S_{N-L}-S_N$ for the generated state. The global
     entropy of the pure state vanishes (Lemma~\ref{lem:pure_entropy_full}), and
     the Schmidt symmetry (Lemma~\ref{lem:schmidt_symmetry}) gives
-    $S_{N-L} = S_L$, so $I_L = 2\,S_L$.
+    $S_{N-L}=S_L$, so $I_L=2S_L$.
 \end{proof}
 
 \begin{proposition}[Pure-state mutual-information bound]\label{prop:pure_mutual_info_bound}
     \lean{mutualInfoChain_doubledTensor_le}
     \leanok
     \uses{prop:pure_area_upper, lem:mutual_info_doubled}
-    Let $A$ be an MPS tensor of bond dimension $D\ge 1$ with $V^{(N)}(A)\neq 0$.
-    For the purification MPDO of $A$, whose generated operator is the pure state
-    $|V^{(N)}(A)\rangle\langle V^{(N)}(A)|$, the mutual information between a block
-    of $L$ spins and the rest satisfies
-    \[
-        I_L \le 4\log D,
-    \]
-    uniformly in $L$ and $N$.
+    Let $A$ be an MPS tensor of bond dimension $D\geq1$ with
+    $V^{(N)}(A)\neq0$. For the purification MPDO of $A$, whose generated
+    operator is the pure state
+    $\ketbra{V^{(N)}(A)}{V^{(N)}(A)}$, the mutual information between a block
+    of $L$ spins and the rest satisfies $I_L\leq4\log D$, uniformly in $L$ and
+    $N$.
 \end{proposition}
 \begin{proof}\leanok
-    For a pure state $I_L = 2\,S_L^{(N)}(A)$, since the global entropy $S_N$
-    vanishes and a block and its complement share the same Schmidt spectrum. The
-    block-entropy bound $S_L^{(N)}(A) \le 2\log D$
-    (Proposition~\ref{prop:pure_area_upper}) then gives $I_L \le 4\log D$.
+    For a pure state, $I_L=2S_L^{(N)}(A)$, since the global entropy $S_N$
+    vanishes and a block and its complement share the same Schmidt spectrum.
+    The block-entropy bound $S_L^{(N)}(A)\leq2\log D$
+    (Proposition~\ref{prop:pure_area_upper}) then gives $I_L\leq4\log D$.
 \end{proof}

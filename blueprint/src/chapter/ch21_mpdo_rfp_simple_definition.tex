@@ -8,9 +8,11 @@
     For a doubled-index tensor $B$ with physical dimension $d^{2}$, the
     physical-trace transfer is the bond matrix obtained by closing the ket
     leg against the bra leg of one tensor:
-    \[
-        \mathcal T_{B}=\sum_{i} B^{\,ii}.
-    \]
+    \begin{align}
+        \mathcal T_{B}
+        &=\sum_{i} B^{\,ii}.
+        \label{eq:rfp_phys_trace}
+    \end{align}
     This is the transfer object of the zero-correlation-length condition of
     \cite[Definition~4.2, lines~735--739]{Cirac2016MPDO_arXiv}, applied to
     one element of a basis of normal tensors.
@@ -28,12 +30,10 @@
 \begin{proof}\leanok
     If $M^{\mathrm{dbl}}$ is the doubled-index view of $M$, then
     $(M^{\mathrm{dbl}})^{(i,j)}=M^{ij}$, and hence
-    \[
-        \mathcal T_{M^{\mathrm{dbl}}}
-        =\sum_i(M^{\mathrm{dbl}})^{ii}
-        =\sum_i M^{ii}
-        =\mathcal T_M.
-    \]
+    $\mathcal T_{M^{\mathrm{dbl}}}
+    =\sum_i(M^{\mathrm{dbl}})^{ii}
+    =\sum_i M^{ii}
+    =\mathcal T_M$.
 \end{proof}
 
 \begin{lemma}[Blockwise form of the physical-trace transfer]
@@ -44,23 +44,24 @@
     For a sector decomposition with basis elements $A_{j}$ and weights
     $\mu_{j,q}$, the physical-trace transfer of the assembled tensor is the
     block direct sum of the weighted transfers of the copies:
-    \[
+    \begin{align}
         \mathcal T
-        =\bigoplus_{j}\bigoplus_{q}\mu_{j,q}\,\mathcal T_{A_{j}}.
-    \]
+        &=\bigoplus_{j}\bigoplus_{q}\mu_{j,q} \mathcal T_{A_{j}}.
+        \label{eq:rfp_blockwise_transfer}
+    \end{align}
 \end{lemma}
 
 \begin{proof}\leanok
     The diagonal physical sum distributes over the block direct sum:
-    \[
-        \begin{aligned}
-            \mathcal T
-             & =\sum_i S^{ii}
-            =\sum_i\bigoplus_{j,q}\mu_{j,q}A_j^{ii}     \\
-             & =\bigoplus_{j,q}\mu_{j,q}\sum_i A_j^{ii}
-            =\bigoplus_{j,q}\mu_{j,q}\mathcal T_{A_j}.
-        \end{aligned}
-    \]
+    \begin{align}
+        \mathcal T
+        &=\sum_i S^{ii}
+          =\sum_i\bigoplus_{j,q}\mu_{j,q}A_j^{ii}
+        \notag\\
+        &=\bigoplus_{j,q}\mu_{j,q}\sum_i A_j^{ii}
+          =\bigoplus_{j,q}\mu_{j,q}\mathcal T_{A_j}.
+        \notag
+    \end{align}
 \end{proof}
 
 \begin{definition}[Simple tensor]
@@ -87,7 +88,7 @@
         def:mpdo_doubled_phys_trace_transfer}
     A tensor generating MPDOs is in \emph{simple canonical form} if it has a
     basis-of-normal-tensors decomposition whose basis elements all have
-    non-nilpotent physical-trace transfer.  This records the simple
+    non-nilpotent physical-trace transfer. This records the simple
     horizontal-canonical-form data of the already-blocked tensor $K$ fixed in
     \cite[Appendix~C.2, line~1628]{Cirac2016MPDO_arXiv}.
 \end{definition}
@@ -108,6 +109,6 @@
 \begin{proof}\leanok
     The canonical-form data in the simplicity hypothesis---the sector
     decomposition, its basis-of-normal-tensors property, and the
-    block-diagonal gauge---give a horizontal canonical form.  Positivity and
+    block-diagonal gauge---give a horizontal canonical form. Positivity and
     non-nilpotency are not needed for this conclusion.
 \end{proof}

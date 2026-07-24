@@ -8,11 +8,10 @@
     \uses{def:mpdo_sector_tensors}
     Tracing the two physical legs of a sector tensor leaves a vector over
     the virtual bond:
-    \[
-        |l_k)_{\gamma}:=\tr\left[(l_k)_{\gamma}\right],
-        \qquad
-        (r_k|_{\gamma}:=\tr\left[(r_k)_{\gamma}\right].
-    \]
+    \begin{align}
+        |l_k)_{\gamma}&:=\tr\left[(l_k)_{\gamma}\right], \notag\\
+        (r_k|_{\gamma}&:=\tr\left[(r_k)_{\gamma}\right]. \notag
+    \end{align}
     These are the closed tensors of
     \cite[Appendix~C.2, lines~1473--1477]{Cirac2016MPDO_arXiv}.
 \end{definition}
@@ -24,9 +23,9 @@
     \uses{def:mpdo_closed_sector_tensors}
     For sector tensors $(l_k)_\beta$ and $(r_k)_\alpha$, close their physical
     legs and set
-    \[
-        S:=\sum_k |l_k)(r_k|.
-    \]
+    \begin{align}
+        S&:=\sum_k |l_k)(r_k|. \label{eq:rfp_pairing_operator}
+    \end{align}
     This is the pairing operator displayed in
     \cite[Appendix~C.2, lines~1473--1493]{Cirac2016MPDO_arXiv}.
 \end{definition}
@@ -38,9 +37,7 @@
     \uses{def:mpdo_sector_eta, def:mpdo_closed_sector_tensors}
     For all sectors $k,h$, the trace of the neighboring operator is the
     pairing of the closed sector tensors:
-    \[
-        T_{k,h}=\tr(\eta_{k,h})=(r_k|l_h).
-    \]
+    $T_{k,h}=\tr(\eta_{k,h})=(r_k|l_h)$.
     This is \cite[Appendix~C.2, lines~1452--1455
     and~1478--1481]{Cirac2016MPDO_arXiv}.
 \end{theorem}
@@ -48,13 +45,13 @@
 \begin{proof}
     \leanok
     Expanding the definition of the neighboring operator and applying
-    $\tr(A\otimes B)=\tr(A)\,\tr(B)$,
-    \[
+    $\tr(A\otimes B)=\tr(A) \tr(B)$ gives
+    \begin{align}
         \tr(\eta_{k,h})
-        =\sum_{\gamma}\tr\bigl((r_k)_{\gamma}\otimes(l_h)_{\gamma}\bigr)
-        =\sum_{\gamma}\tr[(r_k)_{\gamma}]\,\tr[(l_h)_{\gamma}]
-        =(r_k|l_h).
-    \]
+        &=\sum_{\gamma}\tr((r_k)_{\gamma}\otimes(l_h)_{\gamma})
+          =\sum_{\gamma}\tr[(r_k)_{\gamma}]\,\tr[(l_h)_{\gamma}]
+          =(r_k|l_h). \notag
+    \end{align}
 \end{proof}
 
 \begin{definition}[Concrete closed-sector trace matrix]
@@ -64,13 +61,8 @@
     \leanok
     \uses{def:mpdo_closed_sector_tensors, thm:mpdo_sector_trace_pairing}
     For the inverse-map sector tensors, define the complex matrix
-    \[
-        T_{k,h}:=(r_k|l_h).
-    \]
-    Equivalently,
-    \[
-        T_{k,h}=\tr(\eta_{k,h}).
-    \]
+    $T_{k,h}:=(r_k|l_h)$. Equivalently,
+    $T_{k,h}=\tr(\eta_{k,h})$.
     This is the trace matrix in
     \cite[Appendix~C.2, lines~1478--1481]{Cirac2016MPDO_arXiv}.
 \end{definition}
@@ -85,9 +77,9 @@
     $U_B\kappa_{\beta,\alpha}U_B^\dagger
     =\bigoplus_k(l_k)_\beta\otimes(r_k)_\alpha$ gives the closed-sector
     pairing operator
-    \[
-        \mathcal T_{\cal K}=\sum_k |l_k)(r_k|.
-    \]
+    \begin{align}
+        \mathcal T_{\cal K}&=\sum_k |l_k)(r_k|. \label{eq:rfp_trace_transfer}
+    \end{align}
     This identifies the transfer matrix of
     Definition~\ref{def:mpo_physical_trace_transfer} with the operator on the
     left-hand side of the zero-correlation-length identity in
@@ -96,20 +88,18 @@
 
 \begin{proof}
     \leanok
-    Trace the sector factorization over the physical index.  Unitary
+    Trace the sector factorization over the physical index. Unitary
     invariance gives
-    \[
-        \tr\bigl(U_B\kappa_{\beta,\alpha}U_B^\dagger\bigr)
-        =\tr(\kappa_{\beta,\alpha}).
-    \]
-    The trace of the block diagonal is the sum of the block traces.  In each
+    $\tr(U_B\kappa_{\beta,\alpha}U_B^\dagger)
+    =\tr(\kappa_{\beta,\alpha})$.
+    The trace of the block diagonal is the sum of the block traces. In each
     sector,
-    \[
-        \tr\bigl((l_k)_\beta\otimes(r_k)_\alpha\bigr)
-        =\tr[(l_k)_\beta]\,\tr[(r_k)_\alpha]
-        =\bigl[|l_k)(r_k|\bigr]_{\beta,\alpha}.
-    \]
-    Summing over $k$ gives the asserted operator identity.
+    \begin{align}
+        \tr((l_k)_\beta\otimes(r_k)_\alpha)
+        &=\tr[(l_k)_\beta]\,\tr[(r_k)_\alpha]
+          =[|l_k)(r_k|]_{\beta,\alpha}. \notag
+    \end{align}
+    Summing over $k$ gives (\ref{eq:rfp_trace_transfer}).
 \end{proof}
 
 \begin{corollary}[Physical-trace transfer from the inverse-map sectors]
@@ -118,13 +108,11 @@
     \leanok
     \uses{def:mpdo_injective_inverse_layer, def:mpdo_eta_structure,
         thm:mpdo_closed_sector_physical_trace_transfer}
-    Let ${\cal K}$ be injective.  Let $R$ and $\rho$ give a three-site
+    Let ${\cal K}$ be injective. Let $R$ and $\rho$ give a three-site
     closure of ${\cal K}$, choose a Hayashi decomposition of $\rho$, and fix
     virtual indices $\alpha_1,\beta_3$ such that
-    $R_{\beta_3,\alpha_1}\ne0$.  For the corresponding closed sector tensors,
-    \[
-        \mathcal T_{\cal K}=\sum_k |l_k)(r_k|.
-    \]
+    $R_{\beta_3,\alpha_1}\ne0$. For the corresponding closed sector tensors,
+    $\mathcal T_{\cal K}=\sum_k |l_k)(r_k|$.
 \end{corollary}
 
 \begin{proof}
@@ -132,7 +120,7 @@
     \uses{thm:mpdo_sector_factorization,
         thm:mpdo_closed_sector_physical_trace_transfer}
     The inverse-map sector tensors satisfy the sector factorization of
-    Theorem~\ref{thm:mpdo_sector_factorization}.  Apply
+    Theorem~\ref{thm:mpdo_sector_factorization}. Apply
     Theorem~\ref{thm:mpdo_closed_sector_physical_trace_transfer}.
 \end{proof}
 
@@ -146,24 +134,20 @@
         def:mpdo_injective_inverse_layer, def:mpdo_eta_structure,
         cor:mpdo_concrete_closed_sector_physical_trace_transfer,
         lem:mpo_source_zcl_normalized_idempotent}
-    Let ${\cal K}$ be injective.  Let $R$ and $\rho$ give a three-site
+    Let ${\cal K}$ be injective. Let $R$ and $\rho$ give a three-site
     closure of ${\cal K}$, choose a Hayashi decomposition of $\rho$, and fix
     virtual indices $\alpha_1,\beta_3$ such that
-    $R_{\beta_3,\alpha_1}\ne0$.  Form the corresponding closed sector
-    tensors $|l_k)$ and $(r_k|$.  If ${\cal K}$ has source zero correlation
-    length, set
-    \[
-        S:=\sum_k |l_k)(r_k|.
-    \]
-    Then there is a real number $\lambda>0$ such that
-    \[
-        S^2=\lambda S,
-        \qquad
-        (\lambda^{-1}S)^2=\lambda^{-1}S.
-    \]
+    $R_{\beta_3,\alpha_1}\ne0$. Form the corresponding closed sector
+    tensors $|l_k)$ and $(r_k|$. If ${\cal K}$ has source zero correlation
+    length, set $S:=\sum_k |l_k)(r_k|$. Then there is a real number
+    $\lambda>0$ such that
+    \begin{align}
+        S^2&=\lambda S, \label{eq:rfp_pairing_quasi_idempotent}\\
+        (\lambda^{-1}S)^2&=\lambda^{-1}S. \notag
+    \end{align}
     If ${\cal K}$ is the canonically normalized representative satisfying
     $\mathcal T_{\cal K}^2=\mathcal T_{\cal K}$, then the raw pairing
-    operator itself satisfies $S^2=S$.  This is the display preceding
+    operator itself satisfies $S^2=S$. This is the display preceding
     \cite[Appendix~C.2, Lemma~C.5]{Cirac2016MPDO_arXiv}; the first identity
     records the rescaling-invariant form of the same zero-correlation-length
     condition.
@@ -176,11 +160,11 @@
     Substitute
     $S=\mathcal T_{\cal K}$ from
     Corollary~\ref{cor:mpdo_concrete_closed_sector_physical_trace_transfer}
-    into the
-    defining relation
+    into the defining relation
     $\mathcal T_{\cal K}^2=\lambda\mathcal T_{\cal K}$, and then apply
-    Lemma~\ref{lem:mpo_source_zcl_normalized_idempotent}.  Under literal
-    idempotence, the same substitution gives $S^2=S$ directly.
+    Lemma~\ref{lem:mpo_source_zcl_normalized_idempotent} to obtain
+    (\ref{eq:rfp_pairing_quasi_idempotent}) and its normalized form. Under
+    literal idempotence, the same substitution gives $S^2=S$ directly.
 \end{proof}
 
 \begin{theorem}[Normalized closed-sector trace relations]
@@ -191,19 +175,16 @@
         thm:mpdo_closed_sector_pairing_normalized_idempotent}
     Under the hypotheses of
     Theorem~\ref{thm:mpdo_closed_sector_pairing_normalized_idempotent},
-    suppose that ${\cal K}$ has source zero correlation length.  There is a
+    suppose that ${\cal K}$ has source zero correlation length. There is a
     real number $\lambda>0$ such that, for
-    \[
-        \widehat T:=\lambda^{-1}T,
-    \]
-    one has
-    \[
-        \widehat T^2=\widehat T^3.
-    \]
+    $\widehat T:=\lambda^{-1}T$, one has
+    \begin{align}
+        \widehat T^2&=\widehat T^3. \label{eq:rfp_trace_square_cube}
+    \end{align}
     For every positive integer $N$, one also has
-    \[
-        \tr(\widehat T^N)=\tr(\widehat T).
-    \]
+    \begin{align}
+        \tr(\widehat T^N)&=\tr(\widehat T). \label{eq:rfp_trace_powers}
+    \end{align}
     This is the valid trace-power display in
     \cite[Appendix~C.2, lines~1490--1497]{Cirac2016MPDO_arXiv}.
     No idempotence or rank-one conclusion for $\widehat T$ is asserted.
@@ -213,25 +194,25 @@
     \leanok
     \uses{thm:mpdo_closed_sector_pairing_normalized_idempotent}
     Let $L$ be the matrix whose $h$th column is $|l_h)$, and let $Q$ be the
-    matrix whose $k$th row is $(r_k|$.  Then $S=LQ$ and $T=QL$.  Place the
-    normalization scalar on $L$.  Since $\lambda^{-1}LQ$ is idempotent,
+    matrix whose $k$th row is $(r_k|$. Then $S=LQ$ and $T=QL$. Place the
+    normalization scalar on $L$. Since $\lambda^{-1}LQ$ is idempotent,
     associativity gives
-    \[
-      (Q\lambda^{-1}L)^2
-        =Q(\lambda^{-1}LQ)\lambda^{-1}L
-        =Q(\lambda^{-1}LQ)^2\lambda^{-1}L
-        =(Q\lambda^{-1}L)^3.
-    \]
+    \begin{align}
+        (Q\lambda^{-1}L)^2
+        &=Q(\lambda^{-1}LQ)\lambda^{-1}L
+          =Q(\lambda^{-1}LQ)^2\lambda^{-1}L
+          =(Q\lambda^{-1}L)^3. \notag
+    \end{align}
     Cyclicity of trace and the idempotence of $\lambda^{-1}LQ$ give
-    \[
-      \tr(Q\lambda^{-1}L)
-        =\tr(\lambda^{-1}LQ)
-        =\tr\bigl((\lambda^{-1}LQ)^2\bigr)
-        =\tr\bigl((Q\lambda^{-1}L)^2\bigr).
-    \]
-    The preceding square--cube identity then gives
-    $\widehat T^N=\widehat T^2$ for every $N\geq2$, proving the stated trace
-    identity.
+    \begin{align}
+        \tr(Q\lambda^{-1}L)
+        &=\tr(\lambda^{-1}LQ)
+          =\tr((\lambda^{-1}LQ)^2)
+          =\tr((Q\lambda^{-1}L)^2). \notag
+    \end{align}
+    By (\ref{eq:rfp_trace_square_cube}),
+    $\widehat T^N=\widehat T^2$ for every $N\geq2$, which proves
+    (\ref{eq:rfp_trace_powers}).
 \end{proof}
 
 \begin{definition}[Explicit neighboring $\eta$-operator data]
@@ -255,10 +236,11 @@
     Let $(l_k)_a$ and $(r_k)_a$ be sector tensors indexed by the horizontal
     virtual index $a$. For neighboring sectors $k,h$, define an operator on
     $B_k^R\otimes B_h^L$ by
-    \[
-        \eta_{k,h}\bigl((x_R,x_L),(y_R,y_L)\bigr)
-        =\sum_a (r_k)_a(x_R,y_R)(l_h)_a(x_L,y_L).
-    \]
+    \begin{align}
+        \eta_{k,h}((x_R,x_L),(y_R,y_L))
+        &=\sum_a (r_k)_a(x_R,y_R)(l_h)_a(x_L,y_L).
+        \label{eq:rfp_eta_entries}
+    \end{align}
     Thus $\eta_{k,h}=r_k l_h$ is the contraction over the shared horizontal
     index in
     \cite[Appendix~C.2, equation~\textup{(etarl)}]{Cirac2016MPDO_arXiv}.
@@ -271,8 +253,8 @@
     \leanok
     \uses{def:mpdo_eta_of_sector_tensors}
     For every pair of sectors and every pair of matrix indices, the entry of
-    $\eta_{k,h}$ is the contraction displayed in
-    Definition~\ref{def:mpdo_eta_of_sector_tensors}.
+    $\eta_{k,h}$ is the contraction displayed
+    in (\ref{eq:rfp_eta_entries}).
 \end{lemma}
 
 \begin{proof}
@@ -282,9 +264,6 @@
 
 Neighboring right and left sector tensors meet in the bond operator
 $\eta_{k,h}=r_k l_h$:
-\[
-    \eta_{k,h}=r_k l_h
-\]
 \begin{center}
     % eta_{k,h} = r_k l_h: the neighboring bond operator is the
     % contraction of the right sector tensor r_k with the left sector
@@ -301,7 +280,7 @@ $\eta_{k,h}=r_k l_h$:
         \tn[pill, wide=2, legs at={1,2},
             up={{$x_R$},{$x_L$}}, down={{$y_R$},{$y_L$}}]{\eta_{k,h}}
     \end{tenkz}
-    $\;=\;$
+    $ = $
     \begin{tenkz}[physical=updown, boundary=none,
                   bond label={$a$ at 1-2}]
         \tn[up=$x_R$, down=$y_R$]{r_k} & \tn[up=$x_L$, down=$y_L$]{l_h}
@@ -318,19 +297,19 @@ This is the contraction in
     Let $N\geq1$ and let $k_0,\ldots,k_{N-1}$ be a cyclic sequence of
     sectors. Fix matrix indices in the left and right factor of every sector,
     and abbreviate
-    \[
-        L_n(a)=(l_{k_n})_a(x_n^L,y_n^L),
-        \qquad
-        R_n(a)=(r_{k_n})_a(x_n^R,y_n^R).
-    \]
+    \begin{align}
+        L_n(a)&=(l_{k_n})_a(x_n^L,y_n^L), \notag\\
+        R_n(a)&=(r_{k_n})_a(x_n^R,y_n^R). \notag
+    \end{align}
     With all site labels read modulo $N$,
-    \[
+    \begin{align}
         \sum_{g_0,\ldots,g_{N-1}}
           \prod_{n=0}^{N-1}L_n(g_n)R_n(g_{n+1})
-        =\prod_{n=0}^{N-1}
+        &=\prod_{n=0}^{N-1}
           \eta_{k_n,k_{n+1}}
-          \bigl((x_n^R,x_{n+1}^L),(y_n^R,y_{n+1}^L)\bigr).
-    \]
+          ((x_n^R,x_{n+1}^L),(y_n^R,y_{n+1}^L)).
+        \label{eq:rfp_cyclic_contraction}
+    \end{align}
     This is the entrywise cyclic contraction at
     \cite[Appendix~C.2, lines~1446--1450]{Cirac2016MPDO_arXiv}.
 \end{theorem}
@@ -341,15 +320,15 @@ This is the contraction in
     Expand the product of the sums defining the neighboring operators and set
     $g'_n=g_{n+1}$. Cyclic invariance of the finite product and commutativity of
     scalar multiplication give
-    \begin{align*}
+    \begin{align}
         \sum_{g_0,\ldots,g_{N-1}}
           \prod_{n=0}^{N-1}L_n(g_n)R_n(g_{n+1})
         &=\sum_{g'_0,\ldots,g'_{N-1}}
-          \prod_{n=0}^{N-1}R_n(g'_n)L_{n+1}(g'_n)\\
-        &=\prod_{n=0}^{N-1}\sum_a R_n(a)L_{n+1}(a).
-    \end{align*}
+          \prod_{n=0}^{N-1}R_n(g'_n)L_{n+1}(g'_n) \notag\\
+        &=\prod_{n=0}^{N-1}\sum_a R_n(a)L_{n+1}(a). \notag
+    \end{align}
     The last expression is the product of the corresponding entries of
-    $\eta_{k_n,k_{n+1}}$.
+    $\eta_{k_n,k_{n+1}}$, as in (\ref{eq:rfp_cyclic_contraction}).
 \end{proof}
 
 \begin{theorem}[Closed sector word as neighboring contractions]
@@ -359,20 +338,22 @@ This is the contraction in
     \uses{def:mpdo_eta_of_sector_tensors}
     Under the hypotheses of the preceding theorem, define
     $M_n(a,b)=L_n(a)R_n(b)$. Then
-    \[
+    \begin{align}
         \tr(M_0M_1\cdots M_{N-1})
-        =\prod_{n=0}^{N-1}
+        &=\prod_{n=0}^{N-1}
           \eta_{k_n,k_{n+1}}
-          \bigl((x_n^R,x_{n+1}^L),(y_n^R,y_{n+1}^L)\bigr).
-    \]
+          ((x_n^R,x_{n+1}^L),(y_n^R,y_{n+1}^L)).
+        \label{eq:rfp_sector_word}
+    \end{align}
 \end{theorem}
 
 \begin{figure}[ht]
     \centering
-    \[
+    \begin{align}
         \tr(M_{k_0}\cdots M_{k_{N-1}})
-        =\tr(\eta_{k_0,k_1}\otimes\cdots\otimes\eta_{k_{N-1},k_0})
-    \]
+        &=\tr(\eta_{k_0,k_1}\otimes\cdots\otimes\eta_{k_{N-1},k_0}).
+        \notag
+    \end{align}
     \caption{Closing the horizontal indices of the factorized sector tensors
     pairs each right factor with the left factor at the next site. The cycle
     therefore becomes the product of the neighboring operators
@@ -385,13 +366,14 @@ This is the contraction in
     \leanok
     \uses{thm:mpdo_cyclic_sector_contraction}
     Expanding the trace of the matrix word gives
-    \[
+    \begin{align}
         \tr(M_0M_1\cdots M_{N-1})
-        =\sum_{g_0,\ldots,g_{N-1}}
-          \prod_{n=0}^{N-1}M_n(g_n,g_{n+1}).
-    \]
-    Substituting $M_n(a,b)=L_n(a)R_n(b)$ gives the cyclic sum in
-    Theorem~\ref{thm:mpdo_cyclic_sector_contraction}; apply that theorem.
+        &=\sum_{g_0,\ldots,g_{N-1}}
+          \prod_{n=0}^{N-1}M_n(g_n,g_{n+1}). \notag
+    \end{align}
+    Substituting $M_n(a,b)=L_n(a)R_n(b)$ gives the cyclic sum
+    in (\ref{eq:rfp_cyclic_contraction}); applying that identity yields
+    (\ref{eq:rfp_sector_word}).
 \end{proof}
 
 \begin{definition}[Sector-adapted chain coordinates]
@@ -402,18 +384,18 @@ This is the contraction in
     \leanok
     \uses{def:mpdo_eta_structure}
     For a sector configuration $k=(k_0,\ldots,k_{N-1})$, let
-    \[
-        I_k=\prod_{n=0}^{N-1}
+    \begin{align}
+        I_k&=\prod_{n=0}^{N-1}
           \bigl(\{0,\ldots,d_L(k_n)-1\}\times
-                 \{0,\ldots,d_R(k_n)-1\}\bigr).
-    \]
+                 \{0,\ldots,d_R(k_n)-1\}\bigr). \notag
+    \end{align}
     Applying the one-site Hayashi decomposition at every site gives a
     bijection
-    \[
+    \begin{align}
         \Phi_N:\{0,\ldots,d-1\}^N
-          \longrightarrow
-          \coprod_{k_0,\ldots,k_{N-1}} I_k.
-    \]
+        &\longrightarrow
+          \coprod_{k_0,\ldots,k_{N-1}} I_k. \notag
+    \end{align}
     We write $\reindex_{\Phi_N}(M)$ for the matrix obtained by
     transporting both indices of $M$ along this bijection.
 \end{definition}
@@ -425,10 +407,10 @@ This is the contraction in
     \uses{def:mpo_tensor}
     Let $U$ be a matrix on the physical space. The physical conjugation of
     ${\cal K}$ by $U$ is the tensor $\widetilde{\cal K}$ defined by
-    \[
+    \begin{align}
         \widetilde\kappa_{\beta,\alpha}^{\,ij}
-        =\bigl(U\kappa_{\beta,\alpha}U^\dagger\bigr)_{ij}.
-    \]
+        &=(U\kappa_{\beta,\alpha}U^\dagger)_{ij}. \notag
+    \end{align}
     Its horizontal bond indices are unchanged. When $U$ is unitary, this is
     the corresponding physical basis change.
 \end{definition}
@@ -441,12 +423,14 @@ This is the contraction in
         def:mpdo_explicit_eta_operators}
     Let $N\geq1$ and let $k$ be a sector configuration. Define the matrix
     $\Omega_k$ on $I_k$ by
-    \[
-      \Omega_k(x,y)=\prod_{n=0}^{N-1}
-        \eta_{k_n,k_{n+1}}
-        \bigl((x_n^R,x_{n+1}^L),(y_n^R,y_{n+1}^L)\bigr),
-    \]
-    where the site labels are read modulo $N$. Thus
+    \begin{align}
+        \Omega_k(x,y)
+        &=\prod_{n=0}^{N-1}
+          \eta_{k_n,k_{n+1}}
+          ((x_n^R,x_{n+1}^L),(y_n^R,y_{n+1}^L)).
+        \label{eq:rfp_cyclic_eta_product}
+    \end{align}
+    Thus
     $\Omega_k=\eta_{k_0,k_1}\otimes\cdots\otimes
     \eta_{k_{N-1},k_0}$ after the neighboring tensor factors are ordered
     cyclically.
@@ -460,11 +444,11 @@ This is the contraction in
         def:mpdo_cyclic_eta_tensor_product,
         def:mpdo_eta_of_sector_tensors}
     Suppose that the physical slices in the Hayashi basis satisfy
-    \[
+    \begin{align}
         U_B\kappa_{\beta,\alpha}U_B^\dagger
-        =\bigoplus_q(l_q)_\beta\otimes(r_q)_\alpha,
-    \]
-    and let $\eta_{q,h}=r_q l_h$. For every $N\geq1$ and every sector
+        &=\bigoplus_q(l_q)_\beta\otimes(r_q)_\alpha. \notag
+    \end{align}
+    Let $\eta_{q,h}=r_q l_h$. For every $N\geq1$ and every sector
     configuration $k$, the corresponding diagonal block of
     $\reindex_{\Phi_N}(M_N(\widetilde{\cal K}))$ is $\Omega_k$.
 \end{theorem}
@@ -475,22 +459,23 @@ This is the contraction in
     Fix $x,y\in I_k$ and expand the closed horizontal trace of the MPO word.
     The sector factorization writes each local entry as a product of entries
     of $l_{k_n}$ and $r_{k_n}$. Set
-    \[
-      M_n(\beta,\alpha)
-        =(l_{k_n})_\beta(x_n^L,y_n^L)
-         (r_{k_n})_\alpha(x_n^R,y_n^R).
-    \]
+    \begin{align}
+        M_n(\beta,\alpha)
+        &=(l_{k_n})_\beta(x_n^L,y_n^L)
+          (r_{k_n})_\alpha(x_n^R,y_n^R). \notag
+    \end{align}
     Then
-    \begin{align*}
-      \bigl[\reindex_{\Phi_N}
-        (M_N(\widetilde{\cal K}))\bigr]_{(k,x),(k,y)}
-      &=\tr(M_0M_1\cdots M_{N-1})\\
-      &=\prod_{n=0}^{N-1}\eta_{k_n,k_{n+1}}
-        \bigl((x_n^R,x_{n+1}^L),(y_n^R,y_{n+1}^L)\bigr)\\
-      &=\Omega_k(x,y).
-    \end{align*}
-    The middle equality is
-    Theorem~\ref{thm:mpdo_sector_word_eta_contraction}.
+    \begin{align}
+        \bigl[\reindex_{\Phi_N}
+          (M_N(\widetilde{\cal K}))\bigr]_{(k,x),(k,y)}
+        &=\tr(M_0M_1\cdots M_{N-1}) \notag\\
+        &=\prod_{n=0}^{N-1}\eta_{k_n,k_{n+1}}
+          ((x_n^R,x_{n+1}^L),(y_n^R,y_{n+1}^L))
+          =\Omega_k(x,y). \notag
+    \end{align}
+    The second equality is
+    Theorem~\ref{thm:mpdo_sector_word_eta_contraction}, and the last is
+    (\ref{eq:rfp_cyclic_eta_product}).
 \end{proof}
 
 \begin{theorem}[Sector-adapted MPO decomposition]
@@ -502,13 +487,14 @@ This is the contraction in
         def:mpdo_cyclic_eta_tensor_product,
         def:mpdo_eta_of_sector_tensors}
     Under the same sector factorization hypothesis, for every $N\geq1$,
-    \[
+    \begin{align}
         \reindex_{\Phi_N}
-          \bigl(M_N(\widetilde{\cal K})\bigr)
-        =\bigoplus_{k_0,\ldots,k_{N-1}}
+          (M_N(\widetilde{\cal K}))
+        &=\bigoplus_{k_0,\ldots,k_{N-1}}
           \eta_{k_0,k_1}\otimes\eta_{k_1,k_2}\otimes\cdots\otimes
           \eta_{k_{N-1},k_0}.
-    \]
+        \label{eq:rfp_sector_decomposition}
+    \end{align}
     This is the algebraic sector decomposition in
     \cite[Appendix~C.2, lines~1446--1450]{Cirac2016MPDO_arXiv}. It does not
     assert that the individual neighboring operators are positive.
@@ -520,11 +506,10 @@ This is the contraction in
     If the row and column sector configurations coincide, the corresponding
     block is Theorem~\ref{thm:mpdo_fixed_sector_cyclic_eta}. If they differ,
     choose a site $n$ at which their labels $k_n$ and $h_n$ are unequal.
-    Block diagonality gives, for every pair of horizontal indices,
-    \[
-      \bigl[U_B\kappa_{\beta,\alpha}U_B^\dagger\bigr]
-        _{(k_n,\,\cdot),(h_n,\,\cdot)}=0.
-    \]
+    Block diagonality gives
+    $[U_B\kappa_{\beta,\alpha}U_B^\dagger]
+    _{(k_n, \cdot),(h_n, \cdot)}=0$ for every pair of horizontal indices.
     This local factor occurs in every cyclic horizontal-index product, so
-    every summand in the closed trace is zero.
+    every summand in the closed trace is zero, proving
+    (\ref{eq:rfp_sector_decomposition}).
 \end{proof}

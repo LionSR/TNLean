@@ -18,13 +18,18 @@ them.
     \leanok
     \uses{def:mpo_tensor}
     A \emph{transfer-map fusion-isometry datum} at blocked size $n$ for an
-    MPO tensor consists of a subspace $\mathcal{A}_n \subseteq M_D(\mathbb{C})$
+    MPO tensor consists of a subspace $\mathcal{A}_n \subseteq \MN{D}$
     together with linear maps
-    $$T_n : M_D(\mathbb{C}) \to \mathcal{A}_n, \qquad
-        S_n : \mathcal{A}_n \to M_D(\mathbb{C})$$
-    such that
-    $$T_n \circ S_n = \id_{\mathcal{A}_n},
-        \qquad S_n \circ T_n = E_n,$$
+    \begin{align}
+        T_n&:\MN{D}\longrightarrow\mathcal{A}_n,
+        &
+        S_n&:\mathcal{A}_n\longrightarrow\MN{D},
+        \notag\\
+        T_n\circ S_n&=\id_{\mathcal{A}_n},
+        &
+        S_n\circ T_n&=E_n,
+        \label{eq:rfp_transfer_retract}
+    \end{align}
     where $E_n$ denotes the blocked transfer map.
 \end{definition}
 
@@ -49,9 +54,16 @@ them.
     blocked size, implies the same condition.
 \end{theorem}
 \begin{proof}\leanok
-    Apply the definition at blocked size $n = 1$.
-    If $E_1 = S_1 \circ T_1$ and $T_1 \circ S_1 = \id$, then
-    $$E_1^2 = S_1 T_1 S_1 T_1 = S_1 (T_1 S_1) T_1 = S_1 T_1 = E_1.$$
+    Apply the definition at blocked size $n=1$.
+    By (\ref{eq:rfp_transfer_retract}),
+    \begin{align}
+        E_1^2
+        &=S_1T_1S_1T_1
+          =S_1(T_1S_1)T_1
+          =S_1T_1
+          =E_1.
+        \notag
+    \end{align}
     Since $E_1$ is the original transfer map, this is exactly transfer-map
     idempotence.
 \end{proof}
@@ -66,7 +78,7 @@ them.
 \end{theorem}
 \begin{proof}\leanok
     The forward implication is the retract calculation
-    $E_1^2 = S_1T_1S_1T_1 = S_1T_1$. Conversely, if $E_1$ is idempotent, then
+    $E_1^2=S_1T_1S_1T_1=S_1T_1$. Conversely, if $E_1$ is idempotent, then
     it factors through its range, giving the required one-site datum.
 \end{proof}
 
@@ -120,9 +132,11 @@ them.
     The \emph{product tensor} of two MPO tensors contracts the bra index of
     the first factor with the ket index of the second and takes the tensor
     product of the bond spaces:
-    \[
-        (M \cdot N)^{i k} = \sum_{j} M^{i j} \otimes N^{j k}.
-    \]
+    \begin{align}
+        (M\mathbin{\cdot}N)^{ik}
+        &=\sum_j M^{ij}\otimes N^{jk}.
+        \label{eq:rfp_product_tensor}
+    \end{align}
     In the vertical reading of \cite[Section~4.5]{Cirac2016MPDO_arXiv} this
     is the tensor obtained by joining two vertically read tensors along the
     original horizontal bond, the tensor written $M_\alpha M_\beta$ in
@@ -136,12 +150,13 @@ them.
     \leanok
     \uses{def:mpdo_operator_product}
     For three bond spaces, let
-    \[
+    \begin{align}
         A_{D_1,D_2,D_3}:
         \C^{D_1}\otimes(\C^{D_2}\otimes\C^{D_3})
-        \longrightarrow
+        &\longrightarrow
         (\C^{D_1}\otimes\C^{D_2})\otimes\C^{D_3}
-    \]
+        \notag
+    \end{align}
     be the coordinate pullback induced by canonical reassociation, defined on
     elementary tensors by
     $A_{D_1,D_2,D_3}(x_1\otimes(x_2\otimes x_3))
@@ -156,17 +171,18 @@ them.
     \uses{def:mpdo_operator_product,
         def:mpdo_operator_product_associator}
     The letters of the two parenthesizations of a triple product are related
-    by the canonical bond reassociation.  Equivalently, for every pair of
+    by the canonical bond reassociation. Equivalently, for every pair of
     physical indices $i,k$,
-    \[
-        \bigl((M\mathbin{\cdot}N)\mathbin{\cdot}P\bigr)^{ik}
+    \begin{align}
+        ((M\mathbin{\cdot}N)\mathbin{\cdot}P)^{ik}
           A_{D_1,D_2,D_3}
-        =A_{D_1,D_2,D_3}
-          \bigl(M\mathbin{\cdot}(N\mathbin{\cdot}P)\bigr)^{ik}.
-    \]
+        &=A_{D_1,D_2,D_3}
+          (M\mathbin{\cdot}(N\mathbin{\cdot}P))^{ik}.
+        \notag
+    \end{align}
 \end{theorem}
 \begin{proof}\leanok
-    Expand both product tensors.  Reassociation preserves every elementary
+    Expand both product tensors. Reassociation preserves every elementary
     tensor factor, while exchanging the order of the two finite sums gives
     the same contraction over the two intermediate physical indices.
 \end{proof}
@@ -177,12 +193,13 @@ them.
     \leanok
     \uses{def:mpdo_operator_product, def:mpo_eval_word}
     The word evaluation of the product tensor along a configuration pair
-    $(\sigma, \tau)$ expands as a sum over the contracted middle
+    $(\sigma,\tau)$ expands as a sum over the contracted middle
     configurations $\rho$ of tensor products of word evaluations:
-    \[
-        (M \cdot N)^{\sigma \tau}
-        = \sum_{\rho} M^{\sigma \rho} \otimes N^{\rho \tau}.
-    \]
+    \begin{align}
+        (M\mathbin{\cdot}N)^{\sigma\tau}
+        &=\sum_\rho M^{\sigma\rho}\otimes N^{\rho\tau}.
+        \label{eq:rfp_product_word}
+    \end{align}
 \end{lemma}
 \begin{proof}\leanok
     Induction on the length, using the mixed-product property of the tensor
@@ -197,11 +214,10 @@ them.
         lem:mpdo_operator_product_eval_word}
     For every chain length $L$, the operator generated by the product tensor
     is the product of the generated operators:
-    $O_L(M \cdot N) = O_L(M)\,O_L(N)$.
+    $O_L(M\mathbin{\cdot}N)=O_L(M)O_L(N)$.
 \end{theorem}
 \begin{proof}\leanok
-    Take traces in the word-evaluation expansion of
-    Lemma~\ref{lem:mpdo_operator_product_eval_word}: the trace of a tensor
+    Take traces in (\ref{eq:rfp_product_word}): the trace of a tensor
     product is the product of the traces, and the sum over middle
     configurations is the entrywise form of the operator product.
 \end{proof}
@@ -210,12 +226,13 @@ them.
     \label{lem:mpdo_word_product_conjugation}
     \lean{MPOTensor.listProd_conj_of_conjTranspose_mul_self}
     \leanok
-    For an isometry $U$ (a rectangular matrix with $U^\dagger U = 1$) and a
-    nonempty word of square matrices $F_1, \dots, F_L$,
-    \[
-        (U F_1 U^\dagger)(U F_2 U^\dagger) \cdots (U F_L U^\dagger)
-        = U\, F_1 F_2 \cdots F_L\, U^\dagger.
-    \]
+    For an isometry $U$ (a rectangular matrix with $U^\dagger U=1$) and a
+    nonempty word of square matrices $F_1,\ldots,F_L$,
+    \begin{align}
+        (UF_1U^\dagger)(UF_2U^\dagger)\cdots(UF_LU^\dagger)
+        &=U F_1F_2\cdots F_L U^\dagger.
+        \notag
+    \end{align}
 \end{lemma}
 \begin{proof}\leanok
     The inner factors $U^\dagger U$ telescope to the identity.
@@ -228,11 +245,14 @@ them.
     For block-diagonal letters whose block of index $\gamma$ is the tensor
     product of a fixed matrix $X_\gamma$ with a varying letter
     $G_{\gamma,l}$,
-    \[
-        \prod_{l=1}^{L} \bigoplus_{\gamma} X_\gamma \otimes G_{\gamma,l}
-        = \bigoplus_{\gamma} X_\gamma^{L} \otimes
-        \prod_{l=1}^{L} G_{\gamma,l}.
-    \]
+    \begin{align}
+        \prod_{l=1}^{L}
+            \bigoplus_{\gamma}X_\gamma\otimes G_{\gamma,l}
+        &=
+        \bigoplus_{\gamma}X_\gamma^{L}\otimes
+            \prod_{l=1}^{L}G_{\gamma,l}.
+        \notag
+    \end{align}
 \end{lemma}
 \begin{proof}\leanok
     Blocks multiply blockwise and tensor products multiply factorwise, so
@@ -244,15 +264,10 @@ them.
     \lean{Matrix.blockDiagonal'_conj, Matrix.submatrix_left_conj_equiv}
     \leanok
     Let $F=\bigoplus_a F_a$ and $G=\bigoplus_a G_a$. Then
-    \[
-        FGF^\dagger=\bigoplus_a F_aG_aF_a^\dagger.
-    \]
+    $FGF^\dagger=\bigoplus_a F_aG_aF_a^\dagger$.
     Moreover, if $r$ is a bijective reindexing of the row space of a matrix
-    $A$, then
-    \[
-        A_r X A_r^\dagger=(AXA^\dagger)_{r,r},
-    \]
-    where $A_r$ denotes the corresponding row reindexing.
+    $A$, then $A_rXA_r^\dagger=(AXA^\dagger)_{r,r}$, where $A_r$ denotes the
+    corresponding row reindexing.
 \end{lemma}
 \begin{proof}\leanok
     The first identity follows because block-diagonal matrices
@@ -269,9 +284,7 @@ them.
     \leanok
     Let $D>0$. The map $A\mapsto A\otimes I_D$ is injective and preserves
     matrix products. Consequently,
-    \[
-        (F\otimes I_D)(G\otimes I_D)=I \implies FG=I.
-    \]
+    $(F\otimes I_D)(G\otimes I_D)=I$ implies $FG=I$.
     In particular, orthonormal rows or columns of $F\otimes I_D$ imply the
     corresponding orthonormality of $F$.
 \end{lemma}
@@ -291,11 +304,14 @@ them.
     per-label bond dimensions, diagonal matrices $\chi_{\alpha,\beta,\gamma}$
     with positive entries, and isometries $U_{\alpha,\beta}$ such that, site
     by site,
-    \[
-        U_{\alpha,\beta}\, (M_\alpha M_\beta)^{i j}\, U_{\alpha,\beta}^\dagger
-        = \bigoplus_{\gamma} \chi_{\alpha,\beta,\gamma}
-        \otimes M_\gamma^{i j}.
-    \]
+    \begin{align}
+        U_{\alpha,\beta}(M_\alpha M_\beta)^{ij}
+            U_{\alpha,\beta}^\dagger
+        &=
+        \bigoplus_\gamma
+            \chi_{\alpha,\beta,\gamma}\otimes M_\gamma^{ij}.
+        \label{eq:rfp_fusion_identity}
+    \end{align}
     This is the isometry statement of
     \cite[Theorem~4.14(iii)]{Cirac2016MPDO_arXiv}; the tensors are the
     vertically read basis of normal tensors of
@@ -323,21 +339,20 @@ them.
     An \emph{active-support fusion coisometry family} consists of the same
     labelled tensors and positive diagonal matrices, together with maps
     $U_{\alpha,\beta}$ satisfying
-    \[
-        U_{\alpha,\beta}U_{\alpha,\beta}^\dagger=1,
-    \]
-    the forward fusion identity
-    \[
+    $U_{\alpha,\beta}U_{\alpha,\beta}^\dagger=1$, the forward fusion identity
+    \begin{align}
         U_{\alpha,\beta}(M_\alpha M_\beta)^{ij}
           U_{\alpha,\beta}^\dagger
-        =G_{\alpha,\beta}^{ij},
-    \]
+        &=G_{\alpha,\beta}^{ij},
+        \notag
+    \end{align}
     and exact reconstruction
-    \[
+    \begin{align}
         (M_\alpha M_\beta)^{ij}
-        =U_{\alpha,\beta}^\dagger
+        &=U_{\alpha,\beta}^\dagger
           G_{\alpha,\beta}^{ij}U_{\alpha,\beta}.
-    \]
+        \label{eq:rfp_coisometry_reconstruction}
+    \end{align}
     Zero-dimensional retained sums are permitted. If in addition
     $U_{\alpha,\beta}^\dagger U_{\alpha,\beta}=1$ for every pair, this family
     gives the preceding full-support fusion-isometry family.
@@ -351,7 +366,7 @@ them.
 
 For fixed labels $\alpha,\beta$, put
 $G_{\alpha,\beta}^{ij}=\bigoplus_\gamma
-\chi_{\alpha,\beta,\gamma}\otimes M_\gamma^{ij}$.  Then
+\chi_{\alpha,\beta,\gamma}\otimes M_\gamma^{ij}$. Then
 \cite[Theorem~4.14(iii), equation~(89), lines~986--991]
 {Cirac2016MPDO_arXiv} gives
 % For fixed \alpha,\beta,
@@ -403,16 +418,18 @@ $G_{\alpha,\beta}^{ij}=\bigoplus_\gamma
     \leanok
     \uses{def:mpdo_bnt_fusion_coisometry_family}
     An active-support fusion coisometry satisfies
-    \[
+    \begin{align}
         U_{\alpha,\beta}(M_\alpha M_\beta)^{ij}
-          =G_{\alpha,\beta}^{ij}U_{\alpha,\beta},
-        \qquad
+        &=G_{\alpha,\beta}^{ij}U_{\alpha,\beta},
+        \notag\\
         (M_\alpha M_\beta)^{ij}U_{\alpha,\beta}^\dagger
-          =U_{\alpha,\beta}^\dagger G_{\alpha,\beta}^{ij}.
-    \]
+        &=U_{\alpha,\beta}^\dagger G_{\alpha,\beta}^{ij}.
+        \notag
+    \end{align}
 \end{lemma}
 \begin{proof}\leanok
-    Substitute exact reconstruction into the left-hand sides and use
+    Substitute exact reconstruction
+    (\ref{eq:rfp_coisometry_reconstruction}) into the left-hand sides and use
     $U_{\alpha,\beta}U_{\alpha,\beta}^\dagger=1$.
 \end{proof}
 
@@ -424,33 +441,31 @@ $G_{\alpha,\beta}^{ij}=\bigoplus_\gamma
     \leanok
     \uses{def:mpdo_bnt_fusion_isometry_family}
     For every pair of labels and physical indices, write
-    \[
-        G_{\alpha,\beta}^{ij}
-        = \bigoplus_\gamma \chi_{\alpha,\beta,\gamma}
-            \otimes M_\gamma^{ij}.
-    \]
+    $G_{\alpha,\beta}^{ij}
+    =\bigoplus_\gamma\chi_{\alpha,\beta,\gamma}
+    \otimes M_\gamma^{ij}$.
     The fusion isometry satisfies the two chi-weighted zipper identities
-    \[
+    \begin{align}
         U_{\alpha,\beta}(M_\alpha M_\beta)^{ij}
-          = G_{\alpha,\beta}^{ij}U_{\alpha,\beta},
-        \qquad
+        &=G_{\alpha,\beta}^{ij}U_{\alpha,\beta},
+        \notag\\
         (M_\alpha M_\beta)^{ij}U_{\alpha,\beta}^\dagger
-          = U_{\alpha,\beta}^\dagger G_{\alpha,\beta}^{ij}.
-    \]
+        &=U_{\alpha,\beta}^\dagger G_{\alpha,\beta}^{ij}.
+        \notag
+    \end{align}
     The corresponding identities in
     \cite[Equation~(21)]{Bultinck2017Anyons} have identity matrices on
     the multiplicity spaces in place of the positive diagonal matrices
-    $\chi$.  Their unweighted form requires the length-independent integer
+    $\chi$. Their unweighted form requires the length-independent integer
     specialization and is not a consequence of the present hypotheses. Even
     after that specialization, comparison of the two triple-fusion orders and
     final-label separation are still needed to construct an invertible
     $F$-move.
 \end{theorem}
 \begin{proof}\leanok
-    Multiply the fusion identity
-    $U_{\alpha,\beta}(M_\alpha M_\beta)^{ij}U_{\alpha,\beta}^\dagger
-      =G_{\alpha,\beta}^{ij}$ on the right by $U_{\alpha,\beta}$ and on the
-    left by $U_{\alpha,\beta}^\dagger$, respectively, and use
+    Multiply the fusion identity (\ref{eq:rfp_fusion_identity}) on the right
+    by $U_{\alpha,\beta}$ and on the left by
+    $U_{\alpha,\beta}^\dagger$, respectively, and use
     $U_{\alpha,\beta}^\dagger U_{\alpha,\beta}=1$.
 \end{proof}
 
@@ -473,25 +488,26 @@ $G_{\alpha,\beta}^{ij}=\bigoplus_\gamma
     independent of the positive chain length. Then
     $\chi_{\alpha,\beta,\gamma}=1_{r_{\alpha,\beta,\gamma}}$ for every triple
     of labels. If
-    \[
+    \begin{align}
         H_{\alpha,\beta}^{ij}
-          = \bigoplus_\gamma 1_{r_{\alpha,\beta,\gamma}}
-              \otimes M_\gamma^{ij},
-    \]
+        &=
+        \bigoplus_\gamma
+            1_{r_{\alpha,\beta,\gamma}}\otimes M_\gamma^{ij},
+        \notag
+    \end{align}
     the fusion isometries satisfy
-    \[
+    \begin{align}
         U_{\alpha,\beta}(M_\alpha M_\beta)^{ij}
-          = H_{\alpha,\beta}^{ij}U_{\alpha,\beta},
-        \qquad
+        &=H_{\alpha,\beta}^{ij}U_{\alpha,\beta},
+        \notag\\
         (M_\alpha M_\beta)^{ij}U_{\alpha,\beta}^\dagger
-          = U_{\alpha,\beta}^\dagger H_{\alpha,\beta}^{ij},
-    \]
-    and
-    \[
+        &=U_{\alpha,\beta}^\dagger H_{\alpha,\beta}^{ij},
+        \notag\\
         (M_\alpha M_\beta)^{ij}
-          = U_{\alpha,\beta}^\dagger H_{\alpha,\beta}^{ij}
-              U_{\alpha,\beta}.
-    \]
+        &=U_{\alpha,\beta}^\dagger
+            H_{\alpha,\beta}^{ij}U_{\alpha,\beta}.
+        \label{eq:rfp_unweighted_reconstruction}
+    \end{align}
     These are the identity-weight specialization of Equations~(19)--(21) in
     \cite[Section~3]{Bultinck2017Anyons}. The MPDO fusion identity appears in
     \cite[Theorem~4.14(iii), lines~986--991]{Cirac2016MPDO_arXiv}; its
@@ -504,7 +520,8 @@ $G_{\alpha,\beta}^{ij}=\bigoplus_\gamma
     identity matrices into
     Theorem~\ref{thm:mpdo_bnt_weighted_zipper}. For completeness, insert
     $U_{\alpha,\beta}^\dagger U_{\alpha,\beta}=1$ on both sides of the product
-    letter and apply the fusion identity between the two inserted factors.
+    letter and apply the fusion identity between the two inserted factors,
+    yielding (\ref{eq:rfp_unweighted_reconstruction}).
 \end{proof}
 
 \begin{theorem}[Common positive blocking of the BNT fusion isometries]
@@ -530,64 +547,68 @@ $G_{\alpha,\beta}^{ij}=\bigoplus_\gamma
         thm:mpdo_bnt_length_independent_zipper}
     Suppose that the labelled doubled-index tensors form the basis of normal
     tensors, and that their fusion-isometry family has positive trace-power
-    coefficients independent of the positive chain length.  Then there is
+    coefficients independent of the positive chain length. Then there is
     one integer $L>0$ such that the blocked tensors $M_\gamma^{[L]}$ span
-    their full product matrix algebra in one letter.  Hence every
+    their full product matrix algebra in one letter. Hence every
     $M_\gamma^{[L]}$ is injective.
 
     For this same $L$, write
-    \[
-      P_{\alpha,\beta}^{I J}
-        =(M_\alpha^{[L]}M_\beta^{[L]})^{I J},
-      \qquad
-      H_{\alpha,\beta}^{I J}
-        =\bigoplus_\gamma
+    \begin{align}
+        P_{\alpha,\beta}^{IJ}
+        &=(M_\alpha^{[L]}M_\beta^{[L]})^{IJ},
+        \notag\\
+        H_{\alpha,\beta}^{IJ}
+        &=\bigoplus_\gamma
           1_{r_{\alpha,\beta,\gamma}}
-            \otimes (M_\gamma^{[L]})^{I J},
-    \]
+            \otimes(M_\gamma^{[L]})^{IJ},
+        \notag
+    \end{align}
     where $r_{\alpha,\beta,\gamma}$ is the dimension of the specialized
-    chi space.  The original fusion isometry satisfies
-    \[
-      U_{\alpha,\beta}P_{\alpha,\beta}^{I J}
-          U_{\alpha,\beta}^\dagger
-        =H_{\alpha,\beta}^{I J},
-    \]
+    chi space. The original fusion isometry satisfies
+    \begin{align}
+        U_{\alpha,\beta}P_{\alpha,\beta}^{IJ}
+            U_{\alpha,\beta}^\dagger
+        &=H_{\alpha,\beta}^{IJ},
+        \label{eq:rfp_blocked_fusion}
+    \end{align}
     the two blocked zipper identities
-    \[
-      U_{\alpha,\beta}P_{\alpha,\beta}^{I J}
-        =H_{\alpha,\beta}^{I J}U_{\alpha,\beta},
-      \qquad
-      P_{\alpha,\beta}^{I J}U_{\alpha,\beta}^\dagger
-        =U_{\alpha,\beta}^\dagger H_{\alpha,\beta}^{I J},
-    \]
+    \begin{align}
+        U_{\alpha,\beta}P_{\alpha,\beta}^{IJ}
+        &=H_{\alpha,\beta}^{IJ}U_{\alpha,\beta},
+        \notag\\
+        P_{\alpha,\beta}^{IJ}U_{\alpha,\beta}^\dagger
+        &=U_{\alpha,\beta}^\dagger H_{\alpha,\beta}^{IJ},
+        \notag
+    \end{align}
     and the literal reconstruction
-    \[
-      P_{\alpha,\beta}^{I J}
-        =U_{\alpha,\beta}^\dagger
-          H_{\alpha,\beta}^{I J}U_{\alpha,\beta}.
-    \]
+    \begin{align}
+        P_{\alpha,\beta}^{IJ}
+        &=U_{\alpha,\beta}^\dagger
+          H_{\alpha,\beta}^{IJ}U_{\alpha,\beta}.
+        \notag
+    \end{align}
 \end{theorem}
 
 \begin{proof}\leanok
     Choose the positive block length supplied by simultaneous BNT blocking.
     The canonical pairing of the blocked ket and bra words transfers the
     one-letter product-algebra span to the blocked MPO tensors, and projection
-    to each labelled factor gives injectivity.  Along a nonempty block, the
+    to each labelled factor gives injectivity. Along a nonempty block, the
     products of the conjugated fusion letters telescope using only
-    $U_{\alpha,\beta}^\dagger U_{\alpha,\beta}=1$.  Length independence
-    replaces every chi matrix by the identity on its own chi space.  The two
+    $U_{\alpha,\beta}^\dagger U_{\alpha,\beta}=1$. Length independence
+    replaces every chi matrix by the identity on its own chi space. The two
     zipper identities and reconstruction then follow by multiplying the
-    blocked fusion identity by $U_{\alpha,\beta}$ or
-    $U_{\alpha,\beta}^\dagger$ on the appropriate side.
+    blocked fusion identity (\ref{eq:rfp_blocked_fusion}) by
+    $U_{\alpha,\beta}$ or $U_{\alpha,\beta}^\dagger$ on the appropriate side.
 \end{proof}
 
 The three rows below are, respectively, the two unweighted zipper identities
-and their local reconstruction consequence.  The symbol
+and their local reconstruction consequence. The symbol
 $H$ denotes $H_{\alpha,\beta}^{ij}$, and the open physical legs carry the
-indices $i,j$.  The reconstruction uses only
+indices $i,j$. The reconstruction uses only
 $U_{\alpha,\beta}^{\dagger}U_{\alpha,\beta}=1$; it does not assert
 $U_{\alpha,\beta}U_{\alpha,\beta}^{\dagger}=1$, surjectivity, or completeness
-of the total fusion space.  The zipper orientation is that of
+of the total fusion space. The zipper orientation is that of
 \cite[Section~3, Equations~(19)--(21)]{Bultinck2017Anyons}; the MPDO identity
 is \cite[Theorem~4.14(iii), lines~986--991]{Cirac2016MPDO_arXiv}, with identity
 weights in the length-independent case at
@@ -629,7 +650,6 @@ weights in the length-independent case at
   &
 }
 \hfil\par
-\smallskip
 \par\noindent\hfil
 \tnpic[rows={op,op}]{
   \tn[mpo, up=$i$]{M_\alpha} &
@@ -645,7 +665,6 @@ weights in the length-independent case at
   &
 }
 \hfil\par
-\smallskip
 \par\noindent\hfil
 \tnpic[rows={op,op}]{
   \tn[mpo, up=$i$]{M_\alpha} \\

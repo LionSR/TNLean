@@ -1,4 +1,3 @@
-
 \begin{definition}[Injective inverse map for a simple MPO tensor]
     \label{def:mpdo_injective_inverse_layer}
     \lean{MPOTensor.IsInjective}
@@ -29,12 +28,13 @@
 \end{theorem}
 
 For an injective simple tensor, contracting $K^{-1}$ with $K$ through the
-physical index identifies the corresponding virtual legs.  In components,
+physical index identifies the corresponding virtual legs. In components,
 this is the matrix-unit identity
-\[
+\begin{align}
     \sum_p(K^{-1})^{\alpha,\beta}_p(K^p)_{\alpha',\beta'}
-    =\delta_{\alpha,\alpha'}\delta_{\beta,\beta'}.
-\]
+    &=\delta_{\alpha,\alpha'}\delta_{\beta,\beta'}.
+    \label{eq:rfp_inverse_matrix_units}
+\end{align}
 Its two Kronecker factors are the two bare cups:
 \begin{tenkzequation}
     % The upper inverse tensor and lower tensor contract through the doubled
@@ -44,12 +44,12 @@ Its two Kronecker factors are the two bare cups:
         \tn{K^{-1}} \\
         \tn{K}
     \end{tenkz}
-    $\;=\;$
+    $ = $
     \begin{tenkz}[rows={wire, wire}, east=cup]
         \tnghost{} \\
         \tnghost{}
     \end{tenkz}
-    $\;\otimes\;$
+    $ \otimes $
     \begin{tenkz}[rows={wire, wire}, west=cup]
         \tnghost{} \\
         \tnghost{}
@@ -76,7 +76,7 @@ virtual legs against a further copy of $K$ recovers $K$:
         \tn{K^{-1}} \\
         \tn{K}
     \end{tenkz}
-    $\;=\;$
+    $ = $
     \begin{tenkz}[physical=up, tensor style=box]
         \tn[up=p]{K}
     \end{tenkz}
@@ -91,11 +91,13 @@ This is the single-block identity in
     \uses{def:mpo_family, def:mpo_physical_trace_transfer}
     Let $\mathcal K$ be an MPO tensor and set
     $Z_4=\tr[\rho^{(4)}(\mathcal K)]$. Its normalized fourth-site virtual tail is
-    \[
-        R_4:=Z_4^{-1}\mathcal T_{\mathcal K}
-        =\tr[\rho^{(4)}(\mathcal K)]^{-1}
+    \begin{align}
+        R_4
+        &:=Z_4^{-1}\mathcal T_{\mathcal K}
+          =\tr[\rho^{(4)}(\mathcal K)]^{-1}
           \sum_{i_4=0}^{d-1}\mathcal K^{i_4i_4}.
-    \]
+        \label{eq:rfp_normalized_tail}
+    \end{align}
     Thus the contraction of the fourth ket and bra indices is incorporated into
     the virtual closing matrix. This is the $N=4$ specialization of the
     normalization convention and three-site marginal in
@@ -110,13 +112,13 @@ This is the single-block identity in
     Let $u=(i_1,i_2,i_3)$ and $v=(j_1,j_2,j_3)$ be physical words of length
     three. The corresponding entry of the first-three-site marginal of the
     normalized four-site periodic operator is
-    \[
+    \begin{align}
         \sigma_3^{(4)}(\mathcal K)_{u,v}
-        =\tr\!\left(\mathcal K^{u,v}R_4\right)
-        =\tr\!\left(
-          \mathcal K^{i_1j_1}\mathcal K^{i_2j_2}\mathcal K^{i_3j_3}R_4
-        \right).
-    \]
+        &=\tr\!\left(\mathcal K^{u,v}R_4\right)
+          =\tr\!\left(\mathcal K^{i_1j_1}\mathcal K^{i_2j_2}
+          \mathcal K^{i_3j_3}R_4\right).
+        \label{eq:rfp_three_site_marginal}
+    \end{align}
 \end{theorem}
 
 \begin{figure}[ht]
@@ -148,21 +150,21 @@ This is the single-block identity in
         lem:mpo_eval_word_append}
     Expanding the partial trace over the fourth site and factoring each
     length-four word at its last letter gives
-    \[
+    \begin{align}
         \sigma_3^{(4)}(\mathcal K)_{u,v}
-        =Z_4^{-1}\sum_{i_4=0}^{d-1}
+        &=Z_4^{-1}\sum_{i_4=0}^{d-1}
           \tr\!\left(\mathcal K^{u,v}\mathcal K^{i_4i_4}\right).
-    \]
-    Linearity of the trace now yields
-    \[
+        \notag
+    \end{align}
+    Linearity of the trace and (\ref{eq:rfp_normalized_tail}) now yield
+    \begin{align}
         Z_4^{-1}\sum_{i_4=0}^{d-1}
           \tr\!\left(\mathcal K^{u,v}\mathcal K^{i_4i_4}\right)
-        =\tr\!\left(
-          \mathcal K^{u,v}
-          \left(Z_4^{-1}\sum_{i_4=0}^{d-1}\mathcal K^{i_4i_4}\right)
-        \right)
-        =\tr\!\left(\mathcal K^{u,v}R_4\right).
-    \]
+        &=\tr\!\left(\mathcal K^{u,v}
+          \left(Z_4^{-1}\sum_{i_4=0}^{d-1}\mathcal K^{i_4i_4}\right)\right)
+          =\tr\!\left(\mathcal K^{u,v}R_4\right).
+        \notag
+    \end{align}
 \end{proof}
 
 \begin{theorem}[Non-vanishing of the normalized fourth-site tail]
@@ -178,14 +180,8 @@ This is the single-block identity in
     \uses{thm:mpdo_reduced_four_three_tail}
     If $R_4=0$, then the tail formula makes every entry of
     $\sigma_3^{(4)}(\mathcal K)$ vanish, so
-    \[
-        \tr[\sigma_3^{(4)}(\mathcal K)]=0.
-    \]
-    On the other hand, $Z_4\ne0$ implies
-    \[
-        \tr[\sigma_3^{(4)}(\mathcal K)]=1,
-    \]
-    a contradiction.
+    $\tr[\sigma_3^{(4)}(\mathcal K)]=0$. On the other hand, $Z_4\ne0$ implies
+    $\tr[\sigma_3^{(4)}(\mathcal K)]=1$, a contradiction.
 \end{proof}
 
 \begin{theorem}[A nonzero entry of the normalized fourth-site tail]
@@ -194,10 +190,8 @@ This is the single-block identity in
     \leanok
     \uses{def:mpdo_normalized_four_site_tail}
     If $Z_4\ne0$, there exist virtual indices $\beta$ and $\alpha$ such that
-    \[
-        (R_4)_{\beta,\alpha}\ne0.
-    \]
-    These are the indices selected before the sector factorization in
+    $(R_4)_{\beta,\alpha}\ne0$. These are the indices selected before the
+    sector factorization in
     \cite[Appendix~C.2, lines~1431--1437]{Cirac2016MPDO_arXiv}.
 \end{theorem}
 
@@ -217,14 +211,15 @@ This is the single-block identity in
     the virtual contraction of the sites following a three-site word. For
     virtual indices
     $\alpha_1,\beta_1,\alpha_3,\beta_3$, define
-    \[
+    \begin{align}
         C_{\alpha_1,\beta_1,\alpha_3,\beta_3}(p_2;R)
-        =\sum_{p_1,p_3}
+        &:=
+        \sum_{p_1,p_3}
         (\mathcal K^{-1})^{\alpha_1,\beta_1}_{p_1}
         (\mathcal K^{-1})^{\alpha_3,\beta_3}_{p_3}
-        \tr\bigl(\mathcal K^{p_1}\mathcal K^{p_2}
-        \mathcal K^{p_3}R\bigr).
-    \]
+        \tr\!\left(\mathcal K^{p_1}\mathcal K^{p_2}\mathcal K^{p_3}R\right).
+        \label{eq:rfp_inverse_contraction}
+    \end{align}
     This is the contraction used in the proof of
     \cite[Appendix~C.2, lines~1415--1438]{Cirac2016MPDO_arXiv}.
 \end{definition}
@@ -237,11 +232,12 @@ This is the single-block identity in
     % The source display following Qketc repeats alpha_3 in the tail scalar.
     % Direct matrix-unit contraction gives R_{beta_3,alpha_1}; see the paper-gap note.
     For every middle physical index $p_2$,
-    \[
+    \begin{align}
         C_{\alpha_1,\beta_1,\alpha_3,\beta_3}(p_2;R)
-        = \mathcal K^{p_2}_{\beta_1,\alpha_3}
-        R_{\beta_3,\alpha_1}.
-    \]
+        &=\mathcal K^{p_2}_{\beta_1,\alpha_3}
+          R_{\beta_3,\alpha_1}.
+        \label{eq:rfp_inverse_contraction_eval}
+    \end{align}
     % Local fix (tail index): the source display repeats the third-site left
     % index in the tail entry; direct contraction gives R_{beta_3,alpha_1} as
     % above. Recorded in
@@ -282,12 +278,12 @@ This is the single-block identity in
                 \tn[up=$p_3$]{\mathcal K} &
                 \tnX{R}
             \end{tenkz}
-            $\;=\;$
+            $ = $
             \begin{tenkz}[compact, physical=up,
                           west label=$\beta_1$, east label=$\alpha_3$]
                 \tn[up=$p_2$]{\mathcal K}
             \end{tenkz}
-            $\;\otimes\;$
+            $ \otimes $
             \begin{tenkz}[compact,
                           west label=$\beta_3$, east label=$\alpha_1$]
                 \tnX{R}
@@ -303,18 +299,21 @@ This is the single-block identity in
 
 \begin{proof}\leanok
     \uses{thm:mpdo_injective_inverse_layer_spec}
-    Move the two finite sums through the trace.  By the inverse-map identity
-    \[
+    Move the two finite sums through the trace. By the inverse-map identity
+    \begin{align}
         \sum_p(\mathcal K^{-1})^{\alpha,\beta}_p\,\mathcal K^p
-        =E_{\alpha,\beta},
-    \]
-    the double sum collapses to
-    \[
-        \tr\bigl(E_{\alpha_1,\beta_1}\mathcal K^{p_2}
-          E_{\alpha_3,\beta_3}R\bigr)
-        = \mathcal K^{p_2}_{\beta_1,\alpha_3}
+        &=E_{\alpha,\beta},
+        \notag
+    \end{align}
+    which is the matrix form of (\ref{eq:rfp_inverse_matrix_units}), the double
+    sum collapses to
+    \begin{align}
+        \tr\!\left(E_{\alpha_1,\beta_1}\mathcal K^{p_2}
+          E_{\alpha_3,\beta_3}R\right)
+        &=\mathcal K^{p_2}_{\beta_1,\alpha_3}
           R_{\beta_3,\alpha_1}.
-    \]
+        \notag
+    \end{align}
 \end{proof}
 
 \begin{definition}[Three-site closure against a virtual tail]
@@ -324,12 +323,12 @@ This is the single-block identity in
     \uses{def:mpo_tensor}
     Let $\mathcal K$ be an MPO tensor and let $R\in\MN{D}$. A tripartite
     operator $\rho$ is the three-site closure of $\mathcal K$ against $R$ if
-    \[
+    \begin{align}
         \rho_{i_1i_2i_3,j_1j_2j_3}
-        =\tr\!\left(
-          \mathcal K^{i_1j_1}\mathcal K^{i_2j_2}\mathcal K^{i_3j_3}R
-        \right).
-    \]
+        &=\tr\!\left(\mathcal K^{i_1j_1}\mathcal K^{i_2j_2}
+          \mathcal K^{i_3j_3}R\right).
+        \label{eq:rfp_three_site_closure}
+    \end{align}
     This is the algebraic form of the three-site reduced operator in
     \cite[Appendix~C.2, lines~1422--1433]{Cirac2016MPDO_arXiv}.
 \end{definition}
@@ -342,20 +341,22 @@ This is the single-block identity in
     \leanok
     \uses{def:mpdo_injective_inverse_layer, def:mpdo_eta_structure}
     Fix virtual indices $\beta,\alpha$ and set
-    \[
-        \kappa_{\beta,\alpha}(i,j)=\mathcal K^{ij}_{\beta,\alpha}.
-    \]
+    $\kappa_{\beta,\alpha}(i,j)=\mathcal K^{ij}_{\beta,\alpha}$.
     For a Hayashi sector $k$, define the two inverse factors
-    \begin{align*}
+    \begin{align}
         A^{(k)}_{\alpha_1,\beta_1}(l,l')
-        &:=\sum_{i_1,j_1}
+        &:=
+        \sum_{i_1,j_1}
         (\mathcal K^{-1})^{\alpha_1,\beta_1}_{(i_1,j_1)}
-        (\rho_{A b_1}^{(k)})_{(i_1,l),(j_1,l')},\\
+        (\rho_{A b_1}^{(k)})_{(i_1,l),(j_1,l')},
+        \notag\\
         B^{(k)}_{\alpha_3,\beta_3}(r,r')
-        &:=\sum_{i_3,j_3}
+        &:=
+        \sum_{i_3,j_3}
         (\mathcal K^{-1})^{\alpha_3,\beta_3}_{(i_3,j_3)}
         (\rho_{b_2 C}^{(k)})_{(r,i_3),(r',j_3)}.
-    \end{align*}
+        \notag
+    \end{align}
     These are the two factors in the sectorwise inverse-map calculation of
     \cite[Appendix~C.2, lines~1407--1428]{Cirac2016MPDO_arXiv}.
 \end{definition}
@@ -370,63 +371,66 @@ This is the single-block identity in
     against $R$. Applying the inverse tensor at the two outer sites collapses
     the closure to one entry of the middle physical slice and one entry of the
     tail:
-    \[
-        \sum_{i_1,j_1,i_3,j_3}
+    \begin{align}
+        &\sum_{i_1,j_1,i_3,j_3}
         (\mathcal K^{-1})^{\alpha_1,\beta_1}_{(i_1,j_1)}
         (\mathcal K^{-1})^{\alpha_3,\beta_3}_{(i_3,j_3)}
         \rho_{i_1i_2i_3,j_1j_2j_3}
-        =\mathcal K^{i_2j_2}_{\beta_1,\alpha_3}\,
+        \notag\\
+        &\qquad
+        =\mathcal K^{i_2j_2}_{\beta_1,\alpha_3}
         R_{\beta_3,\alpha_1}.
-    \]
+        \label{eq:rfp_outer_collapse}
+    \end{align}
     Consequently, for any matrix $U$ on the middle site,
-    \[
-        R_{\beta_3,\alpha_1}
-        \bigl(U\kappa_{\beta_1,\alpha_3}U^\dagger\bigr)_{b,b'}
+    \begin{align}
+        &R_{\beta_3,\alpha_1}
+        (U\kappa_{\beta_1,\alpha_3}U^\dagger)_{b,b'}
+        \notag\\
+        &\qquad
         =\sum_{i_1,j_1,i_3,j_3}
         (\mathcal K^{-1})^{\alpha_1,\beta_1}_{(i_1,j_1)}
         (\mathcal K^{-1})^{\alpha_3,\beta_3}_{(i_3,j_3)}
         \sum_{i_2,j_2}
-        U_{b,i_2}\,\rho_{i_1i_2i_3,j_1j_2j_3}\,
+        U_{b,i_2} \rho_{i_1i_2i_3,j_1j_2j_3}
         \overline{U_{b',j_2}}.
-    \]
+        \label{eq:rfp_conjugated_slice}
+    \end{align}
 \end{theorem}
 
 \begin{proof}
     \leanok
     \uses{thm:mpdo_inverse_map_three_site_contraction}
-    Substituting the three-site closure relation
-    \[
-        \rho_{i_1i_2i_3,j_1j_2j_3}
-        =\tr\!\left(
-          \mathcal K^{i_1j_1}\mathcal K^{i_2j_2}\mathcal K^{i_3j_3}R
-        \right)
-    \]
-    converts the left-hand side of the first identity to
+    Substituting the three-site closure relation~
+    (\ref{eq:rfp_three_site_closure}) converts the left-hand side
+    of (\ref{eq:rfp_outer_collapse}) to
     $C_{\alpha_1,\beta_1,\alpha_3,\beta_3}((i_2,j_2);R)$.
     Theorem~\ref{thm:mpdo_inverse_map_three_site_contraction} then gives
-    \[
+    \begin{align}
         C_{\alpha_1,\beta_1,\alpha_3,\beta_3}((i_2,j_2);R)
-        =\mathcal K^{i_2j_2}_{\beta_1,\alpha_3}
-        R_{\beta_3,\alpha_1},
-    \]
-    which is the first identity. The second identity follows by expanding the
-    matrix product entrywise,
-    \[
-        \bigl(U\kappa_{\beta_1,\alpha_3}U^\dagger\bigr)_{b,b'}
-        =\sum_{i_2,j_2}
-        U_{b,i_2}\,\kappa_{\beta_1,\alpha_3}(i_2,j_2)\,
+        &=\mathcal K^{i_2j_2}_{\beta_1,\alpha_3}
+          R_{\beta_3,\alpha_1},
+        \notag
+    \end{align}
+    which is (\ref{eq:rfp_outer_collapse}). The second identity follows by
+    expanding the matrix product entrywise,
+    \begin{align}
+        (U\kappa_{\beta_1,\alpha_3}U^\dagger)_{b,b'}
+        &=\sum_{i_2,j_2}
+        U_{b,i_2} \kappa_{\beta_1,\alpha_3}(i_2,j_2)
         \overline{U_{b',j_2}},
-    \]
-    multiplying by $R_{\beta_3,\alpha_1}$, substituting the first identity in
-    the form
-    \[
-        R_{\beta_3,\alpha_1}\,
+        \notag
+    \end{align}
+    multiplying by $R_{\beta_3,\alpha_1}$, substituting
+    \begin{align}
+        R_{\beta_3,\alpha_1}
         \kappa_{\beta_1,\alpha_3}(i_2,j_2)
-        =\sum_{i_1,j_1,i_3,j_3}
+        &=\sum_{i_1,j_1,i_3,j_3}
         (\mathcal K^{-1})^{\alpha_1,\beta_1}_{(i_1,j_1)}
         (\mathcal K^{-1})^{\alpha_3,\beta_3}_{(i_3,j_3)}
         \rho_{i_1i_2i_3,j_1j_2j_3},
-    \]
+        \notag
+    \end{align}
     and reordering the finite sums.
 \end{proof}
 
@@ -438,27 +442,29 @@ This is the single-block identity in
         def:mpdo_hayashi_inverse_factors}
     Suppose that $\mathcal K$ is injective, $\rho$ is its three-site closure
     against $R$, and a Hayashi decomposition of $\rho$ has been chosen. Write
-    \[
+    \begin{align}
         \widetilde\kappa^{(k)}_{\beta_1,\alpha_3}
           ((l,r),(l',r'))
-        :=\left[
-          U_B\kappa_{\beta_1,\alpha_3}U_B^\dagger
-        \right]_{(k,l,r),(k,l',r')}.
-    \]
+        &:=
+        \left[U_B\kappa_{\beta_1,\alpha_3}U_B^\dagger\right]_{(k,l,r),(k,l',r')}.
+        \notag
+    \end{align}
     Then every diagonal sector satisfies
-    \[
-        R_{\beta_3,\alpha_1}\,
+    \begin{align}
+        R_{\beta_3,\alpha_1}
         \widetilde\kappa^{(k)}_{\beta_1,\alpha_3}
           ((l,r),(l',r'))
-        =p_k A^{(k)}_{\alpha_1,\beta_1}(l,l')
+        &=p_k A^{(k)}_{\alpha_1,\beta_1}(l,l')
           B^{(k)}_{\alpha_3,\beta_3}(r,r').
-    \]
+        \label{eq:rfp_sector_comparison}
+    \end{align}
     The probability $p_k$ remains explicit because both sector density
     operators are normalized. No zero-correlation-length or non-vanishing
     hypothesis is used in this comparison.
 \end{theorem}
 
-For fixed $k,\alpha_1,\beta_3$, the identity reads coefficientwise as follows.
+For fixed $k,\alpha_1,\beta_3$, the identity
+(\ref{eq:rfp_sector_comparison}) reads coefficientwise as follows.
 % Formula:
 % R_{\beta_3,\alpha_1}
 % \widetilde\kappa^{(k)}_{\beta_1,\alpha_3}((l,r),(l',r'))
@@ -487,76 +493,84 @@ $R_{\beta_3,\alpha_1}\,$
         down={$(l',r')$}
     ]{\widetilde\kappa^{(k)}}
 }
-$\;=\;$
-$p_k\,A^{(k)}_{\alpha_1,\beta_1}(l,l')\,
-B^{(k)}_{\alpha_3,\beta_3}(r,r').$
+$ = $
+$p_k\,A^{(k)}_{\alpha_1,\beta_1}(l,l')
+B^{(k)}_{\alpha_3,\beta_3}(r,r')$.
 \end{tenkzequation}
 
 \begin{proof}
     \leanok
     \uses{thm:mpdo_closure_outer_contraction}
     At fixed indices $(k,l,r)$ and $(k,l',r')$, the Hayashi block equality is
-    \[
-        \sum_{i_2,j_2}
-        [U_B]_{(k,l,r),i_2}\,
-        \rho_{i_1i_2i_3,j_1j_2j_3}\,
+    \begin{align}
+        &\sum_{i_2,j_2}
+        [U_B]_{(k,l,r),i_2}
+        \rho_{i_1i_2i_3,j_1j_2j_3}
         \overline{[U_B]_{(k,l',r'),j_2}}
+        \notag\\
+        &\qquad
         =p_k(\rho_{A b_1}^{(k)})_{(i_1,l),(j_1,l')}
           (\rho_{b_2 C}^{(k)})_{(r,i_3),(r',j_3)}.
-    \]
+        \notag
+    \end{align}
     For each $i_2,j_2$, the preceding theorem gives
-    \[
-        \sum_{i_1,j_1,i_3,j_3}
+    \begin{align}
+        &\sum_{i_1,j_1,i_3,j_3}
         (\mathcal K^{-1})^{\alpha_1,\beta_1}_{(i_1,j_1)}
         (\mathcal K^{-1})^{\alpha_3,\beta_3}_{(i_3,j_3)}
         \rho_{i_1i_2i_3,j_1j_2j_3}
+        \notag\\
+        &\qquad
         =\mathcal K^{i_2j_2}_{\beta_1,\alpha_3}
           R_{\beta_3,\alpha_1}.
-    \]
+        \notag
+    \end{align}
     Apply
-    $\sum_{i_1,j_1,i_3,j_3}
-      (\mathcal K^{-1})^{\alpha_1,\beta_1}_{(i_1,j_1)}
-      (\mathcal K^{-1})^{\alpha_3,\beta_3}_{(i_3,j_3)}\,(-)$
+    \begin{align}
+        \sum_{i_1,j_1,i_3,j_3}
+        &(\mathcal K^{-1})^{\alpha_1,\beta_1}_{(i_1,j_1)}
+        (\mathcal K^{-1})^{\alpha_3,\beta_3}_{(i_3,j_3)}\,(-)
+        \notag
+    \end{align}
     to the Hayashi block equality. Substituting the preceding display and
     interchanging the finite sums gives
-    \begin{align*}
+    \begin{align}
         &\sum_{i_1,j_1,i_3,j_3}
           (\mathcal K^{-1})^{\alpha_1,\beta_1}_{(i_1,j_1)}
-          (\mathcal K^{-1})^{\alpha_3,\beta_3}_{(i_3,j_3)}\\
-        &\quad{}\times\left(\sum_{i_2,j_2}
-          [U_B]_{(k,l,r),i_2}\,
-          \rho_{i_1i_2i_3,j_1j_2j_3}\,
-          \overline{[U_B]_{(k,l',r'),j_2}}\right)\\
-        &={}\sum_{i_2,j_2}
-          [U_B]_{(k,l,r),i_2}\,
+          (\mathcal K^{-1})^{\alpha_3,\beta_3}_{(i_3,j_3)}
+        \notag\\
+        &\qquad{}\times\left(\sum_{i_2,j_2}
+          [U_B]_{(k,l,r),i_2}
+          \rho_{i_1i_2i_3,j_1j_2j_3}
+          \overline{[U_B]_{(k,l',r'),j_2}}\right)
+        \notag\\
+        &\qquad
+        =\sum_{i_2,j_2}
+          [U_B]_{(k,l,r),i_2}
           \mathcal K^{i_2j_2}_{\beta_1,\alpha_3}
-          R_{\beta_3,\alpha_1}\,
+          R_{\beta_3,\alpha_1}
           \overline{[U_B]_{(k,l',r'),j_2}}.
-    \end{align*}
+        \notag
+    \end{align}
     The right-hand side is
-    \begin{align*}
+    \begin{align}
         &R_{\beta_3,\alpha_1}
-        \sum_{i_2,j_2}[U_B]_{(k,l,r),i_2}\,
-        \kappa_{\beta_1,\alpha_3}(i_2,j_2)\,
-        \overline{[U_B]_{(k,l',r'),j_2}}\\
-        &\qquad={}
-        R_{\beta_3,\alpha_1}\,
+        \sum_{i_2,j_2}
+        [U_B]_{(k,l,r),i_2}
+        \kappa_{\beta_1,\alpha_3}(i_2,j_2)
+        \overline{[U_B]_{(k,l',r'),j_2}}
+        \notag\\
+        &\qquad
+        =R_{\beta_3,\alpha_1}
         \widetilde\kappa^{(k)}_{\beta_1,\alpha_3}
           ((l,r),(l',r')).
-    \end{align*}
+        \notag
+    \end{align}
     The contraction of the right-hand side of the Hayashi block equality is
-    \[
-        p_k A^{(k)}_{\alpha_1,\beta_1}(l,l')
-          B^{(k)}_{\alpha_3,\beta_3}(r,r').
-    \]
-    Since the Hayashi block equality holds, equating the two contractions gives
-    \[
-        R_{\beta_3,\alpha_1}\,
-        \widetilde\kappa^{(k)}_{\beta_1,\alpha_3}
-          ((l,r),(l',r'))
-        =p_k A^{(k)}_{\alpha_1,\beta_1}(l,l')
-          B^{(k)}_{\alpha_3,\beta_3}(r,r').
-    \]
+    $p_k A^{(k)}_{\alpha_1,\beta_1}(l,l')
+    B^{(k)}_{\alpha_3,\beta_3}(r,r')$.
+    Since the Hayashi block equality holds, equating the two contractions
+    gives (\ref{eq:rfp_sector_comparison}).
 \end{proof}
 
 \begin{theorem}[The four-site marginal is a three-site closure]
@@ -572,16 +586,17 @@ B^{(k)}_{\alpha_3,\beta_3}(r,r').$
 \begin{proof}
     \leanok
     \uses{thm:mpdo_reduced_four_three_tail}
-    The entry formula for $\sigma_3^{(4)}(\mathcal K)$, carried onto the
-    tripartite site index $(i_1,i_2,i_3)$, gives
-    \[
+    The entry formula (\ref{eq:rfp_three_site_marginal}) for
+    $\sigma_3^{(4)}(\mathcal K)$, carried onto the tripartite site index
+    $(i_1,i_2,i_3)$, gives
+    \begin{align}
         \rho_{i_1i_2i_3,j_1j_2j_3}
-        =\tr\!\left(
-          \mathcal K^{i_1j_1}\mathcal K^{i_2j_2}\mathcal K^{i_3j_3}R_4
-        \right),
-    \]
-    which is the three-site closure condition of
-    Definition~\ref{def:mpdo_three_site_closure} against $R_4$.
+        &=\tr\!\left(\mathcal K^{i_1j_1}\mathcal K^{i_2j_2}
+          \mathcal K^{i_3j_3}R_4\right),
+        \notag
+    \end{align}
+    which is the three-site closure condition
+    (\ref{eq:rfp_three_site_closure}) against $R_4$.
 \end{proof}
 
 \begin{theorem}[Vanishing of the off-diagonal Hayashi sectors]
@@ -592,12 +607,12 @@ B^{(k)}_{\alpha_3,\beta_3}(r,r').$
     In the setting of
     Theorem~\ref{thm:mpdo_inverse_map_hayashi_sector_comparison}, for all
     $k\ne k'$, every off-diagonal sector satisfies
-    \[
+    \begin{align}
         R_{\beta_3,\alpha_1}
-        \left[U_B\kappa_{\beta_1,\alpha_3}U_B^\dagger
-        \right]_{(k,l,r),(k',l',r')}
-        = 0.
-    \]
+        \left[U_B\kappa_{\beta_1,\alpha_3}U_B^\dagger\right]_{(k,l,r),(k',l',r')}
+        &=0.
+        \label{eq:rfp_offdiagonal_vanishing}
+    \end{align}
     Together with the diagonal comparison this gives the direct-sum structure
     of the factorized tensor: the direct sum over sectors is inherited from
     the splitting of the middle site.
@@ -606,17 +621,18 @@ B^{(k)}_{\alpha_3,\beta_3}(r,r').$
 \begin{proof}
     \leanok
     \uses{thm:mpdo_closure_outer_contraction}
-    The Hayashi block equality at off-diagonal indices gives
-    \[
-        \sum_{i_2,j_2}(U_B)_{b,i_2}\,
-        \rho_{i_1i_2i_3,j_1j_2j_3}\,
-        \overline{(U_B)_{b',j_2}}=0
-    \]
-    for $b$ in sector $k$ and $b'$ in sector $k'$ with $k\ne k'$.
+    For $b$ in sector $k$ and $b'$ in sector $k'$ with $k\ne k'$, the Hayashi
+    block equality at off-diagonal indices gives
+    \begin{align}
+        \sum_{i_2,j_2}(U_B)_{b,i_2}
+        \rho_{i_1i_2i_3,j_1j_2j_3}
+        \overline{(U_B)_{b',j_2}}
+        &=0.
+        \notag
+    \end{align}
     Substituting this vanishing into the expansion of
-    Theorem~\ref{thm:mpdo_closure_outer_contraction} gives
-    $R_{\beta_3,\alpha_1}
-    (U_B\kappa_{\beta_1,\alpha_3}U_B^\dagger)_{b,b'}=0$.
+    Theorem~\ref{thm:mpdo_closure_outer_contraction}
+    gives (\ref{eq:rfp_offdiagonal_vanishing}).
 \end{proof}
 
 \begin{definition}[Sector tensors]
@@ -627,13 +643,15 @@ B^{(k)}_{\alpha_3,\beta_3}(r,r').$
     \uses{def:mpdo_hayashi_inverse_factors}
     Fix outer virtual indices $\alpha_1,\beta_3$ and a Hayashi sector $k$.
     The sector tensors are
-    \[
+    \begin{align}
         (l_k)_{\beta_1}
-        := R_{\beta_3,\alpha_1}^{-1}\, p_k\, A^{(k)}_{\alpha_1,\beta_1},
-        \qquad
+        &:=R_{\beta_3,\alpha_1}^{-1}\,p_k
+          A^{(k)}_{\alpha_1,\beta_1},
+        \notag\\
         (r_k)_{\alpha_3}
-        := B^{(k)}_{\alpha_3,\beta_3}.
-    \]
+        &:=B^{(k)}_{\alpha_3,\beta_3}.
+        \notag
+    \end{align}
     % The source (arXiv:1606.00608, Appendix C.2, lines 1435--1448) leaves the
     % distribution of the scalar R^{-1} p_k between l_k and r_k unspecified;
     % here it is attached to l_k.
@@ -647,15 +665,8 @@ B^{(k)}_{\alpha_3,\beta_3}(r,r').$
     \lean{MPOTensor.sectorEta_eq_zero_of_target_weight_eq_zero}
     \leanok
     \uses{def:mpdo_sector_tensors}
-    If $p_k=0$, then
-    \[
-        (l_k)_\beta=0
-    \]
-    for every virtual index $\beta$. Consequently,
-    \[
-        \eta_{h,k}=0
-    \]
-    for every sector $h$.
+    If $p_k=0$, then $(l_k)_\beta=0$ for every virtual index $\beta$.
+    Consequently, $\eta_{h,k}=0$ for every sector $h$.
 \end{lemma}
 
 \begin{proof}
@@ -674,17 +685,19 @@ B^{(k)}_{\alpha_3,\beta_3}(r,r').$
     against $R$, a Hayashi decomposition of $\rho$ has been chosen, and the
     outer indices satisfy $R_{\beta_3,\alpha_1}\ne0$. Then for all virtual
     indices $\beta_1,\alpha_3$,
-    \[
+    \begin{align}
         U_B\,\kappa_{\beta_1,\alpha_3}\,U_B^\dagger
-        =\bigoplus_k (l_k)_{\beta_1}\otimes(r_k)_{\alpha_3}.
-    \]
+        &=\bigoplus_k
+          (l_k)_{\beta_1}\otimes(r_k)_{\alpha_3}.
+        \label{eq:rfp_sector_factorization}
+    \end{align}
     The direct sum refers to the physical indices and is inherited from the
     splitting of the middle site. This is the factorization displayed at
     \cite[Appendix~C.2, lines~1435--1448]{Cirac2016MPDO_arXiv}.
 \end{theorem}
 
-In the middle-site basis selected by $U_B$, the same factorization is
-displayed as
+In the middle-site basis selected by $U_B$, the same factorization
+(\ref{eq:rfp_sector_factorization}) is displayed as
 \begin{center}
     % U_B kappa U_B^dagger = bigoplus_k l_k (x) r_k: U_B splits the
     % physical slice kappa_{beta_1,alpha_3}'s
@@ -698,11 +711,11 @@ displayed as
         \tn[wide=2]{\kappa_{\beta_1,\alpha_3}} & \\
         \tn[pill, wide=2, legs at={1,2}]{U_B^\dagger} &
     \end{tenkz}
-    $\;=\;\bigoplus_k$
+    $ = \bigoplus_k$
     \begin{tenkz}[physical=updown, east=none, tensor style=box]
         \tn{l_k}
     \end{tenkz}
-    $\;\otimes\;$
+    $ \otimes $
     \begin{tenkz}[physical=updown, west=none, tensor style=box]
         \tn{r_k}
     \end{tenkz}
@@ -714,8 +727,9 @@ displayed as
         thm:mpdo_inverse_map_hayashi_sector_offdiagonal}
     On a diagonal sector, the sectorwise comparison gives
     $R_{\beta_3,\alpha_1}\widetilde\kappa^{(k)}
-    = p_k A^{(k)} B^{(k)}$, and dividing by the nonzero entry
-    $R_{\beta_3,\alpha_1}$ produces $(l_k)_{\beta_1}\otimes(r_k)_{\alpha_3}$.
+    =p_kA^{(k)}B^{(k)}$, and dividing by the nonzero entry
+    $R_{\beta_3,\alpha_1}$ produces
+    $(l_k)_{\beta_1}\otimes(r_k)_{\alpha_3}$.
     On an off-diagonal sector, the product with $R_{\beta_3,\alpha_1}$
     vanishes, and since $R_{\beta_3,\alpha_1}\ne0$ the sector itself
     vanishes.
@@ -731,10 +745,12 @@ displayed as
     $R_4$, and choose a Hayashi decomposition of $\rho$. Then there exist
     sector tensors $l_k$ and $r_k$ such that, for all virtual indices
     $\beta_1,\alpha_3$,
-    \[
+    \begin{align}
         U_B\,\kappa_{\beta_1,\alpha_3}\,U_B^\dagger
-        =\bigoplus_k (l_k)_{\beta_1}\otimes(r_k)_{\alpha_3}.
-    \]
+        &=\bigoplus_k
+          (l_k)_{\beta_1}\otimes(r_k)_{\alpha_3}.
+        \notag
+    \end{align}
     The neighboring operators $\eta_{k,h}$ are assembled from these tensors
     in Definition~\ref{def:mpdo_sector_eta}; the remaining steps of
     \cite[Appendix~C.2, Lemma~C.4]{Cirac2016MPDO_arXiv} prove the

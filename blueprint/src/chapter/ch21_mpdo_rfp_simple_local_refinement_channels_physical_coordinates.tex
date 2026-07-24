@@ -1,4 +1,3 @@
-
 \begin{definition}[Refinement in ordinary physical coordinates]
     \label{def:mpdo_physical_t_map}
     \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.physicalTMap}
@@ -7,11 +6,8 @@
       def:mpdo_physical_sector_closure_coordinates}
     Transporting $\mathcal T$ through the canonical two-site and three-site
     coordinate identifications gives a channel
-    \[
-      \widehat{\mathcal T}:M_{q^2}(\mathbb C)\longrightarrow
-        M_{q^3}(\mathbb C),
-    \]
-    where all multiple physical indices are associated to the right.
+    $\widehat{\mathcal T}:\MN{q^2}\longrightarrow\MN{q^3}$, where all
+    multiple physical indices are associated to the right.
 \end{definition}
 
 \begin{theorem}[The physical refinement map is a channel]
@@ -39,10 +35,8 @@
     \leanok
     \uses{def:mpdo_physical_t_map}
     For every virtual matrix $X$,
-    \[
-      \widehat{\mathcal T}\bigl(\widehat{\cal K}_2(X)\bigr)
-      =\widehat{\cal K}_3(X).
-    \]
+    $\widehat{\mathcal T}(\widehat{\mathcal K}_2(X))
+    =\widehat{\mathcal K}_3(X)$.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -59,10 +53,7 @@
       def:mpdo_physical_sector_closure_coordinates}
     Transporting $\mathcal S$ through the canonical three-site and two-site
     coordinate identifications gives a channel
-    \[
-      \widehat{\mathcal S}:M_{q^3}(\mathbb C)\longrightarrow
-        M_{q^2}(\mathbb C).
-    \]
+    $\widehat{\mathcal S}:\MN{q^3}\longrightarrow\MN{q^2}$.
 \end{definition}
 
 \begin{theorem}[The physical coarse-graining map is a channel]
@@ -86,10 +77,8 @@
     \leanok
     \uses{def:mpdo_physical_s_map}
     For every virtual matrix $X$,
-    \[
-      \widehat{\mathcal S}\bigl(\widehat{\cal K}_3(X)\bigr)
-      =\widehat{\cal K}_2(X).
-    \]
+    $\widehat{\mathcal S}(\widehat{\mathcal K}_3(X))
+    =\widehat{\mathcal K}_2(X)$.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -107,10 +96,7 @@
     $\widehat{\mathcal T}\otimes\id$ to the first two, and
     reassociating the result back to $1(2(34))$ defines the localized
     refinement channel
-    \[
-      \widehat{\mathcal T}_{(12)3}:
-      M_{q^3}(\mathbb C)\longrightarrow M_{q^4}(\mathbb C)
-    \]
+    $\widehat{\mathcal T}_{(12)3}:\MN{q^3}\longrightarrow\MN{q^4}$
     on right-associated physical coordinates.
 \end{definition}
 
@@ -138,12 +124,10 @@
     \leanok
     \uses{def:mpdo_localized_physical_t_map}
     For every virtual matrix $X$,
-    \[
-      (\widehat{\mathcal T}\otimes\id)
-        \bigl(\widehat{\cal K}_3(X)\bigr)
-      =\widehat{\cal K}_4(X),
-    \]
-    with the displayed map understood in right-associated coordinates.
+    $(\widehat{\mathcal T}\otimes\id)
+    (\widehat{\mathcal K}_3(X))
+    =\widehat{\mathcal K}_4(X)$, with the map understood in
+    right-associated coordinates.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -162,10 +146,7 @@
     $\widehat{\mathcal S}\otimes\id$ to the first three, and
     reassociating the result back to $1(23)$ defines the localized
     coarse-graining channel
-    \[
-      \widehat{\mathcal S}_{(123)4}:
-      M_{q^4}(\mathbb C)\longrightarrow M_{q^3}(\mathbb C)
-    \]
+    $\widehat{\mathcal S}_{(123)4}:\MN{q^4}\longrightarrow\MN{q^3}$
     on right-associated physical coordinates.
 \end{definition}
 
@@ -190,12 +171,9 @@
     \leanok
     \uses{def:mpdo_localized_physical_s_map}
     For every virtual matrix $X$,
-    \[
-      (\widehat{\mathcal S}\otimes\id)
-        \bigl(\widehat{\cal K}_4(X)\bigr)
-      =\widehat{\cal K}_3(X),
-    \]
-    in right-associated coordinates.
+    $(\widehat{\mathcal S}\otimes\id)
+    (\widehat{\mathcal K}_4(X))
+    =\widehat{\mathcal K}_3(X)$ in right-associated coordinates.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -215,16 +193,17 @@
     \leanok
     \uses{def:mpdo_physical_t_map,
       def:mpdo_localized_physical_t_map}
-    Let $\widehat{\cal K}$ be the sector-coordinate tensor selected by the
+    Let $\widehat{\mathcal K}$ be the sector-coordinate tensor selected by the
     physical isometry of Proposition~C.7. Define
-    \[
+    \begin{align}
       \widehat{\mathcal T}^2
-      =\widehat{\mathcal T}_{(12)3}\circ\widehat{\mathcal T},
-      \qquad
-      \widehat{\mathcal T}^2:M_{q^2}(\mathbb C)
-        \longrightarrow M_{q^4}(\mathbb C),
-    \]
-    where the second application acts on the first two sites and leaves the
+      &=\widehat{\mathcal T}_{(12)3}\circ\widehat{\mathcal T},
+      \notag\\
+      \widehat{\mathcal T}^2
+      &:\MN{q^2}\longrightarrow\MN{q^4}.
+      \notag
+    \end{align}
+    Here the second application acts on the first two sites and leaves the
     third site unchanged. Thus the superscript denotes two successive
     overlapping applications, as in the proof of
     \cite[Theorem~4.9, (iv)$\Rightarrow$(v)]{Cirac2016MPDO_arXiv}.
@@ -255,18 +234,16 @@
     \leanok
     \uses{def:mpdo_physical_t_squared_map}
     For every virtual matrix $X$, the sector-coordinate tensor satisfies
-    \[
-      \widehat{\mathcal T}^2
-        \bigl(\widehat{\cal K}_2(X)\bigr)
-      =\widehat{\cal K}_4(X).
-    \]
+    $\widehat{\mathcal T}^2(\widehat{\mathcal K}_2(X))
+    =\widehat{\mathcal K}_4(X)$.
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{thm:mpdo_physical_t_closure_identity,
       thm:mpdo_localized_physical_t_closure_identity}
-    The first refinement gives $\widehat{\cal K}_3(X)$; applying the localized
-    refinement to its first two sites gives $\widehat{\cal K}_4(X)$.
+    The first refinement gives $\widehat{\mathcal K}_3(X)$; applying the
+    localized refinement to its first two sites gives
+    $\widehat{\mathcal K}_4(X)$.
 \end{proof}
 
 \begin{definition}[Two-step physical coarse-graining]
@@ -276,14 +253,15 @@
     \uses{def:mpdo_physical_s_map,
       def:mpdo_localized_physical_s_map}
     Define
-    \[
+    \begin{align}
       \widehat{\mathcal S}^2
-      =\widehat{\mathcal S}\circ\widehat{\mathcal S}_{(123)4},
-      \qquad
-      \widehat{\mathcal S}^2:M_{q^4}(\mathbb C)
-        \longrightarrow M_{q^2}(\mathbb C),
-    \]
-    where the first application acts on the first three sites and leaves the
+      &=\widehat{\mathcal S}\circ\widehat{\mathcal S}_{(123)4},
+      \notag\\
+      \widehat{\mathcal S}^2
+      &:\MN{q^4}\longrightarrow\MN{q^2}.
+      \notag
+    \end{align}
+    Here the first application acts on the first three sites and leaves the
     fourth site unchanged. The superscript again denotes successive
     overlapping applications.
 \end{definition}
@@ -310,18 +288,16 @@
     \leanok
     \uses{def:mpdo_physical_s_squared_map}
     For every virtual matrix $X$, the sector-coordinate tensor satisfies
-    \[
-      \widehat{\mathcal S}^2
-        \bigl(\widehat{\cal K}_4(X)\bigr)
-      =\widehat{\cal K}_2(X).
-    \]
+    $\widehat{\mathcal S}^2(\widehat{\mathcal K}_4(X))
+    =\widehat{\mathcal K}_2(X)$.
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{thm:mpdo_localized_physical_s_closure_identity,
       thm:mpdo_physical_s_closure_identity}
-    The localized coarse-graining first gives $\widehat{\cal K}_3(X)$; the
-    second coarse-graining gives $\widehat{\cal K}_2(X)$.
+    The localized coarse-graining first gives
+    $\widehat{\mathcal K}_3(X)$; the second coarse-graining gives
+    $\widehat{\mathcal K}_2(X)$.
 \end{proof}
 
 \begin{figure}[!b]
@@ -363,8 +339,7 @@
                 \tnspan[box, label pos=south]{2}{\widehat{\cal K}^{[2]}} &
             \tn[mpo]{\widehat{\cal K}}}
     \end{tenkzequation}
-    \par\medskip
-    \begin{tenkzequation}
+    \par    \begin{tenkzequation}
         $\widehat{\mathcal S}^{\,2}:\quad$
         \tnpic[compact, physical=updown, tensor style=box]{%
             \tn[mpo]{\widehat{\cal K}}
@@ -403,14 +378,13 @@
     \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.blockTwo_sectorCoordinateTensor_isRFPViaTS}
     \leanok
     \uses{def:is_rfp_via_ts, def:mpdo_two_site_blocking}
-    Let $\widehat{\cal K}^{[2]}$ be the tensor obtained by blocking two
-    adjacent sites of the sector-coordinate tensor $\widehat{\cal K}$. Then
-    $\widehat{\cal K}^{[2]}$ is a renormalization fixed point in the sense of
-    Definition~\ref{def:is_rfp_via_ts}. More precisely, after the canonical
-    identifications of one blocked site with two original sites and two
-    blocked sites with four original sites, the required channels are
-    $\widehat{\mathcal S}^2$ and
-    $\widehat{\mathcal T}^2$.
+    Let $\widehat{\mathcal K}^{[2]}$ be the tensor obtained by blocking two
+    adjacent sites of the sector-coordinate tensor $\widehat{\mathcal K}$.
+    Then $\widehat{\mathcal K}^{[2]}$ is a renormalization fixed point in the
+    sense of Definition~\ref{def:is_rfp_via_ts}. More precisely, after the
+    canonical identifications of one blocked site with two original sites and
+    two blocked sites with four original sites, the required channels are
+    $\widehat{\mathcal S}^2$ and $\widehat{\mathcal T}^2$.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -422,11 +396,11 @@
       thm:mpdo_two_site_closure_two_site_blocking}
     Decode one blocked index as a pair of physical indices and two blocked
     indices as four physical indices. The one-site and two-site closures of
-    $\widehat{\cal K}^{[2]}$ thereby become respectively
-    $\widehat{\cal K}_2(X)$ and $\widehat{\cal K}_4(X)$. Transporting the two
-    channels through these permutation identifications preserves complete
-    positivity and trace, and the two closure identities give the required
-    equations in Definition~\ref{def:is_rfp_via_ts}.
+    $\widehat{\mathcal K}^{[2]}$ thereby become respectively
+    $\widehat{\mathcal K}_2(X)$ and $\widehat{\mathcal K}_4(X)$.
+    Transporting the two channels through these permutation identifications
+    preserves complete positivity and trace, and the two closure identities
+    give the required equations in Definition~\ref{def:is_rfp_via_ts}.
 \end{proof}
 
 % **Local fix (zero-weight quotient):** this theorem uses the completed
@@ -446,8 +420,8 @@
     \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.blockTwo_isRFPViaTS}
     \leanok
     \uses{def:is_rfp_via_ts, def:mpdo_two_site_blocking}
-    Let ${\cal K}^{[2]}$ be the tensor obtained by blocking two adjacent sites
-    of the original tensor ${\cal K}$. Then ${\cal K}^{[2]}$ is a
+    Let $\mathcal K^{[2]}$ be the tensor obtained by blocking two adjacent
+    sites of the original tensor $\mathcal K$. Then $\mathcal K^{[2]}$ is a
     renormalization fixed point in the sense of
     Definition~\ref{def:is_rfp_via_ts}. This is
     \cite[Theorem~4.9, (iv)$\Rightarrow$(v)]{Cirac2016MPDO_arXiv}.
@@ -456,12 +430,12 @@
 \begin{proof}\leanok
     \uses{thm:mpdo_blocked_sector_coordinate_tensor_is_rfp_via_ts}
     Transport the refinement and coarse-graining channels for
-    $\widehat{\cal K}^{[2]}$ through the two-site and four-site tensor powers
-    of the physical isometry, as in
-    equation~(\ref{eq:mpdo_physical_isometry_transport}). These unitary
-    congruences preserve complete positivity and trace, while the
-    corresponding closure identities carry the two fixed-point equations back
-    to ${\cal K}^{[2]}$.
+    $\widehat{\mathcal K}^{[2]}$ through the two-site and four-site tensor
+    powers of the physical isometry, as in
+    (\ref{eq:mpdo_physical_isometry_transport}). These unitary congruences
+    preserve complete positivity and trace, while the corresponding closure
+    identities carry the two fixed-point equations back to
+    $\mathcal K^{[2]}$.
 \end{proof}
 
 % **Refuted prerequisite (Lemma C.5):**
@@ -497,19 +471,22 @@
 % channel MPDO_TSKKK.png after explicitly suppressing U, but it does not draw
 % this tensor-power transport square.  The transport theorem is recorded in
 % docs/paper-gaps/cpgsv17_mpdo_blocked_rfp_physical_transport.tex.
-\begin{equation}
-    \label{eq:mpdo_physical_isometry_transport}
-        U^{\otimes4}\widehat{\mathcal T}^{\,2}(U^\dagger)^{\otimes2}=\mathcal T,\qquad
-        U^{\otimes2}\widehat{\mathcal S}^{\,2}(U^\dagger)^{\otimes4}=\mathcal S
-\end{equation}
+\begin{align}
+    U^{\otimes4}\widehat{\mathcal T}^{\,2}
+      (U^\dagger)^{\otimes2}
+    &=\mathcal T,
+    \label{eq:mpdo_physical_isometry_transport}\\
+    U^{\otimes2}\widehat{\mathcal S}^{\,2}
+      (U^\dagger)^{\otimes4}
+    &=\mathcal S.
+    \notag
+\end{align}
 Conjugation by $U^{\otimes n}$ and $(U^\dagger)^{\otimes n}$ carries the
 sector-coordinate channels to the ordinary-coordinate channels. This combines
 Proposition~C.7 with
 \cite[Appendix~C.2, lines~1510--1563 and 1821--1825]{Cirac2016MPDO_arXiv}.
 
 Tracing the ket and bra indices of a sector tensor gives the bond vector
-$|l_k)$ or the bond functional $(r_k|$.  Hence a neighboring pair gives
-\[
-    T_{k,h}=(r_k|l_h)=\tr(\eta_{k,h}),
-\]
-as in \cite[Appendix~C.2, lines~1474--1481]{Cirac2016MPDO_arXiv}.
+$|l_k)$ or the bond functional $(r_k|$. Hence a neighboring pair gives
+$T_{k,h}=(r_k|l_h)=\tr(\eta_{k,h})$, as in
+\cite[Appendix~C.2, lines~1474--1481]{Cirac2016MPDO_arXiv}.

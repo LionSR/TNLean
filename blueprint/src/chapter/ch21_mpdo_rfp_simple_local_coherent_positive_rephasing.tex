@@ -1,4 +1,3 @@
-
 \begin{theorem}[Positive rescaling of Kronecker factors]%
     \label{thm:kronecker_factor_positive_rescaling}
     \lean{Matrix.exists_smul_posSemidef_of_kronecker_posSemidef}
@@ -17,18 +16,17 @@
 \begin{proof}
     \leanok
     On a product vector $x\otimes y$ the quadratic form of $A\otimes B$
-    factors, so for all vectors $x$ and $y$,
-    \[
-        \bigl(x^\dagger A\,x\bigr)\bigl(y^\dagger B\,y\bigr)\ge0 .
-    \]
+    factors, so
+    $(x^\dagger A\,x)(y^\dagger B\,y)\ge0$ for all
+    vectors $x$ and $y$.
     By polarization a complex matrix is determined by its quadratic form;
     since $A$ and $B$ are nonzero there are vectors with
     $a=v_0^\dagger A\,v_0\ne0$ and $c=w_0^\dagger B\,w_0\ne0$. Every value
-    $x^\dagger(cA)\,x=(x^\dagger A\,x)\,c$ is nonnegative, and over the
-    complex numbers a nonnegative quadratic form already forces the matrix
+    $x^\dagger(cA)\,x=(x^\dagger A\,x)\,c$ is non-negative, and over the
+    complex numbers a non-negative quadratic form already forces the matrix
     to be Hermitian, hence positive semidefinite. For the second factor,
     $ac>0$ and $a\,(y^\dagger B\,y)\ge0$ give
-    $c^{-1}(y^\dagger B\,y)=\bigl(a\,(y^\dagger B\,y)\bigr)(ac)^{-1}\ge0$.
+    $c^{-1}(y^\dagger B\,y)=(a\,(y^\dagger B\,y))(ac)^{-1}\ge0$.
 \end{proof}
 
 \begin{lemma}[A matrix and its negative cannot both be positive]%
@@ -40,7 +38,7 @@
 
 \begin{proof}
     \leanok
-    The quadratic form of $X$ is both nonnegative and nonpositive, hence
+    The quadratic form of $X$ is both non-negative and nonpositive, hence
     vanishes identically. Polarization gives $X=0$.
 \end{proof}
 
@@ -51,10 +49,11 @@
     For square matrices $A_n$ indexed by $n=0,\ldots,N-1$, possibly with
     different index types, their finite Kronecker product is the matrix with
     entries
-    \[
+    \begin{align}
         \left(\bigotimes_{n=0}^{N-1}A_n\right)_{x,y}
-        =\prod_{n=0}^{N-1}(A_n)_{x_n,y_n}.
-    \]
+        &=\prod_{n=0}^{N-1}(A_n)_{x_n,y_n}.
+        \notag
+    \end{align}
 \end{definition}
 
 \begin{lemma}[Elementary finite Kronecker identities]%
@@ -113,10 +112,12 @@
     matrices, with possibly different dimensions. If their finite Kronecker
     product is positive semidefinite, then there are nonzero scalars
     $c_0,\ldots,c_{N-1}$ such that
-    \[
-        \prod_{n=0}^{N-1}c_n=1,
-        \qquad c_nA_n\geq0\quad(0\leq n<N).
-    \]
+    \begin{align}
+        \prod_{n=0}^{N-1}c_n&=1,
+        \notag\\
+        c_nA_n&\geq0 \quad (0\leq n<N).
+        \notag
+    \end{align}
 \end{theorem}
 
 \begin{proof}
@@ -138,9 +139,7 @@
     Let $\mathcal A_1,\mathcal A_2\subseteq\MN{D}$ be nonzero linear
     subspaces. If $XY=0$ for every $X\in\mathcal A_1$ and
     $Y\in\mathcal A_2$, then
-    \[
-        \mathcal A_1+\mathcal A_2\ne\MN{D}.
-    \]
+    $\mathcal A_1+\mathcal A_2\ne\MN{D}$.
     No vanishing condition on products in the reverse order is required.
     This is the matrix-algebra obstruction used in
     \cite[Appendix~C.2, lines~1465--1470]{Cirac2016MPDO_arXiv}.
@@ -154,9 +153,10 @@
     the matrix unit $E_{pq}=E_1+E_2$ with
     $E_1\in\mathcal A_1$ and $E_2\in\mathcal A_2$. The one-sided product
     hypothesis gives
-    \[
-        XE_{pq}Y=X(E_1Y)+(XE_2)Y=0.
-    \]
+    \begin{align}
+        XE_{pq}Y&=X(E_1Y)+(XE_2)Y=0.
+        \notag
+    \end{align}
     Its $(i,j)$ entry is $X_{ip}Y_{qj}\ne0$, a contradiction.
 \end{proof}
 
@@ -195,10 +195,11 @@
     \leanok
     \uses{def:mpdo_sector_virtual_matrix_families}
     Let ${\cal K}$ be injective and let
-    \[
-      U\kappa_{\beta,\alpha}U^\dagger
-      =\bigoplus_k(l_k)_\beta\otimes(r_k)_\alpha
-    \]
+    \begin{align}
+        U\kappa_{\beta,\alpha}U^\dagger
+        &=\bigoplus_k(l_k)_\beta\otimes(r_k)_\alpha
+        \notag
+    \end{align}
     be a physical-sector factorization. Then the virtual matrices
     $A_{k;x,y}$ obtained from all within-sector physical entries span the full
     virtual matrix algebra $\MN{D}$.
@@ -233,11 +234,12 @@
     endpoint sectors of every nonzero neighboring operator contain a nonzero
     matrix of this form. Then every nonzero $\eta_{k,h}$ admits a two-edge
     return: there is a sector $j$ for which
-    \[
-        \eta_{h,j}\ne0,
-        \qquad
-        \eta_{j,k}\ne0.
-    \]
+    \begin{align}
+        \eta_{h,j}&\ne0,
+        \notag\\
+        \eta_{j,k}&\ne0.
+        \notag
+    \end{align}
     In particular, the nonzero neighboring support is recurrent.
 \end{theorem}
 
@@ -281,9 +283,7 @@
     Every nonempty closed directed walk of length $N$ determines a cyclic
     family of vertices $v_0,\ldots,v_{N-1}$. Each $v_n\to v_{n+1}$ is an
     edge, where $v_N=v_0$, and for any edge weights in a commutative monoid,
-    \[
-        \operatorname{wt}(w)=\prod_{n=0}^{N-1}\kappa_{v_n,v_{n+1}}.
-    \]
+    $\operatorname{wt}(w)=\prod_{n=0}^{N-1}\kappa_{v_n,v_{n+1}}$.
 \end{lemma}
 
 \begin{proof}
@@ -302,12 +302,8 @@
     group and assign a weight $\kappa_{a,b}\in G$ to each ordered
     pair of vertices. If the product of the edge weights along every closed
     directed walk is one, then there are vertex weights $z_a\in G$ such that
-
-    \[
-        \kappa_{a,b}=z_a^{-1}z_b
-    \]
-    whenever $a\to b$ is an edge. This is the graph-theoretic coboundary step
-    needed to make the phase choices in
+    $\kappa_{a,b}=z_a^{-1}z_b$ whenever $a\to b$ is an edge. This is the
+    graph-theoretic coboundary step needed to make the phase choices in
     \cite[Appendix~C.2, lines~1446--1450]{Cirac2016MPDO_arXiv} coherent across
     a recurrent support component.
 \end{theorem}
@@ -332,9 +328,10 @@
     \uses{def:mpdo_cyclic_eta_tensor_product}
     For a cyclic sector assignment $(k_n)_{n\in\mathbb Z/N\mathbb Z}$, the
     horizontal bond fiber at $n$ is
-    \[
-        H_n=B^R_{k_n}\times B^L_{k_{n+1}}.
-    \]
+    \begin{align}
+        H_n&=B^R_{k_n}\times B^L_{k_{n+1}}.
+        \notag
+    \end{align}
     Shifting the left component by one site identifies
     $\prod_n H_n$ with the vertex-indexed sector fiber used in the cyclic
     neighboring-operator product.
@@ -349,9 +346,7 @@
         def:mpdo_eta_cycle_fiber}
     Reindexing a cyclic neighboring-operator block along its horizontal bond
     fiber gives the finite Kronecker product
-    \[
-        \bigotimes_{n=0}^{N-1}\eta_{k_n,k_{n+1}}.
-    \]
+    $\bigotimes_{n=0}^{N-1}\eta_{k_n,k_{n+1}}$.
 \end{lemma}
 
 \begin{proof}
@@ -373,11 +368,12 @@
     $\eta_{k_n,k_{n+1}}$ is nonzero. If the corresponding cyclic tensor
     product is positive semidefinite, then there are nonzero scalars $c_n$
     satisfying
-    \[
-        \prod_{n=0}^{N-1}c_n=1,
-        \qquad c_n\eta_{k_n,k_{n+1}}\geq0
-        \quad(0\leq n<N).
-    \]
+    \begin{align}
+        \prod_{n=0}^{N-1}c_n&=1,
+        \notag\\
+        c_n\eta_{k_n,k_{n+1}}&\geq0 \quad (0\leq n<N).
+        \notag
+    \end{align}
     This is a choice on one fixed cycle. It does not assert that choices made
     on two different cycles agree on a common edge.
 \end{theorem}
@@ -406,11 +402,12 @@
     cyclic sector assignment $k_0,\ldots,k_{N-1}$, suppose that every
     concrete operator $\eta_{k_n,k_{n+1}}$ obtained from these data is
     nonzero. Then there are nonzero scalars $c_n$ such that
-    \[
-        \prod_{n=0}^{N-1}c_n=1,
-        \qquad c_n\eta_{k_n,k_{n+1}}\geq0
-        \quad(0\leq n<N).
-    \]
+    \begin{align}
+        \prod_{n=0}^{N-1}c_n&=1,
+        \notag\\
+        c_n\eta_{k_n,k_{n+1}}&\geq0 \quad (0\leq n<N).
+        \notag
+    \end{align}
     This is the specialization of
     Theorem~\ref{thm:mpdo_eta_cycle_positive_rescaling} to the inverse-map
     sector operators; positivity of the cyclic product follows from the MPDO
@@ -433,11 +430,12 @@
     \leanok
     \uses{def:mpdo_conjugate_physical}
     For every matrix $U$ on the physical space and every $N\ge1$,
-    \[
+    \begin{align}
         \rho^{(N)}(\widetilde{\cal K})
-        = U^{\otimes N}\,\rho^{(N)}({\cal K})\,
-          \bigl(U^{\otimes N}\bigr)^\dagger .
-    \]
+        &=U^{\otimes N} \rho^{(N)}({\cal K})
+          (U^{\otimes N})^\dagger.
+        \notag
+    \end{align}
     In particular $\rho^{(N)}(\widetilde{\cal K})\ge0$ whenever
     $\rho^{(N)}({\cal K})\ge0$.
 \end{theorem}
@@ -447,18 +445,20 @@
     Expand the closed trace over bond configurations $g$ (with
     $g_{N+1}=g_1$), and each conjugated local entry over its two physical
     indices:
-    \[
-        \bigl[\rho^{(N)}(\widetilde{\cal K})\bigr]_{\sigma,\tau}
-        =\sum_{g}\prod_{n=1}^{N}
+    \begin{align}
+        [\rho^{(N)}(\widetilde{\cal K})]_{\sigma,\tau}
+        &=\sum_{g}\prod_{n=1}^{N}
             \widetilde\kappa_{g_n,g_{n+1}}^{\,\sigma_n\tau_n}
-        =\sum_{g}\prod_{n=1}^{N}\sum_{p_n,q_n}
-            U_{\sigma_n p_n}\,
-            \kappa_{g_n,g_{n+1}}^{\,p_n q_n}\,
-            \overline{U_{\tau_n q_n}} .
-    \]
+        \notag\\
+        &=\sum_{g}\prod_{n=1}^{N}\sum_{p_n,q_n}
+            U_{\sigma_n p_n}
+            \kappa_{g_n,g_{n+1}}^{\,p_n q_n}
+            \overline{U_{\tau_n q_n}}.
+        \notag
+    \end{align}
     Distributing the site product over the physical sums factors the two
     $U$-products out of the bond sum, which leaves the matrix entry of
-    $U^{\otimes N}\rho^{(N)}({\cal K})\bigl(U^{\otimes N}\bigr)^\dagger$.
+    $U^{\otimes N}\rho^{(N)}({\cal K})(U^{\otimes N})^\dagger$.
     Positivity is preserved by any congruence.
 \end{proof}
 
@@ -471,12 +471,16 @@
         thm:mpdo_conjugated_chain_congruence}
     Let ${\cal K}$ be an MPDO whose transformed physical slices satisfy the
     sector factorization hypothesis. Then for every $N\ge1$ and every
-    cyclic sector assignment $k_1,\ldots,k_N$ (with $k_{N+1}=k_1$),
-    \[
-        0\le\bigl[Q_{k_1}\otimes\cdots\otimes Q_{k_N}\bigr]\,\tilde\sigma\,
-        \bigl[Q_{k_1}\otimes\cdots\otimes Q_{k_N}\bigr]
-        =\bigotimes_{n=1}^{N}\eta_{k_n,k_{n+1}} .
-    \]
+    cyclic sector assignment $k_1,\ldots,k_N$ with $k_{N+1}=k_1$,
+    \begin{align}
+        0
+        &\leq
+        [Q_{k_1}\otimes\cdots\otimes Q_{k_N}]\,\tilde\sigma
+        [Q_{k_1}\otimes\cdots\otimes Q_{k_N}]
+        \notag\\
+        &=\bigotimes_{n=1}^{N}\eta_{k_n,k_{n+1}}.
+        \notag
+    \end{align}
     This is the positivity half of the display at
     \cite[Appendix~C.2, lines~1446--1450]{Cirac2016MPDO_arXiv}.
 \end{theorem}
@@ -547,11 +551,8 @@
     Let $(\eta_{k,h})$ be a neighboring-operator family for which every
     nonempty cyclic tensor product is positive semidefinite. Suppose, in
     addition, that every nonzero edge $k\to h$ admits a directed return path
-    from $h$ to $k$. Then there are unit complex numbers $z_k$ such that, for
-    all $k$ and $h$,
-    \[
-        z_k^{-1}z_h\,\eta_{k,h}\geq0.
-    \]
+    from $h$ to $k$. Then there are unit complex numbers $z_k$ such that
+    $z_k^{-1}z_h\,\eta_{k,h}\geq0$ for all $k$ and $h$.
     Consequently, if the neighboring operators arise from the inverse-map
     physical-sector factorization of an injective MPDO and its nonzero
     support is recurrent, the sector tensors admit a reciprocal rephasing
@@ -611,12 +612,9 @@
         thm:mpdo_eta_coherent_positive_choice_recurrent}
     Let ${\cal K}$ be an injective MPO tensor satisfying SAL. Then it admits
     a physical-sector factorization for which every neighboring operator
-    \[
-        \eta_{k,h}=\sum_a (r_k)_a\otimes(l_h)_a
-    \]
-    is positive semidefinite. Zero-weight Hayashi sectors remain in the
-    physical direct sum, but their right tensors may be set to zero without
-    changing the physical slices.
+    $\eta_{k,h}=\sum_a (r_k)_a\otimes(l_h)_a$ is positive semidefinite.
+    Zero-weight Hayashi sectors remain in the physical direct sum, but their
+    right tensors may be set to zero without changing the physical slices.
 \end{theorem}
 
 \begin{proof}
@@ -657,8 +655,8 @@
     symmetric pairs: $\eta_{k,h}=0$ forces $\eta_{h,k}=0$. Then there is a
     positive semidefinite family $\eta'_{k,h}$ with $\eta'_{k,k}=\eta_{k,k}$
     and, for every pair of sectors, scalars $c_{k,h}\ne0$ with
-    $\eta'_{k,h}=c_{k,h}\,\eta_{k,h}$ and
-    $\eta'_{h,k}=c_{k,h}^{-1}\,\eta_{h,k}$. In particular every two-site
+    $\eta'_{k,h}=c_{k,h} \eta_{k,h}$ and
+    $\eta'_{h,k}=c_{k,h}^{-1} \eta_{h,k}$. In particular every two-site
     block $\eta'_{k,h}\otimes\eta'_{h,k}=\eta_{k,h}\otimes\eta_{h,k}$ of
     the sector-adapted decomposition is unchanged.
 

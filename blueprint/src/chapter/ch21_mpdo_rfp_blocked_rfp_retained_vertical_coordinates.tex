@@ -1,4 +1,3 @@
-
 \begin{definition}[Retained coordinates for the vertical-sector algebra]
     \label{def:mpdo_retained_vertical_sector_coordinates}
     \lean{MPOTensor.verticalSectorFinEquiv}
@@ -11,13 +10,10 @@
     \uses{def:mpdo_normalized_vertical_sector_maps}
     Retain the coordinates $(\alpha,a,i)$, where $\alpha$ labels a simple
     sector, $a$ labels a diagonal entry of $\mu_\alpha$, and
-    $0\leq i<d_\alpha$.  The family $(Y_\alpha)_\alpha$ is represented on
-    this space by
-    \[
-        \bigoplus_\alpha Y_\alpha.
-    \]
+    $0\leq i<d_\alpha$. The family $(Y_\alpha)_\alpha$ is represented on
+    this space by $\bigoplus_\alpha Y_\alpha$.
     Write $\iota$ for this inclusion, $\pi$ for extraction of the diagonal
-    summands, and $P=\iota\pi$.  Composing $\iota$ and $\pi$ with $R_\mu$ and
+    summands, and $P=\iota\pi$. Composing $\iota$ and $\pi$ with $R_\mu$ and
     $\widetilde R_\mu$ defines their retained-coordinate forms.
 \end{definition}
 
@@ -27,9 +23,7 @@
     \leanok
     \uses{def:mpdo_retained_vertical_sector_coordinates}
     The diagonal-summand extraction is a left inverse of the inclusion:
-    \[
-        \pi\iota=\id.
-    \]
+    $\pi\iota=\id$.
 \end{lemma}
 
 \begin{proof}\leanok
@@ -43,10 +37,8 @@
     \leanok
     \uses{def:mpdo_retained_vertical_sector_coordinates}
     For every retained-coordinate matrix $Z$,
-    \[
-        P(Z)_{(\alpha,a,i),(\alpha,b,j)}
-          =Z_{(\alpha,a,i),(\alpha,b,j)}.
-    \]
+    $P(Z)_{(\alpha,a,i),(\alpha,b,j)}
+    =Z_{(\alpha,a,i),(\alpha,b,j)}$.
 \end{lemma}
 
 \begin{proof}\leanok
@@ -58,10 +50,8 @@
     \lean{MPOTensor.verticalSectorBlockProjection_apply_ne}
     \leanok
     \uses{def:mpdo_retained_vertical_sector_coordinates}
-    If $\alpha\ne\beta$, then
-    \[
-        P(Z)_{(\alpha,a,i),(\beta,b,j)}=0.
-    \]
+    If $\alpha\neq\beta$, then
+    $P(Z)_{(\alpha,a,i),(\beta,b,j)}=0$.
 \end{lemma}
 
 \begin{proof}\leanok
@@ -74,9 +64,7 @@
     \leanok
     \uses{lem:mpdo_retained_vertical_sector_extraction}
     The projection onto the vertical-sector diagonal summands is idempotent:
-    \[
-        P^2=P.
-    \]
+    $P^2=P$.
 \end{lemma}
 
 \begin{proof}\leanok
@@ -92,7 +80,7 @@
       lem:mpdo_retained_vertical_sector_extraction,
       lem:mpdo_vertical_sector_retraction}
     Suppose that every multiplicity space is nonzero and every diagonal entry
-    of $\mu_\alpha$ is positive.  Then the retained-coordinate partial trace
+    of $\mu_\alpha$ is positive. Then the retained-coordinate partial trace
     is a left inverse of the normalized retained-coordinate embedding.
 \end{lemma}
 
@@ -109,18 +97,17 @@
       def:mpdo_vertical_bond_matrix_contraction}
     For every horizontal bond matrix $X$, contraction of
     $\bigoplus_\alpha\mu_\alpha\otimes M_\alpha$ gives
-    \[
-        \bigoplus_\alpha\mu_\alpha\otimes M_\alpha(X).
-    \]
+    $\bigoplus_\alpha\mu_\alpha\otimes M_\alpha(X)$.
 \end{lemma}
 
 \begin{proof}\leanok
     Flattening the index triple $(\alpha,a,i)$ gives the entry formula
-    \[
+    \begin{align}
         B(X)_{(\alpha,a,i),(\beta,b,j)}
-          =\delta_{\alpha\beta}\delta_{ab}\,
+          &=\delta_{\alpha\beta}\delta_{ab}
             \mu_{\alpha,a}M_\alpha(X)_{ij}.
-    \]
+        \notag
+    \end{align}
 \end{proof}
 
 \begin{definition}[Bond-matrix contraction of a vertical tensor]
@@ -128,10 +115,11 @@
     \lean{MPSTensor.contractBondMatrix}
     \leanok
     Let $A$ be a tensor whose physical label is a pair $(a,b)$ of horizontal
-    bond indices.  For a bond matrix $X$, define
-    \[
-        A(X)=\sum_{a,b}X_{ba}A_{ab}.
-    \]
+    bond indices. For a bond matrix $X$, define
+    \begin{align}
+        A(X)&=\sum_{a,b}X_{ba}A_{ab}.
+        \notag
+    \end{align}
     The order of the entries of $X$ is chosen so that
     $A(X)_{ij}=\tr(M^{ij}X)$ when
     $A_{ab,ij}=M^{ij}_{ab}$.
@@ -142,18 +130,17 @@
     \lean{MPSTensor.contractBondMatrix_mul_mul}
     \leanok
     \uses{def:mpdo_vertical_bond_matrix_contraction}
-    Let $L$ and $K$ be fixed matrices of compatible sizes.  Then
-    \[
-        \left((a,b)\mapsto L A_{ab}K\right)(X)=L A(X)K.
-    \]
+    Let $L$ and $K$ be fixed matrices of compatible sizes. Then
+    $\left((a,b)\mapsto L A_{ab}K\right)(X)=L A(X)K$.
 \end{lemma}
 
 \begin{proof}\leanok
     Distributivity of matrix multiplication over finite sums gives
-    \[
+    \begin{align}
         \sum_{a,b}X_{ba}\left(LA_{ab}K\right)
-          =L\left(\sum_{a,b}X_{ba}A_{ab}\right)K.
-    \]
+          &=L\left(\sum_{a,b}X_{ba}A_{ab}\right)K.
+        \notag
+    \end{align}
 \end{proof}
 
 \begin{lemma}[Contraction of a weighted block sum]
@@ -163,20 +150,19 @@
     \uses{def:mpdo_vertical_bond_matrix_contraction}
     For a weighted block-diagonal tensor
     $A=\bigoplus_\alpha\mu_\alpha A_\alpha$, one has
-    \[
-        A(X)=\bigoplus_\alpha\mu_\alpha A_\alpha(X).
-    \]
+    $A(X)=\bigoplus_\alpha\mu_\alpha A_\alpha(X)$.
 \end{lemma}
 
 \begin{proof}\leanok
     Since each tensor letter is block diagonal,
-    \[
+    \begin{align}
         \sum_{a,b}X_{ba}
           \left(\bigoplus_\alpha\mu_\alpha A_\alpha\right)_{ab}
-          =\bigoplus_\alpha\mu_\alpha
+          &=\bigoplus_\alpha\mu_\alpha
             \sum_{a,b}X_{ba}(A_\alpha)_{ab}
-          =\bigoplus_\alpha\mu_\alpha A_\alpha(X).
-    \]
+           =\bigoplus_\alpha\mu_\alpha A_\alpha(X).
+        \notag
+    \end{align}
 \end{proof}
 
 \begin{lemma}[Vertical contraction and physical closure]
@@ -186,20 +172,18 @@
     \uses{def:phys_close, def:mpdo_vertical_bond_matrix_contraction}
     For the vertically viewed tensor
     $\widetilde M_{ab,ij}=M^{ij}_{ab}$, bond-matrix contraction is the
-    one-site physical closure:
-    \[
-        \widetilde M(X)=M(X).
-    \]
+    one-site physical closure: $\widetilde M(X)=M(X)$.
 \end{lemma}
 
 \begin{proof}\leanok
     For every pair of physical indices,
-    \[
+    \begin{align}
         \widetilde M(X)_{ij}
-          =\sum_{a,b}X_{ba}M^{ij}_{ab}
-          =\tr(M^{ij}X)
-          =M(X)_{ij}.
-    \]
+          &=\sum_{a,b}X_{ba}M^{ij}_{ab}
+           =\tr(M^{ij}X)
+           =M(X)_{ij}.
+        \notag
+    \end{align}
 \end{proof}
 
 \begin{lemma}[Contraction of the assembled vertical tensor]
@@ -209,19 +193,21 @@
     \uses{lem:mpdo_bond_contraction_block_sum}
     The contraction of the assembled vertical tensor is the weighted block
     diagonal of the sector contractions:
-    \[
+    \begin{align}
         \left(\bigoplus_\alpha\mu_\alpha\otimes M_\alpha\right)(X)
-          =\bigoplus_\alpha\mu_\alpha\otimes M_\alpha(X).
-    \]
+          &=\bigoplus_\alpha\mu_\alpha\otimes M_\alpha(X).
+        \notag
+    \end{align}
 \end{lemma}
 
 \begin{proof}\leanok
     Applying the preceding lemma to the block form
     $\bigoplus_\alpha\mu_\alpha\otimes M_\alpha$ of the assembled tensor gives
-    \[
+    \begin{align}
         \left(\bigoplus_\alpha\mu_\alpha\otimes M_\alpha\right)(X)
-          =\bigoplus_\alpha\mu_\alpha\otimes M_\alpha(X).
-    \]
+          &=\bigoplus_\alpha\mu_\alpha\otimes M_\alpha(X).
+        \notag
+    \end{align}
 \end{proof}
 
 \begin{lemma}[Contraction of a letterwise forward identity]
@@ -231,26 +217,22 @@
     \uses{def:phys_close, def:mpdo_vertical_bond_matrix_contraction,
       lem:mpdo_bond_contraction_composition,
       lem:mpdo_vertical_bond_contraction_phys_close}
-    Let $B_{ab}$ be an arbitrary vertical tensor.  If
-    \[
-        U\widetilde M_{ab}U^\dagger=B_{ab}
-    \]
-    for every pair $(a,b)$, then, for every bond matrix $X$,
-    \[
-        U M(X)U^\dagger=B(X).
-    \]
+    Let $B_{ab}$ be an arbitrary vertical tensor. If
+    $U\widetilde M_{ab}U^\dagger=B_{ab}$ for every pair $(a,b)$, then, for
+    every bond matrix $X$, $U M(X)U^\dagger=B(X)$.
 \end{lemma}
 
 \begin{proof}\leanok
     By the definition of bond-matrix contraction,
-    \[
+    \begin{align}
         U M(X)U^\dagger
-          =U\left(\sum_{a,b}X_{ba}\widetilde M_{ab}\right)U^\dagger
-          =\sum_{a,b}X_{ba}
-            \left(U\widetilde M_{ab}U^\dagger\right)
-          =\sum_{a,b}X_{ba}B_{ab}
-          =B(X).
-    \]
+          &=U\left(\sum_{a,b}X_{ba}\widetilde M_{ab}\right)U^\dagger
+           =\sum_{a,b}X_{ba}
+             \left(U\widetilde M_{ab}U^\dagger\right)
+           =\sum_{a,b}X_{ba}B_{ab}
+           =B(X).
+        \notag
+    \end{align}
 \end{proof}
 
 \begin{lemma}[Contraction of a letterwise reconstruction identity]
@@ -260,25 +242,21 @@
     \uses{def:phys_close, def:mpdo_vertical_bond_matrix_contraction,
       lem:mpdo_bond_contraction_composition,
       lem:mpdo_vertical_bond_contraction_phys_close}
-    Let $B_{ab}$ be an arbitrary vertical tensor.  If
-    \[
-        \widetilde M_{ab}=U^\dagger B_{ab}U
-    \]
-    for every pair $(a,b)$, then, for every bond matrix $X$,
-    \[
-        M(X)=U^\dagger B(X)U.
-    \]
+    Let $B_{ab}$ be an arbitrary vertical tensor. If
+    $\widetilde M_{ab}=U^\dagger B_{ab}U$ for every pair $(a,b)$, then, for
+    every bond matrix $X$, $M(X)=U^\dagger B(X)U$.
 \end{lemma}
 
 \begin{proof}\leanok
     Contracting the letterwise identity gives
-    \[
+    \begin{align}
         M(X)
-          =\sum_{a,b}X_{ba}\widetilde M_{ab}
-          =\sum_{a,b}X_{ba}\left(U^\dagger B_{ab}U\right)
-          =U^\dagger\left(\sum_{a,b}X_{ba}B_{ab}\right)U
-          =U^\dagger B(X)U.
-    \]
+          &=\sum_{a,b}X_{ba}\widetilde M_{ab}
+           =\sum_{a,b}X_{ba}\left(U^\dagger B_{ab}U\right)
+           =U^\dagger\left(\sum_{a,b}X_{ba}B_{ab}\right)U
+           =U^\dagger B(X)U.
+        \notag
+    \end{align}
 \end{proof}
 
 \begin{lemma}[Contraction of the one-site vertical canonical form]
@@ -292,21 +270,25 @@
       lem:mpdo_vertical_bond_contraction_reconstruction,
       lem:mpdo_vertical_bond_contraction_assembled}
     Suppose that
-    \[
+    \begin{align}
         U\widetilde M_{ab}U^\dagger
-          =\left(\bigoplus_\alpha\mu_\alpha\otimes M_\alpha\right)_{ab}
-    \]
-    is a one-site vertical canonical-form identity.  Contracting against an
+          &=\left(\bigoplus_\alpha\mu_\alpha\otimes M_\alpha\right)_{ab}
+        \notag
+    \end{align}
+    is a one-site vertical canonical-form identity. Contracting against an
     arbitrary bond matrix $X$ gives
-    \[
+    \begin{align}
         U M(X)U^\dagger
-          =\bigoplus_\alpha\mu_\alpha\otimes M_\alpha(X).
-    \]
+          &=\bigoplus_\alpha\mu_\alpha\otimes M_\alpha(X).
+        \notag
+    \end{align}
     If the reverse letterwise identity is also given, then
-    \[
-        M(X)=U^\dagger
-          \left(\bigoplus_\alpha\mu_\alpha\otimes M_\alpha(X)\right)U.
-    \]
+    \begin{align}
+        M(X)
+          &=U^\dagger
+            \left(\bigoplus_\alpha\mu_\alpha\otimes M_\alpha(X)\right)U.
+        \notag
+    \end{align}
     These are the contracted canonical-form identities used in
     \cite[Appendix~C.4, lines~1955--1979]{Cirac2016MPDO_arXiv}.
 \end{lemma}
@@ -314,42 +296,40 @@
 \begin{proof}\leanok
     Since $A(X)_{ij}=\sum_{a,b}X_{ba}A_{ab,ij}$ and
     $\widetilde M_{ab,ij}=M^{ij}_{ab}$, one has
-    \[
-        M(X)=\sum_{a,b}X_{ba}\widetilde M_{ab}.
-    \]
+    $M(X)=\sum_{a,b}X_{ba}\widetilde M_{ab}$.
     Distributivity of fixed left and right multiplication over finite sums
     gives
-    \[
+    \begin{align}
         U\left(\sum_{a,b}X_{ba}\widetilde M_{ab}\right)U^\dagger
-          =\sum_{a,b}X_{ba}
+          &=\sum_{a,b}X_{ba}
             \left(U\widetilde M_{ab}U^\dagger\right).
-    \]
+        \notag
+    \end{align}
     Substituting the forward hypothesis into this equality gives
-    \[
+    \begin{align}
         U M(X)U^\dagger
-          =\sum_{a,b}X_{ba}
+          &=\sum_{a,b}X_{ba}
             \left(\bigoplus_\alpha\mu_\alpha\otimes M_\alpha\right)_{ab}
-          =\left(\bigoplus_\alpha\mu_\alpha\otimes M_\alpha\right)(X).
-    \]
+           =\left(\bigoplus_\alpha\mu_\alpha\otimes M_\alpha\right)(X).
+        \notag
+    \end{align}
     Applied blockwise, the same calculation gives
-    \[
+    \begin{align}
         \left(\bigoplus_\alpha \mu_\alpha\otimes M_\alpha\right)(X)
-          =\bigoplus_\alpha \mu_\alpha\otimes M_\alpha(X).
-    \]
+          &=\bigoplus_\alpha \mu_\alpha\otimes M_\alpha(X).
+        \notag
+    \end{align}
     If the reverse letterwise identity is given, the same calculation yields
-    \[
-    \begin{aligned}
+    \begin{align}
         M(X)
-          &=\sum_{a,b}X_{ba}\widetilde M_{ab} \\
-          &=U^\dagger\left(
-              \sum_{a,b}X_{ba}
-              \left(\bigoplus_\alpha\mu_\alpha\otimes M_\alpha\right)_{ab}
-            \right)U \\
-          &=U^\dagger\left(
-              \bigoplus_\alpha\mu_\alpha\otimes M_\alpha(X)
-            \right)U.
-    \end{aligned}
-    \]
+          &=\sum_{a,b}X_{ba}\widetilde M_{ab}
+        \notag\\
+          &=U^\dagger\left(\sum_{a,b}X_{ba}
+              \left(\bigoplus_\alpha\mu_\alpha\otimes M_\alpha\right)_{ab}\right)U
+        \notag\\
+          &=U^\dagger\left(\bigoplus_\alpha\mu_\alpha\otimes M_\alpha(X)\right)U.
+        \notag
+    \end{align}
 \end{proof}
 
 \begin{definition}[Four-site physical closure]
@@ -358,11 +338,11 @@
     \leanok
     For a virtual matrix $X$, the four-site physical closure of $K$ is the
     operator $K_4(X)$ whose matrix coefficients are
-    \[
+    \begin{align}
         K_4(X)_{(i_0,(i_1,(i_2,i_3))),(j_0,(j_1,(j_2,j_3)))}
-          =\tr\!\left(
-            K^{i_0j_0}K^{i_1j_1}K^{i_2j_2}K^{i_3j_3}X\right).
-    \]
+          &=\tr\!\left(K^{i_0j_0}K^{i_1j_1}K^{i_2j_2}K^{i_3j_3}X\right).
+        \notag
+    \end{align}
 \end{definition}
 
 \begin{lemma}[Coordinates of the four-site regrouping]
@@ -370,13 +350,14 @@
     \lean{finFourArrowEquiv_apply, finFourArrowEquiv_symm_apply}
     \leanok
     The canonical four-coordinate regrouping and its inverse satisfy
-    \[
+    \begin{align}
         R_4(\sigma)
-          =(\sigma_0,(\sigma_1,(\sigma_2,\sigma_3))),
-        \qquad
+          &=(\sigma_0,(\sigma_1,(\sigma_2,\sigma_3))),
+        \notag\\
         R_4^{-1}(i_0,(i_1,(i_2,i_3)))
-          =(i_0,i_1,i_2,i_3).
-    \]
+          &=(i_0,i_1,i_2,i_3).
+        \notag
+    \end{align}
 \end{lemma}
 
 \begin{proof}\leanok
@@ -391,10 +372,11 @@
     \uses{def:phys_close, def:mpdo_four_site_physical_closure}
     Under the canonical right-associated identification of four-site
     configurations with quadruples of physical indices,
-    \[
+    \begin{align}
         K_4(X)_{(i_0,(i_1,(i_2,i_3))),(j_0,(j_1,(j_2,j_3)))}
-          =\tr\!\left(K^{i_0j_0}K^{i_1j_1}K^{i_2j_2}K^{i_3j_3}X\right).
-    \]
+          &=\tr\!\left(K^{i_0j_0}K^{i_1j_1}K^{i_2j_2}K^{i_3j_3}X\right).
+        \notag
+    \end{align}
 \end{theorem}
 
 \begin{proof}\leanok
@@ -409,9 +391,7 @@
     \leanok
     \uses{def:phys_close, def:mpdo_two_site_blocking}
     After identifying one blocked physical index with two original indices,
-    \[
-        \bigl(K^{[2]}\bigr)_1(X)=K_2(X).
-    \]
+    $(K^{[2]})_1(X)=K_2(X)$.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -425,21 +405,21 @@
     \leanok
     \uses{def:mpdo_two_site_blocking}
     Let $U_1$ and $U_2$ be the physical coordinate changes in vertical
-    canonical forms of $M$ and its two-site blocking, respectively.  Let
+    canonical forms of $M$ and its two-site blocking, respectively. Let
     $J$ be the canonical relabelling from matrices indexed by pairs of
     one-site physical indices to matrices indexed by one blocked physical
-    index.  For the refinement and coarse-graining maps $T$ and $S$, define
-
-    \[
+    index. For the refinement and coarse-graining maps $T$ and $S$, define
+    \begin{align}
         T_{\mathrm v}(Z)
-          =U_2 J\!\left(T(U_1^\dagger ZU_1)\right)U_2^\dagger,
-        \qquad
+          &=U_2 J\!\left(T(U_1^\dagger ZU_1)\right)U_2^\dagger,
+        \notag\\
         S_{\mathrm v}(W)
-          =U_1 S\!\left(J^{-1}(U_2^\dagger WU_2)\right)U_1^\dagger.
-    \]
+          &=U_1 S\!\left(J^{-1}(U_2^\dagger WU_2)\right)U_1^\dagger.
+        \notag
+    \end{align}
     These are the physical maps after absorbing the two vertical coordinate
     changes, as in
-    \cite[Appendix~C.4, lines~1955--1979]{Cirac2016MPDO_arXiv}.  They are
+    \cite[Appendix~C.4, lines~1955--1979]{Cirac2016MPDO_arXiv}. They are
     intermediate maps on the retained physical coordinate spaces; the
     normalized sector maps $R_1,R_2,\widetilde R_1,\widetilde R_2$ have not
     yet been composed with them.
@@ -457,24 +437,32 @@
     For a bond matrix $X$, write $\mathcal M^{(1)}(X)$ and
     $\mathcal M^{(2)}(X)$ for the one-site and two-site physical closures,
     respectively, and write
-    \[
-        B_1(X)=\bigoplus_\alpha\mu_\alpha\otimes M_\alpha(X),
-        \qquad
-        B_2(X)=\bigoplus_\beta\nu_\beta\otimes A_\beta(X)
-    \]
-    for the contracted one-site and two-site vertical canonical forms.  If
-
-    \[
-        T(\mathcal M^{(1)}(X))=\mathcal M^{(2)}(X),
-        \qquad
-        S(\mathcal M^{(2)}(X))=\mathcal M^{(1)}(X),
-    \]
+    \begin{align}
+        B_1(X)
+          &=\bigoplus_\alpha\mu_\alpha\otimes M_\alpha(X),
+        \notag\\
+        B_2(X)
+          &=\bigoplus_\beta\nu_\beta\otimes A_\beta(X)
+        \notag
+    \end{align}
+    for the contracted one-site and two-site vertical canonical forms. If
+    \begin{align}
+        T(\mathcal M^{(1)}(X))
+          &=\mathcal M^{(2)}(X),
+        \notag\\
+        S(\mathcal M^{(2)}(X))
+          &=\mathcal M^{(1)}(X),
+        \notag
+    \end{align}
     then
-    \[
-        T_{\mathrm v}(B_1(X))=B_2(X),
-        \qquad
-        S_{\mathrm v}(B_2(X))=B_1(X).
-    \]
+    \begin{align}
+        T_{\mathrm v}(B_1(X))
+          &=B_2(X),
+        \notag\\
+        S_{\mathrm v}(B_2(X))
+          &=B_1(X).
+        \notag
+    \end{align}
     These are the physical-coordinate identities which, after composition
     with $R_1,R_2,\widetilde R_1,\widetilde R_2$, give the two displayed
     identities for $\widetilde T$ and $\widetilde S$ in
@@ -483,29 +471,25 @@
 
 \begin{proof}\leanok
     The reverse one-site canonical-form identity gives
-    \[
-        U_1^\dagger B_1(X)U_1=\mathcal M^{(1)}(X).
-    \]
+    $U_1^\dagger B_1(X)U_1=\mathcal M^{(1)}(X)$.
     Applying $T$, relabelling its two-site output by $J$, and using the
     forward blocked canonical-form identity gives
-    \[
-    \begin{aligned}
+    \begin{align}
         T_{\mathrm v}(B_1(X))
-          &=U_2J(T(\mathcal M^{(1)}(X)))U_2^\dagger \\
-          &=U_2J(\mathcal M^{(2)}(X))U_2^\dagger
+          &=U_2J(T(\mathcal M^{(1)}(X)))U_2^\dagger
+           =U_2J(\mathcal M^{(2)}(X))U_2^\dagger
            =B_2(X).
-    \end{aligned}
-    \]
+        \notag
+    \end{align}
     The reverse blocked canonical-form identity and the equation for $S$
     give, in the other direction,
-    \[
-    \begin{aligned}
+    \begin{align}
         S_{\mathrm v}(B_2(X))
-          &=U_1S(\mathcal M^{(2)}(X))U_1^\dagger \\
-          &=U_1\mathcal M^{(1)}(X)U_1^\dagger
+          &=U_1S(\mathcal M^{(2)}(X))U_1^\dagger
+           =U_1\mathcal M^{(1)}(X)U_1^\dagger
            =B_1(X).
-    \end{aligned}
-    \]
+        \notag
+    \end{align}
 \end{proof}
 
 \begin{definition}[Refinement and coarse-graining on vertical sectors]
@@ -517,18 +501,21 @@
       def:mpdo_retained_vertical_sector_coordinates,
       def:mpdo_vertical_coordinate_map_transport}
     Define maps between the one-site and two-site simple-sector algebras by
-    \[
-        \widetilde T=\widetilde R_2T_{\mathrm v}R_1,
-        \qquad
-        \widetilde S=\widetilde R_1S_{\mathrm v}R_2.
-    \]
+    \begin{align}
+        \widetilde T
+          &=\widetilde R_2T_{\mathrm v}R_1,
+        \notag\\
+        \widetilde S
+          &=\widetilde R_1S_{\mathrm v}R_2.
+        \notag
+    \end{align}
     The partial trace and diagonal-summand extraction define these maps on the
-    full matrix algebras.  Their agreement with the normalized maps in
+    full matrix algebras. Their agreement with the normalized maps in
     \cite[Appendix~C.4, lines~1972--1979]{Cirac2016MPDO_arXiv} is asserted on
-    the weighted block-diagonal image.  At this stage there is no assertion
+    the weighted block-diagonal image. At this stage there is no assertion
     that the image is preserved, that the two maps are inverse, completely
     positive, or trace preserving, or that the sector labels have been
-    matched.  The final renormalization fixed-point conclusion is separate.
+    matched. The final renormalization fixed-point conclusion is separate.
 \end{definition}
 
 \begin{definition}[Positive vertical-sector families and total trace]
@@ -538,11 +525,12 @@
     \leanok
     \uses{def:mpdo_retained_vertical_sector_coordinates}
     A vertical-sector family $X=(X_\alpha)_\alpha$ is positive when every
-    $X_\alpha$ is positive semidefinite.  Its total sector trace is
-    \[
+    $X_\alpha$ is positive semidefinite. Its total sector trace is
+    \begin{align}
         \Trsec(X)
-          =\sum_\alpha\tr(X_\alpha).
-    \]
+          &=\sum_\alpha\tr(X_\alpha).
+        \notag
+    \end{align}
 \end{definition}
 
 \begin{lemma}[Positivity and trace in normalized sector coordinates]
@@ -560,18 +548,12 @@
     \uses{def:mpdo_positive_vertical_sector_family,
       def:mpdo_retained_vertical_sector_coordinates}
     Suppose that every multiplicity space is nonzero and every diagonal entry
-    of $\mu_\alpha$ is positive.  The normalized embedding $R_\mu$ sends a
+    of $\mu_\alpha$ is positive. The normalized embedding $R_\mu$ sends a
     positive sector family to a positive retained matrix and satisfies
-    \[
-        \tr(R_\mu(X))
-          =\Trsec(X).
-    \]
+    $\tr(R_\mu(X))=\Trsec(X)$.
     Conversely, the sectorwise partial trace sends a positive retained matrix
     to a positive sector family and satisfies
-    \[
-        \Trsec(\widetilde R_\mu(Z))
-          =\tr(Z).
-    \]
+    $\Trsec(\widetilde R_\mu(Z))=\tr(Z)$.
     These trace identities follow by summing the traces of the diagonal
     sectors; deleting the off-diagonal sector entries does not change the
     trace.
@@ -579,8 +561,8 @@
 
 \begin{proof}\leanok
     A positive diagonal weight matrix has positive trace, and its Kronecker
-    product with each positive $X_\alpha$ is positive.  Partial trace preserves
-    positivity.  The two trace formulas follow from
+    product with each positive $X_\alpha$ is positive. Partial trace preserves
+    positivity. The two trace formulas follow from
     $\tr(A\otimes B)=\tr(A)\tr(B)$
     and the normalization by $\tr(\mu_\alpha)$.
 \end{proof}
@@ -591,21 +573,22 @@
     \leanok
     \uses{def:mpdo_retained_vertical_sector_coordinates}
     Suppose that every multiplicity space is nonzero and every diagonal entry
-    of $\mu_\alpha$ is positive.  For
-    $m_\alpha=\tr(\mu_\alpha)$,
-    \[
+    of $\mu_\alpha$ is positive. For $m_\alpha=\tr(\mu_\alpha)$,
+    \begin{align}
         R_\mu\!\left(\bigoplus_\alpha m_\alpha X_\alpha\right)
-          =\bigoplus_\alpha\mu_\alpha\otimes X_\alpha.
-    \]
+          &=\bigoplus_\alpha\mu_\alpha\otimes X_\alpha.
+        \notag
+    \end{align}
 \end{lemma}
 
 \begin{proof}\leanok
     In each sector,
-    \[
+    \begin{align}
         R_\mu(m_\alpha X_\alpha)
-        =m_\alpha^{-1}m_\alpha(\mu_\alpha\otimes X_\alpha)
-        =\mu_\alpha\otimes X_\alpha.
-    \]
+          &=m_\alpha^{-1}m_\alpha(\mu_\alpha\otimes X_\alpha)
+           =\mu_\alpha\otimes X_\alpha.
+        \notag
+    \end{align}
 \end{proof}
 
 \begin{lemma}[Partial trace of weighted vertical sectors]
@@ -614,20 +597,21 @@
     \leanok
     \uses{def:mpdo_retained_vertical_sector_coordinates}
     For $m_\alpha=\tr(\mu_\alpha)$,
-    \[
-        \widetilde R_\mu\!\left(
-          \bigoplus_\alpha\mu_\alpha\otimes X_\alpha\right)
-          =\bigoplus_\alpha m_\alpha X_\alpha.
-    \]
+    \begin{align}
+        \widetilde R_\mu\!\left(\bigoplus_\alpha\mu_\alpha\otimes X_\alpha\right)
+          &=\bigoplus_\alpha m_\alpha X_\alpha.
+        \notag
+    \end{align}
 \end{lemma}
 
 \begin{proof}\leanok
     Taking the partial trace over the multiplicity factor gives
-    \[
+    \begin{align}
         \widetilde R_\mu(\mu_\alpha\otimes X_\alpha)
-        =\tr(\mu_\alpha)X_\alpha
-        =m_\alpha X_\alpha.
-    \]
+          &=\tr(\mu_\alpha)X_\alpha
+           =m_\alpha X_\alpha.
+        \notag
+    \end{align}
 \end{proof}
 
 \begin{lemma}[Trace under coisometric compression]
@@ -637,28 +621,31 @@
     \lean{Matrix.PosSemidef.trace_mul_mul_conjTranspose_eq_iff_of_mul_conjTranspose_eq_one}
     \lean{Matrix.trace_conjTranspose_mul_mul_of_mul_conjTranspose_eq_one}
     \leanok
-    Let $U:\mathbb C^n\to\mathbb C^r$ satisfy $UU^\dagger=1$.  If $Z\geq0$,
-    then
-    \[
-        \tr(UZU^\dagger)\leq\tr(Z),
-        \qquad
+    Let $U:\C^n\to\C^r$ satisfy $UU^\dagger=1$. If $Z\geq0$, then
+    \begin{align}
+        \tr(UZU^\dagger)
+          &\leq\tr(Z),
+        \notag\\
         \tr(UZU^\dagger)=\tr(Z)
-        \Longleftrightarrow U^\dagger UZ=Z.
-    \]
-    For every $W\in\mathbb C^{r\times r}$, one also has
+          &\Longleftrightarrow U^\dagger UZ=Z.
+        \notag
+    \end{align}
+    For every $W\in\C^{r\times r}$, one also has
     $\tr(U^\dagger WU)=\tr(W)$.
 \end{lemma}
 
 \begin{proof}\leanok
-    Put $P=U^\dagger U$.  The matrices $P$ and $1-P$ are orthogonal
+    Put $P=U^\dagger U$. The matrices $P$ and $1-P$ are orthogonal
     projections, and
-    \[
-        \tr(UZU^\dagger)=\tr(PZ),
-        \qquad
+    \begin{align}
+        \tr(UZU^\dagger)
+          &=\tr(PZ),
+        \notag\\
         \tr(Z)-\tr(PZ)
-          =\tr((1-P)Z)\geq0.
-    \]
-    The last trace vanishes precisely when $(1-P)Z=0$.  The formula for $W$
+          &=\tr((1-P)Z)\geq0.
+        \notag
+    \end{align}
+    The last trace vanishes precisely when $(1-P)Z=0$. The formula for $W$
     follows by cyclicity of trace and $UU^\dagger=1$.
 \end{proof}
 
@@ -669,7 +656,7 @@
     \leanok
     Let $Z_T(X)$ be the matrix obtained by applying the normalized one-site
     embedding, expanding by $U_1^\dagger$, applying $T$, and relabelling the
-    two-site indices, before compression by $U_2$.  Define $Z_S(Y)$ in the
+    two-site indices, before compression by $U_2$. Define $Z_S(Y)$ in the
     reverse direction, before compression by $U_1$.
 \end{definition}
 
@@ -687,29 +674,31 @@
       def:mpdo_vertical_sector_precompression,
       lem:mpdo_normalized_vertical_sector_positive_trace}
     Suppose that the physical maps are completely positive and trace
-    preserving and $U_iU_i^\dagger=1$.  For positive sector families
+    preserving and $U_iU_i^\dagger=1$. For positive sector families
     $X\in\mathcal A_1$ and $Y\in\mathcal A_2$, the matrices $Z_T(X)$ and
     $Z_S(Y)$ are positive and
-    \[
+    \begin{align}
         \tr(Z_T(X))
-          =\Trsec(X),
-        \qquad
+          &=\Trsec(X),
+        \notag\\
         \tr(Z_S(Y))
-          =\Trsec(Y).
-    \]
+          &=\Trsec(Y).
+        \notag
+    \end{align}
     After the final compression and sectorwise partial trace,
-    \[
+    \begin{align}
         \Trsec(\widetilde T(X))
-          =\tr(U_2Z_T(X)U_2^\dagger),
-        \qquad
+          &=\tr(U_2Z_T(X)U_2^\dagger),
+        \notag\\
         \Trsec(\widetilde S(Y))
-          =\tr(U_1Z_S(Y)U_1^\dagger).
-    \]
+          &=\tr(U_1Z_S(Y)U_1^\dagger).
+        \notag
+    \end{align}
 \end{lemma}
 
 \begin{proof}\leanok
     Positivity follows successively from the normalized embedding, expansion
-    by an adjoint, the physical map, relabelling, and partial trace.  The trace
+    by an adjoint, the physical map, relabelling, and partial trace. The trace
     identities follow from the preceding two lemmas and trace preservation of
     the physical maps.
 \end{proof}
@@ -736,25 +725,29 @@
     Suppose that the multiplicity spaces are nonzero, their diagonal weights
     are positive, the physical maps $T$ and $S$ are completely positive and
     trace preserving, and the vertical coordinate maps satisfy
-    $U_iU_i^\dagger=1$.  Then $\widetilde T$ and $\widetilde S$ preserve
-    pointwise positive semidefiniteness.  For pointwise positive families
+    $U_iU_i^\dagger=1$. Then $\widetilde T$ and $\widetilde S$ preserve
+    pointwise positive semidefiniteness. For pointwise positive families
     $X\in\mathcal A_1$ and $Y\in\mathcal A_2$, their total sector traces obey
-    \[
-       \Trsec(\widetilde T(X))
-          \leq \Trsec(X),
-       \qquad
-       \Trsec(\widetilde S(Y))
-          \leq \Trsec(Y).
-    \]
+    \begin{align}
+        \Trsec(\widetilde T(X))
+          &\leq \Trsec(X),
+        \notag\\
+        \Trsec(\widetilde S(Y))
+          &\leq \Trsec(Y).
+        \notag
+    \end{align}
     The trace loss vanishes precisely when
-    \[
-       U_2^\dagger U_2 Z_T(X)=Z_T(X),
-       \qquad
-       U_1^\dagger U_1 Z_S(Y)=Z_S(Y),
-    \]
+    \begin{align}
+        U_2^\dagger U_2 Z_T(X)
+          &=Z_T(X),
+        \notag\\
+        U_1^\dagger U_1 Z_S(Y)
+          &=Z_S(Y),
+        \notag
+    \end{align}
     respectively.
 
-    This result concerns positivity and trace on positive elements.  It does
+    This result concerns positivity and trace on positive elements. It does
     not assert a complete-positivity structure for the finite products, a
     trace-preserving extension to their full ambient matrix spaces, or an
     inverse relation between the two transported maps.
@@ -762,15 +755,16 @@
 
 \begin{proof}\leanok
     The normalized diagonal embedding and the sectorwise partial trace
-    preserve positivity.  Before the final compression, trace preservation of
+    preserve positivity. Before the final compression, trace preservation of
     the physical map and $U_iU_i^\dagger=1$ give the original sector trace.
     For a positive matrix $Z$ and a coisometry $U$, put
-    $P=U^\dagger U$.  Then
-    \[
-       \tr(UZU^\dagger)
-        =\tr(PZ)
-        \leq\tr(Z).
-    \]
+    $P=U^\dagger U$. Then
+    \begin{align}
+        \tr(UZU^\dagger)
+          &=\tr(PZ)
+           \leq\tr(Z).
+        \notag
+    \end{align}
     Since $1-P$ is an orthogonal projection, equality is equivalent to
     $\tr((1-P)Z)=0$, hence to $(1-P)Z=0$.
 \end{proof}

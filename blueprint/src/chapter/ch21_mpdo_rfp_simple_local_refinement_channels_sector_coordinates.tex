@@ -15,9 +15,7 @@
       thm:mpdo_physical_sector_three_site_neighboring_operator_trace}
     The sector set and every middle-subspin space are nonempty. Each
     $\Omega_{k,h}$ is positive semidefinite, and
-    \[
-      a_kb_h=0 \quad\Longrightarrow\quad \Omega_{k,h}=0.
-    \]
+    $a_kb_h=0$ implies $\Omega_{k,h}=0$.
 \end{theorem}
 
 \begin{definition}[The three-site neighboring-state preparation $\mathcal T_1$]
@@ -33,16 +31,11 @@
       def:mpdo_neighboring_trace_factorization,
       thm:mpdo_physical_sector_three_site_neighboring_operator_properties}
     On a sector pair with $a_kb_h\ne0$, set
-    \[
-      \widehat\Omega_{k,h}=(a_kb_h)^{-1}\Omega_{k,h}.
-    \]
+    $\widehat\Omega_{k,h}=(a_kb_h)^{-1}\Omega_{k,h}$.
     If $a_kb_h=0$, positivity and vanishing trace imply
     $\Omega_{k,h}=0$; choose any density operator on that summand and denote
     the resulting completed density by $\overline\Omega_{k,h}$. The sectorwise
-    preparation is
-    \[
-      X\longmapsto X\otimes\overline\Omega_{k,h}.
-    \]
+    preparation is $X\longmapsto X\otimes\overline\Omega_{k,h}$.
     Taking the orthogonal direct sum over the outer sectors $(k,h)$ gives the
     preparation stage $\mathcal T_1$ of
     \cite[Appendix~C.2, lines~1523--1535]{Cirac2016MPDO_arXiv}.
@@ -101,9 +94,7 @@
       def:mpdo_physical_sector_t1_preparation,
       def:mpdo_t2_map}
     Define the channel from two physical sites to three physical sites by
-    \[
-      \mathcal T=\mathcal T_2\mathcal T_1\mathcal T_0.
-    \]
+    $\mathcal T=\mathcal T_2\mathcal T_1\mathcal T_0$.
     Thus $\mathcal T_0$ traces the neighboring subspins, $\mathcal T_1$
     adjoins the completed three-site neighboring density, and $\mathcal T_2$
     restores the three complete physical sectors. This is the refinement map
@@ -134,24 +125,29 @@ $\mathcal T_0$ traces $B_k^R\otimes B_h^L$ and sends
 $\mathfrak R_2(\mathcal K_2(X))_{k,h}$ to
 $a_kb_hB_{k,h}(X)$ on $B_k^L\otimes B_h^R$. The preparation
 $\mathcal T_1$ then adjoins
-\[
+\begin{align}
   \widehat\Omega_{k,h}
-  =(a_kb_h)^{-1}\bigoplus_l(\eta_{k,l}\otimes\eta_{l,h}),
-\]
+  &=(a_kb_h)^{-1}\bigoplus_l
+    (\eta_{k,l}\otimes\eta_{l,h}),
+  \notag
+\end{align}
 and $\mathcal T_2$ orders the result as
-\[
+\begin{align}
   (B_k^L\otimes B_k^R)\otimes(B_l^L\otimes B_l^R)
-    \otimes(B_h^L\otimes B_h^R).
-\]
+  \otimes(B_h^L\otimes B_h^R).
+  \notag
+\end{align}
 The refinement uses the sitewise sector coordinates $\mathfrak R_2$ and
 $\mathfrak R_3$
 \cite[Appendix~C.2, lines~1510--1516 and~1522--1545]
   {Cirac2016MPDO_arXiv}.
 For each outer pair, write
-\[
+\begin{align}
   \mathcal H^{\Omega}_{k,h}
-  =\bigoplus_l(B_k^R\otimes B_l^L)\otimes(B_l^R\otimes B_h^L)
-\]
+  &=\bigoplus_l
+    (B_k^R\otimes B_l^L)\otimes(B_l^R\otimes B_h^L)
+  \notag
+\end{align}
 for the carrier Hilbert space of $\Omega_{k,h}$. The symbols
 $\widehat\Omega_{k,h}$ and $\overline\Omega_{k,h}$ denote respectively its
 normalized active density and its completed density on every sector pair.
@@ -207,9 +203,7 @@ outer-sector summand. The composite channel has type
     \leanok
     \uses{def:mpdo_neighboring_trace_factorization}
     On a sector pair with $a_kb_h\ne0$, let
-    \[
-      \mathcal S_{k,h}(X)=X\otimes\frac{\eta_{k,h}}{a_kb_h}.
-    \]
+    $\mathcal S_{k,h}(X)=X\otimes\frac{\eta_{k,h}}{a_kb_h}$.
     If $a_kb_h=0$, positivity and vanishing trace imply
     $\eta_{k,h}=0$; choose any density operator on that unused summand.
     Taking the orthogonal direct sum over $(k,h)$ defines $\mathcal S_1$.
@@ -231,9 +225,7 @@ outer-sector summand. The composite channel has type
     \uses{def:mpdo_s0_map, def:mpdo_physical_sector_s1_map,
       def:mpdo_s2_map}
     Define the channel from three physical sites to two physical sites by
-    \[
-      \mathcal S=\mathcal S_2\mathcal S_1\mathcal S_0.
-    \]
+    $\mathcal S=\mathcal S_2\mathcal S_1\mathcal S_0$.
     This is the coarse-graining map in Proposition~C.7
     \cite[Appendix~C.2, lines~1547--1563]{Cirac2016MPDO_arXiv}.
 \end{definition}
@@ -275,11 +267,12 @@ outer-sector summand. The composite channel has type
     Definition~\ref{def:mpdo_global_sector_closure_coordinates}, which place
     the two outer subspins before the neighboring subspins. If
     $R_{\Phi_2}$ and $R_{\Phi_3}$ denote the two regrouping maps, then
-    \[
-      \mathfrak G_2=R_{\Phi_2}\mathfrak R_2,
-      \qquad
-      \mathfrak G_3=R_{\Phi_3}\mathfrak R_3.
-    \]
+    \begin{align}
+      \mathfrak G_2&=R_{\Phi_2}\mathfrak R_2,
+      \notag\\
+      \mathfrak G_3&=R_{\Phi_3}\mathfrak R_3.
+      \notag
+    \end{align}
 \end{definition}
 
 \begin{theorem}[Diagonal outer-sector block of the three-site closure]
@@ -292,12 +285,11 @@ outer-sector summand. The composite channel has type
       def:mpdo_physical_sector_closure_coordinates,
       def:mpdo_three_site_subspin_regrouping}
     For every virtual matrix $X$ and outer-sector pair $(k,h)$,
-    \[
-      \left[
-        R_{\Phi_3}\mathfrak R_3({\cal K}_3(X))
-      \right]_{(k,h),(k,h)}
-      =B_{k,h}(X)\otimes\Omega_{k,h}.
-    \]
+    \begin{align}
+      \left[R_{\Phi_3}\mathfrak R_3(\mathcal K_3(X))\right]_{(k,h),(k,h)}
+      &=B_{k,h}(X)\otimes\Omega_{k,h}.
+      \notag
+    \end{align}
 \end{theorem}
 
 \begin{proof}
@@ -318,7 +310,7 @@ outer-sector summand. The composite channel has type
       def:mpdo_physical_sector_closure_coordinates,
       def:mpdo_three_site_subspin_regrouping}
     Every matrix entry of
-    $R_{\Phi_3}\mathfrak R_3({\cal K}_3(X))$ between distinct outer-sector
+    $R_{\Phi_3}\mathfrak R_3(\mathcal K_3(X))$ between distinct outer-sector
     pairs $(k,h)\ne(p,q)$ vanishes.
 \end{theorem}
 
@@ -338,12 +330,11 @@ outer-sector summand. The composite channel has type
       def:mpdo_physical_sector_closure_coordinates,
       def:mpdo_two_site_subspin_regrouping}
     For every virtual matrix $X$ and outer-sector pair $(k,h)$,
-    \[
-      \left[
-        R_{\Phi_2}\mathfrak R_2({\cal K}_2(X))
-      \right]_{(k,h),(k,h)}
-      =B_{k,h}(X)\otimes\eta_{k,h}.
-    \]
+    \begin{align}
+      \left[R_{\Phi_2}\mathfrak R_2(\mathcal K_2(X))\right]_{(k,h),(k,h)}
+      &=B_{k,h}(X)\otimes\eta_{k,h}.
+      \notag
+    \end{align}
 \end{theorem}
 
 \begin{proof}
@@ -362,13 +353,13 @@ outer-sector summand. The composite channel has type
       def:mpdo_two_site_subspin_regrouping}
     For every two-site matrix $Y$, outer-sector pair $(k,h)$, and boundary
     indices $a,b$,
-    \[
+    \begin{align}
       [\mathcal T_0(Y)]_{(k,h,a),(k,h,b)}
-      =\left[
-        \tr_{R_k\otimes L_h}
-          \left([R_{\Phi_2}Y]_{(k,h),(k,h)}\right)
-       \right]_{a,b}.
-    \]
+      &=
+      \left[\tr_{R_k\otimes L_h}
+          \left([R_{\Phi_2}Y]_{(k,h),(k,h)}\right)\right]_{a,b}.
+      \notag
+    \end{align}
 \end{theorem}
 
 \begin{proof}
@@ -385,9 +376,7 @@ outer-sector summand. The composite channel has type
       def:mpdo_neighboring_trace_factorization}
     If the $(k,h)$ diagonal block of $R_{\Phi_2}Y$ is
     $B\otimes\eta_{k,h}$, then
-    \[
-      [\mathcal T_0(Y)]_{(k,h),(k,h)}=a_kb_hB.
-    \]
+    $[\mathcal T_0(Y)]_{(k,h),(k,h)}=a_kb_hB$.
 \end{theorem}
 
 \begin{proof}
@@ -409,10 +398,8 @@ outer-sector summand. The composite channel has type
       thm:mpdo_physical_sector_t1_density_properties}
     For every outer-sector pair $(k,h)$ and boundary matrix $B$, the completed
     sectorwise preparation satisfies
-    \[
-      \overline{\mathcal T}_{k,h}(a_kb_hB)
-      =B\otimes\Omega_{k,h}.
-    \]
+    $\overline{\mathcal T}_{k,h}(a_kb_hB)
+    =B\otimes\Omega_{k,h}$.
 \end{theorem}
 
 \begin{proof}
@@ -431,10 +418,8 @@ outer-sector summand. The composite channel has type
     \uses{def:mpdo_physical_sector_t1_preparation,
       thm:mpdo_t1_scaled_block_preparation}
     If the $(k,h)$ diagonal block of a boundary matrix $Y$ is $a_kb_hB$, then
-    \[
-      [\mathcal T_1(Y)]_{(k,h),(k,h)}
-      =B\otimes\Omega_{k,h}.
-    \]
+    $[\mathcal T_1(Y)]_{(k,h),(k,h)}
+    =B\otimes\Omega_{k,h}$.
 \end{theorem}
 
 \begin{proof}
@@ -465,10 +450,7 @@ outer-sector summand. The composite channel has type
     \uses{def:mpdo_t2_map}
     Let $\Phi_3$ be the three-site regrouping. For every prepared matrix $Y$
     and three-site indices $p,q$,
-    \[
-      [\mathcal T_2(Y)]_{p,q}
-      =Y_{\Phi_3(p),\Phi_3(q)}.
-    \]
+    $[\mathcal T_2(Y)]_{p,q}=Y_{\Phi_3(p),\Phi_3(q)}$.
 \end{theorem}
 
 \begin{proof}
@@ -489,10 +471,11 @@ outer-sector summand. The composite channel has type
     Definition~\ref{def:mpdo_neighboring_trace_factorization}. For every
     virtual matrix $X$, in the canonical physical-sector coordinates selected
     by the isometry $U$, the refinement channel satisfies
-    \[
-      \mathcal T\bigl(\mathfrak R_2({\cal K}_2(X))\bigr)
-      =\mathfrak R_3({\cal K}_3(X)).
-    \]
+    \begin{align}
+      \mathcal T(\mathfrak R_2(\mathcal K_2(X)))
+      &=\mathfrak R_3(\mathcal K_3(X)).
+      \label{eq:rfp_t_closure}
+    \end{align}
     This is the refinement half of Proposition~C.7
     \cite[Appendix~C.2, lines~1510--1516 and~1522--1545]
       {Cirac2016MPDO_arXiv}.
@@ -509,23 +492,27 @@ outer-sector summand. The composite channel has type
     The regrouping contained in $\mathcal T_0$ changes
     $\mathfrak R_2$ into $\mathfrak G_2$. On the $(k,h)$ diagonal block, the
     partial trace then gives
-    \[
-      \mathcal T_0\bigl(\mathfrak R_2({\cal K}_2(X))\bigr)_{k,h}
-      =a_kb_hB_{k,h}(X).
-    \]
+    \begin{align}
+      \mathcal T_0
+        (\mathfrak R_2(\mathcal K_2(X)))_{k,h}
+      &=a_kb_hB_{k,h}(X).
+      \notag
+    \end{align}
     On an active pair, $\mathcal T_1$ adjoins
     $(a_kb_h)^{-1}\Omega_{k,h}$, and hence
-    \[
+    \begin{align}
       \mathcal T_1\mathcal T_0
-        \bigl(\mathfrak R_2({\cal K}_2(X))\bigr)_{k,h}
-      =B_{k,h}(X)\otimes\Omega_{k,h}.
-    \]
+        (\mathfrak R_2(\mathcal K_2(X)))_{k,h}
+      &=B_{k,h}(X)\otimes\Omega_{k,h}.
+      \notag
+    \end{align}
     If $a_kb_h=0$, both sides vanish because
     $\Omega_{k,h}=0$. After the canonical reassociation of the intermediate
     sector sum, these are precisely the diagonal blocks of
-    $\mathfrak G_3({\cal K}_3(X))$; all off-diagonal sector blocks vanish.
+    $\mathfrak G_3(\mathcal K_3(X))$; all off-diagonal sector blocks vanish.
     Finally, the inverse regrouping $\mathcal T_2$ changes
-    $\mathfrak G_3$ into $\mathfrak R_3$, which gives the stated equality.
+    $\mathfrak G_3$ into $\mathfrak R_3$, which gives
+    (\ref{eq:rfp_t_closure}).
 \end{proof}
 
 \begin{theorem}[Coarse-graining of the three-site closure]
@@ -541,10 +528,11 @@ outer-sector summand. The composite channel has type
     virtual matrix $X$, in the canonical physical-sector
     coordinates selected by the isometry $U$, the coarse-graining channel
     satisfies
-    \[
-      \mathcal S\bigl(\mathfrak R_3({\cal K}_3(X))\bigr)
-      =\mathfrak R_2({\cal K}_2(X)).
-    \]
+    \begin{align}
+      \mathcal S(\mathfrak R_3(\mathcal K_3(X)))
+      &=\mathfrak R_2(\mathcal K_2(X)).
+      \label{eq:rfp_s_closure}
+    \end{align}
 \end{theorem}
 
 \begin{proof}
@@ -558,27 +546,26 @@ outer-sector summand. The composite channel has type
       def:mpdo_physical_sector_s1_map}
     On the $(k,h)$ diagonal block, $\mathcal S_0$ traces
     $\Omega_{k,h}$ and gives $a_kb_hB_{k,h}(X)$. On an active sector pair,
-    \[
-      \mathcal S_1\bigl((a_kb_h)B_{k,h}(X)\bigr)
-      =B_{k,h}(X)\otimes\eta_{k,h}.
-    \]
+    $\mathcal S_1((a_kb_h)B_{k,h}(X))
+    =B_{k,h}(X)\otimes\eta_{k,h}$.
     If $a_kb_h=0$, positivity and zero trace give $\eta_{k,h}=0$, so both
     sides of this identity vanish. Finally, $\mathcal S_2$ regroups the four
     factors into two physical sites. For distinct sector pairs
     $(k,h)\ne(p,q)$,
-    \[
-      (\mathcal S_1Y)_{(k,h),(p,q)}=0,
-      \qquad
-      [\mathfrak R_2({\cal K}_2(X))]_{(k,h),(p,q)}=0.
-    \]
+    \begin{align}
+      (\mathcal S_1Y)_{(k,h),(p,q)}&=0,
+      \notag\\
+      [\mathfrak R_2(\mathcal K_2(X))]_{(k,h),(p,q)}&=0.
+      \notag
+    \end{align}
+    These diagonal and off-diagonal identities give
+    (\ref{eq:rfp_s_closure}).
 \end{proof}
 
 For the following construction, through
 Theorem~\ref{thm:mpdo_blocked_original_tensor_is_rfp_via_ts}, assume the
 neighboring-operator trace factorization of
 Definition~\ref{def:mpdo_neighboring_trace_factorization}. Write
-\[
-  q=\dim\!\left(\bigoplus_k L_k\otimes R_k\right)
-\]
+$q=\dim\!\left(\bigoplus_k L_k\otimes R_k\right)$
 for the physical dimension of the sector-coordinate tensor
-$\widehat{\cal K}$.
+$\widehat{\mathcal K}$.
