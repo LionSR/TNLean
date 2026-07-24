@@ -455,10 +455,8 @@ private lemma mixedTransferSpectralRadius₂_lt_one_of_dim_eq
     mixedTransferSpectralRadius₂ A B < 1 := by
   subst hD
   simp only [cast_eq] at hgpe
-  have hagree : mixedTransferMap₂ (d := d) (D₁ := D₁) (D₂ := D₁) A B =
-      mixedTransferMap A B := by
-    ext X; simp
-  rw [mixedTransferSpectralRadius₂_eq, hagree, ← mixedTransferSpectralRadius_eq]
+  rw [mixedTransferSpectralRadius₂_eq, mixedTransferMap₂_same_dim,
+    ← mixedTransferSpectralRadius_eq]
   exact spectralRadius_mixedTransfer_lt_one_of_irreducible_TP A B hA_irr hB_irr
     hA_left hB_left hgpe
 
