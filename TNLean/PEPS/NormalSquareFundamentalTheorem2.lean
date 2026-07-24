@@ -10,6 +10,7 @@ import TNLean.PEPS.RegionBlock.ScalarExtraction
 import TNLean.PEPS.RegionBlock.ProportionalityFromAbsorbed
 import TNLean.PEPS.RegionBlock.ReindexInjectivity
 import TNLean.PEPS.RegionBlock.GaugeInjectivity2
+import TNLean.PEPS.NormalBondDimension
 
 /-!
 # The unconditional normal PEPS Fundamental Theorem on the open square lattice
@@ -26,9 +27,9 @@ bonds, and the same state --- it produces a per-edge gauge family `X` with
 
 The union closure of injective regions is derived from the positive bonds
 (`regionInjectivityUnionClosure_of_overlap`), not assumed, and no single-vertex injectivity is
-used anywhere.  This is the open-lattice port of the torus assembly
+used anywhere.  This is the open-lattice analogue of the torus assembly
 (`fundamentalTheorem_normalTorusPEPS_unconditional`), in the scope the open blocking geometry
-honestly supports.
+faithfully supports.
 
 **Scope restriction (interior window, per-vertex scalars):** the conclusion is restricted in
 two ways relative to the source's Theorem 3, both documented in
@@ -51,16 +52,16 @@ obligations".
    hypothesis: rescaling `A`'s components at two interior vertices by `μ` and `μ⁻¹` preserves
    the state and the rectangular injectivity but separates the two scalars.
 
-The structural findings behind this scope (recorded here as the port's scouting note): the open
-lattice encodes no translation structure --- `IsTorusTranslationInvariant` and the whole torus
-witness-transport layer act through the graph automorphisms `translate a b`, which have no
-open-lattice analogue, partial translations not being graph automorphisms; the open witness
-machinery (`exists_regionEdgeGauge_normalSquare*TranslatedEdge`) delivers per-edge gauges at
-interior edges only, each chosen independently, with the reduction to one matrix per
-orientation class having no derivation without a translation-invariance predicate; and the
-per-vertex relation is well formed at boundary vertices (the local virtual configuration ranges
-over the existing incident edges only) but not derivable there, the comparison regions' boundary
-edges falling outside the interior margins.
+The open lattice carries no translation automorphisms: partial translations are
+not graph automorphisms, so `IsTorusTranslationInvariant` has no open-lattice
+analogue.  The witness-transport construction
+(`exists_regionEdgeGauge_normalSquare*TranslatedEdge`) delivers per-edge gauges at
+interior edges only, each chosen independently; the reduction to one matrix per
+orientation class has no derivation without a translation-invariance predicate.
+The per-vertex relation is well formed at boundary vertices (the local virtual
+configuration ranges over the existing incident edges only) but not derivable
+there, the comparison regions' boundary edges falling outside the interior
+margins.
 
 ## References
 
@@ -87,6 +88,100 @@ normally.  All proofs below treat `gaugeVertex` as opaque, so nothing else chang
 seal gaugeVertex
 
 variable {width height d : ℕ}
+
+/-- **Per-edge bond dimension equality at interior edges from rectangular injectivity.**
+
+For two tensors on the open square lattice with the rectangular-injectivity hypotheses and
+union closure, the bond dimensions of `A` and `B` agree at every edge with interior margins.
+The equality follows from the one-edge blocking data built from the rectangular injectivity
+(the source's Lemma `inj_isomorph`, lines 560--583 of `Papers/1804.04964/paper_normal.tex`),
+together with the same-state and positive-bond assumptions.
+
+Source: arXiv:1804.04964, Section 3, lines 560--583 and 1407--1500 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem bondDim_apply_eq_of_normalSquareInteriorEdge
+    (A B : Tensor (squareLatticeGraph width height) d)
+    (hAr : NormalSquareLatticeRectangleInjectivityHypotheses
+            (regionInjectivityDataOf (G := squareLatticeGraph width height) A))
+    (hUA : RegionInjectivityUnionClosure
+            (regionInjectivityDataOf (G := squareLatticeGraph width height) A))
+    (hBr : NormalSquareLatticeRectangleInjectivityHypotheses
+            (regionInjectivityDataOf (G := squareLatticeGraph width height) B))
+    (hUB : RegionInjectivityUnionClosure
+            (regionInjectivityDataOf (G := squareLatticeGraph width height) B))
+    (hAB : SameState A B) (hd : 0 < d)
+    (hposA : ∀ g : Edge (squareLatticeGraph width height), 0 < A.bondDim g)
+    (hposB : ∀ g : Edge (squareLatticeGraph width height), 0 < B.bondDim g)
+    (e : Edge (squareLatticeGraph width height))
+    (he : NormalSquareInteriorEdgeDatum e) :
+    A.bondDim e = B.bondDim e := by
+  rcases he with ⟨hEdge, hMargins⟩ | ⟨hEdge, hMargins⟩
+  · -- Horizontal interior edge
+    obtain ⟨hx3, hx7, hy4, hy6⟩ := hMargins
+    have hx_margin : (e.1.1.1.1 - 1) + 3 ≤ width := by omega
+    have hy_margin : (e.1.1.2.1 - 2) + 3 ≤ height := by omega
+    -- The translated edge equals `e`
+    have heq : e = normalSquareHorizontalTranslatedEdge
+        (e.1.1.1.1 - 1) (e.1.1.2.1 - 2) hx_margin hy_margin := by
+      rw [normalSquareHorizontalTranslatedEdge_sub_eq_rightEdge
+        (by omega) (by omega) (by omega) (by omega)]
+      exact horizontalSquareLatticeEdge_eq_rightEdge e hEdge
+    -- Build blocking data at the translated edge
+    have hxL : 2 ≤ e.1.1.1.1 - 1 := by omega
+    have hyB : 2 ≤ e.1.1.2.1 - 2 := by omega
+    have hxR : (e.1.1.1.1 - 1) + 8 ≤ width := by omega
+    have hyT : (e.1.1.2.1 - 2) + 8 ≤ height := by omega
+    let DA := normalSquareHorizontalTranslatedEdge_blockingDatum_interior
+      (κ := regionInjectivityDataOf A) hAr hUA hxL hyB hxR hyT
+    let DB := normalSquareHorizontalTranslatedEdge_blockingDatum_interior
+      (κ := regionInjectivityDataOf B) hBr hUB hxL hyB hxR hyT
+    have hred : DA.red = DB.red := rfl
+    have hblue : DA.blue = DB.blue := rfl
+    have hsingle : ∀ g : Edge (squareLatticeGraph width height),
+        IsCrossingEdge (G := squareLatticeGraph width height) A DA.red DA.blue g ↔
+          g = normalSquareHorizontalTranslatedEdge (e.1.1.1.1 - 1) (e.1.1.2.1 - 2)
+            hx_margin hy_margin :=
+      isCrossingEdge_normalSquareHorizontalTranslatedEdge A hx_margin hy_margin
+    -- Get bond dimension equality at the translated edge
+    have hbd_translated : A.bondDim
+        (normalSquareHorizontalTranslatedEdge (e.1.1.1.1 - 1) (e.1.1.2.1 - 2)
+          hx_margin hy_margin) =
+        B.bondDim (normalSquareHorizontalTranslatedEdge (e.1.1.1.1 - 1) (e.1.1.2.1 - 2)
+          hx_margin hy_margin) :=
+      bondDim_apply_eq_of_blockingData DA DB hred hblue hAB hd hposA hposB hsingle
+    -- Rewrite to `e`
+    simpa [← heq] using hbd_translated
+  · -- Vertical interior edge
+    obtain ⟨hx4, hx6, hy3, hy7⟩ := hMargins
+    have hx_margin : (e.1.1.1.1 - 2) + 3 ≤ width := by omega
+    have hy_margin : (e.1.1.2.1 - 1) + 3 ≤ height := by omega
+    have heq : e = normalSquareVerticalTranslatedEdge
+        (e.1.1.1.1 - 2) (e.1.1.2.1 - 1) hx_margin hy_margin := by
+      rw [normalSquareVerticalTranslatedEdge_sub_eq_upEdge
+        (by omega) (by omega) (by omega) (by omega)]
+      exact verticalSquareLatticeEdge_eq_upEdge e hEdge
+    have hxL : 2 ≤ e.1.1.1.1 - 2 := by omega
+    have hyB : 2 ≤ e.1.1.2.1 - 1 := by omega
+    have hxR : (e.1.1.1.1 - 2) + 8 ≤ width := by omega
+    have hyT : (e.1.1.2.1 - 1) + 8 ≤ height := by omega
+    let DA := normalSquareVerticalTranslatedEdge_blockingDatum_interior
+      (κ := regionInjectivityDataOf A) hAr hUA hxL hyB hxR hyT
+    let DB := normalSquareVerticalTranslatedEdge_blockingDatum_interior
+      (κ := regionInjectivityDataOf B) hBr hUB hxL hyB hxR hyT
+    have hred : DA.red = DB.red := rfl
+    have hblue : DA.blue = DB.blue := rfl
+    have hsingle : ∀ g : Edge (squareLatticeGraph width height),
+        IsCrossingEdge (G := squareLatticeGraph width height) A DA.red DA.blue g ↔
+          g = normalSquareVerticalTranslatedEdge (e.1.1.1.1 - 2) (e.1.1.2.1 - 1)
+            hx_margin hy_margin :=
+      isCrossingEdge_normalSquareVerticalTranslatedEdge A hx_margin hy_margin
+    have hbd_translated : A.bondDim
+        (normalSquareVerticalTranslatedEdge (e.1.1.1.1 - 2) (e.1.1.2.1 - 1)
+          hx_margin hy_margin) =
+        B.bondDim (normalSquareVerticalTranslatedEdge (e.1.1.1.1 - 2) (e.1.1.2.1 - 1)
+          hx_margin hy_margin) :=
+      bondDim_apply_eq_of_blockingData DA DB hred hblue hAB hd hposA hposB hsingle
+    simpa [← heq] using hbd_translated
 
 /-- **The comparison-region proportionality at a window vertex.**
 
