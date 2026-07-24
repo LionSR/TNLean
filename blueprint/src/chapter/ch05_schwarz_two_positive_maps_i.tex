@@ -54,7 +54,7 @@
     positive.
 \end{proof}
 
-\begin{definition}[Unital linear map]
+\begin{definition}[Unital linear map]\label{def:unital_linear_map}
     \lean{KadisonSchwarz.IsUnitalMap}
     \leanok
     A linear map $E$ is unital if $E(\Id)=\Id$.
@@ -63,7 +63,7 @@
 \begin{theorem}[Kadison--Schwarz for unital two-positive maps]\label{thm:kadison_schwarz_2positive}
     \lean{kadison_schwarz_2positive}
     \leanok
-    \uses{thm:kadison_schwarz}
+    \uses{def:k_positive_map, def:unital_linear_map}
     If $E$ is unital and two-positive, then for all $X\in\MN{D}$,
     $E(X^\dagger X)\ge E(X)^\dagger E(X)$.
 \end{theorem}
