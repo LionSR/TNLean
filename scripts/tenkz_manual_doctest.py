@@ -210,10 +210,10 @@ def _registry_vocabulary() -> tuple[list[str], list[str]]:
     return commands, environments
 
 
-def _is_tenkz_verbatim(body: str) -> bool:
+def _is_tenkz_verbatim(body: str, source_dir: Path) -> bool:
     commands, environments = _registry_vocabulary()
     environment_pattern = "|".join(re.escape(environment) for environment in environments)
-    packages, _ = _extract_usepackages(body)
+    packages, _ = _extract_usepackages(body, source_dir)
     scan = _mask_nonexecuted_tokens(strip_comments(body))
     environment_matches = re.finditer(
         rf"\\begin\{{(?:{environment_pattern})\}}", scan
@@ -285,11 +285,11 @@ def _mask_inline_verbatim(text: str) -> str:
     return "".join(masked)
 
 
-def _usepackage_ranges(body: str) -> list[tuple[int, int]]:
+def _usepackage_ranges(body: str, source_dir: Path) -> list[tuple[int, int]]:
     ranges: list[tuple[int, int]] = []
     offset = 0
     marker = r"\usepackage"
-    executable = _mask_macro_definitions(_mask_false_branches(body))
+    executable = _mask_inert_tex(body, source_dir)
     scan_body = _mask_nonexecuted_tokens(executable)
     while (start := _find_control_word(scan_body, "usepackage", offset)) >= 0:
         cursor = _skip_space_and_comments(body, start + len(marker))
@@ -302,8 +302,8 @@ def _usepackage_ranges(body: str) -> list[tuple[int, int]]:
     return ranges
 
 
-def _extract_usepackages(body: str) -> tuple[list[str], str]:
-    ranges = _usepackage_ranges(body)
+def _extract_usepackages(body: str, source_dir: Path) -> tuple[list[str], str]:
+    ranges = _usepackage_ranges(body, source_dir)
     packages = [body[start:end].strip() for start, end in ranges]
     chunks: list[str] = []
     offset = 0
@@ -495,12 +495,23 @@ def _tex_file_exists(relative: Path, source_dir: Path) -> bool:
     return _resolve_tex_file(relative, source_dir) is not None
 
 
-def _mask_inactive_file_branches(text: str, source_dir: Path) -> str:
+def _mask_inactive_file_branches(
+    text: str,
+    source_dir: Path,
+    inherited_conditionals: tuple[str, ...] = (),
+) -> str:
     masked = list(text)
-    scan = _mask_nonexecuted_tokens(_display_comment_scan(text))
     pattern = re.compile(r"\\IfFileExists(?![A-Za-z@])")
     offset = 0
-    while match := pattern.search(scan, offset):
+    while True:
+        current = "".join(masked)
+        structural = _mask_macro_definitions(
+            _mask_false_branches(current, inherited_conditionals), strict=False
+        )
+        scan = _mask_nonexecuted_tokens(_display_comment_scan(structural))
+        match = pattern.search(scan, offset)
+        if match is None:
+            break
         if _is_escaped(scan, match.start()):
             offset = match.end()
             continue
@@ -521,9 +532,11 @@ def _mask_inactive_file_branches(text: str, source_dir: Path) -> str:
             active_start, active_end = false_start, false_end
             _blank_range(masked, match.start(), false_start + 1)
             _blank_range(masked, false_end - 1, false_end)
-        active = text[active_start + 1 : active_end - 1]
+        active = current[active_start + 1 : active_end - 1]
         masked[active_start + 1 : active_end - 1] = (
-            _mask_inactive_file_branches(active, source_dir)
+            _mask_inactive_file_branches(
+                active, source_dir, inherited_conditionals
+            )
         )
         offset = false_end
     return "".join(masked)
@@ -590,7 +603,9 @@ def _mask_inert_tex(
     source_dir: Path,
     inherited_conditionals: tuple[str, ...] = (),
 ) -> str:
-    selected_file_branches = _mask_inactive_file_branches(text, source_dir)
+    selected_file_branches = _mask_inactive_file_branches(
+        text, source_dir, inherited_conditionals
+    )
     without_false_branches = _mask_false_branches(
         selected_file_branches, inherited_conditionals
     )
@@ -625,11 +640,13 @@ def _has_executable_command(text: str, command: str) -> bool:
     return any(not _is_escaped(scan, match.start()) for match in pattern.finditer(scan))
 
 
-def _instrument_command(document: str, command: str) -> tuple[str, str]:
+def _instrument_command(
+    document: str, command: str, source_dir: Path
+) -> tuple[str, str]:
     selected = next(
         (
             (start, end)
-            for start, end in _usepackage_ranges(document)
+            for start, end in _usepackage_ranges(document, source_dir)
             if "tenkz" in _package_names(document[start:end])
         ),
         None,
@@ -664,7 +681,9 @@ def _variant_definitions(variant_style: str) -> list[str]:
     ]
 
 
-def _standalone_document(body: str, variant_style: str | None = None) -> str:
+def _standalone_document(
+    body: str, source_dir: Path, variant_style: str | None = None
+) -> str:
     body = body.strip()
     scan_body = _mask_nonexecuted_tokens(body)
     has_document_class = _find_control_word(scan_body, "documentclass", 0) >= 0
@@ -681,7 +700,7 @@ def _standalone_document(body: str, variant_style: str | None = None) -> str:
         definitions = "\n".join(_variant_definitions(variant_style)) + "\n"
         return body[:begin] + definitions + body[begin:] + "\n"
 
-    preamble, content = _extract_usepackages(body)
+    preamble, content = _extract_usepackages(body, source_dir)
     if not any("tenkz" in _package_names(package) for package in preamble):
         preamble.append(r"\usepackage{tenkz}")
     if variant_style is not None:
@@ -727,7 +746,9 @@ def extract_displayed_examples(
         body_end = end_match.start()
         body = text[body_start:body_end].strip()
         offset = end_match.end()
-        if environment == "Verbatim" and not _is_tenkz_verbatim(body):
+        if environment == "Verbatim" and not _is_tenkz_verbatim(
+            body, path.parent
+        ):
             continue
         line = text.count("\n", 0, match.start()) + 1
         variants = (
@@ -743,7 +764,9 @@ def extract_displayed_examples(
                     label=f"manual-{_source_label(path)}-{ordinal}{suffix}",
                     source=path,
                     line=line,
-                    document=_standalone_document(body, variant_style),
+                    document=_standalone_document(
+                        body, path.parent, variant_style
+                    ),
                 )
             )
     return examples
@@ -762,7 +785,9 @@ def _conditionals_before(
     inherited_conditionals: tuple[str, ...],
     source_dir: Path,
 ) -> tuple[str, ...]:
-    selected_file_branches = _mask_inactive_file_branches(text, source_dir)
+    selected_file_branches = _mask_inactive_file_branches(
+        text, source_dir, inherited_conditionals
+    )
     executable = _display_comment_scan(
         _mask_macro_definitions(
             _mask_false_branches(
@@ -784,7 +809,13 @@ def _conditionals_before(
     lets = [
         match for match in let_pattern.finditer(executable) if match.start() < offset
     ]
-    known = set((*TEX_PRIMITIVE_CONDITIONALS, *inherited_conditionals))
+    known = set(
+        (
+            *TEX_PRIMITIVE_CONDITIONALS,
+            *_latex_format_conditionals(),
+            *inherited_conditionals,
+        )
+    )
     known.update(match.group(1) for match in newifs)
     while True:
         additions = {
@@ -893,7 +924,9 @@ def reference_examples() -> list[Example]:
             raise ValueError(
                 f"{source}: example mapped to \\{command} does not invoke that command"
             )
-        instrumented, marker = _instrument_command(document, command)
+        instrumented, marker = _instrument_command(
+            document, command, source.parent
+        )
         examples.append(
             Example(
                 label=f"reference-{command}",

@@ -61,10 +61,12 @@ shell command % \tntree{commented}
 % \begin{tenkz} \tn{commented} \end{tenkz}
 % \end{tnexample}
 \newif\ifdraft
+\newcommand{\storedguard}{\IfFileExists}
 \let\ifalias\ifdraft
 \let\ifnever\iffalse
 \let\ifbare\if
 \iffalse
+\IfFileExists
 \newif\iflocal
 \let\iflocalbare\if
 \iftrue
@@ -169,9 +171,13 @@ shell command % \tntree{commented}
         raise AssertionError("an escaped percent incorrectly started a TeX comment")
     if DOCTEST._has_executable_command(r"\verb|\tn| \string\tn \\tn", "tn"):
         raise AssertionError("a non-executed command spelling satisfied reference coverage")
-    if DOCTEST._is_tenkz_verbatim(r"\verb|\tn| \string\tn \\tn"):
+    if DOCTEST._is_tenkz_verbatim(
+        r"\verb|\tn| \string\tn \\tn", Path.cwd()
+    ):
         raise AssertionError("a non-executed command spelling classified a Verbatim block")
-    if DOCTEST._is_tenkz_verbatim(r"% \begin{tenkz} \tn{commented} \end{tenkz}"):
+    if DOCTEST._is_tenkz_verbatim(
+        r"% \begin{tenkz} \tn{commented} \end{tenkz}", Path.cwd()
+    ):
         raise AssertionError("a commented environment classified a Verbatim block")
     package_names = DOCTEST._package_names(
         "\\usepackage{amsmath,% package note\n tenkz}"
@@ -180,11 +186,15 @@ shell command % \tntree{commented}
         raise AssertionError("a comment hid tenkz in a multi-package declaration")
     repeated_package = (
         "\\iffalse\n\\usepackage{tenkz}\n\\fi\n"
+        "\\IfFileExists{missing-instrumentation.tex}"
+        "{\\usepackage{tenkz}}{}\n"
         "% \\usepackage{tenkz}\n"
         "\\usepackage{tenkz}\n"
         "\\begin{document}\\tn{A}\\end{document}\n"
     )
-    instrumented, marker = DOCTEST._instrument_command(repeated_package, "tn")
+    instrumented, marker = DOCTEST._instrument_command(
+        repeated_package, "tn", Path.cwd()
+    )
     if instrumented.index(marker) < instrumented.rindex("\\usepackage{tenkz}"):
         raise AssertionError("runtime instrumentation used a commented package spelling")
     escaped_verb = (
@@ -275,13 +285,19 @@ shell command % \tntree{commented}
             DOCTEST.MANUAL = original_manual
             DOCTEST.MANUAL_DIR = original_manual_dir
             DOCTEST.CHAPTERS = original_chapters
-    ordered_parent = "\\input{child.tex}\n\\newif\\iflaterparent\n"
+    ordered_parent = (
+        "\\let\\ifformat\\if@twocolumn\n"
+        "\\input{child.tex}\n"
+        "\\newif\\iflaterparent\n"
+    )
     child_offset = ordered_parent.index(r"\input")
     inherited = DOCTEST._conditionals_before(
         ordered_parent, child_offset, (), Path.cwd()
     )
     if "iflaterparent" in inherited:
         raise AssertionError("a declaration after input was inherited by the child")
+    if "ifformat" not in inherited:
+        raise AssertionError("an alias to a format conditional was not inherited")
     guarded_parent = (
         "\\IfFileExists{missing-conditional.tex}"
         "{\\newif\\ifguarded}{}\\input{child.tex}\n"
