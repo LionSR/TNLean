@@ -165,14 +165,16 @@ def _registry_vocabulary() -> tuple[list[str], list[str]]:
 
 def _is_tenkz_verbatim(body: str) -> bool:
     commands, environments = _registry_vocabulary()
-    command_pattern = "|".join(re.escape(command) for command in commands)
     environment_pattern = "|".join(re.escape(environment) for environment in environments)
     packages, _ = _extract_usepackages(body)
-    uncommented = _strip_tex_comments(body)
+    scan = _mask_nonexecuted_tokens(body)
+    environment_matches = re.finditer(
+        rf"\\begin\{{(?:{environment_pattern})\}}", scan
+    )
     return bool(
         any("tenkz" in _package_names(package) for package in packages)
-        or re.search(rf"\\(?:{command_pattern})(?![A-Za-z@:_])", uncommented)
-        or re.search(rf"\\begin\{{(?:{environment_pattern})\}}", uncommented)
+        or any(_has_executable_command(body, command) for command in commands)
+        or any(not _is_escaped(scan, match.start()) for match in environment_matches)
     )
 
 
@@ -207,7 +209,12 @@ def _find_control_word(text: str, name: str, offset: int) -> int:
 def _mask_inline_verbatim(text: str) -> str:
     masked = list(text)
     offset = 0
-    while (start := text.find(r"\verb", offset)) >= 0:
+    verb_pattern = re.compile(r"\\verb(?![A-Za-z@])")
+    while match := verb_pattern.search(text, offset):
+        start = match.start()
+        if _is_escaped(text, start):
+            offset = match.end()
+            continue
         delimiter_offset = start + len(r"\verb")
         if delimiter_offset < len(text) and text[delimiter_offset] == "*":
             delimiter_offset += 1
@@ -217,9 +224,13 @@ def _mask_inline_verbatim(text: str) -> str:
         if delimiter.isspace() or delimiter.isalnum():
             offset = delimiter_offset
             continue
-        end = text.find(delimiter, delimiter_offset + 1)
+        line_end = text.find("\n", delimiter_offset + 1)
+        if line_end < 0:
+            line_end = len(text)
+        end = text.find(delimiter, delimiter_offset + 1, line_end)
         if end < 0:
-            break
+            offset = delimiter_offset + 1
+            continue
         for index in range(start, end + 1):
             if masked[index] != "\n":
                 masked[index] = " "
