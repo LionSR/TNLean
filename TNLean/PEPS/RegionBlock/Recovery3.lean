@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.RegionBlock.Recovery2
-import TNLean.PEPS.VertexComplement.KernelDescent
+import TNLean.PEPS.VertexComplement.Injective
 import Mathlib.LinearAlgebra.Matrix.Rank
 
 /-!

@@ -9,4 +9,4 @@ Authors: TNLean contributors
 -- Generated aggregator module: TNLean.PEPS.VertexComplement
 
 import TNLean.PEPS.VertexComplement.Basic
-import TNLean.PEPS.VertexComplement.KernelDescent
+import TNLean.PEPS.VertexComplement.Injective

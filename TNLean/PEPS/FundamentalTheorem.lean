@@ -7,7 +7,7 @@ import TNLean.PEPS.FundamentalTheorem.OneVertexComparison
 import TNLean.PEPS.EdgeGaugeFamily
 import TNLean.PEPS.LocalGauge
 import TNLean.PEPS.TwoInjectiveComparison
-import TNLean.PEPS.VertexComplement.KernelDescent
+import TNLean.PEPS.VertexComplement.Injective
 import TNLean.PEPS.EdgeScalarSolve
 import TNLean.PEPS.TensorFactorScalar
 import Mathlib.LinearAlgebra.LinearIndependent.Basic
