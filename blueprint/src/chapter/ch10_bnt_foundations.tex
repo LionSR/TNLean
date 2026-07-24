@@ -630,6 +630,34 @@
     gives the conclusion for the original tensors.
 \end{proof}
 
+\begin{definition}[Fixed-length block-injective canonical-form condition]
+    \label{def:blockwise_product_word_span}
+    \lean{MPSTensor.WordTupleSpanTop}
+    \leanok
+    For a fixed blocked length $m$, the fixed-length form of the
+    block-injective canonical-form condition is
+    \begin{align}
+        \spn\{(A_1^\omega,\ldots,A_g^\omega):|\omega|=m\}
+        &=
+        \prod_{j=1}^g \MN{D_j}.
+        \notag
+    \end{align}
+    Equivalently,
+    \begin{align}
+        \forall X=(X_j)_j\in\bigoplus_{j=1}^g \MN{D_j},
+        \quad
+        \exists (c_\omega(X))_{|\omega|=m},
+        \quad
+        (X_j)_{j=1}^g
+        &=
+        \sum_{|\omega|=m} c_\omega(X)
+        (A_1^\omega,\ldots,A_g^\omega).
+        \notag
+    \end{align}
+    This is the fixed-length form of the block-injective canonical-form
+    condition of \cite[lines~2113--2117]{Cirac2021Matrix}.
+\end{definition}
+
 \begin{theorem}[Simultaneous one-letter span after blocking a BNT]
     \label{thm:cpsv_bnt_blocked_simultaneous_span}
     \lean{MPSTensor.IsCPSVBasisOfNormalTensors.%
@@ -660,9 +688,6 @@
         thm:common_exact_block_injectivity_normal_left_canonical,
         thm:wordspan_blk_inj_succ,
         thm:peripheral_primitive_irreducible_overlap_one,
-        lem:bnt_direct_sum_injective_prefix_word_span,
-        lem:block_separating_equations_from_pairwise_separation,
-        lem:product_word_span_from_bnt_block_separation,
         lem:gauge_invariance_block_injective}
     Eventual linear independence implies $D_j>0$ for every $j$ and excludes
     gauge-phase equivalence between two distinct blocks. Put every block in a
