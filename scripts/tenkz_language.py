@@ -11,6 +11,7 @@ import argparse
 import json
 import re
 import sys
+from collections.abc import Iterable
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -233,13 +234,8 @@ def _declared_api() -> tuple[set[str], set[str]]:
     return commands, environments
 
 
-def _parser_leaf_keys() -> set[tuple[str, str]]:
-    """Collect public leaf-key spellings installed by the TeX parsers.
-
-    Choice values and family roots are deliberately excluded.  Shared
-    forwards are expanded so the census fails if implementation and registry
-    drift in either direction.
-    """
+def _parser_leaf_keys_from_texts(texts: Iterable[str]) -> set[tuple[str, str]]:
+    """Collect public leaf-key spellings from TeX parser source texts."""
     leaves: set[tuple[str, str]] = set()
     leaf = re.compile(
         r"/tenkz/([^/,{]+?)/([^/,{]+?)/\.(?:code|store~in|is~choice)"
@@ -251,8 +247,7 @@ def _parser_leaf_keys() -> set[tuple[str, str]]:
     forwards = re.compile(
         r"(?m)^\\tenkz_install_core_forwards:nn\s*\{[^}]+\}\s*\{([^}]+)\}"
     )
-    for path in (ROOT / "tex/tenkz").glob("*.code.tex"):
-        text = path.read_text(encoding="utf-8")
+    for text in texts:
         for match in leaf.finditer(text):
             family = match.group(1).replace("~", " ").strip()
             name = match.group(2).replace("~", " ").strip()
@@ -271,6 +266,19 @@ def _parser_leaf_keys() -> set[tuple[str, str]]:
             if name not in {"", "declare atom"}:
                 leaves.add(("setup", name))
     return leaves
+
+
+def _parser_leaf_keys() -> set[tuple[str, str]]:
+    """Collect public leaf-key spellings installed by the TeX parsers.
+
+    Choice values and family roots are deliberately excluded.  Shared
+    forwards are expanded so the census fails if implementation and registry
+    drift in either direction.
+    """
+    return _parser_leaf_keys_from_texts(
+        path.read_text(encoding="utf-8")
+        for path in (ROOT / "tex/tenkz").glob("*.code.tex")
+    )
 
 
 def _parser_registry_keys() -> set[tuple[str, str]]:

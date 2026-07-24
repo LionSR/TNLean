@@ -417,6 +417,21 @@ def test_prechange_ratchet_requires_extension_citation() -> None:
     )
 
 
+def test_parser_identity_swap_requires_extension_citation() -> None:
+    baseline = json.loads((ROOT / "tests/tenkz/census-baseline.json").read_text())
+    current = copy.deepcopy(baseline)
+    current["m2_parser_paths"]["identity_sha256"] = "0" * 64
+    errors = tenkz_shrink.ratchet_errors(
+        current, baseline, has_extension=False
+    )
+    assert errors == [
+        "M2 parser identities changed without an Extension-gate: #NNNN citation"
+    ]
+    assert not tenkz_shrink.ratchet_errors(
+        current, baseline, has_extension=True
+    )
+
+
 def test_census_correction_requires_unchanged_parser_surface() -> None:
     baseline = json.loads((ROOT / "tests/tenkz/census-baseline.json").read_text())
     current = copy.deepcopy(baseline)
@@ -435,6 +450,14 @@ def test_census_correction_requires_unchanged_parser_surface() -> None:
         has_census_correction=True,
     )
     current["m2_parser_paths"]["value"] += 1
+    assert tenkz_shrink.ratchet_errors(
+        current,
+        previous,
+        has_extension=False,
+        has_census_correction=True,
+    )
+    current["m2_parser_paths"]["value"] -= 1
+    current["m2_parser_paths"]["identity_sha256"] = "0" * 64
     assert tenkz_shrink.ratchet_errors(
         current,
         previous,
