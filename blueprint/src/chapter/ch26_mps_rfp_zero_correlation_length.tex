@@ -163,3 +163,70 @@
     $\E_{j,j'}^2=\E_{j,j'}$ and $\rho(\E_{j,j'})<1$ imply
     $\E_{j,j'}=0$.
 \end{proof}
+
+\begin{lemma}[BNT basis of a canonical form is a basis of normal tensors for
+    its direct sum]%
+    \label{lem:bnt_cf_basis_is_bnt_for_direct_sum}
+    \lean{MPSTensor.IsBNTCanonicalForm.isCPSVBasisOfNormalTensors_basisDirectSum}
+    \leanok
+    \uses{def:bnt_cpsv, def:sector_bnt_cf}
+    Let $P$ be a BNT canonical form with distinct basis tensors $(A_j)_j$, and
+    let $A=\bigoplus_j A_j$ be their direct sum with one unit-weight copy of
+    each sector. Then $(A_j)_j$ is a basis of normal tensors for $A$: every
+    $A_j$ is a normal tensor, at every positive system length $N$
+    \begin{align}
+        V^{(N)}(A)
+        &=\sum_j V^{(N)}(A_j),
+        \notag
+    \end{align}
+    and the states $\{|V^{(N)}(A_j)\rangle\}_j$ are linearly independent for
+    all sufficiently large $N$.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{cor:sector_bnt_cf_basis_normal, thm:mpv_decomposition}
+    Every basis block is irreducible and left-canonical with normalized
+    self-overlap converging to $1$, hence a normal tensor by
+    Corollary~\ref{cor:sector_bnt_cf_basis_normal}. The direct sum is the
+    unit-weight block-diagonal tensor, so its length-$N$ matrix-product vector
+    splits as the sum of the block vectors by
+    Theorem~\ref{thm:mpv_decomposition}. Eventual linear independence is part
+    of the canonical-form data of $P$.
+\end{proof}
+
+\begin{theorem}[Corrected forward direction of the main MPS theorem,
+    multiplicity-one representative]%
+    \label{thm:rfp_implies_positive_gap_bnt_zcl_cf_basis_direct_sum}
+    \lean{MPSTensor.IsBNTCanonicalForm.isTransferIdempotent_basisDirectSum_isPositiveGapBNTZCL}
+    \leanok
+    \uses{def:is_positive_gap_bnt_zcl, def:sector_bnt_cf,
+        def:mps_transfer_idempotence}
+    Let $P$ be a BNT canonical form with distinct basis tensors $(A_j)_j$, and
+    let $A=\bigoplus_j A_j$ be their direct sum with one unit-weight copy of
+    each sector. If $A$ is a renormalization fixed point,
+    \begin{align}
+        \E_A^2&=\E_A,
+        \notag
+    \end{align}
+    then $A$ has positive-gap BNT zero correlation length: its physical
+    correlations are independent of the separation whenever both complementary
+    gaps are positive, and for all distinct BNT components $j\ne j'$
+    \begin{align}
+        \E_{j,j'}&=0.
+        \notag
+    \end{align}
+    This is the implication (i)$\implies$(ii) of
+    \cite[Theorem~3.8]{Cirac2016MPDO_arXiv} at the explicit multiplicity-one
+    unit-weight representative. The raw-weight unrestricted biconditional is
+    false by Theorem~\ref{thm:halved_weight_zcl_not_rfp}, and the
+    adjacent-region cases of the source CID are excluded by
+    Definition~\ref{def:is_positive_gap_bnt_zcl}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{lem:bnt_cf_basis_is_bnt_for_direct_sum,
+        thm:is_positive_gap_bnt_zcl_of_is_rfp_direct_sum}
+    By Lemma~\ref{lem:bnt_cf_basis_is_bnt_for_direct_sum}, the distinct basis
+    tensors of $P$ are a basis of normal tensors for $A$. The basis blocks are
+    irreducible, left-canonical, and pairwise gauge-phase distinct, so
+    Theorem~\ref{thm:is_positive_gap_bnt_zcl_of_is_rfp_direct_sum} applies to
+    the direct sum.
+\end{proof}
