@@ -86,12 +86,16 @@
 \bool_new:N \l__tenkz_kernel_trace_physical_bool
 \bool_new:N \l__tenkz_kernel_strict_bool
 \bool_new:N \l__tenkz_kernel_ineq_bool        % inside tenkzeq
+\bool_new:N \l__tenkz_kernel_check_bundles_bool
 \clist_new:N \l__tenkz_kernel_check_off_clist % relations opted out of check=
 \tl_new:N   \l__tenkz_kernel_scratch_tl
 \tl_new:N   \l__tenkz_kernel_sig_tl
 \tl_new:N   \l__tenkz_kernel_slot_tl
 \tl_new:N   \l__tenkz_kernel_child_tl
+\tl_new:N   \l__tenkz_kernel_bundle_item_tl
 \seq_new:N  \l__tenkz_kernel_stack_seq        % operand stack (see shelf notes)
+\seq_new:N  \l__tenkz_kernel_bundle_seq
+\seq_new:N  \l__tenkz_kernel_bundle_match_seq
 \seq_new:N  \g__tenkz_kernel_panel_gseq       % tenkzeq panel signatures
 \seq_new:N  \g__tenkz_kernel_panel_kind_gseq  % diagram or prose per panel
 \seq_new:N  \g__tenkz_kernel_rel_gseq         % tenkzeq relation glyphs
@@ -930,6 +934,41 @@
     \tl_set:Ne #1 { \seq_use:Nn \l__tenkz_kernel_emit_seq { ,~ } }
   }
 
+\cs_new_protected:Npn \__tenkz_kernel_signature_expand_bundles:NN #1#2
+  {
+    \seq_clear:N \l__tenkz_kernel_bundle_seq
+    \exp_args:NV \clist_map_inline:nn #1
+      {
+        \tl_set:Nn \l__tenkz_kernel_bundle_item_tl {##1}
+        \tl_trim_spaces:N \l__tenkz_kernel_bundle_item_tl
+        \exp_args:NnV \regex_extract_once:nnNTF
+          { \A (.*) \s* : \s* bundle \s* = \s* ([1-9]\d*) \s* \Z }
+          \l__tenkz_kernel_bundle_item_tl
+          \l__tenkz_kernel_bundle_match_seq
+          {
+            \tl_set:Ne \l__tenkz_kernel_bundle_item_tl
+              { \seq_item:Nn \l__tenkz_kernel_bundle_match_seq {2} }
+            \tl_trim_spaces:N \l__tenkz_kernel_bundle_item_tl
+            \int_step_inline:nn
+              { \seq_item:Nn \l__tenkz_kernel_bundle_match_seq {3} }
+              {
+                \seq_put_right:NV \l__tenkz_kernel_bundle_seq
+                  \l__tenkz_kernel_bundle_item_tl
+              }
+          }
+          {
+            \seq_put_right:NV \l__tenkz_kernel_bundle_seq
+              \l__tenkz_kernel_bundle_item_tl
+          }
+      }
+    \seq_sort:Nn \l__tenkz_kernel_bundle_seq
+      {
+        \str_compare:eNeTF {##1} > {##2}
+          { \sort_return_swapped: } { \sort_return_same: }
+      }
+    \tl_set:Ne #2 { \seq_use:Nn \l__tenkz_kernel_bundle_seq { ,~ } }
+  }
+
 % ---------- the seven commands -----------------------------------------------------------
 
 % \tn[keys]{label}: an atom at the next chain cell or at=.
@@ -1763,6 +1802,7 @@
     \seq_gclear:N \g__tenkz_kernel_panel_kind_gseq
     \seq_gclear:N \g__tenkz_kernel_rel_gseq
     \clist_clear:N \l__tenkz_kernel_check_off_clist
+    \bool_set_false:N \l__tenkz_kernel_check_bundles_bool
     \prop_clear:N \l__tenkz_kernel_eq_policy_prop
     \prop_clear:N \l__tenkz_kernel_stage_prop
     \__tenkz_kernel_keys:nn { tenkz-kernel-picture } {#1}
@@ -1770,6 +1810,10 @@
     \prop_get:NnN \l__tenkz_kernel_stage_prop {check} \l__tenkz_kernel_scratch_tl
     \quark_if_no_value:NF \l__tenkz_kernel_scratch_tl
       {
+        \exp_args:NnV \regex_match:nnT
+          { modulo \s* = \s* bundles }
+          \l__tenkz_kernel_scratch_tl
+          { \bool_set_true:N \l__tenkz_kernel_check_bundles_bool }
         \exp_args:NnV \regex_extract_all:nnN
           { off \s* = \s* \{ \s* (\d+) \s* : \s* ([^\}]*) \} }
           \l__tenkz_kernel_scratch_tl
@@ -1827,6 +1871,13 @@
               { \seq_item:Nn \g__tenkz_kernel_panel_gseq {##1} }
             \tl_set:Ne \l_tmpb_tl
               { \seq_item:Nn \g__tenkz_kernel_panel_gseq { ##1 + 1 } }
+            \bool_if:NT \l__tenkz_kernel_check_bundles_bool
+              {
+                \__tenkz_kernel_signature_expand_bundles:NN
+                  \l_tmpa_tl \l_tmpa_tl
+                \__tenkz_kernel_signature_expand_bundles:NN
+                  \l_tmpb_tl \l_tmpb_tl
+              }
             \bool_set_false:N \l_tmpa_bool
             \str_if_eq:eeT
               { \seq_item:Nn \g__tenkz_kernel_panel_kind_gseq {##1} }
@@ -1856,6 +1907,8 @@
                     \__tenkz_kernel_event:n
                       {
                         check|relation=##1|result=equal
+                        \bool_if:NT \l__tenkz_kernel_check_bundles_bool
+                          { |modulo=bundles }
                         |signature=\tl_use:N \l_tmpa_tl
                       }
                   }
@@ -1863,6 +1916,8 @@
                     \__tenkz_kernel_event:n
                       {
                         check|relation=##1|result=mismatch
+                        \bool_if:NT \l__tenkz_kernel_check_bundles_bool
+                          { |modulo=bundles }
                         |left=\tl_use:N \l_tmpa_tl
                         |right=\tl_use:N \l_tmpb_tl
                       }

@@ -350,6 +350,31 @@ grep -Fq 'result=mismatch' "$WORK/n_bundle_signature.tnlog" || {
   exit 1
 }
 
+grep -Fq 'result=equal|modulo=bundles' "$WORK/r_bundle_modulo.tnlog" || {
+  echo "FAIL: bundle regrouping did not pass modulo bundles" >&2
+  exit 1
+}
+
+bundle_modulo_negative="$KERNEL/negative/n_bundle_modulo_mismatch.tex"
+if ( cd "$WORK" &&
+     TEXINPUTS="$REPO/tex/tenkz//:" \
+       timeout 120 xelatex -interaction=nonstopmode -halt-on-error \
+       "$bundle_modulo_negative" \
+       >"$WORK/n_bundle_modulo_mismatch.transcript" 2>&1 ); then
+  echo "FAIL: wrong bundle multiplicity passed modulo bundles" >&2
+  exit 1
+fi
+grep -Fq '[TKZ-EQ-SIGNATURE]' \
+  "$WORK/n_bundle_modulo_mismatch.transcript" || {
+  echo "FAIL: bundle modulo mismatch lacked TKZ-EQ-SIGNATURE" >&2
+  exit 1
+}
+grep -Fq 'result=mismatch|modulo=bundles' \
+  "$WORK/n_bundle_modulo_mismatch.tnlog" || {
+  echo "FAIL: bundle modulo mismatch was not recorded" >&2
+  exit 1
+}
+
 for arity_negative in n_missing_relation n_dangling_relation; do
   source="$KERNEL/negative/$arity_negative.tex"
   if ( cd "$WORK" &&
@@ -385,7 +410,7 @@ grep -Fq 'check|relation=3|result=off|reason=third' \
   echo "FAIL: the later equation opt-out was silently dropped" >&2
   exit 1
 }
-echo "PASS: thirty-four review regressions hold"
+echo "PASS: thirty-six review regressions hold"
 
 fail=0
 for pair in s1 s2 s3 s4 s5 s6 s7 s8; do
