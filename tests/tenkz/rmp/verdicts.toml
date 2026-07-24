@@ -2,7 +2,7 @@
 # Schema: scripts/tenkz_rmp.py (load_verdicts).  Any status may be
 # recorded, including failure; the check rejects lies, never gaps.
 schema_version = 1
-campaign_sha256 = "42dc917309993cce67409cbe7846508cc5dc0ce6836fa4d92cd44174e42305cb"
+campaign_sha256 = "2ddff10f7de9703dc9a8e3a9ae21f730286a176a3224c9ef965d1a10cd70d270"
 
 [[verdict]]
 id = "rmp-ii-peps-projection"
@@ -52,9 +52,9 @@ id = "rmp-ii-mpo-sheet"
 status = "cosmetic-gap"
 pairing = "unverified"
 defects = ["label-collision"]
-case_sha256 = "c3882e18c2eda6cc2b65170ab3609a56fe9c74db894266ba776af679b1fb55d8"
-reviewed = "2026-07-23"
-renderer = "maintainer-page-review-2026-07-23"
+case_sha256 = "02f15c77e9641b096ce8fae576f5eacb649ecd8188bb8bb7bf703b36c9a88fa8"
+reviewed = "2026-07-24"
+renderer = "source-split-page-review-2026-07-24"
 note = "wire label a overlaps ink"
 
 [[verdict]]
@@ -62,9 +62,9 @@ id = "rmp-ii-pepo-sheet"
 status = "faithful"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
-case_sha256 = "3af77fde1def2ea1dd5b575c13d5051c96b2e53bcb3a46b171188f7b11ca2520"
-reviewed = "2026-07-23"
-renderer = "maintainer-page-review-2026-07-23"
+case_sha256 = "ea74f5bc2d43c9f670366c484dacff041e1480a8493a4e8d2a334129173c225d"
+reviewed = "2026-07-24"
+renderer = "source-split-page-review-2026-07-24"
 second_viewer = "pairing-sweep-two-viewers-2026-07-23"
 note = "maintainer: OK"
 
@@ -513,9 +513,9 @@ pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
 defects = ["text-substitution"]
 missing = ["pulling-through", "rotated-action"]
-case_sha256 = "85cfefb033d051019d6ace7c242539b3199eb872a286e0be6a60d864f091c45b"
-reviewed = "2026-07-23"
-renderer = "maintainer-page-review-2026-07-23"
+case_sha256 = "55a3de450cf765a09bd2191833e63f42f749fe187ecbe360d310c38d928264a2"
+reviewed = "2026-07-24"
+renderer = "source-split-page-review-2026-07-24"
 note = "already judged"
 
 [[verdict]]
@@ -575,19 +575,19 @@ note = "slanted brick lattice + directed legs axis-aligned"
 id = "rmp-iii-a-ghz-tensor"
 status = "cosmetic-gap"
 pairing = "unverified"
-case_sha256 = "25e9eb9e6cb2dc636f04572fad6fa3146d7c63511d96559a479c09fe32087008"
-reviewed = "2026-07-23"
-renderer = "maintainer-page-review-2026-07-23"
+case_sha256 = "515a44835e0eee4b37dd4a1976f1a120188931c80c1785599848cb77ffcc878c"
+reviewed = "2026-07-24"
+renderer = "source-split-page-review-2026-07-24"
 note = "box-G vs copy-dot; diagonal leg angle"
 
 [[verdict]]
 id = "rmp-iii-a-hadamard"
 status = "cosmetic-gap"
 pairing = "unverified"
-case_sha256 = "4ade62aa7efa99c2d6b5b492641675d8d3be9fbf00e0149aa23c1692136c101d"
-reviewed = "2026-07-23"
-renderer = "maintainer-page-review-2026-07-23"
-note = "H matrix correct; shared author block (#4706)"
+case_sha256 = "ae3e69b02f579b42925b116697b02e2c5d0988578db1b0e41bb334576171b106"
+reviewed = "2026-07-24"
+renderer = "source-split-page-review-2026-07-24"
+note = "H matrix correct; author panel isolated from the GHZ copy tensor"
 
 [[verdict]]
 id = "rmp-iii-a-spt-mpo"
@@ -596,9 +596,9 @@ pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
 defects = ["placement-illegible"]
 missing = ["rotated-action", "strings"]
-case_sha256 = "85081030efcafb9593790da97409eef7b4b6b9799cc0c4ce2ca5916626830d1c"
-reviewed = "2026-07-23"
-renderer = "maintainer-page-review-2026-07-23"
+case_sha256 = "ce29de07fbd5fa8b0081946c35dd1503d495ec6ab0931f8b7165c4c194ed2156"
+reviewed = "2026-07-24"
+renderer = "source-split-page-review-2026-07-24"
 note = "45-degree double strand as axis-aligned stubs"
 
 [[verdict]]
@@ -1099,10 +1099,10 @@ status = "blocked"
 pairing = "unverified"
 defects = ["missing-element"]
 missing = ["equation-composition"]
-case_sha256 = "e786d70146e02303415e0309cbe33681332bce0a00584a2f1653130adeef3ce7"
-reviewed = "2026-07-23"
-renderer = "maintainer-page-review-2026-07-23"
-note = "(a)-(d) panels missing"
+case_sha256 = "b0cded7c1bee18eda923beceae990775328ef6f9e95c1e685715b91495bca607"
+reviewed = "2026-07-24"
+renderer = "source-split-page-review-2026-07-24"
+note = "archival panel (a) remains outside the canonical fine-graining case"
 
 [[verdict]]
 id = "rmp-workbench-ii-historical-composite"
@@ -1269,9 +1269,9 @@ note = "staggering and arrow legs flattened"
 id = "rmp-workbench-iii-ghz-up"
 status = "cosmetic-gap"
 pairing = "unverified"
-case_sha256 = "38c5f34dffa691a0b97ff194f5396a36a559240ba89653ec84489fb0b9f734a9"
-reviewed = "2026-07-23"
-renderer = "maintainer-page-review-2026-07-23"
+case_sha256 = "8fdf3445428c6dce5f324dde05f98f95c028559a7f7bf0998359552dc6dfe8db"
+reviewed = "2026-07-24"
+renderer = "source-split-page-review-2026-07-24"
 note = "glyph and leg geometry"
 
 [[verdict]]
@@ -1280,9 +1280,9 @@ status = "blocked"
 pairing = "unverified"
 defects = ["missing-element"]
 missing = ["pulling-through", "strings"]
-case_sha256 = "8d68e821ae5f684af03548f9c7afbff60dae2b7f255dc70a9ad2dc84457606af"
-reviewed = "2026-07-23"
-renderer = "maintainer-page-review-2026-07-23"
+case_sha256 = "b6d5abc6a5a3c80785845334c1ca0d477676acb881a154f83213cb74a79edd8b"
+reviewed = "2026-07-24"
+renderer = "source-split-page-review-2026-07-24"
 note = "g string, hatched legs, U_g node absent"
 
 [[verdict]]
