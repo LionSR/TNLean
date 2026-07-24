@@ -125,6 +125,10 @@ if grep -F '|cluster-of=C|' "$WORK/r_physical_policy.tnlog" |
   echo "FAIL: physical policy reached a cluster sub-atom" >&2
   exit 1
 fi
+grep -Fq '|weight=bundle=3' "$WORK/r_bundle_weight.tnlog" || {
+  echo "FAIL: bundle arity was not preserved in the wire record" >&2
+  exit 1
+}
 replaced_bond_count=$(
   grep -c '|name=bond-1-2-2-2|origin=grid|' "$WORK/r_cell_policy.tnlog" ||
     true
@@ -251,7 +255,60 @@ do
     exit 1
   }
 done
-echo "PASS: twenty-one review regressions hold"
+
+for contract_negative in \
+  n_one_end_wire \
+  n_malformed_via \
+  n_malformed_cross \
+  n_malformed_mark_target
+do
+  source="$KERNEL/negative/$contract_negative.tex"
+  if ( cd "$WORK" &&
+       TEXINPUTS="$REPO/tex/tenkz//:" \
+         timeout 120 xelatex -interaction=nonstopmode -halt-on-error \
+         "$source" >"$WORK/$contract_negative.transcript" 2>&1 ); then
+    echo "FAIL: $contract_negative was accepted" >&2
+    exit 1
+  fi
+  expected='[TKZ-LANG-ADDRESS]'
+  [ "$contract_negative" = n_one_end_wire ] &&
+    expected='[TKZ-LANG-WIRE-ARITY]'
+  grep -Fq "$expected" "$WORK/$contract_negative.transcript" || {
+    echo "FAIL: $contract_negative lacked $expected" >&2
+    exit 1
+  }
+done
+
+weight_negative="$KERNEL/negative/n_malformed_weight.tex"
+if ( cd "$WORK" &&
+     TEXINPUTS="$REPO/tex/tenkz//:" \
+       timeout 120 xelatex -interaction=nonstopmode -halt-on-error \
+       "$weight_negative" >"$WORK/n_malformed_weight.transcript" 2>&1 ); then
+  echo "FAIL: malformed bundle arity was accepted" >&2
+  exit 1
+fi
+grep -Fq '[TKZ-LANG-CHOICE]' "$WORK/n_malformed_weight.transcript" || {
+  echo "FAIL: malformed bundle arity lacked TKZ-LANG-CHOICE" >&2
+  exit 1
+}
+
+bundle_signature="$KERNEL/negative/n_bundle_signature.tex"
+if ( cd "$WORK" &&
+     TEXINPUTS="$REPO/tex/tenkz//:" \
+       timeout 120 xelatex -interaction=nonstopmode -halt-on-error \
+       "$bundle_signature" >"$WORK/n_bundle_signature.transcript" 2>&1 ); then
+  echo "FAIL: bundle arity was ignored by the signature audit" >&2
+  exit 1
+fi
+grep -Fq '[TKZ-EQ-SIGNATURE]' "$WORK/n_bundle_signature.transcript" || {
+  echo "FAIL: bundle signature mismatch lacked TKZ-EQ-SIGNATURE" >&2
+  exit 1
+}
+grep -Fq 'result=mismatch' "$WORK/n_bundle_signature.tnlog" || {
+  echo "FAIL: bundle signature mismatch was not recorded" >&2
+  exit 1
+}
+echo "PASS: twenty-eight review regressions hold"
 
 fail=0
 for pair in s1 s2 s3 s4 s5 s6 s7 s8; do
