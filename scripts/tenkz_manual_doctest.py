@@ -17,12 +17,6 @@ CHAPTERS = ROOT / "docs" / "tenkz" / "chapters2"
 REGISTRY = ROOT / "tex" / "tenkz" / "tenkz-language-registry.tex"
 REFERENCE = CHAPTERS / "generated-language-reference.tex"
 DISPLAY_ENVIRONMENTS = ("tnexample", "tnmultiples", "Verbatim")
-TEX_VERBATIM_MARKERS = (
-    r"\begin{tenkz",
-    r"\tnpic",
-    r"\tndeclareatom",
-    r"\usepackage{tenkz}",
-)
 
 
 @dataclass(frozen=True)
@@ -33,11 +27,11 @@ class Example:
     document: str
 
 
-def _skip_optional_argument(text: str, offset: int) -> int:
+def _read_optional_argument(text: str, offset: int) -> tuple[int, str | None]:
     while offset < len(text) and text[offset].isspace():
         offset += 1
     if offset == len(text) or text[offset] != "[":
-        return offset
+        return offset, None
 
     depth = 0
     for index in range(offset, len(text)):
@@ -46,11 +40,103 @@ def _skip_optional_argument(text: str, offset: int) -> int:
         elif text[index] == "]" and (index == 0 or text[index - 1] != "\\"):
             depth -= 1
             if depth == 0:
-                return index + 1
+                return index + 1, text[offset + 1:index]
     raise ValueError("unterminated optional environment argument")
 
 
-def _standalone_document(body: str) -> str:
+def _split_top_level(text: str) -> list[str]:
+    pieces: list[str] = []
+    start = 0
+    brace_depth = 0
+    bracket_depth = 0
+    for index, character in enumerate(text):
+        escaped = index > 0 and text[index - 1] == "\\"
+        if character == "{" and not escaped:
+            brace_depth += 1
+        elif character == "}" and not escaped:
+            brace_depth -= 1
+        elif character == "[" and not escaped:
+            bracket_depth += 1
+        elif character == "]" and not escaped:
+            bracket_depth -= 1
+        elif character == "," and brace_depth == 0 and bracket_depth == 0:
+            pieces.append(text[start:index].strip())
+            start = index + 1
+        if brace_depth < 0 or bracket_depth < 0:
+            raise ValueError("unbalanced option group")
+    if brace_depth or bracket_depth:
+        raise ValueError("unbalanced option group")
+    pieces.append(text[start:].strip())
+    return pieces
+
+
+def _read_braced(text: str, offset: int) -> tuple[int, str]:
+    while offset < len(text) and text[offset].isspace():
+        offset += 1
+    if offset == len(text) or text[offset] != "{":
+        raise ValueError("expected braced group")
+    depth = 0
+    for index in range(offset, len(text)):
+        escaped = index > 0 and text[index - 1] == "\\"
+        if text[index] == "{" and not escaped:
+            depth += 1
+        elif text[index] == "}" and not escaped:
+            depth -= 1
+            if depth == 0:
+                return index + 1, text[offset + 1:index]
+    raise ValueError("unterminated braced group")
+
+
+def _multiple_variants(options: str | None) -> list[tuple[str, str]]:
+    if options is None:
+        raise ValueError("tnmultiples requires a variants option")
+    variants_value = None
+    for option in _split_top_level(options):
+        key, separator, value = option.partition("=")
+        if separator and key.strip() == "variants":
+            variants_value = value.strip()
+            break
+    if variants_value is None:
+        raise ValueError("tnmultiples requires a variants option")
+    end, variants_group = _read_braced(variants_value, 0)
+    if variants_value[end:].strip():
+        raise ValueError("unexpected text after tnmultiples variants")
+
+    variants: list[tuple[str, str]] = []
+    for entry in _split_top_level(variants_group):
+        offset, label = _read_braced(entry, 0)
+        offset, style = _read_braced(entry, offset)
+        if entry[offset:].strip():
+            raise ValueError("unexpected text after tnmultiples variant")
+        variants.append((label, style))
+    if not variants:
+        raise ValueError("tnmultiples variants list is empty")
+    return variants
+
+
+def _registry_vocabulary() -> tuple[list[str], list[str]]:
+    registry = REGISTRY.read_text(encoding="utf-8")
+    commands = re.findall(
+        r"\\__tenkz_language_registry_command:nnnnn\s*\{([^{}]+)\}", registry
+    )
+    environments = re.findall(
+        r"\\__tenkz_language_registry_environment:nnnn\s*\{([^{}]+)\}", registry
+    )
+    return commands, environments
+
+
+def _is_tenkz_verbatim(body: str) -> bool:
+    commands, environments = _registry_vocabulary()
+    command_pattern = "|".join(re.escape(command) for command in commands)
+    environment_pattern = "|".join(re.escape(environment) for environment in environments)
+    return bool(
+        re.search(r"\\usepackage\s*\{tenkz\}", body)
+        or re.search(rf"\\(?:{command_pattern})(?![A-Za-z@:_])", body)
+        or re.search(rf"\\begin\{{(?:{environment_pattern})\}}", body)
+    )
+
+
+def _standalone_document(body: str, variant_style: str | None = None) -> str:
     preamble: list[str] = []
     content: list[str] = []
     for line in body.strip().splitlines():
@@ -60,6 +146,13 @@ def _standalone_document(body: str) -> str:
             content.append(line)
     if not any(r"\usepackage{tenkz}" in line for line in preamble):
         preamble.append(r"\usepackage{tenkz}")
+    if variant_style is not None:
+        preamble.extend(
+            [
+                rf"\pgfqkeys{{/tenkz/grid}}{{variant/.style={{{variant_style}}}}}",
+                rf"\pgfqkeys{{/tenkz/cell}}{{variant/.style={{{variant_style}}}}}",
+            ]
+        )
     return "\n".join(
         [
             r"\documentclass{article}",
@@ -83,7 +176,7 @@ def extract_displayed_examples(path: Path) -> list[Example]:
     ordinal = 0
     while match := begin_pattern.search(text, offset):
         environment = match.group(1)
-        body_start = _skip_optional_argument(text, match.end())
+        body_start, options = _read_optional_argument(text, match.end())
         end_marker = rf"\end{{{environment}}}"
         body_end = text.find(end_marker, body_start)
         if body_end < 0:
@@ -91,20 +184,25 @@ def extract_displayed_examples(path: Path) -> list[Example]:
             raise ValueError(f"{path}:{line}: missing {end_marker}")
         body = text[body_start:body_end].strip()
         offset = body_end + len(end_marker)
-        if environment == "Verbatim" and not any(
-            marker in body for marker in TEX_VERBATIM_MARKERS
-        ):
+        if environment == "Verbatim" and not _is_tenkz_verbatim(body):
             continue
-        ordinal += 1
         line = text.count("\n", 0, match.start()) + 1
-        examples.append(
-            Example(
-                label=f"manual-{path.stem}-{ordinal}",
-                source=path,
-                line=line,
-                document=_standalone_document(body),
-            )
+        variants = (
+            _multiple_variants(options)
+            if environment == "tnmultiples"
+            else [(None, None)]
         )
+        for variant_index, (_, variant_style) in enumerate(variants, start=1):
+            ordinal += 1
+            suffix = f"-variant-{variant_index}" if environment == "tnmultiples" else ""
+            examples.append(
+                Example(
+                    label=f"manual-{path.stem}-{ordinal}{suffix}",
+                    source=path,
+                    line=line,
+                    document=_standalone_document(body, variant_style),
+                )
+            )
     return examples
 
 
@@ -119,9 +217,7 @@ def displayed_examples() -> list[Example]:
 
 def reference_examples() -> list[Example]:
     registry = REGISTRY.read_text(encoding="utf-8")
-    commands = re.findall(
-        r"\\__tenkz_language_registry_command:nnnnn\s*\{([^{}]+)\}", registry
-    )
+    commands, _ = _registry_vocabulary()
     mappings = re.findall(
         r"\\__tenkz_language_registry_example:nnn\s*"
         r"\{([^{}]+)\}\s*\{([^{}]+)\}",
@@ -142,6 +238,8 @@ def reference_examples() -> list[Example]:
         REFERENCE.read_text(encoding="utf-8"),
     )
     registry_paths = [mapping_by_command[command] for command in commands]
+    if len(set(registry_paths)) != len(registry_paths):
+        raise ValueError(f"{REGISTRY}: command example paths must be distinct")
     if generated_paths != registry_paths:
         raise ValueError(
             f"{REFERENCE}: generated example list differs from the registry"
@@ -153,12 +251,18 @@ def reference_examples() -> list[Example]:
         source = ROOT / relative
         if not source.is_file():
             raise ValueError(f"{REGISTRY}: example for \\{command} is missing: {relative}")
+        document = source.read_text(encoding="utf-8")
+        uncommented = re.sub(r"(?<!\\)%.*", "", document)
+        if not re.search(rf"\\{re.escape(command)}(?![A-Za-z@:_])", uncommented):
+            raise ValueError(
+                f"{source}: example mapped to \\{command} does not invoke that command"
+            )
         examples.append(
             Example(
                 label=f"reference-{command}",
                 source=source,
                 line=1,
-                document=source.read_text(encoding="utf-8"),
+                document=document,
             )
         )
     return examples

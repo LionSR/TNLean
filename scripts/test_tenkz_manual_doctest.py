@@ -32,16 +32,26 @@ def main() -> int:
 
     fixture = r"""
 \begin{tnmultiples}[
-  variants={a={title={A [nested] title}},b={title=B}}]
-\begin{tenkz} \tn{A} \end{tenkz}
+  caption={A [nested] title},
+  variants={{dot}{dot},{box}{box}}]
+\begin{tenkz} \tn[variant]{A} \end{tenkz}
 \end{tnmultiples}
+\begin{Verbatim}
+\tntree{((ab)c)}
+\end{Verbatim}
 """
     with tempfile.TemporaryDirectory(prefix="tenkz-doctest-unit-") as tmp:
         path = Path(tmp) / "fixture.tex"
         path.write_text(fixture, encoding="utf-8")
         extracted = DOCTEST.extract_displayed_examples(path)
-    if len(extracted) != 1 or r"\begin{tenkz}" not in extracted[0].document:
+    if len(extracted) != 3 or any(
+        r"\begin{tenkz}" not in example.document for example in extracted[:2]
+    ):
         raise AssertionError("nested tnmultiple options confused body extraction")
+    if not all("variant/.style" in example.document for example in extracted[:2]):
+        raise AssertionError("tnmultiples variants were not installed independently")
+    if r"\tntree" not in extracted[2].document:
+        raise AssertionError("a registry command in Verbatim was not recognized as TeX")
 
     print("PASS: tenkz manual doctest extraction and reference coverage")
     return 0
