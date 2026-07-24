@@ -25,7 +25,7 @@
     $V\in\MN{D,k}(\C)$,
     \begin{align}
         R_{VV^\dagger}\tau R_{VV^\dagger}^\dagger
-        &=R_V^\dagger(R_V\tau R_V^\dagger)R_V.
+         & =R_V^\dagger(R_V\tau R_V^\dagger)R_V.
         \label{eq:schwarz_factorized_choi_sandwich}
     \end{align}
 \end{lemma}
@@ -53,7 +53,7 @@
     \leanok
     By (\ref{eq:schwarz_factorized_choi_sandwich}),
     $R_{VV^\dagger}\tau R_{VV^\dagger}^\dagger
-    =R_V^\dagger(R_V\tau R_V^\dagger)R_V$.
+        =R_V^\dagger(R_V\tau R_V^\dagger)R_V$.
     The factor $R_V\tau R_V^\dagger$ is positive by
     Theorem~\ref{thm:k_positive_right_tensor_choi_sandwiches}, and positive
     semidefiniteness is preserved under compression by $R_V$.
@@ -153,149 +153,10 @@
     $(A,B)\mapsto \tr(AB)$.
 \end{definition}
 
-\begin{theorem}[Trace-pairing adjoint identity]\label{thm:trace_pairing_adjoint_identity}
-    \lean{Matrix.trace_traceAdjointMap_mul}
-    \leanok
-    \uses{def:trace_pairing_adjoint}
-    For every linear map $E : \MN{D} \to \MN{D'}$, every $\rho \in \MN{D'}$,
-    and every $X \in \MN{D}$, one has
-    \begin{align}
-        \tr(E^*(\rho)X)
-        &=\tr(\rho E(X)).
-        \label{eq:schwarz_trace_adjoint_pairing}
-    \end{align}
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    Write $X=\sum_{i,j}X_{ij}e_{ij}$ in the standard matrix units and use
-    linearity in $X$. For $X=e_{ij}$ one has
-    $\tr(E^*(\rho)e_{ij})=(E^*(\rho))_{ji}$, while the definition of $E^*$
-    gives $(E^*(\rho))_{ji}=\tr(\rho E(e_{ij}))$.
-\end{proof}
-
-\begin{theorem}[Trace-pairing adjoint is involutive]\label{thm:trace_pairing_adjoint_involutive}
-    \lean{Matrix.traceAdjointMap_traceAdjointMap}
-    \leanok
-    \uses{def:trace_pairing_adjoint, thm:trace_nondeg}
-    For every linear map $E : \MN{D} \to \MN{D'}$, the trace-pairing adjoint
-    of $E^*$ is $E$.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    Fix $X\in\MN{D}$ and an arbitrary matrix $N\in\MN{D'}$. Applying
-    (\ref{eq:schwarz_trace_adjoint_pairing}) first to
-    $E^* : \MN{D'} \to \MN{D}$ and then to $E$ gives
-    \begin{align}
-        \tr((E^*)^*(X)N)
-        &=\tr(XE^*(N))
-        =\tr(E^*(N)X)
-        =\tr(NE(X))
-        =\tr(E(X)N).
-        \notag
-    \end{align}
-    Both $(E^*)^*(X)$ and $E(X)$ lie in $\MN{D'}$, so, since this holds for
-    every $N\in\MN{D'}$, nondegeneracy of the trace pairing on $\MN{D'}$
-    gives $(E^*)^*=E$.
-\end{proof}
-
-\begin{theorem}[Self-duality of the positive semidefinite cone]
-    \label{thm:psd_trace_pairing_self_dual}
-    \lean{Matrix.PosSemidef.of_forall_trace_mul_nonneg}
-    \leanok
-    Let $A \in \MN{D}$ be Hermitian. If $\tr(AB)\geq 0$ for every
-    positive semidefinite matrix $B$, then $A\geq 0$.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    Test the hypothesis on rank-one positive semidefinite matrices
-    $B=xx^\dagger$. The identity $\tr(Axx^\dagger)=x^\dagger A x$ and the
-    hypothesis give $x^\dagger A x\geq 0$ for every vector $x$, so the
-    Hermitian matrix $A$ is positive semidefinite.
-\end{proof}
-
-\begin{theorem}[Trace-pairing adjoint of a positive map]\label{thm:trace_pairing_adjoint_positive}
-    \lean{IsPositiveMap.traceAdjointMap}
-    \leanok
-    \uses{def:trace_pairing_adjoint, thm:psd_trace_pairing_self_dual}
-    If $E : \MN{D}\to\MN{D}$ is positive, then its trace-pairing adjoint $E^*$
-    is positive.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    Let $\rho\geq 0$. First $E^*(\rho)$ is Hermitian. Indeed, positivity of
-    $E$ gives $E(A^\dagger)=E(A)^\dagger$, and hence, for matrix units
-    $e_{ij}$,
-    \begin{align}
-        \overline{\tr(\rho E(e_{ij}))}
-        &=\tr(E(e_{ij})^\dagger\rho)
-        =\tr(E(e_{ji})\rho)
-        =\tr(\rho E(e_{ji})).
-        \notag
-    \end{align}
-    For every $B\geq 0$, (\ref{eq:schwarz_trace_adjoint_pairing}) gives
-    $\tr(E^*(\rho)B)=\tr(\rho E(B))$.
-    Since $E(B)\geq 0$, the right-hand side is non-negative by positivity of
-    the trace product of two positive semidefinite matrices. Self-duality of
-    the positive semidefinite cone therefore gives $E^*(\rho)\geq 0$.
-\end{proof}
-
-\begin{theorem}[Density representation of positive matrix functionals]
-    \label{thm:positive_functional_density_representation}
-    \lean{Matrix.exists_density_of_positive_functional}
-    \leanok
-    Let $f : \MN{D} \to \C$ be a complex-linear functional, where $D>0$. If
-    $f(X) \geq 0$ for every $X \geq 0$ and $f(\Id)=1$, then there is a density
-    matrix $\rho \in \MN{D}$ such that
-    $f(X) = \tr(\rho X)$ for every $X \in \MN{D}$.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    \uses{thm:trace_pairing_adjoint_identity, thm:trace_pairing_adjoint_positive}
-    Define $F : \MN{D} \to \MN{D}$ by $F(X) = f(X)\Id$. For $X \geq 0$ one has
-    $f(X) \geq 0$, so $F(X) = f(X)\Id \geq 0$ and $F$ is positive.
-    Set $\sigma = D^{-1}\Id$ and $\rho = F^*(\sigma)$. Positivity of the
-    trace-pairing adjoint gives $\rho \geq 0$, while
-    (\ref{eq:schwarz_trace_adjoint_pairing}) gives
-    \begin{align}
-        \tr(\rho X)
-        &=\tr(\sigma F(X))
-        =f(X).
-        \notag
-    \end{align}
-    Taking $X = \Id$ yields $\tr(\rho) = 1$.
-\end{proof}
-
-\begin{lemma}[Rank-one domination]
-    \label{lem:posSemidef_rankone_domination}
-    \lean{Matrix.PosSemidef.eq_nonneg_smul_vecMulVec_of_le_smul_vecMulVec}
-    \leanok
-    Let $A\in\MN{D}$ be positive semidefinite, let $c\in\C$, and let
-    $\psi\in\C^D$. If $A\leq c\ketbra{\psi}{\psi}$, then there is a
-    non-negative scalar $a$ such that $A=a\ketbra{\psi}{\psi}$.
-\end{lemma}
-
-\begin{proof}
-    \leanok
-    The assertion is immediate when $\psi=0$. Otherwise set
-    $s=\langle\psi,\psi\rangle$, $P=\ketbra{\psi}{\psi}$, and $Q=s^{-1}P$.
-    Then $Q$ is the orthogonal projection onto $\C\psi$. Write
-    $B=cP-A\geq0$. Since $A+B=cP$ vanishes on the kernel of $Q$, positivity
-    implies $A(\Id-Q)=0$.
-    Taking adjoints gives $(\Id-Q)A=0$, and therefore $A=QAQ$. Finally,
-    \begin{align}
-        PAP
-        &=\langle\psi,A\psi\rangle P, \notag\\
-        A
-        &=s^{-2}\langle\psi,A\psi\rangle P.
-        \notag
-    \end{align}
-    The coefficient is non-negative because $A\geq0$ and $s>0$.
-\end{proof}
+The trace-duality identities and positivity results behind the applications
+below are proved in Section~\ref{sec:app_schwarz_trace_order}. The density and
+rank-one support arguments for the retraction theorem are collected in
+Section~\ref{sec:app_schwarz_retractions}.
 
 % Scope restriction documented in
 % docs/paper-gaps/wolf_prop1_5_one_factor_scope.tex.
@@ -310,7 +171,7 @@
     a density matrix $\rho\in\MN{m}$ such that, for every $A\in\MN{md}$,
     \begin{align}
         E(A)
-        &=\Id_m\otimes
+         & =\Id_m\otimes
         \tr_m\!\left((\rho\otimes\Id_d)A\right).
         \label{eq:schwarz_positive_retraction_factor}
     \end{align}
@@ -321,19 +182,20 @@
 \begin{proof}
     \leanok
     \uses{lem:posSemidef_rankone_domination,
-      thm:positive_functional_density_representation,
-      thm:rankone_ray_scalar_rigidity}
+        thm:positive_functional_density_representation,
+        thm:rankone_ray_scalar_rigidity}
     Let $R(A)$ be the right tensor factor of $E(A)$, so that
     $E(A)=\Id_m\otimes R(A)$. For $Y\geq0$ and
     $P_\psi=\ketbra{\psi}{\psi}$, the inequality
     $Y\leq\tr(Y)\Id_m$ and positivity give
     \begin{align}
         0
-        &\leq R(Y\otimes P_\psi)
+         & \leq R(Y\otimes P_\psi)
         \leq\tr(Y)P_\psi.
         \notag
     \end{align}
-    Hence, for each $v\in\C^d$, there is a scalar $c_v$ such that
+    By Lemma~\ref{lem:posSemidef_rankone_domination}, for each
+    $v\in\C^d$ there is a scalar $c_v$ such that
     $R(Y\otimes P_v)=c_vP_v$.
     By Theorem~\ref{thm:rankone_ray_scalar_rigidity}, applied to the map
     $X\mapsto R(Y\otimes X)$, there is a scalar $c_Y$ such that
@@ -343,14 +205,14 @@
     $f(Y)=R(Y\otimes P_0)_{00}$. Rank-one polarization gives
     $R(Y\otimes X)=f(Y)X$ for all $Y\in\MN{m}$ and $X\in\MN{d}$.
     Positivity of $R$ gives $f(Y)\geq0$ when $Y\geq0$, and the retraction
-    property gives $f(\Id_m)=1$. The density representation of positive
-    matrix functionals therefore supplies a density matrix $\rho$ satisfying
-    $f(Y)=\tr(\rho Y)$.
+    property gives $f(\Id_m)=1$.
+    Theorem~\ref{thm:positive_functional_density_representation} therefore
+    supplies a density matrix $\rho$ satisfying $f(Y)=\tr(\rho Y)$.
 
     Finally, on simple tensors,
     \begin{align}
         \tr_m\!\left((\rho\otimes\Id_d)(Y\otimes X)\right)
-        &=\tr(\rho Y)X
+         & =\tr(\rho Y)X
         =R(Y\otimes X).
         \notag
     \end{align}
@@ -372,14 +234,14 @@
     $\rho_k\in\MN{m_k}$ such that
     \begin{align}
         U^*SU
-        &=\bigoplus_k \Id_{m_k}\otimes\MN{d_k},
+         & =\bigoplus_k \Id_{m_k}\otimes\MN{d_k},
         \label{eq:schwarz_star_algebra_blocks}
     \end{align}
     and, for every $A\in\MN{D}$,
     \begin{align}
         E(A)
-        &=U\left(\bigoplus_k \Id_{m_k}\otimes
-        \tr_{m_k}\!\left((\rho_k\otimes\Id_{d_k})(U^*AU)_{kk}\right)\right)U^*.
+         & =U\left(\bigoplus_k \Id_{m_k}\otimes
+             \tr_{m_k}\!\left((\rho_k\otimes\Id_{d_k})(U^*AU)_{kk}\right)\right)U^*.
         \label{eq:schwarz_star_algebra_retraction}
     \end{align}
     Equivalently, cyclicity of the partial trace permits the factor
@@ -390,7 +252,7 @@
 \begin{proof}
     \leanok
     \uses{thm:positive_retraction_one_matrix_factor,
-      thm:starSubalgebra_unitary_block_diagonal_iff}
+        thm:starSubalgebra_unitary_block_diagonal_iff}
     Conjugate by $U$ and use (\ref{eq:schwarz_star_algebra_blocks}) to
     identify the ambient space with
     $\bigoplus_k\C^{m_k}\otimes\C^{d_k}$. Let $P_k$ be the central projection
@@ -405,24 +267,9 @@
     partial trace gives
     \begin{align}
         \tr_{m_k}((\rho_k\otimes\Id)A_{kk})
-        &=\tr_{m_k}(A_{kk}(\rho_k\otimes\Id)).
+         & =\tr_{m_k}(A_{kk}(\rho_k\otimes\Id)).
         \notag
     \end{align}
-\end{proof}
-
-\begin{theorem}[Trace-pairing adjoints preserve positivity exactly]\label{thm:trace_pairing_adjoint_positive_iff}
-    \lean{isPositiveMap_traceAdjointMap_iff}
-    \leanok
-    \uses{thm:trace_pairing_adjoint_positive, thm:trace_pairing_adjoint_involutive}
-    A linear map is positive if and only if its trace-pairing adjoint is
-    positive.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    One direction is Theorem~\ref{thm:trace_pairing_adjoint_positive}. The
-    other follows by applying the same theorem to $E^*$ and using
-    Theorem~\ref{thm:trace_pairing_adjoint_involutive}.
 \end{proof}
 
 \begin{theorem}[Trace-pairing adjoint of an ampliation]
@@ -435,7 +282,7 @@
     commutes with ampliation:
     \begin{align}
         (E^{(k)})^*
-        &=(E^*)^{(k)}.
+         & =(E^*)^{(k)}.
         \label{eq:schwarz_trace_adjoint_ampliation}
     \end{align}
 \end{theorem}
@@ -447,7 +294,7 @@
     (\ref{eq:schwarz_trace_adjoint_pairing}) gives
     \begin{align}
         \tr((E^*)^{(k)}(\rho)X)
-        &=\sum_{p,q}\tr(E^*(\rho_{pq})X_{qp})
+         & =\sum_{p,q}\tr(E^*(\rho_{pq})X_{qp})
         =\sum_{p,q}\tr(\rho_{pq}E(X_{qp}))
         =\tr(\rho E^{(k)}(X)).
         \notag
@@ -608,20 +455,6 @@
     Trace preservation gives $\tr(E(X^\dagger X)) = \tr(X^\dagger X)$.
 \end{proof}
 
-\begin{lemma}[Trace pairing for Kraus map and adjoint map]\label{lem:trace_mul_map_eq_trace_adjointMap_mul}
-    \lean{Kraus.trace_mul_map_eq_trace_adjointMap_mul}
-    \leanok
-    \uses{def:kraus_map, def:kraus_adjoint_map}
-    For all $X, Y \in \MN{D}$,
-    $\tr\!(X\,E(Y)) = \tr\!(E^*(X)\,Y)$.
-\end{lemma}
-
-\begin{lemma}[Positive-definite trace test]\label{lem:posSemidef_eq_zero_of_posDef_trace_mul_eq_zero}
-    \lean{Kraus.posSemidef_eq_zero_of_posDef_trace_mul_eq_zero}
-    \leanok
-    If $A > 0$, $X \ge 0$, and $\tr(A X) = 0$, then $X = 0$.
-\end{lemma}
-
 \begin{theorem}[Fixed-point peripheral eigenvectors satisfy KS equality]
     \label{thm:ks_equality_of_peripheral_eigenvector_of_fixedPoint}
     \lean{Kraus.ks_equality_of_peripheral_eigenvector_of_fixedPoint}
@@ -632,3 +465,30 @@
     definite fixed point $\rho > 0$. If $E(X) = \mu X$ with $|\mu| = 1$, then
     $E(X^\dagger X) = E(X)^\dagger E(X)$.
 \end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:kadison_schwarz,
+        lem:trace_mul_map_eq_trace_adjointMap_mul,
+        lem:posSemidef_eq_zero_of_posDef_trace_mul_eq_zero}
+    Define the Kadison--Schwarz gap
+    $G=E(X^\dagger X)-E(X)^\dagger E(X)$. By
+    Theorem~\ref{thm:kadison_schwarz}, $G\succeq0$. The adjointness identity of
+    Lemma~\ref{lem:trace_mul_map_eq_trace_adjointMap_mul}, the fixed-point
+    equation $E^*(\rho)=\rho$, the eigenvalue equation $E(X)=\mu X$, and
+    $|\mu|=1$ give
+    \begin{align}
+        \tr(\rho G)
+         & =\tr(\rho E(X^\dagger X))
+        -\tr(\rho E(X)^\dagger E(X)) \notag     \\
+         & =\tr(E^*(\rho)X^\dagger X)
+        -\tr(\rho(\mu X)^\dagger(\mu X)) \notag \\
+         & =\tr(\rho X^\dagger X)
+        -|\mu|^2\tr(\rho X^\dagger X)
+        =0.
+        \notag
+    \end{align}
+    Since $\rho>0$ and $G\succeq0$,
+    Lemma~\ref{lem:posSemidef_eq_zero_of_posDef_trace_mul_eq_zero} yields
+    $G=0$, which is the asserted equality.
+\end{proof}
