@@ -1443,11 +1443,41 @@
     \tenkzl_guard_window:
     \tenkzl_frame_setup:
     \dim_set:Nn \l__tenkzl_m_dim { \tenkz@r@latticemargin\tenkz@pitch }
+    % The lattice writes its record layer once the window, sheets, and
+    % frame are final: the picture and frame records plus one atom record
+    % per surviving site, in draw order (sheet-major, bottom sheet first).
+    % Edge and region records land with the corridor follow-up; until the
+    % lattice renderer consumes records, this store changes no emission.
+    \__tenkz_model_reset:
+    \__tenkz_model_record_picture:n { lang={lattice} }
+    \__tenkz_model_record_frame:e
+      { map={lattice},
+        rows={\int_use:N \l__tenkzl_nrows_int},
+        cols={\int_use:N \l__tenkzl_ncols_int},
+        sheets={\int_use:N \l__tenkzl_sheets_int} }
+    \tenkzl_model_record_sites:
+    \__tenkz_model_validate:
     \begin{tikzpicture}[tenkz~every~picture]
       \pgfsetlayers{background,main,tenkz-lattice-labels}
       \tenkzl_draw_all:
     \end{tikzpicture}
     \group_end:
+  }
+
+% site atom records, sheet-major in the sheet passes' bottom-up order
+\cs_new_protected:Npn \tenkzl_model_record_sites:
+  {
+    \int_step_inline:nnn {0} { \l__tenkzl_sheets_int - 1 }
+      {
+        \tenkzl_select_sheet:n {##1}
+        \tenkzl_foreach_surviving:N \tenkzl_model_record_site:nn
+      }
+  }
+\cs_new_protected:Npn \tenkzl_model_record_site:nn #1#2
+  {
+    \__tenkz_model_record_atom:e
+      { kind={site},
+        cell={#1-#2-\int_use:N \l__tenkzl_sheet_int} }
   }
 
 % one full genre pass over the CURRENT sheet (selected by
