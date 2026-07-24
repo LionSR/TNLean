@@ -66,7 +66,7 @@ def main() -> int:
         raise SystemExit("no rmp-w2 target rows found")
 
     seen_ids: set[str] = set()
-    proposed_starts: set[tuple[str, int]] = set()
+    proposed_ranges: set[tuple[str, int, int]] = set()
     proposed: Counter[str] = Counter()
     allowed = {capability for target in manifest["target"] for capability in target["capabilities"]}
     verdicts = tomllib.loads(
@@ -86,7 +86,10 @@ def main() -> int:
 
         source = SECTIONS[row["section"]]
         start, end = int(row["start"]), int(row["end"])
-        proposed_starts.add((source, start))
+        proposed_range = (source, start, end)
+        if proposed_range in proposed_ranges:
+            raise SystemExit(f"duplicate target range: {source} {start}-{end}")
+        proposed_ranges.add(proposed_range)
         source_path = args.source_root / source
         line_count = len(source_path.read_text(encoding="utf-8").splitlines())
         if not 1 <= start <= end <= line_count:
@@ -109,7 +112,7 @@ def main() -> int:
             raise SystemExit(f"{target_id}: unknown capabilities: {', '.join(unknown)}")
         proposed.update(capabilities)
 
-    unowned_labels: set[tuple[str, int]] = set()
+    unowned_blocks: set[tuple[str, int, int]] = set()
     for source in SECTIONS.values():
         source_path = args.source_root / source
         lines = source_path.read_text(encoding="utf-8").splitlines()
@@ -136,12 +139,18 @@ def main() -> int:
                 if index + 1 < len(label_groups)
                 else len(lines)
             )
+            for line_number in range(block_start + 1, block_end + 1):
+                if lines[line_number - 1].strip().startswith(
+                    ("\\end{tikzpicture}", "\\end{document}")
+                ):
+                    block_end = line_number - 1
+                    break
             if not any(
                 block_start <= end and start <= block_end
                 for start, end, _ in owned.get(source, [])
             ):
-                unowned_labels.add((source, block_start))
-    if proposed_starts != unowned_labels:
+                unowned_blocks.add((source, block_start, block_end))
+    if proposed_ranges != unowned_blocks:
         raise SystemExit("proposed targets do not exhaust the unowned labelled blocks")
 
     reported = {}
