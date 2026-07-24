@@ -255,8 +255,7 @@
 
 \begin{proof}
     \leanok
-    \uses{thm:trace_pairing_adjoint_identity, thm:trace_pairing_adjoint_positive,
-      def:mpdo_faithful_uniform_density, thm:mpdo_faithful_uniform_density}
+    \uses{thm:trace_pairing_adjoint_identity, thm:trace_pairing_adjoint_positive}
     Define $F : \MN{D} \to \MN{D}$ by $F(X) = f(X)\Id$. For $X \geq 0$ one has
     $f(X) \geq 0$, so $F(X) = f(X)\Id \geq 0$ and $F$ is positive.
     Set $\sigma = D^{-1}\Id$ and $\rho = F^*(\sigma)$. Positivity of the
@@ -336,7 +335,7 @@
     \end{align}
     Hence, for each $v\in\C^d$, there is a scalar $c_v$ such that
     $R(Y\otimes P_v)=c_vP_v$.
-    By rank-one ray scalar rigidity, applied to the map
+    By Theorem~\ref{thm:rankone_ray_scalar_rigidity}, applied to the map
     $X\mapsto R(Y\otimes X)$, there is a scalar $c_Y$ such that
     $R(Y\otimes X)=c_YX$ for every $X\in\MN{d}$.
 
@@ -493,6 +492,7 @@
 \end{proof}
 
 \begin{theorem}[Completely positive maps are $k$-positive]
+    \label{thm:cp_implies_k_positive}
     \lean{IsCPMap.isNPositiveMap}
     \leanok
     \uses{def:cp_map}

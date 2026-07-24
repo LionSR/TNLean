@@ -15,6 +15,44 @@
     A linear map is \emph{two-positive} if it is $2$-positive.
 \end{definition}
 
+\begin{theorem}[Completely positive implies two-positive]
+    \label{thm:cp_implies_two_positive}
+    \lean{IsCPMap.is2PositiveMap}
+    \leanok
+    \uses{def:cp_map}
+    Every completely positive map is two-positive.
+\end{theorem}
+
+\begin{theorem}[Two-positive implies positive]
+    \label{thm:two_positive_implies_positive}
+    \lean{Is2PositiveMap.isPositiveMap}
+    \leanok
+    Every two-positive map is positive.
+\end{theorem}
+
+\begin{definition}[Unital linear map]
+    \lean{KadisonSchwarz.IsUnitalMap}
+    \leanok
+    A linear map $E$ is unital if $E(\Id)=\Id$.
+\end{definition}
+
+\begin{theorem}[Kadison--Schwarz for unital two-positive maps]\label{thm:kadison_schwarz_2positive}
+    \lean{kadison_schwarz_2positive}
+    \leanok
+    \uses{thm:kadison_schwarz}
+    If $E$ is unital and two-positive, then for all $X\in\MN{D}$,
+    $E(X^\dagger X)\ge E(X)^\dagger E(X)$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Form the $2\times 2$ block matrix
+    $(\begin{smallmatrix} \Id & X \\ X^\dagger & X^\dagger X \end{smallmatrix})\ge0$.
+    Apply $E\otimes\id_{2}$ (positive by $2$-positivity) and read off the
+    $(2,2)$-block Schur complement:
+    $E(X^\dagger X)-E(X)^\dagger E(X)\ge0$.
+\end{proof}
+
 \begin{definition}[Blockwise ampliation]\label{def:blockwise_ampliation}
     \lean{nPositiveAmpliation}
     \leanok

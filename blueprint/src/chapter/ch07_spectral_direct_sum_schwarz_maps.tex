@@ -53,7 +53,10 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:kadison_schwarz_2positive}
+    \uses{thm:cp_implies_k_positive,
+        thm:k_positive_trace_pairing_adjoint,
+        thm:two_positive_implies_positive,
+        thm:kadison_schwarz_2positive}
     Since $\pi_{\mathcal B}\iota_{\mathcal B}=\id_{\mathcal B}$,
     \begin{align}
         \widehat S\,\widehat T
@@ -146,12 +149,37 @@
     Schwarz condition to exclude transposition.
 \end{proof}
 
+\begin{theorem}[Summand matching and dimension preservation]\label{thm:dim_preserved}
+    \lean{Matrix.exists_blockEquiv_dim_eq_of_starAlgEquiv_pi_matrix}
+    \lean{MPSTensor.dim_preserved}
+    \leanok
+    Let $\{D_i\}_{i\in I}$ and $\{E_j\}_{j\in J}$ be positive integers.
+    A star-algebra isomorphism
+    \begin{align}
+        \prod_{i\in I} M_{D_i}(\C)
+        &\simeq \prod_{j\in J} M_{E_j}(\C)
+        \notag
+    \end{align}
+    determines an equivalence $\sigma:I\simeq J$ such that the isomorphism
+    carries the $i$-th block ideal onto the $\sigma(i)$-th block ideal and
+    $D_i=E_{\sigma(i)}$ for every $i\in I$. For an automorphism of one product,
+    the induced permutation preserves every block ideal and its dimension.
+\end{theorem}
+
+\begin{proof}\leanok
+    A star-algebra isomorphism permutes the minimal nonzero central
+    idempotents, inducing an equivalence $\sigma:I\simeq J$ between the
+    summands. Its restriction to matched ideals is a complex-linear bijection
+    between full matrix algebras. Comparing complex dimensions gives
+    $D_i^2=E_{\sigma(i)}^2$, and positivity of the block dimensions gives
+    $D_i=E_{\sigma(i)}$.
+\end{proof}
+
 \begin{theorem}[Simple-summand matching for inverse CPTP maps]%
     \label{thm:direct_sum_inverse_cptp_block_matching}
     \lean{Matrix.exists_blockEquiv_dim_eq_of_mutual_inverse_kraus_direct_sum_maps}
     \leanok
-    \uses{thm:direct_sum_inverse_cptp_star_equiv,
-        thm:dim_preserved}
+    \uses{thm:direct_sum_inverse_cptp_star_equiv, thm:dim_preserved}
     Let $\{D_i\}_{i\in I}$ and $\{E_j\}_{j\in J}$ be positive integers, and
     set
     \begin{align}
@@ -184,13 +212,11 @@
 
 \begin{proof}
     \leanok
-    \uses{thm:direct_sum_inverse_cptp_star_equiv,
-        thm:dim_preserved}
-    By Theorem~\ref{thm:direct_sum_inverse_cptp_star_equiv}, the rectangular
-    trace adjoints determine a star-algebra isomorphism between
-    $\mathcal A$ and $\mathcal B$. Theorem~\ref{thm:dim_preserved} applied to
-    this isomorphism gives the equivalence~$\sigma$, proves that it carries
-    $I_i$ onto $J_{\sigma(i)}$, and gives
+    \uses{thm:direct_sum_inverse_cptp_star_equiv, thm:dim_preserved}
+    Theorem~\ref{thm:direct_sum_inverse_cptp_star_equiv} gives the
+    star-algebra isomorphism $\Phi:\mathcal A\simeq\mathcal B$. Applying
+    Theorem~\ref{thm:dim_preserved} to $\Phi$ gives the equivalence $\sigma$,
+    the matched block ideals, and the dimension equalities in
     (\ref{eq:spectral_ds_block_matching}).
 \end{proof}
 
@@ -240,9 +266,8 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:unitary_skolem_noether_matrix,
-        thm:direct_sum_inverse_cptp_star_equiv,
-        thm:dim_preserved}
+    \uses{thm:unitary_skolem_noether_matrix, thm:dim_preserved,
+        thm:direct_sum_inverse_cptp_star_equiv}
     The restriction of $\Phi$ to a matched block is a star-algebra
     isomorphism. After reindexing by $D_i=E_{\sigma(i)}$, it is an
     automorphism of a full complex matrix algebra. Skolem--Noether writes
