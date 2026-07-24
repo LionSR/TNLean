@@ -395,31 +395,6 @@ Throughout this section, assume $D_k \ge 1$ for every block~$k$.
     gives~$\sigma$.
 \end{proof}
 
-\begin{theorem}[Summand matching and dimension preservation]\label{thm:dim_preserved}
-    \lean{Matrix.exists_blockEquiv_dim_eq_of_starAlgEquiv_pi_matrix}
-    \lean{MPSTensor.dim_preserved}
-    \leanok
-    Let $\{D_i\}_{i\in I}$ and $\{E_j\}_{j\in J}$ be positive integers.
-    A star-algebra isomorphism
-    \begin{align}
-        \prod_{i\in I} M_{D_i}(\C)
-        &\simeq \prod_{j\in J} M_{E_j}(\C)
-        \notag
-    \end{align}
-    determines an equivalence $\sigma:I\simeq J$ such that the isomorphism
-    carries the $i$-th block ideal onto the $\sigma(i)$-th block ideal and
-    $D_i=E_{\sigma(i)}$ for every $i\in I$. For an automorphism of one product,
-    the induced permutation preserves every block ideal and its dimension.
-\end{theorem}
-
-\begin{proof}\leanok\uses{thm:ring_perm, thm:component_map_bijective}
-    The isomorphism carries the $i$-th block ideal onto the
-    $\sigma(i)$-th block ideal. Its restriction gives a bijective complex
-    linear map from $M_{D_i}(\C)$ to $M_{E_{\sigma(i)}}(\C)$. Comparing
-    dimensions gives $D_i^2=E_{\sigma(i)}^2$, hence
-    $D_i=E_{\sigma(i)}$.
-\end{proof}
-
 \begin{theorem}[Paired component maps are bijections]\label{thm:component_map_bijective}
     \lean{MPSTensor.mem_blockIdeal_iff}
     \lean{MPSTensor.pi_single_mem_blockIdeal}
