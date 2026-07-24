@@ -5,9 +5,9 @@ a convex decomposition into pure states each of Schmidt rank at most $n$. Separa
 states are precisely those of Schmidt number one, and a state of Schmidt number at
 most $n$ satisfies the reduction criterion
 \begin{align}
-    n\,\rho_1\otimes\Id&\ge\rho,
-    \notag\\
-    n\,\Id\otimes\rho_2&\ge\rho,
+    n\,\rho_1\otimes\Id & \ge\rho,
+    \notag                         \\
+    n\,\Id\otimes\rho_2 & \ge\rho,
     \notag
 \end{align}
 which is \cite[Equation~(3.18)]{Wolf2012Quantum}. The bound on the Schmidt number is
@@ -23,9 +23,9 @@ of its weight scales its coefficient matrix and so leaves the Schmidt rank uncha
     A bipartite matrix $\rho$ on $\MN{d}\otimes\MN{d'}$ has Schmidt number at most $n$
     when it is a finite sum of pure-state projectors of Schmidt rank at most $n$,
     \begin{align}
-        \rho&=\sum_i\ket{\psi_i}\bra{\psi_i},
-        \notag\\
-        \SR(\psi_i)&\le n.
+        \rho        & =\sum_i\ket{\psi_i}\bra{\psi_i},
+        \notag                                         \\
+        \SR(\psi_i) & \le n.
         \notag
     \end{align}
 \end{definition}
@@ -248,11 +248,11 @@ of its weight scales its coefficient matrix and so leaves the Schmidt rank uncha
     On a general bipartite system $\MN{d}\otimes\MN{d'}$, a state of Schmidt number at
     most $n$ satisfies the reduction criterion
     \begin{align}
-        n\,\Id\otimes\rho_2&\ge\rho
-        &&(1\le n<d),
-        \notag\\
-        n\,\rho_1\otimes\Id&\ge\rho
-        &&(1\le n<d'),
+        n\,\Id\otimes\rho_2 & \ge\rho
+                            &         & (1\le n<d),
+        \notag                                       \\
+        n\,\rho_1\otimes\Id & \ge\rho
+                            &         & (1\le n<d'),
         \notag
     \end{align}
     with $\rho_1$ and $\rho_2$ the reduced densities on the first and second factors.
@@ -308,9 +308,9 @@ of its weight scales its coefficient matrix and so leaves the Schmidt rank uncha
     Then there is a Hermitian operator $W$ such that, for every $\psi$ of Schmidt rank
     at most $n$,
     \begin{align}
-        \re\tr(W\rho)&<0,
-        \notag\\
-        \re\bra{\psi}W\ket{\psi}&\ge 0.
+        \re\tr(W\rho)            & <0,
+        \notag                            \\
+        \re\bra{\psi}W\ket{\psi} & \ge 0.
         \notag
     \end{align}
     This is the only-if direction of Wolf's Proposition~3.3
@@ -343,9 +343,9 @@ of its weight scales its coefficient matrix and so leaves the Schmidt rank uncha
     $\rho$ exceeds $n$ if and only if there is a Hermitian operator $W$ such that, for
     every $\psi$ of Schmidt rank at most $n$,
     \begin{align}
-        \re\tr(W\rho)&<0,
-        \notag\\
-        \re\bra{\psi}W\ket{\psi}&\ge 0.
+        \re\tr(W\rho)            & <0,
+        \notag                            \\
+        \re\bra{\psi}W\ket{\psi} & \ge 0.
         \notag
     \end{align}
     This is Wolf's Proposition~3.3 \cite[Chapter~3, Proposition~3.3]{Wolf2012Quantum}: a
@@ -415,7 +415,7 @@ of its weight scales its coefficient matrix and so leaves the Schmidt rank uncha
     matrix $\rho$ on $\C^D\otimes\C^D$,
     \begin{align}
         \tr(\tau_T\,\rho)
-        &=\bra{\Omega}(T^{*}\otimes\Id)(\rho)\ket{\Omega},
+         & =\bra{\Omega}(T^{*}\otimes\Id)(\rho)\ket{\Omega},
         \notag
     \end{align}
     where $T^{*}$ is the trace-pairing adjoint of $T$.
@@ -437,7 +437,7 @@ of its weight scales its coefficient matrix and so leaves the Schmidt rank uncha
     \leanok
     \uses{def:k_positive_map, def:has_schmidt_number_le,
         thm:exists_entanglement_witness, thm:exists_isNPositiveMap_choiMatrix_eq,
-        thm:trace_pairing_adjoint_positive, thm:trace_choiMatrix_omega_quadratic_adjoint}
+        thm:k_positive_trace_pairing_adjoint, thm:trace_choiMatrix_omega_quadratic_adjoint}
     Let $\rho$ be a trace-one Hermitian bipartite state on $\C^D\otimes\C^D$ whose Schmidt
     number exceeds $n$. Then there is an $n$-positive map $T\colon\MN{D}\to\MN{D}$ such that
     $(T\otimes\Id)(\rho)$ is not positive semidefinite. This is the if direction of Wolf's
@@ -449,7 +449,7 @@ of its weight scales its coefficient matrix and so leaves the Schmidt rank uncha
     The entanglement witness $W$ for $\rho$ (\ref{thm:exists_entanglement_witness}) is the
     Choi matrix of an $n$-positive map $P$ (\ref{thm:exists_isNPositiveMap_choiMatrix_eq}).
     Its trace-pairing adjoint $T=P^{*}$ is again $n$-positive
-    (\ref{thm:trace_pairing_adjoint_positive}). By the Choi trace pairing through the
+    (\ref{thm:k_positive_trace_pairing_adjoint}). By the Choi trace pairing through the
     trace-pairing adjoint (\ref{thm:trace_choiMatrix_omega_quadratic_adjoint}),
     $\bra{\Omega}(T\otimes\Id)(\rho)\ket{\Omega}=\tr(W\rho)$, whose real part is
     negative. A positive semidefinite matrix has non-negative quadratic forms, so
@@ -468,7 +468,7 @@ positivity.
     \leanok
     Consider the linear map $T : \MN{2} \to \MN{2}$ defined by
     \begin{align}
-        T(A)&=\frac{1}{2} A^T+\frac{1}{4}\tr(A)\Id.
+        T(A) & =\frac{1}{2} A^T+\frac{1}{4}\tr(A)\Id.
         \notag
     \end{align}
     This is the map from \cite[Example~5.3]{Wolf2012Quantum}.
