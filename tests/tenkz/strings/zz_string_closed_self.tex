@@ -1,0 +1,24 @@
+% Regression: closed caller-saved path with a declared self-crossing.
+% Formula: bow-tie segments (-1,-1)--(1,1) and (-1,1)--(1,-1) cross at the
+%   origin; the path is closed with --cycle, so the saved spath carries a
+%   closepath action.  Without the spath_open normalization in
+%   prepare_cubic_loops, that closepath segment would be routed through
+%   append_segment and its tokens stripped, silently dropping the close.
+% Expectation: the rendered bow-tie has exactly one visible gap at the chosen
+%   self-crossing component boundary; the path remains closed.
+\documentclass[varwidth=8cm, border=6pt]{standalone}
+\usepackage{tenkz}
+\usetikzlibrary{hobby,spath3,intersections}
+\begin{document}
+\makeatletter\input{tenkz-string.code.tex}\makeatother
+\begin{tikzpicture}
+\ExplSyntaxOn
+\__tenkz_string_reset:
+\__tenkz_string_register:nn {cs} {open}
+\path[spath/save=cs] (-1,-1) -- (1,1) -- (-1,1) -- (1,-1) -- cycle;
+\__tenkz_string_under:nn {cs} {cs}
+\__tenkz_string_resolve:
+\__tenkz_string_dev_draw:nn {cs} {thick}
+\ExplSyntaxOff
+\end{tikzpicture}
+\end{document}

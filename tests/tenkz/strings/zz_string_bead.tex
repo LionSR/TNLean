@@ -1,0 +1,20 @@
+% Regression: zz_string_bead — a bead at half the actual path length.
+% The deliberately uneven route has a short first segment and a long second
+% one, so segment parameter 0.5 would land on the waypoint.  The arclength
+% anchor must instead lie visibly along the long descending branch.
+\documentclass[varwidth=8cm, border=6pt]{standalone}
+\usepackage{tenkz}
+\usetikzlibrary{hobby,spath3,intersections}
+\begin{document}
+\makeatletter\input{tenkz-string.code.tex}\makeatother
+\begin{tikzpicture}
+\ExplSyntaxOn
+\__tenkz_string_reset:
+\__tenkz_string_declare_open:nn {s} { {0,0} {0.25,1} {3,0} }
+\__tenkz_string_resolve:
+\__tenkz_string_bead:nnn {s} {0.5} {beadpt}
+\__tenkz_string_dev_draw:nn {s} { thick }
+\fill (beadpt) circle [ radius = 2pt ] ;
+\ExplSyntaxOff
+\end{tikzpicture}
+\end{document}

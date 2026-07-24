@@ -1,0 +1,18 @@
+% Regression: a declared loop inside one cubic supports selector-aware surgery.
+\documentclass[varwidth=8cm, border=6pt]{standalone}
+\usepackage{tenkz}
+\usetikzlibrary{hobby,spath3,intersections}
+\begin{document}
+\makeatletter\input{tenkz-string.code.tex}\makeatother
+\begin{tikzpicture}
+\ExplSyntaxOn
+\__tenkz_string_reset:
+\__tenkz_string_register:nn {loop} {open}
+\path[spath/save=loop]
+  (0,0) .. controls (-2,.266667) and (-.666667,-1.466667) .. (4,4.8);
+\__tenkz_string_under_at:nnn {loop} {loop} {1}
+\__tenkz_string_resolve:
+\__tenkz_string_dev_draw:nn {loop} {thick}
+\ExplSyntaxOff
+\end{tikzpicture}
+\end{document}

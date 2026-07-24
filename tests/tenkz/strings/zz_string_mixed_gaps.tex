@@ -1,0 +1,24 @@
+% Regression: a route under an external string and under itself gaps only the
+% declared branch at each crossing; the ordinary pass must not gap every
+% boundary created by the self split.
+\documentclass[varwidth=8cm, border=6pt]{standalone}
+\usepackage{tenkz}
+\usetikzlibrary{hobby,spath3,intersections}
+\begin{document}
+\makeatletter\input{tenkz-string.code.tex}\makeatother
+\begin{tikzpicture}
+\ExplSyntaxOn
+\__tenkz_string_reset:
+\__tenkz_string_register:nn {under} {open}
+\path[spath/save=under]
+  (-3,-1)--(-1,1)--(-3,1)--(-1,-1)--(2,-1);
+\__tenkz_string_register:nn {over} {open}
+\path[spath/save=over] (1,-2)--(1,0);
+\__tenkz_string_under_at:nnn {under} {under} {1}
+\__tenkz_string_under:nn {under} {over}
+\__tenkz_string_resolve:
+\__tenkz_string_dev_draw:nn {under} {thick}
+\__tenkz_string_dev_draw:nn {over} {thick}
+\ExplSyntaxOff
+\end{tikzpicture}
+\end{document}
