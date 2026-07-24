@@ -1,0 +1,22 @@
+%% Kernel fixture: LANGUAGE-1.0.md 12.7 (rmp-iv-intersection-lhs-one).
+%% Expected: three placed atoms (B, C, the wide R); two port-to-port bonds
+%% B.s->R.n@1 and C.s->R.n@2; two orth strings with open n ends and
+%% relative-address waypoints.
+\documentclass{standalone}
+\usepackage{tenkz}
+\makeatletter
+\ExplSyntaxOn
+\file_input:n { tenkz-kernel.code.tex }
+\ExplSyntaxOff
+\makeatother
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[rows={wire,wire}, cols=4, bonds=none]
+  \tn[at=(1,2), name=B]{B}   \tn[at=(1,3), name=C]{C}
+  \tn[at=(2,2), skin=box, wide=2, wires=2, name=R]{R}
+  \tnwire{B.s}{R.n@1}        \tnwire{C.s}{R.n@2}
+  \tnwire[kind=string, route=orth, via={1 w of R}]{open n}{R.w}
+  \tnwire[kind=string, route=orth, via={1 e of C}]{R.e}{open n}
+\end{tenkz}
+\mbox{parsed}
+\end{document}
