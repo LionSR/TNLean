@@ -150,6 +150,8 @@ SOURCE = r"""
 \int_new:N \g__tenkzl_test_expected_traces_int
 \int_new:N \g__tenkzl_test_actual_cups_int
 \int_new:N \g__tenkzl_test_actual_traces_int
+\seq_new:N \g__tenkzl_test_cup_from_seq
+\seq_new:N \g__tenkzl_test_trace_from_seq
 \cs_new_protected:Npn \tenkzClosureRecordProbe #1#2
   {
     \bool_gset_true:N \g__tenkzl_test_closure_records_bool
@@ -157,9 +159,17 @@ SOURCE = r"""
     \int_gset:Nn \g__tenkzl_test_expected_traces_int {#2}
   }
 \cs_new_protected:Npn \__tenkzl_test_count_cup:n #1
-  { \int_gincr:N \g__tenkzl_test_actual_cups_int }
+  {
+    \int_gincr:N \g__tenkzl_test_actual_cups_int
+    \__tenkz_model_get:nnN {#1} {from} \l_tmpa_tl
+    \seq_gput_right:Nx \g__tenkzl_test_cup_from_seq {\l_tmpa_tl}
+  }
 \cs_new_protected:Npn \__tenkzl_test_count_trace:n #1
-  { \int_gincr:N \g__tenkzl_test_actual_traces_int }
+  {
+    \int_gincr:N \g__tenkzl_test_actual_traces_int
+    \__tenkz_model_get:nnN {#1} {from} \l_tmpa_tl
+    \seq_gput_right:Nx \g__tenkzl_test_trace_from_seq {\l_tmpa_tl}
+  }
 \cs_new_eq:NN \__tenkzl_test_model_validate: \__tenkz_model_validate:
 \cs_set_protected:Npn \__tenkz_model_validate:
   {
@@ -167,6 +177,8 @@ SOURCE = r"""
       {
         \int_gzero:N \g__tenkzl_test_actual_cups_int
         \int_gzero:N \g__tenkzl_test_actual_traces_int
+        \seq_gclear:N \g__tenkzl_test_cup_from_seq
+        \seq_gclear:N \g__tenkzl_test_trace_from_seq
         \__tenkz_model_map_wires_origin:nN {cup}
           \__tenkzl_test_count_cup:n
         \__tenkz_model_map_wires_origin:nN {trace}
@@ -179,6 +191,16 @@ SOURCE = r"""
           {\g__tenkzl_test_actual_traces_int} =
           {\g__tenkzl_test_expected_traces_int}
           { \tex_errmessage:D { lattice~trace~records~were~not~frozen } }
+        \seq_gremove_duplicates:N \g__tenkzl_test_cup_from_seq
+        \seq_gremove_duplicates:N \g__tenkzl_test_trace_from_seq
+        \int_compare:nNnF
+          {\seq_count:N \g__tenkzl_test_cup_from_seq} =
+          {\g__tenkzl_test_actual_cups_int}
+          { \tex_errmessage:D { lattice~cup~addresses~were~not~frozen } }
+        \int_compare:nNnF
+          {\seq_count:N \g__tenkzl_test_trace_from_seq} =
+          {\g__tenkzl_test_actual_traces_int}
+          { \tex_errmessage:D { lattice~trace~addresses~were~not~frozen } }
         \bool_gset_false:N \g__tenkzl_test_closure_records_bool
       }
     \__tenkzl_test_model_validate:
@@ -677,6 +699,7 @@ SOURCE = r"""
 \begin{tenkzlattice}[
     rows=3, cols=2, sheets={ket,bra}, boundary=open,
     outer legs=none, east=cup]
+  \tenkzClosureRecordProbe{3}{0}
   \global\advance\tenkzlatticebodyseen by 1\relax
   \tnsite[role=marked, label={\tenkzsitelabelprobe}]{(2,2,1)}
   \tnedge[role=marked]{(2,1,1)-(2,2,1)}

@@ -1620,14 +1620,17 @@
           {
             \__tenkz_model_record_wire:e
               { kind={index}, origin={cup}, state={complete}, side={#1},
-                from={\tenkz_cs_cellkey:nnn {#2}{#3}{0}},
-                to={\tenkz_cs_cellkey:nnn {#2}{#3}{1}},
+                from={\tenkz_cs_cellkey:nnn
+                  {\int_eval:n {#2}}{\int_eval:n {#3}}{0}},
+                to={\tenkz_cs_cellkey:nnn
+                  {\int_eval:n {#2}}{\int_eval:n {#3}}{1}},
                 matrix={\exp_not:V \l__tenkzl_tmp_tl} }
           }
           {
             \__tenkz_model_record_wire:e
               { kind={index}, origin={cup}, state={incomplete}, side={#1},
-                from={\tenkz_cs_cellkey:nnn {#2}{#3}{0}},
+                from={\tenkz_cs_cellkey:nnn
+                  {\int_eval:n {#2}}{\int_eval:n {#3}}{0}},
                 matrix={\exp_not:V \l__tenkzl_tmp_tl} }
           }
       }
@@ -1636,7 +1639,8 @@
           {
             \__tenkz_model_record_wire:e
               { kind={index}, origin={cup}, state={incomplete}, side={#1},
-                from={\tenkz_cs_cellkey:nnn {#2}{#3}{1}},
+                from={\tenkz_cs_cellkey:nnn
+                  {\int_eval:n {#2}}{\int_eval:n {#3}}{1}},
                 matrix={\exp_not:V \l__tenkzl_tmp_tl} }
           }
       }
@@ -1705,9 +1709,11 @@
                 side-a={#1}, side-b={#2},
                 sheet={\int_eval:n {\l__tenkzl_model_trace_sheet_int}},
                 slot={\int_eval:n {\l__tenkzl_model_trace_slot_int}},
-                from={\tenkz_cs_cellkey:nnn {#3}{#4}
+                from={\tenkz_cs_cellkey:nnn
+                  {\int_eval:n {#3}}{\int_eval:n {#4}}
                   {\int_eval:n {\l__tenkzl_model_trace_sheet_int}}},
-                to={\tenkz_cs_cellkey:nnn {#5}{#6}
+                to={\tenkz_cs_cellkey:nnn
+                  {\int_eval:n {#5}}{\int_eval:n {#6}}
                   {\int_eval:n {\l__tenkzl_model_trace_sheet_int}}} }
           }
           {
@@ -1767,7 +1773,8 @@
       { kind={index}, origin={trace}, state={#1}, axis={#3}, side={#2},
         sheet={\int_eval:n {\l__tenkzl_model_trace_sheet_int}},
         slot={\int_eval:n {\l__tenkzl_model_trace_slot_int}},
-        from={\tenkz_cs_cellkey:nnn {#4}{#5}
+        from={\tenkz_cs_cellkey:nnn
+          {\int_eval:n {#4}}{\int_eval:n {#5}}
           {\int_eval:n {\l__tenkzl_model_trace_sheet_int}}} }
   }
 
