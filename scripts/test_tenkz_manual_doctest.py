@@ -47,6 +47,9 @@ def main() -> int:
 \verb|\documentclass{standalone}| \tntree{(ab)}
 \end{Verbatim}
 \begin{Verbatim}
+shell command % \tntree{commented}
+\end{Verbatim}
+\begin{Verbatim}
 \usepackage[
   draft
 ]{graphicx}
