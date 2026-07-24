@@ -155,6 +155,13 @@ def test_kernel_parser_census_includes_hyphenated_families() -> None:
         ("kernel-declare-atom", "skin"),
         ("kernel-declare-atom", "ports"),
     }
+    expected = tenkz_shrink.parser_leaf_fingerprint(
+        {
+            ("kernel-declare-atom", "skin"),
+            ("kernel-declare-atom", "ports"),
+        }
+    )
+    assert tenkz_shrink.parser_leaf_fingerprint_from_texts([source]) == expected
 
 
 def test_alias_replacements_are_registered_vocabulary() -> None:
