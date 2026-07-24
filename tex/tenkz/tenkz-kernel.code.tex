@@ -424,7 +424,11 @@
 % picture-scope sugar: each expansion is the sugar ledger's row, verbatim.
 \keys_define:nn { tenkz-kernel-picture }
   {
-    sandwich .meta:n = { rows = {ket,op,bra} },
+    sandwich .code:n =
+      {
+        \__tenkz_kernel_sugar:n {sandwich}
+        \keys_set:nn {tenkz-kernel-picture} {rows={ket,op,bra}}
+      },
     sandwich .default:n = ,
     boundary .code:n = { \__tenkz_kernel_desugar_boundary:n {#1} },
     lattice .code:n  = { \__tenkz_kernel_desugar_lattice:n {#1} },
@@ -453,7 +457,11 @@
 \keys_define:nn { tenkz-kernel-atom }
   {
     cluster .code:n = { \__tenkz_kernel_desugar_cluster:n {#1} },
-    role .meta:n = { species = {#1} }
+    role .code:n =
+      {
+        \__tenkz_kernel_sugar:n {role}
+        \keys_set:nn {tenkz-kernel-atom} {species={#1}}
+      }
   }
 
 % ---------- wire keys ------------------------------------------------------------
@@ -1640,9 +1648,15 @@
 
 % sugar commands: one-line reassemblies of kernel calls
 \NewDocumentCommand \tnbond { O{} m m }
-  { \__tenkz_kernel_tnwire:nnn { kind = index , #1 } {#2} {#3} }
+  {
+    \__tenkz_kernel_sugar:n {tnbond}
+    \__tenkz_kernel_tnwire:nnn { kind = index , #1 } {#2} {#3}
+  }
 \NewDocumentCommand \tnprose { m }
-  { \__tenkz_kernel_tnmark:nnn { form = prose } { panel } {#1} }
+  {
+    \__tenkz_kernel_sugar:n {tnprose}
+    \__tenkz_kernel_tnmark:nnn { form = prose } { panel } {#1}
+  }
 
 \ProvideDocumentEnvironment { tenkzeq } { O{} } { } { }
 \NewDocumentCommand \tenkzkernel { }
