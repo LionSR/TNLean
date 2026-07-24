@@ -1,0 +1,23 @@
+% Regression: bead arclength is measured on the unsurgered route, so a crossing
+% gap before t=0.75 does not shift or duplicate the bead.
+\documentclass[varwidth=8cm, border=6pt]{standalone}
+\usepackage{tenkz}
+\usetikzlibrary{hobby,spath3,intersections}
+\begin{document}
+\makeatletter\input{tenkz-string.code.tex}\makeatother
+\begin{tikzpicture}
+\ExplSyntaxOn
+\__tenkz_string_reset:
+\__tenkz_string_register:nn {under} {open}
+\path[spath/save=under] (-2,0)--(2,0);
+\__tenkz_string_register:nn {over} {open}
+\path[spath/save=over] (0,-1)--(0,1);
+\__tenkz_string_under:nn {under} {over}
+\__tenkz_string_resolve:
+\__tenkz_string_bead:nnn {under} {0.75} {bead}
+\__tenkz_string_dev_draw:nn {under} {thick}
+\__tenkz_string_dev_draw:nn {over} {thick}
+\fill (bead) circle[radius=2pt];
+\ExplSyntaxOff
+\end{tikzpicture}
+\end{document}

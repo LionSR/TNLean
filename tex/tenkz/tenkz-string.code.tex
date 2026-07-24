@@ -40,6 +40,13 @@
   { [TKZ-CROSS-UNDECLARED]~strings~'#1'~and~'#2'~intersect~with~no~
     declared~order }
   { Every~crossing~carries~a~declared~over/under;~add~one~or~reroute. }
+\msg_new:nnnn {tenkz}{cross-multiple}
+  { [TKZ-CROSS-MULTIPLE]~strings~'#1'~and~'#2'~meet~more~than~once }
+  { Split~one~route~into~separately~named~strings~so~each~ordered~pair~
+    has~one~geometric~crossing. }
+\msg_new:nnnn {tenkz}{join-not-endpoint}
+  { [TKZ-JOIN-NOT-ENDPOINT]~strings~'#1'~and~'#2'~do~not~share~an~endpoint }
+  { A~join~only~exempts~a~meeting~at~the~end~of~at~least~one~saved~route. }
 \msg_new:nnnn {tenkz}{string-library}
   { [TKZ-STRING-LIBRARY]~TikZ~library~'#1'~is~not~loaded }
   { The~string~engine~needs~hobby,~spath3,~and~intersections. }
@@ -47,6 +54,7 @@
 % ---------- state ------------------------------------------------------------
 \seq_new:N \l__tenkz_string_ids_seq          % declaration order
 \prop_new:N \l__tenkz_string_kind_prop       % id -> open|closed|wind|around
+\prop_new:N \l__tenkz_string_source_prop     % id -> caller|generated
 \seq_new:N \l__tenkz_string_cross_seq        % {under}{over} pairs
 \seq_new:N \l__tenkz_string_join_seq         % unordered endpoint joins
 \seq_new:N \l__tenkz_string_gap_ids_seq      % under paths awaiting one gap pass
@@ -57,6 +65,7 @@
 \prop_new:N \l__tenkz_string_self_gap_prop   % self id -> component boundary
 \seq_new:N \l__tenkz_string_pts_seq
 \seq_new:N \l__tenkz_string_scan_seq
+\seq_new:N \l__tenkz_string_endpoint_seq
 \tl_new:N \l__tenkz_string_pts_tl
 \tl_new:N \l__tenkz_string_first_tl
 \tl_new:N \l__tenkz_string_last_tl
@@ -79,12 +88,16 @@
 \int_new:N \l__tenkz_string_declared_int
 \int_new:N \l__tenkz_string_first_segment_int
 \int_new:N \l__tenkz_string_real_segments_int
+\int_new:N \l__tenkz_string_components_before_int
+\int_new:N \l__tenkz_string_components_after_int
 \bool_new:N \l__tenkz_string_closed_bool
+\bool_new:N \l__tenkz_string_endpoint_meeting_bool
 
 \cs_new_protected:Npn \__tenkz_string_reset:
   {
     \seq_clear:N \l__tenkz_string_ids_seq
     \prop_clear:N \l__tenkz_string_kind_prop
+    \prop_clear:N \l__tenkz_string_source_prop
     \seq_clear:N \l__tenkz_string_cross_seq
     \seq_clear:N \l__tenkz_string_join_seq
     \seq_clear:N \l__tenkz_string_gap_ids_seq
@@ -109,6 +122,7 @@
       { \msg_error:nnn {tenkz}{string-redeclared} {#1} }
     \seq_put_right:Nn \l__tenkz_string_ids_seq {#1}
     \prop_put:Nnn \l__tenkz_string_kind_prop {#1} {#2}
+    \prop_put:Nnn \l__tenkz_string_source_prop {#1} {caller}
   }
 
 % load a token list of braced pairs {x,y}{x,y}... into the point seq
@@ -126,6 +140,7 @@
 \cs_new_protected:Npn \__tenkz_string_declare_open:nn #1#2
   {
     \__tenkz_string_register:nn {#1} {open}
+    \prop_put:Nnn \l__tenkz_string_source_prop {#1} {generated}
     \__tenkz_string_load_pts:n {#2}
     \int_set:Nn \l__tenkz_string_n_int
       { \seq_count:N \l__tenkz_string_pts_seq }
@@ -160,6 +175,7 @@
 \cs_new_protected:Npn \__tenkz_string_declare_closed:nn #1#2
   {
     \__tenkz_string_register:nn {#1} {closed}
+    \prop_put:Nnn \l__tenkz_string_source_prop {#1} {generated}
     \__tenkz_string_load_pts:n {#2}
     \int_set:Nn \l__tenkz_string_n_int
       { \seq_count:N \l__tenkz_string_pts_seq }
@@ -186,6 +202,7 @@
 \cs_new_protected:Npn \__tenkz_string_declare_wind:nnnnnnn #1#2#3#4#5#6#7
   {
     \__tenkz_string_register:nn {#1} {wind}
+    \prop_put:Nnn \l__tenkz_string_source_prop {#1} {generated}
     \int_set:Nn \l__tenkz_string_n_int
       { \fp_eval:n { max( 12 , 8 * max( abs(#5) , abs(#6) , 1 ) ) } }
     \tl_clear:N \l__tenkz_string_pts_tl
@@ -216,7 +233,7 @@
     ,
     \fp_eval:n
       { round( #3
-               + \__tenkz_metric_ratio:n {stringtilt} * (#4 + #7
+               + (#4 + \__tenkz_metric_ratio:n {stringtilt} * #7
                    * cosd( 360 * #6 * #1 / \l__tenkz_string_n_int ))
                  * sind( 360 * #5 * #1 / \l__tenkz_string_n_int )
                + #7 * sind( 360 * #6 * #1 / \l__tenkz_string_n_int ) , 5 ) }
@@ -234,6 +251,7 @@
 \cs_new_protected:Npn \__tenkz_string_declare_around:nnnnnn #1#2#3#4#5#6
   {
     \__tenkz_string_register:nn {#1} {around}
+    \prop_put:Nnn \l__tenkz_string_source_prop {#1} {generated}
     \fp_set:Nn \l__tenkz_string_dir_fp {#4}
     \fp_set:Nn \l__tenkz_string_tangent_fp {#4 - 90}
     \fp_set:Nn \l__tenkz_string_scale_fp {#6}
@@ -334,7 +352,16 @@
       { \msg_error:nnn {tenkz}{string-unknown} {#2} }
     \seq_put_right:Nn \l__tenkz_string_cross_seq { {#1} {#2} }
     \str_if_eq:nnT {#1} {#2}
-      { \prop_put:Nnn \l__tenkz_string_self_gap_prop {#1} {#3} }
+      {
+        \prop_get:NnNTF
+          \l__tenkz_string_self_gap_prop {#1} \l__tenkz_string_tmp_tl
+          {
+            \tl_put_right:Nn \l__tenkz_string_tmp_tl {,#3}
+            \prop_put:NnV \l__tenkz_string_self_gap_prop
+              {#1} \l__tenkz_string_tmp_tl
+          }
+          { \prop_put:Nnn \l__tenkz_string_self_gap_prop {#1} {#3} }
+      }
   }
 
 % Record an intentional endpoint join.  It consumes one geometric meeting
@@ -357,10 +384,11 @@
     \int_set:Nn #3 { \pgfintersectionsolutions }
   }
 
-% Count intersections between non-adjacent path segments without mutating or
-% recursively subdividing the saved path.  Adjacent branches meet by
-% construction; the first and last branches share a seam when either the path
-% closes formally or an open route returns to its initial point.
+% Count intersections on a disposable path copy.  Each individual cubic is
+% first checked with spath's self-splitter; distinct non-adjacent segments are
+% then compared pairwise.  Adjacent branches meet by construction; the first
+% and last branches share a seam when either the path closes formally or an
+% open route returns to its initial point.
 \cs_new_protected:Npn \__tenkz_string_self_count:nN #1#2
   {
     \tl_set_eq:Nc \l__tenkz_string_self_path_tl
@@ -393,6 +421,38 @@
         - \l__tenkz_string_real_segments_int + 1
       }
     \int_zero:N #2
+    \prop_get:NnN
+      \l__tenkz_string_source_prop {#1} \l__tenkz_string_tmp_tl
+    \str_if_eq:VnT \l__tenkz_string_tmp_tl {caller}
+      {
+        \seq_map_inline:Nn \l__tenkz_string_segments_seq
+          {
+            \tl_set:Nn \l__tenkz_string_tmp_tl {##1}
+            \spath_finalaction:NV
+              \l__tenkz_string_self_final_tl
+              \l__tenkz_string_tmp_tl
+            \tl_if_eq:NNT
+              \l__tenkz_string_self_final_tl
+              \c_spath_curveto_tl
+              {
+                \spath_numberofcomponents:NV
+                  \l__tenkz_string_components_before_int
+                  \l__tenkz_string_tmp_tl
+                \spath_split_component_at_self_intersections:N
+                  \l__tenkz_string_tmp_tl
+                \spath_numberofcomponents:NV
+                  \l__tenkz_string_components_after_int
+                  \l__tenkz_string_tmp_tl
+                \int_add:Nn #2
+                  {
+                    (
+                      \l__tenkz_string_components_after_int
+                      - \l__tenkz_string_components_before_int
+                    ) / 2
+                  }
+              }
+          }
+      }
     \seq_map_indexed_inline:Nn \l__tenkz_string_segments_seq
       {
         \seq_map_indexed_inline:Nn \l__tenkz_string_segments_seq
@@ -428,6 +488,14 @@
 % after every declaration and before any string is drawn.
 \cs_new_protected:Npn \__tenkz_string_resolve:
   {
+    % Beads are semantic arclength points on the unsurgered route.  Freeze a
+    % private copy before crossing gaps split and shorten the visible path.
+    \seq_map_inline:Nn \l__tenkz_string_ids_seq
+      {
+        \cs_set_eq:cc
+          { \l__tikzspath_prefix_tl tenkz-bead-##1 }
+          { \l__tikzspath_prefix_tl ##1 }
+      }
     \__tenkz_string_police:
     \seq_clear:N \l__tenkz_string_gap_ids_seq
     \seq_clear:N \l__tenkz_string_self_gap_ids_seq
@@ -446,13 +514,30 @@
       {
         \prop_get:NnN
           \l__tenkz_string_self_gap_prop {##1} \l__tenkz_string_tmp_tl
-        \tikzset
+        \tl_if_in:VnTF \l__tenkz_string_tmp_tl {,}
           {
-            spath/insert~gaps~after~components =
-              {##1}
+            \use:e
               {
-                { \dim_eval:n { \__tenkz_dim:n {crossgap} } }
-                { \l__tenkz_string_tmp_tl }
+                \exp_not:N \tikzset
+                  {
+                    spath/insert~gaps~after~components =
+                      {##1}
+                      {
+                        { \dim_eval:n { \__tenkz_dim:n {crossgap} } }
+                        { \exp_not:V \l__tenkz_string_tmp_tl }
+                      }
+                  }
+              }
+          }
+          {
+            \tikzset
+              {
+                spath/insert~gaps~after~components =
+                  {##1}
+                  {
+                    { \dim_eval:n { \__tenkz_dim:n {crossgap} } }
+                    { \l__tenkz_string_tmp_tl }
+                  }
               }
           }
       }
@@ -541,21 +626,90 @@
         \tl_if_eq:nnT { {#2} {#1} } {##1}
           { \int_incr:N \l__tenkz_string_n_int }
       }
+    \int_zero:N \l__tenkz_string_declared_int
     \seq_map_inline:Nn \l__tenkz_string_join_seq
       {
         \tl_if_eq:nnT { {#1} {#2} } {##1}
-          { \int_incr:N \l__tenkz_string_n_int }
+          { \int_incr:N \l__tenkz_string_declared_int }
         \tl_if_eq:nnT { {#2} {#1} } {##1}
-          { \int_incr:N \l__tenkz_string_n_int }
+          { \int_incr:N \l__tenkz_string_declared_int }
       }
     \int_set_eq:NN \l_tmpa_int \l__tenkz_string_n_int
     \__tenkz_string_count:nnN {#1} {#2} \l__tenkz_string_n_int
+    \int_compare:nNnT { \l__tenkz_string_n_int } > {1}
+      { \msg_error:nnnn {tenkz}{cross-multiple} {#1} {#2} }
+    \int_compare:nNnT { \l__tenkz_string_declared_int } > {0}
+      {
+        \__tenkz_string_endpoint_meeting:nnTF {#1} {#2}
+          { \int_add:Nn \l_tmpa_int { \l__tenkz_string_declared_int } }
+          { \msg_error:nnnn {tenkz}{join-not-endpoint} {#1} {#2} }
+      }
     \int_compare:nNnTF { \l__tenkz_string_n_int } > { \l_tmpa_int }
       { \msg_error:nnnn {tenkz}{cross-undeclared} {#1} {#2} }
       {
         \int_compare:nNnT { \l__tenkz_string_n_int } < { \l_tmpa_int }
           { \msg_error:nnnn {tenkz}{cross-not-found} {#1} {#2} }
       }
+  }
+
+\prg_new_protected_conditional:Npnn
+  \__tenkz_string_endpoint_meeting:nn #1#2 {T,F,TF}
+  {
+    \__tenkz_string_count:nnN {#1} {#2} \l__tenkz_string_n_int
+    \seq_clear:N \l__tenkz_string_endpoint_seq
+    \tl_set_eq:Nc \l__tenkz_string_self_path_tl
+      { \l__tikzspath_prefix_tl #1 }
+    \spath_initialpoint:NV
+      \l__tenkz_string_self_initial_point_tl
+      \l__tenkz_string_self_path_tl
+    \seq_put_right:NV
+      \l__tenkz_string_endpoint_seq
+      \l__tenkz_string_self_initial_point_tl
+    \spath_finalpoint:NV
+      \l__tenkz_string_self_final_point_tl
+      \l__tenkz_string_self_path_tl
+    \seq_put_right:NV
+      \l__tenkz_string_endpoint_seq
+      \l__tenkz_string_self_final_point_tl
+    \tl_set_eq:Nc \l__tenkz_string_self_path_tl
+      { \l__tikzspath_prefix_tl #2 }
+    \spath_initialpoint:NV
+      \l__tenkz_string_self_initial_point_tl
+      \l__tenkz_string_self_path_tl
+    \seq_put_right:NV
+      \l__tenkz_string_endpoint_seq
+      \l__tenkz_string_self_initial_point_tl
+    \spath_finalpoint:NV
+      \l__tenkz_string_self_final_point_tl
+      \l__tenkz_string_self_path_tl
+    \seq_put_right:NV
+      \l__tenkz_string_endpoint_seq
+      \l__tenkz_string_self_final_point_tl
+    \bool_set_false:N \l__tenkz_string_endpoint_meeting_bool
+    \int_step_inline:nn { \l__tenkz_string_n_int }
+      {
+        \pgf@process { \pgfpointintersectionsolution {##1} }
+        \seq_map_inline:Nn \l__tenkz_string_endpoint_seq
+          {
+            \bool_if:nT
+              {
+                \dim_compare_p:nNn
+                  {
+                    \dim_abs:n
+                      { \pgf@x - \tl_item:nn {####1} {1} }
+                  } < {1pt / 100}
+                &&
+                \dim_compare_p:nNn
+                  {
+                    \dim_abs:n
+                      { \pgf@y - \tl_item:nn {####1} {2} }
+                  } < {1pt / 100}
+              }
+              { \bool_set_true:N \l__tenkz_string_endpoint_meeting_bool }
+          }
+      }
+    \bool_if:NTF \l__tenkz_string_endpoint_meeting_bool
+      { \prg_return_true: } { \prg_return_false: }
   }
 
 % ---------- beads ---------------------------------------------------------------
@@ -566,7 +720,7 @@
   {
     \prop_if_in:NnF \l__tenkz_string_kind_prop {#1}
       { \msg_error:nnn {tenkz}{string-unknown} {#1} }
-    \tenkz@string@beadpath {#1} {#2} {#3}
+    \tenkz@string@beadpath {tenkz-bead-#1} {#2} {#3}
     \pgfpointanchor {#3} {center}
     \tenkz@event{stringbead|id=#1|t=#2|
       x=\fp_eval:n { round( \dim_to_fp:n { \pgf@x } , 4 ) }pt|
