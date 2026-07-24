@@ -9,6 +9,7 @@ import re
 import subprocess
 import tempfile
 from dataclasses import dataclass
+from functools import cache
 from pathlib import Path
 
 
@@ -158,6 +159,7 @@ def _multiple_variants(options: str | None) -> list[tuple[str, str]]:
     return variants
 
 
+@cache
 def _registry_vocabulary() -> tuple[list[str], list[str]]:
     registry = REGISTRY.read_text(encoding="utf-8")
     commands = re.findall(
