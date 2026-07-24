@@ -1,0 +1,456 @@
+\section{Positivity hierarchy and two-positive maps}
+
+The following family exhibits the strict hierarchy of positivity conditions
+and supplies the threshold statements used in the reduction criterion below.
+
+\subsection{The map \texorpdfstring{$T_\eta$}{T eta} and strictness of the chain}
+
+The cones of $k$-positive maps form a decreasing chain from the completely
+positive maps, at the top amplification dimension, down to the merely positive
+maps.  This subsection shows that every inclusion between consecutive
+dimensions, below the top one, is strict.  The witnesses come from a
+one-parameter family of maps whose positivity threshold is the parameter
+itself, so that tuning the parameter between two integers separates the two
+adjacent cones.
+
+\begin{definition}[The family $T_\eta$]
+    \label{def:t_eta}
+    \lean{Matrix.tEta}
+    \leanok
+    For a real parameter $\eta$, the map $T_\eta$ on $\MN{D}$ is
+    \[
+        T_\eta(\rho)=\tr(\rho)\,\Id-\eta^{-1}\rho.
+    \]
+    The map is defined for every real $\eta$; at $\eta=0$ it reduces to
+    $\rho\mapsto\tr(\rho)\,\Id$, and the positivity threshold below
+    assumes $\eta>0$.
+\end{definition}
+
+\begin{theorem}[Choi matrix of $T_\eta$]
+    \label{thm:choi_matrix_t_eta}
+    \lean{ChoiJamiolkowski.choiMatrix_tEta}
+    \leanok
+    \uses{def:t_eta, thm:choi_matrix_reduction_map}
+    For $D\ge 1$, the Choi matrix of $T_\eta$ is
+    \[
+        \tau_\eta=D^{-1}\Id-\eta^{-1}\ket{\Omega}\bra{\Omega}.
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The Choi matrix is linear in the map, so it splits over the two terms of
+    $T_\eta$.  The trace term contributes
+    \[
+        \tau\bigl(\rho\mapsto\tr(\rho)\,\Id\bigr)=D^{-1}\Id,
+    \]
+    since each elementary slice of $\ket{\Omega}\bra{\Omega}$ contributes its
+    trace times the identity.  The identity map contributes
+    \[
+        \tau(\id)=\ket{\Omega}\bra{\Omega}.
+    \]
+    Subtracting $\eta^{-1}$ times the second from the first gives
+    \[
+        \tau_\eta=D^{-1}\Id-\eta^{-1}\ket{\Omega}\bra{\Omega}.
+    \]
+\end{proof}
+
+\begin{theorem}[Positivity threshold of $T_\eta$]
+    \label{thm:t_eta_threshold}
+    \lean{Matrix.isNPositiveMap_tEta_iff}
+    \leanok
+    \uses{def:t_eta, thm:choi_matrix_t_eta, thm:schmidt_rank_choi_test_iff,
+        thm:maximal_overlap_schmidt_rank}
+    Let $\eta>0$ and $1\le k<D$.  Then $T_\eta$ is $k$-positive if and only if
+    $\eta\ge k$.  This is \cite[Equation~(3.11)]{Wolf2012Quantum} for $1\le k<D$;
+    the top index $k=D$, where $k$-positivity is complete positivity, is
+    Theorem~\ref{thm:t_eta_threshold_top}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    By the Schmidt-rank Choi criterion, $k$-positivity is the nonnegativity of
+    the Choi quadratic form on all vectors of Schmidt rank at most $k$.  For a
+    normalized such vector $\psi$, the Choi matrix
+    $\tau_\eta=D^{-1}\Id-\eta^{-1}\ket{\Omega}\bra{\Omega}$ gives
+    \[
+        \bra{\psi}\tau_\eta\ket{\psi}
+        =D^{-1}-\eta^{-1}|\braket{\Omega}{\psi}|^2.
+    \]
+    The reduced density of $\ket\Omega$ on the first factor is $\Id/D$, so by the
+    maximal-overlap principle the supremum of $|\braket{\Omega}{\psi}|^2$ over
+    Schmidt-rank-$k$ normalized vectors is $\|\Id/D\|_{(k)}=k/D$.  The infimum of
+    the quadratic form is therefore $D^{-1}-\eta^{-1}(k/D)=D^{-1}(1-k/\eta)$,
+    which is nonnegative precisely when $\eta\ge k$.  Degree-two homogeneity
+    extends the bound from normalized vectors to all vectors of Schmidt rank at
+    most $k$.
+\end{proof}
+
+\begin{theorem}[Positivity threshold of $T_\eta$ at the top index]
+    \label{thm:t_eta_threshold_top}
+    \lean{Matrix.isNPositiveMap_tEta_card_iff}
+    \leanok
+    \uses{def:t_eta, thm:choi_matrix_t_eta, thm:schmidt_rank_choi_test_iff}
+    Let $\eta>0$ and $D\ge 1$.  Then $T_\eta$ is $D$-positive if and only if
+    $\eta\ge D$.
+    Together with Theorem~\ref{thm:t_eta_threshold} this is
+    \cite[Equation~(3.11)]{Wolf2012Quantum} over the full range $1\le k\le D$,
+    where the top index $k=D$ is complete positivity.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    On $M_D(\mathbb C)$, $D$-positivity is complete positivity, which is
+    positive semidefiniteness of the Choi operator
+    $\tau_\eta=D^{-1}\Id-\eta^{-1}\ket{\Omega}\bra{\Omega}$.  Its quadratic form on
+    a vector $\psi$ is $D^{-1}\|\psi\|^2-\eta^{-1}|\braket{\Omega}{\psi}|^2$; since
+    $\ket\Omega$ is normalized, Cauchy--Schwarz gives
+    $|\braket{\Omega}{\psi}|^2\le\|\psi\|^2$ with equality at $\psi=\Omega$, so the
+    form is nonnegative for all $\psi$ precisely when $\eta\ge D$.
+\end{proof}
+
+\begin{corollary}[Strictness of the positivity chain]
+    \label{cor:positivity_chain_strict}
+    \lean{Matrix.exists_isNPositiveMap_not_succ}
+    \leanok
+    \uses{thm:t_eta_threshold}
+    Let $1\le k$ with $k+1<D$.  Then there is a map on $\MN{D}$ that is
+    $k$-positive but not $(k+1)$-positive; the cone of $k$-positive maps strictly
+    contains the cone of $(k+1)$-positive maps.  Every inclusion between
+    consecutive amplification dimensions below the top one is therefore strict.
+\end{corollary}
+
+\begin{proof}
+    \leanok
+    Take $T_\eta$ at $\eta=k$.  By the threshold equivalence it is $k$-positive,
+    since $\eta=k\ge k$, but not $(k+1)$-positive, since $\eta=k<k+1$.
+\end{proof}
+
+\subsection{The positivity hierarchy and Kadison--Schwarz from two-positivity}
+
+\begin{theorem}[Completely positive implies two-positive]
+    \lean{IsCPMap.is2PositiveMap}
+    \leanok
+    \uses{def:cp_map}
+    Every completely positive map is two-positive.
+\end{theorem}
+
+\begin{theorem}[Two-positive implies positive]
+    \lean{Is2PositiveMap.isPositiveMap}
+    \leanok
+    Every two-positive map is positive.
+\end{theorem}
+
+\begin{definition}[Unital linear map]
+    \lean{KadisonSchwarz.IsUnitalMap}
+    \leanok
+    A linear map $E$ is unital if $E(\Id) = \Id$.
+\end{definition}
+
+\begin{theorem}[Kadison--Schwarz for unital two-positive maps]\label{thm:kadison_schwarz_2positive}
+    \lean{kadison_schwarz_2positive}
+    \leanok
+    \uses{thm:kadison_schwarz}
+    If $E$ is unital and two-positive, then for all $X \in \MN{D}$,
+    \[
+        E(X^\dagger X) \ge E(X)^\dagger E(X).
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Form the $2 \times 2$ block matrix
+    $(\begin{smallmatrix} \Id & X \\ X^\dagger & X^\dagger X \end{smallmatrix}) \ge 0$.
+    Apply $E \otimes \id_{2}$ (positive by $2$-positivity) and read off the
+    $(2,2)$-block Schur complement: $E(X^\dagger X) - E(X)^\dagger E(X) \ge 0$.
+\end{proof}
+
+\begin{theorem}[Kraus-form Kadison--Schwarz as a special case]
+    \lean{kadison_schwarz_from_2positive}
+    \leanok
+    \uses{thm:kadison_schwarz_2positive}
+    Let $K = (K_i)_{i=0}^{d-1}$ be a unital Kraus family, that is,
+    $\sum_i K_i K_i^\dagger = \Id$. Then for all $X \in \MN{D}$,
+    \[
+        \mathcal{K}(X^\dagger X) \ge
+        \mathcal{K}(X)^\dagger \mathcal{K}(X),
+    \]
+    where $\mathcal{K}(Y) = \sum_i K_i Y K_i^\dagger$.
+\end{theorem}
+
+\section{The reduction criterion}
+
+The reduction map and the family $T_\eta$ are the same map under two
+parametrizations: the natural-number parameter $k$ and the real parameter
+$\eta$ agree at $\eta=k$.  Identifying them lets the positivity threshold and
+the Choi formula carry over to the reduction map without restating them.  Wolf
+attaches to this map the entanglement witness
+$W_n=D^{-1}\Id-n^{-1}\ket{\Omega}\bra{\Omega}$ and the operator inequality
+\cite[Equation~(3.18)]{Wolf2012Quantum} that constrains the reduced densities
+of a bipartite state whose Schmidt number is at most $n$.
+
+\begin{theorem}[The reduction map is the family $T_\eta$ at integer parameter]
+    \label{thm:reduction_map_eq_t_eta}
+    \lean{Matrix.reductionMap_eq_tEta}
+    \leanok
+    \uses{def:reduction_map, def:t_eta}
+    For every $k\in\N$ the reduction map $T_k$ equals the family map $T_\eta$ at
+    $\eta=k$:
+    \[
+        T_k=T_\eta\big|_{\eta=k}.
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The two maps differ only in the scalar coefficient of $X$, namely $k^{-1}$
+    against $\eta^{-1}$ at $\eta=k$.  The natural-number and real casts of $k$
+    into the complex scalars coincide, so the coefficients agree and the maps
+    are equal.
+\end{proof}
+
+\begin{theorem}[The reduction map $T_k$ is $k$-positive]
+    \label{thm:reduction_map_is_n_positive}
+    \lean{Matrix.reductionMap_isNPositiveMap}
+    \leanok
+    \uses{def:reduction_map, thm:reduction_map_eq_t_eta, thm:t_eta_threshold,
+        thm:t_eta_threshold_top}
+    For $1\le k\le D$ the reduction map $T_k$ on $\MN{D}$ is $k$-positive.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The reduction map equals the family map $T_\eta$ at $\eta=k$, and $T_\eta$ is
+    $k$-positive exactly when $\eta\ge k$; the threshold is met with equality at
+    $\eta=k$.  For $k<D$ this is the Schmidt-rank threshold, and the top index
+    $k=D$ is the completely positive endpoint supplied by the dimension-indexed
+    threshold.
+\end{proof}
+
+\begin{theorem}[The reduction map $T_k$ is not $(k+1)$-positive]
+    \label{thm:reduction_map_not_n_positive_succ}
+    \lean{Matrix.reductionMap_not_isNPositiveMap_succ}
+    \leanok
+    \uses{def:reduction_map, thm:reduction_map_eq_t_eta, thm:t_eta_threshold,
+        thm:t_eta_threshold_top}
+    For $1\le k<D$ the reduction map $T_k$ on $\MN{D}$ is not $(k+1)$-positive.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The reduction map equals $T_\eta$ at $\eta=k$.  For $k+1<D$ the threshold
+    gives that $T_\eta$ is $(k+1)$-positive iff $\eta\ge k+1$, so $T_k$ would
+    require $k\ge k+1$, which is false.  For $k+1=D$ the dimension-indexed
+    threshold gives that $T_\eta$ is $D$-positive iff $\eta\ge D$, so $T_k$ would
+    require $k\ge D$, contradicting $k<D$.
+\end{proof}
+
+\begin{remark}
+    Together with the $k$-positivity of $T_k$
+    (\ref{thm:reduction_map_is_n_positive}), this shows that $T_k$ is
+    \emph{exactly} $k$-positive for $1\le k<D$: every inclusion in Wolf's chain
+    $T_{\mathrm{cp}}=T_D\subsetneq\cdots\subsetneq T_1$ is strict.
+\end{remark}
+
+\begin{definition}[Reduction witness]
+    \label{def:reduction_witness}
+    \lean{Matrix.reductionWitness}
+    \leanok
+    The reduction witness on $\MN{D}\otimes\MN{D}$, for $n\in\N$, is
+    \[
+        W_n=D^{-1}\Id-n^{-1}\ket{\Omega}\bra{\Omega}.
+    \]
+\end{definition}
+
+\begin{theorem}[The Choi matrix of the reduction map is the witness]
+    \label{thm:choi_matrix_reduction_witness}
+    \lean{ChoiJamiolkowski.choiMatrix_reductionMap_eq_reductionWitness}
+    \leanok
+    \uses{def:reduction_map, def:reduction_witness, thm:reduction_map_eq_t_eta,
+        thm:choi_matrix_t_eta}
+    For $D\ge 1$ the Choi matrix of $T_n$ is the reduction witness:
+    \[
+        \tau(T_n)=W_n=D^{-1}\Id-n^{-1}\ket{\Omega}\bra{\Omega}.
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The reduction map is $T_\eta$ at $\eta=n$, whose Choi matrix is
+    $D^{-1}\Id-n^{-1}\ket{\Omega}\bra{\Omega}$, which is exactly $W_n$.
+\end{proof}
+
+\begin{theorem}[Reduction-criterion identity]
+    \label{thm:tensor_map_id_t_eta}
+    \lean{Matrix.tensorMapId_tEta_eq}
+    \leanok
+    \uses{def:t_eta}
+    Applying $T_\eta$ to the first factor of a bipartite matrix $\rho$ gives
+    \[
+        (T_\eta\otimes\id)(\rho)=\Id\otimes\rho_2-\eta^{-1}\rho,
+    \]
+    where $\rho_2$ is the reduced density of $\rho$ on the second factor.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Fix block indices $i_2,j_2$ on the second factor and write $\rho^{(i_2,j_2)}$
+    for the $D\times D$ slice $\rho^{(i_2,j_2)}_{i_1 j_1}=\rho_{(i_1,i_2),(j_1,j_2)}$
+    on the first factor.  Its trace is the corresponding entry of $\rho_2$:
+    \[
+        \tr\bigl(\rho^{(i_2,j_2)}\bigr)
+        =\sum_{i_1}\rho_{(i_1,i_2),(i_1,j_2)}
+        =(\rho_2)_{i_2 j_2}.
+    \]
+    Applying $T_\eta$ entry by entry gives
+    \[
+        \bigl((T_\eta\otimes\id)(\rho)\bigr)_{(i_1,i_2),(j_1,j_2)}
+        =\tr\bigl(\rho^{(i_2,j_2)}\bigr)\,\delta_{i_1 j_1}
+            -\eta^{-1}\rho_{(i_1,i_2),(j_1,j_2)}
+        =(\rho_2)_{i_2 j_2}\,\delta_{i_1 j_1}
+            -\eta^{-1}\rho_{(i_1,i_2),(j_1,j_2)},
+    \]
+    and the first term is exactly the $(i_1,i_2),(j_1,j_2)$ entry of
+    $\Id\otimes\rho_2$.
+\end{proof}
+
+\begin{theorem}[Operator-implication step of the reduction criterion]
+    \label{thm:reduction_criterion}
+    \lean{Matrix.reductionCriterion_left, Matrix.reductionCriterion_right}
+    \leanok
+    \uses{def:t_eta, thm:tensor_map_id_t_eta}
+    Let $n\ge 1$ and let $\rho$ be a bipartite matrix, with $\rho^{F}$ its image
+    under the factor swap $\rho^{F}_{(i_2,i_1),(j_2,j_1)}=\rho_{(i_1,i_2),(j_1,j_2)}$.
+    If $(T_n\otimes\id)(\rho)\ge 0$ then
+    \[
+        n\,\Id\otimes\rho_2\ge\rho,
+    \]
+    and if $(T_n\otimes\id)(\rho^{F})\ge 0$ then
+    \[
+        n\,\rho_1\otimes\Id\ge\rho,
+    \]
+    where $\rho_1$ and $\rho_2$ are the reduced densities of $\rho$ on the first
+    and second factors.  Because the factor swap is a unitary reindexing,
+    \[
+        (\id\otimes T_n)(\rho)\ge 0
+        \iff
+        (T_n\otimes\id)(\rho^{F})\ge 0,
+    \]
+    so the second hypothesis is Wolf's symmetric condition
+    $(\id\otimes T_n)(\rho)\ge 0$ expressed through the swap.
+
+    This is the second step of Wolf's two-step argument for
+    \cite[Equation~(3.18)]{Wolf2012Quantum}.  The source states the inequalities
+    under the premise that $\rho$ has Schmidt number at most $n$, and reaches
+    $(T_n\otimes\id)(\rho)\ge 0$ from that premise by the $n$-positivity of
+    $T_n$; that first step is taken here as the hypothesis rather than derived.
+    The first step and the composed full criterion with the Schmidt-number
+    premise are
+    Theorem~\ref{thm:reduction_criterion_of_schmidt_number}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    By the reduction-criterion identity, $(T_n\otimes\id)(\rho)$ equals
+    $\Id\otimes\rho_2-n^{-1}\rho$.  Scaling a positive semidefinite operator by
+    $n>0$ preserves positivity, so $n\,\Id\otimes\rho_2-\rho\ge 0$, which is the
+    first inequality.  For the second, the factor swap $F$ satisfies $F^2=\id$
+    and is a unitary reindexing, so it preserves positive semidefiniteness and
+    the order, and it exchanges the reduced densities and the two tensor slots:
+    \[
+        (\rho^{F})_2=\rho_1,
+        \qquad
+        \bigl(\Id\otimes(\rho^{F})_2-n^{-1}\rho^{F}\bigr)^{F}
+        =\rho_1\otimes\Id-n^{-1}\rho.
+    \]
+    Applying the first form to $\rho^{F}$ gives
+    $n\,\Id\otimes(\rho^{F})_2-\rho^{F}\ge 0$; conjugating by $F$ turns this into
+    $n\,\rho_1\otimes\Id-\rho\ge 0$.
+\end{proof}
+
+\section{The Breuer--Hall map}
+
+A second concrete positive map of \cite[Chapter~3, Example~3.1]{Wolf2012Quantum}
+is built from an antisymmetric contraction $U$ on $\C^{D}$, a matrix with
+$U^{\mathsf T}=-U$ and $U^{\dagger}U\le\Id$.  The associated Breuer--Hall map
+\cite[Equation~(3.19)]{Wolf2012Quantum} is
+\[
+    T_{\mathrm{BH}}(X)=\tr(X)\,\Id-X-U\,X^{\mathsf T}U^{\dagger}.
+\]
+It is positive; whether it is decomposable, and the threshold beyond which it
+fails to be completely positive, are not treated here.
+
+\begin{definition}[Breuer--Hall map]
+    \label{def:breuer_hall_map}
+    \lean{Matrix.breuerHallMap}
+    \leanok
+    For a matrix $U$ on $\MN{D}$, the Breuer--Hall map on $\MN{D}$ is
+    \[
+        T_{\mathrm{BH}}(X)=\tr(X)\,\Id-X-U\,X^{\mathsf T}U^{\dagger}.
+    \]
+\end{definition}
+
+\begin{lemma}[The Breuer--Hall map on rank-one operators]
+    \label{lem:breuer_hall_rankone}
+    \lean{Matrix.breuerHallMap_vecMulVec_posSemidef}
+    \leanok
+    \uses{def:breuer_hall_map}
+    If $U$ is antisymmetric, $U^{\mathsf T}=-U$, and a contraction,
+    $U^{\dagger}U\le\Id$, then for every vector $v$ the image
+    $T_{\mathrm{BH}}(\ket{v}\bra{v})$ of the rank-one operator $\ket{v}\bra{v}$ is
+    positive semidefinite.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{def:breuer_hall_map}
+    On $\ket{v}\bra{v}$ the image is
+    \[
+        T_{\mathrm{BH}}(\ket{v}\bra{v})
+        =\lVert v\rVert^{2}\,\Id-\ket{v}\bra{v}-\ket{U\overline{v}}\bra{U\overline{v}},
+    \]
+    with $\overline{v}$ the entrywise conjugate of $v$.  The two vectors $v$ and
+    $U\overline{v}$ are orthogonal: antisymmetry of $U$ gives
+    \[
+        \braket{v}{U\overline{v}}
+        =\overline{v}^{\,\mathsf T}U\,\overline{v}
+        =\overline{v}^{\,\mathsf T}(-U^{\mathsf T})\overline{v}
+        =-\braket{v}{U\overline{v}},
+    \]
+    hence $\braket{v}{U\overline{v}}=0$.  The contraction bound gives
+    $\lVert U\overline{v}\rVert\le\lVert v\rVert$.  For any
+    $w$ the quadratic form is
+    \[
+        \lVert v\rVert^{2}\lVert w\rVert^{2}
+        -\lvert\braket{v}{w}\rvert^{2}
+        -\lvert\braket{U\overline{v}}{w}\rvert^{2},
+    \]
+    which is nonnegative because the two-vector Bessel inequality for the
+    orthogonal pair $v$, $U\overline{v}$ with
+    $\lVert U\overline{v}\rVert\le\lVert v\rVert$ gives
+    \[
+        \lvert\braket{v}{w}\rvert^{2}
+        +\lvert\braket{U\overline{v}}{w}\rvert^{2}
+        \le\lVert v\rVert^{2}\lVert w\rVert^{2}.
+    \]
+\end{proof}
+
+\begin{theorem}[The Breuer--Hall map is positive]
+    \label{thm:breuer_hall_positive}
+    \lean{Matrix.breuerHallMap_isPositiveMap}
+    \leanok
+    \uses{def:breuer_hall_map}
+    If $U$ is antisymmetric, $U^{\mathsf T}=-U$, and a contraction,
+    $U^{\dagger}U\le\Id$, then the Breuer--Hall map $T_{\mathrm{BH}}$ sends every
+    positive semidefinite matrix to a positive semidefinite matrix.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{lem:breuer_hall_rankone}
+    A positive semidefinite matrix is a sum of rank-one operators
+    $\ket{v}\bra{v}$.  By Lemma~\ref{lem:breuer_hall_rankone} the Breuer--Hall map
+    sends each such operator to a positive semidefinite matrix, and a sum of
+    positive semidefinite matrices is positive semidefinite, so $T_{\mathrm{BH}}$
+    is positive.
+\end{proof}

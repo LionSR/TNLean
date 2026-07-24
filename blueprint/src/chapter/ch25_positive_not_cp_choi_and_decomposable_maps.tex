@@ -1,0 +1,408 @@
+\section{Choi-type maps}
+
+The Choi-type maps in Wolf's Example~3.1 are built from the diagonal projection
+$D(X)$ and cyclic shifts $U_{k0}$:
+\[
+    T_C(X)=(d-n)D(X)-X+\sum_{k=1}^nD(U_{k0}XU_{k0}^{\dagger}).
+\]
+The formal statements below record the map and the rank-one reduction used in
+the standard positivity argument.  Positivity is proved for the case $d=3$,
+$n=1$ and, for every $d\ge3$, at the top of the range, $n=d-2$; the scalar
+input for the latter is a reciprocal inequality valid for an arbitrary
+permutation in place of the cyclic shift.  The positivity assertion for the
+remaining range $1\le n\le d-3$ and the indecomposability assertion remain
+open.  The missing general positivity step is a cyclic reciprocal estimate for
+the weights in the rank-one reduction; it does not follow merely from equality
+of the total numerator and denominator weights.  The general estimate is
+classical: the case $n=d-2$ is due to Ando, the case $n=1$ to Tanahashi and
+Tomiyama~\cite{TanahashiTomiyama1988Indecomposable}, and the whole range to
+Yamagami~\cite{Yamagami1993Cyclic}, whose proof is a variational argument on
+the boundary of a projective simplex.
+
+\begin{definition}[Choi-type map]
+    \label{def:choi_type_map}
+    \lean{Matrix.choiTypeMap}
+    \leanok
+    On the cyclic index set $\mathbb Z/d\mathbb Z$, the Choi-type map is
+    \[
+        T_C(X)=(d-n)D(X)-X+\sum_{k=1}^nD(U_{k0}XU_{k0}^{\dagger}),
+    \]
+    where $D$ keeps the diagonal of a matrix and $U_{k0}$ is the cyclic shift by
+    $k$.
+\end{definition}
+
+\begin{lemma}[The Choi-type map on rank-one projectors]
+    \label{lem:choi_type_map_rankone}
+    \lean{Matrix.choiTypeMap_vecMulVec}
+    \leanok
+    \uses{def:choi_type_map}
+    For a vector $v$ on $\mathbb Z/d\mathbb Z$,
+    \[
+        T_C(\ket{v}\bra{v})
+        =
+        \diag\!\left(
+            (d-n)|v_i|^2+\sum_{k=1}^n |v_{i-k}|^2
+        \right)
+        -\ket{v}\bra{v}.
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    The diagonal projection of a shifted rank-one projector records the shifted
+    squared moduli:
+    \[
+        D(U_{k0}\ket{v}\bra{v}U_{k0}^{\dagger})_{ii}=|v_{i-k}|^2.
+    \]
+    Substituting this into the definition of $T_C$ gives the displayed diagonal
+    matrix minus the original rank-one projector.
+\end{proof}
+
+\begin{definition}[The Choi rank-one diagonal weight]
+    \label{def:choi_type_rankone_weight}
+    \lean{Matrix.choiTypeRankOneWeight}
+    \leanok
+    For a vector $v$ on $\mathbb Z/d\mathbb Z$, set
+    \[
+        a_i=(d-n)|v_i|^2+\sum_{k=1}^n |v_{i-k}|^2 .
+    \]
+\end{definition}
+
+\begin{lemma}[Rank-one complement from a unit bound]
+    \label{lem:rankone_complement_from_unit_bound}
+    \lean{Matrix.one_sub_vecMulVec_posSemidef_of_sum_normSq_le_one}
+    \leanok
+    If $p$ is a vector with
+    \[
+        \sum_i |p_i|^2\le 1,
+    \]
+    then
+    \[
+        I-\ket{p}\bra{p}\ge 0 .
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    For every vector $w$,
+    \[
+        \bra{w}\bigl(I-\ket{p}\bra{p}\bigr)\ket{w}
+        =
+        \|w\|^2-|\braket{p}{w}|^2 .
+    \]
+    Since $\|p\|^2=\sum_i |p_i|^2\le 1$, Cauchy's inequality gives
+    \[
+        |\braket{p}{w}|^2\le \|p\|^2\|w\|^2\le \|w\|^2,
+    \]
+    so the quadratic form is nonnegative.
+\end{proof}
+
+\begin{lemma}[Diagonal rank-one Schur-complement criterion]
+    \label{lem:diagonal_rankone_schur_complement}
+    \lean{Matrix.diagonal_sub_vecMulVec_posSemidef_of_sum_normSq_div_le_one}
+    \leanok
+    \uses{lem:rankone_complement_from_unit_bound}
+    Let $a_i\ge0$ and suppose $v_i=0$ whenever $a_i=0$.  If, with the convention
+    that $|v_i|^2/a_i$ is read as $0$ when $a_i=0$,
+    \[
+        \sum_i \frac{|v_i|^2}{a_i}\le 1,
+    \]
+    then
+    \[
+        \diag(a_i)-\ket{v}\bra{v}\ge 0 .
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Put $p_i=0$ when $a_i=0$ and $p_i=v_i/\sqrt{a_i}$ otherwise.  Then
+    \[
+        \|p\|^2=\sum_i |p_i|^2
+        =\sum_i \frac{|v_i|^2}{a_i}\le 1
+    \]
+    under the same zero-term convention.  Lemma~\ref{lem:rankone_complement_from_unit_bound}
+    gives $I-\ket{p}\bra{p}\ge0$.  If $S=\diag(\sqrt{a_i})$, then
+    the support condition gives
+    \[
+        S\bigl(I-\ket{p}\bra{p}\bigr)S^\dagger
+        =
+        \diag(a_i)-\ket{v}\bra{v}.
+    \]
+    Conjugation by $S$ preserves positive semidefiniteness, which proves the
+    claim.
+\end{proof}
+
+\begin{lemma}[Rank-one positivity from the cyclic reciprocal bound]
+    \label{lem:choi_type_rankone_positive_from_weight_bound}
+    \lean{Matrix.choiTypeMap_vecMulVec_posSemidef_of_weight_sum_le_one}
+    \leanok
+    \uses{def:choi_type_map, lem:choi_type_map_rankone,
+        def:choi_type_rankone_weight, lem:diagonal_rankone_schur_complement}
+    Assume $n\le d-2$. If, with the convention that the summand is $0$ at
+    indices where $a_i=0$,
+    \[
+        \sum_i \frac{|v_i|^2}{a_i}\le 1,
+    \]
+    where $a_i$ is the weight of
+    Definition~\ref{def:choi_type_rankone_weight}, then
+    \[
+        T_C(\ket{v}\bra{v})\ge 0 .
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    The matrix in Lemma~\ref{lem:choi_type_map_rankone} has the form
+    $\diag(a_i)-\ket{v}\bra{v}$.  Each $a_i$ is nonnegative.  Since
+    $n\le d-2$, the coefficient $d-n$ is positive; hence $a_i=0$ forces
+    $v_i=0$.  The hypotheses of
+    Lemma~\ref{lem:diagonal_rankone_schur_complement} therefore apply and give
+    the stated positivity.
+\end{proof}
+
+\begin{lemma}[The first Choi rank-one positivity subcase]
+    \label{lem:choi_type_first_cyclic_reciprocal_subcase}
+    \lean{Matrix.choiTypeMap_vecMulVec_posSemidef_three_one}
+    \leanok
+    \uses{def:choi_type_map, def:choi_type_rankone_weight,
+        lem:choi_type_rankone_positive_from_weight_bound}
+    For $d=3$ and $n=1$, every vector $v=(v_0,v_1,v_2)$ satisfies
+    \[
+        T_C(\ket{v}\bra{v})\ge0 .
+    \]
+    Equivalently, with
+    $x=|v_0|^2$, $y=|v_1|^2$, and $z=|v_2|^2$, the needed cyclic estimate is
+    \[
+        \frac{x}{2x+z}+\frac{y}{2y+x}+\frac{z}{2z+y}\le1 .
+    \]
+    The zero-denominator terms are read as $0$, as in the preceding
+    Schur-complement criterion.  This is only the $3\times3$ rank-one subcase;
+    the cyclic estimate for all $1\le n\le d-2$ remains open.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    First assume that the denominators are nonzero.  After multiplying by their
+    product, the inequality is equivalent to
+    \[
+        x^2y+y^2z+z^2x\ge3xyz .
+    \]
+    This follows from AM--GM applied to the three nonnegative numbers
+    $x^2y$, $y^2z$, and $z^2x$.  If one of the denominators vanishes, the
+    corresponding two variables vanish.  For example, if $2x+z=0$, then
+    $x=z=0$, and the remaining term is
+    \[
+        \frac{y}{2y}\le\frac12\le1
+    \]
+    when $y>0$, while all terms vanish when $y=0$.  The rank-one positivity then
+    follows from
+    Lemma~\ref{lem:choi_type_rankone_positive_from_weight_bound}.
+\end{proof}
+
+\begin{lemma}[Positivity from rank-one positivity]
+    \label{lem:positive_map_from_rankone}
+    \lean{Matrix.isPositiveMap_of_forall_vecMulVec_posSemidef}
+    \leanok
+    A linear map on matrices that sends every rank-one projector
+    $\ket{w}\bra{w}$ to a positive semidefinite matrix sends every positive
+    semidefinite matrix to a positive semidefinite matrix.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Let $\Phi$ be the map and let $X\ge0$.  Scaling the eigenvectors of $X$ by
+    the square roots of its nonnegative eigenvalues produces vectors
+    $w_\alpha$ with
+    \[
+        X=\sum_\alpha \ket{w_\alpha}\bra{w_\alpha}.
+    \]
+    Linearity gives
+    \[
+        \Phi(X)=\sum_\alpha \Phi(\ket{w_\alpha}\bra{w_\alpha}),
+    \]
+    each summand is positive semidefinite by hypothesis, and a sum of
+    positive semidefinite matrices is positive semidefinite.
+\end{proof}
+
+\begin{theorem}[The first Choi map is positive]
+    \label{thm:choi_type_first_positive_subcase}
+    \lean{Matrix.choiTypeMap_isPositiveMap_three_one}
+    \leanok
+    \uses{def:choi_type_map, lem:choi_type_first_cyclic_reciprocal_subcase,
+        lem:positive_map_from_rankone}
+    For $d=3$ and $n=1$, the Choi-type map $T_C$ sends every positive
+    semidefinite matrix to a positive semidefinite matrix.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Combine Lemma~\ref{lem:choi_type_first_cyclic_reciprocal_subcase} with
+    Lemma~\ref{lem:positive_map_from_rankone}.
+\end{proof}
+
+\begin{lemma}[Permutation reciprocal inequality]
+    \label{lem:choi_type_perm_reciprocal}
+    \lean{Matrix.perm_reciprocal_sum_le_one}
+    \leanok
+    Let $x_i\ge0$ be indexed by a finite set, let $T=\sum_j x_j$, and let
+    $\sigma$ be a permutation of the index set.  Then, with zero-denominator
+    summands read as $0$,
+    \[
+        \sum_i \frac{x_i}{T+x_i-x_{\sigma(i)}}\le 1 .
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    If $T=0$, every summand vanishes.  Otherwise write
+    $\delta_i=x_i-x_{\sigma(i)}$.  Each summand obeys
+    \[
+        \frac{x_i}{T+\delta_i}
+        \le\frac{x_iT-x_i\delta_i+\delta_i^2/2}{T^2}:
+    \]
+    for $\sigma(i)=i$ both sides equal $x_i/T$, and for $\sigma(i)\ne i$ the
+    difference of the two sides is
+    \[
+        \frac{\delta_i^2\,\bigl(T-x_i-x_{\sigma(i)}\bigr)}{2\,T^2\,(T+\delta_i)}
+        \ge0,
+    \]
+    by the pair bound $x_i+x_{\sigma(i)}\le T$ and $T+\delta_i\ge 2x_i\ge0$; a
+    vanishing denominator forces $x_i=0$ and leaves a nonnegative right-hand
+    side.  Because $\sigma$ permutes the entries,
+    $\sum_i x_{\sigma(i)}^2=\sum_i x_i^2$, which gives the identity
+    $\sum_i x_i\delta_i=\tfrac12\sum_i\delta_i^2$.  Summing the term bounds
+    therefore yields
+    \[
+        \sum_i\frac{x_i}{T+\delta_i}
+        \le\frac{T\cdot T-\sum_ix_i\delta_i+\tfrac12\sum_i\delta_i^2}{T^2}
+        =1 .
+    \]
+\end{proof}
+
+\begin{lemma}[The Choi weight at the top of the range]
+    \label{lem:choi_type_weight_top}
+    \lean{Matrix.sum_shift_window_eq_sub_pair,
+        Matrix.choiTypeRankOneWeight_sub_two}
+    \leanok
+    \uses{def:choi_type_rankone_weight}
+    Let $d\ge3$ and $n=d-2$.  With $x_i=|v_i|^2$ and $T=\sum_j x_j$, the Choi
+    rank-one diagonal weight equals
+    \[
+        a_i=(d-n)x_i+\sum_{k=1}^{n}x_{i-k}=T+x_i-x_{i+1} .
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    For $n=d-2$ the backward shifts $i-1,\dots,i-(d-2)$ run over every index
+    of $\mathbb Z/d\mathbb Z$ except $i$ and $i+1$, so the shifted sum equals
+    $T-x_i-x_{i+1}$ and $a_i=2x_i+T-x_i-x_{i+1}$.
+\end{proof}
+
+\begin{lemma}[Rank-one positivity at the top of the range]
+    \label{lem:choi_type_rankone_positive_top}
+    \lean{Matrix.choiTypeMap_vecMulVec_posSemidef_sub_two}
+    \leanok
+    \uses{lem:choi_type_rankone_positive_from_weight_bound,
+        lem:choi_type_weight_top, lem:choi_type_perm_reciprocal}
+    For $d\ge3$ and $n=d-2$, every vector $v$ satisfies
+    $T_C(\ket{v}\bra{v})\ge0$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    By Lemma~\ref{lem:choi_type_weight_top}, the reciprocal weight sum is
+    \[
+        \sum_i\frac{x_i}{T+x_i-x_{i+1}}
+    \]
+    with $x_i=|v_i|^2$.  Lemma~\ref{lem:choi_type_perm_reciprocal}, applied
+    to the cyclic shift $\sigma(i)=i+1$, bounds this sum by $1$, and
+    Lemma~\ref{lem:choi_type_rankone_positive_from_weight_bound} turns the
+    bound into rank-one positivity.
+\end{proof}
+
+\begin{theorem}[Choi-type maps at the top of the range are positive]
+    \label{thm:choi_type_positive_top}
+    \lean{Matrix.choiTypeMap_isPositiveMap_sub_two}
+    \leanok
+    \uses{def:choi_type_map, lem:choi_type_rankone_positive_top,
+        lem:positive_map_from_rankone}
+    For every $d\ge3$ and $n=d-2$, the Choi-type map $T_C$ sends every
+    positive semidefinite matrix to a positive semidefinite matrix.  This is
+    the case $n=d-2$ of the positivity assertion of Wolf's Example~3.1 and
+    subsumes the case $d=3$, $n=1$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Combine Lemma~\ref{lem:choi_type_rankone_positive_top} with
+    Lemma~\ref{lem:positive_map_from_rankone}.
+\end{proof}
+
+\section{Decomposable positive maps}
+
+The Choi-type maps are stated in Wolf's Example~3.1 as positive and
+indecomposable.  The formal language for the second adjective is the following
+standard one: a positive map is decomposable when it is the sum of a completely
+positive map and a completely copositive map.
+
+\begin{definition}[Decomposable and indecomposable positive maps]
+    \label{def:decomposable_positive_map}
+    \lean{IsCompletelyCopositiveMap, IsDecomposablePositiveMap,
+        IsIndecomposablePositiveMap}
+    \leanok
+    A map $\Phi\colon\MN{D}\to\MN{D}$ is completely copositive if
+    $\Phi\circ\theta$ is completely positive, where $\theta$ is transposition.
+    It is decomposable if
+    \[
+        \Phi=\Phi_{\mathrm{cp}}+\Phi_{\mathrm{ccp}}
+    \]
+    with $\Phi_{\mathrm{cp}}$ completely positive and
+    $\Phi_{\mathrm{ccp}}$ completely copositive.  It is indecomposable if it is
+    positive and not decomposable.
+\end{definition}
+
+\begin{lemma}[Completely copositive maps are positive]
+    \label{lem:completely_copositive_map_positive}
+    \lean{IsCompletelyCopositiveMap.isPositiveMap}
+    \leanok
+    \uses{def:decomposable_positive_map, thm:transpose_positive_trace_preserving,
+        thm:cp_is_positive}
+    If $\Phi$ is completely copositive, then $\Phi$ is positive.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Let $X\ge0$.  Transposition preserves positivity, so $\theta(X)\ge0$.
+    Since $\Phi\circ\theta$ is completely positive,
+    \[
+        (\Phi\circ\theta)(\theta(X))\ge0.
+    \]
+    Because $\theta^2=\mathrm{id}$, this is exactly $\Phi(X)\ge0$.
+\end{proof}
+
+\begin{lemma}[Decomposable maps are positive]
+    \label{lem:decomposable_map_positive}
+    \lean{IsDecomposablePositiveMap.isPositiveMap}
+    \leanok
+    \uses{def:decomposable_positive_map, thm:cp_is_positive,
+        lem:completely_copositive_map_positive}
+    If $\Phi$ is decomposable, then $\Phi$ is positive.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Write
+    \[
+        \Phi=\Phi_{\mathrm{cp}}+\Phi_{\mathrm{ccp}},
+    \]
+    with $\Phi_{\mathrm{cp}}$ completely positive and
+    $\Phi_{\mathrm{ccp}}$ completely copositive.  For $X\ge0$, the two preceding
+    positivity results give
+    \[
+        \Phi_{\mathrm{cp}}(X)\ge0,
+        \qquad
+        \Phi_{\mathrm{ccp}}(X)\ge0.
+    \]
+    Their sum is positive, hence $\Phi(X)\ge0$.
+\end{proof}
