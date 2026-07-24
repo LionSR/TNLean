@@ -1856,7 +1856,7 @@
     \tenkz_row_extent:n {#1}
     \int_compare:nNnF { \l__tenkz_first_int } = {0}
       {
-        \tenkz_periodic_endpoints:nnnN {#1}
+        \tenkz_periodic_endpoints_match:nnnN {#1}
           {\l__tenkz_first_int}{\l__tenkz_last_int} \l_tmpa_bool
         \bool_if:NT \l_tmpa_bool
           {
@@ -2134,6 +2134,7 @@
         {
           \str_if_eq:VnTF \l__tenkz_eastpol_tl {trace}
             {
+              \tenkz_draw_periodic_mismatches:
               % closure-style default follows the frame: flat words keep
               % the explicit racetrack, vertical words default to hooks --
               % a vertical racetrack spends the very width the rotation
@@ -5660,17 +5661,16 @@ code=label-pos|pos=\tl_to_str:N \l_tmpa_tl}
       }
   }
 
+\seq_new:N \l__tenkz_periodic_mismatch_seq
 \cs_new_protected:Npn \tenkz_record_periodic_row:n #1
   {
     \tenkz_row_extent:n {#1}
     \int_compare:nNnF { \l__tenkz_first_int } = {0}
       {
-        \tenkz_periodic_row_port:nnnN
-          {#1}{\l__tenkz_first_int}{west} \l__tenkz_periodicwest_bool
-        \tenkz_periodic_row_port:nnnN
-          {#1}{\l__tenkz_last_int}{east} \l__tenkz_periodiceast_bool
-        \bool_if:nT
-          { \l__tenkz_periodicwest_bool && \l__tenkz_periodiceast_bool }
+        \tenkz_periodic_endpoints_match:nnnN {#1}
+          {\l__tenkz_first_int}{\l__tenkz_last_int}
+          \l__tenkz_periodicpair_bool
+        \bool_if:NT \l__tenkz_periodicpair_bool
           {
             \prop_get:NeNF \l__tenkz_owner_prop
               {#1-\int_use:N\l__tenkz_first_int} \l_tmpa_tl
@@ -5685,12 +5685,28 @@ code=label-pos|pos=\tl_to_str:N \l_tmpa_tl}
             \prop_put:Nen \l__tenkz_periodicpaired_prop
               {#1-\l_tmpa_tl-east} {}
           }
+        \bool_if:nT
+          {
+            ( \l__tenkz_periodicwest_bool &&
+              ! \l__tenkz_periodiceast_bool ) ||
+            ( ! \l__tenkz_periodicwest_bool &&
+              \l__tenkz_periodiceast_bool )
+          }
+          {
+            \seq_put_right:Ne \l__tenkz_periodic_mismatch_seq
+              {
+                { \int_eval:n{#1} }
+                { \int_use:N \l__tenkz_first_int }
+                { \int_use:N \l__tenkz_last_int }
+              }
+          }
       }
   }
 
 \cs_new_protected:Npn \tenkz_compute_periodic_faces:
   {
     \prop_clear:N \l__tenkz_periodicpaired_prop
+    \seq_clear:N \l__tenkz_periodic_mismatch_seq
     \bool_lazy_and:nnT
       { \str_if_eq_p:Vn \l__tenkz_westpol_tl {trace} }
       { \str_if_eq_p:Vn \l__tenkz_eastpol_tl {trace} }
@@ -5704,7 +5720,18 @@ code=label-pos|pos=\tl_to_str:N \l_tmpa_tl}
       }
   }
 
-\cs_new_protected:Npn \tenkz_periodic_endpoints:nnnN #1#2#3#4
+\cs_new_protected:Npn \tenkz_draw_periodic_mismatches:
+  {
+    \seq_map_inline:Nn \l__tenkz_periodic_mismatch_seq
+      { \tenkz_draw_periodic_mismatch:nnn ##1 }
+  }
+\cs_new_protected:Npn \tenkz_draw_periodic_mismatch:nnn #1#2#3
+  {
+    \tenkz_periodic_endpoints:nnnN {#1}{#2}{#3}
+      \l__tenkz_periodicpair_bool
+  }
+
+\cs_new_protected:Npn \tenkz_periodic_endpoints_match:nnnN #1#2#3#4
   {
     \tenkz_periodic_row_port:nnnN {#1}{#2}{west}
       \l__tenkz_periodicwest_bool
@@ -5714,6 +5741,15 @@ code=label-pos|pos=\tl_to_str:N \l_tmpa_tl}
     % uses temporary booleans and must not turn a mismatch into a closure.
     \bool_set:Nn \l__tenkz_periodicpair_bool
       { \l__tenkz_periodicwest_bool && \l__tenkz_periodiceast_bool }
+    \bool_set_eq:NN #4 \l__tenkz_periodicpair_bool
+  }
+
+% The draw-phase wrapper owns the warning and unmatched-stub ink.  Record
+% derivation calls the pure matcher above, before a tikzpicture exists.
+\cs_new_protected:Npn \tenkz_periodic_endpoints:nnnN #1#2#3#4
+  {
+    \tenkz_periodic_endpoints_match:nnnN {#1}{#2}{#3}
+      \l__tenkz_periodicpair_bool
     \bool_if:nT
       {
         ( \l__tenkz_periodicwest_bool &&
