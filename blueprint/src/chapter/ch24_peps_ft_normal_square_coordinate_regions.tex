@@ -1,0 +1,376 @@
+
+On the square lattice the injective regions are built from $2\times3$ and
+$3\times2$ coordinate rectangles. This section fixes the geometry: the nested
+regions $R\subseteq S$ with $S\setminus R$ a single site, which realize the
+one-site-different injective regions the normal theorem requires at each vertex,
+together with the local window $T$ used around an edge. The union closure of
+Section~\ref{sec:peps_normal_union} builds these regions from injective
+rectangles, so a rectangular injectivity hypothesis yields their injectivity.
+
+\begin{definition}[Complement of a finite region]%
+    \label{def:peps_regionComplement}
+    \lean{TNLean.PEPS.regionComplement}
+    \lean{TNLean.PEPS.mem_regionComplement}
+    \leanok
+    For a finite vertex region $R\subseteq V$, its complement is
+    $V\setminus R$. Equivalently, a vertex lies in the complement exactly
+    when it does not lie in $R$.
+\end{definition}
+
+\begin{definition}[Square-lattice coordinate regions]%
+    \label{def:peps_squareLatticeCoordinateRegions}
+    \lean{TNLean.PEPS.SquareLatticeVertex}
+    \lean{TNLean.PEPS.squareLatticeHorizontalNeighbor}
+    \lean{TNLean.PEPS.squareLatticeVerticalNeighbor}
+    \lean{TNLean.PEPS.squareLatticeGraph}
+    \lean{TNLean.PEPS.IsHorizontalSquareLatticeEdge}
+    \lean{TNLean.PEPS.IsVerticalSquareLatticeEdge}
+    \lean{TNLean.PEPS.squareLatticeRectangle}
+    \lean{TNLean.PEPS.squareLatticeFull}
+    \lean{TNLean.PEPS.squareLatticeCoordinateInterval}
+    \lean{TNLean.PEPS.squareLatticeContiguousRectangle}
+    \lean{TNLean.PEPS.IsTwoByThreeSquareLatticeProduct}
+    \lean{TNLean.PEPS.IsThreeByTwoSquareLatticeProduct}
+    \lean{TNLean.PEPS.IsTwoByThreeContiguousSquareLatticeRectangle}
+    \lean{TNLean.PEPS.IsThreeByTwoContiguousSquareLatticeRectangle}
+    \lean{TNLean.PEPS.normalSquareRegionR}
+    \lean{TNLean.PEPS.normalSquareRegionS}
+    \lean{TNLean.PEPS.normalSquareRegionTVerticalBlock}
+    \lean{TNLean.PEPS.normalSquareRegionTHorizontalBlock}
+    \lean{TNLean.PEPS.normalSquareRegionTHole}
+    \lean{TNLean.PEPS.normalSquareRegionT}
+    \lean{TNLean.PEPS.normalSquareEdgeComplementRegion}
+    \lean{TNLean.PEPS.squareLatticeGraph_adj}
+    \lean{TNLean.PEPS.squareLatticeGraph_adj_right}
+    \lean{TNLean.PEPS.squareLatticeGraph_adj_up}
+    \lean{TNLean.PEPS.squareLatticeRightEdge}
+    \lean{TNLean.PEPS.squareLatticeUpEdge}
+    \lean{TNLean.PEPS.squareLatticeRightEdge_isHorizontal}
+    \lean{TNLean.PEPS.squareLatticeUpEdge_isVertical}
+    \lean{TNLean.PEPS.squareLatticeEdge_horizontal_or_vertical}
+    \lean{TNLean.PEPS.squareLatticeEdge_not_horizontal_and_vertical}
+    \lean{TNLean.PEPS.horizontalSquareLatticeEdge_coords}
+    \lean{TNLean.PEPS.horizontalSquareLatticeEdge_eq_rightEdge}
+    \lean{TNLean.PEPS.verticalSquareLatticeEdge_coords}
+    \lean{TNLean.PEPS.verticalSquareLatticeEdge_eq_upEdge}
+    \leanok
+    The finite $n\times m$ square lattice is represented by pairs of
+    coordinates. The corresponding square-lattice graph has horizontal and
+    vertical nearest-neighbor edges; the two elementary adjacency lemmas record
+    the right-neighbor and upper-neighbor cases used for translated edge
+    blockings, and the corresponding coordinate edges name those two
+    nearest-neighbor edges as elements of the edge set. These named right and
+    upward edges have the expected horizontal and vertical orientations.
+    Every edge of this
+    graph is horizontal or vertical, but not both. Since edges are represented
+    by ordered endpoint pairs, a horizontal edge is oriented from left to right
+    and is exactly the coordinate right edge from its left endpoint; similarly,
+    a vertical edge is oriented from bottom to top and is exactly the
+    coordinate upward edge from its lower endpoint.
+    A coordinate rectangle is a product of a horizontal coordinate set and a
+    vertical coordinate set. The $2\times3$ and
+    $3\times2$ coordinate-product predicates assert only that these two
+    coordinate sets have cardinalities $2,3$ and $3,2$, respectively.
+    Contiguous coordinate rectangles are products of contiguous coordinate
+    intervals, and the contiguous $2\times3$ and $3\times2$ predicates name the
+    rectangular blocks used in the normal square-lattice theorem. The
+    displayed region $R$ is the union of a $2\times3$ contiguous rectangle
+    with the $3\times2$ contiguous rectangle occupying its upper two rows and
+    extending one column to the right. The displayed region $S$ is the union
+    of two $2\times3$ contiguous rectangles shifted by one horizontal
+    coordinate, hence the full $3\times3$ square spanned by them. The
+    displayed local-window model for $T$ is the complement, inside a local
+    $5\times6$ coordinate window, of the vertical $2\times3$ edge block
+    and the horizontal $3\times2$ edge block shown in the source picture.
+    The finite-lattice complementary block is the whole finite square lattice
+    with those two edge blocks removed; this is the block denoted $A_3$ in
+    the proof of \cite[Theorem~3]{Molnar2018NormalPEPS}.
+    The source shapes are:
+    \begin{tenkzequation}
+        % Source/formula verdict: Molnar et al., arXiv:1804.04964,
+        % paper_normal.tex:1405--1429 and source PDF p. 15 depict
+        % R=(2-4,2-4)\{(4,4)} and S=(2-4,2-4).
+        % Ink-to-index verdict: every dot is an ordinary tensor; every lattice
+        % edge is a virtual index, and the selected fill records membership only.
+        % Structural count verdict (not mechanically emitted as a lattice
+        % signature): each 5-by-5 panel has 25 sites, 40 internal virtual
+        % contractions, and 20 cut virtual bonds; (4,4) remains ordinary.
+        % Structurally derived boundary/type verdict: no physical index is
+        % exposed, so each panel has (V,P)=(20,0).
+        \begin{tenkzlattice}[rows=5, cols=5, boundary legs]
+            \tnregion[slot=selected, label=$R$]
+                {(2-4,2-4) - (4,4)}
+        \end{tenkzlattice}
+        $\qquad\text{and}\qquad$
+        \begin{tenkzlattice}[rows=5, cols=5, boundary legs]
+            \tnregion[slot=selected, label=$S$]{(2-4,2-4)}
+        \end{tenkzlattice}
+
+    \end{tenkzequation}
+    \begin{tenkzequation}
+        % Formula verdict: in row-column coordinates the exact local formal
+        % region is T=(1-6,1-5) minus (3-5,1-2) and (2-3,3-5); the two
+        % removed blocks are respectively 3-by-2 and 2-by-3 cell rectangles.
+        % Ink-to-index verdict: every dot is an ordinary tensor, every lattice
+        % edge is a virtual contraction, and the selected fill records only
+        % membership in T; it adds no contraction or tensor operation.
+        % Contraction/boundary verdict: the 6-by-5 panel has 49 internal
+        % virtual contractions and 22 cut virtual bonds, with no exposed
+        % physical indices, hence boundary type (V,P)=(22,0).
+        % Source verdict: arXiv:1804.04964, paper_normal.tex:1430--1445
+        % depicts the same 5-by-6 window complement; this panel uses the exact
+        % cell set of normalSquareRegionT rather than the source's rounded ink.
+        \begin{tenkzlattice}[rows=6, cols=5, boundary legs]
+            \tnregion[slot=selected, label=T, label at=north]
+                {(1-6,1-5) - (3-5,1-2) - (2-3,3-5)}
+        \end{tenkzlattice}
+    \end{tenkzequation}
+    % Maintainer note: injectivity of this finite-lattice complementary block
+    % is not yet proved; this definition only names the region.
+\end{definition}
+
+\begin{lemma}[Basic identities for square-lattice coordinate regions]%
+    \label{lem:peps_squareLatticeCoordinateRegion_identities}
+    \lean{TNLean.PEPS.mem_squareLatticeRectangle}
+    \lean{TNLean.PEPS.mem_squareLatticeCoordinateInterval}
+    \lean{TNLean.PEPS.mem_squareLatticeContiguousRectangle}
+    \lean{TNLean.PEPS.mem_normalSquareRegionR}
+    \lean{TNLean.PEPS.mem_normalSquareRegionS}
+    \lean{TNLean.PEPS.mem_normalSquareRegionTVerticalBlock}
+    \lean{TNLean.PEPS.mem_normalSquareRegionTHorizontalBlock}
+    \lean{TNLean.PEPS.mem_normalSquareRegionTHole}
+    \lean{TNLean.PEPS.mem_normalSquareRegionT}
+    \lean{TNLean.PEPS.mem_normalSquareEdgeComplementRegion}
+    \lean{TNLean.PEPS.isTwoByThreeContiguousSquareLatticeRectangle_of_bounds}
+    \lean{TNLean.PEPS.isThreeByTwoContiguousSquareLatticeRectangle_of_bounds}
+    \lean{TNLean.PEPS.card_squareLatticeRectangle}
+    \lean{TNLean.PEPS.squareLatticeFull_eq_univ}
+    \leanok
+    \uses{def:peps_squareLatticeCoordinateRegions}
+    Membership in a coordinate rectangle is coordinatewise membership, the
+    contiguous coordinate interval has the expected coordinate inequalities,
+    membership in a contiguous coordinate rectangle is the conjunction of the
+    four bounding inequalities, and membership in $R$ is the disjunction of
+    membership in the $2\times3$ lower-left piece or in the shifted
+    $3\times2$ upper piece. Membership in $S$ is the disjunction of
+    membership in the left $2\times3$ piece or in the horizontally shifted
+    $2\times3$ piece. Membership in the local-window $T$ region is
+    membership in the local $5\times6$ window together with nonmembership in
+    the union of the two displayed edge blocks. Bounded contiguous coordinate
+    rectangles of sizes $2\times3$ and $3\times2$ satisfy, respectively,
+    the predicates for
+    contiguous $2\times3$ and contiguous $3\times2$ square-lattice
+    rectangles. The cardinality of a coordinate rectangle is the
+    product of the two coordinate cardinalities, and the full coordinate
+    rectangle is the whole finite vertex set.
+\end{lemma}
+\begin{proof}\leanok
+    The coordinate-rectangle statements follow from membership and cardinality
+    identities for Cartesian products of finite coordinate sets. The
+    contiguous-rectangle statement then unfolds the two coordinate intervals.
+    The membership statements for $R$, $S$, and the two edge blocks removed
+    from $T$ additionally unfold membership in a union of two such
+    rectangles, while membership in $T$ also unfolds the set difference from
+    the local $5\times6$ window. The shape predicates follow by using the
+    displayed lower-left corners as witnesses.
+\end{proof}
+
+\begin{lemma}[The normal regions $R$ and $S$ are unions of contiguous
+        rectangles]%
+    \label{lem:peps_normalSquareRegionRS_rectangular_decomposition}
+    \lean{TNLean.PEPS.normalSquareRegionR_rectangular_decomposition}
+    \lean{TNLean.PEPS.normalSquareRegionS_rectangular_decomposition}
+    \leanok
+    \uses{def:peps_squareLatticeCoordinateRegions,
+        lem:peps_squareLatticeCoordinateRegion_identities}
+    If the displayed $3\times3$ window containing $R$ and $S$ lies in
+    the finite square lattice, then $R$ is the union of a contiguous
+    $2\times3$ rectangle and a contiguous $3\times2$ rectangle, while
+    $S$ is the union of two contiguous $2\times3$ rectangles.
+\end{lemma}
+\begin{proof}\leanok
+    This is the defining description of $R$ and $S$, together with the
+    coordinate bounds which make the displayed rectangles contiguous
+    $2\times3$ and $3\times2$ rectangles.
+\end{proof}
+
+\begin{lemma}[The edge blocks removed from $T$ are contiguous rectangles]%
+    \label{lem:peps_normalSquareRegionTHole_rectangular_decomposition}
+    \lean{TNLean.PEPS.normalSquareRegionTVerticalBlock_rectangular}
+    \lean{TNLean.PEPS.normalSquareRegionTHorizontalBlock_rectangular}
+    \lean{TNLean.PEPS.normalSquareRegionTHole_rectangular_decomposition}
+    \leanok
+    \uses{def:peps_squareLatticeCoordinateRegions,
+        lem:peps_squareLatticeCoordinateRegion_identities}
+    If the two edge blocks cut out of the displayed $T$-region lie in the
+    finite square lattice, then they are respectively a contiguous
+    $2\times3$ rectangle and a contiguous $3\times2$ rectangle.
+\end{lemma}
+\begin{proof}\leanok
+    This is the defining description of the two removed edge blocks, together
+    with the coordinate bounds which make them valid contiguous rectangles.
+\end{proof}
+
+\begin{lemma}[The local $T$-region and its removed edge blocks fill the window]%
+    \label{lem:peps_normalSquareRegionT_window_complement}
+    \lean{TNLean.PEPS.normalSquareRegionTHole_subset_window}
+    \lean{TNLean.PEPS.normalSquareRegionTVerticalBlock_disjoint_horizontalBlock}
+    \lean{TNLean.PEPS.normalSquareRegionT_disjoint_THole}
+    \lean{TNLean.PEPS.normalSquareRegionT_disjoint_verticalBlock}
+    \lean{TNLean.PEPS.normalSquareRegionT_disjoint_horizontalBlock}
+    \lean{TNLean.PEPS.normalSquareRegionT_union_THole}
+    \lean{TNLean.PEPS.normalSquareRegionT_union_verticalBlock_union_horizontalBlock}
+    \leanok
+    \uses{def:peps_squareLatticeCoordinateRegions,
+        lem:peps_squareLatticeCoordinateRegion_identities}
+    The two edge blocks removed from the displayed local $T$-region lie inside
+    the local $5\times6$ coordinate window. They are disjoint from each other
+    and from this local $T$ region, and their union with it is exactly that
+    local window.
+\end{lemma}
+\begin{proof}\leanok
+    This follows by unfolding the definition of $T$ as the set-theoretic
+    complement of the two displayed edge blocks inside the local window.
+\end{proof}
+
+\begin{lemma}[The edge-complementary block fills the finite lattice]%
+    \label{lem:peps_normalSquareEdgeComplementRegion}
+    \lean{TNLean.PEPS.normalSquareRegionT_subset_edgeComplementRegion}
+    \lean{TNLean.PEPS.normalSquareEdgeComplementRegion_disjoint_THole}
+    \lean{TNLean.PEPS.normalSquareEdgeComplementRegion_union_THole}
+    \lean{TNLean.PEPS.normalSquareEdgeComplementRegion_union_verticalBlock_union_horizontalBlock}
+    \leanok
+    \uses{def:peps_squareLatticeCoordinateRegions,
+        lem:peps_squareLatticeCoordinateRegion_identities}
+    The finite-lattice complementary block around the edge is disjoint from
+    the two displayed edge blocks, and its union with them is the full finite
+    square lattice. The local-window $T$ region is contained in this
+    finite-lattice complementary block.
+\end{lemma}
+\begin{proof}\leanok
+    This is the set-theoretic complement of the two displayed edge blocks in
+    the full finite square lattice. The containment of the local-window
+    $T$ region follows because its points also avoid the two removed edge
+    blocks.
+\end{proof}
+
+\begin{definition}[Rectangular covers of square-lattice regions]%
+    \label{def:peps_normalSquareRectangleCover}
+    \lean{TNLean.PEPS.SquareLatticeRectangleCover}
+    \lean{TNLean.PEPS.NormalSquareRegionTRectangleCover}
+    \lean{TNLean.PEPS.NormalSquareEdgeComplementRectangleCover}
+    \lean{TNLean.PEPS.normalSquareVerticalEdgeComplementRegion}
+    \lean{TNLean.PEPS.NormalSquareVerticalEdgeComplementRectangleCover}
+    \leanok
+    \uses{def:peps_squareLatticeCoordinateRegions,
+        lem:peps_normalSquareEdgeComplementRegion}
+    A rectangular cover of a square-lattice region is a nonempty finite family
+    of regions whose union is exactly the given region, and each member is a
+    contiguous $2\times3$ or $3\times2$ rectangle. The two cases used in the
+    proof would be a cover of the local displayed $T$-region and a cover of the
+    finite-lattice complementary block $A_3$. The panel below shows only the
+    two permitted shapes of a cover member; it does not assert that these
+    particular rectangles cover either region.
+    \begin{tenkzequation}
+        % Formula verdict: the selected cells form one 2-by-3 rectangle and
+        % the secondary cells form one 3-by-2 rectangle.  This is a schematic
+        % of the two allowed member shapes, not a union equation or a cover.
+        % Ink-to-index verdict: every dot is an ordinary tensor and every
+        % lattice edge is a virtual contraction; the outlined fills record
+        % rectangle membership only and remain independently customizable.
+        % Contraction/boundary verdict: the 4-by-4 panel has 24 internal
+        % virtual contractions and 16 cut virtual bonds, with no exposed
+        % physical indices, hence boundary type (V,P)=(16,0).
+        % Source verdict: arXiv:1804.04964, paper_normal.tex:1405--1445 uses
+        % 2-by-3 and 3-by-2 injective pieces.  The following formal lemma proves
+        % the local no-cover obstruction for the present origin-based T and A3,
+        % so no stronger geometric claim is encoded by this schematic.
+        \begin{tenkzlattice}[rows=4, cols=4, boundary legs]
+            \tnregion[slot=selected, outline, label={2\times3},
+                label at=center]{(1-2,1-3)}
+            \tnregion[slot=secondary, outline, inset=1,
+                label={3\times2}, label at=center]{(2-4,3-4)}
+        \end{tenkzlattice}
+    \end{tenkzequation}
+\end{definition}
+% Maintainer note: this definition records sufficient coordinate criteria.
+% The concrete local T cover remains to be constructed.
+
+\begin{lemma}[The present local $T$-window and $A_3$ cover obstructions]%
+    \label{lem:peps_normalSquareRegionT_no_five_by_six_cover}
+    \lean{TNLean.PEPS.not_squareLatticeRectangleCover_of_forced_points}
+    \lean{TNLean.PEPS.not_normalSquareRegionT_rectangleCover_at_origin}
+    \lean{TNLean.PEPS.not_normalSquareRegionT_rectangleCover_five_by_six}
+    \lean{TNLean.PEPS.not_normalSquareVerticalRegionT_rectangleCover_at_origin}
+    \lean{TNLean.PEPS.not_normalSquareVerticalRegionT_rectangleCover_six_by_five}
+    \lean{TNLean.PEPS.not_normalSquareEdgeComplementRectangleCover_at_origin}
+    \lean{TNLean.PEPS.not_normalSquareEdgeComplementRectangleCover_five_by_seven}
+    \lean{TNLean.PEPS.not_normalSquareVerticalEdgeComplementRectangleCover_at_origin}
+    \lean{TNLean.PEPS.not_normalSquareVerticalEdgeComplementRectangleCover_seven_by_five}
+    \leanok
+    \uses{def:peps_normalSquareRectangleCover,
+        lem:peps_normalSquareRegionT_window_complement}
+    The present origin-based local-window model for the displayed $T$-region
+    admits no nonempty finite cover by contained contiguous $2\times3$ and
+    $3\times2$ rectangles whenever the ambient lattice contains the
+    $5\times6$ window. The origin-based rotated local-window model used for
+    vertical edges has the analogous obstruction whenever the ambient lattice
+    contains the $6\times5$ window. The normalized $5\times6$ and
+    $6\times5$ cases are recorded as corollaries. The present origin-based
+    horizontal edge-complement model has the analogous obstruction whenever
+    the ambient lattice contains the $5\times7$ frame; the normalized
+    $5\times7$ case is again recorded as a corollary. The present
+    origin-based vertical edge-complement model has the corresponding
+    obstruction whenever the ambient lattice contains the $7\times5$ frame;
+    the normalized $7\times5$ case is recorded as a corollary.
+\end{lemma}
+% Maintainer note: this is a local-model obstruction, not a statement of the
+% source theorem. It records that the current coordinate model is not yet the
+% source cover needed for the $T$-injectivity sentence.
+\begin{proof}\leanok
+    The lower-left point of the local window belongs to the present $T$
+    model. Any contiguous $2\times3$ rectangle containing it also contains
+    a point of the removed vertical edge block, while any contiguous
+    $3\times2$ rectangle containing it also contains a point of the removed
+    horizontal edge block. The rotated statement is the same coordinate
+    argument with the two shapes interchanged. The horizontal
+    edge-complement statement uses the same lower-left point, and so does the
+    normalized vertical edge-complement statement. These cases are all
+    instances of the same point-forcing obstruction to an exact rectangular
+    cover.
+\end{proof}
+
+\begin{lemma}[Injectivity from a rectangular cover]%
+    \label{lem:peps_normalSquareRectangleCover_injective}
+    \lean{TNLean.PEPS.NormalSquareLatticeRectangleInjectivityHypotheses.injective_of_rectangleCover}
+    \leanok
+    \uses{def:peps_normalSquareRectangleCover,
+        def:peps_normalRectangleInjectivityHypotheses,
+        lem:peps_regionInjectivityUnionClosure_finite}
+    If a square-lattice region has a nonempty finite cover by contiguous
+    $2\times3$ and $3\times2$ rectangles, then rectangular injectivity and
+    finite union closure imply that the region is injective.
+\end{lemma}
+\begin{proof}\leanok
+    Apply rectangular injectivity to every rectangle in the cover, then apply
+    finite union closure to the nonempty family.
+\end{proof}
+
+\begin{lemma}[The normal regions $R$ and $S$ differ in one site]%
+    \label{lem:peps_normalSquareRegionR_regionS_difference}
+    \lean{TNLean.PEPS.normalSquareRegionR_subset_regionS}
+    \lean{TNLean.PEPS.mem_normalSquareRegionS_sdiff_regionR}
+    \leanok
+    \uses{def:peps_squareLatticeCoordinateRegions,
+        lem:peps_squareLatticeCoordinateRegion_identities}
+    For the displayed regions $R$ and $S$ with the same lower-left corner,
+    $R$ is contained in $S$. The difference $S\setminus R$ is exactly
+    the lower-right site of the $3\times3$ square: in coordinates, the site
+    one obtains by shifting two steps horizontally and zero steps vertically
+    from the lower-left corner.
+\end{lemma}
+\begin{proof}\leanok
+    Expand the two displayed unions. The only point of the second
+    $2\times3$ piece of $S$ which is not already in the union defining
+    $R$ is its lower-right point.
+\end{proof}
