@@ -117,6 +117,14 @@ shell command % \tntree{commented}
         raise AssertionError("an escaped percent incorrectly started a TeX comment")
     if DOCTEST._has_executable_command(r"\verb|\tn| \string\tn \\tn", "tn"):
         raise AssertionError("a non-executed command spelling satisfied reference coverage")
+    if DOCTEST._is_tenkz_verbatim(r"\verb|\tn| \string\tn \\tn"):
+        raise AssertionError("a non-executed command spelling classified a Verbatim block")
+    escaped_verb = (
+        "Write \\\\verb|without a closing delimiter on this line\n"
+        "\\usepackage{tenkz}\n"
+    )
+    if r"\usepackage{tenkz}" not in DOCTEST._mask_inline_verbatim(escaped_verb):
+        raise AssertionError("an escaped verb spelling masked a later source line")
     first_label = DOCTEST._source_label(DOCTEST.CHAPTERS / "basic" / "example.tex")
     second_label = DOCTEST._source_label(DOCTEST.CHAPTERS / "advanced" / "example.tex")
     if first_label == second_label:
