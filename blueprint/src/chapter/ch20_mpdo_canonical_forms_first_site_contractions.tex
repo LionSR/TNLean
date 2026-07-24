@@ -1,0 +1,574 @@
+\begin{theorem}[Representative and literal reduction from first-site contractions]
+    \label{thm:representative_one_sub_mp_zero}
+    \lean{MPSTensor.FirstSiteActionAgree.of_sameMPVPos}
+    \lean{MPSTensor.insertedTensor_toTensorFromBlocks}
+    \lean{MPSTensor.SectorDecomposition.insertedTensor_toTensor_eq_of_basis}
+    \lean{MPSTensor.insertedTensor_eq_of_gauge}
+    \lean{MPOTensor.IsHorizontalCF.insertedTensor_eq_of_firstSiteActionAgree}
+    \lean{MPOTensor.representative_opposite_insert_eq_of_rotated_mpo_entries}
+    \lean{MPOTensor.representative_braRight_eq_ketLeftBraRight_of_invariant}
+    \lean{MPOTensor.IsHorizontalCF.exists_representative_braRight_eq_ketLeftBraRight}
+    \lean{MPOTensor.IsHorizontalCF.braRight_eq_ketLeftBraRight_of_invariant}
+    \leanok
+    \uses{def:mpdo, def:horizontal_cf_mpdo,
+        def:mpdo_three_first_site_contractions,
+        thm:representative_grouped_insert_eq,
+        thm:postblocked_representative_grouped_insert_eq,
+        thm:mpdo_first_site_invariant_comm}
+    Let $M$ be in horizontal canonical form. For doubled-index matrices
+    $Y,Z$, suppose that
+    $Y_1V^{(N)}(M)=Z_1V^{(N)}(M)$ for every $N\geq1$.
+    Then the corresponding inserted tensors agree on the original bond
+    space, $YM=ZM$.
+
+    Now suppose in addition that $M$ generates an MPDO, $Q=Q^\dagger$, and
+    that $Q\widetilde M=Q\widetilde M Q$ on the vertically viewed tensor.
+    Then, on every representative, the insertions corresponding to
+    $\widetilde M Q$ and $Q\widetilde M Q$ agree:
+    $Y_R(Q)A_j=Y_C(Q)A_j$ for $0\leq j<g$.
+    This equality extends through every repeated weighted sector and the
+    direct sum of the copy gauges, so that the original MPO tensor satisfies
+    $\widetilde M Q=Q\widetilde M Q$.
+    The specialized assertion follows from the two entrywise identities
+    $Q_1H^{(N)}=Q_1H^{(N)}Q_1$ and
+    $Q_1H^{(N)}=H^{(N)}Q_1$ at every positive length.
+
+    This is the representative-indexed conclusion of the invariant-projection
+    step in
+    \cite[Proposition~4.13, lines~1873--1887]{Cirac2016MPDO_arXiv}.
+    Copies with a common normal representative are grouped before separation,
+    exactly as in Appendix~C.3, Lemma~L.
+    The source assumes that $Q$ is an orthogonal projector; this implication
+    only uses its Hermiticity.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:representative_grouped_insert_eq,
+        thm:postblocked_representative_grouped_insert_eq,
+        thm:mpdo_first_site_invariant_comm}
+    For the general assertion, positive-length MPV equality transports the first-site
+    identity to the BNT sector decomposition. The representative-grouped
+    Lemma~L gives $YA_j=ZA_j$ for every representative. First-site insertion
+    commutes with the weighted direct sum, and conjugating each copy by its
+    gauge gives $YM=ZM$ on the original bond space.
+
+    For the specialized assertion, positivity and Hermiticity give
+    $Q_1H^{(N)}=Q_1H^{(N)}Q_1=H^{(N)}Q_1$. Transport these two identities to
+    the BNT sector decomposition and apply the
+    representative-grouped Lemma~L to identify first $Y_L(Q)A_j$ with
+    $Y_C(Q)A_j$ and then with $Y_R(Q)A_j$. Transitivity gives the stated
+    equality for every representative, and the same direct-sum and copy-gauge
+    argument gives the literal equality on $\widetilde M$.
+\end{proof}
+
+\begin{lemma}[Blockwise equality from agreement on the MPV family]
+    \label{lem:blockwise_insert_eq_of_mpv_agree}
+    \lean{MPOTensor.blockwise_insert_eq_of_mpv_agree}
+    \leanok
+    \uses{def:block_diagonal_tensor, def:injective, thm:propblockinj_abstract}
+    Let $\bigoplus_k \mu_k A_k$ be a block-diagonal tensor whose blocks are
+    injective, left-canonical, weighted by nonzero scalars, and jointly
+    block-injective in the sense that for some blocking length~$L$ the tuple
+    of trace pairings against length-$L$ block words is faithful across all
+    blocks simultaneously.
+    For $Y\in \MN{d}$, write
+    \begin{align}
+        (YA_k)^i
+        &:= \sum_{j=0}^{d-1}Y_{i,j}A_k^j
+        \notag
+    \end{align}
+    for the physical-index insertion of $Y$ into block $A_k$, and for a
+    configuration $\sigma=(i_1,\ldots,i_N)$ write
+    \begin{align}
+        (Y_1V^{(N)}(A))_{(i_1,\ldots,i_N)}
+        &:= \sum_{j=0}^{d-1}Y_{i_1,j}
+        V^{(N)}(A)_{(j,i_2,\ldots,i_N)}
+        \notag
+    \end{align}
+    for $Y$ acting on the first physical index of the MPV.
+    If $Y,Z\in \MN{d}$ satisfy
+    $Y_1V^{(N)}(A)=Z_1V^{(N)}(A)$ for every $N\geq1$, then
+    $YA_k=ZA_k$ for every block $k$.
+
+    \textbf{Scope restriction (per-block separation).} The source's Lemma~L
+    separates blockwise contributions at the level of a minimal basis of
+    normal tensors, grouping gauge-equivalent copies of one representative
+    before the trace-separation step; the block-injective hypothesis stated
+    here instead demands trace separation simultaneously across every block,
+    including gauge-equivalent copies, and so excludes decompositions with
+    repeated normal tensors. Documented in
+    \path{docs/paper-gaps/cpgsv17_bicf_block_separation.tex}.
+\end{lemma}
+
+\begin{figure}[ht]
+    \centering
+    \begin{center}
+        $YH^{(N)}(\widetilde M)=ZH^{(N)}(\widetilde M)$
+
+        % Y H^{(N)}(\widetilde M) = Z H^{(N)}(\widetilde M): the first-site
+        % insertions of Y and Z agree against the whole periodic word
+        % (CPSV16 Appendix C.3, Lemma L, hypothesis display, lines
+        % 1835--1840).  Reading each site's ket-bra pair as one doubled
+        % physical index identifies H^{(N)}(\widetilde M) with the matrix
+        % product vector V^{(N)} of that doubled-index tensor
+        % (lem:mpdo_three_first_site_contraction_coefficients), so Lemma
+        % L's one-leg hypothesis picture applies verbatim: Y (resp. Z)
+        % rides the doubled physical leg of site 1 only; sites 2..N keep
+        % that leg open, drawn schematically through the ellipsis.  A
+        % dummy `wire' row keeps the inserted operator off tenkz's traced
+        % first/last row, so only the \widetilde M ring is closed.  Both
+        % sides: periodic ring, same boundary signature (virtual-west=0 |
+        % virtual-east=0 | physical-up=N).
+        \begin{tenkz}[periodic, rows={wire, op:none, ket}, align=3]
+            \tnskip & \tnskip & \tnskip & \tnskip \\
+            \tn{Y} & \tnskip & \tnskip & \tnskip \\
+            \tn{\widetilde M} & \tn{\widetilde M} & \tndots & \tn{\widetilde M}
+        \end{tenkz}
+        $ = $
+        \begin{tenkz}[periodic, rows={wire, op:none, ket}, align=3]
+            \tnskip & \tnskip & \tnskip & \tnskip \\
+            \tn{Z} & \tnskip & \tnskip & \tnskip \\
+            \tn{\widetilde M} & \tn{\widetilde M} & \tndots & \tn{\widetilde M}
+        \end{tenkz}
+    \end{center}
+        \begin{center}
+        $YA_k=ZA_k$
+
+        % Y A_k = Z A_k: the one-site insertions of Y and Z agree on
+        % each block A_k of the canonical form (CPSV16 Appendix C.3,
+        % Lemma L, conclusion display, lines 1843--1846).  The operator
+        % rides the block's physical leg: its down leg pairs into A_k's
+        % up leg and its top leg is the open physical output index; the
+        % op row is sealed, since Y and Z carry no virtual indices.
+        % Both sides expose one virtual index at each end and one
+        % physical leg, so the two sides carry the same boundary
+        % signature (virtual-west=1 | virtual-east=1 | physical-up=1).
+        \begin{tenkz}[rows={op:none, ket}]
+            \tn{Y} \\
+            \tn{A_k}
+        \end{tenkz}
+        $ = $
+        \begin{tenkz}[rows={op:none, ket}]
+            \tn{Z} \\
+            \tn{A_k}
+        \end{tenkz}
+    \end{center}
+    \caption{Blockwise equality from agreement on the MPV family. Top: the
+    hypothesis $Y_1V^{(N)}(A)=Z_1V^{(N)}(A)$ for every length $N$, with the
+    operator inserted on the physical leg of the first site. Bottom: the
+    conclusion that the two insertions agree on every block $A_k$ of the
+    canonical form. These are the two displays of Lemma~L,
+    \cite[Appendix~C.3, lines~1835--1846]{Cirac2016MPDO_arXiv}.}
+    \label{fig:mpdo_first_site_insertion_agreement}
+\end{figure}
+
+\begin{proof}
+    \leanok
+    \uses{def:block_diagonal_tensor, def:injective, thm:propblockinj_abstract}
+    This is the per-block-separated form of Lemma~L of
+    \cite[Appendix~C.3, lines~1835--1846]{Cirac2016MPDO_arXiv}, using the finite
+    criterion from Theorem~\ref{thm:propblockinj_abstract} applied directly to the
+    full block family rather than to a minimal basis of representatives.
+    Expanding the hypothesis over a word of length~$L+1$ beginning with the
+    fixed site and folding each block contribution into a trace pairing
+    against the corresponding first-site insertion tensor yields, upon taking the
+    $Y$-$Z$ difference, a tuple $(\Delta_k)_k$ of block matrices. For every
+    word $w$ of length~$L$,
+    \begin{align}
+        \sum_k \tr(\mu_k^{L+1}\Delta_k A_k^w)
+        &=0.
+        \notag
+    \end{align}
+    The finite block-separation hypothesis applied to the tuple
+    $(\mu_k^{L+1}\Delta_k)_k$ forces each weighted block difference to be
+    zero, and the nonzero weights give the blockwise equality of the two
+    first-site insertions.
+\end{proof}
+
+The trace-pairing step used above is the following local identity,
+$\tr(WYA_k)=\tr(WZA_k)$:
+\begin{center}
+    % tr(W Y A_k) = tr(W Z A_k): trace pairing of a first-site
+    % insertion against a test tensor W.  The virtual bond of the
+    % two-site chain W, A_k closes into a loop (periodic, on the
+    % ket row); the physical leg of A_k feeds up into the inserted
+    % operator Y (resp. Z), whose own leg stays open.  Both sides
+    % carry the same boundary signature
+    % (virtual-west=0 | virtual-east=0 | physical-up=1).
+    % The blank top row is padding: `periodic' closes only the
+    % picture's first and last rows, so the padding keeps the
+    % insertion row untouched while the ket row (last) is traced.
+    \begin{tenkz}[rows={wire, op, ket}, periodic]
+         & \\
+         & \tn{Y} \\
+        \tn[no legs]{W} & \tn{A_k}
+    \end{tenkz}
+    $ = $
+    \begin{tenkz}[rows={wire, op, ket}, periodic]
+         & \\
+         & \tn{Z} \\
+        \tn[no legs]{W} & \tn{A_k}
+    \end{tenkz}
+\end{center}
+For every $W$ in the span of the length-$N$ word evaluations of the
+canonical form, it states $\tr(WA^Y)=\tr(WA^Z)$, where $A^Y$ is obtained by
+applying $Y$ to the physical index. Compare the trace-pairing identities in
+the proof of Lemma~L,
+\cite[Appendix~C.3, lines~1848--1858]{Cirac2016MPDO_arXiv}.
+
+\begin{theorem}[One-sided invariant corners of positive operators]
+    \label{thm:mpdo_opposite_corner_zero}
+    \lean{Matrix.IsHermitian.opposite_corner_eq_zero}
+    \lean{MPOTensor.mpo_opposite_corner_eq_zero}
+    \leanok
+    \uses{def:mpdo}
+    Let $H\geq0$ and let $P=P^\dagger$. If $PH=PHP$, then
+    $(\Id-P)HP=0$.
+    In particular, this conclusion holds for every nonempty-chain density
+    operator generated by an MPDO. This is the operator identity used in the
+    proof of \cite[Proposition~4.13]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Since $H$ and $P$ are Hermitian, taking adjoints gives
+    $HP=(PH)^\dagger=(PHP)^\dagger=PHP$.
+    Therefore $(\Id-P)HP=HP-PHP=0$.
+\end{proof}
+
+\begin{theorem}[First-site contraction reduction]
+    \label{thm:blockwise_opposite_insert_eq}
+    \lean{MPSTensor.IsBNTCanonicalForm.insertedTensor_basis_eq_of_two_firstSiteActionAgree}
+    \leanok
+    \uses{def:sector_bnt_cf, thm:postblocked_representative_grouped_insert_eq}
+    Let $\bigoplus_{j,q}\mu_{j,q}A_j$ be a BNT canonical form and let
+    $Y_L,Y_C,Y_R\in \MN{d}$, with $Y_1V^{(N)}(A)$ denoting $Y$ acting on the
+    first physical index of the MPV. If, for every $N\geq1$,
+    \begin{align}
+        (Y_L)_1V^{(N)}(A)
+        &=(Y_C)_1V^{(N)}(A),
+        \notag\\
+        (Y_L)_1V^{(N)}(A)
+        &=(Y_R)_1V^{(N)}(A),
+        \notag
+    \end{align}
+    then $Y_RA_j=Y_CA_j$ for every minimal representative $A_j$. This is the
+    representative-grouped application of Lemma~L and anticipates the
+    concrete instantiation with $Y_L,Y_C,Y_R$ the physical-index insertions
+    of $P$, $PHP$, $HP$ in
+    Theorem~\ref{thm:blockwise_opposite_insert_rotated_mpo}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:postblocked_representative_grouped_insert_eq}
+    Apply the representative-grouped Lemma~L first to the actions $Y_L,Y_R$
+    and then to $Y_L,Y_C$. The BNT canonical-form hypotheses supply the
+    required common block-injectivity length. Transitivity gives the stated
+    equality on every minimal representative; the repeated copies have
+    already been combined through $\sum_q\mu_{j,q}^{N}$.
+\end{proof}
+
+\begin{definition}[Doubled-index forms of the three first-site contractions]
+    \label{def:mpdo_three_first_site_contractions}
+    \lean{MPSTensor.ketLeftAction}
+    \lean{MPSTensor.braRightAction}
+    \lean{MPSTensor.ketLeftBraRightAction}
+    \leanok
+    Let $P\in \MN{d}$ and write doubled indices as $p=(a,b)$ and
+    $q=(c,e)$. The first-site matrices corresponding respectively to
+    $PH^{(N)}$, $H^{(N)}P$, and $PH^{(N)}P$ are
+    \begin{align}
+        (Y_L)_{p,q}
+        &=P_{a,c}\delta_{b,e},
+        \notag\\
+        (Y_R)_{p,q}
+        &=\delta_{a,c}P_{e,b},
+        \notag\\
+        (Y_C)_{p,q}
+        &=P_{a,c}P_{e,b}.
+        \notag
+    \end{align}
+\end{definition}
+
+The horizontal operator $H^{(N)}(\widetilde M)$ is the cyclic word
+$H^{(N)}(\widetilde M)=\tr_{\mathrm v}(\widetilde M_1\cdots\widetilde M_N)$:
+\begin{center}
+    % H^{(N)}(Mtilde) = tr_v(Mtilde_1 ... Mtilde_N): one operator row of
+    % MPO sites; the periodic wire is the traced virtual index, the up
+    % legs are the ket indices sigma_1..sigma_N and the down legs the
+    % bra indices tau_1..tau_N.  The trace leaves no virtual stub, so
+    % the picture carries the boundary signature of the operator
+    % (virtual-west=0 | virtual-east=0 | physical-up=N | physical-down=N);
+    % the drawn leg count is schematic under the ellipsis.
+    $H^{(N)}(\widetilde M) = $
+    \begin{tenkz}[physical=updown, periodic]
+        \tn[up=$\sigma_1$, down=$\tau_1$]{\widetilde M_1} &
+        \tn[up=$\sigma_2$, down=$\tau_2$]{\widetilde M_2} &
+        \tndots &
+        \tn[up=$\sigma_N$, down=$\tau_N$]{\widetilde M_N}
+    \end{tenkz}
+\end{center}
+Its virtual indices are contracted around the row, while every ket and bra
+index remains external. Reading each ket--bra pair as one doubled index
+identifies its entries with the matrix product vector of the doubled-index
+tensor. This is the contraction in
+\cite[Proposition~4.13, lines~1876--1880]{Cirac2016MPDO_arXiv}.
+
+\begin{lemma}[Coefficient form of the three first-site contractions]
+    \label{lem:mpdo_three_first_site_contraction_coefficients}
+    \lean{MPSTensor.mpv_toMPSTensor_pairConfig}
+    \lean{MPSTensor.ketLeftAction_mpv}
+    \lean{MPSTensor.braRightAction_mpv}
+    \lean{MPSTensor.ketLeftBraRightAction_mpv}
+    \leanok
+    \uses{def:mpo_family, def:mpdo_three_first_site_contractions}
+    For ket and bra configurations $\sigma,\tau$,
+    $V^{(N)}(\widehat M)_{(\sigma,\tau)}
+    =H^{(N)}(M)_{\sigma,\tau}$.
+    If $p_0=(a,b)$ is the first doubled index and $\sigma',\tau'$ are the
+    ket and bra configurations on the remaining $N$ sites, contraction with
+    $Y_L$, $Y_R$, and $Y_C$ gives, respectively,
+    \begin{align}
+        \sum_c P_{a,c}H^{(N+1)}_{(c,\sigma'),(b,\tau')}
+        &,
+        \label{eq:mpdo_contraction_coefficients}\\
+        \sum_e H^{(N+1)}_{(a,\sigma'),(e,\tau')}P_{e,b}
+        &,
+        \notag\\
+        \sum_{c,e}P_{a,c}H^{(N+1)}_{(c,\sigma'),(e,\tau')}P_{e,b}
+        &.
+        \notag
+    \end{align}
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Decode the doubled index at every site as a ket--bra pair. The defining
+    trace of the resulting matrix word is exactly the corresponding entry of
+    $H^{(N)}(M)$. Summing the first doubled index against $Y_L$, $Y_R$, or
+    $Y_C$ leaves the single or double sums in
+    (\ref{eq:mpdo_contraction_coefficients}).
+\end{proof}
+
+\begin{lemma}[Doubled-index insertions are vertical multiplications]
+    \label{lem:mpdo_first_site_insertions_vertical_mul}
+    \lean{MPOTensor.insertedTensor_ketLeftAction_toMPSTensor}
+    \lean{MPOTensor.insertedTensor_braRightAction_toMPSTensor}
+    \lean{MPOTensor.insertedTensor_ketLeftBraRightAction_toMPSTensor}
+    \leanok
+    \uses{def:mpdo_three_first_site_contractions,
+        def:mpdo_vertical_one_site_actions}
+    Let $\widehat M$ be the doubled-index tensor associated with $M$. Then
+    insertion of $Y_L$, $Y_R$, and $Y_C$ gives, respectively, the
+    doubled-index tensors associated with
+    $P\widetilde M$, $\widetilde MP$, and $P\widetilde MP$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{def:mpdo_three_first_site_contractions,
+        def:mpdo_vertical_one_site_actions}
+    Write the output and summed doubled indices as $(a,b)$ and $(c,e)$.
+    The Kronecker deltas in $Y_L$ and $Y_R$ remove, respectively, the sums
+    over $e$ and $c$; $Y_C$ leaves both multiplications. The resulting
+    coefficients are
+    $\sum_c P_{a,c}M^{cb}$,
+    $\sum_e P_{e,b}M^{ae}$, and
+    $\sum_{c,e}P_{a,c}P_{e,b}M^{ce}$.
+\end{proof}
+
+\begin{figure}[ht]
+    \centering
+        % PH^{(N+1)} = PH^{(N+1)}P = H^{(N+1)}P for a projector P with
+        % P\widetilde M=P\widetilde MP (arXiv:1606.00608, proof of
+        % Proposition 4.13, eq. eq1:proof.IV.12, lines 1881--1887;
+        % paper figure DAVID_Fig3.png).  The picture reproduces the one
+        % network drawn by the source; the two further equalities remain in
+        % this comment and in the surrounding blueprint statement.
+        %
+        % Each \widetilde M box is one site tensor.  Its up leg is the ket
+        % index, its down leg the bra index, and the horizontal ring is the
+        % traced virtual index.  P is contracted with the ket leg of the
+        % source's rightmost displayed site; its outer leg is the operator's
+        % open ket index.  The ring leaves no virtual stubs.  The schematic
+        % boundary signature is therefore (virtual-west=0 | virtual-east=0 |
+        % physical-up=N+1 | physical-down=N+1).
+        %
+        % The empty first row is structural padding: tenkz closes the first
+        % and last rows of a multi-row periodic picture, so padding keeps P's
+        % row untraced while closing the \widetilde M row exactly once.
+        $PH^{(N+1)} = $
+        \begin{tenkz}[rows={wire, op:none, op}, compact, periodic, align=3]
+            \tnskip & \tnskip & \tnskip & \tnskip \\
+            \tnskip & \tnskip & \tnskip & \tn{P} \\
+            \tn[mpo]{\widetilde M} & \tn[mpo]{\widetilde M} & \tndots &
+                \tn[mpo]{\widetilde M}
+        \end{tenkz}
+    \caption{The periodic contraction representing $PH^{(N+1)}$. The
+    analogous contractions with $Y_R$ and $Y_C$ place $P$ on the bra leg or
+    on both legs and represent $H^{(N+1)}P$ and $PH^{(N+1)}P$. These are the
+    three first-site contractions in
+    \cite[Proposition~4.13, lines~1881--1887]{Cirac2016MPDO_arXiv}.}
+    \label{fig:mpdo_first_site_contractions}
+\end{figure}
+
+\begin{theorem}[Representative reduction for the MPO contractions]
+    \label{thm:blockwise_opposite_insert_rotated_mpo}
+    \lean{MPOTensor.basis_opposite_insert_eq_of_rotated_mpo_entries}
+    \leanok
+    \uses{def:mpdo_three_first_site_contractions,
+        lem:mpdo_three_first_site_contraction_coefficients,
+        thm:blockwise_opposite_insert_eq}
+    Let the doubled-index tensor $\widehat M$ generate the same positive-length MPV
+    family as a BNT canonical form $\bigoplus_{j,q}\mu_{j,q}A_j$. If,
+    entrywise at every positive length,
+    \begin{align}
+        PH^{(N)}
+        &=PH^{(N)}P,
+        \notag\\
+        PH^{(N)}
+        &=H^{(N)}P,
+        \notag
+    \end{align}
+    then for every minimal representative $A_j$ the insertions associated
+    with $H^{(N)}P$ and $PH^{(N)}P$ agree. Repeated copies over $A_j$ are
+    grouped through the coefficient $\sum_q\mu_{j,q}^{N}$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{lem:mpdo_three_first_site_contraction_coefficients,
+        thm:blockwise_opposite_insert_eq}
+    Lemma~\ref{lem:mpdo_three_first_site_contraction_coefficients} turns the
+    two operator identities into equality of the corresponding first-site
+    contractions. Equality of matrix product vectors transports these
+    equalities to the chosen canonical-form decomposition. Apply
+    Theorem~\ref{thm:blockwise_opposite_insert_eq} with
+    $(Y_L,Y_C,Y_R)$.
+\end{proof}
+
+\begin{definition}[One-site actions of a matrix on the vertically viewed tensor]
+    \label{def:mpdo_vertical_one_site_actions}
+    \lean{MPOTensor.ketLeftMul}
+    \lean{MPOTensor.braRightMul}
+    \lean{MPOTensor.firstSiteMatrix}
+    \lean{MPOTensor.verticalTensor_ketLeftMul}
+    \lean{MPOTensor.verticalTensor_braRightMul}
+    \lean{MPOTensor.firstSiteMatrix_mul_firstSiteMatrix}
+    \leanok
+    \uses{def:mpo_tensor, def:vertical_tensor_mpdo}
+    View the MPO tensor $M$ vertically as the family of physical-space
+    operators $M_{ab}$ of Definition~\ref{def:vertical_tensor_mpdo}, indexed
+    by the virtual indices, with matrix elements
+    $(M_{ab})_{ij}=M^{ij}_{ab}$. A matrix $P\in \MN{d}$ then acts on the
+    tensor by
+    \begin{align}
+        (PM)^{ij}
+        &=\sum_k P_{ik}\,M^{kj},
+        \notag\\
+        (MP)^{ij}
+        &=\sum_k P_{kj}\,M^{ik},
+        \notag
+    \end{align}
+    and on an $(N+1)$-site chain by the first-spin operator
+    $P\otimes\Id^{\otimes N}$. On the letters of the vertically viewed
+    tensor these actions are the left and right matrix products,
+    $(PM)_{ab}=PM_{ab}$ and $(MP)_{ab}=M_{ab}P$. The first-spin operators
+    compose site by site, $P_1Q_1=(PQ)_1$.
+\end{definition}
+
+\begin{theorem}[One-sided invariance and density-operator commutation]
+    \label{thm:mpdo_first_site_invariant_comm}
+    \lean{MPOTensor.firstSiteMatrix_mul_mpo_of_ketLeftMul_invariant}
+    \lean{MPOTensor.firstSiteMatrix_mul_mpo_comm}
+    \leanok
+    \uses{def:mpdo, def:mpo_family, def:mpdo_vertical_one_site_actions,
+        thm:mpdo_opposite_corner_zero}
+    Let $M$ generate an MPDO and let $P=P^\dagger$ satisfy $PM=PMP$ on the
+    vertically viewed tensor. For every total length $L\geq1$, write
+    $P_1=P\otimes\Id^{\otimes(L-1)}$. Then
+    $P_1H^{(L)}=P_1H^{(L)}P_1=H^{(L)}P_1$.
+    This is the equality chain in the proof of
+    \cite[Proposition~4.13]{Cirac2016MPDO_arXiv}; the proposition assumes $P$
+    is an orthogonal projector, but only self-adjointness of $P$ is used.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mpdo_opposite_corner_zero}
+    Put $L=N+1$. Splitting off the first site of a density-operator entry gives
+    \begin{align}
+        H^{(N+1)}_{(i,\sigma),(j,\tau)}
+        &=\tr\bigl(M^{ij}M^{\sigma_0\tau_0}\cdots
+        M^{\sigma_{N-1}\tau_{N-1}}\bigr).
+        \notag
+    \end{align}
+    Summing the first ket index against $P$ therefore pairs the operator
+    $(PM)^{ij}$ against the remaining word; the hypothesis $PM=PMP$ replaces
+    it by $(PMP)^{ij}$, which unfolds to the entry of
+    $P_1H^{(N+1)}P_1$. This proves
+    $P_1H^{(N+1)}=P_1H^{(N+1)}P_1$. Since $H^{(N+1)}$ is positive semidefinite
+    and $P$ is self-adjoint, Theorem~\ref{thm:mpdo_opposite_corner_zero}
+    gives $(\Id-P_1)H^{(N+1)}P_1=0$, hence
+    $H^{(N+1)}P_1=P_1H^{(N+1)}P_1=P_1H^{(N+1)}$.
+\end{proof}
+
+\begin{theorem}[One-sided invariance on BNT representatives]
+    \label{thm:blockwise_one_sub_mp_zero}
+    \lean{MPOTensor.basis_braRight_eq_ketLeftBraRight_of_invariant}
+    \leanok
+    \uses{def:mpdo, def:horizontal_cf_mpv_representation,
+        def:mpdo_vertical_one_site_actions,
+        thm:mpdo_first_site_invariant_comm,
+        thm:blockwise_opposite_insert_rotated_mpo}
+    Let $M$ generate an MPDO whose doubled-index tensor $\widehat M$ generates
+    the same positive-length MPV family as a BNT canonical form
+    $\bigoplus_{j,q}\mu_{j,q}A_j$, and let $P=P^\dagger$ satisfy $PM=PMP$ on
+    the vertically viewed tensor. Then on every minimal representative
+    $A_j$ the insertions of $MP$ and $PMP$ agree; equivalently,
+    $(\Id-P)MP=0$ on every representative.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mpdo_first_site_invariant_comm,
+        thm:blockwise_opposite_insert_rotated_mpo}
+    For every tail length $N$, Theorem~\ref{thm:mpdo_first_site_invariant_comm}
+    turns $PM=PMP$ into the entrywise identities
+    $P_1H^{(N+1)}=P_1H^{(N+1)}P_1$ and
+    $P_1H^{(N+1)}=H^{(N+1)}P_1$. These are exactly the hypotheses of
+    Theorem~\ref{thm:blockwise_opposite_insert_rotated_mpo}, whose conclusion
+    is the equality of the insertions of $MP$ and $PMP$ on every minimal
+    representative.
+\end{proof}
+
+\begin{theorem}[Commutation with a power of a positive semidefinite matrix]
+    \label{thm:psd_commute_of_commute_pow}
+    \lean{Matrix.PosSemidef.commute_of_commute_pow}
+    \lean{MPOTensor.mpo_commute_of_commute_pow}
+    \leanok
+    \uses{def:mpdo}
+    Let $H\geq0$, let $p\geq1$, and let $Q$ satisfy $QH^p=H^pQ$. Then
+    $QH=HQ$. In particular, a matrix commuting with a nonzero power of a
+    nonempty-chain density operator generated by an MPDO commutes with the
+    density operator itself. This is the final operator implication in the
+    periodic-sector contradiction in the proof of
+    \cite[Proposition~4.13]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Diagonalize $H=U\Lambda U^\dagger$ with $U$ unitary and $\Lambda$ the
+    diagonal matrix of eigenvalues $\lambda_i\geq0$. Conjugating the
+    hypothesis by $U$ gives, entrywise for $Q'=U^\dagger QU$,
+    \begin{align}
+        Q'_{ij} \lambda_j^{\,p}
+        &=\lambda_i^{\,p}\,Q'_{ij}.
+        \notag
+    \end{align}
+    Since $x\mapsto x^p$ is injective on the non-negative reals, every entry
+    $Q'_{ij}$ with $\lambda_i\neq\lambda_j$ vanishes, so
+    $Q'\Lambda=\Lambda Q'$. Conjugating back gives $QH=HQ$.
+\end{proof}

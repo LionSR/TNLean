@@ -1,0 +1,869 @@
+\section{Stinespring dilation}
+\label{sec:stinespring}
+%% =========================================================
+
+For a normalized Kraus family, the Stinespring construction realizes the
+channel through an isometry $V$ into a larger space,
+$T(\rho)=\tr_E[V\rho V^\dagger]$; tracing out the environment $E$ returns the
+channel:
+\begin{center}
+    % Formula/source: Wolf, Sec. 2.2, proof of Thm. 2.5, gives the
+    % Schrödinger-picture identity
+    % T(\rho)=\tr_{\mathbb C^r}(V\rho V^\dagger).
+    % Indices: \rho contracts the east system-index pair; the west system
+    % pair consists of the free indices of T(\rho), while the unique vertical
+    % pairleg contracts the repeated dilation-space index e.
+    % Orientation: the starred lower V is the conjugate bra layer; together
+    % with the return path it represents V^\dagger in the operator formula.
+    % Boundary signature: (virtual-west=2 | virtual-east=0 |
+    % physical-up=0 | physical-down=0).
+    \begin{tenkz}[
+        sandwich,
+        east={cup=$\rho$},
+        west label=$T(\rho)$
+    ]
+        \tn{V} \\
+        \tn*{V}
+    \end{tenkz}
+\end{center}
+
+\begin{definition}[Stinespring matrix]\label{def:stinespring_v}
+    \lean{stinespringV}
+    \leanok
+    Given possibly rectangular Kraus operators
+    $K_j:\C^{d_{\mathrm{in}}}\to\C^{d_{\mathrm{out}}}$, the
+    \emph{Stinespring matrix}
+    $V:\C^{d_{\mathrm{in}}}\to
+       \C^{d_{\mathrm{out}}}\otimes\C^r$ is defined by
+    \begin{align}
+        V_{(i,j),k}
+        &=(K_j)_{ik}.
+        \label{eq:representations_stinespring_entries}
+    \end{align}
+    Thus $V=\sum_j K_j\otimes\ket{j}$. It is an isometry precisely when
+    the Kraus family satisfies the trace-preserving normalization.
+\end{definition}
+
+\begin{lemma}[Entry formula for the Stinespring matrix]\label{lem:stinespring_v_apply}
+    \lean{stinespringV_apply}
+    \leanok
+    \uses{def:stinespring_v}
+    For output index $i$, input index $k$, and $j\in\{0,\ldots,r-1\}$,
+    $V_{(i,j),k}=(K_j)_{ik}$.
+\end{lemma}
+
+\begin{definition}[Stinespring matrix with a finite index set]
+    \label{def:stinespring_v_gen}
+    \lean{stinespringVGen}
+    \leanok
+    \uses{def:stinespring_v}
+    For a Kraus family $(K_j)_{j\in J}$ indexed by an arbitrary finite set
+    $J$, define $(V_J)_{(i,j),k}=(K_j)_{ik}$.
+\end{definition}
+
+\begin{lemma}[Entry formula for the finite-index Stinespring matrix]
+    \label{lem:stinespring_v_gen_apply}
+    \lean{stinespringVGen_apply}
+    \leanok
+    \uses{def:stinespring_v_gen}
+    The finite-index Stinespring matrix satisfies
+    $(V_J)_{(i,j),k}=(K_j)_{ik}$.
+\end{lemma}
+
+\begin{theorem}[Stinespring Gram identity]\label{thm:stinespring_v_conjTranspose_mul}
+    \lean{stinespringV_conjTranspose_mul}
+    \leanok
+    \uses{def:stinespring_v}
+    The Stinespring matrix satisfies
+    \begin{align}
+        V^\dagger V
+        &=\sum_{j=0}^{r-1}K_j^\dagger K_j.
+        \label{eq:representations_stinespring_gram}
+    \end{align}
+\end{theorem}
+
+\begin{definition}[Local Stinespring matrix]\label{def:local_stinespring_v}
+    \lean{localStinespringV}
+    \leanok
+    \uses{def:stinespring_v}
+    If a Stinespring matrix $V:\C^{d_{\mathrm{in}}}\to
+    \C^{d_{\mathrm{out}}}$ acts on the first factor while a finite-dimensional
+    space $R$ is left unchanged, the corresponding local Stinespring matrix is
+    $W=V\otimes\Id_R$.
+\end{definition}
+
+\begin{theorem}[Local Stinespring isometry]
+    \label{thm:local_stinespring_v_conjTranspose_mul}
+    \lean{localStinespringV_conjTranspose_mul}
+    \leanok
+    \uses{def:local_stinespring_v}
+    If $V^\dagger V=\Id$, then
+    $(V\otimes\Id_R)^\dagger(V\otimes\Id_R)=\Id$.
+\end{theorem}
+
+\begin{proof}\leanok
+    Use $(A\otimes B)(C\otimes D)=AC\otimes BD$ and
+    $\Id\otimes\Id=\Id$.
+\end{proof}
+
+\begin{theorem}[Stinespring dual representation]\label{thm:stinespring_dual_representation}
+    \lean{stinespring_dual_representation}
+    \leanok
+    \uses{def:stinespring_v, def:cp_map, thm:stinespring_v_conjTranspose_mul}
+    For Kraus operators $\{K_j\}$ and $A\in\MN{D}$,
+    \begin{align}
+        V^\dagger(A\otimes\Id_r)V
+        &=\sum_j K_j^\dagger A K_j
+          =T^*(A).
+        \label{eq:representations_stinespring_dual}
+    \end{align}
+    This is the Stinespring representation of the \emph{dual} (Heisenberg
+    picture) map $T^*$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:stinespring_v}
+    Compute $(V^\dagger(A\otimes\Id_r)V)_{ab}$
+    by summing over the product index $(i,j)$;
+    the $\delta_{jl}$ from $\Id_r$ collapses the sum over $l$, giving
+    $\sum_j K_j^\dagger A K_j$.
+\end{proof}
+
+\begin{theorem}[The Stinespring isometry condition iff trace preservation]\label{thm:stinespringV_isometry_iff_kraus_normalized}
+    \lean{stinespringV_isometry_iff_kraus_normalized}
+    \leanok
+    \uses{def:stinespring_v, def:trace_preserving}
+    In the square specialization
+    $d_{\mathrm{in}}=d_{\mathrm{out}}=D$, one has
+    $V^\dagger V=\Id_D$ if and only if
+    $\sum_j K_j^\dagger K_j=\Id_D$.
+    In particular, $V$ is an isometry precisely when the Kraus map is
+    trace-preserving.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:stinespring_v}
+    One has
+    $(V^\dagger V)_{ab}
+    =\sum_{(i,j)}\overline{V_{(i,j),a}}V_{(i,j),b}
+    =\sum_j\sum_i\overline{(K_j)_{ia}}(K_j)_{ib}
+    =(\sum_jK_j^\dagger K_j)_{ab}$.
+\end{proof}
+
+\begin{theorem}[Stinespring Schr\"odinger representation]\label{thm:stinespring_schrodinger_representation}
+    \lean{stinespring_schrodinger_representation}
+    \leanok
+    \uses{def:stinespring_v, def:cp_map, def:partial_trace}
+    The Kraus map $T(\rho)=\sum_jK_j\rho K_j^\dagger$ equals
+    the partial trace over the dilation space:
+    \begin{align}
+        T(\rho)_{ij}
+        &=\sum_{k=0}^{r-1}(V\rho V^\dagger)_{(i,k),(j,k)}
+          =\tr_r(V\rho V^\dagger).
+        \label{eq:representations_stinespring_schrodinger}
+    \end{align}
+    This is the Schr\"odinger-picture Stinespring representation.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:stinespring_v}
+    Expand the middle expression in
+    (\ref{eq:representations_stinespring_schrodinger}) and sum over $k$ to
+    recover $\sum_kK_k\rho K_k^\dagger$.
+\end{proof}
+
+\begin{theorem}[Existence of a Stinespring dilation]
+    \label{thm:exists_stinespring_dilation}
+    \lean{exists_stinespring_dilation}
+    \leanok
+    \uses{def:cp_map, def:stinespring_v}
+    Every completely positive map admits an ancilla dimension $r$, Kraus operators
+    $\{K_j\}_{j=0}^{r-1}$, and the concrete representation
+    $\pi(A)=A\otimes\Id_r$ such that $E(A)=V^\dagger\pi(A)V$.
+\end{theorem}
+
+\begin{proof}\leanok
+    Choose a Kraus representation of $E$ and apply the explicit Heisenberg-picture
+    Stinespring formula.
+\end{proof}
+
+\begin{theorem}[CPTP maps admit isometric Stinespring dilations]
+    \label{thm:exists_stinespring_isometry_of_cptp}
+    \lean{exists_stinespring_isometry_of_cptp}
+    \leanok
+    \uses{def:channel, def:stinespring_v}
+    Every quantum channel admits a Stinespring dilation whose matrix $V$ is an
+    isometry, equivalently $V^\dagger V=\Id$.
+\end{theorem}
+
+\begin{proof}\leanok
+    Choose Kraus operators for the channel and use trace preservation to obtain
+    the Stinespring isometry condition $V^\dagger V=\Id$.
+\end{proof}
+
+%% =========================================================
+\section{Ordered CP maps, Radon--Nikodym, and open-system representation}
+\label{sec:ordered_cp}
+%% =========================================================
+
+The next three results form the structural part of~\cite[Theorems~2.3--2.5]{Wolf2012Quantum}:
+the ordered CP-map theorem, the Radon--Nikodym theorem for completely positive
+maps, and the open-system representation. They refine the Stinespring dilation
+by tracking how two CP maps related by domination or decomposition sit inside
+a common dilation space.
+
+\begin{definition}[CP partial order]\label{def:cp_dominates}
+    \lean{CPDominates}
+    \leanok
+    \uses{def:cp_map}
+    For linear maps $S,T:\MN{D}\to\MN{D}$, write $T\le S$ (in the CP
+    order) when $S-T$ is completely positive.
+\end{definition}
+
+\begin{definition}[Block-top contraction]\label{def:block_top_rows}
+    \lean{Matrix.blockTopRows}
+    \leanok
+    For natural numbers $r,s$, let $C=C_{r,s}\in\C^{r\times(r+s)}$ be the
+    rectangular $r\times(r+s)$ matrix whose rows are the first $r$ rows
+    of the identity on $\C^{r+s}$: $C_{ij}=1$ if $j=i<r$ and $0$
+    otherwise.
+\end{definition}
+
+\begin{lemma}[$C$ is a co-isometry]\label{lem:block_top_rows_co_isometry}
+    \lean{Matrix.blockTopRows_mul_conjTranspose}
+    \leanok
+    \uses{def:block_top_rows}
+    The block-top matrix satisfies $CC^\dagger=\Id_r$.
+\end{lemma}
+
+\begin{proof}\leanok
+    Direct entrywise computation:
+    $(CC^\dagger)_{ii'}=\sum_jC_{ij}\overline{C_{i'j}}$
+    collapses to $\delta_{ii'}$.
+\end{proof}
+
+\begin{lemma}[$C$ is a contraction]\label{lem:block_top_rows_contraction}
+    \lean{Matrix.blockTopRows_conjTranspose_mul_le_one}
+    \leanok
+    \uses{def:block_top_rows}
+    The block-top matrix satisfies $C^\dagger C\le\Id_{r+s}$.
+\end{lemma}
+
+\begin{proof}\leanok
+    The matrix $C^\dagger C$ is diagonal with a $1$ on the first $r$
+    coordinates and a $0$ on the last $s$, so $\Id-C^\dagger C$ is
+    positive semidefinite.
+\end{proof}
+
+\begin{lemma}[Intertwining of Stinespring isometries]\label{lem:stinespring_intertwine_append}
+    \lean{stinespringV_eq_kronecker_blockTopRows_mul_append}
+    \leanok
+    \uses{def:stinespring_v, def:block_top_rows}
+    Let $K:\{0,\ldots,r-1\}\to\MN{D}$ and
+    $L:\{0,\ldots,s-1\}\to\MN{D}$ be two Kraus families. Write
+    $K\mathbin{+\!+}L$ for their concatenation as a family indexed by
+    $\{0,\ldots,r+s-1\}$. Then
+    \begin{align}
+        V_K
+        &=(\Id_D\otimes C_{r,s})V_{K+\!+L}.
+        \label{eq:representations_stinespring_intertwining}
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    Entrywise expansion of both sides of
+    (\ref{eq:representations_stinespring_intertwining}): the Kronecker product
+    with $C_{r,s}$ picks out the first $r$ coordinates of the dilation space,
+    matching the action of $V_{K+\!+L}$ on those coordinates, which is
+    precisely $V_K$.
+\end{proof}
+
+\begin{theorem}[Ordered CP maps via Stinespring contractions]\label{thm:cp_dominates_stinespring_contraction}
+    \lean{CPDominates.exists_stinespring_contraction}
+    \leanok
+    \uses{def:cp_dominates, def:stinespring_v, def:block_top_rows,
+        lem:block_top_rows_contraction, lem:stinespring_intertwine_append}
+    Let $T_1,T_2:\MN{D}\to\MN{D}$ be CP maps with $T_1\le T_2$.
+    Then there exist ancilla dimensions $r_1,m$, Heisenberg-form Stinespring
+    matrices $V_1:\C^D\to\C^D\otimes\C^{r_1}$ and
+    $V_2:\C^D\to\C^D\otimes\C^m$ realizing $T_1,T_2$ via
+    $T_i(A)=V_i^\dagger(A\otimes\Id)V_i$, and a rectangular contraction
+    $\widetilde C:\C^m\to\C^{r_1}$ with
+    $\widetilde C^\dagger\widetilde C\le\Id_m$ such that
+    \begin{align}
+        V_1
+        &=(\Id_D\otimes\widetilde C)V_2.
+        \label{eq:representations_ordered_intertwining}
+    \end{align}
+    This is~\cite[Theorem~2.3]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:exists_stinespring_dilation, lem:block_top_rows_contraction,
+        lem:stinespring_intertwine_append}
+    Choose a Heisenberg-form Kraus family $K_1$ of $T_1$ with Stinespring
+    matrix $V_1=V_{K_1}$, and Kraus operators $L$ of the CP map
+    $T_2-T_1$ in Schr\"odinger orientation. Let $L^\dagger$ denote the
+    conjugate-transposed family. Set $m=r_1+s$ and let
+    $K_2=K_1\mathbin{+\!+}L^\dagger$. Then
+    \begin{align}
+        T_2(A)
+        &=T_1(A)+(T_2-T_1)(A) \notag\\
+        &=\sum_i(K_1^i)^\dagger A K_1^i+\sum_jL_j A L_j^\dagger \notag\\
+        &=\sum_i(K_1^i)^\dagger A K_1^i
+          +\sum_j(L_j^\dagger)^\dagger A L_j^\dagger.
+        \notag
+    \end{align}
+    This is the Heisenberg form for $K_2$, yielding
+    $T_2(A)=V_{K_2}^\dagger(A\otimes\Id)V_{K_2}$. Taking
+    $\widetilde C=C_{r_1,s}$, the intertwining
+    $V_{K_1}=(\Id_D\otimes\widetilde C)V_{K_2}$ is
+    Lemma~\ref{lem:stinespring_intertwine_append}, and
+    $\widetilde C^\dagger\widetilde C\le\Id$ is
+    Lemma~\ref{lem:block_top_rows_contraction}.
+\end{proof}
+
+\begin{definition}[Block-diagonal projectors on the dilation space]
+    \label{def:block_diag_projectors}
+    \lean{Matrix.blockDiagTopProj, Matrix.blockDiagBotProj}
+    \leanok
+    \uses{def:block_top_rows, lem:block_top_rows_contraction}
+    For $r,s$, let $P_{\mathrm{top}}=C_{r,s}^\dagger C_{r,s}$ and
+    $P_{\mathrm{bot}}=\Id-P_{\mathrm{top}}$. Both are PSD
+    (for $P_{\mathrm{bot}}$, by Lemma~\ref{lem:block_top_rows_contraction})
+    and $P_{\mathrm{top}}+P_{\mathrm{bot}}=\Id$.
+\end{definition}
+
+\begin{theorem}[Radon--Nikodym theorem for finite quantum instruments]
+    \label{thm:cp_radon_nikodym_of_stinespring}
+    \lean{IsCPMap.radon_nikodym_of_stinespring}
+    \leanok
+    \uses{def:cp_map, def:stinespring_v}
+    Let $\{T_i\}_{i\in I}$ be a nonempty finite family of completely positive
+    maps, let $T:\MN{D}\to\MN{D}$ satisfy $\sum_{i\in I}T_i=T$, and
+    suppose that $T$ has a supplied Stinespring representation
+    \begin{align}
+        T(A)
+        &=V^\dagger(A\otimes\Id_r)V.
+        \label{eq:representations_radon_dilation}
+    \end{align}
+    Then there are positive semidefinite operators $P_i\in\MN{r}$ with
+    \begin{align}
+        \sum_{i\in I}P_i
+        &=\Id_r.
+        \label{eq:representations_radon_resolution}
+    \end{align}
+    For every $i\in I$ and $A\in\MN{D}$,
+    \begin{align}
+        T_i(A)
+        &=V^\dagger(A\otimes P_i)V.
+        \label{eq:representations_radon_components}
+    \end{align}
+    This is \cite[Theorem~2.4]{Wolf2012Quantum}, with the nonempty-family condition
+    made explicit; see
+    \path{docs/paper-gaps/wolf_radon_nikodym_nonempty_family.tex}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:kraus_rectangular_freedom'}
+    Choose Kraus families for the component maps $T_i$ and group all their
+    Kraus operators into one finite family. Add zero Kraus operators to one
+    component so that this grouped family has at least as many rows as the
+    supplied Stinespring dilation. Write the grouped Kraus operators as
+    $B_\alpha$, with a label map $\ell(\alpha)\in I$, and write the Kraus
+    operators obtained from the blocks of $V$ as $A_j$. Rectangular Kraus
+    freedom gives a matrix $W$ with
+    \begin{align}
+        W^\dagger W
+        &=\Id_r, \notag\\
+        B_\alpha
+        &=\sum_{j=0}^{r-1}W_{\alpha j}A_j.
+        \notag
+    \end{align}
+    For the fibre over $i$, set
+    \begin{align}
+        (C_i)_{\alpha j}
+        &=
+        \begin{cases}
+            \overline{W_{\alpha j}}, & \ell(\alpha)=i,\\
+            0, & \ell(\alpha)\ne i,
+        \end{cases}
+        \notag\\
+        P_i
+        &=C_i^\dagger C_i.
+        \label{eq:representations_radon_effects}
+    \end{align}
+    Then $P_i\ge0$, and (\ref{eq:representations_radon_resolution}) follows
+    from $W^\dagger W=\Id_r$. Finally,
+    \begin{align}
+        V^\dagger(A\otimes P_i)V
+        &=\sum_{\ell(\alpha)=i}B_\alpha A B_\alpha^\dagger
+          =T_i(A),
+        \notag
+    \end{align}
+    which proves the claim.
+\end{proof}
+
+\begin{theorem}[Binary Radon--Nikodym theorem for CP maps]
+    \label{thm:cp_exists_radon_nikodym}
+    \lean{IsCPMap.exists_radon_nikodym}
+    \leanok
+    \uses{def:cp_map, def:stinespring_v, def:block_diag_projectors}
+    Let $T_1,T_2:\MN{D}\to\MN{D}$ be completely positive. There exist
+    an ancilla dimension $m$, a Kraus family $K$ with Stinespring matrix
+    $V=V_K$, and positive semidefinite operators
+    $P_1,P_2:\C^m\to\C^m$ with $P_1+P_2=\Id_m$ such that, for
+    $i=1,2$ and every $A\in\MN{D}$,
+    \begin{align}
+        T_i(A)
+        &=V^\dagger(A\otimes P_i)V.
+        \label{eq:representations_binary_radon}
+    \end{align}
+\end{theorem}
+
+\begin{remark}[Relation with Wolf's Radon--Nikodym theorem]
+    \label{rem:cp_radon_nikodym_scope}
+    % Source-faithful scope note: Wolf's statement is the finite-family
+    % theorem relative to a supplied Stinespring dilation.
+    Theorem~\ref{thm:cp_radon_nikodym_of_stinespring} treats a finite family
+    relative to a supplied Stinespring dilation. The binary case in
+    Theorem~\ref{thm:cp_exists_radon_nikodym} instead constructs a common
+    dilation from the Kraus families of $T_1$ and $T_2$.
+\end{remark}
+
+\begin{proof}\leanok
+    \uses{thm:cp_dominates_stinespring_contraction, thm:exists_stinespring_dilation,
+        def:block_diag_projectors}
+    Take Heisenberg-form Kraus families $K_1$ for $T_1$ and
+    Schr\"odinger-form $L$ for $T_2$, and form
+    $K=K_1\mathbin{+\!+}L^\dagger$ on $\C^{r_1+s}$. Choose
+    $P_1=P_{\mathrm{top}}$, $P_2=P_{\mathrm{bot}}$ as in
+    Definition~\ref{def:block_diag_projectors}. The Kronecker identity
+    $A\otimes(C^\dagger C)
+    =(\Id\otimes C)^\dagger(A\otimes\Id)(\Id\otimes C)$ rewrites
+    $V^\dagger(A\otimes P_{\mathrm{top}})V$ as
+    $((\Id\otimes C)V)^\dagger(A\otimes\Id)((\Id\otimes C)V)$,
+    which equals $V_{K_1}^\dagger(A\otimes\Id)V_{K_1}=T_1(A)$ by
+    Lemma~\ref{lem:stinespring_intertwine_append}. For the complementary
+    block, $A\otimes P_{\mathrm{bot}}
+    =A\otimes\Id-A\otimes P_{\mathrm{top}}$, and sandwiching by $V$ yields
+    $(T_1+T_2)(A)-T_1(A)=T_2(A)$.
+\end{proof}
+
+\begin{theorem}[Open-system representation of quantum channels]
+    \label{thm:channel_exists_stinespring_open_system}
+    \lean{IsChannel.exists_stinespring_open_system}
+    \leanok
+    \uses{def:channel, def:stinespring_v, def:partial_trace}
+    Every quantum channel $T:\MN{D}\to\MN{D}$ admits a Stinespring
+    isometry $V$ on an ancilla space $\C^r$ such that
+    \begin{align}
+        T(\rho)_{ij}
+        &=\sum_{k=0}^{r-1}(V\rho V^\dagger)_{(i,k),(j,k)}
+          =\tr_r(V\rho V^\dagger).
+        \label{eq:representations_open_system}
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:exists_stinespring_isometry_of_cptp,
+        thm:stinespring_schrodinger_representation}
+    Apply the existence of an isometric Stinespring dilation
+    (Theorem~\ref{thm:exists_stinespring_isometry_of_cptp}) and the
+    Schr\"odinger-picture identity
+    (\ref{eq:representations_stinespring_schrodinger}).
+\end{proof}
+
+\begin{theorem}[Open-system representation, partial-trace form]
+    \label{thm:channel_exists_stinespring_open_system_traceRight}
+    \lean{IsChannel.exists_stinespring_open_system_traceRight}
+    \leanok
+    \uses{def:channel, def:stinespring_v, def:partial_trace}
+    Every quantum channel $T$ admits an isometric Stinespring dilation
+    $V$ such that $T(\rho)=\tr_E(V\rho V^\dagger)$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:channel_exists_stinespring_open_system}
+    Rewrite the componentwise identity
+    (\ref{eq:representations_open_system}) as a partial trace over the
+    ancilla factor.
+\end{proof}
+
+\begin{lemma}[Rectangular Gram equality gives a unitary]
+    \label{lem:exists_unitary_mul_eq_of_gram_eq}
+    \lean{Matrix.exists_unitary_mul_eq_of_conjTranspose_mul_eq}
+    \leanok
+    \uses{}
+    Let $A,B:\C^n\to\C^m$ be linear maps with
+    $B^\dagger B=A^\dagger A$. Then there is a unitary
+    $U$ on $\C^m$ such that $B=UA$.
+\end{lemma}
+
+\begin{proof}\leanok
+\end{proof}
+
+\begin{theorem}[Unitary completion of an isometric inclusion]
+    \label{thm:isometric_inclusion_zero_extension}
+    \lean{Matrix.exists_unitary_zero_extension_eq}
+    \leanok
+    \uses{lem:exists_unitary_mul_eq_of_gram_eq}
+    Let $W:\C^n\to\C^D$ satisfy $W^\dagger W=\Id_n$. There are an
+    identification $\C^D\simeq\C^{D-n}\oplus\C^n$ and a unitary $U$ on
+    $\C^D$ such that, for every $A\in\MN{n}$,
+    \begin{align}
+        WAW^\dagger
+        &=U(0_{D-n}\oplus A)U^\dagger.
+        \label{eq:representations_unitary_completion}
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{lem:exists_unitary_mul_eq_of_gram_eq}
+    The isometry $W$ implies $n\leq D$. Let $J:\C^n\to
+    \C^{D-n}\oplus\C^n$ be the canonical inclusion into the second summand.
+    Since $W^\dagger W=J^\dagger J=\Id_n$,
+    Lemma~\ref{lem:exists_unitary_mul_eq_of_gram_eq}
+    gives a unitary $U$ with $W=UJ$. Substituting this identity gives
+    (\ref{eq:representations_unitary_completion}) because
+    $JAJ^\dagger=0_{D-n}\oplus A$.
+\end{proof}
+
+\begin{definition}[First environment embedding]
+    \label{def:first_env_embedding}
+    \lean{Matrix.firstEnvEmbedding}
+    \leanok
+    For $r\geq1$, let $W_0:\C^D\to\C^D\otimes\C^r$ be the isometry
+    $W_0x=x\otimes e_0$.
+\end{definition}
+
+\begin{lemma}[First environment embedding is an isometry]
+    \label{lem:first_env_embedding_conjTranspose_mul_self}
+    \lean{Matrix.firstEnvEmbedding_conjTranspose_mul_self}
+    \leanok
+    \uses{def:first_env_embedding}
+    The first-environment embedding satisfies $W_0^\dagger W_0=\Id$.
+\end{lemma}
+
+\begin{proof}\leanok
+\end{proof}
+
+\begin{theorem}[Open-system representation, unitary form]
+    \label{thm:channel_exists_stinespring_open_system_unitary}
+    \lean{IsChannel.exists_stinespring_open_system_unitary}
+    \leanok
+    \uses{def:channel, def:partial_trace, def:first_env_embedding}
+    For $D\geq1$, every quantum channel $T$ on $\C^D$ admits an
+    environment dimension $r\geq1$ and a unitary
+    $U$ on $\C^D\otimes\C^r$ such that, for every matrix
+    $\rho$ on $\C^D$,
+    \begin{align}
+        T(\rho)
+        &=\tr_E\!\left(UW_0\rho W_0^\dagger U^\dagger\right).
+        \label{eq:representations_open_unitary}
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:channel_exists_stinespring_open_system_traceRight,
+        lem:exists_unitary_mul_eq_of_gram_eq,
+        lem:first_env_embedding_conjTranspose_mul_self}
+    Take the isometric open-system representation
+    $T(\rho)=\tr_E(V\rho V^\dagger)$. Since
+    $V^\dagger V=\Id=W_0^\dagger W_0$,
+    Lemma~\ref{lem:exists_unitary_mul_eq_of_gram_eq}
+    gives a unitary $U$ with $V=UW_0$. Substituting this identity into the
+    partial trace formula gives (\ref{eq:representations_open_unitary}).
+\end{proof}
+
+%% =========================================================
+\section{POVMs and Naimark dilation}
+\label{sec:povm_naimark}
+%% =========================================================
+
+\begin{definition}[Positive operator-valued measure]\label{def:povm}
+    \lean{POVM}
+    \leanok
+    A \emph{positive operator-valued measure} with $n$ outcomes on $\C^D$
+    is a family $\{E_i\}_{i=0}^{n-1}$ of positive semidefinite
+    operators on $\C^D$ satisfying the resolution of identity
+    \begin{align}
+        \sum_{i=0}^{n-1}E_i
+        &=\Id_D.
+        \label{eq:representations_povm_resolution}
+    \end{align}
+\end{definition}
+
+\begin{definition}[Naimark Kraus square roots]\label{def:naimark_kraus}
+    \lean{POVM.naimarkKraus, POVM.naimarkKraus_spec}
+    \leanok
+    \uses{def:povm}
+    For a POVM $\{E_i\}$, each effect $E_i\ge0$ admits a square-root
+    factorisation $E_i=M_i^\dagger M_i$ with $M_i\in\MN{D}$. The
+    operators $M_i$ are the \emph{Naimark Kraus square roots}.
+\end{definition}
+
+\begin{theorem}[Naimark square roots satisfy the Kraus normalization]
+    \label{lem:naimark_square_root_normalization}
+    \lean{POVM.sum_naimarkKraus_conjTranspose_mul}
+    \leanok
+    \uses{def:naimark_kraus, def:povm}
+    For a POVM $\{E_i\}$ with square roots $E_i=M_i^\dagger M_i$,
+    one has $\sum_iM_i^\dagger M_i=\Id$.
+\end{theorem}
+
+\begin{proof}\leanok
+    Sum the identities $E_i=M_i^\dagger M_i$ and use the defining
+    resolution of the identity for the POVM.
+\end{proof}
+
+\begin{definition}[Naimark isometry]\label{def:naimark_isometry}
+    \lean{POVM.naimarkIsometry}
+    \leanok
+    \uses{def:naimark_kraus, def:stinespring_v}
+    The \emph{Naimark isometry} $V:\C^D\to\C^D\otimes\C^n$ of a POVM
+    is the Stinespring-type construction
+    \begin{align}
+        V
+        &=\sum_{i=0}^{n-1}M_i\otimes\ket{i},
+        \notag\\
+        V_{(a,i),k}
+        &=(M_i)_{a,k}.
+        \label{eq:representations_naimark_isometry}
+    \end{align}
+\end{definition}
+
+\begin{definition}[Naimark projective measurement]\label{def:naimark_projection}
+    \lean{POVM.naimarkProjection, POVM.naimarkProjection_apply}
+    \leanok
+    The \emph{Naimark projectors} on $\C^D\otimes\C^n$ are
+    \begin{align}
+        P_i
+        &=\Id_D\otimes\ketbra{i}{i},
+        \notag\\
+        (P_i)_{(a,b),(c,d)}
+        &=\delta_{a,c}\delta_{b,i}\delta_{d,i}.
+        \label{eq:representations_naimark_projectors}
+    \end{align}
+\end{definition}
+
+\begin{theorem}[Naimark isometry condition]\label{thm:naimark_isometry_isometry}
+    \lean{POVM.naimarkIsometry_isometry}
+    \leanok
+    \uses{def:naimark_isometry, def:povm}
+    The Naimark isometry satisfies $V^\dagger V=\Id_D$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The Stinespring Gram identity gives
+    $V^\dagger V=\sum_iM_i^\dagger M_i=\sum_iE_i=\Id_D$
+    by the resolution of identity.
+\end{proof}
+
+\begin{theorem}[Naimark projectors form a projective measurement]
+    \label{thm:naimark_projection_axioms}
+    \lean{POVM.naimarkProjection_mul_self,
+        POVM.naimarkProjection_hermitian,
+        POVM.naimarkProjection_orthogonal,
+        POVM.naimarkProjection_sum_eq_one}
+    \leanok
+    \uses{def:naimark_projection}
+    The Naimark projectors satisfy
+    \begin{align}
+        P_i^2
+        &=P_i,
+        \notag\\
+        P_i^\dagger
+        &=P_i,
+        \notag\\
+        i\ne j
+        &\Rightarrow P_iP_j=0,
+        \notag\\
+        \sum_iP_i
+        &=\Id_{\C^D\otimes\C^n}.
+        \notag
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Each identity follows from direct entrywise computation using the
+    delta-function form in (\ref{eq:representations_naimark_projectors}).
+\end{proof}
+
+\begin{theorem}[Naimark dilation]\label{thm:naimark_recovers_povm}
+    \lean{POVM.naimark_recovers_povm}
+    \leanok
+    \uses{def:povm, def:naimark_isometry, def:naimark_projection,
+        thm:naimark_isometry_isometry, thm:naimark_projection_axioms}
+    Every POVM $\{E_i\}_{i=0}^{n-1}$ arises as a projective measurement on a
+    dilation: for the isometry $V$ and projectors $P_i$ above,
+    $E_i=V^\dagger P_iV$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Computing entrywise,
+    \begin{align}
+        (V^\dagger P_iV)_{k,\ell}
+        &=\sum_a\overline{(M_i)_{a,k}}(M_i)_{a,\ell}
+          =(M_i^\dagger M_i)_{k,\ell}
+          =(E_i)_{k,\ell}.
+        \notag
+    \end{align}
+\end{proof}
+
+\begin{theorem}[Existential Naimark dilation]\label{thm:exists_naimark_dilation}
+    \lean{POVM.exists_naimark_dilation}
+    \leanok
+    \uses{thm:naimark_recovers_povm}
+    For every POVM $\{E_i\}$ on $\C^D$ there exist a dilation dimension $r$,
+    an isometry $V:\C^D\to\C^D\otimes\C^r$, and a projective
+    measurement $\{P_i\}$ on the dilation satisfying $E_i=V^\dagger P_iV$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Take $r=n$ and the explicit witnesses $V=\sum_iM_i\otimes\ket{i}$
+    and $P_i=\Id_D\otimes\ketbra{i}{i}$.
+\end{proof}
+
+\begin{definition}[Naimark dilation as a structure]
+    \label{def:is_naimark_dilation}
+    \lean{POVM.IsNaimarkDilation}
+    \leanok
+    \uses{thm:naimark_isometry_isometry, thm:naimark_projection_axioms,
+        thm:naimark_recovers_povm}
+    A \emph{Naimark dilation} of a POVM $\{E_i\}$ consists of an isometry
+    $V$ into a larger Hilbert space together with a projective measurement
+    $\{P_i\}$ there such that $E_i=V^\dagger P_iV$ for all $i$.
+\end{definition}
+
+\begin{theorem}[Canonical dilation satisfies the Naimark dilation axioms]
+    \label{thm:is_naimark_dilation_naimark}
+    \lean{POVM.isNaimarkDilation_naimark}
+    \leanok
+    \uses{def:is_naimark_dilation, thm:naimark_recovers_povm}
+    The explicit isometry $V=\sum_iM_i\otimes\ket{i}$ and projectors
+    $P_i=\Id_D\otimes\ketbra{i}{i}$ satisfy the defining axioms
+    of a Naimark dilation.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Combine the previously proved identities $V^\dagger V=\Id_D$,
+    $P_i^2=P_i$, $P_i^\dagger=P_i$, $P_iP_j=0$ for $i\ne j$,
+    $\sum_iP_i=\Id$, and $V^\dagger P_iV=E_i$.
+\end{proof}
+
+\begin{theorem}[Concrete uniqueness for canonical projectors]
+    \label{thm:naimark_concrete_uniqueness}
+    \lean{POVM.exists_isometry_mul_naimarkIsometry_of_recovery}
+    \leanok
+    \uses{def:naimark_isometry, def:naimark_projection, thm:naimark_recovers_povm}
+    Let $V:\C^D\to\C^D\otimes\C^n$ satisfy
+    $V^\dagger P_iV=E_i$ for the canonical projectors
+    $P_i=\Id_D\otimes\ketbra{i}{i}$.
+    Then there exists an isometry $W$ on the dilated space such that
+    $V=WV_0$, where $V_0$ is the canonical Naimark isometry of $\{E_i\}$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    For each outcome $i$, the $i$-th block of $V$ has Gram matrix $E_i$.
+    Comparing with the canonical square root $M_i$ gives
+    $V_i^\dagger V_i=M_i^\dagger M_i$, hence $V_i=U_iM_i$ for a unitary
+    $U_i$ on $\C^D$. Assemble the $U_i$ block-diagonally to obtain an
+    isometry $W=\bigoplus_iU_i$ on $\C^D\otimes\C^n$, and then
+    $V=W\sum_iM_i\otimes\ket{i}=WV_0$.
+\end{proof}
+
+\begin{definition}[POVM from a PSD resolution of identity on a dilation]
+    \label{def:povm_of_psd_resolution_of_identity}
+    \lean{POVM.ofPSDResolutionOfIdentity}
+    \leanok
+    Given an isometry $V:\C^D\to\C^{d'}$ with $V^\dagger V=\Id_D$
+    and a family $\{P_i\}_{i=0}^{n-1}$ of positive semidefinite operators on
+    $\C^{d'}$ summing to the identity, the pulled-back operators
+    $E_i:=V^\dagger P_iV$ form a POVM. In particular, any projective
+    measurement on the dilation (a special case of a PSD resolution of
+    identity) pulls back to a POVM.
+\end{definition}
+
+\begin{definition}[Quantum instrument]\label{def:instrument}
+    \lean{Instrument}
+    \leanok
+    \uses{def:cp_map, def:trace_preserving}
+    A \emph{quantum instrument} with $n$ outcomes is a family
+    $\{\Phi_i\}_{i=0}^{n-1}$ of completely positive maps on $\MN{D}$ whose
+    sum $\sum_i\Phi_i$ is trace-preserving.
+\end{definition}
+
+\begin{definition}[Instrument operations]\label{def:instrument_operations}
+    \lean{Instrument.total, Instrument.update, Instrument.probability,
+        Instrument.posteriorState}
+    \leanok
+    \uses{def:instrument}
+    Associated to an instrument are the total channel $\sum_i\Phi_i$, the
+    unnormalized update $\rho\mapsto\Phi_i(\rho)$ for each outcome $i$, the
+    outcome probability $p_i(\rho)=\tr(\Phi_i(\rho))$, and the normalized
+    posterior state $\Phi_i(\rho)/p_i(\rho)$ whenever $p_i(\rho)\neq0$.
+\end{definition}
+
+\begin{theorem}[Instrument total map is a channel]
+    \label{thm:instrument_total_is_channel}
+    \lean{Instrument.total_isChannel}
+    \leanok
+    \uses{def:instrument, def:channel}
+    The total map $\sum_i\Phi_i$ of an instrument is a quantum channel.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Complete positivity of the sum follows from closure of CP maps under
+    finite addition; trace preservation is built into the definition.
+\end{proof}
+
+\begin{theorem}[Conservation of probability for instruments]
+    \label{thm:instrument_sum_probability}
+    \lean{Instrument.sum_probability}
+    \leanok
+    \uses{def:instrument}
+    For every state $\rho\in\MN{D}$, the outcome probabilities
+    $p_i(\rho):=\tr(\Phi_i(\rho))$ sum to $\tr(\rho)$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Linearity of trace and trace preservation of $\sum_i\Phi_i$ give
+    \begin{align}
+        \sum_i\tr(\Phi_i(\rho))
+        &=\tr\left(\left(\sum_i\Phi_i\right)(\rho)\right)
+         =\tr(\rho).
+        \notag
+    \end{align}
+\end{proof}
+
+\begin{theorem}[Non-negativity of instrument probabilities]
+    \label{thm:instrument_probability_nonneg}
+    \lean{Instrument.probability_nonneg}
+    \leanok
+    \uses{def:instrument}
+    If $\rho\in\MN{D}$ is positive semidefinite, then each outcome
+    probability $p_i(\rho)=\tr(\Phi_i(\rho))$ is a
+    non-negative real number.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Each $\Phi_i$ is completely positive, hence positive, so
+    $\Phi_i(\rho)$ is positive semidefinite and its trace is a
+    non-negative real.
+\end{proof}
+
+%% =========================================================

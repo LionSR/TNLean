@@ -1,0 +1,647 @@
+\section{The Fundamental Theorem for injective chains}%
+\label{sec:ft_chain}
+%% ---------------------------------------------------------
+
+The chain theorem combines the site and physical indices into a single
+physical index and applies the single-block Fundamental Theorem to the
+resulting tensor. Its hypothesis is all-length MPV equality of the
+combined tensors. This hypothesis is strictly stronger than equality of one
+fixed-length closed-chain state: the combined-tensor MPV also tests words that
+repeat one site and omit the others. The corresponding fixed-length theorem is
+Corollary~\ref{cor:fundamentalTheorem_injectiveMPSChain_of_sameState}.
+
+\begin{theorem}[Fundamental Theorem for injective chains]%
+    \label{thm:fundamentalTheorem_injective_chain}
+    \lean{MPSChainTensor.fundamentalTheorem_injective_chain}
+    \leanok
+    \uses{def:non_ti_chain, def:same_mpv}
+    Let $\mathbf{A} = (A_0, \ldots, A_{n-1})$ and
+    $\mathbf{B} = (B_0, \ldots, B_{n-1})$ be two chains with $n>0$ sites
+    and common positive bond dimension $D$, and assume that $\mathbf{A}$ is
+    injective.
+    Suppose that, after combining the site index and physical index into a
+    single MPS tensor, the resulting two tensors generate the same MPV
+    family. Then $\mathbf{A}$ and $\mathbf{B}$ are cyclically gauge
+    equivalent.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{lem:blocking_preserves_injectivity, thm:ft_single}
+    Choose one site of $\mathbf{A}$; its injectivity implies injectivity of
+    the combined tensor by Lemma~\ref{lem:blocking_preserves_injectivity}.
+    Apply the single-block Fundamental Theorem
+    (Theorem~\ref{thm:ft_single}) to the two combined tensors.
+    This yields one invertible matrix $X$ such that every combined matrix of
+    $\mathbf{B}$ equals the corresponding combined matrix of
+    $\mathbf{A}$ conjugated by $X$.
+    Reading this identity back at each site gives
+    $B_k^i = X A_k^i X^{-1}$ for all $k$ and $i$, so the constant choice
+    $Z_k = X$ is a cyclic gauge.
+\end{proof}
+
+\begin{lemma}[Uniform site rescaling rescales the combined tensor]%
+    \label{lem:chainCombinedTensor_smul_chain}
+    \lean{MPSTensor.chainCombinedTensor_smul_chain}
+    \leanok
+    \uses{def:non_ti_chain}
+    Let $\mathbf{A} = (A_0, \ldots, A_{n-1})$ be an $n$-site chain and let
+    $\zeta \in \C$. If $\zeta \mathbf{A}$ denotes the chain obtained by
+    replacing each site tensor $A_k$ with $\zeta A_k$, and if
+    $\widetilde{\mathbf{A}}$ denotes the combined tensor of $\mathbf{A}$,
+    then $\widetilde{\zeta \mathbf{A}}=\zeta\,\widetilde{\mathbf{A}}$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{def:non_ti_chain}
+    Combining the site and physical indices does not change which local matrix
+    is read at the component $(k,i)$, so both sides evaluate to
+    $\zeta A_k^i$ there.
+\end{proof}
+
+\begin{theorem}[Injective-chain Fundamental Theorem up to a global phase]%
+    \label{thm:fundamentalTheorem_injective_chain_gaugePhase}
+    \lean{MPSChainTensor.fundamentalTheorem_injective_chain_gaugePhase}
+    \leanok
+    \uses{thm:fundamentalTheorem_injective_chain, def:gauge_phase_equiv,
+        def:non_ti_chain}
+    Let $\mathbf{A} = (A_0, \ldots, A_{n-1})$ and
+    $\mathbf{B} = (B_0, \ldots, B_{n-1})$ be two chains with $n>0$ sites and
+    common positive bond dimension $D$, and assume that $\mathbf{A}$ is
+    injective.
+    Suppose that the combined tensors $\widetilde{\mathbf{A}}$ and
+    $\widetilde{\mathbf{B}}$ are gauge-phase equivalent.
+    Then there exist invertible matrices $Z_0, \ldots, Z_{n-1} \in \GL_D(\C)$
+    and a nonzero scalar $\zeta \in \C^{\times}$ such that
+    \begin{align}
+        B_k^i
+        &=\zeta\,Z_k A_k^i Z_{k+1}^{-1}
+        \label{eq:aft_chain_gaugePhase_conj}
+    \end{align}
+    for all sites $k$ and physical indices $i$, where $k+1$ is interpreted
+    cyclically modulo $n$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{lem:chainCombinedTensor_smul_chain,
+        thm:gauge_invariance, thm:fundamentalTheorem_injective_chain}
+    If the combined tensor of $\mathbf{B}$ differs from that of $\mathbf{A}$
+    by a gauge and a nonzero scalar $\zeta$, rescale each site of
+    $\mathbf{B}$ by $\zeta^{-1}$. Lemma~\ref{lem:chainCombinedTensor_smul_chain}
+    removes this common scalar from the combined tensor, so
+    Theorem~\ref{thm:fundamentalTheorem_injective_chain} applies to the
+    rescaled chain. Multiplying the resulting sitewise relations by $\zeta$
+    gives (\ref{eq:aft_chain_gaugePhase_conj}).
+\end{proof}
+
+\begin{remark}[Relationship to the translation-invariant all-sizes theorem]
+    \label{rem:ft_vs_singleBlock}
+    \uses{thm:fundamentalTheorem_injective_chain, def:injective}
+    Theorem~\ref{thm:fundamentalTheorem_injective_chain} treats a fixed chain
+    length and assumes equality of the combined-tensor MPV families.
+    The single-block Fundamental Theorem
+    (Theorem~\ref{thm:ft_single}) instead studies one tensor at all system
+    sizes and concludes exact gauge equivalence
+    $B^i = X A^i X^{-1}$.
+    The chain theorem is recovered by converting the chain into one combined
+    tensor; the price is that the hypothesis is all-length MPV equality for
+    that combined tensor rather than equality of the chain state at one fixed
+    length.
+\end{remark}
+
+\subsection{Finite-length MPV agreement}
+
+The single-block theorem can be strengthened by weakening its hypothesis from
+all-length to finite-length MPV agreement: for an injective tensor,
+agreement from any threshold $N_0$ onward already implies full agreement.
+
+\begin{definition}[Finite-length MPV agreement]\label{def:same_mpv_from}
+    \lean{MPSTensor.SameMPVFrom}
+    \leanok
+    \uses{def:same_mpv}
+    Two tensors $A$ and $B$ of the same bond dimension satisfy
+    \emph{finite-length MPV agreement from $N_0$ onward} if they generate
+    the same MPV family for all system sizes $N \ge N_0$, meaning that
+    $V^{(N)}(A)_\sigma = V^{(N)}(B)_\sigma$ for every $N \ge N_0$ and
+    $\sigma \in [d]^N$.
+\end{definition}
+
+\begin{theorem}[Finite-length agreement implies full agreement]%
+    \label{thm:sameMPV_of_sameMPVFrom}
+    \lean{MPSTensor.sameMPV_of_sameMPVFrom_of_injective}
+    \leanok
+    \uses{def:same_mpv_from, def:injective, def:same_mpv}
+    Let $A$ be an injective tensor of bond dimension $D \ge 1$, and let
+    $B$ be a tensor of the same bond dimension. If $A$ and $B$ generate
+    the same MPV family for every system size $N \ge N_0$, then they
+    generate the same MPV family for every system size.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:same_mpv_from, def:injective}
+    Write $1 = \sum_i c_i A^i$ (by injectivity) and set
+    $S = \sum_i c_i B^i$.
+    \begin{enumerate}
+        \item Show that the length-$N_0$ word span of $B$ is all of
+              $\MN{D}$ via the linear relation between the
+              length-$N_0$ word-evaluation maps of $A$ and $B$
+              induced by trace agreement at length $N_0 + 1$,
+              together with a finrank transfer argument.
+        \item Derive $S = 1$ by trace nondegeneracy: for every
+              $M \in \MN{D}$, $\tr(M(S - 1)) = 0$.
+        \item Downward induction on $k = N_0 - |w|$: decompose
+              $\tr(w_A)$ and $\tr(w_B)$ using $1 = \sum c_i A^i$
+              and $S = 1$ respectively, then apply the inductive
+              hypothesis at length $|w| + 1$.
+    \end{enumerate}
+\end{proof}
+
+\begin{theorem}[Strengthened single-block FT (finite-length)]%
+    \label{thm:ft_singleBlock_finiteLength}
+    \lean{MPSTensor.fundamentalTheorem_singleBlock_finiteLength}
+    \leanok
+    \uses{thm:sameMPV_of_sameMPVFrom, thm:ft_single, def:gauge_equiv}
+    Let $A$ be an injective tensor of bond dimension $D \ge 1$, and let
+    $B$ be a tensor of the same bond dimension. If $A$ and $B$ agree on
+    all MPV coefficients for system sizes $N \ge N_0$ (for any threshold
+    $N_0$), then $A$ and $B$ are gauge equivalent.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:sameMPV_of_sameMPVFrom, thm:ft_single}
+    Apply Theorem~\ref{thm:sameMPV_of_sameMPVFrom} to obtain
+    equality of the MPV families for all system sizes, then invoke the
+    single-block Fundamental Theorem (Theorem~\ref{thm:ft_single}).
+\end{proof}
+
+%% ---------------------------------------------------------
+\section{Corollaries: translation-invariant, non-uniform, and blocked chains}%
+\label{sec:ft_corollaries}
+%% ---------------------------------------------------------
+
+The chain theorem specializes to three settings: constant
+translation-invariant chains, non-uniform chains whose state happens to be
+translation-invariant, and constant chains of blocked tensors.
+
+\subsection{Translation-invariant chains}
+
+\begin{theorem}[Single gauge for translation-invariant chains]
+    \label{thm:ti_tensors_single_gauge}
+    \lean{MPSChainTensor.ti_tensors_single_gauge}
+    \leanok
+    \uses{def:injective, def:same_mpv}
+    Let $A$ and $B$ be MPS tensors of bond dimension $D$, and fix a chain
+    length $n \ge 1$.
+    Assume that $A$ is injective and that the combined tensors of the two
+    constant chains $(A, \ldots, A)$ and $(B, \ldots, B)$ generate the same
+    MPV family.
+    Then there exists an invertible matrix $X \in \GL_D(\C)$ such that
+    $B^i = X A^i X^{-1}$ for every physical index~$i$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{lem:blocking_preserves_injectivity, thm:ft_single}
+    Bundle the constant chains into one tensor.
+    Injectivity of $A$ implies injectivity of the combined tensor by
+    Lemma~\ref{lem:blocking_preserves_injectivity}, and the combined-tensor MPV
+    equality is exactly the hypothesis needed for the single-block
+    Fundamental Theorem.
+    The resulting gauge matrix is independent of the site because every site
+    carries the same local tensor.
+\end{proof}
+
+\begin{corollary}[Translation-invariant collapse to one gauge]\label{cor:ft_ti_chain}
+    \lean{MPSChainTensor.ti_tensors_collapse_to_single_gauge}
+    \leanok
+    \uses{def:injective, def:same_mpv}
+    Let $A$ and $B$ be MPS tensors of bond dimension $D$, and fix a chain
+    length $n \ge 1$.
+    Assume that $A$ is injective and that the combined tensors of the two
+    constant chains $(A, \ldots, A)$ and $(B, \ldots, B)$ generate the same
+    MPV family.
+    Then there exist an invertible matrix $Z \in \GL_D(\C)$ and a scalar
+    $\lambda \in \C^{\times}$ with $\lambda^n = 1$ such that
+    \begin{align}
+        B^i
+        &=\lambda\,Z^{-1} A^i Z
+        \label{eq:aft_ti_collapse_conj}
+    \end{align}
+    for every physical index~$i$.
+\end{corollary}
+
+\begin{proof}
+    \leanok
+    \uses{thm:ti_tensors_single_gauge}
+    Apply Theorem~\ref{thm:ti_tensors_single_gauge} to obtain
+    $B^i = X A^i X^{-1}$.
+    Set $Z = X^{-1}$ and $\lambda = 1$.
+    Then $\lambda^n = 1$, and (\ref{eq:aft_ti_collapse_conj}) is exactly the
+    same gauge relation rewritten in the form used by the corollary.
+\end{proof}
+
+\noindent Symmetry-theoretic consequences of the Fundamental Theorem,
+including virtual representations and string order, are developed in
+Chapter~\ref{ch:symmetry}.
+
+\subsection{Blocked chains}
+
+\begin{lemma}[Block injectivity and blocked-tensor injectivity]
+    \label{lem:isNBlkInjective_iff_blockTensor_isInjective}
+    \lean{MPSTensor.isNBlkInjective_iff_blockTensor_isInjective}
+    \leanok
+    \uses{def:blocked_tensor, def:injective}
+    A tensor $A$ is $L$-block injective if and only if its $L$-blocked
+    tensor $A^{[L]}$ is injective.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    The blocked physical alphabet is just a reindexing of words of length $L$.
+    Decoding blocked indices therefore identifies the two spanning families,
+    so the two injectivity conditions are equivalent.
+\end{proof}
+
+\begin{definition}[Constant blocked chain]
+    \label{def:blocked_chain}
+    \lean{MPSChainTensor.blockedChain}
+    \leanok
+    \uses{def:blocked_tensor}
+    For an MPS tensor $A$, a blocking length $L$, and a chain length $n$, the
+    \emph{blocked chain} is the constant $n$-site chain whose local tensor is
+    the blocked tensor $A^{[L]}$.
+\end{definition}
+
+\begin{lemma}[Blocked chains are injective]
+    \label{lem:blocked_chain_isInjective}
+    \lean{MPSChainTensor.blockedChain_isInjective}
+    \leanok
+    \uses{def:blocked_chain, lem:isNBlkInjective_iff_blockTensor_isInjective}
+    If $A$ is $L$-block injective, then the constant blocked chain built from
+    $A^{[L]}$ is injective at every site.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:isNBlkInjective_iff_blockTensor_isInjective}
+    By Lemma~\ref{lem:isNBlkInjective_iff_blockTensor_isInjective}, the local
+    blocked tensor $A^{[L]}$ is injective, and therefore every site of the
+    constant blocked chain is injective.
+\end{proof}
+
+\begin{theorem}[Fundamental Theorem for blocked chains]
+    \label{thm:fundamentalTheorem_blockedChain}
+    \lean{MPSChainTensor.fundamentalTheorem_blockedChain}
+    \leanok
+    \uses{def:blocked_chain, def:same_mpv}
+    Let $A$ and $B$ be MPS tensors of positive bond dimension $D$, let $L$ be
+    a blocking length, and let $n>0$ be a chain length.
+    Assume that $A$ is $L$-block injective and that the combined tensors of the
+    two constant blocked chains built from $A^{[L]}$ and $B^{[L]}$ generate the
+    same MPV family.
+    Then the two blocked chains are gauge equivalent.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{lem:blocked_chain_isInjective,
+        thm:fundamentalTheorem_injective_chain}
+    By Lemma~\ref{lem:blocked_chain_isInjective}, the blocked chain built from
+    $A^{[L]}$ is injective.
+    Apply Theorem~\ref{thm:fundamentalTheorem_injective_chain} to the two
+    constant blocked chains.
+\end{proof}
+
+\begin{remark}
+    The theorem above is the blocked-chain result established here.
+    Recovering sitewise gauges for the original unblocked tensors gives the
+    normal-MPS corollary of \cite{Molnar2018NormalPEPS}; that step is outside
+    this blocked-chain statement.
+\end{remark}
+
+%% ---------------------------------------------------------
+\section{Product algebra construction and per-block gauge}%
+\label{sec:pi_algebra}
+%% ---------------------------------------------------------
+
+The chain Fundamental Theorem
+(Theorem~\ref{thm:fundamentalTheorem_injective_chain}) handles
+non-translation-invariant periodic chains.
+A parallel development addresses block-diagonal tensors:
+given a family of injective block tensors $\{A_k^i\}_{k=0}^{r-1}$
+with block dimensions $D_k$ and a second family $\{B_k^i\}$ with
+per-block $\mc{V}(A_k) = \mc{V}(B_k)$, one seeks per-block gauge
+equivalence $B_k^i = X_k A_k^i X_k^{-1}$ for each~$k$
+independently, and a global block-permutation plus inner-automorphism
+decomposition.
+Throughout this section, assume $D_k \ge 1$ for every block~$k$.
+
+\subsection{Block permutation algebra}
+
+\begin{definition}[Block ideal]\label{def:block_ideal}
+    \lean{MPSTensor.blockIdeal}
+    \leanok
+    Let $\{R_k\}_{k=0}^{r-1}$ be simple rings.
+    The $k$-th \emph{block ideal} in $\prod_{j=0}^{r-1} R_j$ is
+    \begin{align}
+        I_k
+        &:=\left\{x \in \prod_{j=0}^{r-1} R_j :
+            x_j = 0 \text{ for } j \neq k\right\}.
+        \notag
+    \end{align}
+\end{definition}
+
+\begin{theorem}[Each block ideal is an atom]\label{thm:block_ideal_atom}
+    \lean{MPSTensor.isAtom_blockIdeal}
+    \leanok
+    \uses{def:block_ideal}
+    Each block ideal $I_k$ is an atom in the lattice of two-sided ideals of
+    $\prod_{j=0}^{r-1} R_j$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Under the order isomorphism between two-sided ideals of
+    $\prod_{j=0}^{r-1} R_j$
+    and products of two-sided ideal lattices, $I_k$ corresponds to the tuple with
+    $\top$ in the $k$-th coordinate and $\bot$ elsewhere. This tuple is an atom,
+    hence so is $I_k$.
+\end{proof}
+
+\begin{theorem}[Ring isomorphisms match block ideals]\label{thm:ring_perm}
+    \lean{MPSTensor.exists_blockEquiv_of_ringEquiv_pi_simple}
+    \lean{MPSTensor.ringEquiv_pi_simple_permutes_blockIdeals}
+    \leanok
+    \uses{def:block_ideal}
+    Let $\{R_i\}_{i\in I}$ and $\{S_j\}_{j\in J}$ be two finite families of
+    simple rings. Every ring isomorphism
+    $T : \prod_{i\in I}R_i \to \prod_{j\in J}S_j$ determines an equivalence
+    $\sigma:I\simeq J$ such that $T$ maps the $i$-th block ideal onto the
+    $\sigma(i)$-th block ideal. In particular, an automorphism of one product
+    permutes its block ideals.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:block_ideal_atom}
+    By Theorem~\ref{thm:block_ideal_atom}, the atoms in each two-sided ideal
+    lattice are exactly its block ideals. The induced order isomorphism
+    therefore assigns a unique target block ideal to every source block
+    ideal. Applying its inverse shows that this assignment is bijective and
+    gives~$\sigma$.
+\end{proof}
+
+\begin{theorem}[Summand matching and dimension preservation]\label{thm:dim_preserved}
+    \lean{Matrix.exists_blockEquiv_dim_eq_of_starAlgEquiv_pi_matrix}
+    \lean{MPSTensor.dim_preserved}
+    \leanok
+    Let $\{D_i\}_{i\in I}$ and $\{E_j\}_{j\in J}$ be positive integers.
+    A star-algebra isomorphism
+    \begin{align}
+        \prod_{i\in I} M_{D_i}(\C)
+        &\simeq \prod_{j\in J} M_{E_j}(\C)
+        \notag
+    \end{align}
+    determines an equivalence $\sigma:I\simeq J$ such that the isomorphism
+    carries the $i$-th block ideal onto the $\sigma(i)$-th block ideal and
+    $D_i=E_{\sigma(i)}$ for every $i\in I$. For an automorphism of one product,
+    the induced permutation preserves every block ideal and its dimension.
+\end{theorem}
+
+\begin{proof}\leanok\uses{thm:ring_perm, thm:component_map_bijective}
+    The isomorphism carries the $i$-th block ideal onto the
+    $\sigma(i)$-th block ideal. Its restriction gives a bijective complex
+    linear map from $M_{D_i}(\C)$ to $M_{E_{\sigma(i)}}(\C)$. Comparing
+    dimensions gives $D_i^2=E_{\sigma(i)}^2$, hence
+    $D_i=E_{\sigma(i)}$.
+\end{proof}
+
+\begin{theorem}[Paired component maps are bijections]\label{thm:component_map_bijective}
+    \lean{MPSTensor.mem_blockIdeal_iff}
+    \lean{MPSTensor.pi_single_mem_blockIdeal}
+    \lean{MPSTensor.blockComponentMap}
+    \lean{MPSTensor.ringEquiv_maps_single_support_between}
+    \lean{MPSTensor.ringEquiv_maps_single_support}
+    \lean{MPSTensor.ringEquiv_symm_maps_blockIdeal_between}
+    \lean{MPSTensor.blockComponentMap_injective}
+    \lean{MPSTensor.blockComponentMap_surjective}
+    \lean{MPSTensor.blockComponentMap_bijective}
+    \lean{MPSTensor.componentMap_surjective}
+    \lean{MPSTensor.componentMap_bijective}
+    \leanok
+    \uses{thm:ring_perm}
+    Under the hypotheses of Theorem~\ref{thm:ring_perm}, for each $i\in I$
+    the map
+    \begin{align}
+        x
+        &\longmapsto
+        (T(0,\ldots,0,x,0,\ldots,0))_{\sigma(i)}
+        \notag
+    \end{align}
+    from $R_i$ to $S_{\sigma(i)}$ is bijective.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Theorem~\ref{thm:ring_perm} forces an element supported in the $i$-th
+    block ideal to remain supported in the $\sigma(i)$-th block after
+    applying~$T$.
+    Injectivity follows from injectivity of~$T$.
+    For surjectivity, apply the same argument to $T^{-1}$ and the inverse
+    equivalence.
+\end{proof}
+
+\begin{theorem}[Decomposition of automorphisms of $\prod \MN{D_k}$]\label{thm:pi_auto_decomp}
+    \lean{MPSTensor.algEquiv_pi_matrix_decomposition}
+    \leanok
+    Assume $D_k \ge 1$ for all~$k$.
+    Every $\C$-algebra automorphism $T$ of $\prod_{k=0}^{r-1} \MN{D_k}$
+    decomposes as per-block inner automorphisms followed by a block
+    permutation~$\pi$:
+    there exist $\pi \in S_r$ with $D_{\pi(k)} = D_k$
+    and invertible matrices $X_k \in \GL_{D_k}(\C)$ such that,
+    for every tuple $M = (M_0,\ldots,M_{r-1})$ and every block index~$k$,
+    $T(M)_{\pi(k)} = X_k M_k X_k^{-1}$,
+    where $T(M)_j$ denotes the $j$-th block component of $T(M)$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:ring_perm, thm:dim_preserved, thm:component_map_bijective,
+        thm:skolem_noether}
+    Theorem~\ref{thm:ring_perm} gives the permutation $\pi$.
+    Theorem~\ref{thm:dim_preserved} identifies the matrix sizes
+    $D_{\pi(k)} = D_k$.
+    For each $k$, Theorem~\ref{thm:component_map_bijective} gives a bijective
+    multiplicative map from $\MN{D_k}$ to $\MN{D_{\pi(k)}}$ extracted from the
+    elements supported on one factor of~$T$; after reindexing by the dimension equality,
+    this is a $\C$-algebra automorphism of $\MN{D_k}$.
+    Skolem--Noether (Theorem~\ref{thm:skolem_noether}) makes each such
+    automorphism inner.
+
+    This is a standard result in the theory of semisimple algebras;
+    see~\cite[Section~IV.A]{Cirac2021Matrix} for the MPS context.
+\end{proof}
+
+\begin{remark}[Ring level versus algebra level]\label{rem:ring_vs_alg}
+    Theorem~\ref{thm:ring_perm} is a ring-level statement: it only uses the
+    ideal structure of $\prod_k R_k$.
+    Theorem~\ref{thm:component_map_bijective} stays at this ring level: once the
+    block ideals are permuted, one can extract the corresponding single-block
+    maps without using scalar multiplication.
+    Theorems~\ref{thm:dim_preserved}
+    and~\ref{thm:pi_auto_decomp} require an upgrade to $\C$-algebra
+    automorphisms. The reason is threefold: dimension preservation compares
+    the blocks as $\C$-vector spaces; Skolem--Noether applies to the resulting
+    central simple $\C$-algebras; and the final per-block maps must commute
+    with scalar multiplication. Thus the argument separates the ring-level
+    permutation step from the later algebra-level decomposition.
+\end{remark}
+
+\subsection{Per-block linear extension and the product automorphism}
+
+Per-block equality of MPV families produces a unique linear map on each
+matrix block; assembling these maps componentwise yields an algebra
+automorphism of the product, to which the block-permutation decomposition
+applies.
+
+\begin{definition}[Per-block linear extension]%
+    \label{def:perBlockLinearExtension}
+    \lean{MPSTensor.perBlockLinearExtension}
+    \leanok
+    \uses{def:injective, def:same_mpv}
+    Let $A_k, B_k$ be MPS tensors of bond dimension $D_k$ with
+    $A_k$ injective and $\mc{V}(A_k) = \mc{V}(B_k)$ for each block
+    $k \in \{0, \ldots, r{-}1\}$.
+    The \emph{per-block linear extension} $T_k : \MN{D_k} \to \MN{D_k}$
+    is the unique $\C$-linear map satisfying $T_k(A_k^i) = B_k^i$
+    for every physical index~$i$.
+\end{definition}
+
+\begin{lemma}[Per-block multiplicativity]%
+    \label{lem:perBlockLinearExtension_mul}
+    \lean{MPSTensor.perBlockLinearExtension_mul}
+    \leanok
+    \uses{def:perBlockLinearExtension}
+    For each block~$k$, the per-block linear extension $T_k$ is
+    multiplicative:
+    $T_k(MN) = T_k(M)T_k(N)$ for all $M, N \in \MN{D_k}$.
+\end{lemma}
+
+\begin{proof}\leanok\uses{def:perBlockLinearExtension}
+    Since $\{A_k^i\}$ spans $\MN{D_k}$, it suffices to check on spanning
+    elements, where the result follows from the MPV identity.
+\end{proof}
+
+\begin{lemma}[Per-block bijectivity]%
+    \label{lem:perBlockLinearExtension_bijective}
+    \lean{MPSTensor.perBlockLinearExtension_bijective}
+    \leanok
+    \uses{lem:perBlockLinearExtension_mul}
+    Each $T_k$ is bijective.
+\end{lemma}
+
+\begin{proof}\leanok\uses{lem:perBlockLinearExtension_mul}
+    A nonzero multiplicative linear endomorphism of $\MN{D_k}$ is
+    automatically bijective: injectivity follows from the simplicity
+    of $\MN{D_k}$ (the kernel is a proper ideal, hence zero), and
+    surjectivity from finite dimension.
+    Non-vanishing of $T_k$ is established via the trace pairing: if
+    $T_k = 0$, then all $B_k^i = 0$, contradicting the non-vanishing
+    of the trace pairing for injective tensors.
+\end{proof}
+
+\begin{definition}[Product algebra automorphism]%
+    \label{def:piAlgEquiv}
+    \lean{MPSTensor.piAlgEquiv}
+    \leanok
+    \uses{def:perBlockLinearExtension, lem:perBlockLinearExtension_mul,
+        lem:perBlockLinearExtension_bijective}
+    The \emph{product algebra automorphism} is the $\C$-algebra
+    equivalence
+    \begin{align}
+        T:\prod_{k=0}^{r-1} \MN{D_k}
+        &\xrightarrow{\sim}
+        \prod_{k=0}^{r-1} \MN{D_k}
+        \notag
+    \end{align}
+    defined by $T(M)_k = T_k(M_k)$, where each $T_k$ is the per-block
+    linear extension.
+    It is an algebra automorphism since each $T_k$ is a multiplicative,
+    unital, bijective linear map.
+    Diagrammatically, this is the componentwise map on the product algebra
+    obtained by applying the corresponding extension to each summand.
+\end{definition}
+
+\begin{theorem}[Block-permutation decomposition]%
+    \label{thm:piAlgEquiv_decomposition}
+    \lean{MPSTensor.piAlgEquiv_decomposition}
+    \leanok
+    \uses{def:piAlgEquiv, thm:pi_auto_decomp}
+    The product algebra automorphism $T$ decomposes as a block
+    permutation composed with per-block inner automorphisms: there exist
+    a permutation $\sigma \in S_r$ (with $D_{\sigma(k)} = D_k$ for
+    all~$k$) and invertible matrices $X_k \in \GL_{D_k}(\C)$ such that
+    \begin{align}
+        (T(M))_{\sigma(k)}
+        &=X_k M X_k^{-1}
+        \notag
+    \end{align}
+    for all $M \in \MN{D_k}$ (viewed as supported in block~$k$) and
+    all~$k$.
+    Equivalently, the product-algebra automorphism first permutes the
+    simple matrix blocks and then acts inside each block by an inner
+    conjugation.
+\end{theorem}
+
+\begin{proof}\leanok\uses{def:piAlgEquiv, thm:pi_auto_decomp}
+    Apply Theorem~\ref{thm:pi_auto_decomp} to the product-algebra
+    automorphism of Definition~\ref{def:piAlgEquiv}. The theorem writes the
+    nonzero input block as $\pi(k)$ in output component~$k$; for the statement
+    above we set $\sigma := \pi^{-1}$, so an element supported in block~$k$
+    lands in block~$\sigma(k)$.
+\end{proof}
+
+\subsection{Nondegeneracy of the product trace pairing}
+
+\begin{lemma}[Nondegeneracy of the product trace pairing]%
+    \label{lem:piTrace_mul_right_eq_zero}
+    \lean{MPSTensor.piTrace_mul_right_eq_zero}
+    \leanok
+    Let $M = (M_0, \ldots, M_{r-1}) \in \prod_{k} \MN{D_k}$.
+    If $\sum_{k} \tr(M_k N_k) = 0$ for all
+    $N = (N_0, \ldots, N_{r-1})$, then $M = 0$.
+\end{lemma}
+
+\begin{proof}\leanok
+    Choose $N$ supported on a single block~$k$ (all other components
+    zero).
+    The hypothesis reduces to $\tr(M_k N_k) = 0$ for all $N_k$, so
+    $M_k = 0$ by nondegeneracy of the matrix trace pairing on
+    $\MN{D_k}$.
+    Since $k$ was arbitrary, $M = 0$.
+\end{proof}
+
+\begin{lemma}[Injectivity of the product Gram map]%
+    \label{lem:piTraceMulRightPi_ker_eq_bot}
+    \lean{MPSTensor.piTraceMulRightPi_ker_eq_bot}
+    \leanok
+    \uses{def:injective}
+    Let $\{A_k\}$ be a family of injective block tensors.
+    The product Gram map
+    $M \mapsto (k, i \mapsto \tr(M_k \cdot A_k^i))$
+    is injective.
+\end{lemma}
+
+\begin{proof}\leanok\uses{def:injective}
+    Reduces to per-block injectivity of the Gram map
+    $M_k \mapsto (i \mapsto \tr(M_k \cdot A_k^i))$, which holds by
+    injectivity of $A_k$ (the matrices $\{A_k^i\}$ span $\MN{D_k}$,
+    so the trace pairing against them separates points).
+\end{proof}
+
+%% ---------------------------------------------------------

@@ -8,17 +8,12 @@
         thm:chain_ground_space_implies_frustration_free}
     Let $B$ be a canonical-form tensor with BNT components
     $A_1,\ldots,A_g$. If every component vector has zero energy for the
-    parent Hamiltonian,
-    \[
-        H_L^{(N)}(B)V^{(N)}(A_j)=0
-        \qquad (1\le j\le g),
-    \]
-    then
-    \[
+    parent Hamiltonian, $H_L^{(N)}(B)V^{(N)}(A_j)=0$ for $1\le j\le g$, then
+    \begin{align}
         \spn\{V^{(N)}(A_j):j=1,\ldots,g\}
-        \subseteq
-        \ker H_L^{(N)}(B).
-    \]
+        &\subseteq
+        \ker H_L^{(N)}(B). \notag
+    \end{align}
     It is enough to assume the local frustration-free equations
     $h_iV^{(N)}(A_j)=0$ for every $i$ and $j$.
     For $N>0$ and $L\le N$, in the block-diagonal case
@@ -34,19 +29,14 @@
     The kernel is a linear subspace. Hence it is enough to check the generators
     $V^{(N)}(A_j)$. The first hypothesis gives this directly. Under the
     local frustration-free equations,
-    \[
+    \begin{align}
         H_L^{(N)}(B)V^{(N)}(A_j)
-        =
-        \sum_i h_iV^{(N)}(A_j)
-        =
-        0.
-    \]
+        &=\sum_i h_iV^{(N)}(A_j) =0. \notag
+    \end{align}
     For a block-diagonal tensor, write $R_{i,\tau}$ for the cyclic
     length-$L$ restriction at site $i$, with the outside configuration
     fixed by $\tau$. Then
-    \[
-        R_{i,\tau}V^{(N)}(A_j)\in G_L(A_j)\subseteq G_L(B).
-    \]
+    $R_{i,\tau}V^{(N)}(A_j) \in G_L(A_j)\subseteq G_L(B)$.
     The preceding theorem therefore gives
     $h_i(B,L)V^{(N)}(A_j)=0$ for every $i$.
 \end{proof}
@@ -60,51 +50,45 @@
         def:mpv_submodule, lem:bnt_span_eq_sum_mpv_submodules}
     Let $B=\bigoplus_{j=0}^{r-1}\mu_jA_j$. Suppose $N>0$, $L\le N$, and
     the periodic chain constraints for $B$ split into the block constraints:
-    \[
+    \begin{align}
         \mathcal G_{N,L}(B)
-        \subseteq
-        \bigvee_{j=0}^{r-1}\mathcal G_{N,L}(A_j).
-    \]
+        &\subseteq
+        \bigvee_{j=0}^{r-1}\mathcal G_{N,L}(A_j). \notag
+    \end{align}
     If every block chain space is contained in its periodic MPS line,
-    \[
-        \mathcal G_{N,L}(A_j)\subseteq \mathbb C V^{(N)}(A_j)
-        \qquad (0\le j<r),
-    \]
+    \begin{align}
+        \mathcal G_{N,L}(A_j)
+        &\subseteq \C V^{(N)}(A_j)
+        \qquad (0\le j<r), \notag
+    \end{align}
     then the zero-energy space of the parent Hamiltonian is contained in the
     BNT vector span:
-    \[
+    \begin{align}
         \ker H_L^{(N)}(B)
-        \subseteq
-        \spn\{V^{(N)}(A_j):j=0,\ldots,r-1\}.
-    \]
+        &\subseteq
+        \spn\{V^{(N)}(A_j):j=0,\ldots,r-1\}. \notag
+    \end{align}
 \end{lemma}
 
 \begin{proof}
     \leanok
     Theorem~\ref{thm:parent_hamiltonian_kernel_le_chain_ground_space} gives
-    \[
-        \ker H_L^{(N)}(B)\subseteq \mathcal G_{N,L}(B).
-    \]
-    Together with the splitting hypothesis,
-    \[
+    $\ker H_L^{(N)}(B)\subseteq\mathcal G_{N,L}(B)$. Together with the
+    splitting hypothesis,
+    \begin{align}
         \ker H_L^{(N)}(B)
-        \subseteq
-        \mathcal G_{N,L}(B)
-        \subseteq
-        \bigvee_j\mathcal G_{N,L}(A_j).
-    \]
+        &\subseteq \mathcal G_{N,L}(B) \subseteq \bigvee_j\mathcal G_{N,L}(A_j). \notag
+    \end{align}
     The blockwise containments give
-    \[
+    \begin{align}
         \bigvee_j\mathcal G_{N,L}(A_j)
-        \subseteq
-        \bigvee_j\mathbb C V^{(N)}(A_j),
-    \]
+        &\subseteq \bigvee_j\C V^{(N)}(A_j), \notag
+    \end{align}
     and Lemma~\ref{lem:bnt_span_eq_sum_mpv_submodules} gives
-    \[
-        \bigvee_j\mathbb C V^{(N)}(A_j)
-        =
-        \spn\{V^{(N)}(A_j):j=0,\ldots,r-1\}.
-    \]
+    \begin{align}
+        \bigvee_j\C V^{(N)}(A_j)
+        &=\spn\{V^{(N)}(A_j):j=0,\ldots,r-1\}. \notag
+    \end{align}
 \end{proof}
 
 \begin{lemma}[Kernel containment from the block-diagonal boundary comparison]
@@ -113,51 +97,38 @@
     \leanok
     \uses{lem:block_diagonal_kernel_to_bnt_span_from_chain_splitting,
         lem:bnt_block_diagonal_pgvwc_comparison_ground_space}
-    Let \(B=\bigoplus_{j=0}^{r-1}\mu_jA_j\), with every \(\mu_j\ne0\).
+    Let $B=\bigoplus_{j=0}^{r-1}\mu_jA_j$, with every $\mu_j\ne0$.
     Suppose the physical alphabet and all block dimensions are nonempty. Assume
     that the block family is irreducible, left-canonical, has normalized
     self-overlap, and has no two blocks gauge-phase equivalent. Suppose also
-    that each \(A_j\) is \(L_0\)-block-injective, that \(L_0>0\), and that
-    \[
-        \sum_a A^j_a(A^j_a)^\dagger=I
-        \qquad (0\le j<r).
-    \]
-    Let \(N>0\), \(L>0\), \(L\le N\), \(L+L_0\le N\), and
-    \[
-        (L_0+1)
-        +(r-1)\bigl((L_0+1)+((L_0+1)+(L_0+1))\bigr)+1
-        \le L.
-    \]
-    Assume the opened-boundary \(C^j,D^j\) comparison: whenever
-    \(\psi\in\mathcal G_{N,L}(B)\) and
-    \(\psi=\Gamma_N^B(\bigoplus_j X_j)\), there are matrices
-    \(C^j_{i,\rho}\) such that, for every boundary-crossing interval \(i\),
-    every \(\rho\), and every \(\beta\),
-    \[
-        A^j_\beta C^j_{i,\rho}
-        =
-        \bigl((\mu_j^N X_j)A^j_\beta\bigr)A^j_\rho .
-    \]
+    that each $A_j$ is $L_0$-block-injective, that $L_0>0$, and that
+    $\sum_a A^j_a(A^j_a)^\dagger =I \qquad (0\le j<r)$.
+    Let $N>0$, $L>0$, $L\le N$, $L+L_0\le N$, and
+    $(L_0+1) +(r-1)((L_0+1)+((L_0+1)+(L_0+1)))+1 \le L$.
+    Assume the opened-boundary $C^j,D^j$ comparison: whenever
+    $\psi\in\mathcal G_{N,L}(B)$ and
+    $\psi=\Gamma_N^B(\bigoplus_j X_j)$, there are matrices
+    $C^j_{i,\rho}$ such that, for every boundary-crossing interval $i$,
+    every $\rho$, and every $\beta$,
+    $A^j_\beta C^j_{i,\rho} =((\mu_j^N X_j)A^j_\beta)A^j_\rho$.
     If every block chain space is contained in its periodic MPS line,
-    \[
-        \mathcal G_{N,L}(A_j)\subseteq \mathbb C V^{(N)}(A_j)
-        \qquad (0\le j<r),
-    \]
+    \begin{align}
+        \mathcal G_{N,L}(A_j)
+        &\subseteq \C V^{(N)}(A_j)
+        \qquad (0\le j<r), \notag
+    \end{align}
     then
-    \[
+    \begin{align}
         \ker H_L^{(N)}(B)
-        \subseteq
-        \spn\{V^{(N)}(A_j):j=0,\ldots,r-1\}.
-    \]
+        &\subseteq
+        \spn\{V^{(N)}(A_j):j=0,\ldots,r-1\}. \notag
+    \end{align}
 \end{lemma}
 
 \begin{proof}
     \leanok
     Lemma~\ref{lem:bnt_block_diagonal_pgvwc_comparison_ground_space} gives
-    \[
-        \mathcal G_{N,L}(B)=
-        \bigvee_{j=0}^{r-1}\mathcal G_{N,L}(A_j)
-    \]
+    $\mathcal G_{N,L}(B) =\bigvee_{j=0}^{r-1}\mathcal G_{N,L}(A_j)$
     from the stated block hypotheses and the opened-boundary comparison.
     Lemma~\ref{lem:block_diagonal_kernel_to_bnt_span_from_chain_splitting}
     then applies to this equality and to the blockwise containments.
@@ -174,44 +145,32 @@
     that the block family is irreducible, left-canonical, has normalized
     self-overlap, and has no two blocks gauge-phase equivalent. Suppose also
     that each $A_j$ is $L_0$-block-injective, that $L_0>0$, and that
-    \[
-        \sum_a A^j_a(A^j_a)^\dagger=I
-        \qquad (0\le j<r).
-    \]
+    $\sum_a A^j_a(A^j_a)^\dagger =I \qquad (0\le j<r)$.
     Let $N>0$, $L>0$, $L\le N$, $L+L_0\le N$, and
-    \[
-        (L_0+1)
-        +(r-1)\bigl((L_0+1)+((L_0+1)+(L_0+1))\bigr)+1
-        \le L.
-    \]
+    $(L_0+1) +(r-1)((L_0+1)+((L_0+1)+(L_0+1)))+1 \le L$.
     Assume that, for every boundary-crossing interval beginning at $i$, the
     simultaneous products
-    \[
-        w\longmapsto(A^1_w,\ldots,A^r_w),
-        \qquad |w|=N-i,
-    \]
+    $w\longmapsto(A^1_w,\ldots,A^r_w), \qquad |w|=N-i$,
     span the product algebra $\prod_j\MN{D_j}$. If every block chain space is
     contained in its periodic MPS line,
-    \[
-        \mathcal G_{N,L}(A_j)\subseteq \mathbb C V^{(N)}(A_j)
-        \qquad (0\le j<r),
-    \]
+    \begin{align}
+        \mathcal G_{N,L}(A_j)
+        &\subseteq \C V^{(N)}(A_j)
+        \qquad (0\le j<r), \notag
+    \end{align}
     then
-    \[
+    \begin{align}
         \ker H_L^{(N)}(B)
-        \subseteq
-        \spn\{V^{(N)}(A_j):j=0,\ldots,r-1\}.
-    \]
+        &\subseteq
+        \spn\{V^{(N)}(A_j):j=0,\ldots,r-1\}. \notag
+    \end{align}
 \end{lemma}
 
 \begin{proof}
     \leanok
     Lemma~\ref{lem:bnt_block_diagonal_crossing_pgvwc_comparison_ground_space}
     gives
-    \[
-        \mathcal G_{N,L}(B)=
-        \bigvee_{j=0}^{r-1}\mathcal G_{N,L}(A_j)
-    \]
+    $\mathcal G_{N,L}(B) =\bigvee_{j=0}^{r-1}\mathcal G_{N,L}(A_j)$
     from the block hypotheses, the local boundary-crossing constraints, and the
     stated tail-word span.
     Lemma~\ref{lem:block_diagonal_kernel_to_bnt_span_from_chain_splitting}
@@ -227,56 +186,48 @@
         lem:bnt_span_le_parent_hamiltonian_kernel, def:has_nncph_ground_spaces}
     Let $B=\bigoplus_{j=0}^{r-1}\mu_jA_j$, with every $\mu_j\ne0$. Then, for
     every $N>L$, the source parent-Hamiltonian spanning condition
-    \[
-        \ker H_L^{(N)}(B)
-        =
-        \spn\{V^{(N)}(A_j):j=0,\ldots,r-1\}
-    \]
+    $\ker H_L^{(N)}(B) =\spn\{V^{(N)}(A_j):j=0,\ldots,r-1\}$
     is equivalent to the reverse containment, for the same $N$:
-    \[
+    \begin{align}
         \ker H_L^{(N)}(B)
-        \subseteq
-        \spn\{V^{(N)}(A_j):j=0,\ldots,r-1\}.
-    \]
-    In the nearest-neighbor case \(L=2\), the all-chain source condition of
+        &\subseteq
+        \spn\{V^{(N)}(A_j):j=0,\ldots,r-1\}. \notag
+    \end{align}
+    In the nearest-neighbor case $L=2$, the all-chain source condition of
     Definition~\ref{def:has_nncph_ground_spaces} is equivalent to the
     conjunction
-    \[
-        \begin{aligned}
-        &\left(\forall N>2,\ \forall i,j\in\{0,\ldots,N-1\},\;
-        h_i(B,2)h_j(B,2)=h_j(B,2)h_i(B,2)\right)\\
+    \begin{align}
+        &\left(\forall N>2,\ \forall i,j\in\{0,\ldots,N-1\},
+        h_i(B,2)h_j(B,2)=h_j(B,2)h_i(B,2)\right) \notag\\
         &{}\land
-        \left(\forall N>2,\;
+        \left(\forall N>2,
         \ker H_2^{(N)}(B)
         \subseteq
-        \spn\{V^{(N)}(A_j):j=0,\ldots,r-1\}\right).
-        \end{aligned}
-    \]
+        \spn\{V^{(N)}(A_j):j=0,\ldots,r-1\}\right). \notag
+    \end{align}
 \end{lemma}
 
 \begin{proof}
     \leanok
     The forward direction of the displayed equality gives the containment by
     rewriting the kernel. Conversely, for $N>L$ the easy inclusion above gives
-    \[
+    \begin{align}
         \spn\{V^{(N)}(A_j):j=0,\ldots,r-1\}
-        \subseteq
-        \ker H_L^{(N)}(B),
-    \]
+        &\subseteq
+        \ker H_L^{(N)}(B), \notag
+    \end{align}
     and the assumed reverse containment gives equality. For $L=2$, the
     all-chain nearest-neighbor condition of
     Definition~\ref{def:has_nncph_ground_spaces} decomposes as the conjunction
-    \[
-        \begin{aligned}
-        &\left(\forall N>2,\ \forall i,j\in\{0,\ldots,N-1\},\;
-        h_i(B,2)h_j(B,2)=h_j(B,2)h_i(B,2)\right)\\
+    \begin{align}
+        &\left(\forall N>2,\ \forall i,j\in\{0,\ldots,N-1\},
+        h_i(B,2)h_j(B,2)=h_j(B,2)h_i(B,2)\right) \notag\\
         &{}\land
-        \left(\forall N>2,\;
+        \left(\forall N>2,
         \ker H_2^{(N)}(B)
         \subseteq
-        \spn\{V^{(N)}(A_j):j=0,\ldots,r-1\}\right).
-        \end{aligned}
-    \]
+        \spn\{V^{(N)}(A_j):j=0,\ldots,r-1\}\right). \notag
+    \end{align}
     The second conjunct is the reverse containment just identified with the
     source spanning clause.
 \end{proof}
@@ -290,50 +241,33 @@
         thm:parent_hamiltonian_kernel_eq_chain_ground_space,
         lem:block_diagonal_parent_spanning_reverse_inclusion,
         lem:bnt_span_eq_sum_mpv_submodules}
-    Let
-    \[
-        B=\bigoplus_{j=0}^{r-1}\mu_jA_j,
-        \qquad \mu_j\ne0.
-    \]
-    Suppose that, for every \(N>L\),
-    \[
-        G_L^{(N)}(B)
-        =
-        \bigvee_{j=0}^{r-1}\spn\{V^{(N)}(A_j)\}.
-    \]
+    Let $B=\bigoplus_{j=0}^{r-1}\mu_jA_j$, where $\mu_j\ne0$. Suppose that,
+    for every $N>L$,
+    $G_L^{(N)}(B) =\bigvee_{j=0}^{r-1}\spn\{V^{(N)}(A_j)\}$.
     Then the source parent-Hamiltonian spanning equation holds:
-    \[
-        \ker H_N(B,L)
-        =
-        \spn\{V^{(N)}(A_j):j=0,\ldots,r-1\}.
-    \]
+    $\ker H_N(B,L) =\spn\{V^{(N)}(A_j):j=0,\ldots,r-1\}$.
     It is enough to prove the two equations
-    \[
-        G_L^{(N)}(B)=\bigvee_{j=0}^{r-1}G_L^{(N)}(A_j),
-        \qquad
-        G_L^{(N)}(A_j)=\spn\{V^{(N)}(A_j)\}.
-    \]
+    \begin{align}
+        G_L^{(N)}(B)
+        &=\bigvee_{j=0}^{r-1}G_L^{(N)}(A_j), \notag\\
+        G_L^{(N)}(A_j)
+        &=\spn\{V^{(N)}(A_j)\}. \notag
+    \end{align}
 \end{lemma}
 
 \begin{proof}
     \leanok
     The finite-volume identity gives
-    \[
-        \ker H_N(B,L)=G_L^{(N)}(B).
-    \]
-    The assumed chain-space comparison therefore rewrites the kernel as
-    \[
-        \bigvee_{j=0}^{r-1}\spn\{V^{(N)}(A_j)\}.
-    \]
-    The latter supremum is the BNT vector span. Conversely, the easy inclusion
-    of Lemma~\ref{lem:bnt_span_le_parent_hamiltonian_kernel} gives
-    \[
-        \spn\{V^{(N)}(A_j):j=0,\ldots,r-1\}\subseteq\ker H_N(B,L),
-    \]
+    $\ker H_N(B,L)=G_L^{(N)}(B)$. The assumed chain-space comparison therefore
+    rewrites the kernel as
+    $\bigvee_{j=0}^{r-1}\spn\{V^{(N)}(A_j)\}$. The latter supremum is the BNT
+    vector span. Conversely, the easy inclusion of
+    Lemma~\ref{lem:bnt_span_le_parent_hamiltonian_kernel} gives
+    $\spn\{V^{(N)}(A_j):j=0,\ldots,r-1\} \subseteq\ker H_N(B,L)$,
     so the displayed equation is the source spanning clause. If the comparison
-    is first stated as
-    \(G_L^{(N)}(B)=\bigvee_jG_L^{(N)}(A_j)\), the single-block equations
-    \(G_L^{(N)}(A_j)=\spn\{V^{(N)}(A_j)\}\) give the previous hypothesis.
+    is first stated as $G_L^{(N)}(B)=\bigvee_jG_L^{(N)}(A_j)$, the single-block
+    equations $G_L^{(N)}(A_j)=\spn\{V^{(N)}(A_j)\}$ give the previous
+    hypothesis.
 \end{proof}
 
 \begin{lemma}[Gauge invariance of fixed points and parent interactions]
@@ -357,16 +291,12 @@
     \uses{thm:physical_blocking_isometry_iff_transfer_idempotence}
     Suppose $B^i=XA^iX^{-1}$ for every physical letter. If the blocking
     relation for $A$ is
-    \[
-        A^{i_1}A^{i_2}=\sum_j U^{j}_{i_1,i_2}A^j,
-    \]
+    $A^{i_1}A^{i_2} =\sum_j U^{j}_{i_1,i_2}A^j$,
     then conjugation by $X$ gives the same relation for $B$. Hence transfer
     idempotence is invariant under the similarity. At every length $L$, the
-    two tensors have the same local MPS space, so
-    \[
-        G_L(A)=G_L(B),\qquad h_i^{(N)}(A)=h_i^{(N)}(B).
-    \]
-    The parent-interaction identities and the commutation equations follow.
+    two tensors have the same local MPS space, so $G_L(A)=G_L(B)$ and
+    $h_i^{(N)}(A)=h_i^{(N)}(B)$. The parent-interaction identities and the
+    commutation equations follow.
 \end{proof}
 
 \begin{theorem}[Renormalization fixed points have commuting nearest-neighbor local terms]\label{thm:rfp_implies_nncph}
@@ -375,7 +305,7 @@
     \uses{def:mps_transfer_idempotence, def:is_nncph, def:nt_cpsv}
     If $A$ has nonzero virtual dimension, is a normal tensor in the sense of
     \cite{Cirac2016MPDO_arXiv}, and is a renormalization fixed point, then for
-    every chain length $N > 2$ the two-site local terms commute. This theorem
+    every chain length $N>2$ the two-site local terms commute. This theorem
     records the commutation part of the nearest-neighbor source condition, not
     the ground-space spanning part.
 \end{theorem}
@@ -383,22 +313,16 @@
 \begin{proof}\leanok
     \uses{thm:cpsv_normal_tp_gauge, lem:rfp_parent_gauge_invariance,
         thm:left_canonical_rfp_chain_commutation, thm:gauge_invariance_normal}
-    Put $A$ into its trace-preserving gauge.  This is a pure similarity, since
+    Put $A$ into its trace-preserving gauge. This is a pure similarity, since
     the normal-tensor normalization fixes the transfer spectral radius at one.
     Similarity preserves the physical blocking relation and the local MPS
-    spaces, hence also the canonical parent interactions.  In the
+    spaces, hence also the canonical parent interactions. In the
     trace-preserving gauge, the Appendix~B virtual-bond projectors give
-    \[
-        h_0^{(3)}h_1^{(3)}=h_1^{(3)}h_0^{(3)}.
-    \]
+    $h_0^{(3)}h_1^{(3)} =h_1^{(3)}h_0^{(3)}$.
     Cyclic transport gives, for every $N>2$ and every site $i$,
-    \[
-        h_i^{(N)}h_{i+1}^{(N)}=h_{i+1}^{(N)}h_i^{(N)}.
-    \]
+    $h_i^{(N)}h_{i+1}^{(N)} =h_{i+1}^{(N)}h_i^{(N)}$.
     For every pair $i,j$ whose two-site supports are disjoint, locality gives
-    \[
-        h_i^{(N)}h_j^{(N)}=h_j^{(N)}h_i^{(N)}.
-    \]
+    $h_i^{(N)}h_j^{(N)} =h_j^{(N)}h_i^{(N)}$.
     These cases exhaust all pairs of two-site terms on the periodic chain.
     Transporting the parent interactions back proves the claim.
 \end{proof}
@@ -410,13 +334,12 @@
     \uses{thm:rfp_implies_nncph, def:is_nncph_ground_state}
     If $A$ has nonzero virtual dimension, is a normal tensor in the sense of
     \cite{Cirac2016MPDO_arXiv}, and is a renormalization fixed point, then for
-    every chain length $N > 2$ the MPS vector $V^{(N)}(A)$
-    satisfies the commutation and zero-energy equations for nearest-neighbor
-    local terms:
-    \[
-        h_i h_j = h_j h_i,\qquad
-        h_i V^{(N)}(A)=0.
-    \]
+    every chain length $N>2$ the MPS vector $V^{(N)}(A)$ satisfies the
+    commutation and zero-energy equations for nearest-neighbor local terms:
+    \begin{align}
+        h_i h_j&=h_j h_i, \notag\\
+        h_i V^{(N)}(A)&=0. \notag
+    \end{align}
     The zero-energy equation is the usual parent-Hamiltonian
     frustration-freeness statement. The separate ground-space spanning clause
     of the source definition is not asserted here.
@@ -441,9 +364,7 @@
     fixed-point tensor in the sense of \cite{Cirac2016MPDO_arXiv}. If the
     canonical-form tensor consists of the single normal sector $A$, then for
     every $N>2$,
-    \[
-        \ker H_2^{(N)}(A)=\spn\bigl\{V^{(N)}(A)\bigr\}.
-    \]
+    $\ker H_2^{(N)}(A) =\spn\bigl\{V^{(N)}(A)\bigr\}$.
     Its translated two-site interactions also commute and annihilate
     $V^{(N)}(A)$. Hence the singleton family satisfies the all-chain
     nearest-neighbor commuting parent-Hamiltonian ground-space condition.
@@ -463,11 +384,10 @@
     equation then implies that the one-site matrices already span the full
     matrix algebra. Thus $A$ is injective. For $N>2$, the finite-volume kernel
     identity and injective periodic-chain theorem give
-    \[
+    \begin{align}
         \ker H_2^{(N)}(A)
-        =\mathcal G_{N,2}(A)
-        =\spn\bigl\{V^{(N)}(A)\bigr\}.
-    \]
+        &=\mathcal G_{N,2}(A) =\spn\bigl\{V^{(N)}(A)\bigr\}. \notag
+    \end{align}
     The span of the matrix product vectors of the singleton family is the last
     space in this equality. Theorem~\ref{thm:rfp_implies_nncph_ground_state}
     supplies commutation and zero energy on every chain of length greater than
@@ -498,27 +418,23 @@
     sectors. Write $L_j$ and $R_j$ for the left and right overlapping lifts
     of the sector-$j$ bond projector. The single-sector relation and the
     mixed-sector orthogonality give
-    \[
-        L_jR_j=R_jL_j,
-        \qquad
-        L_jR_k=0=R_jL_k \quad (j\ne k),
-    \]
+    \begin{align}
+        L_jR_j&=R_jL_j, \notag\\
+        L_jR_k&=0=R_jL_k
+        \qquad (j\ne k), \notag
+    \end{align}
     where the latter identities follow from the shared one-site factor
     $E_j^*E_k=0$ for the canonical summand inclusions $E_j$. Summing over the
     sectors shows that the two adjacent placements of $Q$ commute.
 
     If $U$ is the common isometry, then transport gives the identity
-    \[
-        (U\otimes U)Q(U^*\otimes U^*)=P_{G_2(B)},
-    \]
+    $(U\otimes U)Q(U^*\otimes U^*) =P_{G_2(B)}$,
     since the range on either side is
-    \[
-        \bigvee_j G_2(A_j)=G_2(B).
-    \]
-    Hence it is the complement of the canonical two-site parent interaction
-    of $B$. The two adjacent three-site parent terms therefore commute.
-    Cyclic transport gives adjacent commutation on every chain with $N>2$;
-    disjoint local terms commute by locality, which proves the claim.
+    $\bigvee_j G_2(A_j)=G_2(B)$. Hence it is the complement of the canonical
+    two-site parent interaction of $B$. The two adjacent three-site parent
+    terms therefore commute. Cyclic transport gives adjacent commutation on
+    every chain with $N>2$; disjoint local terms commute by locality, which
+    proves the claim.
 \end{proof}
 
 \begin{theorem}[Nearest-neighbor parent ground spaces for distinct multiplicity-one RFP sectors]%
@@ -530,10 +446,10 @@
     Let $A_1,\ldots,A_g$ be the distinct basis tensors of a BNT canonical
     form, and let $B=\bigoplus_{j=1}^g A_j$ contain one copy of every basis
     tensor. If $B$ is a renormalization fixed point, then for every $N>2$,
-    \[
+    \begin{align}
         \ker H_2^{(N)}(B)
-        =\spn\bigl\{V^{(N)}(A_j):j=1,\ldots,g\bigr\}.
-    \]
+        &=\spn\bigl\{V^{(N)}(A_j):j=1,\ldots,g\bigr\}. \notag
+    \end{align}
     This is the multiplicity-one distinct-sector case of
     \cite[Theorem~3.10]{Cirac2016MPDO_arXiv}. It does not include repeated
     copies of a basis tensor or arbitrary raw sector weights.
@@ -544,18 +460,12 @@
     matrices $(A_j^i)_j$ span the product of the block matrix algebras. Hence
     the same is true for every positive word length. The one-step restriction
     intersection therefore gives
-    \[
-        \mathcal G_{N,2}(B)
-        \subseteq \bigvee_j G_N(A_j).
-    \]
+    $\mathcal G_{N,2}(B) \subseteq \bigvee_j G_N(A_j)$.
     Comparing this block decomposition before and after moving the periodic
     cut by one site shows that every block boundary matrix commutes with the
     corresponding one-site matrices. Thus each block component lies in
     $\mathcal G_{N,2}(A_j)$, and
-    \[
-        \mathcal G_{N,2}(B)
-        =\bigvee_j\mathcal G_{N,2}(A_j).
-    \]
+    $\mathcal G_{N,2}(B) =\bigvee_j\mathcal G_{N,2}(A_j)$.
     Each block is a normal renormalization fixed point, so one-site
     injectivity and the injective periodic-chain theorem identify its chain
     space with the line spanned by $V^{(N)}(A_j)$. The finite-volume kernel
@@ -572,12 +482,11 @@
     form, and let $B=\bigoplus_{j=1}^g A_j$ contain one copy of every basis
     tensor. If $B$ is a renormalization fixed point, then for every $N>2$ its
     translated two-site parent interactions commute and
-    \[
-        H_2^{(N)}(B)V^{(N)}(B)=0,
-        \qquad
+    \begin{align}
+        H_2^{(N)}(B)V^{(N)}(B)&=0, \notag\\
         \ker H_2^{(N)}(B)
-        =\spn\bigl\{V^{(N)}(A_j):j=1,\ldots,g\bigr\}.
-    \]
+        &=\spn\bigl\{V^{(N)}(A_j):j=1,\ldots,g\bigr\}. \notag
+    \end{align}
     Hence $B$ satisfies the all-chain nearest-neighbor commuting
     parent-Hamiltonian ground-space condition. This is the multiplicity-one
     distinct-sector forward implication in
