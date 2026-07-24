@@ -8,8 +8,10 @@
 \makeatother
 \begin{document}
 \tenkzkernel
-\begin{tenkz}[rows={ket,bra}, cols=2, bonds=grid]
+\begin{tenkz}[rows={ket,bra,ket}, cols=2, bonds=grid]
   \tn[wires=2, name=T]{T}
+  \\
+  \tn[name=B]{B}
 \end{tenkz}
 \mbox{parsed}
 \end{document}
