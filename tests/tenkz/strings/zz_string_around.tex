@@ -1,8 +1,8 @@
-% Regression: zz_string_around — a detour past a measured rectangle.
-% Formula: apex = centre + (support(90) + daylight) * unit(90), pitch units
-%   scaled by 1.1 cm/pitch: support of rect hy=0.3 northward is 0.3, plus
-%   daylight 0.15, so apex = (0, 0.495) cm.
-% Expectation: stringapex event x=0, y=0.495; ink arcs smoothly over the box.
+% Regression: zz_string_around — a detour past an address list of silhouettes.
+% Formula: north support is max(0.3, 0.8+0.25)=1.05 pitch; the tangent
+% envelope spans -0.65 to 0.8 pitch.  Daylight 0.15 and scale 1.1 cm/pitch
+% give flank points (-0.715,1.32) and (0.88,1.32) cm.
+% Expectation: both records influence routing and the curve clears both.
 \documentclass[varwidth=8cm, border=6pt]{standalone}
 \usepackage{tenkz}
 \usetikzlibrary{hobby,spath3,intersections}
@@ -10,10 +10,14 @@
 \makeatletter\input{tenkz-string.code.tex}\makeatother
 \begin{tikzpicture}
 \draw ({-0.5*1.1},{-0.3*1.1}) rectangle ({0.5*1.1},{0.3*1.1});
+\draw ({0.4*1.1},{0.8*1.1}) circle[radius={0.25*1.1}];
 \ExplSyntaxOn
 \__tenkz_string_reset:
 \__tenkz_string_declare_around:nnnnnn {det} {-1.5,0} {1.5,0} {90}
-  { {rect} {0.5} {0.3} {0} {0} {0} {0} } {1.1}
+  {
+    { {rect} {0.5} {0.3} {0} {0} {0} {0} }
+    { {circle} {0.25} {0.25} {0} {0} {0.4} {0.8} }
+  } {1.1}
 \__tenkz_string_resolve:
 \__tenkz_string_dev_draw:nn {det} { thick }
 \ExplSyntaxOff

@@ -1,0 +1,16 @@
+% Expected failure: a declared crossing whose routes never meet.
+\documentclass{standalone}
+\usepackage{tenkz}
+\usetikzlibrary{hobby,spath3,intersections}
+\begin{document}
+\makeatletter\input{tenkz-string.code.tex}\makeatother
+\begin{tikzpicture}
+\ExplSyntaxOn
+\__tenkz_string_reset:
+\__tenkz_string_declare_open:nn {a} { {0,0} {2,0} }
+\__tenkz_string_declare_open:nn {b} { {0,1} {2,1} }
+\__tenkz_string_under:nn {a} {b}
+\__tenkz_string_resolve:
+\ExplSyntaxOff
+\end{tikzpicture}
+\end{document}

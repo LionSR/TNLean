@@ -1,0 +1,18 @@
+% Regression: an intentional endpoint join is not an undeclared crossing.
+\documentclass[varwidth=8cm, border=6pt]{standalone}
+\usepackage{tenkz}
+\usetikzlibrary{hobby,spath3,intersections}
+\begin{document}
+\makeatletter\input{tenkz-string.code.tex}\makeatother
+\begin{tikzpicture}
+\ExplSyntaxOn
+\__tenkz_string_reset:
+\__tenkz_string_declare_open:nn {trunk} { {0,0} {2,0} }
+\__tenkz_string_declare_open:nn {branch} { {1,1} {1,0} }
+\__tenkz_string_join:nn {branch} {trunk}
+\__tenkz_string_resolve:
+\__tenkz_string_dev_draw:nn {trunk} {thick}
+\__tenkz_string_dev_draw:nn {branch} {thick}
+\ExplSyntaxOff
+\end{tikzpicture}
+\end{document}
