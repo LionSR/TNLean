@@ -379,39 +379,13 @@ end GaugeConversion
 
 section Capstone
 
-/-- A block-injective tensor with positive bond dimension is not the zero
-family: some matrix of the family is nonzero. -/
-theorem exists_ne_zero_of_isNBlkInjective {L : ℕ} (hL : 0 < L) (hD : 0 < D)
-    {B : MPSTensor d D} (hB : MPSTensor.IsNBlkInjective B L) :
-    ∃ i : Fin d, B i ≠ 0 := by
-  by_contra hall
-  simp only [not_exists, not_not] at hall
-  have hB' : Submodule.span ℂ (Set.range fun σ : Fin L → Fin d =>
-      MPSTensor.evalWord B (List.ofFn σ)) = ⊤ := hB
-  have hran : (Set.range fun σ : Fin L → Fin d =>
-      MPSTensor.evalWord B (List.ofFn σ)) ⊆ {0} := by
-    rintro _ ⟨σ, rfl⟩
-    obtain ⟨L', rfl⟩ : ∃ L', L = L' + 1 := ⟨L - 1, by omega⟩
-    change MPSTensor.evalWord B (List.ofFn σ) ∈ ({0} : Set (Matrix (Fin D) (Fin D) ℂ))
-    rw [Set.mem_singleton_iff, List.ofFn_succ, MPSTensor.evalWord_cons, hall (σ 0),
-      Matrix.zero_mul]
-  have hle : (⊤ : Submodule ℂ (Matrix (Fin D) (Fin D) ℂ)) ≤ ⊥ := by
-    rw [← hB', ← Submodule.span_zero_singleton (R := ℂ)
-      (M := Matrix (Fin D) (Fin D) ℂ)]
-    exact Submodule.span_mono hran
-  have h10 : (1 : Matrix (Fin D) (Fin D) ℂ) = 0 :=
-    (Submodule.mem_bot ℂ).mp (hle Submodule.mem_top)
-  have hentry := congrFun (congrFun h10 ⟨0, hD⟩) ⟨0, hD⟩
-  rw [Matrix.one_apply_eq] at hentry
-  exact one_ne_zero hentry
-
 /-- A vanishing physical dimension contradicts block injectivity at positive
 bond dimension. -/
 theorem pos_d_of_isNBlkInjective {L : ℕ} (hL : 0 < L) (hD : 0 < D)
     {A : MPSTensor d D} (hA : MPSTensor.IsNBlkInjective A L) : 0 < d := by
   rcases Nat.eq_zero_or_pos d with hd0 | hd
   · exfalso
-    obtain ⟨i, _⟩ := exists_ne_zero_of_isNBlkInjective hL hD hA
+    obtain ⟨i, _⟩ := MPSTensor.exists_ne_zero_of_isNBlkInjective hL hD hA
     have := i.isLt
     omega
   · exact hd
@@ -580,7 +554,7 @@ theorem fundamentalTheorem_normalMPS_gauge_unique {n L d D : ℕ} [NeZero n] (hL
   classical
   choose μ hμ using hprop
   -- The relation pins the ratio of consecutive constants against `B ≠ 0`.
-  obtain ⟨i₀, hi₀⟩ := exists_ne_zero_of_isNBlkInjective hL hD hB
+  obtain ⟨i₀, hi₀⟩ := MPSTensor.exists_ne_zero_of_isNBlkInjective hL hD hB
   -- The inverse of a proportional gauge is inversely proportional.
   have hinv : ∀ v : Fin n,
       (((Z' v)⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) =

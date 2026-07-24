@@ -50,48 +50,6 @@ open scoped Fin.NatCast
 namespace TNLean
 namespace PEPS
 
-/-! ### Linear extension and centralizer helpers
-
-Two-sided multiplication maps agreeing on a spanning set agree everywhere,
-and two invertible matrices inducing the same two-sided conjugation of the
-full matrix algebra are proportional. -/
-
-/-- Two two-sided multiplication maps that agree on a spanning set of the
-matrix algebra agree on every matrix. -/
-private theorem conj_eq_conj_of_span {D : ℕ} {S : Set (Matrix (Fin D) (Fin D) ℂ)}
-    (hS : Submodule.span ℂ S = ⊤) {P Q P' Q' : Matrix (Fin D) (Fin D) ℂ}
-    (h : ∀ M ∈ S, P * M * Q = P' * M * Q') (M : Matrix (Fin D) (Fin D) ℂ) :
-    P * M * Q = P' * M * Q' := by
-  have hmaps :
-      (LinearMap.mulRight ℂ Q).comp (LinearMap.mulLeft ℂ P) =
-        (LinearMap.mulRight ℂ Q').comp (LinearMap.mulLeft ℂ P') := by
-    apply LinearMap.ext_on hS
-    intro N hN
-    simpa [LinearMap.comp_apply, LinearMap.mulLeft_apply, LinearMap.mulRight_apply]
-      using h N hN
-  simpa [LinearMap.comp_apply, LinearMap.mulLeft_apply, LinearMap.mulRight_apply]
-    using congrArg (fun f => f M) hmaps
-
-/-- **Proportionality from a shared two-sided conjugation.**  Two invertible
-matrices `Z`, `Z'` with `Z⁻¹ W Z = Z'⁻¹ W Z'` for every matrix `W` differ by
-a nonzero scalar.  This is the centralizer step of the closed-chain
-collapse: `Z' Z⁻¹` commutes with the full matrix algebra, hence is a
-scalar. -/
-private theorem gl_proportional_of_conj_eq {D : ℕ} (Z Z' : GL (Fin D) ℂ)
-    (h : ∀ W : Matrix (Fin D) (Fin D) ℂ,
-      ((Z⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) * W *
-          (Z : Matrix (Fin D) (Fin D) ℂ) =
-        ((Z'⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) * W *
-          (Z' : Matrix (Fin D) (Fin D) ℂ)) :
-    ∃ c : ℂˣ, (Z' : Matrix (Fin D) (Fin D) ℂ) =
-      (c : ℂ) • (Z : Matrix (Fin D) (Fin D) ℂ) := by
-  obtain ⟨c, hc⟩ := gl_conj_unique_scalar Z⁻¹ Z'⁻¹ fun N => by
-    rw [inv_inv, inv_inv]
-    exact h N
-  have hflip := gl_inv_coe_smul hc
-  rw [inv_inv, inv_inv] at hflip
-  exact ⟨c⁻¹, hflip⟩
-
 /-! ### Iterating the per-bond relation along a word -/
 
 /-- **The per-bond gauge relation iterated along a word.**  If
