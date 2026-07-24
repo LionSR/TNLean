@@ -177,10 +177,13 @@ shell command % \tntree{commented}
         root.write_text(
             "\\newcommand{\\optionalchapter}{\\input{missing.tex}}\n"
             "\\verb|\\IfFileExists| \\string\\IfFileExists \\\\IfFileExists\n"
+            "\\begin{Verbatim}\n\\IfFileExists\n\\end{Verbatim}\n"
             "\\IfFileExists{chapters2/% continued\nchild.tex}"
-            "{\\IfFileExists{chapters2/missing-generated.tex}"
+            "{\\IfFileExists{chapters2/child}"
+            "{\\input{chapters2/wrong-extensionless-branch.tex}}"
+            "{\\IfFileExists{missing-generated.tex}"
             "{\\input{chapters2/missing-generated.tex}}"
-            "{\\input chapters2/child}}"
+            "{\\input chapters2/child}}}"
             "{\\input{chapters2/also-missing.tex}}\n",
             encoding="utf-8",
         )
