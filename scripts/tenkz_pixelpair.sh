@@ -11,14 +11,18 @@
 # Env:   TENKZ_CORPUS_JOBS  parallel compiles (default 8, positive integer)
 set -euo pipefail
 
-REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+SCRIPT_DIR="$(CDPATH='' cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+REPO="$(CDPATH='' cd -- "$SCRIPT_DIR/.." && pwd)"
 BASE_REF="${1:?usage: tenkz_pixelpair.sh <base-commit-ish>}"
 JOBS=${TENKZ_CORPUS_JOBS:-8}
 if [[ ! "$JOBS" =~ ^[1-9][0-9]*$ ]]; then
   echo "FAIL: TENKZ_CORPUS_JOBS must be a positive integer, got '$JOBS'" >&2
   exit 1
 fi
-command -v pdftoppm >/dev/null || { echo "FAIL: pdftoppm not found" >&2; exit 1; }
+for command in timeout xelatex pdftoppm; do
+  command -v "$command" >/dev/null \
+    || { echo "FAIL: $command not found" >&2; exit 1; }
+done
 
 WORK="$(mktemp -d "${TMPDIR:-/tmp}/tenkz-pixelpair-XXXXXX")"
 BASE_TREE="$WORK/base-tree"
@@ -32,14 +36,16 @@ trap 'cleanup_worktree; rm -rf "$WORK"' EXIT
 
 render_side() { # $1 tree root, $2 output dir
   local root="$1" out="$2" src stem
-  mkdir -p "$out/pdf" "$out/png"
+  mkdir -p "$out/pdf" "$out/png" "$out/src"
   cp -R "$root/tests/tenkz/." "$out/src/"
-  ( cd "$out/src"
+  ( CDPATH='' cd -- "$out/src"
     find . -maxdepth 1 -name '*.tex' -print0 | LC_ALL=C sort -z >sources.list
+    [[ -s sources.list ]] \
+      || { echo "FAIL: standalone corpus contains no .tex sources" >&2; exit 1; }
     compile_one() {
       # $1 = tree root (fixed arg), $2 = source path (appended by xargs)
       local name; name="$(basename "$2")"
-      ( TEXINPUTS="$1/tex/tenkz:$1/tex//:" timeout 180 \
+      ( TEXINPUTS="$1/tex/tenkz//:$1/tex//:" timeout 180 \
           xelatex -interaction=nonstopmode -halt-on-error "$name" ) \
         >"${name%.tex}.pixelpair-transcript" 2>&1 \
         || { echo "FAIL: $name did not compile" >&2; return 1; }
@@ -76,6 +82,10 @@ done < <(find "$WORK/base/png" -name '*.png' | LC_ALL=C sort)
 
 if [[ "$fail" -ne 0 ]]; then
   echo "FAIL: pixel divergence against $BASE_REF" >&2
+  exit 1
+fi
+if [[ "$pages" -eq 0 ]]; then
+  echo "FAIL: pixel sweep produced no pages" >&2
   exit 1
 fi
 echo "PASS: $pages pages byte-identical at 300 dpi against $BASE_REF"
