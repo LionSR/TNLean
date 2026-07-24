@@ -398,6 +398,70 @@ theorem rfp_hasParentHamiltonianGroundSpaceSpanning_basisDirectSum
         rfp_nt_structural (P.basis j) (hnormal j) hBlockRFP
       exact chainGroundSpace_eq_mpvSubmodule hInj (by omega) (by omega) (by omega)
 
+/-- The distinct basis tensors of a BNT canonical form are a basis of normal
+tensors for their direct-sum tensor.
+
+Each basis block of a BNT canonical form is irreducible and left-canonical
+with normalized self-overlap, hence a spectrally normalized normal tensor; the
+MPV family of the unit-weight direct sum is the plain sum of the block MPV
+families; and the eventual linear independence of the basis MPV states is part
+of the canonical form. This is the basis-of-normal-tensors relation of
+arXiv:1606.00608, lines 271--274, at the explicit multiplicity-one unit-weight
+representative $A=\bigoplus_j A_j$ used in the proof of Theorem
+`thm:main-MPS`, lines 534--541.
+
+**Scope restriction (multiplicity-one unit weights):** the statement covers
+the direct sum of the distinct basis tensors with one unit-weight copy each.
+Repeated copies and raw sector weights remain outside this statement; see
+docs/paper-gaps/cpsv16_pure_zcl_local_orthogonality_scope.tex. -/
+theorem isCPSVBasisOfNormalTensors_basisDirectSum
+    (hCF : IsBNTCanonicalForm P) :
+    IsCPSVBasisOfNormalTensors (directSumTensor P.basis)
+      (fun j => ⟨P.basisDim j, P.basis j⟩) := by
+  letI : ∀ j : Fin P.basisCount, NeZero (P.basisDim j) :=
+    fun j ↦ ⟨(hCF.basis_dim_pos j).ne'⟩
+  refine {
+    blocks_normal := fun j ↦
+      isNormalTensor_of_isNormal_leftCanonical (P.basis j)
+        (hCF.basis_isNormal j) (hCF.basis_left_canonical j)
+    spans_mpv := ?_
+    eventually_li := by exact hCF.bnt_data }
+  intro N _hN
+  refine ⟨fun _ ↦ 1, fun σ ↦ ?_⟩
+  rw [← toTensorFromBlocks_one_eq_directSumTensor P.basis,
+    mpv_toTensorFromBlocks_eq_sum]
+  simp
+
+/-- **Corrected forward direction of the main MPS theorem (RFP ⟹ ZCL) at the
+multiplicity-one representative.**
+
+Let $P$ be a BNT canonical form. If the direct sum of its distinct basis
+tensors $\bigoplus_j A_j$ is a renormalization fixed point, i.e. its transfer
+matrix satisfies $\mathbb E^2=\mathbb E$, then it has zero correlation length
+in the positive-gap form: the physical correlations are independent of the
+separation whenever both complementary gaps are positive (CID), and the mixed
+transfer matrices of distinct BNT components vanish,
+$\mathbb E_{j,j'}=0$ for $j\neq j'$ (local orthogonality).
+
+This is the implication (i) ⟹ (ii) of Theorem `thm:main-MPS` at
+arXiv:1606.00608, lines 534--541, for the explicit multiplicity-one
+unit-weight direct-sum representative, with the corrections forced by the
+raw-weight counterexample
+`halvedWeightTensor_counterexample_to_unrestricted_zcl_iff_rfp` (issue #2597):
+the source CID quantifies over all disjoint regions, including adjacent ones,
+and the source theorem permits raw sector weights and repeated copies. Both
+restrictions are recorded in
+docs/paper-gaps/cpsv16_pure_zcl_local_orthogonality_scope.tex. -/
+theorem isTransferIdempotent_basisDirectSum_isPositiveGapBNTZCL
+    (hCF : IsBNTCanonicalForm P)
+    (hRFP : IsTransferIdempotent (directSumTensor P.basis)) :
+    IsPositiveGapBNTZCL (directSumTensor P.basis) P.basis := by
+  letI : ∀ j : Fin P.basisCount, NeZero (P.basisDim j) :=
+    fun j ↦ ⟨(hCF.basis_dim_pos j).ne'⟩
+  exact isPositiveGapBNTZCL_of_isTransferIdempotent_directSum P.basis
+    hCF.isCPSVBasisOfNormalTensors_basisDirectSum
+    hCF.basis_irreducible hCF.basis_left_canonical hCF.basis_distinct hRFP
+
 end IsBNTCanonicalForm
 
 end MPSTensor
