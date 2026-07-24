@@ -12,6 +12,8 @@ This file provides low-level operations for splitting, reindexing, and gluing vi
 configurations. Given a predicate on edges, `mergeVirtualConfig` reads one configuration
 where the predicate holds and another configuration elsewhere. The region-specific
 `regionMerge` specializes this operation to the edges incident to a region.
+The equivalence `vertexConfigSplitAt` separates the labels incident to one vertex from all
+remaining edge labels.
 
 The vertex-product lemmas compare products before and after merging configurations. The
 final lemma groups a finite sum by its merged configuration and collapses fibers of constant
@@ -46,6 +48,43 @@ omit [Fintype V] in
 theorem virtualConfigSplit_snd_apply (A : Tensor G d) (select : Edge G → Prop)
     [DecidablePred select] (ζ : VirtualConfig A) (e : {e : Edge G // ¬ select e}) :
     (virtualConfigSplit A select ζ).2 e = ζ e.1 := rfl
+
+/-! ### Split at one vertex -/
+
+/-- The predicate on edges singling out those incident to `j`. -/
+def IsIncidentEdge (j : V) (f : Edge G) : Prop :=
+  f.1.1 = j ∨ f.1.2 = j
+
+instance (j : V) (f : Edge G) : Decidable (IsIncidentEdge (G := G) j f) := by
+  unfold IsIncidentEdge
+  infer_instance
+
+omit [Fintype V] [DecidableRel G.Adj] in
+/-- An edge underlying an incidence at `j` satisfies the vertex-incidence predicate. -/
+theorem isIncidentEdge_of_incident (j : V) (ie : IncidentEdge G j) :
+    IsIncidentEdge (G := G) j ie.1 := ie.2
+
+/-- Split a virtual configuration into its labels on the edges incident to `j`
+and its labels on all remaining edges. -/
+noncomputable def vertexConfigSplitAt (A : Tensor G d) (j : V) :
+    VirtualConfig A ≃
+      LocalVirtualConfig A j ×
+        ((f : {f : Edge G // ¬ IsIncidentEdge (G := G) j f}) → Fin (A.bondDim f.1)) :=
+  virtualConfigSplit A fun f => IsIncidentEdge (G := G) j f
+
+omit [Fintype V] in
+@[simp] theorem vertexConfigSplitAt_fst (A : Tensor G d) (j : V) (ζ : VirtualConfig A)
+    (ie : IncidentEdge G j) :
+    (vertexConfigSplitAt (G := G) A j ζ).1 ie = ζ ie.1 := rfl
+
+omit [Fintype V] in
+@[simp] theorem vertexConfigSplitAt_symm_apply_incident (A : Tensor G d) (j : V)
+    (η : LocalVirtualConfig A j)
+    (r : (f : {f : Edge G // ¬ IsIncidentEdge (G := G) j f}) → Fin (A.bondDim f.1))
+    (ie : IncidentEdge G j) :
+    (vertexConfigSplitAt (G := G) A j).symm (η, r) ie.1 = η ie := by
+  unfold vertexConfigSplitAt virtualConfigSplit IsIncidentEdge
+  rw [Equiv.piEquivPiSubtypeProd_symm_apply, dif_pos ie.2]
 
 /-- Reindex every virtual bond along equality of the bond-dimension families. -/
 noncomputable def virtualConfigCongr (A B : Tensor G d) (h : A.bondDim = B.bondDim) :

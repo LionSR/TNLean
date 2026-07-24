@@ -188,6 +188,60 @@
     $T_{v^c}(*,\eta,\tau)=A_{v^c}(\eta,\tau)$.
 \end{definition}
 
+\begin{definition}[Complement-region index identifications]%
+    \label{def:peps_vertexComplementRegionEquivs}
+    \lean{TNLean.PEPS.isRegionBoundaryEdge_vertexComplementVertices_iff}
+    \lean{TNLean.PEPS.vertexComplementBoundaryEdgeEquiv}
+    \lean{TNLean.PEPS.vertexComplementBoundaryConfigEquiv}
+    \lean{TNLean.PEPS.vertexComplementVertexEquiv}
+    \lean{TNLean.PEPS.vertexComplementPhysicalConfigEquiv}
+    \leanok
+    \uses{def:peps_complementTwoBlock}
+    For a vertex $v$, the edges crossing the boundary of
+    $V\setminus\{v\}$ are precisely the edges incident to $v$. Hence the
+    boundary configurations of $V\setminus\{v\}$ identify with the local
+    virtual configurations at $v$. Similarly, the vertices in
+    $V\setminus\{v\}$ identify with the vertices distinct from $v$, giving
+    the corresponding identification of physical configurations.
+\end{definition}
+
+\begin{theorem}[Vertex-complement contraction as a blocked region]%
+    \label{thm:peps_regionBlockedWeight_vertexComplement}
+    \lean{TNLean.PEPS.vertexComplementBoundaryConfigEquiv_regionBoundaryLabel}
+    \lean{TNLean.PEPS.regionBlockedWeight_vertexComplement}
+    \leanok
+    \uses{def:peps_vertexComplementRegionEquivs, def:peps_complementTwoBlock}
+    Under the preceding identifications, the blocked tensor of
+    $V\setminus\{v\}$ is the vertex-complement tensor:
+    \begin{align}
+        T_{A,V\setminus\{v\}}^{\rho}(\tau)
+        &=
+        A_{v^c}(\Psi_v\rho,\Phi_v\tau).
+        \notag
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    Expanding the blocked contraction as a sum over the virtual
+    configurations of the complement,
+    \begin{align}
+        T_{A,V\setminus\{v\}}^{\rho}(\tau)
+        &=
+        \textstyle
+        \sum_{\zeta:\,\zeta|_{\partial}=\rho}\;
+        \prod_{w\neq v} A_w(\zeta|_w,\tau_w)
+        =
+        A_{v^c}(\Psi_v\rho,\Phi_v\tau),
+        \notag
+    \end{align}
+    where $\zeta$ runs over the virtual configurations of the complement
+    whose boundary restriction $\zeta|_{\partial}$ is the prescribed boundary
+    configuration $\rho$. The boundary identification $\Psi_v$ turns the
+    crossing-edge constraint $\zeta|_{\partial}=\rho$ into the prescribed
+    incident-edge labels, and the vertex identification $\Phi_v$ reindexes
+    the product over the vertices distinct from $v$; both bijections match
+    the summation sets and their factors termwise.
+\end{proof}
+
 \begin{theorem}[Injectivity of the vertex-complement contraction]%
     \label{thm:peps_vertexComplementTensorInjective}
     \lean{TNLean.PEPS.vertexComplementTensorInjective_of_isVertexInjective}
@@ -199,28 +253,13 @@
     of the vertex-complement contraction is linearly independent.
 \end{theorem}
 \begin{proof}\leanok
-    Let $c=(c_\eta)_\eta$ be a finite coefficient family on the open star of
-    $v$. For a set $S\subseteq V\setminus\{v\}$, let $K_S(c)$ be the assertion
-    that for every virtual configuration $\zeta_0$ and physical configuration
-    $\tau$,
-    \begin{align}
-        \sum_{\zeta}
-        \mathbf 1[
-                \zeta_f=\zeta_{0,f}\text{ for every edge }f
-                \text{ whose endpoints are outside }S]
-        c_{\zeta|_{\operatorname{Star}(v)}}
-        \prod_{w\in S} A_w(\zeta|_{\operatorname{Star}(w)},\tau_w)
-        &=0.
-        \notag
-    \end{align}
-    The initial vanishing of the complement contraction is exactly
-    $K_{V\setminus\{v\}}(c)$. If $j\in S$ and $j\neq v$, the one-sided inverse at
-    the vertex $j$ separates the local tensor $A_j$ and gives
-    $K_S(c)\Rightarrow K_{S\setminus\{j\}}(c)$. Iterating this implication over
-    the complement vertices gives $K_\varnothing(c)$. At $S=\varnothing$ the
-    exposed virtual indices are all fixed by $\zeta_0$; positive bond dimensions
-    allow $\zeta_0$ to realize any prescribed star configuration at $v$. Hence
-    every coefficient $c_\eta$ is zero.
+    \uses{thm:peps_regionBlockedWeight_vertexComplement,
+        thm:peps_regionBlockedTensorInjective_of_isVertexInjective}
+    Apply the injectivity theorem for an arbitrary finite region to
+    $R=V\setminus\{v\}$. Theorem~\ref{thm:peps_regionBlockedWeight_vertexComplement}
+    identifies the resulting blocked tensor with the vertex-complement tensor.
+    Reindexing the boundary family and the physical coordinates by bijections
+    preserves linear independence.
 \end{proof}
 
 \begin{theorem}[Injectivity of the complement two-block tensor]%

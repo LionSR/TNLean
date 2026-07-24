@@ -3,7 +3,7 @@
     "by_file": {
       "tenkz-cd.code.tex": 21,
       "tenkz-core.code.tex": 8,
-      "tenkz-free.code.tex": 11,
+      "tenkz-free.code.tex": 0,
       "tenkz-geometry.code.tex": 0,
       "tenkz-grid.code.tex": 7,
       "tenkz-kernel.code.tex": 0,
@@ -11,14 +11,15 @@
       "tenkz-lattice.code.tex": 0,
       "tenkz-metric.code.tex": 0,
       "tenkz-model.code.tex": 0,
-      "tenkz-render.code.tex": 0
+      "tenkz-render.code.tex": 0,
+      "tenkz-string.code.tex": 7
     },
-    "total": 47
+    "total": 43
   },
   "decimal_literals": {
     "by_file": {
       "tenkz-cd.code.tex": 1,
-      "tenkz-core.code.tex": 25,
+      "tenkz-core.code.tex": 18,
       "tenkz-free.code.tex": 4,
       "tenkz-geometry.code.tex": 0,
       "tenkz-grid.code.tex": 18,
@@ -27,8 +28,9 @@
       "tenkz-lattice.code.tex": 10,
       "tenkz-metric.code.tex": 0,
       "tenkz-model.code.tex": 0,
-      "tenkz-render.code.tex": 0
+      "tenkz-render.code.tex": 0,
+      "tenkz-string.code.tex": 0
     },
-    "total": 58
+    "total": 51
   }
 }

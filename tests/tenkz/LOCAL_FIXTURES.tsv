@@ -3,3 +3,5 @@ zz_geomdag.tex	tests/tenkz/zz_geomdag.tex	local geometry DAG regression; compile
 zz_geomframe.tex	tests/tenkz/zz_geomframe.tex	local geometry frame regression; compiles, emits tnlog, and passes tenkz_audit
 zz_geomsupport.tex	tests/tenkz/zz_geomsupport.tex	local support-function regression; compiles, emits tnlog, and passes tenkz_audit
 zz_renderslice.tex	tests/tenkz/zz_renderslice.tex	local shared-renderer regression; compiles, emits tnlog, and passes tenkz_audit
+zz_vertprune.tex	tests/tenkz/zz_vertprune.tex	local vertical-pruning regression; compiles, emits tnlog, and passes tenkz_audit
+zz_wirescan.tex	tests/tenkz/zz_wirescan.tex	local wire-scan sentinel regression; compiles, emits tnlog, and passes tenkz_audit

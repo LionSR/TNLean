@@ -1,0 +1,13 @@
+% Expected failure: internal bead snapshots own the tenkz-bead- prefix.
+\documentclass{standalone}
+\usepackage{tenkz}
+\usetikzlibrary{hobby,spath3,intersections}
+\begin{document}
+\makeatletter\input{tenkz-string.code.tex}\makeatother
+\begin{tikzpicture}
+\ExplSyntaxOn
+\__tenkz_string_reset:
+\__tenkz_string_register:nn {tenkz-bead-a} {open}
+\ExplSyntaxOff
+\end{tikzpicture}
+\end{document}

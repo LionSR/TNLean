@@ -33,7 +33,7 @@
     The reduction map on $\MN{D}$, for $k\in\N$, is
     \begin{align}
         T_k(X)
-        &=\tr(X)\Id-k^{-1}X.
+         & =\tr(X)\Id-k^{-1}X.
         \label{eq:channel_reduction_map}
     \end{align}
 \end{definition}
@@ -61,7 +61,7 @@
     The reduction map is self-dual for the trace pairing:
     \begin{align}
         \tr(T_k(\rho)X)
-        &=\tr(\rho T_k(X)).
+         & =\tr(\rho T_k(X)).
         \label{eq:channel_reduction_self_dual}
     \end{align}
 \end{theorem}
@@ -80,7 +80,7 @@
     For $D\ge 1$, the Choi matrix of the reduction map is
     \begin{align}
         \tau(T_k)
-        &=D^{-1}\Id-k^{-1}\ket{\Omega}\bra{\Omega}.
+         & =D^{-1}\Id-k^{-1}\ket{\Omega}\bra{\Omega}.
         \label{eq:channel_reduction_choi}
     \end{align}
 \end{theorem}
@@ -91,29 +91,6 @@
     the contribution $D^{-1}\Id$. The second term is the Choi matrix of
     $k^{-1}$ times the identity map, namely
     $k^{-1}\ket{\Omega}\bra{\Omega}$.
-\end{proof}
-
-\begin{theorem}[Conjugation filters preserve positivity]
-    \label{thm:conjugation_filters_preserve_positivity}
-    \lean{unitaryConjLM_isCPMap, unitaryConjLM_isPositiveMap,
-        IsPositiveMap.comp_unitaryConjLM, unitaryConjLM_isTP_of_unitary,
-        unitaryConjLM_isChannel_of_unitary}
-    \leanok
-    \uses{def:cp_map, def:positive_map, def:trace_preserving, def:channel}
-    For every $X\in\MN{D}$, the conjugation filter
-    $\rho\mapsto X\rho X^\dagger$ is completely positive, hence positive.
-    Therefore, if $T:\MN{D}\to\MN{D}$ is positive, then
-    $\rho\mapsto T(X\rho X^\dagger)$ is positive. If in addition
-    $X^\dagger X=\Id$, then the conjugation filter is trace-preserving and
-    hence is a quantum channel.
-\end{theorem}
-
-\begin{proof}\leanok
-    Complete positivity follows from the Kraus representation
-    (\ref{eq:channel_kraus_representation}) with the single Kraus operator
-    $X$. Positivity follows immediately. If $X^\dagger X=\Id$, cyclicity of
-    the trace gives
-    $\tr(X\rho X^\dagger)=\tr(X^\dagger X\rho)=\tr(\rho)$.
 \end{proof}
 
 \begin{definition}[Positive map between matrix algebras]
@@ -161,7 +138,7 @@
     cyclicity then give, for every $\rho$,
     \begin{align}
         \tr\!(T(X\rho X^\dagger))
-        &=\tr\!(\rho X^\dagger T^*(\Id)X)
+         & =\tr\!(\rho X^\dagger T^*(\Id)X)
         =\tr(\rho).
         \notag
     \end{align}
@@ -174,7 +151,7 @@
     Let $D\geq 1$ and let $P\in\MN{D}$ be positive semidefinite. Then
     \begin{align}
         P
-        &\preceq \tr(P)\Id.
+         & \preceq \tr(P)\Id.
         \label{eq:channel_psd_trace_bound}
     \end{align}
 \end{theorem}
@@ -192,7 +169,7 @@
     If $A \in \MN{D}$ is positive semidefinite, then
     \begin{align}
         \re\tr(A^2)
-        &\le \left(\re\tr(A)\right)^2.
+         & \le \left(\re\tr(A)\right)^2.
         \label{eq:channel_lorentz_forward}
     \end{align}
 \end{theorem}
@@ -212,7 +189,7 @@
     $\re\tr(A)\ge0$. If
     \begin{align}
         (D-1)\re\tr(A^2)
-        &\le \left(\re\tr(A)\right)^2,
+         & \le \left(\re\tr(A)\right)^2,
         \label{eq:channel_lorentz_converse}
     \end{align}
     then $A$ is positive semidefinite.
@@ -232,7 +209,7 @@
     gives
     \begin{align}
         R^2
-        &\le (D-1)\sum_{i\ne 0}\lambda_i^2
+         & \le (D-1)\sum_{i\ne 0}\lambda_i^2
         \le (D-1)\sum_i\lambda_i^2,
         \notag
     \end{align}
@@ -249,7 +226,7 @@
     For $0\le k\le D$, set
     \begin{align}
         S_k(A)
-        &=\sum_{i=1}^{k}\lambda_i.
+         & =\sum_{i=1}^{k}\lambda_i.
         \label{eq:channel_largest_eigenvalue_sum}
     \end{align}
     This is the sum of the $k$ largest signed eigenvalues. Indices beyond $D$
@@ -275,7 +252,7 @@
     orthogonal projection $P$ of rank $k$:
     \begin{align}
         S_k(A)
-        &=\max_{\substack{P^2=P=P^\dagger\\ \tr(P)=k}}\re\tr(PA).
+         & =\max_{\substack{P^2=P=P^\dagger\\ \tr(P)=k}}\re\tr(PA).
         \label{eq:channel_ky_fan_maximum}
     \end{align}
     This is Ky Fan's maximum principle \cite{Fan1949Theorem}; see also
@@ -299,7 +276,7 @@
     \leanok
     \uses{def:positive_map}
     A linear map $T:\MN{D}\to\MN{D}$ \emph{maps the positive semidefinite cone
-    onto itself} if $T$ is positive and every positive semidefinite matrix is
+        onto itself} if $T$ is positive and every positive semidefinite matrix is
     the image under $T$ of a positive semidefinite matrix. This is condition
     (1) of \cite[Proposition~3.8]{Wolf2012Quantum}.
 \end{definition}
@@ -346,7 +323,7 @@
     $v=\ket{01}-\ket{10}$,
     \begin{align}
         \bra{v}\,D^{-1}F\,\ket{v}
-        &=-\frac{2}{D}<0,
+         & =-\frac{2}{D}<0,
         \notag
     \end{align}
     contradicting positive semidefiniteness.
@@ -376,62 +353,7 @@
     The set of \emph{density matrices} in $\MN{D}$ is
     \begin{align}
         \mc{D}_D
-        &=\{\rho \in \MN{D} : \rho \ge 0,\ \tr(\rho) = 1\}.
+         & =\{\rho \in \MN{D} : \rho \ge 0,\ \tr(\rho) = 1\}.
         \label{eq:channel_density_matrices}
     \end{align}
 \end{definition}
-
-\begin{theorem}[Density matrices are compact]\label{thm:density_compact}
-    \lean{densityMatrices_isCompact}
-    \leanok
-    \uses{def:density_matrices}
-    $\mc{D}_D$ is compact in the entrywise topology on $\MN{D}$.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    The positive semidefinite cone is closed, being the preimage of the closed
-    non-negative cone under continuous quadratic forms. If $\rho \ge 0$ with
-    $\tr(\rho) = 1$, then each entry satisfies
-    $|\rho_{ij}|^2 \le \rho_{ii}\rho_{jj} \le 1$: the diagonal entries are
-    non-negative and sum to~$1$, and the off-diagonal bound is the positive
-    semidefinite Cauchy--Schwarz inequality. Hence the matrix entries are
-    uniformly bounded, and Heine--Borel gives compactness.
-\end{proof}
-
-\begin{theorem}[Density matrices are convex]\label{thm:density_convex}
-    \lean{densityMatrices_isConvex}
-    \leanok
-    \uses{def:density_matrices}
-    $\mc{D}_D$ is convex.
-\end{theorem}
-
-\begin{proof}\leanok
-    A convex combination of positive semidefinite matrices is positive
-    semidefinite, and the trace is linear.
-\end{proof}
-
-\begin{theorem}[Density matrices are nonempty]\label{thm:density_nonempty}
-    \lean{densityMatrices_nonempty}
-    \leanok
-    \uses{def:density_matrices}
-    For $D \ge 1$, $\mc{D}_D \neq \varnothing$.
-\end{theorem}
-
-\begin{proof}\leanok
-    $\frac{1}{D}\Id_D$ is a density matrix.
-\end{proof}
-
-\begin{theorem}[Channels preserve density matrices]\label{thm:channel_preserves_density}
-    \lean{IsChannel.map_densityMatrices}
-    \leanok
-    \uses{def:channel, def:density_matrices}
-    If $E$ is a quantum channel, then
-    $E(\mc{D}_D) \subseteq \mc{D}_D$.
-\end{theorem}
-
-\begin{proof}\leanok\uses{thm:cp_is_positive}
-    Complete positivity implies positivity by
-    Theorem~\ref{thm:cp_is_positive}, so $E(\rho) \ge 0$; trace preservation
-    gives $\tr(E(\rho)) = \tr(\rho) = 1$.
-\end{proof}

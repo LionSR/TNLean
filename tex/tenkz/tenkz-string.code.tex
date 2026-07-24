@@ -1193,10 +1193,15 @@
       y=\fp_eval:n { round( \dim_to_fp:n { \pgf@y } , 4 ) }pt}
   }
 
-% ---------- ink ------------------------------------------------------------------
-% This stage saves paths and cuts gaps; it draws nothing.  The render stage
-% draws every string through spath/use, after resolution -- the integration
-% this module was written for.
+% ---------- development ink -----------------------------------------------------
+% The render stage owns string ink at integration; until then fixtures draw
+% through this single, clearly marked primitive.
+\cs_new_protected:Npn \__tenkz_string_dev_draw:nn #1#2
+  {
+    \prop_if_in:NnF \l__tenkz_string_kind_prop {#1}
+      { \msg_error:nnn {tenkz}{string-unknown} {#1} }
+    \draw [ spath/use = #1 , #2 ] ;
+  }
 
 \ExplSyntaxOff
 

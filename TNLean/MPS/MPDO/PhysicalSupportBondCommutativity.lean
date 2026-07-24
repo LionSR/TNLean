@@ -217,22 +217,4 @@ conjugate of the restricted bond. -/
     (F.liftedTranslationInvariantBondData data).bond =
       F.liftedBond data.bond := rfl
 
-/-- Proposition C.8 on the injective physical support supplies a positive
-translation-invariant commuting bond whose ambient lift remains supported on
-the prescribed two-site sector.
-
-Source: arXiv:1606.00608, Appendix C.2, Proposition C.8 (`3to4`) and
-equations `PjKiPj` and `generateMPDO`, lines 1571--1593 and 1733--1770. -/
-theorem exists_etaLocalStructureData_liftedTranslationInvariantBondData
-    (F : PhysicalSupportRestrictionData P K) (hSAL : IsSAL K) :
-    ∃ data : EtaLocalStructureData
-        (PhysicalSectorFactorization.changePhysicalBasis F.inclusionᴴ K),
-      twoSiteSectorProjection P *
-          (F.liftedTranslationInvariantBondData data.bondData).bond *
-          twoSiteSectorProjection P =
-        (F.liftedTranslationInvariantBondData data.bondData).bond := by
-  obtain ⟨data, _, hsupported⟩ :=
-    F.exists_etaLocalStructureData_liftedBond_supported hSAL
-  exact ⟨data, hsupported⟩
-
 end MPOTensor.PhysicalSupportRestrictionData

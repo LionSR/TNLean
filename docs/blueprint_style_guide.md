@@ -174,13 +174,13 @@ enforced by the dedicated `Blueprint Sync & Prose Review` CI workflow.
   section would contain only one subsection, promote that subsection to a
   section or remove the unnecessary subdivision.
 
-### Main narrative and technical appendices
+### Main narrative and supporting appendices
 
 The blueprint has two simultaneous obligations: its main chapters must read as
 mathematics, and the complete document must retain the technical results that
 connect that mathematics to the formalization. Satisfy both obligations by
 keeping the mathematical narrative in the main chapters and collecting genuinely
-technical complements in appendices at the end of the document.
+supporting results in appendices at the end of the document.
 
 #### What remains in the main chapters
 
@@ -218,9 +218,9 @@ A suitable main-text proof sketch has the following form:
 This sketch explains why the result is true and tells the reader exactly what
 is verified later. Do not replace it by a vague reference to an entire appendix.
 
-#### What may move to a technical appendix
+#### What may move to a supporting appendix
 
-Technical appendices may contain intermediate results introduced to manage
+Supporting appendices may contain intermediate results introduced to manage
 support restrictions, casts, reindexings, common dimensions, preservation under
 standard constructions, routine matrix identities, and other detailed steps
 that do not carry the main mathematical narrative. Long proof expansions may
@@ -234,6 +234,13 @@ chapters. Before relocation, check both the transitive `\uses` graph and ordinar
 dependencies that are not encoded in the graph.
 
 #### Write appendices as mathematical appendices
+
+Every appendix chapter corresponds to exactly one main chapter; a main chapter
+may have no appendix. Appendix source file names use the parent chapter's stable
+`chNN` subject identifier. Later reuse by another chapter does not change the
+result's primary ownership. The displayed umbrella title is `Appendices`, and
+appendix chapter titles use a mathematically descriptive
+`...: Supporting Results` rather than `Technical Complements`.
 
 An appendix is not a dump of Lean declarations or a transcription of a source
 file. It must read like an appendix written by a mathematician:
@@ -279,9 +286,9 @@ The repository maintains two reader-facing builds from one source of truth:
   below).
 
 The focused volume contains the main Fundamental-Theorem and symmetry/string-
-order/SPT chapters together with all technical appendices needed by those
+order/SPT chapters together with all supporting appendices needed by those
 chapters. The complete blueprint contains the same files and adds the later
-chapters and their technical complements. Never duplicate theorem text or
+chapters and their supporting appendices. Never duplicate theorem text or
 maintain build-specific copies of an appendix.
 
 Appendices occur after the main chapters in both builds. Shared FT/SPT appendix

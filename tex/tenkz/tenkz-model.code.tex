@@ -164,12 +164,20 @@
     \tl_set:Nn #3 { \q_no_value }
     \seq_map_inline:Nn \l__tenkz_model_wire_seq
       {
+        % Closure wires carry no from/to; the sentinel is a quark and
+        % must never reach an e-expanding comparison.
         \__tenkz_model_get:nnN {##1} {from} \l__tenkz_model_probe_tl
+        \quark_if_no_value:NF \l__tenkz_model_probe_tl
+          {
         \str_if_eq:eeT { \tl_use:N \l__tenkz_model_probe_tl } {#1}
           {
             \__tenkz_model_get:nnN {##1} {to} \l__tenkz_model_probe_tl
+            \quark_if_no_value:NF \l__tenkz_model_probe_tl
+              {
             \str_if_eq:eeT { \tl_use:N \l__tenkz_model_probe_tl } {#2}
               { \tl_set:Nn #3 {##1} \seq_map_break: }
+              }
+          }
           }
       }
   }

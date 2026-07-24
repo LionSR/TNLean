@@ -385,6 +385,8 @@
     \lean{TNLean.PEPS.normalSquareHorizontalTranslatedEdge_injective_chain}
     \lean{TNLean.PEPS.normalSquareHorizontalTranslatedEdge_blockingDatum_of_complementCover}
     \lean{TNLean.PEPS.normalSquareHorizontalTranslatedEdge_injective_chain_of_complementCover}
+    \lean{TNLean.PEPS.normalSquareHorizontalTranslatedEdge_blockingDatum_interior}
+    \lean{TNLean.PEPS.isCrossingEdge_normalSquareHorizontalTranslatedEdge}
     \lean{TNLean.PEPS.horizontalTranslatedEdge_zero}
     \lean{TNLean.PEPS.horizontalTranslatedRed_zero}
     \lean{TNLean.PEPS.horizontalTranslatedBlue_zero}
@@ -401,11 +403,14 @@
     complement of their union. If this complementary region is injective,
     these three regions form the one-edge blocking datum; if it has a
     rectangular cover, rectangular injectivity and union closure supply that
-    complementary injectivity. In both forms the datum supplies the three
-    injective regions used in the edge-blocked chain. The distinguished edge
-    is the corresponding coordinate right edge. At coordinate origin $0,0$,
-    the translated edge and the three translated regions specialize to the
-    normalized horizontal picture.
+    complementary injectivity; and two rows and columns of margin below and
+    to the left together with eight rows and columns of total room around
+    the frame supply the same datum directly. In each form the datum supplies the three injective
+    regions used in the edge-blocked chain, and the distinguished edge is the
+    only edge crossing between the red and blue regions. The distinguished
+    edge is the corresponding coordinate right edge. At coordinate origin
+    $0,0$, the translated edge and the three translated regions specialize to
+    the normalized horizontal picture.
 \end{lemma}
 \begin{proof}\leanok
     The endpoint memberships and horizontal orientation are coordinate
@@ -427,6 +432,8 @@
     \lean{TNLean.PEPS.normalSquareVerticalTranslatedEdge_injective_chain}
     \lean{TNLean.PEPS.normalSquareVerticalTranslatedEdge_blockingDatum_of_complementCover}
     \lean{TNLean.PEPS.normalSquareVerticalTranslatedEdge_injective_chain_of_complementCover}
+    \lean{TNLean.PEPS.normalSquareVerticalTranslatedEdge_blockingDatum_interior}
+    \lean{TNLean.PEPS.isCrossingEdge_normalSquareVerticalTranslatedEdge}
     \lean{TNLean.PEPS.verticalTranslatedEdge_zero}
     \lean{TNLean.PEPS.verticalTranslatedRed_zero}
     \lean{TNLean.PEPS.verticalTranslatedBlue_zero}
@@ -442,11 +449,14 @@
     complement of their union. If this complementary region is injective,
     these three regions form the one-edge blocking datum; if it has a
     rectangular cover, rectangular injectivity and union closure supply that
-    complementary injectivity. In both forms the datum supplies the three
-    injective regions used in the edge-blocked chain. The distinguished edge
-    is the corresponding coordinate upward edge. At coordinate origin $0,0$,
-    the translated edge and the three translated regions specialize to the
-    normalized vertical picture.
+    complementary injectivity; and two rows and columns of margin below and
+    to the left together with eight rows and columns of total room around
+    the frame supply the same datum directly. In each form the datum supplies
+    the three injective regions used in the edge-blocked chain, and the
+    distinguished edge is the only edge crossing between the red and blue
+    regions. The distinguished edge is the corresponding coordinate upward
+    edge. At coordinate origin $0,0$, the translated edge and the three
+    translated regions specialize to the normalized vertical picture.
 \end{lemma}
 \begin{proof}\leanok
     The endpoint memberships and vertical orientation are coordinate checks.
@@ -455,3 +465,64 @@
     disjointness and covering identities follow from the finite-set complement
     formulas.
 \end{proof}
+
+\begin{theorem}[Bond-dimension equality at interior edges from rectangular
+        injectivity]%
+    \label{thm:peps_bondDim_interiorEdge_eq_of_normalSquareRectangularInjectivity}
+    \lean{TNLean.PEPS.bondDim_apply_eq_of_normalSquareInteriorEdge}
+    \leanok
+    \uses{def:peps_normalRectangleInjectivityHypotheses,
+        def:peps_regionInjectivityData,
+        def:peps_regionInjectivityDataOf,
+        def:peps_same_state,
+        lem:peps_normalSquareInteriorEdgeBlocking}
+    Let $A$ and $B$ be PEPS tensors on the $n\times m$ square lattice with
+    positive physical dimension $d>0$ and positive bond dimensions at every
+    edge, generating the same state. Suppose both tensors satisfy the
+    coordinate rectangular injectivity hypotheses (every contiguous
+    $2\times3$ and $3\times2$ rectangle is injective) and the associated
+    region-injectivity predicates are closed under finite unions. Then the
+    bond dimensions of $A$ and $B$ agree at every edge with interior margins:
+    for every edge $e$ with a margin of at least one row and column of room
+    below and to the left, and at least three rows and columns above and to the
+    right (avoiding the lattice boundary),
+    \begin{align}
+        D_A(e)=D_B(e).
+        \notag
+    \end{align}
+    The equality is derived from the one-edge blocking data built from the
+    rectangular injectivity --- the source's Lemma \emph{inj\_isomorph}
+    (\cite[Section~3, lines~560--583 and
+    1407--1500]{Molnar2018NormalPEPS}) ---
+    together with the same-state and positive-bond assumptions; the bond
+    dimension at the edge is not assumed.
+    \begin{proof}
+        \leanok
+        \uses{lem:peps_normalSquareHorizontalTranslatedEdge_blockingData,
+            lem:peps_normalSquareVerticalTranslatedEdge_blockingData,
+            thm:peps_bondDim_eq_of_normalBlocking}
+        Suppose $e$ is horizontal; the vertical case is the rotated argument.
+        Place the translated frame at $(x_0,y_0)=(x_e-1,y_e-2)$, so the
+        interior margins give $2\le x_0$, $2\le y_0$, $x_0+8\le n$, and
+        $y_0+8\le m$. The margin form of the translated blocking datum
+        (Lemma~\ref{lem:peps_normalSquareHorizontalTranslatedEdge_blockingData})
+        supplies, for each of $A$ and $B$, the injective red and blue blocks
+        and the injective complement at that frame; the two data share the
+        same regions, and the distinguished translated edge $e'$ is the only
+        edge crossing between the red and blue regions:
+        \begin{align}
+            \{\,g:\ \text{$g$ joins the red block to the blue block}\,\}
+                =\{e'\}.
+            \notag
+        \end{align}
+        The one-edge comparison of
+        Theorem~\ref{thm:peps_bondDim_eq_of_normalBlocking} applied to the
+        two data then gives
+        \begin{align}
+            D_A(e')=D_B(e').
+            \notag
+        \end{align}
+        A coordinate check identifies $e'$ with the coordinate right edge at
+        $(x_e,y_e)$, hence with $e$, and $D_A(e)=D_B(e)$ follows.
+    \end{proof}
+\end{theorem}

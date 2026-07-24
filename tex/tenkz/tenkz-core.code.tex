@@ -110,18 +110,9 @@
                                % cover its wires); also the bar's silhouette
                                % contribution, so drawing and clearance read
                                % one number
-% absolute floors and ink hierarchy
-\def\tenkz@wirewidth{0.55pt}
-\def\tenkz@annwidth{0.40pt}
-\def\tenkz@emphwidth{0.80pt}
-\def\tenkz@junctionfloor{0.9mm}% ~4.7x the 0.55pt wire width: below this
-                               % absolute floor a junction reads as dirt
-\def\tenkz@barblen{2.6pt}      % directionality barb; a print-size floor, not
-                               % a ratio: below this the barb reads as dirt
-\def\tenkz@fusedbarblen{3.8pt} % barb spanning a doubled (fused) wire
-\def\tenkz@braceamp{2.6pt}     % brace amplitude; numerically the barb floor
-                               % (both are the smallest mark that reads at
-                               % print size), semantically independent
+% absolute floors and ink hierarchy: the metric registry owns the values
+% (tenkz-metric.code.tex); these spellings resolve through it lazily so
+% the styles below keep reading \tenkz@wirewidth et al. unchanged.
 
 \def\tenkz@dim#1{\dimexpr#1\tenkz@pitch\relax}
 

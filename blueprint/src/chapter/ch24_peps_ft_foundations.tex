@@ -77,19 +77,26 @@ together with the local inverse it provides.
 \begin{definition}[Splitting and reindexing virtual configurations]
     \label{def:peps_virtual_config_split_reindex}
     \lean{TNLean.PEPS.virtualConfigSplit}
+    \lean{TNLean.PEPS.IsIncidentEdge}
+    \lean{TNLean.PEPS.vertexConfigSplitAt}
     \lean{TNLean.PEPS.virtualConfigCongr}
     \leanok
     \uses{def:peps_virtual_config}
     A predicate on the edges splits a virtual configuration canonically into
     its restrictions to the selected and unselected edges. An equality
     between two bond-dimension families also induces a canonical reindexing
-    between their virtual configurations.
+    between their virtual configurations.  For a vertex $v$, selecting the
+    incident edges splits a virtual configuration into its local labels at $v$
+    and the labels on all nonincident edges.
 \end{definition}
 
 \begin{theorem}[Evaluation laws for splitting and reindexing]
     \label{thm:peps_virtual_config_split_reindex_apply}
     \lean{TNLean.PEPS.virtualConfigSplit_fst_apply}
     \lean{TNLean.PEPS.virtualConfigSplit_snd_apply}
+    \lean{TNLean.PEPS.isIncidentEdge_of_incident}
+    \lean{TNLean.PEPS.vertexConfigSplitAt_fst}
+    \lean{TNLean.PEPS.vertexConfigSplitAt_symm_apply_incident}
     \lean{TNLean.PEPS.virtualConfigCongr_apply}
     \lean{TNLean.PEPS.virtualConfigSplit_mergeVirtualConfig}
     \lean{TNLean.PEPS.virtualConfigCongr_mergeVirtualConfig}

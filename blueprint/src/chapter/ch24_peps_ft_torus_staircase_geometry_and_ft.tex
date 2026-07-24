@@ -92,6 +92,120 @@
     either an end-window point or a corner point.
 \end{proof}
 
+\begin{definition}[Torus rectangular injectivity hypotheses]%
+    \label{def:peps_torusRectangleInjectivityHypotheses}
+    \lean{TNLean.PEPS.NormalTorusRectangleInjectivityHypotheses}
+    \leanok
+    \uses{def:peps_regionInjectivityData,
+        def:peps_torus_geometry_translation}
+    On the discrete torus, the rectangular injectivity hypotheses assert
+    that every contiguous $2\times3$ and every contiguous $3\times2$
+    coordinate rectangle is injective for the given region-injectivity
+    assignment. This is the torus counterpart of the square-lattice
+    rectangular injectivity hypotheses.
+\end{definition}
+
+\begin{lemma}[Torus reference-edge blocking data]%
+    \label{lem:peps_torusRectangleReferenceBlockingData}
+    \lean{TNLean.PEPS.torusHorizontalReferenceEdge}
+    \lean{TNLean.PEPS.torusVerticalReferenceEdge}
+    \lean{TNLean.PEPS.torusHorizontalRectangleBlockingDatum}
+    \lean{TNLean.PEPS.torusVerticalRectangleBlockingDatum}
+    \lean{TNLean.PEPS.isCrossingEdge_torusHorizontalRectangleBlockingDatum}
+    \lean{TNLean.PEPS.isCrossingEdge_torusVerticalRectangleBlockingDatum}
+    \leanok
+    \uses{def:peps_torusRectangleInjectivityHypotheses,
+        def:peps_regionInjectivityData,
+        def:peps_torus_geometry_translation}
+    At a frame origin $(x_0,y_0)$ with at least two columns and one row of
+    margin below and to the left (one column and two rows in the rotated
+    case), and with the removed blocks either touching the seam
+    ($x_0+5=n$, $y_0+5=m$) or keeping a further margin of at least two, the
+    horizontal reference edge $e_h$ is the right edge leaving
+    $(x_0+1,y_0+2)$, and the vertical reference edge $e_v$ is the up edge
+    leaving $(x_0+2,y_0+1)$. Around each reference edge the rectangular
+    injectivity hypotheses and union closure supply the one-edge blocking
+    datum: the red block, the blue block, and the complement are injective,
+    and the reference edge is the only edge crossing between the red and
+    blue blocks,
+    \begin{align}
+        \{\,g:\ \text{$g$ joins the red block to the blue block}\,\}
+            =\{e_h\},
+        \notag
+    \end{align}
+    and similarly with $e_v$ at the rotated frame.
+\end{lemma}
+\begin{proof}
+    \leanok
+    The red and blue blocks are the removed edge blocks of the frame, so
+    rectangular injectivity covers them; union closure then gives the
+    injectivity of the remaining complement. The crossing-edge identity
+    enumerates the edges joining the two blocks.
+\end{proof}
+
+\begin{theorem}[Bond-dimension equality from normal torus rectangular injectivity]%
+    \label{thm:peps_bondDim_eq_of_normalTorusRectangularInjectivity}
+    \lean{TNLean.PEPS.bondDim_eq_of_normalTorusRectangle}
+    \leanok
+    \uses{def:peps_torus_translation_invariant,
+        def:peps_regionInjectivityData,
+        def:peps_regionInjectivityDataOf,
+        def:peps_same_state,
+        def:peps_torusRectangleInjectivityHypotheses}
+    Let $A$ and $B$ be translationally invariant PEPS tensors on the
+    $n\times m$ torus with $n,m\geq 7$, positive physical dimension $d>0$,
+    and positive bond dimensions at every edge, generating the same state.
+    Suppose both tensors satisfy the torus rectangular injectivity hypotheses
+    (every contiguous $2\times3$ and $3\times2$ torus rectangle is injective)
+    and the associated region-injectivity predicates are closed under finite
+    unions. Then the bond dimensions of $A$ and $B$ agree on every edge:
+    \begin{align}
+        D_A = D_B.
+        \notag
+    \end{align}
+    The equality is derived from the one-edge blocking data built from the
+    rectangular injectivity --- the source's Lemma \emph{inj\_isomorph}
+    (\cite[Section~3, lines~560--583 and
+    1407--1500]{Molnar2018NormalPEPS}) ---
+    together with the translation invariance, same-state, and positive-bond
+    assumptions; the bond dimension is not assumed as a hypothesis.
+    \begin{proof}
+        \leanok
+        \uses{lem:peps_torusRectangleReferenceBlockingData,
+            thm:peps_bondDim_eq_of_normalBlocking,
+            thm:peps_torusUniformBondDim_of_translationInvariant,
+            def:peps_torus_geometry_translation}
+        Place the frame at $(x_0,y_0)=(n-5,m-5)$; since $n,m\geq 7$ the
+        margins hold with the touching-seam alternative. Let $e_h$ and $e_v$
+        be the horizontal and vertical reference edges of
+        Lemma~\ref{lem:peps_torusRectangleReferenceBlockingData} at this
+        frame. The blocking data built from $A$ and from $B$ around $e_h$
+        share the same red and blue blocks, so the one-edge comparison of
+        Theorem~\ref{thm:peps_bondDim_eq_of_normalBlocking} applies at the
+        unique crossing edge and gives
+        \begin{align}
+            D_A(e_h)=D_B(e_h),
+            \notag
+        \end{align}
+        and the rotated datum at $e_v$ gives
+        \begin{align}
+            D_A(e_v)=D_B(e_v).
+            \notag
+        \end{align}
+        Every torus edge $e$ is horizontal or vertical. A horizontal $e$ is
+        the right edge leaving some vertex $p$, and with the translation
+        $\tau$ carrying the reference vertex to $p$, translation invariance
+        (Theorem~\ref{thm:peps_torusUniformBondDim_of_translationInvariant})
+        gives
+        \begin{align}
+            D_A(e)=D_A(\tau e_h)=D_A(e_h),
+            \notag
+        \end{align}
+        and the same for $B$; hence $D_A(e)=D_B(e)$. A vertical $e$ is
+        treated through $e_v$, and the equality $D_A=D_B$ follows.
+    \end{proof}
+\end{theorem}
+
 \begin{theorem}[Fundamental Theorem for normal PEPS on the torus]%
     \label{thm:fundamentalTheorem_normalTorusPEPS}
     \lean{TNLean.PEPS.fundamentalTheorem_normalTorusPEPS_unconditional}
@@ -137,12 +251,14 @@
         thm:peps_sameState_transport,
         thm:peps_stateCoeff_translationInvariant,
         thm:peps_torusUniformBondDim_of_translationInvariant,
+        def:peps_torusRectangleInjectivityHypotheses,
         def:GaugeEquivPEPS}
     Let $A$ and $B$ be translationally invariant PEPS tensors on the discrete
-    $n\times m$ torus with $n,m\geq 7$, with positive physical dimension, equal
-    and positive bond dimensions,
+    $n\times m$ torus with $n,m\geq 7$, with positive physical dimension and
+    positive bond dimensions,
     generating the same state, and such that every contiguous $2\times 3$ and
-    $3\times 2$ coordinate rectangle of either tensor is injective. Then there
+    $3\times 2$ coordinate rectangle of either tensor is injective. Then the
+    bond dimensions of $A$ and $B$ agree on every edge, and there
     are a family of invertible matrices, one on each edge, carried onto each
     edge by the torus translations from a single matrix on a reference
     horizontal edge and a single matrix on a reference vertical edge, and a
@@ -173,9 +289,14 @@
     per-vertex relation itself).
     \begin{proof}
         \leanok
-        \uses{lem:peps_injectiveRegion_union_pos}
+        \uses{lem:peps_injectiveRegion_union_pos,
+            thm:peps_bondDim_eq_of_normalTorusRectangularInjectivity}
         The union closure of injective regions follows from the positive bond
-        dimensions and Lemma~\ref{lem:peps_injectiveRegion_union_pos}. The
+        dimensions and Lemma~\ref{lem:peps_injectiveRegion_union_pos}, and
+        the bond-dimension equality $D_A=D_B$ is derived from the rectangular
+        injectivity hypotheses and the same-state hypothesis by
+        Theorem~\ref{thm:peps_bondDim_eq_of_normalTorusRectangularInjectivity};
+        neither is assumed. The
         reference blockings are anchored against the far seam: the removed
         blocks keep a margin of at least two rows and columns below and to
         the left and end exactly at the seam above and to the right, so the
