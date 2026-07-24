@@ -1,0 +1,23 @@
+% Regression: affine rotation at picture, nested-group, and atom scope.
+% Coordinates and asymmetric atom borders rotate; labels A--E remain upright.
+\documentclass[varwidth=14cm, border=6pt]{standalone}
+\usepackage{tenkz}
+\begin{document}
+\[
+  \begin{tenkz}[rows={wire},frame={rotate=25}]
+    \tn[tri/l,frame={rotate=60}]{A} & \tn[tri/l]{B}\\
+  \end{tenkz}
+  \qquad
+  \begin{tenkzfree}[frame={rotate=-15}]
+    \tngroup[frame={rotate=55}]{
+      \tngroup[frame={rotate=10}]{
+        \tnput[box,frame={rotate=30}]{c}{(0mm,0mm)}{C}
+      }
+      \tnput[box]{e}{(12mm,0mm)}{E}
+      \tnjoin{c.east}{e.west}
+    }
+    \tnput[box]{d}{(22mm,0mm)}{D}
+    \tnjoin{e.east}{d.west}
+  \end{tenkzfree}
+\]
+\end{document}

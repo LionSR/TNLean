@@ -39,6 +39,9 @@
   {\tnsite[keys]{cell}}{A lattice site creates or changes one atom.}
 \__tenkz_language_registry_command:nnnnn {tnput}{atoms}{object}
   {\tnput[keys]{name}{position}{label}}{A free atom needs a stable name and position.}
+\__tenkz_language_registry_command:nnnnn {tngroup}{composition}{group}
+  {\tngroup[frame={rotate=degrees}]{body}}
+  {A group creates a local coordinate frame while preserving public names.}
 \__tenkz_language_registry_command:nnnnn {tnjoin}{connections-closures}{connection}
   {\tnjoin[keys]{from}{to}}{A free join creates a typed connection record.}
 \__tenkz_language_registry_command:nnnnn {tntree}{atoms}{object}
@@ -107,6 +110,7 @@
 \__tenkz_language_registry_key:nnnnnn {picture}{north}{side-policy}{inherit}{kernel}{North boundary policy.}
 \__tenkz_language_registry_key:nnnnnn {picture}{south}{side-policy}{inherit}{kernel}{South boundary policy.}
 \__tenkz_language_registry_key:nnnnnn {picture}{frame}{frame-spec}{flat}{kernel}{Picture coordinate frame.}
+\__tenkz_language_registry_key:nnnnnn {group}{frame}{frame-spec}{flat}{kernel}{Group-local coordinate frame.}
 \__tenkz_language_registry_key:nnnnnn {picture}{trace style}{enum(racetrack|hooks)}{racetrack}{kernel}{Closure rendering policy.}
 \__tenkz_language_registry_key:nnnnnn {picture}{trace}{trace-spec}{empty}{kernel}{Closed interface segments or physical trace.}
 \__tenkz_language_registry_key:nnnnnn {picture}{open}{cell-set}{empty}{kernel}{Open interface segments.}
@@ -155,6 +159,7 @@
 \__tenkz_language_registry_key:nnnnnn {object}{label pos}{compass}{auto}{kernel}{Object label policy.}
 \__tenkz_language_registry_key:nnnnnn {object}{label shift}{dimension-pair}{zero}{escape}{Object label adjustment.}
 \__tenkz_language_registry_key:nnnnnn {object}{ports}{typed-port-list}{empty}{kernel}{Free-atom typed ports.}
+\__tenkz_language_registry_key:nnnnnn {object}{frame}{frame-spec}{flat}{kernel}{Atom-local coordinate frame.}
 \__tenkz_language_registry_key:nnnnnn {object}{no legs}{flag}{false}{kernel}{Suppress physical ports.}
 \__tenkz_language_registry_key:nnnnnn {object}{removed}{flag}{false}{kernel}{Remove a lattice atom.}
 \__tenkz_language_registry_key:nnnnnn {object}{tree style}{enum(wire|ribbon)}{wire}{kernel}{Fusion-tree strand style.}

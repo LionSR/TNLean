@@ -379,6 +379,7 @@
 \newdimen\tenkz@bboxya
 \newif\iftenkz@bboxcapture
 \newif\iftenkz@identitylinear
+\newif\iftenkz@frameglyphrotated
 \newif\iftenkz@labelrectangle
 \newif\iftenkz@auditownermatch
 \tenkz@bboxcapturetrue
@@ -428,7 +429,8 @@
 \let\tenkz@node@reset@hook\tikz@node@reset@hook
 \def\tikz@node@reset@hook{%
   \tenkz@node@reset@hook
-  \let\tenkz@auditinstallowner\relax}
+  \let\tenkz@auditinstallowner\relax
+  \let\tenkz@frameglyphangle\relax}
 \def\tenkz@begininkuse#1{%
   \global\advance\tenkz@inkuid by 1\relax
   \tenkz@inkowner=\tenkz@inkuid
@@ -967,6 +969,10 @@
         \expandafter\gdef\csname tenkz@glypharcflag@#1\endcsname{0}%
         \expandafter\gdef\csname tenkz@glypharc@#1\endcsname{{0pt}{0pt}}%
       \fi
+      \ifx\tenkz@frameglyphangle\relax\else
+        \expandafter\xdef\csname tenkz@frameglyph@#1\endcsname
+          {\tenkz@frameglyphangle}%
+      \fi
       \tenkz@snapshotvisible{#1}%
     \fi
   \fi}
@@ -1083,6 +1089,7 @@
 \def\tenkz@cleanupglyphsnapshot#1{%
   \global\expandafter\let\csname tenkz@glypharcflag@#1\endcsname\relax
   \global\expandafter\let\csname tenkz@glypharc@#1\endcsname\relax
+  \global\expandafter\let\csname tenkz@frameglyph@#1\endcsname\relax
   \tenkz@cleanupvisiblesnapshot{#1}}
 \def\tenkz@captureglyphgeometrynode#1#2#3#4{%
   \expandafter\ifx\csname tenkz@invalid@#4\endcsname\relax
@@ -1101,8 +1108,26 @@
         \PackageError{tenkz}{Audited glyph node '#1' has no filled shape}%
           {Give every audited glyph a live fill, not only a drawn outline.}%
       \fi
-      \tenkz@requireidentitylinear{#1}{glyph}%
-      \iftenkz@identitylinear\else\def\tenkz@glyphshape{unsupported}\fi
+      \tenkz@frameglyphrotatedfalse
+      \expandafter\ifx\csname tenkz@frameglyph@#4\endcsname\relax
+        \tenkz@requireidentitylinear{#1}{glyph}%
+        \iftenkz@identitylinear\else\def\tenkz@glyphshape{unsupported}\fi
+      \else
+        % The private frame key constructs rotation-only node transforms.
+        % Other affine transforms retain the identity-only audit contract.
+        \edef\tenkz@nodematrix{\csname pgf@sh@nt@#1\endcsname}%
+        \expandafter\tenkz@checklinear\tenkz@nodematrix
+        \iftenkz@identitylinear\else\tenkz@frameglyphrotatedtrue\fi
+      \fi
+      \iftenkz@frameglyphrotated
+        % A rotated rounded rectangle is not an axis-aligned rounded
+        % rectangle.  Audit its conservative sharp axis-aligned hull.
+        \def\tenkz@roundrect{roundrect}%
+        \ifx\tenkz@glyphshape\tenkz@roundrect
+          \def\tenkz@glyphshape{rect}%
+          \tenkz@glyphradius=0pt
+        \fi
+      \fi
       \tenkz@emitglyphinkuse
       \tenkz@emitglyphgeometry{#1}%
       \fi
@@ -1113,12 +1138,29 @@
       \tenkz@visiblestateerror{\tenkz@visibleinvalid}{glyph}{#1}%
     \fi
   \fi}
+\def\tenkz@bboxincludeanchor#1#2{%
+  \pgfextractx{\tenkz@bboxxa}{\pgfpointanchor{#1}{#2}}%
+  \pgfextracty{\tenkz@bboxya}{\pgfpointanchor{#1}{#2}}%
+  \ifdim\tenkz@bboxxa<\tenkz@bboxxmin \tenkz@bboxxmin=\tenkz@bboxxa\fi
+  \ifdim\tenkz@bboxxa>\tenkz@bboxxmax \tenkz@bboxxmax=\tenkz@bboxxa\fi
+  \ifdim\tenkz@bboxya<\tenkz@bboxymin \tenkz@bboxymin=\tenkz@bboxya\fi
+  \ifdim\tenkz@bboxya>\tenkz@bboxymax \tenkz@bboxymax=\tenkz@bboxya\fi}
 \def\tenkz@emitglyphgeometry#1{%
   \begingroup
-  \pgfextractx{\tenkz@bboxxmin}{\pgfpointanchor{#1}{west}}%
-  \pgfextractx{\tenkz@bboxxmax}{\pgfpointanchor{#1}{east}}%
-  \pgfextracty{\tenkz@bboxymin}{\pgfpointanchor{#1}{south}}%
-  \pgfextracty{\tenkz@bboxymax}{\pgfpointanchor{#1}{north}}%
+  \iftenkz@frameglyphrotated
+    \pgfextractx{\tenkz@bboxxmin}{\pgfpointanchor{#1}{north east}}%
+    \pgfextracty{\tenkz@bboxymin}{\pgfpointanchor{#1}{north east}}%
+    \tenkz@bboxxmax=\tenkz@bboxxmin
+    \tenkz@bboxymax=\tenkz@bboxymin
+    \tenkz@bboxincludeanchor{#1}{north west}%
+    \tenkz@bboxincludeanchor{#1}{south east}%
+    \tenkz@bboxincludeanchor{#1}{south west}%
+  \else
+    \pgfextractx{\tenkz@bboxxmin}{\pgfpointanchor{#1}{west}}%
+    \pgfextractx{\tenkz@bboxxmax}{\pgfpointanchor{#1}{east}}%
+    \pgfextracty{\tenkz@bboxymin}{\pgfpointanchor{#1}{south}}%
+    \pgfextracty{\tenkz@bboxymax}{\pgfpointanchor{#1}{north}}%
+  \fi
   \def\tenkz@circle{circle}%
   \ifx\tenkz@glyphshape\tenkz@circle
     \ifdim\tenkz@glyphouterxsep<\tenkz@glyphouterysep
@@ -1193,6 +1235,10 @@
     x3=\number\tenkz@glyphxthree|y3=\number\tenkz@glyphythree}%
   \endgroup}
 \tikzset{
+  tenkz glyph frame/.style={
+    transform shape,
+    rotate=#1,
+    /utils/exec={\def\tenkz@frameglyphangle{#1}}},
   tenkz audited label/.style={
     /utils/exec=\tenkz@installlabelaudit},
   tenkz audited glyph/.style 2 args={

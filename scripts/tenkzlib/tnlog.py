@@ -8,6 +8,7 @@ from typing import Callable
 
 
 INT_RE = re.compile(r"-?\d+")
+NUMBER_RE = re.compile(r"-?(?:\d+(?:\.\d*)?|\.\d+)")
 
 
 def _parse_int(value: str) -> int | None:
@@ -21,6 +22,10 @@ def _parse_int(value: str) -> int | None:
 
 def _is_int(value: str) -> bool:
     return _parse_int(value) is not None
+
+
+def _is_number(value: str) -> bool:
+    return NUMBER_RE.fullmatch(value) is not None
 
 
 def _is_positive_int(value: str) -> bool:
@@ -74,6 +79,15 @@ def _any(value: str) -> bool:
 # a coordinate that is not an integer addresses nothing.
 FIELD_VALIDATORS: dict[str, dict[str, Callable[[str], bool]]] = {
     "picture": {"id": _is_int, "lang": _any},
+    "frame": {
+        "picture": _is_int,
+        "scope": _enum("picture", "group"),
+        "map": _any,
+        "a": _is_number,
+        "b": _is_number,
+        "c": _is_number,
+        "d": _is_number,
+    },
     "label-use": {"picture": _is_int},
     "label-anchor-site": {
         "picture": _is_int,
@@ -280,6 +294,7 @@ class Picture:
             "ink-use",
             "glyph-geometry",
             "wire-geometry",
+            "frame",
             "boundary",
             "warning",
         }

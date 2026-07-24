@@ -61,7 +61,7 @@ declared. The generated reference prints this test beside every row.
 |---|---|---|---|---|---|
 | `rows=` | row-list | — | `{wire}` | picture | `TKZ-PIC-*` |
 | `cols=` | integer | — | 3 | picture | `TKZ-PIC-*` |
-| `frame=` | frame-spec | `flat` `vertical` `plane` `rotate=<deg>` `matrix={..}` `circle` | `flat` | picture, group | `TKZ-FRAME-*` |
+| `frame=` | frame-spec | `flat` `vertical` `rotate=<deg>` | `flat` | picture, group, atom | `TKZ-FRAME-*` |
 | `west=` `east=` `north=` `south=` | small-enum | `open` `none` `trace` `cup` | `open` | picture | `TKZ-SIDE-*` |
 | `trace=` | trace-spec | cell-set or `physical` | empty | picture | `TKZ-CELLSET-*` |
 | `open=` | cell-set | — | empty | picture | `TKZ-CELLSET-*` |
@@ -74,7 +74,7 @@ Every frame contracts adjacent compatible cells by default: `bonds=grid`
 holds in chain and lattice frames alike, and `bonds=none` suppresses the
 frame-generated bonds.
 
-### 2.3 Atom keys (13)
+### 2.3 Atom keys (14)
 
 | Key | Type | Values | Default | Diagnostic family |
 |---|---|---|---|---|
@@ -84,6 +84,7 @@ frame-generated bonds.
 | `at=` | address | — | next chain cell | `TKZ-ADDR-*` |
 | `name=` | identifier | — | generated | `TKZ-NAME-*` |
 | `ports=` | typed-port-list | — | from skin | `TKZ-PORT-*` |
+| `frame=` | frame-spec | `flat` `rotate=<deg>` | `flat` | `TKZ-FRAME-*` |
 | `up=` `down=` | math-list | — | empty | `TKZ-ATOM-*` |
 | `species=` | identifier | — | empty | `TKZ-SPECIES-*` |
 | `label pos=` | small-enum | compass or `auto` | `auto` | `TKZ-LABEL-*` |
@@ -219,8 +220,8 @@ A frame maps addresses to positions. There are two kinds and no third:
 
 `frame=` acts at picture scope and at group scope. `\tngroup` transforms a
 sub-diagram as one object: its records keep their names, its boundary
-signature transforms with it, and the transform is a field of the picture
-record — the audit compares networks, never silhouettes. Label text never
+signature transforms with it, and the transform has its own model record —
+the audit compares networks, never silhouettes. Label text never
 rotates; glyph ink may.
 
 Consumers, rotation and shear: `rmp-iii-a-pulling-through`,

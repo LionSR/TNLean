@@ -16,23 +16,51 @@
 
 \NewDocumentEnvironment { tenkzfree } { O{} }
   {
-    \tl_if_empty:nF {#1} { \pgfqkeys{/tenkz}{#1} }
-    \tenkz@beginpicture{free}
-    % The free tier records imperatively: atoms and joins write as the body
-    % executes, so validation seals the picture-local store before TikZ closes.
-    % This draft still renders from resolved locals; the S4 cutover tracked in
-    % #4699 makes the renderer consume these records directly.
+    \__tenkz_geom_reset:
     \__tenkz_model_reset:
-    \__tenkz_model_record_picture:n { lang={free} }
+    \tl_set:Nn \l__tenkz_frame_picture_angle_tl {0}
+    \tl_set:Nn \l__tenkz_frame_group_angle_tl {0}
+    \tl_if_empty:nF {#1} { \pgfqkeys{/tenkz/free}{#1} }
+    \__tenkz_model_record_picture:n {lang={free}}
+    \fp_compare:nNnF {\l__tenkz_frame_picture_angle_tl} = {0}
+      {
+        \use:e
+          {
+            \exp_not:N \__tenkz_model_record_picture:n
+              {frame={\__tenkz_frame_map:n {\l__tenkz_frame_picture_angle_tl}}}
+          }
+        \__tenkz_frame_record:nn
+          {picture} {\l__tenkz_frame_picture_angle_tl}
+      }
+    \tenkz@beginpicture{free}
+    \fp_compare:nNnF {\l__tenkz_frame_picture_angle_tl} = {0}
+      {
+        \__tenkz_frame_event:nn
+          {picture} {\l__tenkz_frame_picture_angle_tl}
+      }
     % NFSS sets math fonts up lazily; force them before reading the axis
     \check@mathfonts
     \begin{tikzpicture}[tenkz~every~picture,
+      rotate=\l__tenkz_frame_picture_angle_tl,
       baseline={(0pt,\dim_eval:n{-\fontdimen22\textfont2})}]
       \pgfsetlayers{background,main}
   }
   {
     \__tenkz_model_validate:
     \end{tikzpicture}
+  }
+
+\pgfkeys{
+  /tenkz/free/.is~family,
+  /tenkz/free/frame/.code=
+    {\__tenkz_frame_parse_rotation:nN {#1} \l__tenkz_frame_picture_angle_tl},
+}
+\tenkz_install_core_forwards:nn
+  {free} {pitch,compact,inline,tensor~style,species}
+\pgfkeysdef{/tenkz/free/.unknown}
+  {
+    \msg_error:nnn {tenkz}{language-value}
+      {free-picture~key~'\pgfkeyscurrentname'}
   }
 
 % \tnput[<glyph keys>]{<name>}{<coordinate>}{<label>}
@@ -45,9 +73,35 @@
 \tl_new:N \l__tenkz_flpos_tl
 \tl_new:N \l__tenkz_frole_tl     % \tnput role word (empty = none)
 \tl_new:N \l__tenkz_fspec_tl     % \tnput species name (empty = none)
+\tl_new:N \l__tenkz_fangle_tl    % atom-local frame rotation in degrees
+\tl_new:N \l__tenkz_fframeevent_tl
 \bool_new:N \l__tenkz_fcommit_bool % semantic name allocation succeeded
 \bool_new:N \l__tenkz_fkeys_valid_bool
 \tl_new:N \l__tenkz_frolesty_tl  % resolved role/species style (or empty)
+
+\cs_new_protected:Npn \tenkz_free_inscribed_node:nnnn #1#2#3#4
+  {
+    \tl_set:Ne \l_tmpa_tl
+      {
+        \exp_not:n {#1}
+        , \exp_not:V \l__tenkz_frolesty_tl
+      }
+    \tl_if_empty:NF \l__tenkz_frame_glyph_options_tl
+      {
+        \tl_put_right:Ne \l_tmpa_tl
+          {, tenkz~glyph~frame=\exp_not:V \l__tenkz_fangle_tl}
+      }
+    \exp_args:NV \tenkz_free_inscribed_node_aux:nnnn
+      \l_tmpa_tl {#2}{#3}{#4}
+  }
+\cs_new_protected:Npn \tenkz_free_inscribed_node_aux:nnnn #1#2#3#4
+  {
+    \node[#1] (#2) at #3
+      {
+        \__tenkz_frame_upright:n
+          {$\tenkz@labelsize \tenkz@glyphstrut #4$}
+      };
+  }
 \tl_new:N \l__tenkz_fbound_tl    % measured glyph + external-label box
 \tl_new:N \g__tenkz_free_atom_record_tl
 \pgfkeys{
@@ -58,6 +112,8 @@
   /tenkz/put/mpo/.code={\tl_set:Nn \l__tenkz_fshape_tl {mpo}},
   /tenkz/put/ring/.code={\tl_set:Nn \l__tenkz_fshape_tl {ring}},
   /tenkz/put/boundary/.code={\tl_set:Nn \l__tenkz_fshape_tl {boundary}},
+  /tenkz/put/frame/.code=
+    {\__tenkz_frame_parse_rotation:nN {#1} \l__tenkz_fangle_tl},
   /tenkz/put/ports/.store~in=\l__tenkz_fports_tl,
   % role= / species=: the semantic hue interface (see tenkz-core) —
   % the language's invariants cross the free-tier border.  Resolution
@@ -179,6 +235,8 @@
     \tl_clear:N \l__tenkz_fports_tl
     \tl_clear:N \l__tenkz_frole_tl
     \tl_clear:N \l__tenkz_fspec_tl
+    \tl_set:Nn \l__tenkz_fangle_tl {0}
+    \tl_clear:N \l__tenkz_fframeevent_tl
     \tl_set:Nn \l__tenkz_flpos_tl {south}
     \bool_set_true:N \l__tenkz_fkeys_valid_bool
     \tl_if_empty:nF {#1} { \pgfqkeys{/tenkz/put}{#1} }
@@ -207,7 +265,14 @@
         skin={\tl_use:N \l__tenkz_fshape_tl},
         ports={\tl_use:N \l__tenkz_fports_tl},
         role={\tenkz_free_word:N \l__tenkz_frole_tl},
-        species={\tenkz_free_word:N \l__tenkz_fspec_tl} }
+        species={\tenkz_free_word:N \l__tenkz_fspec_tl},
+        frame={\__tenkz_frame_map:n {\l__tenkz_fangle_tl}} }
+    \__tenkz_frame_prepare_atom:n {\l__tenkz_fangle_tl}
+    \fp_compare:nNnF {\l__tenkz_fangle_tl} = {0}
+      {
+        \tl_set:Ne \l__tenkz_fframeevent_tl
+          {|frame=\__tenkz_frame_map:n {\l__tenkz_fangle_tl}}
+      }
     % the role/species style rides its own literal option slot (an
     % empty slot is an inert trailing option); beads resolve through
     % the tensor family, inscribed-label skins through outline
@@ -227,18 +292,14 @@
                    \tl_if_blank:nF {#4}
                      { \exp_args:NV \tenkz_free_dot_label:nnn
                          \l__tenkz_flpos_tl {#2} {#4} } }
-          {box}  { \__tenkz_render_labelnode_named:nnnn
-                     {box~tensor, \l__tenkz_frolesty_tl} {#2} {#3}
-                     { $\tenkz@labelsize \tenkz@glyphstrut #4$ } }
-          {pill} { \__tenkz_render_labelnode_named:nnnn
-                     {pill~tensor, \l__tenkz_frolesty_tl} {#2} {#3}
-                     { $\tenkz@labelsize \tenkz@glyphstrut #4$ } }
-          {mpo}  { \__tenkz_render_labelnode_named:nnnn
-                     {mpo~tensor, \l__tenkz_frolesty_tl} {#2} {#3}
-                     { $\tenkz@labelsize \tenkz@glyphstrut #4$ } }
-          {ring} { \__tenkz_render_labelnode_named:nnnn
-                     {on-wire~matrix, \l__tenkz_frolesty_tl} {#2} {#3}
-                     { $\tenkz@labelsize \tenkz@glyphstrut #4$ } }
+          {box}  { \tenkz_free_inscribed_node:nnnn
+                     {box~tensor}{#2}{#3}{#4} }
+          {pill} { \tenkz_free_inscribed_node:nnnn
+                     {pill~tensor}{#2}{#3}{#4} }
+          {mpo}  { \tenkz_free_inscribed_node:nnnn
+                     {mpo~tensor}{#2}{#3}{#4} }
+          {ring} { \tenkz_free_inscribed_node:nnnn
+                     {on-wire~matrix}{#2}{#3}{#4} }
           {boundary}
             {
               \__tenkz_render_free_coordinate:nn {#2} {#3}
@@ -259,7 +320,7 @@
         \exp_args:NV \clist_map_inline:nn \l__tenkz_fports_tl
           { \exp_args:Ne \tenkz_free_port:n { \tl_to_str:n { #2 . ##1 } } }
       }
-    \tenkz@event{atom|picture=\the\tenkz@pictureid|name=#2|kind=\tl_use:N \l__tenkz_fshape_tl|role=\tenkz_free_word:N \l__tenkz_frole_tl|species=\tenkz_free_word:N \l__tenkz_fspec_tl}
+    \tenkz@event{atom|picture=\the\tenkz@pictureid|name=#2|kind=\tl_use:N \l__tenkz_fshape_tl|role=\tenkz_free_word:N \l__tenkz_frole_tl|species=\tenkz_free_word:N \l__tenkz_fspec_tl\tl_use:N \l__tenkz_fframeevent_tl}
       }
     \group_end:
     \tl_if_empty:NF \g__tenkz_free_atom_record_tl
