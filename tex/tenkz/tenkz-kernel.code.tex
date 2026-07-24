@@ -1920,6 +1920,8 @@
 % survive its own resolution
 \tl_new:N   \l__tenkz_kernel_r_node_tl
 \tl_new:N   \l__tenkz_kernel_r_end_tl
+\tl_new:N   \l__tenkz_kernel_r_from_tl
+\tl_new:N   \l__tenkz_kernel_r_to_tl
 \seq_new:N  \l__tenkz_kernel_r_scan_seq
 \fp_new:N   \l__tenkz_kernel_r_x_fp
 \fp_new:N   \l__tenkz_kernel_r_y_fp
@@ -2941,15 +2943,17 @@
       }
       {
         % endpoints join the waypoint chain; each may be `open <dir>`
-        \tl_clear:N \l__tenkz_kernel_r_b_tl   % from point(s)
-        \tl_clear:N \l__tenkz_kernel_r_c_tl   % to point(s)
+        % Resolving one endpoint uses shared temporary values; it must not
+        % overwrite whether the other endpoint is open.
+        \tl_clear:N \l__tenkz_kernel_r_from_tl
+        \tl_clear:N \l__tenkz_kernel_r_to_tl
         \__tenkz_model_get:nnN {#1} {from} \l__tenkz_kernel_r_end_tl
         \quark_if_no_value:NF \l__tenkz_kernel_r_end_tl
           {
             \__tenkz_kernel_r_node:V \l__tenkz_kernel_r_end_tl
             \__tenkz_kernel_r_xy:nNN { \tl_use:N \l__tenkz_kernel_r_end_tl }
               \l__tenkz_kernel_r_xc_fp \l__tenkz_kernel_r_yc_fp
-            \tl_set:Ne \l__tenkz_kernel_r_b_tl
+            \tl_set:Ne \l__tenkz_kernel_r_from_tl
               {
                 \__tenkz_kernel_r_ppt:nn
                   { \l__tenkz_kernel_r_xc_fp } { \l__tenkz_kernel_r_yc_fp }
@@ -2961,7 +2965,7 @@
             \__tenkz_kernel_r_node:V \l__tenkz_kernel_r_end_tl
             \__tenkz_kernel_r_xy:nNN { \tl_use:N \l__tenkz_kernel_r_end_tl }
               \l__tenkz_kernel_r_xc_fp \l__tenkz_kernel_r_yc_fp
-            \tl_set:Ne \l__tenkz_kernel_r_c_tl
+            \tl_set:Ne \l__tenkz_kernel_r_to_tl
               {
                 \__tenkz_kernel_r_ppt:nn
                   { \l__tenkz_kernel_r_xc_fp } { \l__tenkz_kernel_r_yc_fp }
@@ -2969,31 +2973,31 @@
           }
         % open tips project from the neighbouring routed point, so they are
         % computed after every placed point is known
-        \tl_if_empty:NT \l__tenkz_kernel_r_b_tl
+        \tl_if_empty:NT \l__tenkz_kernel_r_from_tl
           {
             \__tenkz_model_get:nnN {#1} {from-open} \l__tenkz_kernel_r_end_tl
             \quark_if_no_value:NF \l__tenkz_kernel_r_end_tl
               {
                 \__tenkz_kernel_r_first_point:
                 \exp_args:NV \__tenkz_kernel_r_open_tip:nN
-                  \l__tenkz_kernel_r_end_tl \l__tenkz_kernel_r_b_tl
+                  \l__tenkz_kernel_r_end_tl \l__tenkz_kernel_r_from_tl
               }
           }
-        \tl_if_empty:NT \l__tenkz_kernel_r_c_tl
+        \tl_if_empty:NT \l__tenkz_kernel_r_to_tl
           {
             \__tenkz_model_get:nnN {#1} {to-open} \l__tenkz_kernel_r_end_tl
             \quark_if_no_value:NF \l__tenkz_kernel_r_end_tl
               {
                 \__tenkz_kernel_r_last_point:
                 \exp_args:NV \__tenkz_kernel_r_open_tip:nN
-                  \l__tenkz_kernel_r_end_tl \l__tenkz_kernel_r_c_tl
+                  \l__tenkz_kernel_r_end_tl \l__tenkz_kernel_r_to_tl
               }
           }
         \tl_set:Ne \l__tenkz_kernel_r_pts_tl
           {
-            \tl_use:N \l__tenkz_kernel_r_b_tl
+            \tl_use:N \l__tenkz_kernel_r_from_tl
             \tl_use:N \l__tenkz_kernel_r_pts_tl
-            \tl_use:N \l__tenkz_kernel_r_c_tl
+            \tl_use:N \l__tenkz_kernel_r_to_tl
           }
         % route=orth saves a right-angled polyline; every other string is a
         % Hobby route through its points
@@ -3015,7 +3019,7 @@
 \cs_new_protected:Npn \__tenkz_kernel_r_first_point:
   {
     \tl_set:Ne \l__tenkz_kernel_r_tl
-      { \tl_use:N \l__tenkz_kernel_r_pts_tl \tl_use:N \l__tenkz_kernel_r_c_tl }
+      { \tl_use:N \l__tenkz_kernel_r_pts_tl \tl_use:N \l__tenkz_kernel_r_to_tl }
     \tl_if_empty:NF \l__tenkz_kernel_r_tl
       {
         \exp_args:Ne \__tenkz_kernel_r_point_fp:n
@@ -3025,7 +3029,7 @@
 \cs_new_protected:Npn \__tenkz_kernel_r_last_point:
   {
     \tl_set:Ne \l__tenkz_kernel_r_tl
-      { \tl_use:N \l__tenkz_kernel_r_b_tl \tl_use:N \l__tenkz_kernel_r_pts_tl }
+      { \tl_use:N \l__tenkz_kernel_r_from_tl \tl_use:N \l__tenkz_kernel_r_pts_tl }
     \tl_if_empty:NF \l__tenkz_kernel_r_tl
       {
         \exp_args:Ne \__tenkz_kernel_r_point_fp:n
@@ -3319,12 +3323,15 @@
       { \A \s* crossing \s+ of \s+ (.+) \s+ and \s+ (.+) \Z }
       \l__tenkz_kernel_r_tl \l__tenkz_kernel_match_seq
       {
-        \exp_args:Ne \__tenkz_kernel_r_crossid:nN
+        % Freeze both captures before crossid reuses the match sequence.
+        \tl_set:Ne \l__tenkz_kernel_r_b_tl
           { \seq_item:Nn \l__tenkz_kernel_match_seq {2} }
-          \l__tenkz_kernel_r_b_tl
-        \exp_args:Ne \__tenkz_kernel_r_crossid:nN
+        \tl_set:Ne \l__tenkz_kernel_r_c_tl
           { \seq_item:Nn \l__tenkz_kernel_match_seq {3} }
-          \l__tenkz_kernel_r_c_tl
+        \exp_args:NV \__tenkz_kernel_r_crossid:nN
+          \l__tenkz_kernel_r_b_tl \l__tenkz_kernel_r_b_tl
+        \exp_args:NV \__tenkz_kernel_r_crossid:nN
+          \l__tenkz_kernel_r_c_tl \l__tenkz_kernel_r_c_tl
         \__tenkz_string_count:nnN
           { tenkz-bead- \tl_use:N \l__tenkz_kernel_r_b_tl }
           { tenkz-bead- \tl_use:N \l__tenkz_kernel_r_c_tl }
