@@ -213,17 +213,33 @@
     \uses{def:peps_vertexComplementRegionEquivs, def:peps_complementTwoBlock}
     Under the preceding identifications, the blocked tensor of
     $V\setminus\{v\}$ is the vertex-complement tensor:
-    \[
+    \begin{align}
         T_{A,V\setminus\{v\}}^{\rho}(\tau)
-        =
+        &=
         A_{v^c}(\Psi_v\rho,\Phi_v\tau).
-    \]
+        \notag
+    \end{align}
 \end{theorem}
 \begin{proof}\leanok
-    Both sides sum over the same global virtual configurations. The boundary
-    identification turns the crossing-edge constraint into the prescribed
-    incident-edge labels, and the vertex identification reindexes the product
-    over the vertices distinct from $v$.
+    Expanding the blocked contraction as a sum over the virtual
+    configurations of the complement,
+    \begin{align}
+        T_{A,V\setminus\{v\}}^{\rho}(\tau)
+        &=
+        \textstyle
+        \sum_{\zeta:\,\zeta|_{\partial}=\rho}\;
+        \prod_{w\neq v} A_w(\zeta|_w,\tau_w)
+        =
+        A_{v^c}(\Psi_v\rho,\Phi_v\tau),
+        \notag
+    \end{align}
+    where $\zeta$ runs over the virtual configurations of the complement
+    whose boundary restriction $\zeta|_{\partial}$ is the prescribed boundary
+    configuration $\rho$. The boundary identification $\Psi_v$ turns the
+    crossing-edge constraint $\zeta|_{\partial}=\rho$ into the prescribed
+    incident-edge labels, and the vertex identification $\Phi_v$ reindexes
+    the product over the vertices distinct from $v$; both bijections match
+    the summation sets and their factors termwise.
 \end{proof}
 
 \begin{theorem}[Injectivity of the vertex-complement contraction]%
