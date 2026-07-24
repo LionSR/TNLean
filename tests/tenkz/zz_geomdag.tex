@@ -1,0 +1,27 @@
+% Regression: zz_geomdag — placement graph: cell, relative, midpoint, and on-segment requests resolve topologically.
+% Formula: geometry-only; asserts through geomprobe events, no ink.
+\documentclass[varwidth=10cm, border=6pt]{standalone}
+\usepackage{tenkz}
+\begin{document}
+\ExplSyntaxOn
+\tl_new:N \l_probe_x_tl \tl_new:N \l_probe_y_tl
+\__tenkz_geom_frame_declare_rotation:nnnn {flatC} {0} {0} {0}
+% requests are declared out of dependency order on purpose: the evaluator
+% owns the order, not the author
+\__tenkz_geom_place_onseg:nnnn {q} {a} {m} {1/4}
+\__tenkz_geom_place_mid:nnn {m} {a} {b}
+\__tenkz_geom_place_rel:nnnn {b} {a} {60} {2}
+\__tenkz_geom_place_cell:nnnn {a} {flatC} {1} {1}
+\__tenkz_geom_resolve:
+\__tenkz_geom_xy:nNN {b} \l_probe_x_tl \l_probe_y_tl
+\__tenkz_geom_probe:nn {rel-b}
+  { x = \__tenkz_geom_round:n { \l_probe_x_tl } | y = \__tenkz_geom_round:n { \l_probe_y_tl } }
+\__tenkz_geom_xy:nNN {m} \l_probe_x_tl \l_probe_y_tl
+\__tenkz_geom_probe:nn {mid-m}
+  { x = \__tenkz_geom_round:n { \l_probe_x_tl } | y = \__tenkz_geom_round:n { \l_probe_y_tl } }
+\__tenkz_geom_xy:nNN {q} \l_probe_x_tl \l_probe_y_tl
+\__tenkz_geom_probe:nn {onseg-q}
+  { x = \__tenkz_geom_round:n { \l_probe_x_tl } | y = \__tenkz_geom_round:n { \l_probe_y_tl } }
+\ExplSyntaxOff
+geometry placement probe
+\end{document}

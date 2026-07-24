@@ -1,0 +1,408 @@
+% Input:       frame declarations and placement requests from front ends; the metric registry.
+% Output:      resolved coordinates, world angles, and silhouette support distances.
+% Owned state: the frame table, the placement request store, and resolved positions.
+% Invariants:  positions resolve topologically or error; nothing here emits ink.
+% Next stage:  rendering turns resolved records into marks on the page.
+%
+% Geometry answers three questions and nothing else.  WHERE: frames map
+% logical addresses to points (one 2x2 matrix plus offset, or a circle of
+% stations), and a dependency-graph evaluator resolves relative placements
+% in one topological pass -- a cycle is a coded error naming the cycle.
+% WHICH WAY: a direction crosses a frame through its linear part, so a
+% rotation is angle addition and a compass word is converted once.
+% HOW FAR: a silhouette is a support function -- the reach of a rotated
+% skin along a query direction -- and clearance questions fold max-support
+% over record sets.  All lengths here are pitch factors; only rendering
+% multiplies by the pitch dimension.
+
+\ExplSyntaxOn
+
+% ---------- messages -------------------------------------------------------
+\msg_new:nnn {tenkz}{geom-unknown-frame}
+  { [TKZ-GEOM-UNKNOWN-FRAME]~no~frame~named~'#1' }
+\msg_new:nnn {tenkz}{geom-frame-kind}
+  { [TKZ-GEOM-FRAME-KIND]~frame~'#1'~is~a~'#2'~frame;~#3~needs~a~'#4'~frame }
+\msg_new:nnn {tenkz}{geom-compose}
+  { [TKZ-GEOM-COMPOSE]~only~affine~frames~compose;~'#1'~is~not~affine }
+\msg_new:nnn {tenkz}{geom-unknown-place}
+  { [TKZ-GEOM-UNPLACED]~no~placement~named~'#1' }
+\msg_new:nnn {tenkz}{geom-place-cycle}
+  { [TKZ-PLACE-CYCLE]~placements~depend~on~themselves:~#1 }
+\msg_new:nnn {tenkz}{geom-family}
+  { [TKZ-GEOM-FAMILY]~no~silhouette~family~named~'#1' }
+\msg_new:nnn {tenkz}{geom-compass}
+  { [TKZ-GEOM-COMPASS]~no~compass~face~named~'#1';~expected~n,~e,~s,~or~w }
+
+% ---------- frames ----------------------------------------------------------
+% A frame record is six fp fields (row-major matrix a b / c d, offset dx dy)
+% for kind=affine, or fields n (stations), r (radius), start (degrees) for
+% kind=circle.  Frames are picture-local.
+\prop_new:N \l__tenkz_geom_frame_prop     % "name/field" -> fp literal
+\prop_new:N \l__tenkz_geom_framekind_prop % "name" -> affine | circle
+
+\cs_new_protected:Npn \__tenkz_geom_frame_put:nnn #1#2#3
+  { \prop_put:Nen \l__tenkz_geom_frame_prop { #1 / #2 } { \fp_eval:n {#3} } }
+
+\cs_new_protected:Npn \__tenkz_geom_frame_declare_affine:nnnnnnn #1#2#3#4#5#6#7
+  {
+    \prop_put:Nnn \l__tenkz_geom_framekind_prop {#1} {affine}
+    \__tenkz_geom_frame_put:nnn {#1} {a} {#2}
+    \__tenkz_geom_frame_put:nnn {#1} {b} {#3}
+    \__tenkz_geom_frame_put:nnn {#1} {c} {#4}
+    \__tenkz_geom_frame_put:nnn {#1} {d} {#5}
+    \__tenkz_geom_frame_put:nnn {#1} {dx} {#6}
+    \__tenkz_geom_frame_put:nnn {#1} {dy} {#7}
+  }
+% flat is the identity; a rotation frame is one call with cosd/sind
+\cs_new_protected:Npn \__tenkz_geom_frame_declare_rotation:nnnn #1#2#3#4
+  {
+    \__tenkz_geom_frame_declare_affine:nnnnnnn {#1}
+      { cosd(#2) } { -sind(#2) } { sind(#2) } { cosd(#2) } {#3} {#4}
+  }
+\cs_new_protected:Npn \__tenkz_geom_frame_declare_circle:nnnn #1#2#3#4
+  {
+    \prop_put:Nnn \l__tenkz_geom_framekind_prop {#1} {circle}
+    \__tenkz_geom_frame_put:nnn {#1} {n} {#2}
+    \__tenkz_geom_frame_put:nnn {#1} {r} {#3}
+    \__tenkz_geom_frame_put:nnn {#1} {start} {#4}
+  }
+
+\cs_new:Npn \__tenkz_geom_field:nn #1#2
+  { \prop_item:Nn \l__tenkz_geom_frame_prop { #1 / #2 } }
+\cs_new_protected:Npn \__tenkz_geom_require_kind:nnnN #1#2#3#4
+  {
+    \bool_set_false:N #4
+    \prop_get:NnN \l__tenkz_geom_framekind_prop {#1} \l__tenkz_geom_tmp_tl
+    \quark_if_no_value:NTF \l__tenkz_geom_tmp_tl
+      { \msg_error:nnn {tenkz}{geom-unknown-frame} {#1} }
+      {
+        \str_if_eq:VnTF \l__tenkz_geom_tmp_tl {#2}
+          { \bool_set_true:N #4 }
+          { \msg_error:nnxxxx {tenkz}{geom-frame-kind} {#1}
+              { \l__tenkz_geom_tmp_tl } {#3} {#2} }
+      }
+  }
+\tl_new:N \l__tenkz_geom_tmp_tl
+\bool_new:N \l__tenkz_geom_kind_ok_bool
+\cs_new_protected:Npn \__tenkz_geom_require_kind:nnn #1#2#3
+  {
+    \__tenkz_geom_require_kind:nnnN {#1}{#2}{#3}
+      \l__tenkz_geom_kind_ok_bool
+  }
+
+% new = outer applied after inner: M = Mo Mi, t = Mo ti + to
+\cs_new_protected:Npn \__tenkz_geom_frame_compose:nnn #1#2#3
+  {
+    \__tenkz_geom_require_kind:nnnN {#2} {affine} {compose}
+      \l__tenkz_geom_kind_ok_bool
+    \bool_if:NT \l__tenkz_geom_kind_ok_bool
+      {
+        \__tenkz_geom_require_kind:nnnN {#3} {affine} {compose}
+          \l__tenkz_geom_kind_ok_bool
+      }
+    \bool_if:NT \l__tenkz_geom_kind_ok_bool
+      {
+        \__tenkz_geom_frame_declare_affine:nnnnnnn {#1}
+          { \__tenkz_geom_field:nn{#2}{a} * \__tenkz_geom_field:nn{#3}{a}
+            + \__tenkz_geom_field:nn{#2}{b} * \__tenkz_geom_field:nn{#3}{c} }
+          { \__tenkz_geom_field:nn{#2}{a} * \__tenkz_geom_field:nn{#3}{b}
+            + \__tenkz_geom_field:nn{#2}{b} * \__tenkz_geom_field:nn{#3}{d} }
+          { \__tenkz_geom_field:nn{#2}{c} * \__tenkz_geom_field:nn{#3}{a}
+            + \__tenkz_geom_field:nn{#2}{d} * \__tenkz_geom_field:nn{#3}{c} }
+          { \__tenkz_geom_field:nn{#2}{c} * \__tenkz_geom_field:nn{#3}{b}
+            + \__tenkz_geom_field:nn{#2}{d} * \__tenkz_geom_field:nn{#3}{d} }
+          { \__tenkz_geom_field:nn{#2}{a} * \__tenkz_geom_field:nn{#3}{dx}
+            + \__tenkz_geom_field:nn{#2}{b} * \__tenkz_geom_field:nn{#3}{dy}
+            + \__tenkz_geom_field:nn{#2}{dx} }
+          { \__tenkz_geom_field:nn{#2}{c} * \__tenkz_geom_field:nn{#3}{dx}
+            + \__tenkz_geom_field:nn{#2}{d} * \__tenkz_geom_field:nn{#3}{dy}
+            + \__tenkz_geom_field:nn{#2}{dy} }
+      }
+  }
+
+% apply a frame to a logical point; results are fp literals in pitch units
+\cs_new_protected:Npn \__tenkz_geom_apply:nnnNNN #1#2#3#4#5#6
+  {
+    \tl_clear:N #4
+    \tl_clear:N #5
+    \__tenkz_geom_require_kind:nnnN {#1} {affine} {apply} #6
+    \bool_if:NT #6
+      {
+        \tl_set:Ne #4
+          { \fp_eval:n { \__tenkz_geom_field:nn{#1}{a} * (#2)
+                       + \__tenkz_geom_field:nn{#1}{b} * (#3)
+                       + \__tenkz_geom_field:nn{#1}{dx} } }
+        \tl_set:Ne #5
+          { \fp_eval:n { \__tenkz_geom_field:nn{#1}{c} * (#2)
+                       + \__tenkz_geom_field:nn{#1}{d} * (#3)
+                       + \__tenkz_geom_field:nn{#1}{dy} } }
+      }
+  }
+\cs_new_protected:Npn \__tenkz_geom_apply:nnnNN #1#2#3#4#5
+  {
+    \__tenkz_geom_apply:nnnNNN {#1}{#2}{#3} #4 #5
+      \l__tenkz_geom_kind_ok_bool
+  }
+
+% a direction crosses the linear part; shear and scale bend it honestly
+\cs_new_protected:Npn \__tenkz_geom_dir:nnN #1#2#3
+  {
+    \tl_clear:N #3
+    \__tenkz_geom_require_kind:nnnN {#1} {affine} {dir}
+      \l__tenkz_geom_kind_ok_bool
+    \bool_if:NT \l__tenkz_geom_kind_ok_bool
+      {
+        \tl_set:Ne #3
+          { \fp_eval:n
+              { atand
+                  ( \__tenkz_geom_field:nn{#1}{c} * cosd(#2)
+                    + \__tenkz_geom_field:nn{#1}{d} * sind(#2) ,
+                    \__tenkz_geom_field:nn{#1}{a} * cosd(#2)
+                    + \__tenkz_geom_field:nn{#1}{b} * sind(#2) ) } }
+      }
+  }
+
+% compass faces convert once, at the parse boundary
+\cs_new:Npn \__tenkz_geom_compass_angle:n #1
+  {
+    \str_case:nnF {#1}
+      { {n}{90} {e}{0} {s}{270} {w}{180} }
+      { \msg_expandable_error:nnn {tenkz}{geom-compass} {#1} 0 }
+  }
+\cs_new_protected:Npn \__tenkz_geom_port_angle:nnN #1#2#3
+  { \__tenkz_geom_dir:nnN {#1} { \__tenkz_geom_compass_angle:n {#2} } #3 }
+
+% station k of a circle frame: points sit clockwise from `start`, and the
+% travel tangent trails the radius by a quarter turn
+\cs_new_protected:Npn \__tenkz_geom_station:nnNNN #1#2#3#4#5
+  {
+    \tl_clear:N #3
+    \tl_clear:N #4
+    \tl_clear:N #5
+    \__tenkz_geom_require_kind:nnnN {#1} {circle} {station}
+      \l__tenkz_geom_kind_ok_bool
+    \bool_if:NT \l__tenkz_geom_kind_ok_bool
+      {
+        \tl_set:Ne \l__tenkz_geom_tmp_tl
+          { \fp_eval:n { \__tenkz_geom_field:nn{#1}{start}
+                         - 360 * ( (#2) - 1 )
+                           / \__tenkz_geom_field:nn{#1}{n} } }
+        \tl_set:Ne #3
+          { \fp_eval:n
+              { \__tenkz_geom_field:nn{#1}{r} * cosd(\l__tenkz_geom_tmp_tl) } }
+        \tl_set:Ne #4
+          { \fp_eval:n
+              { \__tenkz_geom_field:nn{#1}{r} * sind(\l__tenkz_geom_tmp_tl) } }
+        \tl_set:Ne #5
+          { \fp_eval:n { \l__tenkz_geom_tmp_tl - 90 } }
+      }
+  }
+
+% ---------- the placement graph ---------------------------------------------
+% A request is stored unresolved and evaluated on demand; evaluation walks
+% dependencies depth-first, marks the path, and a revisit names the cycle.
+\prop_new:N \l__tenkz_geom_req_prop    % id -> {type}{arg}{arg}{arg}
+\prop_new:N \l__tenkz_geom_x_prop      % id -> fp literal (pitch units)
+\prop_new:N \l__tenkz_geom_y_prop
+\prop_new:N \l__tenkz_geom_state_prop  % id -> visiting
+\seq_new:N  \l__tenkz_geom_trail_seq
+\tl_new:N \l__tenkz_geom_xa_tl \tl_new:N \l__tenkz_geom_ya_tl
+\tl_new:N \l__tenkz_geom_xb_tl \tl_new:N \l__tenkz_geom_yb_tl
+\bool_new:N \l__tenkz_geom_ok_bool
+
+\cs_new_protected:Npn \__tenkz_geom_reset:
+  {
+    \prop_clear:N \l__tenkz_geom_frame_prop
+    \prop_clear:N \l__tenkz_geom_framekind_prop
+    \prop_clear:N \l__tenkz_geom_req_prop
+    \prop_clear:N \l__tenkz_geom_x_prop
+    \prop_clear:N \l__tenkz_geom_y_prop
+    \prop_clear:N \l__tenkz_geom_state_prop
+    \seq_clear:N \l__tenkz_geom_trail_seq
+  }
+
+\cs_new_protected:Npn \__tenkz_geom_place_cell:nnnn #1#2#3#4
+  { \prop_put:Nnn \l__tenkz_geom_req_prop {#1} { {cell}{#2}{#3}{#4} } }
+\cs_generate_variant:Nn \__tenkz_geom_place_cell:nnnn { nnee }
+\cs_new_protected:Npn \__tenkz_geom_place_rel:nnnn #1#2#3#4
+  { \prop_put:Nnn \l__tenkz_geom_req_prop {#1} { {rel}{#2}{#3}{#4} } }
+\cs_new_protected:Npn \__tenkz_geom_place_mid:nnn #1#2#3
+  { \prop_put:Nnn \l__tenkz_geom_req_prop {#1} { {mid}{#2}{#3}{} } }
+\cs_new_protected:Npn \__tenkz_geom_place_onseg:nnnn #1#2#3#4
+  { \prop_put:Nnn \l__tenkz_geom_req_prop {#1} { {onseg}{#2}{#3}{#4} } }
+
+\cs_new_protected:Npn \__tenkz_geom_store:nnn #1#2#3
+  {
+    \prop_put:Nne \l__tenkz_geom_x_prop {#1} { \fp_eval:n {#2} }
+    \prop_put:Nne \l__tenkz_geom_y_prop {#1} { \fp_eval:n {#3} }
+    \prop_remove:Nn \l__tenkz_geom_state_prop {#1}
+  }
+
+\cs_new_protected:Npn \__tenkz_geom_need:nN #1#2
+  {
+    \bool_set_false:N #2
+    \prop_if_in:NnTF \l__tenkz_geom_x_prop {#1}
+      { \bool_set_true:N #2 }
+      {
+        \prop_if_in:NnTF \l__tenkz_geom_state_prop {#1}
+          {
+            \msg_error:nne {tenkz}{geom-place-cycle}
+              { \seq_use:Nn \l__tenkz_geom_trail_seq { ~->~ } ~->~ #1 }
+          }
+          {
+            \prop_put:Nnn \l__tenkz_geom_state_prop {#1} {visiting}
+            \seq_put_right:Nn \l__tenkz_geom_trail_seq {#1}
+            \prop_get:NnN \l__tenkz_geom_req_prop {#1} \l__tenkz_geom_tmp_tl
+            \quark_if_no_value:NTF \l__tenkz_geom_tmp_tl
+              { \msg_error:nnn {tenkz}{geom-unknown-place} {#1} }
+              {
+                \exp_last_unbraced:NV \__tenkz_geom_eval:nnnnnN
+                  \l__tenkz_geom_tmp_tl {#1} #2
+              }
+            \prop_remove:Nn \l__tenkz_geom_state_prop {#1}
+            \seq_pop_right:NN \l__tenkz_geom_trail_seq \l__tenkz_geom_tmp_tl
+          }
+      }
+  }
+\cs_new_protected:Npn \__tenkz_geom_need:n #1
+  { \__tenkz_geom_need:nN {#1} \l__tenkz_geom_ok_bool }
+
+% #1 type, #2-#4 request args, #5 the id being resolved, #6 success
+\cs_new_protected:Npn \__tenkz_geom_eval:nnnnnN #1#2#3#4#5#6
+  {
+    \str_case:nn {#1}
+      {
+        {cell}
+          {
+            \__tenkz_geom_apply:nnnNNN {#2} {#3} {#4}
+              \l__tenkz_geom_xa_tl \l__tenkz_geom_ya_tl #6
+            \bool_if:NT #6
+              {
+                \__tenkz_geom_store:nnn {#5}
+                  { \l__tenkz_geom_xa_tl } { \l__tenkz_geom_ya_tl }
+              }
+          }
+        {rel}
+          {
+            \__tenkz_geom_need:nN {#2} #6
+            \bool_if:NT #6
+              {
+                \__tenkz_geom_store:nnn {#5}
+                  { \prop_item:Nn \l__tenkz_geom_x_prop {#2} + (#4) * cosd(#3) }
+                  { \prop_item:Nn \l__tenkz_geom_y_prop {#2} + (#4) * sind(#3) }
+              }
+          }
+        {mid}
+          {
+            \__tenkz_geom_need:nN {#2} #6
+            \bool_if:NT #6
+              { \__tenkz_geom_need:nN {#3} #6 }
+            \bool_if:NT #6
+              {
+                \__tenkz_geom_store:nnn {#5}
+                  { ( \prop_item:Nn \l__tenkz_geom_x_prop {#2}
+                    + \prop_item:Nn \l__tenkz_geom_x_prop {#3} ) / 2 }
+                  { ( \prop_item:Nn \l__tenkz_geom_y_prop {#2}
+                    + \prop_item:Nn \l__tenkz_geom_y_prop {#3} ) / 2 }
+              }
+          }
+        {onseg}
+          {
+            \__tenkz_geom_need:nN {#2} #6
+            \bool_if:NT #6
+              { \__tenkz_geom_need:nN {#3} #6 }
+            \bool_if:NT #6
+              {
+                \__tenkz_geom_store:nnn {#5}
+                  { \prop_item:Nn \l__tenkz_geom_x_prop {#2}
+                    + (#4) * ( \prop_item:Nn \l__tenkz_geom_x_prop {#3}
+                             - \prop_item:Nn \l__tenkz_geom_x_prop {#2} ) }
+                  { \prop_item:Nn \l__tenkz_geom_y_prop {#2}
+                    + (#4) * ( \prop_item:Nn \l__tenkz_geom_y_prop {#3}
+                             - \prop_item:Nn \l__tenkz_geom_y_prop {#2} ) }
+              }
+          }
+      }
+  }
+
+\cs_new_protected:Npn \__tenkz_geom_resolve:
+  {
+    \prop_map_inline:Nn \l__tenkz_geom_req_prop
+      { \__tenkz_geom_need:n {##1} }
+  }
+\cs_new_protected:Npn \__tenkz_geom_xy:nNN #1#2#3
+  {
+    \__tenkz_geom_need:nN {#1} \l__tenkz_geom_ok_bool
+    \bool_if:NTF \l__tenkz_geom_ok_bool
+      {
+        \prop_get:NnN \l__tenkz_geom_x_prop {#1} #2
+        \prop_get:NnN \l__tenkz_geom_y_prop {#1} #3
+      }
+      { \tl_clear:N #2 \tl_clear:N #3 }
+  }
+
+% ---------- silhouettes as support functions --------------------------------
+% Support of a skin rotated by theta, queried along direction d, in pitch
+% units.  Arguments are family, half-extents, corner radius, theta, and d.
+% A roundrect caller supplies the radius of the live rendered skin, normalized
+% to pitch units; the other families ignore that slot.  Families: circle
+% (hx = radius), rect (half-extents), roundrect (rect shrunk by its actual
+% corner radius, then re-inflated), triangle (isoceles, apex east: vertex max
+% is exact for polygons).
+\cs_new:Npn \__tenkz_geom_support:nnnnnn #1#2#3#4#5#6
+  {
+    \str_case:nnF {#1}
+      {
+        {circle} { (#2) }
+        {rect}
+          { abs( (#2) * cosd((#6)-(#5)) ) + abs( (#3) * sind((#6)-(#5)) ) }
+        {roundrect}
+          {
+            abs( ( (#2) - \__tenkz_geom_rr:nnn{#4}{#2}{#3} )
+              * cosd((#6)-(#5)) )
+            + abs( ( (#3) - \__tenkz_geom_rr:nnn{#4}{#2}{#3} )
+              * sind((#6)-(#5)) )
+            + \__tenkz_geom_rr:nnn{#4}{#2}{#3}
+          }
+        {triangle}
+          {
+            max(
+              (#2) * cosd((#6)-(#5)) ,
+              - (#2) * cosd((#6)-(#5)) + (#3) * sind((#6)-(#5)) ,
+              - (#2) * cosd((#6)-(#5)) - (#3) * sind((#6)-(#5)) )
+          }
+      }
+      { \msg_expandable_error:nnn {tenkz}{geom-family} {#1} 0 }
+  }
+\cs_new:Npn \__tenkz_geom_rr:nnn #1#2#3
+  { min( (#1) , (#2) , (#3) ) }
+
+% fold max-support over {family}{hx}{hy}{radius}{theta}{cx}{cy} records:
+% each contributes its centre's reach plus its shape's support
+\cs_new_protected:Npn \__tenkz_geom_support_max:nnN #1#2#3
+  {
+    \tl_set:Nn #3 { -10000 }
+    \seq_map_inline:cn {#1}
+      { \__tenkz_geom_support_max_one:nnnnnnnnN ##1 {#2} #3 }
+  }
+\cs_new_protected:Npn \__tenkz_geom_support_max_one:nnnnnnnnN
+    #1#2#3#4#5#6#7#8#9
+  {
+    \tl_set:Ne #9
+      { \fp_eval:n
+          { max( #9 ,
+                 (#6) * cosd(#8) + (#7) * sind(#8)
+                 + \__tenkz_geom_support:nnnnnn
+                     {#1}{#2}{#3}{#4}{#5}{#8} ) } }
+  }
+
+% ---------- probes -----------------------------------------------------------
+% Test fixtures assert geometry through the event stream; six decimals keep
+% the hashes stable and the assertions honest.
+\cs_new_protected:Npn \__tenkz_geom_probe:nn #1#2
+  { \tenkz@event{geomprobe|id=#1|#2} }
+\cs_new:Npn \__tenkz_geom_round:n #1
+  { \fp_eval:n { round( #1 , 6 ) } }
+
+\ExplSyntaxOff
+\endinput

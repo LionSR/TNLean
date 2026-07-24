@@ -1,0 +1,165 @@
+% Input:       the pitch dimension from tenkz-core and the declarations below.
+% Output:      the named metric registry and the \__tenkz_dim:n accessor.
+% Owned state: the global registry of values, kinds, and motivations.
+% Invariants:  every entry carries a motivation; a name resolves or errors.
+% Next stage:  geometry and rendering measure exclusively through the accessor.
+%
+% The registry is the metric table of LANGUAGE-1.0: one pitch, named ratios,
+% and print-size floors, each with its reason.  No public path accepts a
+% numeric factor; drawing code asks for a NAME.  During the transition the
+% legacy \tenkz@r@ macros in tenkz-core remain the old renderer's source;
+% the load-time assertions at the end force both tables to agree, so one
+% truth wears two spellings until the call-site sweep deletes the old names.
+% Dialect-owned ratios (lattice projection, cd trees) migrate here with
+% their stages, not before.
+
+\ExplSyntaxOn
+
+\prop_new:N \g__tenkz_metric_value_prop
+\prop_new:N \g__tenkz_metric_kind_prop
+\prop_new:N \g__tenkz_metric_why_prop
+
+\msg_new:nnn {tenkz}{metric-unknown}
+  { [TKZ-METRIC-UNKNOWN]~no~metric~entry~named~'#1' }
+\msg_new:nnn {tenkz}{metric-redeclared}
+  { [TKZ-METRIC-REDECLARED]~metric~entry~'#1'~already~exists }
+\msg_new:nnnn {tenkz}{metric-drift}
+  { [TKZ-METRIC-DRIFT]~registry~'#1'~and~its~legacy~macro~disagree }
+  { Registry~value~#2;~legacy~value~#3.~One~truth,~two~spellings:~fix~one. }
+
+\cs_new_protected:Npn \__tenkz_metric_declare_aux:nnnn #1#2#3#4
+  {
+    \prop_if_in:NnT \g__tenkz_metric_value_prop {#2}
+      { \msg_error:nnn {tenkz}{metric-redeclared} {#2} }
+    \prop_gput:Nnn \g__tenkz_metric_value_prop {#2} {#3}
+    \prop_gput:Nnn \g__tenkz_metric_kind_prop  {#2} {#1}
+    \prop_gput:Nnn \g__tenkz_metric_why_prop   {#2} {#4}
+  }
+\cs_new_protected:Npn \__tenkz_metric_declare:nnn #1#2#3
+  { \__tenkz_metric_declare_aux:nnnn {ratio} {#1} {#2} {#3} }
+\cs_new_protected:Npn \__tenkz_metric_declare_length:nnn #1#2#3
+  { \__tenkz_metric_declare_aux:nnnn {length} {#1} {#2} {#3} }
+
+% Expandable accessor: legal inside \dimexpr and pgf coordinates.  A ratio
+% scales the pitch; a length stands alone; an unknown name is a coded error
+% and resolves to zero so the expansion context survives to report it.
+\cs_new:Npn \__tenkz_dim:n #1
+  {
+    \prop_if_in:NnTF \g__tenkz_metric_value_prop {#1}
+      {
+        \__tenkz_metric_dim:een
+          { \prop_item:Nn \g__tenkz_metric_kind_prop {#1} }
+          { \prop_item:Nn \g__tenkz_metric_value_prop {#1} }
+          {#1}
+      }
+      {
+        \msg_expandable_error:nnn {tenkz}{metric-unknown} {#1}
+        \dimexpr 0pt \relax
+      }
+  }
+\cs_new:Npn \__tenkz_metric_dim:nnn #1#2#3
+  {
+    \str_if_eq:nnTF {#1} {ratio}
+      { \dimexpr #2 \tenkz@pitch \relax }
+      {
+        \str_if_eq:nnTF {#1} {length}
+          { \dimexpr #2 \relax }
+          {
+            \msg_expandable_error:nnn {tenkz}{metric-unknown} {#3}
+            \dimexpr 0pt \relax
+          }
+      }
+  }
+\cs_generate_variant:Nn \__tenkz_metric_dim:nnn { een }
+
+% The same value as an fp factor of the pitch, for geometry arithmetic.
+\cs_new:Npn \__tenkz_metric_ratio:n #1
+  {
+    \prop_if_in:NnTF \g__tenkz_metric_value_prop {#1}
+      { \prop_item:Nn \g__tenkz_metric_value_prop {#1} }
+      {
+        \msg_expandable_error:nnn {tenkz}{metric-unknown} {#1}
+        0
+      }
+  }
+
+% ---------- the core table (motivations abridged from tenkz-core) ----------
+\__tenkz_metric_declare:nnn {layersep} {0.80}
+  { layers~read~as~layers,~not~as~two~chains }
+\__tenkz_metric_declare:nnn {physleg} {0.38}
+  { a~labelled~leg~clears~the~bond-label~band }
+\__tenkz_metric_declare:nnn {stub} {0.45}
+  { open~index:~longer~than~a~leg,~shorter~than~a~bond;~also~the~cup~reach }
+\__tenkz_metric_declare:nnn {daylight} {0.15}
+  { the~one~gap~between~a~silhouette~and~closure~or~annotation~ink }
+\__tenkz_metric_declare:nnn {labelclear} {0.12}
+  { one~clearance~for~every~label~band }
+\__tenkz_metric_declare:nnn {dotlabelband} {0.30}
+  { clearance~plus~one~line~of~script~text;~bead~and~leg-tip~labels~alike }
+\__tenkz_metric_declare:nnn {inlinephysleg} {0.26}
+  { inline:~legs~shrink~faster~than~the~pitch }
+\__tenkz_metric_declare:nnn {inlinelabelclear} {0.05}
+  { inline:~labels~hug~the~ink~to~spare~line~height }
+\__tenkz_metric_declare:nnn {dotdia} {0.16}
+  { bead~diameter }
+\__tenkz_metric_declare:nnn {tallover} {0.34}
+  { a~wires=k~glyph~visibly~covers~the~wires~it~terminates }
+\__tenkz_metric_declare:nnn {phtracereach} {0.24}
+  { per-site~physical-trace~loop~clears~the~glyph~inside~the~bond~span }
+\__tenkz_metric_declare:nnn {pairtracereach} {0.40}
+  { pair-trace~racetrack~clears~the~neighbouring~column~at~default~pitch }
+\__tenkz_metric_declare:nnn {corner} {0.14}
+  { rounded-corner~radius~of~traces~and~hulls }
+\__tenkz_metric_declare:nnn {glyphbox} {0.22}
+  { inscribed-glyph~minimum~and~span-decoration~overhang }
+\__tenkz_metric_declare:nnn {wireglyph} {0.30}
+  { on-wire~glyphs~sit~ON~a~wire~and~must~read~over~it }
+\__tenkz_metric_declare:nnn {wireglyphcap} {0.15}
+  { wireglyph/2~as~a~named~literal:~pgf~detaches~a~leading~\dimexpr~factor }
+\__tenkz_metric_declare:nnn {fusionwidth} {0.075}
+  { fusion-bar~stroke:~a~wedge,~not~a~wire,~so~it~scales~like~a~glyph }
+\__tenkz_metric_declare:nnn {fuseover} {0.10}
+  { the~wedge~visibly~clasps~the~wires~it~fuses;~drawing~and~clearance~agree }
+
+\__tenkz_metric_declare_length:nnn {wirewidth} {0.55pt}
+  { the~wire~stroke~of~the~ink~hierarchy }
+\__tenkz_metric_declare_length:nnn {annwidth} {0.40pt}
+  { annotation~stroke,~lighter~than~a~wire }
+\__tenkz_metric_declare_length:nnn {emphwidth} {0.80pt}
+  { emphasis~stroke,~heavier~than~a~wire }
+\__tenkz_metric_declare_length:nnn {junctionfloor} {0.9mm}
+  { below~this~absolute~floor~a~junction~reads~as~dirt }
+\__tenkz_metric_declare_length:nnn {barblen} {2.6pt}
+  { directionality~barb:~a~print-size~floor,~not~a~ratio }
+\__tenkz_metric_declare_length:nnn {fusedbarblen} {3.8pt}
+  { barb~spanning~a~doubled~wire }
+\__tenkz_metric_declare_length:nnn {braceamp} {2.6pt}
+  { brace~amplitude:~numerically~the~barb~floor,~semantically~independent }
+
+% ---------- one truth, two spellings: assert agreement with the legacy ----
+\cs_new_protected:Npn \__tenkz_metric_assert:nn #1#2
+  {
+    \str_if_eq:eeF { \prop_item:Nn \g__tenkz_metric_value_prop {#1} } {#2}
+      {
+        \msg_error:nnnee {tenkz}{metric-drift} {#1}
+          { \prop_item:Nn \g__tenkz_metric_value_prop {#1} } {#2}
+      }
+  }
+\clist_map_inline:nn
+  {
+    {layersep}, {physleg}, {stub}, {daylight}, {labelclear},
+    {dotlabelband}, {inlinephysleg}, {inlinelabelclear}, {dotdia},
+    {tallover}, {phtracereach}, {pairtracereach}, {corner}, {glyphbox},
+    {wireglyph}, {wireglyphcap}, {fusionwidth}, {fuseover}
+  }
+  { \exp_args:Nne \__tenkz_metric_assert:nn {#1} { \use:c { tenkz@r@ #1 } } }
+\__tenkz_metric_assert:nn {wirewidth}    { \tenkz@wirewidth }
+\__tenkz_metric_assert:nn {annwidth}     { \tenkz@annwidth }
+\__tenkz_metric_assert:nn {emphwidth}    { \tenkz@emphwidth }
+\__tenkz_metric_assert:nn {junctionfloor}{ \tenkz@junctionfloor }
+\__tenkz_metric_assert:nn {barblen}      { \tenkz@barblen }
+\__tenkz_metric_assert:nn {fusedbarblen} { \tenkz@fusedbarblen }
+\__tenkz_metric_assert:nn {braceamp}     { \tenkz@braceamp }
+
+\ExplSyntaxOff
+\endinput

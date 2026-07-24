@@ -1,0 +1,35 @@
+% Regression: zz_geomframe — frame algebra: rotation, shear composition, direction transport, circle stations.
+% Formula: geometry-only; asserts through geomprobe events, no ink.
+\documentclass[varwidth=10cm, border=6pt]{standalone}
+\usepackage{tenkz}
+\begin{document}
+\ExplSyntaxOn
+\tl_new:N \l_probe_xa_tl \tl_new:N \l_probe_ya_tl \tl_new:N \l_probe_ta_tl
+% a pure rotation moves the east unit vector onto the 30-degree ray
+\__tenkz_geom_frame_declare_rotation:nnnn {rotA} {30} {0} {0}
+\__tenkz_geom_apply:nnnNN {rotA} {1} {0} \l_probe_xa_tl \l_probe_ya_tl
+\__tenkz_geom_probe:nn {rot-east}
+  { x = \__tenkz_geom_round:n { \l_probe_xa_tl } | y = \__tenkz_geom_round:n { \l_probe_ya_tl } }
+% the sheared-plane frame of the lattice family, composed after the rotation
+\__tenkz_geom_frame_declare_affine:nnnnnnn {shear} {1} {1/2} {0} {1} {2} {0}
+\__tenkz_geom_frame_compose:nnn {rotshear} {rotA} {shear}
+\__tenkz_geom_apply:nnnNN {rotshear} {1} {1} \l_probe_xa_tl \l_probe_ya_tl
+\__tenkz_geom_probe:nn {compose-11}
+  { x = \__tenkz_geom_round:n { \l_probe_xa_tl } | y = \__tenkz_geom_round:n { \l_probe_ya_tl } }
+% direction transport bends with the shear: north through `shear` leans east
+\__tenkz_geom_dir:nnN {shear} {90} \l_probe_ta_tl
+\__tenkz_geom_probe:nn {shear-north}
+  { angle = \__tenkz_geom_round:n { \l_probe_ta_tl } }
+\__tenkz_geom_port_angle:nnN {rotA} {n} \l_probe_ta_tl
+\__tenkz_geom_probe:nn {rot-port-n}
+  { angle = \__tenkz_geom_round:n { \l_probe_ta_tl } }
+% four stations on a unit circle starting north: east-going tangents
+\__tenkz_geom_frame_declare_circle:nnnn {ringB} {4} {1} {90}
+\__tenkz_geom_station:nnNNN {ringB} {2} \l_probe_xa_tl \l_probe_ya_tl \l_probe_ta_tl
+\__tenkz_geom_probe:nn {ring-station-2}
+  { x = \__tenkz_geom_round:n { \l_probe_xa_tl }
+    | y = \__tenkz_geom_round:n { \l_probe_ya_tl }
+    | tangent = \__tenkz_geom_round:n { \l_probe_ta_tl } }
+\ExplSyntaxOff
+geometry frame probe
+\end{document}
