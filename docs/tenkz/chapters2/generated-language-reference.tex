@@ -56,6 +56,27 @@
 \texttt{\textbackslash tndeclareatom} & setup-\allowbreak{}extension & A \allowbreak{}declaration \allowbreak{}adds \allowbreak{}a \allowbreak{}typed \allowbreak{}atom \allowbreak{}spelling \allowbreak{}to \allowbreak{}the \allowbreak{}grammar. \\
 \multicolumn{3}{@{}p{106mm}@{}}{\footnotesize\texttt{\detokenize{\tndeclareatom{\command}{skin=value, ports={face:type}}}}} \\[2pt]
 \multicolumn{3}{@{}p{106mm}@{}}{Example: \texttt{\detokenize{tex/tenkz/examples/api/tndeclareatom.tex}}. Representative failure: An \allowbreak{}unknown \allowbreak{}face,\allowbreak{} \allowbreak{}type,\allowbreak{} \allowbreak{}skin,\allowbreak{} \allowbreak{}or \allowbreak{}duplicate \allowbreak{}command \allowbreak{}is \allowbreak{}a \allowbreak{}hard \allowbreak{}error.} \\[3pt]
+\texttt{\textbackslash tnwire} & connections-\allowbreak{}closures & A \allowbreak{}wire \allowbreak{}is \allowbreak{}one \allowbreak{}typed \allowbreak{}index \allowbreak{}line; \allowbreak{}bonds \allowbreak{}and \allowbreak{}strings \allowbreak{}are \allowbreak{}its \allowbreak{}kinds. \\
+\multicolumn{3}{@{}p{106mm}@{}}{\footnotesize\texttt{\detokenize{\tnwire[wire keys]{end}{end}}}} \\[2pt]
+\multicolumn{3}{@{}p{106mm}@{}}{Example: \texttt{\detokenize{tex/tenkz/examples/api/tnwire.tex}}. Representative failure: A \allowbreak{}closed \allowbreak{}wire \allowbreak{}with \allowbreak{}positional \allowbreak{}ends \allowbreak{}is \allowbreak{}a \allowbreak{}hard \allowbreak{}error.} \\[3pt]
+\texttt{\textbackslash tnmark} & regions-\allowbreak{}annotations & A \allowbreak{}mark \allowbreak{}annotates \allowbreak{}without \allowbreak{}owning \allowbreak{}topology. \\
+\multicolumn{3}{@{}p{106mm}@{}}{\footnotesize\texttt{\detokenize{\tnmark[mark keys]{target}{label}}}} \\[2pt]
+\multicolumn{3}{@{}p{106mm}@{}}{Example: \texttt{\detokenize{tex/tenkz/examples/api/tnmark.tex}}. Representative failure: An \allowbreak{}unknown \allowbreak{}mark \allowbreak{}form \allowbreak{}is \allowbreak{}a \allowbreak{}hard \allowbreak{}error.} \\[3pt]
+\texttt{\textbackslash tngroup} & composition & A \allowbreak{}group \allowbreak{}transforms \allowbreak{}a \allowbreak{}sub-\allowbreak{}diagram \allowbreak{}as \allowbreak{}one \allowbreak{}object. \\
+\multicolumn{3}{@{}p{106mm}@{}}{\footnotesize\texttt{\detokenize{\tngroup[picture keys]{body}}}} \\[2pt]
+\multicolumn{3}{@{}p{106mm}@{}}{Example: \texttt{\detokenize{tex/tenkz/examples/api/tngroup.tex}}. Representative failure: An \allowbreak{}unknown \allowbreak{}picture \allowbreak{}key \allowbreak{}is \allowbreak{}a \allowbreak{}hard \allowbreak{}error.} \\[3pt]
+\texttt{\textbackslash tndeclare} & setup-\allowbreak{}extension & The \allowbreak{}one \allowbreak{}extension \allowbreak{}door: \allowbreak{}atom,\allowbreak{} \allowbreak{}skin,\allowbreak{} \allowbreak{}or \allowbreak{}species. \\
+\multicolumn{3}{@{}p{106mm}@{}}{\footnotesize\texttt{\detokenize{\tndeclare{class}{name}{keys}}}} \\[2pt]
+\multicolumn{3}{@{}p{106mm}@{}}{Example: \texttt{\detokenize{tex/tenkz/examples/api/tndeclare.tex}}. Representative failure: An \allowbreak{}unknown \allowbreak{}declaration \allowbreak{}class \allowbreak{}is \allowbreak{}a \allowbreak{}hard \allowbreak{}error.} \\[3pt]
+\texttt{\textbackslash tnbond} & connections-\allowbreak{}closures & Sugar: \allowbreak{}a \allowbreak{}bond \allowbreak{}is \allowbreak{}a \allowbreak{}wire \allowbreak{}of \allowbreak{}kind \allowbreak{}index. \\
+\multicolumn{3}{@{}p{106mm}@{}}{\footnotesize\texttt{\detokenize{\tnbond[wire keys]{end}{end}}}} \\[2pt]
+\multicolumn{3}{@{}p{106mm}@{}}{Example: \texttt{\detokenize{tex/tenkz/examples/api/tnbond.tex}}. Representative failure: An \allowbreak{}unknown \allowbreak{}wire \allowbreak{}key \allowbreak{}is \allowbreak{}a \allowbreak{}hard \allowbreak{}error.} \\[3pt]
+\texttt{\textbackslash tenkzkernel} & setup-\allowbreak{}extension & Binds \allowbreak{}the \allowbreak{}1.0 \allowbreak{}kernel \allowbreak{}surface \allowbreak{}for \allowbreak{}the \allowbreak{}group; \allowbreak{}the \allowbreak{}S4 \allowbreak{}swap \allowbreak{}deletes \allowbreak{}it. \\
+\multicolumn{3}{@{}p{106mm}@{}}{\footnotesize\texttt{\detokenize{\tenkzkernel}}} \\[2pt]
+\multicolumn{3}{@{}p{106mm}@{}}{Example: \texttt{\detokenize{tex/tenkz/examples/api/tenkzkernel.tex}}. Representative failure: Kernel \allowbreak{}spellings \allowbreak{}without \allowbreak{}the \allowbreak{}switch \allowbreak{}fall \allowbreak{}to \allowbreak{}the \allowbreak{}0.7 \allowbreak{}surface.} \\[3pt]
+\texttt{\textbackslash tnprose} & regions-\allowbreak{}annotations & Sugar: \allowbreak{}recorded \allowbreak{}prose \allowbreak{}in \allowbreak{}place \allowbreak{}of \allowbreak{}a \allowbreak{}diagram. \\
+\multicolumn{3}{@{}p{106mm}@{}}{\footnotesize\texttt{\detokenize{\tnprose{text}}}} \\[2pt]
+\multicolumn{3}{@{}p{106mm}@{}}{Example: \texttt{\detokenize{tex/tenkz/examples/api/tnprose.tex}}. Representative failure: Prose \allowbreak{}on \allowbreak{}a \allowbreak{}checked \allowbreak{}relation \allowbreak{}without \allowbreak{}an \allowbreak{}opt-\allowbreak{}out \allowbreak{}is \allowbreak{}a \allowbreak{}hard \allowbreak{}error.} \\[3pt]
 \bottomrule\end{longtable}
 \scriptsize
 \begin{longtable}{@{}>{\raggedright\arraybackslash}p{20mm}>{\raggedright\arraybackslash}p{25mm}>{\raggedright\arraybackslash}p{20mm}>{\raggedright\arraybackslash}p{20mm}>{\raggedright\arraybackslash}p{18mm}@{}}
@@ -66,16 +87,16 @@ setup & \texttt{inline} & flag & false & Inline \allowbreak{}metric \allowbreak{
 setup & \texttt{tensor \allowbreak{}style} & enum(\allowbreak{}dot\textbar{}\allowbreak{}box) & dot & Default \allowbreak{}atom \allowbreak{}silhouette. \\
 setup & \texttt{species} & name-\allowbreak{}list & empty & Semantic \allowbreak{}species \allowbreak{}declarations. \\
 picture & \texttt{rows} & row-\allowbreak{}list & wire & Grid \allowbreak{}row \allowbreak{}topology. \\
-picture & \texttt{physical} & enum(\allowbreak{}up\textbar{}\allowbreak{}down\textbar{}\allowbreak{}updown\textbar{}\allowbreak{}none) & none & One-\allowbreak{}row \allowbreak{}physical \allowbreak{}topology. \\
+picture & \texttt{physical} & physical-\allowbreak{}policy & none & One-\allowbreak{}row \allowbreak{}physical \allowbreak{}topology. \\
 picture & \texttt{sandwich} & flag & false & Ket-\allowbreak{}over-\allowbreak{}bra \allowbreak{}row \allowbreak{}preset. \\
 picture & \texttt{boundary} & enum(\allowbreak{}open\textbar{}\allowbreak{}none\textbar{}\allowbreak{}periodic) & open & All-\allowbreak{}side \allowbreak{}boundary \allowbreak{}policy. \\
 picture & \texttt{west} & side-\allowbreak{}policy & inherit & West \allowbreak{}boundary \allowbreak{}policy. \\
 picture & \texttt{east} & side-\allowbreak{}policy & inherit & East \allowbreak{}boundary \allowbreak{}policy. \\
 picture & \texttt{north} & side-\allowbreak{}policy & inherit & North \allowbreak{}boundary \allowbreak{}policy. \\
 picture & \texttt{south} & side-\allowbreak{}policy & inherit & South \allowbreak{}boundary \allowbreak{}policy. \\
-picture & \texttt{frame} & frame-\allowbreak{}enum & flat & Picture \allowbreak{}coordinate \allowbreak{}frame. \\
+picture & \texttt{frame} & frame-\allowbreak{}spec & flat & Picture \allowbreak{}coordinate \allowbreak{}frame. \\
 picture & \texttt{trace \allowbreak{}style} & enum(\allowbreak{}racetrack\textbar{}\allowbreak{}hooks) & racetrack & Closure \allowbreak{}rendering \allowbreak{}policy. \\
-picture & \texttt{trace} & cell-\allowbreak{}set\textbar{}\allowbreak{}physical & empty & Closed \allowbreak{}interface \allowbreak{}segments. \\
+picture & \texttt{trace} & trace-\allowbreak{}spec & empty & Closed \allowbreak{}interface \allowbreak{}segments \allowbreak{}or \allowbreak{}physical \allowbreak{}trace. \\
 picture & \texttt{open} & cell-\allowbreak{}set & empty & Open \allowbreak{}interface \allowbreak{}segments. \\
 picture & \texttt{bond \allowbreak{}dir} & enum(\allowbreak{}right\textbar{}\allowbreak{}left) & none & Connection \allowbreak{}orientation. \\
 picture & \texttt{west \allowbreak{}label} & math & empty & West \allowbreak{}boundary \allowbreak{}label. \\
@@ -89,7 +110,7 @@ picture & \texttt{sheets} & positive-\allowbreak{}integer\textbar{}\allowbreak{}
 picture & \texttt{outer \allowbreak{}legs} & enum(\allowbreak{}both\textbar{}\allowbreak{}top\textbar{}\allowbreak{}bottom\textbar{}\allowbreak{}none) & none & Sheet \allowbreak{}exterior \allowbreak{}ports. \\
 picture & \texttt{sheet \allowbreak{}sep} & number & 1 & Projected \allowbreak{}sheet \allowbreak{}separation. \\
 picture & \texttt{pairing} & flag & false & Pair \allowbreak{}adjacent \allowbreak{}lattice \allowbreak{}sheets. \\
-picture & \texttt{plane \allowbreak{}lean} & enum(\allowbreak{}east\textbar{}\allowbreak{}west) & east & Projected-\allowbreak{}plane \allowbreak{}lean. \\
+picture & \texttt{plane \allowbreak{}lean} & compass & east & Projected-\allowbreak{}plane \allowbreak{}lean. \\
 picture & \texttt{plane \allowbreak{}rise} & length & metric & Projected \allowbreak{}row \allowbreak{}rise. \\
 picture & \texttt{plane \allowbreak{}slant} & length & metric & Projected \allowbreak{}column \allowbreak{}slant. \\
 picture & \texttt{col \allowbreak{}vector} & dimension-\allowbreak{}pair & frame & Expert \allowbreak{}projected \allowbreak{}column \allowbreak{}basis. \\
@@ -115,7 +136,7 @@ object & \texttt{west \allowbreak{}at} & slot-\allowbreak{}list & rows & West \a
 object & \texttt{east \allowbreak{}at} & slot-\allowbreak{}list & rows & East \allowbreak{}face \allowbreak{}ports. \\
 object & \texttt{up} & math-\allowbreak{}list & empty & Upper \allowbreak{}port \allowbreak{}labels. \\
 object & \texttt{down} & math-\allowbreak{}list & empty & Lower \allowbreak{}port \allowbreak{}labels. \\
-object & \texttt{physical} & enum(\allowbreak{}up\textbar{}\allowbreak{}down\textbar{}\allowbreak{}updown) & empty & Cell \allowbreak{}physical-\allowbreak{}port \allowbreak{}faces. \\
+object & \texttt{physical} & physical-\allowbreak{}policy & empty & Cell \allowbreak{}physical-\allowbreak{}port \allowbreak{}faces. \\
 object & \texttt{role} & semantic-\allowbreak{}role & empty & Semantic \allowbreak{}theme \allowbreak{}role. \\
 object & \texttt{species} & declared-\allowbreak{}name & empty & Semantic \allowbreak{}species. \\
 object & \texttt{label} & math & empty & Lattice-\allowbreak{}site \allowbreak{}label. \\
@@ -125,8 +146,8 @@ object & \texttt{ports} & typed-\allowbreak{}port-\allowbreak{}list & empty & Fr
 object & \texttt{no \allowbreak{}legs} & flag & false & Suppress \allowbreak{}physical \allowbreak{}ports. \\
 object & \texttt{removed} & flag & false & Remove \allowbreak{}a \allowbreak{}lattice \allowbreak{}atom. \\
 object & \texttt{tree \allowbreak{}style} & enum(\allowbreak{}wire\textbar{}\allowbreak{}ribbon) & wire & Fusion-\allowbreak{}tree \allowbreak{}strand \allowbreak{}style. \\
-connection & \texttt{route} & enum(\allowbreak{}straight\textbar{}\allowbreak{}hv\textbar{}\allowbreak{}vh\textbar{}\allowbreak{}arc) & straight & Connection \allowbreak{}route \allowbreak{}family. \\
-connection & \texttt{dir} & flag & false & Connection \allowbreak{}direction. \\
+connection & \texttt{route} & enum(\allowbreak{}straight\textbar{}\allowbreak{}orth\textbar{}\allowbreak{}arc) & straight & Connection \allowbreak{}route \allowbreak{}family; \allowbreak{}0.7 \allowbreak{}compatibility \allowbreak{}also \allowbreak{}accepts \allowbreak{}hv/vh \allowbreak{}until \allowbreak{}S4. \\
+connection & \texttt{dir} & direction-\allowbreak{}policy & false & Connection \allowbreak{}direction. \\
 connection & \texttt{out} & angle & automatic & Arc \allowbreak{}departure \allowbreak{}angle. \\
 connection & \texttt{in} & angle & automatic & Arc \allowbreak{}arrival \allowbreak{}angle. \\
 connection & \texttt{label} & math & empty & Connection \allowbreak{}label. \\
@@ -139,7 +160,7 @@ connection & \texttt{to} & address & empty & Arrow \allowbreak{}target. \\
 connection & \texttt{distinguished} & flag & false & Distinguished \allowbreak{}lattice \allowbreak{}edge. \\
 connection & \texttt{none} & flag & false & Suppress \allowbreak{}a \allowbreak{}lattice \allowbreak{}edge. \\
 connection & \texttt{style} & style-\allowbreak{}name & empty & Named \allowbreak{}lattice-\allowbreak{}edge \allowbreak{}style. \\
-region & \texttt{slot} & enum(\allowbreak{}selected\textbar{}\allowbreak{}secondary\textbar{}\allowbreak{}complement\textbar{}\allowbreak{}collar\textbar{}\allowbreak{}neutral) & selected & Region \allowbreak{}semantic \allowbreak{}slot. \\
+region & \texttt{slot} & semantic-\allowbreak{}slot & selected & Region \allowbreak{}semantic \allowbreak{}slot. \\
 region & \texttt{outline} & flag & false & Outline-\allowbreak{}only \allowbreak{}region. \\
 region & \texttt{inset} & number & 0 & Nested-\allowbreak{}region \allowbreak{}inset. \\
 region & \texttt{label} & math & empty & Region \allowbreak{}label. \\
@@ -150,7 +171,67 @@ annotation & \texttt{brace \allowbreak{}above} & flag & false & Brace \allowbrea
 annotation & \texttt{brace \allowbreak{}below} & flag & false & Brace \allowbreak{}annotation \allowbreak{}below \allowbreak{}a \allowbreak{}span. \\
 annotation & \texttt{box} & flag & false & Boxed \allowbreak{}span \allowbreak{}annotation. \\
 annotation & \texttt{label \allowbreak{}pos} & compass & auto & Span-\allowbreak{}label \allowbreak{}position. \\
-atom-\allowbreak{}declaration & \texttt{skin} & enum(\allowbreak{}dot\textbar{}\allowbreak{}box\textbar{}\allowbreak{}pill\textbar{}\allowbreak{}mpo) & dot & Declared \allowbreak{}atom \allowbreak{}silhouette. \\
+atom-\allowbreak{}declaration & \texttt{skin} & silhouette-\allowbreak{}name & dot & Declared \allowbreak{}atom \allowbreak{}silhouette. \\
 atom-\allowbreak{}declaration & \texttt{ports} & typed-\allowbreak{}port-\allowbreak{}list & empty & Declared \allowbreak{}atom \allowbreak{}ports. \\
+kernel-\allowbreak{}picture & \texttt{rows} & row-\allowbreak{}list & {wire} & Chain \allowbreak{}row \allowbreak{}topology; \allowbreak{}non-\allowbreak{}wire \allowbreak{}rows \allowbreak{}populate. \\
+kernel-\allowbreak{}picture & \texttt{cols} & positive-\allowbreak{}integer & 3 & Cells \allowbreak{}per \allowbreak{}row. \\
+kernel-\allowbreak{}picture & \texttt{frame} & frame-\allowbreak{}spec & flat & Affine \allowbreak{}preset,\allowbreak{} \allowbreak{}matrix,\allowbreak{} \allowbreak{}or \allowbreak{}circle. \\
+kernel-\allowbreak{}picture & \texttt{west} & side-\allowbreak{}policy & open & West \allowbreak{}side \allowbreak{}policy. \\
+kernel-\allowbreak{}picture & \texttt{east} & side-\allowbreak{}policy & open & East \allowbreak{}side \allowbreak{}policy. \\
+kernel-\allowbreak{}picture & \texttt{north} & side-\allowbreak{}policy & open & North \allowbreak{}side \allowbreak{}policy. \\
+kernel-\allowbreak{}picture & \texttt{south} & side-\allowbreak{}policy & open & South \allowbreak{}side \allowbreak{}policy. \\
+kernel-\allowbreak{}picture & \texttt{trace} & trace-\allowbreak{}spec & empty & Cells \allowbreak{}or \allowbreak{}physical \allowbreak{}ports \allowbreak{}closed \allowbreak{}to \allowbreak{}themselves. \\
+kernel-\allowbreak{}picture & \texttt{open} & cell-\allowbreak{}set & empty & Cells \allowbreak{}opened \allowbreak{}by \allowbreak{}declaration. \\
+kernel-\allowbreak{}picture & \texttt{bonds} & bond-\allowbreak{}policy & grid & Frame-\allowbreak{}generated \allowbreak{}adjacent \allowbreak{}contraction. \\
+kernel-\allowbreak{}picture & \texttt{align} & row & midline & The \allowbreak{}wire \allowbreak{}axis \allowbreak{}panels \allowbreak{}align \allowbreak{}on. \\
+kernel-\allowbreak{}picture & \texttt{size} & size-\allowbreak{}class & from \allowbreak{}math \allowbreak{}style & Size \allowbreak{}class \allowbreak{}of \allowbreak{}the \allowbreak{}metric \allowbreak{}context. \\
+kernel-\allowbreak{}picture & \texttt{check} & check-\allowbreak{}spec & signature & The \allowbreak{}tenkzeq \allowbreak{}audit \allowbreak{}specification. \\
+kernel-\allowbreak{}picture & \texttt{sandwich} & flag & false & Ket-\allowbreak{}over-\allowbreak{}bra \allowbreak{}row \allowbreak{}preset. \\
+kernel-\allowbreak{}picture & \texttt{boundary} & enum(\allowbreak{}open\textbar{}\allowbreak{}none\textbar{}\allowbreak{}periodic) & open & All-\allowbreak{}side \allowbreak{}boundary \allowbreak{}word. \\
+kernel-\allowbreak{}picture & \texttt{lattice} & pair & empty & RxC \allowbreak{}wire-\allowbreak{}row \allowbreak{}lattice \allowbreak{}preset. \\
+kernel-\allowbreak{}picture & \texttt{ring} & integer & empty & Circle-\allowbreak{}frame \allowbreak{}ring \allowbreak{}preset. \\
+kernel-\allowbreak{}picture & \texttt{surface} & identifier & empty & Torus \allowbreak{}closure \allowbreak{}preset. \\
+kernel-\allowbreak{}picture & \texttt{physical} & physical-\allowbreak{}policy & none & Expander: \allowbreak{}outward \allowbreak{}physical \allowbreak{}port \allowbreak{}per \allowbreak{}populated \allowbreak{}atom. \\
+kernel-\allowbreak{}atom & \texttt{skin} & silhouette-\allowbreak{}name & theme \allowbreak{}default & Declared \allowbreak{}silhouette. \\
+kernel-\allowbreak{}atom & \texttt{wide} & positive-\allowbreak{}integer & 1 & Cells \allowbreak{}spanned. \\
+kernel-\allowbreak{}atom & \texttt{wires} & positive-\allowbreak{}integer & 1 & Wire \allowbreak{}rows \allowbreak{}spanned. \\
+kernel-\allowbreak{}atom & \texttt{at} & address & next \allowbreak{}chain \allowbreak{}cell & Placement \allowbreak{}address. \\
+kernel-\allowbreak{}atom & \texttt{name} & identifier & generated & Addressable \allowbreak{}name. \\
+kernel-\allowbreak{}atom & \texttt{ports} & typed-\allowbreak{}port-\allowbreak{}list & from \allowbreak{}skin & Typed \allowbreak{}faces \allowbreak{}and \allowbreak{}slots. \\
+kernel-\allowbreak{}atom & \texttt{up} & math-\allowbreak{}list & empty & Outward \allowbreak{}physical \allowbreak{}labels,\allowbreak{} \allowbreak{}page-\allowbreak{}up. \\
+kernel-\allowbreak{}atom & \texttt{down} & math-\allowbreak{}list & empty & Outward \allowbreak{}physical \allowbreak{}labels,\allowbreak{} \allowbreak{}page-\allowbreak{}down. \\
+kernel-\allowbreak{}atom & \texttt{species} & declared-\allowbreak{}name & empty & Semantic \allowbreak{}species. \\
+kernel-\allowbreak{}atom & \texttt{label~pos} & compass & auto & Label \allowbreak{}quadrant. \\
+kernel-\allowbreak{}atom & \texttt{nudge} & pair & zero & Quarter-\allowbreak{}pitch \allowbreak{}displacement. \\
+kernel-\allowbreak{}atom & \texttt{void} & void-\allowbreak{}policy & unset & Hole \allowbreak{}or \allowbreak{}removed \allowbreak{}site. \\
+kernel-\allowbreak{}atom & \texttt{conjugate} & flag & false & Conjugate \allowbreak{}glyph \allowbreak{}orientation. \\
+kernel-\allowbreak{}atom & \texttt{cluster} & pair & empty & Expander: \allowbreak{}RxC \allowbreak{}addressable \allowbreak{}sub-\allowbreak{}atom \allowbreak{}group. \\
+kernel-\allowbreak{}atom & \texttt{role} & semantic-\allowbreak{}role & empty & Prelude \allowbreak{}species \allowbreak{}spelling. \\
+kernel-\allowbreak{}wire & \texttt{kind} & enum(\allowbreak{}index\textbar{}\allowbreak{}string) & index & Bond \allowbreak{}or \allowbreak{}travelling \allowbreak{}string. \\
+kernel-\allowbreak{}wire & \texttt{route} & enum(\allowbreak{}straight\textbar{}\allowbreak{}orth\textbar{}\allowbreak{}arc) & straight & Path \allowbreak{}family. \\
+kernel-\allowbreak{}wire & \texttt{via} & address-\allowbreak{}list & empty & Waypoints. \\
+kernel-\allowbreak{}wire & \texttt{bend} & number & metric & Arc \allowbreak{}bend \allowbreak{}factor. \\
+kernel-\allowbreak{}wire & \texttt{weight} & enum(\allowbreak{}single\textbar{}\allowbreak{}double\textbar{}\allowbreak{}bundle=n) & single & Strand \allowbreak{}multiplicity. \\
+kernel-\allowbreak{}wire & \texttt{species} & declared-\allowbreak{}name & empty & Semantic \allowbreak{}species. \\
+kernel-\allowbreak{}wire & \texttt{wind} & pair & zero & Homotopy \allowbreak{}class \allowbreak{}on \allowbreak{}traced \allowbreak{}frames. \\
+kernel-\allowbreak{}wire & \texttt{around} & address-\allowbreak{}list & empty & Silhouette \allowbreak{}detour \allowbreak{}targets. \\
+kernel-\allowbreak{}wire & \texttt{cross} & crossing-\allowbreak{}list & empty & Declared \allowbreak{}over \allowbreak{}and \allowbreak{}under \allowbreak{}crossings. \\
+kernel-\allowbreak{}wire & \texttt{dir} & direction-\allowbreak{}policy & none & Direction \allowbreak{}mark \allowbreak{}of \allowbreak{}a \allowbreak{}directed \allowbreak{}index. \\
+kernel-\allowbreak{}wire & \texttt{name} & identifier & generated & Addressable \allowbreak{}name. \\
+kernel-\allowbreak{}wire & \texttt{closed} & flag & false & A \allowbreak{}smooth \allowbreak{}closed \allowbreak{}cycle; \allowbreak{}takes \allowbreak{}no \allowbreak{}ends. \\
+kernel-\allowbreak{}mark & \texttt{form} & enum(\allowbreak{}brace-\allowbreak{}above\textbar{}\allowbreak{}brace-\allowbreak{}below\textbar{}\allowbreak{}enclosure\textbar{}\allowbreak{}cut\textbar{}\allowbreak{}band\textbar{}\allowbreak{}label\textbar{}\allowbreak{}prose) & label & Mark \allowbreak{}form. \\
+kernel-\allowbreak{}mark & \texttt{slot} & semantic-\allowbreak{}slot & selected & Semantic \allowbreak{}tint. \\
+kernel-\allowbreak{}mark & \texttt{inset} & number & 0 & Nested-\allowbreak{}contour \allowbreak{}step. \\
+kernel-\allowbreak{}mark & \texttt{label~pos} & compass & auto & Label \allowbreak{}quadrant. \\
+kernel-\allowbreak{}mark & \texttt{nudge} & pair & zero & Quarter-\allowbreak{}pitch \allowbreak{}displacement. \\
+kernel-\allowbreak{}mark & \texttt{name} & identifier & generated & Addressable \allowbreak{}name. \\
+kernel-\allowbreak{}mark & \texttt{outline} & flag & false & Contour \allowbreak{}without \allowbreak{}tint. \\
+kernel-\allowbreak{}setup & \texttt{pitch} & length & em-\allowbreak{}relative & Base \allowbreak{}metric. \\
+kernel-\allowbreak{}setup & \texttt{sizes} & size-\allowbreak{}table & bundled \allowbreak{}table & Size-\allowbreak{}class \allowbreak{}table. \\
+kernel-\allowbreak{}setup & \texttt{strict} & flag & false & Rejects \allowbreak{}sugar; \allowbreak{}benchmark \allowbreak{}and \allowbreak{}CI \allowbreak{}set \allowbreak{}it. \\
+kernel-\allowbreak{}setup & \texttt{theme} & identifier & house & Semantic \allowbreak{}ink \allowbreak{}theme. \\
+kernel-\allowbreak{}declare & \texttt{hue} & hue-\allowbreak{}source & house \allowbreak{}cycle & Species \allowbreak{}ink; \allowbreak{}source:* \allowbreak{}reproduces \allowbreak{}a \allowbreak{}cited \allowbreak{}palette. \\
+kernel-\allowbreak{}declare & \texttt{base} & identifier & empty & Skin \allowbreak{}the \allowbreak{}declaration \allowbreak{}extends. \\
+kernel-\allowbreak{}declare & \texttt{pairings} & port-\allowbreak{}pair-\allowbreak{}list & empty & Skin-\allowbreak{}internal \allowbreak{}wires \allowbreak{}between \allowbreak{}own \allowbreak{}ports. \\
 \bottomrule\end{longtable}
 }

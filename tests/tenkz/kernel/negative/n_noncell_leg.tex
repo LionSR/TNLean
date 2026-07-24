@@ -1,0 +1,15 @@
+% Negative regression: a policy leg must address a cell, not an atom.
+\documentclass{standalone}
+\usepackage{tenkz}
+\makeatletter
+\ExplSyntaxOn
+\file_input:n { tenkz-kernel.code.tex }
+\ExplSyntaxOff
+\makeatother
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[rows={wire}, cols=1, bonds=none]
+  \tn[at=(1,1), name=A]{A}
+  \tnwire{leg n of A}{(1,1)}
+\end{tenkz}
+\end{document}

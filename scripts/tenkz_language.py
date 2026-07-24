@@ -55,6 +55,14 @@ _PARSER_FAMILY_SCOPE = {
     "free region": "region",
     "span": "annotation",
     "declare atom": "atom-declaration",
+    # the 1.0 kernel trees (l3keys); scopes mirror LANGUAGE-1.0.md section 2
+    "kernel-picture": "kernel-picture",
+    "kernel-atom": "kernel-atom",
+    "kernel-wire": "kernel-wire",
+    "kernel-mark": "kernel-mark",
+    "kernel-setup": "kernel-setup",
+    "kernel-declare": "kernel-declare",
+    "kernel-declare-atom": "atom-declaration",
 }
 _SETUP_FORWARDS = {
     "grid": {"pitch", "compact", "inline", "tensor style", "species"},
@@ -268,6 +276,46 @@ def _parser_leaf_keys_from_texts(texts: Iterable[str]) -> set[tuple[str, str]]:
     return leaves
 
 
+# Extension-gate: #4687; Census-correction: #4753 includes hyphenated
+# kernel families in the parser-path census.
+_KERNEL_HELPER = re.compile(
+    r"\\__tenkz_kernel_"
+    r"(?:value:nnn|choice:nnnn|flag:nnn|positive_integer:nnn)\s*"
+    r"\{\s*tenkz-kernel-([a-z]+(?:-[a-z]+)*)\s*\}\s*\{\s*([^}]+?)\s*\}"
+)
+_KERNEL_BLOCK = re.compile(
+    r"\\keys_define:nn\s*\{\s*tenkz-kernel-([a-z]+(?:-[a-z]+)*)\s*\}"
+)
+_KERNEL_LINE = re.compile(
+    r"^\s*([a-z][a-z ~-]*?)\s*\.(?:code:n|meta:n|choices:nn)\s*="
+)
+
+
+def _kernel_leaf_keys_from_texts(texts) -> set[tuple[str, str]]:
+    """Collect l3keys leaves installed by the kernel language stage."""
+    leaves: set[tuple[str, str]] = set()
+    for text in texts:
+        for match in _KERNEL_HELPER.finditer(text):
+            leaves.add((f"kernel-{match.group(1)}",
+                        match.group(2).replace("~", " ").strip()))
+        family = None
+        depth = 0
+        for line in text.splitlines():
+            if family is None:
+                block = _KERNEL_BLOCK.search(line)
+                if block:
+                    family = f"kernel-{block.group(1)}"
+                    depth = line.count("{") - line.count("}")
+                continue
+            depth += line.count("{") - line.count("}")
+            key = _KERNEL_LINE.match(line)
+            if key and key.group(1).strip() != "unknown":
+                leaves.add((family, key.group(1).replace("~", " ").strip()))
+            if depth <= 0:
+                family = None
+    return leaves
+
+
 def _parser_leaf_keys() -> set[tuple[str, str]]:
     """Collect public leaf-key spellings installed by the TeX parsers.
 
@@ -275,10 +323,11 @@ def _parser_leaf_keys() -> set[tuple[str, str]]:
     forwards are expanded so the census fails if implementation and registry
     drift in either direction.
     """
-    return _parser_leaf_keys_from_texts(
+    texts = [
         path.read_text(encoding="utf-8")
         for path in (ROOT / "tex/tenkz").glob("*.code.tex")
-    )
+    ]
+    return _parser_leaf_keys_from_texts(texts) | _kernel_leaf_keys_from_texts(texts)
 
 
 def _parser_registry_keys() -> set[tuple[str, str]]:

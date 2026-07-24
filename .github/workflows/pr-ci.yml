@@ -45,6 +45,7 @@ on:
       - 'scripts/test_tenkz_shrink.py'
       - 'scripts/tenkz_corpus.sh'
       - 'scripts/tenkz_golden.sh'
+      - 'scripts/tenkz_kernel_probes.sh'
       - 'scripts/tenkz_render_corpus.py'
       - 'scripts/test_tenkz_corpus_provenance.py'
       - 'scripts/test_tenkz_corpus_render.py'
@@ -99,6 +100,7 @@ on:
       - 'scripts/test_tenkz_shrink.py'
       - 'scripts/tenkz_corpus.sh'
       - 'scripts/tenkz_golden.sh'
+      - 'scripts/tenkz_kernel_probes.sh'
       - 'scripts/tenkz_render_corpus.py'
       - 'scripts/test_tenkz_corpus_provenance.py'
       - 'scripts/test_tenkz_corpus_render.py'
@@ -210,6 +212,7 @@ jobs:
               - 'scripts/tenkzlib/**'
               - 'scripts/tenkz_corpus.sh'
               - 'scripts/tenkz_golden.sh'
+              - 'scripts/tenkz_kernel_probes.sh'
               - 'scripts/tenkz_render_corpus.py'
               - 'scripts/test_tenkz_corpus_provenance.py'
               - 'scripts/test_tenkz_corpus_render.py'
@@ -291,6 +294,9 @@ jobs:
 
       - name: Compile tenkz manual examples standalone
         run: python3 scripts/tenkz_manual_doctest.py
+
+      - name: Check tenkz kernel record contracts
+        run: scripts/tenkz_kernel_probes.sh
 
       - name: Compile and audit tenkz corpus
         run: TENKZ_CORPUS_JOBS=4 scripts/tenkz_corpus.sh

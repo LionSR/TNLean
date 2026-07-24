@@ -653,7 +653,20 @@ def _instrument_command(
     )
     if selected is None:
         raise ValueError(f"reference for \\{command} does not load tenkz")
-    _, end = selected
+    scan = _mask_nonexecuted_tokens(
+        strip_comments(_mask_inert_tex(document, source_dir))
+    )
+    pattern = re.compile(rf"\\{re.escape(command)}(?![A-Za-z@:_])")
+    invocation = next(
+        (
+            match.start()
+            for match in pattern.finditer(scan)
+            if not _is_escaped(scan, match.start())
+        ),
+        None,
+    )
+    if invocation is None:
+        raise ValueError(f"reference for \\{command} has no executable invocation")
     marker = f"TENKZ-DOCTEST-EXECUTED-{command}"
     original = f"tenkzdoctestoriginal{command}"
     instrumentation = "\n".join(
@@ -662,7 +675,13 @@ def _instrument_command(
             rf"\def\{command}{{\typeout{{{marker}}}\csname {original}\endcsname}}",
         ]
     )
-    return document[:end] + "\n" + instrumentation + document[end:], marker
+    return (
+        document[:invocation]
+        + instrumentation
+        + "\n"
+        + document[invocation:],
+        marker,
+    )
 
 
 def _source_label(path: Path) -> str:

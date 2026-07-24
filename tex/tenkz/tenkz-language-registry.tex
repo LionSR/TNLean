@@ -99,16 +99,16 @@
 \__tenkz_language_registry_key:nnnnnn {setup}{tensor style}{enum(dot|box)}{dot}{kernel}{Default atom silhouette.}
 \__tenkz_language_registry_key:nnnnnn {setup}{species}{name-list}{empty}{kernel}{Semantic species declarations.}
 \__tenkz_language_registry_key:nnnnnn {picture}{rows}{row-list}{wire}{kernel}{Grid row topology.}
-\__tenkz_language_registry_key:nnnnnn {picture}{physical}{enum(up|down|updown|none)}{none}{sugar(rows)}{One-row physical topology.}
+\__tenkz_language_registry_key:nnnnnn {picture}{physical}{physical-policy}{none}{sugar(rows)}{One-row physical topology.}
 \__tenkz_language_registry_key:nnnnnn {picture}{sandwich}{flag}{false}{sugar(rows={ket,bra})}{Ket-over-bra row preset.}
 \__tenkz_language_registry_key:nnnnnn {picture}{boundary}{enum(open|none|periodic)}{open}{sugar(west=, east=, north=, south=)}{All-side boundary policy.}
 \__tenkz_language_registry_key:nnnnnn {picture}{west}{side-policy}{inherit}{kernel}{West boundary policy.}
 \__tenkz_language_registry_key:nnnnnn {picture}{east}{side-policy}{inherit}{kernel}{East boundary policy.}
 \__tenkz_language_registry_key:nnnnnn {picture}{north}{side-policy}{inherit}{kernel}{North boundary policy.}
 \__tenkz_language_registry_key:nnnnnn {picture}{south}{side-policy}{inherit}{kernel}{South boundary policy.}
-\__tenkz_language_registry_key:nnnnnn {picture}{frame}{frame-enum}{flat}{kernel}{Picture coordinate frame.}
+\__tenkz_language_registry_key:nnnnnn {picture}{frame}{frame-spec}{flat}{kernel}{Picture coordinate frame.}
 \__tenkz_language_registry_key:nnnnnn {picture}{trace style}{enum(racetrack|hooks)}{racetrack}{kernel}{Closure rendering policy.}
-\__tenkz_language_registry_key:nnnnnn {picture}{trace}{cell-set|physical}{empty}{kernel}{Closed interface segments.}
+\__tenkz_language_registry_key:nnnnnn {picture}{trace}{trace-spec}{empty}{kernel}{Closed interface segments or physical trace.}
 \__tenkz_language_registry_key:nnnnnn {picture}{open}{cell-set}{empty}{kernel}{Open interface segments.}
 \__tenkz_language_registry_key:nnnnnn {picture}{bond dir}{enum(right|left)}{none}{kernel}{Connection orientation.}
 \__tenkz_language_registry_key:nnnnnn {picture}{west label}{math}{empty}{kernel}{West boundary label.}
@@ -122,7 +122,7 @@
 \__tenkz_language_registry_key:nnnnnn {picture}{outer legs}{enum(both|top|bottom|none)}{none}{kernel}{Sheet exterior ports.}
 \__tenkz_language_registry_key:nnnnnn {picture}{sheet sep}{number}{1}{kernel}{Projected sheet separation.}
 \__tenkz_language_registry_key:nnnnnn {picture}{pairing}{flag}{false}{kernel}{Pair adjacent lattice sheets.}
-\__tenkz_language_registry_key:nnnnnn {picture}{plane lean}{enum(east|west)}{east}{kernel}{Projected-plane lean.}
+\__tenkz_language_registry_key:nnnnnn {picture}{plane lean}{compass}{east}{kernel}{Projected-plane lean.}
 \__tenkz_language_registry_key:nnnnnn {picture}{plane rise}{length}{metric}{escape}{Projected row rise.}
 \__tenkz_language_registry_key:nnnnnn {picture}{plane slant}{length}{metric}{escape}{Projected column slant.}
 \__tenkz_language_registry_key:nnnnnn {picture}{col vector}{dimension-pair}{frame}{escape}{Expert projected column basis.}
@@ -148,7 +148,7 @@
 \__tenkz_language_registry_key:nnnnnn {object}{east at}{slot-list}{rows}{kernel}{East face ports.}
 \__tenkz_language_registry_key:nnnnnn {object}{up}{math-list}{empty}{kernel}{Upper port labels.}
 \__tenkz_language_registry_key:nnnnnn {object}{down}{math-list}{empty}{kernel}{Lower port labels.}
-\__tenkz_language_registry_key:nnnnnn {object}{physical}{enum(up|down|updown)}{empty}{kernel}{Cell physical-port faces.}
+\__tenkz_language_registry_key:nnnnnn {object}{physical}{physical-policy}{empty}{kernel}{Cell physical-port faces.}
 \__tenkz_language_registry_key:nnnnnn {object}{role}{semantic-role}{empty}{kernel}{Semantic theme role.}
 \__tenkz_language_registry_key:nnnnnn {object}{species}{declared-name}{empty}{kernel}{Semantic species.}
 \__tenkz_language_registry_key:nnnnnn {object}{label}{math}{empty}{kernel}{Lattice-site label.}
@@ -158,8 +158,10 @@
 \__tenkz_language_registry_key:nnnnnn {object}{no legs}{flag}{false}{kernel}{Suppress physical ports.}
 \__tenkz_language_registry_key:nnnnnn {object}{removed}{flag}{false}{kernel}{Remove a lattice atom.}
 \__tenkz_language_registry_key:nnnnnn {object}{tree style}{enum(wire|ribbon)}{wire}{kernel}{Fusion-tree strand style.}
-\__tenkz_language_registry_key:nnnnnn {connection}{route}{enum(straight|hv|vh|arc)}{straight}{kernel}{Connection route family.}
-\__tenkz_language_registry_key:nnnnnn {connection}{dir}{flag}{false}{kernel}{Connection direction.}
+% The active 0.7 parser still accepts hv/vh during coexistence.  They are
+% migration-only values; the canonical 1.0 route family spells both `orth`.
+\__tenkz_language_registry_key:nnnnnn {connection}{route}{enum(straight|orth|arc)}{straight}{kernel}{Connection route family; 0.7 compatibility also accepts hv/vh until S4.}
+\__tenkz_language_registry_key:nnnnnn {connection}{dir}{direction-policy}{false}{kernel}{Connection direction.}
 \__tenkz_language_registry_key:nnnnnn {connection}{out}{angle}{automatic}{escape}{Arc departure angle.}
 \__tenkz_language_registry_key:nnnnnn {connection}{in}{angle}{automatic}{escape}{Arc arrival angle.}
 \__tenkz_language_registry_key:nnnnnn {connection}{label}{math}{empty}{kernel}{Connection label.}
@@ -172,7 +174,7 @@
 \__tenkz_language_registry_key:nnnnnn {connection}{distinguished}{flag}{false}{kernel}{Distinguished lattice edge.}
 \__tenkz_language_registry_key:nnnnnn {connection}{none}{flag}{false}{kernel}{Suppress a lattice edge.}
 \__tenkz_language_registry_key:nnnnnn {connection}{style}{style-name}{empty}{kernel}{Named lattice-edge style.}
-\__tenkz_language_registry_key:nnnnnn {region}{slot}{enum(selected|secondary|complement|collar|neutral)}{selected}{kernel}{Region semantic slot.}
+\__tenkz_language_registry_key:nnnnnn {region}{slot}{semantic-slot}{selected}{kernel}{Region semantic slot.}
 \__tenkz_language_registry_key:nnnnnn {region}{outline}{flag}{false}{kernel}{Outline-only region.}
 \__tenkz_language_registry_key:nnnnnn {region}{inset}{number}{0}{kernel}{Nested-region inset.}
 \__tenkz_language_registry_key:nnnnnn {region}{label}{math}{empty}{kernel}{Region label.}
@@ -183,16 +185,109 @@
 \__tenkz_language_registry_key:nnnnnn {annotation}{brace below}{flag}{false}{kernel}{Brace annotation below a span.}
 \__tenkz_language_registry_key:nnnnnn {annotation}{box}{flag}{false}{kernel}{Boxed span annotation.}
 \__tenkz_language_registry_key:nnnnnn {annotation}{label pos}{compass}{auto}{kernel}{Span-label position.}
-\__tenkz_language_registry_key:nnnnnn {atom-declaration}{skin}{enum(dot|box|pill|mpo)}{dot}{kernel}{Declared atom silhouette.}
+\__tenkz_language_registry_key:nnnnnn {atom-declaration}{skin}{silhouette-name}{dot}{kernel}{Declared atom silhouette.}
 \__tenkz_language_registry_key:nnnnnn {atom-declaration}{ports}{typed-port-list}{empty}{kernel}{Declared atom ports.}
 
 % Compatibility spellings are data, never tutorial vocabulary.  Every alias
 % carries its sunset milestone; the sunset executes as a corpus rewrite.
 \__tenkz_language_registry_key:nnnnnn {picture}{periodic}{flag}{false}{alias(boundary=periodic; sunset=1.0)}{Legacy periodic closure.}
-\__tenkz_language_registry_key:nnnnnn {picture}{chain axis}{enum(east|south)}{east}{alias(frame; sunset=1.0)}{Legacy frame spelling.}
+\__tenkz_language_registry_key:nnnnnn {picture}{chain axis}{compass}{east}{alias(frame; sunset=1.0)}{Legacy frame spelling.}
 \__tenkz_language_registry_key:nnnnnn {object}{legs at}{slot-list}{center}{alias(up at,down at; sunset=1.0)}{Legacy shared physical ports.}
 \__tenkz_language_registry_key:nnnnnn {object}{rows}{positive-integer}{2}{alias(span; sunset=1.0)}{Legacy fusion span.}
 \__tenkz_language_registry_key:nnnnnn {picture}{boundary legs}{flag}{false}{alias(boundary=open; sunset=1.0)}{Legacy lattice boundary spelling.}
 \__tenkz_language_registry_key:nnnnnn {region}{label at}{compass}{auto}{alias(label pos; sunset=1.0)}{Legacy region-label spelling.}
 \__tenkz_language_registry_alias:nnnn {connection}{route=curve}{route=arc}
   {Legacy curved-route value. Sunset 1.0.}
+
+% ---- the 1.0 kernel surface (LANGUAGE-1.0.md; the S4 swap retires the
+% ---- 0.7 rows above in favor of these) ----
+\__tenkz_language_registry_environment:nnnn {tenkzeq}{kernel}{picture}
+  {Equation composition and the boundary-signature audit.}
+\__tenkz_language_registry_command:nnnnn {tnwire}{connections-closures}{connection}
+  {\tnwire[wire keys]{end}{end}}{A wire is one typed index line; bonds and strings are its kinds.}
+\__tenkz_language_registry_command:nnnnn {tnmark}{regions-annotations}{picture}
+  {\tnmark[mark keys]{target}{label}}{A mark annotates without owning topology.}
+\__tenkz_language_registry_command:nnnnn {tngroup}{composition}{picture}
+  {\tngroup[picture keys]{body}}{A group transforms a sub-diagram as one object.}
+\__tenkz_language_registry_command:nnnnn {tndeclare}{setup-extension}{setup}
+  {\tndeclare{class}{name}{keys}}{The one extension door: atom, skin, or species.}
+\__tenkz_language_registry_command:nnnnn {tnbond}{connections-closures}{connection}
+  {\tnbond[wire keys]{end}{end}}{Sugar: a bond is a wire of kind index.}
+\__tenkz_language_registry_command:nnnnn {tenkzkernel}{setup-extension}{setup}
+  {\tenkzkernel}{Binds the 1.0 kernel surface for the group; the S4 swap deletes it.}
+\__tenkz_language_registry_command:nnnnn {tnprose}{regions-annotations}{picture}
+  {\tnprose{text}}{Sugar: recorded prose in place of a diagram.}
+\__tenkz_language_registry_example:nnn {tnwire}{tex/tenkz/examples/api/tnwire.tex}
+  {A closed wire with positional ends is a hard error.}
+\__tenkz_language_registry_example:nnn {tnmark}{tex/tenkz/examples/api/tnmark.tex}
+  {An unknown mark form is a hard error.}
+\__tenkz_language_registry_example:nnn {tngroup}{tex/tenkz/examples/api/tngroup.tex}
+  {An unknown picture key is a hard error.}
+\__tenkz_language_registry_example:nnn {tndeclare}{tex/tenkz/examples/api/tndeclare.tex}
+  {An unknown declaration class is a hard error.}
+\__tenkz_language_registry_example:nnn {tnbond}{tex/tenkz/examples/api/tnbond.tex}
+  {An unknown wire key is a hard error.}
+\__tenkz_language_registry_example:nnn {tenkzkernel}{tex/tenkz/examples/api/tenkzkernel.tex}
+  {Kernel spellings without the switch fall to the 0.7 surface.}
+\__tenkz_language_registry_example:nnn {tnprose}{tex/tenkz/examples/api/tnprose.tex}
+  {Prose on a checked relation without an opt-out is a hard error.}
+\__tenkz_language_registry_key:nnnnnn {kernel-picture}{rows}{row-list}{{wire}}{kernel}{Chain row topology; non-wire rows populate.}
+\__tenkz_language_registry_key:nnnnnn {kernel-picture}{cols}{positive-integer}{3}{kernel}{Cells per row.}
+\__tenkz_language_registry_key:nnnnnn {kernel-picture}{frame}{frame-spec}{flat}{kernel}{Affine preset, matrix, or circle.}
+\__tenkz_language_registry_key:nnnnnn {kernel-picture}{west}{side-policy}{open}{kernel}{West side policy.}
+\__tenkz_language_registry_key:nnnnnn {kernel-picture}{east}{side-policy}{open}{kernel}{East side policy.}
+\__tenkz_language_registry_key:nnnnnn {kernel-picture}{north}{side-policy}{open}{kernel}{North side policy.}
+\__tenkz_language_registry_key:nnnnnn {kernel-picture}{south}{side-policy}{open}{kernel}{South side policy.}
+\__tenkz_language_registry_key:nnnnnn {kernel-picture}{trace}{trace-spec}{empty}{kernel}{Cells or physical ports closed to themselves.}
+\__tenkz_language_registry_key:nnnnnn {kernel-picture}{open}{cell-set}{empty}{kernel}{Cells opened by declaration.}
+\__tenkz_language_registry_key:nnnnnn {kernel-picture}{bonds}{bond-policy}{grid}{kernel}{Frame-generated adjacent contraction.}
+\__tenkz_language_registry_key:nnnnnn {kernel-picture}{align}{row}{midline}{kernel}{The wire axis panels align on.}
+\__tenkz_language_registry_key:nnnnnn {kernel-picture}{size}{size-class}{from math style}{kernel}{Size class of the metric context.}
+\__tenkz_language_registry_key:nnnnnn {kernel-picture}{check}{check-spec}{signature}{kernel}{The tenkzeq audit specification.}
+\__tenkz_language_registry_key:nnnnnn {kernel-picture}{sandwich}{flag}{false}{sugar(rows={ket,op,bra})}{Ket-over-bra row preset.}
+\__tenkz_language_registry_key:nnnnnn {kernel-picture}{boundary}{enum(open|none|periodic)}{open}{sugar(west, east)}{All-side boundary word.}
+\__tenkz_language_registry_key:nnnnnn {kernel-picture}{lattice}{pair}{empty}{sugar(rows=, cols=)}{RxC wire-row lattice preset.}
+\__tenkz_language_registry_key:nnnnnn {kernel-picture}{ring}{integer}{empty}{sugar(rows=, cols=, frame=circle, west=trace, east=trace)}{Circle-frame ring preset.}
+\__tenkz_language_registry_key:nnnnnn {kernel-picture}{surface}{identifier}{empty}{sugar(west=trace, east=trace, north=trace, south=trace)}{Torus closure preset.}
+\__tenkz_language_registry_key:nnnnnn {kernel-picture}{physical}{physical-policy}{none}{sugar(rows)}{Expander: outward physical port per populated atom.}
+\__tenkz_language_registry_key:nnnnnn {kernel-atom}{skin}{silhouette-name}{theme default}{kernel}{Declared silhouette.}
+\__tenkz_language_registry_key:nnnnnn {kernel-atom}{wide}{positive-integer}{1}{kernel}{Cells spanned.}
+\__tenkz_language_registry_key:nnnnnn {kernel-atom}{wires}{positive-integer}{1}{kernel}{Wire rows spanned.}
+\__tenkz_language_registry_key:nnnnnn {kernel-atom}{at}{address}{next chain cell}{kernel}{Placement address.}
+\__tenkz_language_registry_key:nnnnnn {kernel-atom}{name}{identifier}{generated}{kernel}{Addressable name.}
+\__tenkz_language_registry_key:nnnnnn {kernel-atom}{ports}{typed-port-list}{from skin}{kernel}{Typed faces and slots.}
+\__tenkz_language_registry_key:nnnnnn {kernel-atom}{up}{math-list}{empty}{kernel}{Outward physical labels, page-up.}
+\__tenkz_language_registry_key:nnnnnn {kernel-atom}{down}{math-list}{empty}{kernel}{Outward physical labels, page-down.}
+\__tenkz_language_registry_key:nnnnnn {kernel-atom}{species}{declared-name}{empty}{kernel}{Semantic species.}
+\__tenkz_language_registry_key:nnnnnn {kernel-atom}{label~pos}{compass}{auto}{kernel}{Label quadrant.}
+\__tenkz_language_registry_key:nnnnnn {kernel-atom}{nudge}{pair}{zero}{kernel}{Quarter-pitch displacement.}
+\__tenkz_language_registry_key:nnnnnn {kernel-atom}{void}{void-policy}{unset}{kernel}{Hole or removed site.}
+\__tenkz_language_registry_key:nnnnnn {kernel-atom}{conjugate}{flag}{false}{kernel}{Conjugate glyph orientation.}
+\__tenkz_language_registry_key:nnnnnn {kernel-atom}{cluster}{pair}{empty}{sugar(name=, skin=)}{Expander: RxC addressable sub-atom group.}
+\__tenkz_language_registry_key:nnnnnn {kernel-atom}{role}{semantic-role}{empty}{sugar(species=)}{Prelude species spelling.}
+\__tenkz_language_registry_key:nnnnnn {kernel-wire}{kind}{enum(index|string)}{index}{kernel}{Bond or travelling string.}
+\__tenkz_language_registry_key:nnnnnn {kernel-wire}{route}{enum(straight|orth|arc)}{straight}{kernel}{Path family.}
+\__tenkz_language_registry_key:nnnnnn {kernel-wire}{via}{address-list}{empty}{kernel}{Waypoints.}
+\__tenkz_language_registry_key:nnnnnn {kernel-wire}{bend}{number}{metric}{kernel}{Arc bend factor.}
+\__tenkz_language_registry_key:nnnnnn {kernel-wire}{weight}{enum(single|double|bundle=n)}{single}{kernel}{Strand multiplicity.}
+\__tenkz_language_registry_key:nnnnnn {kernel-wire}{species}{declared-name}{empty}{kernel}{Semantic species.}
+\__tenkz_language_registry_key:nnnnnn {kernel-wire}{wind}{pair}{zero}{kernel}{Homotopy class on traced frames.}
+\__tenkz_language_registry_key:nnnnnn {kernel-wire}{around}{address-list}{empty}{kernel}{Silhouette detour targets.}
+\__tenkz_language_registry_key:nnnnnn {kernel-wire}{cross}{crossing-list}{empty}{kernel}{Declared over and under crossings.}
+\__tenkz_language_registry_key:nnnnnn {kernel-wire}{dir}{direction-policy}{none}{kernel}{Direction mark of a directed index.}
+\__tenkz_language_registry_key:nnnnnn {kernel-wire}{name}{identifier}{generated}{kernel}{Addressable name.}
+\__tenkz_language_registry_key:nnnnnn {kernel-wire}{closed}{flag}{false}{kernel}{A smooth closed cycle; takes no ends.}
+\__tenkz_language_registry_key:nnnnnn {kernel-mark}{form}{enum(brace-above|brace-below|enclosure|cut|band|label|prose)}{label}{kernel}{Mark form.}
+\__tenkz_language_registry_key:nnnnnn {kernel-mark}{slot}{semantic-slot}{selected}{kernel}{Semantic tint.}
+\__tenkz_language_registry_key:nnnnnn {kernel-mark}{inset}{number}{0}{kernel}{Nested-contour step.}
+\__tenkz_language_registry_key:nnnnnn {kernel-mark}{label~pos}{compass}{auto}{kernel}{Label quadrant.}
+\__tenkz_language_registry_key:nnnnnn {kernel-mark}{nudge}{pair}{zero}{kernel}{Quarter-pitch displacement.}
+\__tenkz_language_registry_key:nnnnnn {kernel-mark}{name}{identifier}{generated}{kernel}{Addressable name.}
+\__tenkz_language_registry_key:nnnnnn {kernel-mark}{outline}{flag}{false}{kernel}{Contour without tint.}
+\__tenkz_language_registry_key:nnnnnn {kernel-setup}{pitch}{length}{em-relative}{kernel}{Base metric.}
+\__tenkz_language_registry_key:nnnnnn {kernel-setup}{sizes}{size-table}{bundled table}{kernel}{Size-class table.}
+\__tenkz_language_registry_key:nnnnnn {kernel-setup}{strict}{flag}{false}{kernel}{Rejects sugar; benchmark and CI set it.}
+\__tenkz_language_registry_key:nnnnnn {kernel-setup}{theme}{identifier}{house}{kernel}{Semantic ink theme.}
+\__tenkz_language_registry_key:nnnnnn {kernel-declare}{hue}{hue-source}{house cycle}{kernel}{Species ink; source:* reproduces a cited palette.}
+\__tenkz_language_registry_key:nnnnnn {kernel-declare}{base}{identifier}{empty}{kernel}{Skin the declaration extends.}
+\__tenkz_language_registry_key:nnnnnn {kernel-declare}{pairings}{port-pair-list}{empty}{kernel}{Skin-internal wires between own ports.}

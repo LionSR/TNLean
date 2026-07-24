@@ -1,0 +1,27 @@
+% Regression: document setup is inherited by the resolved picture model.
+\documentclass{standalone}
+\usepackage{tenkz}
+\makeatletter
+\ExplSyntaxOn
+\file_input:n { tenkz-kernel.code.tex }
+\ExplSyntaxOn
+\cs_new_protected:Npn \__tenkz_test_setup_persistence:
+  {
+    \__tenkz_model_picture_get:nN {theme} \l_tmpa_tl
+    \str_if_eq:VnF \l_tmpa_tl {review}
+      { \errmessage{theme setup did not reach the picture model} }
+    \__tenkz_model_picture_get:nN {sizes} \l_tmpa_tl
+    \str_if_eq:VnF \l_tmpa_tl {review-table}
+      { \errmessage{sizes setup did not reach the picture model} }
+  }
+\ExplSyntaxOff
+\makeatother
+\begin{document}
+\tenkzkernel
+\tnset{theme=review, sizes={review-table}}
+\begin{tenkz}[rows={wire}, cols=1, bonds=none]
+  \ExplSyntaxOn
+  \__tenkz_test_setup_persistence:
+  \ExplSyntaxOff
+\end{tenkz}
+\end{document}
