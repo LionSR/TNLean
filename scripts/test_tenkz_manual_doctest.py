@@ -255,6 +255,23 @@ shell command % \tntree{commented}
             DOCTEST.MANUAL = original_manual
             DOCTEST.MANUAL_DIR = original_manual_dir
             DOCTEST.CHAPTERS = original_chapters
+    ordered_parent = "\\input{child.tex}\n\\newif\\iflaterparent\n"
+    child_offset = ordered_parent.index(r"\input")
+    inherited = DOCTEST._conditionals_before(ordered_parent, child_offset, ())
+    if "iflaterparent" in inherited:
+        raise AssertionError("a declaration after input was inherited by the child")
+    ordered_child = (
+        "\\def\\iflaterparent{ordinary command}\n"
+        "\\iffalse\n\\iflaterparent\n\\fi\n"
+        "\\begin{tnexample}\n"
+        "\\begin{tenkz}\\tn{ordered inheritance}\\end{tenkz}\n"
+        "\\end{tnexample}\n"
+    )
+    with tempfile.TemporaryDirectory(prefix="tenkz-doctest-order-") as tmp:
+        order_path = Path(tmp) / "child.tex"
+        order_path.write_text(ordered_child, encoding="utf-8")
+        if len(DOCTEST.extract_displayed_examples(order_path, inherited)) != 1:
+            raise AssertionError("a later parent declaration hid a live child example")
     if {source.resolve() for source in sources} != {
         root.resolve(),
         child.resolve(),
