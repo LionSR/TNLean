@@ -6,12 +6,13 @@
     \leanok
     An MPS tensor $A$ is a \emph{renormalization fixed point} if there is an
     isometry $V\colon \C^d\to\C^{d^2}$, with coefficients
-    $V_{(i_1,i_2),j}$ and $V^\dagger V=1$, such that, for all physical indices
+    $V_{(i_1,i_2),j}$ and $V^\dagger V=\Id$, such that, for all physical indices
     $i_1,i_2$,
-    \begin{equation}\label{eq:corr_physical_blocking_isometry}
+    \begin{align}
         A^{i_1}A^{i_2}
-        =\sum_{j=0}^{d-1}V_{(i_1,i_2),j}A^j.
-    \end{equation}
+        &=\sum_{j=0}^{d-1}V_{(i_1,i_2),j}A^j.
+        \label{eq:corr_physical_blocking_isometry}
+    \end{align}
     This is the relation $AA=A$ in
     \cite[Definition~3.2]{Cirac2016MPDO_arXiv}.
 \end{definition}
@@ -30,31 +31,33 @@
     \leanok
     \uses{def:mps_transfer_idempotence}
     Suppose there exists an isometry
-    $V : \C^d \to \C^{d^2}$, written as coefficients $V_{(i_1,i_2),j}$, such
+    $V\colon \C^d\to\C^{d^2}$, written as coefficients $V_{(i_1,i_2),j}$, such
     that
-    \begin{equation}\label{eq:corr_kraus_isometry_decomp}
-        A^{i_1} A^{i_2} = \sum_{j=0}^{d-1} V_{(i_1,i_2),j} A^j
-    \end{equation}
-    for all $i_1,i_2 \in \{0,\ldots,d-1\}$.
+    \begin{align}
+        A^{i_1}A^{i_2}
+        &=\sum_{j=0}^{d-1}V_{(i_1,i_2),j}A^j
+        \label{eq:corr_kraus_isometry_decomp}
+    \end{align}
+    for all $i_1,i_2\in\{0,\ldots,d-1\}$.
     Then $\E_A^2=\E_A$.
 \end{theorem}
 \begin{proof}\leanok
-    Substituting the decomposition~(\ref{eq:corr_kraus_isometry_decomp}) into
+    Substituting the decomposition (\ref{eq:corr_kraus_isometry_decomp}) into
     the double Kraus sum gives, for every bond matrix $X$,
-    \[
-        \begin{aligned}
+    \begin{align}
         \E_A^2(X)
-        &= \sum_{i_1,i_2}(A^{i_1}A^{i_2})X(A^{i_1}A^{i_2})^\dagger \\
-        &= \sum_{j,k}\left(
-            \sum_{i_1,i_2}
-            V_{(i_1,i_2),j}\overline{V_{(i_1,i_2),k}}
-        \right)A^jX(A^k)^\dagger \\
-        &= \sum_{j,k}(V^\dagger V)_{j,k}A^jX(A^k)^\dagger
-         = \sum_{j,k}\delta_{j,k}A^jX(A^k)^\dagger \\
-        &= \sum_j A^jX(A^j)^\dagger
-         = \E_A(X).
-        \end{aligned}
-    \]
+        &=\sum_{i_1,i_2}(A^{i_1}A^{i_2})X
+            (A^{i_1}A^{i_2})^\dagger
+        \notag\\
+        &=\sum_{j,k}\left(\sum_{i_1,i_2}
+            V_{(i_1,i_2),j}\overline{V_{(i_1,i_2),k}}\right)A^jX(A^k)^\dagger
+        \notag\\
+        &=\sum_{j,k}(V^\dagger V)_{j,k}A^jX(A^k)^\dagger
+          =\sum_{j,k}\delta_{j,k}A^jX(A^k)^\dagger
+          =\sum_jA^jX(A^j)^\dagger
+          =\E_A(X).
+        \notag
+    \end{align}
     Hence $\E_A^2=\E_A$.
 \end{proof}
 
@@ -65,24 +68,27 @@
     \uses{def:mps_transfer_idempotence,
         thm:physical_blocking_implies_transfer_idempotence}
     The transfer map of $A$ is idempotent if and only if there exists an
-    isometry $V : \C^d \to \C^{d^2}$, written as coefficients
-    $V_{(i_1,i_2),j}$ with $V^\dagger V = 1$, such that
-    \begin{equation}\label{eq:corr_AA_isometry}
-        A^{i_1} A^{i_2} = \sum_{j=0}^{d-1} V_{(i_1,i_2),j} A^j
-    \end{equation}
-    for all $i_1,i_2 \in \{0,\ldots,d-1\}$.
+    isometry $V\colon \C^d\to\C^{d^2}$, written as coefficients
+    $V_{(i_1,i_2),j}$ with $V^\dagger V=\Id$, such that
+    \begin{align}
+        A^{i_1}A^{i_2}
+        &=\sum_{j=0}^{d-1}V_{(i_1,i_2),j}A^j
+        \label{eq:corr_AA_isometry}
+    \end{align}
+    for all $i_1,i_2\in\{0,\ldots,d-1\}$.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:physical_blocking_implies_transfer_idempotence,
         thm:kraus_rectangular_freedom'}
     The backward implication is
     Theorem~\ref{thm:physical_blocking_implies_transfer_idempotence}. For the
-    forward implication,
-    expanding $\E_A^2 = \E_A$ as a Kraus sum gives, for every $X$,
-    \[
-        \sum_{i_1,i_2}(A^{i_1} A^{i_2})\,X\,(A^{i_1} A^{i_2})^\dagger
-        = \sum_j A^j\,X\,(A^j)^\dagger .
-    \]
+    forward implication, expanding $\E_A^2=\E_A$ as a Kraus sum gives, for
+    every $X$,
+    \begin{align}
+        \sum_{i_1,i_2}(A^{i_1}A^{i_2})X(A^{i_1}A^{i_2})^\dagger
+        &=\sum_jA^jX(A^j)^\dagger.
+        \notag
+    \end{align}
     Theorem~\ref{thm:kraus_rectangular_freedom'} then supplies the isometry $V$
     relating the two Kraus families.
 \end{proof}
@@ -124,15 +130,14 @@
         \begin{tenkz}[physical=up]
             \tn[up=$i_1$]{A} & \tn[up=$i_2$]{A}
         \end{tenkz}
-        $\;=\;$
+        $ = $
         \begin{tenkz}[rows={op:none, ket}]
             \tn[pill, wide=2, up at={1,2}, down at=center,
                 up={$i_1$,$i_2$}]{V} & \\
             \tn[wide=2]{A^j} &
         \end{tenkz}
     \end{center}
-    \medskip
-    \begin{center}
+        \begin{center}
         % sum_{i_1,i_2} (V^dagger)^j_{i_1 i_2} A^{i_1} A^{i_2} = A^j
         % (CPSV16 Thm 3.1, lines 396--412, source image II_UAAA.png):
         % V^dagger has one open upper port j and two lower ports, at the
@@ -146,23 +151,24 @@
                 up=$j$]{V^\dagger} & \\
             \tn{A} & \tn{A}
         \end{tenkz}
-        $\;=\;$
+        $ = $
         \begin{tenkz}[physical=up]
             \tn[up=$j$]{A}
         \end{tenkz}
     \end{center}
-    \begin{equation}\label{eq:corr_AA_isometry_adjoint}
-        \sum_{i_1,i_2}(V^\dagger)^j_{i_1,i_2}
-            A^{i_1}A^{i_2}=A^j .
-    \end{equation}
+    \begin{align}
+        \sum_{i_1,i_2}(V^\dagger)^j_{i_1,i_2}A^{i_1}A^{i_2}
+        &=A^j.
+        \label{eq:corr_AA_isometry_adjoint}
+    \end{align}
     \caption{The fusion identity of the renormalization fixed-point
         characterization: two contracted copies of $A$ equal a single copy of
         $A$ with the isometry $V$ merging the summed index $j$ into the
-        physical pair $(i_1,i_2)$, which is
-        equation~(\ref{eq:corr_AA_isometry}); conversely, applying $V^\dagger$
+        physical pair $(i_1,i_2)$, as stated in
+        (\ref{eq:corr_AA_isometry}); conversely, applying $V^\dagger$
         to the two physical legs of the contracted pair recovers the single
         tensor, as stated in
-        equation~(\ref{eq:corr_AA_isometry_adjoint}). The source draws the
+        (\ref{eq:corr_AA_isometry_adjoint}). The source draws the
         isometry as $U$
         \cite[Theorem~3.1, lines~396--412]{Cirac2016MPDO_arXiv}.}
     \label{fig:rfp_kraus_isometry}

@@ -8,21 +8,23 @@
     Let $(B_k)_k$ be a family of tensors and let $\bigoplus_k B_k$ be their
     direct sum on the total bond space. For every bond matrix $X$ and every pair
     of blocks, the $(j,j')$ bond block of the transfer sum
-    \[
-        \sum_i \Bigl(\bigoplus_k B_k^i\Bigr)\,X\,
-            \Bigl(\bigoplus_k B_k^i\Bigr)^\dagger
-    \]
+    \begin{align}
+        \sum_i \left(\bigoplus_k B_k^i\right)X
+            \left(\bigoplus_k B_k^i\right)^\dagger
+        \notag
+    \end{align}
     equals $\E_{j,j'}$ applied to the $(j,j')$ bond block of $X$.
 \end{lemma}
 \begin{proof}\leanok
     A block-diagonal factor connects only matching blocks, so the $(j,j')$ block
     of the product is
-    \[
-        \Bigl(\sum_i \bigl(\bigoplus_k B_k^i\bigr)\,X\,
-            \bigl(\bigoplus_k B_k^i\bigr)^\dagger\Bigr)_{j,j'}
-        = \sum_i B_j^i\,X_{j,j'}\,(B_{j'}^i)^\dagger
-        = \E_{j,j'}(X_{j,j'}) .
-    \]
+    \begin{align}
+        \left(\sum_i \left(\bigoplus_k B_k^i\right)X
+            \left(\bigoplus_k B_k^i\right)^\dagger\right)_{j,j'}
+        &= \sum_i B_j^i X_{j,j'}(B_{j'}^i)^\dagger
+         = \E_{j,j'}(X_{j,j'}).
+        \notag
+    \end{align}
 \end{proof}
 
 \begin{lemma}[Pairwise idempotence of the block transfer sum]%
@@ -32,20 +34,18 @@
     \uses{def:mixed_transfer_rect, lem:block_diagonal_transfer_sum_to_block}
     Let $(B_k)_k$ be a family of tensors. If every mixed transfer operator
     $\E_{j,j'}$ is idempotent, then the block transfer sum $\mathcal S_B$ is
-    idempotent:
-    \[
-        \mathcal S_B\bigl(\mathcal S_B(X)\bigr)=\mathcal S_B(X).
-    \]
+    idempotent: $\mathcal S_B(\mathcal S_B(X))=\mathcal S_B(X)$.
 \end{lemma}
 \begin{proof}\leanok
     By Lemma~\ref{lem:block_diagonal_transfer_sum_to_block}, the $(j,j')$
     block satisfies
-    \[
-        \bigl(\mathcal S_B^2(X)\bigr)_{j,j'}
-        = \E_{j,j'}^2(X_{j,j'})
-        = \E_{j,j'}(X_{j,j'})
-        = \bigl(\mathcal S_B(X)\bigr)_{j,j'}.
-    \]
+    \begin{align}
+        (\mathcal S_B^2(X))_{j,j'}
+        &= \E_{j,j'}^2(X_{j,j'})
+         = \E_{j,j'}(X_{j,j'})
+         = (\mathcal S_B(X))_{j,j'}.
+        \notag
+    \end{align}
     Equality on every block gives the asserted equality on the total bond
     space.
 \end{proof}
@@ -60,23 +60,25 @@
     Suppose every bond dimension is positive. The transfer map of
     $\bigoplus_k B_k$ is idempotent if and only if, for every pair $j,j'$,
     the mixed transfer operator is idempotent:
-    \[
+    \begin{align}
         \E_{\oplus_k B_k}^2=\E_{\oplus_k B_k}
         \quad\Longleftrightarrow\quad
         \E_{j,j'}^2=\E_{j,j'}.
-    \]
+        \notag
+    \end{align}
 \end{theorem}
 \begin{proof}\leanok
     By Lemma~\ref{lem:block_diagonal_transfer_sum_to_block}, the $(j,j')$
     block of the direct-sum transfer map depends only on the $(j,j')$ block of
     its argument and is obtained by applying $\E_{j,j'}$. Thus pairwise
     idempotence gives
-    \[
-        \bigl(\E_{\oplus_k B_k}^2(X)\bigr)_{j,j'}
-        = \E_{j,j'}^2(X_{j,j'})
-        = \E_{j,j'}(X_{j,j'})
-        = \bigl(\E_{\oplus_k B_k}(X)\bigr)_{j,j'}
-    \]
+    \begin{align}
+        (\E_{\oplus_k B_k}^2(X))_{j,j'}
+        &= \E_{j,j'}^2(X_{j,j'})
+         = \E_{j,j'}(X_{j,j'})
+         = (\E_{\oplus_k B_k}(X))_{j,j'}
+        \notag
+    \end{align}
     for every pair of blocks, and hence gives idempotence on the total bond
     space, as in
     Lemma~\ref{lem:block_transfer_sum_idempotent_of_pairwise_mixed}.
@@ -84,12 +86,13 @@
     the $(j,j')$ block of some $Y$ on the total bond space. Applying
     Lemma~\ref{lem:block_diagonal_transfer_sum_to_block} and whole-tensor
     idempotence gives
-    \[
+    \begin{align}
         \E_{j,j'}^2(M)
-        = \bigl(\E_{\oplus_k B_k}^2(Y)\bigr)_{j,j'}
-        = \bigl(\E_{\oplus_k B_k}(Y)\bigr)_{j,j'}
-        = \E_{j,j'}(M).
-    \]
+        &= (\E_{\oplus_k B_k}^2(Y))_{j,j'}
+         = (\E_{\oplus_k B_k}(Y))_{j,j'}
+         = \E_{j,j'}(M).
+        \notag
+    \end{align}
 \end{proof}
 
 \begin{lemma}[Scaling of a rectangular mixed transfer operator]%
@@ -98,17 +101,12 @@
     \leanok
     \uses{def:mixed_transfer_rect}
     For complex scalars $c,e$ and tensors $A,B$ of possibly different bond
-    dimensions,
-    \[
-        \E_{cA,eB}=c\overline e\,\E_{A,B}.
-    \]
+    dimensions, $\E_{cA,eB}=c\overline e\,\E_{A,B}$.
 \end{lemma}
 \begin{proof}\leanok
     Conjugate transposition changes the second scalar to its complex conjugate:
-    \[
-        \sum_i (cA^i)X(eB^i)^\dagger
-        =c\overline e\sum_i A^iX(B^i)^\dagger.
-    \]
+    $\sum_i(cA^i)X(eB^i)^\dagger
+    =c\overline e\sum_iA^iX(B^i)^\dagger$.
 \end{proof}
 
 \begin{theorem}[Phase coherence for literal repeated blocks]%
@@ -119,11 +117,8 @@
         thm:direct_sum_transfer_idempotent_iff_pairwise_mixed}
     Let $A$ have positive bond dimension and a nonzero idempotent transfer map.
     Let $\mu_q$ have unit modulus. If the literal bond direct sum
-    $\bigoplus_q \mu_qA$ has an idempotent transfer map, then for every pair
-    $q,q'$,
-    \[
-        \mu_q=\mu_{q'}.
-    \]
+    $\bigoplus_q \mu_qA$ has an idempotent transfer map, then
+    $\mu_q=\mu_{q'}$ for every pair $q,q'$.
 \end{theorem}
 \begin{proof}\leanok
     The pairwise criterion
@@ -131,31 +126,28 @@
     gives that $\E_{\mu_qA,\mu_{q'}A}$ is idempotent.
     Lemma~\ref{lem:mixed_transfer_rect_smul} and
     $\E_{A,A}=\E_A$ give
-    \[
-        \E_{\mu_qA,\mu_{q'}A}
-        =\mu_q\overline{\mu_{q'}}\E_{A,A}
-        =\mu_q\overline{\mu_{q'}}\E_A.
-    \]
+    $\E_{\mu_qA,\mu_{q'}A}
+    =\mu_q\overline{\mu_{q'}}\E_{A,A}
+    =\mu_q\overline{\mu_{q'}}\E_A$.
     Hence $(\mu_q\overline{\mu_{q'}})\E_A$ is idempotent. Since $\E_A$ is
     nonzero and
     $|\mu_q\overline{\mu_{q'}}|=|\mu_q||\mu_{q'}|=1$,
-    \[
+    \begin{align}
         (\mu_q\overline{\mu_{q'}})^2\E_A
         =\mu_q\overline{\mu_{q'}}\E_A
-        \quad\Longrightarrow\quad
+        &\quad\Longrightarrow\quad
         \mu_q\overline{\mu_{q'}}
         (\mu_q\overline{\mu_{q'}}-1)=0
         \quad\Longrightarrow\quad
         \mu_q\overline{\mu_{q'}}=1.
-    \]
+        \notag
+    \end{align}
     Since $|\mu_{q'}|=1$ gives
-    $\overline{\mu_{q'}}\mu_{q'}=1$,
-    \[
-        \mu_q
-        =\mu_q(\overline{\mu_{q'}}\mu_{q'})
-        =(\mu_q\overline{\mu_{q'}})\mu_{q'}
-        =\mu_{q'}.
-    \]
+    $\overline{\mu_{q'}}\mu_{q'}=1$, one has
+    $\mu_q
+    =\mu_q(\overline{\mu_{q'}}\mu_{q'})
+    =(\mu_q\overline{\mu_{q'}})\mu_{q'}
+    =\mu_{q'}$.
 
 % Scope note: this is the corrected literal-block conclusion from
 % \cite[Theorem~III, lines~543--563]{Cirac2016MPDO_arXiv}; the printed
@@ -173,9 +165,7 @@
     two of which are gauge-phase equivalent, and suppose the direct sum
     $\bigoplus_j A_j$ is a renormalization fixed point. Then for every pair of
     distinct components the mixed transfer operator vanishes,
-    \[
-        \E_{j,j'} = \sum_i A_j^i\otimes\overline{A_{j'}^i} = 0 .
-    \]
+    $\E_{j,j'}=\sum_iA_j^i\otimes\overline{A_{j'}^i}=0$.
     This is the cross-block ($\delta_{j,j'}$) content of the isometry condition
     of \cite[Theorem~III \& Corollary~III.3]{Cirac2016MPDO_arXiv} at the level of
     the normal-tensor blocks; converting it to the residual isometries $U_j$ is a
@@ -197,12 +187,13 @@
     Theorem~\ref{thm:transfer_operator_gap_rect_irr_tp} gives the same
     inequality when the bond dimensions differ. Consequently,
     Lemma~\ref{lem:idempotent_spectral_radius_zero} gives
-    \[
+    \begin{align}
         \E_{j,j'}^2=\E_{j,j'},\qquad
         \rho_{\spec}(\E_{j,j'})<1
         \quad\Longrightarrow\quad
         \E_{j,j'}=0.
-    \]
+        \notag
+    \end{align}
 \end{proof}
 
 \begin{definition}[Residual isometry family]%
@@ -211,11 +202,13 @@
     \leanok
     A family of residual tensors $(U_j)_j$ is a \emph{residual isometry family}
     when it satisfies the source isometry condition
-    \[
-        \sum_i (U_j^i)_{\alpha,\beta}\,\overline{(U_{j'}^i)_{\alpha',\beta'}}
-        = \delta_{j,j'}\delta_{\alpha,\alpha'}\delta_{\beta,\beta'} :
-    \]
-    each block satisfies the within-block pair-index orthonormality, and the
+    \begin{align}
+        \sum_i(U_j^i)_{\alpha,\beta}
+            \overline{(U_{j'}^i)_{\alpha',\beta'}}
+        &=\delta_{j,j'}\delta_{\alpha,\alpha'}\delta_{\beta,\beta'}.
+        \notag
+    \end{align}
+    Each block satisfies the within-block pair-index orthonormality, and the
     cross-block sums between distinct blocks vanish. This is the isometry
     condition of \cite[Theorem~III]{Cirac2016MPDO_arXiv}, split into its $j=j'$
     and $j\ne j'$ cases.
@@ -226,21 +219,15 @@
     \lean{MPSTensor.IsResidualIsometryFamily.wordEntryFamily_one_gram}
     \leanok
     \uses{def:is_residual_isometry_family}
-    Let
-    \[
-        \mathcal V=\bigsqcup_j\{j\}\times [D_j]\times[D_j]
-    \]
-    be the disjoint union of the within-sector virtual pairs.  For
-    $x=(j,\alpha,\beta)$ in $\mathcal V$, set
-    $u_x(i)=(U_j^i)_{\alpha,\beta}$.  Then
-    \[
-        \sum_i u_x(i)\overline{u_y(i)}=\delta_{x,y}.
-    \]
+    Let $\mathcal V=\bigsqcup_j\{j\}\times[D_j]\times[D_j]$ be the disjoint
+    union of the within-sector virtual pairs. For $x=(j,\alpha,\beta)$ in
+    $\mathcal V$, set $u_x(i)=(U_j^i)_{\alpha,\beta}$. Then
+    $\sum_i u_x(i)\overline{u_y(i)}=\delta_{x,y}$.
 \end{lemma}
 
 \begin{proof}\leanok
     If $x$ and $y$ belong to the same sector, the assertion is the
-    within-sector part of the residual isometry condition.  If they belong to
+    within-sector part of the residual isometry condition. If they belong to
     distinct sectors, it is the cross-sector vanishing condition.
 \end{proof}
 
@@ -249,19 +236,19 @@
     \lean{MPSTensor.mixedTransferMap₂_conj_apply}
     \leanok
     \uses{def:mixed_transfer_rect}
-    For decompositions $A^i = X_A D_A U^i X_A^{-1}$ and
-    $B^i = X_B D_B V^i X_B^{-1}$, the mixed transfer operator of $A,B$ is the
+    For decompositions $A^i=X_AD_AU^iX_A^{-1}$ and
+    $B^i=X_BD_BV^iX_B^{-1}$, the mixed transfer operator of $A,B$ is the
     mixed transfer operator of the residual tensors $U,V$ conjugated by the outer
     factors:
-    \[
+    \begin{align}
         \E_{A,B}(Y)
-        = X_A D_A\,\E_{U,V}\!\bigl(X_A^{-1}\,Y\,(X_B^{-1})^\dagger\bigr)\,
-            (X_B D_B)^\dagger .
-    \]
+        &=X_AD_A\,\E_{U,V}\!\left(X_A^{-1}Y(X_B^{-1})^\dagger\right)(X_BD_B)^\dagger.
+        \notag
+    \end{align}
 \end{lemma}
 \begin{proof}\leanok
     Substitute the two decompositions into
-    $\E_{A,B}(Y)=\sum_i A^i\,Y\,(B^i)^\dagger$ and collect the outer factors,
+    $\E_{A,B}(Y)=\sum_iA^iY(B^i)^\dagger$ and collect the outer factors,
     which are independent of the summation index, outside the sum.
 \end{proof}
 
@@ -270,15 +257,15 @@
     \lean{MPSTensor.mixedTransferMap₂_eq_zero_of_conj}
     \leanok
     \uses{def:mixed_transfer_rect}
-    With decompositions $A^i = X_A D_A U^i X_A^{-1}$ and
-    $B^i = X_B D_B V^i X_B^{-1}$ whose factors $X_A, D_A, X_B, D_B$ are
+    With decompositions $A^i=X_AD_AU^iX_A^{-1}$ and
+    $B^i=X_BD_BV^iX_B^{-1}$ whose factors $X_A,D_A,X_B,D_B$ are
     invertible, if $\E_{A,B}=0$ then $\E_{U,V}=0$.
 \end{lemma}
 \begin{proof}\leanok
     \uses{lem:mixed_transfer_conj_apply}
     The covariance identity Lemma~\ref{lem:mixed_transfer_conj_apply} expresses
     $\E_{A,B}$ as $\E_{U,V}$ conjugated by the invertible outer factors
-    $X_A D_A$ and $(X_B D_B)^\dagger$, so $\E_{A,B}=0$ forces $\E_{U,V}=0$.
+    $X_AD_A$ and $(X_BD_B)^\dagger$, so $\E_{A,B}=0$ forces $\E_{U,V}=0$.
 \end{proof}
 
 \begin{lemma}[Entrywise residual isometry sum]%
@@ -286,10 +273,13 @@
     \lean{MPSTensor.residual_isometry_entry_of_mixedTransferMap₂_eq_zero}
     \leanok
     \uses{def:mixed_transfer_rect}
-    If $\E_{U,V}=0$, then for all virtual indices
-    \[
-        \sum_i (U^i)_{\alpha,\beta}\,\overline{(V^i)_{\alpha',\beta'}} = 0 .
-    \]
+    If $\E_{U,V}=0$, then, for all virtual indices,
+    \begin{align}
+        \sum_i(U^i)_{\alpha,\beta}
+        \overline{(V^i)_{\alpha',\beta'}}
+        &=0.
+        \notag
+    \end{align}
 \end{lemma}
 \begin{proof}\leanok
     Apply $\E_{U,V}=0$ to the matrix unit supported at $(\beta,\beta')$ and read
@@ -302,7 +292,7 @@
     \leanok
     \uses{def:mps_transfer_idempotence, def:mixed_transfer_rect}
     If the direct sum $\bigoplus_k B_k$ is a renormalization fixed point, with
-    $\dim_k \ge 1$ for all $k$, then each block $B_j$ is a renormalization fixed
+    $\dim_k\ge1$ for all $k$, then each block $B_j$ is a renormalization fixed
     point.
 \end{lemma}
 \begin{proof}\leanok
@@ -319,14 +309,15 @@
     \uses{def:is_residual_isometry_family, def:mps_transfer_idempotence,
         def:is_isometry_canonical_form}
     Let $(A_j)_j$ be a family of normal, irreducible, left-canonical blocks, no
-    two of which are gauge-phase equivalent, with $\dim_j \ge 1$ for all $j$, and
+    two of which are gauge-phase equivalent, with $\dim_j\ge1$ for all $j$, and
     suppose the direct sum $\bigoplus_j A_j$ is a renormalization fixed point.
     Then there are invertible
     $X_j$, positive trace-normalized diagonal weights $\Lambda_j$, and residual
     tensors $U_j$ with
-    \[
-        A_j^i = X_j\,\sqrt{\Lambda_j}\,U_j^i\,X_j^{-1},
-    \]
+    \begin{align}
+        A_j^i&=X_j\sqrt{\Lambda_j}\,U_j^iX_j^{-1},
+        \notag
+    \end{align}
     such that $(U_j)_j$ is a residual isometry family. This is the
     residual-isometry content of Corollary~III.cor3
     \cite[Corollary~III.3]{Cirac2016MPDO_arXiv} at the level of the normal-tensor
@@ -346,14 +337,15 @@
     block its own transfer map, hence each block is a renormalization fixed
     point; the isometry canonical form
     (Theorem~\ref{thm:isometry_canonical_form_of_rfp_nt}) supplies the
-    decomposition $A_j^i = X_j\sqrt{\Lambda_j}U_j^iX_j^{-1}$ with the within-block
+    decomposition $A_j^i=X_j\sqrt{\Lambda_j}U_j^iX_j^{-1}$ with the within-block
     orthonormality, which is the $j=j'$ case. For $j\ne j'$,
     Theorem~\ref{thm:bnt_locally_orthogonal_of_rfp_direct_sum} gives
     $\E_{A_j,A_{j'}}=0$; by the covariance
     Lemma~\ref{lem:mixed_transfer_conj_apply} and invertibility of the outer
     factors $\E_{U_j,U_{j'}}=0$, and reading the entry of this operator at a
     matrix unit yields the cross-block sum
-    $\sum_i (U_j^i)_{\alpha,\beta}\overline{(U_{j'}^i)_{\alpha',\beta'}}=0$.
+    $\sum_i(U_j^i)_{\alpha,\beta}
+    \overline{(U_{j'}^i)_{\alpha',\beta'}}=0$.
 \end{proof}
 
 \begin{theorem}[A direct sum of isometry-canonical-form blocks is a renormalization fixed point]%
@@ -385,13 +377,14 @@
     (Theorem~\ref{thm:is_rfp_of_isometry_canonical_form}); each off-diagonal block
     $\E_{j,j'}$ with $j\ne j'$ vanishes by hypothesis. Therefore, for every bond
     block,
-    \[
-        \bigl[\mathcal{E}_{\bigoplus B}^2(Y)\bigr]_{j,j'}
-        = \E_{j,j'}\!\bigl(\E_{j,j'}(Y_{j,j'})\bigr)
-        = \E_{j,j'}(Y_{j,j'})
-        = \bigl[\mathcal{E}_{\bigoplus B}(Y)\bigr]_{j,j'},
-    \]
-    so $\mathcal{E}_{\bigoplus B}^2 = \mathcal{E}_{\bigoplus B}$ and the direct
+    \begin{align}
+        [\E_{\bigoplus B}^2(Y)]_{j,j'}
+        &=\E_{j,j'}\!(\E_{j,j'}(Y_{j,j'}))
+         =\E_{j,j'}(Y_{j,j'})
+         =[\E_{\bigoplus B}(Y)]_{j,j'},
+        \notag
+    \end{align}
+    so $\E_{\bigoplus B}^2=\E_{\bigoplus B}$ and the direct
     sum is a renormalization fixed point.
 \end{proof}
 
@@ -403,17 +396,18 @@
         def:mixed_transfer_rect,
         def:normal, def:irreducible_tensor, def:gauge_phase_equiv}
     Let $(B_k)_k$ be a family of normal, irreducible, left-canonical blocks with
-    $\dim_k \ge 1$ for all $k$, no two of which are gauge-phase equivalent. Then
+    $\dim_k\ge1$ for all $k$, no two of which are gauge-phase equivalent. Then
     the direct sum $\bigoplus_k B_k$ is a renormalization fixed point if and only
     if each block is in isometry canonical form and the mixed transfer operators
     between distinct blocks vanish:
-    \[
-        \Bigl(\bigoplus_k B_k \text{ is a RFP}\Bigr)
-        \iff
-        \Bigl(\forall k,\ B_k \text{ in isometry CF}\Bigr)
-        \;\wedge\;
-        \Bigl(\forall j\ne j',\ \E_{j,j'} = 0\Bigr).
-    \]
+    \begin{align}
+        \left(\bigoplus_k B_k\text{ is a RFP}\right)
+        &\iff
+        \left(\forall k,\ B_k\text{ in isometry CF}\right)
+        \wedge
+        \left(\forall j\ne j',\ \E_{j,j'}=0\right).
+        \notag
+    \end{align}
     This is the distinct-blocks (multiplicity-one, phase-one) case of the
     structural characterization of pure-state renormalization fixed points
     \cite[Theorem~III]{Cirac2016MPDO_arXiv}, combining its forward and backward
@@ -434,11 +428,8 @@
     (Lemma~\ref{lem:isrfp_block_of_rfp_direct_sum}), so each block is a
     renormalization fixed point and hence in isometry canonical form
     (Theorem~\ref{thm:isometry_canonical_form_of_rfp_nt}), while the off-diagonal
-    operators vanish,
-    \[
-        \E_{j,j'} = 0 \qquad (j\ne j'),
-    \]
-    by Theorem~\ref{thm:bnt_locally_orthogonal_of_rfp_direct_sum}. Conversely, a
+    operators vanish, $\E_{j,j'}=0$ for $j\ne j'$, by
+    Theorem~\ref{thm:bnt_locally_orthogonal_of_rfp_direct_sum}. Conversely, a
     direct sum of isometry-canonical-form blocks whose cross-block operators
     vanish is a renormalization fixed point
     (Theorem~\ref{thm:is_rfp_of_isometry_canonical_form_direct_sum}).
@@ -455,23 +446,18 @@
     Let $P$ be in BNT canonical form, with distinct basis tensors $(B_j)_j$.
     Then the direct sum containing one copy of each basis tensor is a
     renormalization fixed point if and only if every $B_j$ is in isometry
-    canonical form and
-    \[
-        \E_{j,j'}=0 \qquad (j\ne j').
-    \]
+    canonical form and $\E_{j,j'}=0$ for $j\ne j'$.
     This is the multiplicity-one, phase-one specialization of
-    \cite[Theorem~III and Corollary~III.3]{Cirac2016MPDO_arXiv}.  It concerns
+    \cite[Theorem~III and Corollary~III.3]{Cirac2016MPDO_arXiv}. It concerns
     the direct sum of the basis representatives, not the repeated-copy tensor
     carrying the weights $\mu_{j,q}$.
 
     If the basis direct sum is a renormalization fixed point, there are also
     invertible matrices $X_j$, positive trace-normalized diagonal weights
     $\Lambda_j$, and residual tensors $U_j$ such that
-    \[
-        B_j^i=X_j\sqrt{\Lambda_j}\,U_j^iX_j^{-1},
-    \]
-    and the family $(U_j)_j$ satisfies the full residual isometry condition,
-    including the cross-block equations for $j\ne j'$.
+    $B_j^i=X_j\sqrt{\Lambda_j}\,U_j^iX_j^{-1}$, and the family $(U_j)_j$
+    satisfies the full residual isometry condition, including the cross-block
+    equations for $j\ne j'$.
 % The physical-space construction of the repeated-copy index is recorded in
 % docs/paper-gaps/cpsv16_rfp_isometry_scope.tex.
 \end{corollary}
@@ -480,21 +466,22 @@
         thm:postblocked_representative_grouped_insert_eq,
         thm:primitive_iff_period_one,
         thm:normal_tp_primitive_irred}
-    Positive basis dimensions supply the nonzero bond spaces.  For each basis
+    Positive basis dimensions supply the nonzero bond spaces. For each basis
     tensor, irreducibility and left-canonical normalization are part of the BNT
-    canonical form.  If $m_j>0$ is the peripheral period of $B_j$, the
+    canonical form. If $m_j>0$ is the peripheral period of $B_j$, the
     normalized self-overlap hypothesis and the periodic self-overlap formula
     used in Theorem~\ref{thm:postblocked_representative_grouped_insert_eq} give,
     along the same subsequence,
-    \[
-        \lim_{k\to\infty}O_{B_jB_j}(m_jk)=1,
-        \qquad
-        \lim_{k\to\infty}O_{B_jB_j}(m_jk)=m_j.
-    \]
-    Hence $m_j=1$.  The transfer map is primitive by
+    \begin{align}
+        \lim_{k\to\infty}O_{B_jB_j}(m_jk)&=1,
+        \notag\\
+        \lim_{k\to\infty}O_{B_jB_j}(m_jk)&=m_j.
+        \notag
+    \end{align}
+    Hence $m_j=1$. The transfer map is primitive by
     Theorem~\ref{thm:primitive_iff_period_one}, and normality follows from
-    Theorem~\ref{thm:normal_tp_primitive_irred}.  Gauge-phase distinctness is
-    also part of the BNT canonical form.  The equivalence now follows from
+    Theorem~\ref{thm:normal_tp_primitive_irred}. Gauge-phase distinctness is
+    also part of the BNT canonical form. The equivalence now follows from
     Theorem~\ref{thm:rfp_directSumTensor_iff}; the same derived hypotheses in
     Theorem~\ref{thm:residual_isometry_of_rfp_direct_sum} give the residual
     isometry family.
@@ -507,9 +494,10 @@
     \uses{def:mps_transfer_idempotence, def:is_isometry_canonical_form}
     Let $B$ be the one-letter, one-dimensional tensor $B^0=(1)$, and form two
     block-diagonal copies with phases $1$ and $-1$:
-    \[
-        A^0=\begin{pmatrix}1&0\\0&-1\end{pmatrix}.
-    \]
+    \begin{align}
+        A^0&=\begin{pmatrix}1&0\\0&-1\end{pmatrix}.
+        \notag
+    \end{align}
     The representative $B$ is in isometry canonical form, and both copy
     coefficients have unit modulus. Thus $A$ satisfies the literal virtual
     block-diagonal reading of the displayed repeated-copy formula in
@@ -531,10 +519,6 @@
     Direct multiplication gives $(A^0)^2=I$. Comparing diagonal entries in
     $I=vA^0$ would give simultaneously $v=1$ and $v=-1$, which is impossible.
     On the off-diagonal matrix unit $E_{01}$, the transfer map is conjugation by
-    $A^0$, so
-    \[
-        \E_A(E_{01})=-E_{01},\qquad
-        \E_A^2(E_{01})=E_{01}.
-    \]
+    $A^0$, so $\E_A(E_{01})=-E_{01}$ and $\E_A^2(E_{01})=E_{01}$.
     Hence $\E_A^2\ne\E_A$.
 \end{proof}
