@@ -11,6 +11,7 @@ import argparse
 import json
 import re
 import sys
+from collections.abc import Iterable
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -38,6 +39,29 @@ BASELINE = ROOT / "tests/tenkz/census-baseline.json"
 # escape: sanctioned raw-geometry leak, metered by the escape census.
 _LEDGERS = ("kernel", "sugar", "alias", "escape")
 MILESTONES = ("0.8", "0.9", "1.0")
+_PARSER_FAMILY_SCOPE = {
+    "setup": "setup",
+    "grid": "picture",
+    "lattice": "picture",
+    "cd": "picture",
+    "cell": "object",
+    "put": "object",
+    "tree": "object",
+    "site": "object",
+    "join": "connection",
+    "edge": "connection",
+    "arrow": "connection",
+    "region": "region",
+    "free region": "region",
+    "span": "annotation",
+    "declare atom": "atom-declaration",
+}
+_SETUP_FORWARDS = {
+    "grid": {"pitch", "compact", "inline", "tensor style", "species"},
+    "lattice": {"pitch", "compact", "inline", "tensor style", "species"},
+    "cd": {"pitch", "compact", "inline", "tensor style", "species"},
+    "tree": {"pitch", "compact", "inline"},
+}
 
 
 def parse_status(status: str) -> tuple[str, str]:
@@ -210,13 +234,8 @@ def _declared_api() -> tuple[set[str], set[str]]:
     return commands, environments
 
 
-def _parser_leaf_keys() -> set[tuple[str, str]]:
-    """Collect public leaf-key spellings installed by the TeX parsers.
-
-    Choice values and family roots are deliberately excluded.  Shared
-    forwards are expanded so the census fails if implementation and registry
-    drift in either direction.
-    """
+def _parser_leaf_keys_from_texts(texts: Iterable[str]) -> set[tuple[str, str]]:
+    """Collect public leaf-key spellings from TeX parser source texts."""
     leaves: set[tuple[str, str]] = set()
     leaf = re.compile(
         r"/tenkz/([^/,{]+?)/([^/,{]+?)/\.(?:code|store~in|is~choice)"
@@ -228,8 +247,7 @@ def _parser_leaf_keys() -> set[tuple[str, str]]:
     forwards = re.compile(
         r"(?m)^\\tenkz_install_core_forwards:nn\s*\{[^}]+\}\s*\{([^}]+)\}"
     )
-    for path in (ROOT / "tex/tenkz").glob("*.code.tex"):
-        text = path.read_text(encoding="utf-8")
+    for text in texts:
         for match in leaf.finditer(text):
             family = match.group(1).replace("~", " ").strip()
             name = match.group(2).replace("~", " ").strip()
@@ -250,8 +268,32 @@ def _parser_leaf_keys() -> set[tuple[str, str]]:
     return leaves
 
 
-def _parser_key_names() -> set[str]:
-    return {name for _family, name in _parser_leaf_keys()}
+def _parser_leaf_keys() -> set[tuple[str, str]]:
+    """Collect public leaf-key spellings installed by the TeX parsers.
+
+    Choice values and family roots are deliberately excluded.  Shared
+    forwards are expanded so the census fails if implementation and registry
+    drift in either direction.
+    """
+    return _parser_leaf_keys_from_texts(
+        path.read_text(encoding="utf-8")
+        for path in (ROOT / "tex/tenkz").glob("*.code.tex")
+    )
+
+
+def _parser_registry_keys() -> set[tuple[str, str]]:
+    """Collapse parser families onto the public registry ownership scopes."""
+    scoped: set[tuple[str, str]] = set()
+    for family, name in _parser_leaf_keys():
+        if family not in _PARSER_FAMILY_SCOPE:
+            raise ValueError(f"parser family {family!r} has no registry scope")
+        scope = (
+            "setup"
+            if name in _SETUP_FORWARDS.get(family, set())
+            else _PARSER_FAMILY_SCOPE[family]
+        )
+        scoped.add((scope, name))
+    return scoped
 
 
 def check(entries: list[Entry]) -> list[str]:
@@ -388,11 +430,17 @@ def check(entries: list[Entry]) -> list[str]:
                 "Extension-gate: #NNNN citation, and either way the baseline "
                 "moves in the same commit"
             )
-    registered_key_names = {row[1].replace("~", " ") for row in by_kind["key"]}
-    parser_key_names = _parser_key_names()
-    if registered_key_names != parser_key_names:
-        missing = sorted(parser_key_names - registered_key_names)
-        extra = sorted(registered_key_names - parser_key_names)
+    registered_keys = {
+        (row[0], row[1].replace("~", " ")) for row in by_kind["key"]
+    }
+    parser_keys = _parser_registry_keys()
+    if registered_keys != parser_keys:
+        missing = sorted(
+            f"{scope}:{name}" for scope, name in parser_keys - registered_keys
+        )
+        extra = sorted(
+            f"{scope}:{name}" for scope, name in registered_keys - parser_keys
+        )
         errors.append(
             "parser/registry key census mismatch; missing=" + ",".join(missing)
             + "; extra=" + ",".join(extra)

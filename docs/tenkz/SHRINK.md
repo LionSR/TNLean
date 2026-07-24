@@ -130,3 +130,86 @@ Sugar-shaped commands and sunsets.
 
 Agenda handed to the 0.8 session: the S2/S3/S4 deaths listed above are
 verified against these flag ids; any survivor re-raises automatically.
+
+## Session 0 scope-census correction — 2026-07-24
+
+The original census compared parser spellings without their ownership
+scopes. The scoped comparison has 98 key rows: **79 kernel · 4 sugar ·
+9 escape · 6 alias**. It adds the distinct object `physical` and `label`
+keys and the atom-declaration `ports` key, and assigns `name` to connections,
+where its parser lives. Census-correction: #4719. The parser-path count M2
+is unchanged; this records previously flattened ownership rather than new
+package surface.
+
+Corrected meters: M1 {kernel 79, sugar 4, escape 9, alias 6, commands 18,
+environments 5} · M2 145 · M3 296 · M4 15.14 · M5 {7 aliases (six key,
+one value), 0 missing sunsets} · M6 {4 multi-typed names, 2 union types,
+8 shared enum words}.
+
+### Verdicts on the 56 corrected flags
+
+| flag | verdict |
+|---|---|
+| flag:consumers:command:tncut | dies at S4: a cut is a mark form (`LANGUAGE-1.0` §6); expiry 0.9 |
+| flag:consumers:command:tndeclareatom | keep-because: the extension door is used by declarations, not figures; teaching examples are deliberately excluded from demand counting; expiry 1.0 |
+| flag:consumers:command:tnfuse | demoted at the language landing: a prelude-declared fuse atom (`LANGUAGE-1.0` §9); expiry 0.9 |
+| flag:consumers:command:tnset | keep-because: document-scope policy lives in preambles, which the demand corpus excludes by design; expiry 1.0 |
+| flag:consumers:environment:tenkzplanes | sugar preset over the lattice frame; dies as an environment at S4; expiry 0.9 |
+| flag:consumers:key:annotation:box | folds into mark form `enclosure` at the language landing; expiry 0.9 |
+| flag:consumers:key:annotation:brace above | folds into mark forms `brace-above`/`brace-below` at the language landing; expiry 0.9 |
+| flag:consumers:key:annotation:label pos | moves unchanged to the mark record at the language landing; expiry 0.9 |
+| flag:consumers:key:atom-declaration:ports | keep-because: declared atoms require an explicit typed-port schema at the extension door; permanent |
+| flag:consumers:key:atom-declaration:skin | keep-because: rides `\tndeclareatom`, same exclusion; expiry 1.0 |
+| flag:consumers:key:connection:distinguished | keep-because: two consumers today, torus redraws add more (#4702); expiry 0.9 |
+| flag:consumers:key:connection:fused | respelled `weight=double` at the language landing; expiry 0.9 |
+| flag:consumers:key:connection:none | dies at the language landing: omit the wire record, or use atom `void=sealed`; expiry 0.9 |
+| flag:consumers:key:connection:style | dies with the lattice edge-style pass-through at S3; expiry 0.9 |
+| flag:consumers:key:object:combined | folds into the ports grammar at the language landing; expiry 0.9 |
+| flag:consumers:key:object:east at | folds into the ports grammar; expiry 0.9 |
+| flag:consumers:key:object:west at | folds into the ports grammar; expiry 0.9 |
+| flag:consumers:key:object:physical | folds into the typed-port grammar at the language landing; expiry 0.9 |
+| flag:consumers:key:object:removed | becomes atom `void=sealed` at the language landing; expiry 0.9 |
+| flag:consumers:key:object:span | folds into `ports=` and `wires=` at the language landing; expiry 0.9 |
+| flag:consumers:key:object:species | keep-because: semantic species is a kernel atom field; role consumers move here at the language landing; expiry 0.9 |
+| flag:consumers:key:object:tree style | dies with the cd dialect at S4; expiry 0.9 |
+| flag:consumers:key:picture:align | keep-because: the only math-axis control until `tenkzeq` lands (#4703); expiry 0.9 |
+| flag:consumers:key:picture:bond dir | tombstoned at S4 in favour of wire `dir=`; expiry 0.9 |
+| flag:consumers:key:picture:layer sep | folds into the metric/size classes at the equation landing; expiry 0.9 |
+| flag:consumers:key:picture:north | keep-because: the four side policies are one kernel concept and north is required by two-dimensional frames; expiry 0.9 |
+| flag:consumers:key:picture:open | keep-because: the cell-set boundary algebra is kernel and gains consumers as `open=` spreads; expiry 0.9 |
+| flag:consumers:key:picture:pairing | folds into declared skin pairings and wires at the language landing; expiry 0.9 |
+| flag:consumers:key:picture:plane lean | folds into `frame=` subkeys at S3; expiry 0.9 |
+| flag:consumers:key:picture:polygon | dies with the cd dialect at S4; expiry 0.9 |
+| flag:consumers:key:picture:sheet sep | folds into `frame=` subkeys at S3; expiry 0.9 |
+| flag:consumers:key:picture:sheets | keep-because: the 2+1D lattice mechanism; condensation/czx redraws consume it (#4704); expiry 0.9 |
+| flag:consumers:key:picture:site | dies with the lattice dialect at S3; frame population creates ordinary atoms; expiry 0.9 |
+| flag:consumers:key:picture:south | keep-because: the four side policies are one kernel concept and south is required by two-dimensional frames; expiry 0.9 |
+| flag:consumers:key:picture:trace style | dies at S2 when the default flips to the cap idiom; expiry 0.9 |
+| flag:consumers:key:region:group | folds into address sets at the language landing; expiry 0.9 |
+| flag:consumers:key:region:name | keep-because: same addressing argument as connection:name; expiry 0.9 |
+| flag:consumers:key:setup:inline | dies at the equation landing (math-style sensing, #4703); expiry 0.9 |
+| flag:consumers:key:setup:pitch | keep-because: the metric anchor is set in preambles, excluded from demand counting by design; expiry 1.0 |
+| flag:cooccur:annotation:box+label pos | confirmed merge: enclosure geometry and label placement become one mark record at the language landing; expiry 0.9 |
+| flag:cooccur:connection:from+to | keep-because: source and target are distinct endpoints of one wire record, not duplicate controls; permanent |
+| flag:cooccur:connection:in+out | confirmed merge: `out=`/`in=` are one concept (a hand-routed arc) and both die at S4 when declared routes land; expiry 0.9 (#4705) |
+| flag:cooccur:object:east at+west at | confirmed merge: the two endpoint selectors become one ports record at the language landing; expiry 0.9 |
+| flag:lonely-type:cell-set | keep: the cell-set algebra is kernel and gains consumers as `open=` spreads; expiry 0.9 |
+| flag:lonely-type:cell-set\|physical | dies at the language landing with the union type (M6); expiry 0.9 |
+| flag:lonely-type:frame-enum | becomes the frame-spec type at the language landing; expiry 0.9 |
+| flag:lonely-type:math-and-range | dies with the B10 bond-label keyval at the language landing; expiry 0.9 |
+| flag:lonely-type:positive-integer\|role-list | dies at the language landing with the union type (M6); expiry 0.9 |
+| flag:lonely-type:row | keep: `align=` holds it until tenkzeq; expiry 0.9 |
+| flag:lonely-type:row-list | keep: `rows=` is kernel and audit-load-bearing; permanent |
+| flag:lonely-type:style-name | dies with the lattice edge-style pass-through at S3; expiry 0.9 |
+| flag:sugar-shaped:command:tndots | folds into `\tn[skin=dots]` at the language landing; expiry 0.9 |
+| flag:sugar-shaped:command:tnghost | dies at the language landing because addresses name empty cells directly; expiry 0.9 |
+| flag:sugar-shaped:command:tnskip | becomes `\tn[void=open]` at the language landing; expiry 0.9 |
+| flag:sugar-shaped:command:tntree | confirmed: the tree expander builds kernel atoms and wires; expiry 0.9 |
+| flag:sugar-shaped:command:tnarrow | becomes `\tnwire[dir=to]` at the language landing; expiry 0.9 |
+
+The 1.0 alias sweep also covers the value alias omitted from the original
+table:
+
+| flag | verdict |
+|---|---|
+| flag:sunset:connection:route=curve | executes at the 1.0 freeze with the alias sweep |

@@ -115,6 +115,27 @@ def test_sugar_expansion_checks_every_token() -> None:
     ), errors
 
 
+def test_parser_registry_census_preserves_scopes() -> None:
+    entries = tenkz_shrink.load_registry()
+    moved = [
+        Entry(
+            entry.kind,
+            ("picture", *entry.fields[1:]),
+        )
+        if entry.kind == "key"
+        and entry.fields[0] == "annotation"
+        and entry.fields[1] == "brace above"
+        else entry
+        for entry in entries
+    ]
+    errors = check(moved)
+    assert any(
+        "missing=annotation:brace above" in error
+        and "extra=picture:brace above" in error
+        for error in errors
+    ), errors
+
+
 def test_alias_replacements_are_registered_vocabulary() -> None:
     entries = tenkz_shrink.load_registry()
     for replacement in ("does not exist", " "):
@@ -214,6 +235,43 @@ def test_setup_consumers_include_picture_options() -> None:
     }
     for key in ("pitch", "compact", "inline", "tensor style"):
         assert key in names
+
+
+def test_setup_consumers_include_only_forwarded_tree_options() -> None:
+    path = ROOT / "synthetic.tex"
+    corpus = {
+        path: (
+            r"\tntree[pitch=9mm, compact, inline, species=fermion, "
+            r"tree style=ribbon, role=operator]{(a\,b)_c}"
+        )
+    }
+    scoped = tenkz_shrink.scoped_option_groups(corpus)
+    setup_names = {
+        name
+        for payload in scoped["setup"][path]
+        for name in tenkz_shrink._option_key_names(payload)
+    }
+    object_names = {
+        name
+        for payload in scoped["object"][path]
+        for name in tenkz_shrink._option_key_names(payload)
+    }
+    assert setup_names == {"pitch", "compact", "inline"}
+    assert object_names == {
+        "pitch",
+        "compact",
+        "inline",
+        "species",
+        "tree style",
+        "role",
+    }
+    entries = [
+        Entry("key", ("setup", "species", "name-list", "empty", "kernel", "")),
+        Entry("key", ("object", "species", "declared-name", "empty", "kernel", "")),
+    ]
+    consumers = tenkz_shrink.row_consumers(entries, corpus)
+    assert consumers["key:setup:species"] == set()
+    assert consumers["key:object:species"] == {"synthetic.tex"}
 
 
 def test_cooccurrence_is_measured_per_invocation() -> None:
@@ -356,6 +414,55 @@ def test_prechange_ratchet_requires_extension_citation() -> None:
     ]
     assert not tenkz_shrink.ratchet_errors(
         current, previous, has_extension=True
+    )
+
+
+def test_parser_identity_swap_requires_extension_citation() -> None:
+    baseline = json.loads((ROOT / "tests/tenkz/census-baseline.json").read_text())
+    current = copy.deepcopy(baseline)
+    current["m2_parser_paths"]["identity_sha256"] = "0" * 64
+    errors = tenkz_shrink.ratchet_errors(
+        current, baseline, has_extension=False
+    )
+    assert errors == [
+        "M2 parser identities changed without an Extension-gate: #NNNN citation"
+    ]
+    assert not tenkz_shrink.ratchet_errors(
+        current, baseline, has_extension=True
+    )
+
+
+def test_census_correction_requires_unchanged_parser_surface() -> None:
+    baseline = json.loads((ROOT / "tests/tenkz/census-baseline.json").read_text())
+    current = copy.deepcopy(baseline)
+    previous = copy.deepcopy(baseline)
+    current["m1_census"]["value"]["kernel"] += 3
+    current["m6_overloads"]["value"]["multi_typed_names"] += 1
+    assert tenkz_shrink.ratchet_errors(
+        current,
+        previous,
+        has_extension=False,
+    )
+    assert not tenkz_shrink.ratchet_errors(
+        current,
+        previous,
+        has_extension=False,
+        has_census_correction=True,
+    )
+    current["m2_parser_paths"]["value"] += 1
+    assert tenkz_shrink.ratchet_errors(
+        current,
+        previous,
+        has_extension=False,
+        has_census_correction=True,
+    )
+    current["m2_parser_paths"]["value"] -= 1
+    current["m2_parser_paths"]["identity_sha256"] = "0" * 64
+    assert tenkz_shrink.ratchet_errors(
+        current,
+        previous,
+        has_extension=False,
+        has_census_correction=True,
     )
 
 
