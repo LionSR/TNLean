@@ -18,7 +18,7 @@ with `λ^n = 1` through `B^i = λ · Z⁻¹ A^i Z`
 (`fundamentalTheorem_normalMPS_translationInvariant`).  The gauge `Z` is
 unique up to a multiplicative constant; the uniqueness clause
 (`fundamentalTheorem_normalMPS_translationInvariant_gauge_unique`) is now
-delivered by `TNLean/PEPS/CycleMPSOverlapCapstone.lean`.
+proved in `TNLean/PEPS/CycleMPSOverlapCapstone.lean`.
 
 The derivation collapses the per-bond gauge family of the matrix-form
 corollary (`fundamentalTheorem_normalMPS`).  The per-bond relation
