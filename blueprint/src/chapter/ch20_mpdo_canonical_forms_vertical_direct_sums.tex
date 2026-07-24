@@ -25,11 +25,11 @@
     \leanok
     \uses{lem:mpv_diagonal_tensor, def:horizontal_cf_mpdo}
     Suppose the doubled-index tensor $\widehat{M}$ shares its positive-length matrix
-    product vector family with a block-diagonal assembly
+    product vector family with a block-diagonal direct sum
     $\bigoplus_k\mu_kA_k$ of blocks $A_k$ on
     the doubled index, as in a horizontal canonical form. Then the diagonal tensor of
     $M$ generates the same positive-length matrix product vector family as the
-    block-diagonal assembly
+    block-diagonal direct sum
     $\bigoplus_k\mu_kA_k^{\mathrm{diag}}$ on the single-spin index, where
     $A_k^{\mathrm{diag}}(i)=A_k(i,i)$ is the diagonal restriction of each block.
     For every $N\geq1$,
@@ -44,10 +44,10 @@
     \uses{lem:mpv_diagonal_tensor}
     By Lemma~\ref{lem:mpv_diagonal_tensor}, the diagonal matrix product vector equals
     that of $\widehat{M}$ on the diagonal-paired configuration, which by hypothesis
-    equals that of the block-diagonal assembly there. Expanding the assembly as the
+    equals that of the block-diagonal direct sum there. Expanding the direct sum as the
     weighted sum $\sum_k\mu_k^NV^{(N)}(A_k)$ and restricting each block to the
     diagonal pair gives $\sum_k\mu_k^NV^{(N)}(A_k^{\mathrm{diag}})$, the matrix
-    product vector of the single-spin block-diagonal assembly.
+    product vector of the single-spin block-diagonal direct sum.
 \end{proof}
 
 \begin{theorem}[Per-copy horizontal hypotheses do not control diagonal normality]
@@ -139,7 +139,7 @@
     matrix are non-negative.
 \end{proof}
 
-\begin{lemma}[Matrix product vector of the vertical-assembled tensor]
+\begin{lemma}[Matrix product vector of the vertical direct-sum tensor]
     \label{lem:mpv_vertical_assembled}
     \lean{MPOTensor.verticalCopyDim}
     \lean{MPOTensor.verticalCopyBlocks}
@@ -149,8 +149,8 @@
     Let $g$ be a block count,
     $\dim,\mult:\{0,\ldots,g-1\}\to\N$, weights
     $\omega_{\alpha j}\in\C$ for $0\leq j<\mult_\alpha$, and blocks
-    $A_\alpha$ of bond dimension $\dim_\alpha$. The vertical-assembled tensor is the
-    block-diagonal assembly over the flattened index $(\alpha,j)$ that repeats
+    $A_\alpha$ of bond dimension $\dim_\alpha$. The vertical direct-sum tensor is the
+    block-diagonal direct sum over the flattened index $(\alpha,j)$ that repeats
     $A_\alpha$ with weight $\omega_{\alpha j}$, written
     $\bigoplus_\alpha\bigoplus_j\omega_{\alpha j}A_\alpha$. Its matrix product
     vector decomposes as
@@ -164,7 +164,7 @@
 \end{lemma}
 \begin{proof}\leanok
     \uses{thm:mpv_decomposition}
-    The vertical-assembled tensor is the block-diagonal assembly over the single
+    The vertical direct-sum tensor is the block-diagonal direct sum over the single
     flattened index $q$, with flattened weights $\widetilde\omega_q$ and blocks
     $\widetilde A_q$. By the block matrix-product-vector decomposition
     (Theorem~\ref{thm:mpv_decomposition}),

@@ -135,8 +135,8 @@ on decay rates.
     \lean{MPSTensor.connectedCorrelator_bound}
     \leanok
     \uses{def:connected_correlator}
-    If a constant $C_{XY}\in\R$ and $\lambda_2\in\C$ with
-    $|\lambda_2|<1$ satisfy, for all $n\ge0$,
+    If a constant $C_{XY}\in\R$ and $\lambda_2\in\C$ satisfy, for all
+    $n\ge0$,
     \begin{align}
         |C(X,Y;n)|
         &\le C_{XY}\,|\lambda_2|^n,
@@ -159,7 +159,8 @@ on decay rates.
     For a pure-exponential expansion, the source
     \cite[Section~II.B.3]{Cirac2021Matrix} obtains such a bound by applying
     the triangle inequality and using
-    $|\lambda_j|\le|\lambda_2|<1$ for all subleading eigenvalues.
+    $|\lambda_j|\le|\lambda_2|$ for all subleading eigenvalues; when the
+    transfer-map gap gives $|\lambda_2|<1$, this is a decaying bound.
     In the presence of nontrivial Jordan blocks, an exponential estimate
     still follows at any rate strictly larger than the complementary
     spectral radius, as made explicit below.
@@ -171,10 +172,10 @@ on decay rates.
     \label{rem:spectral_hypothesis}
     \uses{thm:correlator_exponential_bound, thm:primitive_compl_lt_one,
         thm:transfer_operator_gap_irr_tp, thm:transfer_map_gap_wielandt}
-    The hypothesis ``$|\lambda_2| < 1$'' in
-    Theorem~\ref{thm:correlator_exponential_bound} is a transfer-map gap
-    condition: all non-leading eigenvalues of $\E_A$ lie strictly inside the
-    unit disk. It is distinct from the Hamiltonian spectral gap of
+    The condition $|\lambda_2|<1$ turns the bound in
+    Theorem~\ref{thm:correlator_exponential_bound} into exponential decay. It
+    is a transfer-map gap condition: all non-leading eigenvalues of $\E_A$ lie
+    strictly inside the unit disk. It is distinct from the Hamiltonian spectral gap of
     Chapter~\ref{ch:parent_hamiltonian}.
     The complementary transfer-map gap $\rho(\E_A-P)<1$ is established for
     primitive channels
@@ -199,15 +200,16 @@ on decay rates.
     \lean{MPSTensor.correlationLength}
     \leanok
     \uses{def:transfer_map}
-    The correlation length associated with a nonzero subleading eigenvalue
-    $\lambda_2$ of the transfer map, where $0<|\lambda_2|<1$, is
+    For every $\lambda_2\in\C$, define the associated correlation-length
+    quantity by
     \begin{align}
         \xi
         &= -\frac{1}{\log|\lambda_2|}. \notag
     \end{align}
-    If all subleading spectral values vanish and correlations therefore
-    vanish after finitely many transfer steps, one may use the limiting
-    convention $\xi=0$.
+    For a nonzero subleading eigenvalue in the physical range
+    $0<|\lambda_2|<1$, this quantity is positive. If all subleading spectral
+    values vanish and correlations therefore vanish after finitely many
+    transfer steps, the total definition gives the limiting value $\xi=0$.
 \end{definition}
 
 \begin{lemma}[Correlation length is positive]\label{lem:correlation_length_pos}

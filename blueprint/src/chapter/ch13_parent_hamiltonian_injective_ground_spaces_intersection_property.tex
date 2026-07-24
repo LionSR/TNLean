@@ -318,7 +318,9 @@
     \uses{def:in_left_ground, def:in_tail_ground, def:ground_space_parent}
     Assume $\psi$ on $K+L_0+1$ sites satisfies the left ground condition on the
     first $K+L_0$ sites and the suffix ground condition on every fixed prefix of
-    length $K$. Then there exist matrices $(Z_j)_j$ and $(Y_u)_u$ such that
+    length $K$. Then there exist matrices $(Z_j)_j$ and $(Y_u)_u$ with the two
+    trace representations below and, for all $j$ and $u$, the compatibility
+    relation
     \begin{align}
         \psi(\sigma,j)
         &= \tr(A^\sigma Z_j),
@@ -327,8 +329,7 @@
         &= \tr(A^\tau Y_u),
         \notag\\
         Z_jA^u
-        &= A^jY_u
-        \qquad\text{for all $j$ and $u$}.
+        &= A^jY_u.
         \notag
     \end{align}
 \end{lemma}
