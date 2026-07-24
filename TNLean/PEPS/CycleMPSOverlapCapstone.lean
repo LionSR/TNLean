@@ -437,74 +437,6 @@ theorem overlapWindow_exists_bondOperator {B : MPSTensor d D} {n L : ℕ}
   · rw [hX0 a, MPSChainTensor.arcEval_const]
   · rw [hXL b, MPSChainTensor.arcEval_const]
 
-/-! ### Insertion correspondence from the constant-chain specialization -/
-
-/-- **Insertion correspondence of Lemma 5** (arXiv:1804.04964, Lemma 5):
-for `L`-block injective tensors `A` and `B` generating the same closed-chain
-state on `n ≥ 2L + 1` sites, the word products at length `n` are conjugate:
-an invertible matrix `Z` with `B^w = Z ⬝ A^w ⬝ Z⁻¹` for every word `w` of
-length `n`.
-
-Proved from the general site-dependent Lemma 5 apparatus: for constant
-chains — the same tensor at every site — the site-dependent closed-chain
-corollary (`fundamentalTheorem_normalMPSChain_of_overlap`) supplies a
-per-bond gauge family; the arc products of the constant chain are the word
-products, and the word-product conjugation at the full chain length is
-conjugation by the gauge at the starting bond. -/
-theorem exists_conjugation_of_mpv_eq {n L d D : ℕ}
-    (hL : 0 < L) (hn : 2 * L + 1 ≤ n) (hD : 0 < D)
-    (A B : MPSTensor d D)
-    (hA : MPSTensor.IsNBlkInjective A L) (hB : MPSTensor.IsNBlkInjective B L)
-    (hAB : ∀ σ : Fin n → Fin d, MPSTensor.mpv A σ = MPSTensor.mpv B σ) :
-    ∃ Z : GL (Fin D) ℂ,
-      ∀ w : List (Fin d), w.length = n →
-        MPSTensor.evalWord B w =
-          (Z : Matrix (Fin D) (Fin D) ℂ) * MPSTensor.evalWord A w *
-            (((Z⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)) := by
-  haveI : NeZero n := ⟨by omega⟩
-  -- Build constant chains.
-  set A' : MPSChainTensor d D n := fun _ : Fin n => A with hA'
-  set B' : MPSChainTensor d D n := fun _ : Fin n => B with hB'
-  have hAwin : MPSChainTensor.IsWindowInjective A' L :=
-    MPSChainTensor.isWindowInjective_const hA
-  have hBwin : MPSChainTensor.IsWindowInjective B' L :=
-    MPSChainTensor.isWindowInjective_const hB
-  -- mpv equality implies SameState for the constant chains.
-  have hsame : MPSChainTensor.SameState A' B' := by
-    intro σ
-    calc
-      MPSChainTensor.coeff A' σ
-          = Matrix.trace (MPSChainTensor.arcEval A' 0 (List.ofFn σ)) := by
-        rw [MPSChainTensor.coeff_eq_trace_arcEval]
-      _ = Matrix.trace (MPSTensor.evalWord A (List.ofFn σ)) := by
-        rw [hA', MPSChainTensor.arcEval_const]
-      _ = MPSTensor.mpv A σ := by simp
-      _ = MPSTensor.mpv B σ := hAB σ
-      _ = Matrix.trace (MPSTensor.evalWord B (List.ofFn σ)) := by simp
-      _ = Matrix.trace (MPSChainTensor.arcEval B' 0 (List.ofFn σ)) := by
-        rw [hB', MPSChainTensor.arcEval_const]
-      _ = MPSChainTensor.coeff B' σ := by
-        rw [MPSChainTensor.coeff_eq_trace_arcEval]
-  -- Apply the site-dependent capstone.
-  obtain ⟨Z, hZ⟩ := TNLean.PEPS.fundamentalTheorem_normalMPSChain_of_overlap
-    hL hn hD A' B' hAwin hBwin hsame
-  -- The gauge family Z gives arc-product conjugation.
-  have hconj : ∀ w : List (Fin d), w.length = n →
-      MPSTensor.evalWord B w =
-        (Z 0 : Matrix (Fin D) (Fin D) ℂ) * MPSTensor.evalWord A w *
-          ((((Z 0)⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)) := by
-    intro w hw
-    have harc := MPSChainTensor.arcEval_eq_gauge_conj hZ 0 w
-    rw [hA', hB', MPSChainTensor.arcEval_const A 0 w,
-      MPSChainTensor.arcEval_const B 0 w] at harc
-    -- At the full chain length the end bond wraps to the starting bond.
-    have hwrap : ((0 + w.length : ℕ) : Fin n) = (0 : Fin n) := by
-      rw [hw, zero_add]
-      exact Fin.natCast_self n
-    rw [hwrap] at harc
-    exact harc
-  refine ⟨Z 0, hconj⟩
-
 end MPSTensor
 
 namespace TNLean
@@ -583,6 +515,72 @@ theorem evalWord_eq_smul_conj_of_gauge {d D : ℕ} {A B : MPSTensor d D} {Z : GL
       congr 1
       simp only [Matrix.mul_assoc, Units.mul_inv_cancel_left]
 
+/-! ### Insertion correspondence from the constant-chain specialization -/
+
+/-- **Insertion correspondence of Lemma 5** (arXiv:1804.04964, Lemma 5):
+for `L`-block injective tensors `A` and `B` generating the same closed-chain
+state on `n ≥ 2L + 1` sites, the word products at length `n` are conjugate:
+an invertible matrix `Z` with `B^w = Z ⬝ A^w ⬝ Z⁻¹` for every word `w` of
+length `n`.
+
+Proved from the general site-dependent Lemma 5 apparatus: for constant
+chains — the same tensor at every site — the site-dependent closed-chain
+corollary (`fundamentalTheorem_normalMPSChain_of_overlap`) supplies a
+per-bond gauge family; the arc products of the constant chain are the word
+products, and the word-product conjugation at the full chain length is
+conjugation by the gauge at the starting bond. -/
+theorem exists_conjugation_of_mpv_eq {n L d D : ℕ}
+    (hL : 0 < L) (hn : 2 * L + 1 ≤ n) (hD : 0 < D)
+    (A B : MPSTensor d D)
+    (hA : MPSTensor.IsNBlkInjective A L) (hB : MPSTensor.IsNBlkInjective B L)
+    (hAB : ∀ σ : Fin n → Fin d, MPSTensor.mpv A σ = MPSTensor.mpv B σ) :
+    ∃ Z : GL (Fin D) ℂ,
+      ∀ w : List (Fin d), w.length = n →
+        MPSTensor.evalWord B w =
+          (Z : Matrix (Fin D) (Fin D) ℂ) * MPSTensor.evalWord A w *
+            (((Z⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)) := by
+  -- Build constant chains.
+  set A' : MPSChainTensor d D n := fun _ : Fin n => A with hA'
+  set B' : MPSChainTensor d D n := fun _ : Fin n => B with hB'
+  have hAwin : MPSChainTensor.IsWindowInjective A' L :=
+    MPSChainTensor.isWindowInjective_const hA
+  have hBwin : MPSChainTensor.IsWindowInjective B' L :=
+    MPSChainTensor.isWindowInjective_const hB
+  -- mpv equality implies SameState for the constant chains.
+  have hsame : MPSChainTensor.SameState A' B' := by
+    intro σ
+    calc
+      MPSChainTensor.coeff A' σ
+          = Matrix.trace (MPSChainTensor.arcEval A' 0 (List.ofFn σ)) := by
+        rw [MPSChainTensor.coeff_eq_trace_arcEval]
+      _ = Matrix.trace (MPSTensor.evalWord A (List.ofFn σ)) := by
+        rw [hA', MPSChainTensor.arcEval_const]
+      _ = MPSTensor.mpv A σ := by simp
+      _ = MPSTensor.mpv B σ := hAB σ
+      _ = Matrix.trace (MPSTensor.evalWord B (List.ofFn σ)) := by simp
+      _ = Matrix.trace (MPSChainTensor.arcEval B' 0 (List.ofFn σ)) := by
+        rw [hB', MPSChainTensor.arcEval_const]
+      _ = MPSChainTensor.coeff B' σ := by
+        rw [MPSChainTensor.coeff_eq_trace_arcEval]
+  -- Apply the site-dependent capstone.
+  obtain ⟨Z, hZ⟩ := fundamentalTheorem_normalMPSChain_of_overlap
+    hL hn hD A' B' hAwin hBwin hsame
+  -- The gauge family Z gives arc-product conjugation.
+  have hconj : ∀ w : List (Fin d), w.length = n →
+      MPSTensor.evalWord B w =
+        (Z 0 : Matrix (Fin D) (Fin D) ℂ) * MPSTensor.evalWord A w *
+          ((((Z 0)⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)) := by
+    intro w hw
+    have harc := MPSChainTensor.arcEval_eq_gauge_conj hZ 0 w
+    rw [hA', hB', MPSChainTensor.arcEval_const A 0 w,
+      MPSChainTensor.arcEval_const B 0 w] at harc
+    -- At the full chain length the end bond wraps to the starting bond.
+    have hwrap : ((0 + w.length : ℕ) : Fin n) = (0 : Fin n) := by
+      rw [hw, zero_add]
+      exact Fin.natCast_self n
+    rw [hwrap] at harc
+    exact harc
+  refine ⟨Z 0, hconj⟩
 
 /-! ### The strengthened closed-chain corollaries -/
 
