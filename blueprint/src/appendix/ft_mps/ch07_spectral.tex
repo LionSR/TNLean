@@ -1,0 +1,73 @@
+\chapter{Transfer-Operator Gaps and Block Separation: Supporting Results}
+\label{ch:spectral_supporting_results}
+
+This appendix supports Chapter~\ref{ch:spectral}. It records the Gram-matrix
+and unitary-extension arguments used in the fixed-point decomposition.
+
+The next two results supply the ambient unitary in the fixed-point decomposition
+of Theorem~\ref{thm:wolf_6_14}.
+
+\begin{lemma}[Rectangular Gram equality gives a unitary]
+    \label{lem:exists_unitary_mul_eq_of_gram_eq}
+    \lean{Matrix.exists_unitary_mul_eq_of_conjTranspose_mul_eq}
+    \leanok
+    \uses{}
+    Let $A,B:\C^n\to\C^m$ be linear maps with
+    $B^\dagger B=A^\dagger A$. Then there is a unitary
+    $U$ on $\C^m$ such that $B=UA$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Let $\mathcal R_A=\operatorname{ran}A$ and
+    $\mathcal R_B=\operatorname{ran}B$. Define
+    $V:\mathcal R_A\to\mathcal R_B$ by $V(Ax)=Bx$. This is well defined:
+    if $Ax=Ay$, then
+    \begin{align}
+        \lVert B(x-y)\rVert^2
+         & =\langle x-y,B^\dagger B(x-y)\rangle
+        =\langle x-y,A^\dagger A(x-y)\rangle
+        =\lVert A(x-y)\rVert^2=0.
+        \notag
+    \end{align}
+    The same calculation, with two vectors and polarization, gives
+    $\langle V(Ax),V(Ay)\rangle=\langle Ax,Ay\rangle$. Thus $V$ is an
+    isometry onto $\mathcal R_B$. In particular,
+    $\dim\mathcal R_A=\dim\mathcal R_B$, so their orthogonal complements
+    in $\C^m$ have equal dimension. Choose a unitary
+    $V^\perp:\mathcal R_A^\perp\to\mathcal R_B^\perp$ and set
+    $U=V\oplus V^\perp$ with respect to the two orthogonal decompositions of
+    $\C^m$. Then $U$ is unitary and $UAx=Bx$ for every $x\in\C^n$; hence
+    $B=UA$.
+\end{proof}
+
+\begin{theorem}[Unitary completion of an isometric inclusion]
+    \label{thm:isometric_inclusion_zero_extension}
+    \lean{Matrix.exists_unitary_zero_extension_eq}
+    \leanok
+    \uses{lem:exists_unitary_mul_eq_of_gram_eq}
+    Let $W:\C^n\to\C^D$ satisfy $W^\dagger W=\Id_n$. There are an
+    identification $\C^D\simeq\C^{D-n}\oplus\C^n$ and a unitary $U$ on
+    $\C^D$ such that, for every $A\in\MN{n}$,
+    \begin{align}
+        WAW^\dagger
+         & =U(0_{D-n}\oplus A)U^\dagger.
+        \label{eq:representations_unitary_completion}
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{lem:exists_unitary_mul_eq_of_gram_eq}
+    The isometry $W$ implies $n\leq D$. Let $J:\C^n\to
+        \C^{D-n}\oplus\C^n$ be the canonical inclusion into the second summand.
+    Since $W^\dagger W=J^\dagger J=\Id_n$,
+    Lemma~\ref{lem:exists_unitary_mul_eq_of_gram_eq}
+    gives a unitary $U$ with $W=UJ$. Substituting this identity gives
+    (\ref{eq:representations_unitary_completion}) because
+    $JAJ^\dagger=0_{D-n}\oplus A$.
+\end{proof}
+
+Equality of the two inclusion Gram matrices therefore supplies exactly the
+unitary conjugation used to adjoin the complementary zero block in
+Theorem~\ref{thm:wolf_6_14}.

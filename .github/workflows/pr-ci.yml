@@ -46,6 +46,7 @@ on:
       - 'scripts/tenkz_corpus.sh'
       - 'scripts/tenkz_golden.sh'
       - 'scripts/tenkz_kernel_probes.sh'
+      - 'scripts/tenkz_string_probes.sh'
       - 'scripts/tenkz_render_corpus.py'
       - 'scripts/test_tenkz_corpus_provenance.py'
       - 'scripts/test_tenkz_corpus_render.py'
@@ -101,6 +102,7 @@ on:
       - 'scripts/tenkz_corpus.sh'
       - 'scripts/tenkz_golden.sh'
       - 'scripts/tenkz_kernel_probes.sh'
+      - 'scripts/tenkz_string_probes.sh'
       - 'scripts/tenkz_render_corpus.py'
       - 'scripts/test_tenkz_corpus_provenance.py'
       - 'scripts/test_tenkz_corpus_render.py'
@@ -213,6 +215,7 @@ jobs:
               - 'scripts/tenkz_corpus.sh'
               - 'scripts/tenkz_golden.sh'
               - 'scripts/tenkz_kernel_probes.sh'
+              - 'scripts/tenkz_string_probes.sh'
               - 'scripts/tenkz_render_corpus.py'
               - 'scripts/test_tenkz_corpus_provenance.py'
               - 'scripts/test_tenkz_corpus_render.py'
@@ -302,6 +305,8 @@ jobs:
         run: TENKZ_CORPUS_JOBS=4 scripts/tenkz_corpus.sh
       - name: Check golden event baselines
         run: TENKZ_CORPUS_JOBS=4 scripts/tenkz_golden.sh --check
+      - name: Check string-engine event and pixel probes
+        run: scripts/tenkz_string_probes.sh
 
   build:
     needs: changes

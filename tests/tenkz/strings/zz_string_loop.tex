@@ -1,0 +1,18 @@
+% Regression: zz_string_loop — one closed Hobby cycle through four waypoints.
+% Formula: the smooth-loop closure that replaces the four-arc quartet.
+% Expectation: a single smooth oval through the diamond points, no corner at
+%   the seam point (the [closed] joint), no self-intersection.
+\documentclass[varwidth=8cm, border=6pt]{standalone}
+\usepackage{tenkz}
+\usetikzlibrary{hobby,spath3,intersections}
+\begin{document}
+\makeatletter\input{tenkz-string.code.tex}\makeatother
+\begin{tikzpicture}
+\ExplSyntaxOn
+\__tenkz_string_reset:
+\__tenkz_string_declare_closed:nn {loop} { {0,1} {1.4,0} {0,-1} {-1.4,0} }
+\__tenkz_string_resolve:
+\__tenkz_string_dev_draw:nn {loop} { thick }
+\ExplSyntaxOff
+\end{tikzpicture}
+\end{document}

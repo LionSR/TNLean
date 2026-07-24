@@ -1,0 +1,17 @@
+% Expected failure: a self-gap selector must name a post-split component
+% boundary, not an arbitrary component index.
+\documentclass{standalone}
+\usepackage{tenkz}
+\usetikzlibrary{hobby,spath3,intersections}
+\begin{document}
+\makeatletter\input{tenkz-string.code.tex}\makeatother
+\begin{tikzpicture}
+\ExplSyntaxOn
+\__tenkz_string_reset:
+\__tenkz_string_register:nn {self} {open}
+\path[spath/save=self] (-1,-1)--(1,1)--(-1,1)--(1,-1);
+\__tenkz_string_under_at:nnn {self} {self} {99}
+\__tenkz_string_resolve:
+\ExplSyntaxOff
+\end{tikzpicture}
+\end{document}

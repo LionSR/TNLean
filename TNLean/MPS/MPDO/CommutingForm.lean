@@ -748,17 +748,4 @@ theorem hasGSNNCHForm_of_hasCommutingBondProduct
     HasGSNNCHForm M := fun N hN ↦
   hasGSNNCHFormAt_of_hasCommutingBondProductAt (hM N hN)
 
-/-- If the MPO operators are density operators, a global single-bond
-presentation is a special case of the source GSNNCH condition. -/
-theorem isGSNNCH_of_hasCommutingBondProduct
-    {M : MPOTensor d D} (hM : HasCommutingBondProduct M)
-    (hDensity : ∀ N : ℕ, 2 ≤ N →
-      (mpo M N).PosSemidef ∧ (mpo M N).trace = 1) :
-    IsGSNNCH M := by
-  intro N hN
-  simpa [normalizedMPO, (hDensity N hN).2] using
-    (show IsGSNNCHAt (mpo M N) from
-      ⟨(hDensity N hN).1, (hDensity N hN).2,
-        hasGSNNCHFormAt_of_hasCommutingBondProductAt (hM N hN)⟩)
-
 end MPOTensor

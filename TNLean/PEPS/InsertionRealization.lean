@@ -352,63 +352,6 @@ theorem edgeEndpointLocalVirtualOpOfPhysicalOp_eq_of_projected_realization_eqAt
   · exact (edgeRightLocalVirtualOpOfPhysicalOp_eq_iff_projected_realization_eqAt
       A e hv O₂ M).2 hO₂
 
-/-- Projected endpoint realizations of a common bond matrix give the endpoint
-conclusion of physical-to-virtual insertion, under linear independence at the
-two endpoints only.
-
-This is the endpoint-injective form of
-`edgePhysicalToVirtualInsertion_of_projected_realization_eq`: it takes the two
-endpoint linear-independence facts (the pair supplied by
-`EdgeBlockedThreeSiteInjective.endpoint_linearIndependent`) instead of the global
-`IsVertexInjective` hypothesis. The conclusion is exactly the per-`M` body of the
-existential in `physical_to_virtual_insertion`, so wiring that source theorem
-through this lemma reduces it to supplying the common matrix, the projected
-realizations, and image preservation from equality of the two endpoint physical
-actions on the edge-blocked state.
-
-Source: arXiv:1804.04964, Section 3, Lemma inj_isomorph, lines 363--486
-of the local paper source. -/
-theorem edgePhysicalToVirtualInsertion_of_endpointInjective
-    (A : Tensor G d) (e : Edge G)
-    (hu : LinearIndependent ℂ (A.component e.1.1))
-    (hv : LinearIndependent ℂ (A.component e.1.2))
-    (O₁ O₂ : (Fin d → ℂ) →ₗ[ℂ] (Fin d → ℂ))
-    (M : Matrix (Fin (A.bondDim e)) (Fin (A.bondDim e)) ℂ)
-    (hO₁ : (localProjectorAt A hu).comp (O₁.comp (localProjectorAt A hu)) =
-      physRealizeLocalOpAt A hu
-        (localIncidentMatrixOp A (edgeLeftIncident (G := G) e) M.transpose))
-    (hO₂ : (localProjectorAt A hv).comp (O₂.comp (localProjectorAt A hv)) =
-      physRealizeLocalOpAt A hv
-        (localIncidentMatrixOp A (edgeRightIncident (G := G) e) M))
-    (hO₁_image : ∀ c : LocalVirtualConfig A e.1.1 → ℂ,
-      localProjectorAt A hu (O₁ (localTensorMap A e.1.1 c)) =
-        O₁ (localTensorMap A e.1.1 c))
-    (hO₂_image : ∀ c : LocalVirtualConfig A e.1.2 → ℂ,
-      localProjectorAt A hv (O₂ (localTensorMap A e.1.2 c)) =
-        O₂ (localTensorMap A e.1.2 c)) :
-    (∀ c : LocalVirtualConfig A e.1.1 → ℂ,
-      O₁ (localTensorMap A e.1.1 c) =
-        localTensorMap A e.1.1
-          (localIncidentMatrixOp A (edgeLeftIncident (G := G) e) M.transpose c)) ∧
-      ∀ c : LocalVirtualConfig A e.1.2 → ℂ,
-        O₂ (localTensorMap A e.1.2 c) =
-          localTensorMap A e.1.2
-            (localIncidentMatrixOp A (edgeRightIncident (G := G) e) M c) := by
-  obtain ⟨hLeft, hRight⟩ :=
-    edgeEndpointLocalVirtualOpOfPhysicalOp_eq_of_projected_realization_eqAt
-      A e hu hv O₁ O₂ M hO₁ hO₂
-  constructor
-  · intro c
-    have hrealize :=
-      localVirtualOpOfPhysicalOpAt_realizes_of_projector A hu O₁ hO₁_image c
-    rw [hLeft] at hrealize
-    exact hrealize.symm
-  · intro c
-    have hrealize :=
-      localVirtualOpOfPhysicalOpAt_realizes_of_projector A hv O₂ hO₂_image c
-    rw [hRight] at hrealize
-    exact hrealize.symm
-
 /-! ### Decoupling the three physical legs and inverting the middle block
 
 The two endpoints `e.1.1`, `e.1.2` and the middle region `V \ {u, v}` are

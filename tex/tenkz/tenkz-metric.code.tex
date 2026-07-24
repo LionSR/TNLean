@@ -210,13 +210,8 @@
     {wireglyph}, {wireglyphcap}, {fusionwidth}, {fuseover}
   }
   { \exp_args:Nne \__tenkz_metric_assert:nn {#1} { \use:c { tenkz@r@ #1 } } }
-\__tenkz_metric_assert:nn {wirewidth}    { \tenkz@wirewidth }
-\__tenkz_metric_assert:nn {annwidth}     { \tenkz@annwidth }
-\__tenkz_metric_assert:nn {emphwidth}    { \tenkz@emphwidth }
-\__tenkz_metric_assert:nn {junctionfloor}{ \tenkz@junctionfloor }
-\__tenkz_metric_assert:nn {barblen}      { \tenkz@barblen }
-\__tenkz_metric_assert:nn {fusedbarblen} { \tenkz@fusedbarblen }
-\__tenkz_metric_assert:nn {braceamp}     { \tenkz@braceamp }
+% The registry owns the floors: with core's \def table retired, the
+% declare_length entries above mint the legacy spellings themselves.
 
 \ExplSyntaxOff
 \endinput

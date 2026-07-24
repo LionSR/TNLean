@@ -395,15 +395,15 @@ edgeBlockedThreeSiteInjective_all_two_lt_card}
   $V\setminus\{v\}$ opened along the star $\textsf{IncidentEdge}(G,v)$ as the
   shared boundary; its injectivity
   \leanid{TNLean.PEPS.isTwoBlockInjective_complementTwoBlock} follows from vertex
-  injectivity and positive bond dimensions through the star-boundary kernel
-  descent \leanid{TNLean.PEPS.vertexComplementTensorInjective_of_isVertexInjective}.
-  This is the same contraction-of-injective-tensors fact used for the edge-middle
-  block, with the single distinguished vertex $v$ replacing the two endpoints of
-  a distinguished edge: a global virtual configuration is split at each
-  complement vertex $j\ne v$
-  (\leanid{TNLean.PEPS.vertexConfigSplitAt}), the kernel condition descends by
-  the one-sided inverse at $j$, and the terminal empty-region step uses positive
-  bond dimensions to fill the interior virtual indices.
+  injectivity and positive bond dimensions through
+  \leanid{TNLean.PEPS.regionBlockedTensorInjective_of_isVertexInjective},
+  specialized to $V\setminus\{v\}$. The boundary-edge and physical-vertex
+  identifications in
+  \leanid{TNLean.PEPS.regionBlockedWeight_vertexComplement} identify this blocked
+  tensor with the vertex-complement tensor. Thus
+  \leanid{TNLean.PEPS.vertexComplementTensorInjective_of_isVertexInjective}
+  is the same contraction-of-injective-tensors fact, rather than a second
+  kernel-descent argument.
 \item The final two-tensor comparison is applied by blocking one vertex against
   its complement. The paper uses this to prove
   $A_i=\lambda_i\widetilde B_i$ at each vertex, and then incorporates the

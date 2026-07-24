@@ -48,11 +48,13 @@ site-independent tensor and produces the global phase of
     \lean{TNLean.PEPS.translateEdge_isHorizontal}
     \lean{TNLean.PEPS.translateEdge_isVertical}
     \lean{TNLean.PEPS.translateIncidentEdge}
+    \lean{TNLean.PEPS.torusEdge_horizontal_or_vertical}
     \leanok
     The discrete $n\times m$ torus has vertex set $\Z/n\Z\times\Z/m\Z$.
     Its graph joins $(x,y)$ to $(x+1,y)$ and to $(x,y+1)$, with the
-    coordinates read cyclically. Translation by $(a,b)$ is the graph
-    automorphism $\tau_{a,b}(x,y)=(x+a,y+b)$.
+    coordinates read cyclically; every edge is of one of these two forms,
+    so every edge is horizontal or vertical. Translation by $(a,b)$ is the
+    graph automorphism $\tau_{a,b}(x,y)=(x+a,y+b)$.
     The induced action on edges sends an edge with unordered endpoint pair
     $\{u,v\}$ to the edge with unordered endpoint pair
     $\{\tau_{a,b}(u),\tau_{a,b}(v)\}$; in particular it preserves the

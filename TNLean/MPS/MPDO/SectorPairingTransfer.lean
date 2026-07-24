@@ -234,28 +234,6 @@ theorem closedSectorTraceMatrix_normalized_relations
       ((lam : ℂ)⁻¹ • L) Q hrect
     simpa only [Matrix.mul_smul, ← hT] using htrace
 
-/-- Source zero correlation length implies that the normalized concrete
-closed-sector trace matrix satisfies
-\[
-  \widehat T^2=\widehat T^3,
-  \qquad \widehat T=\lambda^{-1}T,
-  \qquad \lambda>0.
-\]
-This follows by writing the normalized closed-sector pairing operator as
-`L * Q` and the normalized trace matrix as `Q * L`.  The conclusion does not
-assert that the trace matrix is idempotent or has rank one.
-
-Derived from the zero-correlation-length identity in the proof of
-arXiv:1606.00608, Appendix C.2, Lemma `SALZCL`, lines 1490--1497. -/
-theorem closedSectorTraceMatrix_normalized_pow_two_eq_pow_three
-    (hZCL : IsSourceZCL K) :
-    ∃ lam : ℝ, 0 < lam ∧
-      let T := closedSectorTraceMatrix K hK hη R α₁ β₃
-      (((lam : ℂ)⁻¹ • T) ^ 2 = ((lam : ℂ)⁻¹ • T) ^ 3) := by
-  obtain ⟨lam, hlam, hpow, _⟩ :=
-    closedSectorTraceMatrix_normalized_relations K hK hη R hρ α₁ β₃ hm hZCL
-  exact ⟨lam, hlam, hpow⟩
-
 /-- Source zero correlation length implies the positive-power trace identity
 for the normalized concrete closed-sector trace matrix:
 \[

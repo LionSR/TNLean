@@ -34,6 +34,7 @@ from tenkz_language import (  # noqa: E402
     parse_status,
     parse_value_alias_sunset,
     public_census,
+    _kernel_leaf_keys_from_texts,
     _parser_leaf_keys,
     _parser_leaf_keys_from_texts,
 )
@@ -762,6 +763,15 @@ def parser_leaf_fingerprint(keys: set[tuple[str, str]]) -> str:
     return hashlib.sha256(payload.encode()).hexdigest()
 
 
+def parser_leaf_fingerprint_from_texts(texts: list[str]) -> str:
+    """Fingerprint every legacy and kernel parser leaf in source texts."""
+    keys = (
+        _parser_leaf_keys_from_texts(texts)
+        | _kernel_leaf_keys_from_texts(texts)
+    )
+    return parser_leaf_fingerprint(keys)
+
+
 def parser_leaf_fingerprint_at_ref(ref: str) -> str:
     """Return the exact parser-leaf fingerprint from a Git tree."""
     listed = subprocess.run(
@@ -797,7 +807,7 @@ def parser_leaf_fingerprint_at_ref(ref: str) -> str:
                 f"{shown.stderr.strip()}"
             )
         texts.append(shown.stdout)
-    return parser_leaf_fingerprint(_parser_leaf_keys_from_texts(texts))
+    return parser_leaf_fingerprint_from_texts(texts)
 
 
 def ratchet_errors(

@@ -1,0 +1,25 @@
+% Regression: three declared strings may cross at one coincident interior point.
+\documentclass[varwidth=8cm, border=6pt]{standalone}
+\usepackage{tenkz}
+\usetikzlibrary{hobby,spath3,intersections}
+\begin{document}
+\makeatletter\input{tenkz-string.code.tex}\makeatother
+\begin{tikzpicture}
+\ExplSyntaxOn
+\__tenkz_string_reset:
+\__tenkz_string_register:nn {a} {open}
+\path[spath/save=a] (-2,-2)--(2,2);
+\__tenkz_string_register:nn {b} {open}
+\path[spath/save=b] (-2,0)--(2,0);
+\__tenkz_string_register:nn {c} {open}
+\path[spath/save=c] (0,-2)--(0,2);
+\__tenkz_string_under:nn {a} {b}
+\__tenkz_string_under:nn {a} {c}
+\__tenkz_string_under:nn {b} {c}
+\__tenkz_string_resolve:
+\__tenkz_string_dev_draw:nn {a} {thick}
+\__tenkz_string_dev_draw:nn {b} {thick}
+\__tenkz_string_dev_draw:nn {c} {thick}
+\ExplSyntaxOff
+\end{tikzpicture}
+\end{document}

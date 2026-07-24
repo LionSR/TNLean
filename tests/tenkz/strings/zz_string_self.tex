@@ -1,0 +1,17 @@
+% Regression: one path may declare the order at its own branch crossing.
+\documentclass[varwidth=8cm, border=6pt]{standalone}
+\usepackage{tenkz}
+\usetikzlibrary{hobby,spath3,intersections}
+\begin{document}
+\makeatletter\input{tenkz-string.code.tex}\makeatother
+\begin{tikzpicture}
+\ExplSyntaxOn
+\__tenkz_string_reset:
+\__tenkz_string_register:nn {self} {open}
+\path[spath/save=self] (-1.2,-0.8)--(1.2,0.8)--(-1.2,0.8)--(1.2,-0.8);
+\__tenkz_string_under:nn {self} {self}
+\__tenkz_string_resolve:
+\__tenkz_string_dev_draw:nn {self} {thick}
+\ExplSyntaxOff
+\end{tikzpicture}
+\end{document}

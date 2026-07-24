@@ -1,0 +1,16 @@
+% Expected failure: both parameters of this cubic loop lie below one half.
+\documentclass{standalone}
+\usepackage{tenkz}
+\usetikzlibrary{hobby,spath3,intersections}
+\begin{document}
+\makeatletter\input{tenkz-string.code.tex}\makeatother
+\begin{tikzpicture}
+\ExplSyntaxOn
+\__tenkz_string_reset:
+\__tenkz_string_register:nn {loop} {open}
+\path[spath/save=loop]
+  (0,0) .. controls (-.2,.0266667) and (-.0666667,-.1466667) .. (.4,.48);
+\__tenkz_string_resolve:
+\ExplSyntaxOff
+\end{tikzpicture}
+\end{document}
