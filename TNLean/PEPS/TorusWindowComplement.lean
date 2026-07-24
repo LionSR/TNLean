@@ -192,6 +192,10 @@ namespace NormalTorusArcWindowInjectivityHypotheses
 
 variable {L K : ℕ} {κ : RegionInjectivityData (TorusVertex width height)}
 
+/-- The torus arc-window injectivity hypotheses satisfy the shared injectivity interface. -/
+theorem toPEPSInjectivityHypotheses (_h : NormalTorusArcWindowInjectivityHypotheses L K κ) :
+    PEPSInjectivityHypotheses κ := ⟨⟩
+
 /-- The translation-invariant hypotheses restrict to the seam-avoiding window
 hypotheses: every wraparound-free coordinate `L × K` window is injective.
 

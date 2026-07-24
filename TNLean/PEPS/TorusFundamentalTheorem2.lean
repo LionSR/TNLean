@@ -9,6 +9,7 @@ import TNLean.PEPS.TorusCovariantAbsorbedFamily
 import TNLean.PEPS.TorusGaugedWeightCovariance
 import TNLean.PEPS.TorusCornerRegion
 import TNLean.PEPS.RegionBlock.ReindexInjectivity
+import TNLean.PEPS.NormalBondDimension
 
 /-!
 # The unconditional normal PEPS Fundamental Theorem on the torus
@@ -146,6 +147,118 @@ theorem component_eq_gaugeVertex_of_cornerProportional
   exact component_eq_gaugeVertex_of_twoBlockProportional A B
     (Region.map (translate a b) cornerRegion) hvR hbond X cR cS hcR0 hposA hRC_v
     hRprop_v hSprop_v η σ
+
+/-- **Equal bond dimensions from normal torus rectangular injectivity.**
+
+From the source's rectangular-injectivity hypotheses on the torus, together with translation
+invariance, the same state, and positive bond dimensions, the two tensors have equal bond
+dimensions on every edge.  The bond-dimension equality is derived from the one-edge blocking
+data built from the rectangular injectivity (the source's Lemma `inj_isomorph`, lines 560--583
+of `Papers/1804.04964/paper_normal.tex`), not assumed.
+
+Source: arXiv:1804.04964, Section 3, lines 560--583 and 1407--1500 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem bondDim_eq_of_normalTorusRectangle
+    {A B : Tensor (torusGraph width height) d}
+    (hA : IsTorusTranslationInvariant A) (hB : IsTorusTranslationInvariant B)
+    (hAr : NormalTorusRectangleInjectivityHypotheses
+      (regionInjectivityDataOf (G := torusGraph width height) A))
+    (hBr : NormalTorusRectangleInjectivityHypotheses
+      (regionInjectivityDataOf (G := torusGraph width height) B))
+    (hUA : RegionInjectivityUnionClosure
+      (regionInjectivityDataOf (G := torusGraph width height) A))
+    (hUB : RegionInjectivityUnionClosure
+      (regionInjectivityDataOf (G := torusGraph width height) B))
+    (hw : 7 ≤ width) (hh : 7 ≤ height)
+    (hAB : SameState A B) (hd : 0 < d)
+    (hposA : ∀ g : Edge (torusGraph width height), 0 < A.bondDim g)
+    (hposB : ∀ g : Edge (torusGraph width height), 0 < B.bondDim g) :
+    A.bondDim = B.bondDim := by
+  set xStart := width - 5 with hxStart_def
+  set yStart := height - 5 with hyStart_def
+  have hx0h : 2 ≤ xStart := by omega
+  have hy0h : 1 ≤ yStart := by omega
+  have hx0v : 1 ≤ xStart := by omega
+  have hy0v : 2 ≤ yStart := by omega
+  have hx_seam : xStart + 5 = width ∨ xStart + 7 ≤ width := Or.inl (by omega)
+  have hy_seam : yStart + 5 = height ∨ yStart + 7 ≤ height := Or.inl (by omega)
+  -- Reference edges
+  let eh : Edge (torusGraph width height) := torusHorizontalReferenceEdge xStart yStart
+  let ev : Edge (torusGraph width height) := torusVerticalReferenceEdge xStart yStart
+  -- The reference coordinates
+  set xref : ZMod width := ((xStart + 1 : ℕ) : ZMod width) with hxref
+  set yref : ZMod height := ((yStart + 2 : ℕ) : ZMod height) with hyref
+  have heh_eq : eh = torusRightEdge (xref, yref) := by
+    dsimp [eh, torusHorizontalReferenceEdge, xref, yref]
+  set xvref : ZMod width := ((xStart + 2 : ℕ) : ZMod width) with hxvref
+  set yvref : ZMod height := ((yStart + 1 : ℕ) : ZMod height) with hyvref
+  have hev_eq : ev = torusUpEdge (xvref, yvref) := by
+    dsimp [ev, torusVerticalReferenceEdge, xvref, yvref]
+  -- Blocking data at the horizontal reference edge
+  let DAh := torusHorizontalRectangleBlockingDatum hAr hUA hx0h hy0h hx_seam hy_seam
+  let DBh := torusHorizontalRectangleBlockingDatum hBr hUB hx0h hy0h hx_seam hy_seam
+  have hredh : DAh.red = DBh.red := rfl
+  have hblueh : DAh.blue = DBh.blue := rfl
+  have hsingleh := isCrossingEdge_torusHorizontalRectangleBlockingDatum
+    A hAr hUA hx0h hy0h hx_seam hy_seam
+  have hbond_eh : A.bondDim eh = B.bondDim eh :=
+    bondDim_apply_eq_of_blockingData DAh DBh hredh hblueh hAB hd hposA hposB hsingleh
+  -- Blocking data at the vertical reference edge
+  let DAv := torusVerticalRectangleBlockingDatum hAr hUA hx0v hy0v hx_seam hy_seam
+  let DBv := torusVerticalRectangleBlockingDatum hBr hUB hx0v hy0v hx_seam hy_seam
+  have hredv : DAv.red = DBv.red := rfl
+  have hbluev : DAv.blue = DBv.blue := rfl
+  have hsinglev := isCrossingEdge_torusVerticalRectangleBlockingDatum
+    A hAr hUA hx0v hy0v hx_seam hy_seam
+  have hbond_ev : A.bondDim ev = B.bondDim ev :=
+    bondDim_apply_eq_of_blockingData DAv DBv hredv hbluev hAB hd hposA hposB hsinglev
+  -- Extend to all edges via translation invariance
+  funext e
+  rcases torusEdge_horizontal_or_vertical e with (hhoriz | hvert)
+  · -- e is horizontal: e = torusRightEdge p for some p
+    obtain ⟨p, hp⟩ := isHorizontalTorusEdge_eq_rightEdge hhoriz
+    subst hp
+    have htransA : A.bondDim (torusRightEdge p) = A.bondDim eh := by
+      calc
+        A.bondDim (torusRightEdge p) = A.bondDim (
+            translateEdge (p.1 - xref) (p.2 - yref) (torusRightEdge (xref, yref))) := by
+          rw [translateEdge_torusRightEdge (p.1 - xref) (p.2 - yref) (xref, yref)]
+          simp [sub_add_cancel]
+        _ = A.bondDim (torusRightEdge (xref, yref)) :=
+          bondDim_translateEdge_of_translationInvariant hA _ _ _
+        _ = A.bondDim eh := by rw [← heh_eq]
+    have htransB : B.bondDim (torusRightEdge p) = B.bondDim eh := by
+      calc
+        B.bondDim (torusRightEdge p) = B.bondDim (
+            translateEdge (p.1 - xref) (p.2 - yref) (torusRightEdge (xref, yref))) := by
+          rw [translateEdge_torusRightEdge (p.1 - xref) (p.2 - yref) (xref, yref)]
+          simp [sub_add_cancel]
+        _ = B.bondDim (torusRightEdge (xref, yref)) :=
+          bondDim_translateEdge_of_translationInvariant hB _ _ _
+        _ = B.bondDim eh := by rw [← heh_eq]
+    rw [htransA, htransB, hbond_eh]
+  · -- e is vertical: e = torusUpEdge p for some p
+    obtain ⟨p, hp⟩ := isVerticalTorusEdge_eq_upEdge hvert
+    subst hp
+    have htransA : A.bondDim (torusUpEdge p) = A.bondDim ev := by
+      calc
+        A.bondDim (torusUpEdge p) = A.bondDim (
+            translateEdge (p.1 - xvref) (p.2 - yvref) (torusUpEdge (xvref, yvref))) := by
+          rw [translateEdge_torusUpEdge (p.1 - xvref) (p.2 - yvref) (xvref, yvref)]
+          simp [sub_add_cancel]
+        _ = A.bondDim (torusUpEdge (xvref, yvref)) :=
+          bondDim_translateEdge_of_translationInvariant hA _ _ _
+        _ = A.bondDim ev := by rw [← hev_eq]
+    have htransB : B.bondDim (torusUpEdge p) = B.bondDim ev := by
+      calc
+        B.bondDim (torusUpEdge p) = B.bondDim (
+            translateEdge (p.1 - xvref) (p.2 - yvref) (torusUpEdge (xvref, yvref))) := by
+          rw [translateEdge_torusUpEdge (p.1 - xvref) (p.2 - yvref) (xvref, yvref)]
+          simp [sub_add_cancel]
+        _ = B.bondDim (torusUpEdge (xvref, yvref)) :=
+          bondDim_translateEdge_of_translationInvariant hB _ _ _
+        _ = B.bondDim ev := by rw [← hev_eq]
+    rw [htransA, htransB, hbond_ev]
 
 /-- **Unconditional normal PEPS Fundamental Theorem on the torus.**
 
