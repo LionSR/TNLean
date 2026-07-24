@@ -1,0 +1,473 @@
+
+\begin{definition}[Representative word-tuple separation]
+    \label{def:representative_word_tuple_span}
+    \lean{MPSTensor.SectorDecomposition.RepresentativeWordTupleSpanAt}
+    \lean{MPSTensor.SectorDecomposition.EventuallyRepresentativeWordTupleSpan}
+    \leanok
+    \uses{def:sector_weight_data, rem:word_tuple_span_top}
+    Let $(A_j)_{j=0}^{g-1}$ be the basis representatives of a sector
+    decomposition.  They have \emph{representative word-tuple separation at
+    length $L$} when
+    \[
+        \spn_{\C}\bigl\{(A_j^w)_{j=0}^{g-1}:
+        w\in\{0,\ldots,d{-}1\}^{L}\bigr\}
+        =\prod_{j=1}^g M_{D_j}(\C).
+    \]
+    They have \emph{eventual representative word-tuple separation} when this
+    equality holds at every sufficiently large length.  Notice that the
+    family is indexed by the minimal representatives $j$, and not by the
+    repeated copies lying over each $j$.
+\end{definition}
+
+\begin{theorem}[Representative-grouped Lemma L]
+    \label{thm:representative_grouped_insert_eq}
+    \lean{MPSTensor.SectorDecomposition.insertedTensor_basis_eq_of_firstSiteActionAgree_of_coeff_ne_zero}
+    \lean{MPSTensor.SectorDecomposition.insertedTensor_basis_eq_of_firstSiteActionAgree}
+    \lean{MPSTensor.SectorDecomposition.insertedTensor_basis_eq_of_sameMPV₂Pos_firstSiteActionAgree}
+    \leanok
+    \uses{def:representative_word_tuple_span,
+      def:sector_weight_data, cor:nonvanishing_finite_power_sum}
+    Let $A_{\mathrm{tot}}$ be the tensor of a sector decomposition with basis
+    representatives $(A_j)_{j=0}^{g-1}$, multiplicities $r_j>0$, nonzero weights
+    $\mu_{j,q}$, and grouped coefficients
+    \[
+        c_j^{(N)}=\sum_{q=0}^{r_j-1}\mu_{j,q}^{N}.
+    \]
+    Suppose that the first-site actions of $Y,Z\in M_d(\C)$ agree on the MPV
+    family of $A_{\mathrm{tot}}$.  If representative word-tuple separation
+    holds at length $L$ and $c_{j_0}^{(L+1)}\neq0$, then
+    \[
+        YA_{j_0}=ZA_{j_0}.
+    \]
+    Consequently, under eventual representative word-tuple separation,
+    $YA_j=ZA_j$ for every representative $j$.  The same conclusion holds if
+    the first-site equality is initially given for any tensor with the same
+    positive-length MPV family as $A_{\mathrm{tot}}$.
+
+    The representative grouping is the argument of
+    \cite[Appendix~C.3, lines~1835--1858]{Cirac2016MPDO_arXiv}.
+
+    In the first auxiliary assertion, eventual representative word-tuple
+    separation is an explicit assumption.  The later post-blocked theorem
+    derives the needed finite representative separation from the full BNT
+    canonical-form hypotheses. The sharp $3D^5$ representative-separation
+    bound is Theorem~\ref{thm:sharp_bnt_block_separation}; its detailed source
+    comparison is recorded in
+    \path{docs/paper-gaps/cpgsv17_bicf_block_separation.tex}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:representative_word_tuple_span,
+      lem:paper_decomp_formula, cor:nonvanishing_finite_power_sum}
+    At a fixed tail length $L$, expand the first-site equality at system size
+    $L+1$ and group all copies lying over the same representative.  For every
+    length-$L$ word $w$ this gives
+    \[
+      \sum_{j=0}^{g-1}
+      \tr\!\left(c_j^{(L+1)}(YA_j-ZA_j)A_j^w\right)=0.
+    \]
+    Representative word-tuple separation therefore forces each matrix
+    $c_j^{(L+1)}(YA_j-ZA_j)$ to vanish.  A nonzero coefficient may then be
+    cancelled.
+
+    For the eventual assertion, choose a threshold $L_0$ and put
+    $M=L_0+1$.  For a fixed representative $j$, apply
+    Corollary~\ref{cor:nonvanishing_finite_power_sum} to the nonzero numbers
+    $\mu_{j,q}^{M}$.  It yields $r\geq1$ such that
+    \[
+        c_j^{(Mr)}=\sum_q(\mu_{j,q}^{M})^r\neq0.
+    \]
+    Since $Mr-1\geq L_0$, the fixed-length argument applies with
+    $L=Mr-1$.  Finally, equality of positive-length MPV families transports the
+    first-site hypothesis to the sector-decomposition tensor.
+\end{proof}
+
+\begin{definition}[Direct sum with one marked letter]
+    \label{def:marked_representative_direct_sum}
+    \lean{MPSTensor.SectorDecomposition.markedTensor}
+    \leanok
+    \uses{def:sector_weight_data}
+    Let
+    \[
+        A_{\mathrm{tot}}^i
+        =\bigoplus_{j=0}^{g-1}\bigoplus_{q=0}^{r_j-1}
+          \mu_{j,q}A_j^i
+    \]
+    be the tensor of a sector decomposition.  Let $s$ range over a second
+    finite alphabet, and for each representative $A_j$ let $C_j^s$ be a
+    matrix on its bond space.  The corresponding direct sum with one marked
+    letter is
+    \[
+        C_{\mathrm{tot}}^s
+        =\bigoplus_{j=0}^{g-1}\bigoplus_{q=0}^{r_j-1}
+          \mu_{j,q}C_j^s.
+    \]
+    The marked alphabet need not coincide with the alphabet of the unmarked
+    tensor.  This is the algebraic form of the marked matrices in the two
+    diagrams of
+    \cite[Proposition~4.13, lines~1909--1919]{Cirac2016MPDO_arXiv}.
+\end{definition}
+
+\begin{lemma}[Trace expansion with one marked letter]
+    \label{lem:marked_representative_trace_expansion}
+    \lean{MPSTensor.SectorDecomposition.trace_markedTensor_mul_evalWord}
+    \leanok
+    \uses{def:marked_representative_direct_sum, def:sector_weight_data}
+    For every marked index $s$ and every unmarked word $w$,
+    \[
+        \tr\!\left(C_{\mathrm{tot}}^s A_{\mathrm{tot}}^w\right)
+        =\sum_{j=0}^{g-1}c_j^{(|w|+1)}
+          \tr\!\left(C_j^s A_j^w\right),
+        \qquad
+        c_j^{(N)}=\sum_{q=0}^{r_j-1}\mu_{j,q}^N.
+    \]
+    The exponent $|w|+1$ includes the weight at the marked site.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Expand both matrices as direct sums.  Their product is the direct sum of
+    \[
+        \mu_{j,q}^{|w|+1}C_j^sA_j^w.
+    \]
+    Taking the trace and summing first over $q$ gives the stated coefficient
+    $c_j^{(|w|+1)}$.
+\end{proof}
+
+\begin{theorem}[Algebraic marked-letter extension of representative separation]
+    \label{thm:representative_grouped_marked_separation}
+    \lean{MPSTensor.SectorDecomposition.markedTensor_basis_eq_of_trace_agree_of_coeff_ne_zero}
+    \lean{MPSTensor.SectorDecomposition.markedTensor_basis_eq_of_trace_agree}
+    \leanok
+    \uses{def:representative_word_tuple_span,
+        def:marked_representative_direct_sum,
+        lem:marked_representative_trace_expansion,
+        cor:nonvanishing_finite_power_sum}
+    Let $(C_j^s)$ and $(E_j^s)$ be two marked families over the same sector
+    decomposition.  Suppose that, for every marked index $s$ and every
+    unmarked word $w$,
+    \[
+        \tr\!\left(C_{\mathrm{tot}}^s A_{\mathrm{tot}}^w\right)
+        =\tr\!\left(E_{\mathrm{tot}}^s A_{\mathrm{tot}}^w\right).
+    \]
+    If representative word-tuple separation holds at length $L$ and
+    $c_{j_0}^{(L+1)}\neq0$, then $C_{j_0}=E_{j_0}$.  Under eventual
+    representative word-tuple separation, one has $C_j=E_j$ for every $j$.
+
+    Lemma~L is stated for marks induced by physical operators on the first
+    site.  After its closed-chain identity has been expanded, the separation
+    calculation uses only the matrices in the marked slot.  The theorem is
+    the resulting algebraic extension of
+    \cite[Appendix~C.3, lines~1848--1858]{Cirac2016MPDO_arXiv}; it is not
+    attributed to the paper as a separately stated arbitrary-mark theorem.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:representative_word_tuple_span,
+        lem:marked_representative_trace_expansion,
+        cor:nonvanishing_finite_power_sum}
+    Fix $s$ and a tail length $L$, and put
+    \[
+        \Delta_j=c_j^{(L+1)}(C_j^s-E_j^s).
+    \]
+    Lemma~\ref{lem:marked_representative_trace_expansion} gives, for every
+    length-$L$ word $w$,
+    \[
+        \sum_{j=0}^{g-1}\tr(\Delta_jA_j^w)=0.
+    \]
+    Representative word-tuple separation implies $\Delta_j=0$ for every
+    $j$.  If $c_{j_0}^{(L+1)}\neq0$, cancellation gives
+    $C_{j_0}^s=E_{j_0}^s$.  Since $s$ was arbitrary,
+    $C_{j_0}=E_{j_0}$.
+
+    Under eventual separation, apply
+    Corollary~\ref{cor:nonvanishing_finite_power_sum} to the nonzero weights
+    above each fixed representative, exactly as in
+    Theorem~\ref{thm:representative_grouped_insert_eq}.  This selects a
+    sufficiently large $L$ with $c_j^{(L+1)}\neq0$ and proves $C_j=E_j$.
+\end{proof}
+
+\begin{definition}[First-site action on a physical block]
+    \label{def:first_site_action_physical_blocking}
+    \lean{MPSTensor.firstSiteActionOnBlock}
+    \leanok
+    \uses{def:blocked_tensor}
+    Let $Y\in M_d(\C)$, and write physical indices of an $(L+1)$-site block
+    as $I=(i_0,\ldots,i_L)$ and $J=(j_0,\ldots,j_L)$.  The induced matrix on
+    the blocked physical space is
+    \[
+        Y^{[L+1]}_{I,J}
+        =Y_{i_0,j_0}\prod_{k=1}^{L}\delta_{i_k,j_k}.
+    \]
+\end{definition}
+
+\begin{lemma}[First-site actions under physical blocking]
+    \label{lem:first_site_action_physical_blocking}
+    \lean{MPSTensor.firstSiteActionAgree_iff_trace}
+    \lean{MPSTensor.FirstSiteActionAgree.trace_evalWord}
+    \lean{MPSTensor.insertedTensor_firstSiteActionOnBlock_blockTensor}
+    \lean{MPSTensor.FirstSiteActionAgree.blockTensor}
+    \lean{MPSTensor.insertedTensor_eq_of_firstSiteActionOnBlock_blockTensor_eq}
+    \leanok
+    \uses{def:first_site_action_physical_blocking, def:blocked_tensor,
+        def:l_blk_injective}
+    This auxiliary statement supplies the transport needed to combine the
+    block-injectivity argument
+    \cite[lines~318--345]{Cirac2016MPDO_arXiv} with Appendix~C.3, Lemma~L
+    \cite[lines~1835--1858]{Cirac2016MPDO_arXiv}.
+
+    Let $A$ be a tensor, and let $Y^{[L+1]}$ be the physical-block action
+    induced by $Y\in M_d(\C)$.  For $I=(i_0,\ldots,i_L)$, its insertion into
+    the blocked tensor satisfies
+    \[
+        \bigl(Y^{[L+1]}A^{[L+1]}\bigr)^I
+        =(YA)^{i_0}A^{i_1}\cdots A^{i_L}.
+    \]
+    Hence equality of the first-site actions of $Y,Z$ on the MPV family of
+    $A$ implies equality of the first-block actions of
+    $Y^{[L+1]},Z^{[L+1]}$ on the MPV family of $A^{[L+1]}$.
+
+    The first-site actions of $Y,Z$ agree at every length if and only if
+    \[
+        \tr\bigl((YA)^i A^w\bigr)=\tr\bigl((ZA)^i A^w\bigr)
+    \]
+    for every physical index $i$ and every finite word $w$.
+
+    Conversely, suppose that $A$ is $L$-block injective.  If the two induced
+    insertion tensors on $A^{[L+1]}$ are equal, then $YA=ZA$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    For the forward implication, split the first block into its first letter
+    and its remaining $L$ letters.  The displayed insertion identity reduces
+    the blocked MPV equality to the original first-site equality, with the
+    remaining letters of the first block prepended to the flattened tail.
+
+    For the converse, put $\Delta^i=(YA)^i-(ZA)^i$.  Equality after blocking
+    gives, for every word $w$ of length $L$,
+    \[
+        \Delta^i A^w=0.
+    \]
+    Since the length-$L$ words span $\MN{D}$, the same equality holds with
+    $A^w$ replaced by the identity, and therefore $\Delta^i=0$ for every
+    physical index $i$.
+\end{proof}
+
+\begin{theorem}[Representative separation after injective blocking]
+    \label{thm:postblocked_representative_grouped_insert_eq}
+    \lean{MPSTensor.IsBNTCanonicalForm.eventuallyRepresentativeWordTupleSpan_of_basis_injective}
+    \lean{MPSTensor.IsBNTCanonicalForm.eventuallyRepresentativeWordTupleSpan_blockTensor}
+    \lean{MPSTensor.IsBNTCanonicalForm.eventuallyRepresentativeWordTupleSpan}
+    \lean{MPSTensor.pairTraceSeparatingAt_blockTensor}
+    \lean{MPSTensor.IsBNTCanonicalForm.insertedTensor_basis_eq_of_firstSiteActionAgree_of_basis_injective}
+    \lean{MPSTensor.IsBNTCanonicalForm.insertedTensor_basis_eq_of_sameMPV₂Pos_firstSiteActionAgree_of_basis_injective}
+    \lean{MPSTensor.IsBNTCanonicalForm.insertedTensor_basis_eq_of_firstSiteActionAgree_of_common_blockInjective}
+    \lean{MPSTensor.IsBNTCanonicalForm.insertedTensor_basis_eq_of_sameMPV₂Pos_firstSiteActionAgree_of_common_blockInjective}
+    \lean{MPSTensor.IsBNTCanonicalForm.exists_common_basis_isNBlkInjective}
+    \lean{MPSTensor.IsBNTCanonicalForm.insertedTensor_basis_eq_of_firstSiteActionAgree}
+    \lean{MPSTensor.IsBNTCanonicalForm.insertedTensor_basis_eq_of_sameMPV₂Pos_firstSiteActionAgree}
+    \leanok
+    \uses{def:sector_bnt_cf, def:sector_decomposition_block_tensor,
+      def:representative_word_tuple_span, thm:representative_grouped_insert_eq}
+    Let $P$ be a BNT canonical form with basis representatives
+    $(A_j)_{j=0}^{g-1}$, and suppose that the representatives have already
+    been blocked so that every $A_j$ is injective. Then representative
+    word-tuple separation holds at every length
+    \[
+        L\geq 6(g-1)+1.
+    \]
+    Consequently, if the first-site actions of $Y,Z\in M_d(\C)$ agree on the
+    positive-length MPV family of the tensor represented by $P$, then
+    \[
+        YA_j=ZA_j
+        \quad (0\leq j<g).
+    \]
+    The same conclusion holds when the first-site equality is given for any
+    tensor with the same positive-length MPV family as the tensor represented by
+    $P$.
+
+    More generally, let $P$ be a BNT canonical form before physical blocking,
+    let $p>0$, and suppose that every $p$-blocked representative
+    $A_j^{[p]}$ is injective. Then the blocked sector decomposition $P^{[p]}$
+    has representative word-tuple separation at every blocked length
+    $L\geq 6(g-1)+1$.
+
+    Without changing the physical alphabet, a BNT canonical form also has
+    eventual representative word-tuple separation.  If $p>0$ is a common
+    block-injectivity length, then one may take pairwise separating words of
+    length $6p$, form selectors of length $6p(g-1)$, and append homogeneous
+    words of any length at least $p$.
+
+    Finally, the BNT canonical-form hypotheses imply that there is a common
+    $L>0$ for which every unblocked representative $A_j$ is $L$-block
+    injective.  Indeed, irreducibility and left-canonicality give a finite
+    peripheral period $m_j$.  The self-overlap tends to $m_j$ along multiples
+    of $m_j$, but by normalization it also tends to $1$; hence $m_j=1$.
+    Thus every representative is normal, and finiteness gives a common
+    positive block-injectivity length.  If the first-site actions
+    of $Y,Z$ agree on the tensor represented by $P$, then
+    \[
+        YA_j=ZA_j
+        \quad (0\leq j<g).
+    \]
+    The same conclusion holds when the first-site equality is given for any
+    tensor with the same positive-length MPV family.  This composes the blocking
+    conclusion of \cite[lines~318--345]{Cirac2016MPDO_arXiv} with
+    Appendix~C.3, Lemma~L
+    \cite[lines~1835--1858]{Cirac2016MPDO_arXiv}.
+
+    No additional common-length hypothesis is required.
+    % The remaining MPDO scope question is the relation with the horizontal
+    % copy-indexed hypotheses; see docs/paper-gaps/cpgsv17_bicf_block_separation.tex.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{lem:bnt_direct_sum_block_separation_word_span,
+      lem:block_separating_equations_from_pairwise_separation,
+      lem:product_word_span_from_bnt_block_separation,
+      thm:representative_grouped_insert_eq}
+    Injectivity of $A_j$ implies that its homogeneous words span
+    $M_{D_j}(\C)$ at every positive length. Apply the three-block separation
+    argument with source length $1$. For each ordered pair of distinct
+    representatives it gives a pairwise block-separating equation at length
+    $6$. Multiplying the equations for the $g-1$ representatives different
+    from $A_j$ gives coefficients $c_w^{(j)}$ satisfying
+    \[
+        \sum_{|w|=6(g-1)}c_w^{(j)}A_k^w
+        =
+        \begin{cases}
+            I, & k=j,\\
+            0, & k\neq j.
+        \end{cases}
+    \]
+    If $L\geq6(g-1)+1$, put $m=L-6(g-1)>0$. The length-$m$ words of each
+    $A_j$ span $M_{D_j}(\C)$. Concatenating these words with the displayed
+    selectors shows that the simultaneous length-$L$ word tuples span
+    $\prod_jM_{D_j}(\C)$. This proves eventual representative word-tuple
+    separation. The representative-grouped Lemma L gives the two first-site
+    conclusions.
+
+    For the unblocked canonical form, propagate $p$-block injectivity to the
+    lengths $2p-1$, $2p$, and $6p$. Applying the direct-sum argument to the
+    resulting injective tensors gives pair trace separation at original
+    length $6p$. The
+    bijection between blocked words of length $6$ and original words of length
+    $6p$ transports this to pair trace separation for the $p$-blocked
+    representatives. The preceding selector argument then applies verbatim
+    to $P^{[p]}$.
+
+    The same pairwise equations at original length $6p$ give selectors for
+    the unblocked representatives directly.  For every
+    $L\geq6p(g-1)+p$, the remaining prefix has length at least $p$ and hence
+    spans each full representative matrix algebra.  Concatenating the prefix
+    with the selectors proves eventual representative word-tuple separation
+    before blocking.
+
+    For the final assertion, first consider one representative $A_j$.
+    Irreducibility and left-canonicality give a positive peripheral period
+    $m_j$.  The periodic self-overlap formula and the normalized self-overlap
+    hypothesis give, along the same subsequence,
+    \[
+        \lim_{k\to\infty}O_{A_jA_j}(m_jk)=m_j,
+        \qquad
+        \lim_{k\to\infty}O_{A_jA_j}(m_jk)=1.
+    \]
+    Hence $m_j=1$.
+    Primitivity then implies normality.  Taking a common
+    multiple of the finitely many normality lengths gives a positive length
+    $L$ at which every representative is block injective.  Block $L+1$ sites.
+    Injectivity
+    propagates from length $L$ to length $L+1$, so the blocked representatives
+    are injective.  Act on the first letter of each physical block and apply
+    the blocked representative separation followed by the
+    representative-grouped Lemma~L.  This gives equality of the two induced
+    insertions on every blocked representative.  The remaining $L$ letters
+    of the first block form a spanning family, so
+    Lemma~\ref{lem:first_site_action_physical_blocking} recovers
+    $YA_j=ZA_j$ before blocking.
+\end{proof}
+
+\begin{corollary}[Marked-letter separation for a BNT canonical form]
+    \label{cor:bnt_marked_representative_separation}
+    \lean{MPSTensor.IsBNTCanonicalForm.markedTensor_basis_eq_of_trace_agree}
+    \leanok
+    \uses{def:sector_bnt_cf,
+        thm:postblocked_representative_grouped_insert_eq,
+        thm:representative_grouped_marked_separation}
+    Let $(C_j^s)$ and $(E_j^s)$ be two marked families over a BNT canonical
+    form.  If their closed marked chains agree for every marked index $s$ and
+    every unmarked word $w$, then
+    \[
+        C_j^s=E_j^s
+    \]
+    for every representative $j$ and every marked index $s$.
+\end{corollary}
+
+\begin{proof}
+    \leanok
+    \uses{thm:postblocked_representative_grouped_insert_eq,
+        thm:representative_grouped_marked_separation}
+    The BNT canonical-form hypotheses give eventual representative word-tuple
+    separation.  Apply
+    Theorem~\ref{thm:representative_grouped_marked_separation}.
+\end{proof}
+
+\begin{corollary}[Physical-letter marked separation in horizontal canonical form]
+    \label{cor:horizontal_cf_linear_marked_separation}
+    \lean{MPSTensor.linearMarkedTensor}
+    \lean{MPSTensor.linearMarkedTensor_toTensorFromBlocks}
+    \lean{MPSTensor.SectorDecomposition.linearMarkedTensor_toTensor_eq_markedTensor}
+    \lean{MPSTensor.linearMarkedTensor_gauge}
+    \lean{MPSTensor.trace_linearMarkedTensor_mul_evalWord_gauge}
+    \lean{MPOTensor.IsHorizontalCF.linearMarkedTensor_eq_of_trace_agree}
+    \leanok
+    \uses{def:horizontal_cf_mpdo,
+        cor:bnt_marked_representative_separation}
+    Let $M$ be an MPO tensor in literal horizontal canonical form.  For two
+    coefficient families $f_{u,z}$ and $g_{u,z}$, put
+    \[
+        C^u=\sum_z f_{u,z}M^z,
+        \qquad
+        E^u=\sum_z g_{u,z}M^z.
+    \]
+    If, for every marked index $u$ and every word $w$,
+    \[
+        \tr(C^uM^w)=\tr(E^uM^w),
+    \]
+    then $C^u=E^u$ for every $u$.
+
+    The marks are required to lie in the span of the physical letters.  No
+    assertion is made for arbitrary bond-space matrices, since off-diagonal
+    matrices between repeated sectors are invisible to closed chains.  The
+    corollary is the physical-insertion consequence of
+    \cite[Appendix~C.3, lines~1835--1858]{Cirac2016MPDO_arXiv} used in the
+    contractions of
+    \cite[Proposition~4.13, lines~1909--1919]{Cirac2016MPDO_arXiv}.
+\end{corollary}
+
+\begin{proof}
+    \leanok
+    \uses{cor:bnt_marked_representative_separation}
+    Pass through the block-diagonal similarity in the literal horizontal
+    canonical form.  Linear combinations of physical letters are covariant
+    under this similarity, and cyclicity of the trace removes it from each
+    closed marked chain.  On the representative-indexed sector
+    decomposition one has
+    \[
+        C_{\mathrm{tot}}^u
+        =\bigoplus_{j,q}\mu_{j,q}
+          \sum_z f_{u,z}A_j^z,
+        \qquad
+        E_{\mathrm{tot}}^u
+        =\bigoplus_{j,q}\mu_{j,q}
+          \sum_z g_{u,z}A_j^z.
+    \]
+    Corollary~\ref{cor:bnt_marked_representative_separation} identifies the
+    two marks on every minimal representative.  Taking their weighted direct
+    sums and restoring the common block-diagonal similarity gives
+    $C^u=E^u$.
+\end{proof}

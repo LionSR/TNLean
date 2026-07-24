@@ -1,0 +1,483 @@
+
+\begin{definition}[Periodic-sector projector]
+    \label{def:mpdo_periodic_sector_projector}
+    \lean{MPOTensor.PeriodicSectorProjector}
+    \leanok
+    \uses{def:mpo_tensor, def:mpo_family, def:mpdo_vertical_one_site_actions}
+    Let $M$ be an MPO tensor.  A \emph{periodic-sector projector} for $M$
+    with exponent $p\ge 1$ is an orthogonal projector $Q$ on
+    the physical space such that for every $N\ge 0$, with
+    $Q_1=Q\otimes\Id^{\otimes N}$ acting on the first site,
+    \[
+        Q_1H^{(N+1)}\ne H^{(N+1)}Q_1
+        \quad\text{and}\quad
+        Q_1\bigl[H^{(N+1)}\bigr]^p=\bigl[H^{(N+1)}\bigr]^pQ_1.
+    \]
+    These are the commutation identities that the proof of
+    \cite[Proposition~4.13]{Cirac2016MPDO_arXiv}, lines 1889--1891, attaches
+    to a nontrivial vertical period; the second family is the displayed
+    identity at lines 1890--1891.
+\end{definition}
+
+\begin{theorem}[No periodic-sector projector for a matrix product density
+    operator]
+    \label{thm:mpdo_no_periodic_sector_projector}
+    \lean{MPOTensor.isEmpty_periodicSectorProjector}
+    \leanok
+    \uses{def:mpdo, def:mpdo_periodic_sector_projector,
+        thm:psd_commute_of_commute_pow}
+    Let $M$ generate matrix product density operators.  Then $M$ admits no
+    periodic-sector projector.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:psd_commute_of_commute_pow}
+    Suppose $Q$ were such a projector.  Every $H^{(N)}$ is positive
+    semidefinite, so commutation of $Q_1$ with $[H^{(N)}]^p$ implies
+    commutation with $H^{(N)}$
+    (Theorem~\ref{thm:psd_commute_of_commute_pow}), contradicting
+    $Q_1H^{(N)}\ne H^{(N)}Q_1$.  This is the contradiction concluding the
+    periodic-sector step in the proof of
+    \cite[Proposition~4.13]{Cirac2016MPDO_arXiv}, lines 1892--1893.
+\end{proof}
+
+\begin{definition}[Periodic vectors supply projectors]
+    \label{def:mpdo_periodic_vector_yields_projector}
+    \lean{MPOTensor.PeriodicVectorYieldsProjector}
+    \leanok
+    \uses{def:vertical_tensor_mpdo, def:no_periodic_vectors,
+        def:mpdo_periodic_sector_projector}
+    Say that \emph{periodic vectors of $M$ supply projectors} if for every
+    nontrivial $p$-periodic vector of the vertically viewed tensor
+    $\widetilde M$ --- an irreducible restriction $B$ of $\widetilde M$ to a
+    minimal invariant subspace whose transfer map has a peripheral
+    eigenvalue different from its spectral radius, as in
+    Definition~\ref{def:no_periodic_vectors} --- there is an exponent
+    $q\ge 1$ for which $M$ admits a periodic-sector projector.  The proof of
+    \cite[Proposition~4.13]{Cirac2016MPDO_arXiv}, lines 1889--1891, asserts
+    this implication from the general theory of the peripheral spectrum of
+    completely positive maps, with $q$ equal to the period $p$ of the
+    vector; only the existence of some exponent enters the exclusion
+    argument.  The projector, its word invariance, and its single-letter
+    displacement are constructed from the cyclic decomposition of the
+    peripheral spectrum
+    (Theorem~\ref{thm:mpdo_displaced_invariant_projector}); the passage
+    from the displacement to the all-length non-commutation family is not
+    needed for the periodic-sector contradiction below.
+    % Gap recorded in docs/paper-gaps/cpgsv17_periodic_sector_projector.tex.
+\end{definition}
+
+\begin{theorem}[No periodic vectors in the vertical direction]
+    \label{thm:mpdo_vertical_no_periodic_vectors}
+    \lean{MPOTensor.hasNoPeriodicVectors_verticalTensor}
+    \leanok
+    \uses{def:mpdo, def:vertical_tensor_mpdo, def:no_periodic_vectors,
+        def:mpdo_periodic_vector_yields_projector,
+        thm:mpdo_no_periodic_sector_projector}
+    Let $M$ generate matrix product density operators and suppose that
+    periodic vectors of $M$ supply projectors.  Then the vertically viewed
+    tensor $\widetilde M$ has no nontrivial $p$-periodic vectors.  This is
+    the periodic-sector step in the proof of
+    \cite[Proposition~4.13]{Cirac2016MPDO_arXiv}, lines 1888--1893, granted
+    the projector that the source draws from the general theory of the
+    peripheral spectrum.
+    % Gap recorded in docs/paper-gaps/cpgsv17_periodic_sector_projector.tex.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:mpdo_periodic_vector_yields_projector,
+        thm:mpdo_no_periodic_sector_projector}
+    A nontrivial $p$-periodic vector of $\widetilde M$ supplies a
+    periodic-sector projector for $M$, and
+    Theorem~\ref{thm:mpdo_no_periodic_sector_projector} shows that no such
+    projector exists.
+\end{proof}
+
+\begin{definition}[Vertically stacked layers]
+    \label{def:mpo_stacked_layers}
+    \lean{MPOTensor.idTensor}
+    \lean{MPOTensor.layerMul}
+    \lean{MPOTensor.stackedTensor}
+    \leanok
+    \uses{def:mpo_tensor}
+    Placing one MPO layer on top of another and contracting the shared
+    physical index gives the \emph{layer product} of two MPO tensors $M$ and
+    $M'$ with the same physical dimension,
+    \[
+        (MM')^{ij}=\sum_kM^{ik}\otimes M'^{kj},
+    \]
+    an MPO tensor on the tensor product of the virtual spaces.  The
+    \emph{$p$-fold vertical stack} $M^{[p]}$ of $M$ is the iterated layer
+    product of $p$ copies of $M$; the empty stack $M^{[0]}$ is the
+    trivial-bond tensor with letters $\delta_{ij}$, which generates the
+    identity operator at every system size.
+\end{definition}
+
+\begin{theorem}[Stacked layers generate powers of the density operator]
+    \label{thm:mpo_stacked_layers_power}
+    \lean{MPOTensor.mpo_layerMul}
+    \lean{MPOTensor.mpo_stackedTensor}
+    \lean{MPOTensor.IsMPDO.stackedTensor}
+    \leanok
+    \uses{def:mpo_stacked_layers, def:mpo_family, def:mpdo}
+    For every system size $N$, the operator generated by a layer
+    product is the product of the density operators generated by the layers,
+    \[
+        H^{(N)}(MM')=H^{(N)}(M)\,H^{(N)}(M').
+    \]
+    Consequently the $p$-fold vertical stack generates
+    $H^{(N)}(M^{[p]})=[H^{(N)}(M)]^p$ for all $N$ and $p$; this is the
+    reading of the powers in the displayed identity of
+    \cite[Proposition~4.13, lines~1890--1891]{Cirac2016MPDO_arXiv} as
+    density operators of stacked layers.  In particular, the vertical stack
+    of a tensor generating matrix product density operators again generates
+    matrix product density operators on every nonempty chain.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:mpo_stacked_layers, def:mpo_family}
+    The word product of layer-product letters along a ket--bra configuration
+    expands, by induction on the length and the mixed-product property of
+    the Kronecker product, as a sum over configurations $\kappa$ of the
+    contracted physical index of Kronecker products of the layers' word
+    products.  Taking traces, each summand factors into the product of the
+    two traces, so the entry of $H^{(N)}(MM')$ at $(\sigma,\tau)$ equals
+    $\sum_\kappa H^{(N)}(M)_{\sigma\kappa}H^{(N)}(M')_{\kappa\tau}$, the
+    entry of the matrix product.  The power identity follows by induction on
+    $p$, and positive semidefiniteness of $[H^{(N)}]^p$ follows from that of
+    $H^{(N)}$.
+\end{proof}
+
+\begin{theorem}[Vertical letters of the stacked tensor]
+    \label{thm:mpo_stacked_vertical_letters}
+    \lean{MPOTensor.verticalTensor_layerMul}
+    \lean{MPOTensor.exists_word_verticalTensor_stackedTensor}
+    \lean{MPOTensor.stackedTensor_ketLeftMul_invariant}
+    \leanok
+    \uses{def:mpo_stacked_layers, def:vertical_tensor_mpdo,
+        def:mpdo_vertical_one_site_actions}
+    The vertically viewed letters of a layer product are the products of the
+    layers' vertically viewed letters, $(MM')_{(a,a'),(b,b')}
+    =M_{ab}M'_{a'b'}$.  Hence every vertically viewed letter of the $p$-fold
+    stack $M^{[p]}$ is the evaluation of a length-$p$ word of
+    $\widetilde M$.  In particular, if a matrix $Q$ satisfies the one-sided
+    invariance $QA_w=QA_wQ$ for every product $A_w$ of $p$ letters of
+    $\widetilde M$, then $QM^{[p]}=QM^{[p]}Q$ in the sense of
+    Definition~\ref{def:mpdo_vertical_one_site_actions}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:mpo_stacked_layers, def:vertical_tensor_mpdo,
+        def:mpdo_vertical_one_site_actions}
+    The letter identity is a direct computation from the layer product:
+    contracting the shared physical index composes the physical-space
+    operators.  Induction on $p$ writes each vertical letter of $M^{[p]}$ as
+    a length-$p$ word.  Thus, for every bond index $v$, there is a word $w$
+    of length $p$ such that $\widetilde{M^{[p]}}_v=A_w$, and
+    \[
+        QA_w=QA_wQ
+        \quad\Longrightarrow\quad
+        Q\widetilde{M^{[p]}}_v=Q\widetilde{M^{[p]}}_vQ.
+    \]
+    Applying this identity to the two one-site actions gives
+    $QM^{[p]}=QM^{[p]}Q$.
+\end{proof}
+
+\begin{definition}[Periodic-sector projector from cyclic data]
+    \label{def:mpdo_periodic_sector_projector_of_cyclic}
+    \lean{MPOTensor.periodicSectorProjectorOfCyclicData}
+    \leanok
+    \uses{def:mpdo, def:mpdo_periodic_sector_projector,
+        def:mpdo_vertical_one_site_actions, def:mpo_stacked_layers}
+    Let $M$ generate matrix product density operators, let $p\ge 1$, and let
+    $Q$ be an orthogonal projector on the physical space satisfying
+    $QA_w=QA_wQ$ for every product $A_w$ of $p$ letters of $\widetilde M$
+    and $Q_1H^{(N)}\ne H^{(N)}Q_1$ for every length.  Then $Q$ is a
+    periodic-sector projector for $M$ with exponent $p$.
+\end{definition}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mpo_stacked_vertical_letters, thm:mpo_stacked_layers_power,
+        thm:mpdo_first_site_invariant_comm}
+    By Theorem~\ref{thm:mpo_stacked_vertical_letters} the word invariance
+    gives $QM^{[p]}=QM^{[p]}Q$ on the stacked tensor, which generates matrix
+    product density operators by
+    Theorem~\ref{thm:mpo_stacked_layers_power}.
+    Theorem~\ref{thm:mpdo_first_site_invariant_comm} applied to $M^{[p]}$
+    yields $Q_1H^{(N)}(M^{[p]})=H^{(N)}(M^{[p]})Q_1$ for every length, and
+    $H^{(N)}(M^{[p]})=[H^{(N)}]^p$ by the stacked-layers identity.  Together
+    with the assumed non-commutation family this is exactly the
+    periodic-sector projector of
+    Definition~\ref{def:mpdo_periodic_sector_projector}.
+\end{proof}
+
+\begin{definition}[Periodic vectors supply cyclic projectors]
+    \label{def:mpdo_periodic_vector_yields_cyclic_projector}
+    \lean{MPOTensor.PeriodicVectorYieldsCyclicProjector}
+    \leanok
+    \uses{def:vertical_tensor_mpdo, def:no_periodic_vectors,
+        def:mpdo_vertical_one_site_actions}
+    Say that \emph{periodic vectors of $M$ supply cyclic projectors} if for
+    every nontrivial $p$-periodic vector of the vertically viewed tensor
+    $\widetilde M$ --- presented as in
+    Definition~\ref{def:no_periodic_vectors} --- there are an exponent
+    $q\ge 1$ and an orthogonal projector $Q$ on the physical space
+    satisfying the one-sided invariance $QA_w=QA_wQ$ for every product
+    $A_w$ of $q$ letters of $\widetilde M$, together with
+    $Q_1H^{(N)}\ne H^{(N)}Q_1$ for every length.  This is the shape of the
+    cyclic decomposition of the peripheral spectrum
+    \cite[Theorem~6.6]{Wolf2012Quantum} applied to the vertical transfer
+    map: each cyclic projection of a period-$p$ sector returns to itself
+    after $p$ applications of the map, while its nontrivial cyclic
+    displacement under one application prevents commutation with
+    $H^{(N)}$.  Compared with
+    Definition~\ref{def:mpdo_periodic_vector_yields_projector}, the
+    commutation of $Q$ with $[H^{(N)}]^p$ is no longer assumed; it is
+    derived through the stacked-layers identity.
+\end{definition}
+
+\begin{theorem}[Reduction of the periodic-sector step to the cyclic
+    decomposition]
+    \label{thm:mpdo_cyclic_projector_reduction}
+    \lean{MPOTensor.periodicVectorYieldsProjector_of_cyclic}
+    \lean{MPOTensor.hasNoPeriodicVectors_verticalTensor_of_cyclicProjector}
+    \leanok
+    \uses{def:mpdo, def:mpdo_periodic_vector_yields_cyclic_projector,
+        def:mpdo_periodic_vector_yields_projector,
+        def:vertical_tensor_mpdo, def:no_periodic_vectors}
+    Let $M$ generate matrix product density operators.  If periodic vectors
+    of $M$ supply cyclic projectors, then they supply periodic-sector
+    projectors, and the vertically viewed tensor $\widetilde M$ has no
+    nontrivial $p$-periodic vectors.  This reduces the hypothesis of the
+    periodic-sector step in the proof of
+    \cite[Proposition~4.13, lines~1888--1893]{Cirac2016MPDO_arXiv} to the
+    cyclic decomposition of the peripheral spectrum of the vertical
+    transfer map.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:mpdo_periodic_sector_projector_of_cyclic,
+        thm:mpdo_vertical_no_periodic_vectors}
+    A nontrivial $p$-periodic vector supplies an invariant non-commuting
+    projector, which is a periodic-sector projector by
+    Definition~\ref{def:mpdo_periodic_sector_projector_of_cyclic}.  The
+    exclusion of periodic vectors is then
+    Theorem~\ref{thm:mpdo_vertical_no_periodic_vectors}.
+\end{proof}
+
+\begin{theorem}[The displaced invariant projector of a nontrivial periodic
+    vector]
+    \label{thm:mpdo_displaced_invariant_projector}
+    \lean{MPOTensor.exists_displaced_invariant_projector_of_periodic_vector}
+    \leanok
+    \uses{def:vertical_tensor_mpdo, def:no_periodic_vectors,
+        def:mpdo_vertical_one_site_actions, def:support_proj}
+    Let $M$ be an MPO tensor and let $\widetilde M$ carry a nontrivial
+    $p$-periodic vector, presented as in
+    Definition~\ref{def:no_periodic_vectors}: an irreducible restriction
+    $B$ of $\widetilde M$ to a minimal invariant subspace, reached through
+    an isometry $V$, with a positive definite transfer eigenvector $\rho$
+    of eigenvalue $r>0$ and a transfer eigenvalue $\mu\ne r$ of modulus
+    $r$.  Then there are an exponent $q\ge 1$ and an orthogonal projector
+    $Q$ on the physical space such that $QA_w=QA_wQ$ for every product
+    $A_w$ of $q$ letters of $\widetilde M$, while
+    $Q\widetilde M\ne Q\widetilde MQ$ in the sense of
+    Definition~\ref{def:mpdo_vertical_one_site_actions}.  This realizes
+    the projector that the proof of
+    \cite[Proposition~4.13, lines~1889--1891]{Cirac2016MPDO_arXiv} draws
+    from the general theory of the peripheral spectrum.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:spectral_unital_gauge_schwarz_setup,
+        lem:eigenvalue_transport_unital_gauge,
+        thm:peripheral_cyclic_structure,
+        thm:cyclic_decomposition_irreducible_schwarz,
+        lem:kraus_cyclic_shift, lem:support_proj_range_factorization}
+    The rescaled unital gauge $K$ of the corner satisfies the hypotheses of
+    the cyclic decomposition of the peripheral spectrum
+    (Theorem~\ref{thm:spectral_unital_gauge_schwarz_setup}), and the
+    eigenvalue $\mu/r\ne 1$ of modulus one
+    (Lemma~\ref{lem:eigenvalue_transport_unital_gauge}) forces the
+    peripheral cyclic group to have order $m\ge 2$.
+    Theorem~\ref{thm:cyclic_decomposition_irreducible_schwarz} produces
+    orthogonal projections $P_0,\dots,P_{m-1}$ summing to the identity
+    with $\E_K(P_{k+1})=P_k$, and the letter-level shift
+    $K_vP_{k+1}=P_kK_v$ holds
+    (Lemma~\ref{lem:kraus_cyclic_shift}).  Set $q=m$ and let $Q$ be the
+    complement of the support projection $\pi$ of
+    $YY^\dagger$ for $Y=V\rho^{1/2}P_0$.  A word $A_w$ of $m$ letters of
+    $\widetilde M$ satisfies $A_wY=YG_w$, where $G_w$ is a scalar multiple
+    of the corresponding word in the letters of $K$, which commutes with
+    $P_0$ by the full-period shift; so the range of $Y$ is invariant and
+    Lemma~\ref{lem:support_proj_range_factorization} gives
+    $QA_w=QA_wQ$.  If a single letter also satisfied the invariance, then
+    $\pi$ would fix $A_vY$, whose columns lie in the sector
+    $V\rho^{1/2}P_{m-1}$ by the cyclic shift; cancelling the injective
+    factor $V\rho^{1/2}$ and using orthogonality of $P_{m-1}$ and $P_0$
+    would force $P_{m-1}K_v=0$ for every letter, hence
+    $P_{m-1}=\E_K(P_0)=0$, contradicting the nonvanishing of the cyclic
+    projections.
+\end{proof}
+
+\begin{theorem}[Horizontal canonical form excludes vertical periodic sectors]
+    \label{thm:mpdo_vertical_no_periodic_vectors_horizontal_cf}
+    \lean{MPOTensor.IsHorizontalCF.exists_not_commute_of_displaced}
+    \lean{MPOTensor.hasNoPeriodicVectors_verticalTensor_of_horizontalCF}
+    \leanok
+    \uses{def:mpdo, def:horizontal_cf_mpdo, def:vertical_tensor_mpdo,
+        def:no_periodic_vectors, thm:representative_one_sub_mp_zero,
+        lem:mpdo_first_site_insertions_vertical_mul,
+        thm:mpdo_displaced_invariant_projector,
+        thm:mpo_stacked_layers_power, thm:mpdo_first_site_invariant_comm,
+        thm:psd_commute_of_commute_pow}
+    Let $M$ be in horizontal canonical form.  If an idempotent $Q$ satisfies
+    $Q\widetilde M\ne Q\widetilde MQ$, then for some $N\ge 0$,
+    \[
+        Q_1H^{(N+1)}\ne H^{(N+1)}Q_1.
+    \]
+    Consequently, if $M$ generates matrix product density operators, then
+    $\widetilde M$ has no nontrivial periodic vectors.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:representative_one_sub_mp_zero,
+        lem:mpdo_first_site_insertions_vertical_mul,
+        thm:mpdo_displaced_invariant_projector,
+        thm:mpo_stacked_layers_power, thm:mpdo_first_site_invariant_comm,
+        thm:psd_commute_of_commute_pow}
+    Suppose first that $Q_1$ commutes with $H^{(N+1)}$ for every $N$.
+    Since $Q^2=Q$, this gives
+    \[
+        Q_1H^{(N+1)}=Q_1H^{(N+1)}Q_1
+    \]
+    at every positive length.
+    Theorem~\ref{thm:representative_one_sub_mp_zero} and
+    Lemma~\ref{lem:mpdo_first_site_insertions_vertical_mul} then imply
+    $Q\widetilde M=Q\widetilde MQ$, a contradiction.  Thus a displaced
+    idempotent has a noncommuting length $N+1$.
+
+    A nontrivial periodic vector supplies the orthogonal projector $Q$ of
+    Theorem~\ref{thm:mpdo_displaced_invariant_projector}, invariant under
+    every word of some full period $p\ge1$.  At the noncommuting length just
+    obtained, the stacked-layer identity and the invariant-projection
+    calculation give
+    \[
+        Q_1[H^{(N+1)}]^p=[H^{(N+1)}]^pQ_1.
+    \]
+    Positive semidefiniteness and
+    Theorem~\ref{thm:psd_commute_of_commute_pow} imply that $Q_1$ commutes
+    with $H^{(N+1)}$, which is the required contradiction.  This uses the
+    pointwise contradiction in
+    \cite[Proposition~4.13, lines~1888--1893]{Cirac2016MPDO_arXiv}; the
+    stronger all-length inequality printed there is unnecessary.
+\end{proof}
+
+\begin{definition}[Displaced projectors never commute]
+    \label{def:mpdo_noninvariant_projector_noncommuting}
+    \lean{MPOTensor.NoninvariantProjectorNoncommuting}
+    \leanok
+    \uses{def:mpo_tensor, def:mpo_family, def:mpdo_vertical_one_site_actions}
+    Say that \emph{displaced projectors of $M$ never commute} if every
+    orthogonal projector $Q$ on the physical space with
+    $Q\widetilde M\ne Q\widetilde MQ$ satisfies
+    $Q_1H^{(N)}\ne H^{(N)}Q_1$ at every length.  This is the
+    canonical-form step of the periodic-sector argument: the proof of
+    \cite[Proposition~4.13]{Cirac2016MPDO_arXiv} assumes the tensor is in
+    canonical form in the horizontal direction, and the argument of
+    lines~1874--1887 turns all-length commutation of $Q_1$ with $H^{(N)}$
+    into the letter-level invariance $Q\widetilde M=Q\widetilde MQ$.  The
+    literal transport through a horizontal canonical form is proved.  This
+    all-length condition is a stronger auxiliary assumption than is needed
+    for Theorem~\ref{thm:mpdo_vertical_no_periodic_vectors_horizontal_cf},
+    which uses the single noncommuting length supplied by the contrapositive
+    of Lemma~L.
+\end{definition}
+
+\begin{theorem}[Reduction of the periodic-sector step to the
+    non-commutation family]
+    \label{thm:mpdo_cyclic_projector_of_noncommutation}
+    \lean{MPOTensor.periodicVectorYieldsCyclicProjector_of_noncommutation}
+    \lean{MPOTensor.hasNoPeriodicVectors_verticalTensor_of_noncommutation}
+    \leanok
+    \uses{def:mpdo, def:mpdo_noninvariant_projector_noncommuting,
+        def:mpdo_periodic_vector_yields_cyclic_projector,
+        def:vertical_tensor_mpdo, def:no_periodic_vectors}
+    Let $M$ generate matrix product density operators.  If displaced
+    projectors of $M$ never commute, then periodic vectors of $M$ supply
+    cyclic projectors, and the vertically viewed tensor $\widetilde M$ has
+    no nontrivial $p$-periodic vectors.  This narrows the hypothesis of the
+    periodic-sector step in the proof of
+    \cite[Proposition~4.13, lines~1888--1893]{Cirac2016MPDO_arXiv} to the
+    canonical-form implication of lines~1874--1887: every other ingredient
+    of the step is proved.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mpdo_displaced_invariant_projector,
+        thm:mpdo_cyclic_projector_reduction}
+    A nontrivial $p$-periodic vector supplies the invariant, displaced
+    projector of Theorem~\ref{thm:mpdo_displaced_invariant_projector}; the
+    non-commutation hypothesis upgrades the displacement to the all-length
+    non-commutation family, so periodic vectors supply cyclic projectors
+    and Theorem~\ref{thm:mpdo_cyclic_projector_reduction} applies.
+\end{proof}
+
+\begin{theorem}[Commutation at chain length two forces letter invariance, for
+    an injective tensor]
+    \label{thm:mpdo_commute_of_isInjective}
+    \lean{MPOTensor.ketLeftMul_eq_braRightMul_of_commute_of_isInjective}
+    \leanok
+    \uses{def:injective, def:mpdo_vertical_one_site_actions, def:mpo_family}
+    Let $M$ be an MPO tensor whose doubled-index tensor is injective, and
+    let $Q$ be an idempotent on the physical space (Hermiticity is not
+    needed).  If $Q_1H^{(2)}=H^{(2)}Q_1$, then $Q\widetilde M=Q\widetilde MQ$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Idempotence of $Q$ upgrades the commutation to the one-sided reduction
+    $Q_1H^{(2)}=Q_1H^{(2)}Q_1$.  Unfolding this identity against every
+    trailing letter of $M$ gives, for every pair of physical indices $a,b$,
+    a trace identity pairing $(Q\widetilde M)_{ab}$ against
+    $(Q\widetilde MQ)_{ab}$ over every letter of the doubled-index tensor.
+    Injectivity's spanning property and nondegeneracy of the trace pairing
+    force the two matrices to agree.
+\end{proof}
+
+\begin{theorem}[No periodic vectors for an injective matrix product density
+    operator]
+    \label{thm:mpdo_vertical_no_periodic_vectors_injective}
+    \lean{MPOTensor.hasNoPeriodicVectors_verticalTensor_of_isInjective}
+    \leanok
+    \uses{def:mpdo, def:injective, def:vertical_tensor_mpdo,
+        def:no_periodic_vectors, thm:mpdo_displaced_invariant_projector,
+        thm:mpdo_commute_of_isInjective}
+    Let $M$ generate matrix product density operators and let $M$'s
+    doubled-index tensor be injective.  Then the vertically viewed tensor
+    $\widetilde M$ has no nontrivial periodic vectors, unconditionally.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    A nontrivial periodic vector supplies the invariant, displaced projector
+    $Q$ of Theorem~\ref{thm:mpdo_displaced_invariant_projector}.  Its word
+    invariance transfers to the stacked tensor, giving commutation with
+    $[H^{(2)}]^p$ unconditionally through the invariant-projection step
+    applied to the stack; positive semidefiniteness of the density operators
+    removes the power, and Theorem~\ref{thm:mpdo_commute_of_isInjective}
+    turns the resulting commutation with $H^{(2)}$ into the letter-level
+    invariance that the displacement forbids.
+
+    Theorem~\ref{thm:mpdo_vertical_no_periodic_vectors_horizontal_cf}
+    gives the corresponding result for a general horizontal canonical form.
+\end{proof}

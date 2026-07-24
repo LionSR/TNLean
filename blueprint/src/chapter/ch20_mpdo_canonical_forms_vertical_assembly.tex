@@ -1,0 +1,737 @@
+
+\begin{lemma}[Matrix product vector of the diagonal tensor]
+    \label{lem:mpv_diagonal_tensor}
+    \lean{MPOTensor.mpv_diagonalTensor}
+    \leanok
+    \uses{def:mpo_to_mps}
+    For an MPO tensor $M$ and a configuration $\sigma$, the matrix product vector of
+    the diagonal tensor $i\mapsto M^{ii}$ equals the matrix product vector of the
+    doubled-index tensor $\widehat{M}$ evaluated on the diagonal-paired configuration
+    $k\mapsto(\sigma_k,\sigma_k)$:
+    \[
+        V^{(N)}\bigl(i\mapsto M^{ii}\bigr)(\sigma)
+        = V^{(N)}\bigl(\widehat{M}\bigr)\bigl(k\mapsto(\sigma_k,\sigma_k)\bigr).
+    \]
+\end{lemma}
+\begin{proof}\leanok
+    At each site value $i$ the diagonal tensor agrees with the doubled-index tensor
+    on the diagonal pair,
+    \[
+        M^{ii} = \widehat{M}^{\,(i,i)}.
+    \]
+    The matrix product vector is multiplicative over sites, so replacing each factor
+    $M^{\sigma_k\sigma_k}$ by $\widehat{M}^{\,(\sigma_k,\sigma_k)}$ reindexes the
+    configuration from $\sigma$ to $k\mapsto(\sigma_k,\sigma_k)$, which is the stated
+    equality.
+\end{proof}
+
+\begin{lemma}[Diagonal tensor as a block decomposition under horizontal form]
+    \label{lem:mpv_diagonal_tensor_eq_blocks}
+    \lean{MPOTensor.mpv_diagonalTensor_eq_blocks}
+    \leanok
+    \uses{lem:mpv_diagonal_tensor, def:horizontal_cf_mpdo}
+    Suppose the doubled-index tensor $\widehat{M}$ shares its positive-length matrix
+    product vector family with a block-diagonal assembly
+    $\bigoplus_k \mu_k\, A_k$ of blocks $A_k$ on
+    the doubled index, as in a horizontal canonical form. Then the diagonal tensor of
+    $M$ generates the same positive-length matrix product vector family as the
+    block-diagonal assembly
+    $\bigoplus_k \mu_k\, A_k^{\mathrm{diag}}$ on the single-spin index, where
+    $A_k^{\mathrm{diag}}(i) = A_k(i,i)$ is the diagonal restriction of each block:
+    \[
+        V^{(N)}\bigl(i\mapsto M^{ii}\bigr)(\sigma)
+        = V^{(N)}\Bigl(\textstyle\bigoplus_k \mu_k\, A_k^{\mathrm{diag}}\Bigr)(\sigma).
+    \]
+    for every $N\geq 1$.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:mpv_diagonal_tensor}
+    By Lemma~\ref{lem:mpv_diagonal_tensor} the diagonal matrix product vector equals
+    that of $\widehat{M}$ on the diagonal-paired configuration, which by hypothesis
+    equals that of the block-diagonal assembly there. Expanding the assembly as the
+    weighted sum $\sum_k \mu_k^N\, V^{(N)}(A_k)$ and restricting each block to the
+    diagonal pair gives $\sum_k \mu_k^N\, V^{(N)}(A_k^{\mathrm{diag}})$, the matrix
+    product vector of the single-spin block-diagonal assembly.
+\end{proof}
+
+\begin{theorem}[Per-copy horizontal hypotheses do not control diagonal normality]
+    \label{thm:diagonal_restriction_not_normal}
+    \lean{MPSTensor.horizontalCFData_diagBlock_not_isNormal}
+    \leanok
+    \uses{rem:word_tuple_span_top}
+    There is a left-canonical, injective doubled-index tensor with a nonzero
+    block weight satisfying the older per-copy finite-length separation
+    hypothesis whose restriction to the diagonal physical pairs is not normal.
+    On bond space
+    $\mathbb C^2$, take
+    \[
+        A^{(a,b)}=c_a E_{ab},
+        \qquad c_0=\frac35,\qquad c_1=\frac45.
+    \]
+    Then the four matrices $A^{(a,b)}$ span $M_2(\mathbb C)$ and
+    \[
+        \sum_{a,b}\bigl(A^{(a,b)}\bigr)^*A^{(a,b)}=I.
+    \]
+    For a single block, injectivity also gives finite-length block separation.
+    The diagonal restriction, however, consists only of
+    \[
+        A^{\mathrm{diag}}(0)=\frac35 E_{00},
+        \qquad A^{\mathrm{diag}}(1)=\frac45 E_{11}.
+    \]
+    Every product of these two matrices is diagonal, so no blocking length spans
+    $M_2(\mathbb C)$.
+\end{theorem}
+\begin{proof}\leanok
+    The four nonzero scalar multiples of the matrix units span the full matrix
+    algebra.  The identity
+    $(3/5)^2+(4/5)^2=1$ gives left-canonicality.  After diagonal restriction,
+    \[
+        E_{ii}E_{jj}=\delta_{ij}E_{ii}.
+    \]
+    Hence every word is either zero or a scalar multiple of some $E_{ii}$, and
+    therefore has vanishing $(0,1)$ entry.  Since $E_{01}$ does not, it lies
+    outside the span at every blocking length.
+\end{proof}
+
+\begin{lemma}[Diagonal tensor word evaluation]
+    \label{lem:eval_word_diagonal_tensor}
+    \lean{MPOTensor.evalWord_diagonalTensor}
+    \leanok
+    \uses{def:mpo_eval_word}
+    For any word $w$, the matrix product of the diagonal tensor along $w$ equals the
+    operator word evaluation with equal ket and bra words, since both multiply the
+    matrices $M^{w_k w_k}$ site by site.
+\end{lemma}
+\begin{proof}\leanok
+    By induction on the word.
+\end{proof}
+
+\begin{lemma}[Diagonal tensor evaluates the density-operator diagonal]
+    \label{lem:mpv_diagonal_tensor_eq_density}
+    \lean{MPOTensor.mpv_diagonalTensor_eq_mpo_diag}
+    \leanok
+    \uses{def:mpo_family, lem:eval_word_diagonal_tensor}
+    For an MPO tensor $M$ and a configuration $\sigma$, the matrix product vector of
+    the diagonal tensor equals the diagonal entry of the generated operator,
+    \[
+        V^{(N)}\bigl(i\mapsto M^{ii}\bigr)(\sigma)
+        = \bigl\langle\sigma\,\big|\,\rho^{(N)}(M)\,\big|\,\sigma\bigr\rangle,
+    \]
+    since both equal $\tr\bigl(M^{\sigma_1\sigma_1}\cdots
+        M^{\sigma_N\sigma_N}\bigr)$.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:eval_word_diagonal_tensor}
+    Word evaluation of the diagonal tensor multiplies the matrices
+    $M^{\sigma_k\sigma_k}$, which is exactly the operator word evaluation with equal
+    ket and bra indices; taking the trace gives the diagonal entry.
+\end{proof}
+
+\begin{lemma}[Nonnegativity of the diagonal matrix product vector]
+    \label{lem:mpv_diagonal_tensor_nonneg}
+    \lean{MPOTensor.mpv_diagonalTensor_nonneg}
+    \leanok
+    \uses{lem:mpv_diagonal_tensor_eq_density, def:mpdo}
+    If $\rho^{(N)}(M)$ is positive semidefinite, then
+    $V^{(N)}\bigl(i\mapsto M^{ii}\bigr)(\sigma)\ge 0$ for every configuration
+    $\sigma$.
+\end{lemma}
+\begin{proof}\leanok
+    By Lemma~\ref{lem:mpv_diagonal_tensor_eq_density}, the value is a diagonal
+    entry of $\rho^{(N)}(M)$, and the diagonal entries of a positive semidefinite
+    matrix are nonnegative.
+\end{proof}
+
+\begin{lemma}[Matrix product vector of the vertical-assembled tensor]
+    \label{lem:mpv_vertical_assembled}
+    \lean{MPOTensor.verticalCopyDim}
+    \lean{MPOTensor.verticalCopyBlocks}
+    \lean{MPOTensor.mpv_verticalAssembledTensor_eq_sum}
+    \leanok
+    \uses{thm:mpv_decomposition, def:block_diagonal_tensor}
+    Let $g$ be a block count,
+    $\dim,\mult:\{0,\dots,g-1\}\to\mathbb N$, weights
+    $\omega_{\alpha j}\in\mathbb C$ for $0\le j<\mult_\alpha$, and blocks
+    $A_\alpha$ of bond dimension $\dim_\alpha$. The vertical-assembled tensor is the
+    block-diagonal assembly over the flattened index $(\alpha, j)$ that repeats
+    $A_\alpha$ with weight $\omega_{\alpha j}$, written
+    $\bigoplus_\alpha\bigoplus_j \omega_{\alpha j}\, A_\alpha$. Its matrix product
+    vector decomposes as
+    \[
+        V^{(N)}\Bigl(\textstyle\bigoplus_\alpha\bigoplus_j
+        \omega_{\alpha j}\, A_\alpha\Bigr)(\sigma)
+        = \sum_{\alpha}\sum_{j} (\omega_{\alpha j})^N\, V^{(N)}(A_\alpha)(\sigma).
+    \]
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:mpv_decomposition}
+    The vertical-assembled tensor is the block-diagonal assembly over the single
+    flattened index $q$, with flattened weights $\widetilde\omega_q$ and blocks
+    $\widetilde A_q$. By the block matrix-product-vector decomposition
+    (Theorem~\ref{thm:mpv_decomposition}),
+    \[
+        V^{(N)}\Bigl(\textstyle\bigoplus_q
+        \widetilde\omega_q\,\widetilde A_q\Bigr)(\sigma)
+        = \sum_{q} (\widetilde\omega_q)^N\, V^{(N)}(\widetilde A_q)(\sigma).
+    \]
+    The flattening identifies $q$ with the pair $(\alpha, j)$ via the bijection
+    \[
+        \{(\alpha,j):0\le\alpha<g,\ 0\le j<\mult_\alpha\}
+        \simeq \{0,\dots,\textstyle\sum_\alpha\mult_\alpha-1\},
+    \]
+    under which $\widetilde\omega_q=\omega_{\alpha j}$ and
+    $\widetilde A_q=A_\alpha$. Reindexing the sum along this bijection yields the
+    double sum over $(\alpha,j)$.
+\end{proof}
+
+\begin{lemma}[Regrouping a block family by repeated representatives]
+    \label{lem:vertical_grouping_equiv}
+    \lean{MPOTensor.sameMPV₂Pos_toTensorFromBlocks_verticalAssembledTensor_of_equiv}
+    \leanok
+    \uses{lem:mpv_vertical_assembled, thm:mpv_decomposition}
+    Let $(B_k)_{k\in I}$ be a finite family of blocks with weights $\nu_k$,
+    and let $(A_\alpha)_{\alpha\in J}$ be a finite family of representative
+    blocks.  Suppose there is a bijection
+    \[
+        e:I\simeq\{(\alpha,j):\alpha\in J, 0\le j<m_\alpha\}
+    \]
+    such that, writing $e(k)=(\alpha,j)$, one has
+    $\nu_k=\omega_{\alpha j}$ and, for every positive length $N$,
+    \[
+        V^{(N)}(B_k)=V^{(N)}(A_\alpha)
+    \]
+    Then
+    \[
+        V^{(N)}\Bigl(\textstyle\bigoplus_{k\in I}\nu_k B_k\Bigr)
+        =
+        V^{(N)}\Bigl(
+          \textstyle\bigoplus_{\alpha\in J}\bigoplus_{j=0}^{m_\alpha-1}
+          \omega_{\alpha j}A_\alpha
+        \Bigr)
+    \]
+    for every positive length $N$.  This is the finite-sum
+    reindexing after the vertical sectors have been grouped in
+    \cite[Proposition~4.13]{Cirac2016MPDO_arXiv}.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:mpv_vertical_assembled, thm:mpv_decomposition}
+    For $N>0$ and every configuration $\sigma$, the two sides expand as
+    \[
+      \sum_{k\in I}\nu_k^N V^{(N)}(B_k)(\sigma),
+      \qquad
+      \sum_{\alpha\in J}\sum_{j=0}^{m_\alpha-1}
+        \omega_{\alpha j}^N V^{(N)}(A_\alpha)(\sigma).
+    \]
+    The summand indexed by $k$ in the first sum equals the summand indexed by
+    $e(k)$ in the second, so reindexing by $e$ proves the equality.
+\end{proof}
+
+\begin{theorem}[Invariant vertical projections are reducing]
+    \label{thm:mpdo_vertical_projector_closure}
+    \lean{MPOTensor.IsHorizontalCF.hasInvariantProjectorClosure_verticalTensor}
+    \leanok
+    \uses{def:mpdo, def:horizontal_cf_mpdo, def:vertical_tensor_mpdo,
+        def:invariant_projector_closure,
+        thm:representative_one_sub_mp_zero}
+    Let $M$ be in horizontal canonical form and generate matrix product
+    density operators. If an orthogonal projection $P$ satisfies, for every
+    vertical letter $v$,
+    \[
+        P\widetilde M_v=P\widetilde M_vP,
+    \]
+    then, for every vertical letter $v$, it also satisfies
+    \[
+        \widetilde M_vP=P\widetilde M_vP.
+    \]
+    Thus the vertically viewed tensor has invariant-projector closure.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:representative_one_sub_mp_zero}
+    Translate the left-invariance identity into the one-site ket and bra
+    actions of the original tensor. The horizontal canonical-form version of
+    Lemma~L gives the opposite one-sided identity. Translating back to the
+    vertically viewed tensor proves the claim.
+\end{proof}
+
+\begin{theorem}[Irreducible reducing sectors of the vertically viewed tensor]
+    \label{thm:mpdo_vertical_irreducible_reducing_sectors}
+    \lean{MPOTensor.IsHorizontalCF.exists_irreducible_verticalBlockDecomp_with_isometry}
+    \leanok
+    \uses{thm:mpdo_vertical_projector_closure,
+        thm:projector_closure_irreducible_corners}
+    Under the hypotheses of
+    Theorem~\ref{thm:mpdo_vertical_projector_closure}, there are positive
+    integers $d_k$, tensors $B_k$ of bond dimension $d_k$, and isometries
+    $V_k:\C^{d_k}\to\C^d$ such that
+    \[
+        V_k^\dagger V_k=\Id,\qquad
+        \sum_k V_kV_k^\dagger=\Id,\qquad
+        V_k^\dagger V_l=0\quad(k\ne l).
+    \]
+    Every $B_k$ is irreducible, and for every vertical letter $v$,
+    \[
+        \widetilde M_vV_k=V_kB_k^v,
+        \qquad
+        V_k^\dagger\widetilde M_v=B_k^vV_k^\dagger,
+        \qquad
+        B_k^v=V_k^\dagger\widetilde M_vV_k.
+    \]
+    Moreover, $\widetilde M$ and the unit-weight direct sum
+    $\bigoplus_k B_k$ have the same matrix product vectors at every positive
+    length.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mpdo_vertical_projector_closure,
+        thm:projector_closure_irreducible_corners}
+    Apply the irreducible-corner decomposition under invariant-projector
+    closure to $\widetilde M$.
+\end{proof}
+
+\begin{theorem}[Complete vertical reducing projectors]
+    \label{thm:mpdo_vertical_complete_reducing_projectors}
+    \lean{MPOTensor.IsHorizontalCF.exists_complete_verticalReducingProjectors}
+    \leanok
+    \uses{thm:mpdo_vertical_irreducible_reducing_sectors}
+    Under the same hypotheses, there are orthogonal projections $P_k$ such
+    that
+    \[
+        \sum_kP_k=\Id,\qquad P_kP_l=0\quad(k\ne l),\qquad
+        \widetilde M_vP_k=P_k\widetilde M_v
+    \]
+    for every $k$ and every vertical letter $v$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mpdo_vertical_irreducible_reducing_sectors}
+    For the isometries of
+    Theorem~\ref{thm:mpdo_vertical_irreducible_reducing_sectors}, set
+    $P_k=V_kV_k^\dagger$. The isometry, orthogonality, completeness, and
+    intertwining identities give the four assertions directly.
+\end{proof}
+
+\begin{figure}[ht]
+    \centering
+    \[
+        U\mathcal K U^\dagger=\bigoplus_\alpha M_\alpha
+    \]
+    \caption{The vertically viewed tensor decomposes through complete
+    orthogonal physical sectors. Each $V_k$ embeds the irreducible tensor
+    $B_k$, while $P_k=V_kV_k^\dagger$ is its reducing range projection. The
+    displayed identity is equivalent, for every vertical letter $v$, to
+    $\widetilde M_v=\sum_kV_kB_{k,v}V_k^\dagger$.
+    This is the iterated invariant-subspace construction in
+    \cite[lines~200--219]{Cirac2016MPDO_arXiv}, applied to the reduction in
+    \cite[Proposition~4.13, lines~1873--1887]{Cirac2016MPDO_arXiv}.}
+    \label{fig:mpdo_vertical_reducing_sectors}
+\end{figure}
+
+\begin{theorem}[Spectrally normalized vertical sectors with physical isometries]
+    \label{thm:mpdo_vertical_normal_sectors_with_isometries}
+    \lean{MPOTensor.IsHorizontalCF.exists_normal_verticalBlockDecomp_with_isometry}
+    \leanok
+    \uses{thm:mpdo_vertical_irreducible_reducing_sectors,
+        thm:mpdo_vertical_no_periodic_vectors_horizontal_cf,
+        lem:irreducible_transfer_perron_pair,
+        lem:irreducible_block_spectral_normalization}
+    Under the same hypotheses, there are positive integers $d_k$, positive
+    scalars $\nu_k$, normal tensors $B_k$ of bond dimension $d_k$, and
+    isometries $V_k:\C^{d_k}\to\C^d$ with pairwise orthogonal ranges. For
+    every sector $k$ and every vertical letter $v$,
+    \[
+        \widetilde M_vV_k=V_k(\nu_kB_k^v),
+        \qquad
+        V_k^\dagger\widetilde M_v=(\nu_kB_k^v)V_k^\dagger,
+        \qquad
+        \nu_kB_k^v=V_k^\dagger\widetilde M_vV_k.
+    \]
+    Moreover, every vertical letter is reconstructed literally by
+    \[
+        \widetilde M_v
+        =\sum_k V_k(\nu_kB_k^v)V_k^\dagger.
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mpdo_vertical_irreducible_reducing_sectors,
+        thm:mpdo_vertical_no_periodic_vectors_horizontal_cf,
+        lem:irreducible_transfer_perron_pair,
+        lem:irreducible_block_spectral_normalization}
+    Retain exactly the irreducible corners containing a nonzero letter. The
+    Perron--Frobenius eigenvalue of each retained corner is positive, and the
+    absence of nontrivial periodic vectors makes the inverse-square-root
+    rescaling normal. Put the removed square root into $\nu_k$ and reindex the
+    retained corners. The original complete reducing decomposition expresses
+    each vertical letter as the sum of all compressed corners; every omitted
+    summand vanishes, which gives the displayed reconstruction. Thus the
+    retained range projections need not sum to the identity, but their
+    orthogonal complement is a zero sector.
+\end{proof}
+
+\begin{theorem}[Vertical normal sectors grouped into BNT representatives]
+    \label{thm:mpdo_vertical_bnt_grouping_with_isometries}
+    \lean{MPOTensor.IsHorizontalCF.exists_verticalBNTGrouping_with_isometry}
+    \leanok
+    \uses{def:mpdo, def:horizontal_cf_mpdo, def:vertical_tensor_mpdo,
+        def:bnt_cpsv, def:mpv_phase_class_data}
+    Under the same hypotheses, partition the normalized vertical sectors by
+    equality of their matrix product vector families up to a fixed nonzero
+    scalar per site. There are normal representatives $M_\alpha$, an enumeration
+    $k=(\alpha,q)$ of the original sectors, invertible matrices
+    $X_{\alpha,q}$, and complex numbers $\zeta_{\alpha,q}$ of unit modulus,
+    with $X_{\alpha,1}=\Id$ and $\zeta_{\alpha,1}=1$, such that
+    \[
+        B_{\alpha,q}^v
+        =\zeta_{\alpha,q}X_{\alpha,q}M_\alpha^vX_{\alpha,q}^{-1}.
+    \]
+    The representatives are pairwise gauge-phase distinct and form a basis of
+    normal tensors for the weighted block tensor
+    $\bigoplus_k\nu_kB_k$. Every grouped coefficient
+    $\nu_{\alpha,q}\zeta_{\alpha,q}$ is positive. With the physical isometries
+    from Theorem~\ref{thm:mpdo_vertical_normal_sectors_with_isometries}
+    retained unchanged, one has both reducing identities, exact compression,
+    and the literal reconstruction
+    \[
+        \widetilde M_v
+        =\sum_\alpha\sum_q
+        V_{\alpha,q}
+        \bigl(\nu_{\alpha,q}\zeta_{\alpha,q}
+        X_{\alpha,q}M_\alpha^vX_{\alpha,q}^{-1}\bigr)
+        V_{\alpha,q}^\dagger .
+    \]
+    For each pair $(\alpha,q)$, the range projector of $V_{\alpha,q}$ obeys
+    the representative-loop identity and gives a nonzero compression at some
+    finite length. This is the decomposition and positivity argument of
+    \cite[Proposition~4.13, lines 1898--1902]{Cirac2016MPDO_arXiv}. The
+    relative Gram identity and proportional-unitary normalization of lines
+    1903--1908 are not asserted here.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpdo_vertical_normal_sectors_with_isometries,
+        thm:cpsv_normal_mpv_phase_gauge,
+        thm:cpsv_normal_separated_eventually_li,
+        thm:mpdo_grouped_sector_compression_nonzero,
+        def:mpdo_sector_projector, thm:mpdo_sector_weight_pos}
+    Take one representative from each phase class. Theorem~\ref{thm:cpsv_normal_mpv_phase_gauge}
+    gives equality of bond dimensions and the displayed letterwise gauge-phase
+    relation for every copy. Distinct representatives are gauge-phase
+    separated by construction, so
+    Theorem~\ref{thm:cpsv_normal_separated_eventually_li} gives eventual linear
+    independence. The phase-class regrouping of the finite sum gives the BNT
+    expansion. The representative copy is assigned the identity gauge and
+    phase one, while the self-overlap
+    normalization of normal tensors shows that every phase has unit modulus.
+    Substitution in the two intertwining identities, the compression identity,
+    and the literal reconstruction from
+    Theorem~\ref{thm:mpdo_vertical_normal_sectors_with_isometries} proves all
+    remaining algebraic assertions without altering any physical isometry.
+    Cyclicity of trace gives the sector-loop identities. The nonzero-corner
+    separation theorem supplies a nonzero compression for every sector, and
+    the sector trace identity and MPDO positivity then make every grouped
+    coefficient positive.
+\end{proof}
+
+\begin{definition}[Block-row map of sector isometries]
+    \label{def:vertical_sector_block_row}
+    \lean{Matrix.sigmaBlockRow}
+    \leanok
+    Let $W_k:\C^{D_k}\to\C^d$ be a finite family of rectangular
+    matrices.  Their block-row map
+    $U:\C^d\to\bigoplus_k\C^{D_k}$ is defined by
+    \[
+        Ux=(W_k^\dagger x)_k.
+    \]
+    This realizes the coisometry in the conclusion of
+    \cite[Proposition~4.13, lines~1863--1870]{Cirac2016MPDO_arXiv} once the
+    sector isometries have been normalized.
+\end{definition}
+
+\begin{theorem}[Conjugation and reconstruction from orthogonal sectors]
+    \label{thm:vertical_sector_coisometry}
+    \lean{Matrix.sigmaBlockRow_isCoisometry}
+    \lean{Matrix.sigmaBlockRow_conjugation}
+    \lean{Matrix.sigmaBlockRow_reconstruction}
+    \leanok
+    \uses{def:vertical_sector_block_row}
+    Suppose that
+    \[
+        W_k^\dagger W_k=\Id,
+        \qquad
+        W_k^\dagger W_l=0\quad(k\ne l),
+    \]
+    and, for every letter $v$ and every sector $k$,
+    \[
+        T_vW_k=W_kB_k^v.
+    \]
+    Then the block-row map $U$ is a coisometry and conjugates $T$ to the
+    direct sum of the sector tensors:
+    \[
+        UU^\dagger=\Id,
+        \qquad
+        UT_vU^\dagger=\bigoplus_k B_k^v.
+    \]
+    If the letters also satisfy the literal sector decomposition
+    \[
+        T_v=\sum_k W_kB_k^vW_k^\dagger,
+    \]
+    then
+    \[
+        T_v=U^\dagger\!\left(\bigoplus_k B_k^v\right)U.
+    \]
+    This last equality is a conditional consequence of the displayed literal
+    sector decomposition; no additional assertion from the source is used.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The $(k,l)$ block of $UU^\dagger$ is $W_k^\dagger W_l$, hence the
+    first identity follows from orthonormality.  The corresponding block of
+    $UT_vU^\dagger$ is
+    \[
+        W_k^\dagger T_vW_l
+        =W_k^\dagger W_lB_l^v,
+    \]
+    which is $B_k^v$ for $k=l$ and zero otherwise.  Finally, multiplication
+    of the block diagonal matrix by the block row gives the sum
+    $\sum_kW_kB_k^vW_k^\dagger$, which is $T_v$ by hypothesis.
+    The row indices of $U$ form the dependent disjoint union
+    $\coprod_k\{0,\ldots,D_k-1\}$.  Its canonical order-preserving bijection
+    with $\{0,\ldots,\sum_kD_k-1\}$ gives the coordinate reindexing required
+    by the vertical canonical-form definition.
+    % Lean adapter: this final reindexing is `finSigmaFinEquiv`.
+\end{proof}
+
+\begin{theorem}[Vertical canonical form from orthogonal grouped sectors]
+    \label{thm:vertical_cf_of_grouped_orthogonal_sectors}
+    \lean{MPOTensor.isVerticalCF_of_grouped_orthogonal_sectors}
+    \leanok
+    \uses{def:vertical_tensor_mpdo, def:vertical_cf_mpdo, def:bnt}
+    Let $\{A_\alpha\}_{\alpha=0}^{g-1}$ be a BNT for the vertically viewed
+    tensor $\widetilde M$.  For each $\alpha$, let $r_\alpha>0$, let
+    $\omega_{\alpha,q}>0$ for $0\leq q<r_\alpha$, and let
+    $W_{\alpha,q}:\C^{D_\alpha}\to\C^d$ satisfy
+    \[
+        W_{\alpha,q}^\dagger W_{\alpha,q}=\Id,
+        \qquad
+        W_{\alpha,q}^\dagger W_{\beta,p}=0
+        \quad\text{if }(\alpha,q)\ne(\beta,p).
+    \]
+    Suppose that, for every vertical letter $v$ and every pair $(\alpha,q)$,
+    \[
+        \widetilde M_v W_{\alpha,q}
+          =W_{\alpha,q}(\omega_{\alpha,q}A_\alpha^v),
+    \]
+    and that the letters have the exact sector decomposition
+    \[
+        \widetilde M_v
+          =\sum_{\alpha=0}^{g-1}\sum_{q=0}^{r_\alpha-1}
+            W_{\alpha,q}(\omega_{\alpha,q}A_\alpha^v)
+            W_{\alpha,q}^\dagger.
+    \]
+    Then $M$ is in vertical canonical form.
+    This is the final finite-dimensional implication in
+    \cite[Proposition~4.13, lines~1863--1870]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:vertical_sector_coisometry}
+    Form the block-row map $U$ from the adjoints
+    $W_{\alpha,q}^\dagger$.  Theorem~\ref{thm:vertical_sector_coisometry}
+    gives
+    \[
+        UU^\dagger=\Id,
+        \qquad
+        U\widetilde M_vU^\dagger
+          =\bigoplus_{\alpha,q}\omega_{\alpha,q}A_\alpha^v,
+    \]
+    together with
+    \[
+        \widetilde M_v
+          =U^\dagger\!\left(
+              \bigoplus_{\alpha,q}\omega_{\alpha,q}A_\alpha^v
+            \right)U.
+    \]
+    Identifying the dependent pairs $(\alpha,q)$ and their bond indices with
+    the standard coordinates of the two finite direct sums gives the required
+    matrix dimensions.  Positivity of the multiplicities and weights, together
+    with the BNT hypothesis, supplies the remaining conditions of vertical
+    canonical form.
+\end{proof}
+\begin{lemma}[A retained vertical phase class exists]
+    \label{lem:mpdo_vertical_retained_class_nonempty}
+    \lean{MPOTensor.IsHorizontalCF.exists_nonempty_verticalBNTGrouping}
+    \leanok
+    \uses{def:horizontal_cf_mpdo,
+        thm:mpdo_vertical_bnt_grouping_with_isometries,
+        lem:mpv_phase_class_nonempty}
+    Under the hypotheses of
+    Theorem~\ref{thm:mpdo_vertical_bnt_grouping_with_isometries}, the retained
+    vertical decomposition has at least one sector and hence at least one
+    phase class.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    The unit-modulus weight witness in the horizontal canonical form, together
+    with left canonicity of its representative, makes the doubled-index tensor
+    nonzero.  Hence its vertical reshaping $\widetilde M$ is nonzero.  If the
+    retained decomposition had no sector, its literal reconstruction formula
+    would make every letter of $\widetilde M$ zero, a contradiction.  Passing
+    from the nonempty finite set of retained sectors to its phase partition
+    gives a retained representative.
+\end{proof}
+
+\begin{theorem}[Nonvanishing of the vertical reshaping]
+    \label{thm:mpdo_vertical_tensor_nonzero}
+    \lean{MPOTensor.IsHorizontalCF.verticalTensor_ne_zero}
+    \leanok
+    \uses{def:horizontal_cf_mpdo, def:vertical_tensor_mpdo}
+    If an MPO tensor $M$ is in horizontal canonical form, then its vertical
+    reshaping is nonzero:
+    \[
+        \widetilde M\ne 0.
+    \]
+    This is the nonvanishing observation used in
+    \cite[Proposition~4.13, lines~1895--1902]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:horizontal_cf_mpdo, def:vertical_tensor_mpdo,
+        lem:sector_bnt_weight_unit_exists_of_struct}
+    Write the doubled-index tensor in horizontal canonical form as
+    $\widehat M=GSG^{-1}$, where $S$ is the weighted direct sum of its basis
+    tensors.  Choose a copy whose weight has unit modulus.  Its basis tensor
+    cannot have every letter equal to zero, since left canonicity gives
+    \[
+        \sum_i (A^i)^\dagger A^i=\Id.
+    \]
+    The corresponding nonzero weight and nonzero letter give $S\ne0$, hence
+    $\widehat M\ne0$.  If $\widetilde M=0$, the bijection between its vertical
+    index and the two horizontal bond indices would give $\widehat M=0$, a
+    contradiction.
+\end{proof}
+
+\begin{theorem}[Algebraic BNT from a grouped vertical decomposition]
+    \label{thm:mpdo_vertical_grouped_is_bnt}
+    \lean{MPOTensor.isBNT_verticalTensor_of_grouping}
+    \leanok
+    \uses{def:horizontal_cf_mpdo, def:vertical_tensor_mpdo, def:bnt,
+        def:bnt_cpsv, def:mpv_phase_class_data}
+    Let $M$ be in horizontal canonical form and put $T=\widetilde M$.  Let
+    $B_k$ have bond dimension $d_k$, let $\mu_k\in\C$, and let
+    $V_k:\C^{d_k}\to\C^d$ be an isometry for $0\leq k<r$.  Assume, for every
+    vertical letter $v$, that
+    \[
+        V_k^\dagger T_v=(\mu_k B_k^v)V_k^\dagger,
+        \qquad
+        T_v=\sum_{k=0}^{r-1}V_k(\mu_k B_k^v)V_k^\dagger.
+    \]
+    Partition the tensors $B_k$ into matrix-product-vector phase classes and
+    choose one representative $A_\alpha$ from each class.  If
+    $\{A_\alpha\}_\alpha$ is a basis of normal tensors in the spectral sense
+    for the weighted direct sum
+    \[
+        A_{\mathrm{ret}}=\bigoplus_{k=0}^{r-1}\mu_k B_k,
+    \]
+    then $\{A_\alpha\}_\alpha$ is an algebraic basis of normal tensors for
+    $T$.
+
+    This is the basis-of-normal-tensors conclusion in
+    \cite[Proposition~4.13, lines~1863--1921]{Cirac2016MPDO_arXiv}, stated for
+    the grouped decomposition before the final coisometry is formed.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:cpsv_bnt_is_bnt, lem:bnt_of_same_mpv2_pos,
+        thm:mpv_decomposition}
+    Put $C_k^v=\mu_kB_k^v$.  Induction on a word $w$ gives
+    \[
+        V_k^\dagger T^w=C_k^wV_k^\dagger.
+    \]
+    For a nonempty word $w=(v,w')$, reconstruction of its first letter,
+    cyclicity of trace, and $V_k^\dagger V_k=\Id$ therefore give
+    \begin{align*}
+        \tr(T^w)
+        &=\sum_k\tr\!\left(V_kC_k^vV_k^\dagger T^{w'}\right)\\
+        &=\sum_k\tr(C_k^vC_k^{w'})
+          =\sum_k\mu_k^{|w|}\tr(B_k^w)
+          =V^{(|w|)}(A_{\mathrm{ret}})_w.
+    \end{align*}
+    Thus $T$ and $A_{\mathrm{ret}}$ have the same matrix product vectors at
+    every positive length.  The spectral BNT hypothesis gives an algebraic BNT
+    for $A_{\mathrm{ret}}$ by Theorem~\ref{thm:cpsv_bnt_is_bnt}; in particular,
+    it supplies the required positive bond dimensions.  Lemma~\ref{lem:bnt_of_same_mpv2_pos}
+    then gives the same algebraic BNT for $T$.
+\end{proof}
+
+\begin{theorem}[Horizontal canonical form implies vertical canonical form]
+    \label{thm:vertical_cf_of_horizontal_cf}
+    \lean{MPOTensor.verticalCF_of_horizontalCF}
+    \lean{MPOTensor.IsHorizontalCF.exists_cpsvVerticalDecomposition}
+    \leanok
+    \uses{def:mpdo, def:horizontal_cf_mpdo, def:vertical_cf_mpdo}
+    A tensor in horizontal canonical form that generates matrix product
+    density operators is also in canonical form in the vertical direction:
+    there exist a basis of normal tensors $\{M_\alpha\}_\alpha$ for the
+    vertically viewed tensor $\widetilde M$, positive diagonal matrices
+    $\mu_\alpha$, and a coisometry $U$ from the physical space onto the
+    retained nonzero sectors. Writing
+    $B=\bigoplus_\alpha\mu_\alpha\otimes M_\alpha$, one has
+    \[
+        UU^\dagger=\Id,\qquad
+        U\widetilde MU^\dagger=B,\qquad
+        \widetilde M=U^\dagger BU.
+    \]
+    The latter declaration retains the literal CPSV16 basis-of-normal-tensors
+    predicate together with these same positive and coisometric data.
+    This is \cite[Proposition~4.13]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:mpv_phase_class_data,
+        thm:mpdo_vertical_bnt_grouping_with_isometries,
+        thm:mpdo_vertical_grouped_is_bnt,
+        thm:mpdo_normalized_grouped_sector_maps,
+        thm:vertical_cf_of_grouped_orthogonal_sectors}
+    Apply
+    Theorem~\ref{thm:mpdo_vertical_bnt_grouping_with_isometries} once and keep
+    its representatives $M_\alpha$, multiplicities $r_\alpha$, exact
+    positive weights $\mu_{\alpha,q}$, and physical sector maps.  For these
+    same witnesses,
+    Theorem~\ref{thm:mpdo_vertical_grouped_is_bnt} proves that
+    $\{M_\alpha\}_\alpha$ is a BNT for $\widetilde M$.
+
+    Theorem~\ref{thm:mpdo_normalized_grouped_sector_maps} absorbs each
+    normalized bond gauge into its physical map and gives maps
+    $W_{\alpha,q}$ such that
+    \[
+        W_{\alpha,q}^\dagger W_{\alpha,q}=\Id,\qquad
+        W_{\alpha,q}^\dagger W_{\beta,p}=0
+        \quad\text{if }(\alpha,q)\ne(\beta,p),
+    \]
+    \[
+        \widetilde M_vW_{\alpha,q}
+          =W_{\alpha,q}(\mu_{\alpha,q}M_\alpha^v),
+        \qquad
+        \widetilde M_v
+          =\sum_\alpha\sum_q
+            W_{\alpha,q}(\mu_{\alpha,q}M_\alpha^v)
+            W_{\alpha,q}^\dagger.
+    \]
+    The canonical equivalence between the dependent disjoint union
+    $\coprod_\alpha\{0,\ldots,r_\alpha-1\}$ and its standard finite index
+    set reindexes the nested reconstruction sum without changing any weight
+    or sector.  The hypotheses of
+    Theorem~\ref{thm:vertical_cf_of_grouped_orthogonal_sectors} now hold, and
+    that theorem gives the vertical canonical form of $M$.
+\end{proof}

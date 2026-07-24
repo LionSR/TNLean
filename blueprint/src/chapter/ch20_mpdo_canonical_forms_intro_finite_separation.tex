@@ -1,0 +1,619 @@
+\section{Horizontal and Vertical Canonical Forms}
+
+% Source-numbering note: arXiv:1606.00608 uses one theorem counter for
+% definitions, propositions, theorems, examples, and observations in Section 4.
+% The three examples after Theorem 4.9 are numbered 4.10--4.12; hence
+% `Prop:IV.12` is Proposition 4.13 in the arXiv source.
+
+\begin{definition}[Horizontal canonical form for an MPO]\label{def:horizontal_cf_mpdo}
+    \lean{MPOTensor.IsHorizontalCF}
+    \leanok
+    \uses{def:mpo_tensor, def:sector_bnt_cf, def:gauge_equiv}
+    An MPO tensor is in \emph{horizontal canonical form} if its doubled-index
+    MPS tensor is a BNT sector decomposition with an independent gauge on
+    every repeated copy:
+    \[
+        M^{ab}=\bigoplus_{j=0}^{g-1}\bigoplus_{q=0}^{r_j-1}
+        \mu_{j,q}X_{j,q}A_j^{ab}X_{j,q}^{-1}.
+    \]
+    Here the $A_j$ are the distinct minimal representatives, $r_j>0$, and
+    every weight $\mu_{j,q}$ is nonzero, $|\mu_{j,q}|\leq1$, and at least
+    one weight has modulus one.  The BNT hypotheses include
+    irreducibility, left-canonicality, normalized self-overlap, eventual
+    linear independence of the representative MPV families, and the
+    exclusion of similarity up to phase between distinct representatives.
+    Repeated gauge-equivalent copies are retained over the same representative
+    rather than separated as distinct blocks.  The total bond dimension of
+    the displayed direct sum is exactly $D$.  Equivalently, with the
+    block-diagonal matrix $X=\bigoplus_{j,q}X_{j,q}$,
+    \[
+        M^{ab}=X\left[\bigoplus_{j,q}\mu_{j,q}A_j^{ab}\right]X^{-1},
+        \qquad X=\bigoplus_{j,q}X_{j,q}.
+    \]
+    This is the canonical form and its BNT decomposition in
+    \cite[lines~237--246 and 281--301]{Cirac2016MPDO_arXiv}.
+\end{definition}
+
+\begin{definition}[MPV representation associated with horizontal canonical form]
+    \label{def:horizontal_cf_mpv_representation}
+    \lean{MPOTensor.HasHorizontalCFMPVRepresentation}
+    \leanok
+    \uses{def:mpo_tensor, def:sector_bnt_cf, def:same_mpv2_pos}
+    An MPO tensor has a \emph{horizontal-canonical-form MPV representation} if
+    its doubled-index MPS tensor generates the same positive-length MPV family as a
+    BNT canonical form
+    \[
+        \bigoplus_{j=0}^{g-1}\bigoplus_{q=0}^{r_j-1}\mu_{j,q}A_j.
+    \]
+    Its length-$N$ matrix product vector is
+    \[
+        \sum_{j=0}^{g-1}
+        \left(\sum_{q=0}^{r_j-1}\mu_{j,q}^{N}\right)V^{(N)}(A_j).
+    \]
+    This is the MPV-level decomposition in
+    \cite[Section~2.3, lines~298--301]{Cirac2016MPDO_arXiv}.
+\end{definition}
+
+\begin{theorem}[Horizontal canonical form gives the BNT MPV representation]
+    \label{thm:horizontal_cf_gives_mpv_representation}
+    \lean{MPOTensor.IsHorizontalCF.hasHorizontalCFMPVRepresentation}
+    \leanok
+    \uses{def:horizontal_cf_mpdo,
+        def:horizontal_cf_mpv_representation}
+    Every MPO tensor in horizontal canonical form has the associated positive-length
+    BNT matrix-product-vector representation.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Each copy similarity cancels inside every positive-length closed
+    matrix-product trace.
+\end{proof}
+
+\begin{figure}[ht]
+    \centering
+    \[
+        K=X\left(\bigoplus_j\mathcal K_j\right)X^{-1}
+    \]
+    \begin{center}
+        % K = X ( bigoplus_j K_j ) X^{-1}  [CPSV16 eq. (CFK), lines 1660-1665]:
+        % the horizontal canonical form of the doubled tensor K as a gauge
+        % conjugation of the block direct sum of basis tensors.  Ink to
+        % indices: each side exposes one virtual index at each end, an up
+        % ket leg and a down bra leg (the paper draws the bra leg
+        % dashed-up); the gauge capsules X and X^{-1} are matrices riding
+        % the virtual wire and carry no physical leg, and the wires between
+        % the capsules and the middle tensor are the contracted virtual
+        % indices of the paper's chain.  The paper's block-index lines j
+        % and q become the direct sum written in the middle label: the
+        % weights mu_j are absorbed into the basis tensors, which depend on
+        % the block index j only, while the gauge blocks X_{j,q} depend on
+        % both indices.  Both sides carry the same boundary signature
+        % (virtual-west=1 | virtual-east=1 | physical-up=1 | physical-down=1).
+        \begin{tenkz}[physical=updown]
+            \tn{K}
+        \end{tenkz}
+        $\;=\;$
+        \begin{tenkz}[physical=updown]
+            \tnX{X} & \tn{\bigoplus_j\mathcal K_j} & \tnX{X^{-1}}
+        \end{tenkz}
+    \end{center}
+    \caption{Horizontal canonical form of the doubled tensor: the gauge $X$,
+    the direct sum of basis tensors $\mathcal K_j$ carrying the ket and bra
+    indices, and $X^{-1}$. In the source
+    specialized simple-biCF/ZCL display the weights $\mu_j$ are independent
+    of the copy index and absorbed into the basis tensors, so the
+    basis tensors depend only on the block index $j$ while the gauge factors
+    $X_{j,q}$ depend on both block indices. This is
+    \cite[Appendix~C.2, lines~1660--1665]{Cirac2016MPDO_arXiv}.}
+    \label{fig:mpdo_horizontal_canonical_form}
+\end{figure}
+
+\begin{definition}[Vertically viewed tensor of an MPO]%
+    \label{def:vertical_tensor_mpdo}
+    \lean{MPOTensor.verticalTensor}
+    \lean{MPOTensor.verticalTensor_finProdFinEquiv}
+    \leanok
+    \uses{def:mpo_tensor}
+    The \emph{vertical direction} of an MPO tensor exchanges the notion of
+    physical and virtual indices \cite[line~943]{Cirac2016MPDO_arXiv}: the
+    vertically viewed tensor $\widetilde M$ has its letters indexed by the
+    horizontal bond pair $(a,b)$, and each letter is the operator on the
+    physical space with matrix elements
+    \[
+        (\widetilde M_{ab})_{ij} = M^{ij}_{ab}.
+    \]
+    Concatenating $\widetilde M$ vertically generates the matrix product
+    vectors of the vertical direction.
+\end{definition}
+
+\begin{lemma}[Vertical reflection identity for the adjoint tensor]
+    \label{lem:vertical_tensor_adjoint_reflection}
+    \lean{MPOTensor.bondPairSwap}
+    \lean{MPOTensor.bondPairSwap_finProdFinEquiv}
+    \lean{MPOTensor.bondPairSwap_involutive}
+    \lean{MPOTensor.verticalTensor_adjointTensor}
+    \leanok
+    \uses{def:vertical_tensor_mpdo, def:mpo_adjoint_tensor}
+    Adjunction exchanges the two oriented horizontal bond indices in the
+    vertical view:
+    \[
+        \widetilde{M^\dagger}_{a,b}
+        = (\widetilde M_{b,a})^\dagger.
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    This follows entrywise from the exchange of the ket and bra indices and
+    conjugate transposition of the virtual matrix.
+\end{proof}
+
+\begin{definition}[Vertical canonical form for an MPO]\label{def:vertical_cf_mpdo}
+    \lean{MPOTensor.IsVerticalCF}
+    \leanok
+    \uses{def:mpo_tensor, def:vertical_tensor_mpdo, def:bnt,
+        def:block_diagonal_tensor}
+    An MPO tensor is in \emph{vertical canonical form} if there are a basis of
+    normal tensors $\{M_\alpha\}_\alpha$ for its vertically viewed tensor
+    $\widetilde M$, positive diagonal matrices
+    $\mu_\alpha=\diag(\omega_{\alpha,0},\dots,\omega_{\alpha,r_\alpha-1})$
+    with $r_\alpha\geq1$,
+    and a matrix $U$ from the physical space onto the retained nonzero sector
+    space such that
+    \[
+        U\widetilde MU^\dagger=B,
+        \qquad
+        \widetilde M=U^\dagger B U,
+        \qquad
+        B=\bigoplus_\alpha \mu_\alpha\otimes M_\alpha.
+    \]
+    This is the conclusion of
+    \cite[Proposition~4.13, lines~1863--1870]{Cirac2016MPDO_arXiv}.
+    In this orientation $UU^\dagger=I$ on the retained space, while
+    $U^\dagger U$ is its support projection in the original physical space.
+    The reconstruction identity says that every letter of $\widetilde M$ is
+    supported on this projection, so the discarded orthogonal complement and
+    the off-diagonal corners vanish.
+    The orthogonal complement may be a zero sector: the source's general
+    canonical-form construction explicitly permits the sum of the nonzero
+    block dimensions to be strictly smaller than the original dimension
+    \cite[lines~214--225]{Cirac2016MPDO_arXiv}.
+    Since each $\mu_\alpha$ is diagonal, the summand
+    $\mu_\alpha\otimes M_\alpha$ is the direct sum
+    $\bigoplus_{k=0}^{r_\alpha-1}\omega_{\alpha,k}M_\alpha$ of weighted copies
+    of $M_\alpha$, so the right-hand side is a block-diagonal tensor over the
+    pairs $(\alpha,k)$ in which the multiplicities $r_\alpha$ and the diagonal
+    entries $\omega_{\alpha,k}$ stay explicit; the coefficients
+    $m_\alpha=\tr(\mu_\alpha)=\sum_{k=0}^{r_\alpha-1}\omega_{\alpha,k}$
+    appearing in the renormalization fixed-point characterization are
+    recovered from them.
+\end{definition}
+
+\begin{figure}[ht]
+    \centering
+        % U \widetilde M U^dagger = bigoplus_alpha mu_alpha (x) M_alpha
+        % (arXiv:1606.00608, Proposition 4.13, eq. UMU and figure
+        % MPDO_UMU.png).  The physical isometry does not represent a plain
+        % Kronecker product: two copy-tensor junctions thread one shared
+        % multiplicity index through both mu_alpha and M_alpha.  Only
+        % M_alpha carries the open virtual legs.  Both sides have boundary
+        % signature
+        % (virtual-west=1 | virtual-east=1 | physical-up=3 |
+        % physical-down=3).
+        \begin{tenkz}[rows={op:none, op, op:none}, tensor style=box]
+            \tn[pill, wide=3, legs at={1,2,3}]{U} & & \\
+            \tn[wide=3]{\widetilde M} & & \\
+            \tn[pill, wide=3, legs at={1,2,3}]{U^\dagger} & &
+        \end{tenkz}
+        $\;=\;\displaystyle\bigoplus_\alpha\;$
+        \begin{tenkzfree}
+            \tnput[box]{mu}{(10mm,7mm)}{\mu_\alpha}
+            \tnput[box, ports={west:virtual, east:virtual, north:physical,
+                south:physical, 158:physical}]{M}{(34mm,0mm)}{M_\alpha}
+            \tnput[dot]{d1}{(0mm,7mm)}{}
+            \tnput[dot]{d2}{(20mm,7mm)}{}
+            \tnput[dot, ports={east:physical}]{d3}{(d2 |- M.158)}{}
+            \tnjoin{$(d1)+(0mm,5mm)$}{$(d1)+(0mm,-19mm)$}
+            \tnjoin{$(d2)+(0mm,5mm)$}{$(d2)+(0mm,-19mm)$}
+            \tnjoin{$(M.west)+(-10mm,0mm)$}{M.west}
+            \tnjoin{M.east}{$(M.east)+(10mm,0mm)$}
+            \tnjoin{M.north}{$(M.north)+(0mm,7mm)$}
+            \tnjoin{M.south}{$(M.south)+(0mm,-7mm)$}
+            \tnjoin{d1}{mu.west}
+            \tnjoin{d2}{mu.east}
+            \tnjoin{d3.east}{M.158}
+        \end{tenkzfree}
+    \caption{Vertical direct-sum form of the tensor: after the physical
+    isometry $U$, each block factorizes as the positive diagonal weight
+    $\mu_\alpha$ on the multiplicity factor times the basis tensor $M_\alpha$,
+    and only $M_\alpha$ carries the virtual legs. This is the decomposition
+    $U\widetilde MU^\dagger=\bigoplus_\alpha\mu_\alpha\otimes M_\alpha$ of
+    \cite[Proposition~4.13, lines~1864--1870]{Cirac2016MPDO_arXiv}.}
+    \label{fig:mpdo_vertical_direct_sum}
+\end{figure}
+
+\begin{remark}[Finite witnesses for block-injective canonical form]%
+    \label{rem:word_tuple_span_top}
+    \lean{MPSTensor.WordTupleSpanTop}
+    \lean{MPSTensor.BlockEntryIndex}
+    \lean{MPSTensor.wordEntryFamily}
+    \lean{MPSTensor.duplicateScalarBlocks_counterexample}
+    \lean{MPSTensor.wordTupleSpanTop_of_wordEntryFamily_linearIndependent}
+    \lean{MPSTensor.hasBlockSelectorWords_of_wordTupleSpanTop}
+    \lean{MPSTensor.hasBlockSelectorWords_of_wordEntryFamily_linearIndependent}
+    \lean{MPSTensor.HasBiCF}
+    \lean{MPSTensor.hasBiCF_of_wordTupleSpanTop}
+    \lean{MPSTensor.hasBiCF_of_wordEntryFamily_linearIndependent}
+    \lean{MPSTensor.HasBlockSelectorWords}
+    \lean{MPSTensor.PropBlockInjective}
+    \lean{MPSTensor.wordTupleSpanTop_of_propBlockInjective}
+    \lean{MPSTensor.hasBiCF_of_propBlockInjective}
+    \lean{MPSTensor.duplicateScalarBlocks_not_hasBiCF}
+    \lean{MPOTensor.horizontalCFData_of_wordTupleSpanTop}
+    \lean{MPOTensor.horizontalCFData_of_wordEntryFamily_linearIndependent}
+    \lean{MPOTensor.horizontalCFData_of_propBlockInjective}
+    \leanok
+    Let $(A_k)_{k}$ be a finite family of block tensors of physical
+    dimension~$d$, and fix a length $L$; write $A_k^w$ for the length-$L$
+    word evaluation of $A_k$ along a word $w \in \{0,\ldots,d{-}1\}^L$. The
+    finite-length spanning hypothesis is that the tuple-valued evaluations
+    span the full product algebra of block matrices,
+    \[
+        \spn_{\C}\bigl\{\,(A_k^w)_k
+            : w \in \{0,\ldots,d{-}1\}^L\,\bigr\}
+        = \textstyle\prod_k \MN{D_k}.
+    \]
+    The corresponding finite-length separation property is that some length
+    $L$ makes the trace pairing against block words nondegenerate: there is
+    a length $L$ such that, for every tuple $(\Delta_k)_k$ of block
+    matrices,
+    \[
+        \Bigl(\forall\, w \in \{0,\ldots,d{-}1\}^L,\
+            \textstyle\sum_k \tr(\Delta_k A_k^w) = 0\Bigr)
+        \implies \forall k,\ \Delta_k = 0.
+    \]
+    Spanning at length~$L$ gives separation at the same length: a trace
+    functional that vanishes on every tuple $(A_k^w)_k$ vanishes on their
+    span, hence on the whole product algebra, so nondegeneracy of the
+    product trace pairing forces every $\Delta_k=0$. Combined with
+    injectivity, left-canonicality, and nonzero block weights, this
+    finite-length separation supplies the older per-copy trace-separation
+    hypotheses for the block-diagonal tensor.
+
+    The spanning hypothesis has an equivalent entrywise form. For a block
+    index $k$ and matrix entry $(a,b)$, let
+    \[
+        w \longmapsto (A_k^w)_{a,b}
+    \]
+    be the corresponding scalar word family, indexed jointly by the triple
+    $(k,a,b)$. Linear independence of this scalar family already implies
+    the spanning condition, hence the separation property, and hence the
+    older per-copy trace-separation hypotheses directly.
+
+    The duplicate-scalar counterexample shows that the separation property
+    is strictly stronger than blockwise injectivity, left-canonicality, and
+    nonzero weights alone. Take $d=1$ and two blocks of bond dimension~$1$
+    with $A_0^{0}=A_1^{0}=1$ and weights $\mu_0=1$, $\mu_1=2$: both blocks
+    are injective and left-canonical, $(A_k^0)^\dagger A_k^0=1$, and the
+    weights are nonzero, but at every length $L$ there is a unique word $w$
+    and $A_0^w=A_1^w=1$, so $\Delta_0=1$, $\Delta_1=-1$ satisfies
+    $\sum_k \tr(\Delta_k A_k^w)=0$ while $\Delta\neq0$. Thus the separation
+    property fails, and no length makes the entrywise scalar family linearly
+    independent.
+
+    The block-injectivity proposition of
+    \cite[lines~340--345]{Cirac2016MPDO_arXiv} gives a concrete sufficient
+    criterion for the spanning condition: a common length $L$ with every
+    block $L$-block-injective, together with a length $S$ at which, for
+    every $k$, there is a coefficient family $(c_w)_{w \in
+    \{0,\ldots,d{-}1\}^S}$ with
+    \[
+        \sum_w c_w A_k^w = \Id,
+        \qquad
+        \forall\, j\neq k,\ \sum_w c_w A_j^w = 0.
+    \]
+    Concatenating the injective prefix with this finite selector family
+    produces the spanning condition at length $L+S$, hence the separation
+    property and the older per-copy trace-separation hypotheses.
+\end{remark}
+
+The inverse tensor of a block-injective canonical form satisfies
+\[
+    \sum_p(\mathcal K_j^p)_{\alpha,\beta}
+    (K^{-1,p}_{j'})_{\alpha',\beta'}
+    =\delta_{\alpha,\alpha'}\delta_{\beta,\beta'}\delta_{j,j'}.
+\]
+Writing $K=X(\bigoplus_j\mathcal K_j)X^{-1}$ in this contraction places the
+gauges on the virtual legs of $K$ and identifies the block index of
+$\mathcal K_j$ with the label $j$:
+\begin{tenkzequation}
+    % K^{-1}K in block-injective canonical form (arXiv:1606.00608,
+    % eq. biCFK, Appendix C.2 lines 1666--1670; MPDO_biCF.png is the
+    % ink specification).  In panel 1 the vertical contraction joins the
+    % physical input of K to the corresponding input of K^{-1}; the other
+    % physical/output index of K^{-1} remains open above.  Its primitive
+    % boundary signature is (virtual-west=2 | virtual-east=2 |
+    % physical-up=1 | physical-down=0).  The paper distinguishes both
+    % physical contractions by a dashed stroke.  The public tenkzfree
+    % grammar has no semantic dash key, so the typed physical--physical
+    % joins below use the ordinary solid bond; issue #4536 tracks the
+    % missing public spelling.
+    \begin{tenkzfree}[tensor style=box, compact]
+        \tnput[box, ports={west:virtual,east:virtual,
+                north:physical,south:physical}]
+            {biInvOne}{(0,8mm)}{K^{-1}}
+        \tnput[box, ports={west:virtual,east:virtual,north:physical}]
+            {biKOne}{(0,-5mm)}{K}
+        \tnput[boundary, ports={east:virtual}]
+            {biInvOneWest}{(-8mm,8mm)}{}
+        \tnput[boundary, ports={west:virtual}]
+            {biInvOneEast}{(8mm,8mm)}{}
+        \tnput[boundary, ports={east:virtual}]
+            {biKOneWest}{(-8mm,-5mm)}{}
+        \tnput[boundary, ports={west:virtual}]
+            {biKOneEast}{(8mm,-5mm)}{}
+        \tnput[boundary, ports={south:physical}]
+            {biOutOne}{(0,18mm)}{}
+        \tnjoin{biInvOneWest.east}{biInvOne.west}
+        \tnjoin{biInvOne.east}{biInvOneEast.west}
+        \tnjoin{biKOneWest.east}{biKOne.west}
+        \tnjoin{biKOne.east}{biKOneEast.west}
+        \tnjoin{biOutOne.south}{biInvOne.north}
+        \tnjoin{biInvOne.south}{biKOne.north}
+    \end{tenkzfree}
+    $\;=\;$
+    % Panel 2 resolves each virtual boundary index into the tensor leg and
+    % the j- and q-rails used by the block decomposition.  X and X^{-1}
+    % have two distinct downward legs: one terminates at the j-dot and the
+    % other crosses the j-rail without a junction before terminating at the
+    % q-dot.  K_j taps only the j-rail.  Thus the composite
+    % virtual boundaries of panel 1 appear here as four primitive virtual
+    % wires on each side (tensor, gauge, j, q); the open physical signature
+    % remains (physical-up=1 | physical-down=0).
+    \begin{tenkzfree}[tensor style=box, compact]
+        \tnput[box, ports={west:virtual,east:virtual,
+                north:physical,south:physical}]
+            {biInvTwo}{(18mm,15mm)}{K^{-1}}
+        \tnput[box, ports={west:virtual,east:virtual,
+                south west:virtual,south east:virtual}]
+            {biXTwo}{(0,0)}{X}
+        \tnput[box, ports={west:virtual,east:virtual,
+                north:physical,south:virtual}]
+            {biKTwo}{(18mm,0)}{\mathcal K_j}
+        \tnput[box, ports={west:virtual,east:virtual,
+                south west:virtual,south east:virtual}]
+            {biXinvTwo}{(36mm,0)}{X^{-1}}
+        \tnput[boundary, ports={east:virtual}]
+            {biInvTwoWest}{(10mm,15mm)}{}
+        \tnput[boundary, ports={west:virtual}]
+            {biInvTwoEast}{(26mm,15mm)}{}
+        \tnput[boundary, ports={east:virtual}]
+            {biGaugeTwoWest}{(-7mm,0)}{}
+        \tnput[boundary, ports={west:virtual}]
+            {biGaugeTwoEast}{(43mm,0)}{}
+        \tnput[boundary, ports={south:physical}]
+            {biOutTwo}{(18mm,27mm)}{}
+        \tnput[boundary, label pos=west, ports={east:virtual}]
+            {biJTwoWest}{(-7mm,-10mm)}{j}
+        \tnput[dot, ports={west:virtual,east:virtual,
+                north:virtual,south:virtual}]
+            {biXjTwo}{(biXTwo.south west |- 0,-10mm)}{}
+        \tnput[dot, ports={west:virtual,east:virtual,north:virtual}]
+            {biKjTwo}{(18mm,-10mm)}{}
+        \tnput[dot, ports={west:virtual,east:virtual,
+                north:virtual,south:virtual}]
+            {biXinvjTwo}{(biXinvTwo.south west |- 0,-10mm)}{}
+        \tnput[boundary, ports={west:virtual}]
+            {biJTwoEast}{(43mm,-10mm)}{}
+        \tnput[boundary, label pos=west, ports={east:virtual}]
+            {biQTwoWest}{(-7mm,-18mm)}{q}
+        \tnput[dot, ports={west:virtual,east:virtual,north:virtual}]
+            {biXqTwo}{(biXTwo.south east |- 0,-18mm)}{}
+        \tnput[dot, ports={west:virtual,east:virtual,north:virtual}]
+            {biXinvqTwo}{(biXinvTwo.south east |- 0,-18mm)}{}
+        \tnput[boundary, ports={west:virtual}]
+            {biQTwoEast}{(43mm,-18mm)}{}
+        \tnjoin{biInvTwoWest.east}{biInvTwo.west}
+        \tnjoin{biInvTwo.east}{biInvTwoEast.west}
+        \tnjoin{biOutTwo.south}{biInvTwo.north}
+        \tnjoin{biInvTwo.south}{biKTwo.north}
+        \tnjoin{biGaugeTwoWest.east}{biXTwo.west}
+        \tnjoin{biXTwo.east}{biKTwo.west}
+        \tnjoin{biKTwo.east}{biXinvTwo.west}
+        \tnjoin{biXinvTwo.east}{biGaugeTwoEast.west}
+        \tnjoin{biXTwo.south west}{biXjTwo.north}
+        \tnjoin{biXTwo.south east}{biXqTwo.north}
+        \tnjoin{biKTwo.south}{biKjTwo.north}
+        \tnjoin{biXinvTwo.south west}{biXinvjTwo.north}
+        \tnjoin{biXinvTwo.south east}{biXinvqTwo.north}
+        \tnjoin{biJTwoWest.east}{biXjTwo.west}
+        \tnjoin{biXjTwo.east}{biKjTwo.west}
+        \tnjoin{biKjTwo.east}{biXinvjTwo.west}
+        \tnjoin{biXinvjTwo.east}{biJTwoEast.west}
+        \tnjoin{biQTwoWest.east}{biXqTwo.west}
+        \tnjoin{biXqTwo.east}{biXinvqTwo.west}
+        \tnjoin{biXinvqTwo.east}{biQTwoEast.west}
+    \end{tenkzfree}
+    $\;=\;$
+    % Panel 3 is the componentwise identity.  The inward virtual legs of X
+    % and X^{-1} form the two matrix-unit hooks: each hook is one continuous
+    % virtual edge, the left open tip points west, and the right open tip
+    % points east, exactly as in MPDO_biCF.png.
+    % The vertical line is physical, not virtual: it is normal to the tensor
+    % rail, continues the north/output port of K^{-1}, and ends at the
+    % j-rail dot which records delta_{j,j'}.  The q-rail passes independently
+    % below.  The primitive boundary signature is (virtual-west=4 |
+    % virtual-east=4 | physical-up=1 | physical-down=0).
+    \begin{tenkzfree}[tensor style=box, compact]
+        \tnput[box, ports={west:virtual,east:virtual,
+                south west:virtual,south east:virtual}]
+            {biXThree}{(0,0)}{X}
+        \tnput[box, ports={west:virtual,east:virtual,
+                south west:virtual,south east:virtual}]
+            {biXinvThree}{(36mm,0)}{X^{-1}}
+        \tnput[boundary, ports={east:virtual}]
+            {biGaugeThreeWest}{(-7mm,0)}{}
+        \tnput[boundary, ports={west:virtual}]
+            {biGaugeThreeEast}{(43mm,0)}{}
+        \tnput[boundary, ports={east:virtual}]
+            {biLeftUnit}{(9mm,10mm)}{}
+        \tnput[boundary, ports={west:virtual}]
+            {biRightUnit}{(27mm,10mm)}{}
+        \tnput[boundary, ports={south:physical}]
+            {biOutThree}{(18mm,14mm)}{}
+        \tnput[boundary, label pos=west, ports={east:virtual}]
+            {biJThreeWest}{(-7mm,-10mm)}{j}
+        \tnput[dot, ports={west:virtual,east:virtual,
+                north:virtual,south:virtual}]
+            {biXjThree}{(biXThree.south west |- 0,-10mm)}{}
+        \tnput[dot, ports={west:virtual,east:virtual,north:physical}]
+            {biDeltaThree}{(18mm,-10mm)}{}
+        \tnput[dot, ports={west:virtual,east:virtual,
+                north:virtual,south:virtual}]
+            {biXinvjThree}{(biXinvThree.south west |- 0,-10mm)}{}
+        \tnput[boundary, ports={west:virtual}]
+            {biJThreeEast}{(43mm,-10mm)}{}
+        \tnput[boundary, label pos=west, ports={east:virtual}]
+            {biQThreeWest}{(-7mm,-18mm)}{q}
+        \tnput[dot, ports={west:virtual,east:virtual,north:virtual}]
+            {biXqThree}{(biXThree.south east |- 0,-18mm)}{}
+        \tnput[dot, ports={west:virtual,east:virtual,north:virtual}]
+            {biXinvqThree}{(biXinvThree.south east |- 0,-18mm)}{}
+        \tnput[boundary, ports={west:virtual}]
+            {biQThreeEast}{(43mm,-18mm)}{}
+        \tnjoin{biGaugeThreeWest.east}{biXThree.west}
+        \tnjoin[route=arc,out=0,in=0]
+            {biXThree.east}{biLeftUnit.east}
+        \tnjoin[route=arc,out=180,in=180]
+            {biXinvThree.west}{biRightUnit.west}
+        \tnjoin{biXinvThree.east}{biGaugeThreeEast.west}
+        \tnjoin{biOutThree.south}{biDeltaThree.north}
+        \tnjoin{biXThree.south west}{biXjThree.north}
+        \tnjoin{biXThree.south east}{biXqThree.north}
+        \tnjoin{biXinvThree.south west}{biXinvjThree.north}
+        \tnjoin{biXinvThree.south east}{biXinvqThree.north}
+        \tnjoin{biJThreeWest.east}{biXjThree.west}
+        \tnjoin{biXjThree.east}{biDeltaThree.west}
+        \tnjoin{biDeltaThree.east}{biXinvjThree.west}
+        \tnjoin{biXinvjThree.east}{biJThreeEast.west}
+        \tnjoin{biQThreeWest.east}{biXqThree.west}
+        \tnjoin{biXqThree.east}{biXinvqThree.west}
+        \tnjoin{biXinvqThree.east}{biQThreeEast.west}
+    \end{tenkzfree}
+\end{tenkzequation}
+Consequently,
+\[
+    K^{-1}K=\bigoplus_j\Id_j.
+\]
+This is the inverse identity in
+\cite[Appendix~C.2, lines~1666--1670]{Cirac2016MPDO_arXiv}.
+
+\begin{theorem}[Finite block-separation criterion]
+    \label{thm:propblockinj_abstract}
+    \lean{MPSTensor.hasBiCF_of_propBlockInjective}
+    \leanok
+    \uses{rem:word_tuple_span_top}
+    If a block family admits the finite-length data described in
+    the block-injectivity proposition of
+    \cite[lines~340--345]{Cirac2016MPDO_arXiv}, then it is in
+    block-injective canonical form.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{rem:word_tuple_span_top}
+    If the common injective prefix has length $L$ and the selector has length
+    $S$, concatenation gives simultaneous words of length $L+S$.  For every
+    tuple $(X_j)_j$, the resulting coefficients satisfy
+    \[
+        \sum_{|w|=L+S}c_w A_j^w=X_j.
+    \]
+    Hence the simultaneous word tuples span the product algebra, and
+    nondegeneracy of the trace pairing gives finite-length trace separation.
+\end{proof}
+
+\begin{lemma}[Single-block word-tuple span]
+    \label{lem:single_block_word_tuple_span}
+    \lean{MPSTensor.wordTupleSpanTop_of_card_eq_one_of_isNBlkInjective}
+    \leanok
+    \uses{def:l_blk_injective, rem:word_tuple_span_top}
+    Let $(A_j)_{j=0}^{g-1}$ be a family with $g=1$. If its unique block is
+    $L$-block injective, then the simultaneous length-$L$ word evaluations
+    span the full one-block product algebra.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{def:l_blk_injective, rem:word_tuple_span_top}
+    For every matrix $X$, block injectivity gives coefficients such that
+    \[
+        X=\sum_{|w|=L}c_wA_0^w.
+    \]
+    Since the family has only the block $A_0$, this is precisely the required
+    simultaneous word-tuple spanning identity.
+\end{proof}
+
+\begin{theorem}[Sharp finite-length block separation]
+    \label{thm:sharp_bnt_block_separation}
+    \lean{MPSTensor.IsBNTCanonicalForm.exists_basis_wordTupleSpanTop_le_three_totalDim_pow_five}
+    \lean{MPSTensor.three_mul_pred_mul_pow_four_add_one_le_three_mul_pow_five}
+    \leanok
+    \uses{thm:bnt_representatives_exact_total_dimension_pow_four,
+        thm:sector_basis_dimension_le_total_dimension,
+        lem:single_block_word_tuple_span,
+        lem:bnt_direct_sum_block_separation_word_span}
+    Let $P$ be a BNT canonical form with total bond dimension $D$. There is a
+    positive integer $N\leq3D^5$ such that the simultaneous word evaluations
+    of the minimal representatives at length $N$ span their full product
+    matrix algebra.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:bnt_representatives_exact_total_dimension_pow_four,
+        thm:wordspan_blk_inj_succ,
+        lem:direct_sum_two_block_dimension_step,
+        lem:single_block_word_tuple_span,
+        lem:pair_product_span_arbitrary_first_value,
+        lem:bnt_direct_sum_block_separation_word_span,
+        thm:sector_basis_dimension_le_total_dimension}
+    Let $g$ be the number of minimal representatives. The common exact
+    injective length is $D^4$. If $g=1$, ordinary block injectivity gives the
+    simultaneous span at length $D^4$.
+
+    Suppose $g\geq2$. Since
+    \[
+        D^4\leq D^4+1\leq3(D^4+1),
+    \]
+    Theorem~\ref{thm:wordspan_blk_inj_succ} propagates block injectivity to
+    the latter two lengths. Lemma~\ref{lem:direct_sum_two_block_dimension_step}
+    then gives the full pair span at length $3(D^4+1)$ for every pair of
+    distinct representatives. For each block $k$,
+    Lemma~\ref{lem:pair_product_span_arbitrary_first_value} gives a tuple $M$
+    with $M_k=X_k$ and $M_j=0$ for a chosen anchor block $j$. For every
+    $\ell\notin\{k,j\}$, choose an identity--zero selector $N^{(\ell)}$ and
+    form
+    \[
+        C_t=M_t\prod_{\ell\notin\{k,j\}}N^{(\ell)}_t.
+    \]
+    Since $N^{(\ell)}_k=I$ and $N^{(\ell)}_\ell=0$,
+    \[
+        C_k=X_k,\qquad C_j=0,\qquad
+        C_\ell=M_\ell(\cdots)0(\cdots)=0
+        \quad(\ell\notin\{k,j\}).
+    \]
+    Thus $C$ is supported only on block $k$. Summing over $k$ gives the full
+    simultaneous span at length
+    \[
+        N=3(g-1)(D^4+1).
+    \]
+    Each representative has positive dimension and occurs at least once, so
+    $g\leq D$. Hence
+    \[
+        N\leq3(D-1)(D^4+1)\leq3D^5,
+    \]
+    where the last inequality follows from $D-1\leq D^4$.
+    This is the bound in
+    \cite[lines~340--345]{Cirac2016MPDO_arXiv}.
+\end{proof}
