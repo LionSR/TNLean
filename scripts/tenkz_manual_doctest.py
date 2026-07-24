@@ -23,6 +23,12 @@ CHAPTERS = ROOT / "docs" / "tenkz" / "chapters2"
 REGISTRY = ROOT / "tex" / "tenkz" / "tenkz-language-registry.tex"
 REFERENCE = CHAPTERS / "generated-language-reference.tex"
 DISPLAY_ENVIRONMENTS = ("tnexample", "tnmultiples", "Verbatim")
+TEX_PRIMITIVE_CONDITIONALS = (
+    "if", "ifcat", "ifnum", "ifdim", "ifodd", "ifvmode", "ifhmode",
+    "ifmmode", "ifinner", "ifvoid", "ifhbox", "ifvbox", "ifx", "ifeof",
+    "iftrue", "iffalse", "ifcase", "ifdefined", "ifcsname", "iffontchar",
+    "ifincsname",
+)
 
 
 @dataclass(frozen=True)
@@ -296,12 +302,6 @@ def _mask_false_branches(
     start_scan = _display_comment_scan(
         _mask_macro_definitions(text, strict=False)
     )
-    primitive_conditionals = (
-        "if", "ifcat", "ifnum", "ifdim", "ifodd", "ifvmode", "ifhmode",
-        "ifmmode", "ifinner", "ifvoid", "ifhbox", "ifvbox", "ifx", "ifeof",
-        "iftrue", "iffalse", "ifcase", "ifdefined", "ifcsname", "iffontchar",
-        "ifincsname",
-    )
     newif_pattern = re.compile(
         r"\\newif\s*\\(if[A-Za-z@]+)(?![A-Za-z@])"
     )
@@ -337,7 +337,11 @@ def _mask_false_branches(
         ]
         declared_conditionals = [match.group(1) for match in active_newifs]
         known_conditionals = set(
-            (*primitive_conditionals, *inherited_conditionals, *declared_conditionals)
+            (
+                *TEX_PRIMITIVE_CONDITIONALS,
+                *inherited_conditionals,
+                *declared_conditionals,
+            )
         )
         while True:
             additions = {
@@ -629,10 +633,12 @@ def _standalone_document(body: str, variant_style: str | None = None) -> str:
     )
 
 
-def extract_displayed_examples(path: Path) -> list[Example]:
+def extract_displayed_examples(
+    path: Path, inherited_conditionals: tuple[str, ...] = ()
+) -> list[Example]:
     text = path.read_text(encoding="utf-8")
     scan_text = _mask_inert_tex(
-        text, path.parent, _manual_conditionals()
+        text, path.parent, inherited_conditionals
     )
     begin_pattern = re.compile(
         r"^[ \t]*\\begin\{(" + "|".join(DISPLAY_ENVIRONMENTS) + r")\}",
@@ -679,36 +685,53 @@ def extract_displayed_examples(path: Path) -> list[Example]:
 
 def displayed_examples() -> list[Example]:
     examples: list[Example] = []
-    for path in _manual_sources():
-        examples.extend(extract_displayed_examples(path))
+    for path, inherited_conditionals in _manual_source_contexts():
+        examples.extend(extract_displayed_examples(path, inherited_conditionals))
     return examples
 
 
-@cache
-def _manual_conditionals_for(directory: Path) -> tuple[str, ...]:
-    declarations: set[str] = set()
-    for source in directory.rglob("*.tex"):
-        scan = _display_comment_scan(source.read_text(encoding="utf-8"))
-        declarations.update(
-            re.findall(r"\\newif\s*\\(if[A-Za-z@]+)(?![A-Za-z@])", scan)
+def _conditionals_before(
+    text: str, offset: int, inherited_conditionals: tuple[str, ...]
+) -> tuple[str, ...]:
+    executable = _display_comment_scan(
+        _mask_macro_definitions(
+            _mask_false_branches(text, inherited_conditionals), strict=False
         )
-    return tuple(sorted(declarations))
+    )
+    newif_pattern = re.compile(r"\\newif\s*\\(if[A-Za-z@]+)(?![A-Za-z@])")
+    let_pattern = re.compile(
+        r"\\let\s*\\(if[A-Za-z@]+)\s*=?\s*\\(if[A-Za-z@]*)"
+        r"(?![A-Za-z@])"
+    )
+    newifs = [
+        match
+        for match in newif_pattern.finditer(executable)
+        if match.start() < offset
+    ]
+    lets = [
+        match for match in let_pattern.finditer(executable) if match.start() < offset
+    ]
+    known = set((*TEX_PRIMITIVE_CONDITIONALS, *inherited_conditionals))
+    known.update(match.group(1) for match in newifs)
+    while True:
+        additions = {
+            match.group(1) for match in lets if match.group(2) in known
+        } - known
+        if not additions:
+            break
+        known.update(additions)
+    return tuple(sorted(known - set(TEX_PRIMITIVE_CONDITIONALS)))
 
 
-def _manual_conditionals() -> tuple[str, ...]:
-    return _manual_conditionals_for(MANUAL_DIR)
-
-
-def _manual_sources() -> list[Path]:
-    pending = [MANUAL]
-    visited: set[Path] = set()
-    inherited_conditionals = _manual_conditionals()
+def _manual_source_contexts() -> list[tuple[Path, tuple[str, ...]]]:
+    pending = [(MANUAL, ())]
+    visited: dict[Path, tuple[str, ...]] = {}
     input_pattern = re.compile(r"\\input(?![A-Za-z@])")
     while pending:
-        source = pending.pop()
+        source, inherited_conditionals = pending.pop()
         if source in visited:
             continue
-        visited.add(source)
+        visited[source] = inherited_conditionals
         raw = source.read_text(encoding="utf-8")
         text = strip_comments(
             _mask_inline_verbatim(
@@ -738,8 +761,17 @@ def _manual_sources() -> list[Path]:
             included = _resolve_tex_file(relative, source.parent)
             if included is None:
                 raise ValueError(f"{source}: missing manual input {relative}")
-            pending.append(included)
-    return sorted(visited)
+            pending.append(
+                (
+                    included,
+                    _conditionals_before(raw, match.start(), inherited_conditionals),
+                )
+            )
+    return sorted(visited.items())
+
+
+def _manual_sources() -> list[Path]:
+    return [source for source, _ in _manual_source_contexts()]
 
 
 def reference_examples() -> list[Example]:
