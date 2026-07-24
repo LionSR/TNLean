@@ -68,6 +68,26 @@ wide_atom_count=$(grep -c '^atom|' "$WORK/r_wide_chain.tnlog" || true)
   echo "FAIL: a chain-positioned wide atom did not claim its full span" >&2
   exit 1
 }
+if grep -Fq '|name=bond-1-1-1-2|origin=grid|' \
+    "$WORK/r_wide_chain.tnlog"; then
+  echo "FAIL: a wide atom received an internal horizontal grid bond" >&2
+  exit 1
+fi
+grep -Fq '|name=bond-1-2-1-3|origin=grid|' \
+  "$WORK/r_wide_chain.tnlog" || {
+  echo "FAIL: a wide atom lost its external horizontal grid bond" >&2
+  exit 1
+}
+if grep -Fq '|name=bond-1-1-2-1|origin=grid|' \
+    "$WORK/r_tall_grid.tnlog"; then
+  echo "FAIL: a multi-wire atom received an internal vertical grid bond" >&2
+  exit 1
+fi
+grep -Fq '|name=bond-1-1-1-2|origin=grid|' \
+  "$WORK/r_tall_grid.tnlog" || {
+  echo "FAIL: a multi-wire atom lost its external horizontal grid bond" >&2
+  exit 1
+}
 grep -Fq '|name=P|ports=n:physical|skin=box' \
     "$WORK/r_declare_atom.tnlog" || {
   echo "FAIL: an identifier atom declaration did not mint a typed command" >&2
@@ -352,7 +372,7 @@ grep -Fq 'check|relation=3|result=off|reason=third' \
   echo "FAIL: the later equation opt-out was silently dropped" >&2
   exit 1
 }
-echo "PASS: thirty-one review regressions hold"
+echo "PASS: thirty-three review regressions hold"
 
 fail=0
 for pair in s1 s2 s3 s4 s5 s6 s7 s8; do

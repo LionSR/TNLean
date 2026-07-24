@@ -1,4 +1,4 @@
-% Regression: a chain-positioned wide atom claims its full cell span.
+% Regression: a multi-wire atom has no grid bond between its owned cells.
 \documentclass{standalone}
 \usepackage{tenkz}
 \makeatletter
@@ -8,8 +8,8 @@
 \makeatother
 \begin{document}
 \tenkzkernel
-\begin{tenkz}[rows={ket}, cols=3, bonds=grid]
-  \tn[wide=2, name=W]{W}
+\begin{tenkz}[rows={ket,bra}, cols=2, bonds=grid]
+  \tn[wires=2, name=T]{T}
 \end{tenkz}
 \mbox{parsed}
 \end{document}

@@ -1372,6 +1372,29 @@
     \prop_put:Nee \l__tenkz_kernel_named_prop
       { bond-#1-#2-#3-#4 } { \tl_use:N \l__tenkz_model_last_tl }
   }
+\tl_new:N \l__tenkz_kernel_first_owner_tl
+\tl_new:N \l__tenkz_kernel_second_owner_tl
+\prg_new_protected_conditional:Npnn
+  \__tenkz_kernel_cells_share_owner:nnnn #1#2#3#4 { T }
+  {
+    \prop_get:NeN \l__tenkz_kernel_cell_prop {#1-#2}
+      \l__tenkz_kernel_first_owner_tl
+    \prop_get:NeN \l__tenkz_kernel_cell_prop {#3-#4}
+      \l__tenkz_kernel_second_owner_tl
+    \quark_if_no_value:NTF \l__tenkz_kernel_first_owner_tl
+      { \prg_return_false: }
+      {
+        \quark_if_no_value:NTF \l__tenkz_kernel_second_owner_tl
+          { \prg_return_false: }
+          {
+            \str_if_eq:VVTF
+              \l__tenkz_kernel_first_owner_tl
+              \l__tenkz_kernel_second_owner_tl
+              { \prg_return_true: }
+              { \prg_return_false: }
+          }
+      }
+  }
 \cs_new_protected:Npn \__tenkz_kernel_bonds:
   {
     \prop_get:NnN \l__tenkz_kernel_policy_prop {bonds}
@@ -1389,6 +1412,9 @@
                   { \bool_set_true:N \l_tmpa_bool }
                 \__tenkz_kernel_cell_sealed:nnT
                   {##1}{\int_eval:n {####1 + 1}}
+                  { \bool_set_true:N \l_tmpa_bool }
+                \__tenkz_kernel_cells_share_owner:nnnnT
+                  {##1}{####1}{##1}{\int_eval:n {####1 + 1}}
                   { \bool_set_true:N \l_tmpa_bool }
                 \bool_if:NF \l_tmpa_bool
                   {
@@ -1412,6 +1438,9 @@
                   { \bool_set_true:N \l_tmpa_bool }
                 \__tenkz_kernel_cell_sealed:nnT
                   {\int_eval:n {##1 + 1}}{####1}
+                  { \bool_set_true:N \l_tmpa_bool }
+                \__tenkz_kernel_cells_share_owner:nnnnT
+                  {##1}{####1}{\int_eval:n {##1 + 1}}{####1}
                   { \bool_set_true:N \l_tmpa_bool }
                 \bool_if:NF \l_tmpa_bool
                   {
