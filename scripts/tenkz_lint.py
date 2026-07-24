@@ -42,6 +42,7 @@ Exit status: 1 iff at least one unescaped finding was reported.
 from __future__ import annotations
 
 import glob
+import json
 import re
 import sys
 from bisect import bisect_right
@@ -338,16 +339,16 @@ def expand_args(args: list[str]) -> list[Path]:
     return uniq
 
 
-# --- Implementation census (advisory) ---------------------------------------
+# --- Implementation census (ratcheted) --------------------------------------
 #
-# Two debt meters over tex/tenkz/*.code.tex, reported per file and never
-# fatal.  The renderer-primitive lockout additionally scans every package
-# .tex/.sty source, including the load map and generated language registry.
-# The rebuild drives both meters to zero: once the renderer stage exists, ink
-# primitives outside RENDER_STAGE_FILES and decimal literals outside the
-# metric table become hard errors and these counts become the ratchet.
+# Two debt meters over tex/tenkz/*.code.tex, reported per file and checked
+# against a manifest-backed baseline.  A shrink updates the baseline in the
+# same change; any unrecorded growth fails.  The renderer-primitive lockout
+# additionally scans every package .tex/.sty source, including the load map
+# and generated language registry.
 
 RENDER_STAGE_FILES = {"tenkz-render.code.tex"}
+CENSUS_BASELINE = Path("tests/tenkz/render-census-baseline.json")
 # The metric registry IS the table of named constants; its decimals are
 # the point, not the debt.
 METRIC_TABLE_FILES = {"tenkz-metric.code.tex"}
@@ -367,6 +368,8 @@ _RENDER_PRIMITIVE_REF = re.compile(r"\\__tenkz_ink_[A-Za-z@:_]+")
 
 def census(repo: Path) -> int:
     ink_total = decimal_total = 0
+    ink_by_file: dict[str, int] = {}
+    decimal_by_file: dict[str, int] = {}
     primitive_violations: list[tuple[Path, int, str]] = []
     package_dir = repo / "tex" / "tenkz"
     package_sources = sorted(
@@ -395,6 +398,8 @@ def census(repo: Path) -> int:
                 decimals += len(_DECIMAL.findall(line))
         if not is_census_source:
             continue
+        ink_by_file[path.name] = ink
+        decimal_by_file[path.name] = decimals
         ink_total += ink
         decimal_total += decimals
         print(f"tenkz-census: {path.name}: {ink} ink token(s), "
@@ -407,7 +412,37 @@ def census(repo: Path) -> int:
             "tenkz-render.code.tex",
             file=sys.stderr,
         )
-    return 1 if primitive_violations else 0
+    actual = {
+        "raw_ink": {"by_file": ink_by_file, "total": ink_total},
+        "decimal_literals": {
+            "by_file": decimal_by_file,
+            "total": decimal_total,
+        },
+    }
+    baseline_path = repo / CENSUS_BASELINE
+    try:
+        expected = json.loads(baseline_path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as exc:
+        print(
+            f"{baseline_path}: FAIL: cannot read render census baseline: {exc}",
+            file=sys.stderr,
+        )
+        return 1
+    census_mismatch = actual != expected
+    if census_mismatch:
+        print(
+            f"{baseline_path}: FAIL: render census differs from the recorded "
+            "baseline; shrink the debt or update the manifest in the same change",
+            file=sys.stderr,
+        )
+        for meter in ("raw_ink", "decimal_literals"):
+            expected_meter = expected.get(meter, {})
+            if actual[meter] != expected_meter:
+                print(
+                    f"  {meter}: expected {expected_meter}, got {actual[meter]}",
+                    file=sys.stderr,
+                )
+    return 1 if primitive_violations or census_mismatch else 0
 
 
 def main(argv: list[str]) -> int:
