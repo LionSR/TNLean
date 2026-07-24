@@ -12,6 +12,8 @@ from dataclasses import dataclass
 from functools import cache
 from pathlib import Path
 
+from tenkzlib.texcase import strip_comments
+
 
 ROOT = Path(__file__).resolve().parents[1]
 MANUAL_DIR = ROOT / "docs" / "tenkz"
@@ -40,19 +42,7 @@ def _is_escaped(text: str, offset: int) -> bool:
 
 
 def _strip_tex_comments(text: str) -> str:
-    output: list[str] = []
-    offset = 0
-    while offset < len(text):
-        if text[offset] == "%" and not _is_escaped(text, offset):
-            newline = text.find("\n", offset)
-            if newline < 0:
-                break
-            output.append("\n")
-            offset = newline + 1
-        else:
-            output.append(text[offset])
-            offset += 1
-    return "".join(output)
+    return strip_comments(text)
 
 
 def _skip_space_and_comments(text: str, offset: int) -> int:
