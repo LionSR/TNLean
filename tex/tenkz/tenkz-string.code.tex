@@ -76,6 +76,7 @@
 \seq_new:N \l__tenkz_string_pts_seq
 \seq_new:N \l__tenkz_string_scan_seq
 \seq_new:N \l__tenkz_string_endpoint_seq
+\seq_new:N \l__tenkz_string_components_seq
 \tl_new:N \l__tenkz_string_pts_tl
 \tl_new:N \l__tenkz_string_first_tl
 \tl_new:N \l__tenkz_string_last_tl
@@ -87,6 +88,11 @@
 \tl_new:N \l__tenkz_string_self_final_tl
 \tl_new:N \l__tenkz_string_self_initial_point_tl
 \tl_new:N \l__tenkz_string_self_final_point_tl
+\tl_new:N \l__tenkz_string_loop_path_tl
+\tl_new:N \l__tenkz_string_loop_first_tl
+\tl_new:N \l__tenkz_string_loop_second_tl
+\tl_new:N \l__tenkz_string_loop_third_tl
+\tl_new:N \l__tenkz_string_loop_reference_tl
 \fp_new:N \l__tenkz_string_x_fp
 \fp_new:N \l__tenkz_string_y_fp
 \fp_new:N \l__tenkz_string_xb_fp
@@ -103,6 +109,12 @@
 \fp_new:N \l__tenkz_string_denom_fp
 \fp_new:N \l__tenkz_string_sum_fp
 \fp_new:N \l__tenkz_string_disc_fp
+\fp_new:N \l__tenkz_string_low_fp
+\fp_new:N \l__tenkz_string_high_fp
+\dim_new:N \l__tenkz_string_intersection_x_dim
+\dim_new:N \l__tenkz_string_intersection_y_dim
+\dim_new:N \l__tenkz_string_endpoint_x_dim
+\dim_new:N \l__tenkz_string_endpoint_y_dim
 \int_new:N \l__tenkz_string_n_int
 \int_new:N \l__tenkz_string_cubic_int
 \int_new:N \l__tenkz_string_declared_int
@@ -489,6 +501,144 @@
       }
   }
 
+% Append one segment to the current component by dropping its repeated move.
+\cs_new_protected:Npn \__tenkz_string_append_segment:n #1
+  {
+    \tl_set:Nn \l__tenkz_string_tmp_tl {#1}
+    \tl_if_empty:NTF \l__tenkz_string_loop_path_tl
+      {
+        \tl_put_right:NV
+          \l__tenkz_string_loop_path_tl \l__tenkz_string_tmp_tl
+      }
+      {
+        \prg_replicate:nn {3}
+          {
+            \tl_set:Ne \l__tenkz_string_tmp_tl
+              {\tl_tail:N \l__tenkz_string_tmp_tl}
+          }
+        \tl_put_right:NV
+          \l__tenkz_string_loop_path_tl \l__tenkz_string_tmp_tl
+      }
+  }
+
+% Replace every looping cubic by three components split at its two
+% intersection parameters.  The two new component boundaries are exactly the
+% crossing and therefore support the same selector-aware gaps as an ordinary
+% self-intersection.
+\cs_new_protected:Npn \__tenkz_string_prepare_cubic_loops:n #1
+  {
+    \tl_set_eq:Nc \l__tenkz_string_self_path_tl
+      {\l__tikzspath_prefix_tl #1}
+    \spath_segments_to_seq:NV
+      \l__tenkz_string_segments_seq \l__tenkz_string_self_path_tl
+    \tl_clear:N \l__tenkz_string_loop_path_tl
+    \seq_map_inline:Nn \l__tenkz_string_segments_seq
+      {
+        \tl_set:Nn \l__tenkz_string_tmp_tl {##1}
+        \spath_finalaction:NV
+          \l__tenkz_string_self_final_tl \l__tenkz_string_tmp_tl
+        \tl_if_eq:NNTF
+          \l__tenkz_string_self_final_tl \c_spath_curveto_tl
+          {
+            \__tenkz_string_cubic_self_count:nN
+              {##1} \l__tenkz_string_cubic_int
+            \int_compare:nNnTF {\l__tenkz_string_cubic_int} = {1}
+              {
+                \fp_set:Nn \l__tenkz_string_low_fp
+                  {
+                    (
+                      \l__tenkz_string_sum_fp
+                      - sqrt(\l__tenkz_string_disc_fp)
+                    ) / 2
+                  }
+                \fp_set:Nn \l__tenkz_string_high_fp
+                  {
+                    (
+                      \l__tenkz_string_sum_fp
+                      + sqrt(\l__tenkz_string_disc_fp)
+                    ) / 2
+                  }
+                \spath_split_curve:NNVV
+                  \l__tenkz_string_loop_first_tl
+                  \l__tenkz_string_loop_third_tl
+                  \l__tenkz_string_tmp_tl
+                  \l__tenkz_string_high_fp
+                \fp_set:Nn \l__tenkz_string_low_fp
+                  {
+                    \l__tenkz_string_low_fp
+                    / \l__tenkz_string_high_fp
+                  }
+                \spath_split_curve:NNVV
+                  \l__tenkz_string_loop_first_tl
+                  \l__tenkz_string_loop_second_tl
+                  \l__tenkz_string_loop_first_tl
+                  \l__tenkz_string_low_fp
+                \exp_args:NV \__tenkz_string_append_segment:n
+                  \l__tenkz_string_loop_first_tl
+                \tl_put_right:NV
+                  \l__tenkz_string_loop_path_tl
+                  \l__tenkz_string_loop_second_tl
+                \tl_put_right:NV
+                  \l__tenkz_string_loop_path_tl
+                  \l__tenkz_string_loop_third_tl
+              }
+              {\__tenkz_string_append_segment:n {##1}}
+          }
+          {\__tenkz_string_append_segment:n {##1}}
+      }
+    \tl_set_eq:cN
+      {\l__tikzspath_prefix_tl #1} \l__tenkz_string_loop_path_tl
+  }
+
+% Split self-crossings while excluding component endpoints from the pairwise
+% reference path.  Cubic-loop preparation intentionally creates coincident
+% endpoints at the crossing; treating those seams as fresh intersections can
+% make spath repeatedly split an already-split point.
+\cs_new_protected:Npn \__tenkz_string_split_self_path:N #1
+  {
+    \spath_components_to_seq:NV
+      \l__tenkz_string_components_seq #1
+    \tl_clear:N \l__tenkz_string_loop_path_tl
+    \seq_map_indexed_inline:Nn \l__tenkz_string_components_seq
+      {
+        \tl_set:Nn \l__tenkz_string_self_path_tl {##2}
+        \spath_reallength:NV
+          \l__tenkz_string_real_segments_int
+          \l__tenkz_string_self_path_tl
+        \int_compare:nNnT
+          {\l__tenkz_string_real_segments_int} > {1}
+          {
+            \spath_split_component_at_self_intersections:N
+              \l__tenkz_string_self_path_tl
+          }
+        \tl_clear:N \l__tenkz_string_loop_reference_tl
+        \seq_map_indexed_inline:Nn \l__tenkz_string_components_seq
+          {
+            \int_compare:nNnF {####1} = {##1}
+              {
+                \tl_set:Nn \l__tenkz_string_tmp_tl {####2}
+                \spath_shorten_at_start:Nn \l__tenkz_string_tmp_tl
+                  {\dim_eval:n {\__tenkz_dim:n {crossgap} / 8}}
+                \spath_shorten_at_end:Nn \l__tenkz_string_tmp_tl
+                  {\dim_eval:n {\__tenkz_dim:n {crossgap} / 8}}
+                \tl_put_right:NV
+                  \l__tenkz_string_loop_reference_tl
+                  \l__tenkz_string_tmp_tl
+              }
+          }
+        \tl_if_empty:NF \l__tenkz_string_loop_reference_tl
+          {
+            \spath_split_path_at_intersections:NV
+              \l__tenkz_string_self_path_tl
+              \l__tenkz_string_loop_reference_tl
+          }
+        \tl_put_right:NV
+          \l__tenkz_string_loop_path_tl
+          \l__tenkz_string_self_path_tl
+      }
+    \tl_set_eq:NN #1 \l__tenkz_string_loop_path_tl
+  }
+
 % Count intersections on a disposable path copy.  Each individual cubic is
 % first checked with spath's self-splitter; distinct non-adjacent segments are
 % then compared pairwise.  Adjacent branches meet by construction; the first
@@ -599,13 +749,17 @@
     \prop_get:NnNT \l__tenkz_string_self_gap_prop
       {#1} \l__tenkz_string_tmp_tl
       {
+        \__tenkz_string_prepare_cubic_loops:n {#1}
         \tl_set_eq:Nc \l__tenkz_string_self_path_tl
           { \l__tikzspath_prefix_tl #1 }
-        \spath_split_at_self_intersections:N
+        \__tenkz_string_split_self_path:N
           \l__tenkz_string_self_path_tl
         \spath_numberofcomponents:NV
           \l__tenkz_string_components_after_int
           \l__tenkz_string_self_path_tl
+        \prop_get:NnN
+          \l__tenkz_string_self_gap_prop
+          {#1} \l__tenkz_string_tmp_tl
         \prop_clear:N \l__tenkz_string_selector_seen_prop
         \clist_map_inline:Vn \l__tenkz_string_tmp_tl
           {
@@ -736,7 +890,13 @@
       {
         \str_if_eq:nnTF {#1} {#2}
           {
-            \tikzset { spath/split~at~self~intersections = {#1} }
+            \tl_set_eq:Nc \l__tenkz_string_self_path_tl
+              {\l__tikzspath_prefix_tl #1}
+            \__tenkz_string_split_self_path:N
+              \l__tenkz_string_self_path_tl
+            \tl_set_eq:cN
+              {\l__tikzspath_prefix_tl #1}
+              \l__tenkz_string_self_path_tl
             \seq_if_in:NnF \l__tenkz_string_self_gap_ids_seq {#1}
               { \seq_put_right:Nn \l__tenkz_string_self_gap_ids_seq {#1} }
           }
@@ -753,43 +913,78 @@
             \spath_components_to_seq:NV
               \l__tenkz_string_after_components_seq
               \l__tenkz_string_self_path_tl
-            \__tenkz_string_find_inserted_boundary:
-            \__tenkz_string_shift_gap_prop:Nn
-              \l__tenkz_string_self_gap_prop {#1}
-            \__tenkz_string_shift_gap_prop:Nn
-              \l__tenkz_string_external_gap_prop {#1}
-            \__tenkz_string_append_external_gap:n {#1}
-            \seq_if_in:NnF \l__tenkz_string_gap_ids_seq {#1}
-              { \seq_put_right:Nn \l__tenkz_string_gap_ids_seq {#1} }
+            \int_zero:N \l__tenkz_string_insertion_int
+            \int_compare:nNnT
+              {\seq_count:N \l__tenkz_string_after_components_seq}
+              >
+              {\seq_count:N \l__tenkz_string_before_components_seq}
+              {\__tenkz_string_find_inserted_boundary:nn {#1}{#2}}
+            \int_compare:nNnT {\l__tenkz_string_insertion_int} > {0}
+              {
+                \__tenkz_string_shift_gap_prop:Nn
+                  \l__tenkz_string_self_gap_prop {#1}
+                \__tenkz_string_shift_gap_prop:Nn
+                  \l__tenkz_string_external_gap_prop {#1}
+                \__tenkz_string_append_external_gap:n {#1}
+                \seq_if_in:NnF \l__tenkz_string_gap_ids_seq {#1}
+                  { \seq_put_right:Nn \l__tenkz_string_gap_ids_seq {#1} }
+              }
           }
         \tenkz@event{stringcross|under=#1|over=#2|
           hits=\int_use:N \l__tenkz_string_n_int}
       }
   }
 
-\cs_new_protected:Npn \__tenkz_string_find_inserted_boundary:
+\cs_new_protected:Npn \__tenkz_string_find_inserted_boundary:nn #1#2
   {
     \int_zero:N \l__tenkz_string_insertion_int
-    \seq_map_indexed_inline:Nn
-      \l__tenkz_string_before_components_seq
+    \__tenkz_string_count:nnN {#1}{#2} \l__tenkz_string_n_int
+    \int_compare:nNnT {\l__tenkz_string_n_int} > {0}
       {
-        \int_compare:nNnT {\l__tenkz_string_insertion_int} = {0}
+        \pgf@process{\pgfpointintersectionsolution{1}}
+        \dim_set:Nn \l__tenkz_string_intersection_x_dim {\pgf@x}
+        \dim_set:Nn \l__tenkz_string_intersection_y_dim {\pgf@y}
+        \seq_map_indexed_inline:Nn
+          \l__tenkz_string_after_components_seq
           {
-            \tl_set:Nn \l__tenkz_string_first_tl {##2}
-            \tl_set:Ne \l__tenkz_string_last_tl
+            \int_compare:nNnT
+              {\l__tenkz_string_insertion_int} = {0}
               {
-                \seq_item:Nn
-                  \l__tenkz_string_after_components_seq {##1}
+                \tl_set:Nn \l__tenkz_string_last_tl {##2}
+                \spath_finalpoint:NV
+                  \l__tenkz_string_tmp_tl
+                  \l__tenkz_string_last_tl
+                \dim_set:Nn \l__tenkz_string_endpoint_x_dim
+                  {\tl_item:Nn \l__tenkz_string_tmp_tl {1}}
+                \dim_set:Nn \l__tenkz_string_endpoint_y_dim
+                  {\tl_item:Nn \l__tenkz_string_tmp_tl {2}}
+                \bool_if:nT
+                  {
+                    \dim_compare_p:nNn
+                      {
+                        \dim_abs:n
+                          {
+                            \l__tenkz_string_endpoint_x_dim
+                            - \l__tenkz_string_intersection_x_dim
+                          }
+                      }
+                      <
+                      {\dim_eval:n {\__tenkz_dim:n {crossgap} / 100}}
+                    &&
+                    \dim_compare_p:nNn
+                      {
+                        \dim_abs:n
+                          {
+                            \l__tenkz_string_endpoint_y_dim
+                            - \l__tenkz_string_intersection_y_dim
+                          }
+                      }
+                      <
+                      {\dim_eval:n {\__tenkz_dim:n {crossgap} / 100}}
+                  }
+                  {\int_set:Nn \l__tenkz_string_insertion_int {##1}}
               }
-            \tl_if_eq:NNF
-              \l__tenkz_string_first_tl \l__tenkz_string_last_tl
-              { \int_set:Nn \l__tenkz_string_insertion_int {##1} }
           }
-      }
-    \int_compare:nNnT {\l__tenkz_string_insertion_int} = {0}
-      {
-        \int_set:Nn \l__tenkz_string_insertion_int
-          { \seq_count:N \l__tenkz_string_before_components_seq }
       }
   }
 
