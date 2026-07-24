@@ -1,3 +1,4 @@
+% Negative regression: atom span values must be numeric.
 \documentclass{standalone}
 \usepackage{tenkz}
 \makeatletter
@@ -7,7 +8,7 @@
 \makeatother
 \begin{document}
 \tenkzkernel
-\begin{tenkz}[rows={wire,wire}, cols=2,
-  west=trace, east=trace, north=trace, south=trace]\end{tenkz}
-\mbox{p}
+\begin{tenkz}[rows={wire}, cols=1]
+  \tn[wires=many]{A}
+\end{tenkz}
 \end{document}

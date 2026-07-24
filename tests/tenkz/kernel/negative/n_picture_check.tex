@@ -1,3 +1,4 @@
+% Negative regression: check= belongs to tenkzeq, not a bare picture.
 \documentclass{standalone}
 \usepackage{tenkz}
 \makeatletter
@@ -7,7 +8,5 @@
 \makeatother
 \begin{document}
 \tenkzkernel
-\begin{tenkz}[rows={wire,wire}, cols=2,
-  west=trace, east=trace, north=trace, south=trace]\end{tenkz}
-\mbox{p}
+\begin{tenkz}[rows={wire}, cols=1, check=signature]\end{tenkz}
 \end{document}

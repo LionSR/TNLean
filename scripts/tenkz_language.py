@@ -279,7 +279,8 @@ def _parser_leaf_keys_from_texts(texts: Iterable[str]) -> set[tuple[str, str]]:
 # Extension-gate: #4687; Census-correction: #4753 includes hyphenated
 # kernel families in the parser-path census.
 _KERNEL_HELPER = re.compile(
-    r"\\__tenkz_kernel_(?:value:nnn|choice:nnnn|flag:nnn)\s*"
+    r"\\__tenkz_kernel_"
+    r"(?:value:nnn|choice:nnnn|flag:nnn|positive_integer:nnn)\s*"
     r"\{\s*tenkz-kernel-([a-z]+(?:-[a-z]+)*)\s*\}\s*\{\s*([^}]+?)\s*\}"
 )
 _KERNEL_BLOCK = re.compile(
