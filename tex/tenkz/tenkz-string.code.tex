@@ -75,6 +75,7 @@
 \seq_new:N \l__tenkz_string_segments_seq
 \prop_new:N \l__tenkz_string_self_gap_prop   % self id -> component boundary
 \prop_new:N \l__tenkz_string_external_gap_prop % under id -> component boundaries
+\prop_new:N \l__tenkz_string_crossing_point_prop % {under}{over} -> {x}{y}
 \prop_new:N \l__tenkz_string_selector_seen_prop
 \seq_new:N \l__tenkz_string_before_components_seq
 \seq_new:N \l__tenkz_string_after_components_seq
@@ -145,6 +146,7 @@
     \seq_clear:N \l__tenkz_string_processed_seq
     \prop_clear:N \l__tenkz_string_self_gap_prop
     \prop_clear:N \l__tenkz_string_external_gap_prop
+    \prop_clear:N \l__tenkz_string_crossing_point_prop
   }
 
 \cs_new_protected:Npn \__tenkz_string_require_libs:
@@ -425,6 +427,19 @@
       { \exp_args:Nc \pgfsetpath { \l__tikzspath_prefix_tl #1 } }
       { \exp_args:Nc \pgfsetpath { \l__tikzspath_prefix_tl #2 } }
     \int_set:Nn #3 { \pgfintersectionsolutions }
+  }
+
+% A crossing is symmetric to its reader, while the ledger keeps the declared
+% under--over order used by surgery.
+\cs_new_protected:Npn \__tenkz_string_crossing_point:nnN #1#2#3
+  {
+    \prop_get:NnNTF
+      \l__tenkz_string_crossing_point_prop { {#1} {#2} } #3
+      { }
+      {
+        \prop_get:NnN
+          \l__tenkz_string_crossing_point_prop { {#2} {#1} } #3
+      }
   }
 
 % A planar cubic has at most one proper self-intersection.  If
@@ -966,6 +981,12 @@
         \pgf@process{\pgfpointintersectionsolution{1}}
         \dim_set:Nn \l__tenkz_string_intersection_x_dim {\pgf@x}
         \dim_set:Nn \l__tenkz_string_intersection_y_dim {\pgf@y}
+        \prop_put:Nne
+          \l__tenkz_string_crossing_point_prop { {#1} {#2} }
+          {
+            { \dim_use:N \l__tenkz_string_intersection_x_dim }
+            { \dim_use:N \l__tenkz_string_intersection_y_dim }
+          }
         \dim_set:Nn \l__tenkz_string_nearest_dim {\maxdimen}
         \seq_map_indexed_inline:Nn
           \l__tenkz_string_after_components_seq
