@@ -63,11 +63,15 @@ shell command % \tntree{commented}
 \newif\ifdraft
 \let\ifalias\ifdraft
 \let\ifnever\iffalse
+\let\ifbare\if
 \iffalse
 \newif\iflocal
+\let\iflocalbare\if
 \iftrue
 \newcommand{\stored}{\fi}
 \ifalias
+\fi
+\ifbare ab
 \fi
 \ifdraft
 \ifthenelse{ignored}{ignored}{ignored}
@@ -76,6 +80,14 @@ shell command % \tntree{commented}
 \begin{tenkz} \tn{false-branch} \end{tenkz}
 \end{tnexample}
 \fi
+\def\iflate{not yet a conditional}
+\iffalse
+\iflate
+\fi
+\begin{tnexample}
+\begin{tenkz} \tn{declaration-order} \end{tenkz}
+\end{tnexample}
+\newif\iflate
 \begin{Verbatim}
 \documentclass[
   border=2pt
@@ -90,7 +102,7 @@ shell command % \tntree{commented}
         path = Path(tmp) / "fixture.tex"
         path.write_text(fixture, encoding="utf-8")
         extracted = DOCTEST.extract_displayed_examples(path)
-    if len(extracted) != 6 or any(
+    if len(extracted) != 7 or any(
         r"\begin{tenkz}" not in example.document for example in extracted[:2]
     ):
         raise AssertionError("nested tnmultiple options confused body extraction")
@@ -107,7 +119,9 @@ shell command % \tntree{commented}
         r"\begin{document}"
     ):
         raise AssertionError("a multiline package declaration was split across the body")
-    complete = extracted[5].document
+    if r"\tn{declaration-order}" not in extracted[5].document:
+        raise AssertionError("a later newif declaration changed an earlier false branch")
+    complete = extracted[6].document
     if complete.count(r"\documentclass") != 1 or r"\tn{commented}" in complete:
         raise AssertionError("complete or commented Verbatim documents were mishandled")
 
