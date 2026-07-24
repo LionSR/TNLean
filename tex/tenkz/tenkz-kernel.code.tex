@@ -87,6 +87,7 @@
 \tl_new:N   \l__tenkz_kernel_scratch_tl
 \tl_new:N   \l__tenkz_kernel_sig_tl
 \tl_new:N   \l__tenkz_kernel_slot_tl
+\tl_new:N   \l__tenkz_kernel_child_tl
 \seq_new:N  \l__tenkz_kernel_stack_seq        % operand stack (see shelf notes)
 \seq_new:N  \g__tenkz_kernel_panel_gseq       % tenkzeq panel signatures
 \seq_new:N  \g__tenkz_kernel_panel_kind_gseq  % diagram or prose per panel
@@ -108,6 +109,12 @@
 \cs_new_protected:Npn \__tenkz_kernel_keys:nn #1#2
   {
     \tl_set:Nn \l__tenkz_kernel_opts_tl {#2}
+    % Parameterized alphabet words remain one key value even though their
+    % canonical spelling contains `=`.
+    \regex_replace_all:nnN
+      { weight \s* = \s* bundle \s* = \s* ([A-Za-z0-9]+) }
+      { weight = \cB\{ bundle = \1 \cE\} }
+      \l__tenkz_kernel_opts_tl
     \regex_replace_all:nnN
       { \( \s* (\d+) \s* , \s* (\d+) \s* \) }
       { \cB\{ \( \1 , \2 \) \cE\} }
@@ -245,8 +252,9 @@
       { \seq_item:Nn \l__tenkz_kernel_match_seq {4} }
     \__tenkz_kernel_addr_operand:VN \l__tenkz_kernel_scratch_tl
       \l__tenkz_kernel_scratch_tl
+    \tl_set:NV \l__tenkz_kernel_child_tl \l__tenkz_kernel_scratch_tl
     \seq_pop:NN \l__tenkz_kernel_stack_seq #2
-    \__tenkz_kernel_node_put:NnV #2 {base} \l__tenkz_kernel_scratch_tl
+    \__tenkz_kernel_node_put:NnV #2 {base} \l__tenkz_kernel_child_tl
   }
 
 % midway and crossing share one two-operand shape; the kind field tells the
@@ -267,10 +275,11 @@
     \seq_pop:NN \l__tenkz_kernel_stack_seq \l_tmpa_tl
     \seq_push:NV \l__tenkz_kernel_stack_seq \l__tenkz_kernel_scratch_tl
     \__tenkz_kernel_addr_operand:VN \l_tmpa_tl \l__tenkz_kernel_scratch_tl
+    \tl_set:NV \l__tenkz_kernel_child_tl \l__tenkz_kernel_scratch_tl
     \seq_pop:NN \l__tenkz_kernel_stack_seq \l_tmpa_tl   % first child id
     \seq_pop:NN \l__tenkz_kernel_stack_seq #3           % the node id
     \__tenkz_kernel_node_put:NnV #3 {first} \l_tmpa_tl
-    \__tenkz_kernel_node_put:NnV #3 {second} \l__tenkz_kernel_scratch_tl
+    \__tenkz_kernel_node_put:NnV #3 {second} \l__tenkz_kernel_child_tl
   }
 
 % leg <face> of <cell>: the operand must be a cell -- only cells carry
@@ -286,17 +295,18 @@
       { \seq_item:Nn \l__tenkz_kernel_match_seq {3} }
     \__tenkz_kernel_addr_operand:VN \l__tenkz_kernel_scratch_tl
       \l__tenkz_kernel_scratch_tl
+    \tl_set:NV \l__tenkz_kernel_child_tl \l__tenkz_kernel_scratch_tl
     \seq_pop:NN \l__tenkz_kernel_stack_seq #2
     \prop_get:NeN \l__tenkz_kernel_node_prop
-      { \l__tenkz_kernel_scratch_tl / kind } \l_tmpa_tl
+      { \l__tenkz_kernel_child_tl / kind } \l_tmpa_tl
     \str_if_eq:VnF \l_tmpa_tl {cell}
       {
         \msg_error:nneee {tenkz}{kernel-address-operand}
-          { \__tenkz_kernel_node_item:Nn \l__tenkz_kernel_scratch_tl {text} }
+          { \__tenkz_kernel_node_item:Nn \l__tenkz_kernel_child_tl {text} }
           {#1} { a~cell }
         \msg_line_context:
       }
-    \__tenkz_kernel_node_put:NnV #2 {cell} \l__tenkz_kernel_scratch_tl
+    \__tenkz_kernel_node_put:NnV #2 {cell} \l__tenkz_kernel_child_tl
   }
 
 \cs_new_protected:Npn \__tenkz_kernel_addr_port:nN #1#2
@@ -343,14 +353,24 @@
       { \seq_item:Nn \l__tenkz_kernel_match_seq {2} }
   }
 
+\cs_new_protected:Npn \__tenkz_kernel_strip_outer_groups:N #1
+  {
+    \tl_if_single:NT #1
+      {
+        \exp_args:NV \tl_if_head_is_group:nT #1
+          {
+            \tl_set:Ne #1 { \exp_args:NV \tl_head:n #1 }
+            \__tenkz_kernel_strip_outer_groups:N #1
+          }
+      }
+  }
+
 % the braced-operand rule, then recursion
 \cs_new_protected:Npn \__tenkz_kernel_addr_operand:nN #1#2
   {
     \tl_set:Nn #2 {#1}
     \tl_trim_spaces:N #2
-    \exp_args:NV \tl_if_head_is_group:nTF #2
-      { \tl_set:Ne #2 { \exp_args:NV \tl_head:n #2 } }
-      { }
+    \__tenkz_kernel_strip_outer_groups:N #2
     \exp_args:NV \__tenkz_kernel_addr:nN #2 #2
   }
 \cs_generate_variant:Nn \__tenkz_kernel_addr_operand:nN { VN }
@@ -358,6 +378,115 @@
 % ---------- shared key machinery ---------------------------------------------
 % One function installs a choice key whose rejection quotes the alphabet;
 % each closed alphabet of the contract appears below exactly once.
+
+\tl_new:N \l__tenkz_kernel_list_tl
+\tl_new:N \l__tenkz_kernel_list_item_tl
+\clist_new:N \l__tenkz_kernel_address_clist
+
+% Address-valued fields retain the author's spelling in their record, but
+% every member is parsed now.  Picture option parsing has already grouped
+% cell coordinates before these key handlers run.
+\cs_new_protected:Npn \__tenkz_kernel_validate_address_list:n #1
+  {
+    \tl_set:Nn \l__tenkz_kernel_list_tl {#1}
+    \tl_trim_spaces:N \l__tenkz_kernel_list_tl
+    \__tenkz_kernel_strip_outer_groups:N \l__tenkz_kernel_list_tl
+    \regex_replace_all:nnN
+      { \( \s* (\d+) \s* , \s* (\d+) \s* \) }
+      { \cB\{ \( \1 , \2 \) \cE\} }
+      \l__tenkz_kernel_list_tl
+    \exp_args:NNV \clist_set:Nn
+      \l__tenkz_kernel_address_clist \l__tenkz_kernel_list_tl
+    \clist_map_inline:Nn \l__tenkz_kernel_address_clist
+      {
+        \__tenkz_kernel_addr_operand:nN
+          {##1} \l__tenkz_kernel_list_item_tl
+      }
+  }
+
+\cs_new_protected:Npn \__tenkz_kernel_validate_crossing_list:n #1
+  {
+    \tl_set:Nn \l__tenkz_kernel_list_tl {#1}
+    \tl_trim_spaces:N \l__tenkz_kernel_list_tl
+    \regex_replace_all:nnN
+      { \( \s* (\d+) \s* , \s* (\d+) \s* \) }
+      { \cB\{ \( \1 , \2 \) \cE\} }
+      \l__tenkz_kernel_list_tl
+    \exp_args:NNV \clist_set:Nn
+      \l__tenkz_kernel_address_clist \l__tenkz_kernel_list_tl
+    \clist_map_inline:Nn \l__tenkz_kernel_address_clist
+      {
+        \regex_extract_once:nnNTF
+          { \A \s* (?: over | under ) \s+ at \s+ (.+) \s* \Z } {##1}
+          \l__tenkz_kernel_match_seq
+          {
+            \tl_set:Ne \l__tenkz_kernel_list_item_tl
+              { \seq_item:Nn \l__tenkz_kernel_match_seq {2} }
+            \__tenkz_kernel_addr_operand:VN
+              \l__tenkz_kernel_list_item_tl \l__tenkz_kernel_list_item_tl
+          }
+          {
+            \__tenkz_kernel_addr:nN
+              {##1} \l__tenkz_kernel_list_item_tl
+          }
+      }
+  }
+
+\cs_new_protected:Npn \__tenkz_kernel_validate_mark_target:n #1
+  {
+    \regex_extract_once:nnNTF
+      {
+        \A \s*
+        ( \( \s* \d+ \s* , \s* \d+ \s* \) )
+        \s* - \s*
+        ( \( \s* \d+ \s* , \s* \d+ \s* \) )
+        \s* \Z
+      }
+      {#1} \l__tenkz_kernel_match_seq
+      {
+        \tl_set:Ne \l__tenkz_kernel_list_tl
+          {
+            { \seq_item:Nn \l__tenkz_kernel_match_seq {2} } ,
+            { \seq_item:Nn \l__tenkz_kernel_match_seq {3} }
+          }
+        \exp_args:NV \__tenkz_kernel_validate_address_list:n
+          \l__tenkz_kernel_list_tl
+      }
+      {
+        % Positional mark targets do not pass through picture option parsing,
+        % so protect their cell-coordinate commas here.
+        \tl_set:Nn \l__tenkz_kernel_list_tl {#1}
+        \regex_replace_all:nnN
+          { \( \s* (\d+) \s* , \s* (\d+) \s* \) }
+          { \cB\{ \( \1 , \2 \) \cE\} }
+          \l__tenkz_kernel_list_tl
+        \exp_args:NV \__tenkz_kernel_validate_address_list:n
+          \l__tenkz_kernel_list_tl
+      }
+  }
+
+\cs_new_protected:Npn \__tenkz_kernel_weight:n #1
+  {
+    \tl_set:Nn \l__tenkz_kernel_list_item_tl {#1}
+    \tl_trim_spaces:N \l__tenkz_kernel_list_item_tl
+    \bool_lazy_or:nnTF
+      { \str_if_eq_p:Vn \l__tenkz_kernel_list_item_tl {single} }
+      { \str_if_eq_p:Vn \l__tenkz_kernel_list_item_tl {double} }
+      { \__tenkz_kernel_stage_put:ne {weight}
+          { \tl_use:N \l__tenkz_kernel_list_item_tl } }
+      {
+        \regex_match:nVTF
+          { \A bundle \s* = \s* [1-9]\d* \Z }
+          \l__tenkz_kernel_list_item_tl
+          { \__tenkz_kernel_stage_put:ne {weight}
+              { \tl_use:N \l__tenkz_kernel_list_item_tl } }
+          {
+            \msg_error:nneee {tenkz}{kernel-choice}
+              {weight} {#1} {single|double|bundle=n}
+              { \tl_use:N \l__tenkz_model_last_tl }
+          }
+      }
+  }
 
 \cs_new_protected:Npn \__tenkz_kernel_choice:nnnn #1#2#3#4
   {
@@ -473,7 +602,10 @@
   { straight, orth, arc } { route }
 \__tenkz_kernel_value:nnn   { tenkz-kernel-wire } { via } { via }
 \__tenkz_kernel_value:nnn   { tenkz-kernel-wire } { bend } { bend }
-\__tenkz_kernel_value:nnn   { tenkz-kernel-wire } { weight } { weight }
+\keys_define:nn { tenkz-kernel-wire }
+  {
+    weight .code:n = { \__tenkz_kernel_weight:n {#1} }
+  }
 \__tenkz_kernel_value:nnn   { tenkz-kernel-wire } { species } { species }
 \__tenkz_kernel_value:nnn   { tenkz-kernel-wire } { wind } { wind }
 \__tenkz_kernel_value:nnn   { tenkz-kernel-wire } { around } { around }
@@ -739,6 +871,13 @@
     \seq_clear:N \l__tenkz_kernel_emit_seq
     \__tenkz_model_map_ids:nn {wire}
       {
+        \tl_clear:N \l_tmpb_tl
+        \__tenkz_model_get:nnN {##1} {weight} \l_tmpa_tl
+        \quark_if_no_value:NF \l_tmpa_tl
+          {
+            \str_if_eq:VnF \l_tmpa_tl {single}
+              { \tl_set:Ne \l_tmpb_tl { : \tl_use:N \l_tmpa_tl } }
+          }
         \clist_map_inline:nn { from, to }
           {
             \__tenkz_model_get:nnN {##1} {####1-open}
@@ -746,7 +885,10 @@
             \quark_if_no_value:NF \l__tenkz_kernel_scratch_tl
               {
                 \seq_put_right:Ne \l__tenkz_kernel_emit_seq
-                  { open: \tl_use:N \l__tenkz_kernel_scratch_tl }
+                  {
+                    open: \tl_use:N \l__tenkz_kernel_scratch_tl
+                    \tl_use:N \l_tmpb_tl
+                  }
               }
             \__tenkz_model_get:nnN {##1} {####1} \l__tenkz_kernel_scratch_tl
             \quark_if_no_value:NF \l__tenkz_kernel_scratch_tl
@@ -761,6 +903,7 @@
                           {
                             edge: \prop_item:Ne \l__tenkz_kernel_node_prop
                               { \l__tenkz_kernel_scratch_tl / side }
+                            \tl_use:N \l_tmpb_tl
                           }
                       }
                   }
@@ -907,34 +1050,78 @@
       }
   }
 \cs_generate_variant:Nn \__tenkz_kernel_wire_end:nn { ne }
-\cs_new_protected:Npn \__tenkz_kernel_tnwire:nnn #1#2#3
+\cs_new_protected:Npn \__tenkz_kernel_validate_addresses:
+  {
+    \__tenkz_model_map_ids:nn {wire}
+      {
+        \tl_set:Nn \l__tenkz_model_last_tl {##1}
+        \clist_map_inline:nn {via, around}
+          {
+            \__tenkz_model_get:nnN {##1} {####1}
+              \l__tenkz_kernel_list_tl
+            \quark_if_no_value:NF \l__tenkz_kernel_list_tl
+              {
+                \exp_args:NV \__tenkz_kernel_validate_address_list:n
+                  \l__tenkz_kernel_list_tl
+              }
+          }
+        \__tenkz_model_get:nnN {##1} {cross}
+          \l__tenkz_kernel_list_tl
+        \quark_if_no_value:NF \l__tenkz_kernel_list_tl
+          {
+            \exp_args:NV \__tenkz_kernel_validate_crossing_list:n
+              \l__tenkz_kernel_list_tl
+          }
+      }
+    \__tenkz_model_map_ids:nn {mark}
+      {
+        \tl_set:Nn \l__tenkz_model_last_tl {##1}
+        \__tenkz_model_get:nnN {##1} {target}
+          \l__tenkz_kernel_list_tl
+        \quark_if_no_value:NF \l__tenkz_kernel_list_tl
+          {
+            \exp_args:NV \__tenkz_kernel_validate_mark_target:n
+              \l__tenkz_kernel_list_tl
+          }
+      }
+  }
+\cs_new_protected:Npn \__tenkz_kernel_tnwire:nnnn #1#2#3#4
   {
     \__tenkz_model_record_wire:n { kind = index }
     \prop_clear:N \l__tenkz_kernel_stage_prop
     \__tenkz_kernel_keys:nn { tenkz-kernel-wire } {#1}
     \prop_if_in:NnTF \l__tenkz_kernel_stage_prop {closed}
       {
-        \bool_lazy_and:nnF
-          { \tl_if_blank_p:n {#2} } { \tl_if_blank_p:n {#3} }
+        \int_compare:nNnF {#4} = {0}
           {
             \msg_error:nne {tenkz}{kernel-wire-arity}
               { \tl_use:N \l__tenkz_model_last_tl }
           }
       }
       {
-        \bool_lazy_or:nnTF
-          { \tl_if_blank_p:n {#2} } { \tl_if_blank_p:n {#3} }
+        \int_compare:nNnTF {#4} = {2}
+          {
+            \bool_lazy_or:nnTF
+              { \tl_if_blank_p:n {#2} }
+              { \tl_if_blank_p:n {#3} }
+              {
+                \msg_error:nne {tenkz}{kernel-wire-arity}
+                  { \tl_use:N \l__tenkz_model_last_tl }
+              }
+              {
+                \__tenkz_kernel_wire_end:nn {from} {#2}
+                \__tenkz_kernel_wire_end:nn {to} {#3}
+              }
+          }
           {
             \msg_error:nne {tenkz}{kernel-wire-arity}
               { \tl_use:N \l__tenkz_model_last_tl }
           }
-          {
-            \__tenkz_kernel_wire_end:nn {from} {#2}
-            \__tenkz_kernel_wire_end:nn {to} {#3}
-          }
       }
     \__tenkz_kernel_commit:
   }
+\cs_new_protected:Npn \__tenkz_kernel_tnwire:nnn #1#2#3
+  { \__tenkz_kernel_tnwire:nnnn {#1} {#2} {#3} {2} }
 
 % \tnmark[keys]{target}{label}: the target -- a cell set, an address set,
 % or a wire place -- is stored verbatim; a mark owns no topology, so the
@@ -1502,6 +1689,7 @@
     \__tenkz_kernel_prepare_cell_policies:
     \__tenkz_kernel_bonds:
     \__tenkz_kernel_closures:
+    \__tenkz_kernel_validate_addresses:
     \__tenkz_model_validate:
     \__tenkz_kernel_emit:
     \bool_if:NT \l__tenkz_kernel_ineq_bool
@@ -1641,15 +1829,25 @@
 % globally; \tn and both environment command pairs rebind locally through
 % \tenkzkernel until the S4 swap deletes the switch and the 0.7 bindings.
 
-% a closed wire takes no positional ends, so the ends are peeked, not
-% declared: two brace groups follow or none do.
+% A closed wire takes no positional ends, so both ends are peeked before the
+% command commits.  This preserves the dedicated arity diagnostic for a
+% one-ended call instead of letting TeX consume an unrelated next token.
+\cs_new_protected:Npn \__tenkz_kernel_tnwire_first:nn #1#2
+  {
+    \peek_remove_spaces:n
+      {
+        \peek_catcode:NTF \c_group_begin_token
+          { \__tenkz_kernel_tnwire:nnn {#1} {#2} }
+          { \__tenkz_kernel_tnwire:nnnn {#1} {#2} { } {1} }
+      }
+  }
 \NewDocumentCommand \tnwire { O{} }
   {
     \peek_remove_spaces:n
       {
         \peek_catcode:NTF \c_group_begin_token
-          { \__tenkz_kernel_tnwire:nnn {#1} }
-          { \__tenkz_kernel_tnwire:nnn {#1} { } { } }
+          { \__tenkz_kernel_tnwire_first:nn {#1} }
+          { \__tenkz_kernel_tnwire:nnnn {#1} { } { } {0} }
       }
   }
 \NewDocumentCommand \tnmark { O{} m m }
