@@ -66,6 +66,8 @@
 \tl_new:N \l__tenkz_string_tmin_tl
 \tl_new:N \l__tenkz_string_self_path_tl
 \tl_new:N \l__tenkz_string_self_final_tl
+\tl_new:N \l__tenkz_string_self_initial_point_tl
+\tl_new:N \l__tenkz_string_self_final_point_tl
 \fp_new:N \l__tenkz_string_x_fp
 \fp_new:N \l__tenkz_string_y_fp
 \fp_new:N \l__tenkz_string_xb_fp
@@ -357,17 +359,28 @@
 
 % Count intersections between non-adjacent path segments without mutating or
 % recursively subdividing the saved path.  Adjacent branches meet by
-% construction; the first and last branches of a closed path share its seam.
+% construction; the first and last branches share a seam when either the path
+% closes formally or an open route returns to its initial point.
 \cs_new_protected:Npn \__tenkz_string_self_count:nN #1#2
   {
     \tl_set_eq:Nc \l__tenkz_string_self_path_tl
       { \l__tikzspath_prefix_tl #1 }
     \spath_finalaction:NV
       \l__tenkz_string_self_final_tl \l__tenkz_string_self_path_tl
+    \spath_initialpoint:NV
+      \l__tenkz_string_self_initial_point_tl
+      \l__tenkz_string_self_path_tl
+    \spath_finalpoint:NV
+      \l__tenkz_string_self_final_point_tl
+      \l__tenkz_string_self_path_tl
     \bool_set:Nn \l__tenkz_string_closed_bool
       {
         \tl_if_eq_p:NN
           \l__tenkz_string_self_final_tl \c_spath_closepath_tl
+        ||
+        \tl_if_eq_p:NN
+          \l__tenkz_string_self_initial_point_tl
+          \l__tenkz_string_self_final_point_tl
       }
     \spath_open:N \l__tenkz_string_self_path_tl
     \spath_segments_to_seq:NV

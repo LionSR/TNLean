@@ -1,0 +1,17 @@
+% Regression: an open route may return to its initial point without creating a
+% self-crossing at that shared endpoint.
+\documentclass{standalone}
+\usepackage{tenkz}
+\usetikzlibrary{hobby,spath3,intersections}
+\begin{document}
+\makeatletter\input{tenkz-string.code.tex}\makeatother
+\begin{tikzpicture}
+\ExplSyntaxOn
+\__tenkz_string_reset:
+\__tenkz_string_register:nn {return} {open}
+\path[spath/save=return] (0,0)--(1.4,0)--(0.7,1.1)--(0,0);
+\__tenkz_string_resolve:
+\__tenkz_string_dev_draw:nn {return} {thick}
+\ExplSyntaxOff
+\end{tikzpicture}
+\end{document}
