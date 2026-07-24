@@ -53,6 +53,7 @@ for src in "$WORK"/xx_string_*.tex; do
     xx_string_join_interior.tex) expected='[TKZ-JOIN-NOT-ENDPOINT]' ;;
     xx_string_multiple_pair.tex) expected='[TKZ-CROSS-MULTIPLE]' ;;
     xx_string_reserved_id.tex) expected='[TKZ-STRING-RESERVED]' ;;
+    xx_string_same_half_curve_undeclared.tex) expected='[TKZ-CROSS-UNDECLARED]' ;;
     xx_string_single_curve_undeclared.tex) expected='[TKZ-CROSS-UNDECLARED]' ;;
     xx_string_self_undeclared.tex) expected='[TKZ-CROSS-UNDECLARED]' ;;
     xx_string_undeclared.tex) expected='[TKZ-CROSS-UNDECLARED]' ;;

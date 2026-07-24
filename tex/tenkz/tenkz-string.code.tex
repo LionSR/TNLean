@@ -94,11 +94,20 @@
 \fp_new:N \l__tenkz_string_dir_fp
 \fp_new:N \l__tenkz_string_tangent_fp
 \fp_new:N \l__tenkz_string_scale_fp
+\fp_new:N \l__tenkz_string_ax_fp
+\fp_new:N \l__tenkz_string_ay_fp
+\fp_new:N \l__tenkz_string_bx_fp
+\fp_new:N \l__tenkz_string_by_fp
+\fp_new:N \l__tenkz_string_cx_fp
+\fp_new:N \l__tenkz_string_cy_fp
+\fp_new:N \l__tenkz_string_denom_fp
+\fp_new:N \l__tenkz_string_sum_fp
+\fp_new:N \l__tenkz_string_disc_fp
 \int_new:N \l__tenkz_string_n_int
+\int_new:N \l__tenkz_string_cubic_int
 \int_new:N \l__tenkz_string_declared_int
 \int_new:N \l__tenkz_string_first_segment_int
 \int_new:N \l__tenkz_string_real_segments_int
-\int_new:N \l__tenkz_string_components_before_int
 \int_new:N \l__tenkz_string_components_after_int
 \int_new:N \l__tenkz_string_insertion_int
 \bool_new:N \l__tenkz_string_closed_bool
@@ -398,6 +407,88 @@
     \int_set:Nn #3 { \pgfintersectionsolutions }
   }
 
+% A planar cubic has at most one proper self-intersection.  If
+% B(t) = A t^3 + B t^2 + C t + D and B(t) = B(s), t != s, then
+% u = t+s solves A (u^2-ts) + B u + C = 0.  Cramer's rule gives u and
+% the discriminant of the two parameters without an arbitrary subdivision.
+\cs_new_protected:Npn \__tenkz_string_cubic_self_count:nN #1#2
+  {
+    \fp_set:Nn \l__tenkz_string_ax_fp
+      {
+        -\tl_item:nn {#1} {2} + 3 * \tl_item:nn {#1} {5}
+        - 3 * \tl_item:nn {#1} {8} + \tl_item:nn {#1} {11}
+      }
+    \fp_set:Nn \l__tenkz_string_ay_fp
+      {
+        -\tl_item:nn {#1} {3} + 3 * \tl_item:nn {#1} {6}
+        - 3 * \tl_item:nn {#1} {9} + \tl_item:nn {#1} {12}
+      }
+    \fp_set:Nn \l__tenkz_string_bx_fp
+      {
+        3 * (
+          \tl_item:nn {#1} {2} - 2 * \tl_item:nn {#1} {5}
+          + \tl_item:nn {#1} {8}
+        )
+      }
+    \fp_set:Nn \l__tenkz_string_by_fp
+      {
+        3 * (
+          \tl_item:nn {#1} {3} - 2 * \tl_item:nn {#1} {6}
+          + \tl_item:nn {#1} {9}
+        )
+      }
+    \fp_set:Nn \l__tenkz_string_cx_fp
+      {3 * (\tl_item:nn {#1} {5} - \tl_item:nn {#1} {2})}
+    \fp_set:Nn \l__tenkz_string_cy_fp
+      {3 * (\tl_item:nn {#1} {6} - \tl_item:nn {#1} {3})}
+    \fp_set:Nn \l__tenkz_string_denom_fp
+      {
+        \l__tenkz_string_ax_fp * \l__tenkz_string_by_fp
+        - \l__tenkz_string_ay_fp * \l__tenkz_string_bx_fp
+      }
+    \int_zero:N #2
+    \fp_compare:nT {abs(\l__tenkz_string_denom_fp) > 1e-8}
+      {
+        \fp_set:Nn \l__tenkz_string_sum_fp
+          {
+            (
+              \l__tenkz_string_cx_fp * \l__tenkz_string_ay_fp
+              - \l__tenkz_string_cy_fp * \l__tenkz_string_ax_fp
+            ) / \l__tenkz_string_denom_fp
+          }
+        \fp_set:Nn \l__tenkz_string_disc_fp
+          {
+            4 * (
+              \l__tenkz_string_bx_fp * \l__tenkz_string_cy_fp
+              - \l__tenkz_string_by_fp * \l__tenkz_string_cx_fp
+            ) / \l__tenkz_string_denom_fp
+            - 3 * \l__tenkz_string_sum_fp ^ 2
+          }
+        \fp_compare:nT {\l__tenkz_string_disc_fp > 1e-8}
+          {
+            \bool_if:nT
+              {
+                \fp_compare_p:n
+                  {
+                    (
+                      \l__tenkz_string_sum_fp
+                      - sqrt(\l__tenkz_string_disc_fp)
+                    ) / 2 > 0
+                  }
+                &&
+                \fp_compare_p:n
+                  {
+                    (
+                      \l__tenkz_string_sum_fp
+                      + sqrt(\l__tenkz_string_disc_fp)
+                    ) / 2 < 1
+                  }
+              }
+              {\int_set:Nn #2 {1}}
+          }
+      }
+  }
+
 % Count intersections on a disposable path copy.  Each individual cubic is
 % first checked with spath's self-splitter; distinct non-adjacent segments are
 % then compared pairwise.  Adjacent branches meet by construction; the first
@@ -495,25 +586,9 @@
               \l__tenkz_string_self_final_tl
               \c_spath_curveto_tl
               {
-                % Split the cubic into disposable halves and intersect them
-                % after removing their shared midpoint.  Unlike spath's
-                % full self-splitter, this terminates promptly for ordinary
-                % non-looping cubics as well as detecting the loop branch.
-                \spath_split_at_normalised:Nn
-                  \l__tenkz_string_tmp_tl {1/2}
-                \spath_components_to_seq:NV
-                  \l__tenkz_string_pts_seq
-                  \l__tenkz_string_tmp_tl
-                \seq_pop_left:NN
-                  \l__tenkz_string_pts_seq \l_tmpa_tl
-                \seq_pop_left:NN
-                  \l__tenkz_string_pts_seq \l_tmpb_tl
-                \spath_shorten_at_end:Nn \l_tmpa_tl
-                  {\dim_eval:n {\__tenkz_dim:n {crossgap} / 8}}
-                \spath_shorten_at_start:Nn \l_tmpb_tl
-                  {\dim_eval:n {\__tenkz_dim:n {crossgap} / 8}}
-                \spath_intersect:NN \l_tmpa_tl \l_tmpb_tl
-                \int_add:Nn #2 {\pgfintersectionsolutions}
+                \__tenkz_string_cubic_self_count:nN
+                  {##1} \l__tenkz_string_cubic_int
+                \int_add:Nn #2 {\l__tenkz_string_cubic_int}
               }
           }
       }
