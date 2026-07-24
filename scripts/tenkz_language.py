@@ -53,6 +53,7 @@ _PARSER_FAMILY_SCOPE = {
     "arrow": "connection",
     "region": "region",
     "free region": "region",
+    "group": "group",
     "span": "annotation",
     "declare atom": "atom-declaration",
     # the 1.0 kernel trees (l3keys); scopes mirror LANGUAGE-1.0.md section 2
