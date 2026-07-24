@@ -504,7 +504,7 @@ def print_missing_blueprint_warnings(missing: list[LeanDecl]) -> None:
                 "::warning "
                 f"file={decl.file},line={decl.line},title=Blueprint update suggested::"
                 f"{decl.fqn} is changed in this PR but has no corresponding "
-                "\\lean{} tag in blueprint/src/chapter."
+                "\\lean{} tag in blueprint/src/chapter or blueprint/src/appendix."
             )
     print()
 

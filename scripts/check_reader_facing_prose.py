@@ -315,8 +315,9 @@ def check_blueprint_line(path: Path, line_no: int, text: str) -> list[Finding]:
 
 def is_blueprint_prose_path(path: Path) -> bool:
     return path in BLUEPRINT_ENTRYPOINTS or (
-        len(path.parts) == 4
-        and path.parts[:3] == ("blueprint", "src", "chapter")
+        len(path.parts) >= 4
+        and path.parts[:2] == ("blueprint", "src")
+        and path.parts[2] in {"chapter", "appendix"}
         and path.suffix == ".tex"
     )
 
