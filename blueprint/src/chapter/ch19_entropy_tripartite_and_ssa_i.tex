@@ -1,0 +1,819 @@
+\section{Tripartite partial traces}
+
+\begin{definition}[Partial trace over $A$]\label{def:traceA_ABC}
+    \lean{Matrix.traceA_ABC}
+    \leanok
+    For a tripartite matrix $\rho_{ABC}$ on
+    $\mathbb{C}^{d_A} \otimes \mathbb{C}^{d_B} \otimes \mathbb{C}^{d_C}$,
+    the partial trace over $A$ is
+    \[
+        (\tr_A \rho_{ABC})_{(b_1, c_1)(b_2, c_2)}
+        = \sum_{a=0}^{d_A - 1} (\rho_{ABC})_{(a, b_1, c_1)(a, b_2, c_2)}.
+    \]
+\end{definition}
+
+\begin{definition}[Partial trace over $C$]\label{def:traceC_ABC}
+    \lean{Matrix.traceC_ABC}
+    \leanok
+    The partial trace over $C$:
+    \[
+        (\tr_C \rho_{ABC})_{(a_1, b_1)(a_2, b_2)}
+        = \sum_{c=0}^{d_C - 1} (\rho_{ABC})_{(a_1, b_1, c)(a_2, b_2, c)}.
+    \]
+\end{definition}
+
+\begin{definition}[Partial trace over $AC$]\label{def:traceAC_ABC}
+    \lean{Matrix.traceAC_ABC}
+    \leanok
+    The partial trace over $A$ and $C$:
+    \[
+        (\tr_{AC} \rho_{ABC})_{b_1 b_2}
+        = \sum_{a=0}^{d_A - 1} \sum_{c=0}^{d_C - 1}
+        (\rho_{ABC})_{(a, b_1, c)(a, b_2, c)}.
+    \]
+\end{definition}
+
+\begin{lemma}[Partial trace preserves Hermiticity]\label{lem:trace_isHermitian}
+    \lean{Matrix.traceA_ABC_isHermitian}
+    \leanok
+    \uses{def:traceA_ABC, def:traceC_ABC, def:traceAC_ABC}
+    If $\rho_{ABC}$ is Hermitian, then $\tr_A(\rho_{ABC})$,
+    $\tr_C(\rho_{ABC})$, and $\tr_{AC}(\rho_{ABC})$ are all Hermitian.
+    The same holds for bipartite partial traces $\tr_A(\rho_{AB})$ and
+    $\tr_B(\rho_{AB})$.
+\end{lemma}
+
+\begin{proof}\leanok
+    Follows from $\overline{\rho_{ji}} = \rho_{ij}$ applied entry-wise
+    inside the summation defining each partial trace.
+\end{proof}
+
+\section{Strong subadditivity}
+
+\begin{lemma}[Relative entropy against a maximally mixed reference]
+    \label{lem:rel_entropy_eval_support}
+    \lean{SSAPosDef.rel_entropy_eval_support}
+    \leanok
+    \uses{def:quantum_relative_entropy, def:von_neumann_entropy}
+    Let $\rho$ be a density matrix on $A \otimes R$ with reduced state
+    $\rho_R = \tr_A \rho$, and suppose the support condition
+    $\ker\bigl((\mathbf 1_A / d_A) \otimes \rho_R\bigr) \subseteq \ker\rho$ holds.
+    Then
+    \[
+        D\bigl(\rho \,\big\|\, (\mathbf 1_A / d_A) \otimes \rho_R\bigr)
+            = \log d_A + S(\rho_R) - S(\rho).
+    \]
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:quantum_relative_entropy}
+    When $\rho_R$ is singular the tensor logarithm of the reference does not split.
+    Regularize the reduced state by the affine perturbation
+    $\rho_{R,\varepsilon} = (1 + d_R\varepsilon)^{-1}(\rho_R + \varepsilon\mathbf 1)$,
+    positive definite for $\varepsilon > 0$. The reference
+    $(\mathbf 1_A / d_A) \otimes \rho_{R,\varepsilon}$ is then a positive definite
+    tensor product, whose logarithm splits, so the cross trace term evaluates to
+    $-\log d_A + \re\tr(\rho_R\log\rho_{R,\varepsilon})$.
+    As $\varepsilon \to 0^+$ the support condition makes the zero eigenvalues of
+    $\rho_R$ contribute nothing, so
+    \[
+        \re\tr\bigl(
+            \rho\,\log((\mathbf 1_A / d_A) \otimes \rho_{R,\varepsilon})\bigr)
+            \to -\log d_A - S(\rho_R).
+    \]
+    Since $D(\rho \,\|\, \sigma)
+        = -S(\rho) - \re\tr(\rho\log\sigma)$, the
+    evaluation follows.
+\end{proof}
+
+\begin{lemma}[The maximally mixed reference lies in the support domain]
+    \label{lem:kron_marginal_support}
+    \lean{SSAPosDef.kron_marginal_support}
+    \leanok
+    Let $\rho$ be a positive semidefinite operator on $A \otimes R$ with reduced
+    state $\rho_R = \tr_A \rho$. Then the singular reference
+    $(\mathbf 1_A / d_A) \otimes \rho_R$ satisfies the support condition
+    $\ker\bigl((\mathbf 1_A / d_A) \otimes \rho_R\bigr) \subseteq \ker\rho$.
+\end{lemma}
+
+\begin{proof}\leanok
+    A vector $v$ annihilated by $(\mathbf 1_A / d_A) \otimes \rho_R$ is annihilated
+    by $\mathbf 1_A \otimes \rho_R$, since $\mathbf 1_A / d_A$ is invertible. Let $P$
+    be the orthogonal projection onto the range of $\rho_R$. The complementary lift
+    $\mathbf 1_A \otimes (\mathbf 1 - P)$ then fixes $v$, while it annihilates $\rho$
+    on the left because the reduced state of $\rho$ on $R$ is supported on the range
+    of $P$. Hence $\rho v = 0$.
+\end{proof}
+
+\begin{lemma}[Partial trace of the maximally mixed reference]
+    \label{lem:traceC_maximally_mixed_reference}
+    \lean{SSAPosDef.traceC_ABC_kronecker_traceA_ABC}
+    \leanok
+    \uses{def:traceA_ABC, def:traceC_ABC, def:traceAC_ABC}
+    For every tripartite matrix $\rho_{ABC}$,
+    \[
+        \tr_C\!\left(\frac{\mathbf 1_A}{d_A}\otimes\rho_{BC}\right)
+        =\frac{\mathbf 1_A}{d_A}\otimes\rho_B.
+    \]
+\end{lemma}
+
+\begin{proof}\leanok
+    For indices $(a_1,b_1)$ and $(a_2,b_2)$, the corresponding matrix entry is
+    \[
+        \left[\tr_C\!\left(\frac{\mathbf 1_A}{d_A}\otimes
+            \rho_{BC}\right)\right]_{(a_1,b_1),(a_2,b_2)}
+        =\frac{\delta_{a_1,a_2}}{d_A}
+            \sum_c (\rho_{BC})_{(b_1,c),(b_2,c)}
+        =\frac{\delta_{a_1,a_2}}{d_A}(\rho_B)_{b_1,b_2}.
+    \]
+    This is the corresponding entry of
+    $(\mathbf 1_A/d_A)\otimes\rho_B$.
+\end{proof}
+
+\begin{theorem}[Strong subadditivity]\label{thm:strong_subadditivity}
+    \lean{strong_subadditivity_general}
+    \leanok
+    \uses{def:von_neumann_entropy, def:traceA_ABC, def:traceC_ABC, def:traceAC_ABC}
+    For a tripartite density matrix $\rho_{ABC}$,
+    \[
+        S(\rho_{ABC}) + S(\rho_B)
+        \le S(\rho_{AB}) + S(\rho_{BC}).
+    \]
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:quantum_relative_entropy, thm:relative_entropy_data_processing_support,
+        lem:rel_entropy_eval_support, lem:kron_marginal_support}
+    Read the inequality as one instance of data processing under the partial trace
+    over $C$, with the singular reference state
+    $\sigma_{ABC} = (\mathbf 1_A / d_A) \otimes \rho_{BC}$. Being a density operator
+    is not enough to place the pair $(\rho_{ABC}, \sigma_{ABC})$ in the
+    relative-entropy domain, which is the kernel inclusion
+    $\ker\sigma_{ABC} \subseteq \ker\rho_{ABC}$; the marginal support lemma supplies
+    it. Against this reference the relative entropy of each pair evaluates to an
+    entropy difference,
+    \[
+        D\bigl(\rho_{ABC} \,\big\|\, (\mathbf 1_A / d_A) \otimes \rho_{BC}\bigr)
+            = \log d_A + S(\rho_{BC}) - S(\rho_{ABC}),
+    \]
+    \[
+        D\bigl(\rho_{AB} \,\big\|\, (\mathbf 1_A / d_A) \otimes \rho_{B}\bigr)
+            = \log d_A + S(\rho_{B}) - S(\rho_{AB}).
+    \]
+    For a singular reference the tensor logarithm does not split, so each evaluation
+    regularizes the reduced state through the affine perturbation
+    $\rho_{R,\varepsilon} = (1 + d_R\varepsilon)^{-1}(\rho_R + \varepsilon\mathbf 1)$,
+    which is positive definite, and passes to the limit
+    \[
+        \re\tr\bigl(
+            \rho\,\log((\mathbf 1_A / d_A) \otimes \rho_{R,\varepsilon})\bigr)
+            \to -\log d_A - S(\rho_R)
+        \qquad (\varepsilon \to 0^+),
+    \]
+    where the zero eigenvalues of $\rho_R$ contribute nothing because the kernel
+    inclusion makes the corresponding diagonal weights vanish. Data processing on
+    the singular support domain under the partial trace
+    over $C$, which sends $\rho_{ABC} \mapsto \rho_{AB}$ and
+    $(\mathbf 1_A / d_A) \otimes \rho_{BC} \mapsto (\mathbf 1_A / d_A) \otimes
+    \rho_{B}$, reads
+    \[
+        D\bigl(\rho_{AB} \,\big\|\, (\mathbf 1_A / d_A) \otimes \rho_{B}\bigr)
+            \le D\bigl(\rho_{ABC} \,\big\|\, (\mathbf 1_A / d_A) \otimes \rho_{BC}\bigr).
+    \]
+    Substituting the two evaluations cancels the common $\log d_A$ and rearranges to
+    the claimed inequality.
+\end{proof}
+
+\begin{theorem}[Strong subadditivity, positive definite case]
+    \label{thm:strong_subadditivity_posdef}
+    \lean{strong_subadditivity_posDef}
+    \leanok
+    \uses{def:von_neumann_entropy, def:traceA_ABC, def:traceC_ABC, def:traceAC_ABC}
+    For a positive definite tripartite density matrix $\rho_{ABC}$,
+    \[
+        S(\rho_{ABC}) + S(\rho_B)
+        \le S(\rho_{AB}) + S(\rho_{BC}).
+    \]
+    This is the positive definite case of Theorem~\ref{thm:strong_subadditivity}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:quantum_relative_entropy, thm:relative_entropy_data_processing}
+    Read the inequality as one instance of data processing under the partial
+    trace over $C$, with reference state
+    $\sigma_{ABC} = (\mathbf 1_A / d_A) \otimes \rho_{BC}$, which is positive
+    definite because $\rho_{BC}$ is. Against this reference the relative entropy of
+    each pair evaluates to an entropy difference,
+    \[
+        D\bigl(\rho_{ABC} \,\big\|\, (\mathbf 1_A / d_A) \otimes \rho_{BC}\bigr)
+            = \log d_A + S(\rho_{BC}) - S(\rho_{ABC}),
+    \]
+    \[
+        D\bigl(\rho_{AB} \,\big\|\, (\mathbf 1_A / d_A) \otimes \rho_{B}\bigr)
+            = \log d_A + S(\rho_{B}) - S(\rho_{AB}),
+    \]
+    each by the tensor logarithm split and the adjoint of the partial trace. Data
+    processing under the partial trace over $C$, which sends
+    $\rho_{ABC} \mapsto \rho_{AB}$ and
+    $(\mathbf 1_A / d_A) \otimes \rho_{BC} \mapsto
+    (\mathbf 1_A / d_A) \otimes \rho_{B}$, reads
+    \[
+        D\bigl(\rho_{AB} \,\big\|\, (\mathbf 1_A / d_A) \otimes \rho_{B}\bigr)
+            \le D\bigl(\rho_{ABC} \,\big\|\, (\mathbf 1_A / d_A) \otimes \rho_{BC}\bigr).
+    \]
+    Substituting the two evaluations cancels the common $\log d_A$ and rearranges
+    to the claimed inequality.
+\end{proof}
+
+\begin{definition}[SSA equality]\label{def:ssa_equality}
+    \lean{IsSSAEquality}
+    \leanok
+    \uses{def:von_neumann_entropy, def:traceA_ABC, def:traceC_ABC, def:traceAC_ABC}
+    A tripartite density matrix $\rho_{ABC}$ satisfies
+    \emph{SSA equality} if
+    \[
+        S(\rho_{ABC}) + S(\rho_B) = S(\rho_{AB}) + S(\rho_{BC}).
+    \]
+\end{definition}
+
+\begin{lemma}[Tensor logarithm on a singular product support]
+    \label{lem:log_kronecker_possemidef}
+    \lean{Matrix.log_kronecker_posSemidef}
+    \leanok
+    Let $A$ and $B$ be positive semidefinite, with $P_A$ and $P_B$ the
+    orthogonal projections onto their respective ranges.  Then
+    \[
+        \log(A\otimes B)
+        =(\log A)\otimes P_B+P_A\otimes(\log B).
+    \]
+    Here the logarithm is extended by zero on the kernel.
+    This identity is the analytic justification for the singular product
+    reference used below; it is not stated verbatim in
+    \cite{Hayden2004Structure}.
+\end{lemma}
+
+\begin{proof}\leanok
+    Diagonalize $A$ and $B$.  On an eigenvector with eigenvalues $a,b\geq0$,
+    the asserted identity becomes
+    \[
+        \log(ab)=\log(a)\mathbf 1_{b\ne0}
+            +\mathbf 1_{a\ne0}\log(b).
+    \]
+    If $a,b>0$, this is the ordinary product identity for the logarithm.  With
+    the kernel convention in the statement, both sides vanish if either
+    eigenvalue is zero.
+\end{proof}
+
+\begin{theorem}[Ancilla additivity on the support domain]
+    \label{thm:relative_entropy_ancilla_additivity_support}
+    \lean{quantumRelativeEntropy_kronecker_support}
+    \leanok
+    \uses{def:quantum_relative_entropy}
+    Let $\rho$ and $\sigma$ be positive semidefinite matrices such that
+    $\ker\sigma\subseteq\ker\rho$, and let $\tau$ be positive semidefinite with
+    $\tr\tau=1$.  Then
+    \[
+        D(\rho\otimes\tau\,\Vert\,\sigma\otimes\tau)
+        =D(\rho\,\Vert\,\sigma).
+    \]
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:hermitian_support_projection,
+        lem:log_kronecker_possemidef,
+        thm:support_projection_absorption_kernel_inclusion}
+    Write $P_\rho$, $P_\sigma$, and $P_\tau$ for the support projections.  The
+    kernel inclusion gives
+    \[
+        P_\sigma\rho P_\sigma=\rho,
+        \qquad \rho P_\sigma=\rho,
+    \]
+    while $\rho P_\rho=\rho$ and $\tau P_\tau=\tau$.  Substituting the singular
+    tensor-logarithm formulas into the relative entropy and using these four
+    identities cancels the two contributions containing $\log\tau$.  Factoring
+    the trace of the remaining tensor product gives
+    \[
+        D(\rho\otimes\tau\,\Vert\,\sigma\otimes\tau)
+        =D(\rho\,\Vert\,\sigma)\tr\tau
+        =D(\rho\,\Vert\,\sigma).
+    \]
+\end{proof}
+
+\begin{theorem}[Partial-trace saturation at each Weyl summand]
+    \label{thm:relative_entropy_weyl_average_eq_summand}
+    \lean{quantumRelativeEntropy_weyl_average_eq_summand_of_partialTraceRight_eq}
+    \leanok
+    \uses{def:quantum_relative_entropy, def:partial_trace}
+    Let $\rho$ and $\sigma$ be positive semidefinite matrices on
+    $\mathcal H_S\otimes\mathbb C^{d_C}$ such that
+    $\ker\sigma\subseteq\ker\rho$, and suppose that
+    \[
+        D(\rho\Vert\sigma)
+          =D(\tr_C\rho\Vert\tr_C\sigma).
+    \]
+    For a primitive $d_C$-th root of unity, put
+    $U_{ab}=\mathbf 1_S\otimes W(a,b)$ and
+    \[
+        \overline X=\frac{1}{d_C^2}\sum_{c,e}U_{ce}XU_{ce}^{\dagger}.
+    \]
+    Then, for every $a,b$,
+    \[
+        D(\overline\rho\Vert\overline\sigma)
+          =D(U_{ab}\rho U_{ab}^{\dagger}\Vert
+              U_{ab}\sigma U_{ab}^{\dagger}).
+    \]
+    This is a scalar equality-propagation prerequisite for
+    \cite[Theorem~3 and equation~(8)]{Hayden2004Structure}; it neither
+    characterizes equality in joint convexity nor asserts recovery.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:twirl_partial_trace,
+        thm:partial_trace_kernel_inclusion,
+        thm:relative_entropy_ancilla_additivity_support,
+        thm:relative_entropy_unitary_invariance,
+        thm:weyl_operator_unitary,
+        thm:maximally_mixed_ancilla}
+    Let $\tau_C=d_C^{-1}\mathbf 1_C$.  The twirl identity gives
+    $\overline X=(\tr_C X)\otimes\tau_C$.  The support inclusion passes to the
+    partial traces:
+    \[
+        \ker\sigma\subseteq\ker\rho
+        \Longrightarrow
+        \ker(\tr_C\sigma)\subseteq\ker(\tr_C\rho).
+    \]
+    Hence support-domain ancilla additivity and the saturation hypothesis give
+    \[
+        D(\overline\rho\Vert\overline\sigma)
+          =D(\tr_C\rho\Vert\tr_C\sigma)
+          =D(\rho\Vert\sigma).
+    \]
+    Every $U_{ab}$ is unitary, and unitary invariance gives
+    \[
+        D(U_{ab}\rho U_{ab}^{\dagger}\Vert
+            U_{ab}\sigma U_{ab}^{\dagger})=D(\rho\Vert\sigma).
+    \]
+    The two displayed identities prove the assertion.
+\end{proof}
+
+\begin{theorem}[Saturation of the finite Weyl Jensen inequality]
+    \label{thm:relative_entropy_weyl_jensen_eq}
+    \lean{quantumRelativeEntropy_weyl_jensen_eq_of_partialTraceRight_eq}
+    \leanok
+    \uses{def:quantum_relative_entropy, def:partial_trace}
+    Let $\rho$ and $\sigma$ be positive semidefinite matrices on
+    $\mathcal H_S\otimes\mathbb C^{d_C}$ such that
+    $\ker\sigma\subseteq\ker\rho$, and suppose that
+    \[
+        D(\rho\Vert\sigma)
+          =D(\tr_C\rho\Vert\tr_C\sigma).
+    \]
+    For a primitive $d_C$-th root of unity, put
+    $U_{ce}=\mathbf 1_S\otimes W(c,e)$ and
+    \[
+        \overline X=\frac{1}{d_C^2}\sum_{c,e}U_{ce}XU_{ce}^{\dagger}.
+    \]
+    Then
+    \[
+        D(\overline\rho\Vert\overline\sigma)
+          =\frac{1}{d_C^2}\sum_{c,e}
+            D(U_{ce}\rho U_{ce}^{\dagger}\Vert
+              U_{ce}\sigma U_{ce}^{\dagger}).
+    \]
+    This scalar identity is associated with the finite Jensen step in the
+    Weyl proof of data processing.  It is a prerequisite for
+    \cite[Theorem~3 and equation~(8)]{Hayden2004Structure}; it neither
+    characterizes equality in joint convexity nor asserts recovery.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:relative_entropy_weyl_average_eq_summand,
+        thm:relative_entropy_unitary_invariance,
+        thm:weyl_operator_unitary}
+    Unitary invariance gives, for every $c,e$,
+    \[
+        D(U_{ce}\rho U_{ce}^{\dagger}\Vert
+          U_{ce}\sigma U_{ce}^{\dagger})=D(\rho\Vert\sigma).
+    \]
+    The preceding theorem gives
+    \[
+        D(\overline\rho\Vert\overline\sigma)=D(\rho\Vert\sigma).
+    \]
+    Substituting into the right-hand side gives
+    \[
+        \frac{1}{d_C^2}\sum_{c,e}
+          D(U_{ce}\rho U_{ce}^{\dagger}\Vert
+            U_{ce}\sigma U_{ce}^{\dagger})
+          =\frac{d_C^2}{d_C^2}D(\rho\Vert\sigma)
+          =D(\overline\rho\Vert\overline\sigma).
+    \]
+\end{proof}
+
+\begin{lemma}[Positive homogeneity of relative entropy]
+    \label{lem:relative_entropy_positive_homogeneity}
+    \lean{Matrix.quantumRelativeEntropy_smul_posDef}
+    \leanok
+    \uses{def:quantum_relative_entropy}
+    If $A$ and $B$ are positive definite and $c>0$, then
+    \[
+        D(cA\Vert cB)=cD(A\Vert B).
+    \]
+\end{lemma}
+
+\begin{proof}\leanok
+    The functional-calculus identity
+    $\log(cA)=(\log c)\mathbf 1+\log A$, and its analogue for $B$,
+    show that the scalar logarithmic terms cancel in
+    $\log(cA)-\log(cB)$.  Linearity of the trace then gives the result.
+\end{proof}
+
+\begin{theorem}[Partial-trace saturation gives zero weighted Weyl gap]
+    \label{thm:partial_trace_saturation_weyl_gap_zero}
+    \lean{Matrix.weylRelativeEntropyGap_eq_zero_of_partialTraceRight_eq}
+    \leanok
+    \uses{thm:relative_entropy_weyl_jensen_eq,
+        lem:relative_entropy_positive_homogeneity}
+    Let $\rho$ and $\sigma$ be positive definite, and suppose that
+    \[
+        D(\rho\Vert\sigma)
+          =D(\tr_C\rho\Vert\tr_C\sigma).
+    \]
+    For the uniformly weighted Weyl conjugates
+    $A_g=d_C^{-2}U_g\rho U_g^\dagger$ and
+    $B_g=d_C^{-2}U_g\sigma U_g^\dagger$, put
+    $A=\sum_gA_g$ and $B=\sum_gB_g$.  Then
+    \[
+        \sum_gD(A_g\Vert B_g)-D(A\Vert B)=0.
+    \]
+\end{theorem}
+
+\begin{proof}\leanok
+    Positive definiteness of $\sigma$ makes the support condition in
+    Theorem~\ref{thm:relative_entropy_weyl_jensen_eq} automatic.  That theorem
+    gives the equality with $d_C^{-2}$ multiplying each scalar relative
+    entropy.  Lemma~\ref{lem:relative_entropy_positive_homogeneity} moves this
+    coefficient inside both matrix arguments, which is precisely the stated
+    weighted gap.
+\end{proof}
+
+\begin{lemma}[Scalar logarithmic resolvent integral]
+    \label{lem:relative_entropy_scalar_resolvent_integral}
+    \lean{Matrix.relativeEntropyScalar}
+    \lean{Matrix.relativeEntropyScalar_integrableOn}
+    \lean{Matrix.integral_relativeEntropyScalar}
+    \leanok
+    Let $a,b>0$.  Then the function
+    \[
+      t\longmapsto
+      \frac{a^2/(a+tb)-b+t b^2/(a+tb)}{1+t}
+    \]
+    is integrable on $(0,\infty)$, and
+    \[
+      \int_0^\infty
+      \frac{a^2/(a+tb)-b+t b^2/(a+tb)}{1+t}\,dt
+      =a(\log a-\log b).
+    \]
+    This is the scalar normalization $(\mathrm{intspec})$ in
+    Jen\v{c}ov\'a--Ruskai, arXiv:0903.2895v4, \S2.1,
+    lines~406--413.
+\end{lemma}
+
+\begin{proof}\leanok
+    The integrand is the derivative of
+    \[
+      a\bigl(\log(1+t)-\log(a+tb)\bigr).
+    \]
+    Its value at $t=0$ is $-a\log a$, whereas its limit as
+    $t\to\infty$ is $-a\log b$.  The derivative has constant sign, according
+    as $a-b$ is positive or negative, and is therefore integrable.  The
+    fundamental theorem of calculus gives the stated value.
+\end{proof}
+
+\begin{theorem}[Hermitian trace-log spectral identity]
+    \label{thm:relative_entropy_hermitian_spectral}
+    \lean{Matrix.quantumRelativeEntropy_spectral}
+    \leanok
+    \uses{def:quantum_relative_entropy}
+    Let $A$ and $B$ be Hermitian matrices of the same size, with spectral
+    resolutions
+    \[
+        A=\sum_i\alpha_i|u_i\rangle\langle u_i|,
+        \qquad
+        B=\sum_j\beta_j|v_j\rangle\langle v_j|.
+    \]
+    Write $w_{ij}=\langle u_i,v_j\rangle$, and use the total real logarithm:
+    $\log 0=0$, while $\log x=\log|x|$ for $x<0$.  Then
+    \[
+        D(A\Vert B)
+        =\sum_{i,j}\alpha_i
+          \bigl(\log\alpha_i-\log\beta_j\bigr)|w_{ij}|^2.
+    \]
+    This is an algebraic totalized extension to arbitrary Hermitian matrices
+    of the homogeneous trace-log identity $(\mathrm{J1})$, which
+    Jen\v{c}ov\'a--Ruskai state for strictly positive matrices in
+    arXiv:0903.2895v4, lines~277--287.
+\end{theorem}
+
+\begin{proof}\leanok
+    Expand both trace terms in eigenbases.  Unitarity of the overlap matrix
+    gives $\sum_j|w_{ij}|^2=1$, so
+    \[
+      \re\Tr(A\log A)
+        =\sum_{i,j}\alpha_i\log(\alpha_i)|w_{ij}|^2,
+      \qquad
+      \re\Tr(A\log B)
+        =\sum_{i,j}\alpha_i\log(\beta_j)|w_{ij}|^2.
+    \]
+    Subtraction gives the stated identity.
+\end{proof}
+
+\begin{theorem}[Support-domain spectral integral of relative entropy]
+    \label{thm:relative_entropy_support_spectral_integral}
+    \lean{Matrix.supportRelativeEntropySpectralIntegrand_integrableOn_and_integral_eq_quantumRelativeEntropy}
+    \leanok
+    \uses{def:quantum_relative_entropy,
+        lem:relative_entropy_scalar_resolvent_integral,
+        thm:relative_entropy_hermitian_spectral}
+    Let $A$ and $B$ be positive semidefinite matrices of the same size and
+    suppose that $\ker B\subseteq\ker A$.  With the spectral notation of the
+    preceding theorem, define, for $t>0$,
+    \[
+      r_{ij}(t)=
+      \begin{cases}
+        0, & \beta_j=0,\\[2mm]
+        \displaystyle
+        \frac{
+          \alpha_i^2/(\alpha_i+t\beta_j)-\beta_j
+            +t\beta_j^2/(\alpha_i+t\beta_j)}
+          {1+t},
+          & \beta_j>0,
+      \end{cases}
+      \qquad
+      I_{A,B}(t)=\sum_{i,j}r_{ij}(t)|w_{ij}|^2.
+    \]
+    Thus no ordinary quotient with $\alpha_i=\beta_j=0$ is used.  Define also
+    \[
+      e_{ij}=
+      \begin{cases}
+        0, & \beta_j=0,\\
+        \alpha_i\bigl(\log\alpha_i-\log\beta_j\bigr)|w_{ij}|^2,
+          & \beta_j>0.
+      \end{cases}
+    \]
+    The function $I_{A,B}$ is integrable on $(0,\infty)$, and
+    \[
+        \int_0^\infty I_{A,B}(t)\,dt
+        =\sum_{i,j}e_{ij}
+        =D(A\Vert B).
+    \]
+    The trace-log identity $(\mathrm{J1})$, the scalar normalization
+    $(\mathrm{intspec})$, and its matrix form $(\mathrm{intAB})$ occur in
+    Jen\v{c}ov\'a--Ruskai, arXiv:0903.2895v4, at lines~277--287,
+    406--413, and 423--427, respectively.  The support-domain extension is
+    given at lines~717--720.
+
+    This theorem concerns the spectral expression $I_{A,B}$.  The next
+    theorem identifies it with the coordinate-free left-right quadratic form
+    underlying the finite Weyl formula.
+\end{theorem}
+
+\begin{proof}\leanok
+    If $\beta_j=0$, the kernel inclusion gives
+    $\alpha_i|w_{ij}|^2=0$, and both $r_{ij}$ and $e_{ij}$ are defined to be
+    zero.  If $\beta_j>0$, the scalar integral applies when $\alpha_i>0$,
+    while the term is identically zero when $\alpha_i=0$.  Since the double
+    sum is finite, integration term by term gives
+    \[
+      \int_0^\infty I_{A,B}(t)\,dt
+        =\sum_{i,j}e_{ij}.
+    \]
+    The kernel inclusion also shows that replacing each $\beta_j=0$ summand
+    in the preceding theorem by zero does not change its value.  Hence that
+    theorem identifies the last sum with $D(A\Vert B)$.
+\end{proof}
+
+\begin{theorem}[Support-domain left-right quadratic representation]
+    \label{thm:relative_entropy_support_left_right_quadratic}
+    \lean{Matrix.PosSemidef.supportInv}
+    \lean{Matrix.supportLeftRightSuperoperator}
+    \lean{Matrix.supportSourceAQuadratic}
+    \lean{Matrix.rawSupportSourceAQuadratic}
+    \lean{Matrix.supportSourceBQuadratic}
+    \lean{Matrix.supportRelativeEntropyLeftRightIntegrand}
+    \lean{Matrix.supportSourceAQuadratic_spectral}
+    \lean{Matrix.supportSourceBQuadratic_spectral}
+    \lean{Matrix.supportRelativeEntropyLeftRightIntegrand_eq_spectral}
+    \lean{Matrix.supportSourceAQuadratic_eq_raw_of_kernel_le}
+    \lean{Matrix.rawSupportSourceAQuadratic_sub_trace_add_sourceB_eq_spectral}
+    \lean{Matrix.supportRelativeEntropyLeftRightIntegrand_continuousOn}
+    \leanok
+    \uses{thm:relative_entropy_support_spectral_integral}
+    Let $A$ and $B$ be positive semidefinite matrices of the same size, let
+    $P_B$ be the orthogonal projection onto the support of $B$, and, for
+    $t>0$, set
+    \[
+        S_t=A\otimes\Id+t(\Id\otimes B^{\top}).
+    \]
+    Write $S_t^+$ for the generalized inverse that vanishes on $\ker S_t$.
+    Define
+    \[
+      Q_{A P_B}(t)
+        =\re\left\langle
+            \opvec((A P_B)^{\top}),
+            S_t^+\opvec((A P_B)^{\top})
+          \right\rangle,
+      \qquad
+      Q_B(t)
+        =\re\left\langle
+            \opvec(B^{\top}),
+            S_t^+\opvec(B^{\top})
+          \right\rangle.
+    \]
+    With the spectral notation of
+    Theorem~\ref{thm:relative_entropy_support_spectral_integral},
+    \[
+      Q_{A P_B}(t)
+        =\sum_{i,j:\,\beta_j>0}
+          \frac{\alpha_i^2}{\alpha_i+t\beta_j}|w_{ij}|^2,
+      \qquad
+      Q_B(t)
+        =\sum_{i,j:\,\beta_j>0}
+          \frac{\beta_j^2}{\alpha_i+t\beta_j}|w_{ij}|^2.
+    \]
+    Consequently,
+    \[
+      \frac{Q_{A P_B}(t)-\re\Tr B+tQ_B(t)}{1+t}
+        =I_{A,B}(t).
+    \]
+    This function is continuous on $(0,\infty)$.  If
+    $\ker B\subseteq\ker A$, then $A P_B=A$, so $Q_{A P_B}(t)$ equals the
+    quadratic form with source $\opvec(A^{\top})$.
+
+    This is the support-projected form of $(\mathrm{intAB})$ in
+    Jen\v{c}ov\'a--Ruskai, arXiv:0903.2895v4, \S2.1,
+    lines~423--427, with the support convention at lines~717--720.
+\end{theorem}
+
+\begin{proof}\leanok
+    Diagonalize $A$ and $B$ and write $W=U_A^\ast U_B$.  In these coordinates,
+    the two equations
+    \[
+      A X_A+tX_A B=A P_B,
+      \qquad
+      A X_B+tX_B B=B
+    \]
+    have entries
+    \[
+      (U_A^\ast X_AU_B)_{ij}
+        =
+        \begin{cases}
+          \dfrac{\alpha_i}{\alpha_i+t\beta_j}w_{ij},&\beta_j>0,\\
+          0,&\beta_j=0,
+        \end{cases}
+    \]
+    and
+    \[
+      (U_A^\ast X_BU_B)_{ij}
+        =
+        \begin{cases}
+          \dfrac{\beta_j}{\alpha_i+t\beta_j}w_{ij},&\beta_j>0,\\
+          0,&\beta_j=0.
+        \end{cases}
+    \]
+    For every positive semidefinite $S$, the identities
+    $S^+S=SS^+=P_S$ imply that $Sx=b$ gives
+    \[
+        \langle b,S^+b\rangle=\langle b,x\rangle.
+    \]
+    Applying this identity to the two displayed solutions gives the spectral
+    formulas.  Their coefficientwise combination is the scalar function
+    appearing in
+    Lemma~\ref{lem:relative_entropy_scalar_resolvent_integral}.  Continuity
+    follows term by term from the finite sums.
+\end{proof}
+
+% Open in #4435: the singular, support-domain passage from the finite-Weyl
+% equality above to the common-resolvent conclusion remains to be proved.
+% The positive-definite relative-modular theorem and the generic
+% support-residual identity and common-solution theorem below are already
+% established; this comment does not reopen them.
+
+\begin{theorem}[Spectral resolvent representation of relative entropy]
+    \label{thm:relative_entropy_resolvent_integral}
+    \lean{Matrix.sourceAResolventQuadratic}
+    \lean{Matrix.sourceBResolventQuadratic}
+    \lean{Matrix.leftRight_mulVec_vec_transpose}
+    \lean{Matrix.sourceA_resolvent_quadratic_spectral}
+    \lean{Matrix.sourceB_resolvent_quadratic_spectral}
+    \lean{Matrix.sourceAResolventQuadratic_continuousOn}
+    \lean{Matrix.sourceBResolventQuadratic_continuousOn}
+    \lean{Matrix.quantumRelativeEntropy_posDef_spectral}
+    \lean{Matrix.relativeEntropyResolventIntegrand}
+    \lean{Matrix.relativeEntropyResolventIntegrand_integrableOn}
+    \lean{Matrix.relativeEntropyResolventIntegrand_continuousOn}
+    \lean{Matrix.quantumRelativeEntropy_resolvent_integral}
+    \leanok
+    \uses{def:quantum_relative_entropy,
+        lem:relative_entropy_scalar_resolvent_integral}
+    Let $A$ and $B$ be positive definite, with spectral resolutions
+    $A=\sum_i\alpha_i|u_i\rangle\langle u_i|$ and
+    $B=\sum_j\beta_j|v_j\rangle\langle v_j|$.  Put
+    $w_{ij}=\langle u_i,v_j\rangle$.  Let $L_A$ and $R_B$ denote left and
+    right multiplication, $L_A(X)=AX$ and $R_B(X)=XB$.  Then, for $t>0$,
+    \begin{align*}
+      \re\langle A,(L_A+tR_B)^{-1}A\rangle_{\rm HS}
+        &=\sum_{i,j}\frac{\alpha_i^2}{\alpha_i+t\beta_j}|w_{ij}|^2,\\
+      \re\langle B,(L_A+tR_B)^{-1}B\rangle_{\rm HS}
+        &=\sum_{i,j}\frac{\beta_j^2}{\alpha_i+t\beta_j}|w_{ij}|^2.
+    \end{align*}
+    Both quadratic forms are continuous on $(0,\infty)$.  Moreover,
+    \[
+      D(A\Vert B)=\int_0^\infty
+      \frac{
+        \re\langle A,(L_A+tR_B)^{-1}A\rangle_{\rm HS}
+        -\re\Tr B
+        +t\re\langle B,(L_A+tR_B)^{-1}B\rangle_{\rm HS}}
+      {1+t}\,dt,
+    \]
+    and the displayed integrand is continuous and integrable on the positive
+    half-line.  This is the positive-definite spectral route of
+    Jen\v{c}ov\'a--Ruskai, arXiv:0903.2895v4, \S4.
+\end{theorem}
+
+\begin{proof}\leanok
+    Vectorization sends $L_A+tR_B$ to
+    $A\otimes\mathbf 1+t\mathbf 1\otimes B^{\mathsf T}$.  The vectors
+    $u_i\otimes\overline{v_j}$ diagonalize this matrix with eigenvalues
+    $\alpha_i+t\beta_j$, which proves the two quadratic-form identities.
+    Insert them into the integrand, use
+    $\sum_i|w_{ij}|^2=1$, and apply the preceding scalar integral term by
+    term.  The same finite spectral sum proves continuity and integrability.
+\end{proof}
+
+\begin{lemma}[Residual identity on the supports]
+    \label{lem:support_resolvent_residual_identity}
+    \lean{Matrix.support_resolvent_residual_identity}
+    \lean{Matrix.IsHermitian.star_mulVec_dotProduct}
+    \leanok
+    \uses{def:support_inverse_square_root}
+    Let $I$ be a finite nonempty set. For each $i\in I$, let $S_i$ be a
+    positive-semidefinite matrix, let $P_i$ be its support projection, and let
+    $b_i$ lie in its support. Write
+    \[
+      S=\sum_i S_i,\qquad b=\sum_i b_i,\qquad
+      G_i=\left((S_i)^{-1/2}_{\mathrm{supp}}\right)^2,
+      \qquad G=\left(S^{-1/2}_{\mathrm{supp}}\right)^2.
+    \]
+    Assume also that $b$ lies in the support of $S$, and put $x=Gb$. Then
+    \[
+      \sum_i \langle b_i-S_i x,G_i(b_i-S_i x)\rangle
+      =\sum_i\langle b_i,G_i b_i\rangle-\langle b,Gb\rangle.
+    \]
+    Jen\v{c}ov\'a and Ruskai give the positive-definite residual expansion in
+    equations~$(\mathrm{Mj})$ and~$(\mathrm{eq:Schz1})$ of the Appendix to
+    arXiv:0903.2895v4. The support assumptions make the same expansion valid
+    for the generalized inverses of the $S_i$ and of $S$.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:support_inverse_square_root_generalized_inverse}
+    Since $G_iS_i=S_iG_i=P_i$ and $P_i b_i=b_i$, expansion of the $i$th
+    summand gives
+    \[
+      \langle b_i,G_i b_i\rangle-
+      \langle b_i,x\rangle-
+      \langle x,b_i\rangle+
+      \langle x,S_i x\rangle.
+    \]
+    Sum over $i$. The support assumption on $b$ gives $Sx=SGb=b$, so the
+    last three terms combine to $-\langle b,Gb\rangle$.
+\end{proof}
+
+\begin{theorem}[Zero support-resolvent defect gives a common solution]
+    \label{thm:support_resolvent_zero_defect}
+    \lean{Matrix.support_resolvent_eq_of_defect_eq_zero}
+    \leanok
+    \uses{def:support_inverse_square_root}
+    Under the hypotheses and notation of the preceding lemma, suppose that
+    \[
+      \sum_i\langle b_i,G_i b_i\rangle-\langle b,Gb\rangle=0.
+    \]
+    Then, for every $i\in I$,
+    \[
+      G_i b_i=P_i x.
+    \]
+    This is the support-domain form of the common-resolvent equation
+    $(\mathrm{basiceq})$ in Section~3.1 of Jen\v{c}ov\'a--Ruskai,
+    arXiv:0903.2895v4. Its residual calculation is the one in the Appendix,
+    equations~$(\mathrm{Mj})$ and~$(\mathrm{eq:Schz1})$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:support_resolvent_residual_identity,
+          lem:support_inverse_square_root_generalized_inverse}
+    The preceding lemma writes the vanishing defect as a finite sum of
+    nonnegative quadratic forms. Hence $G_i(b_i-S_ix)=0$ for every $i$.
+    Multiplication by $S_i$ shows that $P_i(b_i-S_ix)=0$. Both $b_i$ and
+    $S_ix$ lie in the support of $S_i$, so $b_i=S_ix$. Multiplication by
+    $G_i$ now gives $G_i b_i=P_i x$.
+\end{proof}
