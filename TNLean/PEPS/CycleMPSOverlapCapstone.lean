@@ -347,10 +347,6 @@ private theorem isNBlkInjective_conj {B : MPSTensor d D} {L : ℕ}
     evalWord B (List.ofFn τ)) = ⊤ from hB]
   exact Submodule.mem_top
 
-end MPSTensor
-
-namespace MPSTensor
-
 /-! ### Constant-chain specialization of Lemma 5 -/
 
 /-- **Uniqueness of the bond operator** (arXiv:1804.04964, Lemma 5: the maps
@@ -509,10 +505,6 @@ end MPSTensor
 
 namespace TNLean
 namespace PEPS
-
-open MPSChainTensor
-
-variable {n L d D : ℕ}
 
 /-! ### Linear extension and centralizer helpers
 
