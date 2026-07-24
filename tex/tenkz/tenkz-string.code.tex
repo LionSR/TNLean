@@ -550,6 +550,7 @@
   {
     \tl_set_eq:Nc \l__tenkz_string_self_path_tl
       {\l__tikzspath_prefix_tl #1}
+    \spath_open:N \l__tenkz_string_self_path_tl
     \spath_segments_to_seq:NV
       \l__tenkz_string_segments_seq \l__tenkz_string_self_path_tl
     \tl_clear:N \l__tenkz_string_loop_path_tl
