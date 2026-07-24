@@ -9,31 +9,34 @@
     Let $A$ be $L_0$-block-injective with $L_0>0$, and let $L_0\le M$.
     Let $\psi$ be a state on the chain of length $M+1$, and let
     $Y_i(\tau)$ be matrices satisfying
-    \[
-        \Res^{\tau}_{i,L_0+1}(\psi)
-        =
-        \Gamma_{L_0+1}(Y_i(\tau)).
-    \]
+    $\Res^{\tau}_{i,L_0+1}(\psi)=\Gamma_{L_0+1}(Y_i(\tau))$.
     Suppose that, for every outside letter $\eta$,
-    \[
+    \begin{align}
         \Res^{\tau^+_\eta(\mu)}_{M,L_0+1}(\psi)
-        =
+        &=
         \Res^{\tau^-_\eta(\mu)}_{M+1-L_0,L_0+1}(\psi).
-    \]
+        \notag
+    \end{align}
     Then there are boundary conditions $\rho^+_{j,\sigma}$ and
     $\rho^-_{j,\sigma}$ such that, for every complementary position $k$,
-    \[
-        \rho^+_{j,\sigma}(k+L_0)=\mu_k,
-        \qquad
-        \rho^-_{j,\sigma}(k+1)=\mu_k,
-    \]
+    \begin{align}
+        \rho^+_{j,\sigma}(k+L_0)
+        &=
+        \mu_k,
+        \notag\\
+        \rho^-_{j,\sigma}(k+1)
+        &=
+        \mu_k,
+        \notag
+    \end{align}
     and, for every physical letter $j$ and every word $\sigma$ of length
     $L_0$,
-    \[
+    \begin{align}
         Y_M(\rho^+_{j,\sigma})A^jA^\sigma
-        =
+        &=
         Y_{M+1-L_0}(\rho^-_{j,\sigma})A^jA^\sigma.
-    \]
+        \notag
+    \end{align}
 \end{lemma}
 
 \begin{proof}
@@ -41,22 +44,19 @@
     For the product indexed by $j$ and $\sigma$, specialize the preceding
     equality at the outside letter $\eta=j$. Take
     $\rho^+_{j,\sigma}=\tau^+_j(\mu)$ and
-    $\rho^-_{j,\sigma}=\tau^-_j(\mu)$.  The complement equations are the two
-    identities of Lemma~\ref{lem:wrapped_middle_backgrounds}.  Fix $j$.  Applying
+    $\rho^-_{j,\sigma}=\tau^-_j(\mu)$. The complement equations are the two
+    identities of Lemma~\ref{lem:wrapped_middle_backgrounds}. Fix $j$. Applying
     the first-letter restriction to the displayed equality gives
-    \[
+    \begin{align}
         \Gamma_{L_0}\!\left(Y_M(\tau^+_j(\mu))A^j\right)
-        =
+        &=
         \Gamma_{L_0}\!\left(Y_{M+1-L_0}(\tau^-_j(\mu))A^j\right),
-    \]
+        \notag
+    \end{align}
     where the two sides are identified by
-    Lemma~\ref{lem:cyclic_window_boundary_matrix_transport}.  By
+    Lemma~\ref{lem:cyclic_window_boundary_matrix_transport}. By
     Lemma~\ref{lem:ground_space_map_injective_blk},
-    \[
-        Y_M(\tau^+_j(\mu))A^j
-        =
-        Y_{M+1-L_0}(\tau^-_j(\mu))A^j.
-    \]
+    $Y_M(\tau^+_j(\mu))A^j = Y_{M+1-L_0}(\tau^-_j(\mu))A^j$.
     Right multiplication by $A^\sigma$ gives the asserted product equation.
 \end{proof}
 
@@ -69,44 +69,43 @@
     Let $A$ be $L_0$-block-injective with $L_0>0$, and let $L_0\le M$.
     Let $\psi$ be a state on the chain of length $M+1$, and let
     $Y_i(\tau)$ be matrices satisfying
-    \[
-        \Res^{\tau}_{i,L_0+1}(\psi)
-        =
-        \Gamma_{L_0+1}(Y_i(\tau)).
-    \]
+    $\Res^{\tau}_{i,L_0+1}(\psi)=\Gamma_{L_0+1}(Y_i(\tau))$.
     Fix a complementary word $\mu$ of length $M+1-(L_0+1)$.
     Suppose that, for every boundary letter $\eta$ and every physical letter
     $j$,
-    \[
-        Y_M(\tau^+_{\eta}(\mu))A^j
-        =
-        Y_{M+1-L_0}(\tau^-_{\eta}(\mu))A^j .
-    \]
+    $Y_M(\tau^+_\eta(\mu))A^j = Y_{M+1-L_0}(\tau^-_\eta(\mu))A^j$.
     Then there are boundary conditions $\rho^+_{j,\sigma}$ and
     $\rho^-_{j,\sigma}$ such that, for every complementary position $k$,
-    \[
-        \rho^+_{j,\sigma}(k+L_0)=\mu_k,
-        \qquad
-        \rho^-_{j,\sigma}(k+1)=\mu_k,
-    \]
+    \begin{align}
+        \rho^+_{j,\sigma}(k+L_0)
+        &=
+        \mu_k,
+        \notag\\
+        \rho^-_{j,\sigma}(k+1)
+        &=
+        \mu_k,
+        \notag
+    \end{align}
     and, for every physical letter $j$ and every word $\sigma$ of length
     $L_0$,
-    \[
+    \begin{align}
         Y_M(\rho^+_{j,\sigma})A^jA^\sigma
-        =
+        &=
         Y_{M+1-L_0}(\rho^-_{j,\sigma})A^jA^\sigma.
-    \]
+        \notag
+    \end{align}
 \end{lemma}
 
 \begin{proof}
     \leanok
     For each boundary letter $\eta$,
     Lemma~\ref{lem:closed_boundary_restriction_from_right_products} gives
-    \[
+    \begin{align}
         \Res^{\tau^+_\eta(\mu)}_{M,L_0+1}(\psi)
-        =
+        &=
         \Res^{\tau^-_\eta(\mu)}_{M+1-L_0,L_0+1}(\psi).
-    \]
+        \notag
+    \end{align}
     Applying these equalities,
     Lemma~\ref{lem:closure_property_auxiliary_product_from_closing_restrictions}
     gives the displayed boundary conditions and product equation.
@@ -121,33 +120,23 @@
     Fix a complementary word $\mu$, a matrix $X$, and a family of matrices
     $Y_i(\tau)$. Suppose that, for every boundary letter $\eta$, every
     physical letter $j$, and every word $\sigma$ of length $L_0$,
-    \[
+    \begin{align}
         Y_{M+1-L_0}(\tau^-_\eta(\mu))A^jA^\sigma
-        =
-        A^\mu A^jXA^\sigma .
-    \]
+        &=
+        A^\mu A^jXA^\sigma.
+        \notag
+    \end{align}
     Then, for every $\eta$ and $j$,
-    \[
-        Y_{M+1-L_0}(\tau^-_\eta(\mu))A^j
-        =
-        A^\mu A^jX .
-    \]
+    $Y_{M+1-L_0}(\tau^-_\eta(\mu))A^j = A^\mu A^jX$.
 \end{lemma}
 
 \begin{proof}
     \leanok
     Fix $\eta$ and $j$, and set
-    \[
-        Z_{\eta,j}
-        =
-        Y_{M+1-L_0}(\tau^-_\eta(\mu))A^j-A^\mu A^jX .
-    \]
-    The hypothesis gives, for every $\sigma$ with $|\sigma|=L_0$,
-    \[
-        Z_{\eta,j}A^\sigma=0.
-    \]
-    Since $A$ is $L_0$-block-injective, the products $A^\sigma$ with
-    $|\sigma|=L_0$ span the full matrix algebra.  Applying
+    $Z_{\eta,j} = Y_{M+1-L_0}(\tau^-_\eta(\mu))A^j-A^\mu A^jX$.
+    The hypothesis gives $Z_{\eta,j}A^\sigma=0$ for every $\sigma$ with
+    $|\sigma|=L_0$. Since $A$ is $L_0$-block-injective, the products
+    $A^\sigma$ with $|\sigma|=L_0$ span the full matrix algebra. Applying
     Lemma~\ref{lem:padded_complement_annihilation} gives $Z_{\eta,j}=0$.
 \end{proof}
 
@@ -160,32 +149,35 @@
     Fix a complementary word $\mu$, a matrix $X$, and a family of matrices
     $Y_i(\tau)$. Suppose that, for every boundary letter $\eta$, every physical
     letter $j$, and every pair of words $\sigma,\alpha$ of length $L_0$,
-    \[
-        A^\alpha\,
+    \begin{align}
+        A^\alpha
         \left(Y_{M+1-L_0}(\tau^-_\eta(\mu))A^jA^\sigma\right)
-        =
-        A^\alpha\,\left(A^\mu A^jXA^\sigma\right).
-    \]
+        &=
+        A^\alpha\left(A^\mu A^jXA^\sigma\right).
+        \notag
+    \end{align}
     Then, for every $\eta$, $j$, and $\sigma$,
-    \[
+    \begin{align}
         Y_{M+1-L_0}(\tau^-_\eta(\mu))A^jA^\sigma
-        =
-        A^\mu A^jXA^\sigma .
-    \]
+        &=
+        A^\mu A^jXA^\sigma.
+        \notag
+    \end{align}
 \end{lemma}
 
 \begin{proof}
     \leanok
     Fix $\eta$, $j$, and $\sigma$, and set
-    \[
+    \begin{align}
         Z_{\eta,j,\sigma}
-        =
+        &=
         Y_{M+1-L_0}(\tau^-_\eta(\mu))A^jA^\sigma
         -
-        A^\mu A^jXA^\sigma .
-    \]
+        A^\mu A^jXA^\sigma.
+        \notag
+    \end{align}
     The hypothesis says that $A^\alpha Z_{\eta,j,\sigma}=0$ for every word
-    $\alpha$ of length $L_0$.  The left-handed form of
+    $\alpha$ of length $L_0$. The left-handed form of
     Lemma~\ref{lem:padded_complement_annihilation} gives
     $Z_{\eta,j,\sigma}=0$.
 \end{proof}
@@ -199,60 +191,48 @@
     Let $A$ be $L_0$-block-injective with $L_0>0$, and let $L_0\le M$.
     Let $\psi$ be a state on the chain of length $M+1$, and let
     $Y_i(\tau)$ be matrices satisfying
-    \[
-        \Res^{\tau}_{i,L_0+1}(\psi)
-        =
-        \Gamma_{L_0+1}(Y_i(\tau)).
-    \]
+    $\Res^{\tau}_{i,L_0+1}(\psi)=\Gamma_{L_0+1}(Y_i(\tau))$.
     Fix a complementary word $\mu$ and a matrix $X$. Suppose that, for every
     boundary letter $\eta$ and every physical letter $j$,
-    \[
-        Y_M(\tau^+_{\eta}(\mu))A^j
-        =
-        A^\mu A^jX .
-    \]
+    $Y_M(\tau^+_\eta(\mu))A^j = A^\mu A^jX$.
     Suppose also that, for every $\eta$, $j$, and every word $\sigma$ of length
     $L_0$,
-    \[
-        Y_{M+1-L_0}(\tau^-_{\eta}(\mu))A^jA^\sigma
-        =
-        A^\mu A^jXA^\sigma .
-    \]
+    \begin{align}
+        Y_{M+1-L_0}(\tau^-_\eta(\mu))A^jA^\sigma
+        &=
+        A^\mu A^jXA^\sigma.
+        \notag
+    \end{align}
     Then there are boundary conditions $\rho^+_{j,\sigma}$ and
     $\rho^-_{j,\sigma}$ such that, for every complementary position $k$,
-    \[
-        \rho^+_{j,\sigma}(k+L_0)=\mu_k,
-        \qquad
-        \rho^-_{j,\sigma}(k+1)=\mu_k,
-    \]
+    \begin{align}
+        \rho^+_{j,\sigma}(k+L_0)
+        &=
+        \mu_k,
+        \notag\\
+        \rho^-_{j,\sigma}(k+1)
+        &=
+        \mu_k,
+        \notag
+    \end{align}
     and, for every physical letter $j$ and every word $\sigma$ of length
     $L_0$,
-    \[
+    \begin{align}
         Y_M(\rho^+_{j,\sigma})A^jA^\sigma
-        =
+        &=
         Y_{M+1-L_0}(\rho^-_{j,\sigma})A^jA^\sigma.
-    \]
+        \notag
+    \end{align}
 \end{lemma}
 
 \begin{proof}
     \leanok
     Lemma~\ref{lem:closure_property_opposite_boundary_comparison_from_right_words}
     gives, for every $\eta$ and $j$,
-    \[
-        Y_{M+1-L_0}(\tau^-_{\eta}(\mu))A^j
-        =
-        A^\mu A^jX .
-    \]
+    $Y_{M+1-L_0}(\tau^-_\eta(\mu))A^j = A^\mu A^jX$.
     Combining this equation with
-    \[
-        Y_M(\tau^+_{\eta}(\mu))A^j=A^\mu A^jX
-    \]
-    gives
-    \[
-        Y_M(\tau^+_{\eta}(\mu))A^j
-        =
-        Y_{M+1-L_0}(\tau^-_{\eta}(\mu))A^j .
-    \]
+    $Y_M(\tau^+_\eta(\mu))A^j=A^\mu A^jX$ gives
+    $Y_M(\tau^+_\eta(\mu))A^j = Y_{M+1-L_0}(\tau^-_\eta(\mu))A^j$.
     Lemma~\ref{lem:closure_property_auxiliary_product_from_right_products}
     then gives the displayed boundary conditions and product equation.
 \end{proof}
@@ -266,48 +246,50 @@
     Let $A$ be $L_0$-block-injective with $L_0>0$, and let $L_0\le M$.
     Let $\psi$ be a state on the chain of length $M+1$, and let
     $Y_i(\tau)$ be matrices satisfying
-    \[
-        \Res^{\tau}_{i,L_0+1}(\psi)
-        =
-        \Gamma_{L_0+1}(Y_i(\tau)).
-    \]
+    $\Res^{\tau}_{i,L_0+1}(\psi)=\Gamma_{L_0+1}(Y_i(\tau))$.
     Fix a complementary word $\mu$ and a matrix $X$. Suppose that, for every
     boundary letter $\eta$ and every physical letter $j$,
-    \[
-        Y_M(\tau^+_\eta(\mu))A^j=A^\mu A^jX .
-    \]
+    $Y_M(\tau^+_\eta(\mu))A^j=A^\mu A^jX$.
     Suppose also that, for every $\eta$, $j$, and every pair of words
     $\sigma,\alpha$ of length $L_0$,
-    \[
-        A^\alpha\,
+    \begin{align}
+        A^\alpha
         \left(Y_{M+1-L_0}(\tau^-_\eta(\mu))A^jA^\sigma\right)
-        =
-        A^\alpha\,\left(A^\mu A^jXA^\sigma\right).
-    \]
+        &=
+        A^\alpha\left(A^\mu A^jXA^\sigma\right).
+        \notag
+    \end{align}
     Then there are boundary conditions $\rho^+_{j,\sigma}$ and
     $\rho^-_{j,\sigma}$ satisfying the complementary-word equations
-    \[
-        \rho^+_{j,\sigma}(k+L_0)=\mu_k,
-        \qquad
-        \rho^-_{j,\sigma}(k+1)=\mu_k,
-    \]
+    \begin{align}
+        \rho^+_{j,\sigma}(k+L_0)
+        &=
+        \mu_k,
+        \notag\\
+        \rho^-_{j,\sigma}(k+1)
+        &=
+        \mu_k,
+        \notag
+    \end{align}
     and the product equation
-    \[
+    \begin{align}
         Y_M(\rho^+_{j,\sigma})A^jA^\sigma
-        =
-        Y_{M+1-L_0}(\rho^-_{j,\sigma})A^jA^\sigma .
-    \]
+        &=
+        Y_{M+1-L_0}(\rho^-_{j,\sigma})A^jA^\sigma.
+        \notag
+    \end{align}
 \end{lemma}
 
 \begin{proof}
     \leanok
     Lemma~\ref{lem:closure_property_opposite_boundary_comparison_from_left_words}
     gives
-    \[
+    \begin{align}
         Y_{M+1-L_0}(\tau^-_\eta(\mu))A^jA^\sigma
-        =
-        A^\mu A^jXA^\sigma .
-    \]
+        &=
+        A^\mu A^jXA^\sigma.
+        \notag
+    \end{align}
     Lemma~\ref{lem:closure_property_auxiliary_product_from_opposite_boundary_words}
     then gives the displayed boundary conditions and product equation.
 \end{proof}
@@ -319,43 +301,44 @@
     \uses{lem:closure_property_boundary_one_sided_products_ground_space_map,
         lem:closure_property_auxiliary_product_from_opposite_boundary_left_words}
     Let $A$ be $L_0$-block-injective with $L_0>0$, $L_0<M$, and
-    $D\ge1$. Let
-    \[
-        \psi=\Gamma_{M+1}(X)
-    \]
-    be an open-chain representation, and let $Y_i(\tau)$ represent the
-    length-$(L_0+1)$ cyclic restrictions of $\psi$. Fix a complementary word
-    $\mu$. Suppose that, for every boundary letter $\eta$, physical letter
-    $j$, and length-$L_0$ words $\sigma,\alpha$,
-    \[
+    $D\ge1$. Let $\psi=\Gamma_{M+1}(X)$ be an open-chain representation,
+    and let $Y_i(\tau)$ represent the length-$(L_0+1)$ cyclic restrictions of
+    $\psi$. Fix a complementary word $\mu$. Suppose that, for every boundary
+    letter $\eta$, physical letter $j$, and length-$L_0$ words
+    $\sigma,\alpha$,
+    \begin{align}
         A^\alpha
         \left(Y_{M+1-L_0}(\tau^-_\eta(\mu))A^jA^\sigma\right)
-        =
-        A^\alpha
-        \left(A^\mu A^jXA^\sigma\right).
-    \]
+        &=
+        A^\alpha\left(A^\mu A^jXA^\sigma\right).
+        \notag
+    \end{align}
     Then there are boundary conditions $\rho^+_{j,\sigma}$ and
     $\rho^-_{j,\sigma}$ satisfying the complementary-word equations
-    \[
-        \rho^+_{j,\sigma}(k+L_0)=\mu_k,
-        \qquad
-        \rho^-_{j,\sigma}(k+1)=\mu_k,
-    \]
+    \begin{align}
+        \rho^+_{j,\sigma}(k+L_0)
+        &=
+        \mu_k,
+        \notag\\
+        \rho^-_{j,\sigma}(k+1)
+        &=
+        \mu_k,
+        \notag
+    \end{align}
     and the product equation
-    \[
+    \begin{align}
         Y_M(\rho^+_{j,\sigma})A^jA^\sigma
-        =
-        Y_{M+1-L_0}(\rho^-_{j,\sigma})A^jA^\sigma .
-    \]
+        &=
+        Y_{M+1-L_0}(\rho^-_{j,\sigma})A^jA^\sigma.
+        \notag
+    \end{align}
 \end{theorem}
 
 \begin{proof}
     \leanok
     Lemma~\ref{lem:closure_property_boundary_one_sided_products_ground_space_map}
     gives the equation for the boundary-crossing window beginning at $M$,
-    \[
-        Y_M(\tau^+_\eta(\mu))A^j=A^\mu A^jX .
-    \]
+    $Y_M(\tau^+_\eta(\mu))A^j = A^\mu A^jX$.
     The assumed left-multiplied coordinate equation and
     Lemma~\ref{lem:closure_property_auxiliary_product_from_opposite_boundary_left_words}
     then give the displayed boundary conditions and product equation.
@@ -374,27 +357,25 @@
         lem:closure_property_opposite_boundary_comparison_from_right_words,
         lem:closed_boundary_restrictions_from_first_letter_products}
     Let $A$ be $L_0$-block-injective with $L_0>0$, $L_0\le M$, and
-    $D\ge1$. Let
-    \[
-        \psi=\Gamma_{M+1}(X)
-    \]
-    be an open-chain representation, and let $Y_i(\tau)$ represent the
-    length-$(L_0+1)$ cyclic restrictions of $\psi$. Fix a complementary word
-    $\mu$. Suppose that, for every boundary letter $\eta$, physical letter $j$,
-    and length-$L_0$ words $\alpha,\sigma$,
-    \[
+    $D\ge1$. Let $\psi=\Gamma_{M+1}(X)$ be an open-chain representation,
+    and let $Y_i(\tau)$ represent the length-$(L_0+1)$ cyclic restrictions of
+    $\psi$. Fix a complementary word $\mu$. Suppose that, for every boundary
+    letter $\eta$, physical letter $j$, and length-$L_0$ words
+    $\alpha,\sigma$,
+    \begin{align}
         A^\alpha
         \left(Y_{M+1-L_0}(\tau^-_\eta(\mu))A^jA^\sigma\right)
-        =
-        A^\alpha
-        \left(A^\mu A^jXA^\sigma\right).
-    \]
+        &=
+        A^\alpha\left(A^\mu A^jXA^\sigma\right).
+        \notag
+    \end{align}
     Then, for every boundary letter $\eta$,
-    \[
+    \begin{align}
         \Res^{\tau^+_\eta(\mu)}_{M,L_0+1}(\psi)
-        =
+        &=
         \Res^{\tau^-_\eta(\mu)}_{M+1-L_0,L_0+1}(\psi).
-    \]
+        \notag
+    \end{align}
 \end{theorem}
 
 \begin{proof}
@@ -402,24 +383,19 @@
     The assumed equations and
     Lemma~\ref{lem:closure_property_opposite_boundary_comparison_from_left_words}
     give, for every $\eta$, $j$, and $\sigma$,
-    \[
+    \begin{align}
         Y_{M+1-L_0}(\tau^-_\eta(\mu))A^jA^\sigma
-        =
-        A^\mu A^jXA^\sigma .
-    \]
+        &=
+        A^\mu A^jXA^\sigma.
+        \notag
+    \end{align}
     Lemma~\ref{lem:closure_property_opposite_boundary_comparison_from_right_words}
     removes the right word:
-    \[
-        Y_{M+1-L_0}(\tau^-_\eta(\mu))A^j
-        =
-        A^\mu A^jX .
-    \]
+    $Y_{M+1-L_0}(\tau^-_\eta(\mu))A^j = A^\mu A^jX$.
     The equation for the boundary-crossing window beginning at $M$, from
     Lemma~\ref{lem:closure_property_boundary_one_sided_products_ground_space_map},
     gives
-    \[
-        Y_M(\tau^+_\eta(\mu))A^j=A^\mu A^jX .
-    \]
+    $Y_M(\tau^+_\eta(\mu))A^j = A^\mu A^jX$.
     Hence the first-letter products agree, and
     Lemma~\ref{lem:closed_boundary_restrictions_from_first_letter_products}
     identifies the two restrictions.
@@ -436,32 +412,34 @@
         lem:boundary_restrictions_from_commutation_one_sided_products,
         lem:closed_boundary_restrictions_from_first_letter_products}
     Let $A$ be $L_0$-block-injective with $L_0>0$, $L_0<M$, and
-    $D\ge1$. Let
-    \[
-        \psi=\Gamma_{M+1}(X)
-    \]
-    be an open-chain representation. Assume that for all $i$ and $\tau$,
-    \[
-        \Res^{\tau}_{i,L_0+1}(\psi)\in G_{L_0+1}(A).
-    \]
+    $D\ge1$. Let $\psi=\Gamma_{M+1}(X)$ be an open-chain representation.
+    Assume that, for all $i$ and $\tau$,
+    $\Res^{\tau}_{i,L_0+1}(\psi)\in G_{L_0+1}(A)$.
     In local coordinate notation, fix a nonempty word $\mu$ on the sites outside
-    the two cyclic windows. For every outside letter $\eta$, choose the two outside
-    configurations so that, for each index $k$ of this outside word,
-    \[
-        \tau^+_\eta(\mu)_{k+L_0}=\mu_k,
-        \qquad
-        \tau^-_\eta(\mu)_{k+1}=\mu_k,
-    \]
+    the two cyclic windows. For every outside letter $\eta$, choose the two
+    outside configurations so that, for each index $k$ of this outside word,
+    \begin{align}
+        \tau^+_\eta(\mu)_{k+L_0}
+        &=
+        \mu_k,
+        \notag\\
+        \tau^-_\eta(\mu)_{k+1}
+        &=
+        \mu_k,
+        \notag
+    \end{align}
     and put the letter $\eta$ on the remaining sites. The notation
     $\tau^\pm_\eta(\mu)$ is a coordinate parametrization for the comparison used
     at the periodic boundary in \cite[Section~IV.C, lines~2078--2079]
-    {Cirac2021Matrix}; it is not notation from the source.
-    The corresponding boundary-crossing restriction equality is
-    \[
+    {Cirac2021Matrix}; it is not notation
+    from the source. The corresponding boundary-crossing restriction equality
+    is
+    \begin{align}
         \Res^{\tau^+_\eta(\mu)}_{M,L_0+1}(\psi)
-        =
+        &=
         \Res^{\tau^-_\eta(\mu)}_{M+1-L_0,L_0+1}(\psi).
-    \]
+        \notag
+    \end{align}
 \end{theorem}
 
 \begin{proof}
@@ -469,29 +447,25 @@
     Choose matrices $Y_i(\tau)$ representing the length-$(L_0+1)$
     restrictions. The one-sided boundary-product lemma gives, for every
     outside letter $\eta$ and physical letter $j$,
-    \[
-        Y_M(\tau^+_\eta(\mu))A^j=A^\mu A^jX,
-        \qquad
-        XA^jA^\mu=A^jY_{M+1-L_0}(\tau^-_\eta(\mu)).
-    \]
+    \begin{align}
+        Y_M(\tau^+_\eta(\mu))A^j
+        &=
+        A^\mu A^jX,
+        \notag\\
+        XA^jA^\mu
+        &=
+        A^jY_{M+1-L_0}(\tau^-_\eta(\mu)).
+        \notag
+    \end{align}
     Lemma~\ref{lem:closure_property_boundary_block_window_equation_ground_space_map}
     gives matrices $Y_\nu$ satisfying, for every word $\alpha$ of length $L_0$
     and every complementary word $\nu$,
-    \[
-        X A^\alpha A^\nu=A^\alpha Y_\nu .
-    \]
+    $XA^\alpha A^\nu = A^\alpha Y_\nu$.
     Lemma~\ref{lem:boundary_matrix_commutes_block_window} then gives, for every
-    physical letter $k$, the commutation identity
-    \[
-        XA^k=A^kX.
-    \]
+    physical letter $k$, the commutation identity $XA^k=A^kX$.
     Lemma~\ref{lem:boundary_restrictions_from_commutation_one_sided_products}
     gives
-    \[
-        Y_M(\tau^+_\eta(\mu))A^j
-        =
-        Y_{M+1-L_0}(\tau^-_\eta(\mu))A^j .
-    \]
+    $Y_M(\tau^+_\eta(\mu))A^j = Y_{M+1-L_0}(\tau^-_\eta(\mu))A^j$.
     Lemma~\ref{lem:closed_boundary_restrictions_from_first_letter_products}
     then identifies the two boundary-crossing restrictions, giving the
     periodic-boundary comparison of

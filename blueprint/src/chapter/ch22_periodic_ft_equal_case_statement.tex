@@ -1,0 +1,129 @@
+The following is the equal-case theorem of
+\cite[lines~643--656]{DeLasCuevas2017Irreducible}.
+The statements recorded here are conditional components of that theorem: the
+final comparison still assumes periodic-overlap and power-equality hypotheses,
+so the literature theorem has not yet been obtained here as a single
+unconditional result.
+
+% The source-level equal-case theorem remains not ready as a single theorem:
+% the present Lean statements still assume the periodic-overlap and
+% coefficient-power hypotheses which the paper derives from equality of the
+% MPV family. The Z-gauge/root-of-unity construction is already formalized.
+\begin{theorem}[Periodic Fundamental Theorem]\notready
+    \label{thm:periodic_ft}
+    \uses{def:irreducible_form}
+    Let $A$ and $B$ be MPS tensors in irreducible form. Write
+    \begin{align}
+        A^i&=\bigoplus_{j\in J}(R_j\otimes A_j^i), \notag\\
+        B^i&=\bigoplus_{k\in K}(S_k\otimes B_k^i), \notag
+    \end{align}
+    where $\{A_j\}_{j \in J}$ and $\{B_k\}_{k \in K}$ are bases of periodic
+    tensors, $R_j$ and $S_k$ are diagonal multiplicity matrices of sizes
+    $r_j\times r_j$ and $s_k\times s_k$, and $A_j^i$ and $B_k^i$ act on
+    bond spaces of dimensions $D_j$ and $D_k$.
+    Suppose that $\mc{V}(A)=\mc{V}(B)$
+    (equal MPV families for all lengths $N$).
+
+    Then $|J|=|K|$ and there is a bijection $\pi:J\to K$
+    such that $A_j$ and $B_{\pi(j)}$ are $m_j$-periodic for the same
+    period $m_j$.
+    Moreover, for each $j\in J$ there exists:
+    \begin{enumerate}
+        \item an invertible matrix $Y_j$ of size $D_{\pi(j)}\times D_j$,
+              and
+        \item a diagonal unitary matrix $Z_j$ of size $r_j\times r_j$
+              satisfying $Z_j^{m_j}=\Id_{r_j}$,
+    \end{enumerate}
+    such that $B_{\pi(j)}^i=Y_jA_j^iY_j^{-1}$ for every physical
+    index~$i$, and, after reordering the diagonal entries of the
+    multiplicity matrix $S_{\pi(j)}$, one has $Z_jR_j=S_{\pi(j)}$.
+    Equivalently, setting $Z=\bigoplus_j Z_j\otimes\Id_{D_j}$ gives an
+    invertible matrix $Y$ such that $ZA^i=YB^iY^{-1}$ for all $i$,
+    with $[A^i,Z]=0$ and $\mc{V}(A)=\mc{V}(ZA)$.
+
+    \noindent\emph{Remark.}
+    The proof is conditional on the periodic-overlap dichotomy of
+    \cite[lines~589--609]{DeLasCuevas2017Irreducible},
+    which is left here as a separate hypothesis.
+\end{theorem}
+
+\begin{theorem}[Diagonal multiplicity gauge from equal powers]
+    \label{thm:zgauge_construction}
+    \lean{MPSTensor.zgauge_construction}
+    \leanok
+    \uses{lem:z_gauge_diagonal_pow, lem:z_gauge_diagonal_mul}
+    Let $(\mu_i)_{i\in I}$ and $(\nu_i)_{i\in I}$ be two finite lists of
+    nonzero multiplicity entries. If $\mu_i^m=\nu_i^m$ for every $i\in I$,
+    then there exists a diagonal matrix $Z$ such that
+    \begin{align}
+        Z^m&=\Id, \notag\\
+        Z\,\diag(\nu)&=\diag(\mu). \notag
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    Take $Z=\diag(\mu_i/\nu_i)_{i\in I}$ and apply the two diagonal
+    identities from Lemmas~\ref{lem:z_gauge_diagonal_pow} and
+    \ref{lem:z_gauge_diagonal_mul}.
+\end{proof}
+
+\begin{theorem}[Scalar multiplicity gauge from power sums]
+    \label{thm:equalcase_zgauge_power_sums}
+    \lean{MPSTensor.equalCase_zgauge_of_power_sums}
+    \leanok
+    \uses{thm:zgauge_construction}
+    Let $(\mu_i)_{i\in I}$ and $(\nu_i)_{i\in I}$ be two finite lists of
+    multiplicity entries. Suppose that the $\nu_i$ are nonzero, that
+    $\mu_i^m=\nu_i^m$ for every $i\in I$, and that
+    $\sum_{i\in I}\mu_i^k=\sum_{i\in I}\nu_i^k$ for every positive
+    integer~$k$. Then the two lists determine the same multiset, and there is
+    a diagonal $Z$ satisfying $Z^m=\Id$ and
+    $Z\,\diag(\nu)=\diag(\mu)$.
+\end{theorem}
+
+\begin{proof}\leanok
+    Apply Theorem~\ref{thm:zgauge_construction} to obtain $Z$, and apply the
+    Newton--Girard power-sum identity to recover the multiplicity multiset.
+\end{proof}
+
+\begin{theorem}[Conditional matching of bases of periodic tensors]
+    \label{thm:periodic_equalcase_matching}
+    \lean{MPSTensor.fundamentalTheorem_periodic_equalCase_matching}
+    \leanok
+    \uses{def:irreducible_form}
+    Let $A$ and $B$ be in irreducible form, and suppose their bases of periodic
+    tensors contain no repeated pair of distinct basis elements. If the
+    periodic-overlap hypothesis holds for the two bases, then the two bases
+    have the same cardinality and are matched by a bijection whose matched
+    elements are repeated blocks.
+\end{theorem}
+
+\begin{proof}\leanok
+    Apply the proportional-case periodic Fundamental Theorem to the two bases
+    extracted from the irreducible-form decompositions.
+\end{proof}
+
+\begin{theorem}[Conditional scalar equal-case component]
+    \label{thm:periodic_equalcase_scalar_component}
+    \lean{MPSTensor.fundamentalTheorem_periodic_equalCase}
+    \leanok
+    \uses{thm:periodic_equalcase_matching, thm:equalcase_zgauge_power_sums}
+    Let $A$ and $B$ be in irreducible form, and suppose their bases of periodic
+    tensors contain no repeated pair of distinct basis elements. Assume the
+    periodic-overlap hypothesis and the corresponding power equality for the
+    scalar multiplicity entries. Then the bases are matched by a bijection, and
+    each matched pair has a scalar diagonal $Z_j\in\MN{1}$ with
+    \begin{align}
+        Z_j^{m_j}&=\Id, \notag\\
+        Z_j\,\diag(\mu_{A,j})&=\diag(\mu_{B,\pi(j)}). \notag
+    \end{align}
+    The two scalar multiplicity entries also determine the same singleton
+    multiset.
+\end{theorem}
+
+\begin{proof}\leanok
+    First use Theorem~\ref{thm:periodic_equalcase_matching} to match the
+    bases of periodic tensors. For each matched block, apply
+    Theorem~\ref{thm:equalcase_zgauge_power_sums} to the singleton list of
+    multiplicity entries.
+\end{proof}

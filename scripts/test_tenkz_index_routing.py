@@ -15,9 +15,23 @@ from tenkz_audit import Audit
 
 
 ROOT = Path(__file__).resolve().parents[1]
-CHAPTER = ROOT / "blueprint/src/chapter/ch26_mps_rfp_core.tex"
+SOURCE_ROOT = ROOT / "blueprint/src"
+CHAPTER = SOURCE_ROOT / "chapter/ch26_mps_rfp_core.tex"
 BEGIN = "% TENKZ-II-RFP-BEGIN"
 END = "% TENKZ-II-RFP-END"
+
+
+def read_tex_tree(path: Path) -> str:
+    """Read a TeX source after recursively expanding its input wrappers."""
+    source = path.read_text(encoding="utf-8")
+
+    def expand(match: re.Match[str]) -> str:
+        target = match.group(1)
+        if not target.endswith(".tex"):
+            target += ".tex"
+        return read_tex_tree(SOURCE_ROOT / target)
+
+    return re.sub(r"\\input\{([^}]+)\}", expand, source)
 
 
 def main() -> int:
@@ -26,7 +40,7 @@ def main() -> int:
         print("FAIL: xelatex is required")
         return 1
 
-    chapter = CHAPTER.read_text(encoding="utf-8")
+    chapter = read_tex_tree(CHAPTER)
     if chapter.count(BEGIN) != 1 or chapter.count(END) != 1:
         raise AssertionError("II_RFP routing markers must occur exactly once")
     body = chapter.split(BEGIN, 1)[1].split(END, 1)[0]

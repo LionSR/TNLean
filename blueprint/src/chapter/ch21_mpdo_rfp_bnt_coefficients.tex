@@ -42,16 +42,17 @@
     The vertical indices of the $L$ copies are contracted cyclically, while
     the horizontal legs remain open, as in
     \cite[lines~962--967]{Cirac2016MPDO_arXiv}:
-    \[
-        \bigl[O_L(M_\alpha)\bigr]_{\mathbf a,\mathbf b}
-        =\tr\!\left(
-            \widehat M_\alpha^{a_1b_1}\cdots
-            \widehat M_\alpha^{a_Lb_L}
-          \right),
-        \qquad
-        \mathbf a=(a_1,\ldots,a_L),\quad
-        \mathbf b=(b_1,\ldots,b_L).
-    \]
+    \begin{align}
+        [O_L(M_\alpha)]_{\mathbf a,\mathbf b}
+        &=
+        \tr\!\left(\widehat M_\alpha^{a_1b_1}\cdots
+            \widehat M_\alpha^{a_Lb_L}\right),
+        \notag\\
+        \mathbf a&=(a_1,\ldots,a_L),
+        \notag\\
+        \mathbf b&=(b_1,\ldots,b_L).
+        \notag
+    \end{align}
 \end{definition}
 
 \begin{definition}[Same-length BNT product form]%
@@ -63,11 +64,13 @@
         def:mpdo_bnt_label_coefficient_family}
     A BNT-label operator family and a BNT-label coefficient system have
     same-length product form when, for every positive length $L$,
-    \[
+    \begin{align}
         O_L(M_\alpha)O_L(M_\beta)
-        = \sum_\gamma
+        &=
+        \sum_\gamma
         c^{(L)}_{\alpha,\beta,\gamma} O_L(M_\gamma).
-    \]
+        \notag
+    \end{align}
     This is the product identity appearing in \cite[Theorem~4.14(ii)]{Cirac2016MPDO_arXiv}, stated
     independently of the blocked-basis multiplication
     $\mathcal A_n\times\mathcal A_n\to\mathcal A_{2n}$.
@@ -91,11 +94,13 @@
         def:mpdo_bnt_label_coefficient_family}
     A BNT-label trace-scalar family and a BNT-label coefficient system have
     idempotent coefficient form when, for every BNT label $\gamma$,
-    \[
-        m_\gamma =
+    \begin{align}
+        m_\gamma
+        &=
         \sum_{\alpha,\beta}
         c^{(1)}_{\alpha,\beta,\gamma}m_\alpha m_\beta.
-    \]
+        \notag
+    \end{align}
     This is the idempotent condition in \cite[Theorem~4.14(ii)]{Cirac2016MPDO_arXiv}, stated separately
     from the trace-power formula.
 \end{definition}
@@ -127,11 +132,12 @@
     A comparison between the BNT-label coefficients and the chosen
     blocked-basis coefficients consists of a BNT-label assignment together
     with the equality
-    \[
+    \begin{align}
         c^{(n)}_{i,j,k}
-        =
+        &=
         c^{(n)}_{\sigma_n(i),\sigma_n(j),\tau_n(k)}.
-    \]
+        \notag
+    \end{align}
     This is a blocked-basis comparison: the left hand side is expanded in the
     chosen basis of $\mathcal A_{2n}$, so the statement is not itself the
     same-length BNT product law.
@@ -145,10 +151,12 @@
         def:mpdo_diagonal_chi_family}
     A BNT-label coefficient system and a diagonal $\chi$-family are
     compatible when, for every positive length $L$,
-    \[
+    \begin{align}
         c^{(L)}_{\alpha,\beta,\gamma}
-        = \tr(\chi_{\alpha,\beta,\gamma}^{L}).
-    \]
+        &=
+        \tr(\chi_{\alpha,\beta,\gamma}^{L}).
+        \notag
+    \end{align}
     The same matrix $\chi_{\alpha,\beta,\gamma}$ is used for all positive
     $L$.
 \end{definition}
@@ -160,10 +168,8 @@
     \uses{def:mpdo_bnt_label_positive_length_chi_trace_power_form,
         thm:mpdo_trace_matrix_pow}
     Under positive-length BNT-label trace-power form, for every $L>0$,
-    \[
-        c^{(L)}_{\alpha,\beta,\gamma}
-        = \tr(\chi_{\alpha,\beta,\gamma}^{L}).
-    \]
+    $c^{(L)}_{\alpha,\beta,\gamma}
+        = \tr(\chi_{\alpha,\beta,\gamma}^{L})$.
 \end{lemma}
 \begin{proof}\leanok
     Combine the defining positive-length trace-power identity with the trace
@@ -226,12 +232,14 @@
     If the same-length BNT product identity holds and the BNT-label
     coefficients come from a positive length-independent $\chi$-witness, then
     for every $L>0$,
-    \[
+    \begin{align}
         O_L(M_\alpha)O_L(M_\beta)
-        = \sum_\gamma
-        \tr\bigl(    \chi_{\alpha,\beta,\gamma}^{\,L}
-        \bigr) O_L(M_\gamma).
-    \]
+        &=
+        \sum_\gamma
+        \tr(\chi_{\alpha,\beta,\gamma}^{\,L})
+        O_L(M_\gamma).
+        \notag
+    \end{align}
 \end{theorem}
 \begin{proof}\leanok
     Substitute the positive-length trace-power formula into the same-length BNT
@@ -247,12 +255,14 @@
     If the same-length BNT product identity holds with the coefficient family
     canonically determined by a diagonal $\chi$-family, then for every
     $L>0$,
-    \[
+    \begin{align}
         O_L(M_\alpha)O_L(M_\beta)
-        = \sum_\gamma
-        \tr\bigl(    \chi_{\alpha,\beta,\gamma}^{\,L}
-        \bigr) O_L(M_\gamma).
-    \]
+        &=
+        \sum_\gamma
+        \tr(\chi_{\alpha,\beta,\gamma}^{\,L})
+        O_L(M_\gamma).
+        \notag
+    \end{align}
 \end{theorem}
 \begin{proof}\leanok
     Substitute the canonical trace-power formula for the coefficients into the
@@ -268,12 +278,14 @@
     If the BNT trace scalars satisfy the idempotent coefficient condition and
     the BNT-label coefficients come from a positive length-independent
     $\chi$-witness, then
-    \[
-        m_\gamma =
+    \begin{align}
+        m_\gamma
+        &=
         \sum_{\alpha,\beta}
         \tr(\chi_{\alpha,\beta,\gamma})
         m_\alpha m_\beta.
-    \]
+        \notag
+    \end{align}
 \end{theorem}
 \begin{proof}\leanok
     Substitute the length-one trace-power formula into the idempotent
@@ -289,12 +301,14 @@
     If the BNT trace scalars satisfy the idempotent coefficient condition with
     the coefficient family canonically determined by a diagonal
     $\chi$-family, then
-    \[
-        m_\gamma =
+    \begin{align}
+        m_\gamma
+        &=
         \sum_{\alpha,\beta}
         \tr(\chi_{\alpha,\beta,\gamma})
         m_\alpha m_\beta.
-    \]
+        \notag
+    \end{align}
 \end{theorem}
 \begin{proof}\leanok
     Substitute the length-one canonical trace formula into the idempotent
@@ -317,12 +331,12 @@
     length-independent $\chi$-witness, then each positive-length blocked
     coefficient is the trace power of the corresponding BNT-label
     $\chi$-matrix:
-    \[
+    \begin{align}
         c^{(n)}_{i,j,k}
-        = \tr
-        \bigl(    \chi_{\sigma_n(i),\sigma_n(j),\tau_n(k)}^{\,n}
-        \bigr).
-    \]
+        &=
+        \tr\!\left(\chi_{\sigma_n(i),\sigma_n(j),\tau_n(k)}^{\,n}\right).
+        \notag
+    \end{align}
 \end{lemma}
 \begin{proof}\leanok
     Use the comparison equality to replace the blocked-basis coefficient by the
@@ -344,10 +358,15 @@
     $\mathcal{A}_{2n}$, a size $r_{n,i,j,k} \in \N$ and diagonal entries
     $\chi_{n,i,j,k,1}, \ldots, \chi_{n,i,j,k,r_{n,i,j,k}} \in \C$, giving the
     diagonal matrix
-    \[
+    \begin{align}
         \chi_{n,i,j,k}
-        = \diag\bigl(\chi_{n,i,j,k,1}, \ldots, \chi_{n,i,j,k,r_{n,i,j,k}}\bigr).
-    \]
+        &=
+        \diag\bigl(        \chi_{n,i,j,k,1},
+            \ldots,
+            \chi_{n,i,j,k,r_{n,i,j,k}}
+        \bigr).
+        \notag
+    \end{align}
     Unlike the uniform BNT-label family in
     \cite[Theorem~4.14(ii)]{Cirac2016MPDO_arXiv}, the size and diagonal
     entries may depend on the blocked length and on the chosen basis indices.
@@ -362,10 +381,8 @@
     \uses{def:mpdo_blocked_structure_chi_family}
     For each positive blocked size $n$, each multiplication triple $(i,j,k)$,
     and every exponent $L$,
-    \[
-        \tr(\chi_{n,i,j,k}^{\,L})
-        = \sum_r \chi_{n,i,j,k,r}^{\,L}.
-    \]
+    $\tr(\chi_{n,i,j,k}^{\,L})
+        = \sum_r \chi_{n,i,j,k,r}^{\,L}$.
 \end{lemma}
 \begin{proof}\leanok
     Diagonal matrices raise to powers entrywise and the trace of a diagonal
@@ -381,9 +398,7 @@
     The blocked multiplication coefficients are in trace-power form when, for
     every positive blocked size $n$ and every multiplication triple $(i,j,k)$,
     the coefficient $c^{(n)}_{i,j,k}$ equals
-    \[
-        \sum_r \chi_{n,i,j,k,r}^{\,n}.
-    \]
+    $\sum_r \chi_{n,i,j,k,r}^{\,n}$.
     Equivalently, by
     Lemma~\ref{lem:mpdo_blocked_structure_chi_trace_matrix_pow}, it is the
     trace of the $n$-th power of the corresponding diagonal matrix. The exponent
@@ -400,10 +415,7 @@
         lem:mpdo_blocked_structure_chi_trace_matrix_pow}
     Under trace-power form for the blocked multiplication coefficients,
     for every positive blocked size $n$,
-    \[
-        c^{(n)}_{i,j,k}
-        = \tr(\chi_{n,i,j,k}^{\,n}).
-    \]
+    $c^{(n)}_{i,j,k}=\tr(\chi_{n,i,j,k}^{\,n})$.
 \end{lemma}
 \begin{proof}\leanok
     Combine the defining trace-power identity with the trace formula for
@@ -465,19 +477,19 @@
     \lean{eq_zero_or_eq_one_of_forall_sum_pow_eq}
     \lean{Complex.eq_zero_or_eq_one_of_forall_sum_pow_eq}
     \leanok
-    Let $x_1,\dots,x_n$ be nonnegative real numbers whose power sums
+    Let $x_1,\ldots,x_n$ be non-negative real numbers whose power sums
     $\sum_k x_k^L$ take the same value at every exponent $L \ge 1$. Then
     every $x_k$ equals $0$ or $1$. The same holds for a finite family of
-    complex numbers that are nonnegative in the complex order.
+    complex numbers that are non-negative in the complex order.
     Nonnegativity cannot be dropped: the primitive cube roots of unity have
     power sums invariant under doubling the exponent, yet do not lie in
     $\{0,1\}$.
 \end{lemma}
 \begin{proof}\leanok
     If some entry exceeded one, its powers would grow without bound while
-    all other summands stay nonnegative, contradicting constancy of the
+    all other summands stay non-negative, contradicting constancy of the
     power sums; hence every entry lies in $[0,1]$. Comparing the exponents
-    one and two gives $\sum_k x_k(1-x_k) = 0$ with nonnegative summands, so
+    one and two gives $\sum_k x_k(1-x_k) = 0$ with non-negative summands, so
     each summand vanishes.
 \end{proof}
 
@@ -524,9 +536,8 @@
     $\chi_{\alpha,\beta,\gamma,r}$ lies in $\{0,1\}$, as stated in
     \cite[Section~4.5]{Cirac2016MPDO_arXiv}; by positivity every entry
     equals one. Consequently, at every positive length,
-    \[
-        c^{(L)}_{\alpha,\beta,\gamma} = r_{\alpha,\beta,\gamma} \in \N.
-    \]
+    $c^{(L)}_{\alpha,\beta,\gamma}
+        = r_{\alpha,\beta,\gamma} \in \N$.
 \end{theorem}
 \begin{proof}\leanok
     For fixed labels, the trace-power form turns length independence into
@@ -548,11 +559,9 @@
         def:mpdo_bnt_label_positive_length_chi_trace_power_form}
     If a BNT-label coefficient system is in trace-power form with respect
     to a diagonal $\chi$-family all of whose entries equal one, then for
-    every $L>0$,
-    \[
-        c^{(L)}_{\alpha,\beta,\gamma} = r_{\alpha,\beta,\gamma},
-    \]
-    so the coefficient system is length independent.
+    every $L>0$, $c^{(L)}_{\alpha,\beta,\gamma}
+        = r_{\alpha,\beta,\gamma}$, so the coefficient system is length
+    independent.
 \end{theorem}
 \begin{proof}\leanok
     The power sums of a family of ones do not depend on the exponent.
@@ -601,14 +610,17 @@
 \end{theorem}
 \begin{proof}\leanok
     Applying the same-length product law to both coefficient systems gives
-    \[
-        \sum_\delta c^{(L)}_{\alpha,\beta,\delta}\, O_L(M_\delta)
-        = O_L(M_\alpha)\, O_L(M_\beta)
-        = \sum_\delta c'^{(L)}_{\alpha,\beta,\delta}\, O_L(M_\delta).
-    \]
+    \begin{align}
+        \sum_\delta c^{(L)}_{\alpha,\beta,\delta}\,O_L(M_\delta)
+        &=
+        O_L(M_\alpha)O_L(M_\beta)
+        =
+        \sum_\delta c'^{(L)}_{\alpha,\beta,\delta}\,O_L(M_\delta).
+        \notag
+    \end{align}
     Subtracting yields
     $\sum_\delta (c^{(L)}_{\alpha,\beta,\delta}
-        - c'^{(L)}_{\alpha,\beta,\delta})\, O_L(M_\delta) = 0$,
+        - c'^{(L)}_{\alpha,\beta,\delta})O_L(M_\delta) = 0$,
     and linear independence forces every coefficient of the difference to
     zero.
 \end{proof}
@@ -623,30 +635,40 @@
     At every positive length $L$ at which the operators are linearly
     independent, the structure coefficients of the same-length product law
     satisfy
-    \[
-        \sum_\delta c^{(L)}_{\alpha,\beta,\delta}\,
+    \begin{align}
+        \sum_\delta
+        c^{(L)}_{\alpha,\beta,\delta}
         c^{(L)}_{\delta,\gamma,\epsilon}
-        = \sum_\delta c^{(L)}_{\beta,\gamma,\delta}\,
+        &=
+        \sum_\delta
+        c^{(L)}_{\beta,\gamma,\delta}
         c^{(L)}_{\alpha,\delta,\epsilon}.
-    \]
+        \notag
+    \end{align}
     These are the restrictions that the associativity of the multiplication
     imposes on the structure coefficients, noted in
     \cite[Section~4.5]{Cirac2016MPDO_arXiv}.
 \end{theorem}
 \begin{proof}\leanok
     Applying the same-length product law twice in each order gives
-    \begin{align*}
-        (O_L(M_\alpha)\, O_L(M_\beta))\, O_L(M_\gamma)
-         & = \sum_{\varepsilon'}
-        \Bigl(\sum_\delta c^{(L)}_{\alpha,\beta,\delta}\,
-        c^{(L)}_{\delta,\gamma,\varepsilon'}\Bigr)
-        O_L(M_{\varepsilon'}),   \\
-        O_L(M_\alpha)\,(O_L(M_\beta)\, O_L(M_\gamma))
-         & = \sum_{\varepsilon'}
-        \Bigl(\sum_\delta c^{(L)}_{\beta,\gamma,\delta}\,
-        c^{(L)}_{\alpha,\delta,\varepsilon'}\Bigr)
+    \begin{align}
+        (O_L(M_\alpha)O_L(M_\beta))O_L(M_\gamma)
+        &=
+        \sum_{\varepsilon'}
+        \left(\sum_\delta
+            c^{(L)}_{\alpha,\beta,\delta}
+            c^{(L)}_{\delta,\gamma,\varepsilon'}\right)
+        O_L(M_{\varepsilon'}),
+        \notag\\
+        O_L(M_\alpha)(O_L(M_\beta)O_L(M_\gamma))
+        &=
+        \sum_{\varepsilon'}
+        \left(\sum_\delta
+            c^{(L)}_{\beta,\gamma,\delta}
+            c^{(L)}_{\alpha,\delta,\varepsilon'}\right)
         O_L(M_{\varepsilon'}).
-    \end{align*}
+        \notag
+    \end{align}
     Associativity of multiplication equates the two left-hand sides, so the
     right-hand sides agree; linear independence of the operators then forces
     the corresponding coefficient sums to agree for each $\varepsilon'$.
@@ -665,14 +687,16 @@
     length $L$ at which the labelled operators are linearly independent, the
     associativity constraint is a restriction on the family of diagonal
     matrices:
-    \[
+    \begin{align}
         \sum_\delta
         \tr(\chi_{\alpha,\beta,\delta}^{\,L})
         \tr(\chi_{\delta,\gamma,\epsilon}^{\,L})
-        = \sum_\delta
+        &=
+        \sum_\delta
         \tr(\chi_{\beta,\gamma,\delta}^{\,L})
         \tr(\chi_{\alpha,\delta,\epsilon}^{\,L}).
-    \]
+        \notag
+    \end{align}
     In \cite[Section~4.5]{Cirac2016MPDO_arXiv} these restrictions, combined
     with the isometry statement, lead to a pentagon-like equation for the
     fusion isometries whose solutions come from unitary fusion categories.

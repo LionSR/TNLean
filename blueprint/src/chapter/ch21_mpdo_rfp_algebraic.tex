@@ -11,7 +11,7 @@ Chapter~\ref{ch:mpdo_rfp} with the general case of
 \cite[Section~4]{Cirac2016MPDO_arXiv}. The source first places the tensor in
 vertical canonical form and then introduces its closed-chain operators. The
 algebraic characterization identifies the diagonal $\chi$-matrices governing
-the trace-power formula and culminates in the fusion-isometry description.
+the trace-power formula and ends in the fusion-isometry description.
 
 \section{Recall of the vertical canonical form and closed-chain operators}
 
@@ -20,11 +20,11 @@ The general case begins with the vertical canonical form of
 Definition~\ref{def:vertical_cf_mpdo}, there is a coisometry $U$ from the
 original physical space onto the retained nonzero sector space. Writing
 $B=\bigoplus_\alpha\mu_\alpha\otimes M_\alpha$, it satisfies
-\[
-    UU^\dagger=I,
-    \qquad U\widetilde M U^\dagger=B,
-    \qquad \widetilde M=U^\dagger B U,
-\]
+\begin{align}
+    UU^\dagger &= \Id, \notag\\
+    U\widetilde M U^\dagger &= B, \notag\\
+    \widetilde M &= U^\dagger B U, \notag
+\end{align}
 where the matrices $\mu_\alpha$ are positive and diagonal and the tensors
 $\{M_\alpha\}_\alpha$ form a basis of normal tensors. The matrix
 $U^\dagger U$ is the support projection in the original physical space; the
@@ -38,13 +38,13 @@ label as a pair $(a,b)$ of horizontal bond indices and set
 $\widehat M_\alpha^{ab}=M_\alpha^{(a,b)}$. For
 $\mathbf a=(a_1,\ldots,a_L)$ and
 $\mathbf b=(b_1,\ldots,b_L)$, the contraction is
-\[
-    \bigl[O_L(M_\alpha)\bigr]_{\mathbf a,\mathbf b}
-      =\tr\!\left(
-          \widehat M_\alpha^{a_1b_1}\cdots
-          \widehat M_\alpha^{a_Lb_L}\right)
-      =\bigl[\rho^{(L)}(\widehat M_\alpha)\bigr]_{\mathbf a,\mathbf b}.
-\]
+\begin{align}
+    [O_L(M_\alpha)]_{\mathbf a,\mathbf b}
+    &= \tr\!\left(\widehat M_\alpha^{a_1b_1}\cdots
+        \widehat M_\alpha^{a_Lb_L}\right) \notag\\
+    &= [\rho^{(L)}(\widehat M_\alpha)]_{\mathbf a,\mathbf b}.
+    \notag
+\end{align}
 Thus $O_L(M_\alpha)=\rho^{(L)}(\widehat M_\alpha)$, where the trace is over the
 BNT bond space and the remaining row and column indices are the horizontal
 bond strings $\mathbf a$ and $\mathbf b$. These are the operators entering the

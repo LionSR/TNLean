@@ -6,17 +6,13 @@
     Let $A$ be an MPS tensor and let $L_0,K\ge 0$. Let $X$ be a matrix, and let
     $Y_{c_b}$ be a matrix for each iterated block index $c_b$ of the complement.
     Suppose that, for every block letter $b$ of the alphabet
-    $\{0,\ldots,d{-}1\}^{L_0}$ and every iterated block index $c_b$ of the
+    $\Fin{d}^{L_0}$ and every iterated block index $c_b$ of the
     complement, with $w(b)$ the length-$L_0$ word of $b$ and
     $\widetilde{w(c_b)}$ the length-$L_0K$ complement word obtained by
     concatenating the blocks of $c_b$,
-    \[
-        X A^{w(b)} A^{\widetilde{w(c_b)}} = A^{w(b)} Y_{c_b} .
-    \]
+    $X A^{w(b)} A^{\widetilde{w(c_b)}} = A^{w(b)} Y_{c_b}$.
     Then there is a family $Y'_c$, indexed by the length-$L_0K$ words $c$, with
-    \[
-        X A^s A^c = A^s Y'_c
-    \]
+    $X A^s A^c = A^s Y'_c$
     for every length-$L_0$ word $s$ and every length-$L_0K$ word $c$.
 \end{lemma}
 
@@ -40,13 +36,9 @@
     matrix, and let $Y_v$ be a matrix for each complementary word $v$ of
     length $K$. Suppose that, for every word $u$ of length $L_0$ and every
     word $v$ of length $K$,
-    \[
-        X A^u A^v = A^u Y_v .
-    \]
+    $X A^u A^v = A^u Y_v$.
     Then, for every physical letter $j$,
-    \[
-        X A^j = A^j X .
-    \]
+    $X A^j = A^j X$.
     This is the boundary-matrix commutation step obtained from the equations
     $X A^u A^v=A^uY_v$, for all length-$L_0$ words $u$ and all length-$K$
     words $v$, as in
@@ -57,26 +49,19 @@
     \leanok
     \uses{lem:wordspan_blk_inj, lem:padded_complement_annihilation}
     By Lemma~\ref{lem:wordspan_blk_inj},
-    \[
-        \spn\{A^u: |u|=L_0\}=\MN{D}.
-    \]
+    $\spn\{A^u : |u|=L_0\} = \MN{D}$.
     Hence, for every $M\in\MN{D}$ and every complementary word $v$ of length
     $K$, the displayed hypothesis extends by linearity in the length-$L_0$
-    block to
-    \[
-        X M A^v = M Y_v
-    \]
-    Taking $M=\Id$ gives
-    \begin{equation}\label{eq:ph_normal_closing_word_value}
-        Y_v = X A^v .
-    \end{equation}
-    Taking $M=A^j$ and substituting equation~(\ref{eq:ph_normal_closing_word_value})
-    gives, for every word $v$ of length $K$,
-    \[
-        (X A^j-A^jX)A^v=0
-    \]
-    Since $K\le (K+1)L_0$ and $K+1\ge1$, Lemma~\ref{lem:padded_complement_annihilation}
-    gives $X A^j-A^jX=0$.
+    block to $XMA^v=MY_v$. Taking $M=\Id$ gives
+    \begin{align}
+        Y_v &= X A^v.
+        \label{eq:ph_normal_closing_word_value}
+    \end{align}
+    Taking $M=A^j$ and substituting (\ref{eq:ph_normal_closing_word_value})
+    gives $(X A^j-A^jX)A^v=0$ for every word $v$ of length $K$.
+    Since $K\le (K+1)L_0$ and $K+1\ge1$,
+    Lemma~\ref{lem:padded_complement_annihilation} gives
+    $X A^j-A^jX=0$.
 \end{proof}
 
 \begin{lemma}[Trace identity from the boundary-crossing cyclic window]
@@ -85,47 +70,30 @@
     \leanok
     \uses{def:ground_space_map, rem:cyclic_window_operators}
     Let $A$ be a tensor with virtual dimension at least one, and let
-    $L_0>0$ and $L_0<M$. Let
-    \[
-        \psi=\Gamma_{M+1}(X)
-    \]
-    and assume that every cyclic restriction of length $L_0+1$ belongs to
-    $G_{L_0+1}(A)$. Then there are boundary matrices $Y_\nu$, indexed by
-    nonempty complementary words $\nu$ of length $M+1-(L_0+1)$, such that,
-    for every physical letter $j$ and every word $\alpha$ of length $L_0$,
-    \[
+    $L_0>0$ and $L_0<M$. Let $\psi=\Gamma_{M+1}(X)$ and assume that every
+    cyclic restriction of length $L_0+1$ belongs to $G_{L_0+1}(A)$. Then there
+    are boundary matrices $Y_\nu$, indexed by nonempty complementary words
+    $\nu$ of length $M+1-(L_0+1)$, such that, for every physical letter $j$
+    and every word $\alpha$ of length $L_0$,
+    \begin{align}
         \tr\left(A^j X A^\alpha A^\nu\right)
-        =
-        \tr\left(A^j A^\alpha Y_\nu\right).
-    \]
+        &= \tr\left(A^j A^\alpha Y_\nu\right).
+        \notag
+    \end{align}
 \end{lemma}
 
 \begin{proof}
     \leanok
     Let $Y_\nu$ be the matrix representing the cyclic restriction whose window
-    begins at the last site. The cyclic word is
-    \[
-        \alpha\,\nu\,j
-    \]
-    after deleting the first letter from the window and reading the complement,
-    so the ground-space representation gives
-    \[
-        \tr\left(A^\alpha A^\nu A^jX\right)
-        =
-        \tr\left(A^jA^\alpha Y_\nu\right).
-    \]
-    Cyclicity of the trace gives
-    \[
+    begins at the last site. The cyclic word is $\alpha\,\nu\,j$ after deleting
+    the first letter from the window and reading the complement, so the
+    ground-space representation and cyclicity of the trace give
+    \begin{align}
         \tr\left(A^jX A^\alpha A^\nu\right)
-        =
-        \tr\left(A^\alpha A^\nu A^jX\right).
-    \]
-    Therefore
-    \[
-        \tr\left(A^jX A^\alpha A^\nu\right)
-        =
-        \tr\left(A^jA^\alpha Y_\nu\right).
-    \]
+        &= \tr\left(A^\alpha A^\nu A^jX\right)
+         = \tr\left(A^jA^\alpha Y_\nu\right).
+        \notag
+    \end{align}
 \end{proof}
 
 \begin{lemma}[One-site-injective boundary block-window identity]
@@ -136,16 +104,11 @@
         lem:closure_property_boundary_block_window_trace_ground_space_map}
     Let $A$ be a tensor with virtual dimension at least one whose single-site
     matrices span the full matrix algebra. Let $L_0>0$ and $L_0<M$, and let
-    \[
-        \psi=\Gamma_{M+1}(X).
-    \]
-    If every cyclic restriction of length $L_0+1$ belongs to $G_{L_0+1}(A)$,
-    then there are boundary matrices $Y_\nu$, indexed by nonempty
-    complementary words $\nu$ of length $M+1-(L_0+1)$, such that, for every
-    word $\alpha$ of length $L_0$,
-    \[
-        X A^\alpha A^\nu=A^\alpha Y_\nu .
-    \]
+    $\psi=\Gamma_{M+1}(X)$. If every cyclic restriction of length $L_0+1$
+    belongs to $G_{L_0+1}(A)$, then there are boundary matrices $Y_\nu$,
+    indexed by nonempty complementary words $\nu$ of length
+    $M+1-(L_0+1)$, such that, for every word $\alpha$ of length $L_0$,
+    $X A^\alpha A^\nu = A^\alpha Y_\nu$.
     % Scope restriction: the source argument in arXiv:2011.12127, Section~IV.C,
     % lines 2078--2079, assumes only $L_0$-block injectivity. This lemma records
     % the narrower one-site-injective case; the general case is documented in
@@ -159,27 +122,16 @@
     For every physical letter $j$,
     Lemma~\ref{lem:closure_property_boundary_block_window_trace_ground_space_map}
     gives
-    \begin{equation}\label{eq:ph_normal_closing_trace_window}
+    \begin{align}
         \tr\left(A^jX A^\alpha A^\nu\right)
-        =
-        \tr\left(A^jA^\alpha Y_\nu\right)
-    \end{equation}
-    Put
-    \[
-        Z=X A^\alpha A^\nu-A^\alpha Y_\nu .
-    \]
-    For every physical letter $j$,
-    equation~(\ref{eq:ph_normal_closing_trace_window}) gives
-    \[
-        \tr(A^j Z)=0 .
-    \]
+        &= \tr\left(A^jA^\alpha Y_\nu\right).
+        \label{eq:ph_normal_closing_trace_window}
+    \end{align}
+    Put $Z=X A^\alpha A^\nu-A^\alpha Y_\nu$. For every physical letter $j$,
+    Then (\ref{eq:ph_normal_closing_trace_window}) gives $\tr(A^jZ)=0$.
     Since the matrices $A^j$ span the full matrix algebra, the trace pairing
     gives
-    \[
-        \bigl(\forall j,\ \tr(A^j Z)=0\bigr)
-        \quad\Longrightarrow\quad
-        Z=0 .
-    \]
+    $(\forall j,\ \tr(A^jZ)=0) \quad\Longrightarrow\quad Z=0$.
     Hence $X A^\alpha A^\nu=A^\alpha Y_\nu$.
 \end{proof}
 
@@ -192,47 +144,41 @@
         lem:closure_property_boundary_condition_product_window_witnesses,
         lem:outside_labels_determine_boundary_witnesses}
     Let $A$ be $L_0$-block-injective with $L_0>0$, $L_0<M$, and
-    $D\ge1$. Let
-    \[
-        \psi=\Gamma_{M+1}(X)
-    \]
-    and assume that every cyclic restriction of length $L_0+1$ belongs to
-    $G_{L_0+1}(A)$. Then there are boundary matrices $Y_\nu$, indexed by
-    nonempty complementary words $\nu$ of length $M+1-(L_0+1)$, such that, for
-    every word $\alpha$ of length $L_0$ and every word $\beta$ of length $L_0$,
-    \[
+    $D\ge1$. Let $\psi=\Gamma_{M+1}(X)$ and assume that every cyclic
+    restriction of length $L_0+1$ belongs to $G_{L_0+1}(A)$. Then there are
+    boundary matrices $Y_\nu$, indexed by nonempty complementary words $\nu$
+    of length $M+1-(L_0+1)$, such that, for every word $\alpha$ of length
+    $L_0$ and every word $\beta$ of length $L_0$,
+    \begin{align}
         \tr\left(A^\beta X A^\alpha A^\nu\right)
-        =
-        \tr\left(A^\beta A^\alpha Y_\nu\right).
-    \]
+        &= \tr\left(A^\beta A^\alpha Y_\nu\right).
+        \notag
+    \end{align}
 \end{theorem}
 
 \begin{proof}
     \leanok
     Choose representation matrices for every cyclic restriction of length
     $L_0+1$. Fix $\alpha$ and $\nu$. The boundary-crossing equations move the
-    matrix $X$ through the first boundary letter. In local boundary notation
+    matrix $X$ through the first boundary letter. In local boundary notation,
     this has the form
-    \[
+    \begin{align}
         X A^{\rho_0}A^{\rho_1\cdots\rho_{M-L_0}}
-        =
-        A^{\rho_0}Y_{M+1-L_0}(\rho).
-    \]
+        &= A^{\rho_0}Y_{M+1-L_0}(\rho).
+        \notag
+    \end{align}
     The adjacent boundary-window product then transports this comparison
     through the remaining $L_0-1$ boundary letters:
-    \[
+    \begin{align}
         Y_{M+1-L_0}(\rho)A^{\rho_{M+1-L_0}\cdots\rho_{M-1}}
-        =
-        A^{\rho_1\cdots\rho_{L_0-1}}Y_M(\rho).
-    \]
+        &= A^{\rho_1\cdots\rho_{L_0-1}}Y_M(\rho).
+        \notag
+    \end{align}
     Finally, the outside-label uniqueness lemma identifies the final boundary
     matrix with the matrix $Y_\nu$ attached to the complementary word $\nu$.
-    Thus
-    \[
-        X A^\alpha A^\nu=A^\alpha Y_\nu .
-    \]
-    Multiplying on the left by $A^\beta$ and taking the trace gives the
-    asserted identity for every length-$L_0$ word $\beta$.
+    Thus $X A^\alpha A^\nu=A^\alpha Y_\nu$. Multiplying on the left by
+    $A^\beta$ and taking the trace gives the asserted identity for every
+    length-$L_0$ word $\beta$.
 \end{proof}
 
 \begin{theorem}[Length-word trace separation for the boundary block window]
@@ -244,33 +190,29 @@
     $Y_\nu$ be a matrix for each complementary word $\nu$ of length $K$.
     Suppose that, for every word $\alpha$ of length $L_0$, every word $\beta$
     of length $L_0$, and every complementary word $\nu$,
-    \[
+    \begin{align}
         \tr\left(A^\beta X A^\alpha A^\nu\right)
-        =
-        \tr\left(A^\beta A^\alpha Y_\nu\right).
-    \]
+        &= \tr\left(A^\beta A^\alpha Y_\nu\right).
+        \notag
+    \end{align}
     Then, for every word $\alpha$ of length $L_0$ and every complementary word
     $\nu$,
-    \[
-        X A^\alpha A^\nu=A^\alpha Y_\nu .
-    \]
+    $X A^\alpha A^\nu = A^\alpha Y_\nu$.
 \end{theorem}
 
 \begin{proof}
     \leanok
     \uses{lem:ground_space_map_injective_blk}
-    The trace identities say exactly that
-    \[
+    The trace identities say exactly that, for each fixed pair
+    $(\alpha,\nu)$,
+    \begin{align}
         \Gamma_{L_0}(X A^\alpha A^\nu)
-        =
-        \Gamma_{L_0}(A^\alpha Y_\nu)
-    \]
-    for each fixed pair $(\alpha,\nu)$. Since $A$ is $L_0$-block-injective,
-    $\Gamma_{L_0}$ is injective by
+        &= \Gamma_{L_0}(A^\alpha Y_\nu).
+        \notag
+    \end{align}
+    Since $A$ is $L_0$-block-injective, $\Gamma_{L_0}$ is injective by
     Lemma~\ref{lem:ground_space_map_injective_blk}. Hence
-    \[
-        X A^\alpha A^\nu=A^\alpha Y_\nu .
-    \]
+    $X A^\alpha A^\nu=A^\alpha Y_\nu$.
 \end{proof}
 
 \begin{lemma}[Matrix identity $X A^\alpha A^\nu=A^\alpha Y_\nu$ from cyclic-window constraints]
@@ -281,28 +223,23 @@
         thm:closure_property_boundary_block_window_trace_word_ground_space_map,
         thm:block_window_matrix_equation_trace_word_products}
     Let $A$ be $L_0$-block-injective with $L_0>0$, $L_0<M$, and
-    $D\ge1$. Let
-    \[
-        \psi=\Gamma_{M+1}(X)
-    \]
-    and assume that every cyclic restriction of length $L_0+1$ belongs to
-    $G_{L_0+1}(A)$. Then there are boundary matrices $Y_\nu$, indexed by
-    nonempty complementary words $\nu$ of length $M+1-(L_0+1)$, such that for
-    every word $\alpha$ of length $L_0$,
-    \[
-        X A^\alpha A^\nu=A^\alpha Y_\nu .
-    \]
+    $D\ge1$. Let $\psi=\Gamma_{M+1}(X)$ and assume that every cyclic
+    restriction of length $L_0+1$ belongs to $G_{L_0+1}(A)$. Then there are
+    boundary matrices $Y_\nu$, indexed by nonempty complementary words $\nu$
+    of length $M+1-(L_0+1)$, such that, for every word $\alpha$ of length
+    $L_0$,
+    $X A^\alpha A^\nu = A^\alpha Y_\nu$.
 \end{lemma}
 
 \begin{proof}
     \leanok
     Theorem~\ref{thm:closure_property_boundary_block_window_trace_word_ground_space_map}
     gives, for every word $\beta$ of length $L_0$,
-    \[
+    \begin{align}
         \tr\left(A^\beta X A^\alpha A^\nu\right)
-        =
-        \tr\left(A^\beta A^\alpha Y_\nu\right).
-    \]
+        &= \tr\left(A^\beta A^\alpha Y_\nu\right).
+        \notag
+    \end{align}
     Theorem~\ref{thm:block_window_matrix_equation_trace_word_products} then
     gives the displayed matrix equation.
 \end{proof}
@@ -317,51 +254,28 @@
     matrix, let $W_\eta$ and $V_\eta$ be matrix families indexed by a physical
     letter $\eta$, and let $\mu$ be a word. Suppose that, for every physical
     letter $j$,
-    \[
-        X A^j=A^jX
-    \]
-    Suppose also that, for every $\eta$ and
-    every $j$,
-    \[
-        W_\eta A^j = A^\mu A^jX,
-        \qquad
-        X A^jA^\mu = A^jV_\eta .
-    \]
+    $X A^j = A^jX$.
+    Suppose also that, for every $\eta$ and every $j$,
+    \begin{align}
+        W_\eta A^j &= A^\mu A^jX,
+        \notag\\
+        X A^jA^\mu &= A^jV_\eta.
+        \notag
+    \end{align}
     Then, for every $\eta$ and every $j$,
-    \[
-        W_\eta A^j=V_\eta A^j.
-    \]
+    $W_\eta A^j = V_\eta A^j$.
 \end{lemma}
 
 \begin{proof}
     \leanok
     \uses{lem:one_sided_boundary_witness_unique}
-    The commutation relation $X A^j=A^jX$ extends by induction: for every word
-    $w$,
-    \[
-        X A^w=A^wX
-    \]
-    Hence the second one-sided equation gives, for every $k$,
-    \[
-        A^kV_\eta
-        =
-        X A^kA^\mu
-        =
-        A^kX A^\mu
-        =
-        A^kA^\mu X .
-    \]
+    The commutation relation $X A^j=A^jX$ extends by induction to
+    $X A^w=A^wX$ for every word $w$. Hence the second one-sided equation gives,
+    for every $k$,
+    $A^kV_\eta = X A^kA^\mu = A^kX A^\mu = A^kA^\mu X$.
     Lemma~\ref{lem:one_sided_boundary_witness_unique} gives
     $V_\eta=A^\mu X$. The first one-sided equation then gives
-    \[
-        W_\eta A^j
-        =
-        A^\mu A^jX
-        =
-        A^\mu X A^j
-        =
-        V_\eta A^j .
-    \]
+    $W_\eta A^j = A^\mu A^jX = A^\mu X A^j = V_\eta A^j$.
 \end{proof}
 
 \begin{lemma}[Products with one-site tensors determine the boundary matrix]
@@ -369,21 +283,13 @@
     \lean{MPSTensor.wrapped_mirror_witness_agree_of_right_products}
     \leanok
     \uses{lem:one_sided_boundary_witness_unique}
-    Let $A$ be $L_0$-block-injective with $L_0>0$.  Fix two matrix
+    Let $A$ be $L_0$-block-injective with $L_0>0$. Fix two matrix
     families $Y^+$ and $Y^-$ and the two reindexed boundary conditions
-    $\tau^+_\eta(\mu)$ and $\tau^-_\eta(\mu)$.  If, for every physical letter
+    $\tau^+_\eta(\mu)$ and $\tau^-_\eta(\mu)$. If, for every physical letter
     $j$,
-    \[
-        Y^+_{\tau^+_\eta(\mu)} A^j
-        =
-        Y^-_{\tau^-_\eta(\mu)} A^j,
-    \]
+    $Y^+_{\tau^+_\eta(\mu)} A^j = Y^-_{\tau^-_\eta(\mu)} A^j$,
     then
-    \[
-        Y^+_{\tau^+_\eta(\mu)}
-        =
-        Y^-_{\tau^-_\eta(\mu)}.
-    \]
+    $Y^+_{\tau^+_\eta(\mu)} = Y^-_{\tau^-_\eta(\mu)}$.
 \end{lemma}
 
 \begin{proof}
@@ -402,14 +308,10 @@
     configuration $\rho$ has the same word $\mu$ as
     $\tau^+_\eta(\mu)$ on the sites outside the last-site cyclic window, then
     the two matrices representing that restriction agree:
-    \[
-        Y_\rho=Y_{\tau^+_\eta(\mu)}.
-    \]
-    The same assertion holds for the second boundary-crossing window:
-    if $\rho$ has the same outside word as $\tau^-_\eta(\mu)$, then
-    \[
-        Y_\rho=Y_{\tau^-_\eta(\mu)}.
-    \]
+    $Y_\rho = Y_{\tau^+_\eta(\mu)}$.
+    The same assertion holds for the second boundary-crossing window: if
+    $\rho$ has the same outside word as $\tau^-_\eta(\mu)$, then
+    $Y_\rho = Y_{\tau^-_\eta(\mu)}$.
     This is the boundary-matrix independence step used to choose one
     representative outside configuration for each outside word in the
     closure-property matrix comparison.
@@ -418,9 +320,7 @@
 \begin{proof}
     \leanok
     Equality of the cyclic restrictions gives, for every physical letter $j$,
-    \[
-        Y_\rho A^j=Y_{\tau^\pm_\eta(\mu)}A^j.
-    \]
+    $Y_\rho A^j = Y_{\tau^\pm_\eta(\mu)}A^j$.
     Lemma~\ref{lem:one_sided_boundary_witness_unique} identifies the two
     matrices from these one-site products.
 \end{proof}
@@ -430,31 +330,29 @@
     \lean{MPSTensor.eq_of_forall_restrictFirst_eq}
     \leanok
     Let $R_j$ be restriction to first letter $j$:
-    \[
+    \begin{align}
         (R_j\phi)(\sigma_1,\ldots,\sigma_L)
-        =
-        \phi(j,\sigma_1,\ldots,\sigma_L).
-    \]
+        &= \phi(j,\sigma_1,\ldots,\sigma_L).
+        \notag
+    \end{align}
     For $\phi,\psi\in(\C^d)^{\otimes(L+1)}$,
-    \[
-        \bigl(\forall j,\ R_j\phi=R_j\psi\bigr)
-        \Longrightarrow
-        \phi=\psi .
-    \]
+    \begin{align}
+        (\forall j,\ R_j\phi=R_j\psi)
+        &\quad\Longrightarrow\quad \phi=\psi.
+        \notag
+    \end{align}
 \end{lemma}
 
 \begin{proof}
     \leanok
-    At $(\sigma_0,\sigma_1,\ldots,\sigma_L)$ the required equality is
-    \[
+    At $(\sigma_0,\sigma_1,\ldots,\sigma_L)$, the required equality is
+    \begin{align}
         \phi(\sigma_0,\sigma_1,\ldots,\sigma_L)
-        =
-        (R_{\sigma_0}\phi)(\sigma_1,\ldots,\sigma_L)
-        =
-        (R_{\sigma_0}\psi)(\sigma_1,\ldots,\sigma_L)
-        =
-        \psi(\sigma_0,\sigma_1,\ldots,\sigma_L).
-    \]
+        &= (R_{\sigma_0}\phi)(\sigma_1,\ldots,\sigma_L)
+         = (R_{\sigma_0}\psi)(\sigma_1,\ldots,\sigma_L)
+         = \psi(\sigma_0,\sigma_1,\ldots,\sigma_L).
+        \notag
+    \end{align}
 \end{proof}
 
 \begin{lemma}[Auxiliary restriction equality for the closure property]
@@ -463,23 +361,22 @@
     \leanok
     \uses{lem:first_letter_restrictions_determine, rem:cyclic_window_operators}
     Let $L_0>0$ and $L_0\le M$, and set
-    \[
+    \begin{align}
         B^+_{\eta,\mu}(\psi)
-        =
-        \Res^{\tau^+_{\eta}(\mu)}_{M,L_0+1}(\psi),
-        \qquad
+        &= \Res^{\tau^+_{\eta}(\mu)}_{M,L_0+1}(\psi),
+        \notag\\
         B^-_{\eta,\mu}(\psi)
-        =
-        \Res^{\tau^-_{\eta}(\mu)}_{M+1-L_0,L_0+1}(\psi).
-    \]
+        &= \Res^{\tau^-_{\eta}(\mu)}_{M+1-L_0,L_0+1}(\psi).
+        \notag
+    \end{align}
     With $R_j$ as in Lemma~\ref{lem:first_letter_restrictions_determine},
-    \[
+    \begin{align}
         \bigl(\forall j,\ R_jB^+_{\eta,\mu}(\psi)
-        =
-        R_jB^-_{\eta,\mu}(\psi)\bigr)
-        \Longrightarrow
+        = R_jB^-_{\eta,\mu}(\psi)\bigr)
+        &\quad\Longrightarrow\quad
         B^+_{\eta,\mu}(\psi)=B^-_{\eta,\mu}(\psi).
-    \]
+        \notag
+    \end{align}
 \end{lemma}
 
 \begin{proof}
@@ -497,38 +394,32 @@
     Let $A$ be an MPS tensor, let $L_0>0$, and let $L_0\le M$. Suppose the two
     boundary-crossing restrictions of length $L_0+1$ are represented by boundary
     matrices $Y^+_{\eta,\mu}$ and $Y^-_{\eta,\mu}$:
-    \[
-        B^+_{\eta,\mu}(\psi)=\Gamma_{L_0+1}(Y^+_{\eta,\mu}),
-        \qquad
-        B^-_{\eta,\mu}(\psi)=\Gamma_{L_0+1}(Y^-_{\eta,\mu}).
-    \]
+    \begin{align}
+        B^+_{\eta,\mu}(\psi)
+        &= \Gamma_{L_0+1}(Y^+_{\eta,\mu}),
+        \notag\\
+        B^-_{\eta,\mu}(\psi)
+        &= \Gamma_{L_0+1}(Y^-_{\eta,\mu}).
+        \notag
+    \end{align}
     If, for every physical letter $j$,
-    \[
-        Y^+_{\eta,\mu}A^j
-        =
-        Y^-_{\eta,\mu}A^j,
-    \]
+    $Y^+_{\eta,\mu}A^j = Y^-_{\eta,\mu}A^j$,
     then
-    \[
-        B^+_{\eta,\mu}(\psi)=B^-_{\eta,\mu}(\psi).
-    \]
+    $B^+_{\eta,\mu}(\psi) = B^-_{\eta,\mu}(\psi)$.
 \end{lemma}
 
 \begin{proof}
     \leanok
     Fix $j$ and take the first-letter restriction of the two displayed
     length-$(L_0+1)$ restrictions. These are
-    \[
-        \Gamma_{L_0}(Y^+_{\eta,\mu}A^j),
-        \qquad
-        \Gamma_{L_0}(Y^-_{\eta,\mu}A^j).
-    \]
-    The one-site product equality gives, for every $j$,
-    \[
+    $\Gamma_{L_0}(Y^+_{\eta,\mu}A^j)$ and
+    $\Gamma_{L_0}(Y^-_{\eta,\mu}A^j)$. The one-site product equality gives,
+    for every $j$,
+    \begin{align}
         \Gamma_{L_0}(Y^+_{\eta,\mu}A^j)
-        =
-        \Gamma_{L_0}(Y^-_{\eta,\mu}A^j).
-    \]
+        &= \Gamma_{L_0}(Y^-_{\eta,\mu}A^j).
+        \notag
+    \end{align}
     Lemma~\ref{lem:first_letter_restrictions_determine} identifies the two
     original restrictions.
 \end{proof}
@@ -542,17 +433,13 @@
     length-$(L_0+1)$ cyclic restrictions of $\psi$. Fix a complementary
     word $\mu$. If, for every boundary letter $\eta$ and physical letter
     $j$,
-    \[
-        Y_M(\tau^+_\eta(\mu))A^j
-        =
-        Y_{M+1-L_0}(\tau^-_\eta(\mu))A^j,
-    \]
-    then for every $\eta$,
-    \[
+    $Y_M(\tau^+_\eta(\mu))A^j = Y_{M+1-L_0}(\tau^-_\eta(\mu))A^j$,
+    then, for every $\eta$,
+    \begin{align}
         \Res^{\tau^+_\eta(\mu)}_{M,L_0+1}(\psi)
-        =
-        \Res^{\tau^-_\eta(\mu)}_{M+1-L_0,L_0+1}(\psi).
-    \]
+        &= \Res^{\tau^-_\eta(\mu)}_{M+1-L_0,L_0+1}(\psi).
+        \notag
+    \end{align}
 \end{lemma}
 
 \begin{proof}
@@ -572,18 +459,19 @@
         thm:boundary_closing_right_products_chain_ground_space}
     Let $A$ be $L_0$-block-injective with $L_0>0$ and $D\ge1$, let
     $L_0<M$, and let
-    \[
-        \psi\in\mathcal G_{M+1,L_0+1}(A),
-        \qquad
-        \psi=\Gamma_{M+1}(X).
-    \]
+    \begin{align}
+        \psi &\in\mathcal G_{M+1,L_0+1}(A),
+        \notag\\
+        \psi &= \Gamma_{M+1}(X).
+        \notag
+    \end{align}
     For every boundary letter $\eta$ and complementary word $\mu$, the two
     restrictions crossing the periodic cut satisfy
-    \[
+    \begin{align}
         \Res^{\tau^+_{\eta}(\mu)}_{M,L_0+1}(\psi)
-        =
-        \Res^{\tau^-_{\eta}(\mu)}_{M+1-L_0,L_0+1}(\psi).
-    \]
+        &= \Res^{\tau^-_{\eta}(\mu)}_{M+1-L_0,L_0+1}(\psi).
+        \notag
+    \end{align}
 \end{lemma}
 
 \begin{proof}
@@ -591,22 +479,17 @@
     The cyclic-window representation lemma gives matrices
     $Y_M(\tau^+_\eta(\mu))$ and
     $Y_{M+1-L_0}(\tau^-_\eta(\mu))$ such that
-    \[
+    \begin{align}
         \Res^{\tau^+_\eta(\mu)}_{M,L_0+1}(\psi)
-        =
-        \Gamma_{L_0+1}\!\left(Y_M(\tau^+_\eta(\mu))\right),
-        \qquad
+        &= \Gamma_{L_0+1}\!\left(Y_M(\tau^+_\eta(\mu))\right),
+        \notag\\
         \Res^{\tau^-_\eta(\mu)}_{M+1-L_0,L_0+1}(\psi)
-        =
-        \Gamma_{L_0+1}\!\left(Y_{M+1-L_0}(\tau^-_\eta(\mu))\right).
-    \]
+        &= \Gamma_{L_0+1}\!\left(Y_{M+1-L_0}(\tau^-_\eta(\mu))\right).
+        \notag
+    \end{align}
     Theorem~\ref{thm:boundary_closing_right_products_chain_ground_space}
     gives, for every $j$,
-    \[
-        Y_M(\tau^+_\eta(\mu))A^j
-        =
-        Y_{M+1-L_0}(\tau^-_\eta(\mu))A^j .
-    \]
+    $Y_M(\tau^+_\eta(\mu))A^j = Y_{M+1-L_0}(\tau^-_\eta(\mu))A^j$.
     Lemma~\ref{lem:closed_boundary_restriction_from_right_products} identifies
     the two length-$(L_0+1)$ restrictions.
 \end{proof}
