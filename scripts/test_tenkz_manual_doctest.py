@@ -32,19 +32,29 @@ def main() -> int:
 
     fixture = r"""
 \begin{tnmultiples}[
-  caption={A [nested] title},
+  caption={domain [0,1)},
   variants={{dot}{dot},{box}{box}}]
 \begin{tenkz} \tn[variant]{A} \end{tenkz}
 \end{tnmultiples}
 \begin{Verbatim}
 \tntree{((ab)c)}
 \end{Verbatim}
+% \begin{tnexample}
+% \begin{tenkz} \tn{commented} \end{tenkz}
+% \end{tnexample}
+\begin{Verbatim}
+\documentclass{standalone}
+\usepackage{tenkz}
+\begin{document}
+\begin{tenkz} \tn{complete} \end{tenkz}
+\end{document}
+\end{Verbatim}
 """
     with tempfile.TemporaryDirectory(prefix="tenkz-doctest-unit-") as tmp:
         path = Path(tmp) / "fixture.tex"
         path.write_text(fixture, encoding="utf-8")
         extracted = DOCTEST.extract_displayed_examples(path)
-    if len(extracted) != 3 or any(
+    if len(extracted) != 4 or any(
         r"\begin{tenkz}" not in example.document for example in extracted[:2]
     ):
         raise AssertionError("nested tnmultiple options confused body extraction")
@@ -52,6 +62,9 @@ def main() -> int:
         raise AssertionError("tnmultiples variants were not installed independently")
     if r"\tntree" not in extracted[2].document:
         raise AssertionError("a registry command in Verbatim was not recognized as TeX")
+    complete = extracted[3].document
+    if complete.count(r"\documentclass") != 1 or r"\tn{commented}" in complete:
+        raise AssertionError("complete or commented Verbatim documents were mishandled")
 
     print("PASS: tenkz manual doctest extraction and reference coverage")
     return 0
