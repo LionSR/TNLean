@@ -220,7 +220,7 @@ is verified later. Do not replace it by a vague reference to an entire appendix.
 
 #### What may move to a supporting appendix
 
-Technical appendices may contain intermediate results introduced to manage
+Supporting appendices may contain intermediate results introduced to manage
 support restrictions, casts, reindexings, common dimensions, preservation under
 standard constructions, routine matrix identities, and other detailed steps
 that do not carry the main mathematical narrative. Long proof expansions may
