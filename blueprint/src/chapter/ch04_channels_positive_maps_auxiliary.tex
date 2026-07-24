@@ -149,20 +149,22 @@
 \end{lemma}
 
 \begin{proof}\leanok
+    \uses{lem:pos_def_inv_sqrt_invertible, lem:conj_inv_sqrt_normalizes,
+        thm:trace_normalization_inverse_square_root}
     Take $X=(T^*(\Id))^{-1/2}$. It is invertible by
-    Lemma~\ref{lem:pos_def_inv_sqrt_invertible}. The inverse-square-root
-    normalization in
-    Theorem~\ref{thm:trace_normalization_inverse_square_root} gives
-    $X^\dagger T^*(\Id)X=\Id$. Hence the trace-pairing identity and
-    cyclicity give, for every $\rho$,
+    Lemma~\ref{lem:pos_def_inv_sqrt_invertible}, and
+    Theorem~\ref{thm:trace_normalization_inverse_square_root} gives directly
+    that $\rho\mapsto T(X\rho X^\dagger)$ is positive and trace-preserving.
+    The normalization behind that theorem is
+    Lemma~\ref{lem:conj_inv_sqrt_normalizes}, which gives
+    $X^\dagger T^*(\Id)X=\Id$. Indeed, the trace-pairing identity and
+    cyclicity then give, for every $\rho$,
     \begin{align}
         \tr\!(T(X\rho X^\dagger))
         &=\tr\!(\rho X^\dagger T^*(\Id)X)
         =\tr(\rho).
         \notag
     \end{align}
-    Conjugation by $X$ preserves positive semidefiniteness, and $T$ is
-    positive, so $\rho\mapsto T(X\rho X^\dagger)$ is also positive.
 \end{proof}
 
 \begin{theorem}[The trace bounds a positive matrix]
