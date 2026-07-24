@@ -120,8 +120,11 @@
 \dim_new:N \l__tenkz_string_intersection_y_dim
 \dim_new:N \l__tenkz_string_endpoint_x_dim
 \dim_new:N \l__tenkz_string_endpoint_y_dim
+\dim_new:N \l__tenkz_string_distance_dim
+\dim_new:N \l__tenkz_string_nearest_dim
 \int_new:N \l__tenkz_string_n_int
 \int_new:N \l__tenkz_string_cubic_int
+\int_new:N \l__tenkz_string_recount_int
 \int_new:N \l__tenkz_string_declared_int
 \int_new:N \l__tenkz_string_first_segment_int
 \int_new:N \l__tenkz_string_real_segments_int
@@ -956,51 +959,47 @@
 \cs_new_protected:Npn \__tenkz_string_find_inserted_boundary:nn #1#2
   {
     \int_zero:N \l__tenkz_string_insertion_int
-    \__tenkz_string_count:nnN {#1}{#2} \l__tenkz_string_n_int
-    \int_compare:nNnT {\l__tenkz_string_n_int} > {0}
+    \__tenkz_string_count:nnN {#1}{#2} \l__tenkz_string_recount_int
+    \int_compare:nNnT {\l__tenkz_string_recount_int} > {0}
       {
         \pgf@process{\pgfpointintersectionsolution{1}}
         \dim_set:Nn \l__tenkz_string_intersection_x_dim {\pgf@x}
         \dim_set:Nn \l__tenkz_string_intersection_y_dim {\pgf@y}
+        \dim_set:Nn \l__tenkz_string_nearest_dim {\maxdimen}
         \seq_map_indexed_inline:Nn
           \l__tenkz_string_after_components_seq
           {
-            \int_compare:nNnT
-              {\l__tenkz_string_insertion_int} = {0}
+            \tl_set:Nn \l__tenkz_string_last_tl {##2}
+            \spath_finalpoint:NV
+              \l__tenkz_string_tmp_tl
+              \l__tenkz_string_last_tl
+            \dim_set:Nn \l__tenkz_string_endpoint_x_dim
+              {\tl_item:Nn \l__tenkz_string_tmp_tl {1}}
+            \dim_set:Nn \l__tenkz_string_endpoint_y_dim
+              {\tl_item:Nn \l__tenkz_string_tmp_tl {2}}
+            \dim_set:Nn \l__tenkz_string_distance_dim
               {
-                \tl_set:Nn \l__tenkz_string_last_tl {##2}
-                \spath_finalpoint:NV
-                  \l__tenkz_string_tmp_tl
-                  \l__tenkz_string_last_tl
-                \dim_set:Nn \l__tenkz_string_endpoint_x_dim
-                  {\tl_item:Nn \l__tenkz_string_tmp_tl {1}}
-                \dim_set:Nn \l__tenkz_string_endpoint_y_dim
-                  {\tl_item:Nn \l__tenkz_string_tmp_tl {2}}
-                \bool_if:nT
+                \dim_abs:n
                   {
-                    \dim_compare_p:nNn
-                      {
-                        \dim_abs:n
-                          {
-                            \l__tenkz_string_endpoint_x_dim
-                            - \l__tenkz_string_intersection_x_dim
-                          }
-                      }
-                      <
-                      {\dim_eval:n {\__tenkz_dim:n {crossgap} / 100}}
-                    &&
-                    \dim_compare_p:nNn
-                      {
-                        \dim_abs:n
-                          {
-                            \l__tenkz_string_endpoint_y_dim
-                            - \l__tenkz_string_intersection_y_dim
-                          }
-                      }
-                      <
-                      {\dim_eval:n {\__tenkz_dim:n {crossgap} / 100}}
+                    \l__tenkz_string_endpoint_x_dim
+                    - \l__tenkz_string_intersection_x_dim
                   }
-                  {\int_set:Nn \l__tenkz_string_insertion_int {##1}}
+                +
+                \dim_abs:n
+                  {
+                    \l__tenkz_string_endpoint_y_dim
+                    - \l__tenkz_string_intersection_y_dim
+                  }
+              }
+            \dim_compare:nNnT
+              {\l__tenkz_string_distance_dim}
+              <
+              {\l__tenkz_string_nearest_dim}
+              {
+                \dim_set_eq:NN
+                  \l__tenkz_string_nearest_dim
+                  \l__tenkz_string_distance_dim
+                \int_set:Nn \l__tenkz_string_insertion_int {##1}
               }
           }
       }
