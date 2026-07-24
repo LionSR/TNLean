@@ -1477,7 +1477,8 @@
   {
     \__tenkz_model_record_atom:e
       { kind={site},
-        cell={#1-#2-\int_use:N \l__tenkzl_sheet_int} }
+        cell={\tenkz_cs_cellkey:nnn
+          {#1}{#2}{\int_use:N \l__tenkzl_sheet_int}} }
   }
 
 % one full genre pass over the CURRENT sheet (selected by
@@ -3261,14 +3262,14 @@
         \tl_if_blank:nF {#8}
           {
             \__tenkz_render_labelnode_named:nnnn {tn~label, anchor=south~west}
-      {tenkzl-edge-label-probe}
-      { ( \dim_eval:n
-                  { ( \l__tenkzl_qx_dim + \l__tenkzl_px_dim ) / 2
-                    + \tenkz@dim{\tenkz@r@labelclear} } ,
-                \dim_eval:n
-                  { ( \l__tenkzl_qy_dim + \l__tenkzl_py_dim ) / 2
-                    + \tenkz@dim{\tenkz@r@labelclear} } ) }
-      {#8}
+              {tenkzl-edge-label-probe}
+              { ( \dim_eval:n
+                    { ( \l__tenkzl_qx_dim + \l__tenkzl_px_dim ) / 2
+                      + \tenkz@dim{\tenkz@r@labelclear} } ,
+                  \dim_eval:n
+                    { ( \l__tenkzl_qy_dim + \l__tenkzl_py_dim ) / 2
+                      + \tenkz@dim{\tenkz@r@labelclear} } ) }
+              {#8}
             \tenkzl_record_obstacle_bbox:n {tenkzl-edge-label-probe}
           }
         % the audit rebuilds region set-algebra from these events (a
@@ -3491,15 +3492,16 @@
       {
         \tenkzl_site:nn {#1}{#2}
         \begin{pgfonlayer}{tenkz-lattice-labels}
-          \__tenkz_render_labelnode_named:nnnn {tn~label, anchor=south~west, fill=tenkzPaper}
-      {tenkzl-site-label-probe}
-      { ( \dim_eval:n { \l__tenkzl_px_dim
-                            + \tenkz@dim{\tenkz@r@dotdia} / 2
-                            + \tenkz@dim{\tenkz@r@labelclear} } ,
-              \dim_eval:n { \l__tenkzl_py_dim
-                            + \tenkz@dim{\tenkz@r@dotdia} / 2
-                            + \tenkz@dim{\tenkz@r@labelclear} } ) }
-      {#4}
+          \__tenkz_render_labelnode_named:nnnn
+            {tn~label, anchor=south~west, fill=tenkzPaper}
+            {tenkzl-site-label-probe}
+            { ( \dim_eval:n { \l__tenkzl_px_dim
+                              + \tenkz@dim{\tenkz@r@dotdia} / 2
+                              + \tenkz@dim{\tenkz@r@labelclear} } ,
+                \dim_eval:n { \l__tenkzl_py_dim
+                              + \tenkz@dim{\tenkz@r@dotdia} / 2
+                              + \tenkz@dim{\tenkz@r@labelclear} } ) }
+            {#4}
         \end{pgfonlayer}
         \tenkzl_record_site_label_bbox:nnn {#1}{#2}{#3}
       }
@@ -3717,9 +3719,10 @@
               { ( \tenkzl_cy:n{\l__tenkzl_rmin_int}
                  + \tenkzl_cy:n{\l__tenkzl_rmax_int} ) / 2 }
             \__tenkz_render_labelnode_named:nnnn {tn~label, anchor=center}
-      {tenkzl-region-label-probe}
-      { ( \dim_use:N \l__tenkzl_px_dim , \dim_use:N \l__tenkzl_py_dim ) }
-      { $#2$ }
+              {tenkzl-region-label-probe}
+              { ( \dim_use:N \l__tenkzl_px_dim ,
+                  \dim_use:N \l__tenkzl_py_dim ) }
+              { $#2$ }
             \tenkzl_record_obstacle_bbox:n {tenkzl-region-label-probe} }
       }
   }
