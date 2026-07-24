@@ -1,0 +1,18 @@
+% Kernel fixture: LANGUAGE-1.0.md section 12.6 (rmp-ii-blocking family).
+% Expected records: four atoms on row 1 (cols 1-4, physical=up), one
+% enclosure mark over (1,1)-(1,4).  Ink awaits the S4 render integration.
+\documentclass{standalone}
+\usepackage{tenkz}
+\makeatletter
+\ExplSyntaxOn
+\file_input:n { tenkz-kernel.code.tex }
+\ExplSyntaxOff
+\makeatother
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[rows={ket}, cols=4, physical=up]
+  \tn[up=$i_1$]{A} & \tn[up=$i_2$]{A} & \tn[skin=dots]{} & \tn[up=$i_L$]{A}
+  \tnmark[form=enclosure, label pos=w]{(1,1)-(1,4)}{$A^{[L]}$}
+\end{tenkz}
+\mbox{parsed}
+\end{document}
