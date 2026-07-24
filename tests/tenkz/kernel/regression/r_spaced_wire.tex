@@ -1,0 +1,18 @@
+% Regression: whitespace before positional wire ends is syntactic whitespace.
+\documentclass{standalone}
+\usepackage{tenkz}
+\makeatletter
+\ExplSyntaxOn
+\file_input:n { tenkz-kernel.code.tex }
+\ExplSyntaxOff
+\makeatother
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[rows={wire}, cols=2, bonds=none]
+  \tn[at=(1,1), name=A]{A}
+  \tn[at=(1,2), name=B]{B}
+  \tnwire[kind=index]
+    {A.e}{B.w}
+\end{tenkz}
+\mbox{parsed}
+\end{document}

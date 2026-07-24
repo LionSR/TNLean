@@ -1,0 +1,15 @@
+% Regression: a sealed void removes every incident generated grid bond.
+\documentclass{standalone}
+\usepackage{tenkz}
+\makeatletter
+\ExplSyntaxOn
+\file_input:n { tenkz-kernel.code.tex }
+\ExplSyntaxOff
+\makeatother
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[rows={ket}, cols=3]
+  \tn[name=A]{A} & \tn[void=sealed, name=V]{} & \tn[name=C]{C}
+\end{tenkz}
+\mbox{parsed}
+\end{document}
