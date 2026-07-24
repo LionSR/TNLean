@@ -1,8 +1,8 @@
-% Input: validated free atoms, typed ports, joins, regions, and positions.
-% Output: normalized graph records plus free-layout routing ink.
-% Owned state: named atoms, port types, routed joins, and enclosure membership.
-% Invariants: every join resolves two compatible ports before drawing.
-% Next stage: shared event services emit the resolved model used for rendering.
+% Input: public free atoms, typed ports, joins, regions, and author positions.
+% Output: normalized model records plus validated free-layout render requests.
+% Owned state: command staging, named port types, routed joins, and enclosures.
+% Invariants: every committed atom and join records before validation; no raw ink.
+% Next stage: model validation freezes topology; render coordinators emit the ink.
 % tenkz-free supports genuinely non-grid diagrams and is the only tier with runtime
 % port-type assertions: the grid languages are type-safe by construction.
 %
@@ -18,9 +18,10 @@
   {
     \tl_if_empty:nF {#1} { \pgfqkeys{/tenkz}{#1} }
     \tenkz@beginpicture{free}
-    % The free tier records imperatively: atoms and joins write as the
-    % body executes, so validation seals the store at the environment's
-    % END.  Write-only until the free renderer consumes records.
+    % The free tier records imperatively: atoms and joins write as the body
+    % executes, so validation seals the picture-local store before TikZ closes.
+    % This draft still renders from resolved locals; the S4 cutover tracked in
+    % #4699 makes the renderer consume these records directly.
     \__tenkz_model_reset:
     \__tenkz_model_record_picture:n { lang={free} }
     % NFSS sets math fonts up lazily; force them before reading the axis
@@ -221,21 +222,21 @@
     \begin{scope}[local~bounding~box=\l__tenkz_fbound_tl]
       \str_case:Vn \l__tenkz_fshape_tl
         {
-          {dot}  { \__tenkz_render_free_node:nnnn
+          {dot}  { \__tenkz_render_labelnode_named:nnnn
                      {tensor, \l__tenkz_frolesty_tl} {#2} {#3} {}
                    \tl_if_blank:nF {#4}
                      { \exp_args:NV \tenkz_free_dot_label:nnn
                          \l__tenkz_flpos_tl {#2} {#4} } }
-          {box}  { \__tenkz_render_free_node:nnnn
+          {box}  { \__tenkz_render_labelnode_named:nnnn
                      {box~tensor, \l__tenkz_frolesty_tl} {#2} {#3}
                      { $\tenkz@labelsize \tenkz@glyphstrut #4$ } }
-          {pill} { \__tenkz_render_free_node:nnnn
+          {pill} { \__tenkz_render_labelnode_named:nnnn
                      {pill~tensor, \l__tenkz_frolesty_tl} {#2} {#3}
                      { $\tenkz@labelsize \tenkz@glyphstrut #4$ } }
-          {mpo}  { \__tenkz_render_free_node:nnnn
+          {mpo}  { \__tenkz_render_labelnode_named:nnnn
                      {mpo~tensor, \l__tenkz_frolesty_tl} {#2} {#3}
                      { $\tenkz@labelsize \tenkz@glyphstrut #4$ } }
-          {ring} { \__tenkz_render_free_node:nnnn
+          {ring} { \__tenkz_render_labelnode_named:nnnn
                      {on-wire~matrix, \l__tenkz_frolesty_tl} {#2} {#3}
                      { $\tenkz@labelsize \tenkz@glyphstrut #4$ } }
           {boundary}
