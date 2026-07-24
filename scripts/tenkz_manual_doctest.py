@@ -199,6 +199,38 @@ def _find_uncommented(text: str, marker: str, offset: int) -> int:
         offset = found + len(marker)
 
 
+def _extract_usepackages(body: str) -> tuple[list[str], str]:
+    ranges: list[tuple[int, int]] = []
+    offset = 0
+    marker = r"\usepackage"
+    while (start := _find_uncommented(body, marker, offset)) >= 0:
+        cursor = _skip_space_and_comments(body, start + len(marker))
+        if cursor < len(body) and body[cursor] == "[":
+            cursor, _ = _read_optional_argument(body, cursor)
+        cursor = _skip_space_and_comments(body, cursor)
+        end, _ = _read_braced(body, cursor)
+        ranges.append((start, end))
+        offset = end
+
+    packages = [body[start:end].strip() for start, end in ranges]
+    chunks: list[str] = []
+    offset = 0
+    for start, end in ranges:
+        chunks.append(body[offset:start])
+        chunks.append("\n" * body[start:end].count("\n"))
+        offset = end
+    chunks.append(body[offset:])
+    return packages, "".join(chunks)
+
+
+def _find_environment_end(text: str, environment: str, offset: int) -> re.Match[str] | None:
+    pattern = re.compile(
+        rf"^[ \t]*\\end\{{{re.escape(environment)}\}}[ \t]*$",
+        re.MULTILINE,
+    )
+    return pattern.search(text, offset)
+
+
 def _variant_definitions(variant_style: str) -> list[str]:
     return [
         rf"\pgfqkeys{{/tenkz/grid}}{{variant/.style={{{variant_style}}}}}",
@@ -222,14 +254,11 @@ def _standalone_document(body: str, variant_style: str | None = None) -> str:
         definitions = "\n".join(_variant_definitions(variant_style)) + "\n"
         return body[:begin] + definitions + body[begin:] + "\n"
 
-    preamble: list[str] = []
-    content: list[str] = []
-    for line in body.splitlines():
-        if line.lstrip().startswith(r"\usepackage"):
-            preamble.append(line.strip())
-        else:
-            content.append(line)
-    if not any(r"\usepackage{tenkz}" in line for line in preamble):
+    preamble, content = _extract_usepackages(body)
+    tenkz_package = re.compile(
+        r"\\usepackage(?:\s*\[[\s\S]*?\])?\s*\{[^{}]*\btenkz\b[^{}]*\}"
+    )
+    if not any(tenkz_package.search(package) for package in preamble):
         preamble.append(r"\usepackage{tenkz}")
     if variant_style is not None:
         preamble.extend(_variant_definitions(variant_style))
@@ -239,7 +268,7 @@ def _standalone_document(body: str, variant_style: str | None = None) -> str:
             *preamble,
             r"\pagestyle{empty}",
             r"\begin{document}",
-            *content,
+            content,
             r"\end{document}",
             "",
         ]
@@ -249,7 +278,8 @@ def _standalone_document(body: str, variant_style: str | None = None) -> str:
 def extract_displayed_examples(path: Path) -> list[Example]:
     text = path.read_text(encoding="utf-8")
     begin_pattern = re.compile(
-        r"\\begin\{(" + "|".join(DISPLAY_ENVIRONMENTS) + r")\}"
+        r"^[ \t]*\\begin\{(" + "|".join(DISPLAY_ENVIRONMENTS) + r")\}",
+        re.MULTILINE,
     )
     examples: list[Example] = []
     offset = 0
@@ -261,12 +291,13 @@ def extract_displayed_examples(path: Path) -> list[Example]:
         environment = match.group(1)
         body_start, options = _read_optional_argument(text, match.end())
         end_marker = rf"\end{{{environment}}}"
-        body_end = _find_uncommented(text, end_marker, body_start)
-        if body_end < 0:
+        end_match = _find_environment_end(text, environment, body_start)
+        if end_match is None:
             line = text.count("\n", 0, match.start()) + 1
             raise ValueError(f"{path}:{line}: missing {end_marker}")
+        body_end = end_match.start()
         body = text[body_start:body_end].strip()
-        offset = body_end + len(end_marker)
+        offset = end_match.end()
         if environment == "Verbatim" and not _is_tenkz_verbatim(body):
             continue
         line = text.count("\n", 0, match.start()) + 1
@@ -335,7 +366,7 @@ def reference_examples() -> list[Example]:
         if not source.is_file():
             raise ValueError(f"{REGISTRY}: example for \\{command} is missing: {relative}")
         document = source.read_text(encoding="utf-8")
-        uncommented = re.sub(r"(?<!\\)%.*", "", document)
+        uncommented = _strip_tex_comments(document)
         if not re.search(rf"\\{re.escape(command)}(?![A-Za-z@:_])", uncommented):
             raise ValueError(
                 f"{source}: example mapped to \\{command} does not invoke that command"
