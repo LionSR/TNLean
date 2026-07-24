@@ -4,7 +4,7 @@
 The W state on $N$ sites is the single-excitation symmetric state
 \begin{align}
     \ket{W_N}
-    &= \ket{10\cdots0} + \ket{010\cdots0} + \cdots + \ket{0\cdots01},
+     & = \ket{10\cdots0} + \ket{010\cdots0} + \cdots + \ket{0\cdots01},
     \notag
 \end{align}
 the equal-weight superposition of all configurations with exactly one
@@ -22,7 +22,7 @@ left and a right boundary vector rather than by a trace.
     $w=(i_1,\ldots,i_k)$, the open-boundary contraction is the bilinear pairing
     \begin{align}
         (v_L| A^{i_1}A^{i_2}\cdots A^{i_k}\,|v_R)
-        &= v_L^{\mathsf T}(A^{i_1}\cdots A^{i_k})v_R.
+         & = v_L^{\mathsf T}(A^{i_1}\cdots A^{i_k})v_R.
         \notag
     \end{align}
 \end{definition}
@@ -44,9 +44,9 @@ left and a right boundary vector rather than by a trace.
     \uses{def:mps_tensor}
     Set $d=D=2$. The W tensor is the site-independent family
     \begin{align}
-        A^0 &= \begin{pmatrix}1&0\\0&1\end{pmatrix},
-        \notag\\
-        A^1 &= \begin{pmatrix}0&1\\0&0\end{pmatrix},
+        A^0 & = \begin{pmatrix}1&0\\0&1\end{pmatrix},
+        \notag                                        \\
+        A^1 & = \begin{pmatrix}0&1\\0&0\end{pmatrix},
         \notag
     \end{align}
     with left boundary covector $(l|=(0|$ and right boundary vector $|r)=|1)$.
@@ -61,7 +61,7 @@ left and a right boundary vector rather than by a trace.
     single-excitation configurations:
     \begin{align}
         \ket{W_N}(\sigma_1,\ldots,\sigma_N)
-        &=
+         & =
         \begin{cases}
             1, & \text{exactly one } \sigma_j=1, \\
             0, & \text{otherwise}.
@@ -71,7 +71,7 @@ left and a right boundary vector rather than by a trace.
 \end{definition}
 
 \begin{theorem}[The open-boundary contraction is the W state]%
-\label{thm:w_state_identification}
+    \label{thm:w_state_identification}
     \lean{MPSTensor.wTensor_openState_eq_wIndicator}
     \leanok
     \uses{def:w_tensor, def:open_state, def:w_indicator}
@@ -79,8 +79,8 @@ left and a right boundary vector rather than by a trace.
     vectors $(0|$ and $|1)$ equals the W state:
     \begin{align}
         \ket{W_N}
-        &= \sum_{\sigma}(0| A^{\sigma_1}\cdots A^{\sigma_N}\,|1)
-           \ket{\sigma}.
+         & = \sum_{\sigma}(0| A^{\sigma_1}\cdots A^{\sigma_N}\,|1)
+        \ket{\sigma}.
         \notag
     \end{align}
 \end{theorem}
@@ -99,7 +99,7 @@ left and a right boundary vector rather than by a trace.
 \end{proof}
 
 \begin{theorem}[Three-site single excitations]%
-\label{thm:w_state_three_excited}
+    \label{thm:w_state_three_excited}
     \lean{MPSTensor.wState_three_excitedAt}
     \lean{MPSTensor.wState_three_vacuum}
     \lean{MPSTensor.wState_three_double}
@@ -119,7 +119,7 @@ left and a right boundary vector rather than by a trace.
 \end{proof}
 
 \begin{remark}[No fixed-bond translation-invariant family]%
-\label{rem:w_state_ti_bound}
+    \label{rem:w_state_ti_bound}
     \uses{def:w_tensor}
     The open-boundary representation above is not translation invariant: the
     chain is closed by boundary vectors, not by a trace. The review observes
