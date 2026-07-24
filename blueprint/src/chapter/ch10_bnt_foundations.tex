@@ -701,58 +701,136 @@
 \begin{proof}
     \leanok
     \uses{def:bnt_cpsv, def:blockwise_product_word_span}
-    Put $\ell=L_0+1$ and $S=3\ell$, and write
-    $\mathcal G_n^q=\operatorname{ran}\Gamma_n^{A^q}$. Fix $k\ne j$.
-    We first prove
+    Put $\ell=L_0+1$ and $S=3\ell$. For a block $A^q$, define the
+    boundary-to-local-space map
     \begin{align}
-        \mathcal G_S^k\cap\mathcal G_S^j&=\{0\}.
+        T_n^q:\MN{D_q}&\longrightarrow (\C^d)^{\otimes n},
+        \notag\\
+        T_n^q(Z)&=\sum_{|t|=n}\tr(ZA_t^q)\ket{t},
         \notag
     \end{align}
-    Indeed, suppose that a nonzero vector belonged to both spaces and choose
-    boundary matrices $X$ and $Y$ for its two trace representations. Then
-    $X\ne0$ and the equality of the representations is the homogeneous
-    three-block relation
-    \begin{align}
-        \tr(XA^k_{uvw})-\tr(YA^j_{uvw})&=0
-        \qquad (|u|=|v|=|w|=\ell).
-        \notag
-    \end{align}
-    The three-block factorization and length-$\ell$ block injectivity turn
-    this relation into an inclusion of local spaces. After orienting the pair
-    so that the first bond dimension is at least the second, it gives
-    $\mathcal G_\ell^k\subseteq\mathcal G_\ell^j$. The full length-$\ell$
-    word spans and the nondegeneracy of the matrix trace pairing make both
-    maps $\Gamma_\ell^{A^q}$ injective. Consequently,
-    \begin{align}
-        D_k^2
-        &=\dim\mathcal G_\ell^k
-        \leq \dim\mathcal G_\ell^j
-        =D_j^2.
-        \notag
-    \end{align}
-    The chosen ordering forces equality, so $D_k=D_j$ and
-    $\mathcal G_\ell^k=\mathcal G_\ell^j$. Using the injective
-    length-$L_0$ boundary maps to close chains, injective uniqueness then makes
-    the periodic matrix product vectors of the two normalized irreducible
-    blocks proportional at arbitrarily large lengths. The BNT hypotheses exclude
-    this: proportionality of normalized irreducible representatives forces a
-    gauge-phase equivalence, whereas distinct same-dimensional representatives
-    were assumed not to be gauge-phase equivalent. This contradiction proves
-    the displayed trivial-intersection identity. If the bond dimensions are
-    unequal, the same dimension inequality is already the contradiction.
+    and its range $\mathcal G_n^q=\operatorname{ran}T_n^q$. This is the same
+    map as $\Gamma_n^{A^q}$, up to cyclically moving $Z$ inside the trace.
+    The full word span at a length $n$ makes $T_n^q$ injective: if
+    $T_n^q(Z)=0$, then $\tr(ZM)=0$ for every $M\in\MN{D_q}$, whence $Z=0$
+    by nondegeneracy of the trace pairing.
 
-    The full length-$S$ word spans similarly make each $\Gamma_S^{A^q}$
-    injective. Hence
+    Fix two distinct blocks and relabel them $A$ and $B$ so that their bond
+    dimensions satisfy $D_B\leq D_A$. We claim that
+    \begin{align}
+        \mathcal G_S^A\cap\mathcal G_S^B&=\{0\}.
+        \notag
+    \end{align}
+    Suppose instead that $0\ne\psi$ lies in this intersection. Since the
+    length-$S$ word spans are full, $T_S^A$ and $T_S^B$ are injective, so there
+    are nonzero matrices $X\in\MN{D_A}$ and $Y\in\MN{D_B}$ with
+    $\psi=T_S^A(X)=T_S^B(Y)$. Splitting every length-$S$ word into three
+    length-$\ell$ words gives
+    \begin{align}
+        \tr(XA_{uvw})&=\tr(YB_{uvw})
+        &&(|u|=|v|=|w|=\ell).
+        \notag
+    \end{align}
+
+    We now derive the local-space inclusion without suppressing the intervening
+    map. Since the length-$\ell$ words of $A$ span $\MN{D_A}$ and $X\ne0$,
+    the two-sided products span the same algebra:
+    \begin{align}
+        \spn\{A_uXA_v:|u|=|v|=\ell\}&=\MN{D_A}.
+        \notag
+    \end{align}
+    Indeed, after expanding arbitrary left and right factors in length-$\ell$
+    words, the left-hand side is the span of $MXN$ with
+    $M,N\in\MN{D_A}$; a nonzero entry of $X$, together with matrix units for
+    $M$ and $N$, produces every matrix unit. Hence, for any
+    $Z\in\MN{D_A}$, there are scalars $a_{u,v}$ such that
+    \begin{align}
+        Z&=\sum_{u,v}a_{u,v}A_uXA_v.
+        \notag
+    \end{align}
+    Define the corresponding boundary matrix for $B$ by
+    \begin{align}
+        R(Z)&=\sum_{u,v}a_{u,v}B_uYB_v\in\MN{D_B}.
+        \notag
+    \end{align}
+    For each length-$\ell$ word $t$, cyclicity of the trace and the three-block
+    relation above, applied to the concatenated word $vtu$, give
+    \begin{align}
+        \tr(ZA_t)
+        &=\sum_{u,v}a_{u,v}\tr(XA_vA_tA_u)
+        \notag\\
+        &=\sum_{u,v}a_{u,v}\tr(YB_vB_tB_u)
+        \notag\\
+        &=\tr(R(Z)B_t).
+        \notag
+    \end{align}
+    Thus $T_\ell^A(Z)=T_\ell^B(R(Z))$. Although the coefficients in a
+    representation of $Z$ need not be unique, their existence for each $Z$ is
+    enough to prove
+    \begin{align}
+        \mathcal G_\ell^A&\subseteq\mathcal G_\ell^B.
+        \notag
+    \end{align}
+
+    Both $T_\ell^A$ and $T_\ell^B$ are injective, so their ranges have
+    dimensions $D_A^2$ and $D_B^2$. The inclusion just proved therefore yields
+    \begin{align}
+        D_A^2
+        &=\dim\mathcal G_\ell^A
+        \leq\dim\mathcal G_\ell^B
+        =D_B^2.
+        \notag
+    \end{align}
+    On the other hand, the chosen orientation $D_B\leq D_A$ gives
+    $D_B^2\leq D_A^2$. Hence $D_A=D_B$ and the inclusion is an equality.
+    If the original bond dimensions were unequal, the strict reverse inequality
+    would already contradict the local-space inclusion. In the remaining
+    equal-dimensional case, identify the two bond index sets through this
+    equality, as in the BNT same-dimension comparison. For
+    $N>\ell$, let $\mathcal C_N^q(\ell)$ be the intersection of the translates
+    of $\mathcal G_\ell^q$ around the periodic chain. Equality
+    $\mathcal G_\ell^A=\mathcal G_\ell^B$ implies
+    \begin{align}
+        \mathcal C_N^A(\ell)&=\mathcal C_N^B(\ell).
+        \notag
+    \end{align}
+    The injective uniqueness theorem, applied with the injective prefix
+    $L_0$ and interaction range $L_0+1=\ell$, identifies these spaces for
+    $N>\ell$ with the periodic MPS lines
+    \begin{align}
+        \mathcal C_N^A(\ell)&=\spn\{\Psi_N(A)\},
+        &
+        \mathcal C_N^B(\ell)&=\spn\{\Psi_N(B)\},
+        \notag\\
+        \Psi_N(A)&=\sum_{|w|=N}\tr(A_w)\ket{w},
+        &
+        \Psi_N(B)&=\sum_{|w|=N}\tr(B_w)\ket{w}.
+        \notag
+    \end{align}
+    Consequently, equality of the local spaces forces
+    $\Psi_N(A)=c_N\Psi_N(B)$ for some scalar $c_N$ at every such $N$.
+    The normalized irreducible uniqueness theorem says conversely that two
+    same-dimensional normalized representatives whose periodic MPS remain
+    proportional at all sufficiently large lengths are gauge-phase equivalent.
+    Equivalently, the BNT non-gauge-phase hypothesis supplies, beyond every
+    prescribed threshold, an $N$ for which no scalar $c_N$ gives this
+    proportionality. Choose such an $N>\max\{2,\ell\}$. The preceding
+    parent-ground-space equality gives exactly the forbidden proportionality,
+    a contradiction. This proves
+    $\mathcal G_S^A\cap\mathcal G_S^B=\{0\}$, and hence the same assertion for
+    the original ordering of the pair.
+
+    The direct sum map
     \begin{align}
         \Phi_{k,j}:\MN{D_k}\oplus\MN{D_j}
         &\longrightarrow (\C^d)^{\otimes S},
         \notag\\
-        (X,Y)&\longmapsto
-        \Gamma_S^{A^k}(X)+\Gamma_S^{A^j}(Y)
+        (X,Y)&\longmapsto T_S^k(X)+T_S^j(Y)
         \notag
     \end{align}
-    is injective. All spaces are finite-dimensional, so its dual is
-    surjective. Under the nondegenerate trace pairings, that dual sends word
+    is now injective: the trivial intersection handles the two summands, and
+    each $T_S^q$ is injective. All spaces are finite-dimensional, so the dual
+    map is surjective. Under the nondegenerate trace pairings, it sends word
     coefficients $(c_\omega)_\omega$ to
     \begin{align}
         \left(\sum_{|\omega|=S}c_\omega A^k_\omega,
@@ -822,20 +900,38 @@
     irreducible and primitive, form a left-canonical family, and have
     normalized self-overlaps. Choose a common positive length $p$ at which
     every gauged block is block-injective. Positive-length propagation gives
-    block injectivity at $p+1$ and at $3(p+1)$; equivalently, the corresponding
-    homogeneous word spans are full, while the length-$p$ trace map is
-    injective. Thus all hypotheses of the preceding
-    Lemma~\ref{lem:bnt_direct_sum_injective_prefix_word_span} hold with
-    $L_0=p$. Applying it gives the full simultaneous product-algebra span at
-    the exact length
+    block injectivity at $p+1$ and at $3(p+1)$.
+
+    Use the pair-selector conclusion of
+    Lemma~\ref{lem:bnt_direct_sum_injective_prefix_word_span} with $L_0=p$.
+    Thus, for each ordered pair $k\ne j$, there is a length-$3(p+1)$ word
+    combination whose value is $\Id$ on block $k$ and $0$ on block $j$.
+    For fixed $k$, multiply the $g-1$ selectors indexed by $j\ne k$.
+    Concatenation multiplies their block evaluations and gives a selector of
+    length
     \begin{align}
-        L&=(p+1)+3(g-1)(p+1).
+        3(g-1)(p+1)
         \notag
     \end{align}
-    Conjugation by the Perron gauges preserves this span, since it conjugates
-    each component matrix by an invertible map. Finally, a one-letter
-    evaluation of $A_j^{[L]}$ is precisely a length-$L$ word evaluation of
-    $A_j$, which proves the asserted blocked one-letter span.
+    whose value is $\Id$ on block $k$ and $0$ on every other block. Gauge
+    equivalence carries these selector identities back to the original blocks.
+
+    The original blocks also have full length-$p$ word span, since block
+    injectivity is invariant under the Perron gauge. Given
+    $X_k\in\MN{D_k}$, choose a length-$p$ word combination evaluating to
+    $X_k$ on block $k$, and concatenate it with the selector for $k$. This
+    realizes the product-algebra tuple supported at $k$ with value $X_k$.
+    Summing over $k$ gives the full simultaneous span at the constructed
+    length
+    \begin{align}
+        L
+        &=p+3(g-1)(p+1).
+        \notag
+    \end{align}
+    Since $p>0$, this length is positive. Finally, a one-letter evaluation of
+    $A_j^{[L]}$ is precisely a length-$L$ word evaluation of $A_j$. Hence
+    blocking these $L$ sites turns the simultaneous word span just obtained
+    into the asserted simultaneous one-letter span.
 \end{proof}
 
 Let $A$ be a tensor in canonical form, and let $A_1,\ldots,A_g$ be a basis of
