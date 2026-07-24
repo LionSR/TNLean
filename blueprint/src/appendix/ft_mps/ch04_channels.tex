@@ -3,8 +3,8 @@
 
 This appendix supports Chapter~\ref{ch:channels}. It collects the
 supporting results for complete positivity, trace normalization, density
-matrices, mean-ergodic projections, Kadison--Schwarz identities, and
-idempotent retractions.
+matrices, mean-ergodic projections, weighted traces, and idempotent
+retractions.
 
 \section{Kraus representations and complete positivity}
 
@@ -463,38 +463,6 @@ the second identifies its range and fixed points, completing the adjoint
 retraction argument in
 Theorem~\ref{thm:positive_unital_adjoint_mean_ergodic_retraction}.
 
-\section{Kadison--Schwarz square expansion}
-
-This section proves the sum-of-squares identity used in
-Theorem~\ref{thm:kraus_commute_channels}. For a unital Kraus map
-$E(X)=\sum_iK_iXK_i^\dagger$, the identity resolves its Kadison--Schwarz gap
-into nonnegative square terms.
-
-\begin{theorem}[KS gap decomposition]
-    \label{thm:ks_gap_decomp_channels}
-    \lean{KadisonSchwarz.ks_gap_eq_sum_squares}
-    \leanok
-    \uses{def:kraus_map_channels}
-    For a unital Kraus map,
-    \begin{align}
-        E(X^\dagger X)-E(X)^\dagger E(X)
-         & =\sum_iR_i^\dagger R_i,
-        \label{eq:channel_ks_gap}           \\
-        R_i
-         & :=XK_i^\dagger-K_i^\dagger E(X).
-        \label{eq:channel_ks_remainder}
-    \end{align}
-\end{theorem}
-
-\begin{proof}\leanok
-    Expand the right-hand side of (\ref{eq:channel_ks_gap}), substitute
-    (\ref{eq:channel_ks_remainder}), distribute the products, and use
-    $\sum_iK_iK_i^\dagger=\Id$ to recover the Kadison--Schwarz gap.
-\end{proof}
-
-Thus equality in the Kadison--Schwarz inequality forces each remainder to
-vanish, exactly as used in Theorem~\ref{thm:kraus_commute_channels}.
-
 \section{Weighted traces and idempotent retractions}
 
 This section proves the weighted-trace lemma used in
@@ -522,7 +490,7 @@ Theorem~\ref{thm:map_mem_multiplicativeDomain_of_idempotent}.
 \begin{theorem}[Choi--Effros left absorption]
     \label{thm:choi_effros_left}
     \lean{Kraus.choi_effros_left}\leanok
-    \uses{def:kraus_fixed_points, def:kraus_map_channels}
+    \uses{def:kraus_fixed_points, def:kraus_map}
     Under the same hypotheses, for all $X,Y\in\MN{D}$,
     $E(E(X)Y)=E(E(X)E(Y))$.
 \end{theorem}
@@ -539,7 +507,7 @@ Theorem~\ref{thm:map_mem_multiplicativeDomain_of_idempotent}.
 \begin{theorem}[Choi--Effros right absorption]
     \label{thm:choi_effros_right}
     \lean{Kraus.choi_effros_right}\leanok
-    \uses{def:kraus_fixed_points, def:kraus_map_channels}
+    \uses{def:kraus_fixed_points, def:kraus_map}
     Under the same hypotheses, for all $X,Y\in\MN{D}$,
     $E(XE(Y))=E(E(X)E(Y))$.
 \end{theorem}
@@ -556,7 +524,7 @@ Theorem~\ref{thm:map_mem_multiplicativeDomain_of_idempotent}.
 \begin{theorem}[Choi--Effros symmetric absorption]
     \label{thm:choi_effros_left_eq_right}
     \lean{Kraus.choi_effros_left_eq_right}\leanok
-    \uses{def:kraus_fixed_points, def:kraus_map_channels}
+    \uses{def:kraus_fixed_points, def:kraus_map}
     Under the same hypotheses, for all $X,Y\in\MN{D}$,
     $E(E(X)Y)=E(XE(Y))$.
 \end{theorem}
