@@ -160,16 +160,16 @@ by the RMP manifest.
 | `rmp-w2-four-peps-plaquette` | Section V, 256–264 | Four PEPS tensors occupy the edges of one renormalization plaquette. | `free-graph`, `four-site-plaquette`, `renormalization` |
 | `rmp-w2-peps-block-renormalization` | Section V, 265–277 | A two-by-two PEPS block renormalizes to one effective four-leg tensor. | `lattice`, `blocking`, `equation-composition` |
 | `rmp-w2-f-symbol-tensor` | Section V, 278–280 | One F-symbol tensor carries the trivalent fusion data and its labelled legs. | `coherence`, `fusion-tree` |
-| `rmp-w2-right-intersection-word` | Section V, 281–288 | The right word joins boundary tensor R to tensors B and C and closes both virtual ends into R. | `free-graph`, `closure`, `typed-ports`, `enclosure-marks` |
-| `rmp-w2-left-intersection-word` | Section V, 289–296 | The left word joins tensors A and B to boundary tensor L and closes both virtual ends into L. | `free-graph`, `closure`, `typed-ports`, `enclosure-marks` |
-| `rmp-w2-right-intersection-after-inverse` | Section V, 297–304 | Applying the inverse of B leaves R, one exposed site, and C. | `free-graph`, `closure`, `typed-ports`, `enclosure-marks` |
-| `rmp-w2-left-intersection-after-inverse` | Section V, 305–312 | Applying the inverse of B leaves A, one exposed site, and L. | `free-graph`, `closure`, `typed-ports`, `enclosure-marks` |
-| `rmp-w2-left-intersection-regrown` | Section V, 313–321 | Growing B back gives A joined to B, one exposed site, and boundary tensor L. | `free-graph`, `closure`, `typed-ports`, `enclosure-marks` |
-| `rmp-w2-right-intersection-regrown` | Section V, 322–331 | Growing B back gives boundary tensor R, B, one exposed site, and C. | `free-graph`, `closure`, `typed-ports`, `enclosure-marks` |
-| `rmp-w2-right-intersection-with-s` | Section V, 332–343 | S acts on the right word formed by an uncovered wire, B, and C inside boundary tensor R. | `free-graph`, `closure`, `typed-ports`, `enclosure-marks` |
-| `rmp-w2-left-intersection-after-s-inverse` | Section V, 344–351 | The inverse of S removes the jointly injective A–B pair from the L side. | `free-graph`, `typed-ports`, `enclosure-marks` |
-| `rmp-w2-left-boundary-two-indices` | Section V, 352–357 | After inversion, boundary tensor L retains two open indices. | `grid`, `typed-ports`, `enclosure-marks` |
-| `rmp-w2-right-boundary-x` | Section V, 358–365 | The right boundary reduces to X attached to tensor C inside boundary tensor R. | `free-graph`, `closure`, `typed-ports`, `enclosure-marks` |
+| `rmp-w2-right-intersection-word` | Section V, 281–288 | The right word joins boundary tensor R to tensors B and C and closes both virtual ends into R. | `free-graph`, `closure`, `typed-ports` |
+| `rmp-w2-left-intersection-word` | Section V, 289–296 | The left word joins tensors A and B to boundary tensor L and closes both virtual ends into L. | `free-graph`, `closure`, `typed-ports` |
+| `rmp-w2-right-intersection-after-inverse` | Section V, 297–304 | Applying the inverse of B leaves R, one exposed site, and C. | `free-graph`, `closure`, `typed-ports` |
+| `rmp-w2-left-intersection-after-inverse` | Section V, 305–312 | Applying the inverse of B leaves A, one exposed site, and L. | `free-graph`, `closure`, `typed-ports` |
+| `rmp-w2-left-intersection-regrown` | Section V, 313–321 | Growing B back gives A joined to B, one exposed site, and boundary tensor L. | `free-graph`, `closure`, `typed-ports` |
+| `rmp-w2-right-intersection-regrown` | Section V, 322–331 | Growing B back gives boundary tensor R, B, one exposed site, and C. | `free-graph`, `closure`, `typed-ports` |
+| `rmp-w2-right-intersection-with-s` | Section V, 332–343 | S acts on the right word formed by an uncovered wire, B, and C inside boundary tensor R. | `free-graph`, `closure`, `typed-ports` |
+| `rmp-w2-left-intersection-after-s-inverse` | Section V, 344–351 | The inverse of S removes the jointly injective A–B pair from the L side. | `free-graph`, `typed-ports` |
+| `rmp-w2-left-boundary-two-indices` | Section V, 352–357 | After inversion, boundary tensor L retains two open indices. | `grid`, `typed-ports` |
+| `rmp-w2-right-boundary-x` | Section V, 358–365 | The right boundary reduces to X attached to tensor C inside boundary tensor R. | `free-graph`, `closure`, `typed-ports` |
 | `rmp-w2-right-boundary-window` | Section V, 366–383 | A two-dimensional R-boundary window surrounds its retained B–C interior. | `lattice`, `regions`, `typed-ports` |
 | `rmp-w2-left-boundary-window` | Section V, 384–402 | A two-dimensional L-boundary window surrounds its retained B–A interior. | `lattice`, `regions`, `typed-ports` |
 
@@ -178,7 +178,11 @@ by the RMP manifest.
 The existing column counts blocked targets whose `missing` list names the
 capability in `tests/tenkz/rmp/verdicts.toml`. The wave-2 column counts proposed
 consumers above. The combined column is their sum; it is the demand to use when
-ordering language work.
+ordering language work. These are deliberately different populations: the sum
+combines planned source-block consumers with current blocked targets, not all
+current manifest consumers. A repeated figure block remains a separate proposed
+consumer because this inventory assigns coverage to each author-source
+occurrence; the table does not deduplicate mathematically equivalent blocks.
 
 | Capability | Wave-2 proposed consumers | Existing blocked targets | Combined demand |
 |---|---:|---:|---:|
@@ -188,7 +192,7 @@ ordering language work.
 | `cluster-groups` | 0 | 1 | 1 |
 | `coherence` | 1 | 0 | 1 |
 | `crossing-order` | 0 | 9 | 9 |
-| `enclosure-marks` | 10 | 10 | 20 |
+| `enclosure-marks` | 0 | 10 | 10 |
 | `equation-composition` | 2 | 2 | 4 |
 | `four-site-plaquette` | 2 | 0 | 2 |
 | `free-graph` | 12 | 0 | 12 |
