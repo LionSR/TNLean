@@ -1,0 +1,541 @@
+\section{Normal tensors and isometry canonical forms}
+
+\begin{theorem}[RFP normal tensor is injective]\label{thm:rfp_nt_injective}
+    \lean{MPSTensor.rfp_nt_structural}
+    \leanok
+    \uses{def:mps_transfer_idempotence, def:normal, def:injective}
+    If $A$ is a normal RFP tensor, then $A$ is injective.
+\end{theorem}
+\begin{proof}\leanok
+    The RFP condition $\E_A^2 = \E_A$ gives coefficients $V_{i_1i_2,j}$
+    such that
+    \[
+        A^{i_1}A^{i_2}=\sum_j V_{i_1i_2,j}A^j.
+    \]
+    Induction on the word length therefore gives
+    \[
+        A^{i_1}\cdots A^{i_n}\in\spn\{A^j:0\le j<d\}
+        \qquad(n\ge 1).
+    \]
+    By normality, the words of some positive length $N$ span $\MN{D}$.
+    The preceding inclusion therefore shows that the one-site span is already
+    $\MN{D}$.
+\end{proof}
+
+\begin{theorem}[Left-canonical normal RFP tensor is injective]%
+    \label{thm:rfp_nt_structural_of_left_canonical}
+    \lean{MPSTensor.rfp_nt_structural_of_leftCanonical}
+    \leanok
+    \uses{def:mps_transfer_idempotence, def:normal, def:injective}
+    Assume $D > 0$. Let $A$ be a normal renormalization fixed point such that
+    \[
+        \sum_i (A^i)^\dagger A^i = \Id.
+    \]
+    Then $A$ is injective.
+    This is the left-canonical injectivity step in
+    \cite[Appendix~B]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:rfp_nt_injective}
+    The conclusion follows immediately from
+    Theorem~\ref{thm:rfp_nt_injective}. Normality already supplies a positive
+    block-injectivity length, so this implication does not require the
+    additional normalization.
+\end{proof}
+
+\begin{theorem}[Unitary diagonal fixed point for a left-canonical normal RFP]%
+    \label{thm:rfp_nt_cfii_diagonal_fixed_point}
+    \lean{MPSTensor.rfp_nt_cfii_diagonal_fixedPoint}
+    \leanok
+    \uses{def:mps_transfer_idempotence, def:normal, def:transfer_map}
+    Assume $D > 0$. Let $A$ be a normal renormalization fixed point such that
+    \[
+        \sum_i (A^i)^\dagger A^i = \Id.
+    \]
+    Then there exist a unitary $U$ and a diagonal positive definite matrix
+    $\Lambda$ such that, for $B^i := U^\dagger A^i U$,
+    \[
+        \sum_i (B^i)^\dagger B^i = \Id
+        \qquad\text{and}\qquad
+        \E_B(\Lambda) = \Lambda.
+    \]
+    This is the diagonal fixed-point reduction in
+    \cite[Appendix~B]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:rfp_nt_structural_of_left_canonical, thm:injective_irreducible,
+        thm:form_II}
+    By Theorem~\ref{thm:rfp_nt_structural_of_left_canonical}, the tensor $A$
+    is injective. By Theorem~\ref{thm:injective_irreducible}, its transfer map
+    $\E_A$ is irreducible, and hence $A$ is irreducible as a tensor. Applying
+    Theorem~\ref{thm:form_II} gives a unitary conjugate $B$ for which the
+    trace-preserving normalization remains valid and a diagonal positive
+    definite matrix $\Lambda$ with $\E_B(\Lambda) = \Lambda$.
+\end{proof}
+
+\begin{theorem}[Rank-one classification for RFP transfer maps]%
+    \label{thm:transferMap_eq_fixedPointProj_of_isTransferIdempotent_injective}
+    \lean{MPSTensor.transferMap_eq_fixedPointProj_of_isTransferIdempotent_injective}
+    \leanok
+    \uses{def:mps_transfer_idempotence, def:injective, def:fixed_point_proj,
+        thm:exponential_convergence_primitive}
+    Let $A$ be an injective left-canonical RFP tensor with positive-definite
+    fixed point $\rho$ of the transfer map $\E_A$. Then
+    $\E_A = P_\rho$, where $P_\rho(X) = \frac{\tr(X)}{\tr(\rho)} \rho$
+    is the rank-one fixed-point projection.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:exponential_convergence_primitive}
+    The exponential convergence bound gives
+    $\lVert \E_A^n(X) - P_\rho(X)\rVert \le C(1-\delta)^n\lVert X\rVert$.
+    Idempotence of $\E_A$ implies $\E_A^{n+1} = \E_A$ for all $n \ge 0$,
+    so $\lVert \E_A(X) - P_\rho(X)\rVert \le C(1-\delta)^{n+1}\lVert X\rVert$
+    for all $n$. Taking $n \to \infty$ gives $\E_A = P_\rho$.
+\end{proof}
+
+\begin{theorem}[Full structural form for RFP tensors]%
+    \label{thm:rfp_nt_structural_full}
+    \lean{MPSTensor.rfp_nt_structural_full}
+    \leanok
+    \uses{thm:rfp_nt_structural_of_left_canonical,
+        thm:rfp_nt_cfii_diagonal_fixed_point,
+        thm:transferMap_eq_fixedPointProj_of_isTransferIdempotent_injective}
+    A normal tensor $A$ in canonical form~II that is a renormalization fixed
+    point admits a decomposition $A^i = X \Lambda U^i X^{-1}$, where
+    $\Lambda$ is diagonal positive, $\sum_i (U^i)^\dagger U^i=I$, and
+    \[
+        \sum_i \overline{(U^i)_{\alpha,\beta}}\,
+        (U^i)_{\alpha',\beta'}
+        =
+        D^{-1}\delta_{\alpha,\alpha'}\delta_{\beta,\beta'} .
+    \]
+\end{theorem}
+\begin{proof}\leanok
+    After the diagonal fixed-point reduction, write the conjugated tensor as
+    $B$ and its positive diagonal fixed point as $\rho$.  The rank-one
+    classification gives
+    \[
+        \E_B(Y)=P_\rho(Y)
+        =\frac{\tr(Y)}{\tr(\rho)}\rho.
+    \]
+    Set
+    \[
+        \Lambda_\alpha
+          =\sqrt{\frac{D\rho_{\alpha,\alpha}}{\tr(\rho)}},
+        \qquad
+        E_{\alpha,\beta}=D^{-1/2}e_{\alpha,\beta},
+        \qquad
+        K_{\alpha,\beta}=\Lambda E_{\alpha,\beta}.
+    \]
+    Direct multiplication of matrix units yields
+    \[
+        \sum_{\alpha,\beta}K_{\alpha,\beta}Y
+        K_{\alpha,\beta}^{\dagger}=P_\rho(Y).
+    \]
+    Kraus freedom therefore gives an isometry $V$ such that
+    $B^i=\sum_{\alpha,\beta}V_{i,(\alpha,\beta)}K_{\alpha,\beta}$.
+    With
+    $U^i=\sum_{\alpha,\beta}V_{i,(\alpha,\beta)}E_{\alpha,\beta}$,
+    one has $B^i=\Lambda U^i$ and
+    \[
+        U^i_{\alpha,\beta}=D^{-1/2}V_{i,(\alpha,\beta)},
+        \qquad
+        \sum_i\overline{U^i_{\alpha,\beta}}U^i_{\alpha',\beta'}
+        =D^{-1}\delta_{\alpha,\alpha'}\delta_{\beta,\beta'}.
+    \]
+    Conjugating back gives $A^i=X\Lambda U^iX^{-1}$.
+\end{proof}
+
+\begin{theorem}[Structural form with diagonal square-sum identity]%
+    \label{thm:rfp_nt_structural_full_sq_sum}
+    \lean{MPSTensor.rfp_nt_structural_full_sqSum}
+    \leanok
+    \uses{thm:rfp_nt_structural_of_left_canonical,
+        thm:rfp_nt_cfii_diagonal_fixed_point,
+        thm:transferMap_eq_fixedPointProj_of_isTransferIdempotent_injective}
+    The same decomposition as the full structural form
+    (Theorem~\ref{thm:rfp_nt_structural_full}) additionally records that the
+    diagonal weights satisfy $\sum_\alpha \Lambda_\alpha^2 = D$.  This square-sum
+    identity is the trace-normalization seed: the explicit weights are
+    $\Lambda_\alpha = \sqrt{D\,\rho_{\alpha,\alpha}/\tr\rho}$, and
+    $\sum_\alpha \rho_{\alpha,\alpha} = \tr\rho$ for the diagonal fixed point
+    $\rho$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:rfp_nt_structural_of_left_canonical,
+        thm:rfp_nt_cfii_diagonal_fixed_point,
+        thm:transferMap_eq_fixedPointProj_of_isTransferIdempotent_injective}
+    The diagonal fixed-point reduction and the rank-one classification of
+    injective left-canonical renormalization fixed points produce the diagonal
+    weights $\Lambda_\alpha = \sqrt{D\,\rho_{\alpha,\alpha}/\tr\rho}$, so
+    $\Lambda_\alpha^2 = D\,\rho_{\alpha,\alpha}/\tr\rho$.  Summing over $\alpha$
+    and using $\sum_\alpha \rho_{\alpha,\alpha} = \tr\rho$ gives
+    $\sum_\alpha \Lambda_\alpha^2 = D$.
+\end{proof}
+
+\begin{theorem}[Unit pair-index form for RFP tensors]%
+    \label{thm:rfp_nt_structural_full_unit_pair}
+    \lean{MPSTensor.rfp_nt_structural_full_unit_pair}
+    \leanok
+    \uses{thm:rfp_nt_structural_full}
+    A normal tensor $A$ in canonical form~II that is a renormalization fixed
+    point admits a decomposition $A^i = X \Lambda U^i X^{-1}$, where
+    $\Lambda$ is diagonal positive and
+    \[
+        \sum_i \overline{(U^i)_{\alpha,\beta}}\,
+        (U^i)_{\alpha',\beta'}
+        =
+        \delta_{\alpha,\alpha'}\delta_{\beta,\beta'} .
+    \]
+    This is the unit pair-index convention of
+    \cite[Section~3]{Cirac2016MPDO_arXiv}.  The statement still does not impose
+    the trace-normalization $\tr(\Lambda)=1$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:isometry_canonical_form_of_rfp_nt}
+    Apply Theorem~\ref{thm:isometry_canonical_form_of_rfp_nt}, which gives
+    $A^i = X\sqrt{\Lambda}\,U^i X^{-1}$ with $U$ already a unit pair-index
+    isometry.  Set $\widetilde\Lambda_\alpha = \sqrt{\Lambda_\alpha}$, so that
+    $A^i = X\widetilde\Lambda\,U^i X^{-1}$ with $\widetilde\Lambda$ diagonal
+    positive; the decomposition and the pair-index condition are immediate.
+\end{proof}
+
+\begin{theorem}[Per-block isometry canonical form]%
+    \label{thm:rfp_nt_structural_full_blocks}
+    \lean{MPSTensor.rfp_nt_structural_full_blocks}
+    \leanok
+    \uses{thm:rfp_nt_structural_full}
+    When each block $A_k$ of a multi-block tensor is a normal, left-canonical
+    renormalization fixed point, that block admits the isometry decomposition
+    $A_k^i = X_k \Lambda_k U_k^i X_k^{-1}$, with $X_k$ invertible, $\Lambda_k$
+    diagonal positive, and $U_k = (U_k^i)$ satisfies
+    $\sum_i (U_k^i)^\dagger U_k^i = I$ and the pair-index orthonormality
+    condition
+    \[
+        \sum_i \overline{(U_k^i)_{\alpha,\beta}}\,
+        (U_k^i)_{\alpha',\beta'}
+        =
+        D_k^{-1}\delta_{\alpha,\alpha'}\delta_{\beta,\beta'} .
+    \]
+    This is the blockwise form of the isometry canonical form
+    (Theorem~\ref{thm:rfp_nt_structural_full}); see
+    \cite[Section~3]{Cirac2016MPDO_arXiv}. The source additionally imposes the
+    normalization $\tr(\Lambda_k) = 1$; the statement here gives positive
+    $\Lambda_k$ without it. That normalization is genuine rather than a
+    conjugation gauge, since rescaling $\Lambda_k \mapsto \Lambda_k/\tr(\Lambda_k)$
+    factors out as an overall scalar on $A_k^i$ (conjugation by $X_k$ preserves
+    the scale); the statement is thus the un-normalized isometry form.
+    \emph{Scope restriction (source isometry).} Corollary~III.cor3 also
+    invokes the joint isometry condition
+    \[
+        \sum_i (U_k^i)_{\alpha,\beta}\,
+            \overline{(U_\ell^i)_{\alpha',\beta'}}
+        =
+        \delta_{k,\ell}\delta_{\alpha,\alpha'}\delta_{\beta,\beta'}.
+    \]
+    The theorem above records the contracted per-block condition
+    $\sum_i (U_k^i)^\dagger U_k^i=I$ and the diagonal pair-index equation with
+    right-hand side
+    $D_k^{-1}\delta_{\alpha,\alpha'}\delta_{\beta,\beta'}$. It does not impose
+    the trace-normalization
+    $\tr(\Lambda_k)=1$, and it does not include the cross-block equations for
+    $k\ne\ell$.
+\end{theorem}
+% Scope restriction (source isometry) recorded in
+% docs/paper-gaps/cpsv16_rfp_isometry_scope.tex.
+\begin{proof}\leanok
+    \uses{thm:rfp_nt_structural_full}
+    Apply Theorem~\ref{thm:rfp_nt_structural_full} to each block.
+\end{proof}
+
+\begin{theorem}[Per-block unit pair-index form]%
+    \label{thm:rfp_nt_structural_full_blocks_unit_pair}
+    \lean{MPSTensor.rfp_nt_structural_full_blocks_unit_pair}
+    \leanok
+    \uses{thm:rfp_nt_structural_full_unit_pair}
+    Under the hypotheses of
+    Theorem~\ref{thm:rfp_nt_structural_full_blocks}, each block admits a
+    decomposition $A_k^i = X_k \Lambda_k U_k^i X_k^{-1}$ with
+    $\Lambda_k$ diagonal positive and
+    \[
+        \sum_i \overline{(U_k^i)_{\alpha,\beta}}\,
+        (U_k^i)_{\alpha',\beta'}
+        =
+        \delta_{\alpha,\alpha'}\delta_{\beta,\beta'} .
+    \]
+    This is a blockwise unit pair-index comparison. It still does not impose
+    the source trace-normalization of $\Lambda_k$ or the cross-block
+    orthogonality equations for distinct blocks.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:rfp_nt_structural_full_unit_pair}
+    Apply Theorem~\ref{thm:rfp_nt_structural_full_unit_pair} to each block.
+\end{proof}
+
+\begin{definition}[Isometry canonical form]%
+    \label{def:is_isometry_canonical_form}
+    \lean{MPSTensor.IsIsometryCanonicalForm}
+    \leanok
+    A normal tensor $A$ is in \emph{isometry canonical form} when there are an
+    invertible $X$, a positive diagonal weight $\Lambda$ with the trace
+    normalization $\sum_\alpha \Lambda_\alpha = 1$, and a residual tensor $U$
+    satisfying the unit pair-index isometry
+    \[
+        \sum_i \overline{(U^i)_{\alpha,\beta}}\,(U^i)_{\alpha',\beta'}
+        = \delta_{\alpha,\alpha'}\delta_{\beta,\beta'},
+    \]
+    such that
+    \[
+        A^i = X\,\sqrt\Lambda\,U^i\,X^{-1}.
+    \]
+    The square root dresses the unit isometry because the reference tensor of
+    \cite[Section~3]{Cirac2016MPDO_arXiv} is
+    $\widehat A^{(\alpha',\beta')}_{\alpha,\beta}
+        = \delta_{\alpha,\alpha'}\delta_{\beta,\beta'}\sqrt{\Lambda_\alpha}$;
+    the normalization $\tr(\Lambda)=1$ is imposed on $\Lambda$, equivalently on
+    the normalized diagonal fixed point $\rho=\diag(\Lambda)$ of the transfer
+    map. The displayed source form writes $A^i=X\Lambda U^iX^{-1}$ with the bare
+    diagonal; that pairing forces a non-unit residual, so the consistent
+    decomposition keeps the square root $\sqrt\Lambda$ while the trace
+    normalization stays on $\Lambda$. This records the diagonal $j=j'$ case of
+    the source isometry condition.
+    % Square-root correction documented in
+    % docs/paper-gaps/cpsv16_rfp_isometry_scope.tex
+\end{definition}
+
+\begin{theorem}[Trace-normalized isometry canonical form for RFP tensors]%
+    \label{thm:isometry_canonical_form_of_rfp_nt}
+    \lean{MPSTensor.isIsometryCanonicalForm_of_rfp_nt}
+    \leanok
+    \uses{def:is_isometry_canonical_form, thm:rfp_nt_structural_full_sq_sum}
+    A normal tensor in canonical form~II that is a renormalization fixed point
+    is in isometry canonical form: it admits a decomposition
+    $A^i = X\sqrt\Lambda\,U^i X^{-1}$ with $\Lambda$ diagonal, positive,
+    trace-normalized ($\sum_\alpha \Lambda_\alpha = 1$, the source condition
+    $\tr(\Lambda)=1$), and $U$ a unit pair-index isometry.  The diagonal weight
+    is $\Lambda_\alpha = \rho_{\alpha,\alpha}/\tr\rho$, the normalized diagonal
+    fixed point of the transfer map; trace-normalization is then the trace
+    identity $\sum_\alpha \rho_{\alpha,\alpha} = \tr\rho$.  This is the
+    single-block normal-tensor case of the structural characterization of
+    pure-state renormalization fixed points in
+    \cite[Section~3]{Cirac2016MPDO_arXiv}, recovering the diagonal part of the
+    isometry condition there.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:rfp_nt_structural_full_sq_sum}
+    The structural form with the square-sum identity
+    (Theorem~\ref{thm:rfp_nt_structural_full_sq_sum}) supplies a positive
+    diagonal weight $\widetilde\Lambda$ with
+    $\sum_\alpha \widetilde\Lambda_\alpha^2 = D$.  Rescaling to the unit
+    pair-index convention by $U^i\mapsto\sqrt D\,U^i$ and setting
+    $\Lambda_\alpha=(\widetilde\Lambda_\alpha/\sqrt D)^2$ gives
+    $\sum_\alpha \Lambda_\alpha = D^{-1}\sum_\alpha \widetilde\Lambda_\alpha^2
+    = D^{-1}\cdot D = 1$, while
+    $\sqrt{\Lambda_\alpha}=\widetilde\Lambda_\alpha/\sqrt D$ recovers the
+    decomposition $A^i = X\sqrt\Lambda\,U^i X^{-1}$.
+\end{proof}
+
+\begin{figure}[ht]
+    \centering
+    \[
+        A=X\sqrt\Lambda\,U\,X^{-1}
+    \]
+    \begin{center}
+        % A^i = X sqrt(Lambda) U^i X^{-1} (eq_III_NT_RFP, CPSV16 Lemma
+        % lem:charact-NT-pure-RFP, lines 1275-1289; chapter's corrected
+        % sqrt(Lambda) weight, docs/paper-gaps/cpsv16_rfp_isometry_scope.tex):
+        % X and X^{-1} are plain gauge matrices on the wire (no physical
+        % leg); sqrt(Lambda) is the diagonal weight, also a matrix on the
+        % wire; U carries the physical leg i and both bond legs alpha
+        % (west, into sqrt(Lambda)) and beta (east, into X^{-1}).  Both
+        % sides carry the same boundary signature
+        % (virtual-west=1 | virtual-east=1 | physical-up=1).
+        \begin{tenkz}[physical=up]
+            \tn[up=$i$]{A}
+        \end{tenkz}
+        $\;=\;$
+        \begin{tenkz}[physical=up]
+            \tnX{X} & \tnX{\sqrt\Lambda} & \tn[up=$i$]{U} & \tnX{X^{-1}}
+        \end{tenkz}
+    \end{center}
+    \caption{The isometry canonical form of a normal renormalization fixed
+        point: $A^i = X\sqrt\Lambda\,U^i X^{-1}$, with the diagonal weight
+        $\sqrt\Lambda$ and the isometry $U$ carrying the
+        physical index
+        \cite[Appendix~B, lines~1275--1289]{Cirac2016MPDO_arXiv}.}
+    \label{fig:rfp_isometry_canonical_form}
+\end{figure}
+% The source expression carries a bare $\Lambda$; the square root is the
+% corrected weight, recorded in docs/paper-gaps/cpsv16_rfp_isometry_scope.tex.
+
+\begin{lemma}[Reference-tensor transfer identity for a unit pair-index isometry]%
+    \label{lem:unit_pair_isometry_transfer}
+    \lean{MPSTensor.unitPairIsometry_transfer}
+    \leanok
+    Let $U$ be a family of bond matrices satisfying the unit pair-index isometry
+    condition
+    \[
+        \sum_i \overline{(U^i)_{\alpha,\beta}}\,(U^i)_{\alpha',\beta'}
+        = \delta_{\alpha,\alpha'}\delta_{\beta,\beta'}.
+    \]
+    Then for every bond matrix $Z$,
+    \[
+        \sum_i U^i\,Z\,(U^i)^\dagger = \tr(Z)\,I.
+    \]
+\end{lemma}
+\begin{proof}\leanok
+    Reading off the $(x,y)$ entry, the pair-index condition gives
+    $\sum_i (U^i)_{x,\alpha}\,\overline{(U^i)_{y,\beta}}
+        = \delta_{x,y}\,\delta_{\alpha,\beta}$, so the entry collapses to
+    $\delta_{x,y}\sum_\alpha Z_{\alpha,\alpha} = \delta_{x,y}\,\tr(Z)$, which is
+    the $(x,y)$ entry of $\tr(Z)\,I$.
+\end{proof}
+
+\begin{theorem}[Isometry canonical form implies the renormalization fixed-point property]%
+    \label{thm:is_rfp_of_isometry_canonical_form}
+    \lean{MPSTensor.isTransferIdempotent_of_isIsometryCanonicalForm}
+    \leanok
+    \uses{def:is_isometry_canonical_form, def:mps_transfer_idempotence}
+    A tensor in isometry canonical form is a renormalization fixed point. This is
+    the backward direction of the structural characterization of pure-state
+    renormalization fixed points in \cite[Section~3]{Cirac2016MPDO_arXiv}, which
+    the source states as immediate.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{lem:unit_pair_isometry_transfer}
+    Write $A^i = X\sqrt\Lambda\,U^i X^{-1}$. Substituting into the transfer map
+    and pulling the index-independent factors $X\sqrt\Lambda$ and
+    $\sqrt\Lambda\,X^\dagger$ outside the sum, the unit pair-index isometry
+    identity (Lemma~\ref{lem:unit_pair_isometry_transfer}) gives the rank-one form
+    \[
+        \E_A(Y) = \tr\!\bigl(X^{-1} Y (X^{-1})^\dagger\bigr)\,R,
+        \qquad R = X\,\Lambda\,X^\dagger.
+    \]
+    Idempotence then reduces to
+    $\tr\!\bigl(X^{-1} R (X^{-1})^\dagger\bigr) = \tr(\Lambda) = 1$, the trace
+    normalization, so $\E_A \circ \E_A = \E_A$.
+\end{proof}
+
+\begin{theorem}[Per-block trace-normalized isometry canonical form]%
+    \label{thm:isometry_canonical_form_of_rfp_nt_blocks}
+    \lean{MPSTensor.isIsometryCanonicalForm_of_rfp_nt_blocks}
+    \leanok
+    \uses{def:is_isometry_canonical_form, thm:isometry_canonical_form_of_rfp_nt}
+    Each block of a multi-block tensor whose blocks are normal, left-canonical
+    renormalization fixed points is in isometry canonical form, with a
+    trace-normalized diagonal weight and a unit pair-index isometry.  This is
+    the single-block trace-normalized form applied to each block; it omits the
+    cross-block orthogonality between distinct normal-tensor blocks.
+\end{theorem}
+% Scope restriction (cross-block orthogonality) recorded in
+% docs/paper-gaps/cpsv16_rfp_isometry_scope.tex.
+\begin{proof}\leanok
+    \uses{thm:isometry_canonical_form_of_rfp_nt}
+    Apply Theorem~\ref{thm:isometry_canonical_form_of_rfp_nt} to each block.
+\end{proof}
+
+Across all blocks, the canonical form has the following routed representation.
+\begin{figure}[ht]
+    \centering
+    \begin{center}
+        \begin{tenkz}[physical=up, tensor style=box]
+            \tn{A}
+        \end{tenkz}
+        $\;=\;$
+        % TENKZ-II-RFP-BEGIN
+        \begin{tenkzfree}[tensor style=box]
+            \tnput[boundary, ports={east:virtual}]
+                {rfpWest}{(-8mm,0)}{}
+            \tnput[box, ports={west:virtual,east:virtual,south:virtual}]
+                {rfpX}{(0,0)}{X}
+            \tnput[box, ports={west:virtual,east:virtual,south:virtual}]
+                {rfpLambda}{(14mm,0)}{\sqrt\Lambda}
+            \tnput[box,
+                ports={south west:virtual,south:virtual,
+                    south east:virtual,north:physical}]
+                {rfpU}{(31mm,11mm)}{\quad U\quad}
+            \tnput[dot, ports={north:virtual,south:virtual,east:virtual}]
+                {rfpMain}{(31mm,0)}{}
+            \tnput[box, ports={west:virtual,east:virtual,south:virtual}]
+                {rfpM}{(40mm,0)}{M}
+            \tnput[box,
+                ports={west:virtual,east:virtual,north west:virtual,
+                    south:virtual}]
+                {rfpXinv}{(54mm,0)}{X^{-1}}
+            \tnput[boundary, ports={west:virtual}]
+                {rfpEast}{(63mm,0)}{}
+            \tnput[boundary, ports={south:physical}]
+                {rfpPhysical}{(31mm,20mm)}{}
+
+            \tnput[boundary, label pos=west, ports={east:virtual}]
+                {rfpJwest}{(-8mm,-9mm)}{j}
+            \tnput[dot, ports={west:virtual,east:virtual,
+                    north:virtual,south:virtual}]
+                {rfpXj}{(0,-9mm)}{}
+            \tnput[dot, ports={west:virtual,east:virtual,north:virtual}]
+                {rfpLambdaj}{(14mm,-9mm)}{}
+            \tnput[dot, ports={west:virtual,east:virtual,north:virtual}]
+                {rfpUj}{(31mm,-9mm)}{}
+            \tnput[dot, ports={west:virtual,east:virtual,
+                    north:virtual,south:virtual}]
+                {rfpXinvj}{(54mm,-9mm)}{}
+            \tnput[boundary, ports={west:virtual}]
+                {rfpJeast}{(63mm,-9mm)}{}
+
+            \tnput[boundary, label pos=west, ports={east:virtual}]
+                {rfpQwest}{(-8mm,-16mm)}{q}
+            \tnput[dot, ports={west:virtual,east:virtual,north:virtual}]
+                {rfpXq}{(0,-16mm)}{}
+            \tnput[dot, ports={west:virtual,east:virtual,north:virtual}]
+                {rfpMq}{(40mm,-16mm)}{}
+            \tnput[dot, ports={west:virtual,east:virtual,north:virtual}]
+                {rfpXinvq}{(54mm,-16mm)}{}
+            \tnput[boundary, ports={west:virtual}]
+                {rfpQeast}{(63mm,-16mm)}{}
+
+            \tnjoin{rfpWest.east}{rfpX.west}
+            \tnjoin{rfpX.east}{rfpLambda.west}
+            \tnjoin[route=hv]{rfpLambda.east}{rfpU.south west}
+            \tnjoin[route=vh]{rfpU.south east}{rfpXinv.north west}
+            \tnjoin{rfpU.south}{rfpMain.north}
+            \tnjoin{rfpMain.east}{rfpM.west}
+            \tnjoin{rfpM.east}{rfpXinv.west}
+            \tnjoin{rfpXinv.east}{rfpEast.west}
+            \tnjoin{rfpPhysical.south}{rfpU.north}
+
+            \tnjoin{rfpX.south}{rfpXj.north}
+            \tnjoin{rfpXj.south}{rfpXq.north}
+            \tnjoin{rfpLambda.south}{rfpLambdaj.north}
+            \tnjoin{rfpMain.south}{rfpUj.north}
+            \tnjoin{rfpM.south}{rfpMq.north}
+            \tnjoin{rfpXinv.south}{rfpXinvj.north}
+            \tnjoin{rfpXinvj.south}{rfpXinvq.north}
+
+            \tnjoin{rfpJwest.east}{rfpXj.west}
+            \tnjoin{rfpXj.east}{rfpLambdaj.west}
+            \tnjoin{rfpLambdaj.east}{rfpUj.west}
+            \tnjoin{rfpUj.east}{rfpXinvj.west}
+            \tnjoin{rfpXinvj.east}{rfpJeast.west}
+            \tnjoin{rfpQwest.east}{rfpXq.west}
+            \tnjoin{rfpXq.east}{rfpMq.west}
+            \tnjoin{rfpMq.east}{rfpXinvq.west}
+            \tnjoin{rfpXinvq.east}{rfpQeast.west}
+        \end{tenkzfree}
+        % TENKZ-II-RFP-END
+    \end{center}
+    \caption{Block-and-multiplicity routing in the isometry canonical form.
+        The independent rails $j$ and $q$ pass through the coefficient
+        network without being fused: $X$ and $X^{-1}$ depend on both,
+        $\sqrt\Lambda$ and $U$ carry the block label $j$, and $M$ carries
+        the multiplicity label $q$.  The upper leg of $U$ is the physical
+        index, as in the source figure
+        \cite[Section~3.4, lines~543--563]{Cirac2016MPDO_arXiv}.}
+    \label{fig:rfp_block_multiplicity_routing}
+\end{figure}
+Here $j$ labels the normal-tensor block and $q$ its repeated representation;
+the residual isometries in
+\cite[Section~3.4, lines~543--561]{Cirac2016MPDO_arXiv} also satisfy
+cross-block physical orthogonality.  Those additional equations are not part
+of the per-block theorem above.
+% Scope restriction: cross-block orthogonality omitted here; see
+% docs/paper-gaps/cpsv16_rfp_isometry_scope.tex.
