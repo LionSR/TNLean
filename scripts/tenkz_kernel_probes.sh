@@ -263,6 +263,10 @@ grep -Fq '[TKZ-LANG-CHOICE]' "$WORK/n_malformed_physical.transcript" || {
   echo "FAIL: malformed physical rejection lacked TKZ-LANG-CHOICE" >&2
   exit 1
 }
+grep -Fq '(record picture)' "$WORK/n_malformed_physical.transcript" || {
+  echo "FAIL: malformed physical rejection dropped its record context" >&2
+  exit 1
+}
 
 for strict_negative in \
   n_strict_sandwich \
@@ -288,7 +292,8 @@ for contract_negative in \
   n_one_end_wire \
   n_malformed_via \
   n_malformed_cross \
-  n_malformed_mark_target
+  n_malformed_mark_target \
+  n_noncell_leg
 do
   source="$KERNEL/negative/$contract_negative.tex"
   if ( cd "$WORK" &&
@@ -306,6 +311,10 @@ do
     exit 1
   }
 done
+grep -Fq '(node ' "$WORK/n_noncell_leg.transcript" || {
+  echo "FAIL: the non-cell leg rejection dropped its node context" >&2
+  exit 1
+}
 
 weight_negative="$KERNEL/negative/n_malformed_weight.tex"
 if ( cd "$WORK" &&
@@ -317,6 +326,10 @@ if ( cd "$WORK" &&
 fi
 grep -Fq '[TKZ-LANG-CHOICE]' "$WORK/n_malformed_weight.transcript" || {
   echo "FAIL: malformed bundle arity lacked TKZ-LANG-CHOICE" >&2
+  exit 1
+}
+grep -Fq '(record wire-1)' "$WORK/n_malformed_weight.transcript" || {
+  echo "FAIL: malformed bundle arity dropped its record context" >&2
   exit 1
 }
 
@@ -372,7 +385,7 @@ grep -Fq 'check|relation=3|result=off|reason=third' \
   echo "FAIL: the later equation opt-out was silently dropped" >&2
   exit 1
 }
-echo "PASS: thirty-three review regressions hold"
+echo "PASS: thirty-four review regressions hold"
 
 fail=0
 for pair in s1 s2 s3 s4 s5 s6 s7 s8; do
