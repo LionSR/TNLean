@@ -153,14 +153,6 @@ theorem IsNBlkInjective_transposeTensor
           simp [Submodule.map_top, LinearEquiv.range (e := e)]
   simpa using this
 
-/-- Normality is preserved by pointwise transposition. -/
-theorem IsNormal_transposeTensor
-    {d D : ℕ} {A : MPSTensor d D}
-    (h : IsNormal (d := d) (D := D) A) :
-    IsNormal (d := d) (D := D) (transposeTensor A) := by
-  rcases h with ⟨N, hNpos, hN⟩
-  exact ⟨N, hNpos, IsNBlkInjective_transposeTensor (A := A) (N := N) hN⟩
-
 /-- The cumulative span of the transposed tensor also reaches top. -/
 theorem cumulativeSpan_transposeTensor_eq_top_of_cumulativeSpan_eq_top
     {d D : ℕ} (A : MPSTensor d D) {N : ℕ}

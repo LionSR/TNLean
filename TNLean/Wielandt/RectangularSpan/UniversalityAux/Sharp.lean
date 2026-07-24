@@ -140,22 +140,6 @@ theorem vecMulVec_eigenvector_mem_wordSpan_nilpIndex
   exact rectSpan_le_wordSpan A ((A i₀) ^ r)
     (pow_mem_wordSpan' A i₀ r) hmem
 
-/-- **Existential under `IsNormal`** via nilpIndex. -/
-theorem exists_vecMulVec_eigenvector_nilpIndex
-    (A : MPSTensor d D) (i₀ : Fin d)
-    (hN : IsNormal A)
-    {φ : Fin D → ℂ} {μ : ℂ} (hμ : μ ≠ 0)
-    (heig : A i₀ *ᵥ φ = μ • φ) :
-    ∃ n, ∀ ψ : Fin D → ℂ,
-      vecMulVec φ ψ ∈ wordSpan A
-        (nilpIndex (toLin' (A i₀)) + n) := by
-  obtain ⟨n₀, hstab⟩ :=
-    exists_rectSpan_eq_range_of_isNormal
-      ((A i₀) ^ nilpIndex (toLin' (A i₀))) A hN
-  exact ⟨n₀,
-    vecMulVec_eigenvector_mem_wordSpan_nilpIndex
-      A i₀ hμ heig hstab⟩
-
 /-- **Sharp bound**: `D * rank((A i₀)^D) + r ≤ D² - D + 1`
 when `A i₀` is not invertible. -/
 theorem sharp_bound_le (A : MPSTensor d D)
@@ -242,33 +226,6 @@ theorem vecMulVec_eigenvector_sharp_of_rectSpan
       _ ≤ D ^ 2 - D + 1 :=
           sharp_bound_le A i₀ hNotInv
   exact wordSpan_le_cumulativeSpan A hbound hmem
-
-/-- **Parametric sharp word-span saturation via nilpotent index.**
-
-Given eigenvectors and a `rectSpan` stabilization at step `n₀`
-(with the initial matrix `(A i₀) ^ nilpIndex (toLin' (A i₀))`),
-produces `wordSpan A N = ⊤` for `N = (D-1) + (nilpIndex + n₀) + (D-1)`. -/
-theorem wielandt_sharp_parametric_span [NeZero D]
-    (A : MPSTensor d D)
-    (hNormal : IsNormal (d := d) (D := D) A)
-    (i₀ : Fin d) (μ : ℂ) (hμ : μ ≠ 0)
-    (φ : Fin D → ℂ) (hφ : φ ≠ 0)
-    (heigφ : A i₀ *ᵥ φ = μ • φ)
-    (i₁ : Fin d) (ν : ℂ) (hν : ν ≠ 0)
-    (ψ₀ : Fin D → ℂ) (hψ₀ : ψ₀ ≠ 0)
-    (heigψ : (A i₁)ᵀ *ᵥ ψ₀ = ν • ψ₀)
-    {n₀ : ℕ}
-    (hstab : rectSpan
-      ((A i₀) ^ nilpIndex (toLin' (A i₀))) A n₀ =
-      LinearMap.range (LinearMap.mulLeft ℂ
-        ((A i₀) ^ nilpIndex (toLin' (A i₀))))) :
-    wordSpan A ((D - 1) +
-      ((nilpIndex (toLin' (A i₀)) + n₀) +
-        (D - 1))) = ⊤ := by
-  exact wielandt_lemma2b_conditional A hNormal
-    i₀ μ hμ φ hφ heigφ i₁ ν hν ψ₀ hψ₀ heigψ
-    (vecMulVec_eigenvector_mem_wordSpan_nilpIndex
-      A i₀ hμ heigφ hstab ψ₀)
 
 end SharpDirectRoute
 

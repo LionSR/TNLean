@@ -247,41 +247,4 @@ noncomputable def rowRangeSubmoduleEquiv (Q : Matrix (Fin D) (Fin D) ℂ) :
     ext j
     simp [Matrix.row_apply]
 
-/-- Finite-dimensional formula for the range of right multiplication:
-`finrank(range(mulRight Q)) = D * rank(Q)`. -/
-theorem finrank_range_mulRight
-    (Q : Matrix (Fin D) (Fin D) ℂ) :
-    Module.finrank ℂ (LinearMap.range (LinearMap.mulRight ℂ Q))
-      = D * (Matrix.rank Q) := by
-  classical
-  have hRange :
-      LinearMap.range (LinearMap.mulRight ℂ Q) = rowRangeSubmodule (D := D) Q :=
-    range_mulRight_eq_pi (D := D) Q
-  calc
-    Module.finrank ℂ (LinearMap.range (LinearMap.mulRight ℂ Q))
-        = Module.finrank ℂ (rowRangeSubmodule (D := D) Q) := by
-            simpa using
-              (LinearEquiv.finrank_eq (LinearEquiv.ofEq _ _ hRange))
-    _ = Module.finrank ℂ (Fin D → LinearMap.range (Q.vecMulLinear)) := by
-          simpa using
-            (LinearEquiv.finrank_eq (rowRangeSubmoduleEquiv (D := D) Q))
-    _ = D * Module.finrank ℂ (LinearMap.range (Q.vecMulLinear)) := by
-          simp [Module.finrank_pi_fintype, Fintype.card_fin]
-    _ = D * Matrix.rank Q := by
-          -- Relate the row space to the column space of the transpose.
-          have hvec : Q.vecMulLinear = (Qᵀ).mulVecLin := by
-            simp
-          have hrange : LinearMap.range (Q.vecMulLinear) = LinearMap.range ((Qᵀ).mulVecLin) :=
-            congrArg LinearMap.range hvec
-          congr 1
-          calc
-            Module.finrank ℂ (LinearMap.range (Q.vecMulLinear))
-                = Module.finrank ℂ (LinearMap.range ((Qᵀ).mulVecLin)) := by
-                    simpa using
-                      (LinearEquiv.finrank_eq (LinearEquiv.ofEq _ _ hrange))
-            _ = Matrix.rank (Qᵀ) := by
-                    simp [Matrix.rank]
-            _ = Matrix.rank Q := by
-                    simp [Matrix.rank_transpose (A := Q)]
-
 end MPSTensor

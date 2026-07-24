@@ -174,14 +174,6 @@ theorem rectSpanLeftStep_surjective_of_finrank_eq (n : ℕ)
   exact (LinearMap.injective_iff_surjective_of_finrank_eq_finrank hfin).mp
     (rectSpanLeftStep_injective A i₀ n)
 
-/-- The left-step is bijective when finrank stabilizes. -/
-theorem rectSpanLeftStep_bijective_of_finrank_eq (n : ℕ)
-    (hfin : finrank ℂ (rectSpan ((A i₀) ^ D) A n) =
-            finrank ℂ (rectSpan ((A i₀) ^ D) A (n + 1))) :
-    Function.Bijective (rectSpanLeftStep A i₀ n) :=
-  ⟨rectSpanLeftStep_injective A i₀ n,
-   rectSpanLeftStep_surjective_of_finrank_eq A i₀ n hfin⟩
-
 end RectSpanGrowth
 
 /-! ## Section 8b: Stabilization — rectSpan meets full range
@@ -289,17 +281,6 @@ theorem exists_cumulativeRectSpan_finrank_eq_succ
   exists_consecutive_eq_of_monotone_bounded'
     (fun n => cumulativeRectSpan_finrank_mono P A n)
     (fun n => cumulativeRectSpan_finrank_le P A n)
-
-/-- Under `IsNormal`, the finrank of `rectSpan P A n` at the normal-witness level equals
-the finrank of `range(mulLeft P)`. Combined with `rectSpan_eq_range_of_finrank_eq_range`,
-this gives the ceiling. -/
-theorem rectSpan_finrank_eq_range_of_isNormal
-    (P : Matrix (Fin D) (Fin D) ℂ) (A : MPSTensor d D)
-    (hN : IsNormal A) :
-    ∃ n, finrank ℂ (rectSpan P A n) =
-         finrank ℂ (LinearMap.range (LinearMap.mulLeft ℂ P)) := by
-  obtain ⟨N₀, heq⟩ := exists_rectSpan_eq_range_of_isNormal P A hN
-  exact ⟨N₀, by rw [heq]⟩
 
 end RectSpanStabilization
 

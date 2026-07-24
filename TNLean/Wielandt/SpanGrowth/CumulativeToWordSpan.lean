@@ -278,31 +278,4 @@ theorem isNormal_of_isIrreducibleAction_of_aperiodic [NeZero D]
     IsNormal A := by
   exact isNormal_of_algSpan_eq_top_of_aperiodic A (burnside_matrix A hIrr) hone
 
-/-! ## Part 5: Additional useful lemmas -/
-
-/-- The nonzero-trace word extraction gives an eigenvector with nonzero eigenvalue. -/
-theorem exists_eigenvector_of_cumulativeSpan_eq_top [NeZero D]
-    (A : MPSTensor d D) {N : ℕ} (hcs : cumulativeSpan A N = ⊤) :
-    ∃ (w : List (Fin d)) (μ : ℂ) (φ : Fin D → ℂ),
-      w.length ≤ N ∧ μ ≠ 0 ∧ φ ≠ 0 ∧
-      evalWord A w *ᵥ φ = μ • φ := by
-  obtain ⟨w, hw, htr⟩ := exists_nonzero_trace_word_of_cumulativeSpan_eq_top A hcs
-  obtain ⟨μ, φ, hμ, hφ, heig⟩ :=
-    _root_.exists_eigenvector_of_trace_ne_zero _ htr
-  exact ⟨w, μ, φ, hw, hμ, hφ, heig⟩
-
-/-- If `1 ∈ wordSpan A L`, iterated monotonicity gives
-`wordSpan A n ≤ wordSpan A (n + k * L)` for all `k`. -/
-theorem wordSpan_mono_mul_of_one_mem_wordSpan
-    (A : MPSTensor d D) {L : ℕ}
-    (hone : (1 : Matrix (Fin D) (Fin D) ℂ) ∈ wordSpan A L)
-    (n k : ℕ) : wordSpan A n ≤ wordSpan A (n + k * L) := by
-  induction k with
-  | zero => simp
-  | succ k ih =>
-    calc wordSpan A n ≤ wordSpan A (n + k * L) := ih
-      _ ≤ wordSpan A (n + k * L + L) :=
-          wordSpan_mono_of_one_mem_wordSpan A hone _
-      _ = wordSpan A (n + (k + 1) * L) := by ring_nf
-
 end MPSTensor

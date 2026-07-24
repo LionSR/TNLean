@@ -220,13 +220,6 @@ theorem cumulativeRectSpan_mono
     cumulativeRectSpan P A n ≤ cumulativeRectSpan P A (n + 1) :=
   Submodule.map_mono (cumulativeSpan_mono A n)
 
-/-- Generalized monotonicity. -/
-theorem cumulativeRectSpan_mono'
-    (P : Matrix (Fin D) (Fin D) ℂ) (A : MPSTensor d D) {n m : ℕ}
-    (h : n ≤ m) :
-    cumulativeRectSpan P A n ≤ cumulativeRectSpan P A m :=
-  Submodule.map_mono (cumulativeSpan_mono' A h)
-
 /-- Dimension bound for cumulative rectangular span. -/
 theorem cumulativeRectSpan_finrank_le
     (P : Matrix (Fin D) (Fin D) ℂ) (A : MPSTensor d D) (n : ℕ) :

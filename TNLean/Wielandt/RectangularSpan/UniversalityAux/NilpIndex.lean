@@ -141,17 +141,6 @@ theorem rectSpan_nilpIndex_finrank_le
     _ = D * ((A i₀) ^ D).rank := by
         rw [rank_pow_nilpIndex_eq A i₀]
 
-/-- **NilpIndex pigeonhole**: there exists `n₀ ≤ D * D'` with consecutive finrank
-equality for the nilpIndex rectSpan. -/
-theorem exists_finrank_eq_succ_of_rectSpan_nilpIndex
-    (A : MPSTensor d D) (i₀ : Fin d) :
-    ∃ n ≤ D * ((A i₀) ^ D).rank,
-      finrank ℂ (rectSpan ((A i₀) ^ nilpIndex (toLin' (A i₀))) A n) =
-      finrank ℂ (rectSpan ((A i₀) ^ nilpIndex (toLin' (A i₀))) A (n + 1)) :=
-  exists_consecutive_eq_of_monotone_bounded'
-    (fun n => rectSpan_nilpIndex_finrank_mono A i₀ n)
-    (fun n => rectSpan_nilpIndex_finrank_le A i₀ n)
-
 /-- **Surjectivity at nilpIndex**: when consecutive finranks agree. -/
 theorem rectSpanNilpIndexLeftStep_surjective_of_finrank_eq
     (A : MPSTensor d D) (i₀ : Fin d) (n : ℕ)
@@ -208,24 +197,6 @@ theorem rectSpan_nilpIndex_eq_range_of_finrank_eq_ceiling
         ((A i₀) ^ nilpIndex (toLin' (A i₀)))) := by
   apply rectSpan_eq_range_of_finrank_eq_range
   rw [hceiling, finrank_range_mulLeft, rank_pow_nilpIndex_eq A i₀]
-
-/-- **Ceiling permanence (subspace version)**: once rectSpan reaches
-`range(mulLeft ((A i₀)^r))`, it stays there for all subsequent levels. -/
-theorem rectSpan_nilpIndex_range_permanent
-    (A : MPSTensor d D) (i₀ : Fin d) (n : ℕ)
-    (hrange : rectSpan ((A i₀) ^ nilpIndex (toLin' (A i₀))) A n =
-      LinearMap.range (LinearMap.mulLeft ℂ
-        ((A i₀) ^ nilpIndex (toLin' (A i₀))))) :
-    ∀ m, n ≤ m →
-      rectSpan ((A i₀) ^ nilpIndex (toLin' (A i₀))) A m =
-        LinearMap.range (LinearMap.mulLeft ℂ
-          ((A i₀) ^ nilpIndex (toLin' (A i₀)))) := by
-  intro m hm
-  have hceiling : finrank ℂ (rectSpan ((A i₀) ^ nilpIndex (toLin' (A i₀))) A n) =
-      D * ((A i₀) ^ D).rank := by
-    rw [hrange, finrank_range_mulLeft, rank_pow_nilpIndex_eq A i₀]
-  exact rectSpan_nilpIndex_eq_range_of_finrank_eq_ceiling A i₀ m
-    (rectSpan_nilpIndex_finrank_ceiling_permanent A i₀ n hceiling m hm)
 
 end NilpIndexGrowth
 

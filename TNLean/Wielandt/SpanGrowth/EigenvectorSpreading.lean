@@ -187,25 +187,6 @@ theorem phi_mem_cumulativeVectorSpan (A : MPSTensor d D) (φ : Fin D → ℂ) (n
     (mem_cumulativeVectorSpan_generator
       (A := A) (φ := φ) (w := []) (n := n) (by simp))
 
-/-- Eigenvector anchoring: if A i₀ *ᵥ φ = μ • φ with μ ≠ 0, then φ ∈ H_1
-(and hence in K_n for all n ≥ 1).
-Paper: "since A₁|φ⟩ = μ|φ⟩ with μ ≠ 0, we have |φ⟩ = (1/μ)A₁|φ⟩ ∈ H_1" -/
-theorem eigenvector_mem_vectorSpreadSpan
-    (A : MPSTensor d D) (φ : Fin D → ℂ)
-    (i₀ : Fin d) (μ : ℂ) (hμ : μ ≠ 0)
-    (heig : A i₀ *ᵥ φ = μ • φ) :
-    φ ∈ vectorSpreadSpan A φ 1 := by
-  -- A i₀ *ᵥ φ ∈ vectorSpreadSpan A φ 1
-  have hmem : A i₀ *ᵥ φ ∈ vectorSpreadSpan A φ 1 := by
-    have : A i₀ *ᵥ φ = evalWord A [i₀] *ᵥ φ := by simp [evalWord]
-    rw [this]
-    exact evalWord_mulVec_mem_vectorSpreadSpan A φ [i₀]
-  -- μ⁻¹ • (A i₀ *ᵥ φ) ∈ vectorSpreadSpan A φ 1
-  have hsmem : μ⁻¹ • (A i₀ *ᵥ φ) ∈ vectorSpreadSpan A φ 1 :=
-    Submodule.smul_mem _ _ hmem
-  -- Rewrite: μ⁻¹ • (μ • φ) = φ
-  rwa [heig, smul_smul, inv_mul_cancel₀ hμ, one_smul] at hsmem
-
 /-- Eigenvector anchoring for cumulative span (actually φ is in K_n for
 all n, even without the eigenvector condition). -/
 theorem eigenvector_mem_cumulativeVectorSpan

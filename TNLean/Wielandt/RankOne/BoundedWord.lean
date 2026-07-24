@@ -67,14 +67,6 @@ private theorem mem_biRectSpan_iff
       simp only [LinearMap.comp_apply, LinearMap.mulLeft_apply, LinearMap.mulRight_apply,
         Matrix.mul_assoc]⟩
 
-/-- `biRectSpan` always lives in the range of the two-sided multiplication map. -/
-theorem biRectSpan_le_range
-    (P Q : Matrix (Fin D) (Fin D) ℂ) (B : MPSTensor d D) (n : ℕ) :
-    biRectSpan (d := d) (D := D) P Q B n ≤
-      LinearMap.range ((LinearMap.mulLeft ℂ P).comp (LinearMap.mulRight ℂ Q)) := by
-  rw [biRectSpan]
-  exact LinearMap.map_le_range
-
 /-- Converting a bi-rectangular span element back into a bounded word span,
 assuming `P` and `Q` themselves lie in bounded word spans. -/
 theorem biRectSpan_le_wordSpan
@@ -211,38 +203,6 @@ theorem range_comp_le_wordSpan_of_cumulativeSpan_eq_top_of_aperiodic
   rw [← cumulativeSpan_eq_wordSpan_of_one_mem_wordSpan_one B hone (m₁ + n + m₂)]
   exact range_comp_le_cumulativeSpan (d := d) (D := D) B P Q hP hQ htop
 
-/-- Rank-one manufacture from cumulative spanning: the manufactured rank-one element lies in a
-bounded cumulative span. -/
-theorem vecMulVec_mem_cumulativeSpan_of_cumulativeSpan_eq_top
-    (B : MPSTensor d D) {m₁ m₂ n : ℕ}
-    (P Q : Matrix (Fin D) (Fin D) ℂ) (φ ψ : Fin D → ℂ)
-    (hφ : φ ∈ LinearMap.range (Matrix.toLin' P))
-    (hψ : ψ ∈ LinearMap.range (Q.vecMulLinear))
-    (hP : P ∈ wordSpan B m₁) (hQ : Q ∈ wordSpan B m₂)
-    (htop : cumulativeSpan B n = ⊤) :
-    Matrix.vecMulVec φ ψ ∈ cumulativeSpan B (m₁ + n + m₂) := by
-  have hrange : Matrix.vecMulVec φ ψ ∈
-      LinearMap.range ((LinearMap.mulLeft ℂ P).comp (LinearMap.mulRight ℂ Q)) :=
-    vecMulVec_mem_range_mulLeft_mulRight P Q φ ψ hφ hψ
-  exact (range_comp_le_cumulativeSpan (d := d) (D := D) B P Q hP hQ htop) hrange
-
-/-- Rank-one manufacture from cumulative spanning plus aperiodicity: the manufactured rank-one
-matrix lies in a single exact-length word span. -/
-theorem vecMulVec_mem_wordSpan_of_cumulativeSpan_eq_top_of_aperiodic
-    (B : MPSTensor d D) {m₁ m₂ n : ℕ}
-    (P Q : Matrix (Fin D) (Fin D) ℂ) (φ ψ : Fin D → ℂ)
-    (hφ : φ ∈ LinearMap.range (Matrix.toLin' P))
-    (hψ : ψ ∈ LinearMap.range (Q.vecMulLinear))
-    (hP : P ∈ wordSpan B m₁) (hQ : Q ∈ wordSpan B m₂)
-    (htop : cumulativeSpan B n = ⊤)
-    (hone : (1 : Matrix (Fin D) (Fin D) ℂ) ∈ wordSpan B 1) :
-    Matrix.vecMulVec φ ψ ∈ wordSpan B (m₁ + n + m₂) := by
-  have hrange : Matrix.vecMulVec φ ψ ∈
-      LinearMap.range ((LinearMap.mulLeft ℂ P).comp (LinearMap.mulRight ℂ Q)) :=
-    vecMulVec_mem_range_mulLeft_mulRight P Q φ ψ hφ hψ
-  exact (range_comp_le_wordSpan_of_cumulativeSpan_eq_top_of_aperiodic
-    (d := d) (D := D) B P Q hP hQ htop hone) hrange
-
 /-- A crude finrank bound: any `biRectSpan` has dimension at most `D^2`. -/
 theorem biRectSpan_finrank_le
     (P Q : Matrix (Fin D) (Fin D) ℂ) (B : MPSTensor d D) (n : ℕ) :
@@ -263,35 +223,6 @@ convenient pointwise injectivity statements for left and right multiplication.
 namespace WielandtRankOne
 
 open Module
-
-/-- Matrix-level injectivity on the range of right multiplication by `M^D`.
-
-If `X ∈ range (mulRight (M^D))` and `X * M = 0`, then `X = 0`.
-
-We reduce to the previous lemma by transposing. -/
-lemma matrix_eq_zero_of_mul_eq_zero_of_mem_range_mulRight_pow
-    (M : Matrix (Fin D) (Fin D) ℂ) {X : Matrix (Fin D) (Fin D) ℂ}
-    (hX : X ∈ LinearMap.range (LinearMap.mulRight ℂ (M ^ D)))
-    (hXM : X * M = 0) : X = 0 := by
-  classical
-  -- Unpack `hX` and transpose.
-  rcases (LinearMap.mem_range).1 hX with ⟨Y, rfl⟩
-  have hX' : (Y * (M ^ D))ᵀ ∈ LinearMap.range (LinearMap.mulLeft ℂ ((Mᵀ) ^ D)) := by
-    refine (LinearMap.mem_range).2 ?_
-    refine ⟨Yᵀ, ?_⟩
-    -- `(Mᵀ)^D * Yᵀ = (Y * (M^D))ᵀ`.
-    simp only [LinearMap.mulLeft_apply, Matrix.transpose_mul, Matrix.transpose_pow]
-  have hMX' : (Mᵀ) * (Y * (M ^ D))ᵀ = 0 := by
-    -- Transpose the equation `Y * (M^D) * M = 0`.
-    have : ((Y * (M ^ D)) * M)ᵀ = 0 := by
-      simpa using congrArg Matrix.transpose hXM
-    simpa [Matrix.transpose_mul] using this
-  have hXt : (Y * (M ^ D))ᵀ = 0 :=
-    matrix_eq_zero_of_mul_eq_zero_of_mem_range_mulLeft_pow (D := D)
-      (M := Mᵀ) (X := (Y * (M ^ D))ᵀ) hX' hMX'
-  have hX0 : Y * (M ^ D) = 0 := by
-    simpa using congrArg Matrix.transpose hXt
-  simpa only [hX0]
 
 end WielandtRankOne
 
@@ -434,26 +365,5 @@ private theorem exists_consecutive_eq_of_monotone_bounded
   have : a (B + 1) ≥ a 0 + (B + 1) := hgrow (B + 1) le_rfl
   have : a (B + 1) ≤ B := ha_bound (B + 1)
   omega
-
-/-- Finrank stabilization for biRectSpan: there exists `n ≤ D²` with
-`finrank(biRectSpan P Q B n) = finrank(biRectSpan P Q B (n+1))`. -/
-theorem exists_finrank_eq_succ_of_biRectSpan
-    (P Q : Matrix (Fin D) (Fin D) ℂ) (B : MPSTensor d D) (i₀ i₁ : Fin d)
-    (hP : P = (B i₀) ^ D) (hQ : Q = (B i₁) ^ D) :
-    ∃ n ≤ D ^ 2,
-      Module.finrank ℂ (biRectSpan (d := d) (D := D) P Q B n) =
-      Module.finrank ℂ (biRectSpan (d := d) (D := D) P Q B (n + 1)) := by
-  classical
-  let a : ℕ → ℕ := fun n => Module.finrank ℂ (biRectSpan (d := d) (D := D) P Q B n)
-  have ha_mono : ∀ n, a n ≤ a (n + 1) := by
-    intro n
-    change Module.finrank ℂ (biRectSpan (d := d) (D := D) P Q B n) ≤
-      Module.finrank ℂ (biRectSpan (d := d) (D := D) P Q B (n + 1))
-    subst hP; subst hQ
-    exact biRectSpan_finrank_mono B i₀ i₁ n
-  have ha_bound : ∀ n, a n ≤ D ^ 2 := by
-    intro n
-    exact biRectSpan_finrank_le (d := d) (D := D) P Q B n
-  exact exists_consecutive_eq_of_monotone_bounded a ha_mono ha_bound
 
 end MPSTensor
