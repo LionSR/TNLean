@@ -152,4 +152,109 @@ lemma restricted_combined_family_eventually_li
   rw [← key]
   exact hN
 
+/-- **Shared bijection construction from forward and backward existential matches.**
+Given two injective maps built from per-sector existential matches, finite
+cardinality comparison turns the forward injection into a bijection
+`β : Fin Q.basisCount ≃ Fin P.basisCount`.
+
+This lemma is shared between the equal-MPV and proportional sector-matching
+proofs (`StrongMatch.lean` and `ProportionalMatch.lean`). -/
+lemma bijection_from_matches {P Q : SectorDecomposition d}
+    (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
+    (hFwd : ∀ k : Fin Q.basisCount,
+      ∃ (j : Fin P.basisCount) (h : P.basisDim j = Q.basisDim k),
+        GaugePhaseEquiv (cast (congr_arg (MPSTensor d) h) (P.basis j)) (Q.basis k) ∧
+        ¬ Tendsto (fun N : ℕ => mpvOverlap (d := d) (P.basis j) (Q.basis k) N) atTop (𝓝 0))
+    (hBwd : ∀ j : Fin P.basisCount,
+      ∃ (k : Fin Q.basisCount) (h : Q.basisDim k = P.basisDim j),
+        GaugePhaseEquiv (cast (congr_arg (MPSTensor d) h) (Q.basis k)) (P.basis j) ∧
+        ¬ Tendsto (fun N : ℕ => mpvOverlap (d := d) (Q.basis k) (P.basis j) N) atTop (𝓝 0)) :
+    ∃ β : Fin Q.basisCount ≃ Fin P.basisCount,
+      ∀ k : Fin Q.basisCount, ∃ h : P.basisDim (β k) = Q.basisDim k,
+        GaugePhaseEquiv (cast (congr_arg (MPSTensor d) h) (P.basis (β k))) (Q.basis k) ∧
+        ¬ Tendsto (fun N : ℕ => mpvOverlap (d := d) (P.basis (β k)) (Q.basis k) N) atTop (𝓝 0) := by
+  classical
+  let φ₀ : Fin Q.basisCount → Fin P.basisCount := fun k => (hFwd k).choose
+  have φ₀_spec : ∀ k : Fin Q.basisCount,
+      ∃ h : P.basisDim (φ₀ k) = Q.basisDim k,
+        GaugePhaseEquiv
+            (cast (congr_arg (MPSTensor d) h) (P.basis (φ₀ k)))
+            (Q.basis k) ∧
+        ¬ Tendsto (fun N : ℕ =>
+            mpvOverlap (d := d) (P.basis (φ₀ k)) (Q.basis k) N)
+          atTop (𝓝 0) := fun k => (hFwd k).choose_spec
+  have rebase_centre_P :
+      ∀ (j j' : Fin P.basisCount) (_hj : j = j')
+        {kv : Fin Q.basisCount}
+        (h_t : P.basisDim j' = Q.basisDim kv)
+        (_GE : GaugePhaseEquiv
+                  (cast (congr_arg (MPSTensor d) h_t) (P.basis j')) (Q.basis kv)),
+        ∃ h_t' : P.basisDim j = Q.basisDim kv,
+          GaugePhaseEquiv
+              (cast (congr_arg (MPSTensor d) h_t') (P.basis j)) (Q.basis kv) := by
+    rintro _ _ rfl _ h_t GE
+    exact ⟨h_t, GE⟩
+  have hφ₀_inj : Function.Injective φ₀ := by
+    intro k₁ k₂ hjEq
+    obtain ⟨h₁, GE₁, _⟩ := φ₀_spec k₁
+    obtain ⟨h₂, GE₂, _⟩ := φ₀_spec k₂
+    by_contra hne
+    obtain ⟨h₂', GE₂'⟩ :=
+      rebase_centre_P (φ₀ k₁) (φ₀ k₂) hjEq h₂ GE₂
+    have hQdim : Q.basisDim k₁ = Q.basisDim k₂ := h₁.symm.trans h₂'
+    have hQGE :
+        GaugePhaseEquiv
+            (cast (congr_arg (MPSTensor d) hQdim) (Q.basis k₁))
+            (Q.basis k₂) :=
+      gaugePhaseEquiv_cast_compose_via_centre (A := P.basis (φ₀ k₁))
+        (B := Q.basis k₁) (C := Q.basis k₂) h₁ h₂' GE₁ GE₂'
+    exact hQ.basis_distinct k₁ k₂ hne hQdim hQGE
+  let ψ₀ : Fin P.basisCount → Fin Q.basisCount := fun j => (hBwd j).choose
+  have ψ₀_spec : ∀ j : Fin P.basisCount,
+      ∃ h : Q.basisDim (ψ₀ j) = P.basisDim j,
+        GaugePhaseEquiv
+            (cast (congr_arg (MPSTensor d) h) (Q.basis (ψ₀ j)))
+            (P.basis j) ∧
+        ¬ Tendsto (fun N : ℕ =>
+            mpvOverlap (d := d) (Q.basis (ψ₀ j)) (P.basis j) N)
+          atTop (𝓝 0) := fun j => (hBwd j).choose_spec
+  have rebase_centre_Q :
+      ∀ (k k' : Fin Q.basisCount) (_hk : k = k')
+        {jv : Fin P.basisCount}
+        (h_t : Q.basisDim k' = P.basisDim jv)
+        (_GE : GaugePhaseEquiv
+                  (cast (congr_arg (MPSTensor d) h_t) (Q.basis k')) (P.basis jv)),
+        ∃ h_t' : Q.basisDim k = P.basisDim jv,
+          GaugePhaseEquiv
+              (cast (congr_arg (MPSTensor d) h_t') (Q.basis k)) (P.basis jv) := by
+    rintro _ _ rfl _ h_t GE
+    exact ⟨h_t, GE⟩
+  have hψ₀_inj : Function.Injective ψ₀ := by
+    intro j₁ j₂ hkEq
+    obtain ⟨h₁, GE₁, _⟩ := ψ₀_spec j₁
+    obtain ⟨h₂, GE₂, _⟩ := ψ₀_spec j₂
+    by_contra hne
+    obtain ⟨h₂', GE₂'⟩ :=
+      rebase_centre_Q (ψ₀ j₁) (ψ₀ j₂) hkEq h₂ GE₂
+    have hPdim : P.basisDim j₁ = P.basisDim j₂ := h₁.symm.trans h₂'
+    have hPGE :
+        GaugePhaseEquiv
+            (cast (congr_arg (MPSTensor d) hPdim) (P.basis j₁))
+            (P.basis j₂) :=
+      gaugePhaseEquiv_cast_compose_via_centre (A := Q.basis (ψ₀ j₁))
+        (B := P.basis j₁) (C := P.basis j₂) h₁ h₂' GE₁ GE₂'
+    exact hP.basis_distinct j₁ j₂ hne hPdim hPGE
+  have hCardQP : Fintype.card (Fin Q.basisCount) ≤ Fintype.card (Fin P.basisCount) :=
+    Fintype.card_le_of_injective φ₀ hφ₀_inj
+  have hCardPQ : Fintype.card (Fin P.basisCount) ≤ Fintype.card (Fin Q.basisCount) :=
+    Fintype.card_le_of_injective ψ₀ hψ₀_inj
+  have hCard : Fintype.card (Fin Q.basisCount) = Fintype.card (Fin P.basisCount) :=
+    le_antisymm hCardQP hCardPQ
+  have hφ₀_bij : Function.Bijective φ₀ :=
+    (Fintype.bijective_iff_injective_and_card φ₀).2 ⟨hφ₀_inj, hCard⟩
+  let β : Fin Q.basisCount ≃ Fin P.basisCount := Equiv.ofBijective φ₀ hφ₀_bij
+  refine ⟨β, ?_⟩
+  intro k
+  simpa [β] using φ₀_spec k
+
 end MPSTensor
