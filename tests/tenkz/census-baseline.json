@@ -33,9 +33,9 @@
  "m6_overloads": {
   "definition": "names with several value types + union types + enum words shared across enums; must never rise",
   "value": {
-   "multi_typed_names": 18,
-   "shared_enum_words": 22,
-   "union_types": 2
+   "multi_typed_names": 4,
+   "shared_enum_words": 7,
+   "union_types": 1
   }
  }
 }

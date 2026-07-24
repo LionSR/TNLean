@@ -63,7 +63,7 @@ declared. The generated reference prints this test beside every row.
 | `cols=` | integer | — | 3 | picture | `TKZ-PIC-*` |
 | `frame=` | frame-spec | `flat` `vertical` `plane` `rotate=<deg>` `matrix={..}` `circle` | `flat` | picture, group | `TKZ-FRAME-*` |
 | `west=` `east=` `north=` `south=` | small-enum | `open` `none` `trace` `cup` | `open` | picture | `TKZ-SIDE-*` |
-| `trace=` | cell-set | — | empty | picture | `TKZ-CELLSET-*` |
+| `trace=` | trace-spec | cell-set or `physical` | empty | picture | `TKZ-CELLSET-*` |
 | `open=` | cell-set | — | empty | picture | `TKZ-CELLSET-*` |
 | `bonds=` | small-enum | `grid` `none` | `grid` | picture | `TKZ-PIC-*` |
 | `align=` | row | row number or `midline` | `midline` | picture | `TKZ-PIC-*` |
@@ -137,12 +137,12 @@ topology.
 | `strict` | flag | false; benchmark and CI set it |
 | `theme=` | identifier | `house` |
 
-### 2.7 Value types (20)
+### 2.7 Value types (24)
 
 flag · integer · number · length · pair · identifier · small-enum ·
 math-list · row-list · row · cell-set · address · address-list ·
-typed-port-list · crossing-list · port-pair-list · frame-spec · check-spec ·
-size-table · hue-source.
+typed-port-list · crossing-list · port-pair-list · frame-spec · trace-spec ·
+check-spec · size-table · hue-source · bond-policy · size-class · void-policy.
 
 The census covers key values; positional label arguments are mathematics and
 carry no key type. Every registry row names exactly one value type; a shared

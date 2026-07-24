@@ -248,6 +248,10 @@ close dies there.
 | flag:consumers:key:kernel-atom:void | keep-because: kernel landing wave (#4687); consumers arrive with the S4 swap and the redraw campaign; expiry 0.8 |
 | flag:consumers:key:kernel-atom:wide | keep-because: kernel landing wave (#4687); consumers arrive with the S4 swap and the redraw campaign; expiry 0.8 |
 | flag:consumers:key:kernel-atom:wires | keep-because: kernel landing wave (#4687); consumers arrive with the S4 swap and the redraw campaign; expiry 0.8 |
+| flag:lonely-type:bond-policy | keep-because: the picture topology has one generated-bond policy shared by every frame (#4687); expiry 1.0 |
+| flag:lonely-type:integer | keep-because: integer is the primitive count type of the ring expander (#4687); expiry 1.0 |
+| flag:lonely-type:size-class | keep-because: the equation metric owns one size-class policy across its panels (#4687); expiry 1.0 |
+| flag:lonely-type:void-policy | keep-because: open and sealed holes are one atom-topology policy (#4687); expiry 1.0 |
 | flag:consumers:key:kernel-declare:base | keep-because: kernel landing wave (#4687); consumers arrive with the S4 swap and the redraw campaign; expiry 0.8 |
 | flag:consumers:key:kernel-declare:hue | keep-because: kernel landing wave (#4687); consumers arrive with the S4 swap and the redraw campaign; expiry 0.8 |
 | flag:consumers:key:kernel-declare:pairings | keep-because: kernel landing wave (#4687); consumers arrive with the S4 swap and the redraw campaign; expiry 0.8 |
