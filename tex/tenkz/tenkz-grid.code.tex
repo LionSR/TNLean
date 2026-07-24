@@ -2628,16 +2628,16 @@ code=combined-side|value=\tl_to_str:N \l__tenkz_fcombined_tl}
             \str_if_eq:nnTF {##1} {east}
               {
                 \tenkz_seg:nnnnn
-                  { \l__tenkz_x_dim + \tenkz@dim{0.04} }
+                  { \l__tenkz_x_dim + \tenkz@dim{\tenkz@r@cupmouth} }
                   { \l__tenkz_tmp_dim }
-                  { \l__tenkz_x_dim + \tenkz@dim{0.50} }
+                  { \l__tenkz_x_dim + \tenkz@dim{\tenkz@r@cupdepth} }
                   { \l__tenkz_tmp_dim } { bond }
               }
               {
                 \tenkz_seg:nnnnn
-                  { \l__tenkz_x_dim - \tenkz@dim{0.04} }
+                  { \l__tenkz_x_dim - \tenkz@dim{\tenkz@r@cupmouth} }
                   { \l__tenkz_tmp_dim }
-                  { \l__tenkz_x_dim - \tenkz@dim{0.50} }
+                  { \l__tenkz_x_dim - \tenkz@dim{\tenkz@r@cupdepth} }
                   { \l__tenkz_tmp_dim } { bond }
               }
           }
@@ -2647,8 +2647,8 @@ code=combined-side|value=\tl_to_str:N \l__tenkz_fcombined_tl}
     \tl_if_blank:VF \l_tmpb_tl
       {
         \str_if_eq:VnTF \l__tenkz_fcombined_tl {east}
-          { \dim_add:Nn \l__tenkz_x_dim { \tenkz@dim{0.30} } }
-          { \dim_sub:Nn \l__tenkz_x_dim { \tenkz@dim{0.30} } }
+          { \dim_add:Nn \l__tenkz_x_dim { \tenkz@dim{\tenkz@r@wireclear} } }
+          { \dim_sub:Nn \l__tenkz_x_dim { \tenkz@dim{\tenkz@r@wireclear} } }
         \tenkz_map:nn { \l__tenkz_x_dim }
           { \l__tenkz_tmp_dim + \tenkz@dim{\tenkz@r@labelclear} }
         \__tenkz_render_labelnode:nnn
@@ -2692,7 +2692,7 @@ code=combined-side|value=\tl_to_str:N \l__tenkz_fcombined_tl}
             \tenkz_map:nn
               { \tenkz_colx:n{\l__tenkz_pwbase_tl}
                 + \str_if_eq:nnTF {#3}{east}
-                    {\tenkz@dim{0.50}}{-\tenkz@dim{0.50}} }
+                    {\tenkz@dim{\tenkz@r@cupdepth}}{-\tenkz@dim{\tenkz@r@cupdepth}} }
               { ( \tenkz_rowy:n {\l__tenkz_fusebase_int}
                   + \tenkz_rowy:n
                     {\l__tenkz_fusebase_int + \l__tenkz_frows_int - 1} ) / 2 }
@@ -2700,10 +2700,10 @@ code=combined-side|value=\tl_to_str:N \l__tenkz_fcombined_tl}
           {
             \str_if_eq:nnTF {#3} {east}
               { \tenkz_map:nn
-                  { \tenkz_colx:n{\l__tenkz_pwbase_tl} + \tenkz@dim{0.04} }
+                  { \tenkz_colx:n{\l__tenkz_pwbase_tl} + \tenkz@dim{\tenkz@r@cupmouth} }
                   { \tenkz_rowy:n {#1} } }
               { \tenkz_map:nn
-                  { \tenkz_colx:n{\l__tenkz_pwbase_tl} - \tenkz@dim{0.04} }
+                  { \tenkz_colx:n{\l__tenkz_pwbase_tl} - \tenkz@dim{\tenkz@r@cupmouth} }
                   { \tenkz_rowy:n {#1} } }
           }
         \tl_set:Ne #4 { \tenkz_mpt: }
