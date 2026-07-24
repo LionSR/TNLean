@@ -826,6 +826,7 @@ def campaign_digest(targets: Sequence[Target]) -> str:
     """Hash every committed input whose change invalidates visual verdicts."""
     paths = {
         DEFAULT_MANIFEST,
+        PAPER_SOURCE,
         BOOK_SOURCE,
         REPO / "docs" / "tenkz" / "tenkzrmpbenchmark.sty",
         REPO / "scripts" / "tenkz_rmp.py",
