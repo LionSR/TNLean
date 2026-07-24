@@ -214,3 +214,10 @@ occurrence; the table does not deduplicate mathematically equivalent blocks.
 | `strings` | 0 | 7 | 7 |
 | `torus-cycle` | 0 | 4 | 4 |
 | `typed-ports` | 13 | 0 | 13 |
+
+The `enclosure-marks` row is an audit exception rather than language demand.
+Its ten existing blockers are stale Section IV intersection verdicts: their
+manifest capabilities and cases use boundary atoms, in agreement with
+`docs/tenkz/LANGUAGE-1.0.md` Section 14. Treat the semantic demand for
+`enclosure-marks` as zero. Reclassifying those verdicts is separate work and is
+deliberately outside this inventory-only change.
