@@ -32,6 +32,8 @@ tensor.
   trace-preserving Perron gauge.
 * `IsNormalTensor.isNormal`: spectral normality implies eventual block
   injectivity.
+* `isNormalTensor_of_isNormal_leftCanonical`: an algebraically normal
+  left-canonical tensor is a spectrally normalized normal tensor.
 * `MPVBlockPhaseEquiv.dim_eq_and_gaugePhaseEquiv_of_isNormalTensor`: exact MPV
   phase equivalence between normal tensors is realized by an invertible gauge.
 * `IsCPSVBasisOfNormalTensors.blocks_not_gaugePhaseEquiv`: distinct members of
@@ -146,6 +148,34 @@ theorem IsNormalTensor.isNormal [NeZero D]
   have hNormalGauge : IsNormal (tpGauge (d := d) (D := D) A σ) :=
     isNormal_of_tp_primitive_irreducible _ hTP hPrim hIrr
   exact isNormal_of_gaugeEquiv hNormalGauge hGauge.symm
+
+/-- An algebraically normal left-canonical tensor is a spectrally normalized normal tensor.
+
+Algebraic normality and left-canonical normalization imply strong irreducibility by
+arXiv:0909.5347, Proposition 3. Thus the transfer map has a positive-definite fixed point and
+has no unit-modulus eigenvalue other than one. The spectral normalization of
+arXiv:1606.00608, lines 224--235, then has Perron value one and does not rescale the tensor.
+This conversion is an input to the BNT identification invoked at arXiv:1606.00608, line 1307.
+-/
+theorem isNormalTensor_of_isNormal_leftCanonical [NeZero D]
+    (A : MPSTensor d D) (hNormal : IsNormal A) (hLeft : IsLeftCanonical A) :
+    IsNormalTensor A := by
+  have hStrong : IsStronglyIrreduciblePaper A :=
+    isNormal_implies_stronglyIrreducible A hLeft hNormal
+  obtain ⟨ρ, hρ, hρfix⟩ := hStrong.posDef_fixedPoint
+  have hIrr : IsIrreducibleTensor A :=
+    isIrreducibleTensor_of_isIrreducibleMap A hStrong.isIrreducibleMap
+  have huniq : ∀ μ : ℂ, Module.End.HasEigenvalue (transferMap A) μ →
+      ‖μ‖ = (1 : ℝ) → μ = (1 : ℂ) := by
+    intro μ hμ hμnorm
+    have hmem : μ ∈ peripheralEigenvalues (transferMap A) := ⟨hμ, hμnorm⟩
+    rw [hStrong.peripheralEigenvalues_eq] at hmem
+    simpa using hmem
+  have hScaled : IsNormalTensor (fun i =>
+      (((Real.sqrt (1 : ℝ) : ℝ) : ℂ))⁻¹ • A i) :=
+    isNormalTensor_invSqrt_smul_of_unique_peripheral A hIrr ρ 1 hρ (by norm_num)
+      (by simpa using hρfix) huniq
+  simpa using hScaled
 
 /-- A normal tensor has a nonzero letter.
 
