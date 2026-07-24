@@ -82,18 +82,6 @@ theorem prop3_ba (A : MPSTensor d D)
     IsPrimitivePaper A :=
   isPrimitivePaper_of_hasEventuallyFullKrausRank A hA
 
-/-- **Proposition 3 (b)→(a)**, `IsNormal` version.
-
-If `A` is normal, then `A` is primitive in the paper's sense.
-
-This is the `IsNormal` restatement of Proposition 3(b)→(a).
-Paper: arXiv:0909.5347, Proposition 3(b)→(a); Wolf, Chapter 6.
--/
-theorem prop3_ba_isNormal (A : MPSTensor d D)
-    (hA : IsNormal A) :
-    IsPrimitivePaper A :=
-  isPrimitivePaper_of_isNormal A hA
-
 /-! ## Direction (a) → (c) -/
 
 /-- **Proposition 3 (a)→(c)**: paper primitivity implies strong irreducibility.
@@ -255,19 +243,6 @@ theorem wolf_theorem_6_8_conjunction [NeZero D]
     exact (primitivePaper_iff_hasEventuallyFullKrausRank A hNorm).mpr h.1
 
 /-! ## Peripheral primitivity (intermediate result) -/
-
-/-- **Proposition 3 (a)→(c), intermediate step**: paper primitivity implies
-peripheral primitivity of the transfer map.
-
-This isolates the peripherally primitive consequence used in Proposition 3(a)→(c).
-Paper: arXiv:0909.5347, Proposition 3(a)→(c); Wolf, Chapter 6.
--/
-theorem prop3_a_implies_peripherallyPrimitive [NeZero D]
-    (A : MPSTensor d D)
-    (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
-    (hPrim : IsPrimitivePaper A) :
-    IsPeripherallyPrimitive A :=
-  isPeripherallyPrimitive_of_isPrimitivePaper A hNorm hPrim
 
 /-! ## Index bound -/
 

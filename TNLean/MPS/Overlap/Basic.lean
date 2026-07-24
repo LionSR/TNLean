@@ -66,44 +66,6 @@ lemma mpvOverlap_eq_star_mpvInner {d D₁ D₂ : ℕ} (A : MPSTensor d D₁) (B 
   -- Expand `mpvInner` as a sum, then take `star` termwise.
   simp [mpvOverlap, mpvInner_eq_sum, star_sum, mul_comm]
 
-/-- If `V(A_total)` expands in a finite family `A j`, then the overlap with `B` expands
-with the same coefficients. -/
-lemma mpvOverlap_eq_sum_of_decomp_left
-    {d : ℕ} {Dtot : ℕ} {g : ℕ} {dim : Fin g → ℕ}
-    (A_total : MPSTensor d Dtot)
-    (A : (j : Fin g) → MPSTensor d (dim j))
-    {N : ℕ} (c : Fin g → ℂ)
-    (hdecomp : ∀ σ : Fin N → Fin d,
-      mpv A_total σ = ∑ j : Fin g, c j * mpv (A j) σ)
-    {D' : ℕ} (B : MPSTensor d D') :
-    mpvOverlap (d := d) A_total B N =
-      ∑ j : Fin g, c j * mpvOverlap (d := d) (A j) B N := by
-  classical
-  calc
-    mpvOverlap (d := d) A_total B N =
-        ∑ σ : Cfg d N, (∑ j : Fin g, c j * mpv (A j) σ) * star (mpv B σ) := by
-          simp only [mpvOverlap]
-          congr 1
-          ext σ
-          rw [hdecomp σ]
-    _ = ∑ σ : Cfg d N,
-          ∑ j : Fin g, c j * (mpv (A j) σ * star (mpv B σ)) := by
-          congr 1
-          ext σ
-          rw [Finset.sum_mul]
-          congr 1
-          ext j
-          ring
-    _ = ∑ j : Fin g,
-          ∑ σ : Cfg d N, c j * (mpv (A j) σ * star (mpv B σ)) := by
-          rw [Finset.sum_comm]
-    _ = ∑ j : Fin g, c j * ∑ σ : Cfg d N, mpv (A j) σ * star (mpv B σ) := by
-          refine Finset.sum_congr rfl ?_
-          intro j _
-          rw [Finset.mul_sum]
-    _ = ∑ j : Fin g, c j * mpvOverlap (d := d) (A j) B N := by
-          simp [mpvOverlap]
-
 /-- Translate a fixed-length pointwise MPV decomposition into an equality of
 state vectors.
 
@@ -147,53 +109,6 @@ lemma mpvInner_eq_sum_of_decomp_right
     mpvState_eq_sum_of_decomp (d := d) A_total A (N := N) c hdecomp
   rw [mpvInner, hstate]
   simp only [mpvInner, inner_sum, inner_smul_right]
-
-/-- Expand the inner product against the left side of a fixed-length MPV
-decomposition.
-
-This is the conjugate-linear companion of
-`mpvInner_eq_sum_of_decomp_right`, used for the symmetric projection in the
-block-matching argument of arXiv:1606.00608, Theorem II.1, Appendix MPV proof
-line 1182. -/
-lemma mpvInner_eq_sum_of_decomp_left
-    {d g D Dtot : ℕ} {dim : Fin g → ℕ}
-    (A_total : MPSTensor d Dtot)
-    (A : (j : Fin g) → MPSTensor d (dim j))
-    {N : ℕ}
-    (c : Fin g → ℂ)
-    (hdecomp : ∀ σ : Fin N → Fin d,
-      mpv A_total σ = ∑ j : Fin g, c j * mpv (A j) σ)
-    (X : MPSTensor d D) :
-    mpvInner (d := d) A_total X N =
-      ∑ j : Fin g, mpvInner (d := d) (A j) X N * star (c j) := by
-  have hstate :=
-    mpvState_eq_sum_of_decomp (d := d) A_total A (N := N) c hdecomp
-  rw [mpvInner, hstate, sum_inner]
-  refine Finset.sum_congr rfl ?_
-  intro j _
-  rw [inner_smul_left]
-  simp [mpvInner, mul_comm]
-
-/-- If the right tensor in an overlap has a fixed-length MPV decomposition,
-then the overlap expands with conjugated coefficients. -/
-lemma mpvOverlap_eq_sum_of_decomp_right
-    {d g D Dtot : ℕ} {dim : Fin g → ℕ}
-    (A_total : MPSTensor d Dtot)
-    (A : (j : Fin g) → MPSTensor d (dim j))
-    {N : ℕ}
-    (c : Fin g → ℂ)
-    (hdecomp : ∀ σ : Fin N → Fin d,
-      mpv A_total σ = ∑ j : Fin g, c j * mpv (A j) σ)
-    (X : MPSTensor d D) :
-    mpvOverlap (d := d) X A_total N =
-      ∑ j : Fin g, mpvOverlap (d := d) X (A j) N * star (c j) := by
-  calc
-    mpvOverlap (d := d) X A_total N = star (mpvInner (d := d) X A_total N) :=
-      mpvOverlap_eq_star_mpvInner X A_total N
-    _ = star (∑ j : Fin g, c j * mpvInner (d := d) X (A j) N) := by
-      rw [mpvInner_eq_sum_of_decomp_right (d := d) A_total A c hdecomp X]
-    _ = ∑ j : Fin g, mpvOverlap (d := d) X (A j) N * star (c j) := by
-      simp only [star_sum, star_mul, ← mpvOverlap_eq_star_mpvInner]
 
 /-- Proportionality of MPVs at a fixed system size upgrades to proportionality of overlaps. -/
 lemma mpvOverlap_eq_mul_of_mpv_eq_mul
