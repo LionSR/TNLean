@@ -61,9 +61,11 @@ shell command % \tntree{commented}
 % \begin{tenkz} \tn{commented} \end{tenkz}
 % \end{tnexample}
 \newif\ifdraft
-\let\ifalias\iftrue
+\let\ifalias\ifdraft
+\let\ifnever\iffalse
 \iffalse
 \newif\iflocal
+\newcommand{\broken}{
 \ifalias
 \fi
 \ifdraft
@@ -173,38 +175,66 @@ shell command % \tntree{commented}
     if r"\input" in DOCTEST._mask_display_environments(displayed_input):
         raise AssertionError("a displayed input spelling remained in the structural graph")
     with tempfile.TemporaryDirectory(prefix="tenkz-doctest-graph-") as tmp:
-        manual_dir = Path(tmp)
+        manual_dir = Path(tmp) / "manual"
+        manual_dir.mkdir()
         chapters = manual_dir / "chapters2"
         chapters.mkdir()
         root = manual_dir / "manual2.tex"
         child = chapters / "child.tex"
+        local = chapters / "local.tex"
         root.write_text(
             "\\newcommand{\\optionalchapter}{\\input{missing.tex}}\n"
             "\\verb|\\IfFileExists| \\string\\IfFileExists \\\\IfFileExists\n"
             "\\begin{Verbatim}\n\\IfFileExists\n\\end{Verbatim}\n"
-            "\\IfFileExists{chapters2/% continued\nchild.tex}"
+            "\\verb|100%|\\IfFileExists{missing-after-verb.tex}"
+            "{\\input{missing-after-verb.tex}}"
+            "{\\IfFileExists{chapters2/% continued\nchild.tex}"
             "{\\IfFileExists{chapters2/child}"
             "{\\input{chapters2/wrong-extensionless-branch.tex}}"
             "{\\IfFileExists{missing-generated.tex}"
             "{\\input{chapters2/missing-generated.tex}}"
             "{\\input chapters2/child}}}"
-            "{\\input{chapters2/also-missing.tex}}\n",
+            "{\\input{chapters2/also-missing.tex}}}\n",
             encoding="utf-8",
         )
-        child.write_text("", encoding="utf-8")
+        child.write_text(
+            "\\IfFileExists{local.tex}{\\input{local.tex}}"
+            "{\\input{missing-local.tex}}\n",
+            encoding="utf-8",
+        )
+        local.write_text("", encoding="utf-8")
+        ambient = Path(tmp) / "ambient"
+        nested = ambient / "nested"
+        nested.mkdir(parents=True)
+        (nested / "ambient-only.tex").write_text("", encoding="utf-8")
         original_manual = DOCTEST.MANUAL
         original_manual_dir = DOCTEST.MANUAL_DIR
         original_chapters = DOCTEST.CHAPTERS
         DOCTEST.MANUAL = root
         DOCTEST.MANUAL_DIR = manual_dir
         DOCTEST.CHAPTERS = chapters
+        original_texinputs = DOCTEST.os.environ.get("TEXINPUTS")
         try:
             sources = DOCTEST._manual_sources()
+            DOCTEST.os.environ["TEXINPUTS"] = str(ambient)
+            if DOCTEST._tex_file_exists(Path("ambient-only.tex"), manual_dir):
+                raise AssertionError("a plain TEXINPUTS root was searched recursively")
+            DOCTEST.os.environ["TEXINPUTS"] = f"{ambient}//"
+            if not DOCTEST._tex_file_exists(Path("ambient-only.tex"), manual_dir):
+                raise AssertionError("a recursive TEXINPUTS root was not searched")
         finally:
+            if original_texinputs is None:
+                DOCTEST.os.environ.pop("TEXINPUTS", None)
+            else:
+                DOCTEST.os.environ["TEXINPUTS"] = original_texinputs
             DOCTEST.MANUAL = original_manual
             DOCTEST.MANUAL_DIR = original_manual_dir
             DOCTEST.CHAPTERS = original_chapters
-    if {source.resolve() for source in sources} != {root.resolve(), child.resolve()}:
+    if {source.resolve() for source in sources} != {
+        root.resolve(),
+        child.resolve(),
+        local.resolve(),
+    }:
         raise AssertionError("the manual root or a traversed source was omitted")
 
     print("PASS: tenkz manual doctest extraction and reference coverage")
