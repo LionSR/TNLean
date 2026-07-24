@@ -93,6 +93,27 @@ grep -Fq '|name=bond-1-1-1-2|origin=grid|' \
   echo "FAIL: a multi-wire atom lost its external horizontal grid bond" >&2
   exit 1
 }
+for false_field in closed conjugate outline; do
+  if grep -Fq "|$false_field=" "$WORK/r_false_flags.tnlog"; then
+    echo "FAIL: $false_field=false enabled or materialized the flag" >&2
+    exit 1
+  fi
+done
+grep -Fq '|name=wrap-west-1|origin=trace|row=1|side=west' \
+  "$WORK/r_one_sided_trace.tnlog" || {
+  echo "FAIL: west=trace did not materialize its first closure wire" >&2
+  exit 1
+}
+grep -Fq '|name=wrap-west-2|origin=trace|row=2|side=west' \
+  "$WORK/r_one_sided_trace.tnlog" || {
+  echo "FAIL: west=trace did not materialize one closure per row" >&2
+  exit 1
+}
+grep -Fq '|col=1|kind=index|name=wrap-north-col-1|origin=trace|side=north' \
+  "$WORK/r_one_sided_trace.tnlog" || {
+  echo "FAIL: north=trace did not materialize its first closure wire" >&2
+  exit 1
+}
 grep -Fq '|name=P|ports=n:physical|skin=box' \
     "$WORK/r_declare_atom.tnlog" || {
   echo "FAIL: an identifier atom declaration did not mint a typed command" >&2
@@ -428,7 +449,7 @@ grep -Fq 'check|relation=3|result=off|reason=third' \
   echo "FAIL: the later equation opt-out was silently dropped" >&2
   exit 1
 }
-echo "PASS: thirty-eight review regressions hold"
+echo "PASS: forty review regressions hold"
 
 fail=0
 for pair in s1 s2 s3 s4 s5 s6 s7 s8; do

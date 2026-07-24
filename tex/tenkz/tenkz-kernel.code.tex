@@ -528,8 +528,20 @@
   {
     \keys_define:nn {#1}
       {
-        #2 .code:n = { \__tenkz_kernel_stage_put:nn {#3} {true} },
-        #2 .default:n =
+        #2 .code:n =
+          {
+            \str_case:nnF {##1}
+              {
+                {true}  { \__tenkz_kernel_stage_put:nn {#3} {true} }
+                {false} { \prop_remove:Nn \l__tenkz_kernel_stage_prop {#3} }
+              }
+              {
+                \msg_error:nneeee {tenkz}{kernel-choice}
+                  {#2} {##1} {true|false}
+                  { \tl_use:N \l__tenkz_model_last_tl }
+              }
+          },
+        #2 .default:n = true
       }
   }
 \cs_new_protected:Npn \__tenkz_kernel_unknown:nn #1#2
@@ -654,8 +666,19 @@
   {
     pitch .code:n  = { \pgfqkeys{/tenkz}{pitch=#1} },
     sizes .code:n  = { \__tenkz_kernel_stage_put:nn {sizes} {#1} },
-    strict .code:n = { \bool_set_true:N \l__tenkz_kernel_strict_bool },
-    strict .default:n = ,
+    strict .code:n =
+      {
+        \str_case:nnF {#1}
+          {
+            {true}  { \bool_set_true:N \l__tenkz_kernel_strict_bool }
+            {false} { \bool_set_false:N \l__tenkz_kernel_strict_bool }
+          }
+          {
+            \msg_error:nneeee {tenkz}{kernel-choice}
+              {strict} {#1} {true|false} {setup}
+          }
+      },
+    strict .default:n = true,
     theme .code:n  = { \__tenkz_kernel_stage_put:nn {theme} {#1} }
   }
 \__tenkz_kernel_unknown:nn { tenkz-kernel-setup } { setup }
@@ -1548,6 +1571,44 @@
     \prop_put:Nee \l__tenkz_kernel_named_prop
       {#4} { \tl_use:N \l__tenkz_model_last_tl }
   }
+\cs_new_protected:Npn \__tenkz_kernel_side_traces:n #1
+  {
+    \str_case:nn {#1}
+      {
+        {west}
+          {
+            \int_step_inline:nn { \__tenkz_kernel_rows: }
+              {
+                \__tenkz_kernel_closure_wire:nnnn
+                  {trace}{west}{row = ##1}{wrap-west-##1}
+              }
+          }
+        {east}
+          {
+            \int_step_inline:nn { \__tenkz_kernel_rows: }
+              {
+                \__tenkz_kernel_closure_wire:nnnn
+                  {trace}{east}{row = ##1}{wrap-east-##1}
+              }
+          }
+        {north}
+          {
+            \int_step_inline:nn { \__tenkz_kernel_cols: }
+              {
+                \__tenkz_kernel_closure_wire:nnnn
+                  {trace}{north}{col = ##1}{wrap-north-col-##1}
+              }
+          }
+        {south}
+          {
+            \int_step_inline:nn { \__tenkz_kernel_cols: }
+              {
+                \__tenkz_kernel_closure_wire:nnnn
+                  {trace}{south}{col = ##1}{wrap-south-col-##1}
+              }
+          }
+      }
+  }
 \cs_new_protected:Npn \__tenkz_kernel_row_cups:n #1
   {
     \int_step_inline:nnnn {1}{2}{\__tenkz_kernel_rows: - 1}
@@ -1710,9 +1771,9 @@
     \__tenkz_kernel_cell_closures:
     \prop_get:NnN \l__tenkz_kernel_policy_prop {west} \l_tmpa_tl
     \prop_get:NnN \l__tenkz_kernel_policy_prop {east} \l_tmpb_tl
-    \str_if_eq:VnT \l_tmpa_tl {trace}
+    \str_if_eq:VnTF \l_tmpa_tl {trace}
       {
-        \str_if_eq:VnT \l_tmpb_tl {trace}
+        \str_if_eq:VnTF \l_tmpb_tl {trace}
           {
             \int_step_inline:nn { \__tenkz_kernel_rows: }
               {
@@ -1720,12 +1781,17 @@
                   {trace}{west-east}{row = ##1}{wrap-##1}
               }
           }
+          { \__tenkz_kernel_side_traces:n {west} }
+      }
+      {
+        \str_if_eq:VnT \l_tmpb_tl {trace}
+          { \__tenkz_kernel_side_traces:n {east} }
       }
     \prop_get:NnN \l__tenkz_kernel_policy_prop {north} \l_tmpa_tl
     \prop_get:NnN \l__tenkz_kernel_policy_prop {south} \l_tmpb_tl
-    \str_if_eq:VnT \l_tmpa_tl {trace}
+    \str_if_eq:VnTF \l_tmpa_tl {trace}
       {
-        \str_if_eq:VnT \l_tmpb_tl {trace}
+        \str_if_eq:VnTF \l_tmpb_tl {trace}
           {
             \int_step_inline:nn { \__tenkz_kernel_cols: }
               {
@@ -1733,6 +1799,11 @@
                   {trace}{north-south}{col = ##1}{wrap-col-##1}
               }
           }
+          { \__tenkz_kernel_side_traces:n {north} }
+      }
+      {
+        \str_if_eq:VnT \l_tmpb_tl {trace}
+          { \__tenkz_kernel_side_traces:n {south} }
       }
     \clist_map_inline:nn {west,east}
       {
