@@ -11,7 +11,7 @@
     This is the local three-site consequence of the parent-space construction
     and the basic-vector form in
     \cite[Definition~3.9, Equations~(3.16)--(3.18), and
-    Appendix~B]{Cirac2016MPDO_arXiv}. It does not assert commutation for every
+        Appendix~B]{Cirac2016MPDO_arXiv}. It does not assert commutation for every
     chain length.
 \end{theorem}
 
@@ -24,9 +24,9 @@
     On three sites, multiplication of the two adjacent transports cancels the
     middle factors by $U^*U=1$. Consequently their products are
     \begin{align}
-        &U^{\otimes3}P_{01}P_{12}(U^*)^{\otimes3},
-        \notag\\
-        &U^{\otimes3}P_{12}P_{01}(U^*)^{\otimes3},
+         & U^{\otimes3}P_{01}P_{12}(U^*)^{\otimes3},
+        \notag                                       \\
+         & U^{\otimes3}P_{12}P_{01}(U^*)^{\otimes3},
         \notag
     \end{align}
     respectively. They agree by
@@ -53,45 +53,45 @@
     \begin{center}
         \begin{tenkzfree}
             \tnput[boundary, ports={east:virtual}]
-                {transportLeft}{(-12mm,0)}{}
+            {transportLeft}{(-12mm,0)}{}
             \tnput[box, ports={west:virtual,east:virtual,north:physical}]
-                {transportUzero}{(0,0)}{U_0}
+            {transportUzero}{(0,0)}{U_0}
             \tnput[dot, ports={west:virtual,east:virtual},
                 label pos=south]
-                {transportPhiZero}{(16mm,0)}{\varphi_{01}}
+            {transportPhiZero}{(16mm,0)}{\varphi_{01}}
             \tnput[box, ports={west:virtual,east:virtual,north:physical}]
-                {transportUone}{(32mm,0)}{U_1}
+            {transportUone}{(32mm,0)}{U_1}
             \tnput[dot, ports={west:virtual,east:virtual},
                 label pos=south]
-                {transportPhiOne}{(48mm,0)}{\varphi_{12}}
+            {transportPhiOne}{(48mm,0)}{\varphi_{12}}
             \tnput[box, ports={west:virtual,east:virtual,north:physical}]
-                {transportUtwo}{(64mm,0)}{U_2}
+            {transportUtwo}{(64mm,0)}{U_2}
             \tnput[boundary, ports={west:virtual}]
-                {transportRight}{(76mm,0)}{}
+            {transportRight}{(76mm,0)}{}
             \tnput[boundary, ports={south:physical}]
-                {transportPhysicalZero}{(0,14mm)}{}
+            {transportPhysicalZero}{(0,14mm)}{}
             \tnput[boundary, ports={south:physical}]
-                {transportPhysicalOne}{(32mm,14mm)}{}
+            {transportPhysicalOne}{(32mm,14mm)}{}
             \tnput[boundary, ports={south:physical}]
-                {transportPhysicalTwo}{(64mm,14mm)}{}
+            {transportPhysicalTwo}{(64mm,14mm)}{}
             \tnjoin[name=transportOuterLeft]
-                {transportLeft.east}{transportUzero.west}
+            {transportLeft.east}{transportUzero.west}
             \tnjoin[name=transportZeroLeft]
-                {transportUzero.east}{transportPhiZero.west}
+            {transportUzero.east}{transportPhiZero.west}
             \tnjoin[name=transportZeroRight]
-                {transportPhiZero.east}{transportUone.west}
+            {transportPhiZero.east}{transportUone.west}
             \tnjoin[name=transportOneLeft]
-                {transportUone.east}{transportPhiOne.west}
+            {transportUone.east}{transportPhiOne.west}
             \tnjoin[name=transportOneRight]
-                {transportPhiOne.east}{transportUtwo.west}
+            {transportPhiOne.east}{transportUtwo.west}
             \tnjoin[name=transportOuterRight]
-                {transportUtwo.east}{transportRight.west}
+            {transportUtwo.east}{transportRight.west}
             \tnjoin[name=transportPhysicalJoinZero]
-                {transportUzero.north}{transportPhysicalZero.south}
+            {transportUzero.north}{transportPhysicalZero.south}
             \tnjoin[name=transportPhysicalJoinOne]
-                {transportUone.north}{transportPhysicalOne.south}
+            {transportUone.north}{transportPhysicalOne.south}
             \tnjoin[name=transportPhysicalJoinTwo]
-                {transportUtwo.north}{transportPhysicalTwo.south}
+            {transportUtwo.north}{transportPhysicalTwo.south}
             \tnregion[slot=selected, label={$\supp(P_{01})$},
                 label pos=south,
                 name=transportVirtualZero]{transportPhiZero}
@@ -101,13 +101,13 @@
             \tnregion[slot=secondary, outline,
                 label={$\supp((P_2)_{01})$},
                 label pos=north west, name=transportPhysicalRegionZero]
-                {transportUzero,transportUone,transportZeroLeft,
-                 transportZeroRight,transportVirtualZero}
+            {transportUzero,transportUone,transportZeroLeft,
+                transportZeroRight,transportVirtualZero}
             \tnregion[slot=secondary, outline,
                 label={$\supp((P_2)_{12})$},
                 label pos=north east, name=transportPhysicalRegionOne]
-                {transportUone,transportUtwo,transportOneLeft,
-                 transportOneRight,transportVirtualOne}
+            {transportUone,transportUtwo,transportOneLeft,
+                transportOneRight,transportVirtualOne}
         \end{tenkzfree}
     \end{center}
 \end{proof}
@@ -206,10 +206,10 @@
     The two Appendix~B two-site coefficient representatives are idempotent:
     \begin{align}
         \widehat Q_{AX}^{2}
-        &=\widehat Q_{AX},
-        \notag\\
+         & =\widehat Q_{AX},
+        \notag               \\
         \widehat Q_{XB}^{2}
-        &=\widehat Q_{XB}.
+         & =\widehat Q_{XB}.
         \notag
     \end{align}
 \end{lemma}
@@ -232,17 +232,17 @@
     The two Appendix~B coefficient representatives satisfy
     \begin{align}
         \widehat Q_{AX}^{\,2}
-        &=\widehat Q_{AX},
-        \notag\\
+         & =\widehat Q_{AX},
+        \notag               \\
         \widehat Q_{XB}^{\,2}
-        &=\widehat Q_{XB},
+         & =\widehat Q_{XB},
         \notag
     \end{align}
     and their adjacent actions on the common three-site coefficient space
     commute:
     \begin{align}
         (\widehat Q_{AX})_{AX}(\widehat Q_{XB})_{XB}
-        &=
+         & =
         (\widehat Q_{XB})_{XB}(\widehat Q_{AX})_{AX}.
         \notag
     \end{align}
@@ -299,23 +299,23 @@
     Let $A$ be injective and let an Appendix~B structural datum be fixed. Put
     \begin{align}
         \widehat K_{AXB}
-        &=G_3(A),
-        \notag\\
+         & =G_3(A),
+        \notag      \\
         \widehat Q_{AX}
-        &=q_2(A),
-        \notag\\
+         & =q_2(A),
+        \notag      \\
         \widehat Q_{XB}
-        &=q_2(A),
+         & =q_2(A),
         \notag
     \end{align}
     with the two copies of $q_2(A)$ lifted to the indicated faces of the
     three-site coefficient space. Then
     \begin{align}
         [(\widehat Q_{AX})_{AX},(\widehat Q_{XB})_{XB}]
-        &=0,
-        \notag\\
+         & =0,
+        \notag \\
         \widehat K_{AXB}
-        &=
+         & =
         \ker((\widehat Q_{AX})_{AX})
         \cap\ker((\widehat Q_{XB})_{XB}).
         \notag
@@ -360,10 +360,10 @@
     $N$-site terms with the two three-site terms:
     \begin{align}
         R_{i,\tau}^{(3)}h_i^{(N)}
-        &=h_0^{(3)}R_{i,\tau}^{(3)},
-        \notag\\
+         & =h_0^{(3)}R_{i,\tau}^{(3)},
+        \notag                         \\
         R_{i,\tau}^{(3)}h_{i+1}^{(N)}
-        &=h_1^{(3)}R_{i,\tau}^{(3)}.
+         & =h_1^{(3)}R_{i,\tau}^{(3)}.
         \notag
     \end{align}
     % Formula and contraction set: the two intertwining identities above are
@@ -462,7 +462,7 @@
     Suppose the lifted $AX$ and $XB$ representatives commute:
     \begin{align}
         (\widehat Q_{AX})_{AX}(\widehat Q_{XB})_{XB}
-        &=
+         & =
         (\widehat Q_{XB})_{XB}(\widehat Q_{AX})_{AX}.
         \notag
     \end{align}
@@ -492,10 +492,10 @@
     coefficient representatives,
     \begin{align}
         Q_{AX}
-        &=\widehat Q_{AX},
-        \notag\\
+         & =\widehat Q_{AX},
+        \notag               \\
         Q_{XB}
-        &=\widehat Q_{XB},
+         & =\widehat Q_{XB},
         \notag
     \end{align}
     then $\widehat Q_{AX}$ and $\widehat Q_{XB}$ satisfy the algebraic
@@ -525,10 +525,10 @@
     are the two local lifts
     \begin{align}
         h_0^{(3)}(A,2)
-        &=(\widehat Q_{AX})_{AX},
-        \notag\\
+         & =(\widehat Q_{AX})_{AX},
+        \notag                      \\
         h_1^{(3)}(A,2)
-        &=(\widehat Q_{XB})_{XB}.
+         & =(\widehat Q_{XB})_{XB}.
         \notag
     \end{align}
 \end{lemma}
@@ -549,13 +549,13 @@
     overlapping two-site commutation datum
     \begin{align}
         \widehat Q_{AX}^2
-        &=\widehat Q_{AX},
-        \notag\\
+         & =\widehat Q_{AX},
+        \notag               \\
         \widehat Q_{XB}^2
-        &=\widehat Q_{XB},
-        \notag\\
+         & =\widehat Q_{XB},
+        \notag               \\
         (\widehat Q_{AX})_{AX}(\widehat Q_{XB})_{XB}
-        &=
+         & =
         (\widehat Q_{XB})_{XB}(\widehat Q_{AX})_{AX},
         \notag
     \end{align}
@@ -583,7 +583,7 @@
     lifted Definition~D.2 commutator
     \begin{align}
         (\widehat Q_{AX})_{AX}(\widehat Q_{XB})_{XB}
-        &=
+         & =
         (\widehat Q_{XB})_{XB}(\widehat Q_{AX})_{AX},
         \notag
     \end{align}
@@ -604,7 +604,7 @@
     the kernel-intersection condition
     \begin{align}
         K_{AXB}
-        &=
+         & =
         \ker((\widehat Q_{AX})_{AX})
         \cap
         \ker((\widehat Q_{XB})_{XB}).

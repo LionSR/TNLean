@@ -71,7 +71,9 @@ BLUEPRINT_LABEL_TEXTTT_RE = re.compile(r"\\texttt\{(?:thm|lem|def|prop|cor|eq):[
 IGNORED_TEX_MACRO_RE = re.compile(r"\\(?:label|ref|eqref|uses|lean)\{[^}]*\}")
 BLUEPRINT_ENTRYPOINTS = {
     Path("blueprint/src/content.tex"),
+    Path("blueprint/src/content_ft_mps.tex"),
     Path("blueprint/src/print.tex"),
+    Path("blueprint/src/print_ft_mps.tex"),
     Path("blueprint/src/web.tex"),
 }
 
@@ -113,9 +115,12 @@ def _git_diff(base_ref: str) -> str:
             "TNLean.lean",
             ":(glob)TNLean/**/*.lean",
             "blueprint/src/content.tex",
+            "blueprint/src/content_ft_mps.tex",
             "blueprint/src/print.tex",
+            "blueprint/src/print_ft_mps.tex",
             "blueprint/src/web.tex",
             ":(glob)blueprint/src/chapter/*.tex",
+            ":(glob)blueprint/src/appendix/**/*.tex",
         ],
         check=True,
         stdout=subprocess.PIPE,
@@ -165,7 +170,9 @@ def blueprint_files(root: Path) -> Iterable[Path]:
         path = root / rel_path
         if path.exists():
             yield path
-    yield from (root / "blueprint" / "src" / "chapter").glob("*.tex")
+    blueprint_src = root / "blueprint" / "src"
+    yield from (blueprint_src / "chapter").glob("*.tex")
+    yield from (blueprint_src / "appendix").rglob("*.tex")
 
 
 def lean_comment_lines(path: Path) -> set[int]:
@@ -308,8 +315,9 @@ def check_blueprint_line(path: Path, line_no: int, text: str) -> list[Finding]:
 
 def is_blueprint_prose_path(path: Path) -> bool:
     return path in BLUEPRINT_ENTRYPOINTS or (
-        len(path.parts) == 4
-        and path.parts[:3] == ("blueprint", "src", "chapter")
+        len(path.parts) >= 4
+        and path.parts[:2] == ("blueprint", "src")
+        and path.parts[2] in {"chapter", "appendix"}
         and path.suffix == ".tex"
     )
 

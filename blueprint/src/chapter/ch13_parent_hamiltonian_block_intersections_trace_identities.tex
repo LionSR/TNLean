@@ -20,87 +20,27 @@
     are $X$ and $0$, respectively.
 \end{proof}
 
-\begin{lemma}[BNT block separation with an injective prefix]
-    \label{lem:bnt_direct_sum_injective_prefix_word_span}
-    \lean{MPSTensor.hasPairBlockSeparatingWords_threeBlock_of_blocksNotGaugePhaseEquiv_c1}
-    \lean{MPSTensor.propBlockInjective_of_blocksNotGaugePhaseEquiv_directSum_c1}
-    \lean{MPSTensor.wordTupleSpanTop_of_blocksNotGaugePhaseEquiv_directSum_selectors_c1}
-    \lean{MPSTensor.exists_wordTupleSpanTop_of_blocksNotGaugePhaseEquiv_directSum_selectors_c1}
-    \leanok
-    \uses{lem:direct_sum_two_block_dimension_step,
-        lem:pair_trace_separation_to_pairwise_block_separation,
-        lem:block_separating_equations_from_pairwise_separation,
-        lem:product_word_span_from_bnt_block_separation}
-    Let $A^1,\ldots,A^r$ be normalized representatives of a basis of normal
-    tensors: each representative is irreducible, the family is left-canonical,
-    the self-overlaps are normalized, and no two distinct same-dimensional
-    representatives are gauge-phase equivalent. Fix $L_0>0$. Assume that, for
-    every block $j$, the map
-    \begin{align}
-        \Gamma_{L_0}^{A^j}:\MN{D_j} &\longrightarrow (\C^d)^{\otimes L_0},
-        \notag\\
-        X &\longmapsto \sum_{|u|=L_0}\tr(XA^j_u)\ket{u}
-        \notag
-    \end{align}
-    is injective, and that the homogeneous word spans at the two source
-    lengths are full:
-    \begin{align}
-        \spn\{A^j_u:|u|=L_0+1\} &= \MN{D_j},
-        \notag\\
-        \spn\{A^j_v:|v|=3(L_0+1)\} &= \MN{D_j}.
-        \notag
-    \end{align}
-    Then, for every ordered pair $k\ne j$, there are coefficients
-    $c^{k,j}_\omega$ such that
-    \begin{align}
-        \sum_{|\omega|=3(L_0+1)} c^{k,j}_\omega A^k_\omega &= \Id,
-        \notag\\
-        \sum_{|\omega|=3(L_0+1)} c^{k,j}_\omega A^j_\omega &= 0.
-        \notag
-    \end{align}
-    The simultaneous block-word tuples at length
-    $(L_0+1)+3(r-1)(L_0+1)$ span the full product algebra
-    $\prod_{j=1}^r \MN{D_j}$.
-\end{lemma}
-
-\begin{proof}
-    \leanok
-    \uses{lem:direct_sum_two_block_dimension_step,
-        lem:pair_trace_separation_to_pairwise_block_separation,
-        lem:block_separating_equations_from_pairwise_separation,
-        lem:product_word_span_from_bnt_block_separation}
-    Lemma~\ref{lem:direct_sum_two_block_dimension_step} gives homogeneous
-    trace separation at length $3(L_0+1)$ for every ordered pair of distinct
-    normalized BNT representatives.
-    Lemma~\ref{lem:pair_trace_separation_to_pairwise_block_separation}
-    converts these trace-separation equations into the displayed pairwise
-    block-separating equations. Multiplying the $r-1$ pair selectors for a
-    fixed block $k$ gives coefficients $b_v^{(k)}$ of length
-    $3(r-1)(L_0+1)$ such that
-    $\sum_v b_v^{(k)}A^j_v = \delta_{j,k}\Id$.
-    Block injectivity at length $L_0+1$ writes
-    $X_k=\sum_u a_u^{(k)}A^k_u$. Concatenating these two word families and
-    summing over $k$ realizes every tuple $(X_k)_k$ at length
-    $(L_0+1)+3(r-1)(L_0+1)$.
-\end{proof}
-
 \begin{lemma}[Sharp BNT block separation without an injective prefix]
     \label{lem:bnt_direct_sum_block_separation_word_span}
     \lean{MPSTensor.wordTupleSpanTop_mul_pred_of_forall_pairWordTupleSpanTop}
     \lean{MPSTensor.wordTupleSpanTop_mul_pred_of_forall_pairTraceSeparatingAt}
     \lean{MPSTensor.wordTupleSpanTop_threeBlock_mul_pred_of_blocksNotGaugePhaseEquiv_c1}
     \leanok
-    \uses{lem:pair_product_span_arbitrary_first_value,
+    \uses{lem:bnt_direct_sum_injective_prefix_word_span,
+        lem:pair_product_span_arbitrary_first_value,
         lem:block_separating_equations_from_pairwise_separation}
-    Under the hypotheses of the preceding lemma, suppose $r\geq2$. Then the
-    simultaneous block-word tuples at the source length
-    $3(r-1)(L_0+1)$ span the full product algebra
+    Let $A^1,\ldots,A^r$ satisfy the normalization, irreducibility,
+    non-equivalence, injective-prefix, and full-word-span hypotheses of
+    Lemma~\ref{lem:bnt_direct_sum_injective_prefix_word_span} for some
+    $L_0>0$. If $r\geq2$, then the simultaneous block-word tuples at the
+    source length $3(r-1)(L_0+1)$ span the full product algebra
     $\prod_{j=1}^r\MN{D_j}$.
 \end{lemma}
 
 \begin{proof}
     \leanok
-    \uses{lem:direct_sum_two_block_dimension_step,
+    \uses{lem:bnt_direct_sum_injective_prefix_word_span,
+        lem:direct_sum_two_block_dimension_step,
         lem:pair_trace_separation_to_pairwise_block_separation,
         lem:pair_product_span_arbitrary_first_value,
         lem:block_separating_equations_from_pairwise_separation}

@@ -7,17 +7,17 @@
     Let
     \begin{align}
         \mathcal A
-        &=\bigoplus_{i\in I}\MN{n_i},
-        &
+         & =\bigoplus_{i\in I}\MN{n_i},
+         &
         \mathcal B
-        &=\bigoplus_{j\in J}\MN{m_j}.
+         & =\bigoplus_{j\in J}\MN{m_j}.
         \notag
     \end{align}
     Write $\iota_{\mathcal A},\pi_{\mathcal A}$ and $\iota_{\mathcal B},\pi_{\mathcal B}$ for the corresponding
     block-diagonal embeddings and diagonal-block compressions. The canonical full-matrix extension of $T:\mathcal A\to\mathcal B$ is
     \begin{align}
         \widehat T
-        &=\iota_{\mathcal B}\circ T\circ\pi_{\mathcal A}.
+         & =\iota_{\mathcal B}\circ T\circ\pi_{\mathcal A}.
         \label{eq:spectral_ds_kraus_extension}
     \end{align}
     The map $T$ is a direct-sum Kraus map when $\widehat T$ has a Kraus representation.
@@ -39,60 +39,63 @@
     $T:\mathcal A\to\mathcal A$ has an extension satisfying
     \begin{align}
         \widehat T(Y^*Y)-\widehat T(Y^*)\widehat T(Y)
-        &\succeq0,
+         & \succeq0,
         \label{eq:spectral_ds_extension_schwarz}
     \end{align}
     then $T$ satisfies the corresponding inequality in every summand. Finally, if $F:\mathcal A\to\mathcal A$ is a trace-preserving direct-sum
     Kraus map, then its trace adjoint satisfies, for every $X\in\mathcal A$,
     \begin{align}
         F^*(X^*X)-F^*(X^*)F^*(X)
-        &\succeq0
+         & \succeq0
         \label{eq:spectral_ds_adjoint_schwarz}
     \end{align}
     in every summand.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:kadison_schwarz_2positive}
+    \uses{thm:cp_implies_k_positive,
+        thm:k_positive_trace_pairing_adjoint,
+        thm:two_positive_implies_positive,
+        thm:kadison_schwarz_2positive}
     Since $\pi_{\mathcal B}\iota_{\mathcal B}=\id_{\mathcal B}$,
     \begin{align}
         \widehat S\,\widehat T
-        &=\iota_{\mathcal C}S\pi_{\mathcal B}
-          \iota_{\mathcal B}T\pi_{\mathcal A}
-          =\iota_{\mathcal C}ST\pi_{\mathcal A}
-          =\widehat{S\circ T}.
+         & =\iota_{\mathcal C}S\pi_{\mathcal B}
+        \iota_{\mathcal B}T\pi_{\mathcal A}
+        =\iota_{\mathcal C}ST\pi_{\mathcal A}
+        =\widehat{S\circ T}.
         \notag
     \end{align}
     If $\widehat T(X)=\sum_iK_iXK_i^*$ and $\widehat S(Y)=\sum_jL_jYL_j^*$, then
     \begin{align}
         \widehat{S\circ T}(X)
-        &=\sum_{i,j}(L_jK_i)X(L_jK_i)^*,
+         & =\sum_{i,j}(L_jK_i)X(L_jK_i)^*,
         \notag
     \end{align}
     which gives the asserted Kraus representation. For $Y=\iota_{\mathcal A}(X)$, the $i$-th diagonal block of
     (\ref{eq:spectral_ds_extension_schwarz}) is
     \begin{align}
         \left[\widehat T(Y^*Y)
-          -\widehat T(Y^*)\widehat T(Y)\right]_i
-        &=(T(X^*X))_i-(T(X^*))_i(T(X))_i
-          \succeq0,
+            -\widehat T(Y^*)\widehat T(Y)\right]_i
+         & =(T(X^*X))_i-(T(X^*))_i(T(X))_i
+        \succeq0,
         \notag
     \end{align}
     which proves the descent assertion. If $F$ preserves the total trace, then $\widehat F$ preserves the ordinary trace, so $(\widehat F)^*$ is
     unital. Complete positivity implies two-positivity for $(\widehat F)^*$, and Kadison--Schwarz gives
     \begin{align}
         (\widehat F)^*(Y^*Y)
-          -(\widehat F)^*(Y^*)(\widehat F)^*(Y)
-        &\succeq0.
+        -(\widehat F)^*(Y^*)(\widehat F)^*(Y)
+         & \succeq0.
         \notag
     \end{align}
     For $Y=\iota_{\mathcal A}(X)$, use $(\widehat F)^*=\widehat{F^*}$ and project this inequality onto the
     $i$-th diagonal summand. The resulting block identity is
     \begin{align}
         \left[\widehat{F^*}(Y^*Y)
-          -\widehat{F^*}(Y^*)\widehat{F^*}(Y)\right]_i
-        &=(F^*(X^*X))_i-(F^*(X^*))_i(F^*(X))_i
-          \succeq0,
+            -\widehat{F^*}(Y^*)\widehat{F^*}(Y)\right]_i
+         & =(F^*(X^*X))_i-(F^*(X^*))_i(F^*(X))_i
+        \succeq0,
         \notag
     \end{align}
     which is (\ref{eq:spectral_ds_adjoint_schwarz}).
@@ -121,10 +124,10 @@
     inverse unital completely positive maps. Moreover, for all $X,Y\in\mathcal B$,
     \begin{align}
         T^*(XY)
-        &=T^*(X)T^*(Y),
-        &
+         & =T^*(X)T^*(Y),
+         &
         T^*(X^*)
-        &=T^*(X)^*,
+         & =T^*(X)^*,
         \label{eq:spectral_ds_adjoint_multiplicative}
     \end{align}
     and likewise for $S^*$. Thus $T^*$ and $S^*$ determine mutually inverse star-algebra equivalences. This theorem does not yet identify the simple
@@ -146,20 +149,46 @@
     Schwarz condition to exclude transposition.
 \end{proof}
 
+\begin{theorem}[Summand matching and dimension preservation]\label{thm:dim_preserved}
+    \lean{Matrix.exists_blockEquiv_dim_eq_of_starAlgEquiv_pi_matrix}
+    \lean{MPSTensor.dim_preserved}
+    \leanok
+    Let $\{D_i\}_{i\in I}$ and $\{E_j\}_{j\in J}$ be positive integers.
+    A star-algebra isomorphism
+    \begin{align}
+        \prod_{i\in I} M_{D_i}(\C)
+         & \simeq \prod_{j\in J} M_{E_j}(\C)
+        \notag
+    \end{align}
+    determines an equivalence $\sigma:I\simeq J$ such that the isomorphism
+    carries the $i$-th block ideal onto the $\sigma(i)$-th block ideal and
+    $D_i=E_{\sigma(i)}$ for every $i\in I$. For an automorphism of one product,
+    the induced permutation may exchange equal-dimensional block ideals; it
+    preserves the dimension along each matched pair.
+\end{theorem}
+
+\begin{proof}\leanok
+    A star-algebra isomorphism permutes the minimal nonzero central
+    idempotents, inducing an equivalence $\sigma:I\simeq J$ between the
+    summands. Its restriction to matched ideals is a complex-linear bijection
+    between full matrix algebras. Comparing complex dimensions gives
+    $D_i^2=E_{\sigma(i)}^2$, and positivity of the block dimensions gives
+    $D_i=E_{\sigma(i)}$.
+\end{proof}
+
 \begin{theorem}[Simple-summand matching for inverse CPTP maps]%
     \label{thm:direct_sum_inverse_cptp_block_matching}
     \lean{Matrix.exists_blockEquiv_dim_eq_of_mutual_inverse_kraus_direct_sum_maps}
     \leanok
-    \uses{thm:direct_sum_inverse_cptp_star_equiv,
-        thm:dim_preserved}
+    \uses{thm:direct_sum_inverse_cptp_star_equiv, thm:dim_preserved}
     Let $\{D_i\}_{i\in I}$ and $\{E_j\}_{j\in J}$ be positive integers, and
     set
     \begin{align}
         \mathcal A
-        &=\prod_{i\in I}\MN{D_i},
-        &
+         & =\prod_{i\in I}\MN{D_i},
+         &
         \mathcal B
-        &=\prod_{j\in J}\MN{E_j}.
+         & =\prod_{j\in J}\MN{E_j}.
         \notag
     \end{align}
     If $T:\mathcal A\to\mathcal B$ and
@@ -171,10 +200,10 @@
     for every $i\in I$,
     \begin{align}
         \Phi(I_i)
-        &=J_{\sigma(i)},
-        &
+         & =J_{\sigma(i)},
+         &
         D_i
-        &=E_{\sigma(i)}.
+         & =E_{\sigma(i)}.
         \label{eq:spectral_ds_block_matching}
     \end{align}
     This is the simple-summand matching conclusion used in
@@ -184,13 +213,11 @@
 
 \begin{proof}
     \leanok
-    \uses{thm:direct_sum_inverse_cptp_star_equiv,
-        thm:dim_preserved}
-    By Theorem~\ref{thm:direct_sum_inverse_cptp_star_equiv}, the rectangular
-    trace adjoints determine a star-algebra isomorphism between
-    $\mathcal A$ and $\mathcal B$. Theorem~\ref{thm:dim_preserved} applied to
-    this isomorphism gives the equivalence~$\sigma$, proves that it carries
-    $I_i$ onto $J_{\sigma(i)}$, and gives
+    \uses{thm:direct_sum_inverse_cptp_star_equiv, thm:dim_preserved}
+    Theorem~\ref{thm:direct_sum_inverse_cptp_star_equiv} gives the
+    star-algebra isomorphism $\Phi:\mathcal A\simeq\mathcal B$. Applying
+    Theorem~\ref{thm:dim_preserved} to $\Phi$ gives the equivalence $\sigma$,
+    the matched block ideals, and the dimension equalities in
     (\ref{eq:spectral_ds_block_matching}).
 \end{proof}
 
@@ -228,7 +255,7 @@
     $X\in\MN{D_i}$,
     \begin{align}
         \Phi(0,\ldots,0,X,0,\ldots,0)_{\sigma(i)}
-        &=U_i\,\iota_i(X)\,U_i^*,
+         & =U_i\,\iota_i(X)\,U_i^*,
         \label{eq:spectral_ds_block_unitary}
     \end{align}
     where $\iota_i$ is the reindexing induced by the retained dimension
@@ -240,9 +267,8 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:unitary_skolem_noether_matrix,
-        thm:direct_sum_inverse_cptp_star_equiv,
-        thm:dim_preserved}
+    \uses{thm:unitary_skolem_noether_matrix, thm:dim_preserved,
+        thm:direct_sum_inverse_cptp_star_equiv}
     The restriction of $\Phi$ to a matched block is a star-algebra
     isomorphism. After reindexing by $D_i=E_{\sigma(i)}$, it is an
     automorphism of a full complex matrix algebra. Skolem--Noether writes
@@ -261,7 +287,7 @@
     equivalence $\sigma:I\simeq J$, with $D_i=E_{\sigma(i)}$. Suppose that
     there are unitaries $U_i$ satisfying
     $\Phi(0,\ldots,0,X,0,\ldots,0)_{\sigma(i)}
-      =U_i\iota_i(X)U_i^*$.
+        =U_i\iota_i(X)U_i^*$.
     Then $\Phi$ preserves the total block trace.
 \end{lemma}
 
@@ -271,8 +297,8 @@
     trace, so
     \begin{align}
         \sum_j\tr
-          (\Phi(0,\ldots,0,X,0,\ldots,0)_j)
-        &=\tr(X).
+        (\Phi(0,\ldots,0,X,0,\ldots,0)_j)
+         & =\tr(X).
         \notag
     \end{align}
     Summing this identity over the source summands proves the result.
@@ -281,7 +307,7 @@
 \begin{theorem}[Unitary action of an invertible CPTP map]
     \label{thm:direct_sum_inverse_cptp_forward_unitary}
     \lean{Matrix.%
-      exists_blockEquiv_dim_eq_unitary_forward_of_mutual_inverse_kraus_direct_sum_maps}
+        exists_blockEquiv_dim_eq_unitary_forward_of_mutual_inverse_kraus_direct_sum_maps}
     \leanok
     Let $T:\mathcal A\to\mathcal B$ and $S:\mathcal B\to\mathcal A$ be
     mutually inverse completely positive trace-preserving maps between finite
@@ -290,10 +316,10 @@
     $U_i\in\MN{E_{\sigma(i)}}$ such that
     \begin{align}
         T(0,\ldots,0,X,0,\ldots,0)
-        &=(0,\ldots,0,U_i\iota_i(X)U_i^*,0,\ldots,0),
-        \label{eq:spectral_ds_forward_unitary}\\
+         & =(0,\ldots,0,U_i\iota_i(X)U_i^*,0,\ldots,0),
+        \label{eq:spectral_ds_forward_unitary}               \\
         S(0,\ldots,0,Y,0,\ldots,0)
-        &=(0,\ldots,0,\iota_i^{-1}(U_i^*YU_i),0,\ldots,0),
+         & =(0,\ldots,0,\iota_i^{-1}(U_i^*YU_i),0,\ldots,0),
         \label{eq:spectral_ds_inverse_unitary}
     \end{align}
     with the nonzero entry in
@@ -342,11 +368,11 @@
     $\sigma_k\in\MN{m_k}$ such that
     \begin{align}
         U^*\Fix(T^*)U
-        &=\bigoplus_k\Id_{m_k}\otimes\MN{d_k},
-        \label{eq:spectral_ds_adjoint_fixed_blocks}\\
+         & =\bigoplus_k\Id_{m_k}\otimes\MN{d_k},
+        \label{eq:spectral_ds_adjoint_fixed_blocks}                                   \\
         P_T^*(A)
-        &=U\left(\bigoplus_k\Id_{m_k}\otimes
-          \tr_{m_k}\!\left((\sigma_k\otimes\Id_{d_k})(U^*AU)_{kk}\right)\right)U^*
+         & =U\left(\bigoplus_k\Id_{m_k}\otimes
+             \tr_{m_k}\!\left((\sigma_k\otimes\Id_{d_k})(U^*AU)_{kk}\right)\right)U^*
         \label{eq:spectral_ds_adjoint_projection}
     \end{align}
     for every $A\in\MN{D}$. This is the full-support
@@ -364,8 +390,8 @@
     $T^*(A^*A)\geq T^*(A)^*T^*(A)=A^*A$, while
     \begin{align}
         \tr\!\left(\rho T^*(A^*A)\right)
-        &=\tr\!\left(T(\rho)A^*A\right)
-          =\tr(\rho A^*A).
+         & =\tr\!\left(T(\rho)A^*A\right)
+        =\tr(\rho A^*A).
         \notag
     \end{align}
     Since $\rho$ is positive definite, these relations imply
@@ -389,14 +415,14 @@
     the mean-ergodic projection of $T$ satisfies
     \begin{align}
         P_T(B)
-        &=U\left(\bigoplus_k\sigma_k\otimes
-          \tr_{m_k}((U^*BU)_{kk})\right)U^*.
+         & =U\left(\bigoplus_k\sigma_k\otimes
+             \tr_{m_k}((U^*BU)_{kk})\right)U^*.
         \label{eq:spectral_ds_density_projection}
     \end{align}
     Consequently,
     \begin{align}
         \Fix(T)
-        &=U\left(\bigoplus_k\sigma_k\otimes\MN{d_k}\right)U^*.
+         & =U\left(\bigoplus_k\sigma_k\otimes\MN{d_k}\right)U^*.
         \label{eq:spectral_ds_density_fixed_blocks}
     \end{align}
     Here each summand is written on
@@ -413,8 +439,8 @@
     partial trace give
     \begin{align}
         \tr\!\left((\sigma_k\otimes\tr_{m_k}B)A\right)
-        &=\tr\!\left(B\bigl(\Id_{m_k}\otimes
-          \tr_{m_k}((\sigma_k\otimes\Id_{d_k})A)\bigr)\right).
+         & =\tr\!\left(B\bigl(\Id_{m_k}\otimes
+        \tr_{m_k}((\sigma_k\otimes\Id_{d_k})A)\bigr)\right).
         \notag
     \end{align}
     Summing over the diagonal summands and applying the unitary change of
@@ -443,7 +469,7 @@
     if there are matrices $X_k\in\MN{d_k}$ satisfying
     \begin{align}
         U^*\iota(A)U
-        &=\bigoplus_k\sigma_k\otimes X_k.
+         & =\bigoplus_k\sigma_k\otimes X_k.
         \label{eq:spectral_ds_fixed_point_form}
     \end{align}
     Here $\iota$ is the block-diagonal embedding. This is the
@@ -498,16 +524,16 @@ the ambient fixed-point space a zero-block representation.
     a matrix $Y\in\MN{D}$ satisfies $QYQ=Y$ and $QE^*(Y)Q=Y$ exactly when
     \begin{align}
         Y
-        &=W\left(\bigoplus_{k=0}^{n-1}
-          \Id_{m_k}\otimes B_k\right)W^\dagger
+         & =W\left(\bigoplus_{k=0}^{n-1}
+        \Id_{m_k}\otimes B_k\right)W^\dagger
         \label{eq:spectral_ds_corner_element}
     \end{align}
     for some matrices $B_k\in\MN{d_k}$; that is, up to reordering the two
     tensor factors of each block,
     \begin{align}
         \{Y\in Q\MN{D}Q\mid QE^*(Y)Q=Y\}
-        &=W\left(\bigoplus_{k=0}^{n-1}
-          \Id_{m_k}\otimes\MN{d_k}\right)W^\dagger.
+         & =W\left(\bigoplus_{k=0}^{n-1}
+        \Id_{m_k}\otimes\MN{d_k}\right)W^\dagger.
         \label{eq:spectral_ds_corner_blocks}
     \end{align}
     The right-hand side is the support-sector block representation in
@@ -541,7 +567,7 @@ the ambient fixed-point space a zero-block representation.
     fixed-point equation of the compressed map:
     \begin{align}
         QE^*\!(\Phi(X))Q=\Phi(X)
-        &\quad\Longleftrightarrow\quad C^*(X)=X.
+         & \quad\Longleftrightarrow\quad C^*(X)=X.
         \notag
     \end{align}
     With $W:=VU$, which satisfies $W^\dagger W=\Id_r$ and
@@ -572,7 +598,7 @@ the ambient fixed-point space a zero-block representation.
     Theorem~\ref{thm:fixedPointsStarSubalgebra} to $B$. The equivalence
     \begin{align}
         \sum_iB_iXB_i^\dagger=X
-        &\quad\Longleftrightarrow\quad
+         & \quad\Longleftrightarrow\quad
         T(\rho^{1/2}X\rho^{1/2})=\rho^{1/2}X\rho^{1/2}
         \notag
     \end{align}
@@ -620,8 +646,8 @@ restriction disappears
     since
     \begin{align}
         (\Id-Q)\sqrt{\rho}
-          ((\Id-Q)\sqrt{\rho})^\dagger
-        &=(\Id-Q)\rho(\Id-Q)=0.
+        ((\Id-Q)\sqrt{\rho})^\dagger
+         & =(\Id-Q)\rho(\Id-Q)=0.
         \notag
     \end{align}
 
@@ -638,23 +664,23 @@ restriction disappears
     compresses along the isometry:
     \begin{align}
         \sqrt{\sigma}
-        &=V^\dagger\sqrt{\rho}\,V,
+         & =V^\dagger\sqrt{\rho}\,V,
         \label{eq:spectral_ds_sqrt_compression}
     \end{align}
     by uniqueness of the positive square root, since
     $(V^\dagger\sqrt{\rho}V)^2
-      =V^\dagger\sqrt{\rho}\,Q\sqrt{\rho}V=\sigma$.
+        =V^\dagger\sqrt{\rho}\,Q\sqrt{\rho}V=\sigma$.
     Hence, for corner-supported $Y$,
     \begin{align}
         \sqrt{\sigma}\,(V^\dagger YV)\sqrt{\sigma}
-        &=V^\dagger(\sqrt{\rho}\,Y\sqrt{\rho})V.
+         & =V^\dagger(\sqrt{\rho}\,Y\sqrt{\rho})V.
         \label{eq:spectral_ds_weighted_transport}
     \end{align}
     For corner-supported $W$, the compressed map satisfies
     \begin{align}
         C(V^\dagger WV)
-        &=V^\dagger QT(W)QV
-          =V^\dagger T(W)V,
+         & =V^\dagger QT(W)QV
+        =V^\dagger T(W)V,
         \notag
     \end{align}
     since $T(W)$ is again corner-supported. Thus $T(W)=W$ exactly when the
@@ -668,9 +694,9 @@ restriction disappears
     A corner-supported $Y_j$ satisfies $Y_jQ=Y_j$, so
     \begin{align}
         (V^\dagger Y_1V)(V^\dagger Y_2V)
-        &=V^\dagger Y_1(VV^\dagger)Y_2V
-          =V^\dagger(Y_1Q)Y_2V
-          =V^\dagger(Y_1Y_2)V.
+         & =V^\dagger Y_1(VV^\dagger)Y_2V
+        =V^\dagger(Y_1Q)Y_2V
+        =V^\dagger(Y_1Y_2)V.
         \notag
     \end{align}
     The product of two members therefore corresponds to the product of
@@ -683,8 +709,8 @@ Theorem~\ref{thm:weightedCorner_sqrt_surjective}, the carrier of this
 $*$-subalgebra realizes
 \begin{align}
     \rho^{-1/2}
-      \{X\in\MN{D}\mid T(X)=X,\ QXQ=X\}
-      \rho^{-1/2},
+    \{X\in\MN{D}\mid T(X)=X,\ QXQ=X\}
+    \rho^{-1/2},
     \notag
 \end{align}
 with the inverse square root taken on the support of $\rho$: the singular
@@ -692,7 +718,7 @@ case of Corollary~6.7 of~\cite{Wolf2012Quantum}, restricted to the fixed
 points supported on the support of $\rho$.
 
 \begin{theorem}[Conjugation by the square root is onto the corner-supported fixed
-    points]%
+        points]%
     \label{thm:weightedCorner_sqrt_surjective}
     \lean{Kraus.exists_weightedCorner_sqrt_eq_of_fixedPoint}
     \leanok
@@ -713,8 +739,8 @@ points supported on the support of $\rho$.
     Theorem~\ref{thm:weightedCornerFixedPointsStarSubalgebra} and set
     \begin{align}
         Y
-        &=V\left(\sqrt{\sigma}^{-1}(V^\dagger XV)
-          \sqrt{\sigma}^{-1}\right)V^\dagger,
+         & =V\left(\sqrt{\sigma}^{-1}(V^\dagger XV)
+        \sqrt{\sigma}^{-1}\right)V^\dagger,
         \label{eq:spectral_ds_weighted_preimage}
     \end{align}
     where $\sigma=V^\dagger\rho V$ is positive definite, so
@@ -724,9 +750,9 @@ points supported on the support of $\rho$.
     gives
     \begin{align}
         V^\dagger(\sqrt{\rho}\,Y\sqrt{\rho})V
-        &=\sqrt{\sigma}\,(V^\dagger YV)\sqrt{\sigma}
-          =\sqrt{\sigma}\,Z\sqrt{\sigma}
-          =V^\dagger XV.
+         & =\sqrt{\sigma}\,(V^\dagger YV)\sqrt{\sigma}
+        =\sqrt{\sigma}\,Z\sqrt{\sigma}
+        =V^\dagger XV.
         \notag
     \end{align}
     Hence $\sqrt{\rho}\,Y\sqrt{\rho}=QXQ=X$, since both sides are
@@ -769,16 +795,16 @@ that Loewner domination transfers the support.
     The support projection absorbs $\rho$, so $(\Id-Q)\rho=0$ and
     \begin{align}
         0
-        &\preceq(\Id-Q)P(\Id-Q)
-          \preceq(\Id-Q)(c\rho)(\Id-Q)
-          =0,
+         & \preceq(\Id-Q)P(\Id-Q)
+        \preceq(\Id-Q)(c\rho)(\Id-Q)
+        =0,
         \notag
     \end{align}
     because conjugation by $\Id-Q$ preserves the Loewner order. Hence
     \begin{align}
         ((\Id-Q)\sqrt{P})
-          ((\Id-Q)\sqrt{P})^\dagger
-        &=(\Id-Q)P(\Id-Q)=0,
+        ((\Id-Q)\sqrt{P})^\dagger
+         & =(\Id-Q)P(\Id-Q)=0,
         \notag
     \end{align}
     so $(\Id-Q)\sqrt{P}=0$ and
@@ -812,10 +838,10 @@ that Loewner domination transfers the support.
     $A\preceq\tr(A)\Id$; applying the positive map $T_\infty$ gives
     \begin{align}
         \tr(A)\rho_0-T_\infty(A)
-        &=T_\infty\!\left(\tr(A)\Id-A\right)\succeq0,
-        &
+         & =T_\infty\!\left(\tr(A)\Id-A\right)\succeq0,
+         &
         T_\infty(A)
-        &\preceq\tr(A)\rho_0.
+         & \preceq\tr(A)\rho_0.
         \notag
     \end{align}
     Scalar domination therefore gives
@@ -823,7 +849,7 @@ that Loewner domination transfers the support.
     write $H=H^+-H^-$. Since $T_\infty(H)=H$, linearity gives
     \begin{align}
         H
-        &=T_\infty(H^+)-T_\infty(H^-),
+         & =T_\infty(H^+)-T_\infty(H^-),
         \notag
     \end{align}
     so $Q_0HQ_0=H$. Finally, decompose an arbitrary fixed point into two
@@ -865,7 +891,7 @@ that Loewner domination transfers the support.
     of $\rho$, then, for every $X\in\MN{D}$,
     \begin{align}
         QXQ=X
-        &\quad\Longrightarrow\quad QT(X)Q=T(X).
+         & \quad\Longrightarrow\quad QT(X)Q=T(X).
         \label{eq:spectral_ds_support_invariance}
     \end{align}
 \end{theorem}
@@ -880,7 +906,7 @@ that Loewner domination transfers the support.
     $T(\rho)=\rho$ therefore give
     \begin{align}
         0
-        &\preceq T(A)\preceq c\tr(A)\rho.
+         & \preceq T(A)\preceq c\tr(A)\rho.
         \notag
     \end{align}
     Scalar domination transfers the support, hence $QT(A)Q=T(A)$.
@@ -891,8 +917,8 @@ that Loewner domination transfers the support.
     $QA_j^\pm Q=A_j^\pm$ and
     \begin{align}
         X
-        &=\tfrac12(A_1^+-A_1^-)
-          -\tfrac{\mathrm{i}}2(A_2^+-A_2^-).
+         & =\tfrac12(A_1^+-A_1^-)
+        -\tfrac{\mathrm{i}}2(A_2^+-A_2^-).
         \notag
     \end{align}
     Applying the positive-input conclusion to these four matrices and using
@@ -911,17 +937,17 @@ that Loewner domination transfers the support.
     $V^*V=\Id_{\mathcal H}$ and $VV^*=Q_0$ such that
     \begin{align}
         \widetilde T(Y)
-        &=V^*T(VYV^*)V
+         & =V^*T(VYV^*)V
         \label{eq:spectral_ds_support_compression}
     \end{align}
     is positive and trace preserving and has a positive definite fixed
     point. Moreover,
     \begin{align}
         T(VYV^*)
-        &=V\widetilde T(Y)V^*,
-        \label{eq:spectral_ds_compression_intertwining}\\
+         & =V\widetilde T(Y)V^*,
+        \label{eq:spectral_ds_compression_intertwining} \\
         T(X)=X
-        &\quad\Longleftrightarrow\quad
+         & \quad\Longleftrightarrow\quad
         \exists\,Y,\quad
         \widetilde T(Y)=Y\ \text{ and }\ X=VYV^*.
         \label{eq:spectral_ds_compression_fixed}
@@ -942,9 +968,9 @@ that Loewner domination transfers the support.
     also supported there. Inserting $Q_0=VV^*$ gives
     \begin{align}
         T(VYV^*)
-        &=Q_0T(VYV^*)Q_0
-          =VV^*T(VYV^*)VV^*
-          =V\widetilde T(Y)V^*,
+         & =Q_0T(VYV^*)Q_0
+        =VV^*T(VYV^*)VV^*
+        =V\widetilde T(Y)V^*,
         \notag
     \end{align}
     which proves (\ref{eq:spectral_ds_compression_intertwining}). By
@@ -952,10 +978,10 @@ that Loewner domination transfers the support.
     $T$,
     \begin{align}
         \tr(\widetilde T(Y))
-        &=\tr(V\widetilde T(Y)V^*)
-          =\tr(T(VYV^*))
-          =\tr(VYV^*)
-          =\tr(Y).
+         & =\tr(V\widetilde T(Y)V^*)
+        =\tr(T(VYV^*))
+        =\tr(VYV^*)
+        =\tr(Y).
         \notag
     \end{align}
     Thus $\widetilde T$ is trace preserving. The compressed point
@@ -963,18 +989,18 @@ that Loewner domination transfers the support.
     $V\sigma_0V^*=Q_0\rho_0Q_0=\rho_0$,
     \begin{align}
         \widetilde T(\sigma_0)
-        &=V^*T(\rho_0)V
-          =V^*\rho_0V
-          =\sigma_0.
+         & =V^*T(\rho_0)V
+        =V^*\rho_0V
+        =\sigma_0.
         \notag
     \end{align}
     If $T(X)=X$, then $Q_0XQ_0=X$, and hence
     $X=V(V^*XV)V^*$. Moreover,
     \begin{align}
         \widetilde T(V^*XV)
-        &=V^*T(V(V^*XV)V^*)V
-          =V^*T(X)V
-          =V^*XV.
+         & =V^*T(V(V^*XV)V^*)V
+        =V^*T(X)V
+        =V^*XV.
         \notag
     \end{align}
     Conversely, if $\widetilde T(Y)=Y$, then

@@ -2,9 +2,11 @@
 \label{sec:representations_infrastructure}
 %% =========================================================
 
-The following definitions support the Choi--Jamiol\-kowski isomorphism
-(Theorem~\ref{thm:cp_iff_choi_posSemidef}) and the representation theorems
-of~\cite[Chapter~2]{Wolf2012Quantum}.
+Chapter~\ref{ch:channels} established the maximally entangled state, the
+Choi matrix, the Choi criterion for complete positivity, and unitary mixing of
+Kraus operators. This chapter develops the remaining finite-dimensional
+representation results from~\cite[Chapter~2]{Wolf2012Quantum}, beginning with
+partial traces.
 
 \begin{definition}[Partial traces]\label{def:partial_trace}
     \lean{Matrix.traceLeft, Matrix.traceRight, Matrix.partialTraceRight,
@@ -25,174 +27,14 @@ of~\cite[Chapter~2]{Wolf2012Quantum}.
     \end{align}
 \end{definition}
 
-\begin{definition}[Maximally entangled state]\label{def:maximally_entangled}
-    \lean{Matrix.omegaProj}
-    \leanok
-    For every $d\in\N$, define $\ketbra{\Omega}{\Omega}$ on
-    $\C^d\otimes\C^d$ using
-    \begin{align}
-        \ket{\Omega}
-        &= \frac{1}{\sqrt{d}} \sum_{j=0}^{d-1} \ket{j,j}.
-        \label{eq:representations_max_entangled}
-    \end{align}
-    When $d\geq1$, this is the \emph{maximally entangled state}: a rank-one
-    projector with
-    $(\ketbra{\Omega}{\Omega})_{(i_1,i_2),(j_1,j_2)}
-        = \frac{1}{d}\delta_{i_1 i_2}\delta_{j_1 j_2}$
-    and $\tr(\ketbra{\Omega}{\Omega})=1$.
-\end{definition}
-
-\begin{definition}[Flip operator]\label{def:flip_operator}
-    \lean{Matrix.swapMatrix}
-    \leanok
-    The \emph{flip operator} $F$ on $\C^d \otimes \C^d$ is
-    \begin{align}
-        F
-        &= \sum_{i,j=0}^{d-1} \ket{ij}\!\bra{ji}.
-        \label{eq:representations_flip}
-    \end{align}
-    Its matrix entries are
-    \begin{align}
-        F_{(i_1,i_2),(j_1,j_2)}
-        &=
-        \begin{cases}
-            1, & i_1=j_2 \text{ and } i_2=j_1,\\
-            0, & \text{otherwise}.
-        \end{cases}
-        \notag
-    \end{align}
-\end{definition}
-
-\begin{definition}[Two-dimensional antisymmetric vector]
-    \label{def:fin_two_antisymm_vec}
-    \lean{Matrix.finTwoAntisymmVec}
-    \leanok
-    In $\C^2 \otimes \C^2$, let $v = \ket{01} - \ket{10}$.
-    Equivalently, $v_{(0,1)}=1$, $v_{(1,0)}=-1$, and all other coefficients
-    are zero.
-\end{definition}
-
-\begin{definition}[Tensor product of a map with identity]\label{def:tensor_map_id}
-    \lean{Matrix.tensorMapId}
-    \leanok
-    Given a linear map $T : \MN{D} \to \MN{D}$,
-    the \emph{tensor extension} $T \otimes \id$ acts on bipartite matrices
-    $X \in \MN{D \times D}$ by applying $T$ to each ``slice'':
-    \begin{align}
-        (T \otimes \id)(X)_{(i_1,i_2),(j_1,j_2)}
-        &= (T(X^{(i_2,j_2)}))_{i_1 j_1},
-        \label{eq:representations_tensor_map_id}
-    \end{align}
-    where $X^{(i_2,j_2)}_{ab} = X_{(a,i_2),(b,j_2)}$ is the
-    bipartite slice.
-\end{definition}
-
 %% =========================================================
-\section{Choi--Jamio\l{}kowski isomorphism}
-\label{sec:choi_jamiolkowski}
+\section{Further Choi-matrix identities}
+\label{sec:choi_matrix_further_identities}
 %% =========================================================
 
-The Choi--Jamio\l{}kowski isomorphism bends the input legs of the channel $T$
-around the maximally entangled pair $\ket{\Omega}$, presenting the map as the
-matrix $\tau=(T\otimes\id)\ketbra{\Omega}{\Omega}$ on the doubled space:
-\begin{center}
-    % Formula: \tau=(T\otimes\id)(\ketbra{\Omega}{\Omega}).
-    % Source verdict: Wolf, Proposition 2.1 and Equation (2.1), applies the
-    %   two-wire map T\otimes\id to the maximally entangled projector.
-    % In indices, \tau_{(i_1,i_2),(j_1,j_2)}
-    %   =D^{-1}(T(E_{i_2j_2}))_{i_1j_1}; there is no summed Kraus index and
-    %   therefore no pairleg between the two rails.
-    % The east matrix cup is the input projector \ketbra{\Omega}{\Omega}.
-    % The opaque two-wire atom acts by T on one tensor factor and by \id on
-    %   the other; the two west rails are the output indices of \tau.
-    % Boundary signature: (virtual-west=2 | virtual-east=0 |
-    % physical-up=0 | physical-down=0).
-    \begin{tenkz}[
-        rows={wire,wire},
-        east={cup=$\ketbra{\Omega}{\Omega}$},
-        west label=$\tau$
-    ]
-        \tnghost{} & \tnX[wires=2]{T\otimes\id} & \tnghost{} \\
-        \tnghost{} & & \tnghost{}
-    \end{tenkz}
-\end{center}
-
-\begin{definition}[Choi matrix]\label{def:choi_matrix}
-    \lean{ChoiJamiolkowski.choiMatrix}
-    \leanok
-    \uses{def:maximally_entangled, def:tensor_map_id}
-    The \emph{Choi matrix} of a linear map
-    $T : \MN{D} \to \MN{D}$ is
-    \begin{align}
-        \tau
-        &= (T \otimes \id)(\ketbra{\Omega}{\Omega})
-        \in \MN{D \times D}.
-        \label{eq:representations_choi}
-    \end{align}
-    Concretely,
-    $\tau_{(i_1,i_2),(j_1,j_2)}
-        = \frac{1}{D}\,(T(E_{i_2 j_2}))_{i_1 j_1}$
-    where $E_{i_2 j_2}$ is the matrix unit.
-    This is the Choi--Jamiol\-kowski convention of
-    \cite[Proposition~2.1]{Wolf2012Quantum}.
-\end{definition}
-
-\begin{theorem}[Choi matrix of the identity map]\label{thm:choi_matrix_id}
-    \lean{ChoiJamiolkowski.choiMatrix_id}
-    \leanok
-    \uses{def:choi_matrix, def:maximally_entangled}
-    The identity channel has Choi matrix
-    $\ketbra{\Omega}{\Omega}$.
-\end{theorem}
-
-\begin{proof}\leanok
-    Apply the identity map in the definition of the Choi matrix.
-\end{proof}
-
-\begin{theorem}[Choi matrix of transposition]\label{thm:choi_transpose_flip}
-    \lean{ChoiJamiolkowski.choiMatrix_transposeLinearMapComplex_eq_swap}
-    \leanok
-    \uses{def:choi_matrix, def:flip_operator, def:maximally_entangled}
-    Let $\theta(X)=X^T$ be matrix transposition on $\MN{D}$, with $D \ge 1$.
-    Then
-    \begin{align}
-        (\theta\otimes\id)(\ketbra{\Omega}{\Omega})
-        &= \frac{1}{D}F.
-        \label{eq:representations_transpose_choi}
-    \end{align}
-    This is \cite[Equation~3.1]{Wolf2012Quantum}.
-\end{theorem}
-
-\begin{proof}\leanok
-    \uses{def:choi_matrix, def:flip_operator}
-    The $(i_2,j_2)$ slice of $\ketbra{\Omega}{\Omega}$ is
-    $D^{-1}E_{i_2j_2}$. Transposition sends this matrix unit to
-    $D^{-1}E_{j_2i_2}$, whose $(i_1,j_1)$ entry is $D^{-1}$ exactly when
-    $i_1=j_2$ and $i_2=j_1$.
-\end{proof}
-
-\begin{theorem}[Complete positivity iff the Choi matrix is positive semidefinite]\label{thm:cp_iff_choi_posSemidef}
-    \lean{ChoiJamiolkowski.cp_iff_choi_posSemidef}
-    \leanok
-    \uses{def:choi_matrix, def:cp_map}
-    Let $D\geq1$. A linear map $T : \MN{D} \to \MN{D}$ is completely
-    positive (in the Kraus sense) if and only if its Choi matrix $\tau \ge 0$.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    \uses{def:choi_matrix, def:cp_map}
-    ($\Rightarrow$) If $T(X) = \sum_i K_i X K_i^\dagger$, then
-    $\tau = \sum_i \ketbra{v_i}{v_i}$ where
-    $(v_i)_{(a,b)} = c\,K_i(a,b)$ and $c = 1/\sqrt{D}$.
-    This is a sum of rank-one PSD matrices.
-
-    ($\Leftarrow$) If $\tau \ge 0$, write
-    $\tau = \sum_m \ketbra{v_m}{v_m}$
-    by spectral decomposition, define $K_m(a,b) = v_m(a,b)/c$,
-    and recover $T(X) = \sum_m K_m X K_m^\dagger$ by linearity on
-    matrix units.
-\end{proof}
+The Choi foundations were established in Chapter~\ref{ch:channels}. The
+remaining identities express trace preservation and Hermiticity preservation
+in the Choi matrix.
 
 \begin{theorem}[Trace preservation implies the partial-trace condition]\label{thm:traceLeft_choiMatrix_of_tp}
     \lean{ChoiJamiolkowski.traceLeft_choiMatrix_of_tp}
@@ -259,8 +101,7 @@ matrix $\tau=(T\otimes\id)\ketbra{\Omega}{\Omega}$ on the doubled space:
 \label{sec:representation_corollaries}
 %% =========================================================
 
-The next three corollaries follow from the Choi/Kraus/Stinespring
-representations already developed above. They correspond to
+The next three corollaries support channel decompositions and correspond to
 \cite[Propositions~2.2--2.4]{Wolf2012Quantum}.
 
 \begin{theorem}[Polarization of sesquilinear sandwiches]
@@ -309,52 +150,6 @@ representations already developed above. They correspond to
     \leanok
     \uses{thm:polarization_sandwich}
     Apply the polarization identity summand-by-summand.
-\end{proof}
-
-\begin{theorem}[Rank-one ray scalar rigidity]
-    \label{thm:rankone_ray_scalar_rigidity}
-    \lean{WolfProps.exists_eq_smul_id_of_maps_rankOne_to_span}
-    \leanok
-    Let $T:\MN{D}\to\MN{D}$ be complex-linear. Suppose that for every
-    $v\in\C^D$ there is a scalar $c_v\in\C$ such that
-    $T(\ketbra{v}{v})=c_v\ketbra{v}{v}$.
-    Then there is a scalar $c\in\C$ such that $T=c\,\id$.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    Write $P_v=\ketbra{v}{v}$. For $i\ne j$, the identities
-    \begin{align}
-        P_{e_i+e_j}+P_{e_i-e_j}
-        &=2P_{e_i}+2P_{e_j},
-        \notag\\
-        c_{e_i+e_j}P_{e_i+e_j}+c_{e_i-e_j}P_{e_i-e_j}
-        &=2c_{e_i}P_{e_i}+2c_{e_j}P_{e_j}
-        \notag
-    \end{align}
-    give, from their $(i,i)$, $(j,j)$, and $(i,j)$ entries,
-    $c_{e_i+e_j}=c_{e_i-e_j}=c_{e_i}=c_{e_j}$.
-    The imaginary parallelogram identity and its image under $T$ are
-    \begin{align}
-        P_{e_i+\mathrm{i}e_j}+P_{e_i-\mathrm{i}e_j}
-        &=2P_{e_i}+2P_{e_j},
-        \notag\\
-        c_{e_i+\mathrm{i}e_j}P_{e_i+\mathrm{i}e_j}
-        +c_{e_i-\mathrm{i}e_j}P_{e_i-\mathrm{i}e_j}
-        &=2c_{e_i}P_{e_i}+2c_{e_j}P_{e_j}.
-        \notag
-    \end{align}
-    Comparing the same three entries gives
-    $c_{e_i+\mathrm{i}e_j}=c_{e_i-\mathrm{i}e_j}=c_{e_i}=c_{e_j}$.
-    Consequently the polarization identity
-    \begin{align}
-        4E_{ij}
-        &=P_{e_i+e_j}-P_{e_i-e_j}
-        +\mathrm{i}P_{e_i+\mathrm{i}e_j}
-        -\mathrm{i}P_{e_i-\mathrm{i}e_j}
-        \notag
-    \end{align}
-    gives $T(E_{ij})=cE_{ij}$ for every matrix unit, and hence $T=c\,\id$.
 \end{proof}
 
 \begin{theorem}[No information without disturbance]
@@ -560,27 +355,9 @@ is summed between the $K_i$ layer and the $K_i^\dagger$ layer:
     Evaluate the Kraus formula at the identity matrix.
 \end{proof}
 
-\begin{theorem}[Unitary freedom in Kraus operators]\label{thm:kraus_same_map_of_unitary_combination}
-    \lean{kraus_same_map_of_unitary_combination}
-    \leanok
-    \uses{def:cp_map}
-    Let $U$ be a unitary $r \times r$ matrix ($U^\dagger U = \Id$)
-    and suppose $K_j = \sum_\ell U_{j\ell} \tilde{K}_\ell$.
-    Then $\{K_j\}$ and $\{\tilde{K}_\ell\}$ define the same Kraus map:
-    for every $X \in \MN{D}$,
-    \begin{align}
-        \sum_j K_j X K_j^\dagger
-        &= \sum_\ell \tilde{K}_\ell X \tilde{K}_\ell^\dagger.
-        \notag
-    \end{align}
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    Substitute the combination formula, expand the triple sum over
-    $j,\ell,\ell'$, swap summation order, and use the entry-wise form
-    of $U^\dagger U = \Id$ to collapse to $\ell = \ell'$ diagonal terms.
-\end{proof}
+The unitary mixing result was proved in
+Theorem~\ref{thm:kraus_same_map_of_unitary_combination}. The same calculation
+extends to isometric mixing between different Kraus index spaces.
 
 \begin{theorem}[Isometric mixing preserves the Kraus map]
     \label{thm:kraus_same_map_of_isometry_combination}
