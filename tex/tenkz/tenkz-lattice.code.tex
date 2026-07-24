@@ -954,6 +954,7 @@
           \int_use:N \l__tenkzl_gdr_int|dc=\int_use:N \l__tenkzl_gdc_int}
       }
   }
+\cs_generate_variant:Nn \tenkzl_seg:nnnnn { VVVVV }
 
 % ---------- frame setup ----------
 % Fill the map coefficients and the sheet vector, once per picture after
@@ -1455,6 +1456,7 @@
         cols={\int_use:N \l__tenkzl_ncols_int},
         sheets={\int_use:N \l__tenkzl_sheets_int} }
     \tenkzl_model_record_sites:
+    \tenkzl_model_record_bonds:
     \tenkzl_model_record_edges:
     \tenkzl_model_record_regions:
     \__tenkz_model_validate:
@@ -1482,9 +1484,92 @@
           {#1}{#2}{\int_use:N \l__tenkzl_sheet_int}} }
   }
 
-% Explicit \tnedge declarations become ordinary WIRE records.  The implicit
-% nearest-neighbour bonds remain a separate derivation until the final S3
-% corridor; `origin=edge` keeps the two sources distinguishable meanwhile.
+% Derive every surviving nearest-neighbour bond as a WIRE before validation,
+% in the same sheet/row/column order used by the historical ink pass.
+\int_new:N \l__tenkzl_model_bond_sheet_int
+\int_new:N \l__tenkzl_model_bond_row_int
+\int_new:N \l__tenkzl_model_bond_col_int
+\cs_new_protected:Npn \tenkzl_model_record_bonds:
+  {
+    \int_step_variable:nnNn {0}{\l__tenkzl_sheets_int - 1}
+      \l__tenkzl_model_bond_sheet_int
+      {
+        \tenkzl_select_sheet:n { \l__tenkzl_model_bond_sheet_int }
+        \int_step_variable:nnNn {1}{\l__tenkzl_nrows_int}
+          \l__tenkzl_model_bond_row_int
+          {
+            \int_step_variable:nnNn {1}{\l__tenkzl_ncols_int}
+              \l__tenkzl_model_bond_col_int
+              { \tenkzl_model_record_bonds_at: }
+          }
+      }
+  }
+\cs_new_protected:Npn \tenkzl_model_record_bonds_at:
+  {
+    \int_compare:nNnT
+      { \l__tenkzl_model_bond_col_int } < { \l__tenkzl_ncols_int }
+      {
+        \bool_lazy_all:nT
+          {
+            { ! \tenkzl_removed_p:nn
+                {\l__tenkzl_model_bond_row_int}
+                {\l__tenkzl_model_bond_col_int} }
+            { ! \tenkzl_removed_p:nn
+                {\l__tenkzl_model_bond_row_int}
+                {\int_eval:n {\l__tenkzl_model_bond_col_int + 1}} }
+            { ! \tenkzl_nobond_p:nnnn
+                {\l__tenkzl_model_bond_row_int}
+                {\l__tenkzl_model_bond_col_int}
+                {\l__tenkzl_model_bond_row_int}
+                {\int_eval:n {\l__tenkzl_model_bond_col_int + 1}} }
+          }
+          {
+            \tenkzl_model_record_bond:nnnn
+              {\l__tenkzl_model_bond_row_int}
+              {\l__tenkzl_model_bond_col_int}
+              {\l__tenkzl_model_bond_row_int}
+              {\int_eval:n {\l__tenkzl_model_bond_col_int + 1}}
+          }
+      }
+    \int_compare:nNnT
+      { \l__tenkzl_model_bond_row_int } < { \l__tenkzl_nrows_int }
+      {
+        \bool_lazy_all:nT
+          {
+            { ! \tenkzl_removed_p:nn
+                {\l__tenkzl_model_bond_row_int}
+                {\l__tenkzl_model_bond_col_int} }
+            { ! \tenkzl_removed_p:nn
+                {\int_eval:n {\l__tenkzl_model_bond_row_int + 1}}
+                {\l__tenkzl_model_bond_col_int} }
+            { ! \tenkzl_nobond_p:nnnn
+                {\l__tenkzl_model_bond_row_int}
+                {\l__tenkzl_model_bond_col_int}
+                {\int_eval:n {\l__tenkzl_model_bond_row_int + 1}}
+                {\l__tenkzl_model_bond_col_int} }
+          }
+          {
+            \tenkzl_model_record_bond:nnnn
+              {\l__tenkzl_model_bond_row_int}
+              {\l__tenkzl_model_bond_col_int}
+              {\int_eval:n {\l__tenkzl_model_bond_row_int + 1}}
+              {\l__tenkzl_model_bond_col_int}
+          }
+      }
+  }
+\cs_new_protected:Npn \tenkzl_model_record_bond:nnnn #1#2#3#4
+  {
+    \__tenkz_model_record_wire:e
+      { kind={index}, origin={bond},
+        from={\tenkz_cs_cellkey:nnn {\int_eval:n {#1}}{\int_eval:n {#2}}
+          {\int_eval:n {\l__tenkzl_model_bond_sheet_int}}},
+        to={\tenkz_cs_cellkey:nnn {\int_eval:n {#3}}{\int_eval:n {#4}}
+          {\int_eval:n {\l__tenkzl_model_bond_sheet_int}}},
+        style={bond} }
+  }
+
+% Explicit \tnedge declarations become ordinary WIRE records; `origin=edge`
+% keeps them distinct from the derived nearest-neighbour bonds.
 \cs_new_protected:Npn \tenkzl_model_record_edges:
   {
     \seq_map_inline:Nn \l__tenkzl_edges_seq
@@ -3219,43 +3304,8 @@
   }
 \cs_new_protected:Npn \tenkzl_draw_bonds:
   {
-    \int_step_inline:nn { \l__tenkzl_nrows_int }
-      {
-        \int_step_inline:nn { \l__tenkzl_ncols_int }
-          {
-            % horizontal bond to the right neighbour
-            \int_compare:nNnT {####1} < { \l__tenkzl_ncols_int }
-              {
-                \bool_lazy_all:nT
-                  {
-                    { ! \tenkzl_removed_p:nn {##1}{####1} }
-                    { ! \tenkzl_removed_p:nn {##1}{ \int_eval:n{####1+1} } }
-                    { ! \tenkzl_nobond_p:nnnn {##1}{####1}
-                        {##1}{ \int_eval:n{####1+1} } }
-                  }
-                  {
-                    \tenkzl_seg:nnnnn {##1}{####1}
-                      {##1}{ \int_eval:n{####1+1} } {bond}
-                  }
-              }
-            % row-to-row bond to the neighbour below (the depth axis when
-            % frame=oblique)
-            \int_compare:nNnT {##1} < { \l__tenkzl_nrows_int }
-              {
-                \bool_lazy_all:nT
-                  {
-                    { ! \tenkzl_removed_p:nn {##1}{####1} }
-                    { ! \tenkzl_removed_p:nn { \int_eval:n{##1+1} }{####1} }
-                    { ! \tenkzl_nobond_p:nnnn {##1}{####1}
-                        { \int_eval:n{##1+1} }{####1} }
-                  }
-                  {
-                    \tenkzl_seg:nnnnn {##1}{####1}
-                      { \int_eval:n{##1+1} }{####1} {bond}
-                  }
-              }
-          }
-      }
+    \__tenkz_model_map_wires_origin:nN {bond}
+      \tenkzl_draw_bond_record:n
   }
 
 % -- (c) distinguished edges ------------------------------------------
@@ -3272,13 +3322,10 @@
 \tl_new:N \l__tenkzl_model_to_row_tl
 \tl_new:N \l__tenkzl_model_to_col_tl
 \tl_new:N \l__tenkzl_model_to_sheet_tl
-\cs_new_protected:Npn \tenkzl_draw_edge_record:n #1
+\cs_new_protected:Npn \tenkzl_model_decode_wire:n #1
   {
-    \__tenkz_model_get:nnN {#1} {from}  \l__tenkzl_model_from_tl
-    \__tenkz_model_get:nnN {#1} {to}    \l__tenkzl_model_to_tl
-    \__tenkz_model_get:nnN {#1} {style} \l__tenkzl_estyle_tl
-    \__tenkz_model_get:nnN {#1} {label} \l__tenkzl_edgelabel_tl
-    \__tenkz_model_get:nnN {#1} {role}  \l__tenkzl_erole_tl
+    \__tenkz_model_get:nnN {#1} {from} \l__tenkzl_model_from_tl
+    \__tenkz_model_get:nnN {#1} {to}   \l__tenkzl_model_to_tl
     \exp_args:NV \tenkzl_cellkey_sheet:nN
       \l__tenkzl_model_from_tl \l__tenkzl_hsel_int
     \tl_set:Ne \l__tenkzl_model_from_row_tl
@@ -3295,6 +3342,28 @@
       { \seq_item:Nn \l__tenkzl_parts_seq {2} }
     \tl_set:Ne \l__tenkzl_model_to_sheet_tl
       { \int_use:N \l__tenkzl_hsel_int }
+  }
+\cs_new_protected:Npn \tenkzl_draw_bond_record:n #1
+  {
+    \tenkzl_model_decode_wire:n {#1}
+    \int_compare:nNnT
+      { \l__tenkzl_model_from_sheet_tl } = { \l__tenkzl_sheet_int }
+      {
+        \__tenkz_model_get:nnN {#1} {style} \l__tenkzl_estyle_tl
+        \tenkzl_seg:VVVVV
+          \l__tenkzl_model_from_row_tl
+          \l__tenkzl_model_from_col_tl
+          \l__tenkzl_model_to_row_tl
+          \l__tenkzl_model_to_col_tl
+          \l__tenkzl_estyle_tl
+      }
+  }
+\cs_new_protected:Npn \tenkzl_draw_edge_record:n #1
+  {
+    \tenkzl_model_decode_wire:n {#1}
+    \__tenkz_model_get:nnN {#1} {style} \l__tenkzl_estyle_tl
+    \__tenkz_model_get:nnN {#1} {label} \l__tenkzl_edgelabel_tl
+    \__tenkz_model_get:nnN {#1} {role}  \l__tenkzl_erole_tl
     \tenkzl_edge:VVVVVVVVV
       \l__tenkzl_model_from_row_tl
       \l__tenkzl_model_from_col_tl
