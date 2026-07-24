@@ -61,14 +61,7 @@ structure NormalTorusWindowInjectivityHypotheses (L K : ℕ)
     ∀ xStart yStart : ℕ, xStart + L ≤ width → yStart + K ≤ height →
       κ.IsInjective (torusContiguousRectangle xStart yStart L K)
 
-namespace NormalTorusWindowInjectivityHypotheses
-
-/-- The torus window injectivity hypotheses satisfy the shared injectivity interface. -/
-theorem toPEPSInjectivityHypotheses {L K : ℕ} {κ : RegionInjectivityData (TorusVertex width height)}
-    (_h : NormalTorusWindowInjectivityHypotheses L K κ) :
-    PEPSInjectivityHypotheses κ := ⟨⟩
-
-end NormalTorusWindowInjectivityHypotheses
+/-! ### Sliding-window tiling injectivity -/
 
 /-! ### Sliding-window tiling injectivity -/
 

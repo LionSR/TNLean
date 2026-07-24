@@ -268,6 +268,26 @@ spectral split → block extraction → MPV calculation → strict bounds
   a candidate until another consumer justifies widening the public coefficient-identity API;
   do not add stronger hypotheses merely to reuse the existing wrapper.
 
+### square_interior_edge_translate — candidate
+- **Pattern:** given `NormalSquareInteriorEdgeDatum e`, case-split horizontal/vertical,
+  extract interior-margin hypotheses (`IsNormalSquareHorizontalEdgeInteriorMargins` /
+  `IsNormalSquareVerticalEdgeInteriorMargins`), rewrite `e` to the translated-edge form
+  (`normalSquareHorizontalTranslatedEdge` / `normalSquareVerticalTranslatedEdge`) via
+  `normalSquareHorizontalTranslatedEdge_sub_eq_rightEdge` /
+  `normalSquareVerticalTranslatedEdge_sub_eq_upEdge`, and dispatch to the
+  translated-edge version of the target statement.
+- **Seen:** 2 occurrences (2026-07-24):
+  `TNLean/PEPS/NormalSquareInteriorAbsorbedFamily.lean:84-104` (absorbing gauge),
+  `TNLean/PEPS/NormalSquareFundamentalTheorem2.lean:118-190` (per-edge bond-dimension equality).
+- **Abstraction (proposed):** a lemma of shape
+  `NormalSquareInteriorEdgeDatum.translatedDispatch` taking the horizontal and vertical
+  continuations, or a helper that rewrites the edge and exposes the translated-coordinate
+  hypotheses.  Below the rule-of-three promotion bar.
+- **Notes:** the two occurrences differ in the continuation: one calls the absorbing-gauge
+  functions, the other constructs blocking data and applies `bondDim_apply_eq_of_blockingData`.
+  Before promotion, verify that the resulting type families (gauge existence vs. bond-dimension
+  equality) can be unified under a single dispatch lemma without bloating the argument list.
+
 ---
 
 ## Rejected
