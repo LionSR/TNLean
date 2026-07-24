@@ -92,6 +92,42 @@
     either an end-window point or a corner point.
 \end{proof}
 
+\begin{lemma}[Bond-dimension equality from normal torus rectangular injectivity]%
+    \label{lem:peps_bondDim_eq_of_normalTorusRectangularInjectivity}
+    \lean{TNLean.PEPS.bondDim_eq_of_normalTorusRectangle}
+    \leanok
+    \uses{def:peps_torus_translation_invariant,
+        def:peps_regionInjectivityData,
+        def:peps_regionInjectivityDataOf,
+        def:peps_same_state}
+    Let $A$ and $B$ be translationally invariant PEPS tensors on the
+    $n\times m$ torus with $n,m\geq 7$, positive physical dimension $d>0$,
+    and positive bond dimensions at every edge, generating the same state.
+    Suppose both tensors satisfy the torus rectangular injectivity hypotheses
+    (every contiguous $2\times3$ and $3\times2$ torus rectangle is injective)
+    and the associated region-injectivity predicates are closed under finite
+    unions. Then the bond dimensions of $A$ and $B$ agree on every edge:
+    \begin{align}
+        D_A = D_B.
+        \notag
+    \end{align}
+    The equality is derived from the one-edge blocking data built from the
+    rectangular injectivity --- the source's Lemma \emph{inj\_isomorph}
+    (\cite[Section~3, lines~560--583 and
+    1407--1500]{Molnar2018NormalPEPS}) ---
+    together with the translation invariance, same-state, and positive-bond
+    assumptions; the bond dimension is not assumed as a hypothesis.
+    \begin{proof}
+        \leanok
+        The proof constructs horizontal and vertical reference edges and
+        builds one-edge blocking data for each tensor at these edges. The
+        three-region blocking around each reference edge supplies an injective
+        chain, and the one-edge isomorphism argument forces the bond dimensions
+        at the reference edges to agree. Translation invariance then propagates
+        the equality to every edge of the torus.
+    \end{proof}
+\end{lemma}
+
 \begin{theorem}[Fundamental Theorem for normal PEPS on the torus]%
     \label{thm:fundamentalTheorem_normalTorusPEPS}
     \lean{TNLean.PEPS.fundamentalTheorem_normalTorusPEPS_unconditional}

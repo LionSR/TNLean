@@ -455,3 +455,44 @@
     disjointness and covering identities follow from the finite-set complement
     formulas.
 \end{proof}
+
+\begin{lemma}[Bond-dimension equality at interior edges from rectangular
+        injectivity]%
+    \label{lem:peps_bondDim_interiorEdge_eq_of_normalSquareRectangularInjectivity}
+    \lean{TNLean.PEPS.bondDim_apply_eq_of_normalSquareInteriorEdge}
+    \leanok
+    \uses{def:peps_normalRectangleInjectivityHypotheses,
+        def:peps_regionInjectivityData,
+        def:peps_regionInjectivityDataOf,
+        def:peps_same_state,
+        lem:peps_normalSquareInteriorEdgeBlocking}
+    Let $A$ and $B$ be PEPS tensors on the $n\times m$ square lattice with
+    positive physical dimension $d>0$ and positive bond dimensions at every
+    edge, generating the same state. Suppose both tensors satisfy the
+    coordinate rectangular injectivity hypotheses (every contiguous
+    $2\times3$ and $3\times2$ rectangle is injective) and the associated
+    region-injectivity predicates are closed under finite unions. Then the
+    bond dimensions of $A$ and $B$ agree at every edge with interior margins:
+    for every edge $e$ with a margin of at least one row and column of room
+    below and to the left, and at least three rows and columns above and to the
+    right (avoiding the lattice boundary),
+    \begin{align}
+        D_A(e)=D_B(e).
+        \notag
+    \end{align}
+    The equality is derived from the one-edge blocking data built from the
+    rectangular injectivity --- the source's Lemma \emph{inj\_isomorph}
+    (\cite[Section~3, lines~560--583 and
+    1407--1500]{Molnar2018NormalPEPS}) ---
+    together with the same-state and positive-bond assumptions; the bond
+    dimension at the edge is not assumed.
+    \begin{proof}
+        \leanok
+        \uses{lem:peps_normalSquareInteriorEdgeBlocking}
+        The interior-edge blocking datum of
+        Lemma~\ref{lem:peps_normalSquareInteriorEdgeBlocking} supplies the
+        edge-blocking data for both tensors at $e$. The normal blocking
+        hypothesis and the positive bond dimensions then give, through the
+        one-edge isomorphism argument, the equality of the bond dimensions.
+    \end{proof}
+\end{lemma}
