@@ -51,7 +51,7 @@ from pathlib import Path
 
 from tenkz_audit import ENVIRONMENT_LANGS
 from tenkz_language import load_registry, parse_status
-from tenkzlib.texcase import _match_group, scan_constructs, strip_comments
+from tenkzlib.texcase import match_group, scan_constructs, strip_comments
 
 # Bodies scanned for the dots rule: the grid languages whose cells feed
 # the implicit wire.  (tenkzcd cells are math objects and tenkzfree has
@@ -142,7 +142,7 @@ def mask_option_groups(body: str) -> str:
             i += 2
             continue
         if c == "[":
-            closed = _match_group(body, i, "[", "]")
+            closed = match_group(body, i, "[", "]")
             if closed == -1:
                 break
             for j in range(i, closed):

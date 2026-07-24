@@ -38,6 +38,8 @@ on:
       - 'scripts/tenkz_audit.py'
       - 'scripts/tenkz_rmp.py'
       - 'scripts/tenkzlib/**'
+      - 'scripts/tenkz_manual_doctest.py'
+      - 'scripts/test_tenkz_manual_doctest.py'
       - 'scripts/tenkz_language.py'
       - 'scripts/tenkz_shrink.py'
       - 'scripts/test_tenkz_shrink.py'
@@ -90,6 +92,8 @@ on:
       - 'scripts/tenkz_audit.py'
       - 'scripts/tenkz_rmp.py'
       - 'scripts/tenkzlib/**'
+      - 'scripts/tenkz_manual_doctest.py'
+      - 'scripts/test_tenkz_manual_doctest.py'
       - 'scripts/tenkz_language.py'
       - 'scripts/tenkz_shrink.py'
       - 'scripts/test_tenkz_shrink.py'
@@ -196,6 +200,11 @@ jobs:
             corpus:
               - 'tex/tenkz/**'
               - 'tests/tenkz/**'
+              - 'docs/tenkz/chapters2/**'
+              - 'docs/tenkz/manual2.tex'
+              - 'docs/tenkz/tenkzmanual2.sty'
+              - 'scripts/tenkz_manual_doctest.py'
+              - 'scripts/test_tenkz_manual_doctest.py'
               - 'scripts/tenkz_audit.py'
               - 'scripts/tenkzlib/**'
               - 'scripts/tenkz_corpus.sh'
@@ -273,8 +282,14 @@ jobs:
       - name: Test tenkz render baseline replacement
         run: python3 scripts/test_tenkz_corpus_render.py
 
+      - name: Test tenkz manual extraction and reference coverage
+        run: python3 scripts/test_tenkz_manual_doctest.py
+
       - name: Install TeX dependencies
         uses: texra-ai/lean-env-action/blueprint-system-deps@v1
+
+      - name: Compile tenkz manual examples standalone
+        run: python3 scripts/tenkz_manual_doctest.py
 
       - name: Compile and audit tenkz corpus
         run: TENKZ_CORPUS_JOBS=4 scripts/tenkz_corpus.sh
