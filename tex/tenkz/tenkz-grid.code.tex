@@ -1860,7 +1860,7 @@
         \bool_if:NT \l_tmpa_bool
           {
             \__tenkz_model_record_wire:e
-              {kind={index},origin={wrap},row={\int_eval:n{#1}},
+              {kind={index},origin={trace},row={\int_eval:n{#1}},
                side={#2},name={wrap-\int_eval:n{#1}}}
           }
       }
@@ -2133,7 +2133,7 @@
         {
           \str_if_eq:VnTF \l__tenkz_eastpol_tl {trace}
             {
-              \tenkz_draw_periodic_mismatches:
+              \tenkz_draw_periodic_mismatches:n {before}
               % closure-style default follows the frame: flat words keep
               % the explicit racetrack, vertical words default to hooks --
               % a vertical racetrack spends the very width the rotation
@@ -2147,6 +2147,7 @@
               \str_if_eq:VnTF \l__tenkz_perstyle_tl {hooks}
                 { \tenkz_draw_hooks: }
                 { \tenkz_draw_trace: }
+              \tenkz_draw_periodic_mismatches:n {after}
             }
             { \msg_warning:nnn {tenkz}{trace-one-sided} {west} }
         }
@@ -5719,15 +5720,26 @@ code=label-pos|pos=\tl_to_str:N \l_tmpa_tl}
       }
   }
 
-\cs_new_protected:Npn \tenkz_draw_periodic_mismatches:
+\cs_new_protected:Npn \tenkz_draw_periodic_mismatches:n #1
   {
     \seq_map_inline:Nn \l__tenkz_periodic_mismatch_seq
-      { \tenkz_draw_periodic_mismatch:nnn ##1 }
+      { \tenkz_draw_periodic_mismatch:nnnn {#1} ##1 }
   }
-\cs_new_protected:Npn \tenkz_draw_periodic_mismatch:nnn #1#2#3
+\cs_new_protected:Npn \tenkz_draw_periodic_mismatch:nnnn #1#2#3#4
   {
-    \tenkz_periodic_endpoints:nnnN {#1}{#2}{#3}
-      \l__tenkz_periodicpair_bool
+    % Only the top and bottom rows can carry periodic closures.  Emit a top
+    % mismatch before the matching closure records and a bottom mismatch
+    % after them, preserving the historical top-to-bottom event order.
+    \bool_if:nT
+      {
+        ( \str_if_eq_p:nn {#1}{before} && \int_compare_p:nNn {#2} = {1} )
+        ||
+        ( \str_if_eq_p:nn {#1}{after} && \int_compare_p:nNn {#2} > {1} )
+      }
+      {
+        \tenkz_periodic_endpoints:nnnN {#2}{#3}{#4}
+          \l__tenkz_periodicpair_bool
+      }
   }
 
 \cs_new_protected:Npn \tenkz_periodic_endpoints_match:nnnN #1#2#3#4
@@ -5791,7 +5803,7 @@ code=periodic-face-ports|row=\int_eval:n{#1}}
 
 \tl_new:N \l__tenkz_wrapside_tl
 \cs_new_protected:Npn \tenkz_draw_trace:
-  { \__tenkz_model_map_wires_origin:nN {wrap} \tenkz_draw_trace_one:n }
+  { \__tenkz_model_map_wires_origin:nN {trace} \tenkz_draw_trace_one:n }
 \cs_new_protected:Npn \tenkz_draw_trace_one:n #1
   {
     \__tenkz_model_get:nnN {#1} {row}  \l__tenkz_ptrow_tl
@@ -5904,7 +5916,7 @@ code=periodic-face-ports|row=\int_eval:n{#1}}
 % word's hooks wrap over the top and under the bottom toward the page's
 % east margin, as in the reference figure.
 \cs_new_protected:Npn \tenkz_draw_hooks:
-  { \__tenkz_model_map_wires_origin:nN {wrap} \tenkz_draw_hooks_one:n }
+  { \__tenkz_model_map_wires_origin:nN {trace} \tenkz_draw_hooks_one:n }
 \cs_new_protected:Npn \tenkz_draw_hooks_one:n #1
   {
     \__tenkz_model_get:nnN {#1} {row}  \l__tenkz_ptrow_tl
