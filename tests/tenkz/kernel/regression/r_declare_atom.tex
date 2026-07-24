@@ -1,0 +1,17 @@
+% Regression: atom declarations accept the name grammar and typed descriptor.
+\documentclass{standalone}
+\usepackage{tenkz}
+\makeatletter
+\ExplSyntaxOn
+\file_input:n { tenkz-kernel.code.tex }
+\ExplSyntaxOff
+\makeatother
+\begin{document}
+\tenkzkernel
+\tndeclare{atom}{tnprojector}{skin=box, ports={n:physical}}
+\tndeclare{atom}{\tnmap}{skin=ring, ports={w:virtual,e:virtual}}
+\begin{tenkz}[rows={wire}, cols=2, bonds=none]
+  \tnprojector[name=P]{P} & \tnmap[name=M]{M}
+\end{tenkz}
+\mbox{parsed}
+\end{document}

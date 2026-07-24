@@ -55,6 +55,48 @@ if grep -Eq 'name=(wrap|cup)-(west|east|north|south)' \
   echo "FAIL: a side-level closure survived normalization" >&2
   exit 1
 fi
+wide_atom_count=$(grep -c '^atom|' "$WORK/r_wide_chain.tnlog")
+[ "$wide_atom_count" -eq 2 ] || {
+  echo "FAIL: a chain-positioned wide atom did not claim its full span" >&2
+  exit 1
+}
+grep -Fq '|name=P|ports=n:physical|skin=box' \
+    "$WORK/r_declare_atom.tnlog" || {
+  echo "FAIL: an identifier atom declaration did not mint a typed command" >&2
+  exit 1
+}
+grep -Fq '|name=M|ports=w:virtual,e:virtual|skin=ring' \
+    "$WORK/r_declare_atom.tnlog" || {
+  echo "FAIL: a control-sequence atom declaration did not mint a typed command" >&2
+  exit 1
+}
+grep -Fq '|name=trace-1-2|origin=trace|' "$WORK/r_cell_policy.tnlog" || {
+  echo "FAIL: trace= cell policy did not materialize a closure wire" >&2
+  exit 1
+}
+if ! grep -Fq '|face=upper|' "$WORK/r_cell_policy.tnlog" ||
+   ! grep -Fq '|origin=open|to-open=s' "$WORK/r_cell_policy.tnlog"; then
+  echo "FAIL: open= cell policy did not materialize its upper open leg" >&2
+  exit 1
+fi
+if ! grep -Fq '|face=lower|from-open=n|' "$WORK/r_cell_policy.tnlog"; then
+  echo "FAIL: open= cell policy did not materialize its lower open leg" >&2
+  exit 1
+fi
+physical_trace_count=$(
+  grep -c '|mode=physical|name=trace-physical-' "$WORK/r_cell_policy.tnlog"
+)
+[ "$physical_trace_count" -eq 3 ] || {
+  echo "FAIL: trace=physical did not materialize one closure per column" >&2
+  exit 1
+}
+replaced_bond_count=$(
+  grep -c '|name=bond-1-2-2-2|origin=grid|' "$WORK/r_cell_policy.tnlog"
+)
+[ "$replaced_bond_count" -eq 1 ] || {
+  echo "FAIL: trace/open cell policies did not replace their grid bonds" >&2
+  exit 1
+}
 
 negative="$KERNEL/negative/n_diagonal_port.tex"
 if ( cd "$WORK" &&
@@ -69,7 +111,7 @@ grep -Fq '[TKZ-LANG-ADDRESS]' "$WORK/n_diagonal_port.transcript" || {
   tail -20 "$WORK/n_diagonal_port.transcript" >&2
   exit 1
 }
-echo "PASS: four review regressions hold"
+echo "PASS: eight review regressions hold"
 
 fail=0
 for pair in s1 s2 s3 s4 s5 s6 s7 s8; do
