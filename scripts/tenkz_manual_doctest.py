@@ -29,6 +29,68 @@ TEX_PRIMITIVE_CONDITIONALS = (
     "iftrue", "iffalse", "ifcase", "ifdefined", "ifcsname", "iffontchar",
     "ifincsname",
 )
+LATEX_CORE_CONDITIONAL_FALLBACK = ("if@twocolumn",)
+
+
+@cache
+def _latex_format_conditionals() -> tuple[str, ...]:
+    known = set(LATEX_CORE_CONDITIONAL_FALLBACK)
+    if not shutil.which("kpsewhich") or not shutil.which("xelatex"):
+        return tuple(sorted(known))
+    lookup = subprocess.run(
+        ["kpsewhich", "latex.ltx"],
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.DEVNULL,
+        timeout=15,
+    )
+    source = Path(lookup.stdout.strip())
+    if lookup.returncode != 0 or not source.is_file():
+        return tuple(sorted(known))
+    candidates = sorted(
+        set(re.findall(r"\\(if[A-Za-z@]+)", source.read_text(encoding="utf-8")))
+    )
+    with tempfile.TemporaryDirectory(prefix="tenkz-format-conditionals-") as tmp:
+        work = Path(tmp)
+        probe = work / "probe.tex"
+        lines = [r"\documentclass{article}"]
+        lines.extend(
+            rf"\typeout{{TENKZ-COND-{index}="
+            rf"\expandafter\meaning\csname {name}\endcsname}}"
+            for index, name in enumerate(candidates)
+        )
+        lines.append(r"\stop")
+        probe.write_text("\n".join(lines) + "\n", encoding="utf-8")
+        result = subprocess.run(
+            [
+                "xelatex",
+                "-interaction=batchmode",
+                f"-output-directory={work}",
+                probe.as_posix(),
+            ],
+            text=True,
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+            timeout=30,
+        )
+        log = work / "probe.log"
+        if result.returncode != 0 or not log.is_file():
+            return tuple(sorted(known))
+        meanings = {
+            int(index): meaning.strip()
+            for index, meaning in re.findall(
+                r"^TENKZ-COND-(\d+)=(.*)$",
+                log.read_text(encoding="utf-8", errors="replace"),
+                re.MULTILINE,
+            )
+        }
+    primitive_meanings = {rf"\{name}" for name in TEX_PRIMITIVE_CONDITIONALS}
+    known.update(
+        name
+        for index, name in enumerate(candidates)
+        if meanings.get(index) in primitive_meanings
+    )
+    return tuple(sorted(known))
 
 
 @dataclass(frozen=True)
@@ -339,6 +401,7 @@ def _mask_false_branches(
         known_conditionals = set(
             (
                 *TEX_PRIMITIVE_CONDITIONALS,
+                *_latex_format_conditionals(),
                 *inherited_conditionals,
                 *declared_conditionals,
             )
@@ -527,9 +590,12 @@ def _mask_inert_tex(
     source_dir: Path,
     inherited_conditionals: tuple[str, ...] = (),
 ) -> str:
-    without_false_branches = _mask_false_branches(text, inherited_conditionals)
+    selected_file_branches = _mask_inactive_file_branches(text, source_dir)
+    without_false_branches = _mask_false_branches(
+        selected_file_branches, inherited_conditionals
+    )
     without_macros = _mask_macro_definitions(without_false_branches)
-    return _mask_inactive_file_branches(without_macros, source_dir)
+    return without_macros
 
 
 def _mask_nonexecuted_tokens(text: str) -> str:
@@ -691,11 +757,18 @@ def displayed_examples() -> list[Example]:
 
 
 def _conditionals_before(
-    text: str, offset: int, inherited_conditionals: tuple[str, ...]
+    text: str,
+    offset: int,
+    inherited_conditionals: tuple[str, ...],
+    source_dir: Path,
 ) -> tuple[str, ...]:
+    selected_file_branches = _mask_inactive_file_branches(text, source_dir)
     executable = _display_comment_scan(
         _mask_macro_definitions(
-            _mask_false_branches(text, inherited_conditionals), strict=False
+            _mask_false_branches(
+                selected_file_branches, inherited_conditionals
+            ),
+            strict=False,
         )
     )
     newif_pattern = re.compile(r"\\newif\s*\\(if[A-Za-z@]+)(?![A-Za-z@])")
@@ -764,7 +837,12 @@ def _manual_source_contexts() -> list[tuple[Path, tuple[str, ...]]]:
             pending.append(
                 (
                     included,
-                    _conditionals_before(raw, match.start(), inherited_conditionals),
+                    _conditionals_before(
+                        raw,
+                        match.start(),
+                        inherited_conditionals,
+                        source.parent,
+                    ),
                 )
             )
     return sorted(visited.items())
