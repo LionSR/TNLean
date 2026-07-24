@@ -44,7 +44,7 @@ def main() -> int:
 \tntree{((ab)c)}
 \end{Verbatim}
 \begin{Verbatim}
-\verb|\documentclass{standalone}| \tntree{(ab)}
+\verb|\documentclass{standalone}| \usepackagewrapper{foo} \tntree{(ab)}
 \end{Verbatim}
 \begin{Verbatim}
 shell command % \tntree{commented}
@@ -112,6 +112,19 @@ shell command % \tntree{commented}
         raise AssertionError("an even-backslash percent did not start a TeX comment")
     if r"\tnarrow" not in DOCTEST._strip_tex_comments(r"\% \tnarrow"):
         raise AssertionError("an escaped percent incorrectly started a TeX comment")
+    if DOCTEST._has_executable_command(r"\verb|\tn| \string\tn \\tn", "tn"):
+        raise AssertionError("a non-executed command spelling satisfied reference coverage")
+    first_label = DOCTEST._source_label(DOCTEST.CHAPTERS / "basic" / "example.tex")
+    second_label = DOCTEST._source_label(DOCTEST.CHAPTERS / "advanced" / "example.tex")
+    if first_label == second_label:
+        raise AssertionError("chapter-relative case labels are not unique")
+    displayed_input = r"""
+\begin{Verbatim}
+\input{missing-example.tex}
+\end{Verbatim}
+"""
+    if r"\input" in DOCTEST._mask_display_environments(displayed_input):
+        raise AssertionError("a displayed input spelling remained in the structural graph")
 
     print("PASS: tenkz manual doctest extraction and reference coverage")
     return 0

@@ -153,7 +153,7 @@ def _multiple_variants(options: str | None) -> list[tuple[str, str]]:
 
 @cache
 def _registry_vocabulary() -> tuple[list[str], list[str]]:
-    registry = REGISTRY.read_text(encoding="utf-8")
+    registry = strip_comments(REGISTRY.read_text(encoding="utf-8"))
     commands = re.findall(
         r"\\__tenkz_language_registry_command:nnnnn\s*\{([^{}]+)\}", registry
     )
@@ -193,6 +193,15 @@ def _find_uncommented(text: str, marker: str, offset: int) -> int:
         offset = found + len(marker)
 
 
+def _find_control_word(text: str, name: str, offset: int) -> int:
+    pattern = re.compile(rf"\\{re.escape(name)}(?![A-Za-z@])")
+    while match := pattern.search(text, offset):
+        if not _is_commented(text, match.start()):
+            return match.start()
+        offset = match.end()
+    return -1
+
+
 def _mask_inline_verbatim(text: str) -> str:
     masked = list(text)
     offset = 0
@@ -221,7 +230,7 @@ def _extract_usepackages(body: str) -> tuple[list[str], str]:
     offset = 0
     marker = r"\usepackage"
     scan_body = _mask_inline_verbatim(body)
-    while (start := _find_uncommented(scan_body, marker, offset)) >= 0:
+    while (start := _find_control_word(scan_body, "usepackage", offset)) >= 0:
         cursor = _skip_space_and_comments(body, start + len(marker))
         if cursor < len(body) and body[cursor] == "[":
             cursor, _ = _read_optional_argument(body, cursor)
@@ -256,6 +265,49 @@ def _find_environment_end(text: str, environment: str, offset: int) -> re.Match[
         re.MULTILINE,
     )
     return pattern.search(text, offset)
+
+
+def _mask_display_environments(text: str) -> str:
+    masked = list(text)
+    pattern = re.compile(
+        r"^[ \t]*\\begin\{(" + "|".join(DISPLAY_ENVIRONMENTS) + r")\}",
+        re.MULTILINE,
+    )
+    offset = 0
+    while match := pattern.search(text, offset):
+        end = _find_environment_end(text, match.group(1), match.end())
+        if end is None:
+            break
+        for index in range(match.start(), end.end()):
+            if masked[index] != "\n":
+                masked[index] = " "
+        offset = end.end()
+    return "".join(masked)
+
+
+def _mask_nonexecuted_tokens(text: str) -> str:
+    masked = list(_mask_inline_verbatim(text))
+    scan = "".join(masked)
+    string_pattern = re.compile(r"\\string\s*\\(?:[A-Za-z@]+|.)")
+    for match in string_pattern.finditer(scan):
+        for index in range(match.start(), match.end()):
+            if masked[index] != "\n":
+                masked[index] = " "
+    return "".join(masked)
+
+
+def _has_executable_command(text: str, command: str) -> bool:
+    scan = _mask_nonexecuted_tokens(strip_comments(text))
+    pattern = re.compile(rf"\\{re.escape(command)}(?![A-Za-z@:_])")
+    return any(not _is_escaped(scan, match.start()) for match in pattern.finditer(scan))
+
+
+def _source_label(path: Path) -> str:
+    try:
+        relative = path.relative_to(CHAPTERS)
+    except ValueError:
+        relative = Path(path.name)
+    return re.sub(r"[^A-Za-z0-9]+", "-", relative.with_suffix("").as_posix()).strip("-")
 
 
 def _variant_definitions(variant_style: str) -> list[str]:
@@ -336,7 +388,7 @@ def extract_displayed_examples(path: Path) -> list[Example]:
             suffix = f"-variant-{variant_index}" if environment == "tnmultiples" else ""
             examples.append(
                 Example(
-                    label=f"manual-{path.stem}-{ordinal}{suffix}",
+                    label=f"manual-{_source_label(path)}-{ordinal}{suffix}",
                     source=path,
                     line=line,
                     document=_standalone_document(body, variant_style),
@@ -362,7 +414,8 @@ def _manual_chapter_sources() -> list[Path]:
         if source in visited:
             continue
         visited.add(source)
-        text = _strip_tex_comments(_mask_inline_verbatim(source.read_text(encoding="utf-8")))
+        raw = source.read_text(encoding="utf-8")
+        text = strip_comments(_mask_inline_verbatim(_mask_display_environments(raw)))
         for match in input_pattern.finditer(text):
             relative = Path(match.group(1))
             if not relative.suffix:
@@ -377,7 +430,7 @@ def _manual_chapter_sources() -> list[Path]:
 
 
 def reference_examples() -> list[Example]:
-    registry = REGISTRY.read_text(encoding="utf-8")
+    registry = strip_comments(REGISTRY.read_text(encoding="utf-8"))
     commands, _ = _registry_vocabulary()
     mappings = re.findall(
         r"\\__tenkz_language_registry_example:nnn\s*"
@@ -413,8 +466,7 @@ def reference_examples() -> list[Example]:
         if not source.is_file():
             raise ValueError(f"{REGISTRY}: example for \\{command} is missing: {relative}")
         document = source.read_text(encoding="utf-8")
-        uncommented = _strip_tex_comments(document)
-        if not re.search(rf"\\{re.escape(command)}(?![A-Za-z@:_])", uncommented):
+        if not _has_executable_command(document, command):
             raise ValueError(
                 f"{source}: example mapped to \\{command} does not invoke that command"
             )
