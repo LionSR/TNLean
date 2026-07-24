@@ -34,10 +34,13 @@ git -C "$REPO" worktree add --detach --quiet "$BASE_TREE" "$BASE_REF"
 cleanup_worktree() { git -C "$REPO" worktree remove --force "$BASE_TREE" 2>/dev/null || true; }
 trap 'cleanup_worktree; rm -rf "$WORK"' EXIT
 
-render_side() { # $1 tree root, $2 output dir
+render_side() { # $1 package tree root, $2 output dir
   local root="$1" out="$2" src stem
   mkdir -p "$out/pdf" "$out/png" "$out/src"
-  cp -R "$root/tests/tenkz/." "$out/src/"
+  # Both package trees consume the current fixture corpus.  Fixture additions
+  # and edits must not masquerade as renderer differences against an older
+  # base ref.
+  cp -R "$REPO/tests/tenkz/." "$out/src/"
   ( CDPATH='' cd -- "$out/src"
     find . -maxdepth 1 -name '*.tex' -print0 | LC_ALL=C sort -z >sources.list
     [[ -s sources.list ]] \
