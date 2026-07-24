@@ -1,0 +1,16 @@
+% Negative regression: checked prose is not a diagram even at empty boundary.
+\documentclass{standalone}
+\usepackage{tenkz}
+\makeatletter
+\ExplSyntaxOn
+\file_input:n { tenkz-kernel.code.tex }
+\ExplSyntaxOff
+\makeatother
+\begin{document}
+\tenkzkernel
+\begin{tenkzeq}[check={signature}]
+  \begin{tenkz}[rows={wire}, cols=1, bonds=none]\tnprose{text}\end{tenkz}
+  =
+  \begin{tenkz}[rows={wire}, cols=1, bonds=none]\end{tenkz}
+\end{tenkzeq}
+\end{document}
