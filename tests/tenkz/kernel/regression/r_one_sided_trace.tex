@@ -1,0 +1,13 @@
+% Regression: each trace side independently normalizes to closure wires.
+\documentclass{standalone}
+\usepackage{tenkz}
+\makeatletter
+\ExplSyntaxOn
+\file_input:n { tenkz-kernel.code.tex }
+\ExplSyntaxOff
+\makeatother
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[rows={wire,wire}, cols=2, bonds=none, west=trace]\end{tenkz}
+\begin{tenkz}[rows={wire}, cols=2, bonds=none, north=trace]\end{tenkz}
+\end{document}
