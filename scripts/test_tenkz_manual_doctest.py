@@ -61,7 +61,11 @@ shell command % \tntree{commented}
 % \begin{tenkz} \tn{commented} \end{tenkz}
 % \end{tnexample}
 \newif\ifdraft
+\let\ifalias\iftrue
 \iffalse
+\newif\iflocal
+\ifalias
+\fi
 \ifdraft
 \ifthenelse{ignored}{ignored}{ignored}
 \fi
