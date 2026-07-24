@@ -4,7 +4,6 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.CycleMPSFundamentalTheorem
-import TNLean.PEPS.NormalEdgeGaugeFamily
 
 /-!
 # The single-gauge form of the Fundamental Theorem for translation-invariant normal MPS
