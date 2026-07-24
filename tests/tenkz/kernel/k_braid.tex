@@ -1,5 +1,7 @@
 %% Kernel fixture: LANGUAGE-1.0.md 12.1 (rmp-iii-b-braid-one).
 %% Expected: two string wires named a,b; b declares under at crossing of a and b;
+%% The 12.1 sketch's via points made the strands share the row-2 corridor and
+%% meet twice; the crossing police caught it, and the strands route straight.
 %% one label mark at the crossing.  Ink awaits S4 integration.
 \documentclass{standalone}
 \usepackage{tenkz}
@@ -11,10 +13,9 @@
 \begin{document}
 \tenkzkernel
 \begin{tenkz}[rows={wire,wire}, cols=4, bonds=none]
-  \tnwire[kind=string, species=left,  name=a, via={(2,2)}]{(1,1)}{(2,3)}
-  \tnwire[kind=string, species=right, name=b, via={(2,3)},
+  \tnwire[kind=string, species=left,  name=a]{(1,1)}{(2,3)}
+  \tnwire[kind=string, species=right, name=b,
           cross={under at crossing of a and b}]{(1,4)}{(2,2)}
   \tnmark[form=label, label pos=ne]{crossing of a and b}{$R$}
 \end{tenkz}
-\mbox{parsed}
 \end{document}
