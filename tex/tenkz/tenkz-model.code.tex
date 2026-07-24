@@ -189,6 +189,19 @@
       }
   }
 
+% Apply function #2 to every mark of form #1.  Dialect render passes use the
+% shared MARK class without accidentally consuming unrelated annotations.
+\tl_new:N \l__tenkz_model_form_tl
+\cs_new_protected:Npn \__tenkz_model_map_marks_form:nN #1#2
+  {
+    \seq_map_inline:Nn \l__tenkz_model_mark_seq
+      {
+        \__tenkz_model_get:nnN {##1} {form} \l__tenkz_model_form_tl
+        \str_if_eq:eeT { \tl_use:N \l__tenkz_model_form_tl } {#1}
+          { #2 {##1} }
+      }
+  }
+
 % Expanding constructors for front ends whose addresses live in counters.
 % The variants route through the current (possibly frozen) base meaning.
 \cs_generate_variant:Nn \__tenkz_model_record_atom:n { e }
