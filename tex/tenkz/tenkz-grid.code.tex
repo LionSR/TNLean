@@ -74,9 +74,8 @@
 \bool_new:N \l__tenkz_closee_bool
 \tl_new:N \l__tenkz_closewmat_tl % on-bend matrix of the west cups (may be empty)
 \tl_new:N \l__tenkz_closeemat_tl % on-bend matrix of the east cups (may be empty)
-\seq_new:N \l__tenkz_cupw_seq    % west cup pairs {top row}{bottom row}
-\seq_new:N \l__tenkz_cupe_seq    % east cup pairs
-\prop_new:N \l__tenkz_cuprow_prop% "west-r"/"east-r" -> row r is cup-closed there
+\prop_new:N \l__tenkz_cuprow_prop% "west-r"/"east-r" -> row r is cup-closed
+                                 % there; owned by the closure derivation
 \prop_new:N \l__tenkz_nopair_prop% rows carrying the `nopair` rows= modifier
 % wires=k glyphs (one atom spanning k wire rows, quantikz \gate[k]).  Each
 % spanned (row, owner-col) cell is keyed here to the glyph's node name, so
@@ -1739,6 +1738,135 @@
       { \tenkz_model_validate_bond_label:nnn ##1 }
   }
 
+% ---------- closure derivation (record phase) ----------
+% Closures are wires whose origin field records the policy that generated
+% them (LANGUAGE-1.0 sec. 5): cup pairs, the periodic wrap of a traced
+% word, and the physical-trace loops of trace= cell-sets.  The pairing and
+% eligibility decisions live HERE, once, before validation; the draw
+% passes consume the records, and the stub passes read the row-consumption
+% prop this derivation owns.
+\tl_new:N \l__tenkz_mdc_orig_tl
+\cs_new_protected:Npn \tenkz_model_derive_closures:
+  {
+    \prop_clear:N \l__tenkz_cuprow_prop
+    \bool_if:NT \l__tenkz_closew_bool
+      { \tenkz_model_derive_cups_side:nnN {west}{first} \l__tenkz_closewmat_tl }
+    \bool_if:NT \l__tenkz_closee_bool
+      { \tenkz_model_derive_cups_side:nnN {east}{last} \l__tenkz_closeemat_tl }
+    % the periodic wrap runs when BOTH side policies say trace; the style
+    % (racetrack|hooks) is presentation and resolves at draw
+    \str_if_eq:VnT \l__tenkz_westpol_tl {trace}
+      {
+        \str_if_eq:VnT \l__tenkz_eastpol_tl {trace}
+          {
+            \int_compare:nNnTF { \l__tenkz_nrows_int } = {1}
+              { \tenkz_model_derive_wrap:nn {1}{below} }
+              {
+                \tenkz_model_derive_wrap:nn {1}{above}
+                \tenkz_model_derive_wrap:nn {\l__tenkz_nrows_int}{below}
+              }
+          }
+      }
+    % physical trace loops (trace=physical): single-row words only; the
+    % multirow warning stays with the draw pass
+    \bool_if:NT \l__tenkz_ptrace_bool
+      {
+        \int_compare:nNnT { \l__tenkz_nrows_int } = {1}
+          {
+            \int_step_inline:nnn {1} { \l__tenkz_ncols_int }
+              {
+                \bool_lazy_and:nnT
+                  { \tenkz_openup_p:n {1} }
+                  { \tenkz_opendown_p:n {1} }
+                  {
+                    \tenkz_leg_candidate:nnT {1}{##1}
+                      {
+                        \tenkz_phtrace_supported:nnN {1}{##1} \l_tmpa_bool
+                        \__tenkz_model_record_wire:e
+                          {kind={index},origin={phtrace},row={1},col={##1},
+                           supported={\bool_if:NTF \l_tmpa_bool {1}{0}}}
+                      }
+                  }
+              }
+          }
+      }
+    % pair trace loops (trace= cell-sets over ket/bra pairs)
+    \int_step_inline:nn { \l__tenkz_nrows_int }
+      {
+        \int_step_inline:nnn {1} { \l__tenkz_ncols_int }
+          {
+            \prop_if_in:NeT \l__tenkz_trcell_prop {##1-####1}
+              {
+                \tenkz_leg_candidate:nnT {##1}{####1}
+                  {
+                    \tenkz_leg_candidate:nnT { \int_eval:n{##1+1} }{####1}
+                      {
+                        \__tenkz_model_record_wire:e
+                          {kind={index},origin={pairtrace},
+                           row={\int_eval:n{##1}},col={####1}}
+                      }
+                  }
+              }
+          }
+      }
+  }
+% cup pairing for side #1 with row-extent end #2; #3 is the side's on-bend
+% matrix label tl (its emptiness becomes the record's matrix flag)
+\cs_new_protected:Npn \tenkz_model_derive_cups_side:nnN #1#2#3
+  {
+    \seq_clear:N \l_tmpa_seq
+    \int_step_inline:nn { \l__tenkz_nrows_int }
+      {
+        % cup eligibility respects the per-side policy: a side sealed by
+        % west=none/east=none has no open ends to cup there
+        \tenkz_row_open_side:nnN {##1}{#1} \l__tenkz_bopen_bool
+        \bool_if:NT \l__tenkz_bopen_bool
+          {
+            \tenkz_row_extent:n {##1}
+            \int_compare:nNnF { \l__tenkz_first_int } = {0}
+              {
+                \tenkz_cell_fuse_combined:nnnN {##1}
+                  { \int_use:c { l__tenkz_#2_int } } {#1} \l_tmpa_bool
+                \bool_if:NF \l_tmpa_bool
+                  {
+                    \tenkz_cell_virtual_row_port:nnnN {##1}
+                      { \int_use:c { l__tenkz_#2_int } } {#1} \l_tmpb_bool
+                    \bool_if:NT \l_tmpb_bool
+                      { \seq_put_right:Nn \l_tmpa_seq {##1} }
+                  }
+              }
+          }
+      }
+    \bool_while_do:nn
+      { \int_compare_p:nNn { \seq_count:N \l_tmpa_seq } > {1} }
+      {
+        \seq_pop_left:NN \l_tmpa_seq \l_tmpa_tl
+        \seq_pop_left:NN \l_tmpa_seq \l_tmpb_tl
+        \__tenkz_model_record_wire:e
+          {kind={index},origin={cup},side={#1},
+           top={\l_tmpa_tl},bottom={\l_tmpb_tl},
+           name={cup-\l_tmpa_tl-\l_tmpb_tl},
+           matrix={\tl_if_blank:VTF #3 {0}{1}}}
+        \prop_put:Nen \l__tenkz_cuprow_prop { #1 - \l_tmpa_tl } {}
+        \prop_put:Nen \l__tenkz_cuprow_prop { #1 - \l_tmpb_tl } {}
+      }
+  }
+\cs_new_protected:Npn \tenkz_model_derive_wrap:nn #1#2
+  {
+    \tenkz_row_extent:n {#1}
+    \int_compare:nNnF { \l__tenkz_first_int } = {0}
+      {
+        \tenkz_periodic_endpoints:nnnN {#1}
+          {\l__tenkz_first_int}{\l__tenkz_last_int} \l_tmpa_bool
+        \bool_if:NT \l_tmpa_bool
+          {
+            \__tenkz_model_record_wire:e
+              {kind={index},origin={wrap},row={\int_eval:n{#1}},
+               side={#2},name={wrap-\int_eval:n{#1}}}
+          }
+      }
+  }
+
 \cs_new_protected:Npn \tenkz_record_interfaces:
   {
     \prop_clear:N \l__tenkz_opencell_prop
@@ -1850,6 +1978,7 @@
     \tenkz_model_record_owners:
     \tenkz_model_derive_bonds:
     \tenkz_model_validate_bond_labels:
+    \tenkz_model_derive_closures:
     \__tenkz_model_validate:
     \tenkz@beginpicture{grid}
     \tenkz_emit_tracefacewarnings:
@@ -1988,7 +2117,6 @@
       \pgfsetlayers{background,main}
       \tenkz_place_nodes:
       \tenkz_draw_bonds:
-      \tenkz_compute_cups:
       \tenkz_compute_periodic_faces:
       \tenkz_draw_combined_stubs:
       \tenkz_draw_boundaries:
@@ -5053,53 +5181,6 @@ code=label-pos|pos=\tl_to_str:N \l_tmpa_tl}
 % Eligible rows are cupped in ADJACENT PAIRS, top-down (first with second,
 % third with fourth, ...); an odd row out keeps its stub.  A cupped row
 % draws no stub and contributes no open virtual index to the signature.
-\cs_new_protected:Npn \tenkz_compute_cups:
-  {
-    \seq_clear:N \l__tenkz_cupw_seq
-    \seq_clear:N \l__tenkz_cupe_seq
-    \prop_clear:N \l__tenkz_cuprow_prop
-    \bool_if:NT \l__tenkz_closew_bool
-      { \tenkz_compute_cups_side:nnN {west}{first} \l__tenkz_cupw_seq }
-    \bool_if:NT \l__tenkz_closee_bool
-      { \tenkz_compute_cups_side:nnN {east}{last} \l__tenkz_cupe_seq }
-  }
-% side #1 (west|east), row-extent end #2 (first|last), pair seq #3
-\cs_new_protected:Npn \tenkz_compute_cups_side:nnN #1#2#3
-  {
-    \seq_clear:N \l_tmpa_seq
-    \int_step_inline:nn { \l__tenkz_nrows_int }
-      {
-        % cup eligibility respects the per-side policy: a side sealed by
-        % west=none/east=none has no open ends to cup there
-        \tenkz_row_open_side:nnN {##1}{#1} \l__tenkz_bopen_bool
-        \bool_if:NT \l__tenkz_bopen_bool
-          {
-            \tenkz_row_extent:n {##1}
-            \int_compare:nNnF { \l__tenkz_first_int } = {0}
-              {
-                \tenkz_cell_fuse_combined:nnnN {##1}
-                  { \int_use:c { l__tenkz_#2_int } } {#1} \l_tmpa_bool
-                \bool_if:NF \l_tmpa_bool
-                  {
-                    \tenkz_cell_virtual_row_port:nnnN {##1}
-                      { \int_use:c { l__tenkz_#2_int } } {#1} \l_tmpb_bool
-                    \bool_if:NT \l_tmpb_bool
-                      { \seq_put_right:Nn \l_tmpa_seq {##1} }
-                  }
-              }
-          }
-      }
-    \bool_while_do:nn
-      { \int_compare_p:nNn { \seq_count:N \l_tmpa_seq } > {1} }
-      {
-        \seq_pop_left:NN \l_tmpa_seq \l_tmpa_tl
-        \seq_pop_left:NN \l_tmpa_seq \l_tmpb_tl
-        \seq_put_right:Ne #3 { { \l_tmpa_tl } { \l_tmpb_tl } }
-        \prop_put:Nen \l__tenkz_cuprow_prop { #1 - \l_tmpa_tl } {}
-        \prop_put:Nen \l__tenkz_cuprow_prop { #1 - \l_tmpb_tl } {}
-      }
-  }
-
 % Geometry.  One cup = two quarter-arcs (a rounded 180-degree turn) from
 % the upper row's end to the lower row's end, drawn in the pair's wire
 % style (the upper row's — a sandwich pair shares one style).  Horizontal
@@ -5111,12 +5192,19 @@ code=label-pos|pos=\tl_to_str:N \l_tmpa_tl}
 \dim_new:N \l__tenkz_cupry_dim  % vertical radius: half the pair's row gap
 \tl_new:N \l__tenkz_cupmat_tl   % this cup's on-bend matrix (may be empty)
 
+\tl_new:N \l__tenkz_cupside_tl
+\tl_new:N \l__tenkz_cuptop_tl
+\tl_new:N \l__tenkz_cupbot_tl
 \cs_new_protected:Npn \tenkz_draw_cups:
+  { \__tenkz_model_map_wires_origin:nN {cup} \tenkz_draw_cup:n }
+% draw one cup from its wire record: fields side, top, bottom
+\cs_new_protected:Npn \tenkz_draw_cup:n #1
   {
-    \seq_map_inline:Nn \l__tenkz_cupw_seq
-      { \tenkz_draw_cup:nnn {west} ##1 }
-    \seq_map_inline:Nn \l__tenkz_cupe_seq
-      { \tenkz_draw_cup:nnn {east} ##1 }
+    \__tenkz_model_get:nnN {#1} {side}   \l__tenkz_cupside_tl
+    \__tenkz_model_get:nnN {#1} {top}    \l__tenkz_cuptop_tl
+    \__tenkz_model_get:nnN {#1} {bottom} \l__tenkz_cupbot_tl
+    \tenkz_draw_cup:VVV
+      \l__tenkz_cupside_tl \l__tenkz_cuptop_tl \l__tenkz_cupbot_tl
   }
 
 % the cup end of row #2 on side #1: the anchor coordinate (into tl #3) and
@@ -5159,33 +5247,38 @@ code=label-pos|pos=\tl_to_str:N \l_tmpa_tl}
       { ( \tenkz_rowy:n {#2} + \tenkz_rowy:n {#3} ) / 2 }
     \str_if_eq:nnTF {#1}{east}
       {
-        \draw[\tl_use:N \l__tenkz_cell_tl]
-          \l__tenkz_pa_tl --
-          (\dim_use:N \l__tenkz_cupx_dim, \tenkz_rowy:n {#2})
-          arc[start~angle=90, end~angle=0,
-              x~radius=\tenkz@dim{\tenkz@r@stub},
-              y~radius=\dim_use:N \l__tenkz_cupry_dim]
-          arc[start~angle=0, end~angle=-90,
-              x~radius=\tenkz@dim{\tenkz@r@stub},
-              y~radius=\dim_use:N \l__tenkz_cupry_dim]
-          -- \l__tenkz_pb_tl;
+        \__tenkz_render_stroke:nn { \tl_use:N \l__tenkz_cell_tl }
+          {
+            \l__tenkz_pa_tl --
+            (\dim_use:N \l__tenkz_cupx_dim, \tenkz_rowy:n {#2})
+            arc[start~angle=90, end~angle=0,
+                x~radius=\tenkz@dim{\tenkz@r@stub},
+                y~radius=\dim_use:N \l__tenkz_cupry_dim]
+            arc[start~angle=0, end~angle=-90,
+                x~radius=\tenkz@dim{\tenkz@r@stub},
+                y~radius=\dim_use:N \l__tenkz_cupry_dim]
+            -- \l__tenkz_pb_tl
+          }
         \tenkz_cup_matrix:nnn {#1}{#2}{ 1 }
       }
       {
-        \draw[\tl_use:N \l__tenkz_cell_tl]
-          \l__tenkz_pa_tl --
-          (\dim_use:N \l__tenkz_cupx_dim, \tenkz_rowy:n {#2})
-          arc[start~angle=90, end~angle=180,
-              x~radius=\tenkz@dim{\tenkz@r@stub},
-              y~radius=\dim_use:N \l__tenkz_cupry_dim]
-          arc[start~angle=180, end~angle=270,
-              x~radius=\tenkz@dim{\tenkz@r@stub},
-              y~radius=\dim_use:N \l__tenkz_cupry_dim]
-          -- \l__tenkz_pb_tl;
+        \__tenkz_render_stroke:nn { \tl_use:N \l__tenkz_cell_tl }
+          {
+            \l__tenkz_pa_tl --
+            (\dim_use:N \l__tenkz_cupx_dim, \tenkz_rowy:n {#2})
+            arc[start~angle=90, end~angle=180,
+                x~radius=\tenkz@dim{\tenkz@r@stub},
+                y~radius=\dim_use:N \l__tenkz_cupry_dim]
+            arc[start~angle=180, end~angle=270,
+                x~radius=\tenkz@dim{\tenkz@r@stub},
+                y~radius=\dim_use:N \l__tenkz_cupry_dim]
+            -- \l__tenkz_pb_tl
+          }
         \tenkz_cup_matrix:nnn {#1}{#2}{ -1 }
       }
     \tenkz@event{cup|picture=\the\tenkz@pictureid|side=#1|top=#2|bottom=#3|matrix=\tl_if_empty:NTF \l__tenkz_cupmat_tl {0}{1}}
   }
+\cs_generate_variant:Nn \tenkz_draw_cup:nnn { VVV }
 
 % the on-bend fixed-point matrix: a filled dot ON the bend apex, its label
 % OUTSIDE the bend, one clearance band beyond the dot on the side the bend
@@ -5195,23 +5288,24 @@ code=label-pos|pos=\tl_to_str:N \l_tmpa_tl}
   {
     \tl_if_blank:VF \l__tenkz_cupmat_tl
       {
-        \node[tensor]
-          (tzcup\the\tenkz@pictureid-#1-#2)
-          at (\dim_eval:n{ \l__tenkz_cupx_dim
-                           + \tenkz@dim{\tenkz@r@stub} * (#3) },
-              \dim_use:N \l__tenkz_y_dim) {};
+        \__tenkz_render_atom_named_pt:nnnn
+          { \dim_eval:n{ \l__tenkz_cupx_dim
+                         + \tenkz@dim{\tenkz@r@stub} * (#3) } }
+          { \dim_use:N \l__tenkz_y_dim }
+          { tzcup\the\tenkz@pictureid-#1-#2 }
+          { tensor }
         \str_if_eq:nnTF {#1}{east}
           {
-            \node[tn~label, anchor=west] at
-              ($(tzcup\the\tenkz@pictureid-#1-#2.east)
-                +(\tenkz@dim{\tenkz@r@labelclear},0)$)
-              { \tl_use:N \l__tenkz_cupmat_tl };
+            \__tenkz_render_labelnode:nnn { tn~label, anchor=west }
+              { ($(tzcup\the\tenkz@pictureid-#1-#2.east)
+                 +(\tenkz@dim{\tenkz@r@labelclear},0)$) }
+              { \tl_use:N \l__tenkz_cupmat_tl }
           }
           {
-            \node[tn~label, anchor=east] at
-              ($(tzcup\the\tenkz@pictureid-#1-#2.west)
-                +(-\tenkz@dim{\tenkz@r@labelclear},0)$)
-              { \tl_use:N \l__tenkz_cupmat_tl };
+            \__tenkz_render_labelnode:nnn { tn~label, anchor=east }
+              { ($(tzcup\the\tenkz@pictureid-#1-#2.west)
+                 +(-\tenkz@dim{\tenkz@r@labelclear},0)$) }
+              { \tl_use:N \l__tenkz_cupmat_tl }
           }
       }
   }
@@ -5412,31 +5506,32 @@ code=label-pos|pos=\tl_to_str:N \l_tmpa_tl}
       { \bool_set_true:N #3 }
   }
 
+\tl_new:N \l__tenkz_phcol_tl
+\tl_new:N \l__tenkz_phsupported_tl
+\tl_new:N \l__tenkz_ptrow_tl
+\cs_generate_variant:Nn \msg_warning:nnnn { nnnV }
 \cs_new_protected:Npn \tenkz_draw_phtrace:
   {
     \bool_if:NT \l__tenkz_ptrace_bool
       {
         \int_compare:nNnTF { \l__tenkz_nrows_int } = {1}
-          {
-            \int_step_inline:nnn {1} { \l__tenkz_ncols_int }
-              {
-                \bool_lazy_and:nnT
-                  { \tenkz_openup_p:n {1} }
-                  { \tenkz_opendown_p:n {1} }
-                  { \tenkz_leg_candidate:nnT {1}{##1}
-                      {
-                        \tenkz_phtrace_supported:nnN {1}{##1} \l_tmpa_bool
-                        \bool_if:NTF \l_tmpa_bool
-                          { \tenkz_phtrace_site:n {##1} }
-                          {
-                            \msg_warning:nnnn {tenkz}{phtrace-face-ports}
-                              {1}{##1}
-                            \tenkz@event{warning|picture=\the\tenkz@pictureid|code=phtrace-face-ports|cell=1-##1}
-                          }
-                      } }
-              }
-          }
+          { \__tenkz_model_map_wires_origin:nN {phtrace}
+              \tenkz_draw_phtrace_one:n }
           { \msg_warning:nn {tenkz}{phtrace-multirow} }
+      }
+  }
+% one phtrace record: supported sites ink the loop, unsupported sites keep
+% the coded warning the legacy pass emitted at the same stream position
+\cs_new_protected:Npn \tenkz_draw_phtrace_one:n #1
+  {
+    \__tenkz_model_get:nnN {#1} {col} \l__tenkz_phcol_tl
+    \__tenkz_model_get:nnN {#1} {supported} \l__tenkz_phsupported_tl
+    \str_if_eq:VnTF \l__tenkz_phsupported_tl {1}
+      { \tenkz_phtrace_site:V \l__tenkz_phcol_tl }
+      {
+        \msg_warning:nnnV {tenkz}{phtrace-face-ports}
+          {1} \l__tenkz_phcol_tl
+        \tenkz@event{warning|picture=\the\tenkz@pictureid|code=phtrace-face-ports|cell=1-\tl_use:N \l__tenkz_phcol_tl}
       }
   }
 
@@ -5457,13 +5552,16 @@ code=label-pos|pos=\tl_to_str:N \l_tmpa_tl}
     % legs live on the glyph's vertical centre line
     \pgfextractx \l__tenkz_tallx_dim
       { \exp_args:Ne \pgfpointanchor { \l__tenkz_pa_tl } {north} }
-    \draw[trace]
-      (\dim_use:N \l__tenkz_tallx_dim, \dim_use:N \l__tenkz_tmp_dim) --
-      (\dim_use:N \l__tenkz_x_dim,     \dim_use:N \l__tenkz_tmp_dim) --
-      (\dim_use:N \l__tenkz_x_dim,     \dim_use:N \l__tenkz_y_dim) --
-      (\dim_use:N \l__tenkz_tallx_dim, \dim_use:N \l__tenkz_y_dim);
+    \__tenkz_render_stroke:nn { trace }
+      {
+        (\dim_use:N \l__tenkz_tallx_dim, \dim_use:N \l__tenkz_tmp_dim) --
+        (\dim_use:N \l__tenkz_x_dim,     \dim_use:N \l__tenkz_tmp_dim) --
+        (\dim_use:N \l__tenkz_x_dim,     \dim_use:N \l__tenkz_y_dim) --
+        (\dim_use:N \l__tenkz_tallx_dim, \dim_use:N \l__tenkz_y_dim)
+      }
     \tenkz@event{phtrace|picture=\the\tenkz@pictureid|row=1|col=#1}
   }
+\cs_generate_variant:Nn \tenkz_phtrace_site:n { V }
 
 % -- pair trace (the trace= physical cell-set) ----------------------------
 % Per traced column, the wrap loop IS the partial trace over that site's
@@ -5478,21 +5576,13 @@ code=label-pos|pos=\tl_to_str:N \l_tmpa_tl}
 % (no junction); the caps are circular (radius = reach/2), so every join
 % is tangent-continuous.
 \cs_new_protected:Npn \tenkz_draw_pairtrace:
+  { \__tenkz_model_map_wires_origin:nN {pairtrace}
+      \tenkz_draw_pairtrace_one:n }
+\cs_new_protected:Npn \tenkz_draw_pairtrace_one:n #1
   {
-    \int_step_inline:nn { \l__tenkz_nrows_int }
-      {
-        \int_step_inline:nnn {1} { \l__tenkz_ncols_int }
-          {
-            \prop_if_in:NeT \l__tenkz_trcell_prop {##1-####1}
-              {
-                \tenkz_leg_candidate:nnT {##1}{####1}
-                  {
-                    \tenkz_leg_candidate:nnT { \int_eval:n{##1+1} }{####1}
-                      { \tenkz_pairtrace_site:nn {##1}{####1} }
-                  }
-              }
-          }
-      }
+    \__tenkz_model_get:nnN {#1} {row} \l__tenkz_ptrow_tl
+    \__tenkz_model_get:nnN {#1} {col} \l__tenkz_phcol_tl
+    \tenkz_pairtrace_site:VV \l__tenkz_ptrow_tl \l__tenkz_phcol_tl
   }
 
 % one column's wrap loop: ket up-leg tip -> stadium cap east -> down past
@@ -5516,18 +5606,21 @@ code=label-pos|pos=\tl_to_str:N \l_tmpa_tl}
       { \exp_args:Ne \pgfpointanchor { \l__tenkz_pa_tl } {north} }
     \dim_set:Nn \l__tenkz_x_dim
       { \l__tenkz_tallx_dim + \tenkz@dim{\tenkz@r@pairtracereach} }
-    \draw[trace]
-      (\l__tenkz_pa_tl.north) --
-      (\dim_use:N \l__tenkz_tallx_dim, \dim_use:N \l__tenkz_tmp_dim)
-      arc[start~angle=180, end~angle=0,
-          radius=\dim_eval:n { \tenkz@dim{\tenkz@r@pairtracereach} / 2 }]
-      --
-      (\dim_use:N \l__tenkz_x_dim, \dim_use:N \l__tenkz_y_dim)
-      arc[start~angle=360, end~angle=180,
-          radius=\dim_eval:n { \tenkz@dim{\tenkz@r@pairtracereach} / 2 }]
-      -- (\l__tenkz_pb_tl.south);
+    \__tenkz_render_stroke:nn { trace }
+      {
+        (\l__tenkz_pa_tl.north) --
+        (\dim_use:N \l__tenkz_tallx_dim, \dim_use:N \l__tenkz_tmp_dim)
+        arc[start~angle=180, end~angle=0,
+            radius=\dim_eval:n { \tenkz@dim{\tenkz@r@pairtracereach} / 2 }]
+        --
+        (\dim_use:N \l__tenkz_x_dim, \dim_use:N \l__tenkz_y_dim)
+        arc[start~angle=360, end~angle=180,
+            radius=\dim_eval:n { \tenkz@dim{\tenkz@r@pairtracereach} / 2 }]
+        -- (\l__tenkz_pb_tl.south)
+      }
     \tenkz@event{pairtrace|picture=\the\tenkz@pictureid|row=\int_eval:n{#1}|col=#2}
   }
+\cs_generate_variant:Nn \tenkz_pairtrace_site:nn { VV }
 
 % -- periodic closure ---------------------------------------------------
 \msg_new:nnn { tenkz } { periodic-face-ports }
@@ -5661,14 +5754,14 @@ code=periodic-face-ports|row=\int_eval:n{#1}}
       }
   }
 
+\tl_new:N \l__tenkz_wrapside_tl
 \cs_new_protected:Npn \tenkz_draw_trace:
+  { \__tenkz_model_map_wires_origin:nN {wrap} \tenkz_draw_trace_one:n }
+\cs_new_protected:Npn \tenkz_draw_trace_one:n #1
   {
-    \int_compare:nNnTF { \l__tenkz_nrows_int } = {1}
-      { \tenkz_trace_row:nn {1}{below} }
-      {
-        \tenkz_trace_row:nn {1}{above}
-        \tenkz_trace_row:nn {\l__tenkz_nrows_int}{below}
-      }
+    \__tenkz_model_get:nnN {#1} {row}  \l__tenkz_ptrow_tl
+    \__tenkz_model_get:nnN {#1} {side} \l__tenkz_wrapside_tl
+    \tenkz_trace_row:VV \l__tenkz_ptrow_tl \l__tenkz_wrapside_tl
   }
 
 \cs_new_protected:Npn \tenkz_trace_row:nn #1#2
@@ -5745,15 +5838,17 @@ code=periodic-face-ports|row=\int_eval:n{#1}}
         \tl_put_right:Ne \l_tmpa_tl { -- \tenkz_mpt: }
         \tenkz_map:nn { \l__tenkz_tmp_dim } { \tenkz_rowy:n {#1} }
         \tl_put_right:Ne \l_tmpa_tl { -- \tenkz_mpt: }
-        \draw[trace, \tl_use:N \l__tenkz_cell_tl,
-              \tl_use:N \l__tenkz_dirmarks_tl]
-          \l_tmpa_tl -- \l__tenkz_pb_tl;
+        \__tenkz_render_stroke:nn
+          { trace, \tl_use:N \l__tenkz_cell_tl,
+            \tl_use:N \l__tenkz_dirmarks_tl }
+          { \l_tmpa_tl -- \l__tenkz_pb_tl }
         % row=... must write a NUMBER: #1 may be the nrows register, and
         % an unexpandable register token would land verbatim in the log
         \tenkz@event{trace|picture=\the\tenkz@pictureid|row=\int_eval:n{#1}|side=#2}
           }
       }
   }
+\cs_generate_variant:Nn \tenkz_trace_row:nn { VV }
 
 % -- periodic closure, hooks style --------------------------------------
 % The truncated half-hook closure of the RMP O_L figure (arXiv:2011.12127
@@ -5774,13 +5869,12 @@ code=periodic-face-ports|row=\int_eval:n{#1}}
 % word's hooks wrap over the top and under the bottom toward the page's
 % east margin, as in the reference figure.
 \cs_new_protected:Npn \tenkz_draw_hooks:
+  { \__tenkz_model_map_wires_origin:nN {wrap} \tenkz_draw_hooks_one:n }
+\cs_new_protected:Npn \tenkz_draw_hooks_one:n #1
   {
-    \int_compare:nNnTF { \l__tenkz_nrows_int } = {1}
-      { \tenkz_hook_row:nn {1}{below} }
-      {
-        \tenkz_hook_row:nn {1}{above}
-        \tenkz_hook_row:nn {\l__tenkz_nrows_int}{below}
-      }
+    \__tenkz_model_get:nnN {#1} {row}  \l__tenkz_ptrow_tl
+    \__tenkz_model_get:nnN {#1} {side} \l__tenkz_wrapside_tl
+    \tenkz_hook_row:VV \l__tenkz_ptrow_tl \l__tenkz_wrapside_tl
   }
 
 % hooks of row #1, bending toward side #2 (below|above, logical frame).
@@ -5828,12 +5922,15 @@ code=periodic-face-ports|row=\int_eval:n{#1}}
 % hook needs no absolute coordinates beyond the anchor.
 \cs_new_protected:Npn \tenkz_hook_end:Nnnn #1#2#3#4
   {
-    \draw[trace, \tl_use:N \l__tenkz_cell_tl]
-      #1 -- ++\tenkz_side_vec:nn {#2} { \tenkz@dim{\tenkz@r@stub} / 2 }
-      arc[start~angle=\tenkz_arcangle:n{#3},
-          end~angle=\tenkz_arcangle:n{#4},
-          radius=\dim_eval:n { \tenkz@dim{\tenkz@r@stub} / 2 }];
+    \__tenkz_render_stroke:nn { trace, \tl_use:N \l__tenkz_cell_tl }
+      {
+        #1 -- ++\tenkz_side_vec:nn {#2} { \tenkz@dim{\tenkz@r@stub} / 2 }
+        arc[start~angle=\tenkz_arcangle:n{#3},
+            end~angle=\tenkz_arcangle:n{#4},
+            radius=\dim_eval:n { \tenkz@dim{\tenkz@r@stub} / 2 }]
+      }
   }
+\cs_generate_variant:Nn \tenkz_hook_row:nn { VV }
 
 % ---------- public entry points ----------
 \NewDocumentEnvironment { tenkz } { O{} +b }
