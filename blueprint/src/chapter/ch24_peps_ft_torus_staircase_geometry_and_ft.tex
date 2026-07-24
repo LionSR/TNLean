@@ -185,7 +185,10 @@
         unique crossing edge and gives
         \begin{align}
             D_A(e_h)=D_B(e_h),
-            \qquad\text{and at the rotated frame}\qquad
+            \notag
+        \end{align}
+        and the rotated datum at $e_v$ gives
+        \begin{align}
             D_A(e_v)=D_B(e_v).
             \notag
         \end{align}
@@ -248,12 +251,14 @@
         thm:peps_sameState_transport,
         thm:peps_stateCoeff_translationInvariant,
         thm:peps_torusUniformBondDim_of_translationInvariant,
+        def:peps_torusRectangleInjectivityHypotheses,
         def:GaugeEquivPEPS}
     Let $A$ and $B$ be translationally invariant PEPS tensors on the discrete
-    $n\times m$ torus with $n,m\geq 7$, with positive physical dimension, equal
-    and positive bond dimensions,
+    $n\times m$ torus with $n,m\geq 7$, with positive physical dimension and
+    positive bond dimensions,
     generating the same state, and such that every contiguous $2\times 3$ and
-    $3\times 2$ coordinate rectangle of either tensor is injective. Then there
+    $3\times 2$ coordinate rectangle of either tensor is injective. Then the
+    bond dimensions of $A$ and $B$ agree on every edge, and there
     are a family of invertible matrices, one on each edge, carried onto each
     edge by the torus translations from a single matrix on a reference
     horizontal edge and a single matrix on a reference vertical edge, and a
@@ -284,9 +289,14 @@
     per-vertex relation itself).
     \begin{proof}
         \leanok
-        \uses{lem:peps_injectiveRegion_union_pos}
+        \uses{lem:peps_injectiveRegion_union_pos,
+            thm:peps_bondDim_eq_of_normalTorusRectangularInjectivity}
         The union closure of injective regions follows from the positive bond
-        dimensions and Lemma~\ref{lem:peps_injectiveRegion_union_pos}. The
+        dimensions and Lemma~\ref{lem:peps_injectiveRegion_union_pos}, and
+        the bond-dimension equality $D_A=D_B$ is derived from the rectangular
+        injectivity hypotheses and the same-state hypothesis by
+        Theorem~\ref{thm:peps_bondDim_eq_of_normalTorusRectangularInjectivity};
+        neither is assumed. The
         reference blockings are anchored against the far seam: the removed
         blocks keep a margin of at least two rows and columns below and to
         the left and end exactly at the seam above and to the right, so the
