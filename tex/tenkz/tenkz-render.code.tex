@@ -86,6 +86,11 @@
 \tl_new:N \l__tenkz_render_y_tl
 \tl_new:N \l__tenkz_render_content_tl
 \cs_new_protected:Npn \__tenkz_render_atom:nnn #1#2#3
+  { \__tenkz_render_atom_scaled:nnnn {#1} {#2} {#3} { } }
+% The same atom drawn on a sub-frame: #4 carries the size the frame asks
+% for.  A glyph belongs to the frame it sits on, so a frame that shrinks
+% shrinks its glyphs -- the size is never a skin of its own.
+\cs_new_protected:Npn \__tenkz_render_atom_scaled:nnnn #1#2#3#4
   {
     \__tenkz_geom_xy:nNN {#2} \l__tenkz_render_x_tl \l__tenkz_render_y_tl
     \str_case:nnF {#1}
@@ -96,7 +101,7 @@
       }
       { \tl_set:Nn \l__tenkz_render_content_tl {#3} }
     \__tenkz_ink_node:nnnn
-      { \__tenkz_render_skin_style:n {#1} }
+      { \__tenkz_render_skin_style:n {#1} #4 }
       { \l__tenkz_render_x_tl \tenkz@pitch }
       { \l__tenkz_render_y_tl \tenkz@pitch }
       { \l__tenkz_render_content_tl }
@@ -244,6 +249,17 @@
       { \l__tenkz_render_x_tl \tenkz@pitch + \l__tenkz_render_dx_dim }
       { \l__tenkz_render_y_tl \tenkz@pitch + \l__tenkz_render_dy_dim }
       { $ \tenkz@labelsize #4 $ }
+  }
+
+% ---------- strings -----------------------------------------------------------
+% A string draws its saved spath3 route: after crossing surgery the saved
+% path already carries its gaps, so one stroke is the whole story.  #1 the
+% saved path id, #2 extra style tokens (species hue, emphasis).
+\cs_new_protected:Npn \__tenkz_render_string:nn #1#2
+  {
+    \__tenkz_ink_path:nn
+      { spath/use = {#1} , line~width = \__tenkz_dim:n {wirewidth} , #2 }
+      { }
   }
 
 \ExplSyntaxOff

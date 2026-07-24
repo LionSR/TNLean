@@ -168,9 +168,15 @@
 \__tenkz_metric_declare:nnn {clusterstep} {0.25}
   { the~quarter-pitch~sub-frame~of~cluster~sugar:~four~spins~read~as~one~
     site~at~reading~distance }
-\__tenkz_metric_declare:nnn {enclosepad} {0.42}
-  { an~enclosure~clears~the~silhouettes~it~selects~without~touching~the~
-    neighbouring~column }
+\__tenkz_metric_declare:nnn {enclosepad} {0.62}
+  { an~enclosure~clears~the~dot-label~band~of~the~sites~it~selects~
+    without~touching~the~neighbouring~column }
+\__tenkz_metric_declare:nnn {enclosetight} {0.12}
+  { an~enclosure~of~bare~spins~clears~the~dots~it~names~and~stops~halfway~
+    to~the~sub-frame~neighbours~it~does~not:~half~the~cluster~step }
+\__tenkz_metric_declare:nnn {clusterdot} {0.11}
+  { a~spin~on~a~cluster~sub-frame:~small~enough~that~the~gap~between~two~
+    spins~exceeds~their~radius,~so~four~of~them~read~as~four }
 
 \__tenkz_metric_declare_length:nnn {wirewidth} {0.55pt}
   { the~wire~stroke~of~the~ink~hierarchy }
