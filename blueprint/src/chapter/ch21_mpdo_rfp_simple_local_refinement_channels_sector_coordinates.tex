@@ -1,0 +1,571 @@
+\subsection{Refinement and coarse-graining channels}
+
+% **Local fix (zero-weight quotient):** the source quotient is completed on
+% zero-weight pairs. Documented in
+% docs/paper-gaps/cpgsv17_mpdo_zero_weight_preparation_completion.tex.
+\begin{theorem}[Positivity and zero-weight neighboring operators]
+    \label{thm:mpdo_physical_sector_three_site_neighboring_operator_properties}
+    \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.sector_nonempty,
+      MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.threeSiteMiddleIndex_nonempty}
+    \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.threeSiteNeighboringOperator_pos,
+      MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.threeSiteNeighboringOperator_eq_zero_of_mul_eq_zero}
+    \leanok
+    \uses{def:mpdo_physical_sector_three_site_neighboring_operator,
+      def:mpdo_neighboring_trace_factorization,
+      thm:mpdo_physical_sector_three_site_neighboring_operator_trace}
+    The sector set and every middle-subspin space are nonempty. Each
+    $\Omega_{k,h}$ is positive semidefinite, and
+    $a_kb_h=0$ implies $\Omega_{k,h}=0$.
+\end{theorem}
+
+\begin{definition}[The three-site neighboring-state preparation $\mathcal T_1$]
+    \label{def:mpdo_physical_sector_t1_preparation}
+    \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.normalizedThreeSiteNeighboringDensity}
+    \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.inactiveThreeSiteNeighboringDensity}
+    \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.completedThreeSiteNeighboringDensity}
+    \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.completedThreeSitePreparationMap}
+    \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.completedThreeSiteControlledMap}
+    \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.t1Map}
+    \leanok
+    \uses{def:mpdo_physical_sector_three_site_neighboring_operator,
+      def:mpdo_neighboring_trace_factorization,
+      thm:mpdo_physical_sector_three_site_neighboring_operator_properties}
+    On a sector pair with $a_kb_h\ne0$, set
+    $\widehat\Omega_{k,h}=(a_kb_h)^{-1}\Omega_{k,h}$.
+    If $a_kb_h=0$, positivity and vanishing trace imply
+    $\Omega_{k,h}=0$; choose any density operator on that summand and denote
+    the resulting completed density by $\overline\Omega_{k,h}$. The sectorwise
+    preparation is $X\longmapsto X\otimes\overline\Omega_{k,h}$.
+    Taking the orthogonal direct sum over the outer sectors $(k,h)$ gives the
+    preparation stage $\mathcal T_1$ of
+    \cite[Appendix~C.2, lines~1523--1535]{Cirac2016MPDO_arXiv}.
+    The zero-weight choice makes the source map total without imposing a
+    nonzero-weight hypothesis.
+\end{definition}
+
+\begin{theorem}[Properties of the three-site neighboring densities]
+    \label{thm:mpdo_physical_sector_t1_density_properties}
+    \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.normalizedThreeSiteNeighboringDensity_pos,
+      MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.trace_normalizedThreeSiteNeighboringDensity}
+    \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.inactiveThreeSiteNeighboringDensity_posDef,
+      MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.inactiveThreeSiteNeighboringDensity_trace}
+    \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.completedThreeSiteNeighboringDensity_pos,
+      MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.trace_completedThreeSiteNeighboringDensity,
+      MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.completedThreeSiteNeighboringDensity_eq_normalized}
+    \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.completedThreeSitePreparationMap_eq_normalized}
+    \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.completedThreeSiteControlledMap_sameBlock_apply}
+    \leanok
+    \uses{def:mpdo_physical_sector_t1_preparation}
+    The normalized density is positive semidefinite and has trace one on
+    every active pair. The density chosen on an inactive pair is positive
+    definite and has trace one. Hence $\overline\Omega_{k,h}$ is positive
+    semidefinite with trace one for every pair, and agrees with
+    $\widehat\Omega_{k,h}$ on active pairs. The corresponding sectorwise and
+    controlled maps prepare these densities on their diagonal summands.
+\end{theorem}
+
+\begin{theorem}[$\mathcal T_1$ is trace-preserving completely positive]
+    \label{thm:mpdo_physical_sector_t1_preparation_cptp}
+    \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.completedThreeSitePreparationMap_isKrausCPTP}
+    \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.completedThreeSiteControlledMap_isKrausCPTP}
+    \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.t1Map_isKrausCPTP}
+    \leanok
+    \uses{def:mpdo_physical_sector_t1_preparation,
+      thm:mpdo_physical_sector_t1_density_properties}
+    Each completed preparation is trace-preserving and completely positive.
+    The same holds for their orthogonally controlled direct sum.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    On an active pair,
+    $\tr(\widehat\Omega_{k,h})=(a_kb_h)^{-1}a_kb_h=1$; the chosen density on
+    a zero-weight pair also has trace one. Preparation by a positive operator
+    of trace one is trace-preserving and completely positive. The orthogonal
+    control discards coherences between distinct outer-sector pairs and
+    applies these preparations on the diagonal summands.
+\end{proof}
+
+\begin{definition}[The refinement channel $\mathcal T$]
+    \label{def:mpdo_physical_sector_t_map}
+    \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.tMap}
+    \leanok
+    \uses{def:mpdo_t0_map,
+      def:mpdo_physical_sector_t1_preparation,
+      def:mpdo_t2_map}
+    Define the channel from two physical sites to three physical sites by
+    $\mathcal T=\mathcal T_2\mathcal T_1\mathcal T_0$.
+    Thus $\mathcal T_0$ traces the neighboring subspins, $\mathcal T_1$
+    adjoins the completed three-site neighboring density, and $\mathcal T_2$
+    restores the three complete physical sectors. This is the refinement map
+    in \cite[Appendix~C.2, lines~1522--1545]{Cirac2016MPDO_arXiv}.
+\end{definition}
+
+\begin{theorem}[$\mathcal T$ is trace-preserving completely positive]
+    \label{thm:mpdo_physical_sector_t_map_cptp}
+    \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.tMap_isKrausCPTP}
+    \leanok
+    \uses{def:mpdo_physical_sector_t_map}
+    The refinement channel $\mathcal T$ is trace-preserving and completely
+    positive.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mpdo_t0_map_cptp,
+      thm:mpdo_physical_sector_t1_preparation_cptp,
+      thm:mpdo_t2_map_cptp,
+      lem:is_kraus_cptp_comp}
+    Each constituent map is trace-preserving and completely positive, and
+    this property is preserved under composition.
+\end{proof}
+
+Applied to the two-site closure, on the active $(k,h)$-block,
+$\mathcal T_0$ traces $B_k^R\otimes B_h^L$ and sends
+$\mathfrak R_2(\mathcal K_2(X))_{k,h}$ to
+$a_kb_hB_{k,h}(X)$ on $B_k^L\otimes B_h^R$. The preparation
+$\mathcal T_1$ then adjoins
+\begin{align}
+  \widehat\Omega_{k,h}
+  &=(a_kb_h)^{-1}\bigoplus_l
+    (\eta_{k,l}\otimes\eta_{l,h}),
+  \notag
+\end{align}
+and $\mathcal T_2$ orders the result as
+\begin{align}
+  (B_k^L\otimes B_k^R)\otimes(B_l^L\otimes B_l^R)
+  \otimes(B_h^L\otimes B_h^R).
+  \notag
+\end{align}
+The refinement uses the sitewise sector coordinates $\mathfrak R_2$ and
+$\mathfrak R_3$
+\cite[Appendix~C.2, lines~1510--1516 and~1522--1545]
+  {Cirac2016MPDO_arXiv}.
+For each outer pair, write
+\begin{align}
+  \mathcal H^{\Omega}_{k,h}
+  &=\bigoplus_l
+    (B_k^R\otimes B_l^L)\otimes(B_l^R\otimes B_h^L)
+  \notag
+\end{align}
+for the carrier Hilbert space of $\Omega_{k,h}$. The symbols
+$\widehat\Omega_{k,h}$ and $\overline\Omega_{k,h}$ denote respectively its
+normalized active density and its completed density on every sector pair.
+With the matrix algebras introduced above, the refinement stages have type
+
+% Formula: T_0 : A_2 -> A_partial, T_1 : A_partial -> A_Omega, and
+% T_2 : A_Omega -> A_3. Ink: each blue stroke denotes a channel, its label
+% names the stage, and the fixed left-to-right axis records composition.
+\par\noindent\hfil
+  \begin{tenkzcd}[maps, species={channel}]
+    \mathcal A_2 &
+    \mathcal A_{\partial} &
+    \mathcal A_{\Omega} &
+    \mathcal A_3
+    \tnarrow[from={(1,1)}, to={(1,2)}, species=channel]{\mathcal T_0}
+    \tnarrow[from={(1,2)}, to={(1,3)}, species=channel]{\mathcal T_1}
+    \tnarrow[from={(1,3)}, to={(1,4)}, species=channel]{\mathcal T_2}
+  \end{tenkzcd}
+\hfil\par
+Here $\mathcal T_1$ adjoins $\overline\Omega_{k,h}$ on each diagonal
+outer-sector summand. The composite channel has type
+% Formula: T = T_2 T_1 T_0 : A_2 -> A_3. Ink: the blue stroke denotes the
+% composite channel T; its endpoints are matrix algebras, not matrices.
+\par\noindent\hfil
+  \begin{tenkzcd}[maps, species={channel}]
+    \mathcal A_2 & \mathcal A_3
+    \tnarrow[from={(1,1)}, to={(1,2)}, species=channel]{\mathcal T}
+  \end{tenkzcd}
+\hfil\par
+
+\begin{definition}[The neighboring-state preparation $\mathcal S_1$]
+    \label{def:mpdo_physical_sector_s1_map}
+    \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.normalizedNeighboringDensity}
+    \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.normalizedNeighboringDensity_pos,
+      MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.trace_normalizedNeighboringDensity,
+      MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.normalizedNeighboringPreparationMap_isKrausCPTP}
+    \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.inactiveNeighboringDensity,
+      MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.inactiveNeighboringDensity_posDef,
+      MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.inactiveNeighboringDensity_trace}
+    \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.completedNeighboringDensity}
+    \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.completedNeighboringDensity_pos,
+      MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.trace_completedNeighboringDensity,
+      MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.completedNeighboringDensity_eq_normalized}
+    \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.completedNeighboringPreparationMap,
+      MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.completedNeighboringPreparationMap_isKrausCPTP,
+      MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.completedNeighboringPreparationMap_eq_normalized}
+    \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.completedNeighboringControlledMap}
+    \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.completedNeighboringControlledMap_sameBlock_apply}
+    \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.completedNeighboringPreparationMap_smul}
+    \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.s1Map}
+    \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.s1Map_block_eq_kronecker,
+      MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.s1Map_apply_of_ne}
+    \leanok
+    \uses{def:mpdo_neighboring_trace_factorization}
+    On a sector pair with $a_kb_h\ne0$, let
+    $\mathcal S_{k,h}(X)=X\otimes\frac{\eta_{k,h}}{a_kb_h}$.
+    If $a_kb_h=0$, positivity and vanishing trace imply
+    $\eta_{k,h}=0$; choose any density operator on that unused summand.
+    Taking the orthogonal direct sum over $(k,h)$ defines $\mathcal S_1$.
+\end{definition}
+
+\begin{theorem}[$\mathcal S_1$ is trace-preserving completely positive]
+    \label{thm:mpdo_physical_sector_s1_map_cptp}
+    \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.completedNeighboringControlledMap_isKrausCPTP}
+    \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.s1Map_isKrausCPTP}
+    \leanok
+    \uses{def:mpdo_physical_sector_s1_map}
+    The map $\mathcal S_1$ is trace-preserving and completely positive.
+\end{theorem}
+
+\begin{definition}[The coarse-graining channel $\mathcal S$]
+    \label{def:mpdo_physical_sector_s_map}
+    \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.sMap}
+    \leanok
+    \uses{def:mpdo_s0_map, def:mpdo_physical_sector_s1_map,
+      def:mpdo_s2_map}
+    Define the channel from three physical sites to two physical sites by
+    $\mathcal S=\mathcal S_2\mathcal S_1\mathcal S_0$.
+    This is the coarse-graining map in Proposition~C.7
+    \cite[Appendix~C.2, lines~1547--1563]{Cirac2016MPDO_arXiv}.
+\end{definition}
+
+\begin{theorem}[$\mathcal S$ is trace-preserving completely positive]
+    \label{thm:mpdo_physical_sector_s_map_cptp}
+    \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.sMap_isKrausCPTP}
+    \leanok
+    \uses{thm:mpdo_s0_map_cptp,
+      thm:mpdo_physical_sector_s1_map_cptp,
+      thm:mpdo_s2_map_cptp,
+      lem:is_kraus_cptp_comp}
+    The channel $\mathcal S$ is trace-preserving and completely positive.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{lem:is_kraus_cptp_comp}
+    Each of the three factors is trace-preserving and completely positive,
+    and this property is preserved under composition.
+\end{proof}
+
+\begin{definition}[Two- and three-site sector coordinates]
+    \label{def:mpdo_physical_sector_closure_coordinates}
+    \lean{MPOTensor.PhysicalSectorFactorization.twoSiteSectorCoordinateEquiv,
+      MPOTensor.PhysicalSectorFactorization.twoSiteSectorCoordinateEquiv_symm_apply,
+      MPOTensor.PhysicalSectorFactorization.threeSiteSectorCoordinateEquiv,
+      MPOTensor.PhysicalSectorFactorization.threeSiteSectorCoordinateEquiv_symm_apply}
+    \leanok
+    \uses{def:mpdo_two_site_sector_closure,
+      def:mpdo_three_site_sector_closure}
+    The coordinate equivalences used by the coarse-graining channel expose
+    the direct sums over site-sector pairs and triples. Write
+    $\mathfrak R_2$ and $\mathfrak R_3$ for the corresponding matrix
+    reindexings. Their inverses send every sector block to the corresponding
+    physical matrix entries. These reindexings preserve the left-right order
+    within every physical site. They differ from the regrouped coordinates
+    $\mathfrak G_2$ and $\mathfrak G_3$ of
+    Definition~\ref{def:mpdo_global_sector_closure_coordinates}, which place
+    the two outer subspins before the neighboring subspins. If
+    $R_{\Phi_2}$ and $R_{\Phi_3}$ denote the two regrouping maps, then
+    \begin{align}
+      \mathfrak G_2&=R_{\Phi_2}\mathfrak R_2,
+      \notag\\
+      \mathfrak G_3&=R_{\Phi_3}\mathfrak R_3.
+      \notag
+    \end{align}
+\end{definition}
+
+\begin{theorem}[Diagonal outer-sector block of the three-site closure]
+    \label{thm:mpdo_regrouped_three_site_closure_block}
+    \lean{MPOTensor.PhysicalSectorFactorization.s0Regrouped_threeSiteClosure_block_eq}
+    \leanok
+    \uses{def:phys_close,
+      def:mpdo_sector_boundary_operator,
+      def:mpdo_physical_sector_three_site_neighboring_operator,
+      def:mpdo_physical_sector_closure_coordinates,
+      def:mpdo_three_site_subspin_regrouping}
+    For every virtual matrix $X$ and outer-sector pair $(k,h)$,
+    \begin{align}
+      \left[R_{\Phi_3}\mathfrak R_3(\mathcal K_3(X))\right]_{(k,h),(k,h)}
+      &=B_{k,h}(X)\otimes\Omega_{k,h}.
+      \notag
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mpdo_three_site_sector_closure_factorization,
+      def:mpdo_physical_sector_factorization}
+    On the summand labelled by the middle sector $l$, this is the fixed-sector
+    factorization
+    $B_{k,h}(X)\otimes(\eta_{k,l}\otimes\eta_{l,h})$.
+    Taking the direct sum over $l$ gives the stated block.
+\end{proof}
+
+\begin{theorem}[Off-diagonal outer-sector entries of the three-site closure]
+    \label{thm:mpdo_regrouped_three_site_closure_off_diagonal}
+    \lean{MPOTensor.PhysicalSectorFactorization.s0Regrouped_threeSiteClosure_apply_of_outer_ne}
+    \leanok
+    \uses{def:mpdo_physical_sector_factorization,
+      def:mpdo_physical_sector_closure_coordinates,
+      def:mpdo_three_site_subspin_regrouping}
+    Every matrix entry of
+    $R_{\Phi_3}\mathfrak R_3(\mathcal K_3(X))$ between distinct outer-sector
+    pairs $(k,h)\ne(p,q)$ vanishes.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:mpdo_physical_sector_factorization}
+    Distinct outer-sector pairs differ either in their first sector or in
+    their third sector. In the corresponding physical slice, the
+    sector-coordinate tensor is block diagonal, so that factor vanishes.
+\end{proof}
+
+\begin{theorem}[Regrouped two-site closure block]
+    \label{thm:mpdo_t0_regrouped_two_site_closure_block}
+    \lean{MPOTensor.PhysicalSectorFactorization.t0Regrouped_twoSiteClosure_block_eq}
+    \leanok
+    \uses{thm:mpdo_two_site_sector_closure_factorization,
+      def:mpdo_physical_sector_closure_coordinates,
+      def:mpdo_two_site_subspin_regrouping}
+    For every virtual matrix $X$ and outer-sector pair $(k,h)$,
+    \begin{align}
+      \left[R_{\Phi_2}\mathfrak R_2(\mathcal K_2(X))\right]_{(k,h),(k,h)}
+      &=B_{k,h}(X)\otimes\eta_{k,h}.
+      \notag
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mpdo_two_site_sector_closure_factorization}
+    This is the fixed-sector two-site factorization after identifying the
+    sitewise sector coordinates with the regrouped boundary and neighboring
+    coordinates.
+\end{proof}
+
+\begin{theorem}[Diagonal-block action of $\mathcal T_0$]
+    \label{thm:mpdo_t0_same_block_action}
+    \lean{MPOTensor.PhysicalSectorFactorization.t0Map_sameBlock_apply}
+    \leanok
+    \uses{def:mpdo_t0_map,
+      def:mpdo_two_site_subspin_regrouping}
+    For every two-site matrix $Y$, outer-sector pair $(k,h)$, and boundary
+    indices $a,b$,
+    \begin{align}
+      [\mathcal T_0(Y)]_{(k,h,a),(k,h,b)}
+      &=
+      \left[\tr_{R_k\otimes L_h}
+          \left([R_{\Phi_2}Y]_{(k,h),(k,h)}\right)\right]_{a,b}.
+      \notag
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The controlled partial trace acts on a diagonal outer-sector block by
+    the ordinary partial trace over its neighboring factor.
+\end{proof}
+
+\begin{theorem}[Partial trace of a factorized two-site block]
+    \label{thm:mpdo_t0_factorized_block_action}
+    \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.t0Map_block_eq_smul}
+    \leanok
+    \uses{thm:mpdo_t0_same_block_action,
+      def:mpdo_neighboring_trace_factorization}
+    If the $(k,h)$ diagonal block of $R_{\Phi_2}Y$ is
+    $B\otimes\eta_{k,h}$, then
+    $[\mathcal T_0(Y)]_{(k,h),(k,h)}=a_kb_hB$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mpdo_t0_same_block_action,
+      def:mpdo_neighboring_trace_factorization}
+    The partial trace of $B\otimes\eta_{k,h}$ is
+    $\tr(\eta_{k,h})B=a_kb_hB$.
+\end{proof}
+
+% **Local fix (zero-weight quotient):** the next three entries use the
+% completion documented in
+% docs/paper-gaps/cpgsv17_mpdo_zero_weight_preparation_completion.tex.
+\begin{theorem}[Preparation of a scaled boundary block]
+    \label{thm:mpdo_t1_scaled_block_preparation}
+    \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.completedThreeSitePreparationMap_smul}
+    \leanok
+    \uses{def:mpdo_physical_sector_t1_preparation,
+      thm:mpdo_physical_sector_t1_density_properties}
+    For every outer-sector pair $(k,h)$ and boundary matrix $B$, the completed
+    sectorwise preparation satisfies
+    $\overline{\mathcal T}_{k,h}(a_kb_hB)
+    =B\otimes\Omega_{k,h}$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mpdo_physical_sector_t1_density_properties,
+      thm:mpdo_physical_sector_three_site_neighboring_operator_trace}
+    If $a_kb_h\ne0$, the scalar cancels the normalization in
+    $\widehat\Omega_{k,h}=(a_kb_h)^{-1}\Omega_{k,h}$. If $a_kb_h=0$, both
+    sides vanish because $\Omega_{k,h}=0$.
+\end{proof}
+
+\begin{theorem}[Diagonal-block action of $\mathcal T_1$]
+    \label{thm:mpdo_t1_factorized_block_action}
+    \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.t1Map_block_eq_kronecker}
+    \leanok
+    \uses{def:mpdo_physical_sector_t1_preparation,
+      thm:mpdo_t1_scaled_block_preparation}
+    If the $(k,h)$ diagonal block of a boundary matrix $Y$ is $a_kb_hB$, then
+    $[\mathcal T_1(Y)]_{(k,h),(k,h)}
+    =B\otimes\Omega_{k,h}$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mpdo_t1_scaled_block_preparation}
+    On a diagonal outer-sector block, the controlled map is the completed
+    sectorwise preparation, to which the preceding theorem applies.
+\end{proof}
+
+\begin{theorem}[Off-diagonal action of $\mathcal T_1$]
+    \label{thm:mpdo_t1_off_diagonal_action}
+    \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.t1Map_apply_of_ne}
+    \leanok
+    \uses{def:mpdo_physical_sector_t1_preparation}
+    The map $\mathcal T_1$ annihilates every matrix entry between distinct
+    outer-sector pairs.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    This is the orthogonal control in the definition of $\mathcal T_1$.
+\end{proof}
+
+\begin{theorem}[Reindexing action of $\mathcal T_2$]
+    \label{thm:mpdo_t2_reindexing_action}
+    \lean{MPOTensor.PhysicalSectorFactorization.t2Map_apply}
+    \leanok
+    \uses{def:mpdo_t2_map}
+    Let $\Phi_3$ be the three-site regrouping. For every prepared matrix $Y$
+    and three-site indices $p,q$,
+    $[\mathcal T_2(Y)]_{p,q}=Y_{\Phi_3(p),\Phi_3(q)}$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    This is matrix reindexing along the inverse regrouping
+    $\Phi_3^{-1}$.
+\end{proof}
+
+\begin{theorem}[Refinement of the two-site closure]
+    \label{thm:mpdo_physical_sector_t_closure_identity}
+    \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.tMap_twoSiteClosure_eq_threeSiteClosure}
+    \leanok
+    \uses{def:phys_close,
+      def:mpdo_physical_sector_t_map,
+      def:mpdo_physical_sector_closure_coordinates,
+      def:mpdo_neighboring_trace_factorization}
+    Assume the neighboring-operator trace factorization of
+    Definition~\ref{def:mpdo_neighboring_trace_factorization}. For every
+    virtual matrix $X$, in the canonical physical-sector coordinates selected
+    by the isometry $U$, the refinement channel satisfies
+    \begin{align}
+      \mathcal T(\mathfrak R_2(\mathcal K_2(X)))
+      &=\mathfrak R_3(\mathcal K_3(X)).
+      \label{eq:rfp_t_closure}
+    \end{align}
+    This is the refinement half of Proposition~C.7
+    \cite[Appendix~C.2, lines~1510--1516 and~1522--1545]
+      {Cirac2016MPDO_arXiv}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mpdo_t0_regrouped_two_site_closure_block,
+      thm:mpdo_t0_factorized_block_action,
+      thm:mpdo_t1_factorized_block_action,
+      thm:mpdo_t1_off_diagonal_action,
+      thm:mpdo_regrouped_three_site_closure_block,
+      thm:mpdo_regrouped_three_site_closure_off_diagonal}
+    The regrouping contained in $\mathcal T_0$ changes
+    $\mathfrak R_2$ into $\mathfrak G_2$. On the $(k,h)$ diagonal block, the
+    partial trace then gives
+    \begin{align}
+      \mathcal T_0
+        (\mathfrak R_2(\mathcal K_2(X)))_{k,h}
+      &=a_kb_hB_{k,h}(X).
+      \notag
+    \end{align}
+    On an active pair, $\mathcal T_1$ adjoins
+    $(a_kb_h)^{-1}\Omega_{k,h}$, and hence
+    \begin{align}
+      \mathcal T_1\mathcal T_0
+        (\mathfrak R_2(\mathcal K_2(X)))_{k,h}
+      &=B_{k,h}(X)\otimes\Omega_{k,h}.
+      \notag
+    \end{align}
+    If $a_kb_h=0$, both sides vanish because
+    $\Omega_{k,h}=0$. After the canonical reassociation of the intermediate
+    sector sum, these are precisely the diagonal blocks of
+    $\mathfrak G_3(\mathcal K_3(X))$; all off-diagonal sector blocks vanish.
+    Finally, the inverse regrouping $\mathcal T_2$ changes
+    $\mathfrak G_3$ into $\mathfrak R_3$, which gives
+    (\ref{eq:rfp_t_closure}).
+\end{proof}
+
+\begin{theorem}[Coarse-graining of the three-site closure]
+    \label{thm:mpdo_physical_sector_s_closure_identity}
+    \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.s0Map_block_eq_smul}
+    \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.sMap_threeSiteClosure_eq_twoSiteClosure}
+    \leanok
+    \uses{def:phys_close, def:mpdo_physical_sector_s_map,
+      def:mpdo_physical_sector_closure_coordinates,
+      def:mpdo_neighboring_trace_factorization}
+    Assume the neighboring-operator trace factorization of
+    Definition~\ref{def:mpdo_neighboring_trace_factorization}. For every
+    virtual matrix $X$, in the canonical physical-sector
+    coordinates selected by the isometry $U$, the coarse-graining channel
+    satisfies
+    \begin{align}
+      \mathcal S(\mathfrak R_3(\mathcal K_3(X)))
+      &=\mathfrak R_2(\mathcal K_2(X)).
+      \label{eq:rfp_s_closure}
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mpdo_regrouped_three_site_closure_block,
+      thm:mpdo_two_site_sector_closure_factorization,
+      thm:mpdo_three_site_sector_closure_factorization,
+      thm:mpdo_physical_sector_three_site_neighboring_operator_trace,
+      def:mpdo_physical_sector_factorization,
+      def:mpdo_physical_sector_closure_coordinates,
+      def:mpdo_physical_sector_s1_map}
+    On the $(k,h)$ diagonal block, $\mathcal S_0$ traces
+    $\Omega_{k,h}$ and gives $a_kb_hB_{k,h}(X)$. On an active sector pair,
+    $\mathcal S_1((a_kb_h)B_{k,h}(X))
+    =B_{k,h}(X)\otimes\eta_{k,h}$.
+    If $a_kb_h=0$, positivity and zero trace give $\eta_{k,h}=0$, so both
+    sides of this identity vanish. Finally, $\mathcal S_2$ regroups the four
+    factors into two physical sites. For distinct sector pairs
+    $(k,h)\ne(p,q)$,
+    \begin{align}
+      (\mathcal S_1Y)_{(k,h),(p,q)}&=0,
+      \notag\\
+      [\mathfrak R_2(\mathcal K_2(X))]_{(k,h),(p,q)}&=0.
+      \notag
+    \end{align}
+    These diagonal and off-diagonal identities give
+    (\ref{eq:rfp_s_closure}).
+\end{proof}
+
+For the following construction, through
+Theorem~\ref{thm:mpdo_blocked_original_tensor_is_rfp_via_ts}, assume the
+neighboring-operator trace factorization of
+Definition~\ref{def:mpdo_neighboring_trace_factorization}. Write
+$q=\dim\!\left(\bigoplus_k L_k\otimes R_k\right)$
+for the physical dimension of the sector-coordinate tensor
+$\widehat{\mathcal K}$.

@@ -43,10 +43,26 @@ def _tenkzequation_bodies(source: str) -> list[str]:
     return bodies
 
 
+def _read_tex_tree(path: Path, source_root: Path) -> str:
+    """Read a TeX source after recursively expanding its input wrappers."""
+    source = path.read_text(encoding="utf-8")
+
+    def expand(match: re.Match[str]) -> str:
+        target = match.group(1)
+        if not target.endswith(".tex"):
+            target += ".tex"
+        return _read_tex_tree(source_root / target, source_root)
+
+    return re.sub(r"\\input\{([^}]+)\}", expand, source)
+
+
 def _assert_source_linked_groups(repo_root: Path) -> None:
     """Pin every migrated sibling-picture row to its TeX source wrapper."""
     symmetry = (
-        repo_root / "blueprint/src/chapter/ch12_symmetry.tex"
+        repo_root / "blueprint/src/chapter/ch12_symmetry_virtual_and_cohomology.tex"
+    ).read_text(encoding="utf-8")
+    symmetry += (
+        repo_root / "blueprint/src/chapter/ch12_symmetry_string_order.tex"
     ).read_text(encoding="utf-8")
     symmetry_bodies = _tenkzequation_bodies(symmetry)
     symmetry_anchors = (
@@ -64,18 +80,20 @@ def _assert_source_linked_groups(repo_root: Path) -> None:
         assert anchor in body, anchor
         assert body.count(r"\begin{tenkz}") == 2, anchor
 
-    blocked = (
-        repo_root / "blueprint/src/chapter/ch21_mpdo_rfp_blocked_rfp.tex"
-    ).read_text(encoding="utf-8")
+    source_root = repo_root / "blueprint/src"
+    blocked = _read_tex_tree(
+        source_root / "chapter/ch21_mpdo_rfp_blocked_rfp.tex", source_root
+    )
     blocked_bodies = _tenkzequation_bodies(blocked)
     assert len(blocked_bodies) == 1, len(blocked_bodies)
     assert blocked_bodies[0].count(r"\tnpic") == 2
     assert r"\qquad$=$\qquad" in blocked_bodies[0]
 
-    channels = (
-        repo_root
-        / "blueprint/src/chapter/ch21_mpdo_rfp_simple_local_refinement_channels.tex"
-    ).read_text(encoding="utf-8")
+    channels = _read_tex_tree(
+        source_root
+        / "chapter/ch21_mpdo_rfp_simple_local_refinement_channels.tex",
+        source_root,
+    )
     channel_bodies = _tenkzequation_bodies(channels)
     assert len(channel_bodies) == 2, len(channel_bodies)
     for body, anchor in zip(

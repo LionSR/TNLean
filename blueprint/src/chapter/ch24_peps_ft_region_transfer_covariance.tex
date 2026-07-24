@@ -7,15 +7,15 @@
     \lean{TNLean.PEPS.regionComplementWeight_transport}
     \leanok
     \uses{def:peps_tensor_transport, def:peps_regionComplementTwoBlock}
-    Let $\phi:G\simeq G'$ be a graph isomorphism.  The blocked weight of the
+    Let $\phi:G\simeq G'$ be a graph isomorphism. The blocked weight of the
     transported tensor $A^\phi$ over the complement of the image region, read at
     the image complement boundary configuration and the image complement physical
     configuration, equals the blocked weight of $A$ over $V\setminus R$:
-    \[
+    \begin{align}
         T_{A^\phi,V'\setminus\phi(R)}^{(\phi\cdot\eta)^c}(\phi\cdot\tau)
-        =
-        T_{A,V\setminus R}^{\eta^c}(\tau).
-    \]
+        &=T_{A,V\setminus R}^{\eta^c}(\tau).
+        \notag
+    \end{align}
 \end{theorem}
 \begin{proof}\leanok
     The image of the complement of $R$ is the complement of the image of $R$, and
@@ -29,14 +29,14 @@
     \leanok
     \uses{thm:peps_regionComplementWeight_transport}
     Let $\phi:G\simeq G'$ be a graph isomorphism and let $f$ be a crossing edge
-    of $R$.  Two crossing-edge labels of $R$ agree away from $f$ if and only if
+    of $R$. Two crossing-edge labels of $R$ agree away from $f$ if and only if
     their images under the boundary reindex induced by $\phi$ agree away from the
     image of $f$.
 \end{theorem}
 \begin{proof}\leanok
     The boundary reindex is a bijection on crossing edges that carries $f$ to its
     image, so it carries the crossing edges other than $f$ bijectively to the
-    crossing edges other than the image of $f$.  Agreement on the former family
+    crossing edges other than the image of $f$. Agreement on the former family
     is therefore equivalent to agreement on the latter.
 \end{proof}
 
@@ -48,15 +48,15 @@
         thm:peps_regionComplementWeight_transport,
         thm:peps_sameAwayFromBond_regionBoundaryConfigMap}
     Let $\phi:G\simeq G'$ be a graph isomorphism and let $f$ be a crossing edge
-    of $R$.  The region insertion coefficient of the transported tensor $A^\phi$
+    of $R$. The region insertion coefficient of the transported tensor $A^\phi$
     over the image region, with $M$ inserted on the image of $f$ and the physical
     configurations relabelled by $\phi$, equals the region insertion coefficient
     of $A$ over $R$, with $M$ carried back to the bond of $A$ at $f$:
-    \[
-        C_{A^\phi}\bigl(\phi(R),\phi(f),M;\phi\cdot\sigma,\phi\cdot\tau\bigr)
-        =
-        C_A\bigl(R,f,\phi^{*}M;\sigma,\tau\bigr).
-    \]
+    \begin{align}
+        C_{A^\phi}(\phi(R),\phi(f),M;\phi\cdot\sigma,\phi\cdot\tau)
+        &=C_A(R,f,\phi^{*}M;\sigma,\tau).
+        \notag
+    \end{align}
     No endpoint orientation enters: the matrix is inserted between the two single
     boundary values on the edge.
 \end{theorem}
@@ -65,7 +65,7 @@
     agreement-away-from-$f$ constraint is preserved by
     Theorem~\ref{thm:peps_sameAwayFromBond_regionBoundaryConfigMap}, the region
     weight transports along $\phi$, and the complement weight transports by
-    Theorem~\ref{thm:peps_regionComplementWeight_transport}.  The inserted matrix
+    Theorem~\ref{thm:peps_regionComplementWeight_transport}. The inserted matrix
     entry is read at the two boundary values, which the bond-dimension
     identification carries to the corresponding entry of $\phi^{*}M$.
 \end{proof}
@@ -78,13 +78,13 @@
     If two tensors are equal, then their region insertion coefficients are equal,
     with the inserted matrix carried across the induced equality of bond
     dimensions:
-    \[
+    \begin{align}
         A_1=A_2
         \quad\Longrightarrow\quad
         C_{A_1}(R,f,M;\sigma,\tau)
-        =
-        C_{A_2}\bigl(R,f,\psi M;\sigma,\tau\bigr).
-    \]
+        &=C_{A_2}(R,f,\psi M;\sigma,\tau).
+        \notag
+    \end{align}
     This applies to any tensor equality $A_1=A_2$, including the equality between
     a translation-invariant tensor and its transported copy.
 \end{theorem}
@@ -101,12 +101,9 @@
     \uses{def:peps_torus_translation_invariant,
         def:peps_torus_geometry_translation}
     Let $A$ be translation invariant on the discrete torus, let $f$ be a crossing
-    edge of $R$, and let $T_{a,b}$ be a translation.  The bond dimension of $A$
+    edge of $R$, and let $T_{a,b}$ be a translation. The bond dimension of $A$
     at the translated crossing edge equals its bond dimension at the reference
-    crossing edge:
-    \[
-        D_A\bigl(T_{a,b}(f)\bigr)=D_A(f).
-    \]
+    crossing edge: $D_A(T_{a,b}(f))=D_A(f)$.
 \end{theorem}
 \begin{proof}\leanok
     Translation carries the reference edge to its image, and translation
@@ -123,24 +120,21 @@
         thm:peps_bondDim_boundaryEdgeMap_translate,
         def:peps_torus_translation_invariant}
     Let $A$ and $B$ be translation invariant on the discrete torus, and let $f$ be
-    a crossing edge of $R$.  Suppose a map $g$ realizes the coefficient identity
+    a crossing edge of $R$. Suppose a map $g$ realizes the coefficient identity
     at the reference edge:
-    \[
-        C_A(R,f,M;\sigma,\tau)
-        =
-        C_B\bigl(R,f,g(M);\sigma,\tau\bigr).
-    \]
+    $C_A(R,f,M;\sigma,\tau)=C_B(R,f,g(M);\sigma,\tau)$.
     Then, for every translation $T_{a,b}$, the same identity holds at the
     translated crossing edge of the translated region, with the inserted matrix
     carried between the translated and reference bonds:
-    \[
+    \begin{align}
         C_A\bigl(T_{a,b}(R),T_{a,b}(f),M';
             T_{a,b}\cdot\sigma,T_{a,b}\cdot\tau\bigr)
-        =
+        &=
         C_B\bigl(T_{a,b}(R),T_{a,b}(f),
             \widehat{g}(M');
             T_{a,b}\cdot\sigma,T_{a,b}\cdot\tau\bigr),
-    \]
+        \label{eq:peps_translate_coeff}
+    \end{align}
     where $\widehat{g}$ applies $g$ to the reference-bond reindex of $M'$ and
     carries the result back to the translated bond.
 \end{theorem}
@@ -149,9 +143,10 @@
     so Theorem~\ref{thm:peps_regionInsertedCoeff_transport} carries the reference
     coefficient of $A$ to the translated edge with no change of tensor;
     Theorem~\ref{thm:peps_regionInsertedCoeff_congrTensor} mediates the literal
-    and transported tensors.  Applying the reference identity for $g$ and
-    transporting back for $B$ in the same way gives the displayed equality, the
-    inserted matrix being carried across the equal bond dimensions of
+    and transported tensors. Applying the reference identity for $g$ and
+    transporting back for $B$ in the same way gives
+    (\ref{eq:peps_translate_coeff}), the inserted matrix being carried across
+    the equal bond dimensions of
     Theorem~\ref{thm:peps_bondDim_boundaryEdgeMap_translate}.
 \end{proof}
 
@@ -160,13 +155,10 @@
     \lean{TNLean.PEPS.vertexTwoBlock}
     \leanok
     \uses{def:peps_tensor}
-    Fix a vertex $v$.  The single-vertex tensor $A_v$ is regarded as a
+    Fix a vertex $v$. The single-vertex tensor $A_v$ is regarded as a
     two-block tensor whose shared bonds are the edges incident to $v$, whose
     external boundary is a one-point space, and whose physical index is the
-    physical index at $v$:
-    \[
-        T_v(*,\eta,\sigma)=A_v(\eta,\sigma).
-    \]
+    physical index at $v$: $T_v(*,\eta,\sigma)=A_v(\eta,\sigma)$.
 \end{definition}
 
 \begin{theorem}[Injectivity of the single-vertex two-block tensor]%
@@ -179,7 +171,7 @@
 \end{theorem}
 \begin{proof}\leanok
     Vertex injectivity is linear independence of the coefficient family
-    $\eta\mapsto A_v(\eta,-)$.  The auxiliary one-point boundary only reindexes
+    $\eta\mapsto A_v(\eta,-)$. The auxiliary one-point boundary only reindexes
     this same family, so the two-block injectivity condition is the same linear
     independence statement.
 \end{proof}
@@ -193,9 +185,7 @@
     two-block tensor on the same incident shared bonds. Its coefficient is the
     contraction of all tensors away from $v$, with the incident bond indices
     left open at the complement endpoints:
-    \[
-        T_{v^c}(*,\eta,\tau)=A_{v^c}(\eta,\tau).
-    \]
+    $T_{v^c}(*,\eta,\tau)=A_{v^c}(\eta,\tau)$.
 \end{definition}
 
 \begin{theorem}[Injectivity of the vertex-complement contraction]%
@@ -205,9 +195,7 @@
     \uses{def:IsVertexInjective, def:peps_tensor}
     If $A$ is vertex-injective and every virtual bond space has positive
     dimension, then the coefficient family
-    \[
-        \eta\longmapsto \bigl(\tau\longmapsto A_{v^c}(\eta,\tau)\bigr)
-    \]
+    $\eta\longmapsto(\tau\longmapsto A_{v^c}(\eta,\tau))$
     of the vertex-complement contraction is linearly independent.
 \end{theorem}
 \begin{proof}\leanok
@@ -215,14 +203,16 @@
     $v$. For a set $S\subseteq V\setminus\{v\}$, let $K_S(c)$ be the assertion
     that for every virtual configuration $\zeta_0$ and physical configuration
     $\tau$,
-    \[
+    \begin{align}
         \sum_{\zeta}
         \mathbf 1[
                 \zeta_f=\zeta_{0,f}\text{ for every edge }f
-                \text{ whose endpoints are outside }S]\,
+                \text{ whose endpoints are outside }S]
         c_{\zeta|_{\operatorname{Star}(v)}}
-        \prod_{w\in S} A_w(\zeta|_{\operatorname{Star}(w)},\tau_w)=0 .
-    \]
+        \prod_{w\in S} A_w(\zeta|_{\operatorname{Star}(w)},\tau_w)
+        &=0.
+        \notag
+    \end{align}
     The initial vanishing of the complement contraction is exactly
     $K_{V\setminus\{v\}}(c)$. If $j\in S$ and $j\neq v$, the one-sided inverse at
     the vertex $j$ separates the local tensor $A_j$ and gives
@@ -264,33 +254,33 @@
     tensors. The post-absorption insertion equality gives, for every shared
     bond $b$, every matrix $X\in\MN{D_b}$, and all external and
     physical indices,
-    \[
+    \begin{align}
         C_{A_v,A_{v^c}}(b,X;\eta_v,\eta_{v^c},\sigma_v,\sigma_{v^c})
-        =
+        &=
         C_{\widetilde B_v,\widetilde B_{v^c}}
         (b,X;\eta_v,\eta_{v^c},\sigma_v,\sigma_{v^c}).
-    \]
-    Then
-    \[
-        \exists\lambda_v\in\C^\times,\qquad
-        A_v=\lambda_v\widetilde B_v.
-    \]
+        \notag
+    \end{align}
+    Then $\exists\lambda_v\in\C^\times$ such that
+    $A_v=\lambda_v\widetilde B_v$.
 \end{theorem}
 \begin{proof}\leanok
     With $A_1=A_v$, $A_2=A_{v^c}$, $B_1=\widetilde B_v$, and
-    $B_2=\widetilde B_{v^c}$, the post-absorption equality is precisely
-    \[
-        \forall b,X,\eta_v,\eta_{v^c},\sigma_v,\sigma_{v^c},\quad
+    $B_2=\widetilde B_{v^c}$, the post-absorption equality is precisely, for
+    every $b$, $X$, $\eta_v$, $\eta_{v^c}$, $\sigma_v$, and $\sigma_{v^c}$,
+    \begin{align}
         C_{A_1,A_2}(b,X;\eta_v,\eta_{v^c},\sigma_v,\sigma_{v^c})
-        =
+        &=
         C_{B_1,B_2}(b,X;\eta_v,\eta_{v^c},\sigma_v,\sigma_{v^c}).
-    \]
+        \notag
+    \end{align}
     Theorem~\ref{thm:peps_twoInjectiveTensorInsertionComparison} gives
-    \[
-        \exists\lambda_v\in\mathbb C^\times,\qquad
-        A_v=\lambda_v\widetilde B_v,\qquad
+    \begin{align}
+        \exists\lambda_v\in\C^\times,\qquad
+        A_v&=\lambda_v\widetilde B_v,\qquad
         A_{v^c}=\lambda_v^{-1}\widetilde B_{v^c}.
-    \]
+        \notag
+    \end{align}
     The desired local proportionality is the first equality.
 \end{proof}
 

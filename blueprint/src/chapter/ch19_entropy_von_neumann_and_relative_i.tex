@@ -1,0 +1,837 @@
+\section{Von Neumann entropy}
+
+\begin{definition}[Von Neumann entropy]\label{def:von_neumann_entropy}
+    \lean{vonNeumannEntropy}
+    \leanok
+    For a Hermitian matrix $\rho\in\MN{D}$ with eigenvalues
+    $\lambda_0,\ldots,\lambda_{D-1}$, the \emph{von Neumann entropy} is
+    \begin{align}
+        S(\rho)
+        &=-\sum_{i=0}^{D-1}\lambda_i\log\lambda_i,
+        \label{eq:entropy_definition}
+    \end{align}
+    where $0\log 0:=0$.
+\end{definition}
+
+\begin{lemma}[Entropy respects equality]\label{lem:entropy_congr}
+    \lean{vonNeumannEntropy_congr}
+    \leanok
+    \uses{def:von_neumann_entropy}
+    If two Hermitian matrices are equal, then their von Neumann entropies are
+    equal.
+\end{lemma}
+
+\begin{proof}\leanok
+    Substitute the equality of the matrices in the defining eigenvalue sum.
+\end{proof}
+
+\begin{lemma}[Entropy of the zero matrix]\label{lem:entropy_zero}
+    \lean{vonNeumannEntropy_zero}
+    \leanok
+    \uses{def:von_neumann_entropy}
+    The zero matrix has zero von Neumann entropy: $S(0)=0$.
+\end{lemma}
+
+\begin{proof}\leanok
+    All eigenvalues of the zero matrix are zero, and $0\log 0=0$.
+\end{proof}
+
+\begin{theorem}[Entropy is non-negative]\label{thm:entropy_nonneg}
+    \lean{vonNeumannEntropy_nonneg}
+    \leanok
+    \uses{def:von_neumann_entropy}
+    For any density matrix $\rho$, $S(\rho)\ge0$.
+\end{theorem}
+
+\begin{proof}\leanok
+    Each eigenvalue $\lambda_i$ of a density matrix satisfies
+    $0\le\lambda_i\le1$, and $-x\log x\ge0$ on $[0,1]$.
+    \uses{thm:density_eigenvalues_le_one}
+\end{proof}
+
+\begin{lemma}[Eigenvalue sum]\label{lem:density_eigenvalues_sum}
+    \lean{densityMatrices_eigenvalues_sum_one}
+    \leanok
+    The eigenvalues of a density matrix sum to $1$.
+\end{lemma}
+
+\begin{proof}\leanok
+    Follows from $\tr(\rho)=\sum_i\lambda_i=1$.
+\end{proof}
+
+\begin{theorem}[Eigenvalue bound]\label{thm:density_eigenvalues_le_one}
+    \lean{densityMatrices_eigenvalues_le_one}
+    \leanok
+    \uses{lem:density_eigenvalues_sum}
+    Each eigenvalue of a density matrix lies in $[0,1]$.
+\end{theorem}
+
+\begin{proof}\leanok
+    Non-negativity comes from positive semidefiniteness. The upper bound
+    follows because the eigenvalues are non-negative and sum to $1$.
+\end{proof}
+
+\begin{theorem}[Entropy upper bound]\label{thm:entropy_le_log_dim}
+    \lean{vonNeumannEntropy_le_log_dim}
+    \leanok
+    \uses{def:von_neumann_entropy}
+    For a density matrix $\rho\in\MN{D}$ with $D\ge1$, one has
+    $S(\rho)\le\log D$.
+\end{theorem}
+
+\begin{proof}\leanok
+    By Jensen's inequality applied to the concave function $-x\log x$,
+    the entropy is maximized when all eigenvalues equal $1/D$.
+    \uses{lem:density_eigenvalues_sum, thm:density_eigenvalues_le_one}
+\end{proof}
+
+\begin{theorem}[Entropy bounded by log of rank]\label{thm:entropy_le_log_rank}
+    \lean{vonNeumannEntropy_le_log_rank}
+    \leanok
+    \uses{def:von_neumann_entropy}
+    For a density matrix $\rho$ of rank $r$, one has $S(\rho)\le\log r$.
+    This refines the dimension bound: only the nonzero eigenvalues contribute to
+    the entropy, and there are exactly $r$ of them.
+\end{theorem}
+
+\begin{proof}\leanok
+    The entropy is the $-x\log x$ sum over all eigenvalues; the $D-r$ zero
+    eigenvalues contribute nothing. Jensen's inequality applied to $-x\log x$
+    over the $r$ nonzero eigenvalues, with uniform weights $1/r$, gives
+    $S(\rho)\le\log r$, the maximum attained when each nonzero eigenvalue
+    equals $1/r$. The rank equals the number of nonzero eigenvalues of the
+    Hermitian matrix $\rho$.
+    \uses{lem:density_eigenvalues_sum, thm:density_eigenvalues_le_one}
+\end{proof}
+
+\begin{lemma}[Entropy from characteristic polynomial roots]
+    \label{lem:entropy_charpoly_roots}
+    \lean{vonNeumannEntropy_eq_charpoly_roots}
+    \leanok
+    \uses{def:von_neumann_entropy}
+    The von Neumann entropy of a Hermitian matrix is the $-x\log x$ sum over the
+    real parts of the roots of its characteristic polynomial $\chi_\rho$:
+    \begin{align}
+        S(\rho)
+        &=\sum_{\lambda\in\mathrm{roots}(\chi_\rho)}
+          ({-}\re(\lambda)\log\re(\lambda)).
+        \label{eq:entropy_charpoly}
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    The eigenvalues of a Hermitian matrix are exactly the roots of its
+    characteristic polynomial, counted with multiplicity, so the eigenvalue sum
+    defining $S(\rho)$ equals the displayed sum over roots.
+\end{proof}
+
+\begin{theorem}[Trace-logarithm form of the entropy]
+    \label{thm:entropy_eq_neg_trace_mul_log}
+    \lean{vonNeumannEntropy_eq_neg_trace_mul_log}
+    \leanok
+    \uses{def:von_neumann_entropy}
+    Let $\rho$ be a Hermitian matrix and let $\log\rho$ be its logarithm defined
+    through the functional calculus. Then
+    \begin{align}
+        S(\rho)
+        &=-\re(\tr(\rho\log\rho)).
+        \label{eq:entropy_trace_log}
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:von_neumann_entropy}
+    A Hermitian matrix and its logarithm are simultaneously diagonalized by a
+    unitary $U$ with $\rho=U\diag(\lambda_i)U^*$, so
+    \begin{align}
+        \tr(\rho\log\rho)
+        &=\tr\!(U\diag(\lambda_i\log\lambda_i)U^*)
+          =\sum_i\lambda_i\log\lambda_i.
+        \notag
+    \end{align}
+    Its negative is $\sum_i({-}\lambda_i\log\lambda_i)=S(\rho)$. Zero
+    eigenvalues contribute nothing under the convention $0\log 0=0$, so no
+    full-support assumption is required.
+\end{proof}
+
+\begin{remark}
+    The logarithm is the totalized real logarithm, with
+    $\log x=\log\lvert x\rvert$ and $\log 0=0$; both sides of the identity
+    use it on every eigenvalue, so the equality holds for an arbitrary Hermitian
+    matrix. It coincides with the physical entropy $-\tr(\rho\log\rho)$
+    precisely when $\rho$ is positive semidefinite. In that case (a density
+    matrix $\rho$, positive semidefinite with unit trace) the eigenvalues
+    $\lambda_i$ are non-negative, $\rho\log\rho$ is Hermitian with real trace,
+    and the real-part extraction is superfluous: the identity reduces to the
+    standard expression $S(\rho)=-\tr(\rho\log\rho)$.
+\end{remark}
+
+\begin{definition}[Quantum relative entropy]\label{def:quantum_relative_entropy}
+    \lean{quantumRelativeEntropy}
+    \leanok
+    For matrices $\rho,\sigma\in\MN{D}$, define the trace-log expression
+    \begin{align}
+        D(\rho\Vert\sigma)
+        &=\re\tr(\rho(\log\rho-\log\sigma)).
+        \label{eq:entropy_relative_definition}
+    \end{align}
+    On the physical domain where $\rho$ is a density matrix and $\sigma$ is
+    positive definite, this is the Umegaki relative entropy.
+\end{definition}
+
+\begin{lemma}[Trace-log splitting for relative entropy]
+    \label{lem:quantum_relative_entropy_trace_split}
+    \lean{quantumRelativeEntropy_eq_trace_mul_log_sub}
+    \leanok
+    \uses{def:quantum_relative_entropy}
+    For matrices $\rho,\sigma\in\MN{D}$,
+    \begin{align}
+        D(\rho\Vert\sigma)
+        &=\re\tr(\rho\log\rho)-\re\tr(\rho\log\sigma).
+        \label{eq:entropy_relative_split}
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    Expand the matrix product over the difference $\log\rho-\log\sigma$ and use
+    linearity of the trace and of the real part.
+\end{proof}
+
+\begin{lemma}[Relative entropy with identical arguments]
+    \label{lem:quantum_relative_entropy_self}
+    \lean{quantumRelativeEntropy_self}
+    \leanok
+    \uses{def:quantum_relative_entropy}
+    For every matrix $\rho\in\MN{D}$, one has $D(\rho\Vert\rho)=0$.
+\end{lemma}
+
+\begin{proof}\leanok
+    The logarithmic difference $\log\rho-\log\rho$ vanishes.
+\end{proof}
+
+\begin{lemma}[Relative entropy with zero first argument]
+    \label{lem:quantum_relative_entropy_zero_left}
+    \lean{quantumRelativeEntropy_zero_left}
+    \leanok
+    \uses{def:quantum_relative_entropy}
+    For every matrix $\sigma\in\MN{D}$, one has $D(0\Vert\sigma)=0$.
+\end{lemma}
+
+\begin{proof}\leanok
+    The trace-log expression is multiplied on the left by the zero matrix.
+\end{proof}
+
+\begin{theorem}[Relative entropy in entropy form]
+    \label{thm:quantum_relative_entropy_entropy_form}
+    \lean{quantumRelativeEntropy_eq_neg_entropy_sub_trace_mul_log}
+    \leanok
+    \uses{def:quantum_relative_entropy, lem:quantum_relative_entropy_trace_split,
+        thm:entropy_eq_neg_trace_mul_log}
+    If $\rho$ is Hermitian, then
+    \begin{align}
+        D(\rho\Vert\sigma)
+        &=-S(\rho)-\re\tr(\rho\log\sigma).
+        \label{eq:entropy_relative_entropy_form}
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    Apply Lemma~\ref{lem:quantum_relative_entropy_trace_split} to write
+    \begin{align}
+        D(\rho\Vert\sigma)
+        &=\re\tr(\rho\log\rho)-\re\tr(\rho\log\sigma).
+        \notag
+    \end{align}
+    The trace-logarithm identity $\re\tr(\rho\log\rho)=-S(\rho)$ then gives the
+    result.
+\end{proof}
+
+\begin{theorem}[Klein's inequality]\label{thm:klein_inequality}
+    \lean{quantumRelativeEntropy_nonneg}
+    \leanok
+    \uses{def:quantum_relative_entropy, lem:quantum_relative_entropy_trace_split}
+    Let $\rho,\sigma\in\MN{D}$ be density matrices with $\sigma$ of full rank.
+    Then the relative entropy is non-negative, $D(\rho\Vert\sigma)\ge0$.
+\end{theorem}
+
+\begin{proof}\leanok
+    Diagonalize $\rho=\sum_i p_i\ketbra{e_i}{e_i}$ and
+    $\sigma=\sum_j q_j\ketbra{f_j}{f_j}$ in their eigenbases, with all
+    $q_j>0$ since $\sigma$ has full rank. The overlap numbers
+    $P_{ij}=\lvert\braket{e_i}{f_j}\rvert^2$ are non-negative with row sums and
+    column sums equal to $1$, because the two eigenbases are orthonormal. A trace
+    computation gives
+    \begin{align}
+        \re\tr(\rho\log\rho)
+        &=\sum_i p_i\log p_i,
+        \notag\\
+        \re\tr(\rho\log\sigma)
+        &=\sum_{i,j}p_iP_{ij}\log q_j,
+        \notag\\
+        D(\rho\Vert\sigma)
+        &=\sum_i p_i\log p_i-\sum_{i,j}p_iP_{ij}\log q_j.
+        \notag
+    \end{align}
+    The row and column sums, together with the trace-one normalizations, give
+    $\sum_{i,j}P_{ij}(p_i-q_j)=\sum_i p_i-\sum_jq_j=0$. Hence
+    \begin{align}
+        D(\rho\Vert\sigma)
+        &=\sum_{i,j}P_{ij}
+          \bigl[p_i\log p_i-p_i\log q_j-(p_i-q_j)\bigr].
+        \notag
+    \end{align}
+    Each bracket is non-negative. If $p_i>0$, put $x=q_j/p_i>0$; the bracket
+    is $p_i(x-1-\log x)\geq0$ by $\log x\leq x-1$. If $p_i=0$, the bracket
+    equals $q_j>0$. Therefore $D(\rho\Vert\sigma)\geq0$.
+\end{proof}
+
+\begin{theorem}[Klein's inequality, support form]\label{thm:klein_inequality_general}
+    \lean{quantumRelativeEntropy_nonneg_general}
+    \leanok
+    \uses{def:quantum_relative_entropy}
+    Let $\rho,\sigma\in\MN{D}$ be density matrices satisfying the support
+    condition $\ker\sigma\subseteq\ker\rho$, that is, every vector annihilated by
+    $\sigma$ is annihilated by $\rho$. Then the relative entropy is non-negative,
+    $D(\rho\Vert\sigma)\ge0$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:klein_inequality}
+    Regularize $\sigma$ by the trace-one perturbation
+    $\sigma_\varepsilon'=(1+\varepsilon D)^{-1}(\sigma+\varepsilon\Id)$,
+    which is positive definite for every $\varepsilon>0$, hence of full rank. The
+    full-rank Klein inequality (Theorem~\ref{thm:klein_inequality}) gives
+    $D(\rho\Vert\sigma_\varepsilon')\ge0$. The perturbation shares the
+    eigenbasis $\{\ket{f_j}\}$ of $\sigma$, so the cross term reduces to a scalar
+    sum over the eigenvalues $q_j$ of $\sigma$,
+    \begin{align}
+        \re\tr(\rho\log\sigma_\varepsilon')
+        &=\sum_j\bra{f_j}\rho\ket{f_j}
+          \log\!((1+\varepsilon D)^{-1}(q_j+\varepsilon)).
+        \notag
+    \end{align}
+    For $q_j>0$ the scalar logarithm converges to $\log q_j$; for $q_j=0$ the
+    eigenvector $\ket{f_j}$ lies in $\ker\sigma\subseteq\ker\rho$, so its diagonal
+    weight $\bra{f_j}\rho\ket{f_j}$ vanishes and the summand is identically zero.
+    No eigenvalue-continuity input is needed, so
+    $D(\rho\Vert\sigma_\varepsilon')\to D(\rho\Vert\sigma)$ as
+    $\varepsilon\to0^+$ and the inequality passes to the limit.
+\end{proof}
+
+\begin{theorem}[Equality case of Klein's inequality]
+    \label{thm:klein_inequality_equality}
+    \lean{quantumRelativeEntropy_eq_zero_iff}
+    \leanok
+    \uses{thm:klein_inequality}
+    Let $\rho,\sigma\in\MN{D}$ be density matrices with $\sigma$ of full rank.
+    Then the relative entropy vanishes exactly when the states coincide,
+    $D(\rho\Vert\sigma)=0\iff\rho=\sigma$.
+    Together with nonnegativity, this is the order property that makes $D$ a
+    divergence.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:quantum_relative_entropy_self}
+    If $\rho=\sigma$ then $\log\rho-\log\sigma=0$ and
+    $D(\rho\Vert\sigma)=0$.
+    For the converse, diagonalize $\rho=\sum_i p_i\ketbra{e_i}{e_i}$ and
+    $\sigma=\sum_j q_j\ketbra{f_j}{f_j}$, with all $q_j>0$ by full rank, and set
+    $P_{ij}=\lvert\braket{e_i}{f_j}\rvert^2$. As in
+    Theorem~\ref{thm:klein_inequality},
+    \begin{align}
+        D(\rho\Vert\sigma)
+        &=\sum_{i,j}P_{ij}
+          [p_i\log p_i-p_i\log q_j-(p_i-q_j)],
+        \notag
+    \end{align}
+    a sum of non-negative terms: each is bounded below by the tangent inequality
+    $\log x\le x-1$ at $x=q_j/p_i$, while the linear remainder telescopes through
+    the doubly stochastic row and column sums,
+    $\sum_{i,j}P_{ij}(p_i-q_j)=\sum_ip_i-\sum_jq_j=0$.
+    If the total vanishes then every term vanishes. On a row with $p_i=0$ the term
+    reads $P_{ij}q_j$, so $P_{ij}=0$; on a row with $p_i>0$ the term forces the
+    tangent inequality to be tight,
+    $\log(q_j/p_i)=q_j/p_i-1$, and strict concavity of the logarithm
+    ($\log x<x-1$ for $x\neq1$) gives $q_j=p_i$. Hence $q_j=p_i$ whenever
+    $\braket{e_i}{f_j}\neq0$. Writing $W=U_\rho^\dagger U_\sigma$ for the overlap
+    of the eigenvector unitaries, this matching says
+    $W\diag(q)=\diag(p)W$. Thus, conjugating $\sigma$ into the eigenbasis of
+    $\rho$ and using the unitarity $WW^\dagger=1$,
+    \begin{align}
+        U_\rho^\dagger\sigma U_\rho
+        &=W\diag(q)W^\dagger
+          =\diag(p)WW^\dagger
+          =\diag(p),
+        \notag
+    \end{align}
+    the spectral diagonal of $\rho$. Therefore
+    $\sigma=U_\rho\diag(p)U_\rho^\dagger=\rho$.
+\end{proof}
+
+\begin{theorem}[Joint convexity of the relative entropy]
+    \label{thm:relative_entropy_joint_convexity}
+    \lean{TNLean.RelativeEntropyConvexity.convexOn_quantumRelativeEntropy}
+    \leanok
+    \uses{def:quantum_relative_entropy, cor:lieb_concavity_id}
+    On pairs of positive definite matrices in $\MN{D}$, the map
+    $(\rho,\sigma)\mapsto D(\rho\Vert\sigma)$ is jointly convex.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{cor:lieb_concavity_id}
+    For $s\in[0,1)$ consider the approximant
+    \begin{align}
+        g_s(\rho,\sigma)
+        &=\frac{\tr\rho-\re\tr(\rho^s\sigma^{1-s})}{1-s}.
+        \label{eq:entropy_convex_approximant}
+    \end{align}
+    The trace $\tr\rho$ is real-affine in the pair, hence convex,
+    while $(\rho,\sigma)\mapsto\re\tr(\rho^s\sigma^{1-s})$ is jointly concave by
+    the $K=\Id$ case of the Lieb concavity theorem
+    (Corollary~\ref{cor:lieb_concavity_id}). Their difference, scaled by the
+    non-negative factor $(1-s)^{-1}$, is therefore jointly convex, so each
+    $g_s$ is convex.
+
+    Writing $\rho$ and $\sigma$ in their eigenbases with eigenvalues $p_i,q_j>0$
+    and overlap weights $P_{ij}=\lvert\braket{e_i}{f_j}\rvert^2$, the approximant
+    becomes the double sum
+    $g_s(\rho,\sigma)=\sum_{i,j}(1-s)^{-1}(p_i-p_i^sq_j^{1-s})P_{ij}$. As
+    $s\to1^-$ each per-pair term converges, via the scalar limit
+    $(c^u-1)/u\to\log c$, to
+    $p_i(\log p_i-\log q_j)P_{ij}$, whose sum equals
+    $D(\rho\Vert\sigma)$. Thus $g_s\to D$ pointwise on positive definite pairs,
+    and since the pointwise limit of convex functions is convex, $D$ is jointly
+    convex.
+\end{proof}
+
+\begin{theorem}[Joint convexity on the support domain]
+    \label{thm:relative_entropy_joint_convexity_support}
+    \lean{TNLean.RelativeEntropyConvexity.convexOn_quantumRelativeEntropy_support}
+    \leanok
+    \uses{def:quantum_relative_entropy, thm:relative_entropy_joint_convexity}
+    On pairs of density matrices $(\rho,\sigma)$ in $\MN{D}$ satisfying the support
+    condition $\ker\sigma\subseteq\ker\rho$, the map
+    $(\rho,\sigma)\mapsto D(\rho\Vert\sigma)$ is jointly convex.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:relative_entropy_joint_convexity}
+    The domain is convex: for a strict convex combination of two such pairs the
+    kernel of $a\sigma_1+b\sigma_2$ is $\ker\sigma_1\cap\ker\sigma_2$, since the
+    quadratic forms of the positive semidefinite summands are non-negative and
+    their positively weighted sum vanishes only when each does, and a positive
+    semidefinite matrix annihilates exactly the vectors of zero quadratic form;
+    the two pointwise support inclusions then give
+    $\ker\sigma_1\cap\ker\sigma_2\subseteq\ker\rho_1\cap\ker\rho_2$.
+
+    Regularize both arguments through the affine trace-one perturbation
+    $M_\varepsilon=(1+\varepsilon N)^{-1}(M+\varepsilon\Id)$, where $N$
+    is the matrix dimension, which is positive definite for every
+    $\varepsilon>0$. Because the perturbation is affine, it commutes with the
+    convex combination, so the four regularized endpoints and the regularized
+    mixture all lie in the positive definite domain and the positive definite
+    joint convexity (Theorem~\ref{thm:relative_entropy_joint_convexity}) gives
+    the two-point inequality for the regularized pairs. As
+    $\varepsilon\to0^+$, the regularized relative entropy converges on each pair
+    of the support domain:
+    $D(\rho_\varepsilon\Vert\sigma_\varepsilon)
+    \to D(\rho\Vert\sigma)$.
+    Indeed the perturbation shares the eigenbasis of its argument, so each
+    trace-logarithm term is the diagonal sum
+    $\sum_jw_j(\varepsilon)
+    \log((1+\varepsilon N)^{-1}(q_j+\varepsilon))$,
+    where $q_j$ runs over the eigenvalues of $\sigma$ and
+    $w_j(\varepsilon)$ is the corresponding diagonal weight. For $q_j>0$, the
+    scalar factor converges to $\log q_j$, while at a zero eigenvalue the support
+    condition makes the weight vanish, with
+    $w_j(\varepsilon)=(1+\varepsilon N)^{-1}\varepsilon$, so the summand is
+    \begin{align}
+        &(1+\varepsilon N)^{-1}\varepsilon
+        \log((1+\varepsilon N)^{-1}\varepsilon)\longrightarrow0
+        \notag
+    \end{align}
+    by $x\log x\to0$ as $x\to0^+$. The two-point inequality therefore passes to
+    the limit, giving joint convexity on the support domain.
+\end{proof}
+
+\begin{lemma}[Functional calculus under unitary conjugation]
+    \label{lem:cfc_conj_unitary}
+    \lean{Matrix.cfc_conj_unitary}
+    \leanok
+    For a Hermitian matrix $A$, a real function $f$, and a unitary $U$, the
+    continuous functional calculus satisfies
+    \begin{align}
+        f(UAU^\dagger)
+        &=Uf(A)U^\dagger.
+        \label{eq:entropy_cfc_conjugation}
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    The conjugation $\varphi:x\mapsto UxU^\dagger$ is a star-algebra
+    automorphism of the matrix algebra, and the continuous functional calculus
+    commutes with such automorphisms, $\varphi(f(A))=f(\varphi(A))$; since
+    $\varphi(A)=UAU^\dagger$, this is the claim.
+\end{proof}
+
+\begin{lemma}[Matrix logarithm under unitary conjugation]
+    \label{lem:log_conj_unitary}
+    \lean{Matrix.log_conj_unitary}
+    \leanok
+    For a Hermitian matrix $A$ and a unitary $U$,
+    \begin{align}
+        \log(UAU^\dagger)
+        &=U(\log A)U^\dagger.
+        \label{eq:entropy_log_conjugation}
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:cfc_conj_unitary}
+    This is the $f=\log$ case of Lemma~\ref{lem:cfc_conj_unitary}:
+    $f(UAU^\dagger)=Uf(A)U^\dagger$ specialized to the real logarithm gives
+    $\log(UAU^\dagger)=U(\log A)U^\dagger$.
+\end{proof}
+
+\begin{theorem}[Unitary invariance of the quantum relative entropy]
+    \label{thm:relative_entropy_unitary_invariance}
+    \lean{quantumRelativeEntropy_conj_unitary}
+    \lean{Matrix.quantumRelativeEntropy_weyl_conj_eq}
+    \leanok
+    \uses{def:quantum_relative_entropy}
+    For Hermitian matrices $\rho,\sigma$ and a unitary $U$,
+    \begin{align}
+        D(U\rho U^\dagger\Vert U\sigma U^\dagger)
+        &=D(\rho\Vert\sigma).
+        \label{eq:entropy_unitary_invariance}
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:log_conj_unitary}
+    Carry the two logarithms through the conjugation by
+    Lemma~\ref{lem:log_conj_unitary}, so that
+    \begin{align}
+        D(U\rho U^\dagger\Vert U\sigma U^\dagger)
+        &=\re\tr\!(U\rho(\log\rho-\log\sigma)U^\dagger)
+          =\re\tr\!(\rho(\log\rho-\log\sigma))
+          =D(\rho\Vert\sigma),
+        \notag
+    \end{align}
+    where the middle equality is trace cyclicity together with
+    $U^\dagger U=1$.
+\end{proof}
+
+\begin{lemma}[Logarithm of a tensor product of positive definite matrices]
+    \label{lem:log_kronecker}
+    \lean{Matrix.log_kronecker}
+    \leanok
+    For positive definite matrices $\rho$ and $\tau$,
+    \begin{align}
+        \log(\rho\otimes\tau)
+        &=\log\rho\otimes\Id+\Id\otimes\log\tau.
+        \label{eq:entropy_log_tensor}
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    The tensor product factors as
+    $\rho\otimes\tau=(\rho\otimes\Id)(\Id\otimes\tau)$ into a
+    pair of commuting positive definite matrices, so the logarithm of the product
+    is the sum of the logarithms of the factors. Each unital embedding
+    $A\mapsto A\otimes\Id$ and $B\mapsto\Id\otimes B$ is a
+    continuous star-algebra homomorphism, hence commutes with the functional
+    calculus, which carries each logarithm onto its factor:
+    $\log(\rho\otimes\Id)=\log\rho\otimes\Id$ and
+    $\log(\Id\otimes\tau)=\Id\otimes\log\tau$.
+\end{proof}
+
+\begin{theorem}[Ancilla additivity of the quantum relative entropy]
+    \label{thm:relative_entropy_ancilla_additivity}
+    \lean{quantumRelativeEntropy_kronecker}
+    \leanok
+    \uses{def:quantum_relative_entropy, lem:log_kronecker}
+    For positive definite matrices $\rho,\sigma$ and a positive definite matrix
+    $\tau$ of unit trace,
+    \begin{align}
+        D(\rho\otimes\tau\Vert\sigma\otimes\tau)
+        &=D(\rho\Vert\sigma).
+        \label{eq:entropy_ancilla_additivity}
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:log_kronecker}
+    Splitting each tensor logarithm by Lemma~\ref{lem:log_kronecker}, the common
+    $\Id\otimes\log\tau$ terms cancel in the difference, leaving
+    $\log(\rho\otimes\tau)-\log(\sigma\otimes\tau)
+    =(\log\rho-\log\sigma)\otimes\Id$. Hence
+    \begin{align}
+        D(\rho\otimes\tau\Vert\sigma\otimes\tau)
+        &=\re\tr\!((\rho(\log\rho-\log\sigma))\otimes\tau)
+          =\re(\tr(\rho(\log\rho-\log\sigma))\cdot\tr\tau),
+        \notag
+    \end{align}
+    where the trace of a tensor product factors as a product of traces. As
+    $\tr\tau=1$, the right-hand side is $D(\rho\Vert\sigma)$.
+\end{proof}
+
+\begin{lemma}[Root-of-unity character-sum orthogonality]
+    \label{lem:root_of_unity_orthogonality}
+    \lean{Matrix.sum_rootOfUnity_pow_eq}
+    \leanok
+    Let $\zeta$ be a primitive $d$-th root of unity and let $i,j$ range over the
+    residues modulo $d$. Then
+    \begin{align}
+        \sum_{b=0}^{d-1}\zeta^{bi}\overline{\zeta^{bj}}
+        &=
+        \begin{cases}
+            d, & i=j,\\
+            0, & i\ne j.
+        \end{cases}
+        \label{eq:entropy_root_orthogonality}
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    Each summand equals $\xi^b$ with
+    $\xi=\zeta^i\overline{\zeta}^{\,j}$, and $\xi^d=1$. When $i=j$ the
+    base $\xi$ equals $1$ and the sum is $d$. When $i\ne j$ the base is a root of
+    unity different from $1$, so the geometric sum
+    $(\xi-1)\sum_b\xi^b=\xi^d-1=0$ forces the sum to vanish; the
+    equivalence $\xi=1\iff i=j$ uses that
+    $\overline{\zeta}=\zeta^{-1}$ and the injectivity of
+    $b\mapsto\zeta^b$ on residues.
+\end{proof}
+
+\begin{theorem}[Unitarity of the Weyl operators]
+    \label{thm:weyl_operator_unitary}
+    \lean{Matrix.weylShift_mem_unitary}
+    \lean{Matrix.weylClock_mem_unitary}
+    \lean{Matrix.weyl_mem_unitary}
+    \leanok
+    Fix a dimension $d\ge1$ and a primitive $d$-th root of unity $\zeta$.
+    The cyclic shift $X$, the clock operator $Z$, and every Weyl operator
+    $W(a,b)=X^aZ^b$ are unitary.
+\end{theorem}
+
+\begin{proof}\leanok
+    The cyclic shift is the permutation matrix of a cyclic permutation. The
+    clock operator is diagonal, and each diagonal entry is a power of $\zeta$,
+    hence has modulus one. Thus $X$ and $Z$ are unitary, and so is every product
+    $X^aZ^b$.
+\end{proof}
+
+\begin{theorem}[Weyl-operator unitary 1-design twirl]
+    \label{thm:weyl_twirl}
+    \lean{Matrix.sum_weyl_conj}
+    \leanok
+    \uses{lem:root_of_unity_orthogonality}
+    Fix a dimension $d\ge1$ and a primitive $d$-th root of unity $\zeta$, and
+    let $X$ be the cyclic shift $\ket{i}\mapsto\ket{i+1}$ and
+    $Z=\diag(\zeta^0,\ldots,\zeta^{d-1})$ the clock operator. For
+    every matrix $M$ on $\C^d$, the uniform average of the conjugations
+    by the $d^2$ Weyl operators $W(a,b)=X^aZ^b$ is the completely depolarizing
+    channel:
+    \begin{align}
+        \frac{1}{d^2}\sum_{a,b=0}^{d-1}
+        W(a,b)MW(a,b)^\dagger
+        &=\frac{\tr M}{d}\Id.
+        \label{eq:entropy_weyl_twirl}
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:root_of_unity_orthogonality}
+    The double average factors into a clock average followed by a shift average.
+    The clock average $\sum_bZ^bM(Z^b)^\dagger$ multiplies the entry
+    $M_{ij}$ by $\sum_b\zeta^{bi}\overline{\zeta^{bj}}$, which by
+    Lemma~\ref{lem:root_of_unity_orthogonality} is $d$ when $i=j$ and $0$
+    otherwise; the result is $d$ times the diagonal part of $M$. The shift
+    average $\sum_aX^a(\diag v)(X^a)^\dagger$
+    cyclically permutes the diagonal entries, so each diagonal position receives
+    the full sum $\sum_kv_k=\tr M$, giving $(\tr M)\Id$. Combining the two
+    factors of $d$ with the prefactor $d^{-2}$ leaves $(\tr M/d)\Id$.
+\end{proof}
+
+\begin{lemma}[Twirl as partial trace tensored with the maximally mixed ancilla]
+    \label{lem:twirl_partial_trace}
+    \lean{Matrix.sum_kronecker_one_weyl_conj}
+    \leanok
+    \uses{thm:weyl_twirl}
+    Fix a dimension $d_C\ge1$ and a primitive $d_C$-th root of unity $\zeta$.
+    For every matrix $M$ on $\mc H_S\otimes\C^{d_C}$, the uniform
+    average of the conjugations by the $d_C^2$ unitaries
+    $\Id_S\otimes W(a,b)$ on the second factor is the partial trace over
+    that factor tensored with the maximally mixed state $\Id_C/d_C$:
+    \begin{align}
+        \frac{1}{d_C^2}\sum_{a,b}
+        (\Id_S\otimes W(a,b))M(\Id_S\otimes W(a,b))^\dagger
+        &=(\tr_C M)\otimes(\Id_C/d_C).
+        \label{eq:entropy_partial_trace_twirl}
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:weyl_twirl}
+    On each pair of blocks indexed by the first factor, the conjugation by
+    $\Id_S\otimes W(a,b)$ acts as the Weyl conjugation
+    $W(a,b)(\cdot)W(a,b)^\dagger$ of the corresponding block of $M$.
+    Averaging over the $d_C^2$ Weyl operators sends each block to the
+    depolarizing channel by Theorem~\ref{thm:weyl_twirl}, replacing it by its
+    trace times $\Id_C/d_C$. The block trace is exactly the corresponding
+    entry of the partial trace $\tr_C M$, so the average is
+    $(\tr_C M)\otimes(\Id_C/d_C)$.
+\end{proof}
+
+\begin{theorem}[The maximally mixed ancilla]
+    \label{thm:maximally_mixed_ancilla}
+    \lean{Matrix.maximallyMixed_posDef}
+    \lean{Matrix.maximallyMixed_trace}
+    \leanok
+    For $d_C\ge1$, the matrix $\tau_C=d_C^{-1}\Id_C$ is positive
+    definite and has trace one.
+\end{theorem}
+
+\begin{proof}\leanok
+    The identity is positive definite and $d_C^{-1}>0$, so $\tau_C$ is positive
+    definite. Moreover, $\tr\tau_C=d_C^{-1}\tr\Id_C=1$.
+\end{proof}
+
+\begin{lemma}[Reindexing invariance of the quantum relative entropy]
+    \label{lem:relative_entropy_submatrix_equiv}
+    \lean{Matrix.quantumRelativeEntropy_submatrix_equiv}
+    \leanok
+    \uses{def:quantum_relative_entropy}
+    For Hermitian matrices $\rho,\sigma$ on a finite index set and any bijection
+    $e$ from that set onto another finite set,
+    \begin{align}
+        D(\rho_{e^{-1},e^{-1}}\Vert\sigma_{e^{-1},e^{-1}})
+        &=D(\rho\Vert\sigma).
+        \label{eq:entropy_reindexing}
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:quantum_relative_entropy}
+    Write
+    $D(\rho\Vert\sigma)
+    =\re\tr(\rho(\log\rho-\log\sigma))$.
+    The matrix logarithm is covariant under reindexing,
+    $\log(\rho_{e^{-1},e^{-1}})
+    =(\log\rho)_{e^{-1},e^{-1}}$, because reindexing is a
+    star-algebra isomorphism and so commutes with the continuous functional
+    calculus. The same isomorphism preserves products and the trace,
+    \begin{align}
+        (\rho M)_{e^{-1},e^{-1}}
+        &=\rho_{e^{-1},e^{-1}}M_{e^{-1},e^{-1}},
+        \notag\\
+        \tr(M_{e^{-1},e^{-1}})
+        &=\tr(M).
+        \notag
+    \end{align}
+    Taking $M=\log\rho-\log\sigma$ and applying these three identities gives
+    $D(\rho_{e^{-1},e^{-1}}\Vert\sigma_{e^{-1},e^{-1}})
+    =D(\rho\Vert\sigma)$.
+\end{proof}
+
+\begin{theorem}[Data-processing inequality under the partial trace]
+    \label{thm:relative_entropy_data_processing}
+    \lean{Matrix.quantumRelativeEntropy_partialTraceRight_le}
+    \leanok
+    \uses{def:quantum_relative_entropy, thm:relative_entropy_ancilla_additivity,
+        thm:relative_entropy_unitary_invariance, thm:relative_entropy_joint_convexity,
+        lem:relative_entropy_submatrix_equiv, lem:twirl_partial_trace}
+    For positive definite matrices $\rho,\sigma$ on a tensor product of a system
+    factor and an ancilla factor,
+    \begin{align}
+        D(\tr_C\rho\Vert\tr_C\sigma)
+        &\le D(\rho\Vert\sigma),
+        \label{eq:entropy_data_processing}
+    \end{align}
+    where $\tr_C$ is the partial trace over the ancilla factor. This is the
+    positive-definite base case; the source inequality on the support domain
+    $\ker\sigma\subseteq\ker\rho$ is
+    Theorem~\ref{thm:relative_entropy_data_processing_support}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:relative_entropy_ancilla_additivity,
+        thm:relative_entropy_unitary_invariance, thm:relative_entropy_joint_convexity,
+        lem:twirl_partial_trace}
+    By ancilla additivity (Theorem~\ref{thm:relative_entropy_ancilla_additivity})
+    the reduced-state relative entropy equals
+    $D\bigl((\tr_C\rho)\otimes(\Id_C/d_C)\Vert
+    (\tr_C\sigma)\otimes(\Id_C/d_C)\bigr)$. By
+    Lemma~\ref{lem:twirl_partial_trace} each tensored reduced state is the uniform
+    average of the conjugations by the $d_C^2$ unitaries
+    $U_{ab}=\Id_S\otimes W(a,b)$, so this is the relative entropy of a
+    convex combination of the conjugated pairs
+    $(U_{ab}\rho U_{ab}^\dagger,U_{ab}\sigma U_{ab}^\dagger)$ with equal
+    weights $d_C^{-2}$. Joint convexity bounds it above by the same convex
+    combination of the per-term relative entropies, each of which equals
+    $D(\rho\Vert\sigma)$ by unitary invariance
+    (Theorem~\ref{thm:relative_entropy_unitary_invariance}). As the weights sum to
+    one, the bound is $D(\rho\Vert\sigma)$.
+\end{proof}
+
+\begin{theorem}[Data-processing inequality on the support domain]
+    \label{thm:relative_entropy_data_processing_support}
+    \lean{Matrix.quantumRelativeEntropy_partialTraceRight_le_support}
+    \leanok
+    \uses{def:quantum_relative_entropy, thm:relative_entropy_data_processing}
+    For positive semidefinite $\rho,\sigma$ on a tensor product of a system factor
+    and an ancilla factor of dimension $d_C$, with the support condition
+    $\ker\sigma\subseteq\ker\rho$,
+    \begin{align}
+        D(\tr_C\rho\Vert\tr_C\sigma)
+        &\le D(\rho\Vert\sigma),
+        \label{eq:entropy_data_processing_support}
+    \end{align}
+    where $\tr_C$ is the partial trace over the ancilla factor.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:relative_entropy_data_processing}
+    Let $N$ be the dimension of the joint space. Regularize both arguments through
+    the affine trace-shrinking perturbation
+    $M_\varepsilon=(1+N\varepsilon)^{-1}(M+\varepsilon\Id)$, which is
+    positive definite for every $\varepsilon>0$, so the positive-definite
+    data-processing inequality
+    (Theorem~\ref{thm:relative_entropy_data_processing}) gives
+    \begin{align}
+        D(\tr_C\rho_\varepsilon\Vert\tr_C\sigma_\varepsilon)
+        &\le D(\rho_\varepsilon\Vert\sigma_\varepsilon).
+        \notag
+    \end{align}
+    The right-hand side converges to $D(\rho\Vert\sigma)$ as
+    $\varepsilon\to0^+$, by the same shared-eigenbasis scalar-limit argument as the
+    joint convexity on the support domain
+    (Theorem~\ref{thm:relative_entropy_joint_convexity_support}).
+
+    For the left-hand side, the partial trace of the regularization is a
+    differently scaled regularization of the marginal: because the partial trace is
+    linear and $\tr_C\Id=d_C\Id$,
+    \begin{align}
+        \tr_C((1+N\varepsilon)^{-1}(M+\varepsilon\Id))
+        &=(1+N\varepsilon)^{-1}
+          (\tr_C M+d_C\varepsilon\Id).
+        \notag
+    \end{align}
+    This is the affine regularization of $\tr_C M$ with the same scaling rate $N$
+    but shift rate $d_C$ and the smaller identity on the system factor. The support
+    condition transfers to the marginals,
+    $\ker(\tr_C\sigma)\subseteq\ker(\tr_C\rho)$: a vector annihilated by
+    $\tr_C\sigma$ has vanishing marginal quadratic form, which splits into the
+    non-negative joint quadratic forms of its single-ancilla lifts, so each lift lies
+    in $\ker\sigma$, hence in $\ker\rho$, and reassembling the ancilla sum shows
+    the vector lies in $\ker(\tr_C\rho)$. With this support condition the
+    arbitrary-rate affine regularization has the same both-arguments limit:
+    \begin{align}
+        D(\tr_C\rho_\varepsilon\Vert\tr_C\sigma_\varepsilon)
+        &\longrightarrow D(\tr_C\rho\Vert\tr_C\sigma)
+        \quad\text{as }\varepsilon\to0^+.
+        \notag
+    \end{align}
+    Passing the inequality through the two limits gives the support-domain bound.
+\end{proof}

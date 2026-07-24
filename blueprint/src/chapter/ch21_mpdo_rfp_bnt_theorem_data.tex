@@ -15,20 +15,20 @@
     \emph{BNT algebra clause} when there is a length-independent family of
     positive diagonal matrices $\chi_{\alpha,\beta,\gamma}$ such that, for
     every $L>0$,
-    \[
-        c^{(L)}_{\alpha,\beta,\gamma}
-        =\tr(\chi_{\alpha,\beta,\gamma}^{L}),
-    \]
-    the same-length product law holds,
-    \[
+    $c^{(L)}_{\alpha,\beta,\gamma}
+    =\tr(\chi_{\alpha,\beta,\gamma}^{L})$, the same-length product law holds,
+    \begin{align}
         O_L(M_\alpha)O_L(M_\beta)
-        =\sum_\gamma c^{(L)}_{\alpha,\beta,\gamma}O_L(M_\gamma),
-    \]
+        &=\sum_\gamma c^{(L)}_{\alpha,\beta,\gamma}O_L(M_\gamma),
+        \notag
+    \end{align}
     and the trace scalars satisfy
-    \[
-        m_\gamma=\sum_{\alpha,\beta}
-        c^{(1)}_{\alpha,\beta,\gamma}m_\alpha m_\beta.
-    \]
+    \begin{align}
+        m_\gamma
+        &=\sum_{\alpha,\beta}
+          c^{(1)}_{\alpha,\beta,\gamma}m_\alpha m_\beta.
+        \notag
+    \end{align}
     This is the algebra statement in
     \cite[Theorem~4.14(ii), labelled IV.13 in the source,
         lines~972--985]{Cirac2016MPDO_arXiv}, before comparison with a chosen
@@ -45,25 +45,28 @@
     \leanok
     \uses{def:vertical_cf_mpdo, def:mpdo_bnt_algebra_clause}
     Choose a vertical canonical decomposition
-    \[
+    \begin{align}
         U\widetilde M U^\dagger
-        =\bigoplus_\alpha \mu_\alpha\otimes M_\alpha,
-        \qquad
-        \mu_\alpha=\diag
-        (\omega_{\alpha,0},\ldots,\omega_{\alpha,r_\alpha-1}).
-    \]
+        &=\bigoplus_\alpha \mu_\alpha\otimes M_\alpha,
+        \notag\\
+        \mu_\alpha
+        &=\diag(\omega_{\alpha,0},\ldots,\omega_{\alpha,r_\alpha-1}).
+        \notag
+    \end{align}
     Separating the two factors of the doubled physical index of
-    $M_\alpha$ gives an MPO tensor $\widehat M_\alpha$.  Define
-    \[
-        O_L(M_\alpha)=\operatorname{mpo}(\widehat M_\alpha,L),
-        \qquad
-        m_\alpha=\sum_q\omega_{\alpha,q}
-        =\tr(\mu_\alpha).
-    \]
+    $M_\alpha$ gives an MPO tensor $\widehat M_\alpha$. Define
+    \begin{align}
+        O_L(M_\alpha)
+        &=\operatorname{mpo}(\widehat M_\alpha,L),
+        \notag\\
+        m_\alpha
+        &=\sum_q\omega_{\alpha,q}=\tr(\mu_\alpha).
+        \notag
+    \end{align}
     The chosen decomposition satisfies the tensor-attached BNT algebra clause
     when the tensors $M_\alpha$ form a basis of normal tensors and the BNT
     algebra clause holds for precisely these operators and these trace
-    scalars.  This is the data in
+    scalars. This is the data in
     \cite[Theorem~4.14(ii), lines~972--993, and Appendix~C.4,
         lines~2046--2064]{Cirac2016MPDO_arXiv}; it does not include a comparison
     with a two-site vertical canonical decomposition.
@@ -77,20 +80,13 @@
         def:mpdo_bnt_label_trace_scalar_family}
     Fix the one-site diagonal multiplicity matrices $\mu_\alpha$ and the
     two-site diagonal multiplicity matrices $\nu_\gamma$ in the respective
-    vertical canonical decompositions.  A multiplicity-spectrum comparison
-    records
-    \[
-        \tr(\mu_\alpha)=m_\alpha
-    \]
-    and, for every $\gamma$, equality with multiplicity between the entries
-    of $\nu_\gamma$ and the products
-    \[
-        \mu_{\alpha,i}\mu_{\beta,j}
-        \chi_{\alpha,\beta,\gamma,k}.
-    \]
+    vertical canonical decompositions. A multiplicity-spectrum comparison
+    records $\tr(\mu_\alpha)=m_\alpha$ and, for every $\gamma$, equality with
+    multiplicity between the entries of $\nu_\gamma$ and the products
+    $\mu_{\alpha,i}\mu_{\beta,j}\chi_{\alpha,\beta,\gamma,k}$.
     This is the conclusion of the vertical BNT comparison and positive
     power-sum argument in
-    \cite[Appendix~C.4, lines~2048--2058]{Cirac2016MPDO_arXiv}.  The
+    \cite[Appendix~C.4, lines~2048--2058]{Cirac2016MPDO_arXiv}. The
     definition does not require this comparison to follow from a BNT algebra
     clause; constructing it from the MPDO tensor is a separate obligation.
 \end{definition}
@@ -102,19 +98,22 @@
     \uses{def:mpdo_bnt_algebra_tensor_clause}
     For a tensor-attached BNT algebra clause, a source-derived two-site
     multiplicity spectrum consists of a vertical canonical decomposition
-    \[
+    \begin{align}
         \widetilde{M^{(2)}}
-        =\bigoplus_\delta \nu_\delta\otimes A_\delta,
-    \]
+        &=\bigoplus_\delta \nu_\delta\otimes A_\delta,
+        \notag
+    \end{align}
     a bijection $\sigma$ from the one-site sectors to its sectors such that
     $M_\gamma$ and $A_{\sigma(\gamma)}$ generate the same matrix product
     vectors at every positive length, and, for every $\gamma$, the multiset
     equality
-    \[
+    \begin{align}
         \bigl\{\nu_{\sigma(\gamma),r}:r\bigr\}
-        =\bigl\{\mu_{\alpha,i}\mu_{\beta,j}
+        &=
+        \bigl\{\mu_{\alpha,i}\mu_{\beta,j}
           \chi_{\alpha,\beta,\gamma,k}:\alpha,\beta,i,j,k\bigr\}.
-    \]
+        \notag
+    \end{align}
     This is the decomposition and comparison retained in
     \cite[Appendix~C.4, lines~2046--2058]{Cirac2016MPDO_arXiv}.
 \end{definition}
@@ -126,19 +125,16 @@
     \uses{def:mpdo_bnt_two_site_multiplicity_spectrum}
     The invertible-gauge sub-result for a source-derived two-site multiplicity
     spectrum additionally records, for every one-site sector $\gamma$, equality
-    of bond dimensions
-    \[
-        d_\gamma=d_{\sigma(\gamma)}
-    \]
-    and an invertible matrix $Z_\gamma\in\operatorname{GL}(d_\gamma,\mathbb C)$
-    such that
-    \[
+    of bond dimensions $d_\gamma=d_{\sigma(\gamma)}$ and an invertible matrix
+    $Z_\gamma\in\GL(d_\gamma,\C)$ such that, for every physical index $i$,
+    \begin{align}
         A_{\sigma(\gamma)}^i
-        =Z_\gamma M_\gamma^i Z_\gamma^{-1}
-    \]
-    for every physical index $i$.  Thus the matched normal tensors have no
-    residual scalar phase.  This is the exact invertible conjugacy retained
-    from \cite[Appendix~C.4, lines~2053--2057]{Cirac2016MPDO_arXiv}.
+        &=Z_\gamma M_\gamma^i Z_\gamma^{-1}.
+        \notag
+    \end{align}
+    Thus the matched normal tensors have no residual scalar phase. This is the
+    exact invertible conjugacy retained from
+    \cite[Appendix~C.4, lines~2053--2057]{Cirac2016MPDO_arXiv}.
     It does not include the further conclusion on line~2057 that $Z_\gamma$
     may be chosen unitary; that strengthening remains open.
     % The full line-2057 unitary source step is tracked in issue 4645 and
@@ -161,32 +157,34 @@
         def:mpdo_bnt_eventual_power_sums_multiplicity_comparison}
     Let $M$ be an MPDO in horizontal canonical form, equipped with a
     tensor-attached BNT algebra clause
-    \[
-        \widetilde M=\bigoplus_\alpha \mu_\alpha\otimes M_\alpha.
-    \]
+    $\widetilde M=\bigoplus_\alpha \mu_\alpha\otimes M_\alpha$.
     There is a vertical canonical decomposition of the two-site blocking,
-    \[
+    \begin{align}
         \widetilde{M^{(2)}}
-        =\bigoplus_\delta \nu_\delta\otimes A_\delta.
-    \]
+        &=\bigoplus_\delta \nu_\delta\otimes A_\delta.
+        \notag
+    \end{align}
     Its normal-tensor sectors are in bijection, via $\sigma$, with the sectors
     of the full-support one-site product expansion such that $M_\gamma$ and
     $A_{\sigma(\gamma)}$ generate the same matrix product vectors at every
     positive length and, for every $\gamma$,
-    \[
+    \begin{align}
         \bigl\{\nu_{\sigma(\gamma),r}:r\bigr\}
-        =\bigl\{\mu_{\alpha,i}\mu_{\beta,j}
+        &=
+        \bigl\{\mu_{\alpha,i}\mu_{\beta,j}
           \chi_{\alpha,\beta,\gamma,k}:\alpha,\beta,i,j,k\bigr\}
-    \]
-    as multisets.  Thus this two-site decomposition and relabelling realize
+        \label{eq:rfp_multiplicity_spectrum}
+    \end{align}
+    as multisets. Thus this two-site decomposition and relabelling realize
     the multiplicity-spectrum comparison of Appendix~C.4, lines~2046--2058
-    of \cite{Cirac2016MPDO_arXiv}.  Moreover, the paired bond dimensions agree
+    of \cite{Cirac2016MPDO_arXiv}. Moreover, the paired bond dimensions agree
     and there are invertible matrices $Z_\gamma$ satisfying
-    \[
+    \begin{align}
         A_{\sigma(\gamma)}^i
-        =Z_\gamma M_\gamma^i Z_\gamma^{-1}
-    \]
-    exactly.  This is only the invertible-gauge sub-result of
+        &=Z_\gamma M_\gamma^i Z_\gamma^{-1}
+        \label{eq:rfp_sector_conjugacy}
+    \end{align}
+    exactly. This is only the invertible-gauge sub-result of
     lines~2053--2057: the further conclusion that $Z_\gamma$ may be chosen
     unitary is not part of this statement and remains open.
     % The full line-2057 unitary source step is tracked in issue 4645 and
@@ -197,22 +195,24 @@
     Multiplying the two one-site decompositions and using the BNT algebra law
     expresses the two-site closed chain in the basis $M_\gamma$, with
     coefficient
-    \[
-      \sum_{\alpha,\beta,i,j,k}
+    \begin{align}
+        \sum_{\alpha,\beta,i,j,k}
         \bigl(\mu_{\alpha,i}\mu_{\beta,j}
           \chi_{\alpha,\beta,\gamma,k}\bigr)^L.
-    \]
-    All these coefficients are positive.  Hence every basis sector occurs,
+        \notag
+    \end{align}
+    All these coefficients are positive. Hence every basis sector occurs,
     and the characterization of bases of normal tensors matches these sectors
     bijectively with those of the two-site vertical canonical decomposition.
     Normalization makes each matching scalar have modulus one, while
     positivity of two consecutive coefficients makes it positive; it is
-    therefore one.  The normal-tensor matching theorem also supplies equality
+    therefore one. The normal-tensor matching theorem also supplies equality
     of the paired bond dimensions and an invertible gauge; after the scalar is
-    one, its gauge-phase relation is precisely the displayed exact conjugacy.
-    Eventual linear independence of the basis vectors gives the displayed
-    equality of power sums.  The finite positive power-sum identity then gives
-    equality of the corresponding multisets.
+    one, its gauge-phase relation is precisely the exact conjugacy
+    in (\ref{eq:rfp_sector_conjugacy}).
+    Eventual linear independence of the basis vectors gives the corresponding
+    equality of power sums. The finite positive power-sum identity then gives
+    the multiset equality (\ref{eq:rfp_multiplicity_spectrum}).
 \end{proof}
 
 \begin{lemma}[Idempotence for the canonical chi coefficients]%
@@ -222,26 +222,23 @@
     \uses{def:mpdo_bnt_algebra_clause}
     The length-one idempotent law of a BNT algebra clause also holds for the
     coefficient family determined by its diagonal chi matrices:
-    \[
+    \begin{align}
         m_\gamma
-        =\sum_{\alpha,\beta}
+        &=\sum_{\alpha,\beta}
           \tr(\chi_{\alpha,\beta,\gamma})
           m_\alpha m_\beta.
-    \]
+        \notag
+    \end{align}
 \end{lemma}
 
 \begin{proof}\leanok
     The chi representation at length one gives
-    \[
-        c^{(1)}_{\alpha,\beta,\gamma}
-        =\tr(\chi_{\alpha,\beta,\gamma}).
-    \]
+    $c^{(1)}_{\alpha,\beta,\gamma}
+    =\tr(\chi_{\alpha,\beta,\gamma})$.
     Substitution into the idempotent law
-    \[
-        m_\gamma
-        =\sum_{\alpha,\beta}
-          c^{(1)}_{\alpha,\beta,\gamma}m_\alpha m_\beta
-    \]
+    $m_\gamma
+    =\sum_{\alpha,\beta}
+    c^{(1)}_{\alpha,\beta,\gamma}m_\alpha m_\beta$
     gives the stated identity.
 \end{proof}
 
@@ -255,34 +252,32 @@
         thm:bounded_power_sum_multiset}
     Suppose that every entry of the one-site multiplicity matrices, every
     entry of the two-site multiplicity matrices, and every entry of the
-    matrices $\chi_{\alpha,\beta,\gamma}$ is positive.  Suppose also that, for
-    every $\alpha$,
-    \[
-        \sum_i \mu_{\alpha,i}=m_\alpha.
-    \]
+    matrices $\chi_{\alpha,\beta,\gamma}$ is positive. Suppose also that
+    $\sum_i\mu_{\alpha,i}=m_\alpha$ for every $\alpha$.
     If, for every $\gamma$ and all sufficiently large $L$,
-    \[
+    \begin{align}
         \sum_r \nu_{\gamma,r}^{L}
-        =
+        &=
         \sum_{\alpha,\beta,i,j,k}
-        \bigl(
-          \mu_{\alpha,i}\mu_{\beta,j}
-          \chi_{\alpha,\beta,\gamma,k}
-        \bigr)^L,
-    \]
-    then the entries on the two sides agree as multisets.  Together with the
-    displayed one-site trace identity, the one-site and two-site multiplicity
-    entries and their dimensions define a BNT multiplicity-spectrum comparison.
+        \bigl(\mu_{\alpha,i}\mu_{\beta,j}
+          \chi_{\alpha,\beta,\gamma,k}\bigr)^L,
+        \notag
+    \end{align}
+    then the entries on the two sides agree as multisets. Together with the
+    one-site trace identity $\sum_i\mu_{\alpha,i}=m_\alpha$, the one-site and
+    two-site multiplicity entries and their dimensions define a BNT
+    multiplicity-spectrum comparison.
 
-    Positivity makes all entries nonzero.  Eventual equality of two finite
+    Positivity makes all entries nonzero. Eventual equality of two finite
     sums of geometric sequences gives, for every $L\geq 1$,
-    \[
+    \begin{align}
         \sum_r \nu_{\gamma,r}^{L}
-        =
+        &=
         \sum_{\alpha,\beta,i,j,k}
         \bigl(\mu_{\alpha,i}\mu_{\beta,j}
           \chi_{\alpha,\beta,\gamma,k}\bigr)^L.
-    \]
+        \notag
+    \end{align}
     The finite power-sum identity determines both the cardinality and the
     multiset of entries.
 \end{definition}
@@ -301,46 +296,52 @@
     Suppose that the BNT algebra clause holds and that the one-site and
     two-site vertical multiplicity spectra have been compared as above.
     Then every two-site multiplicity matrix has the prescribed trace:
-    \[
+    \begin{align}
         \tr(\nu_\gamma)
-        = \sum_{\alpha,\beta,i,j,k}
+        &=\sum_{\alpha,\beta,i,j,k}
           \mu_{\alpha,i}\mu_{\beta,j}
           \chi_{\alpha,\beta,\gamma,k}
-        = \sum_{\alpha,\beta}
+         =\sum_{\alpha,\beta}
           c^{(1)}_{\alpha,\beta,\gamma}m_\alpha m_\beta
-        = m_\gamma.
-    \]
+         =m_\gamma.
+        \label{eq:rfp_trace_normalization}
+    \end{align}
     This is the normalization used for the preparation matrix
     $\nu_\gamma/m_\gamma$ in the algebra-to-RFP implication of
     \cite[Appendix~C.4, lines~2058--2064]{Cirac2016MPDO_arXiv}.
 \end{theorem}
 \begin{proof}\leanok
-    Sum the multiset equality of the two spectra.  For each
+    Sum the multiset equality of the two spectra. For each
     $\alpha,\beta,\gamma$, the resulting product sum satisfies
-    \[
+    \begin{align}
         \sum_{i,j,k}
           \mu_{\alpha,i}\mu_{\beta,j}\chi_{\alpha,\beta,\gamma,k}
-        =
+        &=
         \left(\sum_i\mu_{\alpha,i}\right)
         \left(\sum_j\mu_{\beta,j}\right)
         \left(\sum_k\chi_{\alpha,\beta,\gamma,k}\right).
-    \]
+        \notag
+    \end{align}
     The identities
-    \[
-        \sum_i\mu_{\alpha,i}=m_\alpha,
-        \qquad
-        \sum_j\mu_{\beta,j}=m_\beta,
-        \qquad
+    \begin{align}
+        \sum_i\mu_{\alpha,i}
+        &=m_\alpha,
+        \notag\\
+        \sum_j\mu_{\beta,j}
+        &=m_\beta,
+        \notag\\
         \sum_k\chi_{\alpha,\beta,\gamma,k}
-          =c^{(1)}_{\alpha,\beta,\gamma}
-    \]
+        &=c^{(1)}_{\alpha,\beta,\gamma}
+        \notag
+    \end{align}
     therefore give
-    \[
+    \begin{align}
         \tr(\nu_\gamma)
-        =\sum_{\alpha,\beta}
+        &=\sum_{\alpha,\beta}
           m_\alpha m_\beta c^{(1)}_{\alpha,\beta,\gamma}
-        =m_\gamma,
-    \]
+         =m_\gamma,
+        \notag
+    \end{align}
     where the final equality is the length-one idempotent law.
 \end{proof}
 
@@ -376,23 +377,26 @@
     The BNT-label theorem data consist of a BNT algebra clause together with
     the comparison with the chosen blocked bases.
     Explicitly, for every $L>0$ the product law is
-    \[
+    \begin{align}
         O_L(M_\alpha)O_L(M_\beta)
-        =\sum_\gamma
+        &=\sum_\gamma
           c^{(L)}_{\alpha,\beta,\gamma}O_L(M_\gamma),
-    \]
+        \notag
+    \end{align}
     while the idempotent scalar law is
-    \[
+    \begin{align}
         m_\gamma
-        =\sum_{\alpha,\beta}
+        &=\sum_{\alpha,\beta}
           c^{(1)}_{\alpha,\beta,\gamma}m_\alpha m_\beta.
-    \]
+        \notag
+    \end{align}
     For every positive blocked length $n$ and blocked-basis indices $i,j,k$,
     the source and target label maps $\sigma_n,\tau_n$ give the comparison
-    \[
+    \begin{align}
         c^{(n)}_{i,j,k}
-        =c^{(n)}_{\sigma_n(i),\sigma_n(j),\tau_n(k)}.
-    \]
+        &=c^{(n)}_{\sigma_n(i),\sigma_n(j),\tau_n(k)}.
+        \notag
+    \end{align}
     They also determine the pulled-back blocked-basis $\chi$-family. These
     data are the source-side hypotheses from which the blocked-basis
     consequences below are derived.
@@ -416,43 +420,39 @@
     \uses{def:mpdo_bnt_label_theorem_data}
     Let $c^{(L)}_{\alpha,\beta,\gamma}$ be the coefficient family and let
     $\chi_{\alpha,\beta,\gamma}$ be the positive diagonal matrices carried by
-    the theorem data.  For every $L>0$,
-    \[
+    the theorem data. For every $L>0$,
+    \begin{align}
         c^{(L)}_{\alpha,\beta,\gamma}
-        =c^{\chi,(L)}_{\alpha,\beta,\gamma}
-        =\tr\!\left(
-            \chi_{\alpha,\beta,\gamma}^{\,L}
-        \right),
-    \]
+        &=c^{\chi,(L)}_{\alpha,\beta,\gamma}
+         =\tr\!\left(\chi_{\alpha,\beta,\gamma}^{\,L}\right),
+        \notag
+    \end{align}
     where $c^{\chi}$ is the canonical coefficient family determined by
     $\chi$, and every diagonal entry of every
-    $\chi_{\alpha,\beta,\gamma}$ is strictly positive.  Consequently, for
+    $\chi_{\alpha,\beta,\gamma}$ is strictly positive. Consequently, for
     every $L>0$, the same-length product identity reads
-    \[
+    \begin{align}
         O_L(M_\alpha)O_L(M_\beta)
-        =\sum_\gamma
-          \tr\!\left(
-              \chi_{\alpha,\beta,\gamma}^{\,L}
-          \right)O_L(M_\gamma),
-    \]
+        &=\sum_\gamma
+          \tr\!\left(\chi_{\alpha,\beta,\gamma}^{\,L}\right)
+          O_L(M_\gamma),
+        \notag
+    \end{align}
     and, at $L=1$, the idempotent identity reads
-    \[
+    \begin{align}
         m_\gamma
-        =\sum_{\alpha,\beta}
+        &=\sum_{\alpha,\beta}
           \tr(\chi_{\alpha,\beta,\gamma})
           m_\alpha m_\beta.
-    \]
+        \notag
+    \end{align}
 \end{theorem}
 \begin{proof}\leanok
     The positive trace-power witness gives
-    \[
-        c^{(L)}_{\alpha,\beta,\gamma}
-        =\tr\!\left(
-            \chi_{\alpha,\beta,\gamma}^{\,L}
-        \right).
-    \]
+    $c^{(L)}_{\alpha,\beta,\gamma}
+    =\tr(\chi_{\alpha,\beta,\gamma}^{\,L})$.
     Substitution into the product law and its length-one idempotent
-    specialization gives the displayed formulas.
+    specialization gives the stated formulas.
 \end{proof}
 
 \begin{theorem}[BNT theorem data give a positive blocked $\chi$ witness]%
@@ -472,11 +472,8 @@
     witness by pulling the length-independent BNT-label $\chi$-family back
     along the blocked-basis comparison maps: writing $\chi_{n,i,j,k}$ for the
     resulting blocked-basis diagonal matrix at a positive blocked length $n$,
-    \[
-        \chi_{n,i,j,k}
-        =
-        \chi_{\sigma_n(i),\sigma_n(j),\tau_n(k)}.
-    \]
+    $\chi_{n,i,j,k}
+    =\chi_{\sigma_n(i),\sigma_n(j),\tau_n(k)}$.
     Thus the two matrices have equal size, diagonal entries, and traces of all
     powers.
 \end{theorem}
@@ -497,15 +494,13 @@
     traces of powers of the BNT-label $\chi$-matrices selected by the source
     and target label maps. Equivalently, they are traces of powers of the
     pulled-back blocked-basis matrices $\chi_{n,i,j,k}$:
-    \[
+    \begin{align}
         c^{(n)}_{i,j,k}
-        =
-        \tr\!\left(
-            \chi_{\sigma_n(i),\sigma_n(j),\tau_n(k)}^{\,n}
-        \right)
-        =
-        \tr\bigl(\chi_{n,i,j,k}^{\,n}\bigr).
-    \]
+        &=
+        \tr\!\left(\chi_{\sigma_n(i),\sigma_n(j),\tau_n(k)}^{\,n}\right)
+         =\tr(\chi_{n,i,j,k}^{\,n}).
+        \notag
+    \end{align}
 \end{corollary}
 \begin{proof}\leanok
     The blocked-basis comparison identifies the coefficient with the trace

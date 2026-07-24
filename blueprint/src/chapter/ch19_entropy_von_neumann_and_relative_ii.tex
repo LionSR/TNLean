@@ -1,0 +1,777 @@
+\begin{definition}[Inverse square root on the support]
+    \label{def:support_inverse_square_root}
+    \lean{Matrix.PosSemidef.supportInvSqrt}
+    \leanok
+    Let $\tau=\sum_i\lambda_i\ketbra{i}{i}$ be positive semidefinite.
+    Its inverse square root on the support is
+    \begin{align}
+        \tau^{-1/2}_{\mathrm{supp}}
+        &=\sum_{\lambda_i>0}\lambda_i^{-1/2}\ketbra{i}{i}.
+        \label{eq:entropy_support_inv_sqrt}
+    \end{align}
+\end{definition}
+
+\begin{lemma}[Hermiticity of the support inverse square root]
+    \label{lem:support_inverse_square_root_hermitian}
+    \lean{Matrix.PosSemidef.supportInvSqrt_isHermitian}
+    \leanok
+    \uses{def:support_inverse_square_root}
+    The inverse square root of a positive semidefinite matrix on its support is
+    Hermitian.
+\end{lemma}
+
+\begin{lemma}[Positivity of the support inverse square root]
+    \label{lem:support_inverse_square_root_positive_semidefinite}
+    \lean{Matrix.PosSemidef.supportInvSqrt_posSemidef}
+    \leanok
+    \uses{def:support_inverse_square_root}
+    The inverse square root of a positive semidefinite matrix on its support is
+    positive semidefinite.
+\end{lemma}
+
+\begin{proof}\leanok
+    On the non-negative spectrum of $\tau$, the defining function satisfies
+    \begin{align}
+        f(x)
+        &=
+        \begin{cases}
+            x^{-1/2}, & x>0,\\
+            0, & x=0
+        \end{cases}
+        \geq 0
+        \quad (x\geq 0).
+        \notag
+    \end{align}
+    The spectral functional calculus therefore gives $f(\tau)\geq 0$.
+\end{proof}
+
+\begin{lemma}[Support inverse square root of a positive-definite matrix]
+    \label{lem:support_inverse_square_root_positive_definite}
+    \lean{Matrix.PosDef.supportInvSqrt_eq_inv_sqrt}
+    \leanok
+    \uses{def:support_inverse_square_root}
+    If $\tau$ is positive definite, then its inverse square root on the support
+    is its ordinary inverse square root:
+    $\tau^{-1/2}_{\mathrm{supp}}=(\sqrt\tau)^{-1}$.
+\end{lemma}
+
+\begin{proof}\leanok
+    Every eigenvalue of $\tau$ is strictly positive. Hence the function
+    defining the support inverse square root agrees on the spectrum with the
+    reciprocal of the positive square-root function.
+\end{proof}
+
+\begin{lemma}[Support inverse-square-root identity]
+    \label{lem:support_inverse_square_root_sandwich}
+    \lean{Matrix.PosSemidef.supportInvSqrt_mul_self_mul_supportInvSqrt}
+    \leanok
+    \uses{def:support_inverse_square_root}
+    If $P_\tau$ is the orthogonal projector onto the support of a positive
+    semidefinite matrix $\tau$, then
+    \begin{align}
+        \tau^{-1/2}_{\mathrm{supp}} \tau
+        \tau^{-1/2}_{\mathrm{supp}}
+        &=P_\tau.
+        \label{eq:entropy_support_sandwich}
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    In an eigenbasis of $\tau$, the left-hand side has eigenvalue zero when
+    $\lambda_i=0$ and eigenvalue
+    $\lambda_i^{-1/2}\lambda_i\lambda_i^{-1/2}=1$ otherwise.
+\end{proof}
+
+\begin{lemma}[Support generalized-inverse identity]
+    \label{lem:support_inverse_square_root_generalized_inverse}
+    \lean{Matrix.PosSemidef.supportInvSqrt_sq_mul_self}
+    \lean{Matrix.PosSemidef.self_mul_supportInvSqrt_sq}
+    \leanok
+    \uses{def:support_inverse_square_root}
+    If $P_\tau$ is the orthogonal projector onto the support of a positive
+    semidefinite matrix $\tau$, then
+    \begin{align}
+        \left(\tau^{-1/2}_{\mathrm{supp}}\right)^2\tau
+        =\tau\left(\tau^{-1/2}_{\mathrm{supp}}\right)^2
+        &=P_\tau.
+        \label{eq:entropy_support_generalized_inv}
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:support_inverse_square_root_sandwich}
+    The support inverse square root commutes with $\tau$ by spectral functional
+    calculus, so
+    \begin{align}
+        \left(\tau^{-1/2}_{\mathrm{supp}}\right)^2\tau
+        &=\tau^{-1/2}_{\mathrm{supp}} \tau
+          \tau^{-1/2}_{\mathrm{supp}}
+          =P_\tau,
+        \notag
+    \end{align}
+    where the last step is
+    Lemma~\ref{lem:support_inverse_square_root_sandwich}. Taking adjoints gives
+    the identity with $\tau$ on the left.
+\end{proof}
+
+\begin{lemma}[Support inverse square root under scaling and a maximally mixed factor]
+    \label{lem:support_inverse_square_root_maximally_mixed}
+    \lean{Matrix.PosSemidef.supportInvSqrt_smul}
+    \lean{Matrix.PosSemidef.supportInvSqrt_kronecker_one}
+    \lean{Matrix.PosSemidef.supportInvSqrt_kronecker_maximallyMixed}
+    \leanok
+    \uses{def:support_inverse_square_root}
+    Let $\tau$ be positive semidefinite and let $c>0$. Then
+    \begin{align}
+        (c\tau)^{-1/2}_{\mathrm{supp}}
+        &=c^{-1/2}\tau^{-1/2}_{\mathrm{supp}}.
+        \label{eq:entropy_support_scaling}
+    \end{align}
+    For every finite-dimensional auxiliary space $\mathcal H_R$,
+    \begin{align}
+        (\tau\otimes\mathbf 1_R)^{-1/2}_{\mathrm{supp}}
+        &=\tau^{-1/2}_{\mathrm{supp}}\otimes\mathbf 1_R.
+        \label{eq:entropy_support_tensor}
+    \end{align}
+    Consequently, for $d_R>0$,
+    \begin{align}
+        (\tau\otimes d_R^{-1}\mathbf 1_R)^{-1/2}_{\mathrm{supp}}
+        &=\sqrt{d_R}
+          (\tau^{-1/2}_{\mathrm{supp}}\otimes\mathbf 1_R).
+        \label{eq:entropy_support_mixed}
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    The scalar identity follows from the functional calculus and
+    $\sqrt{cx}=\sqrt c\sqrt x$ for $c>0$. For the support-inverse function
+    $f(x)=x^{-1/2}$ when $x>0$ and $f(0)=0$, the functional calculus gives
+    \begin{align}
+        f(\tau\otimes\mathbf 1_R)
+        &=f(\tau)\otimes\mathbf 1_R.
+        \notag
+    \end{align}
+    This proves (\ref{eq:entropy_support_tensor}). Applying
+    (\ref{eq:entropy_support_scaling}) with $c=d_R^{-1}$ to
+    $\tau\otimes\mathbf 1_R$ then gives
+    (\ref{eq:entropy_support_mixed}).
+\end{proof}
+
+\begin{definition}[Support Petz transpose map for a partial trace]
+    \label{def:partial_trace_support_petz_map}
+    \lean{Matrix.partialTraceRightPetzMap}
+    \leanok
+    \uses{def:support_inverse_square_root}
+    Let $\sigma$ be positive semidefinite on $H_L\otimes H_R$, and set
+    $\tau=\tr_R\sigma$. The Petz transpose formula on the
+    support of $\tau$ is
+    \begin{align}
+        \mathcal R_\sigma(X)
+        &=\sqrt\sigma
+          \bigl(\tau^{-1/2}_{\mathrm{supp}}X
+          \tau^{-1/2}_{\mathrm{supp}}\otimes\mathbf 1_R\bigr)\sqrt\sigma.
+        \label{eq:entropy_support_petz}
+    \end{align}
+    This is the support formula of
+    \cite[Theorem~3, equation~(8)]{Hayden2004Structure}. It is not asserted to
+    be trace preserving on operators outside the support of $\tau$.
+\end{definition}
+
+\begin{lemma}[Support Petz formula]
+    \label{lem:partial_trace_support_petz_map_apply}
+    \lean{Matrix.partialTraceRightPetzMap_apply}
+    \leanok
+    \uses{def:partial_trace_support_petz_map}
+    For every matrix $X$, the support Petz map is given by
+    (\ref{eq:entropy_support_petz}).
+\end{lemma}
+
+\begin{theorem}[Complete positivity of the support Petz map]
+    \label{thm:partial_trace_support_petz_map_cp}
+    \lean{Matrix.partialTraceRightPetzMap_isKrausCP}
+    \leanok
+    \uses{def:partial_trace_support_petz_map, def:is_kraus_cp}
+    The support Petz transpose map $\mathcal R_\sigma$ is completely positive.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:is_kraus_cp_comp, lem:mpdo_single_kraus_map_cp,
+        lem:mpdo_state_preparation_cp}
+    For an orthonormal basis $(e_r)_r$ of $H_R$, let
+    $J_r:H_L\to H_L\otimes H_R$ be given by $J_r(v)=v\otimes e_r$. Then
+    \begin{align}
+        \mathcal R_\sigma(X)
+        &=\sum_r K_rXK_r^\dagger,
+        \notag\\
+        K_r
+        &=\sqrt\sigma\,J_r\tau^{-1/2}_{\mathrm{supp}}.
+        \notag
+    \end{align}
+    Thus the support Petz map has a rectangular Kraus representation.
+\end{proof}
+
+\begin{lemma}[Trace of the support Petz map]
+    \label{lem:partial_trace_support_petz_map_trace}
+    \lean{Matrix.partialTraceRightPetzMap_trace}
+    \leanok
+    \uses{def:partial_trace_support_petz_map,
+        lem:support_inverse_square_root_sandwich}
+    Let $P_\tau$ be the orthogonal projector onto the support of
+    $\tau=\tr_R\sigma$. Then, for every matrix $X$,
+    \begin{align}
+        \tr(\mathcal R_\sigma(X))
+        &=\tr(P_\tau X).
+        \label{eq:entropy_support_petz_trace}
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:support_inverse_square_root_sandwich}
+    Cyclicity of the trace and the defining property of the partial trace give
+    \begin{align}
+        \tr(\mathcal R_\sigma(X))
+        &=\tr(\tau^{-1/2}_{\mathrm{supp}}
+          X\tau^{-1/2}_{\mathrm{supp}}\tau)
+          =\tr((\tau^{-1/2}_{\mathrm{supp}}
+          \tau\tau^{-1/2}_{\mathrm{supp}})X).
+        \notag
+    \end{align}
+    By (\ref{eq:entropy_support_sandwich}), this equals $\tr(P_\tau X)$.
+\end{proof}
+
+\begin{definition}[Complementary preparation term]
+    \label{def:partial_trace_petz_complement}
+    \lean{Matrix.partialTraceRightPetzComplementMap}
+    \leanok
+    \uses{def:support_proj, def:partial_trace_left,
+        def:mpdo_state_preparation_map}
+    Put $Q_\tau=\mathbf 1_L-P_\tau$ and
+    $\omega_R=\tr_L\sigma$. The complementary term is
+    \begin{align}
+        \mathcal C_\sigma(X)
+        &=Q_\tau XQ_\tau\otimes\omega_R.
+        \label{eq:entropy_petz_complement}
+    \end{align}
+    % Source-faithfulness note: equation (8) supplies the support formula;
+    % this complementary extension is the local completion chosen here.
+\end{definition}
+
+\begin{theorem}[Complete positivity of the complementary term]
+    \label{thm:partial_trace_petz_complement_cp}
+    \lean{Matrix.partialTraceRightPetzComplementMap_isKrausCP}
+    \leanok
+    \uses{def:partial_trace_petz_complement, def:is_kraus_cp}
+    The complementary preparation term $\mathcal C_\sigma$ is completely
+    positive.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:is_kraus_cp_comp, lem:mpdo_single_kraus_map_cp,
+        lem:mpdo_state_preparation_cp}
+    The map $X\mapsto Q_\tau XQ_\tau$ has the single Kraus operator $Q_\tau$.
+    Adjoining the positive semidefinite matrix $\omega_R$ is completely
+    positive, and the composition of these two maps is completely positive.
+\end{proof}
+
+\begin{lemma}[Trace of the complementary term]
+    \label{lem:partial_trace_petz_complement_trace}
+    \lean{Matrix.partialTraceRightPetzComplementMap_trace}
+    \leanok
+    \uses{def:partial_trace_petz_complement}
+    If $\sigma$ has trace one, then
+    \begin{align}
+        \tr(\mathcal C_\sigma(X))
+        &=\tr(Q_\tau X).
+        \label{eq:entropy_petz_complement_trace}
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:partial_trace_petz_complement}
+    Since $\tr(\omega_R)=\tr(\sigma)=1$ and
+    $Q_\tau^2=Q_\tau$, factorization and cyclicity of the trace give
+    $\tr(\mathcal C_\sigma(X))
+      =\tr(Q_\tau XQ_\tau)
+      =\tr(Q_\tau^2X)
+      =\tr(Q_\tau X)$.
+\end{proof}
+
+\begin{definition}[Trace-preserving Petz channel for a partial trace]
+    \label{def:partial_trace_petz_channel}
+    \lean{Matrix.partialTraceRightPetzChannel}
+    \leanok
+    \uses{def:partial_trace_support_petz_map,
+        def:partial_trace_petz_complement}
+    The completed Petz map is
+    \begin{align}
+        \widehat{\mathcal R}_\sigma
+        &=\mathcal R_\sigma+\mathcal C_\sigma.
+        \label{eq:entropy_completed_petz}
+    \end{align}
+\end{definition}
+
+\begin{theorem}[The completed Petz map is a channel]
+    \label{thm:partial_trace_petz_channel_cptp}
+    \lean{Matrix.partialTraceRightPetzChannel_isKrausCPTP}
+    \leanok
+    \uses{def:partial_trace_petz_channel,
+        thm:partial_trace_support_petz_map_cp,
+        lem:partial_trace_support_petz_map_trace,
+        thm:partial_trace_petz_complement_cp,
+        lem:partial_trace_petz_complement_trace, def:is_kraus_cptp}
+    If $\sigma$ is positive semidefinite with trace one, then
+    $\widehat{\mathcal R}_\sigma$ is completely positive and trace preserving.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:is_kraus_cp_add,
+        thm:is_kraus_cptp_of_is_kraus_cp_trace_preserving,
+        lem:partial_trace_support_petz_map_trace,
+        lem:partial_trace_petz_complement_trace}
+    The two summands are completely positive. Since
+    $\tr(\omega_R)=1$, the complementary term satisfies
+    (\ref{eq:entropy_petz_complement_trace}). Adding
+    (\ref{eq:entropy_petz_complement_trace}) to
+    (\ref{eq:entropy_support_petz_trace}) gives trace preservation.
+\end{proof}
+
+\begin{theorem}[Agreement on the marginal support]
+    \label{thm:partial_trace_petz_channel_supported_agreement}
+    \lean{Matrix.partialTraceRightPetzChannel_apply_of_supported}
+    \leanok
+    \uses{def:partial_trace_petz_channel}
+    If $P_\tau XP_\tau=X$, then
+    $\widehat{\mathcal R}_\sigma(X)=\mathcal R_\sigma(X)$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:partial_trace_petz_channel,
+        def:partial_trace_petz_complement}
+    The assumption implies $Q_\tau XQ_\tau=0$. Hence
+    $\mathcal C_\sigma(X)=0$, and adding the complementary term to
+    $\mathcal R_\sigma(X)$ does not change its value.
+\end{proof}
+
+\begin{definition}[Support projection of a Hermitian matrix]
+    \label{def:hermitian_support_projection}
+    \lean{Matrix.IsHermitian.supportProj,
+        Matrix.IsHermitian.supportProj_isHermitian,
+        Matrix.IsHermitian.mul_supportProj_self}
+    \leanok
+    Let $A$ be Hermitian, with spectral decomposition
+    $A=U\diag(\lambda_i)U^\dagger$. Its support projection is
+    \begin{align}
+        P_A
+        &=U\diag(\mathbf 1_{\lambda_i\ne 0})U^\dagger.
+        \label{eq:entropy_hermitian_support}
+    \end{align}
+\end{definition}
+
+\begin{theorem}[Support projection absorption under kernel inclusion]
+    \label{thm:support_projection_absorption_kernel_inclusion}
+    \lean{Matrix.IsHermitian.supportProj_mul_mul_supportProj_of_mulVec_kernel_le}
+    \leanok
+    \uses{def:hermitian_support_projection}
+    Let $A$ and $B$ be Hermitian matrices such that
+    $\ker A\subseteq\ker B$. If $P_A$ is the support projection of $A$, then
+    $P_A B P_A=B$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:hermitian_support_projection}
+    The complementary projection $\mathbf 1-P_A$ has range contained in
+    $\ker A$, and hence in $\ker B$. Thus
+    $B(\mathbf 1-P_A)=0$. Taking adjoints gives
+    $(\mathbf 1-P_A)B=0$, so $B=P_A B$, and therefore
+    $P_A B P_A=P_A B=B$.
+\end{proof}
+
+\begin{definition}[Lift along one basis vector]
+    \label{def:single_basis_vector_lift}
+    \lean{Matrix.liftVec}
+    \leanok
+    For $w\in H_L$ and a distinguished basis vector $e_r\in H_R$, define the
+    lift $J_r w=w\otimes e_r\in H_L\otimes H_R$.
+\end{definition}
+
+\begin{theorem}[Matrix action on a basis-vector lift]
+    \label{thm:matrix_action_single_basis_vector_lift}
+    \lean{Matrix.mulVec_liftVec_apply}
+    \leanok
+    \uses{def:single_basis_vector_lift}
+    Let $X$ be a matrix on $H_L\otimes H_R$. For basis indices $i,s$ and $r$,
+    \begin{align}
+        [XJ_r w]_{(i,s)}
+        &=\sum_j X_{(i,s),(j,r)}w_j.
+        \label{eq:entropy_lift_action}
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:single_basis_vector_lift}
+    Since $(J_r w)_{(j,c)}=w_j\mathbf 1_{c=r}$, expansion of the
+    matrix-vector product gives
+    \begin{align}
+        [XJ_r w]_{(i,s)}
+        &=\sum_{j,c}X_{(i,s),(j,c)}[J_r w]_{(j,c)}
+          =\sum_j X_{(i,s),(j,r)}w_j.
+        \notag
+    \end{align}
+\end{proof}
+
+\begin{theorem}[Quadratic form of a right marginal]
+    \label{thm:partial_trace_quadratic_form_split}
+    \lean{Matrix.qform_partialTraceRight_split}
+    \leanok
+    \uses{def:partial_trace, def:single_basis_vector_lift}
+    Let $X$ be a matrix on $H_L\otimes H_R$, let $w\in H_L$, and let
+    $(e_r)_r$ be the distinguished orthonormal basis of $H_R$. Then
+    \begin{align}
+        \langle w,(\tr_R X)w\rangle
+        &=\sum_r\langle w\otimes e_r,X(w\otimes e_r)\rangle.
+        \label{eq:entropy_partial_trace_qform}
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:matrix_action_single_basis_vector_lift, def:partial_trace}
+    Expanding the matrix products and the partial trace gives
+    $\sum_{i,j,r}\overline{w_i}X_{(i,r),(j,r)}w_j$ on both sides.
+\end{proof}
+
+\begin{theorem}[Kernel inclusion descends under partial trace]
+    \label{thm:partial_trace_kernel_inclusion}
+    \lean{Matrix.partialTraceRight_support}
+    \leanok
+    \uses{def:partial_trace}
+    Let $\sigma$ be positive semidefinite on $H_L\otimes H_R$, and let $\rho$
+    be any matrix on the same space such that
+    $\ker\sigma\subseteq\ker\rho$. Then
+    \begin{align}
+        \ker(\tr_R\sigma)
+        &\subseteq\ker(\tr_R\rho).
+        \label{eq:entropy_partial_trace_kernel}
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:partial_trace_quadratic_form_split,
+        thm:matrix_action_single_basis_vector_lift}
+    If $w\in\ker(\tr_R\sigma)$, then
+    \begin{align}
+        0
+        &=\langle w,(\tr_R\sigma)w\rangle
+          =\sum_r\langle w\otimes e_r,\sigma(w\otimes e_r)\rangle.
+        \notag
+    \end{align}
+    Each summand is non-negative and therefore vanishes. Positive
+    semidefiniteness shows that
+    $\sigma(w\otimes e_r)=0$ for every $r$, so the joint kernel inclusion gives
+    $\rho(w\otimes e_r)=0$. Summing the diagonal components over $r$ yields
+    $(\tr_R\rho)w=0$.
+\end{proof}
+
+\begin{theorem}[The first marginal lies in the Petz support domain]
+    \label{thm:partial_trace_petz_channel_first_marginal_agreement}
+    \lean{Matrix.partialTraceRightPetzChannel_apply_partialTraceRight_of_support}
+    \leanok
+    \uses{def:partial_trace_petz_channel,
+        def:partial_trace_support_petz_map, def:partial_trace}
+    Let $\rho$ and $\sigma$ be positive semidefinite matrices on
+    $H_L\otimes H_R$ such that $\ker\sigma\subseteq\ker\rho$. Then
+    \begin{align}
+        \widehat{\mathcal R}_\sigma(\tr_R\rho)
+        &=\mathcal R_\sigma(\tr_R\rho).
+        \label{eq:entropy_petz_marginal}
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:partial_trace_kernel_inclusion,
+        thm:support_projection_absorption_kernel_inclusion,
+        thm:partial_trace_petz_channel_supported_agreement}
+    Kernel inclusion descends through the partial trace, giving
+    $\ker(\tr_R\sigma)\subseteq\ker(\tr_R\rho)$.
+    Theorem~\ref{thm:support_projection_absorption_kernel_inclusion} therefore
+    yields $P_\tau(\tr_R\rho)P_\tau=\tr_R\rho$, where
+    $\tau=\tr_R\sigma$. By
+    Theorem~\ref{thm:partial_trace_petz_channel_supported_agreement},
+    \begin{align}
+        P_\tau(\tr_R\rho)P_\tau=\tr_R\rho
+        \quad\Longrightarrow\quad
+        \widehat{\mathcal R}_\sigma(\tr_R\rho)
+        &=\mathcal R_\sigma(\tr_R\rho).
+        \notag
+    \end{align}
+\end{proof}
+
+\begin{theorem}[The support Petz map recovers its reference]
+    \label{thm:partial_trace_support_petz_map_reference_recovery}
+    \lean{Matrix.partialTraceRightPetzMap_partialTraceRight}
+    \leanok
+    \uses{def:partial_trace_support_petz_map,
+        lem:partial_trace_support_petz_map_apply,
+        lem:support_inverse_square_root_sandwich,
+        thm:marginal_support_left_absorption}
+    For every positive semidefinite $\sigma$,
+    \begin{align}
+        \mathcal R_\sigma(\tr_R\sigma)
+        &=\sigma.
+        \label{eq:entropy_support_petz_recovery}
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    By (\ref{eq:entropy_support_sandwich}), the middle factor reduces to
+    $P_\tau\otimes\mathbf 1_R$. Marginal-support absorption gives
+    $(\mathbf 1_{LR}-P_\tau\otimes\mathbf 1_R)\sigma=0$, so
+    \begin{align}
+        \sqrt\sigma(\mathbf 1_{LR}-P_\tau\otimes\mathbf 1_R)\sqrt\sigma
+        &=0,
+        \notag
+    \end{align}
+    because that matrix is positive semidefinite of trace zero. Therefore
+    $\sqrt\sigma(P_\tau\otimes\mathbf 1_R)\sqrt\sigma=\sigma$.
+\end{proof}
+
+\begin{theorem}[The completed Petz channel recovers its reference]
+    \label{thm:partial_trace_petz_channel_reference_recovery}
+    \lean{Matrix.partialTraceRightPetzChannel_partialTraceRight}
+    \leanok
+    \uses{thm:partial_trace_support_petz_map_reference_recovery,
+        thm:partial_trace_petz_channel_supported_agreement}
+    For every positive semidefinite $\sigma$,
+    \begin{align}
+        \widehat{\mathcal R}_\sigma(\tr_R\sigma)
+        &=\sigma.
+        \label{eq:entropy_completed_petz_recovery}
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:partial_trace_support_petz_map_reference_recovery,
+        thm:partial_trace_petz_channel_supported_agreement}
+    The marginal satisfies $P_\tau\tau P_\tau=\tau$. Therefore the completed
+    channel agrees with the support Petz map at $\tau$, and
+    Theorem~\ref{thm:partial_trace_support_petz_map_reference_recovery} gives
+    $\widehat{\mathcal R}_\sigma(\tau)=\sigma$.
+\end{proof}
+
+\begin{theorem}[Entropy is invariant under reindexing]
+    \label{thm:entropy_submatrix_equiv}
+    \lean{vonNeumannEntropy_submatrix_equiv}
+    \leanok
+    \uses{def:von_neumann_entropy, lem:entropy_charpoly_roots}
+    Let $\rho$ be a Hermitian matrix indexed by a finite set $J$, and let
+    $e : I \to J$ be a bijection from a finite set $I$. The reindexed matrix on
+    $I$ with entries $\rho_{e(i)\,e(j)}$ has the same von Neumann entropy as
+    $\rho$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:entropy_charpoly_roots}
+    By Lemma~\ref{lem:entropy_charpoly_roots} the entropy depends only on the
+    characteristic polynomial. Reindexing conjugates $\rho$ by a permutation
+    matrix, so $\chi_{(\rho_{e(i)\,e(j)})}=\chi_\rho$, and the entropies
+    coincide.
+\end{proof}
+
+\begin{lemma}[Cyclic invariance of the charpoly-root entropy sum]
+    \label{lem:charpoly_root_entropy_cyclic_swap}
+    \lean{charpoly_roots_negMulLog_re_mul_comm}
+    \leanok
+    Let $A \in M_{m \times n}(\C)$ and
+    $B \in M_{n \times m}(\C)$. Then the charpoly-root entropy sum is
+    invariant under the cyclic swap $AB \mapsto BA$:
+    \begin{align}
+        \sum_{\lambda \in \mathrm{roots}(\chi_{AB})}
+        ({-}\re(\lambda)\log\re(\lambda))
+        &=
+        \sum_{\mu \in \mathrm{roots}(\chi_{BA})}
+        ({-}\re(\mu)\log\re(\mu)),
+        \label{eq:entropy_charpoly_cyclic}
+    \end{align}
+    with roots counted with algebraic multiplicity.
+\end{lemma}
+
+\begin{proof}\leanok
+    The rectangular characteristic-polynomial identity gives
+    $X^n\chi_{AB}=X^m\chi_{BA}$. Thus the two characteristic polynomials have
+    the same nonzero roots, with multiplicity; the additional zero roots
+    contribute nothing because $0\log 0=0$.
+\end{proof}
+
+\begin{theorem}[Entropy of $AB$ equals entropy of $BA$]
+    \label{thm:entropy_mul_comm}
+    \lean{vonNeumannEntropy_mul_comm}
+    \leanok
+    \uses{lem:entropy_charpoly_roots, lem:charpoly_root_entropy_cyclic_swap}
+    For matrices $A \in M_{m \times n}(\C)$ and
+    $B \in M_{n \times m}(\C)$ such that $AB$ and $BA$ are Hermitian,
+    $S(AB)=S(BA)$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:entropy_charpoly_roots, lem:charpoly_root_entropy_cyclic_swap}
+    By Lemma~\ref{lem:entropy_charpoly_roots}, the entropy of a Hermitian matrix
+    is its charpoly-root entropy sum.
+    Lemma~\ref{lem:charpoly_root_entropy_cyclic_swap} identifies these two sums
+    for $AB$ and $BA$.
+\end{proof}
+
+\begin{theorem}[Entropy is additive over tensor products]
+    \label{thm:entropy_kronecker}
+    \lean{vonNeumannEntropy_kronecker}
+    \leanok
+    \uses{def:von_neumann_entropy}
+    For density matrices $\omega$ and $\tau$,
+    $S(\omega\otimes\tau)=S(\omega)+S(\tau)$.
+\end{theorem}
+
+\begin{proof}\leanok
+    The tensor product is unitarily conjugate to the diagonal of eigenvalue
+    products $\lambda_i\mu_j$. Using
+    \begin{align}
+        -\lambda_i\mu_j\log(\lambda_i\mu_j)
+        &=\mu_j\,(-\lambda_i\log\lambda_i)
+          +\lambda_i\,(-\mu_j\log\mu_j)
+        \notag
+    \end{align}
+    and the unit eigenvalue sums collapses the double sum to
+    $S(\omega)+S(\tau)$.
+\end{proof}
+
+\begin{theorem}[Entropy of a scaled density matrix]
+    \label{thm:entropy_smul}
+    \lean{vonNeumannEntropy_smul}
+    \leanok
+    \uses{def:von_neumann_entropy}
+    For a density matrix $\omega$ and a scalar $c$,
+    $S(c\,\omega)=c\,S(\omega)-c\log c$.
+\end{theorem}
+
+\begin{proof}\leanok
+    The eigenvalues of $c\,\omega$ are $c\lambda_i$, so the entropy is
+    $\sum_i-(c\lambda_i)\log(c\lambda_i)$. The splitting identity
+    \begin{align}
+        -(c\lambda)\log(c\lambda)
+        &=\lambda\,(-c\log c)+c\,(-\lambda\log\lambda)
+        \notag
+    \end{align}
+    together with the unit eigenvalue sum $\sum_i\lambda_i=1$ gives
+    \begin{align}
+        \sum_i-(c\lambda_i)\log(c\lambda_i)
+        &=(-c\log c)\sum_i\lambda_i
+          +c\sum_i(-\lambda_i\log\lambda_i)
+          =-c\log c+c\,S(\omega),
+        \notag
+    \end{align}
+    the stated form.
+\end{proof}
+
+\begin{theorem}[Entropy is additive over an orthogonal direct sum of Hermitian blocks]
+    \label{thm:entropy_block_diagonal}
+    \lean{vonNeumannEntropy_blockDiagonal'}
+    \leanok
+    \uses{def:von_neumann_entropy}
+    For a family of Hermitian matrices $M_j$, the block-diagonal direct sum
+    satisfies
+    \begin{align}
+        S\!\left(\bigoplus_j M_j\right)
+        &=\sum_j S(M_j).
+        \label{eq:entropy_block_diagonal}
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    Each block diagonalizes by a unitary congruence, and the block-diagonal
+    assembly of the block unitaries diagonalizes the direct sum, whose
+    eigenvalue multiset is the disjoint union of the block eigenvalue
+    multisets. Hence
+    \begin{align}
+        S\!\left(\bigoplus_j M_j\right)
+        &=\sum_{\lambda\in\biguplus_j\mathrm{spec}(M_j)}
+          -\lambda\log\lambda
+          =\sum_j\sum_{\lambda\in\mathrm{spec}(M_j)}
+          -\lambda\log\lambda
+          =\sum_j S(M_j).
+        \notag
+    \end{align}
+\end{proof}
+
+\begin{theorem}[Entropy of summands on pairwise-annihilating supports]
+    \label{thm:entropy_pairwise_annihilating_support}
+    \lean{vonNeumannEntropy_eq_sum_of_pairwise_annihilating_supports}
+    \leanok
+    \uses{def:von_neumann_entropy}
+    Let $A=\sum_j M_j$ be a finite sum of Hermitian matrices. Suppose there
+    are operators $P_j$ such that
+    \begin{align}
+        P_jM_j=M_jP_j
+        &=M_j,
+        \notag\\
+        P_jP_k
+        &=0
+        \quad (j\ne k).
+        \notag
+    \end{align}
+    Then $S(A)=\sum_j S(M_j)$. The operators $P_j$ need only resolve the
+    support of $A$; their sum need not be the identity on the ambient space.
+    This is the support form of the direct-sum entropy identity used in
+    \cite[Appendix~C.2, lines~1760--1770]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:entropy_mul_comm, thm:entropy_block_diagonal}
+    Write $A=XY$, where $X$ maps the direct sum of the labelled ambient
+    spaces to the original space by the matrices $M_j$, and $Y$ maps back by
+    the operators $P_j$. The support and annihilation identities give
+    $YX=\bigoplus_jM_j$. Reversing the two rectangular factors preserves the
+    nonzero eigenvalues, while any additional eigenvalues are zero. Entropy
+    is therefore unchanged, and additivity on the block diagonal gives the
+    result.
+\end{proof}
+
+\begin{theorem}[Entropy of a weighted orthogonal direct sum]
+    \label{thm:entropy_weighted_block_diagonal}
+    \lean{vonNeumannEntropy_blockDiagonal_smul}
+    \leanok
+    \uses{thm:entropy_smul, thm:entropy_block_diagonal}
+    Let $\omega_j$ be density matrices and let $p_j\geq0$. Then
+    \begin{align}
+        S\!\left(\bigoplus_j p_j\omega_j\right)
+        &=\sum_j(-p_j\log p_j+p_jS(\omega_j)).
+        \label{eq:entropy_weighted_blocks}
+    \end{align}
+    In particular, when the $p_j$ form a probability distribution, this is
+    \begin{align}
+        S\!\left(\bigoplus_j p_j\omega_j\right)
+        &=H(p)+\sum_j p_jS(\omega_j).
+        \label{eq:entropy_weighted_probability}
+    \end{align}
+    This is the entropy identity used in
+    \cite[Appendix~C.2, lines~1760--1770]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+
+\begin{proof}\leanok
+    Entropy is additive over the orthogonal blocks. Applying the scaled-state
+    formula to each block gives
+    $S(p_j\omega_j)=-p_j\log p_j+p_jS(\omega_j)$, and summing over $j$ gives
+    the result.
+\end{proof}
+
+\begin{theorem}[Equality in a positively weighted sum]
+    \label{thm:positive_weighted_sum_termwise_equality}
+    \lean{eq_of_weighted_sum_eq_of_pos_of_le}
+    \leanok
+    Suppose $p_j>0$ and $L_j\leq R_j$ for every $j$. If
+    $\sum_jp_jL_j=\sum_jp_jR_j$, then $L_j=R_j$ for every $j$. This is the
+    positivity argument applied to strong subadditivity in
+    \cite[Appendix~C.2, lines~1770--1780]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+
+\begin{proof}\leanok
+    Each number $p_j(R_j-L_j)$ is non-negative, and their sum vanishes.
+    Therefore every one vanishes. Since $p_j>0$, it follows that
+    $R_j-L_j=0$.
+\end{proof}

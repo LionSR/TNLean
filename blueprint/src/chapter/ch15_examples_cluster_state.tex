@@ -1,0 +1,204 @@
+\section{The cluster state}\label{sec:cluster}
+%% ===================================================================
+
+The cluster state is a universal resource for measurement-based quantum
+computation and provides another example of a non-trivial SPT phase.
+
+\begin{definition}[Cluster-state tensor]\label{def:cluster_tensor}
+    \lean{MPSTensor.clusterTensor}
+    \leanok
+    \uses{def:mps_tensor}
+    Set $d = D = 2$. The cluster-state tensor is the family
+    $\{A^0, A^1\} \subset \MN{2}$ defined by
+    \begin{align}
+        A^0
+        &= \ketbra{+}{0}
+        = \frac{1}{\sqrt{2}}
+        \begin{pmatrix} 1 & 0 \\ 1 & 0 \end{pmatrix},
+        \qquad
+        A^1
+        = \ketbra{-}{1}
+        = \frac{1}{\sqrt{2}}
+        \begin{pmatrix} 0 & 1 \\ 0 & -1 \end{pmatrix},
+        \notag
+    \end{align}
+    where $\ket{\pm} = \tfrac{1}{\sqrt{2}}(\ket{0} \pm \ket{1})$.
+    The review~\cite{Cirac2021Matrix} writes the reflected convention
+    $A^0 = \ketbra{0}{+}$, $A^1 = \ketbra{1}{-}$; the transpose taken
+    here is the same state read in the opposite direction and carries the
+    same SPT order.
+\end{definition}
+
+\begin{theorem}[Cluster-state tensor is not injective]\label{thm:cluster_not_injective}
+    \lean{MPSTensor.cluster_not_isInjective}
+    \leanok
+    \uses{def:cluster_tensor, def:injective}
+    The cluster-state tensor is not injective:
+    $\spn_{\C}\{A^0, A^1\} = \spn_{\C}\{\ketbra{+}{0}, \ketbra{-}{1}\}$
+    has dimension~$2$, not $\dim \MN{2} = 4$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:cluster_tensor}
+    Both $A^0$ and $A^1$ are rank-one matrices with linearly
+    independent column spaces, so they are linearly independent.
+    Their span is two-dimensional, which is strictly less than
+    $\dim \MN{2} = 4$.
+\end{proof}
+
+\begin{theorem}[Cluster-state tensor is normal]\label{thm:cluster_normal}
+    \lean{MPSTensor.cluster_isNBlkInjective_two}
+    \leanok
+    \uses{def:cluster_tensor, def:injective}
+    Although the cluster-state tensor is not injective at a single site, its
+    length-$2$ blocking is injective: the four length-$2$ products span
+    $\MN{2}$. In particular, the cluster-state tensor is normal.
+\end{theorem}
+
+\begin{remark}\label{rem:cluster_injective_blocked}
+    Although the cluster-state tensor is not injective at length~$1$,
+    the length-$2$ blocked tensor is injective. Using
+    $\braket{0}{\pm} = \tfrac{1}{\sqrt{2}}$,
+    $\braket{1}{+} = \tfrac{1}{\sqrt{2}}$, and
+    $\braket{1}{-} = -\tfrac{1}{\sqrt{2}}$, the
+    four products $A^{ij} = A^i A^j$ are
+    \begin{align}
+        A^{00} &= \tfrac{1}{\sqrt{2}}\ketbra{+}{0},\quad
+        A^{01} = \tfrac{1}{\sqrt{2}}\ketbra{+}{1},\quad
+        A^{10} = \tfrac{1}{\sqrt{2}}\ketbra{-}{0},\quad
+        A^{11} = -\tfrac{1}{\sqrt{2}}\ketbra{-}{1}.
+        \label{eq:ex_cluster_blocked_products}
+    \end{align}
+    Since $\{\ket{+},\ket{-}\}$ and $\{\bra{0},\bra{1}\}$ are bases,
+    these four rank-one matrices are linearly independent and
+    span~$\MN{2}$.
+\end{remark}
+
+\begin{theorem}[$\Z_2 \times \Z_2$ on-site symmetry of the blocked cluster-state tensor]\label{thm:cluster_z2z2_symmetric}
+    \lean{MPSTensor.cluster_isOnSiteSymmetric_Z2Z2}
+    \leanok
+    \uses{def:cluster_tensor, def:on_site_symmetric}
+    The length-$2$ blocked cluster-state tensor is on-site symmetric
+    under $\Z_2 \times \Z_2$. The two generators act on the
+    $4$-dimensional blocked physical space $(\C^2)^{\otimes 2}$ by
+    $\sigma_x \otimes \Id$ and $\Id \otimes \sigma_x$,
+    which commute and each square to the identity, defining a linear
+    representation of $\Z_2 \times \Z_2$.
+\end{theorem}
+
+\begin{theorem}[Anticommuting virtual gauges of the cluster-state symmetry]\label{thm:cluster_gauge_anticomm}
+    \lean{MPSTensor.cluster_gauge_anticomm}
+    \leanok
+    The virtual matrices implementing the two generators of
+    Theorem~\ref{thm:cluster_z2z2_symmetric}, namely $V_1 = \sigma_z$ and
+    $V_2 = \sigma_x$, anticommute ($V_1 V_2 = -V_2 V_1$).
+\end{theorem}
+
+\begin{definition}[Cluster-state factor system]\label{def:cluster_omega}
+    \lean{MPSTensor.clusterOmega}
+    \leanok
+    \uses{def:cluster_tensor}
+    The cluster-state factor system on $\Z_2 \times \Z_2$ is
+    $\omega(g,h) = (-1)^{g_2\,h_1}$ (the value $-1$ when $g_2 = 1$ and
+    $h_1 = 1$, and $1$ otherwise). It is the factor system of the explicit
+    projective representation with virtual gauges $\sigma_z$ and $\sigma_x$,
+    both squaring to the identity, so there is no diagonal term.
+\end{definition}
+
+\begin{lemma}[Cluster-state commutator phase]\label{lem:cluster_comm_phase_neg_one}
+    \lean{MPSTensor.cluster_commPhase_eq_neg_one}
+    \leanok
+    \uses{def:cluster_omega, def:comm_phase}
+    The commutator phase of the cluster-state factor system on the two generators
+    is $-1$.
+\end{lemma}
+
+\begin{theorem}[The cluster-state factor system is a $2$-cocycle]\label{thm:cluster_omega_cocycle}
+    \lean{MPSTensor.clusterOmega_isCocycle}
+    \leanok
+    \uses{def:is_cocycle, def:cluster_omega}
+    The cluster-state factor system is a genuine $2$-cocycle, being the factor
+    system of an explicit projective representation, so it represents an element
+    of $H^2(\Z_2 \times \Z_2, \mathrm{U}(1))$.
+\end{theorem}
+
+\begin{theorem}[The cluster-state $\Z_2 \times \Z_2$ phase is non-trivial]\label{thm:cluster_nontrivial_spt}
+    \lean{MPSTensor.cluster_isNontrivialSPT}
+    \leanok
+    \uses{def:nontrivial_class, thm:nontrivial_of_comm_phase, lem:cluster_comm_phase_neg_one}
+    The cluster-state factor system (Theorem~\ref{thm:cluster_omega_cocycle}),
+    built from the anticommuting gauges $\sigma_z$ and $\sigma_x$
+    (Theorem~\ref{thm:cluster_gauge_anticomm}), is not a coboundary: its
+    commutator phase on the two generators is $-1$. Its class in
+    $H^2(\Z_2 \times \Z_2, \mathrm{U}(1)) \cong \Z_2$ is therefore non-trivial, so
+    the cluster state realizes a non-trivial SPT phase.
+\end{theorem}
+
+\begin{theorem}[The cluster state has string order under its $\Z_2 \times \Z_2$ symmetry]\label{thm:cluster_string_order}
+    \lean{MPSTensor.cluster_hasStringOrder}
+    \leanok
+    \uses{def:has_string_order, def:cluster_tensor}
+    For every element $g$ of $\Z_2 \times \Z_2$, the length-$2$ blocked
+    cluster-state tensor has string order in the sense of
+    Definition~\ref{def:has_string_order} for the twist by $g$, with the
+    maximally mixed boundary state $\Lambda = \tfrac{1}{2}\Id$ as its stationary
+    boundary state.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:has_string_order_of_symmetric_injective, thm:cluster_z2z2_symmetric,
+        rem:cluster_injective_blocked}
+    The blocked tensor is injective (Remark~\ref{rem:cluster_injective_blocked})
+    and on-site symmetric under $\Z_2 \times \Z_2$
+    (Theorem~\ref{thm:cluster_z2z2_symmetric}), and each group element acts by a
+    real symmetric involutive permutation matrix, hence unitarily. The
+    maximally mixed state $\Lambda = \tfrac{1}{2}\Id$ is positive definite and
+    has trace~$1$. The four blocked matrices in
+    (\ref{eq:ex_cluster_blocked_products}) satisfy
+    $\sum_i A^i (A^i)^\dagger = \Id$ and
+    $\sum_i (A^i)^\dagger A^i = \Id$, so the transfer map is unital and
+    $\Lambda$ is a fixed point of the adjoint transfer map. These are exactly
+    the hypotheses of Theorem~\ref{thm:has_string_order_of_symmetric_injective},
+    which then yields string order for every $g$. The cluster state is thus the
+    first explicit witness of that criterion.
+\end{proof}
+
+\begin{theorem}[Blocked cluster transfer map is idempotent]\label{thm:cluster_blocked_idempotent}
+    \lean{MPSTensor.clusterBlocked_transferMap_idempotent,
+        MPSTensor.clusterBlocked_transferMap_apply}
+    \leanok
+    \uses{def:cluster_tensor, def:transfer_map}
+    The length-$2$ blocked cluster transfer map satisfies $\E_A^2 = \E_A$. In
+    closed form, it sends every $X$ to the scalar $(X_{00} + X_{11})/2$ times
+    the identity, so its image is one-dimensional.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The single-site cluster transfer map is not idempotent, but the four blocked
+    matrices give the closed form
+    $\E_A(X) = \tfrac{1}{2}(X_{00} + X_{11}) \Id$, which is manifestly
+    idempotent.
+\end{proof}
+
+\begin{theorem}[Cluster zero correlation length]\label{thm:cluster_zcl}
+    \lean{MPSTensor.clusterBlocked_isZCL}
+    \leanok
+    \uses{def:is_zcl, thm:cluster_blocked_idempotent, thm:zcl_iff_idempotent_transfer}
+    The length-$2$ blocked cluster tensor has zero correlation length: its
+    idempotent transfer map (Theorem~\ref{thm:cluster_blocked_idempotent}) gives
+    correlations independent of the separation. Like the GHZ state, and unlike
+    the AKLT state, the cluster state is a renormalization fixed point with zero
+    correlation length.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:zcl_iff_idempotent_transfer, thm:cluster_blocked_idempotent}
+    The claim follows from the idempotence of the blocked cluster transfer map
+    and the equivalence of zero correlation length with transfer-map idempotence
+    (Theorem~\ref{thm:zcl_iff_idempotent_transfer}).
+\end{proof}
+
+%% ===================================================================

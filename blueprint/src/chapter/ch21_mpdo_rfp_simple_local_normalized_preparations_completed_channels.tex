@@ -1,0 +1,573 @@
+\subsection{Normalized preparations and controlled partial traces}
+
+\begin{definition}[Trace matrices of explicit $\eta$-data]
+    \label{def:mpdo_explicit_eta_trace_matrix}
+    \lean{MPOTensor.ExplicitEtaOperators.traceMatrix}
+    \lean{MPOTensor.ExplicitEtaOperators.traceMatrix_apply}
+    \lean{MPOTensor.ExplicitEtaOperators.traceMatrixRe}
+    \lean{MPOTensor.ExplicitEtaOperators.traceMatrixRe_apply}
+    \leanok
+    \uses{def:mpdo_explicit_eta_operators}
+    Every explicit neighboring $\eta$-family determines a sector-by-sector trace
+    matrix. We give both its complex-valued form and the real-part version,
+    which is the direct data for the real Perron--Frobenius matrix $T$ used
+    in the rank-one step.
+\end{definition}
+
+\begin{definition}[Rank-one factorization of neighboring-operator traces]
+    \label{def:mpdo_eta_rank_one_trace_factorization}
+    \lean{MPOTensor.ExplicitEtaOperators.RankOneTraceFactorization}
+    \leanok
+    \uses{def:mpdo_explicit_eta_operators}
+    Let $(\eta_{k,h})$ be a positive neighboring-operator family. A rank-one
+    trace factorization consists of real families $(a_k)$ and $(b_h)$ such that
+    \begin{align}
+        \tr(\eta_{k,h}) &= a_kb_h, \notag\\
+        \sum_l a_lb_l &= 1. \notag
+    \end{align}
+    These identities occur in
+    \cite[Appendix~C.2, lines~1395--1402]{Cirac2016MPDO_arXiv}.
+\end{definition}
+
+\begin{definition}[Direct-sum neighboring operator]
+    \label{def:mpdo_eta_omega}
+    \lean{MPOTensor.ExplicitEtaOperators.OmegaIndex}
+    \lean{MPOTensor.ExplicitEtaOperators.omega}
+    \leanok
+    \uses{def:mpdo_explicit_eta_operators}
+    For sectors $k,h$, define the positive-operator candidate
+    \begin{align}
+        \Omega_{k,h}
+        &=\bigoplus_l(\eta_{k,l}\otimes\eta_{l,h}). \notag
+    \end{align}
+    The summand indexed by $l$ acts on
+    $(B_k^R\otimes B_l^L)\otimes(B_l^R\otimes B_h^L)$.
+    This is the operator adjoined by $\mathcal T_{k,h}$ in
+    \cite[Appendix~C.2, lines~1527--1535]{Cirac2016MPDO_arXiv}.
+\end{definition}
+
+\begin{theorem}[Positivity of finite dependent block diagonals]
+    \label{thm:matrix_pos_semidef_block_diagonal}
+    \lean{Matrix.PosSemidef.blockDiagonal'}
+    \leanok
+    Let $(A_i)_{i\in I}$ be a finite family of positive semidefinite matrices,
+    where the size of $A_i$ may depend on $i$. Then the block-diagonal matrix
+    $\bigoplus_{i\in I}A_i$ is positive semidefinite.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Write each $A_i=B_i^*B_i$ using its positive square root. The dependent
+    block diagonal then satisfies
+    $\bigoplus_i A_i=(\bigoplus_i B_i)^*(\bigoplus_i B_i)$.
+\end{proof}
+
+\begin{theorem}[Positivity of the direct-sum neighboring operator]
+    \label{thm:mpdo_eta_omega_pos}
+    \lean{MPOTensor.ExplicitEtaOperators.omega_pos}
+    \leanok
+    \uses{def:mpdo_eta_omega, def:mpdo_explicit_eta_operators,
+      thm:matrix_pos_semidef_block_diagonal}
+    Every operator $\Omega_{k,h}$ is positive semidefinite.
+\end{theorem}
+\begin{proof}
+    \leanok
+    For every $l$, positivity is preserved by the Kronecker product:
+    $\eta_{k,l}\succeq 0$ and $\eta_{l,h}\succeq 0$ imply
+    $\eta_{k,l}\otimes\eta_{l,h}\succeq 0$.
+    Apply Theorem~\ref{thm:matrix_pos_semidef_block_diagonal} to the family
+    $(\eta_{k,l}\otimes\eta_{l,h})_l$.
+\end{proof}
+
+\begin{theorem}[Trace of the direct-sum neighboring operator]
+    \label{thm:mpdo_eta_omega_trace}
+    \lean{MPOTensor.ExplicitEtaOperators.trace_omega}
+    \lean{MPOTensor.ExplicitEtaOperators.trace_omega_eq_mul}
+    \leanok
+    \uses{def:mpdo_eta_omega, def:mpdo_eta_rank_one_trace_factorization}
+    The trace is
+    \begin{align}
+        \tr(\Omega_{k,h})
+        &=\sum_l\tr(\eta_{k,l})\tr(\eta_{l,h}). \notag
+    \end{align}
+    Under the rank-one trace factorization, this becomes
+    \begin{align}
+        \tr(\Omega_{k,h})
+        &=a_kb_h\sum_l a_lb_l=a_kb_h. \notag
+    \end{align}
+    This is the trace calculation in
+    \cite[Appendix~C.2, lines~1531--1535]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    The direct-sum and Kronecker trace identities give
+    \begin{align}
+        \tr(\Omega_{k,h})
+        &=\sum_l\tr(\eta_{k,l}\otimes\eta_{l,h})
+          =\sum_l\tr(\eta_{k,l})\tr(\eta_{l,h}). \notag
+    \end{align}
+    Substitute
+    $\tr(\eta_{k,h})=a_kb_h$ and $\sum_l a_lb_l=1$.
+\end{proof}
+
+\begin{theorem}[Vanishing of zero-weight neighboring operators]
+    \label{thm:mpdo_eta_zero_weight}
+    \lean{MPOTensor.ExplicitEtaOperators.weight_nonneg}
+    \lean{MPOTensor.ExplicitEtaOperators.eta_eq_zero_of_mul_eq_zero}
+    \lean{MPOTensor.ExplicitEtaOperators.omega_eq_zero_of_mul_eq_zero}
+    \leanok
+    \uses{thm:mpdo_eta_omega_pos, thm:mpdo_eta_omega_trace,
+      def:mpdo_eta_rank_one_trace_factorization}
+    Every product $a_kb_h$ is non-negative. If $a_kb_h=0$, then
+    $\eta_{k,h}=0$ and $\Omega_{k,h}=0$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Since $\eta_{k,h}\succeq 0$, its trace is non-negative, and hence
+    $a_kb_h=\tr(\eta_{k,h})\geq 0$. If $a_kb_h=0$, then
+    $\eta_{k,h}\succeq 0$ and $\tr(\eta_{k,h})=a_kb_h=0$, which imply
+    $\eta_{k,h}=0$.
+    The same implication gives $\Omega_{k,h}=0$ because
+    $\Omega_{k,h}\succeq 0$ and
+    $\tr(\Omega_{k,h})=a_kb_h=0$.
+\end{proof}
+
+\begin{definition}[Normalized active neighboring operators]
+    \label{def:mpdo_normalized_eta_omega}
+    \lean{MPOTensor.ExplicitEtaOperators.normalizedEta}
+    \lean{MPOTensor.ExplicitEtaOperators.normalizedOmega}
+    \leanok
+    \uses{def:mpdo_eta_omega, def:mpdo_eta_rank_one_trace_factorization}
+    With the convention $0^{-1}=0$, define for every pair $(k,h)$
+    \begin{align}
+        \widehat\eta_{k,h}
+        &=(a_kb_h)^{-1}\eta_{k,h}, \notag\\
+        \widehat\Omega_{k,h}
+        &=(a_kb_h)^{-1}\Omega_{k,h}. \notag
+    \end{align}
+    These operators are normalized when the pair is active, namely when
+    $a_kb_h\ne0$.
+\end{definition}
+
+\begin{theorem}[Positivity of normalized neighboring operators]
+    \label{thm:mpdo_normalized_eta_omega_pos}
+    \lean{MPOTensor.ExplicitEtaOperators.normalizedEta_pos}
+    \lean{MPOTensor.ExplicitEtaOperators.normalizedOmega_pos}
+    \leanok
+    \uses{def:mpdo_normalized_eta_omega, thm:mpdo_eta_omega_pos,
+      thm:mpdo_eta_zero_weight}
+    For every pair $(k,h)$, the operators $\widehat\eta_{k,h}$ and
+    $\widehat\Omega_{k,h}$ are positive semidefinite.
+\end{theorem}
+\begin{proof}
+    \leanok
+    By Theorem~\ref{thm:mpdo_eta_zero_weight}, $a_kb_h\geq 0$, and hence
+    $(a_kb_h)^{-1}\geq 0$. Since $\eta_{k,h}\succeq 0$ and
+    $\Omega_{k,h}\succeq 0$, multiplication by $(a_kb_h)^{-1}$ gives
+    $\widehat\eta_{k,h}\succeq 0$ and
+    $\widehat\Omega_{k,h}\succeq 0$.
+\end{proof}
+
+\begin{theorem}[Normalized active preparations]
+    \label{thm:mpdo_normalized_eta_omega_preparation}
+    \lean{MPOTensor.ExplicitEtaOperators.trace_normalizedEta}
+    \lean{MPOTensor.ExplicitEtaOperators.trace_normalizedOmega}
+    \lean{MPOTensor.ExplicitEtaOperators.normalizedEta_preparationMap_isKrausCPTP}
+    \lean{MPOTensor.ExplicitEtaOperators.normalizedOmega_preparationMap_isKrausCPTP}
+    \leanok
+    \uses{def:mpdo_normalized_eta_omega,
+      thm:mpdo_normalized_eta_omega_pos, thm:mpdo_eta_omega_trace,
+      lem:mpdo_state_preparation_cptp}
+    If $a_kb_h\ne0$, then $\widehat\eta_{k,h}$ and
+    $\widehat\Omega_{k,h}$ have trace one.
+    Consequently the maps
+    \begin{align}
+        X&\longmapsto X\otimes\widehat\eta_{k,h}, \notag\\
+        X&\longmapsto X\otimes\widehat\Omega_{k,h} \notag
+    \end{align}
+    are trace-preserving and completely positive. These are the individual
+    preparations $\mathcal S_{k,h}$ and $\mathcal T_{k,h}$ in
+    \cite[Appendix~C.2, lines~1527--1535 and~1551--1555]
+      {Cirac2016MPDO_arXiv}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    On an active pair,
+    $\tr(\widehat\eta_{k,h})
+      =(a_kb_h)^{-1}\tr(\eta_{k,h})
+      =(a_kb_h)^{-1}a_kb_h=1$.
+    Likewise, $\tr(\widehat\Omega_{k,h})=1$ follows from
+    $\tr(\Omega_{k,h})=a_kb_h$.
+    Apply Lemma~\ref{lem:mpdo_state_preparation_cptp} to each operator.
+\end{proof}
+
+\begin{lemma}[Trace-one matrices have nonempty index spaces]
+    \label{lem:mpdo_trace_one_nonempty}
+    \lean{Matrix.nonempty_of_trace_eq_one}
+    \leanok
+    If a matrix indexed by a finite type has trace one, then its index type
+    is nonempty.
+\end{lemma}
+\begin{proof}
+    \leanok
+    A matrix on an empty index space has trace zero, contrary to the
+    hypothesis.
+\end{proof}
+
+\begin{lemma}[Nonemptiness of the Hayashi sector factors]
+    \label{lem:mpdo_hayashi_factor_nonempty}
+    \lean{MPOTensor.ExplicitEtaOperators.dR_nonempty}
+    \lean{MPOTensor.ExplicitEtaOperators.dL_nonempty}
+    \leanok
+    \uses{def:mpdo_eta_structure,
+      lem:mpdo_trace_one_nonempty}
+    Every left and right factor in a Hayashi sector is nonzero-dimensional.
+\end{lemma}
+\begin{proof}
+    \leanok
+    A matrix on an empty index space has trace zero. Hence
+    $\tr(\rho_k^R)=1$ implies
+    $\dim(B_k^R\otimes C)>0$, which implies $\dim B_k^R>0$,
+    and the same argument applied to $\rho_k^L$ gives $d_k^L>0$.
+\end{proof}
+
+\begin{lemma}[Existence of a Hayashi sector]
+    \label{lem:mpdo_hayashi_sector_nonempty}
+    \lean{MPOTensor.ExplicitEtaOperators.sector_nonempty}
+    \leanok
+    \uses{def:mpdo_eta_structure}
+    The set of Hayashi sectors is nonempty.
+\end{lemma}
+\begin{proof}
+    \leanok
+    The sector-weight identity $\sum_k p_k=1$ implies $m>0$.
+\end{proof}
+
+\begin{lemma}[Nonemptiness of the neighboring auxiliary spaces]
+    \label{lem:mpdo_hayashi_auxiliary_nonempty}
+    \lean{MPOTensor.ExplicitEtaOperators.etaIndex_nonempty}
+    \lean{MPOTensor.ExplicitEtaOperators.omegaIndex_nonempty}
+    \leanok
+    \uses{def:mpdo_eta_omega, lem:mpdo_hayashi_factor_nonempty,
+      lem:mpdo_hayashi_sector_nonempty}
+    For every pair of sectors $(k,h)$, the spaces carrying
+    $\eta_{k,h}$ and $\Omega_{k,h}$ are nonzero-dimensional.
+\end{lemma}
+\begin{proof}
+    \leanok
+    The tensor product carrying $\eta_{k,h}$ is nonzero-dimensional by
+    Lemma~\ref{lem:mpdo_hayashi_factor_nonempty}. Choosing an intermediate
+    sector $l$ by Lemma~\ref{lem:mpdo_hayashi_sector_nonempty} then supplies
+    an element of the direct-sum space carrying $\Omega_{k,h}$.
+\end{proof}
+
+\begin{definition}[Faithful uniform density matrix]
+    \label{def:mpdo_faithful_uniform_density}
+    \lean{Matrix.faithfulDensity}
+    \leanok
+    On a nonzero finite-dimensional space $H$, define
+    \begin{align}
+        \tau_H&=\frac{1}{\dim H}I_H. \notag
+    \end{align}
+\end{definition}
+
+\begin{theorem}[The uniform density matrix is faithful and normalized]
+    \label{thm:mpdo_faithful_uniform_density}
+    \lean{Matrix.faithfulDensity_posDef}
+    \lean{Matrix.faithfulDensity_trace}
+    \leanok
+    \uses{def:mpdo_faithful_uniform_density}
+    The matrix $\tau_H$ is positive definite and has trace one.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Since $\dim H>0$, the scalar $(\dim H)^{-1}$ is positive. Thus
+    $\tau_H$ is positive definite, and
+    $\tr(\tau_H)=(\dim H)^{-1}\dim H=1$.
+\end{proof}
+
+\begin{definition}[Completed neighboring-state preparation]
+    \label{def:mpdo_completed_eta_preparation}
+    \lean{MPOTensor.ExplicitEtaOperators.inactiveEtaDensity}
+    \lean{MPOTensor.ExplicitEtaOperators.completedEta}
+    \lean{MPOTensor.ExplicitEtaOperators.completedEtaPreparationMap}
+    \leanok
+    \uses{def:mpdo_normalized_eta_omega,
+      lem:mpdo_hayashi_auxiliary_nonempty,
+      def:mpdo_faithful_uniform_density}
+    For every sector pair define
+    \begin{align}
+        \overline\eta_{k,h}
+        &=
+        \begin{cases}
+          \widehat\eta_{k,h},&a_kb_h\ne0,\\
+          \tau_{B_k^R\otimes B_h^L},&a_kb_h=0,
+        \end{cases} \notag\\
+        \overline{\mathcal S}_{k,h}(X)
+        &=X\otimes\overline\eta_{k,h}. \notag
+    \end{align}
+    On an active pair this is precisely the preparation
+    $\mathcal S_{k,h}$ of
+    \cite[Appendix~C.2, lines~1551--1555]{Cirac2016MPDO_arXiv}; the second
+    branch gives a normalized extension on a pair where the displayed source
+    quotient is undefined.
+\end{definition}
+
+\begin{theorem}[Completed neighboring-state preparations are trace-preserving
+    completely positive]
+    \label{thm:mpdo_completed_eta_preparation_cptp}
+    \lean{MPOTensor.ExplicitEtaOperators.completedEta_pos}
+    \lean{MPOTensor.ExplicitEtaOperators.trace_completedEta}
+    \lean{MPOTensor.ExplicitEtaOperators.completedEta_eq_normalizedEta}
+    \lean{MPOTensor.ExplicitEtaOperators.completedEta_preparationMap_isKrausCPTP}
+    \lean{MPOTensor.ExplicitEtaOperators.completedEtaPreparationMap_eq_normalized}
+    \leanok
+    \uses{def:mpdo_completed_eta_preparation,
+      thm:mpdo_normalized_eta_omega_preparation,
+      thm:mpdo_faithful_uniform_density, lem:mpdo_state_preparation_cptp}
+    For every pair $(k,h)$, the operator $\overline\eta_{k,h}$ is positive
+    semidefinite with trace one. Hence $\overline{\mathcal S}_{k,h}$ is
+    trace-preserving and completely positive. If $a_kb_h\ne0$, then both the
+    density matrix and the preparation equal their normalized active forms.
+\end{theorem}
+\begin{proof}
+    \leanok
+    The two branches give
+    \begin{align}
+      a_kb_h\ne0
+      &\Longrightarrow
+      \overline\eta_{k,h}=\widehat\eta_{k,h}\succeq0,
+      \quad \tr(\overline\eta_{k,h})=1, \notag\\
+      a_kb_h=0
+      &\Longrightarrow
+      \overline\eta_{k,h}=\tau_{B_k^R\otimes B_h^L}\succ0,
+      \quad \tr(\overline\eta_{k,h})=1. \notag
+    \end{align}
+    The state-preparation result applies in either case.
+\end{proof}
+
+\begin{definition}[Completed direct-sum preparation]
+    \label{def:mpdo_completed_omega_preparation}
+    \lean{MPOTensor.ExplicitEtaOperators.inactiveOmegaDensity}
+    \lean{MPOTensor.ExplicitEtaOperators.completedOmega}
+    \lean{MPOTensor.ExplicitEtaOperators.completedOmegaPreparationMap}
+    \leanok
+    \uses{def:mpdo_normalized_eta_omega,
+      lem:mpdo_hayashi_auxiliary_nonempty,
+      def:mpdo_faithful_uniform_density}
+    For every sector pair define
+    \begin{align}
+        \mathcal H^{\Omega}_{k,h}
+        &=
+        \bigoplus_l
+          (B_k^R\otimes B_l^L)\otimes(B_l^R\otimes B_h^L), \notag\\
+        \overline\Omega_{k,h}
+        &=
+        \begin{cases}
+          \widehat\Omega_{k,h},&a_kb_h\ne0,\\
+          \tau_{\mathcal H^{\Omega}_{k,h}},&a_kb_h=0,
+        \end{cases} \notag\\
+        \overline{\mathcal T}_{k,h}(X)
+        &=X\otimes\overline\Omega_{k,h}. \notag
+    \end{align}
+    Thus $\mathcal H^{\Omega}_{k,h}$ is the carrier space, whereas
+    $\Omega_{k,h}$, $\widehat\Omega_{k,h}$, and
+    $\overline\Omega_{k,h}$ are operators on it: respectively the
+    unnormalized neighboring operator, its normalization on an active pair,
+    and its completed density on an arbitrary pair. On an active pair this is
+    precisely the preparation
+    $\mathcal T_{k,h}$ of
+    \cite[Appendix~C.2, lines~1527--1535]{Cirac2016MPDO_arXiv}; the inactive
+    branch is a normalized extension.
+\end{definition}
+
+\begin{theorem}[Completed direct-sum preparations are trace-preserving
+    completely positive]
+    \label{thm:mpdo_completed_omega_preparation_cptp}
+    \lean{MPOTensor.ExplicitEtaOperators.completedOmega_pos}
+    \lean{MPOTensor.ExplicitEtaOperators.trace_completedOmega}
+    \lean{MPOTensor.ExplicitEtaOperators.completedOmega_eq_normalizedOmega}
+    \lean{MPOTensor.ExplicitEtaOperators.completedOmega_preparationMap_isKrausCPTP}
+    \lean{MPOTensor.ExplicitEtaOperators.completedOmegaPreparationMap_eq_normalized}
+    \leanok
+    \uses{def:mpdo_completed_omega_preparation,
+      thm:mpdo_normalized_eta_omega_preparation,
+      thm:mpdo_faithful_uniform_density, lem:mpdo_state_preparation_cptp}
+    For every pair $(k,h)$, the operator $\overline\Omega_{k,h}$ is positive
+    semidefinite with trace one. Hence $\overline{\mathcal T}_{k,h}$ is
+    trace-preserving and completely positive. On every active pair it equals
+    the normalized active preparation.
+\end{theorem}
+\begin{proof}
+    \leanok
+    The two branches give
+    \begin{align}
+      a_kb_h\ne0
+      &\Longrightarrow
+      \overline\Omega_{k,h}=\widehat\Omega_{k,h}\succeq0,
+      \quad \tr(\overline\Omega_{k,h})=1, \notag\\
+      a_kb_h=0
+      &\Longrightarrow
+      \overline\Omega_{k,h}=\tau_{\mathcal H^{\Omega}_{k,h}}\succ0,
+      \quad \tr(\overline\Omega_{k,h})=1. \notag
+    \end{align}
+    The state-preparation result therefore applies to
+    $\overline{\mathcal T}_{k,h}$.
+\end{proof}
+
+\begin{definition}[Globally controlled neighboring-state preparation]
+    \label{def:mpdo_completed_eta_controlled_map}
+    \lean{MPOTensor.ExplicitEtaOperators.completedEtaControlledMap}
+    \leanok
+    \uses{def:mpdo_completed_eta_preparation,
+      def:mpdo_state_preparation_kraus,
+      def:mpdo_controlled_kraus_map}
+    Let $H=\bigoplus_{k,h}H_{k,h}$. Orthogonally controlling the completed
+    preparations over the sector pairs gives a map
+    \begin{align}
+        \overline{\mathcal S}_1(X)
+        &=\sum_{k,h,a}\widetilde A_{k,h,a}X
+          \widetilde A_{k,h,a}^{\dagger}, \notag
+    \end{align}
+    where $(A_{k,h,a})_a$ is a Kraus family for
+    $\overline{\mathcal S}_{k,h}$ and the tilde denotes its extension by zero
+    outside $H_{k,h}$. Thus the map discards inter-sector coherences and
+    applies the completed preparation in each diagonal sector. On active
+    sectors this is the sector-control formula for $\mathcal S_1$ in
+    \cite[Appendix~C.2, lines~1548--1555]{Cirac2016MPDO_arXiv}.
+\end{definition}
+
+\begin{theorem}[Diagonal-sector action of the completed neighboring preparation]
+    \label{thm:mpdo_completed_eta_controlled_map_same_block}
+    \lean{MPOTensor.ExplicitEtaOperators.completedEtaControlledMap_sameBlock_apply}
+    \leanok
+    \uses{def:mpdo_completed_eta_controlled_map,
+      def:mpdo_completed_eta_preparation}
+    If $X_{k,h}$ is the $(k,h)$ diagonal block of $X$, then
+    \begin{align}
+      [\overline{\mathcal S}_1(X)]_{k,h}
+      &=\overline{\mathcal S}_{k,h}(X_{k,h})
+       =X_{k,h}\otimes\overline\eta_{k,h}. \notag
+    \end{align}
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:mpdo_controlled_kraus_map_same_block,
+      thm:mpdo_rectangular_kraus_map_equiv,
+      thm:mpdo_state_preparation_kraus_action}
+    The diagonal-block formula and invariance under Kraus-index relabeling give
+    \begin{align}
+      [\overline{\mathcal S}_1(X)]_{k,h}
+      &=\Phi_{\widetilde A_{k,h}}(X_{k,h})
+       =\Phi_{A_{k,h}}(X_{k,h}), \notag\\
+      \Phi_{A_{k,h}}(X_{k,h})
+      &=X_{k,h}\otimes\overline\eta_{k,h}. \notag
+    \end{align}
+\end{proof}
+
+\begin{theorem}[The globally controlled neighboring-state preparation is
+    trace-preserving completely positive]
+    \label{thm:mpdo_completed_eta_controlled_map_cptp}
+    \lean{MPOTensor.ExplicitEtaOperators.completedEtaControlledMap_isKrausCPTP}
+    \leanok
+    \uses{def:mpdo_completed_eta_controlled_map,
+      thm:mpdo_completed_eta_preparation_cptp,
+      thm:mpdo_state_preparation_kraus_resolution,
+      thm:mpdo_controlled_kraus_map_cptp}
+    The map $\overline{\mathcal S}_1$ is trace-preserving and completely
+    positive.
+\end{theorem}
+\begin{proof}
+    \leanok
+    If $(A_{k,h,a})_a$ is the sectorwise Kraus family, then
+    \begin{align}
+      \sum_{k,h,a}\widetilde A_{k,h,a}^{\dagger}\widetilde A_{k,h,a}
+      &=\bigoplus_{k,h}\left(\sum_a A_{k,h,a}^{\dagger}A_{k,h,a}\right)
+       =\bigoplus_{k,h}I_{H_{k,h}}=I_H. \notag
+    \end{align}
+    Thus the controlled Kraus family is trace-preserving.
+\end{proof}
+
+\begin{definition}[Globally controlled direct-sum preparation]
+    \label{def:mpdo_completed_omega_controlled_map}
+    \lean{MPOTensor.ExplicitEtaOperators.completedOmegaControlledMap}
+    \leanok
+    \uses{def:mpdo_completed_omega_preparation,
+      def:mpdo_state_preparation_kraus,
+      def:mpdo_controlled_kraus_map}
+    Orthogonally controlling the completed direct-sum preparations gives
+    \begin{align}
+        \overline{\mathcal T}_1(X)
+        &=\sum_{k,h,a}\widetilde B_{k,h,a}X
+          \widetilde B_{k,h,a}^{\dagger}, \notag
+    \end{align}
+    where $(B_{k,h,a})_a$ is a Kraus family for
+    $\overline{\mathcal T}_{k,h}$. This map discards inter-sector coherences
+    and, on active sectors, is the sector-control formula for $\mathcal T_1$
+    in \cite[Appendix~C.2, lines~1523--1535]{Cirac2016MPDO_arXiv}.
+\end{definition}
+
+\begin{theorem}[Diagonal-sector action of the completed direct-sum preparation]
+    \label{thm:mpdo_completed_omega_controlled_map_same_block}
+    \lean{MPOTensor.ExplicitEtaOperators.completedOmegaControlledMap_sameBlock_apply}
+    \leanok
+    \uses{def:mpdo_completed_omega_controlled_map,
+      def:mpdo_completed_omega_preparation}
+    If $X_{k,h}$ is the $(k,h)$ diagonal block of $X$, then
+    \begin{align}
+      [\overline{\mathcal T}_1(X)]_{k,h}
+      &=\overline{\mathcal T}_{k,h}(X_{k,h})
+       =X_{k,h}\otimes\overline\Omega_{k,h}. \notag
+    \end{align}
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:mpdo_controlled_kraus_map_same_block,
+      thm:mpdo_rectangular_kraus_map_equiv,
+      thm:mpdo_state_preparation_kraus_action}
+    The diagonal-block formula and invariance under Kraus-index relabeling give
+    \begin{align}
+      [\overline{\mathcal T}_1(X)]_{k,h}
+      &=\Phi_{\widetilde B_{k,h}}(X_{k,h})
+       =\Phi_{B_{k,h}}(X_{k,h}), \notag\\
+      \Phi_{B_{k,h}}(X_{k,h})
+      &=X_{k,h}\otimes\overline\Omega_{k,h}. \notag
+    \end{align}
+\end{proof}
+
+\begin{theorem}[The globally controlled direct-sum preparation is
+    trace-preserving completely positive]
+    \label{thm:mpdo_completed_omega_controlled_map_cptp}
+    \lean{MPOTensor.ExplicitEtaOperators.completedOmegaControlledMap_isKrausCPTP}
+    \leanok
+    \uses{def:mpdo_completed_omega_controlled_map,
+      thm:mpdo_completed_omega_preparation_cptp,
+      thm:mpdo_state_preparation_kraus_resolution,
+      thm:mpdo_controlled_kraus_map_cptp}
+    The map $\overline{\mathcal T}_1$ is trace-preserving and completely
+    positive.
+\end{theorem}
+\begin{proof}
+    \leanok
+    For the sectorwise Kraus family $(B_{k,h,a})_a$,
+    \begin{align}
+      \sum_{k,h,a}\widetilde B_{k,h,a}^{\dagger}\widetilde B_{k,h,a}
+      &=\bigoplus_{k,h}\left(\sum_a B_{k,h,a}^{\dagger}B_{k,h,a}\right)
+       =\bigoplus_{k,h}I_{H_{k,h}}=I_H. \notag
+    \end{align}
+    The orthogonal-control theorem now gives the claim.
+\end{proof}
+
+\begin{remark}[Scope of the completed preparation]
+    The conclusions above begin with the rank-one trace factorization
+    $\tr(\eta_{k,h})=a_kb_h$ and $\sum_l a_lb_l=1$. Deriving this
+    factorization for the inverse-map neighboring operators from the strong
+    area law and zero correlation length is the Perron--Frobenius step of
+    \cite[Appendix~C.2, lines~1404--1410 and~1484--1498]
+      {Cirac2016MPDO_arXiv}.
+    The completed maps therefore give the global controlled preparation once
+    that factorization is supplied; they do not by themselves prove the full
+    two-map statement
+    \cite[Appendix~C.2, lines~1510--1517]{Cirac2016MPDO_arXiv}. The regrouping
+    maps, shift maps, and the required closure identities are separate parts
+    of that statement.
+\end{remark}
