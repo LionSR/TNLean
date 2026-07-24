@@ -165,6 +165,20 @@
   }
 \cs_generate_variant:Nn \__tenkz_model_wire_by_ends:nnN { ee }
 
+% Apply function #2 (one n-type argument, the wire id) to every wire whose
+% origin field equals #1, in declaration order.  Closure draw passes
+% consume records through this one door.
+\tl_new:N \l__tenkz_model_origin_tl
+\cs_new_protected:Npn \__tenkz_model_map_wires_origin:nN #1#2
+  {
+    \seq_map_inline:Nn \l__tenkz_model_wire_seq
+      {
+        \__tenkz_model_get:nnN {##1} {origin} \l__tenkz_model_origin_tl
+        \str_if_eq:eeT { \tl_use:N \l__tenkz_model_origin_tl } {#1}
+          { #2 {##1} }
+      }
+  }
+
 % Expanding constructors for front ends whose addresses live in counters.
 % The variants route through the current (possibly frozen) base meaning.
 \cs_generate_variant:Nn \__tenkz_model_record_atom:n { e }
