@@ -1,0 +1,18 @@
+% Expected failure: a join declaration cannot exempt an interior crossing.
+\documentclass{standalone}
+\usepackage{tenkz}
+\usetikzlibrary{hobby,spath3,intersections}
+\begin{document}
+\makeatletter\input{tenkz-string.code.tex}\makeatother
+\begin{tikzpicture}
+\ExplSyntaxOn
+\__tenkz_string_reset:
+\__tenkz_string_register:nn {a} {open}
+\path[spath/save=a] (-1,-1)--(1,1);
+\__tenkz_string_register:nn {b} {open}
+\path[spath/save=b] (-1,1)--(1,-1);
+\__tenkz_string_join:nn {a} {b}
+\__tenkz_string_resolve:
+\ExplSyntaxOff
+\end{tikzpicture}
+\end{document}
