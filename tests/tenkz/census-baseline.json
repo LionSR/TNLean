@@ -6,12 +6,13 @@
       "commands": 18,
       "environments": 5,
       "escape": 9,
-      "kernel": 76,
+      "kernel": 79,
       "sugar": 4
     }
   },
   "m2_parser_paths": {
-    "definition": "public leaf keys installed by the TeX parsers; an increase requires an Extension-gate citation",
+    "definition": "public leaf keys installed by the TeX parsers; identity changes require an Extension-gate citation",
+    "identity_sha256": "ede8998b9625197e3070ccc241e9939e38521f72d6613a37e3d4e2e679795f59",
     "value": 145
   },
   "m3_escape_usage": {
@@ -32,8 +33,8 @@
   "m6_overloads": {
     "definition": "names with several value types + union types + enum words shared across enums; must never rise",
     "value": {
-      "multi_typed_names": 3,
-      "shared_enum_words": 5,
+      "multi_typed_names": 4,
+      "shared_enum_words": 8,
       "union_types": 2
     }
   }

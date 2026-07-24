@@ -15,6 +15,7 @@ manufactured consumers and never count.
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import re
 import statistics
@@ -34,6 +35,7 @@ from tenkz_language import (  # noqa: E402
     parse_value_alias_sunset,
     public_census,
     _parser_leaf_keys,
+    _parser_leaf_keys_from_texts,
 )
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -51,6 +53,9 @@ _SCOPE_COMMANDS = {
     "connection": ("tncut", "tnedge", "tnjoin", "tnarrow"),
     "region": ("tnregion",),
     "annotation": ("tnspan",),
+}
+_SETUP_COMMAND_FORWARDS = {
+    "tntree": {"pitch", "compact", "inline"},
 }
 
 
@@ -204,6 +209,15 @@ def _option_key_names(payload: str) -> list[str]:
     ]
 
 
+def _forwarded_options(payload: str, keys: set[str]) -> str:
+    """Keep only option parts whose keys are forwarded to another scope."""
+    return ",".join(
+        part
+        for part in _top_level_option_parts(payload)
+        if part.partition("=")[0].strip().replace("~", " ") in keys
+    )
+
+
 def _environment_options(text: str) -> list[str]:
     payloads: list[str] = []
     pattern = re.compile(r"\\begin\{tenkz(?:cd|lattice|free|planes)?\}")
@@ -276,6 +290,11 @@ def scoped_option_groups(
         scoped["setup"][path] = [
             *_brace_argument(text, "tnset", 1),
             *picture_options,
+            *(
+                _forwarded_options(payload, keys)
+                for command, keys in _SETUP_COMMAND_FORWARDS.items()
+                for payload in _command_options(text, command)
+            ),
         ]
         scoped["atom-declaration"][path] = _brace_argument(
             text, "tndeclareatom", 2
@@ -358,6 +377,7 @@ def alias_records(entries: list[Entry]) -> list[tuple[str, str, str | None]]:
 
 
 def meters(entries: list[Entry], corpus: dict[Path, str]) -> dict[str, dict]:
+    parser_leaf_keys = _parser_leaf_keys()
     escape_usage = 0
     scoped = scoped_option_groups(corpus)
     for scope, name in escape_rows(entries):
@@ -411,8 +431,9 @@ def meters(entries: list[Entry], corpus: dict[Path, str]) -> dict[str, dict]:
         },
         "m2_parser_paths": {
             "definition": "public leaf keys installed by the TeX parsers;"
-            " an increase requires an Extension-gate citation",
-            "value": len(_parser_leaf_keys()),
+            " identity changes require an Extension-gate citation",
+            "identity_sha256": parser_leaf_fingerprint(parser_leaf_keys),
+            "value": len(parser_leaf_keys),
         },
         "m3_escape_usage": {
             "definition": "occurrences of escape-ledger spellings in the demand"
@@ -708,24 +729,123 @@ def extension_cited(ref: str) -> bool:
     )
 
 
+def census_correction_cited(ref: str) -> bool:
+    """Whether added diff lines cite a reviewed census correction."""
+    result = subprocess.run(
+        ["git", "diff", "--merge-base", ref, "HEAD", "--"],
+        cwd=ROOT,
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        check=False,
+    )
+    if result.returncode:
+        raise ValueError(f"cannot diff against base ref {ref}: {result.stderr.strip()}")
+    return (
+        re.search(
+            r"Census-correction:\s*#[0-9]+",
+            added_diff_text(result.stdout),
+        )
+        is not None
+    )
+
+
 def _m1_total(snapshot: dict) -> int:
     return sum(snapshot["m1_census"]["value"].values())
 
 
-def ratchet_errors(current: dict, previous: dict, *, has_extension: bool) -> list[str]:
+def parser_leaf_fingerprint(keys: set[tuple[str, str]]) -> str:
+    """Return a stable digest of the exact parser family/key identities."""
+    payload = "\n".join(f"{family}\0{name}" for family, name in sorted(keys))
+    return hashlib.sha256(payload.encode()).hexdigest()
+
+
+def parser_leaf_fingerprint_at_ref(ref: str) -> str:
+    """Return the exact parser-leaf fingerprint from a Git tree."""
+    listed = subprocess.run(
+        ["git", "ls-tree", "-r", "--name-only", ref, "--", "tex/tenkz"],
+        cwd=ROOT,
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        check=False,
+    )
+    if listed.returncode:
+        raise ValueError(
+            f"cannot list parser sources at {ref}: {listed.stderr.strip()}"
+        )
+    paths = [
+        path
+        for path in listed.stdout.splitlines()
+        if path.endswith(".code.tex")
+    ]
+    texts: list[str] = []
+    for path in paths:
+        shown = subprocess.run(
+            ["git", "show", f"{ref}:{path}"],
+            cwd=ROOT,
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            check=False,
+        )
+        if shown.returncode:
+            raise ValueError(
+                f"cannot read parser source {path} at {ref}: "
+                f"{shown.stderr.strip()}"
+            )
+        texts.append(shown.stdout)
+    return parser_leaf_fingerprint(_parser_leaf_keys_from_texts(texts))
+
+
+def ratchet_errors(
+    current: dict,
+    previous: dict,
+    *,
+    has_extension: bool,
+    has_census_correction: bool = False,
+    previous_parser_fingerprint: str | None = None,
+) -> list[str]:
     """Compare the checked-in baseline with its pre-change counterpart."""
     errors: list[str] = []
     current_m1 = current["m1_census"]["value"]
     previous_m1 = previous["m1_census"]["value"]
+    current_parser_fingerprint = current["m2_parser_paths"].get(
+        "identity_sha256"
+    )
+    if previous_parser_fingerprint is None:
+        previous_parser_fingerprint = previous["m2_parser_paths"].get(
+            "identity_sha256"
+        )
+    parser_paths_unchanged = (
+        current_parser_fingerprint is not None
+        and previous_parser_fingerprint is not None
+        and current_parser_fingerprint == previous_parser_fingerprint
+    )
+    correction_allowed = has_census_correction and parser_paths_unchanged
 
-    def extension_guard(grew: bool, meter: str) -> None:
-        if grew and not has_extension:
+    def extension_guard(
+        grew: bool,
+        meter: str,
+        *,
+        allow_correction: bool = False,
+    ) -> None:
+        if (
+            grew
+            and not has_extension
+            and not (allow_correction and correction_allowed)
+        ):
             errors.append(f"{meter} increased without an Extension-gate: #NNNN citation")
 
-    extension_guard(_m1_total(current) > _m1_total(previous), "M1 total")
+    extension_guard(
+        _m1_total(current) > _m1_total(previous),
+        "M1 total",
+        allow_correction=True,
+    )
     extension_guard(
         current_m1.get("kernel", 0) > previous_m1.get("kernel", 0),
         "M1 kernel",
+        allow_correction=True,
     )
     for surface in ("commands", "environments"):
         extension_guard(
@@ -736,6 +856,14 @@ def ratchet_errors(current: dict, previous: dict, *, has_extension: bool) -> lis
         current["m2_parser_paths"]["value"] > previous["m2_parser_paths"]["value"],
         "M2 parser paths",
     )
+    if (
+        current_parser_fingerprint != previous_parser_fingerprint
+        and not has_extension
+    ):
+        errors.append(
+            "M2 parser identities changed without an Extension-gate: "
+            "#NNNN citation"
+        )
     if current["m3_escape_usage"]["value"] > previous["m3_escape_usage"]["value"]:
         errors.append("M3 escape usage increased")
     if current["m4_lines_per_case"]["value"] > previous["m4_lines_per_case"]["value"]:
@@ -747,7 +875,10 @@ def ratchet_errors(current: dict, previous: dict, *, has_extension: bool) -> lis
     if current_m5["missing_sunset"]:
         errors.append("M5 contains aliases without a valid sunset")
     for name, value in current["m6_overloads"]["value"].items():
-        if value > previous["m6_overloads"]["value"][name]:
+        if (
+            value > previous["m6_overloads"]["value"][name]
+            and not correction_allowed
+        ):
             errors.append(f"M6 overload component {name} increased")
     return errors
 
@@ -760,6 +891,8 @@ def evaluate_gate(
     verdicts: set[str],
     *,
     has_extension: bool,
+    has_census_correction: bool = False,
+    previous_parser_fingerprint: str | None = None,
 ) -> tuple[str, list[str]]:
     """Return the gate branch and any failures."""
     actual = meters(entries, corpus)
@@ -768,7 +901,13 @@ def evaluate_gate(
             "computed meters differ from tests/tenkz/census-baseline.json"
         ]
     if previous is not None:
-        errors = ratchet_errors(baseline, previous, has_extension=has_extension)
+        errors = ratchet_errors(
+            baseline,
+            previous,
+            has_extension=has_extension,
+            has_census_correction=has_census_correction,
+            previous_parser_fingerprint=previous_parser_fingerprint,
+        )
         if errors:
             return "ratchet", errors
         if _m1_total(baseline) < _m1_total(previous):
@@ -812,7 +951,17 @@ def main() -> int:
     )
     try:
         previous = baseline_at_ref(args.base_ref) if args.base_ref else None
+        previous_parser_fingerprint = (
+            parser_leaf_fingerprint_at_ref(args.base_ref)
+            if previous is not None
+            else None
+        )
         has_extension = extension_cited(args.base_ref) if previous is not None else False
+        has_census_correction = (
+            census_correction_cited(args.base_ref)
+            if previous is not None
+            else False
+        )
         previous_ledger = ledger_at_ref(args.base_ref) if args.base_ref else None
     except ValueError as exc:
         print(f"tenkz-shrink: FAIL: {exc}", file=sys.stderr)
@@ -832,6 +981,8 @@ def main() -> int:
         previous,
         session_verdict_ids(section),
         has_extension=has_extension,
+        has_census_correction=has_census_correction,
+        previous_parser_fingerprint=previous_parser_fingerprint,
     )
     if failures:
         for failure in failures:
