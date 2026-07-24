@@ -60,6 +60,11 @@ shell command % \tntree{commented}
 % \begin{tnexample}
 % \begin{tenkz} \tn{commented} \end{tenkz}
 % \end{tnexample}
+\iffalse
+\begin{tnexample}
+\begin{tenkz} \tn{false-branch} \end{tenkz}
+\end{tnexample}
+\fi
 \begin{Verbatim}
 \documentclass[
   border=2pt
@@ -100,7 +105,7 @@ shell command % \tntree{commented}
 
     def capture_run(*args: object, **kwargs: object) -> SimpleNamespace:
         captured.update(kwargs)
-        return SimpleNamespace(returncode=0, stdout="")
+        return SimpleNamespace(returncode=0, stdout=reference[0].coverage_marker)
 
     DOCTEST.subprocess.run = capture_run
     try:
@@ -119,6 +124,13 @@ shell command % \tntree{commented}
         raise AssertionError("a non-executed command spelling satisfied reference coverage")
     if DOCTEST._is_tenkz_verbatim(r"\verb|\tn| \string\tn \\tn"):
         raise AssertionError("a non-executed command spelling classified a Verbatim block")
+    if DOCTEST._is_tenkz_verbatim(r"% \begin{tenkz} \tn{commented} \end{tenkz}"):
+        raise AssertionError("a commented environment classified a Verbatim block")
+    package_names = DOCTEST._package_names(
+        "\\usepackage{amsmath,% package note\n tenkz}"
+    )
+    if "tenkz" not in package_names:
+        raise AssertionError("a comment hid tenkz in a multi-package declaration")
     escaped_verb = (
         "Write \\\\verb|without a closing delimiter on this line\n"
         "\\usepackage{tenkz}\n"
@@ -148,7 +160,11 @@ shell command % \tntree{commented}
         chapters.mkdir()
         root = manual_dir / "manual2.tex"
         child = chapters / "child.tex"
-        root.write_text(r"\input chapters2/child", encoding="utf-8")
+        root.write_text(
+            "\\newcommand{\\optionalchapter}{\\input{missing.tex}}\n"
+            "\\input chapters2/child\n",
+            encoding="utf-8",
+        )
         child.write_text("", encoding="utf-8")
         original_manual = DOCTEST.MANUAL
         original_manual_dir = DOCTEST.MANUAL_DIR
