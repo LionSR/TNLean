@@ -443,19 +443,16 @@
 % ---------- cell commands (record; draw later) ----------
 \cs_new:Npn \tenkz_cell_key:
   { \int_use:N \l__tenkz_row_int - \int_use:N \l__tenkz_col_int }
+\prop_new:N \l__tenkz_atomid_prop
 \cs_new_protected:Npn \tenkz_record:nnn #1#2#3
   {
-    % parse the options ONCE, here; the memo hands the resolution to every
-    % later pass, and the model record carries the normalized fields
-    \tenkz_cell_opts:n {#2}
+    % Record raw syntax while the body is still establishing picture policy.
+    % The post-body normalization pass primes the option memo exactly once.
     \__tenkz_model_record_atom:e
       {kind={#1},at={\tenkz_cell_key:},
-       options={\exp_not:n{#2}},label={\exp_not:n{#3}},
-       skin={\bool_if:NT \l__tenkz_cshapeexplicit_bool {\exp_not:V \l__tenkz_cshape_tl}},
-       wide={\int_use:N \l__tenkz_cwide_int},
-       wires={\int_use:N \l__tenkz_cwires_int},
-       role={\exp_not:V \l__tenkz_crole_tl},
-       species={\exp_not:V \l__tenkz_cspec_tl}}
+       options={\exp_not:n{#2}},label={\exp_not:n{#3}}}
+    \prop_put:Nee \l__tenkz_atomid_prop
+      { \tenkz_cell_key: } { \l__tenkz_model_last_tl }
     \prop_put:Nen \l__tenkz_kind_prop  { \tenkz_cell_key: } {#1}
     \prop_put:Nen \l__tenkz_opts_prop  { \tenkz_cell_key: } {#2}
     \prop_put:Nen \l__tenkz_label_prop { \tenkz_cell_key: } {#3}
@@ -802,12 +799,11 @@
 
 
 % ---------- resolved options: one parse per distinct string ----------------
-% Within one picture the parser is a pure function of its option string
-% (the skin policy and strut are picture options, fixed before the body).
-% The resolved locals are snapshotted per distinct string at first parse
-% and restored on every repeat; \tenkz_record:nnn primes the memo, so a
-% recorded cell's options are parsed ONCE, at record time, and every later
-% pass restores the resolution instead of reparsing.  The memo lives in a
+% Once the picture body has established its final policy, the parser is a
+% pure function of its option string and those policy inputs.  The resolved
+% locals are snapshotted per distinct string at first parse and restored on
+% every repeat.  The post-body model pass primes the memo, so every later pass
+% restores the resolution instead of reparsing.  The memo lives in a
 % picture-local prop, so grouping retires it with the picture.
 \prop_new:N \l__tenkz_optmemo_prop
 \tl_new:N \l__tenkz_optmemo_tl
@@ -890,6 +886,30 @@
       {
         \tenkz_cell_opts_parse:n {#1}
         \tenkz_cell_opts_snapshot:V \l__tenkz_optmemokey_tl
+      }
+  }
+
+% Normalize staged ATOM records only after the complete body has established
+% policy such as species declarations and tensor style.
+\tl_new:N \l__tenkz_mna_id_tl
+\cs_new_protected:Npn \tenkz_model_normalize_atoms:
+  {
+    \prop_map_inline:Nn \l__tenkz_atomid_prop
+      {
+        \tenkz_get:NnN \l__tenkz_opts_prop {##1} \l_tmpa_tl
+        \exp_args:NV \tenkz_cell_opts:n \l_tmpa_tl
+        \tl_set:Nn \l__tenkz_mna_id_tl {##2}
+        \__tenkz_model_complete:nnn {\l__tenkz_mna_id_tl}{skin}
+          { \bool_if:NT \l__tenkz_cshapeexplicit_bool
+              { \exp_not:V \l__tenkz_cshape_tl } }
+        \__tenkz_model_complete:nnn {\l__tenkz_mna_id_tl}{wide}
+          { \int_use:N \l__tenkz_cwide_int }
+        \__tenkz_model_complete:nnn {\l__tenkz_mna_id_tl}{wires}
+          { \int_use:N \l__tenkz_cwires_int }
+        \__tenkz_model_complete:nnn {\l__tenkz_mna_id_tl}{role}
+          { \exp_not:V \l__tenkz_crole_tl }
+        \__tenkz_model_complete:nnn {\l__tenkz_mna_id_tl}{species}
+          { \exp_not:V \l__tenkz_cspec_tl }
       }
   }
 
@@ -1755,6 +1775,7 @@
     \prop_clear:N \l__tenkz_kind_prop
     \prop_clear:N \l__tenkz_label_prop
     \prop_clear:N \l__tenkz_opts_prop
+    \prop_clear:N \l__tenkz_atomid_prop
     \prop_clear:N \l__tenkz_owner_prop
     \prop_clear:N \l__tenkz_name_prop
     \prop_clear:N \l__tenkz_tall_prop
@@ -1794,6 +1815,7 @@
         \seq_put_right:Nn \l__tenkz_rowtypes_seq {wire}
         \seq_put_right:Nn \l__tenkz_rowmods_seq {}
       }
+    \tenkz_model_normalize_atoms:
     % record the nopair rows for the expandable pairing predicates
     \prop_clear:N \l__tenkz_nopair_prop
     \int_step_inline:nn { \l__tenkz_nrows_int }

@@ -11,6 +11,7 @@
 % P8 box       (free env under doc-level box)
 % P9 dot       (free env per-picture override)
 % P10 box      (free override must not leak)
+% P11 box,box  (mid-body species declaration normalizes both staged atoms)
 \documentclass[varwidth=10cm, border=3pt]{standalone}
 \usepackage{amsmath}
 \usepackage{tenkz}
@@ -26,4 +27,5 @@
 \begin{tenkzfree}\tnput{a}{(0,0)}{A}\end{tenkzfree}
 \begin{tenkzfree}[tensor style=dot]\tnput{a}{(0,0)}{A}\end{tenkzfree}
 \begin{tenkzfree}\tnput{a}{(0,0)}{A}\end{tenkzfree}
+\tnpic{\tn[species=alpha]{A}\tnset{species={alpha}} & \tn[species=alpha]{B}}
 \end{document}
