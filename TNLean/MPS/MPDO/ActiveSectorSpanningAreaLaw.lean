@@ -304,15 +304,6 @@ private lemma reducedBlockState_apply_of_trace_one
   congr 1
   rw [← Finset.mul_sum, M.sum_evalWord_diag_eq_verticalLoop_pow]
 
-private lemma reducedBlockState_last_apply
-    {N : ℕ} (hN : 0 < N) (u v : Fin (N - 1) → Fin 4) :
-    tensor.reducedBlockState N (N - 1) (Nat.sub_le N 1) u v =
-      Matrix.trace
-        (tensor.evalWord (List.ofFn u) (List.ofFn v) * physTraceTransfer tensor) := by
-  rw [reducedBlockState_apply_of_trace_one tensor (Nat.sub_le N 1)
-    (trace_mpo_tensor N hN)]
-  rw [verticalLoop_eq_physTraceTransfer, show N - (N - 1) = 1 by omega, pow_one]
-
 private lemma reducedBlockState_pred_eq_diagonal
     {N m : ℕ} (hN : 2 ≤ N) (hm : m = N - 1) (hle : m ≤ N) :
     tensor.reducedBlockState N m hle =

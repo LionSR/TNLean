@@ -275,26 +275,6 @@ theorem exists_forall_pairTraceSeparatingAt_threeBlock_of_blocksNotGaugePhaseEqu
     forall_pairTraceSeparatingAt_threeBlock_of_blocksNotGaugePhaseEquiv
       A hIrr hLeft hOverlap hBlocks hBlk hBlk3 hInj hL⟩
 
-/-- Existential common-length form of
-`forall_pairTraceSeparatingAt_threeBlock_of_blocksNotGaugePhaseEquiv_c1`. -/
-theorem exists_forall_pairTraceSeparatingAt_threeBlock_of_blocksNotGaugePhaseEquiv_c1
-    {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
-    (A : (k : Fin r) → MPSTensor d (dim k))
-    (hIrr : HasIrreducibleBlocks (d := d) A)
-    (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
-    (hOverlap : HasNormalizedSelfOverlap (d := d) A)
-    (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
-    {L₀ : ℕ}
-    (hBlk0 : ∀ k : Fin r, IsNBlkInjective (A k) L₀)
-    (hBlk1 : ∀ k : Fin r, IsNBlkInjective (A k) (L₀ + 1))
-    (hBlk3 : ∀ k : Fin r,
-      IsNBlkInjective (A k) ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))))
-    (hL₀ : 0 < L₀) :
-    ∃ S : ℕ, ∀ k j : Fin r, j ≠ k → PairTraceSeparatingAt (A k) (A j) S :=
-  ⟨(L₀ + 1) + ((L₀ + 1) + (L₀ + 1)),
-    forall_pairTraceSeparatingAt_threeBlock_of_blocksNotGaugePhaseEquiv_c1
-      A hIrr hLeft hOverlap hBlocks hBlk0 hBlk1 hBlk3 hL₀⟩
-
 /-- BNT-separated blocks give common pairwise block-separating equations at the
 three-block length, once the direct-sum injectivity hypotheses are supplied.
 

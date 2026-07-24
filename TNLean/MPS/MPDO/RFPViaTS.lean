@@ -108,21 +108,6 @@ theorem physCloseN_identity_eq_mpo (M : MPOTensor d D) (N : ℕ) :
   ext σ τ
   simp [mpoMatrixEntry]
 
-/-- The length-one physical closure has the source coefficient formula from
-arXiv:1606.00608, Definition 4.1, line 657 and figure MPDO_XM. -/
-lemma physCloseN_one_apply (M : MPOTensor d D)
-    (X : Matrix (Fin D) (Fin D) ℂ) (σ τ : Fin 1 → Fin d) :
-    physCloseN M 1 X σ τ = Matrix.trace (M (σ 0) (τ 0) * X) := by
-  simp [physCloseN, List.ofFn_succ, evalWord_cons]
-
-/-- The length-two physical closure has the source coefficient formula from
-arXiv:1606.00608, Definition 4.1, line 657 and figure MPDO_XMM. -/
-lemma physCloseN_two_apply (M : MPOTensor d D)
-    (X : Matrix (Fin D) (Fin D) ℂ) (σ τ : Fin 2 → Fin d) :
-    physCloseN M 2 X σ τ =
-      Matrix.trace (M (σ 0) (τ 0) * M (σ 1) (τ 1) * X) := by
-  simp [physCloseN, List.ofFn_succ, evalWord_cons, Matrix.mul_assoc]
-
 /-- The general length-three physical closure has the coefficient formula for
 $M_3(X)$. When $M=\mathcal K$, it is the operator $\mathcal K_3(X)$ in
 arXiv:1606.00608, Proposition C.7, lines 1510--1516. -/

@@ -66,12 +66,6 @@ theorem krausMap_one_of_unital (K : Fin d → Matrix (Fin D) (Fin D) ℂ)
     (h : IsUnitalKraus K) : krausMap K 1 = 1 := by
   simp only [krausMap, mul_one]; exact h
 
-/-- If the Kraus operators satisfy `∑ Kᵢ† Kᵢ = I`, then the adjoint map is unital:
-`krausAdjointMap K 1 = 1`. -/
-theorem krausAdjointMap_one_of_TP (K : Fin d → Matrix (Fin D) (Fin D) ℂ)
-    (h : IsTPKraus K) : krausAdjointMap K 1 = 1 := by
-  simp only [krausAdjointMap, mul_one]; exact h
-
 /-- A trace-preserving Kraus family preserves the matrix trace. -/
 theorem trace_krausMap_of_tp (K : Fin d → Matrix (Fin D) (Fin D) ℂ)
     (h_tp : IsTPKraus K)
@@ -99,13 +93,6 @@ theorem isUnitalKraus_conjTranspose {K : Fin d → Matrix (Fin D) (Fin D) ℂ}
     (h : IsTPKraus (d := d) (D := D) K) :
     IsUnitalKraus (d := d) (D := D) (fun i => (K i)ᴴ) := by
   change ∑ i, (K i)ᴴ * ((K i)ᴴ)ᴴ = 1
-  simp only [conjTranspose_conjTranspose]; exact h
-
-/-- The conjugate-transposed operators of a unital family form a TP family. -/
-theorem isTPKraus_conjTranspose {K : Fin d → Matrix (Fin D) (Fin D) ℂ}
-    (h : IsUnitalKraus (d := d) (D := D) K) :
-    IsTPKraus (d := d) (D := D) (fun i => (K i)ᴴ) := by
-  change ∑ i, ((K i)ᴴ)ᴴ * (K i)ᴴ = 1
   simp only [conjTranspose_conjTranspose]; exact h
 
 /-- **Kadison-Schwarz inequality** (Wolf, Chapter 5, Equation (5.2)).
