@@ -27,9 +27,9 @@ bonds, and the same state --- it produces a per-edge gauge family `X` with
 
 The union closure of injective regions is derived from the positive bonds
 (`regionInjectivityUnionClosure_of_overlap`), not assumed, and no single-vertex injectivity is
-used anywhere.  This is the open-lattice port of the torus assembly
+used anywhere.  This is the open-lattice analogue of the torus assembly
 (`fundamentalTheorem_normalTorusPEPS_unconditional`), in the scope the open blocking geometry
-honestly supports.
+faithfully supports.
 
 **Scope restriction (interior window, per-vertex scalars):** the conclusion is restricted in
 two ways relative to the source's Theorem 3, both documented in
@@ -52,16 +52,16 @@ obligations".
    hypothesis: rescaling `A`'s components at two interior vertices by `μ` and `μ⁻¹` preserves
    the state and the rectangular injectivity but separates the two scalars.
 
-The structural findings behind this scope (recorded here as the port's scouting note): the open
-lattice encodes no translation structure --- `IsTorusTranslationInvariant` and the whole torus
-witness-transport layer act through the graph automorphisms `translate a b`, which have no
-open-lattice analogue, partial translations not being graph automorphisms; the open witness
-machinery (`exists_regionEdgeGauge_normalSquare*TranslatedEdge`) delivers per-edge gauges at
-interior edges only, each chosen independently, with the reduction to one matrix per
-orientation class having no derivation without a translation-invariance predicate; and the
-per-vertex relation is well formed at boundary vertices (the local virtual configuration ranges
-over the existing incident edges only) but not derivable there, the comparison regions' boundary
-edges falling outside the interior margins.
+The open lattice carries no translation automorphisms: partial translations are
+not graph automorphisms, so `IsTorusTranslationInvariant` has no open-lattice
+analogue.  The witness-transport construction
+(`exists_regionEdgeGauge_normalSquare*TranslatedEdge`) delivers per-edge gauges at
+interior edges only, each chosen independently; the reduction to one matrix per
+orientation class has no derivation without a translation-invariance predicate.
+The per-vertex relation is well formed at boundary vertices (the local virtual
+configuration ranges over the existing incident edges only) but not derivable
+there, the comparison regions' boundary edges falling outside the interior
+margins.
 
 ## References
 

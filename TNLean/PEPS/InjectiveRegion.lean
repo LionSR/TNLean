@@ -692,22 +692,5 @@ theorem regionUnionPart_pairwise_disjoint [Fintype V] (A B : Finset V) :
   · simpa using (regionOnlyRight_disjoint_outside A B).symm
   · exact (hij rfl).elim
 
-/-! ### Shared interface for injectivity hypotheses -/
-
-/-- **Shared interface for PEPS injectivity hypotheses.**
-
-A marker typeclass indicating that a structure carries a `RegionInjectivityData` `κ` and
-asserts that certain families of finite vertex regions are injective.  Each geometry-specific
-structure (cycle arcs, square-lattice rectangles, torus rectangles, torus windows, torus arc
-windows, and the abstract rectangular form) provides an instance keyed on the structure
-itself, allowing downstream code to accept any injectivity hypothesis bundle generically
-when the specific hypothesis structure is available in context.
-
-Source: the six `Normal*InjectivityHypotheses` structures of
-`TNLean/PEPS/CycleBlockingData`, `TNLean/PEPS/NormalBlocking`,
-`TNLean/PEPS/TorusRectangleRegion`, `TNLean/PEPS/TorusWindowComplement`,
-`TNLean/PEPS/TorusWindowRegion`. -/
-class PEPSInjectivityHypotheses (κ : RegionInjectivityData V) : Prop
-
 end PEPS
 end TNLean

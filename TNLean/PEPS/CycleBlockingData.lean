@@ -57,15 +57,6 @@ structure NormalCycleArcInjectivityHypotheses (L : ℕ) (κ : RegionInjectivityD
   /-- Every block of `L` consecutive sites is injective. -/
   arc_injective : ∀ s : Fin n, κ.IsInjective (cycleArcFrom s L)
 
-namespace NormalCycleArcInjectivityHypotheses
-
-/-- The cycle arc-injectivity hypotheses satisfy the shared injectivity interface. -/
-theorem toPEPSInjectivityHypotheses {L : ℕ} {κ : RegionInjectivityData (Fin n)}
-    (_h : NormalCycleArcInjectivityHypotheses L κ) :
-    PEPSInjectivityHypotheses κ := ⟨⟩
-
-end NormalCycleArcInjectivityHypotheses
-
 section NeZero
 
 variable [NeZero n]
