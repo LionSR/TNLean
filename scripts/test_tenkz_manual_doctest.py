@@ -61,6 +61,7 @@ shell command % \tntree{commented}
 % \begin{tenkz} \tn{commented} \end{tenkz}
 % \end{tnexample}
 \iffalse
+\ifthenelse{ignored}{ignored}{ignored}
 \begin{tnexample}
 \begin{tenkz} \tn{false-branch} \end{tenkz}
 \end{tnexample}
@@ -116,6 +117,8 @@ shell command % \tntree{commented}
     texinputs = str(captured["env"]["TEXINPUTS"])
     if not texinputs.startswith(f"{reference[0].source.parent}//:"):
         raise AssertionError("a reference example cannot resolve files beside its source")
+    if f":{DOCTEST.MANUAL_DIR}//:" not in texinputs:
+        raise AssertionError("a manual example cannot resolve files from the manual root")
     if r"\tnarrow" in DOCTEST._strip_tex_comments(r"\\% \tnarrow"):
         raise AssertionError("an even-backslash percent did not start a TeX comment")
     if r"\tnarrow" not in DOCTEST._strip_tex_comments(r"\% \tnarrow"):
@@ -131,6 +134,14 @@ shell command % \tntree{commented}
     )
     if "tenkz" not in package_names:
         raise AssertionError("a comment hid tenkz in a multi-package declaration")
+    repeated_package = (
+        "% \\usepackage{tenkz}\n"
+        "\\usepackage{tenkz}\n"
+        "\\begin{document}\\tn{A}\\end{document}\n"
+    )
+    instrumented, marker = DOCTEST._instrument_command(repeated_package, "tn")
+    if instrumented.index(marker) < instrumented.index("\n\\usepackage{tenkz}"):
+        raise AssertionError("runtime instrumentation used a commented package spelling")
     escaped_verb = (
         "Write \\\\verb|without a closing delimiter on this line\n"
         "\\usepackage{tenkz}\n"
@@ -162,7 +173,9 @@ shell command % \tntree{commented}
         child = chapters / "child.tex"
         root.write_text(
             "\\newcommand{\\optionalchapter}{\\input{missing.tex}}\n"
-            "\\input chapters2/child\n",
+            "\\IfFileExists{chapters2/missing-generated.tex}"
+            "{\\input{chapters2/missing-generated.tex}}"
+            "{\\input chapters2/child}\n",
             encoding="utf-8",
         )
         child.write_text("", encoding="utf-8")

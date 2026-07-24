@@ -216,7 +216,7 @@ def _mask_inline_verbatim(text: str) -> str:
     return "".join(masked)
 
 
-def _extract_usepackages(body: str) -> tuple[list[str], str]:
+def _usepackage_ranges(body: str) -> list[tuple[int, int]]:
     ranges: list[tuple[int, int]] = []
     offset = 0
     marker = r"\usepackage"
@@ -229,7 +229,11 @@ def _extract_usepackages(body: str) -> tuple[list[str], str]:
         end, _ = _read_braced(body, cursor)
         ranges.append((start, end))
         offset = end
+    return ranges
 
+
+def _extract_usepackages(body: str) -> tuple[list[str], str]:
+    ranges = _usepackage_ranges(body)
     packages = [body[start:end].strip() for start, end in ranges]
     chunks: list[str] = []
     offset = 0
@@ -285,7 +289,18 @@ def _blank_range(masked: list[str], start: int, end: int) -> None:
 def _mask_false_branches(text: str) -> str:
     masked = list(text)
     scan = strip_comments(text)
-    tokens = list(re.finditer(r"\\(?:if[A-Za-z@]*|fi)(?![A-Za-z@])", scan))
+    conditionals = (
+        "if", "ifcat", "ifnum", "ifdim", "ifodd", "ifvmode", "ifhmode",
+        "ifmmode", "ifinner", "ifvoid", "ifhbox", "ifvbox", "ifx", "ifeof",
+        "iftrue", "iffalse", "ifcase", "ifdefined", "ifcsname", "iffontchar",
+        "ifincsname",
+    )
+    tokens = list(
+        re.finditer(
+            r"\\(?:" + "|".join(conditionals) + r"|fi)(?![A-Za-z@])",
+            scan,
+        )
+    )
     index = 0
     while index < len(tokens):
         token = tokens[index]
@@ -302,6 +317,33 @@ def _mask_false_branches(text: str) -> str:
         end = tokens[cursor - 1].end() if depth == 0 else len(text)
         _blank_range(masked, token.start(), end)
         index = cursor
+    return "".join(masked)
+
+
+def _mask_inactive_file_branches(text: str) -> str:
+    masked = list(text)
+    scan = strip_comments(text)
+    pattern = re.compile(r"\\IfFileExists(?![A-Za-z@])")
+    offset = 0
+    while match := pattern.search(scan, offset):
+        cursor = _skip_space_and_comments(scan, match.end())
+        file_start = cursor
+        file_end, filename = _read_braced(scan, file_start)
+        true_start = _skip_space_and_comments(scan, file_end)
+        true_end, _ = _read_braced(scan, true_start)
+        false_start = _skip_space_and_comments(scan, true_end)
+        false_end, _ = _read_braced(scan, false_start)
+        relative = Path(filename.strip())
+        candidates = [MANUAL_DIR / relative]
+        if not relative.suffix:
+            candidates.append(MANUAL_DIR / relative.with_suffix(".tex"))
+        if any(candidate.is_file() for candidate in candidates):
+            _blank_range(masked, match.start(), true_start + 1)
+            _blank_range(masked, true_end - 1, false_end)
+        else:
+            _blank_range(masked, match.start(), false_start + 1)
+            _blank_range(masked, false_end - 1, false_end)
+        offset = false_end
     return "".join(masked)
 
 
@@ -350,7 +392,8 @@ def _mask_macro_definitions(text: str) -> str:
 
 
 def _mask_inert_tex(text: str) -> str:
-    return _mask_macro_definitions(_mask_false_branches(text))
+    active = _mask_inactive_file_branches(text)
+    return _mask_macro_definitions(_mask_false_branches(active))
 
 
 def _mask_nonexecuted_tokens(text: str) -> str:
@@ -371,18 +414,17 @@ def _has_executable_command(text: str, command: str) -> bool:
 
 
 def _instrument_command(document: str, command: str) -> tuple[str, str]:
-    packages, _ = _extract_usepackages(document)
-    declaration = next(
+    selected = next(
         (
-            package
-            for package in packages
-            if "tenkz" in _package_names(package)
+            (start, end)
+            for start, end in _usepackage_ranges(document)
+            if "tenkz" in _package_names(document[start:end])
         ),
         None,
     )
-    if declaration is None:
+    if selected is None:
         raise ValueError(f"reference for \\{command} does not load tenkz")
-    end = document.find(declaration) + len(declaration)
+    _, end = selected
     marker = f"TENKZ-DOCTEST-EXECUTED-{command}"
     original = f"tenkzdoctestoriginal{command}"
     instrumentation = "\n".join(
@@ -595,7 +637,7 @@ def compile_example(example: Example, engine: str, work: Path) -> None:
     driver.write_text(example.document, encoding="utf-8")
     env = os.environ.copy()
     env["TEXINPUTS"] = (
-        f"{example.source.parent}//:{ROOT / 'tex' / 'tenkz'}//:"
+        f"{example.source.parent}//:{MANUAL_DIR}//:{ROOT / 'tex' / 'tenkz'}//:"
         f"{env.get('TEXINPUTS', '')}"
     )
     run = subprocess.run(
