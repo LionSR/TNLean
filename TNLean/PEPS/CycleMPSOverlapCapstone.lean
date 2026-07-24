@@ -3,8 +3,10 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.CycleMPSOverlapInsertion
+import TNLean.PEPS.CycleMPSChainOverlapCapstone
 import TNLean.PEPS.CycleArcRegion
+import TNLean.PEPS.NormalEdgeGaugeFamily
+import TNLean.PEPS.TorusGaugeUniqueness
 
 /-!
 # The closed-chain corollaries at `n ≥ 2L + 1` via overlapping windows
@@ -25,19 +27,15 @@ translation-invariant MPS on `n ≥ 2L + 1` sites — two matrix tensors, each
   `fundamentalTheorem_normalMPS` delegates to it for its `n ≥ 2L + 1` bound.
 
 The uniqueness clause of the source corollary — the gauge `Z` is unique up
-to a multiplicative constant — needs no system size and is already delivered
-by `fundamentalTheorem_normalMPS_translationInvariant_gauge_unique`.
+to a multiplicative constant — needs no system size and is delivered here
+as `fundamentalTheorem_normalMPS_translationInvariant_gauge_unique`.
 
-The route consumes the insertion correspondence built from Lemma 5
-(`MPSTensor.exists_conjugation_of_mpv_eq`): the two networks have conjugate
-word products at length `n`, `B^w = Z ⬝ A^w ⬝ Z⁻¹`.  The remaining step is a
-rigidity lemma (`MPSTensor.proportional_of_evalWord_eq`): two `L`-block
-injective tensors with *equal* word products at one length `n ≥ 2L + 1` are
-proportional letterwise, `C^i = λ A^i` with `λ^n = 1`.  Its proof transports
-words of intermediate lengths between the two networks, shows the transport
-of the identity is a nonzero scalar — it commutes with every letter of `C`
-by comparing the two one-letter extensions — and peels one letter off the
-full-length equality through the spanning windows.
+The route specializes the site-dependent closed-chain capstone
+(`TNLean/PEPS/CycleMPSChainOverlapCapstone.lean`) to a constant (translation-
+invariant) family: placing the same tensor at every site of the site-dependent
+Lemma 5 apparatus yields the per-bond gauge equivalence; the word-product
+form of the arc-product conjugation supplies the single-gauge form through
+the rigidity lemma `MPSTensor.proportional_of_evalWord_eq`.
 
 ## References
 
@@ -48,6 +46,7 @@ full-length equality through the spanning windows.
 -/
 
 open scoped Matrix
+open scoped Fin.NatCast
 
 namespace MPSTensor
 
@@ -148,6 +147,32 @@ private theorem transport_one_eq_smul_one {A C : MPSTensor d D} {L k : ℕ}
   apply (show (1 : Matrix (Fin D) (Fin D) ℂ) ≠ 0 from one_ne_zero)
   apply hinj
   rw [hV, hc0, zero_smul, map_zero]
+
+/-- A block-injective tensor with positive bond dimension is not the zero
+family: some matrix of the family is nonzero. -/
+theorem exists_ne_zero_of_isNBlkInjective {L : ℕ} (hL : 0 < L) (hD : 0 < D)
+    {B : MPSTensor d D} (hB : IsNBlkInjective B L) :
+    ∃ i : Fin d, B i ≠ 0 := by
+  by_contra hall
+  simp only [not_exists, not_not] at hall
+  have hB' : Submodule.span ℂ (Set.range fun σ : Fin L → Fin d =>
+      evalWord B (List.ofFn σ)) = ⊤ := hB
+  have hran : (Set.range fun σ : Fin L → Fin d =>
+      evalWord B (List.ofFn σ)) ⊆ {0} := by
+    rintro _ ⟨σ, rfl⟩
+    obtain ⟨L', rfl⟩ : ∃ L', L = L' + 1 := ⟨L - 1, by omega⟩
+    change evalWord B (List.ofFn σ) ∈ ({0} : Set (Matrix (Fin D) (Fin D) ℂ))
+    rw [Set.mem_singleton_iff, List.ofFn_succ, evalWord_cons, hall (σ 0),
+      Matrix.zero_mul]
+  have hle : (⊤ : Submodule ℂ (Matrix (Fin D) (Fin D) ℂ)) ≤ ⊥ := by
+    rw [← hB', ← Submodule.span_zero_singleton (R := ℂ)
+      (M := Matrix (Fin D) (Fin D) ℂ)]
+    exact Submodule.span_mono hran
+  have h10 : (1 : Matrix (Fin D) (Fin D) ℂ) = 0 :=
+    (Submodule.mem_bot ℂ).mp (hle Submodule.mem_top)
+  have hentry := congrFun (congrFun h10 ⟨0, hD⟩) ⟨0, hD⟩
+  rw [Matrix.one_apply_eq] at hentry
+  exact one_ne_zero hentry
 
 /-- Some length-`n` word product of a block-injective tensor is nonzero. -/
 private theorem exists_evalWord_ne_zero {A : MPSTensor d D} {L n : ℕ}
@@ -322,10 +347,233 @@ private theorem isNBlkInjective_conj {B : MPSTensor d D} {L : ℕ}
     evalWord B (List.ofFn τ)) = ⊤ from hB]
   exact Submodule.mem_top
 
+/-! ### Constant-chain specialization of Lemma 5 -/
+
+/-- **Uniqueness of the bond operator** (arXiv:1804.04964, Lemma 5: the maps
+to `X` "are uniquely defined", lines 2045--2255 of
+`Papers/1804.04964/paper_normal.tex`; the mechanism is the insertion
+uniqueness of lines 1940--1960).
+
+Two matrices multiplying every spanning word product to the same family on
+the right are equal.  This is the spanning-family uniqueness
+`MPSChainTensor.eq_of_span_mul_left` read on the word products of one
+block-injective tensor. -/
+theorem bondOperator_unique {B : MPSTensor d D} {L : ℕ}
+    (hB : IsNBlkInjective B L) {X X' : Matrix (Fin D) (Fin D) ℂ}
+    (h : ∀ a : Fin L → Fin d,
+      evalWord B (List.ofFn a) * X = evalWord B (List.ofFn a) * X') : X = X' :=
+  MPSChainTensor.eq_of_span_mul_left
+    (W := fun a : Fin L → Fin d => evalWord B (List.ofFn a)) hB h
+
+/-- **Bond-operator extraction from an intertwining pair** (arXiv:1804.04964,
+Lemma 5, the comparison of the two ends, lines 2211--2255 of
+`Papers/1804.04964/paper_normal.tex`, after the model of
+`eq:inj_O->X_argument`, line 377).
+
+If `F a ⬝ B^b = B^a ⬝ G b` for all length-`L` words `a`, `b`, with the word
+products of `B` spanning, then a single matrix `X` factors both families:
+`F` is the word products times `X` on the right, `G` is `X` times the word
+products.  This is the spanning-family extraction
+`MPSChainTensor.exists_bondOperator_of_intertwine_span` with both spanning
+families the word products of `B`. -/
+theorem exists_bondOperator_of_intertwine {B : MPSTensor d D} {L : ℕ}
+    (hB : IsNBlkInjective B L)
+    (F G : (Fin L → Fin d) → Matrix (Fin D) (Fin D) ℂ)
+    (h : ∀ a b : Fin L → Fin d,
+      F a * evalWord B (List.ofFn b) = evalWord B (List.ofFn a) * G b) :
+    ∃ X : Matrix (Fin D) (Fin D) ℂ,
+      (∀ a, F a = evalWord B (List.ofFn a) * X) ∧
+        (∀ b, G b = X * evalWord B (List.ofFn b)) :=
+  MPSChainTensor.exists_bondOperator_of_intertwine_span
+    (W₁ := fun a : Fin L → Fin d => evalWord B (List.ofFn a))
+    (W₂ := fun b : Fin L → Fin d => evalWord B (List.ofFn b)) hB hB F G h
+
+/-- **Lemma 5 of arXiv:1804.04964 for matrix tensors** (lines 2045--2255 of
+`Papers/1804.04964/paper_normal.tex`, specialized to one site-independent
+tensor).
+
+Let `B` be `L`-block injective on a closed chain of `n ≥ 2L + 1` sites, and
+let `C 0, …, C L` be deformed window tensors — `C j` replaces the blocked
+tensor of the `L`-site window starting `j` sites left of a fixed bond; in the
+source, `C j` is the physical operator `O_{j+1}` contracted with the blocked
+window it acts on.  If the deformed states agree for consecutive window
+positions — the hypothesis quantifies the closed-chain coefficient over a
+common refinement: a prefix of `j` sites, the `L + 1` sites covered by the
+two windows, and the remaining sites — then the deformation is a virtual
+operation on the bond: a single matrix `X` with `C 0` the window products
+times `X` on the right and `C L` equal to `X` times the window products.
+
+Together with `bondOperator_unique`, the assignments `C 0 ↦ X` and
+`C L ↦ X` are uniquely defined; their algebra-homomorphism property (the
+source's maps `O_1 ↦ X` and `O_3^T ↦ X`) is established for the insertion
+correspondence in the site-dependent chain route.
+
+The proof places `B` at every site of the site-dependent form
+(`MPSChainTensor.overlapWindow_exists_bondOperator`), which is the setting
+in which the source states Lemma 5. -/
+theorem overlapWindow_exists_bondOperator {B : MPSTensor d D} {n L : ℕ}
+    (hL : 0 < L) (hn : 2 * L + 1 ≤ n) (hB : IsNBlkInjective B L)
+    (C : ℕ → (Fin L → Fin d) → Matrix (Fin D) (Fin D) ℂ)
+    (hstate : ∀ j, j < L → ∀ {q : ℕ}, j + (L + 1) + q = n →
+      ∀ (pre : Fin j → Fin d) (u : Fin (L + 1) → Fin d) (post : Fin q → Fin d),
+      Matrix.trace (evalWord B (List.ofFn pre) *
+          (C j (Fin.init u) * B (u (Fin.last L))) * evalWord B (List.ofFn post)) =
+        Matrix.trace (evalWord B (List.ofFn pre) *
+          (B (u 0) * C (j + 1) (Fin.tail u)) * evalWord B (List.ofFn post))) :
+    ∃ X : Matrix (Fin D) (Fin D) ℂ,
+      (∀ a, C 0 a = evalWord B (List.ofFn a) * X) ∧
+        (∀ b, C L b = X * evalWord B (List.ofFn b)) := by
+  haveI : NeZero n := ⟨by omega⟩
+  obtain ⟨X, hX0, hXL⟩ := MPSChainTensor.overlapWindow_exists_bondOperator
+    (A := fun _ : Fin n => B) hL hn
+    (MPSChainTensor.isWindowInjective_const hB) 0 C
+    (fun j hj {q} hq pre u post => by
+      simpa only [MPSChainTensor.arcEval_const] using hstate j hj hq pre u post)
+  refine ⟨X, fun a => ?_, fun b => ?_⟩
+  · rw [hX0 a, MPSChainTensor.arcEval_const]
+  · rw [hXL b, MPSChainTensor.arcEval_const]
+
+/-! ### Insertion correspondence from the constant-chain specialization -/
+
+/-- **Insertion correspondence of Lemma 5** (arXiv:1804.04964, Lemma 5):
+for `L`-block injective tensors `A` and `B` generating the same closed-chain
+state on `n ≥ 2L + 1` sites, the word products at length `n` are conjugate:
+an invertible matrix `Z` with `B^w = Z ⬝ A^w ⬝ Z⁻¹` for every word `w` of
+length `n`.
+
+Proved from the general site-dependent Lemma 5 apparatus: for constant
+chains — the same tensor at every site — the site-dependent closed-chain
+corollary (`fundamentalTheorem_normalMPSChain_of_overlap`) supplies a
+per-bond gauge family; the arc products of the constant chain are the word
+products, and the word-product conjugation at the full chain length is
+conjugation by the gauge at the starting bond. -/
+theorem exists_conjugation_of_mpv_eq {n L d D : ℕ}
+    (hL : 0 < L) (hn : 2 * L + 1 ≤ n) (hD : 0 < D)
+    (A B : MPSTensor d D)
+    (hA : MPSTensor.IsNBlkInjective A L) (hB : MPSTensor.IsNBlkInjective B L)
+    (hAB : ∀ σ : Fin n → Fin d, MPSTensor.mpv A σ = MPSTensor.mpv B σ) :
+    ∃ Z : GL (Fin D) ℂ,
+      ∀ w : List (Fin d), w.length = n →
+        MPSTensor.evalWord B w =
+          (Z : Matrix (Fin D) (Fin D) ℂ) * MPSTensor.evalWord A w *
+            (((Z⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)) := by
+  haveI : NeZero n := ⟨by omega⟩
+  -- Build constant chains.
+  set A' : MPSChainTensor d D n := fun _ : Fin n => A with hA'
+  set B' : MPSChainTensor d D n := fun _ : Fin n => B with hB'
+  have hAwin : MPSChainTensor.IsWindowInjective A' L :=
+    MPSChainTensor.isWindowInjective_const hA
+  have hBwin : MPSChainTensor.IsWindowInjective B' L :=
+    MPSChainTensor.isWindowInjective_const hB
+  -- mpv equality implies SameState for the constant chains.
+  have hsame : MPSChainTensor.SameState A' B' := by
+    intro σ
+    calc
+      MPSChainTensor.coeff A' σ
+          = Matrix.trace (MPSChainTensor.arcEval A' 0 (List.ofFn σ)) := by
+        rw [MPSChainTensor.coeff_eq_trace_arcEval]
+      _ = Matrix.trace (MPSTensor.evalWord A (List.ofFn σ)) := by
+        rw [hA', MPSChainTensor.arcEval_const]
+      _ = MPSTensor.mpv A σ := by simp
+      _ = MPSTensor.mpv B σ := hAB σ
+      _ = Matrix.trace (MPSTensor.evalWord B (List.ofFn σ)) := by simp
+      _ = Matrix.trace (MPSChainTensor.arcEval B' 0 (List.ofFn σ)) := by
+        rw [hB', MPSChainTensor.arcEval_const]
+      _ = MPSChainTensor.coeff B' σ := by
+        rw [MPSChainTensor.coeff_eq_trace_arcEval]
+  -- Apply the site-dependent capstone.
+  obtain ⟨Z, hZ⟩ := TNLean.PEPS.fundamentalTheorem_normalMPSChain_of_overlap
+    hL hn hD A' B' hAwin hBwin hsame
+  -- The gauge family Z gives arc-product conjugation.
+  have hconj : ∀ w : List (Fin d), w.length = n →
+      MPSTensor.evalWord B w =
+        (Z 0 : Matrix (Fin D) (Fin D) ℂ) * MPSTensor.evalWord A w *
+          ((((Z 0)⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)) := by
+    intro w hw
+    have harc := MPSChainTensor.arcEval_eq_gauge_conj hZ 0 w
+    rw [hA', hB', MPSChainTensor.arcEval_const A 0 w,
+      MPSChainTensor.arcEval_const B 0 w] at harc
+    -- At the full chain length the end bond wraps to the starting bond.
+    have hwrap : ((0 + w.length : ℕ) : Fin n) = (0 : Fin n) := by
+      rw [hw, zero_add]
+      exact Fin.natCast_self n
+    rw [hwrap] at harc
+    exact harc
+  refine ⟨Z 0, hconj⟩
+
 end MPSTensor
 
 namespace TNLean
 namespace PEPS
+
+/-! ### Linear extension and centralizer auxiliary lemmas
+
+Two-sided multiplication maps agreeing on a spanning set agree everywhere,
+and two invertible matrices inducing the same two-sided conjugation of the
+full matrix algebra are proportional. -/
+
+/-- Two two-sided multiplication maps that agree on a spanning set of the
+matrix algebra agree on every matrix. -/
+theorem conj_eq_conj_of_span {D : ℕ} {S : Set (Matrix (Fin D) (Fin D) ℂ)}
+    (hS : Submodule.span ℂ S = ⊤) {P Q P' Q' : Matrix (Fin D) (Fin D) ℂ}
+    (h : ∀ M ∈ S, P * M * Q = P' * M * Q') (M : Matrix (Fin D) (Fin D) ℂ) :
+    P * M * Q = P' * M * Q' := by
+  have hmaps :
+      (LinearMap.mulRight ℂ Q).comp (LinearMap.mulLeft ℂ P) =
+        (LinearMap.mulRight ℂ Q').comp (LinearMap.mulLeft ℂ P') := by
+    apply LinearMap.ext_on hS
+    intro N hN
+    simpa [LinearMap.comp_apply, LinearMap.mulLeft_apply, LinearMap.mulRight_apply]
+      using h N hN
+  simpa [LinearMap.comp_apply, LinearMap.mulLeft_apply, LinearMap.mulRight_apply]
+    using congrArg (fun f => f M) hmaps
+
+/-- **Proportionality from a shared two-sided conjugation.**  Two invertible
+matrices `Z`, `Z'` with `Z⁻¹ W Z = Z'⁻¹ W Z'` for every matrix `W` differ by
+a nonzero scalar.  This is the centralizer step of the closed-chain
+collapse: `Z' Z⁻¹` commutes with the full matrix algebra, hence is a
+scalar. -/
+theorem gl_proportional_of_conj_eq {D : ℕ} (Z Z' : GL (Fin D) ℂ)
+    (h : ∀ W : Matrix (Fin D) (Fin D) ℂ,
+      ((Z⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) * W *
+          (Z : Matrix (Fin D) (Fin D) ℂ) =
+        ((Z'⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) * W *
+          (Z' : Matrix (Fin D) (Fin D) ℂ)) :
+    ∃ c : ℂˣ, (Z' : Matrix (Fin D) (Fin D) ℂ) =
+      (c : ℂ) • (Z : Matrix (Fin D) (Fin D) ℂ) := by
+  obtain ⟨c, hc⟩ := gl_conj_unique_scalar Z⁻¹ Z'⁻¹ fun N => by
+    rw [inv_inv, inv_inv]
+    exact h N
+  have hflip := gl_inv_coe_smul hc
+  rw [inv_inv, inv_inv] at hflip
+  exact ⟨c⁻¹, hflip⟩
+
+/-! ### The single-gauge relation iterated along a word -/
+
+/-- **The single-gauge relation iterated along a word.**  If
+`B^i = λ · Z⁻¹ A^i Z` for every `i`, then every word product of `B` is the
+conjugated word product of `A` scaled by `λ` to the length of the word:
+`B^{w} = λ^{|w|} · Z⁻¹ A^{w} Z`.
+
+Source: arXiv:1804.04964, Section 3, the corollary for TI MPS, lines
+1624--1661 of `Papers/1804.04964/paper_normal.tex` — the iteration feeding
+its uniqueness clause. -/
+theorem evalWord_eq_smul_conj_of_gauge {d D : ℕ} {A B : MPSTensor d D} {Z : GL (Fin D) ℂ}
+    {lam : ℂ}
+    (hZ : ∀ i : Fin d, B i = lam • ((Z⁻¹ : GL (Fin D) ℂ) * A i * (Z : GL (Fin D) ℂ)))
+    (w : List (Fin d)) :
+    MPSTensor.evalWord B w = lam ^ w.length •
+      ((Z⁻¹ : GL (Fin D) ℂ) * MPSTensor.evalWord A w * (Z : GL (Fin D) ℂ)) := by
+  induction w with
+  | nil =>
+      simp only [MPSTensor.evalWord_nil, List.length_nil, pow_zero, one_smul,
+        Matrix.mul_one, Units.inv_mul]
+  | cons i w ih =>
+      rw [MPSTensor.evalWord_cons, MPSTensor.evalWord_cons, hZ i, ih, List.length_cons,
+        pow_succ']
+      rw [Matrix.smul_mul, Matrix.mul_smul, smul_smul]
+      congr 1
+      simp only [Matrix.mul_assoc, Units.mul_inv_cancel_left]
 
 /-! ### The strengthened closed-chain corollaries -/
 
@@ -341,13 +589,13 @@ size `n`, are related by one invertible matrix `Z` and a constant `λ` with
 `λ^n = 1` through `B^i = λ · Z⁻¹ A^i Z` for every `i`.
 
 This strengthens `fundamentalTheorem_normalMPS_translationInvariant` from
-`n ≥ 3L` to the source's `n ≥ 2L + 1` by replacing the three-arc cover with
-the overlapping-window route: the insertion correspondence of Lemma 5 gives
-conjugate word products at length `n`
-(`MPSTensor.exists_conjugation_of_mpv_eq`), and the rigidity of word
-products at one length (`MPSTensor.proportional_of_evalWord_eq`) turns the
-conjugation into the letterwise gauge relation.  The uniqueness clause of
-the source corollary needs no system size and is
+`n ≥ 3L` to the source's `n ≥ 2L + 1` by specializing the site-dependent
+overlapping-window capstone to a constant chain: the per-bond gauge
+equivalence supplies conjugated word products at length `n`, and the
+rigidity of word products at one length
+(`MPSTensor.proportional_of_evalWord_eq`) turns the conjugation into the
+letterwise gauge relation.  The uniqueness clause of the source corollary
+needs no system size and is
 `fundamentalTheorem_normalMPS_translationInvariant_gauge_unique`.
 
 Source: arXiv:1804.04964, Section `normal_alt`, the corollary after Lemma 5,
@@ -359,7 +607,8 @@ theorem fundamentalTheorem_normalMPS_translationInvariant_of_overlap
     (hAB : ∀ σ : Fin n → Fin d, MPSTensor.mpv A σ = MPSTensor.mpv B σ) :
     ∃ (Z : GL (Fin D) ℂ) (lam : ℂ), lam ^ n = 1 ∧
       ∀ i : Fin d, B i = lam • ((Z⁻¹ : GL (Fin D) ℂ) * A i * (Z : GL (Fin D) ℂ)) := by
-  -- The conjugation at length `n` from the insertion correspondence.
+  haveI : NeZero n := ⟨by omega⟩
+  -- The conjugation at length `n` from the site-dependent chain capstone.
   obtain ⟨P, hP⟩ := MPSTensor.exists_conjugation_of_mpv_eq hL hn hD A B hA hB hAB
   -- Absorb the gauge: the conjugated `B` has equal word products with `A`.
   set Q : GL (Fin D) ℂ := P⁻¹ with hQdef
@@ -452,6 +701,74 @@ theorem fundamentalTheorem_normalMPS_of_overlap {n L d D : ℕ} [NeZero n]
       rw [← mul_assoc, inv_mul_cancel₀ (hpow0 v.val), one_mul]
   rw [mul_comm (lam ^ ((v + 1 : Fin n) : ℕ)) ((lam ^ (v : ℕ))⁻¹), hscal]
   exact hZ₀ i
+
+/-! ### Uniqueness of the single gauge -/
+
+/-- **Uniqueness clause of the Fundamental Theorem for translation-invariant
+normal MPS, single-gauge form** (arXiv:1804.04964, Section 3, the corollary
+for TI MPS: the gauge `Z` is unique up to a multiplicative constant).
+
+Two single-gauge realizations `B^i = λ · Z⁻¹ A^i Z` and
+`B^i = λ' · Z'⁻¹ A^i Z'` of the same pair of `L`-block injective tensors
+have proportional gauges: there is a nonzero scalar `c` with `Z' = c · Z`.
+Iterating each relation along the spanning length-`L` words shows that the
+two conjugations of the full matrix algebra agree — the empty word pins
+`λ^L = λ'^L`, and `λ ≠ 0` because `B` is nonzero — so the centralizer step
+applies.  No system size and no root-of-unity condition on `λ`, `λ'` are
+needed.
+
+Source: arXiv:1804.04964, Section 3, the corollary for TI MPS, lines
+1624--1661 of `Papers/1804.04964/paper_normal.tex`. -/
+theorem fundamentalTheorem_normalMPS_translationInvariant_gauge_unique {L d D : ℕ}
+    (hL : 0 < L) (hD : 0 < D) (A B : MPSTensor d D)
+    (hA : MPSTensor.IsNBlkInjective A L)
+    (hB : MPSTensor.IsNBlkInjective B L) (Z Z' : GL (Fin D) ℂ) (lam lam' : ℂ)
+    (hZ : ∀ i : Fin d,
+      B i = lam • ((Z⁻¹ : GL (Fin D) ℂ) * A i * (Z : GL (Fin D) ℂ)))
+    (hZ' : ∀ i : Fin d,
+      B i = lam' • ((Z'⁻¹ : GL (Fin D) ℂ) * A i * (Z' : GL (Fin D) ℂ))) :
+    ∃ c : ℂˣ, (Z' : Matrix (Fin D) (Fin D) ℂ) =
+      (c : ℂ) • (Z : Matrix (Fin D) (Fin D) ℂ) := by
+  obtain ⟨i₀, hi₀⟩ := MPSTensor.exists_ne_zero_of_isNBlkInjective hL hD hB
+  have hlam : lam ≠ 0 := by
+    intro h0
+    apply hi₀
+    rw [hZ i₀, h0, zero_smul]
+  have hAspan : Submodule.span ℂ (Set.range fun σ : Fin L → Fin d =>
+      MPSTensor.evalWord A (List.ofFn σ)) = ⊤ := hA
+  -- The iterated relations agree on the spanning word products, hence
+  -- everywhere.
+  have hE : ∀ M : Matrix (Fin D) (Fin D) ℂ,
+      (lam ^ L • ((Z⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)) * M *
+          (Z : Matrix (Fin D) (Fin D) ℂ) =
+        (lam' ^ L • ((Z'⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)) * M *
+          (Z' : Matrix (Fin D) (Fin D) ℂ) := by
+    refine conj_eq_conj_of_span hAspan ?_
+    rintro M ⟨σ, rfl⟩
+    have h1 := evalWord_eq_smul_conj_of_gauge hZ (List.ofFn σ)
+    have h2 := evalWord_eq_smul_conj_of_gauge hZ' (List.ofFn σ)
+    rw [List.length_ofFn] at h1 h2
+    simp only [Matrix.smul_mul]
+    exact h1.symm.trans h2
+  -- The empty word pins the two scaling factors to the same value.
+  have hLL : lam ^ L = lam' ^ L := by
+    have h1 := hE 1
+    simp only [Matrix.mul_one, Matrix.smul_mul] at h1
+    rw [Units.inv_mul, Units.inv_mul] at h1
+    have hentry := congrFun (congrFun h1 ⟨0, hD⟩) ⟨0, hD⟩
+    simpa [Matrix.smul_apply, Matrix.one_apply_eq] using hentry
+  -- Cancelling the nonzero factor leaves equal conjugations.
+  have hconj : ∀ W : Matrix (Fin D) (Fin D) ℂ,
+      ((Z⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) * W *
+          (Z : Matrix (Fin D) (Fin D) ℂ) =
+        ((Z'⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) * W *
+          (Z' : Matrix (Fin D) (Fin D) ℂ) := by
+    intro W
+    have h := hE W
+    rw [← hLL] at h
+    simp only [Matrix.smul_mul] at h
+    exact smul_right_injective (Matrix (Fin D) (Fin D) ℂ) (pow_ne_zero L hlam) h
+  exact gl_proportional_of_conj_eq Z Z' hconj
 
 end PEPS
 end TNLean
