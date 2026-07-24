@@ -1,0 +1,276 @@
+A translationally invariant PEPS lives on a torus: a finite square lattice whose
+opposite boundaries are identified, so that the two coordinates are read modulo
+the periods $n$ and $m$.
+\begin{center}
+    % Formula/source: Papers/1804.04964/paper_normal.tex, lines 104--112,
+    % defines a translationally invariant PEPS by repeating one tensor on a
+    % regular lattice and contracting according to the lattice geometry;
+    % lines 1451--1471 state the normal-PEPS theorem on an n-by-m region.
+    % Ink-to-index map: the nine upper legs are the free physical indices of
+    % the displayed 3-by-3 window.  Every horizontal and vertical line is a
+    % virtual bond; the marked A is a representative of the tensor repeated
+    % at every site.
+    % Contraction set: twelve nearest-neighbour bonds inside the window are
+    % summed, and six further bonds identify the three west/east endpoint
+    % pairs and the three north/south endpoint pairs.  No virtual index stays
+    % open, while all nine physical indices remain free.
+    % Boundary signature: virtual=0 | physical=9.
+    % Source verdict: the source has no separate torus-geometry picture.  This
+    % is the house-style realization of the chapter's cyclic-coordinate
+    % definition; unlike the former open-boundary schematic, it displays the
+    % periodic contraction in both coordinate directions.
+    \begin{tenkzlattice}[
+        rows=3, cols=3, sheets={ket}, outer legs=top, frame=oblique,
+        west=trace, east=trace, north=trace, south=trace]
+        \tnsite[role=marked, label=$A$]{(1,2)}
+    \end{tenkzlattice}
+\end{center}
+Translations act on the vertices and edges. Transporting a tensor along a graph
+isomorphism $\phi$ relabels its coefficients by
+$\Coeff_{A^\phi}(\sigma)=\Coeff_A(\sigma\circ\phi)$,
+so two tensors generating the same state still do after transport. This is the
+setting in which the normal Fundamental Theorem specializes to a single
+site-independent tensor and produces the global phase of
+\cite[Theorem~3]{Molnar2018NormalPEPS}.
+
+\begin{definition}[Torus geometry and translations]%
+    \label{def:peps_torus_geometry_translation}
+    \lean{TNLean.PEPS.TorusVertex}
+    \lean{TNLean.PEPS.torusGraph}
+    \lean{TNLean.PEPS.torusGraph_adj_right}
+    \lean{TNLean.PEPS.torusGraph_adj_up}
+    \lean{TNLean.PEPS.Edge.map}
+    \lean{TNLean.PEPS.Edge.equiv}
+    \lean{TNLean.PEPS.IncidentEdge.equiv}
+    \lean{TNLean.PEPS.translateEquiv}
+    \lean{TNLean.PEPS.translate}
+    \lean{TNLean.PEPS.translateEdge}
+    \lean{TNLean.PEPS.translateEdge_isHorizontal}
+    \lean{TNLean.PEPS.translateEdge_isVertical}
+    \lean{TNLean.PEPS.translateIncidentEdge}
+    \leanok
+    The discrete $n\times m$ torus has vertex set $\Z/n\Z\times\Z/m\Z$.
+    Its graph joins $(x,y)$ to $(x+1,y)$ and to $(x,y+1)$, with the
+    coordinates read cyclically. Translation by $(a,b)$ is the graph
+    automorphism $\tau_{a,b}(x,y)=(x+a,y+b)$.
+    The induced action on edges sends an edge with unordered endpoint pair
+    $\{u,v\}$ to the edge with unordered endpoint pair
+    $\{\tau_{a,b}(u),\tau_{a,b}(v)\}$; in particular it preserves the
+    horizontal and vertical orientation classes. For a general graph
+    isomorphism $\phi:G\simeq G'$, the same endpoint action gives a
+    bijection on edges and a bijection from the edges incident to $v$ to
+    the edges incident to $\phi(v)$.
+\end{definition}
+
+\begin{definition}[Transport of a PEPS tensor]%
+    \label{def:peps_tensor_transport}
+    \lean{TNLean.PEPS.Tensor.transport}
+    \lean{TNLean.PEPS.Tensor.transport_bondDim}
+    \leanok
+    \uses{def:peps_tensor, def:peps_torus_geometry_translation}
+    Let $\phi:G\simeq G'$ be a graph isomorphism. The transported tensor
+    $A^\phi$ on $G'$ has bond dimension
+    $D^\phi_{e'}=D_{\phi^{-1}(e')}$ at every edge $e'$ of $G'$. Its local
+    tensor at $w\in G'$ is the local tensor of $A$ at $\phi^{-1}(w)$, with
+    virtual indices moved through the incident-edge bijection induced by
+    $\phi$.
+\end{definition}
+
+\begin{theorem}[State coefficient under transport]%
+    \label{thm:peps_stateCoeff_transport}
+    \lean{TNLean.PEPS.stateCoeff_transport}
+    \leanok
+    \uses{def:peps_stateCoeff, def:peps_tensor_transport}
+    For every graph isomorphism $\phi:G\simeq G'$ and every physical
+    configuration $\sigma$ on the vertices of $G'$,
+    $\Coeff_{A^\phi}(\sigma)=\Coeff_A(\sigma\circ\phi)$.
+\end{theorem}
+\begin{proof}\leanok
+    The edge bijection induced by $\phi$ identifies virtual configurations
+    of $A^\phi$ with virtual configurations of $A$. After this change of
+    summation variables, the local factor at $w\in G'$ becomes the local
+    factor of $A$ at $\phi^{-1}(w)$. Reindexing the finite product over
+    vertices by $\phi$ gives the coefficient equality.
+\end{proof}
+
+\begin{theorem}[Transport preserves equality of PEPS states]%
+    \label{thm:peps_sameState_transport}
+    \lean{TNLean.PEPS.SameState.transport}
+    \leanok
+    \uses{def:peps_same_state, thm:peps_stateCoeff_transport}
+    If two PEPS tensors on $G$ have equal state coefficients for every
+    physical configuration, then their transports along any graph
+    isomorphism $\phi:G\simeq G'$ have equal state coefficients for every
+    physical configuration on $G'$.
+\end{theorem}
+\begin{proof}\leanok
+    By Theorem~\ref{thm:peps_stateCoeff_transport},
+    \begin{align}
+        \Coeff_{A^\phi}(\sigma)
+        &=\Coeff_A(\sigma\circ\phi)
+          =\Coeff_B(\sigma\circ\phi)
+          =\Coeff_{B^\phi}(\sigma),
+        \notag
+    \end{align}
+    where the middle equality is the assumed equality of state coefficients.
+\end{proof}
+
+\begin{definition}[Translation-invariant torus tensor]%
+    \label{def:peps_torus_translation_invariant}
+    \lean{TNLean.PEPS.IsTorusTranslationInvariant}
+    \leanok
+    \uses{def:peps_tensor_transport, def:peps_torus_geometry_translation}
+    A PEPS tensor $A$ on the discrete torus is translation invariant if
+    $A^{\tau_{a,b}}=A$ for every translation $\tau_{a,b}$. This formalizes
+    the setting of \cite[Theorem~3]{Molnar2018NormalPEPS}, where one tensor
+    is repeated at every site of a periodic lattice.
+\end{definition}
+
+\begin{theorem}[State coefficient of a translation-invariant torus tensor]%
+    \label{thm:peps_stateCoeff_translationInvariant}
+    \lean{TNLean.PEPS.stateCoeff_translationInvariant}
+    \leanok
+    \uses{def:peps_torus_translation_invariant,
+        thm:peps_stateCoeff_transport}
+    If $A$ is translation invariant on the discrete torus, then
+    $\Coeff_A(\sigma\circ\tau_{a,b})=\Coeff_A(\sigma)$ for every translation
+    $\tau_{a,b}$ and every physical configuration $\sigma$.
+\end{theorem}
+\begin{proof}\leanok
+    Theorem~\ref{thm:peps_stateCoeff_transport} gives
+    \begin{align}
+        \Coeff_A(\sigma\circ\tau_{a,b})
+        &=\Coeff_{A^{\tau_{a,b}}}(\sigma)
+          =\Coeff_A(\sigma),
+        \notag
+    \end{align}
+    where the second equality substitutes $A^{\tau_{a,b}}=A$ from translation
+    invariance.
+\end{proof}
+
+\begin{definition}[Orientation-uniform bond dimensions on the torus]%
+    \label{def:peps_torus_uniform_bond_dim}
+    \lean{TNLean.PEPS.torusRightEdge}
+    \lean{TNLean.PEPS.torusUpEdge}
+    \lean{TNLean.PEPS.TorusUniformBondDim}
+    \leanok
+    \uses{def:peps_torus_geometry_translation}
+    A bond-dimension function on the torus is orientation-uniform with
+    horizontal dimension $D_h$ and vertical dimension $D_v$ if
+    $D_{e_h}=D_h$ for every horizontal edge $e_h$ and $D_{e_v}=D_v$ for
+    every vertical edge $e_v$. The reference horizontal edge is the right
+    edge at the origin, and the reference vertical edge is the up edge at
+    the origin.
+\end{definition}
+
+\begin{theorem}[Translation invariance gives orientation-uniform bond dimensions]%
+    \label{thm:peps_torusUniformBondDim_of_translationInvariant}
+    \lean{TNLean.PEPS.translateEdge_eq_map}
+    \lean{TNLean.PEPS.bondDim_translateEdge_of_translationInvariant}
+    \lean{TNLean.PEPS.isHorizontalTorusEdge_eq_rightEdge}
+    \lean{TNLean.PEPS.isVerticalTorusEdge_eq_upEdge}
+    \lean{TNLean.PEPS.translateEdge_torusRightEdge}
+    \lean{TNLean.PEPS.translateEdge_torusUpEdge}
+    \lean{TNLean.PEPS.bondDim_torusRightEdge_const}
+    \lean{TNLean.PEPS.bondDim_torusUpEdge_const}
+    \lean{TNLean.PEPS.torusUniformBondDim_of_translationInvariant}
+    \leanok
+    \uses{def:peps_torus_translation_invariant,
+        def:peps_torus_uniform_bond_dim}
+    If $A$ is translation invariant on the discrete torus, then its bond
+    dimensions are orientation-uniform. Explicitly, with
+    $D_h=D_{e_h}$ at the reference right edge $e_h$ and
+    $D_v=D_{e_v}$ at the reference up edge $e_v$, one has
+    $D_{f_h}=D_h$ for every horizontal edge $f_h$ and $D_{f_v}=D_v$ for
+    every vertical edge $f_v$.
+\end{theorem}
+\begin{proof}\leanok
+    Translation invariance gives $A^{\tau_{a,b}}=A$, hence
+    $D_A(\tau_{a,b}(e))=D_A(e)$ for every edge $e$. Every horizontal edge
+    $f_h$ has the form $f_h=\tau_{a,b}(e_h)$ for a translate of the reference
+    right edge, so
+    \begin{align}
+        D_{f_h}
+        &=D_A(\tau_{a,b}(e_h))
+          =D_A(e_h)
+          =D_h.
+        \notag
+    \end{align}
+    The same argument with the reference up edge gives $D_{f_v}=D_v$.
+\end{proof}
+
+\input{chapter/ch24_peps_ft_torus_row_cut_obstruction}
+
+\paragraph{Staircase-window geometry for a reference edge.}
+
+\begin{lemma}[Left endpoint of the staircase reference edge]%
+    \label{lem:peps_reference_edge_left_endpoint_staircase_window}
+    \lean{TNLean.PEPS.referenceEdge_leftEndpoint_mem_staircaseWindow}
+    \leanok
+    Let $L,K>0$, let $s=(a,b)$ be a staircase corner on the torus, and assume
+    $a+2L\le n$ and $2K\le m$. Let $e$ be the horizontal reference edge
+    from $(a+L-1,b+K-1)$ to $(a+L,b+K-1)$, and let $W_j$ be the $j$th
+    staircase window based at $s$. Then the left endpoint
+    $u=(a+L-1,b+K-1)$ lies in $W_j$ if and only if $1\le j$.
+\end{lemma}
+\begin{proof}\leanok
+    The endpoint formula gives the two coordinate distances from the corner:
+    the column distance is $L-1$ and the row distance is $K-1$. Substituting
+    these distances into the staircase-window membership criterion gives exactly
+    $1\le j$.
+\end{proof}
+
+\begin{lemma}[Right endpoint of the staircase reference edge]%
+    \label{lem:peps_reference_edge_right_endpoint_staircase_window}
+    \lean{TNLean.PEPS.referenceEdge_rightEndpoint_mem_staircaseWindow}
+    \leanok
+    In the same notation, the right endpoint $w=(a+L,b+K-1)$ lies in $W_j$
+    if and only if $j<L$.
+\end{lemma}
+\begin{proof}\leanok
+    The right endpoint has column distance $L$ and row distance $K-1$ from
+    $s$. The row condition is automatic, while the column band contains this
+    distance precisely for $j<L$.
+\end{proof}
+
+\begin{lemma}[Boundary windows for the staircase reference edge]%
+    \label{lem:peps_reference_edge_boundary_windows}
+    \lean{TNLean.PEPS.isRegionBoundaryEdge_staircaseWindow_referenceEdge}
+    \leanok
+    \uses{lem:peps_reference_edge_left_endpoint_staircase_window,
+        lem:peps_reference_edge_right_endpoint_staircase_window}
+    If $j=0$ or $L\le j$, then the reference edge $e$ is a boundary edge
+    of $W_j$: exactly one of its two endpoints lies in the window.
+\end{lemma}
+\begin{proof}\leanok
+    For $j=0$, Lemmas~\ref{lem:peps_reference_edge_left_endpoint_staircase_window}
+    and~\ref{lem:peps_reference_edge_right_endpoint_staircase_window} show that
+    only $w$ lies in $W_j$. For $L\le j$, the same two endpoint tests show
+    that only $u$ lies in $W_j$.
+\end{proof}
+
+\begin{lemma}[Interior windows for the staircase reference edge]%
+    \label{lem:peps_reference_edge_interior_windows}
+    \lean{TNLean.PEPS.referenceEdge_endpoints_mem_staircaseWindow_of_interior}
+    \leanok
+    \uses{lem:peps_reference_edge_left_endpoint_staircase_window,
+        lem:peps_reference_edge_right_endpoint_staircase_window}
+    If $1\le j<L$, then both endpoints of $e$ lie in $W_j$.
+\end{lemma}
+\begin{proof}\leanok
+    The left-endpoint criterion gives $u\in W_j$ from $1\le j$, and the
+    right-endpoint criterion gives $w\in W_j$ from $j<L$.
+\end{proof}
+
+\begin{lemma}[Interior windows are not boundary windows]%
+    \label{lem:peps_reference_edge_not_boundary_interior_windows}
+    \lean{TNLean.PEPS.not_isRegionBoundaryEdge_staircaseWindow_referenceEdge_of_interior}
+    \leanok
+    \uses{lem:peps_reference_edge_interior_windows}
+    If $1\le j<L$, then $e$ is not a boundary edge of $W_j$.
+\end{lemma}
+\begin{proof}\leanok
+    By Lemma~\ref{lem:peps_reference_edge_interior_windows}, both endpoints of
+    $e$ lie in $W_j$. The definition of a boundary edge requires exactly one
+    endpoint in the region, so $e$ is not a boundary edge of $W_j$.
+\end{proof}

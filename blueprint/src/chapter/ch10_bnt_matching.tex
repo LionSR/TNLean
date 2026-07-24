@@ -1,0 +1,243 @@
+\section{Coefficient comparison and copy-weight recovery}
+\label{sec:sector_bnt_coeff_comparison}
+
+% Source: copy-weight recovery, Cirac2016MPDO_arXiv Appendix MPV proof,
+% lines 1184--1188.
+The exact matching of Section~\ref{sec:sector_bnt_strong_match} produces, on each
+matched pair, a coefficient identity. This section turns that identity into
+equality of the per-copy weight multisets \cite[Appendix~A]{Cirac2016MPDO_arXiv}.
+No analytic non-decay estimate enters: the fixed-length linear independence
+isolates each sector coefficient exactly.
+
+\subsection{Matched-sector weight multiset equality}
+
+Given a matched pair $(j_0, \tilde k_0)$ and a nonzero scalar $\zeta$ with
+$c_N^{(j_0)}(P) = \zeta^N c_N^{(\tilde k_0)}(Q)$ past a threshold $N_0$, this
+section records two conclusions: the multiset equality of the per-copy weights
+from power-sum recovery (Theorem~\ref{thm:power_sum_multiset}), and its upgrade
+to an explicit per-copy permutation. Together they give the
+$\mu_{j,q} = \nu_{j,q}\, e^{i\varphi_j}$ recovery of
+\cite[Appendix~A]{Cirac2016MPDO_arXiv}.
+% Source: matched normal sectors at Cirac2016MPDO_arXiv line 1182; equal-MPV
+% coefficient comparison at lines 1184--1188; global-gauge construction at
+% lines 1189--1192.
+The coefficient identity is supplied, in the equal-MPV case, by
+Lemma~\ref{lem:sector_bnt_coeff_identity_via_global_gauge} of
+Chapter~\ref{ch:ft_proof}; in the proportional case it is the remaining
+hypothesis of the conditional proportional global gauge
+(Theorem~\ref{thm:sector_bnt_proportional_global_gauge_of_coeff_identity}).
+
+\begin{lemma}[Matched-sector weight multiset equality]%
+    \label{lem:sector_bnt_matched_sector_weight_multiset_eq}
+    \lean{MPSTensor.matched_sector_weight_multiset_eq}
+    \leanok
+    \uses{def:sector_weight_data,
+        thm:power_sum_multiset}
+    Let $P, Q$ be sector decompositions with weights $\mu_{j,q}$ and
+    $\nu_{k,q'}$, and fix indices $j_0$, $\tilde k_0$, and a nonzero scalar
+    $\zeta \in \C \setminus \{0\}$. Suppose that for every $N > N_0$,
+    \begin{align}
+        c_N^{(j_0)}(P)
+        &= \zeta^N \cdot c_N^{(\tilde k_0)}(Q).
+        \label{eq:bnt_matched_sector_coeff_identity}
+    \end{align}
+    Then the per-sector multiplicities agree, $r_{j_0}(P) = r_{\tilde k_0}(Q)$,
+    and the rescaled per-copy weight multisets coincide.
+    % Source: Cirac2016MPDO_arXiv Appendix MPV proof, lines 1184--1188
+    % (\mu_{j,q} = \nu_{j,q} e^{i\varphi_j}, matching multiplicities r_{a,j} = r_{b,j}).
+    This is \cite[Appendix~A]{Cirac2016MPDO_arXiv} read on a single matched
+    sector.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:bounded_power_sum_multiset}
+    Expand both sides of the coefficient identity
+    (\ref{eq:bnt_matched_sector_coeff_identity}) into per-copy power sums
+    $\sum_q \mu_{j_0, q}^N$ and $\sum_{q'} \nu_{\tilde k_0, q'}^N$, and
+    distribute $\zeta^N$ through the right-hand sum to obtain, for every
+    $N > N_0$,
+    \begin{align}
+        \sum_q \mu_{j_0, q}^N
+        &= \sum_{q'} (\zeta \cdot \nu_{\tilde k_0, q'})^N.
+        \notag
+    \end{align}
+    Extend to all positive exponents and apply the unequal-cardinality
+    multiset-recovery lemma (Theorem~\ref{thm:bounded_power_sum_multiset}),
+    using $\zeta \neq 0$ together with the weight non-vanishing assumption
+    to ensure the input weights are nonzero. This yields the multiplicity
+    match and the multiset equality.
+\end{proof}
+
+\begin{lemma}[Matched-sector weight-permutation extractor]%
+    \label{lem:sector_bnt_matched_sector_weight_equiv}
+    \lean{MPSTensor.matched_sector_weight_equiv}
+    \leanok
+    \uses{lem:sector_bnt_matched_sector_weight_multiset_eq}
+    Under the hypotheses of
+    Lemma~\ref{lem:sector_bnt_matched_sector_weight_multiset_eq}, the
+    per-sector multiplicities agree and there is a permutation $\tau$ of
+    the per-copy index set identifying the individual weights up to the
+    gauge phase: for every $q$,
+    $\nu_{\tilde k_0, \tau(q)} = \zeta^{-1} \cdot \mu_{j_0, q}$.
+    % Source: Cirac2016MPDO_arXiv Appendix MPV proof, line 1188
+    % (\mu_{j,q} = \nu_{j,q} e^{i\varphi_j}).
+    This is the per-copy realisation of \cite[Appendix~A]{Cirac2016MPDO_arXiv}:
+    the multiset equality from
+    Lemma~\ref{lem:sector_bnt_matched_sector_weight_multiset_eq} is upgraded to
+    a concrete indexing between the matched $P$- and $Q$-copies.
+\end{lemma}
+
+\begin{proof}\leanok
+    Invoke Lemma~\ref{lem:sector_bnt_matched_sector_weight_multiset_eq} to
+    obtain the cardinality match and the multiset equality.
+    From this multiset-map equality extract a permutation matching the
+    elements pointwise (proved by induction on the cardinality).
+    Compose with the cardinality identification and cancel $\zeta$ via
+    $\zeta \neq 0$ to convert the gauge factor on the right of the
+    pointwise identity to $\zeta^{-1}$ on the left.
+\end{proof}
+
+\section{Strong existential matching by exact linear independence}
+\label{sec:sector_bnt_strong_match}
+
+The exact matching reads \cite[Appendix~A]{Cirac2016MPDO_arXiv} as a statement
+at fixed length: equal MPV families force each basis sector of one form to pair
+with a basis sector of the other. The non-vanishing of the sector coefficients
+isolates the matched sector exactly, with no limit of a single-sector
+projection.
+
+\begin{lemma}[Sector-decomposition coefficient is not eventually zero]
+    \label{lem:sector_decomposition_coeff_not_eventually_zero}
+    \lean{MPSTensor.SectorDecomposition.coeff_not_eventually_zero}
+    \leanok
+    \uses{def:sector_weight_data,
+        lem:finite_geometric_sum_eventual_vanishing}
+    For any sector decomposition $P$ and any sector $j$, the coefficient
+    $c_{P,j}^{(N)}=\sum_q\mu_{j,q}^N$ is not eventually zero in $N$.
+\end{lemma}
+
+\begin{proof}\leanok
+    If the coefficient vanished for every $N\geq M$, the finite geometric-sum
+    extrapolation would make it vanish at every non-negative exponent. However,
+    at exponent zero, $c_{P,j}^{(0)}=\sum_q\mu_{j,q}^0=r_j>0$, which is
+    impossible.
+\end{proof}
+
+\begin{lemma}[Sector coefficient is not eventually zero]
+    \label{lem:sector_bnt_coeff_not_eventually_zero}
+    \lean{MPSTensor.IsBNTCanonicalForm.coeff_not_eventually_zero}
+    \leanok
+    \uses{def:sector_bnt_cf,
+        lem:sector_decomposition_coeff_not_eventually_zero}
+    For a BNT canonical form $P$ and any sector $j$, the sector coefficient
+    $c_{P,j}^{(N)} = \sum_q \mu_{j,q}^N$ is not eventually zero in $N$. Only
+    nonvanishing of the copy weights is used, not any modulus condition.
+\end{lemma}
+
+\begin{proof}\leanok
+    Apply Lemma~\ref{lem:sector_decomposition_coeff_not_eventually_zero}; its
+    conclusion does not require the canonical-form assumptions.
+\end{proof}
+
+\begin{theorem}[Exact single-sector matching]
+    \label{thm:sector_bnt_exact_block_match}
+    \lean{MPSTensor.exists_block_match_exact}
+    \leanok
+    \uses{def:sector_bnt_cf,
+        lem:sector_bnt_combined_family_eventually_li,
+        lem:sector_bnt_coeff_not_eventually_zero}
+    Let $P, Q$ be two BNT canonical forms with the same MPV family (at all
+    positive lengths). For every sector $j$ of $P$ there exist a sector $k$ of
+    $Q$ with matched bond dimension $\dim_P(j) = \dim_Q(k)$, a gauge-phase
+    equivalence after identifying the matched bond dimensions, and a
+    non-decaying cross-overlap. No per-sector unit-modulus hypothesis is
+    required.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:sector_bnt_combined_family_eventually_li,
+        lem:sector_bnt_coeff_not_eventually_zero}
+    Suppose $j$ decays against every sector of $Q$, and let $T$ be the set of
+    $P$-sectors with this property. For $j' \notin T$ the overlap dichotomy
+    turns a non-decaying overlap with some $Q_{k(j')}$ into a gauge-phase
+    equivalence, hence a scalar $\omega_{j'} \in \C^\times$ with
+    $V^{(N)}(P_{j'}) = \omega_{j'}^{N} V^{(N)}(Q_{k(j')})$, so
+    $V^{(N)}(P_{j'})$ lies in the span of $\{V^{(N)}(Q_k)\}_k$. The family
+    $\{P_{j'} : j'\in T\}\cup\{Q_k\}_k$ then has all pairwise cross-overlaps
+    decaying, hence is eventually linearly independent
+    (Lemma~\ref{lem:sector_bnt_combined_family_eventually_li}). Rewriting the
+    common-MPV identity over this family,
+    \begin{align}
+        \sum_{j'\in T} c_N^{(j')}\, V^{(N)}(P_{j'})
+        &= \sum_{k}\Bigl(c_N^{(k)}
+        - \sum_{j'\notin T,\, k(j')=k}
+        c_N^{(j')}\omega_{j'}^{N}\Bigr) V^{(N)}(Q_k),
+        \notag
+    \end{align}
+    exact coefficient extraction forces $c_N^{(j)} = 0$ at each fixed large
+    $N$, contradicting
+    Lemma~\ref{lem:sector_bnt_coeff_not_eventually_zero}. Hence a matched
+    sector $k$ exists; the gauge-phase equivalence is recovered from the
+    non-decaying overlap by the irreducible trace-preserving overlap dichotomy.
+\end{proof}
+
+\begin{theorem}[Strong existential matching, full-basis form]
+    \label{thm:sector_bnt_forall_unit_k_exists_j_nondecaying_overlap_of_sameMPV}
+    \lean{MPSTensor.forall_k_exists_j_nondecaying_overlap_of_sameMPV}
+    \leanok
+    \uses{def:sector_bnt_cf, def:same_mpv2_pos,
+        thm:sector_bnt_exact_block_match}
+    Let $P, Q$ be two BNT canonical forms with the same MPV family at every
+    positive length. Then for every sector $k$ of $Q$ there exist a sector $j$
+    of $P$ with matched bond dimension $\dim_P(j) = \dim_Q(k)$, a gauge-phase
+    equivalence after identifying the matched bond dimensions, and a
+    non-decaying cross-overlap.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:sector_bnt_exact_block_match}
+    Apply Theorem~\ref{thm:sector_bnt_exact_block_match} with the roles of $P$
+    and $Q$ swapped and the same-MPV hypothesis flipped by symmetry of
+    gauge-phase equivalence and overlap convergence.
+\end{proof}
+
+\subsection{Bijective matching by symmetry}
+\label{subsec:sector_bnt_strong_match_bijective_symmetry}
+
+Applying the exact matching once more with $P$ and $Q$ swapped gives the reverse
+direction; the basis-distinctness clause forces injectivity both ways, so
+$g_a = g_b$ and the source relabelling
+$B_k = e^{i\phi_k} X_k A_{j_k} X_k^{-1}$ holds on the full basis
+\cite[Appendix~A]{Cirac2016MPDO_arXiv}.
+
+\begin{theorem}[Bijective matching by symmetry]
+    \label{thm:sector_bnt_bijective_match_of_sameMPV}
+    \lean{MPSTensor.bijective_match_of_sameMPV}
+    \leanok
+    \uses{thm:sector_bnt_exact_block_match,
+        def:sector_bnt_cf, def:same_mpv2_pos}
+    Let $P, Q$ be two BNT canonical forms with the same MPV family at every
+    positive length. Then there is a bijection
+    $\beta : J(Q) \simeq J(P)$ such that for every $k \in J(Q)$ the bond
+    dimensions match, the basis tensors $P_{\beta(k)}$ and $Q_k$ are
+    gauge-phase equivalent after identifying the matched bond dimensions, and
+    the basis cross-overlap does not tend to zero.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:sector_bnt_exact_block_match}
+    Theorem~\ref{thm:sector_bnt_exact_block_match} applied to $(Q, P)$ gives a
+    matching map $m : J(Q) \to J(P)$, and applied to $(P, Q)$ a matching map
+    $J(P) \to J(Q)$.
+
+    \emph{Injectivity of $m$.} If $m(k_1) = m(k_2) = j$, the two witnesses give
+    a common centre $P_j$ gauge-phase equivalent, after identifying bond
+    dimensions, to both $Q_{k_1}$ and $Q_{k_2}$; transitivity yields a
+    gauge-phase equivalence $Q_{k_1} \sim Q_{k_2}$ under
+    $\dim_Q(k_1) = \dim_Q(k_2)$. The basis-distinctness clause on $Q$ then
+    forces $k_1 = k_2$; the reverse map is injective by symmetry.
+    % Source: basis-distinctness clause, Cirac2016MPDO_arXiv lines 264--279.
+
+    \emph{Bijection.} The two injections give equal finite sector counts, so $m$
+    is a bijection $\beta : J(Q) \simeq J(P)$.
+\end{proof}

@@ -460,10 +460,11 @@ SPAN_SYNTAX_RECOVERY = r"""
   \\
   \tnfuse[span=bogus]{X}\tnspan[box]{1}{\tenkzTestBadSpanInk} & & &
   \\
-  \tnfuse[combined=sideways]{X}
-    \tnspan[box]{1}{\tenkzTestBadSpanInk} & & &
+  \tnfuse[span=2, combined=sideways]{X}
+    \tnspan[box]{1}{\tenkzTestBadSpanInk} & \tn{Y} & &
   \\
-  \tn[wide=bogus]{X}\tnspan[box]{1}{\tenkzTestBadSpanInk} & & &
+  \tn[wide=bogus]{X}\tnspan[box]{1}{\tenkzTestBadSpanInk}
+    & \tn{Z} & &
   \\
   \tn[wires=bogus]{X}\tnspan[box]{1}{\tenkzTestBadSpanInk} & & &
   \\
@@ -881,6 +882,16 @@ region|picture=1|lang=free|slot=selected|members=a|outline=0|name=a
         syntax_spans = [
             line for line in syntax_events if line.startswith("span|")
         ]
+        invalid_fuse_bonds = [
+            line for line in syntax_events
+            if line.startswith("bond|")
+            and ("|row=8|" in line or "|row=9|" in line)
+        ]
+        if invalid_fuse_bonds:
+            raise AssertionError(
+                "invalid fusion syntax entered the frozen topology: "
+                f"{invalid_fuse_bonds!r}"
+            )
         if len(syntax_spans) != 2 or not any(
             "|row=1|col=3|length=2|" in line for line in syntax_spans
         ) or not any(

@@ -1,0 +1,367 @@
+\section{The partial transpose and the PPT property}
+
+Transposition is a positive map that is not completely positive, so applying it
+to one factor of a bipartite operator can break positivity. The resulting
+operation, the partial transpose
+\cite[Equation~(3.16)]{Wolf2012Quantum}, sends $\rho\in\MN{d}\otimes\MN{d'}$ to
+the operator $\rho^{T_1}$ obtained by transposing the first tensor factor while
+leaving the second untouched, and the property $\rho^{T_1}\ge 0$---positive
+partial transpose, or PPT---is the criterion
+\cite[Equation~(3.17)]{Wolf2012Quantum} that separates many entangled states
+from the separable ones.
+
+\begin{definition}[Partial transpose over the first factor]
+    \label{def:partial_transpose_left}
+    \lean{Matrix.partialTransposeLeft}
+    \leanok
+    For a bipartite matrix $\rho$ on $\MN{d}\otimes\MN{d'}$, the partial transpose
+    over the first factor is the matrix $\rho^{T_1}$ with entries
+    \begin{align}
+        (\rho^{T_1})_{(i,k),(j,l)}
+        &=\rho_{(j,k),(i,l)},
+        \notag
+    \end{align}
+    transposing the first index pair $i,j$ and fixing the second pair $k,l$.
+\end{definition}
+
+\begin{definition}[Partial transpose over the second factor]
+    \label{def:partial_transpose_right}
+    \lean{Matrix.partialTransposeRight}
+    \leanok
+    For a bipartite matrix $\rho$ on $\MN{d}\otimes\MN{d'}$, the partial transpose
+    over the second factor is the matrix $\rho^{T_2}$ with entries
+    \begin{align}
+        (\rho^{T_2})_{(i,k),(j,l)}
+        &=\rho_{(i,l),(j,k)},
+        \notag
+    \end{align}
+    transposing the second index pair $k,l$ and fixing the first pair $i,j$.
+\end{definition}
+
+\begin{theorem}[The partial transpose is an involution]
+    \label{thm:partial_transpose_left_involution}
+    \lean{Matrix.partialTransposeLeft_partialTransposeLeft}
+    \leanok
+    \uses{def:partial_transpose_left}
+    Applying the first-factor partial transpose twice returns the original matrix:
+    $(\rho^{T_1})^{T_1}=\rho$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Both entries equal $\rho_{(i,k),(j,l)}$: the first transposition exchanges the
+    first index pair, the second restores it.
+\end{proof}
+
+\begin{theorem}[The partial transpose preserves the trace]
+    \label{thm:trace_partial_transpose_left}
+    \lean{Matrix.trace_partialTransposeLeft}
+    \leanok
+    \uses{def:partial_transpose_left}
+    The first-factor partial transpose preserves the trace:
+    $\tr(\rho^{T_1})=\tr(\rho)$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    On the diagonal the row and column indices coincide, so the index exchange in
+    the definition is the identity and each diagonal entry is unchanged.
+\end{proof}
+
+\begin{theorem}[The partial transpose preserves Hermiticity]
+    \label{thm:partial_transpose_left_hermitian}
+    \lean{Matrix.IsHermitian.partialTransposeLeft}
+    \leanok
+    \uses{def:partial_transpose_left}
+    If $\rho$ is Hermitian then so is its first-factor partial transpose
+    $\rho^{T_1}$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The entry $(\rho^{T_1})_{(i,k),(j,l)}=\rho_{(j,k),(i,l)}$ has complex
+    conjugate $\overline{\rho_{(j,k),(i,l)}}=\rho_{(i,l),(j,k)}$ by Hermiticity of
+    $\rho$, which is the $((j,l),(i,k))$ entry of $\rho^{T_1}$.
+\end{proof}
+
+\begin{theorem}[The two partial transposes differ by a global transposition]
+    \label{thm:partial_transpose_right_eq_transpose_left}
+    \lean{Matrix.partialTransposeRight_eq_transpose_partialTransposeLeft}
+    \leanok
+    \uses{def:partial_transpose_left, def:partial_transpose_right}
+    The second-factor partial transpose is the full transpose of the first-factor
+    one: $\rho^{T_2}=(\rho^{T_1})^{\mathsf T}$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Transposing both factors is the full transpose, so transposing the first
+    factor and then the whole operator transposes only the second factor.
+\end{proof}
+
+\begin{definition}[Positive partial transpose property]
+    \label{def:is_ppt}
+    \lean{Matrix.IsPPT}
+    \leanok
+    \uses{def:partial_transpose_left}
+    A bipartite matrix $\rho$ has the positive-partial-transpose (PPT) property when
+    its first-factor partial transpose is positive semidefinite, $\rho^{T_1}\ge 0$.
+\end{definition}
+
+\begin{theorem}[The PPT property is symmetric in the two factors]
+    \label{thm:is_ppt_iff_right}
+    \lean{Matrix.isPPT_iff_partialTransposeRight_posSemidef}
+    \leanok
+    \uses{def:is_ppt, def:partial_transpose_right,
+        thm:partial_transpose_right_eq_transpose_left}
+    A bipartite matrix has the PPT property if and only if its second-factor
+    partial transpose is positive semidefinite:
+    $\rho^{T_1}\ge 0\iff\rho^{T_2}\ge 0$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The two partial transposes differ by a global transposition, and transposition
+    preserves positive semidefiniteness, so one is positive exactly when the other
+    is.
+\end{proof}
+
+\begin{theorem}[Basis-change law for the partial transpose]
+    \label{thm:partial_transpose_left_basis_change}
+    \lean{Matrix.partialTransposeLeft_basis_change}
+    \leanok
+    \uses{def:partial_transpose_left}
+    For matrices $U,V$ on the first factor and a bipartite matrix $\rho$,
+    conjugating inside by $V$ and $U$, taking the first-factor partial transpose,
+    and conjugating outside by $U$ and $V$ produces the original partial transpose
+    conjugated by $U U^{\mathsf T}$ and $V^{\mathsf T}V$:
+    \begin{align}
+        (U\otimes\Id)
+        \left[((V\otimes\Id) \rho\,(U\otimes\Id))^{T_1}\right]
+        (V\otimes\Id)
+        &=((U U^{\mathsf T})\otimes\Id) \rho^{T_1}
+            ((V^{\mathsf T}V)\otimes\Id).
+        \notag
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Expanding the conjugated operator entry by entry as a double sum over the first
+    factor, the partial transpose exchanges the two summation indices and reverses
+    the roles of the left and right conjugating matrices, leaving them transposed;
+    collecting the Kronecker factors gives the stated form.
+\end{proof}
+
+\begin{theorem}[Conjugation invariance of the partial transpose]
+    \label{thm:is_ppt_basis_change}
+    \lean{Matrix.isPPT_basis_change}
+    \leanok
+    \uses{def:is_ppt, thm:partial_transpose_left_basis_change}
+    Let $U$ be any matrix on the first factor. If $\rho$ has the PPT property then
+    \begin{align}
+        &(U\otimes\Id)
+        \Bigl[\bigl((U^\dagger\otimes\Id) \rho
+        (U\otimes\Id)\bigr)^{T_1}\Bigr]
+        (U^\dagger\otimes\Id)
+        \notag
+    \end{align}
+    is positive semidefinite; no invertibility or unitarity of $U$ is required.
+    Specializing to a unitary $U$ this is the partial transpose taken in the basis
+    changed by $U$, so the positivity of the partial transpose is independent of the
+    local basis, recovering Wolf's basis-independence statement
+    \cite[Equation~(3.17)]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    By the basis-change law with $V=U^\dagger$, the new-basis partial transpose
+    equals $((U U^{\mathsf T})\otimes\Id) \rho^{T_1}
+    ((U U^{\mathsf T})\otimes\Id)^\dagger$, a conjugation of $\rho^{T_1}$
+    that preserves positive semidefiniteness.
+\end{proof}
+
+\begin{definition}[Transposition witness]
+    \label{def:transposition_witness}
+    \lean{Matrix.transpositionWitness}
+    \leanok
+    For matrices $A,B$ on $\MN{d}$ and the SWAP operator $F$ on
+    $\MN{d}\otimes\MN{d}$, the transposition witness is
+    $W=(A\otimes B)\,F\,(A\otimes B)^\dagger$.
+    These are the entanglement witnesses associated with the transposition map.
+\end{definition}
+
+\begin{theorem}[Transposition witnesses are Hermitian]
+    \label{thm:transposition_witness_hermitian}
+    \lean{Matrix.transpositionWitness_isHermitian}
+    \leanok
+    \uses{def:transposition_witness}
+    Every transposition witness $W=(A\otimes B)\,F\,(A\otimes B)^\dagger$ is
+    Hermitian.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The SWAP operator is self-adjoint, $F^\dagger=F$, so taking the adjoint of
+    $(A\otimes B)\,F\,(A\otimes B)^\dagger$ returns the same operator.
+\end{proof}
+
+\section{Separable states and the PPT criterion}
+
+A bipartite state is separable when it is a convex combination of pure product
+states $\sum_i p_i\,\ket{a_i}\bra{a_i}\otimes\ket{b_i}\bra{b_i}$. Each pure product
+state is a Kronecker product of two rank-one positive semidefinite matrices, the
+non-negative weight $p_i$ is absorbed into one factor, and conversely a positive
+semidefinite matrix is a non-negative combination of rank-one projectors. Up to
+normalization this gives the equivalent description of separable states as finite
+sums of Kronecker products of positive semidefinite matrices, the cone generated by
+the product positive operators, which is the form used below.
+
+\begin{definition}[Separable bipartite matrix]
+    \label{def:is_separable}
+    \lean{Matrix.IsSeparable}
+    \leanok
+    A bipartite matrix $\rho$ on $\MN{d}\otimes\MN{d'}$ is separable when it is a
+    finite sum of Kronecker products of positive semidefinite matrices,
+    \begin{align}
+        \rho&=\sum_i A_i\otimes B_i,
+        \notag\\
+        A_i&\ge 0,
+        \notag\\
+        B_i&\ge 0.
+        \notag
+    \end{align}
+\end{definition}
+
+\begin{theorem}[A Kronecker product of positive operators is separable]
+    \label{thm:is_separable_kronecker}
+    \lean{Matrix.isSeparable_kronecker}
+    \leanok
+    \uses{def:is_separable}
+    For positive semidefinite $A$ on $\MN{d}$ and $B$ on $\MN{d'}$, the Kronecker
+    product $A\otimes B$ is separable.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    It is the one-term sum $\sum_i A_i\otimes B_i$ with the single index taking the
+    value $A\otimes B$.
+\end{proof}
+
+\begin{theorem}[Separable matrices are closed under addition]
+    \label{thm:is_separable_add}
+    \lean{Matrix.IsSeparable.add}
+    \leanok
+    \uses{def:is_separable}
+    If $\rho$ and $\sigma$ are separable then so is $\rho+\sigma$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Concatenating the two index families realizes $\rho+\sigma$ as a single sum of
+    Kronecker products of positive semidefinite matrices.
+\end{proof}
+
+\begin{theorem}[Separable matrices are closed under non-negative scaling]
+    \label{thm:is_separable_smul}
+    \lean{Matrix.IsSeparable.smul}
+    \leanok
+    \uses{def:is_separable}
+    If $\rho$ is separable and $c\ge 0$ is real then $c\,\rho$ is separable.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Absorbing $c$ into the first factor of each Kronecker product keeps every factor
+    positive semidefinite, since a non-negative multiple of a positive semidefinite
+    matrix is positive semidefinite.
+\end{proof}
+
+\begin{theorem}[A separable matrix is positive semidefinite]
+    \label{thm:is_separable_pos_semidef}
+    \lean{Matrix.IsSeparable.posSemidef}
+    \leanok
+    \uses{def:is_separable}
+    Every separable matrix is positive semidefinite.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Each summand $A_i\otimes B_i$ is a Kronecker product of positive semidefinite
+    matrices, hence positive semidefinite, and a finite sum of positive semidefinite
+    matrices is positive semidefinite.
+\end{proof}
+
+\begin{theorem}[The partial transpose distributes over a finite sum]
+    \label{thm:partial_transpose_left_sum}
+    \lean{Matrix.partialTransposeLeft_sum}
+    \leanok
+    \uses{def:partial_transpose_left}
+    For a finite family of bipartite matrices,
+    $(\sum_i f_i)^{T_1}=\sum_i f_i^{T_1}$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The first-factor partial transpose is an entrywise reindexing of the matrix, so
+    it commutes with the entrywise finite sum.
+\end{proof}
+
+\begin{theorem}[PPT criterion, forward direction]
+    \label{thm:is_separable_is_ppt}
+    \lean{Matrix.IsSeparable.isPPT}
+    \leanok
+    \uses{def:is_separable, def:is_ppt, thm:partial_transpose_left_sum}
+    Every separable matrix has the positive-partial-transpose property:
+    if $\rho$ is separable then $\rho^{T_1}\ge 0$. A negative partial transpose
+    therefore certifies that a state is entangled.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The first-factor partial transpose is linear and acts on a Kronecker product by
+    transposing the first factor, $(A\otimes B)^{T_1}=A^{\mathsf T}\otimes B$.
+    Writing $\rho=\sum_i A_i\otimes B_i$ with each factor positive semidefinite, the
+    partial transpose is $\sum_i A_i^{\mathsf T}\otimes B_i$. The transpose of a
+    positive semidefinite matrix is positive semidefinite, so each summand is a
+    Kronecker product of positive semidefinite matrices, and the sum is positive
+    semidefinite.
+\end{proof}
+
+\begin{theorem}[Applying a map to one factor distributes over a finite sum]
+    \label{thm:tensor_map_id_sum}
+    \lean{Matrix.tensorMapId_sum}
+    \leanok
+    \uses{def:tensor_map_id}
+    For a linear map $T$ on the first factor and a finite family of bipartite
+    matrices,
+    $(T\otimes\id)(\sum_i f_i)=\sum_i (T\otimes\id)(f_i)$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Applying a map to the first factor is linear in the bipartite matrix, so it
+    commutes with the finite sum.
+\end{proof}
+
+\begin{theorem}[Reduction map at the first level on a separable state]
+    \label{thm:is_separable_reduction_one}
+    \lean{Matrix.IsSeparable.tensorMapId_tEta_one_posSemidef}
+    \leanok
+    \uses{def:is_separable, def:t_eta, thm:reduction_map_one_positive,
+        thm:tensor_map_id_sum}
+    For $d\ge 1$ and a separable matrix $\rho$ on $\MN{d}\otimes\MN{d'}$, applying
+    the reduction map $T_1(X)=\tr(X)\Id-X$ to the first factor keeps the result
+    positive semidefinite: $(T_1\otimes\id)(\rho)\ge 0$.
+    This is the separability instance of the operator inequality underlying the
+    reduction criterion at the first level.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The reduction map $T_1$ is positive, so it maps each positive semidefinite first
+    factor $A_i$ of $\rho=\sum_i A_i\otimes B_i$ to a positive semidefinite matrix.
+    The ampliation acts by $(T_1\otimes\id)(A_i\otimes B_i)=T_1(A_i)\otimes B_i$, each
+    summand is a Kronecker product of positive semidefinite matrices, and the sum is
+    positive semidefinite.
+\end{proof}

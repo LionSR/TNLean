@@ -1,0 +1,549 @@
+\section{Trace-pairing expansion in transfer-matrix form}
+\label{sec:trace_pairing_expansion}
+%% =========================================================
+
+% Formula/source: Wolf, Eq. (2.20), writes the transfer coefficients for
+% Hilbert--Schmidt orthonormal bases as
+% \widehat T_{\alpha\beta}=\tr(F_\alpha^\dagger T(G_\beta)).  Identifying the
+% two bases with a Hermitian Hilbert--Schmidt orthonormal basis {\sigma_i}
+% gives t_{ij}=\tr(\sigma_i T(\sigma_j)).  The chapter proves the analogous
+% coordinate expansion more generally for a basis self-dual under the
+% bilinear pairing (A,B)\mapsto\tr(AB):
+% T(\rho)=\sum_{i,j}t_{ij}\tr(\sigma_j\rho)\sigma_i.
+% Index verdict: j is summed in the input coordinate \tr(\sigma_j\rho), while
+% i is summed in the coefficient and output basis element \sigma_i.  This is an
+% algebraic basis expansion, not one tensor-network contraction.  In the
+% retired figure only \sigma_j and \rho were contracted; t_{ij}, \sigma_i, and
+% the equality to T(\rho) were unattached labels.
+
+\begin{definition}[Trace-self-dual basis]\label{def:trace_pairing_self_dual_basis}
+    \lean{TracePairingSelfDualBasis}
+    \leanok
+    A basis $\{\sigma_i\}_i$ of $\MN{D}$ is \emph{trace-self-dual} when
+    its coordinate functionals are given by trace pairing:
+    \begin{align}
+        X &= \sum_i \tr(\sigma_i X)\sigma_i.
+        \label{eq:representations_self_dual}
+    \end{align}
+\end{definition}
+
+\begin{definition}[Trace-pairing coefficients]\label{def:trace_pairing_coeff}
+    \lean{tracePairingCoeff}
+    \leanok
+    \uses{def:trace_pairing_self_dual_basis}
+    For a linear map $T : \MN{D} \to \MN{D}$ and a trace-self-dual basis
+    $\{\sigma_i\}$, define coefficients
+    $t_{ij}:=\tr(\sigma_i T(\sigma_j))$.
+\end{definition}
+
+\begin{theorem}[Trace-pairing expansion of a linear map]\label{thm:linearMap_expand_tracePairing}
+    \lean{linearMap_expand_tracePairing}
+    \leanok
+    \uses{def:trace_pairing_self_dual_basis, def:trace_pairing_coeff}
+    If $\{\sigma_i\}$ is trace-self-dual, then every linear map
+    $T : \MN{D} \to \MN{D}$ admits the expansion
+    \begin{align}
+        T(\rho)
+        &= \sum_i \sum_j t_{ij}\tr(\sigma_j\rho)\sigma_i,
+        \label{eq:representations_trace_expansion}\\
+        t_{ij}
+        &= \tr(\sigma_i T(\sigma_j)).
+        \notag
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Expand $\rho$ and each $T(\sigma_j)$ in the chosen basis and substitute.
+    The trace-self-dual identity (\ref{eq:representations_self_dual}) replaces
+    coordinates by traces, giving the double-sum formula
+    (\ref{eq:representations_trace_expansion}).
+\end{proof}
+
+%% =========================================================
+\section{SVD normal form (existence)}
+\label{sec:svd_normal_form}
+%% =========================================================
+
+\cite[Section~2.3]{Wolf2012Quantum} discusses two families of normal forms for
+the transfer-matrix representation of a quantum channel: the \emph{singular
+    value decomposition} (SVD) and, for qubit channels, the \emph{Lorentz normal
+    form} obtained by general invertible Kraus-rank-one CP filtering operations.
+The SVD normal form is proved below. The Lorentz normal form theorem
+(Theorem~\ref{thm:lorentz_normal_form_qubit}) uses general invertible
+Kraus-rank-one completely positive filterings. Its proof requires the minimisation
+argument and Lorentz-orbit analysis in
+\cite[Propositions~2.9 and~2.11]{Wolf2012Quantum}; see
+Section~\ref{sec:lorentz_normal_form}.
+
+\begin{theorem}[SVD for positive semidefinite matrices]
+    \label{thm:svd_posSemidef}
+    \lean{Matrix.svd_of_posSemidef}\leanok
+    Every positive semidefinite matrix $M \in \MN{D}$ admits a decomposition
+    $M=U\diag(\sigma)U^{\dagger}$, where $U \in \mc{U}(D)$ is unitary and
+    $\sigma : \{0,\ldots,D-1\} \to \R_{\ge 0}$ has non-negative entries.
+\end{theorem}
+
+\begin{proof}\leanok
+    The spectral theorem for Hermitian matrices provides an orthonormal
+    eigenbasis with real eigenvalues. Positive semidefiniteness forces those
+    eigenvalues to be non-negative, and the decomposition is written in SVD
+    form with $U$ the eigenvector unitary and $\sigma$ the eigenvalue sequence.
+\end{proof}
+
+\begin{theorem}[SVD existence for invertible matrices]
+    \label{thm:svd_of_isUnit}
+    \lean{Matrix.svd_of_isUnit}\leanok
+    Every invertible complex square matrix $M \in \MN{D}$ admits a singular
+    value decomposition $M=U\diag(\sigma)V^{\dagger}$, with
+    $U,V \in \mc{U}(D)$ unitary and $\sigma_i>0$ for all $i$.
+\end{theorem}
+
+\begin{proof}\leanok
+    Apply the spectral theorem to the positive definite matrix
+    $M^{\dagger}M$ to obtain
+    $M^{\dagger}M=V\diag(\lambda)V^{\dagger}$ with $\lambda_i>0$.
+    Set $\sigma_i:=\sqrt{\lambda_i}$ and $\Sigma:=\diag(\sigma)$; since
+    $\Sigma$ is a real positive diagonal, it is self-adjoint and invertible.
+    Define $U:=MV\Sigma^{-1}$. Then
+    \begin{align}
+        U^{\dagger}U
+        &= \Sigma^{-1}V^{\dagger}(M^{\dagger}M)V\Sigma^{-1}
+         = \Sigma^{-1}\diag(\lambda)\Sigma^{-1}
+         = \Id,
+        \notag\\
+        U\Sigma V^{\dagger}
+        &= MV(\Sigma^{-1}\Sigma)V^{\dagger}
+         = MVV^{\dagger}
+         = M.
+        \notag
+    \end{align}
+    Thus $U$ is unitary and the stated decomposition holds.
+\end{proof}
+
+\begin{theorem}[SVD representation of a transfer matrix]
+    \label{thm:transferMatrix_svd_of_isUnit}
+    \lean{transferMatrix_svd_of_isUnit}\leanok
+    \uses{thm:svd_of_isUnit}
+    Every invertible transfer matrix $\widehat{T}$ of a linear super-operator
+    $T : \MN{D} \to \MN{D}$ admits a singular value decomposition
+    $\widehat{T}=U\diag(\sigma)V^{\dagger}$ with $U,V$
+    unitary on $\C^{D}\otimes\C^{D}$ and $\sigma_i>0$.
+\end{theorem}
+
+\begin{proof}\leanok
+    Direct specialisation of Theorem~\ref{thm:svd_of_isUnit} to the index type
+    $\{0,\ldots,D-1\}\times\{0,\ldots,D-1\}$ used by the transfer-matrix
+    representation.
+\end{proof}
+
+\begin{remark}[Sorted / unique singular values]
+    Theorem~\ref{thm:svd_of_isUnit} produces the singular values as an
+    unordered family, without the usual convention that $\sigma_i$ are sorted
+    in non-increasing order or the statement that they are uniquely determined
+    by $M$. Downstream applications in \cite[Section~2.3]{Wolf2012Quantum},
+    such as trace-norm identities, polar decomposition, and the Lorentz normal
+    form, will typically require the sorted / unique variant; that refinement is
+    future work.
+\end{remark}
+
+%% =========================================================
+\section{Lorentz normal form}
+\label{sec:lorentz_normal_form}
+%% =========================================================
+
+This section states the existence theorems from
+\cite[Section~2.3]{Wolf2012Quantum}.
+% The existing Wolf.* declarations referenced in this section live in
+% TNLean/Channel/LorentzNormalForm.lean. The correctly formulated Proposition 2.11
+% has no Lean declaration yet; declaration tags are omitted for pending results.
+
+\begin{definition}[SL-filtering operation]\label{def:sl_filtering}
+    \lean{Wolf.SLFiltering}\leanok
+    An \emph{SL-filtering} for $D \times D$ matrices is a completely
+    positive map of the form $\Phi(X)=SXS^{\dagger}$, where
+    $S \in \MN{D}$ satisfies $\det S=1$. Such maps are
+    invertible and have Kraus rank~1.
+\end{definition}
+
+\begin{definition}[Doubly-stochastic map]\label{def:doubly_stochastic}
+    \lean{Wolf.DoublyStochastic}\leanok
+    A linear map $T : \MN{D} \to \MN{D}$ is \emph{doubly-stochastic}
+    if $T(\Id)\propto\Id$ and the reduced density matrix
+    $\tr_{1}[\tau]$ of its Choi matrix
+    $\tau=(T\otimes\id)(\ketbra{\Omega}{\Omega})$
+    is proportional to the identity. This is the normal form in
+    \cite[Proposition~2.9]{Wolf2012Quantum}.
+\end{definition}
+
+\begin{lemma}[Positive-definite trace lower bound]\label{lem:posdef_trace_lower_bound}
+    \lean{posDef_minEigenvalue_mul_trace_conjTranspose_mul_self_le,
+        sub_minEigenvalue_smul_one_posSemidef}
+    \leanok
+    Let $D\geq1$, let $M\in\MN{D}$ be positive-definite, and let
+    $\lambda_{\min}(M)$ be its smallest Hermitian eigenvalue. For every
+    $X\in\MN{D}$,
+    \begin{align}
+        \lambda_{\min}(M)\tr(X^{\dagger}X)
+        &\leq \tr(XMX^{\dagger}).
+        \label{eq:representations_posdef_trace_bound}
+    \end{align}
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    The matrix $M-\lambda_{\min}(M)\Id$ is positive semidefinite by the
+    spectral theorem. Since $X^{\dagger}X$ is also positive semidefinite, the
+    trace product
+    $\tr\!\left(X^{\dagger}X(M-\lambda_{\min}(M)\Id)\right)$
+    is non-negative. Expanding this expression and cycling the trace gives
+    (\ref{eq:representations_posdef_trace_bound}).
+\end{proof}
+
+\begin{lemma}[Determinant AM--GM Hilbert--Schmidt bound]
+\label{lem:det_amgm_hilbert_schmidt_bound}
+    \lean{Matrix.card_le_trace_conjTranspose_mul_self_re_of_det_norm_eq_one}
+    \leanok
+    Let $A\in\MN{D}$ with $D\geq1$. If $|\det A|=1$, then
+    $D\leq\tr(A^{\dagger}A)$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    The matrix $A^{\dagger}A$ is positive semidefinite and has determinant
+    $|\det A|^{2}=1$. Thus the product of its Hermitian eigenvalues is one.
+    Denoting the eigenvalues of $A^{\dagger}A$ by
+    $\lambda_{1},\ldots,\lambda_{D}\geq0$, the arithmetic-geometric mean
+    inequality gives
+    \begin{align}
+        \frac{\lambda_{1}+\cdots+\lambda_{D}}{D}
+        &\geq(\lambda_{1}\cdots\lambda_{D})^{1/D}
+         =1.
+        \notag
+    \end{align}
+    Therefore
+    $\tr(A^{\dagger}A)=\lambda_{1}+\cdots+\lambda_{D}\geq D$.
+\end{proof}
+
+\begin{lemma}[Kronecker Hilbert--Schmidt trace multiplicativity]
+\label{lem:kronecker_hilbert_schmidt_trace}
+    \lean{Matrix.trace_conjTranspose_mul_self_kronecker}
+    \leanok
+    For complex matrices $A$ and $B$ of compatible rectangular sizes,
+    \begin{align}
+        \tr\!\left((A\otimes_{k}B)^{\dagger}
+            (A\otimes_{k}B)\right)
+        &=\tr(A^{\dagger}A)\tr(B^{\dagger}B).
+        \label{eq:representations_kronecker_hs}
+    \end{align}
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Use
+    $(A\otimes_{k}B)^{\dagger}=A^{\dagger}\otimes_{k}B^{\dagger}$, the mixed
+    product identity for Kronecker products, and
+    $\tr(C\otimes_{k}D)=\tr(C)\tr(D)$. With
+    $C=A^{\dagger}A$ and $D=B^{\dagger}B$, these identities give
+    (\ref{eq:representations_kronecker_hs}).
+\end{proof}
+
+% Lean: Wolf.infimum_is_attained
+\begin{lemma}[Infimum attainment for SL-filterings]\label{lem:infimum_is_attained}
+    \lean{Wolf.infimum_is_attained}\leanok
+    \uses{lem:posdef_trace_lower_bound, lem:det_amgm_hilbert_schmidt_bound,
+    lem:kronecker_hilbert_schmidt_trace}
+    For a positive-definite Choi matrix $\tau$, the infimum of
+    \begin{align}
+        \tr\!\left[(S_{2}\otimes_{k}S_{1})\tau
+            (S_{2}\otimes_{k}S_{1})^{\dagger}\right]
+        \notag
+    \end{align}
+    over $S_{1},S_{2}\in\MN{D}$ with
+    $\det S_{1}=\det S_{2}=1$ is attained.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:posdef_trace_lower_bound, lem:det_amgm_hilbert_schmidt_bound,
+    lem:kronecker_hilbert_schmidt_trace}
+    Write $X=S_{2}\otimes_{k}S_{1}$.
+    Lemma~\ref{lem:posdef_trace_lower_bound} gives the trace lower bound below.
+    Lemma~\ref{lem:kronecker_hilbert_schmidt_trace} factors the
+    Hilbert--Schmidt trace. For each $i\in\{1,2\}$,
+    Lemma~\ref{lem:det_amgm_hilbert_schmidt_bound} supplies the first row.
+    Together,
+    \begin{align}
+        \tr(S_i^\dagger S_i)
+        &=\|S_i\|^2\geq D,
+        \notag\\
+        \tr(X\tau X^\dagger)
+        &\geq\lambda_{\min}(\tau)\tr(X^\dagger X)
+        \notag\\
+        &=\lambda_{\min}(\tau)
+          \tr(S_2^\dagger S_2)\tr(S_1^\dagger S_1)
+        \notag\\
+        &\geq\lambda_{\min}(\tau)D\|S_i\|^2.
+        \notag
+    \end{align}
+    Hence any point
+    whose value is at most the value at the identity lies in a fixed
+    Frobenius ball $\{\,\|S\|\leq C\,\}$. Intersecting with the closed set
+    $\det S=1$ produces a compact set, on which the continuous trace
+    functional attains its minimum by the extreme-value theorem. A point
+    outside the sublevel set has value larger than the value at the identity,
+    so the minimiser on the compact set is a global minimiser.
+\end{proof}
+
+% Lean: pow_card_mul_prod_le_sum_pow
+\begin{lemma}[Arithmetic--geometric-mean inequality, product/sum form]
+\label{lem:amgm_prod_sum}
+    \lean{pow_card_mul_prod_le_sum_pow}
+    \leanok
+    For a non-negative family $f_{0},\ldots,f_{D-1}$ of real numbers,
+    \begin{align}
+        D^{D}\prod_{i}f_{i}
+        &\leq\left(\sum_{i}f_{i}\right)^{D}.
+        \label{eq:representations_amgm_prod_sum}
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    Apply the weighted arithmetic--geometric-mean inequality with uniform
+    weights $1/D$:
+    \begin{align}
+        \left(\prod_{i}f_{i}\right)^{1/D}
+        &\leq\frac{1}{D}\sum_{i}f_{i}.
+        \notag
+    \end{align}
+    Raising both sides to the $D$-th power gives
+    (\ref{eq:representations_amgm_prod_sum}).
+\end{proof}
+
+% Lean: Matrix.PosSemidef.pow_card_mul_det_re_le_trace_re_pow,
+% Matrix.PosSemidef.pow_card_mul_det_re_eq_trace_re_pow_iff
+\begin{lemma}[Trace--determinant AM--GM for positive-semidefinite matrices]
+\label{lem:trace_det_amgm}
+    \lean{Matrix.PosSemidef.pow_card_mul_det_re_le_trace_re_pow,
+    Matrix.PosSemidef.pow_card_mul_det_re_eq_trace_re_pow_iff}
+    \leanok
+    \uses{lem:amgm_prod_sum}
+    For a positive-semidefinite $D \times D$ matrix $M$,
+    \begin{align}
+        D^{D}\det M
+        &\leq(\tr M)^{D},
+        \label{eq:representations_trace_det_amgm}
+    \end{align}
+    and equality holds if and only if $M=(\tr M/D)\Id$.
+\end{lemma}
+
+\begin{proof}\leanok
+    Both $\det M=\prod_{i}\lambda_{i}$ and
+    $\tr M=\sum_{i}\lambda_{i}$ are expressed through the non-negative
+    eigenvalues $\lambda_i$ of $M$. The bound is the
+    arithmetic--geometric-mean inequality with uniform weights $1/D$, raised
+    to the $D$-th power; equality holds exactly when all eigenvalues coincide,
+    that is, when $M$ is a scalar matrix.
+\end{proof}
+
+% Lean: Wolf.exists_normal_form_generic
+\begin{theorem}[Generic normal form for CP maps]\label{thm:exists_normal_form_generic}
+    \lean{Wolf.exists_normal_form_generic}
+    \leanok
+    \uses{def:sl_filtering, def:doubly_stochastic, lem:infimum_is_attained,
+    lem:trace_det_amgm}
+    Let $T : \MN{D} \to \MN{D}$ be a completely positive map whose Choi matrix
+    is positive-definite (equivalently, $T$ has full Kraus rank). Then there
+    exist SL-filterings $\Phi_{1},\Phi_{2}$ such that
+    $\Phi_{2}\circ T\circ\Phi_{1}$ is doubly-stochastic.
+
+    This is the equal-dimension (square) case $T : \MN{D} \to \MN{D}$; the
+    source \cite[Proposition~2.9]{Wolf2012Quantum} states the proposition for a
+    general $T : \mathcal{M}_{d_1} \to \mathcal{M}_{d_2}$ with separate filterings
+    on each factor.
+    % See docs/paper-gaps/wolf_prop28_square_case.tex
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:infimum_is_attained, lem:trace_det_amgm}
+    Let $\tau$ be the Choi matrix of $T$ and take the minimiser
+    $(S_{1},S_{2})$ of
+    \begin{align}
+        \tr\!\left[(S_{2}\otimes_{k}S_{1})\tau
+            (S_{2}\otimes_{k}S_{1})^{\dagger}\right]
+        \notag
+    \end{align}
+    over $\det S_{1}=\det S_{2}=1$ from
+    Lemma~\ref{lem:infimum_is_attained}. Set $\Phi_{1},\Phi_{2}$ to be the
+    filterings with matrices $S_{1}^{\mathsf T}$ and $S_{2}$, so that the Choi
+    matrix of $\Phi_{2}\circ T\circ\Phi_{1}$ equals
+    $(S_{2}\otimes_{k}S_{1})\tau
+    (S_{2}\otimes_{k}S_{1})^{\dagger}$. Holding one filtering factor fixed,
+    the minimiser is optimal in the other coordinate, so each partial trace
+    minimises a functional $\tr(SMS^{\dagger})$ over $\det S=1$ for a
+    positive-semidefinite $M$, where
+    $\tr(SMS^{\dagger})\geq D(\det M)^{1/D}$, with equality at the minimiser;
+    by the equality case of Lemma~\ref{lem:trace_det_amgm}, this forces
+    $SMS^{\dagger}\propto\Id$, hence both partial traces are proportional to
+    the identity, which is exactly the doubly-stochastic condition.
+\end{proof}
+
+\begin{definition}[Diagonal Lorentz normal form]\label{def:lorentz_diagonal}
+    \lean{Wolf.IsLorentzDiagonal}\leanok
+    For a completely positive, trace-preserving qubit channel
+    $T' : \MN{2} \to \MN{2}$, write $\widehat{T'}$ for its matrix
+    in the normalized Pauli basis
+    $\{\sigma_{0}/\sqrt{2},\sigma_{1}/\sqrt{2},
+        \sigma_{2}/\sqrt{2},\sigma_{3}/\sqrt{2}\}$. The channel is in
+    \emph{diagonal Lorentz normal form} when it is unital and every
+    off-diagonal entry of $\widehat{T'}$ is zero.
+\end{definition}
+
+\begin{definition}[Non-diagonal Lorentz normal form]\label{def:lorentz_non_diagonal}
+    \lean{Wolf.IsLorentzNonDiagonal}\leanok
+    For a completely positive, trace-preserving qubit channel
+    $T' : \MN{2} \to \MN{2}$, write $\widehat{T'}$ in the normalized
+    Pauli basis. The channel is in \emph{non-diagonal Lorentz normal form}
+    when, for some $x \in [0,1]$,
+    \begin{align}
+        \widehat{T'}
+        &=
+        \begin{pmatrix}
+            1   & 0          & 0          & 0   \\
+            0   & x/\sqrt{3} & 0          & 0   \\
+            0   & 0          & x/\sqrt{3} & 0   \\
+            2/3 & 0          & 0          & 1/3
+        \end{pmatrix}.
+        \label{eq:representations_lorentz_nondiagonal}
+    \end{align}
+    Trace preservation supplies the first row of the displayed matrix.
+\end{definition}
+
+\begin{definition}[Singular Lorentz normal form]\label{def:lorentz_singular}
+    \lean{Wolf.IsLorentzSingular}\leanok
+    For a completely positive, trace-preserving qubit channel
+    $T' : \MN{2} \to \MN{2}$, write $\widehat{T'}$ in the normalized
+    Pauli basis. The channel is in \emph{singular Lorentz normal form} when
+    \begin{align}
+        \widehat{T'}
+        &=
+        \begin{pmatrix}
+            1 & 0 & 0 & 0 \\
+            0 & 0 & 0 & 0 \\
+            0 & 0 & 0 & 0 \\
+            1 & 0 & 0 & 0
+        \end{pmatrix},
+        \label{eq:representations_lorentz_singular}
+    \end{align}
+    equivalently, every input state is mapped to $(1+\sigma_{3})/2$.
+    Trace preservation supplies the first row of the displayed matrix.
+\end{definition}
+
+% Pending Lean formalization: there is currently no declaration for this theorem.
+\begin{theorem}[Lorentz normal form for qubit channels]\label{thm:lorentz_normal_form_qubit}
+    \uses{thm:exists_normal_form_generic,
+        def:lorentz_diagonal, def:lorentz_non_diagonal, def:lorentz_singular}
+    For every qubit channel $T : \MN{2} \to \MN{2}$, there exist invertible
+    completely positive maps $\Phi_{1},\Phi_{2}$, both of Kraus rank one, such
+    that the filtered channel $T'=\Phi_{2}\circ T\circ\Phi_{1}$ is in one
+    of the three Lorentz normal forms: diagonal, non-diagonal, or singular.
+    These general filters include scalar freedom and are not restricted to
+    determinant-one $\SL(2,\C)$ filterings. A proof requires the corresponding
+    scalar normalization and the classification of Lorentz orbits.
+\end{theorem}
+
+%% The following sections will not be needed for the fundamental theorem of the matrix product states.
+
+%% =========================================================
+\section{Determinant of a quantum channel}
+\label{sec:channel_determinant}
+%% =========================================================
+
+%% Source: \cite[Section~6.1, Theorem~6.1(2)]{Wolf2012Quantum}.
+
+\begin{definition}[Channel determinant]\label{def:channel_det}
+    \lean{channelDet}\leanok
+    For a linear map $T : \MN{D} \to \MN{D}$, the
+    \emph{channel determinant} $\det T$ is the determinant of the
+    matrix of $T$ with respect to the standard matrix-unit basis
+    of $\MN{D}$.
+    This is the quantity studied in \cite[Section~6.1]{Wolf2012Quantum}.
+\end{definition}
+
+\begin{remark}[Channel determinant as an operator determinant]
+    \label{rem:channel_det_linearMap_det}
+    \lean{channelDet_eq_linearMap_det}
+    \leanok
+    The channel determinant agrees with the ordinary determinant of the linear
+    endomorphism $T : \MN{D} \to \MN{D}$.
+\end{remark}
+
+\begin{definition}[Unitary channel]\label{def:unitary_channel}
+    \lean{unitaryChannel, unitaryChannel_isChannel}\leanok
+    For a unitary matrix $U \in \mc{U}(D)$, the
+    \emph{unitary channel} is $T(\rho)=U\rho U^\dagger$.
+    It is automatically a quantum channel.
+\end{definition}
+
+\begin{theorem}[Unitary channels have determinant one]
+    \label{thm:channel_det_unitary_eq_one}
+    \lean{channelDet_unitary_eq_one, channelDet_norm_eq_one_of_unitaryChannel}
+    \leanok
+    \uses{def:channel_det, def:unitary_channel}
+    If $T(\rho)=U\rho U^\dagger$ is a unitary channel, then
+    $\det T=1$ and hence $|\det T|=1$.
+\end{theorem}
+
+\begin{proof}\leanok
+    Vectorization identifies $T$ with a Kronecker product
+    $\overline{U}\otimes U$, whose determinant is
+    $\overline{\det U}^{\,D}(\det U)^D=1$.
+\end{proof}
+
+\begin{theorem}[Determinant bound for positive trace-preserving maps]
+    \label{thm:channelDet_norm_le_one}
+    \lean{channelDet_norm_le_one_of_positive_tracePreserving,
+        channelDet_norm_le_one_of_channel}\leanok
+    \uses{def:channel_det, def:positive_map, def:trace_preserving}
+    For any positive trace-preserving map $T : \MN{D} \to \MN{D}$,
+    $|\det T|\leq1$.
+    This is \cite[Theorem~6.1(1)]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}\leanok
+    Every eigenvalue $\mu$ of $T$ satisfies $|\mu|\leq1$
+    (positivity and trace preservation force spectral radius~$\leq1$).
+    Since $\det T$ is the product of the eigenvalues
+    (counted with algebraic multiplicity), the bound
+    $|\det T|=\prod_i|\mu_i|\leq1$ follows by induction.
+\end{proof}
+
+\begin{theorem}[Determinant one iff the channel is unitary]
+    \label{thm:channelDet_norm_eq_one_iff_unitary}
+    \lean{channelDet_norm_eq_one_iff_exists_unitaryChannel}\leanok
+    \uses{def:channel, def:channel_det, def:unitary_channel}
+    For a CPTP map $T : \MN{D} \to \MN{D}$,
+    \begin{align}
+        |\det T|=1
+        &\iff
+        \exists\,U \in \mc{U}(D),\quad T(\rho)=U\rho U^\dagger.
+        \label{eq:representations_det_unitary_iff}
+    \end{align}
+    This is \cite[Theorem~6.1(2)]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:channelDet_norm_le_one, thm:channel_det_unitary_eq_one}
+    Reverse direction is Theorem~\ref{thm:channel_det_unitary_eq_one}.
+    Forward direction: $|\det T|=1$ together with $|\mu|\leq1$ for every
+    eigenvalue $\mu$ (from trace preservation and positivity) forces every
+    eigenvalue to satisfy $|\mu|=1$. Determinant saturation transfers to the
+    unital Heisenberg dual $T^*(Y)=\sum_iK_i^\dagger YK_i$. The
+    determinant--Hilbert--Schmidt bound and a trace-summing argument then force
+    equality in the Kadison--Schwarz inequality on the standard matrix basis.
+    The resulting Kraus commutation relations make $T^*$ multiplicative on all
+    matrices, hence a $*$-automorphism of $\MN{D}$. By the Skolem--Noether
+    theorem it is inner, and therefore
+    $T(\rho)=U\rho U^\dagger$ for some unitary $U$. Kraus freedom then gives
+    $K_i=c_iU$ with $\sum_i|c_i|^2=1$.
+\end{proof}

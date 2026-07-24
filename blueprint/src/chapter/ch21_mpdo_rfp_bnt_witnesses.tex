@@ -70,16 +70,18 @@
         O_L(M_\alpha)O_L(M_\beta)
         &= \sum_\gamma c^{(L)}_{\alpha,\beta,\gamma} O_L(M_\gamma),
         \label{eq:mpdo_bnt_same_len_product}\\
-        m_\gamma &= \sum_{\alpha,\beta} c^{(1)}_{\alpha,\beta,\gamma}m_\alpha m_\beta.
+        m_\gamma
+        &= \sum_{\alpha,\beta} c^{(1)}_{\alpha,\beta,\gamma}m_\alpha m_\beta.
         \label{eq:mpdo_bnt_idempotent_law}
     \end{align}
     A witness also carries the positive-length trace-power law
     $c^{(L)}_{\alpha,\beta,\gamma}
         = \tr(\chi_{\alpha,\beta,\gamma}^{\,L})$
     and positivity of the diagonal $\chi_{\alpha,\beta,\gamma}$-entries.
-    Substituting the trace-power law into equations~(\ref{eq:mpdo_bnt_same_len_product})
-    and (\ref{eq:mpdo_bnt_idempotent_law}) rewrites them with the
-    coefficients as $\chi$-traces,
+    Substituting the trace-power law into
+    (\ref{eq:mpdo_bnt_same_len_product}) and
+    (\ref{eq:mpdo_bnt_idempotent_law}) rewrites them with the coefficients
+    as $\chi$-traces,
     \begin{align}
         O_L(M_\alpha)O_L(M_\beta)
         &= \sum_\gamma \tr(\chi_{\alpha,\beta,\gamma}^{\,L}) O_L(M_\gamma),
@@ -94,14 +96,13 @@
     formulas (\ref{eq:mpdo_bnt_same_len_product_chi}) and
     (\ref{eq:mpdo_bnt_idempotent_law_chi}).
     If $\sigma_n$ and $\tau_n$ are the source and target label maps for a
-    positive blocked length $n$, then the blocked-basis coefficients
-    satisfy
-    \[
+    positive blocked length $n$, then the blocked-basis coefficients satisfy
+    \begin{align}
         c^{(n)}_{i,j,k}
-        = c^{(n)}_{\sigma_n(i),\sigma_n(j),\tau_n(k)}
-        = \tr\!\left(
-            \chi_{\sigma_n(i),\sigma_n(j),\tau_n(k)}^{\,n}\right).
-    \]
+        &= c^{(n)}_{\sigma_n(i),\sigma_n(j),\tau_n(k)}
+         = \tr\!\left(\chi_{\sigma_n(i),\sigma_n(j),\tau_n(k)}^{\,n}\right).
+        \notag
+    \end{align}
 \end{theorem}
 \begin{proof}\leanok
     Unpack the existential witness and apply the corresponding witness-level
@@ -129,13 +130,14 @@
     $\chi$ trace-power witness for the chosen algebra-structure data: a
     blocked $\chi$-family with positive diagonal entries such that, for
     every positive blocked length $n$,
-    \[
+    \begin{align}
         \chi_{n,i,j,k}
-        = \chi_{\sigma_n(i),\sigma_n(j),\tau_n(k)},
-        \qquad
+        &= \chi_{\sigma_n(i),\sigma_n(j),\tau_n(k)},
+        \notag\\
         c^{(n)}_{i,j,k}
-        = \tr\bigl(\chi_{n,i,j,k}^{\,n}\bigr).
-    \]
+        &= \tr(\chi_{n,i,j,k}^{\,n}).
+        \notag
+    \end{align}
     The blocked-basis $\chi$-family is the pullback of the BNT-label
     $\chi$-family along the source and target comparison maps
     $\sigma_n,\tau_n$. The proposition-level nonempty form of the witness
@@ -160,13 +162,12 @@
     powers of the BNT-label $\chi$-matrices selected by the source and target
     maps. Equivalently, they are traces of powers of the pulled-back
     blocked-basis $\chi$-matrices:
-    \[
+    \begin{align}
         c^{(n)}_{i,j,k}
-        = \tr\!\left(
-            \chi_{\sigma_n(i),\sigma_n(j),\tau_n(k)}^{\,n}
-        \right)
-        = \tr\bigl(\chi_{n,i,j,k}^{\,n}\bigr).
-    \]
+        &= \tr\!\left(\chi_{\sigma_n(i),\sigma_n(j),\tau_n(k)}^{\,n}\right)
+         = \tr(\chi_{n,i,j,k}^{\,n}).
+        \notag
+    \end{align}
 \end{corollary}
 \begin{proof}\leanok
     Apply the trace-power identity of the positive blocked-basis
