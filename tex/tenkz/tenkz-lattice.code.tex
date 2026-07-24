@@ -889,9 +889,10 @@
   {
     \tenkzl_site_save:nn {#1}{#2}
     \tenkzl_site:nn {#3}{#4}
-    \draw[#5]
+    \__tenkz_render_stroke:nn {#5}
+      {
       ( \dim_use:N \l__tenkzl_qx_dim , \dim_use:N \l__tenkzl_qy_dim ) --
-      ( \dim_use:N \l__tenkzl_px_dim , \dim_use:N \l__tenkzl_py_dim ) ;
+      ( \dim_use:N \l__tenkzl_px_dim , \dim_use:N \l__tenkzl_py_dim ) }
   }
 
 % ---------- sheet near-coincidence guard (every sheets>1 picture) ----------
@@ -2186,7 +2187,8 @@
           { \tenkz@dim{\tenkz@r@boundaryleg} }
           \l__tenkzl_cupbtx_dim \l__tenkzl_cupbty_dim
         \tenkzl_side_cup_corridor:nnn {#1}{#2}{#3}
-        \draw[tenkz~lattice~cup]
+        \__tenkz_render_stroke:nn {tenkz~lattice~cup}
+      {
           (\dim_use:N \l__tenkzl_cupatx_dim,\dim_use:N \l__tenkzl_cupaty_dim) --
           (\dim_use:N \l__tenkzl_cupalx_dim,\dim_use:N \l__tenkzl_cupaly_dim)
           .. controls
@@ -2196,7 +2198,7 @@
           ..
           (\dim_use:N \l__tenkzl_cupblx_dim,\dim_use:N \l__tenkzl_cupbly_dim)
           --
-          (\dim_use:N \l__tenkzl_cupbtx_dim,\dim_use:N \l__tenkzl_cupbty_dim);
+          (\dim_use:N \l__tenkzl_cupbtx_dim,\dim_use:N \l__tenkzl_cupbty_dim)}
         % Publish the line endpoints and Bezier controls.  The curve lies in
         % their convex hull, so every later directional silhouette bounds the
         % complete rendered cup without reverse-engineering its corridor.
@@ -2214,14 +2216,16 @@
           \l__tenkzl_cupbtx_dim \l__tenkzl_cupbty_dim
         % Both plain endpoint stubs render after the haloed connector, so its
         % round preaction caps cannot nick either sheet wire.
-        \draw[bond]
+        \__tenkz_render_stroke:nn {bond}
+      {
           (\dim_use:N \l__tenkzl_cupax_dim,\dim_use:N \l__tenkzl_cupay_dim) --
           (\dim_use:N \l__tenkzl_cupasx_dim,\dim_use:N \l__tenkzl_cupasy_dim) --
-          (\dim_use:N \l__tenkzl_cupatx_dim,\dim_use:N \l__tenkzl_cupaty_dim);
-        \draw[bond]
+          (\dim_use:N \l__tenkzl_cupatx_dim,\dim_use:N \l__tenkzl_cupaty_dim)}
+        \__tenkz_render_stroke:nn {bond}
+      {
           (\dim_use:N \l__tenkzl_cupbtx_dim,\dim_use:N \l__tenkzl_cupbty_dim) --
           (\dim_use:N \l__tenkzl_cupbsx_dim,\dim_use:N \l__tenkzl_cupbsy_dim) --
-          (\dim_use:N \l__tenkzl_cupbx_dim,\dim_use:N \l__tenkzl_cupby_dim);
+          (\dim_use:N \l__tenkzl_cupbx_dim,\dim_use:N \l__tenkzl_cupby_dim)}
         \tl_if_blank:VF \l__tenkzl_tmp_tl
           { \tenkzl_draw_side_cup_matrix:nnn {#1}{#2}{#3} }
         \tenkz@event{cup|picture=\the\tenkz@pictureid|lang=lattice|%
@@ -2236,9 +2240,10 @@
     \tenkzl_side_point:nnnnnNN {#1}{#2}{#3}{#4}
       { \tenkz@dim{\tenkz@r@boundaryleg} }
       \l__tenkzl_cupatx_dim \l__tenkzl_cupaty_dim
-    \draw[bond]
+    \__tenkz_render_stroke:nn {bond}
+      {
       (\dim_use:N \l__tenkzl_cupax_dim,\dim_use:N \l__tenkzl_cupay_dim) --
-      (\dim_use:N \l__tenkzl_cupatx_dim,\dim_use:N \l__tenkzl_cupaty_dim);
+      (\dim_use:N \l__tenkzl_cupatx_dim,\dim_use:N \l__tenkzl_cupaty_dim)}
     \tenkzl_record_obstacle_point:NN
       \l__tenkzl_cupax_dim \l__tenkzl_cupay_dim
     \tenkzl_record_obstacle_point:NN
@@ -2254,19 +2259,22 @@
   {
     \tl_set:Ne \l__tenkzl_cupnode_tl
       {tzl-cup-\the\tenkz@pictureid-#1-\int_eval:n{#2}-\int_eval:n{#3}}
-    \node[tensor] (\l__tenkzl_cupnode_tl) at
-      ( \dim_eval:n
+    \__tenkz_render_labelnode_named:nnnn {tensor}
+      {\l__tenkzl_cupnode_tl}
+      { ( \dim_eval:n
           { ( \l__tenkzl_cupalx_dim + 3 \l__tenkzl_cupacx_dim
               + 3 \l__tenkzl_cupbcx_dim + \l__tenkzl_cupblx_dim ) / 8 } ,
         \dim_eval:n
           { ( \l__tenkzl_cupaly_dim + 3 \l__tenkzl_cupacy_dim
-              + 3 \l__tenkzl_cupbcy_dim + \l__tenkzl_cupbly_dim ) / 8 } ) {};
+              + 3 \l__tenkzl_cupbcy_dim + \l__tenkzl_cupbly_dim ) / 8 } ) }
+      {}
     \tenkzl_record_obstacle_bbox:n {\l__tenkzl_cupnode_tl}
-    \node[tn~label,anchor=center] (tenkzl-cup-label-probe) at
-      ($(\l__tenkzl_cupnode_tl.center)
+    \__tenkz_render_labelnode_named:nnnn {tn~label,anchor=center}
+      {tenkzl-cup-label-probe}
+      { ($(\l__tenkzl_cupnode_tl.center)
         +(\dim_use:N \l__tenkzl_cuplabeldx_dim,
-          \dim_use:N \l__tenkzl_cuplabeldy_dim)$)
-      {\box_use:N \l__tenkzl_cuplabel_box};
+          \dim_use:N \l__tenkzl_cuplabeldy_dim)$) }
+      {\box_use:N \l__tenkzl_cuplabel_box}
     \tenkzl_record_obstacle_bbox:n {tenkzl-cup-label-probe}
   }
 
@@ -2639,20 +2647,23 @@
     \tenkzl_side_cup_from_projections:NNNN
       \l__tenkzl_trlane_dim \l__tenkzl_trtransb_dim
       \l__tenkzl_trblx_dim \l__tenkzl_trbly_dim
-    \draw[tenkz~lattice~side~trace]
+    \__tenkz_render_stroke:nn {tenkz~lattice~side~trace}
+      {
       (\dim_use:N \l__tenkzl_tratx_dim,\dim_use:N \l__tenkzl_traty_dim) --
       (\dim_use:N \l__tenkzl_tralx_dim,\dim_use:N \l__tenkzl_traly_dim) --
       (\dim_use:N \l__tenkzl_trblx_dim,\dim_use:N \l__tenkzl_trbly_dim) --
-      (\dim_use:N \l__tenkzl_trbtx_dim,\dim_use:N \l__tenkzl_trbty_dim);
+      (\dim_use:N \l__tenkzl_trbtx_dim,\dim_use:N \l__tenkzl_trbty_dim)}
     % Plain endpoint stubs follow the haloed return path, preserving both caps.
-    \draw[bond]
+    \__tenkz_render_stroke:nn {bond}
+      {
       (\dim_use:N \l__tenkzl_trax_dim,\dim_use:N \l__tenkzl_tray_dim) --
       (\dim_use:N \l__tenkzl_trasx_dim,\dim_use:N \l__tenkzl_trasy_dim) --
-      (\dim_use:N \l__tenkzl_tratx_dim,\dim_use:N \l__tenkzl_traty_dim);
-    \draw[bond]
+      (\dim_use:N \l__tenkzl_tratx_dim,\dim_use:N \l__tenkzl_traty_dim)}
+    \__tenkz_render_stroke:nn {bond}
+      {
       (\dim_use:N \l__tenkzl_trbtx_dim,\dim_use:N \l__tenkzl_trbty_dim) --
       (\dim_use:N \l__tenkzl_trbsx_dim,\dim_use:N \l__tenkzl_trbsy_dim) --
-      (\dim_use:N \l__tenkzl_trbx_dim,\dim_use:N \l__tenkzl_trby_dim);
+      (\dim_use:N \l__tenkzl_trbx_dim,\dim_use:N \l__tenkzl_trby_dim)}
     \tenkz@event{trace|picture=\the\tenkz@pictureid|lang=lattice|%
       axis=#1-#2|sheet=\int_eval:n {\l__tenkzl_trsheet_int}|%
       slot=\int_eval:n {\l__tenkzl_trslot_int}|%
@@ -2752,10 +2763,11 @@
           \l__tenkzl_tratx_dim \l__tenkzl_traty_dim
           \l__tenkzl_trasx_dim \l__tenkzl_trasy_dim
       }
-    \draw[bond]
+    \__tenkz_render_stroke:nn {bond}
+      {
       (\dim_use:N \l__tenkzl_trax_dim,\dim_use:N \l__tenkzl_tray_dim) --
       (\dim_use:N \l__tenkzl_trasx_dim,\dim_use:N \l__tenkzl_trasy_dim) --
-      (\dim_use:N \l__tenkzl_tratx_dim,\dim_use:N \l__tenkzl_traty_dim);
+      (\dim_use:N \l__tenkzl_tratx_dim,\dim_use:N \l__tenkzl_traty_dim)}
   }
 
 \cs_new_protected:Npn \tenkzl_draw_trace_side_stubs:n #1
@@ -3062,8 +3074,9 @@
         % The metric radius is the fallback.  Semantic style extensions from
         % the execute-once environment body arrive through #1 and must remain
         % free to replace it.
-        \draw[ rounded~corners=\tenkz@dim{0.10}, #1,
-               even~odd~rule ] \l__tenkzl_path_tl ;
+        \__tenkz_render_stroke:nn { rounded~corners=\tenkz@dim{0.10}, #1,
+               even~odd~rule }
+      { \l__tenkzl_path_tl }
       }
   }
 
@@ -3208,23 +3221,24 @@
       {
         \tenkzl_xyz:nnnNN {#1}{#2}{#3} \l__tenkzl_qx_dim \l__tenkzl_qy_dim
         \tenkzl_xyz:nnnNN {#4}{#5}{#6} \l__tenkzl_px_dim \l__tenkzl_py_dim
-        \draw[#7]
+        \__tenkz_render_stroke:nn {#7}
+      {
           ( \dim_use:N \l__tenkzl_qx_dim , \dim_use:N \l__tenkzl_qy_dim ) --
-          ( \dim_use:N \l__tenkzl_px_dim , \dim_use:N \l__tenkzl_py_dim ) ;
+          ( \dim_use:N \l__tenkzl_px_dim , \dim_use:N \l__tenkzl_py_dim ) }
         % the label rides the midpoint, one clearance band to the
         % north-east (clears the stroke on every frame; the label node
         % itself never shears)
         \tl_if_blank:nF {#8}
           {
-            \node[tn~label, anchor=south~west]
-              (tenkzl-edge-label-probe) at
-              ( \dim_eval:n
+            \__tenkz_render_labelnode_named:nnnn {tn~label, anchor=south~west}
+      {tenkzl-edge-label-probe}
+      { ( \dim_eval:n
                   { ( \l__tenkzl_qx_dim + \l__tenkzl_px_dim ) / 2
                     + \tenkz@dim{\tenkz@r@labelclear} } ,
                 \dim_eval:n
                   { ( \l__tenkzl_qy_dim + \l__tenkzl_py_dim ) / 2
-                    + \tenkz@dim{\tenkz@r@labelclear} } )
-              {#8};
+                    + \tenkz@dim{\tenkz@r@labelclear} } ) }
+      {#8}
             \tenkzl_record_obstacle_bbox:n {tenkzl-edge-label-probe}
           }
         % the audit rebuilds region set-algebra from these events (a
@@ -3281,9 +3295,10 @@
     % the comma is LITERAL: pgfkeys splits the option
     % list before expanding items, so the tint must be
     % its own item (empty when the site carries no role)
-    \node[\l__tenkzl_skin_tl , \l__tenkzl_stint_tl] at
-      ( \dim_use:N \l__tenkzl_px_dim ,
-        \dim_use:N \l__tenkzl_py_dim ) {};
+    \__tenkz_render_labelnode:nnn {\l__tenkzl_skin_tl , \l__tenkzl_stint_tl}
+      { ( \dim_use:N \l__tenkzl_px_dim ,
+        \dim_use:N \l__tenkzl_py_dim ) }
+      {}
   }
 \cs_new_protected:Npn \tenkzl_sites_ink:
   {
@@ -3321,12 +3336,13 @@
     % physical index points out of the sheet and never
     % shears (RMP sec2fig4b), so only the FOOT is mapped
     \tenkzl_site:nn {#1}{#2}
-    \draw[physical~leg]
+    \__tenkz_render_stroke:nn {physical~leg}
+      {
       ( \dim_use:N \l__tenkzl_px_dim ,
         \dim_use:N \l__tenkzl_py_dim ) --
       ( \dim_use:N \l__tenkzl_px_dim ,
         \dim_eval:n { \l__tenkzl_py_dim
-                      + \tenkz@dim{\tenkz@r@physleg} } );
+                      + \tenkz@dim{\tenkz@r@physleg} } )}
     \dim_set_eq:NN \l__tenkzl_qx_dim \l__tenkzl_px_dim
     \dim_set:Nn \l__tenkzl_qy_dim
       { \l__tenkzl_py_dim + \tenkz@dim{\tenkz@r@physleg} }
@@ -3336,12 +3352,13 @@
       \l__tenkzl_qx_dim \l__tenkzl_qy_dim
     \str_if_eq:VnT \l__tenkzl_physical_tl {updown}
       {
-        \draw[physical~leg]
+        \__tenkz_render_stroke:nn {physical~leg}
+      {
           ( \dim_use:N \l__tenkzl_px_dim ,
             \dim_use:N \l__tenkzl_py_dim ) --
           ( \dim_use:N \l__tenkzl_px_dim ,
             \dim_eval:n { \l__tenkzl_py_dim
-                          - \tenkz@dim{\tenkz@r@physleg} } );
+                          - \tenkz@dim{\tenkz@r@physleg} } )}
         \dim_set_eq:NN \l__tenkzl_qx_dim \l__tenkzl_px_dim
         \dim_set:Nn \l__tenkzl_qy_dim
           { \l__tenkzl_py_dim - \tenkz@dim{\tenkz@r@physleg} }
@@ -3421,9 +3438,10 @@
     \dim_set_eq:NN \l__tenkzl_qy_dim \l__tenkzl_py_dim
     \tenkzl_map:nn { \l__tenkzl_x_dim + \l__tenkzl_dx_dim }
                    { \l__tenkzl_y_dim + \l__tenkzl_dy_dim }
-    \draw[bond]
+    \__tenkz_render_stroke:nn {bond}
+      {
       ( \dim_use:N \l__tenkzl_qx_dim , \dim_use:N \l__tenkzl_qy_dim ) --
-      ( \dim_use:N \l__tenkzl_px_dim , \dim_use:N \l__tenkzl_py_dim ) ;
+      ( \dim_use:N \l__tenkzl_px_dim , \dim_use:N \l__tenkzl_py_dim ) }
   }
 
 % -- (f) region and site labels ---------------------------------------
@@ -3443,15 +3461,15 @@
       {
         \tenkzl_site:nn {#1}{#2}
         \begin{pgfonlayer}{tenkz-lattice-labels}
-          \node[tn~label, anchor=south~west, fill=tenkzPaper]
-            (tenkzl-site-label-probe) at
-            ( \dim_eval:n { \l__tenkzl_px_dim
+          \__tenkz_render_labelnode_named:nnnn {tn~label, anchor=south~west, fill=tenkzPaper}
+      {tenkzl-site-label-probe}
+      { ( \dim_eval:n { \l__tenkzl_px_dim
                             + \tenkz@dim{\tenkz@r@dotdia} / 2
                             + \tenkz@dim{\tenkz@r@labelclear} } ,
               \dim_eval:n { \l__tenkzl_py_dim
                             + \tenkz@dim{\tenkz@r@dotdia} / 2
-                            + \tenkz@dim{\tenkz@r@labelclear} } )
-            {#4};
+                            + \tenkz@dim{\tenkz@r@labelclear} } ) }
+      {#4}
         \end{pgfonlayer}
         \tenkzl_record_site_label_bbox:nnn {#1}{#2}{#3}
       }
@@ -3587,10 +3605,10 @@
     \tl_set:Ne \l__tenkzl_tmp_tl
       { \bool_if:NTF \l__tenkzl_oblique_bool
           { \tenkzl_flipanchor:n {#1} } {#1} }
-    \node[tn~label, anchor=\l__tenkzl_tmp_tl]
-      (tenkzl-region-label-probe) at
-      ( \dim_use:N \l__tenkzl_px_dim , \dim_use:N \l__tenkzl_py_dim )
-      { $#6$ };
+    \__tenkz_render_labelnode_named:nnnn {tn~label, anchor=\l__tenkzl_tmp_tl}
+      {tenkzl-region-label-probe}
+      { ( \dim_use:N \l__tenkzl_px_dim , \dim_use:N \l__tenkzl_py_dim ) }
+      { $#6$ }
     \tenkzl_record_obstacle_bbox:n {tenkzl-region-label-probe}
     % A corner label deliberately occupies the pocket beside its extreme
     % site.  Under an oblique frame its flipped anchor can also meet the one
@@ -3616,10 +3634,10 @@
 \cs_new_protected:Npn \tenkzl_side_label:nnnn #1#2#3#4
   {
     \tenkzl_map:nn {#2} {#3}
-    \node[tn~label, anchor=#1]
-      (tenkzl-region-label-probe) at
-      ( \dim_use:N \l__tenkzl_px_dim , \dim_use:N \l__tenkzl_py_dim )
-      { $#4$ };
+    \__tenkz_render_labelnode_named:nnnn {tn~label, anchor=#1}
+      {tenkzl-region-label-probe}
+      { ( \dim_use:N \l__tenkzl_px_dim , \dim_use:N \l__tenkzl_py_dim ) }
+      { $#4$ }
     \tenkzl_record_obstacle_bbox:n {tenkzl-region-label-probe}
   }
 \cs_new_protected:Npn \tenkzl_label_place:nn #1#2
@@ -3668,10 +3686,10 @@
                  + \tenkzl_cx:n{\l__tenkzl_cmax_int} ) / 2 }
               { ( \tenkzl_cy:n{\l__tenkzl_rmin_int}
                  + \tenkzl_cy:n{\l__tenkzl_rmax_int} ) / 2 }
-            \node[tn~label, anchor=center]
-              (tenkzl-region-label-probe) at
-              ( \dim_use:N \l__tenkzl_px_dim , \dim_use:N \l__tenkzl_py_dim )
-              { $#2$ };
+            \__tenkz_render_labelnode_named:nnnn {tn~label, anchor=center}
+      {tenkzl-region-label-probe}
+      { ( \dim_use:N \l__tenkzl_px_dim , \dim_use:N \l__tenkzl_py_dim ) }
+      { $#2$ }
             \tenkzl_record_obstacle_bbox:n {tenkzl-region-label-probe} }
       }
   }
@@ -3850,20 +3868,23 @@
     \tenkzl_ifopen:nnnTF {#1}{#2}{#3}
       {
         \tenkzl_ifacecount_incr:nN {#3} \l__tenkzl_bpo_prop
-        \draw[physical~leg]
+        \__tenkz_render_stroke:nn {physical~leg}
+      {
           ( \dim_use:N \l__tenkzl_qx_dim , \dim_use:N \l__tenkzl_qy_dim ) --
           ( \dim_use:N \l__tenkzl_qx_dim ,
-            \dim_eval:n { \l__tenkzl_qy_dim + \tenkz@dim{\tenkz@r@physleg} } );
-        \draw[physical~leg]
+            \dim_eval:n { \l__tenkzl_qy_dim + \tenkz@dim{\tenkz@r@physleg} } )}
+        \__tenkz_render_stroke:nn {physical~leg}
+      {
           ( \dim_use:N \l__tenkzl_px_dim , \dim_use:N \l__tenkzl_py_dim ) --
           ( \dim_use:N \l__tenkzl_px_dim ,
-            \dim_eval:n { \l__tenkzl_py_dim - \tenkz@dim{\tenkz@r@physleg} } );
+            \dim_eval:n { \l__tenkzl_py_dim - \tenkz@dim{\tenkz@r@physleg} } )}
       }
       {
         \tenkzl_ifacecount_incr:nN {#3} \l__tenkzl_bpc_prop
-        \draw[physical~leg]
+        \__tenkz_render_stroke:nn {physical~leg}
+      {
           ( \dim_use:N \l__tenkzl_qx_dim , \dim_use:N \l__tenkzl_qy_dim ) --
-          ( \dim_use:N \l__tenkzl_px_dim , \dim_use:N \l__tenkzl_py_dim ) ;
+          ( \dim_use:N \l__tenkzl_px_dim , \dim_use:N \l__tenkzl_py_dim ) }
       }
   }
 % warn once per open=/trace= key whose interface index exceeds the
@@ -3917,10 +3938,12 @@
     % Endpoint stubs meet the opaque site disks plainly.  Only the exterior
     % return receives the crossing halo; applying it to the whole path would
     % cut a paper-coloured U-shaped scar into both endpoint disks.
-    \draw[trace]
+    \__tenkz_render_stroke:nn {trace}
+      {
       ( \dim_use:N \l__tenkzl_px_dim , \dim_use:N \l__tenkzl_py_dim ) --
-      ( \dim_use:N \l__tenkzl_px_dim , \dim_use:N \l__tenkzl_dy_dim );
-    \draw[tenkz~lattice~pair~trace]
+      ( \dim_use:N \l__tenkzl_px_dim , \dim_use:N \l__tenkzl_dy_dim )}
+    \__tenkz_render_stroke:nn {tenkz~lattice~pair~trace}
+      {
       ( \dim_use:N \l__tenkzl_px_dim , \dim_use:N \l__tenkzl_dy_dim )
       arc[start~angle=180, end~angle=0,
           radius=\dim_eval:n { \tenkz@dim{\tenkz@r@planetracereach} / 2 }]
@@ -3929,10 +3952,11 @@
           { \l__tenkzl_qx_dim + \tenkz@dim{\tenkz@r@planetracereach} } ,
         \dim_use:N \l__tenkzl_dx_dim )
       arc[start~angle=360, end~angle=180,
-          radius=\dim_eval:n { \tenkz@dim{\tenkz@r@planetracereach} / 2 }];
-    \draw[trace]
+          radius=\dim_eval:n { \tenkz@dim{\tenkz@r@planetracereach} / 2 }]}
+    \__tenkz_render_stroke:nn {trace}
+      {
       ( \dim_use:N \l__tenkzl_qx_dim , \dim_use:N \l__tenkzl_dx_dim ) --
-      ( \dim_use:N \l__tenkzl_qx_dim , \dim_use:N \l__tenkzl_qy_dim ) ;
+      ( \dim_use:N \l__tenkzl_qx_dim , \dim_use:N \l__tenkzl_qy_dim ) }
     % The straight return lies between the two east cap endpoints, and each
     % semicircle stays inside the axis-aligned paper-frame bounds below.
     % Publish all four corners so a later directional silhouette contains the
@@ -3997,12 +4021,13 @@
         \int_incr:N \l__tenkzl_bot_int
         \tenkzl_xyz:nnnNN {#1}{#2}{ \l__tenkzl_sheets_int - 1 }
           \l__tenkzl_px_dim \l__tenkzl_py_dim
-        \draw[physical~leg]
+        \__tenkz_render_stroke:nn {physical~leg}
+      {
           ( \dim_use:N \l__tenkzl_px_dim ,
             \dim_use:N \l__tenkzl_py_dim ) --
           ( \dim_use:N \l__tenkzl_px_dim ,
             \dim_eval:n { \l__tenkzl_py_dim
-                          + \tenkz@dim{\tenkz@r@physleg} } );
+                          + \tenkz@dim{\tenkz@r@physleg} } )}
         \dim_set_eq:NN \l__tenkzl_qx_dim \l__tenkzl_px_dim
         \dim_set:Nn \l__tenkzl_qy_dim
           { \l__tenkzl_py_dim + \tenkz@dim{\tenkz@r@physleg} }
@@ -4018,12 +4043,13 @@
         \int_incr:N \l__tenkzl_bob_int
         \tenkzl_xyz:nnnNN {#1}{#2}{0}
           \l__tenkzl_px_dim \l__tenkzl_py_dim
-        \draw[physical~leg]
+        \__tenkz_render_stroke:nn {physical~leg}
+      {
           ( \dim_use:N \l__tenkzl_px_dim ,
             \dim_use:N \l__tenkzl_py_dim ) --
           ( \dim_use:N \l__tenkzl_px_dim ,
             \dim_eval:n { \l__tenkzl_py_dim
-                          - \tenkz@dim{\tenkz@r@physleg} } );
+                          - \tenkz@dim{\tenkz@r@physleg} } )}
         \dim_set_eq:NN \l__tenkzl_qx_dim \l__tenkzl_px_dim
         \dim_set:Nn \l__tenkzl_qy_dim
           { \l__tenkzl_py_dim - \tenkz@dim{\tenkz@r@physleg} }
