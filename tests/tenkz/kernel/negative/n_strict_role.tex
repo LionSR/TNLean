@@ -1,0 +1,15 @@
+% Negative regression: strict mode rejects atom-key sugar.
+\documentclass{standalone}
+\usepackage{tenkz}
+\makeatletter
+\ExplSyntaxOn
+\file_input:n { tenkz-kernel.code.tex }
+\ExplSyntaxOff
+\makeatother
+\begin{document}
+\tenkzkernel
+\tnset{strict}
+\begin{tenkz}[rows={wire}, cols=1, bonds=none]
+  \tn[role=operator]{A}
+\end{tenkz}
+\end{document}

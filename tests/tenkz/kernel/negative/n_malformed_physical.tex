@@ -1,0 +1,12 @@
+% Negative regression: the physical sugar accepts only its declared alphabet.
+\documentclass{standalone}
+\usepackage{tenkz}
+\makeatletter
+\ExplSyntaxOn
+\file_input:n { tenkz-kernel.code.tex }
+\ExplSyntaxOff
+\makeatother
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[physical=sideways]\end{tenkz}
+\end{document}

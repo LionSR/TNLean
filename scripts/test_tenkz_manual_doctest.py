@@ -24,8 +24,8 @@ def main() -> int:
     reference = DOCTEST.reference_examples()
     if len(manual) != 9:
         raise AssertionError(f"expected 9 displayed TeX examples, found {len(manual)}")
-    if len(reference) != 18:
-        raise AssertionError(f"expected 18 reference examples, found {len(reference)}")
+    if len(reference) != 25:
+        raise AssertionError(f"expected 25 reference examples, found {len(reference)}")
     if any(r"\begin{document}" not in example.document for example in manual):
         raise AssertionError("a displayed example was not wrapped as a document")
     if any("tenkz_rmp.sh" in example.document for example in manual):
@@ -197,6 +197,29 @@ shell command % \tntree{commented}
     )
     if instrumented.index(marker) < instrumented.rindex("\\usepackage{tenkz}"):
         raise AssertionError("runtime instrumentation used a commented package spelling")
+    inert_invocations = (
+        "\\usepackage{tenkz}\n"
+        "\\iffalse\n\\tn{dead}\\fi\n"
+        "\\newcommand{\\stored}{\\tn{stored}}\n"
+        "\\begin{document}\\tn{live}\\end{document}\n"
+    )
+    instrumented, marker = DOCTEST._instrument_command(
+        inert_invocations, "tn", Path.cwd()
+    )
+    if instrumented.index(marker) < instrumented.index(r"\begin{document}"):
+        raise AssertionError("runtime instrumentation selected an inert invocation")
+    inert_only = (
+        "\\usepackage{tenkz}\n"
+        "\\iffalse\n\\tn{dead}\\fi\n"
+        "\\newcommand{\\stored}{\\tn{stored}}\n"
+    )
+    try:
+        DOCTEST._instrument_command(inert_only, "tn", Path.cwd())
+    except ValueError as error:
+        if "no executable invocation" not in str(error):
+            raise
+    else:
+        raise AssertionError("an inert command spelling counted as executable")
     escaped_verb = (
         "Write \\\\verb|without a closing delimiter on this line\n"
         "\\usepackage{tenkz}\n"

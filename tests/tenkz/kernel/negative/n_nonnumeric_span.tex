@@ -1,0 +1,14 @@
+% Negative regression: atom span values must be numeric.
+\documentclass{standalone}
+\usepackage{tenkz}
+\makeatletter
+\ExplSyntaxOn
+\file_input:n { tenkz-kernel.code.tex }
+\ExplSyntaxOff
+\makeatother
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[rows={wire}, cols=1]
+  \tn[wires=many]{A}
+\end{tenkz}
+\end{document}

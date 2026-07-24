@@ -1,0 +1,24 @@
+\documentclass{standalone}
+\usepackage{tenkz}
+\makeatletter
+\ExplSyntaxOn
+\file_input:n { tenkz-kernel.code.tex }
+\ExplSyntaxOff
+\makeatother
+\begin{document}
+\tenkzkernel
+\begin{tenkzeq}[check={signature, off={1: first}, off={3: third}}]
+  \begin{tenkz}[rows={wire}, cols=1, bonds=none]
+    \tnwire{w outside}{e outside}
+  \end{tenkz}
+  =
+  \begin{tenkz}[rows={wire}, cols=1, bonds=none]\end{tenkz}
+  =
+  \begin{tenkz}[rows={wire}, cols=1, bonds=none]\end{tenkz}
+  =
+  \begin{tenkz}[rows={wire}, cols=1, bonds=none]
+    \tnwire{w outside}{e outside}
+  \end{tenkz}
+\end{tenkzeq}
+\mbox{parsed}
+\end{document}

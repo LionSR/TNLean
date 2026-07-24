@@ -1,0 +1,12 @@
+% Negative regression: an unknown surface preset is a coded error.
+\documentclass{standalone}
+\usepackage{tenkz}
+\makeatletter
+\ExplSyntaxOn
+\file_input:n { tenkz-kernel.code.tex }
+\ExplSyntaxOff
+\makeatother
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[surface=cylinder]\end{tenkz}
+\end{document}

@@ -1,0 +1,14 @@
+% Negative regression: malformed cluster dimensions are a coded error.
+\documentclass{standalone}
+\usepackage{tenkz}
+\makeatletter
+\ExplSyntaxOn
+\file_input:n { tenkz-kernel.code.tex }
+\ExplSyntaxOff
+\makeatother
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[rows={wire}, cols=1, bonds=none]
+  \tn[name=C, cluster=2-by-2]{C}
+\end{tenkz}
+\end{document}

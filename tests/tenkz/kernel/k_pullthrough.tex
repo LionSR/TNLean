@@ -1,0 +1,27 @@
+%% Kernel fixture: LANGUAGE-1.0.md 12.3 (rmp-iii-a-pulling-through).
+%% Expected: two panels, each rows=ket cols=3 physical=up with one string
+%% w outside -> e outside; the second declares over at crossing of g and
+%% leg n of (1,2); check=signature passes (equal boundaries) and emits a
+%% check event.
+\documentclass{standalone}
+\usepackage{tenkz}
+\makeatletter
+\ExplSyntaxOn
+\file_input:n { tenkz-kernel.code.tex }
+\ExplSyntaxOff
+\makeatother
+\begin{document}
+\tenkzkernel
+\begin{tenkzeq}[size=m, check={signature}]
+  \begin{tenkz}[rows={ket}, cols=3, physical=up]
+    \tnwire[kind=string, species=g,
+            via={1 s of (1,2)}]{w outside}{e outside}
+  \end{tenkz}
+  =
+  \begin{tenkz}[rows={ket}, cols=3, physical=up]
+    \tnwire[kind=string, species=g, name=g, via={1 n of (1,2)},
+            cross={over at crossing of g and leg n of (1,2)}]{w outside}{e outside}
+  \end{tenkz}
+\end{tenkzeq}
+\mbox{parsed}
+\end{document}

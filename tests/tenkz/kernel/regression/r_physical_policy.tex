@@ -1,0 +1,16 @@
+% Regression: physical sugar skips none, sealed voids, and cluster sub-atoms.
+\documentclass{standalone}
+\usepackage{tenkz}
+\makeatletter
+\ExplSyntaxOn
+\file_input:n { tenkz-kernel.code.tex }
+\ExplSyntaxOff
+\makeatother
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[rows={ket}, cols=1, bonds=none, physical=none]\end{tenkz}
+\begin{tenkz}[rows={ket}, cols=2, bonds=none, physical=up]
+  \tn[void=sealed, name=V]{} & \tn[name=C, cluster=1x1]{C}
+\end{tenkz}
+\mbox{parsed}
+\end{document}

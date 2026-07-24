@@ -1,0 +1,15 @@
+% Negative regression: two records may not claim the same frame cell.
+\documentclass{standalone}
+\usepackage{tenkz}
+\makeatletter
+\ExplSyntaxOn
+\file_input:n { tenkz-kernel.code.tex }
+\ExplSyntaxOff
+\makeatother
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[rows={wire}, cols=2, bonds=none]
+  \tn[at=(1,1), wide=2, name=W]{W}
+  \tn[at=(1,2), name=N]{N}
+\end{tenkz}
+\end{document}

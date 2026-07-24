@@ -1,0 +1,12 @@
+% Negative regression: a ring requires a positive column count.
+\documentclass{standalone}
+\usepackage{tenkz}
+\makeatletter
+\ExplSyntaxOn
+\file_input:n { tenkz-kernel.code.tex }
+\ExplSyntaxOff
+\makeatother
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[ring=0]\end{tenkz}
+\end{document}

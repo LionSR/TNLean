@@ -13,7 +13,13 @@ ROOT = Path(__file__).resolve().parents[1]
 SCRIPT = ROOT / "scripts/tenkz_shrink.py"
 
 sys.path.insert(0, str(ROOT / "scripts"))
-from tenkz_language import Entry, check, parse_alias_payload, parse_status  # noqa: E402
+from tenkz_language import (  # noqa: E402
+    Entry,
+    _kernel_leaf_keys_from_texts,
+    check,
+    parse_alias_payload,
+    parse_status,
+)
 from tenkz_lint import registry_alias_patterns  # noqa: E402
 import tenkz_shrink  # noqa: E402
 
@@ -134,6 +140,21 @@ def test_parser_registry_census_preserves_scopes() -> None:
         and "extra=picture:brace above" in error
         for error in errors
     ), errors
+
+
+def test_kernel_parser_census_includes_hyphenated_families() -> None:
+    source = r"""
+\__tenkz_kernel_value:nnn
+  { tenkz-kernel-declare-atom } { skin } { skin }
+\keys_define:nn { tenkz-kernel-declare-atom }
+  {
+    ports .code:n = { }
+  }
+"""
+    assert _kernel_leaf_keys_from_texts([source]) == {
+        ("kernel-declare-atom", "skin"),
+        ("kernel-declare-atom", "ports"),
+    }
 
 
 def test_alias_replacements_are_registered_vocabulary() -> None:
@@ -272,6 +293,17 @@ def test_setup_consumers_include_only_forwarded_tree_options() -> None:
     consumers = tenkz_shrink.row_consumers(entries, corpus)
     assert consumers["key:setup:species"] == set()
     assert consumers["key:object:species"] == {"synthetic.tex"}
+
+
+def test_only_kernel_scopes_may_lack_consumer_groups() -> None:
+    groups = {"object": {ROOT / "synthetic.tex": ["skin=box"]}}
+    assert tenkz_shrink._scope_groups(groups, "kernel-wire") == {}
+    try:
+        tenkz_shrink._scope_groups(groups, "objct")
+    except KeyError as error:
+        assert "unknown registry scope: objct" in str(error)
+    else:
+        raise AssertionError("a misspelled non-kernel scope was accepted")
 
 
 def test_cooccurrence_is_measured_per_invocation() -> None:

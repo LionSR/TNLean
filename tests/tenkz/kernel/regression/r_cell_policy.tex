@@ -1,0 +1,16 @@
+% Regression: cell trace/open and bare physical trace become wire records.
+\documentclass{standalone}
+\usepackage{tenkz}
+\makeatletter
+\ExplSyntaxOn
+\file_input:n { tenkz-kernel.code.tex }
+\ExplSyntaxOff
+\makeatother
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[rows={ket,bra}, cols=2, trace={(1,2)}]\end{tenkz}
+\begin{tenkz}[rows={ket,bra}, cols=2, open={(1,2)}]\end{tenkz}
+\begin{tenkz}[rows={op}, cols=2, trace=physical]\end{tenkz}
+\begin{tenkz}[rows={ket,bra}, cols=2, trace={(physical,2)}]\end{tenkz}
+\mbox{parsed}
+\end{document}

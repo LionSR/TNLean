@@ -1,0 +1,37 @@
+\documentclass{standalone}
+\usepackage{tenkz}
+\makeatletter
+\ExplSyntaxOn
+\file_input:n { tenkz-kernel.code.tex }
+\ExplSyntaxOn
+\cs_new_protected:Npn \__tenkz_test_shared_policy:
+  {
+    \__tenkz_model_picture_get:nN {size} \l_tmpa_tl
+    \str_if_eq:VnF \l_tmpa_tl {m}
+      { \errmessage{tenkzeq size policy did not reach its panel} }
+    \__tenkz_model_picture_get:nN {align} \l_tmpa_tl
+    \str_if_eq:VnF \l_tmpa_tl {2}
+      { \errmessage{tenkzeq align policy did not reach its panel} }
+    \__tenkz_model_picture_get:nN {check} \l_tmpa_tl
+    \quark_if_no_value:NF \l_tmpa_tl
+      { \errmessage{tenkzeq check policy leaked into its panel} }
+  }
+\ExplSyntaxOff
+\makeatother
+\begin{document}
+\tenkzkernel
+\begin{tenkzeq}[size=m, align=2, check={signature}]
+  \begin{tenkz}[rows={ket,wire}, cols=1, size=s, align=1]
+    \ExplSyntaxOn
+    \__tenkz_test_shared_policy:
+    \ExplSyntaxOff
+  \end{tenkz}
+  =
+  \begin{tenkz}[rows={ket,wire}, cols=1]
+    \ExplSyntaxOn
+    \__tenkz_test_shared_policy:
+    \ExplSyntaxOff
+  \end{tenkz}
+\end{tenkzeq}
+\mbox{parsed}
+\end{document}

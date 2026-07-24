@@ -1,41 +1,41 @@
 {
-  "m1_census": {
-    "definition": "registry key rows per ledger plus public commands and environments; kernel is one-in-one-out and the total never rises between shrink sessions",
-    "value": {
-      "alias": 6,
-      "commands": 18,
-      "environments": 5,
-      "escape": 9,
-      "kernel": 79,
-      "sugar": 4
-    }
-  },
-  "m2_parser_paths": {
-    "definition": "public leaf keys installed by the TeX parsers; identity changes require an Extension-gate citation",
-    "identity_sha256": "ede8998b9625197e3070ccc241e9939e38521f72d6613a37e3d4e2e679795f59",
-    "value": 145
-  },
-  "m3_escape_usage": {
-    "definition": "occurrences of escape-ledger spellings in the demand corpus; every occurrence names a core-grammar gap",
-    "value": 296
-  },
-  "m4_lines_per_case": {
-    "definition": "mean non-comment non-blank lines over the frozen 130 benchmark cases; the fidelity meter against fake shrink",
-    "value": 15.14
-  },
-  "m5_aliases": {
-    "definition": "key and value alias rows plus sunset compliance; near zero at the 1.0 freeze",
-    "value": {
-      "count": 7,
-      "missing_sunset": 0
-    }
-  },
-  "m6_overloads": {
-    "definition": "names with several value types + union types + enum words shared across enums; must never rise",
-    "value": {
-      "multi_typed_names": 4,
-      "shared_enum_words": 8,
-      "union_types": 2
-    }
+ "m1_census": {
+  "definition": "registry key rows per ledger plus public commands and environments; kernel is one-in-one-out and the total never rises between shrink sessions",
+  "value": {
+   "alias": 6,
+   "commands": 25,
+   "environments": 6,
+   "escape": 9,
+   "kernel": 131,
+   "sugar": 12
   }
+ },
+ "m2_parser_paths": {
+  "definition": "public leaf keys installed by the TeX parsers; identity changes require an Extension-gate citation",
+  "identity_sha256": "cbc52d052db991b6b2ced12363d3d4a3b4aeed7c52c458ecd806fc59fd5bbdbd",
+  "value": 207
+ },
+ "m3_escape_usage": {
+  "definition": "occurrences of escape-ledger spellings in the demand corpus; every occurrence names a core-grammar gap",
+  "value": 296
+ },
+ "m4_lines_per_case": {
+  "definition": "mean non-comment non-blank lines over the frozen 130 benchmark cases; the fidelity meter against fake shrink",
+  "value": 15.14
+ },
+ "m5_aliases": {
+  "definition": "key and value alias rows plus sunset compliance; near zero at the 1.0 freeze",
+  "value": {
+   "count": 7,
+   "missing_sunset": 0
+  }
+ },
+ "m6_overloads": {
+  "definition": "names with several value types + union types + enum words shared across enums; must never rise",
+  "value": {
+   "multi_typed_names": 4,
+   "shared_enum_words": 7,
+   "union_types": 1
+  }
+ }
 }
