@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.FundamentalTheorem.EdgeInsertion
 import TNLean.PEPS.TwoInjectiveComparison
-import TNLean.PEPS.VertexComplement.KernelDescent
+import TNLean.PEPS.VertexComplement.Injective
 
 /-!
 # One-vertex comparison for the PEPS Fundamental Theorem
