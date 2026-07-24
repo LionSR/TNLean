@@ -1,0 +1,44 @@
+% Regression: zz_string_wind — signed and pure-meridian torus windings.
+% Formula: class (1,0) with zero amplitude is the circle of radius 1;
+%   class (1,1) with amplitude 0.35 oscillates once: radius 1.35 at angle 0,
+%   0.65 at angle 180, back to 1.35 at closure.
+% Expectation: left picture a perfect circle; right picture one smooth
+%   oscillation, no kinks at the seam.
+\documentclass[varwidth=10cm, border=6pt]{standalone}
+\usepackage{tenkz}
+\usetikzlibrary{hobby,spath3,intersections}
+\begin{document}
+\makeatletter\input{tenkz-string.code.tex}\makeatother
+\begin{tikzpicture}
+\ExplSyntaxOn
+\__tenkz_string_reset:
+\__tenkz_string_declare_wind:nnnnnnn {w10} {0} {0} {1} {1} {0} {0}
+\__tenkz_string_resolve:
+\__tenkz_string_dev_draw:nn {w10} { thick }
+\ExplSyntaxOff
+\end{tikzpicture}\quad
+\begin{tikzpicture}
+\ExplSyntaxOn
+\__tenkz_string_reset:
+\__tenkz_string_declare_wind:nnnnnnn {w11} {0} {0} {1} {1} {1} {0.35}
+\__tenkz_string_resolve:
+\__tenkz_string_dev_draw:nn {w11} { thick }
+\ExplSyntaxOff
+\end{tikzpicture}\quad
+\begin{tikzpicture}
+\ExplSyntaxOn
+\__tenkz_string_reset:
+\__tenkz_string_declare_wind:nnnnnnn {w01} {0} {0} {1} {0} {1} {0.35}
+\__tenkz_string_resolve:
+\__tenkz_string_dev_draw:nn {w01} { thick }
+\ExplSyntaxOff
+\end{tikzpicture}\quad
+\begin{tikzpicture}
+\ExplSyntaxOn
+\__tenkz_string_reset:
+\__tenkz_string_declare_wind:nnnnnnn {wn} {0} {0} {1} {-3} {0} {0}
+\__tenkz_string_resolve:
+\__tenkz_string_dev_draw:nn {wn} { thick }
+\ExplSyntaxOff
+\end{tikzpicture}
+\end{document}

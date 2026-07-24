@@ -1,0 +1,19 @@
+% Expected failure: one declaration cannot cover all cubic-loop and off-seam
+% branch crossings on the same caller path.
+\documentclass{standalone}
+\usepackage{tenkz}
+\usetikzlibrary{hobby,spath3,intersections}
+\begin{document}
+\makeatletter\input{tenkz-string.code.tex}\makeatother
+\begin{tikzpicture}
+\ExplSyntaxOn
+\__tenkz_string_reset:
+\__tenkz_string_register:nn {mixed} {open}
+\path[spath/save=mixed]
+  (0,0) .. controls (3.5,2) and (-3.5,2) .. (6,0)
+        .. controls (5,1) and (1,-1) .. (0,1);
+\__tenkz_string_under_at:nnn {mixed} {mixed} {1}
+\__tenkz_string_resolve:
+\ExplSyntaxOff
+\end{tikzpicture}
+\end{document}

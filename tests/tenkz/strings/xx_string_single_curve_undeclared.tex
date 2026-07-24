@@ -1,0 +1,16 @@
+% Expected failure: a loop inside one cubic segment is a self-crossing.
+\documentclass{standalone}
+\usepackage{tenkz}
+\usetikzlibrary{hobby,spath3,intersections}
+\begin{document}
+\makeatletter\input{tenkz-string.code.tex}\makeatother
+\begin{tikzpicture}
+\ExplSyntaxOn
+\__tenkz_string_reset:
+\__tenkz_string_register:nn {loop} {open}
+\path[spath/save=loop]
+  (0,0) .. controls (3.5,2) and (-3.5,2) .. (6,0);
+\__tenkz_string_resolve:
+\ExplSyntaxOff
+\end{tikzpicture}
+\end{document}
