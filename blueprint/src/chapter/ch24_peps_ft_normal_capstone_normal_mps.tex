@@ -533,24 +533,21 @@ to $n \ge 2L + 1$.
     the other is an automorphism of the matrix algebra, hence inner.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{lem:exists_mpvTransport, lem:overlapWindow_exists_bondOperator,
-        lem:isNBlkInjective_of_le, thm:skolem_noether}
-    A virtual insertion $X$ on a bond of the $A$-network is realized on
-    each of the $L + 1$ overlapping windows around the bond by deformed
-    window tensors placing $X$ after the first $L - j$ letters.
-    Transporting them to the $B$-network by the word transport
-    (Lemma~\ref{lem:exists_mpvTransport}) preserves all closed-chain
-    coefficients, so the transported deformations generate one common
-    state, and the bond-operator extraction
-    (Lemma~\ref{lem:overlapWindow_exists_bondOperator}) produces
-    $Y = \Phi(X)$ with $\Lambda(A^{a} X) = B^{a} \Phi(X)$ and
-    $\Lambda(X A^{b}) = \Phi(X)\,B^{b}$ on all window words. Uniqueness
-    of the bond operator makes $\Phi$ linear, unital and multiplicative,
-    hence an automorphism of the full matrix algebra, and by
-    Skolem--Noether (Theorem~\ref{thm:skolem_noether})
-    $\Phi(X) = Z X Z^{-1}$ for an invertible $Z$. Pairing the insertions
-    against all closed-chain words of length $n$ and using nondegeneracy of
-    the trace pairing transfers the conjugation to the word products.
+    \uses{cor:fundamentalTheorem_normalMPSChain_of_overlap,
+        thm:mps_chain_gaugeEquiv_sameState}
+    Regard $A$ and $B$ as constant site-dependent chains on $n$ sites.
+    Window injectivity of a constant chain is block injectivity of the
+    single tensor, and agreement of the matrix product vectors at size $n$
+    is the same-state hypothesis, so the site-dependent overlapping-window
+    capstone
+    (Corollary~\ref{cor:fundamentalTheorem_normalMPSChain_of_overlap})
+    supplies a per-bond gauge family relating the two chains. The arc
+    products of a constant chain are the word products of the tensor, and
+    the gauge conjugation of arc products
+    (Theorem~\ref{thm:mps_chain_gaugeEquiv_sameState}), read at the full
+    chain length $n$ where the end bond wraps to the starting bond, is
+    conjugation of the length-$n$ word products by the gauge at the
+    starting bond.
 \end{proof}
 
 \begin{lemma}[Rigidity of word products at one length]%
