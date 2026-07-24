@@ -1,18 +1,46 @@
 % Target: rmp-iii-a-pulling-through
 % Formula: The full MPO-algebra string pulls through the PEPS plaquette.
-% Ink: Canonical public tenkzfree four-arm ring before-and-after equation.
+% Ink: Canonical public tenkzfree rotated four-arm pulling-through equation.
 % Boundary: Four external PEPS legs and two MPO string ends remain open.
 % Source: paper TN-Review-main.tex line 1356; author source ImagesReview Section
 %   III/ImagesReview Section III.tex lines 170-197
 % Capabilities: free-graph, pulling-through, rotated-action
 \[
   \begin{tenkzfree}
-    \tnput[ring]{l}{(-7mm,7mm)}{\lambda}
-    \tnput[box]{n}{(0mm,9mm)}{} \tnput[box]{w}{(-9mm,0mm)}{}
-    \tnput[box]{s}{(0mm,-9mm)}{} \tnput[box]{e}{(9mm,0mm)}{}
-    \tnjoin{l.east}{n.west} \tnjoin{n.east}{e.north}
-    \tnjoin{e.south}{s.east} \tnjoin{s.west}{w.south}
-    \tnjoin{w.north}{l.south}
+    \tnput[ring]{l}{(-6mm,6mm)}{\lambda}
+    \tnput[box,frame={rotate=90}]{n}{(0mm,7mm)}{}
+    \tnput[box]{e}{(7mm,0mm)}{}
+    \tnput[box,frame={rotate=90}]{s}{(0mm,-7mm)}{}
+    \tnput[box]{w}{(-7mm,0mm)}{}
+    \tnjoin[role=operator,route=hv]{n.east}{e.north}
+    \tnjoin[role=operator,route=vh]{e.south}{s.east}
+    \tnjoin[role=operator,route=hv]{s.west}{w.south}
+    \tnjoin[role=operator,route=vh]{w.north}{n.west}
+    \tnput[box,frame={rotate=90}]{ot}{(0mm,15mm)}{}
+    \tnput[box]{ow}{(-15mm,0mm)}{}
+    \tnjoin{n.north}{ot.south}
+    \tnjoin{ot.north}{0mm,20mm}
+    \tnjoin{w.west}{ow.east}
+    \tnjoin{ow.west}{-20mm,0mm}
+    \tnjoin[role=operator,route=arc,out=90,in=180]{ow.north}{ot.west}
   \end{tenkzfree}
-  =\text{quarter-turn}.
+  =
+  \begin{tenkzfree}
+    \tnput[ring]{l}{(-6mm,6mm)}{\lambda}
+    \tnput[box,frame={rotate=90}]{n}{(0mm,7mm)}{}
+    \tnput[box]{e}{(7mm,0mm)}{}
+    \tnput[box,frame={rotate=90}]{s}{(0mm,-7mm)}{}
+    \tnput[box]{w}{(-7mm,0mm)}{}
+    \tnjoin[role=operator,route=hv]{n.east}{e.north}
+    \tnjoin[role=operator,route=vh]{e.south}{s.east}
+    \tnjoin[role=operator,route=hv]{s.west}{w.south}
+    \tnjoin[role=operator,route=vh]{w.north}{n.west}
+    \tnput[box]{oe}{(15mm,0mm)}{}
+    \tnput[box,frame={rotate=90}]{os}{(0mm,-15mm)}{}
+    \tnjoin{e.east}{oe.west}
+    \tnjoin{oe.east}{20mm,0mm}
+    \tnjoin{s.south}{os.north}
+    \tnjoin{os.south}{0mm,-20mm}
+    \tnjoin[role=operator,route=arc,out=0,in=270]{oe.south}{os.east}
+  \end{tenkzfree}.
 \]

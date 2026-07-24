@@ -221,14 +221,13 @@ note = "vertically mirrored vs source; V-glyph aspect"
 
 [[verdict]]
 id = "rmp-ii-circuit"
-status = "structural-gap"
+status = "cosmetic-gap"
 pairing = "verified"
-pairing_by = "pairing-sweep-two-viewers-2026-07-23"
-defects = ["wrong-contraction"]
-case_sha256 = "014f811e3ab4a6f1c85636e3a416394fa86575541e5b841397ab7e60c27ea3c3"
-reviewed = "2026-07-23"
-renderer = "maintainer-page-review-2026-07-23"
-note = "rotated 90 degrees and shallower than the source tree"
+pairing_by = "rotation-frame-source-review-2026-07-24"
+case_sha256 = "30fc9618a5e58cf49c1f03b39ef1907d0c7a25b9b5602a6e9af9f180f93d7c9e"
+reviewed = "2026-07-24"
+renderer = "rotation-frame-source-comparison-2026-07-24"
+note = "The one-to-two-to-four circuit topology, eight outputs, and rotated gate frames match; gate proportions and spacing remain cosmetic differences."
 
 [[verdict]]
 id = "rmp-ii-sv17"
@@ -514,15 +513,13 @@ note = "Judged faithful in the maintainer review; awaiting pairing verification.
 
 [[verdict]]
 id = "rmp-iii-a-pulling-through"
-status = "blocked"
+status = "cosmetic-gap"
 pairing = "verified"
-pairing_by = "pairing-sweep-two-viewers-2026-07-23"
-defects = ["text-substitution"]
-missing = ["pulling-through", "rotated-action"]
-case_sha256 = "55a3de450cf765a09bd2191833e63f42f749fe187ecbe360d310c38d928264a2"
+pairing_by = "rotation-frame-source-review-2026-07-24"
+case_sha256 = "c257c6f9752e5622a5c20e198befd769d2d9478633caac902ef704cd9ee7a277"
 reviewed = "2026-07-24"
-renderer = "source-split-page-review-2026-07-24"
-note = "already judged"
+renderer = "rotation-frame-source-comparison-2026-07-24"
+note = "Both complete pulling-through diagrams, rotated boundary boxes, operator loops, and equality structure match; box proportions and wire curvature remain cosmetic differences."
 
 [[verdict]]
 id = "rmp-iii-a-commuting-hamiltonian"
@@ -599,15 +596,13 @@ note = "Author panel shows an unlabeled black bond node, not the declared Hadama
 
 [[verdict]]
 id = "rmp-iii-a-spt-mpo"
-status = "blocked"
+status = "cosmetic-gap"
 pairing = "verified"
-pairing_by = "pairing-sweep-two-viewers-2026-07-23"
-defects = ["placement-illegible"]
-missing = ["rotated-action", "strings"]
-case_sha256 = "ce29de07fbd5fa8b0081946c35dd1503d495ec6ab0931f8b7165c4c194ed2156"
+pairing_by = "rotation-frame-source-review-2026-07-24"
+case_sha256 = "126f9c35551420afd6aae868a64323584d2769c5615a08bb7e42c9f896b9a43f"
 reviewed = "2026-07-24"
-renderer = "source-split-page-review-2026-07-24"
-note = "45-degree double strand as axis-aligned stubs"
+renderer = "rotation-frame-source-comparison-2026-07-24"
+note = "The six-leg stars, diagonal operator boxes, red symmetry string, and two-sided identity match; scale and label placement remain cosmetic differences."
 
 [[verdict]]
 id = "rmp-iii-a-spt-intertwiner"
