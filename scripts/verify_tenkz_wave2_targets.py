@@ -112,15 +112,35 @@ def main() -> int:
     unowned_labels: set[tuple[str, int]] = set()
     for source in SECTIONS.values():
         source_path = args.source_root / source
-        for line_number, line in enumerate(source_path.read_text(encoding="utf-8").splitlines(), 1):
+        lines = source_path.read_text(encoding="utf-8").splitlines()
+        label_groups: list[list[int]] = []
+        for line_number, line in enumerate(lines, 1):
             match = re.match(r"^\s*%{2,4}(?!%)(.*)$", line)
             if match is None:
                 continue
             label = match.group(1).strip()
             if not label or label.startswith(NON_LABEL_PREFIXES):
                 continue
-            if not any(start <= line_number <= end for start, end, _ in owned.get(source, [])):
-                unowned_labels.add((source, line_number))
+            if label_groups:
+                previous_label = label_groups[-1][-1]
+                between = lines[previous_label : line_number - 1]
+                if all(not item.strip().lstrip("%").strip() for item in between):
+                    label_groups[-1].append(line_number)
+                    continue
+            label_groups.append([line_number])
+
+        for index, group in enumerate(label_groups):
+            block_start = group[0]
+            block_end = (
+                label_groups[index + 1][0] - 1
+                if index + 1 < len(label_groups)
+                else len(lines)
+            )
+            if not any(
+                block_start <= end and start <= block_end
+                for start, end, _ in owned.get(source, [])
+            ):
+                unowned_labels.add((source, block_start))
     if proposed_starts != unowned_labels:
         raise SystemExit("proposed targets do not exhaust the unowned labelled blocks")
 
