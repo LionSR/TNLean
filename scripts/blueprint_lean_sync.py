@@ -234,14 +234,17 @@ def collect_lean_decls(lean_root: Path) -> dict[str, LeanDecl]:
 # Parse blueprint .tex files
 # ---------------------------------------------------------------------------
 
+def _blueprint_content_files(blueprint_src: Path) -> list[Path]:
+    """Return theorem-bearing chapter and appendix sources in stable order."""
+    files = list((blueprint_src / "chapter").glob("*.tex"))
+    files.extend((blueprint_src / "appendix").rglob("*.tex"))
+    return sorted(files)
+
+
 def collect_blueprint_lean_refs(blueprint_src: Path) -> list[BlueprintEntry]:
     """Return all raw declaration references appearing in ``\\lean{...}`` tags."""
-    chapter_dir = blueprint_src / "chapter"
-    if not chapter_dir.exists():
-        return []
-
     refs: list[BlueprintEntry] = []
-    for tex_file in sorted(chapter_dir.glob("*.tex")):
+    for tex_file in _blueprint_content_files(blueprint_src):
         text = tex_file.read_text(errors="replace")
         rel = str(tex_file.relative_to(blueprint_src.parent))
         for lm in _TEX_LEAN_RE.finditer(text):
@@ -262,11 +265,7 @@ def collect_blueprint_lean_refs(blueprint_src: Path) -> list[BlueprintEntry]:
 def collect_blueprint_entries(blueprint_src: Path) -> list[BlueprintEntry]:
     """Parse theorem-like blueprint environments for ``\\lean{}`` and ``\\leanok``."""
     entries: list[BlueprintEntry] = []
-    chapter_dir = blueprint_src / "chapter"
-    if not chapter_dir.exists():
-        return entries
-
-    for tex_file in sorted(chapter_dir.glob("*.tex")):
+    for tex_file in _blueprint_content_files(blueprint_src):
         text = tex_file.read_text(errors="replace")
         lines = text.splitlines()
         lean_decls_by_line: dict[int, list[str]] = {}
@@ -505,7 +504,7 @@ def print_missing_blueprint_warnings(missing: list[LeanDecl]) -> None:
                 "::warning "
                 f"file={decl.file},line={decl.line},title=Blueprint update suggested::"
                 f"{decl.fqn} is changed in this PR but has no corresponding "
-                "\\lean{} tag in blueprint/src/chapter."
+                "\\lean{} tag in blueprint/src/chapter or blueprint/src/appendix."
             )
     print()
 

@@ -7,7 +7,7 @@
     $\lambda_0,\ldots,\lambda_{D-1}$, the \emph{von Neumann entropy} is
     \begin{align}
         S(\rho)
-        &=-\sum_{i=0}^{D-1}\lambda_i\log\lambda_i,
+         & =-\sum_{i=0}^{D-1}\lambda_i\log\lambda_i,
         \label{eq:entropy_definition}
     \end{align}
     where $0\log 0:=0$.
@@ -113,8 +113,8 @@
     real parts of the roots of its characteristic polynomial $\chi_\rho$:
     \begin{align}
         S(\rho)
-        &=\sum_{\lambda\in\mathrm{roots}(\chi_\rho)}
-          ({-}\re(\lambda)\log\re(\lambda)).
+         & =\sum_{\lambda\in\mathrm{roots}(\chi_\rho)}
+            ({-}\re(\lambda)\log\re(\lambda)).
         \label{eq:entropy_charpoly}
     \end{align}
 \end{lemma}
@@ -134,7 +134,7 @@
     through the functional calculus. Then
     \begin{align}
         S(\rho)
-        &=-\re(\tr(\rho\log\rho)).
+         & =-\re(\tr(\rho\log\rho)).
         \label{eq:entropy_trace_log}
     \end{align}
 \end{theorem}
@@ -145,8 +145,8 @@
     unitary $U$ with $\rho=U\diag(\lambda_i)U^*$, so
     \begin{align}
         \tr(\rho\log\rho)
-        &=\tr\!(U\diag(\lambda_i\log\lambda_i)U^*)
-          =\sum_i\lambda_i\log\lambda_i.
+         & =\tr\!(U\diag(\lambda_i\log\lambda_i)U^*)
+        =\sum_i\lambda_i\log\lambda_i.
         \notag
     \end{align}
     Its negative is $\sum_i({-}\lambda_i\log\lambda_i)=S(\rho)$. Zero
@@ -172,7 +172,7 @@
     For matrices $\rho,\sigma\in\MN{D}$, define the trace-log expression
     \begin{align}
         D(\rho\Vert\sigma)
-        &=\re\tr(\rho(\log\rho-\log\sigma)).
+         & =\re\tr(\rho(\log\rho-\log\sigma)).
         \label{eq:entropy_relative_definition}
     \end{align}
     On the physical domain where $\rho$ is a density matrix and $\sigma$ is
@@ -187,7 +187,7 @@
     For matrices $\rho,\sigma\in\MN{D}$,
     \begin{align}
         D(\rho\Vert\sigma)
-        &=\re\tr(\rho\log\rho)-\re\tr(\rho\log\sigma).
+         & =\re\tr(\rho\log\rho)-\re\tr(\rho\log\sigma).
         \label{eq:entropy_relative_split}
     \end{align}
 \end{lemma}
@@ -230,7 +230,7 @@
     If $\rho$ is Hermitian, then
     \begin{align}
         D(\rho\Vert\sigma)
-        &=-S(\rho)-\re\tr(\rho\log\sigma).
+         & =-S(\rho)-\re\tr(\rho\log\sigma).
         \label{eq:entropy_relative_entropy_form}
     \end{align}
 \end{theorem}
@@ -239,7 +239,7 @@
     Apply Lemma~\ref{lem:quantum_relative_entropy_trace_split} to write
     \begin{align}
         D(\rho\Vert\sigma)
-        &=\re\tr(\rho\log\rho)-\re\tr(\rho\log\sigma).
+         & =\re\tr(\rho\log\rho)-\re\tr(\rho\log\sigma).
         \notag
     \end{align}
     The trace-logarithm identity $\re\tr(\rho\log\rho)=-S(\rho)$ then gives the
@@ -263,21 +263,21 @@
     computation gives
     \begin{align}
         \re\tr(\rho\log\rho)
-        &=\sum_i p_i\log p_i,
-        \notag\\
+         & =\sum_i p_i\log p_i,
+        \notag                                              \\
         \re\tr(\rho\log\sigma)
-        &=\sum_{i,j}p_iP_{ij}\log q_j,
-        \notag\\
+         & =\sum_{i,j}p_iP_{ij}\log q_j,
+        \notag                                              \\
         D(\rho\Vert\sigma)
-        &=\sum_i p_i\log p_i-\sum_{i,j}p_iP_{ij}\log q_j.
+         & =\sum_i p_i\log p_i-\sum_{i,j}p_iP_{ij}\log q_j.
         \notag
     \end{align}
     The row and column sums, together with the trace-one normalizations, give
     $\sum_{i,j}P_{ij}(p_i-q_j)=\sum_i p_i-\sum_jq_j=0$. Hence
     \begin{align}
         D(\rho\Vert\sigma)
-        &=\sum_{i,j}P_{ij}
-          \bigl[p_i\log p_i-p_i\log q_j-(p_i-q_j)\bigr].
+         & =\sum_{i,j}P_{ij}
+        \bigl[p_i\log p_i-p_i\log q_j-(p_i-q_j)\bigr].
         \notag
     \end{align}
     Each bracket is non-negative. If $p_i>0$, put $x=q_j/p_i>0$; the bracket
@@ -306,8 +306,8 @@
     sum over the eigenvalues $q_j$ of $\sigma$,
     \begin{align}
         \re\tr(\rho\log\sigma_\varepsilon')
-        &=\sum_j\bra{f_j}\rho\ket{f_j}
-          \log\!((1+\varepsilon D)^{-1}(q_j+\varepsilon)).
+         & =\sum_j\bra{f_j}\rho\ket{f_j}
+        \log\!((1+\varepsilon D)^{-1}(q_j+\varepsilon)).
         \notag
     \end{align}
     For $q_j>0$ the scalar logarithm converges to $\log q_j$; for $q_j=0$ the
@@ -340,8 +340,8 @@
     Theorem~\ref{thm:klein_inequality},
     \begin{align}
         D(\rho\Vert\sigma)
-        &=\sum_{i,j}P_{ij}
-          [p_i\log p_i-p_i\log q_j-(p_i-q_j)],
+         & =\sum_{i,j}P_{ij}
+                          [p_i\log p_i-p_i\log q_j-(p_i-q_j)],
         \notag
     \end{align}
     a sum of non-negative terms: each is bounded below by the tangent inequality
@@ -359,9 +359,9 @@
     $\rho$ and using the unitarity $WW^\dagger=1$,
     \begin{align}
         U_\rho^\dagger\sigma U_\rho
-        &=W\diag(q)W^\dagger
-          =\diag(p)WW^\dagger
-          =\diag(p),
+         & =W\diag(q)W^\dagger
+        =\diag(p)WW^\dagger
+        =\diag(p),
         \notag
     \end{align}
     the spectral diagonal of $\rho$. Therefore
@@ -382,7 +382,7 @@
     For $s\in[0,1)$ consider the approximant
     \begin{align}
         g_s(\rho,\sigma)
-        &=\frac{\tr\rho-\re\tr(\rho^s\sigma^{1-s})}{1-s}.
+         & =\frac{\tr\rho-\re\tr(\rho^s\sigma^{1-s})}{1-s}.
         \label{eq:entropy_convex_approximant}
     \end{align}
     The trace $\tr\rho$ is real-affine in the pair, hence convex,
@@ -435,18 +435,18 @@
     $\varepsilon\to0^+$, the regularized relative entropy converges on each pair
     of the support domain:
     $D(\rho_\varepsilon\Vert\sigma_\varepsilon)
-    \to D(\rho\Vert\sigma)$.
+        \to D(\rho\Vert\sigma)$.
     Indeed the perturbation shares the eigenbasis of its argument, so each
     trace-logarithm term is the diagonal sum
     $\sum_jw_j(\varepsilon)
-    \log((1+\varepsilon N)^{-1}(q_j+\varepsilon))$,
+        \log((1+\varepsilon N)^{-1}(q_j+\varepsilon))$,
     where $q_j$ runs over the eigenvalues of $\sigma$ and
     $w_j(\varepsilon)$ is the corresponding diagonal weight. For $q_j>0$, the
     scalar factor converges to $\log q_j$, while at a zero eigenvalue the support
     condition makes the weight vanish, with
     $w_j(\varepsilon)=(1+\varepsilon N)^{-1}\varepsilon$, so the summand is
     \begin{align}
-        &(1+\varepsilon N)^{-1}\varepsilon
+         & (1+\varepsilon N)^{-1}\varepsilon
         \log((1+\varepsilon N)^{-1}\varepsilon)\longrightarrow0
         \notag
     \end{align}
@@ -462,7 +462,7 @@
     continuous functional calculus satisfies
     \begin{align}
         f(UAU^\dagger)
-        &=Uf(A)U^\dagger.
+         & =Uf(A)U^\dagger.
         \label{eq:entropy_cfc_conjugation}
     \end{align}
 \end{lemma}
@@ -481,7 +481,7 @@
     For a Hermitian matrix $A$ and a unitary $U$,
     \begin{align}
         \log(UAU^\dagger)
-        &=U(\log A)U^\dagger.
+         & =U(\log A)U^\dagger.
         \label{eq:entropy_log_conjugation}
     \end{align}
 \end{lemma}
@@ -502,7 +502,7 @@
     For Hermitian matrices $\rho,\sigma$ and a unitary $U$,
     \begin{align}
         D(U\rho U^\dagger\Vert U\sigma U^\dagger)
-        &=D(\rho\Vert\sigma).
+         & =D(\rho\Vert\sigma).
         \label{eq:entropy_unitary_invariance}
     \end{align}
 \end{theorem}
@@ -513,9 +513,9 @@
     Lemma~\ref{lem:log_conj_unitary}, so that
     \begin{align}
         D(U\rho U^\dagger\Vert U\sigma U^\dagger)
-        &=\re\tr\!(U\rho(\log\rho-\log\sigma)U^\dagger)
-          =\re\tr\!(\rho(\log\rho-\log\sigma))
-          =D(\rho\Vert\sigma),
+         & =\re\tr\!(U\rho(\log\rho-\log\sigma)U^\dagger)
+        =\re\tr\!(\rho(\log\rho-\log\sigma))
+        =D(\rho\Vert\sigma),
         \notag
     \end{align}
     where the middle equality is trace cyclicity together with
@@ -529,7 +529,7 @@
     For positive definite matrices $\rho$ and $\tau$,
     \begin{align}
         \log(\rho\otimes\tau)
-        &=\log\rho\otimes\Id+\Id\otimes\log\tau.
+         & =\log\rho\otimes\Id+\Id\otimes\log\tau.
         \label{eq:entropy_log_tensor}
     \end{align}
 \end{lemma}
@@ -555,7 +555,7 @@
     $\tau$ of unit trace,
     \begin{align}
         D(\rho\otimes\tau\Vert\sigma\otimes\tau)
-        &=D(\rho\Vert\sigma).
+         & =D(\rho\Vert\sigma).
         \label{eq:entropy_ancilla_additivity}
     \end{align}
 \end{theorem}
@@ -565,11 +565,11 @@
     Splitting each tensor logarithm by Lemma~\ref{lem:log_kronecker}, the common
     $\Id\otimes\log\tau$ terms cancel in the difference, leaving
     $\log(\rho\otimes\tau)-\log(\sigma\otimes\tau)
-    =(\log\rho-\log\sigma)\otimes\Id$. Hence
+        =(\log\rho-\log\sigma)\otimes\Id$. Hence
     \begin{align}
         D(\rho\otimes\tau\Vert\sigma\otimes\tau)
-        &=\re\tr\!((\rho(\log\rho-\log\sigma))\otimes\tau)
-          =\re(\tr(\rho(\log\rho-\log\sigma))\cdot\tr\tau),
+         & =\re\tr\!((\rho(\log\rho-\log\sigma))\otimes\tau)
+        =\re(\tr(\rho(\log\rho-\log\sigma))\cdot\tr\tau),
         \notag
     \end{align}
     where the trace of a tensor product factors as a product of traces. As
@@ -584,9 +584,9 @@
     residues modulo $d$. Then
     \begin{align}
         \sum_{b=0}^{d-1}\zeta^{bi}\overline{\zeta^{bj}}
-        &=
+         & =
         \begin{cases}
-            d, & i=j,\\
+            d, & i=j,    \\
             0, & i\ne j.
         \end{cases}
         \label{eq:entropy_root_orthogonality}
@@ -636,7 +636,7 @@
     \begin{align}
         \frac{1}{d^2}\sum_{a,b=0}^{d-1}
         W(a,b)MW(a,b)^\dagger
-        &=\frac{\tr M}{d}\Id.
+         & =\frac{\tr M}{d}\Id.
         \label{eq:entropy_weyl_twirl}
     \end{align}
 \end{theorem}
@@ -667,7 +667,7 @@
     \begin{align}
         \frac{1}{d_C^2}\sum_{a,b}
         (\Id_S\otimes W(a,b))M(\Id_S\otimes W(a,b))^\dagger
-        &=(\tr_C M)\otimes(\Id_C/d_C).
+         & =(\tr_C M)\otimes(\Id_C/d_C).
         \label{eq:entropy_partial_trace_twirl}
     \end{align}
 \end{lemma}
@@ -707,7 +707,7 @@
     $e$ from that set onto another finite set,
     \begin{align}
         D(\rho_{e^{-1},e^{-1}}\Vert\sigma_{e^{-1},e^{-1}})
-        &=D(\rho\Vert\sigma).
+         & =D(\rho\Vert\sigma).
         \label{eq:entropy_reindexing}
     \end{align}
 \end{lemma}
@@ -716,23 +716,23 @@
     \uses{def:quantum_relative_entropy}
     Write
     $D(\rho\Vert\sigma)
-    =\re\tr(\rho(\log\rho-\log\sigma))$.
+        =\re\tr(\rho(\log\rho-\log\sigma))$.
     The matrix logarithm is covariant under reindexing,
     $\log(\rho_{e^{-1},e^{-1}})
-    =(\log\rho)_{e^{-1},e^{-1}}$, because reindexing is a
+        =(\log\rho)_{e^{-1},e^{-1}}$, because reindexing is a
     star-algebra isomorphism and so commutes with the continuous functional
     calculus. The same isomorphism preserves products and the trace,
     \begin{align}
         (\rho M)_{e^{-1},e^{-1}}
-        &=\rho_{e^{-1},e^{-1}}M_{e^{-1},e^{-1}},
-        \notag\\
+         & =\rho_{e^{-1},e^{-1}}M_{e^{-1},e^{-1}},
+        \notag                                     \\
         \tr(M_{e^{-1},e^{-1}})
-        &=\tr(M).
+         & =\tr(M).
         \notag
     \end{align}
     Taking $M=\log\rho-\log\sigma$ and applying these three identities gives
     $D(\rho_{e^{-1},e^{-1}}\Vert\sigma_{e^{-1},e^{-1}})
-    =D(\rho\Vert\sigma)$.
+        =D(\rho\Vert\sigma)$.
 \end{proof}
 
 \begin{theorem}[Data-processing inequality under the partial trace]
@@ -746,7 +746,7 @@
     factor and an ancilla factor,
     \begin{align}
         D(\tr_C\rho\Vert\tr_C\sigma)
-        &\le D(\rho\Vert\sigma),
+         & \le D(\rho\Vert\sigma),
         \label{eq:entropy_data_processing}
     \end{align}
     where $\tr_C$ is the partial trace over the ancilla factor. This is the
@@ -762,7 +762,7 @@
     By ancilla additivity (Theorem~\ref{thm:relative_entropy_ancilla_additivity})
     the reduced-state relative entropy equals
     $D\bigl((\tr_C\rho)\otimes(\Id_C/d_C)\Vert
-    (\tr_C\sigma)\otimes(\Id_C/d_C)\bigr)$. By
+        (\tr_C\sigma)\otimes(\Id_C/d_C)\bigr)$. By
     Lemma~\ref{lem:twirl_partial_trace} each tensored reduced state is the uniform
     average of the conjugations by the $d_C^2$ unitaries
     $U_{ab}=\Id_S\otimes W(a,b)$, so this is the relative entropy of a
@@ -785,7 +785,7 @@
     $\ker\sigma\subseteq\ker\rho$,
     \begin{align}
         D(\tr_C\rho\Vert\tr_C\sigma)
-        &\le D(\rho\Vert\sigma),
+         & \le D(\rho\Vert\sigma),
         \label{eq:entropy_data_processing_support}
     \end{align}
     where $\tr_C$ is the partial trace over the ancilla factor.
@@ -801,7 +801,7 @@
     (Theorem~\ref{thm:relative_entropy_data_processing}) gives
     \begin{align}
         D(\tr_C\rho_\varepsilon\Vert\tr_C\sigma_\varepsilon)
-        &\le D(\rho_\varepsilon\Vert\sigma_\varepsilon).
+         & \le D(\rho_\varepsilon\Vert\sigma_\varepsilon).
         \notag
     \end{align}
     The right-hand side converges to $D(\rho\Vert\sigma)$ as
@@ -814,8 +814,8 @@
     linear and $\tr_C\Id=d_C\Id$,
     \begin{align}
         \tr_C((1+N\varepsilon)^{-1}(M+\varepsilon\Id))
-        &=(1+N\varepsilon)^{-1}
-          (\tr_C M+d_C\varepsilon\Id).
+         & =(1+N\varepsilon)^{-1}
+        (\tr_C M+d_C\varepsilon\Id).
         \notag
     \end{align}
     This is the affine regularization of $\tr_C M$ with the same scaling rate $N$
@@ -829,7 +829,7 @@
     arbitrary-rate affine regularization has the same both-arguments limit:
     \begin{align}
         D(\tr_C\rho_\varepsilon\Vert\tr_C\sigma_\varepsilon)
-        &\longrightarrow D(\tr_C\rho\Vert\tr_C\sigma)
+         & \longrightarrow D(\tr_C\rho\Vert\tr_C\sigma)
         \quad\text{as }\varepsilon\to0^+.
         \notag
     \end{align}

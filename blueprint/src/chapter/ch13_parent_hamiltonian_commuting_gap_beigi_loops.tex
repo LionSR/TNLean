@@ -6,8 +6,8 @@
     For the convention that an $L$-site interaction is zero when $L>N$, the
     two-site parent Hamiltonian on a one-site periodic chain satisfies
     \begin{align}
-        H_2^{(1)} &= 0, \notag\\
-        \ker H_2^{(1)} &= \C^d. \notag
+        H_2^{(1)}      & = 0, \notag    \\
+        \ker H_2^{(1)} & = \C^d. \notag
     \end{align}
     This convention is local to the present development. The two-site terms
     in \cite[Section~III]{Beigi2012Classification}, source lines 451--514, are
@@ -34,7 +34,7 @@
     integers, and let
     \begin{align}
         s_N
-        &=
+         & =
         \sum_{(a_0,\ldots,a_{N-1})}
         \prod_{n=0}^{N-1}w(a_n,a_{n+1}) \notag
     \end{align}
@@ -120,14 +120,14 @@
     Let $\Phi_a=(\varphi_a(r,l))_{r,l}$ and write
     $r_a=\rank\Phi_a$. Choose a rank factorization
     \begin{align}
-        \Phi_a &= X_aY_a, \notag\\
-        X_a &\in M_{D_a^{\mathrm R},r_a}(\C), \notag\\
-        Y_a &\in M_{r_a,D_a^{\mathrm L}}(\C). \notag
+        \Phi_a & = X_aY_a, \notag                        \\
+        X_a    & \in M_{D_a^{\mathrm R},r_a}(\C), \notag \\
+        Y_a    & \in M_{r_a,D_a^{\mathrm L}}(\C). \notag
     \end{align}
     The tensor on the minimal Schmidt support is
     \begin{align}
         (\widetilde C_a^{(r,l)})_{\alpha,\beta}
-        &=
+         & =
         (Y_a)_{\alpha,l}(X_a)_{r,\beta}, \notag
     \end{align}
     again extended by zero outside sector~$a$. Its physical tensor is its
@@ -202,10 +202,10 @@
     The transfer map of the unnormalized coordinate tensor is
     \begin{align}
         \mathcal E_a(Z)
-        &=
-        \tr(X_a^*X_aZ)Y_aY_a^*, \notag\\
+         & =
+        \tr(X_a^*X_aZ)Y_aY_a^*, \notag \\
         \mathcal E_a^2
-        &=
+         & =
         \nu_a^2\mathcal E_a. \notag
     \end{align}
     Hence the transfer map of $\widehat C_a$ is idempotent. This remains
@@ -247,10 +247,10 @@
     Expanding the closed matrix product on a sector configuration
     $((r_n,l_n))_{n=0}^{N-1}$ gives
     \begin{align}
-        &\sum_{g\in\{0,\ldots,D_a^{\mathrm L}-1\}^N}
-          \prod_{n=0}^{N-1}
-          \delta_{g_n,l_n}
-          \varphi_a\!\left(r_n,g_{n+1}\right) =
+         & \sum_{g\in\{0,\ldots,D_a^{\mathrm L}-1\}^N}
+        \prod_{n=0}^{N-1}
+        \delta_{g_n,l_n}
+        \varphi_a\!\left(r_n,g_{n+1}\right) =
         \prod_{n=0}^{N-1}\varphi_a(r_n,l_{n+1}), \notag
     \end{align}
     where all site labels are read cyclically. Indeed, the Kronecker deltas
@@ -269,7 +269,7 @@
     then for a physical configuration $s=(s_0,\ldots,s_{N-1})$ one has
     \begin{align}
         \tr(A_a^{s_0}\cdots A_a^{s_{N-1}})
-        &=
+         & =
         \sum_{t\in\{0,\ldots,d-1\}^N}
         \left(\prod_{n=0}^{N-1}U_{s_n,t_n}\right)
         \tr(C_a^{t_0}\cdots C_a^{t_{N-1}}). \notag
@@ -300,7 +300,7 @@
         (U^*)^{\otimes N}
         \left(\prod_{n=0}^{N-1}Q_n\right)
         U^{\otimes N}
-        &=
+         & =
         \prod_{n=0}^{N-1}
         \left((U^*)^{\otimes N}Q_nU^{\otimes N}\right) =
         \prod_{n=0}^{N-1}\widetilde Q_n =
@@ -327,7 +327,7 @@
     complementary interactions is carried to
     \begin{align}
         Q_N^{\mathrm{E}}
-        &=
+         & =
         E^{-1}Q_NE =
         \prod_{n=0}^{N-1}(\Id-h_n^{\mathrm{E}}). \notag
     \end{align}
@@ -335,21 +335,21 @@
     data supply pairwise commutativity, which Euclidean transport preserves.
     For all $0\leq m,n<N$, one has
     $h_m^{\mathrm{E}}h_n^{\mathrm{E}}
-    =h_n^{\mathrm{E}}h_m^{\mathrm{E}}$. For any commuting orthogonal
+        =h_n^{\mathrm{E}}h_m^{\mathrm{E}}$. For any commuting orthogonal
     projections $P_0,\ldots,P_{N-1}$,
     \begin{align}
         \prod_{n=0}^{N-1}(\Id-P_n)
-        &=
+         & =
         \operatorname{proj}_{\bigcap_{n=0}^{N-1}\ker P_n}. \notag
     \end{align}
     Applying this identity to the $h_n^{\mathrm{E}}$ gives
     \begin{align}
         Q_N^{\mathrm{E}}
-        &=
+         & =
         \operatorname{proj}_{\bigcap_{n=0}^{N-1}\ker h_n^{\mathrm{E}}},
-        \notag\\
+        \notag \\
         \bigcap_{n=0}^{N-1}\ker h_n^{\mathrm{E}}
-        &=
+         & =
         \ker\!\left(\sum_{n=0}^{N-1}h_n^{\mathrm{E}}\right) =
         \ker H_N^{\mathrm{E}}. \notag
     \end{align}
@@ -383,11 +383,11 @@
     edge projectors. Since $\varphi_a\in\ran P_{a,a}$,
     \begin{align}
         \widetilde Q_N\Phi_a
-        &=
+         & =
         P_{a,a}^{\otimes N}\Phi_a =
-        \Phi_a, \notag\\
+        \Phi_a, \notag \\
         \Phi_a(t_0,\ldots,t_{N-1})
-        &=
+         & =
         \prod_{n=0}^{N-1}\varphi_a(r_n,l_{n+1}). \notag
     \end{align}
     If $U$ is the one-site spatial unitary and
@@ -395,7 +395,7 @@
     conjugation gives
     \begin{align}
         Q_N\Psi_a
-        &=
+         & =
         U^{\otimes N}\widetilde Q_N\Phi_a =
         U^{\otimes N}\Phi_a =
         \Psi_a. \notag
@@ -422,7 +422,7 @@
     orthogonal family and
     \begin{align}
         \spn\{\Psi_a^{(N)}:a\to a\text{ is a positive loop}\}
-        &=
+         & =
         \ker H_N. \notag
     \end{align}
     In particular, the same conclusion holds under the BNT and all-chain
@@ -436,9 +436,9 @@
     $\varphi_a(q)\ne0$. On the constant edge-index configuration,
     \begin{align}
         \Phi_a^{(N)}(q,\ldots,q)
-        &=
-        \prod_{n=0}^{N-1}\varphi_a(q) \notag\\
-        &\ne
+         & =
+        \prod_{n=0}^{N-1}\varphi_a(q) \notag \\
+         & \ne
         0. \notag
     \end{align}
     Thus $\Phi_a^{(N)}\ne0$, and unitarity gives
@@ -447,16 +447,16 @@
     $\Phi_b^{(N)}(s)=0$, and hence
     \begin{align}
         \langle\Phi_a^{(N)},\Phi_b^{(N)}\rangle
-        &=
+         & =
         \sum_s\overline{\Phi_a^{(N)}(s)} \Phi_b^{(N)}(s) =
         0. \notag
     \end{align}
     Moreover,
     \begin{align}
         \langle\Psi_a^{(N)},\Psi_b^{(N)}\rangle
-        &=
+         & =
         \langle U^{\otimes N}\Phi_a^{(N)},
-            U^{\otimes N}\Phi_b^{(N)}\rangle =
+        U^{\otimes N}\Phi_b^{(N)}\rangle =
         \langle\Phi_a^{(N)},\Phi_b^{(N)}\rangle =
         0. \notag
     \end{align}
@@ -500,7 +500,7 @@
     \begin{align}
         \forall^\infty N,\quad
         V^{(N)}(B)
-        &\in
+         & \in
         \spn\{V^{(N)}(L_j):j=1,\ldots,g\}. \notag
     \end{align}
     Normal-tensor orthogonality applied to this eventual-span relation first

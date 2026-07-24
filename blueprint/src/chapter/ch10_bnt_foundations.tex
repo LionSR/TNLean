@@ -99,7 +99,7 @@
     Let $A$ have a canonical-form MPV expansion
     \begin{align}
         \ket{V^{(N)}(A)}
-        &= \sum_{k=1}^{r}\mu_k^N\ket{V^{(N)}(\widetilde A_k)}
+         & = \sum_{k=1}^{r}\mu_k^N\ket{V^{(N)}(\widetilde A_k)}
         \notag
     \end{align}
     at every positive length, where the tensors $\widetilde A_k$ are normal
@@ -148,9 +148,9 @@
     their overlaps with every $A_j$ also vanish. Explicitly, for $t\ne t'$ in
     $T$ and every $j$,
     \begin{align}
-        O_{\widetilde A_t\widetilde A_{t'}}(N)&\longrightarrow0,
-        \notag\\
-        O_{\widetilde A_t A_j}(N)&\longrightarrow0.
+        O_{\widetilde A_t\widetilde A_{t'}}(N) & \longrightarrow0,
+        \notag                                                     \\
+        O_{\widetilde A_t A_j}(N)              & \longrightarrow0.
         \notag
     \end{align}
     By Lemma~\ref{lem:bnt_finite_index_overlap_orthonormal_li}, the combined
@@ -165,7 +165,7 @@
     \begin{align}
         \sum_{t\in T}c_{N,t}\ket{V^{(N)}(\widetilde A_t)}
         +\sum_{j=1}^{g}\alpha_{N,j}\ket{V^{(N)}(A_j)}
-        &=0.
+         & =0.
         \notag
     \end{align}
     Linear independence forces every $c_{N,t}$ to vanish. Hence the
@@ -184,12 +184,12 @@
 
     Conversely, coverage gives, for each canonical-form summand,
     $\ket{V^{(N)}(\widetilde A_k)}
-    =\zeta_k^N\ket{V^{(N)}(A_{j(k)})}$. Hence
+        =\zeta_k^N\ket{V^{(N)}(A_{j(k)})}$. Hence
     \begin{align}
         \ket{V^{(N)}(A)}
-        &= \sum_j
-            \left(\sum_{k:j(k)=j}(\mu_k\zeta_k)^N\right)
-            \ket{V^{(N)}(A_j)}.
+         & = \sum_j
+        \left(\sum_{k:j(k)=j}(\mu_k\zeta_k)^N\right)
+        \ket{V^{(N)}(A_j)}.
         \notag
     \end{align}
     This is the required BNT span at every positive length. Pairwise
@@ -215,28 +215,28 @@
     Take physical dimension two and bond dimension one. Let $A_0$ be supported
     on physical symbol zero and let $A_1$ be supported on physical symbol one:
     \begin{align}
-        A_0^0&=1,
-        \notag\\
-        A_0^1&=0,
-        \notag\\
-        A_1^0&=0,
-        \notag\\
-        A_1^1&=1.
+        A_0^0 & =1,
+        \notag      \\
+        A_0^1 & =0,
+        \notag      \\
+        A_1^0 & =0,
+        \notag      \\
+        A_1^1 & =1.
         \notag
     \end{align}
     Both transfer maps are the identity on the one-dimensional matrix algebra:
     $\E_{A_j}(X)=X$ for $j=0,1$. Hence both tensors are normal. At every
     positive length,
     \begin{align}
-        \ket{V^{(N)}(A_0)}&=\ket{0\cdots0},
-        \notag\\
-        \ket{V^{(N)}(A_1)}&=\ket{1\cdots1}.
+        \ket{V^{(N)}(A_0)} & =\ket{0\cdots0},
+        \notag                                \\
+        \ket{V^{(N)}(A_1)} & =\ket{1\cdots1}.
         \notag
     \end{align}
     Thus $(A_0)$ and $(A_0,A_1)$ are both bases of normal tensors for $A_0$.
     Indeed, for every $N\geq 1$, the second expansion is
     $\ket{V^{(N)}(A_0)}
-    =1\cdot\ket{V^{(N)}(A_0)}+0\cdot\ket{V^{(N)}(A_1)}$.
+        =1\cdot\ket{V^{(N)}(A_0)}+0\cdot\ket{V^{(N)}(A_1)}$.
     Their index sets have cardinalities one and two, so they cannot be related
     by a bijection.
     % The missing converse-coverage condition is documented in
@@ -252,7 +252,7 @@
     Let $A$ have a canonical-form MPV expansion
     \begin{align}
         \ket{V^{(N)}(A)}
-        &=\sum_{k=0}^{r-1}\mu_k^N\ket{V^{(N)}(\widetilde A_k)}
+         & =\sum_{k=0}^{r-1}\mu_k^N\ket{V^{(N)}(\widetilde A_k)}
         \notag
     \end{align}
     at every positive length, where the tensors $\widetilde A_k$ are normal
@@ -278,7 +278,7 @@
     $B_{f(j)}$ representing that block. If $f(j)=f(j')$, then
     \begin{align}
         A_j
-        &\sim_{\mathrm{gp}}\widetilde A_{\ell(j)}
+         & \sim_{\mathrm{gp}}\widetilde A_{\ell(j)}
         \sim_{\mathrm{gp}}B_{f(j)}
         =B_{f(j')}\sim_{\mathrm{gp}}\widetilde A_{\ell(j')}
         \sim_{\mathrm{gp}}A_{j'}.
@@ -290,16 +290,16 @@
     Write the two relations through the chosen active block as
     \begin{align}
         \widetilde A_{\ell(j)}^i
-        &=\zeta_{1,j}X_{1,j}A_j^iX_{1,j}^{-1},
-        \notag\\
+         & =\zeta_{1,j}X_{1,j}A_j^iX_{1,j}^{-1},
+        \notag                                        \\
         \widetilde A_{\ell(j)}^i
-        &=\zeta_{2,j}X_{2,j}B_{e(j)}^iX_{2,j}^{-1}.
+         & =\zeta_{2,j}X_{2,j}B_{e(j)}^iX_{2,j}^{-1}.
         \notag
     \end{align}
     Solving the second identity for $B_{e(j)}^i$ and using the first gives
     \begin{align}
         B_{e(j)}^i
-        &=(\zeta_{2,j}^{-1}\zeta_{1,j})
+         & =(\zeta_{2,j}^{-1}\zeta_{1,j})
         (X_{2,j}^{-1}X_{1,j})A_j^i(X_{1,j}^{-1}X_{2,j}).
         \notag
     \end{align}
@@ -307,7 +307,7 @@
     The gauge-phase relation gives
     \begin{align}
         O_{B_{e(j)}B_{e(j)}}(N)
-        &=(\zeta_j\overline{\zeta_j})^N O_{A_jA_j}(N)
+         & =(\zeta_j\overline{\zeta_j})^N O_{A_jA_j}(N)
         =|\zeta_j|^{2N}O_{A_jA_j}(N).
         \notag
     \end{align}
@@ -472,9 +472,9 @@
     Let $A$ and $B$ be normal tensors of positive, possibly different, bond
     dimensions. Their self-overlaps satisfy
     \begin{align}
-        O_{AA}(N)&\longrightarrow 1,
-        \notag\\
-        O_{BB}(N)&\longrightarrow 1.
+        O_{AA}(N) & \longrightarrow 1,
+        \notag                         \\
+        O_{BB}(N) & \longrightarrow 1.
         \notag
     \end{align}
     Moreover, either $O_{AB}(N)\longrightarrow 0$, or their bond dimensions
@@ -497,10 +497,10 @@
     Theorem~\ref{thm:cpsv_normal_mpv_phase_gauge}, $|\zeta|=1$. Hence
     \begin{align}
         O_{AB}(N)
-        &=\overline{\zeta}^{\,N}O_{AA}(N),
-        \notag\\
+         & =\overline{\zeta}^{\,N}O_{AA}(N),
+        \notag                               \\
         |O_{AB}(N)|
-        &=|O_{AA}(N)|\longrightarrow1.
+         & =|O_{AA}(N)|\longrightarrow1.
         \notag
     \end{align}
 \end{proof}
@@ -540,9 +540,9 @@
 \begin{proof}\leanok
     The proportionality relation gives
     \begin{align}
-        O_{AB}(N)&=c_NO_{BB}(N),
-        \notag\\
-        O_{AA}(N)&=|c_N|^2O_{BB}(N).
+        O_{AB}(N) & =c_NO_{BB}(N),
+        \notag                         \\
+        O_{AA}(N) & =|c_N|^2O_{BB}(N).
         \notag
     \end{align}
     Hence $|c_N|^2\to1$ and therefore $|c_N|\to1$. The first identity now
@@ -630,6 +630,249 @@
     gives the conclusion for the original tensors.
 \end{proof}
 
+\begin{definition}[Fixed-length block-injective canonical-form condition]
+    \label{def:blockwise_product_word_span}
+    \lean{MPSTensor.WordTupleSpanTop}
+    \leanok
+    For a fixed blocked length $m$, the fixed-length form of the
+    block-injective canonical-form condition is
+    \begin{align}
+        \spn\{(A_1^\omega,\ldots,A_g^\omega):|\omega|=m\}
+         & =
+        \prod_{j=1}^g \MN{D_j}.
+        \notag
+    \end{align}
+    Equivalently,
+    \begin{align}
+        \forall X=(X_j)_j\in\bigoplus_{j=1}^g \MN{D_j},
+        \quad
+        \exists (c_\omega(X))_{|\omega|=m},
+        \quad
+        (X_j)_{j=1}^g
+         & =
+        \sum_{|\omega|=m} c_\omega(X)
+        (A_1^\omega,\ldots,A_g^\omega).
+        \notag
+    \end{align}
+    This is the fixed-length form of the block-injective canonical-form
+    condition of \cite[lines~2113--2117]{Cirac2021Matrix}.
+\end{definition}
+
+\begin{lemma}[BNT block separation with an injective prefix]
+    \label{lem:bnt_direct_sum_injective_prefix_word_span}
+    \lean{MPSTensor.hasPairBlockSeparatingWords_threeBlock_of_blocksNotGaugePhaseEquiv_c1}
+    \lean{MPSTensor.propBlockInjective_of_blocksNotGaugePhaseEquiv_directSum_c1}
+    \lean{MPSTensor.wordTupleSpanTop_of_blocksNotGaugePhaseEquiv_directSum_selectors_c1}
+    \lean{MPSTensor.exists_wordTupleSpanTop_of_blocksNotGaugePhaseEquiv_directSum_selectors_c1}
+    \leanok
+    \uses{def:bnt_cpsv, def:nt_cpsv, def:blocks_not_gauge_phase_equiv,
+        def:left_canonical_tensor, def:mpv_overlap,
+        def:blockwise_product_word_span}
+    Let $A^1,\ldots,A^r$ be normalized representatives of a basis of normal
+    tensors: each representative is irreducible, the family is left-canonical,
+    the self-overlaps are normalized, and no two distinct same-dimensional
+    representatives are gauge-phase equivalent. Fix $L_0>0$. Assume that, for
+    every block $j$, the map
+    \begin{align}
+        \Gamma_{L_0}^{A^j}:\MN{D_j} & \longrightarrow (\C^d)^{\otimes L_0},
+        \notag                                                                     \\
+        X                           & \longmapsto \sum_{|u|=L_0}\tr(XA^j_u)\ket{u}
+        \notag
+    \end{align}
+    is injective, and that the homogeneous word spans at the two source
+    lengths are full:
+    \begin{align}
+        \spn\{A^j_u:|u|=L_0+1\}    & = \MN{D_j},
+        \notag                                   \\
+        \spn\{A^j_v:|v|=3(L_0+1)\} & = \MN{D_j}.
+        \notag
+    \end{align}
+    Then, for every ordered pair $k\ne j$, there are coefficients
+    $c^{k,j}_\omega$ such that
+    \begin{align}
+        \sum_{|\omega|=3(L_0+1)} c^{k,j}_\omega A^k_\omega & = \Id,
+        \notag                                                      \\
+        \sum_{|\omega|=3(L_0+1)} c^{k,j}_\omega A^j_\omega & = 0.
+        \notag
+    \end{align}
+    The simultaneous block-word tuples at length
+    $(L_0+1)+3(r-1)(L_0+1)$ span the full product algebra
+    $\prod_{j=1}^r \MN{D_j}$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{def:bnt_cpsv, def:blockwise_product_word_span,
+        thm:trace_nondeg, thm:cpsv_bnt_blocks_not_gaugePhaseEquiv,
+        thm:normal_proportional_mpv_geometric_phase}
+    Put $\ell=L_0+1$ and $S=3\ell$. For a block $A^q$, define the
+    boundary-to-local-space map
+    \begin{align}
+        T_n^q:\MN{D_q} & \longrightarrow (\C^d)^{\otimes n},
+        \notag                                               \\
+        T_n^q(Z)       & =\sum_{|t|=n}\tr(ZA_t^q)\ket{t},
+        \notag
+    \end{align}
+    and its range $\mathcal G_n^q=\operatorname{ran}T_n^q$. This is the same
+    map as $\Gamma_n^{A^q}$, up to cyclically moving $Z$ inside the trace.
+    The full word span at a length $n$ makes $T_n^q$ injective: if
+    $T_n^q(Z)=0$, then $\tr(ZM)=0$ for every $M\in\MN{D_q}$, whence $Z=0$
+    by nondegeneracy of the trace pairing.
+
+    Fix two distinct blocks and relabel them $A$ and $B$ so that their bond
+    dimensions satisfy $D_B\leq D_A$. We claim that
+    \begin{align}
+        \mathcal G_S^A\cap\mathcal G_S^B & =\{0\}.
+        \notag
+    \end{align}
+    Suppose instead that $0\ne\psi$ lies in this intersection. Since the
+    length-$S$ word spans are full, $T_S^A$ and $T_S^B$ are injective, so there
+    are nonzero matrices $X\in\MN{D_A}$ and $Y\in\MN{D_B}$ with
+    $\psi=T_S^A(X)=T_S^B(Y)$. Splitting every length-$S$ word into three
+    length-$\ell$ words gives
+    \begin{align}
+        \tr(XA_{uvw}) & =\tr(YB_{uvw})
+                      &                & (|u|=|v|=|w|=\ell).
+        \notag
+    \end{align}
+
+    We now derive the local-space inclusion without suppressing the intervening
+    map. Since the length-$\ell$ words of $A$ span $\MN{D_A}$ and $X\ne0$,
+    the two-sided products span the same algebra:
+    \begin{align}
+        \spn\{A_uXA_v:|u|=|v|=\ell\} & =\MN{D_A}.
+        \notag
+    \end{align}
+    Indeed, after expanding arbitrary left and right factors in length-$\ell$
+    words, the left-hand side is the span of $MXN$ with
+    $M,N\in\MN{D_A}$; a nonzero entry of $X$, together with matrix units for
+    $M$ and $N$, produces every matrix unit. Hence, for any
+    $Z\in\MN{D_A}$, there are scalars $a_{u,v}$ such that
+    \begin{align}
+        Z & =\sum_{u,v}a_{u,v}A_uXA_v.
+        \notag
+    \end{align}
+    Define the corresponding boundary matrix for $B$ by
+    \begin{align}
+        R(Z) & =\sum_{u,v}a_{u,v}B_uYB_v\in\MN{D_B}.
+        \notag
+    \end{align}
+    For each length-$\ell$ word $t$, cyclicity of the trace and the three-block
+    relation above, applied to the concatenated word $vtu$, give
+    \begin{align}
+        \tr(ZA_t)
+         & =\sum_{u,v}a_{u,v}\tr(XA_vA_tA_u)
+        \notag                               \\
+         & =\sum_{u,v}a_{u,v}\tr(YB_vB_tB_u)
+        \notag                               \\
+         & =\tr(R(Z)B_t).
+        \notag
+    \end{align}
+    Thus $T_\ell^A(Z)=T_\ell^B(R(Z))$. Although the coefficients in a
+    representation of $Z$ need not be unique, their existence for each $Z$ is
+    enough to prove
+    \begin{align}
+        \mathcal G_\ell^A & \subseteq\mathcal G_\ell^B.
+        \notag
+    \end{align}
+
+    Both $T_\ell^A$ and $T_\ell^B$ are injective, so their ranges have
+    dimensions $D_A^2$ and $D_B^2$. The inclusion just proved therefore yields
+    \begin{align}
+        D_A^2
+         & =\dim\mathcal G_\ell^A
+        \leq\dim\mathcal G_\ell^B
+        =D_B^2.
+        \notag
+    \end{align}
+    On the other hand, the chosen orientation $D_B\leq D_A$ gives
+    $D_B^2\leq D_A^2$. Hence $D_A=D_B$ and the inclusion is an equality.
+    If the original bond dimensions were unequal, the strict reverse inequality
+    would already contradict the local-space inclusion. In the remaining
+    equal-dimensional case, identify the two bond index sets through this
+    equality, as in the BNT same-dimension comparison. For
+    $N>\ell$, let $\mathcal C_N^q(\ell)$ be the intersection of the translates
+    of $\mathcal G_\ell^q$ around the periodic chain. Equality
+    $\mathcal G_\ell^A=\mathcal G_\ell^B$ implies
+    \begin{align}
+        \mathcal C_N^A(\ell) & =\mathcal C_N^B(\ell).
+        \notag
+    \end{align}
+    We justify the needed injective uniqueness step here. A vector satisfying
+    every translated length-$\ell$ local constraint can be cut successively
+    around the ring. Injectivity of $T_{L_0}^q$ makes the resulting boundary
+    matrix unique at each cut, so consistency at adjacent cuts gives one
+    matrix $Z$ satisfying
+    \begin{align}
+        ZA_i^q & =A_i^qZ \qquad (0\leq i<d).
+        \notag
+    \end{align}
+    Since the length-$\ell$ words span $\MN{D_q}$, their commutant consists
+    only of scalar matrices. Thus $Z$ is scalar, and the translated local
+    constraints identify the periodic intersection, for $N>\ell$, with the
+    MPS line
+    \begin{align}
+        \mathcal C_N^A(\ell) & =\spn\{\Psi_N(A)\},
+                             &
+        \mathcal C_N^B(\ell) & =\spn\{\Psi_N(B)\},
+        \notag                                               \\
+        \Psi_N(A)            & =\sum_{|w|=N}\tr(A_w)\ket{w},
+                             &
+        \Psi_N(B)            & =\sum_{|w|=N}\tr(B_w)\ket{w}.
+        \notag
+    \end{align}
+    Consequently, equality of the local spaces forces
+    $\Psi_N(A)=c_N\Psi_N(B)$ for some scalar $c_N$ at every such $N$.
+    The normalized self-overlaps are the squared norms of these vectors and
+    tend to one. Hence both vectors, and therefore $c_N$, are nonzero for all
+    sufficiently large $N$. Theorem~\ref{thm:normal_proportional_mpv_geometric_phase}
+    now turns this eventual nonzero proportionality into a gauge-phase
+    equivalence. This contradicts
+    Theorem~\ref{thm:cpsv_bnt_blocks_not_gaugePhaseEquiv} for the two distinct
+    BNT representatives. Thus
+    $\mathcal G_S^A\cap\mathcal G_S^B=\{0\}$, and hence the same assertion for
+    the original ordering of the pair.
+
+    The direct sum map
+    \begin{align}
+        \Phi_{k,j}:\MN{D_k}\oplus\MN{D_j}
+              & \longrightarrow (\C^d)^{\otimes S},
+        \notag                                      \\
+        (X,Y) & \longmapsto T_S^k(X)+T_S^j(Y)
+        \notag
+    \end{align}
+    is now injective: the trivial intersection handles the two summands, and
+    each $T_S^q$ is injective. All spaces are finite-dimensional, so the dual
+    map is surjective. Under the nondegenerate trace pairings, it sends word
+    coefficients $(c_\omega)_\omega$ to
+    \begin{align}
+        \left(\sum_{|\omega|=S}c_\omega A^k_\omega,
+        \sum_{|\omega|=S}c_\omega A^j_\omega\right).
+        \notag
+    \end{align}
+    Surjectivity at $(\Id,0)$ gives the asserted pair selector.
+
+    For fixed $k$, multiply its selectors against the other $r-1$ blocks.
+    Concatenation multiplies word evaluations, so this gives coefficients
+    $b_v^{(k)}$ at length $(r-1)S$ satisfying
+    \begin{align}
+        \sum_{|v|=(r-1)S}b_v^{(k)}A^j_v
+         & =\delta_{j,k}\Id.
+        \notag
+    \end{align}
+    Given $X_k\in\MN{D_k}$, the full length-$\ell$ word span writes
+    $X_k=\sum_{|u|=\ell}a_u^{(k)}A^k_u$. Concatenating this expansion with the
+    selector realizes the tuple supported at $k$ with value $X_k$, at the
+    exact length
+    \begin{align}
+        \ell+(r-1)S
+         & =(L_0+1)+3(r-1)(L_0+1).
+        \notag
+    \end{align}
+    Summing these supported tuples over $k$ yields every element of the stated
+    product algebra.
+\end{proof}
+
 \begin{theorem}[Simultaneous one-letter span after blocking a BNT]
     \label{thm:cpsv_bnt_blocked_simultaneous_span}
     \lean{MPSTensor.IsCPSVBasisOfNormalTensors.%
@@ -646,7 +889,7 @@
     \begin{align}
         \spn_{\C}\left\{((A_1^{[L]})^i,\ldots,(A_g^{[L]})^i)
         : 0\leq i<d^L\right\}
-        &= \prod_{j=1}^g \MN{D_j}.
+         & = \prod_{j=1}^g \MN{D_j}.
         \notag
     \end{align}
     This is the existence form of simultaneous block injectivity associated
@@ -655,28 +898,53 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:cpsv_normal_tp_gauge,
+    \uses{lem:cpsv_bnt_block_dimensions_positive,
+        thm:cpsv_bnt_blocks_not_gaugePhaseEquiv,
+        thm:cpsv_normal_tp_gauge,
         thm:normal_tp_primitive_irred,
         thm:common_exact_block_injectivity_normal_left_canonical,
         thm:wordspan_blk_inj_succ,
         thm:peripheral_primitive_irreducible_overlap_one,
-        lem:bnt_direct_sum_injective_prefix_word_span,
-        lem:block_separating_equations_from_pairwise_separation,
-        lem:product_word_span_from_bnt_block_separation,
-        lem:gauge_invariance_block_injective}
-    Eventual linear independence implies $D_j>0$ for every $j$ and excludes
-    gauge-phase equivalence between two distinct blocks. Put every block in a
-    trace-preserving gauge. Normality gives a common positive length $p$ at
-    which every gauged block is $p$-block injective; this injectivity persists
-    at all larger lengths. Pairwise direct-sum separation at lengths $p$,
-    $p+1$, and $3(p+1)$ gives, for each ordered pair of distinct blocks, a
-    length-$3(p+1)$ polynomial equal to the identity on the first block and
-    zero on the second. Multiplying the $g-1$ pairwise polynomials gives a
-    selector for each block. Combining these selectors with the common
-    length-$p$ word spans yields the full product-algebra span at
-    $L=p+(g-1)3(p+1)$. Conjugation by the Perron gauges preserves this span.
-    Finally, a one-letter evaluation of $A_j^{[L]}$ is precisely a length-$L$
-    word evaluation of $A_j$.
+        lem:gauge_invariance_block_injective,
+        lem:bnt_direct_sum_injective_prefix_word_span}
+    Every block has positive bond dimension, and distinct blocks are not
+    gauge-phase equivalent after equal bond dimensions are identified. Put
+    each block in its trace-preserving Perron gauge. The gauged blocks are
+    irreducible and primitive, form a left-canonical family, and have
+    normalized self-overlaps. Choose a common positive length $p$ at which
+    every gauged block is block-injective. Positive-length propagation gives
+    block injectivity at $p+1$ and at $3(p+1)$.
+
+    Use the pair-selector conclusion of
+    Lemma~\ref{lem:bnt_direct_sum_injective_prefix_word_span} with $L_0=p$.
+    Thus, for each ordered pair $k\ne j$, there is a length-$3(p+1)$ word
+    combination whose value is $\Id$ on block $k$ and $0$ on block $j$.
+    For fixed $k$, multiply the $g-1$ selectors indexed by $j\ne k$.
+    Concatenation multiplies their block evaluations and gives a selector of
+    length
+    \begin{align}
+        3(g-1)(p+1)
+        \notag
+    \end{align}
+    whose value is $\Id$ on block $k$ and $0$ on every other block. Gauge
+    equivalence carries these selector identities back to the original blocks.
+
+    The original blocks also have full length-$p$ word span, since block
+    injectivity is invariant under the Perron gauge. Given
+    $X_k\in\MN{D_k}$, choose a length-$p$ word combination evaluating to
+    $X_k$ on block $k$, and concatenate it with the selector for $k$. This
+    realizes the product-algebra tuple supported at $k$ with value $X_k$.
+    Summing over $k$ gives the full simultaneous span at the constructed
+    length
+    \begin{align}
+        L
+         & =p+3(g-1)(p+1).
+        \notag
+    \end{align}
+    Since $p>0$, this length is positive. Finally, a one-letter evaluation of
+    $A_j^{[L]}$ is precisely a length-$L$ word evaluation of $A_j$. Hence
+    blocking these $L$ sites turns the simultaneous word span just obtained
+    into the asserted simultaneous one-letter span.
 \end{proof}
 
 Let $A$ be a tensor in canonical form, and let $A_1,\ldots,A_g$ be a basis of
@@ -693,10 +961,10 @@ $X=\bigoplus_{j=1}^{g}\bigoplus_{q=1}^{r_j}X_{j,q}$. Then
 % alpha,beta; j and q select direct-sum summands and are not contraction legs.
 \begin{align}
     A^i
-    &=X\left[\bigoplus_{j=1}^{g}
-        \left(M_j\otimes A_j^i\right)\right]X^{-1}
+     & =X\left[\bigoplus_{j=1}^{g}
+             \left(M_j\otimes A_j^i\right)\right]X^{-1}
     =\bigoplus_{j=1}^{g}\bigoplus_{q=1}^{r_j}
-        \mu_{j,q}X_{j,q}A_j^iX_{j,q}^{-1}.
+    \mu_{j,q}X_{j,q}A_j^iX_{j,q}^{-1}.
     \label{eq:bnt_found_canonical_decomp}
 \end{align}
 This is \cite[Section~2.3, Equations~(20a)--(21)]{Cirac2016MPDO_arXiv}.
