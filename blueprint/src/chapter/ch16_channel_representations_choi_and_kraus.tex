@@ -11,34 +11,34 @@ of~\cite[Chapter~2]{Wolf2012Quantum}.
         Matrix.partialTraceRight_apply}
     \leanok
     Let $X \in \MN{d \cdot d'}$ be a bipartite matrix indexed by
-    \[
-        (\{0,\ldots,d-1\} \times \{0,\ldots,d'-1\})^2.
-    \]
+    $(\{0,\ldots,d-1\} \times \{0,\ldots,d'-1\})^2$.
     The \emph{left partial trace} $\tr_A(X)$ and
     \emph{right partial trace} $\tr_B(X)$ are the
     $d' \times d'$ and $d \times d$ matrices defined by
-    \[
+    \begin{align}
         (\tr_A(X))_{ij}
-        = \sum_{k} X_{(k,i),(k,j)},
-        \qquad
+        &= \sum_{k} X_{(k,i),(k,j)},
+        \notag\\
         (\tr_B(X))_{ij}
-        = \sum_{k} X_{(i,k),(j,k)}.
-    \]
+        &= \sum_{k} X_{(i,k),(j,k)}.
+        \notag
+    \end{align}
 \end{definition}
 
 \begin{definition}[Maximally entangled state]\label{def:maximally_entangled}
     \lean{Matrix.omegaProj}
     \leanok
-    The \emph{maximally entangled state} on $\C^d \otimes \C^d$ is the
-    rank-one projector
-    \[
-        \ketbra{\Omega}{\Omega},
-        \quad
+    For $d\geq1$, the \emph{maximally entangled state} on
+    $\C^d \otimes \C^d$ is the rank-one projector
+    $\ketbra{\Omega}{\Omega}$, where
+    \begin{align}
         \ket{\Omega}
-        = \frac{1}{\sqrt{d}} \sum_{j=0}^{d-1} \ket{j,j}.
-    \]
-    Concretely, $(\ketbra{\Omega}{\Omega})_{(i_1,i_2),(j_1,j_2)}
-        = \frac{1}{d} \delta_{i_1 j_1}\delta_{i_2 j_2}$
+        &= \frac{1}{\sqrt{d}} \sum_{j=0}^{d-1} \ket{j,j}.
+        \label{eq:representations_max_entangled}
+    \end{align}
+    Concretely,
+    $(\ketbra{\Omega}{\Omega})_{(i_1,i_2),(j_1,j_2)}
+        = \frac{1}{d}\delta_{i_1 i_2}\delta_{j_1 j_2}$
     and $\tr(\ketbra{\Omega}{\Omega}) = 1$.
 \end{definition}
 
@@ -46,28 +46,28 @@ of~\cite[Chapter~2]{Wolf2012Quantum}.
     \lean{Matrix.swapMatrix}
     \leanok
     The \emph{flip operator} $F$ on $\C^d \otimes \C^d$ is
-    \[
-        F = \sum_{i,j=0}^{d-1} \ket{ij}\!\bra{ji}.
-    \]
+    \begin{align}
+        F
+        &= \sum_{i,j=0}^{d-1} \ket{ij}\!\bra{ji}.
+        \label{eq:representations_flip}
+    \end{align}
     Its matrix entries are
-    \[
+    \begin{align}
         F_{(i_1,i_2),(j_1,j_2)}
-        =
+        &=
         \begin{cases}
             1, & i_1=j_2 \text{ and } i_2=j_1,\\
             0, & \text{otherwise}.
         \end{cases}
-    \]
+        \notag
+    \end{align}
 \end{definition}
 
 \begin{definition}[Two-dimensional antisymmetric vector]
     \label{def:fin_two_antisymm_vec}
     \lean{Matrix.finTwoAntisymmVec}
     \leanok
-    In $\C^2 \otimes \C^2$, let
-    \[
-        v = \ket{01} - \ket{10}.
-    \]
+    In $\C^2 \otimes \C^2$, let $v = \ket{01} - \ket{10}$.
     Equivalently, $v_{(0,1)}=1$, $v_{(1,0)}=-1$, and all other coefficients
     are zero.
 \end{definition}
@@ -78,10 +78,11 @@ of~\cite[Chapter~2]{Wolf2012Quantum}.
     Given a linear map $T : \MN{D} \to \MN{D}$,
     the \emph{tensor extension} $T \otimes \id$ acts on bipartite matrices
     $X \in \MN{D \times D}$ by applying $T$ to each ``slice'':
-    \[
+    \begin{align}
         (T \otimes \id)(X)_{(i_1,i_2),(j_1,j_2)}
-        = (T(X^{(i_2,j_2)}))_{i_1 j_1},
-    \]
+        &= (T(X^{(i_2,j_2)}))_{i_1 j_1},
+        \label{eq:representations_tensor_map_id}
+    \end{align}
     where $X^{(i_2,j_2)}_{ab} = X_{(a,i_2),(b,j_2)}$ is the
     bipartite slice.
 \end{definition}
@@ -122,11 +123,12 @@ matrix $\tau=(T\otimes\id)\ketbra{\Omega}{\Omega}$ on the doubled space:
     \uses{def:maximally_entangled, def:tensor_map_id}
     The \emph{Choi matrix} of a linear map
     $T : \MN{D} \to \MN{D}$ is
-    \[
+    \begin{align}
         \tau
-        = (T \otimes \id)(\ketbra{\Omega}{\Omega})
-        \in  \MN{D \times D}.
-    \]
+        &= (T \otimes \id)(\ketbra{\Omega}{\Omega})
+        \in \MN{D \times D}.
+        \label{eq:representations_choi}
+    \end{align}
     Concretely,
     $\tau_{(i_1,i_2),(j_1,j_2)}
         = \frac{1}{D}\,(T(E_{i_2 j_2}))_{i_1 j_1}$
@@ -153,11 +155,11 @@ matrix $\tau=(T\otimes\id)\ketbra{\Omega}{\Omega}$ on the doubled space:
     \uses{def:choi_matrix, def:flip_operator, def:maximally_entangled}
     Let $\theta(X)=X^T$ be matrix transposition on $\MN{D}$, with $D \ge 1$.
     Then
-    \[
+    \begin{align}
         (\theta\otimes\id)(\ketbra{\Omega}{\Omega})
-        =
-        \frac{1}{D}F.
-    \]
+        &= \frac{1}{D}F.
+        \label{eq:representations_transpose_choi}
+    \end{align}
     This is \cite[Equation~3.1]{Wolf2012Quantum}.
 \end{theorem}
 
@@ -173,8 +175,8 @@ matrix $\tau=(T\otimes\id)\ketbra{\Omega}{\Omega}$ on the doubled space:
     \lean{ChoiJamiolkowski.cp_iff_choi_posSemidef}
     \leanok
     \uses{def:choi_matrix, def:cp_map}
-    A linear map $T : \MN{D} \to \MN{D}$ is completely positive
-    (in the Kraus sense) if and only if its Choi matrix $\tau \ge 0$.
+    Let $D\geq1$. A linear map $T : \MN{D} \to \MN{D}$ is completely
+    positive (in the Kraus sense) if and only if its Choi matrix $\tau \ge 0$.
 \end{theorem}
 
 \begin{proof}
@@ -203,11 +205,14 @@ matrix $\tau=(T\otimes\id)\ketbra{\Omega}{\Omega}$ on the doubled space:
 \begin{proof}
     \leanok
     \uses{def:choi_matrix, def:partial_trace}
-    $(\tr_A(\tau))_{ij}
-        = \tr(T(\Omega^{(ij)}))
-        = \tr(\Omega^{(ij)})$
-    by trace preservation, where
-    $\Omega^{(ij)} = \frac{1}{D} E_{ij}$ is the $(i,j)$-slice of
+    By trace preservation,
+    \begin{align}
+        (\tr_A(\tau))_{ij}
+        &= \tr(T(\Omega^{(ij)}))
+         = \tr(\Omega^{(ij)}),
+        \notag
+    \end{align}
+    where $\Omega^{(ij)} = \frac{1}{D} E_{ij}$ is the $(i,j)$-slice of
     $\ketbra{\Omega}{\Omega}$.
     Taking the trace gives $\frac{1}{D}\delta_{ij}$.
 \end{proof}
@@ -236,12 +241,13 @@ matrix $\tau=(T\otimes\id)\ketbra{\Omega}{\Omega}$ on the doubled space:
     \lean{ChoiJamiolkowski.trace_choiMatrix_of_tp}
     \leanok
     \uses{def:choi_matrix, def:trace_preserving, thm:traceLeft_choiMatrix_of_tp}
-    If $T$ is trace-preserving, then $\tr(\tau) = 1$.
+    If $D\geq1$ and $T$ is trace-preserving, then $\tr(\tau) = 1$.
 \end{theorem}
 
 \begin{proof}
     \leanok
     \uses{thm:traceLeft_choiMatrix_of_tp}
+    One has
     $\tr(\tau)
         = \tr(\tr_A(\tau))
         = \tr(\frac{1}{D}\Id_D)
@@ -262,12 +268,15 @@ representations already developed above. They correspond to
     \lean{WolfProps.polarization_sandwich}
     \leanok
     For any $A, B, X \in \MN{D}$,
-    \[
+    \begin{align}
         4\,A X B^\dagger
-        = (A+B) X (A+B)^\dagger - (A-B) X (A-B)^\dagger
+        &= (A+B) X (A+B)^\dagger - (A-B) X (A-B)^\dagger
+        \notag\\
+        &\quad
         + i\,(A + iB) X (A + iB)^\dagger
         - i\,(A - iB) X (A - iB)^\dagger.
-    \]
+        \label{eq:representations_polarization}
+    \end{align}
     Each of the four summands on the right is a single-Kraus CP map, so
     every sesquilinear sandwich decomposes into a signed complex linear
     combination of CP maps.
@@ -275,9 +284,13 @@ representations already developed above. They correspond to
 
 \begin{proof}
     \leanok
-    Working entrywise, reduces to the scalar polarization identity
-    $4\,\alpha\,\overline{\delta}
-        = \sum_{k=0}^{3} i^k (\alpha + i^k \beta)\overline{(\gamma + i^k \delta)}$
+    Working entrywise reduces the claim to the scalar polarization identity
+    \begin{align}
+        4\,\alpha\,\overline{\delta}
+        &= \sum_{k=0}^{3} i^k
+        (\alpha + i^k \beta)\overline{(\gamma + i^k \delta)}
+        \notag
+    \end{align}
     in $\C$, which holds after substituting $i^2 = -1$.
 \end{proof}
 
@@ -302,49 +315,45 @@ representations already developed above. They correspond to
     \label{thm:rankone_ray_scalar_rigidity}
     \lean{WolfProps.exists_eq_smul_id_of_maps_rankOne_to_span}
     \leanok
-    Let $T:\MN{D}\to\MN{D}$ be complex-linear.  Suppose that for every
+    Let $T:\MN{D}\to\MN{D}$ be complex-linear. Suppose that for every
     $v\in\C^D$ there is a scalar $c_v\in\C$ such that
-    \[
-        T(\ketbra{v}{v})=c_v\ketbra{v}{v}.
-    \]
+    $T(\ketbra{v}{v})=c_v\ketbra{v}{v}$.
     Then there is a scalar $c\in\C$ such that $T=c\,\id$.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    Write $P_v=\ketbra{v}{v}$.  For $i\ne j$, the identities
-    \[
-        P_{e_i+e_j}+P_{e_i-e_j}=2P_{e_i}+2P_{e_j}
-    \]
-    and
-    \[
+    Write $P_v=\ketbra{v}{v}$. For $i\ne j$, the identities
+    \begin{align}
+        P_{e_i+e_j}+P_{e_i-e_j}
+        &=2P_{e_i}+2P_{e_j},
+        \notag\\
         c_{e_i+e_j}P_{e_i+e_j}+c_{e_i-e_j}P_{e_i-e_j}
-        =2c_{e_i}P_{e_i}+2c_{e_j}P_{e_j}
-    \]
+        &=2c_{e_i}P_{e_i}+2c_{e_j}P_{e_j}
+        \notag
+    \end{align}
     give, from their $(i,i)$, $(j,j)$, and $(i,j)$ entries,
-    \[
-        c_{e_i+e_j}=c_{e_i-e_j}=c_{e_i}=c_{e_j}.
-    \]
+    $c_{e_i+e_j}=c_{e_i-e_j}=c_{e_i}=c_{e_j}$.
     The imaginary parallelogram identity and its image under $T$ are
-    \[
+    \begin{align}
         P_{e_i+\mathrm{i}e_j}+P_{e_i-\mathrm{i}e_j}
-        =2P_{e_i}+2P_{e_j},
-    \]
-    \[
+        &=2P_{e_i}+2P_{e_j},
+        \notag\\
         c_{e_i+\mathrm{i}e_j}P_{e_i+\mathrm{i}e_j}
         +c_{e_i-\mathrm{i}e_j}P_{e_i-\mathrm{i}e_j}
-        =2c_{e_i}P_{e_i}+2c_{e_j}P_{e_j}.
-    \]
+        &=2c_{e_i}P_{e_i}+2c_{e_j}P_{e_j}.
+        \notag
+    \end{align}
     Comparing the same three entries gives
-    \[
-        c_{e_i+\mathrm{i}e_j}=c_{e_i-\mathrm{i}e_j}=c_{e_i}=c_{e_j}.
-    \]
+    $c_{e_i+\mathrm{i}e_j}=c_{e_i-\mathrm{i}e_j}=c_{e_i}=c_{e_j}$.
     Consequently the polarization identity
-    \[
-        4E_{ij}=P_{e_i+e_j}-P_{e_i-e_j}
+    \begin{align}
+        4E_{ij}
+        &=P_{e_i+e_j}-P_{e_i-e_j}
         +\mathrm{i}P_{e_i+\mathrm{i}e_j}
         -\mathrm{i}P_{e_i-\mathrm{i}e_j}
-    \]
+        \notag
+    \end{align}
     gives $T(E_{ij})=cE_{ij}$ for every matrix unit, and hence $T=c\,\id$.
 \end{proof}
 
@@ -363,11 +372,8 @@ representations already developed above. They correspond to
     \uses{thm:rankone_ray_scalar_rigidity}
     Rank-one ray scalar rigidity gives $T=c\,\id$ for some $c\in\C$.
     If $D>0$, evaluating at the first coordinate projector gives
-    \[
-        P_{e_0}=T(P_{e_0})=cP_{e_0},
-    \]
-    whose $(0,0)$ entry yields $c=1$.  For $D=0$ the matrix algebra is
-    trivial, so the conclusion also holds.
+    $P_{e_0}=T(P_{e_0})=cP_{e_0}$, whose $(0,0)$ entry yields $c=1$.
+    For $D=0$ the matrix algebra is trivial, so the conclusion also holds.
 \end{proof}
 
 \begin{definition}[Pure-state ensemble density]
@@ -400,13 +406,14 @@ representations already developed above. They correspond to
     \uses{def:pureEnsembleDensity}
     Expanding and applying the orthogonality relation
     $\sum_i V_{ij}\overline{V_{ij'}} = \delta_{j j'}$ from
-    $V^\dagger V = \Id$:
-    \[
+    $V^\dagger V = \Id$ gives
+    \begin{align}
         \sum_i \ketbra{\psi_i}{\psi_i}
-        = \sum_{j, j'} \left(\sum_i V_{ij} \overline{V_{ij'}}\right)
+        &= \sum_{j, j'} \left(\sum_i V_{ij} \overline{V_{ij'}}\right)
         \ketbra{\phi_j}{\phi_{j'}}
         = \sum_j \ketbra{\phi_j}{\phi_j}.
-    \]
+        \notag
+    \end{align}
 \end{proof}
 
 \begin{theorem}[Hughston--Jozsa--Wootters converse]
@@ -507,11 +514,14 @@ is summed between the $K_i$ layer and the $K_i^\dagger$ layer:
     \leanok
     \uses{def:trace_preserving}
     For any $N$,
-    $\tr((\sum_i K_i^\dagger K_i)\,N)
-        = \sum_i \tr(K_i^\dagger K_i N)
-        = \sum_i \tr(K_i N K_i^\dagger)
-        = \tr(T(N))
-        = \tr(N)$.
+    \begin{align}
+        \tr\left(\left(\sum_i K_i^\dagger K_i\right)N\right)
+        &= \sum_i \tr(K_i^\dagger K_i N)
+         = \sum_i \tr(K_i N K_i^\dagger)
+         = \tr(T(N))
+         = \tr(N).
+        \notag
+    \end{align}
     Non-degeneracy of the trace pairing forces
     $\sum_i K_i^\dagger K_i = \Id$.
 \end{proof}
@@ -526,11 +536,15 @@ is summed between the $K_i$ layer and the $K_i^\dagger$ layer:
 
 \begin{proof}
     \leanok
-    $\tr(T(X))
-        = \sum_i \tr(K_i X K_i^\dagger)
-        = \sum_i \tr(K_i^\dagger K_i X)
-        = \tr((\textstyle\sum_i K_i^\dagger K_i)\,X)
-        = \tr(X)$.
+    One has
+    \begin{align}
+        \tr(T(X))
+        &= \sum_i \tr(K_i X K_i^\dagger)
+         = \sum_i \tr(K_i^\dagger K_i X)
+         = \tr\left(\left(\sum_i K_i^\dagger K_i\right)X\right)
+         = \tr(X).
+        \notag
+    \end{align}
 \end{proof}
 
 \begin{theorem}[Unitality implies Kraus unital normalization]
@@ -539,9 +553,7 @@ is summed between the $K_i$ layer and the $K_i^\dagger$ layer:
     \leanok
     \uses{def:cp_map}
     If $T(X) = \sum_i K_i X K_i^\dagger$ satisfies $T(\Id) = \Id$, then
-    \[
-        \sum_i K_i K_i^\dagger = \Id.
-    \]
+    $\sum_i K_i K_i^\dagger = \Id$.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -556,10 +568,11 @@ is summed between the $K_i$ layer and the $K_i^\dagger$ layer:
     and suppose $K_j = \sum_\ell U_{j\ell} \tilde{K}_\ell$.
     Then $\{K_j\}$ and $\{\tilde{K}_\ell\}$ define the same Kraus map:
     for every $X \in \MN{D}$,
-    \[
+    \begin{align}
         \sum_j K_j X K_j^\dagger
-        = \sum_\ell \tilde{K}_\ell X \tilde{K}_\ell^\dagger.
-    \]
+        &= \sum_\ell \tilde{K}_\ell X \tilde{K}_\ell^\dagger.
+        \notag
+    \end{align}
 \end{theorem}
 
 \begin{proof}
@@ -575,12 +588,9 @@ is summed between the $K_i$ layer and the $K_i^\dagger$ layer:
     \leanok
     \uses{def:cp_map}
     Let $W$ be an isometry between two Kraus index spaces, so $W^\dagger W = \Id$.
-    If
-    \[
-        K_j = \sum_\ell W_{j\ell} \widetilde K_\ell,
-    \]
-    then the Kraus families $\{K_j\}$ and $\{\widetilde K_\ell\}$ define the
-    same completely positive map.
+    If $K_j = \sum_\ell W_{j\ell} \widetilde K_\ell$, then the Kraus
+    families $\{K_j\}$ and $\{\widetilde K_\ell\}$ define the same completely
+    positive map.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -594,9 +604,7 @@ is summed between the $K_i$ layer and the $K_i^\dagger$ layer:
     \uses{def:cp_map}
     Let $\{K_j\}_{j=0}^{r-1}$ and $\{K'_j\}_{j=0}^{r-1}$ be two
     Hilbert--Schmidt orthonormal Kraus families, and suppose
-    \[
-        K_j = \sum_{\ell=0}^{r-1} U_{j\ell}\,K'_\ell.
-    \]
+    $K_j = \sum_{\ell=0}^{r-1} U_{j\ell}\,K'_\ell$.
     Then the transition matrix $U$ is unitary:
     $U^\dagger U = \Id_r$.
 \end{theorem}
@@ -623,10 +631,18 @@ is summed between the $K_i$ layer and the $K_i^\dagger$ layer:
 \begin{proof}
     \leanok
     Use the trace pairing: for all $X$,
-    $\tr(X^\dagger (\sum B_\alpha^\dagger Y B_\alpha))
-        = \tr((\sum B_\alpha X^\dagger B_\alpha^\dagger) Y)
-        = \tr((\sum A_j X^\dagger A_j^\dagger) Y)
-        = \tr(X^\dagger (\sum A_j^\dagger Y A_j))$.
+    \begin{align}
+        \tr\left(X^\dagger
+            \left(\sum_\alpha B_\alpha^\dagger Y B_\alpha\right)\right)
+        &= \tr\left(\left(\sum_\alpha
+            B_\alpha X^\dagger B_\alpha^\dagger\right)Y\right)
+        \notag\\
+        &= \tr\left(\left(\sum_j
+            A_j X^\dagger A_j^\dagger\right)Y\right)
+         = \tr\left(X^\dagger
+            \left(\sum_j A_j^\dagger Y A_j\right)\right).
+        \notag
+    \end{align}
     Nondegeneracy of the trace pairing gives the result.
 \end{proof}
 
@@ -741,10 +757,7 @@ is summed between the $K_i$ layer and the $K_i^\dagger$ layer:
     \uses{def:choi_matrix, def:cp_map}
     If a completely positive map admits a Kraus representation with exactly $r$
     operators, then its Choi matrix is a sum of $r$ rank-one outer products.
-    Consequently,
-    \[
-        \rank(\tau_E) \le r.
-    \]
+    Consequently, $\rank(\tau_E) \le r$.
     Conversely, diagonalizing the positive semidefinite Choi matrix and keeping
     only the nonzero eigenvalue summands produces a Kraus family with exactly
     $\rank(\tau_E)$ operators. Hence the Choi rank is precisely
