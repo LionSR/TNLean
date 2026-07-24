@@ -35,16 +35,22 @@ def strip_comments(source: str) -> str:
     return "\n".join(output)
 
 
-def _match_group(
+def match_group(
     source: str, index: int, open_character: str, close_character: str
 ) -> int:
-    """Return the offset after a balanced brace-aware group, or -1."""
+    """Return the offset after a comment- and brace-aware group, or -1."""
     group_depth = 0
     brace_depth = 0
     while index < len(source):
         character = source[index]
         if character == "\\":
             index += 2
+            continue
+        if character == "%":
+            newline = source.find("\n", index)
+            if newline < 0:
+                return -1
+            index = newline + 1
             continue
         if character == open_character and (
             open_character == "{" or brace_depth == 0
@@ -60,6 +66,8 @@ def _match_group(
             brace_depth += 1
         elif character == "}":
             brace_depth -= 1
+            if brace_depth < 0:
+                return -1
         index += 1
     return -1
 
@@ -89,7 +97,7 @@ def scan_constructs(source: str) -> list[Construct]:
         end = end_match.end() if end_match else len(source)
         body_start = match.end()
         if source[body_start : body_start + 1] == "[":
-            closed = _match_group(source, body_start, "[", "]")
+            closed = match_group(source, body_start, "[", "]")
             if closed != -1:
                 body_start = closed
         body_end = end_match.start() if end_match else len(source)
@@ -108,7 +116,7 @@ def scan_constructs(source: str) -> list[Construct]:
         while index < len(source) and source[index] in " \t\n":
             index += 1
         if source[index : index + 1] == "[":
-            closed = _match_group(source, index, "[", "]")
+            closed = match_group(source, index, "[", "]")
             if closed == -1:
                 continue
             index = closed
@@ -116,7 +124,7 @@ def scan_constructs(source: str) -> list[Construct]:
                 index += 1
         if source[index : index + 1] != "{":
             continue
-        closed = _match_group(source, index, "{", "}")
+        closed = match_group(source, index, "{", "}")
         if closed == -1:
             continue
         constructs.append(

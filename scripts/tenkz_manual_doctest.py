@@ -12,7 +12,7 @@ from dataclasses import dataclass
 from functools import cache
 from pathlib import Path
 
-from tenkzlib.texcase import strip_comments
+from tenkzlib.texcase import match_group, strip_comments
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -30,6 +30,7 @@ class Example:
     source: Path
     line: int
     document: str
+    coverage_marker: str | None = None
 
 
 def _is_escaped(text: str, offset: int) -> bool:
@@ -63,27 +64,10 @@ def _read_optional_argument(text: str, offset: int) -> tuple[int, str | None]:
     offset = _skip_space_and_comments(text, offset)
     if offset == len(text) or text[offset] != "[":
         return offset, None
-
-    brace_depth = 0
-    index = offset + 1
-    while index < len(text):
-        if text[index] == "%" and not _is_escaped(text, index):
-            newline = text.find("\n", index)
-            if newline < 0:
-                break
-            index = newline + 1
-            continue
-        escaped = _is_escaped(text, index)
-        if text[index] == "{" and not escaped:
-            brace_depth += 1
-        elif text[index] == "}" and not escaped:
-            brace_depth -= 1
-            if brace_depth < 0:
-                raise ValueError("unbalanced brace in optional environment argument")
-        elif text[index] == "]" and not escaped and brace_depth == 0:
-            return index + 1, _strip_tex_comments(text[offset + 1:index])
-        index += 1
-    raise ValueError("unterminated optional environment argument")
+    end = match_group(text, offset, "[", "]")
+    if end < 0:
+        raise ValueError("unterminated or unbalanced optional environment argument")
+    return end, _strip_tex_comments(text[offset + 1 : end - 1])
 
 
 def _split_top_level(text: str) -> list[str]:
@@ -112,16 +96,10 @@ def _read_braced(text: str, offset: int) -> tuple[int, str]:
         offset += 1
     if offset == len(text) or text[offset] != "{":
         raise ValueError("expected braced group")
-    depth = 0
-    for index in range(offset, len(text)):
-        escaped = _is_escaped(text, index)
-        if text[index] == "{" and not escaped:
-            depth += 1
-        elif text[index] == "}" and not escaped:
-            depth -= 1
-            if depth == 0:
-                return index + 1, text[offset + 1:index]
-    raise ValueError("unterminated braced group")
+    end = match_group(text, offset, "{", "}")
+    if end < 0:
+        raise ValueError("unterminated braced group")
+    return end, text[offset + 1 : end - 1]
 
 
 def _multiple_variants(options: str | None) -> list[tuple[str, str]]:
@@ -167,7 +145,7 @@ def _is_tenkz_verbatim(body: str) -> bool:
     commands, environments = _registry_vocabulary()
     environment_pattern = "|".join(re.escape(environment) for environment in environments)
     packages, _ = _extract_usepackages(body)
-    scan = _mask_nonexecuted_tokens(body)
+    scan = _mask_nonexecuted_tokens(strip_comments(body))
     environment_matches = re.finditer(
         rf"\\begin\{{(?:{environment_pattern})\}}", scan
     )
@@ -269,7 +247,7 @@ def _package_names(declaration: str) -> list[str]:
         cursor, _ = _read_optional_argument(declaration, cursor)
     cursor = _skip_space_and_comments(declaration, cursor)
     _, names = _read_braced(declaration, cursor)
-    return [name.strip() for name in names.split(",")]
+    return [name.strip() for name in strip_comments(names).split(",")]
 
 
 def _find_environment_end(text: str, environment: str, offset: int) -> re.Match[str] | None:
@@ -298,6 +276,83 @@ def _mask_display_environments(text: str) -> str:
     return "".join(masked)
 
 
+def _blank_range(masked: list[str], start: int, end: int) -> None:
+    for index in range(start, end):
+        if masked[index] != "\n":
+            masked[index] = " "
+
+
+def _mask_false_branches(text: str) -> str:
+    masked = list(text)
+    scan = strip_comments(text)
+    tokens = list(re.finditer(r"\\(?:if[A-Za-z@]*|fi)(?![A-Za-z@])", scan))
+    index = 0
+    while index < len(tokens):
+        token = tokens[index]
+        if token.group(0) != r"\iffalse" or _is_escaped(scan, token.start()):
+            index += 1
+            continue
+        depth = 1
+        cursor = index + 1
+        while cursor < len(tokens) and depth:
+            nested = tokens[cursor]
+            if not _is_escaped(scan, nested.start()):
+                depth += -1 if nested.group(0) == r"\fi" else 1
+            cursor += 1
+        end = tokens[cursor - 1].end() if depth == 0 else len(text)
+        _blank_range(masked, token.start(), end)
+        index = cursor
+    return "".join(masked)
+
+
+def _mask_macro_definitions(text: str) -> str:
+    masked = list(text)
+    scan = strip_comments(text)
+    pattern = re.compile(
+        r"\\(?:(?:new|renew|provide)command|(?:g|e|x)?def)\*?(?![A-Za-z@])"
+    )
+    offset = 0
+    while match := pattern.search(scan, offset):
+        if _is_escaped(scan, match.start()):
+            offset = match.end()
+            continue
+        cursor = _skip_space_and_comments(scan, match.end())
+        is_command = "command" in match.group(0)
+        if is_command:
+            if cursor < len(scan) and scan[cursor] == "{":
+                cursor, _ = _read_braced(scan, cursor)
+            else:
+                control = re.match(r"\\(?:[A-Za-z@]+|.)", scan[cursor:])
+                if control is None:
+                    offset = match.end()
+                    continue
+                cursor += control.end()
+            for _ in range(2):
+                cursor = _skip_space_and_comments(scan, cursor)
+                if cursor < len(scan) and scan[cursor] == "[":
+                    cursor, _ = _read_optional_argument(scan, cursor)
+        else:
+            control = re.match(r"\\(?:[A-Za-z@]+|.)", scan[cursor:])
+            if control is None:
+                offset = match.end()
+                continue
+            cursor += control.end()
+            while cursor < len(scan) and scan[cursor] != "{":
+                cursor += 1
+        cursor = _skip_space_and_comments(scan, cursor)
+        if cursor >= len(scan) or scan[cursor] != "{":
+            offset = match.end()
+            continue
+        end, _ = _read_braced(scan, cursor)
+        _blank_range(masked, cursor, end)
+        offset = end
+    return "".join(masked)
+
+
+def _mask_inert_tex(text: str) -> str:
+    return _mask_macro_definitions(_mask_false_branches(text))
+
+
 def _mask_nonexecuted_tokens(text: str) -> str:
     masked = list(_mask_inline_verbatim(text))
     scan = "".join(masked)
@@ -313,6 +368,30 @@ def _has_executable_command(text: str, command: str) -> bool:
     scan = _mask_nonexecuted_tokens(strip_comments(text))
     pattern = re.compile(rf"\\{re.escape(command)}(?![A-Za-z@:_])")
     return any(not _is_escaped(scan, match.start()) for match in pattern.finditer(scan))
+
+
+def _instrument_command(document: str, command: str) -> tuple[str, str]:
+    packages, _ = _extract_usepackages(document)
+    declaration = next(
+        (
+            package
+            for package in packages
+            if "tenkz" in _package_names(package)
+        ),
+        None,
+    )
+    if declaration is None:
+        raise ValueError(f"reference for \\{command} does not load tenkz")
+    end = document.find(declaration) + len(declaration)
+    marker = f"TENKZ-DOCTEST-EXECUTED-{command}"
+    original = f"tenkzdoctestoriginal{command}"
+    instrumentation = "\n".join(
+        [
+            rf"\expandafter\let\csname {original}\endcsname\{command}",
+            rf"\def\{command}{{\typeout{{{marker}}}\csname {original}\endcsname}}",
+        ]
+    )
+    return document[:end] + "\n" + instrumentation + document[end:], marker
 
 
 def _source_label(path: Path) -> str:
@@ -368,6 +447,7 @@ def _standalone_document(body: str, variant_style: str | None = None) -> str:
 
 def extract_displayed_examples(path: Path) -> list[Example]:
     text = path.read_text(encoding="utf-8")
+    scan_text = _mask_inert_tex(text)
     begin_pattern = re.compile(
         r"^[ \t]*\\begin\{(" + "|".join(DISPLAY_ENVIRONMENTS) + r")\}",
         re.MULTILINE,
@@ -375,8 +455,8 @@ def extract_displayed_examples(path: Path) -> list[Example]:
     examples: list[Example] = []
     offset = 0
     ordinal = 0
-    while match := begin_pattern.search(text, offset):
-        if _is_commented(text, match.start()):
+    while match := begin_pattern.search(scan_text, offset):
+        if _is_commented(scan_text, match.start()):
             offset = match.end()
             continue
         environment = match.group(1)
@@ -428,7 +508,9 @@ def _manual_sources() -> list[Path]:
             continue
         visited.add(source)
         raw = source.read_text(encoding="utf-8")
-        text = strip_comments(_mask_inline_verbatim(_mask_display_environments(raw)))
+        text = strip_comments(
+            _mask_inline_verbatim(_mask_display_environments(_mask_inert_tex(raw)))
+        )
         for match in input_pattern.finditer(text):
             if _is_escaped(text, match.start()):
                 continue
@@ -493,12 +575,14 @@ def reference_examples() -> list[Example]:
             raise ValueError(
                 f"{source}: example mapped to \\{command} does not invoke that command"
             )
+        instrumented, marker = _instrument_command(document, command)
         examples.append(
             Example(
                 label=f"reference-{command}",
                 source=source,
                 line=1,
-                document=document,
+                document=instrumented,
+                coverage_marker=marker,
             )
         )
     return examples
@@ -528,6 +612,11 @@ def compile_example(example: Example, engine: str, work: Path) -> None:
         raise RuntimeError(
             f"{example.source}:{example.line}: standalone compilation failed "
             f"for {example.label}\n{tail}"
+        )
+    if example.coverage_marker and example.coverage_marker not in run.stdout:
+        raise RuntimeError(
+            f"{example.source}:{example.line}: \\{example.label.removeprefix('reference-')} "
+            "was not executed during standalone compilation"
         )
 
 
