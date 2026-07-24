@@ -1,0 +1,363 @@
+% Input:       string declarations (waypoints, windings, detours, crossings)
+%              from the language stage; frames and silhouettes from geometry.
+% Output:      saved smooth paths, resolved crossing gaps, bead anchors, and
+%              string events; development ink until the render stage owns it.
+% Owned state: the string registry (ids, kinds, paths) and the crossing ledger.
+% Invariants:  every declared crossing intersects; every intersection between
+%              two strings is declared; paths exist before resolution.
+% Next stage:  tenkz-render draws strings; the language stage supplies records.
+%
+% Curve model.  A string routes through waypoints as a Hobby spline: Hobby's
+% algorithm (the METAFONT curve engine) chooses tangents and curvature
+% globally, so a route declared by positions alone comes out graceful with
+% no angle annotations.  This retires the out=/in= angle pair, the largest
+% escape-hatch population in the shrink census (297 corpus occurrences).
+% Closed strings are closed Hobby cycles: one smooth loop replaces the
+% four-arc closure quartet.  Crossings are declared data: the under path is
+% split at its geometric intersections with the over path and each cut end
+% retreats by half the crossgap; the over path is drawn whole.  Storage and
+% surgery are spath3; intersection counting is the pgf intersections engine;
+% both are xelatex-clean and verified composable with Hobby splines here.
+% The consumer loads the TikZ libraries hobby, spath3, and intersections.
+%
+% Units.  Waypoints and centres are caller-space TikZ numbers, written as
+% braced pairs {x,y}; silhouette queries return pitch units and convert at
+% the boundary through an explicit caller-space scale.  Every styling
+% constant is a named metric ratio.
+
+\makeatletter
+\ExplSyntaxOn
+
+% ---------- metric entries ---------------------------------------------------
+% crossgap: total visual break in the under strand at a crossing, as a pitch
+% ratio.  Calibration: quantikz opens 3pt at its reference line width; at the
+% 11mm pitch that is 3pt/31.2pt = 0.096, rounded to one clean step.
+\__tenkz_metric_declare:nnn {stringcrossgap} {0.10}
+  { quantikz~opens~3pt~at~11mm~pitch;~the~community-calibrated~crossing~break }
+% tube: meridian amplitude of a wound string, as a pitch ratio.  Large enough
+% that one oscillation reads at a four-station ring, small enough that the
+% winding never strays a full station gap from the cycle it decorates.
+\__tenkz_metric_declare:nnn {stringtube} {0.35}
+  { winding~oscillation~legible~at~four~stations~without~leaving~the~ring }
+
+% ---------- diagnostics ------------------------------------------------------
+\msg_new:nnnn {tenkz}{string-redeclared}
+  { [TKZ-STRING-REDECLARED]~string~'#1'~already~exists }
+  { Each~string~id~is~declared~once;~pick~a~fresh~name. }
+\msg_new:nnnn {tenkz}{string-unknown}
+  { [TKZ-STRING-UNKNOWN]~no~string~named~'#1' }
+  { Declare~the~string~before~referencing~it. }
+\msg_new:nnnn {tenkz}{string-nocross}
+  { [TKZ-STRING-NOCROSS]~'#1'~is~declared~under~'#2'~but~they~never~meet }
+  { The~declared~crossing~has~no~geometric~intersection;~fix~the~route~or~
+    remove~the~declaration. }
+\msg_new:nnnn {tenkz}{string-undeclared}
+  { [TKZ-STRING-UNDECLARED]~strings~'#1'~and~'#2'~intersect~with~no~
+    declared~order }
+  { Every~crossing~carries~a~declared~over/under;~add~one~or~reroute. }
+\msg_new:nnnn {tenkz}{string-library}
+  { [TKZ-STRING-LIBRARY]~TikZ~library~'#1'~is~not~loaded }
+  { The~string~engine~needs~hobby,~spath3,~and~intersections. }
+
+% ---------- state ------------------------------------------------------------
+\seq_new:N \l__tenkz_string_ids_seq          % declaration order
+\prop_new:N \l__tenkz_string_kind_prop       % id -> open|closed|wind|around
+\seq_new:N \l__tenkz_string_cross_seq        % {under}{over} pairs
+\seq_new:N \l__tenkz_string_pts_seq
+\seq_new:N \l__tenkz_string_scan_seq
+\tl_new:N \l__tenkz_string_pts_tl
+\tl_new:N \l__tenkz_string_first_tl
+\tl_new:N \l__tenkz_string_last_tl
+\tl_new:N \l__tenkz_string_tmp_tl
+\tl_new:N \l__tenkz_string_id_tl
+\fp_new:N \l__tenkz_string_x_fp
+\fp_new:N \l__tenkz_string_y_fp
+\fp_new:N \l__tenkz_string_dir_fp
+\fp_new:N \l__tenkz_string_scale_fp
+\int_new:N \l__tenkz_string_n_int
+\bool_new:N \l__tenkz_string_hit_bool
+
+\cs_new_protected:Npn \__tenkz_string_reset:
+  {
+    \seq_clear:N \l__tenkz_string_ids_seq
+    \prop_clear:N \l__tenkz_string_kind_prop
+    \seq_clear:N \l__tenkz_string_cross_seq
+  }
+
+\cs_new_protected:Npn \__tenkz_string_require_libs:
+  {
+    \cs_if_exist:cF {l__tikzspath_prefix_tl}
+      { \msg_error:nnn {tenkz}{string-library} {spath3} }
+    \cs_if_exist:cF {hobby@this@opts}
+      { \msg_error:nnn {tenkz}{string-library} {hobby} }
+    \cs_if_exist:NF \pgfintersectionofpaths
+      { \msg_error:nnn {tenkz}{string-library} {intersections} }
+  }
+
+\cs_new_protected:Npn \__tenkz_string_register:nn #1#2
+  {
+    \prop_if_in:NnT \l__tenkz_string_kind_prop {#1}
+      { \msg_error:nnn {tenkz}{string-redeclared} {#1} }
+    \seq_put_right:Nn \l__tenkz_string_ids_seq {#1}
+    \prop_put:Nnn \l__tenkz_string_kind_prop {#1} {#2}
+  }
+
+% load a token list of braced pairs {x,y}{x,y}... into the point seq
+\cs_new_protected:Npn \__tenkz_string_load_pts:n #1
+  {
+    \seq_clear:N \l__tenkz_string_pts_seq
+    \tl_map_inline:nn {#1}
+      { \seq_put_right:Nn \l__tenkz_string_pts_seq {##1} }
+  }
+
+% ---------- path construction ------------------------------------------------
+% An open string through braced pairs: first and last are endpoints, the
+% interior are Hobby waypoints.  Two points degenerate to a straight bond,
+% which the language stage forbids for kind=string; the engine tolerates it.
+\cs_new_protected:Npn \__tenkz_string_declare_open:nn #1#2
+  {
+    \__tenkz_string_register:nn {#1} {open}
+    \__tenkz_string_load_pts:n {#2}
+    \int_set:Nn \l__tenkz_string_n_int
+      { \seq_count:N \l__tenkz_string_pts_seq }
+    \seq_pop_left:NN \l__tenkz_string_pts_seq \l__tenkz_string_first_tl
+    \seq_pop_right:NN \l__tenkz_string_pts_seq \l__tenkz_string_last_tl
+    \seq_set_map:NNn \l__tenkz_string_pts_seq \l__tenkz_string_pts_seq
+      { ( ##1 ) }
+    \tl_set:Ne \l__tenkz_string_pts_tl
+      { \seq_use:Nn \l__tenkz_string_pts_seq { ~ } }
+    \seq_if_empty:NTF \l__tenkz_string_pts_seq
+      {
+        \use:e
+          {
+            \exp_not:N \path [ spath/save = #1 ]
+              ( \exp_not:o \l__tenkz_string_first_tl ) --
+              ( \exp_not:o \l__tenkz_string_last_tl ) ;
+          }
+      }
+      {
+        \use:e
+          {
+            \exp_not:N \path [ spath/save = #1 ]
+              ( \exp_not:o \l__tenkz_string_first_tl )
+              to [ curve~through = { \exp_not:o \l__tenkz_string_pts_tl } ]
+              ( \exp_not:o \l__tenkz_string_last_tl ) ;
+          }
+      }
+    \tenkz@event{string|id=#1|kind=open|pts=\int_use:N \l__tenkz_string_n_int}
+  }
+
+% A closed string: one smooth Hobby cycle through every listed point.
+\cs_new_protected:Npn \__tenkz_string_declare_closed:nn #1#2
+  {
+    \__tenkz_string_register:nn {#1} {closed}
+    \__tenkz_string_load_pts:n {#2}
+    \int_set:Nn \l__tenkz_string_n_int
+      { \seq_count:N \l__tenkz_string_pts_seq }
+    \seq_pop_left:NN \l__tenkz_string_pts_seq \l__tenkz_string_first_tl
+    \seq_set_map:NNn \l__tenkz_string_pts_seq \l__tenkz_string_pts_seq
+      { ( ##1 ) }
+    \tl_set:Ne \l__tenkz_string_pts_tl
+      { \seq_use:Nn \l__tenkz_string_pts_seq { ~ .. ~ } }
+    \use:e
+      {
+        \exp_not:N \path [ spath/save = #1 , use~Hobby~shortcut ]
+          ( [ closed ] \exp_not:o \l__tenkz_string_first_tl )
+          .. ~ \exp_not:o \l__tenkz_string_pts_tl ;
+      }
+    \tenkz@event{string|id=#1|kind=closed|pts=\int_use:N \l__tenkz_string_n_int}
+  }
+
+% A wound string on a circle of centre (#2,#3) and radius #4 in caller space:
+% homotopy class (p,q) = (#5,#6), meridian amplitude #7 in caller space
+% (pass 0 for a pure longitude).  The radius is modulated as
+% r + a cos(360 q t) while the angle sweeps 360 p t -- the planar projection
+% of a torus winding; samples are dense enough that the closed Hobby cycle
+% is indistinguishable from the parametric curve.
+\cs_new_protected:Npn \__tenkz_string_declare_wind:nnnnnnn #1#2#3#4#5#6#7
+  {
+    \__tenkz_string_register:nn {#1} {wind}
+    \int_set:Nn \l__tenkz_string_n_int
+      { \fp_eval:n { max( 12 , 8 * max( #5 , #6 , 1 ) ) } }
+    \tl_clear:N \l__tenkz_string_pts_tl
+    \int_step_inline:nnn { 1 } { \l__tenkz_string_n_int - 1 }
+      {
+        \tl_put_right:Ne \l__tenkz_string_pts_tl
+          { .. ~ ( \__tenkz_string_wind_pt:nnnnnnn
+              {##1} {#2}{#3}{#4}{#5}{#6}{#7} ) ~ }
+      }
+    \use:e
+      {
+        \exp_not:N \path [ spath/save = #1 , use~Hobby~shortcut ]
+          ( [ closed ]
+            \__tenkz_string_wind_pt:nnnnnnn {0} {#2}{#3}{#4}{#5}{#6}{#7} )
+          \exp_not:o \l__tenkz_string_pts_tl ;
+      }
+    \tenkz@event{string|id=#1|kind=wind|class=#5,#6|
+      pts=\int_use:N \l__tenkz_string_n_int}
+  }
+% sample i of n: angle 360 p i/n, radius r + a cos(360 q i/n)
+\cs_new:Npn \__tenkz_string_wind_pt:nnnnnnn #1#2#3#4#5#6#7
+  {
+    \fp_eval:n
+      { round( #2 + (#4 + #7 * cosd( 360 * #6 * #1 / \l__tenkz_string_n_int ))
+               * cosd( 360 * #5 * #1 / \l__tenkz_string_n_int ) , 5 ) }
+    ,
+    \fp_eval:n
+      { round( #3 + (#4 + #7 * cosd( 360 * #6 * #1 / \l__tenkz_string_n_int ))
+               * sind( 360 * #5 * #1 / \l__tenkz_string_n_int ) , 5 ) }
+  }
+
+% A detour past one measured obstacle: string #1 from point #2 to point #3
+% (braced pairs), apex pushed along direction angle #4 to the obstacle's
+% support plus daylight.  #5 is the obstacle as {family}{hx}{hy}{corner}
+% {theta}{cx}{cy} in pitch units; #6 is the caller-space length of one pitch
+% unit.  Geometry's support functions are consumed read-only.
+\cs_new_protected:Npn \__tenkz_string_declare_around:nnnnnn #1#2#3#4#5#6
+  {
+    \__tenkz_string_register:nn {#1} {around}
+    \tl_set:Nn \l__tenkz_string_id_tl {#1}
+    \fp_set:Nn \l__tenkz_string_dir_fp {#4}
+    \fp_set:Nn \l__tenkz_string_scale_fp {#6}
+    \__tenkz_string_apex:nnnnnnn #5
+    \use:e
+      {
+        \exp_not:N \path [ spath/save = #1 ]
+          ( \exp_not:n {#2} )
+          to [ curve~through =
+            { ( \fp_use:N \l__tenkz_string_x_fp ,
+                \fp_use:N \l__tenkz_string_y_fp ) } ]
+          ( \exp_not:n {#3} ) ;
+      }
+    \tenkz@event{string|id=#1|kind=around|
+      apexx=\fp_eval:n { round( \l__tenkz_string_x_fp , 5 ) }|
+      apexy=\fp_eval:n { round( \l__tenkz_string_y_fp , 5 ) }}
+  }
+% apex = centre + (support(d) + daylight) * unit(d), pitch units scaled out
+\cs_new_protected:Npn \__tenkz_string_apex:nnnnnnn #1#2#3#4#5#6#7
+  {
+    \fp_set:Nn \l__tenkz_string_x_fp
+      { ( #6 + ( \__tenkz_geom_support:nnnnnn
+                   {#1}{#2}{#3}{#4}{#5}{ \l__tenkz_string_dir_fp }
+                 + \__tenkz_string_ratio:n {daylight} )
+               * cosd( \l__tenkz_string_dir_fp ) )
+        * \l__tenkz_string_scale_fp }
+    \fp_set:Nn \l__tenkz_string_y_fp
+      { ( #7 + ( \__tenkz_geom_support:nnnnnn
+                   {#1}{#2}{#3}{#4}{#5}{ \l__tenkz_string_dir_fp }
+                 + \__tenkz_string_ratio:n {daylight} )
+               * sind( \l__tenkz_string_dir_fp ) )
+        * \l__tenkz_string_scale_fp }
+  }
+% a metric ratio as a plain factor, for pitch-unit arithmetic
+\cs_new:Npn \__tenkz_string_ratio:n #1
+  { \prop_item:Nn \g__tenkz_metric_value_prop {#1} }
+
+% ---------- crossings ----------------------------------------------------------
+\cs_new_protected:Npn \__tenkz_string_under:nn #1#2
+  {
+    \prop_if_in:NnF \l__tenkz_string_kind_prop {#1}
+      { \msg_error:nnn {tenkz}{string-unknown} {#1} }
+    \prop_if_in:NnF \l__tenkz_string_kind_prop {#2}
+      { \msg_error:nnn {tenkz}{string-unknown} {#2} }
+    \seq_put_right:Nn \l__tenkz_string_cross_seq { {#1} {#2} }
+  }
+
+% intersection count of two saved paths through the pgf engine
+\cs_new_protected:Npn \__tenkz_string_count:nnN #1#2#3
+  {
+    \pgfintersectionofpaths
+      { \exp_args:Nc \pgfsetpath { \l__tikzspath_prefix_tl #1 } }
+      { \exp_args:Nc \pgfsetpath { \l__tikzspath_prefix_tl #2 } }
+    \int_set:Nn #3 { \pgfintersectionsolutions }
+  }
+
+% Resolve every declared crossing, then police the honesty rule: an
+% intersecting undeclared pair is a hard error.  Runs inside the picture,
+% after every declaration and before any string is drawn.
+\cs_new_protected:Npn \__tenkz_string_resolve:
+  {
+    \seq_map_inline:Nn \l__tenkz_string_cross_seq
+      { \__tenkz_string_resolve_one:nn ##1 }
+    \__tenkz_string_police:
+  }
+\cs_new_protected:Npn \__tenkz_string_resolve_one:nn #1#2
+  {
+    \__tenkz_string_count:nnN {#1} {#2} \l__tenkz_string_n_int
+    \int_compare:nNnTF { \l__tenkz_string_n_int } = { 0 }
+      { \msg_error:nnnn {tenkz}{string-nocross} {#1} {#2} }
+      {
+        \tikzset
+          {
+            spath/split~at~intersections~with = {#1} {#2} ,
+            spath/insert~gaps~after~components =
+              {#1} { \dim_eval:n { \__tenkz_dim:n {stringcrossgap} } } ,
+          }
+        \tenkz@event{stringcross|under=#1|over=#2|
+          hits=\int_use:N \l__tenkz_string_n_int}
+      }
+  }
+\cs_new_protected:Npn \__tenkz_string_police:
+  {
+    \seq_set_eq:NN \l__tenkz_string_scan_seq \l__tenkz_string_ids_seq
+    \seq_map_inline:Nn \l__tenkz_string_ids_seq
+      {
+        \seq_pop_left:NN \l__tenkz_string_scan_seq \l__tenkz_string_tmp_tl
+        \seq_map_inline:Nn \l__tenkz_string_scan_seq
+          { \__tenkz_string_police_pair:nn {##1} {####1} }
+      }
+  }
+\cs_new_protected:Npn \__tenkz_string_police_pair:nn #1#2
+  {
+    \bool_set_false:N \l__tenkz_string_hit_bool
+    \seq_map_inline:Nn \l__tenkz_string_cross_seq
+      {
+        \tl_if_eq:nnT { {#1} {#2} } {##1}
+          { \bool_set_true:N \l__tenkz_string_hit_bool }
+        \tl_if_eq:nnT { {#2} {#1} } {##1}
+          { \bool_set_true:N \l__tenkz_string_hit_bool }
+      }
+    \bool_if:NF \l__tenkz_string_hit_bool
+      {
+        \__tenkz_string_count:nnN {#1} {#2} \l__tenkz_string_n_int
+        \int_compare:nNnT { \l__tenkz_string_n_int } > { 0 }
+          { \msg_error:nnnn {tenkz}{string-undeclared} {#1} {#2} }
+      }
+  }
+
+% ---------- beads ---------------------------------------------------------------
+% The point a fraction #2 along string #1, exposed as TikZ coordinate #3 and
+% reported as an event.  The parameter is the spath segment parameter, which
+% Hobby's near-uniform waypoint spacing keeps close to arclength; the event
+% carries the resolved position so a fixture pins the truth, not the promise.
+\cs_new_protected:Npn \__tenkz_string_bead:nnn #1#2#3
+  {
+    \prop_if_in:NnF \l__tenkz_string_kind_prop {#1}
+      { \msg_error:nnn {tenkz}{string-unknown} {#1} }
+    \tenkz@string@beadpath {#1} {#2} {#3}
+    \pgfpointanchor {#3} {center}
+    \tenkz@event{stringbead|id=#1|t=#2|
+      x=\fp_eval:n { round( \dim_to_fp:n { \pgf@x } , 4 ) }pt|
+      y=\fp_eval:n { round( \dim_to_fp:n { \pgf@y } , 4 ) }pt}
+  }
+
+% ---------- development ink -----------------------------------------------------
+% The render stage owns string ink at integration; until then fixtures draw
+% through this single, clearly marked primitive.
+\cs_new_protected:Npn \__tenkz_string_dev_draw:nn #1#2
+  {
+    \prop_if_in:NnF \l__tenkz_string_kind_prop {#1}
+      { \msg_error:nnn {tenkz}{string-unknown} {#1} }
+    \draw [ spath/use = #1 , #2 ] ;
+  }
+
+\ExplSyntaxOff
+
+% The spath coordinate system is parsed with document catcodes; this helper
+% stays outside the expl3 region so 'spath cs:' reaches TikZ verbatim.
+\def\tenkz@string@beadpath#1#2#3{%
+  \path (spath cs:#1 #2) coordinate (#3);%
+}
+
+\makeatother
+\endinput
