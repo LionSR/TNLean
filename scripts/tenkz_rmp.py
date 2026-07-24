@@ -31,6 +31,8 @@ from tenkzlib.tnlog import ParsedLog, parse_log
 REPO = Path(__file__).resolve().parent.parent
 DEFAULT_MANIFEST = REPO / "tests" / "tenkz" / "rmp" / "manifest.toml"
 DEFAULT_VERDICT = REPO / "tests" / "tenkz" / "rmp" / "verdicts.toml"
+PAPER_SOURCE = REPO / "Papers" / "2011.12127" / "TN-Review-main.tex"
+FROZEN_TARGET_COUNT = 130
 BOOK_SOURCE = REPO / "docs" / "tenkz" / "rmp-benchmark.tex"
 BOOK_OUTPUT = REPO / "output" / "pdf" / "tenkz-rmp-benchmark.pdf"
 COMPARE_OUTPUT = REPO / "output" / "pdf" / "tenkz-rmp-comparison.pdf"
@@ -92,6 +94,9 @@ FORBIDDEN_CASE_PATTERNS = (
      "case uses a whole-figure definition"),
     (re.compile(r"\\coordinate\b|\\pgf(?:point|path|extra)\b"),
      "case uses an undocumented coordinate escape"),
+)
+INCLUDEGRAPHICS_RE = re.compile(
+    r"\\includegraphics(?:\s*\[[^\]]*\])?\s*\{([^}]*)\}"
 )
 
 
@@ -398,6 +403,7 @@ def load_manifest(path: Path) -> list[Target]:
             )
         )
     validate_census(targets, corpus)
+    validate_source_placements(targets)
     for target in targets:
         validate_case(target)
     validate_distinct_case_bodies(targets)
@@ -411,6 +417,13 @@ def duplicates(values: Iterable[Any]) -> list[Any]:
 
 
 def validate_census(targets: list[Target], census: dict[str, Any]) -> None:
+    # M4 is explicitly defined over a frozen benchmark denominator.  The
+    # manifest derives the detailed census, but it cannot redefine that gate.
+    if len(targets) != FROZEN_TARGET_COUNT:
+        fail(
+            f"manifest has {len(targets)} targets; "
+            f"the benchmark denominator is frozen at {FROZEN_TARGET_COUNT}"
+        )
     if len(targets) != census["total_targets"]:
         fail(
             f"manifest has {len(targets)} targets; "
@@ -462,6 +475,29 @@ def validate_census(targets: list[Target], census: dict[str, Any]) -> None:
         fail(
             f"manifest has {context_only} paper-context-only targets; "
             f"[corpus] declares {census['paper_context_only']}"
+        )
+
+
+def validate_source_placements(targets: Sequence[Target]) -> None:
+    """Keep the manifest's placement census anchored to the source paper."""
+    try:
+        source = strip_comments(PAPER_SOURCE.read_text(encoding="utf-8"))
+    except (OSError, UnicodeError) as exc:
+        fail(f"cannot read source paper {PAPER_SOURCE}: {exc}")
+    expected = [
+        (source.count("\n", 0, match.start()) + 1, match.group(1))
+        for match in INCLUDEGRAPHICS_RE.finditer(source)
+    ]
+    ordered = sorted(
+        (placement["order"], placement["line"], placement["asset"])
+        for target in targets
+        for placement in target.placements
+    )
+    actual = [(line, asset) for _, line, asset in ordered]
+    if actual != expected:
+        fail(
+            "paper placements must match the source paper's "
+            f"{len(expected)} includegraphics occurrences"
         )
 
 
