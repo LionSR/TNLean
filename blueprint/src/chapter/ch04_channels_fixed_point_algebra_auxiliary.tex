@@ -59,7 +59,7 @@
     (\ref{eq:channel_fixed_point_proj}), give
     \begin{align}
         \tr(X)
-        &=\tr(E(X))
+         & =\tr(E(X))
         =\nu\tr(X)+\tr(P(X))
         =\nu\tr(X)+\tr(X).
         \notag
@@ -86,21 +86,6 @@
     The fixed-point set of a complex-linear map
     $E:\MN{D}\to\MN{D}$ is $\Fix(E)=\{X\in\MN{D}:E(X)=X\}$.
 \end{definition}
-
-\begin{lemma}[Faithfulness of a positive-definite weighted trace]
-    \label{lem:posDef_weighted_trace_faithful}
-    \lean{Matrix.posSemidef_eq_zero_of_posDef_trace_mul_eq_zero}\leanok
-    If $M\succeq0$, $\rho>0$, and $\tr(\rho M)=0$, then $M=0$.
-\end{lemma}
-
-\begin{proof}\leanok
-    Write $\rho=S^\dagger S$ with $S$ invertible. The matrix
-    $SMS^\dagger$ is positive semidefinite and
-    $\tr(SMS^\dagger)=\tr(S^\dagger SM)=\tr(\rho M)=0$.
-    A positive semidefinite matrix of trace zero vanishes, so
-    $SMS^\dagger=0$. Since $S$ and $S^\dagger$ are invertible,
-    $SMS^\dagger=0$ implies $MS^\dagger=0$, and hence $M=0$.
-\end{proof}
 
 \begin{theorem}[Fixed points lie in the multiplicative domain]
     \label{thm:fixedPoints_in_multiplicativeDomain}
@@ -129,7 +114,7 @@
     every $A\in\MN{D}$, it satisfies the Schwarz inequality
     \begin{align}
         E(A^\dagger A)-E(A^\dagger)E(A)
-        &\succeq0.
+         & \succeq0.
         \label{eq:channel_fixed_point_schwarz}
     \end{align}
     If the trace-pairing adjoint $E^*$ has a positive definite fixed point
@@ -155,14 +140,14 @@
     The trace-pairing identity, $E^*(\rho)=\rho$, and $E(X)=X$ give
     \begin{align}
         \tr(\rho\Delta_X)
-        &=\tr\!\left(E^*(\rho)X^\dagger X\right)
-          -\tr\!\left(\rho X^\dagger X\right)
+         & =\tr\!\left(E^*(\rho)X^\dagger X\right)
+        -\tr\!\left(\rho X^\dagger X\right)
         =0.
         \notag
     \end{align}
-    Since $\rho>0$, faithfulness of the weighted trace forces
-    $\Delta_X=0$. Applying the same argument to $X^\dagger$ gives equality
-    in the other one-sided Schwarz inequality. Hence
+    Since $\rho>0$, Lemma~\ref{lem:posDef_weighted_trace_faithful}
+    forces $\Delta_X=0$. Applying the same argument to $X^\dagger$ gives
+    equality in the other one-sided Schwarz inequality. Hence
     Theorem~\ref{thm:abstract_md_characterization} places $X$ in the full
     multiplicative domain. Consequently, for fixed points $X,Y$,
     $E(XY)=E(X)E(Y)=XY$. Linearity and unitality supply the remaining
@@ -205,55 +190,6 @@
     multiplicative domain.
 \end{proof}
 
-\begin{theorem}[Choi--Effros left absorption]
-    \label{thm:choi_effros_left}
-    \lean{Kraus.choi_effros_left}\leanok
-    \uses{def:kraus_fixed_points, def:kraus_map_channels}
-    Under the same hypotheses, for all $X,Y\in\MN{D}$,
-    $E(E(X)Y)=E(E(X)E(Y))$.
-\end{theorem}
-
-\begin{proof}\leanok
-    \uses{thm:map_mem_multiplicativeDomain_of_idempotent}
-    Theorem~\ref{thm:map_mem_multiplicativeDomain_of_idempotent} places
-    $E(X)$ in the multiplicative domain, so
-    $E(E(X)Y)=E(E(X))E(Y)=E(X)E(Y)$.
-    Applying the same multiplicativity to $E(X)$ and $E(Y)$ gives
-    $E(E(X)E(Y))=E(E(X))E(E(Y))=E(X)E(Y)$ by idempotence.
-\end{proof}
-
-\begin{theorem}[Choi--Effros right absorption]
-    \label{thm:choi_effros_right}
-    \lean{Kraus.choi_effros_right}\leanok
-    \uses{def:kraus_fixed_points, def:kraus_map_channels}
-    Under the same hypotheses, for all $X,Y\in\MN{D}$,
-    $E(XE(Y))=E(E(X)E(Y))$.
-\end{theorem}
-
-\begin{proof}\leanok
-    \uses{thm:map_mem_multiplicativeDomain_of_idempotent}
-    Theorem~\ref{thm:map_mem_multiplicativeDomain_of_idempotent} places
-    $E(Y)$ in the multiplicative domain, so
-    $E(XE(Y))=E(X)E(E(Y))=E(X)E(Y)$.
-    Applying the same multiplicativity to $E(X)$ and $E(Y)$ gives
-    $E(E(X)E(Y))=E(E(X))E(E(Y))=E(X)E(Y)$ by idempotence.
-\end{proof}
-
-\begin{theorem}[Choi--Effros symmetric absorption]
-    \label{thm:choi_effros_left_eq_right}
-    \lean{Kraus.choi_effros_left_eq_right}\leanok
-    \uses{def:kraus_fixed_points, def:kraus_map_channels}
-    Under the same hypotheses, for all $X,Y\in\MN{D}$,
-    $E(E(X)Y)=E(XE(Y))$.
-\end{theorem}
-
-\begin{proof}\leanok
-    \uses{thm:choi_effros_left, thm:choi_effros_right}
-    By Theorems~\ref{thm:choi_effros_left}
-    and~\ref{thm:choi_effros_right}, both sides equal
-    $E(E(X)E(Y))$.
-\end{proof}
-
 \begin{theorem}[Choi--Effros projected product]
     \label{thm:choi_effros_sandwich}
     \lean{Kraus.choi_effros_sandwich}\leanok
@@ -268,6 +204,10 @@
     $E(X)$ and $E(Y)$ in the multiplicative domain. Therefore
     $E(E(X)E(Y))=E(E(X))E(E(Y))=E(X)E(Y)$ by idempotence.
 \end{proof}
+
+The left, right, and symmetric absorption variants are
+Theorems~\ref{thm:choi_effros_left}, \ref{thm:choi_effros_right}, and
+\ref{thm:choi_effros_left_eq_right}, respectively.
 
 \begin{definition}[Adjoint fixed points]\label{def:adjoint_fixed_points}
     \lean{Kraus.adjointFixedPoints}\leanok
@@ -298,7 +238,7 @@
     The \emph{Kraus commutant} is
     \begin{align}
         \{K_i,K_i^\dagger\}'
-        &=\{X\in\MN{D}:[X,K_i]=[X,K_i^\dagger]=0\ \forall i\}.
+         & =\{X\in\MN{D}:[X,K_i]=[X,K_i^\dagger]=0\ \forall i\}.
         \label{eq:channel_kraus_commutant}
     \end{align}
     It is a $*$-subalgebra of $\MN{D}$.
@@ -312,7 +252,7 @@
     the adjoint fixed-point $*$-subalgebra equals the Kraus commutant:
     \begin{align}
         \Fix(E^*)
-        &=\{K_i,K_i^\dagger\}'.
+         & =\{K_i,K_i^\dagger\}'.
         \label{eq:channel_adjoint_fix_commutant}
     \end{align}
     This is \cite[Theorem~6.13]{Wolf2012Quantum}.
@@ -323,7 +263,7 @@
     For the inclusion ``$\supseteq$'', if $X$ commutes with all $K_i$ and
     $K_i^\dagger$, then
     $E^*(X)=\sum_iK_i^\dagger XK_i
-    =X\sum_iK_i^\dagger K_i=X$ by trace preservation.
+        =X\sum_iK_i^\dagger K_i=X$ by trace preservation.
     For the inclusion ``$\subseteq$'', any $*$-subalgebra inside
     $\Fix(E^*)$ lies in the Kraus commutant, because for
     $X\in\Fix(E^*)$ with $X^\dagger X\in\Fix(E^*)$ the
