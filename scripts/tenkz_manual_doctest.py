@@ -288,7 +288,7 @@ def _blank_range(masked: list[str], start: int, end: int) -> None:
 
 def _mask_false_branches(text: str) -> str:
     masked = list(text)
-    scan = strip_comments(text)
+    scan = strip_comments(_mask_display_environments(text))
     primitive_conditionals = (
         "if", "ifcat", "ifnum", "ifdim", "ifodd", "ifvmode", "ifhmode",
         "ifmmode", "ifinner", "ifvoid", "ifhbox", "ifvbox", "ifx", "ifeof",
@@ -324,9 +324,25 @@ def _mask_false_branches(text: str) -> str:
     return "".join(masked)
 
 
-def _mask_inactive_file_branches(text: str) -> str:
+def _tex_file_exists(relative: Path, source_dir: Path) -> bool:
+    roots = [source_dir, MANUAL_DIR, ROOT / "tex" / "tenkz"]
+    for entry in os.environ.get("TEXINPUTS", "").split(":"):
+        normalized = entry.removesuffix("//")
+        if normalized:
+            roots.append(Path(normalized))
+    for root in dict.fromkeys(path.resolve() for path in roots if path.is_dir()):
+        if (root / relative).is_file():
+            return True
+        if any(candidate.is_file() for candidate in root.rglob(relative.as_posix())):
+            return True
+    return False
+
+
+def _mask_inactive_file_branches(text: str, source_dir: Path) -> str:
     masked = list(text)
-    scan = _mask_nonexecuted_tokens(strip_comments(text))
+    scan = _mask_nonexecuted_tokens(
+        strip_comments(_mask_display_environments(text))
+    )
     pattern = re.compile(r"\\IfFileExists(?![A-Za-z@])")
     offset = 0
     while match := pattern.search(scan, offset):
@@ -342,10 +358,7 @@ def _mask_inactive_file_branches(text: str) -> str:
         false_end, _ = _read_braced(scan, false_start)
         normalized_filename = re.sub(r"\s+", "", strip_comments(filename))
         relative = Path(normalized_filename)
-        candidates = [MANUAL_DIR / relative]
-        if not relative.suffix:
-            candidates.append(MANUAL_DIR / relative.with_suffix(".tex"))
-        if any(candidate.is_file() for candidate in candidates):
+        if _tex_file_exists(relative, source_dir):
             active_start, active_end = true_start, true_end
             _blank_range(masked, match.start(), true_start + 1)
             _blank_range(masked, true_end - 1, false_end)
@@ -354,8 +367,8 @@ def _mask_inactive_file_branches(text: str) -> str:
             _blank_range(masked, match.start(), false_start + 1)
             _blank_range(masked, false_end - 1, false_end)
         active = text[active_start + 1 : active_end - 1]
-        masked[active_start + 1 : active_end - 1] = _mask_inactive_file_branches(
-            active
+        masked[active_start + 1 : active_end - 1] = (
+            _mask_inactive_file_branches(active, source_dir)
         )
         offset = false_end
     return "".join(masked)
@@ -363,7 +376,7 @@ def _mask_inactive_file_branches(text: str) -> str:
 
 def _mask_macro_definitions(text: str) -> str:
     masked = list(text)
-    scan = strip_comments(text)
+    scan = strip_comments(_mask_display_environments(text))
     pattern = re.compile(
         r"\\(?:(?:new|renew|provide)command|(?:g|e|x)?def)\*?(?![A-Za-z@])"
     )
@@ -405,9 +418,10 @@ def _mask_macro_definitions(text: str) -> str:
     return "".join(masked)
 
 
-def _mask_inert_tex(text: str) -> str:
-    active = _mask_inactive_file_branches(text)
-    return _mask_macro_definitions(_mask_false_branches(active))
+def _mask_inert_tex(text: str, source_dir: Path) -> str:
+    without_macros = _mask_macro_definitions(text)
+    without_false_branches = _mask_false_branches(without_macros)
+    return _mask_inactive_file_branches(without_false_branches, source_dir)
 
 
 def _mask_nonexecuted_tokens(text: str) -> str:
@@ -503,7 +517,7 @@ def _standalone_document(body: str, variant_style: str | None = None) -> str:
 
 def extract_displayed_examples(path: Path) -> list[Example]:
     text = path.read_text(encoding="utf-8")
-    scan_text = _mask_inert_tex(text)
+    scan_text = _mask_inert_tex(text, path.parent)
     begin_pattern = re.compile(
         r"^[ \t]*\\begin\{(" + "|".join(DISPLAY_ENVIRONMENTS) + r")\}",
         re.MULTILINE,
@@ -565,7 +579,9 @@ def _manual_sources() -> list[Path]:
         visited.add(source)
         raw = source.read_text(encoding="utf-8")
         text = strip_comments(
-            _mask_inline_verbatim(_mask_display_environments(_mask_inert_tex(raw)))
+            _mask_inline_verbatim(
+                _mask_display_environments(_mask_inert_tex(raw, source.parent))
+            )
         )
         for match in input_pattern.finditer(text):
             if _is_escaped(text, match.start()):
