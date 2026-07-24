@@ -10,10 +10,11 @@ import TNLean.MPS.FundamentalTheorem.SectorBNT.ProportionalMatch.Core
 
 The strong existential matching theorem states the CPSV16 Appendix MPV proof,
 line 1182, matching conclusion directly on the original pair `(P, Q)` of BNT
-canonical forms.  In the equal-MPV case both theorems reduce to their
-proportional-sector counterparts via the
+canonical forms.  In the equal-MPV case the existential theorem reduces to
+its proportional-sector counterpart via the
 `SameMPV₂Pos → EventuallyNonzeroProportionalMPV₂` conversion, and the
-bijection step is the shared construction `bijection_from_matches`.
+bijection theorem applies that reduction in both directions through the
+shared construction `bijection_from_matches`.
 
 The coefficient identity of CPSV16 Appendix MPV proof, lines 1187–1188
 (Corollary substitution) lives in the companion module
@@ -73,10 +74,9 @@ the forward injection into an equivalence `β : Fin Q.basisCount ≃
 Fin P.basisCount`, carrying the matched bond-dimension equality,
 gauge-phase equivalence, and non-decaying overlap for every sector of `Q`.
 
-The proof derives both directions from the proportional matching lemma
-`forall_k_exists_j_nondecaying_overlap_of_eventuallyProportional` using the
-`SameMPV₂Pos → NonzeroProportionalMPV₂` conversion, then delegates to the
-shared bijection construction `bijection_from_matches`. -/
+The bijection step is the shared construction `bijection_from_matches`,
+applied to both directions of
+`forall_k_exists_j_nondecaying_overlap_of_sameMPV`. -/
 theorem bijective_match_of_sameMPV
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
@@ -89,12 +89,8 @@ theorem bijective_match_of_sameMPV
         ¬ Tendsto (fun N : ℕ =>
             mpvOverlap (d := d) (P.basis (β k)) (Q.basis k) N)
           atTop (𝓝 0) := by
-  have hProp : EventuallyNonzeroProportionalMPV₂ P.toTensor Q.toTensor :=
-    hEqual.toNonzeroProportionalMPV₂.eventually
-  have hProp_symm : EventuallyNonzeroProportionalMPV₂ Q.toTensor P.toTensor :=
-    hProp.symm
-  have hFwd := forall_k_exists_j_nondecaying_overlap_of_eventuallyProportional hP hQ hProp
-  have hBwd := forall_k_exists_j_nondecaying_overlap_of_eventuallyProportional hQ hP hProp_symm
-  exact bijection_from_matches hP hQ hFwd hBwd
+  exact bijection_from_matches hP hQ
+    (forall_k_exists_j_nondecaying_overlap_of_sameMPV hP hQ hEqual)
+    (forall_k_exists_j_nondecaying_overlap_of_sameMPV hQ hP hEqual.symm)
 
 end MPSTensor
