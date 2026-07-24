@@ -1,18 +1,28 @@
 % Target: rmp-ii-circuit
 % Formula: |psi> = (prod_{layers l} (x)_k U^{(l)}_k) |0>.
-% Ink: Canonical public tenkz environment; no raw TikZ.
-% Boundary: The initial state closes the input; four circuit wires remain open after
+% Ink: Canonical public rotated tenkzfree binary circuit tree.
+% Boundary: The initial state closes the input; eight circuit wires remain open after
 %   the gates.
 % Source: paper TN-Review-main.tex line 518; author source ImagesReview Section
 %   II/ImagesReview Section II.tex lines 547-571
-% Capabilities: grid, typed-ports
+% Capabilities: free-graph, typed-ports, rotated-action
 \[
-  % rows = wires; col 1: |0> source; col 2: first gate (wires 2-3);
-  % col 3: second layer, brick-offset (wires 1-2 and 3-4)
-  \begin{tenkz}[rows={wire,wire,wire,wire}, west=none]
-     & & \tn[box, wires=2]{}\\
-    \tn[dot]{|0\rangle} & \tn[box, wires=2]{} & \\
-     & & \tn[box, wires=2]{}\\
-     & &
-  \end{tenkz}
+  \begin{tenkzfree}[frame={rotate=90}]
+    \tnput[dot]{z}{(-18mm,0mm)}{|0\rangle}
+    \tnput[box,frame={rotate=90}]{g0}{(-11mm,0mm)}{}
+    \tnput[box,frame={rotate=90}]{g1}{(-3mm,-5mm)}{}
+    \tnput[box,frame={rotate=90}]{g2}{(-3mm,5mm)}{}
+    \tnput[box,frame={rotate=90}]{g3}{(5mm,-7.5mm)}{}
+    \tnput[box,frame={rotate=90}]{g4}{(5mm,-2.5mm)}{}
+    \tnput[box,frame={rotate=90}]{g5}{(5mm,2.5mm)}{}
+    \tnput[box,frame={rotate=90}]{g6}{(5mm,7.5mm)}{}
+    \tnjoin{z}{g0}
+    \tnjoin{g0}{g1} \tnjoin{g0}{g2}
+    \tnjoin{g1}{g3} \tnjoin{g1}{g4}
+    \tnjoin{g2}{g5} \tnjoin{g2}{g6}
+    \tnjoin{g3}{12mm,-8.5mm} \tnjoin{g3}{12mm,-6.5mm}
+    \tnjoin{g4}{12mm,-3.5mm} \tnjoin{g4}{12mm,-1.5mm}
+    \tnjoin{g5}{12mm,1.5mm} \tnjoin{g5}{12mm,3.5mm}
+    \tnjoin{g6}{12mm,6.5mm} \tnjoin{g6}{12mm,8.5mm}
+  \end{tenkzfree}
 \]
