@@ -13,9 +13,11 @@
     $m_n : \mathcal{A}_n \otimes \mathcal{A}_n \to \mathcal{A}_{2n}$ and
     inclusion maps $\iota_n : \mathcal{A}_n \to \mathcal{A}_{n+1}$ realized,
     inside the ambient bond-space matrix algebra, by
-    \[
-        m_n(x,y) = xy, \qquad \iota_n(x) = x.
-    \]
+    \begin{align}
+        m_n(x,y) &= xy, \notag\\
+        \iota_n(x) &= x.
+        \notag
+    \end{align}
 \end{definition}
 
 \begin{definition}[Algebra-structure RFP predicate]%
@@ -26,9 +28,10 @@
     An MPO tensor $M$ satisfies the \emph{algebra-structure formulation} used
     here when there exist algebra-structure data such that, for every
     positive blocking size $n$,
-    \[
-        \mathcal{A}_n = \Fix(E_n^{\dagger}),
-    \]
+    \begin{align}
+        \mathcal{A}_n &= \Fix(E_n^{\dagger}),
+        \notag
+    \end{align}
     where $E_n$ is the blocked transfer map. This is a nontrivial algebraic
     condition, but it is still weaker than the full coefficient formulation of
     \cite[Theorem~4.14(ii)]{Cirac2016MPDO_arXiv}; that formulation also
@@ -43,9 +46,10 @@
     Assume the doubled tensor is trace-preserving and the transfer map admits a
     positive-definite fixed point. If $E_1^2 = E_1$, then there is a stationary
     family of support algebras
-    \[
-        \mathcal{A}_n = \Fix(E_1^{\dagger}),
-    \]
+    \begin{align}
+        \mathcal{A}_n &= \Fix(E_1^{\dagger}),
+        \notag
+    \end{align}
     with multiplication $m_n(x,y) = xy$ and inclusion $\iota_n(x) = x$.
 \end{theorem}
 \begin{proof}\leanok
@@ -91,7 +95,7 @@ The two closure maps have the same local form:
     \end{tenkz}
 \end{center}
 In each cell, $X$ is inserted on the virtual bond and the virtual indices are
-closed by $\tr$; the physical legs remain open.  Their spans are the
+closed by $\tr$; the physical legs remain open. Their spans are the
 fixed-point algebras compared in
 \cite[Appendix~C.4, lines~1974--1980]{Cirac2016MPDO_arXiv}.
 
@@ -117,9 +121,10 @@ fixed-point algebras compared in
     \uses{def:mpdo_rfp_via_algebra}
     Assume the doubled tensor is trace-preserving and the transfer map admits a
     positive-definite fixed point. If, for every positive blocked size $n$,
-    \[
-        \Fix(E_n^{\dagger}) = \Fix(E_1^{\dagger}),
-    \]
+    \begin{align}
+        \Fix(E_n^{\dagger}) &= \Fix(E_1^{\dagger}),
+        \notag
+    \end{align}
     then the algebra-structure formulation holds.
 \end{theorem}
 \begin{proof}\leanok
@@ -147,9 +152,10 @@ family, and the corresponding multiplication / inclusion coefficient arrays.
     $\mathcal{A}_n$ over a finite index set $I_n$. The \emph{blocked
     coefficients} of $x \in \mathcal{A}_n$ are the coordinates
     $(x_i)_{i \in I_n} \in \C^{I_n}$ with
-    \[
-        x = \sum_{i \in I_n} x_i\, b_i.
-    \]
+    \begin{align}
+        x &= \sum_{i \in I_n} x_i\, b_i.
+        \notag
+    \end{align}
 \end{definition}
 
 \begin{theorem}[Reconstruction from blocked coefficients]%
@@ -173,9 +179,11 @@ family, and the corresponding multiplication / inclusion coefficient arrays.
     For $i,j \in I_n$, the \emph{blocked multiplication coefficients} are the
     blocked coefficients $(c^{(n)}_{i,j,k})_{k \in I_{2n}}$ of
     $m_n(b_i,b_j) \in \mathcal{A}_{2n}$:
-    \[
-        m_n(b_i,b_j) = \sum_{k \in I_{2n}} c^{(n)}_{i,j,k}\, b_k.
-    \]
+    \begin{align}
+        m_n(b_i,b_j)
+        &= \sum_{k \in I_{2n}} c^{(n)}_{i,j,k}\, b_k.
+        \notag
+    \end{align}
 \end{definition}
 
 \begin{theorem}[Blocked multiplication reconstructs from its coefficients]%
@@ -184,9 +192,7 @@ family, and the corresponding multiplication / inclusion coefficient arrays.
     \leanok
     \uses{def:mpdo_blocked_structure_coefficients}
     In the ambient bond-space matrix algebra,
-    \[
-        b_i\, b_j = \sum_{k \in I_{2n}} c^{(n)}_{i,j,k}\, b_k.
-    \]
+    $b_i b_j = \sum_{k \in I_{2n}} c^{(n)}_{i,j,k} b_k$.
 \end{theorem}
 \begin{proof}\leanok
     Apply the reconstruction formula of
@@ -202,9 +208,11 @@ family, and the corresponding multiplication / inclusion coefficient arrays.
     For $i \in I_n$, the \emph{blocked inclusion coefficients} are the
     blocked coefficients $(d_{ij})_{j \in I_{n+1}}$ of
     $\iota_n(b_i) \in \mathcal{A}_{n+1}$:
-    \[
-        \iota_n(b_i) = \sum_{j \in I_{n+1}} d_{ij}\, b_j.
-    \]
+    \begin{align}
+        \iota_n(b_i)
+        &= \sum_{j \in I_{n+1}} d_{ij}\, b_j.
+        \notag
+    \end{align}
 \end{definition}
 
 \begin{theorem}[Blocked inclusion reconstructs from its coefficients]%
@@ -214,9 +222,7 @@ family, and the corresponding multiplication / inclusion coefficient arrays.
     \uses{def:mpdo_blocked_inclusion_coefficients}
     Reconstructing the inclusion coefficients recovers the image of $b_i$
     under $\iota_n$:
-    \[
-        \sum_{j \in I_{n+1}} d_{ij}\, b_j = \iota_n(b_i).
-    \]
+    $\sum_{j \in I_{n+1}} d_{ij} b_j = \iota_n(b_i)$.
 \end{theorem}
 \begin{proof}\leanok
     \uses{def:mpdo_blocked_coefficients}
@@ -232,12 +238,9 @@ family, and the corresponding multiplication / inclusion coefficient arrays.
     \leanok
     \uses{def:mpdo_rfp_via_algebra, def:mpdo_blocked_coefficients}
     If the algebra tower is compatible with an MPO tensor $M$ and
-    $E_n^\dagger X = X$ for a positive blocking size $n$, then $X \in
-    \mathcal{A}_n$ and, writing $(X_i)_{i \in I_n}$ for its blocked
-    coefficients,
-    \[
-        X = \sum_{i \in I_n} X_i\, b_i.
-    \]
+    $E_n^\dagger X = X$ for a positive blocking size $n$, then
+    $X \in \mathcal{A}_n$ and, writing $(X_i)_{i \in I_n}$ for its blocked
+    coefficients, $X = \sum_{i \in I_n} X_i b_i$.
 \end{theorem}
 \begin{proof}\leanok
     Compatibility identifies $\mathcal{A}_n$ with the adjoint fixed-point algebra of
@@ -252,9 +255,7 @@ family, and the corresponding multiplication / inclusion coefficient arrays.
     \uses{def:mpdo_rfp_via_algebra}
     If an MPO tensor satisfies the algebra-structure formulation, then for
     every positive blocking size $n$ and every $X$,
-    \[
-        E_n^{\dagger} X = X \implies E_1^{\dagger} X = X.
-    \]
+    $E_n^{\dagger}X=X$ implies $E_1^{\dagger}X=X$.
 \end{theorem}
 \begin{proof}\leanok
     Compatibility at size $n$ places $X$ in $\mathcal{A}_n$. The inclusion map
@@ -270,15 +271,12 @@ family, and the corresponding multiplication / inclusion coefficient arrays.
     \label{lem:mpdo_adjoint_fix_reverse}
     \lean{MPOTensor.adjoint_blockedTransferMap_apply_of_adjoint_transferMap_apply}
     \leanok
-    For every $n$,
-    \[
-        E_1^{\dagger} X = X \implies E_n^{\dagger} X = X.
-    \]
+    For every $n$, $E_1^{\dagger}X=X$ implies $E_n^{\dagger}X=X$.
 \end{lemma}
 \begin{proof}\leanok
     Induction on $n$ using $E_{n+1} = E_n \circ E_1$ and
     $(A \circ B)^{\dagger} = B^{\dagger} \circ A^{\dagger}$; the base case is
-    $E_0 = \mathrm{id}$. This step does not require the algebra-structure data.
+    $E_0 = \id$. This step does not require the algebra-structure data.
 \end{proof}
 
 \begin{lemma}[Blocked powers of adjoint eigenvectors]%
@@ -289,15 +287,16 @@ family, and the corresponding multiplication / inclusion coefficient arrays.
     $E_n^\dagger X=\lambda^n X$ for every $n$.
 \end{lemma}
 \begin{proof}\leanok
-    The case $n=0$ is $E_0=\mathrm{id}$. For the induction step,
+    The case $n=0$ is $E_0=\id$. For the induction step,
     $E_{n+1}=E_n\circ E_1$, hence
-    \[
+    \begin{align}
         E_{n+1}^{\dagger}X
-        = E_1^{\dagger}E_n^{\dagger}X
-        = E_1^{\dagger}(\lambda^n X)
-        = \lambda^n E_1^{\dagger}X
-        = \lambda^{n+1}X.
-    \]
+        &= E_1^{\dagger}E_n^{\dagger}X
+         = E_1^{\dagger}(\lambda^n X)
+         = \lambda^n E_1^{\dagger}X
+         = \lambda^{n+1}X.
+        \notag
+    \end{align}
 \end{proof}
 
 \begin{theorem}[Finite-order adjoint eigenvalues for algebra towers]%
@@ -323,11 +322,9 @@ family, and the corresponding multiplication / inclusion coefficient arrays.
     \leanok
     \uses{def:mpdo_rfp_via_algebra, thm:mpdo_adjoint_fix_descent,
         lem:mpdo_adjoint_fix_reverse}
-    If an MPO tensor satisfies the algebra-structure formulation, then for
-    every positive blocking size $n$,
-    \[
-        \Fix(E_n^{\dagger}) = \Fix(E_1^{\dagger}).
-    \]
+    If an MPO tensor satisfies the algebra-structure formulation, then
+    $\Fix(E_n^{\dagger})=\Fix(E_1^{\dagger})$ for every positive blocking
+    size $n$.
 \end{theorem}
 \begin{proof}\leanok
     Combine Theorem~\ref{thm:mpdo_adjoint_fix_descent} with
@@ -344,9 +341,7 @@ family, and the corresponding multiplication / inclusion coefficient arrays.
     point, if $M$ satisfies the algebra-structure formulation, then the
     stationary tower $\mathcal{A}_n = \Fix(E_1^\dagger)$ is
     itself compatible with $M$: for every positive blocking size $n$,
-    \[
-        \Fix(E_1^\dagger) = \Fix(E_n^\dagger).
-    \]
+    $\Fix(E_1^\dagger)=\Fix(E_n^\dagger)$.
 \end{theorem}
 
 \begin{theorem}[The support-algebra condition does not imply fusion]%
@@ -364,26 +359,21 @@ family, and the corresponding multiplication / inclusion coefficient arrays.
 \begin{proof}\leanok
     Take the phase-flip channel with Kraus operators
     $K_0=\frac35 I$ and $K_1=\frac45 Z$. Its transfer map satisfies
-    \[
+    \begin{align}
         E(X)_{ij}
-        = \begin{cases}
+        &=
+        \begin{cases}
             X_{ij}, & i=j, \\
             -\frac7{25}X_{ij}, & i\neq j.
         \end{cases}
-    \]
+        \notag
+    \end{align}
     Hence, for every $n>0$ and $i\neq j$,
-    \[
-        E^n(X)_{ij}=\left(-\frac7{25}\right)^n X_{ij}.
-    \]
-    Since $(-7/25)^n\neq 1$ for every $n>0$ and $E$ is self-adjoint,
-    \[
-        \Fix((E^n)^\dagger)=\Fix(E^\dagger).
-    \]
-    Thus the support-algebra condition holds. On the other hand,
-    \[
-        E^2(X)_{01}=\frac{49}{625}X_{01}
-        \neq -\frac7{25}X_{01}=E(X)_{01}.
-    \]
+    $E^n(X)_{ij}=(-7/25)^n X_{ij}$. Since $(-7/25)^n\neq 1$ for every $n>0$
+    and $E$ is self-adjoint,
+    $\Fix((E^n)^\dagger)=\Fix(E^\dagger)$. Thus the support-algebra condition
+    holds. On the other hand,
+    $E^2(X)_{01}=\frac{49}{625}X_{01}\neq-\frac7{25}X_{01}=E(X)_{01}$.
     Therefore $E^2\neq E$, so the fusion condition fails.
 \end{proof}
 
@@ -392,73 +382,72 @@ family, and the corresponding multiplication / inclusion coefficient arrays.
     \uses{def:mpdo_rfp_via_algebra, def:mpdo_rfp_via_fusion,
         thm:mpdo_algebra_not_imply_fusion, thm:newton_girard}
     Write $E=E_1$ for the one-site transfer map. The present algebra predicate
-    gives, for every $n>0$,
-    \[
-        \Fix((E^n)^\dagger)
-        = \Fix(E^\dagger).
-    \]
+    gives $\Fix((E^n)^\dagger)=\Fix(E^\dagger)$ for every $n>0$.
     Hence a vector $X$ with $E^\dagger X=\lambda X$ and $\lambda^n=1$ lies in
     $\Fix(E^\dagger)$, so $(\lambda-1)X=0$ and $\lambda=1$ by
     Theorem~\ref{thm:mpdo_algebra_root_of_unity_eigenvalue}. It does not imply
-    $E^2=E$, as Theorem~\ref{thm:mpdo_algebra_not_imply_fusion} shows.  More
+    $E^2=E$, as Theorem~\ref{thm:mpdo_algebra_not_imply_fusion} shows. More
     generally, if $\Pi_{\mathrm{diag}}$ is the projection onto diagonal
     matrices and $0<\varepsilon<1$, set
-    \[
-        E(X)
-        = \varepsilon\, X
-        + (1 - \varepsilon)\, \Pi_{\mathrm{diag}}(X),
-    \]
-    so that
-    \[
+    $E(X)=\varepsilon X+(1-\varepsilon)\Pi_{\mathrm{diag}}(X)$, so that
+    \begin{align}
         E^n(X)
-        = \Pi_{\mathrm{diag}}(X)
-        + \varepsilon^n(X-\Pi_{\mathrm{diag}}(X)),
-        \qquad
+        &= \Pi_{\mathrm{diag}}(X)
+          + \varepsilon^n(X-\Pi_{\mathrm{diag}}(X)),
+        \notag\\
         E^2-E
-        = (\varepsilon^2-\varepsilon)
-        (\mathrm{id}-\Pi_{\mathrm{diag}}).
-    \]
+        &= (\varepsilon^2-\varepsilon)
+           (\id-\Pi_{\mathrm{diag}}).
+        \notag
+    \end{align}
     The fixed-point algebra is diagonal for every $n>0$, but $E^2\ne E$.
 
     The missing source step is the coefficient argument in
     \cite[Appendix~C.4]{Cirac2016MPDO_arXiv}. One needs the same-length
     product law
-    \begin{equation}\label{eq:mpdo_chi_product_law}
+    \begin{align}
         O_L(M_\alpha)O_L(M_\beta)
-        =
+        &=
         \sum_\gamma
         \tr(\chi_{\alpha,\beta,\gamma}^{\,L})
         O_L(M_\gamma)
-    \end{equation}
+        \label{eq:mpdo_chi_product_law}
+    \end{align}
     and the length-one idempotent trace identity
-    \begin{equation}\label{eq:mpdo_idempotent_trace_identity}
+    \begin{align}
         m_\gamma
-        =
+        &=
         \sum_{\alpha,\beta}
         \tr(\chi_{\alpha,\beta,\gamma})
         m_\alpha m_\beta.
-    \end{equation}
+        \label{eq:mpdo_idempotent_trace_identity}
+    \end{align}
     The proof of \cite[Theorem~4.14]{Cirac2016MPDO_arXiv} uses
     (\ref{eq:mpdo_chi_product_law}) and (\ref{eq:mpdo_idempotent_trace_identity}),
     positivity, and the simple-matrix lemma
     \cite[lines~1155--1163]{Cirac2016MPDO_arXiv} to give
-    \begin{equation}\label{eq:mpdo_nu_chi_witness}
+    \begin{align}
         \{\nu_{\gamma,k}\}_k
-        =
+        &=
         \{\mu_{\alpha,k_1}\mu_{\beta,k_2}
         \chi_{\alpha,\beta,\gamma,k_3}\}_{\alpha,\beta,k_1,k_2,k_3},
-        \qquad
-        \tr(\nu_\gamma)=m_\gamma.
-    \end{equation}
+        \notag\\
+        \tr(\nu_\gamma)
+        &=m_\gamma.
+        \label{eq:mpdo_nu_chi_witness}
+    \end{align}
     The reconstruction maps in \cite[lines~2065--2085]{Cirac2016MPDO_arXiv}
     then use
-    \begin{equation}\label{eq:mpdo_reconstruction_maps}
+    \begin{align}
         \widetilde R_2\left(\bigoplus_\gamma X_\gamma\right)
-        = \bigoplus_\gamma \frac{\nu_\gamma}{m_\gamma}\otimes X_\gamma,
-        \qquad
+        &= \bigoplus_\gamma
+           \frac{\nu_\gamma}{m_\gamma}\otimes X_\gamma,
+        \notag\\
         \widetilde R_1\left(\bigoplus_\gamma X_\gamma\right)
-        = \bigoplus_\gamma \frac{\mu_\gamma}{m_\gamma}\otimes X_\gamma.
-    \end{equation}
+        &= \bigoplus_\gamma
+           \frac{\mu_\gamma}{m_\gamma}\otimes X_\gamma.
+        \label{eq:mpdo_reconstruction_maps}
+    \end{align}
     Thus $\tr(\nu_\gamma)=m_\gamma$ and the defining equality
     $m_\gamma=\tr(\mu_\gamma)$ normalize the factors
     $\nu_\gamma/m_\gamma$ and $\mu_\gamma/m_\gamma$, respectively, in
@@ -466,7 +455,7 @@ family, and the corresponding multiplication / inclusion coefficient arrays.
     $S=\widetilde R_1\widetilde S R_2$. The scalar
     Newton--Girard power-sum identity needed to obtain the trace-power form is
     already available as
-    Theorem~\ref{thm:newton_girard}.  To obtain the trace-power conclusion of
+    Theorem~\ref{thm:newton_girard}. To obtain the trace-power conclusion of
     \cite[Theorem~4.14(ii)]{Cirac2016MPDO_arXiv}, one must impose the
     BNT-label hypotheses as a separate condition, relate them to the one-site
     and two-site vertical canonical forms, and construct the maps in
@@ -495,11 +484,15 @@ the elementary trace-power identity for diagonal matrices.
     $\chi_{\alpha,\beta,\gamma,1}, \ldots,
     \chi_{\alpha,\beta,\gamma,r_{\alpha,\beta,\gamma}} \in \C$ for each
     triple, giving the diagonal matrix
-    \[
+    \begin{align}
         \chi_{\alpha,\beta,\gamma}
-        = \diag\bigl(\chi_{\alpha,\beta,\gamma,1}, \ldots,
-        \chi_{\alpha,\beta,\gamma,r_{\alpha,\beta,\gamma}}\bigr).
-    \]
+        &=
+        \diag\bigl(        \chi_{\alpha,\beta,\gamma,1},
+            \ldots,
+            \chi_{\alpha,\beta,\gamma,r_{\alpha,\beta,\gamma}}
+        \bigr).
+        \notag
+    \end{align}
     This is the matrix $\chi_{\alpha,\beta,\gamma}$ of
     \cite[Theorem~4.14(ii)]{Cirac2016MPDO_arXiv}.
 \end{definition}
@@ -511,11 +504,13 @@ the elementary trace-power identity for diagonal matrices.
     \uses{def:mpdo_diagonal_chi_family}
     For every triple $(\alpha, \beta, \gamma)$, if $\chi_{\alpha,\beta,\gamma}$
     has size $r_{\alpha,\beta,\gamma}$, then for every $L \ge 0$,
-    \[
+    \begin{align}
         \tr(\chi_{\alpha,\beta,\gamma}^{L})
-        = \sum_{k=1}^{r_{\alpha,\beta,\gamma}}
+        &=
+        \sum_{k=1}^{r_{\alpha,\beta,\gamma}}
         \chi_{\alpha,\beta,\gamma,k}^{L},
-    \]
+        \notag
+    \end{align}
     where $\chi_{\alpha,\beta,\gamma,k}$ are the diagonal entries.
 \end{theorem}
 \begin{proof}\leanok
@@ -531,12 +526,15 @@ the elementary trace-power identity for diagonal matrices.
     A binary compatibility predicate between an abstract structure-coefficient
     family $c^{(L)}_{\alpha,\beta,\gamma}$ and a diagonal $\chi$ family: the
     pair $(c, \chi)$ is said to be in \emph{trace-power form} when
-    \[
+    \begin{align}
         c^{(L)}_{\alpha,\beta,\gamma}
-        = \tr(\chi_{\alpha,\beta,\gamma}^{L})
-        = \sum_{k=1}^{r_{\alpha,\beta,\gamma}}
+        &=
+        \tr(\chi_{\alpha,\beta,\gamma}^{L})
+         =
+        \sum_{k=1}^{r_{\alpha,\beta,\gamma}}
         \chi_{\alpha,\beta,\gamma,k}^{L}
-    \]
+        \notag
+    \end{align}
     for every $L \ge 0$ and every triple $(\alpha, \beta, \gamma)$, where
     $r_{\alpha,\beta,\gamma}$ is the size of $\chi_{\alpha,\beta,\gamma}$. This
     is the formal analog of the target identity of

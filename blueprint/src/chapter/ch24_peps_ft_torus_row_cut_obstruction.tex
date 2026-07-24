@@ -6,14 +6,15 @@
     \leanok
     A matrix $M\in \MN{4}$ is a per-edge product on two collected vertical
     bonds if, under the identification
-    \[
-        (r,s)\longmapsto 2r+s,\qquad \{0,1\}\times\{0,1\}\simeq \{0,1,2,3\},
-    \]
-    there are matrices $Y_0,Y_1\in \MN{2}$ such that, for all
+    $(r,s)\longmapsto 2r+s$ between
+    $\{0,1\}\times\{0,1\}$ and $\{0,1,2,3\}$, there are matrices
+    $Y_0,Y_1\in \MN{2}$ such that, for all
     $r,s,r',s'\in\{0,1\}$,
-    \[
-        M_{(r,s),(r',s')}=(Y_0)_{r,r'}(Y_1)_{s,s'}.
-    \]
+    \begin{align}
+        M_{(r,s),(r',s')}
+        &=(Y_0)_{r,r'}(Y_1)_{s,s'}.
+        \notag
+    \end{align}
 \end{definition}
 
 \begin{definition}[Per-edge factorization of the row-cut gauge]%
@@ -26,14 +27,11 @@
     and $B$ be MPS tensors with physical alphabet $\{0,\ldots,15\}$ and
     bond space $\C^4$. If $A$ and $B$ are $1$-block injective and generate
     the same MPV family, then there exist $Z\in \GL_4(\C)$ and
-    $\lambda\in\C$ such that $Z$ is a per-edge product matrix and, for all
-    physical indices $i\in\{0,\ldots,15\}$,
-    \[
-        B^i=\lambda\, Z^{-1}A^iZ.
-    \]
-    This is the additional product conclusion needed by a row-wise
-    one-dimensional reduction before it could imply the per-edge conclusion
-    of \cite[Theorem~3]{Molnar2018NormalPEPS}.
+    $\lambda\in\C$ such that $Z$ is a per-edge product matrix and
+    $B^i=\lambda Z^{-1}A^iZ$ for all physical indices
+    $i\in\{0,\ldots,15\}$. This is the additional product conclusion needed
+    by a row-wise one-dimensional reduction before it could imply the per-edge
+    conclusion of \cite[Theorem~3]{Molnar2018NormalPEPS}.
 \end{definition}
 
 \begin{theorem}[A row-cut gauge need not factor per edge]%
@@ -43,98 +41,76 @@
     \uses{def:peps_row_cut_gauge_factorizes}
     The row-cut factorization assertion is false. Explicitly, let
     $E_{ab}\in\MN{4}$ be the matrix units and set
-    \[
-        A^{(a,b)}=E_{ab},\qquad
-        G=
+    \begin{align}
+        A^{(a,b)}
+        &=E_{ab}, \notag\\
+        G
+        &=
         \begin{pmatrix}
             1&0&1&0\\
             0&1&0&0\\
             0&0&1&0\\
             0&0&0&1
-        \end{pmatrix},
-        \qquad
-        B^{(a,b)}=G^{-1}E_{ab}G.
-    \]
+        \end{pmatrix}, \notag\\
+        B^{(a,b)}
+        &=G^{-1}E_{ab}G.
+        \notag
+    \end{align}
     Then $A$ and $B$ are $1$-block injective and generate the same MPV
     family, but there are no $Z\in\GL_4(\C)$ and $\lambda\in\C$ with
     $Z$ a per-edge product matrix and
-    \[
-        B^{(a,b)}=\lambda\, Z^{-1}E_{ab}Z
-    \]
-    for all $a,b\in\{0,\ldots,3\}$.
+    $B^{(a,b)}=\lambda Z^{-1}E_{ab}Z$ for all
+    $a,b\in\{0,\ldots,3\}$.
 \end{theorem}
+
 \begin{proof}
     \leanok
     The matrix units span $\MN{4}$, hence $A$ is $1$-block injective; conjugation
     by $G$ preserves this property for $B$. For every word
-    $w=((a_1,b_1),\ldots,(a_N,b_N))$,
-    \[
-        B^{w}
-        =
-        G^{-1}A^{w}G,
-        \qquad
-        \tr(B^{w})=\tr(A^{w}),
-    \]
-    so the two MPV families are equal.
+    $w=((a_1,b_1),\ldots,(a_N,b_N))$, one has
+    $B^w=G^{-1}A^wG$ and $\tr(B^w)=\tr(A^w)$, so the two MPV families are
+    equal.
 
-    Suppose that $Z$ and $\lambda$ satisfied the displayed conjugation
-    relation. With $W=ZG^{-1}$, multiplication by $Z$ on the left and by
-    $G^{-1}$ on the right gives, for every matrix unit $E_{ab}$,
-    \[
-        W E_{ab}=\lambda\, E_{ab}W.
-    \]
-    Taking the $(x,y)$ entry gives, for all $x,y,a,b\in\{0,\ldots,3\}$,
-    \[
-        W_{x,a}\delta_{b,y}
-        =
-        \lambda\,\delta_{x,a}W_{b,y}.
-    \]
-    With $y=b$ this gives
-    \[
-        x\ne a \Rightarrow W_{x,a}=0,
-        \qquad
-        W_{a,a}=\lambda W_{b,b}.
-    \]
+    Suppose that $Z$ and $\lambda$ satisfy
+    $B^{(a,b)}=\lambda Z^{-1}E_{ab}Z$ for every $a,b\in\{0,\ldots,3\}$.
+    With $W=ZG^{-1}$, multiplication by $Z$ on the left and by $G^{-1}$
+    on the right gives $WE_{ab}=\lambda E_{ab}W$ for every matrix unit
+    $E_{ab}$. Taking the $(x,y)$ entry gives
+    $W_{x,a}\delta_{b,y}=\lambda\delta_{x,a}W_{b,y}$ for all
+    $x,y,a,b\in\{0,\ldots,3\}$. With $y=b$, this gives
+    $x\ne a\Rightarrow W_{x,a}=0$ and
+    $W_{a,a}=\lambda W_{b,b}$.
+
     Since $Z$ and $G$ are invertible, so is $W$. Thus the diagonal entries
     cannot all vanish; the case $a=b$ gives $\lambda=1$, and then
-    $W_{a,a}=W_{b,b}$ for all $a,b$. Hence
-    \[
-        W=cI_4,\qquad \lambda=1
-    \]
-    with $c\ne0$. Thus $Z=cG$.
+    $W_{a,a}=W_{b,b}$ for all $a,b$. Hence $W=c\Id_4$ and $\lambda=1$ for
+    some $c\ne0$, so $Z=cG$.
 
-    For a matrix $M\in\MN{4}$ write $M_{rr'}\in\MN{2}$ for the block
+    For a matrix $M\in\MN{4}$, write $M_{rr'}\in\MN{2}$ for the block
     whose $(s,s')$ entry is $M_{(r,s),(r',s')}$. If $Z$ were a per-edge
-    product, then
-    \[
-        Z_{rr'}=(Y_0)_{r,r'}Y_1
-    \]
-    for some $Y_0,Y_1\in\MN{2}$. In particular,
-    \[
-        (Z_{00})_{s,s'}(Z_{01})_{1,1}
-        =
-        (Z_{01})_{s,s'}(Z_{00})_{1,1}.
-    \]
-    Since $Z=cG$ and $c\ne0$, the same identity holds for the corresponding
-    blocks of $G$:
-    \[
-        G_{00}=
+    product, then $Z_{rr'}=(Y_0)_{r,r'}Y_1$ for some
+    $Y_0,Y_1\in\MN{2}$. In particular,
+    $(Z_{00})_{s,s'}(Z_{01})_{1,1}
+    =(Z_{01})_{s,s'}(Z_{00})_{1,1}$.
+    Since $Z=cG$ and $c\ne0$, scaling cancels from this block
+    proportionality condition. The corresponding blocks of $G$ are
+    \begin{align}
+        G_{00}
+        &=
         \begin{pmatrix}
             1&0\\
             0&1
-        \end{pmatrix},
-        \qquad
-        G_{01}=
+        \end{pmatrix}, \notag\\
+        G_{01}
+        &=
         \begin{pmatrix}
             1&0\\
             0&0
         \end{pmatrix}.
-    \]
-    Their proportionality identity gives
-    \[
-        (G_{00})_{00}(G_{01})_{11}
-        =
-        (G_{01})_{00}(G_{00})_{11},
-    \]
-    which reads $0=1$. Hence no per-edge product conjugator can exist.
+        \notag
+    \end{align}
+    Substitution into
+    $(G_{00})_{00}(G_{01})_{11}
+    =(G_{01})_{00}(G_{00})_{11}$ gives $0=1$. Hence no per-edge product
+    conjugator can exist.
 \end{proof}
