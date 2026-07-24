@@ -81,13 +81,23 @@ from __future__ import annotations
 import hashlib
 import re
 import sys
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from fractions import Fraction
 from pathlib import Path
-from typing import Callable, Optional
+from typing import Optional
 
-INT_RE = re.compile(r"-?\d+")
-CELL_RE = re.compile(r"-?\d+--?\d+")  # r-c with signed components
+from tenkzlib.texcase import Construct, scan_constructs, strip_comments
+from tenkzlib.tnlog import (
+    FIELD_VALIDATORS,
+    Event,
+    Picture,
+    _is_cell,
+    _is_int,
+    _is_nonnegative_int,
+    _is_pairleg_port,
+    _is_positive_int,
+    parse_log,
+)
 
 # The .tnlog dialect tag each tenkz environment logs -- the single
 # argument each sub-language's code passes to `\tenkz@beginpicture` in
@@ -126,68 +136,6 @@ DIALECT_KINDS = {
                 "pairtrace", "label-anchor-site", "boundary", "warning"},
     "cd": {"cdcell", "cdobject", "cdarrow", "cdmap", "tree"},
 }
-
-
-def _parse_int(v: str) -> Optional[int]:
-    if INT_RE.fullmatch(v) is None:
-        return None
-    try:
-        return int(v)
-    except ValueError:  # Python's configured decimal-digit safety limit
-        return None
-
-
-def _is_int(v: str) -> bool:
-    return _parse_int(v) is not None
-
-
-def _is_positive_int(v: str) -> bool:
-    parsed = _parse_int(v)
-    return parsed is not None and parsed > 0
-
-
-def _is_nonnegative_int(v: str) -> bool:
-    parsed = _parse_int(v)
-    return parsed is not None and parsed >= 0
-
-
-def _is_cell(v: str) -> bool:
-    return re.fullmatch(r"\d+-\d+", v) is not None
-
-
-def _is_lattice_cell(v: str) -> bool:
-    return re.fullmatch(r"\d+-\d+(?:-\d+)?", v) is not None
-
-
-def _is_lattice_cell_list(v: str) -> bool:
-    return bool(v) and all(_is_lattice_cell(cell.strip())
-                           for cell in v.split(","))
-
-
-def _is_region_cell_list(v: str) -> bool:
-    """A resolved region may be empty; non-empty memberships stay strict."""
-    return not v or _is_lattice_cell_list(v)
-
-
-def _is_pairleg_port(v: str) -> bool:
-    """A contraction starts at the centred face or a positive face slot."""
-    if v == "center":
-        return True
-    if not _is_int(v):
-        return False
-    try:
-        return int(v) > 0
-    except ValueError:
-        return False
-
-
-def _enum(*vals: str) -> Callable[[str], bool]:
-    allowed = set(vals)
-    return lambda v: v in allowed
-
-
-def _any(v: str) -> bool:
-    return v != ""
 
 
 Rect = tuple[int, int, int, int]
@@ -440,151 +388,6 @@ def _stroked_polygon_intersects_roundrect(
     )
 
 
-# kind -> {field: validator}; fields absent here are accepted as opaque.
-# Numeric slots are validated strictly: they are cell/row coordinates, and
-# a coordinate that is not an integer addresses nothing.
-FIELD_VALIDATORS: dict[str, dict[str, Callable[[str], bool]]] = {
-    "picture": {"id": _is_int, "lang": _any},
-    "label-use": {"picture": _is_int},
-    "label-anchor-site": {"picture": _is_int, "label": _is_positive_int,
-                          "x": _is_int, "y": _is_int},
-    "ink-use": {"picture": _is_int, "class": _enum("glyph", "wire"),
-                "id": _is_positive_int,
-                "shape": _enum("rect", "circle", "roundrect", "triangle")},
-    "atom": {"picture": _is_int, "cell": _is_cell, "name": _any, "kind": _any},
-    "faceports": {"picture": _is_int, "cell": _is_cell,
-                  "face": _enum("up", "down", "west", "east"),
-                  "arity": _is_nonnegative_int, "at": _any},
-    "pairleg": {"picture": _is_int, "upper": _is_cell, "lower": _is_cell,
-                "upper-port": _is_pairleg_port,
-                "column": _is_int},
-    # The emitter normalizes the user-facing `bond dir=left|right` to
-    # forward/reverse (direction along the wire); accept both spellings.
-    "bond": {"picture": _is_int, "row": _is_int, "from": _is_int, "to": _is_int,
-             "dir": _enum("none", "left", "right", "forward", "reverse")},
-    "trace": {"picture": _is_int, "row": _is_int,
-              "side": _enum("above", "below"),
-              "lang": _enum("lattice"),
-              "axis": _enum("west-east", "north-south"),
-              "sheet": _is_nonnegative_int, "slot": _is_positive_int,
-              "from": _is_cell, "to": _is_cell},
-    "hooks": {"picture": _is_int, "row": _is_int, "side": _enum("above", "below")},
-    "pairtrace": {"picture": _is_int, "row": _is_int, "col": _is_int, "site": _is_cell},
-    "phtrace": {"picture": _is_int, "row": _is_int, "col": _is_int},
-    "cup": {"picture": _is_int, "lang": _enum("lattice"),
-            "side": _enum("west", "east", "north", "south"),
-            "top": _is_int, "bottom": _is_int, "cell": _is_cell,
-            "sheet-a": _is_int, "sheet-b": _is_int, "matrix": _is_int},
-    "hole": {"picture": _is_int, "row": _is_int, "col": _is_int},
-    "warning": {"picture": _is_int, "code": _any},
-    "boundary": {"picture": _is_int, "virtual-west": _is_int, "virtual-east": _is_int,
-                 "virtual-north": _is_int, "virtual-south": _is_int,
-                 "physical-up": _is_int, "physical-down": _is_int},
-    "bbox": {"picture": _is_int, "class": _enum("label", "wire"),
-             "id": _is_positive_int, "xmin": _is_int, "xmax": _is_int,
-             "ymin": _is_int, "ymax": _is_int,
-             "shape": _enum("rect", "roundrect"),
-             "radius": _is_nonnegative_int},
-    "glyph-geometry": {"picture": _is_int, "owner": _is_positive_int,
-                       "shape": _enum("rect", "circle", "roundrect", "triangle"),
-                       "xmin": _is_int, "xmax": _is_int,
-                       "ymin": _is_int, "ymax": _is_int,
-                       "radius": _is_nonnegative_int,
-                       "stroke": _is_nonnegative_int,
-                       "x1": _is_int, "y1": _is_int,
-                       "x2": _is_int, "y2": _is_int,
-                       "x3": _is_int, "y3": _is_int},
-    "wire-geometry": {"picture": _is_int, "owner": _is_positive_int,
-                      "shape": _enum("rect-minus-label"),
-                      "xmin": _is_int, "xmax": _is_int,
-                      "y": _is_int, "outer": _is_positive_int,
-                      "inner": _is_nonnegative_int,
-                      "cut-shape": _enum("rect", "roundrect"),
-                      "cut-xmin": _is_int, "cut-xmax": _is_int,
-                      "cut-ymin": _is_int, "cut-ymax": _is_int,
-                      "cut-radius": _is_nonnegative_int,
-                      "cut-id": _is_positive_int},
-    "lattice": {"picture": _is_int, "rows": _is_positive_int,
-                "cols": _is_positive_int, "sheets": _is_positive_int,
-                "roles": _any},
-    "site": {"picture": _is_int, "cell": _is_lattice_cell,
-             "mode": _enum("removed")},
-    "region": {"picture": _is_int, "lang": _enum("free", "lattice"),
-               "slot": _enum("selected", "secondary", "complement",
-                             "collar", "neutral", "group"),
-               "cells": _is_region_cell_list, "members": _any,
-               "outline": _enum("0", "1"), "name": _any},
-    "edge": {"picture": _is_int, "from": _is_lattice_cell,
-             "to": _is_lattice_cell,
-             "role": _enum("none", "operator", "marked", "extra", "passive")},
-    "cdcell": {"picture": _is_int, "index": _is_int},
-    "cdobject": {"picture": _is_int, "cell": _is_cell},
-    "cdarrow": {"picture": _is_int, "from": _any, "to": _any},
-    "cdmap": {"picture": _is_int, "from": _is_cell, "to": _is_cell,
-              "fused": _enum("0", "1"),
-              "role": _enum("none", "operator", "marked", "extra", "passive"),
-              "species": _any},
-    "tree": {"picture": _is_int, "id": _is_positive_int,
-             "style": _enum("wire", "ribbon"),
-             "leaves": _is_positive_int, "vertices": _is_nonnegative_int,
-             "topology": _any,
-             "role": _enum("none", "operator", "marked", "extra", "passive"),
-             "species": _any},
-    "join": {"picture": _is_int, "from": _any, "to": _any},
-    "span": {"picture": _is_int, "row": _is_positive_int,
-             "col": _is_positive_int, "length": _is_positive_int,
-             "kind": _enum("brace above", "brace below", "box")},
-}
-
-
-@dataclass
-class Event:
-    kind: str
-    attrs: dict[str, str]
-    line: int
-    raw: str
-
-
-@dataclass
-class Picture:
-    ident: int
-    lang: str
-    line: int
-    events: list[Event] = field(default_factory=list)
-
-    def content(self) -> list[Event]:
-        """Events that denote ink.  Derived boundaries and warning
-        diagnostics do not contribute to the canonical topology."""
-        return [e for e in self.events
-                if e.kind not in {"bbox", "label-use", "label-anchor-site",
-                                  "ink-use",
-                                  "glyph-geometry", "wire-geometry",
-                                  "boundary", "warning"}]
-
-    def boundary(self) -> Optional[tuple[int, int, int, int]]:
-        for e in self.events:
-            if e.kind == "boundary":
-                try:
-                    return tuple(int(e.attrs[k].strip()) for k in
-                                 ("virtual-west", "virtual-east",
-                                  "physical-up", "physical-down"))  # type: ignore[return-value]
-                except (KeyError, ValueError):
-                    return None
-        return None
-
-    def ncols(self) -> int:
-        n = 0
-        for e in self.events:
-            if e.kind == "atom" and "cell" in e.attrs and _is_cell(e.attrs["cell"].strip()):
-                n = max(n, int(e.attrs["cell"].strip().split("-")[1]))
-            elif e.kind == "bond":
-                for k in ("from", "to"):
-                    v = e.attrs.get(k, "").strip()
-                    if _is_int(v):
-                        n = max(n, int(v))
-        return n
-
-
 @dataclass
 class Finding:
     severity: str  # "HARD" | "ADV" | "NOTE"
@@ -640,69 +443,18 @@ class Audit:
     # ---------------- parsing ----------------
 
     def parse_log(self) -> None:
-        name = self.log_path.name
-        for lineno, raw in enumerate(
-                self.log_path.read_text(encoding="utf-8").splitlines(), 1):
-            line = raw.strip()
-            if not line:
-                continue
-            where = f"{name}:{lineno}"
-            parts = line.split("|")
-            kind = parts[0].strip()
-            attrs: dict[str, str] = {}
-            ok = True
-            for p in parts[1:]:
-                if "=" not in p:
-                    self.hard("malformed-event", where,
-                              f"bare field {p.strip()!r} (expected key=value): {line}")
-                    ok = False
-                    continue
-                k, v = p.split("=", 1)
-                attrs[k.strip()] = v.strip()
-            ev = Event(kind, attrs, lineno, line)
-            validators = FIELD_VALIDATORS.get(kind)
-            if validators is None:
-                self.adv("unknown-event", where, f"unrecognized event kind {kind!r}")
-            else:
-                for k, v in attrs.items():
-                    check = validators.get(k)
-                    if check is not None and not check(v):
-                        self.hard("malformed-event", where,
-                                  f"{kind} field {k}={v!r} fails validation: {line}")
-                        ok = False
-                if kind != "picture" and "picture" not in attrs:
-                    self.hard("malformed-event", where,
-                              f"{kind} event lacks required picture=: {line}")
-                    ok = False
-            if kind == "picture":
-                if not ok or "id" not in attrs or not _is_int(attrs["id"]):
-                    continue
-                pid = int(attrs["id"])
-                lang = attrs.get("lang", "")
-                if lang not in KNOWN_LANGS:
-                    self.adv("unknown-lang", where, f"picture {pid} has lang={lang!r}")
-                if pid in self.by_id:
-                    self.hard("duplicate-picture", where,
-                              f"picture id {pid} already declared at line "
-                              f"{self.by_id[pid].line}")
-                    continue
-                pic = Picture(pid, lang, lineno)
-                self.by_id[pid] = pic
-                self.pictures.append(pic)
-                continue
-            if kind == "tree":
-                self.check_tree_event(ev)
-            ref = attrs.get("picture", "")
-            if not _is_int(ref):
-                continue
-            pid = int(ref)
-            if pid == 0 and kind == "tree":
-                continue  # \tntree in running math, outside any picture
-            if pid not in self.by_id:
-                self.hard("dangling-picture-ref", where,
-                          f"{kind} references undeclared picture {pid}")
-                continue
-            self.by_id[pid].events.append(ev)
+        parsed = parse_log(
+            self.log_path.read_text(encoding="utf-8"),
+            source_name=self.log_path.name,
+            known_langs=KNOWN_LANGS,
+            hard=self.hard,
+            advisory=self.adv,
+            check_event=lambda event: (
+                self.check_tree_event(event) if event.kind == "tree" else None
+            ),
+        )
+        self.pictures = parsed.pictures
+        self.by_id = parsed.by_id
 
     def check_tree_event(self, event: Event) -> None:
         """Validate the tree event as structural data, not display text."""
@@ -1661,115 +1413,6 @@ def canonical_hash(pic: Picture) -> str:
 
 
 # ---------------- TeX source scanning ----------------
-
-@dataclass
-class Construct:
-    name: str      # environment name or "tnpic"
-    start: int     # offset of the construct's first character
-    end: int       # offset one past its last character
-    body: str
-    line: int
-
-
-def strip_comments(src: str) -> str:
-    """Replace unescaped `%`-comments with spaces, preserving offsets so
-    positions in the stripped text index the original file."""
-    out: list[str] = []
-    for line in src.split("\n"):
-        buf = list(line)
-        i = 0
-        while i < len(buf):
-            if buf[i] == "\\":
-                i += 2
-                continue
-            if buf[i] == "%":
-                for j in range(i, len(buf)):
-                    buf[j] = " "
-                break
-            i += 1
-        out.append("".join(buf))
-    return "\n".join(out)
-
-
-def _match_group(src: str, i: int, open_ch: str, close_ch: str) -> int:
-    """Offset one past the group opening at `src[i]`, brace-aware: a `]`
-    inside `{...}` does not close a `[...]` group.  Works for both brace
-    and bracket groups.  Returns -1 if unbalanced."""
-    depth_group = 0
-    depth_brace = 0
-    while i < len(src):
-        c = src[i]
-        if c == "\\":
-            i += 2
-            continue
-        if c == open_ch and (open_ch == "{" or depth_brace == 0):
-            depth_group += 1
-        elif c == close_ch and (close_ch == "}" or depth_brace == 0):
-            depth_group -= 1
-            if depth_group == 0:
-                return i + 1
-        elif c == "{":
-            depth_brace += 1
-        elif c == "}":
-            depth_brace -= 1
-        i += 1
-    return -1
-
-
-def _find_env_end(src: str, name: str, pos: int) -> Optional[re.Match[str]]:
-    """Match of the `\\end{name}` closing the `\\begin{name}` whose body
-    starts at `pos`, depth-counting nested same-name environments so an
-    inner `\\end` never closes the outer construct.  None if unclosed."""
-    token_re = re.compile(r"\\(begin|end)\{" + re.escape(name) + r"\}")
-    depth = 1
-    for tok in token_re.finditer(src, pos):
-        depth += 1 if tok.group(1) == "begin" else -1
-        if depth == 0:
-            return tok
-    return None
-
-
-def scan_constructs(src: str) -> list[Construct]:
-    """Picture-producing constructs in source order.  tenkz assigns picture
-    ids at `\\begin` time, so source order of construct starts equals log
-    order even when a `\\tnpic` nests inside a `tenkzcd` cell."""
-    found: list[Construct] = []
-    env_re = re.compile(r"\\begin\{(tenkz(?:cd|lattice|free|planes)?)\}")
-    for m in env_re.finditer(src):
-        name = m.group(1)
-        end_m = _find_env_end(src, name, m.end())
-        end = end_m.end() if end_m else len(src)
-        body_start = m.end()
-        if src[body_start:body_start + 1] == "[":
-            closed = _match_group(src, body_start, "[", "]")
-            if closed != -1:
-                body_start = closed
-        body_end = end_m.start() if end_m else len(src)
-        found.append(Construct(name, m.start(), end,
-                               src[body_start:body_end],
-                               src.count("\n", 0, m.start()) + 1))
-    for m in re.finditer(r"\\tnpic\b", src):
-        i = m.end()
-        while i < len(src) and src[i] in " \t\n":
-            i += 1
-        if src[i:i + 1] == "[":
-            closed = _match_group(src, i, "[", "]")
-            if closed == -1:
-                continue
-            i = closed
-            while i < len(src) and src[i] in " \t\n":
-                i += 1
-        if src[i:i + 1] != "{":
-            continue
-        closed = _match_group(src, i, "{", "}")
-        if closed == -1:
-            continue
-        found.append(Construct("tnpic", m.start(), closed,
-                               src[i + 1:closed - 1],
-                               src.count("\n", 0, m.start()) + 1))
-    found.sort(key=lambda c: c.start)
-    return found
-
 
 _INLINE_EQUALITY_SPACE = r"(?:\s|\\[,;:!]|\\(?:quad|qquad)\b)*"
 _INLINE_EQUALITY_GLUE = re.compile(
