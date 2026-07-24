@@ -1,0 +1,21 @@
+% Regression: zz_string_bead — a bead anchored halfway along a string.
+% Formula: t=0.5 of a two-segment Hobby route lands exactly on the middle
+%   waypoint (1, 0.6) cm = (28.3465, 17.0079) pt.
+% Expectation: stringbead event x=28.35pt, y=17.01pt within rounding; the
+%   dot sits visibly on the curve's crest.
+\documentclass[varwidth=8cm, border=6pt]{standalone}
+\usepackage{tenkz}
+\usetikzlibrary{hobby,spath3,intersections}
+\begin{document}
+\makeatletter\input{tenkz-string.code.tex}\makeatother
+\begin{tikzpicture}
+\ExplSyntaxOn
+\__tenkz_string_reset:
+\__tenkz_string_declare_open:nn {s} { {0,0} {1,0.6} {2,0} }
+\__tenkz_string_resolve:
+\__tenkz_string_bead:nnn {s} {0.5} {beadpt}
+\__tenkz_string_dev_draw:nn {s} { thick }
+\fill (beadpt) circle [ radius = 2pt ] ;
+\ExplSyntaxOff
+\end{tikzpicture}
+\end{document}
