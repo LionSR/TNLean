@@ -33,13 +33,13 @@ variable {d : ℕ}
 
 /-! ### Bijective matching from per-block existentials in both directions
 
-The forward and backward existential matches (in `ProportionalMatch/Core.lean`
-as `forall_k_exists_j_nondecaying_overlap_of_eventuallyProportional`) provide
-the input to the shared bijection construction `bijection_from_matches` (in
-`MatchAux.lean`).  The cast-aware symmetry and transitivity lemmas
+The forward and backward existential matches
+`forall_k_exists_j_nondecaying_overlap_of_eventuallyProportional` provide the
+input to the shared bijection construction `bijection_from_matches`.  The
+cast-aware symmetry and transitivity lemmas
 (`gaugePhaseEquiv_symm_same_dim`, `gaugePhaseEquiv_swap_cast`,
 `gaugePhaseEquiv_trans_same_dim`, `gaugePhaseEquiv_cast_compose_via_centre`)
-are shared with the equal-MPV variant in `SectorBNT/StrongMatch.lean`. -/
+are shared with the equal-MPV bijection theorem. -/
 
 /-- **Bijective proportional matching.**
 

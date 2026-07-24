@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.FundamentalTheorem.SectorBNT.ExactMatch
+import TNLean.MPS.FundamentalTheorem.SectorBNT.ProportionalMatch.Core
 
 /-!
 # Strong existential and bijective sector matching
@@ -27,7 +27,6 @@ index $j_k$ with $|V^{(N)}(B_k)\rangle = |V^{(N)}(A_{j_k})\rangle$, and the
 single-block fundamental theorem gives $B_k = X_k A_{j_k} X_k^{-1}$.
 -/
 
-open scoped Matrix BigOperators
 open Filter Topology
 
 namespace MPSTensor
@@ -44,9 +43,8 @@ of `P` of equal bond dimension, gauge-phase equivalent to `Q.basis k` after the
 dimension cast, and with non-decaying cross-overlap.
 
 This is derived from the proportional sector-matching lemma
-`forall_k_exists_j_nondecaying_overlap_of_eventuallyProportional` (now in
-`ProportionalMatch/Core.lean`) using the conversion
-`SameMPV₂Pos.toNonzeroProportionalMPV₂.eventually`.
+`forall_k_exists_j_nondecaying_overlap_of_eventuallyProportional` using the
+conversion `SameMPV₂Pos.toNonzeroProportionalMPV₂.eventually`.
 
 Paper anchor: CPSV16 Appendix MPV proof, line 1182 (arXiv:1606.00608), CPSV21
 Definition 4.2 lines 1846–1850, and the two-layer display at lines 1864–1884. -/
@@ -76,10 +74,9 @@ Fin P.basisCount`, carrying the matched bond-dimension equality,
 gauge-phase equivalence, and non-decaying overlap for every sector of `Q`.
 
 The proof derives both directions from the proportional matching lemma
-`forall_k_exists_j_nondecaying_overlap_of_eventuallyProportional` (now in
-`ProportionalMatch/Core.lean`) using the `SameMPV₂Pos → NonzeroProportionalMPV₂`
-conversion, then delegates to the shared bijection construction
-`bijection_from_matches` in `MatchAux.lean`. -/
+`forall_k_exists_j_nondecaying_overlap_of_eventuallyProportional` using the
+`SameMPV₂Pos → NonzeroProportionalMPV₂` conversion, then delegates to the
+shared bijection construction `bijection_from_matches`. -/
 theorem bijective_match_of_sameMPV
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
