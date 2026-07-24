@@ -295,6 +295,17 @@ def test_setup_consumers_include_only_forwarded_tree_options() -> None:
     assert consumers["key:object:species"] == {"synthetic.tex"}
 
 
+def test_only_kernel_scopes_may_lack_consumer_groups() -> None:
+    groups = {"object": {ROOT / "synthetic.tex": ["skin=box"]}}
+    assert tenkz_shrink._scope_groups(groups, "kernel-wire") == {}
+    try:
+        tenkz_shrink._scope_groups(groups, "objct")
+    except KeyError as error:
+        assert "unknown registry scope: objct" in str(error)
+    else:
+        raise AssertionError("a misspelled non-kernel scope was accepted")
+
+
 def test_cooccurrence_is_measured_per_invocation() -> None:
     entries = [
         Entry(

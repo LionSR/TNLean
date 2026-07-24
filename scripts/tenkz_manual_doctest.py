@@ -653,7 +653,9 @@ def _instrument_command(
     )
     if selected is None:
         raise ValueError(f"reference for \\{command} does not load tenkz")
-    scan = _mask_nonexecuted_tokens(strip_comments(document))
+    scan = _mask_nonexecuted_tokens(
+        strip_comments(_mask_inert_tex(document, source_dir))
+    )
     pattern = re.compile(rf"\\{re.escape(command)}(?![A-Za-z@:_])")
     invocation = next(
         (
