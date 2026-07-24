@@ -295,10 +295,28 @@ def _mask_false_branches(text: str) -> str:
         "iftrue", "iffalse", "ifcase", "ifdefined", "ifcsname", "iffontchar",
         "ifincsname",
     )
-    declared_conditionals = re.findall(
-        r"\\newif\s*\\(if[A-Za-z@]+)(?![A-Za-z@])", scan
+    newif_pattern = re.compile(
+        r"\\newif\s*\\(if[A-Za-z@]+)(?![A-Za-z@])"
     )
-    conditionals = (*primitive_conditionals, *declared_conditionals)
+    newif_matches = list(newif_pattern.finditer(scan))
+    declared_conditionals = [match.group(1) for match in newif_matches]
+    primitive_pattern = "|".join(primitive_conditionals)
+    let_pattern = re.compile(
+        rf"\\let\s*\\(if[A-Za-z@]+)\s*=?\s*\\({primitive_pattern})"
+        r"(?![A-Za-z@])"
+    )
+    let_matches = list(let_pattern.finditer(scan))
+    aliased_conditionals = [match.group(1) for match in let_matches]
+    conditionals = (
+        *primitive_conditionals,
+        *declared_conditionals,
+        *aliased_conditionals,
+    )
+    declaration_operands = {
+        match.start(group) - 1
+        for match in (*newif_matches, *let_matches)
+        for group in range(1, len(match.groups()) + 1)
+    }
     tokens = list(
         re.finditer(
             r"\\(?:" + "|".join(conditionals) + r"|fi)(?![A-Za-z@])",
@@ -315,7 +333,10 @@ def _mask_false_branches(text: str) -> str:
         cursor = index + 1
         while cursor < len(tokens) and depth:
             nested = tokens[cursor]
-            if not _is_escaped(scan, nested.start()):
+            if (
+                nested.start() not in declaration_operands
+                and not _is_escaped(scan, nested.start())
+            ):
                 depth += -1 if nested.group(0) == r"\fi" else 1
             cursor += 1
         end = tokens[cursor - 1].end() if depth == 0 else len(text)
