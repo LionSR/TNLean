@@ -6,6 +6,7 @@ from __future__ import annotations
 import argparse
 import os
 import re
+import shutil
 import subprocess
 import tempfile
 from dataclasses import dataclass
@@ -220,7 +221,8 @@ def _usepackage_ranges(body: str) -> list[tuple[int, int]]:
     ranges: list[tuple[int, int]] = []
     offset = 0
     marker = r"\usepackage"
-    scan_body = _mask_nonexecuted_tokens(body)
+    executable = _mask_macro_definitions(_mask_false_branches(body))
+    scan_body = _mask_nonexecuted_tokens(executable)
     while (start := _find_control_word(scan_body, "usepackage", offset)) >= 0:
         cursor = _skip_space_and_comments(body, start + len(marker))
         if cursor < len(body) and body[cursor] == "[":
@@ -286,9 +288,12 @@ def _blank_range(masked: list[str], start: int, end: int) -> None:
             masked[index] = " "
 
 
-def _mask_false_branches(text: str) -> str:
+def _mask_false_branches(
+    text: str, inherited_conditionals: tuple[str, ...] = ()
+) -> str:
     masked = list(text)
-    scan = _display_comment_scan(
+    scan = _display_comment_scan(text)
+    start_scan = _display_comment_scan(
         _mask_macro_definitions(text, strict=False)
     )
     primitive_conditionals = (
@@ -307,7 +312,9 @@ def _mask_false_branches(text: str) -> str:
         r"(?![A-Za-z@])"
     )
     let_matches = list(let_pattern.finditer(scan))
-    known_conditionals = set((*primitive_conditionals, *declared_conditionals))
+    known_conditionals = set(
+        (*primitive_conditionals, *inherited_conditionals, *declared_conditionals)
+    )
     while True:
         additions = {
             match.group(1)
@@ -342,6 +349,7 @@ def _mask_false_branches(text: str) -> str:
         if (
             token.group(0) != r"\iffalse"
             or token.start() in declaration_operands
+            or start_scan[token.start() : token.end()] != token.group(0)
             or _is_escaped(scan, token.start())
         ):
             index += 1
@@ -396,6 +404,17 @@ def _resolve_tex_file(relative: Path, source_dir: Path) -> Path | None:
             )
             if candidate is not None:
                 return candidate.resolve()
+    if shutil.which("kpsewhich"):
+        lookup = subprocess.run(
+            ["kpsewhich", relative.as_posix()],
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.DEVNULL,
+            timeout=15,
+        )
+        resolved = Path(lookup.stdout.strip())
+        if lookup.returncode == 0 and resolved.is_file():
+            return resolved.resolve()
     return None
 
 
@@ -493,8 +512,12 @@ def _mask_macro_definitions(text: str, *, strict: bool = True) -> str:
     return "".join(masked)
 
 
-def _mask_inert_tex(text: str, source_dir: Path) -> str:
-    without_false_branches = _mask_false_branches(text)
+def _mask_inert_tex(
+    text: str,
+    source_dir: Path,
+    inherited_conditionals: tuple[str, ...] = (),
+) -> str:
+    without_false_branches = _mask_false_branches(text, inherited_conditionals)
     without_macros = _mask_macro_definitions(without_false_branches)
     return _mask_inactive_file_branches(without_macros, source_dir)
 
@@ -507,6 +530,16 @@ def _mask_nonexecuted_tokens(text: str) -> str:
         for index in range(match.start(), match.end()):
             if masked[index] != "\n":
                 masked[index] = " "
+    scan = "".join(masked)
+    offset = 0
+    while (start := _find_control_word(scan, "detokenize", offset)) >= 0:
+        cursor = _skip_space_and_comments(scan, start + len(r"\detokenize"))
+        if cursor >= len(scan) or scan[cursor] != "{":
+            offset = cursor
+            continue
+        end, _ = _read_braced(scan, cursor)
+        _blank_range(masked, start, end)
+        offset = end
     return "".join(masked)
 
 
@@ -592,7 +625,9 @@ def _standalone_document(body: str, variant_style: str | None = None) -> str:
 
 def extract_displayed_examples(path: Path) -> list[Example]:
     text = path.read_text(encoding="utf-8")
-    scan_text = _mask_inert_tex(text, path.parent)
+    scan_text = _mask_inert_tex(
+        text, path.parent, _manual_conditionals()
+    )
     begin_pattern = re.compile(
         r"^[ \t]*\\begin\{(" + "|".join(DISPLAY_ENVIRONMENTS) + r")\}",
         re.MULTILINE,
@@ -643,9 +678,25 @@ def displayed_examples() -> list[Example]:
     return examples
 
 
+@cache
+def _manual_conditionals_for(directory: Path) -> tuple[str, ...]:
+    declarations: set[str] = set()
+    for source in directory.rglob("*.tex"):
+        scan = _display_comment_scan(source.read_text(encoding="utf-8"))
+        declarations.update(
+            re.findall(r"\\newif\s*\\(if[A-Za-z@]+)(?![A-Za-z@])", scan)
+        )
+    return tuple(sorted(declarations))
+
+
+def _manual_conditionals() -> tuple[str, ...]:
+    return _manual_conditionals_for(MANUAL_DIR)
+
+
 def _manual_sources() -> list[Path]:
     pending = [MANUAL]
     visited: set[Path] = set()
+    inherited_conditionals = _manual_conditionals()
     input_pattern = re.compile(r"\\input(?![A-Za-z@])")
     while pending:
         source = pending.pop()
@@ -655,7 +706,11 @@ def _manual_sources() -> list[Path]:
         raw = source.read_text(encoding="utf-8")
         text = strip_comments(
             _mask_inline_verbatim(
-                _mask_display_environments(_mask_inert_tex(raw, source.parent))
+                _mask_display_environments(
+                    _mask_inert_tex(
+                        raw, source.parent, inherited_conditionals
+                    )
+                )
             )
         )
         for match in input_pattern.finditer(text):
