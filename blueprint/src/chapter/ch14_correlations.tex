@@ -1,27 +1,31 @@
 \chapter{Exponential Decay of Correlations}\label{ch:correlations}
 
-This chapter derives the transfer-matrix expression for thermodynamic-limit
-correlators of a normal MPS and the resulting exponential decay estimate.
-The key mechanism is spectral: after removing the leading eigenvalue
-contribution, the connected part is governed by subleading eigenvalues of the
-transfer map.
+This chapter records an auxiliary-space transfer-map interface for
+thermodynamic-limit correlation functions and the resulting exponential decay
+estimates. The key mechanism is spectral: after removing the leading
+eigenvalue contribution, the connected part is governed by subleading
+eigenvalues of the transfer map. Passing from physical local observables to the
+auxiliary insertions used here requires the corresponding observable-inserted
+transfer map and is not supplied by the present definitions.
 
 When the MPS tensor generates a parent Hamiltonian
-(Chapter~\ref{ch:parent_hamiltonian}), the correlator quantifies spatial
-correlations in the ground state. The exponential decay rate is set by the
-spectral properties of the transfer map, i.e.\ by the modulus of its
-subleading eigenvalues.
+(Chapter~\ref{ch:parent_hamiltonian}), these auxiliary formulas control spatial
+ground-state correlations once physical observable insertions have been
+identified with the corresponding transfer-map insertions. The exponential
+decay rate is then set by the spectral properties of the transfer map, i.e.\ by
+the modulus of its subleading eigenvalues.
 
 The spectral analysis of the transfer map and the mixed transfer operator,
 including the eigenvalue bound $\rho(F_{AB}) \le 1$, the strict
-transfer-operator gap $\rho(F_{AB}) < 1$ for non-equivalent blocks, and the resulting
-overlap decay, is developed in Chapter~\ref{ch:spectral}. This chapter
-focuses on the \emph{correlator} side: one-point and two-point expectations,
-their spectral decomposition, and quantitative bounds on decay rates.
+transfer-operator gap $\rho(F_{AB}) < 1$ for non-equivalent blocks, and the
+resulting overlap decay, is developed in Chapter~\ref{ch:spectral}. This
+chapter focuses on the auxiliary \emph{correlator} interface: one-point and
+two-point functionals, their spectral decomposition, and quantitative bounds
+on decay rates.
 
 \section{Connected correlators from the transfer map}
 
-\begin{definition}[One-point expectation]\label{def:one_point_expectation}
+\begin{definition}[Auxiliary-space one-point functional]\label{def:one_point_expectation}
     \lean{MPSTensor.onePointExpectation}
     \leanok
     \uses{def:transfer_map, thm:qpf}
@@ -29,22 +33,22 @@ their spectral decomposition, and quantitative bounds on decay rates.
     Write the tensor as $A$ and the fixed point as $\rho^R$.
     Under the hypotheses of Theorem~\ref{thm:qpf}, that fixed point exists
     and is unique up to scaling; we normalize it so that $\tr(\rho^R)=1$.
-    For a local observable $X \in \MN{D}$ define
-    \[
-        \langle X_0 \rangle := \tr(X\rho^R).
-    \]
+    For an auxiliary-space insertion $X\in\MN{D}$, define
+    \begin{align}
+        \langle X_0 \rangle &= \tr(X\rho^R). \notag
+    \end{align}
 \end{definition}
 
-\begin{definition}[Two-point expectation at distance $n$]\label{def:two_point_expectation}
+\begin{definition}[Auxiliary-space two-point functional at distance $n$]\label{def:two_point_expectation}
     \lean{MPSTensor.twoPointExpectation}
     \leanok
     \uses{def:transfer_map, def:one_point_expectation}
-    For observables $X,Y \in \MN{D}$ and $n\ge 0$,
-    \[
+    For auxiliary-space insertions $X,Y\in\MN{D}$ and $n\ge0$, define
+    \begin{align}
         \langle X_0 Y_n \rangle
-        := \tr\!\left(Y\,\E_A^n(X\rho^R)\right).
-    \]
-    Equivalently: insert $X$ at site $0$, propagate by $\E_A^n$, then insert
+        &= \tr\!\left(Y\,\E_A^n(X\rho^R)\right). \notag
+    \end{align}
+    Equivalently, insert $X$ at site $0$, propagate by $\E_A^n$, then insert
     $Y$ and take the trace.
     \begin{center}
         % Formula: \langle X_0Y_n\rangle
@@ -71,14 +75,16 @@ their spectral decomposition, and quantitative bounds on decay rates.
     \end{center}
 \end{definition}
 
-\begin{definition}[Connected correlator]\label{def:connected_correlator}
+\begin{definition}[Auxiliary-space connected correlator]\label{def:connected_correlator}
     \lean{MPSTensor.connectedCorrelator}
     \leanok
     \uses{def:two_point_expectation, def:one_point_expectation}
     The connected two-point function is
-    \[
-        C(X,Y;n) := \langle X_0Y_n\rangle - \langle X_0\rangle\langle Y_0\rangle.
-    \]
+    \begin{align}
+        C(X,Y;n)
+        &= \langle X_0Y_n\rangle
+        - \langle X_0\rangle\langle Y_0\rangle. \notag
+    \end{align}
 \end{definition}
 
 \section{Spectral expansion and exponential decay}
@@ -88,28 +94,38 @@ their spectral decomposition, and quantitative bounds on decay rates.
     \lean{MPSTensor.connectedCorrelator_eq_sum}
     \leanok
     \uses{def:connected_correlator}
-    If coefficients $c_j\in\C$ and eigenvalues $\lambda_j\in\C$
-    ($j=1,\dots,D^2-1$) satisfy, for all $n\ge 0$,
-    \[
-        C(X,Y;n) = \sum_{j=1}^{D^2-1} c_j\,\lambda_j^n,
-    \]
+    If coefficients $c_j\in\C$ and eigenvalues $\lambda_j\in\C$, for
+    $j=1,\ldots,D^2-1$, satisfy, for all $n\ge 0$,
+    \begin{align}
+        C(X,Y;n)
+        &= \sum_{j=1}^{D^2-1} c_j\,\lambda_j^n,
+        \label{eq:correlations_spectral_expansion}
+    \end{align}
     then the connected correlator equals the stated sum of exponentials.
     The source~\cite[Section~II.B.3]{Cirac2021Matrix} states that the connected
-    correlator is a sum of $D^2-1$ pure exponentials
-    $C(X,Y;n) = \sum_{j\ge 2}^{D^2} c_{XY}(j)\lambda_j^n$,
-    which always exists for a normal MPS via the transfer-map spectral decomposition.
+    correlator is a sum of $D^2-1$ pure exponentials,
+    $C(X,Y;n)=\sum_{j\ge 2}^{D^2}c_{XY}(j)\lambda_j^n$.
+    This pure-exponential representation follows when the relevant
+    subleading spectral data of the transfer map are diagonalizable.
+    For a non-diagonalizable transfer map, nontrivial Jordan blocks can
+    instead produce terms of the form $n^k\lambda^n$. Accordingly, the
+    pure-exponential formula is retained here as an explicit interface
+    hypothesis rather than asserted for every normal MPS.
     % Constructing $c_j,\lambda_j$ from $\E_A$ is tracked in Issue~\#1447.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    Given the expansion hypothesis, the equality is immediate.
-    The source~\cite[Section~II.B.3]{Cirac2021Matrix} derives this expansion
-    from the spectral decomposition of $\E_A^n$ restricted to the
-    complement of the fixed-point eigenspace: the leading eigenvalue
-    $\lambda_1=1$ contributes $\langle X_0\rangle\langle Y_0\rangle$,
-    which is subtracted in the connected correlator, leaving the sum
-    over subleading eigenvalues.
+    Given the expansion hypothesis
+    (\ref{eq:correlations_spectral_expansion}), the equality is immediate.
+    Under the corresponding diagonalizability hypothesis, the expansion
+    follows from the spectral decomposition of $\E_A^n$ restricted to the
+    complement of the fixed-point eigenspace. The leading eigenvalue
+    $\lambda_1=1$ contributes
+    $\langle X_0\rangle\langle Y_0\rangle$, which is subtracted in the
+    connected correlator, leaving the sum over subleading eigenvalues.
+    This is the spectral mechanism described in
+    \cite[Section~II.B.3]{Cirac2021Matrix}.
     % Constructing the eigendecomposition coefficients from $\E_A$
     % is tracked in Issue~\#1447.
 \end{proof}
@@ -119,26 +135,34 @@ their spectral decomposition, and quantitative bounds on decay rates.
     \lean{MPSTensor.connectedCorrelator_bound}
     \leanok
     \uses{def:connected_correlator}
-    If a constant $C_{XY}\in\R$ and $\lambda_2\in\C$ satisfy, for all $n\ge 0$,
-    \[
-        |C(X,Y;n)| \le C_{XY}\,|\lambda_2|^n,
-    \]
+    If a constant $C_{XY}\in\R$ and $\lambda_2\in\C$ with
+    $|\lambda_2|<1$ satisfy, for all $n\ge0$,
+    \begin{align}
+        |C(X,Y;n)|
+        &\le C_{XY}\,|\lambda_2|^n,
+        \label{eq:correlations_decay_bound}
+    \end{align}
     then the connected correlator satisfies that exponential decay bound.
     The source~\cite[Section~II.B.3]{Cirac2021Matrix} obtains this by combining
-    the sum-of-exponentials expansion with the triangle inequality, and
-    Sec.~4 provides the transfer-map gap condition $|\lambda_j|<1$ for the
-    subleading eigenvalues.
+    the sum-of-exponentials expansion with the triangle inequality, while
+    under the primitive or injective hypotheses stated in
+    Chapter~\ref{ch:spectral}, the transfer-map gap results ensure that the
+    subleading eigenvalues lie strictly inside the unit disk.
     % Extracting $C_{XY}$ and $\lambda_2$ from the transfer-map spectrum
     % is tracked in Issue~\#1447.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    Given the bound hypothesis, the estimate is immediate.
-    The source~\cite[Section~II.B.3]{Cirac2021Matrix} obtains this bound
-    by applying the triangle inequality to the sum-of-exponentials
-    expansion and using the transfer-map gap condition
+    Given the bound hypothesis (\ref{eq:correlations_decay_bound}), the
+    estimate is immediate.
+    For a pure-exponential expansion, the source
+    \cite[Section~II.B.3]{Cirac2021Matrix} obtains such a bound by applying
+    the triangle inequality and using
     $|\lambda_j|\le|\lambda_2|<1$ for all subleading eigenvalues.
+    In the presence of nontrivial Jordan blocks, an exponential estimate
+    still follows at any rate strictly larger than the complementary
+    spectral radius, as made explicit below.
     % Deriving the bound from the eigendecomposition of $\E_A$
     % is tracked in Issue~\#1447.
 \end{proof}
@@ -152,30 +176,38 @@ their spectral decomposition, and quantitative bounds on decay rates.
     condition: all non-leading eigenvalues of $\E_A$ lie strictly inside the
     unit disk. It is distinct from the Hamiltonian spectral gap of
     Chapter~\ref{ch:parent_hamiltonian}.
-    The complementary transfer-map gap $\rho(\E_A - P) < 1$ is established for
+    The complementary transfer-map gap $\rho(\E_A-P)<1$ is established for
     primitive channels
     (Theorem~\ref{thm:primitive_compl_lt_one}, Chapter~\ref{ch:channels}).
-    The mixed-transfer gap needed for block separation is supplied for
-    irreducible trace-preserving tensors
-    (Theorem~\ref{thm:transfer_operator_gap_irr_tp}), and quantitative single-tensor
-    transfer-map bounds for injective tensors are recorded in
+    The mixed-transfer gap needed for separation of non-equivalent canonical
+    blocks is supplied for irreducible trace-preserving tensors
+    (Theorem~\ref{thm:transfer_operator_gap_irr_tp}), and quantitative
+    single-tensor transfer-map bounds for injective tensors are recorded in
     Theorem~\ref{thm:transfer_map_gap_wielandt}.
-    Thus the analytical input needed to make
-    Theorems~\ref{thm:correlator_sum_exponentials}
-    and~\ref{thm:correlator_exponential_bound} unconditional is already
-    present; what remains is extracting the spectral expansion coefficients
-    $c_j,\lambda_j$ from the eigendecomposition of $\E_A$
+
+    These transfer-map gap results suffice for unconditional exponential
+    convergence at every rate strictly larger than the complementary
+    spectral radius. A pure sum of exponentials, or a bound with the exact
+    rate given by the largest subleading eigenvalue modulus, additionally
+    requires control of the relevant Jordan blocks. The remaining
+    formalization task is to extract the spectral coefficients and, where
+    necessary, the generalized spectral terms from $\E_A$
     (Issue~\#1447).
 \end{remark}
+
 \begin{definition}[Correlation length]\label{def:correlation_length}
     \lean{MPSTensor.correlationLength}
     \leanok
     \uses{def:transfer_map}
-    The correlation length associated with a subleading eigenvalue
-    $\lambda_2$ of the transfer map ($|\lambda_2|<1$) is
-    \[
-        \xi := -\frac{1}{\log|\lambda_2|}.
-    \]
+    The correlation length associated with a nonzero subleading eigenvalue
+    $\lambda_2$ of the transfer map, where $0<|\lambda_2|<1$, is
+    \begin{align}
+        \xi
+        &= -\frac{1}{\log|\lambda_2|}. \notag
+    \end{align}
+    If all subleading spectral values vanish and correlations therefore
+    vanish after finitely many transfer steps, one may use the limiting
+    convention $\xi=0$.
 \end{definition}
 
 \begin{lemma}[Correlation length is positive]\label{lem:correlation_length_pos}
@@ -187,16 +219,16 @@ their spectral decomposition, and quantitative bounds on decay rates.
 
 \begin{proof}
     \leanok
-    Since $0 < |\lambda_2| < 1$, we have $\log|\lambda_2| < 0$, so
-    $\xi = -1/\log|\lambda_2| > 0$.
+    Since $0<|\lambda_2|<1$, we have $\log|\lambda_2|<0$, so
+    $\xi=-1/\log|\lambda_2|>0$.
 \end{proof}
 
 \section{Quantitative transfer-map gap bounds}
 
 The transfer-map gap theorems in Chapter~\ref{ch:channels} establish
-$\rho(\E_A - P) < 1$ for primitive channels qualitatively. This section
-gives the \emph{quantitative} refinements with explicit constants
-and rates for the single-tensor transfer map $\E_A$.
+$\rho(\E_A-P)<1$ for primitive channels qualitatively. This section gives
+quantitative refinements in terms of geometric constants and rates for the
+single-tensor transfer map $\E_A$.
 
 \begin{theorem}[Exponential convergence of injective primitive channels]%
     \label{thm:exponential_convergence_primitive}
@@ -207,28 +239,35 @@ and rates for the single-tensor transfer map $\E_A$.
     Fix an injective, trace-preserving MPS tensor $A$ with positive
     definite fixed point $\rho$.
     Let
-    \[
-        P(X) = \frac{\tr(X)}{\tr(\rho)}\rho
-    \]
+    \begin{align}
+        P(X)
+        &= \frac{\tr(X)}{\tr(\rho)}\rho
+        \label{eq:correlations_fixed_point_projection}
+    \end{align}
     be the corresponding fixed-point projection.
-    Then there exist $C > 0$ and $0 < \delta \le 1$ such that for all
-    $n \ge 0$ and $X \in \MN{D}$,
-    \[
-        \|\E_A^n(X) - P(X)\|
-        \le  C\,(1-\delta)^n\,\|X\|.
-    \]
+    Then there exist $C > 0$ and $0 < \delta \le 1$ such that, for all
+    $n\ge 0$ and $X\in\MN{D}$,
+    \begin{align}
+        \|\E_A^n(X)-P(X)\|
+        &\le C(1-\delta)^n\|X\|.
+        \label{eq:correlations_channel_convergence}
+    \end{align}
     The transfer-map gap $\delta$ exists by primitivity
-    (Theorem~\ref{thm:primitive_compl_lt_one}, the complementary transfer-map gap).
+    (Theorem~\ref{thm:primitive_compl_lt_one}, the complementary transfer-map
+    gap).
 \end{theorem}
 
 \begin{proof}
     \leanok
     Injectivity implies primitivity of the transfer map.
-    The complementary spectral radius $\rho(\E_A - P) < 1$ then follows from
-    the primitive transfer-map gap theorem for the complementary map.
-    The Gelfand formula yields a
-    geometric bound $\|\,(\E_A - P)^n\| \le C\,(1-\delta)^n$ for suitable
-    constants, giving the claimed estimate.
+    The complementary spectral-radius bound $\rho(\E_A-P)<1$ then follows
+    from the primitive transfer-map gap theorem. Choose
+    $r$ with $\rho(\E_A-P)<r<1$. The Gelfand formula yields
+    $\|(\E_A-P)^n\|\le Cr^n$ for a suitable constant $C>0$.
+    Since $P$ is the fixed-point projection, $\E_A P=P\E_A=P$, and hence
+    $\E_A^n-P=(\E_A-P)^n$ for $n\ge 1$. The case $n=0$ is absorbed by
+    increasing $C$ if necessary. Setting $\delta=1-r$ gives
+    (\ref{eq:correlations_channel_convergence}).
 \end{proof}
 
 \begin{theorem}[Correlation length bound]\label{thm:correlation_length_bound}
@@ -237,24 +276,31 @@ and rates for the single-tensor transfer map $\E_A$.
     \uses{def:correlation_length, thm:exponential_convergence_primitive,
         def:injective}
     For an injective trace-preserving MPS tensor, there exist
-    $C > 0$ and $\xi > 0$ such that for all $n \ge 0$ and all
-    traceless $X \in \MN{D}$ (i.e.\ $\tr(X) = 0$),
-    \[
+    $C>0$ and $\xi>0$ such that, for all $n\ge 0$ and all
+    traceless $X\in\MN{D}$, i.e.\ $\tr(X)=0$,
+    \begin{align}
         \|\E_A^n(X)\|
-        \le  C\,e^{-n/\xi} \|X\|.
-    \]
+        &\le C e^{-n/\xi}\|X\|.
+        \label{eq:correlations_traceless_decay}
+    \end{align}
     Traceless matrices lie in $\ker P$, where $P$ is the fixed-point
-    projection. Since $\E_A - P$ has spectral radius strictly less
-    than~$1$, the Gelfand formula gives exponential decay at rate
-    $\xi = -1/\log\rho(\E_A - P)$.
+    projection (\ref{eq:correlations_fixed_point_projection}).
+    Since $\E_A-P$ has spectral radius strictly less than~$1$, choose any
+    $r$ with $\rho(\E_A-P)<r<1$. The Gelfand formula then gives exponential
+    decay with $\xi=-1/\log r$. Choosing a rate strictly above the spectral
+    radius is necessary in general because a Jordan block at the spectral
+    radius can prevent a uniform bound proportional to
+    $\rho(\E_A-P)^n$.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    For traceless $X$ we have $P(X) = 0$, so $\E_A^n(X) = (\E_A - P)^n(X)$.
-    The exponential convergence theorem gives a geometric bound
-    $C\,(1-\delta)^n\,\|X\|$. Rewriting $(1-\delta)^n = e^{-n/\xi}$ with
-    $\xi = -1/\log(1-\delta)$ yields the claimed estimate.
+    For traceless $X$, we have $P(X)=0$, so
+    $\E_A^n(X)=(\E_A-P)^n(X)$.
+    Applying the Gelfand-formula estimate with
+    $\rho(\E_A-P)<r<1$ gives $\|\E_A^n(X)\|\le Cr^n\|X\|$.
+    With $\xi=-1/\log r>0$, the identity $r^n=e^{-n/\xi}$ yields
+    (\ref{eq:correlations_traceless_decay}).
 \end{proof}
 
 \begin{theorem}[Transfer-map gap from injectivity]%
@@ -263,15 +309,16 @@ and rates for the single-tensor transfer map $\E_A$.
     \leanok
     \uses{thm:transfer_operator_gap}
     For an injective trace-preserving MPS tensor, there exists
-    $\delta > 0$ such that every eigenvalue $\mu \neq 1$ of the
-    transfer map satisfies $|\mu| \le 1 - \delta$.
+    $\delta>0$ such that every eigenvalue $\mu\ne 1$ of the
+    transfer map satisfies $|\mu|\le 1-\delta$.
 \end{theorem}
+
 \begin{proof}
     \leanok
     Injectivity implies eventual full Kraus rank. This yields primitivity,
     hence a complementary transfer-map gap. Since the transfer map has
     only finitely many eigenvalues, one may choose a uniform
-    $\delta > 0$ separating $1$ from the remaining spectrum.
+    $\delta>0$ separating $1$ from the remaining spectrum.
 \end{proof}
 
 \section{Relation to parent Hamiltonians}
@@ -279,10 +326,11 @@ and rates for the single-tensor transfer map $\E_A$.
 \begin{remark}\label{rem:correlations_parent_hamiltonian}
     \uses{def:parent_hamiltonian, lem:parent_hamiltonian_annihilates,
         def:correlation_length, thm:correlator_exponential_bound}
-    When the MPS tensor $A$ generates a parent Hamiltonian $H_N(A,L)$
-    (Definition~\ref{def:parent_hamiltonian}) whose ground state is the
-    matrix product vector (Lemma~\ref{lem:parent_hamiltonian_annihilates}),
-    the exponential decay bound
-    (Theorem~\ref{thm:correlator_exponential_bound}) shows that ground-state
-    correlations decay with a finite correlation length $\xi$.
+    Suppose that the MPS tensor $A$ generates a parent Hamiltonian $H_N(A,L)$
+    (Definition~\ref{def:parent_hamiltonian}) whose ground state is the matrix
+    product vector (Lemma~\ref{lem:parent_hamiltonian_annihilates}), and that
+    physical observable insertions reduce to the auxiliary functionals defined
+    above. If the hypotheses of
+    Theorem~\ref{thm:correlator_exponential_bound} hold, then the corresponding
+    ground-state correlations decay with finite correlation length $\xi$.
 \end{remark}
