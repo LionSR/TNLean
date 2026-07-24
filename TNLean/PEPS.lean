@@ -23,8 +23,6 @@ import TNLean.PEPS.CycleMPSConstantDescription
 import TNLean.PEPS.CycleMPSFundamentalTheorem
 import TNLean.PEPS.CycleMPSInjectivity
 import TNLean.PEPS.CycleMPSOverlapCapstone
-import TNLean.PEPS.CycleMPSOverlapInsertion
-import TNLean.PEPS.CycleMPSOverlapWindow
 import TNLean.PEPS.CycleMPSTensor
 import TNLean.PEPS.CycleMPSTranslationInvariant
 import TNLean.PEPS.CycleMPSWordTransport

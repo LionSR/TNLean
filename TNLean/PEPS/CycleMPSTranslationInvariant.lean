@@ -16,9 +16,10 @@ corollary for TI MPS, lines 1624--1661 of
 `L`-block injective, generating the same closed-chain state on `n ≥ 3L`
 sites, are related by a *single* invertible matrix `Z` and a constant `λ`
 with `λ^n = 1` through `B^i = λ · Z⁻¹ A^i Z`
-(`fundamentalTheorem_normalMPS_translationInvariant`), and the gauge `Z` is
-unique up to a multiplicative constant
-(`fundamentalTheorem_normalMPS_translationInvariant_gauge_unique`).
+(`fundamentalTheorem_normalMPS_translationInvariant`).  The gauge `Z` is
+unique up to a multiplicative constant; the uniqueness clause
+(`fundamentalTheorem_normalMPS_translationInvariant_gauge_unique`) is now
+delivered by `TNLean/PEPS/CycleMPSOverlapCapstone.lean`.
 
 The derivation collapses the per-bond gauge family of the matrix-form
 corollary (`fundamentalTheorem_normalMPS`).  The per-bond relation
@@ -34,11 +35,6 @@ centralizer of the full matrix algebra is the scalars.  The same-state
 relation pins consecutive scalars against the nonzero tensor `B`, so a
 single scalar `λ` relates all consecutive gauges; following the bonds once
 around the closed chain returns to the starting bond, forcing `λ^n = 1`.
-
-The uniqueness clause needs no system size: two single-gauge realizations,
-iterated along the spanning length-`L` words, give two equal conjugations of
-the full matrix algebra (`evalWord_eq_smul_conj_of_gauge`), so the gauges
-differ by a nonzero scalar.
 
 ## References
 
@@ -123,31 +119,6 @@ theorem evalWord_eq_conj_of_gaugeFamily {n d D : ℕ} [NeZero n] {A B : MPSTenso
       have hidx : v + ((i :: w).length : Fin n) = v + 1 + (w.length : Fin n) := by
         rw [List.length_cons, Nat.cast_add, Nat.cast_one, ← add_assoc, add_right_comm]
       rw [MPSTensor.evalWord_cons, MPSTensor.evalWord_cons, hZ v i, ih (v + 1), hidx]
-      simp only [Matrix.mul_assoc, Units.mul_inv_cancel_left]
-
-/-- **The single-gauge relation iterated along a word.**  If
-`B^i = λ · Z⁻¹ A^i Z` for every `i`, then every word product of `B` is the
-conjugated word product of `A` scaled by `λ` to the length of the word:
-`B^{w} = λ^{|w|} · Z⁻¹ A^{w} Z`.
-
-Source: arXiv:1804.04964, Section 3, the corollary for TI MPS, lines
-1624--1661 of `Papers/1804.04964/paper_normal.tex` — the iteration feeding
-its uniqueness clause. -/
-theorem evalWord_eq_smul_conj_of_gauge {d D : ℕ} {A B : MPSTensor d D} {Z : GL (Fin D) ℂ}
-    {lam : ℂ}
-    (hZ : ∀ i : Fin d, B i = lam • ((Z⁻¹ : GL (Fin D) ℂ) * A i * (Z : GL (Fin D) ℂ)))
-    (w : List (Fin d)) :
-    MPSTensor.evalWord B w = lam ^ w.length •
-      ((Z⁻¹ : GL (Fin D) ℂ) * MPSTensor.evalWord A w * (Z : GL (Fin D) ℂ)) := by
-  induction w with
-  | nil =>
-      simp only [MPSTensor.evalWord_nil, List.length_nil, pow_zero, one_smul,
-        Matrix.mul_one, Units.inv_mul]
-  | cons i w ih =>
-      rw [MPSTensor.evalWord_cons, MPSTensor.evalWord_cons, hZ i, ih, List.length_cons,
-        pow_succ']
-      rw [Matrix.smul_mul, Matrix.mul_smul, smul_smul]
-      congr 1
       simp only [Matrix.mul_assoc, Units.mul_inv_cancel_left]
 
 /-! ### Collapsing the per-bond family -/
@@ -242,72 +213,6 @@ theorem fundamentalTheorem_normalMPS_translationInvariant {n L d D : ℕ} [NeZer
     ∃ (Z : GL (Fin D) ℂ) (lam : ℂ), lam ^ n = 1 ∧
       ∀ i : Fin d, B i = lam • ((Z⁻¹ : GL (Fin D) ℂ) * A i * (Z : GL (Fin D) ℂ)) :=
   fundamentalTheorem_normalMPS_translationInvariant_of_overlap hL hn hD A B hA hB hAB
-
-/-- **Uniqueness clause of the Fundamental Theorem for translation-invariant
-normal MPS, single-gauge form** (arXiv:1804.04964, Section 3, the corollary
-for TI MPS: the gauge `Z` is unique up to a multiplicative constant).
-
-Two single-gauge realizations `B^i = λ · Z⁻¹ A^i Z` and
-`B^i = λ' · Z'⁻¹ A^i Z'` of the same pair of `L`-block injective tensors
-have proportional gauges: there is a nonzero scalar `c` with `Z' = c · Z`.
-Iterating each relation along the spanning length-`L` words shows that the
-two conjugations of the full matrix algebra agree — the empty word pins
-`λ^L = λ'^L`, and `λ ≠ 0` because `B` is nonzero — so the centralizer step
-applies.  No system size and no root-of-unity condition on `λ`, `λ'` are
-needed.
-
-Source: arXiv:1804.04964, Section 3, the corollary for TI MPS, lines
-1624--1661 of `Papers/1804.04964/paper_normal.tex`. -/
-theorem fundamentalTheorem_normalMPS_translationInvariant_gauge_unique {L d D : ℕ}
-    (hL : 0 < L) (hD : 0 < D) (A B : MPSTensor d D)
-    (hA : MPSTensor.IsNBlkInjective A L)
-    (hB : MPSTensor.IsNBlkInjective B L) (Z Z' : GL (Fin D) ℂ) (lam lam' : ℂ)
-    (hZ : ∀ i : Fin d,
-      B i = lam • ((Z⁻¹ : GL (Fin D) ℂ) * A i * (Z : GL (Fin D) ℂ)))
-    (hZ' : ∀ i : Fin d,
-      B i = lam' • ((Z'⁻¹ : GL (Fin D) ℂ) * A i * (Z' : GL (Fin D) ℂ))) :
-    ∃ c : ℂˣ, (Z' : Matrix (Fin D) (Fin D) ℂ) =
-      (c : ℂ) • (Z : Matrix (Fin D) (Fin D) ℂ) := by
-  obtain ⟨i₀, hi₀⟩ := exists_ne_zero_of_isNBlkInjective hL hD hB
-  have hlam : lam ≠ 0 := by
-    intro h0
-    apply hi₀
-    rw [hZ i₀, h0, zero_smul]
-  have hAspan : Submodule.span ℂ (Set.range fun σ : Fin L → Fin d =>
-      MPSTensor.evalWord A (List.ofFn σ)) = ⊤ := hA
-  -- The iterated relations agree on the spanning word products, hence
-  -- everywhere.
-  have hE : ∀ M : Matrix (Fin D) (Fin D) ℂ,
-      (lam ^ L • ((Z⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)) * M *
-          (Z : Matrix (Fin D) (Fin D) ℂ) =
-        (lam' ^ L • ((Z'⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)) * M *
-          (Z' : Matrix (Fin D) (Fin D) ℂ) := by
-    refine conj_eq_conj_of_span hAspan ?_
-    rintro M ⟨σ, rfl⟩
-    have h1 := evalWord_eq_smul_conj_of_gauge hZ (List.ofFn σ)
-    have h2 := evalWord_eq_smul_conj_of_gauge hZ' (List.ofFn σ)
-    rw [List.length_ofFn] at h1 h2
-    simp only [Matrix.smul_mul]
-    exact h1.symm.trans h2
-  -- The empty word pins the two scaling factors to the same value.
-  have hLL : lam ^ L = lam' ^ L := by
-    have h1 := hE 1
-    simp only [Matrix.mul_one, Matrix.smul_mul] at h1
-    rw [Units.inv_mul, Units.inv_mul] at h1
-    have hentry := congrFun (congrFun h1 ⟨0, hD⟩) ⟨0, hD⟩
-    simpa [Matrix.smul_apply, Matrix.one_apply_eq] using hentry
-  -- Cancelling the nonzero factor leaves equal conjugations.
-  have hconj : ∀ W : Matrix (Fin D) (Fin D) ℂ,
-      ((Z⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) * W *
-          (Z : Matrix (Fin D) (Fin D) ℂ) =
-        ((Z'⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) * W *
-          (Z' : Matrix (Fin D) (Fin D) ℂ) := by
-    intro W
-    have h := hE W
-    rw [← hLL] at h
-    simp only [Matrix.smul_mul] at h
-    exact smul_right_injective (Matrix (Fin D) (Fin D) ℂ) (pow_ne_zero L hlam) h
-  exact gl_proportional_of_conj_eq Z Z' hconj
 
 end PEPS
 end TNLean
