@@ -506,7 +506,7 @@ end MPSTensor
 namespace TNLean
 namespace PEPS
 
-/-! ### Linear extension and centralizer helpers
+/-! ### Linear extension and centralizer auxiliary lemmas
 
 Two-sided multiplication maps agreeing on a spanning set agree everywhere,
 and two invertible matrices inducing the same two-sided conjugation of the
