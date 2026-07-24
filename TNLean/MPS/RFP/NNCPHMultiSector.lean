@@ -447,11 +447,11 @@ This is the implication (i) ⟹ (ii) of Theorem `thm:main-MPS` at
 arXiv:1606.00608, lines 534--541, for the explicit multiplicity-one
 unit-weight direct-sum representative, with the corrections forced by the
 raw-weight counterexample
-`halvedWeightTensor_counterexample_to_unrestricted_zcl_iff_rfp` (issue #2597):
-the source CID quantifies over all disjoint regions, including adjacent ones,
-and the source theorem permits raw sector weights and repeated copies. Both
-restrictions are recorded in
-docs/paper-gaps/cpsv16_pure_zcl_local_orthogonality_scope.tex. -/
+`halvedWeightTensor_counterexample_to_unrestricted_zcl_iff_rfp`, recorded in
+docs/paper-gaps/cpsv16_pure_zcl_raw_weight_counterexample.tex: the source CID
+quantifies over all disjoint regions, including adjacent ones, and the source
+theorem permits raw sector weights and repeated copies. Both restrictions are
+recorded in docs/paper-gaps/cpsv16_pure_zcl_local_orthogonality_scope.tex. -/
 theorem isTransferIdempotent_basisDirectSum_isPositiveGapBNTZCL
     (hCF : IsBNTCanonicalForm P)
     (hRFP : IsTransferIdempotent (directSumTensor P.basis)) :
