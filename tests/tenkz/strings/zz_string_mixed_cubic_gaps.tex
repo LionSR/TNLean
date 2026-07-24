@@ -1,6 +1,5 @@
-% Expected failure: one declaration cannot cover all cubic-loop and off-seam
-% branch crossings on the same caller path.
-\documentclass{standalone}
+% Regression: a cubic loop and a distinct branch crossing can both be selected.
+\documentclass[varwidth=8cm, border=6pt]{standalone}
 \usepackage{tenkz}
 \usetikzlibrary{hobby,spath3,intersections}
 \begin{document}
@@ -13,7 +12,10 @@
   (0,0) .. controls (3.5,2) and (-3.5,2) .. (6,0)
         .. controls (5,1) and (1,-1) .. (0,1);
 \__tenkz_string_under_at:nnn {mixed} {mixed} {1}
+\__tenkz_string_under_at:nnn {mixed} {mixed} {3}
+\__tenkz_string_under_at:nnn {mixed} {mixed} {5}
 \__tenkz_string_resolve:
+\__tenkz_string_dev_draw:nn {mixed} {thick}
 \ExplSyntaxOff
 \end{tikzpicture}
 \end{document}
