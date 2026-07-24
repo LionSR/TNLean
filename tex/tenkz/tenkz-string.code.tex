@@ -1,10 +1,7 @@
-% Input:       string declarations (waypoints, windings, detours, crossings)
-%              from the language stage; frames and silhouettes from geometry.
-% Output:      saved smooth paths, resolved crossing gaps, bead anchors, and
-%              string events; development ink until the render stage owns it.
-% Owned state: the string registry (ids, kinds, paths) and the crossing ledger.
-% Invariants:  every declared crossing intersects; every intersection between
-%              two strings is declared; paths exist before resolution.
+% Input:       string records from language; frames and silhouettes from geometry.
+% Output:      saved paths, crossing gaps, bead anchors, and string events.
+% Owned state: the string registry and crossing, join, and gap ledgers.
+% Invariants:  declared crossings exist; geometric crossings are declared.
 % Next stage:  tenkz-render draws strings; the language stage supplies records.
 %
 % Curve model.  A string routes through waypoints as a Hobby spline: Hobby's
@@ -27,18 +24,6 @@
 
 \makeatletter
 \ExplSyntaxOn
-
-% ---------- metric entries ---------------------------------------------------
-% crossgap: total visual break in the under strand at a crossing, as a pitch
-% ratio.  Calibration: quantikz opens 3pt at its reference line width; at the
-% 11mm pitch that is 3pt/31.2pt = 0.096, rounded to one clean step.
-\__tenkz_metric_declare:nnn {crossgap} {0.10}
-  { quantikz~opens~3pt~at~11mm~pitch;~the~community-calibrated~crossing~break }
-% tube: meridian amplitude of a wound string, as a pitch ratio.  Large enough
-% that one oscillation reads at a four-station ring, small enough that the
-% winding never strays a full station gap from the cycle it decorates.
-\__tenkz_metric_declare:nnn {stringtube} {0.35}
-  { winding~oscillation~legible~at~four~stations~without~leaving~the~ring }
 
 % ---------- diagnostics ------------------------------------------------------
 \msg_new:nnnn {tenkz}{string-redeclared}
@@ -222,7 +207,7 @@
     ,
     \fp_eval:n
       { round( #3
-               + 0.55 * (#4 + #7
+               + \__tenkz_metric_ratio:n {stringtilt} * (#4 + #7
                    * cosd( 360 * #6 * #1 / \l__tenkz_string_n_int ))
                  * sind( 360 * #5 * #1 / \l__tenkz_string_n_int )
                + #7 * sind( 360 * #6 * #1 / \l__tenkz_string_n_int ) , 5 ) }
