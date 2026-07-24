@@ -1,0 +1,181 @@
+\begin{definition}[Left-canonical periodic tensor]
+    \label{def:periodic_tensor}
+    \lean{MPSTensor.IsPeriodic}
+    \leanok
+    A left-canonical irreducible MPS tensor $A$ of bond dimension $D$ is
+    \emph{$m$-periodic} (for some $m \ge 1$) if the peripheral spectrum of
+    its transfer map $\E_A$ is exactly the $m$-th roots of unity
+    $\{e^{2\pi i k/m} : 0 \le k < m\}$. This is the normalized form-II
+    convention used later in the source.
+    A $1$-periodic tensor is exactly an irreducible tensor with
+    primitive transfer map (Definition~\ref{def:primitive_channel}).
+\end{definition}
+
+\begin{definition}[Irreducible form]
+    \label{def:irreducible_form}
+    \lean{MPSTensor.IsIrreducibleForm}
+    \leanok
+    A tensor $A$ is in \emph{irreducible form} if it is block-diagonal
+    \[
+        A^i = \bigoplus_{j \in J} \mu_j\, A_j^i,
+    \]
+    where each block $A_j$ is an $m_j$-periodic tensor. Following
+    \cite[Section~II]{DeLasCuevas2017Irreducible}, the phases are fixed by the
+    convention $\mu_j>0$, so the weights are positive real scalars.
+    % Source check: arXiv:1708.00029, lines 252--261 define irreducible form
+    % with the positive-weight convention. The non-repeated basis of periodic
+    % tensors is introduced later, at lines 287--303, and is not part of this
+    % definition.
+    It extends the normal canonical form
+    (Definition~\ref{def:is_normal_canonical_form}),
+    which requires the stronger condition that every block is $1$-periodic.
+\end{definition}
+
+\begin{remark}[Normal canonical form gives irreducible form]
+    \label{rem:irr_form_vs_ncf}
+\lean{MPSTensor.toIsIrreducibleFormOfPhaseNormalized,
+    MPSTensor.toIsIrreducibleFormOfPhaseNormalized_period_eq_one}
+\leanok
+    Let $A^i=\bigoplus_j \mu_j A_j^i$ be a normal canonical block family with
+    nonzero complex weights. Replacing $\mu_j$ by $|\mu_j|$ and $A_j$ by
+    $(\mu_j/|\mu_j|)A_j$ gives the positive-weight irreducible form convention
+    and does not change the MPV family. The corresponding irreducible-form
+    witness has all periods equal to~$1$. This is the period-one part of the statement in
+    \cite[Section~II]{DeLasCuevas2017Irreducible} that normal tensors are
+    periodic tensors with period~$1$.
+\end{remark}
+
+\begin{remark}[Irreducible form allows higher periods]
+    \label{rem:irreducible_form_higher_periods}
+\notready
+    The converse containment is not part of the implication above.
+    Irreducible form permits periodic blocks with period larger than~$1$; for
+    instance, the antiferromagnetic example has period~$2$.
+\end{remark}
+
+\noindent Physical-index rotation was introduced in
+Definition~\ref{def:rotate_physical} (Chapter~\ref{ch:symmetry}).
+The following compatibility theorems are proved in the present chapter.
+
+\begin{theorem}[Transfer map preserved by physical rotation]%
+    \label{thm:transfer_map_rotate_physical}
+    \lean{MPSTensor.transferMap_rotatePhysical}
+    \leanok
+    \uses{def:rotate_physical, def:transfer_map}
+    If $u u^\dagger = I$, then the transfer map is invariant under
+    physical-index rotation:
+    $\mathcal{E}_{A_u} = \mathcal{E}_A$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:unitary_kraus_mixing}
+    This is the unitary freedom of Kraus representations from
+    \cite[Theorem~2.1(4)]{Wolf2012Quantum}.
+\end{proof}
+
+\begin{theorem}[Left-canonical preserved by physical rotation]%
+    \label{thm:left_canonical_rotate_physical}
+    \lean{MPSTensor.isLeftCanonical_rotatePhysical}
+    \leanok
+    \uses{def:rotate_physical}
+    If $u u^\dagger = I$ and $A$ is left-canonical, then
+    $A_u$ is left-canonical.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:rotate_physical}
+    Expand $\sum_i B_i^\dagger B_i$ where $B_i = \sum_j u_{ij} A_j$,
+    swap sums, apply orthogonality $u^\dagger u = I$, and collapse to
+    $\sum_j A_j^\dagger A_j = I$.
+\end{proof}
+
+\begin{theorem}[Irreducibility preserved by physical rotation]%
+    \label{thm:irreducible_tensor_rotate_physical}
+    \lean{MPSTensor.isIrreducibleTensor_rotatePhysical}
+    \leanok
+    \uses{def:rotate_physical}
+    If $u u^\dagger = I$ and $A$ is irreducible, then
+    $A_u$ is irreducible.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:rotate_physical}
+    Contrapositive: any nontrivial invariant projection~$P$ for the
+    rotated tensor yields $(1-P)\, A_k\, P = 0$ for all~$k$ via the
+    orthogonality of~$u$, contradicting irreducibility of~$A$.
+\end{proof}
+
+\begin{theorem}[Periodicity preserved by physical rotation]%
+    \label{thm:periodic_rotate_physical}
+    \lean{MPSTensor.isPeriodic_rotatePhysical}
+    \leanok
+    \uses{def:rotate_physical, thm:transfer_map_rotate_physical,
+        thm:left_canonical_rotate_physical,
+        thm:irreducible_tensor_rotate_physical}
+    If $u u^\dagger = I$ and $A$ is periodic with period~$m$, then
+    $A_u$ is periodic with the same period.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:transfer_map_rotate_physical,
+        thm:left_canonical_rotate_physical,
+        thm:irreducible_tensor_rotate_physical}
+    Assembles transfer-map invariance, left-canonical preservation, and
+    irreducibility preservation.
+\end{proof}
+
+\begin{theorem}[Equality of MPV families preserved by physical rotation]%
+    \label{thm:same_mpv_rotate_physical}
+    \lean{MPSTensor.sameMPV₂_rotatePhysical}
+    \leanok
+    \uses{def:rotate_physical, def:same_mpv}
+    If $\mathcal{V}(A) = \mathcal{V}(B)$, then
+    $\mathcal{V}(A_u) = \mathcal{V}(B_u)$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:rotate_physical, def:same_mpv}
+    Induction on the word length with a strengthened hypothesis
+    carrying an arbitrary prefix matrix, reducing each step to the
+    hypothesis via word concatenation.
+\end{proof}
+
+\begin{theorem}[Physical rotation distributes over block-diagonal composition]%
+    \label{thm:rotate_physical_blocks}
+    \lean{MPSTensor.rotatePhysical_toTensorFromBlocks}
+    \leanok
+    \uses{def:rotate_physical}
+    The rotated block-diagonal tensor satisfies
+    $(\bigoplus_k \mu_k A_k)_u
+        = \bigoplus_k \mu_k (A_k)_u$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:rotate_physical}
+    Pointwise matrix-entry computation using linearity of
+    the block-diagonal embedding and reindexing.
+\end{proof}
+
+\begin{theorem}[Irreducible form preserved by physical rotation]%
+    \label{thm:irreducible_form_rotate_physical}
+    \lean{MPSTensor.isIrreducibleForm_rotatePhysical}
+    \leanok
+    \uses{def:rotate_physical, def:irreducible_form,
+        thm:periodic_rotate_physical,
+        thm:same_mpv_rotate_physical,
+        thm:rotate_physical_blocks}
+    If $u u^\dagger = I$ and $A$ is in irreducible form, then
+    $A_u$ is in irreducible form with the same block structure and
+    rotated blocks.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:periodic_rotate_physical,
+        thm:same_mpv_rotate_physical,
+        thm:rotate_physical_blocks}
+    Each block remains periodic by
+    Theorem~\ref{thm:periodic_rotate_physical}, equality of MPV families
+    transfers via Theorem~\ref{thm:same_mpv_rotate_physical}, and
+    block-diagonal compatibility follows from
+    Theorem~\ref{thm:rotate_physical_blocks}.
+\end{proof}
