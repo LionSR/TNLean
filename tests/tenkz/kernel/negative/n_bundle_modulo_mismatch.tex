@@ -1,0 +1,21 @@
+% Negative regression: modulo bundles still checks constituent multiplicity.
+\documentclass{standalone}
+\usepackage{tenkz}
+\makeatletter
+\ExplSyntaxOn
+\file_input:n { tenkz-kernel.code.tex }
+\ExplSyntaxOff
+\makeatother
+\begin{document}
+\tenkzkernel
+\begin{tenkzeq}[check={signature, modulo=bundles}]
+  \begin{tenkz}[rows={wire}, cols=1, bonds=none]
+    \tnwire[weight=bundle=3]{w outside}{e outside}
+  \end{tenkz}
+  =
+  \begin{tenkz}[rows={wire}, cols=1, bonds=none]
+    \tnwire{w outside}{e outside}
+    \tnwire{w outside}{e outside}
+  \end{tenkz}
+\end{tenkzeq}
+\end{document}
