@@ -522,7 +522,7 @@ full matrix algebra are proportional. -/
 
 /-- Two two-sided multiplication maps that agree on a spanning set of the
 matrix algebra agree on every matrix. -/
-private theorem conj_eq_conj_of_span {D : ℕ} {S : Set (Matrix (Fin D) (Fin D) ℂ)}
+theorem conj_eq_conj_of_span {D : ℕ} {S : Set (Matrix (Fin D) (Fin D) ℂ)}
     (hS : Submodule.span ℂ S = ⊤) {P Q P' Q' : Matrix (Fin D) (Fin D) ℂ}
     (h : ∀ M ∈ S, P * M * Q = P' * M * Q') (M : Matrix (Fin D) (Fin D) ℂ) :
     P * M * Q = P' * M * Q' := by
@@ -541,7 +541,7 @@ matrices `Z`, `Z'` with `Z⁻¹ W Z = Z'⁻¹ W Z'` for every matrix `W` differ 
 a nonzero scalar.  This is the centralizer step of the closed-chain
 collapse: `Z' Z⁻¹` commutes with the full matrix algebra, hence is a
 scalar. -/
-private theorem gl_proportional_of_conj_eq {D : ℕ} (Z Z' : GL (Fin D) ℂ)
+theorem gl_proportional_of_conj_eq {D : ℕ} (Z Z' : GL (Fin D) ℂ)
     (h : ∀ W : Matrix (Fin D) (Fin D) ℂ,
       ((Z⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) * W *
           (Z : Matrix (Fin D) (Fin D) ℂ) =
