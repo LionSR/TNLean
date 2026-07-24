@@ -499,6 +499,20 @@ def validate_source_placements(targets: Sequence[Target]) -> None:
             "paper placements must match the source paper's "
             f"{len(expected)} includegraphics occurrences"
         )
+    expected_published = len({asset for _, asset in expected})
+    published = sum(target.corpus == "published" for target in targets)
+    if published != expected_published:
+        fail(
+            f"manifest has {published} published targets; the source paper has "
+            f"{expected_published} distinct graphics"
+        )
+    expected_workbench = FROZEN_TARGET_COUNT - expected_published
+    workbench = sum(target.corpus == "author-workbench" for target in targets)
+    if workbench != expected_workbench:
+        fail(
+            f"manifest has {workbench} author-workbench targets; "
+            f"the frozen remainder is {expected_workbench}"
+        )
 
 
 def case_headers(lines: list[str], *, path: Path) -> dict[str, str]:
@@ -817,6 +831,8 @@ def campaign_digest(targets: Sequence[Target]) -> str:
         REPO / "scripts" / "tenkz_rmp.py",
         REPO / "scripts" / "tenkz_lint.py",
         REPO / "scripts" / "tenkz_audit.py",
+        REPO / "scripts" / "tenkzlib" / "texcase.py",
+        REPO / "scripts" / "tenkzlib" / "tnlog.py",
     }
     paths.update((REPO / "tex" / "tenkz").glob("*.tex"))
     paths.update((REPO / "tex" / "tenkz").glob("*.sty"))
