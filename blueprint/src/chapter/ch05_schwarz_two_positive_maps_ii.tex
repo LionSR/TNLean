@@ -439,22 +439,6 @@ Section~\ref{sec:app_schwarz_retractions}.
     there exists $C$ with $A = B C$.
 \end{theorem}
 
-\begin{theorem}[Hilbert--Schmidt contraction]\label{thm:hs_contraction}
-    \lean{KadisonSchwarz.hilbertSchmidt_contraction}
-    \leanok
-    \uses{def:unital_kraus, def:tp_kraus}
-    If a Kraus map is both unital and trace-preserving, then
-    $\tr(E(X)^\dagger E(X)) \le \tr(X^\dagger X)$
-    for all $X \in \MN{D}$.
-\end{theorem}
-
-\begin{proof}\leanok\uses{thm:kadison_schwarz}
-    By (\ref{eq:schwarz_kadison}),
-    $E(X^\dagger X) - E(X)^\dagger E(X) \ge 0$, so
-    $\tr(E(X^\dagger X)) \ge \tr(E(X)^\dagger E(X))$.
-    Trace preservation gives $\tr(E(X^\dagger X)) = \tr(X^\dagger X)$.
-\end{proof}
-
 \begin{theorem}[Fixed-point peripheral eigenvectors satisfy KS equality]
     \label{thm:ks_equality_of_peripheral_eigenvector_of_fixedPoint}
     \lean{Kraus.ks_equality_of_peripheral_eigenvector_of_fixedPoint}

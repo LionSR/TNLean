@@ -511,7 +511,8 @@ the ambient fixed-point space a zero-block representation.
     \label{thm:cornerFixedPoints_block_form}
     \lean{Kraus.cornerFixedPoints_blockDiagonal_iff}
     \leanok
-    \uses{def:support_proj, def:kraus_map_channels}
+    \uses{def:support_proj, def:kraus_map, def:kraus_adjoint_map,
+        def:tp_kraus}
     Let $E(X)=\sum_iK_iXK_i^\dagger$ be a trace-preserving Kraus map on
     $\MN{D}$, with Heisenberg-picture adjoint
     $E^*(Y)=\sum_iK_i^\dagger YK_i$, let $\rho\succeq0$ satisfy

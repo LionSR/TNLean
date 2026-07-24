@@ -75,7 +75,7 @@
 
 \begin{definition}[Kraus fixed points]\label{def:kraus_fixed_points}
     \lean{Kraus.fixedPoints}\leanok
-    \uses{def:kraus_map_channels}
+    \uses{def:kraus_map}
     The \emph{fixed-point set} of a Kraus map
     $E(X)=\sum_iK_iXK_i^\dagger$ is
     $\Fix(E)=\{X\in\MN{D}:E(X)=X\}$.
@@ -91,8 +91,8 @@
     \label{thm:fixedPoints_in_multiplicativeDomain}
     \lean{Kraus.fixedPoints_in_multiplicativeDomain}
     \leanok
-    \uses{def:kraus_fixed_points, def:multiplicative_domain_channels,
-        def:kraus_map_channels}
+    \uses{def:kraus_fixed_points, def:kraus_adjoint_map, def:tp_kraus,
+        def:full_multiplicative_domain}
     Let $E$ be a trace-preserving Kraus map whose Schr{\"o}dinger-picture map has a
     positive definite fixed point $\rho>0$.
     Then every adjoint fixed point belongs to the multiplicative domain of the
@@ -170,7 +170,8 @@
 \begin{theorem}[Projected elements lie in the multiplicative domain]
     \label{thm:map_mem_multiplicativeDomain_of_idempotent}
     \lean{Kraus.map_mem_multiplicativeDomain_of_idempotent}\leanok
-    \uses{def:kraus_fixed_points, def:kraus_map_channels}
+    \uses{def:kraus_fixed_points, def:kraus_adjoint_map, def:unital_kraus,
+        def:full_multiplicative_domain}
     Let $E$ be a unital Kraus map whose adjoint map has a positive definite
     fixed point, and suppose $E^2=E$. Then $E(X)$ lies in the multiplicative
     domain of $E$ for every $X\in\MN{D}$.
@@ -193,7 +194,7 @@
 \begin{theorem}[Choi--Effros projected product]
     \label{thm:choi_effros_sandwich}
     \lean{Kraus.choi_effros_sandwich}\leanok
-    \uses{def:kraus_fixed_points, def:kraus_map_channels}
+    \uses{def:kraus_fixed_points, def:kraus_map}
     Under the same hypotheses, for all $X,Y\in\MN{D}$,
     $E(E(X)E(Y))=E(X)E(Y)$.
 \end{theorem}
@@ -211,7 +212,7 @@ Theorems~\ref{thm:choi_effros_left}, \ref{thm:choi_effros_right}, and
 
 \begin{definition}[Adjoint fixed points]\label{def:adjoint_fixed_points}
     \lean{Kraus.adjointFixedPoints}\leanok
-    \uses{def:kraus_map_channels}
+    \uses{def:kraus_adjoint_map}
     The \emph{adjoint fixed-point set} is
     $\Fix(E^*)=\{X\in\MN{D}:E^*(X)=X\}$, where
     $E^*(X)=\sum_iK_i^\dagger XK_i$.
@@ -220,7 +221,7 @@ Theorems~\ref{thm:choi_effros_left}, \ref{thm:choi_effros_right}, and
 \begin{theorem}[Fixed points form a $*$-subalgebra in the Heisenberg picture]
     \label{thm:adjointFixedPointsStarSubalgebra}
     \lean{Kraus.adjointFixedPointsStarSubalgebra, Kraus.fixedPoints_starSubalgebra}\leanok
-    \uses{def:adjoint_fixed_points, def:kraus_map_channels}
+    \uses{def:adjoint_fixed_points, def:tp_kraus}
     If the Kraus map is trace-preserving and has a positive definite
     fixed point $\rho>0$ with $E(\rho)=\rho$, then $\Fix(E^*)$ is a
     $*$-subalgebra of $\MN{D}$.
@@ -234,7 +235,7 @@ Theorems~\ref{thm:choi_effros_left}, \ref{thm:choi_effros_right}, and
 
 \begin{definition}[Kraus commutant]\label{def:kraus_commutant}
     \lean{Kraus.krausCommutant, Kraus.krausCommutantStarSubalgebra}\leanok
-    \uses{def:kraus_map_channels}
+    \uses{def:kraus_map}
     The \emph{Kraus commutant} is
     \begin{align}
         \{K_i,K_i^\dagger\}'
@@ -247,7 +248,7 @@ Theorems~\ref{thm:choi_effros_left}, \ref{thm:choi_effros_right}, and
 \begin{theorem}[Adjoint fixed points equal the Kraus commutant]
     \label{thm:adjointFixedPoints_eq_krausCommutant}
     \lean{Kraus.adjointFixedPointsStarSubalgebra_eq_krausCommutantStarSubalgebra}\leanok
-    \uses{def:adjoint_fixed_points, def:kraus_commutant, def:kraus_map_channels}
+    \uses{def:adjoint_fixed_points, def:kraus_commutant, def:tp_kraus}
     Under the hypotheses of Theorem~\ref{thm:adjointFixedPointsStarSubalgebra},
     the adjoint fixed-point $*$-subalgebra equals the Kraus commutant:
     \begin{align}
