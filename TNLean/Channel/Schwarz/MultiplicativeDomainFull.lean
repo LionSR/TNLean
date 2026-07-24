@@ -231,33 +231,11 @@ theorem conjTranspose_mem_leftMultiplicativeDomain (K : Fin d → Mat) {X : Mat}
   have h := congrArg Matrix.conjTranspose (hX Yᴴ)
   simpa [conjTranspose_krausMap, mul_assoc] using h
 
-theorem zero_mem_multiplicativeDomain (K : Fin d → Mat) :
-    (0 : Mat) ∈ multiplicativeDomain K :=
-  ⟨zero_mem_rightMultiplicativeDomain K, zero_mem_leftMultiplicativeDomain K⟩
-
-theorem add_mem_multiplicativeDomain (K : Fin d → Mat) {X Y : Mat}
-    (hX : X ∈ multiplicativeDomain K) (hY : Y ∈ multiplicativeDomain K) :
-    X + Y ∈ multiplicativeDomain K :=
-  ⟨add_mem_rightMultiplicativeDomain (K := K) hX.1 hY.1,
-    add_mem_leftMultiplicativeDomain (K := K) hX.2 hY.2⟩
-
-theorem mul_mem_multiplicativeDomain (K : Fin d → Mat) {X Y : Mat}
-    (hX : X ∈ multiplicativeDomain K) (hY : Y ∈ multiplicativeDomain K) :
-    X * Y ∈ multiplicativeDomain K :=
-  ⟨mul_mem_rightMultiplicativeDomain (K := K) hX.1 hY.1,
-    mul_mem_leftMultiplicativeDomain (K := K) hX.2 hY.2⟩
-
 theorem one_mem_multiplicativeDomain (K : Fin d → Mat)
     (h_unital : IsUnitalKraus K) :
     (1 : Mat) ∈ multiplicativeDomain K :=
   ⟨one_mem_rightMultiplicativeDomain (K := K) h_unital,
     one_mem_leftMultiplicativeDomain (K := K) h_unital⟩
-
-theorem conjTranspose_mem_multiplicativeDomain (K : Fin d → Mat) {X : Mat}
-    (hX : X ∈ multiplicativeDomain K) :
-    Xᴴ ∈ multiplicativeDomain K :=
-  ⟨conjTranspose_mem_rightMultiplicativeDomain (K := K) hX.2,
-    conjTranspose_mem_leftMultiplicativeDomain (K := K) hX.1⟩
 
 noncomputable def rightMultiplicativeDomainSubalgebra (K : Fin d → Mat)
     (h_unital : IsUnitalKraus K) : Subalgebra ℂ Mat where
@@ -362,13 +340,6 @@ theorem krausMap_mul_left_of_mem_multiplicativeDomain (K : Fin d → Mat)
     {X : Mat} (hX : X ∈ multiplicativeDomain K) (Y : Mat) :
     krausMap K (Y * X) = krausMap K Y * krausMap K X :=
   hX.2 Y
-
-/-- The Kraus map preserves `*` on the multiplicative domain:
-`E(X†) = E(X)†` for all `X ∈ 𝒜`. -/
-theorem krausMap_star_of_mem_multiplicativeDomain (K : Fin d → Mat) {X : Mat}
-    (_hX : X ∈ multiplicativeDomain K) :
-    krausMap K Xᴴ = (krausMap K X)ᴴ :=
-  krausMap_conjTranspose K X
 
 end StarHomomorphism
 

@@ -192,23 +192,4 @@ theorem pairTraceSeparatingAt_threeBlock_of_exists_not_forall_mpv_eq_mul_of_dim_
       hAblk hBblk hA hB hD hL hDistinct)
     hAblk3 hBblk3
 
-/-- Finite-C1 form of homogeneous pair trace separation at the PGVWC
-three-block length \(3(L_0+1)\). -/
-theorem pairTraceSeparatingAt_threeBlock_of_exists_not_forall_mpv_eq_mul_of_dim_ge_succ
-    {A : MPSTensor d D₁} {B : MPSTensor d D₂} [NeZero D₁] [NeZero D₂]
-    {L₀ : ℕ}
-    (hA0 : IsNBlkInjective A L₀) (hB0 : IsNBlkInjective B L₀)
-    (hAblk : IsNBlkInjective A (L₀ + 1)) (hBblk : IsNBlkInjective B (L₀ + 1))
-    (hAblk3 : IsNBlkInjective A ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))))
-    (hBblk3 : IsNBlkInjective B ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))))
-    (hD : D₂ ≤ D₁) (hL₀ : 0 < L₀)
-    (hDistinct :
-      ∃ N : ℕ, 2 ≤ N ∧ L₀ + 1 < N ∧
-        ¬ ∃ c : ℂ, ∀ σ : Fin N → Fin d, mpv A σ = c * mpv B σ) :
-    PairTraceSeparatingAt A B ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))) := by
-  exact pairTraceSeparatingAt_of_groundSpace_inf_eq_bot_of_isNBlkInjective
-    (groundSpace_inf_eq_bot_of_exists_not_forall_mpv_eq_mul_of_dim_ge_succ
-      hA0 hB0 hAblk hBblk hD hL₀ hDistinct)
-    hAblk3 hBblk3
-
 end MPSTensor

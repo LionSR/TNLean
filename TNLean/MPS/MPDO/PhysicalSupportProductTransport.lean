@@ -400,19 +400,6 @@ private theorem twoSiteSectorProjection_mul_liftedBond
     sitewisePhysicalMatrix_isometry F.inclusion F.inclusion_isometry 2,
     Matrix.one_mul]
 
-private theorem liftedBond_mul_twoSiteSectorProjection
-    (F : PhysicalSupportRestrictionData P K)
-    (B : Matrix (Fin 2 → Fin F.supportDim)
-      (Fin 2 → Fin F.supportDim) ℂ) :
-    F.liftedBond B * twoSiteSectorProjection P = F.liftedBond B := by
-  rw [F.twoSiteSectorProjection_eq_lifted_range]
-  simp only [liftedBond, singleKrausMap_apply, Matrix.mul_assoc]
-  rw [← Matrix.mul_assoc
-      (sitewisePhysicalMatrix F.inclusion 2)ᴴ
-      (sitewisePhysicalMatrix F.inclusion 2),
-    sitewisePhysicalMatrix_isometry F.inclusion F.inclusion_isometry 2,
-    Matrix.one_mul]
-
 private theorem liftedBondProduct_left_supported
     (F : PhysicalSupportRestrictionData P K)
     (data : TranslationInvariantBondData F.supportDim)

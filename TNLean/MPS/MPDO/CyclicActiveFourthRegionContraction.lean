@@ -33,11 +33,6 @@ private theorem fourthRegion_retained_internal_index {n : ℕ} (i : Fin n) :
   ext
   simp [Fin.succAbove_last]
 
-private theorem fourthRegion_retained_internal_succ_index {n : ℕ} (i : Fin n) :
-    Fin.castAdd 1 i + 1 = (Fin.last n).succAbove i + 1 := by
-  ext
-  simp [Fin.succAbove_last, Fin.add_def]
-
 private theorem fourthRegion_internal_succ_index {n : ℕ} (i : Fin n) :
     Fin.castAdd 3 (Fin.castAdd 1 i) + 1 =
       Fin.castAdd 3 ((Fin.last n).succAbove i + 1) := by
@@ -56,11 +51,6 @@ private theorem fourthRegion_internal_succ_index {n : ℕ} (i : Fin n) :
 private theorem fourthRegion_last_retained_index {n : ℕ} :
     Fin.castAdd 3 (Fin.natAdd n (0 : Fin 1)) =
       Fin.castAdd 3 (Fin.last n) := by
-  ext
-  rfl
-
-private theorem fourthRegion_retained_last_index {n : ℕ} :
-    Fin.natAdd n (0 : Fin 1) = Fin.last n := by
   ext
   rfl
 

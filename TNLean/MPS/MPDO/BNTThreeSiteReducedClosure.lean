@@ -273,45 +273,6 @@ theorem reducedBlockState_reindex_isThreeSiteFamilyClosure_of_sameMPV₂Pos
       simp [MPSTensor.SectorDecomposition.basisMPOTensor, u, v,
         evalWord, Matrix.mul_assoc]
 
-/-- Under the source hypotheses of simplicity, SAL, and copy-independent
-canonical-form weights, one normalized three-site reduced state has a BNT
-family closure with every closing matrix nonzero.
-
-The SAL hypothesis supplies the nonzero normalization trace.  Simplicity is
-used through the nonnilpotence of every physical-trace transfer, and the
-horizontal canonical form is used through equality of the positive-length
-matrix-product-vector families.
-
-Source: arXiv:1606.00608, simplicity and SAL at lines 815--822, and Appendix
-C.2, lines 1646--1665 and 1714--1732. -/
-theorem exists_reducedBlockState_threeSiteFamilyClosure_nonzero_closing
-    {D : ℕ} (M : MPOTensor d D)
-    (S : MPSTensor.SectorDecomposition (d * d))
-    (hM : MPSTensor.SameMPV₂Pos M.toMPSTensor S.toTensor)
-    (hWeight : ∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),
-      S.weight j q = S.weight j q')
-    (hnonNil : ∀ j,
-      ¬ IsNilpotent (doubledPhysTraceTransfer d (S.basis j)))
-    (hSAL : IsSAL M) :
-    ∃ L : ℕ, 0 < L ∧
-      IsThreeSiteFamilyClosure
-        (fun j ↦ S.basisMPOTensor j)
-        (S.normalizedThreeSiteClosingMatrix M L)
-        (Matrix.reindex (_root_.finThreeArrowEquiv (Fin d))
-          (_root_.finThreeArrowEquiv (Fin d))
-          (M.reducedBlockState (L + 3) 3 (by omega))) ∧
-      ∀ j : Fin S.basisCount,
-        S.normalizedThreeSiteClosingMatrix M L j ≠ 0 := by
-  obtain ⟨_hMPDO, htrace, _hSAL⟩ := hSAL
-  obtain ⟨L, hL, hR⟩ :=
-    S.exists_common_threeSiteClosingMatrix_ne_zero hWeight hnonNil
-  refine ⟨L, hL, ?_, ?_⟩
-  · simpa [Nat.add_comm] using
-      reducedBlockState_reindex_isThreeSiteFamilyClosure_of_sameMPV₂Pos M S hM L
-  · intro j
-    exact S.normalizedThreeSiteClosingMatrix_ne_zero M L j
-      (htrace (L + 3) (by omega)) (hR j)
-
 /-- At chain length four, the normalized three-site reduced state is a BNT
 family closure with every closing matrix nonzero.
 
