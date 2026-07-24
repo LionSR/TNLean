@@ -1,0 +1,470 @@
+%% ---------------------------------------------------------
+\section{Non-translation-invariant periodic chains}
+\label{sec:non_ti_setup}
+%% ---------------------------------------------------------
+
+The algebraic proof of~\cite{Molnar2018NormalPEPS} keeps a fixed periodic
+chain length and lets the local tensors vary from site to site. The
+necessary objects---the coefficient of a configuration, the same-state
+relation, sitewise injectivity, and cyclic gauge equivalence---are recorded
+first.
+
+\begin{definition}[Periodic non-TI chain data]\label{def:non_ti_chain}
+    \lean{MPSChainTensor, MPSChainTensor.coeff, MPSChainTensor.SameState, MPSChainTensor.IsInjective, MPSChainTensor.GaugeEquiv}
+    \leanok
+    \uses{def:mps_tensor, def:injective}
+    Fix a chain length $n$.
+    A \emph{non-translation-invariant periodic MPS chain} consists of sitewise
+    tensors $A_k=\{A_k^i\}_{i=0}^{d-1}$, where $k=0,\ldots,n-1$ and each
+    $A_k^i\in\MN{D}$.
+    For a basis configuration
+    $\sigma=(\sigma_0,\ldots,\sigma_{n-1})$, its coefficient is
+    \begin{align}
+        c_{A,\sigma}
+        &:=\tr\!\left(A_0^{\sigma_0}A_1^{\sigma_1}\cdots A_{n-1}^{\sigma_{n-1}}\right).
+        \notag
+    \end{align}
+    Two such chains generate the \emph{same chain state} if these coefficients
+    agree for every $\sigma$.
+    The chain is \emph{injective} if each local tensor $A_k$ is injective in
+    the usual single-site sense.
+    Finally, two chains are \emph{cyclically gauge equivalent} if there are
+    invertible bond matrices $Z_0,\ldots,Z_{n-1}$ such that, for every site
+    $k$ and physical index $i$,
+    \begin{align}
+        B_k^i
+        &=Z_kA_k^iZ_{k+1}^{-1},
+        \notag
+    \end{align}
+    with indices understood modulo $n$, so that $Z_n=Z_0$. Locally, this
+    gauge relation is represented by
+    \begin{center}
+        % B_k^i = Z_k A_k^i Z_{k+1}^{-1}: the black nodes are the
+        % site tensors, the red capsules are the two neighboring bond
+        % gauges, and the upper leg carries the free physical index i.
+        % Both sides have boundary signature (1,1,1,0), ordered as
+        % (virtual-west, virtual-east, physical-up, physical-down).
+        \begin{tenkz}[physical=up]
+            \tn[up=$i$]{B_k}
+        \end{tenkz}
+        $ = $
+        \begin{tenkz}[physical=up]
+            \tnX{Z_k} & \tn[up=$i$]{A_k} & \tnX{Z_{k+1}^{-1}}
+        \end{tenkz}
+    \end{center}
+\end{definition}
+
+\begin{lemma}[Cyclic gauge equivalence is an equivalence relation]
+    \label{lem:chain_gauge_equiv_equivalence}
+    \lean{MPSChainTensor.GaugeEquiv.refl}
+    \lean{MPSChainTensor.GaugeEquiv.symm}
+    \lean{MPSChainTensor.GaugeEquiv.trans}
+    \leanok
+    \uses{def:non_ti_chain}
+    On fixed-length periodic chains, cyclic gauge equivalence is reflexive,
+    symmetric, and transitive.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Reflexivity uses the identity gauge on every bond.
+    Symmetry inverts each bond gauge, and transitivity multiplies the gauges
+    pointwise along the chain.
+\end{proof}
+
+%% ---------------------------------------------------------
+\section{One-sided inverse and physical realisation of virtual insertions}%
+\label{sec:decomposition_map}
+%% ---------------------------------------------------------
+
+If $A$ is injective, the linear combination map
+$\Phi_A(c):=\sum_i c_iA^i\colon\C^d\to\MN{D}$
+is surjective and admits a right inverse. The resulting decomposition map
+expresses any matrix as a linear combination of the spanning family
+$\{A^i\}$, and its multiplicative refinement re-expresses a virtual insertion
+on the bond as a physical operation on the local index.
+
+\begin{lemma}[Existence of a right inverse]\label{lem:exists_rightInverse}
+    \lean{MPSTensor.IsInjective.exists_rightInverse}
+    \leanok
+    \uses{def:injective}
+    If $A$ is injective, then there exists a $\C$-linear map
+    $\Psi\colon\MN{D}\to\C^d$ satisfying
+    $\Phi_A\circ\Psi=\id_{\MN{D}}$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Surjectivity of $\Phi_A$ yields a linear section by choice.
+\end{proof}
+
+\begin{definition}[Decomposition map]\label{def:decomposition_map}
+    \lean{MPSTensor.decompositionMap}
+    \leanok
+    \uses{def:injective, lem:exists_rightInverse}
+    Let $A$ be an injective MPS tensor.
+    The \emph{decomposition map}
+    $\Psi_A\colon\MN{D}\to\C^d$ is a fixed choice of right inverse of
+    $\Phi_A$.
+\end{definition}
+
+\begin{lemma}[Decomposition property]\label{lem:exists_decomposition}
+    \lean{MPSTensor.IsInjective.exists_decomposition}
+    \leanok
+    \uses{def:decomposition_map}
+    If $A$ is injective, then for every $X\in\MN{D}$ there exist
+    coefficients $c\in\C^d$ such that
+    $X=\sum_{i=0}^{d-1}c_iA^i$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Take $c=\Psi_A(X)$. Then
+    $\Phi_A(c)=\Phi_A(\Psi_A(X))=X$.
+\end{proof}
+
+\begin{remark}[Non-uniqueness of the decomposition]
+    \label{rem:decomposition_nonunique}
+    When $d>D^2$, the map $\Phi_A$ has a nontrivial kernel, so
+    the section $\Psi_A$ is not unique.
+    The statements that follow depend only on
+    $\Phi_A\circ\Psi_A=\id_{\MN{D}}$, so the choice does not
+    affect the conclusions.
+\end{remark}
+
+\subsection{Physical realisation of virtual insertions}%
+\label{sec:phys_realize}
+
+For an injective tensor $A$, the physical realisation map encodes the
+effect of inserting a virtual matrix $X$ on the bond as a $d\times d$
+operation on the physical indices. Its multiplicativity
+(Theorem~\ref{thm:physRealize_mul}) turns the bond algebra into an algebra
+acting on the physical leg, and is the source of the algebra homomorphism
+used in the virtual bond gauge.
+
+\begin{definition}[Physical realisation map]\label{def:phys_realize}
+    \lean{MPSTensor.physRealize}
+    \leanok
+    \uses{def:decomposition_map}
+    Let $A$ be an injective tensor.
+    For $X\in\MN{D}$, define the $d\times d$ matrix
+    $O_A(X)\in\MN{d}$ by
+    \begin{align}
+        O_A(X)_{ij}
+        &:=(\Psi_A(A^iX))_j,
+        \notag
+    \end{align}
+    so that row~$i$ of $O_A(X)$ contains the decomposition coefficients
+    of $A^iX$ in the spanning set $\{A^j\}$.
+    Diagrammatically, the inserted virtual matrix is re-expressed as a
+    physical operation on the same local tensor:
+    \begin{center}
+        % A^i X = sum_j O_A(X)_{ij} A^j: on the left, X is inserted on
+        % A's east virtual leg.  On the right, the lower leg of O_A(X)
+        % contracts with A's physical leg over j, while O_A(X)'s upper
+        % leg is the free index i.  The operator row has no virtual
+        % boundary.  Both sides have signature (1,1,1,0).
+        \begin{tenkz}[physical=up]
+            \tn[up=$i$]{A} & \tnX{X}
+        \end{tenkz}
+        $ = $
+        \begin{tenkz}[rows={op:none, ket}]
+            \tn[mpo, up=$i$, down=$j$]{O_A(X)} \\
+            \tn{A}
+        \end{tenkz}
+    \end{center}
+    The map $X\mapsto O_A(X)$ is $\C$-linear.
+\end{definition}
+
+\begin{lemma}[Defining property of the physical realisation map]%
+    \label{lem:physRealize_spec}
+    \lean{MPSTensor.physRealize_spec}
+    \leanok
+    \uses{def:phys_realize, def:decomposition_map}
+    For every $X\in\MN{D}$ and every physical index $i$,
+    \begin{align}
+        A^iX
+        &=\sum_{j=0}^{d-1}O_A(X)_{ij}A^j.
+        \notag
+    \end{align}
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    By definition, $O_A(X)_{ij}=(\Psi_A(A^iX))_j$.
+    Applying $\Phi_A$ gives
+    $\sum_jO_A(X)_{ij}A^j=\Phi_A(\Psi_A(A^iX))=A^iX$,
+    where the last step uses
+    $\Phi_A\circ\Psi_A=\id_{\MN{D}}$.
+\end{proof}
+
+\begin{theorem}[Physical realisation is multiplicative]%
+    \label{thm:physRealize_mul}
+    \lean{MPSTensor.physRealize_mul}
+    \leanok
+    \uses{def:phys_realize, lem:physRealize_spec, def:injective}
+    Let $A$ be an injective MPS tensor.
+    For all $X,Y\in\MN{D}$,
+    $O_A(XY)=O_A(X)O_A(Y)$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Applying Lemma~\ref{lem:physRealize_spec} to $X$ yields
+    $A^iX=\sum_{j=0}^{d-1}O_A(X)_{ij}A^j$.
+    Multiplying by $Y$ on the right and applying the linear map $\Psi_A$
+    gives
+    \begin{align}
+        \Psi_A(A^iXY)
+        &=\sum_{j=0}^{d-1}O_A(X)_{ij}\Psi_A(A^jY).
+        \notag
+    \end{align}
+    Taking the $k$th component of both sides gives
+    \begin{align}
+        O_A(XY)_{ik}
+        &=\sum_{j=0}^{d-1}O_A(X)_{ij}O_A(Y)_{jk}
+          =(O_A(X)O_A(Y))_{ik}.
+        \notag
+    \end{align}
+    Since this holds for all $i$ and $k$, the matrices are equal.
+\end{proof}
+
+\begin{remark}[General injective case]
+    \label{rem:physRealize_mul_general}
+    \uses{thm:physRealize_mul, def:injective, def:decomposition_map}
+    When $d>D^2$, the decomposition map $\Psi_A$ need not be unique.
+    Nevertheless, Theorem~\ref{thm:physRealize_mul} is already the
+    general injective statement: for the fixed choice of $\Psi_A$ in
+    Definition~\ref{def:decomposition_map}, the associated physical
+    realisation map $O_A$ is multiplicative.
+    This supersedes the earlier basis-only formulation.
+\end{remark}
+
+%% ---------------------------------------------------------
+\section{The virtual bond gauge and the proportionality lemma}%
+\label{sec:virtual_bond_gauge}
+%% ---------------------------------------------------------
+
+The two structural lemmas of~\cite{Molnar2018NormalPEPS} carry the entire
+fixed-length argument. The virtual bond gauge
+(Lemma~\ref{lem:virtual_bond_gauge}) turns equality of the combined MPV
+families into the virtual-bond conjugacy $X\mapsto Z^{-1}XZ$ by a fixed
+invertible matrix $Z$; the proportionality
+lemma (Lemma~\ref{lem:tensor_proportional}) shows that two tensor pairs
+agreeing under all virtual insertions are proportional. Both rest on two
+elementary facts: injectivity is preserved by blocking, and the centre of
+$\MN{D}$ consists of scalars.
+
+\subsection{Two preliminary facts}
+\label{sec:intermediate}
+
+\begin{lemma}[Blocking preserves injectivity]\label{lem:blocking_preserves_injectivity}
+    \lean{MPSTensor.chainCombinedTensor_isInjective}
+    \leanok
+    \uses{def:injective, def:blocked_tensor}
+    Let $A_0,\ldots,A_{m-1}$ be injective MPS tensors with compatible
+    bond dimensions.
+    Then the blocked tensor
+    \begin{align}
+        (A_0\otimes\cdots\otimes A_{m-1})^{(i_0,\ldots,i_{m-1})}
+        &:=A_0^{i_0}A_1^{i_1}\cdots A_{m-1}^{i_{m-1}}
+        \notag
+    \end{align}
+    is again injective.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    The span of the blocked matrices contains all products
+    $A_0^{i_0}\cdots A_{m-1}^{i_{m-1}}$.
+    Since each $\{A_k^i\}_i$ spans $\MN{D}$, these products span
+    all of $\MN{D}$.
+\end{proof}
+
+\subsection{Same state forces a virtual bond gauge}
+
+The 3-site virtual-bond statement is used later in the proof of the PEPS
+fundamental theorem. Its hypothesis is the all-length MPV equality of the
+combined tensors, and its conclusion is the conjugacy of the middle-bond
+insertion data.
+
+\begin{lemma}[Virtual bond gauge -- 3-site case]%
+    \label{lem:virtual_bond_gauge}
+    \lean{MPSTensor.virtual_bond_gauge}
+    \leanok
+    \uses{thm:physRealize_mul, thm:simplicity, thm:skolem_noether}
+    Let $A=(A_0,A_1,A_2)$ and $B=(B_0,B_1,B_2)$ be two
+    3-site injective periodic chains with common bond dimension
+    $D\ge1$ and $\mc{V}(A)=\mc{V}(B)$ (same MPV family).
+    Then at the middle bond there exists an invertible matrix
+    $Z\in\GL_D(\C)$ such that, for all $X\in\MN{D}$ and all physical
+    indices $i_0,i_1,i_2$, the virtual-insertion trace coefficients agree
+    after conjugation:
+    \begin{align}
+        \tr\!\left(A_0^{i_0}X A_1^{i_1}A_2^{i_2}\right)
+        &=\tr\!\left(B_0^{i_0}Z^{-1}XZ B_1^{i_1}B_2^{i_2}\right).
+        \notag
+    \end{align}
+
+    In \cite[Lemma~1]{Molnar2018NormalPEPS}, the statement is given for
+    arbitrary chain length $n\ge3$ and any bond position, with
+    uniqueness of $Z$ up to scalar.
+    The chain-level generalization to arbitrary $n\ge3$
+    and any bond position is not pursued here.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{thm:physRealize_mul, thm:simplicity, thm:skolem_noether,
+        lem:blocking_preserves_injectivity}
+    The $\mc{V}(A)=\mc{V}(B)$ hypothesis gives, for every $X\in\MN{D}$,
+    equality of the virtual-insertion trace coefficients
+    \begin{align}
+        \tr\!\left(A_0^{i_0}X A_1^{i_1}A_2^{i_2}\right)
+        &=\tr\!\left(B_0^{i_0}Y B_1^{i_1}B_2^{i_2}\right)
+        \notag
+    \end{align}
+    for some $Y$ depending on $X$.
+    Since all three site tensors on each side are injective,
+    the physical realisation maps $O_A,O_B$ are algebra homomorphisms
+    by Theorem~\ref{thm:physRealize_mul}.
+    Setting $T(X)=Y$ defines a $\C$-linear multiplicative map,
+    hence a nonzero $\C$-algebra endomorphism of $\MN{D}$, which is
+    bijective by Theorem~\ref{thm:simplicity}.
+    Skolem--Noether (Theorem~\ref{thm:skolem_noether}) gives
+    $Z\in\GL_D(\C)$ with $T(X)=Z^{-1}XZ$.
+\end{proof}
+
+\subsection{Aligned gauges force proportionality}%
+\label{sec:tensor_proportional}
+
+After applying Lemma~\ref{lem:virtual_bond_gauge} to each bond and absorbing
+the gauge matrices, one obtains two chains whose virtual-insertion
+operations agree on every bond. Lemma~2 of~\cite{Molnar2018NormalPEPS}
+shows that this agreement forces the local tensors to be proportional.
+
+\begin{lemma}[Aligned gauges force proportionality --
+        Lemma~2 of \protect\cite{Molnar2018NormalPEPS}]%
+    \label{lem:tensor_proportional}
+    \lean{MPSTensor.tensor_proportional}
+    \leanok
+    \uses{def:injective, def:decomposition_map, lem:center_scalar}
+    Let $A_1,A_2$ and $B_1,B_2$ be injective MPS tensors with
+    the same positive bond dimension $D$.
+    Suppose that, for all $X\in\MN{D}$ on the internal bond,
+    all $Y\in\MN{D}$ on the external bond, and all physical indices $i,j$,
+    \begin{align}
+        \tr\!\left(A_1^iX A_2^j\right)
+        &=\tr\!\left(B_1^iX B_2^j\right),
+        \label{eq:internal_bond}\\
+        \tr\!\left(A_2^jY A_1^i\right)
+        &=\tr\!\left(B_2^jY B_1^i\right).
+        \label{eq:external_bond}
+    \end{align}
+    Diagrammatically, inserting $X$ on the bond between the two sites,
+    as in (\ref{eq:internal_bond}), gives
+    \begin{center}
+        % tr(A_1^i X A_2^j) = tr(B_1^i X B_2^j): X lies on the
+        % internal bond between the two site tensors, and the periodic
+        % return closes the remaining virtual ends.  The two upper legs
+        % are the free indices i,j.  Both sides have signature (0,0,2,0).
+        \begin{tenkz}[periodic, physical=up]
+            \tn[up=$i$]{A_1} & \tnX{X} & \tn[up=$j$]{A_2}
+        \end{tenkz}
+        $ = $
+        \begin{tenkz}[periodic, physical=up]
+            \tn[up=$i$]{B_1} & \tnX{X} & \tn[up=$j$]{B_2}
+        \end{tenkz}
+    \end{center}
+    while the insertion $Y$ on the outer trace bond, as
+    in (\ref{eq:external_bond}), is
+    \begin{center}
+        % tr(A_2^j Y A_1^i) = tr(B_2^j Y B_1^i): reading each periodic
+        % word from its second site encounters A_2/B_2, then Y on the
+        % outer return bond, then A_1/B_1.  Thus this is not the internal
+        % cyclic order above.  The upper legs are the free indices i,j,
+        % and both sides have signature (0,0,2,0).
+        \begin{tenkz}[periodic, physical=up]
+            \tn[up=$i$]{A_1} & \tn[up=$j$]{A_2} & \tnX{Y}
+        \end{tenkz}
+        $ = $
+        \begin{tenkz}[periodic, physical=up]
+            \tn[up=$i$]{B_1} & \tn[up=$j$]{B_2} & \tnX{Y}
+        \end{tenkz}
+    \end{center}
+    so the two hypotheses distinguish the internal and external virtual
+    loops of the two-site periodic chain.
+
+    Then there exists a nonzero scalar $\lambda\in\C^{\times}$ such
+    that, for all physical indices $i,j$,
+    \begin{align}
+        A_1^i
+        &=\lambda B_1^i,
+        \notag\\
+        A_2^j
+        &=\lambda^{-1}B_2^j.
+        \notag
+    \end{align}
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{def:decomposition_map, lem:center_scalar}
+    By cyclicity and non-degeneracy of the trace pairing,
+    the conditions in (\ref{eq:internal_bond})
+    and (\ref{eq:external_bond}) give, for all physical indices $i,j$,
+    \begin{align}
+        A_2^jA_1^i
+        &=B_2^jB_1^i,
+        \label{eq:aft_product_identities_a}\\
+        A_1^iA_2^j
+        &=B_1^iB_2^j.
+        \label{eq:aft_product_identities_b}
+    \end{align}
+    Write $\Id_D=\sum_jc_jA_2^j$ using the decomposition map
+    $\Psi_{A_2}$, and define $Z:=\sum_jc_jB_2^j\in\MN{D}$.
+    This is the point where the two-site comparison collapses to a single
+    boundary matrix:
+    \begin{center}
+        % A_1^i = Z B_1^i = B_1^i Z: the upper leg is the free physical
+        % index i, the red capsule Z acts on the west or east virtual
+        % index, and the untouched outer virtual indices remain open.
+        % All three terms have boundary signature (1,1,1,0).
+        \begin{tenkz}[physical=up]
+            \tn[up=$i$]{A_1}
+        \end{tenkz}
+        $ = $
+        \begin{tenkz}[physical=up]
+            \tnX{Z} & \tn[up=$i$]{B_1}
+        \end{tenkz}
+        $ = $
+        \begin{tenkz}[physical=up]
+            \tn[up=$i$]{B_1} & \tnX{Z}
+        \end{tenkz}
+
+
+        % Z B_1^i = (lambda Id_D) B_1^i: after centrality identifies Z
+        % with lambda Id_D, the two red capsules act on the same west
+        % virtual index of B_1^i.  Both terms keep the east virtual index
+        % and physical index i open, hence have signature (1,1,1,0).
+        \begin{tenkz}[physical=up]
+            \tnX{Z} & \tn[up=$i$]{B_1}
+        \end{tenkz}
+        $ = $
+        \begin{tenkz}[physical=up]
+            \tnX{\lambda \Id_D} & \tn[up=$i$]{B_1}
+        \end{tenkz}
+    \end{center}
+    The first product identity (\ref{eq:aft_product_identities_a}) gives
+    $A_1^i=ZB_1^i$, and the second
+    (\ref{eq:aft_product_identities_b}) gives $A_1^i=B_1^iZ$.
+    Hence $Z$ commutes with every $B_1^i$; since $\{B_1^i\}$ spans
+    $\MN{D}$, $Z$ is central.
+    By Lemma~\ref{lem:center_scalar}, $Z=\lambda\Id_D$ for some
+    $\lambda\in\C^{\times}$ (nonzero since the tensors are nonzero).
+    Thus $A_1^i=\lambda B_1^i$, and substituting
+    into (\ref{eq:aft_product_identities_a}) forces
+    $A_2^j=\lambda^{-1}B_2^j$.
+\end{proof}
+
+%% ---------------------------------------------------------

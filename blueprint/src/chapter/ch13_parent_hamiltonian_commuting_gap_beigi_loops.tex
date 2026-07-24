@@ -5,14 +5,13 @@
     \leanok
     For the convention that an $L$-site interaction is zero when $L>N$, the
     two-site parent Hamiltonian on a one-site periodic chain satisfies
-    \[
-        H_2^{(1)}=0,
-        \qquad
-        \ker H_2^{(1)}=\mathbb C^d.
-    \]
-    This convention is local to the present development.  The two-site terms
+    \begin{align}
+        H_2^{(1)} &= 0, \notag\\
+        \ker H_2^{(1)} &= \C^d. \notag
+    \end{align}
+    This convention is local to the present development. The two-site terms
     in \cite[Section~III]{Beigi2012Classification}, source lines 451--514, are
-    not assigned an action when both site labels denote the same site.  The
+    not assigned an action when both site labels denote the same site. The
     nearest-neighbor condition in
     \cite[Theorem~3.10(iii)]{Cirac2016MPDO_arXiv}, source lines 534--540, only
     concerns $N>2$.
@@ -20,7 +19,7 @@
 
 \begin{proof}\leanok
     Since $2>1$, the single translated interaction is zero by the stated
-    convention.  Its sum is therefore zero, and the kernel of the zero
+    convention. Its sum is therefore zero, and the kernel of the zero
     operator is the full one-site Hilbert space.
 \end{proof}
 
@@ -31,34 +30,33 @@
     \lean{FiniteWeightedDigraph.cycleWeightSum_eq_card_loop}
     \leanok
     \uses{def:beigi_sector_graph}
-    Let $G$ be a finite directed graph whose edge weights are nonnegative
+    Let $G$ be a finite directed graph whose edge weights are non-negative
     integers, and let
-    \[
-        s_N=\sum_{(a_0,\ldots,a_{N-1})}
-        \prod_{n=0}^{N-1}w(a_n,a_{n+1})
-    \]
-    be the weighted sum over ordered cyclic vertex sequences.  Suppose that
-    $s_N$ is constant for all sufficiently large $N$.  Then every edge that
+    \begin{align}
+        s_N
+        &=
+        \sum_{(a_0,\ldots,a_{N-1})}
+        \prod_{n=0}^{N-1}w(a_n,a_{n+1}) \notag
+    \end{align}
+    be the weighted sum over ordered cyclic vertex sequences. Suppose that
+    $s_N$ is constant for all sufficiently large $N$. Then every edge that
     belongs to a directed cycle has weight one, every directed cycle is a
     repetition of a single loop, and, for every $N>0$,
-    \[
-        s_N=\#\{a:w(a,a)>0\}.
-    \]
-    This is the comparison in
+    $s_N=\#\{a:w(a,a)>0\}$. This is the comparison in
     \cite[Section~IV]{Beigi2012Classification}.
 \end{theorem}
 
 \begin{proof}\leanok
     Choose a sufficiently large $N$ such that the sums at lengths $N$,
-    $N+1$, and $N(N+1)$ have their common eventual value.  Repeating each
+    $N+1$, and $N(N+1)$ have their common eventual value. Repeating each
     ordered $N$-cycle $N+1$ times gives an injection into the cycles of length
     $N(N+1)$, while repeating each ordered $(N+1)$-cycle $N$ times gives a
-    second injection.  Comparison of the three weighted sums shows first that
-    every positive cyclic weight is one.  Both injections must then be
-    exhaustive.  Hence a cycle at the common length has periods $N$ and
-    $N+1$; comparison of adjacent entries gives period one.  Repeating an
+    second injection. Comparison of the three weighted sums shows first that
+    every positive cyclic weight is one. Both injections must then be
+    exhaustive. Hence a cycle at the common length has periods $N$ and
+    $N+1$; comparison of adjacent entries gives period one. Repeating an
     arbitrary shorter cycle to a sufficiently large length proves that it is
-    constant.  The only surviving ordered cycles at any positive length are
+    constant. The only surviving ordered cycles at any positive length are
     therefore the constant words supported on positive loops, each of weight
     one.
 \end{proof}
@@ -82,7 +80,7 @@
     The ordered-cycle dimension formula identifies the eventual
     parent-ground-space dimension with the eventual weighted-cycle sum.
     The preceding theorem identifies that sum, at every positive length, with
-    the loop number.  Transport between coefficient and Euclidean coordinates
+    the loop number. Transport between coefficient and Euclidean coordinates
     preserves the dimension of the ground space.
 \end{proof}
 
@@ -99,16 +97,13 @@
     \leanok
     \uses{def:beigi_sector_graph}
     Let $a\to a$ be a positive loop and choose a nonzero vector
-    $\varphi_a\in\ran P_{a,a}$.  In sector coordinates define
-    the matrix product tensor
-    \[
-        (C_a^{(r,l)})_{x,y}=\delta_{x,l}\,\varphi_a(r,y),
-    \]
-    and set it to zero outside sector $a$.  The physical loop tensor is the
+    $\varphi_a\in\ran P_{a,a}$. In sector coordinates define the matrix
+    product tensor $(C_a^{(r,l)})_{x,y}=\delta_{x,l}\varphi_a(r,y)$ and set it
+    to zero outside sector~$a$. The physical loop tensor is the
     image of $C_a$ under the one-site unitary of the spatial decomposition.
     Its associated cyclic product pairs the right factor at site $n$ with the
-    left factor at site $n+1$.  The corresponding $N$-site product state is
-    denoted by $\Psi_a^{(N)}\in(\mathbb C^d)^{\otimes N}$.
+    left factor at site $n+1$. The corresponding $N$-site product state is
+    denoted by $\Psi_a^{(N)}\in(\C^d)^{\otimes N}$.
 \end{definition}
 
 \begin{definition}[Schmidt-support tensor associated with a positive Beigi loop]
@@ -123,19 +118,19 @@
     \leanok
     \uses{def:beigi_loop_product_state}
     Let $\Phi_a=(\varphi_a(r,l))_{r,l}$ and write
-    $r_a=\rank\Phi_a$.  Choose a rank factorization
-    \[
-        \Phi_a=X_aY_a,
-        \qquad
-        X_a\in M_{D_a^{\mathrm R},r_a}(\C),\quad
-        Y_a\in M_{r_a,D_a^{\mathrm L}}(\C).
-    \]
+    $r_a=\rank\Phi_a$. Choose a rank factorization
+    \begin{align}
+        \Phi_a &= X_aY_a, \notag\\
+        X_a &\in M_{D_a^{\mathrm R},r_a}(\C), \notag\\
+        Y_a &\in M_{r_a,D_a^{\mathrm L}}(\C). \notag
+    \end{align}
     The tensor on the minimal Schmidt support is
-    \[
+    \begin{align}
         (\widetilde C_a^{(r,l)})_{\alpha,\beta}
-          =(Y_a)_{\alpha,l}(X_a)_{r,\beta},
-    \]
-    again extended by zero outside sector~$a$.  Its physical tensor is its
+        &=
+        (Y_a)_{\alpha,l}(X_a)_{r,\beta}, \notag
+    \end{align}
+    again extended by zero outside sector~$a$. Its physical tensor is its
     image under the same one-site unitary.
 \end{definition}
 
@@ -148,11 +143,9 @@
     \uses{def:beigi_loop_schmidt_support}
     Let $\nu_a=\lVert\varphi_a\rVert_2>0$, where the norm is the
     Hilbert-space norm of the bond vector, or equivalently the Frobenius norm
-    of $\Phi_a$.  In either coordinate system, the normalized representative is
-    \[
-        \widehat C_a=\nu_a^{-1}\widetilde C_a.
-    \]
-    The raw coordinate and physical tensors are retained separately.
+    of $\Phi_a$. In either coordinate system, the normalized representative is
+    $\widehat C_a=\nu_a^{-1}\widetilde C_a$. The raw coordinate and physical
+    tensors are retained separately.
 \end{definition}
 
 \begin{lemma}[Positive Schmidt dimension of a Beigi loop]
@@ -165,7 +158,7 @@
 
 \begin{proof}\leanok
     If $r_a=0$, then the intermediate index set in the factorization
-    $\Phi_a=X_aY_a$ is empty.  Every entry of $X_aY_a$ is therefore zero,
+    $\Phi_a=X_aY_a$ is empty. Every entry of $X_aY_a$ is therefore zero,
     contrary to $\varphi_a\ne0$.
 \end{proof}
 
@@ -177,17 +170,17 @@
     \leanok
     \uses{def:beigi_loop_schmidt_support, def:injective, def:normal}
     The tensor $\widetilde C_a$ on the Schmidt support is injective, as is its
-    image under the one-site unitary.  In particular, the physical tensor is
+    image under the one-site unitary. In particular, the physical tensor is
     normal.
 \end{theorem}
 
 \begin{proof}\leanok
     In a rank factorization $\Phi_a=X_aY_a$ through
     $r_a=\rank\Phi_a$, the columns of $Y_a$ and the rows of $X_a$ each span
-    $\C^{r_a}$.  Their pairwise outer products therefore span
+    $\C^{r_a}$. Their pairwise outer products therefore span
     $M_{r_a}(\C)$, and these outer products are precisely the loop-sector
-    letters of $\widetilde C_a$.  A unitary change of physical coordinates preserves
-    this span.  One-site injectivity implies normality.
+    letters of $\widetilde C_a$. A unitary change of physical coordinates
+    preserves this span. One-site injectivity implies normality.
 \end{proof}
 
 \begin{theorem}[Transfer fixed point of a normalized Beigi loop tensor]
@@ -207,27 +200,26 @@
         thm:beigi_minimal_loop_tensor_injective,
         def:mps_transfer_idempotence}
     The transfer map of the unnormalized coordinate tensor is
-    \[
-        \mathcal E_a(Z)=\tr(X_a^*X_aZ)Y_aY_a^*,
-        \qquad
-        \mathcal E_a^2=\nu_a^2\mathcal E_a.
-    \]
-    Hence the transfer map of $\widehat C_a$ is idempotent.  This remains
-    true after the physical unitary rotation.  The normalized physical tensor
+    \begin{align}
+        \mathcal E_a(Z)
+        &=
+        \tr(X_a^*X_aZ)Y_aY_a^*, \notag\\
+        \mathcal E_a^2
+        &=
+        \nu_a^2\mathcal E_a. \notag
+    \end{align}
+    Hence the transfer map of $\widehat C_a$ is idempotent. This remains
+    true after the physical unitary rotation. The normalized physical tensor
     is injective and therefore normal.
 \end{theorem}
 
 \begin{proof}\leanok
     Summing the Kraus terms over the loop-sector coordinates gives the stated
-    rank-one formula.  Cyclicity of the trace and $\Phi_a=X_aY_a$ give
-    \[
-        \tr(X_a^*X_aY_aY_a^*)
-          =\tr(\Phi_a^*\Phi_a)=\nu_a^2.
-    \]
-    Scaling every letter by $\nu_a^{-1}$ scales the transfer map by
-    $\nu_a^{-2}$, which makes it idempotent.  A unitary change of physical
-    coordinates leaves the transfer map invariant, and the nonzero scalar
-    preserves injectivity.
+    rank-one formula. Cyclicity of the trace and $\Phi_a=X_aY_a$ give
+    $\tr(X_a^*X_aY_aY_a^*)=\tr(\Phi_a^*\Phi_a)=\nu_a^2$. Scaling every
+    letter by $\nu_a^{-1}$ scales the transfer map by $\nu_a^{-2}$, which
+    makes it idempotent. A unitary change of physical coordinates leaves the
+    transfer map invariant, and the nonzero scalar preserves injectivity.
 \end{proof}
 
 \begin{theorem}[Periodic vector of a positive Beigi loop]
@@ -241,15 +233,12 @@
     \uses{def:beigi_loop_product_state, def:beigi_loop_schmidt_support,
         def:beigi_normalized_minimal_loop_tensor, lem:mpv_rotate_physical}
     For every $N>0$, the periodic matrix product vector of $C_a$ has
-    coefficient
-    \[
-        \prod_{n=0}^{N-1}\varphi_a(r_n,l_{n+1})
-    \]
-    on a cyclic configuration in sector $a$, and coefficient zero on every
-    other sector configuration.  Consequently the periodic vector of the
-    physical loop tensor is exactly the sitewise-unitary image of this cyclic
-    product-of-pairs state.  The same identities hold for the tensor on the
-    minimal Schmidt support.  For the normalized minimal tensor it is
+    coefficient $\prod_{n=0}^{N-1}\varphi_a(r_n,l_{n+1})$ on a cyclic
+    configuration in sector~$a$, and coefficient zero on every other sector
+    configuration. Consequently, the periodic vector of the physical loop
+    tensor is exactly the sitewise-unitary image of this cyclic
+    product-of-pairs state. The same identities hold for the tensor on the
+    minimal Schmidt support. For the normalized minimal tensor it is
     $\nu_a^{-N}\Psi_a^{(N)}$.
 \end{theorem}
 
@@ -257,37 +246,34 @@
     Write $D_a^{\mathrm L}$ for the left-factor dimension of sector~$a$.
     Expanding the closed matrix product on a sector configuration
     $((r_n,l_n))_{n=0}^{N-1}$ gives
-    \[
-        \sum_{g\in\{0,\ldots,D_a^{\mathrm L}-1\}^N}
+    \begin{align}
+        &\sum_{g\in\{0,\ldots,D_a^{\mathrm L}-1\}^N}
           \prod_{n=0}^{N-1}
-            \delta_{g_n,l_n}\,
-            \varphi_a\!\left(r_n,g_{n+1}\right)
-        =\prod_{n=0}^{N-1}\varphi_a(r_n,l_{n+1}),
-    \]
-    where all site labels are read cyclically.  Indeed, the Kronecker deltas
+          \delta_{g_n,l_n}
+          \varphi_a\!\left(r_n,g_{n+1}\right) =
+        \prod_{n=0}^{N-1}\varphi_a(r_n,l_{n+1}), \notag
+    \end{align}
+    where all site labels are read cyclically. Indeed, the Kronecker deltas
     leave only the assignment $g_n=l_n$.
 
     For the minimal tensor, let $S^{(r,l)}$ be the rectangular matrix whose
-    only nonzero row is row $l$, equal there to row $r$ of $X_a$.  Then
-    \[
-        C_a^{(r,l)}=S^{(r,l)}Y_a,
-        \qquad
-        \widetilde C_a^{(r,l)}=Y_aS^{(r,l)}.
-    \]
-    For every nonempty word there is therefore a rectangular matrix $R$ such
-    that its two products are $RY_a$ and $Y_aR$, respectively.  Cyclicity of
-    the trace gives $\tr(RY_a)=\tr(Y_aR)$, proving equality of all
-    positive-length periodic vectors.
+    only nonzero row is row~$l$, equal there to row~$r$ of $X_a$. Then
+    $C_a^{(r,l)}=S^{(r,l)}Y_a$ and
+    $\widetilde C_a^{(r,l)}=Y_aS^{(r,l)}$. For every nonempty word there is
+    therefore a rectangular matrix $R$ such that its two products are $RY_a$
+    and $Y_aR$, respectively. Cyclicity of the trace gives
+    $\tr(RY_a)=\tr(Y_aR)$, proving equality of all positive-length periodic
+    vectors.
 
     If $A_a$ denotes the physical loop tensor and $U$ the one-site unitary,
-    then for a physical configuration
-    $s=(s_0,\ldots,s_{N-1})$ one has
-    \[
+    then for a physical configuration $s=(s_0,\ldots,s_{N-1})$ one has
+    \begin{align}
         \tr(A_a^{s_0}\cdots A_a^{s_{N-1}})
-        =\sum_{t\in\{0,\ldots,d-1\}^N}
-          \left(\prod_{n=0}^{N-1}U_{s_n,t_n}\right)
-          \tr(C_a^{t_0}\cdots C_a^{t_{N-1}}).
-    \]
+        &=
+        \sum_{t\in\{0,\ldots,d-1\}^N}
+        \left(\prod_{n=0}^{N-1}U_{s_n,t_n}\right)
+        \tr(C_a^{t_0}\cdots C_a^{t_{N-1}}). \notag
+    \end{align}
     Substitution of the preceding cyclic coefficient formula gives the stated
     sitewise-unitary image.
 \end{proof}
@@ -298,27 +284,28 @@
     \leanok
     \uses{def:beigi_sector_graph}
     Suppose that $A$ is equipped with Beigi sector data, with one-site spatial
-    unitary $U$.  For $N\geq2$, let $Q_N$ be the product of the translated
+    unitary $U$. For $N\geq2$, let $Q_N$ be the product of the translated
     complementary parent interactions and let $\widetilde Q_N$ be the
-    corresponding product in sector coordinates.  Then
-    \[
-        (U^*)^{\otimes N}Q_NU^{\otimes N}=\widetilde Q_N.
-    \]
+    corresponding product in sector coordinates. Then
+    $(U^*)^{\otimes N}Q_NU^{\otimes N} = \widetilde Q_N$.
 \end{theorem}
 
 \begin{proof}\leanok
     The two-site coordinate identity gives
-    $(U^*\otimes U^*)(\mathbf 1-h)(U\otimes U)=\widetilde Q$ for one bond.
+    $(U^*\otimes U^*)(\Id-h)(U\otimes U)=\widetilde Q$ for one bond.
     Conjugation by $(U^*)^{\otimes N}$ carries every translated copy of this
-    bond identity to the corresponding translated sector interaction.  Since
+    bond identity to the corresponding translated sector interaction. Since
     unitary conjugation distributes over an ordered product,
-    \[
-        (U^*)^{\otimes N}\!\left(\prod_{n=0}^{N-1}Q_n\right)U^{\otimes N}
-        =\prod_{n=0}^{N-1}
-          \left((U^*)^{\otimes N}Q_nU^{\otimes N}\right)
-        =\prod_{n=0}^{N-1}\widetilde Q_n
-        =\widetilde Q_N,
-    \]
+    \begin{align}
+        (U^*)^{\otimes N}
+        \left(\prod_{n=0}^{N-1}Q_n\right)
+        U^{\otimes N}
+        &=
+        \prod_{n=0}^{N-1}
+        \left((U^*)^{\otimes N}Q_nU^{\otimes N}\right) =
+        \prod_{n=0}^{N-1}\widetilde Q_n =
+        \widetilde Q_N, \notag
+    \end{align}
     where $Q_n$ and $\widetilde Q_n$ are the translated physical and sector
     complementary interactions, respectively.
 \end{proof}
@@ -328,44 +315,44 @@
     \lean{MPSTensor.BeigiSectorGraphData.mem_ker_parentHamiltonian_of_groundBondProduct_mulVec_eq_self}
     \leanok
     \uses{def:beigi_sector_graph}
-    Suppose that $A$ is equipped with Beigi sector data.  For $N\geq2$, let
+    Suppose that $A$ is equipped with Beigi sector data. For $N\geq2$, let
     $h_0,\ldots,h_{N-1}$ be its translated length-two parent interactions and
-    set
-    \[
-        Q_N=\prod_{n=0}^{N-1}(\mathbf 1-h_n).
-    \]
-    Every vector fixed by $Q_N$ belongs to the kernel of the periodic parent
-    Hamiltonian $H_N=\sum_n h_n$.
+    set $Q_N=\prod_{n=0}^{N-1}(\Id-h_n)$. Every vector fixed by $Q_N$
+    belongs to the kernel of the periodic parent Hamiltonian
+    $H_N=\sum_n h_n$.
 \end{theorem}
 
 \begin{proof}\leanok
     Under the Euclidean identification $E$, the matrix product of the
     complementary interactions is carried to
-    \[
-        Q_N^{\mathrm{E}}=E^{-1}Q_NE
-        =\prod_{n=0}^{N-1}(\mathbf 1-h_n^{\mathrm{E}}).
-    \]
-    The operators $h_n^{\mathrm{E}}$ are orthogonal projections.  Beigi sector
-    data supply pairwise commutativity, which Euclidean transport preserves.
-    For all $0\leq m,n<N$,
-    \[
-        h_m^{\mathrm{E}}h_n^{\mathrm{E}}
-        =h_n^{\mathrm{E}}h_m^{\mathrm{E}}.
-    \]
-    For any commuting orthogonal projections $P_0,\ldots,P_{N-1}$,
-    \[
-        \prod_{n=0}^{N-1}(\mathbf 1-P_n)
-        =\operatorname{proj}_{\bigcap_{n=0}^{N-1}\ker P_n}.
-    \]
-    Applying this identity to the $h_n^{\mathrm{E}}$ gives
-    \[
+    \begin{align}
         Q_N^{\mathrm{E}}
-        =\operatorname{proj}_{\bigcap_{n=0}^{N-1}\ker h_n^{\mathrm{E}}},
-        \qquad
+        &=
+        E^{-1}Q_NE =
+        \prod_{n=0}^{N-1}(\Id-h_n^{\mathrm{E}}). \notag
+    \end{align}
+    The operators $h_n^{\mathrm{E}}$ are orthogonal projections. Beigi sector
+    data supply pairwise commutativity, which Euclidean transport preserves.
+    For all $0\leq m,n<N$, one has
+    $h_m^{\mathrm{E}}h_n^{\mathrm{E}}
+    =h_n^{\mathrm{E}}h_m^{\mathrm{E}}$. For any commuting orthogonal
+    projections $P_0,\ldots,P_{N-1}$,
+    \begin{align}
+        \prod_{n=0}^{N-1}(\Id-P_n)
+        &=
+        \operatorname{proj}_{\bigcap_{n=0}^{N-1}\ker P_n}. \notag
+    \end{align}
+    Applying this identity to the $h_n^{\mathrm{E}}$ gives
+    \begin{align}
+        Q_N^{\mathrm{E}}
+        &=
+        \operatorname{proj}_{\bigcap_{n=0}^{N-1}\ker h_n^{\mathrm{E}}},
+        \notag\\
         \bigcap_{n=0}^{N-1}\ker h_n^{\mathrm{E}}
-        =\ker\!\left(\sum_{n=0}^{N-1}h_n^{\mathrm{E}}\right)
-        =\ker H_N^{\mathrm{E}}.
-    \]
+        &=
+        \ker\!\left(\sum_{n=0}^{N-1}h_n^{\mathrm{E}}\right) =
+        \ker H_N^{\mathrm{E}}. \notag
+    \end{align}
     Thus $Q_Nv=v$ implies $E^{-1}v\in\ker H_N^{\mathrm{E}}$, and conjugating
     back by $E$ gives $v\in\ker H_N$.
 \end{proof}
@@ -378,43 +365,41 @@
     \uses{def:beigi_sector_graph, def:beigi_loop_product_state,
         thm:beigi_complement_product_conjugation,
         thm:beigi_complement_product_fixed_vector}
-    Let $a\to a$ be a positive loop.  For every $N\geq 2$, its physical
+    Let $a\to a$ be a positive loop. For every $N\geq2$, its physical
     cyclic product-of-pairs state belongs to the kernel of the length-two
-    periodic parent Hamiltonian.  Equivalently, its Euclidean representative
-    belongs to the parent ground space.  This is only a membership assertion;
+    periodic parent Hamiltonian. Equivalently, its Euclidean representative
+    belongs to the parent ground space. This is only a membership assertion;
     it does not assert that the loop states span the ground space.
 \end{theorem}
 
 \begin{proof}\leanok
     In sector coordinates, the complete product $\widetilde Q_N$ of the
     complementary two-site interactions is block diagonal over cyclic sector
-    sequences.  Write $\Phi_a(k;x)$ for the coefficient of the loop cyclic
-    product in the block indexed by $k$.  Its support lies in sector $a$, so
-    for every
-    $k\ne(a,\ldots,a)$ and every edge-index tuple $x$,
-    \[
-        \Phi_a(k;x)=0.
-    \]
-    Thus only the constant cyclic sector sequence contributes.  On this block,
-    $\widetilde Q_N$ is the tensor product of the edge projectors.  Since
-    $\varphi_a\in\ran P_{a,a}$,
-    \[
+    sequences. Write $\Phi_a(k;x)$ for the coefficient of the loop cyclic
+    product in the block indexed by $k$. Its support lies in sector~$a$, so
+    for every $k\ne(a,\ldots,a)$ and every edge-index tuple $x$, one has
+    $\Phi_a(k;x)=0$. Thus only the constant cyclic sector sequence
+    contributes. On this block, $\widetilde Q_N$ is the tensor product of the
+    edge projectors. Since $\varphi_a\in\ran P_{a,a}$,
+    \begin{align}
         \widetilde Q_N\Phi_a
-        =P_{a,a}^{\otimes N}\Phi_a
-        =\Phi_a,
-        \qquad
+        &=
+        P_{a,a}^{\otimes N}\Phi_a =
+        \Phi_a, \notag\\
         \Phi_a(t_0,\ldots,t_{N-1})
-        =\prod_{n=0}^{N-1}\varphi_a(r_n,l_{n+1}).
-    \]
+        &=
+        \prod_{n=0}^{N-1}\varphi_a(r_n,l_{n+1}). \notag
+    \end{align}
     If $U$ is the one-site spatial unitary and
     $\Psi_a=U^{\otimes N}\Phi_a$ is the physical loop state, unitary
     conjugation gives
-    \[
+    \begin{align}
         Q_N\Psi_a
-        =U^{\otimes N}\widetilde Q_N\Phi_a
-        =U^{\otimes N}\Phi_a
-        =\Psi_a.
-    \]
+        &=
+        U^{\otimes N}\widetilde Q_N\Phi_a =
+        U^{\otimes N}\Phi_a =
+        \Psi_a. \notag
+    \end{align}
     Theorem~\ref{thm:beigi_complement_product_fixed_vector} now yields
     $\Psi_a\in\ker H_N$.
 \end{proof}
@@ -435,10 +420,11 @@
     Suppose that the parent-ground-space dimension is eventually constant.
     For every $N>2$, the positive-loop product states form a nonzero pairwise
     orthogonal family and
-    \[
+    \begin{align}
         \spn\{\Psi_a^{(N)}:a\to a\text{ is a positive loop}\}
-        =\ker H_N.
-    \]
+        &=
+        \ker H_N. \notag
+    \end{align}
     In particular, the same conclusion holds under the BNT and all-chain
     nearest-neighbor parent-ground-space hypotheses.
 \end{theorem}
@@ -446,82 +432,80 @@
 \begin{proof}\leanok
     Write $\Phi_a^{(N)}$ for the cyclic product in sector coordinates and
     $\Psi_a^{(N)}=U^{\otimes N}\Phi_a^{(N)}$ for the physical state, where
-    $U$ is the one-site spatial unitary.  Choose $q$ with
-    $\varphi_a(q)\ne0$.  On the constant edge-index configuration,
-    \[
+    $U$ is the one-site spatial unitary. Choose $q$ with
+    $\varphi_a(q)\ne0$. On the constant edge-index configuration,
+    \begin{align}
         \Phi_a^{(N)}(q,\ldots,q)
-        =\prod_{n=0}^{N-1}\varphi_a(q)\ne0.
-    \]
+        &=
+        \prod_{n=0}^{N-1}\varphi_a(q) \notag\\
+        &\ne
+        0. \notag
+    \end{align}
     Thus $\Phi_a^{(N)}\ne0$, and unitarity gives
-    \[
-        \Psi_a^{(N)}=U^{\otimes N}\Phi_a^{(N)}\ne0.
-    \]
-    If $a\ne b$, then every sector configuration $s$
-    satisfies $\Phi_a^{(N)}(s)=0$ or $\Phi_b^{(N)}(s)=0$, and hence
-    \[
+    $\Psi_a^{(N)}=U^{\otimes N}\Phi_a^{(N)}\ne0$. If $a\ne b$, then every
+    sector configuration $s$ satisfies $\Phi_a^{(N)}(s)=0$ or
+    $\Phi_b^{(N)}(s)=0$, and hence
+    \begin{align}
         \langle\Phi_a^{(N)},\Phi_b^{(N)}\rangle
-        =\sum_s\overline{\Phi_a^{(N)}(s)}\,\Phi_b^{(N)}(s)=0.
-    \]
+        &=
+        \sum_s\overline{\Phi_a^{(N)}(s)} \Phi_b^{(N)}(s) =
+        0. \notag
+    \end{align}
     Moreover,
-    \[
+    \begin{align}
         \langle\Psi_a^{(N)},\Psi_b^{(N)}\rangle
-        =\langle U^{\otimes N}\Phi_a^{(N)},
-            U^{\otimes N}\Phi_b^{(N)}\rangle
-        =\langle\Phi_a^{(N)},\Phi_b^{(N)}\rangle=0.
-    \]
-    Thus the loop states are linearly independent.  Their span is contained in
+        &=
+        \langle U^{\otimes N}\Phi_a^{(N)},
+            U^{\otimes N}\Phi_b^{(N)}\rangle =
+        \langle\Phi_a^{(N)},\Phi_b^{(N)}\rangle =
+        0. \notag
+    \end{align}
+    Thus the loop states are linearly independent. Their span is contained in
     $\ker H_N$ by
-    Theorem~\ref{thm:beigi_loop_product_state_ground_state}.  Its dimension is
+    Theorem~\ref{thm:beigi_loop_product_state_ground_state}. Its dimension is
     the number of positive loops, which equals $\dim\ker H_N$ by
-    Corollary~\ref{cor:beigi_parent_ground_space_loop_number}.  The inclusion
+    Corollary~\ref{cor:beigi_parent_ground_space_loop_number}. The inclusion
     is consequently an equality.
 \end{proof}
 
-\begin{theorem}[All-chain nearest-neighbor commuting parent-Hamiltonian ground spaces imply a renormalization fixed point]\label{thm:nncph_implies_rfp}
+\begin{theorem}[All-chain nearest-neighbor commuting parent-Hamiltonian ground spaces imply a renormalization fixed point]
+    \label{thm:nncph_implies_rfp}
     \lean{MPSTensor.nncph_implies_rfp}
     \leanok
     \uses{def:mps_transfer_idempotence, def:bnt, def:has_nncph_ground_spaces,
         def:normal, thm:beigi_loop_product_states_span_ground_space,
         thm:beigi_normalized_minimal_loop_tensor_rfp}
     Let $B$ be normal and in left-canonical form. Suppose that the family
-    \(A_j\) is a BNT for \(B\), and that the nearest-neighbor parent
-    Hamiltonian of \(B\) has the
-    all-chain ground-space property of
-    Definition~\ref{def:has_nncph_ground_spaces}: for every $N>2$ the length-two
-    translated parent interactions commute,
-    \[
-        h_i(B,2)h_j(B,2)=h_j(B,2)h_i(B,2),
-    \]
-    the vector $V^{(N)}(B)$ has zero energy, and
-    \[
-        \ker H_2^{(N)}(B)
-        =
-        \spn\{V^{(N)}(A_j):j=1,\ldots,g\}.
-    \]
+    $A_j$ is a BNT for $B$, and that the nearest-neighbor parent Hamiltonian
+    of $B$ has the all-chain ground-space property of
+    Definition~\ref{def:has_nncph_ground_spaces}: for every $N>2$, the
+    length-two translated parent interactions commute,
+    $h_i(B,2)h_j(B,2)=h_j(B,2)h_i(B,2)$, the vector $V^{(N)}(B)$ has zero
+    energy, and
+    $\ker H_2^{(N)}(B) = \spn\{V^{(N)}(A_j):j=1,\ldots,g\}$.
     Then $B$ is a renormalization fixed point.
 
     This is the normal left-canonical representative case of the reverse
-    implication in Theorem~3.10 of \cite{Cirac2016MPDO_arXiv}.  The source
+    implication in Theorem~3.10 of \cite{Cirac2016MPDO_arXiv}. The source
     theorem is stated for a tensor in canonical form; the unrestricted
     canonical-form statement is not asserted here.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    The commuting interaction determines Beigi's finite sector graph.  Its
+    The commuting interaction determines Beigi's finite sector graph. Its
     positive loops span the parent ground space, and the normalized minimal
-    loop tensors $L_j$ are normal renormalization fixed points.  For the normal
+    loop tensors $L_j$ are normal renormalization fixed points. For the normal
     representative $B$,
-    \[
+    \begin{align}
         \forall^\infty N,\quad
         V^{(N)}(B)
-        \in \spn\{V^{(N)}(L_j):j=1,\ldots,g\}.
-    \]
+        &\in
+        \spn\{V^{(N)}(L_j):j=1,\ldots,g\}. \notag
+    \end{align}
     Normal-tensor orthogonality applied to this eventual-span relation first
     identifies the bond dimensions and then gives an index $j$, an invertible
     matrix $X$, and a scalar $\zeta$ with $|\zeta|=1$ such that
-    \[
-        L_j^i = \zeta X B^i X^{-1}.
-    \]
+    $L_j^i = \zeta X B^i X^{-1}$.
     Transfer idempotence is preserved by these transformations.
 \end{proof}

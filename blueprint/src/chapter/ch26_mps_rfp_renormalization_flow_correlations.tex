@@ -1,0 +1,269 @@
+\section{Renormalization flow and physical correlations}
+
+\begin{theorem}[Canonical-form blocks are injective]\label{thm:rfp_cf_structural}
+    \lean{MPSTensor.rfp_cf_structural}
+    \leanok
+    \uses{def:is_canonical_form, def:injective}
+    For a family of tensors in canonical form, every block is injective.
+    This is part of the canonical-form hypotheses in
+    \cite[Section~2.3]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+\begin{proof}\leanok
+    The canonical-form hypotheses include injectivity of each block.
+\end{proof}
+
+
+\begin{theorem}[RG flow convergence for canonical-form tensors]%
+    \label{thm:rg_flow_converges_of_cf}
+    \lean{MPSTensor.rg_flow_converges_of_cf}
+    \leanok
+    \uses{def:is_canonical_form, def:transfer_map, def:fixed_point_proj,
+        thm:exponential_convergence_primitive}
+    For a tensor in canonical form with blocks $(A_k)$ and weights $(\mu_k)$,
+    the iterated blocking $\E_{A_k}^{2^n}$ converges pointwise to an
+    idempotent linear map $\E_\infty$ as $n\to\infty$.
+    That is, there exists $\E_\infty$ with $\E_\infty^2=\E_\infty$ such that
+    $\E_{A_k}^{2^n}(\rho)\to\E_\infty(\rho)$ for all density matrices $\rho$.
+    This is \cite[Appendix~B]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+\begin{proof}\leanok
+    Each block is injective and left-canonical, so its transfer map is a
+    primitive channel with a unique positive-definite fixed point $\rho_0$.
+    The exponential convergence bound
+    $\lVert \E^n(X)-P(X)\rVert\le C(1-\delta)^n\lVert X\rVert$
+    (Theorem~\ref{thm:exponential_convergence_primitive}) then gives
+    pointwise convergence $\E^n(X)\to P(X)$, and composing with the
+    subsequence $2^n\to\infty$ yields the result.
+    The witness $\E_\infty=P$ is the rank-one fixed-point projection,
+    which is idempotent.
+\end{proof}
+
+\begin{remark}\label{rem:zero_correlation_length}
+    \uses{thm:spectral_radius_le_one, def:correlation_length,
+        def:mps_transfer_idempotence}
+    When the transfer map is idempotent ($\E^2=\E$), connected correlations become
+    separation-independent for all separations $n\ge 1$.
+    Informally, this corresponds to zero correlation length ($\xi=0$).
+    The full spectral equivalence (idempotence iff vanishing subleading spectrum)
+    is deferred here.
+\end{remark}
+
+\begin{definition}[Virtual-insertion distance independence]\label{def:is_cid}
+    \lean{MPSTensor.IsCID}
+    \leanok
+    \uses{def:connected_correlator}
+    For a positive definite right fixed point $\rho^R>0$, the virtual
+    insertion expression is independent of distance when for all virtual bond
+    matrices $X$ and $Y$ and all separations $n,m\ge 1$,
+    $C(X,Y;n)=C(X,Y;m)$.
+\end{definition}
+
+\begin{definition}[Physical observable transfer]
+    \label{def:physical_observable_transfer}
+    \lean{MPSTensor.physicalObservableTransfer}
+    \leanok
+    \uses{def:eval_word}
+    For an observable $O$ on a block of $L$ physical spins, define the linear
+    map on the virtual matrix space by
+    \begin{align}
+        \E_O(X)
+        &=\sum_{\boldsymbol i,\boldsymbol j}
+          \bra{\boldsymbol j}O\ket{\boldsymbol i}
+          A^{\boldsymbol i}X(A^{\boldsymbol j})^\dagger.
+        \notag
+    \end{align}
+    This is the observable transfer map of
+    \cite[lines~490--496]{Cirac2016MPDO_arXiv}.
+\end{definition}
+
+\begin{definition}[Two-observable periodic expectation]
+    \label{def:physical_two_point_expectation}
+    \lean{MPSTensor.physicalTwoPointExpectation}
+    \leanok
+    \uses{def:physical_observable_transfer, def:transfer_map}
+    Let $O_1,O_2$ act on blocks of $L_1,L_2$ physical spins, separated around
+    the periodic chain by complementary gaps of lengths $n_1,n_2$. Their
+    two-observable expectation is
+    \begin{align}
+        \Tr_{\MN{D}}\!\left(\E_{O_2}\circ\E_A^{n_2}\circ\E_{O_1}\circ\E_A^{n_1}\right).
+        \notag
+    \end{align}
+    The trace is the operator trace on the virtual matrix space, as in
+    \cite[lines~490--496]{Cirac2016MPDO_arXiv}.
+\end{definition}
+
+\begin{definition}[Physical correlations independent of distance]%
+    \label{def:source_physical_cid}
+    \lean{MPSTensor.IsPhysicalCID}
+    \leanok
+    \uses{def:physical_two_point_expectation}
+    Let $O_1,O_2$ act on two disjoint contiguous regions of positive lengths
+    $L_1,L_2\geq1$ in a periodic chain, with complementary gap lengths
+    $n_1,n_2\geq0$. Physical correlations are independent of distance when, for
+    every $m_1,m_2\geq0$ satisfying
+    $n_1+n_2=m_1+m_2$, one has
+    \begin{align}
+        \Tr_{\MN{D}}\!\left(\E_{O_2}\circ\E_A^{n_2}\circ\E_{O_1}\circ\E_A^{n_1}\right)
+        &=
+        \Tr_{\MN{D}}\!\left(\E_{O_2}\circ\E_A^{m_2}\circ\E_{O_1}\circ\E_A^{m_1}\right).
+        \notag
+    \end{align}
+    Thus either region may be translated without crossing the other. Zero
+    gaps, corresponding to adjacent regions, are included. This is
+    \cite[Definition~3.3 and lines~490--496]{Cirac2016MPDO_arXiv}.
+\end{definition}
+
+\begin{definition}[Positive-gap physical distance independence]%
+    \label{def:is_positive_gap_physical_cid}
+    \lean{MPSTensor.IsPositiveGapPhysicalCID}
+    \leanok
+    \uses{def:physical_observable_transfer,
+        def:physical_two_point_expectation}
+    For an observable $O$ on a block of $L$ physical spins, write
+    \begin{align}
+        \E_O(X)
+        &=\sum_{\boldsymbol i,\boldsymbol j}
+          \bra{\boldsymbol j}O\ket{\boldsymbol i}
+          A^{\boldsymbol i}X(A^{\boldsymbol j})^\dagger.
+        \notag
+    \end{align}
+    Place two observables $O_1,O_2$ on nonempty finite blocks of a periodic
+    chain, with positive complementary gap lengths $n_1,n_2$. The tensor has
+    \emph{positive-gap physical correlations independent of distance} when the expectation
+    is unchanged upon replacing these gaps by positive $m_1,m_2$ satisfying
+    $n_1+n_2=m_1+m_2$:
+    \begin{align}
+        \Tr_{\MN{D}}\!\left(\E_{O_2}\circ\E_A^{n_2}\circ\E_{O_1}\circ\E_A^{n_1}\right)
+        &=
+        \Tr_{\MN{D}}\!\left(\E_{O_2}\circ\E_A^{m_2}\circ\E_{O_1}\circ\E_A^{m_1}\right).
+        \notag
+    \end{align}
+    This is the transfer-matrix form of
+    \cite[Definition~3.3 and the correlation formula preceding
+    Theorem~3.8]{Cirac2016MPDO_arXiv}, restricted to positive complementary
+    gaps. It excludes adjacent regions.
+\end{definition}
+
+\begin{lemma}[Physical CID implies positive-gap physical CID]%
+    \label{lem:is_positive_gap_physical_cid_of_physical_cid}
+    \lean{MPSTensor.isPositiveGapPhysicalCID_of_isPhysicalCID}
+    \leanok
+    \uses{def:source_physical_cid, def:is_positive_gap_physical_cid}
+    Correlations independent of distance for all disjoint physical regions are
+    independent of distance when both complementary gaps are positive.
+\end{lemma}
+\begin{proof}\leanok
+    Restrict the four gap lengths to positive integers.
+\end{proof}
+
+\begin{theorem}[Idempotent transfer implies positive-gap physical CID]%
+    \label{thm:is_positive_gap_physical_cid_of_is_rfp}
+    \lean{MPSTensor.isPositiveGapPhysicalCID_of_isTransferIdempotent}
+    \leanok
+    \uses{def:mps_transfer_idempotence, def:is_positive_gap_physical_cid}
+    If $\E_A^2=\E_A$, then physical correlations are independent of distance
+    whenever both complementary gaps are positive.
+\end{theorem}
+\begin{proof}\leanok
+    Idempotence gives $\E_A^n=\E_A$ for every $n\geq1$. Substituting
+    $\E_A^{n_1}=\E_A^{n_2}=\E_A^{m_1}=\E_A^{m_2}=\E_A$ in the two-observable
+    transfer formula gives
+    \begin{align}
+        \Tr_{\MN{D}}\!\left(\E_{O_2}\circ\E_A^{n_2}\circ\E_{O_1}\circ\E_A^{n_1}\right)
+        &=
+        \Tr_{\MN{D}}\!\left(\E_{O_2}\circ\E_A\circ\E_{O_1}\circ\E_A\right)
+        \notag\\
+        &=
+        \Tr_{\MN{D}}\!\left(\E_{O_2}\circ\E_A^{m_2}\circ\E_{O_1}\circ\E_A^{m_1}\right).
+        \notag
+    \end{align}
+\end{proof}
+
+\begin{definition}[Zero correlation length]\label{def:is_zcl}
+    \lean{MPSTensor.IsZCL}
+    \leanok
+    \uses{def:is_locally_orthogonal, def:is_bnt_zcl, def:is_cid}
+    In the single-block convention, an MPS tensor has \emph{zero correlation
+        length} when $\E_A^2=\E_A$ and $\operatorname{CID}(A)$ both hold.
+    The source definition is
+    Definition~\ref{def:source_bnt_zcl}; the present condition uses virtual
+    insertions instead.
+\end{definition}
+
+\begin{theorem}[Virtual-insertion distance independence implies RFP]%
+    \label{thm:isCID_implies_isTransferIdempotent}
+    \lean{MPSTensor.isCID_implies_isTransferIdempotent}
+    \leanok
+    \uses{def:is_cid, def:mps_transfer_idempotence, def:transfer_map}
+    If an MPS tensor admits a positive definite right fixed point and its
+    virtual-insertion correlator is independent of distance, then its transfer
+    map is idempotent.
+    % The reverse direction of Theorem 3.8 in arXiv:1606.00608 additionally
+    % fails for raw repeated-copy weights. A corrected restricted theorem would
+    % additionally require realizing virtual insertions by physical observables.
+\end{theorem}
+\begin{proof}\leanok
+    Let $\rho>0$ be the fixed point. For every matrix $Z$, invertibility gives
+    $Z=(Z\rho^{-1})\rho$. Apply distance independence with
+    $X=Z\rho^{-1}$, the second insertion $N$, and separations $2$ and $1$.
+    The identical disconnected terms cancel. Thus, for every $N$,
+    $\tr\!\left(N\E_A^2(Z)\right)=\tr\!\left(N\E_A(Z)\right)$.
+    Nondegeneracy of the trace pairing yields
+    $\E_A^2(Z)=\E_A(Z)$ for every $Z$, hence $\E_A^2=\E_A$.
+\end{proof}
+
+\begin{theorem}[Zero correlation length iff idempotent transfer]%
+    \label{thm:zcl_iff_idempotent_transfer}
+    \lean{MPSTensor.zcl_iff_idempotent_transfer}
+    \leanok
+    \uses{def:mps_transfer_idempotence, def:is_cid, def:is_locally_orthogonal}
+    Under the single-block convention above,
+    $(\E_A^2=\E_A\ \text{and}\ \operatorname{CID}(A))
+    \Longleftrightarrow\E_A^2=\E_A$.
+    This is the idempotence/CID part of
+    \cite[Theorem~3.8]{Cirac2016MPDO_arXiv}. The full source theorem for
+    canonical-form tensors instead uses the unrestricted physical condition in
+    Definition~\ref{def:source_bnt_zcl}; under its stated raw-weight
+    normalization, that biconditional is false by
+    Theorem~\ref{thm:halved_weight_zcl_not_rfp}.
+\end{theorem}
+\begin{proof}\leanok
+    The forward direction extracts the idempotence hypothesis. Conversely,
+    idempotence gives $\E_A^n=\E_A$ for every $n\geq 1$. Hence, for every
+    positive-definite right fixed point $\rho^R$, every pair of virtual
+    matrices $X,Y$, and every $n\geq 1$,
+    \begin{align}
+        C(X,Y;n)
+        &=\tr\!\left(Y\E_A^n(X\rho^R)\right)
+          -\tr(X\rho^R)\tr(Y\rho^R)
+        \notag\\
+        &=\tr\!\left(Y\E_A(X\rho^R)\right)
+          -\tr(X\rho^R)\tr(Y\rho^R)
+        \notag\\
+        &=C(X,Y;1).
+        \notag
+    \end{align}
+    Thus the connected correlator is independent of every positive
+    separation.
+\end{proof}
+
+\begin{theorem}[Single-block RFP iff ZCL inside a canonical form]%
+    \label{thm:rfp_iff_zcl}
+    \lean{MPSTensor.rfp_iff_zcl}
+    \leanok
+    \uses{def:is_canonical_form, def:mps_transfer_idempotence, def:is_zcl}
+    Let $A^i=\bigoplus_k \mu_k A_k^i$ be a tensor in canonical form. For each
+    $k$, the tensor $A_k$ is a renormalization fixed point if and only if
+    $A_k$ has zero correlation length.
+
+    This is the single-block consequence of
+    \cite[Theorem~3.10]{Cirac2016MPDO_arXiv}. The ZCL condition in the source
+    theorem is the BNT-family condition: CID together with the local
+    orthogonality equations $\mathbb E_{j,j'}=0$ for all $j\ne j'$,
+    as in Definition~\ref{def:source_bnt_zcl}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:zcl_iff_idempotent_transfer}
+    Apply Theorem~\ref{thm:zcl_iff_idempotent_transfer} to the chosen
+    canonical-form block.
+\end{proof}

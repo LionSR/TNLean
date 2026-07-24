@@ -8,32 +8,37 @@
         lem:peps_horizontal_staircase_window_injectivity,
         thm:peps_horizontal_staircase_reference_edge_crossing}
     Let $B$ be a PEPS tensor on a torus whose periods $W,H$ satisfy
-    $1<W$ and $1<H$.  Assume the one-orientation $L\times K$
+    $1<W$ and $1<H$. Assume the one-orientation $L\times K$
     window-injectivity hypotheses for $B$, union closure for injective
     regions, positive bond dimensions, and
-    \[
+    \begin{align}
         2\le L,\qquad 2\le K,\qquad 1\le a,\qquad
-        a+2L\le W,\qquad b+2K-1\le H,
-    \]
-    together with
-    \[
+        a+2L\le W,\qquad b+2K-1\le H.
+        \label{eq:peps_window_fit}
+    \end{align}
+    Suppose also that
+    \begin{align}
         2L+1\le W,\qquad 2K+1\le H.
-    \]
+        \label{eq:peps_window_complement_fit}
+    \end{align}
     Let $W_{\mathrm L}$ be the left end window and let $e$ be the reference
-    edge.  If $M,M'\in\MN{D_B(e)}$ satisfy
-    \[
+    edge. If $M,M'\in\MN{D_B(e)}$ satisfy
+    \begin{align}
         C_B(W_{\mathrm L},e,M;\sigma,\tau)
-        =
+        &=
         C_B(W_{\mathrm L},e,M';\sigma,\tau)
-    \]
+        \notag
+    \end{align}
     for every physical configuration $\sigma$ on $W_{\mathrm L}$ and $\tau$
     on $V\setminus W_{\mathrm L}$, then $M=M'$.
 \end{lemma}
 \begin{proof}
     \leanok
     The window-injectivity hypotheses give injectivity of the blocked tensor
-    map on $W_{\mathrm L}$.  The single-window complement is also injective at
-    the displayed size.  Since $e\in\partial W_{\mathrm L}$,
+    map on $W_{\mathrm L}$. The single-window complement is also injective
+    under the size hypotheses (\ref{eq:peps_window_fit})
+    and (\ref{eq:peps_window_complement_fit}). Since
+    $e\in\partial W_{\mathrm L}$,
     Theorem~\ref{thm:peps_regionInsertedCoeff_injective} applied to the
     region $W_{\mathrm L}$ gives $M=M'$.
 \end{proof}
@@ -46,37 +51,30 @@
         def:peps_window_edge_coeff_identity_witness,
         def:peps_window_edge_coeff_identity_witness_of_hypotheses}
     Let $A$ and $B$ be PEPS tensors on a torus whose periods $W,H$ satisfy
-    $1<W$ and $1<H$.  Assume the one-orientation $L\times K$
+    $1<W$ and $1<H$. Assume the one-orientation $L\times K$
     window-injectivity hypotheses for both tensors, union closure for
     injective regions for both tensors, positive bond dimensions, and
-    \[
-        2\le L,\qquad 2\le K,\qquad 1\le a,\qquad
-        a+2L\le W,\qquad b+2K-1\le H,
-    \]
-    together with
-    \[
-        2L+1\le W,\qquad 2K+1\le H.
-    \]
+    $2\le L$, $2\le K$, $1\le a$, $a+2L\le W$, and $b+2K-1\le H$,
+    together with $2L+1\le W$ and $2K+1\le H$.
     Let $W_{\mathrm L}$ be the left end window and let $e$ be the reference
-    edge.  If $T_e:\MN{D_A(e)}\to\MN{D_B(e)}$ is a region insertion transfer
+    edge. If $T_e:\MN{D_A(e)}\to\MN{D_B(e)}$ is a region insertion transfer
     on $W_{\mathrm L}$ at $e$, then there exist
     $Z,Z_{\mathrm{ref}}\in\GL(D_B(e))$ and a bond-dimension identification
     $\iota_e:\MN{D_A(e)}\simeq\MN{D_B(e)}$ such that the coefficient-identity
-    witness at $e$ is nonempty.  The coefficient identity has the form
-    \[
+    witness at $e$ is nonempty. The coefficient identity has the form
+    \begin{align}
         C_A(W_{\mathrm L},e,M;\sigma,\tau)
-        =
+        &=
         C_B(W_{\mathrm L},e,Z\,\iota_e(M)\,Z^{-1};\sigma,\tau).
-    \]
+        \label{eq:peps_window_transfer_coeff}
+    \end{align}
 \end{theorem}
 \begin{proof}
     \leanok
     The transfer determines a gauge $Z$ by the region insertion algebra:
-    \[
-        T_e(M)=Z\,\iota_e(M)\,Z^{-1}.
-    \]
-    Its coefficient-matching property gives the displayed identity.  The
-    window and complement injectivity hypotheses are those required by
+    $T_e(M)=Z\,\iota_e(M)\,Z^{-1}$. Its coefficient-matching property
+    gives (\ref{eq:peps_window_transfer_coeff}). The window and complement
+    injectivity hypotheses are those required by
     Definition~\ref{def:peps_window_edge_coeff_identity_witness_of_hypotheses},
     which yields the witness with $Z_{\mathrm{ref}}=Z$.
 \end{proof}
@@ -89,22 +87,16 @@
         def:peps_region_insertion_transfer_of_realizes,
         thm:peps_windowEdgeCoeffIdentityWitness_of_transfer}
     Let $A$ and $B$ be PEPS tensors on a torus whose periods $W,H$ satisfy
-    $1<W$ and $1<H$.  Assume the one-orientation $L\times K$
+    $1<W$ and $1<H$. Assume the one-orientation $L\times K$
     window-injectivity hypotheses for both tensors, union closure for
     injective regions for both tensors, matched bond dimensions, equality of
     the PEPS state, positive bond dimensions, and
-    \[
-        2\le L,\qquad 2\le K,\qquad 1\le a,\qquad
-        a+2L\le W,\qquad b+2K-1\le H,
-    \]
-    together with
-    \[
-        2L+1\le W,\qquad 2K+1\le H.
-    \]
+    $2\le L$, $2\le K$, $1\le a$, $a+2L\le W$, and $b+2K-1\le H$,
+    together with $2L+1\le W$ and $2K+1\le H$.
     Let $W_{\mathrm L}$ be the left end window and let $e$ be the reference
-    edge.  Suppose the endpoint tensor of each family at the in-region
+    edge. Suppose the endpoint tensor of each family at the in-region
     endpoint of $e$ has linearly independent columns, and suppose the boundary
-    matrix transfer is realized on $W_{\mathrm L}$ in both directions.  Then
+    matrix transfer is realized on $W_{\mathrm L}$ in both directions. Then
     there exist $Z,Z_{\mathrm{ref}}\in\GL(D_B(e))$ and a bond-dimension
     identification $\iota_e:\MN{D_A(e)}\simeq\MN{D_B(e)}$ such that the
     coefficient-identity witness at $e$ is nonempty.
@@ -112,13 +104,14 @@
 \begin{proof}
     \leanok
     The two realized boundary transfers determine a region insertion transfer:
-    \[
+    \begin{align}
         C_A(W_{\mathrm L},e,M;\sigma,\tau)
-        =
+        &=
         C_B(W_{\mathrm L},e,T_e(M);\sigma,\tau),
-        \qquad
-        T_e(MM')=T_e(M)T_e(M').
-    \]
+        \notag\\
+        T_e(MM')&=T_e(M)T_e(M').
+        \notag
+    \end{align}
     Theorem~\ref{thm:peps_windowEdgeCoeffIdentityWitness_of_transfer} then
     gives the two gauges and the nonempty coefficient-identity witness.
 \end{proof}

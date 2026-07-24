@@ -1,0 +1,778 @@
+\section{Representations}
+\label{sec:representations_infrastructure}
+%% =========================================================
+
+The following definitions support the Choi--Jamiol\-kowski isomorphism
+(Theorem~\ref{thm:cp_iff_choi_posSemidef}) and the representation theorems
+of~\cite[Chapter~2]{Wolf2012Quantum}.
+
+\begin{definition}[Partial traces]\label{def:partial_trace}
+    \lean{Matrix.traceLeft, Matrix.traceRight, Matrix.partialTraceRight,
+        Matrix.partialTraceRight_apply}
+    \leanok
+    Let $X \in \MN{d \cdot d'}$ be a bipartite matrix indexed by
+    $(\{0,\ldots,d-1\} \times \{0,\ldots,d'-1\})^2$.
+    The \emph{left partial trace} $\tr_A(X)$ and
+    \emph{right partial trace} $\tr_B(X)$ are the
+    $d' \times d'$ and $d \times d$ matrices defined by
+    \begin{align}
+        (\tr_A(X))_{ij}
+        &= \sum_{k} X_{(k,i),(k,j)},
+        \notag\\
+        (\tr_B(X))_{ij}
+        &= \sum_{k} X_{(i,k),(j,k)}.
+        \notag
+    \end{align}
+\end{definition}
+
+\begin{definition}[Maximally entangled state]\label{def:maximally_entangled}
+    \lean{Matrix.omegaProj}
+    \leanok
+    For every $d\in\N$, define $\ketbra{\Omega}{\Omega}$ on
+    $\C^d\otimes\C^d$ using
+    \begin{align}
+        \ket{\Omega}
+        &= \frac{1}{\sqrt{d}} \sum_{j=0}^{d-1} \ket{j,j}.
+        \label{eq:representations_max_entangled}
+    \end{align}
+    When $d\geq1$, this is the \emph{maximally entangled state}: a rank-one
+    projector with
+    $(\ketbra{\Omega}{\Omega})_{(i_1,i_2),(j_1,j_2)}
+        = \frac{1}{d}\delta_{i_1 i_2}\delta_{j_1 j_2}$
+    and $\tr(\ketbra{\Omega}{\Omega})=1$.
+\end{definition}
+
+\begin{definition}[Flip operator]\label{def:flip_operator}
+    \lean{Matrix.swapMatrix}
+    \leanok
+    The \emph{flip operator} $F$ on $\C^d \otimes \C^d$ is
+    \begin{align}
+        F
+        &= \sum_{i,j=0}^{d-1} \ket{ij}\!\bra{ji}.
+        \label{eq:representations_flip}
+    \end{align}
+    Its matrix entries are
+    \begin{align}
+        F_{(i_1,i_2),(j_1,j_2)}
+        &=
+        \begin{cases}
+            1, & i_1=j_2 \text{ and } i_2=j_1,\\
+            0, & \text{otherwise}.
+        \end{cases}
+        \notag
+    \end{align}
+\end{definition}
+
+\begin{definition}[Two-dimensional antisymmetric vector]
+    \label{def:fin_two_antisymm_vec}
+    \lean{Matrix.finTwoAntisymmVec}
+    \leanok
+    In $\C^2 \otimes \C^2$, let $v = \ket{01} - \ket{10}$.
+    Equivalently, $v_{(0,1)}=1$, $v_{(1,0)}=-1$, and all other coefficients
+    are zero.
+\end{definition}
+
+\begin{definition}[Tensor product of a map with identity]\label{def:tensor_map_id}
+    \lean{Matrix.tensorMapId}
+    \leanok
+    Given a linear map $T : \MN{D} \to \MN{D}$,
+    the \emph{tensor extension} $T \otimes \id$ acts on bipartite matrices
+    $X \in \MN{D \times D}$ by applying $T$ to each ``slice'':
+    \begin{align}
+        (T \otimes \id)(X)_{(i_1,i_2),(j_1,j_2)}
+        &= (T(X^{(i_2,j_2)}))_{i_1 j_1},
+        \label{eq:representations_tensor_map_id}
+    \end{align}
+    where $X^{(i_2,j_2)}_{ab} = X_{(a,i_2),(b,j_2)}$ is the
+    bipartite slice.
+\end{definition}
+
+%% =========================================================
+\section{Choi--Jamio\l{}kowski isomorphism}
+\label{sec:choi_jamiolkowski}
+%% =========================================================
+
+The Choi--Jamio\l{}kowski isomorphism bends the input legs of the channel $T$
+around the maximally entangled pair $\ket{\Omega}$, presenting the map as the
+matrix $\tau=(T\otimes\id)\ketbra{\Omega}{\Omega}$ on the doubled space:
+\begin{center}
+    % Formula: \tau=(T\otimes\id)(\ketbra{\Omega}{\Omega}).
+    % Source verdict: Wolf, Proposition 2.1 and Equation (2.1), applies the
+    %   two-wire map T\otimes\id to the maximally entangled projector.
+    % In indices, \tau_{(i_1,i_2),(j_1,j_2)}
+    %   =D^{-1}(T(E_{i_2j_2}))_{i_1j_1}; there is no summed Kraus index and
+    %   therefore no pairleg between the two rails.
+    % The east matrix cup is the input projector \ketbra{\Omega}{\Omega}.
+    % The opaque two-wire atom acts by T on one tensor factor and by \id on
+    %   the other; the two west rails are the output indices of \tau.
+    % Boundary signature: (virtual-west=2 | virtual-east=0 |
+    % physical-up=0 | physical-down=0).
+    \begin{tenkz}[
+        rows={wire,wire},
+        east={cup=$\ketbra{\Omega}{\Omega}$},
+        west label=$\tau$
+    ]
+        \tnghost{} & \tnX[wires=2]{T\otimes\id} & \tnghost{} \\
+        \tnghost{} & & \tnghost{}
+    \end{tenkz}
+\end{center}
+
+\begin{definition}[Choi matrix]\label{def:choi_matrix}
+    \lean{ChoiJamiolkowski.choiMatrix}
+    \leanok
+    \uses{def:maximally_entangled, def:tensor_map_id}
+    The \emph{Choi matrix} of a linear map
+    $T : \MN{D} \to \MN{D}$ is
+    \begin{align}
+        \tau
+        &= (T \otimes \id)(\ketbra{\Omega}{\Omega})
+        \in \MN{D \times D}.
+        \label{eq:representations_choi}
+    \end{align}
+    Concretely,
+    $\tau_{(i_1,i_2),(j_1,j_2)}
+        = \frac{1}{D}\,(T(E_{i_2 j_2}))_{i_1 j_1}$
+    where $E_{i_2 j_2}$ is the matrix unit.
+    This is the Choi--Jamiol\-kowski convention of
+    \cite[Proposition~2.1]{Wolf2012Quantum}.
+\end{definition}
+
+\begin{theorem}[Choi matrix of the identity map]\label{thm:choi_matrix_id}
+    \lean{ChoiJamiolkowski.choiMatrix_id}
+    \leanok
+    \uses{def:choi_matrix, def:maximally_entangled}
+    The identity channel has Choi matrix
+    $\ketbra{\Omega}{\Omega}$.
+\end{theorem}
+
+\begin{proof}\leanok
+    Apply the identity map in the definition of the Choi matrix.
+\end{proof}
+
+\begin{theorem}[Choi matrix of transposition]\label{thm:choi_transpose_flip}
+    \lean{ChoiJamiolkowski.choiMatrix_transposeLinearMapComplex_eq_swap}
+    \leanok
+    \uses{def:choi_matrix, def:flip_operator, def:maximally_entangled}
+    Let $\theta(X)=X^T$ be matrix transposition on $\MN{D}$, with $D \ge 1$.
+    Then
+    \begin{align}
+        (\theta\otimes\id)(\ketbra{\Omega}{\Omega})
+        &= \frac{1}{D}F.
+        \label{eq:representations_transpose_choi}
+    \end{align}
+    This is \cite[Equation~3.1]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:choi_matrix, def:flip_operator}
+    The $(i_2,j_2)$ slice of $\ketbra{\Omega}{\Omega}$ is
+    $D^{-1}E_{i_2j_2}$. Transposition sends this matrix unit to
+    $D^{-1}E_{j_2i_2}$, whose $(i_1,j_1)$ entry is $D^{-1}$ exactly when
+    $i_1=j_2$ and $i_2=j_1$.
+\end{proof}
+
+\begin{theorem}[Complete positivity iff the Choi matrix is positive semidefinite]\label{thm:cp_iff_choi_posSemidef}
+    \lean{ChoiJamiolkowski.cp_iff_choi_posSemidef}
+    \leanok
+    \uses{def:choi_matrix, def:cp_map}
+    Let $D\geq1$. A linear map $T : \MN{D} \to \MN{D}$ is completely
+    positive (in the Kraus sense) if and only if its Choi matrix $\tau \ge 0$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:choi_matrix, def:cp_map}
+    ($\Rightarrow$) If $T(X) = \sum_i K_i X K_i^\dagger$, then
+    $\tau = \sum_i \ketbra{v_i}{v_i}$ where
+    $(v_i)_{(a,b)} = c\,K_i(a,b)$ and $c = 1/\sqrt{D}$.
+    This is a sum of rank-one PSD matrices.
+
+    ($\Leftarrow$) If $\tau \ge 0$, write
+    $\tau = \sum_m \ketbra{v_m}{v_m}$
+    by spectral decomposition, define $K_m(a,b) = v_m(a,b)/c$,
+    and recover $T(X) = \sum_m K_m X K_m^\dagger$ by linearity on
+    matrix units.
+\end{proof}
+
+\begin{theorem}[Trace preservation implies the partial-trace condition]\label{thm:traceLeft_choiMatrix_of_tp}
+    \lean{ChoiJamiolkowski.traceLeft_choiMatrix_of_tp}
+    \leanok
+    \uses{def:choi_matrix, def:partial_trace, def:trace_preserving}
+    If $T$ is trace-preserving, then
+    $\tr_A(\tau) = \frac{1}{D} \Id_D$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:choi_matrix, def:partial_trace}
+    By trace preservation,
+    \begin{align}
+        (\tr_A(\tau))_{ij}
+        &= \tr(T(\Omega^{(ij)}))
+         = \tr(\Omega^{(ij)}),
+        \notag
+    \end{align}
+    where $\Omega^{(ij)} = \frac{1}{D} E_{ij}$ is the $(i,j)$-slice of
+    $\ketbra{\Omega}{\Omega}$.
+    Taking the trace gives $\frac{1}{D}\delta_{ij}$.
+\end{proof}
+
+\begin{theorem}[Hermiticity preservation and the Choi matrix]\label{thm:choiMatrix_isHermitian_iff_hermiticityPreserving}
+    \lean{ChoiJamiolkowski.choiMatrix_isHermitian_iff_hermiticityPreserving}
+    \leanok
+    \uses{def:choi_matrix}
+    The Choi matrix $\tau$ is Hermitian if and only if
+    $T(B^\dagger) = T(B)^\dagger$ for all $B \in \MN{D}$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:choi_matrix}
+    The Choi matrix entries satisfy
+    $\tau_{(a,i),(b,j)} = \frac{1}{D}(T(E_{ij}))_{ab}$.
+    Hermiticity of $\tau$ says
+    $\overline{\tau_{(b,j),(a,i)}} = \tau_{(a,i),(b,j)}$, which
+    unravels to $T(E_{ji})_{ba} = \overline{T(E_{ij})_{ab}}$, i.e.,
+    $T(E_{ij}^\dagger) = T(E_{ij})^\dagger$.
+    By linearity this extends to all $B$.
+\end{proof}
+
+\begin{theorem}[Trace of the Choi matrix of a trace-preserving map]\label{thm:trace_choiMatrix_of_tp}
+    \lean{ChoiJamiolkowski.trace_choiMatrix_of_tp}
+    \leanok
+    \uses{def:choi_matrix, def:trace_preserving, thm:traceLeft_choiMatrix_of_tp}
+    If $D\geq1$ and $T$ is trace-preserving, then $\tr(\tau) = 1$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:traceLeft_choiMatrix_of_tp}
+    One has
+    $\tr(\tau)
+        = \tr(\tr_A(\tau))
+        = \tr(\frac{1}{D}\Id_D)
+        = 1$.
+\end{proof}
+
+%% =========================================================
+\section{Representation corollaries for channel decompositions}
+\label{sec:representation_corollaries}
+%% =========================================================
+
+The next three corollaries follow from the Choi/Kraus/Stinespring
+representations already developed above. They correspond to
+\cite[Propositions~2.2--2.4]{Wolf2012Quantum}.
+
+\begin{theorem}[Polarization of sesquilinear sandwiches]
+    \label{thm:polarization_sandwich}
+    \lean{WolfProps.polarization_sandwich}
+    \leanok
+    For any $A, B, X \in \MN{D}$,
+    \begin{align}
+        4\,A X B^\dagger
+        &= (A+B) X (A+B)^\dagger - (A-B) X (A-B)^\dagger
+        \notag\\
+        &\quad
+        + i\,(A + iB) X (A + iB)^\dagger
+        - i\,(A - iB) X (A - iB)^\dagger.
+        \label{eq:representations_polarization}
+    \end{align}
+    Each of the four summands on the right is a single-Kraus CP map, so
+    every sesquilinear sandwich decomposes into a signed complex linear
+    combination of CP maps.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Working entrywise reduces the claim to the scalar polarization identity
+    \begin{align}
+        4\,\alpha\,\overline{\delta}
+        &= \sum_{k=0}^{3} i^k
+        (\alpha + i^k \beta)\overline{(\gamma + i^k \delta)}
+        \notag
+    \end{align}
+    in $\C$, which holds after substituting $i^2 = -1$.
+\end{proof}
+
+\begin{theorem}[CP decomposition of sandwich sums]
+    \label{thm:cp_decomposition_of_sandwich_sum}
+    \lean{WolfProps.cp_decomposition_of_sandwich_sum}
+    \leanok
+    \uses{thm:polarization_sandwich}
+    For any finite Kraus-like families $\{A_i\}, \{B_i\}$, the map
+    $T(X) = \sum_i A_i X B_i^\dagger$ satisfies
+    $4\,T = T_1 - T_2 + i\,T_3 - i\,T_4$ with each $T_k$ a CP map given
+    explicitly by a single-side Kraus sum of the combined families.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:polarization_sandwich}
+    Apply the polarization identity summand-by-summand.
+\end{proof}
+
+\begin{theorem}[Rank-one ray scalar rigidity]
+    \label{thm:rankone_ray_scalar_rigidity}
+    \lean{WolfProps.exists_eq_smul_id_of_maps_rankOne_to_span}
+    \leanok
+    Let $T:\MN{D}\to\MN{D}$ be complex-linear. Suppose that for every
+    $v\in\C^D$ there is a scalar $c_v\in\C$ such that
+    $T(\ketbra{v}{v})=c_v\ketbra{v}{v}$.
+    Then there is a scalar $c\in\C$ such that $T=c\,\id$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Write $P_v=\ketbra{v}{v}$. For $i\ne j$, the identities
+    \begin{align}
+        P_{e_i+e_j}+P_{e_i-e_j}
+        &=2P_{e_i}+2P_{e_j},
+        \notag\\
+        c_{e_i+e_j}P_{e_i+e_j}+c_{e_i-e_j}P_{e_i-e_j}
+        &=2c_{e_i}P_{e_i}+2c_{e_j}P_{e_j}
+        \notag
+    \end{align}
+    give, from their $(i,i)$, $(j,j)$, and $(i,j)$ entries,
+    $c_{e_i+e_j}=c_{e_i-e_j}=c_{e_i}=c_{e_j}$.
+    The imaginary parallelogram identity and its image under $T$ are
+    \begin{align}
+        P_{e_i+\mathrm{i}e_j}+P_{e_i-\mathrm{i}e_j}
+        &=2P_{e_i}+2P_{e_j},
+        \notag\\
+        c_{e_i+\mathrm{i}e_j}P_{e_i+\mathrm{i}e_j}
+        +c_{e_i-\mathrm{i}e_j}P_{e_i-\mathrm{i}e_j}
+        &=2c_{e_i}P_{e_i}+2c_{e_j}P_{e_j}.
+        \notag
+    \end{align}
+    Comparing the same three entries gives
+    $c_{e_i+\mathrm{i}e_j}=c_{e_i-\mathrm{i}e_j}=c_{e_i}=c_{e_j}$.
+    Consequently the polarization identity
+    \begin{align}
+        4E_{ij}
+        &=P_{e_i+e_j}-P_{e_i-e_j}
+        +\mathrm{i}P_{e_i+\mathrm{i}e_j}
+        -\mathrm{i}P_{e_i-\mathrm{i}e_j}
+        \notag
+    \end{align}
+    gives $T(E_{ij})=cE_{ij}$ for every matrix unit, and hence $T=c\,\id$.
+\end{proof}
+
+\begin{theorem}[No information without disturbance]
+    \label{thm:linearMap_eq_id_of_fixes_rankOne}
+    \lean{WolfProps.linearMap_eq_id_of_fixes_rankOne}
+    \leanok
+    Let $T : \MN{D} \to \MN{D}$ be linear. If $T(\ketbra{v}{v})
+        = \ketbra{v}{v}$ for every $v \in \C^D$, then
+    $T = \id$. In particular, a quantum channel preserving every
+    pure state equals the identity.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:rankone_ray_scalar_rigidity}
+    Rank-one ray scalar rigidity gives $T=c\,\id$ for some $c\in\C$.
+    If $D>0$, evaluating at the first coordinate projector gives
+    $P_{e_0}=T(P_{e_0})=cP_{e_0}$, whose $(0,0)$ entry yields $c=1$.
+    For $D=0$ the matrix algebra is trivial, so the conclusion also holds.
+\end{proof}
+
+\begin{definition}[Pure-state ensemble density]
+    \label{def:pureEnsembleDensity}
+    \lean{WolfProps.pureEnsembleDensity}
+    \leanok
+    Given a finite family $\{\psi_i\}_{i \in \iota}$ of (unnormalized)
+    vectors in $\C^D$, its \emph{pure-ensemble density} is
+    $\rho = \sum_i \ketbra{\psi_i}{\psi_i}$. Weights
+    $p_i \geq 0$ with $\sum p_i = 1$ can be absorbed by replacing
+    $\psi_i \mapsto \sqrt{p_i} \psi_i$.
+\end{definition}
+
+\begin{theorem}[Isometric mixing preserves the density]
+    \label{thm:pureEnsembleDensity_eq_of_isometric_mixing}
+    \lean{WolfProps.pureEnsembleDensity_eq_of_isometric_mixing}
+    \leanok
+    \uses{def:pureEnsembleDensity}
+    If two pure-state ensembles $\{\psi_i\}_{i \in \iota_1}$ and
+    $\{\phi_j\}_{j \in \iota_2}$ are related by an isometric mixing
+    matrix $V \in \C^{\iota_1 \times \iota_2}$ with
+    $V^\dagger V = \Id$ and $\psi_i = \sum_j V_{ij} \phi_j$, then
+    they induce the same pure-ensemble density operator. This is the
+    sufficient direction of the Hughston--Jozsa--Wootters theorem; the
+    converse is Theorem~\ref{thm:exists_isometric_mixing_of_pureEnsembleDensity_eq}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:pureEnsembleDensity}
+    Expanding and applying the orthogonality relation
+    $\sum_i V_{ij}\overline{V_{ij'}} = \delta_{j j'}$ from
+    $V^\dagger V = \Id$ gives
+    \begin{align}
+        \sum_i \ketbra{\psi_i}{\psi_i}
+        &= \sum_{j, j'} \left(\sum_i V_{ij} \overline{V_{ij'}}\right)
+        \ketbra{\phi_j}{\phi_{j'}}
+        = \sum_j \ketbra{\phi_j}{\phi_j}.
+        \notag
+    \end{align}
+\end{proof}
+
+\begin{theorem}[Hughston--Jozsa--Wootters converse]
+    \label{thm:exists_isometric_mixing_of_pureEnsembleDensity_eq}
+    \lean{WolfProps.exists_isometric_mixing_of_pureEnsembleDensity_eq}
+    \leanok
+    \uses{def:pureEnsembleDensity, thm:kraus_rectangular_freedom'}
+    If two pure-state ensembles $\{\psi_i\}_{i \in \iota_1}$ and
+    $\{\phi_j\}_{j \in \iota_2}$ induce the same pure-ensemble density
+    operator and $|\iota_2| \le |\iota_1|$, then there exists a tall
+    isometric mixing matrix
+    $V \in \C^{\iota_1 \times \iota_2}$ with
+    $V^\dagger V = \Id$ and $\psi_i = \sum_j V_{ij} \phi_j$. The
+    cardinality hypothesis is what makes $V$ a tall isometry; the
+    symmetric case $|\iota_1| \le |\iota_2|$ follows by swapping the
+    roles of the ensembles.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:pureEnsembleDensity, thm:kraus_rectangular_freedom',
+        thm:pureEnsembleDensity_eq_of_isometric_mixing}
+    Embed each vector $\psi_i$, $\phi_j$ as the $0$-th column of a
+    $D \times D$ matrix with zeros elsewhere; call these
+    $K_i$, $L_j \in \MN{D}$. A direct entry-wise computation
+    shows that for any $X \in \MN{D}$ both
+    $\sum_i K_i X K_i^\dagger$ and $\sum_j L_j X L_j^\dagger$ collapse
+    to $X_{00} \cdot \rho$, so the density equality
+    $\rho_\psi = \rho_\phi$ forces the two Kraus families to define the
+    same CP map. Theorem~\ref{thm:kraus_rectangular_freedom'} then supplies an
+    isometry $V$ with $V^\dagger V = \Id$ and
+    $K_i = \sum_j V_{ij}\,L_j$; reading the equation off at column $0$
+    recovers the vector relation
+    $\psi_i = \sum_j V_{ij} \phi_j$.
+\end{proof}
+
+\begin{theorem}[Hughston--Jozsa--Wootters equivalence]
+    \label{thm:pureEnsembleDensity_eq_iff_exists_isometric_mixing}
+    \lean{WolfProps.pureEnsembleDensity_eq_iff_exists_isometric_mixing}
+    \leanok
+    \uses{def:pureEnsembleDensity,
+        thm:pureEnsembleDensity_eq_of_isometric_mixing,
+        thm:exists_isometric_mixing_of_pureEnsembleDensity_eq}
+    Under the cardinality hypothesis $|\iota_2| \le |\iota_1|$, two
+    pure-state ensembles induce the same density operator iff they are
+    related by a tall isometric mixing matrix.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:pureEnsembleDensity_eq_of_isometric_mixing,
+        thm:exists_isometric_mixing_of_pureEnsembleDensity_eq}
+    Combine the two directions above.
+\end{proof}
+
+%% =========================================================
+\section{Kraus representation theorem}
+\label{sec:kraus_representation}
+%% =========================================================
+
+A Kraus representation writes the channel as
+$T(\rho)=\sum_i K_i\rho K_i^\dagger$. In tensor-network form the Kraus index $i$
+is summed between the $K_i$ layer and the $K_i^\dagger$ layer:
+\begin{center}
+    % Formula: T(\rho)=\sum_i K_i\rho K_i^\dagger.
+    % Source verdict: Wolf, Theorem 2.1 and Equation (2.8), gives the Kraus
+    %   formula but no dedicated figure; that formula is authoritative here.
+    % In indices, T(\rho)_{ab}
+    %   =\sum_{i,c,d}(K_i)_{ac}\rho_{cd}\overline{(K_i)_{bd}}.
+    % The sandwich pairleg contracts the unique Kraus index i.  Its upper
+    %   node is K_i and its lower node is the conjugate \overline{K_i}; reading
+    %   the lower wire from the east input toward the west output supplies the
+    %   transpose, hence K_i^\dagger in the matrix product.
+    % The east cup contracts the input indices c,d against \rho.  The west
+    %   pair carries the free output indices a,b, so reversing the picture
+    %   would instead feed the adjoint channel.
+    % Boundary signature: (virtual-west=2 | virtual-east=0 |
+    % physical-up=0 | physical-down=0).
+    \begin{tenkz}[
+        sandwich,
+        east={cup=$\rho$},
+        west label=$T(\rho)$
+    ]
+        \tn{K_i} \\
+        \tn*{K_i}
+    \end{tenkz}
+\end{center}
+
+\begin{theorem}[Trace preservation implies Kraus normalization]\label{thm:kraus_sum_conjTranspose_mul_of_tp}
+    \lean{kraus_sum_conjTranspose_mul_of_tp}
+    \leanok
+    \uses{def:cp_map, def:trace_preserving}
+    If $T(X) = \sum_i K_i X K_i^\dagger$ is trace-preserving, then
+    $\sum_i K_i^\dagger K_i = \Id$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:trace_preserving}
+    For any $N$,
+    \begin{align}
+        \tr\left(\left(\sum_i K_i^\dagger K_i\right)N\right)
+        &= \sum_i \tr(K_i^\dagger K_i N)
+         = \sum_i \tr(K_i N K_i^\dagger)
+         = \tr(T(N))
+         = \tr(N).
+        \notag
+    \end{align}
+    Non-degeneracy of the trace pairing forces
+    $\sum_i K_i^\dagger K_i = \Id$.
+\end{proof}
+
+\begin{theorem}[Kraus normalization implies trace preservation]\label{thm:kraus_tp_of_sum_conjTranspose_mul}
+    \lean{kraus_tp_of_sum_conjTranspose_mul}
+    \leanok
+    \uses{def:cp_map, def:trace_preserving}
+    If $\sum_i K_i^\dagger K_i = \Id$, then
+    $T(X) = \sum_i K_i X K_i^\dagger$ is trace-preserving.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    One has
+    \begin{align}
+        \tr(T(X))
+        &= \sum_i \tr(K_i X K_i^\dagger)
+         = \sum_i \tr(K_i^\dagger K_i X)
+         = \tr\left(\left(\sum_i K_i^\dagger K_i\right)X\right)
+         = \tr(X).
+        \notag
+    \end{align}
+\end{proof}
+
+\begin{theorem}[Unitality implies Kraus unital normalization]
+    \label{thm:kraus_sum_mul_conjTranspose_of_unital}
+    \lean{kraus_sum_mul_conjTranspose_of_unital}
+    \leanok
+    \uses{def:cp_map}
+    If $T(X) = \sum_i K_i X K_i^\dagger$ satisfies $T(\Id) = \Id$, then
+    $\sum_i K_i K_i^\dagger = \Id$.
+\end{theorem}
+
+\begin{proof}\leanok
+    Evaluate the Kraus formula at the identity matrix.
+\end{proof}
+
+\begin{theorem}[Unitary freedom in Kraus operators]\label{thm:kraus_same_map_of_unitary_combination}
+    \lean{kraus_same_map_of_unitary_combination}
+    \leanok
+    \uses{def:cp_map}
+    Let $U$ be a unitary $r \times r$ matrix ($U^\dagger U = \Id$)
+    and suppose $K_j = \sum_\ell U_{j\ell} \tilde{K}_\ell$.
+    Then $\{K_j\}$ and $\{\tilde{K}_\ell\}$ define the same Kraus map:
+    for every $X \in \MN{D}$,
+    \begin{align}
+        \sum_j K_j X K_j^\dagger
+        &= \sum_\ell \tilde{K}_\ell X \tilde{K}_\ell^\dagger.
+        \notag
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Substitute the combination formula, expand the triple sum over
+    $j,\ell,\ell'$, swap summation order, and use the entry-wise form
+    of $U^\dagger U = \Id$ to collapse to $\ell = \ell'$ diagonal terms.
+\end{proof}
+
+\begin{theorem}[Isometric mixing preserves the Kraus map]
+    \label{thm:kraus_same_map_of_isometry_combination}
+    \lean{kraus_same_map_of_isometry_combination}
+    \leanok
+    \uses{def:cp_map}
+    Let $W$ be an isometry between two Kraus index spaces, so $W^\dagger W = \Id$.
+    If $K_j = \sum_\ell W_{j\ell} \widetilde K_\ell$, then the Kraus
+    families $\{K_j\}$ and $\{\widetilde K_\ell\}$ define the same completely
+    positive map.
+\end{theorem}
+
+\begin{proof}\leanok
+    Expand the Kraus sums, interchange the finite summations, and use
+    $W^\dagger W = \Id$ to collapse the coefficient matrix.
+\end{proof}
+
+\begin{theorem}[The transition matrix of orthonormal Kraus families is unitary]\label{thm:kraus_transition_unitary_of_hs_orthonormal}
+    \lean{kraus_transition_unitary_of_hs_orthonormal}
+    \leanok
+    \uses{def:cp_map}
+    Let $\{K_j\}_{j=0}^{r-1}$ and $\{K'_j\}_{j=0}^{r-1}$ be two
+    Hilbert--Schmidt orthonormal Kraus families, and suppose
+    $K_j = \sum_{\ell=0}^{r-1} U_{j\ell}\,K'_\ell$.
+    Then the transition matrix $U$ is unitary:
+    $U^\dagger U = \Id_r$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Expand $\tr(K_j^\dagger K_i)$ using the change of basis.
+    Hilbert--Schmidt orthonormality of both Kraus families identifies
+    the Gram matrix with the identity, yielding the matrix identity
+    $U U^\dagger = \Id_r$, hence also $U^\dagger U = \Id_r$.
+\end{proof}
+
+\begin{theorem}[Dual map equality from primal map equality]\label{thm:kraus_dual_eq_of_map_eq}
+    \lean{kraus_dual_eq_of_map_eq}
+    \leanok
+    \uses{def:cp_map}
+    If two Kraus families satisfy
+    $\sum_\alpha B_\alpha X B_\alpha^\dagger = \sum_j A_j X A_j^\dagger$
+    for all $X$, then
+    $\sum_\alpha B_\alpha^\dagger Y B_\alpha = \sum_j A_j^\dagger Y A_j$
+    for all $Y$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Use the trace pairing: for all $X$,
+    \begin{align}
+        \tr\left(X^\dagger
+            \left(\sum_\alpha B_\alpha^\dagger Y B_\alpha\right)\right)
+        &= \tr\left(\left(\sum_\alpha
+            B_\alpha X^\dagger B_\alpha^\dagger\right)Y\right)
+        \notag\\
+        &= \tr\left(\left(\sum_j
+            A_j X^\dagger A_j^\dagger\right)Y\right)
+         = \tr\left(X^\dagger
+            \left(\sum_j A_j^\dagger Y A_j\right)\right).
+        \notag
+    \end{align}
+    Nondegeneracy of the trace pairing gives the result.
+\end{proof}
+
+\begin{theorem}[Equal Stinespring Gramians]\label{thm:kraus_conjTranspose_mul_eq_of_map_eq}
+    \lean{kraus_conjTranspose_mul_eq_of_map_eq}
+    \leanok
+    \uses{thm:kraus_dual_eq_of_map_eq}
+    If two Kraus families define the same CPM, then
+    $\sum_\alpha B_\alpha^\dagger B_\alpha = \sum_j A_j^\dagger A_j$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Specialise Theorem~\ref{thm:kraus_dual_eq_of_map_eq} at $Y = \Id$.
+\end{proof}
+
+\begin{theorem}[Rectangular Kraus freedom]\label{thm:kraus_rectangular_freedom}
+    \lean{kraus_rectangular_freedom}
+    \leanok
+    \uses{thm:kraus_dual_eq_of_map_eq, thm:kraus_conjTranspose_mul_eq_of_map_eq}
+    If $\sum_\alpha B_\alpha X B_\alpha^\dagger = \sum_j A_j X A_j^\dagger$
+    for all $X$ and $r_2 \le r_1$ (where $\{B_\alpha\}_{\alpha=0}^{r_1-1}$
+    is the larger family and $\{A_j\}_{j=0}^{r_2-1}$ the smaller),
+    then there exists a rectangular isometry
+    $V$ ($r_1 \times r_2$, $V^\dagger V = \Id_{r_2}$) such that
+    $B_\alpha = \sum_j V_{\alpha j}\,A_j$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Pad the smaller family to size $r_1$, establish Gram matrix equality
+    $M_B^\dagger M_B = M_{A'}^\dagger M_{A'}$ from dual map equality,
+    construct a partial isometry via inner product preservation on the
+    range, and extend to a full isometry $V$ with $V^\dagger V = \Id_{r_2}$.
+\end{proof}
+
+\begin{theorem}[Rectangular Kraus freedom with general finite index types]\label{thm:kraus_rectangular_freedom'}
+    \lean{kraus_rectangular_freedom'}
+    \leanok
+    \uses{thm:kraus_rectangular_freedom}
+    Variant of Theorem~\ref{thm:kraus_rectangular_freedom} with general
+    finite index sets $\iota_1, \iota_2$ in place of standard index sets of
+    cardinalities $r_1$ and $r_2$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Reindex by choosing enumerations of those finite index sets and apply
+    Theorem~\ref{thm:kraus_rectangular_freedom}.
+\end{proof}
+
+\begin{theorem}[Isometric freedom of Kraus representations]
+    \label{thm:kraus_isometry_freedom_iff}
+    \lean{kraus_isometry_freedom_iff}
+    \leanok
+    \uses{thm:kraus_rectangular_freedom'}
+    Let $\{B_\alpha\}_{\alpha \in \iota_1}$ and $\{A_j\}_{j \in \iota_2}$
+    be finite Kraus families with $|\iota_2| \le |\iota_1|$.
+    Then the following are equivalent:
+    \begin{enumerate}
+        \item $\sum_\alpha B_\alpha X B_\alpha^\dagger
+                  = \sum_j A_j X A_j^\dagger$ for all $X \in \MN{D}$.
+        \item There exists a matrix $V = (V_{\alpha j})$ with
+              $V^\dagger V = \Id$ such that
+              $B_\alpha = \sum_j V_{\alpha j} A_j$ for every $\alpha$.
+    \end{enumerate}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The implication $(1) \Rightarrow (2)$ is
+    Theorem~\ref{thm:kraus_rectangular_freedom'}.
+    Conversely, expand $\sum_\alpha B_\alpha X B_\alpha^\dagger$ using
+    $B_\alpha = \sum_j V_{\alpha j} A_j$, interchange the finite sums,
+    and use $V^\dagger V = \Id$ to collapse the coefficient matrix to the
+    diagonal.
+\end{proof}
+
+\begin{theorem}[Unitary freedom of Kraus representations]
+    \label{thm:kraus_unitary_freedom_iff}
+    \lean{kraus_unitary_freedom_iff}
+    \leanok
+    \uses{thm:kraus_isometry_freedom_iff}
+    Let $\{B_\alpha\}_{\alpha \in \iota}$ and $\{A_j\}_{j \in \iota}$
+    be two Kraus families with the same finite index set.
+    Then the following are equivalent:
+    \begin{enumerate}
+        \item $\sum_\alpha B_\alpha X B_\alpha^\dagger
+                  = \sum_j A_j X A_j^\dagger$ for all $X \in \MN{D}$.
+        \item There exists a unitary matrix $U = (U_{\alpha j})$ such that
+              $B_\alpha = \sum_j U_{\alpha j} A_j$ for every $\alpha$.
+    \end{enumerate}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Apply Theorem~\ref{thm:kraus_isometry_freedom_iff} with
+    $|\iota| = |\iota|$.
+    In the square case an isometry matrix is unitary, and the converse is
+    immediate.
+\end{proof}
+
+\begin{remark}[Choi rank and minimal Kraus cardinality]
+    \label{rem:choi_rank_eq_min_kraus_cardinality}
+    \lean{Channel.HasKrausCard, Channel.HasKrausRankLE, Channel.choiRank,
+        Channel.choiRank_le_of_hasKrausCard,
+        Channel.choiRank_le_of_hasKrausRankLE,
+        Channel.hasKrausCard_choiRank_of_cp,
+        Channel.hasKrausRankLE_choiRank_of_cp,
+        Channel.hasKrausRankLE_choiRank_of_cptp}
+    \leanok
+    \uses{def:choi_matrix, def:cp_map}
+    If a completely positive map admits a Kraus representation with exactly $r$
+    operators, then its Choi matrix is a sum of $r$ rank-one outer products.
+    Consequently, $\rank(\tau_E) \le r$.
+    Conversely, diagonalizing the positive semidefinite Choi matrix and keeping
+    only the nonzero eigenvalue summands produces a Kraus family with exactly
+    $\rank(\tau_E)$ operators. Hence the Choi rank is precisely
+    the minimal Kraus cardinality.
+\end{remark}
+
+\begin{proof}
+    \leanok
+    For the forward implication, expand the Choi matrix using the Kraus formula
+    and write $\tau_E = \sum_j v_j v_j^\dagger$ with one vector $v_j$ for each
+    Kraus operator. The column space of this sum lies in the span of the $r$
+    vectors $\{v_j\}$, so the rank is at most $r$. For the converse, use the
+    spectral decomposition of the positive semidefinite Choi matrix,
+    discard the zero-eigenvalue terms, and rescale the remaining eigenvectors
+    into Kraus operators.
+\end{proof}
+
+%% =========================================================

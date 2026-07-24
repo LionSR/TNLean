@@ -1,0 +1,457 @@
+\begin{definition}[Normal rectangular injectivity hypotheses]%
+    \label{def:peps_normalRectangleInjectivityHypotheses}
+    \lean{TNLean.PEPS.NormalRectangleInjectivityHypotheses}
+    \lean{TNLean.PEPS.NormalSquareLatticeRectangleInjectivityHypotheses}
+    \leanok
+    \uses{def:peps_regionInjectivityData,
+        def:peps_squareLatticeCoordinateRegions}
+    In the square-lattice normal theorem, every $2\times 3$ and
+    $3\times 2$ rectangular region is assumed injective. The corresponding
+    abstract hypotheses specify which finite regions have these two shapes and
+    assert injectivity for all of them. In the coordinate square-lattice
+    specialization, these two families are the contiguous coordinate
+    $2\times 3$ and $3\times 2$ rectangles.
+\end{definition}
+
+\begin{lemma}[Coordinate rectangular injectivity gives abstract rectangular
+        injectivity]%
+    \label{lem:peps_squareLatticeRectangleInjectivity_toRectangular}
+    \lean{TNLean.PEPS.NormalSquareLatticeRectangleInjectivityHypotheses.toRectangular}
+    \leanok
+    \uses{def:peps_normalRectangleInjectivityHypotheses}
+    The coordinate square-lattice rectangular injectivity hypotheses determine
+    abstract rectangular injectivity hypotheses, with the two abstract
+    rectangular families taken to be the contiguous coordinate $2\times 3$
+    and $3\times 2$ rectangles.
+\end{lemma}
+\begin{proof}\leanok
+    This is the direct specialization of the abstract rectangular families to
+    the two contiguous coordinate-rectangle predicates.
+\end{proof}
+
+\begin{lemma}[Coordinate rectangular injectivity gives injective rectangles]%
+    \label{lem:peps_squareLatticeRectangleInjectivity_rectangles}
+    \lean{TNLean.PEPS.NormalSquareLatticeRectangleInjectivityHypotheses.rect23_injective}
+    \lean{TNLean.PEPS.NormalSquareLatticeRectangleInjectivityHypotheses.rect32_injective}
+    \leanok
+    \uses{def:peps_normalRectangleInjectivityHypotheses,
+        lem:peps_squareLatticeCoordinateRegion_identities}
+    Under the coordinate square-lattice rectangular injectivity hypotheses,
+    every bounded contiguous $2\times3$ rectangle and every bounded
+    contiguous $3\times2$ rectangle is injective.
+\end{lemma}
+\begin{proof}\leanok
+    This is the defining rectangular injectivity hypothesis applied to the
+    coordinate witnesses for the two rectangle shapes.
+\end{proof}
+
+\begin{lemma}[Rectangular injectivity gives injective $T$-edge blocks]%
+    \label{lem:peps_normalSquareRegionT_edgeBlocks_injective}
+    \lean{TNLean.PEPS.NormalSquareLatticeRectangleInjectivityHypotheses.tVerticalBlock_injective}
+    \lean{TNLean.PEPS.NormalSquareLatticeRectangleInjectivityHypotheses.tHorizontalBlock_injective}
+    \lean{TNLean.PEPS.NormalSquareLatticeRectangleInjectivityHypotheses.tHole_injective_of_union}
+    \leanok
+    \uses{def:peps_regionInjectivityData,
+        def:peps_normalRectangleInjectivityHypotheses,
+        lem:peps_normalSquareRegionTHole_rectangular_decomposition}
+    For the displayed local $T$-region inside its $5\times6$ coordinate window,
+    if the smaller edge-block bounds
+    $x_0 + 5 \leq n$ and $y_0 + 5 \leq m$ hold in the finite $n\times m$
+    square lattice, then the coordinate square-lattice rectangular injectivity
+    hypotheses imply that the vertical $2\times3$ block and horizontal
+    $3\times2$ block removed from the window are injective. If, in addition,
+    region injectivity is closed under unions, then the union of these two
+    removed edge blocks is injective.
+\end{lemma}
+% Maintainer note: this does not prove injectivity of the finite-lattice
+% complementary block used as the third region in
+% \cite[Theorem~3]{Molnar2018NormalPEPS}.
+\begin{proof}\leanok
+    Apply the rectangular injectivity hypotheses to the already identified
+    contiguous rectangle shapes of the two edge blocks. The final assertion is
+    one application of union closure to these two injective blocks.
+\end{proof}
+
+\begin{lemma}[Injectivity from a rectangular cover of the local $T$-region]%
+    \label{lem:peps_normalSquareRegionT_injective_of_cover}
+    \lean{TNLean.PEPS.NormalSquareLatticeRectangleInjectivityHypotheses.regionT_injective_of_cover}
+    \lean{TNLean.PEPS.NormalSquareVerticalRegionTRectangleCover}
+    \lean{TNLean.PEPS.NormalSquareLatticeRectangleInjectivityHypotheses.verticalT_inj_of_cover}
+    \leanok
+    \uses{def:peps_normalSquareRectangleCover,
+        def:peps_normalRectangleInjectivityHypotheses,
+        lem:peps_normalSquareRectangleCover_injective,
+        lem:peps_regionInjectivityUnionClosure_finite}
+    If the displayed local $T$-region has a nonempty finite cover by
+    contiguous $2\times3$ and $3\times2$ rectangles, then rectangular
+    injectivity and finite union closure imply that $T$ is injective. The
+    rotated vertical local $T$-region has the same conditional injectivity
+    criterion.
+\end{lemma}
+% Current source-comparison status: docs/paper-gaps/peps_normal_ft_section3_route.tex.
+\begin{proof}\leanok
+    Apply rectangular injectivity to every rectangle in the cover, then apply
+    finite union closure to the nonempty family.
+\end{proof}
+
+\begin{lemma}[Injectivity from a rectangular cover of the edge complement]%
+    \label{lem:peps_normalSquareEdgeComplementRegion_injective_of_cover}
+    \lean{TNLean.PEPS.NormalSquareLatticeRectangleInjectivityHypotheses.edgeComplement_injective}
+    \lean{TNLean.PEPS.NormalSquareLatticeRectangleInjectivityHypotheses.%
+        verticalEdgeComplement_injective}
+    \lean{TNLean.PEPS.NormalSquareLatticeRectangleInjectivityHypotheses.%
+        edgeComplement_injective_of_T_cover}
+    \leanok
+    \uses{def:peps_normalSquareRectangleCover,
+        def:peps_normalRectangleInjectivityHypotheses,
+        lem:peps_normalSquareRectangleCover_injective,
+        lem:peps_regionInjectivityUnionClosure_finite,
+        lem:peps_normalSquareEdgeComplementRegion_coverOfT}
+    If the finite-lattice complementary block $A_3$ has a nonempty finite
+    cover by contiguous $2\times3$ and $3\times2$ rectangles, then
+    rectangular injectivity and finite union closure imply that $A_3$ is
+    injective. The same criterion applies to every vertical edge-complementary
+    block: a nonempty finite cover of that block by contiguous $2\times3$ and
+    $3\times2$ rectangles implies injectivity of the vertical
+    edge-complementary block. In the normalized horizontal-edge $5\times7$
+    frame, it is enough to give such a cover of the local $T$-region, since
+    adjoining the two top-collar $3\times2$ rectangles gives a cover of $A_3$.
+\end{lemma}
+% Current source-comparison status: docs/paper-gaps/peps_normal_ft_section3_route.tex.
+\begin{proof}\leanok
+    Apply rectangular injectivity to every rectangle in the cover, then apply
+    finite union closure to the nonempty family. For the normalized
+    $5\times7$ edge complement, first extend the local $T$-cover by the
+    two top-collar rectangles.
+\end{proof}
+
+\begin{lemma}[A cover of $T$ extends to a cover of the edge complement]%
+    \label{lem:peps_normalSquareEdgeComplementRegion_coverOfT}
+    \lean{TNLean.PEPS.normalSquareEdgeComplementRectangleCoverOfT}
+    \lean{TNLean.PEPS.normalSquareVerticalEdgeComplementRectangleCoverOfVerticalT}
+    \leanok
+    \uses{def:peps_normalSquareRectangleCover,
+        lem:peps_normalSquareEdgeComplementRegion_topCollar}
+    In the normalized horizontal-edge $5\times7$ frame with lower-left corner
+    $(0,0)$, any rectangular cover of the local $T$-region extends to a
+    rectangular cover of the edge-complementary block $A_3$ by adjoining the
+    two top-collar contiguous $3\times2$ rectangles. In the normalized
+    vertical-edge $7\times5$ frame with lower-left corner $(0,0)$, any
+    rectangular cover of the rotated local $T$-region extends to a rectangular
+    cover of the vertical edge-complementary block by adjoining the two
+    right-collar contiguous $2\times3$ rectangles.
+\end{lemma}
+\begin{proof}\leanok
+    Index the new cover by the old cover indices together with two extra
+    indices for the collar rectangles. For the horizontal block, the
+    decomposition is
+    \begin{align}
+        A_3
+        &=T \cup (\{0,1,2\}\times\{5,6\})
+          \cup (\{2,3,4\}\times\{5,6\}).
+        \notag
+    \end{align}
+    For the vertical block, the decomposition is
+    \begin{align}
+        A_3^{\mathrm v}
+        &=T^{\mathrm v} \cup (\{5,6\}\times\{0,1,2\})
+          \cup (\{5,6\}\times\{2,3,4\}).
+        \notag
+    \end{align}
+\end{proof}
+
+\begin{lemma}[The normalized edge complements have collars]%
+    \label{lem:peps_normalSquareEdgeComplementRegion_topCollar}
+    \lean{TNLean.PEPS.normalSquareEdgeComplementRegion_eq_T_union_topCollar}
+    \lean{TNLean.PEPS.normalSquareEdgeComplementRegion_eq_T_union_rightCollar}
+    \lean{TNLean.PEPS.normalSquareVerticalRegionTHole}
+    \lean{TNLean.PEPS.normalSquareVerticalRegionT}
+    \lean{TNLean.PEPS.mem_normalSquareVerticalRegionTHole}
+    \lean{TNLean.PEPS.mem_normalSquareVerticalRegionT}
+    \lean{TNLean.PEPS.normalSquareVerticalEdgeComplement_eq_verticalT_union_rightCollar}
+    \lean{TNLean.PEPS.NormalSquareLatticeRectangleInjectivityHypotheses.topCollar_injective}
+    \lean{TNLean.PEPS.NormalSquareLatticeRectangleInjectivityHypotheses.rightCollar_injective}
+    \lean{TNLean.PEPS.NormalSquareLatticeRectangleInjectivityHypotheses.verticalComp_injective}
+    \lean{TNLean.PEPS.NormalSquareLatticeRectangleInjectivityHypotheses.verticalComp_inj_of_cover}
+    \leanok
+    \uses{lem:peps_normalSquareEdgeComplementRegion,
+        lem:peps_normalSquareRegionT_window_complement,
+        def:peps_regionInjectivityData,
+        lem:peps_squareLatticeRectangleInjectivity_rectangles}
+    In the normalized horizontal-edge $5\times7$ frame, the finite-lattice
+    complementary block $A_3$ is the local-window $T$-region together with
+    two top-collar contiguous $3\times2$ rectangles. Consequently, if the
+    local $T$-region is injective, then rectangular injectivity and union
+    closure imply that $A_3$ is injective. There is also a transposed
+    $7\times5$ horizontal-frame collar identity with two contiguous
+    $2\times3$ right-collar rectangles. For the rotated vertical
+    edge-blocking regions, the corresponding complement is the rotated local
+    $T$-region together with the same two right-collar rectangles; hence rotated
+    $T$-injectivity, and hence a rectangular cover of rotated $T$, implies
+    injectivity of the vertical complementary block.
+    \begin{tenkzequation}
+        % Formula verdict: in the normalized 7-by-5 row-column frame,
+        % A3=((1-7,1-5)-(3-5,1-2)-(2-3,3-5)) is exactly the local T
+        % region together with collars C1=(6-7,1-3) and C2=(6-7,3-5).
+        % Ink-to-index verdict: every dot is an ordinary tensor and every
+        % lattice edge is a virtual contraction; region fills encode only the
+        % stated cell-set equality and do not alter the contraction graph.
+        % Contraction/boundary verdict: each 7-by-5 panel has 58 internal
+        % virtual contractions and 24 cut virtual bonds, with no exposed
+        % physical indices, hence boundary type (V,P)=(24,0).
+        % Source verdict: arXiv:1804.04964, paper_normal.tex:1430--1445 and
+        % 1475--1499 motivate the complementary block.  The collar equality is
+        % the exact local formal decomposition in NormalEdgeComplementCover.lean.
+        \begin{tenkzlattice}[rows=7, cols=5, boundary legs]
+            \tnregion[slot=selected, label=T, label at=north]
+                {(1-6,1-5) - (3-5,1-2) - (2-3,3-5)}
+            \tnregion[slot=collar, outline, label={C_1},
+                label at=center]{(6-7,1-3)}
+            \tnregion[slot=collar, outline, inset=1, label={C_2},
+                label at=center]{(6-7,3-5)}
+        \end{tenkzlattice}
+        $ = $
+        \begin{tenkzlattice}[rows=7, cols=5, boundary legs]
+            \tnregion[slot=complement, label={A_3}, label at=north]
+                {(1-7,1-5) - (3-5,1-2) - (2-3,3-5)}
+        \end{tenkzlattice}
+    \end{tenkzequation}
+\end{lemma}
+% Current source-comparison status: docs/paper-gaps/peps_normal_ft_section3_route.tex.
+\begin{proof}\leanok
+    The two set identities follow by expanding the coordinate inequalities.
+    The injectivity statements apply union closure first to the local
+    $T$-region and the first collar rectangle, and then to the second collar
+    rectangle.
+\end{proof}
+
+\begin{lemma}[A large rectangle is injective]%
+    \label{lem:peps_normalSquareWideRectangle_injective}
+    \lean{TNLean.PEPS.NormalSquareLatticeRectangleInjectivityHypotheses.wideRectangle_injective}
+    \lean{TNLean.PEPS.NormalSquareLatticeRectangleInjectivityHypotheses.shortRectangle_injective}
+    \leanok
+    \uses{lem:peps_injectiveRegion_union,
+        lem:peps_squareLatticeRectangleInjectivity_rectangles}
+    A contiguous rectangle whose width is at least two and whose height is at
+    least three is the union of the source $2\times3$ rectangles sliding over
+    it, so rectangular injectivity and union closure prove it injective. The
+    transposed statement holds for a contiguous rectangle of width at least
+    three and height at least two.
+\end{lemma}
+% Current source-comparison status: docs/paper-gaps/peps_normal_ft_section3_route.tex.
+\begin{proof}\leanok
+    Each cell of the rectangle lies in one of the contained source windows, so
+    the rectangle equals the finite union of those windows; union closure then
+    gives injectivity.
+\end{proof}
+
+\begin{lemma}[Interior edge-complement injectivity]%
+    \label{lem:peps_normalSquareInteriorEdgeComplement_injective}
+    \lean{TNLean.PEPS.NormalSquareLatticeRectangleInjectivityHypotheses.interiorEdgeComplement_injective}
+    \lean{TNLean.PEPS.NormalSquareLatticeRectangleInjectivityHypotheses.interiorVerticalEdgeComplement_injective}
+    \leanok
+    \uses{lem:peps_normalSquareEdgeComplementRegion,
+        lem:peps_normalSquareWideRectangle_injective,
+        lem:peps_squareLatticeRectangleInjectivity_rectangles}
+    Let the two edge blocks be removed at an interior position of a sufficiently
+    large lattice, with one row and column of room below and to the left and
+    further room above and to the right. Then the complementary block $A_3$ is
+    the union of four full-length bands around the removed blocks --- below,
+    above, left, and right --- together with two filler rectangles inside the
+    bounding box of the removed blocks. Each band is a large contiguous
+    rectangle and each filler is a source rectangle, all avoiding the removed
+    blocks, so rectangular injectivity and union closure prove $A_3$ injective
+    with no rectangular-cover hypothesis. The transposed statement holds for the
+    rotated vertical complementary block.
+
+    \emph{Scope restriction (interior edge).} The removed blocks must sit in the
+    interior. The fixed origin window has its corner forced and so has no
+    rectangular cover; the source object is the full-lattice complement $A_3$,
+    which has room only at an interior edge. The source comparison is recorded
+    in \path{docs/paper-gaps/peps_normal_ft_section3_route.tex}.
+\end{lemma}
+% Current source-comparison status: docs/paper-gaps/peps_normal_ft_section3_route.tex.
+\begin{proof}\leanok
+    The six pieces cover the complement of the removed blocks, by expanding the
+    coordinate inequalities. Each band is injective by the large-rectangle
+    lemma and each filler by rectangular injectivity, so union closure gives
+    injectivity of the union.
+\end{proof}
+
+\begin{lemma}[Cover-free interior every-edge blocking]%
+    \label{lem:peps_normalSquareInteriorEdgeBlocking}
+    \lean{TNLean.PEPS.horizontalSquareLatticeEdge_blockingDatum_interior}
+    \lean{TNLean.PEPS.verticalSquareLatticeEdge_blockingDatum_interior}
+    \lean{TNLean.PEPS.NormalSquareInteriorEdgeDatum}
+    \lean{TNLean.PEPS.normalSquareEdgeBlockingHypotheses_of_interiorData}
+    \leanok
+    \uses{lem:peps_normalSquareInteriorEdgeComplement_injective,
+        lem:peps_normalSquareHorizontalTranslatedEdge_blockingData,
+        def:peps_normalEdgeBlockingHypotheses}
+    For an interior horizontal or vertical edge with the corresponding interior
+    margins, the translated edge-blocking datum is built with no rectangular
+    cover: its complementary-block injectivity is the interior $A_3$
+    injectivity. A family of these cover-free interior data over all edges
+    assembles the normal edge-blocking hypotheses, with the injective chain,
+    endpoint membership, pairwise disjointness, and coverage at every edge.
+
+    \emph{Scope restriction (interior edge).} The construction supplies data
+    only at edges with interior margins. Edges near the lattice boundary of the
+    open rectangular model lack such margins; on a translation-invariant lattice
+    every edge is interior. The source comparison is recorded in
+    \path{docs/paper-gaps/peps_normal_ft_section3_route.tex}.
+\end{lemma}
+% Current source-comparison status: docs/paper-gaps/peps_normal_ft_section3_route.tex.
+\begin{proof}\leanok
+    Each interior edge is horizontal or vertical; the corresponding interior
+    blocking datum discharges its complementary-block injectivity through the
+    interior $A_3$ injectivity. Assembling these per-edge data over all edges
+    gives the edge-blocking hypotheses.
+\end{proof}
+
+\begin{lemma}[Normalized edge-blocking data]%
+    \label{lem:peps_normalSquareHorizontalEdge_blockingData}
+    \lean{TNLean.PEPS.normalSquareHorizontalEdge}
+    \lean{TNLean.PEPS.normalSquareHorizontalEdge_isHorizontal}
+    \lean{TNLean.PEPS.normalSquareHorizontalEdgeRed}
+    \lean{TNLean.PEPS.normalSquareHorizontalEdgeBlue}
+    \lean{TNLean.PEPS.normalSquareHorizontalEdgeComplement}
+    \lean{TNLean.PEPS.normalSquareHorizontalEdge_blockingDatum}
+    \lean{TNLean.PEPS.normalSquareHorizontalEdge_blockingData}
+    \lean{TNLean.PEPS.normalSquareHorizontalEdge_blockingData_of_TCover}
+    \lean{TNLean.PEPS.normalSquareHorizontalEdge_injective_chain}
+    \lean{TNLean.PEPS.normalSquareHorizontalEdge_blockingDatum_of_TCover}
+    \lean{TNLean.PEPS.normalSquareHorizontalEdge_injective_chain_of_TCover}
+    \lean{TNLean.PEPS.normalSquareVerticalEdge}
+    \lean{TNLean.PEPS.normalSquareVerticalEdge_isVertical}
+    \lean{TNLean.PEPS.normalSquareVerticalEdgeRed}
+    \lean{TNLean.PEPS.normalSquareVerticalEdgeBlue}
+    \lean{TNLean.PEPS.normalSquareVerticalEdgeComplement}
+    \lean{TNLean.PEPS.normalSquareVerticalEdge_blockingDatum}
+    \lean{TNLean.PEPS.normalSquareVerticalEdge_blockingData}
+    \lean{TNLean.PEPS.normalSquareVerticalEdge_blockingData_of_verticalT}
+    \lean{TNLean.PEPS.normalSquareVerticalEdge_blockingData_of_verticalTCover}
+    \lean{TNLean.PEPS.normalSquareVerticalEdge_blockingDatum_of_verticalT}
+    \lean{TNLean.PEPS.normalSquareVerticalEdge_blockingDatum_of_verticalTCover}
+    \lean{TNLean.PEPS.normalSquareVerticalEdge_injective_chain}
+    \lean{TNLean.PEPS.normalSquareVerticalEdge_injective_chain_of_verticalT}
+    \lean{TNLean.PEPS.normalSquareVerticalEdge_injective_chain_of_verticalTCover}
+    \leanok
+    \uses{def:peps_squareLatticeCoordinateRegions,
+        lem:peps_normalSquareEdgeComplementRegion,
+        lem:peps_normalSquareRegionT_edgeBlocks_injective,
+        lem:peps_normalSquareEdgeComplementRegion_topCollar}
+    In the normalized $5\times7$ horizontal-edge frame, the red block is the
+    vertical $2\times3$ block, the blue block is the horizontal $3\times2$
+    block, and the complementary block is the finite-lattice edge complement
+    $A_3$. The distinguished edge is a horizontal edge of the square-lattice
+    graph. The left endpoint of the distinguished edge lies in the red block,
+    the right endpoint lies in the blue block, the three regions are pairwise
+    disjoint, and their union is the whole finite square lattice.
+    If the local $T$-region is injective, rectangular injectivity and union
+    closure give injectivity of all three blocks; in particular a rectangular
+    cover of $T$ suffices. The normalized $7\times5$ vertical-edge frame
+    has the analogous red and blue rectangular blocks, a distinguished vertical
+    edge, and the same set-theoretic blocking data; at this stage its
+    complementary-block injectivity is either kept as an explicit hypothesis or
+    obtained from
+    rotated $T$-injectivity, and therefore from a rectangular cover of
+    rotated $T$, by the vertical collar lemma. In both cases the named
+    blocking datum supplies the corresponding three injective regions for the
+    edge-blocked chain.
+\end{lemma}
+% Maintainer note: horizontal and vertical complement injectivity are reduced
+% to local and rotated T-covers, respectively. The translated every-edge
+% construction remains a separate step.
+\begin{proof}\leanok
+    The endpoint memberships are coordinate checks. Rectangular injectivity
+    gives the rectangular red and blue blocks. For the horizontal edge, the
+    collar lemma gives the complement, and the rectangular cover criterion
+    removes the direct $T$-injectivity input when such a cover is supplied.
+    For the vertical edge, complement injectivity is an explicit input or is
+    obtained from the rotated $T$-cover. The disjointness and cover
+    statements are finite-set complement identities.
+\end{proof}
+
+\begin{lemma}[Translated horizontal edge-blocking data]%
+    \label{lem:peps_normalSquareHorizontalTranslatedEdge_blockingData}
+    \lean{TNLean.PEPS.normalSquareHorizontalTranslatedEdge}
+    \lean{TNLean.PEPS.normalSquareHorizontalTranslatedEdgeRed}
+    \lean{TNLean.PEPS.normalSquareHorizontalTranslatedEdgeBlue}
+    \lean{TNLean.PEPS.normalSquareHorizontalTranslatedEdgeComplement}
+    \lean{TNLean.PEPS.normalSquareHorizontalTranslatedEdge_isHorizontal}
+    \lean{TNLean.PEPS.normalSquareHorizontalTranslatedEdge_eq_rightEdge}
+    \lean{TNLean.PEPS.normalSquareHorizontalTranslatedEdge_blockingDatum}
+    \lean{TNLean.PEPS.normalSquareHorizontalTranslatedEdge_injective_chain}
+    \lean{TNLean.PEPS.normalSquareHorizontalTranslatedEdge_blockingDatum_of_complementCover}
+    \lean{TNLean.PEPS.normalSquareHorizontalTranslatedEdge_injective_chain_of_complementCover}
+    \lean{TNLean.PEPS.horizontalTranslatedEdge_zero}
+    \lean{TNLean.PEPS.horizontalTranslatedRed_zero}
+    \lean{TNLean.PEPS.horizontalTranslatedBlue_zero}
+    \lean{TNLean.PEPS.horizontalTranslatedComp_zero}
+    \leanok
+    \uses{def:peps_squareLatticeCoordinateRegions,
+        lem:peps_normalSquareEdgeComplementRegion,
+        lem:peps_normalSquareEdgeComplementRegion_injective_of_cover}
+    For any coordinate origin whose horizontal blocking window lies in the
+    finite square lattice, there is a distinguished horizontal edge with the
+    same relative position as in the normalized picture. The translated red
+    region is the $2\times3$ block, the translated blue region is the
+    $3\times2$ block, and the complementary region is the finite-lattice
+    complement of their union. If this complementary region is injective,
+    these three regions form the one-edge blocking datum; if it has a
+    rectangular cover, rectangular injectivity and union closure supply that
+    complementary injectivity. In both forms the datum supplies the three
+    injective regions used in the edge-blocked chain. The distinguished edge
+    is the corresponding coordinate right edge. At coordinate origin $0,0$,
+    the translated edge and the three translated regions specialize to the
+    normalized horizontal picture.
+\end{lemma}
+\begin{proof}\leanok
+    The endpoint memberships and horizontal orientation are coordinate
+    checks. Rectangular injectivity gives the red and blue blocks. The
+    complementary block is supplied either as an input or from a rectangular
+    cover, and the disjointness and covering identities follow from the
+    finite-set complement formulas.
+\end{proof}
+
+\begin{lemma}[Translated vertical edge-blocking data]%
+    \label{lem:peps_normalSquareVerticalTranslatedEdge_blockingData}
+    \lean{TNLean.PEPS.normalSquareVerticalTranslatedEdge}
+    \lean{TNLean.PEPS.normalSquareVerticalTranslatedEdgeRed}
+    \lean{TNLean.PEPS.normalSquareVerticalTranslatedEdgeBlue}
+    \lean{TNLean.PEPS.normalSquareVerticalTranslatedEdgeComplement}
+    \lean{TNLean.PEPS.normalSquareVerticalTranslatedEdge_isVertical}
+    \lean{TNLean.PEPS.normalSquareVerticalTranslatedEdge_eq_upEdge}
+    \lean{TNLean.PEPS.normalSquareVerticalTranslatedEdge_blockingDatum}
+    \lean{TNLean.PEPS.normalSquareVerticalTranslatedEdge_injective_chain}
+    \lean{TNLean.PEPS.normalSquareVerticalTranslatedEdge_blockingDatum_of_complementCover}
+    \lean{TNLean.PEPS.normalSquareVerticalTranslatedEdge_injective_chain_of_complementCover}
+    \lean{TNLean.PEPS.verticalTranslatedEdge_zero}
+    \lean{TNLean.PEPS.verticalTranslatedRed_zero}
+    \lean{TNLean.PEPS.verticalTranslatedBlue_zero}
+    \lean{TNLean.PEPS.verticalTranslatedComp_zero}
+    \leanok
+    \uses{def:peps_squareLatticeCoordinateRegions,
+        lem:peps_normalSquareEdgeComplementRegion_injective_of_cover}
+    For any coordinate origin whose vertical blocking window lies in the
+    finite square lattice, there is a distinguished vertical edge with the same
+    relative position as in the normalized vertical picture. The translated
+    red region is the $3\times2$ block, the translated blue region is the
+    $2\times3$ block, and the complementary region is the finite-lattice
+    complement of their union. If this complementary region is injective,
+    these three regions form the one-edge blocking datum; if it has a
+    rectangular cover, rectangular injectivity and union closure supply that
+    complementary injectivity. In both forms the datum supplies the three
+    injective regions used in the edge-blocked chain. The distinguished edge
+    is the corresponding coordinate upward edge. At coordinate origin $0,0$,
+    the translated edge and the three translated regions specialize to the
+    normalized vertical picture.
+\end{lemma}
+\begin{proof}\leanok
+    The endpoint memberships and vertical orientation are coordinate checks.
+    Rectangular injectivity gives the red and blue blocks. The complementary
+    block is supplied either as an input or from a rectangular cover, and the
+    disjointness and covering identities follow from the finite-set complement
+    formulas.
+\end{proof}

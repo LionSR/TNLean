@@ -1,0 +1,608 @@
+\begin{definition}[Full-support specialization of one fusion layer]%
+    \label{def:mpdo_full_support_virtual_projector_one_fusion}
+    \lean{MPOTensor.BNTFusionIsometryFamily.projectorQBlock}
+    \lean{MPOTensor.BNTFusionIsometryFamily.conjugatedProjectorQBlock}
+    \leanok
+    \uses{def:mpdo_bnt_fusion_isometry_family}
+    For a full-support fusion family, let $P_\gamma$ act on the bond space of
+    $M_\gamma$. Define
+    \begin{align}
+        Q^{\mathrm{fs}}_{\alpha,\beta}
+        &=\bigoplus_\gamma
+          \chi_{\alpha,\beta,\gamma}\otimes P_\gamma,
+        \notag\\
+        \widehat Q^{\mathrm{fs}}_{\alpha,\beta}
+        &=U_{\alpha,\beta}^{\dagger}
+          Q^{\mathrm{fs}}_{\alpha,\beta}U_{\alpha,\beta}.
+        \notag
+    \end{align}
+    The terminal contraction is the same as in the source operator. The
+    additional condition is that the active support is the whole product bond
+    space.
+
+    \textbf{Scope restriction (full-support fusion family):} Full support is
+    not an additional hypothesis of the arbitrary-chain source statement.
+    This distinction is
+    documented in
+    \path{docs/paper-gaps/cpsv16_topological_projector_recursion.tex}.
+\end{definition}
+
+\begin{theorem}[Projection property of the full-support specialization]%
+    \label{thm:mpdo_full_support_virtual_projector_one_fusion}
+    \lean{MPOTensor.BNTFusionIsometryFamily.projectorQBlock_eq_unweighted}
+    \lean{MPOTensor.BNTFusionIsometryFamily.projectorQBlock_isStarProjection}
+    \lean{MPOTensor.BNTFusionIsometryFamily.%
+        conjugatedProjectorQBlock_isOrthogonalProjection}
+    \leanok
+    \uses{def:mpdo_full_support_virtual_projector_one_fusion,
+        thm:mpdo_pair_fusion_bnt_completeness,
+        thm:star_projection_coisometric_transport,
+        thm:orthogonal_projection_star_projection_channel}
+    Suppose that the labelled tensors form a basis of normal tensors and the
+    positive trace-power coefficients are independent of the positive chain
+    length. If each $P_\gamma$ is a self-adjoint idempotent on the bond space,
+    then $Q^{\mathrm{fs}}_{\alpha,\beta}$ is a self-adjoint idempotent and
+    $\widehat Q^{\mathrm{fs}}_{\alpha,\beta}$ is an orthogonal
+    projection.
+\end{theorem}
+\begin{proof}\leanok
+    Length independence gives
+    $\chi_{\alpha,\beta,\gamma}=1$, hence
+    $(Q^{\mathrm{fs}}_{\alpha,\beta})^2
+    =Q^{\mathrm{fs}}_{\alpha,\beta}$ and
+    $(Q^{\mathrm{fs}}_{\alpha,\beta})^\dagger
+    =Q^{\mathrm{fs}}_{\alpha,\beta}$.
+    The basis-of-normal-tensors completeness theorem gives
+    $U_{\alpha,\beta}U_{\alpha,\beta}^{\dagger}=1$, so
+    \begin{align}
+        (\widehat Q^{\mathrm{fs}}_{\alpha,\beta})^2
+        &=U_{\alpha,\beta}^{\dagger}Q^{\mathrm{fs}}_{\alpha,\beta}
+          (U_{\alpha,\beta}U_{\alpha,\beta}^{\dagger})
+          Q^{\mathrm{fs}}_{\alpha,\beta}U_{\alpha,\beta}
+          =\widehat Q^{\mathrm{fs}}_{\alpha,\beta}.
+        \notag
+    \end{align}
+\end{proof}
+
+\begin{theorem}[Left iterated fusion completeness]%
+    \label{thm:mpdo_left_fusion_selector_completeness}
+    \lean{MPOTensor.BNTFusionIsometryFamily.%
+        leftFusionIsometry_mul_conjTranspose_eq_one_of_lengthIndependent_of_selectorWords}
+    \leanok
+    \uses{thm:mpdo_pair_fusion_selector_completeness,
+        def:mpdo_left_fusion_isometry}
+    Under the hypotheses of
+    Theorem~\ref{thm:mpdo_pair_fusion_selector_completeness},
+    $U^{\mathrm L}_{\alpha,\beta,\gamma}
+    (U^{\mathrm L}_{\alpha,\beta,\gamma})^{\dagger}=1$.
+\end{theorem}
+\begin{proof}\leanok
+    Pair fusion completeness gives
+    $\sum_\delta r_{a,b}^{\delta}D_\delta=D_aD_b$.
+    Applying this equality first to $(\delta,\gamma)$ and then to
+    $(\alpha,\beta)$ shows that the source and target dimensions of
+    $U^{\mathrm L}_{\alpha,\beta,\gamma}$ coincide. A square isometry is
+    surjective.
+\end{proof}
+
+\begin{theorem}[Right iterated fusion completeness]%
+    \label{thm:mpdo_right_fusion_selector_completeness}
+    \lean{MPOTensor.BNTFusionIsometryFamily.%
+        rightFusionIsometry_mul_conjTranspose_eq_one_of_lengthIndependent_of_selectorWords}
+    \leanok
+    \uses{thm:mpdo_pair_fusion_selector_completeness,
+        def:mpdo_right_fusion_isometry}
+    Under the same hypotheses,
+    $U^{\mathrm R}_{\alpha,\beta,\gamma}
+    (U^{\mathrm R}_{\alpha,\beta,\gamma})^{\dagger}=1$.
+\end{theorem}
+\begin{proof}\leanok
+    The right-associated dimension calculation is
+    \begin{align}
+        \sum_{\delta,\varepsilon}
+          r_{\beta,\gamma}^{\delta}r_{\alpha,\delta}^{\varepsilon}
+          D_\varepsilon
+        &=D_\alpha(D_\beta D_\gamma).
+        \notag
+    \end{align}
+    The right iterated fusion map is therefore a square isometry.
+\end{proof}
+
+\begin{theorem}[Right adjoint inverse for the full triple-fusion comparison]%
+    \label{thm:mpdo_triple_fusion_comparison_right_inverse}
+    \lean{MPOTensor.BNTFusionIsometryFamily.%
+        tripleFusionComparison_mul_conjTranspose_eq_one_of_lengthIndependent_of_selectorWords}
+    \leanok
+    \uses{lem:mpdo_triple_fusion_comparison_left_range,
+        thm:mpdo_left_fusion_selector_completeness}
+    Under the same hypotheses, the comparison of the full direct sums satisfies
+    $C_{\alpha,\beta,\gamma}C_{\alpha,\beta,\gamma}^{\dagger}=1$.
+\end{theorem}
+\begin{proof}\leanok
+    The left range identity reduces the product to
+    $U^{\mathrm L}(U^{\mathrm L})^{\dagger}$, which is the identity by
+    Theorem~\ref{thm:mpdo_left_fusion_selector_completeness}.
+\end{proof}
+
+\begin{theorem}[Left adjoint inverse for the full triple-fusion comparison]%
+    \label{thm:mpdo_triple_fusion_comparison_left_inverse}
+    \lean{MPOTensor.BNTFusionIsometryFamily.%
+        conjTranspose_mul_tripleFusionComparison_eq_one_of_lengthIndependent_of_selectorWords}
+    \leanok
+    \uses{lem:mpdo_triple_fusion_comparison_right_range,
+        thm:mpdo_right_fusion_selector_completeness}
+    Under the same hypotheses,
+    $C_{\alpha,\beta,\gamma}^{\dagger}C_{\alpha,\beta,\gamma}=1$.
+    This proves invertibility on the full direct sums. It does not yet prove
+    invertibility of a fixed-final multiplicity matrix.
+\end{theorem}
+\begin{proof}\leanok
+    Apply the right range identity and
+    Theorem~\ref{thm:mpdo_right_fusion_selector_completeness}.
+\end{proof}
+
+\begin{theorem}[Vanishing between distinct final sectors]%
+    \label{thm:mpdo_triple_fusion_comparison_final_sector_vanishing}
+    \lean{MPOTensor.BNTFusionIsometryFamily.%
+        tripleFusionComparison_finalSector_submatrix_eq_zero}
+    \leanok
+    \uses{def:mpdo_triple_fusion_comparison,
+        def:mpdo_final_label_selector_words}
+    Suppose the positive trace-power coefficients are independent of the
+    positive chain length and common word selectors exist. If
+    $\varepsilon\ne\varepsilon'$, then the corner of the full comparison from
+    the right final sector $\varepsilon'$ to the left final sector
+    $\varepsilon$ vanishes:
+    $P^{\mathrm L}_{\varepsilon}
+    C_{\alpha,\beta,\gamma}
+    P^{\mathrm R}_{\varepsilon'}=0$.
+    The assertion is conditional on the displayed word-selector identities.
+    It neither states that a diagonal corner is invertible nor identifies one
+    with an $F$-matrix, and it does not assert the pentagon identity.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:mpdo_triple_fusion_comparison_intertwines}
+    Fix one left multiplicity index and one right multiplicity index. Taking
+    the corresponding bond-space corner of the full letterwise identity gives
+    $M_\varepsilon^{ij}X=X M_{\varepsilon'}^{ij}$.
+    Induction on the word $w$ gives
+    $M_\varepsilon^w X = X M_{\varepsilon'}^w$. Multiply these identities by
+    $c_\varepsilon(w)$ and sum over all words of length $S$. The two selector
+    identities give $X=0$. Since the multiplicity indices were arbitrary,
+    the whole off-diagonal final-sector corner vanishes.
+\end{proof}
+
+\begin{definition}[Fixed-final multiplicity spaces]%
+    \label{def:mpdo_final_sector_multiplicity_spaces}
+    \lean{MPOTensor.BNTFusionIsometryFamily.LeftFinalMultiplicity}
+    \lean{MPOTensor.BNTFusionIsometryFamily.RightFinalMultiplicity}
+    \lean{MPOTensor.BNTFusionIsometryFamily.leftFinalIndexEquiv}
+    \lean{MPOTensor.BNTFusionIsometryFamily.rightFinalIndexEquiv}
+    \lean{MPOTensor.BNTFusionIsometryFamily.leftTripleFinalEquiv}
+    \lean{MPOTensor.BNTFusionIsometryFamily.rightTripleFinalEquiv}
+    \leanok
+    \uses{def:mpdo_bnt_fusion_isometry_family}
+    Fix a final label $\varepsilon$. The multiplicity spaces of the two
+    bracketings are
+    \begin{align}
+        \mathcal H^{\mathrm L}_{\varepsilon}
+        &=\bigoplus_{\delta}
+          \C^{\dim\chi_{\alpha,\beta,\delta}}
+          \otimes \C^{\dim\chi_{\delta,\gamma,\varepsilon}},
+        \notag\\
+        \mathcal H^{\mathrm R}_{\varepsilon}
+        &=\bigoplus_{\delta}
+          \C^{\dim\chi_{\beta,\gamma,\delta}}
+          \otimes \C^{\dim\chi_{\alpha,\delta,\varepsilon}}.
+        \notag
+    \end{align}
+    These spaces have the bracketing pattern of the $(e,\mu,\nu)$ and
+    $(f,\lambda,\sigma)$ index spaces in the printed-$F$ row/column convention
+    of \cite[Section~3.4]{Bultinck2017Anyons}. Identifying the dimensions of the positive
+    diagonal matrices with the fusion multiplicities of that equation
+    requires the length-independent integer specialization and is not
+    asserted here. The corresponding fixed-final row spaces are
+    $\mathcal H^{\mathrm L}_{\varepsilon}\otimes\C^{D_\varepsilon}$ and
+    $\mathcal H^{\mathrm R}_{\varepsilon}\otimes\C^{D_\varepsilon}$.
+\end{definition}
+
+\begin{theorem}[Equality of fixed-final multiplicity dimensions]%
+    \label{thm:mpdo_final_sector_multiplicity_card_eq}
+    \lean{MPOTensor.BNTFusionIsometryFamily.%
+        card_leftFinalMultiplicity_eq_card_rightFinalMultiplicity_of_lengthIndependent}
+    \leanok
+    \uses{def:mpdo_final_sector_multiplicity_spaces,
+        def:mpdo_bnt_label_linear_independent,
+        def:mpdo_bnt_label_length_independent}
+    Suppose that the positive trace-power coefficients are independent of
+    the positive chain length and that the labelled operators are eventually
+    linearly independent. Then, for each final label $\varepsilon$,
+    \begin{align}
+        \dim\mathcal H^{\mathrm L}_{\varepsilon}
+        &=\sum_{\delta}
+          \dim\chi_{\alpha,\beta,\delta}
+          \dim\chi_{\delta,\gamma,\varepsilon}
+          =\sum_{\delta}
+          \dim\chi_{\beta,\gamma,\delta}
+          \dim\chi_{\alpha,\delta,\varepsilon}
+          =\dim\mathcal H^{\mathrm R}_{\varepsilon}.
+        \notag
+    \end{align}
+    Consequently a matrix between the two fixed-final multiplicity spaces
+    is square. This is the numerical associativity statement of
+    \cite[lines~237--241]{Bultinck2017Anyons}; it does not assert completeness
+    of the fusion maps or invertibility of the fixed-final comparison.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:mpdo_bnt_label_coeff_associativity,
+        thm:mpdo_bnt_label_length_independent_natural}
+    Choose a positive length beyond the linear-independence threshold.
+    Associativity of the same-length product law gives equality of the two
+    sums of products of structure coefficients. Length independence and
+    positivity identify every coefficient with the size of its corresponding
+    diagonal $\chi$-matrix. The two sums are precisely the cardinalities of
+    the displayed dependent sums.
+\end{proof}
+
+\begin{definition}[Triple-fusion maps with fixed final label]%
+    \label{def:mpdo_final_sector_fusion_maps}
+    \lean{MPOTensor.BNTFusionIsometryFamily.leftFinalFusionMap}
+    \lean{MPOTensor.BNTFusionIsometryFamily.rightFinalFusionMap}
+    \leanok
+    \uses{def:mpdo_final_sector_multiplicity_spaces,
+        def:mpdo_left_fusion_isometry,
+        def:mpdo_right_fusion_isometry}
+    The maps $U^{\mathrm L}_{\alpha,\beta,\gamma;\varepsilon}$ and
+    $U^{\mathrm R}_{\alpha,\beta,\gamma;\varepsilon}$ are obtained by
+    restricting the two iterated fusion isometries to the summands with final
+    label $\varepsilon$. Their adjoints, after the canonical reassociation
+    of the triple bond space, have the orientation and bracketing pattern of
+    the weighted analogs of the two sides in the printed-$F$ row/column
+    convention of \cite[Section~3.4]{Bultinck2017Anyons}.
+\end{definition}
+
+\begin{theorem}[Left triple fusion at a fixed final label]%
+    \label{thm:mpdo_left_final_fusion_apply}
+    \lean{MPOTensor.BNTFusionIsometryFamily.leftFinalFusion_apply}
+    \leanok
+    \uses{def:mpdo_final_sector_fusion_maps,
+        def:mpdo_operator_product, thm:mpdo_left_fusion_apply,
+        lem:matrix_block_conjugation_restriction}
+    For every final label $\varepsilon$, the left-associated restriction
+    satisfies the positive-diagonal weighted identity
+    \begin{align}
+        U^{\mathrm L}_{\alpha,\beta,\gamma;\varepsilon}
+        ((M_\alpha M_\beta)M_\gamma)^{ij}
+        (U^{\mathrm L}_{\alpha,\beta,\gamma;\varepsilon})^\dagger
+        &=\bigoplus_{\delta}
+          \chi_{\alpha,\beta,\delta}\otimes
+          \bigl(\chi_{\delta,\gamma,\varepsilon}\otimes
+          M_\varepsilon^{ij}\bigr).
+        \notag
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{lem:matrix_block_conjugation_restriction}
+    Restrict Theorem~\ref{thm:mpdo_left_fusion_apply} to the rows and columns
+    whose final label is $\varepsilon$. Reindexing the conjugating matrix
+    commutes with conjugation, and the outer block-diagonal matrix retains
+    precisely the displayed $\varepsilon$-blocks.
+\end{proof}
+
+\begin{theorem}[Right triple fusion at a fixed final label]%
+    \label{thm:mpdo_right_final_fusion_apply}
+    \lean{MPOTensor.BNTFusionIsometryFamily.rightFinalFusion_apply}
+    \leanok
+    \uses{def:mpdo_final_sector_fusion_maps,
+        def:mpdo_operator_product, thm:mpdo_right_fusion_apply,
+        lem:matrix_block_conjugation_restriction}
+    For every final label $\varepsilon$, the right-associated restriction
+    satisfies the positive-diagonal weighted identity
+    \begin{align}
+        U^{\mathrm R}_{\alpha,\beta,\gamma;\varepsilon}
+        (M_\alpha(M_\beta M_\gamma))^{ij}
+        (U^{\mathrm R}_{\alpha,\beta,\gamma;\varepsilon})^\dagger
+        &=\bigoplus_{\delta}
+          \chi_{\beta,\gamma,\delta}\otimes
+          \bigl(\chi_{\alpha,\delta,\varepsilon}\otimes
+          M_\varepsilon^{ij}\bigr).
+        \notag
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{lem:matrix_block_conjugation_restriction}
+    Restrict Theorem~\ref{thm:mpdo_right_fusion_apply} to the rows and columns
+    whose final label is $\varepsilon$. Reindexing the conjugating matrix
+    commutes with conjugation, and the outer block-diagonal matrix retains
+    precisely the displayed $\varepsilon$-blocks.
+\end{proof}
+
+\begin{theorem}[Injective fixed-final intertwiners]%
+    \label{thm:mpdo_injective_fixed_final_intertwiner}
+    \lean{MPOTensor.BNTFusionIsometryFamily.%
+        exists_reindexed_intertwiner_eq_kronecker_one_of_isInjective}
+    \leanok
+    \uses{def:mpdo_final_sector_multiplicity_spaces, def:injective}
+    Suppose that $M_\varepsilon$ is injective. Let $C$ be a matrix from the
+    right fixed-final-sector space to the left fixed-final-sector space. Under
+    the canonical identifications with
+    $\mathcal H^{\mathrm L}_{\varepsilon}\otimes\C^{D_\varepsilon}$ and
+    $\mathcal H^{\mathrm R}_{\varepsilon}\otimes\C^{D_\varepsilon}$, assume
+    that, for every pair of physical indices $i,j$,
+    \begin{align}
+        (1_{\mathcal H^{\mathrm L}_{\varepsilon}}\otimes
+          M_\varepsilon^{ij})C
+        &=C(1_{\mathcal H^{\mathrm R}_{\varepsilon}}\otimes
+          M_\varepsilon^{ij}).
+        \notag
+    \end{align}
+    Then there is a rectangular matrix
+    $F:\mathcal H^{\mathrm R}_{\varepsilon}\to
+    \mathcal H^{\mathrm L}_{\varepsilon}$ such that
+    $C=F\otimes 1_{D_\varepsilon}$.
+    This conclusion is conditional on the supplied matrix $C$. It does not
+    assert the existence or invertibility of $C$ or $F$, and it does not
+    identify the dimensions of the positive diagonal matrices $\chi$ with the
+    fusion multiplicities in the printed-$F$ row/column convention of
+    \cite[Section~3.4]{Bultinck2017Anyons}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{lem:amplified_center_scalar}
+    Apply Lemma~\ref{lem:amplified_center_scalar} to the family
+    $\{M_\varepsilon^{ij}\}_{i,j}$. This family spans the full matrix algebra
+    by injectivity, and the assumed relation is precisely the amplified
+    intertwining identity of that lemma.
+\end{proof}
+
+\begin{theorem}[Conditional fixed-final Kronecker form and separation]%
+    \label{thm:mpdo_triple_fusion_comparison_final_sector_kronecker}
+    \lean{MPOTensor.BNTFusionIsometryFamily.%
+        exists_tripleFusionComparison_finalSector_eq_kronecker_one_of_separation}
+    \leanok
+    \uses{def:mpdo_triple_fusion_comparison,
+        def:mpdo_final_label_selector_words,
+        def:mpdo_final_sector_multiplicity_spaces}
+    Suppose the positive trace-power coefficients are independent of the
+    positive chain length and common word selectors separate the final labels.
+    Fix labels $\alpha,\beta,\gamma,\varepsilon$, and suppose that
+    $M_\varepsilon$ is injective at the present blocking. Write
+    $C^{\varepsilon,\varepsilon'}_{\alpha,\beta,\gamma}
+    =P^{\mathrm L}_{\varepsilon}
+    C_{\alpha,\beta,\gamma}
+    P^{\mathrm R}_{\varepsilon'}$
+    for the corner from the right final sector $\varepsilon'$ to the left
+    final sector $\varepsilon$. There is a rectangular matrix
+    $F_\varepsilon:\mathcal H^{\mathrm R}_{\varepsilon}
+    \to\mathcal H^{\mathrm L}_{\varepsilon}$ such that, after the canonical
+    index identifications,
+    $C^{\varepsilon,\varepsilon}_{\alpha,\beta,\gamma}
+    =F_\varepsilon\otimes 1_{D_\varepsilon}$.
+    For every $\varepsilon'\ne\varepsilon$,
+    $C^{\varepsilon,\varepsilon'}_{\alpha,\beta,\gamma}=0$.
+    The selector identities and injectivity at the present blocking are
+    additional hypotheses here. The theorem neither asserts that
+    $F_\varepsilon$ is square or invertible nor identifies it with the
+    printed $F$-matrix of \cite[Section~3.4]{Bultinck2017Anyons}; no pentagon identity
+    is asserted.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:mpdo_triple_fusion_comparison_intertwines,
+        thm:mpdo_triple_fusion_comparison_final_sector_vanishing,
+        thm:mpdo_injective_fixed_final_intertwiner}
+    Taking the $\varepsilon$--$\varepsilon$ corner of the full comparison
+    identity gives, for every pair $i,j$,
+    \begin{align}
+        (1_{\mathcal H^{\mathrm L}_\varepsilon}\otimes
+          M_\varepsilon^{ij})C^{\varepsilon,\varepsilon}
+        &=C^{\varepsilon,\varepsilon}
+          (1_{\mathcal H^{\mathrm R}_\varepsilon}\otimes
+            M_\varepsilon^{ij}).
+        \notag
+    \end{align}
+    Injectivity and the amplified commutant result give
+    $C^{\varepsilon,\varepsilon}=F_\varepsilon\otimes1_{D_\varepsilon}$.
+    The common word selectors give
+    $C^{\varepsilon,\varepsilon'}=0$ whenever
+    $\varepsilon'\ne\varepsilon$ by
+    Theorem~\ref{thm:mpdo_triple_fusion_comparison_final_sector_vanishing}.
+\end{proof}
+
+\begin{theorem}[Unitarity of each fixed-final comparison corner]%
+    \label{thm:mpdo_triple_fusion_comparison_final_sector_unitary}
+    \lean{MPOTensor.BNTFusionIsometryFamily.%
+        tripleFusionComparison_finalSector_mul_conjTranspose_eq_one}
+    \lean{MPOTensor.BNTFusionIsometryFamily.%
+        conjTranspose_mul_tripleFusionComparison_finalSector_eq_one}
+    \leanok
+    \uses{def:mpdo_final_label_selector_words,
+        def:mpdo_final_sector_multiplicity_spaces,
+        def:mpdo_triple_fusion_comparison}
+    Suppose the positive trace-power coefficients are independent of the
+    positive chain length and common selectors exist at a positive length.
+    For every final label $\varepsilon$, write
+    $C_\varepsilon
+    =P^{\mathrm L}_{\varepsilon}
+    C_{\alpha,\beta,\gamma}
+    P^{\mathrm R}_{\varepsilon}$. Then
+    \begin{align}
+        C_\varepsilon C_\varepsilon^\dagger
+        &=1,
+        \label{eq:mpdo_final_sector_right_unitary}\\
+        C_\varepsilon^\dagger C_\varepsilon
+        &=1.
+        \label{eq:mpdo_final_sector_left_unitary}
+    \end{align}
+    The conclusion is conditional on the simultaneous selector identities.
+    It is the fixed-output-channel invertibility consequence of the
+    simultaneous inverse used in \cite[lines~247--277]{Bultinck2017Anyons}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:mpdo_triple_fusion_comparison_right_inverse,
+        thm:mpdo_triple_fusion_comparison_left_inverse,
+        thm:mpdo_triple_fusion_comparison_final_sector_vanishing}
+    Order each full direct sum first by its final label. In the product
+    $CC^\dagger$, the $\varepsilon$-diagonal corner is
+    $\sum_{\varepsilon'}
+    C^{\varepsilon,\varepsilon'}
+    (C^{\varepsilon,\varepsilon'})^\dagger$.
+    Every term with $\varepsilon'\ne\varepsilon$ vanishes, while
+    $CC^\dagger=1$. Hence
+    $C_\varepsilon C_\varepsilon^\dagger=1$. Taking instead the
+    $\varepsilon$-diagonal corner of $C^\dagger C=1$ gives the second identity.
+\end{proof}
+
+\begin{theorem}[Unitarity of the fixed-final multiplicity matrix]%
+    \label{thm:mpdo_triple_fusion_multiplicity_unitary}
+    \lean{MPOTensor.BNTFusionIsometryFamily.%
+        exists_tripleFusionComparison_finalSector_eq_kronecker_one_and_unitary}
+    \leanok
+    \uses{def:mpdo_final_label_selector_words,
+        def:mpdo_final_sector_multiplicity_spaces,
+        def:mpdo_triple_fusion_comparison,
+        lem:matrix_kronecker_identity_cancellation}
+    Assume the hypotheses of
+    Theorem~\ref{thm:mpdo_triple_fusion_comparison_final_sector_unitary}.
+    Suppose in addition that $M_\varepsilon$ is injective at the present
+    blocking and that $D_\varepsilon>0$. There is a matrix
+    $F_\varepsilon:\mathcal H^{\mathrm R}_{\varepsilon}
+    \to\mathcal H^{\mathrm L}_{\varepsilon}$ such that
+    \begin{align}
+        C_\varepsilon
+        &=F_\varepsilon\otimes1_{D_\varepsilon},
+        \notag\\
+        F_\varepsilon F_\varepsilon^\dagger
+        &=1,
+        \notag\\
+        F_\varepsilon^\dagger F_\varepsilon
+        &=1.
+        \notag
+    \end{align}
+    Thus $F_\varepsilon$ is invertible. Its orientation is opposite to the
+    printed-$F$ row/column convention of
+    \cite[Section~3.4]{Bultinck2017Anyons}; no pentagon
+    identity is asserted.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:mpdo_triple_fusion_comparison_final_sector_kronecker,
+        thm:mpdo_triple_fusion_comparison_final_sector_unitary,
+        lem:matrix_kronecker_identity_cancellation}
+    Injectivity gives
+    $C_\varepsilon=F_\varepsilon\otimes1_{D_\varepsilon}$.
+    Substituting this expression into
+    (\ref{eq:mpdo_final_sector_right_unitary}) and
+    (\ref{eq:mpdo_final_sector_left_unitary}) gives
+    \begin{align}
+        (F_\varepsilon F_\varepsilon^\dagger)
+          \otimes1_{D_\varepsilon}
+        &=1,
+        \notag\\
+        (F_\varepsilon^\dagger F_\varepsilon)
+          \otimes1_{D_\varepsilon}
+        &=1.
+        \notag
+    \end{align}
+    Since $D_\varepsilon>0$, Lemma~\ref{lem:matrix_kronecker_identity_cancellation}
+    removes the identity factor and gives the two asserted identities.
+\end{proof}
+
+\begin{definition}[Simultaneous MPO block left inverse]
+    \label{def:mpdo_block_left_inverse}
+    \lean{MPSTensor.IsMPOBlockLeftInverse}
+    \leanok
+    Let $M_c^{il}\in \MN{D_c}$ be a finite labelled MPO tensor
+    family. A simultaneous block left inverse consists of coefficients
+    $C_{(c,x,y),(i,l)}$ such that
+    \begin{align}
+        \sum_{i,l}C_{(c,x,y),(i,l)}(M_d^{il})_{x'y'}
+        &=\delta_{cd}\delta_{xx'}\delta_{yy'}.
+        \notag
+    \end{align}
+    This is the common block inverse used in
+    \cite[Appendix~C.2, lines~1666--1676]{Cirac2016MPDO_arXiv} and
+    \cite[lines~269--277]{Bultinck2017Anyons}.
+\end{definition}
+
+\begin{theorem}[Simultaneous inverse from a one-letter product-algebra span]%
+    \label{thm:mpdo_one_letter_simultaneous_inverse}
+    \lean{MPSTensor.WordTupleSpanTop.%
+        exists_one_letter_simultaneous_left_inverse}
+    \lean{MPSTensor.WordTupleSpanTop.exists_mpo_block_left_inverse}
+    \leanok
+    \uses{def:mpdo_block_left_inverse,
+      thm:cpsv_bnt_blocked_simultaneous_span}
+    Let $A_c^q\in \MN{D_c}$ be a finite labelled tensor family. If
+    the one-letter tuples $q\longmapsto (A_c^q)_c$ span the full product
+    algebra $\prod_c \MN{D_c}$, then there are coefficients
+    $C_{(c,x,y),q}$ such that
+    \begin{align}
+        \sum_q C_{(c,x,y),q}(A_d^q)_{x'y'}
+        &=\delta_{cd}\delta_{xx'}\delta_{yy'}.
+        \notag
+    \end{align}
+    For an MPO tensor the letter is the ket--bra pair $q=(i,k)$, so the same
+    coefficients form the common block-letter left inverse used in
+    \cite[lines~269--277]{Bultinck2017Anyons}. The full product-algebra span
+    is obtained after the common blocking described in
+    \cite[lines~427--431]{Bultinck2017Anyons}.
+\end{theorem}
+
+\begin{proof}\leanok
+    Fix $(c,x,y)$ and consider the product-algebra element which is the matrix
+    unit $E_{xy}$ in block $c$ and zero in every other block. By the spanning
+    hypothesis it is a linear combination of the one-letter tuples. Reading
+    its $(x',y')$ entry in block $d$ gives the displayed identity. Reindexing
+    the doubled physical letter by the ket--bra pair gives the MPO form.
+\end{proof}
+
+\begin{figure}[ht]
+    \centering
+    % The first row is the word-selector identity itself: M^w is already the
+    % matrix obtained by evaluating the entire word, so no local tensor
+    % network is drawn.  In the second row the root labels epsilon and
+    % epsilon' give the final-sector cut, and C and F map right-tree
+    % coordinates to left-tree coordinates.  The last row is the
+    % corresponding diagonal corner.
+    \begin{align}
+        \textup{selector},\ S>0:\quad&
+        \sum_{|w|=S}c_{\varepsilon}(w)M_{\varepsilon'}^{w}
+        =\delta_{\varepsilon,\varepsilon'}1_{D_\varepsilon}
+        \notag\\[1.5em]
+        \textup{sector cut},\ \varepsilon\ne\varepsilon':\quad&
+        \underbrace{
+          \tntree{((\alpha\,\beta) \gamma)_\varepsilon}
+        }_{U^{\mathrm L}_{\alpha,\beta,\gamma;\varepsilon}}
+        \xleftarrow{
+          C^{\varepsilon,\varepsilon'}_{\alpha,\beta,\gamma}}
+        \underbrace{
+          \tntree{(\alpha\,(\beta\,\gamma))_{\varepsilon'}}
+        }_{U^{\mathrm R}_{\alpha,\beta,\gamma;\varepsilon'}}
+        =0
+        \notag\\[1.5em]
+        \textup{diagonal corner}:\quad&
+        \mathcal H^{\mathrm L}_{\varepsilon}
+          \otimes\C^{D_\varepsilon}
+        \xleftarrow{F_\varepsilon\otimes1_{D_\varepsilon}}
+        \mathcal H^{\mathrm R}_{\varepsilon}
+          \otimes\C^{D_\varepsilon}
+        \notag\\
+        &\Longrightarrow\quad
+        F_\varepsilon F_\varepsilon^\dagger=1,
+        \qquad
+        F_\varepsilon^\dagger F_\varepsilon=1.
+        \notag
+    \end{align}
+    \caption{The fixed-final comparison in the graphical order of
+        \cite[equation~(pentagon3) and lines~269--277]
+        {Bultinck2017Anyons}. At a positive common length, the simultaneous
+        word selector is the finite-word counterpart of the inverse
+        $B_d^+$ in the source: it retains the chosen final label and
+        annihilates every other one. Thus the comparison has no
+        off-diagonal final-label corners. On the surviving corner,
+        injectivity gives
+        $C_\varepsilon=F_\varepsilon\otimes1_{D_\varepsilon}$; two-sided
+        unitarity of $C_\varepsilon$ and $D_\varepsilon>0$ give two-sided
+        unitarity of $F_\varepsilon$. This is the associativity mechanism
+        described in \cite[lines~995--1010]{Cirac2016MPDO_arXiv}. No
+        pentagon coherence identity is asserted here.}
+    \label{fig:mpdo_fixed_final_comparison_unitary}
+\end{figure}

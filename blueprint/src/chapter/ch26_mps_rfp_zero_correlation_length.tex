@@ -1,0 +1,165 @@
+\section{Zero-correlation-length conditions}
+
+\begin{definition}[Single-block local orthogonality convention]%
+    \label{def:is_locally_orthogonal}
+    \lean{MPSTensor.IsLocallyOrthogonal}
+    \leanok
+    \uses{def:mps_transfer_idempotence}
+    For the single-block convention used here, local orthogonality means
+    $\E_A^2=\E_A$. The source local-orthogonality condition for a BNT family is
+    instead the collection of mixed-sector equations $\E_{j,j'}=0$ for distinct
+    components. Thus this definition records the one-block idempotence
+    convention.
+\end{definition}
+
+\begin{definition}[BNT local orthogonality]%
+    \label{def:is_bnt_locally_orthogonal}
+    \lean{MPSTensor.IsBNTLocallyOrthogonal}
+    \leanok
+    \uses{def:mixed_transfer_rect}
+    Let $(A_j)_j$ be the BNT components of a tensor in canonical form. The
+    family is \emph{locally orthogonal} when, for every pair of distinct
+    components,
+    \begin{align}
+        \E_{j,j'}
+        &=\sum_i A_j^i\otimes\overline{A_{j'}^i}=0.
+        \notag
+    \end{align}
+    This is the mixed-sector condition of
+    \cite[Definition~3.5]{Cirac2016MPDO_arXiv}.
+\end{definition}
+
+\begin{definition}[Virtual-insertion BNT zero correlation length]%
+    \label{def:is_bnt_zcl}
+    \lean{MPSTensor.IsBNTZCL}
+    \leanok
+    \uses{def:bnt_cpsv, def:is_cid, def:is_bnt_locally_orthogonal}
+    Let $(A_j)_j$ be a basis of normal tensors for $A$. The BNT
+    zero-correlation-length condition is that $\operatorname{CID}(A)$ and, for
+    every pair of distinct BNT components, $\E_{j,j'}=0$. This
+    virtual-insertion condition is not
+    \cite[Definition~3.6]{Cirac2016MPDO_arXiv}, which quantifies over physical
+    observables on all disjoint regions.
+\end{definition}
+
+\begin{definition}[Positive-gap BNT zero correlation length]%
+    \label{def:is_positive_gap_bnt_zcl}
+    \lean{MPSTensor.IsPositiveGapBNTZCL}
+    \leanok
+    \uses{def:bnt_cpsv, def:is_positive_gap_physical_cid,
+        def:is_bnt_locally_orthogonal}
+    A family $(A_j)_j$ of MPS tensors has positive-gap BNT zero correlation
+    length for $A$ when $(A_j)_j$ is a basis of normal tensors for $A$ in the
+    sense of Definition~\ref{def:bnt_cpsv}, its components are locally
+    orthogonal, and the physical correlations of $A$ are independent of
+    separation whenever both complementary gaps are positive. Adjacent regions
+    are not included.
+\end{definition}
+
+\begin{lemma}[Positive-gap BNT zero correlation length, unfolded]%
+    \label{lem:is_positive_gap_bnt_zcl_iff}
+    \lean{MPSTensor.isPositiveGapBNTZCL_iff}
+    \leanok
+    \uses{def:is_positive_gap_bnt_zcl}
+    Positive-gap BNT zero correlation length is equivalent to the conjunction
+    of the BNT relation, positive-gap physical distance independence, and BNT
+    local orthogonality.
+\end{lemma}
+\begin{proof}\leanok
+    This is the defining conjunction.
+\end{proof}
+
+\begin{definition}[BNT zero correlation length]%
+    \label{def:source_bnt_zcl}
+    \lean{MPSTensor.IsPhysicalBNTZCL}
+    \leanok
+    \uses{def:bnt_cpsv, def:source_physical_cid,
+        def:is_bnt_locally_orthogonal}
+    A BNT family has zero correlation length when the associated matrix-product
+    vectors have correlations independent of distance for all disjoint physical
+    regions and the BNT components are locally orthogonal. This is
+    \cite[Definition~3.6]{Cirac2016MPDO_arXiv}.
+\end{definition}
+
+\begin{theorem}[Unequal raw weights obstruct the ZCL--RFP equivalence]%
+    \label{thm:halved_weight_zcl_not_rfp}
+    \lean{MPSTensor.halvedWeightTensor_counterexample_to_unrestricted_zcl_iff_rfp}
+    \lean{MPSTensor.halvedWeightTensor_isPhysicalBNTZCL}
+    \lean{MPSTensor.halvedWeightTensor_eq_halvedDecomp_toTensor}
+    \lean{MPSTensor.halvedWeightTensor_mpv}
+    \lean{MPSTensor.halvedWeightTensor_sameMPV₂_halvedDecomp}
+    \lean{MPSTensor.halvedWeightTensor_not_isTransferIdempotent}
+    \leanok
+    \uses{def:source_bnt_zcl, def:mps_transfer_idempotence, def:sector_bnt_cf}
+    Let $P$ be the canonical decomposition with one scalar basis tensor
+    $C^0=(1)$, two one-dimensional copies, and respective weights $1$ and
+    $1/2$. Write $A=\mathcal A(P)$ for the tensor represented by $P$. Relative
+    to these sector coordinates, $A^0$ has block form
+    \begin{align}
+        A^0
+        &=
+        \begin{pmatrix}
+            1 & 0 \\
+            0 & \tfrac12
+        \end{pmatrix}.
+        \notag
+    \end{align}
+    The weights $(1,1/2)$ satisfy the raw-weight BNT canonical-form
+    normalization, and the corresponding canonical decomposition represents
+    $A$. Its MPV coefficient at length~$N$ is $V^{(N)}(A)=1+2^{-N}$. The BNT
+    has one component, so local orthogonality is vacuous. Since the physical
+    space has dimension one, all physical correlations are independent of
+    separation. Thus $A$ has zero correlation length in the sense of
+    Definition~\ref{def:source_bnt_zcl}, but $A$ is not a renormalization fixed
+    point. Consequently \cite[Theorem~3.8]{Cirac2016MPDO_arXiv} is false under
+    its stated raw-weight BNT normalization.
+\end{theorem}
+\begin{proof}\leanok
+    The $(0,0)$ and $(1,1)$ entries of the one-letter blocking equation
+    $(A^0)^2=vA^0$ would give $1=v\cdot 1$ and
+    $\frac14=v\cdot\frac12$. The first equality forces $v=1$, while
+    substitution in the second gives $1/4=1/2$, a contradiction. Hence no such
+    scalar exists. The physical distance-independence assertion follows because
+    every observable on a one-letter physical space is scalar.
+\end{proof}
+
+\begin{lemma}[Source BNT zero correlation length implies its positive-gap form]%
+    \label{lem:is_positive_gap_bnt_zcl_of_source_bnt_zcl}
+    \lean{MPSTensor.isPositiveGapBNTZCL_of_isPhysicalBNTZCL}
+    \leanok
+    \uses{def:source_bnt_zcl, def:is_positive_gap_bnt_zcl}
+    If a BNT family has zero correlation length for all disjoint physical
+    regions, then it has positive-gap BNT zero correlation length.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:is_positive_gap_physical_cid_of_physical_cid}
+    Restrict the physical distance-independence condition to configurations in
+    which both complementary gaps are positive. The BNT relation and local
+    orthogonality are unchanged.
+\end{proof}
+
+\begin{theorem}[Direct-sum RFP implies positive-gap BNT zero correlation length]%
+    \label{thm:is_positive_gap_bnt_zcl_of_is_rfp_direct_sum}
+    \lean{MPSTensor.isPositiveGapBNTZCL_of_isTransferIdempotent_directSum}
+    \leanok
+    \uses{def:is_positive_gap_bnt_zcl, def:mps_transfer_idempotence}
+    Let $(A_j)_j$ be nonzero-dimensional, irreducible, left-canonical,
+    pairwise gauge-phase-distinct BNT components. If the direct-sum tensor
+    $A=\bigoplus_j A_j$ satisfies $\E_A^2=\E_A$, then $A$ has positive-gap
+    physical CID and $\E_{j,j'}=0$ for all $j\ne j'$. Thus this explicit
+    direct-sum representative has positive-gap BNT zero correlation length.
+    This does not include the adjacent-region cases in
+    \cite[Theorem~3.8]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:is_positive_gap_physical_cid_of_is_rfp,
+        thm:bnt_locally_orthogonal_of_rfp_direct_sum}
+    Idempotence implies positive-gap physical CID by
+    Theorem~\ref{thm:is_positive_gap_physical_cid_of_is_rfp}. On each
+    off-diagonal bond block, idempotence of $\E_A$ gives
+    $\E_{j,j'}\circ\E_{j,j'}=\E_{j,j'}$. Distinct irreducible left-canonical
+    blocks satisfy $\rho(\E_{j,j'})<1$. Since the spectrum of an idempotent is
+    contained in $\{0,1\}$, the conditions
+    $\E_{j,j'}^2=\E_{j,j'}$ and $\rho(\E_{j,j'})<1$ imply
+    $\E_{j,j'}=0$.
+\end{proof}

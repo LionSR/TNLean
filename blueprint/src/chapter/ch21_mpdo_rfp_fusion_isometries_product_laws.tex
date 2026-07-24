@@ -1,0 +1,753 @@
+\begin{definition}[Operator family of a fusion-isometry family]%
+    \label{def:mpdo_bnt_fusion_operator_family}
+    \lean{MPOTensor.BNTFusionIsometryFamily.toOperatorFamily}
+    \lean{MPOTensor.BNTFusionIsometryFamily.toOperatorFamily_operator}
+    \lean{MPOTensor.BNTFusionIsometryFamily.toPositiveChiWitness}
+    \leanok
+    \uses{def:mpdo_bnt_fusion_isometry_family,
+        def:mpdo_bnt_label_operator_family,
+        def:mpdo_positive_bnt_label_chi_trace_power_form}
+    The tensors of a fusion-isometry family generate the concrete BNT-label
+    operator family $O_L(M_\gamma)$, and the positive diagonal matrices give
+    the positive trace-power witness for the coefficient family
+    $c^{(L)}_{\alpha,\beta,\gamma}
+        = \tr(\chi_{\alpha,\beta,\gamma}^{L})$.
+\end{definition}
+
+\begin{figure}[ht]
+    \centering
+    % Formula:
+    %   O_L(M_\alpha)O_L(M_\beta)
+    %     = \sum_\gamma \tr
+    %       (\chi_{\alpha,\beta,\gamma}^{L})O_L(M_\gamma).
+    % Source verdict: CPSV16 Theorem 4.14(ii)--(iii), source TeX lines
+    %   962--991, states the formula algebraically.  MPDO_O_L_A_.png fixes
+    %   the periodic-word convention for O_L(M); the source has no dedicated
+    %   picture of the complete product law.  The horizontal words below are
+    %   the house-style quarter-turn of that source word.
+    % Ink-to-index map: at site \ell on the left, the vertical pairleg carries
+    %   q_\ell and contracts the bra index of M_\alpha with the ket index of
+    %   M_\beta.  Their periodic rows contract a_0=a_L and b_0=b_L
+    %   independently; i_\ell and j_\ell remain free.  On the right, the
+    %   upper wire row is the multiplicity trace
+    %   tr(\chi_{\alpha,\beta,\gamma}^{L}) (labelled \chi in the ink), and the
+    %   lower operator row is O_L(M_\gamma).  These two loops have no pairleg.
+    %   The sum over \gamma is a sector sum, not a contraction edge.
+    % Boundary signatures (virtual-west, virtual-east, physical-up,
+    %   physical-down): both sides have semantic signature (0,0,L,L).
+    %   Each three-site representative emits (0,0,3,3).
+    \tnpic[compact, rows={op,op}, periodic]{
+        \tn[mpo, up=$i_1$]{M_\alpha} &
+        \tn[mpo]{M_\alpha} & \tndots &
+        \tn[mpo, up=$i_L$]{M_\alpha} \\
+        \tn[mpo, down=$j_1$]{M_\beta}
+            \tnspan[brace below]{4}{$L\text{ sites}$} &
+        \tn[mpo]{M_\beta} & \tndots &
+        \tn[mpo, down=$j_L$]{M_\beta}
+    }
+    \qquad$=\sum_\gamma$\qquad
+    % The doubled row gap makes the absent chi--M_gamma pairleg unmistakable
+    % at print size.
+    \tnpic[compact, rows={wire,op}, layer sep=2, periodic]{
+        \tn[box]{\chi} & \tn[box]{\chi} & \tndots & \tn[box]{\chi} \\
+        \tn[mpo, up=$i_1$, down=$j_1$]{M_\gamma}
+            \tnspan[brace below]{4}{$L\text{ sites}$} &
+        \tn[mpo]{M_\gamma} & \tndots &
+        \tn[mpo, up=$i_L$, down=$j_L$]{M_\gamma}
+    }
+    \caption{Closing an $L$-site chain of the local fusion identity. On the
+        left, the bra legs of the $M_\alpha$ operator are contracted with the
+        ket legs of the $M_\beta$ operator. On the right, the multiplicity loop
+        and the $M_\gamma$ loop are disjoint; the former contributes
+        $\tr(\chi_{\alpha,\beta,\gamma}^{L})$. Thus the diagram is
+        the trace-power product law of
+        \cite[Theorem~4.14(ii)--(iii), equations~(87) and~(89),
+        lines~962--991]{Cirac2016MPDO_arXiv}.}
+    \label{fig:mpdo_fusion_trace_power}
+\end{figure}
+
+\begin{theorem}[Fusion families give the same-length product law]%
+    \label{thm:mpdo_fusion_same_length_product}
+    \lean{MPOTensor.BNTFusionCoisometryFamily.mpo_mul_mpo_eq_sum}
+    \lean{MPOTensor.BNTFusionIsometryFamily.mpo_mul_mpo_eq_sum}
+    \lean{MPOTensor.BNTFusionIsometryFamily.toOperatorFamily_hasSameLengthProductForm}
+    \leanok
+    \uses{def:mpdo_bnt_fusion_coisometry_family,
+        def:mpdo_bnt_fusion_isometry_family,
+        def:mpdo_bnt_fusion_operator_family,
+        thm:mpdo_operator_product_mpo,
+        lem:mpdo_word_product_conjugation,
+        lem:mpdo_word_product_block_kronecker,
+        def:mpdo_bnt_label_same_length_product_form}
+    An active-support fusion coisometry family, and hence also a full-support
+    fusion-isometry family, satisfies the same-length product law with the
+    trace-power coefficients of its diagonal matrices. For every chain
+    length $L\ge 1$,
+    \begin{align}
+        O_L(M_\alpha)O_L(M_\beta)
+        &=\sum_{\gamma}
+          \tr(\chi_{\alpha,\beta,\gamma}^{L})O_L(M_\gamma).
+        \label{eq:rfp_same_length_product}
+    \end{align}
+    This derives the product law of
+    \cite[Theorem~4.14(ii)]{Cirac2016MPDO_arXiv} from the isometry statement
+    of \cite[Theorem~4.14(iii)]{Cirac2016MPDO_arXiv}. The active-support
+    formulation is the one used in
+    \cite[Appendix~C.4, lines~2020--2029]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+\begin{proof}\leanok
+    The product of the operators is generated by the product tensor. For a
+    nonempty word $W$ of letters of the product tensor, the conjugated
+    letters multiply to the conjugated word, and the closed trace is
+    unchanged. For an active-support family, exact reconstruction writes the
+    word as $U_{\alpha,\beta}^\dagger W U_{\alpha,\beta}$, and cyclicity of
+    trace together with
+    $U_{\alpha,\beta}U_{\alpha,\beta}^\dagger=1$ removes the outer maps. In
+    the full-support case one may equivalently use the isometric orientation:
+    $\tr(U_{\alpha,\beta}WU_{\alpha,\beta}^\dagger)
+      =\tr(WU_{\alpha,\beta}^\dagger U_{\alpha,\beta})=\tr(W)$.
+    By the fusion identity the
+    conjugated letters are the block-diagonal tensor-product letters of the
+    weighted direct sum. Their word product splits block by block with the
+    diagonal factors accumulating into $\chi_{\alpha,\beta,\gamma}^{L}$;
+    taking the trace block by block and factor by factor yields the
+    coefficients $\tr(\chi_{\alpha,\beta,\gamma}^{L})$ in
+    (\ref{eq:rfp_same_length_product}).
+\end{proof}
+
+\begin{definition}[BNT algebra clause derived from fusion isometries]%
+    \label{def:mpdo_bnt_fusion_algebra_clause}
+    \lean{MPOTensor.BNTFusionIsometryFamily.toBNTAlgebraClause}
+    \leanok
+    \uses{def:mpdo_bnt_algebra_clause,
+        def:mpdo_bnt_fusion_isometry_family,
+        def:mpdo_bnt_label_idempotent_coefficient_form,
+        def:mpdo_positive_bnt_label_chi_trace_power_form,
+        thm:mpdo_fusion_same_length_product}
+    Suppose the fusion-isometry identity holds with positive diagonal matrices
+    $\chi_{\alpha,\beta,\gamma}$, and suppose the trace scalars satisfy the
+    length-one idempotent law for the corresponding trace-power coefficients.
+    For $L>0$, the resulting BNT algebra clause has coefficients
+    $c^{(L)}_{\alpha,\beta,\gamma}
+        =\tr(\chi_{\alpha,\beta,\gamma}^{L})$
+    and records positivity of every diagonal entry. The product law and the
+    assumed idempotent condition are, respectively,
+    \begin{align}
+        O_L(M_\alpha)O_L(M_\beta)
+        &=\sum_\gamma
+          c^{(L)}_{\alpha,\beta,\gamma}O_L(M_\gamma),
+        \notag\\
+        m_\gamma
+        &=\sum_{\alpha,\beta}
+          c^{(1)}_{\alpha,\beta,\gamma}m_\alpha m_\beta.
+        \notag
+    \end{align}
+    This construction realizes implication (iii)$\Rightarrow$(ii) of
+    \cite[Theorem~4.14]{Cirac2016MPDO_arXiv}; it does not assert either of the
+    implications involving the renormalization fixed-point condition.
+\end{definition}
+
+\begin{definition}[Active-sector fusion for a vertical canonical decomposition]%
+    \label{def:mpdo_bnt_fusion_tensor_clause}
+    \lean{MPOTensor.BNTFusionTensorClause}
+    \lean{MPOTensor.HasBNTFusionTensorClause}
+    \leanok
+    \uses{def:vertical_cf_mpdo,
+        def:mpdo_bnt_fusion_coisometry_family,
+        def:mpdo_bnt_label_idempotent_coefficient_form}
+    Choose a vertical canonical decomposition
+    \begin{align}
+        U\widetilde M U^\dagger
+        &=\bigoplus_\alpha \mu_\alpha\otimes M_\alpha.
+        \notag
+    \end{align}
+    The fusion clause for this decomposition consists of positive diagonal
+    matrices $\chi_{\alpha,\beta,\gamma}$ and coisometries
+    $U_{\alpha,\beta}$ onto the active product sectors, satisfying
+    \begin{align}
+        U_{\alpha,\beta}(M_\alpha M_\beta)^{ij}
+        U_{\alpha,\beta}^\dagger
+        &=\bigoplus_\gamma
+          \chi_{\alpha,\beta,\gamma}\otimes M_\gamma^{ij}.
+        \label{eq:rfp_active_fusion}
+    \end{align}
+    They obey $U_{\alpha,\beta}U_{\alpha,\beta}^\dagger=1$, and the active
+    direct sum reconstructs the product tensor:
+    \begin{align}
+        (M_\alpha M_\beta)^{ij}
+        &=U_{\alpha,\beta}^\dagger
+          \left(\bigoplus_\gamma
+            \chi_{\alpha,\beta,\gamma}\otimes M_\gamma^{ij}\right)
+          U_{\alpha,\beta}.
+        \notag
+    \end{align}
+    The trace scalars $m_\alpha=\tr(\mu_\alpha)$ satisfy the
+    length-one idempotent identity for the coefficients determined by these
+    same diagonal matrices. This is statement (iii) of
+    \cite[Theorem~4.14, lines~986--993]{Cirac2016MPDO_arXiv}, attached to the
+    chosen decomposition of
+    \cite[Proposition~4.13, lines~943--951]{Cirac2016MPDO_arXiv}.
+\end{definition}
+
+\begin{theorem}[Renormalization fixed points have active-sector fusion]%
+    \label{thm:mpdo_rfp_to_bnt_fusion_tensor}
+    \lean{MPOTensor.HasBNTFusionTensorClause.of_isRFPViaTS}
+    \leanok
+    \uses{def:is_rfp_via_ts,
+        def:vertical_cf_mpdo,
+        def:mpdo_bnt_fusion_tensor_clause}
+    Let $M$ be a matrix product density operator in horizontal canonical form.
+    If the one-site and two-site physical closures are related in both
+    directions by trace-preserving completely positive maps as in
+    Definition~4.1, then a vertical canonical decomposition of $M$ has the
+    active-sector fusion clause above. In particular, its positive diagonal
+    fusion matrices satisfy the length-one idempotent trace-scalar identity.
+\end{theorem}
+\begin{proof}\leanok
+    Choose vertical canonical decompositions of the one-site tensor and its
+    two-site blocking. Transporting the two physical maps through these
+    decompositions identifies their normal sectors and yields the positive
+    active-sector fusion of each product $M_\alpha M_\beta$. For every
+    positive length, the blocked operator is therefore both a sum over the
+    two-site multiplicity matrices and the product of the two one-site sums.
+    At all sufficiently large lengths, the normal-sector operators are
+    linearly independent, so their coefficients agree. Equality of the
+    resulting positive power sums identifies the two multisets of
+    multiplicity entries. Summing this multiset identity gives
+    $m_\gamma=\sum_{\alpha,\beta}
+      \tr(\chi_{\alpha,\beta,\gamma})m_\alpha m_\beta$,
+    which completes the fusion clause.
+\end{proof}
+
+\begin{theorem}[Active-sector fusion implies the tensor-attached algebra clause]%
+    \label{thm:mpdo_bnt_fusion_tensor_to_algebra_tensor}
+    \lean{MPOTensor.BNTFusionTensorClause.toBNTAlgebraTensorClause}
+    \lean{MPOTensor.HasBNTFusionTensorClause.to_hasBNTAlgebraTensorClause}
+    \leanok
+    \uses{def:mpdo_bnt_algebra_tensor_clause,
+        def:mpdo_bnt_fusion_algebra_clause,
+        def:mpdo_bnt_fusion_tensor_clause}
+    Suppose the active-sector fusion clause holds for a chosen vertical canonical
+    decomposition. Then the algebra clause holds for the same decomposition.
+    For every positive chain length $L$, its coefficients are
+    $c^{(L)}_{\alpha,\beta,\gamma}
+        =\tr(\chi_{\alpha,\beta,\gamma}^{L})$,
+    determined by the same diagonal matrices. Thus statement (iii) implies
+    statement (ii) of
+    \cite[Theorem~4.14, lines~972--993]{Cirac2016MPDO_arXiv}. No assertion
+    concerning the renormalization fixed-point condition is made here.
+\end{theorem}
+\begin{proof}\leanok
+    Iterating the fusion identity along $L$ sites and taking the closed trace
+    gives
+    $O_L(M_\alpha)O_L(M_\beta)
+      =\sum_\gamma
+        \tr(\chi_{\alpha,\beta,\gamma}^{L})O_L(M_\gamma)$.
+    Writing $m_\alpha=\tr(\mu_\alpha)$, the assumed length-one
+    idempotent identity is
+    $m_\gamma=\sum_{\alpha,\beta}
+      \tr(\chi_{\alpha,\beta,\gamma})m_\alpha m_\beta$.
+    These are the product and idempotent identities of the algebra clause.
+    Retaining the chosen vertical decomposition and the same diagonal matrices
+    gives the tensor-attached algebra clause.
+\end{proof}
+
+\begin{figure}[ht]
+    \centering
+    % Writing Q_N for the N-site operator and r=N-1, the recursion is
+    %   Q_N = \bigoplus_{\substack{\alpha_1,\ldots,\alpha_{r+1}\\
+    %                    \beta_1,\ldots,\beta_r\\k_1,\ldots,k_r}}
+    %         \left(\prod_{s=1}^{r}
+    %           \chi_{\alpha_s,\beta_s,\alpha_{s+1},k_s}\right)
+    %         \tr(M_{\alpha_{r+1}}).
+    % Source verdict: CPSV16 lines 999--1008 and MPDO_Structure.png give this
+    %   recursive coefficient graph.  The image is the source for the open
+    %   copy rails, repeated-step ellipsis, and terminal horizontal trace.
+    % Ink-to-index map: the four east ports of X_s, from top to bottom, are
+    %   k_s, alpha_s, beta_s, gamma_s.  The first three meet distinct open
+    %   copy rails.  For consecutive steps, gamma_s and alpha_{s+1} are two
+    %   incidences on the same rail, which remains open above and below; the
+    %   rail is a diagonal copy register and does not sum that label.  The
+    %   ellipsis repeats precisely this routing.  On the terminal rail,
+    %   gamma_r meets both X_r and the selector port of M_{gamma_r}.  The two
+    %   horizontal operator ports of M_{gamma_r} are contracted with one
+    %   another, while its two bond ports remain open.  Thus the terminal
+    %   matrix acts on the label-dependent bond space of M_{gamma_r}.
+    % Boundary signature: the r coefficient boxes have 3r+1 unique open copy
+    %   rails, together with the open terminal bond pair.  The bond dimension
+    %   depends on the terminal label gamma_r.
+    % Projector caveat: lines 1010--1015 require length-independent structure
+    %   coefficients and projector terminal traces before Q is a projector;
+    %   the contraction displayed here asserts only the operator Q_N.
+    \ensuremath{Q={}}
+    \begin{tenkzfree}[compact, tensor style=box]
+        \tnput[box,
+            ports={20:physical,7:physical,-7:physical,-20:physical}]
+            {Xone}{(0mm,-7mm)}{X}
+        \tnput[box,
+            ports={20:physical,7:physical,-7:physical,-20:physical}]
+            {Xtwo}{(24mm,-2mm)}{X}
+        \tnput[box,
+            ports={20:physical,7:physical,-7:physical,-20:physical}]
+            {Xthree}{(48mm,3mm)}{X}
+        \tnput[box,
+            ports={20:physical,7:physical,-7:physical,-20:physical}]
+            {Xlast}{(80mm,8mm)}{X}
+        \tnput[boundary, label pos=north]
+            {Omission}{(70mm,0mm)}{\cdots}% chktex 11
+
+        \tnput[dot, ports={west:physical,north:physical,south:physical}]
+            {Kone}{(9.5mm,-7mm |- Xone.20)}{}
+        \tnput[dot, ports={west:physical,north:physical,south:physical}]
+            {Aone}{(12mm,-7mm |- Xone.7)}{}
+        \tnput[dot, ports={west:physical,north:physical,south:physical}]
+            {Bone}{(14.5mm,-7mm |- Xone.-7)}{}
+
+        \tnput[dot, ports={west:physical,north:physical,south:physical}]
+            {Atwo}{(36mm,-2mm |- Xtwo.7)}{}
+        \tnput[dot, ports={west:physical,north:physical,south:physical}]
+            {Gone}{(36mm,-7mm |- Xone.-20)}{}
+        \tnput[dot, ports={west:physical,north:physical,south:physical}]
+            {Ktwo}{(33.5mm,-2mm |- Xtwo.20)}{}
+        \tnput[dot, ports={west:physical,north:physical,south:physical}]
+            {Btwo}{(38.5mm,-2mm |- Xtwo.-7)}{}
+
+        \tnput[dot, ports={west:physical,north:physical,south:physical}]
+            {Athree}{(60mm,3mm |- Xthree.7)}{}
+        \tnput[dot, ports={west:physical,north:physical,south:physical}]
+            {Gtwo}{(60mm,-2mm |- Xtwo.-20)}{}
+        \tnput[dot, ports={west:physical,north:physical,south:physical}]
+            {Kthree}{(57.5mm,3mm |- Xthree.20)}{}
+        \tnput[dot, ports={west:physical,north:physical,south:physical}]
+            {Bthree}{(62.5mm,3mm |- Xthree.-7)}{}
+        \tnput[dot, ports={west:physical,north:physical,south:physical}]
+            {Gthree}{(67mm,3mm |- Xthree.-20)}{}
+
+        \tnput[dot, ports={west:physical,north:physical,south:physical}]
+            {Klast}{(89.5mm,8mm |- Xlast.20)}{}
+        \tnput[dot, ports={west:physical,north:physical,south:physical}]
+            {Alast}{(92mm,8mm |- Xlast.7)}{}
+        \tnput[dot, ports={west:physical,north:physical,south:physical}]
+            {Blast}{(94.5mm,8mm |- Xlast.-7)}{}
+        \tnput[dot, ports={west:physical,north:physical,south:physical}]
+            {Glast}{(102mm,8mm |- Xlast.-20)}{}
+        \tnput[dot, ports={east:physical,north:physical,south:physical}]
+            {Selector}{(102mm,0mm)}{}
+
+        \tnput[mpo,
+            ports={north:virtual,south:virtual,west:physical,
+                south west:physical,south east:physical}]
+            {Mlast}{(116mm,0mm)}{M_{\gamma_r}}
+
+        \foreach \name/\x in {
+                Kone/9.5,Aone/12,Bone/14.5,
+                Ktwo/33.5,Atwo/36,Btwo/38.5,
+                Kthree/57.5,Athree/60,Bthree/62.5,Gthree/67,
+                Klast/89.5,Alast/92,Blast/94.5,Glast/102} {
+            \tnput[boundary, ports={south:physical}]
+                {\name Top}{(\x mm,18mm)}{}
+            \tnput[boundary, ports={north:physical}]
+                {\name Bottom}{(\x mm,-20mm)}{}
+        }
+        \tnput[boundary, ports={south:virtual}]
+            {Mtop}{(116mm,18mm)}{}
+        \tnput[boundary, ports={north:virtual}]
+            {Mbottom}{(116mm,-20mm)}{}
+
+        \tnjoin{Xone.20}{Kone.west}
+        \tnjoin{Xone.7}{Aone.west}
+        \tnjoin{Xone.-7}{Bone.west}
+        \tnjoin{Xone.-20}{Gone.west}
+        \tnjoin{Xtwo.20}{Ktwo.west}
+        \tnjoin{Xtwo.7}{Atwo.west}
+        \tnjoin{Xtwo.-7}{Btwo.west}
+        \tnjoin{Xtwo.-20}{Gtwo.west}
+        \tnjoin{Xthree.20}{Kthree.west}
+        \tnjoin{Xthree.7}{Athree.west}
+        \tnjoin{Xthree.-7}{Bthree.west}
+        \tnjoin{Xthree.-20}{Gthree.west}
+        \tnjoin{Xlast.20}{Klast.west}
+        \tnjoin{Xlast.7}{Alast.west}
+        \tnjoin{Xlast.-7}{Blast.west}
+        \tnjoin{Xlast.-20}{Glast.west}
+
+        \foreach \name in {
+                Kone,Aone,Bone,Ktwo,Btwo,Kthree,Bthree,Gthree,
+                Klast,Alast,Blast} {
+            \tnjoin{\name Top.south}{\name.north}
+            \tnjoin{\name.south}{\name Bottom.north}
+        }
+        \tnjoin{AtwoTop.south}{Atwo.north}
+        \tnjoin{Atwo.south}{Gone.north}
+        \tnjoin{Gone.south}{AtwoBottom.north}
+        \tnjoin{AthreeTop.south}{Athree.north}
+        \tnjoin{Athree.south}{Gtwo.north}
+        \tnjoin{Gtwo.south}{AthreeBottom.north}
+
+        \tnjoin{GlastTop.south}{Glast.north}
+        \tnjoin{Glast.south}{Selector.north}
+        \tnjoin{Selector.south}{GlastBottom.north}
+        \tnjoin{Selector.east}{Mlast.west}
+        \tnjoin[route=arc, out=-90, in=-90]
+            {Mlast.south west}{Mlast.south east}
+        \tnjoin{Mtop.south}{Mlast.north}
+        \tnjoin{Mlast.south}{Mbottom.north}
+    \end{tenkzfree}
+    \caption{The recursive contraction defining the structure operator $Q$,
+        with terminal factor $\tr(M_{\gamma_r})$
+        \cite[lines~999--1008]{Cirac2016MPDO_arXiv}.}
+    \label{fig:mpdo_recursive_structure_operator}
+\end{figure}
+
+The associativity of the algebra product in
+\cite[Equation~(87)]{Cirac2016MPDO_arXiv}
+constrains the diagonal matrices $\chi_{\alpha,\beta,\gamma}$ and, through the
+isometry statement, induces a compatibility equation between the fusion
+isometries of the two ways of bracketing a triple product,
+$(M_\alpha M_\beta) M_\gamma$ and $M_\alpha (M_\beta M_\gamma)$
+\cite[lines~995--999]{Cirac2016MPDO_arXiv}. The source attributes the
+construction of that equation, and the classification of its solutions, to
+\cite{Bultinck2017Anyons}. The next definitions and theorems first record the
+tensor-level content of the two bracketings and then compare the resulting
+full direct sums. Restriction of that comparison to a fixed final label is a
+separate step.
+
+\begin{figure}[ht]
+    \centering
+    % The parenthesization is the tree: delta and eta label the respective
+    % internal edges, while epsilon labels the common root edge.
+    \begin{align}
+        \tntree{((\alpha\,\beta)_\delta\,\gamma)_\varepsilon}
+        &\xrightarrow{F_{\varepsilon}^{\alpha\beta\gamma}}
+        \tntree{(\alpha\,(\beta\,\gamma)_\eta)_\varepsilon}.
+        \notag
+    \end{align}
+    \caption{The two ways of fusing three labels to a fixed final label
+        $\varepsilon$, using the printed-$F$ row/column convention of
+        \cite[Section~3.4]{Bultinck2017Anyons}. The solid fusion trees are
+        the left- and right-bracketed maps constructed below. The arrow is
+        the change of basis from left- to right-bracketed multiplicity
+        coordinates. The results below first construct this map and then
+        prove its two-sided unitarity under the
+        simultaneous-selector and positive-bond-dimension hypotheses.}
+    \label{fig:mpdo_fixed_final_fusion_bracketings}
+\end{figure}
+
+\begin{definition}[Iterated fusion isometry of a triple product, left
+        bracketing]%
+    \label{def:mpdo_left_fusion_isometry}
+    \lean{MPOTensor.BNTFusionIsometryFamily.leftFusionIsometry}
+    \leanok
+    \uses{def:mpdo_bnt_fusion_isometry_family}
+    For labels $\alpha, \beta, \gamma$, the \emph{left iterated fusion
+        isometry} $U^{\mathrm L}_{\alpha,\beta,\gamma}$ is obtained by applying
+    $U_{\alpha,\beta}$ (tensored with the identity on the bond space of
+    $M_\gamma$) to fuse the first two tensors, then applying $U_{\delta,\gamma}$,
+    for each label $\delta$ appearing in the resulting direct sum, to fuse
+    the outcome with the third tensor. Its codomain is indexed by pairs of
+    labels $(\delta, \varepsilon)$ together with the multiplicity indices of
+    $\chi_{\alpha,\beta,\delta}$ and $\chi_{\delta,\gamma,\varepsilon}$.
+\end{definition}
+
+\begin{theorem}[The left iterated fusion isometry is an isometry]%
+    \label{thm:mpdo_left_fusion_isometry_isometry}
+    \lean{MPOTensor.BNTFusionIsometryFamily.leftFusionIsometry_isometry}
+    \leanok
+    \uses{def:mpdo_left_fusion_isometry}
+    The left iterated fusion isometry satisfies
+    $(U^{\mathrm L}_{\alpha,\beta,\gamma})^\dagger
+        U^{\mathrm L}_{\alpha,\beta,\gamma}=1$.
+\end{theorem}
+\begin{proof}\leanok
+    The composite of two isometries is an isometry.
+\end{proof}
+
+\begin{theorem}[The left iterated fusion isometry conjugates a triple product
+        onto a doubly weighted direct sum]%
+    \label{thm:mpdo_left_fusion_apply}
+    \lean{MPOTensor.BNTFusionIsometryFamily.leftFusion_apply}
+    \leanok
+    \uses{def:mpdo_left_fusion_isometry, def:mpdo_operator_product,
+        lem:matrix_block_conjugation_restriction}
+    Site by site,
+    \begin{align}
+        &U^{\mathrm L}_{\alpha,\beta,\gamma}
+        ((M_\alpha M_\beta)M_\gamma)^{ij}
+        (U^{\mathrm L}_{\alpha,\beta,\gamma})^\dagger
+        \notag\\
+        &\qquad
+        =\bigoplus_{\delta}\bigoplus_{\varepsilon}
+        \chi_{\alpha,\beta,\delta}
+        \otimes\bigl(\chi_{\delta,\gamma,\varepsilon}
+          \otimes M_\varepsilon^{ij}\bigr).
+        \notag
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{lem:matrix_block_conjugation_restriction}
+    Apply the fusion identity for $U_{\alpha,\beta}$ to the first two
+    tensors, summed against the physical index contracting with the third
+    tensor. Regroup the result over $\delta$ and use blockwise conjugation to
+    obtain $\chi_{\alpha,\beta,\delta}$ tensored with a letter of
+    $M_\delta M_\gamma$. The fusion identity for $U_{\delta,\gamma}$ gives the
+    second direct sum.
+\end{proof}
+
+\begin{definition}[Iterated fusion isometry of a triple product, right
+        bracketing]%
+    \label{def:mpdo_right_fusion_isometry}
+    \lean{MPOTensor.BNTFusionIsometryFamily.rightFusionIsometry}
+    \leanok
+    \uses{def:mpdo_bnt_fusion_isometry_family}
+    For labels $\alpha, \beta, \gamma$, the \emph{right iterated fusion
+        isometry} $U^{\mathrm R}_{\alpha,\beta,\gamma}$ is obtained by applying
+    $U_{\beta,\gamma}$, tensored with the identity on the bond space of
+    $M_\alpha$, and then applying $U_{\alpha,\delta}$ for every intermediate
+    label $\delta$. Its codomain is indexed by the intermediate and final
+    labels $(\delta,\varepsilon)$ and by the multiplicity indices of
+    $\chi_{\beta,\gamma,\delta}$ and $\chi_{\alpha,\delta,\varepsilon}$.
+    This is the right-bracketed composite in the associativity equation of
+    \cite[Section~``Associativity and the pentagon equation'']{Bultinck2017Anyons},
+    before the change of basis by an $F$-matrix.
+\end{definition}
+
+\begin{theorem}[The right iterated fusion isometry is an isometry]%
+    \label{thm:mpdo_right_fusion_isometry_isometry}
+    \lean{MPOTensor.BNTFusionIsometryFamily.rightFusionIsometry_isometry}
+    \leanok
+    \uses{def:mpdo_right_fusion_isometry}
+    The right iterated fusion isometry satisfies
+    $(U^{\mathrm R}_{\alpha,\beta,\gamma})^\dagger
+        U^{\mathrm R}_{\alpha,\beta,\gamma}=1$.
+\end{theorem}
+\begin{proof}\leanok
+    The two successive fusion maps are isometries on each intermediate
+    sector, so their block-diagonal composite is an isometry.
+\end{proof}
+
+\begin{theorem}[The right iterated fusion isometry conjugates a triple product
+        onto a doubly weighted direct sum]%
+    \label{thm:mpdo_right_fusion_apply}
+    \lean{MPOTensor.BNTFusionIsometryFamily.rightFusion_apply}
+    \leanok
+    \uses{def:mpdo_right_fusion_isometry, def:mpdo_operator_product,
+        lem:matrix_block_conjugation_restriction}
+    Site by site,
+    \begin{align}
+        &U^{\mathrm R}_{\alpha,\beta,\gamma}
+        (M_\alpha(M_\beta M_\gamma))^{ij}
+        (U^{\mathrm R}_{\alpha,\beta,\gamma})^\dagger
+        \notag\\
+        &\qquad
+        =\bigoplus_{\delta}\bigoplus_{\varepsilon}
+        \chi_{\beta,\gamma,\delta}
+        \otimes\bigl(\chi_{\alpha,\delta,\varepsilon}
+          \otimes M_\varepsilon^{ij}\bigr).
+        \notag
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{lem:matrix_block_conjugation_restriction}
+    Apply the fusion identity for $U_{\beta,\gamma}$ to $M_\beta M_\gamma$.
+    In the summand indexed by $\delta$, exchange the first multiplicity
+    factor with the bond space of $M_\alpha$. Blockwise conjugation regroups
+    the contraction as
+    $\chi_{\beta,\gamma,\delta}\otimes
+      (M_\alpha M_\delta)^{ij}$.
+    The fusion identity for $U_{\alpha,\delta}$ gives the sum over
+    $\varepsilon$.
+\end{proof}
+
+\begin{definition}[Full comparison of the two triple-fusion orders]%
+    \label{def:mpdo_triple_fusion_comparison}
+    \lean{MPOTensor.BNTFusionIsometryFamily.tripleFusionComparison}
+    \leanok
+    \uses{def:mpdo_left_fusion_isometry,
+        def:mpdo_right_fusion_isometry,
+        def:mpdo_operator_product_associator}
+    The canonical comparison from the right-associated full direct sum to the
+    left-associated full direct sum is
+    \begin{align}
+        C_{\alpha,\beta,\gamma}
+        &=U^{\mathrm L}_{\alpha,\beta,\gamma}
+          A_{D_\alpha,D_\beta,D_\gamma}
+          (U^{\mathrm R}_{\alpha,\beta,\gamma})^\dagger.
+        \label{eq:rfp_triple_comparison}
+    \end{align}
+    Both intermediate labels and the final label remain in the direct sums.
+    This definition does not select a fixed final label and makes no
+    invertibility assertion. Its orientation is from the right-associated
+    sum to the left-associated sum; consequently it is adjoint-oriented with
+    respect to the printed-$F$ row/column convention used here for
+    \cite[Section~3.4]{Bultinck2017Anyons}.
+\end{definition}
+
+\begin{lemma}[Left range projection of the full triple-fusion comparison]%
+    \label{lem:mpdo_triple_fusion_comparison_left_range}
+    \lean{MPOTensor.BNTFusionIsometryFamily.%
+        tripleFusionComparison_mul_conjTranspose}
+    \leanok
+    \uses{def:mpdo_triple_fusion_comparison}
+    The product of the full comparison with its adjoint is the range
+    projection of the left iterated fusion isometry:
+    \begin{align}
+        C_{\alpha,\beta,\gamma}C_{\alpha,\beta,\gamma}^{\dagger}
+        &=U^{\mathrm L}_{\alpha,\beta,\gamma}
+          (U^{\mathrm L}_{\alpha,\beta,\gamma})^{\dagger}.
+        \notag
+    \end{align}
+    The right side is not asserted to be the identity. Surjectivity of the
+    left iterated fusion map requires completeness of the fusion
+    decomposition, corresponding to the invertible total fusion matrix in
+    \cite[lines~181--191]{Bultinck2017Anyons}.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:mpdo_right_fusion_isometry_isometry,
+        def:mpdo_operator_product_associator}
+    Substitute (\ref{eq:rfp_triple_comparison}). The isometry identity
+    $(U^{\mathrm R})^\dagger U^{\mathrm R}=1$ and the two-sided inverse
+    identities for the permutation matrix $A$ leave
+    $U^{\mathrm L}(U^{\mathrm L})^\dagger$.
+\end{proof}
+
+\begin{lemma}[Right range projection of the full triple-fusion comparison]%
+    \label{lem:mpdo_triple_fusion_comparison_right_range}
+    \lean{MPOTensor.BNTFusionIsometryFamily.%
+        conjTranspose_mul_tripleFusionComparison}
+    \leanok
+    \uses{def:mpdo_triple_fusion_comparison}
+    The product in the opposite order is the range projection of the right
+    iterated fusion isometry:
+    \begin{align}
+        C_{\alpha,\beta,\gamma}^{\dagger}C_{\alpha,\beta,\gamma}
+        &=U^{\mathrm R}_{\alpha,\beta,\gamma}
+          (U^{\mathrm R}_{\alpha,\beta,\gamma})^{\dagger}.
+        \notag
+    \end{align}
+    The right side is not asserted to be the identity. Surjectivity of the
+    right iterated fusion map likewise requires completeness of the fusion
+    decomposition.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:mpdo_left_fusion_isometry_isometry,
+        def:mpdo_operator_product_associator}
+    Substitute (\ref{eq:rfp_triple_comparison}). The isometry identity
+    $(U^{\mathrm L})^\dagger U^{\mathrm L}=1$ and the two-sided inverse
+    identities for $A$ leave
+    $U^{\mathrm R}(U^{\mathrm R})^\dagger$.
+\end{proof}
+
+\begin{theorem}[The full triple-fusion comparison intertwines the unweighted
+        direct sums]%
+    \label{thm:mpdo_triple_fusion_comparison_intertwines}
+    \lean{MPOTensor.BNTFusionIsometryFamily.%
+        tripleFusionComparison_intertwines_of_lengthIndependent}
+    \leanok
+    \uses{def:mpdo_triple_fusion_comparison,
+        thm:mpdo_operator_product_associativity,
+        thm:mpdo_left_fusion_apply,
+        thm:mpdo_right_fusion_apply,
+        thm:mpdo_bnt_length_independent_zipper}
+    Suppose the positive trace-power coefficients are independent of the
+    positive chain length. For every pair of physical indices $i,k$, let
+    \begin{align}
+        D^{\mathrm L}_{ik}
+        &=\bigoplus_{\delta,\varepsilon}
+          1_{r_{\alpha,\beta}^{\delta}}\otimes
+          \bigl(1_{r_{\delta,\gamma}^{\varepsilon}}
+            \otimes M_\varepsilon^{ik}\bigr),
+        \notag
+    \end{align}
+    and define $D^{\mathrm R}_{ik}$ by the right-associated multiplicities
+    $r_{\beta,\gamma}^{\delta}$ and
+    $r_{\alpha,\delta}^{\varepsilon}$. Then
+    \begin{align}
+        D^{\mathrm L}_{ik}C_{\alpha,\beta,\gamma}
+        &=C_{\alpha,\beta,\gamma}D^{\mathrm R}_{ik}.
+        \notag
+    \end{align}
+    This is an identity on the full direct sums. It neither extracts a
+    fixed-final $F$-transformation nor proves invertibility or the pentagon
+    identity.
+\end{theorem}
+\begin{proof}\leanok
+    Length independence makes every positive diagonal factor equal to the
+    identity. Substitute the left and right triple-fusion identities into
+    (\ref{eq:rfp_triple_comparison}), cancel the two isometries, and apply
+    Theorem~\ref{thm:mpdo_operator_product_associativity}.
+\end{proof}
+
+\begin{definition}[Common word selectors for the final labels]%
+    \label{def:mpdo_final_label_selector_words}
+    \lean{MPOTensor.BNTFusionIsometryFamily.HasFinalLabelSelectorWords}
+    \leanok
+    For some common length $S$, suppose that for each final label
+    $\varepsilon$ there are coefficients $c_\varepsilon(w)$, indexed by the
+    words $w$ of length $S$ in the doubled physical alphabet, such that
+    \begin{align}
+        \sum_{|w|=S}c_\varepsilon(w)M_\varepsilon^w
+        &=1,
+        \notag\\
+        \sum_{|w|=S}c_\varepsilon(w)M_{\varepsilon'}^w
+        &=0
+        \quad\text{if }\varepsilon'\ne\varepsilon.
+        \notag
+    \end{align}
+    This is the finite-word form of the simultaneous inverse relation
+    $B_d^+B_{d'}=\delta_{d,d'}1$ used in the fixed-channel argument of
+    \cite{Bultinck2017Anyons}.
+\end{definition}
+
+\begin{theorem}[Pair fusion completeness from positive-length selectors]%
+    \label{thm:mpdo_pair_fusion_selector_completeness}
+    \lean{MPOTensor.BNTFusionIsometryFamily.%
+        fusionIsometry_mul_conjTranspose_eq_one_of_lengthIndependent_of_selectorWords}
+    \leanok
+    \uses{def:mpdo_final_label_selector_words,
+        thm:mpdo_bnt_length_independent_zipper}
+    Suppose the positive trace-power coefficients are independent of the
+    positive chain length, and suppose that common selectors exist at a
+    positive length. Then every pair fusion isometry is surjective:
+    $U_{\alpha,\beta}U_{\alpha,\beta}^{\dagger}=1$.
+    The common selectors are the finite-word form of the simultaneous inverse
+    used in \cite[line~269]{Bultinck2017Anyons}.
+\end{theorem}
+\begin{proof}\leanok
+    For a word $w$ of the positive selector length, the identity
+    $U_{\alpha,\beta}^{\dagger}U_{\alpha,\beta}=1$ gives
+    $D^w=U_{\alpha,\beta}(M_\alpha M_\beta)^w
+      U_{\alpha,\beta}^{\dagger}$, where
+    $D=\bigoplus_\gamma
+      1_{r_{\alpha,\beta}^{\gamma}}\otimes M_\gamma$.
+    Hence the range projection
+    $P=U_{\alpha,\beta}U_{\alpha,\beta}^{\dagger}$ satisfies $PD^w=D^w$.
+    Summing the selector polynomials over the final label gives the identity
+    on the full direct sum, and therefore $P=1$.
+\end{proof}
+
+\begin{theorem}[Pair fusion completeness from a source BNT]%
+    \label{thm:mpdo_pair_fusion_bnt_completeness}
+    \lean{MPOTensor.BNTFusionIsometryFamily.%
+        hasFinalLabelSelectorWords_of_hasBlockSelectorWords}
+    \lean{MPOTensor.BNTFusionIsometryFamily.%
+        fusionIsometry_mul_conjTranspose_eq_one_of_bnt_of_lengthIndependent}
+    \leanok
+    \uses{thm:cpsv_bnt_blocked_simultaneous_span,
+        thm:mpdo_pair_fusion_selector_completeness}
+    Suppose that the labelled tensors in the fusion family form a basis of
+    normal tensors and that the positive trace-power coefficients are
+    independent of the positive chain length. Then every pair fusion
+    isometry is surjective:
+    $U_{\alpha,\beta}U_{\alpha,\beta}^{\dagger}=1$.
+    In particular, final-label selectors and coisometry are conclusions, not
+    additional hypotheses. This is a derived consequence of the common BNT
+    word span in \cite[lines~317--345]{Cirac2016MPDO_arXiv}, the fusion
+    identity at lines~986--993, and length independence at lines~995--1010.
+\end{theorem}
+\begin{proof}\leanok
+    The basis-of-normal-tensors argument gives a positive common word length
+    at which the labelled word evaluations span the full product matrix
+    algebra. Choosing the tuple which is the identity in one labelled block
+    and zero in every other block gives common final-label selectors. Apply
+    Theorem~\ref{thm:mpdo_pair_fusion_selector_completeness}.
+\end{proof}

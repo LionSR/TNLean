@@ -22,60 +22,57 @@
     \uses{def:nsite_space_parent, def:cyclic_window_support,
         def:cyclic_windows_overlap}
     On a three-site space
-    $\mathcal H_A\otimes\mathcal H_X\otimes\mathcal H_B$, let
-    $Q_{AX}$ and $Q_{XB}$ be two-site projectors. Their local actions on the
-    three-site space are the operators
-    \[
+    $\mc H_A\otimes\mc H_X\otimes\mc H_B$, let $Q_{AX}$ and $Q_{XB}$ be
+    two-site projectors. Their local actions on the three-site space are the
+    operators
+    \begin{align}
         (Q_{AX}\psi)(a,x,b)
-        =
-        Q_{AX}\bigl(\alpha,\xi\mapsto\psi(\alpha,\xi,b)\bigr)(a,x),
-    \]
-    and
-    \[
+        &=
+        Q_{AX}(\alpha,\xi\mapsto\psi(\alpha,\xi,b))(a,x),
+        \notag\\
         (Q_{XB}\psi)(a,x,b)
-        =
-        Q_{XB}\bigl(\xi,\beta\mapsto\psi(a,\xi,\beta)\bigr)(x,b).
-    \]
+        &=
+        Q_{XB}(\xi,\beta\mapsto\psi(a,\xi,\beta))(x,b).
+        \notag
+    \end{align}
     The algebraic part of the overlapping nearest-neighbor commutation
     condition is
-    \[
-        Q_{AX}^2=Q_{AX},\qquad
-        Q_{XB}^2=Q_{XB},\qquad
-        Q_{AX}Q_{XB}=Q_{XB}Q_{AX}
-    \]
+    \begin{align}
+        Q_{AX}^2&=Q_{AX},
+        \notag\\
+        Q_{XB}^2&=Q_{XB},
+        \notag\\
+        Q_{AX}Q_{XB}&=Q_{XB}Q_{AX},
+        \notag
+    \end{align}
     after these two local actions are viewed on the common three-site space.
     This is the local-support part of the parent commuting Hamiltonian condition
-    in \cite[Definition~D.2]{Cirac2016MPDO_arXiv}.  The cyclic windows beginning
+    in \cite[Definition~D.2]{Cirac2016MPDO_arXiv}. The cyclic windows beginning
     at $i$ and $i+1$ realize the two supports $AX$ and $XB$, and hence overlap at
     the middle site.
 
     The source local condition also fixes a three-site subspace $K_{AXB}$ and
     imposes the kernel-intersection equation
-    \[
-        K_{AXB}=
-        \ker\bigl((Q_{AX})_{AX}\bigr)
-        \cap
-        \ker\bigl((Q_{XB})_{XB}\bigr).
-    \]
+    $K_{AXB}=\ker((Q_{AX})_{AX})\cap\ker((Q_{XB})_{XB})$.
     Forgetting this intersection equation gives the algebraic overlapping
     two-site commutation condition displayed above.
 
     The two lift maps also distribute over complementary projectors:
-    \[
-        (1-Q_{AX})_{AX}=1-(Q_{AX})_{AX},\qquad
-        (1-Q_{XB})_{XB}=1-(Q_{XB})_{XB}.
-    \]
+    \begin{align}
+        (1-Q_{AX})_{AX}&=1-(Q_{AX})_{AX},
+        \notag\\
+        (1-Q_{XB})_{XB}&=1-(Q_{XB})_{XB}.
+        \notag
+    \end{align}
     Consequently, if the projectors $Q_{AX}$ and $Q_{XB}$ commute on the
     three-site space, then their complementary projectors
-    \[
-        P_{AX}=1-Q_{AX},\qquad P_{XB}=1-Q_{XB}
-    \]
-    commute after the same lifts. This is the elementary algebraic passage used
-    when one moves between the $Q$-projectors of
+    $P_{AX}=1-Q_{AX}$ and $P_{XB}=1-Q_{XB}$ commute after the same lifts.
+    This is the elementary algebraic passage used when one moves between the
+    $Q$-projectors of
     \cite[Appendix~D.2]{Cirac2016MPDO_arXiv} and the complementary ground-space
-    projectors $P$.  Since the original two projectors are idempotent, the
+    projectors $P$. Since the original two projectors are idempotent, the
     complementary projectors are idempotent as well; hence the pair
-    \(P_{AX},P_{XB}\) satisfies the same idempotent-and-commutation condition on
+    $P_{AX},P_{XB}$ satisfies the same idempotent-and-commutation condition on
     the three-site space.
 \end{definition}
 
@@ -85,36 +82,36 @@
     \lean{MPSTensor.rightPairLift_toMatrix_reindex}
     \leanok
     \uses{def:overlapping_two_site_supports}
-    Let $\mathcal H=\C^d$, and let $Q$ be an endomorphism of
-    $\mathcal H\otimes\mathcal H$.  Under the canonical identifications of
-    two- and three-site configurations with pairs and right-associated triples,
-    the matrices of its two adjacent actions are
-    \[
-        [Q_{AX}]=[Q]\otimes I_d,
-        \qquad
-        [Q_{XB}]=I_d\otimes[Q].
-    \]
-    Equivalently, for all $a,x,b,a',x',b'\in\{0,\ldots,d-1\}$,
-    \[
+    Let $\mc H=\C^d$, and let $Q$ be an endomorphism of
+    $\mc H\otimes\mc H$. Under the canonical identifications of two- and
+    three-site configurations with pairs and right-associated triples, the
+    matrices of its two adjacent actions are
+    \begin{align}
+        [Q_{AX}]&=[Q]\otimes I_d,
+        \notag\\
+        [Q_{XB}]&=I_d\otimes[Q].
+        \notag
+    \end{align}
+    Equivalently, for all $a,x,b,a',x',b'\in\Fin d$,
+    \begin{align}
         [Q_{AX}]_{(a,x,b),(a',x',b')}
-          =[Q]_{(a,x),(a',x')}\delta_{b,b'},
-    \]
-    and
-    \[
+        &=[Q]_{(a,x),(a',x')}\delta_{b,b'},
+        \notag\\
         [Q_{XB}]_{(a,x,b),(a',x',b')}
-          =\delta_{a,a'}[Q]_{(x,b),(x',b')}.
-    \]
+        &=\delta_{a,a'}[Q]_{(x,b),(x',b')}.
+        \notag
+    \end{align}
     This is the homogeneous three-single-site specialization of the factor
-    actions on $\mathcal H_A\otimes\mathcal H_X\otimes\mathcal H_B$ in
+    actions on $\mc H_A\otimes\mc H_X\otimes\mc H_B$ in
     \cite[Definition~D.2]{Cirac2016MPDO_arXiv}; here
-    $\mathcal H_A=\mathcal H_X=\mathcal H_B=\mathcal H$.  No assertion is made
-    for unequal factor spaces.
+    $\mc H_A=\mc H_X=\mc H_B=\mc H$. No assertion is made for unequal factor
+    spaces.
 \end{theorem}
 
 \begin{proof}
     \leanok
     On the first pair, the final coordinate is unchanged, which contributes
-    $\delta_{b,b'}$ to the matrix coefficient.  On the final pair, the first
+    $\delta_{b,b'}$ to the matrix coefficient. On the final pair, the first
     coordinate is unchanged, which contributes $\delta_{a,a'}$.
 \end{proof}
 
@@ -124,35 +121,43 @@
     \lean{MPSTensor.localTerm_two_three_one_eq_rightPairLift_parentInteraction}
     \leanok
     \uses{def:overlapping_two_site_supports, def:local_term_parent}
-    Put \(q(A)=1-P_{G_2(A)}\) for the canonical two-site parent interaction. On
+    Put $q(A)=1-P_{G_2(A)}$ for the canonical two-site parent interaction. On
     the three-site space
-    \(\mathcal H_A\otimes\mathcal H_X\otimes\mathcal H_B\), with sites
-    \(0,1,2\) labelled \(A,X,B\), the two adjacent translated length-two parent
-    interactions are the two local actions
-    \[
-        h^{(3)}_0(A,2)=q(A)_{AX},\qquad
-        h^{(3)}_1(A,2)=q(A)_{XB}.
-    \]
+    $\mc H_A\otimes\mc H_X\otimes\mc H_B$, with sites $0,1,2$ labelled
+    $A,X,B$, the two adjacent translated length-two parent interactions are
+    the two local actions
+    \begin{align}
+        h^{(3)}_0(A,2)&=q(A)_{AX},
+        \notag\\
+        h^{(3)}_1(A,2)&=q(A)_{XB}.
+        \notag
+    \end{align}
     This identifies the two translated parent interactions with the two
     supports appearing in \cite[Definition~D.2]{Cirac2016MPDO_arXiv}; it does
     not assert that they commute.
 \end{theorem}
 
 \begin{proof}\leanok
-    Let \(\sigma=(a,x,b)\) be a three-site configuration. For the first
+    Let $\sigma=(a,x,b)$ be a three-site configuration. For the first
     translated term, the length-two window and the corresponding replacement
     satisfy
-    \[
-        \sigma_{\{0,1\}}=(a,x)=\sigma_{AX},\qquad
+    \begin{align}
+        \sigma_{\{0,1\}}&=(a,x)=\sigma_{AX},
+        \notag\\
         \sigma^{\{0,1\}\leftarrow(\alpha,\xi)}
-        =(\alpha,\xi,b)=\sigma^{AX\leftarrow(\alpha,\xi)}.
-    \]
+        &=(\alpha,\xi,b)
+        =\sigma^{AX\leftarrow(\alpha,\xi)}.
+        \notag
+    \end{align}
     For the second translated term,
-    \[
-        \sigma_{\{1,2\}}=(x,b)=\sigma_{XB},\qquad
+    \begin{align}
+        \sigma_{\{1,2\}}&=(x,b)=\sigma_{XB},
+        \notag\\
         \sigma^{\{1,2\}\leftarrow(\xi,\beta)}
-        =(a,\xi,\beta)=\sigma^{XB\leftarrow(\xi,\beta)}.
-    \]
+        &=(a,\xi,\beta)
+        =\sigma^{XB\leftarrow(\xi,\beta)}.
+        \notag
+    \end{align}
     Substituting these two pairs of identities into the definition of the
     translated parent term gives the two displayed equations.
 \end{proof}
@@ -163,26 +168,21 @@
     \leanok
     \uses{def:overlapping_two_site_supports,
         thm:local_term_two_three_ax_xb_lifts}
-    Suppose the canonical two-site parent interaction \(q(A)=1-P_{G_2(A)}\)
-    satisfies the overlapping \(AX/XB\) commutation condition of
+    Suppose the canonical two-site parent interaction $q(A)=1-P_{G_2(A)}$
+    satisfies the overlapping $AX/XB$ commutation condition of
     Definition~\ref{def:overlapping_two_site_supports}. Then, on the three-site
     chain,
-    \[
-        h^{(3)}_0(A,2)h^{(3)}_1(A,2)
-        =
-        h^{(3)}_1(A,2)h^{(3)}_0(A,2).
-    \]
+    $h^{(3)}_0(A,2)h^{(3)}_1(A,2) = h^{(3)}_1(A,2)h^{(3)}_0(A,2)$.
     This only identifies the first two translated local terms with the lifted
-    \(AX\) and \(XB\) actions; the construction of the
+    $AX$ and $XB$ actions; the construction of the
     \cite[Appendix~D.2]{Cirac2016MPDO_arXiv} projectors associated with the
     \cite[Appendix~B]{Cirac2016MPDO_arXiv} basic-vector form is a separate step.
 \end{theorem}
 
 \begin{proof}\leanok
     By Theorem~\ref{thm:local_term_two_three_ax_xb_lifts}, the two translated
-    local terms are \(q(A)_{AX}\) and \(q(A)_{XB}\). The assumed
-    overlapping support condition says exactly that these two lifted
-    endomorphisms commute.
+    local terms are $q(A)_{AX}$ and $q(A)_{XB}$. The assumed overlapping
+    support condition says exactly that these two lifted endomorphisms commute.
 \end{proof}
 
 \begin{theorem}[Three-site commutation from two-site representatives]
@@ -191,11 +191,8 @@
     \leanok
     \uses{def:overlapping_two_site_supports,
         thm:local_term_two_three_ax_xb_lifts}
-    Let $Q_{AX}$ and $Q_{XB}$ be two-site projectors whose lifted \(AX\) and
-    \(XB\) actions commute. Suppose that
-    \[
-        q(A)=Q_{AX},\qquad q(A)=Q_{XB}.
-    \]
+    Let $Q_{AX}$ and $Q_{XB}$ be two-site projectors whose lifted $AX$ and
+    $XB$ actions commute. Suppose that $q(A)=Q_{AX}$ and $q(A)=Q_{XB}$.
     Then the first two translated length-two local terms on the three-site
     chain commute.
 \end{theorem}
@@ -203,19 +200,16 @@
 \begin{proof}\leanok
     The lift identities identify the translated terms with the lifted actions
     of the two projectors:
-    \[
-        h^{(3)}_0(A,2)=(Q_{AX})_{AX},
-        \qquad
-        h^{(3)}_1(A,2)=(Q_{XB})_{XB}.
-    \]
+    \begin{align}
+        h^{(3)}_0(A,2)&=(Q_{AX})_{AX},
+        \notag\\
+        h^{(3)}_1(A,2)&=(Q_{XB})_{XB}.
+        \notag
+    \end{align}
     The overlapping-support hypothesis is the equation
-    \[
-        (Q_{AX})_{AX}(Q_{XB})_{XB}
-        =
-        (Q_{XB})_{XB}(Q_{AX})_{AX}.
-    \]
+    $(Q_{AX})_{AX}(Q_{XB})_{XB} = (Q_{XB})_{XB}(Q_{AX})_{AX}$.
     Substituting the two lifted identities gives the desired commutation of
-    \(h^{(3)}_0(A,2)\) and \(h^{(3)}_1(A,2)\).
+    $h^{(3)}_0(A,2)$ and $h^{(3)}_1(A,2)$.
 \end{proof}
 
 \begin{theorem}[Three-site commutation from source projectors]
@@ -228,18 +222,10 @@
     \cite[Definition~D.2]{Cirac2016MPDO_arXiv} local parent-commuting
     condition on $A X B$, and suppose that the canonical two-site parent
     interaction is identified, as a two-site operator, with the two source
-    projectors:
-    \[
-        q(A)=Q_{AX},\qquad q(A)=Q_{XB}.
-    \]
-    After lifting these two equalities to the \(AX\) and \(XB\) faces, the first
-    two translated length-two local terms on the three-site chain commute.
-    Thus
-    \[
-        h^{(3)}_0(A,2)h^{(3)}_1(A,2)
-        =
-        h^{(3)}_1(A,2)h^{(3)}_0(A,2).
-    \]
+    projectors: $q(A)=Q_{AX}$ and $q(A)=Q_{XB}$. After lifting these two
+    equalities to the $AX$ and $XB$ faces, the first two translated length-two
+    local terms on the three-site chain commute. Thus,
+    $h^{(3)}_0(A,2)h^{(3)}_1(A,2) = h^{(3)}_1(A,2)h^{(3)}_0(A,2)$.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -257,25 +243,18 @@
     \leanok
     \uses{def:overlapping_two_site_supports,
         thm:local_term_two_three_ax_xb_lifts}
-    Suppose the Appendix~D.2 projectors \(Q_{AX}\) and \(Q_{XB}\) satisfy the
-    local parent-commuting condition on \(A X B\), and suppose that the canonical
+    Suppose the Appendix~D.2 projectors $Q_{AX}$ and $Q_{XB}$ satisfy the
+    local parent-commuting condition on $A X B$, and suppose that the canonical
     two-site parent interaction is their complement on both faces:
-    \[
-        q(A)=1-Q_{AX}=1-Q_{XB}.
-    \]
-    Then the first two translated length-two local terms on the three-site
-    chain commute,
-    \[
-        h^{(3)}_0(A,2)h^{(3)}_1(A,2)
-        =
-        h^{(3)}_1(A,2)h^{(3)}_0(A,2).
-    \]
+    $q(A)=1-Q_{AX}=1-Q_{XB}$. Then the first two translated length-two local
+    terms on the three-site chain commute,
+    $h^{(3)}_0(A,2)h^{(3)}_1(A,2) = h^{(3)}_1(A,2)h^{(3)}_0(A,2)$.
 \end{theorem}
 
 \begin{proof}\leanok
     The lift identities of Theorem~\ref{thm:local_term_two_three_ax_xb_lifts}
-    identify the translated terms with \((1-Q_{AX})_{AX}\) and
-    \((1-Q_{XB})_{XB}\). The Appendix~D.2 condition implies the overlapping
+    identify the translated terms with $(1-Q_{AX})_{AX}$ and
+    $(1-Q_{XB})_{XB}$. The Appendix~D.2 condition implies the overlapping
     two-site commutation condition after forgetting the kernel-intersection
     equation. Definition~\ref{def:overlapping_two_site_supports} then gives
     commutation of the complementary lifted projectors, hence the displayed
@@ -287,9 +266,8 @@
     \leanok
     \uses{def:local_term_parent}
     The parent Hamiltonian with block length~$L$ on $N$ sites has
-    \emph{commuting} local terms if
-    $h_i h_j = h_j h_i$ for all $i,j \in \{0,\ldots,N{-}1\}$.
-    This records the translated commutation equation
+    \emph{commuting} local terms if $h_i h_j=h_j h_i$ for all
+    $i,j\in\Fin N$. This records the translated commutation equation
     $[\tau_j(P_L),P_L]=0$ from
     \cite[Definition~3.9]{Cirac2016MPDO_arXiv}; the same source definition
     also requires the ground space to be spanned, for $N>L$, by the periodic
@@ -301,14 +279,11 @@
     \leanok
     \uses{def:is_commuting_parent_ham}
     The nearest-neighbor commuting condition is the length-$2$ specialization
-    of the preceding commutation equation. For every
-    $i,j\in\{0,\ldots,N{-}1\}$,
-    \[
-        h_i h_j=h_j h_i.
-    \]
-    The source definition \cite[Definition~3.9]{Cirac2016MPDO_arXiv} also
-    requires the corresponding parent Hamiltonian to have $L=2$ and to have
-    the prescribed ground-space spanning property for $N>2$.
+    of the preceding commutation equation. For every $i,j\in\Fin N$, one has
+    $h_i h_j=h_j h_i$. The source definition
+    \cite[Definition~3.9]{Cirac2016MPDO_arXiv} also requires the corresponding
+    parent Hamiltonian to have $L=2$ and to have the prescribed ground-space
+    spanning property for $N>2$.
 \end{definition}
 
 \begin{lemma}[Overlap reduction for commuting local terms]
@@ -320,11 +295,8 @@
         def:cyclic_windows_overlap, lem:transported_es_nonoverlap_positive}
     Let $L\le N$. Suppose that $h_i h_j=h_j h_i$ whenever the length-$L$
     cyclic supports of the two local terms meet. Then the parent Hamiltonian
-    has commuting local terms:
-    \[
-        h_i h_j=h_j h_i \qquad \text{for all } i,j.
-    \]
-    In the case $L=2$, this gives the nearest-neighbor commuting condition.
+    has commuting local terms: $h_i h_j=h_j h_i$ for all $i,j$. In the case
+    $L=2$, this gives the nearest-neighbor commuting condition.
 \end{lemma}
 
 \begin{proof}\leanok
@@ -339,23 +311,25 @@
     \lean{MPSTensor.cyclicWindowsOverlap_twoSite_cases}
     \leanok
     \uses{def:cyclic_windows_overlap}
-    For $i,j\in\mathbb Z/N\mathbb Z$, if the two length-two cyclic supports
-    starting at $i$ and $j$ overlap, then
-    \[
-        j=i
-        \quad\text{or}\quad
-        j\equiv i+1\pmod N
-        \quad\text{or}\quad
-        i\equiv j+1\pmod N .
-    \]
+    For $i,j\in\Z/N\Z$, if the two length-two cyclic supports starting at $i$
+    and $j$ overlap, then
+    \begin{align}
+        j&=i,
+        \notag\\
+        \text{or}\qquad j&\equiv i+1\pmod N,
+        \notag\\
+        \text{or}\qquad i&\equiv j+1\pmod N.
+        \label{eq:parent_two_site_overlap_cases}
+    \end{align}
 \end{lemma}
 
 \begin{proof}
     \leanok
     Expanding each length-two cyclic support gives shifts
     $r_i,r_j\in\{0,1\}$ and an equality of sites
-    $i+r_i\equiv j+r_j\pmod N$.  The four possible pairs
-    $(r_i,r_j)$ give exactly the three alternatives displayed above.
+    $i+r_i\equiv j+r_j\pmod N$. The four possible pairs $(r_i,r_j)$ give
+    exactly the three alternatives in
+    (\ref{eq:parent_two_site_overlap_cases}).
 \end{proof}
 
 \begin{lemma}[Adjacent two-site translates suffice for nearest-neighbor commutation]
@@ -365,11 +339,14 @@
     \leanok
     \uses{lem:two_site_cyclic_window_overlap_cases,
         lem:commuting_parent_ham_overlap_reduction, lem:local_term_idempotent}
-    Let $N\ge2$. Suppose that, for every $i\in\mathbb Z/N\mathbb Z$, the
-    translated length-two local term commutes with its cyclic right neighbor:
-    \[
-        h_i(A,2)\,h_{i+1}(A,2)=h_{i+1}(A,2)\,h_i(A,2).
-    \]
+    Let $N\ge2$. Suppose that, for every $i\in\Z/N\Z$, the translated
+    length-two local term commutes with its cyclic right neighbor:
+    \begin{align}
+        h_i(A,2)h_{i+1}(A,2)
+        &=
+        h_{i+1}(A,2)h_i(A,2).
+        \label{eq:parent_adjacent_two_site_commutation}
+    \end{align}
     Then all translated length-two local terms commute, and the family
     $p_i=h_i(A,2)$ satisfies the finite-chain local-projector hypotheses used
     in the conditional Appendix~B extraction.
@@ -378,17 +355,11 @@
 \begin{proof}
     \leanok
     By Lemma~\ref{lem:two_site_cyclic_window_overlap_cases}, overlapping
-    length-two cyclic supports force
-    \[
-        j=i
-        \quad\text{or}\quad
-        j\equiv i+1\pmod N
-        \quad\text{or}\quad
-        i\equiv j+1\pmod N .
-    \]
-    The equal-start case gives $h_i(A,2)=h_j(A,2)$.  The two nearest-neighbor
-    cases are the displayed hypothesis and its transpose.  The overlap-reduction
-    lemma supplies the remaining disjoint pairs by locality.
+    length-two cyclic supports force the three alternatives in
+    (\ref{eq:parent_two_site_overlap_cases}). The equal-start case gives
+    $h_i(A,2)=h_j(A,2)$. The two nearest-neighbor cases are
+    (\ref{eq:parent_adjacent_two_site_commutation}) and its transpose. The
+    overlap-reduction lemma supplies the remaining disjoint pairs by locality.
 \end{proof}
 
 \begin{lemma}[Local-projector hypotheses from overlapping two-site commutation]
@@ -398,9 +369,7 @@
     \uses{lem:commuting_parent_ham_overlap_reduction, lem:local_term_idempotent}
     Let $N\ge2$. Suppose that the translated length-two local terms commute for
     every pair of overlapping cyclic windows:
-    \[
-        h_i(A,2)h_j(A,2)=h_j(A,2)h_i(A,2).
-    \]
+    $h_i(A,2)h_j(A,2) = h_j(A,2)h_i(A,2)$.
     Then the family $p_i=h_i(A,2)$ gives the finite-chain local-projector
     hypotheses used in the conditional Appendix~B extraction.
 \end{lemma}
@@ -418,10 +387,12 @@
     \uses{def:is_nncph, def:is_frustration_free}
     This condition records the commutation equation and the zero-energy equation
     for the nearest-neighbor local terms:
-    \[
-        h_i h_j = h_j h_i,\qquad
-        h_i V^{(N)}(A)=0.
-    \]
+    \begin{align}
+        h_i h_j&=h_j h_i,
+        \notag\\
+        h_i V^{(N)}(A)&=0.
+        \notag
+    \end{align}
     This is the zero-energy part of the condition appearing in
     \cite[Theorem~3.10(iii)]{Cirac2016MPDO_arXiv}: the MPS vector has zero
     energy for the translated two-site local terms, and those terms commute.
@@ -441,11 +412,7 @@
     Let $B$ be a canonical-form tensor with BNT components
     $A_1,\ldots,A_g$. The source parent-Hamiltonian spanning condition is that,
     for every $N>L$,
-    \[
-        \ker H_L^{(N)}(B)
-        =
-        \spn\{V^{(N)}(A_j):j=1,\ldots,g\}.
-    \]
+    $\ker H_L^{(N)}(B)=\spn\{V^{(N)}(A_j):j=1,\ldots,g\}$.
     This is the ground-space clause in
     \cite[Definition~3.9]{Cirac2016MPDO_arXiv}. It is separate from the
     commutation equation $[\tau_j(P_L),P_L]=0$ and from the zero-energy
@@ -460,13 +427,16 @@
     For a fixed chain length $N$, this condition is the conjunction of the
     nearest-neighbor commutation equation, the zero-energy equation for the MPS
     vector, and the ground-space spanning equation:
-    \[
-        h_i h_j=h_j h_i,\qquad
-        h_iV^{(N)}(B)=0,\qquad
+    \begin{align}
+        h_i h_j&=h_j h_i,
+        \notag\\
+        h_iV^{(N)}(B)&=0,
+        \notag\\
         \ker H_2^{(N)}(B)
-        =
+        &=
         \spn\{V^{(N)}(A_j):j=1,\ldots,g\}.
-    \]
+        \notag
+    \end{align}
     The source statement in
     \cite[Theorem~3.10(iii)]{Cirac2016MPDO_arXiv} quantifies this condition
     over all $N>2$.
@@ -481,13 +451,16 @@
     \cite[Theorem~3.10(iii)]{Cirac2016MPDO_arXiv}. For every $N>2$, the
     fixed-chain condition of Definition~\ref{def:has_nncph_ground_space}
     holds:
-    \[
-        h_i h_j=h_j h_i,\qquad
-        h_iV^{(N)}(B)=0,\qquad
+    \begin{align}
+        h_i h_j&=h_j h_i,
+        \notag\\
+        h_iV^{(N)}(B)&=0,
+        \notag\\
         \ker H_2^{(N)}(B)
-        =
+        &=
         \spn\{V^{(N)}(A_j):j=1,\ldots,g\}.
-    \]
+        \notag
+    \end{align}
     This condition records the ground-space spanning equation, but does not
     prove it for a concrete canonical-form tensor.
 \end{definition}
@@ -515,19 +488,12 @@
     general commuting condition. The ground-vector condition above contains
     this commuting equation together with the frustration-free equation for
     $V^{(N)}(A)$; it does not assert the source ground-space spanning property.
-    For $N\ge 2$, Lemma~\ref{lem:parent_hamiltonian_ff} with $L=2$ gives
-    \[
-        h_i\,V^{(N)}(A)=0
-    \]
-    for every site $i$.
-    The fixed-chain ground-space condition also contains
-    \[
-        \ker H_2^{(N)}(B)
-        =
-        \spn\{V^{(N)}(A_j):j=1,\ldots,g\},
-    \]
-    and quantifying this condition over all $N>2$ gives the
-    nearest-neighbor case of the spanning condition above.
+    For $N\ge2$, Lemma~\ref{lem:parent_hamiltonian_ff} with $L=2$ gives
+    $h_iV^{(N)}(A)=0$ for every site $i$. The fixed-chain ground-space
+    condition also contains
+    $\ker H_2^{(N)}(B) = \spn\{V^{(N)}(A_j):j=1,\ldots,g\}$,
+    and quantifying this condition over all $N>2$ gives the nearest-neighbor
+    case of the spanning condition above.
     Conversely, the all-chain condition is exactly the conjunction of the
     all-chain ground-vector equations and the nearest-neighbor instance of the
     spanning condition above. This is precisely the condition named in
@@ -535,11 +501,9 @@
     Since the displayed zero-energy equation follows from the
     parent-Hamiltonian construction for $N>2$, independently of the
     commutation and spanning equations, this is equivalently
-    \[
-        \begin{aligned}
+    \begin{align}
         &\forall N>2,\quad
-        \left[
-        \begin{array}{l}
+        \left[\begin{array}{l}
         \forall\, i,j,\quad
         h_i^{(N)}h_j^{(N)}=h_j^{(N)}h_i^{(N)},\\
         \forall\, i,\quad
@@ -547,11 +511,10 @@
         \ker H_2^{(N)}(B)
             =
             \spn\{V^{(N)}(A_j):j=1,\ldots,g\}
-        \end{array}
-        \right]\\
+        \end{array}\right]
+        \notag\\
         &\qquad\Longleftrightarrow\qquad
-        \left[
-        \begin{array}{l}
+        \left[\begin{array}{l}
         \forall N>2,\quad
         \forall\, i,j,\quad
         h_i^{(N)}h_j^{(N)}=h_j^{(N)}h_i^{(N)},\\
@@ -559,10 +522,9 @@
         \ker H_2^{(N)}(B)
             =
             \spn\{V^{(N)}(A_j):j=1,\ldots,g\}.
-        \end{array}
-        \right]
-        \end{aligned}
-    \]
+        \end{array}\right].
+        \notag
+    \end{align}
 \end{remark}
 
 \begin{theorem}[Chain ground-space vectors are frustration-free]
@@ -572,33 +534,23 @@
     \uses{def:chain_ground_space, def:is_frustration_free}
     Assume $N>0$ and $L\le N$. Let $\psi$ be a vector in the periodic chain
     ground space $G_L^{(N)}(A)$. Then $\psi$ satisfies all local zero-energy
-    equations: for every site $i$,
-    \[
-        h_i(A,L)\psi=0.
-    \]
+    equations: for every site $i$, one has $h_i(A,L)\psi=0$.
 \end{theorem}
 
 \begin{proof}
     \leanok
     Write $R_{i,\eta}\psi$ for the cyclic length-$L$ restriction of $\psi$ at
     site $i$, with the outside configuration fixed by $\eta$. Membership in
-    $G_L^{(N)}(A)$ gives, for every $i$ and $\eta$,
-    \[
-        R_{i,\eta}\psi\in G_L(A)=\ker h_L(A).
-    \]
-    Hence
-    \[
-        h_L(A)R_{i,\eta}\psi=0.
-    \]
-    For a full configuration $\sigma$, taking
+    $G_L^{(N)}(A)$ gives
+    $R_{i,\eta}\psi\in G_L(A)=\ker h_L(A)$ for every $i$ and $\eta$. Hence
+    $h_L(A)R_{i,\eta}\psi=0$. For a full configuration $\sigma$, taking
     $\eta=\sigma|_{\{i,\ldots,i+L-1\}^c}$ gives
-    \[
-        \bigl(h_i(A,L)\psi\bigr)(\sigma)
-        =
-        \bigl(h_L(A)R_{i,\eta}\psi\bigr)
-            \bigl(\sigma|_{\{i,\ldots,i+L-1\}}\bigr)
-        =
-        0.
-    \]
+    \begin{align}
+        (h_i(A,L)\psi)(\sigma)
+        &=
+        (h_L(A)R_{i,\eta}\psi)
+            (\sigma|_{\{i,\ldots,i+L-1\}}) =0.
+        \notag
+    \end{align}
     Thus $h_i(A,L)\psi=0$ for every $i$.
 \end{proof}
