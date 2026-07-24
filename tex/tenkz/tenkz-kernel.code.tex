@@ -76,6 +76,7 @@
 \prop_new:N \l__tenkz_kernel_node_prop        % "id/field" -> value
 \prop_new:N \l__tenkz_kernel_named_prop       % user name -> record id
 \prop_new:N \l__tenkz_kernel_policy_prop      % picture policy for late passes
+\prop_new:N \l__tenkz_kernel_eq_policy_prop   % tenkzeq policy inherited by panels
 \prop_new:N \l__tenkz_kernel_cell_prop        % "r-c" -> atom id (occupancy)
 \prop_new:N \l__tenkz_kernel_trace_cell_prop  % "interface-col" -> traced segment
 \prop_new:N \l__tenkz_kernel_open_cell_prop   % "interface-col" -> opened segment
@@ -1477,6 +1478,14 @@
     \int_set:Nn \l__tenkz_kernel_col_int { 1 }
     \int_zero:N \l__tenkz_kernel_node_int
     \__tenkz_kernel_keys:nn { tenkz-kernel-picture } {#1}
+    % Equation policy is the shared outer context, so it overrides a
+    % conflicting panel spelling.  `check` was removed by eq_begin and never
+    % becomes a picture field.
+    \bool_if:NT \l__tenkz_kernel_ineq_bool
+      {
+        \prop_map_inline:Nn \l__tenkz_kernel_eq_policy_prop
+          { \prop_put:Nnn \l__tenkz_kernel_stage_prop {##1} {##2} }
+      }
     % the staged picture keys become the picture record and the policy the
     % closure pass reads after the body ran
     \prop_set_eq:NN \l__tenkz_kernel_policy_prop \l__tenkz_kernel_stage_prop
@@ -1534,6 +1543,7 @@
     \seq_gclear:N \g__tenkz_kernel_panel_kind_gseq
     \seq_gclear:N \g__tenkz_kernel_rel_gseq
     \clist_clear:N \l__tenkz_kernel_check_off_clist
+    \prop_clear:N \l__tenkz_kernel_eq_policy_prop
     \prop_clear:N \l__tenkz_kernel_stage_prop
     \__tenkz_kernel_keys:nn { tenkz-kernel-picture } {#1}
     % check={signature, off={k: reason}}: the reason is recorded, never lost
@@ -1554,6 +1564,9 @@
               }
           }
       }
+    \prop_remove:Nn \l__tenkz_kernel_stage_prop {check}
+    \prop_set_eq:NN
+      \l__tenkz_kernel_eq_policy_prop \l__tenkz_kernel_stage_prop
     \prop_clear:N \l__tenkz_kernel_stage_prop
     \char_set_catcode_active:N \=
     \char_set_active_eq:NN \= \__tenkz_kernel_eq_rel:
@@ -1625,8 +1638,8 @@
 
 % ---------- the public surface -----------------------------------------------------------------
 % \tnwire, \tnmark, \tngroup, and \tndeclare are new spellings and bind
-% globally; \tn and the environments rebind per group through \tenkzkernel
-% until the S4 swap deletes both the switch and the 0.7 bindings.
+% globally; \tn and both environment command pairs rebind locally through
+% \tenkzkernel until the S4 swap deletes the switch and the 0.7 bindings.
 
 % a closed wire takes no positional ends, so the ends are peeked, not
 % declared: two brace groups follow or none do.
@@ -1658,15 +1671,17 @@
     \__tenkz_kernel_tnmark:nnn { form = prose } { panel } {#1}
   }
 
+\NewDocumentCommand \__tenkz_kernel_env_begin_cmd { O{} }
+  { \__tenkz_kernel_begin:n {#1} }
+\NewDocumentCommand \__tenkz_kernel_eq_env_begin_cmd { O{} }
+  { \__tenkz_kernel_eq_begin:n {#1} }
 \ProvideDocumentEnvironment { tenkzeq } { O{} } { } { }
 \NewDocumentCommand \tenkzkernel { }
   {
-    \RenewDocumentEnvironment { tenkz } { O{} }
-      { \__tenkz_kernel_begin:n {##1} }
-      { \__tenkz_kernel_end: }
-    \RenewDocumentEnvironment { tenkzeq } { O{} }
-      { \__tenkz_kernel_eq_begin:n {##1} }
-      { \__tenkz_kernel_eq_end: }
+    \cs_set_eq:NN \tenkz \__tenkz_kernel_env_begin_cmd
+    \cs_set_eq:NN \endtenkz \__tenkz_kernel_end:
+    \cs_set_eq:NN \tenkzeq \__tenkz_kernel_eq_env_begin_cmd
+    \cs_set_eq:NN \endtenkzeq \__tenkz_kernel_eq_end:
     \cs_set_eq:NN \tnset \__tenkz_kernel_tnset:n
   }
 
