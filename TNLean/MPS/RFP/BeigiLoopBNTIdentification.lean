@@ -17,12 +17,14 @@ import TNLean.Wielandt.Primitivity.Equivalence
 This file develops the normal-tensor comparison needed to identify the loop-product ground
 states in Beigi's classification with the basis of normal tensors of a matrix product state.
 
-The conversion lemmas below relate the project's algebraic normality predicate to the spectral
-normal-tensor predicate of Cirac--Pérez-García--Schuch--Verstraete. They are inputs to the
-identification asserted in arXiv:1606.00608, line 1307. Their primitive-transfer ingredient is
+The conversion lemma below relates the project's algebraic normality predicate to the spectral
+normal-tensor predicate of Cirac--Pérez-García--Schuch--Verstraete. It is an input to the
+identification asserted in arXiv:1606.00608, line 1307. Its primitive-transfer ingredient is
 the equivalence between eventual full Kraus rank and strong irreducibility in
 arXiv:0909.5347, Proposition 3, together with the Perron--Frobenius theorem for irreducible
-completely positive maps (Wolf, Theorem 6.3).
+completely positive maps (Wolf, Theorem 6.3). The companion conversion from an algebraically
+normal left-canonical tensor is `isNormalTensor_of_isNormal_leftCanonical` in
+`TNLean/MPS/CanonicalForm/NormalTensorGauge.lean`.
 -/
 
 open scoped Matrix BigOperators ComplexOrder
@@ -31,34 +33,6 @@ open FiniteWeightedDigraph
 namespace MPSTensor
 
 variable {d D : ℕ}
-
-/-- An algebraically normal left-canonical tensor is a spectrally normalized normal tensor.
-
-Algebraic normality and left-canonical normalization imply strong irreducibility by
-arXiv:0909.5347, Proposition 3. Thus the transfer map has a positive-definite fixed point and
-has no unit-modulus eigenvalue other than one. The spectral normalization of
-arXiv:1606.00608, lines 224--235, then has Perron value one and does not rescale the tensor.
-This conversion is an input to the BNT identification invoked at arXiv:1606.00608, line 1307.
--/
-theorem isNormalTensor_of_isNormal_leftCanonical [NeZero D]
-    (A : MPSTensor d D) (hNormal : IsNormal A) (hLeft : IsLeftCanonical A) :
-    IsNormalTensor A := by
-  have hStrong : IsStronglyIrreduciblePaper A :=
-    isNormal_implies_stronglyIrreducible A hLeft hNormal
-  obtain ⟨ρ, hρ, hρfix⟩ := hStrong.posDef_fixedPoint
-  have hIrr : IsIrreducibleTensor A :=
-    isIrreducibleTensor_of_isIrreducibleMap A hStrong.isIrreducibleMap
-  have huniq : ∀ μ : ℂ, Module.End.HasEigenvalue (transferMap A) μ →
-      ‖μ‖ = (1 : ℝ) → μ = (1 : ℂ) := by
-    intro μ hμ hμnorm
-    have hmem : μ ∈ peripheralEigenvalues (transferMap A) := ⟨hμ, hμnorm⟩
-    rw [hStrong.peripheralEigenvalues_eq] at hmem
-    simpa using hmem
-  have hScaled : IsNormalTensor (fun i =>
-      (((Real.sqrt (1 : ℝ) : ℝ) : ℂ))⁻¹ • A i) :=
-    isNormalTensor_invSqrt_smul_of_unique_peripheral A hIrr ρ 1 hρ (by norm_num)
-      (by simpa using hρfix) huniq
-  simpa using hScaled
 
 /-- A transfer-idempotent algebraically normal tensor is a spectrally normalized normal tensor.
 
