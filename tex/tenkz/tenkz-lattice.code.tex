@@ -1444,10 +1444,9 @@
     \tenkzl_frame_setup:
     \dim_set:Nn \l__tenkzl_m_dim { \tenkz@r@latticemargin\tenkz@pitch }
     % The lattice writes its record layer once the window, sheets, and
-    % frame are final: the picture and frame records plus one atom record
-    % per surviving site, in draw order (sheet-major, bottom sheet first).
-    % Edge and region records land with the corridor follow-up; until the
-    % lattice renderer consumes records, this store changes no emission.
+    % frame are final: the picture and frame records, one atom record per
+    % surviving site, and the body's explicit edge and region declarations.
+    % The record order matches the corresponding draw passes.
     \__tenkz_model_reset:
     \__tenkz_model_record_picture:n { lang={lattice} }
     \__tenkz_model_record_frame:e
@@ -1456,6 +1455,8 @@
         cols={\int_use:N \l__tenkzl_ncols_int},
         sheets={\int_use:N \l__tenkzl_sheets_int} }
     \tenkzl_model_record_sites:
+    \tenkzl_model_record_edges:
+    \tenkzl_model_record_regions:
     \__tenkz_model_validate:
     \begin{tikzpicture}[tenkz~every~picture]
       \pgfsetlayers{background,main,tenkz-lattice-labels}
@@ -1477,7 +1478,41 @@
   {
     \__tenkz_model_record_atom:e
       { kind={site},
-        cell={#1-#2-\int_use:N \l__tenkzl_sheet_int} }
+        cell={\tenkz_cs_cellkey:nnn
+          {#1}{#2}{\int_use:N \l__tenkzl_sheet_int}} }
+  }
+
+% Explicit \tnedge declarations become ordinary WIRE records.  The implicit
+% nearest-neighbour bonds remain a separate derivation until the final S3
+% corridor; `origin=edge` keeps the two sources distinguishable meanwhile.
+\cs_new_protected:Npn \tenkzl_model_record_edges:
+  {
+    \seq_map_inline:Nn \l__tenkzl_edges_seq
+      { \tenkzl_model_record_edge:nnnnnnnnn ##1 }
+  }
+\cs_new_protected:Npn \tenkzl_model_record_edge:nnnnnnnnn
+    #1#2#3#4#5#6#7#8#9
+  {
+    \__tenkz_model_record_wire:e
+      { kind={index}, origin={edge},
+        from={\tenkz_cs_cellkey:nnn {#1}{#2}{#3}},
+        to={\tenkz_cs_cellkey:nnn {#4}{#5}{#6}},
+        style={\exp_not:n {#7}}, label={\exp_not:n {#8}}, role={#9} }
+  }
+
+% A lattice region is the LANGUAGE-1.0 enclosure MARK: membership, tint,
+% outline policy, nesting inset, and label placement are frozen together.
+\cs_new_protected:Npn \tenkzl_model_record_regions:
+  {
+    \seq_map_inline:Nn \l__tenkzl_regions_seq
+      { \tenkzl_model_record_region:nnnnnn ##1 }
+  }
+\cs_new_protected:Npn \tenkzl_model_record_region:nnnnnn #1#2#3#4#5#6
+  {
+    \__tenkz_model_record_mark:e
+      { form={enclosure}, slot={#1}, outline={#2},
+        label={\exp_not:n {#3}}, label-pos={#4},
+        members={\exp_not:n {#5}}, inset={#6} }
   }
 
 % one full genre pass over the CURRENT sheet (selected by
@@ -2858,8 +2893,26 @@
 % -- (a) regions ------------------------------------------------------
 \cs_new_protected:Npn \tenkzl_draw_regions:
   {
-    \seq_map_inline:Nn \l__tenkzl_regions_seq
-      { \tenkzl_region:nnnnnn ##1 }
+    \__tenkz_model_map_marks_form:nN {enclosure}
+      \tenkzl_draw_region_record:n
+  }
+\tl_new:N \l__tenkzl_model_outline_tl
+\tl_new:N \l__tenkzl_model_members_tl
+\cs_new_protected:Npn \tenkzl_draw_region_record:n #1
+  {
+    \__tenkz_model_get:nnN {#1} {slot}      \l__tenkzl_rslot_tl
+    \__tenkz_model_get:nnN {#1} {outline}   \l__tenkzl_model_outline_tl
+    \__tenkz_model_get:nnN {#1} {label}     \l__tenkzl_rlabel_tl
+    \__tenkz_model_get:nnN {#1} {label-pos} \l__tenkzl_rlabelat_tl
+    \__tenkz_model_get:nnN {#1} {members}   \l__tenkzl_model_members_tl
+    \__tenkz_model_get:nnN {#1} {inset}     \l__tenkzl_rinset_tl
+    \tenkzl_region:VVVVVV
+      \l__tenkzl_rslot_tl
+      \l__tenkzl_model_outline_tl
+      \l__tenkzl_rlabel_tl
+      \l__tenkzl_rlabelat_tl
+      \l__tenkzl_model_members_tl
+      \l__tenkzl_rinset_tl
   }
 
 % slot -> style
@@ -2949,6 +3002,7 @@
     \int_compare:nNnT { \l__tenkzl_sheet_int } = {0}
       { \tenkz@event{region|picture=\the\tenkz@pictureid|lang=lattice|slot=#1|cells=#5} }
   }
+\cs_generate_variant:Nn \tenkzl_region:nnnnnn { VVVVVV }
 
 % =====================================================================
 % rectilinear boundary tracer
@@ -3207,8 +3261,50 @@
 % -- (c) distinguished edges ------------------------------------------
 \cs_new_protected:Npn \tenkzl_draw_edges:
   {
-    \seq_map_inline:Nn \l__tenkzl_edges_seq
-      { \tenkzl_edge:nnnnnnnnn ##1 }
+    \__tenkz_model_map_wires_origin:nN {edge}
+      \tenkzl_draw_edge_record:n
+  }
+\tl_new:N \l__tenkzl_model_from_tl
+\tl_new:N \l__tenkzl_model_to_tl
+\tl_new:N \l__tenkzl_model_from_row_tl
+\tl_new:N \l__tenkzl_model_from_col_tl
+\tl_new:N \l__tenkzl_model_from_sheet_tl
+\tl_new:N \l__tenkzl_model_to_row_tl
+\tl_new:N \l__tenkzl_model_to_col_tl
+\tl_new:N \l__tenkzl_model_to_sheet_tl
+\cs_new_protected:Npn \tenkzl_draw_edge_record:n #1
+  {
+    \__tenkz_model_get:nnN {#1} {from}  \l__tenkzl_model_from_tl
+    \__tenkz_model_get:nnN {#1} {to}    \l__tenkzl_model_to_tl
+    \__tenkz_model_get:nnN {#1} {style} \l__tenkzl_estyle_tl
+    \__tenkz_model_get:nnN {#1} {label} \l__tenkzl_edgelabel_tl
+    \__tenkz_model_get:nnN {#1} {role}  \l__tenkzl_erole_tl
+    \exp_args:NV \tenkzl_cellkey_sheet:nN
+      \l__tenkzl_model_from_tl \l__tenkzl_hsel_int
+    \tl_set:Ne \l__tenkzl_model_from_row_tl
+      { \seq_item:Nn \l__tenkzl_parts_seq {1} }
+    \tl_set:Ne \l__tenkzl_model_from_col_tl
+      { \seq_item:Nn \l__tenkzl_parts_seq {2} }
+    \tl_set:Ne \l__tenkzl_model_from_sheet_tl
+      { \int_use:N \l__tenkzl_hsel_int }
+    \exp_args:NV \tenkzl_cellkey_sheet:nN
+      \l__tenkzl_model_to_tl \l__tenkzl_hsel_int
+    \tl_set:Ne \l__tenkzl_model_to_row_tl
+      { \seq_item:Nn \l__tenkzl_parts_seq {1} }
+    \tl_set:Ne \l__tenkzl_model_to_col_tl
+      { \seq_item:Nn \l__tenkzl_parts_seq {2} }
+    \tl_set:Ne \l__tenkzl_model_to_sheet_tl
+      { \int_use:N \l__tenkzl_hsel_int }
+    \tenkzl_edge:VVVVVVVVV
+      \l__tenkzl_model_from_row_tl
+      \l__tenkzl_model_from_col_tl
+      \l__tenkzl_model_from_sheet_tl
+      \l__tenkzl_model_to_row_tl
+      \l__tenkzl_model_to_col_tl
+      \l__tenkzl_model_to_sheet_tl
+      \l__tenkzl_estyle_tl
+      \l__tenkzl_edgelabel_tl
+      \l__tenkzl_erole_tl
   }
 % one recorded edge (r,c,h)-(r',c',h') in resolved style #7 with label
 % #8 and role word #9 (`none' when unhued), each endpoint mapped with
@@ -3233,14 +3329,14 @@
         \tl_if_blank:nF {#8}
           {
             \__tenkz_render_labelnode_named:nnnn {tn~label, anchor=south~west}
-      {tenkzl-edge-label-probe}
-      { ( \dim_eval:n
-                  { ( \l__tenkzl_qx_dim + \l__tenkzl_px_dim ) / 2
-                    + \tenkz@dim{\tenkz@r@labelclear} } ,
-                \dim_eval:n
-                  { ( \l__tenkzl_qy_dim + \l__tenkzl_py_dim ) / 2
-                    + \tenkz@dim{\tenkz@r@labelclear} } ) }
-      {#8}
+              {tenkzl-edge-label-probe}
+              { ( \dim_eval:n
+                    { ( \l__tenkzl_qx_dim + \l__tenkzl_px_dim ) / 2
+                      + \tenkz@dim{\tenkz@r@labelclear} } ,
+                  \dim_eval:n
+                    { ( \l__tenkzl_qy_dim + \l__tenkzl_py_dim ) / 2
+                      + \tenkz@dim{\tenkz@r@labelclear} } ) }
+              {#8}
             \tenkzl_record_obstacle_bbox:n {tenkzl-edge-label-probe}
           }
         % the audit rebuilds region set-algebra from these events (a
@@ -3249,6 +3345,7 @@
           {#1}{#2}{#3}|to=\tenkz_cs_cellkey:nnn {#4}{#5}{#6}|role=#9}
       }
   }
+\cs_generate_variant:Nn \tenkzl_edge:nnnnnnnnn { VVVVVVVVV }
 
 % -- (d) site glyphs --------------------------------------------------
 % An op sheet's boxes defer to the cover pass (\tenkzl_draw_opsites:,
@@ -3463,15 +3560,16 @@
       {
         \tenkzl_site:nn {#1}{#2}
         \begin{pgfonlayer}{tenkz-lattice-labels}
-          \__tenkz_render_labelnode_named:nnnn {tn~label, anchor=south~west, fill=tenkzPaper}
-      {tenkzl-site-label-probe}
-      { ( \dim_eval:n { \l__tenkzl_px_dim
-                            + \tenkz@dim{\tenkz@r@dotdia} / 2
-                            + \tenkz@dim{\tenkz@r@labelclear} } ,
-              \dim_eval:n { \l__tenkzl_py_dim
-                            + \tenkz@dim{\tenkz@r@dotdia} / 2
-                            + \tenkz@dim{\tenkz@r@labelclear} } ) }
-      {#4}
+          \__tenkz_render_labelnode_named:nnnn
+            {tn~label, anchor=south~west, fill=tenkzPaper}
+            {tenkzl-site-label-probe}
+            { ( \dim_eval:n { \l__tenkzl_px_dim
+                              + \tenkz@dim{\tenkz@r@dotdia} / 2
+                              + \tenkz@dim{\tenkz@r@labelclear} } ,
+                \dim_eval:n { \l__tenkzl_py_dim
+                              + \tenkz@dim{\tenkz@r@dotdia} / 2
+                              + \tenkz@dim{\tenkz@r@labelclear} } ) }
+            {#4}
         \end{pgfonlayer}
         \tenkzl_record_site_label_bbox:nnn {#1}{#2}{#3}
       }
@@ -3689,9 +3787,10 @@
               { ( \tenkzl_cy:n{\l__tenkzl_rmin_int}
                  + \tenkzl_cy:n{\l__tenkzl_rmax_int} ) / 2 }
             \__tenkz_render_labelnode_named:nnnn {tn~label, anchor=center}
-      {tenkzl-region-label-probe}
-      { ( \dim_use:N \l__tenkzl_px_dim , \dim_use:N \l__tenkzl_py_dim ) }
-      { $#2$ }
+              {tenkzl-region-label-probe}
+              { ( \dim_use:N \l__tenkzl_px_dim ,
+                  \dim_use:N \l__tenkzl_py_dim ) }
+              { $#2$ }
             \tenkzl_record_obstacle_bbox:n {tenkzl-region-label-probe} }
       }
   }

@@ -61,7 +61,7 @@ def tracked_lean_files(repo_root: Path) -> list[Path]:
     ]
 
 
-def strip_comments_and_strings(source: str) -> str:
+def strip_lean_comments_and_strings(source: str) -> str:
     result: list[str] = []
     i = 0
     block_depth = 0
@@ -130,7 +130,7 @@ def count_pattern(files: list[Path], pattern: re.Pattern[str]) -> int:
     count = 0
     for path in files:
         source = path.read_text(encoding="utf-8")
-        count += len(pattern.findall(strip_comments_and_strings(source)))
+        count += len(pattern.findall(strip_lean_comments_and_strings(source)))
     return count
 
 

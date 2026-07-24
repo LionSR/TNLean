@@ -24,6 +24,10 @@ on:
       - 'scripts/write_badges.py'
       - 'scripts/tenkz_audit.py'
       - 'scripts/tenkz_lint.py'
+      - 'scripts/tenkz_rmp.py'
+      - 'scripts/tenkzlib/**'
+      - 'scripts/test_tnlog.py'
+      - 'scripts/test_texcase.py'
       - 'scripts/test_tenkz_pic.py'
       - 'scripts/test_tenkz_equation_audit.py'
   workflow_dispatch:
@@ -61,6 +65,8 @@ jobs:
             'tex/tenkz/examples/*.tex'
           python3 scripts/test_tenkz_pic.py
           python3 scripts/test_tenkz_equation_audit.py
+          python3 scripts/test_tnlog.py
+          python3 scripts/test_texcase.py
 
       - name: Build blueprint bibliography
         run: python3 scripts/blueprint_bibtex.py

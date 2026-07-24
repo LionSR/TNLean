@@ -1,7 +1,7 @@
 % Input: validated picture, atom, wire, mark, and frame declarations from front ends.
 % Output: normalized semantic records addressable by picture-local stable identifiers.
 % Owned state: the record store, class sequences, id counter, and validation phase flag.
-% Invariants: records contain no unparsed user syntax; topology is immutable after validation.
+% Invariants: records are normalized before validation; topology is immutable after validation.
 % Next stage: style and geometry resolve metrics and silhouettes from these records.
 %
 % The record classes follow LANGUAGE-1.0.md: PICTURE, ATOM, WIRE, MARK, plus
@@ -79,6 +79,16 @@
   {
     \prop_put:Nen \l__tenkz_model_record_prop
       { \l__tenkz_model_last_tl / #1 } {#2}
+  }
+
+% Complete a staged record field after a front end has consumed its whole
+% declaration scope.  Policy-sensitive syntax cannot be normalized while the
+% body is still establishing that policy; validation remains the hard freeze.
+\cs_new_protected:Npn \__tenkz_model_complete:nnn #1#2#3
+  {
+    \bool_if:NTF \l__tenkz_model_validated_bool
+      { \msg_error:nn {tenkz}{model-frozen} }
+      { \prop_put:Nee \l__tenkz_model_record_prop {#1/#2} {#3} }
   }
 
 % Public-to-the-package constructors, one per record class.  Field
@@ -175,6 +185,19 @@
       {
         \__tenkz_model_get:nnN {##1} {origin} \l__tenkz_model_origin_tl
         \str_if_eq:eeT { \tl_use:N \l__tenkz_model_origin_tl } {#1}
+          { #2 {##1} }
+      }
+  }
+
+% Apply function #2 to every mark of form #1.  Dialect render passes use the
+% shared MARK class without accidentally consuming unrelated annotations.
+\tl_new:N \l__tenkz_model_form_tl
+\cs_new_protected:Npn \__tenkz_model_map_marks_form:nN #1#2
+  {
+    \seq_map_inline:Nn \l__tenkz_model_mark_seq
+      {
+        \__tenkz_model_get:nnN {##1} {form} \l__tenkz_model_form_tl
+        \str_if_eq:eeT { \tl_use:N \l__tenkz_model_form_tl } {#1}
           { #2 {##1} }
       }
   }

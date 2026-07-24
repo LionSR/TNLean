@@ -37,6 +37,7 @@ from tenkz_language import (  # noqa: E402
     _parser_leaf_keys,
     _parser_leaf_keys_from_texts,
 )
+from tenkzlib.texcase import strip_comments  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[1]
 BASELINE = ROOT / "tests/tenkz/census-baseline.json"
@@ -57,18 +58,6 @@ _SCOPE_COMMANDS = {
 _SETUP_COMMAND_FORWARDS = {
     "tntree": {"pitch", "compact", "inline"},
 }
-
-
-def strip_comments(text: str) -> str:
-    out = []
-    for line in text.splitlines():
-        cut = len(line)
-        for index, char in enumerate(line):
-            if char == "%" and (index == 0 or line[index - 1] != "\\"):
-                cut = index
-                break
-        out.append(line[:cut])
-    return "\n".join(out)
 
 
 def manifest_case_paths() -> list[Path]:
