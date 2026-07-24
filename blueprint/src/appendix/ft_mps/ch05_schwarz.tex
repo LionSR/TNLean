@@ -1,11 +1,221 @@
 \chapter{Schwarz Inequalities and Multiplicative Domains: Supporting Results}
 \label{ch:schwarz_supporting_results}
 
-This appendix supports Chapter~\ref{ch:schwarz}. It records the rank-one
-rigidity argument used to identify the scalar factor in a positive retraction.
+This appendix supports Chapter~\ref{ch:schwarz} by collecting the elementary
+order, trace-duality, rank-one, and weighted-trace arguments used there.
 
-The following theorem supplies the scalarity step in
-Theorem~\ref{thm:positive_retraction_one_matrix_factor}.
+\section{Trace duality and elementary order preservation}
+\label{sec:app_schwarz_trace_order}
+
+Let $T$ denote a positive linear map between matrix algebras. For a linear map
+$E:\MN{D}\to\MN{D'}$, write $E^*$ for the trace-pairing adjoint of
+Definition~\ref{def:trace_pairing_adjoint}. The results below supply the
+order step in Theorem~\ref{thm:positive_map_image_bounded}, the adjointness step
+in Theorem~\ref{thm:trace_pairing_adjoint_ampliation}, and the positivity step
+in Theorem~\ref{thm:k_positive_trace_pairing_adjoint}. Adjoint preservation is
+also used in Theorem~\ref{thm:maximalSupport_fixedPoint_of_bounded_orbits}.
+
+\begin{theorem}[Positive maps are monotone]
+    \label{thm:positive_map_monotone}
+    \lean{IsPositiveMap.map_le_map}
+    \leanok
+    \uses{def:positive_map}
+    If $T:\MN{n}\to\MN{m}$ is positive and
+    $A,B\in\MN{n}$ satisfy $A\le B$, then $T(A)\le T(B)$ in $\MN{m}$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Since $B-A\ge0$, positivity gives $T(B-A)\ge0$.
+    By linearity, this is $T(B)-T(A)\ge0$.
+\end{proof}
+
+\begin{theorem}[Positive maps preserve adjoints]
+    \label{thm:positive_map_conjTranspose}
+    \lean{IsPositiveMap.map_conjTranspose}
+    \leanok
+    \uses{def:positive_map_is_positive_linear_map}
+    If $T:\MN{n}\to\MN{m}$ is positive, then
+    $T(A^\dagger)=T(A)^\dagger$ for all $A\in\MN{n}$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Regard $T$ as the associated positive linear map
+    (Definition~\ref{def:positive_map_is_positive_linear_map}). For positive
+    linear maps between matrix $C^*$-algebras, $T(A^\ast)=T(A)^\ast$.
+    Since the star on each matrix algebra is the conjugate transpose,
+    $T(A^\dagger)=T(A^\ast)=T(A)^\ast=T(A)^\dagger$.
+\end{proof}
+
+\begin{theorem}[Trace-pairing adjoint identity]\label{thm:trace_pairing_adjoint_identity}
+    \lean{Matrix.trace_traceAdjointMap_mul}
+    \leanok
+    \uses{def:trace_pairing_adjoint}
+    For every linear map $E : \MN{D} \to \MN{D'}$, every $\rho \in \MN{D'}$,
+    and every $X \in \MN{D}$, one has
+    \begin{align}
+        \tr(E^*(\rho)X)
+         & =\tr(\rho E(X)).
+        \label{eq:schwarz_trace_adjoint_pairing}
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Write $X=\sum_{i,j}X_{ij}e_{ij}$ in the standard matrix units and use
+    linearity in $X$. For $X=e_{ij}$ one has
+    $\tr(E^*(\rho)e_{ij})=(E^*(\rho))_{ji}$, while the definition of $E^*$
+    gives $(E^*(\rho))_{ji}=\tr(\rho E(e_{ij}))$.
+\end{proof}
+
+\begin{theorem}[Trace-pairing adjoint is involutive]\label{thm:trace_pairing_adjoint_involutive}
+    \lean{Matrix.traceAdjointMap_traceAdjointMap}
+    \leanok
+    \uses{def:trace_pairing_adjoint, thm:trace_nondeg}
+    For every linear map $E : \MN{D} \to \MN{D'}$, the trace-pairing adjoint
+    of $E^*$ is $E$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Fix $X\in\MN{D}$ and an arbitrary matrix $N\in\MN{D'}$. Applying
+    (\ref{eq:schwarz_trace_adjoint_pairing}) first to
+    $E^* : \MN{D'} \to \MN{D}$ and then to $E$ gives
+    \begin{align}
+        \tr((E^*)^*(X)N)
+         & =\tr(XE^*(N))
+        =\tr(E^*(N)X)
+        =\tr(NE(X))
+        =\tr(E(X)N).
+        \notag
+    \end{align}
+    Both $(E^*)^*(X)$ and $E(X)$ lie in $\MN{D'}$, so, since this holds for
+    every $N\in\MN{D'}$, nondegeneracy of the trace pairing on $\MN{D'}$
+    gives $(E^*)^*=E$.
+\end{proof}
+
+\begin{theorem}[Self-duality of the positive semidefinite cone]
+    \label{thm:psd_trace_pairing_self_dual}
+    \lean{Matrix.PosSemidef.of_forall_trace_mul_nonneg}
+    \leanok
+    Let $A \in \MN{D}$ be Hermitian. If $\tr(AB)\geq 0$ for every
+    positive semidefinite matrix $B$, then $A\geq 0$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Test the hypothesis on rank-one positive semidefinite matrices
+    $B=xx^\dagger$. The identity $\tr(Axx^\dagger)=x^\dagger A x$ and the
+    hypothesis give $x^\dagger A x\geq 0$ for every vector $x$, so the
+    Hermitian matrix $A$ is positive semidefinite.
+\end{proof}
+
+\begin{theorem}[Trace-pairing adjoint of a positive map]\label{thm:trace_pairing_adjoint_positive}
+    \lean{IsPositiveMap.traceAdjointMap}
+    \leanok
+    \uses{def:trace_pairing_adjoint, thm:psd_trace_pairing_self_dual}
+    If $E : \MN{D}\to\MN{D}$ is positive, then its trace-pairing adjoint $E^*$
+    is positive.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:positive_map_conjTranspose}
+    Let $\rho\geq 0$. First $E^*(\rho)$ is Hermitian. Indeed,
+    Theorem~\ref{thm:positive_map_conjTranspose} gives
+    $E(A^\dagger)=E(A)^\dagger$, and hence, for matrix units
+    $e_{ij}$,
+    \begin{align}
+        \overline{\tr(\rho E(e_{ij}))}
+         & =\tr(E(e_{ij})^\dagger\rho)
+        =\tr(E(e_{ji})\rho)
+        =\tr(\rho E(e_{ji})).
+        \notag
+    \end{align}
+    For every $B\geq 0$, (\ref{eq:schwarz_trace_adjoint_pairing}) gives
+    $\tr(E^*(\rho)B)=\tr(\rho E(B))$.
+    Since $E(B)\geq 0$, the right-hand side is non-negative by positivity of
+    the trace product of two positive semidefinite matrices. Self-duality of
+    the positive semidefinite cone therefore gives $E^*(\rho)\geq 0$.
+\end{proof}
+
+\begin{theorem}[Trace-pairing adjoints preserve positivity exactly]\label{thm:trace_pairing_adjoint_positive_iff}
+    \lean{isPositiveMap_traceAdjointMap_iff}
+    \leanok
+    \uses{thm:trace_pairing_adjoint_positive, thm:trace_pairing_adjoint_involutive}
+    A linear map is positive if and only if its trace-pairing adjoint is
+    positive.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    One direction is Theorem~\ref{thm:trace_pairing_adjoint_positive}. The
+    other follows by applying the same theorem to $E^*$ and using
+    Theorem~\ref{thm:trace_pairing_adjoint_involutive}.
+\end{proof}
+
+\section{Positive functionals and rank-one retractions}
+\label{sec:app_schwarz_retractions}
+
+The next three results provide, respectively, the density, support, and
+scalarity steps in Theorem~\ref{thm:positive_retraction_one_matrix_factor} and
+hence in its finite-star-algebra extension,
+Theorem~\ref{thm:positive_retraction_finite_star_algebra}.
+
+\begin{theorem}[Density representation of positive matrix functionals]
+    \label{thm:positive_functional_density_representation}
+    \lean{Matrix.exists_density_of_positive_functional}
+    \leanok
+    Let $f : \MN{D} \to \C$ be a complex-linear functional, where $D>0$. If
+    $f(X) \geq 0$ for every $X \geq 0$ and $f(\Id)=1$, then there is a density
+    matrix $\rho \in \MN{D}$ such that
+    $f(X) = \tr(\rho X)$ for every $X \in \MN{D}$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:trace_pairing_adjoint_identity, thm:trace_pairing_adjoint_positive}
+    Define $F : \MN{D} \to \MN{D}$ by $F(X) = f(X)\Id$. For $X \geq 0$ one has
+    $f(X) \geq 0$, so $F(X) = f(X)\Id \geq 0$ and $F$ is positive.
+    Set $\sigma = D^{-1}\Id$ and $\rho = F^*(\sigma)$. Positivity of the
+    trace-pairing adjoint gives $\rho \geq 0$, while
+    (\ref{eq:schwarz_trace_adjoint_pairing}) gives
+    \begin{align}
+        \tr(\rho X)
+         & =\tr(\sigma F(X))
+        =f(X).
+        \notag
+    \end{align}
+    Taking $X = \Id$ yields $\tr(\rho) = 1$.
+\end{proof}
+
+\begin{lemma}[Rank-one domination]
+    \label{lem:posSemidef_rankone_domination}
+    \lean{Matrix.PosSemidef.eq_nonneg_smul_vecMulVec_of_le_smul_vecMulVec}
+    \leanok
+    Let $A\in\MN{D}$ be positive semidefinite, let $c\in\C$, and let
+    $\psi\in\C^D$. If $A\leq c\ketbra{\psi}{\psi}$, then there is a
+    non-negative scalar $a$ such that $A=a\ketbra{\psi}{\psi}$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    The assertion is immediate when $\psi=0$. Otherwise set
+    $s=\langle\psi,\psi\rangle$, $P=\ketbra{\psi}{\psi}$, and $Q=s^{-1}P$.
+    Then $Q$ is the orthogonal projection onto $\C\psi$. Write
+    $B=cP-A\geq0$. Since $A+B=cP$ vanishes on the kernel of $Q$, positivity
+    implies $A(\Id-Q)=0$.
+    Taking adjoints gives $(\Id-Q)A=0$, and therefore $A=QAQ$. Finally,
+    \begin{align}
+        PAP
+         & =\langle\psi,A\psi\rangle P, \notag \\
+        A
+         & =s^{-2}\langle\psi,A\psi\rangle P.
+        \notag
+    \end{align}
+    The coefficient is non-negative because $A\geq0$ and $s>0$.
+\end{proof}
 
 \begin{theorem}[Rank-one ray scalar rigidity]
     \label{thm:rankone_ray_scalar_rigidity}
@@ -60,6 +270,28 @@ Theorem~\ref{thm:positive_retraction_one_matrix_factor}.
     gives $T(E_{ij})=cE_{ij}$. Thus $T=c\,\id$ on every matrix unit.
 \end{proof}
 
-Thus rank-one domination in
-Theorem~\ref{thm:positive_retraction_one_matrix_factor} produces one scalar
-functional rather than a vector-dependent family of coefficients.
+The rank-one domination and rigidity results turn the vector-dependent
+coefficients in the one-factor retraction into a single positive functional;
+the density representation identifies that functional with a density matrix.
+
+\section{Faithful weighted traces and peripheral Schwarz equality}
+\label{sec:app_schwarz_weighted_ks}
+
+These two trace facts provide the adjointness and faithfulness steps in
+Theorem~\ref{thm:ks_equality_of_peripheral_eigenvector_of_fixedPoint}. For the
+Kraus map $E$, write $E^*$ for its Kraus adjoint and let $\rho>0$ denote the
+faithful fixed point used there.
+
+\begin{lemma}[Trace pairing for Kraus map and adjoint map]\label{lem:trace_mul_map_eq_trace_adjointMap_mul}
+    \lean{Kraus.trace_mul_map_eq_trace_adjointMap_mul}
+    \leanok
+    \uses{def:kraus_map, def:kraus_adjoint_map}
+    For all $X, Y \in \MN{D}$,
+    $\tr\!(X\,E(Y)) = \tr\!(E^*(X)\,Y)$.
+\end{lemma}
+
+\begin{lemma}[Positive-definite trace test]\label{lem:posSemidef_eq_zero_of_posDef_trace_mul_eq_zero}
+    \lean{Kraus.posSemidef_eq_zero_of_posDef_trace_mul_eq_zero}
+    \leanok
+    If $A > 0$, $X \ge 0$, and $\tr(A X) = 0$, then $X = 0$.
+\end{lemma}

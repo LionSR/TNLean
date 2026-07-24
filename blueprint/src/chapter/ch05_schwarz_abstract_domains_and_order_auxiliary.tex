@@ -10,7 +10,7 @@
     inequality if, for every $A\in\MN{D}$,
     \begin{align}
         E(A^\dagger A)-E(A^\dagger)E(A)
-        &\succeq 0.
+         & \succeq 0.
         \label{eq:schwarz_abstract_inequality}
     \end{align}
     This is \cite[Equation~(5.2)]{Wolf2012Quantum}.
@@ -25,11 +25,11 @@
     For a complex-linear map $E:\MN{D}\to\MN{D}$, set
     \begin{align}
         \mc{A}_R(E)
-        &=\{A:E(XA)=E(X)E(A)\text{ for every }X\}, \notag\\
+         & =\{A:E(XA)=E(X)E(A)\text{ for every }X\}, \notag \\
         \mc{A}_L(E)
-        &=\{A:E(AX)=E(A)E(X)\text{ for every }X\}, \notag\\
+         & =\{A:E(AX)=E(A)E(X)\text{ for every }X\}, \notag \\
         \mc{A}(E)
-        &=\mc{A}_R(E)\cap\mc{A}_L(E).
+         & =\mc{A}_R(E)\cap\mc{A}_L(E).
         \notag
     \end{align}
     These are \cite[Equations~(5.11)--(5.12)]{Wolf2012Quantum}, with the
@@ -48,10 +48,10 @@
     If $E$ satisfies the Schwarz inequality, then
     \begin{align}
         A\in\mc{A}_R(E)
-        &\quad\Longleftrightarrow\quad
-        E(A^\dagger A)=E(A^\dagger)E(A), \notag\\
+         & \quad\Longleftrightarrow\quad
+        E(A^\dagger A)=E(A^\dagger)E(A), \notag \\
         A\in\mc{A}_L(E)
-        &\quad\Longleftrightarrow\quad
+         & \quad\Longleftrightarrow\quad
         E(AA^\dagger)=E(A)E(A^\dagger).
         \notag
     \end{align}
@@ -66,22 +66,22 @@
     (\ref{eq:schwarz_abstract_inequality}) to $A+tY$ and $A+itY$ for real
     $t$. Set
     \begin{align}
-        L&=E(A^\dagger Y)-E(A^\dagger)E(Y), \notag\\
-        R&=E(Y^\dagger A)-E(Y^\dagger)E(A), \notag\\
-        Q&=E(Y^\dagger Y)-E(Y^\dagger)E(Y)\succeq0.
+        L & =E(A^\dagger Y)-E(A^\dagger)E(Y), \notag  \\
+        R & =E(Y^\dagger A)-E(Y^\dagger)E(A), \notag  \\
+        Q & =E(Y^\dagger Y)-E(Y^\dagger)E(Y)\succeq0.
         \notag
     \end{align}
     Expansion and the equality at $A^\dagger A$ give, for every real $t$,
     \begin{align}
-        t(L+R)+t^2Q&\succeq0, \notag\\
-        it(L-R)+t^2Q&\succeq0.
+        t(L+R)+t^2Q  & \succeq0, \notag \\
+        it(L-R)+t^2Q & \succeq0.
         \notag
     \end{align}
     Nonnegativity for both signs of every real parameter forces $L+R=0$ and
     $L-R=0$. Hence $L=R=0$, which is precisely
     \begin{align}
-        E(A^\dagger Y)&=E(A^\dagger)E(Y), \notag\\
-        E(Y^\dagger A)&=E(Y^\dagger)E(A).
+        E(A^\dagger Y) & =E(A^\dagger)E(Y), \notag \\
+        E(Y^\dagger A) & =E(Y^\dagger)E(A).
         \notag
     \end{align}
     Replacing $Y$ by $X^\dagger$ yields $E(XA)=E(X)E(A)$.
@@ -107,7 +107,7 @@
     (\ref{eq:schwarz_kadison}) therefore gives, for every $A\in\MN{D}$,
     \begin{align}
         E(A^\dagger A)-E(A^\dagger)E(A)
-        &=E(A^\dagger A)-E(A)^\dagger E(A)\succeq0.
+         & =E(A^\dagger A)-E(A)^\dagger E(A)\succeq0.
         \notag
     \end{align}
 \end{proof}
@@ -123,10 +123,10 @@
     For a Kraus map $E$, define
     \begin{align}
         \mc{A}_R(E)
-        &:=\{X\in\MN{D}:\forall Y\in\MN{D},\
-        E(XY)=E(X)E(Y)\}, \notag\\
+         & :=\{X\in\MN{D}:\forall Y\in\MN{D},\
+        E(XY)=E(X)E(Y)\}, \notag               \\
         \mc{A}_L(E)
-        &:=\{X\in\MN{D}:\forall Y\in\MN{D},\
+         & :=\{X\in\MN{D}:\forall Y\in\MN{D},\
         E(YX)=E(Y)E(X)\}.
         \notag
     \end{align}
@@ -161,9 +161,9 @@
     Kraus convention of this subsection. For the linear map associated with
     a Kraus family,
     \begin{align}
-        \mc{A}_R^{\mathrm W}&=\mc{A}_L^{\mathrm K}, \notag\\
-        \mc{A}_L^{\mathrm W}&=\mc{A}_R^{\mathrm K}, \notag\\
-        \mc{A}^{\mathrm W}&=\mc{A}^{\mathrm K}.
+        \mc{A}_R^{\mathrm W} & =\mc{A}_L^{\mathrm K}, \notag \\
+        \mc{A}_L^{\mathrm W} & =\mc{A}_R^{\mathrm K}, \notag \\
+        \mc{A}^{\mathrm W}   & =\mc{A}^{\mathrm K}.
         \notag
     \end{align}
 \end{remark}
@@ -177,10 +177,10 @@
     Let $E$ be a unital Kraus map. Then
     \begin{align}
         X\in\mc{A}_R(E)
-        &\quad\Longleftrightarrow\quad
-        E(XX^\dagger)=E(X)E(X)^\dagger, \notag\\
+         & \quad\Longleftrightarrow\quad
+        E(XX^\dagger)=E(X)E(X)^\dagger, \notag \\
         X\in\mc{A}_L(E)
-        &\quad\Longleftrightarrow\quad
+         & \quad\Longleftrightarrow\quad
         E(X^\dagger X)=E(X)^\dagger E(X).
         \notag
     \end{align}
@@ -235,8 +235,8 @@
     \uses{thm:md_characterization, thm:one_sided_md_subalgebras}
     If $X\in\mc{A}(E)=\mc{A}_R(E)\cap\mc{A}_L(E)$, then
     \begin{align}
-        E(X^\dagger X)&=E(X)^\dagger E(X), \notag\\
-        E(XX^\dagger)&=E(X)E(X)^\dagger.
+        E(X^\dagger X) & =E(X)^\dagger E(X), \notag \\
+        E(XX^\dagger)  & =E(X)E(X)^\dagger.
         \notag
     \end{align}
     The characterization of Theorem~\ref{thm:md_characterization} shows that
@@ -267,38 +267,8 @@
 
 \subsection{Positive maps preserve order and spectral intervals}
 
-\begin{theorem}[Positive maps are monotone]
-    \label{thm:positive_map_monotone}
-    \lean{IsPositiveMap.map_le_map}
-    \leanok
-    \uses{def:positive_map}
-    If $T:\MN{n}\to\MN{m}$ is positive and
-    $A,B\in\MN{n}$ satisfy $A\le B$, then $T(A)\le T(B)$ in $\MN{m}$.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    Since $B-A\ge0$, positivity gives $T(B-A)\ge0$.
-    By linearity, this is $T(B)-T(A)\ge0$.
-\end{proof}
-
-\begin{theorem}[Positive maps preserve adjoints]
-    \label{thm:positive_map_conjTranspose}
-    \lean{IsPositiveMap.map_conjTranspose}
-    \leanok
-    \uses{def:positive_map_is_positive_linear_map}
-    If $T:\MN{n}\to\MN{m}$ is positive, then
-    $T(A^\dagger)=T(A)^\dagger$ for all $A\in\MN{n}$.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    Regard $T$ as the associated positive linear map
-    (Definition~\ref{def:positive_map_is_positive_linear_map}). For positive
-    linear maps between matrix $C^*$-algebras, $T(A^\ast)=T(A)^\ast$.
-    Since the star on each matrix algebra is the conjugate transpose,
-    $T(A^\dagger)=T(A^\ast)=T(A)^\ast=T(A)^\dagger$.
-\end{proof}
+The elementary order-preservation results used below are proved in
+Section~\ref{sec:app_schwarz_trace_order}.
 
 \begin{theorem}[Order intervals are preserved]
     \label{thm:positive_map_image_bounded}
@@ -309,7 +279,7 @@
     If $a\le0\le b$ and $a\Id\le A\le b\Id$, then
     \begin{align}
         a\Id
-        &\le T(A)\le b\Id.
+         & \le T(A)\le b\Id.
         \label{eq:schwarz_order_interval}
     \end{align}
     This is the matrix form of \cite[Equation~(5.21)]{Wolf2012Quantum}.
@@ -318,7 +288,8 @@
 \begin{proof}
     \leanok
     \uses{thm:positive_map_monotone}
-    By monotonicity, $T(a\Id)\le T(A)\le T(b\Id)$.
+    By Theorem~\ref{thm:positive_map_monotone},
+    $T(a\Id)\le T(A)\le T(b\Id)$.
     For the lower bound, $T(a\Id)=aT(\Id)$.
     Since $a\le0$ and $T(\Id)\le\Id$, one has $aT(\Id)\ge a\Id$.
     For the upper bound, $T(b\Id)=bT(\Id)\le b\Id$ since $b\ge0$.
@@ -335,7 +306,7 @@
     If $\spec(A)\subseteq[a,b]$ with $a\le0\le b$, then
     \begin{align}
         \spec(T(A))
-        &\subseteq[a,b].
+         & \subseteq[a,b].
         \notag
     \end{align}
     This is \cite[Equation~(5.21)]{Wolf2012Quantum}.
