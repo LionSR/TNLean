@@ -341,11 +341,16 @@ def expand_args(args: list[str]) -> list[Path]:
 # --- Implementation census (advisory) ---------------------------------------
 #
 # Two debt meters over tex/tenkz/*.code.tex, reported per file and never
-# fatal.  The rebuild drives both to zero: once the renderer stage exists,
-# ink primitives outside RENDER_STAGE_FILES and decimal literals outside the
+# fatal.  The renderer-primitive lockout additionally scans every package
+# .tex/.sty source, including the load map and generated language registry.
+# The rebuild drives both meters to zero: once the renderer stage exists, ink
+# primitives outside RENDER_STAGE_FILES and decimal literals outside the
 # metric table become hard errors and these counts become the ratchet.
 
 RENDER_STAGE_FILES = {"tenkz-render.code.tex"}
+# The metric registry IS the table of named constants; its decimals are
+# the point, not the debt.
+METRIC_TABLE_FILES = {"tenkz-metric.code.tex"}
 # The pgf alternative names DRAWING primitives only; the pgfkeys keyval
 # machinery is parser plumbing that legitimately lives outside the renderer.
 _INK_TOKEN = re.compile(
@@ -357,25 +362,52 @@ _DECIMAL = re.compile(r"(?<![\w@.])\d*\.\d+")
 # Only metric-table DEFINITIONS are exempt; a stray literal multiplying a
 # metric macro in drawing code is exactly the debt this meter measures.
 _METRIC_LINE = re.compile(r"\\def\\tenkz@(?:r@[a-z]+|basepitch|pitch)\b|\\tenkz@pitch=")
+_RENDER_PRIMITIVE_REF = re.compile(r"\\__tenkz_ink_[A-Za-z@:_]+")
 
 
 def census(repo: Path) -> int:
     ink_total = decimal_total = 0
-    for path in sorted((repo / "tex" / "tenkz").glob("*.code.tex")):
-        if path.name in RENDER_STAGE_FILES:
-            continue
+    primitive_violations: list[tuple[Path, int, str]] = []
+    package_dir = repo / "tex" / "tenkz"
+    package_sources = sorted(
+        path for path in package_dir.iterdir()
+        if path.is_file() and path.suffix in {".tex", ".sty"}
+    )
+    for path in package_sources:
+        is_census_source = path.name.endswith(".code.tex")
+        is_renderer = path.name in RENDER_STAGE_FILES
         ink = decimals = 0
-        for line in strip_comments(path.read_text(encoding="utf-8")).splitlines():
-            ink += len(_INK_TOKEN.findall(line))
+        for lineno, line in enumerate(
+            strip_comments(path.read_text(encoding="utf-8")).splitlines(), 1
+        ):
+            if not is_renderer:
+                if is_census_source:
+                    ink += len(_INK_TOKEN.findall(line))
+                primitive_violations.extend(
+                    (path, lineno, match.group())
+                    for match in _RENDER_PRIMITIVE_REF.finditer(line)
+                )
+            if not is_census_source:
+                continue
+            if path.name in METRIC_TABLE_FILES:
+                continue
             if not _METRIC_LINE.search(line):
                 decimals += len(_DECIMAL.findall(line))
+        if not is_census_source:
+            continue
         ink_total += ink
         decimal_total += decimals
         print(f"tenkz-census: {path.name}: {ink} ink token(s), "
               f"{decimals} decimal literal(s) outside the metric table")
     print(f"tenkz-census: WARN totals: {ink_total} ink token(s) outside the "
           f"render stage, {decimal_total} stray decimal literal(s)")
-    return 0
+    for path, lineno, primitive in primitive_violations:
+        print(
+            f"{path}:{lineno}: FAIL: render primitive {primitive} is owned by "
+            "tenkz-render.code.tex",
+            file=sys.stderr,
+        )
+    return 1 if primitive_violations else 0
 
 
 def main(argv: list[str]) -> int:

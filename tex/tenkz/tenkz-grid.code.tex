@@ -1380,6 +1380,161 @@
     #2~pairing~interface(s),~numbered~top-down~per~adjacent~facing~
     pair:~no~segment~matches.
   }
+% ---------- model ownership and bond derivation -----------------------------
+% Ownership is topology, not drawing bookkeeping.  Resolve it from the parsed
+% cells before validation so the implicit-bond pass sees wide, tall, and
+% fusion continuations without depending on the later node-placement pass.
+\tl_new:N \l__tenkz_mdo_kind_tl
+\cs_new_protected:Npn \tenkz_validate_fuse_combined:
+  {
+    \tl_if_empty:NF \l__tenkz_fcombined_tl
+      {
+        \bool_lazy_or:nnF
+          { \str_if_eq_p:Vn \l__tenkz_fcombined_tl {west} }
+          { \str_if_eq_p:Vn \l__tenkz_fcombined_tl {east} }
+          {
+            \bool_set_false:N \l__tenkz_celloptsvalid_bool
+            \PackageError{tenkz}
+              {combined=\tl_use:N \l__tenkz_fcombined_tl
+                \c_space_tl is~not~a~fusion~side}
+              {Use~combined=west~or~combined=east~on~a~fusion~bar.}
+          }
+      }
+  }
+\cs_new_protected:Npn \tenkz_model_record_owner:nn #1#2
+  {
+    \tenkz_get:NnN \l__tenkz_opts_prop {#1-#2} \l_tmpa_tl
+    \exp_args:NV \tenkz_cell_opts:n \l_tmpa_tl
+    \str_if_eq:VnT \l__tenkz_mdo_kind_tl {fuse}
+      { \tenkz_validate_fuse_combined: }
+    \bool_if:NTF \l__tenkz_celloptsvalid_bool
+      {
+        \str_case:Vn \l__tenkz_mdo_kind_tl
+          {
+            {tn}
+              {
+                \int_step_inline:nnn {#2} {#2 + \l__tenkz_cwide_int - 1}
+                  { \prop_put:Nnn \l__tenkz_owner_prop {#1-##1} {#2} }
+                \int_step_inline:nnn {#1 + 1} {#1 + \l__tenkz_cwires_int - 1}
+                  {
+                    \prop_put:Nen \l__tenkz_kind_prop {##1-#2} {tnv}
+                    \int_step_inline:nnn {#2} {#2 + \l__tenkz_cwide_int - 1}
+                      { \prop_put:Nen \l__tenkz_owner_prop {##1-####1} {#2} }
+                  }
+              }
+            {tnc}
+              {
+                \int_step_inline:nnn {#2} {#2 + \l__tenkz_cwide_int - 1}
+                  { \prop_put:Nnn \l__tenkz_owner_prop {#1-##1} {#2} }
+                \int_step_inline:nnn {#1 + 1} {#1 + \l__tenkz_cwires_int - 1}
+                  {
+                    \prop_put:Nen \l__tenkz_kind_prop {##1-#2} {tnv}
+                    \int_step_inline:nnn {#2} {#2 + \l__tenkz_cwide_int - 1}
+                      { \prop_put:Nen \l__tenkz_owner_prop {##1-####1} {#2} }
+                  }
+              }
+            {tnx}
+              {
+                \prop_put:Nnn \l__tenkz_owner_prop {#1-#2} {#2}
+                \int_step_inline:nnn {#1 + 1} {#1 + \l__tenkz_cwires_int - 1}
+                  {
+                    \prop_put:Nen \l__tenkz_kind_prop {##1-#2} {tnv}
+                    \int_step_inline:nnn {#2} {#2 + \l__tenkz_cwide_int - 1}
+                      { \prop_put:Nen \l__tenkz_owner_prop {##1-####1} {#2} }
+                  }
+              }
+            {dots}  { \prop_put:Nnn \l__tenkz_owner_prop {#1-#2} {#2} }
+            {ghost} { \prop_put:Nnn \l__tenkz_owner_prop {#1-#2} {#2} }
+            {fuse}
+              {
+                \prop_put:Nnn \l__tenkz_owner_prop {#1-#2} {#2}
+                \int_step_inline:nnn {#1 + 1} {#1 + \l__tenkz_frows_int - 1}
+                  {
+                    \prop_put:Nen \l__tenkz_kind_prop {##1-#2} {fusec}
+                    \prop_put:Nen \l__tenkz_owner_prop {##1-#2} {#2}
+                  }
+              }
+          }
+      }
+      { \prop_remove:Nn \l__tenkz_kind_prop {#1-#2} }
+  }
+\cs_new_protected:Npn \tenkz_model_record_owners:
+  {
+    \int_step_inline:nn { \l__tenkz_nrows_int }
+      {
+        \int_step_inline:nnn {1} { \l__tenkz_ncols_int }
+          {
+            \prop_get:NeNT \l__tenkz_kind_prop {##1-####1}
+              \l__tenkz_mdo_kind_tl
+              { \tenkz_model_record_owner:nn {##1}{####1} }
+          }
+      }
+  }
+
+% The implicit bonds of a row become WIRE records BEFORE validation, using
+% the same predicates the draw-time scan trusts: a hole breaks the chain,
+% an empty column is transparent, one owner needs no internal bond, and a
+% sparse fusion face contracts only the row slots it declares.  The scan in
+% \tenkz_draw_bonds: keeps drawing from its own walk until the shared
+% renderer consumes these records (S2); then the walk dies and the
+% derivation lives here alone.
+\int_new:N \l__tenkz_mdb_prev_int
+\tl_new:N  \l__tenkz_mdb_kind_tl
+\tl_new:N  \l__tenkz_mdb_oa_tl
+\tl_new:N  \l__tenkz_mdb_ob_tl
+\bool_new:N \l__tenkz_mdb_pa_bool
+\bool_new:N \l__tenkz_mdb_pb_bool
+\cs_new:Npn \tenkz_model_dir_word:
+  {
+    \tl_if_empty:NTF \l__tenkz_dir_tl {none}
+      { \str_if_eq:VnTF \l__tenkz_dir_tl {right} {to} {from} }
+  }
+\cs_new_protected:Npn \tenkz_model_derive_bonds:
+  {
+    \int_step_inline:nn { \l__tenkz_nrows_int }
+      {
+        \tenkz_row_dir:nN {##1} \l__tenkz_dir_tl
+        \int_zero:N \l__tenkz_mdb_prev_int
+        \int_step_inline:nnn {1} { \l__tenkz_ncols_int }
+          {
+            \tenkz_get:NeN \l__tenkz_kind_prop {##1-####1} \l__tenkz_mdb_kind_tl
+            \str_if_eq:VnTF \l__tenkz_mdb_kind_tl {skip}
+              { \int_zero:N \l__tenkz_mdb_prev_int }
+              {
+                \prop_if_in:NeT \l__tenkz_owner_prop {##1-####1}
+                  {
+                    \int_compare:nNnT { \l__tenkz_mdb_prev_int } > {0}
+                      {
+                        \tenkz_get:NeN \l__tenkz_owner_prop
+                          {##1-\int_use:N \l__tenkz_mdb_prev_int} \l__tenkz_mdb_oa_tl
+                        \tenkz_get:NeN \l__tenkz_owner_prop
+                          {##1-####1} \l__tenkz_mdb_ob_tl
+                        \tl_if_eq:NNF \l__tenkz_mdb_oa_tl \l__tenkz_mdb_ob_tl
+                          {
+                            \tenkz_cell_virtual_row_port:nnnN {##1}
+                              {\int_use:N \l__tenkz_mdb_prev_int}{east}
+                              \l__tenkz_mdb_pa_bool
+                            \tenkz_cell_virtual_row_port:nnnN {##1}
+                              {####1}{west} \l__tenkz_mdb_pb_bool
+                            \bool_lazy_and:nnT
+                              { \l__tenkz_mdb_pa_bool } { \l__tenkz_mdb_pb_bool }
+                              {
+                                \__tenkz_model_record_wire:e
+                                  {kind={index},
+                                   from={##1-\int_use:N \l__tenkz_mdb_prev_int},
+                                   to={##1-####1},
+                                   row={##1},origin={bond},
+                                   dir={\tenkz_model_dir_word:}}
+                              }
+                          }
+                      }
+                    \int_set:Nn \l__tenkz_mdb_prev_int {####1}
+                  }
+              }
+          }
+      }
+  }
+
 \cs_new_protected:Npn \tenkz_record_interfaces:
   {
     \prop_clear:N \l__tenkz_opencell_prop
@@ -1426,6 +1581,7 @@
 \cs_new_protected:Npn \tenkz_render:nn #1#2
   {
     \group_begin:
+    \__tenkz_geom_reset:
     \__tenkz_model_reset:
     \__tenkz_model_record_picture:n { lang = {grid} }
     \prop_clear:N \l__tenkz_kind_prop
@@ -1484,6 +1640,8 @@
     \tenkz_record_traces:
     % map the interface-addressed open=/trace= segments to rows
     \tenkz_record_interfaces:
+    \tenkz_model_record_owners:
+    \tenkz_model_derive_bonds:
     \__tenkz_model_validate:
     \tenkz@beginpicture{grid}
     \tenkz_emit_tracefacewarnings:
@@ -1722,21 +1880,7 @@
         % domain is closed.  Reject an impossible bar side before allocating
         % measured ink, registering its cells, or emitting topology events.
         \str_if_eq:VnT \l__tenkz_kind_tl {fuse}
-          {
-            \tl_if_empty:NF \l__tenkz_fcombined_tl
-              {
-                \bool_lazy_or:nnF
-                  { \str_if_eq_p:Vn \l__tenkz_fcombined_tl {west} }
-                  { \str_if_eq_p:Vn \l__tenkz_fcombined_tl {east} }
-                  {
-                    \bool_set_false:N \l__tenkz_celloptsvalid_bool
-                    \PackageError{tenkz}
-                      {combined=\tl_use:N \l__tenkz_fcombined_tl
-                        \c_space_tl is~not~a~fusion~side}
-                      {Use~combined=west~or~combined=east~on~a~fusion~bar.}
-                  }
-              }
-          }
+          { \tenkz_validate_fuse_combined: }
         \bool_if:NTF \l__tenkz_celloptsvalid_bool
           {
             \tenkz_get:NnN \l__tenkz_label_prop {#1-#2} \l_tmpb_tl
@@ -1799,9 +1943,25 @@
         {dot}
           {
             \tenkz_map:nn { \l__tenkz_x_dim } { \l__tenkz_y_dim }
-            \node[tensor, \l__tenkz_rolesty_tl]
-              (\tenkz_node_name:nn{#1}{#2})
-              at \tenkz_mpt: {};
+            % the migration experiment: same node, same name, same point --
+            % but the mapped point crosses geometry and the ink primitive
+            \bool_if:NTF \g__tenkz_experiment_render_bool
+              {
+                \__tenkz_geom_frame_declare_rotation:nnnn {gridflat}{0}{0}{0}
+                \__tenkz_geom_place_cell:nnee { cell:#1-#2 } {gridflat}
+                  { \fp_eval:n { \dim_to_fp:n { \l__tenkz_mx_dim }
+                                / \dim_to_fp:n { \tenkz@pitch } } }
+                  { \fp_eval:n { \dim_to_fp:n { \l__tenkz_my_dim }
+                                / \dim_to_fp:n { \tenkz@pitch } } }
+                \__tenkz_render_atom_named:nn { cell:#1-#2 }
+                  { tensor, \l__tenkz_rolesty_tl ,
+                    name = \tenkz_node_name:nn{#1}{#2} }
+              }
+              {
+                \node[tensor, \l__tenkz_rolesty_tl]
+                  (\tenkz_node_name:nn{#1}{#2})
+                  at \tenkz_mpt: {};
+              }
           }
         {box}  { \tenkz_glyph_node:nnn {#1}{#2}{box~tensor} }
         {mpo}  { \tenkz_glyph_node:nnn {#1}{#2}{mpo~tensor} }

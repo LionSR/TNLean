@@ -6,6 +6,7 @@ REPO=$(CDPATH='' cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)
 CORPUS="$REPO/tests/tenkz"
 # Test seam for the isolated manifest-mutation regression.
 PROVENANCE=${TENKZ_CORPUS_PROVENANCE:-"$CORPUS/PROVENANCE.tsv"}
+LOCAL_FIXTURES="$CORPUS/LOCAL_FIXTURES.tsv"
 JOBS=${TENKZ_CORPUS_JOBS:-4}
 RENDER=0
 RENDER_DIR="$REPO/build/tenkz-corpus-render"
@@ -78,7 +79,7 @@ if ! [[ "$JOBS" =~ ^[1-9][0-9]*$ ]]; then
   exit 1
 fi
 
-python3 - "$REPO" "$PROVENANCE" <<'PY'
+python3 - "$REPO" "$PROVENANCE" "$LOCAL_FIXTURES" <<'PY'
 import csv
 import hashlib
 import subprocess
@@ -90,6 +91,7 @@ from pathlib import Path
 repo = Path(sys.argv[1])
 corpus = repo / "tests" / "tenkz"
 provenance = Path(sys.argv[2])
+local_fixtures = Path(sys.argv[3])
 
 
 def fail(message: str) -> None:
@@ -144,7 +146,8 @@ actual_counts = Counter(record["disposition"] for record in records)
 if actual_counts != expected_counts:
     fail(
         "PROVENANCE.tsv disposition census must be "
-        "257 standalone, 1 support, and 20 excluded; got "
+        + ", ".join(f"{value} {key}" for key, value in expected_counts.items())
+        + "; got "
         + ", ".join(f"{key}={actual_counts.get(key, 0)}" for key in expected_counts)
     )
 
@@ -152,6 +155,41 @@ standalone = {
     record["source_file"]: record["adopted_path"]
     for record in records if record["disposition"] == "standalone"
 }
+
+# Repository-local probes are not part of the adopted handoff corpus.  Keep
+# them in their own manifest so adding a regression never rewrites the
+# independent handoff source-name or disposition invariants above.
+try:
+    with local_fixtures.open(encoding="utf-8", newline="") as stream:
+        local_rows = list(csv.reader(stream, dialect="excel-tab"))
+except OSError as exc:
+    fail(f"cannot read {local_fixtures}: {exc}")
+local_header = ["source_file", "adopted_path", "reason"]
+if not local_rows or local_rows[0] != local_header:
+    fail(f"LOCAL_FIXTURES.tsv header must be exactly {local_header!r}")
+if any(len(row) != len(local_header) for row in local_rows[1:]):
+    bad = next(index for index, row in enumerate(local_rows[1:], 2)
+               if len(row) != len(local_header))
+    fail(f"LOCAL_FIXTURES.tsv row {bad} must have exactly three tab-separated fields")
+local_records = [dict(zip(local_header, row)) for row in local_rows[1:]]
+local_names = [record["source_file"] for record in local_records]
+local_duplicates = sorted(
+    name for name, count in Counter(local_names).items() if count > 1
+)
+if local_duplicates:
+    fail("LOCAL_FIXTURES.tsv repeats source_file entries: "
+         + ", ".join(local_duplicates))
+if set(local_names) & set(source_names):
+    fail("local fixtures must not also appear in the handoff PROVENANCE.tsv")
+if any(not name or Path(name).name != name or not name.endswith(".tex")
+       for name in local_names):
+    fail("every LOCAL_FIXTURES.tsv source_file must be a plain .tex basename")
+if any(not record["reason"].strip() for record in local_records):
+    fail("every LOCAL_FIXTURES.tsv row needs a non-empty reason")
+standalone.update({
+    record["source_file"]: record["adopted_path"]
+    for record in local_records
+})
 actual_tex = {path.name for path in corpus.glob("*.tex") if path.is_file()}
 if set(standalone) != actual_tex:
     missing = sorted(set(standalone) - actual_tex)
@@ -212,6 +250,8 @@ if tracked_fixtures != actual_fixtures:
         details.append("tracked fixtures missing on disk: " + ", ".join(stale))
     fail("git fixture census mismatch (" + "; ".join(details) + ")")
 PY
+
+python3 "$REPO/scripts/tenkz_lint.py" --census
 
 source_count=$(find "$CORPUS" -maxdepth 1 -type f -name '*.tex' | wc -l | tr -d ' ')
 
