@@ -65,7 +65,8 @@ shell command % \tntree{commented}
 \let\ifnever\iffalse
 \iffalse
 \newif\iflocal
-\newcommand{\broken}{
+\iftrue
+\newcommand{\stored}{\fi}
 \ifalias
 \fi
 \ifdraft
@@ -144,12 +145,13 @@ shell command % \tntree{commented}
     if "tenkz" not in package_names:
         raise AssertionError("a comment hid tenkz in a multi-package declaration")
     repeated_package = (
+        "\\iffalse\n\\usepackage{tenkz}\n\\fi\n"
         "% \\usepackage{tenkz}\n"
         "\\usepackage{tenkz}\n"
         "\\begin{document}\\tn{A}\\end{document}\n"
     )
     instrumented, marker = DOCTEST._instrument_command(repeated_package, "tn")
-    if instrumented.index(marker) < instrumented.index("\n\\usepackage{tenkz}"):
+    if instrumented.index(marker) < instrumented.rindex("\\usepackage{tenkz}"):
         raise AssertionError("runtime instrumentation used a commented package spelling")
     escaped_verb = (
         "Write \\\\verb|without a closing delimiter on this line\n"
@@ -183,8 +185,10 @@ shell command % \tntree{commented}
         child = chapters / "child.tex"
         local = chapters / "local.tex"
         root.write_text(
+            "\\newif\\ifshared\n"
             "\\newcommand{\\optionalchapter}{\\input{missing.tex}}\n"
             "\\verb|\\IfFileExists| \\string\\IfFileExists \\\\IfFileExists\n"
+            "\\texttt{\\detokenize{\\IfFileExists}}\n"
             "\\begin{Verbatim}\n\\IfFileExists\n\\end{Verbatim}\n"
             "\\verb|100%|\\IfFileExists{missing-after-verb.tex}"
             "{\\input{missing-after-verb.tex}}"
@@ -198,6 +202,8 @@ shell command % \tntree{commented}
             encoding="utf-8",
         )
         child.write_text(
+            "\\iffalse\\ifshared\\fi"
+            "\\input{missing-shared-conditional.tex}\\fi\n"
             "\\IfFileExists{local.tex}{\\input{local.tex}}"
             "{\\input{missing-local.tex}}\n",
             encoding="utf-8",
@@ -222,6 +228,11 @@ shell command % \tntree{commented}
             DOCTEST.os.environ["TEXINPUTS"] = f"{ambient}//"
             if not DOCTEST._tex_file_exists(Path("ambient-only.tex"), manual_dir):
                 raise AssertionError("a recursive TEXINPUTS root was not searched")
+            DOCTEST.os.environ.pop("TEXINPUTS", None)
+            if DOCTEST.shutil.which("kpsewhich") and not DOCTEST._tex_file_exists(
+                Path("article.cls"), manual_dir
+            ):
+                raise AssertionError("the default TeX search path was omitted")
         finally:
             if original_texinputs is None:
                 DOCTEST.os.environ.pop("TEXINPUTS", None)
