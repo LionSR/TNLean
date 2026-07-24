@@ -768,6 +768,14 @@ structure NormalRectangleInjectivityHypotheses where
   /-- Every \(3\times 2\) rectangular region is injective. -/
   threeByTwo_injective : ∀ R : Finset V, IsThreeByTwoRegion R → ι.IsInjective R
 
+namespace NormalRectangleInjectivityHypotheses
+
+/-- The abstract rectangular injectivity hypotheses satisfy the shared injectivity interface. -/
+theorem toPEPSInjectivityHypotheses (_h : NormalRectangleInjectivityHypotheses ι) :
+    PEPSInjectivityHypotheses ι := ⟨⟩
+
+end NormalRectangleInjectivityHypotheses
+
 /-- Coordinate square-lattice form of the rectangular injectivity hypotheses.
 
 Theorem 3 of arXiv:1804.04964 assumes injectivity for every contiguous
@@ -922,6 +930,10 @@ theorem regionS_injective_of_union
   exact hUnion.union_injective
     (h.twoByThree_injective S₁ hS₁)
     (h.twoByThree_injective S₂ hS₂)
+
+/-- The square-lattice rectangular injectivity hypotheses satisfy the shared interface. -/
+theorem toPEPSInjectivityHypotheses (_h : NormalSquareLatticeRectangleInjectivityHypotheses κ) :
+    PEPSInjectivityHypotheses κ := ⟨⟩
 
 end NormalSquareLatticeRectangleInjectivityHypotheses
 

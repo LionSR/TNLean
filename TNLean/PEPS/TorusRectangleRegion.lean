@@ -132,6 +132,10 @@ namespace NormalTorusRectangleInjectivityHypotheses
 
 variable {κ : RegionInjectivityData (TorusVertex width height)}
 
+/-- The torus rectangular injectivity hypotheses satisfy the shared injectivity interface. -/
+theorem toPEPSInjectivityHypotheses (_h : NormalTorusRectangleInjectivityHypotheses κ) :
+    PEPSInjectivityHypotheses κ := ⟨⟩
+
 /-- A bounded contiguous $2\times3$ coordinate rectangle is injective under the torus rectangular
 injectivity hypotheses.
 
