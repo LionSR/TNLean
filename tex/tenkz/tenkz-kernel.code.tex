@@ -2176,39 +2176,47 @@
   }
 
 % `crossing of a and b` is where the two strings actually meet, so the
-% address asks the ink, not the author: the engine intersects the two saved
-% routes and the first solution IS the point.
-%
-% INCOMPLETE.  This answers only for routes that were never operated on.
-% Surgery cuts the under route's gap AT the crossing, so afterwards the two
-% routes no longer meet and this asks a question the ink can no longer
-% answer -- exactly the declared crossings a label most wants to name.  The
-% point is a property of the routes, and the engine holds it at the moment
-% it cuts: the fix is for the string engine to publish its crossing points
-% as it makes them, and for this production to read that ledger.  Until
-% then a label on a declared crossing raises the diagnostic below.
+% address asks the string engine for the point saved before crossing surgery.
+% Undeclared pairs still read the live intersection of their routes.
 \cs_new_protected:Npn \__tenkz_kernel_r_crossing:nnn #1#2#3
   {
-    \bool_if:NTF \l__tenkz_kernel_r_cut_bool
-      { \int_zero:N \l__tenkz_kernel_r_cross_int }
-      { \__tenkz_string_count:nnN {#2} {#3} \l__tenkz_kernel_r_cross_int }
-    \int_compare:nNnTF { \l__tenkz_kernel_r_cross_int } > {0}
+    \__tenkz_string_crossing_point:nnN
+      {#2} {#3} \l__tenkz_kernel_r_tl
+    \quark_if_no_value:NTF \l__tenkz_kernel_r_tl
       {
-        \pgfpointintersectionsolution {1}
-        \__tenkz_geom_store:nnn {#1}
-          { \dim_to_fp:n { \use:c {pgf@x} } / \dim_to_fp:n { \tenkz@pitch } }
-          { \dim_to_fp:n { \use:c {pgf@y} } / \dim_to_fp:n { \tenkz@pitch } }
+        \__tenkz_string_count:nnN
+          {#2} {#3} \l__tenkz_kernel_r_cross_int
+        \int_compare:nNnTF { \l__tenkz_kernel_r_cross_int } > {0}
+          {
+            \pgfpointintersectionsolution {1}
+            \__tenkz_geom_store:nnn {#1}
+              {
+                \dim_to_fp:n { \use:c {pgf@x} }
+                / \dim_to_fp:n { \tenkz@pitch }
+              }
+              {
+                \dim_to_fp:n { \use:c {pgf@y} }
+                / \dim_to_fp:n { \tenkz@pitch }
+              }
+          }
+          { \msg_error:nnnn {tenkz}{kernel-render-nocross} {#2} {#3} }
       }
-      { \msg_error:nnnn {tenkz}{kernel-render-nocross} {#2} {#3} }
+      {
+        \__tenkz_geom_store:nnn {#1}
+          {
+            \dim_to_fp:n { \tl_item:Nn \l__tenkz_kernel_r_tl {1} }
+            / \dim_to_fp:n { \tenkz@pitch }
+          }
+          {
+            \dim_to_fp:n { \tl_item:Nn \l__tenkz_kernel_r_tl {2} }
+            / \dim_to_fp:n { \tenkz@pitch }
+          }
+      }
   }
 \int_new:N \l__tenkz_kernel_r_cross_int
-\bool_new:N \l__tenkz_kernel_r_cut_bool
 \msg_new:nnn {tenkz}{kernel-render-nocross}
   { [TKZ-KERNEL-RENDER-NOCROSS]~an~address~names~the~crossing~of~'#1'~and~
-    '#2',~but~the~picture~cannot~say~where~they~meet:~either~the~routes~
-    never~meet,~or~a~declared~crossing~has~already~cut~the~gap~that~held~
-    the~answer.~The~string~engine~must~publish~its~crossing~points~before~
-    this~address~can~name~a~declared~crossing. }
+    '#2',~but~their~saved~routes~do~not~meet. }
 
 % A port is a cell of its atom's span: n/s slots walk the spanned columns,
 % e/w slots walk the spanned rows.  The wire it anchors runs under the
@@ -3080,13 +3088,6 @@
       { \__tenkz_kernel_r_string_declare:n {##1} }
     \seq_map_inline:Nn \l__tenkz_kernel_r_strings_seq
       { \__tenkz_kernel_r_crossings:n {##1} }
-    % surgery has run if any crossing was declared; see the crossing address
-    \seq_map_inline:Nn \l__tenkz_kernel_r_strings_seq
-      {
-        \__tenkz_model_get:nnN {##1} {cross} \l__tenkz_kernel_r_tl
-        \quark_if_no_value:NF \l__tenkz_kernel_r_tl
-          { \bool_set_true:N \l__tenkz_kernel_r_cut_bool }
-      }
     \bool_lazy_or:nnT
       { ! \seq_if_empty_p:N \l__tenkz_kernel_r_strings_seq }
       { ! \prop_if_empty_p:N \l__tenkz_kernel_r_legdrawn_prop }
