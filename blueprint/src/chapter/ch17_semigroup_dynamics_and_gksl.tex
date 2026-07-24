@@ -25,18 +25,20 @@
 
 \begin{definition}[Exponential semigroup]\label{def:exp_semigroup_ch12}
     \lean{expSemigroup, expSemigroupCLM}\leanok
-    Given a generator $L \in \mathrm{End}_{\C}(\MN{D})$, the
+    Given a generator $L \in \End_{\C}(\MN{D})$, the
     \emph{exponential semigroup} is
-    \[
-        T_t := e^{tL} = \sum_{k=0}^{\infty} \frac{(tL)^k}{k!}.
-    \]
+    \begin{align}
+        T_t
+        &:= e^{tL}
+          = \sum_{k=0}^{\infty} \frac{(tL)^k}{k!}.
+        \label{eq:semigroup_exp_def}
+    \end{align}
 \end{definition}
 
 \begin{theorem}[Semigroup law for the exponential]\label{thm:expSemigroupCLM_add_ch12}
     \lean{expSemigroupCLM_add, expSemigroup_comp}\leanok
     \uses{def:exp_semigroup_ch12}
-    For all $t,s \in \R$,
-    $e^{(t+s)L} = e^{tL} \cdot e^{sL}$.
+    For all $t,s \in \R$, $e^{(t+s)L} = e^{tL} \cdot e^{sL}$.
 \end{theorem}
 
 \begin{proof}
@@ -73,34 +75,29 @@
 \begin{theorem}[Derivative of the exponential semigroup]\label{thm:hasDerivAt_expSemigroupCLM_ch12}
     \lean{hasDerivAt_expSemigroupCLM}\leanok
     \uses{def:exp_semigroup_ch12}
-    For all $t \in \R$,
-    \[
-        \frac{d}{dt} e^{tL} = e^{tL} \cdot L.
-    \]
+    For all $t \in \R$, one has
+    $\frac{d}{dt}e^{tL} = e^{tL} \cdot L$.
     This is \cite[Equation~(7.2)]{Wolf2012Quantum}.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    Chain rule applied to the composition
-    $\R \xrightarrow{t \mapsto t \cdot L} \mathrm{End}(\MN{D})
-        \xrightarrow{\exp} \mathrm{End}(\MN{D})$.
+    Apply the chain rule to the composition
+    $\R \xrightarrow{t \mapsto t \cdot L} \End(\MN{D})
+        \xrightarrow{\exp} \End(\MN{D})$.
 \end{proof}
 
 \begin{theorem}[Derivative at the origin]
     \label{thm:hasDerivAt_expSemigroupCLM_zero_ch12}
     \lean{hasDerivAt_expSemigroupCLM_zero}\leanok
     \uses{thm:hasDerivAt_expSemigroupCLM_ch12, thm:expSemigroupCLM_zero_ch12}
-    One has
-    \[
-        \left.\frac{d}{dt} e^{tL}\right|_{t=0} = L.
-    \]
+    One has $\left.\frac{d}{dt}e^{tL}\right|_{t=0} = L$.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    This is Theorem~\ref{thm:hasDerivAt_expSemigroupCLM_ch12} at $t=0$ together with
-    Theorem~\ref{thm:expSemigroupCLM_zero_ch12}.
+    This is Theorem~\ref{thm:hasDerivAt_expSemigroupCLM_ch12} at $t=0$
+    together with Theorem~\ref{thm:expSemigroupCLM_zero_ch12}.
 \end{proof}
 
 \begin{theorem}[Generator uniqueness]\label{thm:generator_unique_ch12}
@@ -120,14 +117,15 @@
     \label{thm:expSemigroup_toCLM_ch12}
     \lean{expSemigroup_toCLM}\leanok
     \uses{def:exp_semigroup_ch12}
-    The linear-map exponential semigroup and the continuous-linear-map exponential
-    semigroup agree under the canonical identification of endomorphisms with continuous
-    linear endomorphisms.
+    The linear-map exponential semigroup and the continuous-linear-map
+    exponential semigroup agree under the canonical identification of
+    endomorphisms with continuous linear endomorphisms.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    This is a direct unpacking of the definition of the linear-map exponential semigroup.
+    This is a direct unpacking of the definition of the linear-map
+    exponential semigroup.
 \end{proof}
 
 \begin{theorem}[Pointwise derivative formula]
@@ -135,15 +133,14 @@
     \lean{hasDerivAt_expSemigroup_apply}\leanok
     \uses{thm:hasDerivAt_expSemigroupCLM_ch12, thm:expSemigroup_toCLM_ch12}
     For every $X \in \MN{D}$ and every $t \in \R$,
-    \[
-        \frac{d}{dt}(e^{tL}(X)) = e^{tL}(L(X)).
-    \]
+    $\frac{d}{dt}(e^{tL}(X)) = e^{tL}(L(X))$.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    Evaluate the derivative of the continuous-linear-map semigroup at $X$ and transport the
-    statement through Theorem~\ref{thm:expSemigroup_toCLM_ch12}.
+    Evaluate the derivative of the continuous-linear-map semigroup at $X$
+    and transport the statement through
+    Theorem~\ref{thm:expSemigroup_toCLM_ch12}.
 \end{proof}
 
 \begin{theorem}[Linear-map exponential semigroup at time $0$]
@@ -181,11 +178,8 @@
     \lean{continuousDynSemigroup_eq_exp}\leanok
     \uses{def:continuous_dyn_semigroup_ch12, def:exp_semigroup_ch12}
     Every norm-continuous dynamical semigroup $T$ on $\MN{D}$ is
-    of the form
-    \[
-        T_t = e^{tL}
-    \]
-    for some generator $L \in \mathrm{End}_{\C}(\MN{D})$ and every $t \ge 0$.
+    of the form $T_t = e^{tL}$ for some generator
+    $L \in \End_{\C}(\MN{D})$ and every $t \ge 0$.
     This is \cite[Proposition~7.1]{Wolf2012Quantum}.
 \end{theorem}
 
@@ -209,31 +203,34 @@
     \lean{duhamel_formula}\leanok
     \uses{def:exp_semigroup_ch12, thm:hasDerivAt_expSemigroupCLM_ch12}
     Let $\Delta = L' - L$. For $t \ge 0$,
-    \[
+    \begin{align}
         e^{tL'} - e^{tL}
-        = \int_0^t e^{(t-s)L} \Delta\,e^{sL'}\,ds.
-    \]
+        &= \int_0^t e^{(t-s)L} \Delta\,e^{sL'}\,ds.
+        \label{eq:semigroup_duhamel}
+    \end{align}
     This is \cite[Lemma~7.1]{Wolf2012Quantum}.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    Define $f(s) = e^{(t-s)L} e^{sL'}$.
-    Then $f'(s) = e^{(t-s)L} \Delta\,e^{sL'}$
-    (Theorem~\ref{thm:hasDerivAt_expSemigroupCLM_ch12}),
-    and $e^{tL'} - e^{tL} = f(t) - f(0) = \int_0^t f'(s)\,ds$.
+    Define $f(s) = e^{(t-s)L}e^{sL'}$.
+    Then $f'(s) = e^{(t-s)L}\Delta\,e^{sL'}$ by
+    Theorem~\ref{thm:hasDerivAt_expSemigroupCLM_ch12}, and
+    $e^{tL'} - e^{tL} = f(t) - f(0) = \int_0^t f'(s)\,ds$,
+    which gives (\ref{eq:semigroup_duhamel}).
 \end{proof}
 
 \begin{theorem}[Perturbation bound]\label{thm:perturbation_bound_ch12}
     \lean{perturbation_bound}\leanok
     \uses{thm:duhamel_formula_ch12}
     For $t \ge 0$,
-    \[
+    \begin{align}
         \bigl\|e^{tL'} - e^{tL}\bigr\|
-        \le t\,\|\Delta\|
+        &\le t\,\|\Delta\|
         \cdot \sup_{s \in [0,t]}\|e^{sL}\|
         \cdot \sup_{s \in [0,t]}\|e^{sL'}\|,
-    \]
+        \label{eq:semigroup_perturbation_bound}
+    \end{align}
     where $\Delta = L' - L$.
     This is \cite[Corollary~7.1]{Wolf2012Quantum}.
 \end{theorem}
@@ -242,7 +239,7 @@
     \leanok
     Apply the triangle inequality and submultiplicativity of the
     operator norm to the Duhamel integral
-    (Theorem~\ref{thm:duhamel_formula_ch12}).
+    (\ref{eq:semigroup_duhamel}).
 \end{proof}
 
 \begin{corollary}[Perturbation bound under unit-norm control]
@@ -251,24 +248,24 @@
     \uses{thm:perturbation_bound_ch12}
     For $t \ge 0$, if $\|e^{sL}\| \le 1$ and $\|e^{sL'}\| \le 1$ for every
     $s \in [0,t]$, then
-    \[
-        \|e^{tL'} - e^{tL}\| \le t\,\|L' - L\|.
-    \]
+    $\|e^{tL'} - e^{tL}\| \le t\,\|L' - L\|$.
 \end{corollary}
 
 \begin{proof}
     \leanok
-    Apply Theorem~\ref{thm:perturbation_bound_ch12} and bound both suprema by $1$.
+    Apply (\ref{eq:semigroup_perturbation_bound}) and bound both suprema
+    by $1$.
 \end{proof}
 
 \begin{lemma}[Dyson-series summability from factorial majorant]
     \label{lem:summable_dyson_factorial_ch12}
     \lean{summable_dysonTerm_of_factorial_bound}\leanok
     Assume a factorial majorant of Dyson--Phillips iterates:
-    \[
+    \begin{align}
         \|D_n(t)\|
-        \le M\,\frac{(t\,\|L'-L\|\,M)^n}{n!}.
-    \]
+        &\le M\,\frac{(t\,\|L'-L\|\,M)^n}{n!}.
+        \label{eq:semigroup_dyson_majorant}
+    \end{align}
     Then the Dyson series is summable in operator norm.
 \end{lemma}
 
@@ -283,10 +280,11 @@
     \lean{norm_dysonTerm_le}\leanok
     \uses{def:exp_semigroup_ch12}
     For $s \in [0,t]$ and $M = \sup_{u \in [0,t]} \|e^{uL}\|$,
-    \[
+    \begin{align}
         \|\widetilde{T}^{(n)}_s\|
-        \le M\,\frac{(s\,\|\Delta\|\,M)^n}{n!}.
-    \]
+        &\le M\,\frac{(s\,\|\Delta\|\,M)^n}{n!}.
+        \label{eq:semigroup_dyson_iterate}
+    \end{align}
 \end{theorem}
 
 \begin{proof}
@@ -309,28 +307,29 @@
 \begin{proof}
     \leanok
     \uses{thm:norm_dysonTerm_le_ch12, lem:summable_dyson_factorial_ch12}
-    Compose the factorial norm bound
-    (Theorem~\ref{thm:norm_dysonTerm_le_ch12}) with the
-    Weierstrass M-test step
-    (Lemma~\ref{lem:summable_dyson_factorial_ch12}).
+    The bound (\ref{eq:semigroup_dyson_iterate}) gives a factorial majorant.
+    Lemma~\ref{lem:summable_dyson_factorial_ch12} then applies the Weierstrass
+    M-test.
 \end{proof}
 
 \begin{corollary}[Factorial norm bound at the final time]
     \label{cor:norm_dysonTerm_le_at_ch12}
     \lean{norm_dysonTerm_le_at}\leanok
     \uses{thm:norm_dysonTerm_le_ch12}
-    For $t \ge 0$, setting $s=t$ in Theorem~\ref{thm:norm_dysonTerm_le_ch12}
-    gives
-    \[
+    For $t \ge 0$, setting $s=t$ in
+    (\ref{eq:semigroup_dyson_iterate}) gives
+    \begin{align}
         \|\widetilde{T}^{(n)}_t\|
-        \le M\,\frac{(t\,\|\Delta\|\,M)^n}{n!},
-    \]
+        &\le M\,\frac{(t\,\|\Delta\|\,M)^n}{n!},
+        \label{eq:semigroup_dyson_final}
+    \end{align}
     where $M = \sup_{u \in [0,t]} \|e^{uL}\|$.
 \end{corollary}
 
 \begin{proof}
     \leanok
-    This is the special case $s=t$ of Theorem~\ref{thm:norm_dysonTerm_le_ch12}.
+    This is the special case $s=t$ of
+    (\ref{eq:semigroup_dyson_iterate}).
 \end{proof}
 
 \begin{theorem}[Continuity of Dyson iterates]
@@ -346,9 +345,9 @@
     \uses{def:exp_semigroup_ch12}
     By induction on $n$. The base case is continuity of the matrix
     exponential. For the inductive step, the parametric integral
-    $t\mapsto \int_0^t e^{(t-s)L} \Delta\,\widetilde{T}^{(n)}_s\,ds$
+    $t\mapsto \int_0^t e^{(t-s)L}\Delta\,\widetilde{T}^{(n)}_s\,ds$
     is continuous by the continuous-parameter primitive theorem;
-    the pasting lemma extends this to all of $\mathbb{R}$ since
+    the pasting lemma extends this to all of $\R$ since
     $\widetilde{T}^{(n+1)}_t = 0$ for $t \le 0$.
 \end{proof}
 
@@ -357,11 +356,12 @@
     \lean{norm_dysonRemainder_le}\leanok
     \uses{thm:duhamel_formula_ch12, thm:norm_dysonTerm_le_ch12}
     For $s \in [0,t]$, $M = \sup_{u \in [0,t]}\|e^{uL}\|$,
-    and $M' = \sup_{u \in [0,t]}\|e^{uL'}\|$:
-    \[
+    and $M' = \sup_{u \in [0,t]}\|e^{uL'}\|$,
+    \begin{align}
         \bigl\|T'_s - \textstyle\sum_{n < N}\widetilde{T}^{(n)}_s\bigr\|
-        \le M'\,\frac{(s\,\|\Delta\|\,M)^N}{N!}.
-    \]
+        &\le M'\,\frac{(s\,\|\Delta\|\,M)^N}{N!}.
+        \label{eq:semigroup_dyson_remainder}
+    \end{align}
 \end{theorem}
 
 \begin{proof}
@@ -370,9 +370,9 @@
         thm:dysonTerm_continuous_ch12}
     Induction on $N$. The base case is the semigroup supremum bound.
     The inductive step uses the telescoping remainder identity
-    $R_{N+1}(s) = \int_0^s e^{(s-u)L} \Delta\,R_N(u)\,du$
-    (derived from the Duhamel formula), bounds the integrand
-    pointwise, and integrates to recover the factorial.
+    $R_{N+1}(s) = \int_0^s e^{(s-u)L}\Delta\,R_N(u)\,du$
+    derived from the Duhamel formula (\ref{eq:semigroup_duhamel}), bounds
+    the integrand pointwise, and integrates to recover the factorial.
 \end{proof}
 
 \begin{theorem}[Dyson series identity {\cite[Equation~(7.13)]{Wolf2012Quantum}}]
@@ -381,17 +381,19 @@
     \uses{thm:norm_dysonRemainder_le_ch12, cor:summable_dysonTerm_ch12}
     For $t \ge 0$, the Dyson--Phillips series equals the perturbed
     semigroup:
-    \[
-        \sum_{n=0}^{\infty} \widetilde{T}^{(n)}_t = e^{tL'}.
-    \]
+    \begin{align}
+        \sum_{n=0}^{\infty} \widetilde{T}^{(n)}_t
+        &= e^{tL'}.
+        \label{eq:semigroup_dyson_series}
+    \end{align}
 \end{theorem}
 
 \begin{proof}
     \leanok
     \uses{thm:norm_dysonRemainder_le_ch12, cor:summable_dysonTerm_ch12}
-    The partial-sum remainder
-    $\|e^{tL'} - \sum_{n<N}\widetilde{T}^{(n)}_t\|
-        \le M'\,(t\|\Delta\|M)^N/N!$
+    By (\ref{eq:semigroup_dyson_remainder}), the partial-sum remainder
+    $\|e^{tL'}-\sum_{n<N}\widetilde{T}^{(n)}_t\|
+        \le M'(t\|\Delta\|M)^N/N!$
     tends to zero as $N \to \infty$, since $c^N/N! \to 0$ for any
     constant $c$. Together with the summability of the series
     (Corollary~\ref{cor:summable_dysonTerm_ch12}), this identifies
@@ -402,14 +404,14 @@
     \label{cor:tsum_dysonTerm_eq_ch12}
     \lean{tsum_dysonTerm_eq}\leanok
     \uses{thm:dyson_series_eq_ch12}
-    $\sum_{n=0}^{\infty} \widetilde{T}^{(n)}_t = e^{tL'}$
-    (tsum form).
+    One has $\sum_{n=0}^{\infty}\widetilde{T}^{(n)}_t = e^{tL'}$
+    in tsum form.
 \end{corollary}
 
 \begin{proof}
     \leanok
     \uses{thm:dyson_series_eq_ch12}
-    The claim follows from Theorem~\ref{thm:dyson_series_eq_ch12}.
+    The claim follows from (\ref{eq:semigroup_dyson_series}).
 \end{proof}
 
 %% ---------------------------------------------------------
@@ -430,9 +432,11 @@ which shows that such generators have the standard Lindblad form.
     A \emph{generator decomposition} consists of a completely positive map
     $\phi : \MN{d} \to \MN{d}$ and a matrix $\kappa \in \MN{d}$, defining
     the linear map
-    \[
-        L(\rho) = \phi(\rho) - \kappa\rho - \rho\kappa^\dagger.
-    \]
+    \begin{align}
+        L(\rho)
+        &= \phi(\rho) - \kappa\rho - \rho\kappa^\dagger.
+        \label{eq:semigroup_generator_decomp}
+    \end{align}
     This is \cite[Equation~(7.14)]{Wolf2012Quantum}.
 \end{definition}
 
@@ -474,14 +478,14 @@ which shows that such generators have the standard Lindblad form.
 
 \begin{proof}
     \leanok
-    Let $\phi(\rho) = \sum_i K_i \rho K_i^\dagger$.
+    Let $\phi(\rho) = \sum_i K_i\rho K_i^\dagger$.
     By the cyclic property of trace,
     $\tr(L(\rho))
         = \tr((\sum_i K_i^\dagger K_i)\rho)
         - \tr(\kappa\rho)
         - \tr(\kappa^\dagger\rho)
-        = \tr((\kappa + \kappa^\dagger)\rho)
-        - \tr(\kappa\rho) - \tr(\kappa^\dagger\rho) = 0$.
+        = \tr((\kappa+\kappa^\dagger)\rho)
+        - \tr(\kappa\rho)-\tr(\kappa^\dagger\rho)=0$.
 \end{proof}
 
 \subsection{The Lindblad form}
@@ -491,13 +495,14 @@ which shows that such generators have the standard Lindblad form.
     A \emph{Lindblad form} consists of a Hermitian matrix $H = H^\dagger$
     (the Hamiltonian) and a family of matrices $\{L_j\}_{j=0}^{r-1}$
     (the Lindblad operators), defining the linear map
-    \[
+    \begin{align}
         L(\rho)
-        = i[\rho, H]
-        + \sum_{j} \Bigl(        L_j \rho L_j^\dagger
-        - \tfrac{1}{2}\{L_j^\dagger L_j, \rho\}_+
+        &= i[\rho,H]
+        + \sum_j \Bigl(        L_j\rho L_j^\dagger
+            - \tfrac{1}{2}\{L_j^\dagger L_j,\rho\}_+
         \Bigr),
-    \]
+        \label{eq:semigroup_lindblad_form}
+    \end{align}
     where $[A,B] = AB - BA$ and $\{A,B\}_+ = AB + BA$.
     This is \cite[Equation~(7.21)]{Wolf2012Quantum}.
 \end{definition}
@@ -514,7 +519,8 @@ which shows that such generators have the standard Lindblad form.
     The Hamiltonian part satisfies
     $\tr(i[\rho,H]) = 0$ by the cyclic property.
     Each dissipator term satisfies
-    $\tr(L_j \rho L_j^\dagger) = \tr(L_j^\dagger L_j \rho)
+    $\tr(L_j\rho L_j^\dagger)
+        = \tr(L_j^\dagger L_j\rho)
         = \tr(\rho L_j^\dagger L_j)$,
     so the three terms sum to zero.
 \end{proof}
@@ -524,22 +530,24 @@ which shows that such generators have the standard Lindblad form.
     \lean{LindbladForm.toLinearMap_eq_generatorDecomp}\leanok
     \uses{def:lindblad_form, def:generator_decomp}
     A Lindblad form with Hamiltonian $H$ and operators $\{L_j\}$ defines
-    the same linear map as the generator decomposition $(\phi, \kappa)$
-    with $\phi(\rho) = \sum_j L_j \rho L_j^\dagger$ and
+    the same linear map as the generator decomposition $(\phi,\kappa)$
+    with $\phi(\rho) = \sum_j L_j\rho L_j^\dagger$ and
     $\kappa = iH + \frac{1}{2}\sum_j L_j^\dagger L_j$.
     This is \cite[Equation~(7.24)]{Wolf2012Quantum}.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    Compute $\kappa^\dagger = -iH + \frac{1}{2}\sum_j L_j^\dagger L_j$
+    Compute $\kappa^\dagger = -iH+\frac{1}{2}\sum_j L_j^\dagger L_j$
     using $H^\dagger = H$ and $(A^\dagger A)^\dagger = A^\dagger A$.
     Setting $S = \sum_j L_j^\dagger L_j$, expand
-    $\phi(\rho) - \kappa\rho - \rho\kappa^\dagger
-        = \sum_j L_j\rho L_j^\dagger - iH\rho - \tfrac{1}{2}S\rho
-        + i\rho H - \tfrac{1}{2}\rho S$,
-    which is $i[\rho,H] + \sum_j(L_j\rho L_j^\dagger
-        - \tfrac{1}{2}L_j^\dagger L_j\rho - \tfrac{1}{2}\rho L_j^\dagger L_j)$.
+    $\phi(\rho)-\kappa\rho-\rho\kappa^\dagger
+        = \sum_j L_j\rho L_j^\dagger-iH\rho-\tfrac{1}{2}S\rho
+        +i\rho H-\tfrac{1}{2}\rho S$,
+    which is
+    $i[\rho,H]+\sum_j(L_j\rho L_j^\dagger
+        -\tfrac{1}{2}L_j^\dagger L_j\rho
+        -\tfrac{1}{2}\rho L_j^\dagger L_j)$.
 \end{proof}
 
 \begin{theorem}[Lindblad form is CCP]
@@ -561,13 +569,14 @@ which shows that such generators have the standard Lindblad form.
     \uses{def:lindblad_form}
     The \emph{commutator form} of the Lindblad equation writes
     the generator as
-    \[
+    \begin{align}
         L(\rho)
-        = i[\rho, H]
-        + \tfrac{1}{2}\sum_{j}
-        \bigl([L_j, \rho L_j^\dagger]
-        + [L_j\rho,\,L_j^\dagger]\bigr),
-    \]
+        &= i[\rho,H]
+        + \tfrac{1}{2}\sum_j
+        \bigl([L_j,\rho L_j^\dagger]
+        + [L_j\rho,L_j^\dagger]\bigr),
+        \label{eq:semigroup_commutator_form}
+    \end{align}
     where $[A,B] = AB - BA$.
     This is \cite[Equation~(7.22)]{Wolf2012Quantum}.
 \end{definition}
@@ -583,8 +592,9 @@ which shows that such generators have the standard Lindblad form.
 
 \begin{proof}\leanok
     Expanding the commutator brackets
-    $[L_j, \rho L_j^\dagger]$ and $[L_j\rho, L_j^\dagger]$
-    yields the standard dissipator terms.
+    $[L_j,\rho L_j^\dagger]$ and $[L_j\rho,L_j^\dagger]$
+    in (\ref{eq:semigroup_commutator_form}) yields the standard dissipator
+    terms in (\ref{eq:semigroup_lindblad_form}).
 \end{proof}
 
 \subsection{Characterization of conditional complete positivity}
@@ -594,15 +604,17 @@ which shows that such generators have the standard Lindblad form.
     \lean{ccp_implies_choi_projected_posSemidef}\leanok
     \uses{def:is_ccp}
     If $L$ is CCP and $P = \Id - \ketbra{\Omega}{\Omega}$, then
-    \[
-        P((L \otimes \id)(\ketbra{\Omega}{\Omega}))P \ge 0.
-    \]
+    \begin{align}
+        P((L\otimes\id)(\ketbra{\Omega}{\Omega}))P
+        &\ge 0.
+        \label{eq:semigroup_choi_projected}
+    \end{align}
     This is \cite[Proposition~7.2]{Wolf2012Quantum}.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    Write $L(\rho) = \phi(\rho) - \kappa\rho - \rho\kappa^\dagger$.
+    Write $L(\rho) = \phi(\rho)-\kappa\rho-\rho\kappa^\dagger$.
     The left- and right-multiplication terms are annihilated by $P$, so the
     projected Choi matrix reduces to the projected Choi matrix of $\phi$, which
     is positive.
@@ -613,7 +625,7 @@ which shows that such generators have the standard Lindblad form.
     \lean{choi_projected_posSemidef_implies_ccp}\leanok
     \uses{def:is_ccp}
     If $L$ is Hermiticity-preserving and
-    $P((L \otimes \id)(\ketbra{\Omega}{\Omega}))P \ge 0$
+    $P((L\otimes\id)(\ketbra{\Omega}{\Omega}))P \ge 0$,
     where $P = \Id - \ketbra{\Omega}{\Omega}$,
     then $L$ is CCP.
     This is \cite[Proposition~7.2]{Wolf2012Quantum}.
@@ -622,11 +634,11 @@ which shows that such generators have the standard Lindblad form.
 \begin{proof}
     \leanok
     Decompose the Hermitian Choi matrix as
-    $\tau_L = Q - \ket{\psi}\bra{\Omega} - \ket{\Omega}\bra{\psi}$
+    $\tau_L = Q-\ket{\psi}\bra{\Omega}-\ket{\Omega}\bra{\psi}$
     with $Q \ge 0$ supported on $\ket{\Omega}^\perp$.
     The Choi--Jamiolkowski isomorphism applied to $Q$ gives
     the CP map $\phi$, and
-    $(\kappa \otimes \Id)\ket{\Omega} = \ket{\psi}$ defines $\kappa$.
+    $(\kappa\otimes\Id)\ket{\Omega} = \ket{\psi}$ defines $\kappa$.
 \end{proof}
 
 \subsection{Completely positive semigroups and conditionally completely positive generators}
@@ -642,7 +654,7 @@ which shows that such generators have the standard Lindblad form.
 \begin{proof}
     \leanok
     \uses{thm:choi_projected_implies_ccp}
-    From $(e^{tL} \otimes \id)(\ketbra{\Omega}{\Omega}) \ge 0$,
+    From $(e^{tL}\otimes\id)(\ketbra{\Omega}{\Omega}) \ge 0$,
     expand at infinitesimal $t$ and project onto $P$ to get
     $P(L\otimes\id)(\ketbra{\Omega}{\Omega})P \ge 0$.
     Then Theorem~\ref{thm:choi_projected_implies_ccp} gives CCP.
@@ -659,10 +671,12 @@ which shows that such generators have the standard Lindblad form.
 \begin{proof}
     \leanok
     Approximate $e^{tL}$ by the completely positive Euler steps
-    \[
-        \rho \mapsto (\Id - h\kappa)\rho(\Id - h\kappa)^\dagger + h\phi(\rho),
-        \qquad h = \frac{t}{n+1}.
-    \]
+    \begin{align}
+        \rho
+        &\mapsto (\Id-h\kappa)\rho(\Id-h\kappa)^\dagger+h\phi(\rho),
+        \qquad h=\frac{t}{n+1}.
+        \notag
+    \end{align}
     Each step is CP, hence so are its powers. These powers converge in operator
     norm to $e^{tL}$, and the cone of CP maps is closed.
 \end{proof}
@@ -686,8 +700,8 @@ which shows that such generators have the standard Lindblad form.
 \begin{theorem}[Traceless Kraus operators exist]
     \label{thm:exists_traceless_kraus_shift}
     \lean{exists_traceless_kraus_shift}\leanok
-    Assume $d > 0$. Given any Kraus operators $\{K_j\}$, there exist $c_j \in \C$
-    such that $K_j' = K_j + c_j \Id$ is traceless.
+    Assume $d > 0$. Given any Kraus operators $\{K_j\}$, there exist
+    $c_j \in \C$ such that $K_j' = K_j+c_j\Id$ is traceless.
     This is part of \cite[Proposition~7.4]{Wolf2012Quantum}.
 \end{theorem}
 
@@ -699,9 +713,9 @@ which shows that such generators have the standard Lindblad form.
 \begin{theorem}[Shift invariance of generators]
     \label{thm:generator_shift_invariance}
     \lean{generator_shift_invariance}\leanok
-    If $K_j' = K_j + c_j \Id$ and $\kappa'$ is adjusted per
+    If $K_j' = K_j+c_j\Id$ and $\kappa'$ is adjusted per
     \cite[Equation~(7.19)]{Wolf2012Quantum},
-    then $(\phi', \kappa')$ and $(\phi, \kappa)$ define the same generator.
+    then $(\phi',\kappa')$ and $(\phi,\kappa)$ define the same generator.
 \end{theorem}
 
 \begin{proof}
@@ -722,7 +736,7 @@ which shows that such generators have the standard Lindblad form.
     \label{thm:generatorDecomp_traceless_unique_phi}
     \lean{generatorDecomp_traceless_unique_phi}\leanok
     \uses{def:lindblad_form, def:has_traceless_kraus, def:generator_decomp}
-    If two Lindblad forms $F, F'$ induce the same generator and
+    If two Lindblad forms $F,F'$ induce the same generator and
     both have traceless Kraus operators, then their CP parts agree:
     $\phi = \phi'$.
     This is part of \cite[Proposition~7.4(2)]{Wolf2012Quantum}.
@@ -737,9 +751,9 @@ which shows that such generators have the standard Lindblad form.
     \lean{generatorDecomp_traceless_unique_kappa_modPhase}\leanok
     \uses{def:lindblad_form, def:has_traceless_kraus, def:generator_decomp,
         thm:generatorDecomp_traceless_unique_phi}
-    If two Lindblad forms $F, F'$ induce the same generator and
+    If two Lindblad forms $F,F'$ induce the same generator and
     both have traceless Kraus operators, then their drift matrices
-    differ by an imaginary scalar: $\kappa' = \kappa + i\lambda\,\Id$
+    differ by an imaginary scalar: $\kappa' = \kappa+i\lambda\,\Id$
     for some $\lambda \in \R$.
     This is part of \cite[Proposition~7.4(2)]{Wolf2012Quantum}.
 \end{theorem}
@@ -749,12 +763,13 @@ which shows that such generators have the standard Lindblad form.
     After identifying $\phi = \phi'$
     (Theorem~\ref{thm:generatorDecomp_traceless_unique_phi}),
     the generator equality forces
-    $\Delta\kappa \cdot \rho + \rho \cdot (\Delta\kappa)^\dagger = 0$
-    for all~$\rho$. Setting $\rho = \Id$ gives $\Delta\kappa + (\Delta\kappa)^\dagger = 0$
+    $\Delta\kappa\cdot\rho+\rho\cdot(\Delta\kappa)^\dagger=0$
+    for all~$\rho$. Setting $\rho=\Id$ gives
+    $\Delta\kappa+(\Delta\kappa)^\dagger=0$
     (skew-Hermiticity), which converts the equation to
-    $[\Delta\kappa, \rho] = 0$ for all~$\rho$.
-    The scalar commutant lemma gives $\Delta\kappa = c \cdot \Id$,
-    and skew-Hermiticity forces $c = i\lambda$ for some $\lambda \in \R$.
+    $[\Delta\kappa,\rho]=0$ for all~$\rho$.
+    The scalar commutant lemma gives $\Delta\kappa=c\cdot\Id$,
+    and skew-Hermiticity forces $c=i\lambda$ for some $\lambda\in\R$.
 \end{proof}
 
 \begin{theorem}[Combined uniqueness of the traceless Lindblad form]
@@ -762,9 +777,9 @@ which shows that such generators have the standard Lindblad form.
     \lean{generatorDecomp_traceless_unique}\leanok
     \uses{thm:generatorDecomp_traceless_unique_phi,
         thm:generatorDecomp_traceless_unique_kappa}
-    If two Lindblad forms $F, F'$ induce the same generator and
-    both have traceless Kraus operators, then $\phi = \phi'$ and
-    $\kappa' = \kappa + i\lambda\,\Id$ for some $\lambda \in \R$.
+    If two Lindblad forms $F,F'$ induce the same generator and
+    both have traceless Kraus operators, then $\phi=\phi'$ and
+    $\kappa'=\kappa+i\lambda\,\Id$ for some $\lambda\in\R$.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -786,9 +801,9 @@ which shows that such generators have the standard Lindblad form.
 
 \begin{proof}
     \leanok
-    For fixed $\rho$, the function $f(t) = \tr(e^{tL}(\rho))$ has derivative
-    $f'(t) = \tr(L(e^{tL}(\rho))) = 0$, so $f$ is constant and
-    $\tr(e^{tL}(\rho)) = f(t) = f(0) = \tr(\rho)$.
+    For fixed $\rho$, the function $f(t)=\tr(e^{tL}(\rho))$ has derivative
+    $f'(t)=\tr(L(e^{tL}(\rho)))=0$, so $f$ is constant and
+    $\tr(e^{tL}(\rho))=f(t)=f(0)=\tr(\rho)$.
 \end{proof}
 
 \begin{theorem}[Trace-preserving semigroups have trace-annihilating generators]
@@ -801,7 +816,7 @@ which shows that such generators have the standard Lindblad form.
 
 \begin{proof}
     \leanok
-    Differentiate the identity $\tr(e^{tL}(\rho)) = \tr(\rho)$ at $t = 0$
+    Differentiate the identity $\tr(e^{tL}(\rho))=\tr(\rho)$ at $t=0$
     from the right.
 \end{proof}
 
@@ -819,8 +834,8 @@ which shows that such generators have the standard Lindblad form.
     \lean{gksl_of_generatorDecomp_with_traceConstraint}\leanok
     \uses{def:cp_map, def:is_gksl_generator, def:generator_decomp,
         def:is_trace_constraint}
-    If $L(\rho) = \phi(\rho) - \kappa\rho - \rho\kappa^\dagger$ with
-    $\phi$ CP and $\phi^*(\Id) = \kappa + \kappa^\dagger$,
+    If $L(\rho)=\phi(\rho)-\kappa\rho-\rho\kappa^\dagger$ with
+    $\phi$ CP and $\phi^*(\Id)=\kappa+\kappa^\dagger$,
     then $L$ is a GKSL generator.
     This is \cite[Theorem~7.1, Equation~(7.20)]{Wolf2012Quantum}.
 \end{theorem}
@@ -841,10 +856,14 @@ which shows that such generators have the standard Lindblad form.
     \uses{def:cp_map, def:is_gksl_generator, def:generator_decomp, def:is_trace_constraint}
     If $L$ is a GKSL generator, then there exist a CP map $\phi$ and a matrix
     $\kappa$ such that
-    \[
-        L(\rho) = \phi(\rho) - \kappa\rho - \rho\kappa^\dagger
-    \]
-    and $\phi^*(\Id) = \kappa + \kappa^\dagger$.
+    \begin{align}
+        L(\rho)
+        &= \phi(\rho)-\kappa\rho-\rho\kappa^\dagger,
+        \label{eq:semigroup_gksl_decomp}\\
+        \phi^*(\Id)
+        &= \kappa+\kappa^\dagger.
+        \label{eq:semigroup_gksl_constraint}
+    \end{align}
 \end{theorem}
 
 \begin{proof}\leanok
@@ -852,7 +871,7 @@ which shows that such generators have the standard Lindblad form.
     Apply Theorem~\ref{thm:cp_semigroup_implies_ccp} to obtain a CCP
     decomposition. Then apply Theorem~\ref{thm:tp_semigroup_implies_ta} to the
     trace-preserving part of the semigroup and rewrite the resulting
-    trace-annihilation condition as $\phi^*(\Id) = \kappa + \kappa^\dagger$.
+    trace-annihilation condition as (\ref{eq:semigroup_gksl_constraint}).
 \end{proof}
 
 \begin{theorem}[GKSL iff conditional complete positivity and trace annihilation]
@@ -877,14 +896,15 @@ which shows that such generators have the standard Lindblad form.
     \lean{gksl_iff_lindbladForm}\leanok
     \uses{def:is_gksl_generator, def:lindblad_form}
     $L$ is a GKSL generator if and only if
-    \[
+    \begin{align}
         L(\rho)
-        = i[\rho, H]
-        + \sum_j \Bigl(        L_j \rho L_j^\dagger
-        - \tfrac{1}{2}\{L_j^\dagger L_j, \rho\}_+
-        \Bigr)
-    \]
-    with $H = H^\dagger$.
+        &= i[\rho,H]
+        + \sum_j \Bigl(        L_j\rho L_j^\dagger
+            - \tfrac{1}{2}\{L_j^\dagger L_j,\rho\}_+
+        \Bigr),
+        \label{eq:semigroup_gksl_lindblad}
+    \end{align}
+    with $H=H^\dagger$.
     This is \cite[Theorem~7.1]{Wolf2012Quantum}.
 \end{theorem}
 
@@ -894,11 +914,12 @@ which shows that such generators have the standard Lindblad form.
         thm:lindbladForm_isTraceAnnihilating,
         thm:exists_traceless_kraus_shift}
     Forward: apply Theorem~\ref{thm:generatorDecomp_of_gksl} to write
-    $L(\rho) = \phi(\rho) - \kappa\rho - \rho\kappa^\dagger$ with trace
+    $L(\rho)=\phi(\rho)-\kappa\rho-\rho\kappa^\dagger$ with trace
     constraint. Then choose traceless Kraus operators by
     Theorem~\ref{thm:exists_traceless_kraus_shift} and rewrite $\kappa$ as
-    $iH + \frac{1}{2}\phi^*(\Id)$; Theorem~\ref{thm:lindbladForm_eq_generatorDecomp}
-    gives the Lindblad formula.
+    $iH+\frac{1}{2}\phi^*(\Id)$;
+    Theorem~\ref{thm:lindbladForm_eq_generatorDecomp} gives the Lindblad
+    formula (\ref{eq:semigroup_gksl_lindblad}).
     Reverse: Theorems~\ref{thm:lindbladForm_isCCP}
     and~\ref{thm:lindbladForm_isTraceAnnihilating} show that every Lindblad form
     satisfies the right-hand side of Theorem~\ref{thm:gksl_iff_ccp_ta}.
@@ -908,15 +929,16 @@ which shows that such generators have the standard Lindblad form.
 
 \begin{definition}[Kossakowski form]\label{def:kossakowski_form}
     \lean{KossakowskiForm}\leanok
-    A \emph{Kossakowski form} consists of $H = H^\dagger$, a finite family
+    A \emph{Kossakowski form} consists of $H=H^\dagger$, a finite family
     of matrices $\{F_k\}_{k=0}^{n-1}$, and a positive semidefinite matrix
     $C \in \MN{n}$, defining
-    \[
+    \begin{align}
         L(\rho)
-        = i[\rho, H]
-        + \tfrac{1}{2}\sum_{k,l} C_{lk}\bigl(    [F_k, \rho F_l^\dagger] + [F_k\rho, F_l^\dagger]
-        \bigr).
-    \]
+        &= i[\rho,H]
+        + \tfrac{1}{2}\sum_{k,l}C_{lk}
+        ([F_k,\rho F_l^\dagger]+[F_k\rho,F_l^\dagger]).
+        \label{eq:semigroup_kossakowski_form}
+    \end{align}
     In Wolf's formula one takes $\{F_k\}$ to be a basis of traceless matrices;
     here we keep only the algebraic data needed for the conversion to
     Lindblad form.
@@ -931,10 +953,10 @@ which shows that such generators have the standard Lindblad form.
 
 \begin{proof}
     \leanok
-    Forward: diagonalize $C = B^\dagger B$ and set
-    $L_j = \sum_k B_{jk} F_k$.
-    Reverse: keep the same Hamiltonian and family $F_k = L_k$, and take
-    $C = \Id$.
+    Forward: diagonalize $C=B^\dagger B$ and set
+    $L_j=\sum_k B_{jk}F_k$.
+    Reverse: keep the same Hamiltonian and family $F_k=L_k$, and take
+    $C=\Id$.
 \end{proof}
 
 %% ---------------------------------------------------------
