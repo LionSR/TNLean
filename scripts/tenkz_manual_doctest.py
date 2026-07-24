@@ -305,68 +305,74 @@ def _mask_false_branches(
     newif_pattern = re.compile(
         r"\\newif\s*\\(if[A-Za-z@]+)(?![A-Za-z@])"
     )
-    newif_matches = list(newif_pattern.finditer(scan))
-    declared_conditionals = [match.group(1) for match in newif_matches]
+    newif_matches = list(newif_pattern.finditer(start_scan))
     let_pattern = re.compile(
-        r"\\let\s*\\(if[A-Za-z@]+)\s*=?\s*\\(if[A-Za-z@]+)"
+        r"\\let\s*\\(if[A-Za-z@]+)\s*=?\s*\\(if[A-Za-z@]*)"
         r"(?![A-Za-z@])"
     )
-    let_matches = list(let_pattern.finditer(scan))
-    known_conditionals = set(
-        (*primitive_conditionals, *inherited_conditionals, *declared_conditionals)
-    )
-    while True:
-        additions = {
-            match.group(1)
-            for match in let_matches
-            if match.group(2) in known_conditionals
-        } - known_conditionals
-        if not additions:
-            break
-        known_conditionals.update(additions)
-    aliased_conditionals = sorted(
-        known_conditionals - set(primitive_conditionals) - set(declared_conditionals)
-    )
-    conditionals = (
-        *primitive_conditionals,
-        *declared_conditionals,
-        *aliased_conditionals,
-    )
+    let_matches = list(let_pattern.finditer(start_scan))
     declaration_operands = {
         match.start(group) - 1
         for match in (*newif_matches, *let_matches)
         for group in range(1, len(match.groups()) + 1)
     }
-    tokens = list(
-        re.finditer(
-            r"\\(?:" + "|".join(conditionals) + r"|fi)(?![A-Za-z@])",
-            scan,
-        )
-    )
-    index = 0
-    while index < len(tokens):
-        token = tokens[index]
+    false_tokens = list(re.finditer(r"\\iffalse(?![A-Za-z@])", start_scan))
+    for token in false_tokens:
         if (
-            token.group(0) != r"\iffalse"
+            masked[token.start()] != "\\"
             or token.start() in declaration_operands
             or start_scan[token.start() : token.end()] != token.group(0)
             or _is_escaped(scan, token.start())
         ):
-            index += 1
             continue
+        active_newifs = [
+            match
+            for match in newif_matches
+            if match.start() < token.start() and masked[match.start()] == "\\"
+        ]
+        active_lets = [
+            match
+            for match in let_matches
+            if match.start() < token.start() and masked[match.start()] == "\\"
+        ]
+        declared_conditionals = [match.group(1) for match in active_newifs]
+        known_conditionals = set(
+            (*primitive_conditionals, *inherited_conditionals, *declared_conditionals)
+        )
+        while True:
+            additions = {
+                match.group(1)
+                for match in active_lets
+                if match.group(2) in known_conditionals
+            } - known_conditionals
+            if not additions:
+                break
+            known_conditionals.update(additions)
+        tokens = list(
+            re.finditer(
+                r"\\(?:"
+                + "|".join(sorted(known_conditionals, key=len, reverse=True))
+                + r"|fi)(?![A-Za-z@])",
+                scan[token.start() :],
+            )
+        )
         depth = 1
-        cursor = index + 1
+        cursor = 1
         while cursor < len(tokens) and depth:
             nested = tokens[cursor]
+            nested_start = token.start() + nested.start()
             if (
-                nested.start() not in declaration_operands
-                and not _is_escaped(scan, nested.start())
+                nested_start not in declaration_operands
+                and not _is_escaped(scan, nested_start)
             ):
                 depth += -1 if nested.group(0) == r"\fi" else 1
             cursor += 1
-        end = tokens[cursor - 1].end() if depth == 0 else len(text)
+        end = (
+            token.start() + tokens[cursor - 1].end()
+            if depth == 0
+            else len(text)
+        )
         _blank_range(masked, token.start(), end)
-        index = cursor
     return "".join(masked)
 
 
