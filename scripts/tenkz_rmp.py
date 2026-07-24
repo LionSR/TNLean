@@ -24,10 +24,15 @@ from collections import Counter
 from pathlib import Path
 from typing import Any, Iterable, Sequence
 
+from tenkzlib.texcase import strip_comments
+from tenkzlib.tnlog import ParsedLog, parse_log
+
 
 REPO = Path(__file__).resolve().parent.parent
 DEFAULT_MANIFEST = REPO / "tests" / "tenkz" / "rmp" / "manifest.toml"
 DEFAULT_VERDICT = REPO / "tests" / "tenkz" / "rmp" / "verdicts.toml"
+PAPER_SOURCE = REPO / "Papers" / "2011.12127" / "TN-Review-main.tex"
+FROZEN_TARGET_COUNT = 130
 BOOK_SOURCE = REPO / "docs" / "tenkz" / "rmp-benchmark.tex"
 BOOK_OUTPUT = REPO / "output" / "pdf" / "tenkz-rmp-benchmark.pdf"
 COMPARE_OUTPUT = REPO / "output" / "pdf" / "tenkz-rmp-comparison.pdf"
@@ -47,14 +52,14 @@ REQUIRED_HEADERS = (
     "Source",
     "Capabilities",
 )
-EXPECTED_CORPUS = {
-    "published_targets": 92,
-    "paper_placements": 94,
-    "author_workbench_targets": 38,
-    "total_targets": 130,
-    "author_source_mapped": 82,
-    "paper_context_only": 10,
-}
+CORPUS_FIELDS = (
+    "published_targets",
+    "paper_placements",
+    "author_workbench_targets",
+    "total_targets",
+    "author_source_mapped",
+    "paper_context_only",
+)
 TARGET_REQUIRED = {
     "id",
     "corpus",
@@ -89,6 +94,9 @@ FORBIDDEN_CASE_PATTERNS = (
      "case uses a whole-figure definition"),
     (re.compile(r"\\coordinate\b|\\pgf(?:point|path|extra)\b"),
      "case uses an undocumented coordinate escape"),
+)
+INCLUDEGRAPHICS_RE = re.compile(
+    r"\\includegraphics(?:\s*\[[^\]]*\])?\s*\{([^}]*)\}"
 )
 
 
@@ -263,11 +271,15 @@ def load_manifest(path: Path) -> list[Target]:
     corpus = data.get("corpus")
     if not isinstance(corpus, dict):
         fail("manifest needs a [corpus] table")
-    if set(corpus) != set(EXPECTED_CORPUS):
-        fail("[corpus] fields must be exactly: " + ", ".join(EXPECTED_CORPUS))
-    for field, expected in EXPECTED_CORPUS.items():
-        if corpus[field] != expected:
-            fail(f"corpus.{field} must be {expected}, got {corpus[field]!r}")
+    if set(corpus) != set(CORPUS_FIELDS):
+        fail("[corpus] fields must be exactly: " + ", ".join(CORPUS_FIELDS))
+    for field in CORPUS_FIELDS:
+        if (
+            not isinstance(corpus[field], int)
+            or isinstance(corpus[field], bool)
+            or corpus[field] < 0
+        ):
+            fail(f"corpus.{field} must be a nonnegative integer")
 
     raw_targets = data.get("target")
     if not isinstance(raw_targets, list):
@@ -390,7 +402,8 @@ def load_manifest(path: Path) -> list[Target]:
                 extraction_override=extraction_override,
             )
         )
-    validate_census(targets)
+    validate_census(targets, corpus)
+    validate_source_placements(targets)
     for target in targets:
         validate_case(target)
     validate_distinct_case_bodies(targets)
@@ -403,9 +416,19 @@ def duplicates(values: Iterable[Any]) -> list[Any]:
     return sorted(value for value, count in counts.items() if count > 1)
 
 
-def validate_census(targets: list[Target]) -> None:
-    if len(targets) != EXPECTED_CORPUS["total_targets"]:
-        fail(f"manifest has {len(targets)} targets; expected 130")
+def validate_census(targets: list[Target], census: dict[str, Any]) -> None:
+    # M4 is explicitly defined over a frozen benchmark denominator.  The
+    # manifest derives the detailed census, but it cannot redefine that gate.
+    if len(targets) != FROZEN_TARGET_COUNT:
+        fail(
+            f"manifest has {len(targets)} targets; "
+            f"the benchmark denominator is frozen at {FROZEN_TARGET_COUNT}"
+        )
+    if len(targets) != census["total_targets"]:
+        fail(
+            f"manifest has {len(targets)} targets; "
+            f"[corpus] declares {census['total_targets']}"
+        )
     repeated_ids = duplicates(target.id for target in targets)
     repeated_cases = duplicates(target.case for target in targets)
     if repeated_ids:
@@ -413,31 +436,83 @@ def validate_census(targets: list[Target]) -> None:
     if repeated_cases:
         repeated = ", ".join(path.as_posix() for path in repeated_cases)
         fail("manifest repeats case files: " + repeated)
-    for corpus, expected_count in (
-        ("published", EXPECTED_CORPUS["published_targets"]),
-        ("author-workbench", EXPECTED_CORPUS["author_workbench_targets"]),
+    for corpus_name, expected_count in (
+        ("published", census["published_targets"]),
+        ("author-workbench", census["author_workbench_targets"]),
     ):
-        members = [target for target in targets if target.corpus == corpus]
+        members = [target for target in targets if target.corpus == corpus_name]
         if len(members) != expected_count:
-            fail(f"manifest has {len(members)} {corpus} targets; expected {expected_count}")
+            fail(
+                f"manifest has {len(members)} {corpus_name} targets; "
+                f"[corpus] declares {expected_count}"
+            )
         orders = sorted(target.order for target in members)
         if orders != list(range(1, expected_count + 1)):
-            fail(f"{corpus} order must be exactly 1..{expected_count}")
+            fail(f"{corpus_name} order must be exactly 1..{expected_count}")
     placement_count = sum(len(target.placements) for target in targets)
-    if placement_count != EXPECTED_CORPUS["paper_placements"]:
-        fail(f"manifest has {placement_count} paper placements; expected 94")
+    if placement_count != census["paper_placements"]:
+        fail(
+            f"manifest has {placement_count} paper placements; "
+            f"[corpus] declares {census['paper_placements']}"
+        )
     placement_orders = sorted(
         placement["order"] for target in targets for placement in target.placements
     )
-    if placement_orders != list(range(1, EXPECTED_CORPUS["paper_placements"] + 1)):
-        fail("paper placement order must be exactly 1..94")
+    if placement_orders != list(range(1, census["paper_placements"] + 1)):
+        fail(
+            "paper placement order must be exactly "
+            f"1..{census['paper_placements']}"
+        )
     published = [target for target in targets if target.corpus == "published"]
     mapped = sum(target.author_source is not None for target in published)
     context_only = sum(target.paper_context_only for target in published)
-    if mapped != EXPECTED_CORPUS["author_source_mapped"]:
-        fail(f"manifest has {mapped} mapped published targets; expected 82")
-    if context_only != EXPECTED_CORPUS["paper_context_only"]:
-        fail(f"manifest has {context_only} paper-context-only targets; expected 10")
+    if mapped != census["author_source_mapped"]:
+        fail(
+            f"manifest has {mapped} mapped published targets; "
+            f"[corpus] declares {census['author_source_mapped']}"
+        )
+    if context_only != census["paper_context_only"]:
+        fail(
+            f"manifest has {context_only} paper-context-only targets; "
+            f"[corpus] declares {census['paper_context_only']}"
+        )
+
+
+def validate_source_placements(targets: Sequence[Target]) -> None:
+    """Keep the manifest's placement census anchored to the source paper."""
+    try:
+        source = strip_comments(PAPER_SOURCE.read_text(encoding="utf-8"))
+    except (OSError, UnicodeError) as exc:
+        fail(f"cannot read source paper {PAPER_SOURCE}: {exc}")
+    expected = [
+        (source.count("\n", 0, match.start()) + 1, match.group(1))
+        for match in INCLUDEGRAPHICS_RE.finditer(source)
+    ]
+    ordered = sorted(
+        (placement["order"], placement["line"], placement["asset"])
+        for target in targets
+        for placement in target.placements
+    )
+    actual = [(line, asset) for _, line, asset in ordered]
+    if actual != expected:
+        fail(
+            "paper placements must match the source paper's "
+            f"{len(expected)} includegraphics occurrences"
+        )
+    expected_published = len({asset for _, asset in expected})
+    published = sum(target.corpus == "published" for target in targets)
+    if published != expected_published:
+        fail(
+            f"manifest has {published} published targets; the source paper has "
+            f"{expected_published} distinct graphics"
+        )
+    expected_workbench = FROZEN_TARGET_COUNT - expected_published
+    workbench = sum(target.corpus == "author-workbench" for target in targets)
+    if workbench != expected_workbench:
+        fail(
+            f"manifest has {workbench} author-workbench targets; "
+            f"the frozen remainder is {expected_workbench}"
+        )
 
 
 def case_headers(lines: list[str], *, path: Path) -> dict[str, str]:
@@ -465,30 +540,10 @@ def case_headers(lines: list[str], *, path: Path) -> dict[str, str]:
     return headers
 
 
-def strip_tex_comments(text: str) -> str:
-    """Remove unescaped TeX comments while preserving line boundaries."""
-    stripped: list[str] = []
-    for line in text.splitlines():
-        end = len(line)
-        for index, character in enumerate(line):
-            if character != "%":
-                continue
-            backslashes = 0
-            cursor = index - 1
-            while cursor >= 0 and line[cursor] == "\\":
-                backslashes += 1
-                cursor -= 1
-            if backslashes % 2 == 0:
-                end = index
-                break
-        stripped.append(line[:end])
-    return "\n".join(stripped)
-
-
 def normalized_case_body(target: Target) -> str:
     """Return semantic case source with provenance comments and layout removed."""
     text = (REPO / target.case).read_text(encoding="utf-8")
-    return re.sub(r"\s+", "", strip_tex_comments(text))
+    return re.sub(r"\s+", "", strip_comments(text))
 
 
 def validate_distinct_case_bodies(targets: list[Target]) -> None:
@@ -564,7 +619,7 @@ def validate_case(target: Target) -> None:
     if wide:
         details = ", ".join(f"{number} ({width})" for number, width in wide[:8])
         fail(f"{target.case.as_posix()}: lines exceed 88 characters: {details}")
-    syntax = strip_tex_comments(text)
+    syntax = strip_comments(text)
     for pattern, reason in FORBIDDEN_CASE_PATTERNS:
         match = pattern.search(syntax)
         if match:
@@ -634,37 +689,28 @@ def pdf_dimensions(pdf: Path) -> tuple[str, str, int]:
     return size_match.group(1), size_match.group(2), int(pages_match.group(1))
 
 
-def resolved_event_signatures(tnlog_text: str) -> tuple[str, ...]:
-    """Return concise signatures from the exact event stream used to render.
-
-    Grid pictures already emit an aggregate ``boundary`` record.  Other
-    dialects expose their topology as atoms, joins, bonds, regions, and other
-    model events instead.  For those pictures, retain a deterministic census
-    and the number of explicit boundary atoms rather than claiming that a
-    boundary event exists.
-    """
-    lines = [line.strip() for line in tnlog_text.splitlines() if line.strip()]
-    boundaries = tuple(line for line in lines if line.startswith("boundary|"))
+def event_signatures(parsed: ParsedLog) -> tuple[str, ...]:
+    """Return concise signatures from a parsed render event stream."""
+    boundaries = tuple(
+        event.raw for event in parsed.events if event.kind == "boundary"
+    )
     if boundaries:
         return boundaries
 
     languages: dict[str, str] = {}
     counts: dict[str, Counter[str]] = {}
     boundary_atoms: Counter[str] = Counter()
-    for line in lines:
-        parts = line.split("|")
-        event = parts[0]
-        fields = dict(part.split("=", 1) for part in parts[1:] if "=" in part)
-        if event == "picture":
-            picture = fields.get("id", "?")
-            languages[picture] = fields.get("lang", "unknown")
+    for event in parsed.events:
+        if event.kind == "picture":
+            picture = event.attrs.get("id", "?")
+            languages[picture] = event.attrs.get("lang", "unknown")
             counts.setdefault(picture, Counter())
             continue
-        picture = fields.get("picture")
+        picture = event.attrs.get("picture")
         if picture is None:
             continue
-        counts.setdefault(picture, Counter())[event] += 1
-        if event == "atom" and fields.get("kind") == "boundary":
+        counts.setdefault(picture, Counter())[event.kind] += 1
+        if event.kind == "atom" and event.attrs.get("kind") == "boundary":
             boundary_atoms[picture] += 1
 
     signatures: list[str] = []
@@ -727,7 +773,8 @@ def compile_one(target: Target, root: Path, env: dict[str, str]) -> BuildResult:
         )
         (target_work / f"{target.id}.audit.txt").write_text(audit.stdout, encoding="utf-8")
         width, height, pages = pdf_dimensions(pdf)
-        signatures = resolved_event_signatures(tnlog.read_text(encoding="utf-8"))
+        parsed = parse_log(tnlog.read_text(encoding="utf-8"), source_name=tnlog.name)
+        signatures = event_signatures(parsed)
         return BuildResult(target, wrapper, pdf, tnlog, width, height, pages, signatures)
     except RMPError as exc:
         if not transcript.exists():
@@ -779,11 +826,14 @@ def campaign_digest(targets: Sequence[Target]) -> str:
     """Hash every committed input whose change invalidates visual verdicts."""
     paths = {
         DEFAULT_MANIFEST,
+        PAPER_SOURCE,
         BOOK_SOURCE,
         REPO / "docs" / "tenkz" / "tenkzrmpbenchmark.sty",
         REPO / "scripts" / "tenkz_rmp.py",
         REPO / "scripts" / "tenkz_lint.py",
         REPO / "scripts" / "tenkz_audit.py",
+        REPO / "scripts" / "tenkzlib" / "texcase.py",
+        REPO / "scripts" / "tenkzlib" / "tnlog.py",
     }
     paths.update((REPO / "tex" / "tenkz").glob("*.tex"))
     paths.update((REPO / "tex" / "tenkz").glob("*.sty"))
@@ -955,7 +1005,7 @@ def validate_verdict_consistency(targets: Sequence[Target], verdicts: dict[str, 
     """
     problems: list[str] = []
     for target in targets:
-        body = strip_tex_comments((REPO / target.case).read_text(encoding="utf-8"))
+        body = strip_comments((REPO / target.case).read_text(encoding="utf-8"))
         verdict = verdicts[target.id]
         # Literal prose standing in for a declared diagram.
         if "\\text{" in body:
