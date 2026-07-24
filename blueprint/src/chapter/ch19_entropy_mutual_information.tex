@@ -6,9 +6,11 @@
     \uses{def:von_neumann_entropy}
     The \emph{quantum mutual information} of a bipartite state
     $\rho_{AB}$ is
-    \[
-        I(A{:}B) = S(\rho_A) + S(\rho_B) - S(\rho_{AB}).
-    \]
+    \begin{align}
+        I(A{:}B)
+        &= S(\rho_A) + S(\rho_B) - S(\rho_{AB}).
+        \label{eq:entropy_mutual_information}
+    \end{align}
 \end{definition}
 
 \begin{theorem}[Mutual information is non-negative]\label{thm:mutual_information_nonneg}
@@ -52,9 +54,11 @@ later MPDO arguments.
     \uses{def:entropy_von_neumann_entropy, def:traceA_ABC, def:traceC_ABC, def:traceAC_ABC}
     For any tripartite density matrix $\rho_{ABC}$ on
     $A \otimes B \otimes C$,
-    \[
-        S(\rho_{ABC}) + S(\rho_B) \le S(\rho_{AB}) + S(\rho_{BC}).
-    \]
+    \begin{align}
+        S(\rho_{ABC}) + S(\rho_B)
+        &\le S(\rho_{AB}) + S(\rho_{BC}).
+        \label{eq:entropy_strong_subadditivity}
+    \end{align}
     This formulation introduces no new axiom: it is the same
     strong-subadditivity statement as
     Theorem~\ref{thm:strong_subadditivity}, which is proved there from
@@ -99,10 +103,8 @@ later MPDO arguments.
     \leanok
     \uses{def:entropy_von_neumann_entropy, def:traceA_ABC, def:traceC_ABC}
     For a tripartite density matrix $\rho_{ABC}$ with
-    $\dim B = 1$,
-    \[
-        S(\rho_{ABC}) \le S(\rho_{AB}) + S(\rho_{BC}).
-    \]
+    $\dim B = 1$, one has
+    $S(\rho_{ABC}) \le S(\rho_{AB}) + S(\rho_{BC})$.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -137,7 +139,7 @@ $S(\rho) \le \log D$ bound; neither introduces a new axiom.
     index sets: it does
     not require the index set to be $\Fin{D}$, so it applies to
     bipartite density matrices on
-    $\mathbb{C}^{d_A} \otimes \mathbb{C}^{d_B}$.
+    $\C^{d_A} \otimes \C^{d_B}$.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -156,9 +158,11 @@ $S(\rho) \le \log D$ bound; neither introduces a new axiom.
         thm:entropy_strong_subadditivity}
     For any tripartite density matrix $\rho_{ABC}$ on
     $A \otimes B \otimes C$,
-    \[
-        I(A{:}B)_{\tr_C \rho_{ABC}} \le  I(A{:}BC)_{\rho_{ABC}},
-    \]
+    \begin{align}
+        I(A{:}B)_{\tr_C \rho_{ABC}}
+        &\le I(A{:}BC)_{\rho_{ABC}},
+        \label{eq:entropy_mutual_information_monotone}
+    \end{align}
     where the left-hand side is the bipartite mutual information of
     the reduced state $\rho_{AB} = \tr_C(\rho_{ABC})$ and the
     right-hand side is evaluated by expanding
@@ -182,11 +186,9 @@ $S(\rho) \le \log D$ bound; neither introduces a new axiom.
     \uses{def:entropy_mutual_information, thm:entropy_le_log_dim,
         thm:entropy_nonneg_finite_index}
     For a bipartite density matrix $\rho_{AB}$ on
-    $\mathbb{C}^{d_A} \otimes \mathbb{C}^{d_B}$ with $d_A, d_B \ge 1$
+    $\C^{d_A} \otimes \C^{d_B}$ with $d_A, d_B \ge 1$
     whose single-system reduced states are obtained by partial trace,
-    \[
-        I(A{:}B) \le  \log d_A + \log d_B.
-    \]
+    $I(A{:}B) \le \log d_A + \log d_B$.
 \end{theorem}
 
 \begin{proof}\leanok

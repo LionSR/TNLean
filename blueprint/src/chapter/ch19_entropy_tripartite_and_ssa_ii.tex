@@ -6,29 +6,35 @@
     Let $\rho$ and $\sigma$ be positive definite on
     $\mathcal H_S\otimes\mathbb C^{d_C}$, let
     $q=d_C^{-2}$, and put
-    \[
-        A_g=qU_g\rho U_g^{\dagger},\qquad
-        B_g=qU_g\sigma U_g^{\dagger},\qquad
-        A=\sum_g A_g,\qquad B=\sum_g B_g,
-    \]
-    where $U_g=\mathbf 1_S\otimes W_g$.  For $t>0$, let
-    \[
-        T_g(X)=A_gX+tXB_g,\qquad T(X)=AX+tXB,
-        \qquad \Lambda_t=T^{-1}(B).
-    \]
+    \begin{align}
+        A_g&=qU_g\rho U_g^{\dagger},&
+        B_g&=qU_g\sigma U_g^{\dagger},&
+        A&=\sum_g A_g,&
+        B&=\sum_g B_g,
+        \notag
+    \end{align}
+    where $U_g=\mathbf 1_S\otimes W_g$. For $t>0$, let
+    \begin{align}
+        T_g(X)&=A_gX+tXB_g,&
+        T(X)&=AX+tXB,&
+        \Lambda_t&=T^{-1}(B).
+        \notag
+    \end{align}
     Then
-    \[
+    \begin{align}
         \sum_g\left\|
           T_g^{-1/2}(B_g)-T_g^{1/2}(\Lambda_t)
         \right\|_{\mathrm{HS}}^2
-        =\sum_g\re
+        &=
+        \sum_g\re
           \langle B_g,T_g^{-1}(B_g)\rangle_{\mathrm{HS}}
-          -\re
+        -\re
           \langle B,T^{-1}(B)\rangle_{\mathrm{HS}}.
-    \]
+        \notag
+    \end{align}
     This is the positive-definite, fixed-$t$ identity in
     Jen\v{c}ov\'a--Ruskai, arXiv:0903.2895v4, Appendix,
-    lines 1313--1343.  It does not infer zero defect from equality of relative
+    lines 1313--1343. It does not infer zero defect from equality of relative
     entropies and makes no assertion about singular supports.
 \end{theorem}
 
@@ -36,20 +42,24 @@
     Write $S_g$ for the positive definite matrix representing $T_g$ under
     the vectorization $X\mapsto\opvec(X^{\mathsf T})$, and put
     $b_g=\opvec(B_g^{\mathsf T})$ and
-    $x=S^{-1}\sum_g b_g$.  For the residual $r_g=b_g-S_gx$, direct expansion
+    $x=S^{-1}\sum_g b_g$. For the residual $r_g=b_g-S_gx$, direct expansion
     gives
-    \[
-      \sum_g\langle r_g,S_g^{-1}r_g\rangle
-        =\sum_g\langle b_g,S_g^{-1}b_g\rangle
-          -\left\langle\sum_gb_g,
-            S^{-1}\sum_gb_g\right\rangle.
-    \]
+    \begin{align}
+        \sum_g\langle r_g,S_g^{-1}r_g\rangle
+        &=
+        \sum_g\langle b_g,S_g^{-1}b_g\rangle
+        -\left\langle\sum_gb_g,
+          S^{-1}\sum_gb_g\right\rangle.
+        \notag
+    \end{align}
     Since $S_g^{1/2}$ is invertible,
-    \[
-      \|S_g^{-1/2}b_g-S_g^{1/2}x\|^2
-        =\|S_g^{-1/2}r_g\|^2
+    \begin{align}
+        \|S_g^{-1/2}b_g-S_g^{1/2}x\|^2
+        &=
+        \|S_g^{-1/2}r_g\|^2
         =\re\langle r_g,S_g^{-1}r_g\rangle.
-    \]
+        \notag
+    \end{align}
     Summing proves the identity.
 \end{proof}
 
@@ -59,15 +69,17 @@
     \leanok
     \uses{thm:weyl_operator_unitary}
     Under the notation of Theorem~\ref{thm:weyl_resolvent_defect_identity},
-    set $\Gamma_t=T^{-1}(A)$.  Then, for every $t>0$,
-    \[
-      \sum_g\left\|
-        T_g^{-1/2}(A_g)-T_g^{1/2}(\Gamma_t)
-      \right\|_{\rm HS}^2
-      =\sum_g\re
-        \langle A_g,T_g^{-1}(A_g)\rangle_{\rm HS}
-       -\re\langle A,T^{-1}(A)\rangle_{\rm HS}.
-    \]
+    set $\Gamma_t=T^{-1}(A)$. Then, for every $t>0$,
+    \begin{align}
+        \sum_g\left\|
+          T_g^{-1/2}(A_g)-T_g^{1/2}(\Gamma_t)
+        \right\|_{\mathrm{HS}}^2
+        &=
+        \sum_g\re
+          \langle A_g,T_g^{-1}(A_g)\rangle_{\mathrm{HS}}
+        -\re\langle A,T^{-1}(A)\rangle_{\mathrm{HS}}.
+        \notag
+    \end{align}
     This is the second defect family in Jen\v{c}ov\'a--Ruskai,
     arXiv:0903.2895v4, \S4 and Appendix.
 \end{theorem}
@@ -76,12 +88,14 @@
     Apply the residual identity of
     Theorem~\ref{thm:weyl_resolvent_defect_identity} with
     $a_g=\opvec(A_g^{\mathsf T})$ and
-    $\bar a=\opvec(A^{\mathsf T})$.  Thus
-    \[
-      \sum_g\langle a_g,S_g^{-1}a_g\rangle
+    $\bar a=\opvec(A^{\mathsf T})$. Thus
+    \begin{align}
+        \sum_g\langle a_g,S_g^{-1}a_g\rangle
         -\langle\bar a,S^{-1}\bar a\rangle
-      =\sum_g\|S_g^{-1/2}a_g-S_g^{1/2}S^{-1}\bar a\|^2,
-    \]
+        &=
+        \sum_g\|S_g^{-1/2}a_g-S_g^{1/2}S^{-1}\bar a\|^2,
+        \notag
+    \end{align}
     which is the asserted source-$A$ identity.
 \end{proof}
 
@@ -105,21 +119,25 @@
         thm:weyl_resolvent_defect_identity,
         thm:weyl_sourceA_resolvent_defect_identity}
     For the positive definite finite-Weyl family, let
-    \[
-      \Def_A(t)=
-        \sum_g\re\langle A_g,T_g^{-1}(A_g)\rangle_{\rm HS}
-        -\re\langle A,T^{-1}(A)\rangle_{\rm HS}
-    \]
+    \begin{align}
+        \Def_A(t)
+        &=
+        \sum_g\re\langle A_g,T_g^{-1}(A_g)\rangle_{\mathrm{HS}}
+        -\re\langle A,T^{-1}(A)\rangle_{\mathrm{HS}},
+        \notag
+    \end{align}
     and define $\Def_B(t)$ analogously, with the real parts of
-    the corresponding source-$B$ pairings.  Then both defects are
-    nonnegative and continuous for $t>0$, and
-    \[
-      \sum_gD(A_g\Vert B_g)-D(A\Vert B)
-      =\int_0^\infty
+    the corresponding source-$B$ pairings. Then both defects are
+    non-negative and continuous for $t>0$, and
+    \begin{align}
+        \sum_gD(A_g\Vert B_g)-D(A\Vert B)
+        &=
+        \int_0^\infty
         \frac{\Def_A(t)+t\Def_B(t)}{1+t}\,dt.
-    \]
-    The integrand is continuous, nonnegative, and integrable on
-    $(0,\infty)$.  The coefficient of the source-$B$ defect is exactly $t$,
+        \notag
+    \end{align}
+    The integrand is continuous, non-negative, and integrable on
+    $(0,\infty)$. The coefficient of the source-$B$ defect is exactly $t$,
     as prescribed by the integral formula and equality analysis of
     Jen\v{c}ov\'a--Ruskai, arXiv:0903.2895v4, \S4.
 \end{theorem}
@@ -127,9 +145,9 @@
 \begin{proof}\leanok
     Apply Theorem~\ref{thm:relative_entropy_resolvent_integral} to each pair
     $(A_g,B_g)$ and to $(A,B)$, and interchange the finite sum with the
-    integral.  The trace terms cancel because $B=\sum_gB_g$.  The two
+    integral. The trace terms cancel because $B=\sum_gB_g$. The two
     fixed-resolvent identities write the defects as sums of squared norms,
-    proving nonnegativity.  Continuity and integrability follow from the
+    proving nonnegativity. Continuity and integrability follow from the
     corresponding spectral assertions before taking the finite difference.
 \end{proof}
 
@@ -139,29 +157,28 @@
     \leanok
     \uses{thm:weyl_resolvent_defect_identity}
     Under the hypotheses and notation of the preceding theorem, suppose that
-    \begin{equation}\label{eq:weyl_resolvent_zero_defect_hyp}
+    \begin{align}
         \sum_g\re
           \langle B_g,T_g^{-1}(B_g)\rangle_{\mathrm{HS}}
-          -\re
-          \langle B,T^{-1}(B)\rangle_{\mathrm{HS}}=0.
-    \end{equation}
-    Then, for every Weyl index $g$,
-    \[
-        T_g^{-1}(B_g)=T^{-1}(B).
-    \]
+        -\re
+          \langle B,T^{-1}(B)\rangle_{\mathrm{HS}}
+        &=0.
+        \label{eq:entropy_weyl_zero_defect}
+    \end{align}
+    Then $T_g^{-1}(B_g)=T^{-1}(B)$ for every Weyl index $g$.
     In particular this holds for the identity Weyl element $g=(0,0)$.
     This is the common-resolvent conclusion in Jen\v{c}ov\'a--Ruskai,
     arXiv:0903.2895v4, \S4, lines 652--674; its squared-defect input is in
     Appendix, lines 1313--1343.
     This fixed-$t$, positive-definite conclusion does not assert that equality
-    of relative entropies implies the displayed scalar hypothesis.
+    of relative entropies implies the scalar hypothesis
+    in (\ref{eq:entropy_weyl_zero_defect}).
 \end{theorem}
 
 \begin{proof}\leanok
-    Equation~(\ref{eq:weyl_resolvent_zero_defect_hyp}) writes the hypothesis
-    as a finite sum of squared norms.  Each term is nonnegative, so every term
-    vanishes.  Thus
-    $S_g^{-1/2}(b_g-S_gx)=0$ for every $g$.  Invertibility of
+    The hypothesis (\ref{eq:entropy_weyl_zero_defect}) is a finite sum
+    of squared norms. Each term is non-negative, so every term vanishes. Thus
+    $S_g^{-1/2}(b_g-S_gx)=0$ for every $g$. Invertibility of
     $S_g^{-1/2}$ gives $b_g=S_gx$, and hence
     $S_g^{-1}b_g=x=S^{-1}\sum_hb_h$.
 \end{proof}
@@ -176,30 +193,25 @@
         thm:weyl_relative_entropy_gap_integral,
         thm:weyl_resolvent_zero_defect}
     Under the positive-definite finite-Weyl hypotheses, suppose that
-    \[
-      \sum_gD(A_g\Vert B_g)-D(A\Vert B)=0.
-    \]
-    Then $\Def_B(t)=0$ for every $t>0$, and consequently
-    \[
-      T_g^{-1}(B_g)=T^{-1}(B)
-    \]
-    for every $t>0$ and every Weyl index $g$.
+    $\sum_gD(A_g\Vert B_g)-D(A\Vert B)=0$. Then $\Def_B(t)=0$ for every
+    $t>0$, and consequently $T_g^{-1}(B_g)=T^{-1}(B)$ for every $t>0$ and
+    every Weyl index $g$.
     In particular, equality of relative entropy under the right partial trace
     implies this conclusion by
     Theorem~\ref{thm:partial_trace_saturation_weyl_gap_zero}.
     This is the positive-definite conclusion of the equality argument in
-    Jen\v{c}ov\'a--Ruskai, arXiv:0903.2895v4, \S4 and Appendix.  It makes no
+    Jen\v{c}ov\'a--Ruskai, arXiv:0903.2895v4, \S4 and Appendix. It makes no
     assertion at $t=0$ or for singular inputs.
 \end{theorem}
 
 \begin{proof}\leanok
     The integrand in
-    Theorem~\ref{thm:weyl_relative_entropy_gap_integral} is nonnegative and
-    has integral zero, hence it vanishes almost everywhere.  Its continuity
-    improves this to vanishing at every $t>0$.  Since
+    Theorem~\ref{thm:weyl_relative_entropy_gap_integral} is non-negative and
+    has integral zero, hence it vanishes almost everywhere. Its continuity
+    improves this to vanishing at every $t>0$. Since
     $\Def_A(t)\geq0$, $\Def_B(t)\geq0$, and
-    $t/(1+t)>0$, it follows that $\Def_B(t)=0$.  Theorem
-    \ref{thm:weyl_resolvent_zero_defect} now gives the common solution.
+    $t/(1+t)>0$, it follows that $\Def_B(t)=0$.
+    Theorem~\ref{thm:weyl_resolvent_zero_defect} now gives the common solution.
 \end{proof}
 
 \begin{lemma}[Positive square root from common resolvents]
@@ -209,69 +221,67 @@
     \lean{Matrix.sourceB_resolvent_eq_relativeModular}
     \lean{Matrix.relativeModular_sqrt_mulVec_vec_one}
     \leanok
-    Let $S,T$ be positive semidefinite matrices and let $x$ be a vector.  If,
-    for every $t>0$,
-    \[
-        (t\mathbf 1+S)^{-1}x=(t\mathbf 1+T)^{-1}x,
-    \]
-    then $\sqrt S\,x=\sqrt T\,x$.
+    Let $S,T$ be positive semidefinite matrices and let $x$ be a vector. If
+    $(t\mathbf 1+S)^{-1}x=(t\mathbf 1+T)^{-1}x$ for every $t>0$, then
+    $\sqrt S\,x=\sqrt T\,x$.
     More generally, for any fixed matrix $Q$, if
-    \[
-        Q(t\mathbf 1+S)^{-1}x=Q(t\mathbf 1+T)^{-1}x
-    \]
-    for every $t>0$, then $Q\sqrt S\,x=Q\sqrt T\,x$.
+    $Q(t\mathbf 1+S)^{-1}x=Q(t\mathbf 1+T)^{-1}x$ for every $t>0$, then
+    $Q\sqrt S\,x=Q\sqrt T\,x$.
 
     In particular, for positive definite $A,B$ and every $t>0$, put
-    $\Delta_{A,B}=A\otimes(B^{-1})^{\mathsf T}$.  The source-$B$ left--right
+    $\Delta_{A,B}=A\otimes(B^{-1})^{\mathsf T}$. The source-$B$ left--right
     resolvent satisfies
-    \[
-      \left(A\otimes\mathbf 1+t\,\mathbf 1\otimes B^{\mathsf T}\right)^{-1}
-        \opvec(B^{\mathsf T})
-      =\left(t\mathbf 1+\Delta_{A,B}\right)^{-1}
-        \opvec(\mathbf 1^{\mathsf T}),
-    \]
+    \begin{align}
+        \left(A\otimes\mathbf 1
+          +t\,\mathbf 1\otimes B^{\mathsf T}\right)^{-1}
+          \opvec(B^{\mathsf T})
+        &=
+        \left(t\mathbf 1+\Delta_{A,B}\right)^{-1}
+          \opvec(\mathbf 1^{\mathsf T}),
+        \notag
+    \end{align}
     and
-    \[
-      \sqrt{\Delta_{A,B}}\,\opvec(\mathbf 1^{\mathsf T})
-        =\opvec\!\left(
-          (\sqrt A\,(\sqrt B)^{-1})^{\mathsf T}\right).
-    \]
+    \begin{align}
+        \sqrt{\Delta_{A,B}} \opvec(\mathbf 1^{\mathsf T})
+        &=
+        \opvec\!\left((\sqrt A\,(\sqrt B)^{-1})^{\mathsf T}\right).
+        \notag
+    \end{align}
     These are the positive-square-root specializations of the passage from
     relative modular resolvents to analytic functions of the relative modular
     operator in Jen\v{c}ov\'a--Ruskai, arXiv:0903.2895v4, lines 658--680.
 \end{lemma}
 
 \begin{proof}\leanok
-    Use the L\"owner integral representation of the power $p=1/2$.  Its
+    Use the L\"owner integral representation of the power $p=1/2$. Its
     integrand at $t>0$ is
-    \[
-      f_t(S)=t^{-1/2}\mathbf 1-t^{1/2}(t\mathbf 1+S)^{-1}.
-    \]
+    $f_t(S)=t^{-1/2}\mathbf 1-t^{1/2}(t\mathbf 1+S)^{-1}$.
     Applied to $x$, this is
-    \[
-      f_t(S)x=t^{-1/2}x-t^{1/2}(t\mathbf 1+S)^{-1}x.
-    \]
+    $f_t(S)x=t^{-1/2}x-t^{1/2}(t\mathbf 1+S)^{-1}x$.
     The hypothesis therefore gives
-    $Q\bigl(f_t(S)x\bigr)=Q\bigl(f_t(T)x\bigr)$ for every $t>0$.
+    $Q(f_t(S)x)=Q(f_t(T)x)$ for every $t>0$.
     Since $M\mapsto Q(Mx)$ is a bounded linear map from
-    $\mathbb{M}_n(\mathbb{C})$ to $\mathbb{C}^n$,
-    \[
-      Q\left(\left(\int_0^\infty f_t(S)\,d\mu(t)\right)x\right)
-        =\int_0^\infty Q\bigl(f_t(S)x\bigr)\,d\mu(t),
-    \]
-    and similarly for $T$.  Integration therefore gives
+    $\MN{n}$ to $\mathbb C^n$,
+    \begin{align}
+        Q\left(\left(\int_0^\infty f_t(S)\,d\mu(t)\right)x\right)
+        &=
+        \int_0^\infty Q(f_t(S)x)\,d\mu(t),
+        \notag
+    \end{align}
+    and similarly for $T$. Integration therefore gives
     $Q\sqrt S\,x=Q\sqrt T\,x$.
 
     For the second assertion, factor
-    \[
-      L_A+tR_B=(\Delta_{A,B}+t\mathbf 1)R_B.
-    \]
+    $L_A+tR_B=(\Delta_{A,B}+t\mathbf 1)R_B$.
     Applying the inverse to $B=R_B(\mathbf 1)$ gives the shifted relative
-    modular resolvent on $\mathbf 1$.  Finally,
-    \[
-      \sqrt{\Delta_{A,B}}
-        =\sqrt A\otimes\bigl((\sqrt B)^{-1}\bigr)^{\mathsf T},
-    \]
+    modular resolvent on $\mathbf 1$. Finally,
+    \begin{align}
+        \sqrt{\Delta_{A,B}}
+        &=
+        \sqrt A\otimes
+        ((\sqrt B)^{-1})^{\mathsf T},
+        \notag
+    \end{align}
     as follows from uniqueness of the positive square root.
 \end{proof}
 
@@ -280,11 +290,13 @@
     \lean{Matrix.one_kronecker_transpose_mulVec_vec_transpose}
     \leanok
     For matrices $M$ and $P$, column-stacking vectorization satisfies
-    \[
-      \left(\mathbf 1\otimes P^{\mathsf T}\right)
-        \opvec(M^{\mathsf T})
-      =\opvec\!\left((MP)^{\mathsf T}\right).
-    \]
+    \begin{align}
+        \left(\mathbf 1\otimes P^{\mathsf T}\right)
+          \opvec(M^{\mathsf T})
+        &=
+        \opvec\!\left((MP)^{\mathsf T}\right).
+        \notag
+    \end{align}
 \end{lemma}
 
 \begin{proof}\leanok
@@ -300,46 +312,49 @@
     \uses{def:support_inverse_square_root}
     Let $A,B$ be positive semidefinite, let $t>0$, set
     $B^+=(B^{-1/2}_{\mathrm{supp}})^2$, and let $P_B$ be the support
-    projection of $B$.  Then
-    \[
-      \left(A\otimes\mathbf 1+t(\mathbf 1\otimes B^{\mathsf T})\right)
-      (\mathbf 1\otimes P_B^{\mathsf T})
-      \left(t\mathbf 1+A\otimes(B^+)^{\mathsf T}\right)^{-1}
-      \opvec(\mathbf 1^{\mathsf T})
-      =\opvec(B^{\mathsf T}).
-    \]
+    projection of $B$. Then
+    \begin{align}
+        &\left(A\otimes\mathbf 1
+          +t(\mathbf 1\otimes B^{\mathsf T})\right)
+        (\mathbf 1\otimes P_B^{\mathsf T})
+        \left(t\mathbf 1+A\otimes(B^+)^{\mathsf T}\right)^{-1}
+        \opvec(\mathbf 1^{\mathsf T})
+        \notag\\
+        &\hspace{4em}=\opvec(B^{\mathsf T}).
+        \notag
+    \end{align}
 \end{lemma}
 
 \begin{proof}\leanok
     \uses{lem:support_inverse_square_root_generalized_inverse,
       lem:right_multiplication_transposed_vectorization}
-    Put $C=\mathbf 1\otimes B^{\mathsf T}$.  The support generalized-inverse
+    Put $C=\mathbf 1\otimes B^{\mathsf T}$. The support generalized-inverse
     identity gives
-    \[
-      C\left(A\otimes(B^+)^{\mathsf T}\right)
-        =A\otimes P_B^{\mathsf T}.
-    \]
+    \begin{align}
+        C\left(A\otimes(B^+)^{\mathsf T}\right)
+        &=A\otimes P_B^{\mathsf T}.
+        \notag
+    \end{align}
     Together with $B^{\mathsf T}P_B^{\mathsf T}=B^{\mathsf T}$, this factors
     the left two operators as
-    \[
-      \left(A\otimes\mathbf 1+tC\right)
-        (\mathbf 1\otimes P_B^{\mathsf T})
-      =C\left(t\mathbf 1+A\otimes(B^+)^{\mathsf T}\right).
-    \]
+    \begin{align}
+        \left(A\otimes\mathbf 1+tC\right)
+          (\mathbf 1\otimes P_B^{\mathsf T})
+        &=
+        C\left(t\mathbf 1+A\otimes(B^+)^{\mathsf T}\right).
+        \notag
+    \end{align}
     The shifted relative-modular matrix is positive definite and hence
     invertible, so
-    \[
-      \left(A\otimes\mathbf 1+tC\right)
-        (\mathbf 1\otimes P_B^{\mathsf T})
-        \left(t\mathbf 1+A\otimes(B^+)^{\mathsf T}\right)^{-1}
-      =C.
-    \]
+    \begin{align}
+        \left(A\otimes\mathbf 1+tC\right)
+          (\mathbf 1\otimes P_B^{\mathsf T})
+          \left(t\mathbf 1+A\otimes(B^+)^{\mathsf T}\right)^{-1}
+        &=C.
+        \notag
+    \end{align}
     The Kronecker vectorization identity gives
-    \[
-      C\opvec(\mathbf 1^{\mathsf T})
-        =\opvec(B^{\mathsf T}),
-    \]
-    which is the claim.
+    $C\opvec(\mathbf 1^{\mathsf T})=\opvec(B^{\mathsf T})$, which is the claim.
 \end{proof}
 
 \begin{lemma}[Support relative-modular square-root evaluation]
@@ -348,25 +363,28 @@
     \leanok
     \uses{def:support_inverse_square_root}
     Let $A$ and $B$ be positive semidefinite, and write
-    $B^+=(B^{-1/2}_{\mathrm{supp}})^2$.  Then
-    \[
-      \sqrt{A\otimes(B^+)^{\mathsf T}}\,
-        \opvec(\mathbf 1^{\mathsf T})
-      =\opvec\!\left(
-        (\sqrt A\,B^{-1/2}_{\mathrm{supp}})^{\mathsf T}\right).
-    \]
+    $B^+=(B^{-1/2}_{\mathrm{supp}})^2$. Then
+    \begin{align}
+        \sqrt{A\otimes(B^+)^{\mathsf T}}
+          \opvec(\mathbf 1^{\mathsf T})
+        &=
+        \opvec\!\left((\sqrt A\,B^{-1/2}_{\mathrm{supp}})^{\mathsf T}\right).
+        \notag
+    \end{align}
 \end{lemma}
 
 \begin{proof}\leanok
     \uses{lem:support_inverse_square_root_positive_semidefinite}
     The support inverse square root is positive semidefinite, and
-    \[
-      \left(\sqrt A\otimes
-        (B^{-1/2}_{\mathrm{supp}})^{\mathsf T}\right)^2
-      =A\otimes(B^+)^{\mathsf T}.
-    \]
+    \begin{align}
+        \left(\sqrt A\otimes
+          (B^{-1/2}_{\mathrm{supp}})^{\mathsf T}\right)^2
+        &=
+        A\otimes(B^+)^{\mathsf T}.
+        \notag
+    \end{align}
     Uniqueness of the positive square root gives the corresponding Kronecker
-    factorization.  Applying the Kronecker vectorization identity to
+    factorization. Applying the Kronecker vectorization identity to
     $\opvec(\mathbf 1^{\mathsf T})$ gives the stated equation.
 \end{proof}
 
@@ -375,30 +393,29 @@
     \lean{Matrix.supportRelativeModular_sqrt_ratio_eq_of_resolvent_mulVec_eq}
     \leanok
     \uses{def:support_inverse_square_root}
-    Let $A,B,C,D$ be positive semidefinite matrices.  Write
+    Let $A,B,C,D$ be positive semidefinite matrices. Write
     $B^+=(B^{-1/2}_{\mathrm{supp}})^2$ and
     $D^+=(D^{-1/2}_{\mathrm{supp}})^2$, and let $P_B$ be the orthogonal
-    projection onto $(\ker B)^\perp$.  If, for every $t>0$,
-    \[
-      \left[
-        \left(t\mathbf 1+A\otimes(B^+)^{\mathsf T}\right)^{-1}
-          (\mathbf 1)
-      \right]P_B
-      =
-      \left[
-        \left(t\mathbf 1+C\otimes(D^+)^{\mathsf T}\right)^{-1}
-          (\mathbf 1)
-      \right]P_B,
-    \]
+    projection onto $(\ker B)^\perp$. If, for every $t>0$,
+    \begin{align}
+        \left[\left(t\mathbf 1+A\otimes(B^+)^{\mathsf T}\right)^{-1}
+          (\mathbf 1)\right]P_B
+        &=
+        \left[\left(t\mathbf 1+C\otimes(D^+)^{\mathsf T}\right)^{-1}
+          (\mathbf 1)\right]P_B,
+        \notag
+    \end{align}
     where the inverses act as relative-modular superoperators on matrices, then
-    \[
-      \left(\sqrt A\,B^{-1/2}_{\mathrm{supp}}\right)P_B
-        =\left(\sqrt C\,D^{-1/2}_{\mathrm{supp}}\right)P_B.
-    \]
+    \begin{align}
+        \left(\sqrt A\,B^{-1/2}_{\mathrm{supp}}\right)P_B
+        &=
+        \left(\sqrt C\,D^{-1/2}_{\mathrm{supp}}\right)P_B.
+        \notag
+    \end{align}
     This is the square-root specialization of the support functional-calculus
-    passage in Jen\v{c}ov\'a--Ruskai, arXiv:0903.2895v4, lines 788--793.  The
+    passage in Jen\v{c}ov\'a--Ruskai, arXiv:0903.2895v4, lines 788--793. The
     projection $P_B$ is essential: the source gives the common generalized
-    resolvents only after restriction to $(\ker B)^\perp$.  Deriving this
+    resolvents only after restriction to $(\ker B)^\perp$. Deriving this
     restricted equality requires the preceding singular equality argument and
     its kernel hypotheses.
     % Formalization status: the preceding equality-to-resolvent step remains open.
@@ -409,25 +426,22 @@
         lem:support_relative_modular_sqrt_evaluation,
         lem:right_multiplication_transposed_vectorization}
     By Lemma~\ref{lem:support_relative_modular_sqrt_evaluation},
-    \[
-      \sqrt{A\otimes(B^+)^{\mathsf T}}\,
-        \opvec(\mathbf 1^{\mathsf T})
-      =\opvec\!\left(
-        (\sqrt A\,B^{-1/2}_{\mathrm{supp}})^{\mathsf T}\right).
-    \]
-    Setting $Q=\mathbf 1\otimes P_B^{\mathsf T}$ and applying the common-
-    resolvent lemma (Lemma~\ref{lem:positive_sqrt_from_common_resolvents}) gives
-    \[
-      \opvec\!\left(
-        (\sqrt A\,B^{-1/2}_{\mathrm{supp}}P_B)^{\mathsf T}\right)
-      =\opvec\!\left(
-        (\sqrt C\,D^{-1/2}_{\mathrm{supp}}P_B)^{\mathsf T}\right).
-    \]
-    Since
-    \[
-      \opvec(X^{\mathsf T})
-        =\opvec(Y^{\mathsf T})\quad\Longrightarrow\quad X=Y,
-    \]
+    \begin{align}
+        \sqrt{A\otimes(B^+)^{\mathsf T}}
+          \opvec(\mathbf 1^{\mathsf T})
+        &=
+        \opvec\!\left((\sqrt A\,B^{-1/2}_{\mathrm{supp}})^{\mathsf T}\right).
+        \notag
+    \end{align}
+    Setting $Q=\mathbf 1\otimes P_B^{\mathsf T}$ and applying
+    Lemma~\ref{lem:positive_sqrt_from_common_resolvents} gives
+    \begin{align}
+        \opvec\!\left((\sqrt A\,B^{-1/2}_{\mathrm{supp}}P_B)^{\mathsf T}\right)
+        &=
+        \opvec\!\left((\sqrt C\,D^{-1/2}_{\mathrm{supp}}P_B)^{\mathsf T}\right).
+        \notag
+    \end{align}
+    Since $\opvec(X^{\mathsf T})=\opvec(Y^{\mathsf T})$ implies $X=Y$,
     injectivity of vectorization gives the conclusion.
 \end{proof}
 
@@ -438,30 +452,32 @@
     \lean{Matrix.partialTraceRightPetzMap_eq_of_relativeEntropy_eq_posDef}
     \leanok
     Let $\rho$ and $\sigma$ be positive definite and suppose that
-    \[
-      D(\rho\Vert\sigma)
-        =D(\tr_C\rho\Vert\tr_C\sigma).
-    \]
+    $D(\rho\Vert\sigma)
+      =D(\tr_C\rho\Vert\tr_C\sigma)$.
     Put
-    \[
-      \overline\rho=(\tr_C\rho)\otimes d_C^{-1}\mathbf 1_C,
-      \qquad
-      \overline\sigma=(\tr_C\sigma)\otimes d_C^{-1}\mathbf 1_C.
-    \]
+    \begin{align}
+        \overline\rho
+        &=
+        (\tr_C\rho)\otimes d_C^{-1}\mathbf 1_C,
+        &
+        \overline\sigma
+        &=
+        (\tr_C\sigma)\otimes d_C^{-1}\mathbf 1_C.
+        \notag
+    \end{align}
     Then
-    \[
-      \sqrt\rho\,\sigma^{-1/2}
-        =\sqrt{\overline\rho}\,\overline\sigma^{-1/2},
-    \]
-    and consequently
-    \[
-      \sqrt\sigma\,\overline\sigma^{-1/2}\,
-      \overline\rho\,\overline\sigma^{-1/2}\,\sqrt\sigma=\rho.
-    \]
+    \begin{align}
+        \sqrt\rho\,\sigma^{-1/2}
+        &=
+        \sqrt{\overline\rho} \overline\sigma^{-1/2},
+        \notag\\
+        \sqrt\sigma\,\overline\sigma^{-1/2}
+          \overline\rho\,\overline\sigma^{-1/2} \sqrt\sigma
+        &=\rho.
+        \notag
+    \end{align}
     Hence the raw partial-trace Petz map satisfies
-    \[
-      \mathcal R_\sigma(\tr_C\rho)=\rho.
-    \]
+    $\mathcal R_\sigma(\tr_C\rho)=\rho$.
     This is the positive-definite case only; no singular-support conclusion is
     asserted.
 \end{theorem}
@@ -471,25 +487,31 @@
         lem:positive_sqrt_from_common_resolvents,
         thm:weyl_identity_sandwich_petz_recovery}
     Apply the common-resolvent theorem to the identity Weyl summand and the
-    Weyl average.  The preceding lemma converts the result to equality of the
-    two square-root ratios.  For $c=d_C^{-2}$, the uniform scalar in the
-    identity summand cancels through
-    \[
-      \sqrt{c\rho}\,(\sqrt{c\sigma})^{-1}
-      =(\sqrt c\,\sqrt\rho)
-        \bigl((\sqrt c)^{-1}(\sqrt\sigma)^{-1}\bigr)
-      =\sqrt\rho\,(\sqrt\sigma)^{-1}.
-    \]
+    Weyl average.
+    Lemma~\ref{lem:positive_sqrt_from_common_resolvents} converts the result to
+    equality of the two square-root ratios. For $c=d_C^{-2}$, the uniform
+    scalar in the identity summand cancels through
+    \begin{align}
+        \sqrt{c\rho}\,(\sqrt{c\sigma})^{-1}
+        &=
+        (\sqrt c\,\sqrt\rho)
+        ((\sqrt c)^{-1}(\sqrt\sigma)^{-1})
+        =
+        \sqrt\rho\,(\sqrt\sigma)^{-1}.
+        \notag
+    \end{align}
     The Weyl twirl identifies the average with the displayed maximally mixed
     extensions.
 
     Taking the adjoint product of the ratio equality yields
-    \[
-      \sigma^{-1/2}\rho\sigma^{-1/2}
-        =\overline\sigma^{-1/2}\overline\rho
+    \begin{align}
+        \sigma^{-1/2}\rho\sigma^{-1/2}
+        &=
+        \overline\sigma^{-1/2}\overline\rho
           \overline\sigma^{-1/2}.
-    \]
-    Multiplication by $\sqrt\sigma$ on both sides gives the sandwich.  The raw
+        \notag
+    \end{align}
+    Multiplication by $\sqrt\sigma$ on both sides gives the sandwich. The raw
     Petz recovery identity follows from
     Theorem~\ref{thm:weyl_identity_sandwich_petz_recovery}.
 \end{proof}
@@ -501,23 +523,23 @@
     \uses{lem:support_inverse_square_root_maximally_mixed}
     Let $\tau$ be positive semidefinite on $\mathcal H_S$, let $X$ be a
     matrix on $\mathcal H_S$, and let
-    $\overline\tau=\tau\otimes d_C^{-1}\mathbf 1_C$.  Then
-    \[
+    $\overline\tau=\tau\otimes d_C^{-1}\mathbf 1_C$. Then
+    \begin{align}
         \overline\tau^{-1/2}_{\mathrm{supp}}
-        \bigl(X\otimes d_C^{-1}\mathbf 1_C\bigr)
+        (X\otimes d_C^{-1}\mathbf 1_C)
         \overline\tau^{-1/2}_{\mathrm{supp}}
-        =\bigl(\tau^{-1/2}_{\mathrm{supp}}X
+        &=
+        \bigl(\tau^{-1/2}_{\mathrm{supp}}X
           \tau^{-1/2}_{\mathrm{supp}}\bigr)\otimes\mathbf 1_C.
-    \]
+        \notag
+    \end{align}
 \end{lemma}
 
 \begin{proof}\leanok
-    By the preceding support inverse formula, each outer factor contributes
-    $\sqrt{d_C}$.  The scalar coefficient cancels because
-    \[
-        \sqrt{d_C}\,d_C^{-1}\sqrt{d_C}
-          =d_C^{-1}(\sqrt{d_C})^2=1.
-    \]
+    By Lemma~\ref{lem:support_inverse_square_root_maximally_mixed}, each outer
+    factor contributes $\sqrt{d_C}$. The scalar coefficient cancels because
+    $\sqrt{d_C}\,d_C^{-1}\sqrt{d_C}
+      =d_C^{-1}(\sqrt{d_C})^2=1$.
     The remaining matrix product is the asserted unital tensor embedding.
 \end{proof}
 
@@ -531,34 +553,34 @@
     Let $\rho$ and $\sigma$ be matrices on
     $\mathcal H_S\otimes\mathbb C^{d_C}$, with $\sigma$ positive semidefinite,
     and set
-    \[
-        \overline\sigma=(\tr_C\sigma)\otimes d_C^{-1}\mathbf 1_C.
-    \]
+    $\overline\sigma=(\tr_C\sigma)\otimes d_C^{-1}\mathbf 1_C$.
     If the identity summand obeys the support sandwich identity
-    \[
-        \sqrt\sigma\,
+    \begin{align}
+        \sqrt\sigma
         \overline\sigma^{-1/2}_{\mathrm{supp}}
-        \bigl((\tr_C\rho)\otimes d_C^{-1}\mathbf 1_C\bigr)
-        \overline\sigma^{-1/2}_{\mathrm{supp}}\,
-        \sqrt\sigma=\rho,
-    \]
+        ((\tr_C\rho)\otimes d_C^{-1}\mathbf 1_C)
+        \overline\sigma^{-1/2}_{\mathrm{supp}}
+        \sqrt\sigma
+        &=\rho,
+        \notag
+    \end{align}
     then the raw support Petz map recovers $\rho$:
-    \[
-        \mathcal R_\sigma(\tr_C\rho)=\rho.
-    \]
+    $\mathcal R_\sigma(\tr_C\rho)=\rho$.
     This is the algebraic reduction in
-    \cite[Theorem~3, equation~(8)]{Hayden2004Structure}.  It does not derive
-    the displayed sandwich identity from equality of relative entropies.
+    \cite[Theorem~3, equation~(8)]{Hayden2004Structure}. It does not derive
+    the support sandwich identity from equality of relative entropies.
 \end{theorem}
 
 \begin{proof}\leanok
-    The preceding normalization rewrites the middle three factors as
-    \[
+    Lemma~\ref{lem:maximally_mixed_support_sandwich} rewrites the middle three
+    factors as
+    \begin{align}
         \bigl((\tr_C\sigma)^{-1/2}_{\mathrm{supp}}
           (\tr_C\rho)
           (\tr_C\sigma)^{-1/2}_{\mathrm{supp}}\bigr)
-          \otimes\mathbf 1_C.
-    \]
+        \otimes\mathbf 1_C.
+        \notag
+    \end{align}
     The support Petz formula therefore identifies the left-hand side of the
     assumed sandwich identity with $\mathcal R_\sigma(\tr_C\rho)$.
 \end{proof}
@@ -569,10 +591,12 @@
     \leanok
     \uses{def:quantum_relative_entropy, def:von_neumann_entropy}
     For every positive semidefinite operator $\omega_{XY}$,
-    \[
-        D(\omega_{XY}\,\|\,\omega_X\otimes\omega_Y)
-        =S(\omega_X)+S(\omega_Y)-S(\omega_{XY}).
-    \]
+    \begin{align}
+        D(\omega_{XY} \| \omega_X\otimes\omega_Y)
+        &=
+        S(\omega_X)+S(\omega_Y)-S(\omega_{XY}).
+        \notag
+    \end{align}
     No invertibility assumption is made on either marginal.
     This is \cite[Equation~(4)]{Hayden2004Structure}.
 \end{theorem}
@@ -583,17 +607,18 @@
         thm:right_marginal_support_left_absorption,
         lem:trace_lift_left_factor_mul, lem:trace_lift_right_factor_mul}
     The lifted support projections $P_X\otimes\mathbf 1_Y$ and
-    $\mathbf 1_X\otimes P_Y$ both fix $\omega_{XY}$.  Substituting
+    $\mathbf 1_X\otimes P_Y$ both fix $\omega_{XY}$. Substituting
     Lemma~\ref{lem:log_kronecker_possemidef} into the cross term of the relative
     entropy and using the two partial-trace adjoint identities gives
-    \[
+    \begin{align}
         \re\tr
-        \bigl(\omega_{XY}\log(\omega_X\otimes\omega_Y)\bigr)
-        =-S(\omega_X)-S(\omega_Y).
-    \]
+        (\omega_{XY}\log(\omega_X\otimes\omega_Y))
+        &=
+        -S(\omega_X)-S(\omega_Y).
+        \notag
+    \end{align}
     The asserted formula follows from
-    $D(\rho\,\|\,\sigma)=-S(\rho)
-        -\re\tr(\rho\log\sigma)$.
+    $D(\rho\,\| \sigma)=-S(\rho)-\re\tr(\rho\log\sigma)$.
 \end{proof}
 
 \begin{theorem}[SSA equality as saturation for the product marginals]
@@ -603,18 +628,18 @@
     \leanok
     \uses{def:ssa_equality, def:quantum_relative_entropy,
         def:traceA_ABC, def:traceC_ABC, def:traceAC_ABC}
-    Let $\rho_{ABC}$ be a tripartite density matrix.  Then equality holds in
+    Let $\rho_{ABC}$ be a tripartite density matrix. Then equality holds in
     strong subadditivity if and only if relative-entropy data processing under
     the partial trace over $C$ is saturated for the pair
     $\rho_{ABC}$ and $\rho_A\otimes\rho_{BC}$:
-    \[
-        D(\rho_{ABC}\,\|\,\rho_A\otimes\rho_{BC})
-        =D(\rho_{AB}\,\|\,\rho_A\otimes\rho_B).
-    \]
+    \begin{align}
+        D(\rho_{ABC} \| \rho_A\otimes\rho_{BC})
+        &=
+        D(\rho_{AB} \| \rho_A\otimes\rho_B).
+        \notag
+    \end{align}
     Moreover,
-    \[
-        \tr_C(\rho_A\otimes\rho_{BC})=\rho_A\otimes\rho_B.
-    \]
+    $\tr_C(\rho_A\otimes\rho_{BC})=\rho_A\otimes\rho_B$.
     This is the product-marginal formulation in
     \cite[Equations~(5)--(7)]{Hayden2004Structure}.
 \end{theorem}
@@ -622,23 +647,32 @@
 \begin{proof}\leanok
     \uses{thm:relative_entropy_product_marginals}
     The two relative entropies are
-    \[
-        S(\rho_A)+S(\rho_{BC})-S(\rho_{ABC})
-        \quad\text{and}\quad
+    \begin{align}
+        S(\rho_A)+S(\rho_{BC})-S(\rho_{ABC}),
+        \notag\\
         S(\rho_A)+S(\rho_B)-S(\rho_{AB}),
-    \]
-    respectively.  Cancelling the common term $S(\rho_A)$ shows that their
+        \notag
+    \end{align}
+    respectively. Cancelling the common term $S(\rho_A)$ shows that their
     equality is precisely
-    \[
-        S(\rho_{ABC})+S(\rho_B)=S(\rho_{AB})+S(\rho_{BC}).
-    \]
+    \begin{align}
+        S(\rho_{ABC})+S(\rho_B)
+        &=
+        S(\rho_{AB})+S(\rho_{BC}).
+        \notag
+    \end{align}
     Entrywise, the partial-trace identity is
-    \[
-        \bigl[\tr_C(\rho_A\otimes\rho_{BC})\bigr]_{(a,b),(a',b')}
-        =\sum_c(\rho_A)_{a,a'}(\rho_{BC})_{(b,c),(b',c)}
-        =(\rho_A)_{a,a'}(\rho_B)_{b,b'}
-        =\bigl[\rho_A\otimes\rho_B\bigr]_{(a,b),(a',b')}.
-    \]
+    \begin{align}
+        [\tr_C(\rho_A\otimes\rho_{BC})]_{(a,b),(a',b')}
+        &=
+        \sum_c(\rho_A)_{a,a'}(\rho_{BC})_{(b,c),(b',c)}
+        \notag\\
+        &=
+        (\rho_A)_{a,a'}(\rho_B)_{b,b'}
+        =
+        [\rho_A\otimes\rho_B]_{(a,b),(a',b')}.
+        \notag
+    \end{align}
 \end{proof}
 
 \begin{theorem}[SSA equality as saturation for a maximally mixed reference]
@@ -649,20 +683,20 @@
         def:traceA_ABC, def:traceC_ABC, def:traceAC_ABC,
         lem:traceC_maximally_mixed_reference}
     Let $\rho_{ABC}$ be a tripartite density matrix and set
-    \[
-        \sigma_{ABC}=\frac{\mathbf 1_A}{d_A}\otimes\rho_{BC}.
-    \]
+    $\sigma_{ABC}=(\mathbf 1_A/d_A)\otimes\rho_{BC}$.
     Then equality holds in strong subadditivity if and only if relative-entropy
     data processing under the partial trace over $C$ is saturated for this pair:
-    \[
-        D(\rho_{ABC}\,\|\,\sigma_{ABC})
-        =D(\tr_C\rho_{ABC}\,\|\,\tr_C\sigma_{ABC}).
-    \]
+    \begin{align}
+        D(\rho_{ABC} \| \sigma_{ABC})
+        &=
+        D(\tr_C\rho_{ABC} \| \tr_C\sigma_{ABC}).
+        \notag
+    \end{align}
     By Lemma~\ref{lem:traceC_maximally_mixed_reference}, the reference on the
     right is $(\mathbf 1_A/d_A)\otimes\rho_B$.
 
     This is an equivalent hypothesis-free criterion with a different reference
-    state.  The exact product-marginal formulation is
+    state. The exact product-marginal formulation is
     Theorem~\ref{thm:ssa_equality_product_marginal_dpi}.
 \end{theorem}
 
@@ -670,17 +704,21 @@
     \uses{lem:rel_entropy_eval_support, lem:kron_marginal_support,
         lem:traceC_maximally_mixed_reference}
     The two relative entropies are
-    \[
-        \log d_A+S(\rho_{BC})-S(\rho_{ABC})
-        \quad\text{and}\quad
+    \begin{align}
+        \log d_A+S(\rho_{BC})-S(\rho_{ABC}),
+        \notag\\
         \log d_A+S(\rho_B)-S(\rho_{AB}),
-    \]
+        \notag
+    \end{align}
     respectively. The marginal support lemma places both singular references
     in the relative-entropy domain. Cancelling the common $\log d_A$ shows that
     equality of the two relative entropies is precisely
-    \[
-        S(\rho_{ABC})+S(\rho_B)=S(\rho_{AB})+S(\rho_{BC}).
-    \]
+    \begin{align}
+        S(\rho_{ABC})+S(\rho_B)
+        &=
+        S(\rho_{AB})+S(\rho_{BC}).
+        \notag
+    \end{align}
 \end{proof}
 
 \begin{theorem}[SSA equality under factor relabeling]
@@ -691,12 +729,13 @@
     Let $\rho$ be a Hermitian operator on $A\otimes B\otimes C$, and let
     $e_A:A'\to A$, $e_B:B'\to B$, and $e_C:C'\to C$ be bijections. Define
     $\rho'$ by
-    \[
+    \begin{align}
         \rho'_{(a',b',c'),(\widetilde a',\widetilde b',\widetilde c')}
-        =
+        &=
         \rho_{(e_A(a'),e_B(b'),e_C(c')),
           (e_A(\widetilde a'),e_B(\widetilde b'),e_C(\widetilde c'))}.
-    \]
+        \notag
+    \end{align}
     If $\rho$ satisfies equality in strong subadditivity, then so does $\rho'$.
 \end{theorem}
 
@@ -705,33 +744,46 @@
     \uses{thm:entropy_submatrix_equiv}
     The four operators entering the equality are related by the induced
     bijections:
-    \[
-        \rho' = \rho_{e_A\times e_B\times e_C},\qquad
-        \rho'_{AB}=(\rho_{AB})_{e_A\times e_B},\qquad
-        \rho'_{BC}=(\rho_{BC})_{e_B\times e_C},\qquad
-        \rho'_B=(\rho_B)_{e_B}.
-    \]
+    \begin{align}
+        \rho'
+        &=\rho_{e_A\times e_B\times e_C},
+        \notag\\
+        \rho'_{AB}
+        &=(\rho_{AB})_{e_A\times e_B},
+        \notag\\
+        \rho'_{BC}
+        &=(\rho_{BC})_{e_B\times e_C},
+        \notag\\
+        \rho'_B
+        &=(\rho_B)_{e_B}.
+        \notag
+    \end{align}
     These identities follow by changing variables in the three finite sums
     defining the partial traces. Entropy invariance under reindexing makes the
     corresponding four entropy terms equal, so the strong-subadditivity
     equality for $\rho$ gives the equality for $\rho'$.
 \end{proof}
 
-\begin{definition}[Quantum Markov decomposition]\label{def:hayashi_markov_decomposition}
+\begin{definition}[Quantum Markov decomposition]
+    \label{def:hayashi_markov_decomposition}
     \lean{HayashiMarkovDecomposition}
     \leanok
     \uses{def:ssa_equality}
     A \emph{Hayashi Markov decomposition} of a tripartite state $\rho_{ABC}$
     consists of a finite direct-sum decomposition
-    \[
-        H_B \cong \bigoplus_j H_{B_j^L} \otimes H_{B_j^R},
-    \]
+    \begin{align}
+        H_B
+        &\cong
+        \bigoplus_j H_{B_j^L}\otimes H_{B_j^R},
+        \notag
+    \end{align}
     together with a unitary change of basis on $B$, a probability vector
     $(p_j)_j$, and density matrices $\rho_{A B_j^L}$ and $\rho_{B_j^R C}$ such
     that, in the adapted basis, the state becomes
-    \[
-        \bigoplus_j p_j\, \rho_{A B_j^L} \otimes \rho_{B_j^R C}.
-    \]
+    \begin{align}
+        \bigoplus_j p_j\,\rho_{A B_j^L}\otimes\rho_{B_j^R C}.
+        \notag
+    \end{align}
     The terminology follows Hayashi's presentation of quantum Markov
     structure~\cite{Hayashi2006QuantumInformation}; the block decomposition
     used by the MPDO argument is the structure theorem of
@@ -745,9 +797,12 @@
     \uses{def:ssa_equality, def:hayashi_markov_decomposition,
         thm:hayashi_ssa_equality_reverse}
     For a tripartite density matrix $\rho_{ABC}$,
-    \[
-        S(\rho_{ABC}) + S(\rho_B) = S(\rho_{AB}) + S(\rho_{BC})
-    \]
+    \begin{align}
+        S(\rho_{ABC})+S(\rho_B)
+        &=
+        S(\rho_{AB})+S(\rho_{BC})
+        \notag
+    \end{align}
     holds if and only if $\rho_{ABC}$ admits a quantum Markov decomposition on
     the middle subsystem $B$.
 
@@ -773,41 +828,79 @@
     \uses{def:ssa_equality, def:hayashi_markov_decomposition}
     A tripartite density matrix $\rho_{ABC}$ that admits a quantum Markov
     decomposition on the middle subsystem $B$ satisfies
-    \[
-        S(\rho_{ABC}) + S(\rho_B) = S(\rho_{AB}) + S(\rho_{BC}).
-    \]
+    \begin{align}
+        S(\rho_{ABC})+S(\rho_B)
+        &=
+        S(\rho_{AB})+S(\rho_{BC}).
+        \notag
+    \end{align}
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{def:ssa_equality, def:hayashi_markov_decomposition,
         thm:entropy_kronecker, thm:entropy_smul, thm:entropy_block_diagonal}
     Write the state in the adapted basis as the block-diagonal direct sum
-    $\bigoplus_j p_j\, \rho_{A B_j^L} \otimes \rho_{B_j^R C}$. The von Neumann
+    $\bigoplus_j p_j\,\rho_{A B_j^L}\otimes\rho_{B_j^R C}$. The von Neumann
     entropy of a weighted orthogonal direct sum is
-    $S(\bigoplus_j p_j\, \omega_j) = -\sum_j p_j \log p_j + \sum_j p_j\,
-    S(\omega_j)$ by Theorems~\ref{thm:entropy_block_diagonal}
+    $S(\bigoplus_j p_j\,\omega_j)
+      =-\sum_j p_j\log p_j+\sum_j p_jS(\omega_j)$
+    by Theorems~\ref{thm:entropy_block_diagonal}
     and~\ref{thm:entropy_smul}, and the entropy of a tensor product is additive,
-    $S(\omega \otimes \tau) = S(\omega) + S(\tau)$, by
-    Theorem~\ref{thm:entropy_kronecker}. Tracing out one tensor factor within each
-    block, the three reduced states factor as block-diagonal direct sums,
-    \[
-        \rho_{AB} \cong \bigoplus_j p_j\,\rho_{AB_j^L}\otimes\rho_{B_j^R}, \qquad
-        \rho_{BC} \cong \bigoplus_j p_j\,\rho_{B_j^L}\otimes\rho_{B_j^R C}, \qquad
-        \rho_{B}  \cong \bigoplus_j p_j\,\rho_{B_j^L}\otimes\rho_{B_j^R},
-    \]
-    with $\rho_{ABC} \cong \bigoplus_j p_j\,\rho_{AB_j^L}\otimes\rho_{B_j^R C}$ itself.
-    Writing $H = -\sum_j p_j\log p_j$, the four entropies expand as
-    \[
-        \begin{aligned}
-        S(\rho_{ABC}) &= H + \sum_j p_j\bigl[S(\rho_{AB_j^L}) + S(\rho_{B_j^R C})\bigr], &
-        S(\rho_{AB})  &= H + \sum_j p_j\bigl[S(\rho_{AB_j^L}) + S(\rho_{B_j^R})\bigr], \\
-        S(\rho_{B})   &= H + \sum_j p_j\bigl[S(\rho_{B_j^L}) + S(\rho_{B_j^R})\bigr], &
-        S(\rho_{BC})  &= H + \sum_j p_j\bigl[S(\rho_{B_j^L}) + S(\rho_{B_j^R C})\bigr].
-        \end{aligned}
-    \]
+    $S(\omega\otimes\tau)=S(\omega)+S(\tau)$, by
+    Theorem~\ref{thm:entropy_kronecker}. Tracing out one tensor factor within
+    each block, the three reduced states factor as block-diagonal direct sums,
+    \begin{align}
+        \rho_{AB}
+        &\cong
+        \bigoplus_j p_j\,\rho_{AB_j^L}\otimes\rho_{B_j^R},
+        \notag\\
+        \rho_{BC}
+        &\cong
+        \bigoplus_j p_j\,\rho_{B_j^L}\otimes\rho_{B_j^R C},
+        \notag\\
+        \rho_B
+        &\cong
+        \bigoplus_j p_j\,\rho_{B_j^L}\otimes\rho_{B_j^R},
+        \notag
+    \end{align}
+    with
+    $\rho_{ABC}\cong
+      \bigoplus_j p_j\,\rho_{AB_j^L}\otimes\rho_{B_j^R C}$
+    itself. Writing $H=-\sum_j p_j\log p_j$, the four entropies expand as
+    \begin{align}
+        S(\rho_{ABC})
+        &=
+        H+\sum_j p_j
+          [S(\rho_{AB_j^L})+S(\rho_{B_j^R C})],
+        \notag\\
+        S(\rho_{AB})
+        &=
+        H+\sum_j p_j
+          [S(\rho_{AB_j^L})+S(\rho_{B_j^R})],
+        \notag\\
+        S(\rho_B)
+        &=
+        H+\sum_j p_j
+          [S(\rho_{B_j^L})+S(\rho_{B_j^R})],
+        \notag\\
+        S(\rho_{BC})
+        &=
+        H+\sum_j p_j
+          [S(\rho_{B_j^L})+S(\rho_{B_j^R C})].
+        \notag
+    \end{align}
     Both sides of the claimed identity equal
-    $2H + \sum_j p_j\bigl[S(\rho_{AB_j^L}) + S(\rho_{B_j^R C}) + S(\rho_{B_j^L}) +
-    S(\rho_{B_j^R})\bigr]$, so $S(\rho_{ABC}) + S(\rho_B) = S(\rho_{AB}) +
-    S(\rho_{BC})$. The basis change on $B$ and the direct-sum reindexing leave
-    every entropy term unchanged.
+    \begin{align}
+        2H+\sum_j p_j\bigl[
+          S(\rho_{AB_j^L})
+          +S(\rho_{B_j^R C})
+          +S(\rho_{B_j^L})
+          +S(\rho_{B_j^R})
+        \bigr],
+        \notag
+    \end{align}
+    so
+    $S(\rho_{ABC})+S(\rho_B)=S(\rho_{AB})+S(\rho_{BC})$.
+    The basis change on $B$ and the direct-sum reindexing leave every entropy
+    term unchanged.
 \end{proof}
