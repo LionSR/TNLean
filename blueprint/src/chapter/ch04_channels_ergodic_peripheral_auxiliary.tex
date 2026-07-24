@@ -584,7 +584,7 @@ both unital and trace-preserving.
 \begin{remark}[Bi-canonical special case]\label{rem:bicanonical_special_case}\leanok
     When a Kraus map happens to be both unital and trace-preserving
     (the ``bi-canonical'' case), the Kadison--Schwarz equality at peripheral
-    eigenvectors (Theorem~\ref{thm:ks_peripheral_channels}) shows directly that the
+    eigenvectors (Theorem~\ref{thm:ks_peripheral}) shows directly that the
     peripheral eigenvalues are closed under powers, and hence are roots of unity
     by Theorem~\ref{thm:peripheral_powers}. It
     requires both normalizations simultaneously. The more general adjoint-fixed-point
@@ -592,174 +592,23 @@ both unital and trace-preserving.
     adjoint fixed point are available.
 \end{remark}
 
-\subsection{The Kadison--Schwarz inequality and the multiplicative domain}
-\label{subsec:ks_input_channels}
-
-\begin{definition}[Kraus maps, adjoints, and normalizations]
-    \label{def:kraus_map_channels}
-    \lean{KadisonSchwarz.krausMap, KadisonSchwarz.krausAdjointMap,
-        KadisonSchwarz.IsUnitalKraus, KadisonSchwarz.IsTPKraus}
-    \leanok
-    For operators $\{K_i\}_{i=0}^{d-1}\subseteq\MN{D}$, the associated
-    \emph{Kraus map} and \emph{adjoint Kraus map} are
-    \begin{align}
-        E(X)   & =\sum_iK_iXK_i^\dagger, \notag \\
-        E^*(X) & =\sum_iK_i^\dagger XK_i.
-        \label{eq:channel_kraus_maps}
-    \end{align}
-    The Kraus family is \emph{unital} when
-    $\sum_iK_iK_i^\dagger=\Id$ and \emph{trace-preserving} when
-    $\sum_iK_i^\dagger K_i=\Id$.
-\end{definition}
-
-\begin{theorem}[Kadison--Schwarz inequality]
-    \label{thm:kadison_schwarz_channels}
-    \lean{KadisonSchwarz.kadison_schwarz}
-    \leanok
-    \uses{def:kraus_map_channels}
-    Let $E(X)=\sum_iK_iXK_i^\dagger$ be a unital Kraus map.
-    Then, for every $X\in\MN{D}$,
-    \begin{align}
-        E(X^\dagger X)
-         & \geq E(X)^\dagger E(X).
-        \label{eq:channel_kadison_schwarz}
-    \end{align}
-    This is \cite[Equation~(5.2)]{Wolf2012Quantum}.
-\end{theorem}
-
-\begin{proof}\leanok
-    Apply the unital completely positive map entrywise to the positive
-    $2\times2$ block matrix
-    $(\begin{smallmatrix}X^\dagger X&X^\dagger\\X&\Id\end{smallmatrix})$
-    and take the Schur complement of the lower-right block.
-\end{proof}
-
-\begin{theorem}[Hilbert--Schmidt contraction]
-    \label{thm:hs_contraction_channels}
-    \lean{KadisonSchwarz.hilbertSchmidt_contraction}
-    \leanok
-    \uses{def:kraus_map_channels, thm:kadison_schwarz_channels}
-    If a Kraus map is both unital and trace-preserving, then, for every
-    $X\in\MN{D}$,
-    \begin{align}
-        \tr(E(X)^\dagger E(X))
-         & \leq\tr(X^\dagger X).
-        \label{eq:channel_hs_contraction}
-    \end{align}
-\end{theorem}
-
-\begin{proof}\leanok\uses{thm:kadison_schwarz_channels}
-    The Kadison--Schwarz gap is positive semidefinite by
-    (\ref{eq:channel_kadison_schwarz}). Trace preservation then identifies
-    the traces of its two terms, giving (\ref{eq:channel_hs_contraction}).
-\end{proof}
-
-\begin{theorem}[KS equality implies Kraus commutation]
-    \label{thm:kraus_commute_channels}
-    \lean{KadisonSchwarz.kraus_commute_of_ks_equality}
-    \leanok
-    \uses{thm:ks_gap_decomp_channels}
-    Let $E$ be a unital Kraus map.
-    If $E(X^\dagger X)=E(X)^\dagger E(X)$, then, for every~$i$,
-    \begin{align}
-        XK_i^\dagger
-         & =K_i^\dagger E(X).
-        \label{eq:channel_ks_kraus_relation}
-    \end{align}
-\end{theorem}
-
-\begin{proof}\leanok\uses{thm:ks_gap_decomp_channels}
-    Theorem~\ref{thm:ks_gap_decomp_channels} gives the sum-of-squares formula
-    \begin{align}
-        E(X^\dagger X)-E(X)^\dagger E(X)
-         & =\sum_iR_i^\dagger R_i.
-        \notag
-    \end{align}
-    Every summand is positive semidefinite. If the gap
-    vanishes, each $R_i$ must vanish. Substitution in
-    (\ref{eq:channel_ks_remainder}) gives
-    (\ref{eq:channel_ks_kraus_relation}).
-\end{proof}
-
-\begin{theorem}[KS equality for peripheral eigenvectors]
-    \label{thm:ks_peripheral_channels}
-    \lean{KadisonSchwarz.ks_equality_of_peripheral_eigenvector}
-    \leanok
-    \uses{def:kraus_map_channels, thm:kadison_schwarz_channels}
-    Let $E$ be a Kraus map that is both unital and trace-preserving.
-    If $E(X)=\mu X$ with $|\mu|=1$, then
-    \begin{align}
-        E(X^\dagger X)
-         & =E(X)^\dagger E(X).
-        \label{eq:channel_ks_peripheral}
-    \end{align}
-\end{theorem}
-
-\begin{proof}\leanok
-    The Kadison--Schwarz gap is positive semidefinite by
-    (\ref{eq:channel_kadison_schwarz}). Trace preservation and
-    $E(X)=\mu X$ with $|\mu|=1$ show that its trace is zero, hence the gap
-    vanishes and (\ref{eq:channel_ks_peripheral}) follows.
-\end{proof}
-
-\begin{theorem}[Left multiplicative identity from KS equality]
-    \label{thm:left_multiplicative_identity_channels}
-    \lean{KadisonSchwarz.multiplicative_domain_left}
-    \leanok
-    \uses{thm:kraus_commute_channels}
-    Let $E$ be a unital Kraus map.
-    If $E(X^\dagger X)=E(X)^\dagger E(X)$, then, for every
-    $Y\in\MN{D}$,
-    \begin{align}
-        E(X^\dagger Y)
-         & =E(X)^\dagger E(Y).
-        \label{eq:channel_left_multiplicative}
-    \end{align}
-\end{theorem}
-
-\begin{proof}\leanok\uses{thm:kraus_commute_channels}
-    The relation (\ref{eq:channel_ks_kraus_relation}) lets one move
-    $X^\dagger$ past each Kraus operator inside the sum
-    (\ref{eq:channel_kraus_maps}), yielding
-    (\ref{eq:channel_left_multiplicative}).
-\end{proof}
-
-\begin{definition}[Multiplicative domain]
-    \label{def:multiplicative_domain_channels}
-    \lean{KadisonSchwarz.multiplicativeDomain}
-    \leanok
-    \uses{def:kraus_map_channels}
-    The \emph{multiplicative domain} of a Kraus map $E$ is the set of matrices
-    that are simultaneously left- and right-multiplicative for $E$.
-\end{definition}
-
-\begin{theorem}[Multiplicative domain is a $*$-subalgebra]
-    \label{thm:md_star_subalgebra_channels}
-    \lean{KadisonSchwarz.multiplicativeDomainStarSubalgebra}
-    \leanok
-    \uses{def:multiplicative_domain_channels, def:kraus_map_channels}
-    For a unital Kraus map, the multiplicative domain is a $*$-subalgebra of
-    $\MN{D}$.
-\end{theorem}
-
-\begin{proof}\leanok
-    The multiplicative identities are stable under addition, multiplication,
-    and adjoint, and they contain the identity matrix.
-\end{proof}
-
 \subsection{Peripheral closure via adjoint fixed point}%
 \label{subsec:peripheral_closure_fixedpoint}
 
-The following results replace the trace-preservation hypothesis by the existence
-of a positive definite fixed point for the \emph{adjoint} Kraus map,
-matching the weighted-trace argument in
+The Kraus map, its adjoint, and the unital normalization are those of
+Definitions~\ref{def:kraus_map}, \ref{def:kraus_adjoint_map}, and
+\ref{def:unital_kraus}. The following results combine the canonical
+Kadison--Schwarz and multiplicative-domain theorems of Chapter~\ref{ch:schwarz}
+with a positive definite fixed point of the adjoint map, replacing trace
+preservation by the weighted-trace argument in
 \cite[Appendix~A]{Cirac2016MPDO_arXiv}.
 
 \begin{lemma}[Peripheral closure via adjoint fixed point]%
     \label{lem:peripheral_closed_powers_irred_fp}
     \lean{MPSTensor.peripheralEigenvalues_pow_mem_of_irreducible_unital_of_adjoint_fixedPoint}
     \leanok
-    \uses{def:kraus_map_channels, def:irreducible_cp}
+    \uses{def:kraus_map, def:kraus_adjoint_map, def:unital_kraus,
+        def:irreducible_cp}
     Let $E(X)=\sum_iK_iXK_i^\dagger$ be a Kraus map that is
     unital ($\sum_iK_iK_i^\dagger=\Id$), and assume:
     \begin{enumerate}
@@ -773,11 +622,11 @@ matching the weighted-trace argument in
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:kadison_schwarz_channels, thm:psd_fp_pd_irred,
-        thm:kraus_commute_channels, thm:left_multiplicative_identity_channels}
+    \uses{thm:kadison_schwarz, thm:psd_fp_pd_irred,
+        thm:kraus_commute, thm:right_multiplicative_identity}
     Let $E(X)=\mu X$ with $|\mu|=1$, and set
     $G:=E(X^\dagger X)-E(X)^\dagger E(X)$.
-    By (\ref{eq:channel_kadison_schwarz}), $G\geq0$.
+    By (\ref{eq:schwarz_kadison}), $G\geq0$.
     Since $E^*(\rho)=\rho$,
     \begin{align}
         \tr(\rho G)
@@ -794,10 +643,10 @@ matching the weighted-trace argument in
     Hence $X^\dagger X$ is a positive semidefinite fixed point, which is
     positive definite by irreducibility
     (Theorem~\ref{thm:psd_fp_pd_irred}). Thus $X$ is invertible.
-    Theorem~\ref{thm:kraus_commute_channels} gives the corresponding
+    Theorem~\ref{thm:kraus_commute} gives the corresponding
     intertwining relation with each Kraus operator. Iterating the
     multiplicative identity of
-    Theorem~\ref{thm:left_multiplicative_identity_channels} gives
+    Theorem~\ref{thm:right_multiplicative_identity} gives
     $E(X^n)=\mu^nX^n$, so $\mu^n$ is peripheral.
 \end{proof}
 
@@ -805,7 +654,8 @@ matching the weighted-trace argument in
     \label{thm:peripheral_roots_irred_fp}
     \lean{MPSTensor.peripheral_isRootOfUnity_of_irreducible_unital_of_adjoint_fixedPoint}
     \leanok
-    \uses{def:kraus_map_channels, def:irreducible_cp, def:peripheral_eigenvalues}
+    \uses{def:kraus_map, def:kraus_adjoint_map, def:unital_kraus,
+        def:irreducible_cp, def:peripheral_eigenvalues}
     Let $E(X)=\sum_iK_iXK_i^\dagger$ be a Kraus map that is
     unital, and assume that the adjoint Kraus map
     $E^*(X)=\sum_iK_i^\dagger XK_i$ has a positive definite fixed
