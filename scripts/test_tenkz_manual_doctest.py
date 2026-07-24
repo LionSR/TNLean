@@ -44,7 +44,8 @@ def main() -> int:
 \tntree{((ab)c)}
 \end{Verbatim}
 \begin{Verbatim}
-\verb|\documentclass{standalone}| \documentclasswrapper \usepackagewrapper{foo} \tntree{(ab)}
+\verb|\documentclass{standalone}| \documentclasswrapper \usepackagewrapper{foo}
+\string\usepackage{missing-package} \\usepackage{also-missing} \tntree{(ab)}
 \end{Verbatim}
 \begin{Verbatim}
 shell command % \tntree{commented}
@@ -120,6 +121,12 @@ shell command % \tntree{commented}
     second_label = DOCTEST._source_label(DOCTEST.CHAPTERS / "advanced" / "example.tex")
     if first_label == second_label:
         raise AssertionError("chapter-relative case labels are not unique")
+    colliding_labels = {
+        DOCTEST._source_label(DOCTEST.CHAPTERS / relative)
+        for relative in ("basic/a_b.tex", "basic/a-b.tex", "a/b.tex", "a-b.tex")
+    }
+    if len(colliding_labels) != 4:
+        raise AssertionError("source labels are not injective over paths")
     displayed_input = r"""
 \begin{Verbatim}
 \input{missing-example.tex}
@@ -133,7 +140,7 @@ shell command % \tntree{commented}
         chapters.mkdir()
         root = manual_dir / "manual2.tex"
         child = chapters / "child.tex"
-        root.write_text(r"\input{chapters2/child}", encoding="utf-8")
+        root.write_text(r"\input chapters2/child", encoding="utf-8")
         child.write_text("", encoding="utf-8")
         original_manual = DOCTEST.MANUAL
         original_manual_dir = DOCTEST.MANUAL_DIR

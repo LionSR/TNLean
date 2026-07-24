@@ -196,7 +196,9 @@ def _find_uncommented(text: str, marker: str, offset: int) -> int:
 def _find_control_word(text: str, name: str, offset: int) -> int:
     pattern = re.compile(rf"\\{re.escape(name)}(?![A-Za-z@])")
     while match := pattern.search(text, offset):
-        if not _is_commented(text, match.start()):
+        if not _is_commented(text, match.start()) and not _is_escaped(
+            text, match.start()
+        ):
             return match.start()
         offset = match.end()
     return -1
@@ -229,7 +231,7 @@ def _extract_usepackages(body: str) -> tuple[list[str], str]:
     ranges: list[tuple[int, int]] = []
     offset = 0
     marker = r"\usepackage"
-    scan_body = _mask_inline_verbatim(body)
+    scan_body = _mask_nonexecuted_tokens(body)
     while (start := _find_control_word(scan_body, "usepackage", offset)) >= 0:
         cursor = _skip_space_and_comments(body, start + len(marker))
         if cursor < len(body) and body[cursor] == "[":
@@ -307,7 +309,8 @@ def _source_label(path: Path) -> str:
         relative = path.relative_to(CHAPTERS)
     except ValueError:
         relative = Path(path.name)
-    return re.sub(r"[^A-Za-z0-9]+", "-", relative.with_suffix("").as_posix()).strip("-")
+    source_key = relative.with_suffix("").as_posix()
+    return source_key.encode("utf-8").hex()
 
 
 def _variant_definitions(variant_style: str) -> list[str]:
@@ -319,7 +322,7 @@ def _variant_definitions(variant_style: str) -> list[str]:
 
 def _standalone_document(body: str, variant_style: str | None = None) -> str:
     body = body.strip()
-    scan_body = _mask_inline_verbatim(body)
+    scan_body = _mask_nonexecuted_tokens(body)
     has_document_class = _find_control_word(scan_body, "documentclass", 0) >= 0
     has_document = (
         _find_uncommented(scan_body, r"\begin{document}", 0) >= 0
@@ -407,7 +410,7 @@ def displayed_examples() -> list[Example]:
 def _manual_sources() -> list[Path]:
     pending = [MANUAL]
     visited: set[Path] = set()
-    input_pattern = re.compile(r"\\input\s*\{([^{}]+)\}")
+    input_pattern = re.compile(r"\\input(?![A-Za-z@])")
     while pending:
         source = pending.pop()
         if source in visited:
@@ -416,7 +419,19 @@ def _manual_sources() -> list[Path]:
         raw = source.read_text(encoding="utf-8")
         text = strip_comments(_mask_inline_verbatim(_mask_display_environments(raw)))
         for match in input_pattern.finditer(text):
-            relative = Path(match.group(1))
+            if _is_escaped(text, match.start()):
+                continue
+            cursor = match.end()
+            while cursor < len(text) and text[cursor].isspace():
+                cursor += 1
+            if cursor < len(text) and text[cursor] == "{":
+                cursor, target = _read_braced(text, cursor)
+            else:
+                target_match = re.match(r"[^\s%{}]+", text[cursor:])
+                if target_match is None:
+                    raise ValueError(f"{source}: input command has no filename")
+                target = target_match.group(0)
+            relative = Path(target)
             if not relative.suffix:
                 relative = relative.with_suffix(".tex")
             included = (MANUAL_DIR / relative).resolve()
