@@ -71,6 +71,8 @@ shell command % \tntree{commented}
 \newcommand{\stored}{\fi}
 \ifalias
 \fi
+\if@twocolumn
+\fi
 \ifbare ab
 \fi
 \ifdraft
@@ -78,6 +80,21 @@ shell command % \tntree{commented}
 \fi
 \begin{tnexample}
 \begin{tenkz} \tn{false-branch} \end{tenkz}
+\end{tnexample}
+\fi
+\IfFileExists{missing-conditional.tex}{\newif\ifghost}{}
+\iffalse
+\ifghost
+\fi
+\begin{tnexample}
+\begin{tenkz} \tn{inactive-file-declaration} \end{tenkz}
+\end{tnexample}
+\IfFileExists{present-conditional.tex}{\newif\ifpresent}{}
+\iffalse
+\ifpresent
+\fi
+\begin{tnexample}
+\begin{tenkz} \tn{active-file-declaration} \end{tenkz}
 \end{tnexample}
 \fi
 \def\iflate{not yet a conditional}
@@ -100,9 +117,10 @@ shell command % \tntree{commented}
 """
     with tempfile.TemporaryDirectory(prefix="tenkz-doctest-unit-") as tmp:
         path = Path(tmp) / "fixture.tex"
+        (Path(tmp) / "present-conditional.tex").write_text("", encoding="utf-8")
         path.write_text(fixture, encoding="utf-8")
         extracted = DOCTEST.extract_displayed_examples(path)
-    if len(extracted) != 7 or any(
+    if len(extracted) != 8 or any(
         r"\begin{tenkz}" not in example.document for example in extracted[:2]
     ):
         raise AssertionError("nested tnmultiple options confused body extraction")
@@ -119,9 +137,11 @@ shell command % \tntree{commented}
         r"\begin{document}"
     ):
         raise AssertionError("a multiline package declaration was split across the body")
-    if r"\tn{declaration-order}" not in extracted[5].document:
+    if r"\tn{inactive-file-declaration}" not in extracted[5].document:
+        raise AssertionError("an inactive file branch declared a conditional")
+    if r"\tn{declaration-order}" not in extracted[6].document:
         raise AssertionError("a later newif declaration changed an earlier false branch")
-    complete = extracted[6].document
+    complete = extracted[7].document
     if complete.count(r"\documentclass") != 1 or r"\tn{commented}" in complete:
         raise AssertionError("complete or commented Verbatim documents were mishandled")
 
@@ -257,9 +277,21 @@ shell command % \tntree{commented}
             DOCTEST.CHAPTERS = original_chapters
     ordered_parent = "\\input{child.tex}\n\\newif\\iflaterparent\n"
     child_offset = ordered_parent.index(r"\input")
-    inherited = DOCTEST._conditionals_before(ordered_parent, child_offset, ())
+    inherited = DOCTEST._conditionals_before(
+        ordered_parent, child_offset, (), Path.cwd()
+    )
     if "iflaterparent" in inherited:
         raise AssertionError("a declaration after input was inherited by the child")
+    guarded_parent = (
+        "\\IfFileExists{missing-conditional.tex}"
+        "{\\newif\\ifguarded}{}\\input{child.tex}\n"
+    )
+    guarded_offset = guarded_parent.index(r"\input")
+    guarded_inherited = DOCTEST._conditionals_before(
+        guarded_parent, guarded_offset, (), Path.cwd()
+    )
+    if "ifguarded" in guarded_inherited:
+        raise AssertionError("an inactive file branch leaked a child conditional")
     ordered_child = (
         "\\def\\iflaterparent{ordinary command}\n"
         "\\iffalse\n\\iflaterparent\n\\fi\n"
