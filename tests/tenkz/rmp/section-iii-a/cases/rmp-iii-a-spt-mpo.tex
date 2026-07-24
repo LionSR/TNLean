@@ -1,45 +1,30 @@
 % Target: rmp-iii-a-spt-mpo
 % Formula: Pulling O_g through A deposits the physical action U_g on A.
-% Ink: Canonical public tenkzfree six-leg PEPS star and rotated MPO string.
+% Ink: Canonical public tenkzfree PEPS star, crossing boxes, and rotated arcs.
 % Boundary: Four virtual legs, one physical leg, and two g-string ends are open.
 % Source: paper TN-Review-main.tex line 1459; author source ImagesReview Section
 %   III/ImagesReview Section III.tex lines 414-444
 % Capabilities: free-graph, pulling-through, crossing-order, rotated-action
 \[
-  \begin{tenkzfree}
-    \tnput[dot]{A}{(0mm,0mm)}{}
+  \begin{tenkzfree}\tngroup[frame=flat]{
+    \tnput[dot]{A}{(0mm,0mm)}{A}
     \tnput[box]{xw}{(-9mm,0mm)}{}
-    \tnput[box,frame={rotate=45}]{xne}{(7mm,7mm)}{}
-    \tnput[boundary,label pos=south]{gl}{(-10mm,8mm)}{g}
+    \tnput[box,frame={rotate=45}]{xn}{(0mm,9mm)}{}
     \tnjoin{-18mm,0mm}{xw.west} \tnjoin{xw.east}{A.west}
     \tnjoin{A.east}{18mm,0mm}
     \tnjoin{0mm,-18mm}{A.south}
-    \tnjoin{A.north}{0mm,18mm}
-    \tnjoin{-13mm,-13mm}{A.south west}
-    \tnjoin{A.north east}{xne.south west}
-    \tnjoin{xne.north east}{13mm,13mm}
-    \tnjoin[role=operator]{-18mm,-8mm}{xw.west}
-    \tnjoin[role=operator,route=arc,out=35,in=215]
-      {xw.east}{xne.south west}
-    \tnjoin[role=operator]{xne.north east}{18mm,7mm}
-  \end{tenkzfree}
+    \tnjoin{A.north}{xn.south} \tnjoin{xn.north}{0mm,18mm}
+    \tnjoin[route=arc, out=45, in=225, label=g]{xw}{xn}
+  }\end{tenkzfree}
   =U_g
-  \begin{tenkzfree}
-    \tnput[dot]{A}{(0mm,0mm)}{}
+  \begin{tenkzfree}\tngroup[frame=flat]{
+    \tnput[dot]{A}{(0mm,0mm)}{A}
     \tnput[box]{xe}{(9mm,0mm)}{}
-    \tnput[box,frame={rotate=45}]{xsw}{(-7mm,-7mm)}{}
-    \tnput[boundary,label pos=north]{gl}{(6mm,-8mm)}{g}
-    \tnjoin{-18mm,0mm}{A.west}
-    \tnjoin{A.east}{xe.west}
+    \tnput[box,frame={rotate=45}]{xs}{(0mm,-9mm)}{}
+    \tnjoin{-18mm,0mm}{A.west} \tnjoin{A.east}{xe.west}
     \tnjoin{xe.east}{18mm,0mm}
-    \tnjoin{0mm,-18mm}{A.south}
+    \tnjoin{0mm,-18mm}{xs.south} \tnjoin{xs.north}{A.south}
     \tnjoin{A.north}{0mm,18mm}
-    \tnjoin{-13mm,-13mm}{xsw.south west}
-    \tnjoin{xsw.north east}{A.south west}
-    \tnjoin{A.north east}{13mm,13mm}
-    \tnjoin[role=operator]{-18mm,-7mm}{xsw.south west}
-    \tnjoin[role=operator,route=arc,out=-20,in=200]
-      {xsw.north east}{xe.west}
-    \tnjoin[role=operator]{xe.east}{18mm,8mm}
-  \end{tenkzfree}.
+    \tnjoin[route=arc, out=45, in=225, label=g]{xs}{xe}
+  }\end{tenkzfree}.
 \]

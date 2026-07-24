@@ -83,6 +83,7 @@
 % the row's own height (the node's west/east anchors sit at the glyph's
 % vertical CENTRE, which is between the wires).
 \prop_new:N \l__tenkz_tall_prop
+\prop_new:N \l__tenkz_rotated_node_prop
 \dim_new:N \l__tenkz_tallx_dim
 % physical trace (trace=physical): Tr_phys closes each site's up leg into
 % its own down leg, so those legs leave the boundary signature
@@ -2027,6 +2028,7 @@
     \prop_clear:N \l__tenkz_owner_prop
     \prop_clear:N \l__tenkz_name_prop
     \prop_clear:N \l__tenkz_tall_prop
+    \prop_clear:N \l__tenkz_rotated_node_prop
     \prop_clear:N \l__tenkz_combside_prop
     \bool_set_false:N \l__tenkz_ptrace_bool
     \clist_clear:N \l__tenkz_ptcols_clist
@@ -2362,8 +2364,12 @@
                 {fuse} { \tenkz_node_fuse:nn {#1}{#2} }
               }
             \prop_get:NnNT \l__tenkz_name_prop {#1-#2} \l_tmpa_tl
-              { \tenkz_enclosure_register_existing:eV
-                  {cell:#1-#2} \l_tmpa_tl }
+              {
+                \fp_compare:nNnF {\l__tenkz_cangle_tl} = {0}
+                  { \prop_put:NVn \l__tenkz_rotated_node_prop \l_tmpa_tl { } }
+                \tenkz_enclosure_register_existing:eV
+                  {cell:#1-#2} \l_tmpa_tl
+              }
           }
           { \prop_remove:Nn \l__tenkz_kind_prop {#1-#2} }
       }
@@ -2648,9 +2654,9 @@ code=combined-side|value=\tl_to_str:N \l__tenkz_fcombined_tl}
   }
 \cs_new_protected:Npn \tenkz_glyph_node_aux:nnn #1#2#3
   {
-    % (x, y) is the glyph centre in the LOGICAL frame; the frame map
-    % places it, then geometry and the render stage own the ink
-    % (glyph shapes never rotate -- text stays upright)
+    % (x, y) is the glyph centre in the logical frame.  The picture map
+    % places it; an atom frame rotates the skin while its label is
+    % counter-rotated upright.
     \tenkz_map:nn { \l__tenkz_x_dim } { \l__tenkz_y_dim }
     \tenkz_render_cell_place:nn {#1}{#2}
     \__tenkz_render_atom_labelled_pt:nnnnn
@@ -2682,10 +2688,10 @@ code=combined-side|value=\tl_to_str:N \l__tenkz_fcombined_tl}
     \tl_if_empty:NF \l__tenkz_rolesty_tl
       { \tl_put_right:Ne \l__tenkz_xstyle_tl
           { , \exp_not:V \l__tenkz_rolesty_tl } }
-    % splice the xstyle (see \tenkz_glyph_node:nnn on why it must be spliced)
+    % The shared glyph entry point splices xstyle and installs the resolved
+    % frame on the capsule before its label is counter-rotated upright.
     \tl_set:Nn \l__tenkz_cell_tl {#4}
-    \tl_set:Ne \l_tmpa_tl { \exp_not:n {#3} \exp_not:V \l__tenkz_xstyle_tl }
-    \tenkz_glyph_node_aux:nnV {#1}{#2} \l_tmpa_tl
+    \tenkz_glyph_node:nnn {#1}{#2}{#3}
     \prop_put:Nnn \l__tenkz_owner_prop {#1-#2} {#2}
     \prop_put:Nne \l__tenkz_name_prop {#1-#2} { \tenkz_node_name:nn{#1}{#2} }
     \tenkz_combined_stub:nn {#1}{#2}
@@ -2902,35 +2908,45 @@ code=combined-side|value=\tl_to_str:N \l__tenkz_fcombined_tl}
         \prop_get:NeNTF \l__tenkz_tall_prop
           {\int_eval:n{#1}-\l_tmpa_tl} \l_tmpb_tl
           {
-            % A combined tall face has one centred anchor for the whole
-            % glyph.  Split faces retain their separate row-height anchors.
-            \tenkz_cell_combined:nnnN {#1}{#2}{#3} \l_tmpa_bool
-            \bool_if:NTF \l_tmpa_bool
-              { \tl_set:Ne #4
-                  { (\l_tmpb_tl. \tenkz_compass:n {#3}) } }
+            % A locally rotated skin must choose its border from the other
+            % endpoint of this bond.  A fixed compass anchor rotates with
+            % the skin and can land on the page's wrong side.
+            \prop_if_in:NVTF \l__tenkz_rotated_node_prop \l_tmpb_tl
+              { \tl_set:Ne #4 {(\l_tmpb_tl)} }
               {
-                \bool_if:NTF \l__tenkz_vertical_bool
+                % A combined tall face has one centred anchor for the whole
+                % glyph.  Split faces retain their row-height anchors.
+                \tenkz_cell_combined:nnnN {#1}{#2}{#3} \l_tmpa_bool
+                \bool_if:NTF \l_tmpa_bool
+                  { \tl_set:Ne #4
+                      { (\l_tmpb_tl. \tenkz_compass:n {#3}) } }
                   {
-                    \pgfextracty \l__tenkz_tallx_dim
-                      { \exp_args:Ne \pgfpointanchor { \l_tmpb_tl }
-                          { \tenkz_compass:n {#3} } }
-                    \tl_set:Ne #4
-                      { ( \dim_eval:n { - \tenkz_rowy:n {#1} } ,
-                          \dim_use:N \l__tenkz_tallx_dim ) }
-                  }
-                  {
-                    \pgfextractx \l__tenkz_tallx_dim
-                      { \exp_args:Ne \pgfpointanchor { \l_tmpb_tl } {#3} }
-                    \tl_set:Ne #4
-                      { ( \dim_use:N \l__tenkz_tallx_dim ,
-                          \tenkz_rowy:n {#1} ) }
+                    \bool_if:NTF \l__tenkz_vertical_bool
+                      {
+                        \pgfextracty \l__tenkz_tallx_dim
+                          { \exp_args:Ne \pgfpointanchor { \l_tmpb_tl }
+                              { \tenkz_compass:n {#3} } }
+                        \tl_set:Ne #4
+                          { ( \dim_eval:n { - \tenkz_rowy:n {#1} } ,
+                              \dim_use:N \l__tenkz_tallx_dim ) }
+                      }
+                      {
+                        \pgfextractx \l__tenkz_tallx_dim
+                          { \exp_args:Ne \pgfpointanchor
+                              { \l_tmpb_tl } {#3} }
+                        \tl_set:Ne #4
+                          { ( \dim_use:N \l__tenkz_tallx_dim ,
+                              \tenkz_rowy:n {#1} ) }
+                      }
                   }
               }
           }
           {
             \tenkz_get:NeN \l__tenkz_name_prop
               {\int_eval:n{#1}-\l_tmpa_tl} \l_tmpb_tl
-            \tl_set:Ne #4 { (\l_tmpb_tl. \tenkz_compass:n {#3}) }
+            \prop_if_in:NVTF \l__tenkz_rotated_node_prop \l_tmpb_tl
+              { \tl_set:Ne #4 {(\l_tmpb_tl)} }
+              { \tl_set:Ne #4 {(\l_tmpb_tl. \tenkz_compass:n {#3})} }
           }
       }
   }
