@@ -6,6 +6,7 @@ from __future__ import annotations
 import importlib.util
 import sys
 import tempfile
+from types import SimpleNamespace
 from pathlib import Path
 
 
@@ -31,8 +32,10 @@ def main() -> int:
         raise AssertionError("the displayed shell session was treated as TeX")
 
     fixture = r"""
-\begin{tnmultiples}[
-  caption={domain [0,1)},
+\begin{tnmultiples}% a commented } must not affect the option scanner
+[
+  caption={domain [0,1)}, % nor may this commented } affect it
+  index={options={[some key=val, other=x]}},
   variants={{dot}{dot},{box}{box}}]
 \begin{tenkz} \tn[variant]{A} \end{tenkz}
 \end{tnmultiples}
@@ -43,7 +46,9 @@ def main() -> int:
 % \begin{tenkz} \tn{commented} \end{tenkz}
 % \end{tnexample}
 \begin{Verbatim}
-\documentclass{standalone}
+\documentclass[
+  border=2pt
+]{standalone}
 \usepackage{tenkz}
 \begin{document}
 \begin{tenkz} \tn{complete} \end{tenkz}
@@ -65,6 +70,23 @@ def main() -> int:
     complete = extracted[3].document
     if complete.count(r"\documentclass") != 1 or r"\tn{commented}" in complete:
         raise AssertionError("complete or commented Verbatim documents were mishandled")
+
+    captured: dict[str, object] = {}
+    original_run = DOCTEST.subprocess.run
+
+    def capture_run(*args: object, **kwargs: object) -> SimpleNamespace:
+        captured.update(kwargs)
+        return SimpleNamespace(returncode=0, stdout="")
+
+    DOCTEST.subprocess.run = capture_run
+    try:
+        with tempfile.TemporaryDirectory(prefix="tenkz-doctest-path-") as tmp:
+            DOCTEST.compile_example(reference[0], "xelatex", Path(tmp))
+    finally:
+        DOCTEST.subprocess.run = original_run
+    texinputs = str(captured["env"]["TEXINPUTS"])
+    if not texinputs.startswith(f"{reference[0].source.parent}//:"):
+        raise AssertionError("a reference example cannot resolve files beside its source")
 
     print("PASS: tenkz manual doctest extraction and reference coverage")
     return 0
