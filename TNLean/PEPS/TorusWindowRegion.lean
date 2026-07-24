@@ -63,8 +63,6 @@ structure NormalTorusWindowInjectivityHypotheses (L K : ℕ)
 
 /-! ### Sliding-window tiling injectivity -/
 
-/-! ### Sliding-window tiling injectivity -/
-
 /-- A contiguous torus rectangle of width at least `L` and height at least `K`
 is the union of the contiguous `L × K` windows sliding over it.
 
