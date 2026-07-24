@@ -1,12 +1,12 @@
-% Regression: zz_wirescan — a wire lookup that misses must return the
-% no-value sentinel without expanding it, even when closure wires (which
-% carry no from/to fields) sit in the model store.
+% Regression: zz_wirescan — wire lookup misses retain the no-value sentinel,
+% and record-derived virtual pairings survive into the boundary pass.
 % Formula: Tr[A B] — the periodic wrap is the from/to-less closure record.
 \documentclass[varwidth=10cm, border=6pt]{standalone}
 \usepackage{tenkz}
 \begin{document}
 \ExplSyntaxOn
 \cs_new_eq:NN \__tenkz_test_validate: \__tenkz_model_validate:
+\cs_new_eq:NN \__tenkz_test_draw_bonds: \tenkz_draw_bonds:
 \cs_set_protected:Npn \__tenkz_model_validate:
   {
     % The store now holds one bond wire and one wrap closure.  A miss must
@@ -20,6 +20,22 @@
             sentinel~for~a~miss.}
       }
     \__tenkz_test_validate:
+  }
+\cs_set_protected:Npn \tenkz_draw_bonds:
+  {
+    \__tenkz_test_draw_bonds:
+    \prop_if_in:NnF \l__tenkz_virtualpaired_prop {1-1-east}
+      {
+        \PackageError{tenkz-test}
+          {Record-derived~east~pairing~was~discarded}
+          {The~bond~WIRE~fill~must~survive~until~boundary~resolution.}
+      }
+    \prop_if_in:NnF \l__tenkz_virtualpaired_prop {1-2-west}
+      {
+        \PackageError{tenkz-test}
+          {Record-derived~west~pairing~was~discarded}
+          {The~bond~WIRE~fill~must~survive~until~boundary~resolution.}
+      }
   }
 \ExplSyntaxOff
 \begin{tenkz}[rows={ket}, west=trace, east=trace]
