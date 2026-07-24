@@ -11,9 +11,10 @@
       "tenkz-lattice.code.tex": 0,
       "tenkz-metric.code.tex": 0,
       "tenkz-model.code.tex": 0,
-      "tenkz-render.code.tex": 0
+      "tenkz-render.code.tex": 0,
+      "tenkz-string.code.tex": 7
     },
-    "total": 36
+    "total": 43
   },
   "decimal_literals": {
     "by_file": {
@@ -27,7 +28,8 @@
       "tenkz-lattice.code.tex": 10,
       "tenkz-metric.code.tex": 0,
       "tenkz-model.code.tex": 0,
-      "tenkz-render.code.tex": 0
+      "tenkz-render.code.tex": 0,
+      "tenkz-string.code.tex": 0
     },
     "total": 51
   }
