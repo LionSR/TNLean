@@ -665,7 +665,9 @@
     \lean{MPSTensor.wordTupleSpanTop_of_blocksNotGaugePhaseEquiv_directSum_selectors_c1}
     \lean{MPSTensor.exists_wordTupleSpanTop_of_blocksNotGaugePhaseEquiv_directSum_selectors_c1}
     \leanok
-    \uses{def:bnt_cpsv, def:blockwise_product_word_span}
+    \uses{def:bnt_cpsv, def:nt_cpsv, def:blocks_not_gauge_phase_equiv,
+        def:left_canonical_tensor, def:mpv_overlap,
+        def:blockwise_product_word_span}
     Let $A^1,\ldots,A^r$ be normalized representatives of a basis of normal
     tensors: each representative is irreducible, the family is left-canonical,
     the self-overlaps are normalized, and no two distinct same-dimensional
@@ -821,15 +823,13 @@
     \end{align}
     Consequently, equality of the local spaces forces
     $\Psi_N(A)=c_N\Psi_N(B)$ for some scalar $c_N$ at every such $N$.
-    Theorem~\ref{thm:normal_proportional_mpv_geometric_phase} says that
-    eventual nonzero proportionality of normalized normal representatives has
-    a geometric phase and hence gives a gauge-phase equivalence. By
-    Theorem~\ref{thm:cpsv_bnt_blocks_not_gaugePhaseEquiv}, distinct BNT
-    representatives exclude this conclusion. Therefore, beyond every
-    prescribed threshold, there is an $N$ for which no scalar $c_N$ gives the
-    proportionality above. Choose such an $N>\max\{2,\ell\}$. The
-    local-intersection equality gives exactly the forbidden proportionality,
-    a contradiction. This proves
+    The normalized self-overlaps are the squared norms of these vectors and
+    tend to one. Hence both vectors, and therefore $c_N$, are nonzero for all
+    sufficiently large $N$. Theorem~\ref{thm:normal_proportional_mpv_geometric_phase}
+    now turns this eventual nonzero proportionality into a gauge-phase
+    equivalence. This contradicts
+    Theorem~\ref{thm:cpsv_bnt_blocks_not_gaugePhaseEquiv} for the two distinct
+    BNT representatives. Thus
     $\mathcal G_S^A\cap\mathcal G_S^B=\{0\}$, and hence the same assertion for
     the original ordering of the pair.
 
