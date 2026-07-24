@@ -1199,7 +1199,7 @@
   {
     \tenkz_map_save:nn {#1} {#2}
     \tenkz_map:nn {#3} {#4}
-    \draw[#5] \tenkz_qpt: -- \tenkz_mpt: ;
+    \__tenkz_render_stroke:nn {#5} { \tenkz_qpt: -- \tenkz_mpt: }
   }
 % compass words under the frame map: the vertical map reflects across the
 % north-west/south-east diagonal, so north<->west, south<->east, and the
@@ -2110,9 +2110,9 @@
   {
     \prop_if_in:NnF \l__tenkz_periodicpaired_prop {#1-#2-#3}
       {
-        \draw[bond, tenkz~combined~stub]
-          (\tenkz_node_name:nn{#1}{#2}.\tenkz_compass:n{#3}) --
-          ++\tenkz_stub_vec:n {#3};
+        \__tenkz_render_stroke:nn { bond, tenkz~combined~stub }
+          { (\tenkz_node_name:nn{#1}{#2}.\tenkz_compass:n{#3}) --
+            ++\tenkz_stub_vec:n {#3} }
       }
   }
 
@@ -2323,14 +2323,12 @@ code=combined-side|value=\tl_to_str:N \l__tenkz_fcombined_tl}
     \tenkz_map:nn { \tenkz_colx:n {#2} } { \tenkz_rowy:n {#1} }
     \bool_if:NTF \l__tenkz_vertical_bool
       {
-        \node[tn~label, inner~ysep=0.30em]
-          (\tenkz_node_name:nn{#1}{#2})
-          at \tenkz_mpt: { $\vdots$ };
+        \__tenkz_render_labelnode_named:nnnn { tn~label, inner~ysep=0.30em }
+          { \tenkz_node_name:nn{#1}{#2} } { \tenkz_mpt: } { $\vdots$ }
       }
       {
-        \node[tn~label, inner~xsep=0.30em]
-          (\tenkz_node_name:nn{#1}{#2})
-          at \tenkz_mpt: { $\cdots$ };
+        \__tenkz_render_labelnode_named:nnnn { tn~label, inner~xsep=0.30em }
+          { \tenkz_node_name:nn{#1}{#2} } { \tenkz_mpt: } { $\cdots$ }
       }
     \prop_put:Nnn \l__tenkz_owner_prop {#1-#2} {#2}
     \prop_put:Nne \l__tenkz_name_prop {#1-#2} { \tenkz_node_name:nn{#1}{#2} }
@@ -2339,9 +2337,8 @@ code=combined-side|value=\tl_to_str:N \l__tenkz_fcombined_tl}
 \cs_new_protected:Npn \tenkz_node_ghost:nn #1#2
   {
     \tenkz_map:nn { \tenkz_colx:n {#2} } { \tenkz_rowy:n {#1} }
-    \node[inner~sep=0pt, minimum~size=0pt]
-      (\tenkz_node_name:nn{#1}{#2})
-      at \tenkz_mpt: {};
+    \__tenkz_render_labelnode_named:nnnn { inner~sep=0pt, minimum~size=0pt }
+      { \tenkz_node_name:nn{#1}{#2} } { \tenkz_mpt: } {}
     \prop_put:Nnn \l__tenkz_owner_prop {#1-#2} {#2}
     \prop_put:Nne \l__tenkz_name_prop {#1-#2} { \tenkz_node_name:nn{#1}{#2} }
   }
@@ -2453,8 +2450,9 @@ code=combined-side|value=\tl_to_str:N \l__tenkz_fcombined_tl}
           { \dim_sub:Nn \l__tenkz_x_dim { \tenkz@dim{0.30} } }
         \tenkz_map:nn { \l__tenkz_x_dim }
           { \l__tenkz_tmp_dim + \tenkz@dim{\tenkz@r@labelclear} }
-        \node[tn~label, anchor=\tenkz_compass:n{south}] at \tenkz_mpt:
-          { $\tenkz@labelsize \tl_use:N \l_tmpb_tl$ };
+        \__tenkz_render_labelnode:nnn
+          { tn~label, anchor=\tenkz_compass:n{south} } { \tenkz_mpt: }
+          { $\tenkz@labelsize \tl_use:N \l_tmpb_tl$ }
       }
     % role=/species= ride the event for schema uniformity with the other
     % atom emitters (uniform fields keep the audit's parsers total); the
@@ -2555,6 +2553,10 @@ code=combined-side|value=\tl_to_str:N \l__tenkz_fcombined_tl}
 
 \tl_new:N \l__tenkz_pa_tl
 \tl_new:N \l__tenkz_pb_tl
+% the wire record backing the bond about to ink, and its recorded direction
+\tl_new:N \l__tenkz_bondrec_tl
+\tl_new:N \l__tenkz_bonddirw_tl
+\cs_generate_variant:Nn \__tenkz_model_get:nnN { e }
 
 % extract a `species=<name>' row mod from the str-normalized mods #1
 % (catcode-12 tokens, so both delimiters are built by \use:e): the name
@@ -2661,8 +2663,8 @@ code=combined-side|value=\tl_to_str:N \l__tenkz_fcombined_tl}
 \cs_new_protected:Npn \tenkz_draw_unmatched_virtual:nnn #1#2#3
   {
     \tenkz_anchor:nnnN {#1}{#2}{#3} \l__tenkz_pa_tl
-    \draw[\tl_use:N \l__tenkz_cell_tl]
-      \l__tenkz_pa_tl -- ++\tenkz_stub_vec:n{#3};
+    \__tenkz_render_stroke:nn { \tl_use:N \l__tenkz_cell_tl }
+      { \l__tenkz_pa_tl -- ++\tenkz_stub_vec:n{#3} }
     \str_if_eq:nnTF {#3}{west}
       { \int_incr:N \l__tenkz_internalvw_int }
       { \int_incr:N \l__tenkz_internalve_int }
@@ -2755,9 +2757,33 @@ picture=\the\tenkz@pictureid|code=combined-attach|row=##1}
                                   {east} \l__tenkz_pa_tl
                                 \tenkz_anchor:nnnN {##1}{####1}
                                   {west} \l__tenkz_pb_tl
-                                \draw[\tl_use:N \l__tenkz_cell_tl,
-                                      \tl_use:N \l__tenkz_dirmarks_tl]
-                                  \l__tenkz_pa_tl -- \l__tenkz_pb_tl;
+                                % the WIRE record is authoritative: a bond
+                                % with no record, or a record whose dir
+                                % disagrees with the scan, is a coded error
+                                \__tenkz_model_wire_by_ends:eeN
+                                  {##1-\int_use:N\l_tmpa_int}{##1-####1}
+                                  \l__tenkz_bondrec_tl
+                                \quark_if_no_value:NTF \l__tenkz_bondrec_tl
+                                  { \msg_error:nnee {tenkz}{render-nowire}
+                                      {##1-\int_use:N\l_tmpa_int}{##1-####1} }
+                                  {
+                                    \__tenkz_model_get:enN
+                                      { \tl_use:N \l__tenkz_bondrec_tl }
+                                      {dir} \l__tenkz_bonddirw_tl
+                                    \str_if_eq:eeF
+                                      { \tl_use:N \l__tenkz_bonddirw_tl }
+                                      { \tenkz_model_dir_word: }
+                                      { \msg_error:nneee {tenkz}{render-wiredir}
+                                          { \tl_use:N \l__tenkz_bondrec_tl }
+                                          { \tl_use:N \l__tenkz_bonddirw_tl }
+                                          { \tenkz_model_dir_word: } }
+                                    \__tenkz_render_bond:ennnn
+                                      { \tl_use:N \l__tenkz_bondrec_tl }
+                                      { \tl_use:N \l__tenkz_cell_tl }
+                                      { \tl_use:N \l__tenkz_dirmarks_tl }
+                                      { \l__tenkz_pa_tl }
+                                      { \l__tenkz_pb_tl }
+                                  }
                                 % Boundary accounting consumes these exact
                                 % bond facts rather than repeating the
                                 % consecutive-owner scan.
@@ -2793,9 +2819,10 @@ picture=\the\tenkz@pictureid|code=combined-attach|row=##1}
                                 \tenkz_anchor:nnnN
                                   {##1}{\int_use:N\l__tenkz_pendeast_int}
                                   {east} \l__tenkz_pa_tl
-                                \draw[\tl_use:N \l__tenkz_cell_tl]
-                                  \l__tenkz_pa_tl --
-                                  ++\tenkz_stub_vec:n{east};
+                                \__tenkz_render_stroke:nn
+                                  { \tl_use:N \l__tenkz_cell_tl }
+                                  { \l__tenkz_pa_tl --
+                                    ++\tenkz_stub_vec:n{east} }
                               }
                             \int_zero:N \l__tenkz_pendeast_int
                           }
@@ -2805,8 +2832,9 @@ picture=\the\tenkz@pictureid|code=combined-attach|row=##1}
                           {
                             \tenkz_anchor:nnnN {##1}{####1}{west}
                               \l__tenkz_pb_tl
-                            \draw[\tl_use:N \l__tenkz_cell_tl]
-                              \l__tenkz_pb_tl -- ++\tenkz_stub_vec:n{west};
+                            \__tenkz_render_stroke:nn
+                              { \tl_use:N \l__tenkz_cell_tl }
+                              { \l__tenkz_pb_tl -- ++\tenkz_stub_vec:n{west} }
                           }
                         \bool_set_false:N \l__tenkz_hole_bool
                       }
@@ -2941,11 +2969,12 @@ picture=\the\tenkz@pictureid|code=combined-attach|row=##1}
   {
     \tl_if_blank:VF \l__tenkz_pwlowlabel_tl
       {
-        \node[tn~label, anchor=\tenkz_compass:n{south},
-              shift={\tenkz_leg_vec:nn{1}
-                { \tenkz@dim{\tenkz@r@physleg}
-                  + \tenkz@dim{\tenkz@r@labelclear} }}]
-          at #1 { \tl_use:N \l__tenkz_pwlowlabel_tl };
+        \__tenkz_render_labelnode:nnn
+          { tn~label, anchor=\tenkz_compass:n{south},
+            shift={\tenkz_leg_vec:nn{1}
+              { \tenkz@dim{\tenkz@r@physleg}
+                + \tenkz@dim{\tenkz@r@labelclear} }} }
+          { #1 } { \tl_use:N \l__tenkz_pwlowlabel_tl }
       }
   }
 
@@ -3064,8 +3093,9 @@ picture=\the\tenkz@pictureid|code=combined-attach|row=##1}
                     \tenkz_edgept:NnnN \l__tenkz_pwlownode_tl {north}
                       { \int_eval:n{\l__tenkz_pwlowbase_tl+##1-1} }
                       \l__tenkz_pwlow_tl
-                    \draw[physical~leg] \l__tenkz_pwlow_tl --
-                      ++\tenkz_leg_vec:nn{1}{\tenkz@dim{\tenkz@r@physleg}};
+                    \__tenkz_render_stroke:nn { physical~leg }
+                      { \l__tenkz_pwlow_tl --
+                        ++\tenkz_leg_vec:nn{1}{\tenkz@dim{\tenkz@r@physleg}} }
                     \tenkz_draw_lower_label:N \l__tenkz_pwlow_tl
                     \int_compare:nNnT {#3} = {1}
                       { \int_incr:N \l__tenkz_internalpu_int }
@@ -3172,9 +3202,10 @@ picture=\the\tenkz@pictureid|code=combined-attach|row=##1}
                             \tenkz_pair_wide_leg:nn {#2}{#3}
                             \tenkz_pair_lowpt:nN { \int_eval:n{#2+#3-1} }
                               \l__tenkz_pwlow_tl
-                            \draw[physical~leg] \l__tenkz_pwlow_tl --
-                              ++\tenkz_leg_vec:nn{1}
-                                {\tenkz@dim{\tenkz@r@physleg}};
+                            \__tenkz_render_stroke:nn { physical~leg }
+                              { \l__tenkz_pwlow_tl --
+                                ++\tenkz_leg_vec:nn{1}
+                                  {\tenkz@dim{\tenkz@r@physleg}} }
                             \str_if_eq:VnTF
                               \l__tenkz_faceports_tl {center}
                               {
@@ -3204,8 +3235,8 @@ picture=\the\tenkz@pictureid|code=combined-attach|row=##1}
                               { \int_eval:n{#2+#3-1} } \l__tenkz_pwpt_tl
                             \tenkz_pair_lowpt:nN { \int_eval:n{#2+#3-1} }
                               \l__tenkz_pwlow_tl
-                            \draw[physical~leg]
-                              \l__tenkz_pwpt_tl -- \l__tenkz_pwlow_tl;
+                            \__tenkz_render_stroke:nn { physical~leg }
+                              { \l__tenkz_pwpt_tl -- \l__tenkz_pwlow_tl }
                             \tenkz@event{pairleg|picture=\the\tenkz@pictureid|upper=#1-#2|lower=\int_eval:n{#1+1}-\l__tenkz_pwbase_tl|upper-port=#3|column=\int_eval:n{#2+#3-1}}
                           }
                       }
@@ -3229,15 +3260,17 @@ picture=\the\tenkz@pictureid|code=combined-attach|row=##1}
   {
     \tenkz_edgept:NnnN \l__tenkz_pwname_tl {south}
       { \int_eval:n{#1+#2-1} } \l__tenkz_pwpt_tl
-    \draw[physical~leg] \l__tenkz_pwpt_tl --
-      ++\tenkz_leg_vec:nn{-1}{\tenkz@dim{\tenkz@r@physleg}};
+    \__tenkz_render_stroke:nn { physical~leg }
+      { \l__tenkz_pwpt_tl --
+        ++\tenkz_leg_vec:nn{-1}{\tenkz@dim{\tenkz@r@physleg}} }
     \tl_if_blank:VF \l__tenkz_pwslotlab_tl
       {
-        \node[tn~label, anchor=\tenkz_compass:n{north},
-              shift={\tenkz_leg_vec:nn{-1}
-                { \tenkz@dim{\tenkz@r@physleg}
-                  + \tenkz@dim{\tenkz@r@labelclear} }}]
-          at \l__tenkz_pwpt_tl { \tl_use:N \l__tenkz_pwslotlab_tl };
+        \__tenkz_render_labelnode:nnn
+          { tn~label, anchor=\tenkz_compass:n{north},
+            shift={\tenkz_leg_vec:nn{-1}
+              { \tenkz@dim{\tenkz@r@physleg}
+                + \tenkz@dim{\tenkz@r@labelclear} }} }
+          { \l__tenkz_pwpt_tl } { \tl_use:N \l__tenkz_pwslotlab_tl }
       }
   }
 % the partner's north-face point at absolute column #1: a wide multi-port
@@ -3333,8 +3366,9 @@ picture=\the\tenkz@pictureid|code=combined-attach|row=##1}
           {
             \tenkz_edgept:NnnN \l__tenkz_pb_tl {north} {#2}
               \l__tenkz_pwlow_tl
-            \draw[physical~leg] \l__tenkz_pwlow_tl --
-              ++\tenkz_leg_vec:nn{1}{\tenkz@dim{\tenkz@r@physleg}};
+            \__tenkz_render_stroke:nn { physical~leg }
+              { \l__tenkz_pwlow_tl --
+                ++\tenkz_leg_vec:nn{1}{\tenkz@dim{\tenkz@r@physleg}} }
             \prop_get:NeNT
               \l__tenkz_pwlowerlabel_prop
               {#1-\l__tenkz_pwbase_tl-
@@ -3355,9 +3389,9 @@ picture=\the\tenkz@pictureid|code=combined-attach|row=##1}
       {
         \tenkz_once_p:nnTF {paired-with-center} {#1-\tl_use:N\l__tenkz_pwbase_tl}
           {
-            \draw[physical~leg]
-              (\l__tenkz_pa_tl.\tenkz_compass:n{south}) --
-              (\l__tenkz_pb_tl.\tenkz_compass:n{north});
+            \__tenkz_render_stroke:nn { physical~leg }
+              { (\l__tenkz_pa_tl.\tenkz_compass:n{south}) --
+                (\l__tenkz_pb_tl.\tenkz_compass:n{north}) }
             \tenkz@event{pairleg|picture=\the\tenkz@pictureid|upper=#1-#2|lower=\int_eval:n{#1+1}-\l__tenkz_pwbase_tl|upper-port=center|column=#2}
           }
           {
@@ -3372,9 +3406,9 @@ picture=\the\tenkz@pictureid|code=combined-attach|row=##1}
           {
             \tenkz_edgept:NnnN \l__tenkz_pb_tl {north} {#2}
               \l__tenkz_pwlow_tl
-            \draw[physical~leg]
-              (\l__tenkz_pa_tl.\tenkz_compass:n{south}) --
-              \l__tenkz_pwlow_tl;
+            \__tenkz_render_stroke:nn { physical~leg }
+              { (\l__tenkz_pa_tl.\tenkz_compass:n{south}) --
+                \l__tenkz_pwlow_tl }
             \tenkz@event{pairleg|picture=\the\tenkz@pictureid|upper=#1-#2|lower=\int_eval:n{#1+1}-\l__tenkz_pwbase_tl|upper-port=center|column=#2}
           }
           { \tenkz_leg_open:nnn {#1}{#2}{down}
@@ -3478,19 +3512,21 @@ picture=\the\tenkz@pictureid|code=combined-attach|row=##1}
           { \tl_set:Ne \l__tenkz_legbase_tl
               { ( \dim_use:N \l__tenkz_x_dim ,
                   \dim_use:N \l__tenkz_bkface_dim ) } }
-        \draw[physical~leg] \l__tenkz_legbase_tl --
-          ++\tenkz_leg_vec:nn{#5}{\tenkz@dim{\tenkz@r@physleg}};
+        \__tenkz_render_stroke:nn { physical~leg }
+          { \l__tenkz_legbase_tl --
+            ++\tenkz_leg_vec:nn{#5}{\tenkz@dim{\tenkz@r@physleg}} }
         \seq_pop_left:NNT \l__tenkz_leglab_seq \l_tmpb_tl
           {
             \tl_if_blank:VF \l_tmpb_tl
               {
-                \node[tn~label,
-                      anchor=\tenkz_compass:n
-                        { \str_if_eq:nnTF {#3} {north} {south} {north} },
-                      shift={\tenkz_leg_vec:nn{#5}
-                        { \tenkz@dim{\tenkz@r@physleg}
-                          + \tenkz@dim{\tenkz@r@labelclear} }}]
-                  at \l__tenkz_legbase_tl { \tl_use:N \l_tmpb_tl };
+                \__tenkz_render_labelnode:nnn
+                  { tn~label,
+                    anchor=\tenkz_compass:n
+                      { \str_if_eq:nnTF {#3} {north} {south} {north} },
+                    shift={\tenkz_leg_vec:nn{#5}
+                      { \tenkz@dim{\tenkz@r@physleg}
+                        + \tenkz@dim{\tenkz@r@labelclear} }} }
+                  { \l__tenkz_legbase_tl } { \tl_use:N \l_tmpb_tl }
               }
           }
       }
@@ -3725,19 +3761,20 @@ picture=\the\tenkz@pictureid|code=combined-attach|row=##1}
         \tenkz_edgept:NnnN \l__tenkz_pa_tl {#3} { #2 + ##1 - 1 }
           \l__tenkz_legbase_tl
         % offsets as ++/shift vectors, never inside calc (see leg_stub)
-        \draw[physical~leg]
-          \l__tenkz_legbase_tl --
-          ++\tenkz_leg_vec:nn{#6}{\tenkz@dim{\tenkz@r@physleg}};
+        \__tenkz_render_stroke:nn { physical~leg }
+          { \l__tenkz_legbase_tl --
+            ++\tenkz_leg_vec:nn{#6}{\tenkz@dim{\tenkz@r@physleg}} }
         \seq_pop_left:NNT \l__tenkz_leglab_seq \l_tmpb_tl
           {
             \tl_if_blank:VF \l_tmpb_tl
               {
-                \node[tn~label, anchor=\tenkz_compass:n{#4},
-                      shift={\tenkz_leg_vec:nn{#6}
-                        { \tenkz@dim{\tenkz@r@physleg}
-                          + \tenkz@dim{\tenkz@r@labelclear} }}]
-                  at \l__tenkz_legbase_tl
-                  { \tl_use:N \l_tmpb_tl };
+                \__tenkz_render_labelnode:nnn
+                  { tn~label, anchor=\tenkz_compass:n{#4},
+                    shift={\tenkz_leg_vec:nn{#6}
+                      { \tenkz@dim{\tenkz@r@physleg}
+                        + \tenkz@dim{\tenkz@r@labelclear} }} }
+                  { \l__tenkz_legbase_tl }
+                  { \tl_use:N \l_tmpb_tl }
               }
           }
       }
@@ -3751,15 +3788,17 @@ picture=\the\tenkz@pictureid|code=combined-attach|row=##1}
   {
     % the offsets ride as ++/shift vectors, never inside a calc ($...$):
     % the calc factor parser does not expand a macro-valued coordinate
-    \draw[physical~leg] (\l__tenkz_pa_tl.\tenkz_compass:n{#1}) --
-      ++\tenkz_leg_vec:nn{#4}{\tenkz@dim{\tenkz@r@physleg}};
+    \__tenkz_render_stroke:nn { physical~leg }
+      { (\l__tenkz_pa_tl.\tenkz_compass:n{#1}) --
+        ++\tenkz_leg_vec:nn{#4}{\tenkz@dim{\tenkz@r@physleg}} }
     \tl_if_empty:NF #3
       {
-        \node[tn~label, anchor=\tenkz_compass:n{#2},
-              shift={\tenkz_leg_vec:nn{#4}{ \tenkz@dim{\tenkz@r@physleg}
-                       + \tenkz@dim{\tenkz@r@labelclear} }}]
-          at (\l__tenkz_pa_tl.\tenkz_compass:n{#1})
-          { \tl_use:N #3 };
+        \__tenkz_render_labelnode:nnn
+          { tn~label, anchor=\tenkz_compass:n{#2},
+            shift={\tenkz_leg_vec:nn{#4}{ \tenkz@dim{\tenkz@r@physleg}
+                     + \tenkz@dim{\tenkz@r@labelclear} }} }
+          { (\l__tenkz_pa_tl.\tenkz_compass:n{#1}) }
+          { \tl_use:N #3 }
       }
   }
 
@@ -3903,9 +3942,10 @@ code=label-pos|pos=\tl_to_str:N \l_tmpa_tl}
 % #2, outward offset (#3,#4); the text is \l__tenkz_dot_label_tl
 \cs_new_protected:Npn \tenkz_dot_label_at:nnnn #1#2#3#4
   {
-    \node[tn~label, anchor=#2, shift={(\l__tenkz_clshift_tl)}] at
-      ($(\l__tenkz_pa_tl.#1)+(#3,#4)$)
-      { $\tenkz@labelsize \tl_use:N \l__tenkz_dot_label_tl$ };
+    \__tenkz_render_labelnode:nnn
+      { tn~label, anchor=#2, shift={(\l__tenkz_clshift_tl)} }
+      { ($(\l__tenkz_pa_tl.#1)+(#3,#4)$) }
+      { $\tenkz@labelsize \tl_use:N \l__tenkz_dot_label_tl$ }
   }
 
 % -- decorations: spans, cuts, bond labels ------------------------------
@@ -4346,11 +4386,11 @@ code=label-pos|pos=\tl_to_str:N \l_tmpa_tl}
     \draw[brace]
       (\dim_use:N #1, \dim_use:N \l__tenkz_y_dim) --
       (\dim_use:N #2, \dim_use:N \l__tenkz_y_dim);
-    \node[tn~label, anchor=#3] at
-      (\dim_eval:n{ (\l__tenkz_x_dim + \l__tenkz_tmp_dim)/2 },
-       \dim_eval:n{ \l__tenkz_y_dim
-                    + ( 3.4pt + \tenkz@dim{\tenkz@r@labelclear} ) * #4 })
-      { $\tenkz@labelsize #5$ };
+    \__tenkz_render_labelnode:nnn { tn~label, anchor=#3 }
+      { (\dim_eval:n{ (\l__tenkz_x_dim + \l__tenkz_tmp_dim)/2 },
+         \dim_eval:n{ \l__tenkz_y_dim
+                      + ( 3.4pt + \tenkz@dim{\tenkz@r@labelclear} ) * #4 }) }
+      { $\tenkz@labelsize #5$ }
   }
 
 \cs_new_protected:Npn \tenkz_draw_cut:nnn #1#2#3
@@ -4364,20 +4404,20 @@ code=label-pos|pos=\tl_to_str:N \l_tmpa_tl}
        \dim_eval:n{ \tenkz_rowy:n {\l__tenkz_nrows_int} - \tenkz@dim{0.55} });
     \tl_if_blank:nF {#3}
       {
-        \node[tn~label, anchor=south] at
-          (\dim_use:N \l__tenkz_x_dim,
-           \dim_eval:n{ \tenkz_rowy:n {1} + \tenkz@dim{0.55}
-                        + \tenkz@dim{\tenkz@r@labelclear} })
-          { $\tenkz@labelsize #3$ };
+        \__tenkz_render_labelnode:nnn { tn~label, anchor=south }
+          { (\dim_use:N \l__tenkz_x_dim,
+             \dim_eval:n{ \tenkz_rowy:n {1} + \tenkz@dim{0.55}
+                          + \tenkz@dim{\tenkz@r@labelclear} }) }
+          { $\tenkz@labelsize #3$ }
       }
   }
 
 \cs_new_protected:Npn \tenkz_draw_bondlabel:nnn #1#2#3
   {
-    \node[tn~label, anchor=south] at
-      (\dim_eval:n{ ( \tenkz_colx:n {#2} + \tenkz_colx:n {#3} ) / 2 },
-       \dim_eval:n{ \tenkz_rowy:n {1} + \tenkz@dim{\tenkz@r@labelclear} })
-      { #1 };
+    \__tenkz_render_labelnode:nnn { tn~label, anchor=south }
+      { (\dim_eval:n{ ( \tenkz_colx:n {#2} + \tenkz_colx:n {#3} ) / 2 },
+         \dim_eval:n{ \tenkz_rowy:n {1} + \tenkz@dim{\tenkz@r@labelclear} }) }
+      { #1 }
   }
 
 % -- open boundaries ----------------------------------------------------
