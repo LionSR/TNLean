@@ -48,9 +48,11 @@ for src in "$WORK"/xx_string_*.tex; do
     xx_string_adjacent_extra.tex) expected='[TKZ-CROSS-UNDECLARED]' ;;
     xx_string_duplicate_selector.tex) expected='[TKZ-CROSS-SELECTOR]' ;;
     xx_string_invalid_selector.tex) expected='[TKZ-CROSS-SELECTOR]' ;;
+    xx_string_mixed_self_undeclared.tex) expected='[TKZ-CROSS-UNDECLARED]' ;;
     xx_string_not_found.tex) expected='[TKZ-CROSS-NOT-FOUND]' ;;
     xx_string_join_interior.tex) expected='[TKZ-JOIN-NOT-ENDPOINT]' ;;
     xx_string_multiple_pair.tex) expected='[TKZ-CROSS-MULTIPLE]' ;;
+    xx_string_reserved_id.tex) expected='[TKZ-STRING-RESERVED]' ;;
     xx_string_single_curve_undeclared.tex) expected='[TKZ-CROSS-UNDECLARED]' ;;
     xx_string_self_undeclared.tex) expected='[TKZ-CROSS-UNDECLARED]' ;;
     xx_string_undeclared.tex) expected='[TKZ-CROSS-UNDECLARED]' ;;
