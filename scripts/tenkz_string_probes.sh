@@ -46,6 +46,7 @@ for src in "$WORK"/xx_string_*.tex; do
   stem="${src%.tex}"
   case "${src##*/}" in
     xx_string_not_found.tex) expected='[TKZ-CROSS-NOT-FOUND]' ;;
+    xx_string_self_undeclared.tex) expected='[TKZ-CROSS-UNDECLARED]' ;;
     xx_string_undeclared.tex) expected='[TKZ-CROSS-UNDECLARED]' ;;
     *) echo "FAIL: no expected diagnostic for ${src##*/}" >&2; exit 1 ;;
   esac

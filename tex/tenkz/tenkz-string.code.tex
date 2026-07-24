@@ -53,6 +53,7 @@
 \seq_new:N \l__tenkz_string_self_gap_ids_seq % self paths awaiting branch gap
 \seq_new:N \l__tenkz_string_processed_seq    % directed crossing pairs split
 \seq_new:N \l__tenkz_string_obstacles_seq    % measured around= address list
+\seq_new:N \l__tenkz_string_segments_seq
 \prop_new:N \l__tenkz_string_self_gap_prop   % self id -> component boundary
 \seq_new:N \l__tenkz_string_pts_seq
 \seq_new:N \l__tenkz_string_scan_seq
@@ -63,6 +64,8 @@
 \tl_new:N \l__tenkz_string_normal_tl
 \tl_new:N \l__tenkz_string_tmax_tl
 \tl_new:N \l__tenkz_string_tmin_tl
+\tl_new:N \l__tenkz_string_self_path_tl
+\tl_new:N \l__tenkz_string_self_final_tl
 \fp_new:N \l__tenkz_string_x_fp
 \fp_new:N \l__tenkz_string_y_fp
 \fp_new:N \l__tenkz_string_xb_fp
@@ -71,6 +74,10 @@
 \fp_new:N \l__tenkz_string_tangent_fp
 \fp_new:N \l__tenkz_string_scale_fp
 \int_new:N \l__tenkz_string_n_int
+\int_new:N \l__tenkz_string_declared_int
+\int_new:N \l__tenkz_string_first_segment_int
+\int_new:N \l__tenkz_string_real_segments_int
+\bool_new:N \l__tenkz_string_closed_bool
 
 \cs_new_protected:Npn \__tenkz_string_reset:
   {
@@ -348,19 +355,57 @@
     \int_set:Nn #3 { \pgfintersectionsolutions }
   }
 
-% Count branch intersections of one path without mutating its saved form.
-% spath3 compares distinct Bezier segments and excludes adjacent joins.
+% Count intersections between non-adjacent path segments without mutating or
+% recursively subdividing the saved path.  Adjacent branches meet by
+% construction; the first and last branches of a closed path share its seam.
 \cs_new_protected:Npn \__tenkz_string_self_count:nN #1#2
   {
-    \tl_set_eq:Nc \l__tenkz_string_tmp_tl
+    \tl_set_eq:Nc \l__tenkz_string_self_path_tl
       { \l__tikzspath_prefix_tl #1 }
-    \spath_numberofcomponents:NV #2 \l__tenkz_string_tmp_tl
-    \int_set_eq:NN \l_tmpa_int #2
-    \spath_split_at_self_intersections:N \l__tenkz_string_tmp_tl
-    \spath_numberofcomponents:NV #2 \l__tenkz_string_tmp_tl
-    \int_sub:Nn #2 { \l_tmpa_int }
-    % Each branch crossing contributes two cut parameters on the same path.
-    \int_set:Nn #2 { \int_div_truncate:nn {#2} {2} }
+    \spath_finalaction:NV
+      \l__tenkz_string_self_final_tl \l__tenkz_string_self_path_tl
+    \bool_set:Nn \l__tenkz_string_closed_bool
+      {
+        \tl_if_eq_p:NN
+          \l__tenkz_string_self_final_tl \c_spath_closepath_tl
+      }
+    \spath_open:N \l__tenkz_string_self_path_tl
+    \spath_segments_to_seq:NV
+      \l__tenkz_string_segments_seq \l__tenkz_string_self_path_tl
+    \spath_reallength:NV
+      \l__tenkz_string_real_segments_int \l__tenkz_string_self_path_tl
+    \int_set:Nn \l__tenkz_string_first_segment_int
+      {
+        \seq_count:N \l__tenkz_string_segments_seq
+        - \l__tenkz_string_real_segments_int + 1
+      }
+    \int_zero:N #2
+    \seq_map_indexed_inline:Nn \l__tenkz_string_segments_seq
+      {
+        \seq_map_indexed_inline:Nn \l__tenkz_string_segments_seq
+          {
+            \bool_if:nT
+              {
+                \int_compare_p:n {##1 < ####1}
+                && \int_compare_p:n {##1 + 1 != ####1}
+                &&
+                !(
+                  \l__tenkz_string_closed_bool
+                  && \int_compare_p:n
+                    {##1 == \l__tenkz_string_first_segment_int}
+                  && \int_compare_p:n
+                    {
+                      ####1 == \seq_count:N
+                        \l__tenkz_string_segments_seq
+                    }
+                )
+              }
+              {
+                \spath_intersect:nn {##2} {####2}
+                \int_add:Nn #2 {\pgfintersectionsolutions}
+              }
+          }
+      }
   }
 
 % Police original paths first, then split every declared crossing, and only
@@ -449,19 +494,26 @@
   }
 \cs_new_protected:Npn \__tenkz_string_police_self:n #1
   {
-    \int_zero:N \l_tmpa_int
+    \int_zero:N \l__tenkz_string_declared_int
     \seq_map_inline:Nn \l__tenkz_string_cross_seq
       {
         \tl_if_eq:nnT { {#1} {#1} } {##1}
-          { \int_incr:N \l_tmpa_int }
+          { \int_incr:N \l__tenkz_string_declared_int }
       }
-    \int_compare:nNnT { \l_tmpa_int } > { 0 }
+    \prop_get:NnN
+      \l__tenkz_string_kind_prop {#1} \l__tenkz_string_tmp_tl
+    % A winding is a generated projection of its declared homotopy class.
+    % Its projection overlaps are not free string crossings; all caller-routed
+    % strings are checked, including those with no self declaration.
+    \str_if_eq:VnF \l__tenkz_string_tmp_tl {wind}
       {
         \__tenkz_string_self_count:nN {#1} \l__tenkz_string_n_int
-        \int_compare:nNnTF { \l__tenkz_string_n_int } > { \l_tmpa_int }
+        \int_compare:nNnTF
+          { \l__tenkz_string_n_int } > { \l__tenkz_string_declared_int }
           { \msg_error:nnnn {tenkz}{cross-undeclared} {#1} {#1} }
           {
-            \int_compare:nNnT { \l__tenkz_string_n_int } < { \l_tmpa_int }
+            \int_compare:nNnT
+              { \l__tenkz_string_n_int } < { \l__tenkz_string_declared_int }
               { \msg_error:nnnn {tenkz}{cross-not-found} {#1} {#1} }
           }
       }
