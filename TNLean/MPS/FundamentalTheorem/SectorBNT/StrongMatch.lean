@@ -10,11 +10,10 @@ import TNLean.MPS.FundamentalTheorem.SectorBNT.ExactMatch
 
 The strong existential matching theorem states the CPSV16 Appendix MPV proof,
 line 1182, matching conclusion directly on the original pair `(P, Q)` of BNT
-canonical forms.  In the equal-MPV case both theorems are derived from the
-proportional-sector matching lemmas (now in `ProportionalMatch/Core.lean`)
-via the `SameMPV₂Pos → EventuallyNonzeroProportionalMPV₂` conversion.  The
-bijection construction is shared with the proportional route through
-`bijection_from_matches` in `MatchAux.lean`.
+canonical forms.  In the equal-MPV case both theorems reduce to their
+proportional-sector counterparts via the
+`SameMPV₂Pos → EventuallyNonzeroProportionalMPV₂` conversion, and the
+bijection step is the shared construction `bijection_from_matches`.
 
 The coefficient identity of CPSV16 Appendix MPV proof, lines 1187–1188
 (Corollary substitution) lives in the companion module

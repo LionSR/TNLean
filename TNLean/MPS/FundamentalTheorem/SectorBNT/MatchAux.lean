@@ -155,10 +155,7 @@ lemma restricted_combined_family_eventually_li
 /-- **Shared bijection construction from forward and backward existential matches.**
 Given two injective maps built from per-sector existential matches, finite
 cardinality comparison turns the forward injection into a bijection
-`β : Fin Q.basisCount ≃ Fin P.basisCount`.
-
-This lemma is shared between the equal-MPV and proportional sector-matching
-proofs (`StrongMatch.lean` and `ProportionalMatch.lean`). -/
+`β : Fin Q.basisCount ≃ Fin P.basisCount`. -/
 lemma bijection_from_matches {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
     (hFwd : ∀ k : Fin Q.basisCount,
