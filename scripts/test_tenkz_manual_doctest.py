@@ -44,9 +44,13 @@ def main() -> int:
 \tntree{((ab)c)}
 \end{Verbatim}
 \begin{Verbatim}
+\verb|\documentclass{standalone}| \tntree{(ab)}
+\end{Verbatim}
+\begin{Verbatim}
 \usepackage[
   draft
 ]{graphicx}
+\usepackage{amsmath,tenkz}
 \begin{tenkz} \tn{multiline-package} \end{tenkz}
 \end{Verbatim}
 % \begin{tnexample}
@@ -66,7 +70,7 @@ def main() -> int:
         path = Path(tmp) / "fixture.tex"
         path.write_text(fixture, encoding="utf-8")
         extracted = DOCTEST.extract_displayed_examples(path)
-    if len(extracted) != 5 or any(
+    if len(extracted) != 6 or any(
         r"\begin{tenkz}" not in example.document for example in extracted[:2]
     ):
         raise AssertionError("nested tnmultiple options confused body extraction")
@@ -74,12 +78,14 @@ def main() -> int:
         raise AssertionError("tnmultiples variants were not installed independently")
     if r"\tntree" not in extracted[2].document:
         raise AssertionError("a registry command in Verbatim was not recognized as TeX")
-    multiline_package = extracted[3].document
+    if extracted[3].document.count(r"\documentclass") != 2:
+        raise AssertionError("a documentclass spelling inside verb was executed")
+    multiline_package = extracted[4].document
     if multiline_package.index("]{graphicx}") > multiline_package.index(
         r"\begin{document}"
     ):
         raise AssertionError("a multiline package declaration was split across the body")
-    complete = extracted[4].document
+    complete = extracted[5].document
     if complete.count(r"\documentclass") != 1 or r"\tn{commented}" in complete:
         raise AssertionError("complete or commented Verbatim documents were mishandled")
 

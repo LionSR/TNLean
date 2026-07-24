@@ -14,6 +14,8 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
+MANUAL_DIR = ROOT / "docs" / "tenkz"
+MANUAL = MANUAL_DIR / "manual2.tex"
 CHAPTERS = ROOT / "docs" / "tenkz" / "chapters2"
 REGISTRY = ROOT / "tex" / "tenkz" / "tenkz-language-registry.tex"
 REFERENCE = CHAPTERS / "generated-language-reference.tex"
@@ -175,8 +177,9 @@ def _is_tenkz_verbatim(body: str) -> bool:
     commands, environments = _registry_vocabulary()
     command_pattern = "|".join(re.escape(command) for command in commands)
     environment_pattern = "|".join(re.escape(environment) for environment in environments)
+    packages, _ = _extract_usepackages(body)
     return bool(
-        re.search(r"\\usepackage\s*\{tenkz\}", body)
+        any("tenkz" in _package_names(package) for package in packages)
         or re.search(rf"\\(?:{command_pattern})(?![A-Za-z@:_])", body)
         or re.search(rf"\\begin\{{(?:{environment_pattern})\}}", body)
     )
@@ -199,11 +202,35 @@ def _find_uncommented(text: str, marker: str, offset: int) -> int:
         offset = found + len(marker)
 
 
+def _mask_inline_verbatim(text: str) -> str:
+    masked = list(text)
+    offset = 0
+    while (start := text.find(r"\verb", offset)) >= 0:
+        delimiter_offset = start + len(r"\verb")
+        if delimiter_offset < len(text) and text[delimiter_offset] == "*":
+            delimiter_offset += 1
+        if delimiter_offset >= len(text):
+            break
+        delimiter = text[delimiter_offset]
+        if delimiter.isspace() or delimiter.isalnum():
+            offset = delimiter_offset
+            continue
+        end = text.find(delimiter, delimiter_offset + 1)
+        if end < 0:
+            break
+        for index in range(start, end + 1):
+            if masked[index] != "\n":
+                masked[index] = " "
+        offset = end + 1
+    return "".join(masked)
+
+
 def _extract_usepackages(body: str) -> tuple[list[str], str]:
     ranges: list[tuple[int, int]] = []
     offset = 0
     marker = r"\usepackage"
-    while (start := _find_uncommented(body, marker, offset)) >= 0:
+    scan_body = _mask_inline_verbatim(body)
+    while (start := _find_uncommented(scan_body, marker, offset)) >= 0:
         cursor = _skip_space_and_comments(body, start + len(marker))
         if cursor < len(body) and body[cursor] == "[":
             cursor, _ = _read_optional_argument(body, cursor)
@@ -223,6 +250,15 @@ def _extract_usepackages(body: str) -> tuple[list[str], str]:
     return packages, "".join(chunks)
 
 
+def _package_names(declaration: str) -> list[str]:
+    cursor = _skip_space_and_comments(declaration, len(r"\usepackage"))
+    if cursor < len(declaration) and declaration[cursor] == "[":
+        cursor, _ = _read_optional_argument(declaration, cursor)
+    cursor = _skip_space_and_comments(declaration, cursor)
+    _, names = _read_braced(declaration, cursor)
+    return [name.strip() for name in names.split(",")]
+
+
 def _find_environment_end(text: str, environment: str, offset: int) -> re.Match[str] | None:
     pattern = re.compile(
         rf"^[ \t]*\\end\{{{re.escape(environment)}\}}[ \t]*$",
@@ -240,25 +276,23 @@ def _variant_definitions(variant_style: str) -> list[str]:
 
 def _standalone_document(body: str, variant_style: str | None = None) -> str:
     body = body.strip()
-    has_document_class = _find_uncommented(body, r"\documentclass", 0) >= 0
+    scan_body = _mask_inline_verbatim(body)
+    has_document_class = _find_uncommented(scan_body, r"\documentclass", 0) >= 0
     has_document = (
-        _find_uncommented(body, r"\begin{document}", 0) >= 0
-        and _find_uncommented(body, r"\end{document}", 0) >= 0
+        _find_uncommented(scan_body, r"\begin{document}", 0) >= 0
+        and _find_uncommented(scan_body, r"\end{document}", 0) >= 0
     )
     if has_document_class:
         if not has_document:
             raise ValueError("displayed document class has no complete document body")
         if variant_style is None:
             return body + "\n"
-        begin = _find_uncommented(body, r"\begin{document}", 0)
+        begin = _find_uncommented(scan_body, r"\begin{document}", 0)
         definitions = "\n".join(_variant_definitions(variant_style)) + "\n"
         return body[:begin] + definitions + body[begin:] + "\n"
 
     preamble, content = _extract_usepackages(body)
-    tenkz_package = re.compile(
-        r"\\usepackage(?:\s*\[[\s\S]*?\])?\s*\{[^{}]*\btenkz\b[^{}]*\}"
-    )
-    if not any(tenkz_package.search(package) for package in preamble):
+    if not any("tenkz" in _package_names(package) for package in preamble):
         preamble.append(r"\usepackage{tenkz}")
     if variant_style is not None:
         preamble.extend(_variant_definitions(variant_style))
@@ -322,11 +356,33 @@ def extract_displayed_examples(path: Path) -> list[Example]:
 
 def displayed_examples() -> list[Example]:
     examples: list[Example] = []
-    for path in sorted(CHAPTERS.glob("*.tex")):
-        if path.name == "generated-language-reference.tex":
-            continue
+    for path in _manual_chapter_sources():
         examples.extend(extract_displayed_examples(path))
     return examples
+
+
+def _manual_chapter_sources() -> list[Path]:
+    pending = [MANUAL]
+    visited: set[Path] = set()
+    chapters: set[Path] = set()
+    input_pattern = re.compile(r"\\input\s*\{([^{}]+)\}")
+    while pending:
+        source = pending.pop()
+        if source in visited:
+            continue
+        visited.add(source)
+        text = _strip_tex_comments(_mask_inline_verbatim(source.read_text(encoding="utf-8")))
+        for match in input_pattern.finditer(text):
+            relative = Path(match.group(1))
+            if not relative.suffix:
+                relative = relative.with_suffix(".tex")
+            included = (MANUAL_DIR / relative).resolve()
+            if not included.is_file():
+                raise ValueError(f"{source}: missing manual input {relative}")
+            pending.append(included)
+            if included.is_relative_to(CHAPTERS):
+                chapters.add(included)
+    return sorted(chapters)
 
 
 def reference_examples() -> list[Example]:
