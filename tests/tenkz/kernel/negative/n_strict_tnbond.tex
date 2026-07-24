@@ -1,0 +1,15 @@
+% Negative regression: strict mode rejects connection-command sugar.
+\documentclass{standalone}
+\usepackage{tenkz}
+\makeatletter
+\ExplSyntaxOn
+\file_input:n { tenkz-kernel.code.tex }
+\ExplSyntaxOff
+\makeatother
+\begin{document}
+\tenkzkernel
+\tnset{strict}
+\begin{tenkz}[rows={wire}, cols=2, bonds=none]
+  \tnbond{(1,1)}{(1,2)}
+\end{tenkz}
+\end{document}

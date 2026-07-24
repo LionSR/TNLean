@@ -1,0 +1,13 @@
+% Negative regression: strict mode rejects picture sugar.
+\documentclass{standalone}
+\usepackage{tenkz}
+\makeatletter
+\ExplSyntaxOn
+\file_input:n { tenkz-kernel.code.tex }
+\ExplSyntaxOff
+\makeatother
+\begin{document}
+\tenkzkernel
+\tnset{strict}
+\begin{tenkz}[sandwich]\end{tenkz}
+\end{document}

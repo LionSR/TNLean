@@ -29,7 +29,7 @@ for tex in "$WORK"/*.tex; do
   compile "$(basename "$tex")"
 done
 
-atom_count=$(grep -c '^atom|' "$WORK/r_explicit_at.tnlog")
+atom_count=$(grep -c '^atom|' "$WORK/r_explicit_at.tnlog" || true)
 [ "$atom_count" -eq 2 ] || {
   echo "FAIL: explicit at= did not suppress population of its claimed cell" >&2
   exit 1
@@ -63,7 +63,7 @@ if grep -Eq 'name=(wrap|cup)-(west|east|north|south)' \
   echo "FAIL: a side-level closure survived normalization" >&2
   exit 1
 fi
-wide_atom_count=$(grep -c '^atom|' "$WORK/r_wide_chain.tnlog")
+wide_atom_count=$(grep -c '^atom|' "$WORK/r_wide_chain.tnlog" || true)
 [ "$wide_atom_count" -eq 2 ] || {
   echo "FAIL: a chain-positioned wide atom did not claim its full span" >&2
   exit 1
@@ -92,7 +92,8 @@ if ! grep -Fq '|face=lower|from-open=n|' "$WORK/r_cell_policy.tnlog"; then
   exit 1
 fi
 physical_trace_count=$(
-  grep -c '|mode=physical|name=trace-physical-' "$WORK/r_cell_policy.tnlog"
+  grep -c '|mode=physical|name=trace-physical-' "$WORK/r_cell_policy.tnlog" ||
+    true
 )
 [ "$physical_trace_count" -eq 3 ] || {
   echo "FAIL: trace=physical did not materialize one closure per column" >&2
@@ -125,7 +126,8 @@ if grep -F '|cluster-of=C|' "$WORK/r_physical_policy.tnlog" |
   exit 1
 fi
 replaced_bond_count=$(
-  grep -c '|name=bond-1-2-2-2|origin=grid|' "$WORK/r_cell_policy.tnlog"
+  grep -c '|name=bond-1-2-2-2|origin=grid|' "$WORK/r_cell_policy.tnlog" ||
+    true
 )
 [ "$replaced_bond_count" -eq 1 ] || {
   echo "FAIL: trace/open cell policies did not replace their grid bonds" >&2
@@ -229,7 +231,27 @@ grep -Fq '[TKZ-LANG-CHOICE]' "$WORK/n_malformed_physical.transcript" || {
   echo "FAIL: malformed physical rejection lacked TKZ-LANG-CHOICE" >&2
   exit 1
 }
-echo "PASS: seventeen review regressions hold"
+
+for strict_negative in \
+  n_strict_sandwich \
+  n_strict_role \
+  n_strict_tnbond \
+  n_strict_tnprose
+do
+  source="$KERNEL/negative/$strict_negative.tex"
+  if ( cd "$WORK" &&
+       TEXINPUTS="$REPO/tex/tenkz//:" \
+         timeout 120 xelatex -interaction=nonstopmode -halt-on-error \
+         "$source" >"$WORK/$strict_negative.transcript" 2>&1 ); then
+    echo "FAIL: $strict_negative survived strict mode" >&2
+    exit 1
+  fi
+  grep -Fq '[TKZ-LANG-STRICT]' "$WORK/$strict_negative.transcript" || {
+    echo "FAIL: $strict_negative lacked TKZ-LANG-STRICT" >&2
+    exit 1
+  }
+done
+echo "PASS: twenty-one review regressions hold"
 
 fail=0
 for pair in s1 s2 s3 s4 s5 s6 s7 s8; do
