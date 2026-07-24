@@ -53,7 +53,10 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:cp_implies_two_positive, thm:kadison_schwarz_2positive}
+    \uses{thm:cp_implies_k_positive,
+        thm:k_positive_trace_pairing_adjoint,
+        thm:two_positive_implies_positive,
+        thm:kadison_schwarz_2positive}
     Since $\pi_{\mathcal B}\iota_{\mathcal B}=\id_{\mathcal B}$,
     \begin{align}
         \widehat S\,\widehat T
