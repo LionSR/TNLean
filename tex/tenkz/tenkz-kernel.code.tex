@@ -62,6 +62,9 @@
     (interface,column)~terms~(record~#3). }
 \msg_new:nnn {tenkz}{kernel-sugar-value}
   { [TKZ-LANG-SUGAR]~#1=#2~is~malformed;~expected~#3~(record~#4). }
+\msg_new:nnn {tenkz}{kernel-cluster-name}
+  { [TKZ-LANG-CLUSTER-NAME]~cluster=#1~requires~name=~
+    so~its~sub-atoms~are~addressable~(record~#2). }
 
 % ---------- kernel state -----------------------------------------------------
 
@@ -427,7 +430,7 @@
     lattice .code:n  = { \__tenkz_kernel_desugar_lattice:n {#1} },
     ring .code:n     = { \__tenkz_kernel_desugar_ring:n {#1} },
     surface .code:n  = { \__tenkz_kernel_desugar_surface:n {#1} },
-    physical .code:n = { \__tenkz_kernel_stage_put:nn {physical} {#1} }
+    physical .code:n = { \__tenkz_kernel_desugar_physical:n {#1} }
   }
 
 % ---------- atom keys ------------------------------------------------------------
@@ -603,6 +606,21 @@
       {
         \msg_error:nneeee {tenkz}{kernel-sugar-value}
           {surface} {#1} {torus} {picture}
+      }
+  }
+\cs_new_protected:Npn \__tenkz_kernel_desugar_physical:n #1
+  {
+    \__tenkz_kernel_sugar:n {physical}
+    \str_case:nnF {#1}
+      {
+        {up}     { \__tenkz_kernel_stage_put:nn {physical} {up} }
+        {down}   { \__tenkz_kernel_stage_put:nn {physical} {down} }
+        {updown} { \__tenkz_kernel_stage_put:nn {physical} {updown} }
+        {none}   { \__tenkz_kernel_stage_put:nn {physical} {none} }
+      }
+      {
+        \msg_error:nneee {tenkz}{kernel-choice} {physical} {#1}
+          { up,~down,~updown,~none } { picture }
       }
   }
 
@@ -799,7 +817,12 @@
     \__tenkz_kernel_commit:
     \quark_if_no_value:NF \l_tmpb_tl
       {
-        \quark_if_no_value:NF \l_tmpa_tl
+        \quark_if_no_value:NTF \l_tmpa_tl
+          {
+            \msg_error:nnee {tenkz}{kernel-cluster-name}
+              { \tl_use:N \l_tmpb_tl }
+              { \tl_use:N \l__tenkz_model_last_tl }
+          }
           {
             \exp_args:NVV \__tenkz_kernel_cluster_expand:nn
               \l_tmpa_tl \l_tmpb_tl
@@ -1347,6 +1370,27 @@
       { \__tenkz_kernel_open_cell:w ##1 \q_stop }
   }
 
+\bool_new:N \l__tenkz_kernel_physical_atom_bool
+\cs_new_protected:Npn \__tenkz_kernel_set_atom_physical:nn #1#2
+  {
+    \bool_set_true:N \l__tenkz_kernel_physical_atom_bool
+    \__tenkz_model_get:nnN {#1} {void} \l__tenkz_kernel_scratch_tl
+    \str_if_eq:VnT \l__tenkz_kernel_scratch_tl {sealed}
+      { \bool_set_false:N \l__tenkz_kernel_physical_atom_bool }
+    \__tenkz_model_get:nnN {#1} {cluster-of} \l__tenkz_kernel_scratch_tl
+    \quark_if_no_value:NF \l__tenkz_kernel_scratch_tl
+      { \bool_set_false:N \l__tenkz_kernel_physical_atom_bool }
+    \__tenkz_model_get:nnN {#1} {addr} \l__tenkz_kernel_scratch_tl
+    \quark_if_no_value:NT \l__tenkz_kernel_scratch_tl
+      {
+        \__tenkz_model_get:nnN {#1} {node} \l__tenkz_kernel_scratch_tl
+        \quark_if_no_value:NT \l__tenkz_kernel_scratch_tl
+          { \bool_set_false:N \l__tenkz_kernel_physical_atom_bool }
+      }
+    \bool_if:NT \l__tenkz_kernel_physical_atom_bool
+      { \__tenkz_model_complete:nnn {#1} {physical} {#2} }
+  }
+
 \cs_new_protected:Npn \__tenkz_kernel_closures:
   {
     \__tenkz_kernel_cell_closures:
@@ -1392,10 +1436,14 @@
       \l__tenkz_kernel_scratch_tl
     \quark_if_no_value:NF \l__tenkz_kernel_scratch_tl
       {
-        \__tenkz_model_map_ids:nn {atom}
+        \str_if_eq:VnF \l__tenkz_kernel_scratch_tl {none}
           {
-            \__tenkz_model_complete:nnn {##1} {physical}
-              { \tl_use:N \l__tenkz_kernel_scratch_tl }
+            \tl_set_eq:NN \l_tmpa_tl \l__tenkz_kernel_scratch_tl
+            \__tenkz_model_map_ids:nn {atom}
+              {
+                \__tenkz_kernel_set_atom_physical:nn
+                  {##1} { \tl_use:N \l_tmpa_tl }
+              }
           }
       }
   }

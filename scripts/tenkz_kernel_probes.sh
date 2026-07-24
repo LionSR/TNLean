@@ -106,6 +106,24 @@ if grep -Fq '|origin=grid|' "$WORK/r_sealed_void.tnlog"; then
   echo "FAIL: a sealed void retained an incident generated grid bond" >&2
   exit 1
 fi
+if grep -Fq '|physical=none|' "$WORK/r_physical_policy.tnlog"; then
+  echo "FAIL: physical=none materialized a physical port" >&2
+  exit 1
+fi
+grep -Fq '|name=C|physical=up' "$WORK/r_physical_policy.tnlog" || {
+  echo "FAIL: physical=up did not reach the carrying frame atom" >&2
+  exit 1
+}
+if grep -F '|name=V|' "$WORK/r_physical_policy.tnlog" |
+   grep -Fq '|physical='; then
+  echo "FAIL: physical policy reached a sealed void" >&2
+  exit 1
+fi
+if grep -F '|cluster-of=C|' "$WORK/r_physical_policy.tnlog" |
+   grep -Fq '|physical='; then
+  echo "FAIL: physical policy reached a cluster sub-atom" >&2
+  exit 1
+fi
 replaced_bond_count=$(
   grep -c '|name=bond-1-2-2-2|origin=grid|' "$WORK/r_cell_policy.tnlog"
 )
@@ -166,6 +184,19 @@ grep -Fq 'result=mismatch|reason=prose' "$WORK/n_prose_signature.tnlog" || {
   exit 1
 }
 
+cluster_negative="$KERNEL/negative/n_unnamed_cluster.tex"
+if ( cd "$WORK" &&
+     TEXINPUTS="$REPO/tex/tenkz//:" \
+       timeout 120 xelatex -interaction=nonstopmode -halt-on-error \
+       "$cluster_negative" >"$WORK/n_unnamed_cluster.transcript" 2>&1 ); then
+  echo "FAIL: an unnamed cluster was accepted" >&2
+  exit 1
+fi
+grep -Fq '[TKZ-LANG-CLUSTER-NAME]' "$WORK/n_unnamed_cluster.transcript" || {
+  echo "FAIL: unnamed cluster rejection lacked TKZ-LANG-CLUSTER-NAME" >&2
+  exit 1
+}
+
 for sugar_negative in \
   n_malformed_sugar \
   n_malformed_surface \
@@ -185,7 +216,20 @@ do
     exit 1
   }
 done
-echo "PASS: fifteen review regressions hold"
+
+physical_negative="$KERNEL/negative/n_malformed_physical.tex"
+if ( cd "$WORK" &&
+     TEXINPUTS="$REPO/tex/tenkz//:" \
+       timeout 120 xelatex -interaction=nonstopmode -halt-on-error \
+       "$physical_negative" >"$WORK/n_malformed_physical.transcript" 2>&1 ); then
+  echo "FAIL: malformed physical sugar was accepted" >&2
+  exit 1
+fi
+grep -Fq '[TKZ-LANG-CHOICE]' "$WORK/n_malformed_physical.transcript" || {
+  echo "FAIL: malformed physical rejection lacked TKZ-LANG-CHOICE" >&2
+  exit 1
+}
+echo "PASS: seventeen review regressions hold"
 
 fail=0
 for pair in s1 s2 s3 s4 s5 s6 s7 s8; do
