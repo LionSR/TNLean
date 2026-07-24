@@ -16,6 +16,8 @@
 % surgery are spath3; intersection counting is the pgf intersections engine;
 % both are xelatex-clean and verified composable with Hobby splines here.
 % The consumer loads the TikZ libraries hobby, spath3, and intersections.
+% Requires: @ has letter catcode while this module is read; package loading
+% and the standalone probes both establish that caller-owned scope.
 %
 % Units.  Waypoints and centres are caller-space TikZ numbers, written as
 % braced pairs {x,y}; silhouette queries return pitch units and convert at
@@ -34,6 +36,9 @@
 \msg_new:nnnn {tenkz}{string-reserved}
   { [TKZ-STRING-RESERVED]~string~id~'#1'~uses~a~reserved~prefix }
   { Pick~an~id~that~does~not~begin~with~'tenkz-bead-'. }
+\msg_new:nnnn {tenkz}{string-path-format}
+  { [TKZ-STRING-PATH]~unsupported~spath3~cubic~with~#1~tokens }
+  { tenkz~expects~spath3's~12-token~cubic~segment~contract. }
 \msg_new:nnnn {tenkz}{cross-not-found}
   { [TKZ-CROSS-NOT-FOUND]~'#1'~is~declared~under~'#2'~but~they~never~meet }
   { The~declared~crossing~has~no~geometric~intersection;~fix~the~route~or~
@@ -423,7 +428,7 @@
 % B(t) = A t^3 + B t^2 + C t + D and B(t) = B(s), t != s, then
 % u = t+s solves A (u^2-ts) + B u + C = 0.  Cramer's rule gives u and
 % the discriminant of the two parameters without an arbitrary subdivision.
-\cs_new_protected:Npn \__tenkz_string_cubic_self_count:nN #1#2
+\cs_new_protected:Npn \__tenkz_string_cubic_self_count_trusted:nN #1#2
   {
     \fp_set:Nn \l__tenkz_string_ax_fp
       {
@@ -498,6 +503,19 @@
               }
               {\int_set:Nn #2 {1}}
           }
+      }
+  }
+
+\cs_new_protected:Npn \__tenkz_string_cubic_self_count:nN #1#2
+  {
+    % The pinned spath3 exposes segments as move(x,y), control(x,y),
+    % control(x,y), end(x,y): twelve tokens including the four actions.
+    \int_compare:nNnTF {\tl_count:n {#1}} = {12}
+      {\__tenkz_string_cubic_self_count_trusted:nN {#1} #2}
+      {
+        \int_zero:N #2
+        \msg_error:nnx {tenkz}{string-path-format}
+          {\int_eval:n {\tl_count:n {#1}}}
       }
   }
 
