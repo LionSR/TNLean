@@ -48,6 +48,7 @@
 \bool_new:N \l__tenkz_fkeys_valid_bool
 \tl_new:N \l__tenkz_frolesty_tl  % resolved role/species style (or empty)
 \tl_new:N \l__tenkz_fbound_tl    % measured glyph + external-label box
+\tl_new:N \g__tenkz_free_atom_record_tl
 \pgfkeys{
   /tenkz/put/.is~family,
   /tenkz/put/dot/.code={\tl_set:Nn \l__tenkz_fshape_tl {dot}},
@@ -169,6 +170,7 @@
 
 \NewDocumentCommand \tnput { O{} m m m }
   {
+    \tl_gclear:N \g__tenkz_free_atom_record_tl
     \group_begin:
     % the default skin is the glyph policy (tensor style=dot|box); an
     % explicit skin key overrides it below
@@ -199,7 +201,7 @@
       }
     \bool_if:NT \l__tenkz_fcommit_bool
       {
-    \__tenkz_model_record_atom:e
+    \tl_gset:Ne \g__tenkz_free_atom_record_tl
       { kind={put}, name={\exp_not:n{#2}}, at={\exp_not:n{#3}},
         skin={\tl_use:N \l__tenkz_fshape_tl},
         ports={\tl_use:N \l__tenkz_fports_tl},
@@ -259,6 +261,12 @@
     \tenkz@event{atom|picture=\the\tenkz@pictureid|name=#2|kind=\tl_use:N \l__tenkz_fshape_tl|role=\tenkz_free_word:N \l__tenkz_frole_tl|species=\tenkz_free_word:N \l__tenkz_fspec_tl}
       }
     \group_end:
+    \tl_if_empty:NF \g__tenkz_free_atom_record_tl
+      {
+        \exp_args:NV \__tenkz_model_record_atom:n
+          \g__tenkz_free_atom_record_tl
+        \tl_gclear:N \g__tenkz_free_atom_record_tl
+      }
   }
 \use:e
   {
@@ -287,6 +295,7 @@
 \tl_new:N \l__tenkz_jrolesty_tl % resolved role/species bond style (or empty)
 \tl_new:N \l__tenkz_jname_tl    % optional enclosure-visible join name
 \tl_new:N \l__tenkz_jbound_tl   % measured path + label box
+\tl_new:N \g__tenkz_free_wire_record_tl
 \bool_new:N \l__tenkz_jfused_bool
 \bool_new:N \l__tenkz_jdir_bool
 \bool_new:N \l__tenkz_jroute_valid_bool
@@ -369,6 +378,7 @@
 
 \NewDocumentCommand \tnjoin { O{} m m }
   {
+    \tl_gclear:N \g__tenkz_free_wire_record_tl
     \group_begin:
     \tl_set:Nn \l__tenkz_jroute_tl {straight}
     \tl_clear:N \l__tenkz_jlabel_tl
@@ -474,7 +484,7 @@
       }
     \bool_if:NT \l__tenkz_jcommit_bool
       {
-        \__tenkz_model_record_wire:e
+        \tl_gset:Ne \g__tenkz_free_wire_record_tl
           { kind={index}, origin={join},
             from={\exp_not:n{#2}}, to={\exp_not:n{#3}},
             route={\tl_use:N \l__tenkz_jroute_tl},
@@ -488,6 +498,12 @@
       }
       }
     \group_end:
+    \tl_if_empty:NF \g__tenkz_free_wire_record_tl
+      {
+        \exp_args:NV \__tenkz_model_record_wire:n
+          \g__tenkz_free_wire_record_tl
+        \tl_gclear:N \g__tenkz_free_wire_record_tl
+      }
   }
 
 \cs_new_protected:Npn \tenkz_free_join_route:nn #1#2
