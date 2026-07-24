@@ -1,0 +1,788 @@
+\begin{lemma}[Arbitrary interpolation on one block of a pair]
+    \label{lem:pair_product_span_arbitrary_first_value}
+    \lean{MPSTensor.exists_mem_span_wordTuple_eq_and_eq_zero_of_pairWordTupleSpanTop}
+    \leanok
+    \uses{def:pair_trace_separation_words}
+    Let $(A_\ell)_{\ell=1}^r$ be a finite family of tensors. Suppose that the
+    length-$S$ pair evaluations of blocks $k$ and $j$ span their product
+    matrix algebra. For every $X\in\MN{D_k}$, there is a tuple $M=(M_\ell)_\ell$
+    in the span of the simultaneous length-$S$ word evaluations such that
+    \[
+        M_k=X,
+        \qquad
+        M_j=0.
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{def:pair_trace_separation_words}
+    Full pair span gives coefficients satisfying
+    \[
+        (X,0)=\sum_{|w|=S}c_w(A_k^w,A_j^w).
+    \]
+    Define $M_\ell=\sum_{|w|=S}c_wA_\ell^w$ for every block $\ell$. Then $M$
+    lies in the simultaneous word-tuple span, and its $k$- and $j$-components
+    are $X$ and $0$, respectively.
+\end{proof}
+
+\begin{lemma}[BNT block separation with an injective prefix]
+    \label{lem:bnt_direct_sum_injective_prefix_word_span}
+    \lean{MPSTensor.hasPairBlockSeparatingWords_threeBlock_of_blocksNotGaugePhaseEquiv_c1}
+    \lean{MPSTensor.propBlockInjective_of_blocksNotGaugePhaseEquiv_directSum_c1}
+    \lean{MPSTensor.wordTupleSpanTop_of_blocksNotGaugePhaseEquiv_directSum_selectors_c1}
+    \lean{MPSTensor.exists_wordTupleSpanTop_of_blocksNotGaugePhaseEquiv_directSum_selectors_c1}
+    \leanok
+    \uses{lem:direct_sum_two_block_dimension_step,
+        lem:pair_trace_separation_to_pairwise_block_separation,
+        lem:block_separating_equations_from_pairwise_separation,
+        lem:product_word_span_from_bnt_block_separation}
+    Let $A^1,\ldots,A^r$ be normalized representatives of a basis of normal
+    tensors: each representative is irreducible, the family is left-canonical,
+    the self-overlaps are normalized, and no two distinct same-dimensional
+    representatives are gauge-phase equivalent. Fix $L_0>0$. Assume that, for
+    every
+    block $j$, the map
+    \[
+        \Gamma_{L_0}^{A^j}:\MN{D_j}\to
+        (\C^d)^{\otimes L_0},
+        \qquad
+        X\longmapsto
+        \sum_{|u|=L_0}\tr(XA^j_u)\ket{u}
+    \]
+    is injective, and that the homogeneous word spans at the two source
+    lengths are full:
+    \[
+        \spn\{A^j_u:|u|=L_0+1\}=\MN{D_j},
+        \qquad
+        \spn\{A^j_v:|v|=3(L_0+1)\}=\MN{D_j}.
+    \]
+    Then for every ordered pair $k\ne j$ there are coefficients
+    $c^{k,j}_\omega$ such that
+    \[
+        \sum_{|\omega|=3(L_0+1)} c^{k,j}_\omega A^k_\omega=I,
+        \qquad
+        \sum_{|\omega|=3(L_0+1)} c^{k,j}_\omega A^j_\omega=0.
+    \]
+    The simultaneous block-word tuples at length
+    \[
+        (L_0+1)+3(r-1)(L_0+1)
+    \]
+    span the full product algebra
+    \[
+        \prod_{j=1}^r \MN{D_j}.
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:direct_sum_two_block_dimension_step,
+        lem:pair_trace_separation_to_pairwise_block_separation,
+        lem:block_separating_equations_from_pairwise_separation,
+        lem:product_word_span_from_bnt_block_separation}
+    Lemma~\ref{lem:direct_sum_two_block_dimension_step} gives homogeneous
+    trace separation at length $3(L_0+1)$ for every ordered pair of distinct
+    normalized BNT representatives.
+    Lemma~\ref{lem:pair_trace_separation_to_pairwise_block_separation}
+    converts these trace-separation equations into the displayed pairwise
+    block-separating equations. Multiplying the $r-1$ pair selectors for a
+    fixed block $k$ gives coefficients $b_v^{(k)}$ of length
+    $3(r-1)(L_0+1)$ such that
+    \[
+        \sum_v b_v^{(k)}A_j^v=\delta_{j,k}I.
+    \]
+    Block injectivity at length $L_0+1$ writes
+    $X_k=\sum_u a_u^{(k)}A_k^u$. Concatenating these two word families and
+    summing over $k$ realizes every tuple $(X_k)_k$ at length
+    $(L_0+1)+3(r-1)(L_0+1)$.
+\end{proof}
+
+\begin{lemma}[Sharp BNT block separation without an injective prefix]
+    \label{lem:bnt_direct_sum_block_separation_word_span}
+    \lean{MPSTensor.wordTupleSpanTop_mul_pred_of_forall_pairWordTupleSpanTop}
+    \lean{MPSTensor.wordTupleSpanTop_mul_pred_of_forall_pairTraceSeparatingAt}
+    \lean{MPSTensor.wordTupleSpanTop_threeBlock_mul_pred_of_blocksNotGaugePhaseEquiv_c1}
+    \leanok
+    \uses{lem:pair_product_span_arbitrary_first_value,
+        lem:block_separating_equations_from_pairwise_separation}
+    Under the hypotheses of the preceding lemma, suppose $r\geq2$. Then the
+    simultaneous block-word tuples at the source length
+    \[
+        3(r-1)(L_0+1)
+    \]
+    span the full product algebra $\prod_{j=1}^r\MN{D_j}$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:direct_sum_two_block_dimension_step,
+        lem:pair_trace_separation_to_pairwise_block_separation,
+        lem:pair_product_span_arbitrary_first_value,
+        lem:block_separating_equations_from_pairwise_separation}
+    For a prescribed matrix $X_k$ on block $k$, choose an anchor block $j$.
+    Lemma~\ref{lem:pair_product_span_arbitrary_first_value} gives a length-
+    $3(L_0+1)$ tuple $M$ with $(M_k,M_j)=(X_k,0)$. For every
+    $\ell\notin\{k,j\}$, choose a selector $N^{(\ell)}$ with
+    $N^{(\ell)}_k=I$ and $N^{(\ell)}_\ell=0$, and put
+    \[
+        C_t=M_t\prod_{\ell\notin\{k,j\}}N^{(\ell)}_t.
+    \]
+    Then
+    \[
+        C_k=X_k,\qquad C_j=0,\qquad
+        C_\ell=M_\ell(\cdots)0(\cdots)=0
+        \quad(\ell\notin\{k,j\}).
+    \]
+    Thus $C$ is supported only on block $k$, at length
+    $3(r-1)(L_0+1)$. Summing these tuples over $k$ realizes every element of
+    the product algebra.
+\end{proof}
+
+\begin{lemma}[Blockwise matrix equality from trace pairings]
+    \label{lem:block_matrices_equal_from_trace_pairings}
+    \lean{MPSTensor.block_matrices_eq_of_wordTupleSpanTop_trace}
+    \leanok
+    \uses{def:blockwise_product_word_span}
+    Let $A^1,\ldots,A^g$ be block tensors whose length-$m$ simultaneous word
+    tuples span the product algebra. If, for every word $w$ of length $m$,
+    two blockwise matrix families $X_j$ and $Y_j$ satisfy
+    \[
+        \sum_j\tr(X_jA^j_w)
+        =
+        \sum_j\tr(Y_jA^j_w)
+    \]
+    then $X_j=Y_j$ for every block $j$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{def:blockwise_product_word_span}
+    For every word $w$ of length $m$,
+    \[
+        \sum_j\tr\!\left((X_j-Y_j)A^j_w\right)
+        =
+        \sum_j\tr(X_jA^j_w)
+        -
+        \sum_j\tr(Y_jA^j_w)
+        =
+        0.
+    \]
+    Nondegeneracy of the product trace pairing, together with the spanning
+    hypothesis, gives $X_j-Y_j=0$ for every block $j$.
+\end{proof}
+
+\begin{lemma}[Boundary identities from block-sum membership]
+    \label{lem:blockwise_boundary_identities_from_left_trace_membership}
+    \lean{MPSTensor.pgvwc07_boundary_identities_of_leftBoundaryComponent_mem_iSup}
+    \leanok
+    \uses{lem:block_matrices_equal_from_trace_pairings,
+        def:blockwise_product_word_span,
+        def:ground_space_parent}
+    Let $A^1,\ldots,A^g$ be block tensors whose length-$m$ simultaneous word
+    tuples span the product algebra. Let $C^j_a\in \MN{D_j}$ be
+    matrices indexed by blocks $j$ and physical letters $a$. Suppose that,
+    for every pair of boundary letters $a,b$ and every word $w$ of length
+    $m$, a vector $\psi$ has the left-boundary trace form
+    \[
+        \psi(a,w,b)=
+        \sum_j\tr\!\left(A^j_b C^j_a A^j_w\right)
+    \]
+    and if
+    \[
+        \psi\in\bigvee_j G_{m+2}(A^j),
+    \]
+    then there are matrices $E_j$ such that, for every block $j$ and all
+    $a,b$,
+    \[
+        A^j_bC^j_a=A^j_bE_jA^j_a
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:block_matrices_equal_from_trace_pairings,
+        def:ground_space_parent,
+        def:ground_space_map}
+    Write $\psi=\sum_j\phi_j$ with $\phi_j\in G_{m+2}(A^j)$. For each
+    $j$, choose $E_j$ whose image under the length-$m+2$ ground-space map
+    for $A^j$ is $\phi_j$. Comparing the coefficient of the word $awb$
+    in the two expressions for $\psi$ gives
+    \[
+        \sum_j\tr\!\left(A^j_b C^j_a A^j_w\right)
+        =
+        \sum_j\tr\!\left(A^j_bE_jA^j_aA^j_w\right).
+    \]
+    Lemma~\ref{lem:block_matrices_equal_from_trace_pairings} gives the displayed
+    blockwise identities.
+\end{proof}
+
+\begin{lemma}[Blockwise boundary compatibility from traces]
+    \label{lem:blockwise_boundary_compatibility_from_traces}
+    \lean{MPSTensor.pgvwc07_blockwise_compatibility_of_trace_decomposition}
+    \leanok
+    \uses{lem:block_matrices_equal_from_trace_pairings}
+    Let $A^1,\ldots,A^g$ be block tensors with the following common
+    word-span property: for a fixed $m$, the simultaneous tuples
+    \[
+        w\longmapsto
+        \left(A^1_w,\ldots,A^g_w\right),
+        \qquad |w|=m,
+    \]
+    span the full product algebra
+    $\prod_j \MN{D_j}$.
+    Suppose that matrices $C^j_a,D^j_b\in \MN{D_j}$ satisfy,
+    for all physical indices $a,b$ and all words $w$ of length $m$,
+    \[
+        \sum_j \tr\!\left(A^j_b C^j_a A^j_w\right)
+        =
+        \sum_j \tr\!\left(D^j_b A^j_a A^j_w\right).
+    \]
+    Then
+    \[
+        A^j_bC^j_a=D^j_bA^j_a
+    \]
+    for every block $j$ and all $a,b$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:block_matrices_equal_from_trace_pairings}
+    For fixed $a,b$, set
+    \[
+        \Delta_j=A^j_bC^j_a-D^j_bA^j_a .
+    \]
+    The assumed trace equality says that
+    \[
+        \sum_j \tr\!\left(\Delta_jA^j_w\right)=0
+    \]
+    for every word $w$ of length $m$.  Since the tuples
+    $(A^1_w,\ldots,A^g_w)$ span the product algebra, the product trace
+    pairing is nondegenerate and hence every $\Delta_j$ is zero.
+\end{proof}
+
+\begin{lemma}[Word-valued boundary compatibility from traces]
+    \label{lem:blockwise_word_boundary_compatibility_from_traces}
+    \lean{MPSTensor.pgvwc07_blockwise_word_compatibility_of_trace_decomposition,
+        MPSTensor.pgvwc07_complementary_word_compatibility_of_trace_decomposition}
+    \leanok
+    \uses{lem:block_matrices_equal_from_trace_pairings}
+    Let $A^1,\ldots,A^g$ be block tensors with the common word-span property
+    at length $m$. Suppose that $C^j_\rho \in \MN{D_j}$ is
+    indexed by a block $j$ and a word $\rho$ of some fixed length $M$,
+    and that $D^j_\beta \in \MN{D_j}$ is indexed by a block
+    $j$ and a word $\beta$ of some fixed length $K$. If, for every
+    word $\rho$ of length $M$, every word $\beta$ of length $K$, and
+    every middle word $w$ of length $m$,
+    \[
+        \sum_j\tr\!\left(A^j_\beta C^j_\rho A^j_w\right)
+        =
+        \sum_j\tr\!\left(D^j_\beta A^j_\rho A^j_w\right),
+    \]
+    then
+    \[
+        A^j_\beta C^j_\rho=D^j_\beta A^j_\rho
+    \]
+    for every block $j$ and all words $\beta,\rho$.  In particular, taking
+    $D^j_\beta=X_jA^j_\beta$ gives
+    \[
+        A^j_\beta C^j_\rho=(X_jA^j_\beta)A^j_\rho .
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:block_matrices_equal_from_trace_pairings}
+    Fix $\beta$ and $\rho$, and set
+    \[
+        \Delta_j=A^j_\beta C^j_\rho-D^j_\beta A^j_\rho .
+    \]
+    The trace equality says that
+    \[
+        \sum_j\tr(\Delta_jA^j_w)=0
+    \]
+    for every word $w$ of length $m$.  The same nondegenerate product
+    trace-pairing argument as in
+    Lemma~\ref{lem:blockwise_boundary_compatibility_from_traces} gives
+    $\Delta_j=0$ for every $j$.  The specialization
+    $D^j_\beta=X_jA^j_\beta$ is immediate.
+\end{proof}
+
+\begin{lemma}[Fixed complementary-word compatibility from traces]
+    \label{lem:fixed_complementary_word_boundary_compatibility_from_traces}
+    \lean{MPSTensor.pgvwc07_fixed_complementary_word_compatibility_of_trace_decomposition}
+    \leanok
+    \uses{lem:block_matrices_equal_from_trace_pairings}
+    Let $A^1,\ldots,A^g$ be block tensors with the common word-span property
+    at length $m$. Fix a complementary word $\rho$ of length $M$ and matrices
+    $C^j_\rho,X_j\in\MN{D_j}$. If, for every wrapped word $\beta$ of length
+    $K$ and every middle word $w$ of length $m$,
+    \[
+        \sum_j\tr\!\left(A^j_\beta C^j_\rho A^j_w\right)
+        =
+        \sum_j\tr\!\left((X_jA^j_\beta)A^j_\rho A^j_w\right),
+    \]
+    then
+    \[
+        A^j_\beta C^j_\rho=(X_jA^j_\beta)A^j_\rho
+    \]
+    for every block $j$ and every wrapped word $\beta$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:block_matrices_equal_from_trace_pairings}
+    Fix $\beta$ and set
+    \[
+        \Delta_j=A^j_\beta C^j_\rho-(X_jA^j_\beta)A^j_\rho .
+    \]
+    The trace equality gives
+    \[
+        \sum_j\tr(\Delta_jA^j_w)=0
+    \]
+    for every word $w$ of length $m$. The common word-span property and the
+    product trace pairing imply $\Delta_j=0$ for every $j$.
+\end{proof}
+
+\begin{lemma}[Normalized boundary matrix identities]
+    \label{lem:normalized_boundary_matrix_identities}
+    \lean{MPSTensor.pgvwc07_boundary_matrix_identities_of_indexed_compatibility}
+    \lean{MPSTensor.pgvwc07_boundary_matrix_identities_of_compatibility}
+    \lean{MPSTensor.pgvwc07_boundary_word_matrix_identities_of_compatibility}
+    \lean{MPSTensor.pgvwc07_boundary_matrix_identities_of_two_index_compatibility}
+    \lean{MPSTensor.pgvwc07_boundary_word_matrix_identities_of_two_length_compatibility}
+    \leanok
+    Let $(A_a)_{a\in I}$, $(C_a)_{a\in I}$, and $(D_b)_{b\in I}$ be matrices in
+    $\MD$, indexed by a finite alphabet. If
+    \[
+        \sum_a A_a A_a^\dagger=\Id,
+        \qquad
+        A_b C_a=D_b A_a
+    \]
+    for all $a,b\in I$, and if
+    \[
+        E=\sum_a C_a A_a^\dagger,
+    \]
+    then
+    \[
+        D_b=A_bE,
+        \qquad
+        A_bC_a=A_bEA_a
+    \]
+    for all $a,b\in I$.
+
+    In particular, the same calculation applies when the alphabet is the finite
+    set of words of a fixed length and $A_\beta$ denotes
+    $A_{\beta_1}\cdots A_{\beta_K}$.
+
+    The same argument also applies when the normalized family is indexed by a
+    finite set $J$, while $(A_b)_{b\in I}$ and $(D_b)_{b\in I}$ are indexed by
+    a set $I$. If $(B_a)_{a\in J}$ and $(C_a)_{a\in J}$ are indexed by $J$,
+    and if for all $a\in J$ and $b\in I$,
+    \[
+        \sum_a B_aB_a^\dagger=\Id,
+        \qquad
+        A_bC_a=D_bB_a
+    \]
+    then with
+    \[
+        E=\sum_a C_aB_a^\dagger
+    \]
+    one has
+    \[
+        D_b=A_bE,
+        \qquad
+        A_bC_a=A_bEB_a.
+    \]
+    This includes the case where $I$ and $J$ are word sets of different
+    lengths.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Multiply $D_b$ by the normalization:
+    \[
+        D_b
+        =
+        D_b\sum_a A_aA_a^\dagger
+        =
+        \sum_a D_bA_aA_a^\dagger
+        =
+        \sum_a A_bC_aA_a^\dagger
+        =
+        A_bE .
+    \]
+    Substituting this in $A_bC_a=D_bA_a$ gives
+    $A_bC_a=A_bEA_a$.
+    For two alphabets, the corresponding step is
+    \[
+        D_b
+        =
+        D_b\sum_a B_aB_a^\dagger
+        =
+        \sum_a D_bB_aB_a^\dagger
+        =
+        \sum_a A_bC_aB_a^\dagger
+        =
+        A_bE ,
+    \]
+    where $E=\sum_a C_aB_a^\dagger$.  Substituting this in
+    $A_bC_a=D_bB_a$ gives $A_bC_a=A_bEB_a$.
+\end{proof}
+
+\begin{lemma}[Explicit \(C^j,D^j,E^j\) identities from trace decompositions]
+    \label{lem:pgvwc_cde_identities_from_trace_decompositions}
+    \lean{MPSTensor.pgvwc07_complementary_word_cde_identities_of_trace_decomposition}
+    \leanok
+    \uses{lem:sum_evalWord_mul_conjTranspose_evalWord,
+        lem:blockwise_word_boundary_compatibility_from_traces,
+        lem:normalized_boundary_matrix_identities}
+    Let $A^1,\ldots,A^g$ be block tensors with the common word-span property
+    at length $m$. Fix matrices $X_j$, and put
+    \[
+        D^j_\beta=X_jA^j_\beta .
+    \]
+    Suppose that $C^j_\rho$ is indexed by a block $j$ and a complementary word
+    $\rho$ of length $M$, and assume that, for every wrapped word $\beta$ of
+    length $K$, every complementary word $\rho$, and every middle word $w$ of
+    length $m$,
+    \[
+        \sum_j\tr\!\left(A^j_\beta C^j_\rho A^j_w\right)
+        =
+        \sum_j\tr\!\left(D^j_\beta A^j_\rho A^j_w\right).
+    \]
+    If each block satisfies
+    \[
+        \sum_a A^j_aA^{j\,\dagger}_a=I,
+    \]
+    then for every block $j$ there is a matrix
+    \[
+        E^j=\sum_\rho C^j_\rho\left(A^j_\rho\right)^\dagger
+    \]
+    such that, for every wrapped word $\beta$ and complementary word $\rho$,
+    \[
+        D^j_\beta=A^j_\beta E^j,
+        \qquad
+        A^j_\beta C^j_\rho=A^j_\beta E^jA^j_\rho .
+    \]
+    This is the calculation in
+    \cite[Theorem~12, proof lines~1446--1451]{PerezGarcia2007Matrix}, with
+    the adjoint on \(A^j_\rho\) required by the displayed normalization.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:sum_evalWord_mul_conjTranspose_evalWord,
+        lem:blockwise_word_boundary_compatibility_from_traces,
+        lem:normalized_boundary_matrix_identities}
+    Lemma~\ref{lem:blockwise_word_boundary_compatibility_from_traces} gives
+    \[
+        A^j_\beta C^j_\rho=D^j_\beta A^j_\rho .
+    \]
+    The single-letter normalization gives the word normalization
+    \[
+        \sum_\rho A^j_\rho\left(A^j_\rho\right)^\dagger=I .
+    \]
+    Lemma~\ref{lem:normalized_boundary_matrix_identities}, applied to the
+    two word alphabets, gives
+    \[
+        E^j=\sum_\rho C^j_\rho\left(A^j_\rho\right)^\dagger,
+        \qquad
+        D^j_\beta=A^j_\beta E^j,
+        \qquad
+        A^j_\beta C^j_\rho=A^j_\beta E^jA^j_\rho .
+    \]
+\end{proof}
+
+\begin{lemma}[Block-diagonal boundary $C^j,D^j,E^j$ identities from trace decompositions]
+    \label{lem:block_boundary_cde_identities_from_trace_decompositions}
+    \lean{MPSTensor.pgvwc07_complementary_word_cde_identities_of_block_boundary_trace_decomposition}
+    \leanok
+    \uses{lem:pgvwc_cde_identities_from_trace_decompositions}
+    Let $A^1,\ldots,A^g$ be block tensors with the common word-span property
+    at length $m$. Fix $N\in\N$, complex numbers $\mu_j$, and
+    block-diagonal boundary matrices $X_j$, and put
+    \[
+        D^j_\beta=(\mu_j^NX_j)A^j_\beta .
+    \]
+    Suppose that, for every wrapped word $\beta$ of length $K$, every
+    complementary word $\rho$ of length $M$, and every middle word $w$ of
+    length $m$,
+    \[
+        \sum_j\tr\!\left(A^j_\beta C^j_\rho A^j_w\right)
+        =
+        \sum_j\tr\!\left(((\mu_j^NX_j)A^j_\beta)A^j_\rho A^j_w\right).
+    \]
+    If each block satisfies
+    \[
+        \sum_a A^j_aA^{j\,\dagger}_a=I,
+    \]
+    then for every block $j$ there is a matrix
+    \[
+        E^j=\sum_\rho C^j_\rho\left(A^j_\rho\right)^\dagger
+    \]
+    such that, for every wrapped word $\beta$ and complementary word $\rho$,
+    \[
+        (\mu_j^NX_j)A^j_\beta=A^j_\beta E^j,
+        \qquad
+        A^j_\beta C^j_\rho=A^j_\beta E^jA^j_\rho .
+    \]
+    This is the boundary-matrix calculation in
+    \cite[Theorem~12, proof lines~1446--1451]{PerezGarcia2007Matrix},
+    after substituting the block-diagonal boundary matrix
+    $D^j_\beta=(\mu_j^NX_j)A^j_\beta$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:pgvwc_cde_identities_from_trace_decompositions}
+    Apply Lemma~\ref{lem:pgvwc_cde_identities_from_trace_decompositions}
+    with $D^j_\beta=(\mu_j^NX_j)A^j_\beta$.
+\end{proof}
+
+\begin{lemma}[Complementary-word boundary identities from a compatibility hypothesis]
+    \label{lem:complementary_word_boundary_identities_from_pgvwc}
+    \lean{MPSTensor.pgvwc07_complementary_word_boundary_identities_formula_of_compatibility}
+    \leanok
+    \uses{lem:normalized_boundary_matrix_identities}
+    Let $A_\beta$ be the products over wrapped words of length $K$, let
+    $A_\rho$ be the products over complementary words of length $M$, and let
+    $X\in \MD$ be a matrix.  Suppose that the complementary-word
+    products satisfy
+    \[
+        \sum_\rho A_\rho A_\rho^\dagger=\Id
+    \]
+    and that there are matrices $C_\rho$, indexed by complementary words, such
+    that for every wrapped word $\beta$ and complementary word $\rho$,
+    \[
+        A_\beta C_\rho=(X A_\beta)A_\rho.
+    \]
+    Then, for every complementary word $\rho$, with
+    \[
+        E_\rho=\left(\sum_\gamma C_\gamma A_\gamma^\dagger\right)A_\rho,
+    \]
+    one has, for every wrapped word $\beta$,
+    \[
+        (X A_\beta)A_\rho=A_\beta E_\rho.
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:normalized_boundary_matrix_identities}
+    Apply Lemma~\ref{lem:normalized_boundary_matrix_identities} with
+    $D_\beta=X A_\beta$. It gives
+    \[
+        A_\beta C_\rho=A_\beta E A_\rho
+    \]
+    for $E=\sum_\gamma C_\gamma A_\gamma^\dagger$. With $E_\rho=EA_\rho$,
+    the compatibility hypothesis gives
+    \[
+        (X A_\beta)A_\rho
+        = A_\beta C_\rho
+        = A_\beta E A_\rho
+        = A_\beta E_\rho.
+    \]
+\end{proof}
+
+\begin{lemma}[Complementary-word boundary identities from trace decompositions]
+    \label{lem:complementary_word_boundary_identities_from_trace_decompositions}
+    \lean{MPSTensor.pgvwc07_complementary_word_boundary_identities_of_trace_decomposition}
+    \leanok
+    \uses{lem:sum_evalWord_mul_conjTranspose_evalWord,
+        lem:blockwise_word_boundary_compatibility_from_traces,
+        lem:complementary_word_boundary_identities_from_pgvwc}
+    Let $A^1,\ldots,A^g$ be block tensors with the common word-span property
+    at length $m$. Fix matrices $X_j$. Suppose that $C^j_\rho$ is indexed
+    by a block $j$ and a complementary word $\rho$ of length $M$. Assume
+    that, for every wrapped word $\beta$ of length $K$, every complementary
+    word $\rho$, and every middle word $w$ of length $m$,
+    \[
+        \sum_j\tr\!\left(A^j_\beta C^j_\rho A^j_w\right)
+        =
+        \sum_j\tr\!\left((X_jA^j_\beta)A^j_\rho A^j_w\right).
+    \]
+    If each block satisfies
+    \[
+        \sum_a A^j_aA^{j\dagger}_a=I,
+    \]
+    then, for every block $j$ and every complementary word $\rho$, there is
+    a matrix $E_{j,\rho}$ such that, for every wrapped word $\beta$,
+    \[
+        (X_jA^j_\beta)A^j_\rho=A^j_\beta E_{j,\rho}.
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:sum_evalWord_mul_conjTranspose_evalWord,
+        lem:blockwise_word_boundary_compatibility_from_traces,
+        lem:complementary_word_boundary_identities_from_pgvwc}
+    Lemma~\ref{lem:blockwise_word_boundary_compatibility_from_traces} applied
+    with $D^j_\beta=X_jA^j_\beta$ gives
+    \[
+        A^j_\beta C^j_\rho=(X_jA^j_\beta)A^j_\rho.
+    \]
+    The hypothesis $\sum_a A^j_a A^{j\dagger}_a=I$ extends to words of
+    length $M$:
+    \[
+        \sum_\rho A^j_\rho A^{j\dagger}_\rho=I
+    \].
+    Lemma~\ref{lem:complementary_word_boundary_identities_from_pgvwc} gives the
+    matrices $E_{j,\rho}$.
+\end{proof}
+
+\begin{lemma}[A left-boundary summand is a ground-space vector]
+    \label{lem:left_boundary_component_mem_ground_space}
+    \lean{MPSTensor.pgvwc07LeftBoundaryComponent_mem_groundSpace}
+    \leanok
+    Let $A$ be a block tensor, and let $C_a,E\in \MD$
+    satisfy
+    \[
+        A_b C_a=A_bEA_a
+    \]
+    for all physical indices $a,b$.  For a word
+    $\sigma=(\sigma_1,\ldots,\sigma_{n+2})$, define
+    \[
+        \alpha(\sigma)
+        =
+        \tr\!\left(
+        A_{\sigma_{n+2}} C_{\sigma_1}
+        A_{\sigma_2}\cdots A_{\sigma_{n+1}}
+        \right).
+    \]
+    Then $\alpha\in G_{n+2}(A)$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    The boundary identity gives
+    \[
+        A_{\sigma_{n+2}} C_{\sigma_1}
+        =
+        A_{\sigma_{n+2}}EA_{\sigma_1}.
+    \]
+    Hence, by cyclicity of the trace,
+    \[
+        \alpha(\sigma)
+        =
+        \tr\!\left(
+        A_{\sigma_1}A_{\sigma_2}\cdots A_{\sigma_{n+2}}E
+        \right),
+    \]
+    which is the ground-space parametrization of $E$.
+\end{proof}
+
+\begin{lemma}[Left-boundary summands are ground-space vectors]
+    \label{lem:left_boundary_summands_mem_block_ground_spaces}
+    \lean{MPSTensor.pgvwc07_sum_leftBoundaryComponents_mem_iSup_groundSpace}
+    \leanok
+    \uses{lem:left_boundary_component_mem_ground_space}
+    Let $A^1,\ldots,A^g$ be block tensors, and let
+    $C^j_a,E^j\in \MN{D_j}$ satisfy
+    \[
+        A^j_b C^j_a=A^j_bE^jA^j_a
+    \]
+    for every block $j$ and all physical indices $a,b$.
+    For a word $\sigma=(\sigma_1,\ldots,\sigma_{n+2})$, define
+    \[
+        \alpha_j(\sigma)
+        =
+        \tr\!\left(
+        A^j_{\sigma_{n+2}} C^j_{\sigma_1}
+        A^j_{\sigma_2}\cdots A^j_{\sigma_{n+1}}
+        \right).
+    \]
+    Then
+    \[
+        \sum_j \alpha_j
+        \in
+        \bigvee_j G_{n+2}(A^j).
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:left_boundary_component_mem_ground_space}
+    Fix $j$.  By the assumed boundary identity and cyclicity of the
+    trace,
+    \[
+        \tr\!\left(
+        A^j_{\sigma_{n+2}} C^j_{\sigma_1}
+        A^j_{\sigma_2}\cdots A^j_{\sigma_{n+1}}
+        \right)
+        =
+        \tr\!\left(
+        A^j_{\sigma_1}A^j_{\sigma_2}\cdots
+        A^j_{\sigma_{n+2}}E^j
+        \right).
+    \]
+    Thus $\alpha_j$ is the image of $E^j$ under the parametrization
+    of $G_{n+2}(A^j)$.  Hence each $\alpha_j$ lies in
+    $G_{n+2}(A^j)$, and the finite sum lies in the supremum of these
+    subspaces.
+\end{proof}
+
+\begin{lemma}[Left-boundary trace decompositions lie in the block ground spaces]
+    \label{lem:left_boundary_trace_decomposition_mem_block_ground_spaces}
+    \lean{MPSTensor.pgvwc07_mem_iSup_groundSpace_of_trace_decomposition}
+    \leanok
+    Let $A^1,\ldots,A^g$ be block tensors with common word-span separation at
+    length $n$, and suppose that
+    \[
+        \sum_a A^j_a A^{j\,\dagger}_a=\Id
+    \]
+    for every block $j$.  Suppose a vector $\psi\in(\C^d)^{\otimes(n+2)}$
+    has the left-boundary trace decomposition
+    \[
+        \psi=\sum_j\alpha_j,
+        \qquad
+        \alpha_j(i_1,\ldots,i_{n+2})
+        =
+        \tr\!\left(
+        A^j_{i_{n+2}} C^j_{i_1}
+        A^j_{i_2}\cdots A^j_{i_{n+1}}
+        \right),
+    \]
+    and suppose that the two trace decompositions agree for every middle word:
+    \[
+        \sum_j
+        \tr\!\left(
+        A^j_b C^j_a A^j_w
+        \right)
+        =
+        \sum_j
+        \tr\!\left(
+        D^j_b A^j_a A^j_w
+        \right).
+    \]
+    Then
+    \[
+        \psi\in\bigvee_j G_{n+2}(A^j).
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    The equality of the two boundary trace expressions and the common word-span
+    hypothesis give
+    \[
+        A^j_bC^j_a=D^j_bA^j_a
+    \]
+    for every $j,a,b$.  By the normalization,
+    \[
+        D^j_b
+        =
+        D^j_b\sum_a A^j_aA^{j\,\dagger}_a
+        =
+        \sum_a A^j_bC^j_aA^{j\,\dagger}_a
+        =
+        A^j_bE^j,
+        \qquad
+        E^j:=\sum_a C^j_aA^{j\,\dagger}_a.
+    \]
+    Hence $A^j_bC^j_a=A^j_bE^jA^j_a$.  Lemma
+    \ref{lem:left_boundary_summands_mem_block_ground_spaces} then gives
+    \[
+        \psi=\sum_j\alpha_j\in\bigvee_j G_{n+2}(A^j).
+    \]
+\end{proof}
