@@ -6,27 +6,23 @@
         thm:offdiag_shift_adjoint_cyclic_shift}
     If a periodic tensor admits a cyclic sector decomposition, then for every
     $k$ and every physical letter $i$ there exists a family
-    $P_0,\ldots,P_{m-1}$ such that
-    \[
-        P_u^\dagger=P_u,\qquad P_u^2=P_u\quad(0\le u<m),
-        \qquad
-        \sum_{u=0}^{m-1}P_u=\Id
-    \]
-    and
-    \[
-        P_{k+1}A^i=A^iP_k .
-    \]
+    $P_0,\ldots,P_{m-1}$ such that each $P_u$ is an orthogonal projection,
+    \begin{align}
+        P_u^\dagger&=P_u,\qquad P_u^2=P_u, \notag\\
+        \sum_{u=0}^{m-1}P_u&=\Id, \notag
+    \end{align}
+    and $P_{k+1}A^i=A^iP_k$.
 \end{theorem}
 
 \begin{proof}\leanok
     Choose the projection family contained in the cyclic sector decomposition.
     It satisfies
-    \[
-        P_u^\dagger=P_u,\qquad P_u^2=P_u,\qquad
-        \sum_u P_u=\Id,\qquad \E_A^\dagger(P_{u+1})=P_u .
-    \]
-    Apply
-    Theorem~\ref{thm:offdiag_shift_adjoint_cyclic_shift}.
+    \begin{align}
+        P_u^\dagger&=P_u,\qquad P_u^2=P_u, \notag\\
+        \sum_uP_u&=\Id, \notag\\
+        \E_A^\dagger(P_{u+1})&=P_u. \notag
+    \end{align}
+    Apply Theorem~\ref{thm:offdiag_shift_adjoint_cyclic_shift}.
 \end{proof}
 
 \begin{theorem}[Cyclic-sector off-diagonal reconstruction]
@@ -37,26 +33,26 @@
         thm:eq_sum_offdiag_adjoint_cyclic_shift}
     If a periodic tensor admits a cyclic sector decomposition, then for every
     physical letter $i$ there exists a family $P_0,\ldots,P_{m-1}$ such that
-    \[
-        P_u^\dagger=P_u,\qquad P_u^2=P_u\quad(0\le u<m),
-        \qquad
-        \sum_{u=0}^{m-1}P_u=\Id
-    \]
+    each $P_u$ is an orthogonal projection,
+    \begin{align}
+        P_u^\dagger&=P_u,\qquad P_u^2=P_u, \notag\\
+        \sum_{u=0}^{m-1}P_u&=\Id, \notag
+    \end{align}
     and
-    \[
-        A^i=\sum_{u=0}^{m-1} P_{u+1}A^iP_u .
-    \]
+    \begin{align}
+        A^i=\sum_{u=0}^{m-1}P_{u+1}A^iP_u. \notag
+    \end{align}
 \end{theorem}
 
 \begin{proof}\leanok
     Choose the projection family contained in the cyclic sector decomposition.
     It satisfies
-    \[
-        P_u^\dagger=P_u,\qquad P_u^2=P_u,\qquad
-        \sum_u P_u=\Id,\qquad \E_A^\dagger(P_{u+1})=P_u .
-    \]
-    Apply
-    Theorem~\ref{thm:eq_sum_offdiag_adjoint_cyclic_shift}.
+    \begin{align}
+        P_u^\dagger&=P_u,\qquad P_u^2=P_u, \notag\\
+        \sum_uP_u&=\Id, \notag\\
+        \E_A^\dagger(P_{u+1})&=P_u. \notag
+    \end{align}
+    Apply Theorem~\ref{thm:eq_sum_offdiag_adjoint_cyclic_shift}.
 \end{proof}
 
 \begin{theorem}[Cyclic sector decomposition of a periodic tensor]
@@ -88,51 +84,57 @@
     Under the hypotheses of the cyclic-sector construction for the blocked
     tensor $A^{(m)}$, there are sector tensors $C_k$, projections $P_k$, and
     linear corner isomorphisms
-    \[
-        \varphi_k : M_{\dim C_k}(\mathbb C)
-            \longrightarrow P_k M_D(\mathbb C) P_k
-    \]
+    \begin{align}
+        \varphi_k\colon \MN{\dim C_k}
+        \longrightarrow P_k\MN{D}P_k \notag
+    \end{align}
     whose sector tensors are left-canonical, reproduce the blocked
     matrix-product vectors, have nonzero bond dimensions, and carry the cyclic
     adjoint-transfer decomposition of
     Theorem~\ref{thm:cyclic_sector_decomp_after_blocking_periodic}. In addition,
     for every blocked physical letter $i$,
-    \[
-        \varphi_k(C_k^i)=P_k (A^{(m)})^i P_k .
-    \]
+    \begin{align}
+        \varphi_k(C_k^i)=P_k(A^{(m)})^iP_k. \notag
+    \end{align}
     This is the corner-letter identity used in
     \cite[Lemma~\emph{bdcf}, eq.~\emph{Cu}]{DeLasCuevas2017Irreducible}.
 \end{theorem}
 
 \begin{proof}\leanok
     Let $U$ diagonalize $P_k$, so that
-    \[
-        U^\dagger P_k U=
-        \begin{pmatrix} I & 0 \\ 0 & 0 \end{pmatrix}.
-    \]
-    Write $B^i=U^\dagger (A^{(m)})^i U$, and let $B_{kk}^i$ be the corner block
+    \begin{align}
+        U^\dagger P_kU
+        =
+        \begin{pmatrix}
+            I&0\\
+            0&0
+        \end{pmatrix}. \notag
+    \end{align}
+    Write $B^i=U^\dagger(A^{(m)})^iU$, and let $B_{kk}^i$ be the corner block
     on the support of $P_k$. The sector tensor is
-    \[
-        C_k^i=V_k^\dagger B_{kk}^iV_k,
-    \]
-    where $V_k$ identifies the support with $\mathbb C^{\dim C_k}$. The linear
-    corner isomorphism is the inverse transport
-    \[
+    $C_k^i=V_k^\dagger B_{kk}^iV_k$, where $V_k$ identifies the support with
+    $\C^{\dim C_k}$. The linear corner isomorphism is the inverse transport
+    \begin{align}
         X\longmapsto
         U
-        \begin{pmatrix} V_k X V_k^\dagger & 0 \\ 0 & 0 \end{pmatrix}
-        U^\dagger .
-    \]
+        \begin{pmatrix}
+            V_kXV_k^\dagger&0\\
+            0&0
+        \end{pmatrix}
+        U^\dagger. \notag
+    \end{align}
     Hence
-    \[
+    \begin{align}
         \varphi_k(C_k^i)
-        =
+        &=
         U
-        \begin{pmatrix} B_{kk}^i & 0 \\ 0 & 0 \end{pmatrix}
+        \begin{pmatrix}
+            B_{kk}^i&0\\
+            0&0
+        \end{pmatrix}
         U^\dagger
-        =
-        P_k (A^{(m)})^i P_k .
-    \]
+        =P_k(A^{(m)})^iP_k. \notag
+    \end{align}
 \end{proof}
 
 \begin{theorem}[Periodic cyclic sectors with support isometries]
@@ -142,19 +144,18 @@
     \uses{thm:cyclic_sector_decomp_after_blocking_isometry, def:periodic_tensor}
     If $A$ is periodic with period $m$, then the cyclic-sector decomposition of
     $A^{(m)}$ may be chosen with rectangular support isometries $V_k$ such that
-    \[
-        V_k^\dagger V_k=\Id,\qquad V_kV_k^\dagger=P_k,\qquad
-        \varphi_k(X)=V_kXV_k^\dagger .
-    \]
+    \begin{align}
+        V_k^\dagger V_k&=\Id, \notag\\
+        V_kV_k^\dagger&=P_k, \notag\\
+        \varphi_k(X)&=V_kXV_k^\dagger. \notag
+    \end{align}
     In particular, the same isometries realize the corner-letter identity
-    \[
-        \varphi_k(C_k^i)=P_k(A^{(m)})^iP_k .
-    \]
+    $\varphi_k(C_k^i)=P_k(A^{(m)})^iP_k$.
     \begin{proof}
         \leanok
         Apply Theorem~\ref{thm:cyclic_sector_decomp_after_blocking_isometry}
         to the original tensor $A$ with its period-$m$ peripheral-spectrum
-        hypotheses.  The resulting decomposition is the decomposition of
+        hypotheses. The resulting decomposition is the decomposition of
         $A^{(m)}$, and the isometries $V_k$ in its conclusion are the required
         support isometries.
     \end{proof}
@@ -167,12 +168,9 @@
     \uses{def:cyclic_sector_decomp, def:mpv_overlap, def:blocked_tensor,
         thm:offdiag_shift_adjoint_cyclic_shift}
     Let $A$ and $B$ be left-canonical tensors with cyclic sector
-    decompositions $\{A_u\}_{u\in\mathbb Z_m}$ and
-    $\{B_v\}_{v\in\mathbb Z_m}$. For every $u,v\in\mathbb Z_m$ and every
-    $N>0$,
-    \[
-        O_{A_{u+1},B_{v+1}}(N)=O_{A_u,B_v}(N).
-    \]
+    decompositions $\{A_u\}_{u\in\Z_m}$ and
+    $\{B_v\}_{v\in\Z_m}$. For every $u,v\in\Z_m$ and every $N>0$,
+    $O_{A_{u+1},B_{v+1}}(N)=O_{A_u,B_v}(N)$.
 \end{lemma}
 
 \begin{proof}\leanok
@@ -180,20 +178,20 @@
     decompositions. The single-site relations
     $P_{u+1}A^i=A^iP_u$ and $Q_{v+1}B^i=B^iQ_v$ give the following
     trace-sum identity, where $T$ is the one-site rotation of physical words:
-    \[
-    \begin{aligned}
+    \begin{align}
         O_{A_{u+1},B_{v+1}}(N)
-        &=\sum_{\tau\in[d]^{Nm}}\tr(P_{u+1}A^\tau)\,
-            \overline{\tr(Q_{v+1}B^\tau)}\\
-        &=\sum_{\tau\in[d]^{Nm}}\tr(P_{u+1}A^{T\tau})\,
-            \overline{\tr(Q_{v+1}B^{T\tau})}\\
-        &=\sum_{\tau\in[d]^{Nm}}\tr(P_uA^\tau)\,
+        &=\sum_{\tau\in[d]^{Nm}}\tr(P_{u+1}A^\tau)
+            \overline{\tr(Q_{v+1}B^\tau)} \notag\\
+        &=\sum_{\tau\in[d]^{Nm}}\tr(P_{u+1}A^{T\tau})
+            \overline{\tr(Q_{v+1}B^{T\tau})} \notag\\
+        &=\sum_{\tau\in[d]^{Nm}}\tr(P_uA^\tau)
             \overline{\tr(Q_vB^\tau)}
         =O_{A_u,B_v}(N).
-    \end{aligned}
-    \]
-    The first and last equalities are the cyclic-sector trace formula after
-    reindexing blocked words as physical words of length $Nm$.
+        \label{eq:pft_sector_overlap_transport}
+    \end{align}
+    The first and last equalities in
+    (\ref{eq:pft_sector_overlap_transport}) are the cyclic-sector trace formula
+    after reindexing blocked words as physical words of length $Nm$.
 \end{proof}
 
 \begin{lemma}[Off-diagonal eigenvectors of the period transfer vanish]
@@ -203,45 +201,31 @@
     \uses{def:periodic_tensor, def:cyclic_sector_decomp,
         lem:peripheral_pow_singleton}
     Let $A$ be periodic of period $m$. Let $P_0,\ldots,P_{m-1}$ be
-    orthogonal projections with
-    \[
-        \sum_{k=0}^{m-1} P_k = 1,
-        \qquad
-        \mathcal E_A^*(P_{k+1})=P_k.
-    \]
+    orthogonal projections satisfying
+    \begin{align}
+        \sum_{k=0}^{m-1}P_k&=\Id, \notag\\
+        \E_A^\dagger(P_{k+1})&=P_k. \notag
+    \end{align}
     If
-    \[
-        U=P_u U P_v,\qquad P_uP_v=0,\qquad
-        \mathcal E_A^m(U)=\zeta U,\qquad |\zeta|=1,
-    \]
+    \begin{align}
+        U&=P_uUP_v,\qquad P_uP_v=0, \notag\\
+        \E_A^m(U)&=\zeta U,\qquad |\zeta|=1, \notag
+    \end{align}
     then $U=0$.
 \end{lemma}
 
 \begin{proof}\leanok
-    Since the peripheral spectrum of $\mathcal E_A$ consists of $m$-th roots
+    Since the peripheral spectrum of $\E_A$ consists of $m$-th roots
     of unity, Lemma~\ref{lem:peripheral_pow_singleton} gives
-    \[
-        \operatorname{Spec}_{\mathrm{per}}(\mathcal E_A^m)=\{1\},
-    \]
-    hence $\zeta=1$. The cyclic trace gives
-    \[
-        \tr U=\tr(P_uUP_v)=\tr(P_vP_uU)=0.
-    \]
-    Put
-    \[
-        W=\sum_{t=0}^{m-1}\mathcal E_A^t(U).
-    \]
-    The equation $\mathcal E_A^m(U)=U$ gives $\mathcal E_A(W)=W$, and
-    trace preservation gives $\tr W=0$. Irreducibility of $A$ therefore gives
-    $W=0$. The shift relation
-    \[
-        P_{k+1}A^i=A^iP_k
-    \]
-    moves $\mathcal E_A^t(U)$ into the $(u+t,v+t)$ corner, so only the
-    $t=0$ term contributes after multiplying by $P_u$ and $P_v$. Thus
-    \[
-        U=P_uWP_v=0.
-    \]
+    $\spec_{\mathrm{per}}(\E_A^m)=\{1\}$, hence $\zeta=1$. The cyclic trace
+    gives $\tr U=\tr(P_uUP_v)=\tr(P_vP_uU)=0$.
+
+    Put $W=\sum_{t=0}^{m-1}\E_A^t(U)$. The equation
+    $\E_A^m(U)=U$ gives $\E_A(W)=W$, and trace preservation gives
+    $\tr W=0$. Irreducibility of $A$ therefore gives $W=0$. The shift relation
+    $P_{k+1}A^i=A^iP_k$ moves $\E_A^t(U)$ into the $(u+t,v+t)$ corner, so only
+    the $t=0$ term contributes after multiplying by $P_u$ and $P_v$. Thus
+    $U=P_uWP_v=0$.
 \end{proof}
 
 % The overlap component lemmas below are part of the source dichotomy proof.
@@ -253,7 +237,7 @@
     \leanok
     \uses{def:periodic_tensor}
     If $A$ is $m$-periodic, then
-    $\lim_{N\to\infty} O_{AA}(mN)=m$.
+    $\lim_{N\to\infty}O_{AA}(mN)=m$.
 \end{theorem}
 
 \begin{theorem}[Different periods imply asymptotic orthogonality]%
@@ -268,31 +252,28 @@
     \uses{thm:periodic_overlap_zero_ne_dim}
     If $D_A\ne D_B$, use Theorem~\ref{thm:periodic_overlap_zero_ne_dim}.
     Assume $D_A=D_B$ and $A\sim_{\mathrm{gp}}B$, say
-    $B^i=\zeta X A^iX^{-1}$ with $X\in\GL_D(\C)$ and
+    $B^i=\zeta XA^iX^{-1}$ with $X\in\GL_D(\C)$ and
     $\zeta\ne0$. The transfer maps satisfy
-    \[
+    \begin{align}
         \E_B(Y)
         =
         \zeta\overline{\zeta}
-        X\,\E_A(X^{-1}YX^{-*})\,X^*.
-    \]
-    With $\E_A(\rho_A)=\rho_A$, put
-    $\sigma=X\rho_A X^*$. Then
+        X\E_A(X^{-1}YX^{-*})X^*. \notag
+    \end{align}
+    With $\E_A(\rho_A)=\rho_A$, put $\sigma=X\rho_AX^*$. Then
     $\E_B(\sigma)=|\zeta|^2\sigma$, while $\E_B(\rho_B)=\rho_B$ for a
     nonzero positive fixed point $\rho_B$. Perron--Frobenius eigenvalue
     uniqueness \cite[Theorem~6.3]{Wolf2012Quantum} gives $|\zeta|^2=1$.
     Hence $\E_B$ is conjugate to $\E_A$, so
-    $\sigma_{\mathrm{per}}(\E_A)=\sigma_{\mathrm{per}}(\E_B)$. Since
-    \begin{equation}\label{eq:pft_periodic_set_equality}
-        \sigma_{\mathrm{per}}(\E_A)
-        =
-        \{e^{2\pi i r/m_A}:0\le r<m_A\},
-        \qquad
-        \sigma_{\mathrm{per}}(\E_B)
-        =
-        \{e^{2\pi i r/m_B}:0\le r<m_B\},
-    \end{equation}
-    equality of the two finite sets in~(\ref{eq:pft_periodic_set_equality})
+    $\spec_{\mathrm{per}}(\E_A)=\spec_{\mathrm{per}}(\E_B)$. Since
+    \begin{align}
+        \spec_{\mathrm{per}}(\E_A)
+        &=\{e^{2\pi ir/m_A}:0\le r<m_A\}, \notag\\
+        \spec_{\mathrm{per}}(\E_B)
+        &=\{e^{2\pi ir/m_B}:0\le r<m_B\},
+        \label{eq:pft_periodic_set_equality}
+    \end{align}
+    equality of the two finite sets in (\ref{eq:pft_periodic_set_equality})
     gives $m_A=m_B$, a contradiction. Thus
     $A\not\sim_{\mathrm{gp}}B$, and the irreducible trace-preserving overlap
     dichotomy gives $\lim_{N\to\infty}O_{AB}(N)=0$.
@@ -312,26 +293,25 @@
     \leanok
     \uses{def:periodic_tensor, lem:sector_blocked_normal_periodic}
     Suppose $A$ and $B$ have the same total bond dimension and the same
-    period $m$. Let
-    $A_u$ and $B_v$ be period-blocked sector tensors of virtual dimensions
-    $d_u$ and $e_v$, indexed by $u,v\in\mathbb Z_m$, such that
-    \[
-        \bar A\sim\bigoplus_{u\in\mathbb Z_m}A_u,\qquad
-        \bar B\sim\bigoplus_{v\in\mathbb Z_m}B_v
-    \]
+    period $m$. Let $A_u$ and $B_v$ be period-blocked sector tensors of virtual
+    dimensions $d_u$ and $e_v$, indexed by $u,v\in\Z_m$, such that
+    \begin{align}
+        \bar A&\sim\bigoplus_{u\in\Z_m}A_u, \notag\\
+        \bar B&\sim\bigoplus_{v\in\Z_m}B_v, \notag
+    \end{align}
     with unit weights, and the two decompositions are cyclic sector
-    decompositions. Assume each sector is left-canonical,
-    \[
-        \sum_{\alpha} (A_u^\alpha)^\dagger A_u^\alpha=I_{d_u},
-        \qquad
-        \sum_{\alpha} (B_v^\alpha)^\dagger B_v^\alpha=I_{e_v},
-    \]
-    Assume $\forall u,\ d_u\ne0$ and $\forall v,\ e_v\ne0$, and
+    decompositions. Assume each sector is left-canonical:
+    \begin{align}
+        \sum_{\alpha}(A_u^\alpha)^\dagger A_u^\alpha&=I_{d_u}, \notag\\
+        \sum_{\alpha}(B_v^\alpha)^\dagger B_v^\alpha&=I_{e_v}. \notag
+    \end{align}
+    Assume $d_u\ne0$ for every $u$ and $e_v\ne0$ for every $v$, and
     whenever $d_u=e_v$, the corresponding sector tensors are not gauge-phase
     equivalent after identifying their virtual spaces:
-    \[
-        d_u=e_v\quad\Longrightarrow\quad A_u\not\sim_{\mathrm{gp}}B_v.
-    \]
+    \begin{align}
+        d_u=e_v\quad\Longrightarrow\quad
+        A_u\not\sim_{\mathrm{gp}}B_v. \notag
+    \end{align}
     Then $\lim_{N\to\infty}O_{AB}(N)=0$.
 \end{theorem}
 \begin{proof}\leanok
@@ -339,68 +319,61 @@
         thm:periodic_self_overlap_tendsto,
         thm:overlap_decay_irr_tp,
         thm:overlap_decay_rect_irr_tp}
-    Write
-    $\bar A\sim\bigoplus_{u\in\mathbb Z_m}A_u$ and
-    $\bar B\sim\bigoplus_{v\in\mathbb Z_m}B_v$. For every $N$,
-    \begin{equation}\label{eq:pft_overlap_double_sum}
+    Write $\bar A\sim\bigoplus_{u\in\Z_m}A_u$ and
+    $\bar B\sim\bigoplus_{v\in\Z_m}B_v$. For every $N$,
+    \begin{align}
         O_{\bar A\bar B}(N)
         =
-        \sum_{u\in\mathbb Z_m}\sum_{v\in\mathbb Z_m}
-        O_{A_uB_v}(N).
-    \end{equation}
+        \sum_{u\in\Z_m}\sum_{v\in\Z_m}O_{A_uB_v}(N).
+        \label{eq:pft_overlap_double_sum}
+    \end{align}
     For each sector pair $(u,v)$,
-    \[
+    \begin{align}
         d_u=e_v,\quad A_u\not\sim_{\mathrm{gp}}B_v
-        \quad\Longrightarrow\quad
-        \lim_{N\to\infty}O_{A_uB_v}(N)=0,
-    \]
-    and
-    \[
+        &\quad\Longrightarrow\quad
+        \lim_{N\to\infty}O_{A_uB_v}(N)=0, \notag\\
         d_u\ne e_v
-        \quad\Longrightarrow\quad
-        \lim_{N\to\infty}O_{A_uB_v}(N)=0.
-    \]
-    The finite double sum~(\ref{eq:pft_overlap_double_sum}) therefore gives
-    \[
-        \lim_{N\to\infty} O_{\bar A\bar B}(N)
-        =
-        \sum_{u\in\mathbb Z_m}\sum_{v\in\mathbb Z_m}
-        \lim_{N\to\infty} O_{A_uB_v}(N)
-        =0.
-    \]
+        &\quad\Longrightarrow\quad
+        \lim_{N\to\infty}O_{A_uB_v}(N)=0. \notag
+    \end{align}
+    The finite double sum (\ref{eq:pft_overlap_double_sum}) therefore gives
+    \begin{align}
+        \lim_{N\to\infty}O_{\bar A\bar B}(N)
+        &=
+        \sum_{u\in\Z_m}\sum_{v\in\Z_m}
+        \lim_{N\to\infty}O_{A_uB_v}(N)
+        =0. \notag
+    \end{align}
 
-    If $A\sim_{\mathrm{gp}} B$, then $\bar A\sim_{\mathrm{gp}}\bar B$, so for
+    If $A\sim_{\mathrm{gp}}B$, then $\bar A\sim_{\mathrm{gp}}\bar B$, so for
     some $X\in\GL_D(\C)$ and $\zeta\ne0$,
     $(\bar B)^\alpha=\zeta X(\bar A)^\alpha X^{-1}$. Thus
     $V^{(N)}(\bar B)_\sigma=\zeta^N V^{(N)}(\bar A)_\sigma$, and
-    \[
+    \begin{align}
         O_{\bar A\bar B}(N)
-        =
-        \overline{\zeta}^{\,N} O_{\bar A\bar A}(N),
-        \qquad
+        &=\overline{\zeta}^{\,N}O_{\bar A\bar A}(N), \notag\\
         O_{\bar B\bar B}(N)
-        =
-        |\zeta|^{2N} O_{\bar A\bar A}(N).
-    \]
+        &=|\zeta|^{2N}O_{\bar A\bar A}(N). \notag
+    \end{align}
     Since
     $\lim_{N\to\infty}O_{\bar A\bar A}(N)
-        =\lim_{N\to\infty}O_{\bar B\bar B}(N)=m>0$,
-    \[
+      =\lim_{N\to\infty}O_{\bar B\bar B}(N)=m>0$,
+    \begin{align}
         1
-        =
+        &=
         \lim_{N\to\infty}
         \frac{O_{\bar B\bar B}(N)}{O_{\bar A\bar A}(N)}
         =
-        \lim_{N\to\infty}|\zeta|^{2N},
-    \]
+        \lim_{N\to\infty}|\zeta|^{2N}, \notag
+    \end{align}
     hence $|\zeta|=1$. Therefore
-    \[
+    \begin{align}
         \lim_{N\to\infty}|O_{\bar A\bar B}(N)|
         =
         \lim_{N\to\infty}O_{\bar A\bar A}(N)
         =
-        m\ne0,
-    \]
+        m\ne0, \notag
+    \end{align}
     contradicting $\lim_{N\to\infty}O_{\bar A\bar B}(N)=0$. Thus
     $A\not\sim_{\mathrm{gp}}B$, and the irreducible trace-preserving overlap
     dichotomy gives $\lim_{N\to\infty}O_{AB}(N)=0$.
@@ -412,14 +385,12 @@
     \uses{def:periodic_tensor, def:cyclic_sector_decomp,
         lem:sector_overlap_succ_eq_cyclic_sector_decomp}
     Let $A$ and $B$ be left-canonical tensors with period $m$, and let
-    $\bar A\sim\bigoplus_u A_u$ and $\bar B\sim\bigoplus_v B_v$ be unit-weight
+    $\bar A\sim\bigoplus_uA_u$ and $\bar B\sim\bigoplus_vB_v$ be unit-weight
     cyclic sector decompositions whose sectors are left-canonical. Suppose
     $d_{u_0}=e_{v_0}$, $d_{u_0}\ne0$, and, after identifying the virtual spaces,
-    $A_{u_0}\sim_{\mathrm{gp}}B_{v_0}$. Then for every $l\in\mathbb Z_m$ there
+    $A_{u_0}\sim_{\mathrm{gp}}B_{v_0}$. Then for every $l\in\Z_m$ there
     is an equality $d_{u_0+l}=e_{v_0+l}$ and, after this identification,
-    \[
-        A_{u_0+l}\sim_{\mathrm{gp}}B_{v_0+l}.
-    \]
+    $A_{u_0+l}\sim_{\mathrm{gp}}B_{v_0+l}$.
 \end{lemma}
 
 \begin{lemma}[Finite-cycle coboundary]\label{lem:finite_cycle_coboundary}
@@ -430,18 +401,10 @@
     \uses{}
     Let $G$ be a commutative group, and let
     $\kappa_0,\ldots,\kappa_n\in G$. If
-    \[
-        \prod_{k=0}^{n}\kappa_k=1,
-    \]
-    then there are $\varphi_0,\ldots,\varphi_n\in G$ such that, for every
-    $k<n$,
-    \[
-        \kappa_k=\varphi_k\varphi_{k+1}^{-1},
-    \]
-    and
-    \[
-        \kappa_n=\varphi_n\varphi_0^{-1}.
-    \]
+    $\prod_{k=0}^{n}\kappa_k=1$, then there are
+    $\varphi_0,\ldots,\varphi_n\in G$ such that
+    $\kappa_k=\varphi_k\varphi_{k+1}^{-1}$ for every $k<n$, and
+    $\kappa_n=\varphi_n\varphi_0^{-1}$.
     Equivalently, on a nonempty finite cyclic index set, a product-one family
     satisfies $\kappa_k=\varphi_k\varphi_{k+1}^{-1}$ for every cyclic edge.
     In particular, a product-one family of complex unit phases admits such a
@@ -452,26 +415,22 @@
     \uses{}
     Set $\varphi_k=(\kappa_0\cdots\kappa_{k-1})^{-1}$, with the empty product
     equal to $1$. For $k<n$,
-    \[
+    \begin{align}
         \varphi_k\varphi_{k+1}^{-1}
-        =
+        &=
         (\kappa_0\cdots\kappa_{k-1})^{-1}
         (\kappa_0\cdots\kappa_k)
-        =
-        \kappa_k.
-    \]
+        =\kappa_k. \notag
+    \end{align}
     Separating the final factor in the product-one hypothesis gives
-    \[
-        (\kappa_0\cdots\kappa_{n-1})\kappa_n=1,
-    \]
-    which gives
-    \[
+    $(\kappa_0\cdots\kappa_{n-1})\kappa_n=1$, which gives
+    \begin{align}
         \varphi_n\varphi_0^{-1}
         =
         (\kappa_0\cdots\kappa_{n-1})^{-1}
         =
-        \kappa_n.
-    \]
+        \kappa_n. \notag
+    \end{align}
 \end{proof}
 
 \begin{definition}[Global gauge]
@@ -480,9 +439,9 @@
     \leanok
     Given a positive period $m$, cyclic projectors $P_u$ and $Q_v$, a cyclic
     offset $q$, and corner operators $U_v$, the global gauge is
-    \[
-        U=\sum_{u}P_uU_{u+q}Q_{u+q}.
-    \]
+    \begin{align}
+        U=\sum_uP_uU_{u+q}Q_{u+q}. \notag
+    \end{align}
 \end{definition}
 
 \begin{lemma}[Global gauge as a sector sum]
@@ -490,41 +449,30 @@
     \lean{MPSTensor.globalGauge_eq_sum}
     \leanok
     \uses{def:periodic_global_gauge}
-    Let $m\ge1$.  If each corner operator satisfies $U_v=P_{v-q}U_vQ_v$, then
-    $P_uU_{u+q}Q_{u+q}=U_{u+q}$, so the global gauge is the plain sector sum
-    \[
-        U=\sum_{v}U_v.
-    \]
+    Let $m\ge1$. If each corner operator satisfies
+    $U_v=P_{v-q}U_vQ_v$, then $P_uU_{u+q}Q_{u+q}=U_{u+q}$, so the global
+    gauge is the plain sector sum $U=\sum_vU_v$.
 \end{lemma}
 
 \begin{proof}\leanok
     \uses{def:periodic_global_gauge}
-    The corner relation $U_v=P_{v-q}U_vQ_v$ gives $P_uU_{u+q}Q_{u+q}=U_{u+q}$;
-    reindexing the sum by $v=u+q$ turns $\sum_uP_uU_{u+q}Q_{u+q}$ into
-    $\sum_vU_v$.
+    The corner relation $U_v=P_{v-q}U_vQ_v$ gives
+    $P_uU_{u+q}Q_{u+q}=U_{u+q}$; reindexing the sum by $v=u+q$ turns
+    $\sum_uP_uU_{u+q}Q_{u+q}$ into $\sum_vU_v$.
 \end{proof}
 
 \begin{lemma}[Unit-phase gauge relation gives repeated blocks]
     \label{lem:gauge_phase_data_repeated_blocks}
     \lean{MPSTensor.repeatedBlocks_of_gaugePhaseData_norm_one}
     \leanok
-    Suppose
-    \[
-        B^i=\zeta X A^iX^{-1},
-        \qquad |\zeta|=1,
-    \]
-    with $X$ invertible. Then $A$ and $B$ satisfy the repeated-block relation
-    \[
-        A^i=\zeta^{-1}X^{-1}B^iX.
-    \]
+    Suppose $B^i=\zeta XA^iX^{-1}$ and $|\zeta|=1$, with $X$ invertible.
+    Then $A$ and $B$ satisfy the repeated-block relation
+    $A^i=\zeta^{-1}X^{-1}B^iX$.
 \end{lemma}
 \begin{proof}\leanok
-    Since $|\zeta|=1$, the scalar is nonzero.  Multiplication by $X^{-1}$ on
+    Since $|\zeta|=1$, the scalar is nonzero. Multiplication by $X^{-1}$ on
     the left and by $X$ on the right gives
-    \[
-        X^{-1}B^iX=\zeta A^i;
-    \]
-    multiplication by $\zeta^{-1}$ proves the claim.
+    $X^{-1}B^iX=\zeta A^i$; multiplication by $\zeta^{-1}$ proves the claim.
 \end{proof}
 
 \begin{lemma}[Global-gauge construction]
@@ -535,50 +483,58 @@
         lem:periodic_global_gauge_eq_sum,
         lem:left_canonical_irreducible_unitary_gauge}
     Let $m\ge1$, and let $A$ and $B$ carry the cyclic off-diagonal structure
-    \[
-        A^i=\sum_{u}P_uA^iP_{u+1},
-        \qquad
-        B^i=\sum_{v}Q_vB^iQ_{v+1},
-    \]
+    \begin{align}
+        A^i&=\sum_uP_uA^iP_{u+1}, \notag\\
+        B^i&=\sum_vQ_vB^iQ_{v+1}, \notag
+    \end{align}
     with $P_u$ and $Q_v$ families of orthogonal projections summing to the
-    identity.  Let $q$ be the cyclic offset between the matched sector labels,
+    identity. Let $q$ be the cyclic offset between the matched sector labels,
     and let each $U_v$ be a corner partial isometry from the $Q_v$ corner onto
-    the $P_{v-q}$ corner, that is $U_v=P_{v-q}U_vQ_v$ with $U_v^{\dagger}U_v=Q_v$
-    and $U_vU_v^{\dagger}=P_{v-q}$.  Assume the per-site proportionality of
+    the $P_{v-q}$ corner, that is,
+    \begin{align}
+        U_v&=P_{v-q}U_vQ_v, \notag\\
+        U_v^\dagger U_v&=Q_v, \notag\\
+        U_vU_v^\dagger&=P_{v-q}. \notag
+    \end{align}
+    Assume the per-site proportionality of
     \cite[eq.~result]{DeLasCuevas2017Irreducible},
-    \[
+    \begin{align}
         P_uA^iP_{u+1}
         =
-        \zeta\,U_{u+q}Q_{u+q}B^iQ_{u+q+1}U_{u+q+1}^{\dagger},
+        \zeta\,U_{u+q}Q_{u+q}B^iQ_{u+q+1}U_{u+q+1}^\dagger,
         \qquad
-        |\zeta|=1.
-    \]
+        |\zeta|=1. \notag
+    \end{align}
     Then the global gauge
-    \[
-        U=\sum_{u}P_uU_{u+q}Q_{u+q}
-    \]
-    is unitary and satisfies $A^i=\zeta\,UB^iU^{\dagger}$ for every $i$, so $A$
-    and $B$ are repeated blocks.
+    $U=\sum_uP_uU_{u+q}Q_{u+q}$ is unitary and satisfies
+    $A^i=\zeta UB^iU^\dagger$ for every $i$, so $A$ and $B$ are repeated
+    blocks.
 \end{lemma}
 
 \begin{proof}\leanok
     \uses{def:cyclic_sector_decomp, lem:periodic_global_gauge_eq_sum}
     The corner relation $U_v=P_{v-q}U_vQ_v$ gives
-    $P_uU_{u+q}Q_{u+q}=U_{u+q}$, so $U=\sum_v U_v$ after reindexing.  Distinct
-    projections are orthogonal, $Q_vQ_w=0$ and $P_{v-q}P_{w-q}=0$ for $v\ne w$,
-    which kills the cross terms in $UU^{\dagger}$ and $U^{\dagger}U$; the diagonal
-    terms are $U_vU_v^{\dagger}=P_{v-q}$ and $U_v^{\dagger}U_v=Q_v$, so
-    $UU^{\dagger}=\sum_uP_u=\mathbb 1$ and $U^{\dagger}U=\sum_vQ_v=\mathbb 1$.
-    The off-diagonal structure of $B$ makes $Q_vB^iQ_w$ vanish unless $w=v+1$,
-    so $UB^iU^{\dagger}=\sum_vU_vQ_vB^iQ_{v+1}U_{v+1}^{\dagger}$.  Summing the
-    per-site proportionality over $u$ and reindexing by $v=u+q$,
-    \[
-        \zeta\,UB^iU^{\dagger}
-        =\sum_v\zeta\,U_vQ_vB^iQ_{v+1}U_{v+1}^{\dagger}
-        =\sum_uP_uA^iP_{u+1}
-        =A^i,
-    \]
-    where the last equality is the off-diagonal structure of $A$.  The
-    unit-modulus scalar and the unitary $U$ exhibit $A$ and $B$ as repeated
-    blocks.
+    $P_uU_{u+q}Q_{u+q}=U_{u+q}$, so $U=\sum_vU_v$ after reindexing. Distinct
+    projections are orthogonal, $Q_vQ_w=0$ and $P_{v-q}P_{w-q}=0$ for
+    $v\ne w$, which kills the cross terms in $UU^\dagger$ and $U^\dagger U$;
+    the diagonal terms are $U_vU_v^\dagger=P_{v-q}$ and
+    $U_v^\dagger U_v=Q_v$, so
+    \begin{align}
+        UU^\dagger&=\sum_uP_u=\Id, \notag\\
+        U^\dagger U&=\sum_vQ_v=\Id. \notag
+    \end{align}
+    The off-diagonal structure of $B$ makes $Q_vB^iQ_w$ vanish unless
+    $w=v+1$, so
+    $UB^iU^\dagger=\sum_vU_vQ_vB^iQ_{v+1}U_{v+1}^\dagger$. Summing the
+    per-site proportionality over $u$ and reindexing by $v=u+q$ gives
+    \begin{align}
+        \zeta UB^iU^\dagger
+        &=
+        \sum_v\zeta\,U_vQ_vB^iQ_{v+1}U_{v+1}^\dagger
+        =
+        \sum_uP_uA^iP_{u+1}
+        =A^i. \notag
+    \end{align}
+    The last equality is the off-diagonal structure of $A$. The unit-modulus
+    scalar and the unitary $U$ exhibit $A$ and $B$ as repeated blocks.
 \end{proof}

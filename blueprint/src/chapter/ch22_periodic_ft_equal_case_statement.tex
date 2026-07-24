@@ -13,34 +13,33 @@ unconditional result.
     \label{thm:periodic_ft}
     \uses{def:irreducible_form}
     Let $A$ and $B$ be MPS tensors in irreducible form. Write
-    \[
-        A^i=\bigoplus_{j\in J}(R_j\otimes A_j^i),
-        \qquad
-        B^i=\bigoplus_{k\in K}(S_k\otimes B_k^i),
-    \]
+    \begin{align}
+        A^i&=\bigoplus_{j\in J}(R_j\otimes A_j^i), \notag\\
+        B^i&=\bigoplus_{k\in K}(S_k\otimes B_k^i), \notag
+    \end{align}
     where $\{A_j\}_{j \in J}$ and $\{B_k\}_{k \in K}$ are bases of periodic
     tensors, $R_j$ and $S_k$ are diagonal multiplicity matrices of sizes
     $r_j\times r_j$ and $s_k\times s_k$, and $A_j^i$ and $B_k^i$ act on
     bond spaces of dimensions $D_j$ and $D_k$.
-    Suppose that $\mathcal{V}(A) = \mathcal{V}(B)$
+    Suppose that $\mc{V}(A)=\mc{V}(B)$
     (equal MPV families for all lengths $N$).
 
-    Then $|J| = |K|$ and there is a bijection $\pi : J \to K$
+    Then $|J|=|K|$ and there is a bijection $\pi:J\to K$
     such that $A_j$ and $B_{\pi(j)}$ are $m_j$-periodic for the same
     period $m_j$.
-    Moreover, for each $j \in J$ there exists:
+    Moreover, for each $j\in J$ there exists:
     \begin{enumerate}
-        \item an invertible matrix $Y_j$ of size $D_{\pi(j)} \times D_j$,
+        \item an invertible matrix $Y_j$ of size $D_{\pi(j)}\times D_j$,
               and
-        \item a diagonal unitary matrix $Z_j$ of size $r_j \times r_j$
-              satisfying $Z_j^{m_j} = \Id_{r_j}$,
+        \item a diagonal unitary matrix $Z_j$ of size $r_j\times r_j$
+              satisfying $Z_j^{m_j}=\Id_{r_j}$,
     \end{enumerate}
-    such that $B_{\pi(j)}^i = Y_j A_j^i Y_j^{-1}$ for every physical
+    such that $B_{\pi(j)}^i=Y_jA_j^iY_j^{-1}$ for every physical
     index~$i$, and, after reordering the diagonal entries of the
-    multiplicity matrix $S_{\pi(j)}$, one has $Z_j R_j = S_{\pi(j)}$.
-    Equivalently, setting $Z = \bigoplus_j Z_j \otimes \Id_{D_j}$ gives an
-    invertible matrix $Y$ such that $Z A^i = Y B^i Y^{-1}$ for all $i$,
-    with $[A^i, Z] = 0$ and $\mathcal{V}(A) = \mathcal{V}(ZA)$.
+    multiplicity matrix $S_{\pi(j)}$, one has $Z_jR_j=S_{\pi(j)}$.
+    Equivalently, setting $Z=\bigoplus_j Z_j\otimes\Id_{D_j}$ gives an
+    invertible matrix $Y$ such that $ZA^i=YB^iY^{-1}$ for all $i$,
+    with $[A^i,Z]=0$ and $\mc{V}(A)=\mc{V}(ZA)$.
 
     \noindent\emph{Remark.}
     The proof is conditional on the periodic-overlap dichotomy of
@@ -56,11 +55,10 @@ unconditional result.
     Let $(\mu_i)_{i\in I}$ and $(\nu_i)_{i\in I}$ be two finite lists of
     nonzero multiplicity entries. If $\mu_i^m=\nu_i^m$ for every $i\in I$,
     then there exists a diagonal matrix $Z$ such that
-    \[
-        Z^m=\Id,
-        \qquad
-        Z\,\diag(\nu)=\diag(\mu).
-    \]
+    \begin{align}
+        Z^m&=\Id, \notag\\
+        Z\,\diag(\nu)&=\diag(\mu). \notag
+    \end{align}
 \end{theorem}
 
 \begin{proof}\leanok
@@ -77,12 +75,10 @@ unconditional result.
     Let $(\mu_i)_{i\in I}$ and $(\nu_i)_{i\in I}$ be two finite lists of
     multiplicity entries. Suppose that the $\nu_i$ are nonzero, that
     $\mu_i^m=\nu_i^m$ for every $i\in I$, and that
-    \[
-        \sum_{i\in I}\mu_i^k=\sum_{i\in I}\nu_i^k
-    \]
-    for every positive integer $k$. Then the two lists determine the same
-    multiset, and there is a diagonal $Z$ satisfying
-    $Z^m=\Id$ and $Z\,\diag(\nu)=\diag(\mu)$.
+    $\sum_{i\in I}\mu_i^k=\sum_{i\in I}\nu_i^k$ for every positive
+    integer~$k$. Then the two lists determine the same multiset, and there is
+    a diagonal $Z$ satisfying $Z^m=\Id$ and
+    $Z\,\diag(\nu)=\diag(\mu)$.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -116,12 +112,11 @@ unconditional result.
     tensors contain no repeated pair of distinct basis elements. Assume the
     periodic-overlap hypothesis and the corresponding power equality for the
     scalar multiplicity entries. Then the bases are matched by a bijection, and
-    each matched pair has a scalar diagonal $Z_j\in M_1(\mathbb C)$ with
-    \[
-        Z_j^{m_j}=\Id,
-        \qquad
-        Z_j\,\diag(\mu_{A,j})=\diag(\mu_{B,\pi(j)}).
-    \]
+    each matched pair has a scalar diagonal $Z_j\in\MN{1}$ with
+    \begin{align}
+        Z_j^{m_j}&=\Id, \notag\\
+        Z_j\,\diag(\mu_{A,j})&=\diag(\mu_{B,\pi(j)}). \notag
+    \end{align}
     The two scalar multiplicity entries also determine the same singleton
     multiset.
 \end{theorem}

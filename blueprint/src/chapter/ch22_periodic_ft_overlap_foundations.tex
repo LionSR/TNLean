@@ -6,20 +6,22 @@
     $\{A_v^i\}_i$ and $\{B_v^i\}_i$ be families of complex matrices with the
     same rectangular size. Suppose that for every choice of letters
     $\sigma=(\sigma_v)_v$,
-    \[
+    \begin{align}
         \bigotimes_{v=0}^{m-1} A_v^{\sigma_v}
-        =
+        &=
         z\,\bigotimes_{v=0}^{m-1} B_v^{\sigma_v}.
-    \]
+        \notag
+    \end{align}
     Suppose also that for each $v$ there is a reference letter $i_v$ and a
     matrix entry $(r_v,c_v)$ with
     $(B_v^{i_v})_{r_v,c_v}\ne 0$. Then there are scalars
     $\kappa_v\in\C$ such that
-    \[
-        \prod_{v=0}^{m-1}\kappa_v=z,
-        \qquad
-        A_v^i=\kappa_v B_v^i
-    \]
+    \begin{align}
+        \prod_{v=0}^{m-1}\kappa_v&=z,
+        \notag\\
+        A_v^i&=\kappa_v B_v^i
+        \notag
+    \end{align}
     for every sector $v$ and every letter $i$.
 
     This is the scalar extraction used in
@@ -50,19 +52,21 @@
     $\xi^m=z$. For each sector $v=0,\ldots,m-1$, let $\{A_v^i\}_i$ and
     $\{B_v^i\}_i$ be families of complex matrices with the same rectangular
     size. Suppose that for every choice of letters $\sigma=(\sigma_v)_v$,
-    \[
+    \begin{align}
         \bigotimes_{v=0}^{m-1} A_v^{\sigma_v}
-        =
+        &=
         z\,\bigotimes_{v=0}^{m-1} B_v^{\sigma_v}.
-    \]
+        \notag
+    \end{align}
     Suppose also that each sector has a reference letter $i_v$ and a matrix
     entry $(r_v,c_v)$ with $(B_v^{i_v})_{r_v,c_v}\ne0$. Then there are scalars
     $\kappa_v\in\C$ such that
-    \[
-        \prod_{v=0}^{m-1}\kappa_v=1,
-        \qquad
-        A_v^i=\kappa_v\xi\,B_v^i
-    \]
+    \begin{align}
+        \prod_{v=0}^{m-1}\kappa_v&=1,
+        \notag\\
+        A_v^i&=\kappa_v\xi\,B_v^i
+        \notag
+    \end{align}
     for every sector $v$ and every letter $i$.
 
     This is the normalization in
@@ -77,10 +81,8 @@
     scalars $\mu_v$ with $\prod_v\mu_v=z$ and $A_v^i=\mu_vB_v^i$. Since
     $m>0$, the identities $\xi^m=z$ and $z\ne0$ imply $\xi\ne0$. Put
     $\kappa_v=\mu_v/\xi$. Then
-    \[
-        \prod_v\kappa_v=\frac{\prod_v\mu_v}{\xi^m}=\frac{z}{z}=1,
-    \]
-    and $A_v^i=(\kappa_v\xi)B_v^i$.
+    $\prod_v\kappa_v=(\prod_v\mu_v)/\xi^m=z/z=1$, and
+    $A_v^i=(\kappa_v\xi)B_v^i$.
 \end{proof}
 
 \begin{theorem}[Left-canonical scalar normalization]
@@ -93,11 +95,12 @@
 
 \begin{proof}\leanok
     The two left-canonical equations give
-    \[
-        \sum_i (A^i)^\dagger A^i=\Id,
-        \qquad
-        \sum_i (cA^i)^\dagger(cA^i)=\Id.
-    \]
+    \begin{align}
+        \sum_i (A^i)^\dagger A^i&=\Id,
+        \notag\\
+        \sum_i (cA^i)^\dagger(cA^i)&=\Id.
+        \notag
+    \end{align}
     Substituting the first equation into the second gives
     $(\bar c c)\Id=\Id$. Since the bond dimension is positive, comparison of
     any diagonal entry gives $\bar c c=1$, hence $|c|=1$.
@@ -109,11 +112,8 @@
     \leanok
     \uses{thm:left_canonical_scalar_normalization}
     Let $A$ and $B$ be left-canonical tensors with the same positive bond
-    dimension. Suppose that $|\xi|=1$ and that, for every physical index~$i$,
-    \[
-        A^i=(\kappa\xi)B^i
-    \]
-    Then $|\kappa|=1$.
+    dimension. Suppose that $|\xi|=1$ and that
+    $A^i=(\kappa\xi)B^i$ for every physical index~$i$. Then $|\kappa|=1$.
 
     This is the scalar normalization in
     \cite[Appendix~A, lines~1082--1084]{DeLasCuevas2017Irreducible}, after the
@@ -134,7 +134,7 @@
     A family of compressed sector tensors
     $(C_k)_{k=0}^{m-1}$ on corner bond spaces forms an \emph{off-diagonal
         decomposition} of the blocked tensor $A^{(m)}$ if there exist orthogonal
-    projections $P_0,\dotsc,P_{m-1}$ on the ambient bond space such that
+    projections $P_0,\ldots,P_{m-1}$ on the ambient bond space such that
     $\sum_k P_k = \Id$, the projections satisfy the cyclic-shift relation
     $\E_A^\dagger(P_{k+1}) = P_k$ with the index $k+1$ taken cyclically
     modulo~$m$, each $P_k$ commutes with every blocked letter
@@ -164,14 +164,8 @@
     \uses{def:transfer_map}
     Let $A$ be left-canonical, and let $P_0,\ldots,P_{m-1}$ be orthogonal
     projections on the bond space. If the adjoint transfer map satisfies
-    \[
-        \E_A^\dagger(P_{k+1})=P_k
-    \]
-    for all $k$, with indices taken modulo $m$, then for every physical
-    letter $i$,
-    \[
-        P_{k+1}A^i=A^iP_k.
-    \]
+    $\E_A^\dagger(P_{k+1})=P_k$ for all $k$, with indices taken modulo $m$,
+    then $P_{k+1}A^i=A^iP_k$ for every physical letter $i$.
     This is the single-site grading behind
     \cite[eq.~Aoffdiag]{DeLasCuevas2017Irreducible}; the compressed blocks of
     \cite[eq.~Auprop]{DeLasCuevas2017Irreducible} use the inverse cyclic
@@ -182,17 +176,16 @@
     Put $K_i=(A^i)^\dagger$ and let $\Phi_K$ be the Kraus map of the family
     $K$. Since $A$ is left-canonical, $\Phi_K$ is unital. The projection
     identities and the shift relation give
-    \[
+    \begin{align}
         \Phi_K(P_{k+1}^\dagger P_{k+1})
-        =
+        &=
         \Phi_K(P_{k+1})^\dagger\Phi_K(P_{k+1}),
-    \]
+        \notag
+    \end{align}
     because both sides are equal to $P_k$. The equality case in the
     Kadison--Schwarz inequality therefore gives
-    \[
-        P_{k+1}K_i^\dagger=K_i^\dagger\Phi_K(P_{k+1}).
-    \]
-    Substituting $K_i^\dagger=A^i$ and $\Phi_K(P_{k+1})=P_k$ gives
+    $P_{k+1}K_i^\dagger=K_i^\dagger\Phi_K(P_{k+1})$. Substituting
+    $K_i^\dagger=A^i$ and $\Phi_K(P_{k+1})=P_k$ gives
     $P_{k+1}A^i=A^iP_k$.
 \end{proof}
 
@@ -202,14 +195,8 @@
     \leanok
     \uses{thm:offdiag_shift_adjoint_cyclic_shift}
     Under the hypotheses of Theorem~\ref{thm:offdiag_shift_adjoint_cyclic_shift},
-    assume in addition that
-    \[
-        \sum_{u=0}^{m-1} P_u=\Id .
-    \]
-    Then every physical letter decomposes as
-    \[
-        A^i=\sum_{u=0}^{m-1} P_{u+1}A^iP_u .
-    \]
+    assume in addition that $\sum_{u=0}^{m-1} P_u=\Id$. Then every physical
+    letter decomposes as $A^i=\sum_{u=0}^{m-1}P_{u+1}A^iP_u$.
     This is \cite[eq.~Aoffdiag]{DeLasCuevas2017Irreducible}, written in the
     same inverse cyclic indexing convention.
 \end{theorem}
@@ -226,10 +213,7 @@
     \leanok
     \uses{thm:offdiag_shift_adjoint_cyclic_shift}
     Under the hypotheses of Theorem~\ref{thm:offdiag_shift_adjoint_cyclic_shift},
-    a word $w=i_1\cdots i_\ell$ satisfies
-    \[
-        P_{k+\ell} A^w = A^w P_k .
-    \]
+    a word $w=i_1\cdots i_\ell$ satisfies $P_{k+\ell} A^w=A^w P_k$.
     Thus the single-site grading accumulates one cyclic step for each letter of
     the word.
 \end{theorem}
@@ -248,10 +232,8 @@
     Let $P_0,\ldots,P_{m-1}$ be cyclic sector projections for a tensor $A$.
     The one-site corner-transition letters of
     \cite[Appendix~A]{DeLasCuevas2017Irreducible} are
-    \[
-        A_u^i=P_u A^i P_{u+1},
-    \]
-    with the index $u+1$ taken cyclically modulo~$m$.
+    $A_u^i=P_u A^i P_{u+1}$, with the index $u+1$ taken cyclically
+    modulo~$m$.
 \end{definition}
 
 \begin{definition}[Repeated corner products]
@@ -260,11 +242,12 @@
     \leanok
     \uses{def:periodic_corner_letter}
     For a word $\mathbf i=(i_1,\ldots,i_\ell)$, define
-    \[
+    \begin{align}
         F_u^{\mathbf i}
-        =
+        &=
         A_u^{i_1}A_{u+1}^{i_2}\cdots A_{u+\ell-1}^{i_\ell}.
-    \]
+        \notag
+    \end{align}
     The empty word gives $F_u^\varnothing=P_u$, and a one-letter word gives
     $F_u^{(i)}=A_u^i$. This is the notation of
     \cite[Appendix~A]{DeLasCuevas2017Irreducible}; in the Case~3 contraction
@@ -278,19 +261,16 @@
     \uses{def:periodic_corner_product}
     If the sector maps $P_u$ are orthogonal projections, then for any two
     words $\mathbf i$ and $\mathbf j$,
-    \[
-        F_u^{\mathbf i\mathbf j}
-        =
-        F_u^{\mathbf i}F_{u+|\mathbf i|}^{\mathbf j},
-    \]
-    where indices are taken cyclically modulo~$m$.
+    $F_u^{\mathbf i\mathbf j}
+    =F_u^{\mathbf i}F_{u+|\mathbf i|}^{\mathbf j}$, where indices are taken
+    cyclically modulo~$m$.
 \end{lemma}
 
 \begin{proof}\leanok
     \uses{def:periodic_corner_product}
-    Induct on the word $\mathbf i$.  For the empty word the identity is
+    Induct on the word $\mathbf i$. For the empty word the identity is
     $P_uF_u^{\mathbf j}=F_u^{\mathbf j}$, which follows from the idempotent
-    part of the orthogonal-projection hypothesis.  For a nonempty word, remove
+    part of the orthogonal-projection hypothesis. For a nonempty word, remove
     the first letter and apply the induction hypothesis at the next cyclic
     sector.
 \end{proof}
@@ -302,25 +282,24 @@
     \uses{def:periodic_corner_product, lem:periodic_corner_product_append}
     Let $P_0,\ldots,P_{m-1}$ and $Q_0,\ldots,Q_{m-1}$ be orthogonal projections,
     and suppose the $m$-block product identity
-    \[
+    \begin{align}
         A_u^{i_1}\cdots A_{u+m-1}^{i_m}
-        =
+        &=
         c_u\, B_{u+q}^{i_1}\cdots B_{u+q+m-1}^{i_m}
-    \]
-    holds for every base sector $u$ and every length-$m$ word.  Then for every
+        \notag
+    \end{align}
+    holds for every base sector $u$ and every length-$m$ word. Then for every
     word $W$ of length $km$ with $k\ge1$,
-    \[
-        F_u^{W}=c_u^{\,k}\,\widehat F_{u+q}^{W},
-    \]
-    where $\widehat F$ is the repeated corner product built from $B$.  Each of
-    the $k$ successive length-$m$ blocks is anchored at the same base sector
-    $u$, because a full cycle of unit shifts is trivial, $m\cdot 1=0$ in
-    $\mathbb Z_m$; hence every block contributes the same scalar $c_u$.
+    $F_u^{W}=c_u^{\,k} \widehat F_{u+q}^{W}$, where $\widehat F$ is the
+    repeated corner product built from $B$. Each of the $k$ successive
+    length-$m$ blocks is anchored at the same base sector $u$, because a full
+    cycle of unit shifts is trivial, $m\cdot 1=0$ in $\mathbb Z_m$; hence every
+    block contributes the same scalar $c_u$.
 \end{lemma}
 
 \begin{proof}\leanok
     \uses{lem:periodic_corner_product_append}
-    Induct on $k$.  The base case $k=1$ is the hypothesis.  For the inductive
+    Induct on $k$. The base case $k=1$ is the hypothesis. For the inductive
     step split $W$ into its first length-$m$ block and the remaining length-$km$
     word, apply the concatenation law, and use that the junction shift
     $m\cdot 1=0$ returns to the base sector before applying the block identity
@@ -335,32 +314,37 @@
     Suppose the coefficients $\Omega_{k+1}$ recover each inserted matrix $X_k$
     from the repeated corner product $F_{k+1}$ over length-$L$ words:
     $\sum_{\mathbf j}(\Omega_{k+1}(X_k))_{\mathbf j}\,F_{k+1}^{\mathbf j}=X_k$
-    (\cite[eq.~Omegauprop]{DeLasCuevas2017Irreducible} at $X_k$).  Then for any
+    (\cite[eq.~Omegauprop]{DeLasCuevas2017Irreducible} at $X_k$). Then for any
     sector indices $\sigma$,
-    \[
+    \begin{align}
         \sum_{\boldsymbol\rho}
-        \Bigl(\prod_k (\Omega_{k+1}(X_k))_{\rho_k}\Bigr)
+        \left(\prod_k (\Omega_{k+1}(X_k))_{\rho_k}\right)
         \prod_k A_k^{\sigma_k}\,F_{k+1}^{\rho_k}
-        =
-        \prod_k A_k^{\sigma_k}\,X_k .
-    \]
+        &=
+        \prod_k A_k^{\sigma_k}\,X_k.
+        \notag
+    \end{align}
     Summing the concatenated chain against these coefficients collapses each
-    repeated product $F_{k+1}$ to its inserted matrix $X_k$.  The recovery is
+    repeated product $F_{k+1}$ to its inserted matrix $X_k$. The recovery is
     needed only at the inserted matrices $X_k$, which in the Case-3 contraction
     are the corner-supported tensors that $\Omega_{k+1}$ inverts.
 \end{lemma}
 
 \begin{proof}\leanok
     \uses{def:periodic_corner_product}
-    Expand each $A_k^{\sigma_k}X_k=\sum_{\mathbf j}(\Omega_{k+1}(X_k))_{\mathbf
-    j}\,A_k^{\sigma_k}F_{k+1}^{\mathbf j}$ using the right inverse, apply the
+    Expand each
+    $A_k^{\sigma_k}X_k
+    =\sum_{\mathbf j}(\Omega_{k+1}(X_k))_{\mathbf j}
+    A_k^{\sigma_k}F_{k+1}^{\mathbf j}$ using the right inverse, apply the
     noncommutative distributivity identity
-    \[
-        \prod_k\Bigl(\sum_{\mathbf j} f_{k,\mathbf j}\Bigr)
-        =\sum_{\boldsymbol\rho}\prod_k f_{k,\rho_k},
-    \]
-    and pull the scalar coefficients $\prod_k(\Omega_{k+1}(X_k))_{\rho_k}$ out of
-    each ordered product.
+    \begin{align}
+        \prod_k\left(\sum_{\mathbf j} f_{k,\mathbf j}\right)
+        &=
+        \sum_{\boldsymbol\rho}\prod_k f_{k,\rho_k},
+        \notag
+    \end{align}
+    and pull the scalar coefficients
+    $\prod_k(\Omega_{k+1}(X_k))_{\rho_k}$ out of each ordered product.
 \end{proof}
 
 \begin{lemma}[Inverse cyclic reindexing to the off-diagonal convention]
@@ -370,7 +354,7 @@
     \uses{thm:offdiag_shift_adjoint_cyclic_shift}
     Let $A$ be left-canonical, $\sum_i A_i^\dagger A_i=1$, with orthogonal sector
     projectors $P_k$ satisfying the adjoint shift $\mathcal E^*(P_{k+1})=P_k$,
-    which gives the inverse-indexed grading $P_{k+1}A^i=A^iP_k$.  After the
+    which gives the inverse-indexed grading $P_{k+1}A^i=A^iP_k$. After the
     inverse reindexing $P_k\mapsto P_{-k}$ the projectors satisfy the
     off-diagonal convention $P_{-k}A^i=A^iP_{-(k+1)}$ of
     \cite[eq.~Auprop]{DeLasCuevas2017Irreducible}, under which the
@@ -389,18 +373,21 @@
     Under the off-diagonal convention $P_kA^i=A^iP_{k+1}$, with the $P_k$
     orthogonal projections, the repeated corner-transition product collapses
     through its intermediate projectors:
-    \[
-        F_u^{\mathbf i}=P_u\,A^{\mathbf i}\,P_{u+|\mathbf i|},
-    \]
+    \begin{align}
+        F_u^{\mathbf i}
+        &=
+        P_u\,A^{\mathbf i}\,P_{u+|\mathbf i|},
+        \notag
+    \end{align}
     where $A^{\mathbf i}$ is the ordinary word product and the right projector
     records the accumulated sector offset.
 \end{lemma}
 
 \begin{proof}\leanok
     \uses{def:periodic_corner_product}
-    Induct on the word.  The head junction $P_uA^iP_{u+1}=P_uA^i$ collapses by
-    the shift and idempotency; the induction hypothesis handles the tail, and the
-    accumulated offset realigns.
+    Induct on the word. The head junction $P_uA^iP_{u+1}=P_uA^i$ collapses by
+    the shift and idempotency; the induction hypothesis handles the tail, and
+    the accumulated offset realigns.
 \end{proof}
 
 \begin{lemma}[Blocked letter as a diagonal corner]
@@ -412,9 +399,7 @@
     orthogonal projections, the corner-transition product of a single blocked
     letter is the diagonal blocked corner of
     \cite[eq.~Cu]{DeLasCuevas2017Irreducible}:
-    \[
-        F_u^{(I)}=P_u\,(A^{[m]})^I\,P_u .
-    \]
+    $F_u^{(I)}=P_u\,(A^{[m]})^I\,P_u$.
     Combined with the corner-isomorphism letter identity, this exhibits the
     compressed sector letter as a corner-transition product.
 \end{lemma}
@@ -431,12 +416,9 @@
     \leanok
     The bijection between blocked words of length $L$ over the alphabet of
     $d^m$ blocked letters and single-site words of length $mL$ over the alphabet
-    of $d$ letters,
-    \[
-        [d^m]^L \;\simeq\; [d]^{mL},
-    \]
-    obtained from the iterated blocking bijection.  Here $[q]^r$ denotes the
-    set of words of length $r$ over a $q$-letter alphabet.
+    of $d$ letters, $[d^m]^L\simeq[d]^{mL}$, is obtained from the iterated
+    blocking bijection. Here $[q]^r$ denotes the set of words of length $r$
+    over a $q$-letter alphabet.
 \end{definition}
 
 \begin{lemma}[Flattening bijection agrees with word flattening]
@@ -444,15 +426,15 @@
     \lean{MPSTensor.ofFn_blockFlattenEquiv}
     \leanok
     \uses{def:periodic_block_flatten_equiv}
-    If \(W\in[d^m]^L\) is a blocked word and \(\widehat W\in[d]^{mL}\) is its
-    image under the flattening bijection, then \(\widehat W\) is exactly the
-    concatenation of the \(L\) decoded length-\(m\) blocks of \(W\).
+    If $W\in[d^m]^L$ is a blocked word and $\widehat W\in[d]^{mL}$ is its
+    image under the flattening bijection, then $\widehat W$ is exactly the
+    concatenation of the $L$ decoded length-$m$ blocks of $W$.
 \end{lemma}
 
 \begin{proof}\leanok
     The decoding bijection identifies a word-indexing function with its ordered
     list of letters, and the iterated blocking bijection concatenates the
-    decoded length-\(m\) blocks in order.
+    decoded length-$m$ blocks in order.
 \end{proof}
 
 \begin{lemma}[Corner product of a flattened word]
@@ -462,25 +444,34 @@
     \uses{def:periodic_corner_product, def:periodic_block_flatten_equiv}
     Let $P_k$ be orthogonal projections satisfying the off-diagonal convention
     $P_kA^i=A^iP_{k+1}$, and let $\varphi_k$ be the multiplicative corner
-    isomorphisms with $\varphi_k(\bar A_k^I)=P_k(A^{[m]})^IP_k$.  Then for a
+    isomorphisms with $\varphi_k(\bar A_k^I)=P_k(A^{[m]})^IP_k$. Then for a
     nonempty blocked word $W$, with flattening $\widehat W$, the
     corner-transition product is the corner image of the word evaluation,
-    \[
-        F_k^{\widehat W}=\varphi_k\bigl(\bar A_k^{\,W}\bigr),
-    \]
+    \begin{align}
+        F_k^{\widehat W}
+        &=
+        \varphi_k(\bar A_k^{\,W}),
+        \notag
+    \end{align}
     the content of \cite[eq.~Fu]{DeLasCuevas2017Irreducible} read through
     $\varphi$.
 \end{lemma}
 
 \begin{proof}\leanok
     \uses{lem:periodic_cornerprod_blockdiag}
-    Induct on $W$.  The head blocked letter collapses by the blocked-letter
-    diagonal corner to $\varphi_k(\bar A_k^I)$, and multiplicativity of $\varphi$
-    reassembles the letters:
-    \[
-        F_k^{\widehat W}=\prod_{I\in W}\varphi_k(\bar A_k^I)
-            =\varphi_k\Bigl(\prod_{I\in W}\bar A_k^I\Bigr)=\varphi_k(\bar A_k^{\,W}).
-    \]
+    Induct on $W$. The head blocked letter collapses by the blocked-letter
+    diagonal corner to $\varphi_k(\bar A_k^I)$, and multiplicativity of
+    $\varphi$ reassembles the letters:
+    \begin{align}
+        F_k^{\widehat W}
+        &=
+        \prod_{I\in W}\varphi_k(\bar A_k^I)
+        =
+        \varphi_k\left(\prod_{I\in W}\bar A_k^I\right)
+        =
+        \varphi_k(\bar A_k^{\,W}).
+        \notag
+    \end{align}
     The empty word is excluded so the induction stays inside the corner.
 \end{proof}
 
@@ -491,14 +482,17 @@
     \uses{lem:periodic_cornerprod_flatten,
         lem:periodic_block_flatten_word_compat}
     From a sector right inverse $\Omega$ recovering every sector word product
-    $\bar A_k^{\,W}$ over blocked words $W\in[d^m]^L$ with \(L>0\)
+    $\bar A_k^{\,W}$ over blocked words $W\in[d^m]^L$ with $L>0$
     (\cite[eq.~Omegauprop]{DeLasCuevas2017Irreducible}) one obtains an ambient
-    corner right inverse $\hat\Omega$ over single-site words of length \(mL\):
-    for every corner-supported $Y$ (that is $P_kYP_k=Y$),
-    \[
+    corner right inverse $\hat\Omega$ over single-site words of length $mL$.
+    For every corner-supported $Y$, that is, $P_kYP_k=Y$,
+    \begin{align}
         \sum_{\mathbf j\in[d]^{mL}}
-            (\hat\Omega_k(Y))_{\mathbf j}\,F_k^{\mathbf j}=Y .
-    \]
+            (\hat\Omega_k(Y))_{\mathbf j}\,F_k^{\mathbf j}
+        &=
+        Y.
+        \notag
+    \end{align}
 \end{lemma}
 
 \begin{proof}\leanok
@@ -507,12 +501,18 @@
     Set $\hat\Omega_k(Y)=\Omega_k(\varphi_k^{-1}(Y))$ for corner-supported $Y$.
     Applying $\varphi_k$ to the sector recovery and using the corner product of a
     flattened word,
-    \[
+    \begin{align}
         \sum_{W}(\hat\Omega_k(Y))_{\widehat W}\,F_k^{\widehat W}
-        =\varphi_k\Bigl(\sum_{W}\bigl(\Omega_k(\varphi_k^{-1}(Y))\bigr)_{W}\,
-            \bar A_k^{\,W}\Bigr)
-        =\varphi_k\bigl(\varphi_k^{-1}(Y)\bigr)=Y .
-    \]
+        &=
+        \varphi_k\Bigl(        \sum_{W}(\Omega_k(\varphi_k^{-1}(Y)))_{W}
+            \bar A_k^{\,W}
+        \Bigr)
+        =
+        \varphi_k(\varphi_k^{-1}(Y))
+        =
+        Y.
+        \notag
+    \end{align}
 \end{proof}
 
 \begin{lemma}[Sector contraction]
@@ -522,12 +522,16 @@
     \uses{lem:periodic_ambient_corner_inverse, lem:periodic_corner_contraction}
     Feeding the ambient corner right inverse into the right-inverse contraction
     yields the contracted product-tensor identity
-    \cite[eq.~resultprop]{DeLasCuevas2017Irreducible}: for corner-supported
+    \cite[eq.~resultprop]{DeLasCuevas2017Irreducible}. For corner-supported
     inserted matrices $X_k$,
-    \[
-        \sum_{\boldsymbol\rho}\Bigl(\prod_k(\hat\Omega_{k+1}(X_k))_{\rho_k}\Bigr)
-        \prod_k A_k^{\sigma_k}F_{k+1}^{\rho_k}=\prod_k A_k^{\sigma_k}X_k .
-    \]
+    \begin{align}
+        \sum_{\boldsymbol\rho}
+        \left(\prod_k(\hat\Omega_{k+1}(X_k))_{\rho_k}\right)
+        \prod_k A_k^{\sigma_k}F_{k+1}^{\rho_k}
+        &=
+        \prod_k A_k^{\sigma_k}X_k.
+        \notag
+    \end{align}
 \end{lemma}
 
 \begin{proof}\leanok
