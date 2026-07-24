@@ -4,7 +4,8 @@ This inventory records every drawing block headed by a nonempty `%%`,
 `%%%`, or `%%%%` label in the Section II--V author files. A block starts at
 its outermost consecutive label and ends at the last source line before the
 next labelled drawing. Consecutive heading and panel labels, such as
-`Figure 8` and `(a1)`, form one block. TeX commands commented with doubled
+`Figure 8` and `(a1)`, form one block; doubled-percent picture-style setup
+between them does not split the block. TeX commands commented with doubled
 percent signs and empty separator comments are not labels.
 
 Ownership means that at least one `author_lines` interval in

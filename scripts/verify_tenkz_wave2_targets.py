@@ -35,6 +35,15 @@ NON_LABEL_PREFIXES = (
     "transform shape",
     "font=",
 )
+GROUP_SEPARATOR_PREFIXES = (
+    "\\tikzset{",
+    "}",
+    "every picture/.style",
+    "baseline=",
+    "scale=",
+    "transform shape",
+    "font=",
+)
 
 
 def main() -> int:
@@ -127,7 +136,11 @@ def main() -> int:
             if label_groups:
                 previous_label = label_groups[-1][-1]
                 between = lines[previous_label : line_number - 1]
-                if all(not item.strip().lstrip("%").strip() for item in between):
+                contents = [item.strip().lstrip("%").strip() for item in between]
+                if all(
+                    not content or content.startswith(GROUP_SEPARATOR_PREFIXES)
+                    for content in contents
+                ):
                     label_groups[-1].append(line_number)
                     continue
             label_groups.append([line_number])
