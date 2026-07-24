@@ -53,7 +53,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:kadison_schwarz_2positive}
+    \uses{thm:kadison_schwarz}
     Since $\pi_{\mathcal B}\iota_{\mathcal B}=\id_{\mathcal B}$,
     \begin{align}
         \widehat S\,\widehat T
@@ -150,8 +150,7 @@
     \label{thm:direct_sum_inverse_cptp_block_matching}
     \lean{Matrix.exists_blockEquiv_dim_eq_of_mutual_inverse_kraus_direct_sum_maps}
     \leanok
-    \uses{thm:direct_sum_inverse_cptp_star_equiv,
-        thm:dim_preserved}
+    \uses{thm:direct_sum_inverse_cptp_star_equiv}
     Let $\{D_i\}_{i\in I}$ and $\{E_j\}_{j\in J}$ be positive integers, and
     set
     \begin{align}
@@ -184,13 +183,20 @@
 
 \begin{proof}
     \leanok
-    \uses{thm:direct_sum_inverse_cptp_star_equiv,
-        thm:dim_preserved}
+    \uses{thm:direct_sum_inverse_cptp_star_equiv}
     By Theorem~\ref{thm:direct_sum_inverse_cptp_star_equiv}, the rectangular
-    trace adjoints determine a star-algebra isomorphism between
-    $\mathcal A$ and $\mathcal B$. Theorem~\ref{thm:dim_preserved} applied to
-    this isomorphism gives the equivalence~$\sigma$, proves that it carries
-    $I_i$ onto $J_{\sigma(i)}$, and gives
+    trace adjoints determine a star-algebra isomorphism
+    $\Phi:\mathcal A\simeq\mathcal B$. This isomorphism permutes the minimal
+    nonzero central idempotents, and hence induces an equivalence
+    $\sigma:I\simeq J$ with $\Phi(I_i)=J_{\sigma(i)}$. The restriction of
+    $\Phi$ to these ideals is a complex-linear bijection
+    \begin{align}
+        \MN{D_i}
+        &\simeq \MN{E_{\sigma(i)}}.
+        \notag
+    \end{align}
+    Comparing complex dimensions gives $D_i^2=E_{\sigma(i)}^2$. Since all
+    block dimensions are positive, $D_i=E_{\sigma(i)}$, which proves
     (\ref{eq:spectral_ds_block_matching}).
 \end{proof}
 
@@ -241,8 +247,7 @@
 
 \begin{proof}\leanok
     \uses{thm:unitary_skolem_noether_matrix,
-        thm:direct_sum_inverse_cptp_star_equiv,
-        thm:dim_preserved}
+        thm:direct_sum_inverse_cptp_star_equiv}
     The restriction of $\Phi$ to a matched block is a star-algebra
     isomorphism. After reindexing by $D_i=E_{\sigma(i)}$, it is an
     automorphism of a full complex matrix algebra. Skolem--Noether writes
