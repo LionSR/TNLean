@@ -1748,10 +1748,17 @@
 \cs_new_protected:Npn \tenkz_model_derive_closures:
   {
     \prop_clear:N \l__tenkz_cuprow_prop
+    % frame=vertical prunes cups, physical traces, and pair-trace loops at
+    % draw start; deriving their records here would hand the record-driven
+    % passes ink the prune no longer guards.  Skip the derivations; the
+    % booleans and props stay set so the prune's legacy warnings still fire.
+    \bool_if:NF \l__tenkz_vertical_bool
+      {
     \bool_if:NT \l__tenkz_closew_bool
       { \tenkz_model_derive_cups_side:nnN {west}{first} \l__tenkz_closewmat_tl }
     \bool_if:NT \l__tenkz_closee_bool
       { \tenkz_model_derive_cups_side:nnN {east}{last} \l__tenkz_closeemat_tl }
+      }
     % the periodic wrap runs when BOTH side policies say trace; the style
     % (racetrack|hooks) is presentation and resolves at draw
     \str_if_eq:VnT \l__tenkz_westpol_tl {trace}
@@ -1768,7 +1775,8 @@
       }
     % physical trace loops (trace=physical): single-row words only; the
     % multirow warning stays with the draw pass
-    \bool_if:NT \l__tenkz_ptrace_bool
+    \bool_lazy_and:nnT
+      { ! \l__tenkz_vertical_bool } { \l__tenkz_ptrace_bool }
       {
         \int_compare:nNnT { \l__tenkz_nrows_int } = {1}
           {
@@ -1790,19 +1798,22 @@
           }
       }
     % pair trace loops (trace= cell-sets over ket/bra pairs)
-    \int_step_inline:nn { \l__tenkz_nrows_int }
+    \bool_if:NF \l__tenkz_vertical_bool
       {
-        \int_step_inline:nnn {1} { \l__tenkz_ncols_int }
+        \int_step_inline:nn { \l__tenkz_nrows_int }
           {
-            \prop_if_in:NeT \l__tenkz_trcell_prop {##1-####1}
+            \int_step_inline:nnn {1} { \l__tenkz_ncols_int }
               {
-                \tenkz_leg_candidate:nnT {##1}{####1}
+                \prop_if_in:NeT \l__tenkz_trcell_prop {##1-####1}
                   {
-                    \tenkz_leg_candidate:nnT { \int_eval:n{##1+1} }{####1}
+                    \tenkz_leg_candidate:nnT {##1}{####1}
                       {
-                        \__tenkz_model_record_wire:e
-                          {kind={index},origin={pairtrace},
-                           row={\int_eval:n{##1}},col={####1}}
+                        \tenkz_leg_candidate:nnT { \int_eval:n{##1+1} }{####1}
+                          {
+                            \__tenkz_model_record_wire:e
+                              {kind={index},origin={pairtrace},
+                               row={\int_eval:n{##1}},col={####1}}
+                          }
                       }
                   }
               }
