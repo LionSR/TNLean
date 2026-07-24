@@ -277,3 +277,5 @@ xyz_a_planes.tex	standalone	tests/tenkz/xyz_a_planes.tex	compiles, emits tnlog, 
 xyz_test.tex	standalone	tests/tenkz/xyz_test.tex	compiles, emits tnlog, and passes tenkz_audit
 zz_edgeprobe.tex	standalone	tests/tenkz/zz_edgeprobe.tex	compiles, emits tnlog, and passes tenkz_audit
 zz_siteprobe.tex	standalone	tests/tenkz/zz_siteprobe.tex	compiles, emits tnlog, and passes tenkz_audit
+zz_vertprune.tex	standalone	tests/tenkz/zz_vertprune.tex	compiles, emits tnlog, and passes tenkz_audit
+zz_wirescan.tex	standalone	tests/tenkz/zz_wirescan.tex	compiles, emits tnlog, and passes tenkz_audit
