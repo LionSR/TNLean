@@ -23,6 +23,8 @@
   { [TKZ-METRIC-UNKNOWN]~no~metric~entry~named~'#1' }
 \msg_new:nnn {tenkz}{metric-redeclared}
   { [TKZ-METRIC-REDECLARED]~metric~entry~'#1'~already~exists }
+\msg_new:nnn {tenkz}{metric-legacy-kind}
+  { [TKZ-METRIC-LEGACY-KIND]~length~metric~'#1'~has~a~ratio-style~legacy~macro }
 \msg_new:nnnn {tenkz}{metric-drift}
   { [TKZ-METRIC-DRIFT]~registry~'#1'~and~its~legacy~macro~disagree }
   { Registry~value~#2;~legacy~value~#3.~One~truth,~two~spellings:~fix~one. }
@@ -34,10 +36,21 @@
     \prop_gput:Nnn \g__tenkz_metric_value_prop {#2} {#3}
     \prop_gput:Nnn \g__tenkz_metric_kind_prop  {#2} {#1}
     \prop_gput:Nnn \g__tenkz_metric_why_prop   {#2} {#4}
-    % A registry-first entry mints its legacy spelling; a legacy-first
-    % entry keeps its \def and the drift assertion holds the two equal.
-    \cs_if_exist:cF { tenkz@r@#2 }
-      { \cs_new:cpn { tenkz@r@#2 } {#3} }
+    % A registry-first entry mints the kind-correct legacy spelling; a
+    % legacy-first entry keeps its \def and the drift assertion holds the
+    % two equal.  Ratios use \tenkz@r@<name>; absolute lengths use
+    % \tenkz@<name> and must never acquire the ratio spelling.
+    \str_if_eq:nnTF {#1} {ratio}
+      {
+        \cs_if_exist:cF { tenkz@r@#2 }
+          { \cs_new:cpn { tenkz@r@#2 } {#3} }
+      }
+      {
+        \cs_if_exist:cF { tenkz@#2 }
+          { \cs_new:cpn { tenkz@#2 } {#3} }
+        \cs_if_exist:cT { tenkz@r@#2 }
+          { \msg_error:nnn {tenkz}{metric-legacy-kind} {#2} }
+      }
   }
 \cs_new_protected:Npn \__tenkz_metric_declare:nnn #1#2#3
   { \__tenkz_metric_declare_aux:nnnn {ratio} {#1} {#2} {#3} }

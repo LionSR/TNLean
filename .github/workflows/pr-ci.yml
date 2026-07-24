@@ -36,6 +36,10 @@ on:
       - 'scripts/blueprint_lean_sync.py'
       - 'scripts/check_reader_facing_prose.py'
       - 'scripts/tenkz_audit.py'
+      - 'scripts/tenkz_rmp.py'
+      - 'scripts/tenkzlib/**'
+      - 'scripts/tenkz_manual_doctest.py'
+      - 'scripts/test_tenkz_manual_doctest.py'
       - 'scripts/tenkz_language.py'
       - 'scripts/tenkz_shrink.py'
       - 'scripts/test_tenkz_shrink.py'
@@ -55,6 +59,8 @@ on:
       - 'scripts/test_tenkz_peps_torus.py'
       - 'scripts/test_tenkz_index_routing.py'
       - 'scripts/test_tenkz_tree.py'
+      - 'scripts/test_tnlog.py'
+      - 'scripts/test_texcase.py'
   pull_request:
     types: [opened, synchronize, reopened]
     paths:
@@ -84,6 +90,10 @@ on:
       - 'scripts/blueprint_lean_sync.py'
       - 'scripts/check_reader_facing_prose.py'
       - 'scripts/tenkz_audit.py'
+      - 'scripts/tenkz_rmp.py'
+      - 'scripts/tenkzlib/**'
+      - 'scripts/tenkz_manual_doctest.py'
+      - 'scripts/test_tenkz_manual_doctest.py'
       - 'scripts/tenkz_language.py'
       - 'scripts/tenkz_shrink.py'
       - 'scripts/test_tenkz_shrink.py'
@@ -103,6 +113,8 @@ on:
       - 'scripts/test_tenkz_peps_torus.py'
       - 'scripts/test_tenkz_index_routing.py'
       - 'scripts/test_tenkz_tree.py'
+      - 'scripts/test_tnlog.py'
+      - 'scripts/test_texcase.py'
   workflow_dispatch:
 
 concurrency:
@@ -167,6 +179,8 @@ jobs:
               - 'scripts/blueprint_bibtex.py'
               - 'scripts/check_reader_facing_prose.py'
               - 'scripts/tenkz_audit.py'
+              - 'scripts/tenkz_rmp.py'
+              - 'scripts/tenkzlib/**'
               - 'scripts/tenkz_language.py'
               - 'scripts/tenkz_shrink.py'
               - 'scripts/test_tenkz_shrink.py'
@@ -181,10 +195,18 @@ jobs:
               - 'scripts/test_tenkz_peps_torus.py'
               - 'scripts/test_tenkz_index_routing.py'
               - 'scripts/test_tenkz_tree.py'
+              - 'scripts/test_tnlog.py'
+              - 'scripts/test_texcase.py'
             corpus:
               - 'tex/tenkz/**'
               - 'tests/tenkz/**'
+              - 'docs/tenkz/chapters2/**'
+              - 'docs/tenkz/manual2.tex'
+              - 'docs/tenkz/tenkzmanual2.sty'
+              - 'scripts/tenkz_manual_doctest.py'
+              - 'scripts/test_tenkz_manual_doctest.py'
               - 'scripts/tenkz_audit.py'
+              - 'scripts/tenkzlib/**'
               - 'scripts/tenkz_corpus.sh'
               - 'scripts/tenkz_golden.sh'
               - 'scripts/tenkz_render_corpus.py'
@@ -198,6 +220,7 @@ jobs:
               - 'scripts/tenkz_language.py'
               - 'scripts/tenkz_lint.py'
               - 'scripts/tenkz_shrink.py'
+              - 'scripts/tenkzlib/**'
               - 'scripts/test_tenkz_shrink.py'
             workflow:
               - '.github/workflows/pr-ci.yml'
@@ -259,8 +282,14 @@ jobs:
       - name: Test tenkz render baseline replacement
         run: python3 scripts/test_tenkz_corpus_render.py
 
+      - name: Test tenkz manual extraction and reference coverage
+        run: python3 scripts/test_tenkz_manual_doctest.py
+
       - name: Install TeX dependencies
         uses: texra-ai/lean-env-action/blueprint-system-deps@v1
+
+      - name: Compile tenkz manual examples standalone
+        run: python3 scripts/tenkz_manual_doctest.py
 
       - name: Compile and audit tenkz corpus
         run: TENKZ_CORPUS_JOBS=4 scripts/tenkz_corpus.sh
@@ -447,6 +476,12 @@ jobs:
             'docs/tenkz/chapters2/*.tex' \
             'docs/slides/*.tex' \
             'tex/tenkz/examples/*.tex'
+
+      - name: Test shared tenkz parsers
+        if: env.TEX_CHANGED == 'true'
+        run: |
+          python3 scripts/test_tnlog.py
+          python3 scripts/test_texcase.py
 
       # Build the root manual as well as its input chapters.  This is the
       # syntax gate for manual2.tex, tenkzmanual2.sty, and the expl3 package

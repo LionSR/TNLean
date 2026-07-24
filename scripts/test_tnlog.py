@@ -1,0 +1,79 @@
+#!/usr/bin/env python3
+"""Focused contract tests for the shared tenkz event parser."""
+
+from tenkz_audit import Event as AuditEvent
+from tenkz_audit import FIELD_VALIDATORS as AUDIT_FIELD_VALIDATORS
+from tenkz_audit import Picture as AuditPicture
+from tenkz_audit import parse_log as audit_parse_log
+from tenkzlib.tnlog import Event, FIELD_VALIDATORS, Picture, parse_log
+
+
+def main() -> int:
+    hard: list[tuple[str, str, str]] = []
+    advisory: list[tuple[str, str, str]] = []
+    parsed = parse_log(
+        "\n".join(
+            (
+                "picture|id=1|lang=grid",
+                "atom|picture=1|cell=1-2|name=A|kind=tensor",
+                "bond|picture=1|row=1|from=2|to=3|dir=none",
+                "boundary|picture=1|virtual-west=1|virtual-east=2|"
+                "physical-up=3|physical-down=4",
+                "tree|picture=0|id=1|style=wire|leaves=2|vertices=1|"
+                "topology=(1,2)|role=none|species=plain",
+            )
+        ),
+        source_name="case.tnlog",
+        known_langs={"grid"},
+        hard=lambda *finding: hard.append(finding),
+        advisory=lambda *finding: advisory.append(finding),
+    )
+    assert not hard
+    assert not advisory
+    assert [event.kind for event in parsed.events] == [
+        "picture",
+        "atom",
+        "bond",
+        "boundary",
+        "tree",
+    ]
+    assert len(parsed.pictures) == 1
+    picture = parsed.pictures[0]
+    assert picture is parsed.by_id[1]
+    assert [event.kind for event in picture.content()] == ["atom", "bond"]
+    assert picture.boundary() == (1, 2, 3, 4)
+    assert picture.ncols() == 3
+
+    malformed: list[tuple[str, str, str]] = []
+    notes: list[tuple[str, str, str]] = []
+    parse_log(
+        "\n".join(
+            (
+                "picture|id=1|lang=future",
+                "picture|id=1|lang=grid",
+                "atom|picture=oops|cell=1-1|name=A|kind=tensor",
+                "mystery|picture=2|bare",
+            )
+        ),
+        source_name="bad.tnlog",
+        known_langs={"grid"},
+        hard=lambda *finding: malformed.append(finding),
+        advisory=lambda *finding: notes.append(finding),
+    )
+    assert {finding[0] for finding in malformed} == {
+        "duplicate-picture",
+        "malformed-event",
+        "dangling-picture-ref",
+    }
+    assert {finding[0] for finding in notes} == {"unknown-event", "unknown-lang"}
+
+    assert AuditEvent is Event
+    assert AuditPicture is Picture
+    assert AUDIT_FIELD_VALIDATORS is FIELD_VALIDATORS
+    assert audit_parse_log is parse_log
+    print("tnlog: typed parsing, diagnostics, picture grouping, and shims passed")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

@@ -174,6 +174,137 @@ enforced by the dedicated `Blueprint Sync & Prose Review` CI workflow.
   section would contain only one subsection, promote that subsection to a
   section or remove the unnecessary subdivision.
 
+### Main narrative and technical appendices
+
+The blueprint has two simultaneous obligations: its main chapters must read as
+mathematics, and the complete document must retain the technical results that
+connect that mathematics to the formalization. Satisfy both obligations by
+keeping the mathematical narrative in the main chapters and collecting genuinely
+technical complements in appendices at the end of the document.
+
+#### What remains in the main chapters
+
+1. Every theorem, lemma, proposition, or definition that is named in the primary
+   paper or mathematical notes remains in the main text. Substantial new
+   mathematical results introduced by the project also remain there.
+2. Each retained result has a genuine mathematical proof or proof sketch. A
+   proof consisting only of “see Appendix” is not acceptable.
+3. A proof sketch states the central construction, the main implication or
+   equations, the order of the argument, and why the hypotheses suffice. It
+   identifies the precise technical points deferred to the appendices and cites
+   their labels.
+4. Definitions and notation needed to understand a result appear before their
+   first use. They are not deferred merely because their formal definitions are
+   verbose.
+5. A conceptually important intermediate lemma may remain in the main text even
+   when it is not named in the source. Reader comprehension, not only the
+   explicit `\uses` graph, determines whether a result belongs to the narrative.
+
+A suitable main-text proof sketch has the following form:
+
+```latex
+\begin{proof}
+    Normalize the faithful fixed point and decompose its support into minimal
+    invariant components. Perron--Frobenius theory gives a positive gauge on
+    each component, and a common blocking length removes the residual periods.
+    The resulting tensor is therefore a weighted direct sum of primitive
+    left-canonical blocks. Lemma~\ref{lem:app_support_compression} proves that
+    the support reduction preserves the matrix product vectors, while
+    Proposition~\ref{prop:app_common_blocking} supplies the common blocking
+    length.
+\end{proof}
+```
+
+This sketch explains why the result is true and tells the reader exactly what
+is verified later. Do not replace it by a vague reference to an entire appendix.
+
+#### What may move to a technical appendix
+
+Technical appendices may contain intermediate results introduced to manage
+support restrictions, casts, reindexings, common dimensions, preservation under
+standard constructions, routine matrix identities, and other detailed steps
+that do not carry the main mathematical narrative. Long proof expansions may
+also move when the main chapter retains the theorem, its proof mechanism, and
+precise references to the deferred ingredients.
+
+Do not move a result merely because Lean needs it. Do not move source-named
+results, central constructions, or hypotheses needed to understand later
+chapters. Before relocation, check both the transitive `\uses` graph and ordinary
+`\ref` references, then read the surrounding mathematics to detect expository
+dependencies that are not encoded in the graph.
+
+#### Write appendices as mathematical appendices
+
+An appendix is not a dump of Lean declarations or a transcription of a source
+file. It must read like an appendix written by a mathematician:
+
+1. Organize it by mathematical subject, not by Lean namespace, module, proof
+   tactic, or implementation task. Use titles such as “Support compression in
+   canonical reduction,” not “Auxiliary helpers” or “Lean details.”
+2. Begin each appendix or section with a short statement of its purpose and the
+   main results it supports, with backward references to those results.
+3. Introduce notation before use and give enough local context that the argument
+   can be read without reconstructing the main proof from the formal code.
+4. State results at their natural mathematical level. Group immediate
+   projections, equivalent formulations, and bookkeeping variants under the
+   substantive parent entry according to the display hierarchy below.
+5. Give complete mathematical proofs with the important equations visible.
+   Explain the reason for a support restriction, reindexing, or preservation
+   step; do not narrate tactics or type-checking operations.
+6. End a technical chain by stating explicitly which step of the main theorem it
+   supplies. Use exact theorem and lemma references in both directions.
+7. Preserve useful existing labels when moving material. Labels are global, so
+   forward references from a main chapter to an appendix are valid after the
+   normal repeated LaTeX compilation.
+
+For example, an appendix section should open along the following lines:
+
+```latex
+\section{Support compression in canonical reduction}
+\label{sec:app_canonical_support}
+
+This section proves the support and reindexing results used in
+Theorem~\ref{thm:canonical_block_decomposition}. The main proof explains the
+irreducible decomposition; here we verify that each support reduction preserves
+the associated matrix product vectors.
+```
+
+#### Full and Fundamental-Theorem/SPT builds
+
+The repository maintains two reader-facing builds from one source of truth:
+
+- the complete blueprint, routed by `content.tex` and built from `print.tex`;
+- the focused Fundamental-Theorem/SPT volume, routed by `content_ft_mps.tex` and
+  built from `print_ft_mps.tex` (or the repository build script documented
+  below).
+
+The focused volume contains the main Fundamental-Theorem and symmetry/string-
+order/SPT chapters together with all technical appendices needed by those
+chapters. The complete blueprint contains the same files and adds the later
+chapters and their technical complements. Never duplicate theorem text or
+maintain build-specific copies of an appendix.
+
+Appendices occur after the main chapters in both builds. Shared FT/SPT appendix
+files must be included by both content routers, directly or through a common
+appendix manifest. An FT/SPT main chapter may refer only to material included in
+the focused build; this reference closure must be checked independently of the
+complete build. Later chapters may use additional appendices present only in the
+complete blueprint.
+
+Every relocation must therefore pass all of the following checks:
+
+1. the named mathematical result and an informative proof sketch remain in the
+   main chapter;
+2. every deferred technical claim is cited by an exact label;
+3. the appendix gives a coherent, complete mathematical treatment and refers
+   back to the main result it supports;
+4. labels, `\lean` tags, `\leanok`, `\uses`, citations, and theorem hypotheses
+   remain faithful;
+5. both the complete build and the focused Fundamental-Theorem/SPT build compile
+   repeatedly with no new unresolved references;
+6. the blueprint web build and declaration synchronization introduce no new
+   failures.
+
 ### Display hierarchy for formal declarations
 
 The blueprint is a mathematical document, not an inventory containing one

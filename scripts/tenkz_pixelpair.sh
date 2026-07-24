@@ -9,11 +9,17 @@
 #
 # Usage: scripts/tenkz_pixelpair.sh <base-commit-ish>
 # Env:   TENKZ_CORPUS_JOBS  parallel compiles (default 8, positive integer)
+#
+# The base package must support the public syntax used by the renderer-only
+# manifest at tests/tenkz/pixelpair-sources.txt.  Comparing against a ref older
+# than that syntax fails during compilation rather than reporting a pixel diff;
+# use a manifest whose fixtures are compatible with both package revisions.
 set -euo pipefail
 
 SCRIPT_DIR="$(CDPATH='' cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 REPO="$(CDPATH='' cd -- "$SCRIPT_DIR/.." && pwd)"
 BASE_REF="${1:?usage: tenkz_pixelpair.sh <base-commit-ish>}"
+PAIR_MANIFEST="$REPO/tests/tenkz/pixelpair-sources.txt"
 JOBS=${TENKZ_CORPUS_JOBS:-8}
 if [[ ! "$JOBS" =~ ^[1-9][0-9]*$ ]]; then
   echo "FAIL: TENKZ_CORPUS_JOBS must be a positive integer, got '$JOBS'" >&2
@@ -23,6 +29,8 @@ for command in timeout xelatex pdftoppm; do
   command -v "$command" >/dev/null \
     || { echo "FAIL: $command not found" >&2; exit 1; }
 done
+[[ -s "$PAIR_MANIFEST" ]] \
+  || { echo "FAIL: missing pixelpair source manifest" >&2; exit 1; }
 
 WORK="$(mktemp -d "${TMPDIR:-/tmp}/tenkz-pixelpair-XXXXXX")"
 BASE_TREE="$WORK/base-tree"
@@ -34,10 +42,20 @@ git -C "$REPO" worktree add --detach --quiet "$BASE_TREE" "$BASE_REF"
 cleanup_worktree() { git -C "$REPO" worktree remove --force "$BASE_TREE" 2>/dev/null || true; }
 trap 'cleanup_worktree; rm -rf "$WORK"' EXIT
 
-render_side() { # $1 tree root, $2 output dir
+render_side() { # $1 package tree root, $2 output dir
   local root="$1" out="$2" src stem
   mkdir -p "$out/pdf" "$out/png" "$out/src"
-  cp -R "$root/tests/tenkz/." "$out/src/"
+  # Both package trees consume the same current renderer-only fixtures.  Keep
+  # model-validation probes out: their assertions can require fields an older
+  # package does not yet expose, obscuring the pixel comparison.
+  while IFS= read -r src; do
+    [[ -z "$src" || "$src" == \#* ]] && continue
+    [[ "$src" == *.tex && "$src" != */* ]] \
+      || { echo "FAIL: invalid pixelpair source '$src'" >&2; exit 1; }
+    [[ -f "$REPO/tests/tenkz/$src" ]] \
+      || { echo "FAIL: missing pixelpair source '$src'" >&2; exit 1; }
+    cp "$REPO/tests/tenkz/$src" "$out/src/$src"
+  done <"$PAIR_MANIFEST"
   ( CDPATH='' cd -- "$out/src"
     find . -maxdepth 1 -name '*.tex' -print0 | LC_ALL=C sort -z >sources.list
     [[ -s sources.list ]] \

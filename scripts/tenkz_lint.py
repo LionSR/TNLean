@@ -51,6 +51,7 @@ from pathlib import Path
 
 from tenkz_audit import ENVIRONMENT_LANGS
 from tenkz_language import load_registry, parse_status
+from tenkzlib.texcase import match_group, scan_constructs, strip_comments
 
 # Bodies scanned for the dots rule: the grid languages whose cells feed
 # the implicit wire.  (tenkzcd cells are math objects and tenkzfree has
@@ -114,50 +115,6 @@ class Finding:
     reason: str = ""
 
 
-def strip_comments(src: str) -> str:
-    """Blank out unescaped `%`-comments, preserving offsets/line numbers."""
-    out: list[str] = []
-    for line in src.split("\n"):
-        buf = list(line)
-        i = 0
-        while i < len(buf):
-            if buf[i] == "\\":
-                i += 2
-                continue
-            if buf[i] == "%":
-                for j in range(i, len(buf)):
-                    buf[j] = " "
-                break
-            i += 1
-        out.append("".join(buf))
-    return "\n".join(out)
-
-
-def _match_group(src: str, i: int, open_ch: str, close_ch: str) -> int:
-    """Offset one past the group opening at `src[i]`, brace-aware: a `]`
-    inside `{...}` does not close a `[...]` group.  Works for both brace
-    and bracket groups.  Returns -1 if unbalanced."""
-    depth_group = 0
-    depth_brace = 0
-    while i < len(src):
-        c = src[i]
-        if c == "\\":
-            i += 2
-            continue
-        if c == open_ch and (open_ch == "{" or depth_brace == 0):
-            depth_group += 1
-        elif c == close_ch and (close_ch == "}" or depth_brace == 0):
-            depth_group -= 1
-            if depth_group == 0:
-                return i + 1
-        elif c == "{":
-            depth_brace += 1
-        elif c == "}":
-            depth_brace -= 1
-        i += 1
-    return -1
-
-
 @dataclass
 class Body:
     name: str
@@ -165,52 +122,13 @@ class Body:
     text: str
 
 
-def _find_env_end(src: str, name: str, pos: int) -> "re.Match[str] | None":
-    """Match of the `\\end{name}` closing the `\\begin{name}` whose body
-    starts at `pos`, depth-counting nested same-name environments so an
-    inner `\\end` never closes the outer body.  None if unclosed."""
-    token_re = re.compile(r"\\(begin|end)\{" + re.escape(name) + r"\}")
-    depth = 1
-    for tok in token_re.finditer(src, pos):
-        depth += 1 if tok.group(1) == "begin" else -1
-        if depth == 0:
-            return tok
-    return None
-
-
 def scan_bodies(src: str) -> list[Body]:
     """tenkz-family bodies in a comment-stripped source: environment
     bodies (options group excluded) and balanced `\\tnpic` arguments."""
-    bodies: list[Body] = []
-    env_re = re.compile(r"\\begin\{(tenkz(?:cd|lattice|free|planes)?)\}")
-    for m in env_re.finditer(src):
-        name = m.group(1)
-        end_m = _find_env_end(src, name, m.end())
-        body_start = m.end()
-        if src[body_start:body_start + 1] == "[":
-            closed = _match_group(src, body_start, "[", "]")
-            if closed != -1:
-                body_start = closed
-        body_end = end_m.start() if end_m else len(src)
-        bodies.append(Body(name, body_start, src[body_start:body_end]))
-    for m in re.finditer(r"\\tnpic\b", src):
-        i = m.end()
-        while i < len(src) and src[i] in " \t\n":
-            i += 1
-        if src[i:i + 1] == "[":
-            closed = _match_group(src, i, "[", "]")
-            if closed == -1:
-                continue
-            i = closed
-            while i < len(src) and src[i] in " \t\n":
-                i += 1
-        if src[i:i + 1] != "{":
-            continue
-        closed = _match_group(src, i, "{", "}")
-        if closed == -1:
-            continue
-        bodies.append(Body("tnpic", i + 1, src[i + 1:closed - 1]))
-    return bodies
+    return [
+        Body(construct.name, construct.body_start, construct.body)
+        for construct in scan_constructs(src)
+    ]
 
 
 def mask_option_groups(body: str) -> str:
@@ -224,7 +142,7 @@ def mask_option_groups(body: str) -> str:
             i += 2
             continue
         if c == "[":
-            closed = _match_group(body, i, "[", "]")
+            closed = match_group(body, i, "[", "]")
             if closed == -1:
                 break
             for j in range(i, closed):

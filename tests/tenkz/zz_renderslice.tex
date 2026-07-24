@@ -68,11 +68,14 @@
           }
       }
       {
-        \int_compare:nNnF {\l_tmpa_int} = {0}
+        \int_set:Nn \l_tmpb_int
+          { \int_compare:nNnTF {\g__tenkz_test_picture_int} = {4} {1}{0} }
+        \int_compare:nNnF {\l_tmpa_int} = {\l_tmpb_int}
           {
             \PackageError{tenkz-test}
-              {Expected~no~WIREs~for~an~unsupported~combined~attachment}
-              {A~centred~multi-row~face~must~not~be~duplicated~per~row.}
+              {Expected~\int_use:N\l_tmpb_int~model~WIREs;~got~
+                \int_use:N\l_tmpa_int}
+              {Combined~faces~must~not~leak~state~into~later~owners.}
           }
       }
   }
@@ -91,12 +94,16 @@
 ]
   \tn[wide=2]{A} & & \tn{B} & \tn{C}
 \end{tenkz}
-\begin{tenkz}[rows={ket,ket}]
+\begin{tenkz}[rows={ket,ket}, bond label={K at 1-2}]
   \tn[box,wires=2,combined=east]{X} & \tn[box,wires=2]{Y}\\
   &
 \end{tenkz}
 \begin{tenkz}[rows={ket,ket}]
   \tnfuse[combined=east]{F} & \tn[box,wires=2]{Y}\\
   &
+\end{tenkz}
+\begin{tenkz}[rows={ket,ket}]
+  \tn[box,wires=2,combined=east]{X} & \tndots & \tnghost{}\\
+  & &
 \end{tenkz}
 \end{document}

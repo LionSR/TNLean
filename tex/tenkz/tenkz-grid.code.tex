@@ -442,19 +442,16 @@
 % ---------- cell commands (record; draw later) ----------
 \cs_new:Npn \tenkz_cell_key:
   { \int_use:N \l__tenkz_row_int - \int_use:N \l__tenkz_col_int }
+\prop_new:N \l__tenkz_atomid_prop
 \cs_new_protected:Npn \tenkz_record:nnn #1#2#3
   {
-    % parse the options ONCE, here; the memo hands the resolution to every
-    % later pass, and the model record carries the normalized fields
-    \tenkz_cell_opts:n {#2}
+    % Record raw syntax while the body is still establishing picture policy.
+    % The post-body normalization pass primes the option memo exactly once.
     \__tenkz_model_record_atom:e
       {kind={#1},at={\tenkz_cell_key:},
-       options={\exp_not:n{#2}},label={\exp_not:n{#3}},
-       skin={\bool_if:NT \l__tenkz_cshapeexplicit_bool {\exp_not:V \l__tenkz_cshape_tl}},
-       wide={\int_use:N \l__tenkz_cwide_int},
-       wires={\int_use:N \l__tenkz_cwires_int},
-       role={\exp_not:V \l__tenkz_crole_tl},
-       species={\exp_not:V \l__tenkz_cspec_tl}}
+       options={\exp_not:n{#2}},label={\exp_not:n{#3}}}
+    \prop_put:Nee \l__tenkz_atomid_prop
+      { \tenkz_cell_key: } { \l__tenkz_model_last_tl }
     \prop_put:Nen \l__tenkz_kind_prop  { \tenkz_cell_key: } {#1}
     \prop_put:Nen \l__tenkz_opts_prop  { \tenkz_cell_key: } {#2}
     \prop_put:Nen \l__tenkz_label_prop { \tenkz_cell_key: } {#3}
@@ -801,12 +798,11 @@
 
 
 % ---------- resolved options: one parse per distinct string ----------------
-% Within one picture the parser is a pure function of its option string
-% (the skin policy and strut are picture options, fixed before the body).
-% The resolved locals are snapshotted per distinct string at first parse
-% and restored on every repeat; \tenkz_record:nnn primes the memo, so a
-% recorded cell's options are parsed ONCE, at record time, and every later
-% pass restores the resolution instead of reparsing.  The memo lives in a
+% Once the picture body has established its final policy, the parser is a
+% pure function of its option string and those policy inputs.  The resolved
+% locals are snapshotted per distinct string at first parse and restored on
+% every repeat.  The post-body model pass primes the memo, so every later pass
+% restores the resolution instead of reparsing.  The memo lives in a
 % picture-local prop, so grouping retires it with the picture.
 \prop_new:N \l__tenkz_optmemo_prop
 \tl_new:N \l__tenkz_optmemo_tl
@@ -889,6 +885,30 @@
       {
         \tenkz_cell_opts_parse:n {#1}
         \tenkz_cell_opts_snapshot:V \l__tenkz_optmemokey_tl
+      }
+  }
+
+% Normalize staged ATOM records only after the complete body has established
+% policy such as species declarations and tensor style.
+\tl_new:N \l__tenkz_mna_id_tl
+\cs_new_protected:Npn \tenkz_model_normalize_atoms:
+  {
+    \prop_map_inline:Nn \l__tenkz_atomid_prop
+      {
+        \tenkz_get:NnN \l__tenkz_opts_prop {##1} \l_tmpa_tl
+        \exp_args:NV \tenkz_cell_opts:n \l_tmpa_tl
+        \tl_set:Nn \l__tenkz_mna_id_tl {##2}
+        \__tenkz_model_complete:nnn {\l__tenkz_mna_id_tl}{skin}
+          { \bool_if:NT \l__tenkz_cshapeexplicit_bool
+              { \exp_not:V \l__tenkz_cshape_tl } }
+        \__tenkz_model_complete:nnn {\l__tenkz_mna_id_tl}{wide}
+          { \int_use:N \l__tenkz_cwide_int }
+        \__tenkz_model_complete:nnn {\l__tenkz_mna_id_tl}{wires}
+          { \int_use:N \l__tenkz_cwires_int }
+        \__tenkz_model_complete:nnn {\l__tenkz_mna_id_tl}{role}
+          { \exp_not:V \l__tenkz_crole_tl }
+        \__tenkz_model_complete:nnn {\l__tenkz_mna_id_tl}{species}
+          { \exp_not:V \l__tenkz_cspec_tl }
       }
   }
 
@@ -1587,6 +1607,7 @@
 \bool_new:N \l__tenkz_mdb_pa_bool
 \bool_new:N \l__tenkz_mdb_pb_bool
 \bool_new:N \l__tenkz_mdb_combined_bool
+\prop_new:N \l__tenkz_compat_bond_prop
 \cs_new:Npn \tenkz_model_dir_word:
   {
     \tl_if_empty:NTF \l__tenkz_dir_tl {none}
@@ -1643,24 +1664,30 @@
                               {####1}{west} \l__tenkz_mdb_pb_bool
                             \tenkz_model_note_combined_face:
                             \bool_lazy_and:nnT
+                              { \l__tenkz_mdb_pa_bool }
+                              { \l__tenkz_mdb_pb_bool }
                               {
-                                \bool_lazy_and_p:nn
-                                  { \l__tenkz_mdb_pa_bool }
-                                  { \l__tenkz_mdb_pb_bool }
-                              }
-                              { ! \l__tenkz_mdb_combined_bool }
-                              {
-                                \__tenkz_model_record_wire:e
-                                  {kind={index},
-                                   from={##1-\int_use:N \l__tenkz_mdb_prev_int},
-                                   to={##1-####1},
-                                   row={##1},origin={bond},
-                                   dir={\tenkz_model_dir_word:},
-                                   style={\tl_use:N \l__tenkz_mdb_style_tl},
-                                   role={\tenkz_rowrole_word:},
-                                   species={\tenkz_rowspec_word:}
-                                   \tenkz_model_bond_name:nnn {##1}
-                                     {\l__tenkz_mdb_prev_int}{####1}}
+                                \bool_if:NTF \l__tenkz_mdb_combined_bool
+                                  {
+                                    \prop_put:Nee \l__tenkz_compat_bond_prop
+                                      {##1-\int_use:N
+                                        \l__tenkz_mdb_prev_int-####1} {}
+                                  }
+                                  {
+                                    \__tenkz_model_record_wire:e
+                                      {kind={index},
+                                       from={##1-\int_use:N
+                                         \l__tenkz_mdb_prev_int},
+                                       to={##1-####1},
+                                       row={##1},origin={bond},
+                                       dir={\tenkz_model_dir_word:},
+                                       style={\tl_use:N
+                                         \l__tenkz_mdb_style_tl},
+                                       role={\tenkz_rowrole_word:},
+                                       species={\tenkz_rowspec_word:}
+                                       \tenkz_model_bond_name:nnn {##1}
+                                         {\l__tenkz_mdb_prev_int}{####1}}
+                                  }
                               }
                           }
                       }
@@ -1693,6 +1720,15 @@
               { \bool_set_true:N \l__tenkz_mbl_found_bool }
           }
       }
+    % A combined-face attachment remains a warning-only legacy bond until
+    % fused WIREs land.  It is intentionally absent from the frozen model,
+    % but the retained compatibility ink remains a valid label target.
+    \bool_if:NF \l__tenkz_mbl_found_bool
+      {
+        \prop_if_in:NeT \l__tenkz_compat_bond_prop
+          {1-\int_eval:n{#2}-\int_eval:n{#3}}
+          { \bool_set_true:N \l__tenkz_mbl_found_bool }
+      }
     \bool_if:NF \l__tenkz_mbl_found_bool
       { \msg_error:nnV {tenkz}{model-bond-label} \l__tenkz_mbl_target_tl }
   }
@@ -1709,7 +1745,6 @@
 % eligibility decisions live HERE, once, before validation; the draw
 % passes consume the records, and the stub passes read the row-consumption
 % prop this derivation owns.
-\tl_new:N \l__tenkz_mdc_orig_tl
 \cs_new_protected:Npn \tenkz_model_derive_closures:
   {
     \prop_clear:N \l__tenkz_cuprow_prop
@@ -1775,7 +1810,7 @@
       }
   }
 % cup pairing for side #1 with row-extent end #2; #3 is the side's on-bend
-% matrix label tl (its emptiness becomes the record's matrix flag)
+% matrix label tl, copied into each derived record for the draw pass
 \cs_new_protected:Npn \tenkz_model_derive_cups_side:nnN #1#2#3
   {
     \seq_clear:N \l_tmpa_seq
@@ -1810,7 +1845,7 @@
           {kind={index},origin={cup},side={#1},
            top={\l_tmpa_tl},bottom={\l_tmpb_tl},
            name={cup-\l_tmpa_tl-\l_tmpb_tl},
-           matrix={\tl_if_blank:VTF #3 {0}{1}}}
+           matrix={\exp_not:V #3}}
         \prop_put:Nen \l__tenkz_cuprow_prop { #1 - \l_tmpa_tl } {}
         \prop_put:Nen \l__tenkz_cuprow_prop { #1 - \l_tmpb_tl } {}
       }
@@ -1820,12 +1855,12 @@
     \tenkz_row_extent:n {#1}
     \int_compare:nNnF { \l__tenkz_first_int } = {0}
       {
-        \tenkz_periodic_endpoints:nnnN {#1}
+        \tenkz_periodic_endpoints_match:nnnN {#1}
           {\l__tenkz_first_int}{\l__tenkz_last_int} \l_tmpa_bool
         \bool_if:NT \l_tmpa_bool
           {
             \__tenkz_model_record_wire:e
-              {kind={index},origin={wrap},row={\int_eval:n{#1}},
+              {kind={index},origin={trace},row={\int_eval:n{#1}},
                side={#2},name={wrap-\int_eval:n{#1}}}
           }
       }
@@ -1883,6 +1918,8 @@
     \prop_clear:N \l__tenkz_kind_prop
     \prop_clear:N \l__tenkz_label_prop
     \prop_clear:N \l__tenkz_opts_prop
+    \prop_clear:N \l__tenkz_atomid_prop
+    \prop_clear:N \l__tenkz_compat_bond_prop
     \prop_clear:N \l__tenkz_owner_prop
     \prop_clear:N \l__tenkz_name_prop
     \prop_clear:N \l__tenkz_tall_prop
@@ -1922,6 +1959,7 @@
         \seq_put_right:Nn \l__tenkz_rowtypes_seq {wire}
         \seq_put_right:Nn \l__tenkz_rowmods_seq {}
       }
+    \tenkz_model_normalize_atoms:
     % record the nopair rows for the expandable pairing predicates
     \prop_clear:N \l__tenkz_nopair_prop
     \int_step_inline:nn { \l__tenkz_nrows_int }
@@ -1938,8 +1976,8 @@
     \tenkz_record_interfaces:
     \tenkz_model_record_owners:
     \tenkz_model_derive_bonds:
-    \tenkz_model_derive_closures:
     \tenkz_model_validate_bond_labels:
+    \tenkz_model_derive_closures:
     \__tenkz_model_validate:
     \tenkz@beginpicture{grid}
     \tenkz_emit_tracefacewarnings:
@@ -2095,6 +2133,7 @@
         {
           \str_if_eq:VnTF \l__tenkz_eastpol_tl {trace}
             {
+              \tenkz_draw_periodic_mismatches:n {before}
               % closure-style default follows the frame: flat words keep
               % the explicit racetrack, vertical words default to hooks --
               % a vertical racetrack spends the very width the rotation
@@ -2108,6 +2147,7 @@
               \str_if_eq:VnTF \l__tenkz_perstyle_tl {hooks}
                 { \tenkz_draw_hooks: }
                 { \tenkz_draw_trace: }
+              \tenkz_draw_periodic_mismatches:n {after}
             }
             { \msg_warning:nnn {tenkz}{trace-one-sided} {west} }
         }
@@ -4885,6 +4925,10 @@ code=label-pos|pos=\tl_to_str:N \l_tmpa_tl}
 \cs_new_protected:Npn \tenkz_cell_virtual_row_port:nnnN #1#2#3#4
   {
     \bool_set_true:N #4
+    % These values describe this queried owner.  Unsupported owner kinds
+    % retain the default live port but must not inherit a prior combined face.
+    \tl_clear:N \l__tenkz_faceports_tl
+    \int_set:Nn \l__tenkz_cwires_int {1}
     \tenkz_owner_col:nnN {#1}{#2} \l__tenkz_virtualbase_tl
     \int_set:Nn \l__tenkz_fusebase_int {#1}
     \tenkz_get:NeN \l__tenkz_kind_prop
@@ -5154,12 +5198,13 @@ code=label-pos|pos=\tl_to_str:N \l_tmpa_tl}
 \tl_new:N \l__tenkz_cupbot_tl
 \cs_new_protected:Npn \tenkz_draw_cups:
   { \__tenkz_model_map_wires_origin:nN {cup} \tenkz_draw_cup:n }
-% draw one cup from its wire record: fields side, top, bottom
+% draw one cup from its wire record: fields side, top, bottom, matrix
 \cs_new_protected:Npn \tenkz_draw_cup:n #1
   {
     \__tenkz_model_get:nnN {#1} {side}   \l__tenkz_cupside_tl
     \__tenkz_model_get:nnN {#1} {top}    \l__tenkz_cuptop_tl
     \__tenkz_model_get:nnN {#1} {bottom} \l__tenkz_cupbot_tl
+    \__tenkz_model_get:nnN {#1} {matrix} \l__tenkz_cupmat_tl
     \tenkz_draw_cup:VVV
       \l__tenkz_cupside_tl \l__tenkz_cuptop_tl \l__tenkz_cupbot_tl
   }
@@ -5186,9 +5231,6 @@ code=label-pos|pos=\tl_to_str:N \l_tmpa_tl}
 \cs_new_protected:Npn \tenkz_draw_cup:nnn #1#2#3
   {
     \tenkz_row_wirestyle:nN {#2} \l__tenkz_cell_tl
-    \str_if_eq:nnTF {#1}{east}
-      { \tl_set_eq:NN \l__tenkz_cupmat_tl \l__tenkz_closeemat_tl }
-      { \tl_set_eq:NN \l__tenkz_cupmat_tl \l__tenkz_closewmat_tl }
     \tenkz_cup_anchor:nnNN {#1}{#2} \l__tenkz_pa_tl \l__tenkz_x_dim
     \tenkz_cup_anchor:nnNN {#1}{#3} \l__tenkz_pb_tl \l__tenkz_tmp_dim
     % common abscissa: the OUTERMOST of the two ends; a shorter row gets a
@@ -5617,17 +5659,16 @@ code=label-pos|pos=\tl_to_str:N \l_tmpa_tl}
       }
   }
 
+\seq_new:N \l__tenkz_periodic_mismatch_seq
 \cs_new_protected:Npn \tenkz_record_periodic_row:n #1
   {
     \tenkz_row_extent:n {#1}
     \int_compare:nNnF { \l__tenkz_first_int } = {0}
       {
-        \tenkz_periodic_row_port:nnnN
-          {#1}{\l__tenkz_first_int}{west} \l__tenkz_periodicwest_bool
-        \tenkz_periodic_row_port:nnnN
-          {#1}{\l__tenkz_last_int}{east} \l__tenkz_periodiceast_bool
-        \bool_if:nT
-          { \l__tenkz_periodicwest_bool && \l__tenkz_periodiceast_bool }
+        \tenkz_periodic_endpoints_match:nnnN {#1}
+          {\l__tenkz_first_int}{\l__tenkz_last_int}
+          \l__tenkz_periodicpair_bool
+        \bool_if:NT \l__tenkz_periodicpair_bool
           {
             \prop_get:NeNF \l__tenkz_owner_prop
               {#1-\int_use:N\l__tenkz_first_int} \l_tmpa_tl
@@ -5642,12 +5683,28 @@ code=label-pos|pos=\tl_to_str:N \l_tmpa_tl}
             \prop_put:Nen \l__tenkz_periodicpaired_prop
               {#1-\l_tmpa_tl-east} {}
           }
+        \bool_if:nT
+          {
+            ( \l__tenkz_periodicwest_bool &&
+              ! \l__tenkz_periodiceast_bool ) ||
+            ( ! \l__tenkz_periodicwest_bool &&
+              \l__tenkz_periodiceast_bool )
+          }
+          {
+            \seq_put_right:Ne \l__tenkz_periodic_mismatch_seq
+              {
+                { \int_eval:n{#1} }
+                { \int_use:N \l__tenkz_first_int }
+                { \int_use:N \l__tenkz_last_int }
+              }
+          }
       }
   }
 
 \cs_new_protected:Npn \tenkz_compute_periodic_faces:
   {
     \prop_clear:N \l__tenkz_periodicpaired_prop
+    \seq_clear:N \l__tenkz_periodic_mismatch_seq
     \bool_lazy_and:nnT
       { \str_if_eq_p:Vn \l__tenkz_westpol_tl {trace} }
       { \str_if_eq_p:Vn \l__tenkz_eastpol_tl {trace} }
@@ -5661,7 +5718,29 @@ code=label-pos|pos=\tl_to_str:N \l_tmpa_tl}
       }
   }
 
-\cs_new_protected:Npn \tenkz_periodic_endpoints:nnnN #1#2#3#4
+\cs_new_protected:Npn \tenkz_draw_periodic_mismatches:n #1
+  {
+    \seq_map_inline:Nn \l__tenkz_periodic_mismatch_seq
+      { \tenkz_draw_periodic_mismatch:nnnn {#1} ##1 }
+  }
+\cs_new_protected:Npn \tenkz_draw_periodic_mismatch:nnnn #1#2#3#4
+  {
+    % Only the top and bottom rows can carry periodic closures.  Emit a top
+    % mismatch before the matching closure records and a bottom mismatch
+    % after them, preserving the historical top-to-bottom event order.
+    \bool_if:nT
+      {
+        ( \str_if_eq_p:nn {#1}{before} && \int_compare_p:nNn {#2} = {1} )
+        ||
+        ( \str_if_eq_p:nn {#1}{after} && \int_compare_p:nNn {#2} > {1} )
+      }
+      {
+        \tenkz_periodic_endpoints:nnnN {#2}{#3}{#4}
+          \l__tenkz_periodicpair_bool
+      }
+  }
+
+\cs_new_protected:Npn \tenkz_periodic_endpoints_match:nnnN #1#2#3#4
   {
     \tenkz_periodic_row_port:nnnN {#1}{#2}{west}
       \l__tenkz_periodicwest_bool
@@ -5671,6 +5750,15 @@ code=label-pos|pos=\tl_to_str:N \l_tmpa_tl}
     % uses temporary booleans and must not turn a mismatch into a closure.
     \bool_set:Nn \l__tenkz_periodicpair_bool
       { \l__tenkz_periodicwest_bool && \l__tenkz_periodiceast_bool }
+    \bool_set_eq:NN #4 \l__tenkz_periodicpair_bool
+  }
+
+% The draw-phase wrapper owns the warning and unmatched-stub ink.  Record
+% derivation calls the pure matcher above, before a tikzpicture exists.
+\cs_new_protected:Npn \tenkz_periodic_endpoints:nnnN #1#2#3#4
+  {
+    \tenkz_periodic_endpoints_match:nnnN {#1}{#2}{#3}
+      \l__tenkz_periodicpair_bool
     \bool_if:nT
       {
         ( \l__tenkz_periodicwest_bool &&
@@ -5713,7 +5801,7 @@ code=periodic-face-ports|row=\int_eval:n{#1}}
 
 \tl_new:N \l__tenkz_wrapside_tl
 \cs_new_protected:Npn \tenkz_draw_trace:
-  { \__tenkz_model_map_wires_origin:nN {wrap} \tenkz_draw_trace_one:n }
+  { \__tenkz_model_map_wires_origin:nN {trace} \tenkz_draw_trace_one:n }
 \cs_new_protected:Npn \tenkz_draw_trace_one:n #1
   {
     \__tenkz_model_get:nnN {#1} {row}  \l__tenkz_ptrow_tl
@@ -5826,7 +5914,7 @@ code=periodic-face-ports|row=\int_eval:n{#1}}
 % word's hooks wrap over the top and under the bottom toward the page's
 % east margin, as in the reference figure.
 \cs_new_protected:Npn \tenkz_draw_hooks:
-  { \__tenkz_model_map_wires_origin:nN {wrap} \tenkz_draw_hooks_one:n }
+  { \__tenkz_model_map_wires_origin:nN {trace} \tenkz_draw_hooks_one:n }
 \cs_new_protected:Npn \tenkz_draw_hooks_one:n #1
   {
     \__tenkz_model_get:nnN {#1} {row}  \l__tenkz_ptrow_tl

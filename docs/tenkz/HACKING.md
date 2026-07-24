@@ -17,6 +17,7 @@ timeout 120 env TEXINPUTS="<repo>/tex/tenkz//:" \
 Build the compact manual twice for contents and references:
 
 ```sh
+python3 scripts/tenkz_manual_doctest.py
 cd docs/tenkz
 timeout 150 env TEXINPUTS="../../tex/tenkz//:" \
   xelatex -interaction=nonstopmode -halt-on-error manual2.tex
