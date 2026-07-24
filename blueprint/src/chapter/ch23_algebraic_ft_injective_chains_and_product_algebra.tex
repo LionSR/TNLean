@@ -49,10 +49,7 @@ Corollary~\ref{cor:fundamentalTheorem_injectiveMPSChain_of_sameState}.
     $\zeta \in \C$. If $\zeta \mathbf{A}$ denotes the chain obtained by
     replacing each site tensor $A_k$ with $\zeta A_k$, and if
     $\widetilde{\mathbf{A}}$ denotes the combined tensor of $\mathbf{A}$,
-    then
-    \[
-        \widetilde{\zeta \mathbf{A}} = \zeta\, \widetilde{\mathbf{A}}.
-    \]
+    then $\widetilde{\zeta \mathbf{A}}=\zeta\,\widetilde{\mathbf{A}}$.
 \end{lemma}
 
 \begin{proof}
@@ -77,9 +74,11 @@ Corollary~\ref{cor:fundamentalTheorem_injectiveMPSChain_of_sameState}.
     $\widetilde{\mathbf{B}}$ are gauge-phase equivalent.
     Then there exist invertible matrices $Z_0, \ldots, Z_{n-1} \in \GL_D(\C)$
     and a nonzero scalar $\zeta \in \C^{\times}$ such that
-    \begin{equation}\label{eq:aft_chain_gaugePhase_conj}
-        B_k^i = \zeta\, Z_k A_k^i Z_{k+1}^{-1}
-    \end{equation}
+    \begin{align}
+        B_k^i
+        &=\zeta\,Z_k A_k^i Z_{k+1}^{-1}
+        \label{eq:aft_chain_gaugePhase_conj}
+    \end{align}
     for all sites $k$ and physical indices $i$, where $k+1$ is interpreted
     cyclically modulo $n$.
 \end{theorem}
@@ -94,7 +93,7 @@ Corollary~\ref{cor:fundamentalTheorem_injectiveMPSChain_of_sameState}.
     removes this common scalar from the combined tensor, so
     Theorem~\ref{thm:fundamentalTheorem_injective_chain} applies to the
     rescaled chain. Multiplying the resulting sitewise relations by $\zeta$
-    gives the conclusion~(\ref{eq:aft_chain_gaugePhase_conj}).
+    gives (\ref{eq:aft_chain_gaugePhase_conj}).
 \end{proof}
 
 \begin{remark}[Relationship to the translation-invariant all-sizes theorem]
@@ -124,11 +123,9 @@ agreement from any threshold $N_0$ onward already implies full agreement.
     \uses{def:same_mpv}
     Two tensors $A$ and $B$ of the same bond dimension satisfy
     \emph{finite-length MPV agreement from $N_0$ onward} if they generate
-    the same MPV family for all system sizes $N \ge N_0$, meaning that for
-    every $N \ge N_0$ and $\sigma \in [d]^N$,
-    \[
-        V^{(N)}(A)_\sigma = V^{(N)}(B)_\sigma
-    \]
+    the same MPV family for all system sizes $N \ge N_0$, meaning that
+    $V^{(N)}(A)_\sigma = V^{(N)}(B)_\sigma$ for every $N \ge N_0$ and
+    $\sigma \in [d]^N$.
 \end{definition}
 
 \begin{theorem}[Finite-length agreement implies full agreement]%
@@ -203,10 +200,7 @@ translation-invariant, and constant chains of blocked tensors.
     constant chains $(A, \ldots, A)$ and $(B, \ldots, B)$ generate the same
     MPV family.
     Then there exists an invertible matrix $X \in \GL_D(\C)$ such that
-    \[
-        B^i = X\, A^i\, X^{-1}
-    \]
-    for every physical index~$i$.
+    $B^i = X A^i X^{-1}$ for every physical index~$i$.
 \end{theorem}
 
 \begin{proof}
@@ -232,9 +226,11 @@ translation-invariant, and constant chains of blocked tensors.
     MPV family.
     Then there exist an invertible matrix $Z \in \GL_D(\C)$ and a scalar
     $\lambda \in \C^{\times}$ with $\lambda^n = 1$ such that
-    \begin{equation}\label{eq:aft_ti_collapse_conj}
-        B^i = \lambda\, Z^{-1}\, A^i\, Z
-    \end{equation}
+    \begin{align}
+        B^i
+        &=\lambda\,Z^{-1} A^i Z
+        \label{eq:aft_ti_collapse_conj}
+    \end{align}
     for every physical index~$i$.
 \end{corollary}
 
@@ -244,8 +240,8 @@ translation-invariant, and constant chains of blocked tensors.
     Apply Theorem~\ref{thm:ti_tensors_single_gauge} to obtain
     $B^i = X A^i X^{-1}$.
     Set $Z = X^{-1}$ and $\lambda = 1$.
-    Then $\lambda^n = 1$ and the identity~(\ref{eq:aft_ti_collapse_conj}) is
-    exactly the same gauge relation rewritten in the form used by the corollary.
+    Then $\lambda^n = 1$, and (\ref{eq:aft_ti_collapse_conj}) is exactly the
+    same gauge relation rewritten in the form used by the corollary.
 \end{proof}
 
 \noindent Symmetry-theoretic consequences of the Fundamental Theorem,
@@ -339,7 +335,7 @@ A parallel development addresses block-diagonal tensors:
 given a family of injective block tensors $\{A_k^i\}_{k=0}^{r-1}$
 with block dimensions $D_k$ and a second family $\{B_k^i\}$ with
 per-block $\mc{V}(A_k) = \mc{V}(B_k)$, one seeks per-block gauge
-equivalence $B_k^i = X_k\, A_k^i\, X_k^{-1}$ for each~$k$
+equivalence $B_k^i = X_k A_k^i X_k^{-1}$ for each~$k$
 independently, and a global block-permutation plus inner-automorphism
 decomposition.
 Throughout this section, assume $D_k \ge 1$ for every block~$k$.
@@ -351,9 +347,12 @@ Throughout this section, assume $D_k \ge 1$ for every block~$k$.
     \leanok
     Let $\{R_k\}_{k=0}^{r-1}$ be simple rings.
     The $k$-th \emph{block ideal} in $\prod_{j=0}^{r-1} R_j$ is
-    \[
-        I_k := \{x \in \prod_{j=0}^{r-1} R_j : x_j = 0 \text{ for } j \neq k\}.
-    \]
+    \begin{align}
+        I_k
+        &:=\left\{x \in \prod_{j=0}^{r-1} R_j :
+            x_j = 0 \text{ for } j \neq k\right\}.
+        \notag
+    \end{align}
 \end{definition}
 
 \begin{theorem}[Each block ideal is an atom]\label{thm:block_ideal_atom}
@@ -402,10 +401,11 @@ Throughout this section, assume $D_k \ge 1$ for every block~$k$.
     \leanok
     Let $\{D_i\}_{i\in I}$ and $\{E_j\}_{j\in J}$ be positive integers.
     A star-algebra isomorphism
-    \[
-        \prod_{i\in I}M_{D_i}(\C)
-        \simeq \prod_{j\in J}M_{E_j}(\C)
-    \]
+    \begin{align}
+        \prod_{i\in I} M_{D_i}(\C)
+        &\simeq \prod_{j\in J} M_{E_j}(\C)
+        \notag
+    \end{align}
     determines an equivalence $\sigma:I\simeq J$ such that the isomorphism
     carries the $i$-th block ideal onto the $\sigma(i)$-th block ideal and
     $D_i=E_{\sigma(i)}$ for every $i\in I$. For an automorphism of one product,
@@ -436,9 +436,12 @@ Throughout this section, assume $D_k \ge 1$ for every block~$k$.
     \uses{thm:ring_perm}
     Under the hypotheses of Theorem~\ref{thm:ring_perm}, for each $i\in I$
     the map
-    \[
-        x\longmapsto \bigl(T(0,\ldots,0,x,0,\ldots,0)\bigr)_{\sigma(i)}
-    \]
+    \begin{align}
+        x
+        &\longmapsto
+        (T(0,\ldots,0,x,0,\ldots,0))_{\sigma(i)}
+        \notag
+    \end{align}
     from $R_i$ to $S_{\sigma(i)}$ is bijective.
 \end{theorem}
 
@@ -526,7 +529,7 @@ applies.
     \uses{def:perBlockLinearExtension}
     For each block~$k$, the per-block linear extension $T_k$ is
     multiplicative:
-    $T_k(MN) = T_k(M)\, T_k(N)$ for all $M, N \in \MN{D_k}$.
+    $T_k(MN) = T_k(M)T_k(N)$ for all $M, N \in \MN{D_k}$.
 \end{lemma}
 
 \begin{proof}\leanok\uses{def:perBlockLinearExtension}
@@ -560,11 +563,12 @@ applies.
         lem:perBlockLinearExtension_bijective}
     The \emph{product algebra automorphism} is the $\C$-algebra
     equivalence
-    \[
-        T : \prod_{k=0}^{r-1} \MN{D_k}
-        \xrightarrow{ \sim }
+    \begin{align}
+        T:\prod_{k=0}^{r-1} \MN{D_k}
+        &\xrightarrow{\sim}
         \prod_{k=0}^{r-1} \MN{D_k}
-    \]
+        \notag
+    \end{align}
     defined by $T(M)_k = T_k(M_k)$, where each $T_k$ is the per-block
     linear extension.
     It is an algebra automorphism since each $T_k$ is a multiplicative,
@@ -582,9 +586,11 @@ applies.
     permutation composed with per-block inner automorphisms: there exist
     a permutation $\sigma \in S_r$ (with $D_{\sigma(k)} = D_k$ for
     all~$k$) and invertible matrices $X_k \in \GL_{D_k}(\C)$ such that
-    \[
-        (T(M))_{\sigma(k)} = X_k\, M\, X_k^{-1}
-    \]
+    \begin{align}
+        (T(M))_{\sigma(k)}
+        &=X_k M X_k^{-1}
+        \notag
+    \end{align}
     for all $M \in \MN{D_k}$ (viewed as supported in block~$k$) and
     all~$k$.
     Equivalently, the product-algebra automorphism first permutes the

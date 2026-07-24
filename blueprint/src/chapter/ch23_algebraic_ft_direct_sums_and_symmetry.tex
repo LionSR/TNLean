@@ -151,17 +151,18 @@ Theorem~\ref{thm:sector_bnt_equal_global_gauge}.
               gauge equivalent.
     \end{enumerate}
     Explicitly, for $X=\bigoplus_k X_k$,
-    \begin{equation}\label{eq:aft_multiBlock_global_conj}
+    \begin{align}
         \bigoplus_k \mu_k B_k^i
-        = X \left(\bigoplus_k \mu_k A_k^i\right) X^{-1}.
-    \end{equation}
+        &= X \left(\bigoplus_k \mu_k A_k^i\right) X^{-1}.
+        \label{eq:aft_multiBlock_global_conj}
+    \end{align}
 \end{lemma}
 
 \begin{proof}\leanok\uses{lem:multi_block_ft, lem:multi_block_global}
     Per-block gauge equivalence follows from applying the single-block
     Fundamental Theorem to each block, using injectivity of
     $A_k$ and $\mc{V}(A_k) = \mc{V}(B_k)$.
-    With $X=\bigoplus_k X_k$, the identity~(\ref{eq:aft_multiBlock_global_conj})
+    With $X=\bigoplus_k X_k$, (\ref{eq:aft_multiBlock_global_conj})
     follows by multiplying block-diagonal matrices block by block.
 \end{proof}
 
@@ -173,10 +174,8 @@ Theorem~\ref{thm:sector_bnt_equal_global_gauge}.
     Under the hypotheses of
     Lemma~\ref{lem:fundamentalTheorem_multiBlock_full}, there exist
     invertible matrices $X_k \in \GL_{D_k}(\C)$ such that
-    \[
-        B_k^i = X_k\, A_k^i\, X_k^{-1}
-    \]
-    for every block $k$ and every physical index $i$.
+    $B_k^i = X_k\, A_k^i\, X_k^{-1}$ for every block $k$ and every
+    physical index $i$.
 \end{lemma}
 
 \begin{proof}
@@ -246,21 +245,19 @@ Theorem~\ref{thm:sector_bnt_equal_global_gauge}.
     indices. For weights $\mu_k$, block tensors $A_k$, word length $N$, and
     configuration $\sigma$, the coefficient of the block-diagonal MPV is unchanged
     by reindexing the blocks along $e$:
-    \[
+    \begin{align}
         V^{(N)}\!\left(\bigoplus_k \mu_k A_k\right)_\sigma
-        =
-        V^{(N)}\!\left(\bigoplus_k \mu_{e(k)} A_{e(k)}\right)_\sigma .
-    \]
+        &=
+        V^{(N)}\!\left(\bigoplus_k \mu_{e(k)} A_{e(k)}\right)_\sigma.
+        \notag
+    \end{align}
 \end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:mpv_decomposition}
     Expanding both sides by Theorem~\ref{thm:mpv_decomposition} gives
-    \[
-        \sum_k \mu_k^N\,V^{(N)}(A_k)_\sigma
-        \quad\text{and}\quad
-        \sum_k \mu_{e(k)}^N\,V^{(N)}(A_{e(k)})_\sigma .
-    \]
+    $\sum_k \mu_k^N\,V^{(N)}(A_k)_\sigma$ and
+    $\sum_k \mu_{e(k)}^N\,V^{(N)}(A_{e(k)})_\sigma$.
     These sums are equal by reindexing the finite sum along the bijection $e$.
 \end{proof}
 
@@ -436,7 +433,7 @@ scalar factor.
         \begin{tenkz}[physical=up]
             \tn[up=$i$]{B}
         \end{tenkz}
-        $\;=\;$
+        $ = $
         \begin{tenkz}[physical=up]
             \tnX{X} & \tn[up=$i$]{A} & \tnX{X^{-1}}
         \end{tenkz}
@@ -449,7 +446,7 @@ scalar factor.
         \begin{tenkz}[physical=up]
             \tn[up=$i$]{B}
         \end{tenkz}
-        $\;=\;$
+        $ = $
         \begin{tenkz}[physical=up]
             \tnX{Y} & \tn[up=$i$]{A} & \tnX{Y^{-1}}
         \end{tenkz}
@@ -495,11 +492,8 @@ scalar factor.
     group representation $U : G \to \GL_d(\C)$.
     For each $g \in G$, let $X(g) \in \GL_D(\C)$ satisfy
     $\widetilde{A}_g^i = X(g)\, A^i\, X(g)^{-1}$ for all~$i$.
-    Then for all $g, h \in G$, there exists $c(g,h) \in \C$
-    such that
-    \[
-        X(h)\, X(g) = c(g,h)\, X(g \cdot h).
-    \]
+    Then for all $g, h \in G$, there exists $c(g,h) \in \C$ such that
+    $X(h)\, X(g) = c(g,h)\, X(g \cdot h)$.
     In fact $c(g,h) \ne 0$ since both sides are invertible, so
     $c(g,h) \in \C^{\times}$. Diagrammatically, the two candidate gauges
     are competing local replacements for the same twisted tensor:
@@ -512,7 +506,7 @@ scalar factor.
             \tnX{X(h)X(g)} & \tn[up=$i$]{A} &
                 \tnX{(X(h)X(g))^{-1}}
         \end{tenkz}
-        $\;=\;$
+        $ = $
         \begin{tenkz}[physical=up]
             \tnX{X(gh)} & \tn[up=$i$]{A} & \tnX{X(gh)^{-1}}
         \end{tenkz}
