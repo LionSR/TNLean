@@ -44,6 +44,10 @@
   { [TKZ-CROSS-MULTIPLE]~strings~'#1'~and~'#2'~meet~more~than~once }
   { Split~one~route~into~separately~named~strings~so~each~ordered~pair~
     has~one~geometric~crossing. }
+\msg_new:nnnn {tenkz}{cross-selector}
+  { [TKZ-CROSS-SELECTOR]~self-crossing~selector~'#2'~for~'#1'~is~invalid }
+  { Select~each~post-split~component~boundary~once,~using~an~integer~from~
+    1~through~the~penultimate~component. }
 \msg_new:nnnn {tenkz}{join-not-endpoint}
   { [TKZ-JOIN-NOT-ENDPOINT]~strings~'#1'~and~'#2'~do~not~share~an~endpoint }
   { A~join~only~exempts~a~meeting~at~the~end~of~at~least~one~saved~route. }
@@ -63,6 +67,7 @@
 \seq_new:N \l__tenkz_string_obstacles_seq    % measured around= address list
 \seq_new:N \l__tenkz_string_segments_seq
 \prop_new:N \l__tenkz_string_self_gap_prop   % self id -> component boundary
+\prop_new:N \l__tenkz_string_selector_seen_prop
 \seq_new:N \l__tenkz_string_pts_seq
 \seq_new:N \l__tenkz_string_scan_seq
 \seq_new:N \l__tenkz_string_endpoint_seq
@@ -421,9 +426,59 @@
         - \l__tenkz_string_real_segments_int + 1
       }
     \int_zero:N #2
+    \seq_map_indexed_inline:Nn \l__tenkz_string_segments_seq
+      {
+        \seq_map_indexed_inline:Nn \l__tenkz_string_segments_seq
+          {
+            \bool_if:nT
+              {
+                \int_compare_p:n
+                  {##1 >= \l__tenkz_string_first_segment_int}
+                &&
+                \int_compare_p:n {##1 < ####1}
+              }
+              {
+                \tl_set:Nn \l_tmpa_tl {##2}
+                \tl_set:Nn \l_tmpb_tl {####2}
+                % Consecutive branches have one expected meeting at their
+                % shared waypoint.  Trim only that seam before intersecting,
+                % so a second off-seam crossing is still policed.
+                \int_compare:nNnT {##1 + 1} = {####1}
+                  {
+                    \spath_shorten_at_end:Nn \l_tmpa_tl
+                      {\dim_eval:n {\__tenkz_dim:n {crossgap} / 8}}
+                    \spath_shorten_at_start:Nn \l_tmpb_tl
+                      {\dim_eval:n {\__tenkz_dim:n {crossgap} / 8}}
+                  }
+                \bool_if:nT
+                  {
+                    \l__tenkz_string_closed_bool
+                    && \int_compare_p:n
+                      {##1 == \l__tenkz_string_first_segment_int}
+                    && \int_compare_p:n
+                      {
+                        ####1 == \seq_count:N
+                          \l__tenkz_string_segments_seq
+                      }
+                  }
+                  {
+                    \spath_shorten_at_start:Nn \l_tmpa_tl
+                      {\dim_eval:n {\__tenkz_dim:n {crossgap} / 8}}
+                    \spath_shorten_at_end:Nn \l_tmpb_tl
+                      {\dim_eval:n {\__tenkz_dim:n {crossgap} / 8}}
+                  }
+                \spath_intersect:NN \l_tmpa_tl \l_tmpb_tl
+                \int_add:Nn #2 {\pgfintersectionsolutions}
+              }
+          }
+      }
     \prop_get:NnN
       \l__tenkz_string_source_prop {#1} \l__tenkz_string_tmp_tl
-    \str_if_eq:VnT \l__tenkz_string_tmp_tl {caller}
+    \bool_if:nT
+      {
+        \int_compare_p:n {#2 == 0}
+        && \str_if_eq_p:Vn \l__tenkz_string_tmp_tl {caller}
+      }
       {
         \seq_map_inline:Nn \l__tenkz_string_segments_seq
           {
@@ -453,30 +508,40 @@
               }
           }
       }
-    \seq_map_indexed_inline:Nn \l__tenkz_string_segments_seq
+  }
+
+\cs_new_protected:Npn \__tenkz_string_validate_self_selectors:n #1
+  {
+    \prop_get:NnNT \l__tenkz_string_self_gap_prop
+      {#1} \l__tenkz_string_tmp_tl
       {
-        \seq_map_indexed_inline:Nn \l__tenkz_string_segments_seq
+        \tl_set_eq:Nc \l__tenkz_string_self_path_tl
+          { \l__tikzspath_prefix_tl #1 }
+        \spath_split_at_self_intersections:N
+          \l__tenkz_string_self_path_tl
+        \spath_numberofcomponents:NV
+          \l__tenkz_string_components_after_int
+          \l__tenkz_string_self_path_tl
+        \prop_clear:N \l__tenkz_string_selector_seen_prop
+        \clist_map_inline:Vn \l__tenkz_string_tmp_tl
           {
-            \bool_if:nT
+            \regex_match:nnTF {\A[1-9][0-9]*\Z} {##1}
               {
-                \int_compare_p:n {##1 < ####1}
-                && \int_compare_p:n {##1 + 1 != ####1}
-                &&
-                !(
-                  \l__tenkz_string_closed_bool
-                  && \int_compare_p:n
-                    {##1 == \l__tenkz_string_first_segment_int}
-                  && \int_compare_p:n
-                    {
-                      ####1 == \seq_count:N
-                        \l__tenkz_string_segments_seq
-                    }
-                )
+                \bool_if:nTF
+                  {
+                    \int_compare_p:n
+                      {##1 < \l__tenkz_string_components_after_int}
+                    &&
+                    ! \prop_if_in_p:Nn
+                      \l__tenkz_string_selector_seen_prop {##1}
+                  }
+                  {
+                    \prop_put:Nnn
+                      \l__tenkz_string_selector_seen_prop {##1} {}
+                  }
+                  { \msg_error:nnnn {tenkz}{cross-selector} {#1} {##1} }
               }
-              {
-                \spath_intersect:nn {##2} {####2}
-                \int_add:Nn #2 {\pgfintersectionsolutions}
-              }
+              { \msg_error:nnnn {tenkz}{cross-selector} {#1} {##1} }
           }
       }
   }
@@ -613,6 +678,7 @@
             \int_compare:nNnT
               { \l__tenkz_string_n_int } < { \l__tenkz_string_declared_int }
               { \msg_error:nnnn {tenkz}{cross-not-found} {#1} {#1} }
+            \__tenkz_string_validate_self_selectors:n {#1}
           }
       }
   }

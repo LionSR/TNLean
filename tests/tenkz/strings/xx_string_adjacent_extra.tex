@@ -1,0 +1,18 @@
+% Expected failure: adjacent cubic branches meet again away from their shared
+% waypoint, so their second meeting is an undeclared self-crossing.
+\documentclass{standalone}
+\usepackage{tenkz}
+\usetikzlibrary{hobby,spath3,intersections}
+\begin{document}
+\makeatletter\input{tenkz-string.code.tex}\makeatother
+\begin{tikzpicture}
+\ExplSyntaxOn
+\__tenkz_string_reset:
+\__tenkz_string_register:nn {adjacent} {open}
+\path[spath/save=adjacent]
+  (0,0) .. controls (1,0.2) and (2,0.2) .. (3,0)
+        .. controls (2,0.8) and (1,-0.8) .. (0,1);
+\__tenkz_string_resolve:
+\ExplSyntaxOff
+\end{tikzpicture}
+\end{document}
