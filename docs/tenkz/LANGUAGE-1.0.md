@@ -265,7 +265,9 @@ idiom.
 `origin` field records the policy that generated them (`origin=trace`,
 `origin=cup`, ...). Closure is not a separate record class. A generated
 closure wire carries a canonical name — `wrap-1` for row 1's trace return,
-`cup-1-2` for the cup joining rows 1 and 2 — addressable as any named record;
+`cup-1-2` for the cup joining rows 1 and 2. When both opposite sides carry
+cups, names are side-qualified (`cup-west-1-2`, `cup-east-1-2`) so every
+derived wire remains addressable as one named record;
 policy legs are addressed by the `leg` production. Beads and labels attach to
 closures by the ordinary address grammar. A closed chain that renders open is
 impossible by construction: the closure IS a wire record, and every wire is

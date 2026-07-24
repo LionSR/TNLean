@@ -54,6 +54,9 @@
 \msg_new:nnn {tenkz}{kernel-signature}
   { [TKZ-EQ-SIGNATURE]~panels~#1~and~#2~expose~unequal~boundaries:~
     (#3)~versus~(#4). }
+\msg_new:nnn {tenkz}{kernel-signature-prose}
+  { [TKZ-EQ-SIGNATURE]~panels~#1~and~#2~include~prose;~
+    checked~relations~require~diagrams~unless~the~relation~is~opted~out. }
 \msg_new:nnn {tenkz}{kernel-cellset}
   { [TKZ-LANG-CELLSET]~#1=#2~is~not~a~cell-set~of~
     (interface,column)~terms~(record~#3). }
@@ -82,6 +85,7 @@
 \tl_new:N   \l__tenkz_kernel_slot_tl
 \seq_new:N  \l__tenkz_kernel_stack_seq        % operand stack (see shelf notes)
 \seq_new:N  \g__tenkz_kernel_panel_gseq       % tenkzeq panel signatures
+\seq_new:N  \g__tenkz_kernel_panel_kind_gseq  % diagram or prose per panel
 \seq_new:N  \g__tenkz_kernel_rel_gseq         % tenkzeq relation glyphs
 
 % Key trees fill one staging table; each command copies it onto its record
@@ -1211,20 +1215,66 @@
   {
     \int_step_inline:nnnn {1}{2}{\__tenkz_kernel_rows: - 1}
       {
+        \tl_set:Ne \l_tmpa_tl
+          {cup-##1-\int_eval:n {##1 + 1}}
+        \str_case:nn {#1}
+          {
+            {west}
+              {
+                \prop_get:NnN \l__tenkz_kernel_policy_prop {east} \l_tmpb_tl
+                \str_if_eq:VnT \l_tmpb_tl {cup}
+                  {
+                    \tl_set:Ne \l_tmpa_tl
+                      {cup-west-##1-\int_eval:n {##1 + 1}}
+                  }
+              }
+            {east}
+              {
+                \prop_get:NnN \l__tenkz_kernel_policy_prop {west} \l_tmpb_tl
+                \str_if_eq:VnT \l_tmpb_tl {cup}
+                  {
+                    \tl_set:Ne \l_tmpa_tl
+                      {cup-east-##1-\int_eval:n {##1 + 1}}
+                  }
+              }
+          }
         \__tenkz_kernel_closure_wire:nnnn
           {cup}{#1}
           {top = ##1 , bottom = \int_eval:n {##1 + 1}}
-          {cup-##1-\int_eval:n {##1 + 1}}
+          {\tl_use:N \l_tmpa_tl}
       }
   }
 \cs_new_protected:Npn \__tenkz_kernel_col_cups:n #1
   {
     \int_step_inline:nnnn {1}{2}{\__tenkz_kernel_cols: - 1}
       {
+        \tl_set:Ne \l_tmpa_tl
+          {cup-col-##1-\int_eval:n {##1 + 1}}
+        \str_case:nn {#1}
+          {
+            {north}
+              {
+                \prop_get:NnN \l__tenkz_kernel_policy_prop {south} \l_tmpb_tl
+                \str_if_eq:VnT \l_tmpb_tl {cup}
+                  {
+                    \tl_set:Ne \l_tmpa_tl
+                      {cup-north-col-##1-\int_eval:n {##1 + 1}}
+                  }
+              }
+            {south}
+              {
+                \prop_get:NnN \l__tenkz_kernel_policy_prop {north} \l_tmpb_tl
+                \str_if_eq:VnT \l_tmpb_tl {cup}
+                  {
+                    \tl_set:Ne \l_tmpa_tl
+                      {cup-south-col-##1-\int_eval:n {##1 + 1}}
+                  }
+              }
+          }
         \__tenkz_kernel_closure_wire:nnnn
           {cup}{#1}
           {left = ##1 , right = \int_eval:n {##1 + 1}}
-          {cup-col-##1-\int_eval:n {##1 + 1}}
+          {\tl_use:N \l_tmpa_tl}
       }
   }
 
@@ -1393,6 +1443,17 @@
       {
         \__tenkz_kernel_signature:N \l__tenkz_kernel_sig_tl
         \seq_gput_right:NV \g__tenkz_kernel_panel_gseq \l__tenkz_kernel_sig_tl
+        \bool_set_false:N \l_tmpa_bool
+        \__tenkz_model_map_ids:nn {mark}
+          {
+            \__tenkz_model_get:nnN {##1} {form}
+              \l__tenkz_kernel_scratch_tl
+            \str_if_eq:VnT \l__tenkz_kernel_scratch_tl {prose}
+              { \bool_set_true:N \l_tmpa_bool }
+          }
+        \bool_if:NTF \l_tmpa_bool
+          { \seq_gput_right:Nn \g__tenkz_kernel_panel_kind_gseq {prose} }
+          { \seq_gput_right:Nn \g__tenkz_kernel_panel_kind_gseq {diagram} }
       }
     \group_end:
   }
@@ -1414,6 +1475,7 @@
     \group_begin:
     \bool_set_true:N \l__tenkz_kernel_ineq_bool
     \seq_gclear:N \g__tenkz_kernel_panel_gseq
+    \seq_gclear:N \g__tenkz_kernel_panel_kind_gseq
     \seq_gclear:N \g__tenkz_kernel_rel_gseq
     \clist_clear:N \l__tenkz_kernel_check_off_clist
     \prop_clear:N \l__tenkz_kernel_stage_prop
@@ -1455,24 +1517,49 @@
               { \seq_item:Nn \g__tenkz_kernel_panel_gseq {##1} }
             \tl_set:Ne \l_tmpb_tl
               { \seq_item:Nn \g__tenkz_kernel_panel_gseq { ##1 + 1 } }
-            \str_if_eq:eeTF { \tl_use:N \l_tmpa_tl } { \tl_use:N \l_tmpb_tl }
+            \bool_set_false:N \l_tmpa_bool
+            \str_if_eq:eeT
+              { \seq_item:Nn \g__tenkz_kernel_panel_kind_gseq {##1} }
+              {prose}
+              { \bool_set_true:N \l_tmpa_bool }
+            \str_if_eq:eeT
+              { \seq_item:Nn \g__tenkz_kernel_panel_kind_gseq { ##1 + 1 } }
+              {prose}
+              { \bool_set_true:N \l_tmpa_bool }
+            \bool_if:NTF \l_tmpa_bool
               {
                 \__tenkz_kernel_event:n
                   {
-                    check|relation=##1|result=equal
-                    |signature=\tl_use:N \l_tmpa_tl
+                    check|relation=##1|result=mismatch|reason=prose
+                    |left-kind=
+                      \seq_item:Nn \g__tenkz_kernel_panel_kind_gseq {##1}
+                    |right-kind=
+                      \seq_item:Nn \g__tenkz_kernel_panel_kind_gseq { ##1 + 1 }
                   }
+                \msg_error:nnee {tenkz}{kernel-signature-prose}
+                  {##1} { \int_eval:n { ##1 + 1 } }
               }
               {
-                \__tenkz_kernel_event:n
-                  {
-                    check|relation=##1|result=mismatch
-                    |left=\tl_use:N \l_tmpa_tl
-                    |right=\tl_use:N \l_tmpb_tl
-                  }
-                \msg_error:nneeee {tenkz}{kernel-signature}
-                  {##1} { \int_eval:n { ##1 + 1 } }
+                \str_if_eq:eeTF
                   { \tl_use:N \l_tmpa_tl } { \tl_use:N \l_tmpb_tl }
+                  {
+                    \__tenkz_kernel_event:n
+                      {
+                        check|relation=##1|result=equal
+                        |signature=\tl_use:N \l_tmpa_tl
+                      }
+                  }
+                  {
+                    \__tenkz_kernel_event:n
+                      {
+                        check|relation=##1|result=mismatch
+                        |left=\tl_use:N \l_tmpa_tl
+                        |right=\tl_use:N \l_tmpb_tl
+                      }
+                    \msg_error:nneeee {tenkz}{kernel-signature}
+                      {##1} { \int_eval:n { ##1 + 1 } }
+                      { \tl_use:N \l_tmpa_tl } { \tl_use:N \l_tmpb_tl }
+                  }
               }
             }
           }

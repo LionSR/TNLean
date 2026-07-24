@@ -42,6 +42,14 @@ grep -Fq '|name=cup-1-2|origin=cup|' "$WORK/r_cup.tnlog" || {
   echo "FAIL: cup policy did not derive the adjacent-row cup-1-2 record" >&2
   exit 1
 }
+grep -Fq '|name=cup-west-1-2|origin=cup|' "$WORK/r_cup_both.tnlog" || {
+  echo "FAIL: west/east cup policies did not mint a distinct west name" >&2
+  exit 1
+}
+grep -Fq '|name=cup-east-1-2|origin=cup|' "$WORK/r_cup_both.tnlog" || {
+  echo "FAIL: west/east cup policies did not mint a distinct east name" >&2
+  exit 1
+}
 grep -Fq '|name=bond-1-1-1-2|origin=grid|' "$WORK/k_blocking.tnlog" || {
   echo "FAIL: bonds=grid did not materialize the adjacent WIRE record" >&2
   exit 1
@@ -141,6 +149,23 @@ if grep -Fq 'result=equal' "$WORK/n_signature_mismatch.tnlog"; then
   exit 1
 fi
 
+prose_negative="$KERNEL/negative/n_prose_signature.tex"
+if ( cd "$WORK" &&
+     TEXINPUTS="$REPO/tex/tenkz//:" \
+       timeout 120 xelatex -interaction=nonstopmode -halt-on-error \
+       "$prose_negative" >"$WORK/n_prose_signature.transcript" 2>&1 ); then
+  echo "FAIL: checked prose panel was accepted as a diagram" >&2
+  exit 1
+fi
+grep -Fq '[TKZ-EQ-SIGNATURE]' "$WORK/n_prose_signature.transcript" || {
+  echo "FAIL: checked prose rejection lacked TKZ-EQ-SIGNATURE" >&2
+  exit 1
+}
+grep -Fq 'result=mismatch|reason=prose' "$WORK/n_prose_signature.tnlog" || {
+  echo "FAIL: checked prose mismatch was not recorded before the hard error" >&2
+  exit 1
+}
+
 for sugar_negative in \
   n_malformed_sugar \
   n_malformed_surface \
@@ -160,7 +185,7 @@ do
     exit 1
   }
 done
-echo "PASS: thirteen review regressions hold"
+echo "PASS: fifteen review regressions hold"
 
 fail=0
 for pair in s1 s2 s3 s4 s5 s6 s7 s8; do
