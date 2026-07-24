@@ -156,6 +156,27 @@
   { quantikz~opens~3pt~at~11mm~pitch;~the~calibrated~crossing~break }
 \__tenkz_metric_declare:nnn {stringtilt} {0.55}
   { oblique~torus~projection~shows~longitude~depth~without~flattening~meridians }
+\__tenkz_metric_declare:nnn {wrapreach} {0.55}
+  { a~traced~rail~runs~past~its~outermost~site~far~enough~to~read~as~
+    continuing,~short~enough~not~to~claim~a~new~site }
+\__tenkz_metric_declare:nnn {legcrossclear} {0.35}
+  { a~leg~declared~crossed~by~a~string~continues~past~the~crossing~by~a~
+    visible~margin,~so~the~gap~reads~as~depth,~not~as~an~endpoint }
+\__tenkz_metric_declare:nnn {outsidegap} {0.80}
+  { an~outside~address~sits~one~clear~step~beyond~the~outermost~cell:~
+    farther~than~any~closure~reach,~nearer~than~a~missing~site }
+\__tenkz_metric_declare:nnn {clusterstep} {0.25}
+  { the~quarter-pitch~sub-frame~of~cluster~sugar:~four~spins~read~as~one~
+    site~at~reading~distance }
+\__tenkz_metric_declare:nnn {enclosepad} {0.62}
+  { an~enclosure~clears~the~dot-label~band~of~the~sites~it~selects~
+    without~touching~the~neighbouring~column }
+\__tenkz_metric_declare:nnn {enclosetight} {0.12}
+  { an~enclosure~of~bare~spins~clears~the~dots~it~names~and~stops~halfway~
+    to~the~sub-frame~neighbours~it~does~not:~half~the~cluster~step }
+\__tenkz_metric_declare:nnn {clusterdot} {0.11}
+  { a~spin~on~a~cluster~sub-frame:~small~enough~that~the~gap~between~two~
+    spins~exceeds~their~radius,~so~four~of~them~read~as~four }
 
 \__tenkz_metric_declare_length:nnn {wirewidth} {0.55pt}
   { the~wire~stroke~of~the~ink~hierarchy }
