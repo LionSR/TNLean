@@ -1,0 +1,467 @@
+
+\begin{definition}[Controlled dependent partial trace]
+    \label{def:mpdo_controlled_dependent_partial_trace}
+    \lean{Matrix.controlledPartialTraceRightLM}
+    \leanok
+    \uses{def:mpdo_controlled_kraus_map, def:mpdo_right_partial_trace_map}
+    Let
+    \[
+        H=\bigoplus_{i\in I}(A_i\otimes B_i),
+        \qquad K=\bigoplus_{i\in I}A_i.
+    \]
+    The controlled dependent partial trace discards the off-diagonal blocks
+    between distinct $i$ and applies $\tr_{B_i}$ to the $i$th diagonal block.
+\end{definition}
+
+\begin{theorem}[Diagonal blocks of the controlled dependent partial trace]
+    \label{thm:mpdo_controlled_dependent_partial_trace_same_block}
+    \lean{Matrix.controlledPartialTraceRightLM_sameBlock_apply}
+    \leanok
+    \uses{def:mpdo_controlled_dependent_partial_trace,
+      def:mpdo_right_partial_trace_map}
+    If $X_{ii}$ denotes the $i$th diagonal block of $X$, then
+    \[
+        [\mathcal C_{\mathrm{tr}}(X)]_{ii}=\tr_{B_i}(X_{ii}).
+    \]
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:mpdo_controlled_kraus_map_same_block}
+    If $(K_{i,j})_j$ is the Kraus family chosen for $\tr_{B_i}$, then the
+    diagonal-block formula gives
+    \[
+      [\mathcal C_{\mathrm{tr}}(X)]_{ii}
+      =\sum_j K_{i,j}X_{ii}K_{i,j}^\dagger
+      =\tr_{B_i}(X_{ii}).
+    \]
+\end{proof}
+
+\begin{theorem}[The controlled dependent partial trace is trace-preserving
+    completely positive]
+    \label{thm:mpdo_controlled_dependent_partial_trace_cptp}
+    \lean{Matrix.controlledPartialTraceRightLM_isKrausCPTP}
+    \leanok
+    \uses{def:mpdo_controlled_dependent_partial_trace}
+    The controlled dependent partial trace is trace-preserving and completely
+    positive.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:mpdo_controlled_kraus_map_cptp,
+      lem:mpdo_right_partial_trace_cptp}
+    Choose Kraus operators $(V_{i,a})_a$ for $\tr_{B_i}$ and extend each
+    $V_{i,a}$ by zero outside the $i$th summand. Their controlled family
+    satisfies
+    \[
+      \sum_{i,a}\widetilde V_{i,a}^{\dagger}\widetilde V_{i,a}
+      =\bigoplus_i\left(\sum_aV_{i,a}^{\dagger}V_{i,a}\right)
+      =\bigoplus_i I_{A_i\otimes B_i}
+      =I_H.
+    \]
+    Its Kraus form gives complete positivity, and the displayed resolution of
+    the identity gives trace preservation.
+\end{proof}
+
+\begin{definition}[Two-site subspin regrouping]
+    \label{def:mpdo_two_site_subspin_regrouping}
+    \lean{MPOTensor.ExplicitEtaOperators.PhysicalSectorIndex}
+    \lean{MPOTensor.ExplicitEtaOperators.OuterSubspinIndex}
+    \lean{MPOTensor.ExplicitEtaOperators.NeighborSubspinIndex}
+    \lean{MPOTensor.ExplicitEtaOperators.SectorSiteIndex}
+    \lean{MPOTensor.ExplicitEtaOperators.BoundarySubspinIndex}
+    \lean{MPOTensor.ExplicitEtaOperators.EtaPreparationIndex}
+    \lean{MPOTensor.ExplicitEtaOperators.twoSiteTraceRegroupEquiv}
+    \lean{MPOTensor.ExplicitEtaOperators.t0RegroupEquiv}
+    \lean{MPOTensor.ExplicitEtaOperators.etaShiftEquiv}
+    \lean{MPOTensor.ExplicitEtaOperators.s2ShiftEquiv}
+    \lean{MPOTensor.PhysicalSectorFactorization.t0RegroupEquiv}
+    \leanok
+    \uses{def:mpdo_eta_structure, def:mpdo_physical_sector_factorization}
+    In sector-adapted coordinates, regroup two sites by
+    \[
+      ((l_k,r_k),(l_h,r_h))
+      \longmapsto ((l_k,r_h),(r_k,l_h)).
+    \]
+    Globally this gives the dependent-sum equivalence
+    \[
+      \left(\bigoplus_k L_k\otimes R_k\right)^{\!\otimes2}
+      \simeq
+      \bigoplus_{k,h}(L_k\otimes R_h)\otimes(R_k\otimes L_h).
+    \]
+    The forward equivalence prepares the neighboring factors
+    $R_k\otimes L_h$ for the partial trace in $\mathcal T_0$; its inverse is
+    the shift $\mathcal S_2$. These are the reorderings in
+    \cite[Appendix~C.2, lines~1521--1522 and~1555--1559]
+      {Cirac2016MPDO_arXiv}.
+\end{definition}
+
+\begin{definition}[The two-site partial-trace map $\mathcal T_0$]
+    \label{def:mpdo_t0_map}
+    \lean{MPOTensor.ExplicitEtaOperators.t0Map}
+    \lean{MPOTensor.PhysicalSectorFactorization.t0Map}
+    \leanok
+    \uses{def:mpdo_two_site_subspin_regrouping,
+      def:mpdo_controlled_dependent_partial_trace,
+      def:mpdo_equiv_reindex_map}
+    Define $\mathcal T_0$ by the two-site regrouping followed, in each pair
+    $(k,h)$, by the partial trace over $R_k\otimes L_h$. Its output is indexed
+    by the retained outer factors $L_k\otimes R_h$. Thus, writing $R_{\Phi_2}$
+    for the regrouping reindexing,
+    \[
+      \mathcal T_0
+      =\CTr_{(R_k\otimes L_h)_{k,h}}\circ R_{\Phi_2}.
+    \]
+\end{definition}
+
+\begin{theorem}[$\mathcal T_0$ is trace-preserving completely positive]
+    \label{thm:mpdo_t0_map_cptp}
+    \lean{MPOTensor.ExplicitEtaOperators.t0Map_isKrausCPTP}
+    \lean{MPOTensor.PhysicalSectorFactorization.t0Map_isKrausCPTP}
+    \leanok
+    \uses{def:mpdo_t0_map}
+    The map $\mathcal T_0$ is trace-preserving and completely positive.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:mpdo_equiv_reindex_cptp,
+      thm:mpdo_controlled_dependent_partial_trace_cptp,
+      lem:is_kraus_cptp_comp}
+    If $R_{\Phi_2}$ denotes reindexing along the two-site equivalence and
+    $\CTr$ the controlled dependent partial trace, then
+    \[
+      \mathcal T_0
+      =\CTr_{(R_k\otimes L_h)_{k,h}}\circ R_{\Phi_2}.
+    \]
+    The first factor is trace-preserving completely positive by
+    Theorem~\ref{thm:mpdo_controlled_dependent_partial_trace_cptp}, and the
+    second by Theorem~\ref{thm:mpdo_equiv_reindex_cptp}. Their composition is
+    therefore trace-preserving and completely positive.
+\end{proof}
+
+\begin{definition}[The two-site shift $\mathcal S_2$]
+    \label{def:mpdo_s2_map}
+    \lean{MPOTensor.ExplicitEtaOperators.s2Map}
+    \lean{MPOTensor.PhysicalSectorFactorization.s2ShiftEquiv,
+      MPOTensor.PhysicalSectorFactorization.s2Map,
+      MPOTensor.PhysicalSectorFactorization.s2Map_apply}
+    \leanok
+    \uses{def:mpdo_two_site_subspin_regrouping,
+      def:mpdo_equiv_reindex_map}
+    The map $\mathcal S_2$ is matrix reindexing along the inverse two-site
+    equivalence. Thus
+    \[
+      ((l_k,r_h),(r_k,l_h))
+      \longmapsto ((l_k,r_k),(l_h,r_h)).
+    \]
+\end{definition}
+
+\begin{theorem}[$\mathcal S_2$ is trace-preserving completely positive]
+    \label{thm:mpdo_s2_map_cptp}
+    \lean{MPOTensor.ExplicitEtaOperators.s2Map_isKrausCPTP}
+    \lean{MPOTensor.PhysicalSectorFactorization.s2Map_isKrausCPTP}
+    \leanok
+    \uses{def:mpdo_s2_map}
+    The shift $\mathcal S_2$ is trace-preserving and completely positive.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:mpdo_equiv_reindex_cptp}
+    If $\Phi_2$ is the two-site regrouping, then
+    $\mathcal S_2=R_{\Phi_2^{-1}}$. It is therefore trace-preserving and
+    completely positive by Theorem~\ref{thm:mpdo_equiv_reindex_cptp}.
+\end{proof}
+
+\begin{definition}[Three-site subspin regrouping]
+    \label{def:mpdo_three_site_subspin_regrouping}
+    \lean{MPOTensor.ExplicitEtaOperators.OmegaPreparationIndex}
+    \lean{MPOTensor.ExplicitEtaOperators.threeSiteTraceRegroupEquiv}
+    \lean{MPOTensor.ExplicitEtaOperators.s0RegroupEquiv}
+    \lean{MPOTensor.ExplicitEtaOperators.omegaShiftEquiv}
+    \lean{MPOTensor.ExplicitEtaOperators.t2ShiftEquiv}
+    \lean{MPOTensor.PhysicalSectorFactorization.ThreeSiteMiddleIndex,
+      MPOTensor.PhysicalSectorFactorization.S0PreparationIndex,
+      MPOTensor.PhysicalSectorFactorization.s0RegroupEquiv,
+      MPOTensor.PhysicalSectorFactorization.t2ShiftEquiv}
+    \leanok
+    \uses{def:mpdo_two_site_subspin_regrouping, def:mpdo_eta_omega,
+      def:mpdo_physical_sector_factorization}
+    Regroup three sites by
+    \[
+      ((l_k,r_k),((l_l,r_l),(l_h,r_h)))
+      \longmapsto
+      ((l_k,r_h),((r_k,l_l),(r_l,l_h))).
+    \]
+    Equivalently,
+    \[
+      \left(\bigoplus_k L_k\otimes R_k\right)^{\!\otimes3}
+      \simeq
+      \bigoplus_{k,h}(L_k\otimes R_h)\otimes
+        \left[\bigoplus_l
+          (R_k\otimes L_l)\otimes(R_l\otimes L_h)\right].
+    \]
+    The forward equivalence prepares the four middle subspins for
+    $\mathcal S_0$; its inverse is the shift $\mathcal T_2$ in
+    \cite[Appendix~C.2, lines~1535--1540 and~1547]
+      {Cirac2016MPDO_arXiv}.
+\end{definition}
+
+\begin{definition}[The three-site partial-trace map $\mathcal S_0$]
+    \label{def:mpdo_s0_map}
+    \lean{MPOTensor.ExplicitEtaOperators.s0Map}
+    \lean{MPOTensor.PhysicalSectorFactorization.s0Map,
+      MPOTensor.PhysicalSectorFactorization.s0Map_sameBlock_apply}
+    \leanok
+    \uses{def:mpdo_three_site_subspin_regrouping,
+      def:mpdo_controlled_dependent_partial_trace,
+      def:mpdo_equiv_reindex_map}
+    Define $\mathcal S_0$ by the three-site regrouping followed, for every
+    outer pair $(k,h)$, by the partial trace over
+    \[
+      \bigoplus_l(R_k\otimes L_l)\otimes(R_l\otimes L_h).
+    \]
+    Thus, writing $R_{\Phi_3}$ for the regrouping reindexing,
+    \[
+      \mathcal S_0
+      =\CTr_{\left(
+          \bigoplus_l(R_k\otimes L_l)\otimes(R_l\otimes L_h)
+        \right)_{k,h}}\circ R_{\Phi_3}.
+    \]
+\end{definition}
+% The source prose at line 1547 repeats 2l; the diagram forces the final
+% traced factor to be 3l. The correction is documented in
+% docs/paper-gaps/cpgsv17_mpdo_s0_trace_subspin_typo.tex.
+
+\begin{theorem}[$\mathcal S_0$ is trace-preserving completely positive]
+    \label{thm:mpdo_s0_map_cptp}
+    \lean{MPOTensor.ExplicitEtaOperators.s0Map_isKrausCPTP}
+    \lean{MPOTensor.PhysicalSectorFactorization.s0Map_isKrausCPTP}
+    \leanok
+    \uses{def:mpdo_s0_map}
+    The map $\mathcal S_0$ is trace-preserving and completely positive.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:mpdo_equiv_reindex_cptp,
+      thm:mpdo_controlled_dependent_partial_trace_cptp,
+      lem:is_kraus_cptp_comp}
+    If $R_{\Phi_3}$ denotes reindexing along the three-site equivalence, then
+    \[
+      \mathcal S_0
+      =\CTr_{\left(
+          \bigoplus_l(R_k\otimes L_l)\otimes(R_l\otimes L_h)
+        \right)_{k,h}}\circ R_{\Phi_3}.
+    \]
+    The controlled trace and equivalence reindexing are trace-preserving and
+    completely positive by
+    Theorems~\ref{thm:mpdo_controlled_dependent_partial_trace_cptp}
+    and~\ref{thm:mpdo_equiv_reindex_cptp}, respectively. Their composition
+    has the same property.
+\end{proof}
+
+\begin{definition}[The three-site shift $\mathcal T_2$]
+    \label{def:mpdo_t2_map}
+    \lean{MPOTensor.ExplicitEtaOperators.t2Map}
+    \lean{MPOTensor.PhysicalSectorFactorization.t2Map}
+    \leanok
+    \uses{def:mpdo_three_site_subspin_regrouping,
+      def:mpdo_equiv_reindex_map}
+    The map $\mathcal T_2$ is matrix reindexing along the inverse three-site
+    equivalence. On each summand it sends
+    \[
+      ((l_k,r_h),((r_k,l_l),(r_l,l_h)))
+      \longmapsto ((l_k,r_k),((l_l,r_l),(l_h,r_h))).
+    \]
+\end{definition}
+
+\begin{theorem}[$\mathcal T_2$ is trace-preserving completely positive]
+    \label{thm:mpdo_t2_map_cptp}
+    \lean{MPOTensor.ExplicitEtaOperators.t2Map_isKrausCPTP}
+    \lean{MPOTensor.PhysicalSectorFactorization.t2Map_isKrausCPTP}
+    \leanok
+    \uses{def:mpdo_t2_map}
+    The shift $\mathcal T_2$ is trace-preserving and completely positive.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:mpdo_equiv_reindex_cptp}
+    If $\Phi_3$ is the three-site regrouping, then
+    $\mathcal T_2=R_{\Phi_3^{-1}}$. It is therefore trace-preserving and
+    completely positive by Theorem~\ref{thm:mpdo_equiv_reindex_cptp}.
+\end{proof}
+
+\begin{definition}[Fiberwise partial-trace maps]
+    \label{def:mpdo_fiberwise_partial_trace_maps}
+    \lean{MPOTensor.ExplicitEtaOperators.t0SectorMap}
+    \lean{MPOTensor.ExplicitEtaOperators.s0SectorMap}
+    \leanok
+    \uses{def:mpdo_two_site_subspin_regrouping,
+      def:mpdo_three_site_subspin_regrouping,
+      def:mpdo_right_partial_trace_map,
+      def:mpdo_equiv_reindex_map}
+    For fixed sectors $(k,h)$, define the fiberwise form of $\mathcal T_0$ by
+    regrouping two sites and tracing $R_k\otimes L_h$. For fixed
+    $(k,l,h)$, define the fiberwise form of $\mathcal S_0$ by regrouping three
+    sites and tracing
+    $(R_k\otimes L_l)\otimes(R_l\otimes L_h)$.
+\end{definition}
+
+\begin{theorem}[The fiberwise partial traces are trace-preserving completely
+    positive]
+    \label{thm:mpdo_fiberwise_partial_trace_maps_cptp}
+    \lean{MPOTensor.ExplicitEtaOperators.t0SectorMap_isKrausCPTP}
+    \lean{MPOTensor.ExplicitEtaOperators.s0SectorMap_isKrausCPTP}
+    \leanok
+    \uses{def:mpdo_fiberwise_partial_trace_maps}
+    Every fiberwise form of $\mathcal T_0$ and $\mathcal S_0$ is
+    trace-preserving and completely positive.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:mpdo_equiv_reindex_cptp,
+      lem:mpdo_right_partial_trace_cptp,
+      lem:is_kraus_cptp_comp}
+    The fiberwise forms factor as
+    \[
+      \mathcal T_0^{(k,h)}
+      =\tr_{R_k\otimes L_h}\circ R_{\phi_{k,h}},
+      \qquad
+      \mathcal S_0^{(k,l,h)}
+      =\tr_{(R_k\otimes L_l)\otimes(R_l\otimes L_h)}
+        \circ R_{\phi_{k,l,h}},
+    \]
+    where $\phi_{k,h}$ is the two-site equivalence of
+    Definition~\ref{def:mpdo_two_site_subspin_regrouping} on the $(k,h)$
+    sector, $\phi_{k,l,h}$ is the three-site equivalence of
+    Definition~\ref{def:mpdo_three_site_subspin_regrouping} on the $(k,l,h)$
+    sector, and $R_\phi$ denotes equivalence reindexing. Both factors in each
+    composition are trace-preserving and completely positive, so the
+    composition is as well.
+\end{proof}
+
+\begin{definition}[Fiberwise shifts]
+    \label{def:mpdo_fiberwise_shifts}
+    \lean{MPOTensor.ExplicitEtaOperators.s2SectorMap}
+    \lean{MPOTensor.ExplicitEtaOperators.t2SectorMap}
+    \leanok
+    \uses{def:mpdo_two_site_subspin_regrouping,
+      def:mpdo_three_site_subspin_regrouping,
+      def:mpdo_equiv_reindex_map}
+    On fixed sector pairs, define $\mathcal S_2$ and $\mathcal T_2$ by the
+    same inverse regroupings as the corresponding global shifts.
+\end{definition}
+
+\begin{samepage}
+\begin{theorem}[The fiberwise shifts are trace-preserving completely positive]
+    \label{thm:mpdo_fiberwise_shifts_cptp}
+    \lean{MPOTensor.ExplicitEtaOperators.s2SectorMap_isKrausCPTP}
+    \lean{MPOTensor.ExplicitEtaOperators.t2SectorMap_isKrausCPTP}
+    \leanok
+    \uses{def:mpdo_fiberwise_shifts}
+    Every fiberwise shift is trace-preserving and completely positive.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:mpdo_equiv_reindex_cptp}
+    The shifts $\mathcal S_2^{(k,h)}$ and $\mathcal T_2^{(k,h)}$ are
+    reindexings along the inverse two-site and three-site equivalences of
+    Definitions~\ref{def:mpdo_two_site_subspin_regrouping}
+    and~\ref{def:mpdo_three_site_subspin_regrouping}, respectively. They are
+    therefore trace-preserving and completely positive by
+    Theorem~\ref{thm:mpdo_equiv_reindex_cptp}.
+\end{proof}
+\end{samepage}
+
+To record the domains and codomains, set
+\[
+  \mathcal H^{\Omega}_{k,h}
+  =\bigoplus_l
+    (B_k^R\otimes B_l^L)\otimes(B_l^R\otimes B_h^L)
+\]
+and introduce the matrix algebras
+\[
+\begin{aligned}
+  \mathcal A_2
+  &=\End\!\left(
+      \left[\bigoplus_j(B_j^L\otimes B_j^R)\right]^{\!\otimes2}\right),
+  &
+  \mathcal A_{\partial}
+  &=\End\!\left(\bigoplus_{k,h}B_k^L\otimes B_h^R\right),\\
+  \mathcal A_{\eta}
+  &=\End\!\left(
+      \bigoplus_{k,h}\bigl[(B_k^L\otimes B_h^R)\otimes
+        (B_k^R\otimes B_h^L)\bigr]\right),
+  &
+  \mathcal A_{\Omega}
+  &=\End\!\left(
+      \bigoplus_{k,h}\bigl[(B_k^L\otimes B_h^R)\otimes
+        \mathcal H^{\Omega}_{k,h}\bigr]\right),\\
+  \mathcal A_3
+  &=\End\!\left(
+      \left[\bigoplus_j(B_j^L\otimes B_j^R)\right]^{\!\otimes3}\right).
+\end{aligned}
+\]
+Thus the global maps have types
+\[
+  \mathcal T_0:\mathcal A_2\to\mathcal A_{\partial},
+  \qquad
+  \mathcal S_2:\mathcal A_{\eta}\to\mathcal A_2,
+  \qquad
+  \mathcal S_0:\mathcal A_3\to\mathcal A_{\partial},
+  \qquad
+  \mathcal T_2:\mathcal A_{\Omega}\to\mathcal A_3.
+\]
+The controlled maps $\mathcal T_0$ and $\mathcal S_0$ discard coherences
+between distinct outer-sector pairs. For fixed $(k,h)$, the global map
+$\mathcal S_0$ traces the entire carrier $\mathcal H^{\Omega}_{k,h}$, including
+its direct sum over $l$. The shifts $\mathcal S_2$ and $\mathcal T_2$ are
+global reindexings, with all displayed tensor factors present at their inputs
+\cite[Appendix~C.2, lines~1521--1559]{Cirac2016MPDO_arXiv}.
+
+For the fiberwise maps, write
+\[
+\begin{aligned}
+  \mathcal A_2^{k,h}
+  &=\End\!\left(
+      (B_k^L\otimes B_k^R)\otimes(B_h^L\otimes B_h^R)\right),
+  &
+  \mathcal A_{\partial}^{k,h}
+  &=\End(B_k^L\otimes B_h^R),\\
+  \mathcal A_{\eta}^{k,h}
+  &=\End\!\left(
+      (B_k^L\otimes B_h^R)\otimes(B_k^R\otimes B_h^L)\right),
+  &
+  \mathcal A_{\Omega}^{k,h}
+  &=\End\!\left(
+      (B_k^L\otimes B_h^R)\otimes\mathcal H^{\Omega}_{k,h}\right),\\
+  \mathcal A_3^{k,l,h}
+  &=\End\!\left(
+      (B_k^L\otimes B_k^R)\otimes(B_l^L\otimes B_l^R)
+        \otimes(B_h^L\otimes B_h^R)\right),&\\
+  \mathcal A_3^{k,\bullet,h}
+  &=\End\!\left(\bigoplus_l
+      \bigl[(B_k^L\otimes B_k^R)\otimes(B_l^L\otimes B_l^R)
+        \otimes(B_h^L\otimes B_h^R)\bigr]\right).&
+\end{aligned}
+\]
+The map $\mathcal S_0^{(k,l,h)}$ fixes the middle sector $l$ before taking the
+partial trace; it is therefore distinct from the fixed-$(k,h)$ restriction of
+the global controlled map $\mathcal S_0$. The four fiberwise types are
+% Formula: T_0^(k,h), S_2^(k,h), S_0^(k,l,h), and T_2^(k,h) have the displayed
+% matrix-algebra domains and codomains. Ink: every blue stroke denotes a
+% trace-preserving completely positive map, and its label specifies the map.
+\par\noindent\hfil
+  \begin{tenkzcd}[maps, species={channel}, row sep=6mm]
+    \mathcal A_2^{k,h} & \mathcal A_{\partial}^{k,h} \\
+    \mathcal A_{\eta}^{k,h} & \mathcal A_2^{k,h} \\
+    \mathcal A_3^{k,l,h} & \mathcal A_{\partial}^{k,h} \\
+    \mathcal A_{\Omega}^{k,h} & \mathcal A_3^{k,\bullet,h}
+    \tnarrow[from={(1,1)}, to={(1,2)}, species=channel]
+      {\mathcal T_0^{(k,h)}}
+    \tnarrow[from={(2,1)}, to={(2,2)}, species=channel]
+      {\mathcal S_2^{(k,h)}}
+    \tnarrow[from={(3,1)}, to={(3,2)}, species=channel]
+      {\mathcal S_0^{(k,l,h)}}
+    \tnarrow[from={(4,1)}, to={(4,2)}, species=channel]
+      {\mathcal T_2^{(k,h)}}
+  \end{tenkzcd}
+\hfil\par

@@ -1,0 +1,715 @@
+\section{Single-bond commuting form from the local structure}
+
+\begin{definition}[Translation-invariant two-site bond]
+    \label{def:mpdo_translation_invariant_bond_data}
+    \lean{MPOTensor.TranslationInvariantBondData}
+    \leanok
+    \uses{def:mpdo_commuting_form_data}
+    This records one positive semidefinite two-site bond $B\ge0$ whose
+    translated copies commute pairwise on the periodic $N$-site chain at
+    every chain length $N\ge2$:
+    \[
+        [B_{i,i+1},B_{j,j+1}]=0.
+    \]
+\end{definition}
+
+\begin{definition}[$\eta$-local single-bond commuting-form data]
+    \label{def:mpdo_eta_local_structure_data}
+    \lean{MPOTensor.EtaLocalStructureData}
+    \leanok
+    \uses{def:mpdo_translation_invariant_bond_data, def:mpdo_has_commuting_form}
+    This defines the one-bond eta-local form constructed in
+    \cite[Appendix~C.2]{Cirac2016MPDO_arXiv}:
+    a two-site bond $B$ as in
+    Definition~\ref{def:mpdo_translation_invariant_bond_data} together with,
+    for every chain length $N\ge2$, a constant $c>0$ such that
+    \[
+        \rho^{(N)}(M)=c\prod_{i=0}^{N-1}B_{i,i+1}.
+    \]
+    The bond acts on the full two-site space.
+\end{definition}
+
+\begin{definition}[Finite-chain bond form]
+    \label{def:mpdo_translation_invariant_bond_to_commuting_form_data}
+    \lean{MPOTensor.TranslationInvariantBondData.toCommutingFormData}
+    \lean{MPOTensor.TranslationInvariantBondData.toCommutingFormData_bond}
+    \lean{MPOTensor.TranslationInvariantBondData.toCommutingFormData_hN}
+    \lean{MPOTensor.TranslationInvariantBondData.toCommutingFormData_bondAt}
+    \leanok
+    \uses{def:mpdo_translation_invariant_bond_data, def:mpdo_commuting_form_data}
+    A translation-invariant positive two-site bond determines finite-chain
+    commuting-form data at every length $N \ge 2$.
+\end{definition}
+
+\begin{definition}[Common three-site coordinates for overlapping bonds]
+    \label{def:mpdo_three_site_overlapping_coordinates}
+    \lean{MPOTensor.threeSiteOverlappingEquiv}
+    \lean{MPOTensor.pairBondMatrix}
+    \lean{MPOTensor.TranslationInvariantBondData.pairBond}
+    \lean{MPOTensor.EtaLocalStructureData.pairBond}
+    \leanok
+    \uses{def:mpdo_translation_invariant_bond_data}
+    Write the two-site bond on the ordered pair of physical indices, and
+    identify a three-site configuration $(x_0,x_1,x_2)$ with the
+    left-associated triple $((x_0,x_1),x_2)$.  These are common coordinates
+    for the two bonds on sites $(0,1)$ and $(1,2)$.
+\end{definition}
+
+\begin{theorem}[Adjacent translates are the two overlapping lifts]
+    \label{thm:mpdo_eta_bond_overlapping_lifts}
+    \lean{MPOTensor.reindex_embedLocalOperator_zero_eq_leftOverlappingLift}
+    \lean{MPOTensor.reindex_embedLocalOperator_one_eq_rightOverlappingLift}
+    \lean{MPOTensor.TranslationInvariantBondData.pairBond_isHermitian}
+    \lean{MPOTensor.TranslationInvariantBondData.%
+      reindex_bondAt_zero_eq_leftOverlappingLift}
+    \lean{MPOTensor.TranslationInvariantBondData.%
+      reindex_bondAt_one_eq_rightOverlappingLift}
+    \lean{MPOTensor.TranslationInvariantBondData.%
+      overlappingLifts_pairBond_comm}
+    \lean{MPOTensor.EtaLocalStructureData.pairBond_isHermitian}
+    \lean{MPOTensor.EtaLocalStructureData.reindex_bondAt_zero_eq_leftOverlappingLift}
+    \lean{MPOTensor.EtaLocalStructureData.reindex_bondAt_one_eq_rightOverlappingLift}
+    \lean{MPOTensor.EtaLocalStructureData.overlappingLifts_pairBond_comm}
+    \leanok
+    \uses{def:mpdo_three_site_overlapping_coordinates,
+        def:mpdo_translation_invariant_bond_data}
+    Let $B$ be a translation-invariant positive two-site bond, written as an
+    operator $\widehat B$ on an ordered pair of physical spaces.
+    Under the same three-site identification for both translates,
+    \[
+        B_{0,1}=\widehat B\otimes\Id,
+        \qquad
+        B_{1,2}=\Id\otimes\widehat B.
+    \]
+    Thus these two operators are respectively the left and right overlapping
+    lifts of $\widehat B$.  Moreover, $\widehat B$ is Hermitian and the two
+    lifts commute.  These are exactly the local hypotheses needed for the
+    Bravyi--Vyalyi decomposition invoked at
+    \cite[Appendix~C.2, lines~1599--1605]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+
+\begin{proof}\leanok
+    Let $\Phi$ be the matrix reindexing induced by the common three-site
+    identification, and write $B_{0,1}=\Phi(B_0)$ and
+    $B_{1,2}=\Phi(B_1)$ for the two reindexed translates.  For three-site
+    configurations $x$ and $y$, the two outside-window conditions are
+    \[
+        \bigl(\forall r\notin\{0,1\},\ x_r=y_r\bigr)
+            \Longleftrightarrow x_2=y_2,
+        \qquad
+        \bigl(\forall r\notin\{1,2\},\ x_r=y_r\bigr)
+            \Longleftrightarrow x_0=y_0.
+    \]
+    Hence evaluation at a pair of left-associated triples gives
+    \[
+        \bigl(B_{0,1}\bigr)_{(i,j,k),(i',j',k')}
+          =\widehat B_{(i,j),(i',j')}\,\delta_{k,k'}
+          =\bigl(\widehat B\otimes\Id\bigr)_{(i,j,k),(i',j',k')},
+    \]
+    and
+    \[
+        \bigl(B_{1,2}\bigr)_{(i,j,k),(i',j',k')}
+          =\delta_{i,i'}\,\widehat B_{(j,k),(j',k')}
+          =\bigl(\Id\otimes\widehat B\bigr)_{(i,j,k),(i',j',k')}.
+    \]
+    Positivity of $B$ gives $\widehat B^*=\widehat B$.  Finally, matrix
+    reindexing is multiplicative, so
+    \[
+        \Phi(XY)=\Phi(X)\Phi(Y),
+        \qquad
+        B_0B_1=B_1B_0
+        \quad\Longrightarrow\quad
+        \Phi(B_0)\Phi(B_1)=\Phi(B_1)\Phi(B_0).
+    \]
+    Substituting the two entrywise identities proves that the left and right
+    overlapping lifts commute.
+\end{proof}
+
+\begin{theorem}[$\eta$-local structure carries single-bond commuting form]
+    \label{thm:mpdo_eta_local_structure_has_commuting_form}
+    \lean{MPOTensor.EtaLocalStructureData.hasCommutingForm}
+    \lean{MPOTensor.EtaLocalStructureData.formAt_realizes}
+    \lean{MPOTensor.EtaLocalStructureData.formAt_bondAt_comm}
+    \lean{MPOTensor.EtaLocalStructureData.exists_positive_scalar_mpo_eq_product}
+    \lean{MPOTensor.EtaLocalStructureData.positive_commuting_product_form}
+    \lean{MPOTensor.hasCommutingForm_of_etaLocalStructure}
+    \leanok
+    \uses{def:mpdo_eta_local_structure_data, def:mpdo_has_commuting_form}
+    The $\eta$-local structure itself determines a single-bond
+    commuting-form witness for
+    every chain length $N \ge 2$: writing $B$ for its bond, the translated
+    copies commute,
+    \[
+        [B_{i,i+1},B_{j,j+1}]=0,
+    \]
+    and there exists $c>0$ with
+    \[
+        \rho^{(N)}(M)=c\prod_{i=0}^{N-1}B_{i,i+1}.
+    \]
+    This is the one-bond product conclusion used in
+    \cite[Proposition~C.8]{Cirac2016MPDO_arXiv}.
+    % Gap documented in docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex.
+\end{theorem}
+
+\begin{proof}\leanok
+    At length $N$, apply the commuting two-site bond and realization identity
+    provided by the $\eta$-local structure.
+\end{proof}
+
+\begin{theorem}[$\eta$-local structure gives a single-bond product]
+    \label{thm:mpdo_eta_local_structure_has_commuting_bond_product}
+    \lean{MPOTensor.EtaLocalStructureData.hasCommutingBondProductAt}
+    \lean{MPOTensor.EtaLocalStructureData.hasCommutingBondProduct}
+    \lean{MPOTensor.hasCommutingBondProduct_of_etaLocalStructure}
+    \leanok
+    \uses{def:mpdo_eta_local_structure_data,
+        def:mpdo_has_commuting_bond_product}
+    The same $\eta$-local structure gives a single-bond product witness
+    on every finite periodic chain.
+\end{theorem}
+
+\begin{proof}\leanok
+    Evaluate the local structure at each chain length $N \ge 2$.
+\end{proof}
+
+\begin{theorem}[Single-bond product with doubled-index idempotence]
+    \label{thm:mpdo_eta_local_structure_has_commuting_bond_product_zcl}
+    \lean{MPOTensor.EtaLocalStructureData.hasCommutingBondProductWithZCL}
+    \lean{MPOTensor.hasCommutingBondProductWithZCL_of_etaLocalStructure}
+    \leanok
+    \uses{thm:mpdo_eta_local_structure_has_commuting_form,
+        thm:mpdo_has_commuting_bond_product_zcl_iff_has_commuting_form_and_is_zcl}
+    An $\eta$-local structure together with the doubled-index transfer
+    condition gives the corresponding single-bond branch.
+    % Scope restriction (single-bond presentation): see
+    % docs/paper-gaps/cpsv16_gsnnch_sector_decomposition.tex.
+\end{theorem}
+
+\begin{proof}\leanok
+    Use the commuting-form witness carried by the $\eta$-local structure and
+    combine it with the doubled-index transfer hypothesis.
+\end{proof}
+
+\begin{theorem}[A commuting bond admits unitary block actions]
+    \label{thm:mpdo_eta_local_pair_bond_unitary_block_actions}
+    \lean{MPOTensor.TranslationInvariantBondData.%
+      exists_unitary_blockActions_of_pairBond}
+    \lean{MPOTensor.EtaLocalStructureData.exists_unitary_blockActions_of_pairBond}
+    \leanok
+    \uses{def:mpdo_three_site_overlapping_coordinates,
+        thm:mpdo_eta_bond_overlapping_lifts,
+        thm:commuting_overlapping_unitary_block_actions}
+    Let $\widehat B$ be a pair-indexed positive two-site bond whose periodic
+    translates commute.  There are positive dimensions
+    $d_{l,q}=\dim H_{q,l}$ and $d_{r,q}=\dim H_{q,r}$, a unitary decomposition
+    \[
+        H\cong\bigoplus_{q=0}^{K-1}H_{q,l}\otimes H_{q,r},
+    \]
+    and Hermitian operators $R_q$ on $H\otimes H_{q,l}$ and $S_q$ on
+    $H_{q,r}\otimes H$ such that
+    \[
+        (\Id_H\otimes U^*)\widehat B(\Id_H\otimes U)
+        =\bigoplus_{q=0}^{K-1}(R_q\otimes\Id_{H_{q,r}}),
+    \]
+    \[
+        (U^*\otimes\Id_H)\widehat B(U\otimes\Id_H)
+        =\bigoplus_{q=0}^{K-1}(\Id_{H_{q,l}}\otimes S_q).
+    \]
+    The basis bijection for each sector enumerates the numerical indices in
+    right--left order,
+    \[
+        \bigsqcup_q\bigl(\{0,\ldots,d_{r,q}-1\}
+            \times\{0,\ldots,d_{l,q}-1\}\bigr)
+        \cong\{0,\ldots,d-1\}.
+    \]
+    Writing $e(q,(r,s))$ for this basis bijection, the left and right spatial
+    coordinates are respectively
+    \[
+        (q,((i,s),r))\longmapsto(i,e(q,(r,s))),
+        \qquad
+        (q,(s,(r,k)))\longmapsto(e(q,(r,s)),k).
+    \]
+    Hence the tensor factors in the displayed block actions occur in
+    left--right order.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpdo_eta_bond_overlapping_lifts,
+        thm:commuting_overlapping_unitary_block_actions}
+    The pair-indexed bond is Hermitian by positivity, and its two overlapping
+    lifts commute by the common three-site identification.  Apply
+    Theorem~\ref{thm:commuting_overlapping_unitary_block_actions}.
+\end{proof}
+
+\begin{theorem}[Positive neighboring operators from the commuting bond]
+    \label{thm:mpdo_commuting_bond_positive_eta_decomposition}
+    \lean{MPOTensor.TranslationInvariantBondData.%
+      exists_positive_eta_pairBond_decomposition}
+    \lean{MPOTensor.EtaLocalStructureData.%
+      exists_positive_eta_pairBond_decomposition}
+    \leanok
+    \uses{thm:mpdo_eta_local_pair_bond_unitary_block_actions}
+    Let $B$ be a pair-indexed positive bond whose periodic translates commute.
+    There are a unitary coordinate decomposition
+    \[
+        H\cong\bigoplus_q H_{q,r}\otimes H_{q,l}
+    \]
+    and positive semidefinite operators
+    $\eta_{q,h}$ on $H_{q,r}\otimes H_{h,l}$.  After regrouping the
+    two-site coordinates, the $(q,h)$-sector is
+    \[
+        H_{q,l}\otimes(H_{q,r}\otimes H_{h,l})\otimes H_{h,r},
+    \]
+    and in these regrouped coordinates
+    \[
+        (U^*\otimes U^*)B(U\otimes U)
+        =\bigoplus_{q,h}
+          \Id_{H_{q,l}}\otimes\eta_{q,h}\otimes\Id_{H_{h,r}}.
+    \]
+    The unitary and the neighboring operators depend only on the fixed bond,
+    and hence are independent of a chain length or bond position.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpdo_eta_local_pair_bond_unitary_block_actions}
+    The same unitary block decomposition at both ends of $B$ gives identity
+    action on $H_{q,l}$ through one block identity and on $H_{h,r}$ through
+    the other.  For fixed basis indices
+    $\ell_q^0\in H_{q,l}$ and $r_h^0\in H_{h,r}$, let
+    $B'=(U^*\otimes U^*)B(U\otimes U)$.  The neighboring operator has entries
+    \[
+        (\eta_{q,h})_{(r,\ell),(r',\ell')}
+        =B'_{(q,r,\ell_q^0;h,r_h^0,\ell),
+          (q,r',\ell_q^0;h,r_h^0,\ell')}.
+    \]
+    Thus $\eta_{q,h}$ is a principal compression of the positive operator
+    $B'$, and is therefore positive semidefinite.
+\end{proof}
+
+\begin{theorem}[Cyclic product of a locally decomposed bond]
+    \label{thm:mpdo_eta_pair_bond_cyclic_product_transport}
+    \lean{MPOTensor.%
+      reindex_product_embedLocalOperator_of_etaPair_decomposition}
+    \leanok
+    Suppose that, in one fixed coordinate decomposition
+    \[
+        H\cong\bigoplus_q H_{q,r}\otimes H_{q,l},
+    \]
+    after regrouping the two-site coordinates according to this decomposition,
+    a two-site operator has the form
+    \[
+        B=\bigoplus_{q,h}
+          \Id_{H_{q,l}}\otimes\eta_{q,h}\otimes\Id_{H_{h,r}}.
+    \]
+    For every $N\geq2$, regroup the cyclic chain as
+    \[
+        H^{\otimes N}\cong
+        \bigoplus_{k:\mathbb Z/N\mathbb Z\to\{0,\ldots,K-1\}}
+        \bigotimes_{n\in\mathbb Z/N\mathbb Z}
+          \left(H_{k_n,r}\otimes H_{k_{n+1},l}\right).
+    \]
+    Then, in these coordinates,
+    \[
+        \prod_{n=0}^{N-1}B_{n,n+1}
+        =\bigoplus_k\bigotimes_{n=0}^{N-1}\eta_{k_n,k_{n+1}},
+        \qquad k_N=k_0.
+    \]
+    At $N=2$, the two translated windows have the opposite orders $(0,1)$
+    and $(1,0)$ and give the two oriented factors
+    $\eta_{k_0,k_1}$ and $\eta_{k_1,k_0}$.
+\end{theorem}
+
+\begin{proof}\leanok
+    In a fixed sector configuration, the cyclic regrouping sends the factors
+    $(r_n,l_n)$ to the edge factors $(r_n,l_{n+1})$.  The translate beginning
+    at $n$ acts by $\eta_{k_n,k_{n+1}}$ on the $n$th edge factor and by the
+    identity on every other edge factor.  Different sector configurations do
+    not mix.  Multiplying the translated operators therefore gives the stated
+    direct sum of tensor products.
+\end{proof}
+
+% **Local fix (proportionality scalar):** The converse at source lines
+% 1603--1605 invokes the coefficient-free equation sigmaNK2 after assuming
+% only proportionality to the commuting-bond product.  The statement below
+% retains that scalar.  See docs/paper-gaps/cpsv16_commuting_form_to_sal.tex.
+\begin{theorem}[Scaled finite-chain cyclic neighboring-operator form]
+    \label{thm:mpdo_eta_local_sigma_nk2}
+    \lean{MPOTensor.sitewisePhysicalMatrix_conjTranspose}
+    \lean{MPOTensor.reindex_sitewisePhysicalMatrix_two}
+    \lean{MPOTensor.sitewisePhysicalMatrix_one}
+    \lean{MPOTensor.sitewisePhysicalMatrix_mul_conjTranspose}
+    \lean{MPOTensor.singleKrausMap_bondProduct_of_unitary}
+    \lean{MPOTensor.EtaLocalStructureData.%
+      exists_positive_cyclic_eta_block_decomposition}
+    \leanok
+    \uses{def:mpdo_eta_local_structure_data,
+        thm:mpdo_commuting_bond_positive_eta_decomposition,
+        thm:mpdo_eta_pair_bond_cyclic_product_transport}
+    Let $\sigma^{(N)}(\mathcal K)$ be realized, for every $N\geq2$, by
+    translates of one positive commuting bond.  There are one unitary $U$,
+    positive sector dimensions, and positive semidefinite operators
+    $\eta_{q,h}$, all independent of $N$, such that for every $N\geq2$ there
+    is a constant $c_N>0$ satisfying
+    \[
+        E_N^*(U^*)^{\otimes N}\sigma^{(N)}(\mathcal K)
+          U^{\otimes N}E_N
+        =c_N\bigoplus_{k_0,\ldots,k_{N-1}}
+          \bigotimes_{n=0}^{N-1}\eta_{k_n,k_{n+1}},
+        \qquad k_N=k_0.
+    \]
+    Here $E_N$ is the cyclic regrouping from the edge factors
+    $H_{k_n,r}\otimes H_{k_{n+1},l}$ to the site factors
+    $H_{k_n,r}\otimes H_{k_n,l}$.  The factor $c_N$ is retained from the
+    proportionality relation in
+    \cite[Appendix~C.2, lines~1571--1576]{Cirac2016MPDO_arXiv}.  The passage at
+    \cite[Appendix~C.2, lines~1603--1605]{Cirac2016MPDO_arXiv} suppresses this
+    factor when invoking the coefficient-free equation \emph{sigmaNK2}; the
+    coefficient-free assertion is not part of the present theorem.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpdo_commuting_bond_positive_eta_decomposition,
+        thm:mpdo_eta_pair_bond_cyclic_product_transport}
+    Choose the unitary and the neighboring operators from the decomposition
+    of the fixed bond.  Conjugation by $(U^*)^{\otimes N}$ carries the product
+    of its translates to the product of the conjugated two-site bonds.  The
+    cyclic regrouping theorem changes this product into the displayed direct
+    sum.  Applying both transformations to
+    $\sigma^{(N)}(\mathcal K)=c_N\prod_n B_{n,n+1}$ preserves the same
+    positive scalar $c_N$.
+\end{proof}
+
+\begin{remark}[An arbitrary proportional presentation need not have unit scalar]
+    The proportional commuting-bond form alone does not permit one common
+    local normalization.  Indeed, take physical dimension $d=1$ and bond
+    dimension $D=2$, with sole matrix-product letter $M^{00}=I_2$, and take
+    the two-site bond to be the scalar $B=1$.  Then
+    \[
+        \sigma^{(N)}=\tr(I_2^N)=2
+        =c_N\prod_{n=0}^{N-1}B_{n,n+1},
+        \qquad c_N=2.
+    \]
+    Any positive neighboring decomposition of the one-dimensional physical
+    space has one sector and one scalar $a\geq0$.  A coefficient-free identity
+    at lengths two and four would give $a^2=2$ and $a^4=2$, a contradiction.
+    This example is not a normal injective block.  More generally, the source
+    does not claim that every proportional commuting-bond presentation can be
+    made coefficient-free by one local rescaling.  In the SAL-to-commuting-form
+    direction, the proof chooses the neighboring operators from the source
+    tensor and obtains scalar one directly.  This distinguishes the
+    proportionality at
+    \cite[Appendix~C.2, lines~1571--1576]{Cirac2016MPDO_arXiv} from the
+    coefficient-free invocation at
+    \cite[Appendix~C.2, lines~1603--1605]{Cirac2016MPDO_arXiv}. The
+    source-selected normal representative is
+    Corollary~\ref{cor:mpdo_normal_fixed_product_tensor_of_is_sal}.
+\end{remark}
+
+\begin{definition}[Cyclic edge-weight tensor]
+    \label{def:mpdo_cyclic_edge_weight_tensor}
+    \lean{MPOTensor.cyclicEdgeWeightTensor}
+    \lean{MPOTensor.cyclicEdgeWeightTensor_apply_eq}
+    \lean{MPOTensor.etaCyclicEdgeWeight}
+    \leanok
+    A scalar weight
+    \[
+        w(i,j;i',j')
+    \]
+    on two consecutive ket--bra pairs determines a translation-invariant
+    matrix-product tensor with virtual dimension $d^2$.  Its incoming
+    virtual pair is constrained to equal the current physical ket--bra pair,
+    while its outgoing pair records the following physical pair.
+\end{definition}
+
+\begin{theorem}[Closed cyclic edge-weight identity]
+    \label{thm:mpdo_cyclic_edge_weight_tensor}
+    \lean{MPOTensor.mpo_cyclicEdgeWeightTensor}
+    \leanok
+    \uses{def:mpdo_cyclic_edge_weight_tensor}
+    For every positive length $N$, the closed matrix-product operator of the
+    cyclic edge-weight tensor is
+    \[
+        \rho^{(N)}_{\sigma,\tau}
+          =\prod_{n=0}^{N-1}
+            w(\sigma_n,\tau_n;\sigma_{n+1},\tau_{n+1}),
+        \qquad \sigma_N=\sigma_0,\quad \tau_N=\tau_0.
+    \]
+    In the virtual trace there is precisely one potentially nonzero cyclic
+    virtual configuration.
+\end{theorem}
+
+\begin{definition}[Fixed tensor for a bond-product family]
+    \label{def:mpdo_fixed_bond_product_tensor}
+    \lean{MPOTensor.TranslationInvariantBondData.FixedProductTensorData}
+    \lean{MPOTensor.TranslationInvariantBondData.CyclicEdgeWeightForm}
+    \lean{MPOTensor.TranslationInvariantBondData.CyclicEdgeWeightForm.%
+      toFixedProductTensorData}
+    \leanok
+    \uses{def:mpdo_translation_invariant_bond_data,
+        thm:mpdo_cyclic_edge_weight_tensor}
+    A fixed tensor for a bond-product family consists of a positive virtual
+    dimension and one matrix-product tensor $C$, independent of $N$, such
+    that
+    \[
+        \rho^{(N)}(C)=\prod_{n=0}^{N-1}B_{n,n+1}
+        \qquad (N\geq2).
+    \]
+    If $d>0$, a cyclic scalar edge-weight expression for the entries of the
+    product gives such a tensor with positive virtual dimension $d^2$.
+\end{definition}
+
+\begin{theorem}[Fixed tensor representation of a commuting bond]
+    \label{thm:mpdo_eta_fixed_bond_product_tensor}
+    \lean{MPOTensor.%
+      reindex_mpo_cyclicEdgeWeightTensor_etaCyclicEdgeWeight}
+    \lean{MPOTensor.TranslationInvariantBondData.%
+      nonempty_fixedProductTensorData}
+    \lean{MPOTensor.TranslationInvariantBondData.fixedProductTensorData}
+    \lean{MPOTensor.EtaLocalStructureData.nonempty_fixedProductTensorData}
+    \lean{MPOTensor.EtaLocalStructureData.fixedProductTensorData}
+    \leanok
+    \uses{def:mpdo_translation_invariant_bond_data,
+        def:mpdo_eta_local_structure_data,
+        def:mpdo_fixed_bond_product_tensor,
+        thm:mpdo_commuting_bond_positive_eta_decomposition}
+    Let $B\geq0$ be a two-site bond whose periodic translates commute.  There
+    is a positive integer $R$ and a matrix-product tensor $C$ of virtual
+    dimension $R$, both independent of the chain length, such that for every
+    $N\geq2$,
+    \[
+        \rho^{(N)}(C)=\prod_{n=0}^{N-1}B_{n,n+1}.
+    \]
+    The construction gives a positive $R$ independent of $N$.  No normality,
+    zero-correlation-length, or scalar normalization hypothesis is required.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpdo_commuting_bond_positive_eta_decomposition}
+    Choose Beigi's chain-independent one-site unitary and the positive
+    neighboring operators $\eta_{q,h}$.  For a common matrix-unit index set
+    $\mathcal A$, write
+    \[
+        \eta_{q,h}\bigl((r,l),(r',l')\bigr)
+        =
+        \sum_{a\in\mathcal A}
+        R_a(q)_{r,r'}L_a(h)_{l,l'}.
+    \]
+    Thus the contraction of the right factor at one site with the left factor
+    at the next satisfies
+    \[
+        \sum_{a\in\mathcal A} R_a(q)\otimes L_a(h)=\eta_{q,h}.
+    \]
+    If $V$ is the resulting unitary change to the two-site sector
+    coordinates, this contraction gives
+    \[
+        \widetilde B=VBV^\dagger,
+        \qquad
+        B_{\mathrm{phys}}
+        =V^\dagger \widetilde B V=B.
+    \]
+    For a nonzero physical space, $\mathcal A$ is nonempty and gives a positive
+    virtual dimension.  For the zero-dimensional physical space, take one
+    virtual state and no physical sectors.  The cyclic contraction formula
+    then gives the product of the translates of $B$ at every length $N\geq2$.
+\end{proof}
+
+\begin{theorem}[Positive physical sectors of the selected fixed tensor]
+    \label{thm:mpdo_fixed_bond_positive_physical_sector_representative}
+    \lean{MPOTensor.TranslationInvariantBondData.%
+      exists_positive_physicalSectorFactorization_fixedProductTensorData}
+    \lean{MPOTensor.TranslationInvariantBondData.%
+      PositivePhysicalSectorFixedProductTensorData}
+    \lean{MPOTensor.TranslationInvariantBondData.%
+      nonempty_positivePhysicalSectorFixedProductTensorData}
+    \lean{MPOTensor.TranslationInvariantBondData.%
+      positivePhysicalSectorFixedProductTensorData}
+    \lean{MPOTensor.TranslationInvariantBondData.%
+      fixedProductTensorDataPhysicalSectorFactorization}
+    \lean{MPOTensor.TranslationInvariantBondData.%
+      fixedProductTensorDataPhysicalSectorFactorization_physicalBond_eq}
+    \lean{MPOTensor.TranslationInvariantBondData.%
+      fixedProductTensorDataPhysicalSectorFactorization_neighboring_pos}
+    \lean{MPOTensor.PhysicalSectorFactorization.etaSectorFinEquiv}
+    \lean{MPOTensor.PhysicalSectorFactorization.%
+      sectorCoordinateBond_etaPair_decomposition}
+    \leanok
+    \uses{thm:mpdo_eta_fixed_bond_product_tensor}
+    Let $C$ be the selected fixed tensor of the preceding theorem.  There are
+    physical sectors
+    \[
+        \mathbb C^d
+        \cong
+        \bigoplus_{q=0}^{K-1}H_q^L\otimes H_q^R,
+    \]
+    a unitary $U$, and matrices $L_\beta(q)$ and $R_\alpha(q)$ such that,
+    writing $C_{\beta,\alpha}$ for the physical matrix at fixed virtual
+    indices,
+    \[
+        U C_{\beta,\alpha}U^\dagger
+        =
+        \bigoplus_{q=0}^{K-1}
+          L_\beta(q)\otimes R_\alpha(q).
+    \]
+    The neighboring operators
+    \[
+        \eta_{q,h}
+        =
+        \sum_a R_a(q)\otimes L_a(h)
+    \]
+    are positive semidefinite.  If $U_2$ denotes the induced two-site change
+    of coordinates, then
+    \[
+        B
+        =
+        U_2^\dagger
+        \left[
+          \bigoplus_{q,h}
+          \Id_{H_q^L\otimes H_h^R}\otimes\eta_{q,h}
+        \right]
+        U_2.
+    \]
+    Thus the physical-sector factorization belongs to the same tensor $C$
+    whose closed operators are the fixed products of $B$.
+\end{theorem}
+
+\begin{proof}\leanok
+    Take the physical-sector factorization retained with $C$.  Its defining
+    one-site identity is
+    \[
+        U C_{\beta,\alpha}U^\dagger
+        =
+        \bigoplus_q L_\beta(q)\otimes R_\alpha(q).
+    \]
+    Contracting the adjacent right and left factors gives
+    \[
+        \eta_{q,h}=\sum_a R_a(q)\otimes L_a(h)\succeq0,
+    \]
+    where positivity is the retained neighboring-operator property.  Finally,
+    the retained bond identity is
+    \[
+        B
+        =
+        U_2^\dagger
+        \left[
+          \bigoplus_{q,h}
+          \Id_{H_q^L\otimes H_h^R}\otimes\eta_{q,h}
+        \right]
+        U_2.
+    \]
+\end{proof}
+
+\begin{remark}[The scalar edge formula depends on the one-site coordinates]
+    A cyclic scalar edge formula need not hold in the original physical basis.
+    For $d=2$, let $X$ be the Pauli flip and set $B=\Id+X\otimes X$.  This bond
+    is positive semidefinite and its periodic translates commute.  For every
+    $N\geq2$,
+    \[
+        \langle 0^N,\bigl(\prod_n B_{n,n+1}\bigr)0^N\rangle=2.
+    \]
+    At $N=2$ the periodic product is $B^2=2B$; for $N\geq3$, the empty edge
+    set and the full cycle are the two terms with zero boundary.  An
+    original-coordinate scalar edge weight would make this entry equal to
+    $a^N$.  The cases $N=2$ and $N=3$ would give $a^2=2$ and $a^3=2$, a
+    contradiction.  Equation \emph{sigmaNK2} in
+    \cite[Appendix~C.2, lines~1581--1589]{Cirac2016MPDO_arXiv} is stated only
+    after the one-site unitary coordinate change, as used in the theorem.
+\end{remark}
+
+\begin{theorem}[Eventual proportionality from a fixed product tensor]
+    \label{thm:mpdo_eta_fixed_product_tensor_eventual_proportionality}
+    \lean{MPOTensor.EtaLocalStructureData.%
+      eventuallyNonzeroProportionalMPV₂_fixedProductTensor}
+    \leanok
+    \uses{def:mpdo_eta_local_structure_data,
+        def:mpdo_fixed_bond_product_tensor,
+        thm:mpdo_eta_fixed_bond_product_tensor}
+    Suppose one fixed tensor $C$ generates the products of the bond carried
+    by an eta-local structure.  Then the doubled-index tensors of $M$ and
+    $C$ are eventually nonzero proportional.  The proof uses only lengths
+    $N\geq2$ and therefore assumes no relation at length one.
+\end{theorem}
+
+\begin{proof}\leanok
+    At every $N\geq2$, substitute the exact tensor representation into the
+    positive realization
+    $\rho^{(N)}(M)=c_N\prod_n B_{n,n+1}$, where $c_N>0$, and read ket--bra
+    pairs as doubled physical indices.
+\end{proof}
+
+\begin{theorem}[A normal rescaling gives a geometric phase]
+    \label{thm:mpdo_eta_normal_rescaling_geometric_phase}
+    \lean{MPOTensor.EtaLocalStructureData.%
+      exists_unit_phase_power_mpo_eq_product_of_normal_smul}
+    \leanok
+    \uses{def:mpdo_eta_local_structure_data,
+        def:mpdo_fixed_bond_product_tensor, def:nt_cpsv}
+    Let $A$ be the normal doubled-index source tensor of positive bond
+    dimension $D$, and let $C$ be a fixed tensor for its commuting-bond
+    product.  Suppose that $sC$ is normal for some $s>0$.  Then there is a
+    complex number $\zeta$, with
+    $|\zeta|=1$, such that, for every $N\geq2$,
+    \[
+        \rho^{(N)}(A)=(\zeta s)^N\prod_{n=0}^{N-1}B_{n,n+1}.
+    \]
+    This is a conditional reduction: it does not assert that $C$, or any
+    rescaling of $C$, is normal.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpdo_eta_fixed_product_tensor_eventual_proportionality,
+        lem:mpv_smul, thm:normal_proportional_mpv_geometric_phase,
+        lem:mpdo_three_first_site_contraction_coefficients}
+    Scaling $C$ by $s$ gives
+    \[
+        V^{(N)}(sC)_\sigma=s^N V^{(N)}(C)_\sigma.
+    \]
+    Thus, for all sufficiently large $N$, the proportionality
+    $V^{(N)}(A)_\sigma=c_NV^{(N)}(C)_\sigma$ becomes
+    \[
+        V^{(N)}(A)_\sigma
+          =\frac{c_N}{s^N}V^{(N)}(sC)_\sigma,
+        \qquad \frac{c_N}{s^N}\ne0.
+    \]
+    The normal-tensor overlap dichotomy gives one $\zeta\in\C$, with
+    $|\zeta|=1$, such that
+    \[
+        V^{(N)}(A)_\sigma
+          =\zeta^N V^{(N)}(sC)_\sigma
+          =(\zeta s)^N V^{(N)}(C)_\sigma
+    \]
+    at every positive length.
+\end{proof}
+
+\begin{theorem}[A normal rescaling forces the positive geometric law]
+    \label{thm:mpdo_eta_normal_rescaling_positive_geometric_law}
+    \lean{MPOTensor.EtaLocalStructureData.%
+      mpo_eq_positive_power_product_of_normal_smul}
+    \leanok
+    \uses{def:mpdo_eta_local_structure_data,
+        def:mpdo_fixed_bond_product_tensor, def:nt_cpsv}
+    Let $A$ be the normal doubled-index source tensor of positive bond
+    dimension $D$, let $C$ be a fixed tensor for its commuting-bond product,
+    and suppose that $sC$ is normal for some $s>0$.  Then the unit phase is
+    trivial.  For every $N\geq2$,
+    \[
+        \rho^{(N)}(A)=s^N\prod_{n=0}^{N-1}B_{n,n+1}.
+    \]
+    Thus a positive normal rescaling of the fixed product tensor already
+    supplies the positive geometric realization law.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpdo_eta_normal_rescaling_geometric_phase,
+        thm:cpsv_normal_mpv_phase_gauge}
+    Normality gives
+    \[
+        \lim_{N\to\infty}
+          \bigl\langle V^{(N)}(A),V^{(N)}(A)\bigr\rangle=1.
+    \]
+    Hence at two sufficiently large consecutive lengths, say $N$ and $N+1$,
+    both the source vector and the fixed bond product are nonzero.  Positivity
+    of the realization gives positive numbers $c_N,c_{N+1}$ satisfying
+    $(\zeta s)^N=c_N$ and $(\zeta s)^{N+1}=c_{N+1}$.  Consequently
+    $\zeta s=c_{N+1}/c_N>0$.  Since $|\zeta|=1$ and $s>0$, one has
+    $\zeta=1$.
+\end{proof}

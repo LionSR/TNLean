@@ -1,0 +1,964 @@
+\subsection{Markov decomposition and inverse-map sector factorization}
+
+For the simple MPDO case in Appendix~C.2 of \cite{Cirac2016MPDO_arXiv},
+the strong-area-law hypothesis is used locally through the equality case of
+strong subadditivity for a normalized three-site reduced state.
+
+\begin{definition}[Local $\eta$-structure for a three-site reduced state]
+    \label{def:mpdo_eta_structure}
+    \lean{MPOTensor.EtaStructure}
+    \leanok
+    \uses{def:entropy_quantum_markov_decomposition}
+    For a three-site density operator $\rho_{ABC}$, the local $\eta$-structure
+    is the quantum Markov decomposition on the middle subsystem $B$ produced by
+    equality in strong subadditivity. Concretely, after a unitary change of
+    basis on $B$, one has a finite direct-sum decomposition
+    \[
+        B = \bigoplus_k (b_1^{(k)} \otimes b_2^{(k)})
+    \]
+    such that
+    \[
+        \rho_{ABC} = \bigoplus_k \rho_{A b_1}^{(k)} \otimes \rho_{b_2 C}^{(k)}.
+    \]
+\end{definition}
+
+\begin{definition}[Canonical projections of a Hayashi decomposition]
+    \label{def:mpdo_hayashi_sector_projection}
+    \lean{MPOTensor.EtaStructure.coordinateSectorProjection}
+    \lean{MPOTensor.EtaStructure.sectorProjection}
+    \leanok
+    \uses{def:mpdo_eta_structure}
+    Let
+    \[
+        B=\bigoplus_k\bigl(b_1^{(k)}\otimes b_2^{(k)}\bigr)
+    \]
+    be the middle-site decomposition, and let $E_k$ be the coordinate
+    projection onto its $k$-th summand.  In the original physical basis, define
+    \[
+        Q_k=U_B^*E_kU_B.
+    \]
+    These are the projectors introduced in
+    \cite[Appendix~C.2, lines~1364--1368]{Cirac2016MPDO_arXiv}; the unitary
+    implements the basis change described in
+    \cite[Appendix~C.2, lines~1437--1440]{Cirac2016MPDO_arXiv}.
+\end{definition}
+
+\begin{theorem}[Resolution of the identity by Hayashi-sector projections]
+    \label{thm:mpdo_hayashi_sector_projection_resolution}
+    \lean{MPOTensor.EtaStructure.sectorProjection_isOrthogonal}
+    \lean{MPOTensor.EtaStructure.sum_sectorProjection}
+    \lean{MPOTensor.EtaStructure.sectorProjection_mul_eq_zero}
+    \leanok
+    \uses{def:orthogonal_projection_channel,
+        def:mpdo_hayashi_sector_projection}
+    Each $Q_k$ is an orthogonal projection, distinct summands are mutually
+    orthogonal, and the family resolves the identity:
+    \[
+        Q_kQ_\ell=0\quad(k\ne\ell),
+        \qquad \sum_k Q_k=\Id.
+    \]
+    The first two assertions follow from the orthogonal direct-sum
+    decomposition in
+    \cite[Appendix~C.2, lines~1364--1368]{Cirac2016MPDO_arXiv}; the resolution
+    of the identity is stated in
+    \cite[Appendix~C.2, lines~1693--1697]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:mpdo_hayashi_sector_projection,
+        lem:orthogonal_projection_mul_eq_zero_of_sum_eq_one,
+        thm:star_projection_coisometric_transport,
+        thm:orthogonal_projection_star_projection_channel}
+    The coordinate projections satisfy
+    \[
+        E_k^*=E_k,
+        \qquad E_k^2=E_k,
+        \qquad \sum_k E_k=\Id.
+    \]
+    Reindexing the direct sum and conjugating by $U_B$ preserve these
+    identities.  Hence each $Q_k=U_B^*E_kU_B$ is a star projection and
+    therefore an orthogonal projection, while
+    \[
+        \sum_k Q_k=U_B^*\Bigl(\sum_kE_k\Bigr)U_B=\Id.
+    \]
+    Finally, multiplying the resolution on both sides by $Q_k$ gives
+    \[
+        \sum_\ell Q_kQ_\ell Q_k=Q_k,
+        \qquad
+        Q_kQ_\ell Q_k=(Q_\ell Q_k)^*(Q_\ell Q_k)\geq0.
+    \]
+    The $\ell=k$ term already equals $Q_k$, so every term with $\ell\ne k$
+    vanishes.  Thus $(Q_\ell Q_k)^*(Q_\ell Q_k)=0$, hence
+    $Q_\ell Q_k=0$.  Taking adjoints gives $Q_kQ_\ell=0$ for $\ell\ne k$.
+\end{proof}
+
+\begin{definition}[Markov factors of a simultaneous inverse]
+    \label{def:mpdo_bnt_markov_factors}
+    \lean{MPOTensor.bntMarkovLeftFactor}
+    \lean{MPOTensor.bntMarkovRightFactor}
+    \leanok
+    \uses{def:mpdo_three_site_family_closure, def:mpdo_eta_structure}
+    Let $C_x$ and $C_y$ be two rows of a simultaneous left inverse, and
+    choose a Hayashi decomposition of the three-site operator.  In its
+    $k$-th Markov sector, set
+    \begin{align*}
+        A_x^{(k)}(l,l')
+        &=\sum_{i_1,j_1} C_{x,(i_1,j_1)}
+          \rho_{A b_1;(i_1,l),(j_1,l')}^{(k)},\\
+        B_y^{(k)}(r,r')
+        &=\sum_{i_3,j_3} C_{y,(i_3,j_3)}
+          \rho_{b_2 C;(r,i_3),(r',j_3)}^{(k)}.
+    \end{align*}
+    These are the two factors obtained in the projected contraction
+    of~\cite[Appendix~C.2, lines~1719--1725]{Cirac2016MPDO_arXiv}.
+\end{definition}
+
+\begin{theorem}[Outer inverse contraction in Markov coordinates]
+    \label{thm:mpdo_bnt_outer_inverse_markov_block}
+    \lean{MPOTensor.outerInverseContraction_markov_block}
+    \leanok
+    \uses{def:mpdo_bnt_markov_factors}
+    Let $\Gamma_{x,y}$ denote the outer inverse contraction.  In the basis of
+    the chosen Hayashi decomposition,
+    \[
+      {\bigl[U_B\Gamma_{x,y}U_B^\dagger\bigr]}_{(k,l,r),(k',l',r')}
+      =\begin{cases}
+        p_k A_x^{(k)}(l,l')B_y^{(k)}(r,r'),&k=k',\\
+        0,&k\ne k'.
+      \end{cases}
+    \]
+    In particular, the probability $p_k$ remains explicit.  This identity
+    requires neither a nonvanishing condition on $p_k$ nor assumptions of
+    saturated area law or zero correlation length.
+\end{theorem}
+
+\begin{proof}\leanok
+    Expand the two matrix products and the outer inverse contraction.  The
+    Hayashi block decomposition makes the middle-site contraction zero for
+    $k\ne k'$.  For $k=k'$, the remaining four outer sums separate into the
+    product defining $A_x^{(k)}$ and $B_y^{(k)}$, with the common factor $p_k$.
+\end{proof}
+
+\begin{theorem}[Entrywise BNT--Markov identity]
+    \label{thm:mpdo_bnt_markov_key_formula}
+    \lean{MPOTensor.isMPOBlockLeftInverse_bnt_markov_key_formula}
+    \leanok
+    \uses{thm:mpdo_bnt_three_site_outer_inverse_collapse,
+      thm:mpdo_bnt_outer_inverse_markov_block}
+    Let $x=(s,\alpha_1,\beta_1)$ and
+    $y=(t,\alpha_3,\beta_3)$.  Comparing the two expressions for the same
+    outer inverse contraction gives
+    \[
+      \begin{cases}
+        p_k A_x^{(k)}(l,l')B_y^{(k)}(r,r'),&k=k',\\
+        0,&k\ne k'
+      \end{cases}
+      =
+      \begin{cases}
+        {(R_s)}_{\beta_3,\alpha_1}
+        \bigl[U_B\kappa^{(s)}_{\beta_1,\alpha_3}U_B^\dagger\bigr]
+          _{(k,l,r),(k',l',r')},&s=t,\\
+        0,&s\ne t.
+      \end{cases}
+    \]
+    Here
+    $\kappa^{(s)}_{\beta_1,\alpha_3}(i,j)
+      ={(\mathcal K_s^{ij})}_{\beta_1,\alpha_3}$.
+    Thus both the normal-sector and Markov-sector off-diagonal entries are
+    retained in the statement, rather than being suppressed by a prior
+    choice of equal labels.  This is the full entrywise identity used
+    in~\cite[Appendix~C.2, lines~1719--1732]{Cirac2016MPDO_arXiv}.
+
+    The closing entry ${(R_s)}_{\beta_3,\alpha_1}$ is the corrected tail-index
+    orientation of the display at lines~1422--1438, recorded in
+    \path{docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex}.
+\end{theorem}
+
+\begin{proof}\leanok
+    The preceding theorem identifies the left side with the transformed outer
+    inverse contraction.  The collapse theorem identifies the contraction
+    with zero when $s\ne t$ and with
+    ${(R_s)}_{\beta_3,\alpha_1}
+      \kappa^{(s)}_{\beta_1,\alpha_3}$ when $s=t$.
+    Conjugating this matrix by $U_B$ gives the right side.
+\end{proof}
+
+\begin{theorem}[Off-diagonal Markov blocks of a BNT sector]
+    \label{thm:mpdo_bnt_markov_offdiagonal}
+    \lean{MPOTensor.isMPOBlockLeftInverse_bnt_markov_offdiagonal}
+    \leanok
+    \uses{thm:mpdo_bnt_markov_key_formula}
+    Fix a normal sector $s$ and virtual indices $\alpha_1,\beta_3$ for which
+    ${(R_s)}_{\beta_3,\alpha_1}\ne0$.  Then, for every $\beta_1,\alpha_3$
+    and every pair of distinct Markov sectors $k\ne k'$, one has
+    \[
+      \bigl[U_B\kappa^{(s)}_{\beta_1,\alpha_3}U_B^\dagger\bigr]
+        _{(k,l,r),(k',l',r')}=0.
+    \]
+    Thus each physical slice of the $s$-th normal tensor is block diagonal in
+    the Markov decomposition.  This is equation~\textup{Qks}
+    in~\cite[Appendix~C.2, lines~1682--1688 and 1730--1735]
+      {Cirac2016MPDO_arXiv}.
+
+    The nonzero closing entry uses the corrected orientation
+    ${(R_s)}_{\beta_3,\alpha_1}$ recorded in
+    \path{docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex}.
+\end{theorem}
+
+\begin{proof}\leanok
+    In the entrywise BNT--Markov identity, take equal normal-sector labels and
+    distinct Markov-sector labels.  The left side vanishes, while the right
+    side is the selected closing entry times the displayed block.  Cancel the
+    nonzero closing entry.
+\end{proof}
+
+\begin{definition}[Diagonal BNT block in a Markov sector]
+    \label{def:mpdo_bnt_markov_block}
+    \lean{MPOTensor.bntMarkovBlock}
+    \lean{MPOTensor.BNTMarkovBlockNonzero}
+    \leanok
+    For a normal sector $s$ and a Markov sector $k$, let
+    \[
+      O_s^{(k)}(\beta,\alpha)
+      =\bigl[U_B\kappa^{(s)}_{\beta,\alpha}U_B^\dagger\bigr]_{k,k}.
+    \]
+    The assertion $O_s^{(k)}\ne0$ means that this block is nonzero for at
+    least one pair of virtual indices $\beta,\alpha$.
+\end{definition}
+
+\begin{theorem}[Existence of a normal-sector label]
+    \label{thm:mpdo_bnt_markov_label_exists}
+    \lean{MPOTensor.exists_bntMarkovBlockNonzero_of_probability_ne_zero}
+    \leanok
+    \uses{def:mpdo_bnt_markov_block}
+    If $p_k\ne0$, then there is a normal sector $s$ for which
+    $O_s^{(k)}\ne0$.
+
+    This is the existence part of equation~\textup{QkKjs} in
+    \cite[Appendix~C.2, lines~1733--1737]{Cirac2016MPDO_arXiv}.  Restricting
+    to $p_k\ne0$ is the literal version of the source's preceding removal of
+    summands for which $Q_k\sigma_3^{(N)}Q_k=0$.
+\end{theorem}
+
+\begin{proof}\leanok
+    Choose nonzero diagonal entries of the trace-one left and right states in
+    sector $k$.  The corresponding diagonal entry of the Hayashi
+    decomposition is nonzero because $p_k\ne0$.  Expanding the same entry by
+    the three-site normal-sector family therefore leaves at least one nonzero
+    summand, whose middle tensor has $O_s^{(k)}\ne0$.
+\end{proof}
+
+\begin{theorem}[Uniqueness from nonzero closing matrices]
+    \label{thm:mpdo_bnt_markov_label_unique_nonzero_closing}
+    \lean{MPOTensor.bntMarkovBlockNonzero_eq_of_probability_ne_zero}
+    \lean{MPOTensor.existsUnique_bntMarkovBlockNonzero_of_probability_ne_zero}
+    \leanok
+    \uses{thm:mpdo_bnt_markov_key_formula,
+      thm:mpdo_bnt_markov_label_exists,def:mpdo_bnt_markov_block}
+    Suppose, in addition, that every closing matrix $R_s$ is nonzero.  If
+    $p_k\ne0$, there is a unique normal sector $j_k$ for which
+    $O_{j_k}^{(k)}\ne0$.
+
+    This is the cancellation argument in equation~\textup{QkKjs}.  The
+    stated nonzero-closing-matrix condition isolates the step obtained in the
+    source from simplicity and the common-weight choice at
+    \cite[Appendix~C.2, lines~1714--1718]{Cirac2016MPDO_arXiv}.  Its derivation
+    from those preceding hypotheses is
+    Theorem~\ref{thm:mpdo_normalized_three_site_bnt_family_closure}.
+\end{theorem}
+
+\begin{proof}\leanok
+    Assume that sectors $s\ne t$ both have nonzero $k$-blocks.  A diagonal
+    instance of the BNT--Markov identity for $s$ gives a nonzero left factor.
+    A mixed instance with normal-sector labels $s,t$ forces the right factor
+    selected from $t$ to vanish.  A diagonal instance for $t$ then has zero
+    left-hand side and a nonzero right-hand side, a contradiction.
+\end{proof}
+
+\begin{definition}[Normal-sector projections on the active support]
+    \label{def:mpdo_bnt_sector_projection}
+    \lean{MPOTensor.bntSectorLabel}
+    \lean{MPOTensor.bntSectorProjection}
+    \lean{MPOTensor.activeMarkovProjection}
+    \leanok
+    Under the hypotheses of
+    Theorem~\ref{thm:mpdo_bnt_markov_label_unique_nonzero_closing}, define
+    \[
+      P_s=\sum_{\substack{k:p_k\ne0\\j_k=s}}Q_k,
+      \qquad
+      P_{\mathrm{act}}=\sum_{k:p_k\ne0}Q_k.
+    \]
+    This is equation~\textup{Pis}, restricted to the positive-weight Markov
+    support retained here.
+\end{definition}
+
+\begin{theorem}[Orthogonality and resolution on the active support]
+    \label{thm:mpdo_bnt_sector_projection_resolution}
+    \lean{MPOTensor.bntSectorProjection_isOrthogonal}
+    \lean{MPOTensor.bntSectorProjection_mul_eq_zero}
+    \lean{MPOTensor.sum_bntSectorProjection}
+    \leanok
+    \uses{def:mpdo_bnt_sector_projection}
+    Every $P_s$ is an orthogonal projection, distinct $P_s$ are mutually
+    orthogonal, and
+    \[
+      \sum_s P_s=P_{\mathrm{act}}.
+    \]
+\end{theorem}
+
+\begin{proof}\leanok
+    Each $P_s$ is a sum of mutually orthogonal Markov-sector projections.
+    Distinct labels have disjoint sums.  Finally, summing over $s$ counts each
+    positive-weight Markov sector exactly once.
+\end{proof}
+
+\begin{theorem}[SAL and arbitrary-cut equality in strong subadditivity]
+    \label{thm:mpdo_sal_ssa_equality}
+    \lean{MPOTensor.isSSAEquality_tripartite_m_of_isSAL}
+    \lean{MPOTensor.isSSAEquality_tripartite_of_isSAL}
+    \lean{MPOTensor.isSSAEquality_threeSite_of_isSAL}
+    \lean{MPOTensor.%
+      mutualInfoChain_one_eq_of_isSSAEquality_tripartite_m}
+    \lean{MPOTensor.isSAL_of_isSSAEquality_tripartite_m}
+    \leanok
+    \uses{def:is_sal, def:ssa_equality}
+    Let $1\leq m\leq\lfloor N/2\rfloor$, and divide the chain into four
+    consecutive regions $A,B,C,D$ of lengths $m-1,1,N-m-1,1$.  If the tensor
+    saturates the area law, then its marginal on $ABC$ satisfies
+    \[
+        S(ABC)+S(B)=S(AB)+S(BC).
+    \]
+    Indeed, this is the entropy form of $I_1=I_m$.  Taking $m=2$ gives the
+    regions of lengths $1,1,N-3$, and then taking $N=4$ shows that the
+    three-site reduced state of the four-site chain satisfies equality in
+    strong subadditivity.
+
+    Conversely, suppose the tensor generates positive semidefinite periodic
+    operators and their traces are nonzero at every positive chain length.
+    If the displayed equality holds for every $N$ and every
+    $1\leq m\leq\lfloor N/2\rfloor$, then the tensor saturates the area law.
+    This is the choice of regions used in
+    \cite[Appendix~C.2, lines~1760--1780]{Cirac2016MPDO_arXiv}.
+    The endpoint corrects the strict inequality printed at source line~1771:
+    Definition~4.6 and the concluding comparison both require
+    $m=\lfloor N/2\rfloor$.  This local correction is recorded in
+    \path{docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mpdo_tripartite_block_entropy_identifications}
+    By saturation, $I_1=I_m$. Expanding the two mutual informations and cancelling
+    the entropy of the full chain gives
+    \[
+        S_{N-1}+S_1=S_m+S_{N-m},
+    \]
+    which is the stated equality for the regions $A,B,C$.
+    Conversely, this equality gives $I_1=I_m$.  If it holds for every
+    admissible $m$, comparing the cases $m=L$ and $m=L+1$ gives
+    $I_L=I_{L+1}$ and hence saturation of the area law.
+\end{proof}
+
+\begin{theorem}[All-cut quantum Markov structure implies SAL]
+    \label{thm:mpdo_all_cut_markov_implies_sal}
+    \lean{MPOTensor.isSAL_of_quantumMarkovDecomposition_tripartite_m}
+    \leanok
+    \uses{def:is_sal, def:mpdo, def:entropy_quantum_markov_decomposition}
+    Suppose that the periodic operators are positive semidefinite and have
+    nonzero trace at every positive chain length.  For every $N$ and every
+    $1\leq m\leq\lfloor N/2\rfloor$, divide the chain into four consecutive
+    regions of lengths $m-1,1,N-m-1,1$.  If the marginal on the first three
+    regions admits a quantum Markov decomposition on its one-site middle
+    system, then the tensor saturates the area law.
+    % This is the final entropy step at source lines 1606--1619. The missing
+    % implication from its commuting-bond and source-ZCL hypotheses is recorded in
+    % docs/paper-gaps/cpsv16_commuting_form_to_sal.tex.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpdo_sal_ssa_equality,
+        thm:entropy_ssa_equality_quantum_markov}
+    The quantum Markov decomposition gives equality in strong subadditivity
+    at every admissible cut:
+    \[
+        S(\rho_{ABC})+S(\rho_B)=S(\rho_{AB})+S(\rho_{BC}).
+    \]
+    These equalities at every admissible cut imply saturation of the area law
+    by Theorem~\ref{thm:mpdo_sal_ssa_equality}.
+\end{proof}
+
+\begin{theorem}[SAL implies local $\eta$-structure]
+    \label{thm:sal_implies_eta_structure}
+    \lean{MPOTensor.sal_implies_eta_structure}
+    \leanok
+    \uses{def:ssa_equality, def:mpdo_eta_structure}
+    If a normalized three-site reduced state satisfies the equality case of
+    strong subadditivity --- the local entropy form of the simple-MPDO strong
+    area law --- then it admits the local $\eta$-structure of
+    Definition~\ref{def:mpdo_eta_structure}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:entropy_ssa_equality_quantum_markov}
+    This is exactly the forward implication of the Hayashi equality
+    characterization: equality in strong subadditivity yields a quantum Markov
+    decomposition on the middle subsystem.
+\end{proof}
+
+\begin{lemma}[Partial trace along a right tensor factor]
+    \label{lem:partial_trace_right_along}
+    \lean{Matrix.partialTraceRightAlong,
+      Matrix.partialTraceRightAlong_apply,
+      Matrix.PosSemidef.partialTraceRightAlong,
+      Matrix.trace_partialTraceRightAlong}
+    \leanok
+    Suppose that $C\simeq C'\otimes E$.  The partial trace over $E$ is given
+    entrywise by
+    \[
+        \bigl(\tr_E X\bigr)_{(a,c'),(a',d')}
+        =\sum_e X_{(a,c',e),(a',d',e)}.
+    \]
+    It preserves positivity and trace.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Reindex $C$ as $C'\otimes E$ and apply the ordinary right partial trace.
+    Its entry formula gives the displayed sum.  Positivity follows by tracing
+    a positive matrix, and invariance of the full trace under reindexing gives
+    trace preservation.
+\end{proof}
+
+\begin{theorem}[Right marginals preserve a quantum Markov decomposition]
+    \label{thm:quantum_markov_right_marginal}
+    \lean{Entropy.rightMarginalAlong,
+      Entropy.exists_quantumMarkovDecomposition_rightMarginalAlong}
+    \leanok
+    \uses{def:entropy_quantum_markov_decomposition,
+      lem:partial_trace_right_along}
+    Suppose that $C\simeq C'\otimes E$ and
+    \[
+        \rho_{ABC}
+        =\bigoplus_k p_k\rho_{A b_1}^{(k)}\otimes
+          \rho_{b_2 C}^{(k)}
+    \]
+    is a quantum Markov decomposition on $B$. Then the marginal
+    $\rho_{ABC'}=\tr_E(\rho_{ABC})$ has the decomposition
+    \[
+        \rho_{ABC'}
+        =\bigoplus_k p_k\rho_{A b_1}^{(k)}\otimes
+          \tr_E\!\left(\rho_{b_2 C}^{(k)}\right).
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{lem:partial_trace_right_along}
+    The middle-system decomposition, its unitary change of basis, and the
+    probabilities $p_k$ are unchanged.  Partial trace preserves positivity and
+    trace, so each $\tr_E(\rho_{b_2 C}^{(k)})$ is a density operator.  Applying
+    $\tr_E$ to the block-diagonal identity gives the displayed formula.
+\end{proof}
+
+\begin{lemma}[Tracing a terminal block]
+    \label{lem:mpdo_reduced_state_collapse_last}
+    \lean{collapse_last, collapse_last', reducedBlockState_cast}
+    \leanok
+    Let $a,b,c,N\in\mathbb N$ satisfy $a+b+c\leq N$.  For configurations
+    $u,v$ on the first $a+b$ sites,
+    \[
+      \sum_y \sigma_{a+b+c}^{(N)}(K)_{u\mathbin\Vert y,\,
+        v\mathbin\Vert y}
+      =\sigma_{a+b}^{(N)}(K)_{u,v},
+    \]
+    where the sum ranges over configurations on the last $c$ sites.  The same
+    identity holds after replacing an arithmetically equal block length by its
+    canonical identification.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Expand both reduced states as partial traces of the normalized periodic
+    state.  The left-hand side first traces the complement of the
+    $(a+b+c)$-site block and then its last $c$ sites; combining the two sums
+    gives the partial trace onto the first $a+b$ sites.
+\end{proof}
+
+\begin{theorem}[SAL three-site marginals have Hayashi decompositions]
+    \label{thm:mpdo_sal_three_site_eta_structure}
+    \lean{MPOTensor.exists_etaStructure_reducedBlockState_three_of_isSAL}
+    \leanok
+    \uses{def:is_sal, def:mpdo_eta_structure}
+    Let $K$ satisfy the strong area law and let $N\geq4$.  If
+    $\sigma_3^{(N)}(K)$ is obtained from the normalized $N$-site periodic state
+    by tracing out all but its first three sites, then
+    $\sigma_3^{(N)}(K)$ admits a quantum Markov decomposition on its middle
+    site.  This is the three-site marginal result proved in
+    \cite[Appendix~C.2, lines~1351--1371]{Cirac2016MPDO_arXiv}.  The
+    decomposition may depend on $N$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mpdo_sal_ssa_equality, thm:ssa_equality_reindex_factors,
+        thm:sal_implies_eta_structure,
+        thm:quantum_markov_right_marginal,
+        lem:mpdo_reduced_state_collapse_last}
+    Divide the first $N-1$ sites into consecutive regions of lengths $1$, $1$,
+    and $N-3$.  Let $\rho^{\mathrm{flat}}_{ABC}$ denote this marginal in the
+    corresponding index set
+    $\Fin{d^1}\times\Fin{d^1}\times\Fin{d^{N-3}}$.
+    By Theorem~\ref{thm:mpdo_sal_ssa_equality},
+    \[
+        S(\rho^{\mathrm{flat}}_{ABC})+S(\rho^{\mathrm{flat}}_B)
+        =S(\rho^{\mathrm{flat}}_{AB})+S(\rho^{\mathrm{flat}}_{BC}).
+    \]
+    The first two singleton blocks have the canonical identification
+    \[
+        e_{\mathrm{site}}:\Fin{d}\simeq\Fin{d^1},
+    \]
+    and reindexing these factors preserves the displayed equality.  Positivity
+    and unit trace follow from the normalized reduced state, so the Hayashi
+    characterization gives a quantum Markov decomposition of the $(N-1)$-site
+    marginal.  Finally split the third region as
+    $C\simeq c\otimes E$, where $c$ is its first site and $E$ contains the
+    remaining $N-4$ sites.  Theorem~\ref{thm:quantum_markov_right_marginal} gives
+    the same middle-site direct sum after tracing out $E$.  The contiguous-block
+    reduction gives
+    \[
+        \sigma_3^{(N)}(K)
+        =\tr_{4,\ldots,N-1}\!\left[\sigma_{N-1}^{(N)}(K)\right],
+    \]
+    which identifies the resulting operator with $\sigma_3^{(N)}(K)$.
+\end{proof}
+
+\begin{theorem}[Four-site SAL marginals have Hayashi decompositions]
+    \label{thm:mpdo_four_site_sal_eta_structure}
+    \lean{MPOTensor.exists_etaStructure_reducedBlockState_of_isSAL}
+    \leanok
+    \uses{def:is_sal, def:mpdo_eta_structure}
+    Let $K$ satisfy the strong area law.  If $\sigma_3^{(4)}(K)$ is obtained
+    from its normalized four-site periodic state by tracing out the fourth
+    site, then $\sigma_3^{(4)}(K)$ admits a quantum Markov decomposition on its
+    middle site.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mpdo_sal_three_site_eta_structure}
+    This is the case $N=4$ of
+    Theorem~\ref{thm:mpdo_sal_three_site_eta_structure}.
+\end{proof}
+
+\begin{theorem}[BNT sector projectors for the four-site SAL marginal]
+    \label{thm:mpdo_four_site_sal_bnt_sector_projectors}
+    \lean{MPOTensor.reducedBlockState_four_reindex_eq_submatrix}
+    \lean{MPOTensor.%
+      exists_etaStructure_reducedBlockState_four_reindex_of_isSAL}
+    \lean{MPOTensor.exists_bntSectorProjectors_four_of_sameMPV₂Pos_isSAL}
+    \leanok
+    \uses{thm:mpdo_normalized_three_site_bnt_family_closure,
+      thm:mpdo_bnt_sector_projection_resolution,
+      thm:mpdo_four_site_sal_eta_structure}
+    Suppose that the common blocking has been performed, so that the BNT
+    representatives have a simultaneous one-letter span.  For the normalized
+    three-site marginal $\sigma_3^{(4)}$, there are a simultaneous inverse
+    $C$ and a Hayashi decomposition such that every Markov sector $k$ with
+    $p_k\ne0$ has a unique BNT label $j_k$.  Consequently,
+    \[
+      P_s=\sum_{\substack{k:p_k\ne0\\j_k=s}}Q_k
+    \]
+    is an orthogonal projection, $P_sP_t=0$ for $s\ne t$, and
+    \[
+      \sum_sP_s=P_{\mathrm{act}}.
+    \]
+    No independent nonzero-closing-matrix hypothesis is required.  This is
+    the four-site specialization of equations~\textup{QkKjs} and
+    \textup{Pis} in
+    \cite[Appendix~C.2, lines~1714--1737]{Cirac2016MPDO_arXiv}.
+    The Hayashi decomposition uses the forward equality characterization of
+    strong subadditivity recorded in
+    Theorem~\ref{thm:hayashi_ssa_equality_characterization}; no additional
+    analytic assumption is introduced here.
+\end{theorem}
+
+\begin{proof}\leanok
+    The canonical ordered-triple reindexing is the submatrix convention of
+    the SAL-to-Hayashi theorem.  Choose the simultaneous inverse from the
+    one-letter span and the Hayashi decomposition from SAL.  By
+    Theorem~\ref{thm:mpdo_normalized_three_site_bnt_family_closure}, the same
+    marginal is a BNT family closure whose closing matrices are all nonzero.
+    The generic uniqueness and projector theorems now give the unique labels,
+    orthogonality, mutual disjointness, and resolution of the active support.
+\end{proof}
+
+\begin{definition}[Sitewise physical action and absorbed BNT representatives]
+    \label{def:mpdo_sitewise_physical_matrix}
+    \lean{MPOTensor.sitewisePhysicalMatrix}
+    \lean{MPOTensor.commonWeightAbsorbedBasisMPOTensor}
+    \leanok
+    For a one-site matrix $V$, write $V^{\otimes N}$ in the configuration
+    basis as
+    \[
+      (V^{\otimes N})_{s,t}=\prod_{n=1}^{N}V_{s_n,t_n}.
+    \]
+    If the copies of the $j$-th normal tensor have common coefficient
+    $\mu_j$, let $\mathcal K_j=\mu_j A_j$ denote the representative with this
+    coefficient absorbed into its local tensor.
+\end{definition}
+
+\begin{theorem}[Local selection by the BNT projectors]
+    \label{thm:mpdo_bnt_projector_local_selection}
+    \lean{MPOTensor.bntSectorProjection_mul_physicalSlice_mul_eq_zero}
+    \lean{MPOTensor.bntSectorProjection_mul_physicalSlice_mul_self}
+    \lean{MPOTensor.%
+      sum_bntSectorProjection_mul_physicalSlice_mul_self}
+    \lean{MPOTensor.changePhysicalBasis_bntSectorProjection_basis}
+    \lean{MPOTensor.%
+      exists_bntProjectorSelection_positiveLength_of_sameMPV₂Pos_isSAL}
+    \leanok
+    \uses{thm:mpdo_four_site_sal_bnt_sector_projectors}
+    Under the hypotheses of
+    Theorem~\ref{thm:mpdo_four_site_sal_bnt_sector_projectors}, the resulting
+    projectors satisfy $P_sA_iP_t=0$ whenever $s\ne t$ or $i\ne s$.
+    For the matching label, they satisfy
+    \[
+      P_iA_iP_i=A_i.
+    \]
+    Consequently,
+    \[
+      \sum_sP_sA_iP_s=A_i,
+    \]
+    which is the local diagonal decomposition required for the sector entropy
+    argument.
+    Equivalently, compressing the physical legs of $A_i$ by $P_s$ retains
+    $A_i$ for $s=i$ and gives the zero local tensor otherwise.  This is the
+    local projection relation in
+    \cite[Appendix~C.2, lines~1680--1755]{Cirac2016MPDO_arXiv}.
+
+    The Markov summands of zero Hayashi weight are retained in the ambient
+    decomposition.  They annihilate every normal-sector physical slice, so
+    the displayed local identities do not require the stronger assertion
+    $\sum_sP_s=\Id$ outside the active support.
+\end{theorem}
+
+\begin{proof}\leanok
+    Distinct Hayashi sectors give zero off-diagonal corners.  On an active
+    diagonal sector, uniqueness of the BNT label kills every normal tensor
+    except the matching one.  A zero-weight diagonal sector also kills every
+    physical slice: otherwise the nonzero closing matrix would make the
+    corresponding three-site Markov block nonzero.  Summing these statements
+    over the Hayashi sectors gives the asserted $P_sA_iP_t$ identities.
+\end{proof}
+
+\begin{definition}[Completion on the zero-weight Markov sectors]
+    \label{def:mpdo_completed_bnt_sector_projection}
+    \lean{MPOTensor.completedBntSectorLabel}
+    \lean{MPOTensor.completedBntSectorProjection}
+    \leanok
+    \uses{def:mpdo_bnt_sector_projection}
+    Fix a BNT label $s_0$.  Each positive-weight Markov sector retains its
+    unique BNT label, while every zero-weight Markov sector is assigned the
+    label $s_0$.  If $\widehat S_s$ is the set of Markov sectors with completed
+    label $s$, define
+    \[
+        \widehat P_s=\sum_{k\in\widehat S_s}Q_k.
+    \]
+\end{definition}
+
+\begin{theorem}[Separating projectors with copy-independent weights]
+    \label{thm:mpdo_sal_bnt_separating_projectors_copy_independent}
+    \lean{MPOTensor.completedBntSectorProjection_isOrthogonal}
+    \lean{MPOTensor.completedBntSectorProjection_mul_eq_zero}
+    \lean{MPOTensor.sum_completedBntSectorProjection}
+    \lean{MPOTensor.%
+      completedBntSectorProjection_mul_physicalSlice_mul_eq_zero}
+    \lean{MPOTensor.%
+      exists_bntSeparatingProjectors_of_sameMPV₂Pos_isSAL_of_weight_copy_independent}
+    \leanok
+    \uses{def:mpdo_completed_bnt_sector_projection,
+      thm:mpdo_bnt_projector_local_selection}
+    Let $K$ be simple, in biCF, and satisfy SAL.  Assume in addition that the
+    common blocking has been performed, the copy weights over each BNT
+    representative agree, and the representatives have a simultaneous
+    one-site span.  There is a distinguished BNT label $s_0$ such that the
+    completed projectors are orthogonal and, for distinct labels $s$ and $t$,
+    \[
+        \widehat P_s\widehat P_t=0,
+        \qquad
+        \sum_s\widehat P_s=\Id.
+    \]
+    For every physical slice of the $i$-th BNT representative, whenever
+    $s\ne t$ or $i\ne s$,
+    \[
+        \widehat P_sK_i^{\beta\alpha}\widehat P_t=0.
+    \]
+    This is the copy-independent-weight specialization of the
+    separating-projector lemma in
+    \cite[Appendix~C.2, lines~1680--1737]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mpdo_four_site_sal_bnt_sector_projectors,
+      thm:mpdo_bnt_projector_local_selection}
+    A unit-modulus BNT weight supplies the label $s_0$.  The Markov-sector
+    projections $Q_k$ are mutually orthogonal and sum to the identity, so
+    partitioning all labels by $\widehat S_s$ proves orthogonality and the
+    identity resolution.  If $p_k=0$, then
+    $Q_kK_i^{\beta\alpha}Q_k=0$ for every $i,\beta,\alpha$.  If $p_k\ne0$,
+    then
+    \[
+      Q_kK_i^{\beta\alpha}Q_k=0
+      \quad\text{whenever the BNT label of sector $k$ is not $i$}.
+    \]
+    For distinct Markov sectors,
+    \[
+      Q_kK_i^{\beta\alpha}Q_l=0 \qquad (k\ne l).
+    \]
+    Hence, whenever $s\ne t$ or $i\ne s$,
+    \[
+      \widehat P_sK_i^{\beta\alpha}\widehat P_t
+      =\sum_{k\in\widehat S_s}\sum_{l\in\widehat S_t}
+        Q_kK_i^{\beta\alpha}Q_l
+      =0,
+    \]
+    since every summand vanishes by one of the three preceding cases.
+\end{proof}
+
+\begin{theorem}[Separating projectors for a simple tensor satisfying ZCL and SAL]
+    \label{thm:mpdo_sal_bnt_separating_projectors}
+    \lean{MPOTensor.%
+      exists_bntSeparatingProjectors_of_horizontalCF_isSourceZCL_isSAL}
+    \leanok
+    \uses{thm:mpdo_simple_weight_copy_independent,
+      thm:mpdo_sal_bnt_separating_projectors_copy_independent}
+    Let $K$ be a simple tensor in block-injective canonical form which satisfies
+    ZCL and SAL.  For the representatives $\mathcal K_i$ of its BNT, there are
+    orthogonal projectors $P_s$ such that
+    \[
+      \sum_sP_s=\Id,
+      \qquad
+      P_sK_i^{\beta\alpha}P_t=0
+      \quad\text{whenever }s\ne t\text{ or }i\ne s.
+    \]
+    This is the separating-projector lemma in
+    \cite[Appendix~C.2, lines~1626--1691]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Write the horizontal canonical form as
+    $K=G(\bigoplus_{j,q}\mu_{j,q}\mathcal K_j)G^{-1}$.  Restricting the ZCL
+    equation to the $(j,q)$-th block and using the non-nilpotence supplied by
+    simplicity gives
+    \[
+      \mu_{j,q}=\mu_{j,q'}
+      \qquad\text{for all }j,q,q'.
+    \]
+    The block-diagonal gauge preserves every positive-length periodic state,
+    so the canonical-form tensor and $K$ generate the same such states.  The
+    preceding copy-independent-weight theorem now supplies the projectors.
+\end{proof}
+
+\begin{theorem}[Positive-length BNT-sector compression]
+    \label{thm:mpdo_bnt_projector_positive_length_compression}
+    \lean{MPOTensor.singleKrausMap_sitewise_bntSectorProjection_mpo}
+    \lean{MPOTensor.sitewise_bntSectorProjection_mul_mpo_mul_self}
+    \lean{MPOTensor.%
+      exists_bntProjectorSelection_positiveLength_of_sameMPV₂Pos_isSAL}
+    \leanok
+    \uses{def:mpdo_sitewise_physical_matrix,
+      thm:mpdo_bnt_projector_local_selection}
+    For every nonempty periodic chain and every normal-sector label $s$,
+    \[
+      P_s^{\otimes N}\,\sigma^{(N)}(K)\,P_s^{\otimes N}
+      =n_s\,\sigma^{(N)}(\mathcal K_s),
+      \qquad N\geq1,
+    \]
+    where $n_s$ is the number of BNT copies with label $s$.  This is
+    equation~\textup{sigmaNKj} in
+    \cite[Appendix~C.2, lines~1756--1759]{Cirac2016MPDO_arXiv}.
+
+    Here and throughout the MPDO discussion, a periodic chain has positive
+    length.
+\end{theorem}
+
+\begin{proof}\leanok
+    Sitewise multiplication by $P_s$ is the periodic MPO obtained by changing
+    every local physical matrix by $P_s$.  The preceding theorem replaces
+    each normal representative by itself when its label is $s$ and by the
+    zero tensor otherwise.  For $N\geq1$, the latter has zero periodic MPO.
+    The surviving coefficient is
+    $n_s\mu_s^N$, which is precisely $n_s$ times the MPO of the representative
+    with $\mu_s$ absorbed locally.
+\end{proof}
+
+\begin{corollary}[Each absorbed BNT element generates MPDOs]
+    \label{cor:mpdo_absorbed_bnt_sector_is_mpdo}
+    \lean{MPOTensor.%
+      commonWeightAbsorbedBasisMPOTensor_isMPDO_of_projectorSelection}
+    \lean{MPOTensor.%
+      commonWeightAbsorbedBasisMPOTensor_isMPDO_of_sameMPV₂Pos_isSAL}
+    \leanok
+    \uses{thm:mpdo_bnt_projector_positive_length_compression}
+    Under the hypotheses of
+    Theorem~\ref{thm:mpdo_bnt_projector_positive_length_compression}, every
+    absorbed BNT element $\mathcal K_s$ generates positive semidefinite
+    operators on all nonempty periodic chains.  Indeed,
+    $P_s^{\otimes N}\sigma^{(N)}(K)P_s^{\otimes N}\geq0$ and $n_s>0$, so
+    \[
+      P_s^{\otimes N}\sigma^{(N)}(K)P_s^{\otimes N}
+        =n_s\sigma^{(N)}(\mathcal K_s)
+    \]
+    gives $\sigma^{(N)}(\mathcal K_s)\geq0$.  This is the first positivity
+    conclusion in
+    \cite[Appendix~C.2, lines~1753--1759]{Cirac2016MPDO_arXiv}.
+\end{corollary}
+
+\begin{proof}\leanok
+    Congruence by the Hermitian projection $P_s^{\otimes N}$ preserves
+    positive semidefiniteness.  Multiplication by the inverse of the positive
+    integer $n_s$ then gives positivity of the sector operator.
+\end{proof}
+
+\begin{theorem}[Zero correlation length of the absorbed BNT elements]
+    \label{thm:mpdo_absorbed_bnt_sector_zcl}
+    \lean{MPOTensor.%
+      physTraceTransfer_commonWeightAbsorbedBasisMPOTensor}
+    \lean{MPOTensor.commonWeightAbsorbedBasisMPOTensor_isSourceZCL}
+    \leanok
+    \uses{lem:mpdo_simple_blockwise_zcl_equation,
+      def:mpdo_common_sector_weight_absorption}
+    Let $K$ have zero correlation length and let
+    $\mathcal K_s=\mu_sA_s$ be an absorbed BNT element of its horizontal
+    canonical form.  If the physical-trace transfer $\mathcal B_s$ is not
+    nilpotent, then $\mathcal K_s$ has zero correlation length.  More
+    precisely,
+    \[
+      \mathcal T_{\mathcal K_s}=\mu_s\mathcal B_s\ne0,
+      \qquad
+      \mathcal T_{\mathcal K_s}^{2}
+        =\lambda\mathcal T_{\mathcal K_s},
+      \qquad \lambda>0.
+    \]
+    This is the final zero-correlation-length conclusion in
+    \cite[Appendix~C.2, line~1781]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+
+\begin{proof}\leanok
+    Lemma~\ref{lem:mpdo_simple_blockwise_zcl_equation} gives the displayed
+    quadratic identity.  The common weight is nonzero, and nonnilpotence of
+    $\mathcal B_s$ implies $\mathcal B_s\ne0$, so the absorbed transfer is
+    nonzero.
+\end{proof}
+
+\begin{theorem}[Strict normalization at positive length]
+    \label{thm:mpdo_source_zcl_strict_positive_length_normalization}
+    \lean{MPOTensor.trace_mpo_ne_zero_of_isSourceZCL}
+    \lean{MPOTensor.trace_mpo_pos_of_isMPDO_isSourceZCL}
+    \lean{MPOTensor.%
+      trace_mpo_commonWeightAbsorbedBasisMPOTensor_pos}
+    \leanok
+    \uses{def:mpdo, def:mpo_source_zcl, lem:mpdo_trace_loop_chain,
+      cor:mpdo_absorbed_bnt_sector_is_mpdo,
+      thm:mpdo_absorbed_bnt_sector_zcl}
+    Let $M$ generate matrix product density operators and have source zero
+    correlation length.  Then, for every $N\geq1$,
+    \[
+        \tr\bigl(\sigma^{(N)}(M)\bigr)>0.
+    \]
+    In particular, after a common blocking has made the simultaneous BNT
+    word span full at one letter, the absorbed BNT elements selected in
+    Theorem~\ref{thm:mpdo_absorbed_bnt_sector_zcl} have a well-defined
+    normalized state at every physical chain length.  This is the biCF
+    hypothesis imposed at the start of Case II in the source; its relation
+    with finite physical blocking is recorded in
+    \path{docs/paper-gaps/cpgsv17_bicf_block_separation.tex}.
+    This supplies the strict form of the sector normalization used in
+    \cite[Appendix~C.2, lines~1760--1780]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+
+\begin{proof}\leanok
+    Write the physical-trace transfer as $\mathcal T_M=\lambda E$, where
+    $\lambda>0$ and $E$ is a nonzero idempotent.  A nonzero idempotent on a
+    finite-dimensional complex vector space has nonzero trace, while
+    $E^N=E$ for $N\geq1$.  Hence
+    \[
+        \tr\bigl(\sigma^{(N)}(M)\bigr)
+        =\tr(\mathcal T_M^N)
+        =\lambda^N\tr(E)\ne0.
+    \]
+    Positivity of the density operator then makes this trace strictly
+    positive.
+\end{proof}
+
+\begin{theorem}[Saturated area law for the absorbed BNT elements]
+    \label{thm:mpdo_absorbed_bnt_sector_sal}
+    \lean{MPOTensor.bntSectorProbability}
+    \lean{MPOTensor.bntSectorProbability_pos}
+    \lean{MPOTensor.normalizedMPO_eq_sum_bntSectorProbability_smul}
+    \lean{MPOTensor.reducedBlockState_eq_sum_bntSectorProbability_smul}
+    \lean{MPOTensor.blockEntropy_eq_sum_bntSectorProbability}
+    \lean{MPOTensor.blockEntropy_add_blockEntropy_eq_bntSector}
+    \lean{MPOTensor.%
+      commonWeightAbsorbedBasisMPOTensor_isSAL_of_projectorSelection}
+    \lean{MPOTensor.%
+      commonWeightAbsorbedBasisMPOTensor_isSAL_of_sameMPV₂Pos}
+    \leanok
+    \uses{def:is_sal, def:mpo_source_zcl,
+      def:mpdo_common_sector_weight_absorption}
+    Let $K$ saturate the area law and have zero correlation length, and let
+    its horizontal BNT canonical form, up to block-diagonal gauge, have normal
+    representatives $A_s$, common copy weights $\mu_s$, and copy numbers
+    $n_s$.  Assume that the physical-trace transfer of every $A_s$ is
+    nonnilpotent.  After a common blocking, assume explicitly that the
+    simultaneous one-letter word tuples of the $A_s$ span the direct sum of
+    their full matrix algebras.  Put $\mathcal K_s=\mu_sA_s$.
+
+    For every nonempty chain, define
+    \[
+      p_s^{(N)}=
+      \frac{n_s\,\tr\!\left(\sigma^{(N)}(\mathcal K_s)\right)}
+           {\tr\!\left(\sigma^{(N)}(K)\right)}.
+    \]
+    Then $p_s^{(N)}>0$, and every nonempty prefix marginal has the same sector
+    decomposition with these probabilities.  Translation invariance
+    identifies the other contiguous blocks of the same length.
+    Consequently, every absorbed representative $\mathcal K_s$ saturates the
+    area law.
+
+    The one-letter simultaneous span is the block-injective canonical-form
+    hypothesis imposed at the start of Case II in
+    \cite[line~1628]{Cirac2016MPDO_arXiv}.  Its relation with finite physical
+    blocking is recorded in
+    \path{docs/paper-gaps/cpgsv17_bicf_block_separation.tex}.  The entropy
+    conclusion is the argument of
+    \cite[Appendix~C.2, lines~1748--1781]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:entropy_pairwise_annihilating_support,
+      thm:positive_weighted_sum_termwise_equality,
+      lem:sal_const, thm:entropy_strong_subadditivity,
+      thm:mpdo_tripartite_block_entropy_identifications,
+      thm:mpdo_bnt_projector_local_selection,
+      cor:mpdo_absorbed_bnt_sector_is_mpdo,
+      thm:mpdo_source_zcl_strict_positive_length_normalization}
+    The BNT projections carry every normalized marginal on mutually
+    annihilating supports, so the preceding support form of entropy
+    additivity gives
+    \[
+      S_L(K)=H\!\left(p^{(N)}\right)
+        +\sum_s p_s^{(N)}S_L(\mathcal K_s)
+        \qquad (1\leq L\leq N).
+    \]
+    The four marginals entering strong subadditivity have the same
+    probabilities.  Substitution in the equality for $K$ cancels all four
+    Shannon terms.  Strong subadditivity gives the corresponding inequality
+    in each sector, and strict positivity of every $p_s^{(N)}$ forces every
+    such inequality to be an equality.  Comparing the equalities for block
+    lengths $L$ and $L+1$ proves saturation for $\mathcal K_s$.
+\end{proof}

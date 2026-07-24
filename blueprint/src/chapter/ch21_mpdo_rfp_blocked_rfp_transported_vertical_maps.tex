@@ -1,0 +1,780 @@
+
+\begin{lemma}[Two-site support after refinement]
+    \label{lem:mpdo_vertical_sector_t_image_preservation}
+    \lean{MPOTensor.precompressionVerticalSectorT_image_preservation}
+    \leanok
+    \uses{def:mpdo_vertical_sector_precompression,
+      lem:mpdo_normalized_retained_vertical_sector_embedding,
+      lem:mpdo_retained_vertical_weighted_contraction,
+      lem:mpdo_vertical_bond_contraction_reconstruction,
+      thm:mpdo_one_site_closure_two_site_blocking}
+    For a bond matrix $X$, set
+    \[
+        V_1(X)=\bigoplus_\alpha m_\alpha M_\alpha(X).
+    \]
+    Suppose that both vertical canonical forms satisfy their exact
+    reconstruction identities, the one-site multiplicity spaces are nonzero,
+    their diagonal weights are positive,
+    $T(\mathcal M^{(1)}(X))=\mathcal M^{(2)}(X)$, and
+    $U_2U_2^\dagger=1$, then
+    \[
+        U_2^\dagger U_2 Z_T(V_1(X))=Z_T(V_1(X)).
+    \]
+    This is the refinement support identity used in
+    \cite[Appendix~C.4, lines~1955--1980]{Cirac2016MPDO_arXiv}.
+\end{lemma}
+
+\begin{proof}\leanok
+    Let $\mathcal R^{-1}$ relabel a matrix indexed by two one-site indices as
+    a matrix indexed by the blocked two-site index.  Then
+    \[
+        Z_T(V_1(X))
+        =\mathcal R^{-1}\!\left[
+          T\!\left(U_1^\dagger B_1(X)U_1\right)\right]
+        =\mathcal R^{-1}\!\left[
+          T\!\left(\mathcal M^{(1)}(X)\right)\right]
+        =\mathcal R^{-1}\!\left[\mathcal M^{(2)}(X)\right]
+        =U_2^\dagger B_2(X)U_2.
+    \]
+    Here the first equality is the normalized embedding, the second and last
+    are the two reconstruction identities, and the middle equality is the
+    refinement identity.  The equality before the last is precisely the
+    blocked-index relabelling theorem.
+    Therefore
+    \[
+        U_2^\dagger U_2Z_T(V_1(X))
+        =U_2^\dagger(U_2U_2^\dagger)B_2(X)U_2
+        =Z_T(V_1(X)).
+    \]
+\end{proof}
+
+\begin{lemma}[One-site support after coarse-graining]
+    \label{lem:mpdo_vertical_sector_s_image_preservation}
+    \lean{MPOTensor.precompressionVerticalSectorS_image_preservation}
+    \leanok
+    \uses{def:mpdo_vertical_sector_precompression,
+      lem:mpdo_normalized_retained_vertical_sector_embedding,
+      lem:mpdo_retained_vertical_weighted_contraction,
+      lem:mpdo_vertical_bond_contraction_reconstruction,
+      thm:mpdo_one_site_closure_two_site_blocking}
+    For a bond matrix $X$, set
+    \[
+        V_2(X)=\bigoplus_\beta n_\beta A_\beta(X).
+    \]
+    Suppose that both vertical canonical forms satisfy their exact
+    reconstruction identities, the two-site multiplicity spaces are nonzero,
+    their diagonal weights are positive,
+    $S(\mathcal M^{(2)}(X))=\mathcal M^{(1)}(X)$, and
+    $U_1U_1^\dagger=1$, then
+    \[
+        U_1^\dagger U_1 Z_S(V_2(X))=Z_S(V_2(X)).
+    \]
+    This is the coarse-graining support identity used in
+    \cite[Appendix~C.4, lines~1955--1980]{Cirac2016MPDO_arXiv}.
+\end{lemma}
+
+\begin{proof}\leanok
+    Let $\mathcal R$ decode a matrix indexed by the blocked two-site index as a
+    matrix indexed by two one-site indices.  Then
+    \[
+        Z_S(V_2(X))
+        =S\!\left(\mathcal R\!\left[
+          U_2^\dagger B_2(X)U_2\right]\right)
+        =S\!\left(\mathcal M^{(2)}(X)\right)
+        =\mathcal M^{(1)}(X)
+        =U_1^\dagger B_1(X)U_1.
+    \]
+    Here the first equality is the normalized embedding, the next equality is
+    the blocked-index relabelling theorem, the middle equality is the
+    coarse-graining identity, and the last is the one-site reconstruction.
+    Therefore
+    \[
+        U_1^\dagger U_1Z_S(V_2(X))
+        =U_1^\dagger(U_1U_1^\dagger)B_1(X)U_1
+        =Z_S(V_2(X)).
+    \]
+\end{proof}
+
+\begin{lemma}[Trace preservation on one-site canonical-form contractions]
+    \label{lem:mpdo_vertical_sector_t_source_generated_trace}
+    \lean{MPOTensor.transportedVerticalSectorT_trace_of_source_generated}
+    \leanok
+    \uses{lem:mpdo_vertical_sector_t_image_preservation,
+      lem:mpdo_vertical_sector_precompression_positive_trace}
+    Under the hypotheses of Lemma~\ref{lem:mpdo_vertical_sector_t_image_preservation},
+    suppose in addition that $U_1U_1^\dagger=1$ and that $T$ is completely
+    positive and trace preserving.  Then
+    \[
+        \Trsec(\widetilde T(V_1(X)))=\Trsec(V_1(X)).
+    \]
+\end{lemma}
+
+\begin{proof}\leanok
+    Cyclicity of trace and the preceding support identity give
+    \[
+        \Trsec(\widetilde T(V_1(X)))
+        =\tr(U_2^\dagger U_2Z_T(V_1(X)))
+        =\tr(Z_T(V_1(X)))
+        =\Trsec(V_1(X)).
+    \]
+\end{proof}
+
+\begin{lemma}[Trace preservation on two-site canonical-form contractions]
+    \label{lem:mpdo_vertical_sector_s_source_generated_trace}
+    \lean{MPOTensor.transportedVerticalSectorS_trace_of_source_generated}
+    \leanok
+    \uses{lem:mpdo_vertical_sector_s_image_preservation,
+      lem:mpdo_vertical_sector_precompression_positive_trace}
+    Under the hypotheses of Lemma~\ref{lem:mpdo_vertical_sector_s_image_preservation},
+    suppose in addition that $U_2U_2^\dagger=1$ and that $S$ is completely
+    positive and trace preserving.  Then
+    \[
+        \Trsec(\widetilde S(V_2(X)))=\Trsec(V_2(X)).
+    \]
+\end{lemma}
+
+\begin{proof}\leanok
+    Cyclicity of trace and the preceding support identity give
+    \[
+        \Trsec(\widetilde S(V_2(X)))
+        =\tr(U_1^\dagger U_1Z_S(V_2(X)))
+        =\tr(Z_S(V_2(X)))
+        =\Trsec(V_2(X)).
+    \]
+\end{proof}
+
+\begin{theorem}[Action of the normalized vertical-sector maps]
+    \label{thm:mpdo_transported_vertical_sector_maps}
+    \lean{MPOTensor.transportedVerticalSectorT_trace_smul}
+    \lean{MPOTensor.transportedVerticalSectorS_trace_smul}
+    \lean{MPOTensor.transportedVerticalSectorT_contractBondMatrix_trace_smul}
+    \lean{MPOTensor.transportedVerticalSectorS_contractBondMatrix_trace_smul}
+    \leanok
+    \uses{def:mpdo_transported_vertical_sector_maps,
+      lem:mpdo_normalized_retained_vertical_sector_embedding,
+      lem:mpdo_retained_vertical_sector_partial_trace,
+      thm:mpdo_vertical_coordinate_map_transport}
+    Suppose that every multiplicity space for $\mu_\alpha$ and $\nu_\beta$
+    is nonzero, every diagonal entry of these two matrices is positive, and
+    \[
+        T_{\mathrm v}\!\left(
+          \bigoplus_\alpha\mu_\alpha\otimes X_\alpha\right)
+        =\bigoplus_\beta\nu_\beta\otimes Y_\beta,
+        \qquad
+        S_{\mathrm v}\!\left(
+          \bigoplus_\beta\nu_\beta\otimes Y_\beta\right)
+        =\bigoplus_\alpha\mu_\alpha\otimes X_\alpha.
+    \]
+    Writing $m_\alpha=\tr(\mu_\alpha)$ and
+    $n_\beta=\tr(\nu_\beta)$, one has
+    \[
+        \widetilde T\!\left(
+          \bigoplus_\alpha m_\alpha X_\alpha\right)
+        =\bigoplus_\beta n_\beta Y_\beta,
+        \qquad
+        \widetilde S\!\left(
+          \bigoplus_\beta n_\beta Y_\beta\right)
+        =\bigoplus_\alpha m_\alpha X_\alpha.
+    \]
+    In particular, take $X_\alpha=M_\alpha(X)$ and
+    $Y_\beta=A_\beta(X)$ from the contractions of the one-site and two-site
+    vertical canonical forms.  The physical closure identities for $T$ and
+    $S$ then imply the two hypotheses above, so the same conclusions hold for
+    these source-generated sector operators.
+\end{theorem}
+
+\begin{proof}\leanok
+    Since $\widetilde T=\widetilde R_2T_{\mathrm v}R_1$, one has
+    \[
+    \begin{aligned}
+        \widetilde T\!\left(\bigoplus_\alpha m_\alpha X_\alpha\right)
+        &=\widetilde R_2\!\left(T_{\mathrm v}\!\left(
+          \bigoplus_\alpha\mu_\alpha\otimes X_\alpha\right)\right) \\
+        &=\widetilde R_2\!\left(
+          \bigoplus_\beta\nu_\beta\otimes Y_\beta\right)
+        =\bigoplus_\beta n_\beta Y_\beta.
+    \end{aligned}
+    \]
+    Likewise, $\widetilde S=\widetilde R_1S_{\mathrm v}R_2$ gives
+    \[
+    \begin{aligned}
+        \widetilde S\!\left(\bigoplus_\beta n_\beta Y_\beta\right)
+        &=\widetilde R_1\!\left(S_{\mathrm v}\!\left(
+          \bigoplus_\beta\nu_\beta\otimes Y_\beta\right)\right) \\
+        &=\widetilde R_1\!\left(
+          \bigoplus_\alpha\mu_\alpha\otimes X_\alpha\right)
+        =\bigoplus_\alpha m_\alpha X_\alpha.
+    \end{aligned}
+    \]
+\end{proof}
+
+\begin{lemma}[Fixed contraction families of the transported composites]
+    \label{lem:mpdo_transported_vertical_sector_fixed_generators}
+    \lean{MPOTensor.transportedVerticalSectorS_comp_T_fixed_contractBondMatrix_trace_smul}
+    \lean{MPOTensor.transportedVerticalSectorT_comp_S_fixed_contractBondMatrix_trace_smul}
+    \leanok
+    \uses{thm:mpdo_transported_vertical_sector_maps}
+    For every bond matrix $X$, set
+    \[
+        V_1(X)=\bigoplus_\alpha m_\alpha M_\alpha(X),
+        \qquad
+        V_2(X)=\bigoplus_\beta n_\beta A_\beta(X).
+    \]
+    Under the hypotheses of the preceding theorem, the transported
+    composites satisfy
+    \[
+        (\widetilde S\circ\widetilde T)(V_1(X))=V_1(X),
+        \qquad
+        (\widetilde T\circ\widetilde S)(V_2(X))=V_2(X).
+    \]
+    Thus the one-site and two-site contraction families lie in the respective
+    fixed-point spaces, as in Appendix~C.4, lines 1974--1980.  These equations
+    do not assert that either composite is the identity on the whole sector
+    algebra; that conclusion requires the fixed-point structure argument of
+    Appendix~C.4, lines 1980--1993.
+\end{lemma}
+
+\begin{proof}\leanok
+    The preceding theorem gives
+    $\widetilde T(V_1(X))=V_2(X)$ and
+    $\widetilde S(V_2(X))=V_1(X)$.  Hence
+    \[
+        (\widetilde S\circ\widetilde T)(V_1(X))
+        =\widetilde S(V_2(X))=V_1(X),
+        \qquad
+        (\widetilde T\circ\widetilde S)(V_2(X))
+        =\widetilde T(V_1(X))=V_2(X).
+    \]
+\end{proof}
+
+\begin{theorem}[Faithful fixed point from fixed product generators]
+    \label{thm:positive_map_faithful_fixed_point_from_product_span}
+    \lean{IsPositiveMap.exists_posDef_fixedPoint_of_traceNonincreasing_of_fixed_product_span}
+    \leanok
+    Let $\mathcal M$ be a finite full matrix algebra over $\mathbb C$, and let
+    $F:\mathcal M\to\mathcal M$ be positive and trace nonincreasing.  Suppose
+    that a family $(V_j)_{j\in J}$ consists of fixed points of $F$ and that,
+    for some $L>0$, the identity belongs to the linear span of the products
+    \[
+      V_{j_1}\cdots V_{j_L}
+    \]
+    in $\mathcal M$.  Then $F$ has a positive-definite fixed point.
+    This is the local full-matrix intermediate implication used in
+    \cite[Appendix~C.4, lines~1980--1995]{Cirac2016MPDO_arXiv}; it is not
+    stated there as a separate theorem.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:positive_trace_nonincreasing_bounded_orbits,
+      thm:maximalSupport_fixedPoint_of_bounded_orbits}
+    Boundedness of the forward orbits gives the mean-ergodic projection $P$.
+    Set $\rho=P(\mathbf 1)$ and let $Q$ be the support projection of $\rho$.
+    For every $j$, the maximal-support property of $\rho$ gives
+    \[
+      QV_jQ=V_j.
+    \]
+    Since $Q$ is a projection, this implies $QV_j=V_j=V_jQ$.  By induction,
+    \[
+      Q\cdot V_{j_1}\cdots V_{j_k}\cdot Q
+        =V_{j_1}\cdots V_{j_k}
+      \qquad (k\geq1).
+    \]
+    The product-span hypothesis and linearity then give
+    $Q\mathbf 1Q=\mathbf 1$.  Since $Q^2=Q$, one has
+    \[
+      Q=Q^2=Q\mathbf 1Q=\mathbf 1.
+    \]
+    Thus $\rho$ is positive definite, and the construction of $P$ gives
+    $F(\rho)=\rho$.
+\end{proof}
+
+\begin{theorem}[Trace preservation from fixed product generators]
+    \label{thm:positive_map_trace_preserving_from_fixed_product_span}
+    \lean{IsPositiveMap.tracePreserving_of_traceNonincreasing_of_fixed_product_span}
+    \leanok
+    Let $\mathcal M$ be a finite full matrix algebra over $\mathbb C$, and let
+    $F:\mathcal M\to\mathcal M$ be positive and trace nonincreasing.  Suppose
+    that $F(V_j)=V_j$ for every $j\in J$.  Put
+    $\mathcal V=\spn_{\C}\{V_j:j\in J\}$ and, in the notation of
+    \cite[Appendix~C.4]{Cirac2016MPDO_arXiv}, define
+    \[
+      C_L(\mathcal V)
+        =\spn_{\C}\{v_1\cdots v_L:v_1,\ldots,v_L\in\mathcal V\}.
+    \]
+    If $\mathbf 1\in C_L(\mathcal V)$ for some $L>0$, then $F$ is trace
+    preserving.
+    % The product-span hypothesis is the fixed-generator structure appearing in
+    % \cite[Appendix~C.4, lines~1974--1995]{Cirac2016MPDO_arXiv}.  Trace
+    % preservation is derived here from trace nonincrease and the resulting
+    % faithful fixed point, not from the cited passage.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:positive_map_faithful_fixed_point_from_product_span,
+      thm:trace_pairing_adjoint_positive,
+      thm:psd_trace_pairing_self_dual,
+      lem:posDef_weighted_trace_faithful,
+      thm:trace_preserving_iff_trace_adjoint_unital}
+    Multilinearity gives
+    \[
+      C_L(\mathcal V)
+        =\spn_{\C}\{V_{j_1}\cdots V_{j_L}:j_1,\ldots,j_L\in J\}.
+    \]
+    By Theorem~\ref{thm:positive_map_faithful_fixed_point_from_product_span},
+    there is a positive-definite matrix $\rho$ such that $F(\rho)=\rho$.
+    Let $F^*$ be the trace-pairing adjoint and set
+    \[
+      \Delta=\mathbf 1-F^*(\mathbf 1).
+    \]
+    For every positive semidefinite $X$, trace nonincrease gives
+    \[
+      \tr(\Delta X)
+        =\tr(X)-\tr(F(X))\geq0.
+    \]
+    Positivity of $F^*$ and self-duality of the positive semidefinite cone
+    therefore give $\Delta\geq0$.  The fixed-point equation gives
+    $\tr(\rho\Delta)=0$, so positive definiteness of $\rho$
+    forces $\Delta=0$.  Thus $F^*(\mathbf 1)=\mathbf 1$, which is equivalent
+    to trace preservation.
+\end{proof}
+
+\begin{theorem}[Trace transfer through the canonical full-matrix extension]
+    \label{thm:direct_sum_extension_trace_transfer}
+    \lean{Matrix.IsTraceNonincreasingBetweenDirectSums.directSumExtension}
+    \lean{Matrix.IsTracePreservingMap.isTracePreservingDirectSumMap_of_extension}
+    \leanok
+    \uses{def:direct_sum_full_matrix_extension}
+    Let
+    $\mathcal A=\bigoplus_{\alpha\in I}\mathcal M_{d_\alpha\times d_\alpha}$,
+    let $\iota:\mathcal A\to\End(\bigoplus_\alpha
+    \mathbb C^{d_\alpha})$ be the block-diagonal embedding, and let $\pi$ be
+    diagonal compression.  For a linear map $F:\mathcal A\to\mathcal A$, set
+    $\widehat F=\iota\circ F\circ\pi$.  Then:
+    \begin{enumerate}
+      \item if $F$ is trace nonincreasing on positive elements of $\mathcal A$,
+        then $\widehat F$ is trace nonincreasing;
+      \item if $\widehat F$ is trace preserving, then $F$ preserves the total
+        trace on $\mathcal A$.
+    \end{enumerate}
+\end{theorem}
+
+\begin{proof}\leanok
+    If $Y\geq0$, then $\pi(Y)\geq0$, and the trace identities for diagonal
+    compression and block-diagonal embedding give
+    \[
+      \tr(\widehat F(Y))
+        =\tr_{\mathcal A}(F(\pi(Y)))
+        \leq\tr_{\mathcal A}(\pi(Y))
+        =\tr(Y).
+    \]
+    This proves the first assertion.  For $X\in\mathcal A$, the identity
+    $\pi\circ\iota=\id_{\mathcal A}$ gives
+    \[
+      \tr_{\mathcal A}(F(X))
+        =\tr(\widehat F(\iota(X)))
+        =\tr(\iota(X))
+        =\tr_{\mathcal A}(X),
+    \]
+    whenever $\widehat F$ is trace preserving.
+\end{proof}
+
+\begin{theorem}[Trace preservation on a finite sum from fixed products]
+    \label{thm:positive_direct_sum_map_trace_preserving_from_fixed_product_span}
+    \lean{Matrix.IsPositiveDirectSumMap.tracePreserving_of_traceNonincreasing_of_fixed_product_span}
+    \leanok
+    Let
+    $\mathcal A=\bigoplus_{\alpha\in I}\mathcal M_{d_\alpha\times d_\alpha}$
+    be a finite sum of full matrix algebras, with total trace
+    \[
+      \tr_{\mathcal A}(X)
+        =\sum_{\alpha\in I}\tr(X_\alpha).
+    \]
+    Let $F:\mathcal A\to\mathcal A$ be positive and trace nonincreasing.
+    Suppose that $F(V_j)=V_j$ for every $j\in J$.  With
+    $\mathcal V=\spn_{\C}\{V_j:j\in J\}$, put
+    \[
+      C_L(\mathcal V)
+        =\spn_{\C}\{v_1\cdots v_L:v_1,\ldots,v_L\in\mathcal V\}.
+    \]
+    If $\mathbf 1_{\mathcal A}\in C_L(\mathcal V)$ for some $L>0$, then $F$
+    preserves the total trace on $\mathcal A$.
+    % This is the finite-sector form of the preceding full-matrix trace argument.
+    % The source passage
+    % \cite[Appendix~C.4, lines~1974--1995]{Cirac2016MPDO_arXiv} supplies the
+    % product-span structure to which that argument is applied.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:positive_map_trace_preserving_from_fixed_product_span,
+      thm:direct_sum_full_matrix_extension_compatibility,
+      thm:direct_sum_extension_trace_transfer}
+    Multilinearity first gives
+    \[
+      C_L(\mathcal V)
+        =\spn_{\C}\{V_{j_1}\cdots V_{j_L}:j_1,\ldots,j_L\in J\}.
+    \]
+    Let $\iota:\mathcal A\to\End(\bigoplus_\alpha
+    \mathbb C^{d_\alpha})$ be the block-diagonal embedding and let
+    $\widehat F$ be the canonical full-matrix extension.  These maps satisfy
+    \[
+      \iota(XY)=\iota(X)\iota(Y),
+      \qquad \iota(\mathbf 1_{\mathcal A})=\mathbf 1,
+      \qquad \widehat F(\iota(X))=\iota(F(X)).
+    \]
+    The extension is positive and trace nonincreasing.  The matrices
+    $\iota(V_j)$ are fixed by $\widehat F$, and the displayed identities
+    carry the product-span hypothesis to the full matrix algebra.
+    Theorem~\ref{thm:positive_map_trace_preserving_from_fixed_product_span}
+    makes $\widehat F$ trace preserving.  Restricting to block-diagonal
+    matrices proves preservation of $\tr_{\mathcal A}$ by $F$.
+\end{proof}
+
+\begin{theorem}[Trace sandwich on finite sums of matrix algebras]
+    \label{thm:direct_sum_trace_preservation_sandwich}
+    \lean{Matrix.isTracePreservingBetweenDirectSums_of_comp_of_traceNonincreasing}
+    \leanok
+    Let $\mathcal A$ and $\mathcal B$ be finite sums of full matrix algebras,
+    and let $T:\mathcal A\to\mathcal B$ and $S:\mathcal B\to\mathcal A$ be
+    linear maps.  Suppose that $T$ is positive, both maps are trace
+    nonincreasing, and $S\circ T$ is trace preserving.  Then $T$ is trace
+    preserving.
+\end{theorem}
+
+\begin{proof}\leanok
+    For every positive $X\in\mathcal A$, positivity of $T$ and the two
+    trace-nonincreasing inequalities give
+    \[
+      \tr_{\mathcal A}(X)
+        =\tr_{\mathcal A}(S(T(X)))
+        \leq\tr_{\mathcal B}(T(X))
+        \leq\tr_{\mathcal A}(X).
+    \]
+    Hence the middle term equals the endpoints.  Equality extends from the
+    positive cone to Hermitian matrices by positive and negative parts.  For
+    arbitrary $X$, put
+    \[
+      H_1=X+X^\dagger,
+      \qquad H_2=\mathrm{i}(X-X^\dagger),
+      \qquad X=\frac12(H_1-\mathrm{i}H_2).
+    \]
+    Both $H_1$ and $H_2$ are Hermitian, so linearity proves trace preservation
+    for every $X$.
+\end{proof}
+
+\begin{theorem}[Trace preservation of the transported vertical-sector maps]
+    \label{thm:mpdo_transported_vertical_sector_composites_trace_preserving}
+    \lean{MPOTensor.transportedVerticalSector_composites_tracePreserving}
+    \leanok
+    Suppose that every one-site and two-site multiplicity space is nonzero
+    and every corresponding diagonal weight is positive.  Let
+    $\widetilde M^{(1)}$ and $\widetilde M^{(2)}$ be the vertical tensors of
+    $M$ and its two-site blocking, and let $B_1$ and $B_2$ be their assembled
+    one-site and two-site canonical forms.  Assume that both canonical forms
+    are bases of normal tensors and that, for every vertical letter $\ell$,
+    \[
+      U_i\widetilde M^{(i)}_\ell U_i^\dagger=(B_i)_\ell,
+      \qquad
+      \widetilde M^{(i)}_\ell
+        =U_i^\dagger(B_i)_\ell U_i,
+      \qquad
+      U_iU_i^\dagger=\mathbf 1
+      \quad (i=1,2).
+    \]
+    Assume in addition that the physical maps $T$ and $S$ are completely
+    positive and trace preserving and that, for every horizontal bond matrix
+    $Z$, the two physical-coordinate identities hold:
+    \[
+      T(\mathcal M^{(1)}(Z))=\mathcal M^{(2)}(Z),
+      \qquad
+      S(\mathcal M^{(2)}(Z))=\mathcal M^{(1)}(Z).
+    \]
+    Then each transported map and both square composites preserve the
+    appropriate total sector trace.
+    For the individual maps,
+    \[
+      \sum_\beta\tr(\widetilde T(X)_\beta)
+        =\sum_\alpha\tr(X_\alpha),
+      \qquad
+      \sum_\alpha\tr(\widetilde S(Y)_\alpha)
+        =\sum_\beta\tr(Y_\beta).
+    \]
+    For the square composites,
+    \[
+      \sum_\alpha\tr
+        \bigl((\widetilde S\widetilde T)(X)_\alpha\bigr)
+        =\sum_\alpha\tr(X_\alpha),
+      \qquad
+      \sum_\beta\tr
+        \bigl((\widetilde T\widetilde S)(Y)_\beta\bigr)
+        =\sum_\beta\tr(Y_\beta).
+    \]
+    Neither of the stronger range inclusions
+    \[
+      T(R_1(\mathcal A_1))\subseteq R_2(\mathcal A_2),
+      \qquad
+      S(R_2(\mathcal A_2))\subseteq R_1(\mathcal A_1)
+    \]
+    is assumed.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:positive_direct_sum_map_trace_preserving_from_fixed_product_span,
+      thm:direct_sum_trace_preservation_sandwich,
+      lem:mpdo_transported_vertical_sector_fixed_generators,
+      thm:mpdo_vertical_bond_contractions_generate_sector_algebra,
+      thm:mpdo_transported_vertical_sector_trace_loss}
+    Each transported map is positive and trace nonincreasing, and hence so are
+    the square composites $\widetilde S\widetilde T$ and
+    $\widetilde T\widetilde S$.  The fixed-generator lemma and the
+    product-spanning theorem give the hypotheses of
+    Theorem~\ref{thm:positive_direct_sum_map_trace_preserving_from_fixed_product_span}
+    for both composites.  Thus both preserve the corresponding total trace.
+
+    For positive $X\in\mathcal A_1$, one has
+    \[
+      \tr_{\mathcal A_1}(X)
+        =\tr_{\mathcal A_1}
+          ((\widetilde S\widetilde T)(X))
+        \leq\tr_{\mathcal A_2}(\widetilde T(X))
+        \leq\tr_{\mathcal A_1}(X).
+    \]
+    Theorem~\ref{thm:direct_sum_trace_preservation_sandwich} therefore makes
+    $\widetilde T$ trace preserving.  Applying the same theorem to
+    $\widetilde S$ and $\widetilde T\widetilde S$ proves the assertion for
+    $\widetilde S$.
+\end{proof}
+
+\begin{lemma}[Complete positivity of refinement in vertical coordinates]
+    \label{lem:mpdo_transport_t_vertical_coordinates_cp}
+    \lean{MPOTensor.transportTToVerticalCoordinates_isKrausCP}
+    \leanok
+    \uses{def:mpdo_vertical_coordinate_map_transport}
+    If the physical refinement map $T$ is completely positive, then the
+    transported map $T_{\mathrm v}$ in vertical canonical coordinates is
+    completely positive.
+\end{lemma}
+
+\begin{proof}\leanok
+    By Definition~\ref{def:mpdo_vertical_coordinate_map_transport},
+    \[
+      T_{\mathrm v}(Z)
+        =U_2J\!\left(T(U_1^\dagger ZU_1)\right)U_2^\dagger.
+    \]
+    The two single-operator conjugations and the reindexing $J$ are completely
+    positive, so the assertion follows by composition.
+\end{proof}
+
+\begin{lemma}[Complete positivity of coarse-graining in vertical coordinates]
+    \label{lem:mpdo_transport_s_vertical_coordinates_cp}
+    \lean{MPOTensor.transportSToVerticalCoordinates_isKrausCP}
+    \leanok
+    \uses{def:mpdo_vertical_coordinate_map_transport}
+    If the physical coarse-graining map $S$ is completely positive, then the
+    transported map $S_{\mathrm v}$ in vertical canonical coordinates is
+    completely positive.
+\end{lemma}
+
+\begin{proof}\leanok
+    By Definition~\ref{def:mpdo_vertical_coordinate_map_transport},
+    \[
+      S_{\mathrm v}(W)
+        =U_1S\!\left(J^{-1}(U_2^\dagger WU_2)\right)U_1^\dagger.
+    \]
+    Again, single-operator conjugation, reindexing, and composition preserve
+    complete positivity.
+\end{proof}
+
+\begin{lemma}[Retained-coordinate block-diagonal inclusion]
+    \label{lem:mpdo_vertical_sector_block_diagonal_reindex}
+    \lean{MPOTensor.verticalSectorBlockDiagonal_eq_equivReindexMap_comp_embedding}
+    \leanok
+    \uses{def:mpdo_retained_vertical_sector_coordinates}
+    Let $\iota$ be block-diagonal inclusion of the weighted vertical-sector
+    block family into its full matrix algebra, and let $W$ be the canonical
+    reindexing to retained physical coordinates.  Then the retained-coordinate
+    inclusion is
+    \[
+      \iota_{\mathrm v}=W\circ\iota.
+    \]
+\end{lemma}
+
+\begin{proof}\leanok
+    This is the defining relation between the direct-sum and retained
+    coordinates.
+\end{proof}
+
+\begin{lemma}[Retained-coordinate diagonal-block extraction]
+    \label{lem:mpdo_vertical_sector_blocks_reindex}
+    \lean{MPOTensor.verticalSectorBlocks_eq_compression_comp_equivReindexMap}
+    \leanok
+    \uses{def:mpdo_retained_vertical_sector_coordinates}
+    Let $\pi$ be diagonal-block extraction to the weighted vertical-sector
+    block family, and let $W$ be the canonical reindexing to retained physical
+    coordinates.  Then the retained-coordinate extraction is
+    \[
+      \pi_{\mathrm v}=\pi\circ W^{-1}.
+    \]
+\end{lemma}
+
+\begin{proof}\leanok
+    This is the inverse defining relation between the retained and direct-sum
+    coordinates.
+\end{proof}
+
+\begin{lemma}[Full-matrix factorization of transported refinement]
+    \label{lem:mpdo_transported_vertical_sector_t_extension}
+    \lean{MPOTensor.directSumMapExtension_transportedVerticalSectorT}
+    \leanok
+    \uses{def:mpdo_transported_vertical_sector_maps,
+      lem:mpdo_vertical_sector_block_diagonal_reindex,
+      lem:mpdo_vertical_sector_blocks_reindex}
+    Write $\widehat R_1$ for normalized state preparation,
+    $\widehat{\widetilde R}_2$ for controlled partial trace, and $W_i$ for
+    retained-coordinate reindexing.  The full-matrix extension of the
+    transported refinement map is
+    \[
+      \widehat{\widetilde T}
+        =\widehat{\widetilde R}_2\circ W_2^{-1}\circ
+          T_{\mathrm v}\circ W_1\circ\widehat R_1.
+    \]
+\end{lemma}
+
+\begin{proof}\leanok
+    Substitute the preceding inclusion and extraction identities into
+    $\widetilde T=\widetilde R_2T_{\mathrm v}R_1$.
+\end{proof}
+
+\begin{lemma}[Full-matrix factorization of transported coarse-graining]
+    \label{lem:mpdo_transported_vertical_sector_s_extension}
+    \lean{MPOTensor.directSumMapExtension_transportedVerticalSectorS}
+    \leanok
+    \uses{def:mpdo_transported_vertical_sector_maps,
+      lem:mpdo_vertical_sector_block_diagonal_reindex,
+      lem:mpdo_vertical_sector_blocks_reindex}
+    Write $\widehat R_2$ for normalized state preparation,
+    $\widehat{\widetilde R}_1$ for controlled partial trace, and $W_i$ for
+    retained-coordinate reindexing.  The full-matrix extension of the
+    transported coarse-graining map is
+    \[
+      \widehat{\widetilde S}
+        =\widehat{\widetilde R}_1\circ W_1^{-1}\circ
+          S_{\mathrm v}\circ W_2\circ\widehat R_2.
+    \]
+\end{lemma}
+
+\begin{proof}\leanok
+    Substitute the preceding inclusion and extraction identities into
+    $\widetilde S=\widetilde R_1S_{\mathrm v}R_2$.
+\end{proof}
+
+\begin{theorem}[Complete positivity and adjoint Schwarz for the transported maps]
+    \label{thm:mpdo_transported_vertical_sector_composites_schwarz}
+    \lean{MPOTensor.transportedVerticalSectorT_isKrausDirectSumMap,
+      MPOTensor.transportedVerticalSectorS_isKrausDirectSumMap,
+      MPOTensor.transportedVerticalSector_composites_traceAdjointSchwarz}
+    \leanok
+    \uses{def:mpdo_transported_vertical_sector_maps,
+      lem:mpdo_transport_t_vertical_coordinates_cp,
+      lem:mpdo_transport_s_vertical_coordinates_cp,
+      lem:mpdo_transported_vertical_sector_t_extension,
+      lem:mpdo_transported_vertical_sector_s_extension,
+      thm:mpdo_vertical_sector_partial_trace_kraus,
+      lem:direct_sum_kraus_composition_schwarz,
+      thm:mpdo_transported_vertical_sector_composites_trace_preserving}
+    Under the hypotheses of
+    Theorem~\ref{thm:mpdo_transported_vertical_sector_composites_trace_preserving},
+    the maps
+    \[
+      \widetilde T:\mathcal A_1\longrightarrow\mathcal A_2,
+      \qquad
+      \widetilde S:\mathcal A_2\longrightarrow\mathcal A_1
+    \]
+    are completely positive.  The trace adjoints of the two square composites
+    satisfy the Schwarz inequality in every simple summand.
+\end{theorem}
+
+\begin{proof}\leanok
+    Let $\iota_i$ and $\pi_i$ be block-diagonal inclusion and diagonal-block
+    extraction, respectively, and let $W_i$ denote the canonical reindexing
+    from the weighted vertical-sector coordinates to the retained physical
+    coordinates.  The full-matrix extension of the transported refinement
+    map has the factorization
+    \[
+      \widehat{\widetilde T}
+        =\widehat{\widetilde R}_2\circ W_2^{-1}\circ
+          T_{\mathrm v}\circ W_1\circ\widehat R_1.
+    \]
+    Here $\widehat R_1$ is normalized state preparation,
+    $\widehat{\widetilde R}_2$ is controlled partial trace, and
+    \[
+      T_{\mathrm v}(Z)
+        =U_2J\!\left(T(U_1^\dagger ZU_1)\right)U_2^\dagger.
+    \]
+    Every factor is completely positive.  The analogous identities
+    \[
+      S_{\mathrm v}(W)
+        =U_1S\!\left(J^{-1}(U_2^\dagger WU_2)\right)U_1^\dagger,
+      \qquad
+      \widehat{\widetilde S}
+        =\widehat{\widetilde R}_1\circ W_1^{-1}\circ
+          S_{\mathrm v}\circ W_2\circ\widehat R_2
+    \]
+    prove complete positivity of $\widetilde S$.  These factorizations are
+    exact on the full matrix algebras: $\pi_iW_i^{-1}$ is precisely extraction
+    of the retained diagonal sector blocks.  Thus no range inclusion is used.
+
+    Composition gives complete positivity of
+    $\widetilde S\widetilde T$ and $\widetilde T\widetilde S$.
+    The preceding theorem gives trace preservation of these two composites.
+    Their trace adjoints are therefore unital completely positive maps, and
+    the Kadison--Schwarz inequality applies in each simple summand.
+\end{proof}
+
+\begin{theorem}[Transported vertical-sector composites are identities]
+    \label{thm:mpdo_transported_vertical_sector_composites_identity}
+    \lean{MPOTensor.transportedVerticalSector_composites_eq_id}
+    \leanok
+    \uses{thm:mpdo_transported_vertical_sector_composites_trace_preserving,
+      thm:mpdo_transported_vertical_sector_composites_schwarz,
+      lem:mpdo_transported_vertical_sector_fixed_generators,
+      thm:mpdo_vertical_bond_contractions_generate_sector_algebra,
+      thm:mpdo_fixed_contractions_trace_adjoint_schwarz_identity}
+    Under precisely the hypotheses of
+    Theorem~\ref{thm:mpdo_transported_vertical_sector_composites_trace_preserving},
+    the transported maps satisfy
+    \begin{align}
+      \widetilde S\circ\widetilde T
+        &=\id_{\mathcal A_1},
+        \label{eq:mpdo_vsector_ST_id}\\
+      \widetilde T\circ\widetilde S
+        &=\id_{\mathcal A_2}.
+        \label{eq:mpdo_vsector_TS_id}
+    \end{align}
+    Thus $\widetilde T$ and $\widetilde S$ are mutually inverse.  This is the
+    identity-composition conclusion of
+    \cite[Appendix~C.4, lines~1974--1995]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+
+\begin{proof}\leanok
+    For each square composite $F$, positivity follows from positivity of the
+    two transported maps.  Theorems~
+    \ref{thm:mpdo_transported_vertical_sector_composites_trace_preserving}
+    and~\ref{thm:mpdo_transported_vertical_sector_composites_schwarz} give
+    trace preservation and the Schwarz inequality for $F^*$, respectively.
+    Lemma~\ref{lem:mpdo_transported_vertical_sector_fixed_generators} gives
+    \[
+      F(V_i(X))=V_i(X)
+    \]
+    for every bond matrix $X$.  Theorem~
+    \ref{thm:mpdo_vertical_bond_contractions_generate_sector_algebra} gives a
+    positive integer $L_i$ such that
+    \[
+      C_{L_i}(V_i)=\mathcal A_i.
+    \]
+    Applying Theorem~
+    \ref{thm:mpdo_fixed_contractions_trace_adjoint_schwarz_identity} first to
+    $F=\widetilde S\circ\widetilde T$ and then to
+    $F=\widetilde T\circ\widetilde S$ proves
+    equations~(\ref{eq:mpdo_vsector_ST_id}) and
+    (\ref{eq:mpdo_vsector_TS_id}).
+\end{proof}

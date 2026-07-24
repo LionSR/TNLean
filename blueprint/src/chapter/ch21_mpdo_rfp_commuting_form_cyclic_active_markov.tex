@@ -1,0 +1,682 @@
+
+\begin{lemma}[Marginal stability under source zero correlation length]
+    \label{lem:mpdo_source_zcl_marginal_stability}
+    \lean{MPOTensor.%
+      reducedBlockState_apply_eq_trace_evalWord_mul_verticalLoop_pow}
+    \lean{MPOTensor.%
+      reducedBlockState_succ_succ_eq_succ_of_isSourceZCL}
+    \leanok
+    \uses{def:mpo_source_zcl, lem:mpdo_trace_loop_chain}
+    Let $M$ have source zero correlation length.  For every $N\geq0$, the
+    normalized $N$-site marginal obtained by tracing two sites from
+    $\sigma^{(N+2)}(M)$ equals the normalized $N$-site marginal obtained by
+    tracing one site from $\sigma^{(N+1)}(M)$.
+
+    This is the first replacement at
+    \cite[Appendix~C.2, line~1613]{Cirac2016MPDO_arXiv}.  It does not imply
+    the rank-one trace factorization asserted later on that line.
+\end{lemma}
+
+\begin{proof}\leanok
+    Write $E=\mathcal T_M$ and choose $\lambda>0$ such that
+    $E^2=\lambda E$.  For physical configurations $u,v$ of length $N$, the
+    two marginal matrix elements are
+    \[
+        \frac{\tr(M^{u,v}E^2)}{\tr(E^{N+2})}
+        \quad\text{and}\quad
+        \frac{\tr(M^{u,v}E)}{\tr(E^{N+1})}.
+    \]
+    The numerator and denominator on the left are respectively $\lambda$
+    times those on the right, and source zero correlation length makes the
+    denominator on the right nonzero.
+\end{proof}
+
+% **Local fix (additional marginal replacement):** the printed proof returns
+% to a one-step coefficient after its first replacement.  See
+% docs/paper-gaps/cpsv16_commuting_form_to_sal.tex.
+\begin{theorem}[Iterated marginal stability under zero correlation length]
+    \label{thm:mpdo_source_zcl_iterated_marginal_stability}
+    \lean{MPOTensor.reducedBlockState_add_three_eq_succ_of_isSourceZCL}
+    \leanok
+    \uses{lem:mpdo_source_zcl_marginal_stability}
+    Let $M$ have source zero correlation length.  For every $L\geq0$, the
+    normalized $L$-site marginal obtained by tracing three sites from
+    $\sigma^{(L+3)}(M)$ equals the normalized $L$-site marginal obtained by
+    tracing one site from $\sigma^{(L+1)}(M)$.
+\end{theorem}
+
+\begin{proof}\leanok
+    First retain $L+1$ sites and apply
+    Lemma~\ref{lem:mpdo_source_zcl_marginal_stability}.  Trace the last of
+    these retained sites, and then apply the same lemma while retaining $L$
+    sites.
+\end{proof}
+
+\begin{definition}[Rank-one trace factorization for neighboring operators]
+    \label{def:mpdo_generic_eta_rank_one_trace_factorization}
+    \lean{Matrix.EtaRankOneTraceFactorization}
+    \leanok
+    A rank-one trace factorization of neighboring matrices $\eta_{q,h}$
+    consists of real numbers $a_q,b_h$ such that
+    \[
+        \tr(\eta_{q,h})=a_qb_h,
+        \qquad
+        \sum_q a_qb_q=1.
+    \]
+    The factorization is an explicit assumption; it is not deduced from zero
+    correlation length.  It is the factorization invoked at
+    \cite[Appendix~C.2, line~1613]{Cirac2016MPDO_arXiv}.
+    % Scope restriction documented in
+    % docs/paper-gaps/cpsv16_commuting_form_to_sal.tex.
+\end{definition}
+
+\begin{lemma}[Separation of the two-boundary edge contraction]
+    \label{lem:mpdo_eta_two_boundary_contraction_separated}
+    \lean{Matrix.etaTwoBoundaryContraction_eq_separated}
+    \leanok
+    \uses{def:mpdo_generic_eta_rank_one_trace_factorization,
+        def:mpdo_right_partial_trace_map, def:partial_trace_left}
+    Suppose $\eta_{q,h}$ has a rank-one trace factorization.  For fixed
+    boundary sectors $u,v$, set
+    \[
+        R_{u,q}=\tr_{H_{q,l}}(\eta_{u,q}),
+        \qquad
+        L_{h,v}=\tr_{H_{h,r}}(\eta_{h,v}).
+    \]
+    Then
+    \[
+        \sum_{q,h}\tr(\eta_{q,h})(R_{u,q}\otimes L_{h,v})
+        =\left(\sum_q a_qR_{u,q}\right)\otimes
+          \left(\sum_h b_hL_{h,v}\right).
+    \]
+    This is the corrected edge contraction at
+    \cite[Appendix~C.2, lines~1613--1617]{Cirac2016MPDO_arXiv}.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:mpdo_generic_eta_rank_one_trace_factorization}
+    Substitute $\tr(\eta_{q,h})=a_qb_h$ and distribute the two finite sums.
+\end{proof}
+
+% **Scope restriction (rank-one trace factorization):** the theorem below
+% assumes tr(eta_{q,h}) = a_q b_h.  It does not derive that identity from zero
+% correlation length and does not prove Proposition 4to2, a Markov
+% decomposition, or saturation of the area law.  Source line 1616 suppresses
+% the partial traces on the two surviving boundary operators.  Documented in
+% docs/paper-gaps/cpsv16_commuting_form_to_sal.tex.
+\begin{theorem}[Conditional fourth-region boundary trace]
+    \label{thm:mpdo_eta_fourth_region_trace_formula}
+    \lean{Matrix.eta_fourth_region_trace_formula}
+    \leanok
+    \uses{def:mpdo_generic_eta_rank_one_trace_factorization,
+        def:mpdo_right_partial_trace_map, def:partial_trace_left}
+    Let $\eta_{q,h}$ be arbitrary matrices on
+    $H_{q,r}\otimes H_{h,l}$ with a rank-one trace factorization.  For a
+    nonempty retained sector word $k=(k_0,\ldots,k_{L-1})$, write
+    \[
+        P_k=\bigotimes_{n=0}^{L-2}\eta_{k_n,k_{n+1}},
+        \qquad
+        R_{u,q}=\tr_{H_{q,l}}(\eta_{u,q}),
+        \qquad
+        L_{h,v}=\tr_{H_{h,r}}(\eta_{h,v}).
+    \]
+    The edge contraction corresponding to tracing the two boundary sites of
+    the longer cyclic chain is
+    \[
+    \begin{aligned}
+        &\bigoplus_k P_k\otimes
+          \sum_{q,h}\tr(\eta_{q,h})
+            \bigl(R_{k_{L-1},q}\otimes L_{h,k_0}\bigr)\\
+        &\quad=
+          \bigoplus_k P_k\otimes
+          \left(\sum_q a_qR_{k_{L-1},q}\right)\otimes
+          \left(\sum_h b_hL_{h,k_0}\right).
+    \end{aligned}
+    \]
+    This is the edge-coordinate interpretation of the displayed
+    fourth-region trace in
+    \cite[Appendix~C.2, lines~1606 and 1613--1617]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:mpdo_eta_two_boundary_contraction_separated}
+    Apply Lemma~\ref{lem:mpdo_eta_two_boundary_contraction_separated} for
+    each retained sector word.  Tensor with the unchanged product $P_k$ and
+    take the direct sum over $k$.
+\end{proof}
+
+\begin{remark}
+    The theorem applies, in particular, to the positive chain-independent
+    neighboring family supplied by
+    Theorem~\ref{thm:mpdo_eta_local_sigma_nk2}, once the rank-one trace
+    factorization is given.  It does not derive that factorization, identify
+    this two-boundary contraction with a one-site marginal, or prove a Markov
+    decomposition or saturation of the area law.
+\end{remark}
+
+\begin{theorem}[A nonminimal sector factorization need not be primitive]
+    \label{thm:mpdo_commuting_bond_trace_matrix_primitivity_obstruction}
+    \lean{MPOTensor.CommutingBondTraceMatrixObstruction.%
+      normal_sourceZCL_fixed_commutingBond_does_not_force_traceMatrix_primitive}
+    \leanok
+    \uses{def:mpdo_eta_local_structure_data, def:mpo_source_zcl, def:mpdo,
+      def:injective, def:normal}
+    There is an injective normal tensor $\mathcal K$, of physical dimension two
+    and bond dimension one, which generates MPDOs and has source zero
+    correlation length, together with one positive two-site bond $B$ whose
+    translates commute.  For every $N\geq2$,
+    \[
+        \sigma^{(N)}(\mathcal K)=\prod_{i=0}^{N-1}B_{i,i+1},
+    \]
+    while the trace matrix of a chosen two-sector Beigi factorization is
+    \[
+        T=\begin{pmatrix}1&0\\0&0\end{pmatrix}.
+    \]
+    In particular, $T$ is not primitive.
+
+    This shows that primitivity cannot be inferred for an arbitrary selected
+    factorization in the step suggested at
+    \cite[Appendix~C.2, line~1613]{Cirac2016MPDO_arXiv}.  The same tensor also
+    has a one-sector factorization with positive semidefinite neighboring
+    operator and primitive trace matrix.  Hence the example does not exclude a
+    source-faithful minimal or visible-sector selection, and it does not
+    disprove the stated commuting-form-to-SAL implication.
+\end{theorem}
+
+\begin{proof}\leanok
+    Let $\mathcal K^{0,0}=1$ and let all other physical entries vanish.  The
+    matrices $\{\mathcal K^{i,j}\}_{i,j=0}^1$ span $M_1(\mathbb C)$.  For every
+    $X\in M_1(\mathbb C)$, the doubled-index transfer $\mathcal E_{\mathcal K}$
+    and the physical-trace transfer $P_{\mathcal K}$ satisfy
+    \[
+        \mathcal E_{\mathcal K}(X)=X,
+        \qquad P_{\mathcal K}=I_1,
+        \qquad P_{\mathcal K}^2=P_{\mathcal K}.
+    \]
+    Hence $\mathcal K$ is injective and normal and has source zero correlation
+    length.  Decompose the physical space nonminimally as
+    $\mathbb C\oplus\mathbb C$.  With $w_0=1$ and $w_1=0$, take both sector
+    factors to be the scalar $w_k$ in sector $k$.  The neighboring operators
+    are
+    \[
+        \eta_{k,h}=w_kw_h I_1=\delta_{k,0}\delta_{h,0}I_1\succeq0.
+    \]
+    In the sector coordinates the corresponding physical bond is
+    \[
+        B=\sum_{k,h} I_{H_L^{(k)}}\otimes\eta_{k,h}\otimes
+        I_{H_R^{(h)}}
+        =I_{H_L^{(0)}}\otimes I_1\otimes I_{H_R^{(0)}}.
+    \]
+    Since only the all-zero physical-index word contributes, the
+    factorization identity is
+    \[
+        \sigma^{(N)}(\mathcal K)=\prod_{i=0}^{N-1}B_{i,i+1}
+        \qquad (N\geq2).
+    \]
+    Consequently,
+    \[
+        T_{k,h}=\tr(\eta_{k,h})=\delta_{k,0}\delta_{h,0},
+        \qquad
+        T=\begin{pmatrix}1&0\\0&0\end{pmatrix}.
+    \]
+    For every $n\geq1$,
+    \[
+        T^n=\begin{pmatrix}1&0\\0&0\end{pmatrix}.
+    \]
+    Thus no positive power has all entries strictly positive, so $T$ is not
+    primitive.  For the alternative factorization, take one sector
+    $B^L=\mathbb C^2$ and $B^R=\mathbb C$, with
+
+    \[
+        l=\begin{pmatrix}1&0\\0&0\end{pmatrix},
+        \qquad r=(1).
+    \]
+    Its sole neighboring operator is
+    $\widehat\eta_{0,0}=\diag(1,0)\succeq0$, and hence its trace
+    matrix is
+    \[
+        \widehat T=\bigl(\tr(\widehat\eta_{0,0})\bigr)=(1).
+    \]
+    Every positive power of $\widehat T$ equals $(1)$, so this one-sector
+    trace matrix is primitive.
+\end{proof}
+
+% **Local fix (cyclic-active restriction):** CPSV16 Lemma `propSN` assumes SAL.
+% The following restricted construction repairs the arbitrary-factorization obstruction.
+% See docs/paper-gaps/cpsv16_commuting_form_to_sal.tex.
+\begin{definition}[Cyclic-active sectors]
+    \label{def:mpdo_cyclic_active_sector}
+    \lean{MPOTensor.PhysicalSectorFactorization.IsCyclicActiveSector}
+    \lean{MPOTensor.PhysicalSectorFactorization.cyclicActiveWeight}
+    \lean{MPOTensor.PhysicalSectorFactorization.cyclicActiveWeight_ne_zero_iff}
+    \lean{MPOTensor.PhysicalSectorFactorization.CyclicActiveSector}
+    \lean{MPOTensor.PhysicalSectorFactorization.cyclicActiveSectorTraceMatrix}
+    \lean{MPOTensor.PhysicalSectorFactorization.neighboringOperator_trace_re_pos_iff}
+    \leanok
+    \uses{def:mpdo_physical_sector_factorization,
+      def:mpdo_minimal_neighboring_operator}
+    For a physical-sector factorization with neighboring operators
+    $\eta_{k,h}$, retain a sector $k$ when there is a sector $h$ such that
+    \[
+        \eta_{k,h}\ne0,
+        \qquad h\leadsto k,
+    \]
+    where $\leadsto$ denotes reachability by nonzero neighboring operators.
+    The first edge $k\to h$ is explicit, so the resulting closed walk has
+    positive length even when the return path is empty.  The set $C$ of
+    retained sectors is therefore exactly the set of vertices occurring in
+    positive-length directed cycles, in the sense of
+    \cite[Section~III]{Beigi2012Classification}.  Define
+    \[
+        T_{k,h}=\re\tr(\eta_{k,h})\qquad(k,h\in C).
+    \]
+    For positive semidefinite neighboring operators the trace is real, so
+    $T_{k,h}=\tr(\eta_{k,h})$, and $T_{k,h}>0$ is equivalent to
+    $\eta_{k,h}\ne0$.
+\end{definition}
+
+% **Local fix (cyclic-active restriction):** this theorem concerns the restricted
+% cyclic support, not the full trace matrix in CPSV16 Lemma `propSN`. See
+% docs/paper-gaps/cpsv16_commuting_form_to_sal.tex.
+\begin{theorem}[Deletion of sectors absent from cyclic products]
+    \label{thm:mpdo_cyclic_active_deletion}
+    \lean{MPOTensor.PhysicalSectorFactorization.isCyclicActiveSector_of_cyclic_edges}
+    \lean{MPOTensor.PhysicalSectorFactorization.neighboringOperator_ne_zero_of_cyclicNeighboringProduct_ne_zero}
+    \lean{MPOTensor.PhysicalSectorFactorization.isCyclicActiveSector_of_cyclicNeighboringProduct_ne_zero}
+    \lean{MPOTensor.PhysicalSectorFactorization.cyclicNeighboringProduct_eq_zero_of_not_isCyclicActiveSector}
+    \lean{MPOTensor.PhysicalSectorFactorization.cyclicNeighboringProduct_eq_zero_of_not_forall_isCyclicActiveSector}
+    \lean{MPOTensor.PhysicalSectorFactorization.%
+      map_cyclicNeighboringProduct_eq_zero_of_not_forall_isCyclicActiveSector}
+    \leanok
+    \uses{def:mpdo_cyclic_active_sector,
+      def:mpdo_physical_sector_chain_coordinates}
+    Let $N\geq1$ and let $k=(k_0,\ldots,k_{N-1})$ be a cyclic sector
+    configuration.  If $k_n\notin C$ for some $n$, then
+    \[
+        \Omega_k=0.
+    \]
+    Thus deleting the sectors outside $C$ leaves every finite cyclic
+    neighboring product unchanged.  For every linear contraction $\Phi$,
+    including a composition of reindexings and partial traces,
+    \[
+        \Omega_k=0 \quad\Longrightarrow\quad \Phi(\Omega_k)=0.
+    \]
+\end{theorem}
+
+\begin{proof}\leanok
+    If $\Omega_k\ne0$, each factor $\eta_{k_n,k_{n+1}}$ is nonzero; otherwise
+    every matrix entry of the product vanishes.  Starting with the edge
+    $k_n\to k_{n+1}$ and following the remaining cyclic edges gives a return
+    path to $k_n$.  Hence every $k_n$ belongs to $C$.  The last assertion is
+    the linear identity $\Phi(0)=0$.
+\end{proof}
+
+% **Local fix (cyclic-active restriction):** this is a restricted replacement for
+% the primitive-matrix step of the SAL-dependent CPSV16 Lemma `propSN`. See
+% docs/paper-gaps/cpsv16_commuting_form_to_sal.tex.
+\begin{theorem}[Primitivity on cyclic-active sectors]
+    \label{thm:mpdo_cyclic_active_trace_matrix_primitive}
+    \lean{MPOTensor.PhysicalSectorFactorization.exists_sectorVirtualMatrix_ne_zero_of_isCyclicActiveSector}
+    \lean{MPOTensor.PhysicalSectorFactorization.isCyclicActiveSector_of_sectorVirtualMatrix_ne_zero}
+    \lean{MPOTensor.PhysicalSectorFactorization.sectorVirtualMatrix_eq_zero_of_not_isCyclicActiveSector}
+    \lean{MPOTensor.PhysicalSectorFactorization.nonempty_cyclicActiveSector}
+    \lean{MPOTensor.PhysicalSectorFactorization.cyclicActiveSectorOneSiteMatrixFamily_span_eq_top}
+    \lean{MPOTensor.PhysicalSectorFactorization.cyclicActiveSector_exists_sectorVirtualMatrix_ne_zero}
+    \lean{MPOTensor.PhysicalSectorFactorization.exists_cyclicActive_two_edge_return}
+    \lean{MPOTensor.PhysicalSectorFactorization.cyclicActiveSectorTraceMatrix_isIrreducible}
+    \lean{MPOTensor.PhysicalSectorFactorization.cyclicActiveSectorTraceMatrix_pow_two_diag_pos}
+    \lean{MPOTensor.PhysicalSectorFactorization.cyclicActiveSectorTraceMatrix_pow_three_diag_pos}
+    \lean{MPOTensor.PhysicalSectorFactorization.cyclicActiveSectorTraceMatrix_isPrimitive}
+    \leanok
+    \uses{def:injective, def:mpdo_cyclic_active_sector}
+    Suppose that the virtual dimension is positive, the MPO tensor is
+    injective, and every $\eta_{k,h}$ is positive semidefinite.  Then $C$ is
+    nonempty and the matrix $T$ is primitive.  More precisely, $T$ is
+    irreducible and every $k\in C$ satisfies
+    \[
+        (T^2)_{k,k}>0,
+        \qquad
+        (T^3)_{k,k}>0.
+    \]
+\end{theorem}
+
+\begin{proof}\leanok
+    The virtual matrices of all physical sectors span the full matrix
+    algebra.  If $A=A_k^{xy}$ is nonzero, nondegeneracy of the trace pairing
+    gives a virtual matrix $B=A_q^{uv}$ such that
+    \[
+        \tr(AB)\ne0.
+    \]
+    Cyclicity gives $\tr(BA)=\tr(AB)\ne0$, and therefore
+    \[
+        \eta_{k,q}\ne0,
+        \qquad
+        \eta_{q,k}\ne0.
+    \]
+    Thus a sector containing a nonzero virtual matrix lies on a directed
+    two-cycle.  Hence every virtual matrix outside $C$ vanishes, and the
+    virtual matrices belonging to $C$ still span the full algebra.
+
+    If a proper directed cut separated two nonempty subsets $C_1,C_2$ of
+    $C$, let $V_{C_i}$ denote the span of the virtual matrices in $C_i$.
+    Absence of an edge across the cut gives
+    \[
+        V_{C_1}V_{C_2}=\{0\},
+        \qquad
+        V_{C_1}+V_{C_2}=M_D(\mathbb C).
+    \]
+    Both spaces contain a nonzero matrix.  This contradicts the one-sided
+    product obstruction for two nonzero subspaces whose sum is the full
+    matrix algebra.  Thus $T$ is irreducible.  The same trace pairing gives a
+    two-edge return through each sector and closes every retained edge
+    through a third retained sector.  These yield the displayed positive
+    diagonal entries of $T^2$ and $T^3$; the coprime return lengths imply
+    primitivity.
+\end{proof}
+
+% **Local fix (cyclic-active restriction):** CPSV16 line 1613 uses the one-step
+% coefficient, whereas this restricted theorem proves rank one for its square.
+% See docs/paper-gaps/cpsv16_commuting_form_to_sal.tex.
+\begin{theorem}[Rank-one cyclic-active two-step coefficient]
+    \label{thm:mpdo_cyclic_active_zcl_rank_one}
+    \lean{MPOTensor.PhysicalSectorFactorization.cyclicActiveLeftRestriction}
+    \lean{MPOTensor.PhysicalSectorFactorization.cyclicActiveLeftRestriction_leftTensor}
+    \lean{MPOTensor.PhysicalSectorFactorization.cyclicActiveLeftRestriction_rightTensor}
+    \lean{MPOTensor.PhysicalSectorFactorization.cyclicActiveLeftRestriction_neighboringOperator}
+    \lean{MPOTensor.PhysicalSectorFactorization.reindex_cyclicActiveLeftRestriction_activeSectorTraceMatrix}
+    \lean{MPOTensor.PhysicalSectorFactorization.cyclicActiveSectorTraceMatrix_normalized_relations_of_isSourceZCL}
+    \lean{MPOTensor.PhysicalSectorFactorization.cyclicActiveSectorTraceMatrix_rank_pow_two_eq_one}
+    \lean{MPOTensor.PhysicalSectorFactorization.normalized_cyclicActiveSectorTraceMatrix_rank_pow_two_eq_one}
+    \lean{MPOTensor.PhysicalSectorFactorization.exists_normalized_cyclicActiveSectorTraceMatrix_rank_pow_two_eq_one_of_isSourceZCL}
+    \leanok
+    \uses{def:mpo_source_zcl,
+      thm:mpdo_cyclic_active_trace_matrix_primitive,
+      thm:matrix_primitive_pow_two_rank_one}
+    Under the hypotheses of
+    Theorem~\ref{thm:mpdo_cyclic_active_trace_matrix_primitive}, suppose that
+    the physical-trace transfer has source zero correlation length.  There is
+    a number $\lambda>0$ such that, with $\widehat T=\lambda^{-1}T$,
+    \[
+        \widehat T^2=\widehat T^3,
+        \qquad
+        \rank(\widehat T^2)=1,
+    \]
+    and for every $m\geq1$,
+    \[
+        \tr(\widehat T^m)=\tr(\widehat T).
+    \]
+    The matrix $\widehat T^2$ is the two-step coefficient
+    \[
+        (\widehat T^2)_{k,h}
+        =\sum_{q\in C}\widehat T_{k,q}\widehat T_{q,h}
+    \]
+    by matrix multiplication.  The assertion neither identifies
+    $\widehat T$ with $\widehat T^2$ nor implies that the unreduced Beigi trace
+    matrix is primitive or rank one.
+\end{theorem}
+
+\begin{proof}\leanok
+    Set the left sector tensor equal to zero outside $C$.  The preceding span
+    argument shows that this does not change the physical tensor, and the
+    neighboring operators with both indices in $C$ are unchanged.  The
+    source zero-correlation-length relation, transported through this
+    restricted factorization, gives
+    $\widehat T^2=\widehat T^3$ on the cyclic-active indices.  By
+    Theorem~\ref{thm:mpdo_cyclic_active_trace_matrix_primitive},
+    $\widehat T$ is primitive.  Its square is therefore a strictly positive
+    idempotent matrix and has rank one.
+\end{proof}
+
+% Tracked in https://github.com/LionSR/TNLean/issues/4445.
+% **Local fix (cyclic-active restriction):** the intermediate sum is over the
+% positive-length cyclic support.  See
+% docs/paper-gaps/cpsv16_commuting_form_to_sal.tex.
+\begin{theorem}[Cyclic-active three-boundary trace coefficient]
+    \label{thm:mpdo_cyclic_active_three_boundary_trace}
+    \lean{MPOTensor.PhysicalSectorFactorization.%
+      sum_cyclicActive_trace_mul_trace_eq_pow_two}
+    \lean{MPOTensor.PhysicalSectorFactorization.%
+      neighboringOperator_trace_eq_cyclicActiveSectorTraceMatrix}
+    \lean{MPOTensor.PhysicalSectorFactorization.%
+      sum_cyclicActive_normalized_trace_mul_trace_eq_pow_two}
+    \lean{MPOTensor.PhysicalSectorFactorization.%
+      sum_cyclicActive_partialTraceRight_threeSiteSectorClosure}
+    \leanok
+    \uses{def:mpdo_cyclic_active_sector,
+      thm:mpdo_sector_closure_partial_traces}
+    Let $C$ be the set of cyclic-active sectors and suppose that every
+    neighboring operator is positive semidefinite.  For $q,h\in C$,
+    \[
+        \sum_{r\in C}\tr(\eta_{q,r})\tr(\eta_{r,h})
+        =(T_C^2)_{q,h}.
+    \]
+    More generally, if $B_{q,h}(X)$ denotes the outer boundary operator in
+    the three-site closure, then
+    \[
+      \sum_{r\in C}\tr_{\mathrm{mid}}
+        \bigl(B_{q,h}(X)\otimes\eta_{q,r}\otimes\eta_{r,h}\bigr)
+      =(T_C^2)_{q,h}B_{q,h}(X).
+    \]
+    Here $\tr_{\mathrm{mid}}$ traces both neighboring factors.  No equality
+    between $T_C$ and $T_C^2$ is asserted.
+
+    For every $\lambda\in\R$, set
+    $\widehat T_C=\lambda^{-1}T_C$.  The same calculation with each fully
+    traced edge multiplied by $\lambda^{-1}$ gives
+    \[
+      \sum_{r\in C}
+        \lambda^{-1}\tr(\eta_{q,r})\,
+        \lambda^{-1}\tr(\eta_{r,h})
+      =(\widehat T_C^2)_{q,h}.
+    \]
+\end{theorem}
+
+\begin{proof}\leanok
+    Positivity makes each $\tr(\eta_{a,b})$ real.  Expanding matrix
+    multiplication gives
+    \[
+      (T_C^2)_{q,h}=\sum_{r\in C}(T_C)_{q,r}(T_C)_{r,h}
+      =\sum_{r\in C}\tr(\eta_{q,r})\tr(\eta_{r,h}).
+    \]
+    The partial trace of the fixed-sector three-site closure is
+    \[
+      \tr(\eta_{q,r})\tr(\eta_{r,h})B_{q,h}(X).
+    \]
+    Summing over $r\in C$ proves the second identity.  Multiplying each of the
+    two trace factors by $\lambda^{-1}$ gives the normalized identity.
+\end{proof}
+
+\begin{theorem}[Cyclic-active fourth-region factorization]
+    \label{thm:mpdo_cyclic_active_fourth_region_factorization}
+    \lean{MPOTensor.PhysicalSectorFactorization.%
+      exists_cyclicActiveFourthRegion_formula_of_isSourceZCL}
+    \leanok
+    \uses{thm:mpdo_source_zcl_iterated_marginal_stability,
+      thm:mpdo_cyclic_active_three_boundary_trace,
+      thm:mpdo_cyclic_active_deletion}
+    Let $\mathcal K$ be injective and have source zero correlation length,
+    and suppose its neighboring operators are positive semidefinite.  There
+    are $\lambda>0$ and strictly positive functions $a,b$ on the
+    cyclic-active sectors, normalized by $a\mathbin{\boldsymbol\cdot}b=1$,
+    such that every fourth-region marginal is a direct sum over retained
+    sector words of the unchanged interior neighboring product tensored with
+    the separated left and right boundary factors determined by $a$ and $b$.
+
+    % Local fix (cyclic-active restriction): the coefficient being factorized
+    % is $(\lambda^{-1}T_C)^2$, obtained from one additional source-ZCL
+    % marginal replacement and three traced boundary sites. No equality
+    % between $T_C$ and $T_C^2$ is used. This correction is recorded in
+    % docs/paper-gaps/cpsv16_commuting_form_to_sal.tex.
+\end{theorem}
+
+\begin{proof}\leanok
+    The additional marginal replacement leaves the retained interior product
+    unchanged and produces the two-step coefficient on the cyclic-active
+    sectors.  Its positive rank-one factorization separates the two surviving
+    boundary sums.  All sector words leaving the cyclic-active support vanish
+    before the two outer partial traces are evaluated.
+\end{proof}
+
+\begin{theorem}[Cyclic-active Markov decomposition at every cut]
+    \label{thm:mpdo_cyclic_active_markov_all_cuts}
+    \lean{MPOTensor.PhysicalSectorFactorization.%
+      exists_hayashiMarkovDecomposition_cyclicActiveCut_of_isSourceZCL}
+    \leanok
+    \uses{thm:mpdo_cyclic_active_fourth_region_factorization,
+      def:hayashi_markov_decomposition}
+    Under the hypotheses of
+    Theorem~\ref{thm:mpdo_cyclic_active_fourth_region_factorization}, for
+    arbitrary $A,C\geq 0$, the fourth-region marginal on consecutive regions
+    of lengths $A$, $1$, and $C$ admits a Hayashi Markov decomposition.
+    The middle site decomposes as the direct sum of its left and right sector
+    factors.  Each block is the tensor product of normalized positive left
+    and right path states, and its probability is the product of their
+    unnormalized traces divided by the positive periodic normalization.
+
+    % Local fix (cyclic-active restriction): the block weights and path states
+    % arise from the factorization of $(\lambda^{-1}T_C)^2$ described above.
+    % This correction is recorded in
+    % docs/paper-gaps/cpsv16_commuting_form_to_sal.tex.
+\end{theorem}
+
+\begin{proof}\leanok
+    Separate the retained chain at the distinguished middle site.  The
+    retained neighboring factors split into the left and right path products,
+    while the two cyclic endpoint factors become their respective boundary
+    matrices.  Normalize each positive block by its trace, using an arbitrary
+    trace-one positive matrix when the block vanishes.  The trace-one identity
+    for the full marginal shows that the resulting nonnegative block weights
+    sum to one.
+\end{proof}
+
+\begin{theorem}[Physical-sector factorization and ZCL imply SAL]
+    \label{thm:mpdo_physical_sector_factorization_zcl_sal}
+    \lean{MPOTensor.PhysicalSectorFactorization.isSAL_of_isSourceZCL}
+    \leanok
+    \uses{thm:mpdo_cyclic_active_markov_all_cuts,
+      thm:mpdo_all_cut_markov_implies_sal,
+      thm:mpdo_physical_support_restriction_sal}
+    Let $\mathcal K$ have positive bond dimension and be injective, and let
+    $F$ be a physical-sector factorization of $\mathcal K$.  Suppose every
+    neighboring operator $\eta^F_{q,h}$ is positive semidefinite.  If the
+    physical-trace transfer of $\mathcal K$ has source zero correlation
+    length, then $\mathcal K$ saturates the area law.
+
+    % **Scope restriction (physical-sector factorization):** The theorem
+    % assumes the factorization F and positivity of every neighboring
+    % operator.  CPSV16 Proposition 4to2, lines 1597--1619, starts instead
+    % from a translation-invariant commuting bond and the original source
+    % tensor.  The selected fixed tensor now has the required positive
+    % factorization, but the normality and blocking comparison with the source
+    % tensor remains; see docs/paper-gaps/cpsv16_commuting_form_to_sal.tex.
+\end{theorem}
+
+\begin{proof}\leanok
+    Positivity of the neighboring operators makes every nonempty
+    sector-coordinate chain operator positive.  Source zero correlation
+    length makes its trace nonzero.  Apply the preceding theorem with
+    $A=m-1$ and $C=N-m-1$ at every admissible cut, then use the all-cut
+    Markov criterion.  Finally transport saturation through the physical
+    isometry of $F$.
+\end{proof}
+
+\begin{theorem}[A translation-invariant commuting bond and ZCL imply SAL]
+    \label{thm:mpdo_translation_invariant_commuting_form_zcl_sal}
+    \notready
+    \uses{def:mpdo_eta_local_structure_data, def:mpo_source_zcl,
+        def:is_sal, def:mpdo, def:mpdo_injective_inverse_layer}
+    Let $\mathcal K$ be an injective normal tensor generating MPDOs.  Suppose
+    that there is one
+    positive two-site bond $B$ whose translates commute and, for every
+    $N\geq2$, a constant $c_N>0$ such that
+    \[
+        \sigma^{(N)}(\mathcal K)=c_N\prod_{i=0}^{N-1}B_{i,i+1}.
+    \]
+    If the physical-trace transfer of $\mathcal K$ has zero correlation
+    length, then $\mathcal K$ saturates the area law.
+
+    This is the proposition at
+    \cite[Appendix~C.2, lines~1597--1619]{Cirac2016MPDO_arXiv}.
+    % The local positive neighboring operators are constructed.  The printed
+    % rank-one inference at source line 1613 is obstructed by Lemma C.5. Gap
+    % documented in
+    % docs/paper-gaps/cpsv16_commuting_form_to_sal.tex.
+\end{theorem}
+
+\begin{theorem}[$\eta$-local structure gives the one-sector GSNNCH form]
+    \label{thm:mpdo_eta_local_structure_has_gsnnch_form}
+    \lean{MPOTensor.EtaLocalStructureData.hasGSNNCHForm}
+    \lean{MPOTensor.hasGSNNCHForm_of_etaLocalStructure}
+    \leanok
+    \uses{thm:mpdo_eta_local_structure_has_commuting_bond_product,
+        thm:mpdo_commuting_bond_product_has_gsnnch_form}
+    The single positive bond determined by the $\eta$-local structure gives
+    the one-sector instance of the explicit GSNNCH decomposition.
+\end{theorem}
+
+\begin{proof}\leanok
+    Apply the one-sector construction to the single-bond product at every
+    chain length.
+\end{proof}
+
+\begin{theorem}[Injective SAL tensors generate GSNNCH states]
+    \label{thm:mpdo_injective_sal_is_gsnnch}
+    \lean{MPOTensor.isGSNNCH_of_isInjective_of_isSAL}
+    \leanok
+    \uses{def:is_sal, cor:mpdo_eta_local_structure_of_is_sal,
+        thm:mpdo_eta_local_structure_has_gsnnch_form,
+        thm:mpdo_gsnnch_of_sector_form}
+    Every injective MPO tensor satisfying SAL generates Gibbs states of a
+    nearest-neighbor commuting Hamiltonian: the normalized finite-chain
+    states are density operators with the explicit sector form of
+    Definition~\ref{def:mpdo_source_gsnnch}, realized through one sector.
+    The one-sector form is the commuting product form in which
+    \cite[Proposition~C.8]{Cirac2016MPDO_arXiv} states its conclusion for an
+    injective tensor, combined here with the density normalization of
+    \cite[Definition~4.8]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+
+\begin{proof}\leanok
+    Corollary~\ref{cor:mpdo_eta_local_structure_of_is_sal} gives the
+    $\eta$-local structure, whose single positive bond gives the one-sector
+    form by Theorem~\ref{thm:mpdo_eta_local_structure_has_gsnnch_form}. SAL
+    includes the nonvanishing of every positive-length trace, so
+    Theorem~\ref{thm:mpdo_gsnnch_of_sector_form} applies.
+\end{proof}
+
+\begin{remark}[Positive physical-sector factorization]
+    Suppose that $K$ satisfies $\mathrm{SAL}(K)$ and admits a physical-sector
+    factorization whose neighboring operators $\eta_{k,h}$ are simultaneously
+    positive semidefinite. The associated two-site bond is
+    \begin{equation}\label{eq:mpdo_eta_bond_assembly}
+        B=\sum_{k,h}
+        \operatorname{Id}_{H_L^{(k)}}\otimes
+        \eta_{k,h}\otimes
+        \operatorname{Id}_{H_R^{(h)}},
+        \qquad B\ge 0,
+    \end{equation}
+    and, for every $N\ge 2$,
+    \begin{equation}\label{eq:mpdo_eta_product_form}
+        \sigma^{(N)}(K)=c_N\prod_{n=1}^{N}B_{n,n+1},
+        \qquad c_N>0,\qquad
+        [B_{i,i+1},B_{j,j+1}]=0.
+    \end{equation}
+    Under this hypothesis,
+    Theorem~\ref{thm:mpdo_eta_local_structure_of_positive_physical_sector_factorization}
+    gives the $\eta$-local structure and proves
+    (\ref{eq:mpdo_eta_bond_assembly})--(\ref{eq:mpdo_eta_product_form}) with
+    $c_N=1$. Theorem~\ref{thm:mpdo_eta_local_structure_has_commuting_form}
+    then gives the commuting-form conclusion. Adjacent translates commute on every
+    periodic chain of length at least three by
+    Theorem~\ref{thm:mpdo_periodic_adjacent_physical_bonds_comm}, and the
+    crossed two-site case is
+    Theorem~\ref{thm:mpdo_physical_two_site_crossed_bonds_comm}. Disjoint
+    translates commute by
+    Theorem~\ref{thm:mpdo_periodic_disjoint_physical_bonds_comm}. These cases
+    give pairwise commutativity at every length $N\geq2$ by
+    Theorem~\ref{thm:mpdo_periodic_pairwise_physical_bonds_comm}. Given the
+    physical-sector factorization, the all-length product identity is
+    Theorem~\ref{thm:mpdo_exact_physical_sector_bond_product}.
+    The doubled-index transfer condition enters only in the subsequent RFP and
+    single-bond branch conclusions.
+\end{remark}
