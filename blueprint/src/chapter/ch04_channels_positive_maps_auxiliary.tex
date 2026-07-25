@@ -1,4 +1,4 @@
-\section{Additional results on positive maps and channels}
+\section{Rectangular positive maps, trace normalization, matrix inequalities, and density matrices}
 
 \begin{definition}[Associated positive linear map]
     \label{def:positive_map_is_positive_linear_map}
@@ -9,89 +9,6 @@
     linear map regarded as a positive linear map: if
     $A,B\in\MN{n}$ and $A \le B$, then $E(A) \le E(B)$ in $\MN{m}$.
 \end{definition}
-
-\begin{theorem}[Transposition is positive and trace-preserving]
-    \label{thm:transpose_positive_trace_preserving}
-    \lean{Matrix.transposeLinearMapComplex_isPositiveMap,
-        Matrix.transposeLinearMapComplex_isTracePreservingMap}
-    \leanok
-    \uses{def:positive_map, def:trace_preserving}
-    The matrix transposition map $\theta(X)=X^T$ on $\MN{D}$ is positive
-    and trace-preserving.
-\end{theorem}
-
-\begin{proof}\leanok
-    If $X \ge 0$, write $X=C^\dagger C$. Then
-    $X^T=C^T\overline C=\overline C^\dagger\overline C$, so $X^T \ge 0$.
-    Trace preservation is the identity $\tr(X^T)=\tr(X)$.
-\end{proof}
-
-\begin{definition}[Reduction map]
-    \label{def:reduction_map}
-    \lean{Matrix.reductionMap}
-    \leanok
-    The reduction map on $\MN{D}$, for $k\in\N$, is
-    \begin{align}
-        T_k(X)
-         & =\tr(X)\Id-k^{-1}X.
-        \label{eq:channel_reduction_map}
-    \end{align}
-\end{definition}
-
-\begin{theorem}[The first reduction map is positive]
-    \label{thm:reduction_map_one_positive}
-    \lean{Matrix.reductionMap_one_isPositiveMap}
-    \leanok
-    \uses{def:positive_map, def:reduction_map}
-    For $D\ge 1$, the map $T_1(X)=\tr(X)\Id-X$ on $\MN{D}$ is positive.
-\end{theorem}
-
-\begin{proof}\leanok
-    If $X\ge 0$, diagonalize $X$. Its eigenvalues
-    $\lambda_1,\ldots,\lambda_D$ are non-negative, and each satisfies
-    $\lambda_j\le \sum_{i=1}^D\lambda_i=\tr(X)$. Therefore all eigenvalues
-    of $\tr(X)\Id-X$ are non-negative.
-\end{proof}
-
-\begin{theorem}[Self-duality of the reduction map]
-    \label{thm:reduction_map_self_dual}
-    \lean{Matrix.traceAdjointMap_reductionMap}
-    \leanok
-    \uses{def:reduction_map}
-    The reduction map is self-dual for the trace pairing:
-    \begin{align}
-        \tr(T_k(\rho)X)
-         & =\tr(\rho T_k(X)).
-        \label{eq:channel_reduction_self_dual}
-    \end{align}
-\end{theorem}
-
-\begin{proof}\leanok
-    Expanding both sides of (\ref{eq:channel_reduction_self_dual}) using
-    (\ref{eq:channel_reduction_map}) and bilinearity of the trace gives
-    $\tr(\rho)\tr(X)-k^{-1}\tr(\rho X)$ in each case.
-\end{proof}
-
-\begin{theorem}[Choi matrix of the reduction map]
-    \label{thm:choi_matrix_reduction_map}
-    \lean{ChoiJamiolkowski.choiMatrix_reductionMap}
-    \leanok
-    \uses{def:reduction_map}
-    For $D\ge 1$, the Choi matrix of the reduction map is
-    \begin{align}
-        \tau(T_k)
-         & =D^{-1}\Id-k^{-1}\ket{\Omega}\bra{\Omega}.
-        \label{eq:channel_reduction_choi}
-    \end{align}
-\end{theorem}
-
-\begin{proof}\leanok
-    The trace term sends the $(a,b)$ slice of
-    $\ket{\Omega}\bra{\Omega}$ to its trace times the identity, giving
-    the contribution $D^{-1}\Id$. The second term is the Choi matrix of
-    $k^{-1}$ times the identity map, namely
-    $k^{-1}\ket{\Omega}\bra{\Omega}$.
-\end{proof}
 
 \begin{definition}[Positive map between matrix algebras]
     \label{def:positive_map_rectangular}
@@ -268,65 +185,6 @@
     whose trace against $A$ equals $S_k(A)$, so the value is attained.
     Theorem~\ref{thm:ky_fan_upper_bound} shows that no rank-$k$ projection
     exceeds it. Hence $S_k(A)$ is the maximum.
-\end{proof}
-
-\begin{definition}[Maps preserving the positive semidefinite cone]
-    \label{def:maps_psd_cone_onto}
-    \lean{MapsPSDConeOnto}
-    \leanok
-    \uses{def:positive_map}
-    A linear map $T:\MN{D}\to\MN{D}$ \emph{maps the positive semidefinite cone
-        onto itself} if $T$ is positive and every positive semidefinite matrix is
-    the image under $T$ of a positive semidefinite matrix. This is condition
-    (1) of \cite[Proposition~3.8]{Wolf2012Quantum}.
-\end{definition}
-
-\begin{theorem}[Conjugations preserve the positive semidefinite cone]
-    \label{thm:conjugation_maps_psd_cone_onto}
-    \lean{unitaryConjLM_mapsPSDConeOnto,
-        unitaryConjLM_comp_transpose_mapsPSDConeOnto}
-    \leanok
-    \uses{def:maps_psd_cone_onto}
-    Let $Y\in\MN{D}$ be invertible. Then the map $X\mapsto YXY^\dagger$ and the
-    map $X\mapsto YX^TY^\dagger$ each map the positive semidefinite cone onto
-    itself. This is the implication (3) $\Rightarrow$ (1) of
-    \cite[Proposition~3.8]{Wolf2012Quantum}.
-\end{theorem}
-
-\begin{proof}\leanok
-    Conjugation by any matrix preserves positive semidefiniteness, and the
-    transpose of a positive semidefinite matrix is positive semidefinite, so
-    both maps send the cone into itself. For surjectivity onto the cone, given
-    a positive semidefinite $A$, set
-    $W=Y^{-1}A(Y^{-1})^\dagger$, which is again positive semidefinite. Then
-    $YWY^\dagger=A$ proves the conjugation case, and
-    $Y(W^T)^TY^\dagger=A$ proves the transpose case, with $W$ and $W^T$
-    positive semidefinite.
-\end{proof}
-
-\begin{theorem}[Transposition is not completely positive]
-    \label{thm:transpose_not_completely_positive}
-    \lean{ChoiJamiolkowski.transposeLinearMapComplex_not_isCPMap}
-    \leanok
-    \uses{def:cp_map, def:flip_operator, def:fin_two_antisymm_vec,
-        thm:choi_transpose_flip, thm:cp_iff_choi_posSemidef}
-    If $D \ge 2$, the matrix transposition map $\theta(X)=X^T$ on $\MN{D}$
-    is not completely positive.
-\end{theorem}
-
-\begin{proof}\leanok
-    \uses{def:flip_operator, def:fin_two_antisymm_vec, thm:choi_transpose_flip,
-        thm:cp_iff_choi_posSemidef}
-    If $\theta$ were completely positive, its Choi matrix would be positive
-    semidefinite. By Theorem~\ref{thm:choi_transpose_flip}, this Choi matrix is
-    $D^{-1}F$. For the antisymmetric vector
-    $v=\ket{01}-\ket{10}$,
-    \begin{align}
-        \bra{v}\,D^{-1}F\,\ket{v}
-         & =-\frac{2}{D}<0,
-        \notag
-    \end{align}
-    contradicting positive semidefiniteness.
 \end{proof}
 
 \begin{theorem}[Positive maps preserve Hermiticity]
