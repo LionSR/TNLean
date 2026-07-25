@@ -119,8 +119,10 @@ eventual exact-word spanning, and spectral strong irreducibility.
         \spec_{\mathrm{per}}(\E_A)&=\{1\},
         \notag
     \end{align}
-    and $\E_A$ is irreducible. Thus the eigenvalue $1$ has a
-    positive-definite fixed point and is the only peripheral eigenvalue.
+    and $\E_A$ is irreducible. The formal predicate makes irreducibility
+    explicit, matching the condition implicit in the source terminology.
+    Thus the eigenvalue $1$ has a positive-definite fixed point and is the only
+    peripheral eigenvalue.
 \end{definition}
 
 \begin{theorem}[Equivalent primitivity conditions]
@@ -143,15 +145,23 @@ eventual exact-word spanning, and spectral strong irreducibility.
 \end{theorem}
 
 \begin{proof}\leanok
+    \uses{thm:peripheral_cyclic_structure}
     If $S_i(A)=\MN{D}$ and $\varphi\neq0$, then
     $S_i(A)\varphi=\C^D$, proving (2)$\Rightarrow$(1).
-    For (1)$\Rightarrow$(3), first obtain a nonzero positive fixed point of
-    the channel. The spreading condition makes this fixed point positive
-    definite and excludes nontrivial invariant subspaces. If
-    $\E_A(X)=\lambda X$ with $|\lambda|=1$, pass to a positive power for
-    which $\lambda^p=1$. The Hermitian and anti-Hermitian parts of $X$ are
-    trace-zero fixed points of $\E_A^p$; positivity and uniqueness of the
-    positive fixed point force both parts to vanish unless $\lambda=1$.
+    For (1)$\Rightarrow$(3), first obtain a nonzero positive fixed point
+    $\rho$. The spreading condition makes $\rho$ positive definite and
+    excludes nontrivial invariant subspaces. The cyclic peripheral-spectrum
+    theorem then makes every peripheral eigenvalue a root of unity. Suppose
+    $\E_A(X)=\lambda X$ with $|\lambda|=1$ and $\lambda\neq1$, and choose
+    $p>0$ with $\lambda^p=1$. Paper primitivity persists under positive
+    powers, so $\E_A^p$ has a unique positive fixed point of each trace.
+    If $H$ is a trace-zero Hermitian fixed point of $\E_A^p$, choose
+    $\varepsilon>0$ small enough that
+    $\rho\pm\varepsilon H\succeq0$. These are fixed points with the same
+    trace as $\rho$, so both equal $\rho$ and hence $H=0$. Trace preservation
+    and $\lambda\neq1$ give $\tr(X)=0$. Apply the preceding argument to
+    $X+X^\dagger$ and $\mathrm{i}(X-X^\dagger)$, which are Hermitian fixed
+    points of $\E_A^p$. Both vanish, contradicting $X\neq0$.
     Hence the peripheral spectrum is $\{1\}$.
 
     For (3)$\Rightarrow$(2), write
@@ -333,15 +343,15 @@ eventual exact-word spanning, and spectral strong irreducibility.
 
 \begin{theorem}[Sharp nonzero trace product for a primitive channel]%
     \label{thm:nonzero_trace_word_primitive_sharp}
-    \lean{MPSTensor.exists_nonzero_trace_word_of_isPrimitivePaper_sharp}
+    \lean{MPSTensor.exists_nonzero_trace_word_of_isPrimitivePaper_sharp_pos}
     \leanok
     \uses{def:paper_primitive, def:wielandt_kraus_rank,
-        thm:wielandt_proposition_three, thm:cumulative_span_sharp}
+        thm:wielandt_proposition_three}
     Let $D>0$, suppose $\sum_i(A^i)^\dagger A^i=\Id$, and assume that
     $A$ is primitive in the sense of
     Definition~\ref{def:paper_primitive}. Then there is a word $w$ with
     \begin{align}
-        |w|&\le D^2-\krausrk(A)+1,
+        1\le|w|&\le D^2-\krausrk(A)+1,
         \notag\\
         \tr(A^w)&\neq0.
         \notag
@@ -352,13 +362,16 @@ eventual exact-word spanning, and spectral strong irreducibility.
 
 \begin{proof}\leanok
     Theorem~\ref{thm:wielandt_proposition_three} gives eventual full Kraus
-    rank, hence normality. Starting from
-    $\dim T_1(A)\ge\krausrk(A)$, each strict inclusion
-    $T_n(A)\subsetneq T_{n+1}(A)$ raises the dimension. Stabilisation before
-    reaching $\MN{D}$ would contradict eventual full Kraus rank. Thus
-    $T_{D^2-\krausrk(A)+1}(A)=\MN{D}$. Express $\Id$ as a linear combination
-    of the corresponding words. Since $\tr(\Id)=D\neq0$, at least one word
-    has nonzero trace.
+    rank, hence normality. Put $b=D^2-\krausrk(A)+1$ and let
+    $V_n$ be the span of $A^w$ with $1\le|w|\le n$. Then
+    $S_1(A)\subseteq V_1$, so $\dim V_1\ge\krausrk(A)$. If
+    $V_n=V_{n+1}$ for some $n\ge1$, then $V_n$ is closed under left
+    multiplication by every $A^i$. It therefore contains every positive-length
+    word product; normality forces $V_n=\MN{D}$. Thus, until the full matrix
+    algebra is reached, the dimensions increase strictly, and the bound on
+    $\dim\MN{D}$ gives $V_b=\MN{D}$. Express $\Id$ as a linear combination of
+    the positive-length words defining $V_b$. Since $\tr(\Id)=D\neq0$, at
+    least one has nonzero trace.
 \end{proof}
 
 \begin{theorem}[Sharp nonzero trace product]%
@@ -558,7 +571,7 @@ case are proved in Section~\ref{sec:app_wielandt_blocking_support}.
     \uses{def:word_span, def:normal}
     Let $A$ be a normal MPS tensor with bond dimension $D\ge1$.
     Suppose that a Kraus operator $A^{i_0}$ is non-invertible and that
-    there exist a vector $\varphi\in\C^D$ and a nonzero scalar $\mu$
+    there exist a nonzero vector $\varphi\in\C^D$ and a nonzero scalar $\mu$
     such that $A^{i_0}\varphi=\mu\varphi$.
     Then, for every $\psi\in\C^D$,
     $\ketbra{\varphi}{\psi}\in S_{D^2-D+1}(A)$.
@@ -610,7 +623,7 @@ case are proved in Section~\ref{sec:app_wielandt_blocking_support}.
     $A$ is primitive in the sense of
     Definition~\ref{def:paper_primitive}. Suppose $A^{i_0}$ is not invertible
     and
-    $A^{i_0}\varphi=\mu\varphi$ with $\mu\neq0$.
+    $A^{i_0}\varphi=\mu\varphi$ with $\varphi\neq0$ and $\mu\neq0$.
     Then, for every $\psi\in\C^D$,
     \begin{align}
         \ketbra{\varphi}{\psi}
