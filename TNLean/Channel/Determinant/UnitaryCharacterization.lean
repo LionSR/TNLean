@@ -190,16 +190,9 @@ private theorem forward_det_one_implies_unitaryChannel [NeZero d]
   -- Td is multiplicative
   have hMul :=
     ChannelDeterminant.Internal.heisenberg_dual_multiplicative hT hdet hall K hK hK_tp Td hTd_def
-  have hTd_ne : Td ≠ 0 := by
-    intro h
-    have := congr_fun (congr_arg DFunLike.coe h) 1
-    simp only [hTd_one, LinearMap.zero_apply, one_ne_zero] at this
-  -- Td is bijective (nonzero multiplicative map on simple algebra)
-  have hTd_bij := MPSTensor.linear_mul_endomorphism_bijective Td hMul hTd_ne
-  -- Skolem–Noether: Td(X) = PXP⁻¹
-  let Td_alg := MPSTensor.linearMapToAlgHom Td hMul hTd_bij.2
-  let Td_equiv : MatrixAlg d ≃ₐ[ℂ] MatrixAlg d := AlgEquiv.ofBijective Td_alg hTd_bij
-  obtain ⟨P, hP⟩ := MPSTensor.skolemNoether_matrix Td_equiv
+  have hTd_ne : Td ≠ 0 := MPSTensor.linearMap_ne_zero_of_map_one Td hTd_one
+  -- Skolem–Noether: Td(X) = PXP⁻¹ (nonzero multiplicative endomorphisms are inner)
+  obtain ⟨P, hP⟩ := MPSTensor.exists_inner_of_linear_mul_endomorphism Td hMul hTd_ne
   -- Key identities for P
   have hPinvP : (↑(P⁻¹ : GL (Fin d) ℂ) : MatrixAlg d) * (↑P : MatrixAlg d) = 1 := by
     have : (P⁻¹ * P : GL (Fin d) ℂ) = 1 := inv_mul_cancel _
@@ -227,7 +220,7 @@ private theorem forward_det_one_implies_unitaryChannel [NeZero d]
     change trace (A * Td B) =
       trace ((↑(P⁻¹ : GL (Fin d) ℂ) : MatrixAlg d) * A *
         (↑P : MatrixAlg d) * B)
-    rw [show Td B = Td_equiv B from rfl, hP B]
+    rw [hP B]
     simpa only [Matrix.mul_assoc] using
       (Matrix.trace_mul_cycle (A * (↑P : MatrixAlg d)) B
         ((↑(P⁻¹ : GL (Fin d) ℂ) : MatrixAlg d)))
@@ -241,8 +234,7 @@ private theorem forward_det_one_implies_unitaryChannel [NeZero d]
           (↑(P⁻¹ : GL (Fin d) ℂ) : MatrixAlg d)ᴴ * Xᴴ * (↑P : MatrixAlg d)ᴴ := by
       intro X
       have h := hTd_star X
-      rw [show Td Xᴴ = Td_equiv Xᴴ from rfl, hP Xᴴ] at h
-      rw [show Td X = Td_equiv X from rfl, hP X] at h
+      rw [hP Xᴴ, hP X] at h
       simpa only [coe_units_inv, Matrix.mul_assoc, conjTranspose_mul] using h
     have hPstarPinvstar :
         (↑P : MatrixAlg d)ᴴ * (↑(P⁻¹ : GL (Fin d) ℂ) : MatrixAlg d)ᴴ = 1 := by
