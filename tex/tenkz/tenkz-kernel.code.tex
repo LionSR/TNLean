@@ -3814,18 +3814,24 @@
           }
       }
       {
-        \use:e
+        % A route and an enclosure may both request the same pierced leg.
+        % The reach above already folds every consumer into one maximum, so
+        % the first request owns the saved path and later requests reuse it.
+        \prop_if_in:NeF \l__tenkz_kernel_r_legdrawn_prop {#3}
           {
-            \exp_not:N \__tenkz_string_declare_open:nn {#3}
+            \use:e
               {
-                \__tenkz_kernel_r_ppt:nn
-                  { \l__tenkz_kernel_r_x_fp } { \l__tenkz_kernel_r_y_fp }
-                \__tenkz_kernel_r_ppt:nn
-                  { \l__tenkz_kernel_r_x_fp }
-                  { \l__tenkz_kernel_r_y_fp + \l__tenkz_kernel_r_yc_fp }
+                \exp_not:N \__tenkz_string_declare_open:nn {#3}
+                  {
+                    \__tenkz_kernel_r_ppt:nn
+                      { \l__tenkz_kernel_r_x_fp } { \l__tenkz_kernel_r_y_fp }
+                    \__tenkz_kernel_r_ppt:nn
+                      { \l__tenkz_kernel_r_x_fp }
+                      { \l__tenkz_kernel_r_y_fp + \l__tenkz_kernel_r_yc_fp }
+                  }
               }
+            \prop_put:Nen \l__tenkz_kernel_r_legdrawn_prop {#3} { }
           }
-        \prop_put:Nen \l__tenkz_kernel_r_legdrawn_prop {#3} { }
       }
   }
 
