@@ -155,8 +155,8 @@ abstracted — record why, so it is not re-proposed).
   `isCrossing_rb_of_incident`; `complProd_triMerge` chains two
   `regionProd_p2_eq_merge_of_incident_agree` applications (blue, then red), the
   red step reading `ζc` from the inner merge via the new partition fact
-  `not_isRegionIncidentEdge_blue_of_incident_rc` (a red- and
-  complement-incident edge misses the blue region).
+  `not_isRegionIncidentEdge_blue_of_crossing_rc` (a red-to-complement
+  crossing edge misses the blue region).
 - **Result:** `RegionBlock/CoarseThreeSite5.lean` loses 2 source lines net
   (34 insertions, 36 deletions across two commits): the three product-lemma
   proofs fall from 33 tactic lines to 13 term lines while the new crossing lemma
