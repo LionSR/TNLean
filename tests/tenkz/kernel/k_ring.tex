@@ -1,0 +1,30 @@
+%% Kernel fixture: a carrier that turns (Diagram 3 of Section III, drawn at
+%% six stations rather than four, because at four the turns are right angles
+%% and a square glyph hides them).
+%% Expected records: six atoms on row 1 (cols 1-6, physical=up), one wire
+%% closing the sixth station to the first through two angle-valued faces,
+%% one enclosure mark over the range (1,1)..(1,2).
+%% Expected ink: each glyph stands at its station of the circle frame,
+%% turned by that station's tangent; each physical leg points radially out
+%% of the ring, because the outward physical face is the row's own normal;
+%% every name reads level, because label text never rotates; and the
+%% enclosure is turned with the two records it names rather than drawn
+%% upright around them.  No atom says how it stands: orientation is a
+%% consequence of where a record sits.
+\documentclass{standalone}
+\usepackage{tenkz}
+\makeatletter
+\ExplSyntaxOn
+\file_input:n { tenkz-kernel.code.tex }
+\ExplSyntaxOff
+\makeatother
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[rows={ket}, cols=6, frame=circle, physical=up]
+  \tn[skin=box, name=A]{A} & \tn[skin=box, name=B]{B}
+  & \tn[skin=box, name=C]{C} & \tn[skin=box, name=D]{D}
+  & \tn[skin=box, name=E]{E} & \tn[skin=box, name=F]{F}
+  \tnwire{F.0}{A.180}
+  \tnmark[form=enclosure, slot=selected, label pos=n]{(1,1) .. (1,2)}{$P$}
+\end{tenkz}
+\end{document}
