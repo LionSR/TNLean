@@ -144,18 +144,6 @@ theorem peripheral_isRootOfUnity_of_pow_eigenvalue
       right
       exact ⟨n, rfl⟩
 
-/-- **Explicit bound**: among `μ^0, ..., μ^n`, a repeat gives a root of unity. -/
-theorem isRootOfUnity_of_norm_one_of_finite_orbit (μ : ℂ) (hμ : ‖μ‖ = 1)
-    (n : ℕ) (hrepeat : ∃ i j : ℕ, i < j ∧ j ≤ n ∧ μ ^ i = μ ^ j) :
-    ∃ p : ℕ, 0 < p ∧ p ≤ n ∧ μ ^ p = 1 := by
-  obtain ⟨i, j, hij, hjn, heq⟩ := hrepeat
-  have hμ_ne : μ ≠ 0 := by
-    rw [← norm_ne_zero_iff, hμ]
-    norm_num
-  exact ⟨j - i, Nat.sub_pos_of_lt hij, (Nat.sub_le j i).trans hjn,
-    mul_left_cancel₀ (pow_ne_zero _ hμ_ne) (by
-      rw [← pow_add, Nat.add_sub_cancel' hij.le, mul_one]; exact heq.symm)⟩
-
 end RootsOfUnity
 
 /-! ## Part 4: Channel period and primitivity -/

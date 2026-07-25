@@ -219,12 +219,4 @@ theorem HasSimpleKernel.generator_apply_eq_zero_iff
   · rintro ⟨c, rfl⟩
     simp [hρ.kernel]
 
-/-- For a simple kernel witness, fixed points of the exponential semigroup are
-exactly the scalar multiples of the witness. -/
-theorem HasSimpleKernel.expSemigroup_fixed_nonneg_iff
-    {L : Mat →ₗ[ℂ] Mat} {ρ X : Mat} (hρ : HasSimpleKernel L ρ) :
-    (∀ t : ℝ, 0 ≤ t → expSemigroup L t X = X) ↔ ∃ c : ℂ, X = c • ρ := by
-  rw [← generator_apply_eq_zero_iff_expSemigroup_fixed_nonneg (L := L) X]
-  exact hρ.generator_apply_eq_zero_iff
-
 end

@@ -296,25 +296,6 @@ theorem
   · exact eigenvalue_mul_overlap_normSq_eq_zero_of_kernel_le hA hB hker i j
 
 open scoped Matrix.Norms.L2Operator in
-/-- Each weighted scalar term in the support-domain spectral integrand is
-integrable on the positive half-line when `ker B ⊆ ker A`. -/
-theorem relativeEntropyScalar_mul_overlap_normSq_integrableOn_of_kernel_le
-    {A B : Matrix n n ℂ} (hA : A.PosSemidef) (hB : B.PosSemidef)
-    (hker : ∀ v : n → ℂ, B *ᵥ v = 0 → A *ᵥ v = 0)
-    (i j : n) :
-    IntegrableOn
-      (fun t : ℝ =>
-        relativeEntropyScalar
-            (hA.isHermitian.eigenvalues i)
-            (hB.isHermitian.eigenvalues j) t *
-          Complex.normSq
-            ((star (hA.isHermitian.eigenvectorUnitary : Matrix n n ℂ) *
-              (hB.isHermitian.eigenvectorUnitary : Matrix n n ℂ)) i j))
-      (Ioi 0) :=
-  (relativeEntropyScalar_mul_overlap_normSq_integrableOn_and_integral_of_kernel_le
-    hA hB hker i j).1
-
-open scoped Matrix.Norms.L2Operator in
 /-- The support-domain spectral integrand is integrable on the positive
 half-line, and its integral is the spectral relative-entropy sum, when
 `ker B ⊆ ker A`.

@@ -130,36 +130,6 @@ private theorem exists_nonzero_kraus_of_tp [NeZero D]
     simpa using congr_fun (congr_fun hone_zero a) a
   exact one_ne_zero hentry
 
-/-- A nonzero scalar matrix spans the scalar matrix algebra. -/
-private theorem isInjective_of_dim_one_of_exists_nonzero
-    (A : MPSTensor d 1) (hA : ∃ i : Fin d, A i ≠ 0) :
-    IsInjective A := by
-  obtain ⟨i₀, hi₀⟩ := hA
-  rw [IsInjective]
-  have hentry : A i₀ 0 0 ≠ 0 := by
-    intro h
-    apply hi₀
-    ext i j
-    have hi : i = 0 := Fin.eq_zero i
-    have hj : j = 0 := Fin.eq_zero j
-    subst hi
-    subst hj
-    simpa using h
-  have hsingle :
-      (ℂ ∙ A i₀ : Submodule ℂ (Matrix (Fin 1) (Fin 1) ℂ)) = ⊤ := by
-    refine (Submodule.span_singleton_eq_top_iff ℂ (A i₀)).2 ?_
-    intro M
-    refine ⟨M 0 0 / A i₀ 0 0, ?_⟩
-    ext i j
-    have hi : i = 0 := Fin.eq_zero i
-    have hj : j = 0 := Fin.eq_zero j
-    subst hi
-    subst hj
-    simp [div_eq_mul_inv, hentry]
-  exact eq_top_iff.mpr <| by
-    rw [← hsingle]
-    exact Submodule.span_mono (Set.singleton_subset_iff.mpr (Set.mem_range_self i₀))
-
 /-- **TP + primitive + irreducible → injective after positive blocking**.
 
 The blocking length is positive by the definition of normality. -/

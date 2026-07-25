@@ -109,17 +109,6 @@ private lemma pos_of_matrix_ne_zero
   ext i j
   exact Fin.elim0 i
 
-private noncomputable def quadraticFormCLM (v : Fin D → ℂ) :
-    Matrix (Fin D) (Fin D) ℂ →L[ℂ] ℂ :=
-  LinearMap.toContinuousLinearMap
-    { toFun := fun X => star v ⬝ᵥ (X *ᵥ v)
-      map_add' := by
-        intro X Y
-        simp [Matrix.add_mulVec, dotProduct_add]
-      map_smul' := by
-        intro c X
-        simp [Matrix.smul_mulVec, dotProduct_smul] }
-
 private theorem tsum_posDef_of_posDef_initial_segment
     (term : ℕ → Matrix (Fin D) (Fin D) ℂ)
     (hseries : Summable term)

@@ -316,36 +316,6 @@ lemma su2Xrot_mem_specialUnitaryGroup (β : ℝ) :
   · rw [su2Xrot, Matrix.det_fin_two_of]
     linear_combination hp - (Real.sin (β / 2) : ℂ) ^ 2 * Complex.I_sq
 
-lemma rotZ_mem_specialOrthogonalGroup (θ : ℝ) :
-    rotZ θ ∈ Matrix.specialOrthogonalGroup (Fin 3) ℝ := by
-  rw [Matrix.mem_specialOrthogonalGroup_iff]
-  refine ⟨?_, ?_⟩
-  · rw [Matrix.mem_orthogonalGroup_iff]
-    ext i j
-    fin_cases i <;> fin_cases j <;>
-      simp [rotZ, Matrix.mul_apply, Fin.sum_univ_three, Matrix.transpose_apply] <;>
-      nlinarith [Real.sin_sq_add_cos_sq θ]
-  · rw [Matrix.det_fin_three]
-    simp only [rotZ, Matrix.of_apply, Matrix.cons_val', Matrix.cons_val_zero, Matrix.cons_val_one,
-      Matrix.head_cons, Matrix.head_fin_const, Matrix.cons_val_fin_one, Matrix.empty_val',
-      Matrix.cons_val_two, Matrix.tail_cons]
-    nlinarith [Real.sin_sq_add_cos_sq θ]
-
-lemma rotX_mem_specialOrthogonalGroup (β : ℝ) :
-    rotX β ∈ Matrix.specialOrthogonalGroup (Fin 3) ℝ := by
-  rw [Matrix.mem_specialOrthogonalGroup_iff]
-  refine ⟨?_, ?_⟩
-  · rw [Matrix.mem_orthogonalGroup_iff]
-    ext i j
-    fin_cases i <;> fin_cases j <;>
-      simp [rotX, Matrix.mul_apply, Fin.sum_univ_three, Matrix.transpose_apply] <;>
-      nlinarith [Real.sin_sq_add_cos_sq β]
-  · rw [Matrix.det_fin_three]
-    simp only [rotX, Matrix.of_apply, Matrix.cons_val', Matrix.cons_val_zero, Matrix.cons_val_one,
-      Matrix.head_cons, Matrix.head_fin_const, Matrix.cons_val_fin_one, Matrix.empty_val',
-      Matrix.cons_val_two, Matrix.tail_cons]
-    nlinarith [Real.sin_sq_add_cos_sq β]
-
 /-! ### Lifting `SU(2)` matrices into the general linear group -/
 
 /-- A special unitary matrix has nonzero determinant, hence lifts to the general

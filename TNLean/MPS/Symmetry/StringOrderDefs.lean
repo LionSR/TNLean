@@ -133,15 +133,6 @@ lemma twistedTransferIter_zero (A : MPSTensor d D)
     twistedTransferIter A u 0 = LinearMap.id :=
   pow_zero _
 
-/-- The `(N+1)`-th iterate of the twisted transfer map is the twisted transfer
-map composed with the `N`-th iterate: `ℰ_u^{N+1} = ℰ_u ∘ ℰ_u^N`. -/
-lemma twistedTransferIter_succ (A : MPSTensor d D)
-    (u : Matrix (Fin d) (Fin d) ℂ) (N : ℕ) :
-    twistedTransferIter A u (N + 1) =
-      (twistedTransferMap A u).comp
-        (twistedTransferIter A u N) :=
-  pow_succ' _ _
-
 /-! ### String order parameter -/
 
 /-- The string order parameter `R_L(u)` for an MPS with stationary

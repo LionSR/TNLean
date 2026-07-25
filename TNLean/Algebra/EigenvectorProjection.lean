@@ -65,37 +65,6 @@ theorem eigenvectorProjection_idem (hA : A.IsHermitian) (k : n) :
   rw [hA.eigenvectorProjection_eq_indicator k]
   exact hA.eigenvectorUnitary_indicator_idem {k}
 
-/-- A rank-one eigenvector projection is positive semidefinite. -/
-theorem eigenvectorProjection_posSemidef (hA : A.IsHermitian) (k : n) :
-    (hA.eigenvectorProjection k).PosSemidef := by
-  have hsingle : (Matrix.single k k (1 : ℂ) : Matrix n n ℂ).PosSemidef := by
-    rw [← Matrix.diagonal_single]
-    refine Matrix.PosSemidef.diagonal ?_
-    intro i
-    by_cases hik : i = k
-    · subst hik
-      simp
-    · simp [Pi.single, hik]
-  simpa [eigenvectorProjection, Matrix.star_eq_conjTranspose, Matrix.mul_assoc] using
-    hsingle.mul_mul_conjTranspose_same
-      (B := (hA.eigenvectorUnitary : Matrix n n ℂ))
-
-/-- A rank-one eigenvector projection has trace one. -/
-theorem eigenvectorProjection_trace (hA : A.IsHermitian) (k : n) :
-    (hA.eigenvectorProjection k).trace = 1 := by
-  rw [hA.eigenvectorProjection_eq_indicator k]
-  simpa using hA.eigenvectorUnitary_indicator_trace ({k} : Finset n)
-
-/-- A rank-one eigenvector projection has matrix rank one. -/
-theorem eigenvectorProjection_rank (hA : A.IsHermitian) (k : n) :
-    (hA.eigenvectorProjection k).rank = 1 := by
-  have hrank :=
-    (hA.eigenvectorProjection_isHermitian k).rank_eq_trace_re_of_idem
-      (hA.eigenvectorProjection_idem k)
-  rw [hA.eigenvectorProjection_trace k] at hrank
-  norm_num at hrank
-  exact_mod_cast hrank
-
 /-- Projections associated with distinct eigenbasis vectors have zero product. -/
 theorem eigenvectorProjection_mul_eq_zero_of_ne
     (hA : A.IsHermitian) {j k : n} (hjk : j ≠ k) :

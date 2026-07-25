@@ -174,11 +174,6 @@ theorem kyFanNorm_succ (hA : A.IsHermitian) (k : ℕ) :
     hA.kyFanNorm (k + 1) = hA.kyFanNorm k + hA.descEigenvalue k := by
   simp [kyFanNorm, Finset.sum_range_succ]
 
-/-- Beyond the matrix dimension the descending-eigenvalue list is `0`. -/
-theorem descEigenvalue_eq_zero_of_le (hA : A.IsHermitian) {i : ℕ}
-    (hi : Fintype.card n ≤ i) : hA.descEigenvalue i = 0 := by
-  simp [descEigenvalue, Nat.not_lt.mpr hi]
-
 /-- Summing the full descending-eigenvalue list reproduces the sum of all
 eigenvalues. -/
 theorem sum_descEigenvalue_card (hA : A.IsHermitian) :
@@ -201,16 +196,6 @@ theorem kyFanNorm_card_eq_trace_re (hA : A.IsHermitian) :
   rw [kyFanNorm, sum_descEigenvalue_card]
   rw [hA.trace_eq_sum_eigenvalues, Complex.re_sum]
   simp
-
-/-- For `k` beyond the dimension the Ky-Fan norm is constant, equal to the trace. -/
-theorem kyFanNorm_eq_trace_re_of_card_le (hA : A.IsHermitian) {k : ℕ}
-    (hk : Fintype.card n ≤ k) : hA.kyFanNorm k = (A.trace).re := by
-  rw [← kyFanNorm_card_eq_trace_re hA, kyFanNorm, kyFanNorm,
-    ← Finset.sum_range_add_sum_Ico _ hk]
-  have hzero : ∑ i ∈ Finset.Ico (Fintype.card n) k, hA.descEigenvalue i = 0 :=
-    Finset.sum_eq_zero fun i hi =>
-      descEigenvalue_eq_zero_of_le hA (Finset.mem_Ico.mp hi).1
-  rw [hzero, add_zero]
 
 /-- The Ky-Fan `k`-norm written as a guarded sum over `Fin (Fintype.card n)`:
 each descending eigenvalue contributes exactly when its index is below `k`.  This
