@@ -32,6 +32,11 @@ exact Lemma 2(b) bound. The key results are:
 These results are designed to combine with the already proved `vecMulVec_eigenvector_mem_wordSpan`
 to give the quantitative stage bound on the Wolf/paper path toward `D²-D+1`.
 
+Items 1, 3 and 4 currently have no in-repo callers: the consumers that
+motivated them were removed by dead-code sweeps, and they are retained as the
+module's advertised quantitative API while that keep/delete question is
+tracked on issue #4564. Item 2 stays live via `RectangularSpan/Universality.lean`.
+
 ### References
 - arXiv:0909.5347, Lemma 2(b)
 - Wolf, "Quantum Channels & Operations", Section 6.2.4
