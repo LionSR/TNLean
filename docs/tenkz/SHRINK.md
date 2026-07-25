@@ -361,3 +361,12 @@ close dies there.
 and object
 scope. The picture spelling already exists; the new parser paths make the
 same rotation type composable without adding a second transform vocabulary.
+
+| flag:consumers:key:kernel-wire:crossing | keep-because: amendment two, `Extension-gate: #4779`; consumers arrive with the S4 swap and the redraw campaign; expiry 0.8 |
+
+`Extension-gate: #4779` (2026-07-25) adds `crossing=` at wire scope: the order a
+string takes at every crossing it makes, stated once instead of once per
+crossing. It arrives with the route that derives a crossing set from the side a
+string passes on, and `cross=` stays as the per-crossing exception for the one
+crossing that goes against the habit. Consumers: rmp-iii-a-pulling-through,
+rmp-workbench-iii-g-injective-pull, rmp-workbench-iii-mpo-injective-white.

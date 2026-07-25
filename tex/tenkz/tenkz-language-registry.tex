@@ -276,6 +276,13 @@
 \__tenkz_language_registry_key:nnnnnn {kernel-wire}{wind}{pair}{zero}{kernel}{Homotopy class on traced frames.}
 \__tenkz_language_registry_key:nnnnnn {kernel-wire}{around}{address-list}{empty}{kernel}{Silhouette detour targets.}
 \__tenkz_language_registry_key:nnnnnn {kernel-wire}{cross}{crossing-list}{empty}{kernel}{Declared over and under crossings.}
+% Extension-gate: #4779 -- crossing= is the string's habit, the order it
+% takes at every crossing it makes, stated once instead of once per
+% crossing, and it arrives with the route that derives a crossing set from
+% the side a string passes on.  cross= stays as the per-crossing exception.
+% Consumers: rmp-iii-a-pulling-through, rmp-workbench-iii-g-injective-pull,
+% rmp-workbench-iii-mpo-injective-white.
+\__tenkz_language_registry_key:nnnnnn {kernel-wire}{crossing}{enum(over|under|alternate|alternate=over|alternate=under)}{empty}{kernel}{Default crossing order at every crossing the string makes.}
 \__tenkz_language_registry_key:nnnnnn {kernel-wire}{dir}{direction-policy}{none}{kernel}{Direction mark of a directed index.}
 \__tenkz_language_registry_key:nnnnnn {kernel-wire}{name}{identifier}{generated}{kernel}{Addressable name.}
 \__tenkz_language_registry_key:nnnnnn {kernel-wire}{closed}{flag}{false}{kernel}{A smooth closed cycle; takes no ends.}
