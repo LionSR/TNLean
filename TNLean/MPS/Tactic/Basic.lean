@@ -3,17 +3,13 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import Mathlib.Tactic.Attr.Register
+import TNLean.MPS.Tactic.Attr
 
 /-!
 # Tactics for tensor-network proofs
 
-This file provides small custom `simp` attribute sets and thin tactic macros
-for recurring proof patterns in MPS / channel / overlap files.
-
-## Custom simp attributes
-
-* `mps_transfer` : transfer map unfoldings
+This file provides tactic macros for recurring proof patterns in MPS /
+channel / overlap files.
 
 ## Tactic macros
 
@@ -23,16 +19,11 @@ for recurring proof patterns in MPS / channel / overlap files.
 ## Design
 
 The tactics are intentionally simple. They do not search; when the normal form does
-not apply, they leave clear unsolved goals. The `simp` attribute sets are the primary
-mechanism; the tactic macros are thin sugar over the attributes.
+not apply, they leave clear unsolved goals. Each macro expands to a `simp` call over
+the `mps_transfer` simp set, which is registered in `TNLean.MPS.Tactic.Attr`.
 -/
 
 open Lean Elab Tactic Meta
-
-/-! ### Custom simp attribute sets -/
-
-/-- Simp set for transfer map unfoldings. -/
-register_simp_attr mps_transfer
 
 /-! ### Tactic macros -/
 
