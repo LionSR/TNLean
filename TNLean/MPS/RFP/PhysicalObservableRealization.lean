@@ -10,10 +10,11 @@ import TNLean.MPS.RFP.ZeroCorrelationLength
 /-!
 # Physical observables from simultaneous block injectivity
 
-This file proves the physical-observable realization used in the converse
-zero-correlation-length argument of arXiv:1606.00608, lines 1250--1258.
-A simultaneous word span allows one physical observable to select one BNT
-sector and one virtual matrix unit on both sides of the inserted transfer map.
+This file proves the multiplicity-one, unit-weight specialization of the
+physical-observable realization used in the converse zero-correlation-length
+argument of arXiv:1606.00608, lines 1250--1258. A simultaneous word span allows
+one physical observable to select one BNT basis sector and one virtual matrix
+unit on both sides of the inserted transfer map.
 -/
 
 open scoped Matrix BigOperators
@@ -277,9 +278,9 @@ theorem WordTupleSpanTop.exists_physicalObservableTransfer_directSum_sectorSuppo
   intro z _
   rw [hO z X]
 
-/-- The two virtual rank-one insertions used in equations (1252) and (1256) of
-arXiv:1606.00608 are physical observables supported on the common
-block-injective length.
+/-- In the multiplicity-one, unit-weight direct sum, the two virtual rank-one
+insertions corresponding to equations (1252) and (1256) of arXiv:1606.00608
+are physical observables supported on the common block-injective length.
 
 The coefficient `R a c * l e b` is the matrix-entry expansion of
 $|R)(l|$: it sends an input matrix `X` to
@@ -305,14 +306,15 @@ namespace IsBNTCanonicalForm
 
 variable {P : SectorDecomposition d}
 
-/-- A BNT canonical form admits the sector-supported rank-one physical
-observables of equations (1252) and (1256) on a common region of size at most
-$3D^5$, where $D$ is the total bond dimension.
+/-- The multiplicity-one, unit-weight direct sum of a BNT basis admits
+sector-supported rank-one physical observables on a common region of size at
+most $3D^5$, where $D$ is the total bond dimension.
 
-This is the physical-observable consequence of Proposition `propblockinj` used
-at arXiv:1606.00608, lines 1250--1258. It selects one BNT sector and realizes
-an arbitrary virtual rank-one insertion there, while all other sector pairs
-vanish. -/
+This is the multiplicity-one specialization of the physical-observable
+consequence of Proposition `propblockinj` used at arXiv:1606.00608, lines
+1250--1258. It selects one BNT basis sector and realizes an arbitrary virtual
+rank-one insertion there, while all other sector pairs vanish. The raw-weight
+repeated-copy tensor `P.toTensor` is not the tensor in this conclusion. -/
 theorem exists_basis_physicalObservableTransfer_rankOne_le_three_totalDim_pow_five
     (hCF : IsBNTCanonicalForm P) :
     ∃ L : ℕ, 0 < L ∧ L ≤ 3 * P.totalDim ^ 5 ∧

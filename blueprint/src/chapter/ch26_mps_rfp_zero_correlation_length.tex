@@ -354,18 +354,21 @@
     (\ref{eq:zcl_sector_rank_one}).
 \end{proof}
 
-\begin{theorem}[BNT rank-one observables at the sharp blocking length]%
+\begin{theorem}[Multiplicity-one BNT rank-one observables at the sharp blocking length]%
     \label{thm:bnt_rank_one_observables_sharp_length}
     \lean{MPSTensor.IsBNTCanonicalForm.exists_basis_physicalObservableTransfer_rankOne_le_three_totalDim_pow_five}
     \leanok
     \uses{def:sector_bnt_cf, def:physical_observable_transfer}
-    Let $P$ be a BNT canonical form of total bond dimension $D$. There is a
-    positive length $L\leq3D^5$ such that, for every BNT sector $j$ and every
-    $R,l\in\MN{D_j}$, a physical observable on $L$ sites realizes the
-    sector-supported insertion (\ref{eq:zcl_sector_rank_one}). This is the
-    block-injective physical-observable assertion used in
+    Let $P$ be a BNT canonical form of total bond dimension $D$, and form the
+    direct sum $A=\bigoplus_j A_j$ with one unit-weight copy of each BNT basis
+    tensor. There is a positive length $L\leq3D^5$ such that, for every basis
+    sector $j$ and every $R,l\in\MN{D_j}$, a physical observable on $L$ sites
+    realizes the sector-supported insertion
+    (\ref{eq:zcl_sector_rank_one}). This is the multiplicity-one specialization
+    of the block-injective physical-observable assertion used in
     \cite[proof of Theorem~3.8]{Cirac2016MPDO_arXiv}, equations (1252) and
-    (1256) in the local source.
+    (1256) in the local source. It does not realize the weighted copy-pair
+    insertions for the raw canonical-form tensor $P.\mathrm{toTensor}$.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:sharp_bnt_block_separation,
@@ -376,13 +379,16 @@
     Theorem~\ref{thm:bnt_sector_supported_physical_observable} at this length.
 \end{proof}
 
-\begin{remark}[Remaining obstruction in the printed converse]
-    The sector-supported observables of source lines 1250--1258 therefore
-    require no additional hypothesis. The preceding claim that
-    $\E_j^2\ne\E_j$ yields a nonzero eigenvalue $\lambda$ with
-    $|\lambda|<1$ is not valid for a non-idempotent operator with a nilpotent
-    Jordan part at eigenvalue zero. Hence these observable realizations do not
-    prove the unconditional converse in Theorem~3.8. A proof following the
+\begin{remark}[Remaining obstructions in the printed converse]
+    For the multiplicity-one unit-weight representative, the sector-supported
+    observables require no additional hypothesis. The full canonical-form
+    equations (1252) and (1256) also contain all repeated-copy pairs and their
+    raw weight powers; the theorem above does not realize those weighted
+    insertions. Moreover, the preceding claim that $\E_j^2\ne\E_j$ yields a
+    nonzero eigenvalue $\lambda$ with $|\lambda|<1$ is not valid for a
+    non-idempotent operator with a nilpotent Jordan part at eigenvalue zero.
+    Hence these observable realizations do not prove the unconditional
+    converse in Theorem~3.8. Even at multiplicity one, a proof following the
     source must still derive the nonzero subleading left and right eigenvectors
     used in the correlation calculation at lines 1260--1268.
 \end{remark}

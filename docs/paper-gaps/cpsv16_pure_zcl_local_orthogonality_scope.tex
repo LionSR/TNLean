@@ -197,15 +197,18 @@ a scope restriction, not the full forward implication of the source theorem
 at lines 498--502.
 The older predicate \leanid{MPSTensor.IsCID} instead quantifies directly over
 arbitrary virtual matrices $X,Y$.  Its converse to idempotence is valid, but it
-is stronger than physical CID.  The simultaneous block-injectivity theorem now
-supplies the physical observables asserted at source lines 1250--1258.  More
-precisely,
+is stronger than physical CID. For the multiplicity-one unit-weight direct sum,
+the simultaneous block-injectivity theorem now supplies the corresponding
+physical observables from source lines 1250--1258. More precisely,
 \leanid{MPSTensor.IsBNTCanonicalForm.exists_basis_physicalObservableTransfer_rankOne_le_three_totalDim_pow_five}
-selects any one BNT sector and realizes the insertion $|R)(l|$ there on a
+selects any one BNT basis sector and realizes the insertion $|R)(l|$ there on a
 region of size at most $3D^5$, with zero insertion on every other sector pair.
-Thus sector selection is no longer a missing assumption.
+This theorem acts on \leanid{directSumTensor P.basis}, not the raw weighted
+repeated-copy tensor \leanid{P.toTensor}. The source equations contain all copy
+pairs and their weight powers, so their unrestricted realization remains
+separate.
 
-The remaining obstruction occurs in the preceding sentence at source line
+A further obstruction occurs in the preceding sentence at source line
 1250.  The source claims that
 $\mathbb E_1^2\ne\mathbb E_1$ implies a nonzero eigenvalue $\lambda$ with
 $|\lambda|<1$.  This implication is false for a non-idempotent operator whose

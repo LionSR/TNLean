@@ -5,7 +5,6 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.ParentHamiltonian.BNTBlockDiagonalBoundaryClosing
 import TNLean.MPS.ParentHamiltonian.GroundSpaceSpanning
-import TNLean.MPS.RFP.PhysicalObservableRealization
 import TNLean.MPS.RFP.ResidualWordSpan
 
 /-!
