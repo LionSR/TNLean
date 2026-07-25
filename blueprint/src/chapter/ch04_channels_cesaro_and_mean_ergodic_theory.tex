@@ -1,0 +1,300 @@
+\section{Ces\`aro fixed-point theorem}
+
+\begin{definition}[Ces\`aro mean]\label{def:cesaro_mean}
+    \lean{cesaroMean}
+    \leanok
+    The \emph{Ces\`aro mean} of a linear map $E$ at order $N$,
+    applied to a starting matrix $\rho_0$, is
+    \begin{align}
+        \sigma_N
+         & =\frac{1}{N}\sum_{n=0}^{N-1}E^n(\rho_0).
+        \label{eq:channel_cesaro_mean}
+    \end{align}
+\end{definition}
+
+\begin{theorem}[Ces\`aro telescope]\label{thm:cesaro_telescope}
+    \lean{cesaroMean_telescope}
+    \leanok
+    \uses{def:cesaro_mean}
+    The Ces\`aro mean satisfies
+    \begin{align}
+        E(\sigma_N)-\sigma_N
+         & =\frac{1}{N}(E^N(\rho_0)-\rho_0).
+        \label{eq:channel_cesaro_telescope}
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok\uses{def:cesaro_mean}
+    Applying $E$ to (\ref{eq:channel_cesaro_mean}) gives
+    $E(\sigma_N)=N^{-1}\sum_{n=1}^{N}E^n(\rho_0)$.
+    Subtracting $\sigma_N$ cancels all but the first and last terms, yielding
+    (\ref{eq:channel_cesaro_telescope}).
+\end{proof}
+
+\begin{definition}[Bounded-orbit endomorphism]
+    \label{def:has_bounded_orbits}
+    \lean{LinearMap.HasBoundedOrbits}
+    \leanok
+    Let $\mathbb K$ denote either $\R$ or $\C$, and let $V$ be a normed
+    vector space over $\mathbb K$. A linear endomorphism $f:V\to V$ has
+    \emph{bounded orbits} if, for every $x\in V$, the set
+    $\{f^n x:n\in\N\}$ is bounded.
+\end{definition}
+
+\begin{lemma}[Ces\`aro averages of range elements]
+    \label{lem:mean_ergodic_range_limit}
+    \lean{LinearMap.HasBoundedOrbits.tendsto_birkhoffAverage_of_mem_range_sub_one}
+    \leanok
+    \uses{def:has_bounded_orbits}
+    Let $f:V\to V$ have bounded orbits. If
+    $x\in\range(f-\Id_V)$, then $A_N(x)\longrightarrow 0$.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:has_bounded_orbits}
+    Write $x=(f-\Id_V)y$. Telescoping gives
+    $A_N(x)=(f^Ny-y)/N$. Boundedness of the orbit of $y$ makes the
+    numerator bounded, so the right-hand side tends to zero.
+\end{proof}
+
+\begin{lemma}[Complementarity of the fixed-point space]
+    \label{lem:mean_ergodic_complementarity}
+    \lean{LinearMap.HasBoundedOrbits.disjoint_ker_sub_one_range_sub_one,
+        LinearMap.HasBoundedOrbits.isCompl_ker_sub_one_range_sub_one}
+    \leanok
+    \uses{def:has_bounded_orbits, lem:mean_ergodic_range_limit}
+    Let $V$ be finite-dimensional and let $f:V\to V$ have bounded orbits.
+    Then
+    \begin{align}
+        V
+         & =\ker(f-\Id_V)\oplus\range(f-\Id_V).
+        \label{eq:channel_mean_ergodic_decomp}
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:has_bounded_orbits, lem:mean_ergodic_range_limit}
+    If $z$ belongs to both summands, then $A_N(z)=z$ because
+    $z\in\ker(f-\Id_V)$, while Lemma~\ref{lem:mean_ergodic_range_limit} gives
+    $A_N(z)\to0$. Hence $z=0$. Rank--nullity then gives
+    (\ref{eq:channel_mean_ergodic_decomp}).
+\end{proof}
+
+\begin{definition}[Mean-ergodic projection]
+    \label{def:mean_ergodic_projection}
+    \lean{LinearMap.meanErgodicProjection}
+    \leanok
+    \uses{def:has_bounded_orbits, lem:mean_ergodic_complementarity}
+    Let $V$ be finite-dimensional and let $f:V\to V$ have bounded orbits.
+    The \emph{mean-ergodic projection} $P_f:V\to V$ is the projection onto
+    $\ker(f-\Id_V)$ along $\range(f-\Id_V)$ in
+    (\ref{eq:channel_mean_ergodic_decomp}).
+\end{definition}
+
+\begin{theorem}[Finite-dimensional mean-ergodic theorem]
+    \label{thm:mean_ergodic_bounded_orbits}
+    \lean{LinearMap.HasBoundedOrbits.tendsto_birkhoffAverage_meanErgodicProjection,
+        LinearMap.HasBoundedOrbits.range_meanErgodicProjection,
+        LinearMap.HasBoundedOrbits.meanErgodicProjection_apply_eq_self_iff,
+        LinearMap.HasBoundedOrbits.isIdempotentElem_meanErgodicProjection,
+        LinearMap.HasBoundedOrbits.meanErgodicProjection_apply_meanErgodicProjection,
+        LinearMap.HasBoundedOrbits.comp_meanErgodicProjection,
+        LinearMap.HasBoundedOrbits.meanErgodicProjection_comp}
+    \leanok
+    \uses{def:has_bounded_orbits, def:mean_ergodic_projection}
+    Let $V$ be finite-dimensional and let $f:V\to V$ have bounded orbits.
+    For every $x\in V$, the Ces\`aro averages satisfy
+    \begin{align}
+        A_N(x)
+         & =\frac{1}{N}\sum_{n=0}^{N-1}f^nx
+        \longrightarrow P_fx.
+        \label{eq:channel_mean_ergodic_limit}
+    \end{align}
+    Moreover,
+    \begin{align}
+        \range(P_f) & =\ker(f-\Id_V), \notag \\
+        P_f^2       & =P_f, \notag           \\
+        fP_f        & =P_f=P_ff.
+        \label{eq:channel_mean_ergodic_properties}
+    \end{align}
+    and $P_fx=x$ if and only if $fx=x$.
+    The complex matrix specialization underlying
+    \cite[Equation~(6.14)]{Wolf2012Quantum} is given below.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:has_bounded_orbits, lem:mean_ergodic_range_limit,
+        lem:mean_ergodic_complementarity, def:mean_ergodic_projection}
+    By Lemma~\ref{lem:mean_ergodic_complementarity}, decompose
+    \begin{align}
+        x      & =P_fx+(x-P_fx), \notag   \\
+        P_fx   & \in\ker(f-\Id_V), \notag \\
+        x-P_fx & \in\range(f-\Id_V).
+    \end{align}
+    The fixed component has constant Ces\`aro averages, whereas the averages
+    of the second component tend to zero by
+    Lemma~\ref{lem:mean_ergodic_range_limit}. This proves
+    (\ref{eq:channel_mean_ergodic_limit}). Since
+    $P_fx\in\ker(f-\Id_V)$, one has $f(P_fx)=P_fx$, and hence
+    $fP_f=P_f$. Also, $(f-\Id_V)x\in\range(f-\Id_V)$ and
+    $P_f((f-\Id_V)x)=0$, so $P_f(fx)=P_fx$ and hence $P_ff=P_f$.
+    The range and idempotence identities in
+    (\ref{eq:channel_mean_ergodic_properties}) follow directly from the
+    projection construction.
+\end{proof}
+
+\begin{theorem}[Bounded orbits from trace nonincrease]
+    \label{thm:positive_trace_nonincreasing_bounded_orbits}
+    \lean{IsPositiveMap.hasBoundedOrbits_of_traceNonincreasing}
+    \leanok
+    \uses{def:positive_map, def:has_bounded_orbits}
+    Let $T:\MN{D}\to\MN{D}$ be positive and trace nonincreasing. Then the
+    forward orbit $\{T^n(X):n\geq0\}$ is bounded for every $X\in\MN{D}$.
+    This is the trace-nonincreasing form of
+    \cite[Proposition~6.3]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}\leanok
+    For $X\succeq0$, positivity and induction on $n$ give
+    \begin{align}
+        T^n(X)      & \succeq0, \notag \\
+        \tr(T^n(X)) & \leq\tr(X).
+    \end{align}
+    Thus the orbit lies in a bounded trace section of the positive cone.
+    Apply this to the positive and negative parts of a Hermitian matrix, and
+    then write an arbitrary matrix as a complex linear combination of two
+    Hermitian matrices.
+\end{proof}
+
+\begin{theorem}[Positive trace-preserving mean-ergodic projection]
+    \label{thm:positive_trace_preserving_mean_ergodic_projection}
+    \lean{IsPositiveMap.hasBoundedOrbits_of_tracePreserving,
+        IsPositiveMap.range_meanErgodicProjection_of_tracePreserving,
+        IsPositiveMap.meanErgodicProjection_apply_eq_self_iff_of_tracePreserving}
+    \leanok
+    \uses{def:positive_map, def:trace_preserving,
+        def:mean_ergodic_projection,
+        thm:positive_mean_ergodic_projection,
+        thm:trace_preserving_mean_ergodic_projection,
+        thm:unital_mean_ergodic_projection}
+    Let $T:\MN{D}\to\MN{D}$ be positive and trace-preserving. Then $T$ has
+    bounded orbits, and its mean-ergodic projection $P_T$ is positive and
+    trace-preserving. Its range is precisely the fixed-point space of $T$:
+    \begin{align}
+        \range(P_T) & =\ker(T-\Id), \notag \\
+        P_T(X)=X    & \iff T(X)=X.
+        \label{eq:channel_positive_mean_ergodic}
+    \end{align}
+    If $T(\Id)=\Id$, then $P_T(\Id)=\Id$.
+    This is the Ces\`aro projection $T_\infty$ of
+    \cite[Proposition~6.3 and Equation~(6.14)]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mean_ergodic_bounded_orbits,
+        thm:positive_trace_nonincreasing_bounded_orbits,
+        thm:positive_mean_ergodic_projection,
+        thm:trace_preserving_mean_ergodic_projection,
+        thm:unital_mean_ergodic_projection}
+    Trace preservation implies trace nonincrease, so
+    Theorem~\ref{thm:positive_trace_nonincreasing_bounded_orbits} gives
+    bounded orbits. Theorem~\ref{thm:mean_ergodic_bounded_orbits} then gives
+    the projection and the fixed-point characterization
+    (\ref{eq:channel_positive_mean_ergodic}). Its positivity follows from
+    Theorem~\ref{thm:positive_mean_ergodic_projection}, trace preservation
+    from Theorem~\ref{thm:trace_preserving_mean_ergodic_projection}, and its
+    behavior on the identity from
+    Theorem~\ref{thm:unital_mean_ergodic_projection}.
+\end{proof}
+
+\begin{theorem}[Positive unital adjoint Ces\`aro retraction]
+    \label{thm:positive_unital_adjoint_mean_ergodic_retraction}
+    \lean{IsPositiveMap.traceAdjoint_meanErgodicProjection_isPositiveUnitalRetraction}
+    \leanok
+    \uses{thm:positive_trace_preserving_mean_ergodic_projection,
+        thm:trace_preserving_iff_trace_adjoint_unital,
+        thm:adjoint_mean_ergodic_projection,
+        thm:trace_pairing_adjoint_positive}
+    Let $T:\MN{D}\to\MN{D}$ be positive and trace-preserving. The trace
+    adjoint $P_T^*$ of its mean-ergodic projection is positive, unital, and
+    idempotent. It is a retraction onto the adjoint fixed-point space:
+    \begin{align}
+        P_T^*(\Id)    & =\Id, \notag    \\
+        (P_T^*)^2     & =P_T^*, \notag  \\
+        \range(P_T^*) & =\ker(T^*-\Id).
+        \label{eq:channel_adjoint_cesaro_retraction}
+    \end{align}
+    and $P_T^*(Y)=Y$ if and only if $T^*(Y)=Y$.
+    This is the adjoint projection used in the proof of
+    \cite[Theorem~6.14]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}\leanok
+    Theorem~\ref{thm:positive_trace_preserving_mean_ergodic_projection} makes
+    $P_T$ positive and trace-preserving. Positivity passes to its trace
+    adjoint, while
+    Theorem~\ref{thm:trace_preserving_iff_trace_adjoint_unital} gives
+    $P_T^*(\Id)=\Id$. The remaining assertions in
+    (\ref{eq:channel_adjoint_cesaro_retraction}) are
+    Theorem~\ref{thm:adjoint_mean_ergodic_projection}.
+\end{proof}
+
+\begin{theorem}[Hermitian fixed-point decomposition]\label{thm:hermitian_fixedpoint_parts}
+    \lean{IsPositiveMap.posPart_negPart_fixed_of_hermitian_fixedPoint}
+    \leanok
+    \uses{def:positive_map, def:trace_preserving}
+    Let $E$ be a positive trace-preserving linear map and let $X=E(X)$ be a
+    Hermitian fixed point. Let $P_+=X^+$ and $P_-=X^-$ be its canonical
+    positive and negative parts. Thus $X=P_+-P_-$, $P_\pm\geq0$, and
+    $P_+P_-=P_-P_+=0$. Then $E(P_+)=P_+$ and $E(P_-)=P_-$.
+    This is \cite[Proposition~6.8]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The fixed-point equation gives the common difference
+    $Y=E(P_+)-P_+=E(P_-)-P_-$. Hence $P_++Y$ and $P_-+Y$ are positive
+    semidefinite, while trace preservation gives $\tr(Y)=0$. Diagonalize
+    $P_+$. Since $P_+P_-=P_-P_+=0$, each eigenvector belongs to the kernel
+    of $P_+$ or to the kernel of $P_-$. Positivity of the corresponding
+    matrix $P_++Y$ or $P_-+Y$ shows that every diagonal coefficient of $Y$
+    in this basis is non-negative. Their sum is $\tr(Y)=0$, so every such
+    coefficient vanishes. A positive semidefinite matrix with a zero diagonal
+    coefficient annihilates the corresponding basis vector. Applying this to
+    $P_++Y$ or $P_-+Y$ shows that $Y$ annihilates the entire eigenbasis.
+    Thus $Y=0$, and consequently $E(P_\pm)=P_\pm$.
+\end{proof}
+
+\begin{theorem}[Ces\`aro fixed-point theorem]\label{thm:cesaro_fixedpoint}
+    \lean{IsChannel.exists_posSemidef_fixedPoint}
+    \leanok
+    \uses{def:channel, def:density_matrices, def:cesaro_mean}
+    Every quantum channel $E:\MN{D}\to\MN{D}$, with $D\geq1$, has a nonzero
+    positive semidefinite fixed point: there exists $\rho\geq0$, $\rho\neq0$,
+    with $E(\rho)=\rho$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:density_compact, thm:density_convex, thm:density_nonempty,
+        thm:channel_preserves_density, thm:cesaro_telescope}
+    Start with any $\rho_0\in\mc{D}_D$
+    (Theorem~\ref{thm:density_nonempty}).
+    By Theorem~\ref{thm:channel_preserves_density}, every iterate
+    $E^n(\rho_0)$ lies in $\mc{D}_D$. For $N\geq1$,
+    Theorem~\ref{thm:density_convex} therefore places the finite average
+    $\sigma_N$ in $\mc{D}_D$.
+    By compactness (Theorem~\ref{thm:density_compact}),
+    extract a convergent subsequence $\sigma_{N_k}\to\rho$.
+    The telescope identity (\ref{eq:channel_cesaro_telescope}) gives
+    \begin{align}
+        \lVert E(\sigma_N)-\sigma_N\rVert
+         & =\frac{1}{N}\lVert E^N(\rho_0)-\rho_0\rVert
+        \longrightarrow0,
+        \notag
+    \end{align}
+    so $E(\rho)=\rho$ by continuity.
+    In~\cite[Theorem~6.11]{Wolf2012Quantum}, existence is proved
+    via Brouwer's fixed-point theorem; we use the Ces\`aro
+    argument instead.
+\end{proof}

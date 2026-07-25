@@ -1,0 +1,151 @@
+\section{Irreducibility}
+
+\begin{definition}[Orthogonal projection]
+    \label{def:orthogonal_projection_channel}
+    \lean{IsOrthogonalProjection}
+    \leanok
+    A matrix $P \in \MN{D}$ is an \emph{orthogonal projection} if
+    $P = P^\dagger$ and $P^2 = P$.
+\end{definition}
+
+\begin{definition}[Irreducible map]\label{def:irreducible_cp}
+    \lean{IsIrreducibleMap}
+    \leanok
+    \uses{def:orthogonal_projection_channel}
+    A linear map
+    $E : \MN{D} \to \MN{D}$ is \emph{irreducible}
+    if whenever $P$ is an orthogonal projection satisfying
+    $E(P \MN{D} P) \subseteq P \MN{D} P$,
+    then $P = 0$ or $P = \Id$.
+    This is \cite[Theorem~6.2(1)]{Wolf2012Quantum}.
+    The definition applies to any linear map; complete positivity
+    is not required.
+\end{definition}
+
+\begin{theorem}[Orthogonal projections and involutive-algebra projections]
+    \label{thm:orthogonal_projection_star_projection_channel}
+    \lean{IsOrthogonalProjection.isStarProjection}
+    \lean{IsStarProjection.isOrthogonalProjection}
+    \leanok
+    \uses{def:orthogonal_projection_channel}
+    For a complex square matrix, the two descriptions
+    $P=P^\dagger$, $P^2=P$ and $P^*=P$, $P^2=P$ are equivalent.
+\end{theorem}
+
+\begin{proof}\leanok
+    Since the involution on $\MN{D}$ is conjugate transpose,
+    $P^*=P^\dagger$. Therefore $P^\dagger=P$, $P^2=P$ if and only if
+    $P^*=P$, $P^2=P$.
+\end{proof}
+
+\begin{theorem}[Coisometric transport of a star projection]
+    \label{thm:star_projection_coisometric_transport}
+    \lean{IsStarProjection.conjTranspose_mul_mul_of_mul_conjTranspose_eq_one}
+    \leanok
+    Let $Q$ be a self-adjoint idempotent on a finite-dimensional space, and
+    let $U$ be a coisometry onto that space, so that $UU^\dagger=\Id$. Then
+    $U^\dagger Q U$ is self-adjoint and idempotent.
+\end{theorem}
+
+\begin{proof}\leanok
+    Self-adjointness follows from
+    $(U^\dagger Q U)^\dagger=U^\dagger Q^\dagger U=U^\dagger Q U$.
+    Idempotence follows from
+    \begin{align}
+        (U^\dagger Q U)^2
+         & =U^\dagger Q(UU^\dagger)QU
+        =U^\dagger Q^2U
+        =U^\dagger Q U.
+        \notag
+    \end{align}
+\end{proof}
+
+\begin{lemma}[Pairwise orthogonality from a projection resolution]
+    \label{lem:orthogonal_projection_mul_eq_zero_of_sum_eq_one}
+    \lean{orthogonalProjection_mul_eq_zero_of_sum_eq_one}
+    \leanok
+    \uses{def:orthogonal_projection_channel}
+    Let $(Q_k)_k$ be a finite family of orthogonal projections satisfying
+    $\sum_k Q_k=\Id$. If $k\ne\ell$, then $Q_kQ_\ell=0$.
+\end{lemma}
+
+\begin{proof}\leanok
+    Multiplying the resolution of the identity on both sides by $Q_k$ gives
+    $\sum_j Q_kQ_jQ_k=Q_k$. Each summand is positive semidefinite because
+    $Q_kQ_jQ_k=(Q_jQ_k)^*(Q_jQ_k)$, while the $j=k$ summand is already $Q_k$.
+    Subtracting that term and taking traces gives
+    \begin{align}
+        0
+         & =\sum_{j\ne k}\tr((Q_jQ_k)^*(Q_jQ_k))
+        =\sum_{j\ne k}\lVert Q_jQ_k\rVert_{\mathrm F}^{2}.
+        \notag
+    \end{align}
+    Hence $Q_jQ_k=0$ for $j\ne k$, and taking adjoints gives $Q_kQ_j=0$.
+\end{proof}
+
+\begin{theorem}[Complement of an orthogonal projection]
+    \label{thm:orthogonal_projection_complement_channel}
+    \lean{IsOrthogonalProjection.one_sub}
+    \leanok
+    \uses{def:orthogonal_projection_channel,
+        thm:orthogonal_projection_star_projection_channel}
+    If $P \in \MN{D}$ is an orthogonal projection, then $\Id-P$ is an
+    orthogonal projection.
+\end{theorem}
+
+\begin{proof}\leanok
+    In the involutive algebra $\MN{D}$, $P$ satisfies $P^\dagger=P$ and
+    $P^2=P$. Hence $(\Id-P)^\dagger=\Id-P$ and
+    $(\Id-P)^2=\Id-2P+P^2=\Id-P$. Thus $\Id-P$ is an orthogonal projection.
+\end{proof}
+
+\begin{theorem}[Injectivity implies irreducibility]\label{thm:injective_irreducible}
+    \lean{MPSTensor.injective_implies_irreducibleCP}
+    \leanok
+    \uses{def:injective, def:transfer_map, def:irreducible_cp}
+    If $A$ is an injective MPS tensor, then its transfer map $\E_A$
+    is irreducible.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    If $P$ is an invariant projection for $\E_A$, then
+    $(\Id-P)A^iP=0$ for all~$i$. Since the $\{A^i\}$ span $\MN{D}$,
+    $(\Id-P)MP=0$ for all~$M$, so $P=0$ or $P=\Id$.
+\end{proof}
+
+\section{Transfer maps}
+
+\begin{theorem}[Transfer map is CP]\label{thm:transfer_cp}
+    \lean{MPSTensor.transferMap_isCPMap}
+    \leanok
+    \uses{def:transfer_map, def:cp_map}
+    The transfer map $\E_A(X)=\sum_i A^iX(A^i)^\dagger$
+    is completely positive.
+\end{theorem}
+
+\begin{proof}\leanok
+    It is already written in the Kraus form
+    (\ref{eq:channel_kraus_representation}), with Kraus operators
+    $\{A^i\}$.
+\end{proof}
+
+\begin{theorem}[Transfer map is a channel]\label{thm:transfer_channel}
+    \lean{MPSTensor.transferMap_isChannel}
+    \leanok
+    \uses{def:transfer_map, def:channel}
+    If $\sum_i(A^i)^\dagger A^i=\Id$, then the transfer map
+    $\E_A(X)=\sum_i A^iX(A^i)^\dagger$ is a quantum channel (CPTP).
+\end{theorem}
+
+\begin{proof}\leanok\uses{thm:transfer_cp}
+    Complete positivity is Theorem~\ref{thm:transfer_cp}. Trace preservation
+    follows by cyclicity and the normalization hypothesis:
+    \begin{align}
+        \tr(\E_A(X))
+         & =\sum_i\tr(A^iX(A^i)^\dagger)
+        =\tr\!\left(\left(\sum_i(A^i)^\dagger A^i\right)X\right)
+        =\tr(X).
+        \notag
+    \end{align}
+\end{proof}
