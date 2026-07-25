@@ -296,6 +296,14 @@
 
 % midway and crossing share one two-operand shape; the kind field tells the
 % resolver which mathematics applies.
+%
+% The out variable may alias a caller scratch register -- an atom's place
+% arrives in the same register the general-purpose temporaries use -- so the
+% pending operand is held in a register of this production's own.  Holding it
+% in a shared temporary made the last pop, which restores the node id,
+% overwrite the first operand with the node itself, and both two-operand
+% productions then resolved their first operand as their own place.
+\tl_new:N \l__tenkz_kernel_operand_tl
 \cs_new_protected:Npn \__tenkz_kernel_addr_two:nnN #1#2#3
   {
     \__tenkz_kernel_node_new:nN {#1} #3
@@ -309,13 +317,15 @@
     \__tenkz_kernel_addr_operand:VN \l__tenkz_kernel_scratch_tl
       \l__tenkz_kernel_scratch_tl
     % first child resolved; swap it against the pending second operand
-    \seq_pop:NN \l__tenkz_kernel_stack_seq \l_tmpa_tl
+    \seq_pop:NN \l__tenkz_kernel_stack_seq \l__tenkz_kernel_operand_tl
     \seq_push:NV \l__tenkz_kernel_stack_seq \l__tenkz_kernel_scratch_tl
-    \__tenkz_kernel_addr_operand:VN \l_tmpa_tl \l__tenkz_kernel_scratch_tl
+    \__tenkz_kernel_addr_operand:VN \l__tenkz_kernel_operand_tl
+      \l__tenkz_kernel_scratch_tl
     \tl_set:NV \l__tenkz_kernel_child_tl \l__tenkz_kernel_scratch_tl
-    \seq_pop:NN \l__tenkz_kernel_stack_seq \l_tmpa_tl   % first child id
+    \seq_pop:NN \l__tenkz_kernel_stack_seq
+      \l__tenkz_kernel_operand_tl                       % first child id
     \seq_pop:NN \l__tenkz_kernel_stack_seq #3           % the node id
-    \__tenkz_kernel_node_put:NnV #3 {first} \l_tmpa_tl
+    \__tenkz_kernel_node_put:NnV #3 {first} \l__tenkz_kernel_operand_tl
     \__tenkz_kernel_node_put:NnV #3 {second} \l__tenkz_kernel_child_tl
   }
 
@@ -1997,6 +2007,8 @@
 \msg_new:nnn {tenkz}{kernel-render-crossref}
   { [TKZ-KERNEL-RENDER-CROSSREF]~crossing~operand~'#1'~names~no~string~or~
     leg~of~this~picture }
+\msg_new:nnn {tenkz}{kernel-render-onwire}
+  { [TKZ-KERNEL-RENDER-ONWIRE]~address~'#1'~names~no~wire~of~this~picture }
 \msg_new:nnn {tenkz}{kernel-render-phtrace}
   { [TKZ-KERNEL-RENDER-PHTRACE]~physical~trace~record~'#1'~has~no~rendered~
     atom~at~row~1,~column~#2 }
@@ -2315,6 +2327,245 @@
       }
   }
 
+% ---------- the address dependency graph --------------------------------------
+% "Address resolution is a dependency graph evaluated in one pass; a cycle is
+% the coded error [TKZ-ADDR-CYCLE]" -- and the graph is over records, not over
+% the passes that happen to draw them.  A record's place may name other
+% records: a tensor standing at a point of a curve depends on that curve, and
+% a curve whose end is a tensor depends on that tensor.  Settling a record
+% settles everything its place names first, so the order is read off the
+% picture rather than fixed here.  A record met a second time on one descent
+% is a circular place, printed with the trail that closed on it.
+%
+% A curve exists only once the wire stage has drawn it, and a record whose
+% place names a curve therefore cannot settle before that stage runs.  Such a
+% record is left unsettled and the sweep after the wire stage takes it.  This
+% is a property of curves, not of tensors: nothing below asks what class a
+% record belongs to in order to decide whether it may settle.
+%
+% These registers belong to the walk alone.  Settling calls placement, which
+% is mid-computation on the shared r_ scratch, so the walk touches none of it.
+\prop_new:N \l__tenkz_kernel_dep_state_prop  % record id -> visiting | settled
+\seq_new:N  \l__tenkz_kernel_dep_trail_seq   % the descent, in author's names
+\tl_new:N   \l__tenkz_kernel_dep_acc_tl      % the list being collected
+\tl_new:N   \l__tenkz_kernel_dep_tl          % one collected list, by value
+\tl_new:N   \l__tenkz_kernel_dep_look_tl     % one field read
+\bool_new:N \l__tenkz_kernel_dep_ready_bool
+\int_new:N  \l__tenkz_kernel_dep_stage_int   % 0 before the wire stage, 1 in
+                                             % it, 2 after it
+
+% The wire stage itself is a node of the graph: a policy leg is a wire that
+% owns no record, so an address naming one depends on this instead.
+\tl_const:Nn \c__tenkz_kernel_dep_wires_tl { tenkz-wire-stage }
+
+\msg_new:nnn {tenkz}{kernel-addr-cycle}
+  { [TKZ-ADDR-CYCLE]~these~places~depend~on~themselves:~#1 }
+
+% A record answers to its author's name where it has one, and to its own id
+% where it does not; a diagnostic quotes the spelling the author can find.
+\cs_new_protected:Npn \__tenkz_kernel_dep_label:nN #1#2
+  {
+    \__tenkz_model_get:nnN {#1} {name} #2
+    \quark_if_no_value:NT #2 { \tl_set:Nn #2 {#1} }
+  }
+
+\cs_new_protected:Npn \__tenkz_kernel_dep_add:n #1
+  {
+    \prop_get:NnN \l__tenkz_kernel_named_prop {#1} \l__tenkz_kernel_dep_look_tl
+    \quark_if_no_value:NF \l__tenkz_kernel_dep_look_tl
+      {
+        \tl_put_right:Ne \l__tenkz_kernel_dep_acc_tl
+          { { \tl_use:N \l__tenkz_kernel_dep_look_tl } }
+      }
+  }
+\cs_generate_variant:Nn \__tenkz_kernel_dep_add:n { e }
+
+% the record occupying the cell an address names, where one does
+\cs_new_protected:Npn \__tenkz_kernel_dep_cell:n #1
+  {
+    \prop_get:NeN \l__tenkz_kernel_cell_prop
+      {
+        \__tenkz_kernel_r_item:nn {#1} {row} -
+        \__tenkz_kernel_r_item:nn {#1} {col}
+      }
+      \l__tenkz_kernel_dep_look_tl
+    \quark_if_no_value:NF \l__tenkz_kernel_dep_look_tl
+      {
+        \tl_put_right:Ne \l__tenkz_kernel_dep_acc_tl
+          { { \tl_use:N \l__tenkz_kernel_dep_look_tl } }
+      }
+  }
+\cs_generate_variant:Nn \__tenkz_kernel_dep_cell:n { e }
+
+% Every production is asked the same question -- which records does this
+% place name? -- and each answers from its own operands.
+\cs_new_protected:Npn \__tenkz_kernel_dep_node:n #1
+  {
+    \str_case:enF { \__tenkz_kernel_r_item:nn {#1} {kind} }
+      {
+        {rel}
+          {
+            \__tenkz_kernel_dep_node:e
+              { \__tenkz_kernel_r_item:nn {#1} {base} }
+          }
+        {mid}
+          {
+            \__tenkz_kernel_dep_node:e
+              { \__tenkz_kernel_r_item:nn {#1} {first} }
+            \__tenkz_kernel_dep_node:e
+              { \__tenkz_kernel_r_item:nn {#1} {second} }
+          }
+        {crossing}
+          {
+            \__tenkz_kernel_dep_node:e
+              { \__tenkz_kernel_r_item:nn {#1} {first} }
+            \__tenkz_kernel_dep_node:e
+              { \__tenkz_kernel_r_item:nn {#1} {second} }
+          }
+        {record}
+          { \__tenkz_kernel_dep_add:e { \__tenkz_kernel_r_item:nn {#1} {name} } }
+        {port}
+          { \__tenkz_kernel_dep_add:e { \__tenkz_kernel_r_item:nn {#1} {record} } }
+        {onwire}
+          { \__tenkz_kernel_dep_add:e { \__tenkz_kernel_r_item:nn {#1} {wire} } }
+        {leg}
+          {
+            \__tenkz_kernel_dep_cell:e { \__tenkz_kernel_r_item:nn {#1} {cell} }
+            \tl_put_right:Ne \l__tenkz_kernel_dep_acc_tl
+              { { \c__tenkz_kernel_dep_wires_tl } }
+          }
+      }
+      { }
+  }
+\cs_generate_variant:Nn \__tenkz_kernel_dep_node:n { e, V }
+
+% The records one record's place names: the carrier it stands on, the
+% addresses of its own place and of its ends, and the waypoints it travels.
+\cs_new_protected:Npn \__tenkz_kernel_dep_list:nN #1#2
+  {
+    \tl_clear:N \l__tenkz_kernel_dep_acc_tl
+    \__tenkz_model_get:nnN {#1} {cluster-of} \l__tenkz_kernel_dep_look_tl
+    \quark_if_no_value:NF \l__tenkz_kernel_dep_look_tl
+      { \exp_args:NV \__tenkz_kernel_dep_add:n \l__tenkz_kernel_dep_look_tl }
+    \clist_map_inline:nn {node, from, to}
+      {
+        \__tenkz_model_get:nnN {#1} {##1} \l__tenkz_kernel_dep_look_tl
+        \quark_if_no_value:NF \l__tenkz_kernel_dep_look_tl
+          { \__tenkz_kernel_dep_node:V \l__tenkz_kernel_dep_look_tl }
+      }
+    \__tenkz_model_get:nnN {#1} {via} \l__tenkz_kernel_dep_look_tl
+    \quark_if_no_value:NF \l__tenkz_kernel_dep_look_tl
+      {
+        \exp_args:NV \clist_map_inline:nn \l__tenkz_kernel_dep_look_tl
+          { \__tenkz_kernel_dep_waypoint:n {##1} }
+      }
+    \tl_set_eq:NN #2 \l__tenkz_kernel_dep_acc_tl
+  }
+% A waypoint keeps the author's spelling in its record, so it is read through
+% the one address parser rather than a second reading of the grammar.
+\cs_new_protected:Npn \__tenkz_kernel_dep_waypoint:n #1
+  {
+    \__tenkz_kernel_addr_operand:nN {#1} \l__tenkz_kernel_dep_look_tl
+    \__tenkz_kernel_dep_node:V \l__tenkz_kernel_dep_look_tl
+  }
+
+\cs_new_protected:Npn \__tenkz_kernel_dep_reset:
+  {
+    \prop_clear:N \l__tenkz_kernel_dep_state_prop
+    \seq_clear:N \l__tenkz_kernel_dep_trail_seq
+    \int_zero:N \l__tenkz_kernel_dep_stage_int
+  }
+
+\cs_new_protected:Npn \__tenkz_kernel_settle:n #1
+  {
+    \prop_get:NnN \l__tenkz_kernel_dep_state_prop {#1}
+      \l__tenkz_kernel_dep_look_tl
+    \quark_if_no_value:NTF \l__tenkz_kernel_dep_look_tl
+      { \__tenkz_kernel_settle_visit:n {#1} }
+      {
+        \str_if_eq:VnF \l__tenkz_kernel_dep_look_tl {settled}
+          {
+            % the record the descent returned to closes the trail, so the
+            % diagnostic reads as the circle the author wrote
+            \__tenkz_kernel_dep_label:nN {#1} \l__tenkz_kernel_dep_look_tl
+            \seq_put_right:NV \l__tenkz_kernel_dep_trail_seq
+              \l__tenkz_kernel_dep_look_tl
+            \msg_error:nne {tenkz}{kernel-addr-cycle}
+              { \seq_use:Nn \l__tenkz_kernel_dep_trail_seq { ~->~ } }
+            \seq_pop_right:NN \l__tenkz_kernel_dep_trail_seq
+              \l__tenkz_kernel_dep_look_tl
+            % the trail is reported once; the descent unwinds rather than
+            % turning a circular place into an unbounded one
+            \prop_put:Nnn \l__tenkz_kernel_dep_state_prop {#1} {settled}
+          }
+      }
+  }
+\cs_new_protected:Npn \__tenkz_kernel_settle_visit:n #1
+  {
+    \prop_put:Nnn \l__tenkz_kernel_dep_state_prop {#1} {visiting}
+    \__tenkz_kernel_dep_label:nN {#1} \l__tenkz_kernel_dep_look_tl
+    \seq_put_right:NV \l__tenkz_kernel_dep_trail_seq
+      \l__tenkz_kernel_dep_look_tl
+    \__tenkz_kernel_dep_list:nN {#1} \l__tenkz_kernel_dep_tl
+    % the list travels by value: the descent below reuses the register
+    \exp_args:NV \__tenkz_kernel_settle_after:nn
+      \l__tenkz_kernel_dep_tl {#1}
+  }
+% #1 the records #2 depends on, #2 the record.  A record settles when every
+% record it names has settled, and stays unsettled otherwise.
+\cs_new_protected:Npn \__tenkz_kernel_settle_after:nn #1#2
+  {
+    \tl_map_inline:nn {#1} { \__tenkz_kernel_settle:n {##1} }
+    \prop_remove:Nn \l__tenkz_kernel_dep_state_prop {#2}
+    \seq_pop_right:NN \l__tenkz_kernel_dep_trail_seq
+      \l__tenkz_kernel_dep_look_tl
+    \bool_set_true:N \l__tenkz_kernel_dep_ready_bool
+    \tl_map_inline:nn {#1}
+      {
+        \prop_get:NnN \l__tenkz_kernel_dep_state_prop {##1}
+          \l__tenkz_kernel_dep_look_tl
+        \bool_lazy_or:nnT
+          { \quark_if_no_value_p:N \l__tenkz_kernel_dep_look_tl }
+          { ! \str_if_eq_p:Vn \l__tenkz_kernel_dep_look_tl {settled} }
+          { \bool_set_false:N \l__tenkz_kernel_dep_ready_bool }
+      }
+    \bool_if:NT \l__tenkz_kernel_dep_ready_bool
+      { \__tenkz_kernel_settle_realize:n {#2} }
+  }
+% Realizing a record is giving it the geometry its class carries: an atom
+% takes its place, a curve is routed.  A record whose geometry the wire stage
+% owns realizes only once that stage has begun; the wire stage itself is such
+% a record, and the render pass settles it when it reaches that point.
+\cs_new_protected:Npn \__tenkz_kernel_settle_realize:n #1
+  {
+    \prop_get:NnN \l__tenkz_model_class_prop {#1} \l__tenkz_kernel_dep_look_tl
+    \str_case:VnF \l__tenkz_kernel_dep_look_tl
+      {
+        {atom}
+          {
+            \__tenkz_kernel_r_atom_place:n {#1}
+            \prop_put:Nnn \l__tenkz_kernel_dep_state_prop {#1} {settled}
+          }
+        {wire}
+          {
+            \int_compare:nNnT { \l__tenkz_kernel_dep_stage_int } > {0}
+              {
+                \__tenkz_kernel_r_wire_route:n {#1}
+                \prop_put:Nnn \l__tenkz_kernel_dep_state_prop {#1} {settled}
+              }
+          }
+      }
+      { }
+  }
+% The route of one wire.  Only a curve has one; every other wire takes its
+% shape from the cells it joins, which the frame already answers for.
+\cs_new_protected:Npn \__tenkz_kernel_r_wire_route:n #1
+  {
+    \__tenkz_model_get:nnN {#1} {kind} \l__tenkz_kernel_dep_look_tl
+    \str_if_eq:VnT \l__tenkz_kernel_dep_look_tl {string}
+      { \__tenkz_kernel_r_string_declare:n {#1} }
+  }
+
 % Resolve one address node into the placement graph.  Field reads happen
 % AFTER any recursion, so no scratch register must survive a recursive call.
 \cs_new_protected:Npn \__tenkz_kernel_r_node:n #1
@@ -2374,18 +2625,138 @@
         {outside} { \__tenkz_kernel_r_outside:n {#2} }
         {crossing}
           {
-            \exp_args:Nnee \__tenkz_kernel_r_crossing:nnn {#2}
+            \__tenkz_kernel_r_opid:eN
+              { \__tenkz_kernel_r_item:nn {#2} {first} }
+              \l__tenkz_kernel_ow_a_tl
+            \__tenkz_kernel_r_opid:eN
+              { \__tenkz_kernel_r_item:nn {#2} {second} }
+              \l__tenkz_kernel_ow_b_tl
+            \exp_args:NnVV \__tenkz_kernel_r_crossing:nnn {#2}
+              \l__tenkz_kernel_ow_a_tl \l__tenkz_kernel_ow_b_tl
+          }
+        {onwire} { \__tenkz_kernel_r_onwire:n {#2} }
+      }
+      { \msg_error:nnnn {tenkz}{kernel-render-todo} { #1 ~ address } {#2} }
+  }
+
+% ---------- a place on a curve --------------------------------------------------
+% Two productions name a point of a wire rather than a place in the frame,
+% and both answer through the wire's own route.  Their registers are their
+% own: resolution below runs while the shared r_ scratch is mid-computation.
+\tl_new:N \l__tenkz_kernel_ow_a_tl
+\tl_new:N \l__tenkz_kernel_ow_b_tl
+\tl_new:N \l__tenkz_kernel_ow_c_tl
+\tl_new:N \l__tenkz_kernel_ow_t_tl
+\tl_new:N \l__tenkz_kernel_ow_kind_tl
+\tl_new:N \l__tenkz_kernel_ow_sid_tl
+\seq_new:N \l__tenkz_kernel_ow_run_stack_seq
+
+% The engine's name for one operand of a crossing.  A named wire answers with
+% its name; a policy leg owns no record and answers with the id the leg pass
+% saved its path under.
+\cs_new_protected:Npn \__tenkz_kernel_r_opid:nN #1#2
+  {
+    \str_case:enF { \__tenkz_kernel_r_item:nn {#1} {kind} }
+      {
+        {leg}
+          {
+            \tl_set:Ne #2
               {
-                \__tenkz_kernel_r_item:nn
-                  { \__tenkz_kernel_r_item:nn {#2} {first} } {name}
-              }
-              {
-                \__tenkz_kernel_r_item:nn
-                  { \__tenkz_kernel_r_item:nn {#2} {second} } {name}
+                leg - \__tenkz_kernel_r_item:nn {#1} {face}
+                - \__tenkz_kernel_r_item:nn
+                    { \__tenkz_kernel_r_item:nn {#1} {cell} } {row}
+                - \__tenkz_kernel_r_item:nn
+                    { \__tenkz_kernel_r_item:nn {#1} {cell} } {col}
               }
           }
       }
-      { \msg_error:nnnn {tenkz}{kernel-render-todo} { #1 ~ address } {#2} }
+      { \tl_set:Ne #2 { \__tenkz_kernel_r_item:nn {#1} {name} } }
+  }
+\cs_generate_variant:Nn \__tenkz_kernel_r_opid:nN { eN }
+
+% `on w t` is the point at fraction t of wire w.  A curve is measured along
+% itself, so the engine answers the arclength question on the route it saved
+% before any crossing cut it; a wire that is a straight run between two ends
+% divides that run instead.  The tensor placed there is not a junction: the
+% wire keeps its whole route and the place is read off it.
+\cs_new_protected:Npn \__tenkz_kernel_r_onwire:n #1
+  {
+    \prop_get:NeN \l__tenkz_kernel_named_prop
+      { \__tenkz_kernel_r_item:nn {#1} {wire} } \l__tenkz_kernel_ow_a_tl
+    \tl_set:Ne \l__tenkz_kernel_ow_t_tl { \__tenkz_kernel_r_item:nn {#1} {t} }
+    \quark_if_no_value:NTF \l__tenkz_kernel_ow_a_tl
+      {
+        \msg_error:nnee {tenkz}{kernel-render-onwire}
+          { \__tenkz_kernel_r_item:nn {#1} {text} } { }
+      }
+      {
+        \__tenkz_model_get:nnN { \tl_use:N \l__tenkz_kernel_ow_a_tl } {kind}
+          \l__tenkz_kernel_ow_kind_tl
+        \str_if_eq:VnTF \l__tenkz_kernel_ow_kind_tl {string}
+          { \__tenkz_kernel_r_onwire_curve:n {#1} }
+          { \__tenkz_kernel_r_onwire_run:n {#1} }
+      }
+  }
+% the arclength point of a curve, converted once at the coordinate boundary
+\cs_new_protected:Npn \__tenkz_kernel_r_onwire_curve:n #1
+  {
+    \__tenkz_kernel_r_sid:nN { \tl_use:N \l__tenkz_kernel_ow_a_tl }
+      \l__tenkz_kernel_ow_sid_tl
+    \exp_args:Nee \__tenkz_string_bead:nnn
+      { \tl_use:N \l__tenkz_kernel_ow_sid_tl }
+      { \tl_use:N \l__tenkz_kernel_ow_t_tl }
+      { tenkz-on-#1 }
+    \pgfpointanchor {tenkz-on-#1} {center}
+    \__tenkz_geom_store:nnn {#1}
+      {
+        \dim_to_fp:n { \use:c {pgf@x} } / \dim_to_fp:n { \tenkz@pitch }
+      }
+      {
+        \dim_to_fp:n { \use:c {pgf@y} } / \dim_to_fp:n { \tenkz@pitch }
+      }
+  }
+% the same fraction of a wire that runs straight between its two ends
+\cs_new_protected:Npn \__tenkz_kernel_r_onwire_run:n #1
+  {
+    \__tenkz_model_get:nnN { \tl_use:N \l__tenkz_kernel_ow_a_tl } {from}
+      \l__tenkz_kernel_ow_b_tl
+    \__tenkz_model_get:nnN { \tl_use:N \l__tenkz_kernel_ow_a_tl } {to}
+      \l__tenkz_kernel_ow_c_tl
+    \bool_lazy_or:nnTF
+      { \quark_if_no_value_p:N \l__tenkz_kernel_ow_b_tl }
+      { \quark_if_no_value_p:N \l__tenkz_kernel_ow_c_tl }
+      {
+        \msg_error:nnee {tenkz}{kernel-render-todo}
+          { \__tenkz_kernel_r_item:nn {#1} {text} } {#1}
+      }
+      {
+        % Resolving an end may recursively resolve an on-wire or crossing
+        % address, both of which use the ow_ registers.  Freeze this run's
+        % two node ids and fraction on a LIFO stack until both ends settle.
+        \seq_put_right:Ne \l__tenkz_kernel_ow_run_stack_seq
+          { \exp_not:V \l__tenkz_kernel_ow_b_tl }
+        \seq_put_right:Ne \l__tenkz_kernel_ow_run_stack_seq
+          { \exp_not:V \l__tenkz_kernel_ow_c_tl }
+        \seq_put_right:Ne \l__tenkz_kernel_ow_run_stack_seq
+          { \exp_not:V \l__tenkz_kernel_ow_t_tl }
+        \__tenkz_kernel_r_node:e
+          { \seq_item:Nn \l__tenkz_kernel_ow_run_stack_seq {-3} }
+        \__tenkz_kernel_r_node:e
+          { \seq_item:Nn \l__tenkz_kernel_ow_run_stack_seq {-2} }
+        \use:e
+          {
+            \__tenkz_geom_place_onseg:nnnn {#1}
+              { \seq_item:Nn \l__tenkz_kernel_ow_run_stack_seq {-3} }
+              { \seq_item:Nn \l__tenkz_kernel_ow_run_stack_seq {-2} }
+              { \seq_item:Nn \l__tenkz_kernel_ow_run_stack_seq {-1} }
+          }
+        \seq_pop_right:NN \l__tenkz_kernel_ow_run_stack_seq
+          \l__tenkz_kernel_ow_t_tl
+        \seq_pop_right:NN \l__tenkz_kernel_ow_run_stack_seq
+          \l__tenkz_kernel_ow_c_tl
+        \seq_pop_right:NN \l__tenkz_kernel_ow_run_stack_seq
+          \l__tenkz_kernel_ow_b_tl
+      }
   }
 
 % ---------- the selector and the offset hull -----------------------------------
@@ -3279,12 +3650,22 @@
   }
 
 % ---------- index-wire ink ---------------------------------------------------------------------
+\cs_new_protected:Npn \__tenkz_kernel_r_wire_queue:n #1
+  {
+    \__tenkz_model_get:nnN {#1} {kind} \l__tenkz_kernel_r_tl
+    \str_if_eq:VnT \l__tenkz_kernel_r_tl {string}
+      { \seq_put_right:Nn \l__tenkz_kernel_r_strings_seq {#1} }
+  }
 \cs_new_protected:Npn \__tenkz_kernel_r_wire:n #1
   {
     \__tenkz_model_get:nnN {#1} {kind} \l__tenkz_kernel_r_tl
     \str_if_eq:VnTF \l__tenkz_kernel_r_tl {string}
-      { \seq_put_right:Nn \l__tenkz_kernel_r_strings_seq {#1} }
+      { }
       {
+        % Settle the endpoint dependency graph before emitting this wire's
+        % ink.  This predeclares any curve named by an `on w t` end while
+        % leaving unrelated string event order unchanged.
+        \__tenkz_kernel_settle:n {#1}
         \__tenkz_model_get:nnN {#1} {origin} \l__tenkz_kernel_r_tl
         \quark_if_no_value:NTF \l__tenkz_kernel_r_tl
           { \__tenkz_kernel_r_wire_ends:n {#1} }
@@ -4684,8 +5065,11 @@
 
 \cs_new_protected:Npn \__tenkz_kernel_r_strings:
   {
+    % The graph fixes the order in which curves are routed: one whose end is a
+    % tensor waits for that tensor, and one whose end is a tensor standing on
+    % another curve waits for that curve first.
     \seq_map_inline:Nn \l__tenkz_kernel_r_strings_seq
-      { \__tenkz_kernel_r_string_declare:n {##1} }
+      { \__tenkz_kernel_settle:n {##1} }
     \seq_map_inline:Nn \l__tenkz_kernel_r_strings_seq
       { \__tenkz_kernel_r_crossings:n {##1} }
     \bool_lazy_or:nnT
@@ -5245,6 +5629,7 @@
     \prop_clear:N \l__tenkz_kernel_r_species_prop
     \seq_clear:N \l__tenkz_kernel_r_strings_seq
     \seq_clear:N \l__tenkz_kernel_r_after_atom_seq
+    \seq_clear:N \l__tenkz_kernel_ow_run_stack_seq
     \seq_set_from_clist:Nn \l__tenkz_kernel_r_palette_seq
       { tenkzMarked , tenkzAction , tenkzExtra , tenkzOperator }
     \__tenkz_kernel_r_axis_read:
@@ -5253,11 +5638,17 @@
     \__tenkz_geom_reset:
     \prop_clear:N \l__tenkz_kernel_r_turn_prop
     \__tenkz_kernel_r_frame:
-    \__tenkz_model_map_ids:nn {atom} { \__tenkz_kernel_r_atom_place:n {##1} }
+    \__tenkz_kernel_dep_reset:
+    % Every place the frame alone answers for settles here, in the order the
+    % addresses themselves ask for.  A place that names a curve does not, and
+    % waits for the sweep after the wire stage below.
+    \__tenkz_model_map_ids:nn {atom} { \__tenkz_kernel_settle:n {##1} }
     % turns after places: a spin takes the axes of the carrier it stands on,
     % and the carrier must have found its own first
     \__tenkz_model_map_ids:nn {atom} { \__tenkz_kernel_r_atom_turn:n {##1} }
     \__tenkz_string_reset:
+    \__tenkz_model_map_ids:nn {wire}
+      { \__tenkz_kernel_r_wire_queue:n {##1} }
     % Panels meet on the axis their wires run along, not on the middle of
     % whatever ink each of them happens to reach.  A string standing north of
     % a row and a string standing south of it make two pictures of different
@@ -5269,9 +5660,20 @@
         tenkz~every~picture
       ]
     \__tenkz_kernel_r_prescan:
+    % The ordinary-wire pass may now settle its endpoint dependencies.  A
+    % curve reached through `on w t` is declared here without ink, so the
+    % ordinary wire still draws below the later leg and string passes.
+    \int_set:Nn \l__tenkz_kernel_dep_stage_int {1}
     \__tenkz_model_map_ids:nn {wire} { \__tenkz_kernel_r_wire:n {##1} }
     \__tenkz_kernel_r_legs:
+    % The wire stage now owns a route for every curve, and the policy legs
+    % stand as engine paths, so the graph's remaining nodes can be reached.
+    \prop_put:NVn \l__tenkz_kernel_dep_state_prop
+      \c__tenkz_kernel_dep_wires_tl {settled}
     \__tenkz_kernel_r_strings:
+    \int_set:Nn \l__tenkz_kernel_dep_stage_int {2}
+    \__tenkz_model_map_ids:nn {atom} { \__tenkz_kernel_settle:n {##1} }
+    \__tenkz_model_map_ids:nn {atom} { \__tenkz_kernel_r_atom_turn:n {##1} }
     \__tenkz_kernel_r_atoms:
     \seq_map_inline:Nn \l__tenkz_kernel_r_after_atom_seq
       { \__tenkz_kernel_r_physical_trace:n {##1} }
