@@ -35,12 +35,12 @@ fallback so a clean pre-generation checkout still compiles.
 The RMP book has a separate driver and interface:
 
 ```sh
-scripts/tenkz_rmp.sh check --id <target>
-scripts/tenkz_rmp.sh check --section <section>
-scripts/tenkz_rmp.sh check --all
-scripts/tenkz_rmp.sh book --all
-scripts/tenkz_rmp.sh render --all
-scripts/tenkz_rmp.sh compare --all --source-root tex/RMP_TIKZ_SOURCE_CODE
+python3 scripts/tenkz_rmp.py check --id <target>
+python3 scripts/tenkz_rmp.py check --section <section>
+python3 scripts/tenkz_rmp.py check --all
+python3 scripts/tenkz_rmp.py book --all
+python3 scripts/tenkz_rmp.py render --all
+python3 scripts/tenkz_rmp.py compare --all --source-root tex/RMP_TIKZ_SOURCE_CODE
 ```
 
 Per-target verdicts are stored in `tests/tenkz/rmp/verdicts.toml`, one

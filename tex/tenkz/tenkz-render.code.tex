@@ -15,8 +15,6 @@
 
 \msg_new:nnn {tenkz}{render-skin}
   { [TKZ-RENDER-SKIN]~no~kernel~skin~named~'#1' }
-\msg_new:nnn {tenkz}{render-route}
-  { [TKZ-RENDER-ROUTE]~no~route~named~'#1' }
 \msg_new:nnn {tenkz}{render-nowire}
   { [TKZ-RENDER-NOWIRE]~the~bond~scan~draws~#1~->~#2~but~the~model~holds~
     no~such~wire~record;~derivation~and~scan~disagree }
@@ -109,11 +107,9 @@
 \tl_new:N \l__tenkz_render_x_tl
 \tl_new:N \l__tenkz_render_y_tl
 \tl_new:N \l__tenkz_render_content_tl
-\cs_new_protected:Npn \__tenkz_render_atom:nnn #1#2#3
-  { \__tenkz_render_atom_scaled:nnnn {#1} {#2} {#3} { } }
-% The same atom drawn on a sub-frame: #4 carries the size the frame asks
-% for.  A glyph belongs to the frame it sits on, so a frame that shrinks
-% shrinks its glyphs -- the size is never a skin of its own.
+% #4 carries the size the frame asks for.  A glyph belongs to the frame it
+% sits on, so a frame that shrinks shrinks its glyphs -- the size is never a
+% skin of its own; an unscaled atom passes an empty fourth argument.
 \cs_new_protected:Npn \__tenkz_render_atom_scaled:nnnn #1#2#3#4
   {
     \__tenkz_geom_xy:nNN {#2} \l__tenkz_render_x_tl \l__tenkz_render_y_tl
@@ -129,57 +125,6 @@
       { \l__tenkz_render_x_tl \tenkz@pitch }
       { \l__tenkz_render_y_tl \tenkz@pitch }
       { \l__tenkz_render_content_tl }
-  }
-
-% Draw one wire between resolved placements: #1 route word, #2 from id,
-% #3 to id, #4 extra tikz options.  Orthogonal routes corner at (x2, y1);
-% arcs bend by the tikz bend-left amount the caller resolved.
-\tl_new:N \l__tenkz_render_xb_tl
-\tl_new:N \l__tenkz_render_yb_tl
-\cs_new_protected:Npn \__tenkz_render_wire:nnnn #1#2#3#4
-  {
-    \__tenkz_geom_xy:nNN {#2} \l__tenkz_render_x_tl \l__tenkz_render_y_tl
-    \__tenkz_geom_xy:nNN {#3} \l__tenkz_render_xb_tl \l__tenkz_render_yb_tl
-    \str_case:nnF {#1}
-      {
-        {straight}
-          {
-            \__tenkz_ink_path:nn { line~width = \__tenkz_dim:n {wirewidth} , #4 }
-              {
-                ( \l__tenkz_render_x_tl \tenkz@pitch ,
-                  \l__tenkz_render_y_tl \tenkz@pitch )
-                --
-                ( \l__tenkz_render_xb_tl \tenkz@pitch ,
-                  \l__tenkz_render_yb_tl \tenkz@pitch )
-              }
-          }
-        {orth}
-          {
-            \__tenkz_ink_path:nn { line~width = \__tenkz_dim:n {wirewidth} , #4 }
-              {
-                ( \l__tenkz_render_x_tl \tenkz@pitch ,
-                  \l__tenkz_render_y_tl \tenkz@pitch )
-                --
-                ( \l__tenkz_render_xb_tl \tenkz@pitch ,
-                  \l__tenkz_render_y_tl \tenkz@pitch )
-                --
-                ( \l__tenkz_render_xb_tl \tenkz@pitch ,
-                  \l__tenkz_render_yb_tl \tenkz@pitch )
-              }
-          }
-        {arc}
-          {
-            \__tenkz_ink_path:nn { line~width = \__tenkz_dim:n {wirewidth} , #4 }
-              {
-                ( \l__tenkz_render_x_tl \tenkz@pitch ,
-                  \l__tenkz_render_y_tl \tenkz@pitch )
-                to [ bend~left ]
-                ( \l__tenkz_render_xb_tl \tenkz@pitch ,
-                  \l__tenkz_render_yb_tl \tenkz@pitch )
-              }
-          }
-      }
-      { \msg_error:nnn {tenkz}{render-route} {#1} }
   }
 
 % ---------- named atoms -------------------------------------------------------
@@ -198,14 +143,6 @@
   { \__tenkz_ink_node_named:nnnnn {#4} {#3} {#1} {#2} { } }
 \cs_new_protected:Npn \__tenkz_render_atom_labelled_pt:nnnnn #1#2#3#4#5
   { \__tenkz_ink_node_named:nnnnn {#4} {#3} {#1} {#2} {#5} }
-\cs_new_protected:Npn \__tenkz_render_atom_named:nn #1#2
-  {
-    \__tenkz_geom_xy:nNN {#1} \l__tenkz_render_x_tl \l__tenkz_render_y_tl
-    \__tenkz_ink_node:nnnn {#2}
-      { \fp_to_decimal:n { \l__tenkz_render_x_tl * \dim_to_fp:n { \tenkz@pitch } } pt }
-      { \fp_to_decimal:n { \l__tenkz_render_y_tl * \dim_to_fp:n { \tenkz@pitch } } pt }
-      { }
-  }
 
 % ---------- labelled atoms ----------------------------------------------------
 % #1 placement id, #2 the caller's complete option list (style, hue, name),
@@ -249,30 +186,6 @@
           }
           { \fp_compare:nNnTF { sind(#1) } > { 0 } { south } { north } }
       }
-  }
-% #1 placement id, #2 outward angle (degrees), #3 clearance metric name,
-% #4 label content.  The angular offset is computed here in fp -- pgfmath
-% never sees a direction function.
-\dim_new:N \l__tenkz_render_dx_dim
-\dim_new:N \l__tenkz_render_dy_dim
-\dim_new:N \l__tenkz_render_label_inner_sep_dim
-\cs_new_protected:Npn \__tenkz_render_label:nnnn #1#2#3#4
-  {
-    \__tenkz_geom_xy:nNN {#1} \l__tenkz_render_x_tl \l__tenkz_render_y_tl
-    \dim_set:Nn \l__tenkz_render_dx_dim
-      { \fp_to_decimal:n { cosd(#2) } \__tenkz_dim:n {#3} }
-    \dim_set:Nn \l__tenkz_render_dy_dim
-      { \fp_to_decimal:n { sind(#2) } \__tenkz_dim:n {#3} }
-    \dim_set:Nn \l__tenkz_render_label_inner_sep_dim
-      { \__tenkz_dim:n {labelclear} / 2 }
-    \__tenkz_ink_node:nnnn
-      {
-        anchor = \__tenkz_render_label_anchor:n {#2} ,
-        inner~sep = \l__tenkz_render_label_inner_sep_dim
-      }
-      { \l__tenkz_render_x_tl \tenkz@pitch + \l__tenkz_render_dx_dim }
-      { \l__tenkz_render_y_tl \tenkz@pitch + \l__tenkz_render_dy_dim }
-      { $ \tenkz@labelsize #4 $ }
   }
 
 % ---------- strings -----------------------------------------------------------

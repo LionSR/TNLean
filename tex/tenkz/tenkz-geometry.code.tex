@@ -84,11 +84,6 @@
   }
 \tl_new:N \l__tenkz_geom_tmp_tl
 \bool_new:N \l__tenkz_geom_kind_ok_bool
-\cs_new_protected:Npn \__tenkz_geom_require_kind:nnn #1#2#3
-  {
-    \__tenkz_geom_require_kind:nnnN {#1}{#2}{#3}
-      \l__tenkz_geom_kind_ok_bool
-  }
 
 % new = outer applied after inner: M = Mo Mi, t = Mo ti + to
 \cs_new_protected:Npn \__tenkz_geom_frame_compose:nnn #1#2#3
@@ -262,7 +257,6 @@
 \prop_new:N \l__tenkz_geom_state_prop  % id -> visiting
 \seq_new:N  \l__tenkz_geom_trail_seq
 \tl_new:N \l__tenkz_geom_xa_tl \tl_new:N \l__tenkz_geom_ya_tl
-\tl_new:N \l__tenkz_geom_xb_tl \tl_new:N \l__tenkz_geom_yb_tl
 \bool_new:N \l__tenkz_geom_ok_bool
 
 \cs_new_protected:Npn \__tenkz_geom_reset:
@@ -525,22 +519,6 @@
               / \l__tenkz_geom_cor_norm_dim } }
   }
 
-% Fold one paper point: silhouette takes the along maximum, the transverse
-% interval widens to cover the across-projection.
-\cs_new_protected:Npn \__tenkz_geom_corridor_include:nn #1#2
-  {
-    \__tenkz_geom_corridor_along:nnN {#1}{#2} \l__tenkz_geom_cor_scratch_dim
-    \dim_set:Nn \l__tenkz_geom_cor_sil_dim
-      { \dim_max:nn { \l__tenkz_geom_cor_sil_dim }
-          { \l__tenkz_geom_cor_scratch_dim } }
-    \__tenkz_geom_corridor_trans:nnN {#1}{#2} \l__tenkz_geom_cor_scratch_dim
-    \dim_set:Nn \l__tenkz_geom_cor_tmin_dim
-      { \dim_min:nn { \l__tenkz_geom_cor_tmin_dim }
-          { \l__tenkz_geom_cor_scratch_dim } }
-    \dim_set:Nn \l__tenkz_geom_cor_tmax_dim
-      { \dim_max:nn { \l__tenkz_geom_cor_tmax_dim }
-          { \l__tenkz_geom_cor_scratch_dim } }
-  }
 % Fold the transverse span only: cup routing measures a site's across
 % extent without letting it push the outward lane.
 \cs_new_protected:Npn \__tenkz_geom_corridor_include_trans:nn #1#2
@@ -552,30 +530,6 @@
     \dim_set:Nn \l__tenkz_geom_cor_tmax_dim
       { \dim_max:nn { \l__tenkz_geom_cor_tmax_dim }
           { \l__tenkz_geom_cor_scratch_dim } }
-  }
-\cs_new_protected:Npn \__tenkz_geom_corridor_include_bbox:nnnn #1#2#3#4
-  {
-    \__tenkz_geom_corridor_include:nn {#1} {#3}
-    \__tenkz_geom_corridor_include:nn {#1} {#4}
-    \__tenkz_geom_corridor_include:nn {#2} {#3}
-    \__tenkz_geom_corridor_include:nn {#2} {#4}
-  }
-
-% Escape a forbidden transverse interval: when the tip projection lands
-% within bulge of [min,max], displace it to the nearer clear side plus
-% bulge; otherwise it is already clear and stays.  #1 tip register
-% (adjusted in place), #2 interval min, #3 interval max, #4 bulge.
-\cs_new_protected:Npn \__tenkz_geom_corridor_escape:Nnnn #1#2#3#4
-  {
-    \bool_lazy_and:nnT
-      { ! \dim_compare_p:nNn {#1} < { (#2) - (#4) } }
-      { ! \dim_compare_p:nNn {#1} > { (#3) + (#4) } }
-      {
-        \dim_compare:nNnTF
-          { #1 - (#2) } < { (#3) - #1 }
-          { \dim_set:Nn #1 { (#2) - (#4) } }
-          { \dim_set:Nn #1 { (#3) + (#4) } }
-      }
   }
 
 % ---------- probes -----------------------------------------------------------
