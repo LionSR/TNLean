@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import Mathlib.Tactic.Attr.Register
+import TNLean.MPS.Tactic.Attr
 
 /-!
 # Tactics for tensor-network proofs
@@ -20,7 +20,7 @@ channel / overlap files.
 
 The tactics are intentionally simple. They do not search; when the normal form does
 not apply, they leave clear unsolved goals. Each macro expands to a `simp` call over
-the `mps_transfer` simp set.
+the `mps_transfer` simp set, which is registered in `TNLean.MPS.Tactic.Attr`.
 -/
 
 open Lean Elab Tactic Meta
