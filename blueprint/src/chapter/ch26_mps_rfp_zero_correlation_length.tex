@@ -123,6 +123,72 @@
     every observable on a one-letter physical space is scalar.
 \end{proof}
 
+\begin{theorem}[Adjacent regions obstruct the RFP--CID forward implication]%
+    \label{thm:bell_pair_chain_not_cid}
+    \lean{MPSTensor.bellPairChainTensor}
+    \lean{MPSTensor.bellPairChainTensor_isNormalTensor}
+    \lean{MPSTensor.bellPairChainTensor_isTransferIdempotent}
+    \lean{MPSTensor.bellPairChainTensor_adjacent_twoPointExpectation}
+    \lean{MPSTensor.bellPairChainTensor_shifted_twoPointExpectation}
+    \lean{MPSTensor.bellPairChainTensor_not_isPhysicalCID}
+    \lean{MPSTensor.bellPairChain_isNormalTensor_isTransferIdempotent_and_not_isPhysicalCID}
+    \leanok
+    \uses{def:physical_two_point_expectation, def:source_physical_cid,
+        def:mps_transfer_idempotence, def:nt_cpsv}
+    Let $A$ be the tensor with physical index pairs
+    $(\alpha,\beta)\in\{0,1\}^{2}$ and letters
+    \begin{align}
+        A^{(\alpha,\beta)}_{\gamma,\delta}
+        &=\delta_{\gamma,\alpha}\,\delta_{\delta,\beta}\,\sqrt{\tfrac12},
+        \notag
+    \end{align}
+    the canonical normal-tensor renormalization fixed point with maximally
+    mixed spectrum $\Lambda=(1/2,1/2)$: each node carries two spins, and the
+    pair $(\ket{00}+\ket{11})/\sqrt 2$ is shared between the second spin of
+    one node and the first spin of the next. The transfer map is
+    \begin{align}
+        \E_A(X)&=\tr(X)\operatorname{diag}(\Lambda)
+        =\tfrac12\tr(X)\,\Id,
+        \notag
+    \end{align}
+    which is idempotent since $\tr\operatorname{diag}(\Lambda)=1$, and $A$ is
+    a single normal tensor, so no copy weights are involved. With the Pauli
+    matrix $Z$ on the second spin of one node and on the first spin of the
+    next node, the two regions are adjacent, and the two-region expectation is
+    \begin{align}
+        \Tr_{\MN{2}}\!\left(
+        \E_{I\otimes Z}\circ\E_A^{0}\circ\E_{Z\otimes I}\circ\E_A^{2}\right)
+        &=1,
+        \notag
+    \end{align}
+    while after a shift by one site, which leaves one free site on each
+    complementary arc, it is
+    \begin{align}
+        \Tr_{\MN{2}}\!\left(
+        \E_{I\otimes Z}\circ\E_A^{1}\circ\E_{Z\otimes I}\circ\E_A^{1}\right)
+        &=0.
+        \notag
+    \end{align}
+    Thus $A$ is a renormalization fixed point whose correlations are not
+    independent of the distance in the unrestricted sense of
+    Definition~\ref{def:source_physical_cid}: the forward implication of
+    \cite[Theorem~3.8]{Cirac2016MPDO_arXiv} is false for adjacent regions,
+    because the block $\E_A^{0}=1$ between adjacent observables is not
+    governed by idempotence.
+\end{theorem}
+\begin{proof}\leanok
+    The letters are the rescaled matrix units
+    $A^{(\alpha,\beta)}=\sqrt{1/2}\,\ketbra{\alpha}{\beta}$, so a conjugated
+    letter product collapses to a diagonal matrix unit and the transfer map
+    sums to $\E_A(X)=\frac12\tr(X)\,\Id$. Idempotence follows from
+    $\frac12\tr(\Id)=1$. The one-letter observable transfer maps are
+    $\E_{Z\otimes I}(X)=\frac12\tr(X)\,Z$ and
+    $\E_{I\otimes Z}(X)=\frac12\tr(ZX)\,\Id$. With zero middle gap the
+    composition reduces by $\tr(Z^{2})=2$ to the transfer map itself, whose
+    operator trace is $1$; with one idempotent block on each side the
+    composition is the zero map, since $\tr(Z)=0$.
+\end{proof}
+
 \begin{lemma}[Source BNT zero correlation length implies its positive-gap form]%
     \label{lem:is_positive_gap_bnt_zcl_of_source_bnt_zcl}
     \lean{MPSTensor.isPositiveGapBNTZCL_of_isPhysicalBNTZCL}
@@ -219,7 +285,8 @@
     unit-weight representative. The raw-weight unrestricted biconditional is
     false by Theorem~\ref{thm:halved_weight_zcl_not_rfp}, and the
     adjacent-region cases of the source CID are excluded by
-    Definition~\ref{def:is_positive_gap_bnt_zcl}.
+    Definition~\ref{def:is_positive_gap_bnt_zcl}; they do not follow from
+    idempotence in general, by Theorem~\ref{thm:bell_pair_chain_not_cid}.
 \end{theorem}
 \begin{proof}\leanok
     \uses{lem:bnt_cf_basis_is_bnt_for_direct_sum,

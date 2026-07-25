@@ -83,7 +83,10 @@ redistributed while their sum, and hence the chain length, remains fixed.
 
 The physical block lengths are positive, as the source regions are nonempty.
 The gap lengths are arbitrary natural numbers. In particular, a zero gap
-represents adjacent regions, as permitted by the source definition. -/
+represents adjacent regions, as permitted by the source definition. The
+adjacent case obstructs the unrestricted forward implication from transfer
+idempotence; see
+`docs/paper-gaps/cpsv16_pure_zcl_adjacent_gap_cid_scope.tex`. -/
 def IsPhysicalCID (A : MPSTensor d D) : Prop :=
   ∀ (L₁ L₂ : ℕ)
     (O₁ : Matrix (Fin L₁ → Fin d) (Fin L₁ → Fin d) ℂ)
@@ -109,7 +112,7 @@ over all disjoint regions, including adjacent regions.  Here both complementary
 gaps are required to be positive. If a gap is zero, the transfer formula
 contains $\mathbb{E}^0=1$, which does not follow from
 $\mathbb{E}^2=\mathbb{E}$. See
-`docs/paper-gaps/cpsv16_pure_zcl_local_orthogonality_scope.tex`. -/
+`docs/paper-gaps/cpsv16_pure_zcl_adjacent_gap_cid_scope.tex`. -/
 def IsPositiveGapPhysicalCID (A : MPSTensor d D) : Prop :=
   ∀ (L₁ L₂ : ℕ)
     (O₁ : Matrix (Fin L₁ → Fin d) (Fin L₁ → Fin d) ℂ)

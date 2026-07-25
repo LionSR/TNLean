@@ -1,0 +1,129 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+
+\input{command}
+
+\title{Adjacent regions obstruct the unrestricted CID forward implication in
+Cirac--Perez-Garcia--Schuch--Verstraete 2017}
+\author{}
+\date{2026-07-25}
+
+\begin{document}
+\maketitle
+
+\section{Source statement and the adjacent gap}
+
+Definition~3.3 of \cite{Cirac2016MPDO_arXiv} defines correlations independent
+of the distance by quantifying over observables on any two disjoint
+regions.\footnote{Local source:
+\path{Papers/1606.00608/MPDO-22-12-17-2.tex:437--448}, label \path{ZCL}.}
+Disjointness permits \emph{adjacent} regions: with $n_{2}=n_{1}'+1$ there is no
+free site between the two observables, and the allowed shifts
+$n_{1}'-n_{2}+1<\Delta<N-n_{2}'$ are exactly $\Delta\ge 1$, each leaving at
+least one free site on each complementary arc.
+
+Expectation values are computed by the two-observable trace
+formula\footnote{Local source:
+\path{Papers/1606.00608/MPDO-22-12-17-2.tex:490--496}, label \path{Corr}.}
+\begin{align}
+  \langle V|O_{1}O_{2}|V\rangle
+  =\tr\!\left(\mathbb E_{O_{1}} \mathbb E^{\,n_{2}-n_{1}-1}
+  \mathbb E_{O_{2}} \mathbb E^{\,N+n_{1}-n_{2}-1}\right),
+\end{align}
+printed for single-site observables at positions $n_{1}<n_{2}$. Generalized
+to block observables on the regions $[n_{1},n_{1}']$ and $[n_{2},n_{2}']$ of
+Definition~3.3, the exponents read $n_{2}-n_{1}'-1$ and $N+n_{1}-n_{2}'-1$.
+The forward implication ``if $\mathbb E^{2}=\mathbb E$, then one will have
+CID'' (line~498) substitutes $\mathbb E^{n}=\mathbb E$ into this formula.
+Idempotence justifies that substitution only for $n\ge 1$. Between adjacent
+observables the middle exponent is $n_{2}-n_{1}'-1=0$, so the corresponding
+transfer block is $\mathbb E^{0}=1$, which idempotence does not identify with
+$\mathbb E$. The printed argument therefore covers only configurations with
+at least one free site between the observables, while the definition also
+quantifies over adjacent regions.
+
+\section{Counterexample: the Bell-pair chain}
+
+Take the canonical normal-tensor renormalization fixed point of
+\path{lem:charact-NT-pure-RFP} (line~1300) with trivial gauge $X=\one$,
+trivial isometry $U=\one$, and maximally mixed spectrum
+$\Lambda=(1/2,1/2)$:
+\begin{align}
+  A^{(\alpha,\beta)}_{\gamma,\delta}
+  =\delta_{\gamma,\alpha} \delta_{\delta,\beta} \sqrt{\tfrac12},
+  \qquad (\alpha,\beta)\in\{0,1\}^{2}.
+\end{align}
+The physical index is the pair of spins at one node. The generated states are
+the chains of \path{eq:III_MPSRFP}--\path{eq:III_varphi}
+(lines~564--578): each node $n$ carries two spins $a_{n},b_{n}$, and the
+maximally entangled pair
+$\ket{\varphi}=(\ket{00}+\ket{11})/\sqrt 2$ is shared between $b_{n}$ and
+$a_{n+1}$.
+
+The transfer map is
+\begin{align}
+  \mathbb E(X)=\tr(X)\operatorname{diag}(\Lambda)
+  =\tfrac12\tr(X) \one,
+\end{align}
+which is idempotent because $\tr\operatorname{diag}(\Lambda)=1$. The tensor
+is a single normal tensor---it is already $1$-block injective and
+left-canonical---so no repeated copies or copy weights are involved.
+
+Now put the Pauli matrix $Z$ on spin $b_{1}$ and $Z$ on spin $a_{2}$. These
+are adjacent regions with zero gap, and the two-region expectation is the
+Bell-pair value
+\begin{align}
+  \tr\!\left(\mathbb E_{I\otimes Z} \mathbb E^{0}
+  \mathbb E_{Z\otimes I} \mathbb E^{2}\right)
+  =\bra{\varphi}Z\otimes Z\ket{\varphi}=1.
+\end{align}
+After the allowed shift $\Delta=1$, which places one free site on each
+complementary arc, the expectation factorizes through the trace-form fixed
+point:
+\begin{align}
+  \tr\!\left(\mathbb E_{I\otimes Z} \mathbb E^{1}
+  \mathbb E_{Z\otimes I} \mathbb E^{1}\right)
+  =\bra{\varphi}Z\otimes\one\ket{\varphi}^{2}=0.
+\end{align}
+The two values differ, so the tensor does not have CID in the unrestricted
+sense of the source definition, even though $\mathbb E^{2}=\mathbb E$. All
+four assertions---idempotence, normality, the adjacent value $1$, and the
+shifted value $0$---have kernel-checked proofs.\footnote{Formal conjunction:
+\leanid{MPSTensor.bellPairChain_isNormalTensor_isTransferIdempotent_and_not_isPhysicalCID}
+in \doclink{TNLean/MPS/RFP/BellPairCIDObstruction}.}
+
+\section{Consequence for the theorem surface}
+
+The unrestricted forward implication of line~498 is false as stated, and the
+counterexample is a single normal renormalization fixed point: unlike the
+raw-weight counterexample of
+\path{cpsv16_pure_zcl_raw_weight_counterexample.tex}, which refutes the
+converse direction of Theorem~3.8 (labelled \path{TheoremZCLPure}) using copy
+weights, no repeated copies are involved here. A repair that only normalizes
+copy weights therefore cannot save the forward direction; the quantification
+over adjacent regions must be removed instead.
+
+The faithful repair is the positive-gap restriction, requiring at least one
+free site on each complementary arc. That restricted statement is proved:
+transfer idempotence implies physical CID when both complementary gaps are
+positive, formalized as
+\leanid{MPSTensor.isPositiveGapPhysicalCID_of_isTransferIdempotent}. The
+Bell-pair chain is consistent with the repair: its gap-positive configurations
+do factorize, as the shifted value above shows. The source-faithful
+unrestricted predicate \leanid{MPSTensor.IsPhysicalCID} is retained with a
+docstring pointer to this note, and the gap recorded here closes the question
+left open in the raw-weight note, whose converse-direction counterexample did
+not settle the forward implication for adjacent physical regions.
+
+The verdict is a source gap with a proved repair: the printed forward argument
+has an adjacent-region hole at $\mathbb E^{0}=1$, and the positive-gap
+statement is the correct replacement target for \ghissue{4772}.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}
