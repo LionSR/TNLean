@@ -5,19 +5,6 @@ point of $\E_A$ that is not full rank has a proper invariant support, which
 block-diagonalizes the Kraus operators without changing the MPV family. Iterating
 the resulting splitting decomposes any tensor into irreducible blocks.
 
-\begin{theorem}[Unitary conjugation preserves the MPV family]\label{thm:samempv_unitary}
-    \lean{MPSTensor.sameMPV_conj_unitary}
-    \leanok
-    \uses{def:same_mpv}
-    If $U$ is a unitary matrix, then $A$ and $U^\dagger A U$
-    generate the same MPV family.
-\end{theorem}
-
-\begin{proof}\leanok
-    By cyclicity of the trace,
-    $\tr((U^\dagger A^{i_1} U) \cdots (U^\dagger A^{i_N} U))
-    = \tr(A^{i_1} \cdots A^{i_N})$.
-\end{proof}
 
 \begin{theorem}[Invariant projection gives a two-block decomposition]\label{thm:lowerzero_two_block}
     \lean{MPSTensor.exists_twoBlock_decomp_of_lowerZero}
@@ -43,9 +30,9 @@ the resulting splitting decomposes any tensor into irreducible blocks.
     block triangular. Write the conjugated letters as
     \begin{align}
         B^i
-        &=
+         & =
         \begin{pmatrix}
-            A_1^i & * \\
+            A_1^i & *     \\
             0     & A_2^i
         \end{pmatrix}.
         \notag
@@ -54,7 +41,7 @@ the resulting splitting decomposes any tensor into irreducible blocks.
     satisfies
     \begin{align}
         \tr(B^{i_1}\cdots B^{i_N})
-        &=
+         & =
         \tr(A_1^{i_1}\cdots A_1^{i_N})
         +\tr(A_2^{i_1}\cdots A_2^{i_N}).
         \label{eq:canonical_two_block_trace}
@@ -63,41 +50,19 @@ the resulting splitting decomposes any tensor into irreducible blocks.
     coefficients as the conjugated tensor.
 \end{proof}
 
-\begin{theorem}[Nontrivial invariant projection gives strict two-block reduction]
-    \label{thm:lowerzero_two_block_strict}
-    \lean{MPSTensor.exists_twoBlock_decomp_of_lowerZero_strict}
-    \leanok
-    \uses{def:same_mpv2}
-    Under the hypotheses of Theorem~\ref{thm:lowerzero_two_block},
-    assume in addition that $P\neq0$ and $P\neq\Id$.
-    Then there exist $n,m$ with $n+m=D$, $n<D$, and $m<D$, together
-    with block tensors $A_1,A_2$, such that
-    $A$ and $A_1\oplus A_2$ generate the same MPV family in the sense of
-    Definition~\ref{def:same_mpv2}.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    \uses{thm:lowerzero_two_block}
-    Apply Theorem~\ref{thm:lowerzero_two_block}.
-    In the diagonal form of $P$, the $1$-eigenspace is nonempty because
-    $P\neq0$, and the $0$-eigenspace is nonempty because $P\neq\Id$.
-    Hence both block sizes are positive.
-    Since $n+m=D$, this implies $n<D$ and $m<D$.
-\end{proof}
 
 \begin{definition}[Support projection]\label{def:support_proj}
     \lean{MPSTensor.supportProj}
     \leanok
     For a positive semidefinite matrix $\rho\ge0$, the \emph{support
-    projection} $P$ is the orthogonal projection onto the range of $\rho$.
+        projection} $P$ is the orthogonal projection onto the range of $\rho$.
     Via the spectral decomposition
     $\rho=U\diag(\lambda_1,\ldots,\lambda_D)U^\dagger$, it is
     \begin{align}
         P
-        &=
+         & =
         U\diag\!\bigl(        \mathbf{1}_{\lambda_1>0},\ldots,
-            \mathbf{1}_{\lambda_D>0}
+        \mathbf{1}_{\lambda_D>0}
         \bigr)U^\dagger,
         \label{eq:canonical_support_projection}
     \end{align}
@@ -214,33 +179,6 @@ implies that the retained block dimensions satisfy $\sum_kD_k\le D$ without
 using an empty-word coefficient. Each retained block is then placed in the
 trace-preserving gauge.
 
-\begin{theorem}[Nonzero irreducible block decomposition]%
-    \label{thm:nonzero_irreducible_block_decomposition}
-    \lean{MPSTensor.exists_irreducible_blockDecomp_nonzeroBlocks}
-    \leanok
-    \uses{def:irreducible_tensor, def:same_mpv2_pos}
-    Every MPS tensor $A$ admits a finite family of nonzero irreducible blocks
-    $(B_k)_{k=1}^r$, each with at least one nonzero Kraus operator and positive
-    bond dimension. For every $N\ge1$ and every $\sigma$,
-    \begin{align}
-        V^{(N)}(A)_\sigma
-        &=
-        V^{(N)}\!\left(\bigoplus_{k=1}^r B_k\right)_\sigma.
-        \label{eq:canonical_nonzero_decomp}
-    \end{align}
-    Moreover, $\sum_{k=1}^rD_k\le D$.
-\end{theorem}
-
-\begin{proof}\leanok
-    \uses{thm:irred_decomp}
-    Apply the irreducible block decomposition
-    (Theorem~\ref{thm:irred_decomp}) and retain the blocks having a nonzero
-    Kraus operator. For every all-zero irreducible block $C_j$ and every
-    $N\ge1$, $V^{(N)}(C_j)_\sigma=0$, so
-    (\ref{eq:canonical_nonzero_decomp}) holds.
-    The dimension inequality follows by restricting the structural identity
-    $\sum_jD_j=D$ to the retained subset.
-\end{proof}
 
 \begin{theorem}[Blockwise TP-gauge normalization of irreducible blocks]%
     \label{thm:blockwise_tp_gauge}
@@ -254,7 +192,7 @@ trace-preserving gauge.
     every $\sigma$,
     \begin{align}
         V^{(N)}(A)_\sigma
-        &=
+         & =
         V^{(N)}\!\left(\bigoplus_{k=1}^r\mu_kC_k\right)_\sigma
         =
         \sum_{k=1}^r\mu_k^{\,N}V^{(N)}(C_k)_\sigma,
@@ -288,7 +226,7 @@ trace-preserving gauge.
     that, for every $N\ge1$ and every $\sigma$,
     \begin{align}
         V^{(N)}(A)_\sigma
-        &=
+         & =
         V^{(N)}\!\left(\bigoplus_{k=1}^r\mu_kB_k\right)_\sigma,
         \label{eq:canonical_arbitrary_tp}
     \end{align}
@@ -300,13 +238,13 @@ trace-preserving gauge.
     Theorem~\ref{thm:nonzero_irreducible_block_decomposition} supplies the
     nonzero irreducible blocks $(C_k)_{k=1}^r$, with
     $V^{(N)}(A)_\sigma
-    =V^{(N)}(\bigoplus_{k=1}^rC_k)_\sigma$ for every $N\ge1$ and every
+        =V^{(N)}(\bigoplus_{k=1}^rC_k)_\sigma$ for every $N\ge1$ and every
     $\sigma$. Applying the Perron--Frobenius TP gauge
     (\ref{eq:qpf_irred_tp_gauge}) to each $C_k$ gives a left-canonical block
     $B_k$ with weight $\mu_k$, and
     \begin{align}
         V^{(N)}\!\left(\bigoplus_{k=1}^rC_k\right)_\sigma
-        &=
+         & =
         V^{(N)}\!\left(\bigoplus_{k=1}^r\mu_kB_k\right)_\sigma.
         \notag
     \end{align}
@@ -318,94 +256,23 @@ trace-preserving gauge.
 \label{sec:blocking_infrastructure}
 
 Blocking by an integer~$p$ carries MPV equalities, weights, transfer maps, and
-identifications of the blocked physical alphabet. The first consequence is the
-existence of a common blocking period under which every transfer map in a finite
-family becomes primitive; the period-removal and primitive-block reductions then
-proceed from that common period.
-
-\begin{theorem}[Common blocking period for a block family]%
-    \label{thm:common_blocking_period}
-    \lean{MPSTensor.exists_common_blocking_all_primitive}
-    \leanok
-    \uses{def:blocked_tensor}
-    Let $(B_k)_{k=1}^r$ be a finite family of positive-bond-dimension MPS
-    tensors, each admitting a blocking period $p_k$ making its transfer map
-    primitive. Then $p=\lcm(p_1,\ldots,p_r)$ is a common
-    period: $\E_{B_k^{[p]}}$ is primitive for every~$k$.
-\end{theorem}
-
-\begin{proof}\leanok
-    Each $p_k$ divides $p$, so primitivity of $\E_{B_k^{[p_k]}}$ carries over
-    to $\E_{B_k^{[p]}}$ via the divisibility identity for transfer-map powers.
-\end{proof}
-
-The following stability statements are used when a primitive irreducible block
-is blocked again for a common-refinement or injectivity length. This later
-blocking is distinct from the period-removal length that produced the sector
-block.
-
-\begin{theorem}[Blocking preserves irreducibility for primitive irreducible blocks]%
-    \label{thm:blocked_irreducible_tp_primitive}
-    \lean{MPSTensor.isIrreducibleTensor_blockTensor_of_tp_primitive_irr}
-    \leanok
-    \uses{def:blocked_tensor, def:irreducible_tensor}
-    Let $A$ be left-canonical, irreducible, primitive, of positive bond
-    dimension. For every $P>0$, the blocked tensor $A^{[P]}$ is irreducible:
-    there is no orthogonal projection $Q$ with $Q\neq0$, $Q\neq\Id$ such that
-    $(\Id-Q)(A^{[P]})^\alpha Q=0$ for every $P$-blocked index $\alpha$.
-\end{theorem}
-
-\begin{proof}\leanok
-    The blocked transfer map is the corresponding positive power of the
-    original one:
-    \begin{align}
-        \E_{A^{[P]}}(X)
-        &=\E_A^P(X).
-        \label{eq:canonical_block_transfer_power}
-    \end{align}
-    Hence a positive-definite fixed point of $\E_A$ remains fixed by
-    $\E_{A^{[P]}}$. Primitivity gives uniqueness of positive semidefinite fixed
-    points for the blocked map, hence its transfer map is irreducible, which is
-    the irreducibility criterion for $A^{[P]}$.
-\end{proof}
-
-\begin{theorem}[Extra blocking of primitive irreducible sector blocks]%
-    \label{thm:tp_primitive_irreducible_extra_blocking}
-    \lean{MPSTensor.tp_primitive_irreducible_extra_blocking}
-    \leanok
-    \uses{def:blocked_tensor, thm:blocked_irreducible_tp_primitive}
-    Let $A$ be trace-preserving, primitive, and tensor-irreducible. For every
-    $k>0$,
-    \begin{align}
-        \sum_\alpha((A^{[k]})^\alpha)^\dagger(A^{[k]})^\alpha
-        &=\Id,
-        \notag\\
-        \sigma_\partial(\E_{A^{[k]}})
-        &=\{1\},
-        \label{eq:canonical_extra_blocking}
-    \end{align}
-    and $A^{[k]}$ is tensor-irreducible. This $k$ is a later common-refinement
-    or injectivity length, distinct from the period-removal length that
-    produced the sector block.
-\end{theorem}
-
-\begin{proof}\leanok
-    \uses{thm:blocked_irreducible_tp_primitive}
-    Trace preservation follows from blocking a trace-preserving tensor,
-    primitivity from the transfer-power identity
-    (\ref{eq:canonical_block_transfer_power}), and irreducibility from
-    Theorem~\ref{thm:blocked_irreducible_tp_primitive}.
-\end{proof}
+identifications of the blocked physical alphabet. For an irreducible
+trace-preserving block, powering first collapses the peripheral eigenvalue set
+to $\{1\}$; the powered map can nevertheless split into several cyclic corners.
+The reduction compresses to those corners and proves primitivity there. A later
+least-common-multiple step places a finite family of the resulting sectors over
+one blocked alphabet.
 
 \subsection{Period removal by cyclic sectors}%
 \label{sec:cyclic_sectors}
 
-The step needed below is the period-removing blocking described
-in~\cite[Section~2.3]{Cirac2016MPDO_arXiv}: after blocking each irreducible TP
-block by the least common multiple of its peripheral periods, the result has no
-nontrivial $p$-periodic vectors. The cyclic-sector
-decomposition comes from the peripheral spectrum of the adjoint transfer
-map~\cite[Theorem~6.6]{Wolf2012Quantum}.
+The period-removing blocking of
+\cite[Section~2.3]{Cirac2016MPDO_arXiv} has four distinct steps. Power the
+transfer map by its period, obtain the adjoint-fixed cyclic projections,
+compress to their corners, and prove that each corner restriction is
+irreducible. Only then does the peripheral set $\{1\}$ imply primitivity of the
+sector maps. The cyclic projections come from
+\cite[Theorem~6.6]{Wolf2012Quantum}.
 
 \begin{theorem}[Period removal by blocking]%
     \label{thm:cyclic_sector_decomp_after_blocking}
@@ -425,12 +292,12 @@ map~\cite[Theorem~6.6]{Wolf2012Quantum}.
               $P_k(A^{[m]})^i=(A^{[m]})^iP_k$ for every blocked letter~$i$,
         \item the sector trace formula
               $f_{C_k}(\sigma)
-              =\tr(P_k(A^{[m]})^{\sigma_1}\cdots(A^{[m]})^{\sigma_N})$,
+                  =\tr(P_k(A^{[m]})^{\sigma_1}\cdots(A^{[m]})^{\sigma_N})$,
         \item linear isomorphisms onto the compression corners
               $\varphi_k:\MN{\dim C_k}\xrightarrow{\sim}P_k\MN{D}P_k$,
         \item transfer-intertwining identities
               $\varphi_k(\E_{C_k^\dagger}(X))
-              =\E_{(P_kA^{[m]})^\dagger}(\varphi_k(X))$,
+                  =\E_{(P_kA^{[m]})^\dagger}(\varphi_k(X))$,
         \item multiplicativity and adjoint compatibility
               $\varphi_k(XY)=\varphi_k(X)\varphi_k(Y)$ and
               $\varphi_k(X^\dagger)=\varphi_k(X)^\dagger$.
@@ -469,15 +336,15 @@ map~\cite[Theorem~6.6]{Wolf2012Quantum}.
     dimension, and that the compression maps satisfy
     \begin{align}
         \varphi_u(\E_{C_u^\dagger}(X))
-        &=
+         & =
         \E_{(P_uA^{[m]})^\dagger}(\varphi_u(X)),
-        \notag\\
+        \notag \\
         \varphi_u(XY)
-        &=
+         & =
         \varphi_u(X)\varphi_u(Y),
-        \notag\\
+        \notag \\
         \varphi_u(X^\dagger)
-        &=
+         & =
         \varphi_u(X)^\dagger.
         \label{eq:canonical_sector_compression}
     \end{align}
@@ -497,7 +364,7 @@ map~\cite[Theorem~6.6]{Wolf2012Quantum}.
     $(\E_A^\dagger)^m$. The peripheral spectrum of the blocked adjoint map is
     \begin{align}
         \sigma_\partial((\E_A^\dagger)^m)
-        &=
+         & =
         \{(\gamma^j)^m:0\le j<m\}
         =
         \{1\},
@@ -537,52 +404,6 @@ map~\cite[Theorem~6.6]{Wolf2012Quantum}.
     Theorem~\ref{thm:blocked_sector_unconditional} to the sector blocks.
 \end{proof}
 
-\begin{theorem}[Cyclic sectors after removing zero blocks]%
-    \label{thm:ft_after_blocking_per_block_cyclic_nonzero_blocks}
-    \lean{MPSTensor.afterBlocking_perBlockCyclicData_of_sameMPV₂Pos}
-    \leanok
-    \uses{thm:tp_gauge_arbitrary, def:same_mpv2_pos,
-        def:primitive_irreducible_cyclic_sectors,
-        thm:cyclic_sector_decomp_irr_tp_prim_irr}
-    If $A$ and $B$ generate the same MPV family at every positive length, then
-    after removing the all-zero blocks and applying the trace-preserving gauge
-    there are weighted nonzero-block tensors
-    $\bigoplus_j\mu_j^AA_j$ and $\bigoplus_k\mu_k^BB_k$ such that, for every
-    $N\ge1$ and $\sigma$,
-    \begin{align}
-        V^{(N)}(A)_\sigma
-        &=
-        V^{(N)}\!\left(\bigoplus_j\mu_j^AA_j\right)_\sigma,
-        \label{eq:canonical_nonzero_part_a}\\
-        V^{(N)}(B)_\sigma
-        &=
-        V^{(N)}\!\left(\bigoplus_k\mu_k^BB_k\right)_\sigma.
-        \label{eq:canonical_nonzero_part_b}
-    \end{align}
-    The two nonzero parts agree:
-    \begin{align}
-        V^{(N)}\!\left(\bigoplus_j\mu_j^AA_j\right)_\sigma
-        &=
-        V^{(N)}\!\left(\bigoplus_k\mu_k^BB_k\right)_\sigma.
-        \label{eq:canonical_nonzero_parts_equal}
-    \end{align}
-    Each nonzero block has primitive irreducible cyclic sectors: for each $j$,
-    there is $m_j\ge1$ with a unit-weight sector decomposition
-    $A_j^{[m_j]}\sim\bigoplus_{u=1}^{m_j}C^A_{j,u}$, and similarly for $B_k$.
-\end{theorem}
-
-\begin{proof}\leanok
-    \uses{thm:tp_gauge_arbitrary,
-        thm:cyclic_sector_decomp_irr_tp_prim_irr}
-    Apply Theorem~\ref{thm:tp_gauge_arbitrary} separately to $A$ and $B$.
-    Its positive-length conclusion gives
-    (\ref{eq:canonical_nonzero_part_a}) and
-    (\ref{eq:canonical_nonzero_part_b}). Chaining these identities through
-    $\mc{V}^+(A)=\mc{V}^+(B)$ gives
-    (\ref{eq:canonical_nonzero_parts_equal}). Finally apply
-    Theorem~\ref{thm:cyclic_sector_decomp_irr_tp_prim_irr} to every
-    trace-preserving irreducible nonzero-weight block.
-\end{proof}
 
 \begin{theorem}[Common blocking length for cyclic sectors]%
     \label{thm:ft_after_blocking_common_length_common_sector_theorem}
@@ -599,18 +420,18 @@ map~\cite[Theorem~6.6]{Wolf2012Quantum}.
     $\sigma$, each blocked tensor equals its powered nonzero part:
     \begin{align}
         V^{(N)}(A^{[p]})_\sigma
-        &=
+         & =
         V^{(N)}\!\left(\bigoplus_j(\mu_j^A)^p(A_j)^{[p]}\right)_\sigma,
-        \label{eq:canonical_powered_part_a}\\
+        \label{eq:canonical_powered_part_a} \\
         V^{(N)}(B^{[p]})_\sigma
-        &=
+         & =
         V^{(N)}\!\left(\bigoplus_k(\mu_k^B)^p(B_k)^{[p]}\right)_\sigma.
         \label{eq:canonical_powered_part_b}
     \end{align}
     The two powered nonzero parts agree:
     \begin{align}
         V^{(N)}\!\left(\bigoplus_j(\mu_j^A)^p(A_j)^{[p]}\right)_\sigma
-        &=
+         & =
         V^{(N)}\!\left(\bigoplus_k(\mu_k^B)^p(B_k)^{[p]}\right)_\sigma.
         \label{eq:canonical_powered_parts_equal}
     \end{align}
@@ -635,99 +456,11 @@ map~\cite[Theorem~6.6]{Wolf2012Quantum}.
     (\ref{eq:canonical_powered_parts_equal}).
 \end{proof}
 
-\section{Blocking and weighted direct sums}%
+\section{Cyclic-sector irreducibility and common alphabets}%
 \label{subsec:internal_lean_only_labels}
 
-Blocking by a length~$p$ commutes with weighted direct sums up to the $p$th power
-of each weight: for nonzero weights $(\mu_k)$ and blocks $(B_k)$,
-\begin{align}
-    \left(\bigoplus_k\mu_kB_k\right)^{[p]}
-    &\sim
-    \bigoplus_k\mu_k^{\,p}B_k^{[p]},
-    \label{eq:canonical_block_weight_power}
-\end{align}
-where $\sim$ is equality of MPV families. When two block families are reblocked
-to a common length $p=m_ke_k$, the $p$-blocked alphabet is identified with the
-$e_k$-fold tensor power of the $m_k$-blocked alphabet, so each sector reblocked
-through its own period agrees with the directly $p$-blocked block.
-
-\begin{lemma}[Adjoint primitivity equivalence]%
-    \label{thm:primitive_adjoint_equiv}
-    \lean{MPSTensor.IsPrimitive.adjoint_iff}\leanok
-    \uses{def:primitive_channel}
-    Let $\E$ be a finite-dimensional completely positive map. Then $\E$ is
-    primitive if and only if its Frobenius adjoint $\E^\dagger$ is primitive;
-    equivalently, $\sigma_\partial(\E)=\{1\}$ if and only if
-    $\sigma_\partial(\E^\dagger)=\{1\}$, since the peripheral spectrum of
-    $\E^\dagger$ is the complex conjugate of that of $\E$.
-\end{lemma}
-
-\begin{lemma}[Primitivity under blocking by a multiple]%
-    \label{thm:primitive_blocking_divisible}
-    \lean{MPSTensor.isPrimitive_transferMap_blockTensor_of_dvd}\leanok
-    \uses{def:blocked_tensor, def:primitive_channel}
-    Let $A$ have positive bond dimension and let $p_0,p\ge1$ with $p_0\mid p$.
-    If $\E_{A^{[p_0]}}$ is primitive, then $\E_{A^{[p]}}$ is primitive.
-\end{lemma}
-
-\begin{lemma}[Blocking the weighted block sum]%
-    \label{thm:block_tensor_to_tensor_from_blocks}
-    \lean{MPSTensor.sameMPV₂_blockTensor_toTensorFromBlocks}\leanok
-    \uses{def:blocked_tensor, def:block_diagonal_tensor, def:same_mpv2}
-    For nonzero weights $(\mu_k)_{k=1}^r$, blocks $(B_k)_{k=1}^r$, and any
-    $p\ge1$, the blocking identity
-    (\ref{eq:canonical_block_weight_power}) holds, where $\sim$ denotes
-    generation of the same MPV family at every length.
-\end{lemma}
-
-\begin{lemma}[Positive-length equality survives blocking]%
-    \label{thm:same_mpv2_pos_block_tensor}
-    \lean{MPSTensor.sameMPV₂Pos_blockTensor}\leanok
-    \uses{def:blocked_tensor, def:same_mpv2_pos}
-    If two tensors have the same MPV coefficients at every positive length, then
-    so do their blocked tensors after any positive blocking length.
-\end{lemma}
-
-\begin{lemma}[Positive-length blocking of a weighted block sum]%
-    \label{thm:same_mpv2_pos_block_tensor_to_tensor_from_blocks}
-    \lean{MPSTensor.sameMPV₂Pos_blockTensor_toTensorFromBlocks}\leanok
-    \uses{def:blocked_tensor, def:block_diagonal_tensor, def:same_mpv2_pos,
-        thm:same_mpv2_pos_block_tensor, thm:block_tensor_to_tensor_from_blocks}
-    If $A$ and $\bigoplus_k\mu_kB_k$ have the same MPV coefficients at every
-    positive length, then after any positive blocking length $p$, $A^{[p]}$ and
-    $\bigoplus_k\mu_k^{\,p}B_k^{[p]}$ have the same MPV coefficients at every
-    positive length.
-\end{lemma}
-
-\begin{lemma}[Positive-length equality of powered block sums]%
-    \label{thm:same_mpv2_pos_to_tensor_from_blocks_block_power}
-    \lean{MPSTensor.sameMPV₂Pos_toTensorFromBlocks_blockPower}\leanok
-    \uses{def:blocked_tensor, def:block_diagonal_tensor, def:same_mpv2_pos,
-        thm:same_mpv2_pos_block_tensor, thm:block_tensor_to_tensor_from_blocks}
-    If $\bigoplus_j\mu_j^AA_j$ and $\bigoplus_k\mu_k^BB_k$ have the same MPV
-    coefficients at every positive length, then after any positive common
-    blocking length $p$, $\bigoplus_j(\mu_j^A)^pA_j^{[p]}$ and
-    $\bigoplus_k(\mu_k^B)^pB_k^{[p]}$ have the same MPV coefficients at every
-    positive length.
-\end{lemma}
-
-\begin{lemma}[Nonzero weights survive blocking]%
-    \label{lem:block_weights_ne_zero}
-    \lean{MPSTensor.blockWeights_ne_zero}\leanok
-    If $\mu\in\C$ is nonzero and $p\ge1$, then $\mu^p\neq0$; blocking
-    preserves the nonzero-weight hypothesis of a weighted block decomposition.
-\end{lemma}
-
-\begin{lemma}[Common reblocking of cyclic-sector families]%
-    \label{thm:exists_common_blocked_cyclic_sector_family}
-    \lean{MPSTensor.exists_commonBlockedCyclicSectorFamily_of_hasPrimitiveIrreducibleCyclicSectors}\leanok
-    \uses{def:primitive_irreducible_cyclic_sectors, def:blocked_tensor}
-    Given a finite family $(B_k)_{k=1}^r$, each with primitive irreducible cyclic
-    sectors, there is a common blocking length $p$ such that each $B_k^{[p]}$
-    admits a unit-weight direct-sum decomposition over a single common blocked
-    alphabet $d^{[p]}$ into left-canonical blocks with primitive transfer maps,
-    tensor irreducibility, and positive bond dimensions.
-\end{lemma}
+The powered map is analyzed corner by corner before the resulting sector
+families are placed over a common blocked alphabet.
 
 \begin{lemma}[Sector irreducibility for the adjoint blocked map]%
     \label{thm:sector_irred_unconditional}
@@ -740,18 +473,6 @@ through its own period agrees with the directly $p$-blocked block.
     of $(\E_{A^\dagger})^m$ to each corner $P_u\MN{D}P_u$ is irreducible.
 \end{lemma}
 
-\begin{lemma}[Iterated blocking at the transfer-map level]%
-    \label{thm:iterated_blocking_transfer}
-    \lean{MPSTensor.transferMap_blockTensor_mul}\leanok
-    \uses{def:blocked_tensor, def:transfer_map}
-    For any MPS tensor $A$ and $m,n\ge0$,
-    \begin{align}
-        \E_{(A^{[m]})^{[n]}}
-        &=
-        \E_{A^{[mn]}}.
-        \label{eq:canonical_iterated_blocking}
-    \end{align}
-\end{lemma}
 
 \begin{definition}[Primitive irreducible cyclic-sector decomposition]%
     \label{def:primitive_irreducible_cyclic_sectors}
@@ -764,24 +485,3 @@ through its own period agrees with the directly $p$-blocked block.
     left-canonical, with primitive transfer map, tensor-irreducible, and of
     positive bond dimension.
 \end{definition}
-
-\begin{lemma}[Common reblocking at a prescribed multiple]%
-    \label{thm:exists_common_blocked_cyclic_sector_family_common_multiple}
-    \lean{MPSTensor.exists_commonBlockedCyclicSectorFamily_of_commonMultiple}\leanok
-    \uses{thm:exists_common_blocked_cyclic_sector_family}
-    With hypotheses as in
-    Lemma~\ref{thm:exists_common_blocked_cyclic_sector_family}, and given any
-    common multiple $p$ of the per-block period-removal lengths $(m_k)$, the
-    common reblocking can be performed at the prescribed length $p$.
-\end{lemma}
-
-\begin{lemma}[Structural properties of the common reblocked sectors]%
-    \label{thm:common_blocked_cyclic_sector_derived_properties}
-    \lean{MPSTensor.CommonBlockedCyclicSectorFamily.derived_properties}\leanok
-    \uses{thm:exists_common_blocked_cyclic_sector_family}
-    Each sector tensor in the common reblocked cyclic-sector family of
-    Lemma~\ref{thm:exists_common_blocked_cyclic_sector_family} is
-    trace-preserving, $\sum_i(B^i)^\dagger B^i=\Id$, has primitive transfer
-    map, $\sigma_\partial(\E_B)=\{1\}$, is tensor-irreducible, and has positive
-    bond dimension.
-\end{lemma}

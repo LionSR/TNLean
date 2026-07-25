@@ -38,7 +38,7 @@ hypothesis of the conditional proportional global gauge
     $\zeta \in \C \setminus \{0\}$. Suppose that for every $N > N_0$,
     \begin{align}
         c_N^{(j_0)}(P)
-        &= \zeta^N \cdot c_N^{(\tilde k_0)}(Q).
+         & = \zeta^N \cdot c_N^{(\tilde k_0)}(Q).
         \label{eq:bnt_matched_sector_coeff_identity}
     \end{align}
     Then the per-sector multiplicities agree, $r_{j_0}(P) = r_{\tilde k_0}(Q)$,
@@ -58,7 +58,7 @@ hypothesis of the conditional proportional global gauge
     $N > N_0$,
     \begin{align}
         \sum_q \mu_{j_0, q}^N
-        &= \sum_{q'} (\zeta \cdot \nu_{\tilde k_0, q'})^N.
+         & = \sum_{q'} (\zeta \cdot \nu_{\tilde k_0, q'})^N.
         \notag
     \end{align}
     Extend to all positive exponents and apply the unequal-cardinality
@@ -169,7 +169,7 @@ projection.
     common-MPV identity over this family,
     \begin{align}
         \sum_{j'\in T} c_N^{(j')}\, V^{(N)}(P_{j'})
-        &= \sum_{k}\Bigl(c_N^{(k)}
+         & = \sum_{k}\Bigl(c_N^{(k)}
         - \sum_{j'\notin T,\, k(j')=k}
         c_N^{(j')}\omega_{j'}^{N}\Bigr) V^{(N)}(Q_k),
         \notag
@@ -240,4 +240,51 @@ $B_k = e^{i\phi_k} X_k A_{j_k} X_k^{-1}$ holds on the full basis
 
     \emph{Bijection.} The two injections give equal finite sector counts, so $m$
     is a bijection $\beta : J(Q) \simeq J(P)$.
+\end{proof}
+
+\section{Overlap rigidity for normal blocks}
+\label{sec:bnt_overlap_rigidity}
+
+The BNT matching argument ultimately turns a non-decaying mixed overlap into
+a gauge-phase match. The following two results isolate that spectral step.
+
+\begin{lemma}[Mixed-transfer spectral radius from unit-modulus overlap]%
+    \label{lem:overlap_norm_one_implies_spectral_radius_ge_one}
+    \lean{MPSTensor.mixedTransferSpectralRadius_ge_one_of_mpvOverlap_norm_tendsto_one}
+    \leanok
+    \uses{def:mpv_overlap}
+    Let $A$ and $B$ have the same bond dimension. If
+    $\|\braket{V^{(N)}(A)}{V^{(N)}(B)}\|\to1$, then the mixed transfer map has
+    spectral radius at least~$1$.
+\end{lemma}
+
+\begin{proof}\leanok
+    If the mixed-transfer spectral radius were less than~$1$, the iterated
+    mixed transfer map would tend to zero in operator norm, hence so would its
+    trace. By (\ref{eq:canonical_overlap_trace}), the overlap would tend to
+    zero, contradicting the hypothesis.
+\end{proof}
+
+\begin{theorem}[Gauge-phase equivalence from unit-modulus overlap]%
+    \label{thm:nt_overlap_norm_one_gauge}
+    \lean{MPSTensor.gaugePhaseEquiv_of_overlap_norm_tendsto_one_of_irreducible_TP}
+    \leanok
+    \uses{def:irreducible_tensor, def:tp_kraus, def:gauge_phase_equiv,
+        def:mpv_overlap}
+    Let $A$ and $B$ be irreducible MPS tensors of the same bond dimension with
+    $\sum_i(A^i)^\dagger A^i=\Id$ and
+    $\sum_i(B^i)^\dagger B^i=\Id$. If
+    $\|\braket{V^{(N)}(A)}{V^{(N)}(B)}\|\to1$, then $A$ and $B$ are
+    gauge-phase equivalent.
+    % Same-bond-dimension case of \cite[Lemma~equalMPS]{Cirac2016MPDO_arXiv};
+    % proportionality of MPVs is not assumed.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:overlap_norm_one_implies_spectral_radius_ge_one,
+        thm:modulus_one_gauge_irr_tp}
+    By Lemma~\ref{lem:overlap_norm_one_implies_spectral_radius_ge_one}, the
+    mixed-transfer spectral radius is at least~$1$, and
+    Theorem~\ref{thm:modulus_one_gauge_irr_tp} then gives gauge-phase
+    equivalence.
 \end{proof}

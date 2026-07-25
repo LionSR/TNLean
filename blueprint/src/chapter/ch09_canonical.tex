@@ -7,16 +7,17 @@ the basis of normal tensors carried by those blocks and compares their
 coefficients, and Chapter~\ref{ch:ft_proof} proves the theorem itself. The
 reduction follows~\cite{PerezGarcia2007Matrix}, \cite{Cirac2016MPDO_arXiv},
 \cite{Cirac2021Matrix}, and~\cite[Chapter~6]{Wolf2012Quantum}. Its goal is to expose the primitive blocks
-inside the tensor. The transfer operator of an arbitrary tensor can be reducible
-and can have a period greater than one; the reduction splits it along its
-invariant subspaces and brings the period of each block down to one, so that each
-block is primitive, with peripheral spectrum $\{1\}$. The blocks are returned in a
-fixed gauge, and the sections below carry out the reduction. The periodic
-decomposition theorem of~\cite[Theorem~5]{PerezGarcia2007Matrix} also gives an
-explicit decomposition of the state vector into $p$-periodic summands; here we
-use only its blocked cyclic-sector consequence
-(Theorem~\ref{thm:cyclic_sector_decomp_after_blocking}), and that explicit
-state-vector decomposition lies outside this chapter.
+inside the tensor. The transfer operator of an arbitrary tensor can be reducible and periodic.
+The reduction first splits invariant subspaces. For each irreducible
+trace-preserving block, it then powers the transfer map, extracts the
+adjoint-fixed cyclic projections, compresses to their corners, and proves that
+each corner is primitive and tensor-irreducible. The blocks are returned in a
+fixed gauge. The periodic decomposition theorem
+of~\cite[Theorem~5]{PerezGarcia2007Matrix} also gives $p$ translated
+$p$-periodic state summands when $p\mid N$. That state-vector decomposition
+belongs to the periodic-MPS main text in Chapter~22; here we use only its
+blocked cyclic-sector consequence
+(Theorem~\ref{thm:cyclic_sector_decomp_after_blocking}).
 % Scope boundary documented in docs/paper-gaps/pgvwc07_periodic_decomposition_scope.tex.
 
 Two normalizations appear. The unital orientation

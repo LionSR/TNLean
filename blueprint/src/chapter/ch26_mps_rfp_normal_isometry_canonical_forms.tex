@@ -1,5 +1,71 @@
 \section{Normal tensors and isometry canonical forms}
 
+\subsection{Project-specific block-injective canonical-form interface}
+\label{subsec:rfp_project_canonical_form}
+
+The following predicate is a project-specific interface used chiefly in this
+chapter. It is stronger and differently normalized than the CPSV canonical
+form of Definition~\ref{def:cpsv_canonical_form}; the two should not be
+identified.
+
+\begin{definition}[Canonical form conditions]\label{def:is_canonical_form}
+    \lean{MPSTensor.IsCanonicalForm}
+    \leanok
+    \uses{def:injective}
+    A collection of scaling factors $(\mu_k)_{k=1}^r$ and
+    block tensors $(A_k)_{k=1}^r$ satisfies the
+    \emph{canonical form conditions} if:
+    \begin{enumerate}
+        \item each $A_k$ is injective,
+        \item each $A_k$ satisfies the TP normalization
+              $\sum_i(A_k^i)^\dagger A_k^i=\Id$,
+        \item the moduli are non-increasing:
+              $|\mu_1|\ge|\mu_2|\ge\cdots\ge|\mu_r|$,
+        \item all $\mu_k\neq0$,
+        \item every block bond dimension is positive: $D_k\ge1$ for every~$k$,
+        \item the self-overlap converges: $O_{A_kA_k}(N)\to1$
+              for each~$k$.
+    \end{enumerate}
+    Only this one-sided normalization is assumed;
+    no unital condition is assumed here.
+    Condition~(6) is a primitivity hypothesis:
+    for a primitive channel
+    (\cite[Theorem~6.7(3)]{Wolf2012Quantum}),
+    $T^n(\rho)\to\rho_\infty$ for every initial state,
+    which forces the self-overlap to converge to~$1$.
+    See also~\cite[Theorem~6.8]{Wolf2012Quantum}
+    for the completely-positive characterisation
+    and Chapter~\ref{ch:spectral} for the transfer-operator gap
+    proof.
+\end{definition}
+
+\begin{lemma}[Canonical form from peripheral primitivity]%
+    \label{thm:canonical_from_primitive}
+    \lean{MPSTensor.IsCanonicalForm.of_peripheral_primitive}
+    \leanok
+    \uses{def:is_canonical_form, def:injective, def:tp_kraus,
+        def:primitive_channel}
+    Let $(\mu_k,A_k)_{k=1}^r$ be nonzero weights and injective left-canonical
+    blocks with positive bond dimensions, non-increasing moduli
+    $|\mu_1|\ge\cdots\ge|\mu_r|>0$, and
+    $\sigma_\partial(\E_{A_k})=\{1\}$. Then $(\mu_k,A_k)_{k=1}^r$ satisfies
+    the canonical-form conditions of Definition~\ref{def:is_canonical_form},
+    and $O_{A_kA_k}(N)\to1$ for every~$k$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{def:is_canonical_form, thm:primitive_compl_lt_one,
+        thm:primitive_overlap}
+    The injectivity, left-canonical identity, weight ordering, and
+    nonzero-weight clauses are exactly the hypotheses. For each block,
+    peripheral primitivity gives the complementary spectral gap
+    $\rho_{\spec}(\E_{A_k}-P)<1$ by
+    Theorem~\ref{thm:primitive_compl_lt_one}.
+    Theorem~\ref{thm:primitive_overlap} then yields
+    $O_{A_kA_k}(N)\to1$.
+\end{proof}
+
 \begin{theorem}[RFP normal tensor is injective]\label{thm:rfp_nt_injective}
     \lean{MPSTensor.rfp_nt_structural}
     \leanok
@@ -11,7 +77,7 @@
     such that
     \begin{align}
         A^{i_1}A^{i_2}
-        &=\sum_j V_{i_1i_2,j}A^j.
+         & =\sum_j V_{i_1i_2,j}A^j.
         \notag
     \end{align}
     Induction on the word length therefore gives
@@ -79,10 +145,10 @@
     \uses{thm:exponential_convergence_primitive}
     The exponential convergence bound gives
     $\lVert \E_A^n(X) - P_\rho(X)\rVert
-    \le C(1-\delta)^n\lVert X\rVert$.
+        \le C(1-\delta)^n\lVert X\rVert$.
     Idempotence of $\E_A$ implies $\E_A^{n+1} = \E_A$ for all $n \ge 0$,
     so $\lVert \E_A(X) - P_\rho(X)\rVert
-    \le C(1-\delta)^{n+1}\lVert X\rVert$ for all $n$. Taking
+        \le C(1-\delta)^{n+1}\lVert X\rVert$ for all $n$. Taking
     $n \to \infty$ gives $\E_A = P_\rho$.
 \end{proof}
 
@@ -98,8 +164,8 @@
     $\Lambda$ is diagonal positive, $\sum_i (U^i)^\dagger U^i=I$, and
     \begin{align}
         \sum_i \overline{(U^i)_{\alpha,\beta}}
-        (U^i)_{\alpha',\beta'}
-        &=
+               (U^i)_{\alpha',\beta'}
+         & =
         D^{-1}\delta_{\alpha,\alpha'}\delta_{\beta,\beta'}.
         \notag
     \end{align}
@@ -112,20 +178,20 @@
     Set
     \begin{align}
         \Lambda_\alpha
-        &=\sqrt{\frac{D\rho_{\alpha,\alpha}}{\tr(\rho)}},
-        \notag\\
+         & =\sqrt{\frac{D\rho_{\alpha,\alpha}}{\tr(\rho)}},
+        \notag                                              \\
         E_{\alpha,\beta}
-        &=D^{-1/2}e_{\alpha,\beta},
-        \notag\\
+         & =D^{-1/2}e_{\alpha,\beta},
+        \notag                                              \\
         K_{\alpha,\beta}
-        &=\Lambda E_{\alpha,\beta}.
+         & =\Lambda E_{\alpha,\beta}.
         \notag
     \end{align}
     Direct multiplication of matrix units yields
     \begin{align}
         \sum_{\alpha,\beta}K_{\alpha,\beta}Y
         K_{\alpha,\beta}^{\dagger}
-        &=P_\rho(Y).
+         & =P_\rho(Y).
         \notag
     \end{align}
     Kraus freedom therefore gives an isometry $V$ such that
@@ -135,10 +201,10 @@
     one has $B^i=\Lambda U^i$ and
     \begin{align}
         U^i_{\alpha,\beta}
-        &=D^{-1/2}V_{i,(\alpha,\beta)},
-        \notag\\
+         & =D^{-1/2}V_{i,(\alpha,\beta)},
+        \notag                                                  \\
         \sum_i\overline{U^i_{\alpha,\beta}}U^i_{\alpha',\beta'}
-        &=D^{-1}\delta_{\alpha,\alpha'}\delta_{\beta,\beta'}.
+         & =D^{-1}\delta_{\alpha,\alpha'}\delta_{\beta,\beta'}.
         \notag
     \end{align}
     Conjugating back gives $A^i=X\Lambda U^iX^{-1}$.
@@ -181,8 +247,8 @@
     $\Lambda$ is diagonal positive and
     \begin{align}
         \sum_i \overline{(U^i)_{\alpha,\beta}}
-        (U^i)_{\alpha',\beta'}
-        &=
+               (U^i)_{\alpha',\beta'}
+         & =
         \delta_{\alpha,\alpha'}\delta_{\beta,\beta'}.
         \notag
     \end{align}
@@ -212,8 +278,8 @@
     condition
     \begin{align}
         \sum_i \overline{(U_k^i)_{\alpha,\beta}}
-        (U_k^i)_{\alpha',\beta'}
-        &=
+               (U_k^i)_{\alpha',\beta'}
+         & =
         D_k^{-1}\delta_{\alpha,\alpha'}\delta_{\beta,\beta'}.
         \notag
     \end{align}
@@ -229,8 +295,8 @@
     invokes the joint isometry condition
     \begin{align}
         \sum_i (U_k^i)_{\alpha,\beta}
-            \overline{(U_\ell^i)_{\alpha',\beta'}}
-        &=
+        \overline{(U_\ell^i)_{\alpha',\beta'}}
+         & =
         \delta_{k,\ell}\delta_{\alpha,\alpha'}\delta_{\beta,\beta'}.
         \notag
     \end{align}
@@ -260,8 +326,8 @@
     $\Lambda_k$ diagonal positive and
     \begin{align}
         \sum_i \overline{(U_k^i)_{\alpha,\beta}}
-        (U_k^i)_{\alpha',\beta'}
-        &=
+               (U_k^i)_{\alpha',\beta'}
+         & =
         \delta_{\alpha,\alpha'}\delta_{\beta,\beta'}.
         \notag
     \end{align}
@@ -284,7 +350,7 @@
     satisfying the unit pair-index isometry
     \begin{align}
         \sum_i \overline{(U^i)_{\alpha,\beta}}\,(U^i)_{\alpha',\beta'}
-        &= \delta_{\alpha,\alpha'}\delta_{\beta,\beta'}.
+         & = \delta_{\alpha,\alpha'}\delta_{\beta,\beta'}.
         \notag
     \end{align}
     such that $A^i = X\,\sqrt\Lambda\,U^i\,X^{-1}$.
@@ -292,8 +358,8 @@
     \cite[Section~3]{Cirac2016MPDO_arXiv} is
     \begin{align}
         \widehat A^{(\alpha',\beta')}_{\alpha,\beta}
-        &= \delta_{\alpha,\alpha'}\delta_{\beta,\beta'}
-            \sqrt{\Lambda_\alpha}.
+         & = \delta_{\alpha,\alpha'}\delta_{\beta,\beta'}
+        \sqrt{\Lambda_\alpha}.
         \notag
     \end{align}
     The normalization $\tr(\Lambda)=1$ is imposed on $\Lambda$, equivalently on
@@ -334,8 +400,8 @@
     pair-index convention by $U^i\mapsto\sqrt D\,U^i$ and setting
     $\Lambda_\alpha=(\widetilde\Lambda_\alpha/\sqrt D)^2$ gives
     $\sum_\alpha \Lambda_\alpha
-    = D^{-1}\sum_\alpha \widetilde\Lambda_\alpha^2
-    = D^{-1}\cdot D = 1$, while
+        = D^{-1}\sum_\alpha \widetilde\Lambda_\alpha^2
+        = D^{-1}\cdot D = 1$, while
     $\sqrt{\Lambda_\alpha}=\widetilde\Lambda_\alpha/\sqrt D$ recovers the
     decomposition $A^i = X\sqrt\Lambda\,U^i X^{-1}$.
 \end{proof}
@@ -379,22 +445,22 @@
     condition
     \begin{align}
         \sum_i \overline{(U^i)_{\alpha,\beta}}\,(U^i)_{\alpha',\beta'}
-        &= \delta_{\alpha,\alpha'}\delta_{\beta,\beta'}.
+         & = \delta_{\alpha,\alpha'}\delta_{\beta,\beta'}.
         \notag
     \end{align}
     Then for every bond matrix $Z$,
     \begin{align}
         \sum_i U^i\,Z\,(U^i)^\dagger
-        &= \tr(Z)\,I.
+         & = \tr(Z)\,I.
         \notag
     \end{align}
 \end{lemma}
 \begin{proof}\leanok
     Reading off the $(x,y)$ entry, the pair-index condition gives
     $\sum_i (U^i)_{x,\alpha} \overline{(U^i)_{y,\beta}}
-    = \delta_{x,y} \delta_{\alpha,\beta}$, so the entry collapses to
+        = \delta_{x,y} \delta_{\alpha,\beta}$, so the entry collapses to
     $\delta_{x,y}\sum_\alpha Z_{\alpha,\alpha}
-    = \delta_{x,y} \tr(Z)$, which is the $(x,y)$ entry of $\tr(Z)\,I$.
+        = \delta_{x,y} \tr(Z)$, which is the $(x,y)$ entry of $\tr(Z)\,I$.
 \end{proof}
 
 \begin{theorem}[Isometry canonical form implies the renormalization fixed-point property]%
@@ -415,10 +481,10 @@
     identity (Lemma~\ref{lem:unit_pair_isometry_transfer}) gives the rank-one form
     \begin{align}
         \E_A(Y)
-        &= \tr\!(X^{-1} Y (X^{-1})^\dagger)\,R,
-        \notag\\
+         & = \tr\!(X^{-1} Y (X^{-1})^\dagger)\,R,
+        \notag                                    \\
         R
-        &= X\,\Lambda\,X^\dagger.
+         & = X\,\Lambda\,X^\dagger.
         \notag
     \end{align}
     Idempotence then reduces to
@@ -455,53 +521,53 @@ Across all blocks, the canonical form has the following routed representation.
         % TENKZ-II-RFP-BEGIN
         \begin{tenkzfree}[tensor style=box]
             \tnput[boundary, ports={east:virtual}]
-                {rfpWest}{(-8mm,0)}{}
+            {rfpWest}{(-8mm,0)}{}
             \tnput[box, ports={west:virtual,east:virtual,south:virtual}]
-                {rfpX}{(0,0)}{X}
+            {rfpX}{(0,0)}{X}
             \tnput[box, ports={west:virtual,east:virtual,south:virtual}]
-                {rfpLambda}{(14mm,0)}{\sqrt\Lambda}
+            {rfpLambda}{(14mm,0)}{\sqrt\Lambda}
             \tnput[box,
                 ports={south west:virtual,south:virtual,
-                    south east:virtual,north:physical}]
-                {rfpU}{(31mm,11mm)}{\quad U\quad}
+                        south east:virtual,north:physical}]
+            {rfpU}{(31mm,11mm)}{\quad U\quad}
             \tnput[dot, ports={north:virtual,south:virtual,east:virtual}]
-                {rfpMain}{(31mm,0)}{}
+            {rfpMain}{(31mm,0)}{}
             \tnput[box, ports={west:virtual,east:virtual,south:virtual}]
-                {rfpM}{(40mm,0)}{M}
+            {rfpM}{(40mm,0)}{M}
             \tnput[box,
                 ports={west:virtual,east:virtual,north west:virtual,
-                    south:virtual}]
-                {rfpXinv}{(54mm,0)}{X^{-1}}
+                        south:virtual}]
+            {rfpXinv}{(54mm,0)}{X^{-1}}
             \tnput[boundary, ports={west:virtual}]
-                {rfpEast}{(63mm,0)}{}
+            {rfpEast}{(63mm,0)}{}
             \tnput[boundary, ports={south:physical}]
-                {rfpPhysical}{(31mm,20mm)}{}
+            {rfpPhysical}{(31mm,20mm)}{}
 
             \tnput[boundary, label pos=west, ports={east:virtual}]
-                {rfpJwest}{(-8mm,-9mm)}{j}
+            {rfpJwest}{(-8mm,-9mm)}{j}
             \tnput[dot, ports={west:virtual,east:virtual,
-                    north:virtual,south:virtual}]
-                {rfpXj}{(0,-9mm)}{}
+                        north:virtual,south:virtual}]
+            {rfpXj}{(0,-9mm)}{}
             \tnput[dot, ports={west:virtual,east:virtual,north:virtual}]
-                {rfpLambdaj}{(14mm,-9mm)}{}
+            {rfpLambdaj}{(14mm,-9mm)}{}
             \tnput[dot, ports={west:virtual,east:virtual,north:virtual}]
-                {rfpUj}{(31mm,-9mm)}{}
+            {rfpUj}{(31mm,-9mm)}{}
             \tnput[dot, ports={west:virtual,east:virtual,
-                    north:virtual,south:virtual}]
-                {rfpXinvj}{(54mm,-9mm)}{}
+                        north:virtual,south:virtual}]
+            {rfpXinvj}{(54mm,-9mm)}{}
             \tnput[boundary, ports={west:virtual}]
-                {rfpJeast}{(63mm,-9mm)}{}
+            {rfpJeast}{(63mm,-9mm)}{}
 
             \tnput[boundary, label pos=west, ports={east:virtual}]
-                {rfpQwest}{(-8mm,-16mm)}{q}
+            {rfpQwest}{(-8mm,-16mm)}{q}
             \tnput[dot, ports={west:virtual,east:virtual,north:virtual}]
-                {rfpXq}{(0,-16mm)}{}
+            {rfpXq}{(0,-16mm)}{}
             \tnput[dot, ports={west:virtual,east:virtual,north:virtual}]
-                {rfpMq}{(40mm,-16mm)}{}
+            {rfpMq}{(40mm,-16mm)}{}
             \tnput[dot, ports={west:virtual,east:virtual,north:virtual}]
-                {rfpXinvq}{(54mm,-16mm)}{}
+            {rfpXinvq}{(54mm,-16mm)}{}
             \tnput[boundary, ports={west:virtual}]
-                {rfpQeast}{(63mm,-16mm)}{}
+            {rfpQeast}{(63mm,-16mm)}{}
 
             \tnjoin{rfpWest.east}{rfpX.west}
             \tnjoin{rfpX.east}{rfpLambda.west}

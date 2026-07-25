@@ -104,6 +104,56 @@ used in Theorem~\ref{thm:cumulative_span_sharp},
 Theorem~\ref{thm:eigenvector_spreading}, and
 Theorem~\ref{thm:wielandt_general}.
 
+The next two lemmas connect irreducible matrix actions with the cumulative word
+span used throughout Chapter~\ref{ch:wielandt}.
+
+\begin{remark}[Burnside input for cumulative spanning]\leanok
+    \uses{thm:irreducible_tensor_to_action, thm:burnside_matrix,
+        lem:algspan_cumulative_span}
+    The passage from irreducible tensors to full algebra spanning first passes
+    through the irreducible action on $\C^D$. Burnside's theorem then says that
+    the resulting irreducible subalgebra of $\MN{D}$ is all of $\MN{D}$. Once
+    the algebra span is full, finite-dimensionality gives a single cumulative
+    span that already equals $\MN{D}$.
+\end{remark}
+
+\begin{lemma}[Irreducible action gives an irreducible tensor]
+    \label{lem:irreducible_action_to_tensor}
+    \lean{MPSTensor.isIrreducibleTensor_of_isIrreducibleAction}
+    \leanok
+    \uses{def:irreducible_action, def:irreducible_tensor}
+    If the letters of $A$ act irreducibly on $\C^D$, then $A$ has no nontrivial
+    invariant orthogonal projection.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    If $P$ were a nontrivial invariant orthogonal projection, then its range
+    would be invariant under every letter of $A$.
+    Irreducibility of the action forces this range to be either $0$ or all of
+    $\C^D$, so $P$ must be $0$ or $\Id$, a contradiction.
+\end{proof}
+
+\begin{lemma}[The algebra span reaches a finite cumulative span]
+    \label{lem:algspan_cumulative_span}
+    \lean{MPSTensor.exists_cumulativeSpan_eq_top_of_algSpan_eq_top}
+    \leanok
+    \uses{def:alg_span, def:cumulative_span}
+    If the generated unital algebra satisfies $\algspn(A)=\MN{D}$, then there
+    exists $N$ such that $T_N(A)=\MN{D}$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Every element of $\algspn(A)$ lies in some cumulative span $T_n(A)$:
+    the generators lie in $T_1(A)$, scalar multiples of the identity lie in
+    $T_0(A)$, and the family $\{T_n(A)\}_{n\ge0}$ is closed under addition
+    and under multiplication with lengths adding.
+    Since $\MN{D}$ is finite-dimensional, the ascending chain
+    $T_0(A)\subseteq T_1(A)\subseteq\cdots$ stabilizes, so one can choose a
+    single $N$ with $T_N(A)=\MN{D}$.
+\end{proof}
+
 \begin{definition}[Fitting decomposition]\label{def:fitting_decomp}
     \lean{Wielandt.FittingDecomposition}
     \leanok
