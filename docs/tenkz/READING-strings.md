@@ -94,36 +94,27 @@ and a tensor at the meeting of a string with an index is
 \tn[skin=box, at=crossing of g and leg n of (1,2)]{}
 ```
 
-Neither draws. The first has no resolver at all: the node-kind table lists
-`cell`, `rel`, `mid`, `record`, `port`, `outside` and `crossing` and falls
-through to `TKZ-KERNEL-RENDER-TODO` for `onwire`. The second resolves only
-after string geometry exists. The mark pass runs after the string pass and
-reads the saved pre-surgery crossing point. Atom placement instead calls the
-same crossing resolver before `\tikzpicture` opens and before either string
-has been drawn. The resolver then falls back to PGF's live intersection path
-and XeLaTeX stops at `\pgf@intersectionofpaths` with the undefined internal
-control sequence `\pgf@intersect@next`.
+Both now draw in the kernel on current `main`. The node-kind dispatch sends an
+`onwire` address through `\__tenkz_kernel_r_onwire:n`, with separate curve and
+ordinary-run resolvers. The address walk is
+`\__tenkz_kernel_settle:n`/`\__tenkz_kernel_settle_after:nn`: it settles the
+records named by a place before realizing that place, queues curve geometry
+before dependent ink, and reports a repeated visiting record through
+`kernel-addr-cycle` as `[TKZ-ADDR-CYCLE]`.
 
-The reason is the order of the passes. Atoms are placed before the picture
-opens; a wire has no geometry until it is drawn inside the picture. So a
-tensor's place cannot be a point of a curve — not because the language refuses
-to say it, but because the two quantities are computed in an order the
-contract never promised. Section 3 promises that address resolution is a
-dependency graph and names `[TKZ-ADDR-CYCLE]` for a cycle in it. That code
-appears in the contract and nowhere in the package, because there is no graph:
-there is a fixed order.
+The circularity the diagnostic catches is real — a curve routed through a
+tensor whose place is a point of that curve — but these panels do not ask for
+it. In every one of them the curve's shape is fixed by the frame: it enters at
+the margin, turns at addresses, or closes around a plaquette. The tensors that
+stand on it are consequences. `k_carried.tex` exercises four atoms on a closed
+curve, `k_cornercut.tex` exercises atoms at curve/leg crossings,
+`r_nested_onwire.tex` exercises a carried atom on an ordinary run, and
+`n_addr_cycle.tex` pins the cycle diagnostic.
 
-The circularity the code exists to catch is real, and it is the one these
-panels raise — a curve routed through a tensor whose place is a point of that
-curve. The panels do not ask for it. In every one of them the curve's shape is
-fixed by the frame: it enters at the margin, turns at addresses, or closes
-around a plaquette. The tensors that stand on it are consequences. Resolving
-the curves whose shape depends only on the frame, then the atoms that stand on
-them, draws all five without touching the grammar.
-
-So the largest family is sayable and undrawn. `strings` is the wrong record
-for it. What these five want is a **carried tensor**: a tensor whose place is
-a point of a wire.
+So the largest family is sayable and drawn. `strings` is still the wrong
+classification for it. What these five use is a **carried tensor**: a tensor
+whose place is a point of a wire. The benchmark cases still need to consume
+that implemented mechanism before their verdicts can change.
 
 ### The F-symbol is sayable today
 
@@ -172,7 +163,7 @@ targets and among seven targets carrying the `strings` need. The direct source
 reading resolves that overlap: repair the pairing first; against the right
 panel, neither recorded need remains.
 
-### None of the four implemented mechanisms answers it
+### The carried-tensor mechanism is the missing link
 
 The selector bounds a set of records, and a carried tensor is not a set. The
 offset hull and the route form give the corner cut its shape — `route={nw of
@@ -181,8 +172,9 @@ crossing habit resolves over and under at each meeting and derives the
 crossing set instead of requiring it authored; a derived crossing is a fact
 about a wire, and a tensor at that crossing is a fact about an atom.
 
-The division is clean. Those four are all about where curves go. The demand
-here is about where tensors stand.
+The division is clean. Those four are all about where curves go. The carried
+tensor address and dependency walk now answer the separate question of where
+tensors stand.
 
 ## What should be recorded
 
@@ -246,7 +238,8 @@ this reading: the winding numbers are read only for their presence, so
 
 ## Evidence
 
-Compiled against the kernel on `main`, each as a standalone picture.
+Rechecked against `main` at `461f2c7f1`, with the resolver and dependency-walk
+symbols named above.
 
 | what was said | result |
 |---|---|
@@ -255,7 +248,8 @@ Compiled against the kernel on `main`, each as a standalone picture.
 | a wire with both ends open | draws |
 | a closed string through named waypoints | draws |
 | a mark at `crossing of g and leg n of (1,2)` | draws |
-| an atom at `crossing of g and leg n of (1,2)` | XeLaTeX stops in `\pgf@intersectionofpaths` at undefined `\pgf@intersect@next` |
-| an atom at `on g 0.25` | `TKZ-KERNEL-RENDER-TODO`, `'onwire address' does not draw yet` |
-| an atom at `on L 0.5` on a closed string | the same |
+| an atom at `crossing of g and leg n of (1,2)` | draws; pinned by `k_cornercut.tex` |
+| an atom at `on g 0.25` | draws through `\__tenkz_kernel_r_onwire:n` |
+| an atom at `on L 0.5` on a closed string | draws; pinned by `k_carried.tex` |
+| a curve depending on an atom carried by that curve | hard error `[TKZ-ADDR-CYCLE]`; pinned by `n_addr_cycle.tex` |
 | an atom with a declared skin carrying `pairings=` | `TKZ-KERNEL-RENDER-TODO` |
