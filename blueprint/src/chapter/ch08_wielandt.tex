@@ -1,10 +1,11 @@
 \chapter{Wielandt Bound}\label{ch:wielandt}
 
-This chapter proves a quantum analog of Wielandt's inequality:
-for a normal MPS tensor with bond dimension~$D$,
-the cumulative span of matrix products stabilises
-after at most $D^2$ steps.
-The results follow~\cite{Sanz2010Quantum}.
+This chapter proves the quantum Wielandt bounds of
+\cite{Sanz2010Quantum}. For a primitive normalized tensor, it compares the
+uniform vector-spreading index $q(\E_A)$ with the first exact word length
+$\iota(A)$ satisfying $S_{\iota(A)}(A)=\MN{D}$ and proves
+$\iota(A)\le(D^2-\krausrk(A)+1)D^2$. The cumulative bound
+$T_{D^2}(A)=\MN{D}$ is an intermediate step in the proof of Lemma~1.
 
 \input{chapter/ch08_wielandt_cumulative_bound}
 \input{chapter/ch08_wielandt_fixed_length_and_normality}
