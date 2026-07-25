@@ -212,6 +212,17 @@ abstracted — record why, so it is not re-proposed).
   `regionBlockedTensorInjective_compl_red` and the blueprint ch24 `\lean{}` tags
   are untouched; the two surviving docstring citations are re-pointed at the
   `ThreeBlockGeometry` twins.
+- **Follow-up (#4822):** the two surviving wrappers were code-dead (no Lean
+  consumers; all call sites use the `ThreeBlockGeometry` twins), so they were
+  dropped together with their section docs, and the `IsBlueRedCrossingEdge` +
+  `blueRedCrossingBondProd` D-side support chain cascaded with them (its only
+  consumer was the deleted collapse wrapper; the live consumers all use the
+  `ThreeBlockGeometry` versions). The vestigial `_hblue`/`_hcompl` hypotheses
+  came off `regionBlockedTensorInjective_union`'s signature (the proof already
+  re-derives both internally via `regionBlockedTensorInjective_blue`/
+  `regionBlockedTensorInjective_complement`), and the sole consumer
+  `regionBlockedTensorInjective_compl_red` stops passing them.
+  `UnionInjectivity.lean` is now 133 lines (net −110 on the follow-up).
 
 ---
 
