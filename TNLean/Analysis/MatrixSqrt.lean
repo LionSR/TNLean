@@ -120,12 +120,6 @@ theorem PosSemidef.supportInvSqrt_isHermitian {ρ : Matrix n n ℂ}
   exact Matrix.isHermitian_iff_isSelfAdjoint.mpr
     (cfc_predicate (fun x : ℝ ↦ if x ≠ 0 then (Real.sqrt x)⁻¹ else 0) ρ)
 
-/-- The generalized inverse on the support is Hermitian. -/
-theorem PosSemidef.supportInv_isHermitian {ρ : Matrix n n ℂ}
-    (hρ : ρ.PosSemidef) : hρ.supportInv.IsHermitian := by
-  simpa only [PosSemidef.supportInv, hρ.supportInvSqrt_isHermitian.eq] using
-    Matrix.isHermitian_conjTranspose_mul_self hρ.supportInvSqrt
-
 /-- The support inverse square root is positive semidefinite.
 
 This is the positivity of the generalized inverse square root used in
