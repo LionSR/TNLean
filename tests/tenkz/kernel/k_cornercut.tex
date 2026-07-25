@@ -1,0 +1,34 @@
+%% Kernel fixture: a tensor standing where a curve meets another wire (the
+%% corner cut of Section III, lines 468-497: a curve crosses two of a
+%% tensor's indices and a small square stands on it at each meeting).
+%% Expected records: three ket atoms with physical legs up; one string routed
+%% north of the row with an over habit; two box atoms whose places are the
+%% crossings of that string with the outer two legs.  The second picture is
+%% the same production with two curves as its operands.
+%% Expected ink: each box stands ON the meeting.  The curve keeps its whole
+%% route through the box and the index keeps its whole run through it, so a
+%% box is what sits where the two meet and not a junction of them: the middle
+%% leg, which carries no box, shows the same meeting as a plain crossing.
+\documentclass{standalone}
+\usepackage{tenkz}
+\makeatletter
+\ExplSyntaxOn
+\file_input:n { tenkz-kernel.code.tex }
+\ExplSyntaxOff
+\makeatother
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[rows={ket}, cols=3, physical=up]
+  \tnwire[kind=string, species=g, name=g, crossing=over,
+          route={n of (1,1) .. (1,3)}]{open}{open}
+  \tn[skin=box, at=crossing of g and leg n of (1,1)]{}
+  \tn[skin=box, at=crossing of g and leg n of (1,3)]{}
+\end{tenkz}
+\qquad
+\begin{tenkz}[rows={wire,wire}, cols=4, bonds=none]
+  \tnwire[kind=string, species=left,  name=a]{(1,1)}{(2,3)}
+  \tnwire[kind=string, species=right, name=b,
+          cross={under at crossing of a and b}]{(1,4)}{(2,2)}
+  \tn[skin=box, at=crossing of a and b]{$T$}
+\end{tenkz}
+\end{document}

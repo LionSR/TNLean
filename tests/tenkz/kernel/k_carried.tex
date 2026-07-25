@@ -1,0 +1,29 @@
+%% Kernel fixture: a tensor standing at a point of a curve (the threaded loop
+%% of Section III, lines 305-327: a closed curve carrying four tensors, one at
+%% each of four of its points).
+%% Expected records: four ket atoms on row 1 with physical legs up, one closed
+%% string named L through four waypoints, four box atoms whose places are
+%% fractions along L.
+%% Expected ink: the loop is one smooth closed curve, drawn whole; each box
+%% stands ON it at the fraction its address names, so the curve enters one
+%% side of the box and leaves the other unchanged.  A box is not a junction:
+%% nothing about the loop's route or the tensors below it is decided by where
+%% the boxes stand.
+\documentclass{standalone}
+\usepackage{tenkz}
+\makeatletter
+\ExplSyntaxOn
+\file_input:n { tenkz-kernel.code.tex }
+\ExplSyntaxOff
+\makeatother
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[rows={ket}, cols=4, physical=up]
+  \tnwire[kind=string, species=g, name=L, closed,
+          via={1 n of (1,1), 1 n of (1,4), 1 s of (1,4), 1 s of (1,1)}]
+  \tn[skin=box, at=on L 0.05]{$1$}
+  \tn[skin=box, at=on L 0.3]{$2$}
+  \tn[skin=box, at=on L 0.55]{$3$}
+  \tn[skin=box, at=on L 0.8]{$4$}
+\end{tenkz}
+\end{document}
