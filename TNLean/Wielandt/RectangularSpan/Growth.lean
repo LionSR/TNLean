@@ -130,7 +130,14 @@ theorem rectSpanLeftStep_injective (n : ℕ) :
   exact Subtype.ext (by simpa [sub_eq_zero] using hzero)
 
 /-- Finrank is non-decreasing along the sequence
-`n ↦ rectSpan ((A i₀)^D) A n`. -/
+`n ↦ rectSpan ((A i₀)^D) A n`.
+
+Paper anchor (arXiv:0909.5347, proof of Lemma 2(b)): "For all $n \in \mathbb{N}$,
+$\dim[R_{n+1}(A)] \ge \dim[R_n(A)]$", because the `$A_1 A^{(n)}_k \in R_{n+1}(A)$`
+are again linearly independent "given that $A_1$ is invertible on its range".
+Kept at zero references per the owner ruling: this is the paper's own
+monotonicity sentence (the injectivity input is `rectSpanLeftStep_injective`,
+with `isUnit_restrict_range_toLin'_pow` supplying the paper's hypothesis). -/
 theorem rectSpan_finrank_mono (n : ℕ) :
     finrank ℂ (rectSpan ((A i₀) ^ D) A n) ≤
       finrank ℂ (rectSpan ((A i₀) ^ D) A (n + 1)) :=
