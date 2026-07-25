@@ -1,0 +1,25 @@
+% Regression: diagonal boundary angles have deterministic half-open sectors.
+\documentclass{standalone}
+\usepackage{tenkz}
+\makeatletter
+\ExplSyntaxOn
+\file_input:n { tenkz-kernel.code.tex }
+\ExplSyntaxOn
+\cs_new_protected:Npn \__tenkz_test_face_side:nn #1#2
+  {
+    \__tenkz_kernel_r_face_side:n {#1}
+    \tl_if_eq:NnF \l__tenkz_kernel_r_face_side_tl {#2}
+      { \errmessage{face #1 selected \l__tenkz_kernel_r_face_side_tl, not #2} }
+  }
+\ExplSyntaxOff
+\makeatother
+\begin{document}
+\tenkzkernel
+\ExplSyntaxOn
+\__tenkz_test_face_side:nn {45} {n}
+\__tenkz_test_face_side:nn {-45} {e}
+\__tenkz_test_face_side:nn {135} {w}
+\__tenkz_test_face_side:nn {-135} {s}
+\ExplSyntaxOff
+\mbox{parsed}
+\end{document}
