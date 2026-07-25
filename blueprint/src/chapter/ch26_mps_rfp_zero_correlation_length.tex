@@ -297,3 +297,92 @@
     Theorem~\ref{thm:is_positive_gap_bnt_zcl_of_is_rfp_direct_sum} applies to
     the direct sum.
 \end{proof}
+
+\begin{theorem}[Simultaneous inverse for BNT word evaluations]%
+    \label{thm:bnt_word_tuple_simultaneous_inverse}
+    \lean{MPSTensor.WordTupleSpanTop.exists_simultaneous_left_inverse}
+    \leanok
+    \uses{rem:word_tuple_span_top}
+    Suppose the simultaneous length-$L$ word evaluations of $(A_j)_j$ span
+    $\bigoplus_j\MN{D_j}$. There are coefficients
+    $C_{(j,a,b),w}$ such that, for every sector $k$,
+    \begin{align}
+        \sum_{|w|=L} C_{(j,a,b),w}(A_k^w)_{x,y}
+        &=\delta_{j,k}\delta_{a,x}\delta_{b,y}.
+        \notag
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    The tuple whose $j$-th component is the matrix unit
+    $\ketbra{a}{b}$ and whose other components vanish belongs to the full
+    simultaneous word span. Reading its $(k,x,y)$ entry gives the displayed
+    identity.
+\end{proof}
+
+\begin{theorem}[Sector-supported physical observable realization]%
+    \label{thm:bnt_sector_supported_physical_observable}
+    \lean{MPSTensor.WordTupleSpanTop.exists_physicalObservableTransfer_directSum_matrixUnit}
+    \lean{MPSTensor.WordTupleSpanTop.exists_physicalObservableTransfer_directSum_sectorSupported}
+    \lean{MPSTensor.WordTupleSpanTop.exists_physicalObservableTransfer_directSum_rankOne}
+    \leanok
+    \uses{def:physical_observable_transfer, rem:word_tuple_span_top}
+    Let $A=\bigoplus_k A_k$, and suppose the simultaneous length-$L$ word
+    evaluations span $\bigoplus_k\MN{D_k}$. For every sector $j$ and matrices
+    $R,l\in\MN{D_j}$, there is an observable $O$ on $L$ sites whose inserted
+    transfer map vanishes on every sector pair except $(j,j)$ and satisfies
+    \begin{align}
+        \E_O(X)_{j,j}
+        &=R\,\tr(lX_{j,j}).
+        \label{eq:zcl_sector_rank_one}
+    \end{align}
+    In particular, arbitrary virtual matrix-unit maps supported on one sector
+    are realized by physical observables.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:bnt_word_tuple_simultaneous_inverse}
+    Apply Theorem~\ref{thm:bnt_word_tuple_simultaneous_inverse} independently
+    to the left and right word evaluations. The observable with coefficients
+    \begin{align}
+        O_{\tau,\sigma}
+        &=C_{(j,a,b),\sigma}\,
+          \overline{C_{(j,c,e),\tau}}
+        \notag
+    \end{align}
+    sends the $(b,e)$ entry of $X_{j,j}$ to the $(a,c)$ entry and annihilates
+    every other entry and sector pair. Summing these matrix-unit observables
+    with coefficients $R_{a,c}l_{e,b}$ gives
+    (\ref{eq:zcl_sector_rank_one}).
+\end{proof}
+
+\begin{theorem}[BNT rank-one observables at the sharp blocking length]%
+    \label{thm:bnt_rank_one_observables_sharp_length}
+    \lean{MPSTensor.IsBNTCanonicalForm.exists_basis_physicalObservableTransfer_rankOne_le_three_totalDim_pow_five}
+    \leanok
+    \uses{def:sector_bnt_cf, def:physical_observable_transfer}
+    Let $P$ be a BNT canonical form of total bond dimension $D$. There is a
+    positive length $L\leq3D^5$ such that, for every BNT sector $j$ and every
+    $R,l\in\MN{D_j}$, a physical observable on $L$ sites realizes the
+    sector-supported insertion (\ref{eq:zcl_sector_rank_one}). This is the
+    block-injective physical-observable assertion used in
+    \cite[proof of Theorem~3.8]{Cirac2016MPDO_arXiv}, equations (1252) and
+    (1256) in the local source.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:sharp_bnt_block_separation,
+        thm:bnt_sector_supported_physical_observable}
+    Theorem~\ref{thm:sharp_bnt_block_separation} gives a positive
+    $L\leq3D^5$ for which the simultaneous word evaluations span the product
+    matrix algebra. Apply
+    Theorem~\ref{thm:bnt_sector_supported_physical_observable} at this length.
+\end{proof}
+
+\begin{remark}[Remaining obstruction in the printed converse]
+    The sector-supported observables of source lines 1250--1258 therefore
+    require no additional hypothesis. The preceding claim that
+    $\E_j^2\ne\E_j$ yields a nonzero eigenvalue $\lambda$ with
+    $|\lambda|<1$ is not valid for a non-idempotent operator with a nilpotent
+    Jordan part at eigenvalue zero. Hence these observable realizations do not
+    prove the unconditional converse in Theorem~3.8. A proof following the
+    source must still derive the nonzero subleading left and right eigenvectors
+    used in the correlation calculation at lines 1260--1268.
+\end{remark}
