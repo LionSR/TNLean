@@ -1,3 +1,78 @@
+\section{Positive maps and channels}
+
+\begin{definition}[Positive map]\label{def:positive_map}
+    \lean{IsPositiveMap}
+    \leanok
+    A linear map $E : \MN{n} \to \MN{m}$ is \emph{positive}
+    if $E(X) \ge 0$ whenever $X \ge 0$, where $X \ge 0$
+    means that $X$ is positive semidefinite.
+\end{definition}
+
+\begin{definition}[Trace-preserving map]\label{def:trace_preserving}
+    \lean{IsTracePreservingMap}
+    \leanok
+    A linear map $E : \MN{D} \to \MN{D}$ is \emph{trace-preserving}
+    if $\tr(E(X)) = \tr(X)$ for all $X$.
+\end{definition}
+
+\begin{remark}\leanok
+    We use the Loewner order on matrices: $X \le Y$ means
+    $Y - X \ge 0$.
+\end{remark}
+
+\begin{definition}[Completely positive map]\label{def:cp_map}
+    \lean{IsCPMap}
+    \leanok
+    A linear map $E : \MN{D} \to \MN{D}$ is \emph{completely positive} (CP)
+    if it admits a \emph{Kraus representation}: there exist operators
+    $\{K_i\}_{i=0}^{r-1}$ with $K_i \in \MN{D}$ such that, for every
+    $X \in \MN{D}$,
+    \begin{align}
+        E(X)
+        &= \sum_{i=0}^{r-1} K_i X K_i^\dagger.
+        \label{eq:channel_kraus_representation}
+    \end{align}
+    The Kraus representation also gives entrywise positivity on every positive
+    block matrix by Theorem~\ref{thm:cp_map_entrywise_complete_positive}, and hence
+    the associated completely positive map between matrix $C^*$-algebras in
+    Theorem~\ref{thm:cp_map_to_abstract_completely_positive}.
+\end{definition}
+
+\begin{definition}[Quantum channel]\label{def:channel}
+    \lean{IsChannel}
+    \leanok
+    \uses{def:cp_map, def:trace_preserving}
+    A linear map $E : \MN{D} \to \MN{D}$ is a \emph{quantum channel}
+    if it is both completely positive and trace-preserving (CPTP),
+    following~\cite{Wolf2012Quantum}.
+\end{definition}
+
+\begin{theorem}[CP maps are positive]\label{thm:cp_is_positive}
+    \lean{IsCPMap.isPositiveMap}
+    \leanok
+    \uses{def:cp_map, def:positive_map}
+    Every completely positive map is positive.
+\end{theorem}
+
+\begin{proof}\leanok
+    By the Kraus representation (\ref{eq:channel_kraus_representation}), if
+    $X \ge 0$, then each summand $K_i X K_i^\dagger \ge 0$ because
+    conjugation preserves positive semidefiniteness. Hence their sum is
+    positive semidefinite.
+\end{proof}
+
+\begin{theorem}[Channels are positive]\label{thm:channel_positive}
+    \lean{IsChannel.pos}
+    \leanok
+    \uses{def:channel, def:positive_map}
+    Every quantum channel is positive.
+\end{theorem}
+
+\begin{proof}\leanok\uses{thm:cp_is_positive}
+    A quantum channel is completely positive by definition, so
+    Theorem~\ref{thm:cp_is_positive} applies.
+\end{proof}
+
 \section{Rectangular positive maps, trace bounds, and density matrices}
 
 \begin{definition}[Associated positive linear map]
