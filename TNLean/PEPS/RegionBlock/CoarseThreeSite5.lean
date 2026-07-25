@@ -123,6 +123,24 @@ theorem isCrossing_bc_of_incident (F : CoherentCoarseBlockingFrame (G := G) (d :
       Or.inl ⟨hc1, (Finset.disjoint_left.mp hP.blue_disjoint_complement) hb2⟩⟩
   · exact absurd hc2 ((Finset.disjoint_left.mp hP.blue_disjoint_complement) hb2)
 
+/-- An edge incident to both red and complement is not incident to blue: each endpoint
+lies in red or in the complement, both disjoint from blue. -/
+theorem not_isRegionIncidentEdge_blue_of_incident_rc
+    (F : CoherentCoarseBlockingFrame (G := G) (d := d) A)
+    (hP : F.frame.IsPartition) {e : Edge G}
+    (hr : IsRegionIncidentEdge (G := G) F.frame.red e)
+    (hc : IsRegionIncidentEdge (G := G) F.frame.complement e) :
+    ¬ IsRegionIncidentEdge (G := G) F.frame.blue e := by
+  rcases hr with hr1 | hr2 <;> rcases hc with hc1 | hc2
+  · exact absurd hc1 ((Finset.disjoint_left.mp hP.red_disjoint_complement) hr1)
+  · rintro (hb | hb)
+    · exact (Finset.disjoint_left.mp hP.red_disjoint_blue) hr1 hb
+    · exact (Finset.disjoint_left.mp hP.blue_disjoint_complement) hb hc2
+  · rintro (hb | hb)
+    · exact (Finset.disjoint_left.mp hP.blue_disjoint_complement) hb hc1
+    · exact (Finset.disjoint_left.mp hP.red_disjoint_blue) hr2 hb
+  · exact absurd hc2 ((Finset.disjoint_left.mp hP.red_disjoint_complement) hr2)
+
 /-! ### The three-way merge
 
 The merge of an agreeing triple reads the red-incident edges from the red
