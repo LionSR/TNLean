@@ -3873,39 +3873,26 @@
                 - \tl_use:N \l__tenkz_kernel_r_col_tl
               }
           }
-        % the leg-tip label: author-owned tokens from up= / down=
+        % The leg-tip label: author-owned tokens from up= / down=.  It stands
+        % beyond the tip along the leg's own direction and anchors on its own
+        % opposite side, which is one statement for both faces -- the face
+        % chose the anchor only while every leg ran down the page.
         \__tenkz_model_get:nnN {#1} {#3} \l__tenkz_kernel_r_b_tl
         \quark_if_no_value:NF \l__tenkz_kernel_r_b_tl
           {
-            \str_if_eq:nnTF {#2} {n}
+            \__tenkz_render_labelnode:nnn
               {
-                \__tenkz_render_labelnode:nnn
-                  {
-                    anchor = south ,
-                    inner~sep = \__tenkz_dim:n {labelclear}
-                  }
-                  {
-                    (
-                      \__tenkz_kernel_r_pt:n { \l__tenkz_kernel_r_tipx_fp } ,
-                      \__tenkz_kernel_r_pt:n { \l__tenkz_kernel_r_tipy_fp }
-                    )
-                  }
-                  { \tl_use:N \l__tenkz_kernel_r_b_tl }
+                anchor = \exp_args:NV \__tenkz_render_label_anchor:n
+                  \l__tenkz_kernel_leg_dir_tl ,
+                inner~sep = \__tenkz_dim:n {labelclear}
               }
               {
-                \__tenkz_render_labelnode:nnn
-                  {
-                    anchor = north ,
-                    inner~sep = \__tenkz_dim:n {labelclear}
-                  }
-                  {
-                    (
-                      \__tenkz_kernel_r_pt:n { \l__tenkz_kernel_r_tipx_fp } ,
-                      \__tenkz_kernel_r_pt:n { \l__tenkz_kernel_r_tipy_fp }
-                    )
-                  }
-                  { \tl_use:N \l__tenkz_kernel_r_b_tl }
+                (
+                  \__tenkz_kernel_r_pt:n { \l__tenkz_kernel_r_tipx_fp } ,
+                  \__tenkz_kernel_r_pt:n { \l__tenkz_kernel_r_tipy_fp }
+                )
               }
+              { \tl_use:N \l__tenkz_kernel_r_b_tl }
           }
       }
   }
@@ -3921,10 +3908,18 @@
             \__tenkz_kernel_r_node:V \l__tenkz_kernel_r_b_tl
             \__tenkz_kernel_r_xy:nNN { \tl_use:N \l__tenkz_kernel_r_b_tl }
               \l__tenkz_kernel_r_xc_fp \l__tenkz_kernel_r_yc_fp
+            % how far the waypoint stands ALONG THE LEG: both ends are
+            % resolved page points, so the distance between them is the
+            % projection onto the direction the leg leaves in.  Down the
+            % page it is the old vertical delta, and a waypoint behind the
+            % leg projects negative rather than lengthening it backwards.
             \fp_set:Nn \l__tenkz_kernel_r_reach_fp
               {
                 max( \l__tenkz_kernel_r_reach_fp ,
-                     abs( \l__tenkz_kernel_r_yc_fp - \l__tenkz_kernel_r_y_fp )
+                     ( \l__tenkz_kernel_r_xc_fp - \l__tenkz_kernel_r_x_fp )
+                       * cosd( \l__tenkz_kernel_leg_dir_tl )
+                     + ( \l__tenkz_kernel_r_yc_fp - \l__tenkz_kernel_r_y_fp )
+                       * sind( \l__tenkz_kernel_leg_dir_tl )
                      + \__tenkz_metric_ratio:n {legcrossclear} )
               }
             \clist_map_break:
@@ -4916,6 +4911,10 @@
   }
 \cs_new_protected:Npn \__tenkz_kernel_r_mark:n #1
   {
+    % Every mark starts square to the page and each form that has axes of
+    % its own sets them: a mark must never inherit the turn of the mark
+    % drawn before it.
+    \tl_set:Nn \l__tenkz_kernel_r_tau_tl {0}
     \__tenkz_model_get:nnN {#1} {form} \l__tenkz_kernel_r_tl
     \str_case:VnF \l__tenkz_kernel_r_tl
       {
@@ -4969,8 +4968,20 @@
     \__tenkz_model_get:nnN {#1} {label-pos} \l__tenkz_kernel_r_c_tl
     \quark_if_no_value:NT \l__tenkz_kernel_r_c_tl
       { \tl_set:Nn \l__tenkz_kernel_r_c_tl { n } }
+    % The side a label speaks from is a side OF THE MARK, so the step out to
+    % it is that side's angle carried through the mark's own turn -- the
+    % caller has already put the point on the turned side, and a second step
+    % taken down the page would walk it back off.  The anchor reads the same
+    % page direction: the text does not rotate, so it stands on its own
+    % opposite side of wherever the step lands it.
     \tl_set:Ne \l__tenkz_kernel_r_c_tl
-      { \__tenkz_kernel_r_compass:n { \tl_use:N \l__tenkz_kernel_r_c_tl } }
+      {
+        \fp_eval:n
+          {
+            \__tenkz_kernel_r_compass:n { \tl_use:N \l__tenkz_kernel_r_c_tl }
+            + \l__tenkz_kernel_r_tau_tl
+          }
+      }
     \__tenkz_model_get:nnN {#1} {label} \l__tenkz_kernel_r_b_tl
     \quark_if_no_value:NF \l__tenkz_kernel_r_b_tl
       {
