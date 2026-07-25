@@ -120,24 +120,46 @@
       }
   }
 
-% apply a frame to a logical point; results are fp literals in pitch units
+% apply a frame to a logical point; results are fp literals in pitch units.
+% A circle frame reads the second coordinate as a station and the first as a
+% step inward, so the flat frame's rightward column becomes travel along the
+% ring and its downward row becomes travel toward the centre.  Both readings
+% accept fractions: a port half a cell east of its atom is half a station
+% further round.
 \cs_new_protected:Npn \__tenkz_geom_apply:nnnNNN #1#2#3#4#5#6
   {
     \tl_clear:N #4
     \tl_clear:N #5
-    \__tenkz_geom_require_kind:nnnN {#1} {affine} {apply} #6
-    \bool_if:NT #6
+    \bool_set_false:N #6
+    \prop_get:NnN \l__tenkz_geom_framekind_prop {#1} \l__tenkz_geom_kind_tl
+    \quark_if_no_value:NTF \l__tenkz_geom_kind_tl
+      { \msg_error:nnn {tenkz}{geom-unknown-frame} {#1} }
       {
-        \tl_set:Ne #4
-          { \fp_eval:n { \__tenkz_geom_field:nn{#1}{a} * (#2)
-                       + \__tenkz_geom_field:nn{#1}{b} * (#3)
-                       + \__tenkz_geom_field:nn{#1}{dx} } }
-        \tl_set:Ne #5
-          { \fp_eval:n { \__tenkz_geom_field:nn{#1}{c} * (#2)
-                       + \__tenkz_geom_field:nn{#1}{d} * (#3)
-                       + \__tenkz_geom_field:nn{#1}{dy} } }
+        \bool_set_true:N #6
+        \str_if_eq:VnTF \l__tenkz_geom_kind_tl {circle}
+          {
+            \tl_set:Ne #4
+              { \fp_eval:n
+                  { ( \__tenkz_geom_field:nn{#1}{r} - ( (#2) - 1 ) )
+                    * cosd( \__tenkz_geom_station_angle:nn {#1} {#3} ) } }
+            \tl_set:Ne #5
+              { \fp_eval:n
+                  { ( \__tenkz_geom_field:nn{#1}{r} - ( (#2) - 1 ) )
+                    * sind( \__tenkz_geom_station_angle:nn {#1} {#3} ) } }
+          }
+          {
+            \tl_set:Ne #4
+              { \fp_eval:n { \__tenkz_geom_field:nn{#1}{a} * (#2)
+                           + \__tenkz_geom_field:nn{#1}{b} * (#3)
+                           + \__tenkz_geom_field:nn{#1}{dx} } }
+            \tl_set:Ne #5
+              { \fp_eval:n { \__tenkz_geom_field:nn{#1}{c} * (#2)
+                           + \__tenkz_geom_field:nn{#1}{d} * (#3)
+                           + \__tenkz_geom_field:nn{#1}{dy} } }
+          }
       }
   }
+\tl_new:N \l__tenkz_geom_kind_tl
 \cs_new_protected:Npn \__tenkz_geom_apply:nnnNN #1#2#3#4#5
   {
     \__tenkz_geom_apply:nnnNNN {#1}{#2}{#3} #4 #5
@@ -162,6 +184,36 @@
       }
   }
 
+% The axes a frame gives a record.  An address on a carrier is read in the
+% carrier's axes, and the ink the frame measures is measured in them, so
+% every stage that turns ink or resolves a face asks this one question: by
+% what angle does the frame turn the axes at this address?  For an affine
+% frame the answer is its linear part -- the image of the logical direction
+% the flat frame sends to page east, the same everywhere -- and for a circle
+% frame it is the tangent, which varies by station.  A shear is not a turn:
+% under an affine frame that scales its axes unequally this angle is the
+% turn of one axis only, and the other follows the matrix.
+\cs_new_protected:Npn \__tenkz_geom_turn:nnnN #1#2#3#4
+  {
+    \prop_get:NnN \l__tenkz_geom_framekind_prop {#1} \l__tenkz_geom_kind_tl
+    \quark_if_no_value:NTF \l__tenkz_geom_kind_tl
+      { \msg_error:nnn {tenkz}{geom-unknown-frame} {#1} \tl_set:Nn #4 {0} }
+      {
+        \str_if_eq:VnTF \l__tenkz_geom_kind_tl {circle}
+          {
+            \tl_set:Ne #4
+              { \fp_eval:n
+                  { \__tenkz_geom_station_angle:nn {#1} {#3} - 90 } }
+          }
+          {
+            \tl_set:Ne #4
+              { \fp_eval:n
+                  { atand( \__tenkz_geom_field:nn{#1}{d} ,
+                           \__tenkz_geom_field:nn{#1}{b} ) } }
+          }
+      }
+  }
+
 % compass faces convert once, at the parse boundary
 \cs_new:Npn \__tenkz_geom_compass_angle:n #1
   {
@@ -174,6 +226,11 @@
 
 % station k of a circle frame: points sit clockwise from `start`, and the
 % travel tangent trails the radius by a quarter turn
+\cs_new:Npn \__tenkz_geom_station_angle:nn #1#2
+  {
+    \__tenkz_geom_field:nn{#1}{start}
+    - 360 * ( (#2) - 1 ) / \__tenkz_geom_field:nn{#1}{n}
+  }
 \cs_new_protected:Npn \__tenkz_geom_station:nnNNN #1#2#3#4#5
   {
     \tl_clear:N #3
@@ -184,9 +241,7 @@
     \bool_if:NT \l__tenkz_geom_kind_ok_bool
       {
         \tl_set:Ne \l__tenkz_geom_tmp_tl
-          { \fp_eval:n { \__tenkz_geom_field:nn{#1}{start}
-                         - 360 * ( (#2) - 1 )
-                           / \__tenkz_geom_field:nn{#1}{n} } }
+          { \fp_eval:n { \__tenkz_geom_station_angle:nn {#1} {#2} } }
         \tl_set:Ne #3
           { \fp_eval:n
               { \__tenkz_geom_field:nn{#1}{r} * cosd(\l__tenkz_geom_tmp_tl) } }
