@@ -43,10 +43,14 @@ and~\cite{Evans1978Spectral}.
     Equivalently, $\supp B$ would be invariant under every $K_i$, making the
     support projection of $B$ a nontrivial invariant projection.
 
-    Induct on an upper bound $n$ for $\dim\ker B$. The case $n=0$ is
-    immediate. In the induction step, either $B>0$, in which case
-    positivity of $E$ gives $T^n(B)>0$, or the strict kernel decrease places
-    $T(B)$ under the induction hypothesis. Since $A\neq0$, rank--nullity gives
+    We prove by induction on $n$ that every nonzero $B\geq0$ with
+    $\dim\ker B\leq n$ satisfies $T^n(B)>0$. For $n=0$, the kernel is
+    trivial, so $B>0$. Suppose the claim holds for $n$ and let
+    $\dim\ker B\leq n+1$. If $B>0$, then $T(B)=B+E(B)>0$, and every
+    subsequent iterate remains positive definite. Otherwise the strict
+    kernel decrease gives $\dim\ker T(B)\leq n$; the induction hypothesis
+    applied to $T(B)$ yields
+    $T^n(T(B))=T^{n+1}(B)>0$. Since $A\neq0$, rank--nullity gives
     $\dim\ker A\leq D-1$, which proves (\ref{eq:qpf_growth_pd}).
 \end{proof}
 
