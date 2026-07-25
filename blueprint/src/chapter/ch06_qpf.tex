@@ -15,7 +15,7 @@ and~\cite{Evans1978Spectral}.
 
 \section{Positive definiteness}
 
-\begin{theorem}[CP growth criterion from Wolf Theorem~6.2(2)]
+\begin{theorem}[Positive-definite growth for irreducible CP maps]
     \label{thm:growth_pd_irred}
     \lean{growth_posDef_of_irreducible_cp}
     \leanok
@@ -32,14 +32,26 @@ and~\cite{Evans1978Spectral}.
 \end{theorem}
 
 \begin{proof}\leanok
-    For a nonzero positive semidefinite matrix $B$, set $T(B)=B+E(B)$.
-    If $B$ is not positive definite, irreducibility forces
+    Choose a Kraus decomposition
+    \begin{align}
+        E(X)
+         & =\sum_i K_iXK_i^\dagger
+        \notag
+    \end{align}
+    and set $T(B)=B+E(B)$ for nonzero $B\geq0$. If $B$ is not positive
+    definite, irreducibility forces
     \begin{align}
         \dim\ker T(B)
          & <\dim\ker B.
         \notag
     \end{align}
-    Indeed, equality would make $\ker B$ invariant under every $K_i^\dagger$.
+    Indeed, equality would imply
+    \begin{align}
+        K_i^\dagger(\ker B)
+         & \subseteq\ker B
+        \qquad\text{for every }i.
+        \notag
+    \end{align}
     Equivalently, $\supp B$ would be invariant under every $K_i$, making the
     support projection of $B$ a nontrivial invariant projection.
 
@@ -67,16 +79,34 @@ and~\cite{Evans1978Spectral}.
     \leanok
     \uses{def:irreducible_cp}
     Suppose $\rho$ is not positive definite, and let $Q$ be its support
-    projection. The fixed-point equation implies
+    projection. Since $\rho=Q\rho Q$ and
+    $\rho=\sum_iA^i\rho(A^i)^\dagger$, the $(\Id-Q)$ corner satisfies
     \begin{align}
-        Q\E_A(QXQ)Q
-         & =\E_A(QXQ)
+        0
+         & =(\Id-Q)\rho(\Id-Q) \notag \\
+         & =\sum_i
+        \bigl((\Id-Q)A^iQ\bigr)\rho
+        \bigl((\Id-Q)A^iQ\bigr)^\dagger.
         \notag
     \end{align}
-    for every $X$, so $Q$ is invariant. Irreducibility forces
-    $Q=0$ or $Q=\Id$. The first case contradicts $\rho\neq0$, while the
-    second says that $\rho$ is positive definite. This is the
-    support-projection mechanism of
+    Every summand is positive semidefinite, so each vanishes. The restriction
+    of $\rho$ to its support is positive definite; hence
+    \begin{align}
+        (\Id-Q)A^iQ
+         & =0
+        \qquad\text{for every }i.
+        \notag
+    \end{align}
+    Thus $A^iQ=QA^iQ$, and for every $X$ each summand
+    $A^iQXQ(A^i)^\dagger$ lies in the $Q$ corner. Therefore
+    \begin{align}
+        Q\E_A(QXQ)Q
+         & =\E_A(QXQ),
+        \notag
+    \end{align}
+    so $Q$ is invariant. Irreducibility forces $Q=0$ or $Q=\Id$. The first
+    case contradicts $\rho\neq0$, while the second says that $\rho$ is
+    positive definite. This is the support-projection mechanism of
     \cite[Theorem~6.2(1)]{Wolf2012Quantum}.
 \end{proof}
 
@@ -108,8 +138,7 @@ and~\cite{Evans1978Spectral}.
 
 \begin{proof}
     \leanok
-    The growth theorem for irreducible CP maps
-    (\cite[Theorem~6.2(2)]{Wolf2012Quantum}) gives
+    Theorem~\ref{thm:growth_pd_irred} gives
     $(\Id + E)^{D-1}(A) > 0$.
     Since $B \ge 0$ is nonzero,
     $\tr(B(\Id + E)^{D-1}(A)) > 0$.
@@ -144,16 +173,24 @@ and~\cite{Evans1978Spectral}.
 \begin{proof}\leanok
     If $\sigma=0$, take $c=0$. Otherwise,
     Theorem~\ref{thm:psd_fp_pd_irred} makes both $\rho$ and $\sigma$
-    positive definite. Write $\rho=SS^\dagger$ and let $c_0>0$ be the
-    smallest eigenvalue of
-    $H=(S^\dagger)^{-1}\sigma S^{-1}$. Then
+    positive definite. Write $\rho=SS^\dagger$ and set
+    \begin{align}
+        H
+         & =S^{-1}\sigma(S^\dagger)^{-1}.
+        \notag
+    \end{align}
+    If $c_0>0$ is the smallest eigenvalue of $H$, then
+    $H-c_0\Id\geq0$ and $H-c_0\Id$ is singular. Since $S$ is invertible,
+    congruence by $S$ preserves positivity and singularity and gives
     \begin{align}
         \tau
          & =\sigma-c_0\rho
+        =S(H-c_0\Id)S^\dagger,
         \notag
     \end{align}
-    is a positive semidefinite fixed point with a zero eigenvalue. If
-    $\tau\neq0$, Theorem~\ref{thm:psd_fp_pd_irred} would make it positive
+    so $\tau$ is positive semidefinite and singular. Linearity makes $\tau$
+    a fixed point. If $\tau\neq0$,
+    Theorem~\ref{thm:psd_fp_pd_irred} would make it positive
     definite, a contradiction. Thus $\tau=0$ and $\sigma=c_0\rho$.
     This is the minimal-eigenvalue mechanism of
     \cite[Theorem~6.3(2)]{Wolf2012Quantum}.
@@ -738,13 +775,13 @@ The TP-gauge application follows~\cite[Appendix~A]{Cirac2016MPDO_arXiv}.
 
 \section{A CP spectral characterization of irreducibility}
 
-\begin{definition}[CP spectral package]
+\begin{definition}[Restricted CP spectral properties]
     \label{def:has_spectral_properties}
     \lean{HasSpectralProperties}
     \leanok
     \uses{def:cp_map}
-    A completely positive map $E$ on $\MN{D}$ has the \emph{CP spectral
-        package} used here if there exist a positive real number $r$, a positive
+    A completely positive map $E$ on $\MN{D}$ has the \emph{restricted CP
+        spectral properties} used here if there exist a positive real number $r$, a positive
     definite right eigenvector $\rho$, and a positive definite left eigenvector
     $\sigma$ for the adjoint map such that
     \begin{align}
@@ -762,7 +799,7 @@ The TP-gauge application follows~\cite[Appendix~A]{Cirac2016MPDO_arXiv}.
     eigenvector at $r$ is proportional to $\rho$.
 \end{definition}
 
-\begin{theorem}[Irreducibility gives the CP spectral package]
+\begin{theorem}[Irreducibility gives the restricted CP spectral properties]
     \label{thm:has_spectral_properties_irred}
     \lean{hasSpectralProperties_of_irreducible_cp}
     \leanok
@@ -770,7 +807,7 @@ The TP-gauge application follows~\cite[Appendix~A]{Cirac2016MPDO_arXiv}.
         thm:pf_eigenvector_existence, thm:psd_fp_unique_irred,
         thm:spectral_radius_pf_irred}
     Every nonzero irreducible completely positive map on $\MN{D}$ has the
-    CP spectral package of Definition~\ref{def:has_spectral_properties}.
+    restricted CP spectral properties of Definition~\ref{def:has_spectral_properties}.
 \end{theorem}
 
 \begin{proof}
@@ -783,13 +820,13 @@ The TP-gauge application follows~\cite[Appendix~A]{Cirac2016MPDO_arXiv}.
     Theorem~\ref{thm:spectral_radius_pf_irred}.
 \end{proof}
 
-\begin{theorem}[The CP spectral package implies irreducibility]
+\begin{theorem}[Restricted CP spectral properties imply irreducibility]
     \label{thm:irred_from_spectral_properties}
     \lean{isIrreducibleMap_of_hasSpectralProperties}
     \leanok
     \uses{def:has_spectral_properties, thm:tp_gauge_from_adjoint_fixed,
         lem:cesaro_subseq_fixed}
-    If a completely positive map on $\MN{D}$ has the CP spectral package of
+    If a completely positive map on $\MN{D}$ has the restricted CP spectral properties of
     Definition~\ref{def:has_spectral_properties}, then it is irreducible.
 \end{theorem}
 
@@ -805,18 +842,18 @@ The TP-gauge application follows~\cite[Appendix~A]{Cirac2016MPDO_arXiv}.
     Definition~\ref{def:has_spectral_properties}.
 \end{proof}
 
-\begin{theorem}[Irreducibility iff the CP spectral package holds]
+\begin{theorem}[Irreducibility iff the restricted CP spectral properties hold]
     \label{thm:irred_iff_spectral_properties}
     \lean{isIrreducibleMap_iff_spectral_properties}
     \leanok
     \uses{def:has_spectral_properties, def:irreducible_cp,
         thm:has_spectral_properties_irred, thm:irred_from_spectral_properties}
     Let $E$ be a nonzero completely positive map on $\MN{D}$.
-    Then $E$ is irreducible if and only if it has the CP spectral package of
+    Then $E$ is irreducible if and only if it has the restricted CP spectral properties of
     Definition~\ref{def:has_spectral_properties}. This is a CP-map variant of
     \cite[Theorem~6.4]{Wolf2012Quantum}: uniqueness is required only among
     positive semidefinite Perron eigenvectors, not on the full eigenspace.
-    That restricted package is nevertheless sufficient for the
+    Those restricted properties are nevertheless sufficient for the
     irreducibility equivalence.
 \end{theorem}
 
