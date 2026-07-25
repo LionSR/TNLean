@@ -16,7 +16,7 @@
     \lean{cesaroMean_telescope}
     \leanok
     \uses{def:cesaro_mean}
-    The Ces\`aro mean satisfies
+    For $N\geq1$, the Ces\`aro mean satisfies
     \begin{align}
         E(\sigma_N)-\sigma_N
          & =\frac{1}{N}(E^N(\rho_0)-\rho_0).
@@ -42,25 +42,24 @@
 
 \begin{proof}
     \leanok
-    \uses{thm:density_compact, thm:density_convex, thm:density_nonempty,
-        thm:channel_preserves_density, thm:cesaro_telescope}
+    \uses{thm:density_nonempty, lem:cesaro_mean_density,
+        lem:cesaro_subseq_fixed}
     Start with any $\rho_0\in\mc{D}_D$
     (Theorem~\ref{thm:density_nonempty}).
-    By Theorem~\ref{thm:channel_preserves_density}, every iterate
-    $E^n(\rho_0)$ lies in $\mc{D}_D$. For $N\geq1$,
-    Theorem~\ref{thm:density_convex} therefore places the finite average
-    $\sigma_N$ in $\mc{D}_D$.
-    By compactness (Theorem~\ref{thm:density_compact}),
-    extract a convergent subsequence $\sigma_{N_k}\to\rho$.
-    The telescope identity (\ref{eq:channel_cesaro_telescope}) gives
+    Lemma~\ref{lem:cesaro_mean_density} keeps every $\sigma_N$, $N\geq1$,
+    in the compact set $\mc{D}_D$, so a subsequence converges to some
+    $\rho\in\mc{D}_D$. The telescope identity
+    (\ref{eq:channel_cesaro_telescope}) gives
     \begin{align}
         \lVert E(\sigma_N)-\sigma_N\rVert
          & =\frac{1}{N}\lVert E^N(\rho_0)-\rho_0\rVert
         \longrightarrow0,
         \notag
     \end{align}
-    so $E(\rho)=\rho$ by continuity.
-    In~\cite[Theorem~6.11]{Wolf2012Quantum}, existence is proved
+    because the iterates $E^N(\rho_0)$ lie in the compact set
+    $\mc{D}_D$ and are therefore uniformly bounded. Equivalently,
+    Lemma~\ref{lem:cesaro_subseq_fixed} identifies the subsequential limit
+    as a fixed point. In~\cite[Theorem~6.11]{Wolf2012Quantum}, existence is proved
     via Brouwer's fixed-point theorem; we use the Ces\`aro
     argument instead.
 \end{proof}
