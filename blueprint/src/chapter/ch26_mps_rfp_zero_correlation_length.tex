@@ -379,6 +379,104 @@
     Theorem~\ref{thm:bnt_sector_supported_physical_observable} at this length.
 \end{proof}
 
+\begin{theorem}[Subleading spectral pair excludes positive-gap CID]%
+    \label{thm:zcl_subleading_pair_excludes_cid}
+    \lean{MPSTensor.IsBNTCanonicalForm.not_isPositiveGapPhysicalCID_basisDirectSum_of_basis_spectral_pair}
+    \leanok
+    \uses{def:is_positive_gap_physical_cid, def:sector_bnt_cf,
+        thm:bnt_rank_one_observables_sharp_length}
+    Let $P$ be a BNT canonical form, let $A=\bigoplus_k A_k$, and fix a
+    sector $j$. Suppose there are matrices $r,l\in\MN{D_j}$ and a scalar
+    $\lambda\ne0$ with $|\lambda|<1$ such that
+    \begin{align}
+        \bigl(\E_j(r),\E_j^*(l),\tr(lr)\bigr)
+        &=\bigl(\lambda r,\lambda l,1\bigr).
+        \notag
+    \end{align}
+    Then $A$ does not have positive-gap physical CID.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:bnt_rank_one_observables_sharp_length}
+    Let $\rho_j$ be the trace-one positive fixed point of $\E_j$. At the
+    common blocking length, choose physical observables with inserted transfer
+    maps
+    \begin{align}
+        \bigl(\E_{O_1}(X),\E_{O_2}(X)\bigr)
+        &=\bigl(\rho_j\tr(lX_{j,j}),r\tr(X_{j,j})\bigr).
+        \notag
+    \end{align}
+    The left eigenvector equation, together with
+    $\E_j(\rho_j)=\rho_j$, $\tr(\rho_j)=1$, and $\tr(lr)=1$, gives
+    \begin{align}
+        \langle O_1 O_2\rangle_{n_1,n_2}&=\lambda^{n_1}.
+        \notag
+    \end{align}
+    Positive-gap CID compares $(n_1,n_2)=(1,2)$ with $(2,1)$, so
+    $\lambda=\lambda^2$. Since $\lambda\ne0$, this forces $\lambda=1$,
+    contrary to $|\lambda|<1$.
+\end{proof}
+
+\begin{theorem}[Conditional converse and equivalence at the multiplicity-one representative]%
+    \label{thm:positive_gap_bnt_zcl_conditional_converse}
+    \lean{MPSTensor.IsBNTCanonicalForm.isTransferIdempotent_basisDirectSum_of_isPositiveGapBNTZCL_of_spectral_pair}
+    \lean{MPSTensor.IsBNTCanonicalForm.isPositiveGapBNTZCL_basisDirectSum_iff_isTransferIdempotent_of_spectral_pair}
+    \leanok
+    \uses{def:is_positive_gap_bnt_zcl, def:mps_transfer_idempotence,
+        def:sector_bnt_cf}
+    Let $P$ be a BNT canonical form and $A=\bigoplus_j A_j$. Assume that every
+    non-idempotent block $\E_j^2\ne\E_j$ has matrices $r_j,l_j$ and a scalar
+    $\lambda_j$ satisfying the five spectral conditions in
+    Theorem~\ref{thm:zcl_subleading_pair_excludes_cid}. Then
+    \begin{align}
+        A\text{ has positive-gap BNT ZCL}
+        &\Longleftrightarrow \E_A^2=\E_A.
+        \notag
+    \end{align}
+    % CPSV16 local source line 1250.
+    The extra spectral assumption is the assertion used in the proof of
+    \cite[Theorem~3.8]{Cirac2016MPDO_arXiv}; it is not a consequence
+    of non-idempotence for a general linear operator.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:zcl_subleading_pair_excludes_cid,
+        thm:direct_sum_transfer_idempotent_iff_pairwise_mixed,
+        thm:rfp_implies_positive_gap_bnt_zcl_cf_basis_direct_sum}
+    If some $\E_j$ were not idempotent, its assumed spectral pair would
+    contradict physical CID by
+    Theorem~\ref{thm:zcl_subleading_pair_excludes_cid}. Thus every diagonal
+    mixed transfer map is idempotent. Local orthogonality makes every
+    off-diagonal mixed transfer map zero, so
+    Theorem~\ref{thm:direct_sum_transfer_idempotent_iff_pairwise_mixed} gives
+    $\E_A^2=\E_A$. The reverse implication is
+    Theorem~\ref{thm:rfp_implies_positive_gap_bnt_zcl_cf_basis_direct_sum}.
+\end{proof}
+
+\begin{theorem}[Source physical ZCL implies idempotence under the spectral assumption]%
+    \label{thm:physical_bnt_zcl_conditional_converse}
+    \lean{MPSTensor.IsBNTCanonicalForm.isTransferIdempotent_basisDirectSum_of_isPhysicalBNTZCL_of_spectral_pair}
+    \leanok
+    \uses{def:mps_transfer_idempotence, def:sector_bnt_cf}
+    Under the assumptions of
+    Theorem~\ref{thm:positive_gap_bnt_zcl_conditional_converse}, source
+    physical BNT zero correlation length for $A=\bigoplus_j A_j$ implies
+    $\E_A^2=\E_A$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:positive_gap_bnt_zcl_conditional_converse}
+    Source physical CID includes all positive-gap configurations. Apply the
+    forward implication in
+    Theorem~\ref{thm:positive_gap_bnt_zcl_conditional_converse}.
+\end{proof}
+
+\begin{theorem}[Unconditional reverse implication at the multiplicity-one representative]%
+    \label{thm:positive_gap_bnt_zcl_unconditional_converse}
+    \notready
+    \uses{def:is_positive_gap_bnt_zcl, def:mps_transfer_idempotence,
+        def:sector_bnt_cf}
+    Let $P$ be a BNT canonical form and $A=\bigoplus_j A_j$. If $A$ has
+    positive-gap BNT zero correlation length, then $\E_A^2=\E_A$.
+\end{theorem}
+
 \begin{remark}[Remaining obstructions in the printed converse]
     For the multiplicity-one unit-weight representative, the sector-supported
     observables require no additional hypothesis. The full canonical-form

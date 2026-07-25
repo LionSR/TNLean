@@ -54,32 +54,6 @@ private theorem sectorSingleSum_apply_same (j : Fin r)
     simp [hx]
   · simp
 
-private theorem sectorSingleSum_apply_left_ne (j k : Fin r) (hjk : j ≠ k)
-    (R : Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
-    (a : Fin (dim k)) (v : Fin (∑ x, dim x)) :
-    (∑ x, ∑ y, Matrix.single (finSigmaFinEquiv ⟨j, x⟩)
-      (finSigmaFinEquiv ⟨j, y⟩) (R x y)) (finSigmaFinEquiv ⟨k, a⟩) v = 0 := by
-  classical
-  simp only [Matrix.sum_apply]
-  apply Finset.sum_eq_zero
-  intro x _
-  apply Finset.sum_eq_zero
-  intro y _
-  simp [hjk]
-
-private theorem sectorSingleSum_apply_right_ne (j k : Fin r) (hjk : j ≠ k)
-    (R : Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
-    (u : Fin (∑ x, dim x)) (c : Fin (dim k)) :
-    (∑ x, ∑ y, Matrix.single (finSigmaFinEquiv ⟨j, x⟩)
-      (finSigmaFinEquiv ⟨j, y⟩) (R x y)) u (finSigmaFinEquiv ⟨k, c⟩) = 0 := by
-  classical
-  simp only [Matrix.sum_apply]
-  apply Finset.sum_eq_zero
-  intro x _
-  apply Finset.sum_eq_zero
-  intro y _
-  simp [hjk]
-
 /-- Inclusion of a matrix into one diagonal sector of a direct-sum bond space. -/
 noncomputable def directSumSectorInclusion (j : Fin r) :
     Matrix (Fin (dim j)) (Fin (dim j)) ℂ →ₗ[ℂ]
@@ -280,13 +254,12 @@ theorem not_isPositiveGapPhysicalCID_basisDirectSum_of_basis_spectral_pair
     (hCF : IsBNTCanonicalForm P) (j : Fin P.basisCount)
     {ν : ℂ} {r l : Matrix (Fin (P.basisDim j)) (Fin (P.basisDim j)) ℂ}
     (hν_ne : ν ≠ 0) (hν_norm : ‖ν‖ < 1)
-    (hr : Module.End.HasEigenvector (transferMap (P.basis j)) ν r)
+    (_hr : Module.End.HasEigenvector (transferMap (P.basis j)) ν r)
     (hl : Module.End.HasEigenvector
       (Matrix.traceAdjointMap (transferMap (P.basis j))) ν l)
     (hlr : Matrix.trace (l * r) = 1) :
     ¬ IsPositiveGapPhysicalCID (directSumTensor P.basis) := by
   classical
-  have _hr_ne : r ≠ 0 := hr.2
   letI : NeZero (P.basisDim j) := ⟨(hCF.basis_dim_pos j).ne'⟩
   let E := transferMap (P.basis j)
   have hCh : IsChannel E := by
@@ -315,7 +288,7 @@ theorem not_isPositiveGapPhysicalCID_basisDirectSum_of_basis_spectral_pair
   intro hCID
   have hEq := hCID L L O₁ O₂ 1 2 2 1 hL_pos hL_pos
     (by norm_num) (by norm_num) (by norm_num) (by norm_num) (by norm_num)
-  have hExpectation (n₁ n₂ : ℕ) (hn₂ : 0 < n₂) :
+  have hExpectation (n₁ n₂ : ℕ) :
       physicalTwoPointExpectation (directSumTensor P.basis) L L O₁ O₂ n₁ n₂ =
         ν ^ n₁ := by
     unfold physicalTwoPointExpectation
@@ -366,7 +339,7 @@ theorem not_isPositiveGapPhysicalCID_basisDirectSum_of_basis_spectral_pair
       simp [smul_smul]
     rw [hcomp, map_smul, trace_directSumSectorRankOne, hlr]
     simp
-  rw [hExpectation 1 2 (by norm_num), hExpectation 2 1 (by norm_num),
+  rw [hExpectation 1 2, hExpectation 2 1,
     pow_one, pow_two] at hEq
   have hν_one : ν = 1 := by
     exact (mul_left_cancel₀ hν_ne (by simpa [mul_assoc] using hEq)).symm
