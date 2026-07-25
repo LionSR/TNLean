@@ -164,6 +164,30 @@ abstracted — record why, so it is not re-proposed).
   body, is unchanged; the `triFiber_card`, `agreeing_summand_eq`, and
   `agreeingTripleSum_collapse` consumers compile untouched.
 
+### Gauge-extraction ladder packaged for matrix-algebra endomorphisms
+- **Pattern:** three sites re-ran the same four-step gauge ladder —
+  simplicity-bijectivity (`linear_mul_endomorphism_bijective`) →
+  `linearMapToAlgHom` → `AlgEquiv.ofBijective` → `skolemNoether_matrix` → inner —
+  plus per-site shims unwrapping the algebra equivalence back to the linear map:
+  four `change`-shims in `fundamentalTheorem_singleBlock`
+  (`MPS/FundamentalTheorem/Basic.lean`), a 7-line `f`↦`Φ` unwrap in
+  `exists_conjugation_of_sameState` (`PEPS/CycleMPSChainOverlapInsertion.lean`),
+  and three `show … from rfl` rewrites in
+  `forward_det_one_implies_unitaryChannel`
+  (`Channel/Determinant/UnitaryCharacterization.lean`). Two sites also
+  duplicated a 5–6-line unital⇒nonzero inline proof.
+- **Reuse:** `MPSTensor.exists_inner_of_linear_mul_endomorphism` relocated from
+  `FundamentalTheorem/Basic.lean` to `Algebra/SkolemNoether.lean` beside its
+  three ingredients; all three sites now obtain the gauge matrix in one
+  `obtain`, and the unital⇒nonzero duplications use the new
+  `MPSTensor.linearMap_ne_zero_of_map_one` (`T 1 = 1 → T ≠ 0`).
+  `Chain/AlgebraIsomorphism.lean` now imports `Algebra.SkolemNoether` directly
+  (its `FundamentalTheorem.Basic` import existed solely for the lemma).
+- **Result:** 5 files changed, 51 insertions against 64 deletions (13 lines
+  net; 29 lines net at the three migration sites). All theorem statements and
+  blueprint links unchanged. This finishes #4595's migration and discharges
+  the last open item of #4518 (ledger D2).
+
 ---
 
 ## Candidates
