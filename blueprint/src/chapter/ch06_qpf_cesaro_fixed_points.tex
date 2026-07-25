@@ -1,0 +1,66 @@
+\section{Ces\`aro fixed points for quantum channels}
+
+\begin{definition}[Ces\`aro mean]\label{def:cesaro_mean}
+    \lean{cesaroMean}
+    \leanok
+    The \emph{Ces\`aro mean} of a linear map $E$ at order $N$,
+    applied to a starting matrix $\rho_0$, is
+    \begin{align}
+        \sigma_N
+         & =\frac{1}{N}\sum_{n=0}^{N-1}E^n(\rho_0).
+        \label{eq:channel_cesaro_mean}
+    \end{align}
+\end{definition}
+
+\begin{theorem}[Ces\`aro telescope]\label{thm:cesaro_telescope}
+    \lean{cesaroMean_telescope}
+    \leanok
+    \uses{def:cesaro_mean}
+    The Ces\`aro mean satisfies
+    \begin{align}
+        E(\sigma_N)-\sigma_N
+         & =\frac{1}{N}(E^N(\rho_0)-\rho_0).
+        \label{eq:channel_cesaro_telescope}
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok\uses{def:cesaro_mean}
+    Applying $E$ to (\ref{eq:channel_cesaro_mean}) gives
+    $E(\sigma_N)=N^{-1}\sum_{n=1}^{N}E^n(\rho_0)$.
+    Subtracting $\sigma_N$ cancels all but the first and last terms, yielding
+    (\ref{eq:channel_cesaro_telescope}).
+\end{proof}
+
+\begin{theorem}[Ces\`aro fixed-point theorem]\label{thm:cesaro_fixedpoint}
+    \lean{IsChannel.exists_posSemidef_fixedPoint}
+    \leanok
+    \uses{def:channel, def:density_matrices, def:cesaro_mean}
+    Every quantum channel $E:\MN{D}\to\MN{D}$, with $D\geq1$, has a nonzero
+    positive semidefinite fixed point: there exists $\rho\geq0$, $\rho\neq0$,
+    with $E(\rho)=\rho$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:density_compact, thm:density_convex, thm:density_nonempty,
+        thm:channel_preserves_density, thm:cesaro_telescope}
+    Start with any $\rho_0\in\mc{D}_D$
+    (Theorem~\ref{thm:density_nonempty}).
+    By Theorem~\ref{thm:channel_preserves_density}, every iterate
+    $E^n(\rho_0)$ lies in $\mc{D}_D$. For $N\geq1$,
+    Theorem~\ref{thm:density_convex} therefore places the finite average
+    $\sigma_N$ in $\mc{D}_D$.
+    By compactness (Theorem~\ref{thm:density_compact}),
+    extract a convergent subsequence $\sigma_{N_k}\to\rho$.
+    The telescope identity (\ref{eq:channel_cesaro_telescope}) gives
+    \begin{align}
+        \lVert E(\sigma_N)-\sigma_N\rVert
+         & =\frac{1}{N}\lVert E^N(\rho_0)-\rho_0\rVert
+        \longrightarrow0,
+        \notag
+    \end{align}
+    so $E(\rho)=\rho$ by continuity.
+    In~\cite[Theorem~6.11]{Wolf2012Quantum}, existence is proved
+    via Brouwer's fixed-point theorem; we use the Ces\`aro
+    argument instead.
+\end{proof}
