@@ -168,13 +168,65 @@ normalization, the formal statements prove the equivalence between the paper's
 primitive condition and eventual full Kraus rank, so using normality as an
 intermediate hypothesis is legitimate.
 
+\section{Scope of the index comparison}
+
+Proposition~1 of~\cite{Sanz2010Quantum} states
+\[
+    q(\mathcal E_A)\leq i(A)
+\]
+for every quantum channel. The present tagged theorem
+\leanid{MPSTensor.qIndex_le_iIndex_of_isPrimitivePaper} assumes both
+trace-preserving normalization and \leanid{MPSTensor.IsPrimitivePaper}. It is
+therefore a specialization of Proposition~1, not yet the source theorem with
+its full hypothesis set. The lower-level theorem
+\leanid{MPSTensor.qIndex_le_iIndex} assumes eventual full Kraus rank, so it has
+the same finite-index restriction in a different form.
+
+The missing cases are mathematically degenerate but must still be represented
+explicitly. If the channel is not primitive, then the admissible set defining
+$q(\mathcal E_A)$ is empty and the formal convention gives $q(\mathcal E_A)=0$.
+If it does not have eventual full Kraus rank, the corresponding admissible set
+for $i(A)$ is empty and $i(A)=0$. A source-faithful theorem can therefore be
+obtained by proving these two zero-index characterizations and splitting on
+primitivity, using the existing primitive-channel inequality in the nontrivial
+case. The relevant definitions and the restricted theorem are in
+\path{TNLean/Wielandt/Primitivity/Definitions.lean} and
+\path{TNLean/Wielandt/Inequality/Bounds.lean:118--124}.
+
+\section{Scope of the strong-irreducibility equivalence}
+
+Proposition~3(c) of~\cite{Sanz2010Quantum} asks for a unique peripheral
+eigenvalue and a positive-definite corresponding eigenvector. The current
+predicate \leanid{MPSTensor.IsStronglyIrreduciblePaper} additionally carries
+\leanid{IsIrreducibleMap (transferMap A)} as an explicit conjunct. Consequently,
+the equivalences
+\leanid{MPSTensor.primitivePaper_iff_stronglyIrreducible} and
+\leanid{MPSTensor.hasEventuallyFullKrausRank_iff_stronglyIrreducible} prove a
+strengthened version of Proposition~3 rather than its literal third clause.
+This strengthened interpretation is documented in
+\path{TNLean/Wielandt/Primitivity/Definitions.lean:219--224} and
+\path{docs/glossary.md}.
+
+To remove the restriction, define the literal source predicate using only the
+positive-definite fixed point and peripheral-eigenvalue uniqueness, then prove
+that it implies transfer-map irreducibility for a normalized completely
+positive map. This implication supplies the extra conjunct of the existing
+predicate, after which the established equivalences yield the literal
+Proposition~3. Alternatively, the three equivalence directions may be reproved
+directly for the source predicate. Until that bridge is formalized, the
+blueprint identifies the tagged theorem as a strengthened form and retains the
+literal source condition in its main-text statement.
+
 \section{Conclusion}
 
 The general quantum Wielandt bound has been formalized with the right index and
-with the paper's linearly independent Kraus count made explicit. The remaining
-difference concerns only the two improved estimates.
+with the paper's linearly independent Kraus count made explicit. Three local
+scope restrictions remain: the formal index comparison assumes primitivity, the
+formal strong-irreducibility predicate carries an extra irreducibility conjunct,
+and the two improved estimates distinguish a chosen Kraus operator from an
+arbitrary element of the one-step span.
 
-For those estimates, the paper assumes that the one-step space $S_1(A)$ contains
+For the improved estimates, the paper assumes that the one-step space $S_1(A)$ contains
 a matrix with a specified spectral property. The formal statements presently
 assume that such a matrix is one of the chosen Kraus operators. This is a
 stronger hypothesis. Mathematically, the expected correction is clear: prove the
