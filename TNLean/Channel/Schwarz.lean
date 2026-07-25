@@ -39,6 +39,7 @@ import TNLean.Channel.Schwarz.SchwarzSubnormal
 import TNLean.Channel.Schwarz.StrongSubadditivityPosDef
 import TNLean.Channel.Schwarz.SupportRelativeModular
 import TNLean.Channel.Schwarz.SupportResolvent
+import TNLean.Channel.Schwarz.SupportSourceBDefect
 import TNLean.Channel.Schwarz.TwoPositive
 import TNLean.Channel.Schwarz.WeylRelativeEntropyIntegral
 import TNLean.Channel.Schwarz.WeylTwirl

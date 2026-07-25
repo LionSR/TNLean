@@ -745,6 +745,60 @@
     follows term by term from the finite sums.
 \end{proof}
 
+\begin{lemma}[Nonnegativity of the finite-family source-$B$ support defect]
+    \label{lem:support_sourceB_quadratic_sum_sub_nonnegative}
+    \lean{Matrix.supportSourceBQuadratic_sum_sub_nonneg}
+    \leanok
+    \uses{thm:relative_entropy_support_left_right_quadratic,
+      lem:support_resolvent_residual_identity}
+    Let $I$ be a finite nonempty set. For each $i\in I$, let $A_i$ and $B_i$
+    be positive-semidefinite matrices of the same size. For $t>0$, write
+    \begin{align}
+        Q^B_{A_i,B_i}(t)
+        &=
+        \re\left\langle
+          \opvec(B_i^{\mathsf T}),
+          \bigl(A_i\otimes\mathbf 1+
+            t(\mathbf 1\otimes B_i^{\mathsf T})\bigr)^+
+          \opvec(B_i^{\mathsf T})
+        \right\rangle.
+        \notag
+    \end{align}
+    Then
+    \begin{align}
+        0
+        &\leq
+        \sum_{i\in I}Q^B_{A_i,B_i}(t)
+          -Q^B_{\sum_i A_i,\sum_i B_i}(t).
+        \notag
+    \end{align}
+    No kernel inclusion between $A_i$ and $B_i$ is required. This lemma is a
+    positive-semidefinite support-domain extension of the positive-definite
+    calculation in equations $(\mathrm{Mj})$, $(\mathrm{eq:Schz1})$, and
+    $(\mathrm{eq:Schwzt})$ at lines~1299--1328 of Jen\v{c}ov\'a--Ruskai,
+    arXiv:0903.2895v4; their generalized-inverse notation is given at
+    lines~254--262. The paper does not state this extension. Its later
+    singular equality theorem at lines~761--785 assumes
+    $\ker B_i\subseteq\ker A_i$ and is not asserted here. The subsequent
+    singular entropy-equality passage is recorded in
+    \path{docs/paper-gaps/cpsv16_ssa_equality_hayashi_markov.tex}.
+\end{lemma}
+
+\begin{proof}\leanok
+    Put
+    \begin{align}
+        S_i
+        &=A_i\otimes\mathbf 1+t(\mathbf 1\otimes B_i^{\mathsf T}),&
+        b_i&=\opvec(B_i^{\mathsf T}).
+        \notag
+    \end{align}
+    The source equation for the support relative-modular operator shows that
+    $b_i$ lies in the support of $S_i$. The same argument applied to
+    $\sum_i A_i$ and $\sum_i B_i$ shows that $\sum_i b_i$ lies in the
+    support of $\sum_i S_i$. The support-resolvent residual identity writes
+    the displayed defect as a sum of nonnegative quadratic residuals.
+\end{proof}
+
 % Open in #4435: the singular, support-domain passage from the finite-Weyl
 % equality above to the common-resolvent conclusion remains to be proved.
 % The positive-definite relative-modular theorem and the generic
