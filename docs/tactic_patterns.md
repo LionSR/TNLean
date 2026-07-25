@@ -96,6 +96,25 @@ abstracted — record why, so it is not re-proposed).
   lines fell from 666 to 481 (185 lines net). The public theorem statement and
   blueprint link are unchanged.
 
+### Bijective sector matching from directional existentials
+- **Pattern:** The equal-MPV (`bijective_match_of_sameMPV`) and proportional
+  (`bijective_match_of_eventuallyProportional`) bijection constructions each
+  rebuilt the same injective-map-plus-cardinality argument (the `φ₀`-centred
+  rebase, `Fintype.card_le_of_injective`, `Equiv.ofBijective`), about 75
+  lines verbatim in both files.
+- **Reuse:** Both theorems now call `bijection_from_matches` in
+  `SectorBNT/MatchAux.lean`, parameterized by the forward and backward
+  existential-match hypotheses. The equal-MPV existentials are obtained from
+  the proportional matcher through
+  `SameMPV₂Pos.toNonzeroProportionalMPV₂.eventually`, and the proportional
+  matcher itself moved down to `ProportionalMatch/Core.lean` so both routes
+  sit above it in the import graph.
+- **Result:** `StrongMatch.lean` fell from 259 to 72 lines and
+  `ProportionalMatch.lean` from 267 to 140; `MatchAux.lean` grew by 85 lines
+  and `ProportionalMatch/Core.lean` by 34. Net 176 insertions against 320
+  deletions (144 lines net). All public theorem statements and blueprint
+  links are unchanged.
+
 ### Cyclic-sector compression transport
 - **Pattern:** the transfer-intertwining branch in
   `exists_compressedTensor_of_supported_projection_with_letter_and_isometry`

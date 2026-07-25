@@ -282,4 +282,40 @@ theorem exists_block_match_exact_of_eventuallyProportional
         (hNot := hNot)
   exact ⟨k₀, hDim, hGPE, hk₀⟩
 
+/-! ### Full-basis proportional matching (Q → P direction)
+
+For every sector `k` of `Q`, there exists a sector `j` of `P` of equal
+bond dimension, gauge-phase equivalent in the cast-compatible shape, and
+with non-decaying cross-overlap.  This is the proportional analogue of
+the strong existential matching theorem (equal-MPV case).
+
+Paper anchor: CPSV16 §II.C lines 349–352 (theorem `thm1`);
+Appendix MPV theorem statement lines 1167–1170 and Appendix MPV proof
+line 1182 (matching). -/
+theorem forall_k_exists_j_nondecaying_overlap_of_eventuallyProportional
+    {P Q : SectorDecomposition d}
+    (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
+    (hProp : EventuallyNonzeroProportionalMPV₂ P.toTensor Q.toTensor) :
+    ∀ k : Fin Q.basisCount,
+      ∃ (j : Fin P.basisCount) (h : P.basisDim j = Q.basisDim k),
+        GaugePhaseEquiv
+            (cast (congr_arg (MPSTensor d) h) (P.basis j))
+            (Q.basis k) ∧
+        ¬ Tendsto (fun N : ℕ =>
+            mpvOverlap (d := d) (P.basis j) (Q.basis k) N)
+          atTop (𝓝 0) := by
+  classical
+  intro k
+  have hProp_symm : EventuallyNonzeroProportionalMPV₂ Q.toTensor P.toTensor :=
+    hProp.symm
+  obtain ⟨j, hsymDim, hGE_swapped, hNonDecay_swapped⟩ :=
+    exists_block_match_exact_of_eventuallyProportional
+      (P := Q) (Q := P) hQ hP k hProp_symm
+  refine ⟨j, hsymDim.symm, ?_, ?_⟩
+  · exact gaugePhaseEquiv_swap_cast hsymDim.symm
+      (by simpa using hGE_swapped)
+  · intro hTend
+    apply hNonDecay_swapped
+    exact tendsto_mpvOverlap_zero_swap (P.basis j) (Q.basis k) hTend
+
 end MPSTensor
