@@ -1,16 +1,15 @@
 \chapter{Perron--Frobenius Theory for Channels and Transfer Maps: Supporting Results}
 \label{ch:qpf_supporting_results}
 
-This appendix supports Chapter~\ref{ch:qpf}. It proves the density-matrix
-properties used in the elementary channel fixed-point existence theorem.
+This appendix supplies the compactness, gauge, similarity, and finite-sum
+calculations used in Chapter~\ref{ch:qpf}.
 
-\section{Density matrices and the Ces\`aro construction}
+\section{Density matrices, Brouwer's theorem, and Ces\`aro limits}
+\label{sec:app_qpf_density}
 
-This section proves the compactness, convexity, nonemptiness, and invariance
-facts used in Theorem~\ref{thm:cesaro_fixedpoint}. Write $\mc{D}_D$ for the
-density matrices of Definition~\ref{def:density_matrices}; the Ces\`aro means
-$\sigma_N$ and their telescope identity remain in
-Definition~\ref{def:cesaro_mean} and Theorem~\ref{thm:cesaro_telescope}.
+Write $\mc{D}_D$ for the density matrices of
+Definition~\ref{def:density_matrices}. The next results provide the compact
+convex domain and the limit argument used for channel fixed points.
 
 \begin{theorem}[Density matrices are compact]\label{thm:density_compact}
     \lean{densityMatrices_isCompact}
@@ -67,5 +66,259 @@ Definition~\ref{def:cesaro_mean} and Theorem~\ref{thm:cesaro_telescope}.
     gives $\tr(E(\rho)) = \tr(\rho) = 1$.
 \end{proof}
 
-Together these results keep the Ces\`aro orbit inside a compact nonempty set of
-density matrices, as required in Theorem~\ref{thm:cesaro_fixedpoint}.
+\begin{theorem}[Brouwer fixed point on density matrices]%
+    \label{thm:brouwer_density_matrices}
+    \lean{brouwer_fixedPoint_densityMatrices}
+    \lean{fixedPoint_of_compact_retract, fixedPoint_of_compact_retract_fin}
+    \lean{exists_fixedPoint_closedCube, exists_fixedPoint_unitCube}
+    \leanok
+    \uses{def:density_matrices, thm:density_compact}
+    Let $D > 0$. Every continuous map from the compact convex set of
+    density matrices in $\MN{D}$ to itself has a fixed point.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The proof starts from Brouwer's theorem for products of simplices,
+    transfers it to closed cubes, and then to compact retracts of
+    finite-dimensional real normed spaces. The density-matrix set is
+    such a compact retract, using the explicit density retraction.
+\end{proof}
+
+\begin{lemma}[Ces\`aro means remain density matrices]
+    \label{lem:cesaro_mean_density}
+    \lean{IsChannel.cesaroMean_mem_densityMatrices}
+    \leanok
+    \uses{def:cesaro_mean, thm:channel_preserves_density, thm:density_convex}
+    Let $E$ be a quantum channel and $\rho\in\mc{D}_D$. Then, for every
+    $N\geq0$,
+    \begin{align}
+        \frac{1}{N+1}\sum_{n=0}^{N}E^n(\rho)
+         & \in\mc{D}_D.
+        \label{eq:qpf_cesaro_density}
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    Every iterate $E^n(\rho)$ belongs to $\mc{D}_D$ by
+    Theorem~\ref{thm:channel_preserves_density}. Equation
+    (\ref{eq:qpf_cesaro_density}) is their convex average: positivity is
+    preserved by sums and multiplication by $(N+1)^{-1}$, while its trace is
+    $(N+1)^{-1}\sum_{n=0}^{N}1=1$.
+\end{proof}
+
+\begin{lemma}[Subsequential Ces\`aro limits are fixed points]
+    \label{lem:cesaro_subseq_fixed}
+    \lean{IsChannel.cesaroMean_subseq_limit_fixedPoint}
+    \leanok
+    \uses{lem:cesaro_mean_density, thm:density_compact,
+        thm:cesaro_telescope}
+    Let $E$ be a quantum channel, $\rho\in\mc{D}_D$, and
+    $\psi:\N\to\N$ satisfy $\psi(k)\to\infty$. If
+    \begin{align}
+        \frac{1}{\psi(k)+1}\sum_{n=0}^{\psi(k)}E^n(\rho)
+         & \longrightarrow\sigma,
+        \notag
+    \end{align}
+    then $\sigma\in\mc{D}_D$ and $E(\sigma)=\sigma$.
+\end{lemma}
+
+\begin{proof}\leanok
+    Lemma~\ref{lem:cesaro_mean_density} and closedness of the compact set
+    $\mc{D}_D$ give $\sigma\in\mc{D}_D$. The telescope identity yields
+    \begin{align}
+        E(\sigma_{\psi(k)+1})-\sigma_{\psi(k)+1}
+         & =\frac{E^{\psi(k)+1}(\rho)-\rho}{\psi(k)+1}.
+        \notag
+    \end{align}
+    Both $E^{\psi(k)+1}(\rho)$ and $\rho$ lie in the compact set
+    $\mc{D}_D$, so their difference is uniformly bounded. The right-hand
+    side tends to zero. Continuity of $E$ and convergence of the subsequence
+    therefore give $E(\sigma)-\sigma=0$.
+\end{proof}
+
+\section{Canonical-gauge algebra}
+\label{sec:app_qpf_gauge}
+
+For the right-canonical gauge in
+Theorem~\ref{thm:right_canonical_gauge}, each summand becomes
+\begin{align}
+    (S^{-1}A^iS)(S^{-1}A^iS)^\dagger
+     & =S^{-1}A^iSS^\dagger(A^i)^\dagger(S^\dagger)^{-1}
+    \notag                                               \\
+     & =S^{-1}A^i\rho(A^i)^\dagger(S^\dagger)^{-1}.
+    \notag
+\end{align}
+Hence
+\begin{align}
+    \sum_iA'^i(A'^i)^\dagger
+     & =S^{-1}\E_A(\rho)(S^\dagger)^{-1}
+    =S^{-1}\rho(S^\dagger)^{-1}
+    =\Id.
+    \notag
+\end{align}
+For the left-canonical gauge in Theorem~\ref{thm:left_canonical_gauge},
+\begin{align}
+    (SA^iS^{-1})^\dagger(SA^iS^{-1})
+     & =(S^\dagger)^{-1}(A^i)^\dagger S^\dagger SA^iS^{-1}
+    \notag                                                 \\
+     & =(S^\dagger)^{-1}(A^i)^\dagger\sigma A^iS^{-1},
+    \notag
+\end{align}
+and therefore
+\begin{align}
+    \sum_i(A'^i)^\dagger A'^i
+     & =(S^\dagger)^{-1}
+    \left(\sum_i(A^i)^\dagger\sigma A^i\right)S^{-1}
+    =(S^\dagger)^{-1}\sigma S^{-1}
+    =\Id.
+    \notag
+\end{align}
+Finally, for the square-root gauge
+(\ref{eq:qpf_tp_gauge}), self-adjointness of $\sigma^{1/2}$ gives
+\begin{align}
+    (B^i)^\dagger B^i
+     & =\sigma^{-1/2}(A^i)^\dagger
+    \sigma^{1/2}\sigma^{1/2}A^i\sigma^{-1/2}
+    \notag                                                 \\
+     & =\sigma^{-1/2}(A^i)^\dagger\sigma A^i\sigma^{-1/2}.
+    \notag
+\end{align}
+Summing, substituting the adjoint fixed-point equation, and cancelling the
+outer square-root factors yields
+\begin{align}
+    \sum_i(B^i)^\dagger B^i
+     & =\sigma^{-1/2}
+    \left(\sum_i(A^i)^\dagger\sigma A^i\right)\sigma^{-1/2}
+    =\sigma^{-1/2}\sigma\sigma^{-1/2}
+    =\Id.
+    \notag
+\end{align}
+
+\begin{lemma}[Square-root trace-preserving gauge is a gauge equivalence]%
+    \label{lem:tp_gauge_equiv}
+    \lean{MPSTensor.gaugeEquiv_tpGauge}
+    \leanok
+    \uses{def:gauge_equiv}
+    If $\sigma$ is positive definite and $B$ is defined by
+    (\ref{eq:qpf_tp_gauge}), then $A$ and $B$ are gauge equivalent.
+\end{lemma}
+
+\begin{proof}\leanok
+    The gauge matrix is $\sigma^{1/2}$, which is invertible because
+    $\sigma$ is positive definite. Thus (\ref{eq:qpf_tp_gauge}) has the form
+    of the gauge relation (\ref{eq:mps_gauge_equiv}).
+\end{proof}
+
+\section{Similarity bookkeeping}
+\label{sec:app_qpf_similarity}
+
+\begin{lemma}[Similarity is an involution]%
+    \label{lem:similarity_involution}
+    \lean{similarityMap_similarityMap_inv}
+    \leanok
+    For any invertible $C \in \MN{D}$ and any linear map $E$ on $\MN{D}$,
+    write $S_C(E)(X)=C^{-1}E(CXC^\dagger)(C^\dagger)^{-1}$ for the
+    similarity transform by $C$. The transforms by $C$ and $C^{-1}$ compose
+    to the identity:
+    \begin{align}
+        S_{C^{-1}}(S_C(E))(X)
+         & =C\left[C^{-1}E\!\left(C(C^{-1}X(C^\dagger)^{-1})C^\dagger\right)
+                 (C^\dagger)^{-1}\right]C^\dagger \notag \\
+         & =E(X).
+        \label{eq:qpf_similarity_involution}
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    Direct computation: the inner conjugation
+    $C(C^{-1}X(C^\dagger)^{-1})C^\dagger$ collapses to $X$
+    using $CC^{-1} = \Id$ and $(C^\dagger)^{-1}C^\dagger = \Id$, and the
+    outer conjugation by $C(\,\cdot\,)C^\dagger$ then cancels the inner
+    $C^{-1}(\,\cdot\,)(C^\dagger)^{-1}$ on $E(X)$ for the same reason.
+\end{proof}
+
+\begin{lemma}[Irreducibility is invariant under similarity]%
+    \label{lem:similarity_irred_iff}
+    \lean{isIrreducibleMap_similarity_iff}
+    \leanok
+    \uses{def:irreducible_cp, lem:similarity_irred, lem:similarity_involution}
+    For any invertible $C \in \MN{D}$ and any linear map $E$ on $\MN{D}$,
+    the similarity transform
+    $X \mapsto C^{-1}E(CXC^\dagger)(C^\dagger)^{-1}$
+    is irreducible if and only if $E$ is.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:similarity_irred, lem:similarity_involution}
+    The forward direction follows from Lemma~\ref{lem:similarity_irred}
+    applied with the inverse $C^{-1}$, whose determinant is also nonzero:
+    if the similarity transform of $E$ by $C$ is irreducible, then so is its
+    similarity transform by $C^{-1}$, which equals $E$ by
+    (\ref{eq:qpf_similarity_involution}). The reverse direction is
+    Lemma~\ref{lem:similarity_irred} itself with $c = 1$.
+\end{proof}
+
+\section{Auxiliary Perron reductions}
+\label{sec:app_qpf_perron}
+
+\begin{theorem}[Adjoint transfer map is nonzero]%
+    \label{thm:adjoint_transfer_ne_zero}
+    \lean{MPSTensor.adjointTransferMap_ne_zero_of_nonzero}
+    \leanok
+    \uses{def:transfer_map}
+    If some Kraus operator $A^i \neq 0$, then the adjoint transfer
+    map $\E_A^\dagger(X) = \sum_i (A^i)^\dagger X A^i$ is nonzero.
+\end{theorem}
+
+\begin{proof}\leanok
+    If $\E_A^\dagger = 0$ then $\E_A^\dagger(\Id) = 0$,
+    so $\sum_i (A^i)^\dagger A^i = 0$.
+    Since each summand $(A^i)^\dagger A^i$ is positive semidefinite,
+    each $(A^i)^\dagger A^i = 0$ and hence each $A^i = 0$.
+\end{proof}
+
+\begin{theorem}[Real spectral-radius identity]
+    \label{thm:spectral_radius_real_pf_irred}
+    \lean{spectralRadius_toReal_eq_of_posDef_eigenvector_of_irreducible_cp}
+    \leanok
+    \uses{thm:spectral_radius_pf_irred}
+    Under the hypotheses of Theorem~\ref{thm:spectral_radius_pf_irred}, the
+    real-valued spectral radius of $E$ is also equal to~$r$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    This is the real-valued reformulation of
+    Theorem~\ref{thm:spectral_radius_pf_irred}.
+\end{proof}
+
+\section{Exponential truncation and scalar reformulations}
+\label{sec:app_qpf_exponential}
+
+\begin{theorem}[Exponential truncation is positive definite]
+    \label{thm:exp_truncation_pd_irred}
+    \lean{exp_truncation_posDef_of_irreducible_cp}
+    \leanok
+    \uses{def:irreducible_cp, thm:growth_pd_irred}
+    Let $E$ be an irreducible completely positive map on $\MN{D}$,
+    let $A \ge 0$ be nonzero, and let $t > 0$.
+    Then the finite exponential truncation satisfies
+    \begin{align}
+        \sum_{k=0}^{D-1}\frac{t^k}{k!}E^k(A)
+         & >0.
+        \label{eq:qpf_exp_truncation}
+    \end{align}
+    This is the finite-sum core of the completely positive specialization of
+    \cite[Theorem~6.2(3)]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:growth_pd_irred}
+    If a nonzero vector $v$ annihilated the quadratic form in
+    (\ref{eq:qpf_exp_truncation}), positivity of every summand would make
+    $E^k(A)v=0$ for $0\leq k\leq D-1$. Expanding
+    $(\Id+E)^{D-1}(A)$ by the binomial theorem would then make it annihilate
+    $v$, contrary to Theorem~\ref{thm:growth_pd_irred}.
+\end{proof}
