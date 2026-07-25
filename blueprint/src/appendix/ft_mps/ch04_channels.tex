@@ -2,8 +2,8 @@
 \label{ch:channels_supporting_results}
 
 This appendix supports Chapter~\ref{ch:channels}. It collects the
-supporting results for complete positivity, density matrices, mean-ergodic
-projections, weighted traces, and idempotent retractions.
+supporting results for complete positivity, mean-ergodic projections,
+weighted traces, and idempotent retractions.
 
 \section{Kraus representations and complete positivity}
 
@@ -53,72 +53,6 @@ associated completely positive map between matrix $C^*$-algebras.
 Thus the Kraus formulation of Definition~\ref{def:cp_map} has the two
 consequences cited there: entrywise complete positivity and the associated
 abstract completely positive map.
-
-\section{Density matrices and the Ces\`aro construction}
-
-This section proves the compactness, convexity, nonemptiness, and invariance
-facts used in Theorem~\ref{thm:cesaro_fixedpoint}. Write $\mc{D}_D$ for the
-density matrices of Definition~\ref{def:density_matrices}; the Ces\`aro means
-$\sigma_N$ and their telescope identity remain in
-Definition~\ref{def:cesaro_mean} and Theorem~\ref{thm:cesaro_telescope}.
-
-\begin{theorem}[Density matrices are compact]\label{thm:density_compact}
-    \lean{densityMatrices_isCompact}
-    \leanok
-    \uses{def:density_matrices}
-    $\mc{D}_D$ is compact in the entrywise topology on $\MN{D}$.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    The positive semidefinite cone is closed, being the preimage of the closed
-    non-negative cone under continuous quadratic forms. If $\rho \ge 0$ with
-    $\tr(\rho) = 1$, then each entry satisfies
-    $|\rho_{ij}|^2 \le \rho_{ii}\rho_{jj} \le 1$: the diagonal entries are
-    non-negative and sum to~$1$, and the off-diagonal bound is the positive
-    semidefinite Cauchy--Schwarz inequality. Hence the matrix entries are
-    uniformly bounded, and Heine--Borel gives compactness.
-\end{proof}
-
-\begin{theorem}[Density matrices are convex]\label{thm:density_convex}
-    \lean{densityMatrices_isConvex}
-    \leanok
-    \uses{def:density_matrices}
-    $\mc{D}_D$ is convex.
-\end{theorem}
-
-\begin{proof}\leanok
-    A convex combination of positive semidefinite matrices is positive
-    semidefinite, and the trace is linear.
-\end{proof}
-
-\begin{theorem}[Density matrices are nonempty]\label{thm:density_nonempty}
-    \lean{densityMatrices_nonempty}
-    \leanok
-    \uses{def:density_matrices}
-    For $D \ge 1$, $\mc{D}_D \neq \varnothing$.
-\end{theorem}
-
-\begin{proof}\leanok
-    $\frac{1}{D}\Id_D$ is a density matrix.
-\end{proof}
-
-\begin{theorem}[Channels preserve density matrices]\label{thm:channel_preserves_density}
-    \lean{IsChannel.map_densityMatrices}
-    \leanok
-    \uses{def:channel, def:density_matrices}
-    If $E$ is a quantum channel, then
-    $E(\mc{D}_D) \subseteq \mc{D}_D$.
-\end{theorem}
-
-\begin{proof}\leanok\uses{thm:cp_is_positive}
-    Complete positivity implies positivity by
-    Theorem~\ref{thm:cp_is_positive}, so $E(\rho) \ge 0$; trace preservation
-    gives $\tr(E(\rho)) = \tr(\rho) = 1$.
-\end{proof}
-
-Together these results keep the Ces\`aro orbit inside a compact nonempty set of
-density matrices, as required in Theorem~\ref{thm:cesaro_fixedpoint}.
 
 \section{Preservation under the mean-ergodic projection}
 
