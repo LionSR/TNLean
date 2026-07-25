@@ -34,7 +34,7 @@ Then K_{D-1}(A, φ) = ℂ^D.
 
 - `cumulativeVectorSpan_mono`: K_n ≤ K_{n+1}
 - `cumulativeVectorSpan_stable`: If K_n = K_{n+1} then K_m = K_n for m ≥ n
-- `eigenvector_mem_cumulativeVectorSpan`: The eigenvector anchoring trick
+- `phi_mem_cumulativeVectorSpan`: the anchor vector lies in K_n for all n
 - `cumulativeVectorSpan_finrank_le`: dim(K_n) ≤ D
 - `cumulativeVectorSpan_finrank_strict_mono`: strict inclusion → strict dim growth
 - `eigenvector_spreading`: The main theorem K_{D-1} = ⊤
@@ -178,7 +178,7 @@ theorem cumulativeVectorSpan_stable (A : MPSTensor d D) (φ : Fin D → ℂ) {n 
     · exact hword_all w (by omega)
   · exact cumulativeVectorSpan_mono' A φ hm
 
-/-! ### Eigenvector anchoring -/
+/-! ### Anchor membership -/
 
 /-- φ is in K_n for all n ≥ 0 (since evalWord A [] *ᵥ φ = φ). -/
 theorem phi_mem_cumulativeVectorSpan (A : MPSTensor d D) (φ : Fin D → ℂ) (n : ℕ) :
@@ -186,14 +186,6 @@ theorem phi_mem_cumulativeVectorSpan (A : MPSTensor d D) (φ : Fin D → ℂ) (n
   simpa [evalWord] using
     (mem_cumulativeVectorSpan_generator
       (A := A) (φ := φ) (w := []) (n := n) (by simp))
-
-/-- Eigenvector anchoring for cumulative span (actually φ is in K_n for
-all n, even without the eigenvector condition). -/
-theorem eigenvector_mem_cumulativeVectorSpan
-    (A : MPSTensor d D) (φ : Fin D → ℂ)
-    {n : ℕ} (_hn : 1 ≤ n) :
-    φ ∈ cumulativeVectorSpan A φ n :=
-  phi_mem_cumulativeVectorSpan A φ n
 
 /-! ### Dimension bounds -/
 
