@@ -238,6 +238,33 @@
     \tenkz@event{string|id=#1|kind=closed|pts=\int_use:N \l__tenkz_string_n_int}
   }
 
+% A (1,0) winding in the exterior corridor.  Its first edge is the seam
+% representative through the lattice; the remaining edges are the exterior
+% return.  Unlike a generic closed string, these segments must stay linear:
+% smoothing the whole cycle with Hobby turns the seam representative into an
+% unrelated oval.
+\cs_new_protected:Npn \__tenkz_string_declare_corridor_wind:nn #1#2
+  {
+    \__tenkz_string_register:nn {#1} {wind}
+    \prop_put:Nnn \l__tenkz_string_source_prop {#1} {generated}
+    \__tenkz_string_load_pts:n {#2}
+    \int_set:Nn \l__tenkz_string_n_int
+      { \seq_count:N \l__tenkz_string_pts_seq }
+    \seq_pop_left:NN \l__tenkz_string_pts_seq \l__tenkz_string_first_tl
+    \seq_set_map:NNn \l__tenkz_string_pts_seq \l__tenkz_string_pts_seq
+      { -- ~ ( ##1 ) }
+    \tl_set:Ne \l__tenkz_string_pts_tl
+      { \seq_use:Nn \l__tenkz_string_pts_seq { ~ } }
+    \use:e
+      {
+        \exp_not:N \path [ spath/save = #1 ]
+          ( \exp_not:o \l__tenkz_string_first_tl )
+          \exp_not:o \l__tenkz_string_pts_tl ~ -- ~ cycle ;
+      }
+    \tenkz@event{string|id=#1|kind=wind|class=1,0|
+      pts=\int_use:N \l__tenkz_string_n_int}
+  }
+
 % A wound string on a circle of centre (#2,#3) and radius #4 in caller space:
 % homotopy class (p,q) = (#5,#6), meridian amplitude #7 in caller space
 % (pass 0 for a pure longitude).  The radius is modulated as

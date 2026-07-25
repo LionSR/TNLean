@@ -29,6 +29,18 @@ for tex in "$WORK"/*.tex; do
   compile "$(basename "$tex")"
 done
 
+wind_mismatch="$KERNEL/x_wind_mismatch.tex"
+if timeout 120 env TEXINPUTS="$REPO/tex/tenkz//:" \
+    xelatex -output-directory="$WORK" -interaction=nonstopmode \
+    -halt-on-error "$wind_mismatch" >"$WORK/x_wind_mismatch.transcript" 2>&1; then
+  echo "FAIL: x_wind_mismatch.tex unexpectedly compiled" >&2
+  exit 1
+fi
+grep -Fq '[TKZ-WIND-MISMATCH]' "$WORK/x_wind_mismatch.transcript" || {
+  echo "FAIL: x_wind_mismatch.tex did not emit [TKZ-WIND-MISMATCH]" >&2
+  exit 1
+}
+
 atom_count=$(grep -c '^atom|' "$WORK/r_explicit_at.tnlog" || true)
 [ "$atom_count" -eq 2 ] || {
   echo "FAIL: explicit at= did not suppress population of its claimed cell" >&2

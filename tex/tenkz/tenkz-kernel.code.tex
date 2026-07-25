@@ -1901,6 +1901,9 @@
 \msg_new:nnn {tenkz}{kernel-render-phtrace}
   { [TKZ-KERNEL-RENDER-PHTRACE]~physical~trace~record~'#1'~has~no~rendered~
     atom~at~row~1,~column~#2 }
+\msg_new:nnn {tenkz}{kernel-wind-mismatch}
+  { [TKZ-WIND-MISMATCH]~string~'#1'~claims~wind=\{#2\},~but~its~
+    corridor~route~realizes~wind=\{1,0\} }
 
 % variants this pass leans on; generation is idempotent where l3 already
 % ships the form
@@ -3491,28 +3494,85 @@
         % through-and-around loop: across the lattice middle along the
         % wound direction, returning through the declared via points.
         \__tenkz_model_get:nnN {#1} {wind} \l__tenkz_kernel_r_c_tl
-        \quark_if_no_value:NF \l__tenkz_kernel_r_c_tl
+        \quark_if_no_value:NTF \l__tenkz_kernel_r_c_tl
           {
-            \tl_set:Ne \l__tenkz_kernel_r_b_tl
+            \exp_args:NVV \__tenkz_string_declare_closed:nn
+              \l__tenkz_kernel_r_sid_tl \l__tenkz_kernel_r_pts_tl
+          }
+          {
+            \tl_set_eq:NN \l__tenkz_kernel_r_b_tl
+              \l__tenkz_kernel_r_c_tl
+            \regex_replace_all:nnN { \s+ } { }
+              \l__tenkz_kernel_r_b_tl
+            \str_if_eq:VnF \l__tenkz_kernel_r_b_tl {1,0}
+              {
+                \msg_error:nnee {tenkz}{kernel-wind-mismatch}
+                  { \tl_use:N \l__tenkz_kernel_r_sid_tl }
+                  { \tl_use:N \l__tenkz_kernel_r_c_tl }
+              }
+            \tl_clear:N \l__tenkz_kernel_r_b_tl
+            \tl_clear:N \l__tenkz_kernel_r_from_tl
+            \__tenkz_kernel_r_frame_xy:nnNN
+              { ( 1 + \l__tenkz_kernel_r_rows_int ) / 2 }
+              { 1 - \__tenkz_metric_ratio:n {outsidegap} }
+              \l__tenkz_kernel_r_xc_fp \l__tenkz_kernel_r_yc_fp
+            \tl_put_right:Ne \l__tenkz_kernel_r_b_tl
               {
                 \__tenkz_kernel_r_ppt:nn
-                  { 1 - \__tenkz_metric_ratio:n {outsidegap} }
-                  { - ( 1 + \l__tenkz_kernel_r_rows_int ) / 2 }
+                  { \l__tenkz_kernel_r_xc_fp }
+                  { \l__tenkz_kernel_r_yc_fp }
+              }
+            \__tenkz_kernel_r_frame_xy:nnNN
+              { ( 1 + \l__tenkz_kernel_r_rows_int ) / 2 }
+              {
+                \l__tenkz_kernel_r_cols_int
+                + \__tenkz_metric_ratio:n {outsidegap}
+              }
+              \l__tenkz_kernel_r_xc_fp \l__tenkz_kernel_r_yc_fp
+            \tl_put_right:Ne \l__tenkz_kernel_r_b_tl
+              {
                 \__tenkz_kernel_r_ppt:nn
-                  {
-                    \l__tenkz_kernel_r_cols_int
-                    + \__tenkz_metric_ratio:n {outsidegap}
-                  }
-                  { - ( 1 + \l__tenkz_kernel_r_rows_int ) / 2 }
+                  { \l__tenkz_kernel_r_xc_fp }
+                  { \l__tenkz_kernel_r_yc_fp }
+              }
+            \__tenkz_kernel_r_frame_xy:nnNN
+              {
+                \l__tenkz_kernel_r_rows_int
+                + \__tenkz_metric_ratio:n {outsidegap}
+              }
+              {
+                \l__tenkz_kernel_r_cols_int
+                + \__tenkz_metric_ratio:n {outsidegap}
+              }
+              \l__tenkz_kernel_r_xc_fp \l__tenkz_kernel_r_yc_fp
+            \tl_put_right:Ne \l__tenkz_kernel_r_b_tl
+              {
+                \__tenkz_kernel_r_ppt:nn
+                  { \l__tenkz_kernel_r_xc_fp }
+                  { \l__tenkz_kernel_r_yc_fp }
+              }
+            \__tenkz_kernel_r_frame_xy:nnNN
+              {
+                \l__tenkz_kernel_r_rows_int
+                + \__tenkz_metric_ratio:n {outsidegap}
+              }
+              { 1 - \__tenkz_metric_ratio:n {outsidegap} }
+              \l__tenkz_kernel_r_xc_fp \l__tenkz_kernel_r_yc_fp
+            \tl_set:Ne \l__tenkz_kernel_r_from_tl
+              {
+                \__tenkz_kernel_r_ppt:nn
+                  { \l__tenkz_kernel_r_xc_fp }
+                  { \l__tenkz_kernel_r_yc_fp }
               }
             \tl_set:Ne \l__tenkz_kernel_r_pts_tl
               {
                 \tl_use:N \l__tenkz_kernel_r_b_tl
                 \tl_use:N \l__tenkz_kernel_r_pts_tl
+                \tl_use:N \l__tenkz_kernel_r_from_tl
               }
+            \exp_args:NVV \__tenkz_string_declare_corridor_wind:nn
+              \l__tenkz_kernel_r_sid_tl \l__tenkz_kernel_r_pts_tl
           }
-        \exp_args:NVV \__tenkz_string_declare_closed:nn
-          \l__tenkz_kernel_r_sid_tl \l__tenkz_kernel_r_pts_tl
       }
       {
         % endpoints join the waypoint chain; each may be `open <dir>`
