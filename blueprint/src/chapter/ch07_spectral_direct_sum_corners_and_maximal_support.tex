@@ -1,0 +1,516 @@
+Without a full-rank hypothesis on the fixed point, the corner-restricted
+fixed-point $*$-algebra of
+Theorem~\ref{thm:cornerFixedPointsStarSubalgebra} still carries the block
+structure through the compression onto the support sector; this is the
+$\sum_kd_km_k\leq D$ support-sector form of the block representation in
+Equation~(1.39) of~\cite{Wolf2012Quantum} invoked by
+\cite[Theorem~6.14]{Wolf2012Quantum}. A corner-restricted fixed point
+extended by zero on the complement of the support sector need not be a fixed
+point of the ambient map, so the corner block form does not by itself give
+the ambient fixed-point space a zero-block representation.
+
+\begin{theorem}[Block form of the corner-restricted fixed points]%
+    \label{thm:cornerFixedPoints_block_form}
+    \lean{Kraus.cornerFixedPoints_blockDiagonal_iff}
+    \leanok
+    \uses{def:support_proj, def:kraus_map, def:kraus_adjoint_map,
+        def:tp_kraus}
+    Let $E(X)=\sum_iK_iXK_i^\dagger$ be a trace-preserving Kraus map on
+    $\MN{D}$, with Heisenberg-picture adjoint
+    $E^*(Y)=\sum_iK_i^\dagger YK_i$, let $\rho\succeq0$ satisfy
+    $E(\rho)=\rho$, and let $Q$ be the support projection of $\rho$. There
+    are a sector dimension $r\leq D$, a number $n$ of blocks, positive
+    dimensions $d_0,\ldots,d_{n-1}$ and multiplicities
+    $m_0,\ldots,m_{n-1}$ with $\sum_kd_km_k=r$, realized by an explicit
+    identification of the index sets, and an isometry
+    $W:\C^r\to\C^D$ with $W^\dagger W=\Id_r$ and $WW^\dagger=Q$, such that
+    a matrix $Y\in\MN{D}$ satisfies $QYQ=Y$ and $QE^*(Y)Q=Y$ exactly when
+    \begin{align}
+        Y
+         & =W\left(\bigoplus_{k=0}^{n-1}
+        \Id_{m_k}\otimes B_k\right)W^\dagger
+        \label{eq:spectral_ds_corner_element}
+    \end{align}
+    for some matrices $B_k\in\MN{d_k}$; that is, up to reordering the two
+    tensor factors of each block,
+    \begin{align}
+        \{Y\in Q\MN{D}Q\mid QE^*(Y)Q=Y\}
+         & =W\left(\bigoplus_{k=0}^{n-1}
+        \Id_{m_k}\otimes\MN{d_k}\right)W^\dagger.
+        \label{eq:spectral_ds_corner_blocks}
+    \end{align}
+    The right-hand side is the support-sector block representation in
+    Equation~(1.39) of~\cite{Wolf2012Quantum}; the equivalence characterizes
+    the corner-restricted set, not the ambient fixed-point space.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:support_proj_fixed, thm:supported_corner_compression_isometry,
+        thm:compression_on_support_posDef, thm:adjointFixedPoints_block_form}
+    Since $\rho$ is a fixed point of $E$, the support projection satisfies
+    $(\Id-Q)K_iQ=0$ by Theorem~\ref{thm:support_proj_fixed}, so the
+    compressed family $QK_iQ$ is supported on the corner and
+    trace-preserving there. Compress it to the support sector along the
+    isometry $V:\C^r\to\C^D$ of
+    Theorem~\ref{thm:supported_corner_compression_isometry}, which satisfies
+    $V^\dagger V=\Id_r$ and $VV^\dagger=Q$. The compressed family $C$ is
+    trace-preserving on $\C^r$, and
+    $\sigma=V^\dagger\rho V$ is a positive definite fixed point of the
+    compressed Schr\"odinger map by
+    Theorem~\ref{thm:compression_on_support_posDef}. The block form of the
+    Heisenberg-picture fixed points of $C$ from
+    Theorem~\ref{thm:adjointFixedPoints_block_form} yields a unitary
+    $U\in\MN{r}$, dimensions $d_k$, and multiplicities $m_k$ with
+    $\sum_kd_km_k=r$.
+
+    Write $\Phi(X):=VXV^\dagger$ for the compression isomorphism onto the
+    corner and $C^*$ for the Heisenberg-picture adjoint of the compressed
+    family. The corner-restricted fixed-point condition corresponds to the
+    fixed-point equation of the compressed map:
+    \begin{align}
+        QE^*\!(\Phi(X))Q=\Phi(X)
+         & \quad\Longleftrightarrow\quad C^*(X)=X.
+        \notag
+    \end{align}
+    With $W:=VU$, which satisfies $W^\dagger W=\Id_r$ and
+    $WW^\dagger=Q$, this equivalence gives
+    (\ref{eq:spectral_ds_corner_element}) and
+    (\ref{eq:spectral_ds_corner_blocks}). Finally, $r\leq D$ because the
+    isometry $V$ embeds $\C^r$ into $\C^D$.
+\end{proof}
+
+\begin{theorem}[Weighted fixed points form a $*$-subalgebra]%
+    \label{thm:weightedFixedPointsStarSubalgebra}
+    \lean{Kraus.weightedFixedPointsStarSubalgebra}
+    \leanok
+    \uses{def:tp_kraus, thm:fixedPointsStarSubalgebra}
+    Let $T(X)=\sum_iK_iXK_i^\dagger$ be trace-preserving, and let
+    $\rho>0$ satisfy $T(\rho)=\rho$. If
+    $F_T:=\{X\in\MN{D}\mid T(X)=X\}$, then
+    $\rho^{-1/2}F_T\rho^{-1/2}$ is a $*$-subalgebra of $\MN{D}$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:fixedPointsStarSubalgebra}
+    Set $B_i=\rho^{-1/2}K_i\rho^{1/2}$. The equation $T(\rho)=\rho$
+    implies that the family $\{B_i\}$ is unital, and trace preservation of
+    $T$ implies that $\rho$ is a positive-definite fixed point of the
+    adjoint map of the gauged family. Apply
+    Theorem~\ref{thm:fixedPointsStarSubalgebra} to $B$. The equivalence
+    \begin{align}
+        \sum_iB_iXB_i^\dagger=X
+         & \quad\Longleftrightarrow\quad
+        T(\rho^{1/2}X\rho^{1/2})=\rho^{1/2}X\rho^{1/2}
+        \notag
+    \end{align}
+    identifies the fixed points of the gauged map with
+    $\rho^{-1/2}F_T\rho^{-1/2}$.
+\end{proof}
+
+For a singular fixed point the conjugation is taken with the inverse square
+root on the support of $\rho$, and the conjugated set lives in the corner
+algebra of the support projection. The corollary in~\cite{Wolf2012Quantum}
+takes a maximum-rank fixed point, for which every fixed point of $T$ is
+supported on the support of $\rho$; the following two statements take an
+arbitrary positive semidefinite fixed point and restrict to the fixed points
+supported on the support of $\rho$.
+Theorem~\ref{thm:maximalSupport_fixedPoint} below supplies a fixed point
+whose support carries every fixed point, and at such a fixed point the
+restriction disappears
+(Theorem~\ref{thm:maximalSupport_weightedCorner}).
+% Maintainer note: the restriction history is recorded in
+% docs/paper-gaps/wolf_cor67_maximal_support_restriction.tex.
+
+\begin{theorem}[Weighted corner fixed points form a $*$-subalgebra]%
+    \label{thm:weightedCornerFixedPointsStarSubalgebra}
+    \lean{Kraus.weightedCornerFixedPointsStarSubalgebra}
+    \leanok
+    \uses{def:tp_kraus, def:support_proj, rem:corner_algebra_star_instances}
+    Let $T(X)=\sum_iK_iXK_i^\dagger$ be trace-preserving, let
+    $\rho\succeq0$ satisfy $T(\rho)=\rho$, and let $Q$ be the support
+    projection of $\rho$. The corner elements $Y\in Q\MN{D}Q$ such that
+    $\sqrt{\rho}\,Y\sqrt{\rho}$ is a fixed point of $T$ form a
+    $*$-subalgebra of the corner algebra $Q\MN{D}Q$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:weightedFixedPointsStarSubalgebra,
+        thm:supported_corner_compression_isometry,
+        thm:compression_on_support_posDef,
+        thm:support_proj_fixed}
+    Closure under addition, scalars, and conjugation is linearity together
+    with the stability of fixed points under conjugate transposition. The
+    corner unit $Q$ belongs to the set because
+    $\sqrt{\rho}\,Q\sqrt{\rho}=\rho$ is a fixed point. The support projection
+    absorbs the square root, $Q\sqrt{\rho}=\sqrt{\rho}=\sqrt{\rho}\,Q$,
+    since
+    \begin{align}
+        (\Id-Q)\sqrt{\rho}
+        ((\Id-Q)\sqrt{\rho})^\dagger
+         & =(\Id-Q)\rho(\Id-Q)=0.
+        \notag
+    \end{align}
+
+    For closure under multiplication, compress to the support sector. Since
+    $\rho$ is a fixed point of $T$, the support projection satisfies
+    $(\Id-Q)K_iQ=0$ by Theorem~\ref{thm:support_proj_fixed}. The compressed
+    family $QK_iQ$ is trace-preserving on the corner, and compression along
+    the isometry $V:\C^r\to\C^D$ of
+    Theorem~\ref{thm:supported_corner_compression_isometry}, with
+    $V^\dagger V=\Id_r$ and $VV^\dagger=Q$, produces a trace-preserving
+    family $C$ on $\C^r$ whose Schr\"odinger map has the positive definite
+    fixed point $\sigma=V^\dagger\rho V$ by
+    Theorem~\ref{thm:compression_on_support_posDef}. The square root
+    compresses along the isometry:
+    \begin{align}
+        \sqrt{\sigma}
+         & =V^\dagger\sqrt{\rho}\,V,
+        \label{eq:spectral_ds_sqrt_compression}
+    \end{align}
+    by uniqueness of the positive square root, since
+    $(V^\dagger\sqrt{\rho}V)^2
+        =V^\dagger\sqrt{\rho}\,Q\sqrt{\rho}V=\sigma$.
+    Hence, for corner-supported $Y$,
+    \begin{align}
+        \sqrt{\sigma}\,(V^\dagger YV)\sqrt{\sigma}
+         & =V^\dagger(\sqrt{\rho}\,Y\sqrt{\rho})V.
+        \label{eq:spectral_ds_weighted_transport}
+    \end{align}
+    For corner-supported $W$, the compressed map satisfies
+    \begin{align}
+        C(V^\dagger WV)
+         & =V^\dagger QT(W)QV
+        =V^\dagger T(W)V,
+        \notag
+    \end{align}
+    since $T(W)$ is again corner-supported. Thus $T(W)=W$ exactly when the
+    compressed map fixes $V^\dagger WV$. The set therefore corresponds,
+    element by element, to the weighted fixed points of the compressed
+    family with respect to the positive definite fixed point $\sigma$,
+    which form a $*$-subalgebra by
+    Theorem~\ref{thm:weightedFixedPointsStarSubalgebra}.
+
+    Closure under multiplication transports back through the correspondence.
+    A corner-supported $Y_j$ satisfies $Y_jQ=Y_j$, so
+    \begin{align}
+        (V^\dagger Y_1V)(V^\dagger Y_2V)
+         & =V^\dagger Y_1(VV^\dagger)Y_2V
+        =V^\dagger(Y_1Q)Y_2V
+        =V^\dagger(Y_1Y_2)V.
+        \notag
+    \end{align}
+    The product of two members therefore corresponds to the product of
+    their compressed images, which lies in the compressed
+    $*$-subalgebra.
+\end{proof}
+
+Combined with the conjugation correspondence of
+Theorem~\ref{thm:weightedCorner_sqrt_surjective}, the carrier of this
+$*$-subalgebra realizes
+\begin{align}
+    \rho^{-1/2}
+    \{X\in\MN{D}\mid T(X)=X,\ QXQ=X\}
+    \rho^{-1/2},
+    \notag
+\end{align}
+with the inverse square root taken on the support of $\rho$: the singular
+case of Corollary~6.7 of~\cite{Wolf2012Quantum}, restricted to the fixed
+points supported on the support of $\rho$.
+
+\begin{theorem}[Conjugation by the square root is onto the corner-supported fixed
+        points]%
+    \label{thm:weightedCorner_sqrt_surjective}
+    \lean{Kraus.exists_weightedCorner_sqrt_eq_of_fixedPoint}
+    \leanok
+    \uses{def:tp_kraus, def:support_proj}
+    In the setting of
+    Theorem~\ref{thm:weightedCornerFixedPointsStarSubalgebra}, every fixed
+    point $X$ of $T$ with $QXQ=X$ arises as
+    $X=\sqrt{\rho}\,Y\sqrt{\rho}$ for a corner-supported $Y$ with
+    $\sqrt{\rho}\,Y\sqrt{\rho}$ fixed by $T$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:supported_corner_compression_isometry,
+        thm:compression_on_support_posDef,
+        thm:support_proj_fixed}
+    Compress to the support sector as in the proof of
+    Theorem~\ref{thm:weightedCornerFixedPointsStarSubalgebra} and set
+    \begin{align}
+        Y
+         & =V\left(\sqrt{\sigma}^{-1}(V^\dagger XV)
+        \sqrt{\sigma}^{-1}\right)V^\dagger,
+        \label{eq:spectral_ds_weighted_preimage}
+    \end{align}
+    where $\sigma=V^\dagger\rho V$ is positive definite, so
+    $\sqrt{\sigma}$ is invertible. Then $Y$ is corner-supported. Writing
+    $Z=\sqrt{\sigma}^{-1}(V^\dagger XV)\sqrt{\sigma}^{-1}$ for the
+    compressed middle factor, (\ref{eq:spectral_ds_weighted_transport})
+    gives
+    \begin{align}
+        V^\dagger(\sqrt{\rho}\,Y\sqrt{\rho})V
+         & =\sqrt{\sigma}\,(V^\dagger YV)\sqrt{\sigma}
+        =\sqrt{\sigma}\,Z\sqrt{\sigma}
+        =V^\dagger XV.
+        \notag
+    \end{align}
+    Hence $\sqrt{\rho}\,Y\sqrt{\rho}=QXQ=X$, since both sides are
+    corner-supported. In particular, $\sqrt{\rho}\,Y\sqrt{\rho}$ is fixed
+    by $T$.
+\end{proof}
+
+The support hypothesis on the fixed points is discharged by exhibiting a
+fixed point whose support carries every fixed point. The first ingredient is
+that Loewner domination transfers the support.
+
+\begin{lemma}[The transfer map of a trace-preserving family is a channel]%
+    \label{lem:isChannel_transferMap}
+    \lean{Kraus.isChannel_transferMap}
+    \leanok
+    \uses{def:channel, def:tp_kraus}
+    Let $K_0,\ldots,K_{d-1}$ be a trace-preserving Kraus family. The map
+    $E(X)=\sum_iK_iXK_i^\dagger$ is a quantum channel.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:transfer_channel}
+    The trace-preservation hypothesis is the normalization
+    $\sum_iK_i^\dagger K_i=\Id$ of the channel form of the transfer map
+    (Theorem~\ref{thm:transfer_channel}).
+\end{proof}
+
+\begin{lemma}[Scalar Loewner domination transfers the support]%
+    \label{lem:stationaryProj_absorb_of_le}
+    \lean{Kraus.stationaryProj_absorb_of_le_smul}
+    \leanok
+    \uses{def:support_proj}
+    Let $\rho,P\succeq0$ and $c\in\C$ with $P\preceq c\rho$, and let $Q$
+    be the support projection of $\rho$. Then $QP=P$ and $PQ=P$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{def:support_proj}
+    The support projection absorbs $\rho$, so $(\Id-Q)\rho=0$ and
+    \begin{align}
+        0
+         & \preceq(\Id-Q)P(\Id-Q)
+        \preceq(\Id-Q)(c\rho)(\Id-Q)
+        =0,
+        \notag
+    \end{align}
+    because conjugation by $\Id-Q$ preserves the Loewner order. Hence
+    \begin{align}
+        ((\Id-Q)\sqrt{P})
+        ((\Id-Q)\sqrt{P})^\dagger
+         & =(\Id-Q)P(\Id-Q)=0,
+        \notag
+    \end{align}
+    so $(\Id-Q)\sqrt{P}=0$ and
+    $(\Id-Q)P=((\Id-Q)\sqrt{P})\sqrt{P}=0$. Thus $QP=P$; taking conjugate
+    transposes gives $PQ=P$ since $P$ and $Q$ are Hermitian.
+\end{proof}
+
+\begin{theorem}[A fixed point of maximal support from bounded orbits]%
+    \label{thm:maximalSupport_fixedPoint_of_bounded_orbits}
+    \lean{IsPositiveMap.exists_maximalSupport_fixedPoint_of_hasBoundedOrbits}
+    \leanok
+    \uses{def:positive_map, def:has_bounded_orbits,
+        def:mean_ergodic_projection, def:support_proj}
+    Let $T:\MN{D}\to\MN{D}$ be positive and have bounded orbits, and let
+    $T_\infty$ be its mean-ergodic projection. Then
+    $\rho_0=T_\infty(\Id)$ is positive semidefinite and fixed by $T$. If
+    $Q_0$ is the support projection of $\rho_0$, then every fixed point $X$
+    of $T$ satisfies $Q_0XQ_0=X$. This is the bounded-orbit form of the
+    maximal-support argument underlying
+    \cite[Proposition~6.9]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:positive_mean_ergodic_projection,
+        thm:mean_ergodic_bounded_orbits,
+        thm:positive_map_conjTranspose, thm:psd_le_trace_smul_one,
+        lem:stationaryProj_absorb_of_le}
+    Positivity of the mean-ergodic projection gives $\rho_0\succeq0$, while
+    its range and idempotence give $T(\rho_0)=\rho_0$. If $A\succeq0$, then
+    $A\preceq\tr(A)\Id$; applying the positive map $T_\infty$ gives
+    \begin{align}
+        \tr(A)\rho_0-T_\infty(A)
+         & =T_\infty\!\left(\tr(A)\Id-A\right)\succeq0,
+         &
+        T_\infty(A)
+         & \preceq\tr(A)\rho_0.
+        \notag
+    \end{align}
+    Scalar domination therefore gives
+    $Q_0T_\infty(A)Q_0=T_\infty(A)$. For a fixed Hermitian matrix $H$,
+    write $H=H^+-H^-$. Since $T_\infty(H)=H$, linearity gives
+    \begin{align}
+        H
+         & =T_\infty(H^+)-T_\infty(H^-),
+        \notag
+    \end{align}
+    so $Q_0HQ_0=H$. Finally, decompose an arbitrary fixed point into two
+    Hermitian fixed matrices, using preservation of conjugate transpose, and
+    conclude that $Q_0XQ_0=X$.
+\end{proof}
+
+\begin{theorem}[A fixed point of maximal support]%
+    \label{thm:maximalSupport_fixedPoint}
+    \lean{IsPositiveMap.exists_maximalSupport_fixedPoint}
+    \leanok
+    \uses{def:positive_map, def:trace_preserving, def:mean_ergodic_projection,
+        def:support_proj}
+    Let $T:\MN{D}\to\MN{D}$ be positive and trace-preserving, and let
+    $T_\infty$ be its mean-ergodic projection. Then
+    $\rho_0=T_\infty(\Id)$ is positive semidefinite and fixed by $T$. With
+    $Q_0$ the support projection of $\rho_0$, every fixed point $X$ of $T$
+    satisfies $Q_0XQ_0=X$. This is the maximal-support property of fixed
+    points in Section~6.4 of~\cite{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:positive_trace_preserving_mean_ergodic_projection,
+        thm:maximalSupport_fixedPoint_of_bounded_orbits}
+    Theorem~\ref{thm:positive_trace_preserving_mean_ergodic_projection}
+    gives bounded orbits. Apply
+    Theorem~\ref{thm:maximalSupport_fixedPoint_of_bounded_orbits}.
+\end{proof}
+
+\begin{theorem}[Restriction to the support of a stationary positive matrix]%
+    \label{thm:stationarySupport_restriction}
+    \lean{IsPositiveMap.map_supported_on_fixedPoint_support}
+    \leanok
+    \uses{def:positive_map, def:support_proj,
+        lem:stationaryProj_absorb_of_le}
+    Let $T:\MN{D}\to\MN{D}$ be positive, and let
+    $\rho\succeq0$ satisfy $T(\rho)=\rho$. If $Q$ is the support projection
+    of $\rho$, then, for every $X\in\MN{D}$,
+    \begin{align}
+        QXQ=X
+         & \quad\Longrightarrow\quad QT(X)Q=T(X).
+        \label{eq:spectral_ds_support_invariance}
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{lem:stationaryProj_absorb_of_le}
+    First suppose $A\succeq0$ and $QAQ=A$. On the support of $\rho$, the
+    matrix $\rho$ is positive definite, so $Q\preceq c\rho$ for some
+    positive scalar $c$. Moreover, $A\preceq\tr(A)Q$, because this follows
+    by compressing $\tr(A)\Id-A\succeq0$ with $Q$. Positivity and
+    $T(\rho)=\rho$ therefore give
+    \begin{align}
+        0
+         & \preceq T(A)\preceq c\tr(A)\rho.
+        \notag
+    \end{align}
+    Scalar domination transfers the support, hence $QT(A)Q=T(A)$.
+
+    Write $H_1=X+X^*$ and $H_2=\mathrm{i}(X-X^*)$, so that both matrices
+    are Hermitian and $X=\tfrac12H_1-\tfrac{\mathrm{i}}2H_2$. Setting
+    $A_j^\pm=QH_j^\pm Q$ gives positive matrices with
+    $QA_j^\pm Q=A_j^\pm$ and
+    \begin{align}
+        X
+         & =\tfrac12(A_1^+-A_1^-)
+        -\tfrac{\mathrm{i}}2(A_2^+-A_2^-).
+        \notag
+    \end{align}
+    Applying the positive-input conclusion to these four matrices and using
+    linearity of $T$ gives (\ref{eq:spectral_ds_support_invariance}).
+\end{proof}
+
+\begin{theorem}[Restriction to full-rank fixed points]%
+    \label{thm:stationarySupport_compression}
+    \lean{IsPositiveMap.exists_maximalSupportCompression}
+    \leanok
+    \uses{thm:maximalSupport_fixedPoint, thm:stationarySupport_restriction}
+    Let $T:\MN{D}\to\MN{D}$ be positive and trace preserving, set
+    $\rho_0=T_\infty(\Id)$, and let $Q_0$ be the support projection of
+    $\rho_0$. There are a finite-dimensional Hilbert space $\mathcal H$ and
+    an isometry $V:\mathcal H\to\C^D$ with
+    $V^*V=\Id_{\mathcal H}$ and $VV^*=Q_0$ such that
+    \begin{align}
+        \widetilde T(Y)
+         & =V^*T(VYV^*)V
+        \label{eq:spectral_ds_support_compression}
+    \end{align}
+    is positive and trace preserving and has a positive definite fixed
+    point. Moreover,
+    \begin{align}
+        T(VYV^*)
+         & =V\widetilde T(Y)V^*,
+        \label{eq:spectral_ds_compression_intertwining} \\
+        T(X)=X
+         & \quad\Longleftrightarrow\quad
+        \exists\,Y,\quad
+        \widetilde T(Y)=Y\ \text{ and }\ X=VYV^*.
+        \label{eq:spectral_ds_compression_fixed}
+    \end{align}
+    These are Equations~(6.52) and~(6.51), respectively,
+    of~\cite{Wolf2012Quantum}. Thus the complementary fixed-point summand
+    vanishes.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:maximalSupport_fixedPoint, thm:stationarySupport_restriction}
+    Theorem~\ref{thm:maximalSupport_fixedPoint} gives $\rho_0$ and shows
+    that $Q_0XQ_0=X$ for every fixed point $X$ of $T$. Choose an isometry
+    onto the range of $Q_0$. Positivity follows from positivity of
+    conjugation and of $T$. The matrix $VYV^*$ is supported on $Q_0$, so
+    Theorem~\ref{thm:stationarySupport_restriction} shows that its image is
+    also supported there. Inserting $Q_0=VV^*$ gives
+    \begin{align}
+        T(VYV^*)
+         & =Q_0T(VYV^*)Q_0
+        =VV^*T(VYV^*)VV^*
+        =V\widetilde T(Y)V^*,
+        \notag
+    \end{align}
+    which proves (\ref{eq:spectral_ds_compression_intertwining}). By
+    cyclicity of the trace, the isometry identity, and trace preservation of
+    $T$,
+    \begin{align}
+        \tr(\widetilde T(Y))
+         & =\tr(V\widetilde T(Y)V^*)
+        =\tr(T(VYV^*))
+        =\tr(VYV^*)
+        =\tr(Y).
+        \notag
+    \end{align}
+    Thus $\widetilde T$ is trace preserving. The compressed point
+    $\sigma_0=V^*\rho_0V$ is positive definite. Since
+    $V\sigma_0V^*=Q_0\rho_0Q_0=\rho_0$,
+    \begin{align}
+        \widetilde T(\sigma_0)
+         & =V^*T(\rho_0)V
+        =V^*\rho_0V
+        =\sigma_0.
+        \notag
+    \end{align}
+    If $T(X)=X$, then $Q_0XQ_0=X$, and hence
+    $X=V(V^*XV)V^*$. Moreover,
+    \begin{align}
+        \widetilde T(V^*XV)
+         & =V^*T(V(V^*XV)V^*)V
+        =V^*T(X)V
+        =V^*XV.
+        \notag
+    \end{align}
+    Conversely, if $\widetilde T(Y)=Y$, then
+    (\ref{eq:spectral_ds_compression_intertwining}) gives
+    $T(VYV^*)=V\widetilde T(Y)V^*=VYV^*$. These two implications prove
+    (\ref{eq:spectral_ds_compression_fixed}).
+\end{proof}
+
+The next three theorems are generic finite-matrix facts. They do not depend
+on positive maps, fixed points, or Theorem~6.14 of~\cite{Wolf2012Quantum}.

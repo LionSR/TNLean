@@ -134,58 +134,6 @@
     are non-negative.
 \end{proof}
 
-\begin{definition}[Sum of the largest eigenvalues]
-    \label{def:ky_fan_norm}
-    \lean{Matrix.IsHermitian.kyFanNorm}
-    \leanok
-    Let $A\in\MN{D}$ be Hermitian with eigenvalues
-    $\lambda_1\ge\lambda_2\ge\cdots\ge\lambda_D$ listed in decreasing order.
-    For $0\le k\le D$, set
-    \begin{align}
-        S_k(A)
-         & =\sum_{i=1}^{k}\lambda_i.
-        \label{eq:channel_largest_eigenvalue_sum}
-    \end{align}
-    This is the sum of the $k$ largest signed eigenvalues. Indices beyond $D$
-    contribute zero, so the value stabilizes at $\re\tr(A)$ once $k$ reaches
-    $D$.
-
-    The \emph{Ky-Fan $k$-norm} $\|A\|_{(k)}$ is by definition the sum of the
-    $k$ largest \emph{singular values} of $A$. It agrees with $S_k(A)$ exactly
-    when $A$ is positive semidefinite, where eigenvalues and singular values
-    coincide; for an indefinite Hermitian $A$ the two differ. For
-    $A=\diag(1,-2)$, one has $S_1(A)=1$ but $\|A\|_{(1)}=2$. The results below
-    concern $S_k(A)$ for arbitrary Hermitian $A$, so on the
-    positive-semidefinite cone they are statements about the Ky-Fan norm.
-\end{definition}
-
-\begin{theorem}[Ky Fan's maximum principle]
-    \label{thm:ky_fan_maximum_principle}
-    \lean{Matrix.IsHermitian.kyFanNorm_eq_sup_trace}
-    \leanok
-    \uses{def:ky_fan_norm, thm:ky_fan_achievability, thm:ky_fan_upper_bound}
-    Let $A\in\MN{D}$ be Hermitian and $0\le k<D$. Then the sum of its $k$
-    largest eigenvalues is the largest value of $\re\tr(PA)$ attained by an
-    orthogonal projection $P$ of rank $k$:
-    \begin{align}
-        S_k(A)
-         & =\max_{\substack{P^2=P=P^\dagger\\ \tr(P)=k}}\re\tr(PA).
-        \label{eq:channel_ky_fan_maximum}
-    \end{align}
-    This is Ky Fan's maximum principle \cite{Fan1949Theorem}; see also
-    \cite[Problem~I.6.15, Exercise~II.1.13]{Bhatia1997Matrix}. For a positive
-    semidefinite $A$, where $S_k(A)$ coincides with the Ky-Fan norm
-    $\|A\|_{(k)}$, it gives the extremal overlap of
-    \cite[Lemma~3.1]{Wolf2012Quantum}.
-\end{theorem}
-
-\begin{proof}\leanok
-    \uses{thm:ky_fan_achievability, thm:ky_fan_upper_bound}
-    Theorem~\ref{thm:ky_fan_achievability} provides a rank-$k$ projection
-    whose trace against $A$ equals $S_k(A)$, so the value is attained.
-    Theorem~\ref{thm:ky_fan_upper_bound} shows that no rank-$k$ projection
-    exceeds it. Hence $S_k(A)$ is the maximum.
-\end{proof}
 
 \begin{theorem}[Positive maps preserve Hermiticity]
     \label{thm:positive_map_preserves_hermitian}
