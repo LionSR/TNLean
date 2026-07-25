@@ -178,14 +178,40 @@ declaration.
 
 ## What this addresses
 
-The corridor unblocks the ten section-IV targets, the four torus cycles and
-the two ring closures. Crossing order unblocks the nine crossing-order
-targets, the three braid resolutions and the two multi-strand braids. Between
-them, nineteen of the thirty-eight blocked targets, and the greater part of
-the twenty-three wrong-contraction defects, which are wrong for precisely
-these two reasons: a wrap drawn through the diagram, and a crossing drawn
-without an order.
+A blocked target is unblocked only when **every** entry in its recorded needs
+is covered, and only when its pairing is sound: a routing amendment cannot
+repair a panel that was matched against the wrong source figure. Four of the
+thirty-eight blocked targets carry a `wrong-source` pairing and are excluded
+here on that ground; they must be redrawn against the authors' own panels
+whatever the language does. Under that rule, counted against the ledger:
+
+| | targets |
+|---|---|
+| the corridor alone | 10 |
+| crossing order alone | 8 |
+| both together | **19** |
+
+The corridor's ten are the section-IV intersection family, `lhs` and `rhs` of
+panels one through five, each of which records the wrap as its only need.
+Crossing order's eight are the two-shift, the self-braiding, the two R-tensor
+panels and the four braids. The nineteenth is the second torus panel, which
+needs both: a wound string and an order for the crossings it makes.
+
+Two claims an earlier draft made do not survive the rule and are withdrawn.
+The braid resolutions and the multi-strand braids are not targets beyond the
+eight — every one of them records crossing order alongside, so they are the
+same panels named twice. And the torus cycles and ring closures do not come to
+the corridor: of the four torus cycles, one is the panel just counted, two
+carry a `wrong-source` pairing and the fourth also wants a sliding string;
+both ring closures carry a second need, one a rotated action and one a group
+average, and they arrive only with the amendments in the companion note.
+
+What the two amendments do reach beyond the count is the dominant defect. Of
+the twenty-three targets recorded as depicting the wrong contraction, the
+greater part are wrong for exactly these two reasons: a wrap drawn through the
+diagram instead of around it, and a crossing drawn without an order.
 
 The language gets one new route value and one new key, and gives back two
 values from the side alphabet and one wire key. It ends smaller than it
-started.
+started. The companion note withdraws the route value again, on the ground
+that a route is a selector rather than a word.

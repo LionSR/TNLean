@@ -888,38 +888,57 @@ displacement keys and the nesting key.
 
 ## What this addresses
 
-Of the thirty-eight blocked targets, the corridor and crossing order take
-twenty outright and share four. These amendments take fourteen outright —
-the inverse renormalization, the F-symbol, the pulling-through pair, the GHZ
-state, the SPT string, the g-injective projector, the dyon, the CZX state, the
-renormalization and fine-graining workbenches, the second MPU wrap, the
-cluster-state workbench, the g-injective pull and the white MPO-injective panel
-— and share four with the corridor: the third torus panel, Diagram 3, and both
-equation-59 panels, where the corridor supplies a closed ring or a wound string
-and the local axes orient the tensors standing on it. Whichever note lands
-second inherits the joint acceptance figures.
+The counting rule is the companion note's, and it is stated there: a blocked
+target is unblocked only when every entry in its recorded needs is covered,
+and only when its pairing is sound. Four of the thirty-eight blocked targets
+carry a `wrong-source` pairing and are excluded on that ground; they must be
+redrawn against the authors' own panels whatever the language does. Counted
+against the ledger:
 
-Of the forty-one cosmetic gaps, about twenty-seven are addressed and fourteen
-wait on a palette or a redrawing. Ten fall to the reference extent, seven to
-the label station, seven to the measured closure depth, six to angle faces and
-the circle pitch. Among the twenty-seven structural gaps, the condensation
-lattice, both intersection panels, both PEPS renormalization workbenches, the
-equation-51 trace ring and the idempotent are reached by the hull, the basis
-and the local axes. Seven targets across all statuses carry a wrong-source
-pairing and must be redrawn against the authors' own panels whatever the
-language does.
+| | targets |
+|---|---|
+| the corridor and crossing order | 19 |
+| these seven amendments in addition | 9 |
+| all nine amendments | **28** of 38 |
 
-One cause of forty-one is not turned into an amendment, and it is the largest
-remaining question. Six targets want a property of a wire nobody wrote: a leg
-made by the physical-face policy, a rail made by a side policy, a pairing made
-by a skin, each recorded as thin where the source is bold, or missing an
-arrowhead, or missing a stub. Two answers are available and they differ in
-kind. Either every generated wire takes a species from the port type that made
-it, so weight, hue and direction are theme bindings on two built-in species and
-no kernel row changes; or a policy passes wire keys to the wires it makes,
-which changes no key table but changes what a policy value is. The first is
-cheaper and covers hue and weight. The second is needed if a direction mark on
-a generated leg is mathematical content rather than decoration, which for the
+The nine these amendments add are the inverse renormalization and the GHZ
+state, which want a rotated action; the pulling-through pair, which wants a
+rotated action and the relation between its two panels; the dyon, which wants
+a marked region and an open string; the CZX state, which wants cluster groups;
+the fine-graining workbench, which wants equation composition; Diagram 3,
+which wants a ring closure and a rotated action; equation 59, which wants a
+group average and a ring closure; and the cluster-state workbench, which wants
+staggered sites.
+
+Ten blocked targets remain, and it is worth saying exactly why, because six of
+them share one cause. **No amendment here supplies strings.** Seven blocked
+targets record it as a need — the F-symbol, the SPT string, the second MPU
+wrap, the g-injective pull, the white MPO-injective panel, equation 59 in its
+first form, and the g-injective projector — and the string engine that exists
+routes, winds, detours and cuts crossings, but does not yet answer what the
+ledger means by that word in these panels. Settling it needs the panels read
+side by side against the authors' own source, which is a reading, not a
+design. The remaining four are the `wrong-source` pairings.
+
+Among the forty-one cosmetic gaps, the reference extent, the label station,
+the measured closure depth and the angle faces between them reach a
+substantial majority; the exact count wants a second pass over the notes with
+the same strictness applied here, and is not claimed until then. Among the
+twenty-seven structural gaps, the hull, the basis and the local axes reach the
+condensation lattice, both intersection panels, both renormalization
+workbenches, the equation-51 trace ring and the idempotent.
+
+One cause is not turned into an amendment, and it is the largest remaining
+question. Six targets want a property of a wire nobody wrote: a leg made by
+the physical-face policy, a rail made by a side policy, a pairing made by a
+skin, each recorded as thin where the source is bold, or missing an arrowhead,
+or missing a stub. Two answers are available and they differ in kind. Either
+every generated wire takes a species from the port type that made it, so
+weight, hue and direction are theme bindings on two built-in species and no
+kernel row changes; or a policy passes wire keys to the wires it makes, which
+changes no key table but changes what a policy value is. The first is cheaper
+and covers hue and weight. The second is needed if a direction mark on a
+generated leg is mathematical content rather than decoration, which for the
 fusion indices of the F-symbol figure it plainly is. This wants the
 maintainer's decision before anyone drafts it.
 
