@@ -69,27 +69,6 @@ theorem fundamentalTheorem_singleBlock {A B : MPSTensor d D}
         exact hT i
       simpa [hfi] using hX (A i)
 
-/-- A nonzero multiplicative complex-linear endomorphism of a full matrix algebra is inner.
-
-Simplicity makes the endomorphism bijective. Its surjectivity promotes it to an algebra
-homomorphism, bijectivity upgrades that homomorphism to an algebra equivalence, and
-Skolem--Noether realizes the equivalence as conjugation by an invertible matrix. -/
-theorem exists_inner_of_linear_mul_endomorphism
-    (T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
-    (hMul : ∀ M N, T (M * N) = T M * T N)
-    (hNonzero : T ≠ 0) :
-    ∃ X : GL (Fin D) ℂ, ∀ M : Matrix (Fin D) (Fin D) ℂ,
-      T M = (X : Matrix (Fin D) (Fin D) ℂ) * M *
-        ((X⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) := by
-  classical
-  have hBij := linear_mul_endomorphism_bijective T hMul hNonzero
-  let fHom := linearMapToAlgHom T hMul hBij.surjective
-  let f := AlgEquiv.ofBijective fHom hBij
-  obtain ⟨X, hX⟩ := skolemNoether_matrix f
-  refine ⟨X, fun M => ?_⟩
-  change f M = _
-  exact hX M
-
 /-- For injective `A`, MPV equality with any `B` is equivalent to gauge equivalence. -/
 theorem sameMPV_iff_gaugeEquiv_of_injective {A B : MPSTensor d D}
     (hA : IsInjective A) :
