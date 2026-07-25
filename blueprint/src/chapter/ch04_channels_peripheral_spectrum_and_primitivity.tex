@@ -1,0 +1,391 @@
+\section{Peripheral spectrum and primitivity}
+
+\begin{definition}[Peripheral spectrum]\label{def:peripheral_spectrum}
+    \lean{peripheralSpectrum}
+    \leanok
+    The \emph{peripheral spectrum} of a bounded linear operator $T$
+    is the set of spectral values $\mu$ with
+    $|\mu|$ equal to the spectral radius of $T$.
+\end{definition}
+
+\begin{definition}[Peripheral eigenvalues]\label{def:peripheral_eigenvalues}
+    \lean{peripheralEigenvalues}
+    \leanok
+    The \emph{peripheral eigenvalues} of a linear map $E$ on
+    a finite-dimensional space
+    are the eigenvalues $\lambda$ on the unit circle:
+    $|\lambda| = 1$.
+    For a channel, the spectral radius is~$1$
+    \cite[Proposition~6.1]{Wolf2012Quantum}, so these coincide with
+    the eigenvalues of maximal modulus.
+
+    The condition $|\lambda| = 1$ is appropriate for channels, since the
+    spectral radius of a channel is~$1$; for a general linear map with
+    spectral radius $r \neq 1$ the condition would generalise to
+    $|\lambda| = r$.
+\end{definition}
+
+\begin{remark}[Peripheral conventions for channels]%
+    \label{rem:peripheral_conventions_channels}
+    \leanok
+    \uses{def:peripheral_spectrum, def:peripheral_eigenvalues}
+    The spectral-radius convention of
+    Definition~\ref{def:peripheral_spectrum} is the usual bounded-operator
+    notion. For channels the spectral radius is~$1$, so the channel arguments
+    below use the unit-circle set of Definition~\ref{def:peripheral_eigenvalues}.
+\end{remark}
+
+\begin{definition}[Primitive map]\label{def:primitive_channel}
+    \lean{IsPrimitive}
+    \leanok
+    \uses{def:peripheral_eigenvalues}
+    A linear map is \emph{primitive} if its only peripheral eigenvalue
+    is $\lambda = 1$, i.e.\
+    $\mathrm{peripheral}(E) = \{1\}$.
+    For channels this corresponds to \cite[Theorem~6.7]{Wolf2012Quantum}.
+    This definition applies to any linear endomorphism, not only
+    to channels.
+\end{definition}
+
+\section{Fixed-point projection}
+
+\begin{definition}[Fixed-point projection]\label{def:fixed_point_proj}
+    \lean{fixedPointProj}
+    \leanok
+    Given a linear map $E:\MN{D}\to\MN{D}$ and a fixed point
+    $\rho$ with $E(\rho)=\rho$ and $\tr(\rho)\neq0$,
+    the \emph{fixed-point projection} is the rank-one map
+    \begin{align}
+        P(X)
+         & =\frac{\tr(X)}{\tr(\rho)}\rho.
+        \label{eq:channel_fixed_point_proj}
+    \end{align}
+    This projects onto the span of $\rho$ along the kernel of the
+    trace functional. When the fixed point is unique up to scaling,
+    this span is the full fixed-point space.
+\end{definition}
+
+\begin{theorem}[Power decomposition]\label{thm:pow_decomp}
+    \lean{pow_eq_fixedPointProj_add_compl_pow}
+    \leanok
+    \uses{def:fixed_point_proj, def:trace_preserving}
+    If $E$ is trace-preserving and $E(\rho)=\rho$, then, for $n\geq1$,
+    \begin{align}
+        E^n
+         & =P+(E-P)^n,
+        \label{eq:channel_power_decomp}
+    \end{align}
+    where $P$ is the fixed-point projection.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:fixed_point_proj}
+    By (\ref{eq:channel_fixed_point_proj}), $P$ is idempotent.
+    The fixed-point relation $E(\rho)=\rho$ gives $E\circ P=P$, and trace
+    preservation gives $P\circ E=P$. These imply
+    $(E-P)\circ P=0$ and $P\circ(E-P)=0$, so in the binomial expansion of
+    $(P+(E-P))^n$ all cross terms vanish, yielding
+    (\ref{eq:channel_power_decomp}).
+\end{proof}
+
+\section{Peripheral eigenvalues and powering}
+
+
+\begin{theorem}[$1$ is a peripheral eigenvalue]\label{thm:one_peripheral}
+    \lean{one_mem_peripheralEigenvalues}
+    \leanok
+    \uses{def:peripheral_eigenvalues}
+    If $E$ has a nonzero fixed point $\rho\neq0$ with $E(\rho)=\rho$,
+    then $1$ is a peripheral eigenvalue of $E$.
+\end{theorem}
+
+\begin{proof}\leanok
+    $\rho$ is an eigenvector with eigenvalue~$1$, and $|1|=1$.
+\end{proof}
+
+\begin{theorem}[Finiteness of peripheral eigenvalues]\label{thm:peripheral_finite}
+    \lean{peripheralEigenvalues_finite}
+    \leanok
+    \uses{def:peripheral_eigenvalues}
+    On a finite-dimensional space, the set of peripheral eigenvalues
+    is finite.
+\end{theorem}
+
+\begin{proof}\leanok
+    Peripheral eigenvalues are a subset of all eigenvalues,
+    which is a finite set in finite dimensions.
+\end{proof}
+
+\begin{theorem}[Power-stable peripheral eigenvalues are roots of unity]\label{thm:peripheral_roots_of_unity}
+    \lean{peripheral_isRootOfUnity_of_pow_eigenvalue}
+    \leanok
+    \uses{def:peripheral_eigenvalues}
+    Let $E$ be a linear endomorphism on a finite-dimensional space.
+    If $\mu$ is a peripheral eigenvalue of $E$ and $\mu^n$ is an eigenvalue
+    of $E$ for every $n\geq1$, then $\mu$ is a root of unity.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Since $\mu^n$ is an eigenvalue for every positive~$n$,
+    the pigeonhole principle on the finite eigenvalue set gives
+    $\mu^a=\mu^b$ for some $a\neq b$, hence $\mu^{|a-b|}=1$.
+\end{proof}
+
+\begin{theorem}[Peripheral powers imply root of unity]\label{thm:peripheral_powers}
+    \lean{peripheral_isRootOfUnity_of_closed_powers}
+    \leanok
+    \uses{def:peripheral_eigenvalues}
+    If the set of peripheral eigenvalues of a linear endomorphism~$E$ on a
+    finite-dimensional space is \emph{closed under powers}
+    ($\mu\in\mathrm{peripheral}(E)$ and $n\geq1$ imply
+    $\mu^n\in\mathrm{peripheral}(E)$), then every peripheral eigenvalue is a
+    root of unity.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:peripheral_roots_of_unity}
+    The closure hypothesis provides
+    $\mu^n\in\mathrm{peripheral}(E)$ for all positive~$n$,
+    which in particular means $\mu^n$ is an eigenvalue.
+    Theorem~\ref{thm:peripheral_roots_of_unity} then gives
+    $\mu^p=1$ for some $p>0$.
+\end{proof}
+
+\subsection{Periodicity removal by powering}\label{subsec:periodicity_removal_power}
+
+\begin{remark}\label{rem:periodicity_removal_spectral}\leanok
+    The results in this subsection are purely spectral: they use only
+    finiteness of a set of complex numbers and the spectral mapping theorem
+    for powers. In particular, they do not rely on complete positivity.
+    For transfer maps, replacing a tensor by its $p$-blocked tensor replaces
+    $\E_A$ by $\E_A^p$, so this powering step is the operator-theoretic
+    form of blocking.
+\end{remark}
+
+\begin{lemma}[Common exponent for a finite set of roots of unity]\label{lem:common_power_eq_one}
+    \lean{exists_common_power_eq_one_of_finite}
+    \leanok
+    Let $s\subseteq\C$ be a finite set.
+    Assume that for every $\mu\in s$ there exists an exponent $p_\mu>0$
+    with $\mu^{p_\mu}=1$.
+    Then there exists $p>0$ such that $\mu^p=1$ for all $\mu\in s$.
+\end{lemma}
+
+\begin{proof}\leanok
+    Take $p$ to be the least common multiple of the exponents $p_\mu$.
+\end{proof}
+
+\begin{lemma}[Powering collapses peripheral eigenvalues]\label{lem:peripheral_pow_singleton}
+    \lean{peripheralEigenvalues_pow_eq_singleton}
+    \leanok
+    \uses{def:peripheral_eigenvalues}
+    Let $E:\MN{D}\to\MN{D}$ be a linear map, and assume that $E$ has a
+    nonzero fixed point $\rho\neq0$. Let $p>0$.
+    If every peripheral eigenvalue $\mu$ of $E$ satisfies $\mu^p=1$,
+    then $\mathrm{peripheral}(E^p)=\{1\}$.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:one_peripheral}
+    The fixed point $\rho$ gives $1\in\mathrm{peripheral}(E^p)$.
+    For the reverse inclusion, let $\nu\in\mathrm{peripheral}(E^p)$.
+    Spectral mapping gives $\nu=\mu^p$ for some $\mu\in\spec(E)$.
+    From $|\nu|=1$ and $p>0$ we obtain $|\mu|=1$, hence
+    $\mu\in\mathrm{peripheral}(E)$.
+    The hypothesis $\mu^p=1$ then forces $\nu=1$.
+\end{proof}
+
+For a normalized MPS tensor, the transfer map is naturally trace-preserving but need
+not be unital. In general one should not expect a single gauge choice to make it
+both unital and trace-preserving.
+
+\begin{remark}[Bi-canonical special case]\label{rem:bicanonical_special_case}\leanok
+    When a Kraus map happens to be both unital and trace-preserving
+    (the ``bi-canonical'' case), the Kadison--Schwarz equality at peripheral
+    eigenvectors (Theorem~\ref{thm:ks_peripheral}) shows directly that the
+    peripheral eigenvalues are closed under powers, and hence are roots of unity
+    by Theorem~\ref{thm:peripheral_powers}. It
+    requires both normalizations simultaneously. The more general adjoint-fixed-point
+    formulation below covers the case where only unitality and a positive definite
+    adjoint fixed point are available.
+\end{remark}
+
+\subsection{Peripheral closure via adjoint fixed point}%
+\label{subsec:peripheral_closure_fixedpoint}
+
+The Kraus map, its adjoint, and the unital normalization are those of
+Definitions~\ref{def:kraus_map}, \ref{def:kraus_adjoint_map}, and
+\ref{def:unital_kraus}. The following results combine the canonical
+Kadison--Schwarz and multiplicative-domain theorems of Chapter~\ref{ch:schwarz}
+with a positive definite fixed point of the adjoint map, replacing trace
+preservation by the weighted-trace argument in
+\cite[Appendix~A]{Cirac2016MPDO_arXiv}.
+
+\begin{lemma}[Peripheral closure via adjoint fixed point]%
+    \label{lem:peripheral_closed_powers_irred_fp}
+    \lean{MPSTensor.peripheralEigenvalues_pow_mem_of_irreducible_unital_of_adjoint_fixedPoint}
+    \leanok
+    \uses{def:kraus_map, def:kraus_adjoint_map, def:unital_kraus,
+        def:irreducible_cp}
+    Let $E(X)=\sum_iK_iXK_i^\dagger$ be a Kraus map that is
+    unital ($\sum_iK_iK_i^\dagger=\Id$), and assume:
+    \begin{enumerate}
+        \item the adjoint Kraus map $E^*(X)=\sum_iK_i^\dagger XK_i$
+              has a positive definite fixed point $\rho>0$, and
+        \item $E$ is irreducible.
+    \end{enumerate}
+    Then $\mathrm{peripheral}(E)$ is closed under powers:
+    if $\mu\in\mathrm{peripheral}(E)$, then
+    $\mu^n\in\mathrm{peripheral}(E)$ for every $n\in\N$.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:kadison_schwarz, thm:psd_fp_pd_irred,
+        thm:kraus_commute, thm:right_multiplicative_identity}
+    Let $E(X)=\mu X$ with $|\mu|=1$, and set
+    $G:=E(X^\dagger X)-E(X)^\dagger E(X)$.
+    By (\ref{eq:schwarz_kadison}), $G\geq0$.
+    Since $E^*(\rho)=\rho$,
+    \begin{align}
+        \tr(\rho G)
+         & =\tr(\rho E(X^\dagger X))
+        -\tr(\rho E(X)^\dagger E(X)) \notag \\
+         & =\tr(E^*(\rho)X^\dagger X)
+        -\tr(\rho E(X)^\dagger E(X)) \notag \\
+         & =\tr(\rho X^\dagger X)
+        -|\mu|^2\tr(\rho X^\dagger X)
+        =0.
+    \end{align}
+    Because $\rho>0$ and $G\geq0$, this forces $G=0$, so
+    $E(X^\dagger X)=E(X)^\dagger E(X)=X^\dagger X$.
+    Hence $X^\dagger X$ is a positive semidefinite fixed point, which is
+    positive definite by irreducibility
+    (Theorem~\ref{thm:psd_fp_pd_irred}). Thus $X$ is invertible.
+    Theorem~\ref{thm:kraus_commute} gives the corresponding
+    intertwining relation with each Kraus operator. Iterating the
+    multiplicative identity of
+    Theorem~\ref{thm:right_multiplicative_identity} gives
+    $E(X^n)=\mu^nX^n$, so $\mu^n$ is peripheral.
+\end{proof}
+
+\begin{theorem}[Roots of unity via adjoint fixed point]%
+    \label{thm:peripheral_roots_irred_fp}
+    \lean{MPSTensor.peripheral_isRootOfUnity_of_irreducible_unital_of_adjoint_fixedPoint}
+    \leanok
+    \uses{def:kraus_map, def:kraus_adjoint_map, def:unital_kraus,
+        def:irreducible_cp, def:peripheral_eigenvalues}
+    Let $E(X)=\sum_iK_iXK_i^\dagger$ be a Kraus map that is
+    unital, and assume that the adjoint Kraus map
+    $E^*(X)=\sum_iK_i^\dagger XK_i$ has a positive definite fixed
+    point and that $E$ is irreducible.
+    Then every peripheral eigenvalue of $E$ is a root of unity.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:peripheral_closed_powers_irred_fp, thm:peripheral_powers}
+    Combine the closure-under-powers result
+    (Lemma~\ref{lem:peripheral_closed_powers_irred_fp})
+    with Theorem~\ref{thm:peripheral_powers}.
+\end{proof}
+
+\begin{remark}\label{rem:adjoint_fp_more_general}\leanok
+    Lemma~\ref{lem:peripheral_closed_powers_irred_fp}
+    and Theorem~\ref{thm:peripheral_roots_irred_fp}
+    cover the bi-canonical (unital + TP) case as well:
+    trace preservation gives
+    $E^*(\Id)=\Id$, which is a positive definite fixed
+    point of the adjoint.
+    The adjoint-fixed-point formulation matches the
+    argument in \cite[Appendix~A]{Cirac2016MPDO_arXiv},
+    which uses a faithful invariant state rather than
+    bi-canonicality.
+    Theorem~\ref{thm:peripheral_roots_irred_fp} establishes the
+    root-of-unity conclusion in this adjoint-fixed-point formulation.
+    In the same adjoint-fixed-point formulation, Chapter~\ref{ch:spectral}
+    proves the corresponding cyclic structure: the cyclic group of
+    peripheral eigenvalues is Theorem~\ref{thm:peripheral_cyclic_structure},
+    and the cyclic projection decomposition is
+    Theorem~\ref{thm:cyclic_decomposition_irreducible_schwarz}.
+\end{remark}
+
+\begin{definition}[Channel period]\label{def:channel_period}
+    \lean{channelPeriod}
+    \leanok
+    \uses{def:peripheral_eigenvalues}
+    The \emph{period} of a channel $E$ is the number of
+    peripheral eigenvalues, counted without multiplicity:
+    $p(E):=|\mathrm{peripheral}(E)|$.
+\end{definition}
+
+\section{Primitivity and the complementary transfer-map gap}
+
+\begin{theorem}[Primitivity equals period one]\label{thm:primitive_iff_period_one}
+    \lean{isPrimitive_iff_period_one}
+    \leanok
+    \uses{def:primitive_channel, def:channel_period}
+    A linear map with a nonzero fixed point is primitive if and only if
+    its period is~$1$.
+\end{theorem}
+
+\begin{proof}\leanok\uses{thm:one_peripheral}
+    If $\mathrm{peripheral}(E)=\{1\}$, then
+    $|\mathrm{peripheral}(E)|=1$.
+    Conversely, if $|\mathrm{peripheral}(E)|=1$, then
+    $1\in\mathrm{peripheral}(E)$ by
+    Theorem~\ref{thm:one_peripheral}, so the only element is~$1$.
+\end{proof}
+
+\begin{remark}[Period-one characterization]%
+    \label{rem:primitive_period_one_characterization}
+    \leanok
+    \uses{def:channel_period, thm:primitive_iff_period_one}
+    The period $p(E)$ counts peripheral eigenvalues without multiplicity.
+    Theorem~\ref{thm:primitive_iff_period_one} is therefore the period-one
+    characterization of primitivity. The spectral estimates below are stated
+    directly with Definition~\ref{def:primitive_channel}, since they use the
+    absence of peripheral eigenvalues other than~$1$, not a separate counting
+    hypothesis.
+\end{remark}
+
+\begin{theorem}[Complementary transfer-map gap for primitive maps]%
+    \label{thm:primitive_compl_lt_one}
+    \lean{compl_eigenvalue_norm_lt_one_of_primitive}
+    \leanok
+    \uses{def:primitive_channel, def:fixed_point_proj, def:trace_preserving}
+    Let $E:\MN{D}\to\MN{D}$ be trace-preserving, and let
+    $\rho\neq0$ satisfy $E(\rho)=\rho$ and $\tr(\rho)\neq0$.
+    Let $P$ be the fixed-point projection associated to $\rho$, as defined
+    in (\ref{eq:channel_fixed_point_proj}). Assume that:
+    \begin{enumerate}
+        \item $E$ is primitive;
+        \item every eigenvalue $\mu$ of $E$ satisfies $|\mu|\le1$;
+        \item whenever $E(X)=X$ and $\tr(X)=0$, one has $X=0$.
+    \end{enumerate}
+    Then every eigenvalue $\nu$ of $E-P$ satisfies $|\nu|<1$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Let $(E-P)(X)=\nu X$ with $X\neq0$. Then
+    $E(X)=\nu X+P(X)$. If $\tr(X)=0$, then $P(X)=0$, so
+    $E(X)=\nu X$ and hence $\nu$ is an eigenvalue of $E$ with
+    $|\nu|\le1$. If $|\nu|=1$, primitivity forces $\nu=1$, so $X$ is a
+    trace-zero fixed point of $E$; by assumption this implies $X=0$, a
+    contradiction. Thus $|\nu|<1$.
+
+    If instead $\tr(X)\neq0$, trace preservation and
+    $\tr(P(X))=\tr(X)$, which follows from
+    (\ref{eq:channel_fixed_point_proj}), give
+    \begin{align}
+        \tr(X)
+         & =\tr(E(X))
+        =\nu\tr(X)+\tr(P(X))
+        =\nu\tr(X)+\tr(X).
+        \notag
+    \end{align}
+    Hence $\nu\tr(X)=0$ and therefore $\nu=0$. In either case,
+    $|\nu|<1$.
+\end{proof}
