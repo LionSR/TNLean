@@ -78,7 +78,7 @@
     density matrices $\sigma_k\in\MN{m_k}$ such that
     \begin{align}
         \Fix(\widetilde T)
-        &=U\left(\bigoplus_k\sigma_k\otimes\MN{d_k}\right)U^*.
+         & =U\left(\bigoplus_k\sigma_k\otimes\MN{d_k}\right)U^*.
         \label{eq:spectral_max_support_blocks}
     \end{align}
     This is the maximal-support application of the full-support step in the
@@ -109,7 +109,7 @@
     is positive definite and has the form
     \begin{align}
         U^*\rho_{\mathrm{full}}U
-        &=\bigoplus_k\sigma_k\otimes X_k.
+         & =\bigoplus_k\sigma_k\otimes X_k.
         \notag
     \end{align}
     Hence every principal block $\sigma_k\otimes X_k$ is positive definite.
@@ -130,12 +130,12 @@
     associated with a decomposition
     \begin{align}
         \C^D
-        &=\C^{d_0}\oplus
-          \bigoplus_k\C^{m_k}\otimes\C^{d_k},
-        \notag\\
+         & =\C^{d_0}\oplus
+        \bigoplus_k\C^{m_k}\otimes\C^{d_k},
+        \notag                   \\
         \Fix(T)
-        &=U\left(0_{d_0}\oplus
-          \bigoplus_k\sigma_k\otimes\MN{d_k}\right)U^*.
+         & =U\left(0_{d_0}\oplus
+        \bigoplus_k\sigma_k\otimes\MN{d_k}\right)U^*.
         \label{eq:spectral_fixed_density_blocks}
     \end{align}
     This is \cite[Theorem~6.14 and Equation~(6.63)]{Wolf2012Quantum}.
@@ -154,8 +154,8 @@
     (\ref{eq:spectral_max_support_blocks}) give
     \begin{align}
         \Fix(T)
-        &=VU_c\left(\bigoplus_k
-          \sigma_k\otimes\MN{d_k}\right)U_c^*V^*.
+         & =VU_c\left(\bigoplus_k
+        \sigma_k\otimes\MN{d_k}\right)U_c^*V^*.
         \notag
     \end{align}
     Put $W=VU_c$. Then $W^*W=\Id_n$. Compare $W$ with the canonical
@@ -166,7 +166,7 @@
     $A\in\MN{n}$,
     \begin{align}
         WAW^*
-        &=U(0_{D-n}\oplus A)U^*.
+         & =U(0_{D-n}\oplus A)U^*.
         \label{eq:spectral_zero_extension}
     \end{align}
     Substituting the compressed density-block description into
@@ -236,9 +236,9 @@ support projection.
     invertible matrices $U$ and $U^\dagger$ preserves the rank, and
     \begin{align}
         \rank\diag(\mathbf 1_{\lambda>0})
-        &=\#\{i\mid\lambda_i>0\}
-          =\#\{i\mid\lambda_i\neq0\}
-          =\rank\diag(\lambda),
+         & =\#\{i\mid\lambda_i>0\}
+        =\#\{i\mid\lambda_i\neq0\}
+        =\rank\diag(\lambda),
         \notag
     \end{align}
     where the middle equality follows because the eigenvalues of
@@ -260,9 +260,9 @@ support projection.
     With $\rho=U\diag(\lambda)U^\dagger$ as above,
     \begin{align}
         \tr\!\left(U\diag(\mathbf 1_{\lambda>0})U^\dagger\right)
-        &=\tr\diag(\mathbf 1_{\lambda>0})
-          =\#\{i\mid\lambda_i>0\}
-          =\rank\rho,
+         & =\tr\diag(\mathbf 1_{\lambda>0})
+        =\#\{i\mid\lambda_i>0\}
+        =\rank\rho,
         \notag
     \end{align}
     where the last equality follows because the rank of a positive
@@ -270,7 +270,7 @@ support projection.
 \end{proof}
 
 \begin{theorem}[The support of a fixed point of maximum rank carries every fixed
-    point]%
+        point]%
     \label{thm:maximalSupport_of_maximalRank}
     \lean{Kraus.maximalSupport_of_maximalRank}
     \leanok
@@ -300,9 +300,9 @@ support projection.
     $\rank\rho_0\leq\rank\rho$. Conversely, $Q_0\rho Q_0=\rho$, so
     \begin{align}
         \rank\rho
-        &=\rank(Q_0\rho Q_0)
-          \leq\rank Q_0
-          =\rank\rho_0,
+         & =\rank(Q_0\rho Q_0)
+        \leq\rank Q_0
+        =\rank\rho_0,
         \notag
     \end{align}
     where the last equality is
@@ -312,18 +312,18 @@ support projection.
     $\Id-Q_0$ lies in the kernel of $\rho$. The support projection $P$ of
     $\rho$ vanishes on that kernel, and therefore
     \begin{align}
-        P(\Id-Q_0)&=0,
-        &
-        PQ_0&=P,
-        &
-        Q_0P&=P.
+        P(\Id-Q_0) & =0,
+                   &
+        PQ_0       & =P,
+                   &
+        Q_0P       & =P.
         \notag
     \end{align}
     The last identity follows by taking conjugate transposes. The difference
     $R=Q_0-P$ is Hermitian and idempotent, since
     \begin{align}
         R^2
-        &=Q_0-P-P+P=R.
+         & =Q_0-P-P+P=R.
         \notag
     \end{align}
     Its trace vanishes by Lemma~\ref{lem:trace_stationaryProj} and the
@@ -367,21 +367,10 @@ of Corollary~6.7 of~\cite{Wolf2012Quantum}.
 
 \section{Further irreducibility and primitivity equivalences}
 
-This section collects several criteria and equivalences from
-\cite[Theorems~6.2, 6.7, 6.8]{Wolf2012Quantum} that are used later.
-
-\begin{theorem}[Exponential positivity condition]%
-    \label{thm:wolf_6_2_item_3}
-    \lean{exp_posDef_of_irreducible_cp}
-    \lean{irreducible_iff_exp_posDef_forall}
-    \leanok
-    \uses{def:irreducible_cp}
-    Let $E$ be an irreducible completely positive map, $A\geq0$ with
-    $A\neq0$, and $t>0$. Then $\exp(tE)(A)$ is positive definite.
-    Conversely, if $\exp(tE)(A)$ is positive definite for every such $t$
-    and $A$, then $E$ is irreducible (full equivalence
-    \lean{irreducible_iff_exp_posDef_forall}).
-\end{theorem}
+This section collects criteria and equivalences from
+\cite[Theorems~6.7 and~6.8]{Wolf2012Quantum} that are used later. The
+completely positive exponential characterization corresponding to Wolf's
+Theorem~6.2 appears in Theorem~\ref{thm:wolf_6_2_item_3}.
 
 \begin{theorem}[Kraus-span equivalence]%
     \label{thm:wolf_6_8_kraus_span}
@@ -439,9 +428,9 @@ arbitrary peripheral periods.
     $\sigma\in\mathrm{Sym}(\iota)$, not necessarily a single cycle, such
     that, for every $k\in\iota$ and $X\in\MN{D}$,
     \begin{align}
-        T(P_{\sigma(k)})&=P_k, \notag\\
-        T(P_kX)&=T(P_k)T(X), \notag\\
-        T(XP_k)&=T(X)T(P_k).
+        T(P_{\sigma(k)}) & =P_k, \notag        \\
+        T(P_kX)          & =T(P_k)T(X), \notag \\
+        T(XP_k)          & =T(X)T(P_k).
         \notag
     \end{align}
     In general, $\sigma$ may have multiple disjoint cycles.
