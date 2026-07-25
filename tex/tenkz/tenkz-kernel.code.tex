@@ -2402,21 +2402,35 @@
               \l__tenkz_kernel_r_row_tl
             \__tenkz_model_get:nnN {#1} {bottom}
               \l__tenkz_kernel_r_col_tl
+            \__tenkz_kernel_r_frame_xy:nnNN
+              { \l__tenkz_kernel_r_row_tl } {1}
+              \l__tenkz_kernel_r_x_fp \l__tenkz_kernel_r_y_fp
+            \__tenkz_kernel_r_frame_xy:nnNN
+              { \l__tenkz_kernel_r_col_tl } {1}
+              \l__tenkz_kernel_r_xb_fp \l__tenkz_kernel_r_yb_fp
             \__tenkz_render_stroke:nn { bond }
               {
                 \__tenkz_kernel_r_pair:nn
-                  {1} {-\l__tenkz_kernel_r_row_tl}
+                  { \l__tenkz_kernel_r_x_fp }
+                  { \l__tenkz_kernel_r_y_fp }
                 .. controls
                   \__tenkz_kernel_r_pair:nn
-                    {1 - \__tenkz_metric_ratio:n {stub}}
-                    {-\l__tenkz_kernel_r_row_tl}
+                    {
+                      \l__tenkz_kernel_r_x_fp
+                      - \__tenkz_metric_ratio:n {stub}
+                    }
+                    { \l__tenkz_kernel_r_y_fp }
                   and
                   \__tenkz_kernel_r_pair:nn
-                    {1 - \__tenkz_metric_ratio:n {stub}}
-                    {-\l__tenkz_kernel_r_col_tl}
+                    {
+                      \l__tenkz_kernel_r_xb_fp
+                      - \__tenkz_metric_ratio:n {stub}
+                    }
+                    { \l__tenkz_kernel_r_yb_fp }
                 ..
                 \__tenkz_kernel_r_pair:nn
-                  {1} {-\l__tenkz_kernel_r_col_tl}
+                  { \l__tenkz_kernel_r_xb_fp }
+                  { \l__tenkz_kernel_r_yb_fp }
               }
           }
         {east}
@@ -2425,29 +2439,37 @@
               \l__tenkz_kernel_r_row_tl
             \__tenkz_model_get:nnN {#1} {bottom}
               \l__tenkz_kernel_r_col_tl
+            \__tenkz_kernel_r_frame_xy:nnNN
+              { \l__tenkz_kernel_r_row_tl }
+              { \l__tenkz_kernel_r_cols_int }
+              \l__tenkz_kernel_r_x_fp \l__tenkz_kernel_r_y_fp
+            \__tenkz_kernel_r_frame_xy:nnNN
+              { \l__tenkz_kernel_r_col_tl }
+              { \l__tenkz_kernel_r_cols_int }
+              \l__tenkz_kernel_r_xb_fp \l__tenkz_kernel_r_yb_fp
             \__tenkz_render_stroke:nn { bond }
               {
                 \__tenkz_kernel_r_pair:nn
-                  {\l__tenkz_kernel_r_cols_int}
-                  {-\l__tenkz_kernel_r_row_tl}
+                  { \l__tenkz_kernel_r_x_fp }
+                  { \l__tenkz_kernel_r_y_fp }
                 .. controls
                   \__tenkz_kernel_r_pair:nn
                     {
-                      \l__tenkz_kernel_r_cols_int
+                      \l__tenkz_kernel_r_x_fp
                       + \__tenkz_metric_ratio:n {stub}
                     }
-                    {-\l__tenkz_kernel_r_row_tl}
+                    { \l__tenkz_kernel_r_y_fp }
                   and
                   \__tenkz_kernel_r_pair:nn
                     {
-                      \l__tenkz_kernel_r_cols_int
+                      \l__tenkz_kernel_r_xb_fp
                       + \__tenkz_metric_ratio:n {stub}
                     }
-                    {-\l__tenkz_kernel_r_col_tl}
+                    { \l__tenkz_kernel_r_yb_fp }
                 ..
                 \__tenkz_kernel_r_pair:nn
-                  {\l__tenkz_kernel_r_cols_int}
-                  {-\l__tenkz_kernel_r_col_tl}
+                  { \l__tenkz_kernel_r_xb_fp }
+                  { \l__tenkz_kernel_r_yb_fp }
               }
           }
         {north}
@@ -2456,21 +2478,35 @@
               \l__tenkz_kernel_r_row_tl
             \__tenkz_model_get:nnN {#1} {right}
               \l__tenkz_kernel_r_col_tl
+            \__tenkz_kernel_r_frame_xy:nnNN
+              {1} { \l__tenkz_kernel_r_row_tl }
+              \l__tenkz_kernel_r_x_fp \l__tenkz_kernel_r_y_fp
+            \__tenkz_kernel_r_frame_xy:nnNN
+              {1} { \l__tenkz_kernel_r_col_tl }
+              \l__tenkz_kernel_r_xb_fp \l__tenkz_kernel_r_yb_fp
             \__tenkz_render_stroke:nn { bond }
               {
                 \__tenkz_kernel_r_pair:nn
-                  {\l__tenkz_kernel_r_row_tl} {-1}
+                  { \l__tenkz_kernel_r_x_fp }
+                  { \l__tenkz_kernel_r_y_fp }
                 .. controls
                   \__tenkz_kernel_r_pair:nn
-                    {\l__tenkz_kernel_r_row_tl}
-                    {-1 + \__tenkz_metric_ratio:n {stub}}
+                    { \l__tenkz_kernel_r_x_fp }
+                    {
+                      \l__tenkz_kernel_r_y_fp
+                      + \__tenkz_metric_ratio:n {stub}
+                    }
                   and
                   \__tenkz_kernel_r_pair:nn
-                    {\l__tenkz_kernel_r_col_tl}
-                    {-1 + \__tenkz_metric_ratio:n {stub}}
+                    { \l__tenkz_kernel_r_xb_fp }
+                    {
+                      \l__tenkz_kernel_r_yb_fp
+                      + \__tenkz_metric_ratio:n {stub}
+                    }
                 ..
                 \__tenkz_kernel_r_pair:nn
-                  {\l__tenkz_kernel_r_col_tl} {-1}
+                  { \l__tenkz_kernel_r_xb_fp }
+                  { \l__tenkz_kernel_r_yb_fp }
               }
           }
         {south}
@@ -2479,29 +2515,37 @@
               \l__tenkz_kernel_r_row_tl
             \__tenkz_model_get:nnN {#1} {right}
               \l__tenkz_kernel_r_col_tl
+            \__tenkz_kernel_r_frame_xy:nnNN
+              { \l__tenkz_kernel_r_rows_int }
+              { \l__tenkz_kernel_r_row_tl }
+              \l__tenkz_kernel_r_x_fp \l__tenkz_kernel_r_y_fp
+            \__tenkz_kernel_r_frame_xy:nnNN
+              { \l__tenkz_kernel_r_rows_int }
+              { \l__tenkz_kernel_r_col_tl }
+              \l__tenkz_kernel_r_xb_fp \l__tenkz_kernel_r_yb_fp
             \__tenkz_render_stroke:nn { bond }
               {
                 \__tenkz_kernel_r_pair:nn
-                  {\l__tenkz_kernel_r_row_tl}
-                  {-\l__tenkz_kernel_r_rows_int}
+                  { \l__tenkz_kernel_r_x_fp }
+                  { \l__tenkz_kernel_r_y_fp }
                 .. controls
                   \__tenkz_kernel_r_pair:nn
-                    {\l__tenkz_kernel_r_row_tl}
+                    { \l__tenkz_kernel_r_x_fp }
                     {
-                      -\l__tenkz_kernel_r_rows_int
+                      \l__tenkz_kernel_r_y_fp
                       - \__tenkz_metric_ratio:n {stub}
                     }
                   and
                   \__tenkz_kernel_r_pair:nn
-                    {\l__tenkz_kernel_r_col_tl}
+                    { \l__tenkz_kernel_r_xb_fp }
                     {
-                      -\l__tenkz_kernel_r_rows_int
+                      \l__tenkz_kernel_r_yb_fp
                       - \__tenkz_metric_ratio:n {stub}
                     }
                 ..
                 \__tenkz_kernel_r_pair:nn
-                  {\l__tenkz_kernel_r_col_tl}
-                  {-\l__tenkz_kernel_r_rows_int}
+                  { \l__tenkz_kernel_r_xb_fp }
+                  { \l__tenkz_kernel_r_yb_fp }
               }
           }
       }
