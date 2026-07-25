@@ -258,28 +258,7 @@ theorem exists_block_match_exact_of_eventuallyProportional
   classical
   obtain ⟨k₀, hk₀⟩ := exists_nondecaying_overlap_exact_of_eventuallyProportional
     (P := P) (Q := Q) hP hQ j₀ hProp
-  haveI hj₀dim : NeZero (P.basisDim j₀) := ⟨(hP.basis_dim_pos j₀).ne'⟩
-  haveI hk₀dim : NeZero (Q.basisDim k₀) := ⟨(hQ.basis_dim_pos k₀).ne'⟩
-  have hDim : P.basisDim j₀ = Q.basisDim k₀ := by
-    by_contra hne
-    exact hk₀ <|
-      mpvOverlap_tendsto_zero_of_dim_ne_of_irreducible_TP
-        (P.basis j₀) (Q.basis k₀)
-        (hP.basis_irreducible j₀) (hQ.basis_irreducible k₀)
-        (hP.basis_left_canonical j₀) (hQ.basis_left_canonical k₀)
-        hne
-  have hGPE :
-      GaugePhaseEquiv
-        (cast (congr_arg (MPSTensor d) hDim) (P.basis j₀)) (Q.basis k₀) := by
-    by_contra hNot
-    exact hk₀ <|
-      mpvOverlap_tendsto_zero_of_not_gaugePhaseEquiv_cast_left_of_irreducible_TP
-        (hdim := hDim) (A := P.basis j₀) (B := Q.basis k₀)
-        (hA_irr := hP.basis_irreducible j₀)
-        (hB_irr := hQ.basis_irreducible k₀)
-        (hA_norm := hP.basis_left_canonical j₀)
-        (hB_norm := hQ.basis_left_canonical k₀)
-        (hNot := hNot)
+  obtain ⟨hDim, hGPE⟩ := dim_and_gaugePhase_of_nondecaying_overlap hP hQ hk₀
   exact ⟨k₀, hDim, hGPE, hk₀⟩
 
 /-! ### Full-basis proportional matching (Q → P direction)
