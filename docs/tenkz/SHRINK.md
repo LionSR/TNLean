@@ -514,7 +514,7 @@ ledger when the parser row moves — which is how every retirement in this
 project has been booked since Session 0, and why nine 0.7 rows sentenced then
 are still `kernel` today. Twenty verdicts below change accordingly.
 
-### Verdicts on the 127 flags
+### Verdicts on the 128 flags
 
 | flag | verdict |
 |---|---|
@@ -590,6 +590,7 @@ are still `kernel` today. Twenty verdicts below change accordingly.
 | flag:consumers:key:kernel-wire:bend | dies at the S4 swap: an arc leaves and enters along its ends' faces, which is how every curve in the corpus is written (`LANGUAGE-1.0` 5); expiry 0.9 |
 | flag:consumers:key:kernel-wire:closed | keep-because: kernel landing wave (#4687); consumers arrive with the S4 swap and the redraw campaign; expiry 0.8 |
 | flag:consumers:key:kernel-wire:cross | keep-because: kernel landing wave (#4687); consumers arrive with the S4 swap and the redraw campaign; expiry 0.8 |
+| flag:consumers:key:kernel-wire:crossing | keep-because: amendment two, `Extension-gate: #4779`; consumers arrive with the S4 swap and the redraw campaign; expiry 0.8 |
 | flag:consumers:key:kernel-wire:dir | keep-because: kernel landing wave (#4687); consumers arrive with the S4 swap and the redraw campaign; expiry 0.8 |
 | flag:consumers:key:kernel-wire:kind | keep-because: kernel landing wave (#4687); consumers arrive with the S4 swap and the redraw campaign; expiry 0.8 |
 | flag:consumers:key:kernel-wire:name | keep-because: kernel landing wave (#4687); consumers arrive with the S4 swap and the redraw campaign; expiry 0.8 |
@@ -645,6 +646,13 @@ are still `kernel` today. Twenty verdicts below change accordingly.
 | flag:sugar-shaped:command:tntree | confirmed by contract: `\tntree` is an expander sugar row (`LANGUAGE-1.0` 9); dies into the kernel at the S4 swap; expiry 0.9 |
 | flag:sugar-shaped:command:tnarrow | tombstoned by contract: `\tnarrow` migrates to `\tnwire[dir=to]` (`LANGUAGE-1.0` 10); deleted at the S4 swap; expiry 0.9 |
 | flag:sugar-shaped:command:tngroup | keep-because: a group is the composition grammar for one transform over several atoms and wires, not atom sugar; permanent (re-affirmed 2026-07-25) |
+
+`Extension-gate: #4779` (2026-07-25) adds `crossing=` at wire scope: the order a
+string takes at every crossing it makes, stated once instead of once per
+crossing. It arrives with the route that derives a crossing set from the side a
+string passes on, and `cross=` stays as the per-crossing exception for the one
+crossing that goes against the habit. Consumers: rmp-iii-a-pulling-through,
+rmp-workbench-iii-g-injective-pull, rmp-workbench-iii-mpo-injective-white.
 
 One arrival is named here and booked elsewhere, so that it is counted once.
 Retiring the face words leaves the corpus spelling them, and they survive as
