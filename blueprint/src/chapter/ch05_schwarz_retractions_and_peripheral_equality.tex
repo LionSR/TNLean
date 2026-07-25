@@ -107,10 +107,11 @@ Section~\ref{sec:app_schwarz_retractions}.
 
 \begin{proof}
     \leanok
-    \uses{thm:positive_retraction_one_matrix_factor,
-        thm:starSubalgebra_unitary_block_diagonal_iff}
-    Conjugate by $U$ and use (\ref{eq:schwarz_star_algebra_blocks}) to
-    identify the ambient space with
+    \uses{thm:positive_retraction_one_matrix_factor}
+    The standard finite-dimensional Wedderburn theorem in
+    \cite[Proposition~1.5]{Wolf2012Quantum} supplies $U$ and the block form
+    (\ref{eq:schwarz_star_algebra_blocks}). Conjugate by $U$ to identify the
+    ambient space with
     $\bigoplus_k\C^{m_k}\otimes\C^{d_k}$. Let $P_k$ be the central projection
     onto the $k$-th summand and let $T_k$ be the $k$-th diagonal block of the
     conjugated map. Since $T_k(\Id-P_k)=0$, positivity implies
