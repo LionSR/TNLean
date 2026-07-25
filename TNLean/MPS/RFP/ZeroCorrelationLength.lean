@@ -208,14 +208,6 @@ def IsBNTLocallyOrthogonal
     (blocks : (j : Fin g) → MPSTensor d (dim j)) : Prop :=
   ∀ j j' : Fin g, j ≠ j' → mixedTransferMap₂ (blocks j) (blocks j') = 0
 
-/-- Unfolding of BNT-level local orthogonality into the mixed transfer
-equations. -/
-lemma isBNTLocallyOrthogonal_iff
-    (blocks : (j : Fin g) → MPSTensor d (dim j)) :
-    IsBNTLocallyOrthogonal blocks ↔
-      ∀ j j' : Fin g, j ≠ j' → mixedTransferMap₂ (blocks j) (blocks j') = 0 :=
-  Iff.rfl
-
 /-- BNT zero correlation length in the source sense of arXiv:1606.00608,
 Definition 3.6 (lines 476--478): `blocks` is a basis of normal tensors for
 `A`, the physical correlations of `A` satisfy Definition 3.3 (lines 437--445),
@@ -238,15 +230,6 @@ def IsBNTZCL (A : MPSTensor d D)
     (blocks : (j : Fin g) → MPSTensor d (dim j)) : Prop :=
   IsCPSVBasisOfNormalTensors A (fun j => ⟨dim j, blocks j⟩) ∧
     IsCID A ∧ IsBNTLocallyOrthogonal blocks
-
-/-- Unfolding of BNT-level zero correlation length into the BNT relation, CID,
-and BNT local orthogonality. -/
-lemma isBNTZCL_iff (A : MPSTensor d D)
-    (blocks : (j : Fin g) → MPSTensor d (dim j)) :
-    IsBNTZCL A blocks ↔
-      IsCPSVBasisOfNormalTensors A (fun j => ⟨dim j, blocks j⟩) ∧
-        IsCID A ∧ IsBNTLocallyOrthogonal blocks :=
-  Iff.rfl
 
 /-- Positive-gap BNT zero correlation length: a BNT family satisfies the
 mixed-sector local-orthogonality equations, while physical block-observable

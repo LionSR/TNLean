@@ -438,24 +438,6 @@ def IsSameSPTPhase (A B : MPSTensor d D)
         (((ρB.X (g⁻¹))⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)) ∧
     ScalarCocycle.CohomologousTo ωA ωB
 
-/-- `IsSameSPTPhase` implies on-site symmetry for the first tensor: the virtual
-representation intertwining gives a gauge equivalence between `A` and each
-twisted tensor, which implies `SameMPV`. -/
-theorem IsSameSPTPhase.isOnSiteSymmetric_left
-    {A B : MPSTensor d D} {U : G →* Matrix (Fin d) (Fin d) ℂ}
-    (h : IsSameSPTPhase A B U) : IsOnSiteSymmetric A U := by
-  obtain ⟨_, _, ρA, _, hA, _, _⟩ := h
-  intro g
-  exact GaugeEquiv.sameMPV ⟨ρA.X (g⁻¹), fun i => hA g i⟩
-
-/-- `IsSameSPTPhase` implies on-site symmetry for the second tensor. -/
-theorem IsSameSPTPhase.isOnSiteSymmetric_right
-    {A B : MPSTensor d D} {U : G →* Matrix (Fin d) (Fin d) ℂ}
-    (h : IsSameSPTPhase A B U) : IsOnSiteSymmetric B U := by
-  obtain ⟨_, _, _, ρB, _, hB, _⟩ := h
-  intro g
-  exact GaugeEquiv.sameMPV ⟨ρB.X (g⁻¹), fun i => hB g i⟩
-
 /-- For an injective symmetric MPS with canonical FCS data, the twisted transfer
 map has the virtual representation gauge matrix as a fixed point (eigenvalue 1).
 This is immediate from the virtual representation intertwining relation and the

@@ -278,26 +278,6 @@ theorem HasAppendixD2ParentCommutingHamiltonian.to_overlapping
   right_idempotent := h.right_idempotent
   commute_lifts := h.commute_lifts
 
-theorem HasOverlappingTwoSiteCommutation.commute_apply
-    {QAX QXB : NSiteSpace d 2 →ₗ[ℂ] NSiteSpace d 2}
-    (h : HasOverlappingTwoSiteCommutation (d := d) QAX QXB)
-    (ψ : NSiteSpace d 3) :
-    leftPairLift QAX (rightPairLift QXB ψ) =
-      rightPairLift QXB (leftPairLift QAX ψ) := by
-  simpa [Module.End.mul_apply] using LinearMap.congr_fun h.commute_lifts ψ
-
-theorem HasOverlappingTwoSiteCommutation.left_lift_idempotent
-    {QAX QXB : NSiteSpace d 2 →ₗ[ℂ] NSiteSpace d 2}
-    (h : HasOverlappingTwoSiteCommutation (d := d) QAX QXB) :
-    leftPairLift QAX * leftPairLift QAX = leftPairLift QAX := by
-  rw [← leftPairLift_mul, h.left_idempotent]
-
-theorem HasOverlappingTwoSiteCommutation.right_lift_idempotent
-    {QAX QXB : NSiteSpace d 2 →ₗ[ℂ] NSiteSpace d 2}
-    (h : HasOverlappingTwoSiteCommutation (d := d) QAX QXB) :
-    rightPairLift QXB * rightPairLift QXB = rightPairLift QXB := by
-  rw [← rightPairLift_mul, h.right_idempotent]
-
 /-- The left complementary projector in arXiv:1606.00608, Appendix D.2, is
 idempotent. -/
 theorem HasOverlappingTwoSiteCommutation.left_complement_idempotent
@@ -423,14 +403,6 @@ theorem localTerm_two_three_zero_one_commute_of_appendixD2_complement
     h.to_overlapping hAX hXB
 
 /-! ### Adjacent cyclic two-site supports -/
-
-/-- The left two-site support \(AX\) of the three-site window starting at `i`. -/
-def axCyclicSupport (N : ℕ) (i : Fin N) : Finset (Fin N) :=
-  cyclicWindowSupport N 2 i
-
-/-- The right two-site support \(XB\) of the three-site window starting at `i`. -/
-def xbCyclicSupport (N : ℕ) (i : Fin N) : Finset (Fin N) :=
-  cyclicWindowSupport N 2 (cyclicForwardSite i 1)
 
 /-- The two adjacent nearest-neighbor windows share their middle site. -/
 theorem adjacent_twoSite_cyclicWindowsOverlap {N : ℕ} (i : Fin N) :
