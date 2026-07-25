@@ -97,32 +97,6 @@ private lemma bellPairChainTensor_letter_conj (a b : Fin 2)
     show star bellCoeff * bellCoeff = 1 / 2 by
       rw [mul_comm]; exact bellCoeff_mul_star]
 
-/-- Summing the diagonal matrix units over the first spin gives the identity
-contribution of the transfer map. -/
-private lemma single_sum_one (X : Matrix (Fin 2) (Fin 2) ℂ) :
-    (∑ a : Fin 2, ∑ b : Fin 2, Matrix.single a a ((1 / 2 : ℂ) * X b b)) =
-      (1 / 2 * Matrix.trace X) • 1 := by
-  have hinner : ∀ a : Fin 2,
-      (∑ b : Fin 2, Matrix.single a a ((1 / 2 : ℂ) * X b b)) =
-        Matrix.single a a ((1 / 2 : ℂ) * Matrix.trace X) := by
-    intro a
-    have h1 : (∑ b : Fin 2, Matrix.single a a ((1 / 2 : ℂ) * X b b)) =
-        Matrix.single a a (∑ b : Fin 2, (1 / 2 : ℂ) * X b b) := by
-      change (∑ b : Fin 2, Matrix.singleAddMonoidHom a a ((1 / 2 : ℂ) * X b b)) =
-        Matrix.singleAddMonoidHom a a (∑ b : Fin 2, (1 / 2 : ℂ) * X b b)
-      rw [map_sum]
-    rw [h1, Fin.sum_univ_two, Matrix.trace_fin_two]
-    congr 1
-    ring
-  rw [Finset.sum_congr rfl fun a _ => hinner a]
-  rw [show (∑ a : Fin 2, Matrix.single a a ((1 / 2 : ℂ) * Matrix.trace X)) =
-      ((1 / 2 : ℂ) * Matrix.trace X) • ∑ a : Fin 2, Matrix.single a a 1 from by
-    rw [Finset.smul_sum]
-    apply Finset.sum_congr rfl
-    intro a _
-    rw [Matrix.smul_single, smul_eq_mul, mul_one]]
-  rw [Matrix.sum_single_one]
-
 /-- Summing the diagonal matrix units against a sign on the first spin gives a
 diagonal matrix. -/
 private lemma single_sum_fst (s : Fin 2 → ℂ) (X : Matrix (Fin 2) (Fin 2) ℂ) :
@@ -180,6 +154,13 @@ private lemma single_sum_snd (s : Fin 2 → ℂ) (X : Matrix (Fin 2) (Fin 2) ℂ
     intro a _
     rw [Matrix.smul_single, smul_eq_mul, mul_one]]
   rw [Matrix.sum_single_one]
+
+/-- Summing the diagonal matrix units over the first spin gives the identity
+contribution of the transfer map: the `s ≡ 1` case of `single_sum_fst`. -/
+private lemma single_sum_one (X : Matrix (Fin 2) (Fin 2) ℂ) :
+    (∑ a : Fin 2, ∑ b : Fin 2, Matrix.single a a ((1 / 2 : ℂ) * X b b)) =
+      (1 / 2 * Matrix.trace X) • 1 := by
+  simpa using single_sum_fst (fun _ => 1) X
 
 /-- The transfer map of the Bell-pair chain tensor is
 `𝔼(X) = tr(X) · diag(Λ)`, evaluated entrywise. -/
