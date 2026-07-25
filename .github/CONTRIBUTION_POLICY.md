@@ -83,7 +83,4 @@ carries none of that cost.
 ## tenkz is closed
 
 `tenkz` is an internal project under active redesign. It accepts no outside
-contributions under any circumstance, assigned or not. This covers every
-`tenkz` implementation and integration file, wherever it sits — currently
-`tex/tenkz/`, `tests/tenkz/`, `docs/tenkz/`, the `tenkz` entries under
-`scripts/` and `.github/workflows/`, and the `tenkz` files under `blueprint/`.
+contributions, assigned or not, in any file that implements or integrates it.
