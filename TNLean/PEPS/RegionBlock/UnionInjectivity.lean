@@ -55,7 +55,17 @@ The union lemma is proved once over a bare `ThreeBlockGeometry` (in
 `TNLean.PEPS.RegionBlock.UnionInjectivityGeneral2`). The
 `NormalEdgeBlockingData`-parametrized theorems of this file are reformulations
 that view the edge-centred red, blue, and complement blocks as that geometry
-via `NormalEdgeBlockingData.toThreeBlockGeometry`. -/
+via `NormalEdgeBlockingData.toThreeBlockGeometry`.
+
+A boundary edge of the host `univ \ red` has one endpoint in `univ \ red` and one
+in `red`. The host-side endpoint lies in the blue block or in the complement block
+(the two cover `univ \ red`). When it lies in blue the edge is a boundary edge of
+the blue block (the red endpoint is outside blue); when it lies in complement the
+edge is a boundary edge of the complement block (the red endpoint is outside
+complement). A host boundary configuration is therefore the data of a blue
+boundary configuration on the blue/red crossing edges and a complement boundary
+configuration on the complement/red crossing edges, recombined by
+`ThreeBlockGeometry.hostLabelFrom`. -/
 
 /-- View the one-edge blocking data as a bare three-block geometry: the same
 red, blue, and complement blocks, keeping only their pairwise disjointness and
@@ -71,17 +81,6 @@ def NormalEdgeBlockingData.toThreeBlockGeometry
   red_disjoint_complement := D.red_disjoint_complement
   blue_disjoint_complement := D.blue_disjoint_complement
   cover_univ := D.cover_univ
-
-/-! ### Reconstructing a host boundary configuration from blue and complement data
-
-A boundary edge of the host `univ \ red` has one endpoint in `univ \ red` and one in
-`red`. The host-side endpoint lies in the blue block or in the complement block (the
-two cover `univ \ red`). When it lies in blue the edge is a boundary edge of the blue
-block (the red endpoint is outside blue); when it lies in complement the edge is a
-boundary edge of the complement block (the red endpoint is outside complement). A host
-boundary configuration is therefore the data of a blue boundary configuration on the
-blue/red crossing edges and a complement boundary configuration on the complement/red
-crossing edges, recombined by `ThreeBlockGeometry.hostLabelFrom`. -/
 
 /-! ### The blue inversion of the host annihilation
 

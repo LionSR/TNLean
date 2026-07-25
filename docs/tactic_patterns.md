@@ -204,14 +204,13 @@ abstracted — record why, so it is not re-proposed).
   `swapBlueComplement` abbrev, `blueRedCrossingBondProd`) close by plain defeq —
   no bridge lemmas. Statements byte-identical, including the unused
   `_hblue`/`_hcompl` hypotheses.
-- **Result:** `RegionBlock/UnionInjectivity.lean` drops from 906 to 628 lines
-  (+34/−312, net −278) across 4 commits; the sole external consumer
+- **Result:** `RegionBlock/UnionInjectivity.lean` drops from 906 to 244 lines
+  (net −662), landed together in #4817 in two stages: the wrapper migration
+  (906 → 628, +34/−312, net −278, 4 commits) and the deletion of the 12
+  orphaned D-side helper declarations with their docstrings and the orphaned
+  section docs (+7/−391, net −384). The sole external consumer
   `regionBlockedTensorInjective_compl_red` and the blueprint ch24 `\lean{}` tags
-  are untouched. The wrappers orphaned the D-side helper lemmas (now dead,
-  kept in place) — the follow-up deletion slice landed as #4522 slice (d):
-  the 12 orphaned declarations, their docstrings, and the two section docs
-  introducing only deleted material are gone (+7/−391, net −384; 628 → 244
-  lines), with the two surviving docstring citations re-pointed at the
+  are untouched; the two surviving docstring citations are re-pointed at the
   `ThreeBlockGeometry` twins.
 
 ---
