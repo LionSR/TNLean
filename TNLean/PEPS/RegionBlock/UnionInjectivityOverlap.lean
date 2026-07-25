@@ -168,7 +168,7 @@ theorem overlapRightGeometry_univ_sdiff_red (R₁ R₂ : Finset V) :
 
 The source proof inverts the two injective regions in sequence. With the two
 overlap geometries this is two applications of the landed blue strip
-(`complCoeff_combination_eq_zero`), one for each region: stripping `R₁` leaves the
+(`ThreeBlockGeometry.complCoeff_combination_eq_zero`), one for each region: stripping `R₁` leaves the
 residual coupling through `R₂ \ R₁`, and stripping `R₂` leaves the residual
 coupling through `R₁ \ R₂`. -/
 
