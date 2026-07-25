@@ -1885,6 +1885,9 @@
 \msg_new:nnn {tenkz}{kernel-render-crossref}
   { [TKZ-KERNEL-RENDER-CROSSREF]~crossing~operand~'#1'~names~no~string~or~
     leg~of~this~picture }
+\msg_new:nnn {tenkz}{kernel-render-phtrace}
+  { [TKZ-KERNEL-RENDER-PHTRACE]~physical~trace~record~'#1'~has~no~rendered~
+    atom~at~row~1,~column~#2 }
 
 % variants this pass leans on; generation is idempotent where l3 already
 % ships the form
@@ -3488,24 +3491,39 @@
               { \tl_set:Nn \l__tenkz_kernel_r_tl {##1} }
           }
       }
-    \pgfextractx \l__tenkz_kernel_r_north_x_dim
-      { \pgfpointanchor{\tl_use:N \l__tenkz_kernel_r_tl}{north} }
-    \pgfextracty \l__tenkz_kernel_r_north_y_dim
-      { \pgfpointanchor{\tl_use:N \l__tenkz_kernel_r_tl}{north} }
-    \pgfextracty \l__tenkz_kernel_r_south_y_dim
-      { \pgfpointanchor{\tl_use:N \l__tenkz_kernel_r_tl}{south} }
-    \pgfextractx \l__tenkz_kernel_r_east_x_dim
-      { \pgfpointanchor{\tl_use:N \l__tenkz_kernel_r_tl}{east} }
-    \dim_add:Nn \l__tenkz_kernel_r_east_x_dim
-      { \__tenkz_dim:n {phtracereach} }
-    \__tenkz_render_stroke:nn { trace }
+    \bool_set_false:N \l_tmpa_bool
+    \quark_if_no_value:NF \l__tenkz_kernel_r_tl
       {
-        ( \l__tenkz_kernel_r_north_x_dim , \l__tenkz_kernel_r_north_y_dim )
-        -- ++( 0 , \__tenkz_dim:n {physleg} )
-        -| ( \l__tenkz_kernel_r_east_x_dim ,
-             \l__tenkz_kernel_r_south_y_dim - \__tenkz_dim:n {physleg} )
-        -| ( \l__tenkz_kernel_r_north_x_dim ,
-             \l__tenkz_kernel_r_south_y_dim )
+        \cs_if_exist:cT
+          { pgf@sh@ns@\tl_use:N \l__tenkz_kernel_r_tl }
+          { \bool_set_true:N \l_tmpa_bool }
+      }
+    \bool_if:NTF \l_tmpa_bool
+      {
+        \pgfextractx \l__tenkz_kernel_r_north_x_dim
+          { \pgfpointanchor{\tl_use:N \l__tenkz_kernel_r_tl}{north} }
+        \pgfextracty \l__tenkz_kernel_r_north_y_dim
+          { \pgfpointanchor{\tl_use:N \l__tenkz_kernel_r_tl}{north} }
+        \pgfextracty \l__tenkz_kernel_r_south_y_dim
+          { \pgfpointanchor{\tl_use:N \l__tenkz_kernel_r_tl}{south} }
+        \pgfextractx \l__tenkz_kernel_r_east_x_dim
+          { \pgfpointanchor{\tl_use:N \l__tenkz_kernel_r_tl}{east} }
+        \dim_add:Nn \l__tenkz_kernel_r_east_x_dim
+          { \__tenkz_dim:n {phtracereach} }
+        \__tenkz_render_stroke:nn { trace }
+          {
+            ( \l__tenkz_kernel_r_north_x_dim ,
+              \l__tenkz_kernel_r_north_y_dim )
+            -- ++( 0 , \__tenkz_dim:n {physleg} )
+            -| ( \l__tenkz_kernel_r_east_x_dim ,
+                 \l__tenkz_kernel_r_south_y_dim - \__tenkz_dim:n {physleg} )
+            -| ( \l__tenkz_kernel_r_north_x_dim ,
+                 \l__tenkz_kernel_r_south_y_dim )
+          }
+      }
+      {
+        \msg_error:nnee {tenkz}{kernel-render-phtrace}
+          {#1} { \tl_use:N \l__tenkz_kernel_r_col_tl }
       }
   }
 \cs_new_protected:Npn \__tenkz_kernel_r_atom_ink:n #1
