@@ -1,0 +1,45 @@
+% Traced rails and open string tips use the picture frame's boundary.
+\documentclass[border=5pt]{standalone}
+\usepackage{tenkz}
+\makeatletter
+\ExplSyntaxOn
+\file_input:n { tenkz-kernel.code.tex }
+\ExplSyntaxOff
+\makeatother
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[
+    rows={wire,wire}, cols=3, bonds=none,
+    west=trace, east=trace]
+  \tn[at=(1,1), skin=box]{A}
+  \tn[at=(1,3), skin=box]{B}
+  \tn[at=(2,1), skin=box]{C}
+  \tn[at=(2,3), skin=box]{D}
+\end{tenkz}
+\qquad
+\begin{tenkz}[
+    rows={wire,wire}, cols=3, bonds=none,
+    north=trace, south=trace]
+  \tn[at=(1,1), skin=box]{A}
+  \tn[at=(1,2), skin=box]{B}
+  \tn[at=(1,3), skin=box]{C}
+  \tn[at=(2,1), skin=box]{D}
+  \tn[at=(2,2), skin=box]{E}
+  \tn[at=(2,3), skin=box]{F}
+\end{tenkz}
+\qquad
+\begin{tenkz}[rows={wire,wire,wire}, cols=3, bonds=none]
+  \tn[at=(1,1), skin=box]{A}
+  \tn[at=(1,2), skin=box]{B}
+  \tn[at=(1,3), skin=box]{C}
+  \tnwire[kind=string, route=orth, via={(2,1),(2,3)}]{open w}{open e}
+\end{tenkz}
+\qquad
+\begin{tenkz}[rows={wire,wire,wire}, cols=3, bonds=none]
+  \tn[at=(1,1), skin=box]{A}
+  \tn[at=(2,1), skin=box]{B}
+  \tn[at=(3,1), skin=box]{C}
+  \tnwire[kind=string, route=orth, via={(1,2),(3,2)}]{open n}{open s}
+\end{tenkz}
+\qquad
+\end{document}
