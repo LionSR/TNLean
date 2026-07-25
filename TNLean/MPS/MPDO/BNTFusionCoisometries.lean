@@ -207,14 +207,6 @@ theorem toOperatorFamily_hasSameLengthProductForm :
   simpa [toOperatorFamily_operator, BNTLabelCoefficientFamily.ofChi_coeff]
     using Fam.mpo_mul_mpo_eq_sum L hL α β
 
-/-- The positive chi witness determined by a fusion coisometry family.
-
-Source: CPSV16, Theorem 4.14(ii), lines 976--985. -/
-noncomputable def toPositiveChiWitness :
-    PositiveBNTLabelChiTracePowerForm
-      (BNTLabelCoefficientFamily.ofChi Fam.chi) :=
-  PositiveBNTLabelChiTracePowerForm.ofChi Fam.chi Fam.posEntries
-
 /-- The source-faithful active-support fusion clause, together with its
 idempotent trace-scalar law, implies the BNT algebra clause.
 
@@ -226,7 +218,7 @@ noncomputable def toBNTAlgebraClause
       m.HasIdempotentCoefficientForm (BNTLabelCoefficientFamily.ofChi Fam.chi)) :
     BNTAlgebraClause (BNTLabelCoefficientFamily.ofChi Fam.chi)
       Fam.toOperatorFamily m where
-  positiveChi := Fam.toPositiveChiWitness
+  positiveChi := PositiveBNTLabelChiTracePowerForm.ofChi Fam.chi Fam.posEntries
   sameLengthProduct := Fam.toOperatorFamily_hasSameLengthProductForm
   idempotent := hIdempotent
 
