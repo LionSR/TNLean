@@ -668,3 +668,87 @@ crossing. It arrives with the route that derives a crossing set from the side a
 string passes on, and `cross=` stays as the per-crossing exception for the one
 crossing that goes against the habit. Consumers: rmp-iii-a-pulling-through,
 rmp-workbench-iii-g-injective-pull, rmp-workbench-iii-mpo-injective-white.
+
+### 2026-07-25 — deletions outside the language
+
+This entry is not a shrink session and does not open one. It retires no
+registry row, moves no meter and re-examines no flag, so the verdicts above
+stand as they are and are not restated here: repeating a hundred and
+twenty-eight unchanged rows to satisfy a reader that nothing changed is the
+bookkeeping this ledger exists to refuse. What follows is a record of
+deletions in the harness around the language and in three implementation
+files beneath it, neither of which any meter here measures.
+
+The work subtracts and does nothing else. It takes no position the surface
+swap has not already taken: the commutative-diagram, free-placement and
+lattice tiers keep their fourteen, eighty-six and seventy-seven benchmark
+cases, and they retire after the redraw campaign, not before it. No spelling
+was retired, no meter was added, no baseline was re-frozen.
+
+The census is unmoved — 192 before and 192 after — and it should be. The
+language was not touched.
+
+#### Tombstones: none are due
+
+Every alias row in the registry carries `sunset=1.0` — `periodic`, `chain
+axis`, `legs at`, `rows`, `boundary legs`, `label at`, and the value alias
+`route=curve` — and the package is at 0.7. Not one has expired. Nothing was
+retired here, and the empty result is recorded so that the next session does
+not derive it again.
+
+#### The harness, measured before it was judged
+
+Thirty files carrying 16,709 lines stand beside a package of 24,541. Every
+one was traced to its caller: the continuous-integration workflows, another
+script, or nothing. Twenty-seven are reached from a workflow step and do work
+no other gate repeats — the corpus driver and its provenance and render
+tests, the golden and kernel and string pins, the audit, the source lint, the
+registry and shrink gates, the manual extraction, the benchmark driver, and
+eleven measured-geometry regressions that each assert a different mechanism
+(label bands, label overlap, face ports, enclosures, index routing, fusion
+trees, the torus, the equation audit and its web layout, the picture
+pipeline, the shared parsers). None of them is a second opinion on another's
+question. The two census meters that sound alike are not: one counts drawing
+ink in the package sources, the other counts rows of public vocabulary.
+
+Three are reached from nowhere. Two of them are kept for reasons recorded
+below. The third had no second job either, and it goes.
+
+#### What went
+
+| what | lines | what it was for | why it is no longer needed |
+|---|---:|---|---|
+| `scripts/tenkz_rmp.sh` | 6 | a shell frontend for the benchmark driver; its whole body was one line handing its arguments to `scripts/tenkz_rmp.py` | both workflows already call the driver directly, so the frontend served only four blocks of documentation, which now name the driver. Its removal also retires a false sentence in the benchmark index, which credited the frontend with defining the generated-index control sequence that the driver defines. |
+| `\__tenkz_render_atom:nnn` | 2 | the unscaled atom, forwarding to the scaled one with an empty size | every caller passes the size argument; the forwarding form was never reached. The scaled entry now carries the whole comment. |
+| `\__tenkz_render_wire:nnnn` and its two point registers, with the `render-route` diagnostic | 52 | a three-way straight, orthogonal and arc router in the shared render stage | no stage ever called it. Wires reach paper through `\__tenkz_render_stroke:nn` and the string stage's saved routes; the three-way case analysis was written against a routing contract the wire record replaced. The diagnostic it raised had no other raiser and goes with it. |
+| `\__tenkz_render_atom_named:nn` | 8 | a named atom placed from a pitch-fraction coordinate | the named atoms that reach paper all take the point-exact entries beside it, because the fraction round trip loses a scaled point and the pixel gate sees it. The comment above those entries says so; this form contradicted it and had no caller. |
+| `\__tenkz_render_label:nnnn` and its three dimension registers | 24 | a label placed at an angular offset with its own inner clearance | the kernel calls only the anchor helper above it and computes its own offset. Nothing called the placer. |
+| `\__tenkz_geom_require_kind:nnn` | 5 | a three-argument convenience over the frame-kind check | all seven real call sites use the four-argument form, which names the flag it sets. |
+| `\__tenkz_geom_corridor_include:nn` and `\__tenkz_geom_corridor_include_bbox:nnnn` | 23 | folding a paper point, and a bounding box's four corners, into the corridor silhouette and transverse interval | a two-function island: the box form's only caller was itself dead, and the point form's only caller was the box form. Cup routing uses the transverse-only fold beside them, which stays. |
+| `\__tenkz_geom_corridor_escape:Nnnn` | 16 | displacing a tip out of a forbidden transverse interval | the offset hull does this work now; nothing called the register-adjusting form. |
+| `\l__tenkz_geom_xb_tl`, `\l__tenkz_geom_yb_tl` | 1 | a second point in the placement graph | the graph resolves one point at a time into the `a` pair beside them. |
+| `\l__tenkz_model_scratch_tl` | 1 | scratch text in the record store | never written and never read. |
+
+Totals: the harness falls from 16,709 lines to 16,703 and from thirty files
+to twenty-nine; the package falls from 24,541 lines to 24,407, of which the
+render stage gives up 87 of its 290 — thirty parts in a hundred — the
+geometry stage 46 of 590, and the record store one.
+
+The ink and decimal censuses are unchanged at 44 and 51, so no baseline was
+re-frozen. The deletions took no drawing with them: what left the render
+stage never drew, and what left the geometry stage only ever computed.
+
+#### What was considered and kept
+
+| what | verdict |
+|---|---|
+| `scripts/tenkz_pixelpair.sh` (109 lines) | keep-because: no caller, no documentation, and a manifest of six fixtures against the corpus renderer's two hundred and fifty-seven — but it is the only place the detached true-legacy build is written down, and the redraw campaign is the moment that build is needed. Delete it at the campaign's close, when the last comparison against an old package tree is behind us; expiry 1.0 |
+| `scripts/check_tenkz_demolition.py` and its self-test (245 lines, with a workflow of its own) | keep-because: it refuses the retired catalogue's paths and calls in every tracked file. Three days old, and the branches that predate the demolition are still in flight; a restored file that nothing loads compiles clean, which is the one failure no other gate sees. Retire it at the 0.8 close, when those branches have landed or died; expiry 0.8 |
+| `scripts/test_tenkz_language.py` (89 lines) | keep-because: no workflow step runs it, and its first probe repeats a step that one does. Its other two do not repeat anything: the typed-port refusal at the extension door, and the equality of the legacy closure word's event stream with the canonical spelling's. Both are dormant, which is a wiring question and not a deletion question; a subtract-only change is the wrong place to settle it. Raise it at the 0.8 close: wire the two probes to a step or retire them; expiry 0.8 |
+| `tex/tenkz/tenkz-grid.code.tex` (6,142 lines) | keep: the premise that it holds the drawing path the shared renderer replaced does not survive contact with the file. Twenty-seven of its four hundred and twenty-seven control sequences are called from outside it, the blueprint chapters among the callers, and every one of the remaining four hundred is reachable from those and from the two public entry points at its end. There is no unreachable cluster. The shared render stage is a service beneath the live dialects, not a replacement for them. |
+| the leaf keys of the option parsers, and the role-prefixed silhouette styles | keep: their full names appear once each, at their definition, because they are assembled at use from a role word and a suffix, or dispatched by the option machinery from an author's key. Absence of a literal mention is not absence of a consumer. The instrument for those rows is this ledger and the registry gate, never a search. |
+
+Handed to the next session: the three expiries above; and a question this
+entry could not answer, which is whether the eleven measured-geometry
+regressions want to become one harness with eleven fixtures. They repeat no
+assertion, but they repeat a great deal of scaffolding.
