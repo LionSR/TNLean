@@ -38,15 +38,29 @@ and~\cite{Evans1978Spectral}.
          & =\sum_i K_iXK_i^\dagger
         \notag
     \end{align}
-    and set $T(B)=B+E(B)$ for nonzero $B\geq0$. Since $E(B)\geq0$, one has
-    $T(B)\geq B$ and hence $\ker T(B)\subseteq\ker B$. If $B$ is not
-    positive definite, irreducibility forces
+    and set $T(B)=B+E(B)$ for nonzero $B\geq0$. Always
+    $\ker T(B)\subseteq\ker B$: if $v\in\ker T(B)$, then
+    \begin{align}
+        0
+         & =v^\dagger Bv+v^\dagger E(B)v,
+        \notag
+    \end{align}
+    and both terms are non-negative, so $v^\dagger Bv=0$ and hence $Bv=0$.
+    If $B$ is not positive definite, irreducibility forces
     \begin{align}
         \dim\ker T(B)
          & <\dim\ker B.
         \notag
     \end{align}
-    Indeed, equality would imply, for every~$i$,
+    Indeed, equality of the kernel dimensions would turn the inclusion above
+    into $\ker B\subseteq\ker T(B)$. Thus, for $v\in\ker B$,
+    \begin{align}
+        0
+         & =v^\dagger E(B)v
+        =\sum_i(K_i^\dagger v)^\dagger B(K_i^\dagger v).
+        \notag
+    \end{align}
+    Every summand is non-negative, so equality would imply, for every~$i$,
     \begin{align}
         K_i^\dagger(\ker B)
          & \subseteq\ker B.
@@ -256,6 +270,28 @@ and~\cite{Evans1978Spectral}.
     \cite[Theorem~6.3(3)]{Wolf2012Quantum}: uniqueness of a positive
     eigenvalue admitting a nonzero positive semidefinite eigenvector.
     The proof follows Wolf's dual-map trace argument.
+\end{proof}
+
+\begin{theorem}[PSD eigenvector uniqueness for irreducible CP maps]
+    \label{thm:psd_eigenvector_unique_irred}
+    \lean{posSemidef_eigenvector_unique_of_irreducible_cp}
+    \leanok
+    \uses{def:irreducible_cp}
+    Let $E$ be an irreducible completely positive map on $\MN{D}$. Suppose
+    $\rho\neq0$ and $\rho,\sigma\geq0$ satisfy
+    $E(\rho)=r\rho$ and $E(\sigma)=r\sigma$ for a real number $r>0$.
+    Then $\sigma=c\rho$ for some $c\in\C$.
+    This is the completely positive specialization of the
+    positive-eigenvector uniqueness in
+    \cite[Theorem~6.3(2--3)]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:irred_map_smul, thm:psd_fp_unique_irred}
+    Choose Kraus operators for $E$ and rescale each by $r^{-1/2}$. Their
+    transfer map is $r^{-1}E$, so both $\rho$ and $\sigma$ are fixed points.
+    The rescaled map remains irreducible, and
+    Theorem~\ref{thm:psd_fp_unique_irred} gives the claimed proportionality.
 \end{proof}
 
 \section{Existence and the Perron--Frobenius theorem}
@@ -819,7 +855,7 @@ The TP-gauge application follows~\cite[Appendix~A]{Cirac2016MPDO_arXiv}.
 
 \begin{proof}
     \leanok
-    \uses{thm:pf_eigenvector_existence, thm:psd_fp_unique_irred,
+    \uses{thm:pf_eigenvector_existence, thm:psd_eigenvector_unique_irred,
         thm:spectral_radius_pf_irred}
     Combine Perron--Frobenius existence for the map and its adjoint with the
     uniqueness theorem for positive semidefinite Perron eigenvectors and the
