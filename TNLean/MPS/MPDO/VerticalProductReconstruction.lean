@@ -15,7 +15,6 @@ import TNLean.MPS.MPDO.NormalizedGroupedSectors
 import TNLean.MPS.MPDO.VerticalBNTConstruction
 import TNLean.MPS.MPDO.VerticalBNT
 import TNLean.MPS.MPDO.VerticalSpectral
-import TNLean.MPS.Tactic.Basic
 
 /-!
 # Coisometric reconstruction of retained vertical products
