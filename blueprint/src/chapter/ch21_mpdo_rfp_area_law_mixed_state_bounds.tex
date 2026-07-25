@@ -408,16 +408,22 @@
     \begin{align}
         \sigma^{(N)}_{L:K}
         &=\sum_{a,b=1}^{D} X_{ab}\otimes Y_{ab},
-        &
-        \operatorname{OSR}(\sigma^{(N)}_{L:K})&\leq D^2,
         \notag
     \end{align}
-    where, for left-block words $x,x'$ and right-block words $y,y'$,
+    and
+    \begin{align}
+        \operatorname{OSR}(\sigma^{(N)}_{L:K})&\leq D^2.
+        \notag
+    \end{align}
+    For left-block words $x,x'$ and right-block words $y,y'$, the factors are
     \begin{align}
         (X_{ab})_{x,x'}
         &=\tr[\rho^{(N)}(M)]^{-1}
           \bigl(M^{x_1x'_1}\cdots M^{x_Lx'_L}\bigr)_{ab},
-        &
+        \notag
+    \end{align}
+    and
+    \begin{align}
         (Y_{ab})_{y,y'}
         &=\bigl(M^{y_1y'_1}\cdots M^{y_Ky'_K}\bigr)_{ba}.
         \notag
