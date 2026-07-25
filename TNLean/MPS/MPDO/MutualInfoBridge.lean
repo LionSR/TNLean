@@ -88,7 +88,7 @@ theorem bipartitionedNormalizedMPO_hasOperatorSchmidtDecomposition
     Matrix.mul_apply, Fintype.sum_prod_type, Finset.mul_sum, mul_assoc]
 
 /-- The operator-Schmidt rank across a contiguous cut of a normalized periodic
-MPO is at most the number `D * D` of ordered pairs of virtual-boundary indices.
+MPO is at most the number \(D^2\) of ordered pairs of virtual-boundary indices.
 No positivity or local-purification hypothesis is used. -/
 theorem operatorSchmidtRank_bipartitionedNormalizedMPO_le
     (M : MPOTensor d D) (N L K : ℕ) (h : N = L + K) :
