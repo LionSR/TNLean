@@ -14,12 +14,12 @@ is needed. Net element count: **zero added, zero retired.**
 
 | target | recorded need | recorded note |
 |---|---|---|
-| `rmp-iii-a-spt-mpo` | strings | the string geometry remains incomplete |
+| `rmp-iii-a-spt-mpo` | strings | diagonal action frames are now represented; the string geometry remains incomplete |
 | `rmp-workbench-iii-g-injective-pull` | pulling-through, strings | g string, hatched legs, U_g node absent |
 | `rmp-workbench-iii-mpo-injective-white` | pulling-through, strings | colored strings replaced by boxes |
 | `rmp-workbench-iii-eq59` | torus-cycle, strings | torus with wound strings collapsed to a two-box loop |
 | `rmp-iii-a-g-injective-projector` | strings, group-average | *(pairing: wrong-source)* |
-| `rmp-iii-a-f-symbol` | strings | author draws the anyon-string realization; abstract tree substituted |
+| `rmp-iii-a-f-symbol` | strings | author draws the MPO/anyon-string realization; abstract tree substituted |
 | `rmp-workbench-ii-mpu-wrap-second` | strings | inter-row wrap wires absent |
 
 ## What the authors drew
