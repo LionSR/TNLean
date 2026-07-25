@@ -230,8 +230,8 @@ three times at 414–444, 468–497 and 501–520, the last marked *veryold* in 
 source and drawing discs where the others draw squares. The assignment above
 rests on $U_g$, which fixes the SPT panel and therefore fixes the pull. The
 assignment of 501–520 to the white MPO-injective panel is the manifest's own
-and I did not check it against the archival output; the three targets should
-be re-paired together, not one at a time.
+and has not yet been checked against the archival output; the three targets
+should be re-paired together, not one at a time.
 
 **The torus surface.** Equation 59 draws a genuine surface, and a curve on a
 surface is drawn only where the surface does not hide it. `wind={p,q}` states
