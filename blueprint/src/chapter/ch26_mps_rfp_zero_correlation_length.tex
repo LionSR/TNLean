@@ -379,6 +379,53 @@
     Theorem~\ref{thm:bnt_sector_supported_physical_observable} at this length.
 \end{proof}
 
+\begin{lemma}[Sector compression calculus for the direct sum]%
+    \label{lem:zcl_direct_sum_sector_calculus}
+    \lean{MPSTensor.directSumSectorCompression}
+    \lean{MPSTensor.directSumSectorInclusion}
+    \lean{MPSTensor.directSumSectorInclusion_eq_sum}
+    \lean{MPSTensor.directSumSectorCompression_inclusion}
+    \lean{MPSTensor.directSumSectorRankOne}
+    \lean{MPSTensor.directSumSectorRankOne_apply}
+    \lean{MPSTensor.directSumSectorCompression_reindex}
+    \lean{MPSTensor.directSumSectorCompression_transferMap}
+    \lean{MPSTensor.directSumSectorCompression_transferMap_pow}
+    \lean{MPSTensor.trace_directSumSectorRankOne}
+    \lean{MPSTensor.trace_mul_pow_apply_of_traceAdjointMap_hasEigenvector}
+    \leanok
+    \uses{def:transfer_map}
+    Let $A=\bigoplus_k A_k$. Denote compression to the $(j,j)$ bond block by
+    $C_j$ and its trace-pairing adjoint by $I_j$. Then
+    \begin{align}
+        C_jI_j&=\id.
+        \notag
+    \end{align}
+    If $\E_A$ and $\E_j$ are the transfer maps of $A$ and $A_j$, respectively,
+    then, for every $n\geq0$,
+    \begin{align}
+        C_j\E_A^n&=\E_j^nC_j.
+        \notag
+    \end{align}
+    The sector-supported rank-one map
+    $\mathcal R_{j;R,l}(X)=I_j(R)\tr(lC_j(X))$ has operator trace
+    \begin{align}
+        \Tr_{\End}(\mathcal R_{j;R,l})&=\tr(lR).
+        \notag
+    \end{align}
+    Finally, if $\E_j^*(l)=\lambda l$, then
+    \begin{align}
+        \tr\!\bigl(l\E_j^n(X)\bigr)&=\lambda^n\tr(lX).
+        \notag
+    \end{align}
+\end{lemma}
+\begin{proof}\leanok
+    The inclusion is the trace-pairing adjoint of compression; expanding it in
+    matrix units gives $C_jI_j=\id$ and the rank-one trace formula. The
+    block-diagonal form of $A$ gives $C_j\E_A=\E_jC_j$, and induction gives the
+    identity for every power. Moving one factor of $\E_j$ across the trace
+    pairing and iterating proves the eigenvector formula.
+\end{proof}
+
 \begin{theorem}[Subleading spectral pair excludes positive-gap CID]%
     \label{thm:zcl_subleading_pair_excludes_cid}
     \lean{MPSTensor.IsBNTCanonicalForm.not_isPositiveGapPhysicalCID_basisDirectSum_of_basis_spectral_pair}
@@ -396,7 +443,8 @@
     Then $A$ does not have positive-gap physical CID.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{thm:bnt_rank_one_observables_sharp_length}
+    \uses{lem:zcl_direct_sum_sector_calculus,
+        thm:bnt_rank_one_observables_sharp_length}
     Let $\rho_j$ be the trace-one positive fixed point of $\E_j$. At the
     common blocking length, choose physical observables with inserted transfer
     maps
