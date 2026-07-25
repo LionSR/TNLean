@@ -141,6 +141,29 @@ abstracted — record why, so it is not re-proposed).
 - **Result:** the theorem proof decreased from 421 to 362 lines (59 lines net),
   with no new declaration; the file diff is 18 insertions and 77 deletions.
 
+### Three-way merge collapse through the regionMerge calculus
+- **Pattern:** each of the three `triMerge` product lemmas re-proved the per-vertex
+  read-back of a nested `mergeVirtualConfig` by hand: `Finset.prod_congr`,
+  `congr 1; funext ie`, a `by_cases` ladder over each region's incidence, and
+  `mergeVirtualConfig_of_pos`/`mergeVirtualConfig_of_neg` rewrites, with the
+  crossing-agreement step inlined at each leaf.
+- **Reuse:** `redProd_triMerge` is a one-line `regionProd_eq_merge` application
+  (`triMerge` is definitionally the nest
+  `regionMerge red (ζr, regionMerge blue (ζb, ζc))`); `blueProd_triMerge` chains
+  `regionProd_eq_merge` with `regionProd_p2_eq_merge_of_incident_agree` at the red
+  merge region, the agreement being `TripleAgrees.rb` through
+  `isCrossing_rb_of_incident`; `complProd_triMerge` chains two
+  `regionProd_p2_eq_merge_of_incident_agree` applications (blue, then red), the
+  red step reading `ζc` from the inner merge via the new partition fact
+  `not_isRegionIncidentEdge_blue_of_incident_rc` (a red- and
+  complement-incident edge misses the blue region).
+- **Result:** `RegionBlock/CoarseThreeSite5.lean` loses 2 source lines net
+  (34 insertions, 36 deletions across two commits): the three product-lemma
+  proofs fall from 33 tactic lines to 13 term lines while the new crossing lemma
+  adds 18 lines. Every declaration name and statement, including the `triMerge`
+  body, is unchanged; the `triFiber_card`, `agreeing_summand_eq`, and
+  `agreeingTripleSum_collapse` consumers compile untouched.
+
 ---
 
 ## Candidates
