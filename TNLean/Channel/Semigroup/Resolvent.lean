@@ -6,6 +6,14 @@ Authors: TNLean contributors
 import TNLean.Algebra.MatrixOperatorSpace
 import TNLean.Channel.Semigroup.Basic
 
+/-!
+# Euler-resolvent limit (Wolf, Equation (7.9))
+
+The Euler approximation of a dynamical semigroup by powers of the resolvent:
+Wolf's lecture notes, Equation (7.9),
+`T_t = lim_{n → ∞} ((n/t) R(n/t))ⁿ` with `R(z) = (z𝟙 - L)⁻¹` (Eq. (7.6)).
+-/
+
 open Matrix TNLean
 
 noncomputable section
@@ -15,14 +23,6 @@ namespace TNLean.Channel.Semigroup
 open scoped TNOperatorSpace
 
 variable {D : ℕ}
-
-/-!
-# Euler-resolvent limit (Wolf, Equation (7.9))
-
-The Euler approximation of a dynamical semigroup by powers of the resolvent:
-Wolf's lecture notes, Equation (7.9),
-`T_t = lim_{n → ∞} ((n/t) R(n/t))ⁿ` with `R(z) = (z𝟙 - L)⁻¹` (Eq. (7.6)).
--/
 
 /-- Euler resolvent step `(λ R(λ,L))`. -/
 def eulerResolventStep (L : MatrixCLM (Fin D)) (lam : ℂ) : MatrixCLM (Fin D) :=
