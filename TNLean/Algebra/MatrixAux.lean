@@ -14,7 +14,6 @@ import Mathlib.Analysis.MeanInequalities
 import Mathlib.LinearAlgebra.Matrix.Charpoly.Eigs
 import Mathlib.LinearAlgebra.Matrix.Transvection
 import Mathlib.Topology.Instances.Matrix
-import TNLean.Algebra.DependentBlockDiagonal
 
 /-!
 # Auxiliary matrix lemmas
