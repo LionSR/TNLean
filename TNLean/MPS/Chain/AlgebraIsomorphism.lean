@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.Chain.VirtualInsertion
 import TNLean.MPS.Chain.Defs
 import TNLean.MPS.Structure.LinearExtension
-import TNLean.MPS.FundamentalTheorem.Basic
+import TNLean.Algebra.SkolemNoether
 /-!
 # Algebra isomorphism between virtual bond algebras
 
