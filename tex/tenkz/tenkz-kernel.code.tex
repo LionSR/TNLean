@@ -1930,6 +1930,8 @@
 \fp_new:N   \l__tenkz_kernel_r_xc_fp
 \fp_new:N   \l__tenkz_kernel_r_yc_fp
 \fp_new:N   \l__tenkz_kernel_r_reach_fp
+\bool_new:N \l__tenkz_kernel_r_from_bool
+\bool_new:N \l__tenkz_kernel_r_to_bool
 
 % one conversion: a pitch-unit fp expression as a pt spelling
 \cs_new:Npn \__tenkz_kernel_r_pt:n #1
@@ -2370,13 +2372,137 @@
             \str_case:VnF \l__tenkz_kernel_r_tl
               {
                 {grid}  { \__tenkz_kernel_r_wire_grid:n {#1} }
+                {open}  { \__tenkz_kernel_r_wire_ends:n {#1} }
                 {trace} { \__tenkz_kernel_r_wire_trace:n {#1} }
+                {cup}   { \__tenkz_kernel_r_wire_cup:n {#1} }
               }
               {
                 \msg_error:nnee {tenkz}{kernel-render-todo}
                   { origin = \tl_use:N \l__tenkz_kernel_r_tl } {#1}
               }
           }
+      }
+  }
+
+% Cup records already own the paired row or column indices.  Rendering only
+% turns those resolved endpoints into an outboard half-ellipse.
+\cs_new_protected:Npn \__tenkz_kernel_r_wire_cup:n #1
+  {
+    \__tenkz_model_get:nnN {#1} {side} \l__tenkz_kernel_r_tl
+    \str_case:VnF \l__tenkz_kernel_r_tl
+      {
+        {west}
+          {
+            \__tenkz_model_get:nnN {#1} {top}
+              \l__tenkz_kernel_r_row_tl
+            \__tenkz_model_get:nnN {#1} {bottom}
+              \l__tenkz_kernel_r_col_tl
+            \__tenkz_render_stroke:nn { bond }
+              {
+                \__tenkz_kernel_r_pair:nn
+                  {1} {-\l__tenkz_kernel_r_row_tl}
+                .. controls
+                  \__tenkz_kernel_r_pair:nn
+                    {1 - \__tenkz_metric_ratio:n {stub}}
+                    {-\l__tenkz_kernel_r_row_tl}
+                  and
+                  \__tenkz_kernel_r_pair:nn
+                    {1 - \__tenkz_metric_ratio:n {stub}}
+                    {-\l__tenkz_kernel_r_col_tl}
+                ..
+                \__tenkz_kernel_r_pair:nn
+                  {1} {-\l__tenkz_kernel_r_col_tl}
+              }
+          }
+        {east}
+          {
+            \__tenkz_model_get:nnN {#1} {top}
+              \l__tenkz_kernel_r_row_tl
+            \__tenkz_model_get:nnN {#1} {bottom}
+              \l__tenkz_kernel_r_col_tl
+            \__tenkz_render_stroke:nn { bond }
+              {
+                \__tenkz_kernel_r_pair:nn
+                  {\l__tenkz_kernel_r_cols_int}
+                  {-\l__tenkz_kernel_r_row_tl}
+                .. controls
+                  \__tenkz_kernel_r_pair:nn
+                    {
+                      \l__tenkz_kernel_r_cols_int
+                      + \__tenkz_metric_ratio:n {stub}
+                    }
+                    {-\l__tenkz_kernel_r_row_tl}
+                  and
+                  \__tenkz_kernel_r_pair:nn
+                    {
+                      \l__tenkz_kernel_r_cols_int
+                      + \__tenkz_metric_ratio:n {stub}
+                    }
+                    {-\l__tenkz_kernel_r_col_tl}
+                ..
+                \__tenkz_kernel_r_pair:nn
+                  {\l__tenkz_kernel_r_cols_int}
+                  {-\l__tenkz_kernel_r_col_tl}
+              }
+          }
+        {north}
+          {
+            \__tenkz_model_get:nnN {#1} {left}
+              \l__tenkz_kernel_r_row_tl
+            \__tenkz_model_get:nnN {#1} {right}
+              \l__tenkz_kernel_r_col_tl
+            \__tenkz_render_stroke:nn { bond }
+              {
+                \__tenkz_kernel_r_pair:nn
+                  {\l__tenkz_kernel_r_row_tl} {-1}
+                .. controls
+                  \__tenkz_kernel_r_pair:nn
+                    {\l__tenkz_kernel_r_row_tl}
+                    {-1 + \__tenkz_metric_ratio:n {stub}}
+                  and
+                  \__tenkz_kernel_r_pair:nn
+                    {\l__tenkz_kernel_r_col_tl}
+                    {-1 + \__tenkz_metric_ratio:n {stub}}
+                ..
+                \__tenkz_kernel_r_pair:nn
+                  {\l__tenkz_kernel_r_col_tl} {-1}
+              }
+          }
+        {south}
+          {
+            \__tenkz_model_get:nnN {#1} {left}
+              \l__tenkz_kernel_r_row_tl
+            \__tenkz_model_get:nnN {#1} {right}
+              \l__tenkz_kernel_r_col_tl
+            \__tenkz_render_stroke:nn { bond }
+              {
+                \__tenkz_kernel_r_pair:nn
+                  {\l__tenkz_kernel_r_row_tl}
+                  {-\l__tenkz_kernel_r_rows_int}
+                .. controls
+                  \__tenkz_kernel_r_pair:nn
+                    {\l__tenkz_kernel_r_row_tl}
+                    {
+                      -\l__tenkz_kernel_r_rows_int
+                      - \__tenkz_metric_ratio:n {stub}
+                    }
+                  and
+                  \__tenkz_kernel_r_pair:nn
+                    {\l__tenkz_kernel_r_col_tl}
+                    {
+                      -\l__tenkz_kernel_r_rows_int
+                      - \__tenkz_metric_ratio:n {stub}
+                    }
+                ..
+                \__tenkz_kernel_r_pair:nn
+                  {\l__tenkz_kernel_r_col_tl}
+                  {-\l__tenkz_kernel_r_rows_int}
+              }
+          }
+      }
+      {
+        \msg_error:nnee {tenkz}{kernel-render-todo}
+          { cup ~ side = \tl_use:N \l__tenkz_kernel_r_tl } {#1}
       }
   }
 
@@ -2400,12 +2526,15 @@
 
 \cs_new_protected:Npn \__tenkz_kernel_r_wire_ends:n #1
   {
+    \bool_set_false:N \l__tenkz_kernel_r_from_bool
+    \bool_set_false:N \l__tenkz_kernel_r_to_bool
     \__tenkz_model_get:nnN {#1} {from} \l__tenkz_kernel_r_end_tl
     \quark_if_no_value:NF \l__tenkz_kernel_r_end_tl
       {
         \__tenkz_kernel_r_node:V \l__tenkz_kernel_r_end_tl
         \__tenkz_kernel_r_xy:nNN { \tl_use:N \l__tenkz_kernel_r_end_tl }
           \l__tenkz_kernel_r_x_fp \l__tenkz_kernel_r_y_fp
+        \bool_set_true:N \l__tenkz_kernel_r_from_bool
       }
     \__tenkz_model_get:nnN {#1} {to} \l__tenkz_kernel_r_end_tl
     \quark_if_no_value:NF \l__tenkz_kernel_r_end_tl
@@ -2413,6 +2542,56 @@
         \__tenkz_kernel_r_node:V \l__tenkz_kernel_r_end_tl
         \__tenkz_kernel_r_xy:nNN { \tl_use:N \l__tenkz_kernel_r_end_tl }
           \l__tenkz_kernel_r_xb_fp \l__tenkz_kernel_r_yb_fp
+        \bool_set_true:N \l__tenkz_kernel_r_to_bool
+      }
+    \bool_if:NF \l__tenkz_kernel_r_from_bool
+      {
+        \__tenkz_model_get:nnN {#1} {from-open} \l__tenkz_kernel_r_end_tl
+        \quark_if_no_value:NF \l__tenkz_kernel_r_end_tl
+          {
+            \fp_set:Nn \l__tenkz_kernel_r_x_fp
+              {
+                \l__tenkz_kernel_r_xb_fp
+                + \__tenkz_metric_ratio:n {stub}
+                  * cosd(\__tenkz_kernel_r_compass:n
+                      {\l__tenkz_kernel_r_end_tl})
+              }
+            \fp_set:Nn \l__tenkz_kernel_r_y_fp
+              {
+                \l__tenkz_kernel_r_yb_fp
+                + \__tenkz_metric_ratio:n {stub}
+                  * sind(\__tenkz_kernel_r_compass:n
+                      {\l__tenkz_kernel_r_end_tl})
+              }
+            \bool_set_true:N \l__tenkz_kernel_r_from_bool
+          }
+      }
+    \bool_if:NF \l__tenkz_kernel_r_to_bool
+      {
+        \__tenkz_model_get:nnN {#1} {to-open} \l__tenkz_kernel_r_end_tl
+        \quark_if_no_value:NF \l__tenkz_kernel_r_end_tl
+          {
+            \fp_set:Nn \l__tenkz_kernel_r_xb_fp
+              {
+                \l__tenkz_kernel_r_x_fp
+                + \__tenkz_metric_ratio:n {stub}
+                  * cosd(\__tenkz_kernel_r_compass:n
+                      {\l__tenkz_kernel_r_end_tl})
+              }
+            \fp_set:Nn \l__tenkz_kernel_r_yb_fp
+              {
+                \l__tenkz_kernel_r_y_fp
+                + \__tenkz_metric_ratio:n {stub}
+                  * sind(\__tenkz_kernel_r_compass:n
+                      {\l__tenkz_kernel_r_end_tl})
+              }
+            \bool_set_true:N \l__tenkz_kernel_r_to_bool
+          }
+      }
+    \bool_lazy_and:nnT
+      { \l__tenkz_kernel_r_from_bool }
+      { \l__tenkz_kernel_r_to_bool }
+      {
         % an ellipsis endpoint keeps daylight: the wire stops short of the dots
         \clist_map_inline:nn {from, to}
           { \__tenkz_kernel_r_dots_trim:nn {#1} {##1} }
@@ -2551,6 +2730,58 @@
                   { \l__tenkz_kernel_r_yb_fp }
               }
           }
+        {interface}
+          {
+            \__tenkz_model_get:nnN {#1} {interface}
+              \l__tenkz_kernel_r_row_tl
+            \__tenkz_model_get:nnN {#1} {col}
+              \l__tenkz_kernel_r_col_tl
+            \__tenkz_render_stroke:nn { bond }
+              {
+                \__tenkz_kernel_r_pair:nn
+                  { \l__tenkz_kernel_r_col_tl }
+                  { - \l__tenkz_kernel_r_row_tl }
+                --
+                \__tenkz_kernel_r_pair:nn
+                  { \l__tenkz_kernel_r_col_tl }
+                  { - \l__tenkz_kernel_r_row_tl - 1 }
+              }
+          }
+        {physical}
+          {
+            \__tenkz_model_get:nnN {#1} {col}
+              \l__tenkz_kernel_r_col_tl
+            \__tenkz_render_stroke:nn { trace }
+              {
+                \__tenkz_kernel_r_pair:nn
+                  { \l__tenkz_kernel_r_col_tl }
+                  { -1 + \__tenkz_metric_ratio:n {physleg} }
+                --
+                \__tenkz_kernel_r_pair:nn
+                  {
+                    \l__tenkz_kernel_r_col_tl
+                    + \__tenkz_metric_ratio:n {phtracereach}
+                  }
+                  { -1 + \__tenkz_metric_ratio:n {physleg} }
+                --
+                \__tenkz_kernel_r_pair:nn
+                  {
+                    \l__tenkz_kernel_r_col_tl
+                    + \__tenkz_metric_ratio:n {phtracereach}
+                  }
+                  { -1 - \__tenkz_metric_ratio:n {physleg} }
+                --
+                \__tenkz_kernel_r_pair:nn
+                  { \l__tenkz_kernel_r_col_tl }
+                  { -1 - \__tenkz_metric_ratio:n {physleg} }
+              }
+          }
+        % A trace needs two opposing sides.  The model retains a one-sided
+        % request as an auditable sealed-boundary record, but it owns no ink.
+        {west}  { }
+        {east}  { }
+        {north} { }
+        {south} { }
       }
       {
         \msg_error:nnee {tenkz}{kernel-render-todo}
@@ -3861,7 +4092,9 @@
   }
 \NewDocumentCommand \tnmark { O{} m m }
   { \__tenkz_kernel_tnmark:nnn {#1} {#2} {#3} }
-\NewDocumentCommand \tngroup { O{} m }
+% The dialect composition layer installs \tngroup first; the kernel switch
+% deliberately replaces that renderer-backed binding with the record grammar.
+\RenewDocumentCommand \tngroup { O{} m }
   { \__tenkz_kernel_tngroup:nn {#1} {#2} }
 \NewDocumentCommand \tndeclare { m m m }
   { \__tenkz_kernel_tndeclare:nnn {#1} {#2} {#3} }
