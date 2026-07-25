@@ -3650,12 +3650,22 @@
   }
 
 % ---------- index-wire ink ---------------------------------------------------------------------
+\cs_new_protected:Npn \__tenkz_kernel_r_wire_queue:n #1
+  {
+    \__tenkz_model_get:nnN {#1} {kind} \l__tenkz_kernel_r_tl
+    \str_if_eq:VnT \l__tenkz_kernel_r_tl {string}
+      { \seq_put_right:Nn \l__tenkz_kernel_r_strings_seq {#1} }
+  }
 \cs_new_protected:Npn \__tenkz_kernel_r_wire:n #1
   {
     \__tenkz_model_get:nnN {#1} {kind} \l__tenkz_kernel_r_tl
     \str_if_eq:VnTF \l__tenkz_kernel_r_tl {string}
-      { \seq_put_right:Nn \l__tenkz_kernel_r_strings_seq {#1} }
+      { }
       {
+        % Settle the endpoint dependency graph before emitting this wire's
+        % ink.  This predeclares any curve named by an `on w t` end while
+        % leaving unrelated string event order unchanged.
+        \__tenkz_kernel_settle:n {#1}
         \__tenkz_model_get:nnN {#1} {origin} \l__tenkz_kernel_r_tl
         \quark_if_no_value:NTF \l__tenkz_kernel_r_tl
           { \__tenkz_kernel_r_wire_ends:n {#1} }
@@ -5637,6 +5647,8 @@
     % and the carrier must have found its own first
     \__tenkz_model_map_ids:nn {atom} { \__tenkz_kernel_r_atom_turn:n {##1} }
     \__tenkz_string_reset:
+    \__tenkz_model_map_ids:nn {wire}
+      { \__tenkz_kernel_r_wire_queue:n {##1} }
     % Panels meet on the axis their wires run along, not on the middle of
     % whatever ink each of them happens to reach.  A string standing north of
     % a row and a string standing south of it make two pictures of different
@@ -5648,11 +5660,14 @@
         tenkz~every~picture
       ]
     \__tenkz_kernel_r_prescan:
+    % The ordinary-wire pass may now settle its endpoint dependencies.  A
+    % curve reached through `on w t` is declared here without ink, so the
+    % ordinary wire still draws below the later leg and string passes.
+    \int_set:Nn \l__tenkz_kernel_dep_stage_int {1}
     \__tenkz_model_map_ids:nn {wire} { \__tenkz_kernel_r_wire:n {##1} }
     \__tenkz_kernel_r_legs:
     % The wire stage now owns a route for every curve, and the policy legs
     % stand as engine paths, so the graph's remaining nodes can be reached.
-    \int_set:Nn \l__tenkz_kernel_dep_stage_int {1}
     \prop_put:NVn \l__tenkz_kernel_dep_state_prop
       \c__tenkz_kernel_dep_wires_tl {settled}
     \__tenkz_kernel_r_strings:
