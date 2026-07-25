@@ -318,8 +318,8 @@
     same formula defines the rank of an arbitrary complex bipartite matrix.
 \end{definition}
 
-\begin{lemma}[Two virtual boundaries bound the operator-Schmidt rank]
-    \label{lem:mpdo_periodic_cut_operator_schmidt_rank}
+\begin{theorem}[Two virtual boundaries bound the operator-Schmidt rank]
+    \label{thm:mpdo_periodic_cut_operator_schmidt_rank}
     \lean{MPOTensor.periodicCutLeftFactor,
       MPOTensor.periodicCutRightFactor,
       MPOTensor.bipartitionedNormalizedMPO_hasOperatorSchmidtDecomposition,
@@ -331,7 +331,7 @@
     $N=L+K$. Opening the two virtual bonds at the consecutive cut gives
     \begin{align}
         \sigma^{(N)}_{L:K}
-        &=\sum_{a,b=1}^{D} X_{ab}\otimes Y_{ab},
+        &=\sum_{a,b=0}^{D-1} X_{ab}\otimes Y_{ab},
         \notag
     \end{align}
     and
@@ -343,13 +343,13 @@
     \begin{align}
         (X_{ab})_{x,x'}
         &=\tr[\rho^{(N)}(M)]^{-1}
-          \bigl(M^{x_1x'_1}\cdots M^{x_Lx'_L}\bigr)_{ab},
+          \bigl(M^{x_0x'_0}\cdots M^{x_{L-1}x'_{L-1}}\bigr)_{ab},
         \notag
     \end{align}
     and
     \begin{align}
         (Y_{ab})_{y,y'}
-        &=\bigl(M^{y_1y'_1}\cdots M^{y_Ky'_K}\bigr)_{ba}.
+        &=\bigl(M^{y_0y'_0}\cdots M^{y_{K-1}y'_{K-1}}\bigr)_{ba}.
         \notag
     \end{align}
     This is the identity
@@ -365,7 +365,7 @@
     $I_L\leq4\log D$: such a conclusion would require an entropy bound in
     terms of the operator-Schmidt rank.
     % The unresolved analytic inequality is tracked in issue #4295.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}\leanok
     Split each closed virtual word into its left and right products. Expanding
