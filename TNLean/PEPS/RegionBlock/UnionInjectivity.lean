@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.RegionBlock.ThreeBlockResonate2
+import TNLean.PEPS.RegionBlock.UnionInjectivityGeneral2
 
 /-!
 # Injectivity of the union of two injective region blocks
@@ -47,6 +48,29 @@ namespace PEPS
 variable {V : Type*} [Fintype V] [LinearOrder V]
 variable {G : SimpleGraph V} [DecidableRel G.Adj] {d : ℕ}
 variable {A : Tensor G d} {e : Edge G}
+
+/-! ### Viewing edge blocking data as a bare three-block geometry
+
+The union lemma is proved once over a bare `ThreeBlockGeometry` (in
+`TNLean.PEPS.RegionBlock.UnionInjectivityGeneral2`). The
+`NormalEdgeBlockingData`-parametrized theorems of this file are thin wrappers
+that view the edge-centred red, blue, and complement blocks as that geometry;
+the bridge is `NormalEdgeBlockingData.toThreeBlockGeometry`. -/
+
+/-- View the one-edge blocking data as a bare three-block geometry: the same
+red, blue, and complement blocks, keeping only their pairwise disjointness and
+the cover of the vertex set, and forgetting the injectivity witnesses and the
+distinguished edge. -/
+def NormalEdgeBlockingData.toThreeBlockGeometry
+    (D : NormalEdgeBlockingData (regionInjectivityDataOf (G := G) A) G e) :
+    ThreeBlockGeometry V where
+  red := D.red
+  blue := D.blue
+  complement := D.complement
+  red_disjoint_blue := D.red_disjoint_blue
+  red_disjoint_complement := D.red_disjoint_complement
+  blue_disjoint_complement := D.blue_disjoint_complement
+  cover_univ := D.cover_univ
 
 /-! ### Reconstructing a host boundary configuration from blue and complement data
 
