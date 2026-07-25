@@ -281,8 +281,11 @@ theorem isNormal_of_isIrreducibleAction_of_aperiodic [NeZero D]
 /-! ## Part 5: Eigenvector extraction from a nonzero-trace word -/
 
 /-- The nonzero-trace word extraction gives an eigenvector with nonzero eigenvalue.
-Paper anchor: proof of Theorem 1, case (1) in arXiv:0909.5347 —
-'there exists |φ⟩ such that A₁ⁿ|φ⟩ = μ|φ⟩ with μ ≠ 0'. -/
+
+Paper anchor: proof of Theorem 1, case (1) in arXiv:0909.5347 — a word
+product A⁽ⁿ⁾₁ of nonzero trace "therefore" has an eigenvector with nonzero
+eigenvalue ("there exists |φ⟩ such that A⁽ⁿ⁾₁|φ⟩ = μ|φ⟩ with μ ≠ 0"); the
+superscript indexes length-`n` word products, not a power of one operator. -/
 theorem exists_eigenvector_of_cumulativeSpan_eq_top [NeZero D]
     (A : MPSTensor d D) {N : ℕ} (hcs : cumulativeSpan A N = ⊤) :
     ∃ (w : List (Fin d)) (μ : ℂ) (φ : Fin D → ℂ),

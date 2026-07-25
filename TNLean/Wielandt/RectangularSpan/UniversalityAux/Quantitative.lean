@@ -22,13 +22,13 @@ namespace MPSTensor
 This section provides the quantitative dimension-counting lemmas for the
 exact Lemma 2(b) bound. The key results are:
 
-1. **Initial dimension**: `rectSpan P A 0` has finrank 1 when `P ≠ 0` (it equals `span{P}`).
+1. **Level zero**: `rectSpan P A 0 = span{P}` (`rectSpan_zero_eq_span`).
 2. **Tight ceiling**: `finrank(rectSpan P A n) ≤ D · rank(P)`, matching the exact formula
-   `finrank(range(mulLeft P)) = D · rank(P)` from `RectangularRanges.lean`.
-3. **Tight pigeonhole**: finrank stabilization within `D · rank(P)` steps (vs `D²`).
-4. **Cumulative transfer**: `cumulativeRectSpan` to `cumulativeSpan` level shift.
-5. **Quantitative eigenvector rank-one**: under `IsNormal` + eigenvector, every rank-one
-   `vecMulVec φ ψ` lies in `cumulativeSpan A (D + D²)`.
+   `finrank(range(mulLeft P)) = D · rank(P)` from `RectangularSpan/Ranges.lean`.
+3. **Cumulative transfer**: `cumulativeRectSpan` to `cumulativeSpan` level shift, with the
+   quantitative range equality `cumulativeRectSpan_eq_range_quantitative`.
+4. **Parametric Wielandt-length bound**: `wielandt_parametric_span`, combining a `rectSpan`
+   stabilization witness with the conditional Lemma 2(b) rank-one step.
 
 These results are designed to combine with the already proved `vecMulVec_eigenvector_mem_wordSpan`
 to give the quantitative stage bound on the Wolf/paper path toward `D²-D+1`.
