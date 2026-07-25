@@ -130,17 +130,6 @@ theorem rectSpan_nilpIndex_finrank_mono
   LinearMap.finrank_le_finrank_of_injective
     (rectSpan_nilpIndex_leftStep_injective A i₀ n)
 
-/-- **Tight ceiling**: `finrank(rectSpan ((A i₀)^r) A n) ≤ D * rank((A i₀)^r)`. -/
-theorem rectSpan_nilpIndex_finrank_le
-    (A : MPSTensor d D) (i₀ : Fin d) (n : ℕ) :
-    finrank ℂ (rectSpan ((A i₀) ^ nilpIndex (toLin' (A i₀))) A n) ≤
-      D * ((A i₀) ^ D).rank := by
-  calc finrank ℂ (rectSpan ((A i₀) ^ nilpIndex (toLin' (A i₀))) A n)
-      ≤ D * ((A i₀) ^ nilpIndex (toLin' (A i₀))).rank :=
-        rectSpan_finrank_le_rank_mul_D _ _ n
-    _ = D * ((A i₀) ^ D).rank := by
-        rw [rank_pow_nilpIndex_eq A i₀]
-
 /-- **Surjectivity at nilpIndex**: when consecutive finranks agree. -/
 theorem rectSpanNilpIndexLeftStep_surjective_of_finrank_eq
     (A : MPSTensor d D) (i₀ : Fin d) (n : ℕ)
@@ -155,48 +144,6 @@ theorem rectSpanNilpIndexLeftStep_surjective_of_finrank_eq
     FiniteDimensional.finiteDimensional_submodule _
   exact (LinearMap.injective_iff_surjective_of_finrank_eq_finrank hfin).mp
     (rectSpan_nilpIndex_leftStep_injective A i₀ n)
-
-/-- **Ceiling permanence**: once the finrank of `rectSpan ((A i₀)^r) A n` reaches
-the ceiling `D * D'`, it stays there for all subsequent levels.
-
-The argument: finrank at ceiling → rectSpan = range → finrank = ceiling. Since
-finrank is non-decreasing and bounded by ceiling, it stays at ceiling. -/
-theorem rectSpan_nilpIndex_finrank_ceiling_permanent
-    (A : MPSTensor d D) (i₀ : Fin d) (n : ℕ)
-    (hceiling : finrank ℂ (rectSpan ((A i₀) ^ nilpIndex (toLin' (A i₀))) A n) =
-      D * ((A i₀) ^ D).rank) :
-    ∀ m, n ≤ m →
-      finrank ℂ (rectSpan ((A i₀) ^ nilpIndex (toLin' (A i₀))) A m) =
-        D * ((A i₀) ^ D).rank := by
-  intro m hm
-  induction m with
-  | zero =>
-    have : n = 0 := by omega
-    rw [this] at hceiling; exact hceiling
-  | succ k ih =>
-    by_cases hk : n ≤ k
-    · have hkbound := ih hk
-      have hle : finrank ℂ (rectSpan ((A i₀) ^ nilpIndex (toLin' (A i₀))) A (k + 1)) ≤
-          D * ((A i₀) ^ D).rank :=
-        rectSpan_nilpIndex_finrank_le A i₀ (k + 1)
-      have hmono := rectSpan_nilpIndex_finrank_mono A i₀ k
-      omega
-    · have : n = k + 1 := by omega
-      rw [this] at hceiling; exact hceiling
-
-/-- **At ceiling, rectSpan equals full range.**
-
-When the finrank reaches `D * D'`, the rectSpan at that level equals
-`range(mulLeft ((A i₀)^r))`. -/
-theorem rectSpan_nilpIndex_eq_range_of_finrank_eq_ceiling
-    (A : MPSTensor d D) (i₀ : Fin d) (n : ℕ)
-    (hceiling : finrank ℂ (rectSpan ((A i₀) ^ nilpIndex (toLin' (A i₀))) A n) =
-      D * ((A i₀) ^ D).rank) :
-    rectSpan ((A i₀) ^ nilpIndex (toLin' (A i₀))) A n =
-      LinearMap.range (LinearMap.mulLeft ℂ
-        ((A i₀) ^ nilpIndex (toLin' (A i₀)))) := by
-  apply rectSpan_eq_range_of_finrank_eq_range
-  rw [hceiling, finrank_range_mulLeft, rank_pow_nilpIndex_eq A i₀]
 
 end NilpIndexGrowth
 
