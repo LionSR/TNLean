@@ -320,37 +320,4 @@ theorem biRectSpan_finrank_mono (n : ℕ) :
 
 end BiRectSpanDimGrowth
 
-/-!
-## Pigeonhole finrank stabilization
-
-The monotone bounded sequence `finrank(biRectSpan P Q B n)` must have a consecutive
-equality within the first `D^2+1` steps. This is a pure natural-number pigeonhole.
--/
-
-/-- Generic pigeonhole: a monotone function `ℕ → ℕ` bounded by `B` has a consecutive
-equality within the first `B+1` values. -/
-private theorem exists_consecutive_eq_of_monotone_bounded
-    {B : ℕ} (a : ℕ → ℕ)
-    (ha_mono : ∀ n, a n ≤ a (n + 1))
-    (ha_bound : ∀ n, a n ≤ B) :
-    ∃ n ≤ B, a n = a (n + 1) := by
-  by_contra h
-  push Not at h
-  have hstrict : ∀ n ≤ B, a n < a (n + 1) := by
-    intro n hn
-    exact lt_of_le_of_ne (ha_mono n) (h n hn)
-  -- Telescoping: a k ≥ a 0 + k for k ≤ B + 1
-  have hgrow : ∀ k, k ≤ B + 1 → a k ≥ a 0 + k := by
-    intro k hk
-    induction k with
-    | zero => omega
-    | succ k ih =>
-      have hk_le : k ≤ B := by omega
-      have hih : a k ≥ a 0 + k := ih (by omega)
-      have hstep : a k < a (k + 1) := hstrict k hk_le
-      omega
-  have : a (B + 1) ≥ a 0 + (B + 1) := hgrow (B + 1) le_rfl
-  have : a (B + 1) ≤ B := ha_bound (B + 1)
-  omega
-
 end MPSTensor
