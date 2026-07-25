@@ -145,24 +145,22 @@ eventual exact-word spanning, and spectral strong irreducibility.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:peripheral_cyclic_structure}
+    \uses{thm:blocking_primitivity}
     If $S_i(A)=\MN{D}$ and $\varphi\neq0$, then
     $S_i(A)\varphi=\C^D$, proving (2)$\Rightarrow$(1).
     For (1)$\Rightarrow$(3), first obtain a nonzero positive fixed point
-    $\rho$. The spreading condition makes $\rho$ positive definite and
-    excludes nontrivial invariant subspaces. The cyclic peripheral-spectrum
-    theorem then makes every peripheral eigenvalue a root of unity. Suppose
-    $\E_A(X)=\lambda X$ with $|\lambda|=1$ and $\lambda\neq1$, and choose
-    $p>0$ with $\lambda^p=1$. Paper primitivity persists under positive
-    powers, so $\E_A^p$ has a unique positive fixed point of each trace.
-    If $H$ is a trace-zero Hermitian fixed point of $\E_A^p$, choose
-    $\varepsilon>0$ small enough that
-    $\rho\pm\varepsilon H\succeq0$. These are fixed points with the same
-    trace as $\rho$, so both equal $\rho$ and hence $H=0$. Trace preservation
-    and $\lambda\neq1$ give $\tr(X)=0$. Apply the preceding argument to
-    $X+X^\dagger$ and $\mathrm{i}(X-X^\dagger)$, which are Hermitian fixed
-    points of $\E_A^p$. Both vanish, contradicting $X\neq0$.
-    Hence the peripheral spectrum is $\{1\}$.
+    $\rho$. The spreading condition makes $\rho$ positive definite and makes
+    the tensor irreducible. The blocking-periodicity theorem then gives
+    $p>0$ such that $\E_A^p$ is primitive. If
+    $\E_A(X)=\lambda X$ with $|\lambda|=1$, then
+    $\E_A^p(X)=\lambda^pX$; uniqueness of the peripheral eigenvalue of the
+    primitive power gives $\lambda^p=1$. If $\lambda\neq1$, the eigenvector
+    yields a nonzero trace-zero Hermitian matrix $H$ fixed by $\E_A^p$.
+    Decompose $H=Q_1-Q_2$ into positive semidefinite $\E_A^p$-fixed parts.
+    Paper primitivity makes every nonzero positive fixed point of the power
+    proportional to $\rho$, while $\tr(H)=0$ makes the two proportionality
+    constants equal. Hence $H=0$, a contradiction. Thus every peripheral
+    eigenvalue equals $1$, and $\E_A$ is strongly irreducible.
 
     For (3)$\Rightarrow$(2), write
     $\E_A^m=P_\rho+(\E_A-P_\rho)^m$. The complementary powers tend to zero.
@@ -185,8 +183,7 @@ eventual exact-word spanning, and spectral strong irreducibility.
         q(\E_A)&\le\iota(A).
         \notag
     \end{align}
-    This is the inequality following
-    \cite[Proposition~3]{Sanz2010Quantum}.
+    This is \cite[Proposition~1]{Sanz2010Quantum}.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -734,11 +731,11 @@ case are proved in Section~\ref{sec:app_wielandt_blocking_support}.
 \begin{proof}
     \leanok
     \uses{thm:wielandt_proposition_three,
-        thm:nonzero_trace_word_sharp_pos, thm:eigenvector_from_trace,
+        thm:nonzero_trace_word_primitive_sharp, thm:eigenvector_from_trace,
         thm:isNormal_blockTensor, thm:wielandt_case2_normal_generator,
         cor:wielandt_case3_generator}
     Theorem~\ref{thm:wielandt_proposition_three} gives normality.
-    By Theorem~\ref{thm:nonzero_trace_word_sharp_pos}, there exists a
+    By Theorem~\ref{thm:nonzero_trace_word_primitive_sharp}, there exists a
     \emph{positive-length} word~$w$ with
     $|w|\le D^2-d'+1$ and $\tr(A^w)\neq0$, where
     $d'=\krausrk(A)$.
