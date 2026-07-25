@@ -1,0 +1,15 @@
+% Regression: an ordinary wire may end at a point of a declared curve.
+\documentclass{standalone}
+\usepackage{tenkz}
+\makeatletter
+\ExplSyntaxOn
+\file_input:n { tenkz-kernel.code.tex }
+\ExplSyntaxOff
+\makeatother
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[rows={wire,wire}, cols=4, bonds=none]
+  \tnwire[kind=string, name=curve]{(1,1)}{(1,4)}
+  \tnwire{on curve 0.25}{(2,4)}
+\end{tenkz}
+\end{document}

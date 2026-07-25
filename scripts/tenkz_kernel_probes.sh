@@ -211,6 +211,35 @@ grep -Fq '[TKZ-LANG-ADDRESS]' "$WORK/n_diagonal_port.transcript" || {
   exit 1
 }
 
+missing_onwire="$KERNEL/negative/n_missing_onwire.tex"
+if ( cd "$WORK" &&
+     TEXINPUTS="$REPO/tex/tenkz//:" \
+       timeout 120 xelatex -interaction=nonstopmode -halt-on-error \
+       "$missing_onwire" >"$WORK/n_missing_onwire.transcript" 2>&1 ); then
+  echo "FAIL: an on-wire address accepted a missing wire" >&2
+  exit 1
+fi
+grep -Fq '[TKZ-KERNEL-RENDER-ONWIRE]' \
+    "$WORK/n_missing_onwire.transcript" || {
+  echo "FAIL: missing on-wire name lacked TKZ-KERNEL-RENDER-ONWIRE" >&2
+  tail -20 "$WORK/n_missing_onwire.transcript" >&2
+  exit 1
+}
+
+addr_cycle="$KERNEL/negative/n_addr_cycle.tex"
+if ( cd "$WORK" &&
+     TEXINPUTS="$REPO/tex/tenkz//:" \
+       timeout 120 xelatex -interaction=nonstopmode -halt-on-error \
+       "$addr_cycle" >"$WORK/n_addr_cycle.transcript" 2>&1 ); then
+  echo "FAIL: a cyclic address dependency was accepted" >&2
+  exit 1
+fi
+grep -Fq '[TKZ-ADDR-CYCLE]' "$WORK/n_addr_cycle.transcript" || {
+  echo "FAIL: cyclic address dependency lacked TKZ-ADDR-CYCLE" >&2
+  tail -20 "$WORK/n_addr_cycle.transcript" >&2
+  exit 1
+}
+
 signature_negative="$KERNEL/negative/n_signature_mismatch.tex"
 if ( cd "$WORK" &&
      TEXINPUTS="$REPO/tex/tenkz//:" \
