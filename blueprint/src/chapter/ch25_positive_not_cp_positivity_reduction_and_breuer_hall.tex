@@ -1,3 +1,120 @@
+\section{Elementary positive-map examples}
+
+The reduction map and the automorphisms of the positive semidefinite cone are
+basic structural examples of positive maps. The reduction map has a simple
+trace form and an explicit Choi matrix; the automorphisms preserve the order
+cone and map it onto itself.
+
+\subsection{The reduction map}
+
+\begin{definition}[Reduction map]
+    \label{def:reduction_map}
+    \lean{Matrix.reductionMap}
+    \leanok
+    The reduction map on $\MN{D}$, for $k\in\N$, is
+    \begin{align}
+        T_k(X)
+         & =\tr(X)\Id-k^{-1}X.
+        \label{eq:channel_reduction_map}
+    \end{align}
+\end{definition}
+
+\begin{theorem}[The first reduction map is positive]
+    \label{thm:reduction_map_one_positive}
+    \lean{Matrix.reductionMap_one_isPositiveMap}
+    \leanok
+    \uses{def:positive_map, def:reduction_map}
+    For $D\ge 1$, the map $T_1(X)=\tr(X)\Id-X$ on $\MN{D}$ is positive.
+\end{theorem}
+
+\begin{proof}\leanok
+    If $X\ge 0$, diagonalize $X$. Its eigenvalues
+    $\lambda_1,\ldots,\lambda_D$ are non-negative, and each satisfies
+    $\lambda_j\le \sum_{i=1}^D\lambda_i=\tr(X)$. Therefore all eigenvalues
+    of $\tr(X)\Id-X$ are non-negative.
+\end{proof}
+
+\begin{theorem}[Self-duality of the reduction map]
+    \label{thm:reduction_map_self_dual}
+    \lean{Matrix.traceAdjointMap_reductionMap}
+    \leanok
+    \uses{def:reduction_map}
+    The reduction map is self-dual for the trace pairing:
+    \begin{align}
+        \tr(T_k(\rho)X)
+         & =\tr(\rho T_k(X)).
+        \label{eq:channel_reduction_self_dual}
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    Expanding both sides of (\ref{eq:channel_reduction_self_dual}) using
+    (\ref{eq:channel_reduction_map}) and bilinearity of the trace gives
+    $\tr(\rho)\tr(X)-k^{-1}\tr(\rho X)$ in each case.
+\end{proof}
+
+\begin{theorem}[Choi matrix of the reduction map]
+    \label{thm:choi_matrix_reduction_map}
+    \lean{ChoiJamiolkowski.choiMatrix_reductionMap}
+    \leanok
+    \uses{def:reduction_map}
+    For $D\ge 1$, the Choi matrix of the reduction map is
+    \begin{align}
+        \tau(T_k)
+         & =D^{-1}\Id-k^{-1}\ket{\Omega}\bra{\Omega}.
+        \label{eq:channel_reduction_choi}
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    The trace term sends the $(a,b)$ slice of
+    $\ket{\Omega}\bra{\Omega}$ to its trace times the identity, giving
+    the contribution $D^{-1}\Id$. The second term is the Choi matrix of
+    $k^{-1}$ times the identity map, namely
+    $k^{-1}\ket{\Omega}\bra{\Omega}$.
+\end{proof}
+
+\subsection{Automorphisms of the positive semidefinite cone}
+
+Invertible conjugations, with or without transposition, do more than preserve
+positivity: they are surjective on the positive semidefinite cone.
+
+\begin{definition}[Maps preserving the positive semidefinite cone]
+    \label{def:maps_psd_cone_onto}
+    \lean{MapsPSDConeOnto}
+    \leanok
+    \uses{def:positive_map}
+    A linear map $T:\MN{D}\to\MN{D}$ \emph{maps the positive semidefinite cone
+        onto itself} if $T$ is positive and every positive semidefinite matrix is
+    the image under $T$ of a positive semidefinite matrix. This is condition
+    (1) of \cite[Proposition~3.8]{Wolf2012Quantum}.
+\end{definition}
+
+\begin{theorem}[Conjugations preserve the positive semidefinite cone]
+    \label{thm:conjugation_maps_psd_cone_onto}
+    \lean{unitaryConjLM_mapsPSDConeOnto,
+        unitaryConjLM_comp_transpose_mapsPSDConeOnto}
+    \leanok
+    \uses{def:maps_psd_cone_onto}
+    Let $Y\in\MN{D}$ be invertible. Then the map $X\mapsto YXY^\dagger$ and the
+    map $X\mapsto YX^TY^\dagger$ each map the positive semidefinite cone onto
+    itself. This is the implication (3) $\Rightarrow$ (1) of
+    \cite[Proposition~3.8]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}\leanok
+    Conjugation by any matrix preserves positive semidefiniteness. Moreover,
+    if $W=C^\dagger C$, then
+    $W^T=C^T\overline C=\overline C^\dagger\overline C\geq0$;
+    hence transposition also preserves positive semidefiniteness, and both maps
+    send the cone into itself. For surjectivity onto the cone, given
+    a positive semidefinite $A$, set
+    $W=Y^{-1}A(Y^{-1})^\dagger$, which is again positive semidefinite. Then
+    $YWY^\dagger=A$ proves the conjugation case, and
+    $Y(W^T)^TY^\dagger=A$ proves the transpose case, with $W$ and $W^T$
+    positive semidefinite.
+\end{proof}
+
 \section{Positivity hierarchy and two-positive maps}
 
 The following family exhibits the strict hierarchy of positivity conditions
@@ -19,7 +136,7 @@ adjacent cones.
     \leanok
     For a real parameter $\eta$, the map $T_\eta$ on $\MN{D}$ is
     \begin{align}
-        T_\eta(\rho)&=\tr(\rho) \Id-\eta^{-1}\rho.
+        T_\eta(\rho) & =\tr(\rho) \Id-\eta^{-1}\rho.
         \notag
     \end{align}
     The map is defined for every real $\eta$; at $\eta=0$ it reduces to
@@ -34,7 +151,7 @@ adjacent cones.
     \uses{def:t_eta, thm:choi_matrix_reduction_map}
     For $D\ge 1$, the Choi matrix of $T_\eta$ is
     \begin{align}
-        \tau_\eta&=D^{-1}\Id-\eta^{-1}\ket{\Omega}\bra{\Omega}.
+        \tau_\eta & =D^{-1}\Id-\eta^{-1}\ket{\Omega}\bra{\Omega}.
         \notag
     \end{align}
 \end{theorem}
@@ -70,7 +187,7 @@ adjacent cones.
     normalized such vector $\psi$, the Choi matrix
     $\tau_\eta=D^{-1}\Id-\eta^{-1}\ket{\Omega}\bra{\Omega}$ gives
     $\bra{\psi}\tau_\eta\ket{\psi}
-    =D^{-1}-\eta^{-1}|\braket{\Omega}{\psi}|^2$.
+        =D^{-1}-\eta^{-1}|\braket{\Omega}{\psi}|^2$.
     The reduced density of $\ket\Omega$ on the first factor is $\Id/D$, so by the
     maximal-overlap principle the supremum of $|\braket{\Omega}{\psi}|^2$ over
     Schmidt-rank-$k$ normalized vectors is $\|\Id/D\|_{(k)}=k/D$. The infimum of
@@ -127,7 +244,7 @@ adjacent cones.
     Let $K=(K_i)_{i=0}^{d-1}$ be a unital Kraus family, that is,
     $\sum_i K_i K_i^\dagger=\Id$. Then for all $X\in\MN{D}$,
     $\mathcal{K}(X^\dagger X)\ge
-    \mathcal{K}(X)^\dagger\mathcal{K}(X)$,
+        \mathcal{K}(X)^\dagger\mathcal{K}(X)$,
     where $\mathcal{K}(Y)=\sum_i K_i Y K_i^\dagger$.
 \end{theorem}
 
@@ -208,7 +325,7 @@ of a bipartite state whose Schmidt number is at most $n$.
     \leanok
     The reduction witness on $\MN{D}\otimes\MN{D}$, for $n\in\N$, is
     \begin{align}
-        W_n&=D^{-1}\Id-n^{-1}\ket{\Omega}\bra{\Omega}.
+        W_n & =D^{-1}\Id-n^{-1}\ket{\Omega}\bra{\Omega}.
         \notag
     \end{align}
 \end{definition}
@@ -221,7 +338,7 @@ of a bipartite state whose Schmidt number is at most $n$.
         thm:choi_matrix_t_eta}
     For $D\ge 1$ the Choi matrix of $T_n$ is the reduction witness:
     \begin{align}
-        \tau(T_n)&=W_n=D^{-1}\Id-n^{-1}\ket{\Omega}\bra{\Omega}.
+        \tau(T_n) & =W_n=D^{-1}\Id-n^{-1}\ket{\Omega}\bra{\Omega}.
         \notag
     \end{align}
 \end{theorem}
@@ -239,7 +356,7 @@ of a bipartite state whose Schmidt number is at most $n$.
     \uses{def:t_eta}
     Applying $T_\eta$ to the first factor of a bipartite matrix $\rho$ gives
     \begin{align}
-        (T_\eta\otimes\id)(\rho)&=\Id\otimes\rho_2-\eta^{-1}\rho,
+        (T_\eta\otimes\id)(\rho) & =\Id\otimes\rho_2-\eta^{-1}\rho,
         \notag
     \end{align}
     where $\rho_2$ is the reduced density of $\rho$ on the second factor.
@@ -252,18 +369,18 @@ of a bipartite state whose Schmidt number is at most $n$.
     on the first factor. Its trace is the corresponding entry of $\rho_2$:
     \begin{align}
         \tr(\rho^{(i_2,j_2)})
-        &=\sum_{i_1}\rho_{(i_1,i_2),(i_1,j_2)}
-          =(\rho_2)_{i_2 j_2}.
+         & =\sum_{i_1}\rho_{(i_1,i_2),(i_1,j_2)}
+        =(\rho_2)_{i_2 j_2}.
         \notag
     \end{align}
     Applying $T_\eta$ entry by entry gives
     \begin{align}
         ((T_\eta\otimes\id)(\rho))_{(i_1,i_2),(j_1,j_2)}
-        &=\tr(\rho^{(i_2,j_2)}) \delta_{i_1 j_1}
-            -\eta^{-1}\rho_{(i_1,i_2),(j_1,j_2)}
-        \notag\\
-        &=(\rho_2)_{i_2 j_2} \delta_{i_1 j_1}
-            -\eta^{-1}\rho_{(i_1,i_2),(j_1,j_2)},
+         & =\tr(\rho^{(i_2,j_2)}) \delta_{i_1 j_1}
+        -\eta^{-1}\rho_{(i_1,i_2),(j_1,j_2)}
+        \notag                                     \\
+         & =(\rho_2)_{i_2 j_2} \delta_{i_1 j_1}
+        -\eta^{-1}\rho_{(i_1,i_2),(j_1,j_2)},
         \notag
     \end{align}
     and the first term is exactly the $(i_1,i_2),(j_1,j_2)$ entry of
@@ -284,7 +401,7 @@ of a bipartite state whose Schmidt number is at most $n$.
     densities of $\rho$ on the first and second factors. Because the factor
     swap is a unitary reindexing,
     $(\id\otimes T_n)(\rho)\ge0
-    \iff(T_n\otimes\id)(\rho^{F})\ge0$, so the second hypothesis is Wolf's
+        \iff(T_n\otimes\id)(\rho^{F})\ge0$, so the second hypothesis is Wolf's
     symmetric condition
     $(\id\otimes T_n)(\rho)\ge0$ expressed through the swap.
 
@@ -308,7 +425,7 @@ of a bipartite state whose Schmidt number is at most $n$.
     the order, and it exchanges the reduced densities and the two tensor slots:
     $(\rho^{F})_2=\rho_1$ and
     $(\Id\otimes(\rho^{F})_2-n^{-1}\rho^{F})^{F}
-    =\rho_1\otimes\Id-n^{-1}\rho$.
+        =\rho_1\otimes\Id-n^{-1}\rho$.
     Applying the first form to $\rho^{F}$ gives
     $n\,\Id\otimes(\rho^{F})_2-\rho^{F}\ge0$; conjugating by $F$ turns this into
     $n\,\rho_1\otimes\Id-\rho\ge0$.
@@ -330,7 +447,7 @@ fails to be completely positive, are not treated here.
     \leanok
     For a matrix $U$ on $\MN{D}$, the Breuer--Hall map on $\MN{D}$ is
     \begin{align}
-        T_{\mathrm{BH}}(X)&=\tr(X) \Id-X-U\,X^{\mathsf T}U^{\dagger}.
+        T_{\mathrm{BH}}(X) & =\tr(X) \Id-X-U\,X^{\mathsf T}U^{\dagger}.
         \notag
     \end{align}
 \end{definition}
@@ -352,30 +469,30 @@ fails to be completely positive, are not treated here.
     On $\ket{v}\bra{v}$ the image is
     \begin{align}
         T_{\mathrm{BH}}(\ket{v}\bra{v})
-        &=\lVert v\rVert^{2} \Id-\ket{v}\bra{v}
-          -\ket{U\overline{v}}\bra{U\overline{v}},
+         & =\lVert v\rVert^{2} \Id-\ket{v}\bra{v}
+        -\ket{U\overline{v}}\bra{U\overline{v}},
         \notag
     \end{align}
     with $\overline{v}$ the entrywise conjugate of $v$. The two vectors $v$ and
     $U\overline{v}$ are orthogonal: antisymmetry of $U$ gives
     \begin{align}
         \braket{v}{U\overline{v}}
-        &=\overline{v}^{\,\mathsf T}U\,\overline{v}
-          =\overline{v}^{\,\mathsf T}(-U^{\mathsf T})\overline{v}
-          =-\braket{v}{U\overline{v}},
+         & =\overline{v}^{\,\mathsf T}U\,\overline{v}
+        =\overline{v}^{\,\mathsf T}(-U^{\mathsf T})\overline{v}
+        =-\braket{v}{U\overline{v}},
         \notag
     \end{align}
     hence $\braket{v}{U\overline{v}}=0$. The contraction bound gives
     $\lVert U\overline{v}\rVert\le\lVert v\rVert$. For any
     $w$ the quadratic form is
     $\lVert v\rVert^{2}\lVert w\rVert^{2}
-    -\lvert\braket{v}{w}\rvert^{2}
-    -\lvert\braket{U\overline{v}}{w}\rvert^{2}$,
+        -\lvert\braket{v}{w}\rvert^{2}
+        -\lvert\braket{U\overline{v}}{w}\rvert^{2}$,
     which is non-negative because the two-vector Bessel inequality for the
     orthogonal pair $v$, $U\overline{v}$ with
     $\lVert U\overline{v}\rVert\le\lVert v\rVert$ gives
     $\lvert\braket{v}{w}\rvert^{2} +\lvert\braket{U\overline{v}}{w}\rvert^{2}
-    \le\lVert v\rVert^{2}\lVert w\rVert^{2}$.
+        \le\lVert v\rVert^{2}\lVert w\rVert^{2}$.
 \end{proof}
 
 \begin{theorem}[The Breuer--Hall map is positive]

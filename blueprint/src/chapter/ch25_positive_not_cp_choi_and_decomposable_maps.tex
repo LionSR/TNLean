@@ -4,7 +4,7 @@ The Choi-type maps in Wolf's Example~3.1 are built from the diagonal projection
 $D(X)$ and cyclic shifts $U_{k0}$:
 \begin{align}
     T_C(X)
-    &=(d-n)D(X)-X+\sum_{k=1}^nD(U_{k0}XU_{k0}^{\dagger}).
+     & =(d-n)D(X)-X+\sum_{k=1}^nD(U_{k0}XU_{k0}^{\dagger}).
     \notag
 \end{align}
 The formal statements below record the map and the rank-one reduction used in
@@ -28,7 +28,7 @@ the boundary of a projective simplex.
     On the cyclic index set $\Z/d\Z$, the Choi-type map is
     \begin{align}
         T_C(X)
-        &=(d-n)D(X)-X+\sum_{k=1}^nD(U_{k0}XU_{k0}^{\dagger}),
+         & =(d-n)D(X)-X+\sum_{k=1}^nD(U_{k0}XU_{k0}^{\dagger}),
         \notag
     \end{align}
     where $D$ keeps the diagonal of a matrix and $U_{k0}$ is the cyclic shift by
@@ -43,7 +43,7 @@ the boundary of a projective simplex.
     For a vector $v$ on $\Z/d\Z$,
     \begin{align}
         T_C(\ketbra{v}{v})
-        &=
+         & =
         \diag\!\left((d-n)|v_i|^2+\sum_{k=1}^n |v_{i-k}|^2\right)
         -\ketbra{v}{v}.
         \notag
@@ -66,7 +66,7 @@ the boundary of a projective simplex.
     For a vector $v$ on $\Z/d\Z$, set
     \begin{align}
         a_i
-        &=(d-n)|v_i|^2+\sum_{k=1}^n |v_{i-k}|^2.
+         & =(d-n)|v_i|^2+\sum_{k=1}^n |v_{i-k}|^2.
         \notag
     \end{align}
 \end{definition}
@@ -83,7 +83,7 @@ the boundary of a projective simplex.
     \leanok
     For every vector $w$,
     $\bra{w}(\Id-\ketbra{p}{p})\ket{w}
-    =\|w\|^2-|\braket{p}{w}|^2$.
+        =\|w\|^2-|\braket{p}{w}|^2$.
     Since $\|p\|^2=\sum_i |p_i|^2\le 1$, Cauchy's inequality gives
     $|\braket{p}{w}|^2\le \|p\|^2\|w\|^2\le \|w\|^2$, so the quadratic form is
     non-negative.
@@ -105,9 +105,9 @@ the boundary of a projective simplex.
     Put $p_i=0$ when $a_i=0$ and $p_i=v_i/\sqrt{a_i}$ otherwise. Then
     \begin{align}
         \|p\|^2
-        &=\sum_i |p_i|^2
-          =\sum_i \frac{|v_i|^2}{a_i}
-          \le 1
+         & =\sum_i |p_i|^2
+        =\sum_i \frac{|v_i|^2}{a_i}
+        \le 1
         \notag
     \end{align}
     under the same zero-term convention.
@@ -152,7 +152,7 @@ the boundary of a projective simplex.
     $x=|v_0|^2$, $y=|v_1|^2$, and $z=|v_2|^2$, the needed cyclic estimate is
     \begin{align}
         \frac{x}{2x+z}+\frac{y}{2y+x}+\frac{z}{2z+y}
-        &\le1.
+         & \le1.
         \notag
     \end{align}
     The zero-denominator terms are read as $0$, as in the preceding
@@ -218,7 +218,7 @@ the boundary of a projective simplex.
     summands read as $0$,
     \begin{align}
         \sum_i \frac{x_i}{T+x_i-x_{\sigma(i)}}
-        &\le 1.
+         & \le 1.
         \notag
     \end{align}
 \end{lemma}
@@ -229,15 +229,15 @@ the boundary of a projective simplex.
     $\delta_i=x_i-x_{\sigma(i)}$. Each summand obeys
     \begin{align}
         \frac{x_i}{T+\delta_i}
-        &\le\frac{x_iT-x_i\delta_i+\delta_i^2/2}{T^2}.
+         & \le\frac{x_iT-x_i\delta_i+\delta_i^2/2}{T^2}.
         \notag
     \end{align}
     For $\sigma(i)=i$ both sides equal $x_i/T$, and for $\sigma(i)\ne i$ the
     difference of the two sides is
     \begin{align}
         \frac{\delta_i^2(T-x_i-x_{\sigma(i)})}
-             {2T^2(T+\delta_i)}
-        &\ge0,
+        {2T^2(T+\delta_i)}
+         & \ge0,
         \notag
     \end{align}
     by the pair bound $x_i+x_{\sigma(i)}\le T$ and
@@ -248,7 +248,7 @@ the boundary of a projective simplex.
     therefore yields
     \begin{align}
         \sum_i\frac{x_i}{T+\delta_i}
-        &\le
+         & \le
         \frac{T^2-\sum_i x_i\delta_i+\tfrac12\sum_i\delta_i^2}{T^2}
         =1.
         \notag
@@ -265,8 +265,8 @@ the boundary of a projective simplex.
     rank-one diagonal weight equals
     \begin{align}
         a_i
-        &=(d-n)x_i+\sum_{k=1}^{n}x_{i-k}
-          =T+x_i-x_{i+1}.
+         & =(d-n)x_i+\sum_{k=1}^{n}x_{i-k}
+        =T+x_i-x_{i+1}.
         \notag
     \end{align}
 \end{lemma}
@@ -314,6 +314,53 @@ the boundary of a projective simplex.
     \leanok
     Combine Lemma~\ref{lem:choi_type_rankone_positive_top} with
     Lemma~\ref{lem:positive_map_from_rankone}.
+\end{proof}
+
+\section{Transposition}
+
+Transposition is the basic example of a positive map that is not completely
+positive. Its positivity is used in the decomposable-map construction below,
+while the failure of complete positivity follows from its Choi matrix.
+
+\begin{theorem}[Transposition is positive and trace-preserving]
+    \label{thm:transpose_positive_trace_preserving}
+    \lean{Matrix.transposeLinearMapComplex_isPositiveMap,
+        Matrix.transposeLinearMapComplex_isTracePreservingMap}
+    \leanok
+    \uses{def:positive_map, def:trace_preserving}
+    The matrix transposition map $\theta(X)=X^T$ on $\MN{D}$ is positive
+    and trace-preserving.
+\end{theorem}
+
+\begin{proof}\leanok
+    If $X \ge 0$, write $X=C^\dagger C$. Then
+    $X^T=C^T\overline C=\overline C^\dagger\overline C$, so $X^T \ge 0$.
+    Trace preservation is the identity $\tr(X^T)=\tr(X)$.
+\end{proof}
+
+\begin{theorem}[Transposition is not completely positive]
+    \label{thm:transpose_not_completely_positive}
+    \lean{ChoiJamiolkowski.transposeLinearMapComplex_not_isCPMap}
+    \leanok
+    \uses{def:cp_map, def:flip_operator, def:fin_two_antisymm_vec,
+        thm:choi_transpose_flip, thm:cp_iff_choi_posSemidef}
+    If $D \ge 2$, the matrix transposition map $\theta(X)=X^T$ on $\MN{D}$
+    is not completely positive.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:flip_operator, def:fin_two_antisymm_vec, thm:choi_transpose_flip,
+        thm:cp_iff_choi_posSemidef}
+    If $\theta$ were completely positive, its Choi matrix would be positive
+    semidefinite. By Theorem~\ref{thm:choi_transpose_flip}, this Choi matrix is
+    $D^{-1}F$. For the antisymmetric vector
+    $v=\ket{01}-\ket{10}$,
+    \begin{align}
+        \bra{v}\,D^{-1}F\,\ket{v}
+         & =-\frac{2}{D}<0,
+        \notag
+    \end{align}
+    contradicting positive semidefiniteness.
 \end{proof}
 
 \section{Decomposable positive maps}
