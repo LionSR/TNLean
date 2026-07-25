@@ -3,14 +3,17 @@
 %% and a square glyph hides them).
 %% Expected records: six atoms on row 1 (cols 1-6, physical=up), one wire
 %% closing the sixth station to the first through two angle-valued faces,
-%% one enclosure mark over the range (1,1)..(1,2).
+%% one enclosure mark over the range (1,1)..(1,2), and one string routed
+%% north of that same range, which derives two crossings and resolves both.
 %% Expected ink: each glyph stands at its station of the circle frame,
 %% turned by that station's tangent; each physical leg points radially out
 %% of the ring, because the outward physical face is the row's own normal;
-%% every name reads level, because label text never rotates; and the
-%% enclosure is turned with the two records it names rather than drawn
-%% upright around them.  No atom says how it stands: orientation is a
-%% consequence of where a record sits.
+%% every name reads level, because label text never rotates; the enclosure
+%% is turned with the two records it names rather than drawn upright around
+%% them; and the route leans the same way, standing off the north of the two
+%% records it travels rather than the north of the page, so that both of the
+%% radial legs it claims to cross actually meet it.  No atom says how it
+%% stands: orientation is a consequence of where a record sits.
 \documentclass{standalone}
 \usepackage{tenkz}
 \makeatletter
@@ -26,5 +29,7 @@
   & \tn[skin=box, name=E]{E} & \tn[skin=box, name=F]{F}
   \tnwire{F.0}{A.180}
   \tnmark[form=enclosure, slot=selected, label pos=n]{(1,1) .. (1,2)}{$P$}
+  \tnwire[kind=string, species=g, crossing=over,
+          route={n of (1,1) .. (1,2)}]{open}{open}
 \end{tenkz}
 \end{document}
