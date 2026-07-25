@@ -184,7 +184,7 @@ above together with the pigeonhole helper
 `exists_consecutive_eq_of_monotone_bounded'` and the `cumulativeRectSpan_mono` /
 `cumulativeRectSpan_finrank_le` bounds in `RectangularSpan/Basic.lean`)
 currently has no callers outside the cluster; it is retained as advertised
-stabilization API while the keep/delete question is tracked on issue #4564.
+stabilization API while the keep/delete question is tracked separately.
 -/
 
 section RectSpanStabilization
