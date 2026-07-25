@@ -1207,6 +1207,16 @@
   {
     \prop_if_in:NnF \l__tenkz_string_kind_prop {#1}
       { \msg_error:nnn {tenkz}{string-unknown} {#1} }
+    % A bead reads the route before any crossing cut it.  Resolution freezes
+    % that copy for every string at once; a bead asked for earlier -- because
+    % something stands at the point it names -- freezes its own, and the two
+    % are the same route.
+    \cs_if_exist:cF { \l__tikzspath_prefix_tl tenkz-bead-#1 }
+      {
+        \cs_set_eq:cc
+          { \l__tikzspath_prefix_tl tenkz-bead-#1 }
+          { \l__tikzspath_prefix_tl #1 }
+      }
     \tenkz@string@beadpath {tenkz-bead-#1} {#2} {#3}
     \pgfpointanchor {#3} {center}
     \tenkz@event{stringbead|id=#1|t=#2|
