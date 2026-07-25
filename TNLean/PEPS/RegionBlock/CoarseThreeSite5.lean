@@ -123,6 +123,34 @@ theorem isCrossing_bc_of_incident (F : CoherentCoarseBlockingFrame (G := G) (d :
       Or.inl ⟨hc1, (Finset.disjoint_left.mp hP.blue_disjoint_complement) hb2⟩⟩
   · exact absurd hc2 ((Finset.disjoint_left.mp hP.blue_disjoint_complement) hb2)
 
+/-- A red-to-complement crossing edge is not incident to the blue block: its two
+endpoints lie one in the red block and one in the complement, both disjoint from blue.
+(Mirrors `not_isRegionIncidentEdge_complement_of_crossing_rb` in `CoarseThreeSite9`
+with the roles of blue and complement swapped.) -/
+theorem not_isRegionIncidentEdge_blue_of_crossing_rc
+    (F : CoherentCoarseBlockingFrame (G := G) (d := d) A) (hP : F.frame.IsPartition)
+    {e : Edge G} (hg : IsCrossingEdge (G := G) A F.frame.red F.frame.complement e) :
+    ¬ IsRegionIncidentEdge (G := G) F.frame.blue e := by
+  -- The red-to-complement crossing edge has, on each endpoint, a red and a complement
+  -- boundary condition; the two combine to place each endpoint in red or complement.
+  have hblue : ∀ v : V, v ∈ F.frame.red ∨ v ∈ F.frame.complement → v ∉ F.frame.blue := by
+    rintro v (hr | hc) hb
+    · exact (Finset.disjoint_left.mp hP.red_disjoint_blue) hr hb
+    · exact (Finset.disjoint_left.mp hP.blue_disjoint_complement) hb hc
+  rcases hg.1 with ⟨hr1, hr2⟩ | ⟨hr1, hr2⟩ <;> rcases hg.2 with ⟨hc1, hc2⟩ | ⟨hc1, hc2⟩
+  · -- e.1.1 ∈ red, e.1.1 ∈ complement: impossible.
+    exact absurd hc1 ((Finset.disjoint_left.mp hP.red_disjoint_complement) hr1)
+  · -- e.1.1 ∈ red, e.1.2 ∈ complement.
+    rintro (hb | hb)
+    · exact hblue _ (Or.inl hr1) hb
+    · exact hblue _ (Or.inr hc2) hb
+  · -- e.1.2 ∈ red, e.1.1 ∈ complement.
+    rintro (hb | hb)
+    · exact hblue _ (Or.inr hc1) hb
+    · exact hblue _ (Or.inl hr2) hb
+  · -- e.1.2 ∈ red, e.1.2 ∈ complement: impossible.
+    exact absurd hc2 ((Finset.disjoint_left.mp hP.red_disjoint_complement) hr2)
+
 /-! ### The three-way merge
 
 The merge of an agreeing triple reads the red-incident edges from the red
@@ -145,14 +173,8 @@ theorem redProd_triMerge (F : CoherentCoarseBlockingFrame (G := G) (d := d) A)
     (σr : RegionPhysicalConfig (V := V) (d := d) F.frame.red) :
     (∏ w : {w : V // w ∈ F.frame.red}, A.component w.1 (fun ie => ζr ie.1) (σr w)) =
       ∏ w : {w : V // w ∈ F.frame.red},
-        A.component w.1 (fun ie => triMerge F ζr ζb ζc ie.1) (σr w) := by
-  refine Finset.prod_congr rfl (fun w _ => ?_)
-  congr 1; funext ie
-  have hrinc : IsRegionIncidentEdge (G := G) F.frame.red ie.1 := by
-    rcases ie.2 with hie | hie
-    · exact Or.inl (by rw [hie]; exact w.2)
-    · exact Or.inr (by rw [hie]; exact w.2)
-  rw [triMerge, mergeVirtualConfig_of_pos A _ ζr _ hrinc]
+        A.component w.1 (fun ie => triMerge F ζr ζb ζc ie.1) (σr w) :=
+  regionProd_eq_merge A F.frame.red σr (ζr, regionMerge A F.frame.blue (ζb, ζc))
 
 /-- The blue vertex product reads the merge unchanged: a blue-incident edge that is
 also red-incident is a red-to-blue crossing edge, where the agreement coincides. -/
@@ -161,18 +183,12 @@ theorem blueProd_triMerge (F : CoherentCoarseBlockingFrame (G := G) (d := d) A)
     (σb : RegionPhysicalConfig (V := V) (d := d) F.frame.blue) :
     (∏ w : {w : V // w ∈ F.frame.blue}, A.component w.1 (fun ie => ζb ie.1) (σb w)) =
       ∏ w : {w : V // w ∈ F.frame.blue},
-        A.component w.1 (fun ie => triMerge F ζr ζb ζc ie.1) (σb w) := by
-  refine Finset.prod_congr rfl (fun w _ => ?_)
-  congr 1; funext ie
-  have hbinc : IsRegionIncidentEdge (G := G) F.frame.blue ie.1 := by
-    rcases ie.2 with hie | hie
-    · exact Or.inl (by rw [hie]; exact w.2)
-    · exact Or.inr (by rw [hie]; exact w.2)
-  by_cases hr : IsRegionIncidentEdge (G := G) F.frame.red ie.1
-  · rw [triMerge, mergeVirtualConfig_of_pos A _ _ _ hr]
-    exact (h.rb F (isCrossing_rb_of_incident F hP hr hbinc)).symm
-  · rw [triMerge, mergeVirtualConfig_of_neg A _ _ _ hr,
-      mergeVirtualConfig_of_pos A _ _ _ hbinc]
+        A.component w.1 (fun ie => triMerge F ζr ζb ζc ie.1) (σb w) :=
+  (regionProd_eq_merge A F.frame.blue σb (ζb, ζc)).trans
+    (regionProd_p2_eq_merge_of_incident_agree A F.frame.red F.frame.blue σb
+      (ζr, regionMerge A F.frame.blue (ζb, ζc)) fun _e hr hb =>
+      (h.rb F (isCrossing_rb_of_incident F hP hr hb)).trans
+        (regionMerge_of_incident A F.frame.blue (ζb, ζc) hb).symm)
 
 /-- The complement vertex product reads the merge unchanged: a complement-incident
 edge that is red-incident is a red-to-complement crossing edge, and one that is
@@ -183,22 +199,15 @@ theorem complProd_triMerge (F : CoherentCoarseBlockingFrame (G := G) (d := d) A)
     (σc : RegionPhysicalConfig (V := V) (d := d) F.frame.complement) :
     (∏ w : {w : V // w ∈ F.frame.complement}, A.component w.1 (fun ie => ζc ie.1) (σc w)) =
       ∏ w : {w : V // w ∈ F.frame.complement},
-        A.component w.1 (fun ie => triMerge F ζr ζb ζc ie.1) (σc w) := by
-  refine Finset.prod_congr rfl (fun w _ => ?_)
-  congr 1; funext ie
-  have hcinc : IsRegionIncidentEdge (G := G) F.frame.complement ie.1 := by
-    rcases ie.2 with hie | hie
-    · exact Or.inl (by rw [hie]; exact w.2)
-    · exact Or.inr (by rw [hie]; exact w.2)
-  by_cases hr : IsRegionIncidentEdge (G := G) F.frame.red ie.1
-  · rw [triMerge, mergeVirtualConfig_of_pos A _ _ _ hr]
-    exact (h.rc F (isCrossing_rc_of_incident F hP hr hcinc)).symm
-  · by_cases hb : IsRegionIncidentEdge (G := G) F.frame.blue ie.1
-    · rw [triMerge, mergeVirtualConfig_of_neg A _ _ _ hr,
-        mergeVirtualConfig_of_pos A _ _ _ hb]
-      exact (h.bc F (isCrossing_bc_of_incident F hP hb hcinc)).symm
-    · rw [triMerge, mergeVirtualConfig_of_neg A _ _ _ hr,
-        mergeVirtualConfig_of_neg A _ _ _ hb]
+        A.component w.1 (fun ie => triMerge F ζr ζb ζc ie.1) (σc w) :=
+  (regionProd_p2_eq_merge_of_incident_agree A F.frame.blue F.frame.complement σc (ζb, ζc)
+    fun _e hb hc => h.bc F (isCrossing_bc_of_incident F hP hb hc)).trans
+    (regionProd_p2_eq_merge_of_incident_agree A F.frame.red F.frame.complement σc
+      (ζr, regionMerge A F.frame.blue (ζb, ζc)) fun _e hr hc =>
+      let hx := isCrossing_rc_of_incident F hP hr hc
+      (h.rc F hx).trans
+        (regionMerge_of_not_incident A F.frame.blue (ζb, ζc)
+          (not_isRegionIncidentEdge_blue_of_crossing_rc F hP hx)).symm)
 
 /-! ### The assembled physical configuration
 

@@ -141,6 +141,29 @@ abstracted — record why, so it is not re-proposed).
 - **Result:** the theorem proof decreased from 421 to 362 lines (59 lines net),
   with no new declaration; the file diff is 18 insertions and 77 deletions.
 
+### Three-way merge collapse through the regionMerge calculus
+- **Pattern:** each of the three `triMerge` product lemmas re-proved the per-vertex
+  read-back of a nested `mergeVirtualConfig` by hand: `Finset.prod_congr`,
+  `congr 1; funext ie`, a `by_cases` ladder over each region's incidence, and
+  `mergeVirtualConfig_of_pos`/`mergeVirtualConfig_of_neg` rewrites, with the
+  crossing-agreement step inlined at each leaf.
+- **Reuse:** `redProd_triMerge` is a one-line `regionProd_eq_merge` application
+  (`triMerge` is definitionally the nest
+  `regionMerge red (ζr, regionMerge blue (ζb, ζc))`); `blueProd_triMerge` chains
+  `regionProd_eq_merge` with `regionProd_p2_eq_merge_of_incident_agree` at the red
+  merge region, the agreement being `TripleAgrees.rb` through
+  `isCrossing_rb_of_incident`; `complProd_triMerge` chains two
+  `regionProd_p2_eq_merge_of_incident_agree` applications (blue, then red), the
+  red step reading `ζc` from the inner merge via the new partition fact
+  `not_isRegionIncidentEdge_blue_of_crossing_rc` (a red-to-complement
+  crossing edge misses the blue region).
+- **Result:** `RegionBlock/CoarseThreeSite5.lean` loses 2 source lines net
+  (34 insertions, 36 deletions across two commits): the three product-lemma
+  proofs fall from 33 tactic lines to 13 term lines while the new crossing lemma
+  adds 18 lines. Every declaration name and statement, including the `triMerge`
+  body, is unchanged; the `triFiber_card`, `agreeing_summand_eq`, and
+  `agreeingTripleSum_collapse` consumers compile untouched.
+
 ---
 
 ## Candidates
@@ -321,6 +344,35 @@ spectral split → block extraction → MPV calculation → strict bounds
   functions, the other constructs blocking data and applies `bondDim_apply_eq_of_blockingData`.
   Before promotion, verify that the resulting type families (gauge existence vs. bond-dimension
   equality) can be unified under a single dispatch lemma without bloating the argument list.
+
+### disjoint-region crossing geometry case-split — candidate
+- **Pattern:** for a crossing edge between two disjoint regions of a three-block
+  partition, four-way `rcases` on the two boundary-edge disjunctions, dispatching the
+  two same-endpoint impossible branches by `absurd` via partition disjointness and the
+  two live branches by pinning each endpoint into the two crossing regions to exclude
+  incidence to the third.
+- **Seen:** ≥4 occurrences across ≥2 files (2026-07-25):
+  `RegionBlock/CoarseThreeSite5.lean` (`isCrossing_rb_of_incident`,
+  `isCrossing_rc_of_incident`, `isCrossing_bc_of_incident`,
+  `not_isRegionIncidentEdge_blue_of_crossing_rc`),
+  `RegionBlock/CoarseThreeSite9.lean:77` (`not_isRegionIncidentEdge_complement_of_crossing_rb`),
+  plus the `UnionInjectivity.lean:337` / `UnionInjectivityGeneral2.lean:311` mirror pair
+  (`not_isRegionIncidentEdge_complement_of_blueRedCrossing`).
+- **Abstraction (proposed):** one lemma per shape over an abstract three-piece
+  partition — `isCrossingEdge_of_incident` (incident to both of two disjoint regions ⇒
+  crossing) and `not_isRegionIncidentEdge_of_isCrossingEdge` (crossing between two
+  regions disjoint from a third ⇒ not incident to the third) — with the region-frame
+  API (`IsRegionIncidentEdge`, `IsCrossingEdge`) already shared. Recorded rather than
+  promoted in the triMerge migration PR: the `IsCrossingEdge`-hypothesis restate
+  (sharing the `CoarseThreeSite9` derivation shape) was applied there, but unifying the
+  six sites needs a partition-with-regions hypothesis bundle common to
+  `CoarseThreeSite5/9` and the `UnionInjectivity*` geometry, which is a design
+  decision for the #4522 interface arc.
+- **Notes:** the incident⇒crossing and crossing⇒non-incident directions are mutually
+  inverse facts about the same four-way case split; promote both directions together
+  or not at all. The `UnionInjectivity*` sites may be subsumed by the planned
+  `NormalEdgeBlockingData.toThreeBlockGeometry` mirror-kill (see #4522), which would
+  change the occurrence count before any promotion.
 
 ---
 
