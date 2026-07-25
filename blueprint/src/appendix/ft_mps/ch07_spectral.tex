@@ -38,8 +38,8 @@ $F_{AB}^{\mathrm{rect}}$ of Definition~\ref{def:mixed_transfer_rect}.
     For every $X\in\MN{D}$ and $N\geq0$,
     \begin{align}
         F_{AB}^N(X)
-        &=\sum_{\sigma\in\{0,\ldots,d{-}1\}^N}
-          A^\sigma X(B^\sigma)^\dagger,
+         & =\sum_{\sigma\in\{0,\ldots,d{-}1\}^N}
+        A^\sigma X(B^\sigma)^\dagger,
         \label{eq:spectral_mixed_power}
     \end{align}
     where $A^\sigma=A^{\sigma_1}\cdots A^{\sigma_N}$ denotes the word
@@ -52,7 +52,7 @@ $F_{AB}^{\mathrm{rect}}$ of Definition~\ref{def:mixed_transfer_rect}.
     step, apply $F_{AB}$ to each summand in
     (\ref{eq:spectral_mixed_power}) and reindex using
     $\{0,\ldots,d{-}1\}^{N+1}\cong
-    \{0,\ldots,d{-}1\}\times\{0,\ldots,d{-}1\}^N$.
+        \{0,\ldots,d{-}1\}\times\{0,\ldots,d{-}1\}^N$.
 \end{proof}
 
 \begin{lemma}[Trace expansion over matrix units]\label{lem:trace_expansion}
@@ -62,8 +62,8 @@ $F_{AB}^{\mathrm{rect}}$ of Definition~\ref{def:mixed_transfer_rect}.
     trace expands as
     \begin{align}
         \Tr(T)
-        &=\sum_{p=0}^{D_1-1}\sum_{q=0}^{D_2-1}
-          (T(E_{pq}))_{pq},
+         & =\sum_{p=0}^{D_1-1}\sum_{q=0}^{D_2-1}
+                              (T(E_{pq}))_{pq},
         \label{eq:spectral_trace_expansion}
     \end{align}
     where $E_{pq}\in M_{D_1\times D_2}(\C)$ has entry $1$ in position
@@ -85,11 +85,11 @@ $T=(F_{AB}^{\mathrm{rect}})^N$, and reassembling the sums over
 matrix-unit indices gives
 \begin{align}
     \Tr(T)
-    &=\sum_\sigma
-      \tr(A^\sigma)\overline{\tr(B^\sigma)}
-      =\sum_\sigma
-      V^{(N)}(A)_\sigma\overline{V^{(N)}(B)_\sigma}
-      =O_{AB}(N).
+     & =\sum_\sigma
+    \tr(A^\sigma)\overline{\tr(B^\sigma)}
+    =\sum_\sigma
+    V^{(N)}(A)_\sigma\overline{V^{(N)}(B)_\sigma}
+    =O_{AB}(N).
     \notag
 \end{align}
 
@@ -117,9 +117,9 @@ Euclidean space.
     Then
     \begin{align}
         \tr(AB)
-        &=\tr\!\left((U^\dagger AU)\Lambda\right)
-          =\sum_i(U^\dagger AU)_{ii}\Lambda_{ii}
-          \geq0,
+         & =\tr\!\left((U^\dagger AU)\Lambda\right)
+        =\sum_i(U^\dagger AU)_{ii}\Lambda_{ii}
+        \geq0,
         \notag
     \end{align}
     because $U^\dagger AU\geq0$ and $\Lambda_{ii}\geq0$ for every $i$.
@@ -132,7 +132,7 @@ Euclidean space.
     \emph{Frobenius norm squared} is
     \begin{align}
         \|X\|_F^2
-        &:=\sum_{i=0}^{m-1}\sum_{j=0}^{n-1}|X_{ij}|^2.
+         & :=\sum_{i=0}^{m-1}\sum_{j=0}^{n-1}|X_{ij}|^2.
         \label{eq:spectral_frob_sq}
     \end{align}
 \end{definition}
@@ -182,7 +182,7 @@ exposition step toward Theorem~\ref{thm:eigenvalue_bound_rect}.
     $n\geq0$,
     \begin{align}
         \|(F_{AB}^{\mathrm{rect}})^n(X)\|_F^2
-        &\leq D_1^2\,\|X\|_F^2.
+         & \leq D_1^2\,\|X\|_F^2.
         \label{eq:spectral_hs_contraction_rect}
     \end{align}
 \end{lemma}
@@ -196,12 +196,12 @@ exposition step toward Theorem~\ref{thm:eigenvalue_bound_rect}.
     Frobenius submultiplicativity $\|MN\|_F\leq\|M\|_F\|N\|_F$ give
     \begin{align}
         \|\opvec((F_{AB}^{\mathrm{rect}})^n(X))\|
-        &\leq\sum_\sigma\|A^\sigma\|_F\,\|X(B^\sigma)^\dagger\|_F.
+         & \leq\sum_\sigma\|A^\sigma\|_F\,\|X(B^\sigma)^\dagger\|_F.
         \notag
     \end{align}
     Cauchy--Schwarz over the word index bounds the right side by
     $\left(\sum_\sigma\|A^\sigma\|_F^2\right)^{1/2}
-    \left(\sum_\sigma\|X(B^\sigma)^\dagger\|_F^2\right)^{1/2}$.
+        \left(\sum_\sigma\|X(B^\sigma)^\dagger\|_F^2\right)^{1/2}$.
     The trace-preserving normalization of $A$ gives
     $\sum_\sigma(A^\sigma)^\dagger A^\sigma=\Id_{D_1}$, so
     $\sum_\sigma\|A^\sigma\|_F^2=D_1$; the same normalization for $B$ gives
@@ -210,14 +210,14 @@ exposition step toward Theorem~\ref{thm:eigenvalue_bound_rect}.
     sides equal $\re\tr(X^\dagger X)$ after expanding by the same
     normalization). Hence
     $\|(F_{AB}^{\mathrm{rect}})^n(X)\|_F\leq\sqrt{D_1} \|X\|_F\leq
-    D_1\,\|X\|_F$, giving (\ref{eq:spectral_hs_contraction_rect}).
+        D_1\,\|X\|_F$, giving (\ref{eq:spectral_hs_contraction_rect}).
 \end{proof}
 
 Theorem~\ref{thm:eigenvalue_bound_rect} follows directly from
 Lemma~\ref{lem:hs_contraction_rect}: if $F_{AB}^{\mathrm{rect}}(X)=\mu X$
 with $X\neq0$, iterating gives $(F_{AB}^{\mathrm{rect}})^n(X)=\mu^nX$, and
 Lemma~\ref{lem:hs_contraction_rect} gives $|\mu|^{2n}\|X\|_F^2\leq
-D_1^2\|X\|_F^2$ for every $n$; since $\|X\|_F>0$, if $|\mu|>1$ then
+    D_1^2\|X\|_F^2$ for every $n$; since $\|X\|_F>0$, if $|\mu|>1$ then
 $|\mu|^{2n}\to\infty$, contradicting the uniform bound, so $|\mu|\leq1$.
 
 \begin{lemma}[Rectangular spectral radius bound]\label{thm:spectral_radius_le_one_rect}
@@ -263,10 +263,10 @@ dimension once they are invertible.
     are unital, and, for every $i$,
     \begin{align}
         X'(B'^i)^\dagger
-        &=\mu(A'^i)^\dagger X',
-        &
+         & =\mu(A'^i)^\dagger X',
+         &
         A'^iX'
-        &=\mu X'B'^i.
+         & =\mu X'B'^i.
         \label{eq:spectral_gauged_intertwining}
     \end{align}
 \end{lemma}
@@ -277,16 +277,16 @@ dimension once they are invertible.
     matrices
     \begin{align}
         C^i
-        &:=
+         & :=
         \begin{pmatrix}
-            A'^i & 0\\
-            0 & B'^i
+            A'^i & 0    \\
+            0    & B'^i
         \end{pmatrix},
-        &
+         &
         Y
-        &:=
+         & :=
         \begin{pmatrix}
-            0 & X'\\
+            0 & X' \\
             0 & 0
         \end{pmatrix},
         \label{eq:spectral_block_embedding}
@@ -421,7 +421,7 @@ $P:=P_\rho$ for the fixed-point projection of
 Definition~\ref{def:fixed_point_proj} (Chapter~\ref{ch:channels}),
 \begin{align}
     P(X)
-    &=\frac{\tr(X)}{\tr(\rho)}\rho,
+     & =\frac{\tr(X)}{\tr(\rho)}\rho,
     \notag
 \end{align}
 and $N:=E-P$ for the complementary part. The power decomposition
@@ -846,7 +846,7 @@ them.
     For a unitary eigenvector $U_\alpha$ with $|\alpha|=1$, conjugating the
     eigenvector equation gives
     $E(U_\alpha^\dagger)=\overline\alpha\,U_\alpha^\dagger
-    =\alpha^{-1}U_\alpha^\dagger$, and $U_\alpha^\dagger\neq0$.
+        =\alpha^{-1}U_\alpha^\dagger$, and $U_\alpha^\dagger\neq0$.
 \end{proof}
 
 Theorem~\ref{thm:peripheral_multiplicity_one} follows the same pattern:
