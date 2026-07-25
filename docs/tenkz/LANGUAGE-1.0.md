@@ -15,23 +15,33 @@ table below is checked against the registry by the census.
      draft and the compression review differ, the compression review wins.
      Open sign-off decisions are collected in §14. -->
 
+<!-- Amended 2026-07-25 by the nine signed amendments
+     (AMENDMENT-corridor-and-crossing-order.md, AMENDMENT-remaining-demand.md,
+     and the critique that governs them). Effectivity: the tables below are
+     the inventory the executable registry is regenerated to at the S4 surface
+     swap. Until that swap the registry still carries the parser rows this
+     amendment retires, and each one holds a dated verdict in
+     docs/tenkz/SHRINK.md naming the landing that executes it — the same way
+     every earlier retirement in this project has been booked. -->
+
 ## 1. The sentence model
 
-> A picture draws one typed tensor network in one frame. Frames — chain,
-> lattice, circle; flat, rotated, sheared, projected; at picture, group, or
-> atom position — turn names into places, so an author writes addresses and
-> never measures. The body declares atoms, wires, and marks. Every index ends
+> A picture draws one typed tensor network in one frame. Frames — flat,
+> projected, circular, each with a basis, at picture, group, or atom position
+> — give every address a place and a pair of axes, so an author writes
+> addresses and never measures, and orientation is a consequence of where a
+> record sits. The body declares atoms, wires, and marks. Every index ends
 > in exactly one of a bond, a closure, or a declared open leg. Equations
 > compose whole pictures under one shared metric and must expose equal
 > boundaries. The language grows by declaration, never by drawing.
 
 ## 2. The kernel
 
-Four record classes, two environments, seven commands.
+Four record classes, two environments, six commands.
 
 | Record class | Declared by | Holds |
 |---|---|---|
-| PICTURE | `tenkz`, `tenkzeq`, `\tngroup`, `\tnpic` | frame, side policy, cell sets, metric context |
+| PICTURE | `tenkz`, `tenkzeq`, `\tngroup` | frame, side policy, selections, metric context |
 | ATOM | `\tn`, frame population | skin, ports, labels, species, place |
 | WIRE | `\tnwire`, side policy, skin pairings | endpoints, route, crossings, winding, closure origin |
 | MARK | `\tnmark` | form, target, label |
@@ -45,36 +55,35 @@ extend the vocabulary the records draw from.
 |---|---|---|
 | `\tn[keys]{label}` | atom at the next chain cell or `at=` | ATOM |
 | `\tnwire[keys]{end}{end}` | a `closed` wire takes no positional ends; every other wire takes exactly two | WIRE |
-| `\tnmark[keys]{target}{label}` | target is a cell set, an address set, or a wire place (§6) | MARK |
+| `\tnmark[keys]{target}{label}` | target is one selector (§3) | MARK |
 | `\tngroup[keys]{body}` | scoped sub-frame; names inside stay addressable outside | PICTURE |
-| `\tnpic[keys]{body}` | one inline picture as a mathematical atom | PICTURE |
 | `\tnset{keys}` | document or group policy | — |
 | `\tndeclare{atom\|skin\|species}{name}{keys}` | the one extension door | — |
 
-A wire end is an address or `open <dir>`. A command is warranted only when
+A wire end is an address, or `open` with an optional direction (§5). A
+command is warranted only when
 it declares a record class of its own; a key modifies the record being
 declared. The generated reference prints this test beside every row.
 
-### 2.2 Picture and equation keys (13)
+### 2.2 Picture and equation keys (12)
 
 | Key | Type | Values | Default | Scope | Diagnostic family |
 |---|---|---|---|---|---|
 | `rows=` | row-list | — | `{wire}` | picture | `TKZ-PIC-*` |
 | `cols=` | integer | — | 3 | picture | `TKZ-PIC-*` |
-| `frame=` | frame-spec | `flat` `vertical` `rotate=<deg>` | `flat` | picture, group, atom | `TKZ-FRAME-*` |
+| `frame=` | small-enum | `flat` `plane` `circle`, with `basis=` | `flat` | picture, group, atom | `TKZ-FRAME-*` |
 | `west=` `east=` `north=` `south=` | small-enum | `open` `none` `trace` `cup` | `open` | picture | `TKZ-SIDE-*` |
-| `trace=` | trace-spec | cell-set or `physical` | empty | picture | `TKZ-CELLSET-*` |
-| `open=` | cell-set | — | empty | picture | `TKZ-CELLSET-*` |
+| `trace=` | trace-spec | selector or `physical` | empty | picture | `TKZ-SELECT-*` |
+| `open=` | selector | — | empty | picture | `TKZ-SELECT-*` |
 | `bonds=` | small-enum | `grid` `none` | `grid` | picture | `TKZ-PIC-*` |
 | `align=` | row | row number or `midline` | `midline` | picture | `TKZ-PIC-*` |
 | `size=` | small-enum | `s` `m` `l` | from math style | picture, equation | `TKZ-SIZE-*` |
-| `check=` | check-spec | — | `signature` | equation | `TKZ-EQ-*` |
 
 Every frame contracts adjacent compatible cells by default: `bonds=grid`
 holds in chain and lattice frames alike, and `bonds=none` suppresses the
 frame-generated bonds.
 
-### 2.3 Atom keys (14)
+### 2.3 Atom keys (11)
 
 | Key | Type | Values | Default | Diagnostic family |
 |---|---|---|---|---|
@@ -84,28 +93,39 @@ frame-generated bonds.
 | `at=` | address | — | next chain cell | `TKZ-ADDR-*` |
 | `name=` | identifier | — | generated | `TKZ-NAME-*` |
 | `ports=` | typed-port-list | — | from skin | `TKZ-PORT-*` |
-| `frame=` | frame-spec | `flat` `rotate=<deg>` | `flat` | `TKZ-FRAME-*` |
-| `up=` `down=` | math-list | — | empty | `TKZ-ATOM-*` |
+| `frame=` | small-enum | `flat` `plane` `circle` | `flat` | `TKZ-FRAME-*` |
 | `species=` | identifier | — | empty | `TKZ-SPECIES-*` |
-| `label pos=` | small-enum | compass or `auto` | `auto` | `TKZ-LABEL-*` |
-| `nudge=` | pair | quarter-pitch steps | zero | `TKZ-ADDR-*` |
+| `label pos=` | angle | a bearing in the record's own axes, or `auto` | `auto` | `TKZ-LABEL-*` |
 | `conjugate` | flag | — | false | `TKZ-ATOM-*` |
 | `void=` | small-enum | `open` `sealed` | unset | `TKZ-ATOM-*` |
 
-`up=`/`down=` speak page-relative: the outward physical face of the row, in
-whichever direction the frame sends it. Atom faces themselves are compass
-(§3). `void=open` is a hole that preserves indices; `void=sealed` removes the
-site and its bonds.
+A face is an angle in the record's own axes (§3, §4), so the outward physical
+face of a row is that row's own normal and needs no page-relative word. A
+label's placement is the same kind of quantity and takes the same type: a
+bearing from the host, read in the host's axes, so a label on a turned atom
+turns with it and a label on a station of a circle frame stands radially out
+of it. One rule, one alphabet, and the four compass words are one sugar
+spelling of the four right angles serving faces and placements alike.
 
-### 2.4 Wire keys (12)
+A typed-port list is a braced comma-separated list of ports, each written
+
+```
+<angle>[@<slot>] : <type> [ : <label> ]
+```
+
+where the type is `virtual` or `physical` and the label is the mathematics
+set at that port's tip — `ports={90:physical:$i$, 0:virtual, 180:virtual}`.
+The label component is where the retired page-relative keys went: an index
+name belongs to the port it names, and a port already knows which way it
+points. `void=open` is a hole that preserves indices; `void=sealed` removes
+the site and its bonds.
+
+### 2.4 Wire keys (9)
 
 | Key | Type | Values | Default | Diagnostic family |
 |---|---|---|---|---|
 | `kind=` | small-enum | `index` `string` | `index` | `TKZ-WIRE-*` |
-| `route=` | small-enum | `straight` `orth` `arc` | `straight` | `TKZ-ROUTE-*` |
-| `via=` | address-list | — | empty | `TKZ-ADDR-*` |
-| `bend=` | number | — | metric | `TKZ-ROUTE-*` |
-| `weight=` | small-enum | `single` `double` `bundle=n` | `single` | `TKZ-WIRE-*` |
+| `route=` | route-spec | `straight` `orth` `arc` `{<side> of <selector>}` | `straight` | `TKZ-ROUTE-*` |
 | `species=` | identifier | — | empty | `TKZ-SPECIES-*` |
 | `closed` | flag | — | false | `TKZ-WIRE-*` |
 | `wind=` | pair | cycle `{p,q}` | zero | `TKZ-WIND-*` |
@@ -115,19 +135,24 @@ site and its bonds.
 | `name=` | identifier | — | generated | `TKZ-NAME-*` |
 
 `dir=` draws the direction mark of a directed virtual index; it changes no
-topology.
+topology. A wire carries no waypoint list, no bend factor and no stroke
+weight: a route names the records it must clear, an arc leaves and enters
+along its ends' faces, and the stroke follows the type the port already
+carries (§5).
 
-### 2.5 Mark keys (7)
+### 2.5 Mark keys (5)
 
 | Key | Type | Values | Default |
 |---|---|---|---|
-| `form=` | small-enum | `brace-above` `brace-below` `enclosure` `cut` `band` `label` `prose` | `label` |
-| `slot=` | small-enum | `selected` `secondary` `complement` `collar` `neutral` | `selected` |
+| `form=` | small-enum | `bracket` `enclosure` `label` | `label` |
+| `species=` | identifier | — | empty |
 | `outline` | flag | — | false |
-| `inset=` | number | — | 0 |
-| `label pos=` | small-enum | compass or `auto` | `auto` |
-| `nudge=` | pair | quarter-pitch steps | zero |
+| `label pos=` | angle | a bearing in the host's own axes, or `auto` | `auto` |
 | `name=` | identifier | — | generated |
+
+A mark takes the `species=` that atoms and wires already carry, with the same
+type and the same meaning, so one semantic identity has one spelling and a
+cited paper's palette reaches a contour and the string that ends in it alike.
 
 ### 2.6 Setup keys (4)
 
@@ -138,12 +163,29 @@ topology.
 | `strict` | flag | false; benchmark and CI set it |
 | `theme=` | identifier | `house` |
 
-### 2.7 Value types (24)
+### 2.7 Value types (22)
 
-flag · integer · number · length · pair · identifier · small-enum ·
-math-list · row-list · row · cell-set · address · address-list ·
-typed-port-list · crossing-list · port-pair-list · frame-spec · trace-spec ·
-check-spec · size-table · hue-source · bond-policy · size-class · void-policy.
+flag · integer · length · pair · angle · identifier · small-enum · row-list ·
+row · selector · route-spec · address · address-list · typed-port-list ·
+crossing-list · port-pair-list · trace-spec · size-table · hue-source ·
+bond-policy · size-class · void-policy.
+
+Five types left and three arrived. The audit specification left with
+`check=`; the frame specification became a three-word enum with no
+parameters; the plain number lost both its consumers with `bend=` and
+`inset=`; the mathematics list lost both its consumers with the two
+page-relative atom keys; and the cell set is the selector, which every key
+that names a set of records now takes. Arriving: the selector, the route's
+side-of-a-selection family, and the angle.
+
+The angle is minted rather than borrowed, and the reason is worth stating
+because it is the only new type here that could have been avoided on paper.
+A bearing is not a plain number: a number is a bend factor or an inset
+count, page quantities with no frame, whereas an angle is read in a record's
+own axes and transforms with them. Typing a face and a label placement as
+`number` would have kept the count lower by reviving a type these amendments
+retired and by flattening the distinction the local-axes rule exists to make.
+The census gains one and says so.
 
 The census covers key values; positional label arguments are mathematics and
 carry no key type. Every registry row names exactly one value type; a shared
@@ -156,16 +198,30 @@ overload census (§11, meter M6) never rises.
 |---|---|
 | side policy | `open` `none` `trace` `cup` |
 | routes | `straight` `orth` `arc` |
-| weights | `single` `double` `bundle=n` |
 | default skins | `dot` `box` `ring` `tri` `dots` `none` |
-| mark forms | `brace-above` `brace-below` `enclosure` `cut` `band` `label` `prose` |
-| atom faces | `n` `e` `s` `w`, slotted `n@1`, `e@{1,2}` |
+| mark forms | `bracket` `enclosure` `label` |
+
+Two whole rows retired. The atom faces retired because a face is an angle in
+the record's own axes and not a word on the page, which also ends the compass
+word's second sense. The weights retired because the stroke follows the type
+the port already carries.
+
+This table holds the words that cross scopes, which is what the rule below
+governs; a `small-enum` whose words serve one key alone is listed with that
+key and needs no row here. What the table may never hold is a value set that
+is not closed. Two are open, and neither is here: `label pos=` takes an
+angle, which is the same quantity a face is and carries the same type (§2.3),
+and the side of a hull route belongs to the route family's own grammar (§5),
+as a port's angle belongs to a typed port's. The four compass words are not
+an alphabet row either. They are one sugar spelling of the four right angles,
+serving faces and label placements by the same rule, and they arrive with the
+change that implements angle-valued faces.
 
 An alphabet word names one operation, applied at any scope. `open` opens an
-index: as a side word it opens a boundary, as the cell-set key `open=` it
-opens the named cells, as `void=open` it opens a hole. `trace` closes to the
-same object: as a side word it closes a row to itself, as the cell-set key
-`trace=` it closes the named cells. `none` suppresses or seals everywhere:
+index: as a side word it opens a boundary, as the selector key `open=` it
+opens the selected cells, as `void=open` it opens a hole. `trace` closes to
+the same object: as a side word it closes a row to itself, as the selector
+key `trace=` it closes the selected cells. `none` suppresses or seals:
 a sealed side, `bonds=none`, and the skin `none`. `cup` closes adjacent rows
 to each other. This is the one-token-one-meaning discipline: a word carries
 its operation across scopes and never a second sense. `periodic` and `tail`
@@ -175,67 +231,162 @@ invisible junction: a nameable point where wires meet without ink.
 ## 3. Addresses
 
 Positions are addresses, never coordinates. One grammar serves atoms, wire
-endpoints, waypoints, and mark targets — nine productions:
+endpoints, routes, and mark targets — eight productions:
 
 ```
-(r,c)                  cell of the current frame
+(r,c) or (r,c,k)       cell of the current frame; member k of its basis
 a                      named record
-a.f@k                  face f of a, slot k          % faces are compass n/e/s/w
+a.θ@k                  the port at angle θ on a, slot k
 n <dir> of a           n pitch steps from a          % 2 e of X
 midway a and b         midpoint
 on w t                 fraction t along wire w       % beads live here
 crossing of a and b    the declared intersection of two wires
-leg <face> of <cell>   the policy-generated leg wire at that face
-<compass> outside      a point on the picture margin
+a .. b                 the records between a and b in the frame's own order
 ```
 
 Operands compose: in productions four through eight an operand is itself an
-address, so `crossing of g and leg n of (1,2)` is well formed. `crossing`
-operands must resolve to wires. The slot suffix `@k` is optional when the
-face carries one slot: `B.s` means `B.s@1`.
+address, so `crossing of g and on r 0.4` is well formed. `crossing` operands
+must resolve to wires. The slot suffix `@k` is optional when the angle
+carries one slot: `B.270` means `B.270@1`. A cell named without a member
+index denotes the whole cell, which is what a cell means to a selection.
 
-`nudge=` displaces the record that carries it by quarter-pitch steps. It is
-the only displacement key. Raw lengths exist solely as `debug at=`, which the
-linter flags and the benchmark rejects; a published figure contains no
-millimetres.
+Every record class is addressable by name, generated names included, and the
+picture is a record (§2). It answers to `picture`, which is how a route or a
+mark names the whole diagram without a second grammar for doing so.
+
+A **selector** names a set of records — one address, a braced comma-separated
+list, or a range:
+
+```
+<selector> ::= <address> | { <address>, <address>, ... } | <address> .. <address>
+```
+
+`x .. y` denotes the records between x and y in the frame's own order: two
+cells corner a block, two places on one wire bound a closed sub-arc, two
+stations of a circle frame bound an arc. The range is written with two dots
+and never with a hyphen, because a cluster member is named `a-2-2` and a
+hyphen range cannot be told from a name the language itself generates. The
+model records the resolved membership and never the expression that produced
+it, so containment between two selections is a fact the model holds rather
+than a number an author types.
+
+Records carry no displacement key. An off-cell site is a basis member of the
+frame or an ordinary address, and a label that will not sit where it is takes
+a station against measured ink (§6). Raw lengths exist solely as `debug at=`,
+which the linter flags and the benchmark rejects; a published figure contains
+no millimetres.
 
 Address resolution is a dependency graph evaluated in one pass; a cycle is
 the coded error `[TKZ-ADDR-CYCLE]`, printed with the cycle.
 
 Open legs are policy, not objects. An unbonded typed port renders as a stub
-in the direction of its face; a wire endpoint may be `open <dir>`. There are
-no placeholder atoms.
+in the direction of its face; a wire endpoint may be `open`, with a direction
+when the end is to sit on the picture margin and without one when it takes
+its place from the route (§5). There are no placeholder atoms.
 <!-- Consumers of the open-end policy: every former tenkzfree body; e.g.
      rmp-ii-triangle-network, rmp-ii-mpo-sheet, rmp-iii-b-braid-one. -->
 
 ## 4. Frames
 
-A public 1.0 frame maps addresses by one affine transform. Its complete
-spelling set is the one in §2.2: `flat`, `vertical`, and `rotate=<degrees>`.
-The previously drafted `plane` and `circle` frame kinds are not implemented
-public grammar. The `ring=` and `planes` rows in §9 remain design sketches,
-not usable 1.0 sugar, until their frame kinds enter the grammar under the
-three-consumer gate.
+A frame assigns each address a point and a pair of axes. The alphabet closes
+to three words with no parameters — `flat`, `plane`, `circle`. For `flat` and
+`plane` the axes are the frame's linear part and are the same everywhere; for
+`circle` they are the tangent and the outward radius and they vary by
+station. An address on a carrier — a wire, a leg, a hull — takes the
+carrier's axes.
 
-`frame=` acts at picture scope and at group scope. `\tngroup` transforms a
-sub-diagram as one object: its records keep their names, its boundary
-signature transforms with it, and the transform has its own model record —
-the audit compares networks, never silhouettes. Label text never
-rotates; glyph ink may.
+The numeric page angle and the general matrix retire together, and the
+transposed projection with them. Of the four rotation consumers the contract
+named, one is a carrier orientation, two are projections, and the fourth's
+own note records the turn as this package's defect rather than the source's
+demand. A degree is the angular millimetre, and a published figure contains
+no millimetres.
 
-Consumers, rotation: `rmp-iii-a-pulling-through`, `rmp-ii-circuit`,
-`rmp-iii-a-spt-mpo`.
-Consumers, groups and `cluster=`: `rmp-app-czx-state`,
-`rmp-iii-b-condensation`, `rmp-workbench-iii-ghz-state-workbench`.
+Ink the frame measures lies in the frame; ink the frame only places stays
+upright. Skins, contours and wires are measured; label text is placed and
+never turns. Orientation is a consequence of where a record sits and is never
+an authored quantity: a port's page direction is its angle plus its record's
+accumulated turn, so the type check and the boundary signature are computed
+in the axes the ports actually point along. Contraction is unaffected —
+turning an atom changes no bond, only which way its faces look. Under a flat
+frame the local axes are the global axes, so the flat corpus resolves
+unchanged.
+
+**The basis.** A frame takes a subkey naming what each cell carries:
+
+```
+frame={flat, basis={<row kind> at (<q>,<q>), ...}}
+```
+
+Members are drawn from the row alphabet, offsets are quarter-pitch pairs, and
+a frame with no basis has a basis of one at the origin, so every existing
+picture is unchanged. Frame population creates one atom per cell per member;
+the model records each atom's cell and member index, so the boundary
+signature sees basis members as the distinct entries they are. Adjacency is
+declared by the offsets, so contraction stays a fact and not a measurement. A
+bilayer is a lattice with a basis of two and its pairing legs are intra-cell
+bonds; as a basis it is one frame and cannot collapse under nesting.
+
+**One clause travels with the circle frame and only with it:** adjacent
+stations are one pitch apart. That fixes a radius the contract otherwise
+leaves unstated — for four stations it gives `pitch` over root two, about
+seven tenths, which is what the authors wrote. It must not be generalized: in
+the projected plane the receding row is foreshortened by construction, and
+that foreshortening is what the plane's ratios are.
+
+`frame=` acts at picture scope, at group scope, and at atom scope.
+`\tngroup` transforms a sub-diagram as one object: its records keep their
+names, its boundary signature transforms with it, and the transform has its
+own model record — the audit compares networks, never silhouettes.
+
+Consumers, carrier axes: `rmp-iii-a-pulling-through`, `rmp-iii-a-mpo-action`,
+`rmp-iii-a-ghz-tensor`, `rmp-workbench-ii-peps-gauge-old`.
+Consumers, circle pitch: `rmp-ii-triangle-network`, `rmp-iii-a-ground-space-1d`,
+`rmp-ii-idempotent`, `rmp-workbench-iii-eq51`.
+Consumers, basis: `rmp-workbench-iii-cluster-state`, `rmp-app-czx-state`,
+`rmp-iii-a-ghz-state`, `rmp-iii-b-condensation`.
 
 ## 5. Wires
 
 A wire is one typed index line. `kind=index` is a bond: two typed-port
-endpoints, no waypoints, and the type check `[TKZ-PORT-TYPE]` — a virtual
-port never meets a physical one. `kind=string` travels: it carries
-waypoints, crossings, winding, and beads, and its endpoints may be any
-address, cells included. The distinction is a field of the record; both are
-one record class and one command.
+endpoints, a straight route, and the type check `[TKZ-PORT-TYPE]` — a virtual
+port never meets a physical one. `kind=string` travels: it carries routes,
+crossings, winding, and beads, and its endpoints may be any address, cells
+included. The distinction is a field of the record; both are one record class
+and one command.
+
+**The offset hull.** The offset hull of a selection is the support hull of
+the selected records' silhouettes, measured in the frame's own axes, expanded
+by `daylight`, turned with radius `corner`. It is one construction with five
+consumers, each reaching it through a key it already carries: a mark strokes
+it as an `enclosure`, a mark strokes the arc of it on the label's side as a
+`bracket`, a wire travels it as `route={<side> of <selector>}`, an atom
+addressed `on <wire> t` stands on it and reads its axes, and a leg measures
+its reach against it.
+
+**Routes.** `route={<side> of <selector>}` sends a wire at one standing
+offset from the hull of that selection, on the named side, entering and
+leaving where that side's arc ends; the side is a compass word or `all`. It
+crosses exactly those wires that leave the selection through a face on that
+side, each once, in hull order. The author's claim is that this string passes
+on this side of these records; the crossing set is the answer to that claim,
+computed and never chosen. An empty crossing set is legal and meaningful. A
+derived crossing enters the model with every field a declared one carries, so
+an audit cannot tell the two apart.
+
+Two rules travel with the hull, and they are doctrine rather than elements.
+**Concentric order:** curves over the same selection are separated by one
+clearance, outward in declaration order for routes, inward by containment for
+contours, ties broken by declaration order. **Reach:** a reach is the maximum
+over everything declared to meet it, so a leg crossed by a route is as long
+as the outermost route crossing it plus one clearance, and a crossing the
+author claimed always exists.
+
+The direction of an open end is optional and takes its place from the route.
+With no direction the end lies on the route, one clearance past the outermost
+wire it crosses; with a direction it lies on the picture margin. An open end
+is an index cut by the picture's frame and is boundary data the equation
+audit matches panel to panel.
 
 **Crossings are declared, never emergent.** `cross={over at <address>}` or
 `under at <address>` names the crossing and its order; rendering gaps the
@@ -255,81 +406,134 @@ frame with traced sides; the rendered path realizes that class or errors.
 
 **Detours.** `around=<address list>` routes the wire past the named records
 against their measured silhouettes plus daylight — the pulling-through
-idiom.
+idiom, and the hull route with the side left to the engine.
 <!-- Consumers: rmp-iii-a-pulling-through, rmp-iii-a-g-injective-projector,
      rmp-workbench-iii-g-injective-pull, rmp-workbench-iii-mpo-injective-white. -->
 
-**Closures.** Side policy words and cell-set keys normalize to wires whose
+**Closures.** Side policy words and selector keys normalize to wires whose
 `origin` field records the policy that generated them (`origin=trace`,
 `origin=cup`, ...). Closure is not a separate record class. A generated
 closure wire carries a canonical name — `wrap-1` for row 1's trace return,
 `cup-1-2` for the cup joining rows 1 and 2. When both opposite sides carry
 cups, names are side-qualified (`cup-west-1-2`, `cup-east-1-2`) so every
-derived wire remains addressable as one named record;
-policy legs are addressed by the `leg` production. Beads and labels attach to
-closures by the ordinary address grammar. A closed chain that renders open is
-impossible by construction: the closure IS a wire record, and every wire is
-drawn or errors.
+derived wire remains addressable as one named record. Generated legs take
+canonical names on the same rule and are named records like any other, which
+is why no address production is needed to reach one. Beads and labels attach
+to closures by the ordinary address grammar. A closed chain that renders open
+is impossible by construction: the closure IS a wire record, and every wire
+is drawn or errors.
+
+A closure clears the selection it closes, so its depth is a consequence of
+its two ends: a trace closing a whole row clears the whole row and comes back
+as the long return the authors draw, and a cup joining two vertically
+adjacent ports at one column clears one column and comes back as the shallow
+cap they draw. Nobody chooses which.
 
 **Beads.** A small tensor on a string is an atom whose address is
 `on <wire> t`. There is no bead vocabulary.
 
-**Weights.** `double` draws the doubled bond; `bundle=n` draws one heavy leg
-standing for an index set, and the signature audit reads it (§7).
-<!-- Consumers, double: rmp-app-czx-state, rmp-iii-a-spt-mpo,
-     rmp-workbench-iii-peps-renormalization-one. Bundle:
-     rmp-ii-boundary-lasso, rmp-iv-intersection-lhs-three,
-     rmp-iv-intersection-rhs-four. -->
+**Stroke.** The stroke follows the type the port already carries: two named
+ratios in the theme, one virtual and one physical, selected by the index and
+never by the author. A theme may set them equal. Bundling is a claim about
+the boundary signature, which the audit already carries (§7), and it owes no
+ink of its own.
+<!-- Zero authored consumers in the corpus: no author ever wrote a stroke
+     weight, and of the six targets recorded with a wrong stroke, four are
+     recorded faithful, two of them annotated better than the authors. A
+     deletion needs no consumers; what it needs is that nothing is lost. -->
 
 ## 6. Marks
 
-A mark is a non-topological record on a target: braces above or below a cell
-range, a measured `enclosure` contour around members, a `cut` across a wire,
-a shaded `band`, a free `label`, or `prose` (§7). A mark target is a cell
-set, a wire place, or an address set — a braced, comma-separated list of
-addresses, `{a-2-2, b-2-1, ...}`. Marks never own topology; deleting every
-mark changes no contraction.
+A mark is a non-topological record on a target: an `enclosure` stroking the
+offset hull of a selection, a `bracket` stroking the arc of that hull on the
+label's side, or a free `label`. A mark target is one selector (§3), and the
+mark reads it through the same grammar every other key does. Marks never own
+topology; deleting every mark changes no contraction.
 
-The enclosure contour derives from its members' silhouettes; `slot=` selects
-the semantic tint. `inset=` steps nested contours inward so shared
-boundaries stay distinct — the nested-boundary idiom. `outline` draws the
-contour without tint.
+Three forms retired. The shaded band never differed from an enclosure except
+in the shape of its selection. The lower brace merged with the upper into one
+bracket, because the side a bracket speaks from is the side its label sits on
+and every mark carries a label placement already. The cut has no consumer in
+the benchmark or the blueprint and fails tenure outright, taking its sugar
+row with it.
+
+`species=` binds the mark's ink to a declared semantic identity; `outline`
+strokes the contour without tint. Nesting needs no key: containment between
+two selections is a fact the model holds, and concentric order (§5) steps the
+inner contour in by one clearance.
+
+**Label stations.** Every label belongs to a host — a glyph, a wire, a place
+on a wire, a selection — and inherits from it a ranked ring of stations: the
+compass points at one clearance, then the diagonals, then the same ring one
+step out. The first station whose box meets no ink already placed and no
+label already placed wins, where ink means the measured silhouettes the
+geometry stage computes anyway, legs and stubs included. A named placement is
+honoured, and honouring it grows the host's contour on that side rather than
+putting the label on ink; a pinned label that still collides is refused, as
+an undeclared crossing is refused, and for the same reason. `auto` is the
+face whose outward support leaves the widest clear band. The model records
+whether a label was set inside its glyph or beside it, and that bit says the
+figure contains a name that outgrew its class.
 <!-- Consumers, enclosure: rmp-ii-blocking, rmp-app-czx-state,
-     rmp-iii-a-ghz-state. Band: rmp-ii-boundary-lasso, rmp-iii-b-dyon,
-     rmp-ii-boundary-region. -->
+     rmp-iii-a-ghz-state, rmp-iii-b-dyon, rmp-iv-ground-space-2d,
+     rmp-ii-boundary-region. Stations: rmp-ii-triangle-network,
+     rmp-ii-mpo-sheet, rmp-ii-mpu-splitting. Species on marks: rmp-iii-b-dyon,
+     rmp-ii-boundary-lasso, rmp-ii-mpo-injectivity-ring. -->
 
 ## 7. Equations: `tenkzeq`
 
-`tenkzeq` composes whole pictures around relation glyphs and is the audit
-scope:
+`tenkzeq` composes whole pictures around the mathematics between them and is
+the audit scope. Its body is rows separated by line breaks, and each row is
+an alternating sequence of terms and joiners. A term is a picture or
+mathematics. A joiner is the mathematics between two terms and carries one of
+three classes: **relation**, **sum**, **product**. Only the product list is
+the language's own datum — juxtaposition and the product signs; relation and
+sum are read from the class the mathematics already has.
 
-1. **One metric context.** All panels share the pitch, the size-class table,
-   and the weight table. Within a size class the widest measured label box
-   wins for every member — `X` and `X^{-1}` render at one width by
-   construction.
+1. **One metric context.** All panels share the pitch and the size-class
+   table. A glyph's extent is a function of two declared quantities and
+   nothing else: its size class, and the number of port slots on each pair of
+   opposite faces. The horizontal extent is the class reference times the
+   greater of one and the slots on the vertical faces; the vertical extent
+   likewise. A round skin takes the reference as its diameter, a box as its
+   side, a triangle as its circumscribing square, so an operator and its
+   inverse match across skins. This holds in every scope and not only inside
+   an equation, and a label that does not fit is not accommodated by growing
+   the glyph — it goes to the station rule (§6).
 2. **Math-style sensing.** Display, text, and script contexts choose the
-   density profile; there is no manual compact or inline flag. `\tnpic`
-   inherits the sensing.
+   density profile; there is no manual compact or inline flag. An inline
+   picture inherits the sensing.
 3. **Axis alignment.** Panels align on the declared wire axis (`align=`).
-4. **The signature audit.** `check={signature}` compares the boundary
-   signatures of adjacent panels and errors on mismatch with
-   `[TKZ-EQ-SIGNATURE]`, printing both signatures. `modulo=bundles` accepts
-   declared regroupings: a `bundle=n` leg equals its n constituents.
-   Opt-out is per relation and recorded:
-   `check={signature, off={2: isometry annihilation}}` — the reason string
-   lands in the event stream. There is no undocumented off switch.
-5. **Prose panels.** Text in place of a diagram is `\tnmark[form=prose]`,
-   and the event stream records it as not-a-diagram. A relation whose side
-   is prose fails `check=signature` unless that relation is opted out with a
-   reason. Silent text substitution is impossible to commit.
+4. **The audit follows the joiner.** Every term has a boundary signature;
+   mathematics has none, and its signature is unknown. A relation requires
+   equal signatures and ends the term. A sum requires equal signatures and
+   continues it. A product requires disjoint signatures and concatenates
+   them. Any joiner with an unknown operand yields an unknown result, and the
+   comparison is recorded as unperformed rather than as passed — which is
+   what an elision between two panels asserts, and needs no spelling of its
+   own. A mismatch is `[TKZ-EQ-SIGNATURE]`, printing both signatures. A
+   relation with an undepicted side is legal in a draft and refused under
+   strict, which the benchmark sets. The audit rule is derived from the
+   joiner's class and is not the author's to configure; there is no audit
+   key, and so no undocumented off switch either.
+5. **Coefficients and summations need no key.** A scalar coefficient is a
+   term of empty signature; juxtaposition is a product; concatenating an
+   empty signature leaves the panel's boundary as it was. A summation sign is
+   likewise mathematics, set west of the panel on the shared axis, its limits
+   smashed against a panel that is always the taller.
 <!-- Consumers: rmp-ii-mpu-brickwork, rmp-iii-a-coproduct,
-     rmp-workbench-iii-eq59-now, rmp-ii-mpu-unitarity. -->
+     rmp-workbench-iii-eq59-now, rmp-ii-mpu-unitarity,
+     rmp-ii-tangent-projector, rmp-workbench-ii-fine-graining. -->
 
 ## 8. Declarations and the extension gate
 
-`\tndeclare{atom}{\tnprojector}{skin=box, ports={w:virtual, e:virtual, n:physical}}`
-creates a one-label atom command. Ports live on any compass face, slotted,
-any mix of `virtual` and `physical`. A declared skin
+`\tndeclare{atom}{\tnprojector}{skin=box, ports={180:virtual, 0:virtual, 90:physical}}`
+creates a one-label atom command. Ports live at any angle in the atom's own
+axes, slotted, labelled, any mix of `virtual` and `physical` (§2.3 gives the
+port grammar); every stock shape already
+carries a boundary anchor for an arbitrary direction, so a leg at 50 or −120
+degrees attaches exactly on the boundary of a disc, a box, a rounded box or a
+triangle with nothing declared. A declared skin
 (`\tndeclare{skin}{window}{base=box, pairings={...}}`) is ports plus
 pairings; a pairing is a WIRE whose endpoints are the skin's own ports.
 Skins contain no free ink: an element that is not a port or a pairing of
@@ -344,7 +548,7 @@ cycle.
 |---|---|---|---|
 | `hue=` | hue-source | house cycle name or `source:<color>` | species |
 | `base=` | identifier | a declared or default skin | skin |
-| `pairings=` | port-pair-list | `{n@1 > e@1 : R, ...}` pairs of own ports | skin |
+| `pairings=` | port-pair-list | `{90@1 > 0@1 : R, ...}` pairs of own ports | skin |
 
 The standard prelude declares — as declarations, not kernel rows — the skins
 `pill`, `mpo`, `window`, `boundary`, the fuse atom, and the species
@@ -363,7 +567,7 @@ Sugar is a registry row whose `sugar(<expansion>)` status states its kernel
 expansion. The linter rewrites any source to pure kernel; a test class
 proves sugar and expansion emit identical events; `\tnset{strict}` rejects
 sugar entirely. The model and the event stream contain only kernel records.
-Teaching text uses sugar freely. Twenty-seven rows:
+Teaching text uses sugar freely. Twenty-five rows:
 
 | Sugar | Expands to |
 |---|---|
@@ -377,33 +581,31 @@ Teaching text uses sugar freely. Twenty-seven rows:
 | `lattice={RxC}` | R wire rows (`rows={wire,...,wire}`), `cols=C` |
 | `ring=N` | one wire row, `cols=N, frame=circle, west=trace, east=trace` |
 | `surface=torus` | `west=trace, east=trace, north=trace, south=trace` |
-| `planes` | two `\tngroup` sheets (ket, bra) + `frame=plane` preset |
-| `cluster={RxC}` | `\tngroup` of R×C dot atoms on a quarter-pitch sub-frame, named `<name>-<r>-<c>` |
+| `planes` | `frame={plane, basis={ket at (0,0), bra at (2,2)}}` |
+| `cluster={RxC}` | `frame={flat, basis={<R×C members at quarter pitch>}}`; members are ordinary addresses `(r,c,k)` |
+| `\tnpic[k]{body}` | `\tn`-scope picture term: `\begin{tenkz}[k] body \end{tenkz}` under math-style sensing |
 | `\tnX{m}` | `\tn[skin=ring]{m}` |
 | `\tn*[k]{m}` | `\tn[conjugate, k]{m}` |
 | `\tnbond[k]{a}{b}` | `\tnwire[kind=index, k]{a}{b}` |
 | `\tnstring[k]{verbs}` | `\tnwire[kind=string, ...]` — verb table below |
 | `\tnfuse[k]{m}` | prelude fuse atom (`skin=tri`, `wires=`, `ports=`); tenure: 0 benchmark consumers, held by 4 blueprint figures |
-| `\tnspan[form]{k}{m}` | `\tnmark[form=...]{(r,c)-(r,c+k-1)}{m}` |
-| `\tncut[k]{m}` | `\tnmark[form=cut]{<wire place>}{m}` |
-| `\tnregion[k]{members}` | `\tnmark[form=enclosure or band, k]{members}{}` |
+| `\tnspan[form]{k}{m}` | `\tnmark[form=...]{(r,c) .. (r,c+k-1)}{m}` |
 | `\tndots` | `\tn[skin=dots]{}` (elision bit read by the audit) |
 | `\tnskip` | `\tn[void=open]{}` |
 | `\tntree[k]{word}` | expander: fuse atoms + wires from the word |
-| `up at= down at= west at= east at=`, `combined=`, `span=` | `ports=` face/slot grammar; `span=` folds into `wires=` |
+| `up at= down at= west at= east at=`, `combined=`, `span=`, `up=`, `down=` | `ports=` angle/slot grammar; `span=` folds into `wires=` |
 | `role=` | `species=` (the four prelude species) |
 | `\tndeclareatom` | `\tndeclare{atom}` |
-| `\tnprose{m}` | `\tnmark[form=prose]{<panel>}{m}` |
 
 Two rows are expanders: their expansion is a rule over the picture, not a
 token substitution — `physical=` adds a port per wire-row atom, `\tntree`
 builds atoms and wires from the word. Expander output is still pure kernel
 records, and the same test class verifies it.
 
-String verb table: `through a` → `via={a}` entering and leaving tangent
-ports · `loop a` → `closed, around={a}` · `over w at p` / `under w at p` →
-`cross=` · `wind {p,q}` → `wind=` · `bead{m}` → an atom `on <wire> t` ·
-`join s at p` → an endpoint `on s p`.
+String verb table: `through a` → `route={all of a}` entering and leaving
+tangent ports · `loop a` → `closed, route={all of a}` · `over w at p` /
+`under w at p` → `cross=` · `wind {p,q}` → `wind=` · `bead{m}` → an atom
+`on <wire> t` · `join s at p` → an endpoint `on s p`.
 
 Sugar tenure: a sugar row needs three distinct consumers among the benchmark
 cases and blueprint figures; a row below tenure is a mandatory agenda item
@@ -422,22 +624,35 @@ them forever with the migration hint. No deleted spelling is ever reused.
 | `\tnsite` | `\tn[at=(r,c)]` |
 | `\tnghost{m}` | addresses reference empty cells directly |
 | boundary-skin placeholder atoms | open-end policy (§3) |
-| `out=`, `in=` | routes and `via=`; arc keeps one `bend=` |
-| `route=hv`, `route=vh`, `route=curve` | `route=orth` (+ `via=`), `route=arc` |
-| `drop`, `hug` routes | `route=orth, via=` and `around=` |
-| `label shift=` | `nudge=` (quarter-pitch) or `label pos=` |
-| `col vector= row vector= sheet vector=` | `frame={plane, ...}` subkeys |
+| `out=`, `in=` | `route=arc`, which leaves and enters along its ends' faces |
+| `route=hv`, `route=vh`, `route=curve` | `route=orth`, `route=arc` |
+| `drop`, `hug` routes | `route=orth` and `route={<side> of <selector>}` |
+| `label shift=` | `label pos=`, a station on the host's ring (§6) |
+| `col vector= row vector= sheet vector=` | `frame=plane`; a sheet is a basis member of one frame (§4) |
 | `maps`, `polygon=`, `radius=` | died with `tenkzcd` |
 | `tensor style=` | `skin=` |
-| `fused` | `weight=double` |
+| `fused` | nothing: the port type decides the stroke (§5) |
 | connection `none` flag | omit the record; `void=sealed` removes a site |
 | `wiring=` micro-DSL | skin pairings are wires (§8) |
-| `cluster` as a skin | `cluster={RxC}` group sugar — sub-spins must be addressable |
+| `cluster` as a skin | `cluster={RxC}` basis sugar — sub-spins must be addressable |
 | `enclosure` as a skin | `\tnmark[form=enclosure]`; a boundary operator is a wide atom (§12.7) |
-| `poly=k` | waits for three manifested consumers |
+| `poly=k` | permanently dead: the consumers arrived and they want angles, not corners |
 | `weight=string` | `kind=string` |
-| `trace style=racetrack` | `cap` closures are the default; `loop` remains for looped traces |
+| `trace style=racetrack` | closure depth follows the selection the closure clears (§5) |
 | `inline`, `compact` | math-style sensing + `size=` |
+| `via=` | `route={<side> of <selector>}`: every waypoint in this contract's own sketches was a side of a selection |
+| `bend=` | nothing: an arc leaves and enters along its ends' faces |
+| `weight=` | nothing: the port type decides the stroke, and bundling is a claim the audit already carries |
+| `nudge=` (atom and mark) | a basis member `(r,c,k)`, an ordinary address, or the label station rule (§6) |
+| `inset=` | nothing: concentric order is doctrine on the hull (§5) |
+| `slot=` | `species=`, which atoms and wires already carry |
+| `up=`, `down=` | `ports=`: the outward physical face is the row's own normal |
+| `check=` | nothing: the audit follows the joiner class (§7) |
+| `form=cut`, `form=band`, `form=brace-below`, `form=prose`, `\tncut`, `\tnregion`, `\tnprose` | `form=enclosure`, `form=bracket`, or a term of unknown signature (§6, §7) |
+| `frame=vertical`, `frame=rotate=<deg>`, frame matrices | `flat`, `plane`, `circle`; orientation is a consequence of where a record sits (§4) |
+| `leg <face> of <cell>`, `<compass> outside` | a generated leg is a named record; an open end takes its place from the route (§5) |
+| `(r,c)-(r,c)` cell ranges | `(r,c) .. (r,c)` — a hyphen cannot be told from a generated name |
+| `\tnpic` as a command | the sugar row `\tnpic` over the picture environment (§9) |
 | aliases `chain axis`, `legs at`, `rows`→span, `boundary legs`, `label at` | kernel spellings above |
 
 ## 11. The shrink gate
@@ -451,7 +666,7 @@ meter touches the baseline file in the same diff.
 |---|---|---|
 | M1 | registry census split kernel / sugar / alias | kernel non-increasing except gate exception; total non-increasing between sessions |
 | M2 | parser-path count | increase requires `Extension-gate: #NNNN` |
-| M3 | escape usage (`debug at=`, `nudge=` excess) in the corpus | non-increasing; each occurrence names a grammar gap |
+| M3 | escape usage (`debug at=` and the raw-geometry rows) in the corpus | non-increasing; each occurrence names a grammar gap |
 | M4 | mean lines per benchmark figure, frozen denominator | non-increasing — the fidelity meter |
 | M5 | alias count + sunsets | near zero at the 1.0 freeze |
 | M6 | overload count | never rises |
@@ -472,19 +687,47 @@ section of `docs/tenkz/SHRINK.md` with one verdict per flag. The session
 passes only if the census strictly decreased or every flag carries a written
 verdict; a keep-because verdict that expires twice dies or becomes doctrine.
 
+**The metric registry is a ledger too**, and it is the one the meters do not
+count. A ratio is an element: it is named, it is spelled, it is inherited by
+every theme, and it is as expensive to remove after a release as a key. It
+carries no meter of its own — the tooling stays as it is — and instead every
+shrink session states its net movement in prose, with the same standard of
+evidence as the key ledgers. The standing rule that follows from the nine
+amendments: a quantity that is already a column of the size-class table, or
+already a named ratio, is not minted a second time under a new name.
+
 ## 12. Spelling sketches
 
-The seven figures the 0.7 language failed worst, in kernel form. No
-millimetres appear; `% sugar:` marks each sugar spelling with its expansion.
+The seven figures the 0.7 language failed worst, **in kernel form**: every
+token below is admitted by the tables above, and a sketch that names a
+spelling those tables do not carry is a defect in the sketch. No millimetres
+appear; `% sugar:` marks each sugar spelling with its expansion.
+
+Kernel form is what settles the one question these sketches could otherwise
+answer two ways. A face is an angle and so is a label placement (§2.3, §3),
+so both are written below as angles and never as letters — `label pos=45`,
+`label pos=180`, `B.270`, `R.90@1`. The only compass words left are the side
+of a hull a route travels (`route={s of ...}`), which belongs to the route
+family's own grammar, and the four boundary key names (`west=`, `east=`,
+`north=`, `south=`), which are key names and not values at all. That is the
+one-token-one-meaning rule doing its work rather than being suspended for the
+examples.
+
+An author need not write the angle. The four compass words survive as a sugar
+spelling of the four right angles — `n` for 90, `e` for 0, `s` for 270, `w`
+for 180 — covering faces and label placements alike, so every fixture in the
+corpus keeps its spelling. That row arrives with the change that implements
+angle-valued faces, and the sugar ledger moves from twenty-five to
+twenty-six there rather than here, so the one arrival is counted once.
 
 ### 12.1 Braid (`rmp-iii-b-braid-one`)
 
 ```tex
 \[\begin{tenkz}[rows={wire,wire}, cols=4, bonds=none]
-  \tnwire[kind=string, species=left,  name=a, via={(2,2)}]{(1,1)}{(2,3)}
-  \tnwire[kind=string, species=right, name=b, via={(2,3)},
+  \tnwire[kind=string, species=left,  name=a, route={s of (2,2)}]{(1,1)}{(2,3)}
+  \tnwire[kind=string, species=right, name=b, route={n of (2,3)},
           cross={under at crossing of a and b}]{(1,4)}{(2,2)}
-  \tnmark[form=label, label pos=ne]{crossing of a and b}{$R$}
+  \tnmark[form=label, label pos=45]{crossing of a and b}{$R$}
 \end{tenkz}\]
 ```
 
@@ -494,25 +737,33 @@ millimetres appear; `% sugar:` marks each sugar spelling with its expansion.
 \[\begin{tenkz}[lattice={3x3},          % sugar: rows={wire,wire,wire}, cols=3
               west=trace, east=trace, north=trace, south=trace]
   \tnwire[kind=string, species=flux, closed, wind={1,0},
-          via={s outside}]              % the homotopy class is recorded
+          route={s of picture}]         % the homotopy class is recorded
 \end{tenkz}\]
 ```
 
 ### 12.3 Pulling-through (`rmp-iii-a-pulling-through`)
 
 ```tex
-\begin{tenkzeq}[size=m, check={signature}]
+\begin{tenkzeq}[size=m]
   \begin{tenkz}[rows={ket}, cols=3, physical=up]   % sugar: physical= adds the up ports
     \tnwire[kind=string, species=g,
-            via={1 s of (1,2)}]{w outside}{e outside}
+            route={s of (1,1) .. (1,3)}]{open}{open}
   \end{tenkz}
   =
   \begin{tenkz}[rows={ket}, cols=3, physical=up]   % sugar: physical= adds the up ports
-    \tnwire[kind=string, species=g, name=g, via={1 n of (1,2)},
-            cross={over at crossing of g and leg n of (1,2)}]{w outside}{e outside}
+    \tnwire[kind=string, species=g, name=g,
+            route={n of (1,1) .. (1,3)}]{open}{open}
   \end{tenkz}
 \end{tenkzeq}
 ```
+
+The second panel declares no crossing and needs none: the route crosses
+exactly those legs that leave the selection northward, each once, in hull
+order, and each derived crossing enters the model with every field a declared
+one carries. The reach rule lengthens all three legs past the string, so the
+crossings the author claimed all exist — which is the defect this sketch used
+to carry, where two of the three legs stopped short and the crossing police
+had nothing to refuse.
 
 ### 12.4 Two-shift MPU (`rmp-ii-mpu-two-shift`)
 
@@ -530,11 +781,11 @@ millimetres appear; `% sugar:` marks each sugar spelling with its expansion.
 ### 12.5 CZX state (`rmp-app-czx-state`)
 
 ```tex
-\[\begin{tenkz}[lattice={2x2}, bonds=none]   % sugar: rows={wire,wire}, cols=2
-  \tn[cluster={2x2}, name=a]{} & \tn[cluster={2x2}, name=b]{} \\
-  \tn[cluster={2x2}, name=c]{} & \tn[cluster={2x2}, name=d]{}
-  % sugar: cluster= expands to a \tngroup of four dot atoms named a-1-1 .. a-2-2
-  \tnmark[form=enclosure, slot=selected]{{a-2-2, b-2-1, c-1-2, d-1-1}}{$X$}
+\[\begin{tenkz}[lattice={2x2}, bonds=none,   % sugar: rows={wire,wire}, cols=2
+              frame={flat, basis={wire at (0,0), wire at (2,0),
+                                  wire at (0,2), wire at (2,2)}}]
+  % four members per cell; a member is the ordinary address (r,c,k)
+  \tnmark[form=enclosure, species=marked]{{(1,1,4), (1,2,3), (2,1,2), (2,2,1)}}{$X$}
 \end{tenkz}\]
 ```
 
@@ -542,8 +793,9 @@ millimetres appear; `% sugar:` marks each sugar spelling with its expansion.
 
 ```tex
 \[\begin{tenkz}[rows={ket}, cols=4, physical=up]   % sugar: physical= adds the up ports
-  \tn[up=$i_1$]{A} & \tn[up=$i_2$]{A} & \tn[skin=dots]{} & \tn[up=$i_L$]{A}
-  \tnmark[form=enclosure, label pos=w]{(1,1)-(1,4)}{$A^{[L]}$}
+  \tn[ports={90:physical:$i_1$}]{A} & \tn[ports={90:physical:$i_2$}]{A}
+  & \tn[skin=dots]{} & \tn[ports={90:physical:$i_L$}]{A}
+  \tnmark[form=enclosure, label pos=180]{(1,1) .. (1,4)}{$A^{[L]}$}
 \end{tenkz}\]
 ```
 
@@ -553,16 +805,19 @@ millimetres appear; `% sugar:` marks each sugar spelling with its expansion.
 \[\begin{tenkz}[rows={wire,wire}, cols=4, bonds=none]
   \tn[at=(1,2), name=B]{B}   \tn[at=(1,3), name=C]{C}
   \tn[at=(2,2), skin=box, wide=2, wires=2, name=R]{R}  % the wide operator row
-  \tnwire{B.s}{R.n@1}        \tnwire{C.s}{R.n@2}
-  % B.n and C.n stay unbonded: typed ports render their own stubs.
-  \tnwire[kind=string, route=orth, via={1 w of R}]{open n}{R.w}  % wrap west
-  \tnwire[kind=string, route=orth, via={1 e of C}]{R.e}{open n}  % out east
+  \tnwire{B.270}{R.90@1}     \tnwire{C.270}{R.90@2}
+  % B and C keep their upward ports unbonded: typed ports render their own stubs.
+  \tnwire[kind=string, route={all of picture}]{R.0}{R.180}  % the wrap
 \end{tenkz}\]
 ```
 
+The wrap is one line for the first time, and it is the same construction the
+enclosure strokes and the closure clears: an offset hull of a selection, here
+the whole picture.
+
 ## 13. Grammar rules
 
-1. One picture, one frame chain. Nesting is `\tngroup` or `\tnpic`.
+1. One picture, one frame chain. Nesting is `\tngroup`.
 2. Picture options declare topology and policy; they create no hidden atoms.
 3. Body order may establish references; it never changes an earlier record.
    Crossing references resolve at validation (§5).
@@ -583,16 +838,25 @@ confirmation at L1 acceptance:
 
 1. **`dir=` wire key.** The compression review left directed virtual indices
    without a kernel spelling; `dir=to|from|none` fills the `\tnarrow`
-   tombstone. Wire keys stay at twelve because `end=` is deleted in favor of
-   positional `open <dir>` endpoints.
+   tombstone. `end=` is deleted in favor of positional `open <dir>`
+   endpoints.
 2. **Boundary operators are wide atoms.** The section-IV R operator is a
    `wide=` box ATOM (§12.7), not an enclosure mark — marks own no topology.
    This diverges from the plan's phrasing "enclosure mark + orth/around
    wires"; the enclosure mark keeps the blocking and region consumers (§6).
-3. **`leg <face> of <cell>` address production.** Added so strings can cross
-   policy-generated legs (§12.3); it raises the address grammar to nine
-   productions.
+3. **`leg <face> of <cell>` address production — reversed 2026-07-25.** It
+   was added so a string could name a leg to cross. With the hull route the
+   crossing set is derived and no one names a leg, and a generated leg is a
+   named record like any other closure wire, so the production leaves and the
+   grammar returns to eight.
 4. **Effectivity.** The 0.7 registry describes the current package until the
    kernel lands; the registry regeneration and the three Session-0 artifacts
    land with this contract's acceptance, and the census then enforces every
-   count stated here.
+   count stated here. The retirements of 2026-07-25 are booked here and in
+   `docs/tenkz/SHRINK.md`; the registry rows they retire move ledger when the
+   parser rows move, in the change that implements each amendment.
+5. **The tint-for-species exchange is deferred as a pair.** Retiring the
+   mark's `slot=` and giving a mark the `species=` every other record carries
+   is one exchange of net zero, and it is spelled in §2.5 above. It costs no
+   key either way, so the registry books it in the change that adds the
+   parser row rather than in two halves.
