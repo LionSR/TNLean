@@ -715,12 +715,19 @@ The TP-gauge application follows~\cite[Appendix~A]{Cirac2016MPDO_arXiv}.
 \begin{proof}\leanok
     \uses{thm:exp_pd_irred}
     The forward implication is Theorem~\ref{thm:exp_pd_irred}. Conversely,
-    let $P$ be an invariant orthogonal projection. If $P\neq0$, invariance
-    of the generator keeps $\exp(tE)(P)$ in the corner $P\MN{D}P$ for
-    every $t\geq0$. At $t=1$ the assumed positive definiteness is impossible
-    unless $P=\Id$, because a positive definite matrix cannot be supported
-    on a proper corner. Thus every invariant projection is $0$ or $\Id$,
-    so $E$ is irreducible.
+    let $P$ be an invariant orthogonal projection. Invariance gives
+    $E(P\MN{D}P)\subseteq P\MN{D}P$, so induction yields
+    $E^k(P)\in P\MN{D}P$ for every $k\geq0$. Therefore every term, and hence
+    the convergent series
+    \begin{align}
+        \exp(tE)(P)
+         & =\sum_{k=0}^{\infty}\frac{t^k}{k!}E^k(P),
+        \notag
+    \end{align}
+    lies in the same corner. If $P\neq0$, then at $t=1$ the assumed positive
+    definiteness is impossible unless $P=\Id$, because a positive definite
+    matrix cannot be supported on a proper corner. Thus every invariant
+    projection is $0$ or $\Id$, so $E$ is irreducible.
 \end{proof}
 
 \section{Ergodicity of irreducible channels}

@@ -43,7 +43,7 @@
 \begin{proof}
     \leanok
     \uses{thm:density_nonempty, lem:cesaro_mean_density,
-        lem:cesaro_subseq_fixed}
+        thm:cesaro_telescope}
     Start with any $\rho_0\in\mc{D}_D$
     (Theorem~\ref{thm:density_nonempty}).
     Lemma~\ref{lem:cesaro_mean_density} keeps every $\sigma_N$, $N\geq1$,
@@ -57,9 +57,9 @@
         \notag
     \end{align}
     because the iterates $E^N(\rho_0)$ lie in the compact set
-    $\mc{D}_D$ and are therefore uniformly bounded. Equivalently,
-    Lemma~\ref{lem:cesaro_subseq_fixed} identifies the subsequential limit
-    as a fixed point. In~\cite[Theorem~6.11]{Wolf2012Quantum}, existence is proved
+    $\mc{D}_D$ and are therefore uniformly bounded. Along the convergent
+    subsequence, continuity of $E$ now gives $E(\rho)=\rho$.
+    In~\cite[Theorem~6.11]{Wolf2012Quantum}, existence is proved
     via Brouwer's fixed-point theorem; we use the Ces\`aro
     argument instead.
 \end{proof}
