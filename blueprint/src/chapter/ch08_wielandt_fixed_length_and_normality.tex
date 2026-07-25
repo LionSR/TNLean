@@ -58,9 +58,9 @@ construction is in Section~\ref{sec:app_wielandt_blocking_support}.
     Their product satisfies
     \begin{align}
         M_i\ketbra{\varphi}{e_j}
-        &=\ketbra{M_i\varphi}{e_j}
-          =\ketbra{e_i}{e_j}
-          =E_{ij}.
+         & =\ketbra{M_i\varphi}{e_j}
+        =\ketbra{e_i}{e_j}
+        =E_{ij}.
         \notag
     \end{align}
     Lemma~\ref{lem:word_span_mul} therefore gives
@@ -119,7 +119,7 @@ construction is in Section~\ref{sec:app_wielandt_blocking_support}.
     Theorem~\ref{thm:wielandt_general} then yields
     \begin{align}
         \iota(A)
-        &\le(D^2-\krausrk(A)+1)D^2.
+         & \le(D^2-\krausrk(A)+1)D^2.
         \notag
     \end{align}
     Trace preservation gives a nonzero Kraus operator, hence
@@ -191,7 +191,8 @@ construction is in Section~\ref{sec:app_wielandt_blocking_support}.
     moduli are non-increasing but need not be strictly ordered. The
     representative family is assumed to have been selected; this statement does
     not reconstruct the full CPSV sector decomposition with repeated copies
-    inside one sector.
+    inside one sector. This scope restriction is recorded in
+    \path{docs/paper-gaps/ft_one_copy_scope_restriction.tex}.
 \end{corollary}
 
 \begin{proof}
@@ -246,11 +247,11 @@ Section~\ref{sec:app_wielandt_blocking_support}.
     \emph{primitive} if
     \begin{align}
         \sum_i(A^i)^\dagger A^i
-        &=\Id, \notag\\
+         & =\Id, \notag                                         \\
         \rho
-        &\ge0,\qquad \rho\neq0,\qquad \E_A(\rho)=\rho, \notag\\
+         & \ge0,\qquad \rho\neq0,\qquad \E_A(\rho)=\rho, \notag \\
         \rho_{\spec}(\E_A-P)
-        &<1,
+         & <1,
         \notag
     \end{align}
     where $P$ is the fixed-point projection associated to $\rho$.

@@ -12,7 +12,7 @@ Section~\ref{sec:app_wielandt_cumulative_support}.
     The \emph{word span} at length~$n$ is the subspace
     \begin{align}
         S_n(A)
-        &=\spn_{\C}\{A^w:|w|=n\}\subseteq\MN{D}.
+         & =\spn_{\C}\{A^w:|w|=n\}\subseteq\MN{D}.
         \notag
     \end{align}
     This is~\cite[Section~II]{Sanz2010Quantum}.
@@ -33,7 +33,7 @@ Section~\ref{sec:app_wielandt_cumulative_support}.
     The \emph{fixed-length vector span} at length~$n$ is
     \begin{align}
         H_n(A,\varphi)
-        &=\spn_{\C}\{A^w\varphi:|w|=n\}\subseteq\C^D.
+         & =\spn_{\C}\{A^w\varphi:|w|=n\}\subseteq\C^D.
         \notag
     \end{align}
     This is $S_n(A)\ket{\varphi}$ in the notation
@@ -69,10 +69,10 @@ eventual exact-word spanning, and spectral strong irreducibility.
     \leanok
     \uses{def:vector_spread_span}
     The transfer map is \emph{primitive in the sense of
-    \cite{Sanz2010Quantum}} if there is a positive integer $q$ such that
+        \cite{Sanz2010Quantum}} if there is a positive integer $q$ such that
     \begin{align}
         H_q(A,\varphi)
-        &=\C^D
+         & =\C^D
         \label{eq:wld_paper_primitive_spread}
     \end{align}
     for every nonzero $\varphi\in\C^D$. The same $q$ works for all
@@ -86,7 +86,7 @@ eventual exact-word spanning, and spectral strong irreducibility.
     The \emph{full-Kraus-rank index} is
     \begin{align}
         \iota(A)
-        &=\min\{n\ge1:S_n(A)=\MN{D}\}.
+         & =\min\{n\ge1:S_n(A)=\MN{D}\}.
         \notag
     \end{align}
     If the set is empty, its value is defined to be zero.
@@ -99,33 +99,34 @@ eventual exact-word spanning, and spectral strong irreducibility.
     The \emph{primitivity index} is
     \begin{align}
         q(\E_A)
-        &=\min\{q\ge1:H_q(A,\varphi)=\C^D
-          \text{ for every }\varphi\neq0\}.
+         & =\min\{q\ge1:H_q(A,\varphi)=\C^D
+        \text{ for every }\varphi\neq0\}.
         \notag
     \end{align}
     If the set is empty, its value is defined to be zero.
 \end{definition}
 
-\begin{definition}[Strong irreducibility in Proposition~3]
+\begin{definition}[Strengthened strong irreducibility]
     \label{def:strongly_irreducible_paper}
     \lean{MPSTensor.IsStronglyIrreduciblePaper}
     \leanok
     \uses{def:transfer_map, def:irreducible_cp, def:primitive_channel}
     The tensor is \emph{strongly irreducible in the sense of
-    \cite[Proposition~3(c)]{Sanz2010Quantum}} if there is a matrix $\rho>0$
+        \cite[Proposition~3(c)]{Sanz2010Quantum}} if there is a matrix $\rho>0$
     such that
     \begin{align}
-        \E_A(\rho)&=\rho, \notag\\
-        \spec_{\mathrm{per}}(\E_A)&=\{1\},
+        \E_A(\rho)                 & =\rho, \notag \\
+        \spec_{\mathrm{per}}(\E_A) & =\{1\},
         \notag
     \end{align}
-    and $\E_A$ is irreducible. The formal predicate makes irreducibility
-    explicit, matching the condition implicit in the source terminology.
-    Thus the eigenvalue $1$ has a positive-definite fixed point and is the only
-    peripheral eigenvalue.
+    and $\E_A$ is irreducible. The source condition in
+    \cite[Proposition~3(c)]{Sanz2010Quantum} requires the positive-definite
+    fixed point and uniqueness of the peripheral eigenvalue. The formal
+    predicate adds irreducibility as explicit extra data, so it is a
+    strengthened interpretation rather than the literal source clause.
 \end{definition}
 
-\begin{theorem}[Equivalent primitivity conditions]
+\begin{theorem}[Strengthened form of the primitivity equivalence]
     \label{thm:wielandt_proposition_three}
     \lean{MPSTensor.primitivePaper_iff_hasEventuallyFullKrausRank}
     \lean{MPSTensor.primitivePaper_iff_stronglyIrreducible}
@@ -141,7 +142,11 @@ eventual exact-word spanning, and spectral strong irreducibility.
         \item there is a positive $i$ for which $S_i(A)=\MN{D}$;
         \item $\E_A$ is strongly irreducible.
     \end{enumerate}
-    This is~\cite[Proposition~3]{Sanz2010Quantum}.
+    Proposition~3 of~\cite{Sanz2010Quantum} states the same equivalence with
+    item~(3) replaced by the literal source condition: a unique peripheral
+    eigenvalue and a positive-definite corresponding eigenvector. The theorem
+    displayed here is the formalized strengthening in which item~(3) also
+    includes irreducibility.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -171,7 +176,7 @@ eventual exact-word spanning, and spectral strong irreducibility.
     $o(\lVert B\rVert^2)$. For large $m$ this is a contradiction.
 \end{proof}
 
-\begin{theorem}[Primitivity index is bounded by the full-rank index]
+\begin{theorem}[Primitive-channel specialization of the index bound]
     \label{thm:q_index_le_i_index}
     \lean{MPSTensor.qIndex_le_iIndex_of_isPrimitivePaper}
     \leanok
@@ -180,10 +185,12 @@ eventual exact-word spanning, and spectral strong irreducibility.
     Under the hypotheses of
     Theorem~\ref{thm:wielandt_proposition_three}, paper primitivity implies
     \begin{align}
-        q(\E_A)&\le\iota(A).
+        q(\E_A) & \le\iota(A).
         \notag
     \end{align}
-    This is \cite[Proposition~1]{Sanz2010Quantum}.
+    Proposition~1 of~\cite{Sanz2010Quantum} states this inequality for every
+    quantum channel. The tagged theorem is the currently formalized
+    specialization under normalization and paper primitivity.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -270,7 +277,7 @@ eventual exact-word spanning, and spectral strong irreducibility.
     For every $n$,
     \begin{align}
         S_{n+1}(A)
-        &=\spn_{\C}\{A^i\}_{i=0}^{d-1}S_n(A).
+         & =\spn_{\C}\{A^i\}_{i=0}^{d-1}S_n(A).
         \notag
     \end{align}
     Consequently, if $L>0$ and $A$ is $L$-block injective, then
@@ -348,9 +355,9 @@ eventual exact-word spanning, and spectral strong irreducibility.
     $A$ is primitive in the sense of
     Definition~\ref{def:paper_primitive}. Then there is a word $w$ with
     \begin{align}
-        1\le|w|&\le D^2-\krausrk(A)+1,
-        \notag\\
-        \tr(A^w)&\neq0.
+        1\le|w|  & \le D^2-\krausrk(A)+1,
+        \notag                            \\
+        \tr(A^w) & \neq0.
         \notag
     \end{align}
     This is the sharp trace conclusion of
@@ -431,7 +438,7 @@ eventual exact-word spanning, and spectral strong irreducibility.
     \emph{cumulative vector span} is
     \begin{align}
         K_n(A,\varphi)
-        &=\spn_{\C}\{A^w\varphi:|w|\le n\}\subseteq\C^D.
+         & =\spn_{\C}\{A^w\varphi:|w|\le n\}\subseteq\C^D.
         \notag
     \end{align}
     This is~\cite[proof of Lemma~2(a)]{Sanz2010Quantum}.
@@ -521,7 +528,7 @@ case are proved in Section~\ref{sec:app_wielandt_blocking_support}.
     If $S_1(A)$ contains an invertible matrix~$X$, then
     \begin{align}
         S_{D^2-\krausrk(A)+1}(A)
-        &=\MN{D}.
+         & =\MN{D}.
         \label{eq:wld_case2_one_step_wordspan_top}
     \end{align}
     In the terminology of~\cite{Sanz2010Quantum}, this is the case where
@@ -582,7 +589,7 @@ case are proved in Section~\ref{sec:app_wielandt_blocking_support}.
     part. The dimension-growth argument gives a level $n_0$ for which
     \begin{align}
         (A^{i_0})^rS_{n_0}(A)
-        &=\{(A^{i_0})^rM:M\in\MN{D}\}.
+         & =\{(A^{i_0})^rM:M\in\MN{D}\}.
         \notag
     \end{align}
     Since $A^{i_0}\varphi=\mu\varphi$ and $\mu\neq0$, iterating gives
@@ -595,13 +602,13 @@ case are proved in Section~\ref{sec:app_wielandt_blocking_support}.
     Since
     \begin{align}
         A^{i_0}\ketbra{\varphi}{\psi}
-        &=\ketbra{A^{i_0}\varphi}{\psi}
-          =\mu\ketbra{\varphi}{\psi},
+         & =\ketbra{A^{i_0}\varphi}{\psi}
+        =\mu\ketbra{\varphi}{\psi},
         \notag
     \end{align}
     one has
     $\ketbra{\varphi}{\psi}
-      =\mu^{-1}A^{i_0}\ketbra{\varphi}{\psi}$.
+        =\mu^{-1}A^{i_0}\ketbra{\varphi}{\psi}$.
     Thus
     $\ketbra{\varphi}{\psi}\in S_k(A)$ implies
     $\ketbra{\varphi}{\psi}\in S_{k+1}(A)$, because left multiplication
@@ -624,7 +631,7 @@ case are proved in Section~\ref{sec:app_wielandt_blocking_support}.
     Then, for every $\psi\in\C^D$,
     \begin{align}
         \ketbra{\varphi}{\psi}
-        &\in S_{D^2-D+1}(A).
+         & \in S_{D^2-D+1}(A).
         \notag
     \end{align}
     This is the quantitative rank-one conclusion of
@@ -638,9 +645,9 @@ case are proved in Section~\ref{sec:app_wielandt_blocking_support}.
     generalized zero-eigenspace. Dimension growth then gives $n_0$ with
     \begin{align}
         (A^{i_0})^rS_{n_0}(A)
-        &=\{(A^{i_0})^rM:M\in\MN{D}\},
-        \notag\\
-        r+n_0&\le D^2-D+1.
+              & =\{(A^{i_0})^rM:M\in\MN{D}\},
+        \notag                                \\
+        r+n_0 & \le D^2-D+1.
         \notag
     \end{align}
     Since $(A^{i_0})^r\varphi=\mu^r\varphi$ and $\mu\neq0$, the vector
@@ -648,7 +655,7 @@ case are proved in Section~\ref{sec:app_wielandt_blocking_support}.
     $\ketbra{\varphi}{\psi}\in S_{r+n_0}(A)$ for every $\psi$.
     The identity
     $\ketbra{\varphi}{\psi}=\mu^{-1}A^{i_0}
-      \ketbra{\varphi}{\psi}$
+        \ketbra{\varphi}{\psi}$
     pads this element to the exact length $D^2-D+1$.
 \end{proof}
 
@@ -720,7 +727,7 @@ case are proved in Section~\ref{sec:app_wielandt_blocking_support}.
     Then
     \begin{align}
         \iota(A)
-        &\le(D^2-\krausrk(A)+1)D^2,
+         & \le(D^2-\krausrk(A)+1)D^2,
         \notag
     \end{align}
     where $\iota(A)=\min\{n\ge1:S_n(A)=\MN{D}\}$ is the
