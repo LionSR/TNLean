@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Defs
-import TNLean.MPS.Tactic.Basic
+import TNLean.MPS.Tactic.Attr
 
 import Mathlib.Analysis.Complex.Basic
 import Mathlib.LinearAlgebra.Matrix.PosDef
