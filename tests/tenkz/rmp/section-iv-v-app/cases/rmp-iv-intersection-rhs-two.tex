@@ -4,20 +4,11 @@
 % Boundary: The outer end closes through R; two virtual and two physical legs open.
 % Source: paper TN-Review-main.tex line 2059; author source ImagesReview Section
 %   IV/ImagesReview Section IV.tex lines 87-94 (Rtensor2)
-% Capabilities: free-graph, closure, typed-ports
+% Capabilities: grid, closure, typed-ports
 \[
-  \begin{tenkzfree}
-    \tnput[box, ports={west:virtual,east:virtual,north:physical}]
-      {c}{(8mm,0mm)}{C}
-    \tnput[pill, ports={west:virtual,east:virtual,135:physical}]
-      {r}{(0mm,-8mm)}{\qquad R\qquad}
-    \tnput[boundary, ports={south:physical}]{rp}{(-8mm,9mm)}{}
-    \tnput[boundary, ports={south:virtual}]{rv}{(-2mm,9mm)}{}
-    \tnput[boundary, ports={south:virtual}]{cv}{(2mm,9mm)}{}
-    \tnput[boundary, ports={south:physical}]{cp}{(8mm,9mm)}{}
-    \tnjoin[route=arc,out=0,in=0]{c.east}{r.east}
-    \tnjoin[route=hv]{r.west}{rv.south}
-    \tnjoin[route=hv]{c.west}{cv.south}
-    \tnjoin[route=hv]{r.135}{rp.south} \tnjoin{c.north}{cp.south}
-  \end{tenkzfree}
+  \begin{tenkz}[rows={ket:nopair, ket:nopair}, west=open, east=cup,
+                tensor style=box]
+    & & \tn{C}\\
+    \tn[pill, wide=3, up at={1}]{R} & &
+  \end{tenkz}
 \]

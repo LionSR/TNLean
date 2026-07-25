@@ -4,18 +4,9 @@
 % Boundary: C and X keep upward physical legs; C's west virtual leg stays open.
 % Source: paper TN-Review-main.tex line 2074; author source ImagesReview Section
 %   IV/ImagesReview Section IV.tex lines 148-155 (Rtensor5)
-% Capabilities: free-graph, closure, typed-ports
+% Capabilities: grid, closure, typed-ports
 \[
-  \begin{tenkzfree}
-    \tnput[box, ports={west:virtual,east:virtual,north:physical}]
-      {c}{(8mm,0mm)}{C}
-    \tnput[pill, ports={east:virtual,135:physical}]
-      {x}{(0mm,-5mm)}{\qquad X\qquad}
-    \tnput[boundary, ports={east:virtual}]{v}{(3mm,0mm)}{}
-    \tnput[boundary, ports={south:physical}]{xP}{(-4mm,9mm)}{}
-    \tnput[boundary, ports={south:physical}]{cP}{(8mm,9mm)}{}
-    \tnjoin[route=arc,out=0,in=0]{c.east}{x.east}
-    \tnjoin{v.east}{c.west}
-    \tnjoin[route=hv]{x.135}{xP.south} \tnjoin{c.north}{cP.south}
-  \end{tenkzfree}
+  \begin{tenkz}[rows={ket}, west=open, east=none, tensor style=box]
+    \tn{C} & \tn[pill, wide=2, up at={2}]{X} &
+  \end{tenkz}
 \]

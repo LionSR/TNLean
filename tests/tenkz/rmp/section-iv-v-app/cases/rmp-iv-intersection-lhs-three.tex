@@ -4,25 +4,11 @@
 % Boundary: The outer end closes through L; two virtual and three physical legs open.
 % Source: paper TN-Review-main.tex line 2063; author source ImagesReview Section
 %   IV/ImagesReview Section IV.tex lines 103-111 (Ltensor3)
-% Capabilities: free-graph, closure, typed-ports
+% Capabilities: grid, closure, typed-ports
 \[
-  \begin{tenkzfree}
-    \tnput[box, ports={west:virtual,east:virtual,north:physical}]
-      {a}{(-8mm,0mm)}{A}
-    \tnput[box, ports={west:virtual,east:virtual,north:physical}]
-      {b}{(-2mm,0mm)}{B}
-    \tnput[pill, ports={west:virtual,east:virtual,45:physical}]
-      {l}{(0mm,-8mm)}{\qquad L\qquad}
-    \tnput[boundary, ports={south:physical}]{ap}{(-8mm,9mm)}{}
-    \tnput[boundary, ports={south:physical}]{bp}{(-2mm,9mm)}{}
-    \tnput[boundary, ports={south:virtual}]{bv}{(2mm,9mm)}{}
-    \tnput[boundary, ports={south:virtual}]{lv}{(5mm,9mm)}{}
-    \tnput[boundary, ports={south:physical}]{lp}{(8mm,9mm)}{}
-    \tnjoin{a.east}{b.west}
-    \tnjoin[route=arc,out=180,in=180]{a.west}{l.west}
-    \tnjoin[route=hv]{b.east}{bv.south}
-    \tnjoin[route=hv]{l.east}{lv.south}
-    \tnjoin{a.north}{ap.south} \tnjoin{b.north}{bp.south}
-    \tnjoin[route=hv]{l.45}{lp.south}
-  \end{tenkzfree}
+  \begin{tenkz}[rows={ket:nopair, ket:nopair}, west=cup, east=open,
+                tensor style=box]
+    \tn{A} & \tn{B} & \\
+    \tn[pill, wide=3, up at={3}]{L} & &
+  \end{tenkz}
 \]
