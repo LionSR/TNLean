@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.OperatorSchmidt
 import TNLean.Entropy.MutualInformation
 import TNLean.MPS.MPDO.MutualInfoMonotone
 
@@ -42,6 +43,58 @@ noncomputable def bipartitionedNormalizedMPO (M : MPOTensor d D)
     Matrix (Fin (d ^ L) × Fin (d ^ K)) (Fin (d ^ L) × Fin (d ^ K)) ℂ :=
   (normalizedMPO M N).submatrix (chainBipartitionEquiv d N L K h).symm
     (chainBipartitionEquiv d N L K h).symm
+
+/-- The left-block factor obtained by opening the two virtual bonds of a
+periodic MPO at a contiguous cut.  The normalization scalar is absorbed into
+this factor. -/
+noncomputable def periodicCutLeftFactor (M : MPOTensor d D) (N L : ℕ)
+    (a b : Fin D) : Matrix (Fin (d ^ L)) (Fin (d ^ L)) ℂ :=
+  fun x x' ↦
+    (mpo M N).trace⁻¹ *
+      evalWord M (List.ofFn (finFunctionFinEquiv.symm x))
+        (List.ofFn (finFunctionFinEquiv.symm x')) a b
+
+/-- The right-block factor obtained by opening the two virtual bonds of a
+periodic MPO at a contiguous cut. Its virtual indices are reversed because
+\(\operatorname{tr}(AB) = \sum_{a,b} A_{ab} B_{ba}\). -/
+noncomputable def periodicCutRightFactor (M : MPOTensor d D) (K : ℕ)
+    (a b : Fin D) : Matrix (Fin (d ^ K)) (Fin (d ^ K)) ℂ :=
+  fun y y' ↦
+    evalWord M (List.ofFn (finFunctionFinEquiv.symm y))
+      (List.ofFn (finFunctionFinEquiv.symm y')) b a
+
+/-- Opening the two virtual bonds at a contiguous cut gives an explicit
+operator-Schmidt decomposition of a normalized periodic MPO with `D * D`
+product terms.
+
+The statement is purely algebraic: it requires neither positivity nor a
+nonzero trace. The factor `(mpo M N).trace⁻¹` uses the convention \(0⁻¹ = 0\),
+so a zero trace makes every left factor zero. -/
+theorem bipartitionedNormalizedMPO_hasOperatorSchmidtDecomposition
+    (M : MPOTensor d D) (N L K : ℕ) (h : N = L + K) :
+    Matrix.HasOperatorSchmidtDecomposition
+      (bipartitionedNormalizedMPO M N L K h) (D * D) := by
+  subst N
+  refine ⟨fun t ↦ periodicCutLeftFactor M (L + K) L
+      (finProdFinEquiv.symm t).1 (finProdFinEquiv.symm t).2,
+    fun t ↦ periodicCutRightFactor M K
+      (finProdFinEquiv.symm t).1 (finProdFinEquiv.symm t).2, ?_⟩
+  ext ⟨x, y⟩ ⟨x', y'⟩
+  rw [← finProdFinEquiv.sum_comp]
+  simp [bipartitionedNormalizedMPO, normalizedMPO, chainBipartitionEquiv,
+    biSplitEquiv, blockSplitEquiv_symm_apply, Matrix.sum_apply,
+    Matrix.kroneckerMap_apply, periodicCutLeftFactor, periodicCutRightFactor,
+    mpoMatrixEntry, List.ofFn_fin_append, evalWord_append, Matrix.trace,
+    Matrix.mul_apply, Fintype.sum_prod_type, Finset.mul_sum, mul_assoc]
+
+/-- The operator-Schmidt rank across a contiguous cut of a normalized periodic
+MPO is at most the number \(D^2\) of ordered pairs of virtual-boundary indices.
+No positivity or local-purification hypothesis is used. -/
+theorem operatorSchmidtRank_bipartitionedNormalizedMPO_le
+    (M : MPOTensor d D) (N L K : ℕ) (h : N = L + K) :
+    Matrix.operatorSchmidtRank (bipartitionedNormalizedMPO M N L K h) ≤ D * D :=
+  Matrix.operatorSchmidtRank_le_of_hasOperatorSchmidtDecomposition
+    (bipartitionedNormalizedMPO_hasOperatorSchmidtDecomposition M N L K h)
 
 /-- Positivity of the normalized state is preserved by the bipartition
 reindexing. -/
