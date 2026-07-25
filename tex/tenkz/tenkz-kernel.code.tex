@@ -542,6 +542,66 @@
       }
   }
 
+% route= carries two families.  Three words name a path shape.  The hull form
+% `<side> of <selector>' names a curve instead: the wire travels at one
+% standing offset from the offset hull of the selection, on the named side,
+% entering and leaving where that side's arc ends.  The side is a compass
+% word or `all'; `around' is not among them, because the whole picture is a
+% selection like any other and one idea keeps one spelling.
+\cs_new_protected:Npn \__tenkz_kernel_route:n #1
+  {
+    \tl_set:Nn \l__tenkz_kernel_list_item_tl {#1}
+    \tl_trim_spaces:N \l__tenkz_kernel_list_item_tl
+    \regex_match:nVTF { \A (?: all | n | e | s | w ) \s+ of \s+ \S }
+      \l__tenkz_kernel_list_item_tl
+      { \__tenkz_kernel_route_keep: }
+      {
+        \str_case:VnF \l__tenkz_kernel_list_item_tl
+          {
+            {straight} { \__tenkz_kernel_route_keep: }
+            {orth}     { \__tenkz_kernel_route_keep: }
+            {arc}      { \__tenkz_kernel_route_keep: }
+          }
+          {
+            \msg_error:nneeee {tenkz}{kernel-choice}
+              {route} {#1} {straight|orth|arc|<side>~of~<selector>}
+              { \tl_use:N \l__tenkz_model_last_tl }
+          }
+      }
+  }
+\cs_new_protected:Npn \__tenkz_kernel_route_keep:
+  {
+    \__tenkz_kernel_stage_put:ne {route}
+      { \tl_use:N \l__tenkz_kernel_list_item_tl }
+  }
+
+% crossing= is the string's habit: the order it takes at every crossing it
+% makes, stated once instead of once per crossing.  `alternate' flips along
+% the order the string meets them, and `alternate=under' anchors the first.
+\cs_new_protected:Npn \__tenkz_kernel_crossing:n #1
+  {
+    \tl_set:Nn \l__tenkz_kernel_list_item_tl {#1}
+    \tl_trim_spaces:N \l__tenkz_kernel_list_item_tl
+    \str_case:VnF \l__tenkz_kernel_list_item_tl
+      {
+        {over}            { \__tenkz_kernel_crossing_keep: }
+        {under}           { \__tenkz_kernel_crossing_keep: }
+        {alternate}       { \__tenkz_kernel_crossing_keep: }
+        {alternate=over}  { \__tenkz_kernel_crossing_keep: }
+        {alternate=under} { \__tenkz_kernel_crossing_keep: }
+      }
+      {
+        \msg_error:nneeee {tenkz}{kernel-choice}
+          {crossing} {#1} {over|under|alternate|alternate=under}
+          { \tl_use:N \l__tenkz_model_last_tl }
+      }
+  }
+\cs_new_protected:Npn \__tenkz_kernel_crossing_keep:
+  {
+    \__tenkz_kernel_stage_put:ne {crossing}
+      { \tl_use:N \l__tenkz_kernel_list_item_tl }
+  }
+
 \cs_new_protected:Npn \__tenkz_kernel_choice:nnnn #1#2#3#4
   {
     \keys_define:nn {#1}
@@ -681,13 +741,13 @@
 
 \__tenkz_kernel_choice:nnnn { tenkz-kernel-wire } { kind }
   { index, string } { kind }
-\__tenkz_kernel_choice:nnnn { tenkz-kernel-wire } { route }
-  { straight, orth, arc } { route }
 \__tenkz_kernel_value:nnn   { tenkz-kernel-wire } { via } { via }
 \__tenkz_kernel_value:nnn   { tenkz-kernel-wire } { bend } { bend }
 \keys_define:nn { tenkz-kernel-wire }
   {
-    weight .code:n = { \__tenkz_kernel_weight:n {#1} }
+    weight .code:n   = { \__tenkz_kernel_weight:n {#1} } ,
+    route .code:n    = { \__tenkz_kernel_route:n {#1} } ,
+    crossing .code:n = { \__tenkz_kernel_crossing:n {#1} }
   }
 \__tenkz_kernel_value:nnn   { tenkz-kernel-wire } { species } { species }
 \__tenkz_kernel_value:nnn   { tenkz-kernel-wire } { wind } { wind }
@@ -978,6 +1038,19 @@
               \l__tenkz_kernel_scratch_tl
             \quark_if_no_value:NF \l__tenkz_kernel_scratch_tl
               {
+                % An end with no direction is still an index the frame cuts,
+                % and the side it is cut on is the end of the arc its route
+                % travels.
+                \str_if_eq:VnT \l__tenkz_kernel_scratch_tl {route}
+                  {
+                    \__tenkz_kernel_route_of:nNN {##1}
+                      \l__tenkz_kernel_ro_side_tl \l__tenkz_kernel_ro_sel_tl
+                    \tl_set:Ne \l__tenkz_kernel_scratch_tl
+                      {
+                        \__tenkz_kernel_route_end:ee
+                          { \tl_use:N \l__tenkz_kernel_ro_side_tl } {####1}
+                      }
+                  }
                 \seq_put_right:Ne \l__tenkz_kernel_emit_seq
                   {
                     open: \tl_use:N \l__tenkz_kernel_scratch_tl
@@ -1200,10 +1273,19 @@
       }
   }
 
-% \tnwire[keys]{end}{end}: a wire end is an address or `open <dir>`;
-% a closed wire takes no positional ends.
+% \tnwire[keys]{end}{end}: a wire end is an address, `open <dir>`, or a bare
+% `open`; a closed wire takes no positional ends.  A bare open end names no
+% direction and takes its place from the route: it lies where that side's arc
+% ends, one clearance past the outermost wire the route crosses.  Without a
+% route there is nothing to take a place from, and the end is refused.
 \cs_new_protected:Npn \__tenkz_kernel_wire_end:nn #1#2
   {
+    \str_if_eq:nnTF {#2} {open}
+      {
+        \__tenkz_model_complete:nnn { \l__tenkz_model_last_tl } { #1-open }
+          {route}
+      }
+      {
     \regex_extract_once:nnNTF { \A open \s+ (nw|ne|sw|se|n|e|s|w) \Z } {#2}
       \l__tenkz_kernel_match_seq
       {
@@ -1218,6 +1300,7 @@
         \tl_set:NV \l__tenkz_model_last_tl \l__tenkz_kernel_scratch_tl
         \__tenkz_model_complete:nnn { \l__tenkz_model_last_tl } {#1}
           { \tl_use:N \l_tmpa_tl }
+      }
       }
   }
 \cs_generate_variant:Nn \__tenkz_kernel_wire_end:nn { ne }
@@ -2328,6 +2411,7 @@
 \tl_new:N \l__tenkz_kernel_hull_skin_tl
 \tl_new:N \l__tenkz_kernel_hull_turn_tl
 \tl_new:N \l__tenkz_kernel_sel_tl
+\bool_new:N \l__tenkz_kernel_sel_bool
 \msg_new:nnn {tenkz}{kernel-selector-empty}
   { [TKZ-KERNEL-SELECTOR-EMPTY]~the~selection~'#1'~names~no~record }
 \msg_new:nnn {tenkz}{kernel-selector-range}
@@ -2340,7 +2424,25 @@
     \seq_clear:N #2
     \tl_set:Nn \l__tenkz_kernel_sel_tl {#1}
     \tl_trim_spaces:N \l__tenkz_kernel_sel_tl
-    \exp_args:NV \tl_if_head_is_group:nTF \l__tenkz_kernel_sel_tl
+    \str_if_eq:VnTF \l__tenkz_kernel_sel_tl {picture}
+      {
+        % The whole picture is a selection like any other.  This is why the
+        % corridor's own word retires: a wire that travels around everything
+        % selects everything, and needs no second spelling to say so.
+        \__tenkz_model_map_ids:nn {atom} { \seq_put_right:Nn #2 {##1} }
+      }
+      {
+    % A braced list is one group and nothing else.  A range whose ends
+    % arrived through a key value also begins with a group -- the cell
+    % coordinates are braced against the comma that separates keys -- so
+    % leading a group is not enough to tell the two apart.
+    \bool_set_false:N \l__tenkz_kernel_sel_bool
+    \tl_if_single:NT \l__tenkz_kernel_sel_tl
+      {
+        \exp_args:NV \tl_if_head_is_group:nT \l__tenkz_kernel_sel_tl
+          { \bool_set_true:N \l__tenkz_kernel_sel_bool }
+      }
+    \bool_if:NTF \l__tenkz_kernel_sel_bool
       {
         % a braced list: every member is an address in its own right
         \tl_set:Ne \l__tenkz_kernel_sel_tl
@@ -2351,6 +2453,7 @@
       {
         \exp_args:NV \__tenkz_kernel_select_addr:nN
           \l__tenkz_kernel_sel_tl #2
+      }
       }
     \seq_if_empty:NT #2
       { \msg_error:nnn {tenkz}{kernel-selector-empty} {#1} }
@@ -2382,11 +2485,9 @@
         \str_if_eq:eeT
           { \__tenkz_kernel_node_item:Nn \l_tmpb_tl {kind} } {cell}
           {
-            \prop_get:NeN \l__tenkz_kernel_cell_prop
-              {
-                \__tenkz_kernel_node_item:Nn \l_tmpb_tl {row}
-                - \__tenkz_kernel_node_item:Nn \l_tmpb_tl {col}
-              }
+            \exp_args:Nee \__tenkz_kernel_select_cell:nnN
+              { \__tenkz_kernel_node_item:Nn \l_tmpb_tl {row} }
+              { \__tenkz_kernel_node_item:Nn \l_tmpb_tl {col} }
               \l_tmpb_tl
             \quark_if_no_value:NF \l_tmpb_tl
               { \seq_put_right:NV #2 \l_tmpb_tl }
@@ -2412,12 +2513,39 @@
           { \int_min:nn { \l__tenkz_kernel_r_col_tl } { \l__tenkz_kernel_r_c_tl } }
           { \int_max:nn { \l__tenkz_kernel_r_col_tl } { \l__tenkz_kernel_r_c_tl } }
           {
-            \prop_get:NnN \l__tenkz_kernel_cell_prop {##1-####1} \l_tmpb_tl
+            \__tenkz_kernel_select_cell:nnN {##1} {####1} \l_tmpb_tl
             \quark_if_no_value:NF \l_tmpb_tl
               { \seq_put_right:NV #2 \l_tmpb_tl }
           }
       }
   }
+% The atom standing on a cell, whichever way it got there.  The occupancy
+% table records the cells an author claimed, and a spanning glyph claims
+% several; a frame-populated site claims none, and is no less a member of a
+% selection for that, so the records answer where the table is silent.
+\cs_new_protected:Npn \__tenkz_kernel_select_cell:nnN #1#2#3
+  {
+    \prop_get:NeN \l__tenkz_kernel_cell_prop {#1-#2} #3
+    \quark_if_no_value:NT #3
+      {
+        \__tenkz_model_map_ids:nn {atom}
+          {
+            \__tenkz_kernel_r_atom_rc:nNNN {##1}
+              \l__tenkz_kernel_sel_row_tl \l__tenkz_kernel_sel_col_tl
+              \l__tenkz_kernel_sel_at_bool
+            \bool_if:NT \l__tenkz_kernel_sel_at_bool
+              {
+                \bool_lazy_and:nnT
+                  { \int_compare_p:nNn { \l__tenkz_kernel_sel_row_tl } = {#1} }
+                  { \int_compare_p:nNn { \l__tenkz_kernel_sel_col_tl } = {#2} }
+                  { \tl_set:Nn #3 {##1} }
+              }
+          }
+      }
+  }
+\tl_new:N \l__tenkz_kernel_sel_row_tl
+\tl_new:N \l__tenkz_kernel_sel_col_tl
+\bool_new:N \l__tenkz_kernel_sel_at_bool
 \cs_new_protected:Npn \__tenkz_kernel_select_corner:nNN #1#2#3
   {
     \str_if_eq:eeTF { \__tenkz_kernel_node_item:nn {#1} {kind} } {cell}
@@ -2601,6 +2729,361 @@
   {
     \__tenkz_geom_support_max:nnN { \cs_to_str:N #1 } {#2} #4
     \tl_set:Ne #4 { \fp_eval:n { #4 + (#3) } }
+  }
+
+% ---------- the route that rides the hull -------------------------------------
+% A wire whose route is `<side> of <selector>' travels at one standing offset
+% from that selection's offset hull, on the named side, entering and leaving
+% where that side's arc ends.  Two things follow from the claim and are
+% therefore computed, never chosen: the crossing set, which is the wires that
+% leave the selection through a face on that side, each met once in hull
+% order; and the reach of every leg it crosses, which is the lane it must
+% reach plus one clearance.  An empty crossing set is legal and says the
+% string passes the selection clear.
+%
+% The first half of this section answers those questions from the model
+% alone, before any measurement, so a derived crossing is written into the
+% wire's own crossing field in the spelling a declaration uses and an audit
+% cannot tell the two apart.  The second half is the ink.
+%
+% The route asks its questions inside walks over wires, atoms and legs, so
+% like the hull builder it touches none of the shared scratch: these are its
+% alone.
+\tl_new:N \l__tenkz_kernel_ro_tl
+\tl_new:N \l__tenkz_kernel_ro_b_tl
+\tl_new:N \l__tenkz_kernel_ro_side_tl
+\tl_new:N \l__tenkz_kernel_ro_sel_tl
+\tl_new:N \l__tenkz_kernel_ro_row_tl
+\tl_new:N \l__tenkz_kernel_ro_col_tl
+\tl_new:N \l__tenkz_kernel_ro_sid_tl
+\tl_new:N \l__tenkz_kernel_ro_habit_tl
+\tl_new:N \l__tenkz_kernel_ro_cross_tl
+\tl_new:N \l__tenkz_kernel_ro_lane_tl
+\tl_new:N \l__tenkz_kernel_ro_scale_tl
+\tl_new:N \l__tenkz_kernel_ro_reach_tl
+\seq_new:N \l__tenkz_kernel_ro_seq
+\seq_new:N \l__tenkz_kernel_ro_leg_seq
+\seq_new:N \l__tenkz_kernel_ro_sort_seq
+\seq_new:N \l__tenkz_kernel_ro_have_seq
+\seq_new:N \l__tenkz_kernel_ro_mem_seq
+\seq_new:N \l__tenkz_kernel_ro_obst_seq
+\int_new:N \l__tenkz_kernel_ro_int
+\bool_new:N \l__tenkz_kernel_ro_bool
+\fp_new:N \l__tenkz_kernel_ro_x_fp
+\fp_new:N \l__tenkz_kernel_ro_xb_fp
+\fp_new:N \l__tenkz_kernel_ro_y_fp
+\fp_new:N \l__tenkz_kernel_ro_yb_fp
+\prop_new:N \l__tenkz_kernel_ro_lane_prop    % wire id -> lane coordinate
+\prop_new:N \l__tenkz_kernel_ro_box_prop     % wire id -> {x}{xb}{y}{yb}
+\prop_new:N \l__tenkz_kernel_ro_legs_prop    % leg path id -> outermost lane
+\prop_new:N \l__tenkz_kernel_ro_taken_prop   % route text -> lanes already out
+
+\msg_new:nnn {tenkz}{kernel-route-noroute}
+  { [TKZ-ROUTE-NO-ROUTE]~wire~'#1'~has~an~open~end~with~no~direction~and~no~
+    route~to~take~its~place~from }
+
+% route=<side> of <selector> -> the side in #2, the selector in #3; #2 comes
+% back empty when the wire's route names a path shape instead of a hull.
+\cs_new_protected:Npn \__tenkz_kernel_route_of:nNN #1#2#3
+  {
+    \tl_clear:N #2
+    \tl_clear:N #3
+    \__tenkz_model_get:nnN {#1} {route} \l__tenkz_kernel_ro_tl
+    \quark_if_no_value:NF \l__tenkz_kernel_ro_tl
+      {
+        \exp_args:NnV \regex_extract_once:nnNT
+          { \A \s* (all|n|e|s|w) \s+ of \s+ (.+?) \s* \Z }
+          \l__tenkz_kernel_ro_tl \l__tenkz_kernel_ro_seq
+          {
+            \tl_set:Ne #2 { \seq_item:Nn \l__tenkz_kernel_ro_seq {2} }
+            \tl_set:Ne #3 { \seq_item:Nn \l__tenkz_kernel_ro_seq {3} }
+          }
+      }
+  }
+
+% Where the arc of side #2 begins (#3 = from) and ends (#3 = to).  A north or
+% south arc is travelled west to east and an east or west arc north to south,
+% so a wire's two ends are never in doubt and an author who wants the other
+% order swaps them.
+\cs_new:Npn \__tenkz_kernel_route_end:nn #1#2
+  {
+    \str_case:nn {#1}
+      {
+        {n}   { \str_if_eq:nnTF {#2} {from} {w} {e} }
+        {s}   { \str_if_eq:nnTF {#2} {from} {w} {e} }
+        {all} { \str_if_eq:nnTF {#2} {from} {w} {e} }
+        {e}   { \str_if_eq:nnTF {#2} {from} {n} {s} }
+        {w}   { \str_if_eq:nnTF {#2} {from} {n} {s} }
+      }
+  }
+\cs_generate_variant:Nn \__tenkz_kernel_route_end:nn { ee }
+
+% The crossing set of wire #1, in hull order, as items {face}{row}{col}.
+% Only a north or south face carries a physical leg out of a cell, so a route
+% on an east or west side meets none, and that empty set is the true answer
+% to a claim that the string passes those sites clear.
+\cs_new_protected:Npn \__tenkz_kernel_route_legs:nN #1#2
+  {
+    \seq_clear:N #2
+    \__tenkz_kernel_route_of:nNN {#1}
+      \l__tenkz_kernel_ro_side_tl \l__tenkz_kernel_ro_sel_tl
+    \tl_if_empty:NF \l__tenkz_kernel_ro_side_tl
+      {
+        \seq_clear:N \l__tenkz_kernel_ro_sort_seq
+        \__tenkz_kernel_select:VN \l__tenkz_kernel_ro_sel_tl
+          \l__tenkz_kernel_ro_mem_seq
+        \str_case:Vn \l__tenkz_kernel_ro_side_tl
+          {
+            {n}   { \__tenkz_kernel_route_face:nn {n} {up} }
+            {s}   { \__tenkz_kernel_route_face:nn {s} {down} }
+            {all}
+              {
+                \__tenkz_kernel_route_face:nn {n} {up}
+                \__tenkz_kernel_route_face:nn {s} {down}
+              }
+          }
+        % hull order: the order the string meets them travelling the arc,
+        % which for a north or south side is the frame's own column order
+        \seq_sort:Nn \l__tenkz_kernel_ro_sort_seq
+          {
+            \int_compare:nNnTF
+              { \tl_item:nn {##1} {1} * 1000 + \tl_item:nn {##1} {2} }
+              > { \tl_item:nn {##2} {1} * 1000 + \tl_item:nn {##2} {2} }
+              { \sort_return_swapped: } { \sort_return_same: }
+          }
+        \seq_map_inline:Nn \l__tenkz_kernel_ro_sort_seq
+          {
+            \seq_put_right:Ne #2
+              {
+                { \tl_item:nn {##1} {3} }
+                { \tl_item:nn {##1} {2} }
+                { \tl_item:nn {##1} {1} }
+              }
+          }
+      }
+  }
+% every selected site whose physical policy sends a leg out of face #1, which
+% the policy word #2 or `updown` asks for
+\cs_new_protected:Npn \__tenkz_kernel_route_face:nn #1#2
+  {
+    \seq_map_inline:Nn \l__tenkz_kernel_ro_mem_seq
+      {
+        \__tenkz_model_get:nnN {##1} {physical} \l__tenkz_kernel_ro_tl
+        \quark_if_no_value:NF \l__tenkz_kernel_ro_tl
+          {
+            \bool_lazy_or:nnT
+              { \str_if_eq_p:Vn \l__tenkz_kernel_ro_tl {updown} }
+              { \str_if_eq_p:Vn \l__tenkz_kernel_ro_tl {#2} }
+              { \__tenkz_kernel_route_face_add:nn {##1} {#1} }
+          }
+      }
+  }
+\cs_new_protected:Npn \__tenkz_kernel_route_face_add:nn #1#2
+  {
+    % an ellipsis occupies its cell and grows no leg
+    \__tenkz_model_get:nnN {#1} {skin} \l__tenkz_kernel_ro_b_tl
+    \str_if_eq:VnF \l__tenkz_kernel_ro_b_tl {dots}
+      {
+        \__tenkz_kernel_r_atom_rc:nNNN {#1}
+          \l__tenkz_kernel_ro_row_tl \l__tenkz_kernel_ro_col_tl
+          \l__tenkz_kernel_ro_bool
+        \bool_if:NT \l__tenkz_kernel_ro_bool
+          {
+            \seq_put_right:Ne \l__tenkz_kernel_ro_sort_seq
+              {
+                { \tl_use:N \l__tenkz_kernel_ro_col_tl }
+                { \tl_use:N \l__tenkz_kernel_ro_row_tl }
+                {#2}
+              }
+          }
+      }
+  }
+
+% The habit resolves the crossing set.  Every crossing the route makes is
+% written into the wire's own crossing field, in the spelling a declaration
+% uses, unless the author already declared that one -- the exception stands,
+% and it still counts a step of an alternation, because the order is the
+% order the string meets them and not the order it was told about them.  With
+% no habit and no exception the crossing stays unresolved and the crossing
+% police refuses the picture, which is the guarantee this key was never
+% allowed to weaken.
+\cs_new_protected:Npn \__tenkz_kernel_route_crossings:
+  {
+    \__tenkz_model_map_ids:nn {wire}
+      {
+        \__tenkz_kernel_route_open_ends:n {##1}
+        \__tenkz_kernel_route_legs:nN {##1} \l__tenkz_kernel_ro_leg_seq
+        \seq_if_empty:NF \l__tenkz_kernel_ro_leg_seq
+          { \__tenkz_kernel_route_habit:n {##1} }
+      }
+  }
+% an end with no direction and no route has nowhere to stand
+\cs_new_protected:Npn \__tenkz_kernel_route_open_ends:n #1
+  {
+    \clist_map_inline:nn {from, to}
+      {
+        \__tenkz_model_get:nnN {#1} {##1-open} \l__tenkz_kernel_ro_b_tl
+        \quark_if_no_value:NF \l__tenkz_kernel_ro_b_tl
+          {
+            \str_if_eq:VnT \l__tenkz_kernel_ro_b_tl {route}
+              {
+                \__tenkz_kernel_route_of:nNN {#1}
+                  \l__tenkz_kernel_ro_side_tl \l__tenkz_kernel_ro_sel_tl
+                \tl_if_empty:NT \l__tenkz_kernel_ro_side_tl
+                  { \msg_error:nnn {tenkz}{kernel-route-noroute} {#1} }
+              }
+          }
+      }
+  }
+\cs_new_protected:Npn \__tenkz_kernel_route_habit:n #1
+  {
+    \__tenkz_model_get:nnN {#1} {crossing} \l__tenkz_kernel_ro_habit_tl
+    \quark_if_no_value:NF \l__tenkz_kernel_ro_habit_tl
+      {
+        \__tenkz_kernel_route_declared:n {#1}
+        \__tenkz_kernel_r_sid:nN {#1} \l__tenkz_kernel_ro_sid_tl
+        \__tenkz_model_get:nnN {#1} {cross} \l__tenkz_kernel_ro_cross_tl
+        \quark_if_no_value:NT \l__tenkz_kernel_ro_cross_tl
+          { \tl_clear:N \l__tenkz_kernel_ro_cross_tl }
+        \int_zero:N \l__tenkz_kernel_ro_int
+        \seq_map_inline:Nn \l__tenkz_kernel_ro_leg_seq
+          { \__tenkz_kernel_route_habit_one:nn {##1} {#1} }
+        \__tenkz_model_complete:nnn {#1} {cross}
+          { \exp_not:V \l__tenkz_kernel_ro_cross_tl }
+      }
+  }
+\cs_new_protected:Npn \__tenkz_kernel_route_habit_one:nn #1#2
+  {
+    \int_incr:N \l__tenkz_kernel_ro_int
+    \tl_set:Ne \l__tenkz_kernel_ro_b_tl
+      {
+        leg - \tl_item:nn {#1} {1} - \tl_item:nn {#1} {2}
+        - \tl_item:nn {#1} {3}
+      }
+    \seq_if_in:NVF \l__tenkz_kernel_ro_have_seq \l__tenkz_kernel_ro_b_tl
+      {
+        \__tenkz_kernel_route_order:NN
+          \l__tenkz_kernel_ro_habit_tl \l__tenkz_kernel_ro_tl
+        \tl_if_empty:NF \l__tenkz_kernel_ro_cross_tl
+          { \tl_put_right:Nn \l__tenkz_kernel_ro_cross_tl {,} }
+        \tl_put_right:Ne \l__tenkz_kernel_ro_cross_tl
+          {
+            \tl_use:N \l__tenkz_kernel_ro_tl \c_space_tl at ~ crossing ~ of ~
+            \tl_use:N \l__tenkz_kernel_ro_sid_tl \c_space_tl and ~
+            leg ~ \tl_item:nn {#1} {1} ~ of ~
+            { ( \tl_item:nn {#1} {2} , \tl_item:nn {#1} {3} ) }
+          }
+      }
+  }
+% The habit's word at the crossing now being counted.  An alternation flips
+% along the string's own order and its anchor names the first.
+\cs_new_protected:Npn \__tenkz_kernel_route_order:NN #1#2
+  {
+    \str_case:VnF #1
+      {
+        {over}  { \tl_set:Nn #2 {over} }
+        {under} { \tl_set:Nn #2 {under} }
+      }
+      {
+        % an alternation's anchor names its first crossing, and every
+        % crossing after it takes the other word
+        \str_if_eq:VnTF #1 {alternate=under}
+          { \tl_set:Nn #2 {under} }
+          { \tl_set:Nn #2 {over} }
+        \int_if_even:nT { \l__tenkz_kernel_ro_int }
+          {
+            \str_if_eq:VnTF #2 {over}
+              { \tl_set:Nn #2 {under} }
+              { \tl_set:Nn #2 {over} }
+          }
+      }
+  }
+% the leg path ids the wire's own crossing declarations already name
+\cs_new_protected:Npn \__tenkz_kernel_route_declared:n #1
+  {
+    \seq_clear:N \l__tenkz_kernel_ro_have_seq
+    \__tenkz_model_get:nnN {#1} {cross} \l__tenkz_kernel_ro_tl
+    \quark_if_no_value:NF \l__tenkz_kernel_ro_tl
+      {
+        \exp_args:NnV \regex_extract_all:nnN
+          { leg \s+ ([nesw]) \s+ of \s+ \{? \s* \( \s* (\d+) \s* ,
+            \s* (\d+) \s* \) \s* \}? }
+          \l__tenkz_kernel_ro_tl \l__tenkz_kernel_ro_seq
+        \int_step_inline:nnnn {2} {4} { \seq_count:N \l__tenkz_kernel_ro_seq }
+          {
+            \seq_put_right:Ne \l__tenkz_kernel_ro_have_seq
+              {
+                leg - \seq_item:Nn \l__tenkz_kernel_ro_seq {##1}
+                - \seq_item:Nn \l__tenkz_kernel_ro_seq { ##1 + 1 }
+                - \seq_item:Nn \l__tenkz_kernel_ro_seq { ##1 + 2 }
+              }
+          }
+      }
+  }
+
+% ---------- the route as ink --------------------------------------------------
+% The lane.  A curve over a selection stands one clearance outside that
+% selection's offset hull, and curves over the same selection step outward in
+% declaration order, so two routes on one side never overlap and the author
+% never counts them.
+\cs_new_protected:Npn \__tenkz_kernel_r_route_measure:n #1
+  {
+    \__tenkz_kernel_route_of:nNN {#1}
+      \l__tenkz_kernel_ro_side_tl \l__tenkz_kernel_ro_sel_tl
+    \tl_if_empty:NF \l__tenkz_kernel_ro_side_tl
+      {
+        \__tenkz_kernel_select:VN \l__tenkz_kernel_ro_sel_tl
+          \l__tenkz_kernel_ro_mem_seq
+        \__tenkz_kernel_hull_obstacles:NN
+          \l__tenkz_kernel_ro_mem_seq \l__tenkz_kernel_ro_obst_seq
+        \__tenkz_kernel_hull_scale:NN
+          \l__tenkz_kernel_ro_mem_seq \l__tenkz_kernel_ro_scale_tl
+        \prop_get:NVN \l__tenkz_kernel_ro_taken_prop
+          \l__tenkz_kernel_ro_sel_tl \l__tenkz_kernel_ro_lane_tl
+        \quark_if_no_value:NT \l__tenkz_kernel_ro_lane_tl
+          { \tl_set:Nn \l__tenkz_kernel_ro_lane_tl {0} }
+        \prop_put:Nee \l__tenkz_kernel_ro_taken_prop
+          { \tl_use:N \l__tenkz_kernel_ro_sel_tl }
+          { \int_eval:n { \l__tenkz_kernel_ro_lane_tl + 1 } }
+        \__tenkz_kernel_r_route_edge:nnN   {0} { } \l__tenkz_kernel_ro_xb_fp
+        \__tenkz_kernel_r_route_edge:nnN  {90} { } \l__tenkz_kernel_ro_yb_fp
+        \__tenkz_kernel_r_route_edge:nnN {180} {-} \l__tenkz_kernel_ro_x_fp
+        \__tenkz_kernel_r_route_edge:nnN {270} {-} \l__tenkz_kernel_ro_y_fp
+        \prop_put:Nne \l__tenkz_kernel_ro_box_prop {#1}
+          {
+            { \fp_eval:n { \l__tenkz_kernel_ro_x_fp  } }
+            { \fp_eval:n { \l__tenkz_kernel_ro_xb_fp } }
+            { \fp_eval:n { \l__tenkz_kernel_ro_y_fp  } }
+            { \fp_eval:n { \l__tenkz_kernel_ro_yb_fp } }
+          }
+        \prop_put:Nne \l__tenkz_kernel_ro_lane_prop {#1}
+          {
+            \fp_eval:n
+              {
+                \str_case:Vn \l__tenkz_kernel_ro_side_tl
+                  {
+                    {n}   { \l__tenkz_kernel_ro_yb_fp }
+                    {s}   { \l__tenkz_kernel_ro_y_fp  }
+                    {e}   { \l__tenkz_kernel_ro_xb_fp }
+                    {w}   { \l__tenkz_kernel_ro_x_fp  }
+                    {all} { \l__tenkz_kernel_ro_yb_fp }
+                  }
+              }
+          }
+      }
+  }
+% one edge of the offset hull, pushed out by the lanes already standing there
+\cs_new_protected:Npn \__tenkz_kernel_r_route_edge:nnN #1#2#3
+  {
+    % one clearance is the hull's own, the next is this route's, and one more
+    % for every route already standing over the same selection
+    \__tenkz_kernel_hull_reach:NnnN \l__tenkz_kernel_ro_obst_seq {#1}
+      {
+        ( \l__tenkz_kernel_ro_lane_tl + 2 )
+        * \__tenkz_metric_ratio:n {daylight} * \l__tenkz_kernel_ro_scale_tl
+      }
+      \l__tenkz_kernel_ro_reach_tl
+    \fp_set:Nn #3 { #2 \l__tenkz_kernel_ro_reach_tl }
   }
 
 % `crossing of a and b` is where the two strings actually meet, so the
@@ -3349,6 +3832,26 @@
                   }
               }
           }
+        % A leg crossed by a route is as long as the outermost route crossing
+        % it, plus one clearance, so a crossing the author claimed by naming
+        % the side always exists and the crossing police can no longer fall
+        % silent where a leg stopped short of the string.
+        \prop_get:NeN \l__tenkz_kernel_ro_legs_prop
+          {
+            leg - #2 - \tl_use:N \l__tenkz_kernel_r_row_tl
+            - \tl_use:N \l__tenkz_kernel_r_col_tl
+          }
+          \l__tenkz_kernel_leg_reach_tl
+        \quark_if_no_value:NF \l__tenkz_kernel_leg_reach_tl
+          {
+            \fp_set:Nn \l__tenkz_kernel_r_reach_fp
+              {
+                max( \l__tenkz_kernel_r_reach_fp ,
+                     abs( \l__tenkz_kernel_leg_reach_tl
+                          - \l__tenkz_kernel_r_y_fp )
+                     + \__tenkz_metric_ratio:n {legcrossclear} )
+              }
+          }
         % a declared crossing lengthens the leg past the crossing string
         \prop_get:NeN \l__tenkz_kernel_r_legref_prop
           {
@@ -3510,6 +4013,56 @@
               }
           }
       }
+    % A route's own crossing set joins the same ledger.  Its legs become
+    % engine paths whether or not the habit resolved their order, because a
+    % crossing the picture does not resolve must still be one the crossing
+    % police can see and refuse.
+    \prop_clear:N \l__tenkz_kernel_ro_lane_prop
+    \prop_clear:N \l__tenkz_kernel_ro_box_prop
+    \prop_clear:N \l__tenkz_kernel_ro_legs_prop
+    \prop_clear:N \l__tenkz_kernel_ro_taken_prop
+    \__tenkz_model_map_ids:nn {wire}
+      {
+        \__tenkz_kernel_r_route_measure:n {##1}
+        \__tenkz_kernel_route_legs:nN {##1} \l__tenkz_kernel_ro_leg_seq
+        \prop_get:NnN \l__tenkz_kernel_ro_lane_prop {##1}
+          \l__tenkz_kernel_ro_lane_tl
+        \quark_if_no_value:NF \l__tenkz_kernel_ro_lane_tl
+          {
+            \seq_map_inline:Nn \l__tenkz_kernel_ro_leg_seq
+              { \__tenkz_kernel_r_route_leg:nn {####1} {##1} }
+          }
+      }
+  }
+% one leg of a route's crossing set: it is an engine path, and it reaches at
+% least as far as the outermost lane that crosses it
+\cs_new_protected:Npn \__tenkz_kernel_r_route_leg:nn #1#2
+  {
+    \tl_set:Ne \l__tenkz_kernel_ro_b_tl
+      {
+        leg - \tl_item:nn {#1} {1} - \tl_item:nn {#1} {2}
+        - \tl_item:nn {#1} {3}
+      }
+    \prop_put:NVn \l__tenkz_kernel_r_legref_prop
+      \l__tenkz_kernel_ro_b_tl {#2}
+    \tl_set_eq:NN \l__tenkz_kernel_ro_row_tl \l__tenkz_kernel_ro_lane_tl
+    \prop_get:NVN \l__tenkz_kernel_ro_legs_prop
+      \l__tenkz_kernel_ro_b_tl \l__tenkz_kernel_ro_reach_tl
+    \quark_if_no_value:NF \l__tenkz_kernel_ro_reach_tl
+      {
+        \tl_set:Ne \l__tenkz_kernel_ro_row_tl
+          {
+            \fp_eval:n
+              {
+                abs( \l__tenkz_kernel_ro_reach_tl )
+                  > abs( \l__tenkz_kernel_ro_lane_tl )
+                  ? \l__tenkz_kernel_ro_reach_tl
+                  : \l__tenkz_kernel_ro_lane_tl
+              }
+          }
+      }
+    \prop_put:NVV \l__tenkz_kernel_ro_legs_prop
+      \l__tenkz_kernel_ro_b_tl \l__tenkz_kernel_ro_row_tl
   }
 
 % the engine id of string record #1: its name, else the record id
@@ -3628,6 +4181,226 @@
   }
 
 \cs_new_protected:Npn \__tenkz_kernel_r_string_declare:n #1
+  {
+    \prop_if_in:NnTF \l__tenkz_kernel_ro_lane_prop {#1}
+      { \__tenkz_kernel_r_route_string:n {#1} }
+      { \__tenkz_kernel_r_string_free:n {#1} }
+  }
+
+% The arc of the hull on the named side, at the lane the route stands in.
+% A compass word names the arc; `all' leaves it unnamed, and the two ends
+% pick the run of turns that joins them, so a wire routed around everything
+% travels the way round its own ends ask for.  An end that named an address
+% starts or finishes there; an end that named a direction runs on to the
+% picture margin, as an end with a direction always has; an end that named
+% neither is the arc's own end and asks for nothing.
+\cs_new_protected:Npn \__tenkz_kernel_r_route_string:n #1
+  {
+    \__tenkz_kernel_r_sid:nN {#1} \l__tenkz_kernel_r_sid_tl
+    \__tenkz_kernel_route_of:nNN {#1}
+      \l__tenkz_kernel_ro_side_tl \l__tenkz_kernel_ro_sel_tl
+    \prop_get:NnN \l__tenkz_kernel_ro_lane_prop {#1}
+      \l__tenkz_kernel_ro_lane_tl
+    \prop_get:NnN \l__tenkz_kernel_ro_box_prop {#1} \l__tenkz_kernel_ro_b_tl
+    \exp_last_unbraced:NV \__tenkz_kernel_r_route_box:nnnn
+      \l__tenkz_kernel_ro_b_tl
+    \tl_clear:N \l__tenkz_kernel_r_from_tl
+    \tl_clear:N \l__tenkz_kernel_r_to_tl
+    \clist_map_inline:nn {from, to}
+      { \__tenkz_kernel_r_route_end_at:nn {#1} {##1} }
+    \str_case:Vn \l__tenkz_kernel_ro_side_tl
+      {
+        {n}   { \__tenkz_kernel_r_route_across:nn {x} {lane} }
+        {s}   { \__tenkz_kernel_r_route_across:nn {x} {lane} }
+        {e}   { \__tenkz_kernel_r_route_across:nn {lane} {y} }
+        {w}   { \__tenkz_kernel_r_route_across:nn {lane} {y} }
+        {all} { \__tenkz_kernel_r_route_around:n {#1} }
+      }
+    \clist_map_inline:nn {from, to}
+      { \__tenkz_kernel_r_route_tip:nn {#1} {##1} }
+    \tl_set:Ne \l__tenkz_kernel_r_pts_tl
+      {
+        \tl_use:N \l__tenkz_kernel_r_from_tl
+        \tl_use:N \l__tenkz_kernel_r_pts_tl
+        \tl_use:N \l__tenkz_kernel_r_to_tl
+      }
+    \prop_if_in:NeTF \l__tenkz_model_record_prop { #1 / closed }
+      {
+        \exp_args:NVV \__tenkz_string_declare_closed:nn
+          \l__tenkz_kernel_r_sid_tl \l__tenkz_kernel_r_pts_tl
+      }
+      {
+        \exp_args:NVV \__tenkz_string_declare_open:nn
+          \l__tenkz_kernel_r_sid_tl \l__tenkz_kernel_r_pts_tl
+      }
+  }
+% the measured hull box back into the four route registers
+\cs_new_protected:Npn \__tenkz_kernel_r_route_box:nnnn #1#2#3#4
+  {
+    \fp_set:Nn \l__tenkz_kernel_ro_x_fp  {#1}
+    \fp_set:Nn \l__tenkz_kernel_ro_xb_fp {#2}
+    \fp_set:Nn \l__tenkz_kernel_ro_y_fp  {#3}
+    \fp_set:Nn \l__tenkz_kernel_ro_yb_fp {#4}
+  }
+% a straight arc from one end of the side to the other: #1 and #2 name which
+% coordinate runs and which stands
+\cs_new_protected:Npn \__tenkz_kernel_r_route_across:nn #1#2
+  {
+    \tl_set:Ne \l__tenkz_kernel_r_pts_tl
+      {
+        \__tenkz_kernel_r_ppt:nn
+          {
+            \str_if_eq:nnTF {#1} {lane}
+              { \l__tenkz_kernel_ro_lane_tl } { \l__tenkz_kernel_ro_x_fp }
+          }
+          {
+            \str_if_eq:nnTF {#2} {lane}
+              { \l__tenkz_kernel_ro_lane_tl } { \l__tenkz_kernel_ro_yb_fp }
+          }
+        \__tenkz_kernel_r_ppt:nn
+          {
+            \str_if_eq:nnTF {#1} {lane}
+              { \l__tenkz_kernel_ro_lane_tl } { \l__tenkz_kernel_ro_xb_fp }
+          }
+          {
+            \str_if_eq:nnTF {#2} {lane}
+              { \l__tenkz_kernel_ro_lane_tl } { \l__tenkz_kernel_ro_y_fp }
+          }
+      }
+  }
+
+% The whole hull.  Its turns are numbered anticlockwise from the northeast,
+% and the route takes the run from the turn nearest where it starts to the
+% turn nearest where it stops.  A closed wire takes every turn, which is the
+% ring; an open wire with no address at either end takes them all too, and
+% then its ends are the run's ends.
+\cs_new_protected:Npn \__tenkz_kernel_r_route_around:n #1
+  {
+    \__tenkz_kernel_r_route_turn_at:NN
+      \l__tenkz_kernel_r_from_tl \l__tenkz_kernel_ro_row_tl
+    \__tenkz_kernel_r_route_turn_at:NN
+      \l__tenkz_kernel_r_to_tl \l__tenkz_kernel_ro_col_tl
+    \prop_if_in:NeT \l__tenkz_model_record_prop { #1 / closed }
+      {
+        \tl_set:Nn \l__tenkz_kernel_ro_row_tl {0}
+        \tl_set:Nn \l__tenkz_kernel_ro_col_tl {0}
+      }
+    \int_compare:nNnT { \l__tenkz_kernel_ro_row_tl } = {0}
+      { \tl_set:Nn \l__tenkz_kernel_ro_row_tl {1} }
+    \int_compare:nNnT { \l__tenkz_kernel_ro_col_tl } = {0}
+      { \tl_set:Nn \l__tenkz_kernel_ro_col_tl {4} }
+    \tl_clear:N \l__tenkz_kernel_r_pts_tl
+    \int_set:Nn \l__tenkz_kernel_ro_int
+      {
+        \int_mod:nn
+          { \l__tenkz_kernel_ro_col_tl - \l__tenkz_kernel_ro_row_tl + 4 } {4}
+        + 1
+      }
+    \int_step_inline:nn { \l__tenkz_kernel_ro_int }
+      {
+        \__tenkz_kernel_r_route_turn:n
+          {
+            \int_mod:nn { \l__tenkz_kernel_ro_row_tl + ##1 - 2 } {4} + 1
+          }
+      }
+  }
+% turn #1 of the hull, counted anticlockwise from the northeast
+\cs_new_protected:Npn \__tenkz_kernel_r_route_turn:n #1
+  {
+    \tl_put_right:Ne \l__tenkz_kernel_r_pts_tl
+      {
+        \__tenkz_kernel_r_ppt:nn
+          {
+            \int_compare:nNnTF {#1} < {2}
+              { \l__tenkz_kernel_ro_xb_fp }
+              {
+                \int_compare:nNnTF {#1} < {4}
+                  { \l__tenkz_kernel_ro_x_fp }
+                  { \l__tenkz_kernel_ro_xb_fp }
+              }
+          }
+          {
+            \int_compare:nNnTF {#1} < {3}
+              { \l__tenkz_kernel_ro_yb_fp }
+              { \l__tenkz_kernel_ro_y_fp }
+          }
+      }
+  }
+% which turn a point stands nearest, or 0 when there is no such point
+\cs_new_protected:Npn \__tenkz_kernel_r_route_turn_at:NN #1#2
+  {
+    \tl_if_empty:NTF #1
+      { \tl_set:Nn #2 {0} }
+      {
+        \exp_args:Ne \__tenkz_kernel_r_point_fp:n { \tl_item:Nn #1 {1} }
+        \tl_set:Ne #2
+          {
+            \fp_eval:n
+              {
+                \l__tenkz_kernel_r_yc_fp
+                  >= ( \l__tenkz_kernel_ro_y_fp
+                       + \l__tenkz_kernel_ro_yb_fp ) / 2
+                  ? ( \l__tenkz_kernel_r_xc_fp
+                        >= ( \l__tenkz_kernel_ro_x_fp
+                             + \l__tenkz_kernel_ro_xb_fp ) / 2 ? 1 : 2 )
+                  : ( \l__tenkz_kernel_r_xc_fp
+                        >= ( \l__tenkz_kernel_ro_x_fp
+                             + \l__tenkz_kernel_ro_xb_fp ) / 2 ? 4 : 3 )
+              }
+          }
+      }
+  }
+
+% an end that named an address: the route starts or finishes there
+\cs_new_protected:Npn \__tenkz_kernel_r_route_end_at:nn #1#2
+  {
+    \__tenkz_model_get:nnN {#1} {#2} \l__tenkz_kernel_r_end_tl
+    \quark_if_no_value:NF \l__tenkz_kernel_r_end_tl
+      {
+        \__tenkz_kernel_r_node:V \l__tenkz_kernel_r_end_tl
+        \__tenkz_kernel_r_xy:nNN { \tl_use:N \l__tenkz_kernel_r_end_tl }
+          \l__tenkz_kernel_r_xc_fp \l__tenkz_kernel_r_yc_fp
+        \tl_set:Ne \l__tenkz_kernel_ro_tl
+          {
+            \__tenkz_kernel_r_ppt:nn
+              { \l__tenkz_kernel_r_xc_fp } { \l__tenkz_kernel_r_yc_fp }
+          }
+        \__tenkz_kernel_r_route_end_put:nV {#2} \l__tenkz_kernel_ro_tl
+      }
+  }
+% an end that named a direction: it runs on from the arc to the margin
+\cs_new_protected:Npn \__tenkz_kernel_r_route_tip:nn #1#2
+  {
+    \__tenkz_model_get:nnN {#1} {#2} \l__tenkz_kernel_r_end_tl
+    \quark_if_no_value:NT \l__tenkz_kernel_r_end_tl
+      {
+        \__tenkz_model_get:nnN {#1} {#2-open} \l__tenkz_kernel_r_end_tl
+        \bool_lazy_and:nnT
+          { ! \quark_if_no_value_p:N \l__tenkz_kernel_r_end_tl }
+          { ! \str_if_eq_p:Vn \l__tenkz_kernel_r_end_tl {route} }
+          {
+            % the margin projection reads the arc end it leaves from
+            \exp_args:Ne \__tenkz_kernel_r_point_fp:n
+              {
+                \str_if_eq:nnTF {#2} {from}
+                  { \tl_item:Nn \l__tenkz_kernel_r_pts_tl {1} }
+                  { \tl_item:Nn \l__tenkz_kernel_r_pts_tl {-1} }
+              }
+            \exp_args:NV \__tenkz_kernel_r_open_tip:nN
+              \l__tenkz_kernel_r_end_tl \l__tenkz_kernel_ro_tl
+            \__tenkz_kernel_r_route_end_put:nV {#2} \l__tenkz_kernel_ro_tl
+          }
+      }
+  }
+\cs_new_protected:Npn \__tenkz_kernel_r_route_end_put:nn #1#2
+  {
+    \str_if_eq:nnTF {#1} {from}
+      { \tl_set:Nn \l__tenkz_kernel_r_from_tl {#2} }
+      { \tl_set:Nn \l__tenkz_kernel_r_to_tl {#2} }
+  }
+\cs_generate_variant:Nn \__tenkz_kernel_r_route_end_put:nn { nV }
+
+\cs_new_protected:Npn \__tenkz_kernel_r_string_free:n #1
   {
     \__tenkz_kernel_r_sid:nN {#1} \l__tenkz_kernel_r_sid_tl
     \tl_clear:N \l__tenkz_kernel_r_pts_tl
@@ -3795,23 +4568,38 @@
   }
 
 % cross={over|under at crossing of A and B}: self over means the other
-% operand is the under path.  A leg operand names the leg's saved path.
+% operand is the under path.  A leg operand names the leg's saved path.  The
+% field is a list, because a string that crosses several wires resolves
+% several crossings, whether the author wrote them or the route derived them.
 \cs_new_protected:Npn \__tenkz_kernel_r_crossings:n #1
   {
     \__tenkz_model_get:nnN {#1} {cross} \l__tenkz_kernel_r_tl
     \quark_if_no_value:NF \l__tenkz_kernel_r_tl
       {
         \__tenkz_kernel_r_sid:nN {#1} \l__tenkz_kernel_r_sid_tl
-        \exp_args:NnV \regex_extract_once:nnN
-          { \A \s* (over|under) \s+ at \s+ crossing \s+ of \s+ (.+)
-            \s+ and \s+ (.+) \Z }
-          \l__tenkz_kernel_r_tl \l__tenkz_kernel_match_seq
-        \exp_args:Nee \__tenkz_kernel_r_cross_pair:nnn
-          { \seq_item:Nn \l__tenkz_kernel_match_seq {3} }
-          { \seq_item:Nn \l__tenkz_kernel_match_seq {4} }
-          { \seq_item:Nn \l__tenkz_kernel_match_seq {2} }
+        \exp_args:NV \clist_map_inline:nn \l__tenkz_kernel_r_tl
+          { \__tenkz_kernel_r_crossing_one:n {##1} }
       }
   }
+\cs_new_protected:Npn \__tenkz_kernel_r_crossing_one:n #1
+  {
+    \regex_extract_once:nnN
+      { \A \s* (over|under) \s+ at \s+ crossing \s+ of \s+ (.+)
+        \s+ and \s+ (.+) \Z }
+      {#1} \l__tenkz_kernel_match_seq
+    % The declared order is read out of the match before the operands are,
+    % because resolving an operand runs its own match and leaves the shared
+    % capture list holding a leg's face where the order word stood.  Read
+    % late, `over` came back as the second capture of the wrong match and
+    % every declared crossing drew the way it was not declared.
+    \tl_set:Ne \l__tenkz_kernel_r_order_tl
+      { \seq_item:Nn \l__tenkz_kernel_match_seq {2} }
+    \exp_args:Nee \__tenkz_kernel_r_cross_pair:nnn
+      { \seq_item:Nn \l__tenkz_kernel_match_seq {3} }
+      { \seq_item:Nn \l__tenkz_kernel_match_seq {4} }
+      { \tl_use:N \l__tenkz_kernel_r_order_tl }
+  }
+\tl_new:N \l__tenkz_kernel_r_order_tl
 \cs_new_protected:Npn \__tenkz_kernel_r_cross_pair:nnn #1#2#3
   {
     \__tenkz_kernel_r_crossid:nN {#1} \l__tenkz_kernel_r_b_tl
@@ -3820,7 +4608,10 @@
     \str_if_eq:VVTF \l__tenkz_kernel_r_b_tl \l__tenkz_kernel_r_sid_tl
       { \tl_set_eq:NN \l__tenkz_kernel_r_b_tl \l__tenkz_kernel_r_c_tl }
       { }
-    \str_if_eq:nnTF {#3} {over}
+    % The order word arrives as a register to read, not as a word already
+    % read, so it is compared expanded.  Compared unexpanded it never equals
+    % `over', and every crossing an author declared over was drawn under.
+    \str_if_eq:eeTF {#3} {over}
       {
         \exp_args:NVV \__tenkz_string_under:nn
           \l__tenkz_kernel_r_b_tl \l__tenkz_kernel_r_sid_tl
@@ -4374,6 +5165,22 @@
       }
   }
 
+% The row a panel is read across, in pitch units, as the frame places it.
+\tl_new:N \l__tenkz_kernel_r_axis_tl
+\cs_new_protected:Npn \__tenkz_kernel_r_axis_read:
+  {
+    \__tenkz_model_picture_get:nN {align} \l__tenkz_kernel_r_axis_tl
+    \bool_lazy_or:nnT
+      { \quark_if_no_value_p:N \l__tenkz_kernel_r_axis_tl }
+      { \str_if_eq_p:Vn \l__tenkz_kernel_r_axis_tl {midline} }
+      {
+        \tl_set:Ne \l__tenkz_kernel_r_axis_tl
+          { \fp_eval:n { ( \__tenkz_kernel_rows: + 1 ) / 2 } }
+      }
+  }
+\cs_new:Npn \__tenkz_kernel_r_axis:
+  { 1 - \l__tenkz_kernel_r_axis_tl }
+
 \cs_new_protected:Npn \__tenkz_kernel_render:
   {
     \prop_clear:N \l__tenkz_kernel_r_placed_prop
@@ -4383,6 +5190,7 @@
     \seq_clear:N \l__tenkz_kernel_r_after_atom_seq
     \seq_set_from_clist:Nn \l__tenkz_kernel_r_palette_seq
       { tenkzMarked , tenkzAction , tenkzExtra , tenkzOperator }
+    \__tenkz_kernel_r_axis_read:
     \int_set:Nn \l__tenkz_kernel_r_rows_int { \__tenkz_kernel_rows: }
     \int_set:Nn \l__tenkz_kernel_r_cols_int { \__tenkz_kernel_cols: }
     \__tenkz_geom_reset:
@@ -4393,9 +5201,14 @@
     % and the carrier must have found its own first
     \__tenkz_model_map_ids:nn {atom} { \__tenkz_kernel_r_atom_turn:n {##1} }
     \__tenkz_string_reset:
+    % Panels meet on the axis their wires run along, not on the middle of
+    % whatever ink each of them happens to reach.  A string standing north of
+    % a row and a string standing south of it make two pictures of different
+    % heights, and a relation between them is read across the row they both
+    % speak about.  align= names that row; midline is the frame's own middle.
     \tikzpicture
       [
-        baseline = (current~bounding~box.center) ,
+        baseline = \__tenkz_kernel_r_pt:n { \__tenkz_kernel_r_axis: } ,
         tenkz~every~picture
       ]
     \__tenkz_kernel_r_prescan:
@@ -4470,6 +5283,12 @@
     \__tenkz_kernel_bonds:
     \__tenkz_kernel_closures:
     \__tenkz_kernel_validate_addresses:
+    % The route's crossing set is model data, not measurement: which wires
+    % leave the selection on the named side is a question the records answer.
+    % Deriving it here, before the store freezes, is what lets a derived
+    % crossing be written in the spelling a declaration uses.  The text is
+    % generated, so it does not pass through address validation again.
+    \__tenkz_kernel_route_crossings:
     \__tenkz_model_validate:
     \__tenkz_kernel_emit:
     \__tenkz_kernel_render:
