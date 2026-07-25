@@ -415,14 +415,16 @@
 % tr(eta_{k,h}) = a_k b_h. It proves the conditional implication (iv) => (v),
 % not Proposition prop2to5 from SAL and ZCL alone. The missing rank-one step is
 % documented in docs/paper-gaps/cpgsv17_pf_rank_one.tex.
-\begin{theorem}[Two-site blocking of the original tensor is a renormalization fixed point]
+\begin{theorem}[Conditional two-site blocking theorem from neighboring trace factorization]
     \label{thm:mpdo_blocked_original_tensor_is_rfp_via_ts}
     \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.blockTwo_isRFPViaTS}
     \leanok
     \uses{def:is_rfp_via_ts, def:mpdo_two_site_blocking}
-    Let $\mathcal K^{[2]}$ be the tensor obtained by blocking two adjacent
-    sites of the original tensor $\mathcal K$. Then $\mathcal K^{[2]}$ is a
-    renormalization fixed point in the sense of
+    Assume that the neighboring operators are positive semidefinite and that
+    there are real families $(a_k)_k,(b_k)_k$ satisfying
+    $\tr(\eta_{k,h})=a_kb_h$ and $\sum_k a_kb_k=1$. Let $\mathcal K^{[2]}$ be
+    the tensor obtained by blocking two adjacent sites of $\mathcal K$. Then
+    $\mathcal K^{[2]}$ is a renormalization fixed point in the sense of
     Definition~\ref{def:is_rfp_via_ts}. This is
     \cite[Theorem~4.9, (iv)$\Rightarrow$(v)]{Cirac2016MPDO_arXiv}.
 \end{theorem}
@@ -448,12 +450,11 @@
 % conditional blocking theorem thm:mpdo_blocked_original_tensor_is_rfp_via_ts
 % instead assumes a neighboring trace factorization.
 % Documented in docs/paper-gaps/cpgsv17_pf_rank_one.tex.
-\begin{theorem}[SAL and ZCL give the two blocking channels]
+\begin{theorem}[Blocking channels from SAL and ZCL (open)]
     \label{thm:mpdo_sal_zcl_blocking_channels}
     \notready
     \uses{def:is_sal, def:mpo_source_zcl, def:is_rfp_via_ts,
-        def:mpdo_two_site_blocking,
-        thm:mpdo_sal_zcl_bnt_sector_structure}
+        def:mpdo_two_site_blocking}
     Let $K$ be a simple tensor in block-injective canonical form (biCF),
     equipped with a basis-of-normal-tensors decomposition and satisfying the
     strong area law and zero correlation length. Let $M=K^{[2]}$ be its
@@ -465,6 +466,11 @@
     \cite[Theorem~4.9 and Appendix~C.2, lines~1810--1825]
       {Cirac2016MPDO_arXiv}. The separate standing biCF and BNT hypotheses are
     imposed at lines~849--850 and restated at line~1628 of the same source.
+    Proposition~\emph{prop2to5} refers back to the construction of
+    Proposition~C.7 after projection to each local sector. That construction
+    requires the rank-one neighboring-trace factorization supplied in the
+    printed argument by the refuted Lemma~C.5. No proof under SAL and ZCL alone
+    is presently known.
 \end{theorem}
 
 % Correct equation, not a figure: the cited source draws the two-to-three
