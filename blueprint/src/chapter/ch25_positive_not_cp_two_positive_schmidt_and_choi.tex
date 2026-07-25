@@ -1,4 +1,11 @@
-\section{Additional results on two-positive maps}
+\section{$k$-positive maps, Schmidt rank, and Choi compression}
+
+This section develops the $k$-positive-map criteria of
+\cite[Chapter~3]{Wolf2012Quantum}. Schmidt-rank bounds convert positivity of
+ampliations into quadratic-form conditions on the Choi matrix, while Ky
+Fan's maximum principle controls the extremal overlap with vectors of bounded
+Schmidt rank. The right-factor compression criteria give rectangular and
+rank-$k$ projection forms of the same condition.
 
 \subsection{Two-positive maps and the generalized Schwarz inequality}
 
@@ -164,27 +171,66 @@
     $\C^k\to\C^D$, and this range dimension is $\rank(C_\psi)$.
 \end{proof}
 
-\begin{lemma}[Monotonicity of bounded Schmidt rank]\label{lem:schmidt_rank_mono}
-    \lean{Matrix.HasSchmidtRankLE.mono}
-    \leanok
-    \uses{def:schmidt_rank}
-    If $\SR(\psi)\le k$ and $k\le l$, then $\SR(\psi)\le l$.
-\end{lemma}
+\subsection{Schmidt rank and maximal overlap}
 
-\begin{lemma}[Rank factorization through a coordinate space]
-    \label{lem:matrix_rank_factorization_coordinate}
-    \lean{Matrix.exists_mul_eq_of_rank_le}
-    \leanok
-    If $A\in\MN{m,n}(\C)$ has rank at most $k$, then there are matrices
-    $B\in\MN{m,k}(\C)$ and $C\in\MN{k,n}(\C)$ such that $BC=A$.
-\end{lemma}
+The monotonicity, rank-factorization, reduced-density, Rayleigh, and Parseval
+steps used below are proved in
+Section~\ref{sec:app_positive_not_cp_schmidt_rank}. The two extremal
+projection bounds behind Ky Fan's maximum principle are proved in
+Section~\ref{sec:app_positive_not_cp_ky_fan}.
 
-\begin{proof}
+
+\begin{definition}[Sum of the largest eigenvalues]
+    \label{def:ky_fan_norm}
+    \lean{Matrix.IsHermitian.kyFanNorm}
     \leanok
-    The range of the linear map represented by $A$ has dimension at most $k$.
-    Embed this range into $\C^k$, compose with the range map, and then map
-    back to the ambient codomain. The corresponding matrices give the desired
-    factorization.
+    Let $A\in\MN{D}$ be Hermitian with eigenvalues
+    $\lambda_1\ge\lambda_2\ge\cdots\ge\lambda_D$ listed in decreasing order.
+    For $0\le k\le D$, set
+    \begin{align}
+        S_k(A)
+         & =\sum_{i=1}^{k}\lambda_i.
+        \label{eq:channel_largest_eigenvalue_sum}
+    \end{align}
+    This is the sum of the $k$ largest signed eigenvalues. Indices beyond $D$
+    contribute zero, so the value stabilizes at $\re\tr(A)$ once $k$ reaches
+    $D$.
+
+    The \emph{Ky-Fan $k$-norm} $\|A\|_{(k)}$ is by definition the sum of the
+    $k$ largest \emph{singular values} of $A$. It agrees with $S_k(A)$ exactly
+    when $A$ is positive semidefinite, where eigenvalues and singular values
+    coincide; for an indefinite Hermitian $A$ the two differ. For
+    $A=\diag(1,-2)$, one has $S_1(A)=1$ but $\|A\|_{(1)}=2$. The results below
+    concern $S_k(A)$ for arbitrary Hermitian $A$, so on the
+    positive-semidefinite cone they are statements about the Ky-Fan norm.
+\end{definition}
+
+\begin{theorem}[Ky Fan's maximum principle]
+    \label{thm:ky_fan_maximum_principle}
+    \lean{Matrix.IsHermitian.kyFanNorm_eq_sup_trace}
+    \leanok
+    \uses{def:ky_fan_norm, thm:ky_fan_achievability, thm:ky_fan_upper_bound}
+    Let $A\in\MN{D}$ be Hermitian and $0\le k<D$. Then the sum of its $k$
+    largest eigenvalues is the largest value of $\re\tr(PA)$ attained by an
+    orthogonal projection $P$ of rank $k$:
+    \begin{align}
+        S_k(A)
+         & =\max_{\substack{P^2=P=P^\dagger\\ \tr(P)=k}}\re\tr(PA).
+        \label{eq:channel_ky_fan_maximum}
+    \end{align}
+    This is Ky Fan's maximum principle \cite{Fan1949Theorem}; see also
+    \cite[Problem~I.6.15, Exercise~II.1.13]{Bhatia1997Matrix}. For a positive
+    semidefinite $A$, where $S_k(A)$ coincides with the Ky-Fan norm
+    $\|A\|_{(k)}$, it gives the extremal overlap of
+    \cite[Lemma~3.1]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:ky_fan_achievability, thm:ky_fan_upper_bound}
+    Theorem~\ref{thm:ky_fan_achievability} provides a rank-$k$ projection
+    whose trace against $A$ equals $S_k(A)$, so the value is attained.
+    Theorem~\ref{thm:ky_fan_upper_bound} shows that no rank-$k$ projection
+    exceeds it. Hence $S_k(A)$ is the maximum.
 \end{proof}
 
 \begin{theorem}[Maximal overlap with a fixed Schmidt rank]
@@ -295,78 +341,6 @@
     density operator of the $i$-th eigenvector on the first factor is
     $\rho_i=\tr_2\ketbra{\phi_i}{\phi_i}$.
 \end{definition}
-
-\begin{lemma}[Coefficient-matrix form of the reduced density]
-    \label{lem:reduced_eig_density_factored}
-    \lean{Matrix.IsHermitian.reducedEigDensity_eq}
-    \leanok
-    \uses{def:reduced_eig_density}
-    Writing $C_i$ for the coefficient matrix of $\phi_i$, the reduced density
-    operator factors as $\rho_i=C_iC_i^\dagger$.
-\end{lemma}
-
-\begin{proof}
-    \leanok
-    The partial trace of $\ketbra{\phi_i}{\phi_i}$ over the second factor has
-    entries $\sum_b(C_i)_{a,b}\overline{(C_i)_{a',b}}$, which is the
-    $(a,a')$ entry of $C_iC_i^\dagger$.
-\end{proof}
-
-\begin{lemma}[Reduced density is positive semidefinite]
-    \label{lem:reduced_eig_density_posSemidef}
-    \lean{Matrix.IsHermitian.reducedEigDensity_posSemidef}
-    \leanok
-    \uses{lem:reduced_eig_density_factored}
-    The reduced density operator $\rho_i$ is positive semidefinite.
-\end{lemma}
-
-\begin{proof}
-    \leanok
-    By the coefficient-matrix form, $\rho_i=C_iC_i^\dagger$, which is positive
-    semidefinite for any matrix $C_i$.
-\end{proof}
-
-\begin{lemma}[Eigenbasis Rayleigh expansion]
-    \label{lem:eigenbasis_rayleigh}
-    \lean{Matrix.IsHermitian.rayleigh}
-    \leanok
-    For a Hermitian operator $\tau$ with eigenvalues $\nu_i$ and normalized
-    eigenvectors $\phi_i$, the expectation in a vector $\psi$ expands as
-    \begin{align}
-        \bra{\psi}\tau\ket{\psi}
-         & =\sum_i\nu_i|\braket{\phi_i}{\psi}|^2.
-        \label{eq:schwarz_eigenbasis_rayleigh}
-    \end{align}
-\end{lemma}
-
-\begin{proof}
-    \leanok
-    Diagonalizing $\tau=U\diag(\nu_i)U^\dagger$ with $U$ the unitary of
-    eigenvectors, the change of variable $y=U^\dagger\psi$ gives
-    $\bra{\psi}\tau\ket{\psi}=\sum_i\nu_i|y_i|^2$, and
-    $y_i=\braket{\phi_i}{\psi}$ is the $i$-th eigenvector overlap.
-\end{proof}
-
-\begin{lemma}[Eigenbasis Parseval identity]
-    \label{lem:eigenbasis_parseval}
-    \lean{Matrix.IsHermitian.sum_normSq_eigenvector_overlap}
-    \leanok
-    For a Hermitian operator $\tau$ with normalized eigenvectors $\phi_i$, the
-    eigenvector overlaps recover the squared norm of $\psi$:
-    \begin{align}
-        \sum_i|\braket{\phi_i}{\psi}|^2
-         & =\|\psi\|^2.
-        \label{eq:schwarz_eigenbasis_parseval}
-    \end{align}
-\end{lemma}
-
-\begin{proof}
-    \leanok
-    The eigenvectors form an orthonormal basis, so with $y=U^\dagger\psi$ one
-    has
-    $\sum_i|\braket{\phi_i}{\psi}|^2=\sum_i|y_i|^2=\|y\|^2=\|\psi\|^2$,
-    where the last equality follows because $U$ is unitary.
-\end{proof}
 
 \begin{theorem}[Spectral lower bound for the Schmidt-rank expectation]
     \label{thm:spectral_lower_bound_schmidt_rank}
@@ -528,6 +502,12 @@
     semidefinite cone under finite sums.
 \end{proof}
 
+\subsection{Choi compression criteria}
+
+The right-tensor identities, parametrizations of bounded Schmidt rank, and
+projection factorizations used in this subsection are proved in
+Section~\ref{sec:app_positive_not_cp_choi_compression}.
+
 \begin{definition}[Right compression of the Choi matrix]\label{def:choi_right_compression}
     \lean{ChoiJamiolkowski.rightCompression,
         ChoiJamiolkowski.rightCompression_apply,
@@ -557,184 +537,6 @@
         \label{eq:schwarz_right_tensor_factor}
     \end{align}
 \end{definition}
-
-\begin{theorem}[Right tensor sandwich formula]
-    \label{thm:choi_right_tensor_sandwich}
-    \lean{ChoiJamiolkowski.rightTensorMatrix_mul_choiMatrix_mul_conjTranspose}
-    \leanok
-    \uses{def:choi_right_compression, def:choi_right_tensor_factor}
-    If $\tau$ is the Choi matrix of $T$, then
-    \begin{align}
-        R_X\tau R_X^\dagger
-         & =C_T(X),
-        \label{eq:schwarz_right_tensor_sandwich}
-    \end{align}
-    where $C_T(X)$ is the right-factor Choi compression by $X$.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    By (\ref{eq:schwarz_right_tensor_factor}), the $(i,p),(j,q)$ entry of the
-    left-hand side of (\ref{eq:schwarz_right_tensor_sandwich}) is
-    \begin{align}
-        \sum_{r,s,a,b}
-        \delta_{i,r}X_{a,p}\tau_{(r,a),(s,b)}
-        \delta_{j,s}\overline{X_{b,q}}
-         & =\sum_{a,b}X_{a,p}\tau_{(i,a),(j,b)}
-        \overline{X_{b,q}}.
-        \notag
-    \end{align}
-    which is (\ref{eq:schwarz_right_choi_compression}).
-\end{proof}
-
-\begin{lemma}[Compressed maximally entangled vectors have bounded Schmidt rank]
-    \label{lem:compressed_omega_schmidt_rank}
-    \lean{ChoiJamiolkowski.compressedOmegaVector_hasSchmidtRankLE}
-    \leanok
-    \uses{def:schmidt_rank, def:choi_right_compression}
-    For $X\in\MN{D,k}(\C)$, the vector
-    \begin{align}
-        \psi_X
-         & =\left(D^{-1/2}X_{i,p}\right)_{(i,p)}
-        \in\C^D\otimes\C^k
-        \label{eq:schwarz_compressed_omega}
-    \end{align}
-    has Schmidt rank at most $k$.
-\end{lemma}
-
-\begin{proof}
-    \leanok
-    The coefficient matrix of $\psi_X$ is a scalar multiple of $X$. Therefore
-    its rank is bounded by the number of columns, which is $k$.
-\end{proof}
-
-\begin{theorem}[Rank of a compressed maximally entangled vector]
-    \label{thm:compressed_omega_schmidt_rank_eq_rank}
-    \lean{ChoiJamiolkowski.compressedOmegaVector_schmidtRank_eq_rank}
-    \leanok
-    \uses{def:schmidt_rank, def:choi_right_compression}
-    Assume $D>0$. For $X\in\MN{D,k}(\C)$, the vector $\psi_X$ in
-    (\ref{eq:schwarz_compressed_omega}) satisfies
-    $\SR(\psi_X)=\rank X$.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    The coefficient matrix of $\psi_X$ is $D^{-1/2}X$. Since $D>0$, the
-    scalar $D^{-1/2}$ is nonzero, and multiplication by this scalar preserves
-    rank.
-\end{proof}
-
-\begin{theorem}[Square representative with exact Schmidt rank]
-    \label{thm:square_schmidt_rank_exact_parametrization}
-    \lean{ChoiJamiolkowski.exists_squareCompression_of_vector,
-        ChoiJamiolkowski.exists_squareCompression_of_hasSchmidtRankLE}
-    \leanok
-    \uses{def:schmidt_rank, def:choi_right_compression,
-        thm:compressed_omega_schmidt_rank_eq_rank}
-    Assume $D>0$. For every $\psi\in\C^D\otimes\C^D$, there is
-    $X\in\MN{D}(\C)$ such that
-    \begin{align}
-        \psi_{(i,p)}
-         & =D^{-1/2}X_{i,p}, \notag \\
-        \rank X
-         & =\SR(\psi).
-        \label{eq:schwarz_square_schmidt_representative}
-    \end{align}
-    In particular, if $\SR(\psi)\le r$, then $X$ may be chosen with
-    $\rank X\le r$.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    Take $X_{i,p}=D^{1/2}\psi_{(i,p)}$. Since $D>0$, this gives
-    $D^{-1/2}X_{i,p}=\psi_{(i,p)}$. The rank identity follows from
-    Theorem~\ref{thm:compressed_omega_schmidt_rank_eq_rank}. The bounded-rank
-    statement follows by comparison with the assumed Schmidt-rank bound.
-\end{proof}
-
-\begin{lemma}[Square parametrization of bounded Schmidt rank]
-    \label{lem:schmidt_rank_square_compressed_omega}
-    \lean{ChoiJamiolkowski.hasSchmidtRankLE_iff_exists_rank_le_compressedOmegaVector}
-    \leanok
-    \uses{def:schmidt_rank, def:choi_right_compression,
-        thm:square_schmidt_rank_exact_parametrization}
-    Assume $D>0$. A vector $\psi\in\C^D\otimes\C^D$ has Schmidt rank at most
-    $k$ if and only if there is a matrix $X\in\MD(\C)$ of rank at most $k$
-    such that $\psi_{(i,j)}=D^{-1/2}X_{i,j}$.
-\end{lemma}
-
-\begin{proof}
-    \leanok
-    The forward direction is the bounded-rank part of
-    Theorem~\ref{thm:square_schmidt_rank_exact_parametrization}. Conversely,
-    if $\psi_{(i,j)}=D^{-1/2}X_{i,j}$, then
-    $C_\psi=D^{-1/2}X$, so $\rank(C_\psi)=\rank(X)$ because multiplication
-    by a nonzero scalar preserves rank.
-\end{proof}
-
-\begin{lemma}[Schmidt rank under the adjoint right tensor factor]
-    \label{lem:right_tensor_adjoint_schmidt_rank}
-    \lean{ChoiJamiolkowski.schmidtCoeffMatrix_rightTensorMatrix_conjTranspose_mulVec,
-        ChoiJamiolkowski.rightTensorMatrix_conjTranspose_mulVec_hasSchmidtRankLE}
-    \leanok
-    \uses{def:schmidt_rank, def:choi_right_tensor_factor}
-    Let $X\in\MN{D,k}(\C)$ and let $\eta\in\C^D\otimes\C^k$. Then
-    $R_X^\dagger\eta\in\C^D\otimes\C^D$ has Schmidt rank at most $k$.
-\end{lemma}
-
-\begin{proof}
-    \leanok
-    If $\eta$ is read as a $D\times k$ coefficient matrix $E$, then the
-    coefficient matrix of $R_X^\dagger\eta$ is $EX^\dagger$. Therefore
-    $\rank(EX^\dagger)\le\rank(X^\dagger)=\rank(X)\le k$.
-\end{proof}
-
-\begin{lemma}[Right-tensor representatives of bounded Schmidt rank]
-    \label{lem:right_tensor_adjoint_schmidt_rank_representatives}
-    \lean{ChoiJamiolkowski.exists_rightTensorMatrix_conjTranspose_mulVec_of_hasSchmidtRankLE}
-    \leanok
-    \uses{def:schmidt_rank, def:choi_right_tensor_factor,
-        lem:matrix_rank_factorization_coordinate}
-    If $\psi\in\C^D\otimes\C^D$ has Schmidt rank at most $k$, then there
-    exist $X\in\MN{D,k}(\C)$ and $\eta\in\C^D\otimes\C^k$ such that
-    $\psi=R_X^\dagger\eta$.
-\end{lemma}
-
-\begin{proof}
-    \leanok
-    Let $C_\psi$ be the coefficient matrix of $\psi$. The rank assumption
-    gives a factorization $C_\psi=BC$ through $\C^k$. Taking
-    $X=C^\dagger$ and reading $B$ as the coefficient matrix of $\eta$ gives
-    the required identity, because the coefficient matrix of
-    $R_X^\dagger\eta$ is $BX^\dagger=BC$.
-\end{proof}
-
-\begin{theorem}[Quadratic form of a right Choi compression]
-    \label{thm:choi_right_compression_quadratic_form}
-    \lean{ChoiJamiolkowski.rightTensor_choiMatrix_quadraticForm_eq,
-        ChoiJamiolkowski.rightCompression_quadraticForm_eq_choiMatrix_quadraticForm}
-    \leanok
-    \uses{def:choi_right_compression, def:choi_right_tensor_factor,
-        thm:choi_right_tensor_sandwich}
-    For $X\in\MN{D,k}(\C)$ and $\eta\in\C^D\otimes\C^k$,
-    \begin{align}
-        \langle\eta,C_T(X)\eta\rangle
-         & =\langle R_X^\dagger\eta,\tau_T R_X^\dagger\eta\rangle.
-        \label{eq:schwarz_right_compression_quadratic}
-    \end{align}
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    Substituting (\ref{eq:schwarz_right_tensor_sandwich}) gives
-    \begin{align}
-        \langle\eta,R_X\tau_T R_X^\dagger\eta\rangle
-         & =\langle R_X^\dagger\eta,\tau_T R_X^\dagger\eta\rangle.
-        \notag
-    \end{align}
-\end{proof}
-
 \begin{theorem}[Schmidt-rank Choi expectation from $k$-positivity]
     \label{thm:k_positive_schmidt_rank_choi_expectation}
     \lean{ChoiJamiolkowski.IsNPositiveMap.choiMatrix_quadraticForm_nonneg_of_hasSchmidtRankLE}
@@ -801,48 +603,6 @@
     Combine Theorem~\ref{thm:k_positive_schmidt_rank_choi_expectation} with
     Theorem~\ref{thm:schmidt_rank_choi_test_converse}.
 \end{proof}
-
-\begin{lemma}[Rank-one ampliation as Choi compression]
-    \label{lem:rank_one_ampliation_choi_compression}
-    \lean{ChoiJamiolkowski.nPositiveAmpliation_rankOne_eq_rightCompression}
-    \leanok
-    \uses{def:blockwise_ampliation, def:choi_right_compression}
-    Applying the $k$-fold ampliation of $T$ to the rank-one matrix
-    $\ketbra{\psi}{\psi}$, where
-    $\psi_{(a,p)}=D^{-1/2}X_{a,p}$, is exactly the right-factor compression
-    of the Choi matrix of $T$ by $X$.
-\end{lemma}
-
-\begin{proof}
-    \leanok
-    In entries, both sides are
-    \begin{align}
-        \sum_{a,b}X_{a,p}
-        T\!\left(D^{-1}E_{a,b}\right)_{i,j}
-        \overline{X_{b,q}}.
-        \notag
-    \end{align}
-    If $\psi_{(a,p)}=D^{-1/2}X_{a,p}$, then for fixed $p,q$, the corresponding
-    block of $\ketbra{\psi}{\psi}$ is
-    \begin{align}
-        (\ketbra{\psi}{\psi})_{(\cdot,p),(\cdot,q)}
-         & =D^{-1}\sum_{a,b}X_{a,p}\overline{X_{b,q}}E_{a,b}.
-        \notag
-    \end{align}
-    Hence
-    \begin{align}
-        T\!\left(D^{-1}\sum_{a,b}
-           X_{a,p}\overline{X_{b,q}}E_{a,b}\right)_{i,j}
-         & =D^{-1}\sum_{a,b}X_{a,p}\overline{X_{b,q}}
-                                   (T(E_{a,b}))_{i,j} \notag \\
-         & =\sum_{a,b}X_{a,p}\tau_{(i,a),(j,b)}
-        \overline{X_{b,q}}.
-        \notag
-    \end{align}
-    where the second equality uses
-    $\tau_{(i,a),(j,b)}=D^{-1}(T(E_{a,b}))_{i,j}$.
-\end{proof}
-
 \begin{theorem}[Rectangular Choi-compression test for $k$-positivity]
     \label{thm:k_positive_iff_right_choi_compressions}
     \lean{ChoiJamiolkowski.isNPositiveMap_iff_forall_rightCompression_posSemidef}
@@ -899,61 +659,198 @@
     (\ref{eq:schwarz_right_tensor_sandwich}) identifies
     $R_X\tau R_X^\dagger$ with $C_T(X)$.
 \end{proof}
-
-\begin{lemma}[Right-tensor multiplication]
-    \label{lem:right_tensor_multiplication}
-    \lean{ChoiJamiolkowski.rightTensorMatrix_mul_rightTensorMatrix}
+\begin{theorem}[Rank-$k$ right projections in the Choi criterion]
+    \label{thm:rank_k_right_projection_choi_sandwich_forward}
+    \lean{ChoiJamiolkowski.IsNPositiveMap.rightTensor_choiMatrix_sandwich_posSemidef_of_isHermitian_idempotent_rank}
     \leanok
-    \uses{def:choi_right_tensor_factor}
-    Let $X\in\MN{D,k}(\C)$ and $P\in\MN{D,D}(\C)$. Then the right-tensor
-    factors satisfy $R_XR_P=R_{PX}$.
-\end{lemma}
+    \uses{lem:rank_k_hermitian_projection_factorization,
+        thm:factorized_right_projection_choi_sandwich}
+    Assume $D>0$. Let $T:\MN{D,D}(\C)\to\MN{D,D}(\C)$ be $k$-positive,
+    with Choi matrix $\tau$. If $P\in\MN{D,D}(\C)$ is Hermitian, satisfies
+    $P^2=P$, and has rank $k$, then $R_P\tau R_P^\dagger\geq0$.
+    This is the forward rank-$k$ projection-compression direction of
+    \cite[Chapter~3, Proposition~3.1]{Wolf2012Quantum}.
+\end{theorem}
 
 \begin{proof}
     \leanok
-    This is an entrywise calculation: the Kronecker delta in the physical
-    index forces the two right-tensor factors to have the same physical
-    coordinate, and the remaining sum is the matrix product $PX$.
+    By Lemma~\ref{lem:rank_k_hermitian_projection_factorization}, write
+    $P=VV^\dagger$ with $V\in\MN{D,k}(\C)$. The conclusion is then exactly
+    Theorem~\ref{thm:factorized_right_projection_choi_sandwich}.
 \end{proof}
 
-\begin{lemma}[Square sandwich implies fixed rectangular compression]
-    \label{lem:square_sandwich_fixed_rectangular_compression}
-    \lean{ChoiJamiolkowski.rightCompression_posSemidef_of_rightTensorMatrix_sandwich_posSemidef_of_mul_eq_self}
+\begin{theorem}[Projection-compression converse for the Choi criterion]
+    \label{thm:rank_k_right_projection_choi_sandwich_converse}
+    \lean{ChoiJamiolkowski.isNPositiveMap_of_forall_rankProjection_rightTensor_choiMatrix_sandwich_posSemidef}
     \leanok
-    \uses{thm:choi_right_tensor_sandwich, lem:right_tensor_multiplication}
-    Let $T:\MN{D,D}(\C)\to\MN{D,D}(\C)$ have Choi matrix $\tau$. Suppose
-    $P\in\MN{D,D}(\C)$ and $X\in\MN{D,k}(\C)$ satisfy $PX=X$. If
-    $R_P\tau R_P^\dagger\ge0$, then the rectangular right compression of
-    $\tau$ by $X$ is positive semidefinite.
-\end{lemma}
+    \uses{thm:k_positive_iff_right_choi_compressions,
+        lem:square_sandwich_fixed_rectangular_compression,
+        lem:rank_k_projection_fixing_rectangular_factor}
+    Assume $D>0$ and $k\le D$. Let
+    $T:\MN{D,D}(\C)\to\MN{D,D}(\C)$ have Choi matrix $\tau$. Suppose that
+    $R_P\tau R_P^\dagger\geq0$ for every Hermitian projection
+    $P\in\MN{D,D}(\C)$ of rank $k$. Then $T$ is $k$-positive.
+\end{theorem}
 
 \begin{proof}
     \leanok
-    Since $PX=X$, Lemma~\ref{lem:right_tensor_multiplication} gives
-    $R_XR_P=R_X$. Therefore
+    By Theorem~\ref{thm:k_positive_iff_right_choi_compressions}, it is enough
+    to prove positivity of the right-factor compression by an arbitrary
+    $X\in\MN{D,k}(\C)$. Choose a rank-$k$ Hermitian projection $P$ with
+    $PX=X$ using
+    Lemma~\ref{lem:rank_k_projection_fixing_rectangular_factor}. The assumed
+    positivity of $R_P\tau R_P^\dagger$, together with
+    Lemma~\ref{lem:square_sandwich_fixed_rectangular_compression}, gives
+    positivity of the rectangular compression by $X$.
+\end{proof}
+
+\begin{theorem}[Rank-$k$ projection form of the Choi criterion]
+    \label{thm:rank_k_right_projection_choi_criterion}
+    \lean{ChoiJamiolkowski.isNPositiveMap_iff_forall_rankProjection_rightTensor_choiMatrix_sandwich_posSemidef}
+    \leanok
+    \uses{thm:rank_k_right_projection_choi_sandwich_forward,
+        thm:rank_k_right_projection_choi_sandwich_converse}
+    Assume $D>0$ and $k\le D$. A linear map
+    $T:\MN{D,D}(\C)\to\MN{D,D}(\C)$ is $k$-positive if and only if, for every
+    Hermitian projection $P\in\MN{D,D}(\C)$ of rank $k$,
+    $R_P\tau R_P^\dagger\geq0$, where $\tau$ is the Choi matrix of $T$.
+    This is the rank-$k$ projection formulation of
+    \cite[Chapter~3, Proposition~3.1]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The forward direction is
+    Theorem~\ref{thm:rank_k_right_projection_choi_sandwich_forward}. The
+    reverse direction is
+    Theorem~\ref{thm:rank_k_right_projection_choi_sandwich_converse}.
+\end{proof}
+
+\section{Trace adjoints and the positivity hierarchy}
+
+The trace-pairing adjoint was introduced in
+Definition~\ref{def:trace_pairing_adjoint}. Its compatibility with
+ampliation makes $k$-positivity invariant under trace adjoints and identifies
+the endpoints of the positivity hierarchy. Routine closure properties of the
+cones of $k$-positive maps are collected in
+Section~\ref{sec:app_positive_not_cp_k_positive_closure}.
+
+\begin{theorem}[Trace-pairing adjoint of an ampliation]
+    \label{thm:trace_pairing_adjoint_ampliation}
+    \lean{nPositiveAmpliation_traceAdjointMap}
+    \leanok
+    \uses{def:blockwise_ampliation, def:trace_pairing_adjoint,
+        thm:trace_pairing_adjoint_identity}
+    For every linear map $E : \MN{D}\to\MN{D}$, the trace-pairing adjoint
+    commutes with ampliation:
     \begin{align}
-        R_X\tau R_X^\dagger
-         & =R_X(R_P\tau R_P^\dagger)R_X^\dagger,
-        \label{eq:schwarz_fixed_rectangular_compression}
+        (E^{(k)})^*
+         & =(E^*)^{(k)}.
+        \label{eq:schwarz_trace_adjoint_ampliation}
     \end{align}
-    which is positive because positive semidefiniteness is preserved under
-    compression. The left-hand side of
-    (\ref{eq:schwarz_fixed_rectangular_compression}) is the rectangular
-    compression by (\ref{eq:schwarz_right_tensor_sandwich}).
-\end{proof}
-
-\begin{lemma}[Rank-$k$ projection fixing a rectangular right factor]
-    \label{lem:rank_k_projection_fixing_rectangular_factor}
-    \lean{Matrix.exists_isHermitian_idempotent_rank_mul_eq_self}
-    \leanok
-    Let $X\in\MN{D,k}(\C)$ and suppose $k\le D$. Then there exists a
-    Hermitian projection $P\in\MN{D,D}(\C)$ of rank $k$ such that $PX=X$.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}
     \leanok
-    The column space of $X$ has dimension at most $k$. Since $k\le D$, extend
-    this column space to a $k$-dimensional subspace $U\subseteq\C^D$. Let $P$
-    be the orthogonal projection onto $U$. Then $P$ is Hermitian and
-    idempotent, its rank is $\dim U=k$, and it fixes each column of $X$.
+    For block matrices write $\rho_{pq}$ and $X_{pq}$ for their
+    $\MN{D}$-valued blocks. Expanding the trace by blocks and applying
+    (\ref{eq:schwarz_trace_adjoint_pairing}) gives
+    \begin{align}
+        \tr((E^*)^{(k)}(\rho)X)
+         & =\sum_{p,q}\tr(E^*(\rho_{pq})X_{qp})
+        =\sum_{p,q}\tr(\rho_{pq}E(X_{qp}))
+        =\tr(\rho E^{(k)}(X)).
+        \notag
+    \end{align}
+    Nondegeneracy of the trace pairing identifies the two adjoints, proving
+    (\ref{eq:schwarz_trace_adjoint_ampliation}).
+\end{proof}
+
+\begin{theorem}[Trace-pairing adjoint of a $k$-positive map]
+    \label{thm:k_positive_trace_pairing_adjoint}
+    \lean{IsNPositiveMap.traceAdjointMap}
+    \leanok
+    \uses{def:k_positive_map, thm:trace_pairing_adjoint_ampliation,
+        thm:trace_pairing_adjoint_positive}
+    If $E$ is $k$-positive, then $E^*$ is $k$-positive.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Since $E$ is $k$-positive, its ampliation $E^{(k)}$ is positive. The
+    trace-pairing adjoint of this positive map is positive, and
+    (\ref{eq:schwarz_trace_adjoint_ampliation}) identifies that adjoint with
+    $(E^*)^{(k)}$.
+\end{proof}
+
+\begin{theorem}[$k$-positivity is trace-adjoint invariant]
+    \label{thm:k_positive_trace_pairing_adjoint_iff}
+    \lean{isNPositiveMap_traceAdjointMap_iff}
+    \leanok
+    \uses{thm:k_positive_trace_pairing_adjoint,
+        thm:trace_pairing_adjoint_involutive}
+    A linear map is $k$-positive if and only if its trace-pairing adjoint is
+    $k$-positive.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    One direction is
+    Theorem~\ref{thm:k_positive_trace_pairing_adjoint}. The other follows by
+    applying the same theorem to $E^*$ and using
+    Theorem~\ref{thm:trace_pairing_adjoint_involutive}.
+\end{proof}
+
+\begin{theorem}[Completely positive maps are $k$-positive]
+    \label{thm:cp_implies_k_positive}
+    \lean{IsCPMap.isNPositiveMap}
+    \leanok
+    \uses{def:cp_map}
+    Every completely positive map is $k$-positive for all $k \ge 1$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Choose a Kraus representation $E(X)=\sum_i K_iXK_i^\dagger$. For every
+    $Y\succeq0$ in $\MN{D}\otimes\MN{k}$,
+    \begin{align}
+        (E\otimes\id_k)(Y)
+         & =\sum_i (K_i\otimes\Id_k)Y(K_i\otimes\Id_k)^\dagger
+        \succeq0.
+        \notag
+    \end{align}
+    Thus every ampliation $E\otimes\id_k$ is positive.
+\end{proof}
+
+\begin{theorem}[One-positive maps are positive]
+    \label{thm:one_positive_iff_positive}
+    \lean{isNPositiveMap_one_iff_isPositiveMap}
+    \leanok
+    \uses{def:k_positive_map, def:positive_map}
+    A linear map is $1$-positive if and only if it is positive.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The ampliation by $\MN{1}$ is identified with the original matrix algebra:
+    all block indices have the unique value, so positivity of
+    $E\otimes\id_1$ is exactly positivity of $E$.
+\end{proof}
+
+\begin{theorem}[$D$-positive maps on nonzero $\MN{D}$ are completely positive]
+    \label{thm:d_positive_iff_completely_positive}
+    \lean{isCPMap_iff_isNPositiveMap_card}
+    \leanok
+    \uses{def:k_positive_map, def:cp_map, thm:cp_iff_choi_posSemidef}
+    For maps $E:\MN{D}\to\MN{D}$ with $D\ge 1$, complete positivity is
+    equivalent to $D$-positivity.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Complete positivity implies $k$-positivity for every $k$. Conversely,
+    assume $D\ge 1$. If $E$ is $D$-positive, apply $E\otimes\id_D$ to the
+    maximally entangled projector $\ketbra{\Omega}{\Omega}$. The result is
+    the Choi matrix of $E$, hence it is positive semidefinite. Choi's theorem
+    then gives complete positivity.
 \end{proof}
