@@ -2011,6 +2011,14 @@
 \cs_new_protected:Npn \__tenkz_kernel_r_frame:
   { \__tenkz_geom_frame_declare_affine:nnnnnnn {kpic} {0}{1}{-1}{0} {-1}{1} }
 
+\cs_new_protected:Npn \__tenkz_kernel_r_frame_xy:nnNN #1#2#3#4
+  {
+    \__tenkz_geom_apply:nnnNN {kpic} {#1} {#2}
+      \l__tenkz_kernel_r_x_tl \l__tenkz_kernel_r_y_tl
+    \fp_set:Nn #3 { \l__tenkz_kernel_r_x_tl + 0 }
+    \fp_set:Nn #4 { \l__tenkz_kernel_r_y_tl + 0 }
+  }
+
 \cs_generate_variant:Nn \__tenkz_geom_place_rel:nnnn { nnee, nVee, neee }
 \cs_generate_variant:Nn \__tenkz_geom_place_mid:nnn { nVV, nee }
 \cs_generate_variant:Nn \__tenkz_render_atom_labelled:nnn { nen }
@@ -2494,35 +2502,51 @@
         {west-east}
           {
             \__tenkz_model_get:nnN {#1} {row} \l__tenkz_kernel_r_row_tl
+            \__tenkz_kernel_r_frame_xy:nnNN
+              { \l__tenkz_kernel_r_row_tl }
+              { 1 - \__tenkz_metric_ratio:n {wrapreach} }
+              \l__tenkz_kernel_r_x_fp \l__tenkz_kernel_r_y_fp
+            \__tenkz_kernel_r_frame_xy:nnNN
+              { \l__tenkz_kernel_r_row_tl }
+              {
+                \l__tenkz_kernel_r_cols_int
+                + \__tenkz_metric_ratio:n {wrapreach}
+              }
+              \l__tenkz_kernel_r_xb_fp \l__tenkz_kernel_r_yb_fp
             \__tenkz_render_stroke:nn { bond }
               {
                 \__tenkz_kernel_r_pair:nn
-                  { 1 - \__tenkz_metric_ratio:n {wrapreach} }
-                  { - \l__tenkz_kernel_r_row_tl }
+                  { \l__tenkz_kernel_r_x_fp }
+                  { \l__tenkz_kernel_r_y_fp }
                 --
                 \__tenkz_kernel_r_pair:nn
-                  {
-                    \l__tenkz_kernel_r_cols_int
-                    + \__tenkz_metric_ratio:n {wrapreach}
-                  }
-                  { - \l__tenkz_kernel_r_row_tl }
+                  { \l__tenkz_kernel_r_xb_fp }
+                  { \l__tenkz_kernel_r_yb_fp }
               }
           }
         {north-south}
           {
             \__tenkz_model_get:nnN {#1} {col} \l__tenkz_kernel_r_col_tl
+            \__tenkz_kernel_r_frame_xy:nnNN
+              { 1 - \__tenkz_metric_ratio:n {wrapreach} }
+              { \l__tenkz_kernel_r_col_tl }
+              \l__tenkz_kernel_r_x_fp \l__tenkz_kernel_r_y_fp
+            \__tenkz_kernel_r_frame_xy:nnNN
+              {
+                \l__tenkz_kernel_r_rows_int
+                + \__tenkz_metric_ratio:n {wrapreach}
+              }
+              { \l__tenkz_kernel_r_col_tl }
+              \l__tenkz_kernel_r_xb_fp \l__tenkz_kernel_r_yb_fp
             \__tenkz_render_stroke:nn { bond }
               {
                 \__tenkz_kernel_r_pair:nn
-                  { \l__tenkz_kernel_r_col_tl }
-                  { - 1 + \__tenkz_metric_ratio:n {wrapreach} }
+                  { \l__tenkz_kernel_r_x_fp }
+                  { \l__tenkz_kernel_r_y_fp }
                 --
                 \__tenkz_kernel_r_pair:nn
-                  { \l__tenkz_kernel_r_col_tl }
-                  {
-                    - \l__tenkz_kernel_r_rows_int
-                    - \__tenkz_metric_ratio:n {wrapreach}
-                  }
+                  { \l__tenkz_kernel_r_xb_fp }
+                  { \l__tenkz_kernel_r_yb_fp }
               }
           }
       }
@@ -2815,43 +2839,57 @@
       {
         {n}
           {
+            \__tenkz_kernel_r_frame_xy:nnNN
+              { 1 - \__tenkz_metric_ratio:n {stub} } {1}
+              \l__tenkz_kernel_r_xb_fp \l__tenkz_kernel_r_yb_fp
             \tl_set:Ne #2
               {
                 \__tenkz_kernel_r_ppt:nn
                   { \l__tenkz_kernel_r_xc_fp }
-                  { -1 + \__tenkz_metric_ratio:n {stub} }
+                  { \l__tenkz_kernel_r_yb_fp }
               }
           }
         {s}
           {
+            \__tenkz_kernel_r_frame_xy:nnNN
+              {
+                \l__tenkz_kernel_r_rows_int
+                + \__tenkz_metric_ratio:n {stub}
+              }
+              {1}
+              \l__tenkz_kernel_r_xb_fp \l__tenkz_kernel_r_yb_fp
             \tl_set:Ne #2
               {
                 \__tenkz_kernel_r_ppt:nn
                   { \l__tenkz_kernel_r_xc_fp }
-                  {
-                    - \l__tenkz_kernel_r_rows_int
-                    - \__tenkz_metric_ratio:n {stub}
-                  }
+                  { \l__tenkz_kernel_r_yb_fp }
               }
           }
         {w}
           {
+            \__tenkz_kernel_r_frame_xy:nnNN
+              {1} { 1 - \__tenkz_metric_ratio:n {stub} }
+              \l__tenkz_kernel_r_xb_fp \l__tenkz_kernel_r_yb_fp
             \tl_set:Ne #2
               {
                 \__tenkz_kernel_r_ppt:nn
-                  { 1 - \__tenkz_metric_ratio:n {stub} }
+                  { \l__tenkz_kernel_r_xb_fp }
                   { \l__tenkz_kernel_r_yc_fp }
               }
           }
         {e}
           {
+            \__tenkz_kernel_r_frame_xy:nnNN
+              {1}
+              {
+                \l__tenkz_kernel_r_cols_int
+                + \__tenkz_metric_ratio:n {stub}
+              }
+              \l__tenkz_kernel_r_xb_fp \l__tenkz_kernel_r_yb_fp
             \tl_set:Ne #2
               {
                 \__tenkz_kernel_r_ppt:nn
-                  {
-                    \l__tenkz_kernel_r_cols_int
-                    + \__tenkz_metric_ratio:n {stub}
-                  }
+                  { \l__tenkz_kernel_r_xb_fp }
                   { \l__tenkz_kernel_r_yc_fp }
               }
           }
