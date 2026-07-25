@@ -15,6 +15,8 @@ def main() -> int:
         "\n".join(
             (
                 "picture|id=1|lang=grid",
+                "frame|picture=1|scope=picture|map=rotate(30)|"
+                "a=0.866025|b=-0.5|c=0.5|d=0.866025",
                 "atom|picture=1|cell=1-2|name=A|kind=tensor",
                 "bond|picture=1|row=1|from=2|to=3|dir=none",
                 "boundary|picture=1|virtual-west=1|virtual-east=2|"
@@ -32,6 +34,7 @@ def main() -> int:
     assert not advisory
     assert [event.kind for event in parsed.events] == [
         "picture",
+        "frame",
         "atom",
         "bond",
         "boundary",
@@ -52,6 +55,8 @@ def main() -> int:
                 "picture|id=1|lang=future",
                 "picture|id=1|lang=grid",
                 "atom|picture=oops|cell=1-1|name=A|kind=tensor",
+                "frame|picture=1|scope=atom|map=rotate(30)|"
+                "a=bad|b=0|c=0|d=1",
                 "mystery|picture=2|bare",
             )
         ),

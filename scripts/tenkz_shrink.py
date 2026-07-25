@@ -51,6 +51,7 @@ CURRENT_MILESTONE = "0.8"
 
 _SCOPE_COMMANDS = {
     "picture": ("tnpic",),
+    "group": ("tngroup",),
     "object": ("tn", "tnX", "tnfuse", "tndots", "tnsite", "tnput", "tntree"),
     "connection": ("tncut", "tnedge", "tnjoin", "tnarrow"),
     "region": ("tnregion",),
@@ -254,6 +255,7 @@ def scoped_option_groups(
         scope: {} for scope in (
             "setup",
             "picture",
+            "group",
             "object",
             "connection",
             "region",

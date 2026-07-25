@@ -225,10 +225,10 @@ status = "structural-gap"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
 defects = ["wrong-contraction"]
-case_sha256 = "014f811e3ab4a6f1c85636e3a416394fa86575541e5b841397ab7e60c27ea3c3"
-reviewed = "2026-07-23"
-renderer = "maintainer-page-review-2026-07-23"
-note = "rotated 90 degrees and shallower than the source tree"
+case_sha256 = "18c1336b9ee9e02401a3b6e24066c2424ff1b6528b2fc8467c5b17a4577ac43c"
+reviewed = "2026-07-25"
+renderer = "rotation-frame-source-review-2026-07-25"
+note = "Rotated gate frames are now represented; the source tree still has eight outputs."
 
 [[verdict]]
 id = "rmp-ii-sv17"
@@ -518,11 +518,11 @@ status = "blocked"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
 defects = ["text-substitution"]
-missing = ["pulling-through", "rotated-action"]
-case_sha256 = "55a3de450cf765a09bd2191833e63f42f749fe187ecbe360d310c38d928264a2"
-reviewed = "2026-07-24"
-renderer = "source-split-page-review-2026-07-24"
-note = "already judged"
+missing = ["pulling-through"]
+case_sha256 = "bf4590dabd16a5d10ee4048bec230811fdc17d0d7bbd65644988686a94396e5e"
+reviewed = "2026-07-25"
+renderer = "rotation-frame-source-review-2026-07-25"
+note = "Rotated action frames are now represented; the second diagram remains text."
 
 [[verdict]]
 id = "rmp-iii-a-commuting-hamiltonian"
@@ -603,11 +603,11 @@ status = "blocked"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
 defects = ["placement-illegible"]
-missing = ["rotated-action", "strings"]
-case_sha256 = "ce29de07fbd5fa8b0081946c35dd1503d495ec6ab0931f8b7165c4c194ed2156"
-reviewed = "2026-07-24"
-renderer = "source-split-page-review-2026-07-24"
-note = "45-degree double strand as axis-aligned stubs"
+missing = ["strings"]
+case_sha256 = "d607cc45d0422379134a2c6f2549ec691bfcd6ac4a5bc2cb45ff08a9a56d50e7"
+reviewed = "2026-07-25"
+renderer = "rotation-frame-source-review-2026-07-25"
+note = "Diagonal action frames are now represented; the string geometry remains incomplete."
 
 [[verdict]]
 id = "rmp-iii-a-spt-intertwiner"
@@ -1187,11 +1187,11 @@ status = "blocked"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
 defects = ["text-substitution"]
-missing = ["rotated-action", "ring-closure"]
-case_sha256 = "24da4b8228d1a553f9639d7f19ef24de96a59ce873597a4a95fa8cceca3f0531"
-reviewed = "2026-07-23"
-renderer = "maintainer-page-review-2026-07-23"
-note = "already judged"
+missing = ["ring-closure"]
+case_sha256 = "442c65c0001e5a1e77c581e5405cd9965d9f001cb4d642c406dafb2d0e2af9fb"
+reviewed = "2026-07-25"
+renderer = "rotation-frame-source-review-2026-07-25"
+note = "The rotated action is represented; the second closure remains text."
 
 [[verdict]]
 id = "rmp-workbench-iii-historical-composite"
