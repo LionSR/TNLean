@@ -34,3 +34,17 @@ Examples:
 
 ---
 Addresses #
+
+<!--
+Outside contributors: work is scoped in an issue first, and an unsolicited
+agent-generated pull request from an account with no prior contribution here is
+closed without review. Agent-assisted work must name the tool and model and the
+scope of its assistance, and a human must be able to explain every line without
+it. See .github/CONTRIBUTION_POLICY.md.
+-->
+
+### Agent assistance
+<!-- Tool and model, and which parts of the change they produced.
+     Write "none" if the work was unassisted. -->
+
+-

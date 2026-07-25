@@ -3,6 +3,11 @@
 This document codifies the conventions for pull requests, issues, code review,
 Lean style, and CI automation used in the TNLean project.
 
+> **Before you write code.** Unsolicited agent-generated pull requests from accounts with no prior contribution here are closed without review; please contribute by opening an issue and waiting for it to be assigned to you. Code contributions require working knowledge of quantum mechanics and tensor networks.
+> Agent-assisted work carries disclosure and accountability requirements. Some subprojects such as `tenkz` are closed to outside contribution entirely. See
+> [`.github/CONTRIBUTION_POLICY.md`](../.github/CONTRIBUTION_POLICY.md).
+> The conventions below apply once you hold an assigned issue.
+
 ---
 
 ## 1. Pull Request Conventions
