@@ -1,0 +1,27 @@
+% Regression: one leg reaches every route lane, even when the lanes were
+% measured in differently turned selections.
+\documentclass{standalone}
+\usepackage{tenkz}
+\makeatletter
+\ExplSyntaxOn
+\file_input:n { tenkz-kernel.code.tex }
+\ExplSyntaxOff
+\makeatother
+\begin{document}
+\tenkzkernel
+\ExplSyntaxOn
+\prop_clear:N \l__tenkz_kernel_ro_legs_prop
+\tl_set:Nn \l__tenkz_kernel_ro_lane_tl {2}
+\tl_set:Nn \l__tenkz_kernel_ro_tau_tl {0}
+\__tenkz_kernel_r_route_leg:nn {{n}{1}{1}} {wire-1}
+\tl_set:Nn \l__tenkz_kernel_ro_lane_tl {-1}
+\tl_set:Nn \l__tenkz_kernel_ro_tau_tl {90}
+\__tenkz_kernel_r_route_leg:nn {{n}{1}{1}} {wire-2}
+\prop_map_inline:Nn \l__tenkz_kernel_ro_legs_prop
+  {
+    \int_compare:nNnF { \clist_count:n {#2} } = {2}
+      { \errmessage{a crossed leg forgot one route axis} }
+  }
+\ExplSyntaxOff
+\mbox{parsed}
+\end{document}

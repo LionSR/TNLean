@@ -1,0 +1,33 @@
+% Regression: opposite sides count independently, while an all-side route
+% occupies every side and advances every side's next lane.
+\documentclass{standalone}
+\usepackage{tenkz}
+\makeatletter
+\ExplSyntaxOn
+\file_input:n { tenkz-kernel.code.tex }
+\ExplSyntaxOff
+\makeatother
+\begin{document}
+\tenkzkernel
+\ExplSyntaxOn
+\prop_clear:N \l__tenkz_kernel_ro_taken_prop
+\tl_set:Nn \l__tenkz_kernel_ro_sel_tl {(1,1)}
+\tl_set:Nn \l__tenkz_kernel_ro_side_tl {n}
+\__tenkz_kernel_r_route_lane_take:
+\tl_if_eq:NnF \l__tenkz_kernel_ro_lane_tl {0}
+  { \errmessage{the first north route did not take lane zero} }
+\tl_set:Nn \l__tenkz_kernel_ro_side_tl {s}
+\__tenkz_kernel_r_route_lane_take:
+\tl_if_eq:NnF \l__tenkz_kernel_ro_lane_tl {0}
+  { \errmessage{the first south route shared the north counter} }
+\tl_set:Nn \l__tenkz_kernel_ro_side_tl {all}
+\__tenkz_kernel_r_route_lane_take:
+\tl_if_eq:NnF \l__tenkz_kernel_ro_lane_tl {1}
+  { \errmessage{the all-side route did not clear both occupied sides} }
+\tl_set:Nn \l__tenkz_kernel_ro_side_tl {e}
+\__tenkz_kernel_r_route_lane_take:
+\tl_if_eq:NnF \l__tenkz_kernel_ro_lane_tl {2}
+  { \errmessage{the east route collided with the all-side route} }
+\ExplSyntaxOff
+\mbox{parsed}
+\end{document}
