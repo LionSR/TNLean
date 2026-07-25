@@ -56,10 +56,10 @@ through its own period agrees with the directly $p$-blocked block.
     \lean{MPSTensor.IsPrimitive.adjoint_iff}\leanok
     \uses{def:primitive_channel}
     Let $\E$ be a finite-dimensional completely positive map. Then $\E$ is
-    primitive if and only if its Frobenius adjoint $\E^\dagger$ is primitive;
-    equivalently, $\sigma_\partial(\E)=\{1\}$ if and only if
-    $\sigma_\partial(\E^\dagger)=\{1\}$, since the peripheral spectrum of
-    $\E^\dagger$ is the complex conjugate of that of $\E$.
+    primitive if and only if its Frobenius adjoint $\E^\dagger$ is primitive.
+    Equivalently, the eigenvalues $\lambda$ of $\E$ with $|\lambda|=1$ form
+    the singleton $\{1\}$ if and only if the same holds for $\E^\dagger$,
+    because adjunction sends every eigenvalue to its complex conjugate.
 \end{lemma}
 
 \begin{lemma}[Primitivity under blocking by a multiple]%
@@ -140,8 +140,8 @@ through its own period agrees with the directly $p$-blocked block.
          & \longrightarrow0.
         \notag
     \end{align}
-    The convergence is the complementary-power field of this primitive
-    fixed-point witness.
+    The primitive fixed-point theorem supplies this complementary-power
+    convergence.
 
     The blocked transfer map is the corresponding positive power:
     \begin{align}
