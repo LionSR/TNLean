@@ -77,22 +77,6 @@ noncomputable example
     change ‖(1 : ℂ)‖ = 1
     simp
 
-/-- **Per-block unit-modulus witness for `singletonDecomp`.**
-
-Fundamental-theorem theorems on `IsBNTCanonicalForm` take the per-block
-unit-modulus convention `∀ j, ∃ q, ‖μ_{j,q}‖ = 1` (paper-implicit in
-CPSV16 Appendix MPV proof, line 1182's projection argument) as an explicit
-hypothesis.  For `singletonDecomp C`, the unique copy carries
-weight `1`. -/
-lemma singletonDecomp_weight_unit_per_block (C : MPSTensor d D) :
-    ∀ j : Fin (singletonDecomp C).basisCount,
-      ∃ q : Fin ((singletonDecomp C).copies j),
-        ‖(singletonDecomp C).weight j q‖ = 1 := by
-  intro _
-  refine ⟨0, ?_⟩
-  change ‖(1 : ℂ)‖ = 1
-  simp
-
 /-! ## Example 2 — `C ⊕ (-C)` -/
 
 /-- The single-sector two-copy decomposition of `C` with raw weights
@@ -223,21 +207,6 @@ noncomputable example
     refine ⟨0, 0, ?_⟩
     change ‖(if (0 : Fin 2) = 0 then (1 : ℂ) else Complex.exp (Complex.I * θ))‖ = 1
     simp
-
-/-- **Per-block unit-modulus witness for `phaseDecomp`.**
-
-For each (unique) BNT basis sector, the copy `q = 0` carries weight
-`μ = 1`.  Consumed by FT theorems on `IsBNTCanonicalForm` as the
-explicit per-block hypothesis (paper-implicit in CPSV16 Appendix MPV proof,
-line 1182's projection argument). -/
-lemma phaseDecomp_weight_unit_per_block (C : MPSTensor d D) (θ : ℝ) :
-    ∀ j : Fin (phaseDecomp C θ).basisCount,
-      ∃ q : Fin ((phaseDecomp C θ).copies j),
-        ‖(phaseDecomp C θ).weight j q‖ = 1 := by
-  intro _
-  refine ⟨0, ?_⟩
-  change ‖(if (0 : Fin 2) = 0 then (1 : ℂ) else Complex.exp (Complex.I * θ))‖ = 1
-  simp
 
 /-! ## Example 4 — equal-modulus weight layer on `signFlipDecomp`
 
