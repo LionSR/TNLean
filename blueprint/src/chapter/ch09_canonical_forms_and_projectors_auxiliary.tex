@@ -45,10 +45,22 @@
         thm:unital_nonscalar_fixed_point_split,
         thm:irreducible_unital_scalar_fixed_point,
         thm:pgvwc07_dual_diag_unital}
-    Follow the proof of \cite[Theorem~4]{PerezGarcia2007Matrix}. First divide
-    the whole tensor by the square root of the largest transfer spectral
-    radius. Perron--Frobenius supplies a positive semidefinite fixed point. If
-    it is full rank, conjugation by its positive square root gives the unital
+    Follow the proof of \cite[Theorem~4]{PerezGarcia2007Matrix}, beginning with
+    the identically-zero case. If every positive-length MPV coefficient
+    vanishes, return the empty retained family; all block conditions and the
+    bond-dimension bound are then vacuous. Otherwise some length~$N$ has a
+    nonzero coefficient, and therefore
+    \begin{align}
+        \Tr(\E_A^N)
+         & =\sum_\sigma\left|V^{(N)}(A)_\sigma\right|^2
+        >0.
+        \notag
+    \end{align}
+    Thus $\E_A$ has a nonzero eigenvalue and positive spectral radius. Only in
+    this nonzero branch do we divide the tensor by the square root of that
+    radius.
+    Perron--Frobenius then supplies a positive semidefinite fixed point. If it
+    is full rank, conjugation by its positive square root gives the unital
     gauge
     \begin{align}
         \sum_i A^i(A^i)^\dagger
@@ -156,10 +168,17 @@ the coefficient argument of Chapter~\ref{ch:bnt}.
          & =\bigoplus_{k=1}^r\mu_kA_k^i,
         \tag{CF}\label{eq:cpsv_canonical_form}
     \end{align}
-    where every $A_k$ is a normal tensor. Since the states are not normalized,
-    the common scalar may be chosen so that $|\mu_k|\le1$ for every~$k$ and at
-    least one weight has modulus one, unless the positive-length MPV family is
-    identically zero.
+    where every $A_k$ is a normal tensor. For a nonzero positive-length MPV
+    family, the states are not normalized, so the common scalar may be chosen
+    such that $|\mu_k|\le1$ for every~$k$ and at least one weight has modulus
+    one.
+
+    \textbf{Local fix (zero-family normalization):} The source states the
+    unit-modulus convention without an exception. An identically zero
+    positive-length MPV family has no nonempty retained family on which a
+    unit-modulus weight can be attained, so here it is represented by the empty
+    family. This deviation is recorded in
+    \path{docs/paper-gaps/cpsv16_cf_normalization_and_proportional_comparison.tex}.
 
     A basis of normal tensors for $A$ is a family $(C_j)_{j=1}^g$ of normal
     tensors such that $V^{(N)}(A)$ lies in the span of the
