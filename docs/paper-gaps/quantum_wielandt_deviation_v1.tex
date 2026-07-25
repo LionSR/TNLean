@@ -67,9 +67,9 @@ rank by
 This is the paper's number $d$ written invariantly. Replacing $d$ by
 $\operatorname{kr}(A)$ is therefore not a change in the mathematical bound.
 \footnote{The formal definitions are \leanid{MPSTensor.wordSpan} in
-    \path{TNLean/Wielandt/SpanGrowth/CumulativeSpan.lean:57--64} and
+    \path{TNLean/Wielandt/SpanGrowth/CumulativeSpan.lean} and
     \leanid{MPSTensor.krausRank} in
-    \path{TNLean/Wielandt/Primitivity/Definitions.lean:84--90}. The local
+    \path{TNLean/Wielandt/Primitivity/Definitions.lean}. The local
     source identifies $d$ as the number of linearly independent Kraus operators in
     \path{Papers/0909.5347/main.tex:360--365}; the proof of Lemma~1 uses
     $\dim T_1(A)=d$ in \path{Papers/0909.5347/main.tex:579--583}.}
@@ -83,61 +83,45 @@ blocking argument, but the conclusion is the equality
 $S_n(A)=M_D(\mathbb C)$ for one fixed length $n$. It is not merely a statement
 about the increasing sum $S_0(A)+\cdots+S_n(A)$.\footnote{The general
     theorem is \leanid{MPSTensor.iIndex_le_general_of_isPrimitivePaper}
-    in \path{TNLean/Wielandt/Inequality/Bounds.lean:389--468}. The
-    formal equivalence between the primitive condition used by Sanz--P\'erez-Garc\'ia--Wolf--Cirac
+    in \path{TNLean/Wielandt/Inequality/Bounds.lean}. The formal equivalence
+    between the primitive condition used by Sanz--P\'erez-Garc\'ia--Wolf--Cirac
     and eventual full Kraus rank under normalization is in
-    \path{TNLean/Wielandt/Primitivity/Equivalence.lean:169--191}.}
+    \path{TNLean/Wielandt/Primitivity/Equivalence.lean}.}
 
-The two improved estimates are where the statements diverge. The formal
-invertible case assumes that one of the Kraus matrices, say $A_{i_0}$, is
-invertible; under that assumption it proves
+The two improved estimates now use the source hypotheses directly. If an
+arbitrary $X\in S_1(A)$ is invertible, then
 \[
     S_{D^2-\operatorname{kr}(A)+1}(A)=M_D(\mathbb C).
 \]
-The formal non-invertible case assumes that one Kraus matrix $A_{i_0}$ is
-non-invertible and has a nonzero eigenvalue; under that assumption it proves
+If an arbitrary $X\in S_1(A)$ is non-invertible and has a nonzero eigenvalue,
+then
 \[
     S_{D^2}(A)=M_D(\mathbb C).
 \]
-The paper's hypotheses are weaker: they allow the invertible or non-invertible
-matrix to be any element of $S_1(A)$, hence any linear combination of the Kraus
-matrices.\footnote{The formal invertible case is
-    \leanid{MPSTensor.wordSpan_eq_top_of_isPrimitivePaper_of_isUnit} and
-    \leanid{MPSTensor.iIndex_le_of_isPrimitivePaper_of_isUnit} in
-    \path{TNLean/Wielandt/Inequality/Bounds.lean:313--337}. The
-    formal non-invertible case is
-    \leanid{MPSTensor.wordSpan_eq_top_of_isPrimitivePaper_of_noninvertible_eigenvector}
-    and \leanid{MPSTensor.iIndex_le_sq_of_noninvertible_eigenvector} in
-    \path{TNLean/Wielandt/Inequality/Bounds.lean:213--243}.}
+Thus the distinguished-Kraus-operator restriction recorded in the first
+version of this note has been removed.\footnote{The primary declarations are
+    \leanid{MPSTensor.wordSpan_eq_top_of_isPrimitivePaper_of_mem_wordSpan_one_of_isUnit}
+    and
+    \leanid{MPSTensor.wordSpan_eq_top_of_isPrimitivePaper_of_mem_wordSpan_one_of_noninvertible_eigenvector}
+    in \path{TNLean/Wielandt/Inequality/Bounds.lean}. The corresponding index
+    bounds are \leanid{MPSTensor.iIndex_le_of_mem_wordSpan_one_of_isUnit} and
+    \leanid{MPSTensor.iIndex_le_sq_of_mem_wordSpan_one_of_noninvertible_eigenvector}.}
 
-\section{The mathematical difference}
+\section{Resolution of the one-step-subspace deviation}
 
-The distinction is small but genuine. Suppose first that the paper gives an
-invertible matrix $X\in S_1(A)$. Since $X$ is a linear combination of the
-$A_i$, multiplication by $X$ sends $S_n(A)$ into $S_{n+1}(A)$. Since $X$ is
-invertible, this multiplication is injective on $M_D(\mathbb C)$. This is the
-linear-algebra reason why the dimensions of the spaces $S_n(A)$ cannot stagnate
-for too long; it is the dimension-growth step used in the proof of the sharper
-bound.
-
-If $X$ is itself one of the Kraus matrices, then every product $XW$ with
-$W\in S_n(A)$ is visibly a linear combination of words of length $n+1$ whose
-first letter is fixed. This is the case now covered by the formal theorem. If
-$X$ is only a linear combination of Kraus matrices, the same inclusion
-$XS_n(A)\subseteq S_{n+1}(A)$ is still true, but it has to be used in that more
-linear form. The proof should not need the matrix $X$ to be a distinguished
-letter; it only needs $X$ to lie in $S_1(A)$ and to have the relevant spectral
-property.
-
-The same issue appears in the non-invertible case. The source hypothesis gives
-a matrix $X\in S_1(A)$ which is singular but has a nonzero eigenvalue. The
-formal theorem proves the corresponding statement when this matrix is one of
-the Kraus matrices. The natural generalization is to run the same argument with
-an arbitrary such $X\in S_1(A)$, using the inclusion $XS_n(A)\subseteq S_{n+1}(A)$
-rather than a distinguished first letter. Equivalently, one could prove a change
-of Kraus representation which places $X$ among the displayed Kraus operators
-without changing the channel or the spaces $S_n(A)$ in the relevant way. Either
-approach would match the paper's statement.
+The original restriction arose from proving the dimension-growth and rank-one
+arguments only for a distinguished Kraus matrix. The current statements take an
+arbitrary $X\in S_1(A)$ together with its span-membership hypothesis. The key
+inclusion
+\[
+    XS_n(A)\subseteq S_{n+1}(A)
+\]
+then replaces the distinguished-letter step. For the invertible case, left
+multiplication by $X$ is injective and drives dimension growth. For the
+non-invertible case, the same inclusion pads the rank-one operator extracted
+from a nonzero eigenvector. Thus both proofs now apply to exactly the one-step
+subspace hypotheses used in the source, and the deviation recorded by the first
+version of this note is closed.
 
 \section{What is not a discrepancy}
 
@@ -170,42 +154,49 @@ intermediate hypothesis is legitimate.
 
 \section{Scope of the index comparison}
 
+For a nonzero vector $\varphi\in\mathbb C^D$, set
+\[
+    H_n(A,\varphi)=S_n(A)\varphi,
+\]
+and let $q(\mathcal E_A)$ be the least positive $n$ such that
+$H_n(A,\varphi)=\mathbb C^D$ for every nonzero $\varphi$. As for $i(A)$, the
+value is defined to be zero when no such positive integer exists.
 Proposition~1 of~\cite{Sanz2010Quantum} states
 \[
     q(\mathcal E_A)\leq i(A)
 \]
-for every quantum channel. The present tagged theorem
-\leanid{MPSTensor.qIndex_le_iIndex_of_isPrimitivePaper} assumes both
-trace-preserving normalization and \leanid{MPSTensor.IsPrimitivePaper}. It is
-therefore a specialization of Proposition~1, not yet the source theorem with
-its full hypothesis set. The lower-level theorem
-\leanid{MPSTensor.qIndex_le_iIndex} assumes eventual full Kraus rank, so it has
-the same finite-index restriction in a different form.
+for every quantum channel.
+
+The available comparison assumes trace-preserving normalization and uniform
+vector-spreading primitivity. It proves the same inequality under these
+hypotheses, and is therefore a specialization of Proposition~1 rather than the
+source theorem with its full hypothesis set. A related comparison assumes
+instead that $i(A)$ is finite.\footnote{The two declarations are
+    \leanid{MPSTensor.qIndex_le_iIndex_of_isPrimitivePaper} and
+    \leanid{MPSTensor.qIndex_le_iIndex}. The definitions are in
+    \path{TNLean/Wielandt/Primitivity/Definitions.lean}, and the restricted
+    theorem is in \path{TNLean/Wielandt/Inequality/Bounds.lean}.}
 
 The missing cases are mathematically degenerate but must still be represented
 explicitly. If the channel is not primitive, then the admissible set defining
-$q(\mathcal E_A)$ is empty and the formal convention gives $q(\mathcal E_A)=0$.
-If it does not have eventual full Kraus rank, the corresponding admissible set
-for $i(A)$ is empty and $i(A)=0$. A source-faithful theorem can therefore be
-obtained by proving these two zero-index characterizations and splitting on
-primitivity, using the existing primitive-channel inequality in the nontrivial
-case. The relevant definitions and the restricted theorem are in
-\path{TNLean/Wielandt/Primitivity/Definitions.lean} and
-\path{TNLean/Wielandt/Inequality/Bounds.lean}.
+$q(\mathcal E_A)$ is empty and $q(\mathcal E_A)=0$. If it does not have
+eventual full Kraus rank, the admissible set for $i(A)$ is empty and $i(A)=0$.
+A source-faithful theorem can therefore be obtained by proving these two
+zero-index characterizations and splitting on primitivity, using the existing
+primitive-channel inequality in the nontrivial case.
 
 \section{Scope of the strong-irreducibility equivalence}
 
 Proposition~3(c) of~\cite{Sanz2010Quantum} asks for a unique peripheral
-eigenvalue and a positive-definite corresponding eigenvector. The current
-predicate \leanid{MPSTensor.IsStronglyIrreduciblePaper} additionally carries
-\leanid{IsIrreducibleMap (transferMap A)} as an explicit conjunct. Consequently,
-the equivalences
-\leanid{MPSTensor.primitivePaper_iff_stronglyIrreducible} and
-\leanid{MPSTensor.hasEventuallyFullKrausRank_iff_stronglyIrreducible} prove a
-strengthened version of Proposition~3 rather than its literal third clause.
-This strengthened interpretation is documented in
-\path{TNLean/Wielandt/Primitivity/Definitions.lean} and
-\path{docs/glossary.md}.
+eigenvalue and a positive-definite corresponding eigenvector. The present
+comparison strengthens this condition by also requiring irreducibility of the
+transfer map. Consequently, the proved equivalence is a strengthened version
+of Proposition~3 rather than its literal third clause.\footnote{The strengthened
+    predicate is \leanid{MPSTensor.IsStronglyIrreduciblePaper}; the equivalences
+    are \leanid{MPSTensor.primitivePaper_iff_stronglyIrreducible} and
+    \leanid{MPSTensor.hasEventuallyFullKrausRank_iff_stronglyIrreducible}. See
+    \path{TNLean/Wielandt/Primitivity/Definitions.lean} and
+    \path{docs/glossary.md}.}
 
 To remove the restriction, define the literal source predicate using only the
 positive-definite fixed point and peripheral-eigenvalue uniqueness, then prove
@@ -213,28 +204,16 @@ that it implies transfer-map irreducibility for a normalized completely
 positive map. This implication supplies the extra conjunct of the existing
 predicate, after which the established equivalences yield the literal
 Proposition~3. Alternatively, the three equivalence directions may be reproved
-directly for the source predicate. Until that bridge is formalized, the
-blueprint identifies the tagged theorem as a strengthened form and retains the
-literal source condition in its main-text statement.
+directly for the source predicate.
 
 \section{Conclusion}
 
-The general quantum Wielandt bound has been formalized with the right index and
-with the paper's linearly independent Kraus count made explicit. Three local
-scope restrictions remain: the formal index comparison assumes primitivity, the
-formal strong-irreducibility predicate carries an extra irreducibility conjunct,
-and the two improved estimates distinguish a chosen Kraus operator from an
-arbitrary element of the one-step span.
-
-For the improved estimates, the paper assumes that the one-step space $S_1(A)$ contains
-a matrix with a specified spectral property. The formal statements presently
-assume that such a matrix is one of the chosen Kraus operators. This is a
-stronger hypothesis. Mathematically, the expected correction is clear: prove the
-two arguments for an arbitrary qualifying matrix $X\in S_1(A)$, using the
-inclusion $XS_n(A)\subseteq S_{n+1}(A)$ and the same dimension-growth reasoning,
-or prove an explicit Kraus-representation invariance result which reduces the
-paper's hypotheses to the chosen-Kraus-matrix hypotheses without changing the
-channel or the index $i(A)$.
+The general quantum Wielandt bound and both improved one-step-subspace estimates
+now use the source indices and hypotheses. Two local scope restrictions remain:
+the index comparison assumes primitivity, and the strong-irreducibility
+predicate carries an additional irreducibility conjunct. The preceding sections
+record the corresponding zero-index and source-predicate bridges needed to
+remove these restrictions.
 
 \bibliographystyle{alpha}
 \bibliography{references}

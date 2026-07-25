@@ -106,27 +106,25 @@ eventual exact-word spanning, and spectral strong irreducibility.
     If the set is empty, its value is defined to be zero.
 \end{definition}
 
+% Scope restriction (explicit irreducibility): the condition below strengthens
+% Sanz et al., Proposition 3(c). See
+% docs/paper-gaps/quantum_wielandt_deviation_v1.tex.
 \begin{definition}[Strengthened strong irreducibility]
     \label{def:strongly_irreducible_paper}
     \lean{MPSTensor.IsStronglyIrreduciblePaper}
     \leanok
     \uses{def:transfer_map, def:irreducible_cp, def:primitive_channel}
-    The tensor is \emph{strongly irreducible in the sense of
-        \cite[Proposition~3(c)]{Sanz2010Quantum}} if there is a matrix $\rho>0$
-    such that
+    We call the tensor \emph{strongly irreducible} here if there is a matrix
+    $\rho>0$ such that
     \begin{align}
         \E_A(\rho)                 & =\rho, \notag \\
         \spec_{\mathrm{per}}(\E_A) & =\{1\},
         \notag
     \end{align}
-    and $\E_A$ is irreducible. The source condition in
+    and $\E_A$ is irreducible. The condition in
     \cite[Proposition~3(c)]{Sanz2010Quantum} requires the positive-definite
-    fixed point and uniqueness of the peripheral eigenvalue. The formal
-    predicate adds irreducibility as an explicit extra condition, so it is a
-    strengthened interpretation rather than the literal source clause.
-    \textbf{Scope restriction (explicit irreducibility):} the difference and
-    its elimination route are recorded in
-    \path{docs/paper-gaps/quantum_wielandt_deviation_v1.tex}.
+    fixed point and uniqueness of the peripheral eigenvalue; the definition
+    above strengthens it by also requiring irreducibility.
 \end{definition}
 
 \begin{theorem}[Strengthened form of the primitivity equivalence]
@@ -147,10 +145,8 @@ eventual exact-word spanning, and spectral strong irreducibility.
     \end{enumerate}
     Proposition~3 of~\cite{Sanz2010Quantum} states the same equivalence with
     item~(3) replaced by the literal source condition: a unique peripheral
-    eigenvalue and a positive-definite corresponding eigenvector. The theorem
-    displayed here is the formalized strengthening in which item~(3) also
-    includes irreducibility. The restriction is documented in
-    \path{docs/paper-gaps/quantum_wielandt_deviation_v1.tex}.
+    eigenvalue and a positive-definite corresponding eigenvector. Here
+    item~(3) includes the additional irreducibility condition.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -180,6 +176,9 @@ eventual exact-word spanning, and spectral strong irreducibility.
     $o(\lVert B\rVert^2)$. For large $m$ this is a contradiction.
 \end{proof}
 
+% Scope restriction (primitive channels): Proposition 1 is universal, whereas
+% the theorem below assumes paper primitivity. See
+% docs/paper-gaps/quantum_wielandt_deviation_v1.tex.
 \begin{theorem}[Primitive-channel specialization of the index bound]
     \label{thm:q_index_le_i_index}
     \lean{MPSTensor.qIndex_le_iIndex_of_isPrimitivePaper}
@@ -193,11 +192,8 @@ eventual exact-word spanning, and spectral strong irreducibility.
         \notag
     \end{align}
     Proposition~1 of~\cite{Sanz2010Quantum} states this inequality for every
-    quantum channel. The tagged theorem is the currently formalized
-    specialization under normalization and paper primitivity.
-    \textbf{Scope restriction (primitive channels):} the missing zero-index
-    cases and their elimination route are recorded in
-    \path{docs/paper-gaps/quantum_wielandt_deviation_v1.tex}.
+    quantum channel; the present theorem records its specialization under
+    normalization and paper primitivity.
 \end{theorem}
 
 \begin{proof}\leanok
