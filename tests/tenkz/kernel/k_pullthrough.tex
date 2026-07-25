@@ -1,8 +1,14 @@
-%% Kernel fixture: LANGUAGE-1.0.md 12.3 (rmp-iii-a-pulling-through).
-%% Expected: two panels, each rows=ket cols=3 physical=up with one string
-%% w outside -> e outside; the second declares over at crossing of g and
-%% leg n of (1,2); check=signature passes (equal boundaries) and emits a
-%% check event.
+%% Kernel fixture: LANGUAGE-1.0.md 12.3 (rmp-iii-a-pulling-through), in the
+%% amended grammar.
+%% Expected: two panels, each rows=ket cols=3 physical=up, with one string
+%% routed on one side of the selection (1,1) .. (1,3) and one crossing habit.
+%% The south route meets no leg, which is the true answer to a string passing
+%% south of legs that all point north; the north route meets all three, each
+%% once, in hull order, and every one of those crossings is derived and then
+%% resolved by the habit.  No crossing is declared by hand.  Every crossed leg
+%% reaches past the lane, so the picture cannot assert the relation by letting
+%% a leg stop short of the string.  check=signature passes (equal boundaries)
+%% and emits a check event.
 \documentclass{standalone}
 \usepackage{tenkz}
 \makeatletter
@@ -14,13 +20,13 @@
 \tenkzkernel
 \begin{tenkzeq}[size=m, check={signature}]
   \begin{tenkz}[rows={ket}, cols=3, physical=up]
-    \tnwire[kind=string, species=g,
-            via={1 s of (1,2)}]{w outside}{e outside}
+    \tnwire[kind=string, species=g, crossing=over,
+            route={s of (1,1) .. (1,3)}]{open}{open}
   \end{tenkz}
   =
   \begin{tenkz}[rows={ket}, cols=3, physical=up]
-    \tnwire[kind=string, species=g, name=g, via={1 n of (1,2)},
-            cross={over at crossing of g and leg n of (1,2)}]{w outside}{e outside}
+    \tnwire[kind=string, species=g, crossing=over,
+            route={n of (1,1) .. (1,3)}]{open}{open}
   \end{tenkz}
 \end{tenkzeq}
 \end{document}
