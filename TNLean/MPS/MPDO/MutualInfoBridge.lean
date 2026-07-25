@@ -55,8 +55,7 @@ noncomputable def periodicCutLeftFactor (M : MPOTensor d D) (N L : ℕ)
         (List.ofFn (finFunctionFinEquiv.symm x')) a b
 
 /-- The right-block factor obtained by opening the two virtual bonds of a
-periodic MPO at a contiguous cut.  Its virtual indices are reversed because
-`trace (A * B) = ∑ a, b, A a b * B b a`. -/
+periodic MPO at a contiguous cut.  Its virtual indices are reversed because \(\operatorname{tr}(AB) = \sum_{a,b} A_{ab} B_{ba}\). -/
 noncomputable def periodicCutRightFactor (M : MPOTensor d D) (K : ℕ)
     (a b : Fin D) : Matrix (Fin (d ^ K)) (Fin (d ^ K)) ℂ :=
   fun y y' ↦
@@ -68,8 +67,8 @@ operator-Schmidt decomposition of a normalized periodic MPO with `D * D`
 product terms.
 
 The statement is purely algebraic: it requires neither positivity nor a
-nonzero trace.  Under the totalized inverse convention in `normalizedMPO`, a
-zero trace simply makes every left factor zero. -/
+nonzero trace. The factor `(mpo M N).trace⁻¹` uses the convention \(0⁻¹ = 0\),
+so a zero trace makes every left factor zero. -/
 theorem bipartitionedNormalizedMPO_hasOperatorSchmidtDecomposition
     (M : MPOTensor d D) (N L K : ℕ) (h : N = L + K) :
     Matrix.HasOperatorSchmidtDecomposition
