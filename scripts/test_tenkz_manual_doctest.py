@@ -28,7 +28,7 @@ def main() -> int:
         raise AssertionError(f"expected 25 reference examples, found {len(reference)}")
     if any(r"\begin{document}" not in example.document for example in manual):
         raise AssertionError("a displayed example was not wrapped as a document")
-    if any("tenkz_rmp.sh" in example.document for example in manual):
+    if any("tenkz_rmp.py" in example.document for example in manual):
         raise AssertionError("the displayed shell session was treated as TeX")
 
     fixture = r"""
