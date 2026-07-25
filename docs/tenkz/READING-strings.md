@@ -189,12 +189,12 @@ No amendment. The recommended ledger changes, for the maintainer's signature:
 
 | target | change |
 |---|---|
-| `rmp-iii-a-spt-mpo` | `strings` → `carried tensor` |
-| `rmp-workbench-iii-g-injective-pull` | `strings` → `carried tensor`; keep `pulling-through` |
-| `rmp-workbench-iii-mpo-injective-white` | `strings` → `carried tensor`; keep `pulling-through` |
-| `rmp-workbench-iii-eq59` | `strings` → `carried tensor`; keep `torus-cycle` |
+| `rmp-iii-a-spt-mpo` | `strings` → `carried-tensor` |
+| `rmp-workbench-iii-g-injective-pull` | `strings` → `carried-tensor`; keep `pulling-through` |
+| `rmp-workbench-iii-mpo-injective-white` | `strings` → `carried-tensor`; keep `pulling-through` |
+| `rmp-workbench-iii-eq59` | `strings` → `carried-tensor`; keep `torus-cycle` |
 | `rmp-iii-a-f-symbol` | drop `strings`; the panel is sayable and the case draws the wrong diagram |
-| `rmp-workbench-ii-mpu-wrap-second` | `strings` → `skin pairings` |
+| `rmp-workbench-ii-mpu-wrap-second` | `strings` → `skin-pairings` |
 | `rmp-iii-a-g-injective-projector` | re-pair, then re-review; on the right panel neither `strings` nor `group-average` is missing |
 
 Two manifest ranges are wrong and should move with them:
