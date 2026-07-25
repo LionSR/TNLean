@@ -16,7 +16,7 @@ This file introduces a two-sided ("bi-rectangular") span
 and develops the membership and conversion lemmas used by the rank-one
 extraction step in the Quantum Wielandt proof: if the exact word span is
 already full, the bi-rectangular span is the full two-sided range of the
-linear map `X ↦ P * X * Q` (`biRectSpan_eq_range_of_wordSpan_eq_top`), and if
+linear map $X \mapsto P * X * Q$ (`biRectSpan_eq_range_of_wordSpan_eq_top`), and if
 `P` and `Q` themselves lie in bounded word spans, the bi-rectangular span is
 contained in a bounded word span (`biRectSpan_le_wordSpan`).
 -/
