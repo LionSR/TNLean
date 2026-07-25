@@ -1,52 +1,10 @@
-\section{Cumulative span to word span}\label{sec:cumspan_to_wordspan}
+\section{One-step padding and exact word spans}\label{sec:cumspan_to_wordspan}
 
-Cumulative spanning, $T_N(A)=\MN{D}$, is the sum of the word spans at
-all lengths at most~$N$ and is weaker than normality, which requires
-$S_L(A)=\MN{D}$ at a single length~$L$.
-An aperiodicity hypothesis upgrades cumulative spanning to a single-length word
-span.
-
-\begin{remark}[Aperiodicity condition]\label{rem:aperiodicity}\leanok
-    We say $A$ satisfies the \emph{aperiodicity condition}
-    if $\Id \in S_1(A)$, i.e.\ the identity matrix lies in the
-    span of the Kraus operators $\{A^i\}_{i=0}^{d-1}$.
-    This is an additional hypothesis. The one-sided TP normalization
-    $\sum_i (A^i)^\dagger A^i = \Id$ does \emph{not} imply
-    $\Id \in S_1(A)$; it only gives a quadratic identity among the
-    Kraus operators.
-    The aperiodicity condition is kept explicit in this section for
-    generality.
-    For the primitive condition with positive-definite fixed point
-    (peripheral-spectrum primitivity together with a positive-definite
-    fixed point), Theorem~\ref{thm:normal_from_primitive_posdef} gives
-    normality without passing through aperiodicity.
-\end{remark}
-
-\begin{remark}[Counterexample: cumulative spanning does not imply normality]%
-    \label{rem:cumspan_counterexample}\leanok
-    In $\MN{2}$, let $A^0=E_{12}$ and $A^1=E_{21}$ be the off-diagonal
-    matrix units.
-    Then $\algspn(A)=\MN{2}$ and $T_2(A)=\MN{2}$, but the word spans
-    alternate: $S_n(A)$ contains only off-diagonal matrices for odd~$n$
-    and only diagonal matrices for even~$n$.
-    Hence $S_n(A)\neq\MN{2}$ for every~$n$, and $A$ is not normal.
-    The aperiodicity condition fails because
-    $\Id\notin S_1(A)=\spn_{\C}\{E_{12},E_{21}\}$.
-\end{remark}
-
-\begin{theorem}[Word span monotonicity from aperiodicity]%
-    \label{thm:wordspan_mono_aperiodic}
-    \lean{MPSTensor.wordSpan_mono_succ_of_one_mem_wordSpan_one}
-    \leanok
-    \uses{def:word_span}
-    If $\Id\in S_1(A)$, then $S_n(A)\le S_{n+1}(A)$ for every~$n$.
-\end{theorem}
-
-\begin{proof}\leanok\uses{lem:word_span_mul}
-    For any $M\in S_n(A)$, one has
-    $M=M\Id\in S_n(A)S_1(A)\subseteq S_{n+1}(A)$ by
-    Lemma~\ref{lem:word_span_mul}.
-\end{proof}
+Cumulative spanning, $T_N(A)=\MN{D}$, is weaker than exact-length spanning
+$S_L(A)=\MN{D}$. If $\Id\in S_1(A)$, shorter words can be padded to a
+common length. Section~\ref{sec:app_wielandt_identity_in_span} proves this
+conversion and records a counterexample without the one-step padding
+condition.
 
 \begin{theorem}[Homogeneous word-span propagation under normalization]%
     \label{thm:wordspan_propagation_unital}
@@ -84,35 +42,7 @@ span.
     Iterating this implication gives the result for every $m\ge L$.
 \end{proof}
 
-\begin{theorem}[Cumulative span equals word span under aperiodicity]%
-    \label{thm:cumspan_eq_wordspan}
-    \lean{MPSTensor.cumulativeSpan_eq_wordSpan_of_one_mem_wordSpan_one}
-    \leanok
-    \uses{def:cumulative_span, def:word_span}
-    If $\Id\in S_1(A)$, then $T_n(A)=S_n(A)$ for every~$n$.
-\end{theorem}
-
-\begin{proof}\leanok\uses{thm:wordspan_mono_aperiodic}
-    By Theorem~\ref{thm:wordspan_mono_aperiodic}, the word spans form the
-    chain $S_0(A)\le S_1(A)\le\cdots\le S_n(A)$.
-    Therefore their sum $T_n(A)=S_0(A)+\cdots+S_n(A)$ equals the largest
-    term $S_n(A)$.
-\end{proof}
-
-\begin{theorem}[Cumulative spanning plus aperiodicity implies normality]%
-    \label{thm:cumspan_to_normal}
-    \lean{MPSTensor.isNormal_of_cumulativeSpan_eq_top_of_aperiodic}
-    \leanok
-    \uses{def:normal, def:cumulative_span, def:word_span}
-    If $T_N(A)=\MN{D}$ and $\Id\in S_1(A)$, then $A$ is normal.
-\end{theorem}
-
-\begin{proof}\leanok\uses{thm:cumspan_eq_wordspan}
-    Theorem~\ref{thm:cumspan_eq_wordspan} gives
-    $S_N(A)=T_N(A)=\MN{D}$.
-\end{proof}
-
-\begin{theorem}[Algebra span plus aperiodicity implies normality]%
+\begin{theorem}[Algebra span plus one-step padding implies normality]%
     \label{thm:algspan_to_normal}
     \lean{MPSTensor.isNormal_of_algSpan_eq_top_of_aperiodic}
     \leanok
@@ -127,11 +57,10 @@ span.
     Apply Theorem~\ref{thm:cumspan_to_normal}.
 \end{proof}
 
-\begin{remark}[Normal canonical form avoids the aperiodicity step]\label{rem:d1_bypasses_aperiodicity}
-    The aperiodicity results in Section~\ref{sec:cumspan_to_wordspan} are
-    needed only for the block-injective argument through
-    Definition~\ref{def:normal}, where cumulative spanning is upgraded to
-    eventual block injectivity.
+\begin{remark}[Normal canonical form avoids one-step padding]\label{rem:d1_bypasses_aperiodicity}
+    The identity-in-the-one-step-span results in
+    Section~\ref{sec:app_wielandt_identity_in_span} are needed only when
+    cumulative spanning is upgraded to exact-length spanning.
     The normal-canonical theory used later in
     Chapters~\ref{ch:canonical}--\ref{ch:bnt} does not pass through this
     step: it works directly with irreducible TP-normalized blocks whose
@@ -180,5 +109,6 @@ span.
 \end{proof}
 
 \begin{remark}
-    Blocking preserves normality by Theorem~\ref{thm:isNormal_blockTensor}.
+    Blocking preserves normality by Theorem~\ref{thm:isNormal_blockTensor},
+    proved in Section~\ref{sec:app_wielandt_blocking_support}.
 \end{remark}

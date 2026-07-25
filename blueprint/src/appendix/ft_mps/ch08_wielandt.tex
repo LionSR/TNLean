@@ -1,0 +1,819 @@
+\chapter{Wielandt Bound: Supporting Results}
+\label{ch:wielandt_supporting_results}
+
+This appendix supports Chapter~\ref{ch:wielandt}. It collects exact-word,
+cumulative-span, augmentation, blocking, complementary-gap, and one-step
+padding results used by the main quantitative argument.
+
+\section{Exact-word and block-injectivity support}
+\label{sec:app_wielandt_exact_word_support}
+
+This section proves the exact-word identities and low-dimensional facts used in
+Lemma~\ref{lem:wordspan_blk_inj}, Theorem~\ref{thm:wordspan_blk_inj_succ},
+Theorem~\ref{thm:lemma2b_assembly}, and
+Theorem~\ref{thm:tp_primitive_irred_block_injective}.
+
+\begin{lemma}[Word span products]\label{lem:word_span_mul}
+    \lean{MPSTensor.wordSpan_mul_le}
+    \leanok
+    \uses{def:word_span}
+    One has $S_m(A)S_n(A)\subseteq S_{m+n}(A)$:
+    the product of word spans at lengths $m$ and $n$
+    is contained in the word span at length $m+n$.
+\end{lemma}
+
+\begin{proof}\leanok
+    Every product $A^{w_1}A^{w_2}$ with $|w_1|=m$
+    and $|w_2|=n$ equals $A^{w_1w_2}$, where
+    $|w_1w_2|=m+n$.
+\end{proof}
+
+\begin{lemma}[Zero-length word span]
+    \label{lem:wordspan_zero_ne_top}
+    \lean{MPSTensor.wordSpan_zero_ne_top_of_two_le}
+    \leanok
+    \uses{def:word_span}
+    If $D\ge2$, then $S_0(A)\neq\MN{D}$.
+\end{lemma}
+
+\begin{proof}\leanok\uses{def:word_span}
+    The zero-length products consist only of the identity, so
+    $S_0(A)=\spn_{\C}\{\Id\}$ has dimension~$1$.
+    Since $\dim\MN{D}=D^2\ge4$, this span cannot equal $\MN{D}$.
+\end{proof}
+
+\begin{corollary}[$0$-block injectivity]
+    \label{cor:blk_inj_zero_dim_one}
+    \lean{MPSTensor.bondDim_eq_one_of_isNBlkInjective_zero}
+    \leanok
+    \uses{lem:wordspan_blk_inj}
+    If $D\ge1$ and $A$ is $0$-block injective, then $D=1$.
+\end{corollary}
+
+\begin{proof}\leanok\uses{lem:wordspan_blk_inj, lem:wordspan_zero_ne_top}
+    By Lemma~\ref{lem:wordspan_blk_inj}, $0$-block injectivity gives
+    $S_0(A)=\MN{D}$. Lemma~\ref{lem:wordspan_zero_ne_top} excludes
+    $D\ge2$, so the nonzero bond dimension must be~$1$.
+\end{proof}
+
+\begin{lemma}[Two-sided span from one nonzero matrix]
+    \label{lem:two_sided_nonzero_matrix_span}
+    \lean{Matrix.span_range_mul_nonzero_mul_eq_top}
+    \leanok
+    If $C\in\MN{D}$ is nonzero, then
+    \begin{align}
+        \spn_{\C}\{RCS:R,S\in\MN{D}\}
+         & =\MN{D}.
+        \label{eq:wld_two_sided_nonzero_span}
+    \end{align}
+    This is the matrix-factorization input used in~%
+    \cite[Lemma~3]{PerezGarcia2007Matrix}.
+\end{lemma}
+
+\begin{proof}\leanok
+    Choose a nonzero entry $C_{pq}$. Then every matrix unit $E_{ij}$
+    is a scalar multiple of $E_{ip}CE_{qj}$, so the span in
+    (\ref{eq:wld_two_sided_nonzero_span}) contains the standard matrix basis.
+\end{proof}
+
+\begin{lemma}[Exact words around a nonzero middle matrix]
+    \label{lem:block_injective_two_sided_word_span}
+    \lean{MPSTensor.span_range_evalWord_mul_nonzero_mul_evalWord_eq_top}
+    \leanok
+    \uses{def:l_blk_injective, lem:two_sided_nonzero_matrix_span}
+    If $A$ is $L$-block injective and $X\neq0$, then
+    \begin{align}
+        \spn_{\C}\{A^uXA^v:|u|=|v|=L\}
+         & =\MN{D}.
+        \notag
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok\uses{lem:two_sided_nonzero_matrix_span}
+    By $L$-block injectivity, the length-$L$ word products span
+    $\MN{D}$. Bilinearity of $(R,S)\mapsto RXS$ reduces the claim to
+    Lemma~\ref{lem:two_sided_nonzero_matrix_span}, with $R$ and $S$ chosen
+    among those word products.
+\end{proof}
+
+\section{Cumulative-span and spectral linear algebra}
+\label{sec:app_wielandt_cumulative_support}
+
+This section supplies the finite-dimensional stabilization and spectral facts
+used in Theorem~\ref{thm:cumulative_span_sharp},
+Theorem~\ref{thm:eigenvector_spreading}, and
+Theorem~\ref{thm:wielandt_general}.
+
+\begin{definition}[Fitting decomposition]\label{def:fitting_decomp}
+    \lean{Wielandt.FittingDecomposition}
+    \leanok
+    A \emph{Fitting decomposition} of a linear endomorphism
+    $f:V\to V$ on a finite-dimensional vector space over an
+    algebraically closed field consists of:
+    \begin{enumerate}
+        \item $f$ is nilpotent on the generalized $0$-eigenspace,
+        \item $f$ is invertible on each generalized $\mu$-eigenspace
+              for $\mu\neq0$,
+        \item the generalized eigenspaces span~$V$,
+        \item the generalized eigenspaces are linearly independent.
+    \end{enumerate}
+\end{definition}
+
+\begin{theorem}[Fitting decomposition exists]\label{thm:fitting_decomp}
+    \lean{Wielandt.fittingDecomposition}
+    \leanok
+    \uses{def:fitting_decomp}
+    Every linear endomorphism on a finite-dimensional vector space
+    over an algebraically closed field admits a Fitting decomposition.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Nilpotency on the zero generalized eigenspace follows from
+    the definition of generalized eigenspaces.
+    Invertibility on nonzero generalized eigenspaces follows
+    because $f-\mu$ is nilpotent there, so
+    $f=\mu(1-(1-f/\mu))$ is invertible.
+    Spanning and independence are standard results for
+    generalized eigenspaces over algebraically closed fields.
+    In~\cite{Sanz2010Quantum} and \cite[Lemma~6.3(b)]{Wolf2012Quantum},
+    the Jordan normal form is used directly.
+    The argument is phrased in terms of generalized eigenspaces instead.
+\end{proof}
+
+\begin{theorem}[Nilpotent power bound]\label{thm:nilpotent_pow_bound}
+    \lean{Wielandt.nilpotent_pow_eq_zero_of_finrank}
+    \leanok
+    If $f$ is nilpotent on a space of dimension~$n$, then $f^n=0$.
+\end{theorem}
+
+\begin{proof}\leanok
+    A nilpotent endomorphism on an $n$-dimensional space has
+    nilpotency index at most~$n$.
+\end{proof}
+
+\begin{theorem}[Cumulative span reaches $\MN{D}$ --- explicit bound]\label{thm:cumulative_eq_top_bound}
+    \lean{MPSTensor.cumulativeSpan_eq_top_of_isNormal_bound}
+    \leanok
+    \uses{def:cumulative_span, def:normal}
+    Let $D>0$. If $A$ is normal, then
+    $T_{D^2}(A)=\MN{D}$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:cumulative_strict_mono, lem:cumulative_finrank_le}
+    By Theorem~\ref{thm:cumulative_strict_mono}, if
+    $T_n\neq T_{n+1}$, then $\dim T_{n+1}>\dim T_n$.
+    Since $\dim T_n\le D^2$ by Lemma~\ref{lem:cumulative_finrank_le},
+    after at most $D^2$ steps either $T_n=\MN{D}$ or $T_n$ has stabilised.
+    Stabilisation before reaching $\MN{D}$ contradicts normality, which
+    requires $S_{L_0}=\MN{D}$ for some $L_0$ and hence
+    $T_{L_0}=\MN{D}$.
+\end{proof}
+
+\begin{theorem}[Nonzero trace product]\label{thm:nonzero_trace_word}
+    \lean{MPSTensor.exists_nonzero_trace_word}
+    \leanok
+    \uses{def:normal}
+    Let $D>0$. If $A$ is normal, then there exists a word $w$ of length at
+    most $D^2$ such that $\tr(A^w)\neq0$.
+    This is the weaker $D^2$ corollary of
+    \cite[Lemma~1]{Sanz2010Quantum}. The sharp source statement is
+    Theorem~\ref{thm:nonzero_trace_word_primitive_sharp}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:cumulative_eq_top}
+    By Theorem~\ref{thm:cumulative_eq_top}, $\Id\in T_{D^2}(A)$, so $\Id$
+    is a linear combination of word products of length at most~$D^2$.
+    At least one has nonzero trace because $\tr(\Id)=D\neq0$.
+\end{proof}
+
+\begin{theorem}[Nonzero trace implies eigenvector]\label{thm:eigenvector_from_trace}
+    \lean{exists_eigenvector_of_trace_ne_zero}
+    \leanok
+    If $M\in\MN{D}$ has $\tr(M)\neq0$, then $M$ has a nonzero eigenvalue
+    $\mu\neq0$ and a corresponding eigenvector $\varphi\neq0$ satisfying
+    $M\varphi=\mu\varphi$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The trace is the sum of the eigenvalues of $M$, counted with
+    multiplicity, so a nonzero trace gives a nonzero eigenvalue~$\mu$.
+    Choosing a nonzero vector $\varphi\in\ker(M-\mu\Id)$ gives
+    $M\varphi=\mu\varphi$.
+\end{proof}
+
+\begin{theorem}[Eigenvalue extraction]\label{thm:eigenvalue_extraction}
+    \lean{MPSTensor.exists_word_eigenvector}
+    \leanok
+    \uses{def:normal}
+    Let $D>0$. If $A$ is normal, then there exist a word $w_0$ with
+    $|w_0|\le D^2$, a nonzero scalar $\mu\neq0$, and a nonzero vector
+    $\varphi\neq0$ such that $A^{w_0}\varphi=\mu\varphi$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:nonzero_trace_word, thm:eigenvector_from_trace}
+    By Theorem~\ref{thm:nonzero_trace_word}, there is a word $w_0$ with
+    $\tr(A^{w_0})\neq0$ and $|w_0|\le D^2$.
+    By Theorem~\ref{thm:eigenvector_from_trace}, $A^{w_0}$ has a nonzero
+    eigenvector.
+\end{proof}
+
+\begin{theorem}[Vector span stabilisation]\label{thm:vector_span_stable}
+    \lean{MPSTensor.cumulativeVectorSpan_stable}
+    \leanok
+    \uses{def:cumulative_vector_span}
+    If $K_n(A,\varphi)=K_{n+1}(A,\varphi)$, then
+    $K_m(A,\varphi)=K_n(A,\varphi)$ for every $m\ge n$.
+\end{theorem}
+
+\begin{proof}\leanok\uses{thm:cumulative_stable}
+    The argument is the same as for Theorem~\ref{thm:cumulative_stable}:
+    left multiplication by $A^i$ cannot escape the stabilised span.
+\end{proof}
+
+\begin{lemma}[Vector span from matrix span]\label{lem:vector_span_from_matrix}
+    \lean{MPSTensor.cumulativeVectorSpan_eq_top_of_cumulativeSpan_eq_top}
+    \leanok
+    \uses{def:cumulative_vector_span, def:cumulative_span}
+    If $T_N(A)=\MN{D}$ and $\varphi\neq0$, then
+    $K_N(A,\varphi)=\C^D$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Every matrix $M\in\MN{D}$ lies in $T_N(A)$, so in particular every
+    rank-one matrix sending $\varphi$ to any target vector~$v$ lies in
+    $T_N(A)$. Applying such matrices to $\varphi$ recovers all of~$\C^D$.
+\end{proof}
+
+\section{One-step augmentation}
+\label{sec:app_wielandt_augmentation}
+
+This section proves the one-step augmentation results used in
+Theorem~\ref{thm:wielandt_case2_one_step_span} and
+Theorem~\ref{thm:wielandt_case3_one_step_span}.
+
+\begin{definition}[One-step augmentation]\label{def:one_step_augment}
+    \lean{MPSTensor.oneStepAugment}
+    \leanok
+    \uses{def:mps_tensor}
+    Let $A$ be an MPS tensor with Kraus family
+    $\{A^i\}_{i=0}^{d-1}$, and let $X\in\MN{D}$.
+    The \emph{one-step augmentation} of $A$ by $X$ is the tensor
+    $\widetilde A$ with physical dimension $d+1$ whose first Kraus operator
+    is $X$ and whose remaining Kraus operators are those of $A$:
+    \begin{align}
+        \widetilde A^0
+         & =X,
+        \notag   \\
+        \widetilde A^{i+1}
+         & =A^i.
+        \notag
+    \end{align}
+\end{definition}
+
+\begin{lemma}[Kraus operators lie in the one-step span]\label{lem:kraus_mem_word_span_one}
+    \lean{MPSTensor.apply_mem_wordSpan_one}
+    \leanok
+    \uses{def:word_span}
+    Every Kraus operator $A^i$ belongs to the one-step span $S_1(A)$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    This is the length-one word with letter~$i$.
+\end{proof}
+
+\begin{lemma}[Redundant one-step augmentation]\label{lem:one_step_augment_word_span}
+    \lean{MPSTensor.oneStepAugment_apply_mem_wordSpan_one,
+        MPSTensor.wordSpan_oneStepAugment_one,
+        MPSTensor.wordSpan_oneStepAugment_eq}
+    \leanok
+    \uses{def:one_step_augment, def:word_span, lem:kraus_mem_word_span_one}
+    Let $X\in S_1(A)$, and let $\widetilde A$ be the one-step
+    augmentation of $A$ by $X$. Then
+    $S_n(\widetilde A)=S_n(A)$ for every $n\ge0$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:kraus_mem_word_span_one}
+    The new generator $X$ is already in $S_1(A)$, and each original
+    generator remains in the augmented family. Hence the one-step spans
+    agree. Multiplying word spans and arguing by induction on the word
+    length gives equality at every length.
+\end{proof}
+
+\begin{lemma}[Normality and Kraus rank under one-step augmentation]%
+    \label{lem:one_step_augment_normal_kraus_rank}
+    \lean{MPSTensor.isNormal_oneStepAugment_of_mem_wordSpan_one,
+        MPSTensor.krausRank_oneStepAugment}
+    \leanok
+    \uses{def:one_step_augment, def:normal, lem:one_step_augment_word_span}
+    Let $X\in S_1(A)$, and let $\widetilde A$ be the one-step augmentation
+    of $A$ by $X$. If $A$ is normal, then $\widetilde A$ is normal, and
+    $\krausrk(\widetilde A)=\krausrk(A)$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:one_step_augment_word_span}
+    Since all exact word spans are unchanged by
+    Lemma~\ref{lem:one_step_augment_word_span}, eventual full word span
+    for $A$ gives eventual full word span for $\widetilde A$.
+    The equality of Kraus ranks is the equality of the dimensions of the
+    common one-step span.
+\end{proof}
+
+\begin{theorem}[Wielandt case (2), invertible generator]%
+    \label{thm:wielandt_case2_normal_generator}
+    \lean{MPSTensor.wordSpan_eq_top_of_isNormal_of_isUnit,
+        MPSTensor.iIndex_le_of_isNormal_of_isUnit}
+    \leanok
+    \uses{def:word_span, def:normal}
+    Let $A$ be a normal MPS tensor with bond dimension $D>0$, and suppose
+    that some Kraus operator $A^{i_0}$ is invertible. Then
+    \begin{align}
+        S_{D^2-\krausrk(A)+1}(A)
+         & =\MN{D},
+        \notag                    \\
+        \iota(A)
+         & \le D^2-\krausrk(A)+1.
+        \notag
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The dimensions of the exact word spans cannot decrease, because
+    left multiplication by the invertible Kraus operator is injective.
+    If this dimension growth stopped before the full matrix algebra was
+    reached, the same argument at every later length would contradict
+    normality. Since $\dim S_1(A)=\krausrk(A)$ and
+    $\dim\MN{D}=D^2$, the full algebra is reached by length
+    $D^2-\krausrk(A)+1$. The index bound follows from the definition
+    of $\iota(A)$.
+\end{proof}
+
+\begin{corollary}[Wielandt case (2), invertible Kraus operator]%
+    \label{cor:wielandt_case2_generator}
+    \lean{MPSTensor.wordSpan_eq_top_of_isPrimitivePaper_of_isUnit,
+        MPSTensor.iIndex_le_of_isPrimitivePaper_of_isUnit}
+    \leanok
+    \uses{lem:kraus_mem_word_span_one, thm:wielandt_case2_one_step_span,
+        cor:wielandt_case2_one_step_index}
+    Let $A$ be an MPS tensor with bond dimension $D\ge1$, satisfying
+    $\sum_i(A^i)^\dagger A^i=\Id$, and suppose that $A$ is primitive in the
+    sense of Definition~\ref{def:paper_primitive}.
+    If some Kraus operator $A^{i_0}$ is invertible, then
+    \begin{align}
+        S_{D^2-\krausrk(A)+1}(A)
+         & =\MN{D},
+        \notag                    \\
+        \iota(A)
+         & \le D^2-\krausrk(A)+1.
+        \notag
+    \end{align}
+\end{corollary}
+
+\begin{proof}
+    \leanok
+    \uses{lem:kraus_mem_word_span_one, thm:wielandt_case2_one_step_span,
+        cor:wielandt_case2_one_step_index}
+    Apply the one-step case to $X=A^{i_0}$, which belongs to $S_1(A)$ by
+    Lemma~\ref{lem:kraus_mem_word_span_one}.
+\end{proof}
+
+\begin{corollary}[Wielandt case (3), non-invertible Kraus operator]%
+    \label{cor:wielandt_case3_generator}
+    \lean{MPSTensor.wordSpan_eq_top_of_isPrimitivePaper_of_noninvertible_eigenvector,
+        MPSTensor.iIndex_le_sq_of_noninvertible_eigenvector}
+    \leanok
+    \uses{lem:kraus_mem_word_span_one, thm:wielandt_case3_one_step_span,
+        cor:wielandt_case3_one_step_index}
+    Let $A$ be an MPS tensor with bond dimension $D\ge1$, satisfying
+    $\sum_i(A^i)^\dagger A^i=\Id$, and suppose that $A$ is primitive in the
+    sense of Definition~\ref{def:paper_primitive}.
+    If some Kraus operator $A^{i_0}$ is non-invertible and has an
+    eigenvector $\varphi\neq0$ with nonzero eigenvalue~$\mu$, then
+    \begin{align}
+        S_{D^2}(A)
+         & =\MN{D},
+        \notag      \\
+        \iota(A)
+         & \le D^2.
+        \notag
+    \end{align}
+\end{corollary}
+
+\begin{proof}
+    \leanok
+    \uses{lem:kraus_mem_word_span_one, thm:wielandt_case3_one_step_span,
+        cor:wielandt_case3_one_step_index}
+    Apply the one-step case to $X=A^{i_0}$, which belongs to $S_1(A)$ by
+    Lemma~\ref{lem:kraus_mem_word_span_one}.
+\end{proof}
+
+\section{Blocking and fixed-length spanning}
+\label{sec:app_wielandt_blocking_support}
+\label{sec:rectangular_span}
+
+This section proves the blocking and fixed-length constructions used in
+Theorem~\ref{thm:wielandt_general},
+Theorem~\ref{thm:bounded_injective_blocking_normal_left_canonical}, and
+Theorem~\ref{thm:tp_primitive_irred_block_injective}.
+
+\begin{theorem}[Blocking preserves normality]\label{thm:isNormal_blockTensor}
+    \lean{MPSTensor.isNormal_blockTensor_of_isNormal}
+    \leanok
+    \uses{def:normal, def:blocked_tensor}
+    If $A$ is normal and $L>0$, then the blocked tensor
+    $A^{[L]}$ is also normal.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:word_span_le_blockTensor, lem:word_span_mul}
+    Choose $N$ with $S_N(A)=\MN{D}$. Then $\Id\in S_N(A)$.
+    For any $M\in S_N(A)$, write
+    $\Id=\sum_r c_rA^{w_r}$ with each $|w_r|=N$. Then
+    \begin{align}
+        M
+         & =M\Id
+        =\sum_r c_rMA^{w_r}
+        \in S_N(A)S_N(A)
+        \subseteq S_{2N}(A).
+        \label{eq:wld_blocknormal_self_inclusion}
+    \end{align}
+    By Lemma~\ref{lem:word_span_mul}, iterating
+    (\ref{eq:wld_blocknormal_self_inclusion}) gives
+    $S_N(A)\subseteq S_{kN}(A)$ for every $k\ge1$.
+    Taking $k=L$ yields
+    $\MN{D}=S_N(A)\subseteq S_{NL}(A)$.
+    By Lemma~\ref{lem:word_span_le_blockTensor},
+    $S_{NL}(A)\subseteq S_N(A^{[L]})$, so
+    $S_N(A^{[L]})=\MN{D}$.
+\end{proof}
+
+\begin{lemma}[Chunking: word span embeds into blocked word span]%
+    \label{lem:word_span_le_blockTensor}
+    \lean{MPSTensor.wordSpan_le_wordSpan_blockTensor}
+    \leanok
+    \uses{def:word_span, def:blocked_tensor}
+    One has $S_{nL}(A)\subseteq S_n(A^{[L]})$ for all $n,L$.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:word_span_mul}
+    Every length-$nL$ word in the original alphabet
+    can be split into $n$ consecutive chunks of length~$L$,
+    each of which is a single blocked Kraus operator by
+    (\ref{eq:mps_blocked_tensor}).
+    The claim follows by induction on~$n$, using
+    Lemma~\ref{lem:word_span_mul}.
+\end{proof}
+
+\begin{theorem}[Word eigenvector gives blocked eigenvector]%
+    \label{thm:blockTensor_single_eigenvector}
+    \lean{MPSTensor.blockTensor_single_eigenvector}
+    \leanok
+    \uses{def:blocked_tensor}
+    If $A^{w_0}\varphi=\mu\varphi$ for a word $w_0$
+    of length~$L$, then $(A^{[L]})^{j_0}\varphi=\mu\varphi$,
+    where $j_0$ is the encoded blocked index corresponding
+    to $w_0$.
+\end{theorem}
+
+\begin{proof}\leanok
+    By (\ref{eq:mps_blocked_tensor}),
+    $(A^{[L]})^{j_0}=A^{w_0}$.
+\end{proof}
+
+\begin{theorem}[Blocked fixed-length matrix spanning]\label{thm:wielandt_blocked_assembly}
+    \lean{MPSTensor.wielandt_blocked_assembly}
+    \leanok
+    \uses{def:word_span, def:normal, def:blocked_tensor}
+    Suppose $A$ has bond dimension $D>0$, is normal, and $L>0$, and we have:
+    \begin{enumerate}
+        \item a word $w_0$ of length $L$ with eigenvector
+              $A^{w_0}\varphi=\mu\varphi$
+              ($\mu\neq0$, $\varphi\neq0$),
+        \item a word $\tau_0$ of length $L$ with transpose
+              eigenvector
+              $(A^{\tau_0})^T\psi=\nu\psi$
+              ($\nu\neq0$, $\psi\neq0$),
+        \item a rank-one element
+              $\varphi\psi^T\in S_m(A^{[L]})$
+              for some $m$.
+    \end{enumerate}
+    Then there exists $N$ such that $S_N(A)=\MN{D}$.
+
+    \noindent\emph{Remark.}
+    The proof gives the explicit bound
+    $N=((D{-}1)+m+(D{-}1))L$; the theorem states only the
+    existential conclusion.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:isNormal_blockTensor, thm:blockTensor_single_eigenvector,
+        thm:eigenvector_spreading, lem:blocking_transfer,
+        thm:lemma2b_assembly}
+    Set $B=A^{[L]}$, which is normal by
+    Theorem~\ref{thm:isNormal_blockTensor}. The word eigenvectors transfer to
+    single-index eigenvectors of $B$ and $B^T$ by
+    Theorem~\ref{thm:blockTensor_single_eigenvector}. Eigenvector spreading
+    and padding then give
+    $H_{D-1}(B,\varphi)=H_{D-1}(B^T,\psi)=\C^D$.
+
+    For each standard basis vector $e_j$, choose
+    $R_j\in S_{D-1}(B^T)$ with $R_j\psi=e_j$. Reversing each word after
+    transposition shows that $R_j^T\in S_{D-1}(B)$, and therefore
+    $(\varphi\psi^T)R_j^T=\varphi e_j^T$ belongs to
+    $S_{m+D-1}(B)$. Theorem~\ref{thm:lemma2b_assembly}, applied with
+    $n=D-1$ and $m'=m+D-1$, now gives
+    $S_{(D-1)+m+(D-1)}(B)=\MN{D}$. Finally,
+    Lemma~\ref{lem:blocking_transfer} transfers this identity to
+    $S_{((D-1)+m+(D-1))L}(A)=\MN{D}$.
+\end{proof}
+
+\begin{theorem}[Rank-one extraction for blocked tensor]%
+    \label{thm:rankone_extraction_blockTensor}
+    \lean{MPSTensor.exists_rankOne_mem_wordSpan_blockTensor}
+    \leanok
+    \uses{def:word_span, def:normal, def:blocked_tensor}
+    Suppose $A$ has bond dimension $D>0$, is normal, and $N_0\ge1$ with
+    $S_{N_0}(A)=\MN{D}$.
+    Then there exist words $\sigma_0,\tau_0$ of length~$N_0$,
+    nonzero vectors $\varphi,\psi$, nonzero scalars $\mu,\nu$,
+    and $m\in\N$ such that:
+    \begin{enumerate}
+        \item $A^{\sigma_0}\varphi=\mu\varphi$,
+        \item $(A^{\tau_0})^T\psi=\nu\psi$,
+        \item $\varphi\psi^T\in S_m(A^{[N_0]})$.
+    \end{enumerate}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:blocked_tensor, thm:isNormal_blockTensor,
+        thm:eigenvector_from_trace}
+    Set $B=A^{[N_0]}$.
+    By (\ref{eq:mps_blocked_tensor}) and
+    $S_{N_0}(A)=\MN{D}$, one has $S_1(B)=\MN{D}$.
+    Hence $\Id\in S_1(B)$, so not all blocked generators can have trace
+    zero.
+    Choose $j_0$ with $\tr(B^{j_0})\neq0$.
+    By Theorem~\ref{thm:eigenvector_from_trace},
+    $B^{j_0}$ has a nonzero eigenvector $\varphi$
+    with eigenvalue $\mu\neq0$.
+    Writing $j_0$ as the blocked index corresponding to a word
+    $\sigma_0$ of length~$N_0$ gives
+    $A^{\sigma_0}\varphi=\mu\varphi$.
+    Applying the same argument to the transpose blocked tensor gives
+    a word $\tau_0$ of length~$N_0$, a nonzero vector $\psi$,
+    and $\nu\neq0$ with $(A^{\tau_0})^T\psi=\nu\psi$.
+    Since $A$ is normal and $N_0\ge1$,
+    the blocked tensor $B$ is normal by
+    Theorem~\ref{thm:isNormal_blockTensor}.
+    Therefore there exists $M$ with $S_M(B)=\MN{D}$.
+    In particular, $\varphi\psi^T\in S_M(B)$.
+    Taking $m=M$ proves~(3).
+\end{proof}
+
+\begin{theorem}[Fixed-length word-span saturation via blocking]\label{thm:wielandt_lemma2b}
+    \lean{MPSTensor.wielandt_lemma2b}
+    \leanok
+    \uses{def:word_span, def:normal}
+    If $A$ is a normal MPS tensor with bond dimension $D>0$,
+    then there exists $N$ such that $S_N(A)=\MN{D}$.
+    This is a blocked fixed-length construction under the stated normality
+    hypothesis. The quantitative result of \cite[Lemma~2(b)]{Sanz2010Quantum}
+    is Theorem~\ref{thm:rank_one_noninvertible_eigenvector_primitive}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:rankone_extraction_blockTensor,
+        thm:wielandt_blocked_assembly}
+    By normality, some $N_0>0$ has $S_{N_0}(A)=\MN{D}$.
+    Theorem~\ref{thm:rankone_extraction_blockTensor} produces eigenvectors
+    and a rank-one element
+    $\varphi\psi^T\in S_m(A^{[N_0]})$.
+    Theorem~\ref{thm:wielandt_blocked_assembly} then gives
+    $S_{((D-1)+m+(D-1))N_0}(A)=\MN{D}$.
+\end{proof}
+
+\section{Complementary-gap consequences}
+\label{sec:app_wielandt_complementary_gap}
+
+This section proves the complementary-gap consequences used in
+Lemma~\ref{lem:primitive_implies_irreducible},
+Lemma~\ref{lem:strongly_irred_from_primitive}, and
+Theorem~\ref{thm:normal_from_primitive_posdef}.
+
+\begin{theorem}[Primitive overlap convergence]\label{thm:prim_overlap_one}
+    \lean{MPSTensor.IsPrimitiveMPS.overlap_tendsto_one}
+    \leanok
+    \uses{def:primitive_mps, def:mpv_overlap}
+    If $A$ is a primitive MPS tensor, then $O_{AA}(N)\to1$.
+\end{theorem}
+
+\begin{proof}\leanok\uses{thm:primitive_overlap}
+    The claim follows from the self-overlap convergence under a
+    complementary transfer-map gap
+    (Theorem~\ref{thm:primitive_overlap}).
+\end{proof}
+
+\begin{theorem}[Peripheral primitivity and irreducibility give normalized overlap]
+    \label{thm:peripheral_primitive_irreducible_overlap_one}
+    \lean{MPSTensor.%
+        overlap_tendsto_one_of_peripheralPrimitive_of_irreducible}
+    \leanok
+    \uses{def:primitive_channel, def:irreducible_tensor, def:mpv_overlap}
+    Let $A$ have positive bond dimension and satisfy
+    $\sum_i(A^i)^\dagger A^i=\Id$.
+    If $A$ is tensor-irreducible and the transfer map is primitive, then
+    $O_{AA}(N)\to1$.
+\end{theorem}
+
+\begin{proof}\leanok\uses{thm:prim_overlap_one}
+    Irreducible Perron--Frobenius theory supplies a nonzero positive fixed
+    point. Peripheral primitivity gives a strict spectral-radius bound on the
+    complementary transfer map. Thus $A$ is a primitive MPS tensor, and
+    Theorem~\ref{thm:prim_overlap_one} applies.
+\end{proof}
+
+\begin{lemma}[Primitive MPS tensors have nonzero word products]\label{lem:prim_nonzero_word}
+    \lean{MPSTensor.exists_nonzero_evalWord_of_isPrimitiveMPS}
+    \leanok
+    \uses{def:primitive_mps, def:eval_word}
+    If $A$ is a primitive MPS tensor,
+    then for every $n\ge0$ there exists a word $w$ of length
+    \emph{exactly}~$n$ with $A^w\neq0$.
+\end{lemma}
+
+\begin{proof}\leanok
+    The PSD fixed point $\rho$ of $\E_A$ satisfies
+    $\E_A^n(\rho)=\rho\neq0$.
+    Since
+    $\E_A^n(\rho)=\sum_{|w|=n}A^w\rho(A^w)^\dagger$,
+    at least one summand is nonzero, hence some $A^w\neq0$.
+\end{proof}
+
+\begin{lemma}[Iterated transfer does not vanish]\label{lem:transfer_pow_ne_zero}
+    \lean{MPSTensor.transferMap_pow_ne_zero_of_isPrimitiveMPS}
+    \leanok
+    \uses{def:primitive_mps, def:transfer_map}
+    If $A$ is a primitive MPS tensor, then
+    $\E_A^n\neq0$ for all $n\ge0$.
+\end{lemma}
+
+\begin{proof}\leanok\uses{lem:prim_nonzero_word}
+    By Lemma~\ref{lem:prim_nonzero_word}, there exists a word~$w$ of
+    length~$n$ with $A^w\neq0$.
+    The expansion
+    $\E_A^n(\Id)=\sum_{|u|=n}A^u(A^u)^\dagger$
+    contains the nonzero positive semidefinite summand
+    $A^w(A^w)^\dagger$, so $\E_A^n(\Id)\neq0$.
+\end{proof}
+
+\begin{lemma}[Fixed-point uniqueness from a complementary transfer-map gap]%
+    \label{lem:fixedpoint_unique_spectral}
+    \lean{MPSTensor.IsPrimitiveMPS.fixedPoint_unique}
+    \leanok
+    \uses{def:primitive_mps}
+    If $A$ is a primitive MPS tensor
+    with PSD fixed point $\rho$,
+    then every fixed point $\sigma$ of $\E_A$ is proportional
+    to $\rho$: $\sigma=\frac{\tr(\sigma)}{\tr(\rho)}\rho$.
+\end{lemma}
+
+\begin{proof}\leanok
+    Set $\sigma'=\sigma-\frac{\tr(\sigma)}{\tr(\rho)}\rho$.
+    Then $\tr(\sigma')=0$ and $(\E_A-P_\rho)(\sigma')=\sigma'$.
+    If $\sigma'\neq0$, then $1$ is an eigenvalue of $\E_A-P_\rho$,
+    contradicting the complementary transfer-map gap
+    $\rho_{\spec}(\E_A-P_\rho)<1$.
+\end{proof}
+
+\begin{lemma}[Complement powers tend to zero]%
+    \label{lem:complement_pow_zero}
+    \lean{MPSTensor.IsPrimitiveMPS.complement_pow_tendsto_zero}
+    \leanok
+    \uses{def:primitive_mps}
+    If $A$ is a primitive MPS tensor with PSD fixed point $\rho$,
+    then $(\E_A-P_\rho)^n\to0$ in operator norm.
+\end{lemma}
+
+\begin{proof}\leanok
+    The spectral radius of $\E_A-P_\rho$ is strictly less
+    than $1$ by the complementary transfer-map gap hypothesis.
+    Apply the general result that powers of an operator
+    with spectral radius $<1$ tend to zero.
+\end{proof}
+
+\begin{lemma}[Primitive tensors with positive-definite fixed point have irreducible transfer map]%
+    \label{lem:irreducible_map_from_primitive}
+    \lean{MPSTensor.isIrreducibleMap_of_isPrimitiveMPS_of_posDef}
+    \leanok
+    \uses{def:primitive_mps}
+    If $A$ is a primitive MPS tensor with positive-definite fixed
+    point~$\rho$, then the transfer map $\E_A$ is irreducible.
+
+    The proof uses fixed-point uniqueness
+    (Lemma~\ref{lem:fixedpoint_unique_spectral}):
+    every PSD fixed point is proportional to $\rho$,
+    so Wolf's criterion for irreducibility
+    (a positive-definite fixed point together with uniqueness of positive
+    fixed points implies irreducibility) applies directly.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:fixedpoint_unique_spectral}
+    By Lemma~\ref{lem:fixedpoint_unique_spectral},
+    if $\sigma\ge0$ and $\E_A(\sigma)=\sigma$, then
+    $\sigma=\frac{\tr(\sigma)}{\tr(\rho)}\rho$.
+    Since $\rho>0$, Wolf's uniqueness criterion for
+    irreducibility applies.
+\end{proof}
+
+\section{Identity in the one-step span}
+\label{sec:app_wielandt_identity_in_span}
+
+This section proves the one-step padding conversions used in
+Theorem~\ref{thm:algspan_to_normal}. It also records why cumulative spanning
+alone does not imply normality.
+
+\begin{remark}[Identity-in-the-one-step-span condition]
+    \label{rem:aperiodicity}\leanok
+    The \emph{one-step padding condition} is $\Id\in S_1(A)$: the identity
+    matrix lies in the span of the Kraus operators
+    $\{A^i\}_{i=0}^{d-1}$. This is an additional hypothesis. The
+    normalization $\sum_i(A^i)^\dagger A^i=\Id$ gives a quadratic identity
+    and does not imply $\Id\in S_1(A)$.
+    Theorem~\ref{thm:normal_from_primitive_posdef} obtains normality from
+    a positive-definite fixed point and a complementary gap without this
+    padding condition.
+\end{remark}
+
+\begin{remark}[Counterexample: cumulative spanning does not imply normality]%
+    \label{rem:cumspan_counterexample}\leanok
+    In $\MN{2}$, let $A^0=E_{12}$ and $A^1=E_{21}$ be the off-diagonal
+    matrix units.
+    Then $\algspn(A)=\MN{2}$ and $T_2(A)=\MN{2}$, but the word spans
+    alternate: $S_n(A)$ contains only off-diagonal matrices for odd~$n$
+    and only diagonal matrices for even~$n$.
+    Hence $S_n(A)\neq\MN{2}$ for every~$n$, and $A$ is not normal.
+    The one-step padding condition fails because
+    $\Id\notin S_1(A)=\spn_{\C}\{E_{12},E_{21}\}$.
+\end{remark}
+
+\begin{theorem}[Word-span monotonicity from one-step padding]%
+    \label{thm:wordspan_mono_aperiodic}
+    \lean{MPSTensor.wordSpan_mono_succ_of_one_mem_wordSpan_one}
+    \leanok
+    \uses{def:word_span}
+    If $\Id\in S_1(A)$, then $S_n(A)\le S_{n+1}(A)$ for every~$n$.
+\end{theorem}
+
+\begin{proof}\leanok\uses{lem:word_span_mul}
+    For any $M\in S_n(A)$, one has
+    $M=M\Id\in S_n(A)S_1(A)\subseteq S_{n+1}(A)$ by
+    Lemma~\ref{lem:word_span_mul}.
+\end{proof}
+
+\begin{theorem}[Cumulative span equals word span under one-step padding]%
+    \label{thm:cumspan_eq_wordspan}
+    \lean{MPSTensor.cumulativeSpan_eq_wordSpan_of_one_mem_wordSpan_one}
+    \leanok
+    \uses{def:cumulative_span, def:word_span}
+    If $\Id\in S_1(A)$, then $T_n(A)=S_n(A)$ for every~$n$.
+\end{theorem}
+
+\begin{proof}\leanok\uses{thm:wordspan_mono_aperiodic}
+    By Theorem~\ref{thm:wordspan_mono_aperiodic}, the word spans form the
+    chain $S_0(A)\le S_1(A)\le\cdots\le S_n(A)$.
+    Therefore their sum $T_n(A)=S_0(A)+\cdots+S_n(A)$ equals the largest
+    term $S_n(A)$.
+\end{proof}
+
+\begin{theorem}[Cumulative spanning plus one-step padding implies normality]%
+    \label{thm:cumspan_to_normal}
+    \lean{MPSTensor.isNormal_of_cumulativeSpan_eq_top_of_aperiodic}
+    \leanok
+    \uses{def:normal, def:cumulative_span, def:word_span}
+    If $T_N(A)=\MN{D}$ and $\Id\in S_1(A)$, then $A$ is normal.
+\end{theorem}
+
+\begin{proof}\leanok\uses{thm:cumspan_eq_wordspan}
+    Theorem~\ref{thm:cumspan_eq_wordspan} gives
+    $S_N(A)=T_N(A)=\MN{D}$.
+\end{proof}
