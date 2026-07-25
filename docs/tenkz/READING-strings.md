@@ -96,9 +96,13 @@ and a tensor at the meeting of a string with an index is
 
 Neither draws. The first has no resolver at all: the node-kind table lists
 `cell`, `rel`, `mid`, `record`, `port`, `outside` and `crossing` and falls
-through to `TKZ-KERNEL-RENDER-TODO` for `onwire`. The second resolves, but
-only for a mark. A mark at a crossing draws; an atom at the same crossing
-fails inside the intersection machinery.
+through to `TKZ-KERNEL-RENDER-TODO` for `onwire`. The second resolves only
+after string geometry exists. The mark pass runs after the string pass and
+reads the saved pre-surgery crossing point. Atom placement instead calls the
+same crossing resolver before `\tikzpicture` opens and before either string
+has been drawn. The resolver then falls back to PGF's live intersection path
+and XeLaTeX stops at `\pgf@intersectionofpaths` with the undefined internal
+control sequence `\pgf@intersect@next`.
 
 The reason is the order of the passes. Atoms are placed before the picture
 opens; a wire has no geometry until it is drawn inside the picture. So a
@@ -241,7 +245,7 @@ Compiled against the kernel on `main`, each as a standalone picture.
 | a wire with both ends open | draws |
 | a closed string through named waypoints | draws |
 | a mark at `crossing of g and leg n of (1,2)` | draws |
-| an atom at `crossing of g and leg n of (1,2)` | fails in the intersection machinery |
+| an atom at `crossing of g and leg n of (1,2)` | XeLaTeX stops in `\pgf@intersectionofpaths` at undefined `\pgf@intersect@next` |
 | an atom at `on g 0.25` | `TKZ-KERNEL-RENDER-TODO`, `'onwire address' does not draw yet` |
 | an atom at `on L 0.5` on a closed string | the same |
 | an atom with a declared skin carrying `pairings=` | `TKZ-KERNEL-RENDER-TODO` |
