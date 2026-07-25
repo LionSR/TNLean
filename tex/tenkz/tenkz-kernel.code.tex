@@ -3156,7 +3156,7 @@
 \tl_new:N \l__tenkz_kernel_ro_tau_tl
 \prop_new:N \l__tenkz_kernel_ro_lane_prop    % wire id -> lane coordinate
 \prop_new:N \l__tenkz_kernel_ro_box_prop     % wire id -> {x}{xb}{y}{yb}{tau}
-\prop_new:N \l__tenkz_kernel_ro_legs_prop    % leg path id -> {lane}{tau}
+\prop_new:N \l__tenkz_kernel_ro_legs_prop    % leg path id -> {{lane}{tau}},...
 \prop_new:N \l__tenkz_kernel_ro_taken_prop   % route text -> lanes already out
 
 % A route stands in the axes of the selection it travels, which is the rule a
@@ -4315,8 +4315,12 @@
           \l__tenkz_kernel_leg_reach_tl
         \quark_if_no_value:NF \l__tenkz_kernel_leg_reach_tl
           {
-            \exp_last_unbraced:NV \__tenkz_kernel_r_leg_lane:nn
-              \l__tenkz_kernel_leg_reach_tl
+            \clist_map_inline:Vn \l__tenkz_kernel_leg_reach_tl
+              {
+                \tl_set:Nn \l__tenkz_kernel_ro_row_tl {##1}
+                \exp_last_unbraced:NV \__tenkz_kernel_r_leg_lane:nn
+                  \l__tenkz_kernel_ro_row_tl
+              }
           }
         % a declared crossing lengthens the leg past the crossing string
         \prop_get:NeN \l__tenkz_kernel_r_legref_prop
@@ -4523,7 +4527,7 @@
       }
   }
 % one leg of a route's crossing set: it is an engine path, and it reaches at
-% least as far as the outermost lane that crosses it
+% at least as far as every lane that crosses it
 \cs_new_protected:Npn \__tenkz_kernel_r_route_leg:nn #1#2
   {
     \tl_set:Ne \l__tenkz_kernel_ro_b_tl
@@ -4533,27 +4537,29 @@
       }
     \prop_put:NVn \l__tenkz_kernel_r_legref_prop
       \l__tenkz_kernel_ro_b_tl {#2}
-    % the lane travels with the axes it is a coordinate in, because the leg
-    % that must reach it grows out of an atom which stands in axes of its own
+    % Every lane travels with the axes it is a coordinate in.  Bare lane
+    % scalars from differently turned selections cannot be ordered, so retain
+    % all pairs and let the leg project each one into its own direction.
     \tl_set:Ne \l__tenkz_kernel_ro_row_tl
       {
-        { \tl_use:N \l__tenkz_kernel_ro_lane_tl }
-        { \tl_use:N \l__tenkz_kernel_ro_tau_tl  }
+        {
+          { \tl_use:N \l__tenkz_kernel_ro_lane_tl }
+          { \tl_use:N \l__tenkz_kernel_ro_tau_tl  }
+        }
       }
     \prop_get:NVN \l__tenkz_kernel_ro_legs_prop
       \l__tenkz_kernel_ro_b_tl \l__tenkz_kernel_ro_reach_tl
-    \quark_if_no_value:NF \l__tenkz_kernel_ro_reach_tl
+    \quark_if_no_value:NTF \l__tenkz_kernel_ro_reach_tl
       {
-        \fp_compare:nNnT
-          { abs( \tl_item:Nn \l__tenkz_kernel_ro_reach_tl {1} ) }
-          > { abs( \l__tenkz_kernel_ro_lane_tl ) }
-          {
-            \tl_set_eq:NN
-              \l__tenkz_kernel_ro_row_tl \l__tenkz_kernel_ro_reach_tl
-          }
+        \prop_put:NVV \l__tenkz_kernel_ro_legs_prop
+          \l__tenkz_kernel_ro_b_tl \l__tenkz_kernel_ro_row_tl
       }
-    \prop_put:NVV \l__tenkz_kernel_ro_legs_prop
-      \l__tenkz_kernel_ro_b_tl \l__tenkz_kernel_ro_row_tl
+      {
+        \tl_put_right:Ne \l__tenkz_kernel_ro_reach_tl
+          { , \tl_use:N \l__tenkz_kernel_ro_row_tl }
+        \prop_put:NVV \l__tenkz_kernel_ro_legs_prop
+          \l__tenkz_kernel_ro_b_tl \l__tenkz_kernel_ro_reach_tl
+      }
   }
 
 % the engine id of string record #1: its name, else the record id
