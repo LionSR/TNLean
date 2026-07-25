@@ -38,8 +38,9 @@ and~\cite{Evans1978Spectral}.
          & =\sum_i K_iXK_i^\dagger
         \notag
     \end{align}
-    and set $T(B)=B+E(B)$ for nonzero $B\geq0$. If $B$ is not positive
-    definite, irreducibility forces
+    and set $T(B)=B+E(B)$ for nonzero $B\geq0$. Since $E(B)\geq0$, one has
+    $T(B)\geq B$ and hence $\ker T(B)\subseteq\ker B$. If $B$ is not
+    positive definite, irreducibility forces
     \begin{align}
         \dim\ker T(B)
          & <\dim\ker B.
@@ -112,13 +113,14 @@ and~\cite{Evans1978Spectral}.
     \label{thm:psd_fp_pd}
     \lean{MPSTensor.posSemidef_fixedPoint_isPosDef}
     \leanok
-    \uses{def:injective, def:transfer_map, thm:psd_fp_pd_irred}
+    \uses{def:injective, def:transfer_map}
     Let $A$ be an injective MPS tensor and let $\rho \ge 0$,
     $\rho \neq 0$, be a fixed point of $\E_A$. Then $\rho$ is positive
     definite.
 \end{theorem}
 
 \begin{proof}\leanok
+    \uses{thm:psd_fp_pd_irred}
     Injectivity implies irreducibility of the transfer map. Apply
     Theorem~\ref{thm:psd_fp_pd_irred}.
 \end{proof}
@@ -126,7 +128,7 @@ and~\cite{Evans1978Spectral}.
 \begin{theorem}[Orthogonal trace condition]\label{thm:orthogonal_trace_cond}
     \lean{orthogonal_trace_pos_of_irreducible_cp}
     \leanok
-    \uses{def:irreducible_cp, thm:growth_pd_irred}
+    \uses{def:irreducible_cp}
     Let $E$ be an irreducible completely positive map on $\MN{D}$,
     and let $A, B \ge 0$ be nonzero positive semidefinite matrices
     with $\tr(BA) = 0$.
@@ -136,6 +138,7 @@ and~\cite{Evans1978Spectral}.
 
 \begin{proof}
     \leanok
+    \uses{thm:growth_pd_irred}
     Theorem~\ref{thm:growth_pd_irred} gives
     $(\Id + E)^{D-1}(A) > 0$.
     Since $B \ge 0$ is nonzero,
@@ -162,13 +165,14 @@ and~\cite{Evans1978Spectral}.
     \label{thm:psd_fp_unique_irred}
     \lean{MPSTensor.posSemidef_fixedPoint_unique_of_irreducible}
     \leanok
-    \uses{def:irreducible_cp, def:transfer_map, thm:psd_fp_pd_irred}
+    \uses{def:irreducible_cp, def:transfer_map}
     Let $A$ be an MPS tensor whose transfer map is irreducible. If
     $\rho,\sigma\geq0$ are fixed points of $\E_A$ and $\rho\neq0$, then
     $\sigma=c\rho$ for some $c\in\C$.
 \end{theorem}
 
 \begin{proof}\leanok
+    \uses{thm:psd_fp_pd_irred}
     If $\sigma=0$, take $c=0$. Otherwise,
     Theorem~\ref{thm:psd_fp_pd_irred} makes both $\rho$ and $\sigma$
     positive definite. Write $\rho=SS^\dagger$ and set
@@ -198,12 +202,13 @@ and~\cite{Evans1978Spectral}.
     \label{thm:psd_fp_unique}
     \lean{MPSTensor.posSemidef_fixedPoint_unique}
     \leanok
-    \uses{def:injective, def:transfer_map, thm:psd_fp_unique_irred}
+    \uses{def:injective, def:transfer_map}
     Let $A$ be an injective MPS tensor. If $\rho,\sigma\geq0$ are nonzero
     fixed points of $\E_A$, then $\sigma=c\rho$ for some $c\in\C$.
 \end{theorem}
 
 \begin{proof}\leanok
+    \uses{thm:psd_fp_unique_irred}
     Injectivity implies irreducibility of the transfer map. Apply
     Theorem~\ref{thm:psd_fp_unique_irred}.
 \end{proof}
@@ -298,8 +303,7 @@ and~\cite{Evans1978Spectral}.
     \label{thm:qpf_irreducible}
     \lean{MPSTensor.quantum_perron_frobenius_irreducible}
     \leanok
-    \uses{def:irreducible_cp, def:transfer_map, thm:psd_fp_exists,
-        thm:psd_fp_pd_irred, thm:psd_fp_unique_irred}
+    \uses{def:irreducible_cp, def:transfer_map}
     Assume $D\ge 1$. Let $A$ be an MPS tensor such that its transfer map is
     irreducible and $\sum_i (A^i)^\dagger A^i=\Id$, so that $\E_A$ is
     trace-preserving.
@@ -308,6 +312,8 @@ and~\cite{Evans1978Spectral}.
 \end{theorem}
 
 \begin{proof}\leanok
+    \uses{thm:psd_fp_exists, thm:psd_fp_pd_irred,
+        thm:psd_fp_unique_irred}
     Existence is the channel fixed-point theorem
     (Theorem~\ref{thm:psd_fp_exists}). Irreducibility upgrades the fixed point
     to positive definite, and Theorem~\ref{thm:psd_fp_unique_irred} gives
@@ -463,7 +469,7 @@ The TP-gauge application follows~\cite[Appendix~A]{Cirac2016MPDO_arXiv}.
     \label{thm:pf_eigenvector_existence_general}
     \lean{exists_posSemidef_eigenvector_general}
     \leanok
-    \uses{def:positive_map, thm:pf_eigenvector_existence}
+    \uses{def:positive_map}
     Let $E:\MN{D}\to\MN{D}$ be a positive linear map with $D>0$. Then
     there are a nonzero positive semidefinite matrix $\rho$ and a real number
     $r\geq0$ such that
@@ -478,6 +484,7 @@ The TP-gauge application follows~\cite[Appendix~A]{Cirac2016MPDO_arXiv}.
 \end{theorem}
 
 \begin{proof}\leanok
+    \uses{thm:pf_eigenvector_existence}
     If $E$ annihilates a nonzero positive semidefinite matrix $\rho$, take
     $r=0$. Otherwise $E(\sigma)\neq0$ for every nonzero
     $\sigma\geq0$, and Theorem~\ref{thm:pf_eigenvector_existence} gives
@@ -488,7 +495,7 @@ The TP-gauge application follows~\cite[Appendix~A]{Cirac2016MPDO_arXiv}.
     \label{thm:pf_eigenvector_existence}
     \lean{exists_posSemidef_eigenvector}
     \leanok
-    \uses{def:positive_map, thm:brouwer_density_matrices}
+    \uses{def:positive_map}
     Let $E:\MN{D}\to\MN{D}$ be a positive linear map with $D>0$, and assume
     that $E(\sigma)\neq0$ for every nonzero positive semidefinite matrix
     $\sigma$. Then there are a nonzero positive semidefinite matrix $\rho$
@@ -496,6 +503,7 @@ The TP-gauge application follows~\cite[Appendix~A]{Cirac2016MPDO_arXiv}.
 \end{theorem}
 
 \begin{proof}\leanok
+    \uses{thm:brouwer_density_matrices}
     Normalize $E$ on the density matrices by
     \begin{align}
         \rho
@@ -632,7 +640,7 @@ The TP-gauge application follows~\cite[Appendix~A]{Cirac2016MPDO_arXiv}.
     \label{thm:exp_pd_irred}
     \lean{exp_posDef_of_irreducible_cp}
     \leanok
-    \uses{def:irreducible_cp, thm:exp_truncation_pd_irred}
+    \uses{def:irreducible_cp}
     Let $E$ be an irreducible completely positive map on $\MN{D}$,
     let $A \ge 0$ be nonzero, and let $t > 0$.
     Then
@@ -647,6 +655,7 @@ The TP-gauge application follows~\cite[Appendix~A]{Cirac2016MPDO_arXiv}.
 
 \begin{proof}
     \leanok
+    \uses{thm:exp_truncation_pd_irred}
     By Theorem~\ref{thm:exp_truncation_pd_irred}, the first $D$ terms in
     (\ref{eq:qpf_exp_positive}) already form a positive definite matrix.
     Every remaining term is positive semidefinite, so the full exponential
@@ -658,7 +667,7 @@ The TP-gauge application follows~\cite[Appendix~A]{Cirac2016MPDO_arXiv}.
     \label{thm:wolf_6_2_item_3}
     \lean{irreducible_iff_exp_posDef_forall}
     \leanok
-    \uses{def:irreducible_cp, thm:exp_pd_irred}
+    \uses{def:irreducible_cp}
     Let $E$ be a completely positive map on $\MN{D}$. Then $E$ is
     irreducible if and only if, for every $t>0$ and every nonzero
     $A\geq0$, one has $\exp(tE)(A)>0$.
@@ -668,6 +677,7 @@ The TP-gauge application follows~\cite[Appendix~A]{Cirac2016MPDO_arXiv}.
 \end{theorem}
 
 \begin{proof}\leanok
+    \uses{thm:exp_pd_irred}
     The forward implication is Theorem~\ref{thm:exp_pd_irred}. Conversely,
     let $P$ be an invariant orthogonal projection. If $P\neq0$, invariance
     of the generator keeps $\exp(tE)(P)$ in the corner $P\MN{D}P$ for
@@ -683,8 +693,7 @@ The TP-gauge application follows~\cite[Appendix~A]{Cirac2016MPDO_arXiv}.
     \label{thm:channel_density_fp_irred}
     \lean{IsChannel.exists_unique_density_fixedPoint_of_irreducible}
     \leanok
-    \uses{def:channel, def:irreducible_cp, thm:psd_fp_pd_irred,
-        thm:psd_fp_unique_irred}
+    \uses{def:channel, def:irreducible_cp}
     Let $E$ be an irreducible quantum channel on $\MN{D}$ with $D > 0$.
     Then there exists a unique density matrix $\sigma$ such that
     $E(\sigma) = \sigma$.
@@ -711,8 +720,7 @@ The TP-gauge application follows~\cite[Appendix~A]{Cirac2016MPDO_arXiv}.
     \label{thm:channel_cesaro_irred}
     \lean{IsChannel.cesaroMean_tendsto_of_irreducible}
     \leanok
-    \uses{def:channel, def:irreducible_cp, def:cesaro_mean,
-        thm:channel_density_fp_irred}
+    \uses{def:channel, def:irreducible_cp, def:cesaro_mean}
     Let $E$ be an irreducible quantum channel on $\MN{D}$ with $D > 0$,
     and let $\rho$ be any density matrix.
     Then the Ces\`aro means (\ref{eq:channel_cesaro_mean}) converge to the
@@ -723,6 +731,7 @@ The TP-gauge application follows~\cite[Appendix~A]{Cirac2016MPDO_arXiv}.
 
 \begin{proof}
     \leanok
+    \uses{thm:channel_density_fp_irred}
     Every subsequential limit of the Ces\`aro means is again a density-matrix
     fixed point.
     By Theorem~\ref{thm:channel_density_fp_irred}, there is only one such
@@ -736,8 +745,7 @@ The TP-gauge application follows~\cite[Appendix~A]{Cirac2016MPDO_arXiv}.
     \label{thm:spectral_radius_pf_irred}
     \lean{spectralRadius_eq_of_posDef_eigenvector_of_irreducible_cp}
     \leanok
-    \uses{def:irreducible_cp, thm:posDef_adjoint_eigenvector,
-        thm:tp_gauge_from_adjoint_fixed, thm:spectral_radius_le_one}
+    \uses{def:irreducible_cp}
     Let $E$ be an irreducible completely positive map on $\MN{D}$.
     Suppose $\rho > 0$ and $E(\rho) = r\rho$ with $r > 0$.
     Then the spectral radius of $E$ is $r$.
@@ -804,9 +812,7 @@ The TP-gauge application follows~\cite[Appendix~A]{Cirac2016MPDO_arXiv}.
     \label{thm:has_spectral_properties_irred}
     \lean{hasSpectralProperties_of_irreducible_cp}
     \leanok
-    \uses{def:has_spectral_properties, def:irreducible_cp,
-        thm:pf_eigenvector_existence, thm:psd_fp_unique_irred,
-        thm:spectral_radius_pf_irred}
+    \uses{def:has_spectral_properties, def:irreducible_cp}
     Every nonzero irreducible completely positive map on $\MN{D}$ has the
     restricted CP spectral properties of Definition~\ref{def:has_spectral_properties}.
 \end{theorem}
@@ -825,8 +831,7 @@ The TP-gauge application follows~\cite[Appendix~A]{Cirac2016MPDO_arXiv}.
     \label{thm:irred_from_spectral_properties}
     \lean{isIrreducibleMap_of_hasSpectralProperties}
     \leanok
-    \uses{def:has_spectral_properties, thm:tp_gauge_from_adjoint_fixed,
-        lem:cesaro_subseq_fixed}
+    \uses{def:has_spectral_properties}
     If a completely positive map on $\MN{D}$ has the restricted CP spectral properties of
     Definition~\ref{def:has_spectral_properties}, then it is irreducible.
 \end{theorem}
@@ -847,8 +852,7 @@ The TP-gauge application follows~\cite[Appendix~A]{Cirac2016MPDO_arXiv}.
     \label{thm:irred_iff_spectral_properties}
     \lean{isIrreducibleMap_iff_spectral_properties}
     \leanok
-    \uses{def:has_spectral_properties, def:irreducible_cp,
-        thm:has_spectral_properties_irred, thm:irred_from_spectral_properties}
+    \uses{def:has_spectral_properties, def:irreducible_cp}
     Let $E$ be a nonzero completely positive map on $\MN{D}$.
     Then $E$ is irreducible if and only if it has the restricted CP spectral properties of
     Definition~\ref{def:has_spectral_properties}. This is a CP-map variant of
@@ -860,6 +864,7 @@ The TP-gauge application follows~\cite[Appendix~A]{Cirac2016MPDO_arXiv}.
 
 \begin{proof}
     \leanok
+    \uses{thm:has_spectral_properties_irred, thm:irred_from_spectral_properties}
     Combine Theorems~\ref{thm:has_spectral_properties_irred}
     and~\ref{thm:irred_from_spectral_properties}.
 \end{proof}
