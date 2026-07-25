@@ -431,11 +431,13 @@ projection onto the fixed-point subspace.
     \lean{MPSTensor.isStronglyIrreduciblePaper_of_isPrimitiveMPS_of_posDef}
     \leanok
     \uses{def:primitive_mps}
-    If $A$ is a primitive MPS tensor with positive-definite fixed
-    point~$\rho$, then $A$ is strongly irreducible in the sense of~%
-    \cite[Proposition~3(c)]{Sanz2010Quantum}:
-    $\E_A$ is irreducible, the fixed point $\rho$ is positive
-    definite, and the peripheral spectrum of $\E_A$ is $\{1\}$.
+    If $A$ is a primitive MPS tensor with positive-definite fixed point~$\rho$,
+    then it satisfies the strengthened condition in
+    Definition~\ref{def:strongly_irreducible_paper}: $\E_A$ is irreducible,
+    the fixed point $\rho$ is positive definite, and the peripheral spectrum
+    of $\E_A$ is $\{1\}$. The source clause is
+    \cite[Proposition~3(c)]{Sanz2010Quantum}; the definition used here records
+    irreducibility separately.
 \end{lemma}
 
 \begin{proof}
