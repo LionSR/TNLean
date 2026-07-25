@@ -80,6 +80,21 @@ abstracted — record why, so it is not re-proposed).
 
 ## Completed refactors
 
+### Non-decaying-overlap dimension and gauge-phase dichotomy
+- **Pattern:** The `hDim`/`hGPE` tails of
+  `exists_state_scalar_of_nondecaying_overlap` (`MatchAux.lean`) and
+  `exists_block_match_exact_of_eventuallyProportional`
+  (`ProportionalMatch/Core.lean`) each re-ran the same two by-contradiction
+  applications of the irreducible-TP overlap dichotomies
+  (`mpvOverlap_tendsto_zero_of_dim_ne_of_irreducible_TP` and
+  `mpvOverlap_tendsto_zero_of_not_gaugePhaseEquiv_cast_left_of_irreducible_TP`),
+  about 22 lines verbatim in both files.
+- **Reuse:** Both proofs now obtain `⟨hDim, hGPE⟩` from
+  `dim_and_gaugePhase_of_nondecaying_overlap` in `SectorBNT/MatchAux.lean`,
+  with the two `NeZero` instances moved inside the shared lemma.
+- **Result:** 2 files changed, 22 insertions against 30 deletions (8 lines
+  net). All public theorem statements and blueprint links are unchanged.
+
 ### Exact-sector matching through the proportional core
 - **Pattern:** The equal-MPV sector matcher repeated the eventually-proportional
   matcher's fixed-length linear-independence and coefficient-comparison proof

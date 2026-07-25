@@ -20,19 +20,16 @@ namespace MPSTensor
 
 variable {d : ℕ}
 
-/-- If the overlap of two irreducible normalized BNT blocks does not decay,
-then the left MPV state is an exact scalar multiple of the right MPV state at
-every length. -/
-lemma exists_state_scalar_of_nondecaying_overlap
+/-- Equal bond dimension and gauge-phase equivalence from a non-decaying overlap:
+the two irreducible-TP overlap dichotomies, applied by contradiction. -/
+lemma dim_and_gaugePhase_of_nondecaying_overlap
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
     {j : Fin P.basisCount} {k : Fin Q.basisCount}
     (hnd : ¬ Tendsto (fun N : ℕ =>
       mpvOverlap (d := d) (P.basis j) (Q.basis k) N) atTop (𝓝 0)) :
-    ∃ α : ℕ → ℂ, ∀ N : ℕ,
-      mpvState (d := d) (P.basis j) N =
-        α N • mpvState (d := d) (Q.basis k) N := by
-  classical
+    ∃ h : P.basisDim j = Q.basisDim k,
+      GaugePhaseEquiv (cast (congr_arg (MPSTensor d) h) (P.basis j)) (Q.basis k) := by
   haveI hjdim : NeZero (P.basisDim j) := ⟨(hP.basis_dim_pos j).ne'⟩
   haveI hkdim : NeZero (Q.basisDim k) := ⟨(hQ.basis_dim_pos k).ne'⟩
   have hDim : P.basisDim j = Q.basisDim k := by
@@ -55,6 +52,22 @@ lemma exists_state_scalar_of_nondecaying_overlap
         (hA_norm := hP.basis_left_canonical j)
         (hB_norm := hQ.basis_left_canonical k)
         (hNot := hNot)
+  exact ⟨hDim, hGPE⟩
+
+/-- If the overlap of two irreducible normalized BNT blocks does not decay,
+then the left MPV state is an exact scalar multiple of the right MPV state at
+every length. -/
+lemma exists_state_scalar_of_nondecaying_overlap
+    {P Q : SectorDecomposition d}
+    (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
+    {j : Fin P.basisCount} {k : Fin Q.basisCount}
+    (hnd : ¬ Tendsto (fun N : ℕ =>
+      mpvOverlap (d := d) (P.basis j) (Q.basis k) N) atTop (𝓝 0)) :
+    ∃ α : ℕ → ℂ, ∀ N : ℕ,
+      mpvState (d := d) (P.basis j) N =
+        α N • mpvState (d := d) (Q.basis k) N := by
+  classical
+  obtain ⟨hDim, hGPE⟩ := dim_and_gaugePhase_of_nondecaying_overlap hP hQ hnd
   obtain ⟨X, ζ, hζ, hConj⟩ := hGPE
   refine ⟨fun N : ℕ => (ζ ^ N)⁻¹, ?_⟩
   intro N
