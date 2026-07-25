@@ -25,6 +25,12 @@ This file provides the "abstract algebra" ingredients for the Fundamental Theore
   `Matrix n n ℂ` is inner (conjugation by an invertible matrix).
 * **`linearMapToAlgHom`**: Promotes a multiplicative surjective linear map to an algebra
   homomorphism (proving `T 1 = 1`).
+* `linearMap_ne_zero_of_map_one`: a unital linear endomorphism of a matrix algebra
+  is nonzero.
+* **`exists_inner_of_linear_mul_endomorphism`**: the packaged gauge-extraction ladder —
+  a nonzero multiplicative linear endomorphism is inner (simplicity gives bijectivity,
+  and Skolem–Noether turns the resulting algebra equivalence into conjugation by an
+  invertible matrix).
 -/
 
 open scoped Matrix
@@ -60,6 +66,16 @@ theorem linear_mul_endomorphism_bijective
       intro A B hAB
       exact (TwoSidedIdeal.ker_eq_bot (f := f)).1 hker hAB
     exact ⟨hinj, LinearMap.surjective_of_injective hinj⟩
+
+/-- A unital linear endomorphism of a matrix algebra is nonzero. -/
+theorem linearMap_ne_zero_of_map_one {D : ℕ} [NeZero D]
+    (T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
+    (hOne : T 1 = 1) : T ≠ 0 := by
+  intro h0
+  have h10 : (1 : Matrix (Fin D) (Fin D) ℂ) = 0 := by
+    rw [← hOne, h0]
+    rfl
+  exact one_ne_zero h10
 
 /-- Full matrix algebras over `ℂ` can be algebra-isomorphic only when their
 matrix sizes agree.
@@ -178,5 +194,26 @@ noncomputable def linearMapToAlgHom
         { toFun := T, map_one' := hOne, map_mul' := hMul,
           map_zero' := by simp, map_add' := T.map_add }
       commutes' := fun c => by simp [Algebra.algebraMap_eq_smul_one, hOne] }
+
+/-- A nonzero multiplicative $\C$-linear endomorphism of a full matrix algebra is inner.
+
+Simplicity makes the endomorphism bijective. Its surjectivity promotes it to an algebra
+homomorphism, bijectivity upgrades that homomorphism to an algebra equivalence, and
+Skolem--Noether realizes the equivalence as conjugation by an invertible matrix. -/
+theorem exists_inner_of_linear_mul_endomorphism
+    (T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
+    (hMul : ∀ M N, T (M * N) = T M * T N)
+    (hNonzero : T ≠ 0) :
+    ∃ X : GL (Fin D) ℂ, ∀ M : Matrix (Fin D) (Fin D) ℂ,
+      T M = (X : Matrix (Fin D) (Fin D) ℂ) * M *
+        ((X⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) := by
+  classical
+  have hBij := linear_mul_endomorphism_bijective T hMul hNonzero
+  let fHom := linearMapToAlgHom T hMul hBij.surjective
+  let f := AlgEquiv.ofBijective fHom hBij
+  obtain ⟨X, hX⟩ := skolemNoether_matrix f
+  refine ⟨X, fun M => ?_⟩
+  change f M = _
+  exact hX M
 
 end MPSTensor
