@@ -3157,7 +3157,7 @@
 \prop_new:N \l__tenkz_kernel_ro_lane_prop    % wire id -> lane coordinate
 \prop_new:N \l__tenkz_kernel_ro_box_prop     % wire id -> {x}{xb}{y}{yb}{tau}
 \prop_new:N \l__tenkz_kernel_ro_legs_prop    % leg path id -> {{lane}{tau}},...
-\prop_new:N \l__tenkz_kernel_ro_taken_prop   % route text -> lanes already out
+\prop_new:N \l__tenkz_kernel_ro_taken_prop   % side | selector -> next lane
 
 % A route stands in the axes of the selection it travels, which is the rule a
 % contour over that same selection already obeys: a quantity measured against
@@ -3434,20 +3434,41 @@
 % edge it stands on in those axes, which is what makes it a distance a leg can
 % be asked to reach; a lane scalar without the axes it was measured in is not
 % a distance at all.
-\cs_new_protected:Npn \__tenkz_kernel_r_route_measure:n #1
+\cs_new_protected:Npn \__tenkz_kernel_r_route_lane_take:
   {
-    \__tenkz_kernel_route_of:nNN {#1}
-      \l__tenkz_kernel_ro_side_tl \l__tenkz_kernel_ro_sel_tl
-    \tl_if_empty:NF \l__tenkz_kernel_ro_side_tl
+    \str_if_eq:VnTF \l__tenkz_kernel_ro_side_tl {all}
       {
-        \__tenkz_kernel_select:VN \l__tenkz_kernel_ro_sel_tl
-          \l__tenkz_kernel_ro_mem_seq
-        \__tenkz_kernel_hull_obstacles:NN
-          \l__tenkz_kernel_ro_mem_seq \l__tenkz_kernel_ro_obst_seq
-        \__tenkz_kernel_hull_scale:NN
-          \l__tenkz_kernel_ro_mem_seq \l__tenkz_kernel_ro_scale_tl
-        \__tenkz_kernel_hull_turn:NN
-          \l__tenkz_kernel_ro_mem_seq \l__tenkz_kernel_ro_tau_tl
+        % An all-side route occupies every side at one common offset.  Stand
+        % outside the busiest side, then advance all four counters so a later
+        % compass-side route cannot land on one of the same four paths.
+        \int_zero:N \l__tenkz_kernel_ro_int
+        \clist_map_inline:nn {n,s,e,w}
+          {
+            \prop_get:NeN \l__tenkz_kernel_ro_taken_prop
+              { ##1 | \tl_use:N \l__tenkz_kernel_ro_sel_tl }
+              \l__tenkz_kernel_ro_lane_tl
+            \quark_if_no_value:NF \l__tenkz_kernel_ro_lane_tl
+              {
+                \int_compare:nNnT
+                  { \l__tenkz_kernel_ro_lane_tl }
+                  >
+                  { \l__tenkz_kernel_ro_int }
+                  {
+                    \int_set:Nn \l__tenkz_kernel_ro_int
+                      { \l__tenkz_kernel_ro_lane_tl }
+                  }
+              }
+          }
+        \tl_set:Ne \l__tenkz_kernel_ro_lane_tl
+          { \int_use:N \l__tenkz_kernel_ro_int }
+        \clist_map_inline:nn {n,s,e,w}
+          {
+            \prop_put:Nee \l__tenkz_kernel_ro_taken_prop
+              { ##1 | \tl_use:N \l__tenkz_kernel_ro_sel_tl }
+              { \int_eval:n { \l__tenkz_kernel_ro_int + 1 } }
+          }
+      }
+      {
         \prop_get:NeN \l__tenkz_kernel_ro_taken_prop
           {
             \tl_use:N \l__tenkz_kernel_ro_side_tl
@@ -3462,6 +3483,24 @@
             | \tl_use:N \l__tenkz_kernel_ro_sel_tl
           }
           { \int_eval:n { \l__tenkz_kernel_ro_lane_tl + 1 } }
+      }
+  }
+
+\cs_new_protected:Npn \__tenkz_kernel_r_route_measure:n #1
+  {
+    \__tenkz_kernel_route_of:nNN {#1}
+      \l__tenkz_kernel_ro_side_tl \l__tenkz_kernel_ro_sel_tl
+    \tl_if_empty:NF \l__tenkz_kernel_ro_side_tl
+      {
+        \__tenkz_kernel_select:VN \l__tenkz_kernel_ro_sel_tl
+          \l__tenkz_kernel_ro_mem_seq
+        \__tenkz_kernel_hull_obstacles:NN
+          \l__tenkz_kernel_ro_mem_seq \l__tenkz_kernel_ro_obst_seq
+        \__tenkz_kernel_hull_scale:NN
+          \l__tenkz_kernel_ro_mem_seq \l__tenkz_kernel_ro_scale_tl
+        \__tenkz_kernel_hull_turn:NN
+          \l__tenkz_kernel_ro_mem_seq \l__tenkz_kernel_ro_tau_tl
+        \__tenkz_kernel_r_route_lane_take:
         \__tenkz_kernel_r_route_edge:nnN
           { \l__tenkz_kernel_ro_tau_tl       } { } \l__tenkz_kernel_ro_xb_fp
         \__tenkz_kernel_r_route_edge:nnN
