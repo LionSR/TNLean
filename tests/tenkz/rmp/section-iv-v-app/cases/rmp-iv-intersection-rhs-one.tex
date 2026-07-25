@@ -6,20 +6,9 @@
 %   IV/ImagesReview Section IV.tex lines 71-78 (Rtensor)
 % Capabilities: free-graph, closure, typed-ports
 \[
-  \begin{tenkzfree}
-    \tnput[box, ports={west:virtual,east:virtual,north:physical}]
-      {b}{(0mm,0mm)}{B}
-    \tnput[box, ports={west:virtual,east:virtual,north:physical}]
-      {c}{(8mm,0mm)}{C}
-    \tnput[pill, ports={west:virtual,east:virtual,135:physical}]
-      {r}{(0mm,-8mm)}{\qquad R\qquad}
-    \tnput[boundary, ports={south:physical}]{rp}{(-8mm,9mm)}{}
-    \tnput[boundary, ports={south:physical}]{bp}{(0mm,9mm)}{}
-    \tnput[boundary, ports={south:physical}]{cp}{(8mm,9mm)}{}
-    \tnjoin{b.east}{c.west}
-    \tnjoin[route=arc,out=180,in=180]{b.west}{r.west}
-    \tnjoin[route=arc,out=0,in=0]{c.east}{r.east}
-    \tnjoin[route=hv]{r.135}{rp.south}
-    \tnjoin{b.north}{bp.south} \tnjoin{c.north}{cp.south}
-  \end{tenkzfree}
+  \begin{tenkz}[rows={ket:nopair, ket:nopair}, west=cup, east=cup,
+                tensor style=box]
+    \tnghost{} & \tn{B} & \tn{C}\\
+    \tn[pill, wide=3, up at={1}]{R} & &
+  \end{tenkz}
 \]

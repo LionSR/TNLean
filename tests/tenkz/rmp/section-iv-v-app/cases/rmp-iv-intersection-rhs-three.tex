@@ -6,23 +6,9 @@
 %   IV/ImagesReview Section IV.tex lines 112-121 (Rtensor3)
 % Capabilities: free-graph, closure, typed-ports
 \[
-  \begin{tenkzfree}
-    \tnput[box, ports={west:virtual,east:virtual,north:physical}]
-      {b}{(2mm,0mm)}{B}
-    \tnput[box, ports={west:virtual,east:virtual,north:physical}]
-      {c}{(8mm,0mm)}{C}
-    \tnput[pill, ports={west:virtual,east:virtual,135:physical}]
-      {r}{(0mm,-8mm)}{\qquad R\qquad}
-    \tnput[boundary, ports={south:physical}]{rp}{(-8mm,9mm)}{}
-    \tnput[boundary, ports={south:virtual}]{bv}{(-2mm,9mm)}{}
-    \tnput[boundary, ports={south:virtual}]{cv}{(5mm,9mm)}{}
-    \tnput[boundary, ports={south:physical}]{bp}{(2mm,9mm)}{}
-    \tnput[boundary, ports={south:physical}]{cp}{(8mm,9mm)}{}
-    \tnjoin[route=arc,out=180,in=180]{b.west}{r.west}
-    \tnjoin[route=arc,out=0,in=0]{c.east}{r.east}
-    \tnjoin[route=hv]{b.east}{bv.south}
-    \tnjoin[route=hv]{c.west}{cv.south}
-    \tnjoin[route=hv]{r.135}{rp.south} \tnjoin{b.north}{bp.south}
-    \tnjoin{c.north}{cp.south}
-  \end{tenkzfree}
+  \begin{tenkz}[rows={ket:nopair, ket:nopair}, west=cup, east=cup,
+                tensor style=box]
+    & \tn{B} & \tnskip & \tn{C}\\
+    \tn[pill, wide=4, up at={1}]{R} & & &
+  \end{tenkz}
 \]

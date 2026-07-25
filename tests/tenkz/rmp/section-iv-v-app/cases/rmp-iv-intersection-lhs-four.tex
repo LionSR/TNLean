@@ -6,16 +6,8 @@
 %   IV/ImagesReview Section IV.tex lines 134-141 (Ltensor4)
 % Capabilities: free-graph, typed-ports
 \[
-  \begin{tenkzfree}
-    \tnput[pill, ports={135:physical,west:virtual,east:virtual,45:physical}]
-      {l}{(0mm,-4mm)}{\qquad L\qquad}
-    \tnput[boundary, ports={south:physical}]{pL}{(-8mm,9mm)}{}
-    \tnput[boundary, ports={south:virtual}]{vL}{(-3mm,9mm)}{}
-    \tnput[boundary, ports={south:virtual}]{vR}{(3mm,9mm)}{}
-    \tnput[boundary, ports={south:physical}]{pR}{(8mm,9mm)}{}
-    \tnjoin[route=hv]{l.135}{pL.south}
-    \tnjoin[route=hv]{l.west}{vL.south}
-    \tnjoin[route=hv]{l.east}{vR.south}
-    \tnjoin[route=hv]{l.45}{pR.south}
-  \end{tenkzfree}
+  \begin{tenkz}[rows={ket:nopair, ket:nopair}, tensor style=box]
+    & \tnghost{} & \tnghost{} & \\
+    \tn[pill, wide=4, up at={4}]{L} & & &
+  \end{tenkz}
 \]
