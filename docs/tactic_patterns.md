@@ -188,6 +188,28 @@ abstracted — record why, so it is not re-proposed).
   blueprint links unchanged. This finishes #4595's migration and discharges
   the last open item of #4518 (ledger D2).
 
+### UnionInjectivity ↔ UnionInjectivityGeneral2 mirror kill
+- **Pattern:** three `NormalEdgeBlockingData`-parametrized theorems
+  (`complCoeff_combination_eq_zero`,
+  `regionBlockedWeight_complement_eq_smul_constrained`,
+  `regionBlockedTensorInjective_union`) duplicated their
+  bare-`ThreeBlockGeometry` twins in `UnionInjectivityGeneral2` as
+  rename-identical 108/166/117-line proof bodies; the D-versions derive
+  blue/compl injectivity internally, so the g-versions' injectivity arguments
+  come for free.
+- **Reuse:** `NormalEdgeBlockingData.toThreeBlockGeometry` (a structure literal
+  whose projections reduce definitionally) plus re-proof of each D-theorem as a
+  2–3-line wrapper over its `ThreeBlockGeometry` twin. All data conversions
+  (`threeBlockComplPhysical`, `threeBlockComplCoeff` through the
+  `swapBlueComplement` abbrev, `blueRedCrossingBondProd`) close by plain defeq —
+  no bridge lemmas. Statements byte-identical, including the unused
+  `_hblue`/`_hcompl` hypotheses.
+- **Result:** `RegionBlock/UnionInjectivity.lean` drops from 906 to 628 lines
+  (+34/−312, net −278) across 4 commits; the sole external consumer
+  `regionBlockedTensorInjective_compl_red` and the blueprint ch24 `\lean{}` tags
+  are untouched. The wrappers orphaned the D-side helper lemmas (now dead,
+  kept in place) — a follow-up deletion slice worth ≈ −380 further lines.
+
 ---
 
 ## Candidates
