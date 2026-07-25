@@ -99,6 +99,7 @@ import TNLean.MPS.MPDO.DiagonalCutRank
 import TNLean.MPS.MPDO.DiagonalFiniteChain
 import TNLean.MPS.MPDO.EtaPreparation
 import TNLean.MPS.MPDO.FigureEightPairwise
+import TNLean.MPS.MPDO.FirstSite
 import TNLean.MPS.MPDO.FirstSiteBlocking
 import TNLean.MPS.MPDO.FixedBondPositivePhysicalSectorConstructor
 import TNLean.MPS.MPDO.FixedBondPositivePhysicalSectorRepresentative
