@@ -4,53 +4,10 @@ This section proves the peripheral spectrum structure
 of~\cite[Theorem~6.6]{Wolf2012Quantum} for irreducible Schwarz maps:
 the peripheral eigenvalues form a finite cyclic group.
 The trace-preserving refinement that the order divides the bond
-dimension is proved in Theorem~\ref{thm:peripheral_cyclic_group}.
-
-\begin{lemma}[Peripheral eigenvectors are invertible]%
-    \label{lem:isUnit_peripheral_eigenvector}
-    \lean{MPSTensor.isUnit_peripheral_eigenvector}
-    \leanok
-    \uses{thm:ks_peripheral}
-    Let $E$ be an irreducible unital Kraus map on $\MN{D}$ with a
-    positive-definite adjoint fixed point.
-    If $X \ne 0$ satisfies $E(X) = \mu X$ with $|\mu| = 1$,
-    then $X$ is invertible.
-\end{lemma}
-
-\begin{proof}
-    \leanok
-    By the Kadison--Schwarz inequality
-    (\ref{eq:schwarz_kadison}), the gap
-    $G=E(X^\dagger X)-E(X)^\dagger E(X)$ is positive semidefinite.
-    Pairing $G$ with the positive-definite adjoint fixed point and using
-    $E(X)=\mu X$ and $|\mu|=1$ gives weighted trace zero, hence $G=0$.
-    Therefore $E(X^\dagger X)=E(X)^\dagger E(X)=X^\dagger X$, so
-    $X^\dagger X$ is a nonzero positive semidefinite fixed point.
-    Irreducibility upgrades it to a positive-definite, hence invertible,
-    matrix, so $\det(X)\ne 0$.
-\end{proof}
-
-\begin{lemma}[Peripheral eigenvalues: product closure]%
-    \label{lem:peripheral_mul_closure}
-    \lean{MPSTensor.peripheralEigenvalues_mul_mem_of_irreducible_unital_of_adjoint_fixedPoint}
-    \leanok
-    \uses{lem:isUnit_peripheral_eigenvector,thm:ks_peripheral}
-    Let $E$ be an irreducible unital Kraus map on $\MN{D}$ with a
-    positive-definite adjoint fixed point.
-    If $\mu, \nu$ are peripheral eigenvalues of $E$, then so is $\mu\nu$.
-\end{lemma}
-
-\begin{proof}
-    \leanok
-    Take eigenvectors $X$ and $Y$ for $\mu$ and $\nu$, respectively.
-    The Kadison--Schwarz equality at $X$ places $X$ in the multiplicative
-    domain. Thus the right multiplicative identity
-    (\ref{eq:schwarz_right_multiplicative}) gives
-    $E(YX)=E(Y)E(X)=(\nu\mu)YX$.
-    Since $X$ and $Y$ are invertible by
-    Lemma~\ref{lem:isUnit_peripheral_eigenvector}, $YX\ne 0$, and
-    $|\mu\nu|=1$.
-\end{proof}
+dimension is proved in Theorem~\ref{thm:peripheral_cyclic_group}. The
+invertibility of peripheral eigenvectors and the product closure of the
+peripheral eigenvalues used below are proved in
+Section~\ref{sec:app_spectral_periodicity}.
 
 \begin{theorem}[Peripheral eigenvalues: cyclic structure]%
     \label{thm:peripheral_cyclic_structure}

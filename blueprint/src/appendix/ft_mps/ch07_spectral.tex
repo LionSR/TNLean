@@ -1,0 +1,879 @@
+\chapter{Peripheral Channel Structure and Transfer-Operator Gaps: Supporting Results}
+\label{ch:spectral_supporting_results}
+
+This appendix supports Chapter~\ref{ch:spectral}. It proves the algebraic
+mixed-transfer identities, the Frobenius-norm apparatus behind the eigenvalue
+bounds, the peripheral intertwiners behind the gauge-rigidity theorems, the
+Banach-algebra convergence facts behind the overlap-decay theorems, the
+rank-one Perron projection behind the primitive overlap limit, and the
+cyclic-decomposition machinery that removes peripheral periodicity.
+
+\section{Mixed-transfer powers and overlap traces}
+\label{sec:app_spectral_mixed_trace}
+
+This section proves the self-transfer identity, the word expansion of the
+mixed transfer operator, and the trace identities used in
+Theorem~\ref{thm:overlap_trace} and Theorem~\ref{thm:overlap_trace_rect}.
+Recall the mixed transfer operator $F_{AB}$ of
+Definition~\ref{def:mixed_transfer} and its rectangular form
+$F_{AB}^{\mathrm{rect}}$ of Definition~\ref{def:mixed_transfer_rect}.
+
+\begin{theorem}[Self-transfer]\label{thm:mixed_self}
+    \lean{MPSTensor.mixedTransferMap_self}
+    \leanok
+    \uses{def:mixed_transfer, def:transfer_map}
+    Setting $B=A$ recovers the ordinary transfer map: $F_{AA}=\E_A$.
+\end{theorem}
+
+\begin{proof}\leanok
+    Substituting $B=A$ into (\ref{eq:spectral_mixed_transfer}) gives
+    $F_{AA}(X)=\sum_iA^iX(A^i)^\dagger=\E_A(X)$ by
+    (\ref{eq:mps_transfer_map}).
+\end{proof}
+
+\begin{lemma}[Iterated mixed transfer]\label{thm:mixed_pow}
+    \lean{MPSTensor.mixedTransferMap_pow_apply}
+    \leanok
+    \uses{def:mixed_transfer, def:eval_word}
+    For every $X\in\MN{D}$ and $N\geq0$,
+    \begin{align}
+        F_{AB}^N(X)
+        &=\sum_{\sigma\in\{0,\ldots,d{-}1\}^N}
+          A^\sigma X(B^\sigma)^\dagger,
+        \label{eq:spectral_mixed_power}
+    \end{align}
+    where $A^\sigma=A^{\sigma_1}\cdots A^{\sigma_N}$ denotes the word
+    evaluation of Definition~\ref{def:eval_word}.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Induct on $N$. The base case is $F_{AB}^0(X)=X$. For the inductive
+    step, apply $F_{AB}$ to each summand in
+    (\ref{eq:spectral_mixed_power}) and reindex using
+    $\{0,\ldots,d{-}1\}^{N+1}\cong
+    \{0,\ldots,d{-}1\}\times\{0,\ldots,d{-}1\}^N$.
+\end{proof}
+
+\begin{lemma}[Trace expansion over matrix units]\label{lem:trace_expansion}
+    \lean{MPSTensor.linearMap_trace_eq_sum_apply_single}
+    \leanok
+    For any linear endomorphism $T$ on $M_{D_1\times D_2}(\C)$, the operator
+    trace expands as
+    \begin{align}
+        \Tr(T)
+        &=\sum_{p=0}^{D_1-1}\sum_{q=0}^{D_2-1}
+          (T(E_{pq}))_{pq},
+        \label{eq:spectral_trace_expansion}
+    \end{align}
+    where $E_{pq}\in M_{D_1\times D_2}(\C)$ has entry $1$ in position
+    $(p,q)$ and zero elsewhere.
+\end{lemma}
+
+\begin{proof}\leanok
+    The operator trace is
+    $\Tr(T)=\sum_{p,q}\tr(T(E_{pq})E_{qp})$, and
+    $\tr(ME_{qp})=M_{pq}$.
+\end{proof}
+
+Theorem~\ref{thm:overlap_trace} and Theorem~\ref{thm:overlap_trace_rect}
+combine Lemma~\ref{thm:mixed_pow} and Lemma~\ref{lem:trace_expansion} the
+same way, over the square and rectangular matrix-unit bases respectively:
+expanding $\Tr(T)$ by (\ref{eq:spectral_trace_expansion}), applying
+(\ref{eq:spectral_mixed_power}) to each $T(E_{pq})$ for $T=F_{AB}^N$ or
+$T=(F_{AB}^{\mathrm{rect}})^N$, and reassembling the sums over
+matrix-unit indices gives
+\begin{align}
+    \Tr(T)
+    &=\sum_\sigma
+      \tr(A^\sigma)\overline{\tr(B^\sigma)}
+      =\sum_\sigma
+      V^{(N)}(A)_\sigma\overline{V^{(N)}(B)_\sigma}
+      =O_{AB}(N).
+    \notag
+\end{align}
+
+\section{Frobenius estimates and eigenvalue bounds}
+\label{sec:app_spectral_frobenius}
+
+This section proves the trace positivity fact
+(Lemma~\ref{lem:psd_trace_product_nonneg}) and the detailed Frobenius-norm
+estimate behind the rectangular eigenvalue bound
+(Theorem~\ref{thm:eigenvalue_bound_rect}), of which
+Theorem~\ref{thm:eigenvalue_bound} is the equal-bond-dimension case
+$D_1=D_2=D$. The estimate uses the Frobenius (Hilbert--Schmidt) norm
+$\|{\cdot}\|_F$ on rectangular matrices and an isometric embedding into
+Euclidean space.
+
+\begin{lemma}[Trace product of positive semidefinite matrices]
+    \label{lem:psd_trace_product_nonneg}
+    \lean{Matrix.PosSemidef.trace_mul_nonneg}
+    \leanok
+    If $A,B\geq0$, then $\tr(AB)\geq0$.
+\end{lemma}
+
+\begin{proof}\leanok
+    Write $B=U\Lambda U^\dagger$ with $U$ unitary and $\Lambda$ diagonal.
+    Then
+    \begin{align}
+        \tr(AB)
+        &=\tr\!\left((U^\dagger AU)\Lambda\right)
+          =\sum_i(U^\dagger AU)_{ii}\Lambda_{ii}
+          \geq0,
+        \notag
+    \end{align}
+    because $U^\dagger AU\geq0$ and $\Lambda_{ii}\geq0$ for every $i$.
+\end{proof}
+
+\begin{definition}[Frobenius norm squared]\label{def:frob_sq}
+    \lean{MPSTensor.frobSq}
+    \leanok
+    For a possibly rectangular matrix $X\in M_{m\times n}(\C)$, its
+    \emph{Frobenius norm squared} is
+    \begin{align}
+        \|X\|_F^2
+        &:=\sum_{i=0}^{m-1}\sum_{j=0}^{n-1}|X_{ij}|^2.
+        \label{eq:spectral_frob_sq}
+    \end{align}
+\end{definition}
+
+\begin{lemma}[Trace formula for Frobenius norm]\label{lem:frob_sq_trace}
+    \lean{MPSTensor.frobSq_trace}
+    \lean{Matrix.trace_conjTranspose_mul_self_re_eq_frobenius_norm_sq}
+    \leanok
+    \uses{def:frob_sq}
+    One has $\|X\|_F^2=\re\tr(X^\dagger X)$.
+\end{lemma}
+
+\begin{proof}\leanok
+    Expand the matrix product and trace entry by entry.
+\end{proof}
+
+\begin{definition}[Euclidean-space embedding]\label{def:mat_to_es}
+    \lean{MPSTensor.matToES}
+    \leanok
+    Flattening matrix entries defines an isometric embedding
+    $\opvec:M_{m\times n}(\C)\to\C^{mn}$ with respect to the Frobenius
+    norm: $\|\opvec(X)\|^2=\|X\|_F^2$.
+\end{definition}
+
+\begin{lemma}[Norm of embedded matrix]\label{lem:norm_mat_to_es}
+    \lean{MPSTensor.norm_matToES_sq}
+    \leanok
+    \uses{def:mat_to_es, def:frob_sq}
+    One has $\|\opvec(X)\|^2=\|X\|_F^2$.
+\end{lemma}
+
+\begin{proof}\leanok
+    Both sides equal $\sum_{i,j}\lVert X_{ij}\rVert^2$: the left side by
+    the Euclidean entry-norm formula and the right side by
+    (\ref{eq:spectral_frob_sq}).
+\end{proof}
+
+The following internal estimate is folded into a private supporting lemma
+in the formalization and is recorded here, untagged, purely as an
+exposition step toward Theorem~\ref{thm:eigenvalue_bound_rect}.
+
+\begin{lemma}[Uniform Frobenius bound for the rectangular mixed transfer power]%
+    \label{lem:hs_contraction_rect}
+    \uses{def:mixed_transfer_rect, def:frob_sq}
+    Let $A$ and $B$ be normalized MPS tensors of bond dimensions
+    $D_1\geq1$ and $D_2\geq1$. For every $X\in M_{D_1\times D_2}(\C)$ and
+    $n\geq0$,
+    \begin{align}
+        \|(F_{AB}^{\mathrm{rect}})^n(X)\|_F^2
+        &\leq D_1^2\,\|X\|_F^2.
+        \label{eq:spectral_hs_contraction_rect}
+    \end{align}
+\end{lemma}
+
+\begin{proof}
+    \uses{thm:mixed_pow, lem:norm_mat_to_es}
+    The word expansion (\ref{eq:spectral_mixed_power}) writes
+    $(F_{AB}^{\mathrm{rect}})^n(X)=\sum_\sigma A^\sigma(X(B^\sigma)^\dagger)$,
+    a sum over words $\sigma$ of length $n$. Embedding into Euclidean space by
+    $\opvec$ (Definition~\ref{def:mat_to_es}), the triangle inequality and the
+    Frobenius submultiplicativity $\|MN\|_F\leq\|M\|_F\|N\|_F$ give
+    \begin{align}
+        \|\opvec((F_{AB}^{\mathrm{rect}})^n(X))\|
+        &\leq\sum_\sigma\|A^\sigma\|_F\,\|X(B^\sigma)^\dagger\|_F.
+        \notag
+    \end{align}
+    Cauchy--Schwarz over the word index bounds the right side by
+    $\left(\sum_\sigma\|A^\sigma\|_F^2\right)^{1/2}
+    \left(\sum_\sigma\|X(B^\sigma)^\dagger\|_F^2\right)^{1/2}$.
+    The trace-preserving normalization of $A$ gives
+    $\sum_\sigma(A^\sigma)^\dagger A^\sigma=\Id_{D_1}$, so
+    $\sum_\sigma\|A^\sigma\|_F^2=D_1$; the same normalization for $B$ gives
+    $\sum_\sigma(B^\sigma)^\dagger B^\sigma=\Id_{D_2}$, which forces the
+    exact identity $\sum_\sigma\|X(B^\sigma)^\dagger\|_F^2=\|X\|_F^2$ (both
+    sides equal $\re\tr(X^\dagger X)$ after expanding by the same
+    normalization). Hence
+    $\|(F_{AB}^{\mathrm{rect}})^n(X)\|_F\leq\sqrt{D_1} \|X\|_F\leq
+    D_1\,\|X\|_F$, giving (\ref{eq:spectral_hs_contraction_rect}).
+\end{proof}
+
+Theorem~\ref{thm:eigenvalue_bound_rect} follows directly from
+Lemma~\ref{lem:hs_contraction_rect}: if $F_{AB}^{\mathrm{rect}}(X)=\mu X$
+with $X\neq0$, iterating gives $(F_{AB}^{\mathrm{rect}})^n(X)=\mu^nX$, and
+Lemma~\ref{lem:hs_contraction_rect} gives $|\mu|^{2n}\|X\|_F^2\leq
+D_1^2\|X\|_F^2$ for every $n$; since $\|X\|_F>0$, if $|\mu|>1$ then
+$|\mu|^{2n}\to\infty$, contradicting the uniform bound, so $|\mu|\leq1$.
+
+\begin{lemma}[Rectangular spectral radius bound]\label{thm:spectral_radius_le_one_rect}
+    \lean{MPSTensor.spectralRadius_mixedTransfer₂_le_one}
+    \leanok
+    \uses{def:mixed_transfer_rect, thm:eigenvalue_bound_rect}
+    For normalized tensors of bond dimensions $D_1$ and $D_2$,
+    $\rho_{\spec}(F_{AB}^{\mathrm{rect}})\leq1$.
+\end{lemma}
+
+\begin{proof}\leanok
+    On a finite-dimensional space every spectral value is an eigenvalue, and
+    each satisfies $|\mu|\leq1$ by Theorem~\ref{thm:eigenvalue_bound_rect}.
+\end{proof}
+
+\section{Peripheral intertwiners and gauge rigidity}
+\label{sec:app_spectral_rigidity}
+
+This section proves the intertwining relations behind
+Theorem~\ref{thm:modulus_one_gauge_irr_tp} and
+Theorem~\ref{thm:transfer_operator_gap_rect_irr_tp}: transporting a
+modulus-one mixed-transfer eigenvector through separate unital gauges
+produces Kraus-level intertwiners, and these intertwiners force equal bond
+dimension once they are invertible.
+
+\begin{lemma}[Gauged peripheral eigenvector yields Kraus intertwining]%
+    \label{thm:gauged_intertwining_core}
+    \lean{MPSTensor.gauged_intertwining_core}
+    \leanok
+    \uses{def:mixed_transfer_rect, thm:qpf, thm:right_canonical_gauge}
+    Let $A$ be a normalized tensor of bond dimension $D_1$ and $B$ a
+    normalized tensor of bond dimension $D_2$. Suppose $\rho_A,\rho_B$ are
+    fixed points of the respective transfer maps and $S_A,S_B$ are
+    invertible matrices with $S_AS_A^\dagger=\rho_A$ and
+    $S_BS_B^\dagger=\rho_B$ (for instance the positive definite
+    Perron--Frobenius fixed points of Theorem~\ref{thm:qpf} and their
+    square roots, as in the right-canonical gauge of
+    Theorem~\ref{thm:right_canonical_gauge}). Gauge to unital families
+    $A'^i=S_A^{-1}A^iS_A$ and $B'^i=S_B^{-1}B^iS_B$. If
+    $X\in M_{D_1\times D_2}(\C)\setminus\{0\}$ satisfies
+    $F_{AB}^{\mathrm{rect}}(X)=\mu X$ with $|\mu|=1$, then
+    $X'=S_A^{-1}X(S_B^\dagger)^{-1}$ is nonzero, the families $A'$ and $B'$
+    are unital, and, for every $i$,
+    \begin{align}
+        X'(B'^i)^\dagger
+        &=\mu(A'^i)^\dagger X',
+        &
+        A'^iX'
+        &=\mu X'B'^i.
+        \label{eq:spectral_gauged_intertwining}
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:ks_peripheral, thm:kraus_commute}
+    Embed the gauged families and transported eigenvector into the block
+    matrices
+    \begin{align}
+        C^i
+        &:=
+        \begin{pmatrix}
+            A'^i & 0\\
+            0 & B'^i
+        \end{pmatrix},
+        &
+        Y
+        &:=
+        \begin{pmatrix}
+            0 & X'\\
+            0 & 0
+        \end{pmatrix},
+        \label{eq:spectral_block_embedding}
+    \end{align}
+    on $M_{D_1+D_2}(\C)$; the matrices $\{C^i\}$ form a unital Kraus family,
+    and $E_C(Y)=\mu Y$. The positive definite fixed points of the adjoint
+    maps give a faithful weighted trace for the block map. Applying the
+    Kadison--Schwarz inequality to $Y$ and pairing its positive semidefinite
+    gap with this fixed point shows that the gap vanishes. The Kraus
+    relation of Theorem~\ref{thm:kraus_commute} then gives
+    $Y(C^i)^\dagger=\mu(C^i)^\dagger Y$; applying the same argument to the
+    complementary product gives $C^iY=\mu YC^i$. Expanding these block
+    relations gives (\ref{eq:spectral_gauged_intertwining}).
+\end{proof}
+
+\begin{lemma}[Intertwining yields gauge-phase equivalence]%
+    \label{thm:gauged_intertwining_gauge_phase}
+    \lean{MPSTensor.gaugePhaseEquiv_of_gauged_intertwining}
+    \leanok
+    \uses{def:gauge_phase_equiv}
+    Let $A$ and $B$ be tensors of the same bond dimension. Suppose invertible
+    gauges take them to $A'$ and $B'$, and suppose there are an invertible
+    matrix $X'$ and a scalar $\mu$ with $|\mu|=1$ such that
+    $A'^iX'=\mu X'B'^i$ for every physical index $i$. Then $A$ and $B$ are
+    gauge-phase equivalent.
+\end{lemma}
+
+\begin{proof}\leanok
+    Compose the two gauge matrices with the intertwiner to obtain one
+    invertible matrix conjugating $A$ to a scalar multiple of $B$.
+\end{proof}
+
+Combining these two lemmas proves Theorem~\ref{thm:modulus_one_gauge_irr_tp}:
+Lemma~\ref{thm:gauged_intertwining_core} supplies the intertwining relations
+(\ref{eq:spectral_gauged_intertwining}) for the separately gauged, unital
+families. The Kadison--Schwarz equality used inside its own proof makes
+$X'X'^\dagger$ and $X'^\dagger X'$ nonzero positive semidefinite fixed points
+of the gauged transfer maps; under irreducibility,
+Theorem~\ref{thm:psd_fp_pd_irred} upgrades these to positive definite
+matrices, so the transported intertwiner $X'$ is invertible.
+Lemma~\ref{thm:gauged_intertwining_gauge_phase} then converts the invertible
+intertwiner, together with the two gauge matrices, into a single invertible
+matrix realizing the gauge-phase relation
+$B^i=\overline\mu XA^iX^{-1}$ via the Skolem--Noether theorem
+(Theorem~\ref{thm:skolem_noether}).
+
+Lemma~\ref{thm:rectangular_intertwining_dim_eq} gives the companion
+kernel-invariance argument, independent of irreducibility: if a modulus-one
+rectangular intertwiner (\ref{eq:spectral_rect_intertwining}) exists between
+injective tensors of bond dimensions $D_1$ and $D_2$, then the first
+relation shows that $\ker(X)$ is invariant under every $(B^i)^\dagger$;
+since the $\{B^i\}$ span the full matrix algebra, so do the
+$\{(B^i)^\dagger\}$, so $\ker(X)$ is trivial and $D_2\leq D_1$. Taking
+adjoints of the second relation and applying the same argument to
+$X^\dagger$ shows that $\ker(X^\dagger)$ is invariant under every
+$(A^i)^\dagger$ and hence trivial, giving $D_1\leq D_2$. Combined with
+Lemma~\ref{thm:gauged_intertwining_core}, this proves
+$\rho_{\spec}(F_{AB}^{\mathrm{rect}})<1$ whenever $A$ and $B$ are injective
+tensors of unequal bond dimension, which is exactly
+Theorem~\ref{thm:transfer_operator_gap_rect}.
+
+\section{Spectral-radius decay and overlap limits}
+\label{sec:app_spectral_decay}
+
+This section collects the Banach-algebra convergence facts underlying
+Theorem~\ref{thm:transfer_pow_zero}, Theorem~\ref{thm:overlap_decay}, and
+the block-separation consequences of the transfer-operator gap.
+
+\begin{lemma}[Powers vanish below unit spectral radius]%
+    \label{lem:spectral_radius_pow_zero}
+    \lean{MPSTensor.pow_tendsto_zero_of_spectralRadius_lt_one}
+    \leanok
+    Let $a$ be an element of a complex Banach algebra with
+    $\rho_{\spec}(a)<1$. Then $a^n\to0$ as $n\to\infty$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Choose $r$ with $\rho_{\spec}(a)<r<1$. The Gelfand formula
+    $\|a^n\|^{1/n}\to\rho_{\spec}(a)$ gives $\|a^n\|\leq r^n$ for all
+    sufficiently large $n$, and $r^n\to0$.
+\end{proof}
+
+Theorem~\ref{thm:transfer_pow_zero} combines the gap
+$\rho_{\spec}(F_{AB})<1$ of Theorem~\ref{thm:transfer_operator_gap} with
+Lemma~\ref{lem:spectral_radius_pow_zero} to give
+$\|F_{AB}^n\|_{\mathrm{op}}\to0$, hence $F_{AB}^n(X)\to0$ for every $X$.
+Since $\Tr$ is continuous on the finite-dimensional matrix-endomorphism
+algebra, this gives $\Tr(F_{AB}^N)\to0$ term by term over the finitely many
+matrix-unit entries of (\ref{eq:spectral_trace_expansion}); combined with
+the overlap--trace identity (\ref{eq:spectral_overlap_trace}), this proves
+Theorem~\ref{thm:overlap_decay}.
+
+\begin{theorem}[Cross-correlation decay]\label{thm:cross_decay}
+    \lean{MPSTensor.cross_correlation_tendsto_zero}
+    \leanok
+    \uses{def:mixed_transfer, def:gauge_phase_equiv, def:injective}
+    If $A$ and $B$ are injective normalized tensors that are not gauge-phase
+    equivalent, then $\tr(F_{AB}^N(X))\to0$ as $N\to\infty$ for every
+    $X\in\MN{D}$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:transfer_pow_zero}
+    Theorem~\ref{thm:transfer_pow_zero} gives $F_{AB}^N(X)\to0$ in operator
+    norm, and continuity of the trace gives the conclusion.
+\end{proof}
+
+\begin{theorem}[Self-correlation persists]\label{thm:self_persist}
+    \lean{MPSTensor.self_correlation_persists}
+    \leanok
+    \uses{def:transfer_map}
+    If $\rho$ is a fixed point of $\E_A$, then
+    $\tr(\E_A^N(\rho))=\tr(\rho)$ for every $N\geq0$. In particular, this
+    applies to the distinguished Perron--Frobenius fixed point from
+    Theorem~\ref{thm:qpf}.
+\end{theorem}
+
+\begin{proof}\leanok
+    Since $\E_A(\rho)=\rho$, one has $\E_A^N(\rho)=\rho$ for every $N$.
+    Taking the trace proves the claim.
+\end{proof}
+
+\section{Rank-one Perron projection}
+\label{sec:app_spectral_perron_projection}
+
+This section proves the rank-one Perron limit
+(Theorem~\ref{thm:trace_pow_one}) underlying the primitive overlap
+convergence (Theorem~\ref{thm:primitive_overlap}). Let $E:\MN{D}\to\MN{D}$
+be trace-preserving with a fixed point $\rho\neq0$, $\tr(\rho)\neq0$. Write
+$P:=P_\rho$ for the fixed-point projection of
+Definition~\ref{def:fixed_point_proj} (Chapter~\ref{ch:channels}),
+\begin{align}
+    P(X)
+    &=\frac{\tr(X)}{\tr(\rho)}\rho,
+    \notag
+\end{align}
+and $N:=E-P$ for the complementary part. The power decomposition
+(Theorem~\ref{thm:pow_decomp}, Chapter~\ref{ch:channels}) gives
+$E^n=P+N^n$ for $n\geq1$.
+
+\begin{lemma}[Trace of the fixed-point projection]\label{lem:fixedPointProj_trace}
+    \lean{fixedPointProj_trace}
+    \leanok
+    \uses{def:fixed_point_proj}
+    The fixed-point projection $P$ has operator trace $\Tr(P)=1$.
+\end{lemma}
+
+\begin{proof}\leanok
+    $P$ has the rank-one form $P(X)=f(X)\rho$ for the linear functional
+    $f(X)=\tr(X)/\tr(\rho)$. The operator trace of a rank-one endomorphism
+    $X\mapsto f(X)\rho$ equals $f(\rho)$, and
+    $f(\rho)=\tr(\rho)/\tr(\rho)=1$.
+\end{proof}
+
+Under the hypothesis $\rho_{\spec}(N)<1$ of Theorem~\ref{thm:trace_pow_one},
+Lemma~\ref{lem:spectral_radius_pow_zero} gives $N^n\to0$, so
+$\Tr(E^n)=\Tr(P)+\Tr(N^n)\to\Tr(P)=1$ by
+Lemma~\ref{lem:fixedPointProj_trace}. This is exactly the mechanism recorded
+in Theorem~\ref{thm:trace_pow_one}.
+
+When $E=\E_A$ is the transfer map of a normalized MPS tensor and $\rho$ is
+its Perron--Frobenius fixed point (Theorem~\ref{thm:qpf},
+Chapter~\ref{ch:qpf}), the overlap--trace identity
+(\ref{eq:spectral_overlap_trace}) with $A=B$ gives
+$O_{AA}(N)=\Tr(\E_A^N)$, so Theorem~\ref{thm:trace_pow_one} yields the
+primitive self-overlap limit of Theorem~\ref{thm:primitive_overlap}. The
+hypothesis $\rho_{\spec}(N)<1$ is exactly the complementary transfer-map gap
+that the complementary spectral-radius theorem for primitive maps
+(Theorem~\ref{thm:primitive_compl_lt_one}, Chapter~\ref{ch:channels})
+supplies: for a primitive $E$ all eigenvalues bounded by $1$ in modulus and
+no trace-zero fixed point, every eigenvalue of $N=E-P$ has modulus strictly
+less than $1$, and since $\MN{D}$ is finite-dimensional this bounds the
+spectral radius $\rho_{\spec}(N)$ itself.
+
+\begin{theorem}[Complementary spectral-radius gap for irreducible primitive tensors]%
+    \label{thm:spectralRadius_compl_lt_one_peripheralPrimitive_irred}
+    \lean{MPSTensor.spectralRadius_compl_lt_one_of_peripheralPrimitive_of_irreducible}
+    \leanok
+    \uses{def:irreducible_tensor, def:primitive_channel}
+    Let $A$ be an irreducible normalized MPS tensor whose transfer map
+    $\E_A$ is primitive. Then there is a nonzero positive semidefinite
+    fixed point $\rho$ of $\E_A$ with $\tr(\rho)\neq0$ such that, for
+    $P:=P_\rho$ and $N:=\E_A-P$, $\rho_{\spec}(N)<1$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:psd_fp_exists, thm:primitive_compl_lt_one}
+    The channel fixed-point existence theorem
+    (Theorem~\ref{thm:psd_fp_exists}) supplies a nonzero positive
+    semidefinite fixed point $\rho$. To see that every trace-zero fixed
+    point of $\E_A$ vanishes, let $X$ be a (not necessarily Hermitian)
+    fixed point with $\tr(X)=0$. Since
+    $\E_A(X)^\dagger=\E_A(X^\dagger)$, the matrices $H_1:=X+X^\dagger$ and
+    $H_2:=\mathrm{i}(X-X^\dagger)$ are Hermitian fixed points of $\E_A$
+    with $\tr(H_1)=\tr(X)+\overline{\tr(X)}=0$ and
+    $\tr(H_2)=\mathrm{i}(\tr(X)-\overline{\tr(X)})=0$. A nonzero trace-zero
+    Hermitian fixed point would decompose, by the positive-semidefinite
+    splitting of Hermitian fixed points
+    (\cite[Proposition~6.8]{Wolf2012Quantum}), into two nonzero positive
+    semidefinite fixed points; irreducibility of $\E_A$ forces both to be
+    proportional to $\rho$ (Theorem~\ref{thm:psd_fp_unique_irred}), and
+    their difference having zero trace forces the proportionality
+    constants to agree, so the Hermitian fixed point itself vanishes.
+    Applying this to $H_1$ and $H_2$ gives $H_1=H_2=0$, and
+    $X=\tfrac12(H_1-\mathrm{i}H_2)=0$. The complementary spectral-radius
+    theorem for primitive maps (Theorem~\ref{thm:primitive_compl_lt_one})
+    then applies with this trace-zero-fixed-point triviality and the
+    eigenvalue bound $|\mu|\le1$ from the trace-preserving normalization,
+    giving $\rho_{\spec}(N)<1$.
+\end{proof}
+
+This concretely instantiates the hypothesis of
+Theorem~\ref{thm:trace_pow_one} and, via Theorem~\ref{thm:primitive_overlap},
+gives the primitive self-overlap limit for every irreducible peripherally
+primitive normalized MPS tensor.
+
+\section{Periodicity removal}
+\label{sec:app_spectral_periodicity}
+
+This section proves the cyclic-decomposition machinery of
+Theorem~\ref{thm:cyclic_decomposition_irreducible_schwarz} and the
+divisibility statements of Theorem~\ref{thm:peripheral_cyclic_group} and
+Theorem~\ref{thm:channel_period_divides_dim}: normalizing a peripheral
+eigenvector to a unitary, forming its discrete Fourier (cyclic) spectral
+projections, and tracking how the channel shifts the resulting corners.
+
+\begin{lemma}[Peripheral eigenvectors are invertible]%
+    \label{lem:isUnit_peripheral_eigenvector}
+    \lean{MPSTensor.isUnit_peripheral_eigenvector}
+    \leanok
+    \uses{thm:ks_peripheral}
+    Let $E$ be an irreducible unital Kraus map on $\MN{D}$ with a
+    positive-definite adjoint fixed point.
+    If $X \ne 0$ satisfies $E(X) = \mu X$ with $|\mu| = 1$,
+    then $X$ is invertible.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    By the Kadison--Schwarz inequality
+    (\ref{eq:schwarz_kadison}), the gap
+    $G=E(X^\dagger X)-E(X)^\dagger E(X)$ is positive semidefinite.
+    Pairing $G$ with the positive-definite adjoint fixed point and using
+    $E(X)=\mu X$ and $|\mu|=1$ gives weighted trace zero, hence $G=0$.
+    Therefore $E(X^\dagger X)=E(X)^\dagger E(X)=X^\dagger X$, so
+    $X^\dagger X$ is a nonzero positive semidefinite fixed point.
+    Irreducibility upgrades it to a positive-definite, hence invertible,
+    matrix, so $\det(X)\ne 0$.
+\end{proof}
+
+\begin{lemma}[Peripheral eigenvalues: product closure]%
+    \label{lem:peripheral_mul_closure}
+    \lean{MPSTensor.peripheralEigenvalues_mul_mem_of_irreducible_unital_of_adjoint_fixedPoint}
+    \leanok
+    \uses{lem:isUnit_peripheral_eigenvector,thm:ks_peripheral}
+    Let $E$ be an irreducible unital Kraus map on $\MN{D}$ with a
+    positive-definite adjoint fixed point.
+    If $\mu, \nu$ are peripheral eigenvalues of $E$, then so is $\mu\nu$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Take eigenvectors $X$ and $Y$ for $\mu$ and $\nu$, respectively.
+    The Kadison--Schwarz equality at $X$ places $X$ in the multiplicative
+    domain. Thus the right multiplicative identity
+    (\ref{eq:schwarz_right_multiplicative}) gives
+    $E(YX)=E(Y)E(X)=(\nu\mu)YX$.
+    Since $X$ and $Y$ are invertible by
+    Lemma~\ref{lem:isUnit_peripheral_eigenvector}, $YX\ne 0$, and
+    $|\mu\nu|=1$.
+\end{proof}
+
+\begin{lemma}[Scalar fixed points for irreducible unital maps]
+    \label{lem:irreducible_unital_fixed_points_scalar}
+    \lean{MPSTensor.fixed_eq_scalar_of_irreducible_unital}
+    \leanok
+    \uses{thm:psd_fp_unique_irred}
+    If $E$ is irreducible and unital, then every fixed point of $E$ is a
+    scalar multiple of $\Id$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{thm:psd_fp_unique_irred}
+    If $E(X)=X$, then the Hermitian matrices
+    $X+X^\dagger$ and $\mathrm{i}(X-X^\dagger)$ are also fixed by $E$.
+    The positive-semidefinite fixed-point uniqueness theorem gives
+    $X+X^\dagger=a\Id$ and
+    $\mathrm{i}(X-X^\dagger)=b\Id$, hence
+    $X=\frac{1}{2}(a-\mathrm{i}b)\Id$.
+\end{proof}
+
+\begin{lemma}[Peripheral unitary eigenvector]
+    \label{lem:peripheral_unitary_eigenvector}
+    \lean{MPSTensor.exists_peripheral_unitary_of_irreducible_schwarz}
+    \leanok
+    \uses{thm:ks_equality_of_peripheral_eigenvector_of_fixedPoint,
+        thm:psd_fp_unique_irred}
+    For an irreducible unital Schwarz map with faithful adjoint fixed point,
+    each peripheral eigenvalue admits a unitary eigenvector.
+\end{lemma}
+
+\begin{proof}\leanok
+    For an eigenvector $X$ at a peripheral eigenvalue $\gamma$, the
+    Kadison--Schwarz equality gives
+    $E(X^\dagger X)=E(X)^\dagger E(X)=X^\dagger X$, so $X^\dagger X$ is a
+    nonzero positive semidefinite fixed point. Irreducible uniqueness of the
+    positive semidefinite fixed point makes it a positive scalar $c\Id$;
+    rescaling $X$ by $c^{-1/2}$ produces a unitary eigenvector.
+\end{proof}
+
+\begin{lemma}[Powers on a peripheral-unitary orbit]
+    \label{lem:peripheral_unitary_powers}
+    \lean{MPSTensor.map_powers_of_peripheral_unitary}
+    \leanok
+    \uses{thm:ks_equality_of_peripheral_eigenvector_of_fixedPoint,
+        thm:right_multiplicative_identity}
+    If $E(U)=\mu U$ with $|\mu|=1$ and $U$ unitary, then
+    $E(U^n)=\mu^nU^n$ for every $n$.
+\end{lemma}
+
+\begin{proof}\leanok
+    The Kadison--Schwarz equality at the unitary eigenvector places $U$ in
+    the multiplicative domain, so the right multiplicative identity
+    (\ref{eq:schwarz_right_multiplicative}) gives
+    $E(U^n)=E(U)^n=\mu^nU^n$ by induction on $n$.
+\end{proof}
+
+\begin{lemma}[Normalized peripheral unitary]
+    \label{lem:normalized_peripheral_unitary}
+    \lean{MPSTensor.exists_normalized_peripheral_unitary_of_irreducible_schwarz}
+    \leanok
+    \uses{lem:peripheral_unitary_eigenvector, lem:peripheral_unitary_powers,
+        lem:irreducible_unital_fixed_points_scalar}
+    Peripheral unitary eigenvectors can be normalized compatibly with
+    the faithful fixed-point state.
+\end{lemma}
+
+\begin{proof}\leanok
+    Given a unitary eigenvector $U$ for a primitive $m$-th root $\gamma$,
+    Lemma~\ref{lem:peripheral_unitary_powers} gives $E(U^m)=U^m$, a fixed
+    point that is scalar by
+    Lemma~\ref{lem:irreducible_unital_fixed_points_scalar}: $U^m=\alpha\Id$.
+    Unitarity of $U^m$ forces $|\alpha|=1$; multiplying $U$ by an $m$-th
+    root $\beta$ of $\alpha^{-1}$ produces $(\beta U)^m=1$ while preserving
+    the eigenvector equation.
+\end{proof}
+
+\begin{lemma}[Cyclic projections from a peripheral unitary]
+    \label{lem:cyclic_projections_from_peripheral_unitary}
+    \lean{exists_cyclic_projections_of_peripheral_unitary}
+    \leanok
+    A primitive $m$-th peripheral root yields $m$ orthogonal projections
+    summing to $\Id$ and cyclically permuted by the channel.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:normalized_peripheral_unitary}
+    Given a unitary $U$ of order $m$ with $E(U)=\gamma U$ for a primitive
+    $m$-th root $\gamma$, the Fourier projections
+    $P_k:=m^{-1}\sum_{j=0}^{m-1}\overline\gamma^{kj}U^j$ are mutually
+    orthogonal and sum to $\Id$ by discrete Fourier orthogonality of the
+    characters $j\mapsto\gamma^{kj}$; since $E(U^j)=\gamma^jU^j$
+    (Lemma~\ref{lem:peripheral_unitary_powers}), each Fourier mode is
+    shifted by one step, giving $E(P_{k+1})=P_k$.
+\end{proof}
+
+Combining these lemmas proves Theorem~\ref{thm:cyclic_decomposition_irreducible_schwarz}:
+Lemma~\ref{lem:normalized_peripheral_unitary} supplies a unitary generator of
+exact order $m$ for a primitive $m$-th peripheral root, and
+Lemma~\ref{lem:cyclic_projections_from_peripheral_unitary} builds the $m$
+Fourier projections out of its powers, using
+Lemma~\ref{lem:peripheral_unitary_powers} to identify how the channel shifts
+them.
+
+\subsection{Cyclic corners and restricted primitivity}
+
+\begin{definition}[Corner preservation]
+    \lean{PreservesCorner}
+    \leanok
+    For an orthogonal projection $P$ and linear map $E$, the corner
+    $P\MN{D}P$ is preserved if $E(PXP)=PE(PXP)P$ for every $X$.
+\end{definition}
+
+\begin{definition}[Corner subspace]
+    \lean{cornerSubmodule}
+    \leanok
+    The corner subspace associated with $P$ is
+    $\{PXP:X\in\MN{D}\}$.
+\end{definition}
+
+\begin{definition}[Restricted corner map]
+    \label{def:corner_restriction}
+    \lean{cornerRestriction}
+    \leanok
+    The restriction of $E$ to an invariant corner $P\MN{D}P$.
+\end{definition}
+
+\begin{definition}[Irreducible restriction on a corner]
+    \lean{IsIrreducibleOnCorner}
+    \leanok
+    Irreducibility of the corner-restricted map.
+\end{definition}
+
+\begin{definition}[Rank of an orthogonal projection]
+    \lean{cornerRank}
+    \leanok
+    The rank of an orthogonal projection $P\in\MN{D}$, equivalently the
+    dimension of its range.
+\end{definition}
+
+\begin{lemma}[Compression isometry for an orthogonal projection]%
+    \label{thm:compression_isometry_projection}
+    \lean{cornerSubmoduleMatrixLinearEquiv}
+    \leanok
+    Let $P\in\MN{D}$ be an orthogonal projection of rank $n$. The corner
+    algebra $P\MN{D}P$ is linearly isomorphic to the full matrix algebra
+    $\MN{n}$. The isomorphism is built from the spectral diagonalisation
+    of $P$ by conjugating the top-left $n\times n$ block by the unitary
+    diagonalising $P$.
+\end{lemma}
+
+\begin{lemma}[Rank equals trace for an orthogonal projection]%
+    \label{thm:corner_rank_eq_trace}
+    \lean{cornerRank_eq_trace}
+    \leanok
+    The rank of an orthogonal projection $P$ equals its trace:
+    $n=\tr(P)$.
+\end{lemma}
+
+\begin{proof}\leanok
+    The eigenvalues of an orthogonal (Hermitian idempotent) projection are
+    $0$ or $1$: the eigenvalues $\lambda$ satisfy $\lambda^2=\lambda$ from
+    $P^2=P$. The trace is the sum of the eigenvalues, which counts the
+    eigenvalue-$1$ multiplicities, i.e.\ the rank $n$.
+\end{proof}
+
+\begin{lemma}[Power maps preserve each cyclic sector]
+    \label{lem:corner_pow_preserved}
+    \lean{preserves_corner_pow_of_cyclic_decomp}
+    \leanok
+    Appropriate powers of the channel preserve each sector corner.
+\end{lemma}
+
+\begin{proof}\leanok
+    Induction on the exponent, using the left- and right-multiplicative
+    domain identities on each sector projection $P_k$, shows
+    $T^n(P_{k+n\bmod m}XP_{k+n\bmod m})=P_k\,T^n(X)\,P_k$; specializing to
+    $n=m$, where $P_{k+m}=P_k$, gives that $T^m$ preserves the corner
+    $P_k\MN{D}P_k$.
+\end{proof}
+
+\begin{lemma}[Primitivity passes to a fixed corner]
+    \label{lem:primitivity_corner_restriction}
+    \lean{isPrimitive_cornerRestriction_of_isPrimitive}
+    \leanok
+    \uses{def:corner_restriction}
+    Let $P\in\MN{D}$ be a nonzero idempotent and let $E$ be a linear map on
+    $\MN{D}$ that preserves the corner $P\MN{D}P$, is primitive, and fixes
+    the corner projection, $E(P)=P$. Then the restriction of $E$ to the
+    corner $P\MN{D}P$ is again primitive.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{def:corner_restriction}
+    The corner projection $P$ lies in its own corner and is fixed by the
+    restriction, so $1$ is a peripheral eigenvalue of the restriction.
+    Conversely, every eigenvalue of the restriction of unit modulus arises
+    from a nonzero corner element $X$ with $E(X)=\mu X$; viewing $X$ as an
+    element of $\MN{D}$ exhibits $\mu$ as a peripheral eigenvalue of $E$.
+    Primitivity of $E$ forces $\mu=1$, so the peripheral spectrum of the
+    restriction is exactly $\{1\}$ and the restriction is primitive.
+\end{proof}
+
+\begin{lemma}[Irreducibility of restricted sector dynamics]
+    \label{lem:corner_restriction_irreducible}
+    \lean{isIrreducible_restriction_of_cyclic_decomp}
+    \leanok
+    Let $T$ be irreducible, let $P_0,\ldots,P_{m-1}$ be orthogonal
+    projections summing to $\Id$ and cyclically permuted by $T$, and
+    suppose that every orthogonal projection $Q$ with $QP_k=P_kQ=Q$ that
+    is invariant under the corner restriction of $T^m$ to $P_k\MN{D}P_k$
+    admits an orthogonal projection $R$ invariant under $T$ on the full
+    algebra with $Q=0\iff R=0$ and $Q=P_k\iff R=\Id$. Then, for every $k$,
+    the restriction of $T^m$ to the corner $P_k\MN{D}P_k$ is irreducible.
+\end{lemma}
+
+\begin{proof}\leanok
+    Let $Q$ be an invariant projection for the corner restriction of $T^m$
+    on $P_k\MN{D}P_k$. The orbit-sum hypothesis supplies an ambient
+    invariant projection $R$ for $T$ with $Q=0\iff R=0$ and
+    $Q=P_k\iff R=\Id$. Irreducibility of $T$ forces $R=0$ or $R=\Id$, hence
+    $Q=0$ or $Q=P_k$ by the two biconditionals.
+\end{proof}
+
+\begin{lemma}[Primitivity of restricted sector dynamics]
+    \label{lem:corner_restriction_primitive}
+    \lean{isPrimitive_restriction_of_cyclic_decomp}
+    \leanok
+    Each sector restriction is primitive.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:primitivity_corner_restriction}
+    Every peripheral eigenvalue of $T$ is an $m$-th root of unity, so the
+    peripheral spectrum of $T^m$ is exactly $\{1\}$; combined with
+    $T^m(P_k)=P_k$, Lemma~\ref{lem:primitivity_corner_restriction} makes the
+    corner restriction of $T^m$ to $P_k\MN{D}P_k$ primitive.
+\end{proof}
+
+\begin{lemma}[Corner invariance at the period]
+    \label{lem:corner_invariance_perm}
+    \lean{preserves_corner_pow_orderOf_of_perm_decomp}
+    \leanok
+    The channel raised to the period preserves every cyclic corner.
+\end{lemma}
+
+\begin{proof}\leanok
+    The same induction as in Lemma~\ref{lem:corner_pow_preserved}, with the
+    cyclic shift $k\mapsto k+1$ replaced by a permutation $\sigma$ of the
+    sector index set, shows that $T^{\mathrm{ord}(\sigma)}$ preserves each
+    corner $P_k\MN{D}P_k$.
+\end{proof}
+
+\subsection{Group structure and divisibility}
+
+\begin{lemma}[Peripheral product closure]
+    \label{lem:peripheral_closed_under_mul_group}
+    \lean{PeripheralSpectrum.peripheral_eigenvalues_closed_under_mul}
+    \leanok
+    \uses{lem:peripheral_mul_closure}
+    The product of two peripheral eigenvalues is peripheral.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:peripheral_unitary_eigenvector}
+    Peripheral eigenvalues admit unitary eigenvectors
+    (Lemma~\ref{lem:peripheral_unitary_eigenvector}). If $U_\alpha,U_\beta$
+    are unitary eigenvectors for $\alpha,\beta$, the multiplicative-domain
+    identity gives
+    $E(U_\alpha U_\beta)=E(U_\alpha)E(U_\beta)=\alpha\beta\,U_\alpha U_\beta$,
+    and $U_\alpha U_\beta\neq0$ since both factors are unitary.
+\end{proof}
+
+\begin{lemma}[Peripheral inverse closure]
+    \label{lem:peripheral_closed_under_inv_group}
+    \lean{PeripheralSpectrum.peripheral_eigenvalues_closed_under_inv}
+    \leanok
+    \uses{thm:peripheral_cyclic_structure}
+    The inverse of a peripheral eigenvalue is peripheral.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:peripheral_unitary_eigenvector}
+    For a unitary eigenvector $U_\alpha$ with $|\alpha|=1$, conjugating the
+    eigenvector equation gives
+    $E(U_\alpha^\dagger)=\overline\alpha\,U_\alpha^\dagger
+    =\alpha^{-1}U_\alpha^\dagger$, and $U_\alpha^\dagger\neq0$.
+\end{proof}
+
+Theorem~\ref{thm:peripheral_multiplicity_one} follows the same pattern:
+given a peripheral unitary eigenvector $U$ for $\gamma$
+(Lemma~\ref{lem:peripheral_unitary_eigenvector}), the multiplicative-domain
+identity gives $E(XU^\dagger)=XU^\dagger$ for any $\gamma$-eigenvector $X$,
+so the scalar fixed-point lemma for irreducible unital maps
+(Lemma~\ref{lem:irreducible_unital_fixed_points_scalar}) gives
+$XU^\dagger=c\Id$, hence $X=cU$ and the eigenspace is one-dimensional.
+
+The divisibility statements of Theorem~\ref{thm:peripheral_cyclic_group} and
+Theorem~\ref{thm:channel_period_divides_dim} follow from
+Lemma~\ref{lem:cyclic_projections_from_peripheral_unitary} and
+Theorem~\ref{thm:corner_rank_eq_trace}: the $m$ cyclic Fourier projections
+$P_0,\ldots,P_{m-1}$ sum to $\Id$ and are cyclically permuted by $E$, so
+trace preservation gives $\tr(P_{k+1})=\tr(P_k)$ for every $k$, hence
+$D=\tr(\Id)=\sum_{k=0}^{m-1}\tr(P_k)=m\,\tr(P_0)$. Since the trace of an
+orthogonal projection is a natural number (Theorem~\ref{thm:corner_rank_eq_trace}),
+$m\mid D$.
+
+This periodicity-removal chain --- unitary normalization, Fourier
+projections, cyclic Kraus shift (Lemma~\ref{lem:kraus_cyclic_shift}), the
+blocked cyclic corners of this section, and restricted primitivity --- is
+exactly the machinery behind the period-removing blocking theorems of
+Chapter~\ref{ch:canonical}: \cite[Theorem~6.6]{Wolf2012Quantum} supplies the
+cyclic peripheral spectrum of the adjoint transfer map, and
+Theorem~\ref{thm:cyclic_sector_decomp_after_blocking} (Section~\ref{sec:cyclic_sectors})
+and Theorem~\ref{thm:cyclic_sector_decomp_after_blocking_isometry} apply it
+to realize the cyclic-sector decomposition of a blocked irreducible tensor
+with rectangular support isometries.

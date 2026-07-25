@@ -30,42 +30,9 @@
     \end{align}
 \end{definition}
 
-\begin{theorem}[Self-transfer]\label{thm:mixed_self}
-    \lean{MPSTensor.mixedTransferMap_self}
-    \leanok
-    \uses{def:mixed_transfer, def:transfer_map}
-    Setting $B=A$ recovers the ordinary transfer map: $F_{AA}=\E_A$.
-\end{theorem}
-
-\begin{proof}\leanok
-    Substituting $B=A$ into (\ref{eq:spectral_mixed_transfer}) gives
-    $F_{AA}(X)=\sum_iA^iX(A^i)^\dagger=\E_A(X)$ by
-    (\ref{eq:mps_transfer_map}).
-\end{proof}
-
-\begin{lemma}[Iterated mixed transfer]\label{thm:mixed_pow}
-    \lean{MPSTensor.mixedTransferMap_pow_apply}
-    \leanok
-    \uses{def:mixed_transfer, def:eval_word}
-    For every $X\in\MN{D}$ and $N\geq0$,
-    \begin{align}
-        F_{AB}^N(X)
-        &=\sum_{\sigma\in\{0,\ldots,d{-}1\}^N}
-          A^\sigma X(B^\sigma)^\dagger,
-        \label{eq:spectral_mixed_power}
-    \end{align}
-    where $A^\sigma=A^{\sigma_1}\cdots A^{\sigma_N}$ denotes the word
-    evaluation of Definition~\ref{def:eval_word}.
-\end{lemma}
-
-\begin{proof}
-    \leanok
-    Induct on $N$. The base case is $F_{AB}^0(X)=X$. For the inductive
-    step, apply $F_{AB}$ to each summand in
-    (\ref{eq:spectral_mixed_power}) and reindex using
-    $\{0,\ldots,d{-}1\}^{N+1}\cong
-    \{0,\ldots,d{-}1\}\times\{0,\ldots,d{-}1\}^N$.
-\end{proof}
+The self-transfer identity $F_{AA}=\E_A$, the iterated word expansion of
+$F_{AB}$, and the trace-expansion lemma over matrix units are proved in
+Section~\ref{sec:app_spectral_mixed_trace}.
 
 \section{MPV overlap as transfer trace}
 
@@ -74,27 +41,6 @@ $O_{AB}(N)=\sum_{\sigma\in\{0,\ldots,d{-}1\}^N}
 V^{(N)}(A)_\sigma\overline{V^{(N)}(B)_\sigma}$.
 This section rewrites that scalar as the operator trace of the mixed
 transfer power.
-
-\begin{lemma}[Trace expansion over matrix units]\label{lem:trace_expansion}
-    \lean{MPSTensor.linearMap_trace_eq_sum_apply_single}
-    \leanok
-    For any linear endomorphism $T$ on $M_{D_1\times D_2}(\C)$, the operator
-    trace expands as
-    \begin{align}
-        \Tr(T)
-        &=\sum_{p=0}^{D_1-1}\sum_{q=0}^{D_2-1}
-          (T(E_{pq}))_{pq},
-        \label{eq:spectral_trace_expansion}
-    \end{align}
-    where $E_{pq}\in M_{D_1\times D_2}(\C)$ has entry $1$ in position
-    $(p,q)$ and zero elsewhere.
-\end{lemma}
-
-\begin{proof}\leanok
-    The operator trace is
-    $\Tr(T)=\sum_{p,q}\tr(T(E_{pq})E_{qp})$, and
-    $\tr(ME_{qp})=M_{pq}$.
-\end{proof}
 
 \begin{lemma}[Overlap equals transfer trace]\label{thm:overlap_trace}
     \lean{MPSTensor.trace_mixedTransferMap_pow_eq_mpvOverlap}
@@ -111,9 +57,10 @@ transfer power.
 \begin{proof}
     \leanok
     \uses{thm:mixed_pow, lem:trace_expansion}
-    Expand the operator trace by (\ref{eq:spectral_trace_expansion}), apply
-    (\ref{eq:spectral_mixed_power}) to each $F_{AB}^N(E_{pq})$, and extract
-    its $(p,q)$-entry. Reassembling the sums gives
+    Section~\ref{sec:app_spectral_mixed_trace} expands the
+    operator trace over matrix units (Lemma~\ref{lem:trace_expansion}) and
+    the transfer power by words (Lemma~\ref{thm:mixed_pow}); reassembling
+    the sums over matrix-unit indices gives
     \begin{align}
         \Tr(F_{AB}^N)
         &=\sum_\sigma
@@ -123,6 +70,8 @@ transfer power.
           =O_{AB}(N).
         \notag
     \end{align}
+    The rectangular case, Lemma~\ref{thm:overlap_trace_rect}, is the same
+    argument over the rectangular matrix-unit basis.
 \end{proof}
 
 \begin{lemma}[Rectangular overlap as transfer trace]\label{thm:overlap_trace_rect}
@@ -140,94 +89,21 @@ transfer power.
 
 \begin{proof}\leanok
     \uses{thm:overlap_trace}
-    Expand the operator trace over the rectangular matrix-unit basis, apply
-    the rectangular analog of (\ref{eq:spectral_mixed_power}), and sum over
-    the matrix-unit indices as in Lemma~\ref{thm:overlap_trace}.
-\end{proof}
-
-\section{Frobenius norm estimates}
-
-The transfer-operator gap proofs use the Frobenius
-(Hilbert--Schmidt) norm on the finite-dimensional matrix algebra.
-We write $\|{\cdot}\|_F$ for this norm and use it interchangeably with
-$\|{\cdot}\|_{\mathrm{HS}}$. We use its squared form and an isometric
-embedding into Euclidean space.
-
-\begin{definition}[Frobenius norm squared]\label{def:frob_sq}
-    \lean{MPSTensor.frobSq}
-    \leanok
-    For a possibly rectangular matrix $X\in M_{m\times n}(\C)$, its
-    \emph{Frobenius norm squared} is
-    \begin{align}
-        \|X\|_F^2
-        &:=\sum_{i=0}^{m-1}\sum_{j=0}^{n-1}|X_{ij}|^2.
-        \label{eq:spectral_frob_sq}
-    \end{align}
-\end{definition}
-
-\begin{lemma}[Trace formula for Frobenius norm]\label{lem:frob_sq_trace}
-    \lean{MPSTensor.frobSq_trace}
-    \lean{Matrix.trace_conjTranspose_mul_self_re_eq_frobenius_norm_sq}
-    \leanok
-    \uses{def:frob_sq}
-    One has $\|X\|_F^2=\re\tr(X^\dagger X)$.
-\end{lemma}
-
-\begin{proof}\leanok
-    Expand the matrix product and trace entry by entry.
-\end{proof}
-
-\begin{lemma}[Trace product of positive semidefinite matrices]
-    \label{lem:psd_trace_product_nonneg}
-    \lean{Matrix.PosSemidef.trace_mul_nonneg}
-    \leanok
-    If $A,B\geq0$, then $\tr(AB)\geq0$.
-\end{lemma}
-
-\begin{proof}\leanok
-    Write $B=U\Lambda U^\dagger$ with $U$ unitary and $\Lambda$ diagonal.
-    Then
-    \begin{align}
-        \tr(AB)
-        &=\tr\!\left((U^\dagger AU)\Lambda\right)
-          =\sum_i(U^\dagger AU)_{ii}\Lambda_{ii}
-          \geq0,
-        \notag
-    \end{align}
-    because $U^\dagger AU\geq0$ and $\Lambda_{ii}\geq0$ for every $i$.
-\end{proof}
-
-\begin{definition}[Euclidean-space embedding]\label{def:mat_to_es}
-    \lean{MPSTensor.matToES}
-    \leanok
-    Flattening matrix entries defines an isometric embedding
-    $\opvec:M_{m\times n}(\C)\to\C^{mn}$ with respect to the Frobenius
-    norm: $\|\opvec(X)\|^2=\|X\|_F^2$.
-\end{definition}
-
-\begin{lemma}[Norm of embedded matrix]\label{lem:norm_mat_to_es}
-    \lean{MPSTensor.norm_matToES_sq}
-    \leanok
-    \uses{def:mat_to_es, def:frob_sq}
-    One has $\|\opvec(X)\|^2=\|X\|_F^2$.
-\end{lemma}
-
-\begin{proof}\leanok
-    Both sides equal $\sum_{i,j}\lVert X_{ij}\rVert^2$: the left side by
-    the Euclidean entry-norm formula and the right side by
-    (\ref{eq:spectral_frob_sq}).
+    The detailed word-index calculation is the same as the proof of
+    Theorem~\ref{thm:overlap_trace}, over the rectangular matrix-unit basis;
+    see Section~\ref{sec:app_spectral_mixed_trace}.
 \end{proof}
 
 \section{Eigenvalue bound and transfer-operator gap}
 
-The eigenvalue bound follows from a uniform Frobenius-norm estimate obtained
-directly from the trace-preserving normalization
-(cf.~\cite[Proposition~6.1]{Wolf2012Quantum} for the general operator-norm
-version via Russo--Dye). For the rigidity theorem, one gauges $A$ and $B$
-separately using positive fixed points of their transfer maps to obtain unital
-Kraus families, and then applies the Kadison--Schwarz equality argument
-(\cite[Theorem~5.3]{Wolf2012Quantum}) to a block embedding of a
-mixed-transfer eigenvector.
+The eigenvalue bound uses the Frobenius (Hilbert--Schmidt) norm
+$\|{\cdot}\|_F$ on the finite-dimensional matrix algebra and the trace
+positivity of two positive semidefinite matrices; both are proved in
+Section~\ref{sec:app_spectral_frobenius}. For the rigidity
+theorem, one gauges $A$ and $B$ separately using positive fixed points of
+their transfer maps to obtain unital Kraus families, and then applies the
+Kadison--Schwarz equality argument (\cite[Theorem~5.3]{Wolf2012Quantum}) to
+a block embedding of a mixed-transfer eigenvector.
 
 \begin{theorem}[Eigenvalue bound]\label{thm:eigenvalue_bound}
     \lean{MPSTensor.eigenvalue_norm_le_one}
@@ -239,24 +115,13 @@ mixed-transfer eigenvector.
 
 \begin{proof}
     \leanok
-    \uses{thm:mixed_pow}
-    Expand $F_{AB}^n(X)$ using (\ref{eq:spectral_mixed_power}) and apply
-    Cauchy--Schwarz together with the normalization
-    (\ref{eq:spec_tp_normalization}) for both tensors. This gives a constant
-    $C_D$, depending only on $D$, such that
-    $\|F_{AB}^n(X)\|_{\mathrm{HS}}\leq C_D\|X\|_{\mathrm{HS}}$ for every
-    $n$. If $F_{AB}(X)=\mu X$ and $X\neq0$, then
-    \begin{align}
-        |\mu|^n\|X\|_{\mathrm{HS}}
-        &=\|F_{AB}^n(X)\|_{\mathrm{HS}}
-          \leq C_D\|X\|_{\mathrm{HS}}
-        \notag
-    \end{align}
-    for every $n$, and hence $|\mu|\leq1$.
-
-    The argument uses only the trace-preserving normalization
-    (\ref{eq:spec_tp_normalization}) and does not appeal to
-    Perron--Frobenius theory.
+    \uses{thm:eigenvalue_bound_rect}
+    This is the equal-bond-dimension case $D_1=D_2=D$ of
+    Theorem~\ref{thm:eigenvalue_bound_rect}, which gives the full
+    Cauchy--Schwarz estimate via the Frobenius-norm apparatus of
+    Section~\ref{sec:app_spectral_frobenius}. The argument uses
+    only the trace-preserving normalization (\ref{eq:spec_tp_normalization})
+    and does not appeal to Perron--Frobenius theory.
 \end{proof}
 
 \begin{theorem}[Rectangular eigenvalue bound]\label{thm:eigenvalue_bound_rect}
@@ -269,11 +134,15 @@ mixed-transfer eigenvector.
 \end{theorem}
 
 \begin{proof}\leanok
-    The word expansion and Frobenius-norm estimate used in
-    Theorem~\ref{thm:eigenvalue_bound} apply to rectangular matrices. If
-    $F_{AB}^{\mathrm{rect}}(X)=\mu X$ and $X\neq0$, then
-    $|\mu|^n\|X\|_{\mathrm{HS}}\leq D_1\|X\|_{\mathrm{HS}}$ for every
-    $n$, and hence $|\mu|\leq1$.
+    A uniform Frobenius bound
+    $\|(F_{AB}^{\mathrm{rect}})^n(X)\|_F^2\leq D_1^2\|X\|_F^2$ follows from
+    the word expansion, the Frobenius submultiplicativity
+    $\|MN\|_F\leq\|M\|_F\|N\|_F$, and Cauchy--Schwarz applied to the
+    trace-preserving normalization of $A$ and $B$
+    (Section~\ref{sec:app_spectral_frobenius}). If
+    $F_{AB}^{\mathrm{rect}}(X)=\mu X$ with $X\neq0$, iterating gives
+    $|\mu|^{2n}\|X\|_F^2\leq D_1^2\|X\|_F^2$ for every $n$, forcing
+    $|\mu|\leq1$.
 \end{proof}
 
 \begin{lemma}[Spectral radius bound]\label{thm:spectral_radius_le_one}
@@ -308,7 +177,8 @@ mixed-transfer eigenvector.
     Since $\rho_{\spec}(F_{AB})\leq1$ by
     Lemma~\ref{thm:spectral_radius_le_one}, the hypothesis gives an
     eigenvalue $\mu$ with $|\mu|=1$ and a nonzero eigenvector $X$ satisfying
-    $F_{AB}(X)=\mu X$. The proof proceeds in five steps.
+    $F_{AB}(X)=\mu X$. The proof proceeds in five steps, elaborated in
+    Section~\ref{sec:app_spectral_rigidity}.
 
     \emph{Step~1 (Separate gauging).}
     Choose positive definite fixed points $\rho_A$ and $\rho_B$ of
@@ -333,7 +203,7 @@ mixed-transfer eigenvector.
             0 & X'\\
             0 & 0
         \end{pmatrix}.
-        \label{eq:spectral_block_embedding}
+        \notag
     \end{align}
     The matrices $\{C^i\}$ form a unital Kraus family on $\MN{2D}$, and
     $E_C(Y)=\mu Y$.
@@ -373,53 +243,6 @@ mixed-transfer eigenvector.
     The gauging is applied separately to $\E_A$ and $\E_B$; the mixed
     transfer map $F_{AB}$ need not be simultaneously unital and
     trace-preserving.
-\end{proof}
-
-\begin{lemma}[Gauged peripheral eigenvector yields Kraus intertwining]%
-    \label{thm:gauged_intertwining_core}
-    \lean{MPSTensor.gauged_intertwining_core}
-    \leanok
-    \uses{def:mixed_transfer, thm:qpf, thm:right_canonical_gauge}
-    Let $A$ and $B$ be normalized tensors, and let $X\neq0$ satisfy
-    $F_{AB}(X)=\mu X$ with $|\mu|=1$. Choose positive definite fixed points
-    $\rho_A,\rho_B$ of the transfer maps and gauge to unital families
-    $A'^i=S_A^{-1}A^iS_A$ and $B'^i=S_B^{-1}B^iS_B$, where
-    $S_AS_A^\dagger=\rho_A$ and $S_BS_B^\dagger=\rho_B$. Then
-    $X'=S_A^{-1}X(S_B^\dagger)^{-1}$ is nonzero, the families $A'$ and $B'$
-    are unital, and, for every $i$,
-    \begin{align}
-        X'(B'^i)^\dagger
-        &=\mu(A'^i)^\dagger X',
-        &
-        A'^iX'
-        &=\mu X'B'^i.
-        \label{eq:spectral_gauged_intertwining}
-    \end{align}
-\end{lemma}
-
-\begin{proof}\leanok
-    \uses{thm:ks_peripheral, thm:kraus_commute}
-    Embed the gauged families and transported eigenvector into the block
-    matrices (\ref{eq:spectral_block_embedding}), apply the
-    Kadison--Schwarz equality argument for the modulus-one eigenvalue, and
-    extract (\ref{eq:spectral_gauged_intertwining}) from the block relations.
-\end{proof}
-
-\begin{lemma}[Intertwining yields gauge-phase equivalence]%
-    \label{thm:gauged_intertwining_gauge_phase}
-    \lean{MPSTensor.gaugePhaseEquiv_of_gauged_intertwining}
-    \leanok
-    \uses{def:gauge_phase_equiv}
-    Let $A$ and $B$ be tensors of the same bond dimension. Suppose invertible
-    gauges take them to $A'$ and $B'$, and suppose there are an invertible
-    matrix $X'$ and a scalar $\mu$ with $|\mu|=1$ such that
-    $A'^iX'=\mu X'B'^i$ for every physical index $i$. Then $A$ and $B$ are
-    gauge-phase equivalent.
-\end{lemma}
-
-\begin{proof}\leanok
-    Compose the two gauge matrices with the intertwiner to obtain one
-    invertible matrix conjugating $A$ to a scalar multiple of $B$.
 \end{proof}
 
 \begin{remark}[Two gauge conventions]\label{rem:gauge_conventions}\leanok
@@ -472,11 +295,17 @@ mixed-transfer eigenvector.
 
 \begin{proof}\leanok
     \uses{def:injective}
-    The second relation in (\ref{eq:spectral_rect_intertwining}) shows that
-    $\ker(X)$ is invariant under all generators of $B$. Since these
-    generators span the full matrix algebra, $\ker(X)$ is trivial and
-    $D_2\leq D_1$. Applying the same argument to $X^\dagger$ and the first
-    relation gives $D_1\leq D_2$.
+    The first relation in (\ref{eq:spectral_rect_intertwining}) shows that
+    $\ker(X)$ is invariant under every $(B^i)^\dagger$: if $Xv=0$, then
+    $X(B^i)^\dagger v=\mu(A^i)^\dagger Xv=0$. Since the $\{B^i\}$ span the
+    full matrix algebra, so do the $\{(B^i)^\dagger\}$ (conjugate
+    transposition is a linear bijection of the matrix algebra), so
+    $\ker(X)$ is invariant under every matrix; injectivity of the resulting
+    map forces $\ker(X)=0$, giving $D_2\leq D_1$. Taking adjoints of the
+    second relation gives $X^\dagger(A^i)^\dagger=\overline\mu(B^i)^\dagger
+    X^\dagger$, so the same argument applied to $X^\dagger$ shows
+    $\ker(X^\dagger)$ is invariant under every $(A^i)^\dagger$ and hence
+    trivial, giving $D_1\leq D_2$.
 \end{proof}
 
 \begin{theorem}[Rectangular transfer-operator gap]\label{thm:transfer_operator_gap_rect}
@@ -524,23 +353,8 @@ mixed-transfer eigenvector.
 
 \section{MPV overlap decay}
 
-Two lemmas for complex Banach algebras translate the transfer-operator gap
-into convergence statements.
-
-\begin{lemma}[Powers vanish below unit spectral radius]%
-    \label{lem:spectral_radius_pow_zero}
-    \lean{MPSTensor.pow_tendsto_zero_of_spectralRadius_lt_one}
-    \leanok
-    Let $a$ be an element of a complex Banach algebra with
-    $\rho_{\spec}(a)<1$. Then $a^n\to0$ as $n\to\infty$.
-\end{lemma}
-
-\begin{proof}
-    \leanok
-    Choose $r$ with $\rho_{\spec}(a)<r<1$. The Gelfand formula
-    $\|a^n\|^{1/n}\to\rho_{\spec}(a)$ gives $\|a^n\|\leq r^n$ for all
-    sufficiently large $n$, and $r^n\to0$.
-\end{proof}
+The Banach-algebra fact that powers below unit spectral radius vanish is
+proved in Section~\ref{sec:app_spectral_decay}.
 
 \begin{lemma}[An idempotent below unit spectral radius vanishes]%
     \label{lem:idempotent_spectral_radius_zero}
@@ -570,8 +384,8 @@ into convergence statements.
     \leanok
     \uses{thm:transfer_operator_gap, lem:spectral_radius_pow_zero}
     The gap $\rho_{\spec}(F_{AB})<1$ from
-    Theorem~\ref{thm:transfer_operator_gap} and
-    Lemma~\ref{lem:spectral_radius_pow_zero} give
+    Theorem~\ref{thm:transfer_operator_gap} and the Gelfand-formula
+    convergence of Lemma~\ref{lem:spectral_radius_pow_zero} give
     $\|F_{AB}^n\|_{\mathrm{op}}\to0$. Hence $F_{AB}^n(X)\to0$ for every
     $X$.
 \end{proof}
@@ -600,40 +414,10 @@ into convergence statements.
     Since the sum is finite, $O_{AB}(N)\to0$.
 \end{proof}
 
-\section{Block separation}
-
-The block-separation results below record the overlap asymptotics used in the
-canonical-form separation of Chapter~\ref{ch:canonical}.
-
-\begin{theorem}[Cross-correlation decay]\label{thm:cross_decay}
-    \lean{MPSTensor.cross_correlation_tendsto_zero}
-    \leanok
-    \uses{def:mixed_transfer, def:gauge_phase_equiv, def:injective}
-    If $A$ and $B$ are injective normalized tensors that are not gauge-phase
-    equivalent, then $\tr(F_{AB}^N(X))\to0$ as $N\to\infty$ for every
-    $X\in\MN{D}$.
-\end{theorem}
-
-\begin{proof}\leanok
-    \uses{thm:transfer_pow_zero}
-    Theorem~\ref{thm:transfer_pow_zero} gives $F_{AB}^N(X)\to0$ in operator
-    norm, and continuity of the trace gives the conclusion.
-\end{proof}
-
-\begin{theorem}[Self-correlation persists]\label{thm:self_persist}
-    \lean{MPSTensor.self_correlation_persists}
-    \leanok
-    \uses{def:transfer_map}
-    If $\rho$ is a fixed point of $\E_A$, then
-    $\tr(\E_A^N(\rho))=\tr(\rho)$ for every $N\geq0$. In particular, this
-    applies to the distinguished Perron--Frobenius fixed point from
-    Theorem~\ref{thm:qpf}.
-\end{theorem}
-
-\begin{proof}\leanok
-    Since $\E_A(\rho)=\rho$, one has $\E_A^N(\rho)=\rho$ for every $N$.
-    Taking the trace proves the claim.
-\end{proof}
+The block-separation consequences of this gap --- cross-correlation decay
+between distinct blocks and the persistence of self-correlation at a fixed
+point --- used in the canonical-form separation of Chapter~\ref{ch:canonical},
+are recorded in Section~\ref{sec:app_spectral_decay}.
 
 \section{Transfer-operator gap under irreducible-TP hypotheses}
 
