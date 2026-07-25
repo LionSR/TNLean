@@ -149,15 +149,6 @@ theorem partialTransposeRight_kronecker (A : Matrix (Fin d) (Fin d) ℂ)
 
 /-! ### Relation to the full transpose -/
 
-/-- Transposing the first factor and then the second equals the full transpose:
-`(ρ^{T₁})^{T₂} = ρᵀ`.  Equivalently, the two partial transposes differ by a
-global transposition. -/
-theorem partialTransposeRight_partialTransposeLeft
-    (ρ : Matrix (Fin d × Fin d') (Fin d × Fin d') ℂ) :
-    partialTransposeRight (partialTransposeLeft ρ) = ρᵀ := by
-  ext p q
-  simp only [partialTransposeRight_apply, partialTransposeLeft_apply, Matrix.transpose_apply]
-
 /-- **Wolf eq. (3.17), `ρ^{T₂}` form.** The two partial transposes differ by a
 global transposition: `ρ^{T₂} = (ρ^{T₁})ᵀ`. -/
 theorem partialTransposeRight_eq_transpose_partialTransposeLeft
@@ -165,13 +156,6 @@ theorem partialTransposeRight_eq_transpose_partialTransposeLeft
     partialTransposeRight ρ = (partialTransposeLeft ρ)ᵀ := by
   ext p q
   simp only [partialTransposeRight_apply, partialTransposeLeft_apply, Matrix.transpose_apply]
-
-/-- The two partial transposes differ by a global transposition, `ρ^{T₁}` form:
-`ρ^{T₁} = (ρ^{T₂})ᵀ`. -/
-theorem partialTransposeLeft_eq_transpose_partialTransposeRight
-    (ρ : Matrix (Fin d × Fin d') (Fin d × Fin d') ℂ) :
-    partialTransposeLeft ρ = (partialTransposeRight ρ)ᵀ := by
-  rw [partialTransposeRight_eq_transpose_partialTransposeLeft, Matrix.transpose_transpose]
 
 /-! ### Trace preservation -/
 

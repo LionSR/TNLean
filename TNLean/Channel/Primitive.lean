@@ -66,11 +66,6 @@ theorem fixedPointProj_idempotent (ρ : Matrix (Fin D) (Fin D) ℂ) (htr : trace
     fixedPointProj ρ htr (fixedPointProj ρ htr X) = fixedPointProj ρ htr X := by
   simp [fixedPointProj, div_eq_mul_inv, htr]
 
-/-- The fixed-point projection fixes `ρ`. -/
-theorem fixedPointProj_apply_rho (ρ : Matrix (Fin D) (Fin D) ℂ) (htr : trace ρ ≠ 0) :
-    fixedPointProj ρ htr ρ = ρ := by
-  simp [fixedPointProj, htr]
-
 /-- The trace of `fixedPointProj ρ` as a linear endomorphism is 1.
 
 The proof expresses `fixedPointProj ρ htr` as the rank-one map `X ↦ f(X) • ρ`

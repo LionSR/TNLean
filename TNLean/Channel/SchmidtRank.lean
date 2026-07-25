@@ -187,22 +187,6 @@ theorem schmidtRank_eq_finrank_range_toEuclideanLin [Finite m] [DecidableEq n]
     (EuclideanSpace.basisFun m ℂ).toBasis
     (EuclideanSpace.basisFun n ℂ).toBasis
 
-/-- The Schmidt singular values are nonnegative. -/
-theorem schmidtSingularValues_nonneg [Fintype m] (ψ : m × n → ℂ) (k : ℕ) :
-    0 ≤ schmidtSingularValues ψ k := by
-  classical
-  exact
-    ((Matrix.toEuclideanLin (schmidtCoeffMatrix ψ) :
-      EuclideanSpace ℂ n →ₗ[ℂ] EuclideanSpace ℂ m).singularValues_nonneg k)
-
-/-- The Schmidt singular values are weakly decreasing. -/
-theorem schmidtSingularValues_antitone [Fintype m] (ψ : m × n → ℂ) :
-    Antitone (schmidtSingularValues ψ) := by
-  classical
-  exact
-    ((Matrix.toEuclideanLin (schmidtCoeffMatrix ψ) :
-      EuclideanSpace ℂ n →ₗ[ℂ] EuclideanSpace ℂ m).singularValues_antitone)
-
 /-- The support of the Schmidt singular values has size exactly the Schmidt
 rank. -/
 @[simp]
