@@ -26,23 +26,20 @@
 % ZCL, but its active trace matrix has no rank-one factorization.  The exact
 % failed conclusion is T_{k,h}=a_k b_h from equation Apptralktrrk.  Documented
 % in docs/paper-gaps/cpgsv17_pf_rank_one.tex.
-\begin{lemma}[SAL and ZCL give a rank-one sector trace matrix]
-    \label{lem:mpdo_sal_zcl_rank_one_trace_matrix}
-    \notready
-    \uses{def:is_sal, def:mpo_source_zcl,
-        thm:mpdo_active_trace_matrix_zcl_relations}
-    Let $\mathcal K$ be an injective matrix product density operator tensor
-    satisfying the strong area law and zero correlation length. For the
-    neighboring operators obtained from its inverse-map sector decomposition,
-    define $T_{k,h}=\tr(\eta_{k,h})$. Then there are real families $(a_k)_k$
-    and $(b_k)_k$ such that
+\begin{remark}[Printed Lemma C.5 is refuted]
+    \label{rem:mpdo_sal_zcl_rank_one_trace_matrix}
+    Lemma~C.5 of
+    \cite[Appendix~C.2, lines~1484--1499]{Cirac2016MPDO_arXiv} claims that an
+    injective matrix product density operator tensor satisfying the strong area
+    law and zero correlation length has real families $(a_k)_k,(b_k)_k$ with
     \begin{align}
-        T_{k,h}&=a_kb_h, \notag\\
+        T_{k,h}=\tr(\eta_{k,h})&=a_kb_h, \notag\\
         \sum_k a_kb_k&=1. \notag
     \end{align}
-    This is Lemma~C.5 at
-    \cite[Appendix~C.2, lines~1473--1499]{Cirac2016MPDO_arXiv}.
-\end{lemma}
+    This claim is false under the printed hypotheses. Theorem~\ref{thm:mpdo_sal_zcl_rank_one_counterexample}
+    gives a four-sector counterexample with the source inverse-map
+    factorization and with no such families $a,b$.
+\end{remark}
 
 \begin{theorem}[Counterexample to the printed SAL--ZCL rank-one inference]
     \label{thm:mpdo_sal_zcl_rank_one_counterexample}
@@ -150,7 +147,7 @@
 \end{proof}
 
 % **Refuted prerequisite (Lemma C.5):**
-% lem:mpdo_sal_zcl_rank_one_trace_matrix is formally refuted under its printed
+% rem:mpdo_sal_zcl_rank_one_trace_matrix is formally refuted under its printed
 % SAL and ZCL hypotheses by thm:mpdo_sal_zcl_rank_one_counterexample. Hence its
 % use in the printed derivation of the source corollary fails, and that
 % corollary remains unformalized under the source hypotheses. A conditional
@@ -158,10 +155,10 @@
 % semidefiniteness or linear independence is given by
 % thm:simple_mpdo_local_structure_data_of_sal_zcl. Documented in
 % docs/paper-gaps/cpgsv17_pf_rank_one.tex.
-\begin{corollary}[Local sector structure from SAL and ZCL]
+\begin{corollary}[Local sector structure from SAL and ZCL (open)]
     \label{cor:mpdo_sal_zcl_local_sector_structure}
     \notready
-    \uses{lem:mpdo_sal_zcl_rank_one_trace_matrix,
+    \uses{def:is_sal, def:mpo_source_zcl, thm:sal_implies_eta_structure,
         thm:mpdo_active_trace_matrix_zcl_relations}
     Let $\mathcal K$ be an injective matrix product density operator tensor
     satisfying the strong area law and zero correlation length. Then there are
@@ -173,7 +170,9 @@
         \sum_k a_kb_k&=1. \notag
     \end{align}
     This is the structural corollary at
-    \cite[Appendix~C.2, lines~1501--1505]{Cirac2016MPDO_arXiv}.
+    \cite[Appendix~C.2, lines~1501--1505]{Cirac2016MPDO_arXiv}. Its printed
+    derivation combines Lemma~C.4 with the refuted Lemma~C.5, so the conclusion
+    remains open under the printed hypotheses.
 \end{corollary}
 
 % **Scope restriction (rank-one trace matrix):** the two constructors below
@@ -182,15 +181,15 @@
 % does not formalize Lemma SALZCL, its structural corollary, or Proposition
 % prop2to3 from those hypotheses alone. Documented in
 % docs/paper-gaps/cpgsv17_pf_rank_one.tex.
-\begin{theorem}[Local simple-MPDO structure from corrected rank-one criteria]
+\begin{theorem}[Conditional local simple-MPDO structure under stronger rank-one hypotheses]
     \label{thm:simple_mpdo_local_structure_data_of_sal_zcl}
     \lean{MPOTensor.SimpleMPDOLocalStructureData.ofSALZCLOfPairingIdempotent}
     \lean{MPOTensor.SimpleMPDOLocalStructureData.ofSALZCLOfPosSemidef}
     \leanok
     \uses{def:simple_mpdo_local_structure_data, thm:sal_implies_eta_structure,
         thm:psd_trace_powers_rank_one_t, thm:pairing_idempotent_rank_one_t}
-    There are two sufficient forms of the local conclusion associated with
-    \cite[Lemmas~C.2, C.4, and~C.5]{Cirac2016MPDO_arXiv}. In the first,
+    These are conditional constructions under hypotheses stronger than SAL and
+    ZCL; neither is the printed Lemma~C.5 or its corollary. In the first,
     $T$ is positive semidefinite, $\tr(T)=1$, and $\tr(T^m)=1$ for every
     positive integer $m$; the spectral theorem then gives the rank-one
     factorization $T=ab^\top$ with $a\cdot b=1$. In the second, $T$ is the
@@ -266,7 +265,7 @@ This is the calculation in
 \cite[Appendix~C.2, lines~1745--1751]{Cirac2016MPDO_arXiv}.
 
 % **Refuted prerequisite (Lemma C.5):**
-% lem:mpdo_sal_zcl_rank_one_trace_matrix is formally refuted under its printed
+% rem:mpdo_sal_zcl_rank_one_trace_matrix is formally refuted under its printed
 % SAL and ZCL hypotheses by thm:mpdo_sal_zcl_rank_one_counterexample. Hence its
 % use in the printed derivation of this proposition fails, and the proposition
 % remains unformalized under the source hypotheses. A conditional construction
@@ -274,11 +273,10 @@ This is the calculation in
 % independence is given by
 % thm:simple_mpdo_local_structure_data_of_sal_zcl. Documented in
 % docs/paper-gaps/cpgsv17_pf_rank_one.tex.
-\begin{theorem}[SAL and ZCL give the BNT sector structure]
+\begin{theorem}[BNT sector structure from SAL and ZCL (open)]
     \label{thm:mpdo_sal_zcl_bnt_sector_structure}
     \notready
-    \uses{def:is_sal, def:mpo_source_zcl,
-        cor:mpdo_sal_zcl_local_sector_structure}
+    \uses{def:is_sal, def:mpo_source_zcl}
     Let $K$ be a simple tensor in block-injective canonical form (biCF),
     equipped with a basis-of-normal-tensors decomposition. If $K$ satisfies
     the strong area law and zero correlation length, then its basis tensors
@@ -293,4 +291,7 @@ This is the calculation in
     \cite[Theorem~4.9 and Appendix~C.2, lines~1740--1788]
       {Cirac2016MPDO_arXiv}. The separate standing biCF and BNT hypotheses are
     imposed at lines~849--850 and restated at line~1628 of the same source.
+    The proof at lines~1745--1785 applies the structural corollary after
+    establishing SAL and ZCL for each basis tensor. Since that corollary uses
+    the refuted Lemma~C.5, the printed proof does not establish this proposition.
 \end{theorem}
