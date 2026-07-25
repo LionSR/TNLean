@@ -95,22 +95,6 @@ theorem eq_nearestPoint_of_mem_of_norm_eq_iInf
     nlinarith
   exact sub_eq_zero.mp (norm_eq_zero.mp hnorm0)
 
-theorem nearestPoint_eq_self
-    (K : Set F) (hK_nonempty : K.Nonempty) (hK_complete : IsComplete K)
-    (hK_convex : Convex ℝ K) {u : F} (huK : u ∈ K) :
-    (nearestPoint K hK_nonempty hK_complete hK_convex u : F) = u := by
-  letI : Nonempty K := hK_nonempty.to_subtype
-  symm
-  apply eq_nearestPoint_of_mem_of_norm_eq_iInf K hK_nonempty hK_complete hK_convex huK
-  have hbdd : BddBelow (Set.range fun w : K => ‖u - w‖) := by
-    refine ⟨0, ?_⟩
-    rintro _ ⟨w, rfl⟩
-    exact norm_nonneg _
-  have hEq : (⨅ w : K, ‖u - w‖) = 0 :=
-    le_antisymm (by simpa using ciInf_le hbdd ⟨u, huK⟩)
-      (le_ciInf fun w => norm_nonneg _)
-  simp [hEq]
-
 theorem dist_nearestPoint_nearestPoint_le
     (K : Set F) (hK_nonempty : K.Nonempty) (hK_complete : IsComplete K)
     (hK_convex : Convex ℝ K) (u v : F) :
@@ -161,11 +145,5 @@ theorem lipschitzWith_nearestPoint
   rw [edist_dist, edist_dist]
   simpa using ENNReal.ofReal_le_ofReal
     (dist_nearestPoint_nearestPoint_le K hK_nonempty hK_complete hK_convex u v)
-
-theorem continuous_nearestPoint
-    (K : Set F) (hK_nonempty : K.Nonempty) (hK_complete : IsComplete K)
-    (hK_convex : Convex ℝ K) :
-    Continuous fun u : F => (nearestPoint K hK_nonempty hK_complete hK_convex u : F) :=
-  (lipschitzWith_nearestPoint K hK_nonempty hK_complete hK_convex).continuous
 
 end ConvexProjection

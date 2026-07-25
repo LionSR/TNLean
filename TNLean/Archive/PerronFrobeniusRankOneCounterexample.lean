@@ -113,11 +113,6 @@ lemma T_sq : T * T = P := by
   fin_cases i <;> fin_cases j <;>
     simp [T, P, Matrix.mul_apply, Fin.sum_univ_three] <;> ring
 
-lemma T_mul_P : T * P = P := by
-  ext i j
-  fin_cases i <;> fin_cases j <;>
-    simp [T, P, Matrix.mul_apply, Fin.sum_univ_three] <;> ring
-
 lemma P_mul_T : P * T = P := by
   ext i j
   fin_cases i <;> fin_cases j <;>
@@ -163,14 +158,6 @@ theorem T_tracePowersConstant :
   · interval_cases k; simp
   · rw [T_pow_eq_P k h, trace_T, trace_P]
 
-/-- The counterexample also satisfies the consequence `T ^ 2 = T ^ 3` of the
-operator-valued ZCL identity in arXiv:1606.00608, Appendix C.2, lines
-1489--1497.  Indeed, writing `T = R L`, the displayed identity
-`L R = (L R) ^ 2` gives only `T ^ 2 = T ^ 3`; it does not give
-`T = T ^ 2`. -/
-theorem T_sq_eq_cube : T ^ 2 = T ^ 3 := by
-  rw [T_pow_eq_P 2 (by norm_num), T_pow_eq_P 3 (by norm_num)]
-
 /-- `T` has no rank-one factorization. -/
 theorem T_not_rankOne : ¬ ∃ a b : Fin 3 → ℝ, T = Matrix.vecMulVec a b := by
   rintro ⟨a, b, hT⟩
@@ -199,17 +186,6 @@ theorem counterexample :
       (∀ k : ℕ, 0 < k → Matrix.trace (T ^ k) = Matrix.trace T) ∧
       ¬ ∃ a b : Fin 3 → ℝ, T = Matrix.vecMulVec a b :=
   ⟨T_isPrimitive, T_tracePowersConstant, T_not_rankOne⟩
-
-/-- Even the matrix consequence of the operator-valued ZCL identity does not
-repair the Perron--Frobenius step: the same primitive trace-normalized matrix
-has constant traces, satisfies `T ^ 2 = T ^ 3`, and is not an outer product. -/
-theorem counterexample_with_zcl_operator_consequence :
-    Matrix.IsPrimitive T ∧
-      Matrix.trace T = 1 ∧
-      (∀ k : ℕ, 0 < k → Matrix.trace (T ^ k) = Matrix.trace T) ∧
-      T ^ 2 = T ^ 3 ∧
-      ¬ ∃ a b : Fin 3 → ℝ, T = Matrix.vecMulVec a b :=
-  ⟨T_isPrimitive, trace_T, T_tracePowersConstant, T_sq_eq_cube, T_not_rankOne⟩
 
 /-- The primitive trace-normalized counterexample satisfies the full
 rectangular pairing identity used in arXiv:1606.00608, Appendix C.2, lines
