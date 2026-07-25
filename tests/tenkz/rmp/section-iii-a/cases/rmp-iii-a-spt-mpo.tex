@@ -1,30 +1,30 @@
 % Target: rmp-iii-a-spt-mpo
 % Formula: Pulling O_g through A deposits the physical action U_g on A.
-% Ink: Canonical public tenkzfree PEPS star, crossing boxes, and g-string arcs.
+% Ink: Canonical public tenkzfree PEPS star, crossing boxes, and rotated arcs.
 % Boundary: Four virtual legs, one physical leg, and two g-string ends are open.
 % Source: paper TN-Review-main.tex line 1459; author source ImagesReview Section
 %   III/ImagesReview Section III.tex lines 414-444
-% Capabilities: free-graph, pulling-through, crossing-order
+% Capabilities: free-graph, pulling-through, crossing-order, rotated-action
 \[
-  \begin{tenkzfree}
+  \begin{tenkzfree}\tngroup[frame=flat]{
     \tnput[dot]{A}{(0mm,0mm)}{A}
     \tnput[box]{xw}{(-9mm,0mm)}{}
-    \tnput[box]{xn}{(0mm,9mm)}{}
+    \tnput[box,frame={rotate=45}]{xn}{(0mm,9mm)}{}
     \tnjoin{-18mm,0mm}{xw.west} \tnjoin{xw.east}{A.west}
     \tnjoin{A.east}{18mm,0mm}
     \tnjoin{0mm,-18mm}{A.south}
     \tnjoin{A.north}{xn.south} \tnjoin{xn.north}{0mm,18mm}
     \tnjoin[route=arc, out=45, in=225, label=g]{xw}{xn}
-  \end{tenkzfree}
+  }\end{tenkzfree}
   =U_g
-  \begin{tenkzfree}
+  \begin{tenkzfree}\tngroup[frame=flat]{
     \tnput[dot]{A}{(0mm,0mm)}{A}
     \tnput[box]{xe}{(9mm,0mm)}{}
-    \tnput[box]{xs}{(0mm,-9mm)}{}
+    \tnput[box,frame={rotate=45}]{xs}{(0mm,-9mm)}{}
     \tnjoin{-18mm,0mm}{A.west} \tnjoin{A.east}{xe.west}
     \tnjoin{xe.east}{18mm,0mm}
     \tnjoin{0mm,-18mm}{xs.south} \tnjoin{xs.north}{A.south}
     \tnjoin{A.north}{0mm,18mm}
     \tnjoin[route=arc, out=45, in=225, label=g]{xs}{xe}
-  \end{tenkzfree}.
+  }\end{tenkzfree}.
 \]

@@ -61,7 +61,7 @@ declared. The generated reference prints this test beside every row.
 |---|---|---|---|---|---|
 | `rows=` | row-list | — | `{wire}` | picture | `TKZ-PIC-*` |
 | `cols=` | integer | — | 3 | picture | `TKZ-PIC-*` |
-| `frame=` | frame-spec | `flat` `vertical` `plane` `rotate=<deg>` `matrix={..}` `circle` | `flat` | picture, group | `TKZ-FRAME-*` |
+| `frame=` | frame-spec | `flat` `vertical` `rotate=<deg>` | `flat` | picture, group, atom | `TKZ-FRAME-*` |
 | `west=` `east=` `north=` `south=` | small-enum | `open` `none` `trace` `cup` | `open` | picture | `TKZ-SIDE-*` |
 | `trace=` | trace-spec | cell-set or `physical` | empty | picture | `TKZ-CELLSET-*` |
 | `open=` | cell-set | — | empty | picture | `TKZ-CELLSET-*` |
@@ -74,7 +74,7 @@ Every frame contracts adjacent compatible cells by default: `bonds=grid`
 holds in chain and lattice frames alike, and `bonds=none` suppresses the
 frame-generated bonds.
 
-### 2.3 Atom keys (13)
+### 2.3 Atom keys (14)
 
 | Key | Type | Values | Default | Diagnostic family |
 |---|---|---|---|---|
@@ -84,6 +84,7 @@ frame-generated bonds.
 | `at=` | address | — | next chain cell | `TKZ-ADDR-*` |
 | `name=` | identifier | — | generated | `TKZ-NAME-*` |
 | `ports=` | typed-port-list | — | from skin | `TKZ-PORT-*` |
+| `frame=` | frame-spec | `flat` `rotate=<deg>` | `flat` | `TKZ-FRAME-*` |
 | `up=` `down=` | math-list | — | empty | `TKZ-ATOM-*` |
 | `species=` | identifier | — | empty | `TKZ-SPECIES-*` |
 | `label pos=` | small-enum | compass or `auto` | `auto` | `TKZ-LABEL-*` |
@@ -209,24 +210,21 @@ no placeholder atoms.
 
 ## 4. Frames
 
-A frame maps addresses to positions. There are two kinds and no third:
-
-- **Affine**: one 2×2 matrix plus offset. The presets `flat`, `vertical`,
-  `plane` (`lean=`, `rise=`, `slant=` subkeys), and `rotate=<degrees>` are
-  parameter fills of that single map.
-- **`circle`**: cells sit on a circle; `(1,k)` is the k-th station. A circle
-  frame is not affine and is the only non-affine frame.
+A public 1.0 frame maps addresses by one affine transform. Its complete
+spelling set is the one in §2.2: `flat`, `vertical`, and `rotate=<degrees>`.
+The previously drafted `plane` and `circle` frame kinds are not implemented
+public grammar. The `ring=` and `planes` rows in §9 remain design sketches,
+not usable 1.0 sugar, until their frame kinds enter the grammar under the
+three-consumer gate.
 
 `frame=` acts at picture scope and at group scope. `\tngroup` transforms a
 sub-diagram as one object: its records keep their names, its boundary
-signature transforms with it, and the transform is a field of the picture
-record — the audit compares networks, never silhouettes. Label text never
+signature transforms with it, and the transform has its own model record —
+the audit compares networks, never silhouettes. Label text never
 rotates; glyph ink may.
 
-Consumers, rotation and shear: `rmp-iii-a-pulling-through`,
-`rmp-ii-circuit`, `rmp-iii-a-spt-mpo`, `rmp-ii-peps-rg`.
-Consumers, circle: `rmp-iv-ground-space-1d`, `rmp-iii-a-mpo-injective`,
-`rmp-iii-b-idempotent`, `rmp-workbench-iii-eq51`.
+Consumers, rotation: `rmp-iii-a-pulling-through`, `rmp-ii-circuit`,
+`rmp-iii-a-spt-mpo`.
 Consumers, groups and `cluster=`: `rmp-app-czx-state`,
 `rmp-iii-b-condensation`, `rmp-workbench-iii-ghz-state-workbench`.
 

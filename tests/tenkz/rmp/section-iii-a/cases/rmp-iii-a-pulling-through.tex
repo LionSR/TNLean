@@ -1,18 +1,18 @@
 % Target: rmp-iii-a-pulling-through
 % Formula: The full MPO-algebra string pulls through the PEPS plaquette.
-% Ink: Canonical public tenkzfree four-arm ring before-and-after equation.
+% Ink: Canonical public tenkzfree four-arm ring with rotated action frames.
 % Boundary: Four external PEPS legs and two MPO string ends remain open.
 % Source: paper TN-Review-main.tex line 1356; author source ImagesReview Section
 %   III/ImagesReview Section III.tex lines 170-197
 % Capabilities: free-graph, pulling-through, rotated-action
 \[
-  \begin{tenkzfree}
+  \begin{tenkzfree}\tngroup[frame={rotate=90}]{
     \tnput[ring]{l}{(-7mm,7mm)}{\lambda}
-    \tnput[box]{n}{(0mm,9mm)}{} \tnput[box]{w}{(-9mm,0mm)}{}
-    \tnput[box]{s}{(0mm,-9mm)}{} \tnput[box]{e}{(9mm,0mm)}{}
+    \tnput[box,frame={rotate=90}]{n}{(0mm,9mm)}{} \tnput[box]{w}{(-9mm,0mm)}{}
+    \tnput[box,frame={rotate=90}]{s}{(0mm,-9mm)}{} \tnput[box]{e}{(9mm,0mm)}{}
     \tnjoin{l.east}{n.west} \tnjoin{n.east}{e.north}
     \tnjoin{e.south}{s.east} \tnjoin{s.west}{w.south}
     \tnjoin{w.north}{l.south}
-  \end{tenkzfree}
+  }\end{tenkzfree}
   =\text{quarter-turn}.
 \]
