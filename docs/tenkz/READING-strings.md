@@ -73,7 +73,7 @@ The MPU wrap is not about a curve at all.
 
 ### The largest family wants an address the contract already carries
 
-The signed address grammar has nine productions. Two of them name a point of a
+The signed address grammar has eight productions. Two of them name a point of a
 curve rather than a place in the frame:
 
 ```
@@ -197,13 +197,11 @@ No amendment. The recommended ledger changes, for the maintainer's signature:
 | `rmp-workbench-ii-mpu-wrap-second` | `strings` → `skin-pairings` |
 | `rmp-iii-a-g-injective-projector` | re-pair, then re-review; on the right panel neither `strings` nor `group-average` is missing |
 
-Two manifest ranges are wrong and should move with them:
+One manifest range is wrong and should move with them:
 
 - `rmp-workbench-iii-g-injective-pull` cites lines 414–444, which is the SPT
   panel's range. Only the SPT panel's formula names $U_g$, and only 414–444
   draws it. The pull belongs at 468–497.
-- `rmp-iii-a-g-injective-projector` cites lines 468–520 and belongs at
-  305–327.
 
 Should a carried tensor ever be argued as a primitive rather than as an
 address that already exists, the consumer count is not the obstacle. Beyond
@@ -214,7 +212,18 @@ charge tile stands along its string. Eight consumers, and no new word.
 
 ## What this reading does not settle
 
-Two points want the maintainer's eye.
+Three points want the maintainer's eye.
+
+**The projector's source ownership.** The direct author source at 305–327
+draws the four $L_g$ actions and the projector ring, while 468–520 draws two
+pulling-through panels. That supports moving
+`rmp-iii-a-g-injective-projector` to 305–327. However,
+`wave2-targets.md` already assigns 305–328 to the archival
+`rmp-workbench-iii-eq59-now` target and assigns the published projector to
+468–520. Re-pairing the published target would therefore deliberately share
+one author block with its archival counterpart and overturn the existing
+inventory. The source evidence is recorded here, but that ownership change
+still needs the maintainer's corpus decision.
 
 **The three pulling-through panels.** Section III repeats the same figure
 three times at 414–444, 468–497 and 501–520, the last marked *veryold* in the
