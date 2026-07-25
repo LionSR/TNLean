@@ -578,23 +578,9 @@ theorem exists_conjugation_of_sameState [NeZero n] {L : ℕ} (hL : 0 < L)
     rwa [show p + (n - L) + L = p + n by omega, arcEval_add_n,
       arcEval_add_n] at h
   -- `Φ` is unital, hence nonzero, hence an automorphism, hence inner.
-  have hΦne : Φ ≠ 0 := by
-    intro h0
-    haveI : Nonempty (Fin D) := ⟨⟨0, hD⟩⟩
-    apply (show (1 : Matrix (Fin D) (Fin D) ℂ) ≠ 0 from one_ne_zero)
-    rw [← hΦone, h0]
-    rfl
-  have hBij := MPSTensor.linear_mul_endomorphism_bijective Φ hΦmul hΦne
-  let fHom := MPSTensor.linearMapToAlgHom Φ hΦmul hBij.surjective
-  let f := AlgEquiv.ofBijective fHom hBij
-  obtain ⟨P, hP⟩ := MPSTensor.skolemNoether_matrix f
-  have hΦP : ∀ X : Matrix (Fin D) (Fin D) ℂ,
-      Φ X = (P : Matrix (Fin D) (Fin D) ℂ) * X *
-        ((P⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) := by
-    intro X
-    have : f X = Φ X := rfl
-    rw [← this]
-    exact hP X
+  haveI : NeZero D := NeZero.of_pos hD
+  have hΦne : Φ ≠ 0 := MPSTensor.linearMap_ne_zero_of_map_one Φ hΦone
+  obtain ⟨P, hΦP⟩ := MPSTensor.exists_inner_of_linear_mul_endomorphism Φ hΦmul hΦne
   -- Strip the insertions: the arc products are conjugate.
   refine ⟨P, fun w hw => ?_⟩
   have hAw : arcEval A p w =
