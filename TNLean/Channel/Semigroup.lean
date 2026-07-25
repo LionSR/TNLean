@@ -38,5 +38,4 @@ import TNLean.Channel.Semigroup.ReducibleQDS.FixedDensity
 import TNLean.Channel.Semigroup.ReducibleQDS.GeneratorCompression
 import TNLean.Channel.Semigroup.ReducibleQDS.SubsequenceAnalysis
 import TNLean.Channel.Semigroup.RelaxationConditions
-import TNLean.Channel.Semigroup.Resolvent
 import TNLean.Channel.Semigroup.WeightedLoweringContractivity

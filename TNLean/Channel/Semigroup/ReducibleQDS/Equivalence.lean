@@ -80,16 +80,6 @@ theorem wolf_prop_7_6_three_implies_four
     HasBlockUpperTriangularLindblad L :=
   hasBlockUpperTriangularLindblad_of_hasInvariantCompression hGKSL h
 
-/-- **(3) → (2)**: An invariant compression implies a rank-deficient kernel element.
-This follows from (3) → (4) → (2). -/
-theorem wolf_prop_7_6_three_implies_two
-    {L : Mat →ₗ[ℂ] Mat}
-    (hGKSL : IsGKSLGenerator L)
-    (h : HasInvariantCompression L) :
-    HasRankDeficientKernelElement L :=
-  hasRankDeficientKernelElement_of_hasBlockUpperTriangularLindblad hGKSL
-    (hasBlockUpperTriangularLindblad_of_hasInvariantCompression hGKSL h)
-
 /-- **Wolf Proposition 7.6 (full equivalence)**: For a GKSL generator `L`, the
 four reducibility conditions are equivalent. We state the result by taking
 condition (1) as the base condition. -/

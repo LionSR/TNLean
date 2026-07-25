@@ -483,20 +483,6 @@ theorem traceRight_smul (c : ℂ) (X : Matrix (Fin d × Fin d') (Fin d × Fin d'
     traceRight (c • X) = c • traceRight X := by
   ext i j; simp [traceRight_apply, Finset.mul_sum]
 
-/-- `traceLeft` as a linear map. -/
-noncomputable def traceLeftLM (d d' : ℕ) :
-    Matrix (Fin d × Fin d') (Fin d × Fin d') ℂ →ₗ[ℂ] Matrix (Fin d') (Fin d') ℂ where
-  toFun := traceLeft
-  map_add' := traceLeft_add
-  map_smul' := traceLeft_smul
-
-/-- `traceRight` as a linear map. -/
-noncomputable def traceRightLM (d d' : ℕ) :
-    Matrix (Fin d × Fin d') (Fin d × Fin d') ℂ →ₗ[ℂ] Matrix (Fin d) (Fin d) ℂ where
-  toFun := traceRight
-  map_add' := traceRight_add
-  map_smul' := traceRight_smul
-
 /-- Left partial trace of a Kronecker product: `tr_A(A ⊗ B) = tr(A) • B`. -/
 theorem traceLeft_kronecker (A : Matrix (Fin d) (Fin d) ℂ) (B : Matrix (Fin d') (Fin d') ℂ) :
     traceLeft (kroneckerMap (· * ·) A B) = A.trace • B := by
