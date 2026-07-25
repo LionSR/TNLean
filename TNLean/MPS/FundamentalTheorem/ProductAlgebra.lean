@@ -124,15 +124,6 @@ theorem perBlockLinearExtension_one
   have h1 : T 1 = T x * T 1 := by rw [hx, one_mul]
   rw [h1, ← hMul, mul_one, hx]
 
-/-- Per-block T commutes with scalars. -/
-theorem perBlockLinearExtension_commutes
-    (A B : (k : Fin r) → MPSTensor d (dim k))
-    (hA : ∀ k, IsInjective (A k))
-    (hSame : ∀ k, SameMPV (A k) (B k))
-    (k : Fin r) (c : ℂ) :
-    perBlockLinearExtension A B hA hSame k (algebraMap ℂ _ c) = algebraMap ℂ _ c := by
-  simp only [Algebra.algebraMap_eq_smul_one, map_smul, perBlockLinearExtension_one A B hA hSame k]
-
 /-- The assembled product algebra map: apply `T_k` on each block independently. -/
 noncomputable def piLinearExtension
     (A B : (k : Fin r) → MPSTensor d (dim k))
@@ -202,15 +193,6 @@ theorem piAlgEquiv_apply
     piAlgEquiv A B hA hSame M k =
       perBlockLinearExtension A B hA hSame k (M k) := by
   simp [piAlgEquiv, AlgEquiv.ofBijective, piAlgHom, piLinearExtension_apply]
-
-/-- The product algebra map sends `A_k i` to `B_k i` in each block. -/
-theorem piAlgEquiv_on_single
-    (A B : (k : Fin r) → MPSTensor d (dim k))
-    (hA : ∀ k, IsInjective (A k))
-    (hSame : ∀ k, SameMPV (A k) (B k))
-    (k : Fin r) (i : Fin d) :
-    piAlgEquiv A B hA hSame (Pi.single k (A k i)) k = B k i := by
-  simp [Pi.single_eq_same, perBlockLinearExtension_spec]
 
 end PiAlgEquivConstruction
 
