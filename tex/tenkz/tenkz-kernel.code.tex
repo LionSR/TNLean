@@ -239,9 +239,12 @@
       \l__tenkz_kernel_match_seq
       { \__tenkz_kernel_addr_outside:nN {#1} #2 }
       {
-    % production 3: a.f@k -- face f of a, slot k; @1 when the face has one
+    % production 3: a.θ@k -- the port at angle θ on a, slot k; @1 when the
+    % face has one.  A face is an angle in the record's own axes, and the
+    % four compass words name the four right angles of that circle.
     \regex_extract_once:nnNTF
-      { \A ([A-Za-z][A-Za-z0-9\-]*) \. (n|e|s|w)
+      { \A ([A-Za-z][A-Za-z0-9\-]*) \.
+           ( [-+]? (?: [0-9]+ (?: \. [0-9]* )? | \. [0-9]+ ) | n|e|s|w )
            (?: @ (\d+) )? \Z } {#1}
       \l__tenkz_kernel_match_seq
       { \__tenkz_kernel_addr_port:nN {#1} #2 }
@@ -347,6 +350,16 @@
     \tl_set:NV #2 \l__tenkz_kernel_parent_tl
   }
 
+% A compass word is sugar for a right angle, converted here at the parse
+% boundary; downstream a face is a number and nothing asks which spelling
+% produced it.
+\cs_new:Npn \__tenkz_kernel_face_angle:n #1
+  {
+    \str_case:enF {#1}
+      { {n}{90} {e}{0} {s}{270} {w}{180} }
+      { \fp_eval:n { #1 } }
+  }
+
 \cs_new_protected:Npn \__tenkz_kernel_addr_port:nN #1#2
   {
     \__tenkz_kernel_node_new:nN {#1} #2
@@ -354,7 +367,10 @@
     \__tenkz_kernel_node_put:Nne #2 {record}
       { \seq_item:Nn \l__tenkz_kernel_match_seq {2} }
     \__tenkz_kernel_node_put:Nne #2 {face}
-      { \seq_item:Nn \l__tenkz_kernel_match_seq {3} }
+      {
+        \__tenkz_kernel_face_angle:n
+          { \seq_item:Nn \l__tenkz_kernel_match_seq {3} }
+      }
     % the slot suffix is optional when the face carries one slot; the out
     % variable may alias a caller scratch register, so nothing else writes it
     \int_compare:nNnTF { \seq_count:N \l__tenkz_kernel_match_seq } > { 3 }
@@ -2032,9 +2048,43 @@
   }
 
 % ---------- placement resolution --------------------------------------------------------------
-% The picture frame: logical (row, col) to page (x, y) with rows downward.
+% The picture frame: logical (row, col) to page (x, y).  Flat is the default
+% and has rows downward, columns rightward, and cell (1,1) at the origin.
+% On a circle a column is a station and a row is a step toward the centre;
+% the stations stand one pitch apart, which fixes the radius the contract
+% left unstated, and the first of them stands at the top, where its tangent
+% is the flat frame's own eastward axis.  The clause is the circle's alone:
+% a projected frame foreshortens its receding row by construction.
+\cs_new:Npn \__tenkz_kernel_r_frame_word:
+  {
+    \prop_if_in:NnTF \l__tenkz_kernel_policy_prop {frame}
+      { \prop_item:Nn \l__tenkz_kernel_policy_prop {frame} }
+      { flat }
+  }
 \cs_new_protected:Npn \__tenkz_kernel_r_frame:
-  { \__tenkz_geom_frame_declare_affine:nnnnnnn {kpic} {0}{1}{-1}{0} {-1}{1} }
+  {
+    \str_if_eq:eeTF { \__tenkz_kernel_r_frame_word: } {circle}
+      {
+        \__tenkz_geom_frame_declare_circle:nnnn {kpic}
+          { \__tenkz_kernel_cols: }
+          {
+            \__tenkz_kernel_cols: < 2
+              ? 0 : 1 / ( 2 * sind( 180 / \__tenkz_kernel_cols: ) )
+          }
+          {90}
+      }
+      { \__tenkz_geom_frame_declare_affine:nnnnnnn {kpic} {0}{1}{-1}{0} {-1}{1} }
+  }
+
+% The turn a record's carrier gives it: the angle its own axes stand at on
+% the page.  Ports read their faces in it, skins are inked in it, and the
+% hull measures silhouettes in it.
+\cs_new_protected:Npn \__tenkz_kernel_r_turn:nN #1#2
+  {
+    \prop_get:NnN \l__tenkz_kernel_r_turn_prop {#1} #2
+    \quark_if_no_value:NT #2 { \tl_set:Nn #2 {0} }
+  }
+\prop_new:N \l__tenkz_kernel_r_turn_prop
 
 \cs_new_protected:Npn \__tenkz_kernel_r_frame_xy:nnNN #1#2#3#4
   {
@@ -2044,9 +2094,52 @@
     \fp_set:Nn #4 { \l__tenkz_kernel_r_y_tl + 0 }
   }
 
+\cs_generate_variant:Nn \__tenkz_render_stroke:nn { en }
 \cs_generate_variant:Nn \__tenkz_geom_place_rel:nnnn { nnee, nVee, neee }
 \cs_generate_variant:Nn \__tenkz_geom_place_mid:nnn { nVV, nee }
 \cs_generate_variant:Nn \__tenkz_render_atom_labelled:nnn { nen }
+
+% The turn of one atom, read after it is placed: the frame's own turn at the
+% cell it occupies, or -- for a spin that stands on a cluster's sub-frame --
+% the turn of the carrier it stands on.  Only a turned atom is recorded, so
+% a flat picture stores nothing and asks nothing.  These registers are this
+% walk's alone: it runs over every atom and must not touch the shared
+% scratch the placement below is mid-computation on.
+\tl_new:N \l__tenkz_kernel_turn_a_tl
+\tl_new:N \l__tenkz_kernel_turn_b_tl
+\tl_new:N \l__tenkz_kernel_turn_tl
+\bool_new:N \l__tenkz_kernel_turn_bool
+\cs_new_protected:Npn \__tenkz_kernel_r_atom_turn:n #1
+  {
+    \__tenkz_kernel_r_atom_rc:nNNN {#1}
+      \l__tenkz_kernel_turn_a_tl \l__tenkz_kernel_turn_b_tl
+      \l__tenkz_kernel_turn_bool
+    \bool_if:NTF \l__tenkz_kernel_turn_bool
+      {
+        \__tenkz_geom_turn:nnnN {kpic}
+          { \l__tenkz_kernel_turn_a_tl } { \l__tenkz_kernel_turn_b_tl }
+          \l__tenkz_kernel_turn_tl
+      }
+      {
+        \tl_set:Nn \l__tenkz_kernel_turn_tl {0}
+        \__tenkz_model_get:nnN {#1} {cluster-of} \l__tenkz_kernel_turn_a_tl
+        \quark_if_no_value:NF \l__tenkz_kernel_turn_a_tl
+          {
+            \prop_get:NVN \l__tenkz_kernel_named_prop
+              \l__tenkz_kernel_turn_a_tl \l__tenkz_kernel_turn_b_tl
+            \quark_if_no_value:NF \l__tenkz_kernel_turn_b_tl
+              {
+                \exp_args:NV \__tenkz_kernel_r_turn:nN
+                  \l__tenkz_kernel_turn_b_tl \l__tenkz_kernel_turn_tl
+              }
+          }
+      }
+    \fp_compare:nNnF { \l__tenkz_kernel_turn_tl } = {0}
+      {
+        \prop_put:NnV \l__tenkz_kernel_r_turn_prop
+          {#1} \l__tenkz_kernel_turn_tl
+      }
+  }
 
 \cs_new_protected:Npn \__tenkz_kernel_r_atom_place:n #1
   {
@@ -2092,12 +2185,16 @@
   }
 
 % A cluster sub-atom sits on the quarter-pitch sub-frame of its parent; its
-% own name carries its (r, c) inside the cluster by construction.
+% own name carries its (r, c) inside the cluster by construction.  The
+% sub-frame is the parent's, so the step from the parent to the member is
+% taken in the parent's axes: four spins on a turned carrier turn with it
+% rather than staying square to the page.
 \cs_new_protected:Npn \__tenkz_kernel_r_cluster_place:n #1
   {
     % parent record id
     \prop_get:NVN \l__tenkz_kernel_named_prop \l__tenkz_kernel_r_tl
       \l__tenkz_kernel_r_b_tl
+    \exp_args:NV \__tenkz_kernel_r_atom_turn:n \l__tenkz_kernel_r_b_tl
     % cluster extent RxC from the parent record
     \__tenkz_model_get:nnN
       { \tl_use:N \l__tenkz_kernel_r_b_tl } {cluster} \l__tenkz_kernel_r_c_tl
@@ -2122,7 +2219,10 @@
     \__tenkz_geom_place_rel:nVee {#1} \l__tenkz_kernel_r_b_tl
       {
         \fp_eval:n
-          { atand( \l__tenkz_kernel_r_y_fp , \l__tenkz_kernel_r_x_fp ) }
+          {
+            atand( \l__tenkz_kernel_r_y_fp , \l__tenkz_kernel_r_x_fp )
+            + \l__tenkz_kernel_turn_tl
+          }
       }
       {
         \fp_eval:n
@@ -2217,6 +2317,7 @@
 \seq_new:N \l__tenkz_kernel_leg_obst_seq
 \tl_new:N \l__tenkz_kernel_leg_tl
 \tl_new:N \l__tenkz_kernel_leg_reach_tl
+\tl_new:N \l__tenkz_kernel_leg_dir_tl
 % The hull builder runs INSIDE the leg walk, which is mid-computation on its
 % own position and its own cell.  It therefore touches none of the shared
 % scratch: these are its alone.
@@ -2225,6 +2326,7 @@
 \tl_new:N \l__tenkz_kernel_hull_a_tl
 \tl_new:N \l__tenkz_kernel_hull_b_tl
 \tl_new:N \l__tenkz_kernel_hull_skin_tl
+\tl_new:N \l__tenkz_kernel_hull_turn_tl
 \tl_new:N \l__tenkz_kernel_sel_tl
 \msg_new:nnn {tenkz}{kernel-selector-empty}
   { [TKZ-KERNEL-SELECTOR-EMPTY]~the~selection~'#1'~names~no~record }
@@ -2386,24 +2488,28 @@
         {none}  { \tl_set:Nn #2 { {circle}{0}{0}{0}{0} } }
         {tri}
           {
+            \__tenkz_kernel_r_turn:nN {#1} \l__tenkz_kernel_hull_turn_tl
             \tl_set:Ne #2
               {
                 {triangle}
                 { \__tenkz_metric_ratio:n {glyphbox} }
                 { \__tenkz_metric_ratio:n {glyphbox} }
-                {0}{0}
+                {0}
+                { \tl_use:N \l__tenkz_kernel_hull_turn_tl }
               }
           }
       }
       {
         \__tenkz_kernel_hull_half:nnN {#1} {wide}  \l__tenkz_kernel_hull_a_tl
         \__tenkz_kernel_hull_half:nnN {#1} {wires} \l__tenkz_kernel_hull_b_tl
+        \__tenkz_kernel_r_turn:nN {#1} \l__tenkz_kernel_hull_turn_tl
         \tl_set:Ne #2
           {
             {rect}
             { \tl_use:N \l__tenkz_kernel_hull_a_tl }
             { \tl_use:N \l__tenkz_kernel_hull_b_tl }
-            {0}{0}
+            {0}
+            { \tl_use:N \l__tenkz_kernel_hull_turn_tl }
           }
       }
   }
@@ -2443,6 +2549,51 @@
               }
           }
       }
+  }
+
+% The axes a selection stands in: the mean of its members' turns, taken as a
+% mean direction so that a selection straddling the wrap of the circle is not
+% averaged into its opposite.  A flat selection returns zero exactly, which
+% is what keeps a page-axis contour a page-axis contour.
+\fp_new:N \l__tenkz_kernel_hull_cos_fp
+\fp_new:N \l__tenkz_kernel_hull_sin_fp
+\cs_new_protected:Npn \__tenkz_kernel_hull_turn:NN #1#2
+  {
+    \fp_zero:N \l__tenkz_kernel_hull_cos_fp
+    \fp_zero:N \l__tenkz_kernel_hull_sin_fp
+    \seq_map_inline:Nn #1
+      {
+        \__tenkz_kernel_r_turn:nN {##1} \l__tenkz_kernel_hull_turn_tl
+        \fp_add:Nn \l__tenkz_kernel_hull_cos_fp
+          { cosd( \l__tenkz_kernel_hull_turn_tl ) }
+        \fp_add:Nn \l__tenkz_kernel_hull_sin_fp
+          { sind( \l__tenkz_kernel_hull_turn_tl ) }
+      }
+    \tl_set:Ne #2
+      {
+        \fp_eval:n
+          { atand( \l__tenkz_kernel_hull_sin_fp ,
+                   \l__tenkz_kernel_hull_cos_fp ) }
+      }
+  }
+\tl_new:N \l__tenkz_kernel_r_tau_tl
+\tl_new:N \l__tenkz_kernel_r_turnopt_tl
+\fp_new:N \l__tenkz_kernel_r_unturn_fp
+% A pair held in the axes of \l__tenkz_kernel_r_tau_tl, carried back to the
+% page in place.  At zero turn it is the identity, token for token.
+\cs_new_protected:Npn \__tenkz_kernel_r_unturn:NN #1#2
+  {
+    \fp_set:Nn \l__tenkz_kernel_r_unturn_fp
+      {
+        #1 * cosd( \l__tenkz_kernel_r_tau_tl )
+        - #2 * sind( \l__tenkz_kernel_r_tau_tl )
+      }
+    \fp_set:Nn #2
+      {
+        #1 * sind( \l__tenkz_kernel_r_tau_tl )
+        + #2 * cosd( \l__tenkz_kernel_r_tau_tl )
+      }
+    \fp_set_eq:NN #1 \l__tenkz_kernel_r_unturn_fp
   }
 
 % the hull's support along #2 degrees, padded by #3, over the obstacle seq #1
@@ -2495,9 +2646,13 @@
   { [TKZ-KERNEL-RENDER-NOCROSS]~an~address~names~the~crossing~of~'#1'~and~
     '#2',~but~their~saved~routes~do~not~meet. }
 
-% A port is a cell of its atom's span: n/s slots walk the spanned columns,
-% e/w slots walk the spanned rows.  The wire it anchors runs under the
-% atom's skin, so the span cell IS the port at this stage's altitude.
+% A port is a cell of its atom's span, chosen by the face's angle in the
+% atom's OWN axes: a face within a right angle of east takes the eastmost
+% spanned column, one within a right angle of north the northmost spanned
+% row, and along the remaining axis the slot walks the span.  The cell then
+% resolves through the frame, so a port on a turned carrier turns with it.
+% The wire the port anchors runs under the atom's skin, so the span cell IS
+% the port at this stage's altitude.
 \cs_new_protected:Npn \__tenkz_kernel_r_port:n #1
   {
     \prop_get:NeN \l__tenkz_kernel_named_prop
@@ -2518,61 +2673,29 @@
           }
         \__tenkz_kernel_r_span:nNN { \tl_use:N \l__tenkz_kernel_r_tl }
           \l__tenkz_kernel_r_b_tl \l__tenkz_kernel_r_c_tl
-        \str_case:en { \__tenkz_kernel_r_item:nn {#1} {face} }
+        \__tenkz_geom_place_cell:nnee {#1} {kpic}
           {
-            {n}
+            \fp_eval:n
               {
-                \__tenkz_geom_place_cell:nnee {#1} {kpic}
-                  { \l__tenkz_kernel_r_row_tl }
-                  {
-                    \int_eval:n
-                      {
-                        \l__tenkz_kernel_r_col_tl
-                        + \__tenkz_kernel_r_item:nn {#1} {slot} - 1
-                      }
-                  }
+                \l__tenkz_kernel_r_row_tl
+                + ( sind( \__tenkz_kernel_r_item:nn {#1} {face} ) > cosd(45)
+                      ? 0
+                      : ( sind( \__tenkz_kernel_r_item:nn {#1} {face} )
+                            < -cosd(45)
+                          ? \l__tenkz_kernel_r_c_tl - 1
+                          : \__tenkz_kernel_r_item:nn {#1} {slot} - 1 ) )
               }
-            {s}
+          }
+          {
+            \fp_eval:n
               {
-                \__tenkz_geom_place_cell:nnee {#1} {kpic}
-                  {
-                    \int_eval:n
-                      { \l__tenkz_kernel_r_row_tl + \l__tenkz_kernel_r_c_tl - 1 }
-                  }
-                  {
-                    \int_eval:n
-                      {
-                        \l__tenkz_kernel_r_col_tl
-                        + \__tenkz_kernel_r_item:nn {#1} {slot} - 1
-                      }
-                  }
-              }
-            {w}
-              {
-                \__tenkz_geom_place_cell:nnee {#1} {kpic}
-                  {
-                    \int_eval:n
-                      {
-                        \l__tenkz_kernel_r_row_tl
-                        + \__tenkz_kernel_r_item:nn {#1} {slot} - 1
-                      }
-                  }
-                  { \l__tenkz_kernel_r_col_tl }
-              }
-            {e}
-              {
-                \__tenkz_geom_place_cell:nnee {#1} {kpic}
-                  {
-                    \int_eval:n
-                      {
-                        \l__tenkz_kernel_r_row_tl
-                        + \__tenkz_kernel_r_item:nn {#1} {slot} - 1
-                      }
-                  }
-                  {
-                    \int_eval:n
-                      { \l__tenkz_kernel_r_col_tl + \l__tenkz_kernel_r_b_tl - 1 }
-                  }
+                \l__tenkz_kernel_r_col_tl
+                + ( cosd( \__tenkz_kernel_r_item:nn {#1} {face} ) > cosd(45)
+                      ? \l__tenkz_kernel_r_b_tl - 1
+                      : ( cosd( \__tenkz_kernel_r_item:nn {#1} {face} )
+                            < -cosd(45)
+                          ? 0
+                          : \__tenkz_kernel_r_item:nn {#1} {slot} - 1 ) )
               }
           }
       }
@@ -3167,6 +3290,16 @@
       {
         \__tenkz_kernel_r_xy:nNN {#1}
           \l__tenkz_kernel_r_x_fp \l__tenkz_kernel_r_y_fp
+        % the leg's outward direction: its face read in the atom's own axes
+        \__tenkz_kernel_r_turn:nN {#1} \l__tenkz_kernel_r_leg_turn_tl
+        \tl_set:Ne \l__tenkz_kernel_leg_dir_tl
+          {
+            \fp_eval:n
+              {
+                \str_if_eq:nnTF {#2} {n} {90} {270}
+                + \l__tenkz_kernel_r_leg_turn_tl
+              }
+          }
         \fp_set:Nn \l__tenkz_kernel_r_reach_fp
           { \__tenkz_metric_ratio:n {physleg} }
         % A reach is the maximum over everything declared to meet it.  A leg
@@ -3193,19 +3326,24 @@
                           \l__tenkz_kernel_leg_tl
                         \__tenkz_kernel_hull_reach:NnnN
                           \l__tenkz_kernel_leg_obst_seq
-                          { \str_if_eq:nnTF {#2} {n} {90} {270} }
+                          { \l__tenkz_kernel_leg_dir_tl }
                           {
                             2 * \__tenkz_metric_ratio:n {daylight}
                             * \l__tenkz_kernel_leg_tl
                           }
                           \l__tenkz_kernel_leg_reach_tl
+                        % how far the contour stands from this atom ALONG THE
+                        % LEG: the hull's reach that way less the atom's own
+                        % reach that way, which is the projection of where it
+                        % stands onto the direction it leaves in
                         \fp_set:Nn \l__tenkz_kernel_r_reach_fp
                           {
                             max( \l__tenkz_kernel_r_reach_fp ,
                                  \l__tenkz_kernel_leg_reach_tl
-                                 - \str_if_eq:nnTF {#2} {n}
-                                     { \l__tenkz_kernel_r_y_fp }
-                                     { - \l__tenkz_kernel_r_y_fp } )
+                                 - ( \l__tenkz_kernel_r_x_fp
+                                       * cosd( \l__tenkz_kernel_leg_dir_tl )
+                                     + \l__tenkz_kernel_r_y_fp
+                                       * sind( \l__tenkz_kernel_leg_dir_tl ) ) )
                           }
                       }
                   }
@@ -3245,9 +3383,8 @@
                   }
                   {
                     (
-                      \__tenkz_kernel_r_pt:n { \l__tenkz_kernel_r_x_fp } ,
-                      \__tenkz_kernel_r_pt:n
-                        { \l__tenkz_kernel_r_y_fp + \l__tenkz_kernel_r_reach_fp }
+                      \__tenkz_kernel_r_pt:n { \l__tenkz_kernel_r_tipx_fp } ,
+                      \__tenkz_kernel_r_pt:n { \l__tenkz_kernel_r_tipy_fp }
                     )
                   }
                   { \tl_use:N \l__tenkz_kernel_r_b_tl }
@@ -3260,9 +3397,8 @@
                   }
                   {
                     (
-                      \__tenkz_kernel_r_pt:n { \l__tenkz_kernel_r_x_fp } ,
-                      \__tenkz_kernel_r_pt:n
-                        { \l__tenkz_kernel_r_y_fp - \l__tenkz_kernel_r_reach_fp }
+                      \__tenkz_kernel_r_pt:n { \l__tenkz_kernel_r_tipx_fp } ,
+                      \__tenkz_kernel_r_pt:n { \l__tenkz_kernel_r_tipy_fp }
                     )
                   }
                   { \tl_use:N \l__tenkz_kernel_r_b_tl }
@@ -3293,11 +3429,31 @@
       }
   }
 % #3 empty: plain ink now; #3 a path id: save as an engine string instead
+% A physical leg leaves its atom along the atom's own north: the outward
+% physical face is the row's normal, and on a turned carrier that normal
+% turns with it -- which is how four tensors on a ring point their physical
+% faces radially outward without any of them saying so.
+\fp_new:N \l__tenkz_kernel_r_tipx_fp
+\fp_new:N \l__tenkz_kernel_r_tipy_fp
+\tl_new:N \l__tenkz_kernel_r_leg_turn_tl
 \cs_new_protected:Npn \__tenkz_kernel_r_leg_ink:nnn #1#2#3
   {
     \str_if_eq:nnTF {#2} {n}
       { \fp_set:Nn \l__tenkz_kernel_r_yc_fp { \l__tenkz_kernel_r_reach_fp } }
       { \fp_set:Nn \l__tenkz_kernel_r_yc_fp { - \l__tenkz_kernel_r_reach_fp } }
+    \__tenkz_kernel_r_turn:nN {#1} \l__tenkz_kernel_r_leg_turn_tl
+    \fp_set:Nn \l__tenkz_kernel_r_tipx_fp
+      {
+        \l__tenkz_kernel_r_x_fp
+        + \l__tenkz_kernel_r_yc_fp
+          * cosd( 90 + \l__tenkz_kernel_r_leg_turn_tl )
+      }
+    \fp_set:Nn \l__tenkz_kernel_r_tipy_fp
+      {
+        \l__tenkz_kernel_r_y_fp
+        + \l__tenkz_kernel_r_yc_fp
+          * sind( 90 + \l__tenkz_kernel_r_leg_turn_tl )
+      }
     \tl_if_blank:nTF {#3}
       {
         \__tenkz_render_stroke:nn { bond }
@@ -3306,8 +3462,8 @@
               { \l__tenkz_kernel_r_x_fp } { \l__tenkz_kernel_r_y_fp }
             --
             \__tenkz_kernel_r_pair:nn
-              { \l__tenkz_kernel_r_x_fp }
-              { \l__tenkz_kernel_r_y_fp + \l__tenkz_kernel_r_yc_fp }
+              { \l__tenkz_kernel_r_tipx_fp }
+              { \l__tenkz_kernel_r_tipy_fp }
           }
       }
       {
@@ -3318,8 +3474,8 @@
                 \__tenkz_kernel_r_ppt:nn
                   { \l__tenkz_kernel_r_x_fp } { \l__tenkz_kernel_r_y_fp }
                 \__tenkz_kernel_r_ppt:nn
-                  { \l__tenkz_kernel_r_x_fp }
-                  { \l__tenkz_kernel_r_y_fp + \l__tenkz_kernel_r_yc_fp }
+                  { \l__tenkz_kernel_r_tipx_fp }
+                  { \l__tenkz_kernel_r_tipy_fp }
               }
           }
         \prop_put:Nen \l__tenkz_kernel_r_legdrawn_prop {#3} { }
@@ -3933,13 +4089,33 @@
           }
       }
     \tl_put_right:Nn \l__tenkz_kernel_r_c_tl { , alias = #1 }
+    % Ink the frame measures lies in the frame; ink the frame only places
+    % stays upright.  A skin is measured, so it turns with its carrier; the
+    % name inside it is placed, so it is turned back by the same angle and
+    % reads level however the carrier stands.
+    \__tenkz_kernel_r_turn:nN {#1} \l__tenkz_kernel_r_ink_turn_tl
+    \fp_compare:nNnF { \l__tenkz_kernel_r_ink_turn_tl } = {0}
+      {
+        \tl_put_right:Ne \l__tenkz_kernel_r_c_tl
+          { , rotate = \tl_use:N \l__tenkz_kernel_r_ink_turn_tl }
+      }
     % pgfkeys splits its option list on the commas it can see; an unexpanded
     % variable is one opaque key, so the style reaches the node expanded.
     \__tenkz_render_atom_labelled:nen {#1}
       { \l__tenkz_kernel_r_c_tl }
       {
-        $ \use:c {tenkz@labelsize} \tl_use:N \l__tenkz_kernel_r_b_tl $
+        \__tenkz_kernel_r_upright:n
+          { $ \use:c {tenkz@labelsize} \tl_use:N \l__tenkz_kernel_r_b_tl $ }
       }
+  }
+\tl_new:N \l__tenkz_kernel_r_ink_turn_tl
+% #1 typeset by a record whose skin the frame has turned by the angle in
+% \l__tenkz_kernel_r_ink_turn_tl: label text never rotates.
+\cs_new_protected:Npn \__tenkz_kernel_r_upright:n #1
+  {
+    \fp_compare:nNnTF { \l__tenkz_kernel_r_ink_turn_tl } = {0}
+      {#1}
+      { \rotatebox{ \fp_eval:n { - \l__tenkz_kernel_r_ink_turn_tl } }{#1} }
   }
 
 % ---------- marks --------------------------------------------------------------------------------
@@ -4033,13 +4209,19 @@
       }
   }
 
-% An enclosure strokes the offset hull of what it selects.
+% An enclosure strokes the offset hull of what it selects, in the axes its
+% selection stands in.  The four supports are taken along those axes and the
+% contour is stroked in them, so a mark over turned records is turned with
+% them; under a flat frame the axes are the page's and the contour is the
+% page rectangle it has always been.
 \cs_new_protected:Npn \__tenkz_kernel_r_mark_enclosure:n #1
   {
     \__tenkz_model_get:nnN {#1} {target} \l__tenkz_kernel_r_tl
     \__tenkz_kernel_select:VN \l__tenkz_kernel_r_tl \l__tenkz_kernel_sel_seq
     \__tenkz_kernel_hull_obstacles:NN
       \l__tenkz_kernel_sel_seq \l__tenkz_kernel_sel_obst_seq
+    \__tenkz_kernel_hull_turn:NN \l__tenkz_kernel_sel_seq
+      \l__tenkz_kernel_r_tau_tl
     % A contour clears its members by one clearance.  It is one clearance for
     % every selection: what differs between a row of labelled sites and four
     % bare spins is the members' own silhouettes, which already carry their
@@ -4047,18 +4229,59 @@
     \__tenkz_kernel_hull_scale:NN \l__tenkz_kernel_sel_seq \l__tenkz_kernel_sel_tl
     \fp_set:Nn \l__tenkz_kernel_r_reach_fp
       { \__tenkz_metric_ratio:n {daylight} * \l__tenkz_kernel_sel_tl }
-    \__tenkz_kernel_hull_reach:NnnN \l__tenkz_kernel_sel_obst_seq {0}
+    \__tenkz_kernel_hull_reach:NnnN \l__tenkz_kernel_sel_obst_seq
+      { \l__tenkz_kernel_r_tau_tl }
       { \l__tenkz_kernel_r_reach_fp } \l__tenkz_kernel_r_xb_tl
-    \__tenkz_kernel_hull_reach:NnnN \l__tenkz_kernel_sel_obst_seq {180}
+    \__tenkz_kernel_hull_reach:NnnN \l__tenkz_kernel_sel_obst_seq
+      { \l__tenkz_kernel_r_tau_tl + 180 }
       { \l__tenkz_kernel_r_reach_fp } \l__tenkz_kernel_r_x_tl
-    \__tenkz_kernel_hull_reach:NnnN \l__tenkz_kernel_sel_obst_seq {90}
+    \__tenkz_kernel_hull_reach:NnnN \l__tenkz_kernel_sel_obst_seq
+      { \l__tenkz_kernel_r_tau_tl + 90 }
       { \l__tenkz_kernel_r_reach_fp } \l__tenkz_kernel_r_yb_tl
-    \__tenkz_kernel_hull_reach:NnnN \l__tenkz_kernel_sel_obst_seq {270}
+    \__tenkz_kernel_hull_reach:NnnN \l__tenkz_kernel_sel_obst_seq
+      { \l__tenkz_kernel_r_tau_tl + 270 }
       { \l__tenkz_kernel_r_reach_fp } \l__tenkz_kernel_r_y_tl
-    \fp_set:Nn \l__tenkz_kernel_r_x_fp  { - \l__tenkz_kernel_r_x_tl }
-    \fp_set:Nn \l__tenkz_kernel_r_xb_fp {   \l__tenkz_kernel_r_xb_tl }
-    \fp_set:Nn \l__tenkz_kernel_r_y_fp  { - \l__tenkz_kernel_r_y_tl }
-    \fp_set:Nn \l__tenkz_kernel_r_yb_fp {   \l__tenkz_kernel_r_yb_tl }
+    % the contour's own centre, carried back to the page through its axes
+    \fp_set:Nn \l__tenkz_kernel_r_xc_fp
+      { ( \l__tenkz_kernel_r_xb_tl - \l__tenkz_kernel_r_x_tl ) / 2 }
+    \fp_set:Nn \l__tenkz_kernel_r_yc_fp
+      { ( \l__tenkz_kernel_r_yb_tl - \l__tenkz_kernel_r_y_tl ) / 2 }
+    \__tenkz_kernel_r_unturn:NN
+      \l__tenkz_kernel_r_xc_fp \l__tenkz_kernel_r_yc_fp
+    \fp_set:Nn \l__tenkz_kernel_r_x_fp
+      {
+        \l__tenkz_kernel_r_xc_fp
+        - ( \l__tenkz_kernel_r_xb_tl + \l__tenkz_kernel_r_x_tl ) / 2
+      }
+    \fp_set:Nn \l__tenkz_kernel_r_xb_fp
+      {
+        \l__tenkz_kernel_r_xc_fp
+        + ( \l__tenkz_kernel_r_xb_tl + \l__tenkz_kernel_r_x_tl ) / 2
+      }
+    \fp_set:Nn \l__tenkz_kernel_r_y_fp
+      {
+        \l__tenkz_kernel_r_yc_fp
+        - ( \l__tenkz_kernel_r_yb_tl + \l__tenkz_kernel_r_y_tl ) / 2
+      }
+    \fp_set:Nn \l__tenkz_kernel_r_yb_fp
+      {
+        \l__tenkz_kernel_r_yc_fp
+        + ( \l__tenkz_kernel_r_yb_tl + \l__tenkz_kernel_r_y_tl ) / 2
+      }
+    % the turn is an option on the stroke, not a second path spelling
+    \tl_clear:N \l__tenkz_kernel_r_turnopt_tl
+    \fp_compare:nNnF { \l__tenkz_kernel_r_tau_tl } = {0}
+      {
+        \tl_set:Ne \l__tenkz_kernel_r_turnopt_tl
+          {
+            % the engine's own separator is a catcode-12 colon, which this
+            % syntax spells only through the string constant
+            , rotate~around = {
+              \fp_eval:n { \l__tenkz_kernel_r_tau_tl } \c_colon_str
+              \__tenkz_kernel_r_pair:nn
+                { \l__tenkz_kernel_r_xc_fp } { \l__tenkz_kernel_r_yc_fp } }
+          }
+      }
     \__tenkz_model_get:nnN {#1} {slot} \l__tenkz_kernel_r_hue_tl
     \quark_if_no_value:NTF \l__tenkz_kernel_r_hue_tl
       { \tl_set:Nn \l__tenkz_kernel_r_hue_tl { tenkzPassive } }
@@ -4075,11 +4298,12 @@
               }
           }
       }
-    \__tenkz_render_stroke:nn
+    \__tenkz_render_stroke:en
       {
         draw = \tl_use:N \l__tenkz_kernel_r_hue_tl ,
         line~width = \__tenkz_dim:n {annwidth} ,
         rounded~corners = \__tenkz_dim:n {corner}
+        \tl_use:N \l__tenkz_kernel_r_turnopt_tl
       }
       {
         \__tenkz_kernel_r_pair:nn
@@ -4103,17 +4327,29 @@
       {
     \tl_set:Ne \l__tenkz_kernel_r_tl
       { \__tenkz_kernel_r_compass:n { \tl_use:N \l__tenkz_kernel_r_tl } }
+    % the side a label speaks from is a side OF THE CONTOUR, so the step out
+    % to it is taken in the contour's axes and then carried to the page
+    \fp_set:Nn \l__tenkz_kernel_r_xc_fp
+      {
+        cosd( \l__tenkz_kernel_r_tl )
+        * ( \l__tenkz_kernel_r_xb_fp - \l__tenkz_kernel_r_x_fp ) / 2
+      }
+    \fp_set:Nn \l__tenkz_kernel_r_yc_fp
+      {
+        sind( \l__tenkz_kernel_r_tl )
+        * ( \l__tenkz_kernel_r_yb_fp - \l__tenkz_kernel_r_y_fp ) / 2
+      }
+    \__tenkz_kernel_r_unturn:NN
+      \l__tenkz_kernel_r_xc_fp \l__tenkz_kernel_r_yc_fp
     \fp_set:Nn \l__tenkz_kernel_r_x_fp
       {
         ( \l__tenkz_kernel_r_x_fp + \l__tenkz_kernel_r_xb_fp ) / 2
-        + cosd( \l__tenkz_kernel_r_tl )
-          * ( \l__tenkz_kernel_r_xb_fp - \l__tenkz_kernel_r_x_fp ) / 2
+        + \l__tenkz_kernel_r_xc_fp
       }
     \fp_set:Nn \l__tenkz_kernel_r_y_fp
       {
         ( \l__tenkz_kernel_r_y_fp + \l__tenkz_kernel_r_yb_fp ) / 2
-        + sind( \l__tenkz_kernel_r_tl )
-          * ( \l__tenkz_kernel_r_yb_fp - \l__tenkz_kernel_r_y_fp ) / 2
+        + \l__tenkz_kernel_r_yc_fp
       }
     \__tenkz_kernel_r_mark_label_ink:n {#1}
       }
@@ -4150,8 +4386,12 @@
     \int_set:Nn \l__tenkz_kernel_r_rows_int { \__tenkz_kernel_rows: }
     \int_set:Nn \l__tenkz_kernel_r_cols_int { \__tenkz_kernel_cols: }
     \__tenkz_geom_reset:
+    \prop_clear:N \l__tenkz_kernel_r_turn_prop
     \__tenkz_kernel_r_frame:
     \__tenkz_model_map_ids:nn {atom} { \__tenkz_kernel_r_atom_place:n {##1} }
+    % turns after places: a spin takes the axes of the carrier it stands on,
+    % and the carrier must have found its own first
+    \__tenkz_model_map_ids:nn {atom} { \__tenkz_kernel_r_atom_turn:n {##1} }
     \__tenkz_string_reset:
     \tikzpicture
       [
