@@ -18,7 +18,7 @@ is needed. Net element count: **zero added, zero retired.**
 | `rmp-workbench-iii-g-injective-pull` | pulling-through, strings | g string, hatched legs, U_g node absent |
 | `rmp-workbench-iii-mpo-injective-white` | pulling-through, strings | colored strings replaced by boxes |
 | `rmp-workbench-iii-eq59` | torus-cycle, strings | torus with wound strings collapsed to a two-box loop |
-| `rmp-iii-a-g-injective-projector` | strings, group-average | *(pairing: wrong-source)* |
+| `rmp-iii-a-g-injective-projector` | strings, group-average | author panel shows a g-string pulling-through equality, not the declared four-leg group-average projector P_G |
 | `rmp-iii-a-f-symbol` | strings | author draws the MPO/anyon-string realization; abstract tree substituted |
 | `rmp-workbench-ii-mpu-wrap-second` | strings | inter-row wrap wires absent |
 
@@ -167,9 +167,10 @@ closed curve, which a closed string with the four tensors named as waypoints
 would fix today.
 
 So neither recorded need survives contact with the right panel. The remaining
-amendment note already counts this target among the four wrong-source targets
-rather than among the six string ones; the ledger and the note disagree, and
-the note is right.
+amendment note counts this target in both lists: among four wrong-source
+targets and among seven targets carrying the `strings` need. The direct source
+reading resolves that overlap: repair the pairing first; against the right
+panel, neither recorded need remains.
 
 ### None of the four implemented mechanisms answers it
 
