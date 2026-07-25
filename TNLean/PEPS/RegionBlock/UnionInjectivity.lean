@@ -53,9 +53,9 @@ variable {A : Tensor G d} {e : Edge G}
 
 The union lemma is proved once over a bare `ThreeBlockGeometry` (in
 `TNLean.PEPS.RegionBlock.UnionInjectivityGeneral2`). The
-`NormalEdgeBlockingData`-parametrized theorems of this file are thin wrappers
-that view the edge-centred red, blue, and complement blocks as that geometry;
-the bridge is `NormalEdgeBlockingData.toThreeBlockGeometry`. -/
+`NormalEdgeBlockingData`-parametrized theorems of this file are reformulations
+that view the edge-centred red, blue, and complement blocks as that geometry
+via `NormalEdgeBlockingData.toThreeBlockGeometry`. -/
 
 /-- View the one-edge blocking data as a bare three-block geometry: the same
 red, blue, and complement blocks, keeping only their pairwise disjointness and
@@ -224,7 +224,7 @@ complement physical leg `σcompl` and blue boundary configuration `bβ`, the
 
 The annihilation, evaluated at the fused leg `threeBlockComplPhysical D σblue σcompl`,
 holds for every blue leg `σblue`. Scaling by the nonzero blue interior bond product
-and applying the blue smul-factorization
+and applying the blue scalar-multiplication factorization
 (`regionInteriorBondProd_smul_threeBlockBlueWeight_eq`) rewrites the host weights as
 the complement-coupling combination of the blue blocked-region weights; the blue
 block's chosen left inverse then reads off the complement coupling row.
