@@ -8,6 +8,7 @@ import Mathlib.Data.List.OfFn
 import Mathlib.LinearAlgebra.Matrix.GeneralLinearGroup.Defs
 import Mathlib.LinearAlgebra.Matrix.Trace
 import Mathlib.Order.Filter.AtTopBot.Basic
+import Mathlib.Tactic.Attr.Register
 
 /-!
 # Basic definitions for matrix product state tensors
@@ -547,3 +548,6 @@ theorem isNormal_of_gaugeEquiv {A B : MPSTensor d D}
   exact ⟨N, hNpos, isNBlkInjective_of_gaugeEquiv hN hGauge⟩
 
 end MPSTensor
+
+/-- Simp set for transfer map unfoldings. -/
+register_simp_attr mps_transfer
