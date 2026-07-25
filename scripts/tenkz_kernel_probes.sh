@@ -211,6 +211,21 @@ grep -Fq '[TKZ-LANG-ADDRESS]' "$WORK/n_diagonal_port.transcript" || {
   exit 1
 }
 
+missing_onwire="$KERNEL/negative/n_missing_onwire.tex"
+if ( cd "$WORK" &&
+     TEXINPUTS="$REPO/tex/tenkz//:" \
+       timeout 120 xelatex -interaction=nonstopmode -halt-on-error \
+       "$missing_onwire" >"$WORK/n_missing_onwire.transcript" 2>&1 ); then
+  echo "FAIL: an on-wire address accepted a missing wire" >&2
+  exit 1
+fi
+grep -Fq '[TKZ-KERNEL-RENDER-ONWIRE]' \
+    "$WORK/n_missing_onwire.transcript" || {
+  echo "FAIL: missing on-wire name lacked TKZ-KERNEL-RENDER-ONWIRE" >&2
+  tail -20 "$WORK/n_missing_onwire.transcript" >&2
+  exit 1
+}
+
 signature_negative="$KERNEL/negative/n_signature_mismatch.tex"
 if ( cd "$WORK" &&
      TEXINPUTS="$REPO/tex/tenkz//:" \

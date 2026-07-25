@@ -2007,6 +2007,8 @@
 \msg_new:nnn {tenkz}{kernel-render-crossref}
   { [TKZ-KERNEL-RENDER-CROSSREF]~crossing~operand~'#1'~names~no~string~or~
     leg~of~this~picture }
+\msg_new:nnn {tenkz}{kernel-render-onwire}
+  { [TKZ-KERNEL-RENDER-ONWIRE]~address~'#1'~names~no~wire~of~this~picture }
 \msg_new:nnn {tenkz}{kernel-render-phtrace}
   { [TKZ-KERNEL-RENDER-PHTRACE]~physical~trace~record~'#1'~has~no~rendered~
     atom~at~row~1,~column~#2 }
@@ -2684,7 +2686,7 @@
     \tl_set:Ne \l__tenkz_kernel_ow_t_tl { \__tenkz_kernel_r_item:nn {#1} {t} }
     \quark_if_no_value:NTF \l__tenkz_kernel_ow_a_tl
       {
-        \msg_error:nnee {tenkz}{kernel-render-crossref}
+        \msg_error:nnee {tenkz}{kernel-render-onwire}
           { \__tenkz_kernel_r_item:nn {#1} {text} } { }
       }
       {
