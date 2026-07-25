@@ -202,16 +202,6 @@ theorem kyFanNorm_card_eq_trace_re (hA : A.IsHermitian) :
   rw [hA.trace_eq_sum_eigenvalues, Complex.re_sum]
   simp
 
-/-- For `k` beyond the dimension the Ky-Fan norm is constant, equal to the trace. -/
-theorem kyFanNorm_eq_trace_re_of_card_le (hA : A.IsHermitian) {k : ℕ}
-    (hk : Fintype.card n ≤ k) : hA.kyFanNorm k = (A.trace).re := by
-  rw [← kyFanNorm_card_eq_trace_re hA, kyFanNorm, kyFanNorm,
-    ← Finset.sum_range_add_sum_Ico _ hk]
-  have hzero : ∑ i ∈ Finset.Ico (Fintype.card n) k, hA.descEigenvalue i = 0 :=
-    Finset.sum_eq_zero fun i hi =>
-      descEigenvalue_eq_zero_of_le hA (Finset.mem_Ico.mp hi).1
-  rw [hzero, add_zero]
-
 /-- The Ky-Fan `k`-norm written as a guarded sum over `Fin (Fintype.card n)`:
 each descending eigenvalue contributes exactly when its index is below `k`.  This
 indexing is convenient for relating the norm to diagonal weights in the

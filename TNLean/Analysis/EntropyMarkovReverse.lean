@@ -528,22 +528,6 @@ theorem kronecker_density {m n : Type*} [Fintype m] [Fintype n]
   refine ⟨hL.kronecker hR, ?_⟩
   rw [Matrix.trace_kronecker, hLt, hRt, mul_one]
 
-/-- The entropy of a single weighted Kronecker block. -/
-theorem entropy_smul_kronecker {m n : Type*} [Fintype m] [DecidableEq m]
-    [Fintype n] [DecidableEq n] {L : Matrix m m ℂ} {R : Matrix n n ℂ}
-    (hL : L.PosSemidef) (hR : R.PosSemidef) (hLt : L.trace = 1) (hRt : R.trace = 1)
-    (c : ℝ) (hHerm : ((c : ℂ) • (L ⊗ₖ R)).IsHermitian) :
-    vonNeumannEntropy ((c : ℂ) • (L ⊗ₖ R)) hHerm
-      = negMulLog c + c * (vonNeumannEntropy L hL.isHermitian + vonNeumannEntropy R hR.isHermitian)
-      := by
-  obtain ⟨hkron, hkront⟩ := kronecker_density hL hR hLt hRt
-  rw [vonNeumannEntropy_congr rfl hHerm
-    (hkron.isHermitian.smul (k := (c : ℂ))
-      (isSelfAdjoint_iff.mpr (by rw [RCLike.star_def, Complex.conj_ofReal])))]
-  rw [vonNeumannEntropy_smul hkron hkront c]
-  rw [vonNeumannEntropy_kronecker hL hR hLt hRt]
-  ring
-
 /-- The entropy of a block-diagonal sum of nonnegatively weighted Kronecker
 blocks. -/
 theorem entropy_blockDiagonal_smul_kronecker {o : Type*} [Fintype o] [DecidableEq o]
