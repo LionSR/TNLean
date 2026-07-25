@@ -198,14 +198,6 @@ theorem rectSpan_le_wordSpan (A : MPSTensor d D) {m n : ℕ}
   simp only [LinearMap.mulLeft_apply]
   exact (wordSpan_mul_le A m n) (Submodule.mul_mem_mul hP hQ)
 
-/-- Dimension bound for rectangular span. -/
-theorem rectSpan_finrank_le (P : Matrix (Fin D) (Fin D) ℂ) (A : MPSTensor d D) (n : ℕ) :
-    Module.finrank ℂ (rectSpan P A n) ≤ D ^ 2 := by
-  calc Module.finrank ℂ (rectSpan P A n)
-      ≤ Module.finrank ℂ (Matrix (Fin D) (Fin D) ℂ) := Submodule.finrank_le _
-    _ = D ^ 2 := by
-          rw [Module.finrank_matrix, Fintype.card_fin, Module.finrank_self, mul_one]; ring
-
 /-! ## Section 4: Cumulative rectangular span -/
 
 /-- The **cumulative rectangular span**: image of `cumulativeSpan` under left-mult by P. -/

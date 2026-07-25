@@ -215,30 +215,4 @@ theorem fitting_nilpotent_pow_eq_zero
     _ = 0 * (f.restrict hm) ^ (D - k) := by rw [hk_zero]
     _ = 0 := zero_mul _
 
-/-! ### Part 5: Word-level eigenvector properties -/
-
-/-- **Eigenvector of a word product gives eigenvectors under repeated application.**
-
-If `evalWord A w₀ *ᵥ φ = μ • φ`, then for any word `w`,
-`evalWord A (w ++ w₀) *ᵥ φ = μ • evalWord A w *ᵥ φ`.
-
-This captures the "pumping" property: appending the eigenvector-producing
-word to any other word scales the result by μ.
-
-Paper: arXiv:0909.5347, Lemma 2(a) proof — "since A₁|φ⟩ = μ|φ⟩, we can
-replace any application of A₁ by multiplication by μ." -/
-theorem evalWord_append_eigenvector (A : MPSTensor d D)
-    (w₀ : List (Fin d)) (φ : Fin D → ℂ) (μ : ℂ)
-    (heig : evalWord A w₀ *ᵥ φ = μ • φ) (w : List (Fin d)) :
-    evalWord A (w ++ w₀) *ᵥ φ = μ • (evalWord A w *ᵥ φ) := by
-  rw [evalWord_append]
-  -- (evalWord A w * evalWord A w₀) *ᵥ φ
-  -- = evalWord A w *ᵥ (evalWord A w₀ *ᵥ φ)  by mulVec_mulVec
-  -- = evalWord A w *ᵥ (μ • φ)                by heig
-  -- = μ • (evalWord A w *ᵥ φ)                by mulVec_smul
-  rw [show (evalWord A w * evalWord A w₀) *ᵥ φ =
-      evalWord A w *ᵥ (evalWord A w₀ *ᵥ φ) from
-    (Matrix.mulVec_mulVec φ (evalWord A w) (evalWord A w₀)).symm]
-  rw [heig, Matrix.mulVec_smul]
-
 end MPSTensor

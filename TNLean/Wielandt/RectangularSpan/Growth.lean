@@ -31,9 +31,6 @@ The paper's Lemma 2(b) (arXiv:0909.5347) uses a one-sided rectangular span argum
 given `P = (A i₀)^D` (which kills the nilpotent block of `A i₀`), the subspaces
 `rectSpan P A n` grow in dimension with each step, because left-multiplication by
 `A i₀` is injective on the range of `mulLeft P`.
-
-This mirrors the two-sided `biRectSpan` growth proofs in `RankOneBoundedWord.lean`
-but for the simpler one-sided setting, directly on `rectSpan P A n`.
 -/
 
 /-- Generic pigeonhole: a monotone function `ℕ → ℕ` bounded by `B` has a consecutive
@@ -138,21 +135,6 @@ theorem rectSpan_finrank_mono (n : ℕ) :
     finrank ℂ (rectSpan ((A i₀) ^ D) A n) ≤
       finrank ℂ (rectSpan ((A i₀) ^ D) A (n + 1)) :=
   LinearMap.finrank_le_finrank_of_injective (rectSpanLeftStep_injective A i₀ n)
-
-/-- **Pigeonhole stabilization**: the monotone bounded sequence
-`n ↦ finrank(rectSpan ((A i₀)^D) A n)` has a consecutive equality within the first
-`D²` steps. -/
-theorem exists_finrank_eq_succ_of_rectSpan :
-    ∃ n ≤ D ^ 2,
-      finrank ℂ (rectSpan ((A i₀) ^ D) A n) =
-      finrank ℂ (rectSpan ((A i₀) ^ D) A (n + 1)) := by
-  -- Use generic pigeonhole for monotone bounded sequences
-  suffices h : ∃ n ≤ D ^ 2,
-      (fun n => finrank ℂ (rectSpan ((A i₀) ^ D) A n)) n =
-      (fun n => finrank ℂ (rectSpan ((A i₀) ^ D) A n)) (n + 1) from h
-  apply exists_consecutive_eq_of_monotone_bounded'
-  · exact fun n => rectSpan_finrank_mono A i₀ n
-  · exact fun n => rectSpan_finrank_le ((A i₀) ^ D) A n
 
 /-! ### Surjectivity of the left-step from finrank stabilization
 

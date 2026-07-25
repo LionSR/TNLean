@@ -9,8 +9,8 @@ import TNLean.Wielandt.RectangularSpan.UniversalityAux.Basic
 # Rectangular span universality auxiliary lemmas: quantitative ceiling
 
 This module contains the Section 8e dimension-counting results for rectangular
-spans, including the quantitative cumulative-span transfer and the parametric
-Wielandt-length bounds derived from a stabilization witness.
+spans, including the quantitative cumulative-span range equality and the
+parametric Wielandt-length bounds derived from a stabilization witness.
 -/
 
 open scoped Matrix
@@ -25,8 +25,7 @@ exact Lemma 2(b) bound. The key results are:
 1. **Level zero**: `rectSpan P A 0 = span{P}` (`rectSpan_zero_eq_span`).
 2. **Tight ceiling**: `finrank(rectSpan P A n) ≤ D · rank(P)`, matching the exact formula
    `finrank(range(mulLeft P)) = D · rank(P)` from `RectangularSpan/Ranges.lean`.
-3. **Cumulative transfer**: `cumulativeRectSpan` to `cumulativeSpan` level shift, with the
-   quantitative range equality `cumulativeRectSpan_eq_range_quantitative`.
+3. **Quantitative range equality**: `cumulativeRectSpan_eq_range_quantitative`.
 4. **Parametric Wielandt-length bound**: `wielandt_parametric_span`, combining a `rectSpan`
    stabilization witness with the conditional Lemma 2(b) rank-one step.
 
@@ -73,41 +72,7 @@ theorem rectSpan_finrank_le_rank_mul_D (P : Matrix (Fin D) (Fin D) ℂ)
         Submodule.finrank_mono (rectSpan_le_range P A n)
     _ = D * P.rank := finrank_range_mulLeft P
 
-/-- **Rank bound for powers**: `rank((A i₀)^D) ≤ D`. -/
-theorem rank_pow_le (A : MPSTensor d D) (i₀ : Fin d) :
-    ((A i₀) ^ D).rank ≤ D := by
-  calc ((A i₀) ^ D).rank
-      ≤ Fintype.card (Fin D) := Matrix.rank_le_card_width _
-    _ = D := Fintype.card_fin D
-
-/-! ### Part 3: Cumulative rectangular span transfer to cumulative span -/
-
-/-- **Level-shift transfer**: `cumulativeRectSpan P A n ≤ cumulativeSpan A (m + n)` when
-`P ∈ wordSpan A m`.
-
-This is the cumulative analogue of `rectSpan_le_wordSpan`:
-every element of `cumulativeRectSpan P A n` is a linear combination of `P · M_k`
-where `M_k` is a word of length `≤ n`; since `P` is a word of length `m`,
-the product `P · M_k` has length `m + k ≤ m + n`, putting it in `cumulativeSpan A (m + n)`. -/
-theorem cumulativeRectSpan_le_cumulativeSpan
-    (P : Matrix (Fin D) (Fin D) ℂ) (A : MPSTensor d D)
-    {m : ℕ} (hP : P ∈ wordSpan A m) (n : ℕ) :
-    cumulativeRectSpan P A n ≤ cumulativeSpan A (m + n) := by
-  -- cumulativeRectSpan P A n = map(mulLeft P)(cumulativeSpan A n)
-  -- Suffices: for each generator w with w.length ≤ n,
-  -- P · evalWord A w ∈ cumulativeSpan A (m + n).
-  rw [cumulativeRectSpan]
-  rw [Submodule.map_le_iff_le_comap]
-  apply Submodule.span_le.mpr
-  rintro M ⟨w, hwlen, rfl⟩
-  -- Need: evalWord A w ∈ comap (mulLeft P) (cumulativeSpan A (m + n))
-  -- i.e., P * evalWord A w ∈ cumulativeSpan A (m + n)
-  change (LinearMap.mulLeft ℂ P) (evalWord A w) ∈ cumulativeSpan A (m + n)
-  simp only [LinearMap.mulLeft_apply]
-  have hMmem : evalWord A w ∈ wordSpan A w.length := evalWord_mem_wordSpan A w
-  have hProd : P * evalWord A w ∈ wordSpan A (m + w.length) :=
-    wordSpan_mul_le A m w.length (Submodule.mul_mem_mul hP hMmem)
-  exact wordSpan_le_cumulativeSpan A (by omega) hProd
+/-! ### Part 3: Quantitative cumulative rectangular span = range -/
 
 /-- **Quantitative cumulativeRectSpan = range under IsNormal.**
 
