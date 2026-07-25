@@ -1,15 +1,147 @@
 \section{Translation-invariant canonical form}
 
+\begin{definition}[Unnormalized positive-length PGVWC07 data]%
+    \label{def:pgvwc07_positive_length_witness}
+    \lean{MPSTensor.PGVWC07PositiveLengthWitness}
+    \leanok
+    An unnormalized positive-length PGVWC07 witness for a tensor~$A$ consists
+    of finitely many blocks $(A_k)_{k=1}^r$ of positive bond dimensions and
+    positive real weights $(a_k)_{k=1}^r$. Each block is unital, has only scalar
+    transfer-map fixed points, and has a diagonal positive-definite fixed point
+    $\Lambda_k$ for the adjoint transfer map. Moreover,
+    \begin{align}
+        V^{(N)}(A)_\sigma
+         & =
+        V^{(N)}\!\left(\bigoplus_{k=1}^r a_kA_k\right)_\sigma
+        \qquad(N>0),
+        \notag
+    \end{align}
+    and the retained bond dimensions satisfy $\sum_k\dim(A_k)\le D$.
+\end{definition}
+
+\begin{theorem}[Construction of the positive-length PGVWC07 witness]%
+    \label{thm:pgvwc07_positive_length_witness}
+    \lean{MPSTensor.isIrreducibleTensor_smul}
+    \lean{MPSTensor.exists_pgvwc07_unital_dualDiag_data_of_irreducible}
+    \lean{MPSTensor.exists_pgvwc07_unital_dualDiag_blockwise}
+    \lean{MPSTensor.exists_pgvwc07_unital_dualDiag_from_arbitrary}
+    \lean{MPSTensor.exists_pgvwc07_positiveLengthWitness}
+    \leanok
+    \uses{def:pgvwc07_positive_length_witness,
+        thm:nonzero_irreducible_block_decomposition,
+        thm:unital_data_irreducible,
+        thm:irreducible_tensor_to_action,
+        lem:irreducible_action_to_tensor,
+        thm:irreducible_unital_scalar_fixed_point,
+        thm:pgvwc07_dual_diag_unital}
+    Every MPS tensor has an unnormalized positive-length PGVWC07 witness.
+    More precisely, the checked construction has four stages. First, a nonzero
+    irreducible block remains irreducible under nonzero scalar rescaling and can
+    be put in a unital gauge with scalar fixed-point space and a diagonal
+    positive-definite dual fixed point. Second, this construction is applied to
+    each member of a finite nonzero irreducible block family. Third, the
+    nonzero irreducible decomposition of an arbitrary tensor supplies that
+    family and the total bond-dimension bound. Finally, these data are packaged
+    as a witness in the sense of
+    Definition~\ref{def:pgvwc07_positive_length_witness}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:pgvwc07_positive_length_witness,
+        thm:nonzero_irreducible_block_decomposition,
+        thm:unital_data_irreducible,
+        thm:irreducible_tensor_to_action,
+        lem:irreducible_action_to_tensor,
+        thm:irreducible_unital_scalar_fixed_point,
+        thm:pgvwc07_dual_diag_unital}
+    Follow \cite[Theorem~4]{PerezGarcia2007Matrix}. The nonzero irreducible
+    decomposition is obtained by strict dimension induction. On a nonzero
+    current block, Perron--Frobenius gives a positive semidefinite eigenvector
+    at a positive spectral radius. If it is singular, positivity makes its
+    support invariant: $(\Id-P)A^iP=0$. After diagonalizing $P$, every letter is
+    upper block triangular and the finite-ring trace splits as
+    \begin{align}
+        \tr(A^{i_1}\cdots A^{i_N})
+         & =\tr(A_1^{i_1}\cdots A_1^{i_N})
+        +\tr(A_2^{i_1}\cdots A_2^{i_N}).
+        \notag
+    \end{align}
+    Discard all-zero blocks and repeat on the two strictly smaller diagonal
+    blocks. This gives the finite nonzero irreducible family of
+    Theorem~\ref{thm:nonzero_irreducible_block_decomposition}.
+
+    For each retained irreducible block, divide by the square root of its
+    positive spectral radius and conjugate by the square root of its
+    positive-definite Perron eigenvector. Theorem~\ref{thm:unital_data_irreducible}
+    gives the unital identity
+    \begin{align}
+        \sum_i A_k^i(A_k^i)^\dagger
+         & =\Id.
+        \notag
+    \end{align}
+    Nonzero scalar rescaling preserves irreducibility. The checked proof passes
+    from tensor irreducibility to irreducibility of the matrix action, carries
+    invariant subspaces through the gauge similarity, and returns to tensor
+    irreducibility using Theorem~\ref{thm:irreducible_tensor_to_action} and
+    Lemma~\ref{lem:irreducible_action_to_tensor}. Hence
+    Theorem~\ref{thm:irreducible_unital_scalar_fixed_point} makes every fixed
+    point scalar. Theorem~\ref{thm:pgvwc07_dual_diag_unital} then diagonalizes a
+    positive-definite dual fixed point by a unitary without changing unitality.
+
+    Apply this single-block construction to every member of the finite family.
+    The square roots of the block spectral radii become positive weights, gauge
+    invariance preserves every positive-length MPV coefficient, and the block
+    dimensions are unchanged. Combining this blockwise result with the initial
+    decomposition yields the arbitrary-input unnormalized form and its bound
+    $\sum_k\dim(A_k)\le D$. Packaging these fields gives the structured witness.
+\end{proof}
+
+\begin{theorem}[Finite normalization of a nonempty PGVWC07 witness]%
+    \label{thm:pgvwc07_positive_length_weight_normalization}
+    \lean{MPSTensor.PGVWC07PositiveLengthWitness.block_count_pos_of_exists_ne_zero_mpv}
+    \lean{MPSTensor.PGVWC07PositiveLengthWitness.exists_weight_normalization}
+    \leanok
+    \uses{def:pgvwc07_positive_length_witness}
+    Let $W$ be an unnormalized positive-length witness with positive weights
+    $a_k$. If some positive-length MPV coefficient of the original tensor is
+    nonzero, then $W$ has at least one block. For any nonempty witness, define
+    \begin{align}
+        s
+         & :=\max_{1\le k\le r}a_k,
+        \notag                      \\
+        \nu_k
+         & :=\frac{a_k}{s}.
+        \notag
+    \end{align}
+    Then $s>0$, every $\nu_k$ is positive, $|\nu_k|\le1$, and
+    $|\nu_k|=1$ for at least one~$k$. For every $N>0$,
+    \begin{align}
+        V^{(N)}(A)_\sigma
+         & =s^N
+        V^{(N)}\!\left(\bigoplus_k\nu_kA_k\right)_\sigma.
+        \label{eq:canonical_pgvwc_weight_normalization}
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:pgvwc07_positive_length_witness}
+    If the witness had no blocks, its weighted block tensor would have zero MPV
+    coefficients at every positive length, contrary to the assumed nonzero
+    coefficient. Thus $r>0$. Since the finite family $(a_k)$ is nonempty and
+    every $a_k>0$, its maximum $s$ is positive. The definition
+    $\nu_k=a_k/s$ gives $0<\nu_k\le1$, and any maximizing index has
+    $\nu_k=1$. Finally, $a_k=s\nu_k$ for every~$k$, so homogeneity of a
+    length-$N$ matrix product vector gives
+    (\ref{eq:canonical_pgvwc_weight_normalization}).
+\end{proof}
+
 \begin{theorem}[Normalized exact form for a nonzero MPV family]%
     \label{thm:pgvwc07_ti_canonical_form_nonzero}
     \lean{MPSTensor.exists_pgvwc07_normalized_exact_form_after_rescaling_of_exists_ne_zero_mpv}
     \leanok
-    \uses{thm:fp_inv_proj, thm:two_block_decomp,
-        thm:unital_gauge_of_pd_fixed_point,
-        thm:unital_nonscalar_fixed_point_split,
-        thm:irreducible_unital_scalar_fixed_point,
-        thm:pgvwc07_dual_diag_unital}
-    Suppose that $V^{(N)}(A)_\sigma\neq0$ for some $N>0$ and some closed
+    \uses{thm:pgvwc07_positive_length_witness,
+        thm:pgvwc07_positive_length_weight_normalization}
+    Suppose that $V^{(N)}(A)_\sigma\neq0$ for some $N>0$ and some
     word~$\sigma$. Then there are a scalar $s>0$ and a nonempty finite family
     of positive-bond-dimension blocks $(A_k)_{k=1}^r$ with positive weights
     $(\mu_k)_{k=1}^r$ such that $s^{-1}A$ and
@@ -30,51 +162,21 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:fp_inv_proj, thm:two_block_decomp,
-        thm:unital_gauge_of_pd_fixed_point,
-        thm:unital_nonscalar_fixed_point_split,
-        thm:irreducible_unital_scalar_fixed_point,
-        thm:pgvwc07_dual_diag_unital}
-    Follow the proof of \cite[Theorem~4]{PerezGarcia2007Matrix}. The nonzero
-    coefficient gives
+    \uses{thm:pgvwc07_positive_length_witness,
+        thm:pgvwc07_positive_length_weight_normalization}
+    Choose the structured witness from
+    Theorem~\ref{thm:pgvwc07_positive_length_witness}. The assumed nonzero
+    coefficient makes its block family nonempty, so
+    Theorem~\ref{thm:pgvwc07_positive_length_weight_normalization} supplies
+    $s>0$ and the normalized positive weights. Equation
+    (\ref{eq:canonical_pgvwc_weight_normalization}) and homogeneity give
     \begin{align}
-        \Tr(\E_A^N)
-         & =\sum_\sigma\left|V^{(N)}(A)_\sigma\right|^2
-        >0,
+        V^{(N)}(s^{-1}A)_\sigma
+         & =s^{-N}V^{(N)}(A)_\sigma
+        =V^{(N)}\!\left(\bigoplus_k\mu_kA_k\right)_\sigma.
         \notag
     \end{align}
-    so $\E_A$ has positive spectral radius. Divide the tensor by the square
-    root of this radius. Perron--Frobenius supplies a positive semidefinite
-    fixed point. If it is full rank, conjugation by its positive square root
-    gives the unital gauge
-    \begin{align}
-        \sum_iA^i(A^i)^\dagger
-         & =\Id.
-        \notag
-    \end{align}
-    If the fixed point is singular, positivity makes its support invariant:
-    $(\Id-P)A^iP=0$. After diagonalizing $P$, every letter is upper block
-    triangular, and the finite-ring trace splits as
-    \begin{align}
-        \tr(A^{i_1}\cdots A^{i_N})
-         & =\tr(A_1^{i_1}\cdots A_1^{i_N})
-        +\tr(A_2^{i_1}\cdots A_2^{i_N}).
-        \notag
-    \end{align}
-    Both diagonal blocks have smaller bond dimension, so induction repeats the
-    construction until every retained block has a full-rank Perron fixed point.
-
-    Put each retained block in unital gauge. A non-scalar Hermitian fixed point
-    $X$ would produce the nonzero singular fixed point
-    $\lambda_{\max}(X)\Id-X\ge0$ and hence another strict split. Thus the
-    induction stops only when every block has fixed-point space $\C\Id$.
-    Apply the Perron argument to each dual map and diagonalize its
-    positive-definite fixed point by a unitary. This preserves the unital
-    identity and gives
-    (\ref{eq:canonical_pgvwc_nonzero_block_conditions}). Finally absorb the
-    positive spectral-radius factors into the weights and divide all weights
-    by their largest modulus. This gives $|\mu_k|\le1$, a unit-modulus weight,
-    and total retained bond dimension at most~$D$.
+    All block conditions and the bond-dimension bound are fields of the witness.
 \end{proof}
 
 \begin{theorem}[Zero/nonzero alternative for the normalized exact form]%
@@ -84,7 +186,7 @@
     \uses{thm:pgvwc07_ti_canonical_form_nonzero}
     For every MPS tensor~$A$, one of the following alternatives holds:
     \begin{enumerate}
-        \item $V^{(N)}(A)_\sigma=0$ for every $N>0$ and every closed
+        \item $V^{(N)}(A)_\sigma=0$ for every $N>0$ and every
               word~$\sigma$;
         \item there are a scalar $s>0$ and a nonempty normalized block family
               satisfying all conclusions of
@@ -190,8 +292,8 @@ tensors is stated in Chapter~\ref{ch:bnt}. Write
     \label{eq:canonical_peripheral_spectrum}
 \end{align}
 for the peripheral spectrum of a transfer map $\E$, where $r(\E)$ is its
-spectral radius. The stronger predicates used later
-(Definition~\ref{def:is_normal_canonical_form} and the canonical-form predicate
+spectral radius. The stronger conditions used later
+(Definition~\ref{def:is_normal_canonical_form} and the canonical-form conditions
 of Chapter~\ref{ch:bnt}) add left-canonical normalization and spectral
 primitivity. The weight moduli are taken non-increasing, not strictly
 decreasing; equal-modulus and repeated-copy sectors are retained and compared by
@@ -250,16 +352,16 @@ the coefficient argument of Chapter~\ref{ch:bnt}.
 \end{definition}
 
 This source definition is distinct from the stronger normal-canonical-form
-interface below. The renormalization fixed-point analysis uses a separate
+conditions below. The renormalization fixed-point analysis uses a separate
 block-injective canonical-form criterion; it is not the CPSV canonical-form
 definition.
 
-\begin{remark}[Relation to the strong predicates]
+\begin{remark}[Relation to the stronger conditions]
     A tensor $A$ which is irreducible
     (Definition~\ref{def:irreducible_tensor}), has transfer map of spectral
     radius one, and has primitive transfer map is normal in the sense of
     Definition~\ref{def:nt_cpsv}. The reverse implications from the stronger
-    predicates of Definition~\ref{def:is_normal_canonical_form} and of
+    conditions of Definition~\ref{def:is_normal_canonical_form} and of
     Chapter~\ref{ch:bnt} require the fundamental-theorem step or the
     algebraic-to-spectral normality equivalence, established later.
 \end{remark}

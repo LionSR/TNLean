@@ -3,7 +3,7 @@
 
 % Source: Cirac2016MPDO_arXiv \S~II lines 287--301; Cirac2021Matrix
 % Definition~4.2, Proposition~4.3, lines 1864--1884.
-This section introduces the BNT canonical-form predicate of
+This section introduces the BNT canonical-form conditions of
 \cite[Section~2]{Cirac2016MPDO_arXiv}, defined on a sector decomposition with raw
 sector weights $\mu_{j,q}$ and coefficients $c_N^{(j)} = \sum_q \mu_{j,q}^{\,N}$;
 no equal-modulus factorization is assumed.
@@ -11,8 +11,8 @@ no equal-modulus factorization is assumed.
 \subsection{Sector decompositions and phase matching}
 \label{sec:bnt_sector_decompositions}
 
-The sector decomposition and the MPV phase-equivalence predicates introduced
-here feed the BNT canonical-form predicate below.
+The sector decomposition and the MPV phase-equivalence relations introduced
+here determine the BNT canonical-form conditions below.
 
 \begin{definition}[Sector weights and sector decomposition]%
     \label{def:sector_weight_data}
@@ -224,8 +224,8 @@ single family.
     \lean{MPSTensor.IsBNTCanonicalForm}
     \leanok
     \uses{def:sector_weight_data}
-    Given a sector decomposition $P$, the BNT canonical-form predicate
-    records the minimal BNT hypotheses of
+    Given a sector decomposition $P$, the BNT canonical-form conditions
+    record the minimal BNT hypotheses of
     \cite{Cirac2016MPDO_arXiv,Cirac2021Matrix} without any equal-modulus
     or strict-ordering condition on the raw sector weights. It asserts that
     each basis block has positive bond dimension, is irreducible,

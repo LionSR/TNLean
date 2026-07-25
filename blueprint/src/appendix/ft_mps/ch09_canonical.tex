@@ -561,14 +561,55 @@ through its own period agrees with the directly $p$-blocked block.
     If $\E_{A^{[p_0]}}$ is primitive, then $\E_{A^{[p]}}$ is primitive.
 \end{lemma}
 
+\begin{lemma}[Formal ingredients for irreducibility after primitive blocking]%
+    \label{lem:blocked_irreducibility_direct_support}
+    \lean{MPSTensor.hasPrimitiveFixedPoint_of_peripheralPrimitive_of_irreducible}
+    \lean{MPSTensor.posDef_of_isIrreducibleTensor_of_isPrimitiveMPS}
+    \lean{MPSTensor.leftCanonical_blockTensor}
+    \lean{MPSTensor.transferMap_blockTensor}
+    \lean{MPSTensor.transferMap_blockTensor_fixedPoint}
+    \lean{isIrreducibleMap_of_channel_posDef_fixedPoint_unique}
+    \lean{MPSTensor.isIrreducibleTensor_of_isIrreducibleMap}
+    \leanok
+    \uses{def:blocked_tensor, def:irreducible_tensor, def:primitive_mps,
+        def:fixed_point_proj, thm:pow_decomp, thm:transfer_channel}
+    Let $A$ be left-canonical, tensor-irreducible, and have primitive transfer
+    map. Then $A$ has primitive fixed-point data $(\rho,P_\rho,N)$ with
+    $\rho>0$ and $N^n\to0$. For every blocking length~$P$, the tensor
+    $A^{[P]}$ is left-canonical, its transfer map is $\E_A^P$, and $\rho$ is
+    fixed by this blocked map. For every $n\ge1$,
+    \begin{align}
+        \E_A^n
+         & =P_\rho+N^n.
+        \label{eq:canonical_primitive_fixed_point_power}
+    \end{align}
+    Finally, a channel with a positive-definite fixed point whose positive
+    semidefinite fixed points are all proportional is irreducible as a map;
+    irreducibility of a transfer map implies tensor irreducibility.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:primitive_mps, def:fixed_point_proj, thm:pow_decomp,
+        thm:transfer_channel}
+    Peripheral primitivity, tensor irreducibility, and left-canonical
+    normalization first give primitive fixed-point data, and tensor
+    irreducibility makes its positive semidefinite fixed point positive
+    definite. Blocking preserves the left-canonical identity, replaces the
+    transfer map by its positive power, and therefore preserves the fixed
+    point. The defining complementary-power identity gives
+    (\ref{eq:canonical_primitive_fixed_point_power}). The channel fixed-point
+    criterion then gives map irreducibility from uniqueness of positive
+    semidefinite fixed points, and the final implication converts map
+    irreducibility to tensor irreducibility.
+\end{proof}
+
 \begin{theorem}[Blocking preserves irreducibility for primitive irreducible blocks]%
     \label{thm:blocked_irreducible_tp_primitive}
     \lean{MPSTensor.isIrreducibleTensor_blockTensor_of_tp_primitive_irr}
     \leanok
     \uses{def:blocked_tensor, def:irreducible_tensor, def:primitive_mps,
-        def:fixed_point_proj, thm:psd_fp_exists, thm:psd_fp_pd_irred,
-        thm:primitive_compl_lt_one, lem:complement_pow_zero,
-        lem:irreducible_map_from_primitive}
+        def:fixed_point_proj, lem:blocked_irreducibility_direct_support,
+        thm:pow_decomp, thm:transfer_channel}
     Let $A$ be left-canonical, irreducible, primitive, of positive bond
     dimension. For every $P>0$, the blocked tensor $A^{[P]}$ is irreducible:
     there is no orthogonal projection $Q$ with $Q\neq0$, $Q\neq\Id$ such that
@@ -576,27 +617,22 @@ through its own period agrees with the directly $p$-blocked block.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{def:primitive_mps, def:fixed_point_proj, thm:psd_fp_exists,
-        thm:psd_fp_pd_irred, thm:primitive_compl_lt_one,
-        lem:complement_pow_zero, lem:irreducible_map_from_primitive}
-    Trace preservation gives a nonzero positive semidefinite fixed point
-    $\rho$ of $\E_A$ (Theorem~\ref{thm:psd_fp_exists}). Tensor irreducibility
-    implies irreducibility of the transfer map, so
-    Theorem~\ref{thm:psd_fp_pd_irred} gives $\rho>0$. Together with peripheral
-    primitivity, these facts give the primitive fixed-point data of
-    Definition~\ref{def:primitive_mps}. In particular, if
+    \uses{def:primitive_mps, def:fixed_point_proj,
+        lem:blocked_irreducibility_direct_support, thm:pow_decomp,
+        thm:transfer_channel}
+    Lemma~\ref{lem:blocked_irreducibility_direct_support} gives primitive
+    fixed-point data with $\rho>0$. In particular, if
     $P_\rho(X)=\tr(X)\rho/\tr(\rho)$ and $N:=\E_A-P_\rho$, then
     \begin{align}
         \E_A
          & =P_\rho+N,
-        \notag        \\
-        \rho_{\spec}(N)
-         & <1.
+        \notag               \\
+        N^n
+         & \longrightarrow0.
         \notag
     \end{align}
-    The complementary-gap conclusion is
-    Theorem~\ref{thm:primitive_compl_lt_one}, and it implies
-    $N^n\to0$ by Lemma~\ref{lem:complement_pow_zero}.
+    The convergence is the complementary-power field of this primitive
+    fixed-point witness.
 
     The blocked transfer map is the corresponding positive power:
     \begin{align}
@@ -627,12 +663,12 @@ through its own period agrees with the directly $p$-blocked block.
     positive semidefinite fixed point of the blocked map is proportional to
     $\rho$.
 
-    Blocking preserves trace preservation, so the blocked transfer map is a
-    channel. Its positive-definite fixed point and the uniqueness just proved
-    imply transfer-map irreducibility by the criterion used in
-    Lemma~\ref{lem:irreducible_map_from_primitive}. The established implication
-    from transfer-map irreducibility to tensor irreducibility then shows that
-    $A^{[P]}$ is tensor-irreducible.
+    Blocking preserves the left-canonical identity, so
+    Theorem~\ref{thm:transfer_channel} makes the blocked transfer map a channel.
+    Its positive-definite fixed point and the uniqueness just proved imply map
+    irreducibility by
+    Lemma~\ref{lem:blocked_irreducibility_direct_support}. The final implication
+    in that lemma then shows that $A^{[P]}$ is tensor-irreducible.
 \end{proof}
 
 \begin{theorem}[Extra blocking of primitive irreducible sector blocks]%
