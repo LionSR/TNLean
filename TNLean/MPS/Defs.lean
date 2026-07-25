@@ -145,17 +145,6 @@ theorem mpv_reindexPhysical {d₁ d₂ D : ℕ} (f : Fin d₁ → Fin d₂)
     mpv (reindexPhysical f A) σ = mpv A (fun n => f (σ n)) := by
   simp [mpv, coeff, evalWord_reindexPhysical, List.map_ofFn, Function.comp_def]
 
-@[deprecated evalWord_reindexPhysical (since := "2026-07-10")]
-lemma evalWord_map {d' : ℕ} (B : MPSTensor d' D) (g : Fin d → Fin d') (l : List (Fin d)) :
-    evalWord B (l.map g) = evalWord (fun i => B (g i)) l :=
-  (evalWord_reindexPhysical g B l).symm
-
-@[deprecated mpv_reindexPhysical (since := "2026-07-10")]
-lemma mpv_comp_reindex {d' : ℕ} (B : MPSTensor d' D) (g : Fin d → Fin d')
-    {N : ℕ} (σ : Fin N → Fin d) :
-    mpv (fun i => B (g i)) σ = mpv B (fun k => g (σ k)) :=
-  mpv_reindexPhysical g B σ
-
 /-- Gauge equivalence: `A` and `B` are related by simultaneous similarity
 `B i = X * A i * X⁻¹` for some `X ∈ GL(D,ℂ)`. -/
 def GaugeEquiv (A B : MPSTensor d D) : Prop :=

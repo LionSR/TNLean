@@ -70,15 +70,6 @@ noncomputable def openCoeff (vL vR : Fin D → ℂ) (A : MPSTensor d D)
     openCoeff vL vR A [] = vL ⬝ᵥ vR := by
   simp [openCoeff]
 
-/-- Peeling the first letter: the contraction of `i :: w` pushes `A i` into the
-left boundary covector. -/
-lemma openCoeff_cons (vL vR : Fin D → ℂ) (A : MPSTensor d D)
-    (i : Fin d) (w : List (Fin d)) :
-    openCoeff vL vR A (i :: w) =
-      openCoeff (Matrix.vecMul vL (A i)) vR A w := by
-  simp only [openCoeff, evalWord_cons]
-  rw [← Matrix.mulVec_mulVec, Matrix.dotProduct_mulVec]
-
 /-- The open-boundary state on `N` sites: the configuration amplitudes
 `σ ↦ (l| A^{σ_1} ⋯ A^{σ_N} |r)`, assembled as a function on configurations.
 
