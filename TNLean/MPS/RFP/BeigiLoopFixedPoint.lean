@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.RFP.BeigiLoopInjectivity
 import TNLean.MPS.RFP.Defs
 import TNLean.MPS.SharedInfra.Scaling
+import TNLean.MPS.Tactic.Basic
 import TNLean.Spectral.FrobeniusNorm
 
 /-!

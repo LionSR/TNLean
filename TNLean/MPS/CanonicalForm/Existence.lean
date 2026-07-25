@@ -8,7 +8,6 @@ import TNLean.Channel.PerronFrobenius.Existence
 import TNLean.MPS.Irreducible.FormII
 import TNLean.MPS.Overlap.PeripheralToTransferMapGap
 import TNLean.Wielandt.Primitivity.StronglyIrreducibleToFullRank
-import TNLean.MPS.Tactic.Basic
 
 /-!
 # Canonical form existence reductions from the source proofs
