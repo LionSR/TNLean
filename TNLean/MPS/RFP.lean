@@ -34,6 +34,7 @@ import TNLean.MPS.RFP.NNCPHGroundSpace
 import TNLean.MPS.RFP.NNCPHGroundSpacesMultiSector
 import TNLean.MPS.RFP.NNCPHMultiSector
 import TNLean.MPS.RFP.PhaseMultiplicityCounterexample
+import TNLean.MPS.RFP.PhysicalObservableRealization
 import TNLean.MPS.RFP.ResidualFamilyCommutation
 import TNLean.MPS.RFP.ResidualFamilySupport
 import TNLean.MPS.RFP.ResidualIsometry

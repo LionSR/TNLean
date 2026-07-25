@@ -197,22 +197,36 @@ a scope restriction, not the full forward implication of the source theorem
 at lines 498--502.
 The older predicate \leanid{MPSTensor.IsCID} instead quantifies directly over
 arbitrary virtual matrices $X,Y$.  Its converse to idempotence is valid, but it
-is stronger than physical CID: the source obtains the required virtual
-insertions from physical observables by block injectivity
-(lines 1250--1258).  For a corrected statement which removes the raw-copy
-obstruction, the reverse implication would still require a formal
-physical-realization theorem for block observables, followed by the nonzero
-power-sum argument in lines 1260--1268.  One must not identify the two CID
-predicates before that realization theorem is proved.  Since the older
-predicate universally quantifies over positive definite fixed points, it is
-also vacuous for a tensor without such a fixed point.  The periodic-chain
-predicate avoids this boundary-state issue.  Even after a physical-realization
-theorem is supplied, the source proof cannot establish the unrestricted
-reverse implication: the step from non-idempotence of the full transfer matrix
-to non-idempotence of a normal BNT component ignores the eigenvalues contributed
-by the raw copy weights.  A theorem restricted to one unit-weight copy per BNT
-component would still require the physical-realization and power-sum arguments,
-but it would be a different statement.
+is stronger than physical CID. For the multiplicity-one unit-weight direct sum,
+the simultaneous block-injectivity theorem now supplies the corresponding
+physical observables from source lines 1250--1258. More precisely,
+\leanid{MPSTensor.IsBNTCanonicalForm.exists_basis_physicalObservableTransfer_rankOne_le_three_totalDim_pow_five}
+selects any one BNT basis sector and realizes the insertion $|R)(l|$ there on a
+region of size at most $3D^5$, with zero insertion on every other sector pair.
+This theorem acts on \leanid{directSumTensor P.basis}, not the raw weighted
+repeated-copy tensor \leanid{P.toTensor}. The source equations contain all copy
+pairs and their weight powers, so their unrestricted realization remains
+separate.
+
+A further obstruction occurs in the preceding sentence at source line
+1250.  The source claims that
+$\mathbb E_1^2\ne\mathbb E_1$ implies a nonzero eigenvalue $\lambda$ with
+$|\lambda|<1$.  This implication is false for a non-idempotent operator whose
+only subleading spectral value is zero but whose generalized zero-eigenspace
+has a nontrivial nilpotent Jordan part.  Consequently the unconditional reverse
+direction is not obtained from the printed proof, even for the multiplicity-one
+unit-weight representative.  A source-faithful conditional statement would
+have to assume or derive exactly the nonzero subleading left and right
+eigenvectors used in lines 1250--1262; replacing that step by a different
+trace-nondegeneracy argument would not formalize the cited proof.
+
+Since the older predicate universally quantifies over positive definite fixed
+points, it is also vacuous for a tensor without such a fixed point.  The
+periodic-chain predicate avoids this boundary-state issue.  For the
+unrestricted raw-weight statement there is an additional obstruction: the
+step from non-idempotence of the full transfer matrix to non-idempotence of a
+normal BNT component ignores the eigenvalues contributed by the raw copy
+weights.
 
 Accordingly, \leanid{MPSTensor.IsBNTZCL} remains the virtual-insertion
 surrogate, while \leanid{MPSTensor.IsPositiveGapBNTZCL} names the physical
