@@ -1901,6 +1901,7 @@
 \prop_new:N \l__tenkz_kernel_r_legdrawn_prop  % leg path id -> deferred (saved)
 \prop_new:N \l__tenkz_kernel_r_species_prop   % species word -> hue
 \seq_new:N  \l__tenkz_kernel_r_strings_seq    % string wire record ids
+\seq_new:N  \l__tenkz_kernel_r_after_atom_seq % physical traces need glyph borders
 \seq_new:N  \l__tenkz_kernel_r_palette_seq
 \int_new:N  \l__tenkz_kernel_r_rows_int
 \int_new:N  \l__tenkz_kernel_r_cols_int
@@ -1932,6 +1933,10 @@
 \fp_new:N   \l__tenkz_kernel_r_reach_fp
 \bool_new:N \l__tenkz_kernel_r_from_bool
 \bool_new:N \l__tenkz_kernel_r_to_bool
+\dim_new:N  \l__tenkz_kernel_r_north_x_dim
+\dim_new:N  \l__tenkz_kernel_r_north_y_dim
+\dim_new:N  \l__tenkz_kernel_r_south_y_dim
+\dim_new:N  \l__tenkz_kernel_r_east_x_dim
 
 % one conversion: a pitch-unit fp expression as a pt spelling
 \cs_new:Npn \__tenkz_kernel_r_pt:n #1
@@ -2736,45 +2741,30 @@
               \l__tenkz_kernel_r_row_tl
             \__tenkz_model_get:nnN {#1} {col}
               \l__tenkz_kernel_r_col_tl
+            \__tenkz_kernel_r_frame_xy:nnNN
+              { \l__tenkz_kernel_r_row_tl }
+              { \l__tenkz_kernel_r_col_tl }
+              \l__tenkz_kernel_r_x_fp \l__tenkz_kernel_r_y_fp
+            \__tenkz_kernel_r_frame_xy:nnNN
+              { \l__tenkz_kernel_r_row_tl + 1 }
+              { \l__tenkz_kernel_r_col_tl }
+              \l__tenkz_kernel_r_xb_fp \l__tenkz_kernel_r_yb_fp
             \__tenkz_render_stroke:nn { bond }
               {
                 \__tenkz_kernel_r_pair:nn
-                  { \l__tenkz_kernel_r_col_tl }
-                  { - \l__tenkz_kernel_r_row_tl }
+                  { \l__tenkz_kernel_r_x_fp }
+                  { \l__tenkz_kernel_r_y_fp }
                 --
                 \__tenkz_kernel_r_pair:nn
-                  { \l__tenkz_kernel_r_col_tl }
-                  { - \l__tenkz_kernel_r_row_tl - 1 }
+                  { \l__tenkz_kernel_r_xb_fp }
+                  { \l__tenkz_kernel_r_yb_fp }
               }
           }
         {physical}
           {
-            \__tenkz_model_get:nnN {#1} {col}
-              \l__tenkz_kernel_r_col_tl
-            \__tenkz_render_stroke:nn { trace }
-              {
-                \__tenkz_kernel_r_pair:nn
-                  { \l__tenkz_kernel_r_col_tl }
-                  { -1 + \__tenkz_metric_ratio:n {physleg} }
-                --
-                \__tenkz_kernel_r_pair:nn
-                  {
-                    \l__tenkz_kernel_r_col_tl
-                    + \__tenkz_metric_ratio:n {phtracereach}
-                  }
-                  { -1 + \__tenkz_metric_ratio:n {physleg} }
-                --
-                \__tenkz_kernel_r_pair:nn
-                  {
-                    \l__tenkz_kernel_r_col_tl
-                    + \__tenkz_metric_ratio:n {phtracereach}
-                  }
-                  { -1 - \__tenkz_metric_ratio:n {physleg} }
-                --
-                \__tenkz_kernel_r_pair:nn
-                  { \l__tenkz_kernel_r_col_tl }
-                  { -1 - \__tenkz_metric_ratio:n {physleg} }
-              }
+            \int_compare:nNnTF { \l__tenkz_kernel_r_rows_int } = {1}
+              { \seq_put_right:Nn \l__tenkz_kernel_r_after_atom_seq {#1} }
+              { \__tenkz_kernel_r_wire_pair_trace:n {#1} }
           }
         % A trace needs two opposing sides.  The model retains a one-sided
         % request as an auditable sealed-boundary record, but it owns no ink.
@@ -2786,6 +2776,51 @@
       {
         \msg_error:nnee {tenkz}{kernel-render-todo}
           { trace ~ side = \tl_use:N \l__tenkz_kernel_r_tl } {#1}
+      }
+  }
+
+% A multi-row physical trace joins the limiting rows.  Its circular turns
+% use pairtracereach, while the atoms later cover the stroke ends.
+\cs_new_protected:Npn \__tenkz_kernel_r_wire_pair_trace:n #1
+  {
+    \__tenkz_model_get:nnN {#1} {col} \l__tenkz_kernel_r_col_tl
+    \__tenkz_kernel_r_frame_xy:nnNN
+      {1} { \l__tenkz_kernel_r_col_tl }
+      \l__tenkz_kernel_r_x_fp \l__tenkz_kernel_r_y_fp
+    \__tenkz_kernel_r_frame_xy:nnNN
+      { \l__tenkz_kernel_r_rows_int } { \l__tenkz_kernel_r_col_tl }
+      \l__tenkz_kernel_r_xb_fp \l__tenkz_kernel_r_yb_fp
+    \fp_set:Nn \l__tenkz_kernel_r_reach_fp
+      { \__tenkz_metric_ratio:n {pairtracereach} }
+    \fp_set:Nn \l__tenkz_kernel_r_xc_fp
+      { \l__tenkz_kernel_r_x_fp + \l__tenkz_kernel_r_reach_fp }
+    \__tenkz_render_stroke:nn { trace }
+      {
+        \__tenkz_kernel_r_pair:nn
+          { \l__tenkz_kernel_r_x_fp } { \l__tenkz_kernel_r_y_fp }
+        --
+        \__tenkz_kernel_r_pair:nn
+          { \l__tenkz_kernel_r_x_fp }
+          { \l__tenkz_kernel_r_y_fp + \__tenkz_metric_ratio:n {physleg} }
+        arc
+          [
+            start~angle = 180 , end~angle = 0 ,
+            radius =
+              \__tenkz_kernel_r_pt:n { \l__tenkz_kernel_r_reach_fp / 2 }
+          ]
+        --
+        \__tenkz_kernel_r_pair:nn
+          { \l__tenkz_kernel_r_xc_fp }
+          { \l__tenkz_kernel_r_yb_fp - \__tenkz_metric_ratio:n {physleg} }
+        arc
+          [
+            start~angle = 360 , end~angle = 180 ,
+            radius =
+              \__tenkz_kernel_r_pt:n { \l__tenkz_kernel_r_reach_fp / 2 }
+          ]
+        --
+        \__tenkz_kernel_r_pair:nn
+          { \l__tenkz_kernel_r_xb_fp } { \l__tenkz_kernel_r_yb_fp }
       }
   }
 
@@ -3380,6 +3415,55 @@
   {
     \__tenkz_model_map_ids:nn {atom} { \__tenkz_kernel_r_atom_ink:n {##1} }
   }
+% The physical closure clears the live glyph, including label- and span-grown
+% silhouettes.  Find the atom at the traced column, then read its border.
+\cs_new_protected:Npn \__tenkz_kernel_r_physical_trace:n #1
+  {
+    \__tenkz_model_get:nnN {#1} {col} \l__tenkz_kernel_r_col_tl
+    \prop_get:NeN \l__tenkz_kernel_cell_prop
+      { 1-\tl_use:N \l__tenkz_kernel_r_col_tl }
+      \l__tenkz_kernel_r_tl
+    \quark_if_no_value:NT \l__tenkz_kernel_r_tl
+      {
+        \__tenkz_model_map_ids:nn {atom}
+          {
+            \__tenkz_kernel_r_atom_rc:nNNN {##1}
+              \l__tenkz_kernel_r_row_tl
+              \l__tenkz_kernel_r_b_tl
+              \l_tmpa_bool
+            \bool_lazy_and:nnT
+              {
+                \bool_lazy_and_p:nn
+                  { \bool_if_p:N \l_tmpa_bool }
+                  { \int_compare_p:nNn { \l__tenkz_kernel_r_row_tl } = {1} }
+              }
+              {
+                \int_compare_p:nNn { \l__tenkz_kernel_r_b_tl }
+                  = { \l__tenkz_kernel_r_col_tl }
+              }
+              { \tl_set:Nn \l__tenkz_kernel_r_tl {##1} }
+          }
+      }
+    \pgfextractx \l__tenkz_kernel_r_north_x_dim
+      { \pgfpointanchor{\tl_use:N \l__tenkz_kernel_r_tl}{north} }
+    \pgfextracty \l__tenkz_kernel_r_north_y_dim
+      { \pgfpointanchor{\tl_use:N \l__tenkz_kernel_r_tl}{north} }
+    \pgfextracty \l__tenkz_kernel_r_south_y_dim
+      { \pgfpointanchor{\tl_use:N \l__tenkz_kernel_r_tl}{south} }
+    \pgfextractx \l__tenkz_kernel_r_east_x_dim
+      { \pgfpointanchor{\tl_use:N \l__tenkz_kernel_r_tl}{east} }
+    \dim_add:Nn \l__tenkz_kernel_r_east_x_dim
+      { \__tenkz_dim:n {phtracereach} }
+    \__tenkz_render_stroke:nn { trace }
+      {
+        ( \l__tenkz_kernel_r_north_x_dim , \l__tenkz_kernel_r_north_y_dim )
+        -- ++( 0 , \__tenkz_dim:n {physleg} )
+        -| ( \l__tenkz_kernel_r_east_x_dim ,
+             \l__tenkz_kernel_r_south_y_dim - \__tenkz_dim:n {physleg} )
+        -| ( \l__tenkz_kernel_r_north_x_dim ,
+             \l__tenkz_kernel_r_south_y_dim )
+      }
+  }
 \cs_new_protected:Npn \__tenkz_kernel_r_atom_ink:n #1
   {
     % A cluster carrier is a group, not a glyph: its spins are the atoms
@@ -3404,7 +3488,11 @@
             \__tenkz_kernel_r_xy:nNN {#1}
               \l__tenkz_kernel_r_x_fp \l__tenkz_kernel_r_y_fp
             \__tenkz_render_labelnode:nnn
-              { inner~sep = \__tenkz_dim:n {labelclear} , fill = tenkzPaper }
+              {
+                alias = #1 ,
+                inner~sep = \__tenkz_dim:n {labelclear} ,
+                fill = tenkzPaper
+              }
               {
                 (
                   \__tenkz_kernel_r_pt:n { \l__tenkz_kernel_r_x_fp } ,
@@ -3420,10 +3508,16 @@
             % size they would read as one blot
             \__tenkz_model_get:nnN {#1} {cluster-of} \l__tenkz_kernel_r_c_tl
             \quark_if_no_value:NTF \l__tenkz_kernel_r_c_tl
-              { \__tenkz_render_atom:nnn { dot } {#1} { } }
+              {
+                \__tenkz_render_atom_scaled:nnnn
+                  { dot } {#1} { } { , alias = #1 }
+              }
               {
                 \__tenkz_render_atom_scaled:nnnn { dot } {#1} { }
-                  { , minimum~size = \__tenkz_dim:n {clusterdot} }
+                  {
+                    , alias = #1
+                    , minimum~size = \__tenkz_dim:n {clusterdot}
+                  }
               }
             % a dot cannot inscribe text: its label sits in the label band,
             % on the side label pos names, default south
@@ -3516,6 +3610,7 @@
                 }
           }
       }
+    \tl_put_right:Nn \l__tenkz_kernel_r_c_tl { , alias = #1 }
     % pgfkeys splits its option list on the commas it can see; an unexpanded
     % variable is one opaque key, so the style reaches the node expanded.
     \__tenkz_render_atom_labelled:nen {#1}
@@ -3796,6 +3891,7 @@
     \prop_clear:N \l__tenkz_kernel_r_legdrawn_prop
     \prop_clear:N \l__tenkz_kernel_r_species_prop
     \seq_clear:N \l__tenkz_kernel_r_strings_seq
+    \seq_clear:N \l__tenkz_kernel_r_after_atom_seq
     \seq_set_from_clist:Nn \l__tenkz_kernel_r_palette_seq
       { tenkzMarked , tenkzAction , tenkzExtra , tenkzOperator }
     \int_set:Nn \l__tenkz_kernel_r_rows_int { \__tenkz_kernel_rows: }
@@ -3814,6 +3910,8 @@
     \__tenkz_kernel_r_legs:
     \__tenkz_kernel_r_strings:
     \__tenkz_kernel_r_atoms:
+    \seq_map_inline:Nn \l__tenkz_kernel_r_after_atom_seq
+      { \__tenkz_kernel_r_physical_trace:n {##1} }
     \__tenkz_kernel_r_marks:
     \endtikzpicture
   }
