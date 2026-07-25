@@ -91,11 +91,18 @@ the turns.
 They differ in one parameter: which records the curve must clear. Not the
 geometry, not the clearance, not the rounding, not the ordering rule.
 
-The authors settle it. Diagram 3 of Section III places four copies of one
-tensor at `(\d:0.7)` and draws around them a `rounded corners` rectangle of
-half-width `0.7`. That rectangle is the rounded hull of the four tensors plus
-clearance, and in that one figure it is stroked as a mark, travelled as a
-wire, and stood on as a place. The authors drew all three with one `\draw`.
+The authors settle it, in `tex/RMP_TIKZ_SOURCE_CODE/ImagesReview Section
+III/ImagesReview Section III.tex`. Diagram 3, at lines 178 to 181, draws a
+closed `rounded corners` square of half-width `0.7` and then places four
+copies of one tensor at `(\d:0.7)` for `\d` in `{0,90,180,270}` — which puts
+each tensor on the midpoint of a side. The tensor ring and the contour are the
+same closed curve: one is stroked, the other is stood on. Three lines earlier
+a red string leaves a tensor outside the square and routes around it.
+
+So in one figure, built from one construction, a closed curve offset from a
+set of records serves three roles: it is stroked as a mark, it is stood on as
+a place, and its outside is travelled as a route. The authors did not draw it
+three times because they thought of it once.
 
 The service already exists and is already general: the corridor functions take
 an obstacle set, not a picture, and the maximum-support fold already runs over
@@ -750,13 +757,14 @@ close.
 Consumers: the tangent-space projector, the fine-graining workbench, the
 historical composite, the projector on the tangent space, the boundary lasso,
 the equation-59 workbench, the PEPS renormalization, the second PEPS
-renormalization workbench. Two further blocked targets carry the
-equation-composition name and both are recorded wrong-source — the
-renormalization workbench draws a unitary on a plaquette where the authors drew
-four factorization sub-figures, and the projector target declares a four-leg
-projector where the authors drew the g-string equality. Language work is
-necessary for both and sufficient for neither; both must be redrawn against the
-source before their verdicts can move.
+renormalization workbench. One further blocked target carries the
+equation-composition name and is recorded wrong-source: the renormalization
+workbench draws a unitary on a plaquette where the authors drew four
+factorization sub-figures. It must be redrawn against the source before its
+verdict can move, whatever the language does. (The g-injective projector,
+which declares a four-leg projector where the authors drew the g-string
+equality, is also recorded wrong-source but carries no equation-composition
+need; an earlier draft counted it here in error.)
 
 What would settle the one rule the corpus cannot: whether disjointness under a
 product is compared by position or by the names of the open legs. The
@@ -956,7 +964,7 @@ net of what the corridor amendment and the shrink ledger have already booked.
 | alphabet values | — | — | **−21** |
 | address productions | 9 | 8 | **−1** |
 | sugar rows | 27 | 25 | **−2** |
-| value types | 24 | about 20 | **−4** |
+| value types | 24 | about 21 | **−3** |
 | parser paths | — | — | about **−7** |
 | metric ratios | — | — | **−2** |
 | overload count | — | — | **−3** |
@@ -980,10 +988,13 @@ inline-picture row arrives. Two rows keep their spellings, their tenure and
 their consumers while losing their group expansions, so the count holds while
 three mechanisms die under it.
 
-Value types: the audit specification, the frame specification (which becomes a
-three-word enum with no parameters), the cell set, and the plain number —
-the last pending the census, since the two keys retiring it are, on a reading
-of the key tables, its only two consumers.
+Value types: four leave and one arrives. The audit specification, the frame
+specification (which becomes a three-word enum with no parameters), the cell
+set, and the plain number go — the last pending the census, since the two keys
+retiring it are, on a reading of the key tables, its only two consumers. The
+route key's selector family arrives, and it is counted here rather than
+absorbed: it is a new value type by the census's own definition, and the note
+elsewhere says so.
 
 Overloads: the compass word meaning both a tensor's face and a page direction;
 the picture-margin address against the open-endpoint spelling; the sheet
