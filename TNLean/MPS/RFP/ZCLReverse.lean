@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Channel.FixedPoint.StationarySupport
-import TNLean.MPS.RFP.NNCPHMultiSector
+import TNLean.MPS.CanonicalForm.NormalTensorGauge
 import TNLean.MPS.RFP.PhysicalObservableRealization
 
 /-!
@@ -73,7 +73,6 @@ theorem directSumSectorInclusion_eq_sum (j : Fin r)
   rw [Matrix.trace_traceAdjointMap_mul]
   simp only [Matrix.sum_mul, Matrix.trace_sum, Matrix.trace_single_mul]
   simp [directSumSectorCompression, Matrix.trace, Matrix.diag, Matrix.mul_apply]
-
 
 @[simp] theorem directSumSectorCompression_inclusion (j : Fin r)
     (R : Matrix (Fin (dim j)) (Fin (dim j)) ℂ) :
@@ -153,9 +152,7 @@ theorem directSumSectorRankOne_apply (j : Fin r)
     · simp [Matrix.sum_apply, Sigma.mk.injEq, Ne.symm hk']
   · simp [Matrix.sum_apply, Sigma.mk.injEq, Ne.symm hk]
 
-
-
-@[simp] theorem directSumSectorCompression_reindex
+private theorem directSumSectorCompression_reindex
     (j : Fin r)
     (Y : Matrix ((k : Fin r) × Fin (dim k)) ((k : Fin r) × Fin (dim k)) ℂ) :
     directSumSectorCompression dim j
@@ -223,7 +220,7 @@ section Eigenvectors
 
 /-- A left eigenvector for the trace-pairing adjoint evaluates a power of the
 original map by the corresponding eigenvalue power. -/
-theorem trace_mul_pow_apply_of_traceAdjointMap_hasEigenvector
+private theorem trace_mul_pow_apply_of_traceAdjointMap_hasEigenvector
     {D : ℕ} (E : Module.End ℂ (Matrix (Fin D) (Fin D) ℂ))
     {ν : ℂ} {l : Matrix (Fin D) (Fin D) ℂ}
     (hl : Module.End.HasEigenvector (Matrix.traceAdjointMap E) ν l)
@@ -262,8 +259,8 @@ theorem not_isPositiveGapPhysicalCID_basisDirectSum_of_basis_spectral_pair
   classical
   letI : NeZero (P.basisDim j) := ⟨(hCF.basis_dim_pos j).ne'⟩
   let E := transferMap (P.basis j)
-  have hCh : IsChannel E := by
-    exact transferMap_isChannel (P.basis j) (hCF.basis_left_canonical j)
+  have hCh : IsChannel E :=
+    transferMap_isChannel (P.basis j) (hCF.basis_left_canonical j)
   have hIrr : IsIrreducibleMap E :=
     isIrreducibleCP_transferMap_of_isIrreducibleTensor
       (P.basis j) (hCF.basis_irreducible j)
@@ -312,12 +309,9 @@ theorem not_isPositiveGapPhysicalCID_basisDirectSum_of_basis_spectral_pair
             directSumSectorCompression_transferMap_pow (dim := P.basisDim)
               (B := P.basis) (j := j) n₁ X]
         exact trace_mul_pow_apply_of_traceAdjointMap_hasEigenvector E hl n₁ _
-      have hρ_pow_all : ∀ n : ℕ, (E ^ n) ρ = ρ := by
-        intro n
-        induction n with
-        | zero => simp
-        | succ n ih => rw [pow_succ', Module.End.mul_apply, ih, hρ_fixed]
-      have hρ_pow : (E ^ n₂) ρ = ρ := hρ_pow_all n₂
+      have hρ_pow : (E ^ n₂) ρ = ρ := by
+        rw [Module.End.pow_apply]
+        exact Function.IsFixedPt.iterate hρ_fixed n₂
       have hmid : directSumSectorCompression P.basisDim j
           (((transferMap (directSumTensor P.basis)) ^ n₂)
             (c • directSumSectorInclusion P.basisDim j ρ)) = c • ρ := by
@@ -393,7 +387,28 @@ theorem isPositiveGapBNTZCL_basisDirectSum_iff_isTransferIdempotent_of_spectral_
   constructor
   · exact hCF.isTransferIdempotent_basisDirectSum_of_isPositiveGapBNTZCL_of_spectral_pair
       hspectral
-  · exact hCF.isTransferIdempotent_basisDirectSum_isPositiveGapBNTZCL
+  · intro hRFP
+    letI : ∀ j : Fin P.basisCount, NeZero (P.basisDim j) :=
+      fun j ↦ ⟨(hCF.basis_dim_pos j).ne'⟩
+    apply isPositiveGapBNTZCL_of_isTransferIdempotent_directSum P.basis
+    · refine {
+        blocks_normal := fun j ↦
+          isNormalTensor_of_isNormal_leftCanonical (P.basis j)
+            (hCF.basis_isNormal j) (hCF.basis_left_canonical j)
+        spans_mpv := ?_
+        eventually_li := hCF.bnt_data }
+      intro N _hN
+      refine ⟨fun _ ↦ 1, fun σ ↦ ?_⟩
+      rw [← show toTensorFromBlocks (d := d) (fun _ ↦ 1) P.basis =
+          directSumTensor P.basis by
+        funext i
+        simp [toTensorFromBlocks, directSumTensor],
+        mpv_toTensorFromBlocks_eq_sum]
+      simp
+    · exact hCF.basis_irreducible
+    · exact hCF.basis_left_canonical
+    · exact hCF.basis_distinct
+    · exact hRFP
 
 /-- Source physical BNT zero correlation length implies transfer idempotence at
 the multiplicity-one representative under the line-1250 spectral assertion. -/
