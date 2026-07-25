@@ -87,6 +87,35 @@ theorem hasFinalLabelSelectorWords_of_hasBlockSelectorWords
     Fam.HasFinalLabelSelectorWords S :=
   hSel
 
+/-- Finite scalar sums commute with a dependent block diagonal whose blocks
+have a fixed identity Kronecker factor. -/
+private theorem sum_sum_smul_blockDiagonal'_one_kronecker
+    {ι κ₁ κ₂ : Type*} [DecidableEq ι] [Fintype κ₁] [Fintype κ₂]
+    (m n : ι → ℕ) (c : κ₁ → κ₂ → ℂ)
+    (A : (i : ι) → κ₁ → κ₂ → Matrix (Fin (n i)) (Fin (n i)) ℂ) :
+    (∑ a : κ₁, ∑ b : κ₂, c a b • Matrix.blockDiagonal' (fun i =>
+      (1 : Matrix (Fin (m i)) (Fin (m i)) ℂ) ⊗ₖ A i a b)) =
+      Matrix.blockDiagonal' (fun i =>
+        (1 : Matrix (Fin (m i)) (Fin (m i)) ℂ) ⊗ₖ
+          (∑ a : κ₁, ∑ b : κ₂, c a b • A i a b)) := by
+  classical
+  simp_rw [← Matrix.blockDiagonal'_smul]
+  let blockDiagonalHom :=
+    Matrix.blockDiagonal'AddMonoidHom
+      (fun i => Fin (m i) × Fin (n i)) (fun i => Fin (m i) × Fin (n i)) ℂ
+  change (∑ a : κ₁, ∑ b : κ₂, blockDiagonalHom (fun i =>
+      c a b • ((1 : Matrix (Fin (m i)) (Fin (m i)) ℂ) ⊗ₖ A i a b))) =
+    blockDiagonalHom (fun i =>
+      (1 : Matrix (Fin (m i)) (Fin (m i)) ℂ) ⊗ₖ
+        (∑ a : κ₁, ∑ b : κ₂, c a b • A i a b))
+  simp_rw [← map_sum blockDiagonalHom]
+  congr 1
+  funext i
+  ext x y
+  by_cases hxy : x.1 = y.1
+  · simp [Matrix.sum_apply, Matrix.smul_apply, Matrix.one_apply, hxy]
+  · simp [Matrix.sum_apply, Matrix.smul_apply, hxy]
+
 /-- **Positive-length final-label selectors make every pair fusion map surjective.**
 
 Suppose that the positive trace-power coefficients are independent of the positive chain
@@ -185,13 +214,11 @@ theorem fusionIsometry_mul_conjTranspose_eq_one_of_lengthIndependent_of_selector
               (∑ ε : Λ, ∑ w : Fin (n + 1) → Fin (p * p),
                 coeff ε w •
                   MPSTensor.evalWord (Fam.tensor γ).toMPSTensor (List.ofFn w)) := by
-        ext ⟨γ, μ, b⟩ ⟨γ', μ', b'⟩
-        by_cases hγ : γ = γ'
-        · subst γ'
-          simp [Matrix.sum_apply, Matrix.smul_apply, hDword,
-            Matrix.blockDiagonal'_apply, Finset.mul_sum, mul_left_comm]
-        · simp [Matrix.sum_apply, Matrix.smul_apply, hDword,
-            Matrix.blockDiagonal'_apply, hγ]
+        simp_rw [hDword]
+        exact sum_sum_smul_blockDiagonal'_one_kronecker
+          (fun γ => Fam.chi.dim α β γ) Fam.bondDim coeff
+          (fun γ _ w =>
+            MPSTensor.evalWord (Fam.tensor γ).toMPSTensor (List.ofFn w))
       _ = Matrix.blockDiagonal' fun γ =>
           (1 : Matrix (Fin (Fam.chi.dim α β γ))
             (Fin (Fam.chi.dim α β γ)) ℂ) ⊗ₖ
@@ -451,6 +478,38 @@ theorem conjTranspose_mul_tripleFusionComparison_eq_one_of_lengthIndependent_of_
     Fam.rightFusionIsometry_mul_conjTranspose_eq_one_of_lengthIndependent_of_selectorWords
       c hχ hLI hS hSel]
 
+/-- The fixed-final matrix entries of the triple-fusion comparison intertwine
+the corresponding final-label tensor entries.
+
+Source: arXiv:1511.08090, equations `zippercondition2` and `Fmove`, lines
+237--277; arXiv:1606.00608, lines 995--1010. -/
+private theorem tripleFusionComparison_final_entry_intertwines_of_lengthIndependent
+    (c : BNTLabelCoefficientFamily Λ)
+    (hχ : c.HasPositiveLengthChiTracePowerForm Fam.chi)
+    (hLI : c.LengthIndependent) (α β γ ε ε' δL δR : Λ)
+    (μL : Fin (Fam.chi.dim α β δL)) (νL : Fin (Fam.chi.dim δL γ ε))
+    (μR : Fin (Fam.chi.dim β γ δR)) (νR : Fin (Fam.chi.dim α δR ε'))
+    (bL : Fin (Fam.bondDim ε)) (bR : Fin (Fam.bondDim ε'))
+    (ij : Fin (p * p)) :
+    (∑ b, (Fam.tensor ε).toMPSTensor ij bL b *
+        Fam.tripleFusionComparison α β γ
+          (Fam.leftFinalRow α β γ ε ⟨δL, μL, νL, b⟩)
+          (Fam.rightFinalRow α β γ ε' ⟨δR, μR, νR, bR⟩)) =
+      ∑ b, Fam.tripleFusionComparison α β γ
+          (Fam.leftFinalRow α β γ ε ⟨δL, μL, νL, bL⟩)
+          (Fam.rightFinalRow α β γ ε' ⟨δR, μR, νR, b⟩) *
+        (Fam.tensor ε').toMPSTensor ij b bR := by
+  obtain ⟨⟨i, k⟩, rfl⟩ := finProdFinEquiv.surjective ij
+  have hFull := Fam.tripleFusionComparison_intertwines_of_lengthIndependent
+    c hχ hLI α β γ i k
+  have hEntry := congrArg
+    (fun X => X (Fam.leftFinalRow α β γ ε ⟨δL, μL, νL, bL⟩)
+      (Fam.rightFinalRow α β γ ε' ⟨δR, μR, νR, bR⟩)) hFull
+  simpa [Matrix.mul_apply, Matrix.blockDiagonal'_apply,
+    leftFinalRow, rightFinalRow, Fintype.sum_sigma,
+    Fintype.sum_prod_type, Matrix.one_apply, MPOTensor.toMPSTensor]
+    using hEntry
+
 private theorem rectangularIntertwiner_eq_zero_of_selectorWords
     {d D₁ D₂ S : ℕ} (A : MPSTensor d D₁) (B : MPSTensor d D₂)
     (C : Matrix (Fin D₁) (Fin D₂) ℂ)
@@ -524,17 +583,10 @@ theorem tripleFusionComparison_finalSector_submatrix_eq_zero
       (Fam.tensor ε).toMPSTensor ij * Cblock =
         Cblock * (Fam.tensor ε').toMPSTensor ij := by
     intro ij
-    obtain ⟨⟨i, k⟩, rfl⟩ := finProdFinEquiv.surjective ij
-    have hFull := Fam.tripleFusionComparison_intertwines_of_lengthIndependent
-      c hχ hLI α β γ i k
     ext b b'
-    have hEntry := congrArg
-      (fun X => X (Fam.leftFinalRow α β γ ε ⟨δL, μL, νL, b⟩)
-        (Fam.rightFinalRow α β γ ε' ⟨δR, μR, νR, b'⟩)) hFull
-    simpa [Cblock, C, Matrix.mul_apply, Matrix.blockDiagonal'_apply,
-      leftFinalRow, rightFinalRow, Fintype.sum_sigma, Fintype.sum_prod_type,
-      Matrix.one_apply, MPOTensor.toMPSTensor]
-      using hEntry
+    simpa [Cblock, C, Matrix.mul_apply] using
+      Fam.tripleFusionComparison_final_entry_intertwines_of_lengthIndependent
+        c hχ hLI α β γ ε ε' δL δR μL νL μR νR b b' ij
   obtain ⟨coeff, hSelf, hOther⟩ := hSel ε
   have hZero := rectangularIntertwiner_eq_zero_of_selectorWords
     (Fam.tensor ε).toMPSTensor (Fam.tensor ε').toMPSTensor Cblock hLetter
@@ -594,19 +646,12 @@ theorem exists_tripleFusionComparison_finalSector_eq_kronecker_one_of_separation
             (Fam.RightFinalMultiplicity α β γ ε) ℂ) ⊗ₖ
             (Fam.tensor ε).toMPSTensor ij) := by
     intro ij
-    obtain ⟨⟨i, k⟩, rfl⟩ := finProdFinEquiv.surjective ij
-    have hFull := Fam.tripleFusionComparison_intertwines_of_lengthIndependent
-      c hχ hLI α β γ i k
     ext ⟨⟨δL, μL, νL⟩, bL⟩ ⟨⟨δR, μR, νR⟩, bR⟩
-    simp [C, Matrix.mul_apply, MPOTensor.toMPSTensor,
+    simpa [C, Matrix.mul_apply,
       leftFinalIndexEquiv_symm_apply, rightFinalIndexEquiv_symm_apply,
-      Fintype.sum_prod_type, Matrix.one_apply]
-    have hEntry := congrArg
-      (fun X => X (Fam.leftFinalRow α β γ ε ⟨δL, μL, νL, bL⟩)
-        (Fam.rightFinalRow α β γ ε ⟨δR, μR, νR, bR⟩)) hFull
-    simpa [Matrix.mul_apply, Matrix.blockDiagonal'_apply,
-      leftFinalRow, rightFinalRow, Fintype.sum_sigma,
-      Fintype.sum_prod_type, Matrix.one_apply] using hEntry
+      Fintype.sum_prod_type, Matrix.one_apply] using
+      Fam.tripleFusionComparison_final_entry_intertwines_of_lengthIndependent
+        c hχ hLI α β γ ε ε δL δR μL νL μR νR bL bR ij
   obtain ⟨F, hF⟩ :=
     Fam.exists_reindexed_intertwiner_eq_kronecker_one_of_isInjective
       α β γ ε hε C hC
