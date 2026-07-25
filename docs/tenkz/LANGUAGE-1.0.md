@@ -95,12 +95,17 @@ frame-generated bonds.
 | `ports=` | typed-port-list | — | from skin | `TKZ-PORT-*` |
 | `frame=` | small-enum | `flat` `plane` `circle` | `flat` | `TKZ-FRAME-*` |
 | `species=` | identifier | — | empty | `TKZ-SPECIES-*` |
-| `label pos=` | small-enum | an angle or `auto` | `auto` | `TKZ-LABEL-*` |
+| `label pos=` | angle | a bearing in the record's own axes, or `auto` | `auto` | `TKZ-LABEL-*` |
 | `conjugate` | flag | — | false | `TKZ-ATOM-*` |
 | `void=` | small-enum | `open` `sealed` | unset | `TKZ-ATOM-*` |
 
 A face is an angle in the record's own axes (§3, §4), so the outward physical
-face of a row is that row's own normal and needs no page-relative word.
+face of a row is that row's own normal and needs no page-relative word. A
+label's placement is the same kind of quantity and takes the same type: a
+bearing from the host, read in the host's axes, so a label on a turned atom
+turns with it and a label on a station of a circle frame stands radially out
+of it. One rule, one alphabet, and the four compass words are one sugar
+spelling of the four right angles serving faces and placements alike.
 
 A typed-port list is a braced comma-separated list of ports, each written
 
@@ -142,7 +147,7 @@ carries (§5).
 | `form=` | small-enum | `bracket` `enclosure` `label` | `label` |
 | `species=` | identifier | — | empty |
 | `outline` | flag | — | false |
-| `label pos=` | small-enum | an angle or `auto` | `auto` |
+| `label pos=` | angle | a bearing in the host's own axes, or `auto` | `auto` |
 | `name=` | identifier | — | generated |
 
 A mark takes the `species=` that atoms and wires already carry, with the same
@@ -158,21 +163,29 @@ cited paper's palette reaches a contour and the string that ends in it alike.
 | `strict` | flag | false; benchmark and CI set it |
 | `theme=` | identifier | `house` |
 
-### 2.7 Value types (21)
+### 2.7 Value types (22)
 
-flag · integer · length · pair · identifier · small-enum · row-list · row ·
-selector · route-spec · address · address-list · typed-port-list ·
+flag · integer · length · pair · angle · identifier · small-enum · row-list ·
+row · selector · route-spec · address · address-list · typed-port-list ·
 crossing-list · port-pair-list · trace-spec · size-table · hue-source ·
 bond-policy · size-class · void-policy.
 
-Five types left and two arrived. The audit specification left with `check=`;
-the frame specification became a three-word enum with no parameters; the
-plain number lost both its consumers with `bend=` and `inset=`; the
-mathematics list lost both its consumers with the two page-relative atom
-keys; and the cell set is the selector, which every key that names a set of
-records now takes. The route's side-of-a-selection family is the second
-arrival, and it is counted here rather than absorbed, because a value family
-the census can see is an element.
+Five types left and three arrived. The audit specification left with
+`check=`; the frame specification became a three-word enum with no
+parameters; the plain number lost both its consumers with `bend=` and
+`inset=`; the mathematics list lost both its consumers with the two
+page-relative atom keys; and the cell set is the selector, which every key
+that names a set of records now takes. Arriving: the selector, the route's
+side-of-a-selection family, and the angle.
+
+The angle is minted rather than borrowed, and the reason is worth stating
+because it is the only new type here that could have been avoided on paper.
+A bearing is not a plain number: a number is a bend factor or an inset
+count, page quantities with no frame, whereas an angle is read in a record's
+own axes and transforms with them. Typing a face and a label placement as
+`number` would have kept the count lower by reviving a type these amendments
+retired and by flattening the distinction the local-axes rule exists to make.
+The census gains one and says so.
 
 The census covers key values; positional label arguments are mathematics and
 carry no key type. Every registry row names exactly one value type; a shared
@@ -192,6 +205,17 @@ Two whole rows retired. The atom faces retired because a face is an angle in
 the record's own axes and not a word on the page, which also ends the compass
 word's second sense. The weights retired because the stroke follows the type
 the port already carries.
+
+This table holds the words that cross scopes, which is what the rule below
+governs; a `small-enum` whose words serve one key alone is listed with that
+key and needs no row here. What the table may never hold is a value set that
+is not closed. Two are open, and neither is here: `label pos=` takes an
+angle, which is the same quantity a face is and carries the same type (§2.3),
+and the side of a hull route belongs to the route family's own grammar (§5),
+as a port's angle belongs to a typed port's. The four compass words are not
+an alphabet row either. They are one sugar spelling of the four right angles,
+serving faces and label placements by the same rule, and they arrive with the
+change that implements angle-valued faces.
 
 An alphabet word names one operation, applied at any scope. `open` opens an
 index: as a side word it opens a boundary, as the selector key `open=` it
@@ -680,19 +704,21 @@ spelling those tables do not carry is a defect in the sketch. No millimetres
 appear; `% sugar:` marks each sugar spelling with its expansion.
 
 Kernel form is what settles the one question these sketches could otherwise
-answer two ways. A face is an angle (§3), so a port below is written as its
-angle and never as a letter. Every compass word that does appear is a **side
-word**, which is a different alphabet and the only sense those words still
-carry: a boundary side (`west=trace`) and the side of a hull a route travels
-(`route={s of ...}`). That is the one-token-one-meaning rule doing its work
-rather than being suspended for the examples.
+answer two ways. A face is an angle and so is a label placement (§2.3, §3),
+so both are written below as angles and never as letters — `label pos=45`,
+`label pos=180`, `B.270`, `R.90@1`. The only compass words left are the side
+of a hull a route travels (`route={s of ...}`), which belongs to the route
+family's own grammar, and the four boundary key names (`west=`, `east=`,
+`north=`, `south=`), which are key names and not values at all. That is the
+one-token-one-meaning rule doing its work rather than being suspended for the
+examples.
 
 An author need not write the angle. The four compass words survive as a sugar
 spelling of the four right angles — `n` for 90, `e` for 0, `s` for 270, `w`
-for 180 — so every fixture in the corpus keeps its spelling. That row arrives
-with the change that implements angle-valued faces, and the sugar ledger
-moves from twenty-five to twenty-six there rather than here, so the one
-arrival is counted once.
+for 180 — covering faces and label placements alike, so every fixture in the
+corpus keeps its spelling. That row arrives with the change that implements
+angle-valued faces, and the sugar ledger moves from twenty-five to
+twenty-six there rather than here, so the one arrival is counted once.
 
 ### 12.1 Braid (`rmp-iii-b-braid-one`)
 

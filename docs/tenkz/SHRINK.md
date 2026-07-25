@@ -382,7 +382,7 @@ refuses every saving that another ledger has already recorded.
 | alphabet values | — | — | **−17** (22 out, 5 in) |
 | address productions | 9 | 8 | **−1** |
 | sugar rows | 27 | 25 | **−2** |
-| value types | 24 | 21 | **−3** (5 out, 2 in) |
+| value types | 24 | 22 | **−2** (5 out, 3 in) |
 | tombstone rows | 23 | 36 | **+13**, which is what a tombstone table is for |
 | metric ratios | 45 | 45 | **0** |
 | registry census M1 | 191 | 191 | 0 |
@@ -401,9 +401,27 @@ Alphabet values, spelled out: eight face words, five tint words, three weight
 words, four mark forms and two frame words leave; two frame words and the
 three joiner classes arrive. Value types: the audit specification, the frame
 specification, the plain number, the mathematics list and the cell set leave;
-the selector and the route's side-of-a-selection family arrive. The
-mathematics list is a departure the notes missed — its only two consumers
+the selector, the route's side-of-a-selection family and the angle arrive.
+The mathematics list is a departure the notes missed — its only two consumers
 were the two page-relative atom keys, and it leaves with them.
+
+**A correction to this table, made under review.** The value-type row first
+read minus three, on two arrivals. It is minus two, on three. Retiring the
+face words made a label placement an angle as well as a face, and no type in
+the list held an angle: the plain number left in this same session, and a
+bearing is not a number anyway, because a number is a page quantity with no
+frame while an angle is read in a record's own axes and transforms with them.
+Typing the placement `number` would have bought the lower count by reviving a
+type these amendments retired and by flattening the distinction the
+local-axes rule exists to make. The angle is minted, the census gains one,
+and the row says so.
+
+Two ledgers do not move with it. The alphabet table gains no row, because an
+angle is not a closed alphabet and the four compass words are sugar rather
+than an alphabet — and that sugar is the row already attributed below to the
+change that lands angle-valued faces, covering faces and label placements by
+the same rule. Booking it here for the placement, having declined to book it
+here for the face, would be the same error twice.
 
 ### What was refused, and why
 
