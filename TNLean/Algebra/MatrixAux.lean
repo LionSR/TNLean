@@ -568,15 +568,6 @@ theorem scalar_of_filtering_min {R : Matrix n n ℂ} (hR : R.PosSemidef)
         have hzero : R i j = 0 := Complex.ext hre him
         simp [hij, hzero]
 
-/-- Wolf §2.3 AM--GM stationarity core: a positive semidefinite matrix whose real trace
-pairing is minimized by the identity among determinant-one filters is scalar. -/
-theorem posDef_scalar_of_filtering_min {D : ℕ} {R : Matrix (Fin D) (Fin D) ℂ}
-    (hR : R.PosSemidef)
-    (hmin : ∀ A : Matrix (Fin D) (Fin D) ℂ, A.det = 1 →
-      (trace (Aᴴ * A * R)).re ≥ (trace R).re) :
-    ∃ c : ℂ, R = c • (1 : Matrix (Fin D) (Fin D) ℂ) :=
-  scalar_of_filtering_min hR hmin
-
 end FilteringMinimum
 
 section PosSemidefTrace
@@ -763,14 +754,6 @@ theorem mulVec_eq_zero_left
   · intro i
     fin_cases i <;> simp [C, hA, hB]
   · simpa [C] using hv
-
-/-- For PSD matrices `A` and `B`, `ker(A + B) ⊆ ker(B)`. -/
-theorem mulVec_eq_zero_right
-    {A B : Matrix n n ℂ}
-    (hA : A.PosSemidef) (hB : B.PosSemidef)
-    (v : n → ℂ) (hv : (A + B) *ᵥ v = 0) :
-    B *ᵥ v = 0 := by
-  exact mulVec_eq_zero_left hB hA v (by simpa [add_comm] using hv)
 
 variable {D : ℕ}
 
