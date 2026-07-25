@@ -32,12 +32,15 @@ formula\footnote{Local source:
 \begin{align}
   \langle V|O_{1}O_{2}|V\rangle
   =\tr\!\left(\mathbb E_{O_{1}} \mathbb E^{\,n_{2}-n_{1}-1}
-  \mathbb E_{O_{2}} \mathbb E^{\,N+n_{1}-n_{2}'-1}\right).
+  \mathbb E_{O_{2}} \mathbb E^{\,N+n_{1}-n_{2}-1}\right),
 \end{align}
+printed for single-site observables at positions $n_{1}<n_{2}$. Generalized
+to block observables on the regions $[n_{1},n_{1}']$ and $[n_{2},n_{2}']$ of
+Definition~3.3, the exponents read $n_{2}-n_{1}'-1$ and $N+n_{1}-n_{2}'-1$.
 The forward implication ``if $\mathbb E^{2}=\mathbb E$, then one will have
 CID'' (line~498) substitutes $\mathbb E^{n}=\mathbb E$ into this formula.
 Idempotence justifies that substitution only for $n\ge 1$. Between adjacent
-observables the middle exponent is $n_{2}-n_{1}-1=0$, so the corresponding
+observables the middle exponent is $n_{2}-n_{1}'-1=0$, so the corresponding
 transfer block is $\mathbb E^{0}=1$, which idempotence does not identify with
 $\mathbb E$. The printed argument therefore covers only configurations with
 at least one free site between the observables, while the definition also
