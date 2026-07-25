@@ -1,12 +1,12 @@
 % Target: rmp-iv-intersection-lhs-five
-% Formula: After inversion, the L boundary condition retains two open indices.
-% Ink: Boundary tensor L is the only atom and carries two explicit upper ports.
-% Boundary: L has no virtual boundary stubs; its two upper indices remain open.
+% Formula: After inversion, the L boundary condition retains three open indices.
+% Ink: L alone carries one physical and two virtual open ports.
+% Boundary: L's west and east virtual stubs and its upward physical leg remain open.
 % Source: paper TN-Review-main.tex line 2073; author source ImagesReview Section
 %   IV/ImagesReview Section IV.tex lines 142-147 (Ltensor5)
 % Capabilities: grid, typed-ports
 \[
-  \begin{tenkz}[rows={ket}, boundary=none]
-    \tn[pill, wide=2, up at={1,2}]{L} &
+  \begin{tenkz}[rows={ket}]
+    \tn[pill, wide=3, up at={3}]{L} & &
   \end{tenkz}
 \]

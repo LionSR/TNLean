@@ -835,82 +835,73 @@ note = "border hue; arrowed legs absent"
 
 [[verdict]]
 id = "rmp-iv-intersection-lhs-one"
-status = "blocked"
+status = "cosmetic-gap"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
-defects = ["placement-illegible"]
-missing = ["enclosure-marks"]
-case_sha256 = "45361eb14513b7826b57e8556d58fdcc3ae99aca36ee3b2f3e1d69fa13956e0b"
-reviewed = "2026-07-23"
-renderer = "maintainer-page-review-2026-07-23"
-note = "maintainer: extremely bad; the R wrap operator"
+case_sha256 = "ae8c789b406e104a8a7e33a741d0452a5d47e5a484807ad9be90b33cc14ef6c1"
+reviewed = "2026-07-25"
+renderer = "source-split-page-review-2026-07-25"
+note = "Contraction and boundary types match; exposed virtual ends route sideways."
 
 [[verdict]]
 id = "rmp-iv-intersection-rhs-one"
-status = "blocked"
+status = "cosmetic-gap"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
-missing = ["enclosure-marks"]
-case_sha256 = "9c58483f0d1b1199ef75967f8adbc388908609769ebed569c3f1c2cd8ec8da17"
-reviewed = "2026-07-23"
-renderer = "maintainer-page-review-2026-07-23"
-note = "\"these R are failing\""
+case_sha256 = "26518ae10460bb91c1349bab30554d7967c93ab09cd9ccb4c651e6cc3ed32667"
+reviewed = "2026-07-25"
+renderer = "source-split-page-review-2026-07-25"
+note = "Contraction and boundary types match; exposed virtual ends route sideways."
 
 [[verdict]]
 id = "rmp-iv-intersection-lhs-two"
-status = "blocked"
+status = "cosmetic-gap"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
-missing = ["enclosure-marks"]
-case_sha256 = "30324eb05ae2b8b115737bfd997c040f2f46c42553893636e273c2d1a94e714b"
-reviewed = "2026-07-23"
-renderer = "maintainer-page-review-2026-07-23"
-note = "wrap drawn as a crossing"
+case_sha256 = "cefed751ec317b47eb6e7d0e31a3d137d4e0766d997ef28adf75dfd56f97712c"
+reviewed = "2026-07-25"
+renderer = "source-split-page-review-2026-07-25"
+note = "Crossing removed; the two virtual openings route sideways rather than up."
 
 [[verdict]]
 id = "rmp-iv-intersection-rhs-two"
-status = "blocked"
+status = "cosmetic-gap"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
-missing = ["enclosure-marks"]
-case_sha256 = "0248394b94248758d3d66cb05a041c26a3998fc3d0f2553c3ab356b0a6e309bf"
-reviewed = "2026-07-23"
-renderer = "maintainer-page-review-2026-07-23"
-note = "spurious crossing over R"
+case_sha256 = "5a338125a02a0b4f01f458e7b062cc8d48b0e9d3504342fa7a17c4bc2941776d"
+reviewed = "2026-07-25"
+renderer = "source-split-page-review-2026-07-25"
+note = "Spurious crossing removed; exposed virtual ends route sideways."
 
 [[verdict]]
 id = "rmp-iv-intersection-lhs-three"
-status = "blocked"
+status = "cosmetic-gap"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
-missing = ["enclosure-marks"]
-case_sha256 = "1200a65c22b30b2052700cd25dec611c7c7e6508b407a945faee4f52310867d9"
-reviewed = "2026-07-23"
-renderer = "maintainer-page-review-2026-07-23"
-note = "crossing near the L edge"
+case_sha256 = "b591ff811989b4220aa32c49573a8b19c307c8cf5c763ac3ef3034d2210b9e42"
+reviewed = "2026-07-25"
+renderer = "source-split-page-review-2026-07-25"
+note = "Crossing removed; exposed virtual ends route sideways."
 
 [[verdict]]
 id = "rmp-iv-intersection-rhs-three"
-status = "blocked"
+status = "cosmetic-gap"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
-missing = ["enclosure-marks"]
-case_sha256 = "0260f3aee3ffd1141c5a80ab42bac6426a3292a4d8c1dac932e0e1bc3943c9c1"
-reviewed = "2026-07-23"
-renderer = "maintainer-page-review-2026-07-23"
-note = "wrap routing"
+case_sha256 = "0a6d511637bd08511c69d8cfa061bdbd358e0038477d336d030afde609728500"
+reviewed = "2026-07-25"
+renderer = "source-split-page-review-2026-07-25"
+note = "Contraction and boundary types match; exposed virtual ends route sideways."
 
 [[verdict]]
 id = "rmp-iv-intersection-lhs-four"
-status = "blocked"
+status = "cosmetic-gap"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
-defects = ["boundary-mismatch"]
-missing = ["enclosure-marks"]
-case_sha256 = "cb341aa7dd37f15d5c60463f6c6b045d2ff4cb93f9a391c75028e69b1afc6065"
-reviewed = "2026-07-23"
-renderer = "maintainer-page-review-2026-07-23"
-note = "open-leg count differs from source"
+case_sha256 = "febcdfd830331c95ea06f6901e70162756c691e46d63e4bd842ca07fbfec05a8"
+reviewed = "2026-07-25"
+renderer = "source-split-page-review-2026-07-25"
+note = "Five-leg boundary restored; the free identity wire is horizontal, not U-shaped."
 
 [[verdict]]
 id = "rmp-iv-intersection-rhs-four"
@@ -925,25 +916,23 @@ note = "layout and wrap"
 
 [[verdict]]
 id = "rmp-iv-intersection-lhs-five"
-status = "blocked"
+status = "cosmetic-gap"
 pairing = "verified"
 pairing_by = "codex-pairing-sweep-2026-07-24"
-missing = ["enclosure-marks"]
-case_sha256 = "b78d7d2d6cf88f96b0b643d3ef0a1c603ea37b5055df82f34f25635efdccb6e5"
-reviewed = "2026-07-23"
-renderer = "maintainer-page-review-2026-07-23"
-note = "wrap leg drawn straight"
+case_sha256 = "e924dfbf4ced474517613d44cef1fe1264271740ce087570ca145a29c4ac96a4"
+reviewed = "2026-07-25"
+renderer = "source-split-page-review-2026-07-25"
+note = "Three-leg boundary restored; the virtual stubs route sideways rather than up."
 
 [[verdict]]
 id = "rmp-iv-intersection-rhs-five"
-status = "blocked"
+status = "cosmetic-gap"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
-missing = ["enclosure-marks"]
-case_sha256 = "2c5cfa360094943cd5c5e2af0c070fcd702cde2141a13dab1d821a51ef3c6c06"
-reviewed = "2026-07-23"
-renderer = "maintainer-page-review-2026-07-23"
-note = "cup routing"
+case_sha256 = "83656f26ed5b93360c441830219d10a8ca20b69492de50c96cf6a7ae7c66ae30"
+reviewed = "2026-07-25"
+renderer = "source-split-page-review-2026-07-25"
+note = "Boundary types match; the equivalent C--X contraction is mirrored."
 
 [[verdict]]
 id = "rmp-iv-intersection-lhs-six"

@@ -1,21 +1,13 @@
 % Target: rmp-iv-intersection-lhs-four
 % Formula: The inverse S removes the jointly injective pair A--B from the L side.
-% Ink: Four open index legs rise from the boundary tensor L.
-% Boundary: L exposes two virtual and two physical indices, all upward.
+% Ink: Three open index legs leave L; a separate identity wire adds two more.
+% Boundary: L has two virtual and one physical index; the free wire adds two virtuals.
 % Source: paper TN-Review-main.tex line 2068; author source ImagesReview Section
 %   IV/ImagesReview Section IV.tex lines 134-141 (Ltensor4)
-% Capabilities: free-graph, typed-ports
+% Capabilities: grid, typed-ports
 \[
-  \begin{tenkzfree}
-    \tnput[pill, ports={135:physical,west:virtual,east:virtual,45:physical}]
-      {l}{(0mm,-4mm)}{\qquad L\qquad}
-    \tnput[boundary, ports={south:physical}]{pL}{(-8mm,9mm)}{}
-    \tnput[boundary, ports={south:virtual}]{vL}{(-3mm,9mm)}{}
-    \tnput[boundary, ports={south:virtual}]{vR}{(3mm,9mm)}{}
-    \tnput[boundary, ports={south:physical}]{pR}{(8mm,9mm)}{}
-    \tnjoin[route=hv]{l.135}{pL.south}
-    \tnjoin[route=hv]{l.west}{vL.south}
-    \tnjoin[route=hv]{l.east}{vR.south}
-    \tnjoin[route=hv]{l.45}{pR.south}
-  \end{tenkzfree}
+  \begin{tenkz}[rows={ket:nopair, ket:nopair}, tensor style=box]
+    & \tnghost{} & \tnghost{} & \\
+    \tn[pill, wide=4, up at={4}]{L} & & &
+  \end{tenkz}
 \]
