@@ -345,6 +345,35 @@ spectral split → block extraction → MPV calculation → strict bounds
   Before promotion, verify that the resulting type families (gauge existence vs. bond-dimension
   equality) can be unified under a single dispatch lemma without bloating the argument list.
 
+### disjoint-region crossing geometry case-split — candidate
+- **Pattern:** for a crossing edge between two disjoint regions of a three-block
+  partition, four-way `rcases` on the two boundary-edge disjunctions, dispatching the
+  two same-endpoint impossible branches by `absurd` via partition disjointness and the
+  two live branches by pinning each endpoint into the two crossing regions to exclude
+  incidence to the third.
+- **Seen:** ≥4 occurrences across ≥2 files (2026-07-25):
+  `RegionBlock/CoarseThreeSite5.lean` (`isCrossing_rb_of_incident`,
+  `isCrossing_rc_of_incident`, `isCrossing_bc_of_incident`,
+  `not_isRegionIncidentEdge_blue_of_crossing_rc`),
+  `RegionBlock/CoarseThreeSite9.lean:77` (`not_isRegionIncidentEdge_complement_of_crossing_rb`),
+  plus the `UnionInjectivity.lean:337` / `UnionInjectivityGeneral2.lean:311` mirror pair
+  (`not_isRegionIncidentEdge_complement_of_blueRedCrossing`).
+- **Abstraction (proposed):** one lemma per shape over an abstract three-piece
+  partition — `isCrossingEdge_of_incident` (incident to both of two disjoint regions ⇒
+  crossing) and `not_isRegionIncidentEdge_of_isCrossingEdge` (crossing between two
+  regions disjoint from a third ⇒ not incident to the third) — with the region-frame
+  API (`IsRegionIncidentEdge`, `IsCrossingEdge`) already shared. Recorded rather than
+  promoted in the triMerge migration PR: the `IsCrossingEdge`-hypothesis restate
+  (sharing the `CoarseThreeSite9` derivation shape) was applied there, but unifying the
+  six sites needs a partition-with-regions hypothesis bundle common to
+  `CoarseThreeSite5/9` and the `UnionInjectivity*` geometry, which is a design
+  decision for the #4522 interface arc.
+- **Notes:** the incident⇒crossing and crossing⇒non-incident directions are mutually
+  inverse facts about the same four-way case split; promote both directions together
+  or not at all. The `UnionInjectivity*` sites may be subsumed by the planned
+  `NormalEdgeBlockingData.toThreeBlockGeometry` mirror-kill (see #4522), which would
+  change the occurrence count before any promotion.
+
 ---
 
 ## Rejected

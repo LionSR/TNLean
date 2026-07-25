@@ -123,23 +123,33 @@ theorem isCrossing_bc_of_incident (F : CoherentCoarseBlockingFrame (G := G) (d :
       Or.inl ⟨hc1, (Finset.disjoint_left.mp hP.blue_disjoint_complement) hb2⟩⟩
   · exact absurd hc2 ((Finset.disjoint_left.mp hP.blue_disjoint_complement) hb2)
 
-/-- An edge incident to both red and complement is not incident to blue: each endpoint
-lies in red or in the complement, both disjoint from blue. -/
-theorem not_isRegionIncidentEdge_blue_of_incident_rc
-    (F : CoherentCoarseBlockingFrame (G := G) (d := d) A)
-    (hP : F.frame.IsPartition) {e : Edge G}
-    (hr : IsRegionIncidentEdge (G := G) F.frame.red e)
-    (hc : IsRegionIncidentEdge (G := G) F.frame.complement e) :
+/-- A red-to-complement crossing edge is not incident to the blue block: its two
+endpoints lie one in the red block and one in the complement, both disjoint from blue.
+(Mirrors `not_isRegionIncidentEdge_complement_of_crossing_rb` in `CoarseThreeSite9`
+with the roles of blue and complement swapped.) -/
+theorem not_isRegionIncidentEdge_blue_of_crossing_rc
+    (F : CoherentCoarseBlockingFrame (G := G) (d := d) A) (hP : F.frame.IsPartition)
+    {e : Edge G} (hg : IsCrossingEdge (G := G) A F.frame.red F.frame.complement e) :
     ¬ IsRegionIncidentEdge (G := G) F.frame.blue e := by
-  rcases hr with hr1 | hr2 <;> rcases hc with hc1 | hc2
-  · exact absurd hc1 ((Finset.disjoint_left.mp hP.red_disjoint_complement) hr1)
-  · rintro (hb | hb)
-    · exact (Finset.disjoint_left.mp hP.red_disjoint_blue) hr1 hb
-    · exact (Finset.disjoint_left.mp hP.blue_disjoint_complement) hb hc2
-  · rintro (hb | hb)
-    · exact (Finset.disjoint_left.mp hP.blue_disjoint_complement) hb hc1
-    · exact (Finset.disjoint_left.mp hP.red_disjoint_blue) hr2 hb
-  · exact absurd hc2 ((Finset.disjoint_left.mp hP.red_disjoint_complement) hr2)
+  -- The red-to-complement crossing edge has, on each endpoint, a red and a complement
+  -- boundary condition; the two combine to place each endpoint in red or complement.
+  have hblue : ∀ v : V, v ∈ F.frame.red ∨ v ∈ F.frame.complement → v ∉ F.frame.blue := by
+    rintro v (hr | hc) hb
+    · exact (Finset.disjoint_left.mp hP.red_disjoint_blue) hr hb
+    · exact (Finset.disjoint_left.mp hP.blue_disjoint_complement) hb hc
+  rcases hg.1 with ⟨hr1, hr2⟩ | ⟨hr1, hr2⟩ <;> rcases hg.2 with ⟨hc1, hc2⟩ | ⟨hc1, hc2⟩
+  · -- e.1.1 ∈ red, e.1.1 ∈ complement: impossible.
+    exact absurd hc1 ((Finset.disjoint_left.mp hP.red_disjoint_complement) hr1)
+  · -- e.1.1 ∈ red, e.1.2 ∈ complement.
+    rintro (hb | hb)
+    · exact hblue _ (Or.inl hr1) hb
+    · exact hblue _ (Or.inr hc2) hb
+  · -- e.1.2 ∈ red, e.1.1 ∈ complement.
+    rintro (hb | hb)
+    · exact hblue _ (Or.inr hc1) hb
+    · exact hblue _ (Or.inl hr2) hb
+  · -- e.1.2 ∈ red, e.1.2 ∈ complement: impossible.
+    exact absurd hc2 ((Finset.disjoint_left.mp hP.red_disjoint_complement) hr2)
 
 /-! ### The three-way merge
 
@@ -194,9 +204,10 @@ theorem complProd_triMerge (F : CoherentCoarseBlockingFrame (G := G) (d := d) A)
     fun _e hb hc => h.bc F (isCrossing_bc_of_incident F hP hb hc)).trans
     (regionProd_p2_eq_merge_of_incident_agree A F.frame.red F.frame.complement σc
       (ζr, regionMerge A F.frame.blue (ζb, ζc)) fun _e hr hc =>
-      (h.rc F (isCrossing_rc_of_incident F hP hr hc)).trans
+      let hx := isCrossing_rc_of_incident F hP hr hc
+      (h.rc F hx).trans
         (regionMerge_of_not_incident A F.frame.blue (ζb, ζc)
-          (not_isRegionIncidentEdge_blue_of_incident_rc F hP hr hc)).symm)
+          (not_isRegionIncidentEdge_blue_of_crossing_rc F hP hx)).symm)
 
 /-! ### The assembled physical configuration
 
