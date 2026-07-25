@@ -1,0 +1,90 @@
+\section{Trace normalization and the Lorentz cone}
+
+\begin{lemma}[Making positive maps trace preserving]
+    \label{lem:making_positive_maps_trace_preserving}
+    \lean{exists_isUnit_det_comp_unitaryConjLM_positive_tracePreserving}
+    \leanok
+    \uses{def:positive_map_rectangular, def:trace_preserving_rectangular,
+        def:trace_pairing_adjoint,
+        thm:trace_normalization_inverse_square_root,
+        lem:pos_def_inv_sqrt_invertible}
+    Let $T:\MN{D}\to\MN{D'}$ be a positive map for which $T^*(\Id)$ is
+    positive definite. Then there exists an invertible $X\in\MN{D}$ such
+    that $\rho\mapsto T(X\rho X^\dagger)$ is a trace-preserving positive map
+    \cite[Chapter~3, Lemma ``Making positive maps trace preserving'']
+    {Wolf2012Quantum}.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:pos_def_inv_sqrt_invertible, lem:conj_inv_sqrt_normalizes,
+        thm:trace_normalization_inverse_square_root}
+    Take $X=(T^*(\Id))^{-1/2}$. It is invertible by
+    Lemma~\ref{lem:pos_def_inv_sqrt_invertible}, and
+    Theorem~\ref{thm:trace_normalization_inverse_square_root} gives directly
+    that $\rho\mapsto T(X\rho X^\dagger)$ is positive and trace-preserving.
+    The normalization behind that theorem is
+    Lemma~\ref{lem:conj_inv_sqrt_normalizes}, which gives
+    $X^\dagger T^*(\Id)X=\Id$. Indeed, the trace-pairing identity and
+    cyclicity then give, for every $\rho$,
+    \begin{align}
+        \tr\!(T(X\rho X^\dagger))
+         & =\tr\!(\rho X^\dagger T^*(\Id)X)
+        =\tr(\rho).
+        \notag
+    \end{align}
+\end{proof}
+
+\begin{theorem}[Forward Lorentz-cone trace inequality]
+    \label{thm:psd_trace_square_le_square_trace}
+    \lean{Matrix.PosSemidef.trace_sq_re_le_trace_re_sq}
+    \leanok
+    If $A \in \MN{D}$ is positive semidefinite, then
+    \begin{align}
+        \re\tr(A^2)
+         & \le \left(\re\tr(A)\right)^2.
+        \label{eq:channel_lorentz_forward}
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    Diagonalize $A$ with non-negative eigenvalues $\lambda_i$. Then
+    $\tr(A^2)=\sum_i\lambda_i^2$ and $\tr(A)=\sum_i\lambda_i$, so the desired
+    inequality is $\sum_i\lambda_i^2\le(\sum_i\lambda_i)^2$, which follows
+    because all mixed products are non-negative.
+\end{proof}
+
+\begin{theorem}[Trace-non-negative Lorentz-cone converse]
+    \label{thm:trace_nonnegative_lorentz_cone_converse}
+    \lean{Matrix.IsHermitian.posSemidef_of_trace_re_nonneg_of_card_sub_one_mul_trace_sq_re_le}
+    \leanok
+    Let $A\in\MN{D}$ be Hermitian and suppose that
+    $\re\tr(A)\ge0$. If
+    \begin{align}
+        (D-1)\re\tr(A^2)
+         & \le \left(\re\tr(A)\right)^2,
+        \label{eq:channel_lorentz_converse}
+    \end{align}
+    then $A$ is positive semidefinite.
+
+    This is the trace-non-negative form of the converse in
+    \cite[Proposition~3.9]{Wolf2012Quantum}. The unrestricted squared
+    implication printed there is false without a trace-sign condition: for
+    $A=-\Id$, one has $\tr(A)^2=D^2\ge D(D-1)=(D-1)\tr(A^2)$, although $A$ is
+    not positive semidefinite.
+\end{theorem}
+
+\begin{proof}\leanok
+    Diagonalize $A$ with real eigenvalues $\lambda_i$. Suppose that some
+    eigenvalue $\lambda_0$ is negative. Set
+    $T=\sum_i\lambda_i$ and $R=\sum_{i\ne 0}\lambda_i$. Since $T\ge0$ and
+    $T=\lambda_0+R$, one has $T<R$, and hence $T^2<R^2$. Cauchy's inequality
+    gives
+    \begin{align}
+        R^2
+         & \le (D-1)\sum_{i\ne 0}\lambda_i^2
+        \le (D-1)\sum_i\lambda_i^2,
+        \notag
+    \end{align}
+    contradicting (\ref{eq:channel_lorentz_converse}). Thus all eigenvalues
+    are non-negative.
+\end{proof}
