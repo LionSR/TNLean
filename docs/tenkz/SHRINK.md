@@ -628,7 +628,16 @@ are still `kernel` today. Twenty verdicts below change accordingly.
 | flag:sugar-shaped:command:tnarrow | tombstoned by contract: `\tnarrow` migrates to `\tnwire[dir=to]` (`LANGUAGE-1.0` 10); deleted at the S4 swap; expiry 0.9 |
 | flag:sugar-shaped:command:tngroup | keep-because: a group is the composition grammar for one transform over several atoms and wires, not atom sugar; permanent (re-affirmed 2026-07-25) |
 
+One arrival is named here and booked elsewhere, so that it is counted once.
+Retiring the face words leaves the corpus spelling them, and they survive as
+one sugar row naming the four right angles. That row lands with the change
+that implements angle-valued faces, and the sugar ledger moves from
+twenty-five to twenty-six there. Booking it in this session as well would put
+the cost in two ledgers, which is the same error as putting a saving in two
+and no more forgivable for running the other way.
+
 Agenda handed to the next session: the mark `species=` row and the nine
 parser rows sentenced above; the two enclosure pads and the region corner,
-once the hull lands; and the multi-strand capability name, once a redraw
-campaign is open to carry the three case headers.
+once the hull lands; the face-word sugar row, with the change that lands it;
+and the multi-strand capability name, once a redraw campaign is open to carry
+the three case headers.

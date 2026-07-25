@@ -60,7 +60,8 @@ extend the vocabulary the records draw from.
 | `\tnset{keys}` | document or group policy | — |
 | `\tndeclare{atom\|skin\|species}{name}{keys}` | the one extension door | — |
 
-A wire end is an address or `open <dir>`. A command is warranted only when
+A wire end is an address, or `open` with an optional direction (§5). A
+command is warranted only when
 it declares a record class of its own; a key modifies the record being
 declared. The generated reference prints this test beside every row.
 
@@ -99,9 +100,20 @@ frame-generated bonds.
 | `void=` | small-enum | `open` `sealed` | unset | `TKZ-ATOM-*` |
 
 A face is an angle in the record's own axes (§3, §4), so the outward physical
-face of a row is that row's own normal and needs no page-relative word. Port
-labels ride `ports=`. `void=open` is a hole that preserves indices;
-`void=sealed` removes the site and its bonds.
+face of a row is that row's own normal and needs no page-relative word.
+
+A typed-port list is a braced comma-separated list of ports, each written
+
+```
+<angle>[@<slot>] : <type> [ : <label> ]
+```
+
+where the type is `virtual` or `physical` and the label is the mathematics
+set at that port's tip — `ports={90:physical:$i$, 0:virtual, 180:virtual}`.
+The label component is where the retired page-relative keys went: an index
+name belongs to the port it names, and a port already knows which way it
+points. `void=open` is a hole that preserves indices; `void=sealed` removes
+the site and its bonds.
 
 ### 2.4 Wire keys (9)
 
@@ -214,6 +226,10 @@ must resolve to wires. The slot suffix `@k` is optional when the angle
 carries one slot: `B.270` means `B.270@1`. A cell named without a member
 index denotes the whole cell, which is what a cell means to a selection.
 
+Every record class is addressable by name, generated names included, and the
+picture is a record (§2). It answers to `picture`, which is how a route or a
+mark names the whole diagram without a second grammar for doing so.
+
 A **selector** names a set of records — one address, a braced comma-separated
 list, or a range:
 
@@ -240,8 +256,9 @@ Address resolution is a dependency graph evaluated in one pass; a cycle is
 the coded error `[TKZ-ADDR-CYCLE]`, printed with the cycle.
 
 Open legs are policy, not objects. An unbonded typed port renders as a stub
-in the direction of its face; a wire endpoint may be `open <dir>`. There are
-no placeholder atoms.
+in the direction of its face; a wire endpoint may be `open`, with a direction
+when the end is to sit on the picture margin and without one when it takes
+its place from the route (§5). There are no placeholder atoms.
 <!-- Consumers of the open-end policy: every former tenkzfree body; e.g.
      rmp-ii-triangle-network, rmp-ii-mpo-sheet, rmp-iii-b-braid-one. -->
 
@@ -488,7 +505,8 @@ sum are read from the class the mathematics already has.
 
 `\tndeclare{atom}{\tnprojector}{skin=box, ports={180:virtual, 0:virtual, 90:physical}}`
 creates a one-label atom command. Ports live at any angle in the atom's own
-axes, slotted, any mix of `virtual` and `physical`; every stock shape already
+axes, slotted, labelled, any mix of `virtual` and `physical` (§2.3 gives the
+port grammar); every stock shape already
 carries a boundary anchor for an arbitrary direction, so a leg at 50 or −120
 degrees attaches exactly on the boundary of a disc, a box, a rounded box or a
 triangle with nothing declared. A declared skin
@@ -656,8 +674,25 @@ already a named ratio, is not minted a second time under a new name.
 
 ## 12. Spelling sketches
 
-The seven figures the 0.7 language failed worst, in kernel form. No
-millimetres appear; `% sugar:` marks each sugar spelling with its expansion.
+The seven figures the 0.7 language failed worst, **in kernel form**: every
+token below is admitted by the tables above, and a sketch that names a
+spelling those tables do not carry is a defect in the sketch. No millimetres
+appear; `% sugar:` marks each sugar spelling with its expansion.
+
+Kernel form is what settles the one question these sketches could otherwise
+answer two ways. A face is an angle (§3), so a port below is written as its
+angle and never as a letter. Every compass word that does appear is a **side
+word**, which is a different alphabet and the only sense those words still
+carry: a boundary side (`west=trace`) and the side of a hull a route travels
+(`route={s of ...}`). That is the one-token-one-meaning rule doing its work
+rather than being suspended for the examples.
+
+An author need not write the angle. The four compass words survive as a sugar
+spelling of the four right angles — `n` for 90, `e` for 0, `s` for 270, `w`
+for 180 — so every fixture in the corpus keeps its spelling. That row arrives
+with the change that implements angle-valued faces, and the sugar ledger
+moves from twenty-five to twenty-six there rather than here, so the one
+arrival is counted once.
 
 ### 12.1 Braid (`rmp-iii-b-braid-one`)
 
@@ -746,7 +781,7 @@ had nothing to refuse.
   \tn[at=(2,2), skin=box, wide=2, wires=2, name=R]{R}  % the wide operator row
   \tnwire{B.270}{R.90@1}     \tnwire{C.270}{R.90@2}
   % B and C keep their upward ports unbonded: typed ports render their own stubs.
-  \tnwire[kind=string, route={all of picture}]{R.e}{R.w}   % the wrap
+  \tnwire[kind=string, route={all of picture}]{R.0}{R.180}  % the wrap
 \end{tenkz}\]
 ```
 
