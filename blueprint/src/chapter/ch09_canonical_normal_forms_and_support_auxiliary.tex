@@ -375,7 +375,8 @@ refines them into primitive irreducible blocks.
     \label{thm:tp_primitive_blockdecomp}
     \lean{MPSTensor.exists_tp_primitive_blockDecomp_after_blocking}
     \leanok
-    \uses{def:blocked_tensor, def:same_mpv2_pos, thm:blocking_primitivity}
+    \uses{def:blocked_tensor, def:same_mpv2_pos,
+        thm:common_blocking_period_tp_irreducible}
     For any MPS tensor $A$, there exist $p\ge1$, nonzero weights
     $(\mu_k)_{k=1}^r$, and blocks $(B_k)_{k=1}^r$ such that, for every blocked
     $\sigma$ of positive length~$N$,
@@ -399,17 +400,18 @@ refines them into primitive irreducible blocks.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:tp_gauge_arbitrary, thm:blocking_primitivity,
-        thm:common_blocking_period, lem:block_weights_ne_zero,
+    \uses{thm:tp_gauge_arbitrary,
+        thm:common_blocking_period_tp_irreducible,
+        lem:block_weights_ne_zero,
         thm:same_mpv2_pos_block_tensor_to_tensor_from_blocks}
     Theorem~\ref{thm:tp_gauge_arbitrary} supplies the left-canonical nontrivial
     blocks, the positive-length equality, and the bound $\sum_kD_k\le D$.
-    First apply Theorem~\ref{thm:blocking_primitivity} separately to every
-    block, obtaining a positive period $p_k$ whose transfer-map power has
-    peripheral eigenvalue set $\{1\}$. Then take the least common multiple of
-    the finitely many $p_k$ and apply
-    Theorem~\ref{thm:common_blocking_period}; divisibility preserves this
-    peripheral primitivity at the common length~$p$.
+    Apply Theorem~\ref{thm:common_blocking_period_tp_irreducible} directly to
+    this finite irreducible family. Its proof first applies
+    Theorem~\ref{thm:blocking_primitivity} to each block and then takes the
+    least common multiple of the resulting periods through
+    Theorem~\ref{thm:common_blocking_period}. This gives one positive length
+    $p$ at which every blocked transfer map is primitive.
     Lemma~\ref{lem:block_weights_ne_zero} keeps the blocked weights nonzero, and
     Lemma~\ref{thm:same_mpv2_pos_block_tensor_to_tensor_from_blocks} carries
     the positive-length equality through blocking, giving

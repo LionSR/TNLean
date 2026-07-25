@@ -1,7 +1,7 @@
 \chapter{Canonical Form Reduction: Supporting Results}
 \label{ch:canonical_supporting_results}
 
-This appendix supports Chapter~\ref{ch:canonical}. It collects the projection, gauge, blocking, compression, and reindexing arguments used by the main reduction while keeping the source-named canonical-form statements and the reduction endpoints in the chapter.
+This appendix supports Chapter~\ref{ch:canonical}. It collects the projection, gauge, blocking, compression, and reindexing arguments used by the main reduction while keeping the source-named canonical-form statements and the principal reductions in the chapter.
 
 Throughout, $\E_A(X)=\sum_iA^iX(A^i)^\dagger$, $A^{[p]}$ denotes blocking by $p$, and $V^{(N)}(A)_\sigma=\tr(A^{\sigma_1}\cdots A^{\sigma_N})$. Weighted direct sums are written $\bigoplus_k\mu_kA_k$.
 
@@ -522,6 +522,24 @@ through its own period agrees with the directly $p$-blocked block.
 \begin{proof}\leanok
     Each $p_k$ divides $p$, so primitivity of $\E_{B_k^{[p_k]}}$ carries over
     to $\E_{B_k^{[p]}}$ via the divisibility identity for transfer-map powers.
+\end{proof}
+
+\begin{theorem}[Common primitive blocking for irreducible left-canonical blocks]%
+    \label{thm:common_blocking_period_tp_irreducible}
+    \lean{MPSTensor.exists_common_blocking_all_primitive_of_TP_irr}
+    \leanok
+    \uses{thm:blocking_primitivity, thm:common_blocking_period}
+    Let $(B_k)_{k=1}^r$ be a finite family of positive-bond-dimension,
+    left-canonical, tensor-irreducible MPS tensors. Then there is a single
+    blocking length $p>0$ such that $\E_{B_k^{[p]}}$ is primitive for every~$k$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:blocking_primitivity, thm:common_blocking_period}
+    Apply Theorem~\ref{thm:blocking_primitivity} to each block, then apply
+    Theorem~\ref{thm:common_blocking_period} to the resulting finite family of
+    positive periods. Their least common multiple is positive and makes every
+    blocked transfer map primitive.
 \end{proof}
 
 \begin{lemma}[Adjoint primitivity equivalence]%
