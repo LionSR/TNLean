@@ -122,39 +122,7 @@ theorem cumulativeRectSpan_eq_range_quantitative [NeZero D]
     cumulativeRectSpan P A (D ^ 2) = LinearMap.range (LinearMap.mulLeft ℂ P) := by
   exact cumulativeRectSpan_eq_range_of_isNormal P A hN
 
-/-! ### Part 4: Quantitative eigenvector rank-one in cumulativeSpan -/
-
-/-- **Rank-one matrices from eigenvectors land in `cumulativeRectSpan`.**
-
-If `φ ∈ range(toLin' P)`, then for every `ψ`, `vecMulVec φ ψ ∈ cumulativeRectSpan P A n`
-whenever `cumulativeRectSpan P A n = range(mulLeft P)`.
-
-This is the cumulative analogue of `vecMulVec_mem_rectSpan_of_mem_range_of_rectSpan_eq_range`. -/
-theorem vecMulVec_mem_cumulativeRectSpan_of_mem_range
-    (P : Matrix (Fin D) (Fin D) ℂ) (A : MPSTensor d D) {n : ℕ}
-    {φ : Fin D → ℂ}
-    (hφ : φ ∈ LinearMap.range (Matrix.toLin' P))
-    (heq : cumulativeRectSpan P A n = LinearMap.range (LinearMap.mulLeft ℂ P)) :
-    ∀ ψ : Fin D → ℂ, vecMulVec φ ψ ∈ cumulativeRectSpan P A n := by
-  intro ψ
-  rw [heq]
-  exact vecMulVec_mem_range_mulLeft_of_mem_range_toLin P hφ ψ
-
-/-! ### Part 5: Tight ceiling for non-invertible case
-
-When `A i₀` is not invertible, `rank((A i₀)^D) ≤ D - 1`, giving the ceiling
-`D * (D-1) = D² - D` for the finrank of `range(mulLeft ((A i₀)^D))`.
-
-This is the key numerical ingredient for the paper's Lemma 2(b) which gives
-the bound `D² - D + 1` via `D + (D² - D - D + 1) = D² - D + 1`. -/
-
-/-- `finrank(range(mulLeft ((A i₀)^D))) = D * rank((A i₀)^D)`, the exact ceiling. -/
-theorem finrank_range_mulLeft_pow (A : MPSTensor d D) (i₀ : Fin d) :
-    finrank ℂ (LinearMap.range (LinearMap.mulLeft ℂ ((A i₀) ^ D)))
-      = D * ((A i₀) ^ D).rank :=
-  finrank_range_mulLeft _
-
-/-! ### Part 6: Parametric rectangular span — toward exact Lemma 2(b)
+/-! ### Part 4: Parametric rectangular span — toward exact Lemma 2(b)
 
 The parametric rectangular span theorem combines:
 1. Power membership: `(A i₀)^D ∈ wordSpan A D`
