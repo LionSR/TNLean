@@ -121,7 +121,10 @@ theorem isUnit_restrict_range_pow (f : End ℂ (Fin D → ℂ)) :
 /-! ## Matrix corollary -/
 
 /-- Matrix formulation: `Matrix.toLin' M` restricts to an automorphism of
-`range (Matrix.toLin' (M^D))`. -/
+`range (Matrix.toLin' (M^D))`.
+Paper anchor: proof of Lemma 2(b) in arXiv:0909.5347 — left multiplication
+by A₁ preserves linear independence 'given that A₁ is invertible on its
+range'. -/
 theorem isUnit_restrict_range_toLin'_pow (M : Matrix (Fin D) (Fin D) ℂ) :
     IsUnit ((Matrix.toLin' M).restrict
       (mapsTo_range_pow (D := D) (f := Matrix.toLin' M))) := by

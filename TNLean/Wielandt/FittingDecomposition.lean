@@ -146,14 +146,6 @@ theorem nilpotent_pow_eq_zero_on_maxGenEigenspace_zero
       (finrank K ↥(f.maxGenEigenspace 0)) = 0 :=
   nilpotent_pow_eq_zero_of_finrank _ (isNilpotent_restrict_maxGenEigenspace_zero f)
 
-theorem maxGenEigenspace_zero_finrank_le
-    {K : Type*} {V : Type*}
-    [Field K] [AddCommGroup V] [Module K V]
-    [IsAlgClosed K] [FiniteDimensional K V]
-    (f : End K V) :
-    finrank K ↥(f.maxGenEigenspace 0) ≤ finrank K V :=
-  Submodule.finrank_le (f.maxGenEigenspace 0)
-
 /-! ## Part 6: Nilpotent Index and Range Stabilization
 
 The **nilpotent index** `nilpIndex f` is the least `k` with `ker(f^k) = maxGenEigenspace f 0`.
