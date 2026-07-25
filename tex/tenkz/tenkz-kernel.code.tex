@@ -3136,6 +3136,32 @@
 % resolves through the frame, so a port on a turned carrier turns with it.
 % The wire the port anchors runs under the atom's skin, so the span cell IS
 % the port at this stage's altitude.
+\tl_new:N \l__tenkz_kernel_r_face_angle_tl
+\tl_new:N \l__tenkz_kernel_r_face_side_tl
+\cs_new_protected:Npn \__tenkz_kernel_r_face_side:n #1
+  {
+    \tl_set:Ne \l__tenkz_kernel_r_face_angle_tl
+      { \fp_eval:n { #1 - 360 * floor( (#1) / 360 ) } }
+    % The four diagonal rays belong counter-clockwise: 45 to north, 135 to
+    % west, 225 (-135) to south, and 315 (-45) to east.  This half-open
+    % partition avoids asking approximate sine and cosine values for equality.
+    \fp_compare:nNnTF { \l__tenkz_kernel_r_face_angle_tl } < {45}
+      { \tl_set:Nn \l__tenkz_kernel_r_face_side_tl {e} }
+      {
+        \fp_compare:nNnTF { \l__tenkz_kernel_r_face_angle_tl } < {135}
+          { \tl_set:Nn \l__tenkz_kernel_r_face_side_tl {n} }
+          {
+            \fp_compare:nNnTF { \l__tenkz_kernel_r_face_angle_tl } < {225}
+              { \tl_set:Nn \l__tenkz_kernel_r_face_side_tl {w} }
+              {
+                \fp_compare:nNnTF
+                  { \l__tenkz_kernel_r_face_angle_tl } < {315}
+                  { \tl_set:Nn \l__tenkz_kernel_r_face_side_tl {s} }
+                  { \tl_set:Nn \l__tenkz_kernel_r_face_side_tl {e} }
+              }
+          }
+      }
+  }
 \cs_new_protected:Npn \__tenkz_kernel_r_port:n #1
   {
     \prop_get:NeN \l__tenkz_kernel_named_prop
@@ -3156,29 +3182,49 @@
           }
         \__tenkz_kernel_r_span:nNN { \tl_use:N \l__tenkz_kernel_r_tl }
           \l__tenkz_kernel_r_b_tl \l__tenkz_kernel_r_c_tl
+        \exp_args:Ne \__tenkz_kernel_r_face_side:n
+          { \__tenkz_kernel_r_item:nn {#1} {face} }
         \__tenkz_geom_place_cell:nnee {#1} {kpic}
           {
-            \fp_eval:n
+            \str_case:VnF \l__tenkz_kernel_r_face_side_tl
               {
-                \l__tenkz_kernel_r_row_tl
-                + ( sind( \__tenkz_kernel_r_item:nn {#1} {face} ) > cosd(45)
-                      ? 0
-                      : ( sind( \__tenkz_kernel_r_item:nn {#1} {face} )
-                            < -cosd(45)
-                          ? \l__tenkz_kernel_r_c_tl - 1
-                          : \__tenkz_kernel_r_item:nn {#1} {slot} - 1 ) )
+                {n}{ \l__tenkz_kernel_r_row_tl }
+                {s}
+                  {
+                    \fp_eval:n
+                      {
+                        \l__tenkz_kernel_r_row_tl
+                        + \l__tenkz_kernel_r_c_tl - 1
+                      }
+                  }
+              }
+              {
+                \fp_eval:n
+                  {
+                    \l__tenkz_kernel_r_row_tl
+                    + \__tenkz_kernel_r_item:nn {#1} {slot} - 1
+                  }
               }
           }
           {
-            \fp_eval:n
+            \str_case:VnF \l__tenkz_kernel_r_face_side_tl
               {
-                \l__tenkz_kernel_r_col_tl
-                + ( cosd( \__tenkz_kernel_r_item:nn {#1} {face} ) > cosd(45)
-                      ? \l__tenkz_kernel_r_b_tl - 1
-                      : ( cosd( \__tenkz_kernel_r_item:nn {#1} {face} )
-                            < -cosd(45)
-                          ? 0
-                          : \__tenkz_kernel_r_item:nn {#1} {slot} - 1 ) )
+                {e}
+                  {
+                    \fp_eval:n
+                      {
+                        \l__tenkz_kernel_r_col_tl
+                        + \l__tenkz_kernel_r_b_tl - 1
+                      }
+                  }
+                {w}{ \l__tenkz_kernel_r_col_tl }
+              }
+              {
+                \fp_eval:n
+                  {
+                    \l__tenkz_kernel_r_col_tl
+                    + \__tenkz_kernel_r_item:nn {#1} {slot} - 1
+                  }
               }
           }
       }
