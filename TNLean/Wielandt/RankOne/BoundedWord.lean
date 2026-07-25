@@ -214,19 +214,6 @@ theorem biRectSpan_finrank_le
           rw [Module.finrank_matrix, Fintype.card_fin, Module.finrank_self, mul_one]; ring
 
 /-!
-## Injectivity tools on invertible blocks
-
-The next lemmas turn the `RankOneSpanGrowth` disjointness statement into
-convenient pointwise injectivity statements for left and right multiplication.
--/
-
-namespace WielandtRankOne
-
-open Module
-
-end WielandtRankOne
-
-/-!
 ## Dimension-growth lemmas for the bi-rectangular span
 
 The intended use is with `P = (B i₀)^D` and `Q = (B i₁)^D` coming from the

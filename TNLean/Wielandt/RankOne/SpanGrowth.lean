@@ -118,6 +118,20 @@ theorem isUnit_restrict_range_pow (f : End ℂ (Fin D → ℂ)) :
     ker_restrict_range_pow_eq_bot (D := D) f
   exact (LinearMap.isUnit_iff_ker_eq_bot (f := f.restrict (mapsTo_range_pow (D := D) f))).2 hker
 
+/-! ## Matrix corollary -/
+
+/-- Matrix formulation: `Matrix.toLin' M` restricts to an automorphism of
+`range (Matrix.toLin' (M^D))`.
+Paper anchor: proof of Lemma 2(b) in arXiv:0909.5347 — left multiplication
+by A₁ preserves linear independence 'given that A₁ is invertible on its
+range'. -/
+theorem isUnit_restrict_range_toLin'_pow (M : Matrix (Fin D) (Fin D) ℂ) :
+    IsUnit ((Matrix.toLin' M).restrict
+      (mapsTo_range_pow (D := D) (f := Matrix.toLin' M))) := by
+  -- Apply the abstract lemma to `f = Matrix.toLin' M`.
+  simpa [Matrix.toLin'_pow] using
+    (isUnit_restrict_range_pow (D := D) (f := Matrix.toLin' M))
+
 /-! ## Pointwise matrix injectivity -/
 
 /-- Vector-level injectivity: if `v ∈ range (M^D)` and `M *ᵥ v = 0`, then `v = 0`.
