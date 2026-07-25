@@ -164,17 +164,6 @@ theorem range_pow_eq_iSup_maxGenEigenspace_ne_zero
   · exact range_pow_le_iSup_maxGenEigenspace_ne_zero (D := D) f
   · exact iSup_maxGenEigenspace_ne_zero_le_range_pow (D := D) f
 
-/-- Matrix formulation of `range_pow_eq_iSup_maxGenEigenspace_ne_zero`.
-
-This is the form that will be used for Kraus operators in the missing Lemma 2(b)
-rank-one extraction step. -/
-theorem range_toLin'_pow_eq_iSup_maxGenEigenspace_ne_zero
-    (M : Matrix (Fin D) (Fin D) ℂ) :
-    LinearMap.range (Matrix.toLin' (M ^ D)) =
-      ⨆ (μ : ℂ) (_ : μ ≠ 0), End.maxGenEigenspace (Matrix.toLin' M) μ := by
-  simpa [Matrix.toLin'_pow] using
-    (range_pow_eq_iSup_maxGenEigenspace_ne_zero (D := D) (f := Matrix.toLin' M))
-
 end WielandtRankOne
 
 end MPSTensor

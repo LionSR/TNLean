@@ -319,26 +319,6 @@ theorem mulRight_image_wordSpan_le_succ (A : MPSTensor d D)
   rw [wordSpan_succ_eq_mul_right A n]
   exact Submodule.mul_mem_mul hM (apply_mem_wordSpan_one A i₀)
 
-/-- When `A i₀` is invertible, right multiplication also gives
-`dim(S_{n+1}) ≥ dim(S_n)`.
-
-This is an auxiliary step for arXiv:0909.5347, Theorem 1 case (2); Wolf,
-Theorem 6.9. -/
-theorem wordSpan_finrank_mono_of_isUnit_right (A : MPSTensor d D)
-    (i₀ : Fin d) (hU : IsUnit (A i₀)) (n : ℕ) :
-    Module.finrank ℂ (wordSpan A n) ≤
-      Module.finrank ℂ (wordSpan A (n + 1)) := by
-  have hle := mulRight_image_wordSpan_le_succ A i₀ n
-  have hle_image : Module.finrank ℂ
-      (Submodule.map (LinearMap.mulRight ℂ (A i₀)) (wordSpan A n)) ≤
-      Module.finrank ℂ (wordSpan A (n + 1)) :=
-    Submodule.finrank_mono hle
-  have heq : Module.finrank ℂ (wordSpan A n) =
-      Module.finrank ℂ
-        (Submodule.map (LinearMap.mulRight ℂ (A i₀)) (wordSpan A n)) :=
-    finrank_eq_finrank_map_mulRight_of_isUnit (S := wordSpan A n) hU
-  omega
-
 /-- If `dim(S_r) = dim(S_{r+1})`, then `S_{r+1}` is exactly the
 right-multiplication image of `S_r` by the invertible generator `A i₀`.
 

@@ -31,9 +31,6 @@ The paper's Lemma 2(b) (arXiv:0909.5347) uses a one-sided rectangular span argum
 given `P = (A i₀)^D` (which kills the nilpotent block of `A i₀`), the subspaces
 `rectSpan P A n` grow in dimension with each step, because left-multiplication by
 `A i₀` is injective on the range of `mulLeft P`.
-
-This mirrors the two-sided `biRectSpan` growth proofs in `RankOneBoundedWord.lean`
-but for the simpler one-sided setting, directly on `rectSpan P A n`.
 -/
 
 /-- Generic pigeonhole: a monotone function `ℕ → ℕ` bounded by `B` has a consecutive
@@ -133,26 +130,18 @@ theorem rectSpanLeftStep_injective (n : ℕ) :
   exact Subtype.ext (by simpa [sub_eq_zero] using hzero)
 
 /-- Finrank is non-decreasing along the sequence
-`n ↦ rectSpan ((A i₀)^D) A n`. -/
+`n ↦ rectSpan ((A i₀)^D) A n`.
+
+Paper anchor (arXiv:0909.5347, proof of Lemma 2(b)): "For all $n \in \mathbb{N}$,
+$\dim[R_{n+1}(A)] \ge \dim[R_n(A)]$", because the $A_1 A^{(n)}_k \in R_{n+1}(A)$
+are again linearly independent "given that $A_1$ is invertible on its range".
+This monotonicity sentence is part of the paper's Lemma 2(b) argument: the
+injectivity input is `rectSpanLeftStep_injective`, with
+`isUnit_restrict_range_toLin'_pow` supplying the paper's hypothesis. -/
 theorem rectSpan_finrank_mono (n : ℕ) :
     finrank ℂ (rectSpan ((A i₀) ^ D) A n) ≤
       finrank ℂ (rectSpan ((A i₀) ^ D) A (n + 1)) :=
   LinearMap.finrank_le_finrank_of_injective (rectSpanLeftStep_injective A i₀ n)
-
-/-- **Pigeonhole stabilization**: the monotone bounded sequence
-`n ↦ finrank(rectSpan ((A i₀)^D) A n)` has a consecutive equality within the first
-`D²` steps. -/
-theorem exists_finrank_eq_succ_of_rectSpan :
-    ∃ n ≤ D ^ 2,
-      finrank ℂ (rectSpan ((A i₀) ^ D) A n) =
-      finrank ℂ (rectSpan ((A i₀) ^ D) A (n + 1)) := by
-  -- Use generic pigeonhole for monotone bounded sequences
-  suffices h : ∃ n ≤ D ^ 2,
-      (fun n => finrank ℂ (rectSpan ((A i₀) ^ D) A n)) n =
-      (fun n => finrank ℂ (rectSpan ((A i₀) ^ D) A n)) (n + 1) from h
-  apply exists_consecutive_eq_of_monotone_bounded'
-  · exact fun n => rectSpan_finrank_mono A i₀ n
-  · exact fun n => rectSpan_finrank_le ((A i₀) ^ D) A n
 
 /-! ### Surjectivity of the left-step from finrank stabilization
 
@@ -174,14 +163,6 @@ theorem rectSpanLeftStep_surjective_of_finrank_eq (n : ℕ)
   exact (LinearMap.injective_iff_surjective_of_finrank_eq_finrank hfin).mp
     (rectSpanLeftStep_injective A i₀ n)
 
-/-- The left-step is bijective when finrank stabilizes. -/
-theorem rectSpanLeftStep_bijective_of_finrank_eq (n : ℕ)
-    (hfin : finrank ℂ (rectSpan ((A i₀) ^ D) A n) =
-            finrank ℂ (rectSpan ((A i₀) ^ D) A (n + 1))) :
-    Function.Bijective (rectSpanLeftStep A i₀ n) :=
-  ⟨rectSpanLeftStep_injective A i₀ n,
-   rectSpanLeftStep_surjective_of_finrank_eq A i₀ n hfin⟩
-
 end RectSpanGrowth
 
 /-! ## Section 8b: Stabilization — rectSpan meets full range
@@ -197,6 +178,13 @@ This section provides the connection between `rectSpan`/`cumulativeRectSpan` and
 - `cumulativeRectSpan_eq_range_of_finrank_eq_range_finrank` : finrank criterion (cumulative)
 - `cumulativeRectSpan_finrank_mono` : finrank is non-decreasing
 - `exists_cumulativeRectSpan_finrank_eq_succ` : pigeonhole stabilization within D² steps
+
+The cumulative-stabilization cluster (the five `cumulativeRectSpan_*` results
+above together with the pigeonhole helper
+`exists_consecutive_eq_of_monotone_bounded'` and the `cumulativeRectSpan_mono` /
+`cumulativeRectSpan_finrank_le` bounds in `RectangularSpan/Basic.lean`)
+currently has no callers outside the cluster; it is retained as advertised
+stabilization API while the keep/delete question is tracked separately.
 -/
 
 section RectSpanStabilization
@@ -289,17 +277,6 @@ theorem exists_cumulativeRectSpan_finrank_eq_succ
   exists_consecutive_eq_of_monotone_bounded'
     (fun n => cumulativeRectSpan_finrank_mono P A n)
     (fun n => cumulativeRectSpan_finrank_le P A n)
-
-/-- Under `IsNormal`, the finrank of `rectSpan P A n` at the normal-witness level equals
-the finrank of `range(mulLeft P)`. Combined with `rectSpan_eq_range_of_finrank_eq_range`,
-this gives the ceiling. -/
-theorem rectSpan_finrank_eq_range_of_isNormal
-    (P : Matrix (Fin D) (Fin D) ℂ) (A : MPSTensor d D)
-    (hN : IsNormal A) :
-    ∃ n, finrank ℂ (rectSpan P A n) =
-         finrank ℂ (LinearMap.range (LinearMap.mulLeft ℂ P)) := by
-  obtain ⟨N₀, heq⟩ := exists_rectSpan_eq_range_of_isNormal P A hN
-  exact ⟨N₀, by rw [heq]⟩
 
 end RectSpanStabilization
 

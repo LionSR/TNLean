@@ -79,20 +79,6 @@ theorem vecMulVec_mem_rectSpan_of_mem_range_of_rectSpan_eq_range
   rw [heq]
   exact vecMulVec_mem_range_mulLeft_of_mem_range_toLin ((A i₀) ^ D) hφ ψ
 
-/-- **Rank-one universality under `IsNormal`.**
-
-Under `IsNormal A`, there exists a level `n` such that for every `φ` in the range
-of `(A i₀)^D` and every `ψ`, the rank-one matrix `vecMulVec φ ψ` lies in
-`rectSpan ((A i₀)^D) A n ⊆ wordSpan A (m + n)` for appropriate `m`. -/
-theorem exists_rectSpan_forall_vecMulVec_of_isNormal
-    (A : MPSTensor d D) (i₀ : Fin d) (hN : IsNormal A) :
-    ∃ n, ∀ (φ : Fin D → ℂ),
-      φ ∈ LinearMap.range (Matrix.toLin' ((A i₀) ^ D)) →
-      ∀ ψ : Fin D → ℂ, vecMulVec φ ψ ∈ rectSpan ((A i₀) ^ D) A n := by
-  obtain ⟨n₀, heq⟩ := exists_rectSpan_eq_range_of_isNormal ((A i₀) ^ D) A hN
-  exact ⟨n₀, fun φ hφ ψ =>
-    vecMulVec_mem_rectSpan_of_mem_range_of_rectSpan_eq_range A i₀ hφ heq ψ⟩
-
 /-- **Rank-one in `wordSpan` from stabilized `rectSpan`.**
 
 If `(A i₀)^D ∈ wordSpan A m` and `rectSpan ((A i₀)^D) A n = range(mulLeft ((A i₀)^D))`,
@@ -233,22 +219,6 @@ theorem vecMulVec_eigenvector_mem_wordSpan
     hstab
     (eigenvector_mem_range_toLin_pow A i₀ hμ heig)
     ψ
-
-/-- **Existential version under `IsNormal`.**
-
-Under `IsNormal A` and with an eigenvector `A i₀ *ᵥ φ = μ • φ` (`μ ≠ 0`),
-there exists `n` such that for **every** `ψ`,
-`vecMulVec φ ψ ∈ wordSpan A (D + n)`.
-
-This is the theorem that directly feeds into the paper's Lemma 2(b) conditional
-fixed-length matrix spanning. -/
-theorem exists_wordSpan_forall_vecMulVec_eigenvector
-    (A : MPSTensor d D) (i₀ : Fin d) (hN : IsNormal A)
-    {φ : Fin D → ℂ} {μ : ℂ} (hμ : μ ≠ 0)
-    (heig : A i₀ *ᵥ φ = μ • φ) :
-    ∃ n, ∀ ψ : Fin D → ℂ, vecMulVec φ ψ ∈ wordSpan A (D + n) := by
-  obtain ⟨n₀, hstab⟩ := exists_rectSpan_eq_range_of_isNormal ((A i₀) ^ D) A hN
-  exact ⟨n₀, fun ψ => vecMulVec_eigenvector_mem_wordSpan A i₀ hμ heig hstab ψ⟩
 
 end EigenvectorIngredients
 

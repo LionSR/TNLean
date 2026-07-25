@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Wielandt.RankOne.BoundedWord
 import TNLean.Wielandt.RankOne.Extraction
+import TNLean.Wielandt.RankOne.Manufacture
 import TNLean.Wielandt.RectangularSpan.Basic
 
 /-!
