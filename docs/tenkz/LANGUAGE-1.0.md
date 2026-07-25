@@ -210,13 +210,12 @@ no placeholder atoms.
 
 ## 4. Frames
 
-A frame maps addresses to positions. There are two kinds and no third:
-
-- **Affine**: one 2×2 matrix plus offset. The presets `flat`, `vertical`,
-  `plane` (`lean=`, `rise=`, `slant=` subkeys), and `rotate=<degrees>` are
-  parameter fills of that single map.
-- **`circle`**: cells sit on a circle; `(1,k)` is the k-th station. A circle
-  frame is not affine and is the only non-affine frame.
+A public 1.0 frame maps addresses by one affine transform. Its complete
+spelling set is the one in §2.2: `flat`, `vertical`, and `rotate=<degrees>`.
+The previously drafted `plane` and `circle` frame kinds are not implemented
+public grammar. The `ring=` and `planes` rows in §9 remain design sketches,
+not usable 1.0 sugar, until their frame kinds enter the grammar under the
+three-consumer gate.
 
 `frame=` acts at picture scope and at group scope. `\tngroup` transforms a
 sub-diagram as one object: its records keep their names, its boundary
@@ -224,10 +223,8 @@ signature transforms with it, and the transform has its own model record —
 the audit compares networks, never silhouettes. Label text never
 rotates; glyph ink may.
 
-Consumers, rotation and shear: `rmp-iii-a-pulling-through`,
-`rmp-ii-circuit`, `rmp-iii-a-spt-mpo`, `rmp-ii-peps-rg`.
-Consumers, circle: `rmp-iv-ground-space-1d`, `rmp-iii-a-mpo-injective`,
-`rmp-iii-b-idempotent`, `rmp-workbench-iii-eq51`.
+Consumers, rotation: `rmp-iii-a-pulling-through`, `rmp-ii-circuit`,
+`rmp-iii-a-spt-mpo`.
 Consumers, groups and `cluster=`: `rmp-app-czx-state`,
 `rmp-iii-b-condensation`, `rmp-workbench-iii-ghz-state-workbench`.
 
