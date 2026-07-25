@@ -239,82 +239,9 @@ theorem complCoeff_combination_eq_zero
     (σcompl : RegionPhysicalConfig (V := V) (d := d) D.complement)
     (bβ : RegionBoundaryConfig (G := G) A D.blue) :
     ∑ bdry : RegionBoundaryConfig (G := G) A (Finset.univ \ D.red),
-        c bdry • threeBlockComplCoeff (A := A) (e := e) D bdry σcompl bβ = 0 := by
-  classical
-  -- The σblue-function obtained by `c`-combining the fused host weights.
-  set F : RegionPhysicalConfig (V := V) (d := d) D.blue → ℂ :=
-    fun σblue => ∑ bdry : RegionBoundaryConfig (G := G) A (Finset.univ \ D.red),
-      c bdry • regionBlockedWeight (G := G) A (Finset.univ \ D.red) bdry
-        (threeBlockComplPhysical (A := A) (e := e) D σblue σcompl) with hF
-  -- The host annihilation makes `F` vanish identically.
-  have hFzero : F = 0 := by
-    funext σblue
-    rw [hF]
-    have := congrFun hc (threeBlockComplPhysical (A := A) (e := e) D σblue σcompl)
-    simpa [Finset.sum_apply, Pi.smul_apply] using this
-  -- Scaling `F` by the blue interior bond product is the complement-coupling
-  -- combination of the blue blocked-region weights.
-  have hbluefac :
-      (regionInteriorBondProd (G := G) A D.blue : ℂ) • F =
-        regionBlockedTensorMap (G := G) A D.blue
-          (fun bβ' => ∑ bdry : RegionBoundaryConfig (G := G) A (Finset.univ \ D.red),
-            c bdry • threeBlockComplCoeff (A := A) (e := e) D bdry σcompl bβ') := by
-    rw [hF]
-    funext σblue
-    rw [Pi.smul_apply, regionBlockedTensorMap_apply]
-    -- Distribute the bond multiple through the `c`-combination and apply the blue
-    -- smul-factorization to each fused host weight.
-    rw [Finset.smul_sum]
-    rw [show (∑ bdry : RegionBoundaryConfig (G := G) A (Finset.univ \ D.red),
-          (regionInteriorBondProd (G := G) A D.blue : ℂ) •
-            c bdry • regionBlockedWeight (G := G) A (Finset.univ \ D.red) bdry
-              (threeBlockComplPhysical (A := A) (e := e) D σblue σcompl)) =
-        ∑ bdry : RegionBoundaryConfig (G := G) A (Finset.univ \ D.red),
-          c bdry • ((regionInteriorBondProd (G := G) A D.blue : ℂ) •
-            regionBlockedWeight (G := G) A (Finset.univ \ D.red) bdry
-              (threeBlockComplPhysical (A := A) (e := e) D σblue σcompl)) from
-        Finset.sum_congr rfl (fun bdry _ => by rw [smul_comm])]
-    rw [show (∑ μ : RegionBoundaryConfig (G := G) A D.blue,
-          (fun bβ' => ∑ bdry : RegionBoundaryConfig (G := G) A (Finset.univ \ D.red),
-            c bdry • threeBlockComplCoeff (A := A) (e := e) D bdry σcompl bβ') μ •
-              regionBlockedWeight (G := G) A D.blue μ σblue) =
-        ∑ bdry : RegionBoundaryConfig (G := G) A (Finset.univ \ D.red),
-          c bdry • ∑ bβ' : RegionBoundaryConfig (G := G) A D.blue,
-            threeBlockComplCoeff (A := A) (e := e) D bdry σcompl bβ' •
-              regionBlockedWeight (G := G) A D.blue bβ' σblue from ?_]
-    · refine Finset.sum_congr rfl (fun bdry _ => ?_)
-      congr 1
-      rw [regionInteriorBondProd_smul_regionBlockedWeight_threeBlockComplPhysical_blue
-        (A := A) (e := e) D bdry σblue σcompl]
-    · -- Beta-reduce, distribute the `bβ'`-sum out of each `c bdry` scalar, and swap
-      -- the `bdry`/`bβ'` summation order.
-      simp only []
-      rw [show (∑ bdry : RegionBoundaryConfig (G := G) A (Finset.univ \ D.red),
-            c bdry • ∑ bβ' : RegionBoundaryConfig (G := G) A D.blue,
-              threeBlockComplCoeff (A := A) (e := e) D bdry σcompl bβ' •
-                regionBlockedWeight (G := G) A D.blue bβ' σblue) =
-          ∑ bdry : RegionBoundaryConfig (G := G) A (Finset.univ \ D.red),
-            ∑ bβ' : RegionBoundaryConfig (G := G) A D.blue,
-              (c bdry * threeBlockComplCoeff (A := A) (e := e) D bdry σcompl bβ') •
-                regionBlockedWeight (G := G) A D.blue bβ' σblue from
-        Finset.sum_congr rfl (fun bdry _ => by
-          rw [Finset.smul_sum]
-          exact Finset.sum_congr rfl (fun bβ' _ => by rw [smul_smul]))]
-      rw [Finset.sum_comm]
-      refine Finset.sum_congr rfl (fun bβ' _ => ?_)
-      rw [Finset.sum_smul]
-      refine Finset.sum_congr rfl (fun bdry _ => ?_)
-      simp only [smul_eq_mul, mul_assoc]
-  -- The left side is zero, so the blue blocked map kills the complement coupling row;
-  -- injectivity of the blue block forces that row to vanish.
-  rw [hFzero, smul_zero] at hbluefac
-  have hrow := regionBlockedTensorMap_injective_of_injective (G := G) A D.blue
-    (regionBlockedTensorInjective_blue (A := A) (e := e) D)
-    (a₁ := fun bβ' => ∑ bdry : RegionBoundaryConfig (G := G) A (Finset.univ \ D.red),
-      c bdry • threeBlockComplCoeff (A := A) (e := e) D bdry σcompl bβ')
-    (a₂ := 0) (by rw [← hbluefac, map_zero])
-  have := congrFun hrow bβ
-  simpa using this
+        c bdry • threeBlockComplCoeff (A := A) (e := e) D bdry σcompl bβ = 0 :=
+  D.toThreeBlockGeometry.complCoeff_combination_eq_zero
+    (regionBlockedTensorInjective_blue (A := A) (e := e) D) c hc σcompl bβ
 
 /-! ### The blue/red crossing multiplicity collapse of the complement coupling
 
