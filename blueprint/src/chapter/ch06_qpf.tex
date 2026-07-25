@@ -45,11 +45,10 @@ and~\cite{Evans1978Spectral}.
          & <\dim\ker B.
         \notag
     \end{align}
-    Indeed, equality would imply
+    Indeed, equality would imply, for every~$i$,
     \begin{align}
         K_i^\dagger(\ker B)
-         & \subseteq\ker B
-        \qquad\text{for every }i.
+         & \subseteq\ker B.
         \notag
     \end{align}
     Equivalently, $\supp B$ would be invariant under every $K_i$, making the
@@ -90,11 +89,10 @@ and~\cite{Evans1978Spectral}.
         \notag
     \end{align}
     Every summand is positive semidefinite, so each vanishes. The restriction
-    of $\rho$ to its support is positive definite; hence
+    of $\rho$ to its support is positive definite; hence, for every~$i$,
     \begin{align}
         (\Id-Q)A^iQ
-         & =0
-        \qquad\text{for every }i.
+         & =0.
         \notag
     \end{align}
     Thus $A^iQ=QA^iQ$, and for every $X$ each summand
@@ -751,7 +749,10 @@ The TP-gauge application follows~\cite[Appendix~A]{Cirac2016MPDO_arXiv}.
     \leanok
     \uses{thm:posDef_adjoint_eigenvector,
         thm:tp_gauge_from_adjoint_fixed, thm:spectral_radius_le_one}
-    Choose a positive definite adjoint eigenvector $\sigma>0$, say
+    Choose Kraus operators $\{K_i\}$ for $E$. Regarded as an MPS tensor,
+    they have transfer map $E$, and irreducibility of $E$ is precisely
+    irreducibility of this tensor. Theorem~\ref{thm:posDef_adjoint_eigenvector}
+    therefore gives a positive definite matrix $\sigma>0$ and $t>0$ such that
     $E^\dagger(\sigma)=t\sigma$. The weighted trace pairing with $\rho$ gives
     \begin{align}
         r\tr(\sigma\rho)
