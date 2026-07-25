@@ -2772,6 +2772,13 @@
 \tl_new:N \l__tenkz_kernel_leg_tl
 \tl_new:N \l__tenkz_kernel_leg_reach_tl
 \tl_new:N \l__tenkz_kernel_leg_dir_tl
+% A leg asks every contour whether it holds the site the leg grew from, and
+% that question resolves a range through the shared cell registers.  The leg
+% therefore keeps its own cell in registers of its own: read from the shared
+% pair afterwards, the leg of the second site of an enclosed range answers
+% with the first site's address, and two legs then claim one name.
+\tl_new:N \l__tenkz_kernel_leg_row_tl
+\tl_new:N \l__tenkz_kernel_leg_col_tl
 % The hull builder runs INSIDE the leg walk, which is mid-computation on its
 % own position and its own cell.  It therefore touches none of the shared
 % scratch: these are its alone.
@@ -3144,10 +3151,33 @@
 \fp_new:N \l__tenkz_kernel_ro_xb_fp
 \fp_new:N \l__tenkz_kernel_ro_y_fp
 \fp_new:N \l__tenkz_kernel_ro_yb_fp
+\fp_new:N \l__tenkz_kernel_ro_u_fp
+\fp_new:N \l__tenkz_kernel_ro_v_fp
+\tl_new:N \l__tenkz_kernel_ro_tau_tl
 \prop_new:N \l__tenkz_kernel_ro_lane_prop    % wire id -> lane coordinate
-\prop_new:N \l__tenkz_kernel_ro_box_prop     % wire id -> {x}{xb}{y}{yb}
-\prop_new:N \l__tenkz_kernel_ro_legs_prop    % leg path id -> outermost lane
-\prop_new:N \l__tenkz_kernel_ro_taken_prop   % route text -> lanes already out
+\prop_new:N \l__tenkz_kernel_ro_box_prop     % wire id -> {x}{xb}{y}{yb}{tau}
+\prop_new:N \l__tenkz_kernel_ro_legs_prop    % leg path id -> {{lane}{tau}},...
+\prop_new:N \l__tenkz_kernel_ro_taken_prop   % side | selector -> next lane
+
+% A route stands in the axes of the selection it travels, which is the rule a
+% contour over that same selection already obeys: a quantity measured against
+% a record is measured in that record's axes.  Its box, its lane and the ends
+% it compares against them are therefore held in those axes and carried to the
+% page at the last moment, through the one carry the axes rule owns -- taken
+% forward here and backward below.  At zero turn either is the identity, token
+% for token, which is why a flat picture does not know this section exists.
+\cs_new_protected:Npn \__tenkz_kernel_ro_unturn:NN #1#2
+  {
+    \tl_set_eq:NN \l__tenkz_kernel_r_tau_tl \l__tenkz_kernel_ro_tau_tl
+    \__tenkz_kernel_r_unturn:NN #1#2
+  }
+% a pair already on the page, read in the route's axes
+\cs_new_protected:Npn \__tenkz_kernel_ro_turn:NN #1#2
+  {
+    \tl_set:Ne \l__tenkz_kernel_r_tau_tl
+      { \fp_eval:n { - \l__tenkz_kernel_ro_tau_tl } }
+    \__tenkz_kernel_r_unturn:NN #1#2
+  }
 
 \msg_new:nnn {tenkz}{kernel-route-noroute}
   { [TKZ-ROUTE-NO-ROUTE]~wire~'#1'~has~an~open~end~with~no~direction~and~no~
@@ -3395,8 +3425,67 @@
 % ---------- the route as ink --------------------------------------------------
 % The lane.  A curve over a selection stands one clearance outside that
 % selection's offset hull, and curves over the same selection step outward in
-% declaration order, so two routes on one side never overlap and the author
-% never counts them.
+% declaration order on each side, so two routes on one side never overlap and
+% a route on the opposite side does not consume a lane the author never sees.
+%
+% The four edges are taken along the selection's own axes, and the side words
+% below therefore name a side OF THAT SELECTION: a north lane stands off the
+% hull's north wherever that north leans.  The lane is the coordinate of the
+% edge it stands on in those axes, which is what makes it a distance a leg can
+% be asked to reach; a lane scalar without the axes it was measured in is not
+% a distance at all.
+\cs_new_protected:Npn \__tenkz_kernel_r_route_lane_take:
+  {
+    \str_if_eq:VnTF \l__tenkz_kernel_ro_side_tl {all}
+      {
+        % An all-side route occupies every side at one common offset.  Stand
+        % outside the busiest side, then advance all four counters so a later
+        % compass-side route cannot land on one of the same four paths.
+        \int_zero:N \l__tenkz_kernel_ro_int
+        \clist_map_inline:nn {n,s,e,w}
+          {
+            \prop_get:NeN \l__tenkz_kernel_ro_taken_prop
+              { ##1 | \tl_use:N \l__tenkz_kernel_ro_sel_tl }
+              \l__tenkz_kernel_ro_lane_tl
+            \quark_if_no_value:NF \l__tenkz_kernel_ro_lane_tl
+              {
+                \int_compare:nNnT
+                  { \l__tenkz_kernel_ro_lane_tl }
+                  >
+                  { \l__tenkz_kernel_ro_int }
+                  {
+                    \int_set:Nn \l__tenkz_kernel_ro_int
+                      { \l__tenkz_kernel_ro_lane_tl }
+                  }
+              }
+          }
+        \tl_set:Ne \l__tenkz_kernel_ro_lane_tl
+          { \int_use:N \l__tenkz_kernel_ro_int }
+        \clist_map_inline:nn {n,s,e,w}
+          {
+            \prop_put:Nee \l__tenkz_kernel_ro_taken_prop
+              { ##1 | \tl_use:N \l__tenkz_kernel_ro_sel_tl }
+              { \int_eval:n { \l__tenkz_kernel_ro_int + 1 } }
+          }
+      }
+      {
+        \prop_get:NeN \l__tenkz_kernel_ro_taken_prop
+          {
+            \tl_use:N \l__tenkz_kernel_ro_side_tl
+            | \tl_use:N \l__tenkz_kernel_ro_sel_tl
+          }
+          \l__tenkz_kernel_ro_lane_tl
+        \quark_if_no_value:NT \l__tenkz_kernel_ro_lane_tl
+          { \tl_set:Nn \l__tenkz_kernel_ro_lane_tl {0} }
+        \prop_put:Nee \l__tenkz_kernel_ro_taken_prop
+          {
+            \tl_use:N \l__tenkz_kernel_ro_side_tl
+            | \tl_use:N \l__tenkz_kernel_ro_sel_tl
+          }
+          { \int_eval:n { \l__tenkz_kernel_ro_lane_tl + 1 } }
+      }
+  }
+
 \cs_new_protected:Npn \__tenkz_kernel_r_route_measure:n #1
   {
     \__tenkz_kernel_route_of:nNN {#1}
@@ -3409,23 +3498,24 @@
           \l__tenkz_kernel_ro_mem_seq \l__tenkz_kernel_ro_obst_seq
         \__tenkz_kernel_hull_scale:NN
           \l__tenkz_kernel_ro_mem_seq \l__tenkz_kernel_ro_scale_tl
-        \prop_get:NVN \l__tenkz_kernel_ro_taken_prop
-          \l__tenkz_kernel_ro_sel_tl \l__tenkz_kernel_ro_lane_tl
-        \quark_if_no_value:NT \l__tenkz_kernel_ro_lane_tl
-          { \tl_set:Nn \l__tenkz_kernel_ro_lane_tl {0} }
-        \prop_put:Nee \l__tenkz_kernel_ro_taken_prop
-          { \tl_use:N \l__tenkz_kernel_ro_sel_tl }
-          { \int_eval:n { \l__tenkz_kernel_ro_lane_tl + 1 } }
-        \__tenkz_kernel_r_route_edge:nnN   {0} { } \l__tenkz_kernel_ro_xb_fp
-        \__tenkz_kernel_r_route_edge:nnN  {90} { } \l__tenkz_kernel_ro_yb_fp
-        \__tenkz_kernel_r_route_edge:nnN {180} {-} \l__tenkz_kernel_ro_x_fp
-        \__tenkz_kernel_r_route_edge:nnN {270} {-} \l__tenkz_kernel_ro_y_fp
+        \__tenkz_kernel_hull_turn:NN
+          \l__tenkz_kernel_ro_mem_seq \l__tenkz_kernel_ro_tau_tl
+        \__tenkz_kernel_r_route_lane_take:
+        \__tenkz_kernel_r_route_edge:nnN
+          { \l__tenkz_kernel_ro_tau_tl       } { } \l__tenkz_kernel_ro_xb_fp
+        \__tenkz_kernel_r_route_edge:nnN
+          { \l__tenkz_kernel_ro_tau_tl + 90  } { } \l__tenkz_kernel_ro_yb_fp
+        \__tenkz_kernel_r_route_edge:nnN
+          { \l__tenkz_kernel_ro_tau_tl + 180 } {-} \l__tenkz_kernel_ro_x_fp
+        \__tenkz_kernel_r_route_edge:nnN
+          { \l__tenkz_kernel_ro_tau_tl + 270 } {-} \l__tenkz_kernel_ro_y_fp
         \prop_put:Nne \l__tenkz_kernel_ro_box_prop {#1}
           {
             { \fp_eval:n { \l__tenkz_kernel_ro_x_fp  } }
             { \fp_eval:n { \l__tenkz_kernel_ro_xb_fp } }
             { \fp_eval:n { \l__tenkz_kernel_ro_y_fp  } }
             { \fp_eval:n { \l__tenkz_kernel_ro_yb_fp } }
+            { \tl_use:N  \l__tenkz_kernel_ro_tau_tl  }
           }
         \prop_put:Nne \l__tenkz_kernel_ro_lane_prop {#1}
           {
@@ -4195,7 +4285,7 @@
 \cs_new_protected:Npn \__tenkz_kernel_r_leg:nnn #1#2#3
   {
     \__tenkz_kernel_r_atom_rc:nNNN {#1}
-      \l__tenkz_kernel_r_row_tl \l__tenkz_kernel_r_col_tl \l_tmpa_bool
+      \l__tenkz_kernel_leg_row_tl \l__tenkz_kernel_leg_col_tl \l_tmpa_bool
     \bool_if:NT \l_tmpa_bool
       {
         \__tenkz_kernel_r_xy:nNN {#1}
@@ -4265,25 +4355,24 @@
         % silent where a leg stopped short of the string.
         \prop_get:NeN \l__tenkz_kernel_ro_legs_prop
           {
-            leg - #2 - \tl_use:N \l__tenkz_kernel_r_row_tl
-            - \tl_use:N \l__tenkz_kernel_r_col_tl
+            leg - #2 - \tl_use:N \l__tenkz_kernel_leg_row_tl
+            - \tl_use:N \l__tenkz_kernel_leg_col_tl
           }
           \l__tenkz_kernel_leg_reach_tl
         \quark_if_no_value:NF \l__tenkz_kernel_leg_reach_tl
           {
-            \fp_set:Nn \l__tenkz_kernel_r_reach_fp
+            \clist_map_inline:Vn \l__tenkz_kernel_leg_reach_tl
               {
-                max( \l__tenkz_kernel_r_reach_fp ,
-                     abs( \l__tenkz_kernel_leg_reach_tl
-                          - \l__tenkz_kernel_r_y_fp )
-                     + \__tenkz_metric_ratio:n {legcrossclear} )
+                \tl_set:Nn \l__tenkz_kernel_ro_row_tl {##1}
+                \exp_last_unbraced:NV \__tenkz_kernel_r_leg_lane:nn
+                  \l__tenkz_kernel_ro_row_tl
               }
           }
         % a declared crossing lengthens the leg past the crossing string
         \prop_get:NeN \l__tenkz_kernel_r_legref_prop
           {
-            leg - #2 - \tl_use:N \l__tenkz_kernel_r_row_tl
-            - \tl_use:N \l__tenkz_kernel_r_col_tl
+            leg - #2 - \tl_use:N \l__tenkz_kernel_leg_row_tl
+            - \tl_use:N \l__tenkz_kernel_leg_col_tl
           }
           \l__tenkz_kernel_r_b_tl
         \quark_if_no_value:NTF \l__tenkz_kernel_r_b_tl
@@ -4296,8 +4385,8 @@
             \exp_args:NV \__tenkz_kernel_r_leg_reach:n \l__tenkz_kernel_r_b_tl
             \__tenkz_kernel_r_leg_ink:nnn {#1} {#2}
               {
-                leg - #2 - \tl_use:N \l__tenkz_kernel_r_row_tl
-                - \tl_use:N \l__tenkz_kernel_r_col_tl
+                leg - #2 - \tl_use:N \l__tenkz_kernel_leg_row_tl
+                - \tl_use:N \l__tenkz_kernel_leg_col_tl
               }
           }
         % The leg-tip label: author-owned tokens from up= / down=.  It stands
@@ -4320,6 +4409,33 @@
                 )
               }
               { \tl_use:N \l__tenkz_kernel_r_b_tl }
+          }
+      }
+  }
+% How far along its own direction a leg must run to meet a route's lane: #1
+% the lane, #2 the axes it was measured in.  The lane is a coordinate along
+% the route's north, so the gap between this atom and it is measured across
+% that same north, and the leg spends only as much of its length crossing that
+% gap as its direction lies along it.  Down the page, over a flat selection,
+% both readings are the old vertical delta.  A leg lying in the lane's own
+% line never meets it however far it runs, and is left at its natural length
+% for the crossing police to refuse.
+\cs_new_protected:Npn \__tenkz_kernel_r_leg_lane:nn #1#2
+  {
+    \fp_compare:nNnF
+      { cosd( \l__tenkz_kernel_leg_dir_tl - (#2) - 90 ) } = {0}
+      {
+        \fp_set:Nn \l__tenkz_kernel_r_reach_fp
+          {
+            max( \l__tenkz_kernel_r_reach_fp ,
+                 abs
+                   (
+                     ( (#1)
+                       - \l__tenkz_kernel_r_x_fp * cosd( (#2) + 90 )
+                       - \l__tenkz_kernel_r_y_fp * sind( (#2) + 90 ) )
+                     / cosd( \l__tenkz_kernel_leg_dir_tl - (#2) - 90 )
+                   )
+                 + \__tenkz_metric_ratio:n {legcrossclear} )
           }
       }
   }
@@ -4457,7 +4573,7 @@
       }
   }
 % one leg of a route's crossing set: it is an engine path, and it reaches at
-% least as far as the outermost lane that crosses it
+% at least as far as every lane that crosses it
 \cs_new_protected:Npn \__tenkz_kernel_r_route_leg:nn #1#2
   {
     \tl_set:Ne \l__tenkz_kernel_ro_b_tl
@@ -4467,24 +4583,29 @@
       }
     \prop_put:NVn \l__tenkz_kernel_r_legref_prop
       \l__tenkz_kernel_ro_b_tl {#2}
-    \tl_set_eq:NN \l__tenkz_kernel_ro_row_tl \l__tenkz_kernel_ro_lane_tl
+    % Every lane travels with the axes it is a coordinate in.  Bare lane
+    % scalars from differently turned selections cannot be ordered, so retain
+    % all pairs and let the leg project each one into its own direction.
+    \tl_set:Ne \l__tenkz_kernel_ro_row_tl
+      {
+        {
+          { \tl_use:N \l__tenkz_kernel_ro_lane_tl }
+          { \tl_use:N \l__tenkz_kernel_ro_tau_tl  }
+        }
+      }
     \prop_get:NVN \l__tenkz_kernel_ro_legs_prop
       \l__tenkz_kernel_ro_b_tl \l__tenkz_kernel_ro_reach_tl
-    \quark_if_no_value:NF \l__tenkz_kernel_ro_reach_tl
+    \quark_if_no_value:NTF \l__tenkz_kernel_ro_reach_tl
       {
-        \tl_set:Ne \l__tenkz_kernel_ro_row_tl
-          {
-            \fp_eval:n
-              {
-                abs( \l__tenkz_kernel_ro_reach_tl )
-                  > abs( \l__tenkz_kernel_ro_lane_tl )
-                  ? \l__tenkz_kernel_ro_reach_tl
-                  : \l__tenkz_kernel_ro_lane_tl
-              }
-          }
+        \prop_put:NVV \l__tenkz_kernel_ro_legs_prop
+          \l__tenkz_kernel_ro_b_tl \l__tenkz_kernel_ro_row_tl
       }
-    \prop_put:NVV \l__tenkz_kernel_ro_legs_prop
-      \l__tenkz_kernel_ro_b_tl \l__tenkz_kernel_ro_row_tl
+      {
+        \tl_put_right:Ne \l__tenkz_kernel_ro_reach_tl
+          { , \tl_use:N \l__tenkz_kernel_ro_row_tl }
+        \prop_put:NVV \l__tenkz_kernel_ro_legs_prop
+          \l__tenkz_kernel_ro_b_tl \l__tenkz_kernel_ro_reach_tl
+      }
   }
 
 % the engine id of string record #1: its name, else the record id
@@ -4624,7 +4745,7 @@
     \prop_get:NnN \l__tenkz_kernel_ro_lane_prop {#1}
       \l__tenkz_kernel_ro_lane_tl
     \prop_get:NnN \l__tenkz_kernel_ro_box_prop {#1} \l__tenkz_kernel_ro_b_tl
-    \exp_last_unbraced:NV \__tenkz_kernel_r_route_box:nnnn
+    \exp_last_unbraced:NV \__tenkz_kernel_r_route_box:nnnnn
       \l__tenkz_kernel_ro_b_tl
     \tl_clear:N \l__tenkz_kernel_r_from_tl
     \tl_clear:N \l__tenkz_kernel_r_to_tl
@@ -4656,38 +4777,51 @@
           \l__tenkz_kernel_r_sid_tl \l__tenkz_kernel_r_pts_tl
       }
   }
-% the measured hull box back into the four route registers
-\cs_new_protected:Npn \__tenkz_kernel_r_route_box:nnnn #1#2#3#4
+% the measured hull box, and the axes it was measured in, back into the route
+% registers
+\cs_new_protected:Npn \__tenkz_kernel_r_route_box:nnnnn #1#2#3#4#5
   {
     \fp_set:Nn \l__tenkz_kernel_ro_x_fp  {#1}
     \fp_set:Nn \l__tenkz_kernel_ro_xb_fp {#2}
     \fp_set:Nn \l__tenkz_kernel_ro_y_fp  {#3}
     \fp_set:Nn \l__tenkz_kernel_ro_yb_fp {#4}
+    \tl_set:Nn \l__tenkz_kernel_ro_tau_tl {#5}
+  }
+% one point of the arc, named in the route's axes and carried to the page
+\cs_new_protected:Npn \__tenkz_kernel_r_route_pt:nn #1#2
+  {
+    \fp_set:Nn \l__tenkz_kernel_ro_u_fp {#1}
+    \fp_set:Nn \l__tenkz_kernel_ro_v_fp {#2}
+    \__tenkz_kernel_ro_unturn:NN
+      \l__tenkz_kernel_ro_u_fp \l__tenkz_kernel_ro_v_fp
+    \tl_put_right:Ne \l__tenkz_kernel_r_pts_tl
+      {
+        \__tenkz_kernel_r_ppt:nn
+          { \l__tenkz_kernel_ro_u_fp } { \l__tenkz_kernel_ro_v_fp }
+      }
   }
 % a straight arc from one end of the side to the other: #1 and #2 name which
 % coordinate runs and which stands
 \cs_new_protected:Npn \__tenkz_kernel_r_route_across:nn #1#2
   {
-    \tl_set:Ne \l__tenkz_kernel_r_pts_tl
+    \tl_clear:N \l__tenkz_kernel_r_pts_tl
+    \__tenkz_kernel_r_route_pt:nn
       {
-        \__tenkz_kernel_r_ppt:nn
-          {
-            \str_if_eq:nnTF {#1} {lane}
-              { \l__tenkz_kernel_ro_lane_tl } { \l__tenkz_kernel_ro_x_fp }
-          }
-          {
-            \str_if_eq:nnTF {#2} {lane}
-              { \l__tenkz_kernel_ro_lane_tl } { \l__tenkz_kernel_ro_yb_fp }
-          }
-        \__tenkz_kernel_r_ppt:nn
-          {
-            \str_if_eq:nnTF {#1} {lane}
-              { \l__tenkz_kernel_ro_lane_tl } { \l__tenkz_kernel_ro_xb_fp }
-          }
-          {
-            \str_if_eq:nnTF {#2} {lane}
-              { \l__tenkz_kernel_ro_lane_tl } { \l__tenkz_kernel_ro_y_fp }
-          }
+        \str_if_eq:nnTF {#1} {lane}
+          { \l__tenkz_kernel_ro_lane_tl } { \l__tenkz_kernel_ro_x_fp }
+      }
+      {
+        \str_if_eq:nnTF {#2} {lane}
+          { \l__tenkz_kernel_ro_lane_tl } { \l__tenkz_kernel_ro_yb_fp }
+      }
+    \__tenkz_kernel_r_route_pt:nn
+      {
+        \str_if_eq:nnTF {#1} {lane}
+          { \l__tenkz_kernel_ro_lane_tl } { \l__tenkz_kernel_ro_xb_fp }
+      }
+      {
+        \str_if_eq:nnTF {#2} {lane}
+          { \l__tenkz_kernel_ro_lane_tl } { \l__tenkz_kernel_ro_y_fp }
       }
   }
 
@@ -4726,35 +4860,37 @@
           }
       }
   }
-% turn #1 of the hull, counted anticlockwise from the northeast
+% turn #1 of the hull, counted anticlockwise from the northeast -- of the
+% hull's own northeast, which is the corner of its axes and not of the page
 \cs_new_protected:Npn \__tenkz_kernel_r_route_turn:n #1
   {
-    \tl_put_right:Ne \l__tenkz_kernel_r_pts_tl
+    \__tenkz_kernel_r_route_pt:nn
       {
-        \__tenkz_kernel_r_ppt:nn
+        \int_compare:nNnTF {#1} < {2}
+          { \l__tenkz_kernel_ro_xb_fp }
           {
-            \int_compare:nNnTF {#1} < {2}
+            \int_compare:nNnTF {#1} < {4}
+              { \l__tenkz_kernel_ro_x_fp }
               { \l__tenkz_kernel_ro_xb_fp }
-              {
-                \int_compare:nNnTF {#1} < {4}
-                  { \l__tenkz_kernel_ro_x_fp }
-                  { \l__tenkz_kernel_ro_xb_fp }
-              }
-          }
-          {
-            \int_compare:nNnTF {#1} < {3}
-              { \l__tenkz_kernel_ro_yb_fp }
-              { \l__tenkz_kernel_ro_y_fp }
           }
       }
+      {
+        \int_compare:nNnTF {#1} < {3}
+          { \l__tenkz_kernel_ro_yb_fp }
+          { \l__tenkz_kernel_ro_y_fp }
+      }
   }
-% which turn a point stands nearest, or 0 when there is no such point
+% Which turn a point stands nearest, or 0 when there is no such point.  The
+% point arrives on the page and the box it is weighed against stands in the
+% route's axes, so it is read in those axes before the two are compared.
 \cs_new_protected:Npn \__tenkz_kernel_r_route_turn_at:NN #1#2
   {
     \tl_if_empty:NTF #1
       { \tl_set:Nn #2 {0} }
       {
         \exp_args:Ne \__tenkz_kernel_r_point_fp:n { \tl_item:Nn #1 {1} }
+        \__tenkz_kernel_ro_turn:NN
+          \l__tenkz_kernel_r_xc_fp \l__tenkz_kernel_r_yc_fp
         \tl_set:Ne #2
           {
             \fp_eval:n
