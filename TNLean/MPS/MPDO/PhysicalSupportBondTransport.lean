@@ -35,18 +35,6 @@ namespace MPOTensor
 
 variable {d e D : ℕ}
 
-/-- Saturation of the area law excludes a zero-dimensional physical space.
-Only the one-site chain is used.
-
-Source: arXiv:1606.00608, Definition 4.6, line 811. -/
-theorem physicalDim_pos_of_isSAL (M : MPOTensor d D) (hSAL : IsSAL M) :
-    0 < d := by
-  by_contra hd
-  have hd0 : d = 0 := Nat.eq_zero_of_not_pos hd
-  subst d
-  obtain ⟨_, htrace, _⟩ := hSAL
-  simpa [mpo, mpoMatrixEntry] using htrace 1 (by omega)
-
 /-- Saturation of the area law excludes a zero-dimensional virtual space.
 Only the one-site chain is used.
 
@@ -131,26 +119,6 @@ theorem liftedBond_supported (F : PhysicalSupportRestrictionData P K)
       (sitewisePhysicalMatrix F.inclusion 2),
     sitewisePhysicalMatrix_isometry F.inclusion F.inclusion_isometry 2,
     Matrix.one_mul]
-
-/-- Proposition C.8 applied on the injective physical support supplies a
-positive two-site bond whose lift to the ambient physical space is supported
-on the prescribed two-site sector.
-
-Source: arXiv:1606.00608, Appendix C.2, Proposition C.8 (`3to4`) and
-equations `PjKiPj` and `generateMPDO`, lines 1571--1593 and 1733--1770. -/
-theorem exists_etaLocalStructureData_liftedBond_supported
-    (F : PhysicalSupportRestrictionData P K) (hSAL : IsSAL K) :
-    ∃ data : EtaLocalStructureData
-        (PhysicalSectorFactorization.changePhysicalBasis F.inclusionᴴ K),
-      (F.liftedBond data.bondData.bond).PosSemidef ∧
-        twoSiteSectorProjection P * F.liftedBond data.bondData.bond *
-          twoSiteSectorProjection P = F.liftedBond data.bondData.bond := by
-  obtain ⟨data⟩ := nonempty_etaLocalStructureData_of_isSAL
-    (PhysicalSectorFactorization.changePhysicalBasis F.inclusionᴴ K)
-    F.restricted_injective
-    (F.restricted_isSAL hSAL)
-  exact ⟨data, F.liftedBond_pos data.bondData.bond_pos,
-    F.liftedBond_supported data.bondData.bond⟩
 
 end PhysicalSupportRestrictionData
 

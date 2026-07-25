@@ -253,25 +253,6 @@ theorem isTransferIdempotent_of_unit_gaugePhase
   rw [IsTransferIdempotent, hMap]
   exact hCRFP
 
-/-- The unit-phase gauge covariance of transfer idempotence across an equality of bond
-dimensions.
-
-This is the casted form used after the normal-tensor fundamental theorem identifies bond
-dimensions. It supplies the normalization-sensitive transport in the BNT identification at
-arXiv:1606.00608, line 1307. The normal-tensor normalization comes from lines 224--235 and,
-for algebraically normal tensors, quantum Wielandt Proposition 3 (arXiv:0909.5347) together
-with Wolf, Theorem 6.3.
--/
-theorem isTransferIdempotent_of_unit_gaugePhase_cast
-    {D₁ D₂ : ℕ} (A : MPSTensor d D₁) (B : MPSTensor d D₂) (hdim : D₁ = D₂)
-    (X : GL (Fin D₂) ℂ) (ζ : ℂ) (hζ : ‖ζ‖ = 1)
-    (hrel : ∀ i, B i = ζ • ((X : Matrix (Fin D₂) (Fin D₂) ℂ) *
-      (cast (congr_arg (MPSTensor d) hdim) A) i *
-      (↑(X⁻¹) : Matrix (Fin D₂) (Fin D₂) ℂ)))
-    (hRFP : IsTransferIdempotent A) : IsTransferIdempotent B := by
-  subst D₂
-  exact isTransferIdempotent_of_unit_gaugePhase A B X ζ hζ (by simpa using hrel) hRFP
-
 /-- Transport across an equality of bond dimensions preserves transfer idempotence.
 
 This isolates the dependent cast used in the BNT identification at arXiv:1606.00608,
