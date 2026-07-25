@@ -24,6 +24,7 @@ CmdLine
   -n 36  # Space-before-parenthesis heuristic.
   -n 38  # Punctuation-before-quotes heuristic.
   -n 39  # Double-space heuristic.
+  -n 26  # Space-before-punctuation heuristic; false positive on tenkz range syntax `..`.
   -n 40  # Punctuation around inline math heuristic.
   -n 45  # Display-math delimiter heuristic.
 }
