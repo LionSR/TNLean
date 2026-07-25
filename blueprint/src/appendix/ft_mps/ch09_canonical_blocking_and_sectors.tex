@@ -70,7 +70,7 @@ through its own period agrees with the directly $p$-blocked block.
     If $\E_{A^{[p_0]}}$ is primitive, then $\E_{A^{[p]}}$ is primitive.
 \end{lemma}
 
-\begin{lemma}[Formal ingredients for irreducibility after primitive blocking]%
+\begin{lemma}[Fixed-point criteria for irreducibility after primitive blocking]%
     \label{lem:blocked_irreducibility_direct_support}
     \lean{MPSTensor.hasPrimitiveFixedPoint_of_peripheralPrimitive_of_irreducible}
     \lean{MPSTensor.posDef_of_isIrreducibleTensor_of_isPrimitiveMPS}
@@ -185,8 +185,8 @@ through its own period agrees with the directly $p$-blocked block.
     \lean{MPSTensor.tp_primitive_irreducible_extra_blocking}
     \leanok
     \uses{def:blocked_tensor, thm:blocked_irreducible_tp_primitive}
-    Let $A$ be trace-preserving, primitive, and tensor-irreducible. For every
-    $k>0$,
+    Let $A$ have positive bond dimension and be trace-preserving, primitive,
+    and tensor-irreducible. For every $k>0$,
     \begin{align}
         \sum_\alpha((A^{[k]})^\alpha)^\dagger(A^{[k]})^\alpha
          & =\Id,
