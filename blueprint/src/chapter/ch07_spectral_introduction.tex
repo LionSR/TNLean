@@ -1,25 +1,59 @@
-\chapter{Transfer-Operator Gaps and Block Separation}\label{ch:spectral}
+\chapter{Peripheral Channel Structure and Transfer-Operator Gaps}\label{ch:spectral}
 
-This chapter proves that the MPV overlaps between distinct
-(non-gauge-phase-equivalent) MPS blocks decay to zero as system
-size grows. It also proves the corresponding self-overlap convergence
-to~$1$ under the complementary transfer-map gap hypothesis that encodes
-primitivity in the cases of interest. The argument is based on a
-spectral analysis of the \emph{mixed transfer operator},
-following~\cite{PerezGarcia2007Matrix}.
+This chapter studies two spectral phenomena for finite-dimensional quantum
+channels and MPS transfer maps, following~\cite{PerezGarcia2007Matrix} and
+\cite{Wolf2012Quantum}.
 
-This chapter concerns gaps in the spectrum of transfer operators,
-writing $\rho_{\spec}(\cdot)$ for the spectral radius:
-$\rho_{\spec}(F_{AB})<1$ for mixed transfer operators and
-$\rho_{\spec}(\E_A-P)<1$ after removing the fixed-point projection. The
-unqualified phrase \emph{spectral gap} is reserved for the energy gap of a
-many-body Hamiltonian, discussed later in the full blueprint.
+The first is \emph{peripheral} structure: for an irreducible unital Schwarz
+map with a faithful adjoint fixed point, the eigenvalues on the unit circle
+form a finite cyclic group (Theorem~\ref{thm:peripheral_cyclic_structure}),
+and under trace preservation the order of this group divides the bond
+dimension~$D$ (Theorem~\ref{thm:peripheral_cyclic_group}). Removing this
+period by unitary conjugation and cyclic corner projections produces the
+periodicity-free cyclic-sector decomposition
+(Theorem~\ref{thm:cyclic_decomposition_irreducible_schwarz}) used by the
+canonical-form reduction of Chapter~\ref{ch:canonical}.
 
-The algebraic mixed-transfer identities in the first two sections do
-not use normalization. Starting with the spectral-radius estimates,
-we assume the trace-preserving normalization
+The second is the \emph{mixed transfer operator} $F_{AB}$ of two MPS tensors
+$A$ and $B$, and its spectral radius $\rho_{\spec}(F_{AB})$. We show that
+$\rho_{\spec}(F_{AB})\leq1$ under trace-preserving normalization
+(Theorem~\ref{thm:eigenvalue_bound}), that equality forces $A$ and $B$ to be
+gauge-phase equivalent (Theorem~\ref{thm:modulus_one_gauge}), and that
+mismatched bond dimensions always force a strict gap
+(Theorem~\ref{thm:transfer_operator_gap_rect}). Since the MPV overlap
+$O_{AB}(N)$ equals the operator trace $\Tr(F_{AB}^N)$
+(Theorem~\ref{thm:overlap_trace}), these gaps translate directly into the
+overlap-decay theorems (Theorem~\ref{thm:overlap_decay} and its rectangular
+and irreducible-trace-preserving variants) used throughout the fundamental
+theorem. The complementary case --- a single tensor whose transfer map has a
+trivial peripheral spectrum away from the fixed-point projection --- gives
+the rank-one Perron limit $\Tr(\E_A^n)\to1$
+(Theorem~\ref{thm:trace_pow_one}) and hence primitive self-overlap
+convergence $O_{AA}(N)\to1$ (Theorem~\ref{thm:primitive_overlap}).
+
+Throughout, $\rho_{\spec}(\cdot)$ denotes the spectral radius of a linear
+endomorphism of a finite-dimensional matrix space:
+$\rho_{\spec}(F_{AB})<1$ for a mixed transfer operator and
+$\rho_{\spec}(\E_A-P)<1$ for a transfer map after removing its fixed-point
+projection $P$. The unqualified phrase \emph{spectral gap} is reserved for
+the energy gap of a many-body Hamiltonian, discussed later in the full
+blueprint.
+
+The algebraic mixed-transfer identities in the first two sections do not use
+normalization. Starting with the spectral-radius estimates, we assume the
+trace-preserving normalization
 \begin{align}
     \sum_i (A^i)^\dagger A^i
      & =\Id.
     \label{eq:spec_tp_normalization}
 \end{align}
+Right-canonical (unital) and left-canonical (trace-preserving) gauges are
+generally different similarity transforms of the same tensor, recorded in
+Remark~\ref{rem:gauge_conventions}; both are used below, depending on which
+fixed point --- of the transfer map or of its adjoint --- drives the gauge.
+
+The proofs of the technical mixed-transfer identities, Frobenius-norm
+estimates, gauge-rigidity intertwiners, spectral-radius decay estimates, the
+rank-one Perron projection, and the cyclic-decomposition machinery removing
+peripheral periodicity are collected in
+Appendix~\ref{ch:spectral_supporting_results}.
