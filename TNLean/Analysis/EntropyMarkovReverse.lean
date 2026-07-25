@@ -520,14 +520,6 @@ end HayashiMarkov
 
 /-! ## Entropy of weighted Kronecker blocks -/
 
-/-- A Kronecker product of two density matrices is a density matrix. -/
-theorem kronecker_density {m n : Type*} [Fintype m] [Fintype n]
-    {L : Matrix m m ℂ} {R : Matrix n n ℂ}
-    (hL : L.PosSemidef) (hR : R.PosSemidef) (hLt : L.trace = 1) (hRt : R.trace = 1) :
-    (L ⊗ₖ R).PosSemidef ∧ (L ⊗ₖ R).trace = 1 := by
-  refine ⟨hL.kronecker hR, ?_⟩
-  rw [Matrix.trace_kronecker, hLt, hRt, mul_one]
-
 /-- The entropy of a block-diagonal sum of nonnegatively weighted Kronecker
 blocks. -/
 theorem entropy_blockDiagonal_smul_kronecker {o : Type*} [Fintype o] [DecidableEq o]

@@ -65,12 +65,6 @@ theorem eigenvectorProjection_idem (hA : A.IsHermitian) (k : n) :
   rw [hA.eigenvectorProjection_eq_indicator k]
   exact hA.eigenvectorUnitary_indicator_idem {k}
 
-/-- A rank-one eigenvector projection has trace one. -/
-theorem eigenvectorProjection_trace (hA : A.IsHermitian) (k : n) :
-    (hA.eigenvectorProjection k).trace = 1 := by
-  rw [hA.eigenvectorProjection_eq_indicator k]
-  simpa using hA.eigenvectorUnitary_indicator_trace ({k} : Finset n)
-
 /-- Projections associated with distinct eigenbasis vectors have zero product. -/
 theorem eigenvectorProjection_mul_eq_zero_of_ne
     (hA : A.IsHermitian) {j k : n} (hjk : j ≠ k) :

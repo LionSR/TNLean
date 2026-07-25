@@ -174,11 +174,6 @@ theorem kyFanNorm_succ (hA : A.IsHermitian) (k : ℕ) :
     hA.kyFanNorm (k + 1) = hA.kyFanNorm k + hA.descEigenvalue k := by
   simp [kyFanNorm, Finset.sum_range_succ]
 
-/-- Beyond the matrix dimension the descending-eigenvalue list is `0`. -/
-theorem descEigenvalue_eq_zero_of_le (hA : A.IsHermitian) {i : ℕ}
-    (hi : Fintype.card n ≤ i) : hA.descEigenvalue i = 0 := by
-  simp [descEigenvalue, Nat.not_lt.mpr hi]
-
 /-- Summing the full descending-eigenvalue list reproduces the sum of all
 eigenvalues. -/
 theorem sum_descEigenvalue_card (hA : A.IsHermitian) :

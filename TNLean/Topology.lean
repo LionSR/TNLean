@@ -10,4 +10,3 @@ Authors: TNLean contributors
 
 import TNLean.Topology.BrouwerProduct
 import TNLean.Topology.CompactRetractFixedPoint
-import TNLean.Topology.ConvexProjection
