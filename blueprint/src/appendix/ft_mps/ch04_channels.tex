@@ -202,57 +202,6 @@ These results supply the deferred technical steps in
 Lemma~\ref{lem:making_positive_maps_trace_preserving}: the inverse-square-root
 filter satisfies the normalization identity and is invertible.
 
-\section{Largest-eigenvalue sums}
-
-This section proves attainment and the matching upper bound used in
-Theorem~\ref{thm:ky_fan_maximum_principle}. For Hermitian $A$, write $S_k(A)$
-for the sum introduced in Definition~\ref{def:ky_fan_norm}.
-
-\begin{theorem}[Achievability of the largest-eigenvalue sum]
-    \label{thm:ky_fan_achievability}
-    \lean{Matrix.IsHermitian.exists_isProj_trace_eq_kyFanNorm}
-    \leanok
-    \uses{def:ky_fan_norm}
-    For every Hermitian $A\in\MN{D}$ and every $k\ge0$, there is an orthogonal
-    projection $P$ of rank $\min(k,D)$ with $\re\tr(PA)=S_k(A)$.
-\end{theorem}
-
-\begin{proof}\leanok
-    \uses{def:ky_fan_norm}
-    Diagonalize $A=U\diag(\lambda_i)U^\dagger$ and take $P$ to be the
-    projection onto the span of the eigenvectors with the $\min(k,D)$ largest
-    eigenvalues. Then $\re\tr(PA)=\sum_{i\le k}\lambda_i=S_k(A)$.
-\end{proof}
-
-\begin{theorem}[Upper bound for the largest-eigenvalue sum]
-    \label{thm:ky_fan_upper_bound}
-    \lean{Matrix.IsHermitian.trace_mul_re_le_kyFanNorm}
-    \leanok
-    \uses{def:ky_fan_norm}
-    For every Hermitian $A\in\MN{D}$ and every orthogonal projection $P$ of
-    rank $k<D$, one has $\re\tr(PA)\le S_k(A)$.
-\end{theorem}
-
-\begin{proof}\leanok
-    \uses{def:ky_fan_norm}
-    Conjugating $P$ by $U$ gives an orthogonal projection $Q$ of the same
-    rank, and $\re\tr(PA)=\sum_iw_i\lambda_i$, where $w_i$ are the diagonal
-    entries of $Q$. Each $w_i$ lies in $[0,1]$ and the weights sum to
-    $\tr(P)=k$. With the threshold $c=\lambda_{k+1}$,
-    \begin{align}
-        \sum_{i\le k}\lambda_i-\sum_iw_i\lambda_i
-         & =\sum_{i\le k}(\lambda_i-c)(1-w_i)
-        +\sum_{i>k}(c-\lambda_i)w_i
-        \ge0,
-        \notag
-    \end{align}
-    since for $i\le k$ the eigenvalues dominate $c$ while $1-w_i\ge0$, and
-    for $i>k$ they are dominated by $c$ while $w_i\ge0$.
-\end{proof}
-
-Together, Theorems~\ref{thm:ky_fan_achievability} and
-\ref{thm:ky_fan_upper_bound} give the two inequalities in
-Theorem~\ref{thm:ky_fan_maximum_principle}.
 
 \section{Density matrices and the Ces\`aro construction}
 
