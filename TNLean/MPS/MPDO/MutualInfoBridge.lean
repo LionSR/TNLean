@@ -55,7 +55,8 @@ noncomputable def periodicCutLeftFactor (M : MPOTensor d D) (N L : ℕ)
         (List.ofFn (finFunctionFinEquiv.symm x')) a b
 
 /-- The right-block factor obtained by opening the two virtual bonds of a
-periodic MPO at a contiguous cut.  Its virtual indices are reversed because \(\operatorname{tr}(AB) = \sum_{a,b} A_{ab} B_{ba}\). -/
+periodic MPO at a contiguous cut. Its virtual indices are reversed because
+\(\operatorname{tr}(AB) = \sum_{a,b} A_{ab} B_{ba}\). -/
 noncomputable def periodicCutRightFactor (M : MPOTensor d D) (K : ℕ)
     (a b : Fin D) : Matrix (Fin (d ^ K)) (Fin (d ^ K)) ℂ :=
   fun y y' ↦
