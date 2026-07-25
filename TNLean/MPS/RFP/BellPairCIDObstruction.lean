@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.RFP.BeigiLoopBNTIdentification
+import TNLean.MPS.CanonicalForm.NormalTensorGauge
 import TNLean.MPS.RFP.ZeroCorrelationLength
 
 /-!
@@ -259,16 +259,6 @@ noncomputable def bellPairChainZSecond :
   (Matrix.diagonal fun i => zSign (finProdFinEquiv.symm i).2).submatrix
     (fun f => f 0) (fun f => f 0)
 
-private lemma bell_trace_half_pauliZ :
-    Matrix.traceLinearMap (Fin 2) ℂ ℂ ((1 / 2 : ℂ) • pauliZ) = 0 := by
-  rw [Matrix.traceLinearMap_apply, Matrix.trace_smul, trace_pauliZ, smul_zero]
-
-private lemma bell_trace_mulLeft_pauliZ_half :
-    ((Matrix.traceLinearMap (Fin 2) ℂ ℂ).comp (LinearMap.mulLeft ℂ pauliZ))
-      ((1 / 2 : ℂ) • pauliZ) = 1 := by
-  rw [LinearMap.comp_apply, LinearMap.mulLeft_apply, Matrix.mul_smul, pauliZ_sq,
-    bell_trace_half_one]
-
 private lemma bell_trace_pauliZ_mul (X : Matrix (Fin 2) (Fin 2) ℂ) :
     Matrix.trace (pauliZ * X) = ∑ b : Fin 2, zSign b * X b b := by
   rw [Matrix.trace_fin_two]
@@ -515,7 +505,7 @@ theorem bellPairChain_isTransferIdempotent_and_not_isPhysicalCID :
     IsTransferIdempotent bellPairChainTensor ∧ ¬ IsPhysicalCID bellPairChainTensor :=
   ⟨bellPairChainTensor_isTransferIdempotent, bellPairChainTensor_not_isPhysicalCID⟩
 
-/-- The full counterexample package: a single normal tensor, with no copy
+/-- The full counterexample: a single normal tensor, with no copy
 weights, that is a renormalization fixed point but fails the source CID
 condition for adjacent regions. -/
 theorem bellPairChain_isNormalTensor_isTransferIdempotent_and_not_isPhysicalCID :
