@@ -208,7 +208,11 @@ abstracted — record why, so it is not re-proposed).
   (+34/−312, net −278) across 4 commits; the sole external consumer
   `regionBlockedTensorInjective_compl_red` and the blueprint ch24 `\lean{}` tags
   are untouched. The wrappers orphaned the D-side helper lemmas (now dead,
-  kept in place) — a follow-up deletion slice worth ≈ −380 further lines.
+  kept in place) — the follow-up deletion slice landed as #4522 slice (d):
+  the 12 orphaned declarations, their docstrings, and the two section docs
+  introducing only deleted material are gone (+7/−391, net −384; 628 → 244
+  lines), with the two surviving docstring citations re-pointed at the
+  `ThreeBlockGeometry` twins.
 
 ---
 
