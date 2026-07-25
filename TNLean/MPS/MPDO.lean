@@ -238,6 +238,7 @@ import TNLean.MPS.MPDO.VerticalSectorCompletePositivity
 import TNLean.MPS.MPDO.VerticalSectorCoordinates
 import TNLean.MPS.MPDO.VerticalSectorDensityBlocks
 import TNLean.MPS.MPDO.VerticalSectorFixedGenerators
+import TNLean.MPS.MPDO.VerticalSectorFixedPointProductSpan
 import TNLean.MPS.MPDO.VerticalSectorGeneration
 import TNLean.MPS.MPDO.VerticalSectorIdentity
 import TNLean.MPS.MPDO.VerticalSectorImagePreservation
