@@ -34,3 +34,16 @@ Examples:
 
 ---
 Addresses #
+
+<!--
+Unsolicited pull requests are closed without review; the issue above must be
+assigned to you. Agent-assisted work must name the tool and model and the scope
+of its assistance, and a human must be able to explain every line without it.
+See .github/CONTRIBUTION_POLICY.md.
+-->
+
+### Agent assistance
+<!-- Tool and model, and which parts of the change they produced.
+     Write "none" if the work was unassisted. -->
+
+-
