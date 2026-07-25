@@ -156,11 +156,11 @@ full quantum Wielandt theorem, but the theorem in
 $i(A)$, where $i(A)$ is defined using the spaces $S_n(A)$ themselves.
 \footnote{The cumulative-span theorem is
     \leanid{MPSTensor.cumulativeSpan_eq_top} in
-    \path{TNLean/Wielandt/SpanGrowth/NonzeroTraceProduct.lean:164--197}; the
-    theorem for the spaces $S_n(A)$ is the general theorem cited above.
-    The blueprint makes this distinction in
-    \path{blueprint/src/chapter/ch08_wielandt.tex:461--490} and states the general
-    bound in \path{blueprint/src/chapter/ch08_wielandt.tex:492--548}.}
+    \path{TNLean/Wielandt/SpanGrowth/NonzeroTraceProduct.lean}; the theorem for
+    the spaces $S_n(A)$ is the general theorem cited above. The blueprint makes
+    this distinction at \texttt{thm:cumulative_eq_top} and states the general
+    bound at \texttt{thm:wielandt_general} in the Chapter~8 sources under
+    \path{blueprint/src/chapter/}.}
 
 Finally, the lower-level use of normality is not itself a mismatch. In these
 formal statements, normality is eventual full Kraus rank. Under the paper's
@@ -191,7 +191,7 @@ obtained by proving these two zero-index characterizations and splitting on
 primitivity, using the existing primitive-channel inequality in the nontrivial
 case. The relevant definitions and the restricted theorem are in
 \path{TNLean/Wielandt/Primitivity/Definitions.lean} and
-\path{TNLean/Wielandt/Inequality/Bounds.lean:118--124}.
+\path{TNLean/Wielandt/Inequality/Bounds.lean}.
 
 \section{Scope of the strong-irreducibility equivalence}
 
@@ -204,7 +204,7 @@ the equivalences
 \leanid{MPSTensor.hasEventuallyFullKrausRank_iff_stronglyIrreducible} prove a
 strengthened version of Proposition~3 rather than its literal third clause.
 This strengthened interpretation is documented in
-\path{TNLean/Wielandt/Primitivity/Definitions.lean:219--224} and
+\path{TNLean/Wielandt/Primitivity/Definitions.lean} and
 \path{docs/glossary.md}.
 
 To remove the restriction, define the literal source predicate using only the
