@@ -286,14 +286,6 @@ theorem isHermitian_map_conj_eq_transpose {n : Type*} {ρ : Matrix n n ℂ}
   simp only [RCLike.star_def] at this ⊢
   rw [← this]
 
-/-- Von Neumann entropy is invariant under transposition (the transpose has the
-same characteristic polynomial). -/
-theorem vonNeumannEntropy_transpose {n : Type*} [Fintype n] [DecidableEq n]
-    (ρ : Matrix n n ℂ) (hρ : ρ.IsHermitian) :
-    vonNeumannEntropy ρᵀ hρ.transpose = vonNeumannEntropy ρ hρ := by
-  rw [vonNeumannEntropy_eq_charpoly_roots, vonNeumannEntropy_eq_charpoly_roots,
-    Matrix.charpoly_transpose]
-
 /-- Von Neumann entropy is invariant under entrywise complex conjugation of a
 Hermitian matrix (it is the transpose). -/
 theorem vonNeumannEntropy_map_conj {n : Type*} [Fintype n] [DecidableEq n]
@@ -537,29 +529,6 @@ theorem traceAC_ABC_isHermitian
   simp only [traceAC_ABC, star_sum]
   exact Finset.sum_congr rfl fun a _ =>
     Finset.sum_congr rfl fun c _ => hρ.apply (a, b₁, c) (a, b₂, c)
-
-/-- `traceAC_ABC` (tracing the first and third factors, keeping the middle) as a
-right partial trace, after grouping the first and third factors on the right. -/
-theorem traceAC_eq_partialTraceRight
-    (ρ : Matrix (Fin dA × Fin dB × Fin dC) (Fin dA × Fin dB × Fin dC) ℂ) :
-    traceAC_ABC ρ
-      = partialTraceRight (ρ.submatrix
-          (fun p : Fin dB × (Fin dA × Fin dC) => (p.2.1, p.1, p.2.2))
-          (fun p : Fin dB × (Fin dA × Fin dC) => (p.2.1, p.1, p.2.2))) := by
-  ext b₁ b₂
-  simp only [traceAC_ABC, partialTraceRight_apply, Matrix.submatrix_apply,
-    Fintype.sum_prod_type]
-
-/-- `traceA_ABC` (tracing the first factor, keeping the last two) as a right
-partial trace, after grouping the first factor on the right. -/
-theorem traceA_eq_partialTraceRight
-    (ρ : Matrix (Fin dA × Fin dB × Fin dC) (Fin dA × Fin dB × Fin dC) ℂ) :
-    traceA_ABC ρ
-      = partialTraceRight (ρ.submatrix
-          (fun p : (Fin dB × Fin dC) × Fin dA => (p.2, p.1.1, p.1.2))
-          (fun p : (Fin dB × Fin dC) × Fin dA => (p.2, p.1.1, p.1.2))) := by
-  ext bc₁ bc₂
-  simp only [traceA_ABC, partialTraceRight_apply, Matrix.submatrix_apply]
 
 end Matrix
 

@@ -77,19 +77,4 @@ lemma gaugePhaseEquiv_cast_idx {d g : ℕ} {dim₁ dim₂ : Fin g → ℕ}
       (T₁ i₂)) (T₂ j) := by
   subst hi; exact hg
 
-/-- Shift the tensor index on the left family in a gauge-phase equivalence along an index equality.
-
-This is a version of `gaugePhaseEquiv_cast_idx` that allows different index types for the two
-families. -/
-lemma gaugePhaseEquiv_cast_idx_left {d gA gB : ℕ}
-    {dimA : Fin gA → ℕ} {dimB : Fin gB → ℕ}
-    (A : (j : Fin gA) → MPSTensor d (dimA j))
-    (B : (k : Fin gB) → MPSTensor d (dimB k))
-    {i₁ i₂ : Fin gA} (hi : i₁ = i₂) {k : Fin gB}
-    (hdim : dimA i₁ = dimB k)
-    (hg : GaugePhaseEquiv (cast (congr_arg (MPSTensor d) hdim) (A i₁)) (B k)) :
-    GaugePhaseEquiv (cast (congr_arg (MPSTensor d) (show dimA i₂ = dimB k from hi ▸ hdim))
-      (A i₂)) (B k) := by
-  subst hi; exact hg
-
 end MPSTensor

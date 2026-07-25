@@ -134,14 +134,6 @@ theorem isIrreducibleSubspace_restrictScalars_iff (q : Submodule ↥S (Euclidean
         have hr' := congrArg (Submodule.restrictScalars ℂ) h
         rwa [hr.restrictScalars_toSubmodule] at hr'
 
-/-- An invariant subspace of a star-subalgebra of complex matrices is irreducible precisely
-when it is simple as a module over the subalgebra. Wolf Ch. 6, towards Thm 6.14. -/
-theorem isIrreducibleSubspace_iff_isSimpleModule {p : Submodule ℂ (EuclideanSpace ℂ n)}
-    (hp : S.IsInvariantSubspace p) :
-    S.IsIrreducibleSubspace p ↔ IsSimpleModule ↥S hp.toSubmodule := by
-  have h := S.isIrreducibleSubspace_restrictScalars_iff hp.toSubmodule
-  rwa [hp.restrictScalars_toSubmodule] at h
-
 /-- Euclidean space is a semisimple module over a star-subalgebra of complex matrices: every
 submodule over the subalgebra admits a complementary submodule. This is the module-theoretic
 form of the orthogonal irreducible decomposition, obtained here from semisimplicity of the

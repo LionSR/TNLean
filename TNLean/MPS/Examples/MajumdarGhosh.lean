@@ -331,11 +331,6 @@ theorem majumdarGhosh_not_isNBlkInjective_one :
     ¬ IsNBlkInjective majumdarGhoshTensor 1 :=
   majumdarGhosh_not_isNBlkInjective_of_odd (by decide)
 
-/-- The Majumdar-Ghosh tensor is not `2`-block injective. -/
-theorem majumdarGhosh_not_isNBlkInjective_two :
-    ¬ IsNBlkInjective majumdarGhoshTensor 2 :=
-  majumdarGhosh_not_isNBlkInjective_of_even (by decide)
-
 /-- The Majumdar-Ghosh tensor is **not** normal: no blocking length `N` makes it
 `N`-block injective.  This algebraic obstruction matches the expected
 two-dimer-covering structure: the bond carries a two-periodic grading that no

@@ -220,25 +220,6 @@ theorem AppendixBStructuralData.physicalIsometryTensorPower_adjoint_inner
       intro σ _
       simp only [star_mul, star_prod, star_star]
 
-/-- Every physical tensor power preserves the Hilbert-space inner product.
-
-Source: arXiv:1606.00608, pair-index isometry equation (3.16), lines
-549--554. -/
-theorem AppendixBStructuralData.physicalIsometryTensorPower_inner
-    {A : MPSTensor d D} (hStruct : AppendixBStructuralData A) (N : ℕ)
-    (v w : (Fin N → Fin D × Fin D) → ℂ) :
-    ⟪(WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).symm
-          (hStruct.physicalIsometryTensorPower N v),
-        (WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).symm
-          (hStruct.physicalIsometryTensorPower N w)⟫_ℂ =
-      ⟪(WithLp.linearEquiv 2 ℂ ((Fin N → Fin D × Fin D) → ℂ)).symm v,
-        (WithLp.linearEquiv 2 ℂ ((Fin N → Fin D × Fin D) → ℂ)).symm w⟫_ℂ := by
-  rw [hStruct.physicalIsometryTensorPower_adjoint_inner]
-  have hleft := LinearMap.congr_fun
-    (hStruct.physicalIsometryTensorPowerLeftInverse_comp N) v
-  simp only [LinearMap.comp_apply, Module.End.one_apply] at hleft
-  rw [hleft]
-
 /-! ### The virtual bond projector -/
 
 /-- The squared norm

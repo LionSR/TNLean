@@ -57,16 +57,6 @@ def adjointDissipator (Lop : Mat) (A : Mat) : Mat :=
   (1 / 2 : ℂ) • (Lopᴴ * Lop * A) -
   (1 / 2 : ℂ) • (A * (Lopᴴ * Lop))
 
-theorem adjointDissipator_add (Lop : Mat) (A B : Mat) :
-    adjointDissipator Lop (A + B) = adjointDissipator Lop A + adjointDissipator Lop B := by
-  simp only [adjointDissipator, mul_add, add_mul, smul_add]
-  abel
-
-theorem adjointDissipator_smul (Lop : Mat) (c : ℂ) (A : Mat) :
-    adjointDissipator Lop (c • A) = c • adjointDissipator Lop A := by
-  simp only [adjointDissipator, mul_smul_comm, smul_mul_assoc, smul_sub, smul_smul]
-  rw [mul_comm ((1 : ℂ) / 2) c]
-
 @[simp] theorem adjointDissipator_conjTranspose (Lop : Mat) (A : Mat) :
     adjointDissipator Lop Aᴴ = (adjointDissipator Lop A)ᴴ := by
   simp only [adjointDissipator, Matrix.conjTranspose_sub, Matrix.conjTranspose_smul,

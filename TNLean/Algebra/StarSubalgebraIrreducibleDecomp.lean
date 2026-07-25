@@ -68,12 +68,6 @@ def IsIrreducibleSubspace (p : Submodule ℂ (EuclideanSpace ℂ n)) : Prop :=
 theorem isInvariantSubspace_top : S.IsInvariantSubspace ⊤ :=
   fun A _ ↦ Module.End.invtSubmodule.top_mem (Matrix.toEuclideanLin A)
 
-/-- The orthogonal complement of an invariant subspace is invariant, restated in terms of
-invariant subspaces of the subalgebra. Wolf Ch. 6, towards Thm 6.14. -/
-theorem isInvariantSubspace_orthogonal {p : Submodule ℂ (EuclideanSpace ℂ n)}
-    (hp : S.IsInvariantSubspace p) : S.IsInvariantSubspace pᗮ :=
-  S.orthogonal_mem_invtSubmodule hp
-
 /-- Dimension-bounded form of the decomposition, used as the induction hypothesis. Every
 invariant subspace of dimension `k` is the supremum of a finite, pairwise orthogonal family
 of irreducible invariant subspaces contained in it. -/

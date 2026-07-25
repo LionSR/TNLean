@@ -117,11 +117,6 @@ theorem choiMatrix_apply
   rw [← neg_one_smul ℂ T, choiMatrix_smul]
   exact neg_one_smul ℂ (choiMatrix T)
 
-theorem choiMatrix_sub
-    (T S : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ) :
-    choiMatrix (T - S) = choiMatrix T - choiMatrix S := by
-  rw [sub_eq_add_neg, choiMatrix_add, choiMatrix_neg, sub_eq_add_neg]
-
 @[simp] theorem projectedChoiMatrix_add
     (T S : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ) :
     projectedChoiMatrix (T + S) = projectedChoiMatrix T + projectedChoiMatrix S := by

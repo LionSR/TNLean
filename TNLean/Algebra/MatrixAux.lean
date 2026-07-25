@@ -764,14 +764,6 @@ theorem mulVec_eq_zero_left
     fin_cases i <;> simp [C, hA, hB]
   · simpa [C] using hv
 
-/-- For PSD matrices `A` and `B`, `ker(A + B) ⊆ ker(B)`. -/
-theorem mulVec_eq_zero_right
-    {A B : Matrix n n ℂ}
-    (hA : A.PosSemidef) (hB : B.PosSemidef)
-    (v : n → ℂ) (hv : (A + B) *ᵥ v = 0) :
-    B *ᵥ v = 0 := by
-  exact mulVec_eq_zero_left hB hA v (by simpa [add_comm] using hv)
-
 variable {D : ℕ}
 
 /-- A positive semidefinite matrix dominated by a scalar multiple of the rank-one matrix

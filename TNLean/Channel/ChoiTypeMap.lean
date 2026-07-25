@@ -236,13 +236,6 @@ theorem choiType_cyclic_reciprocal_three_one_of_nonneg
   have hamgm := choiType_cyclic_reciprocal_three_one_amgm hx hy hz
   nlinarith [hamgm]
 
-/-- The strict-positive form of the first Choi cyclic reciprocal estimate. -/
-theorem choiType_cyclic_reciprocal_three_one_of_pos
-    {x y z : ℝ} (hx : 0 < x) (hy : 0 < y) (hz : 0 < z) :
-    x / (2 * x + z) + y / (2 * y + x) + z / (2 * z + y) ≤ 1 :=
-  choiType_cyclic_reciprocal_three_one_of_nonneg
-    (le_of_lt hx) (le_of_lt hy) (le_of_lt hz)
-
 /-- The cyclic reciprocal sum for the Choi rank-one weights when \(d=3\) and
 \(n=1\), written in the three explicit cyclic coordinates. -/
 theorem choiTypeRankOneWeight_reciprocal_sum_three_one (v : ZMod 3 → ℂ) :

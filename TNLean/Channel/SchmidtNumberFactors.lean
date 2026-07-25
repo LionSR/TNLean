@@ -301,12 +301,6 @@ first factor as the initial `d` coordinates and fixes the second factor. -/
 def cornerEmbedFirst (h : d ≤ d') : Fin d × Fin d' → Fin d' × Fin d' :=
   fun p => (Fin.castLE h p.1, p.2)
 
-theorem cornerEmbedFirst_injective (h : d ≤ d') :
-    Function.Injective (cornerEmbedFirst h : Fin d × Fin d' → Fin d' × Fin d') := by
-  intro p q hpq
-  simp only [cornerEmbedFirst, Prod.mk.injEq] at hpq
-  exact Prod.ext (Fin.castLE_injective h hpq.1) hpq.2
-
 @[simp]
 theorem padFirstFactor_cornerEmbedFirst (h : d ≤ d') (ψ : Fin d × Fin d' → ℂ)
     (p : Fin d × Fin d') : padFirstFactor (ψ) (cornerEmbedFirst h p) = ψ p := by

@@ -6,8 +6,13 @@ Authors: TNLean contributors
 import TNLean.Algebra.MatrixOperatorSpace
 import TNLean.Channel.Semigroup.Basic
 
-import Mathlib.Algebra.Algebra.Spectrum.Basic
-import Mathlib.Analysis.Normed.Ring.Units
+/-!
+# Euler-resolvent limit (Wolf, Equation (7.9))
+
+The Euler approximation of a dynamical semigroup by powers of the resolvent:
+Wolf's lecture notes, Equation (7.9),
+`T_t = lim_{n → ∞} ((n/t) R(n/t))ⁿ` with `R(z) = (z𝟙 - L)⁻¹` (Eq. (7.6)).
+-/
 
 open Matrix TNLean
 
@@ -18,15 +23,6 @@ namespace TNLean.Channel.Semigroup
 open scoped TNOperatorSpace
 
 variable {D : ℕ}
-
-/-- Neumann-series specialization at `z = 1`:
-if `‖L‖ < 1`, then `R(1,L) = ∑ₙ L^n`. -/
-theorem resolvent_one_neumann
-    (L : MatrixCLM (Fin D)) (hL : ‖L‖ < 1) :
-    resolvent L (1 : ℂ) = ∑' n : ℕ, L ^ n := by
-  rw [resolvent, Algebra.algebraMap_eq_smul_one, one_smul]
-  change Ring.inverse (1 - L) = ∑' n : ℕ, L ^ n
-  exact (hasSum_geom_series_inverse L hL).tsum_eq.symm
 
 /-- Euler resolvent step `(λ R(λ,L))`. -/
 def eulerResolventStep (L : MatrixCLM (Fin D)) (lam : ℂ) : MatrixCLM (Fin D) :=
