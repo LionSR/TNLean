@@ -82,7 +82,7 @@ Section~\ref{sec:app_spectral_periodicity}.
     consecutive projections:
     \begin{align}
         K_vP_{k+1}
-        &=P_kK_v.
+         & =P_kK_v.
         \label{eq:spectral_kraus_cyclic_shift}
     \end{align}
     Consequently, a product of $\ell$ Kraus operators moves each projection
@@ -128,6 +128,92 @@ Section~\ref{sec:app_spectral_periodicity}.
     $E(XU^\dagger)=XU^\dagger$ for any $\gamma$-eigenvector $X$.
     By the scalar fixed-point lemma for irreducible unital maps,
     $XU^\dagger=c\Id$, hence $X=cU$ and the eigenspace is one-dimensional.
+\end{proof}
+
+\section{Self-overlap and the period-one criterion}
+
+\begin{theorem}[Self-overlap along peripheral-period multiples]
+    \label{thm:bnt_periodic_self_overlap_tendsto}
+    \label{thm:periodic_self_overlap_tendsto}
+    \lean{MPSTensor.periodicSelfOverlap_tendsto}
+    \leanok
+    \uses{def:mpv_overlap, def:irreducible_tensor,
+        def:left_canonical_tensor, def:peripheral_eigenvalues,
+        def:blocked_tensor}
+    Let $D>0$ and $m>0$. Let $A$ be a left-canonical irreducible MPS tensor
+    with bond dimension $D$, and suppose that the peripheral eigenvalues of
+    its transfer map are exactly $\{z\in\C:z^m=1\}$. Then
+    $O_{AA}(mn)\longrightarrow m$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:cyclic_sector_decomp_after_blocking_isometry,
+        thm:blocked_sector_unconditional, thm:primitive_overlap,
+        thm:overlap_decay_irr_tp, thm:overlap_decay_rect_irr_tp}
+    Apply
+    Theorem~\ref{thm:cyclic_sector_decomp_after_blocking_isometry} to the
+    period-$m$ blocking $A^{[m]}$. It gives $m$ nonzero cyclic-sector
+    tensors $C_0,\ldots,C_{m-1}$, each left-canonical, whose unit-weight direct
+    sum has the same MPV family as $A^{[m]}$. The cyclic-sector relations make
+    every $C_u$ primitive and irreducible. Distinct sectors are not
+    gauge-phase equivalent. Hence the primitive self-overlap limit and the
+    equal- and unequal-dimension overlap-decay theorems give
+    \begin{align}
+        O_{C_uC_v}(n)
+         & \longrightarrow
+        \begin{cases}
+            1, & u=v,     \\
+            0, & u\neq v.
+        \end{cases}
+        \notag
+    \end{align}
+    Expanding the overlap of the unit-weight direct sum and taking the finite
+    sum of these limits yields
+    \begin{align}
+        O_{A^{[m]}A^{[m]}}(n)
+         & =\sum_{u,v\in\Z_m}O_{C_uC_v}(n)
+        \longrightarrow m.
+        \notag
+    \end{align}
+    Finally, blocking identifies
+    $O_{A^{[m]}A^{[m]}}(n)=O_{AA}(mn)$, which proves the claim.
+\end{proof}
+
+\begin{theorem}[Primitivity and normality from normalized self-overlap]
+    \label{thm:bnt_primitivity_normality_from_self_overlap}
+    \lean{MPSTensor.isPrimitive_and_isNormal_of_irreducible_leftCanonical_selfOverlap_tendsto_one}
+    \leanok
+    \uses{def:irreducible_tensor, def:mpv_overlap, def:normal,
+        thm:bnt_periodic_self_overlap_tendsto, thm:normal_tp_primitive_irred}
+    Let $A$ be an irreducible left-canonical tensor of positive bond dimension.
+    If $O_{AA}(N)\longrightarrow1$, then the transfer map of $A$ is primitive
+    and $A$ is normal.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:bnt_periodic_self_overlap_tendsto,
+        thm:normal_tp_primitive_irred}
+    Let $m$ be the peripheral period. Along its multiples,
+    $O_{AA}(mn)\longrightarrow m$. The assumed full limit gives
+    $O_{AA}(mn)\to1$, hence $m=1$. The transfer map is therefore primitive,
+    and irreducibility and left-canonicality give normality.
+\end{proof}
+
+\begin{theorem}[Normality from normalized self-overlap]
+    \label{thm:bnt_normality_from_self_overlap}
+    \lean{MPSTensor.isNormal_of_irreducible_leftCanonical_selfOverlap_tendsto_one}
+    \leanok
+    \uses{thm:bnt_primitivity_normality_from_self_overlap}
+    Let $A$ be an irreducible left-canonical tensor of positive bond dimension.
+    If $O_{AA}(N)\to1$, then $A$ is normal.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    This is the normality conclusion of
+    Theorem~\ref{thm:bnt_primitivity_normality_from_self_overlap}.
 \end{proof}
 
 \section{Primitive overlap convergence (complementary transfer-map gap form)}
