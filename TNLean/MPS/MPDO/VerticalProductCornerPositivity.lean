@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.ComplexPhasePositivity
 import TNLean.MPS.MPDO.VerticalProductCornerComparison
 
 /-!
@@ -74,10 +75,8 @@ theorem FlatBlockedBNTComparison.activeCoefficient_mul_phase_pos
     exact S.ambientInclusion_isometry U₁ hU₁ x
   have hVref : Vrefᴴ * Vref = 1 := by
     exact C.referenceInclusion_isometry mult₂ hMult₂ U₂ hU₂ j
-  have hphase : C.phase j ≠ 0 := by
-    apply norm_ne_zero_iff.mp
-    rw [C.phase_norm j]
-    exact one_ne_zero
+  have hphase : C.phase j ≠ 0 :=
+    Complex.ne_zero_of_norm_eq_one (C.phase_norm j)
   have hc : c ≠ 0 := mul_ne_zero (S.flatCoefficient_ne j) hphase
   have hActiveCorner : ∀ ab,
       c • ((C.gauge j : Matrix (Fin (S.flatDim j))

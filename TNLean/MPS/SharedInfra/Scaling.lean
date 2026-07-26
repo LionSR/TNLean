@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.ComplexPhasePositivity
 import TNLean.MPS.CanonicalForm.Reduction
 import TNLean.MPS.Periodic.Defs
 
@@ -95,10 +96,7 @@ theorem isPeriodic_smul_of_norm_one
     {m : ℕ} {c : ℂ} (hc : ‖c‖ = 1)
     (A : MPSTensor d D) (hA : IsPeriodic m A) :
     IsPeriodic m (fun i => c • A i) := by
-  have hc_ne : c ≠ 0 := by
-    intro hc0
-    have hc' := hc
-    simp [hc0] at hc'
+  have hc_ne : c ≠ 0 := Complex.ne_zero_of_norm_eq_one hc
   have hTransfer : transferMap (fun i => c • A i) = transferMap A := by
     ext X : 1
     rw [transferMap_smul]
