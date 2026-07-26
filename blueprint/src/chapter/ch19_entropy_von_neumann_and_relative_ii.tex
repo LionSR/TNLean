@@ -288,7 +288,9 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:entropy_maximally_mixed_support_inverse}
+    \uses{thm:entropy_maximally_mixed_support_inverse,
+        lem:partial_trace_support_petz_map_apply,
+        def:bipartite_operator_schmidt_rank}
     Functional calculus gives
     $\sqrt{\sigma_{ABC}}
       =d_A^{-1/2}\mathbf 1_A\otimes\sqrt{\rho_{BC}}$.
@@ -498,7 +500,8 @@
 
 \begin{proof}\leanok
     \uses{thm:entropy_maximally_mixed_support_projector,
-        thm:entropy_maximally_mixed_tensor_marginals}
+        thm:entropy_maximally_mixed_tensor_marginals,
+        def:bipartite_operator_schmidt_rank}
     From~(\ref{eq:entropy_mixed_reference_support}),
     $Q_{AB}=\mathbf 1_A\otimes Q_B$, while
     $\tr_{AB}\sigma_{ABC}=\rho_C$. Hence
