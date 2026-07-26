@@ -46,20 +46,25 @@ physical space as in~\cite{Schuch2011Phases}.
     \label{thm:spt_classification}
     \notready
     \uses{def:is_same_spt_phase, def:h2_cx}
-    For $p=0,1$, let $H_p$ have a unique injective-MPS ground state on
-    $\mc H_p^{\otimes N}$ and commute with $(U_g^p)^{\otimes N}$, where
-    $U^p$ is a unitary representation of $G$ on $\mc H_p$.  Choose the
-    endpoint phase gauges of $U^0$ and $U^1$, embed the endpoint spaces into
+    For $p=0,1$, let $H_p$ be a translationally invariant, finite-range,
+    bounded-strength Hamiltonian that is uniformly gapped above a unique
+    injective-MPS ground state on $\mc H_p^{\otimes N}$.  Suppose that $H_p$
+    commutes with $(U_g^p)^{\otimes N}$, where $U^p$ is a unitary
+    representation of $G$ on $\mc H_p$, and choose the endpoint phase gauges.
+    After a common finite blocking, there exist a path-sector Hilbert space
+    $\mc H_{\mathrm{path}}$ and a linear representation
+    $U^{\mathrm{path}}$ such that the endpoints embed into
     \begin{align}
        \mc H&=\mc H_0\oplus\mc H_1\oplus\mc H_{\mathrm{path}},&
        U_g&=U_g^0\oplus U_g^1\oplus U_g^{\mathrm{path}},
        \notag
     \end{align}
-    with an arbitrary linear representation $U^{\mathrm{path}}$ on the third
-    summand, and interpret the endpoints after a common finite blocking.
-    Then a $U_g^{\otimes N}$-symmetric uniformly gapped path connects $H_0$
-    and $H_1$ if and only if the virtual projective representations of their
-    blocked injective MPS ground states determine the same class in
+    and are connected by a continuous path of translationally invariant,
+    finite-range, bounded-strength Hamiltonians commuting with
+    $U_g^{\otimes N}$ and having a gap bounded uniformly below in the system
+    size and path parameter, if and only if the virtual projective
+    representations of the blocked injective MPS ground states determine the
+    same class in
     $H^2(G,\mathrm U(1))$~\cite[Section~II.F]{Schuch2011Phases}.
 \end{theorem}
 
