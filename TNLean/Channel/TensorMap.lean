@@ -231,6 +231,17 @@ theorem idTensorMapLM_id :
   rw [← swapFactorsLinearEquiv_symm]
   exact (swapFactorsLinearEquiv δ α).symm_apply_apply X
 
+/-- Tensoring the identity on the first factor with a sum of linear maps
+preserves the sum. -/
+theorem idTensorMapLM_add
+    (T S : Matrix α α ℂ →ₗ[ℂ] Matrix β β ℂ) :
+    idTensorMapLM (δ := δ) (T + S) =
+      idTensorMapLM (δ := δ) T + idTensorMapLM (δ := δ) S := by
+  apply LinearMap.ext
+  intro X
+  ext ⟨i₁, i₂⟩ ⟨j₁, j₂⟩
+  rfl
+
 /-- Tensoring the identity on the first factor with a linear map preserves
 composition. -/
 theorem idTensorMapLM_comp
