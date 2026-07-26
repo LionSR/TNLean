@@ -194,3 +194,29 @@ positive map.
     $j,\ell,\ell'$, swap summation order, and use the entry-wise form
     of $U^\dagger U = \Id$ to collapse to $\ell = \ell'$ diagonal terms.
 \end{proof}
+
+\begin{theorem}[Rectangular Kraus freedom]\label{thm:kraus_rectangular_freedom}
+    \lean{kraus_rectangular_freedom}
+    \leanok
+    \uses{def:cp_map}
+    If $\sum_\alpha B_\alpha X B_\alpha^\dagger = \sum_j A_j X A_j^\dagger$
+    for all $X$ and $r_2 \le r_1$ (where $\{B_\alpha\}_{\alpha=0}^{r_1-1}$
+    is the larger family and $\{A_j\}_{j=0}^{r_2-1}$ the smaller),
+    then there exists a rectangular isometry
+    $V$ ($r_1 \times r_2$, $V^\dagger V = \Id_{r_2}$) such that
+    $B_\alpha = \sum_j V_{\alpha j}\,A_j$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Pad the smaller family by zero operators to a family $A'$ of size $r_1$.
+    Evaluating equality of the two maps on matrix units and taking matrix
+    entries gives equality of the Gram matrices of the Stinespring vectors,
+    $M_B^\dagger M_B=M_{A'}^\dagger M_{A'}$.  Hence the assignment from
+    each column of $M_{A'}$ to the corresponding column of $M_B$ is
+    well-defined and isometric on their common span.  Extend this isometry to
+    the ambient space $\C^{r_1}$ and let $W$ be its unitary matrix.  Restricting
+    $W$ to the original $r_2$ coordinates gives a rectangular matrix $V$ with
+    $V^\dagger V=\Id_{r_2}$.  Reading the column identity entrywise yields
+    $B_\alpha=\sum_jV_{\alpha j}A_j$.
+\end{proof}
