@@ -122,8 +122,9 @@
 \seq_new:N  \l__tenkzl_edges_seq      % {r}{c}{h}{r'}{c'}{h'}{style}{label}
 \prop_new:N \l__tenkzl_nobond_prop    % \tnedge[none]: "r-c-h:r'-c'-h'" -> 1,
                                       % both endpoint orders (bond suppression)
-\seq_new:N  \l__tenkzl_sitelabels_seq % \tnsite[label=]: {r}{c}{h}{label}
+\seq_new:N  \l__tenkzl_sitelabels_seq % \tnsite[label=]: {r}{c}{h}{label}{bearing}
 \prop_new:N \l__tenkzl_siterole_prop  % \tnsite[role=]: "r-c[-h]" -> tint style
+\prop_new:N \l__tenkzl_sitesize_prop  % \tnsite[size=]: "r-c[-h]" -> s|m|l
 % Exact paper-frame bounds captured from each already-rendered site-label
 % node.  Side-cup routing consumes these coordinates without typesetting or
 % otherwise expanding customizable label content a second time.
@@ -226,11 +227,22 @@
 \tl_new:N   \l__tenkzl_edgelabel_tl   % \tnedge[label=]
 \bool_new:N \l__tenkzl_enone_bool     % \tnedge[none]
 \bool_new:N \l__tenkzl_sremoved_bool  % \tnsite[removed]
+\bool_new:N \l__tenkzl_skeys_valid_bool % all site keys passed preflight
 \bool_new:N \l__tenkzl_cupaexists_bool % side-cup sheet-0 endpoint survives
 \bool_new:N \l__tenkzl_cupbexists_bool % side-cup sheet-1 endpoint survives
 \tl_new:N   \l__tenkzl_sitelabel_tl   % \tnsite[label=]
+\tl_new:N   \l__tenkzl_sitelabelpos_tl % \tnsite[label~pos=]
+\tl_new:N   \l__tenkzl_ssize_tl       % \tnsite[size=]
+\tl_new:N   \l__tenkzl_sresolvedsize_tl % resolved s|m|l; empty when omitted
+\tl_new:N   \l__tenkzl_ssizestyle_tl  % resolved dot/inscribed size style
 \tl_new:N   \l__tenkzl_srole_tl       % \tnsite[role=]: resolved tint style
 \tl_new:N   \l__tenkzl_stint_tl       % draw-pass scratch: a site's tint
+\tl_new:N   \l__tenkzl_slanchor_tl    % resolved site-label anchor
+\dim_new:N  \l__tenkzl_sldx_dim       % resolved site-label paper displacement
+\dim_new:N  \l__tenkzl_sldy_dim
+\dim_new:N  \l__tenkzl_sitediameter_dim % resolved diameter at one site
+\dim_new:N  \l__tenkzl_siteradius_dim % resolved radius at one site
+\dim_new:N  \l__tenkzl_maxsiteradius_dim % largest radius in a routed picture
 
 % sheet-vector near-coincidence guard scratch
 \fp_new:N  \l__tenkzl_mind_fp         % squared min sheet-to-sheet distance
@@ -693,6 +705,7 @@
     \prop_clear:N \l__tenkzl_nobond_prop
     \seq_clear:N \l__tenkzl_sitelabels_seq
     \prop_clear:N \l__tenkzl_siterole_prop
+    \prop_clear:N \l__tenkzl_sitesize_prop
     \prop_clear:N \l__tenkzl_labelxmin_prop
     \prop_clear:N \l__tenkzl_labelxmax_prop
     \prop_clear:N \l__tenkzl_labelymin_prop
@@ -1333,8 +1346,10 @@
 % the named keys act and unknown keys error).
 %   removed   remove the site: sheetless (r,c) removes the whole
 %             physical column, (r,c,h) only sheet h's site
-%   label=    mathematics typeset in the site's free north-east
-%             quadrant (clears vertical legs and in-row bonds)
+%   label=    label content placed outside the site
+%   label pos=north|north east|...: one of the eight shared bearings;
+%             north east is the compatibility default
+%   size=     s|m|l: a per-site glyph size; m is the skin's historical floor
 %   role=     operator|marked|extra|passive: the semantic hue of the
 %             site glyph, resolved through the role-derived styles;
 %             sheetless it tints the whole column, (r,c,h) one sheet
@@ -1342,6 +1357,25 @@
   /tenkz/site/.is~family,
   /tenkz/site/removed/.code={\bool_set_true:N \l__tenkzl_sremoved_bool},
   /tenkz/site/label/.store~in=\l__tenkzl_sitelabel_tl,
+  /tenkz/site/label~pos/.code={
+      \tenkz_label_bearing:nnNNNTF {#1} {1pt}
+        \l__tenkzl_slanchor_tl \l__tenkzl_sldx_dim \l__tenkzl_sldy_dim
+        { \tl_set:Nn \l__tenkzl_sitelabelpos_tl {#1} }
+        {
+          \bool_set_false:N \l__tenkzl_skeys_valid_bool
+          \PackageError{tenkz}
+            {Choice~'#1'~unknown~in~site~label~pos}
+            {Use~north,~south,~east,~west~or~one~of~the~four~diagonals~
+             (`north~east'~and~its~three~partners).}
+        }},
+  /tenkz/site/size/.is~choice,
+  /tenkz/site/size/s/.code={\tl_set:Nn \l__tenkzl_ssize_tl {s}},
+  /tenkz/site/size/m/.code={\tl_set:Nn \l__tenkzl_ssize_tl {m}},
+  /tenkz/site/size/l/.code={\tl_set:Nn \l__tenkzl_ssize_tl {l}},
+  /tenkz/site/size/.unknown/.code={
+      \bool_set_false:N \l__tenkzl_skeys_valid_bool
+      \PackageError{tenkz}{Choice~'\pgfkeys@was@choice'~unknown~in~site~size}
+        {Use~s,~m,~or~l.}},
   /tenkz/site/role/.is~choice,
   /tenkz/site/role/operator/.code={\tl_set:Nn \l__tenkzl_srole_tl
       {operator~site}},
@@ -1352,15 +1386,26 @@
   /tenkz/site/role/passive/.code={\tl_set:Nn \l__tenkzl_srole_tl
       {passive~site}},
 }
+\pgfkeysdef{/tenkz/site/.unknown}
+  {
+    \bool_set_false:N \l__tenkzl_skeys_valid_bool
+    \PackageError{tenkz}{Unknown~site~key~'\pgfkeyscurrentname'}
+      {Check~the~\token_to_str:N \tnsite~option~spelling.}
+  }
 
 \NewDocumentCommand \tnsite { O{} m }
   {
     \bool_set_false:N \l__tenkzl_sremoved_bool
+    \bool_set_true:N \l__tenkzl_skeys_valid_bool
     \tl_clear:N \l__tenkzl_sitelabel_tl
+    \tl_set:Nn \l__tenkzl_sitelabelpos_tl {north~east}
+    \tl_clear:N \l__tenkzl_ssize_tl
     \tl_clear:N \l__tenkzl_srole_tl
     \tl_if_blank:nF {#1} { \pgfqkeys{/tenkz/site}{#1} }
     \tenkzl_cell:nNNN {#2}
       \l__tenkzl_rlo_int \l__tenkzl_clo_int \l__tenkzl_sha_int
+    \bool_if:NT \l__tenkzl_skeys_valid_bool
+      {
     \bool_if:NT \l__tenkzl_sremoved_bool
       {
         \int_compare:nNnTF { \l__tenkzl_sha_int } < {0}
@@ -1379,6 +1424,25 @@
               { \int_use:N \l__tenkzl_rlo_int -
                 \int_use:N \l__tenkzl_clo_int -
                 \int_use:N \l__tenkzl_sha_int } {1}
+          }
+      }
+    \tl_if_empty:NF \l__tenkzl_ssize_tl
+      {
+        % A sheet-addressed size overrides the sheetless column size, exactly
+        % as a sheet-addressed role overrides its column role.
+        \int_compare:nNnTF { \l__tenkzl_sha_int } < {0}
+          {
+            \prop_put:Nee \l__tenkzl_sitesize_prop
+              { \int_use:N \l__tenkzl_rlo_int -
+                \int_use:N \l__tenkzl_clo_int }
+              { \exp_not:V \l__tenkzl_ssize_tl }
+          }
+          {
+            \prop_put:Nee \l__tenkzl_sitesize_prop
+              { \int_use:N \l__tenkzl_rlo_int -
+                \int_use:N \l__tenkzl_clo_int -
+                \int_use:N \l__tenkzl_sha_int }
+              { \exp_not:V \l__tenkzl_ssize_tl }
           }
       }
     \tl_if_empty:NF \l__tenkzl_srole_tl
@@ -1412,7 +1476,9 @@
                 { \int_use:N \l__tenkzl_defsheet_int }
                 { \int_use:N \l__tenkzl_sha_int } }
             { \exp_not:V \l__tenkzl_sitelabel_tl }
+            { \exp_not:V \l__tenkzl_sitelabelpos_tl }
           }
+      }
       }
   }
 
@@ -2154,6 +2220,10 @@
   {
     \tenkzl_endpoint_exists:nnnT {#1}{#2}{#3}
       {
+        \tenkzl_site_radius:nnnN {#1}{#2}{#3} \l__tenkzl_siteradius_dim
+        \dim_set:Nn \l__tenkzl_maxsiteradius_dim
+          { \dim_max:nn { \l__tenkzl_maxsiteradius_dim }
+              { \l__tenkzl_siteradius_dim } }
         \tenkzl_xyz:nnnNN {#1}{#2}{#3}
           \l__tenkzl_cupax_dim \l__tenkzl_cupay_dim
         \__tenkz_geom_corridor_include_trans:nn
@@ -2193,6 +2263,7 @@
   {
     \tenkzl_side_cup_direction:n {#1}
     \__tenkz_geom_corridor_reset:
+    \dim_zero:N \l__tenkzl_maxsiteradius_dim
     % Named loop registers make the row/column/sheet ownership explicit;
     % nested inline placeholders are too easy to permute at this depth.
     \int_step_variable:nnNn {0} { \l__tenkzl_sheets_int - 1 }
@@ -2211,6 +2282,9 @@
               }
           }
       }
+    \dim_compare:nNnT { \l__tenkzl_maxsiteradius_dim } = {0pt}
+      { \dim_set:Nn \l__tenkzl_maxsiteradius_dim
+          { \tenkz@dim{\tenkz@r@dotdia} / 2 } }
     \str_case:nn {#1}
       {
         {west}
@@ -2250,7 +2324,7 @@
             + 2pt }
       }
     \dim_set:Nn \l__tenkzl_cupbulge_dim
-      { \tenkz@dim{\tenkz@r@dotdia} / 2
+      { \l__tenkzl_maxsiteradius_dim
         + \tenkz@dim{\tenkz@r@daylight} }
     \tenkzl_side_cup_project_trans:NNN
       \l__tenkzl_cupatx_dim \l__tenkzl_cupaty_dim \l__tenkzl_cuptransmid_dim
@@ -2258,9 +2332,10 @@
       \l__tenkzl_cupbtx_dim \l__tenkzl_cupbty_dim \l__tenkzl_cupproj_dim
     \dim_set:Nn \l__tenkzl_cuptransmid_dim
       { ( \l__tenkzl_cuptransmid_dim + \l__tenkzl_cupproj_dim ) / 2 }
-    % Site labels occupy the paper north-east quadrant.  Choose the opposite
-    % transverse exterior for every cup on this side.  The sign is the
-    % projection of paper north-east onto the side's transverse axis.
+    % The compatibility target lies opposite the default north-east label
+    % bearing.  Labels at any other bearing remain safe because the exact
+    % rendered bounding boxes extend the endpoint escape below before ink is
+    % drawn.
     \dim_compare:nNnTF
       { \l__tenkzl_cupdx_dim - \l__tenkzl_cupdy_dim } > {0pt}
       { \dim_set:Nn \l__tenkzl_cuptranstarget_dim
@@ -2275,7 +2350,7 @@
         {south} { \int_set:Nn \l_tmpa_int {#3 - 1} }
       }
     \dim_set:Nn \l__tenkzl_cuplane_dim
-      { \l__tenkzl_cupsil_dim + \tenkz@dim{\tenkz@r@dotdia} / 2
+      { \l__tenkzl_cupsil_dim + \l__tenkzl_maxsiteradius_dim
         + \tenkz@dim{\tenkz@r@daylight} }
     \prg_replicate:nn { \l_tmpa_int }
       {
@@ -2284,13 +2359,13 @@
         % daylight gaps so the rendered label of one cup cannot meet the next
         % cup's matrix disk under an expert frame.
         \dim_add:Nn \l__tenkzl_cuplane_dim
-          { \tenkz@dim{\tenkz@r@dotdia}
+          { 2 \l__tenkzl_maxsiteradius_dim
             + \l__tenkzl_cuplabelband_dim
             + 2 \tenkz@dim{\tenkz@r@daylight} }
       }
     % First move outward past the exact bounds of either endpoint's rendered
     % site label, then turn into the shared transverse lane.  Querying the
-    % node bounds recorded by \tenkzl_sitelabel:nnnn keeps arbitrary body
+    % node bounds recorded by \tenkzl_sitelabel:nnnnn keeps arbitrary body
     % customization materialize-once while preventing an outboard label from
     % being crossed by the cup's old transverse-first lead.
     \tenkzl_side_cup_include_label_bbox:nnnn {#1}{#2}{#3}{0}
@@ -2319,7 +2394,7 @@
       \l__tenkzl_cuplane_dim \l__tenkzl_cupproj_dim
       \l__tenkzl_cupblx_dim \l__tenkzl_cupbly_dim
     \dim_set:Nn \l__tenkzl_cuplabeloffset_dim
-      { \tenkz@dim{\tenkz@r@dotdia} / 2
+      { \l__tenkzl_maxsiteradius_dim
         + \tenkz@dim{\tenkz@r@labelclear}
         + \l__tenkzl_cuplabelband_dim / 2 }
     \dim_compare:nNnT { \l__tenkzl_cuptranstarget_dim } <
@@ -2352,6 +2427,7 @@
 \cs_new_protected:Npn \tenkzl_side_cup_avoid_label_stub:nnnNNNNNN
   #1#2#3#4#5#6#7#8#9
   {
+    \tenkzl_site_radius:nnnN {#1}{#2}{#3} \l__tenkzl_siteradius_dim
     \dim_set_eq:NN #8 #4
     \dim_set_eq:NN #9 #5
     \prop_get:NeNT \l__tenkzl_labelxmin_prop
@@ -2428,7 +2504,7 @@
                 + 2 \l__tenkzl_cupbulge_dim } }
         \tenkzl_side_cup_project:NNN #1 #2 \l__tenkzl_cupproj_dim
         \dim_add:Nn \l__tenkzl_cupproj_dim
-          { \tenkz@dim{\tenkz@r@dotdia} / 2 }
+          { \l__tenkzl_siteradius_dim }
         \tenkzl_side_cup_from_projections:NNNN
           \l__tenkzl_cupproj_dim \l__tenkzl_labelshift_dim #5 #6
         \tenkzl_side_cup_project:NNN #3 #4 \l__tenkzl_cupproj_dim
@@ -2490,7 +2566,7 @@
 \cs_new_protected:Npn \tenkzl_side_cup_separate_stub_tips:
   {
     \dim_set:Nn \l__tenkzl_cupstubshift_dim
-      { \tenkz@dim{\tenkz@r@dotdia}
+      { 2 \l__tenkzl_maxsiteradius_dim
         + \tenkz@dim{\tenkz@r@daylight} }
     \dim_compare:nNnT { \l__tenkzl_cuptranstarget_dim } <
       { ( \l__tenkzl_cuptransmin_dim + \l__tenkzl_cuptransmax_dim ) / 2 }
@@ -2882,6 +2958,7 @@
   {
     \tenkzl_side_cup_direction:n {#1}
     \__tenkz_geom_corridor_reset:
+    \dim_zero:N \l__tenkzl_maxsiteradius_dim
     \int_step_variable:nnNn {0}{\l__tenkzl_sheets_int - 1}
       \l__tenkzl_cupscansheet_int
       {
@@ -2898,6 +2975,9 @@
               }
           }
       }
+    \dim_compare:nNnT { \l__tenkzl_maxsiteradius_dim } = {0pt}
+      { \dim_set:Nn \l__tenkzl_maxsiteradius_dim
+          { \tenkz@dim{\tenkz@r@dotdia} / 2 } }
     % Only real routing-side legs contribute tips.  An open side draws them;
     % a trace side will draw its sheet-local stubs later in this pass.  A
     % sealed side contributes nothing, while a cup has already registered its
@@ -3001,7 +3081,7 @@
           { \tenkz@dim{\tenkz@r@daylight} }
       }
     \dim_set:Nn \l__tenkzl_cupbulge_dim
-      { \tenkz@dim{\tenkz@r@dotdia} / 2
+      { \l__tenkzl_maxsiteradius_dim
         + \tenkz@dim{\tenkz@r@daylight} }
     % Reuse the measured cup endpoint escape: a farther exterior lane alone
     % cannot stop a fixed lead from crossing an opaque body label.
@@ -3017,6 +3097,8 @@
       \l__tenkzl_trbsx_dim \l__tenkzl_trbsy_dim
     \seq_if_empty:NF \l__tenkzl_obstaclebboxes_seq
       {
+        \dim_set_eq:NN \l__tenkzl_siteradius_dim
+          \l__tenkzl_maxsiteradius_dim
         \dim_set:Nn \l__tenkzl_labeltransmin_dim {\c_max_dim}
         \dim_set:Nn \l__tenkzl_labeltransmax_dim {-\c_max_dim}
         \seq_map_inline:Nn \l__tenkzl_obstaclebboxes_seq {##1}
@@ -3045,9 +3127,9 @@
     \tenkzl_side_cup_project_trans:NNN
       \l__tenkzl_trbtx_dim \l__tenkzl_trbty_dim \l__tenkzl_trtransb_dim
     \dim_set:Nn \l__tenkzl_trlane_dim
-      { \l__tenkzl_cupsil_dim + \tenkz@dim{\tenkz@r@dotdia} / 2
+      { \l__tenkzl_cupsil_dim + \l__tenkzl_maxsiteradius_dim
         + \tenkz@dim{\tenkz@r@daylight}
-        + ( \tenkz@dim{\tenkz@r@dotdia}
+        + ( 2 \l__tenkzl_maxsiteradius_dim
             + \tenkz@dim{\tenkz@r@daylight} )
           * \l__tenkzl_trordinal_int }
     \tenkzl_side_cup_from_projections:NNNN
@@ -3121,7 +3203,7 @@
 \cs_new_protected:Npn \tenkzl_trace_separate_ns_stub:N #1
   {
     \dim_add:Nn #1
-      { ( \tenkz@dim{\tenkz@r@dotdia}
+      { ( 2 \l__tenkzl_maxsiteradius_dim
           + \tenkz@dim{\tenkz@r@daylight} )
         * \int_eval:n { \l__tenkzl_trordinal_int + 1 } }
   }
@@ -3132,7 +3214,7 @@
 \cs_new_protected:Npn \tenkzl_trace_separate_open_ns_stub:N #1
   {
     \dim_sub:Nn #1
-      { ( \tenkz@dim{\tenkz@r@dotdia}
+      { ( 2 \l__tenkzl_maxsiteradius_dim
           + \tenkz@dim{\tenkz@r@daylight} )
         * \int_eval:n { \l__tenkzl_trordinal_int + 1 } }
   }
@@ -3151,6 +3233,8 @@
 
 \cs_new_protected:Npn \tenkzl_draw_trace_stub_at:nnn #1#2#3
   {
+    \tenkzl_site_radius:nnVN {#2}{#3} \l__tenkzl_trsheet_int
+      \l__tenkzl_siteradius_dim
     \tenkzl_side_point:nnnnnNN {#1}{#2}{#3}{\l__tenkzl_trsheet_int}{0pt}
       \l__tenkzl_trax_dim \l__tenkzl_tray_dim
     \tenkzl_side_point:nnnnnNN {#1}{#2}{#3}{\l__tenkzl_trsheet_int}
@@ -3166,7 +3250,7 @@
     \dim_compare:nNnF { \l__tenkzl_cupnorm_dim } = {0pt}
       {
         \dim_set:Nn \l__tenkzl_cupbulge_dim
-          { \tenkz@dim{\tenkz@r@dotdia} / 2
+          { \l__tenkzl_siteradius_dim
             + \tenkz@dim{\tenkz@r@daylight} }
         \tenkzl_side_cup_avoid_label_stub:nnnNNNNNN
           {#2}{#3}{\l__tenkzl_trsheet_int}
@@ -3678,6 +3762,104 @@
           { \tl_clear:N \l__tenkzl_stint_tl }
       }
   }
+% Resolve the explicit per-site class with the same sheet-local-over-column
+% precedence as \tenkzl_site_tint:nn.  Empty is semantically significant:
+% omission follows the historical skin unchanged, whereas explicit `m'
+% selects that skin's medium size style.
+\cs_new_protected:Npn \tenkzl_site_size:nnnN #1#2#3#4
+  {
+    \prop_get:NeNF \l__tenkzl_sitesize_prop { #1 - #2 - #3 } #4
+      {
+        \prop_get:NeNF \l__tenkzl_sitesize_prop { #1 - #2 } #4
+          { \tl_clear:N #4 }
+      }
+  }
+\cs_generate_variant:Nn \tenkzl_site_size:nnnN { nnVN }
+
+% True exactly when sheet #1 uses the filled-dot site skin.  Operator sheets
+% always use the inscribed MPO skin; every other sheet follows the picture's
+% resolved tensor skin.
+\prg_new_protected_conditional:Npnn \tenkzl_site_skin_is_dot:n #1
+    { T, F, TF }
+  {
+    \bool_if:NTF \l__tenkzl_roles_bool
+      {
+        \str_if_eq:eeTF { \tenkzl_role:n {#1} } {op}
+          { \prg_return_false: }
+          {
+            \str_if_eq:eeTF { \tenkz@tensorskin } {tensor}
+              { \prg_return_true: } { \prg_return_false: }
+          }
+      }
+      {
+        \str_if_eq:eeTF { \tenkz@tensorskin } {tensor}
+          { \prg_return_true: } { \prg_return_false: }
+      }
+  }
+
+% The rendering option for one explicit size.  Omission returns empty so the
+% node receives precisely the historical option list.
+\cs_new_protected:Npn \tenkzl_site_size_style:nnnN #1#2#3#4
+  {
+    \tenkzl_site_size:nnnN {#1}{#2}{#3} \l__tenkzl_sresolvedsize_tl
+    \tl_if_empty:VTF \l__tenkzl_sresolvedsize_tl
+      { \tl_clear:N #4 }
+      {
+        \tenkzl_site_skin_is_dot:nTF {#3}
+          {
+            \tl_set:Ne #4
+              { tenkz~dot~size~\l__tenkzl_sresolvedsize_tl }
+          }
+          {
+            \tl_set:Ne #4
+              { tenkz~inscribed~size~\l__tenkzl_sresolvedsize_tl }
+          }
+      }
+  }
+\cs_generate_variant:Nn \tenkzl_site_size_style:nnnN { nnVN }
+
+% Clearance diameter for one site.  Omitted size deliberately retains the
+% historical bead-radius routing even for a box skin.  An explicit class uses
+% the silhouette floor selected by that skin.
+\cs_new_protected:Npn \tenkzl_site_diameter:nnnN #1#2#3#4
+  {
+    \tenkzl_site_size:nnnN {#1}{#2}{#3} \l__tenkzl_sresolvedsize_tl
+    \tl_if_empty:VTF \l__tenkzl_sresolvedsize_tl
+      { \dim_set:Nn #4 { \tenkz@dim{\tenkz@r@dotdia} } }
+      {
+        \tenkzl_site_skin_is_dot:nTF {#3}
+          {
+            \str_case:Vn \l__tenkzl_sresolvedsize_tl
+              {
+                {s} { \dim_set:Nn #4
+                    { \tenkz@dim{\tenkz@r@clusterdot} } }
+                {m} { \dim_set:Nn #4
+                    { \tenkz@dim{\tenkz@r@dotdia} } }
+                {l} { \dim_set:Nn #4
+                    { \tenkz@dim{\tenkz@r@glyphbox} } }
+              }
+          }
+          {
+            \str_case:Vn \l__tenkzl_sresolvedsize_tl
+              {
+                {s} { \dim_set:Nn #4
+                    { \tenkz@dim{\tenkz@r@glyphref} * 3 / 4 } }
+                {m} { \dim_set:Nn #4
+                    { \tenkz@dim{\tenkz@r@glyphref} } }
+                {l} { \dim_set:Nn #4
+                    { \tenkz@dim{\tenkz@r@glyphref} * 5 / 4 } }
+              }
+          }
+      }
+  }
+\cs_generate_variant:Nn \tenkzl_site_diameter:nnnN { nnVN }
+
+\cs_new_protected:Npn \tenkzl_site_radius:nnnN #1#2#3#4
+  {
+    \tenkzl_site_diameter:nnnN {#1}{#2}{#3} \l__tenkzl_sitediameter_dim
+    \dim_set:Nn #4 { \l__tenkzl_sitediameter_dim / 2 }
+  }
+\cs_generate_variant:Nn \tenkzl_site_radius:nnnN { nnVN }
 % shared surviving-cell iterator: call #1 {row}{col} for every (row,col)
 % of the frame's window that is NOT removed on the ambient sheet (see
 % \tenkzl_removed:nnF).  Centralizes the double int_step_inline + removed
@@ -3703,13 +3885,27 @@
     % so only its POSITION passes through the frame map
     \tenkzl_site:nn {#1}{#2}
     \tenkzl_site_tint:nn {#1}{#2}
+    \tenkzl_site_size_style:nnVN {#1}{#2} \l__tenkzl_sheet_int
+      \l__tenkzl_ssizestyle_tl
     % the comma is LITERAL: pgfkeys splits the option
     % list before expanding items, so the tint must be
     % its own item (empty when the site carries no role)
-    \__tenkz_render_labelnode:nnn {\l__tenkzl_skin_tl , \l__tenkzl_stint_tl}
-      { ( \dim_use:N \l__tenkzl_px_dim ,
-        \dim_use:N \l__tenkzl_py_dim ) }
-      {}
+    \tl_if_empty:VTF \l__tenkzl_ssizestyle_tl
+      {
+        \__tenkz_render_labelnode:nnn
+          {\l__tenkzl_skin_tl , \l__tenkzl_stint_tl}
+          { ( \dim_use:N \l__tenkzl_px_dim ,
+            \dim_use:N \l__tenkzl_py_dim ) }
+          {}
+      }
+      {
+        \__tenkz_render_labelnode:nnn
+          {\l__tenkzl_skin_tl , \l__tenkzl_stint_tl,
+           \l__tenkzl_ssizestyle_tl}
+          { ( \dim_use:N \l__tenkzl_px_dim ,
+            \dim_use:N \l__tenkzl_py_dim ) }
+          {}
+      }
   }
 \cs_new_protected:Npn \tenkzl_sites_ink:
   {
@@ -3861,29 +4057,49 @@
     \seq_map_inline:Nn \l__tenkzl_regions_seq
       { \tenkzl_label:nnnnnn ##1 }
     \seq_map_inline:Nn \l__tenkzl_sitelabels_seq
-      { \tenkzl_sitelabel:nnnn ##1 }
+      { \tenkzl_sitelabel:nnnnn ##1 }
   }
-% one \tnsite[label=] glyph label: it renders during its sheet's pass in
-% the site's free north-east quadrant — half a bead plus one clearance
-% band out, clear of the vertical physical legs and the in-row bonds
-\cs_new_protected:Npn \tenkzl_sitelabel:nnnn #1#2#3#4
+% One \tnsite[label=] glyph label.  Its bearing determines both the outward
+% quadrant and the reversed node anchor through the core's shared bearing
+% table.  Each nonzero component clears the bead's resolved radius plus one
+% label band.  When size is omitted, the historical north-east position is
+% preserved exactly; an explicit class follows the resolved skin's radius.
+\cs_new_protected:Npn \tenkzl_sitelabel:nnnnn #1#2#3#4#5
   {
     \int_compare:nNnT {#3} = { \l__tenkzl_sheet_int }
       {
         \tenkzl_site:nn {#1}{#2}
+        \tenkzl_site_radius:nnnN {#1}{#2}{#3} \l__tenkzl_siteradius_dim
+        \tenkz_label_bearing:nnNNNT {#5} {1pt}
+          \l__tenkzl_slanchor_tl \l__tenkzl_sldx_dim \l__tenkzl_sldy_dim
+          {
+            \dim_set:Nn \l__tenkzl_sitediameter_dim
+              { \l__tenkzl_siteradius_dim
+                + \tenkz@dim{\tenkz@r@labelclear} }
+            \dim_compare:nNnT { \l__tenkzl_sldx_dim } > {0pt}
+              { \dim_set_eq:NN \l__tenkzl_sldx_dim
+                  \l__tenkzl_sitediameter_dim }
+            \dim_compare:nNnT { \l__tenkzl_sldx_dim } < {0pt}
+              { \dim_set:Nn \l__tenkzl_sldx_dim
+                  {-\l__tenkzl_sitediameter_dim} }
+            \dim_compare:nNnT { \l__tenkzl_sldy_dim } > {0pt}
+              { \dim_set_eq:NN \l__tenkzl_sldy_dim
+                  \l__tenkzl_sitediameter_dim }
+            \dim_compare:nNnT { \l__tenkzl_sldy_dim } < {0pt}
+              { \dim_set:Nn \l__tenkzl_sldy_dim
+                  {-\l__tenkzl_sitediameter_dim} }
         \begin{pgfonlayer}{tenkz-lattice-labels}
           \__tenkz_render_labelnode_named:nnnn
-            {tn~label, anchor=south~west, fill=tenkzPaper}
+            {tn~label, anchor=\l__tenkzl_slanchor_tl, fill=tenkzPaper}
             {tenkzl-site-label-probe}
-            { ( \dim_eval:n { \l__tenkzl_px_dim
-                              + \tenkz@dim{\tenkz@r@dotdia} / 2
-                              + \tenkz@dim{\tenkz@r@labelclear} } ,
-                \dim_eval:n { \l__tenkzl_py_dim
-                              + \tenkz@dim{\tenkz@r@dotdia} / 2
-                              + \tenkz@dim{\tenkz@r@labelclear} } ) }
+            { ( \dim_eval:n
+                  { \l__tenkzl_px_dim + \l__tenkzl_sldx_dim } ,
+                \dim_eval:n
+                  { \l__tenkzl_py_dim + \l__tenkzl_sldy_dim } ) }
             {#4}
         \end{pgfonlayer}
         \tenkzl_record_site_label_bbox:nnn {#1}{#2}{#3}
+          }
       }
   }
 

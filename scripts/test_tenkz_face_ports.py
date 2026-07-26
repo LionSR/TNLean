@@ -246,6 +246,12 @@ SOURCE = r"""
 \int_new:N \g__tenkzl_test_bbox_calls_int
 \bool_new:N \g__tenkzl_test_pairtrace_obstacle_bool
 \dim_new:N \g__tenkzl_test_pairtrace_top_dim
+\bool_new:N \g__tenkzl_test_size_routing_bool
+\dim_new:N \l__tenkzl_test_small_radius_dim
+\dim_new:N \l__tenkzl_test_medium_radius_dim
+\dim_new:N \l__tenkzl_test_large_radius_dim
+\dim_new:N \l__tenkzl_test_medium_diameter_dim
+\tl_new:N \l__tenkzl_test_size_style_tl
 \cs_new_protected:Npn \tenkzSealedTipProbe
   { \bool_gset_true:N \g__tenkzl_test_sealed_tip_bool }
 \cs_new_protected:Npn \tenkzObstacleProbe #1
@@ -257,6 +263,55 @@ SOURCE = r"""
   }
 \cs_new_protected:Npn \tenkzPairtraceObstacleProbe
   { \bool_gset_true:N \g__tenkzl_test_pairtrace_obstacle_bool }
+\cs_new_protected:Npn \tenkzSizeRoutingProbe
+  { \bool_gset_true:N \g__tenkzl_test_size_routing_bool }
+\cs_new_protected:Npn \tenkzSiteSizeOrderProbe
+  {
+    \tenkzl_site_radius:nnnN {1}{1}{0}
+      \l__tenkzl_test_small_radius_dim
+    \tenkzl_site_radius:nnnN {1}{2}{0}
+      \l__tenkzl_test_medium_radius_dim
+    \tenkzl_site_radius:nnnN {1}{3}{0}
+      \l__tenkzl_test_large_radius_dim
+    \dim_compare:nNnF { \l__tenkzl_test_small_radius_dim } <
+      { \l__tenkzl_test_medium_radius_dim }
+      { \tex_errmessage:D { small~site~was~not~smaller~than~medium } }
+    \dim_compare:nNnF { \l__tenkzl_test_medium_radius_dim } <
+      { \l__tenkzl_test_large_radius_dim }
+      { \tex_errmessage:D { medium~site~was~not~smaller~than~large } }
+    \tenkzl_site_diameter:nnnN {1}{2}{0}
+      \l__tenkzl_test_medium_diameter_dim
+    \dim_compare:nNnF { \l__tenkzl_test_medium_diameter_dim } =
+      { \tenkz@dim{\tenkz@r@dotdia} }
+      { \tex_errmessage:D { explicit~medium~changed~the~default~dot~size } }
+    \tenkzl_site_radius:nnnN {1}{4}{1}
+      \l__tenkzl_test_medium_radius_dim
+    \dim_compare:nNnF { \l__tenkzl_test_medium_radius_dim } =
+      { \tenkz@dim{\tenkz@r@clusterdot} / 2 }
+      { \tex_errmessage:D { sheet-local~site~size~did~not~override~column } }
+  }
+\cs_new_protected:Npn \tenkzBoxSiteSizeCompatibilityProbe
+  {
+    \tenkzl_site_size_style:nnnN {1}{1}{0}
+      \l__tenkzl_test_size_style_tl
+    \tl_if_empty:NF \l__tenkzl_test_size_style_tl
+      { \tex_errmessage:D { omitted~box~site~acquired~a~size~style } }
+    \tenkzl_site_diameter:nnnN {1}{1}{0}
+      \l__tenkzl_test_medium_diameter_dim
+    \dim_compare:nNnF { \l__tenkzl_test_medium_diameter_dim } =
+      { \tenkz@dim{\tenkz@r@dotdia} }
+      { \tex_errmessage:D { omitted~box~site~changed~routing~clearance } }
+    \tenkzl_site_size_style:nnnN {1}{2}{0}
+      \l__tenkzl_test_size_style_tl
+    \tl_if_eq:VnF \l__tenkzl_test_size_style_tl
+      {tenkz~inscribed~size~m}
+      { \tex_errmessage:D { explicit~medium~box~used~the~wrong~size~style } }
+    \tenkzl_site_diameter:nnnN {1}{2}{0}
+      \l__tenkzl_test_medium_diameter_dim
+    \dim_compare:nNnF { \l__tenkzl_test_medium_diameter_dim } =
+      { \tenkz@dim{\tenkz@r@glyphref} }
+      { \tex_errmessage:D { explicit~medium~box~used~dot~clearance } }
+  }
 \bool_new:N \g__tenkz_test_none_face_label_bool
 \cs_new_protected:Npn \tenkzNoneFaceLabelProbe
   { \bool_gset_true:N \g__tenkz_test_none_face_label_bool }
@@ -307,6 +362,13 @@ SOURCE = r"""
   {
     \int_gzero:N \g__tenkzl_test_obstacle_calls_int
     \__tenkzl_test_trace_silhouette:n {#1}
+    \bool_if:NT \g__tenkzl_test_size_routing_bool
+      {
+        \dim_compare:nNnF { \l__tenkzl_maxsiteradius_dim } =
+          { \tenkz@dim{\tenkz@r@glyphbox} / 2 }
+          { \tex_errmessage:D { trace~clearance~ignored~large~site~radius } }
+        \bool_gset_false:N \g__tenkzl_test_size_routing_bool
+      }
     \bool_if:NT \g__tenkzl_test_pairtrace_obstacle_bool
       {
         \dim_compare:nNnF { \l__tenkzl_cupsil_dim } >
@@ -968,6 +1030,27 @@ SOURCE = r"""
 \ifnum\tenkzlatticeskinchecks=5\else
   \errmessage{lattice tensor style did not exercise every skin contract}
 \fi
+% Omission must leave a box-style site's historical node options and routing
+% clearance untouched.  Explicit medium selects the shared inscribed style
+% and its historical box-width floor.
+\begin{tenkzlattice}[
+    rows=1, cols=2, boundary=none, tensor style=box]
+  \tnsite[size=m]{(1,2)}
+  \tenkzBoxSiteSizeCompatibilityProbe
+\end{tenkzlattice}
+% Per-site sizes use the shared small/medium/large metric diameters.  A
+% sheet-local choice overrides the sheetless column choice, and a large site
+% enlarges the trace corridor by its resolved radius.
+\begin{tenkzlattice}[
+    rows=1, cols=4, sheets=2, boundary=none, east=trace]
+  \tnsite[size=s, label=$s$, label pos=south west]{(1,1)}
+  \tnsite[size=m, label=$m$]{(1,2)}
+  \tnsite[size=l, label=$l$, label pos=north west]{(1,3)}
+  \tnsite[size=l]{(1,4)}
+  \tnsite[size=s]{(1,4,1)}
+  \tenkzSiteSizeOrderProbe
+  \tenkzSizeRoutingProbe
+\end{tenkzlattice}
 % Outer-leg drawing and counting share the endpoint-survival predicate.  Each
 % sheet-local removal suppresses exactly the physical leg on its own face.
 \begin{tenkzlattice}[
@@ -1146,6 +1229,43 @@ def main() -> int:
             print(invalid_run.stdout)
             print("FAIL: an embedded cup= substring bypassed the lattice side policy")
             return 1
+        for name, option, diagnostic in (
+            ("invalid-site-size", "size=xl", "unknown in site size"),
+            (
+                "invalid-site-label-pos",
+                "label pos=upward",
+                "unknown in site label pos",
+            ),
+        ):
+            invalid_site = work / f"{name}.tex"
+            invalid_site.write_text(
+                rf"""\documentclass{{standalone}}
+\usepackage{{tenkz}}
+\begin{{document}}
+\begin{{tenkzlattice}}[rows=1, cols=1]
+  \tnsite[label={{\typeout{{INVALID-SITE-LABEL-MATERIALIZED}}$x$}},
+          {option}]{{(1,1)}}
+\end{{tenkzlattice}}
+\end{{document}}
+""",
+                encoding="utf-8",
+            )
+            invalid_site_run = subprocess.run(
+                [engine, "-interaction=nonstopmode", invalid_site.name],
+                cwd=work,
+                env=env,
+                text=True,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.STDOUT,
+            )
+            if (
+                invalid_site_run.returncode == 0
+                or diagnostic not in invalid_site_run.stdout
+                or "INVALID-SITE-LABEL-MATERIALIZED" in invalid_site_run.stdout
+            ):
+                print(invalid_site_run.stdout)
+                print(f"FAIL: {name} did not reject before site-label ink")
+                return 1
         # A cup is a contraction the picture asserts.  One row offers one end,
         # so no bend can be drawn, and a picture that drew nothing here would
         # deny the contraction without saying so.
