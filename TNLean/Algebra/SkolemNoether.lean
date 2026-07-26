@@ -19,8 +19,6 @@ This file provides the "abstract algebra" ingredients for the Fundamental Theore
   in a simple ring.
 * `matrixAlgEquiv_fin_eq`: an algebra isomorphism between full matrix algebras
   forces the same matrix size.
-* `matrixAlgEquiv_inner_of_fin`: after this size identification, such an
-  isomorphism is inner.
 * **Skolem–Noether** (`skolemNoether_matrix`): Every algebra automorphism of
   `Matrix n n ℂ` is inner (conjugation by an invertible matrix).
 * **`linearMapToAlgHom`**: Promotes a multiplicative surjective linear map to an algebra
@@ -140,39 +138,6 @@ theorem skolemNoether_matrix {n : Type*} [Fintype n] [DecidableEq n]
     _ = e (X : Matrix n n ℂ) * e M * e ((X⁻¹ : GL n ℂ) : Matrix n n ℂ) := by
         rw [← hX_lin, ← hX_lin_inv]; simp [Module.End.mul_eq_comp, LinearMap.comp_assoc]
     _ = e ((X : Matrix n n ℂ) * M * ((X⁻¹ : GL n ℂ) : Matrix n n ℂ)) := by simp [mul_assoc]
-
-/-- An algebra isomorphism between full matrix algebras is conjugation by an
-invertible matrix after the matrix sizes are identified.
-
-Source: arXiv:1804.04964, Section 3, lines 582--586:
-after the insertion correspondence is shown to be an algebra isomorphism
-between full matrix algebras, the paper identifies the two matrix sizes and
-applies Skolem--Noether to obtain an invertible gauge matrix. -/
-theorem matrixAlgEquiv_inner_of_fin {D E : ℕ}
-    (φ : Matrix (Fin D) (Fin D) ℂ ≃ₐ[ℂ] Matrix (Fin E) (Fin E) ℂ) :
-    ∃ h : D = E, ∃ X : GL (Fin E) ℂ,
-      ∀ M : Matrix (Fin D) (Fin D) ℂ,
-        φ M = (X : Matrix (Fin E) (Fin E) ℂ) *
-            Matrix.reindexAlgEquiv ℂ ℂ (finCongr h) M *
-            ((X⁻¹ : GL (Fin E) ℂ) : Matrix (Fin E) (Fin E) ℂ) := by
-  classical
-  have hDE : D = E := matrixAlgEquiv_fin_eq φ
-  let e : Matrix (Fin D) (Fin D) ℂ ≃ₐ[ℂ] Matrix (Fin E) (Fin E) ℂ :=
-    Matrix.reindexAlgEquiv ℂ ℂ (finCongr hDE)
-  let f : Matrix (Fin E) (Fin E) ℂ ≃ₐ[ℂ] Matrix (Fin E) (Fin E) ℂ :=
-    e.symm.trans φ
-  obtain ⟨X, hX⟩ := skolemNoether_matrix (f := f)
-  refine ⟨hDE, X, ?_⟩
-  intro M
-  calc φ M
-      = f (e M) := by
-          change φ (e.symm (e M)) = φ M
-          rw [AlgEquiv.symm_apply_apply]
-    _ = (X : Matrix (Fin E) (Fin E) ℂ) * e M *
-          ((X⁻¹ : GL (Fin E) ℂ) : Matrix (Fin E) (Fin E) ℂ) := hX (e M)
-    _ = (X : Matrix (Fin E) (Fin E) ℂ) *
-          Matrix.reindexAlgEquiv ℂ ℂ (finCongr hDE) M *
-          ((X⁻¹ : GL (Fin E) ℂ) : Matrix (Fin E) (Fin E) ℂ) := by rfl
 
 /-- Promote a multiplicative surjective $\C$-linear map
 $T : \MN{D} \to \MN{D}$ to a $\C$-algebra homomorphism. The key step is
