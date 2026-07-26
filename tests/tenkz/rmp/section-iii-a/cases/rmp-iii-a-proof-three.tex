@@ -5,12 +5,22 @@
 % Source: paper TN-Review-main.tex line 1412; author source ImagesReview Section
 %   III/ImagesReview Section III.tex lines 386-411
 % Capabilities: grid, local-intertwiner, fusion-map
+% The stacked two-layer fusion: alpha sits below beta on one virtual leg;
+% V_alpha reduces the dot with alpha first, then V_beta reduces that
+% result with beta.  The fused side stacks alpha, beta the same way, with
+% F fusing the pair before V_gamma reduces the dot with the fused leg.
 \[
-  \begin{tenkz}[rows={op:operator}, tensor style=box]
-    \tn{\alpha} & \tnX{V_\alpha} & \tn{\beta} & \tnX{V_\beta}
+  \begin{tenkz}[rows={op:operator, op:operator, op:operator},
+                tensor style=box]
+    \tn{\beta} & \tnghost{} & \tn[box,wires=2]{V_\beta}\\
+    \tn{\alpha} & \tn[box,wires=2]{V_\alpha} & \\
+    \tn[dot]{} & &
   \end{tenkz}
   =\lambda(\alpha,\beta;\gamma)
-  \begin{tenkz}[rows={op:operator}, tensor style=box]
-    \tn{\alpha,\beta} & \tnX{F_{\alpha\beta}^{\gamma}} & \tnX{V_\gamma}
+  \begin{tenkz}[rows={op:operator, op:operator, op:operator},
+                tensor style=box]
+    \tn{\beta} & \tn[box,wires=2]{F_{\alpha\beta}^{\gamma}} & \\
+    \tn{\alpha} & & \tn[box,wires=2]{V_\gamma}\\
+    \tn[dot]{} & \tnghost{} &
   \end{tenkz}.
 \]

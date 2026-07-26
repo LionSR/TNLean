@@ -2,7 +2,7 @@
 # Schema: scripts/tenkz_rmp.py (load_verdicts).  Any status may be
 # recorded, including failure; the check rejects lies, never gaps.
 schema_version = 1
-campaign_sha256 = "d3232258c93d676072d9aaf7e400a6223527192be24a137fed2a098c4be955d9"
+campaign_sha256 = "17651574faa898c3fb6a948834ff4fa7916a2fb79b3c1e2cdd230fc52091ef21"
 
 [[verdict]]
 id = "rmp-ii-peps-projection"
@@ -165,10 +165,14 @@ note = "heavy solid S-curve vs compact dotted arc (\"graceful strings\")"
 
 [[verdict]]
 id = "rmp-ii-reduced-density"
-status = "unreviewed"
+status = "faithful"
 pairing = "verified"
 pairing_by = "codex-pairing-sweep-2026-07-24"
-note = "Judged faithful in the maintainer review; awaiting pairing verification."
+case_sha256 = "eb283d9362c33e12bb3bc61debfa2eae79f057efc7ef81582582aa1b5406d5d3"
+reviewed = "2026-07-27"
+renderer = "fable-structural-redraw-2026-07-27-200dpi"
+second_viewer = "LionSR-delegated-fable-countersign-2026-07-26"
+note = "the band matches the author panel site for site; the workbench wraps the same band in eig(...) where the case names it rho_n -- identical network"
 
 [[verdict]]
 id = "rmp-ii-spectrum-rho"
@@ -511,10 +515,14 @@ note = "context-only; clean"
 
 [[verdict]]
 id = "rmp-iii-a-coproduct"
-status = "unreviewed"
+status = "faithful"
 pairing = "verified"
 pairing_by = "codex-pairing-sweep-2026-07-24"
-note = "Judged faithful in the maintainer review; awaiting pairing verification."
+case_sha256 = "c81cc9c8fb70166b73d15593c6465cc544b0b17f59ccf1b4b5bddb9197dda328"
+reviewed = "2026-07-27"
+renderer = "fable-structural-redraw-2026-07-27-200dpi"
+second_viewer = "LionSR-delegated-fable-countersign-2026-07-26"
+note = "the pairing reading caught both panels leaving the virtual wire open where the source closes it in a loop; both now close via periodic. X renders as the grammar's stadium for the source's circle (#4931)"
 
 [[verdict]]
 id = "rmp-iii-a-pulling-through"
@@ -560,14 +568,14 @@ note = "bond hue and box size"
 
 [[verdict]]
 id = "rmp-iii-a-proof-three"
-status = "structural-gap"
+status = "cosmetic-gap"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
-defects = ["missing-element"]
-case_sha256 = "028a826ddb9653a3e0b48d2e47cd2524e645411bb724943a7e64fc6aa9aa00a0"
-reviewed = "2026-07-23"
-renderer = "maintainer-page-review-2026-07-23"
-note = "stacked fusion flattened to one row"
+defects = []
+case_sha256 = "08585d86aba483caa21068b81fc8545860cabff5e0077119c032fd853cf16f5c"
+reviewed = "2026-07-27"
+renderer = "fable-structural-redraw-2026-07-27-200dpi"
+note = "the fusion stack is restored: beta above alpha above the dot, V_alpha and V_beta spanning their levels, F and V_gamma on the right with the dot wire passing under F; rails red in the house operator hue where the source is black"
 
 [[verdict]]
 id = "rmp-iii-a-ghz-state"
@@ -1127,47 +1135,47 @@ note = "four legs, as in Eq50.pdf"
 
 [[verdict]]
 id = "rmp-workbench-iii-eq51"
-status = "structural-gap"
+status = "cosmetic-gap"
 pairing = "verified"
 pairing_by = "codex-pairing-sweep-2026-07-24"
-defects = ["open-closure", "missing-element"]
-case_sha256 = "44e6ca743aeeafb0394b64121d5392d0cb78fe7e79597faaf23ebe9709d9aa7e"
-reviewed = "2026-07-23"
-renderer = "maintainer-page-review-2026-07-23"
-note = "trace ring drawn open; box legs dropped"
+defects = []
+case_sha256 = "bef5963f63321f032c6130abec66e82d4c5ea6712cf507b66f75b884184023e9"
+reviewed = "2026-07-27"
+renderer = "fable-structural-redraw-2026-07-27-200dpi"
+note = "the trace ring closes and every box carries both physical legs; hue plain where the source is red"
 
 [[verdict]]
 id = "rmp-workbench-iii-eq52"
-status = "structural-gap"
+status = "cosmetic-gap"
 pairing = "verified"
 pairing_by = "codex-pairing-sweep-2026-07-24"
-defects = ["open-closure", "missing-element"]
-case_sha256 = "4d67bf463023dc2ed4d3f3b9f03dc0afb90cedfcc4fb9bb76c1e44eb370322ce"
-reviewed = "2026-07-23"
-renderer = "maintainer-page-review-2026-07-23"
-note = "same"
+defects = []
+case_sha256 = "dba0ab1b9476cb92fa76b7106dc38e6ca832672722c618da4b7e0eff65c706e5"
+reviewed = "2026-07-27"
+renderer = "fable-structural-redraw-2026-07-27-200dpi"
+note = "ring closed, legs restored; hue plain where the source is red"
 
 [[verdict]]
 id = "rmp-workbench-iii-diagram-one"
-status = "structural-gap"
+status = "cosmetic-gap"
 pairing = "verified"
 pairing_by = "codex-pairing-sweep-2026-07-24"
-defects = ["open-closure"]
-case_sha256 = "a4899c88acc370816e830d33ef03289d4adfbb0a5e5f997698a41fb2fad5d8c8"
-reviewed = "2026-07-23"
-renderer = "maintainer-page-review-2026-07-23"
-note = "maintainer: wrong; ring closures missing on both sides"
+defects = []
+case_sha256 = "1ee7e398eaa58464dbca25d60b3c36ae8596832c290812a10c9d80cda7d0e754"
+reviewed = "2026-07-27"
+renderer = "fable-structural-redraw-2026-07-27-200dpi"
+note = "both panels close their rings; the one-to-two-site boundary advisory is the identity itself"
 
 [[verdict]]
 id = "rmp-workbench-iii-diagram-two"
-status = "structural-gap"
+status = "cosmetic-gap"
 pairing = "verified"
 pairing_by = "codex-pairing-sweep-2026-07-24"
-defects = ["missing-element"]
-case_sha256 = "cba1899ccb9ddfb772157668cf9a94962f36fa478fe51c759cefeac32fc5735d"
-reviewed = "2026-07-23"
-renderer = "maintainer-page-review-2026-07-23"
-note = "box node and legs omitted; loop reoriented"
+defects = []
+case_sha256 = "8f2fe14c1f4fe5f8274b819562fc942dfaf34955d29645c9e7360de1e30240f8"
+reviewed = "2026-07-27"
+renderer = "fable-structural-redraw-2026-07-27-200dpi"
+note = "Y restored above A with the loop closing in the physical direction, as the source orients it"
 
 [[verdict]]
 id = "rmp-workbench-iii-diagram-three"
@@ -1224,21 +1232,25 @@ note = "glyphs; RHS factor order is cyclic-equivalent"
 
 [[verdict]]
 id = "rmp-workbench-iii-f-symbol-simplified-a"
-status = "unreviewed"
+status = "faithful"
 pairing = "verified"
 pairing_by = "codex-pairing-sweep-2026-07-24"
-note = "The author range explicitly renders the simplified F tensor as one four-leg tensor labelled a."
+case_sha256 = "ef88840b704dd9eb856858d60fa73929896f253581703e50740447f47484f28f"
+reviewed = "2026-07-27"
+renderer = "fable-structural-redraw-2026-07-27-200dpi"
+second_viewer = "LionSR-delegated-fable-countersign-2026-07-26"
+note = "redrawn as the one four-leg tensor labelled a that the author range renders; the fusion-tree pair it replaced asserted a different object. Virtual hue plain where the source uses red"
 
 [[verdict]]
 id = "rmp-workbench-iii-mpo-representation"
-status = "structural-gap"
+status = "cosmetic-gap"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
-defects = ["missing-element"]
-case_sha256 = "f083acc3ab3d2d2fb5585993d69643f33fa027ecb155382d86cafb364d050de1"
-reviewed = "2026-07-26"
-renderer = "fable-countersign-reading-2026-07-26-200dpi"
-note = "physical legs still dropped; the bond labels now parse (the case had misspelt the range syntax and the literal printed across the boxes, silently)"
+defects = []
+case_sha256 = "9693cd4793cf0ca7fd69d735a1ac0bfee88bff2aabbcc9bb399c4839b02884ac"
+reviewed = "2026-07-27"
+renderer = "fable-structural-redraw-2026-07-27-250dpi"
+note = "both physical legs drawn per site and a on every internal bond; the source's colored virtual index remains plain ink"
 
 [[verdict]]
 id = "rmp-workbench-iii-f-tensor"
@@ -1330,25 +1342,25 @@ note = "hatching, hue, center placement"
 
 [[verdict]]
 id = "rmp-workbench-iii-eq60-now"
-status = "structural-gap"
+status = "cosmetic-gap"
 pairing = "verified"
 pairing_by = "codex-pairing-sweep-2026-07-24"
-defects = ["missing-element"]
-case_sha256 = "908d8c8b0703575cd1b50e22ffc04aca284ad5ceb46ceb4103146ef85938eaa5"
-reviewed = "2026-07-23"
-renderer = "maintainer-page-review-2026-07-23"
-note = "dagger insertions dropped; diagonals axis-aligned"
+defects = []
+case_sha256 = "566eecee0b9e128926935e77a0e07e79ecd2ec1419bf39de0488e9ef91364831"
+reviewed = "2026-07-27"
+renderer = "fable-structural-redraw-2026-07-27-200dpi"
+note = "the daggered insertions are drawn and the diagonal legs are genuinely diagonal on both sides"
 
 [[verdict]]
 id = "rmp-workbench-iii-enlarged-mpo-black"
-status = "structural-gap"
+status = "cosmetic-gap"
 pairing = "verified"
 pairing_by = "codex-pairing-sweep-2026-07-24"
-defects = ["open-closure", "missing-element"]
-case_sha256 = "0929257dd040618dfe78b74f0f95971d43619bc96ee5d23bf2a397d4ee34246c"
-reviewed = "2026-07-23"
-renderer = "maintainer-page-review-2026-07-23"
-note = "ring open; legs dropped"
+defects = []
+case_sha256 = "7def2c11b844983a48f9060bb83ee87b99b31e06e92ccc45f7a1eac71baf145c"
+reviewed = "2026-07-27"
+renderer = "fable-structural-redraw-2026-07-27-200dpi"
+note = "ring closed with five boxes and the marked site, as the source draws concretely without an ellipsis"
 
 [[verdict]]
 id = "rmp-workbench-iii-eq59"
