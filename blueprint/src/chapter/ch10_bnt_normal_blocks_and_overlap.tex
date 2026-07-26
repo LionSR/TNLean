@@ -1,19 +1,4 @@
-\begin{lemma}[Perron gauges preserve primitivity]
-    \label{lem:perron_gauge_primitive_iff}
-    \lean{MPSTensor.isPrimitive_transferMap_tpGauge_iff}
-    \leanok
-    \uses{def:primitive_channel}
-    Let $\sigma$ be positive definite. The transfer map of the Perron gauge
-    determined by $\sigma$ is primitive if and only if the original transfer
-    map is primitive.
-\end{lemma}
 
-\begin{proof}\leanok
-    The two transfer maps are similar through the invertible congruence
-    $X\mapsto\sigma^{-1/2}X\sigma^{-1/2}$. Similar linear maps have the same
-    spectrum, so the condition that $1$ is the only eigenvalue on the unit
-    circle is unchanged.
-\end{proof}
 
 \begin{theorem}[Spectral normality gives a pure trace-preserving gauge]
     \label{thm:cpsv_normal_tp_gauge}
@@ -76,22 +61,7 @@
     eventual linear independence are unchanged.
 \end{proof}
 
-\begin{lemma}[Transport of an algebraic BNT along positive-length MPV equality]
-    \label{lem:bnt_of_same_mpv2_pos}
-    \lean{MPSTensor.IsBNT.of_sameMPV₂Pos}
-    \leanok
-    \uses{def:bnt, def:same_mpv2_pos}
-    Let $A$ and $A'$ have the same matrix product vectors at every positive
-    length. If $(A_j)_{j=1}^{g}$ is a basis of normal tensors for $A$, then
-    the same family is a basis of normal tensors for $A'$.
-\end{lemma}
 
-\begin{proof}\leanok
-    \uses{def:bnt, def:same_mpv2_pos}
-    Substitute the positive-length MPV equality into the spanning identity
-    for $A$. Normality and eventual linear independence depend only on the
-    family $(A_j)_{j=1}^{g}$.
-\end{proof}
 
 \begin{theorem}[Non-decaying rectangular overlap determines the bond dimension]
     \label{thm:rect_overlap_norm_one_dim_eq}
@@ -261,29 +231,7 @@
     $a=\zeta^{-1}$.
 \end{proof}
 
-\begin{corollary}[Positive-length geometric proportionality phase]
-    \label{cor:normal_positive_proportional_mpv_geometric_phase}
-    \lean{MPSTensor.NonzeroProportionalMPV₂.%
-        exists_unit_phase_power_of_isNormalTensor}
-    \leanok
-    \uses{def:nt_cpsv, def:mpv_state,
-        def:nonzero_proportional_mpv}
-    Let $A$ and $B$ be normal tensors of positive, possibly different, bond
-    dimensions. Suppose that, for every positive $N$, their matrix product
-    vectors are proportional by a nonzero scalar. Then there is $a\in\C$,
-    with $|a|=1$, such that
-    $\ket{V^{(N)}(A)}=a^N\ket{V^{(N)}(B)}$ for every positive $N$.
-    This is the positive-length one-normal-block consequence of
-    \cite[Corollary~A.3 and Theorem~2.10]{Cirac2016MPDO_arXiv}.
-\end{corollary}
 
-\begin{proof}\leanok
-    \uses{lem:nonzero_proportional_mpv_basic,
-        thm:normal_proportional_mpv_geometric_phase}
-    Positive-length nonzero proportionality implies eventual nonzero
-    proportionality. Apply
-    Theorem~\ref{thm:normal_proportional_mpv_geometric_phase}.
-\end{proof}
 
 \begin{theorem}[Separated normal tensors are eventually independent]
     \label{thm:cpsv_normal_separated_eventually_li}

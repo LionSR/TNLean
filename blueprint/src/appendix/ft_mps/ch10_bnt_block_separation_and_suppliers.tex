@@ -1,0 +1,418 @@
+\section{Direct-sum separation and prepared-family bookkeeping}
+\label{sec:app_bnt_separation_supplier}
+
+We now prove the supporting separation and regrouping results used by the
+source-facing block-injectivity and supplier theorems in
+Chapter~\ref{ch:bnt}.  The direct-sum argument follows the ground-space
+uniqueness mechanism of \cite{PerezGarcia2007Matrix}: disjoint local
+MPS spaces give pair-trace selectors, products of those selectors isolate one
+BNT block, and an injective prefix supplies an arbitrary matrix on that block.
+The remaining results identify dimensions while phase-equivalent prepared
+blocks are grouped into sectors and normalize the resulting finite weight
+family.
+
+\begin{lemma}[BNT block separation with an injective prefix]
+    \label{lem:bnt_direct_sum_injective_prefix_word_span}
+    \lean{MPSTensor.hasPairBlockSeparatingWords_threeBlock_of_blocksNotGaugePhaseEquiv_c1}
+    \lean{MPSTensor.propBlockInjective_of_blocksNotGaugePhaseEquiv_directSum_c1}
+    \lean{MPSTensor.wordTupleSpanTop_of_blocksNotGaugePhaseEquiv_directSum_selectors_c1}
+    \lean{MPSTensor.exists_wordTupleSpanTop_of_blocksNotGaugePhaseEquiv_directSum_selectors_c1}
+    \leanok
+    \uses{def:bnt_cpsv, def:nt_cpsv, def:blocks_not_gauge_phase_equiv,
+        def:left_canonical_tensor, def:mpv_overlap,
+        def:blockwise_product_word_span}
+    Let $A^1,\ldots,A^r$ be normalized representatives of a basis of normal
+    tensors: each representative is irreducible, the family is left-canonical,
+    the self-overlaps are normalized, and no two distinct same-dimensional
+    representatives are gauge-phase equivalent. Fix $L_0>0$. Assume that, for
+    every block $j$, the map
+    \begin{align}
+        \Gamma_{L_0}^{A^j}:\MN{D_j} & \longrightarrow (\C^d)^{\otimes L_0},
+        \notag                                                                     \\
+        X                           & \longmapsto \sum_{|u|=L_0}\tr(XA^j_u)\ket{u}
+        \notag
+    \end{align}
+    is injective, and that the homogeneous word spans at the two source
+    lengths are full:
+    \begin{align}
+        \spn\{A^j_u:|u|=L_0+1\}    & = \MN{D_j},
+        \notag                                   \\
+        \spn\{A^j_v:|v|=3(L_0+1)\} & = \MN{D_j}.
+        \notag
+    \end{align}
+    Then, for every ordered pair $k\ne j$, there are coefficients
+    $c^{k,j}_\omega$ such that
+    \begin{align}
+        \sum_{|\omega|=3(L_0+1)} c^{k,j}_\omega A^k_\omega & = \Id,
+        \notag                                                      \\
+        \sum_{|\omega|=3(L_0+1)} c^{k,j}_\omega A^j_\omega & = 0.
+        \notag
+    \end{align}
+    The simultaneous block-word tuples at length
+    $(L_0+1)+3(r-1)(L_0+1)$ span the full product algebra
+    $\prod_{j=1}^r \MN{D_j}$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{def:bnt_cpsv, def:blockwise_product_word_span,
+        thm:trace_nondeg, thm:cpsv_bnt_blocks_not_gaugePhaseEquiv,
+        thm:normal_proportional_mpv_geometric_phase}
+    Put $\ell=L_0+1$ and $S=3\ell$. For a block $A^q$, define the
+    boundary-to-local-space map
+    \begin{align}
+        T_n^q:\MN{D_q} & \longrightarrow (\C^d)^{\otimes n},
+        \notag                                               \\
+        T_n^q(Z)       & =\sum_{|t|=n}\tr(ZA_t^q)\ket{t},
+        \notag
+    \end{align}
+    and its range $\mathcal G_n^q=\operatorname{ran}T_n^q$. This is the same
+    map as $\Gamma_n^{A^q}$, up to cyclically moving $Z$ inside the trace.
+    The full word span at a length $n$ makes $T_n^q$ injective: if
+    $T_n^q(Z)=0$, then $\tr(ZM)=0$ for every $M\in\MN{D_q}$, whence $Z=0$
+    by nondegeneracy of the trace pairing.
+
+    Fix two distinct blocks and relabel them $A$ and $B$ so that their bond
+    dimensions satisfy $D_B\leq D_A$. We claim that
+    \begin{align}
+        \mathcal G_S^A\cap\mathcal G_S^B & =\{0\}.
+        \notag
+    \end{align}
+    Suppose instead that $0\ne\psi$ lies in this intersection. Since the
+    length-$S$ word spans are full, $T_S^A$ and $T_S^B$ are injective, so there
+    are nonzero matrices $X\in\MN{D_A}$ and $Y\in\MN{D_B}$ with
+    $\psi=T_S^A(X)=T_S^B(Y)$. Splitting every length-$S$ word into three
+    length-$\ell$ words gives
+    \begin{align}
+        \tr(XA_{uvw}) & =\tr(YB_{uvw})
+                      &                & (|u|=|v|=|w|=\ell).
+        \notag
+    \end{align}
+
+    We now derive the local-space inclusion without suppressing the intervening
+    map. Since the length-$\ell$ words of $A$ span $\MN{D_A}$ and $X\ne0$,
+    the two-sided products span the same algebra:
+    \begin{align}
+        \spn\{A_uXA_v:|u|=|v|=\ell\} & =\MN{D_A}.
+        \notag
+    \end{align}
+    Indeed, after expanding arbitrary left and right factors in length-$\ell$
+    words, the left-hand side is the span of $MXN$ with
+    $M,N\in\MN{D_A}$; a nonzero entry of $X$, together with matrix units for
+    $M$ and $N$, produces every matrix unit. Hence, for any
+    $Z\in\MN{D_A}$, there are scalars $a_{u,v}$ such that
+    \begin{align}
+        Z & =\sum_{u,v}a_{u,v}A_uXA_v.
+        \notag
+    \end{align}
+    Define the corresponding boundary matrix for $B$ by
+    \begin{align}
+        R(Z) & =\sum_{u,v}a_{u,v}B_uYB_v\in\MN{D_B}.
+        \notag
+    \end{align}
+    For each length-$\ell$ word $t$, cyclicity of the trace and the three-block
+    relation above, applied to the concatenated word $vtu$, give
+    \begin{align}
+        \tr(ZA_t)
+         & =\sum_{u,v}a_{u,v}\tr(XA_vA_tA_u)
+        \notag                               \\
+         & =\sum_{u,v}a_{u,v}\tr(YB_vB_tB_u)
+        \notag                               \\
+         & =\tr(R(Z)B_t).
+        \notag
+    \end{align}
+    Thus $T_\ell^A(Z)=T_\ell^B(R(Z))$. Although the coefficients in a
+    representation of $Z$ need not be unique, their existence for each $Z$ is
+    enough to prove
+    \begin{align}
+        \mathcal G_\ell^A & \subseteq\mathcal G_\ell^B.
+        \notag
+    \end{align}
+
+    Both $T_\ell^A$ and $T_\ell^B$ are injective, so their ranges have
+    dimensions $D_A^2$ and $D_B^2$. The inclusion just proved therefore yields
+    \begin{align}
+        D_A^2
+         & =\dim\mathcal G_\ell^A
+        \leq\dim\mathcal G_\ell^B
+        =D_B^2.
+        \notag
+    \end{align}
+    On the other hand, the chosen orientation $D_B\leq D_A$ gives
+    $D_B^2\leq D_A^2$. Hence $D_A=D_B$ and the inclusion is an equality.
+    If the original bond dimensions were unequal, the strict reverse inequality
+    would already contradict the local-space inclusion. In the remaining
+    equal-dimensional case, identify the two bond index sets through this
+    equality, as in the BNT same-dimension comparison. For
+    $N>\ell$, let $\mathcal C_N^q(\ell)$ be the intersection of the translates
+    of $\mathcal G_\ell^q$ around the periodic chain. Equality
+    $\mathcal G_\ell^A=\mathcal G_\ell^B$ implies
+    \begin{align}
+        \mathcal C_N^A(\ell) & =\mathcal C_N^B(\ell).
+        \notag
+    \end{align}
+    We justify the needed injective uniqueness step here. A vector satisfying
+    every translated length-$\ell$ local constraint can be cut successively
+    around the ring. Injectivity of $T_{L_0}^q$ makes the resulting boundary
+    matrix unique at each cut, so consistency at adjacent cuts gives one
+    matrix $Z$ satisfying
+    \begin{align}
+        ZA_i^q & =A_i^qZ \qquad (0\leq i<d).
+        \notag
+    \end{align}
+    Since the length-$\ell$ words span $\MN{D_q}$, their commutant consists
+    only of scalar matrices. Thus $Z$ is scalar, and the translated local
+    constraints identify the periodic intersection, for $N>\ell$, with the
+    MPS line
+    \begin{align}
+        \mathcal C_N^A(\ell) & =\spn\{\Psi_N(A)\},
+                             &
+        \mathcal C_N^B(\ell) & =\spn\{\Psi_N(B)\},
+        \notag                                               \\
+        \Psi_N(A)            & =\sum_{|w|=N}\tr(A_w)\ket{w},
+                             &
+        \Psi_N(B)            & =\sum_{|w|=N}\tr(B_w)\ket{w}.
+        \notag
+    \end{align}
+    Consequently, equality of the local spaces forces
+    $\Psi_N(A)=c_N\Psi_N(B)$ for some scalar $c_N$ at every such $N$.
+    The normalized self-overlaps are the squared norms of these vectors and
+    tend to one. Hence both vectors, and therefore $c_N$, are nonzero for all
+    sufficiently large $N$. Theorem~\ref{thm:normal_proportional_mpv_geometric_phase}
+    now turns this eventual nonzero proportionality into a gauge-phase
+    equivalence. This contradicts
+    Theorem~\ref{thm:cpsv_bnt_blocks_not_gaugePhaseEquiv} for the two distinct
+    BNT representatives. Thus
+    $\mathcal G_S^A\cap\mathcal G_S^B=\{0\}$, and hence the same assertion for
+    the original ordering of the pair.
+
+    The direct sum map
+    \begin{align}
+        \Phi_{k,j}:\MN{D_k}\oplus\MN{D_j}
+              & \longrightarrow (\C^d)^{\otimes S},
+        \notag                                      \\
+        (X,Y) & \longmapsto T_S^k(X)+T_S^j(Y)
+        \notag
+    \end{align}
+    is now injective: the trivial intersection handles the two summands, and
+    each $T_S^q$ is injective. All spaces are finite-dimensional, so the dual
+    map is surjective. Under the nondegenerate trace pairings, it sends word
+    coefficients $(c_\omega)_\omega$ to
+    \begin{align}
+        \left(\sum_{|\omega|=S}c_\omega A^k_\omega,
+        \sum_{|\omega|=S}c_\omega A^j_\omega\right).
+        \notag
+    \end{align}
+    Surjectivity at $(\Id,0)$ gives the asserted pair selector.
+
+    For fixed $k$, multiply its selectors against the other $r-1$ blocks.
+    Concatenation multiplies word evaluations, so this gives coefficients
+    $b_v^{(k)}$ at length $(r-1)S$ satisfying
+    \begin{align}
+        \sum_{|v|=(r-1)S}b_v^{(k)}A^j_v
+         & =\delta_{j,k}\Id.
+        \notag
+    \end{align}
+    Given $X_k\in\MN{D_k}$, the full length-$\ell$ word span writes
+    $X_k=\sum_{|u|=\ell}a_u^{(k)}A^k_u$. Concatenating this expansion with the
+    selector realizes the tuple supported at $k$ with value $X_k$, at the
+    exact length
+    \begin{align}
+        \ell+(r-1)S
+         & =(L_0+1)+3(r-1)(L_0+1).
+        \notag
+    \end{align}
+    Summing these supported tuples over $k$ yields every element of the stated
+    product algebra.
+\end{proof}
+
+\begin{lemma}[Common injective blocking for primitive irreducible families]%
+    \label{thm:common_injective_blocking_tp_primitive_irreducible_family}
+    \lean{MPSTensor.exists_common_injective_blocking_of_tp_primitive_irr_family}
+    \leanok
+    \uses{thm:tp_primitive_irred_block_injective,
+        thm:tp_primitive_irreducible_extra_blocking}
+    Let $(B_k)_{k=1}^r$ be a finite family of positive-bond-dimension MPS tensors,
+    each trace-preserving, primitive, and tensor-irreducible. Then there is a
+    single $L\ge 1$ such that each $B_k^{[L]}$ is one-site injective, and this
+    blocking preserves trace preservation, primitivity, and irreducibility for
+    every block.
+\end{lemma}
+
+\begin{proof}\leanok
+    For each block,
+    Theorem~\ref{thm:tp_primitive_irred_block_injective} gives a positive length
+    at which it becomes one-site injective; the product of these lengths is a
+    common length. Injectivity persists under positive further blocking, and
+    Theorem~\ref{thm:tp_primitive_irreducible_extra_blocking} preserves the other
+    hypotheses.
+\end{proof}
+
+\begin{lemma}[Total dimension after grouping by BNT representatives]%
+    \label{lem:collapsed_bnt_sector_decomp_total_dim}
+    \lean{MPSTensor.collapsedBntSectorDecomp_totalDim_eq_sum_dim}
+    \leanok
+    \uses{def:mpv_phase_class_data}
+    Suppose CF summands are grouped by BNT representative, every original copy
+    weight is nonzero, and every summand assigned to a representative has that
+    representative's bond dimension. Then the total bond dimension of the
+    resulting BNT sector decomposition is the sum of the original block
+    dimensions.
+\end{lemma}
+
+\begin{proof}\leanok
+    The collapsed decomposition counts one representative dimension for each
+    assigned copy. Let $e(j,q)$ denote the original CF summand assigned to the
+    $q$th copy of representative $P_j$. Since $(j,q)\mapsto e(j,q)$ reindexes
+    the original summands and each assigned summand has the representative's bond
+    dimension,
+    \begin{align}
+        \sum_{j=1}^{g}\sum_{q=1}^{r_j}\dim(P_j)
+         & =
+        \sum_{j=1}^{g}\sum_{q=1}^{r_j}D_{e(j,q)}
+        =
+        \sum_{k=1}^{r}D_k.
+        \notag
+    \end{align}
+    This is the equality between the collapsed total dimension and the original
+    direct-sum dimension.
+\end{proof}
+
+\begin{lemma}[Prepared phase-equivalent NTs have the same bond dimension]%
+    \label{lem:prepared_phase_equiv_dim_eq}
+    \lean{MPSTensor.dim_eq_of_MPVBlockPhaseEquiv_of_tp_primitive_irr}
+    \leanok
+    \uses{def:mpv_block_phase_equiv, thm:overlap_decay_rect_irr_tp}
+    Let $X$ and $Y$ be trace-preserving, primitive, irreducible NTs of positive
+    bond dimension. If their MPV families differ by a nonzero scalar power, then
+    $X$ and $Y$ have the same bond dimension.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:rect_overlap_norm_one_dim_eq}
+    Choose $\zeta\neq0$ with
+    $\ket{V^{(N)}(Y)}=\zeta^N\ket{V^{(N)}(X)}$ for every positive length~$N$.
+    The normalized self-overlaps give $|O_{XX}(N)|\to 1$, and the phase relation
+    gives
+    \begin{align}
+        O_{YX}(N)   & =\zeta^N O_{XX}(N),
+        \notag                                \\
+        |O_{YX}(N)| & =|\zeta|^N |O_{XX}(N)|.
+        \notag
+    \end{align}
+    Since the same normalization forces $|\zeta|=1$, this gives
+    $|O_{YX}(N)|\to 1$.
+    If the two bond dimensions differed, the rectangular overlap-decay theorem
+    would force $O_{YX}(N)\to 0$, contradicting the preceding limit.
+\end{proof}
+
+\begin{lemma}[Prepared BNT representative classes preserve bond dimension]%
+    \label{lem:prepared_phase_class_dim_eq}
+    \lean{MPSTensor.mpvPhaseClassData_dim_eq_of_tp_primitive_irr}
+    \leanok
+    \uses{def:mpv_phase_class_data, lem:prepared_phase_equiv_dim_eq}
+    In a prepared family of positive-bond-dimension trace-preserving primitive
+    irreducible NTs, every CF summand assigned to a BNT representative has that
+    representative's bond dimension.
+\end{lemma}
+
+\begin{proof}\leanok
+    Apply Lemma~\ref{lem:prepared_phase_equiv_dim_eq} to each representative and
+    each assigned summand.
+\end{proof}
+
+\begin{lemma}[Prepared collapsed BNT total dimension]%
+    \label{lem:prepared_collapsed_bnt_sector_decomp_total_dim}
+    \lean{MPSTensor.collapsedBntSectorDecomp_totalDim_eq_sum_dim_of_tp_primitive_irr}
+    \leanok
+    % Source: canonical-form eq:II_CF1 and prop:char-BNT (Cirac2016MPDO_arXiv),
+    % with the equalMPS dimension conclusion (Cirac2016MPDO_arXiv).
+    For prepared trace-preserving primitive irreducible NTs of positive bond
+    dimension with all copy weights nonzero, grouping CF summands by BNT
+    representative preserves the total bond dimension: the collapsed sector
+    decomposition has total bond dimension equal to the sum of the original block
+    dimensions.
+\end{lemma}
+
+\begin{proof}\leanok\uses{lem:collapsed_bnt_sector_decomp_total_dim,
+        lem:prepared_phase_class_dim_eq}
+    Every assigned summand shares the bond dimension of its representative, by
+    the equal-dimension fact above. The displayed regrouping identity in
+    Lemma~\ref{lem:collapsed_bnt_sector_decomp_total_dim} then identifies the
+    collapsed sum over pairs $(j,q)$ with $\sum_{k=1}^{r}D_k$, the original
+    direct-sum dimension.
+\end{proof}
+
+\begin{theorem}[Conditional BNT form after blocking for an arbitrary tensor]%
+    \label{thm:paperbnt_supplier_after_blocking}
+    \lean{MPSTensor.exists_isBNTCanonicalForm_afterBlocking_pos}
+    \leanok
+    \uses{thm:prepared_bnt_blocks_after_blocking,
+        thm:paperbnt_supplier_prepared,
+        def:same_mpv2_pos}
+    Let $A$ be an MPS tensor. Then there exists a blocking length $p \ge 1$,
+    nonzero weights $\mu_k$, and blocks $B_k$ over the blocked alphabet, such
+    that:
+    \begin{enumerate}
+        \item every block has positive bond dimension;
+        \item every block is TP-normalized, primitive, irreducible, and
+              injective;
+        \item $A^{[p]}$ and $\bigoplus_k \mu_k B_k$ generate the same MPV family
+              at every positive length.
+    \end{enumerate}
+    Moreover, under $|\mu_k| \le 1$ for every $k$ and $|\mu_k|=1$ for at least
+    one $k$, there exists a sector decomposition $P$ over the blocked alphabet in
+    the BNT canonical form of Definition~\ref{def:sector_bnt_cf} such that
+    $A^{[p]}$ and $P$ generate the same MPV family at every positive length.
+\end{theorem}
+
+\begin{proof}\leanok
+    The after-blocking reduction supplies the TP-normalized primitive irreducible
+    injective blocks and the positive-length MPV identity. The normalized-weight
+    hypotheses are the choice that
+    \cite[Section~2.3]{Cirac2016MPDO_arXiv} makes;
+    Theorem~\ref{thm:paperbnt_supplier_prepared} then produces the sector
+    decomposition, following the BNT selection of
+    \cite[Appendix~A]{Cirac2016MPDO_arXiv}. The remaining rescaling step is
+    recorded in Remark~\ref{rem:arbitrary_input_reduction_gap}.
+\end{proof}
+
+\begin{theorem}[Projective weight normalization]%
+    \label{thm:paperbnt_weight_normalization}
+    \lean{MPSTensor.exists_weight_normalization}
+    \leanok
+    For nonzero weights $\mu_1,\ldots,\mu_r$ with $r\geq1$ there is a positive
+    real $m$ such that every normalized weight satisfies
+    \begin{align}
+        \Bigl|\frac{\mu_k}{m}\Bigr| & \leq1,
+        \notag                               \\
+        \frac{\mu_k}{m}             & \neq0,
+        \notag
+    \end{align}
+    and at least one normalized weight has unit modulus,
+    $|\mu_{k_0}/m|=1$.
+    This is the normalization that
+    \cite[line~246]{Cirac2016MPDO_arXiv} chooses for the canonical-form
+    weights.
+\end{theorem}
+
+\begin{proof}\leanok
+    Take $m=\max_k|\mu_k|$; the maximum over a nonempty finite
+    family is attained, positive because every weight is nonzero, an upper
+    bound for every modulus, and equal to the modulus of the attaining
+    weight.
+\end{proof}
+
+\begin{lemma}[Common scalar rescaling of block weights]%
+    \label{lem:mpv_to_tensor_from_blocks_weight_mul_left}
+    \lean{MPSTensor.mpv_toTensorFromBlocks_weight_mul_left}
+    \leanok
+    Multiplying every block weight in a block-diagonal MPS tensor by a scalar
+    $c$ multiplies every length-$N$ MPV coefficient by $c^N$.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpv_decomposition}
+    Expand the block-diagonal MPV coefficient as a finite sum over blocks and
+    factor $c^N$ out of the sum.
+\end{proof}

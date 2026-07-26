@@ -2,23 +2,7 @@ The eventual linear-independence clause is produced from the asymptotic
 overlaps: diagonal overlaps tending to one and off-diagonal overlaps tending to
 zero make the Gram matrix converge to the identity.
 
-\begin{lemma}[Eventual linear independence from finite-index overlap orthonormality]
-    \label{lem:bnt_finite_index_overlap_orthonormal_li}
-    \lean{MPSTensor.eventually_linearIndependent_of_finite_overlap_tendsto_orthonormal}
-    \leanok
-    \uses{def:mpv_overlap}
-    Let $I$ be a finite index set and let $(A_i)_{i \in I}$ be a finite
-    family of tensors such that $O_{A_iA_i}(N) \to 1$ for each $i$, and
-    $O_{A_iA_j}(N) \to 0$ whenever $i \neq j$. Then the MPV states
-    $\{\ket{V^{(N)}(A_i)}\}_{i \in I}$ are linearly independent for all
-    sufficiently large~$N$.
-\end{lemma}
 
-\begin{proof}\leanok
-    The Gram matrix of the family $\{\ket{V^{(N)}(A_i)}\}_{i \in I}$
-    converges entrywise to the identity matrix. Hence for all sufficiently
-    large $N$ it is invertible, so the MPV states are linearly independent.
-\end{proof}
 
 \begin{lemma}[Eventual linear independence from overlap orthonormality]
     \label{lem:bnt_overlap_orthonormal_li}
@@ -40,21 +24,7 @@ zero make the Gram matrix converge to the identity.
 The same conclusion is often more convenient with an explicit threshold rather
 than the eventual quantifier.
 
-\begin{theorem}[Existential BNT independence from overlap limits]%
-    \label{thm:bnt_li_from_overlap_limits_exists}
-    \lean{MPSTensor.exists_eventually_linearIndependent_of_overlap_tendsto_orthonormal}
-    \leanok
-    \uses{lem:bnt_overlap_orthonormal_li}
-    If the self-overlaps of a finite block family tend to $1$ and the
-    cross-overlaps of distinct blocks tend to $0$, then the MPV states are
-    linearly independent for all sufficiently large system sizes.
-\end{theorem}
 
-\begin{proof}\leanok
-    \uses{lem:bnt_overlap_orthonormal_li}
-    This is Lemma~\ref{lem:bnt_overlap_orthonormal_li}, restated with an
-    explicit threshold $N_0$.
-\end{proof}
 
 Eventual linear independence is also what converts an equality of two finite
 linear combinations into equality of their coefficients; this is the mechanism
@@ -80,30 +50,7 @@ Gram-matrix criterion applies to their disjoint union, provided the mixed
 overlaps also decay. This is the form used in the exact sector matching of
 Section~\ref{sec:sector_bnt_strong_match}.
 
-\begin{lemma}[Eventual linear independence for two families]%
-    \label{lem:bnt_two_family_overlap_orthonormal_li}
-    \lean{MPSTensor.eventually_linearIndependent_of_two_family_overlap_tendsto_orthonormal}
-    \leanok
-    \uses{def:mpv_overlap, lem:bnt_finite_index_overlap_orthonormal_li}
-    Let $(A_j)_{j=1}^{g_A}$ and $(B_k)_{k=1}^{g_B}$ be finite families of
-    tensors. Suppose the overlaps inside each family are asymptotically
-    orthonormal, and suppose every mixed overlap
-    $O_{A_jB_k}(N)$ tends to~$0$. Then the combined MPV family
-    \begin{align}
-        \{\ket{V^{(N)}(A_j)}\}_{j=1}^{g_A}
-        \cup
-        \{\ket{V^{(N)}(B_k)}\}_{k=1}^{g_B}
-        \notag
-    \end{align}
-    is linearly independent for all sufficiently large~$N$.
-\end{lemma}
 
-\begin{proof}\leanok
-    Apply the finite-index Gram-matrix criterion to the disjoint union of the two
-    index sets. The within-family hypotheses give the diagonal and
-    off-diagonal limits inside each block, and the mixed overlap hypothesis gives
-    the off-diagonal limits between the two blocks.
-\end{proof}
 
 We now isolate the separation condition that supplies the off-diagonal decay
 and combine it with the canonical-form hypotheses.

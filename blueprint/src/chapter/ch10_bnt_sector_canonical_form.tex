@@ -32,35 +32,7 @@ here determine the BNT canonical-form conditions below.
     $(A_j)_{j=1}^g$ together with these multiplicities and weights.
 \end{definition}
 
-\begin{theorem}[Representative dimensions are bounded by the total bond dimension]
-    \label{thm:sector_basis_dimension_le_total_dimension}
-    \lean{MPSTensor.SectorDecomposition.basisDim_le_totalDim}
-    \lean{MPSTensor.SectorDecomposition.basisCount_le_totalDim}
-    \leanok
-    \uses{def:sector_weight_data}
-    Let the representative $A_j$ have bond dimension $D_j$, and let $D$ be
-    the bond dimension of the flattened sector tensor. Then $D_j\leq D$.
-    If every $D_j$ is positive and there are $g$ representatives, then also
-    $g\leq D$.
-\end{theorem}
 
-\begin{proof}
-    \leanok
-    \uses{def:sector_weight_data}
-    Since $r_j>0$, choose one copy of $A_j$. Its contribution $D_j$ is one
-    non-negative summand in the total dimension of the flattened copy family,
-    so $D_j\leq D$.
-
-    For the second assertion, every representative has multiplicity
-    $r_j\geq1$, and each copy has positive dimension $D_j>0$. Therefore
-    \begin{align}
-        g=\sum_j1
-        \leq\sum_j r_j
-        \leq\sum_j r_jD_j
-        =D.
-        \notag
-    \end{align}
-\end{proof}
 
 \begin{definition}[Physical blocking of a sector decomposition]%
     \label{def:sector_decomposition_block_tensor}
@@ -83,51 +55,9 @@ here determine the BNT canonical-form conditions below.
     separate construction.
 \end{definition}
 
-\begin{theorem}[Indices, dimensions, weights, and representatives under blocking]%
-    \label{thm:sector_decomposition_block_tensor_data}
-    \lean{MPSTensor.SectorDecomposition.blockTensor_basis}
-    \lean{MPSTensor.SectorDecomposition.blockTensor_weight}
-    \lean{MPSTensor.SectorDecomposition.blockTensor_copies}
-    \lean{MPSTensor.SectorDecomposition.blockTensor_totalCopies}
-    \lean{MPSTensor.SectorDecomposition.blockTensor_flatDim}
-    \lean{MPSTensor.SectorDecomposition.blockTensor_totalDim}
-    \lean{MPSTensor.SectorDecomposition.blockTensor_flatWeight}
-    \lean{MPSTensor.SectorDecomposition.blockTensor_flatBasis}
-    \leanok
-    \uses{def:sector_decomposition_block_tensor}
-    Physical blocking preserves the copy sets and bond dimensions. On the
-    flattened copy index, the weight is raised to the $p$-th power and the
-    representative is replaced by its $p$-site blocking.
-\end{theorem}
 
-\begin{proof}\leanok\uses{def:sector_decomposition_block_tensor}
-    These identities follow directly from the definition.
-\end{proof}
 
-\begin{theorem}[Blocked sector coefficients and assembled tensor]%
-    \label{thm:sector_decomposition_block_tensor_mpv}
-    \lean{MPSTensor.SectorDecomposition.coeff_blockTensor}
-    \lean{MPSTensor.SectorDecomposition.sameMPV₂_blockTensor_toTensor}
-    \leanok
-    \uses{def:sector_decomposition_block_tensor, thm:block_tensor_to_tensor_from_blocks}
-    The coefficient of the blocked decomposition satisfies
-    \begin{align}
-        c_{P^{[p]},j}^{(N)}
-        =\sum_q(\mu_{j,q}^{p})^N
-        =c_{P,j}^{(Np)}.
-        \label{eq:bnt_sector_block_coeff}
-    \end{align}
-    Moreover, blocking the tensor assembled from $P$ gives the same MPV family
-    as the tensor assembled from the blocked sector decomposition.
-\end{theorem}
 
-\begin{proof}\leanok
-    \uses{thm:block_tensor_to_tensor_from_blocks}
-    The coefficient identity in
-    (\ref{eq:bnt_sector_block_coeff}) is $(\mu^p)^N=\mu^{pN}$. The tensor
-    identity is Theorem~\ref{thm:block_tensor_to_tensor_from_blocks} applied to
-    the flattened copy family.
-\end{proof}
 
 \begin{lemma}[Sector decomposition formula]%
     \label{lem:paper_decomp_formula}
@@ -191,33 +121,9 @@ single family.
     bijection with the original block indices.
 \end{definition}
 
-\begin{lemma}[Existence of an MPV phase class]
-    \label{lem:mpv_phase_class_nonempty}
-    \lean{MPSTensor.MPVPhaseClassData.g_pos_of_r_pos}
-    \leanok
-    \uses{def:mpv_phase_class_data}
-    A nonempty finite family of blocks has at least one MPV phase class.
-\end{lemma}
 
-\begin{proof}\leanok
-    Choose one original block index. Its occurrence in the phase-class
-    enumeration supplies a phase class containing it.
-\end{proof}
 
-\begin{lemma}[Regrouping a matrix sum by MPV phase classes]
-    \label{lem:mpv_phase_class_regroup_matrix}
-    \lean{MPSTensor.MPVPhaseClassData.regroup_matrix}
-    \leanok
-    \uses{def:mpv_phase_class_data}
-    Let $F_k$ be a finite family of square matrices indexed by the original
-    blocks. If $k=(j,q)$ enumerates the copies in the MPV phase classes, then
-    $\sum_j\sum_q F_{j,q}=\sum_k F_k$.
-\end{lemma}
 
-\begin{proof}\leanok
-    Evaluate both sides at a pair of matrix indices and apply the bijective
-    enumeration of the finite phase-class quotient.
-\end{proof}
 
 \begin{definition}[BNT canonical form]%
     \label{def:sector_bnt_cf}
@@ -502,38 +408,9 @@ and the combined-family linear independence.
 A weighted block sum is the one-copy case of the sector decomposition used
 below. Equal or repeated sectors require the full coefficient formalism.
 
-\begin{definition}[Single-copy sector decomposition]
-    \label{def:trivial_sector_decomp}
-    \lean{MPSTensor.trivialSectorDecomp}
-    \leanok
-    \uses{def:sector_weight_data}
-    Given nonzero weights $(\mu_k)_{k=1}^r$ and blocks $(B_k)_{k=1}^r$, the
-    \emph{single-copy sector decomposition} has $r$ sectors, one basis block
-    $B_k$ per sector, multiplicity~$1$, and sector weight $\mu_k$. As a finite
-    sum,
-    \begin{align}
-        \sum_{k=1}^{r}\mu_k^{\,N}V^{(N)}(B_k)_\sigma
-         & =
-        V^{(N)}\!\left(\bigoplus_k\mu_kB_k\right)_\sigma.
-        \label{eq:canonical_single_copy_sector}
-    \end{align}
-\end{definition}
 
-\begin{lemma}[Single-copy sector decomposition preserves the represented family]
-    \label{lem:trivial_sector_decomp_same_mpv}
-    \lean{MPSTensor.sameMPV₂_trivialSectorDecomp}
-    \leanok
-    \uses{def:trivial_sector_decomp}
-    The single-copy sector decomposition of $(\mu_k,B_k)_k$ represents the same
-    MPS family as $\bigoplus_k\mu_kB_k$.
-\end{lemma}
 
-\begin{proof}\leanok
-    \uses{def:trivial_sector_decomp}
-    Expanding the sector decomposition gives the left-hand side of
-    (\ref{eq:canonical_single_copy_sector}), which is the finite block-sum
-    expression for $\bigoplus_k\mu_kB_k$.
-\end{proof}
+
 
 \subsection{Prepared-block construction of BNT canonical forms}%
 \label{subsec:paperbnt_supplier}
@@ -544,27 +421,7 @@ trace-preserving, primitive, irreducible, and injective; normalized weights then
 quotient gauge-phase-equivalent blocks into sectors to produce the canonical
 form of Definition~\ref{def:sector_bnt_cf}.
 
-\begin{lemma}[Common injective blocking for primitive irreducible families]%
-    \label{thm:common_injective_blocking_tp_primitive_irreducible_family}
-    \lean{MPSTensor.exists_common_injective_blocking_of_tp_primitive_irr_family}
-    \leanok
-    \uses{thm:tp_primitive_irred_block_injective,
-        thm:tp_primitive_irreducible_extra_blocking}
-    Let $(B_k)_{k=1}^r$ be a finite family of positive-bond-dimension MPS tensors,
-    each trace-preserving, primitive, and tensor-irreducible. Then there is a
-    single $L\ge 1$ such that each $B_k^{[L]}$ is one-site injective, and this
-    blocking preserves trace preservation, primitivity, and irreducibility for
-    every block.
-\end{lemma}
 
-\begin{proof}\leanok
-    For each block,
-    Theorem~\ref{thm:tp_primitive_irred_block_injective} gives a positive length
-    at which it becomes one-site injective; the product of these lengths is a
-    common length. Injectivity persists under positive further blocking, and
-    Theorem~\ref{thm:tp_primitive_irreducible_extra_blocking} preserves the other
-    hypotheses.
-\end{proof}
 
 \begin{theorem}[Prepared BNT blocks after blocking]%
     \label{thm:prepared_bnt_blocks_after_blocking}
@@ -656,63 +513,9 @@ $|O_{YX}(N)|\to 1$.
 If their bond dimensions differed, the rectangular overlap-decay theorem would
 give $O_{YX}(N)\to 0$, a contradiction.
 
-\begin{lemma}[Total dimension after grouping by BNT representatives]%
-    \label{lem:collapsed_bnt_sector_decomp_total_dim}
-    \lean{MPSTensor.collapsedBntSectorDecomp_totalDim_eq_sum_dim}
-    \leanok
-    \uses{def:mpv_phase_class_data}
-    Suppose CF summands are grouped by BNT representative, every original copy
-    weight is nonzero, and every summand assigned to a representative has that
-    representative's bond dimension. Then the total bond dimension of the
-    resulting BNT sector decomposition is the sum of the original block
-    dimensions.
-\end{lemma}
 
-\begin{proof}\leanok
-    The collapsed decomposition counts one representative dimension for each
-    assigned copy. Let $e(j,q)$ denote the original CF summand assigned to the
-    $q$th copy of representative $P_j$. Since $(j,q)\mapsto e(j,q)$ reindexes
-    the original summands and each assigned summand has the representative's bond
-    dimension,
-    \begin{align}
-        \sum_{j=1}^{g}\sum_{q=1}^{r_j}\dim(P_j)
-         & =
-        \sum_{j=1}^{g}\sum_{q=1}^{r_j}D_{e(j,q)}
-        =
-        \sum_{k=1}^{r}D_k.
-        \notag
-    \end{align}
-    This is the equality between the collapsed total dimension and the original
-    direct-sum dimension.
-\end{proof}
 
-\begin{lemma}[Prepared phase-equivalent NTs have the same bond dimension]%
-    \label{lem:prepared_phase_equiv_dim_eq}
-    \lean{MPSTensor.dim_eq_of_MPVBlockPhaseEquiv_of_tp_primitive_irr}
-    \leanok
-    \uses{def:mpv_block_phase_equiv, thm:overlap_decay_rect_irr_tp}
-    Let $X$ and $Y$ be trace-preserving, primitive, irreducible NTs of positive
-    bond dimension. If their MPV families differ by a nonzero scalar power, then
-    $X$ and $Y$ have the same bond dimension.
-\end{lemma}
 
-\begin{proof}\leanok
-    \uses{thm:rect_overlap_norm_one_dim_eq}
-    Choose $\zeta\neq0$ with
-    $\ket{V^{(N)}(Y)}=\zeta^N\ket{V^{(N)}(X)}$ for every positive length~$N$.
-    The normalized self-overlaps give $|O_{XX}(N)|\to 1$, and the phase relation
-    gives
-    \begin{align}
-        O_{YX}(N)   & =\zeta^N O_{XX}(N),
-        \notag                                \\
-        |O_{YX}(N)| & =|\zeta|^N |O_{XX}(N)|.
-        \notag
-    \end{align}
-    Since the same normalization forces $|\zeta|=1$, this gives
-    $|O_{YX}(N)|\to 1$.
-    If the two bond dimensions differed, the rectangular overlap-decay theorem
-    would force $O_{YX}(N)\to 0$, contradicting the preceding limit.
-\end{proof}
 
 \begin{theorem}[Gauge realization of prepared phase-equivalent NTs]%
     \label{thm:prepared_phase_equiv_gauge}
@@ -739,79 +542,14 @@ give $O_{YX}(N)\to 0$, a contradiction.
     contradicts the assumed scalar-power identity at every positive length.
 \end{proof}
 
-\begin{lemma}[Prepared BNT representative classes preserve bond dimension]%
-    \label{lem:prepared_phase_class_dim_eq}
-    \lean{MPSTensor.mpvPhaseClassData_dim_eq_of_tp_primitive_irr}
-    \leanok
-    \uses{def:mpv_phase_class_data, lem:prepared_phase_equiv_dim_eq}
-    In a prepared family of positive-bond-dimension trace-preserving primitive
-    irreducible NTs, every CF summand assigned to a BNT representative has that
-    representative's bond dimension.
-\end{lemma}
 
-\begin{proof}\leanok
-    Apply Lemma~\ref{lem:prepared_phase_equiv_dim_eq} to each representative and
-    each assigned summand.
-\end{proof}
 
-\begin{lemma}[Prepared collapsed BNT total dimension]%
-    \label{lem:prepared_collapsed_bnt_sector_decomp_total_dim}
-    \lean{MPSTensor.collapsedBntSectorDecomp_totalDim_eq_sum_dim_of_tp_primitive_irr}
-    \leanok
-    % Source: canonical-form eq:II_CF1 and prop:char-BNT (Cirac2016MPDO_arXiv),
-    % with the equalMPS dimension conclusion (Cirac2016MPDO_arXiv).
-    For prepared trace-preserving primitive irreducible NTs of positive bond
-    dimension with all copy weights nonzero, grouping CF summands by BNT
-    representative preserves the total bond dimension: the collapsed sector
-    decomposition has total bond dimension equal to the sum of the original block
-    dimensions.
-\end{lemma}
 
-\begin{proof}\leanok\uses{lem:collapsed_bnt_sector_decomp_total_dim,
-        lem:prepared_phase_class_dim_eq}
-    Every assigned summand shares the bond dimension of its representative, by
-    the equal-dimension fact above. The displayed regrouping identity in
-    Lemma~\ref{lem:collapsed_bnt_sector_decomp_total_dim} then identifies the
-    collapsed sum over pairs $(j,q)$ with $\sum_{k=1}^{r}D_k$, the original
-    direct-sum dimension.
-\end{proof}
 
 Combining the after-blocking preparation with the normalized-weight construction
 gives the arbitrary-input statement, conditional on the weight normalization.
 
-\begin{theorem}[Conditional BNT form after blocking for an arbitrary tensor]%
-    \label{thm:paperbnt_supplier_after_blocking}
-    \lean{MPSTensor.exists_isBNTCanonicalForm_afterBlocking_pos}
-    \leanok
-    \uses{thm:prepared_bnt_blocks_after_blocking,
-        thm:paperbnt_supplier_prepared,
-        def:same_mpv2_pos}
-    Let $A$ be an MPS tensor. Then there exists a blocking length $p \ge 1$,
-    nonzero weights $\mu_k$, and blocks $B_k$ over the blocked alphabet, such
-    that:
-    \begin{enumerate}
-        \item every block has positive bond dimension;
-        \item every block is TP-normalized, primitive, irreducible, and
-              injective;
-        \item $A^{[p]}$ and $\bigoplus_k \mu_k B_k$ generate the same MPV family
-              at every positive length.
-    \end{enumerate}
-    Moreover, under $|\mu_k| \le 1$ for every $k$ and $|\mu_k|=1$ for at least
-    one $k$, there exists a sector decomposition $P$ over the blocked alphabet in
-    the BNT canonical form of Definition~\ref{def:sector_bnt_cf} such that
-    $A^{[p]}$ and $P$ generate the same MPV family at every positive length.
-\end{theorem}
 
-\begin{proof}\leanok
-    The after-blocking reduction supplies the TP-normalized primitive irreducible
-    injective blocks and the positive-length MPV identity. The normalized-weight
-    hypotheses are the choice that
-    \cite[Section~2.3]{Cirac2016MPDO_arXiv} makes;
-    Theorem~\ref{thm:paperbnt_supplier_prepared} then produces the sector
-    decomposition, following the BNT selection of
-    \cite[Appendix~A]{Cirac2016MPDO_arXiv}. The remaining rescaling step is
-    recorded in Remark~\ref{rem:arbitrary_input_reduction_gap}.
-\end{proof}
 
 \begin{remark}[Arbitrary-input reduction]%
     \label{rem:arbitrary_input_reduction_gap}
@@ -827,45 +565,9 @@ gives the arbitrary-input statement, conditional on the weight normalization.
     discharges both hypotheses at the price of one positive scalar per site.
 \end{remark}
 
-\begin{theorem}[Projective weight normalization]%
-    \label{thm:paperbnt_weight_normalization}
-    \lean{MPSTensor.exists_weight_normalization}
-    \leanok
-    For nonzero weights $\mu_1,\ldots,\mu_r$ with $r\geq1$ there is a positive
-    real $m$ such that every normalized weight satisfies
-    \begin{align}
-        \Bigl|\frac{\mu_k}{m}\Bigr| & \leq1,
-        \notag                               \\
-        \frac{\mu_k}{m}             & \neq0,
-        \notag
-    \end{align}
-    and at least one normalized weight has unit modulus,
-    $|\mu_{k_0}/m|=1$.
-    This is the normalization that
-    \cite[line~246]{Cirac2016MPDO_arXiv} chooses for the canonical-form
-    weights.
-\end{theorem}
 
-\begin{proof}\leanok
-    Take $m=\max_k|\mu_k|$; the maximum over a nonempty finite
-    family is attained, positive because every weight is nonzero, an upper
-    bound for every modulus, and equal to the modulus of the attaining
-    weight.
-\end{proof}
 
-\begin{lemma}[Common scalar rescaling of block weights]%
-    \label{lem:mpv_to_tensor_from_blocks_weight_mul_left}
-    \lean{MPSTensor.mpv_toTensorFromBlocks_weight_mul_left}
-    \leanok
-    Multiplying every block weight in a block-diagonal MPS tensor by a scalar
-    $c$ multiplies every length-$N$ MPV coefficient by $c^N$.
-\end{lemma}
 
-\begin{proof}\leanok
-    \uses{thm:mpv_decomposition}
-    Expand the block-diagonal MPV coefficient as a finite sum over blocks and
-    factor $c^N$ out of the sum.
-\end{proof}
 
 \begin{theorem}[Normalized BNT form after blocking for a nonzero MPV family]%
     \label{thm:paperbnt_supplier_after_blocking_normalized}

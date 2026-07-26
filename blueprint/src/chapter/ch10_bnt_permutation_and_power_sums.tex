@@ -5,108 +5,16 @@ the blocks must agree up to a permutation and per-block gauge phases. The
 argument turns the equality of spans into an invertible change-of-basis matrix,
 then analyses its asymptotics through the overlaps.
 
-\begin{lemma}[Invertible change of basis]
-    \label{lem:bnt_invertible_change_basis}
-    \lean{exists_invertible_changeBasis}
-    \leanok
-    Let $v_1, \ldots, v_g$ and $w_1, \ldots, w_g$ be two linearly independent
-    families in a complex vector space with the same span. Then there exists an
-    invertible matrix $U \in \GL_g(\C)$ such that
-    $w_j = \sum_{i=1}^g U_{ij} v_i$ for every $j$.
-\end{lemma}
 
-\begin{proof}\leanok
-    Because the two families span the same subspace, each $w_j$ has a unique
-    expansion in the basis $\{v_i\}_{i=1}^g$; these coefficients form the
-    columns of $U$. If $U a = 0$, then the corresponding linear relation among
-    the $w_j$ is trivial because the $w_j$ are linearly independent. Thus $U$
-    is injective, hence invertible.
-\end{proof}
 
-\begin{lemma}[Eventual change of basis from equal spans]
-    \label{lem:bnt_eventual_change_basis}
-    \lean{MPSTensor.eventually_exists_invertible_changeBasis}
-    \leanok
-    \uses{lem:bnt_invertible_change_basis, def:mpv_overlap}
-    If two finite families of blocks have asymptotically orthonormal overlaps
-    within each family and their MPV spans agree for every system size $N$,
-    then for all sufficiently large $N$ there exists an invertible matrix
-    $U_N$ expressing the MPV states of one family as linear combinations of
-    the MPV states of the other.
-\end{lemma}
 
-\begin{proof}\leanok\uses{lem:bnt_overlap_orthonormal_li, lem:bnt_invertible_change_basis}
-    By Lemma~\ref{lem:bnt_overlap_orthonormal_li}, both families are
-    linearly independent for all sufficiently large $N$. At such an $N$, the
-    span equality lets us apply Lemma~\ref{lem:bnt_invertible_change_basis}.
-\end{proof}
 
 The change-of-basis matrix is now used to match the blocks. We first treat
 equal block counts, then remove that restriction.
 
-\begin{theorem}[Permutation rigidity for equal block counts]
-    \label{thm:bnt_perm_same_card}
-    \lean{MPSTensor.exists_perm_dimEq_gaugePhaseEquiv_of_overlapOrtho}
-    \leanok
-    \uses{def:injective, def:mpv_overlap, def:gauge_phase_equiv}
-    Let $(A_j)_{j=1}^g$ and $(B_j)_{j=1}^g$ be injective families of positive
-    bond dimension satisfying trace-preserving normalization, with self-overlaps tending to~$1$ and
-    off-diagonal overlaps tending to~$0$ within each family. If the spans of
-    the MPV states agree for every system size $N$, then there is a permutation
-    $\pi$ of $\{1, \ldots, g\}$ such that $A_j$ and $B_{\pi(j)}$ have the
-    same bond dimension and are gauge-phase equivalent.
-\end{theorem}
 
-\begin{proof}\leanok\uses{lem:bnt_eventual_change_basis, thm:overlap_decay, thm:overlap_decay_rect}
-    For large $N$, Lemma~\ref{lem:bnt_eventual_change_basis} gives an
-    invertible matrix $U_N$ relating the two MPV families. Fix $j$ and write
-    $\ket{V^{(N)}(B_j)}=\sum_i u_{ij}^{(N)}\ket{V^{(N)}(A_i)}$. With
-    $G_A(N)=(O_{A_iA_\ell}(N))_{i,\ell}$ and
-    $b_j(N)=(O_{A_iB_j}(N))_i$, this gives
-    \begin{align}
-        G_A(N)\overline{u_j(N)} &= b_j(N), \notag\\
-        O_{B_jB_j}(N) &= u_j(N)^{\top}G_A(N)\overline{u_j(N)}. \notag
-    \end{align}
-    If all mixed overlaps $O_{A_iB_j}(N)$ tended to $0$, then
-    $b_j(N)\to0$; since $G_A(N)\to\Id$, one obtains
-    $\overline{u_j(N)}\to0$ and hence $u_j(N)\to0$. Thus
-    $O_{B_jB_j}(N)\to0$, contradicting $O_{B_jB_j}(N)\to1$.
-    Thus each $B_j$ has a matched block $A_{f(j)}$ with non-decaying mixed
-    overlap. Theorems~\ref{thm:overlap_decay_rect}
-    and~\ref{thm:overlap_decay} then force equal bond dimension and
-    gauge-phase equivalence for each match. Off-diagonal decay within the
-    $B$-family makes $f$ injective, hence bijective, and its inverse is the
-    required permutation.
-\end{proof}
 
-\begin{lemma}[Permutation rigidity with asymptotically orthonormal overlaps]\label{lem:bnt_perm_simple}
-    \lean{MPSTensor.exists_eq_numBlocks_and_equiv_gaugePhase_of_overlapOrtho}
-    \leanok
-    \uses{def:injective, def:mpv, def:mpv_overlap, def:gauge_phase_equiv}
-    Let $(A_j)_{j=1}^{g_A}$ and $(B_k)_{k=1}^{g_B}$ be two
-    families of injective tensors of positive bond dimension satisfying the TP normalization
-    $\sum_i (A_j^i)^\dagger A_j^i = \Id$ and
-    $\sum_i (B_k^i)^\dagger B_k^i = \Id$, whose self-overlaps
-    converge to~$1$ and whose cross-overlaps within each
-    family converge to~$0$.
-    If for every system size~$N$,
-    \begin{align}
-        \spn_{\C}\{\ket{V^{(N)}(A_j)} : 1 \le j \le g_A\}
-        &=
-        \spn_{\C}\{\ket{V^{(N)}(B_k)} : 1 \le k \le g_B\}, \notag
-    \end{align}
-    then $g_A = g_B$, and there is a permutation $\pi$ of the common
-    block index set such that $A_j$ and $B_{\pi(j)}$ have the same bond
-    dimension and are gauge-phase equivalent for each~$j$.
-\end{lemma}
 
-\begin{proof}\leanok\uses{lem:bnt_overlap_orthonormal_li, thm:bnt_perm_same_card}
-    By Lemma~\ref{lem:bnt_overlap_orthonormal_li}, both families are
-    linearly independent for all sufficiently large $N$. At such an $N$, the
-    common span has the same dimension when computed from the $A$-family or
-    the $B$-family, so $g_A = g_B$. After identifying the two index sets,
-    Theorem~\ref{thm:bnt_perm_same_card} yields the permutation conclusion.
-\end{proof}
 
 The two preceding results obtain the block matching from the asymptotic
 orthonormality of the overlaps. The same matching is obtained by the exact
@@ -188,43 +96,9 @@ basis tensors are compared: the coefficient $\sum_q \mu_{j,q}^N$ then equals
 $\sum_q (\nu_{j,q} e^{i\phi_j})^N$, and Newton--Girard recovers the weight
 multiset with multiplicity.
 
-\begin{lemma}[Eventual vanishing of a finite geometric sum]
-    \label{lem:finite_geometric_sum_eventual_vanishing}
-    \lean{MPSTensor.SectorWeightData.geom_sum_eventually_zero}
-    \leanok
-    Let $w_1,\ldots,w_n$ be nonzero complex numbers. If
-    $\sum_i c_i w_i^N=0$ for every sufficiently large $N$, then the same
-    equality holds for every non-negative exponent.
-\end{lemma}
 
-\begin{proof}\leanok
-    Induct on the number of terms. Subtracting $w_1$ times the equality at
-    exponent $N$ from the equality at exponent $N+1$ gives
-    $\sum_{i=2}^{n} c_i(w_i-w_1)w_i^N=0$.
-    The induction hypothesis yields this equality at every exponent, so the
-    original sum $S_N=\sum_i c_iw_i^N$ satisfies $S_{N+1}=w_1S_N$ for every
-    $N$. Since $S_N$ eventually vanishes and $w_1\ne0$, it follows that
-    $S_0=0$ and hence $S_N=0$ for every $N$.
-\end{proof}
 
-\begin{lemma}[Eventual power-sum equality holds at every exponent]
-    \label{lem:eventual_power_sum_equality_all_exponents}
-    \lean{MPSTensor.SectorWeightData.power_sums_eq_of_eventually_eq_hetero}
-    \leanok
-    \uses{lem:finite_geometric_sum_eventual_vanishing}
-    Let $a_1,\ldots,a_m$ and $b_1,\ldots,b_n$ be nonzero complex numbers. If
-    their power sums agree for every sufficiently large exponent, then
-    $\sum_i a_i^k=\sum_j b_j^k$ for every non-negative exponent $k$.
-\end{lemma}
 
-\begin{proof}\leanok
-    Set $w_l=a_l$ for $l\leq m$ and $w_{m+l}=b_l$ for $l\leq n$, with
-    coefficients $c_l=1$ for $l\leq m$ and $c_l=-1$ for $l>m$. Then
-    $\sum_{l=1}^{m+n}c_lw_l^k=\sum_i a_i^k-\sum_j b_j^k$.
-    The hypothesis makes this expression zero for every sufficiently large
-    $k$. Lemma~\ref{lem:finite_geometric_sum_eventual_vanishing} makes it zero
-    for every $k$, which is the required power-sum equality.
-\end{proof}
 
 \begin{theorem}[Finite-range equal power sums imply equal multisets]
     \label{thm:bounded_power_sum_multiset}
@@ -282,24 +156,7 @@ multiset with multiplicity.
     $m\geq 1$.
 \end{proof}
 
-\begin{theorem}[Equal power sums imply equal multisets]\label{thm:power_sum_multiset}
-    \lean{Matrix.sum_pow_eq_implies_multiset_eq}
-    \leanok
-    Let $\alpha, \beta : \{0, \ldots, n-1\} \to \C$.
-    If $\sum_i \alpha_i^k = \sum_i \beta_i^k$ for all $k \ge 1$,
-    then the multisets $\{\alpha_i\}$ and $\{\beta_i\}$ are equal.
-\end{theorem}
 
-\begin{proof}
-    \leanok
-    \uses{thm:newton_girard}
-    Construct diagonal matrices $\diag(\alpha)$ and
-    $\diag(\beta)$. The power-sum hypothesis gives
-    $\tr(\diag(\alpha)^k) = \tr(\diag(\beta)^k)$.
-    By Theorem~\ref{thm:newton_girard}, the characteristic
-    polynomials agree: $\prod_i (X - \alpha_i) = \prod_i (X - \beta_i)$.
-    Extracting roots gives multiset equality.
-\end{proof}
 
 % Maintainer note: Theorems thm:newton_girard and thm:power_sum_multiset feed the
 % equal-MPV corollary of Section~\ref{sec:ft_equal_proportional_cases}, where the

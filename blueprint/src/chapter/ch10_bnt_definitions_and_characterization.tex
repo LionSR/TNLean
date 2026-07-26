@@ -29,48 +29,11 @@
     block MPVs $\{\ket{V^{(N)}(A_j)}\}$ are eventually linearly independent.
 \end{definition}
 
-\begin{lemma}[Positive bond dimensions in a coefficient-form BNT]
-    \label{lem:cpsv_bnt_block_dimensions_positive}
-    \lean{MPSTensor.IsCPSVBasisOfNormalTensors.blocks_dim_pos}
-    \leanok
-    \uses{def:bnt_cpsv}
-    Every block in a coefficient-form basis of normal tensors has positive
-    bond dimension.
-\end{lemma}
 
-\begin{proof}\leanok
-    \uses{def:bnt_cpsv}
-    Eventual linear independence makes the matrix product vector of each block
-    nonzero at some positive length. A tensor with zero bond dimension has
-    zero matrix product vector at every length, which is a contradiction.
-\end{proof}
 
-\begin{lemma}[Bond dimension one implies irreducibility]
-    \label{lem:bond_dimension_one_irreducible}
-    \lean{MPSTensor.isIrreducibleTensor_of_bondDim_one}
-    \leanok
-    \uses{def:irreducible_tensor}
-    Every tensor with a one-dimensional bond space is irreducible.
-\end{lemma}
 
-\begin{proof}\leanok
-    The only orthogonal projections on a one-dimensional complex vector space
-    are zero and the identity.
-\end{proof}
 
-\begin{lemma}[Normality in bond dimension one]
-    \label{lem:bond_dimension_one_identity_transfer_normal}
-    \lean{MPSTensor.isNormalTensor_of_bondDim_one_of_transferMap_eq_id}
-    \leanok
-    \uses{def:nt_cpsv, lem:bond_dimension_one_irreducible}
-    A tensor with one-dimensional bond space and identity transfer map is a
-    normal tensor.
-\end{lemma}
 
-\begin{proof}\leanok
-    Irreducibility follows from the preceding lemma. The identity transfer map
-    has spectral radius one, and its only eigenvalue is one.
-\end{proof}
 
 \begin{theorem}[Distinct BNT members are not gauge-phase equivalent]
     \label{thm:cpsv_bnt_blocks_not_gaugePhaseEquiv}
