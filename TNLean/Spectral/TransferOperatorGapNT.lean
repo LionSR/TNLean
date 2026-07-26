@@ -41,6 +41,36 @@ attribute [local instance] Matrix.linftyOpNormedAddCommGroup Matrix.linftyOpNorm
   ContinuousLinearMap.toNormedRing
   ContinuousLinearMap.toNormedAlgebra
 
+/-- A finite-dimensional matrix endomorphism has an eigenvalue attaining its spectral
+radius. This packages the continuous-linear-map instances used by both gap arguments. -/
+private lemma exists_eigenvalue_nnnorm_eq_spectralRadius [NeZero D₁] [NeZero D₂]
+    (F : Matrix (Fin D₁) (Fin D₂) ℂ →ₗ[ℂ] Matrix (Fin D₁) (Fin D₂) ℂ) :
+    ∃ μ : ℂ, Module.End.HasEigenvalue F μ ∧
+      (↑‖μ‖₊ : ENNReal) =
+        spectralRadius ℂ
+          ((Module.End.toContinuousLinearMap (Matrix (Fin D₁) (Fin D₂) ℂ)) F) := by
+  let V := Matrix (Fin D₁) (Fin D₂) ℂ
+  let Φ : (V →ₗ[ℂ] V) ≃ₐ[ℂ] (V →L[ℂ] V) := Module.End.toContinuousLinearMap V
+  let F' : V →L[ℂ] V := Φ F
+  letI : NormedAddCommGroup (V →L[ℂ] V) := ContinuousLinearMap.toNormedAddCommGroup
+  letI : SeminormedRing (V →L[ℂ] V) := ContinuousLinearMap.toSeminormedRing
+  letI : NormedRing (V →L[ℂ] V) := ContinuousLinearMap.toNormedRing
+  letI : NormedSpace ℂ (V →L[ℂ] V) := ContinuousLinearMap.toNormedSpace
+  letI : NormedAlgebra ℂ (V →L[ℂ] V) := ContinuousLinearMap.toNormedAlgebra
+  haveI : FiniteDimensional ℂ (V →L[ℂ] V) := Φ.toLinearEquiv.finiteDimensional
+  letI : CompleteSpace (V →L[ℂ] V) := FiniteDimensional.complete ℂ (V →L[ℂ] V)
+  obtain ⟨μ, hμ_spec, hμ_norm⟩ :=
+    @spectrum.exists_nnnorm_eq_spectralRadius_of_nonempty ℂ _ _
+      (ContinuousLinearMap.toNormedRing : NormedRing (V →L[ℂ] V))
+      (ContinuousLinearMap.toNormedAlgebra : NormedAlgebra ℂ (V →L[ℂ] V))
+      inferInstance inferInstance (a := F')
+      (@spectrum.nonempty _ (ContinuousLinearMap.toNormedRing : NormedRing (V →L[ℂ] V))
+        (ContinuousLinearMap.toNormedAlgebra : NormedAlgebra ℂ (V →L[ℂ] V))
+        inferInstance inferInstance F')
+  have h_spec_eq := AlgEquiv.spectrum_eq Φ F
+  have hμ_spec_end : μ ∈ spectrum ℂ F := h_spec_eq ▸ hμ_spec
+  exact ⟨μ, Module.End.hasEigenvalue_iff_mem_spectrum.mpr hμ_spec_end, hμ_norm⟩
+
 section SameDimension
 
 /-- Bundle the irreducible fixed point with an invertible square root for a left-canonical
@@ -189,32 +219,8 @@ theorem modulus_one_eigenvalue_implies_gauge_of_irreducible_TP
   rcases eq_or_ne D 0 with rfl | hD
   · exact ⟨1, 1, one_ne_zero, fun i => by ext a; exact a.elim0⟩
   haveI : NeZero D := ⟨hD⟩
-  let V := Matrix (Fin D) (Fin D) ℂ
-  let Φ : (V →ₗ[ℂ] V) ≃ₐ[ℂ] (V →L[ℂ] V) := Module.End.toContinuousLinearMap V
-  let F' : V →L[ℂ] V := Φ (mixedTransferMap A B)
-  letI : NormedAddCommGroup (V →L[ℂ] V) := ContinuousLinearMap.toNormedAddCommGroup
-  letI : SeminormedRing (V →L[ℂ] V) := ContinuousLinearMap.toSeminormedRing
-  letI : NormedRing (V →L[ℂ] V) := ContinuousLinearMap.toNormedRing
-  letI : NormedSpace ℂ (V →L[ℂ] V) := ContinuousLinearMap.toNormedSpace
-  letI : NormedAlgebra ℂ (V →L[ℂ] V) := ContinuousLinearMap.toNormedAlgebra
-  haveI : FiniteDimensional ℂ (V →L[ℂ] V) := Φ.toLinearEquiv.finiteDimensional
-  letI : CompleteSpace (V →L[ℂ] V) := FiniteDimensional.complete ℂ (V →L[ℂ] V)
-  haveI : Nontrivial V := by
-    haveI : Nonempty (Fin D) := ⟨⟨0, NeZero.pos D⟩⟩
-    exact Matrix.nonempty
-  haveI : Nontrivial (V →L[ℂ] V) := ContinuousLinearMap.instNontrivialId
-  obtain ⟨μ, hμ_spec, hμ_norm⟩ :=
-    @spectrum.exists_nnnorm_eq_spectralRadius_of_nonempty ℂ _ _
-      (ContinuousLinearMap.toNormedRing : NormedRing (V →L[ℂ] V))
-      (ContinuousLinearMap.toNormedAlgebra : NormedAlgebra ℂ (V →L[ℂ] V))
-      inferInstance inferInstance (a := F')
-      (@spectrum.nonempty _ (ContinuousLinearMap.toNormedRing : NormedRing (V →L[ℂ] V))
-        (ContinuousLinearMap.toNormedAlgebra : NormedAlgebra ℂ (V →L[ℂ] V))
-        inferInstance inferInstance F')
-  have h_spec_eq := AlgEquiv.spectrum_eq Φ (mixedTransferMap A B)
-  have hμ_spec_end : μ ∈ spectrum ℂ (mixedTransferMap A B) := h_spec_eq ▸ hμ_spec
-  have hμ_ev : Module.End.HasEigenvalue (mixedTransferMap A B) μ :=
-    Module.End.hasEigenvalue_iff_mem_spectrum.mpr hμ_spec_end
+  obtain ⟨μ, hμ_ev, hμ_norm⟩ :=
+    exists_eigenvalue_nnnorm_eq_spectralRadius (mixedTransferMap A B)
   obtain ⟨X, hX_mem, hX_ne⟩ := hμ_ev.exists_hasEigenvector
   have hFX : mixedTransferMap A B X = μ • X := Module.End.mem_eigenspace_iff.mp hX_mem
   have hμ_le : ‖μ‖ ≤ 1 := eigenvalue_norm_le_one A B hA_left hB_left μ hμ_ev
@@ -659,74 +665,14 @@ theorem mixedTransferSpectralRadius₂_lt_one_of_dim_ne_of_irreducible_TP
   refine lt_of_le_of_ne hle ?_
   intro hEq
   rw [MPSTensor.mixedTransferSpectralRadius₂_eq] at hEq
-  set F : (Matrix (Fin D₁) (Fin D₂) ℂ) →L[ℂ] Matrix (Fin D₁) (Fin D₂) ℂ :=
-    (Module.End.toContinuousLinearMap (Matrix (Fin D₁) (Fin D₂) ℂ))
-      (mixedTransferMap₂ A B)
-  have hEqF : spectralRadius ℂ F = 1 := by
-    change spectralRadius ℂ F = 1 at hEq
-    exact hEq
-  let Φ :
-      ((Matrix (Fin D₁) (Fin D₂) ℂ) →ₗ[ℂ] Matrix (Fin D₁) (Fin D₂) ℂ) ≃ₐ[ℂ]
-        ((Matrix (Fin D₁) (Fin D₂) ℂ) →L[ℂ] Matrix (Fin D₁) (Fin D₂) ℂ) :=
-    Module.End.toContinuousLinearMap (Matrix (Fin D₁) (Fin D₂) ℂ)
-  letI : NormedAddCommGroup
-      ((Matrix (Fin D₁) (Fin D₂) ℂ) →L[ℂ] Matrix (Fin D₁) (Fin D₂) ℂ) :=
-    ContinuousLinearMap.toNormedAddCommGroup
-  letI : SeminormedRing
-      ((Matrix (Fin D₁) (Fin D₂) ℂ) →L[ℂ] Matrix (Fin D₁) (Fin D₂) ℂ) :=
-    ContinuousLinearMap.toSeminormedRing
-  letI : NormedRing
-      ((Matrix (Fin D₁) (Fin D₂) ℂ) →L[ℂ] Matrix (Fin D₁) (Fin D₂) ℂ) :=
-    ContinuousLinearMap.toNormedRing
-  letI : NormedSpace ℂ
-      ((Matrix (Fin D₁) (Fin D₂) ℂ) →L[ℂ] Matrix (Fin D₁) (Fin D₂) ℂ) :=
-    ContinuousLinearMap.toNormedSpace
-  letI : NormedAlgebra ℂ
-      ((Matrix (Fin D₁) (Fin D₂) ℂ) →L[ℂ] Matrix (Fin D₁) (Fin D₂) ℂ) :=
-    ContinuousLinearMap.toNormedAlgebra
-  haveI : FiniteDimensional ℂ
-      ((Matrix (Fin D₁) (Fin D₂) ℂ) →L[ℂ] Matrix (Fin D₁) (Fin D₂) ℂ) :=
-    Φ.toLinearEquiv.finiteDimensional
-  letI : CompleteSpace
-      ((Matrix (Fin D₁) (Fin D₂) ℂ) →L[ℂ] Matrix (Fin D₁) (Fin D₂) ℂ) :=
-    FiniteDimensional.complete ℂ
-      ((Matrix (Fin D₁) (Fin D₂) ℂ) →L[ℂ] Matrix (Fin D₁) (Fin D₂) ℂ)
-  obtain ⟨μ, hμ_spec, hμ_rad⟩ :=
-    @spectrum.exists_nnnorm_eq_spectralRadius_of_nonempty ℂ _ _
-      (ContinuousLinearMap.toNormedRing :
-        NormedRing
-          ((Matrix (Fin D₁) (Fin D₂) ℂ) →L[ℂ] Matrix (Fin D₁) (Fin D₂) ℂ))
-      (ContinuousLinearMap.toNormedAlgebra :
-        NormedAlgebra ℂ
-          ((Matrix (Fin D₁) (Fin D₂) ℂ) →L[ℂ] Matrix (Fin D₁) (Fin D₂) ℂ))
-      inferInstance inferInstance (a := F)
-      (@spectrum.nonempty _
-        (ContinuousLinearMap.toNormedRing :
-          NormedRing
-            ((Matrix (Fin D₁) (Fin D₂) ℂ) →L[ℂ] Matrix (Fin D₁) (Fin D₂) ℂ))
-        (ContinuousLinearMap.toNormedAlgebra :
-          NormedAlgebra ℂ
-            ((Matrix (Fin D₁) (Fin D₂) ℂ) →L[ℂ] Matrix (Fin D₁) (Fin D₂) ℂ))
-        inferInstance inferInstance F)
-  have hμ_one : (↑‖μ‖₊ : ENNReal) = 1 := hμ_rad.trans hEqF
+  obtain ⟨μ, hHas, hμ_rad⟩ :=
+    exists_eigenvalue_nnnorm_eq_spectralRadius (mixedTransferMap₂ A B)
+  have hμ_one : (↑‖μ‖₊ : ENNReal) = 1 := hμ_rad.trans hEq
   have hμ_nnn : ‖μ‖₊ = (1 : NNReal) := (ENNReal.coe_eq_one).1 hμ_one
   have hμ_norm : ‖μ‖ = 1 := by
     have : (‖μ‖₊ : ℝ) = (1 : ℝ) := by
       exact_mod_cast hμ_nnn
     simpa only [coe_nnnorm] using this
-  have h_spec :=
-    AlgEquiv.spectrum_eq
-      (Module.End.toContinuousLinearMap (Matrix (Fin D₁) (Fin D₂) ℂ))
-      (mixedTransferMap₂ A B)
-  have hμ_spec' : μ ∈ spectrum ℂ (mixedTransferMap₂ A B) := by
-    have hμ_clm : μ ∈ spectrum ℂ
-        ((Module.End.toContinuousLinearMap (Matrix (Fin D₁) (Fin D₂) ℂ))
-          (mixedTransferMap₂ A B)) := by
-      change μ ∈ spectrum ℂ F
-      exact hμ_spec
-    exact h_spec ▸ hμ_clm
-  have hHas : Module.End.HasEigenvalue (mixedTransferMap₂ A B) μ :=
-    Module.End.hasEigenvalue_iff_mem_spectrum.mpr hμ_spec'
   obtain ⟨X, hX_mem, hX_ne⟩ := hHas.exists_hasEigenvector
   have hFX : mixedTransferMap₂ A B X = μ • X :=
     (Module.End.mem_eigenspace_iff).1 hX_mem
