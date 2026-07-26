@@ -73,6 +73,9 @@ PY
       die "Git package is missing or symlinked: $package_name"
     test -d "$package_root/.git" && test ! -L "$package_root/.git" ||
       die "Git package metadata is not self-contained: $package_name"
+    test ! -e "$package_root/.git/commondir" &&
+      test ! -L "$package_root/.git/commondir" ||
+      die "Git package uses external common metadata: $package_name"
     test ! -e "$package_root/.git/objects/info/alternates" &&
       test ! -L "$package_root/.git/objects/info/alternates" ||
       die "Git package uses external object storage: $package_name"

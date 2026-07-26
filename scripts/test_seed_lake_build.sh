@@ -175,6 +175,15 @@ find "$REPO/.lake/packages/mathlib/.git" -delete
 mv "$REPO/.lake/packages/mathlib/.git.real" \
   "$REPO/.lake/packages/mathlib/.git"
 
+printf '%s\n' "$TEST_ROOT/external-common-metadata" \
+  >"$REPO/.lake/packages/mathlib/.git/commondir"
+if "$REPO/scripts/seed_lake_build.sh" "$TARGET" --dry-run 2>"$TEST_ROOT/error.log"; then
+  echo "external dependency common metadata unexpectedly passed" >&2
+  exit 1
+fi
+/usr/bin/grep -q "Git package uses external common metadata" "$TEST_ROOT/error.log"
+find "$REPO/.lake/packages/mathlib/.git/commondir" -delete
+
 printf '%s\n' "$TEST_ROOT/external-objects" \
   >"$REPO/.lake/packages/mathlib/.git/objects/info/alternates"
 if "$REPO/scripts/seed_lake_build.sh" "$TARGET" --dry-run 2>"$TEST_ROOT/error.log"; then

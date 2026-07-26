@@ -480,7 +480,9 @@ jobs:
         run: python3 scripts/test_lake_build_hotspots.py
 
       - name: Check local cache-seeding shell syntax
-        run: bash -n scripts/seed_lake_build.sh scripts/test_seed_lake_build.sh
+        run: |
+          bash -n scripts/seed_lake_build.sh
+          bash -n scripts/test_seed_lake_build.sh
 
       # Ordinary Lean modules over 1000 lines fail. The exact root aggregator
       # exemption is accepted only while its uncommented content is import-only.
