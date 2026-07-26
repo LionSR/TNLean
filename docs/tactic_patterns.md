@@ -90,6 +90,17 @@ abstracted — record why, so it is not re-proposed).
 
 ## Completed refactors
 
+### Inverse physical action from a twisted companion
+- **Pattern:** the virtual-unitary construction in `StringOrderAux.lean`
+  combined scalar normalization, transfer-map scaling, and the full inverse
+  physical-action calculation in one large proof.
+- **Reuse:** `inverse_physical_action_of_twisted_companion` isolates the
+  unitary change-of-basis calculation, while `transferMap_smul_apply` replaces
+  the entrywise scaled-Kraus expansion.
+- **Result:** `virtualUnitary_of_gaugePhaseEquiv_twisted` falls from 13.3 to
+  6.7 seconds in the declaration profiler. The full profiled source check falls
+  below 25 seconds locally, with every declaration below 7 seconds.
+
 ### Anticommuting-involution projective multiplication
 - **Pattern:** split both `Z₂ × Z₂` inputs into sixteen cases, expand two concrete
   `2 × 2` matrices entrywise, and normalize every resulting scalar expression.
