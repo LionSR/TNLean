@@ -3,9 +3,10 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Entropy.MutualInformation
 import TNLean.Channel.LocalizedKrausCPTP
 import TNLean.Channel.Stinespring
+import TNLean.Channel.TensorMap
+import TNLean.Entropy.MutualInformation
 
 /-!
 # Data processing for bipartite mutual information
@@ -410,17 +411,6 @@ theorem IsKrausCPTP.mutualInformation_tensorMapId_le
 
 namespace Matrix
 
-/-- Apply a linear map to the second factor of a bipartite matrix, leaving the
-first factor unchanged. -/
-noncomputable def idTensorMap
-    {dL dIn dOut : ℕ}
-    (S : Matrix (Fin dIn) (Fin dIn) ℂ →ₗ[ℂ]
-      Matrix (Fin dOut) (Fin dOut) ℂ)
-    (ρ : Matrix (Fin dL × Fin dIn) (Fin dL × Fin dIn) ℂ) :
-    Matrix (Fin dL × Fin dOut) (Fin dL × Fin dOut) ℂ :=
-  (tensorMapId S (ρ.submatrix Prod.swap Prod.swap)).submatrix
-    Prod.swap Prod.swap
-
 /-- Apply one linear map to each factor of a bipartite matrix. -/
 noncomputable def tensorMapBoth
     {dA dA' dB dB' : ℕ}
@@ -441,8 +431,16 @@ theorem IsKrausCPTP.idTensorMap_posSemidef
     {S : Matrix (Fin dIn) (Fin dIn) ℂ →ₗ[ℂ]
       Matrix (Fin dOut) (Fin dOut) ℂ} (hS : IsKrausCPTP S)
     {ρ : Matrix (Fin dL × Fin dIn) (Fin dL × Fin dIn) ℂ}
-    (hρ : ρ.PosSemidef) : (Matrix.idTensorMap S ρ).PosSemidef :=
-  (hS.tensorMapId_posSemidef (hρ.submatrix Prod.swap)).submatrix Prod.swap
+    (hρ : ρ.PosSemidef) : (Matrix.idTensorMap S ρ).PosSemidef := by
+  have h := (hS.tensorMapId_posSemidef
+    (hρ.submatrix Prod.swap)).submatrix Prod.swap
+  have heq : Matrix.idTensorMap S ρ =
+      (Matrix.tensorMapId S (ρ.submatrix Prod.swap Prod.swap)).submatrix
+        Prod.swap Prod.swap := by
+    ext ⟨i, a⟩ ⟨j, b⟩
+    rfl
+  rw [heq]
+  exact h
 
 /-- Applying completely positive maps to both factors preserves positive
 semidefiniteness. -/
