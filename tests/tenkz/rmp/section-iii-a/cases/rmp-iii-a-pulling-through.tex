@@ -10,7 +10,7 @@
     % the plaquette: four tensors threaded by one closed MPO ring
     \tnput[box]{n}{(0mm,7mm)}{} \tnput[box]{e}{(7mm,0mm)}{}
     \tnput[box]{s}{(0mm,-7mm)}{} \tnput[box]{w}{(-7mm,0mm)}{}
-    \tnput[ring]{l}{(-7mm,7mm)}{\lambda}
+    \tnput[circle]{l}{(-7mm,7mm)}{\lambda}
     \tnjoin[role=operator, route=arc, out=90, in=-90]{w.north}{l.south}
     \tnjoin[role=operator, route=arc, out=0, in=180]{l.east}{n.west}
     \tnjoin[role=operator, route=arc, out=0, in=90]{n.east}{e.north}
@@ -27,7 +27,7 @@
   \begin{tenkzfree}
     \tnput[box]{n}{(0mm,7mm)}{} \tnput[box]{e}{(7mm,0mm)}{}
     \tnput[box]{s}{(0mm,-7mm)}{} \tnput[box]{w}{(-7mm,0mm)}{}
-    \tnput[ring]{l}{(-7mm,7mm)}{\lambda}
+    \tnput[circle]{l}{(-7mm,7mm)}{\lambda}
     \tnjoin[role=operator, route=arc, out=90, in=-90]{w.north}{l.south}
     \tnjoin[role=operator, route=arc, out=0, in=180]{l.east}{n.west}
     \tnjoin[role=operator, route=arc, out=0, in=90]{n.east}{e.north}

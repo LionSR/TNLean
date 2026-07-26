@@ -262,6 +262,156 @@
 \end{lemma}
 
 
+\begin{definition}[Product reference for a partial trace]
+    \label{def:entropy_product_tensor_reference}
+    \lean{Matrix.productTensorReference,
+        Matrix.productTensorReference_posSemidef}
+    \leanok
+    Let $\rho_A$ and $\rho_{BC}$ be positive semidefinite, and define
+    \begin{align}
+        \sigma_{ABC}
+        &=\rho_A\otimes\rho_{BC}.
+        \label{eq:entropy_general_product_reference}
+    \end{align}
+    We use the canonical reassociation from $A\times(B\times C)$ to
+    $(A\times B)\times C$, so that the right partial trace removes $C$.
+\end{definition}
+
+\begin{theorem}[Marginal and support calculus for a product reference]
+    \label{thm:entropy_product_reference_support_calculus}
+    \lean{Matrix.partialTraceRight_productTensorReference,
+        Matrix.cfcSqrt_productTensorReference,
+        Matrix.supportInvSqrt_partialTraceRight_productTensorReference,
+        Matrix.supportProj_partialTraceRight_productTensorReference}
+    \leanok
+    \uses{def:entropy_product_tensor_reference, def:partial_trace,
+        def:support_inverse_square_root, def:support_proj}
+    Set $\rho_B=\tr_C\rho_{BC}$, and let $P_A$ and $P_B$ be the support
+    projections of $\rho_A$ and $\rho_B$. Then
+    \begin{align}
+        \tr_C\sigma_{ABC}
+        &=\rho_A\otimes\rho_B,
+        \label{eq:entropy_product_reference_marginal}\\
+        \sqrt{\sigma_{ABC}}
+        &=\sqrt{\rho_A}\otimes\sqrt{\rho_{BC}},
+        \notag\\
+        (\tr_C\sigma_{ABC})^{-1/2}_{\mathrm{supp}}
+        &=\rho_{A,\mathrm{supp}}^{-1/2}\otimes
+          \rho_{B,\mathrm{supp}}^{-1/2},
+        \notag\\
+        P_{\tr_C\sigma_{ABC}}
+        &=P_A\otimes P_B.
+        \label{eq:entropy_product_reference_support}
+    \end{align}
+    Each identity is understood after the same canonical reassociation of the
+    three tensor factors.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:support_inverse_square_root_tensor_product}
+    Expand the marginal in a product basis. The remaining identities follow
+    from functional calculus for positive semidefinite tensor products. The
+    support projection is obtained by multiplying the factorized support
+    inverse square root on both sides of the marginal.
+\end{proof}
+
+\begin{definition}[Compression to the first-factor support]
+    \label{def:entropy_support_compression}
+    \lean{Matrix.supportCompressionMap,
+        Matrix.supportCompressionMap_apply}
+    \leanok
+    If $P_A$ is the support projection of $\rho_A$, define
+    \begin{align}
+        \mathcal S_{P_A}(X)
+        &=P_AXP_A.
+        \label{eq:entropy_support_compression}
+    \end{align}
+\end{definition}
+
+\begin{theorem}[Raw Petz factorization for a product reference]
+    \label{thm:entropy_petz_product_tensor}
+    \lean{Matrix.partialTraceRightPetzMap_productTensor_kronecker,
+        Matrix.partialTraceRightPetzMap_productTensor}
+    \leanok
+    \uses{def:entropy_product_tensor_reference,
+        thm:entropy_product_reference_support_calculus,
+        def:entropy_support_compression,
+        def:partial_trace_support_petz_map}
+    For the reference in~(\ref{eq:entropy_general_product_reference}), the raw
+    Petz map for $\tr_C$ satisfies
+    \begin{align}
+        \mathcal R_{\sigma_{ABC}}
+        &=\mathcal S_{P_A}\otimes\mathcal R_{\rho_{BC}}.
+        \label{eq:entropy_hjpw_product_support_factorization}
+    \end{align}
+    Equivalently, for every product operator $A_0\otimes X_B$,
+    \begin{align}
+        \mathcal R_{\sigma_{ABC}}(A_0\otimes X_B)
+        &=(P_AA_0P_A)\otimes\mathcal R_{\rho_{BC}}(X_B).
+        \notag
+    \end{align}
+    The formulas use the canonical identification
+    $(H_A\otimes H_B)\otimes H_C\cong
+    H_A\otimes(H_B\otimes H_C)$.
+
+    This is the globally valid ambient-space form of
+    \cite[equation~(10)]{Hayden2004Structure}. The literal identity-tensored
+    formula in that equation is obtained on the support of $\rho_A$, or after
+    choosing an extension away from that support. For singular $\rho_A$, the
+    raw map on the full matrix algebra contains the compression
+    $X\mapsto P_AXP_A$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:entropy_product_reference_support_calculus,
+        lem:partial_trace_support_petz_map_apply,
+        def:bipartite_operator_schmidt_rank}
+    Substitute the tensor factorizations of the square root and marginal
+    support inverse into the Petz sandwich. The first-factor terms reduce to
+    $P_AA_0P_A$. This proves the formula for product operators. A finite
+    product-operator decomposition proves the linear-map identity.
+\end{proof}
+
+\begin{theorem}[Identity-tensored forms of the product-reference Petz map]
+    \label{thm:entropy_petz_product_tensor_corollaries}
+    \lean{Matrix.tensorMapId_supportCompressionMap,
+        Matrix.partialTraceRightPetzMap_productTensor_apply_of_left_supported,
+        Matrix.partialTraceRightPetzMap_productTensor_of_posDef_left}
+    \leanok
+    \uses{thm:entropy_petz_product_tensor,
+        def:entropy_support_compression}
+    Let $X$ be an operator on $H_A\otimes H_B$. If
+    \begin{align}
+        (P_A\otimes\mathbf 1_B)X(P_A\otimes\mathbf 1_B)
+        &=X,
+        \notag
+    \end{align}
+    then
+    \begin{align}
+        \mathcal R_{\sigma_{ABC}}(X)
+        &=(\operatorname{id}_A\otimes
+          \mathcal R_{\rho_{BC}})(X).
+        \label{eq:entropy_hjpw_product_supported}
+    \end{align}
+    If $\rho_A$ is positive definite, then $P_A=\mathbf 1_A$, and this
+    identity holds for every $X$.
+
+    When $\rho_A$ is singular, no global identity-tensored formula is asserted
+    for the raw map outside the displayed support. Nor is the generic
+    trace-preserving completion in
+    Definition~\ref{def:partial_trace_petz_channel} asserted to factor: its
+    complementary projection is
+    $\mathbf 1_{AB}-P_A\otimes P_B$, which need not be the identity on $A$
+    tensored with a projection on $B$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:entropy_petz_product_tensor}
+    The support condition makes $\mathcal S_{P_A}$ act as the identity on
+    $X$. If $\rho_A$ is positive definite, its support projection is the
+    identity, so the condition holds on the full matrix algebra.
+\end{proof}
+
 \begin{definition}[Maximally mixed tensor reference]
     \label{def:entropy_maximally_mixed_tensor_reference}
     \lean{Matrix.maximallyMixedTensorReference}

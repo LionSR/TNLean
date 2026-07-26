@@ -64,8 +64,9 @@
   }
 
 % \tnput[<glyph keys>]{<name>}{<coordinate>}{<label>}
-%   glyph keys: dot|box|pill|mpo|ring|boundary (skin),
+%   glyph keys: dot|box|circle|pill|mpo|ring|boundary (skin),
 %   ports={e:virtual, ph:physical, ...},
+%   size=s|m|l (per-atom glyph size; omitted preserves the reference size),
 %   label pos=<compass bearing, cardinal or diagonal> (dot skin only)
 \tl_new:N \l__tenkz_fshape_tl    % \tnput skin word (free-owned: the tiers
                                  % share only L0/L1, never each other's locals)
@@ -78,6 +79,9 @@
 \tl_new:N \l__tenkz_fspec_tl     % \tnput species name (empty = none)
 \tl_new:N \l__tenkz_fangle_tl    % atom-local frame rotation in degrees
 \tl_new:N \l__tenkz_fframeevent_tl
+\tl_new:N \l__tenkz_fsize_tl    % explicit size class; empty = reference path
+\tl_new:N \l__tenkz_fsizeopt_tl % resolved TikZ style, empty when omitted
+\tl_new:N \l__tenkz_fsizeevent_tl
 \bool_new:N \l__tenkz_fcommit_bool % semantic name allocation succeeded
 \bool_new:N \l__tenkz_fkeys_valid_bool
 \tl_new:N \l__tenkz_frolesty_tl  % resolved role/species style (or empty)
@@ -88,6 +92,11 @@
       {
         \exp_not:n {#1}
         , \exp_not:V \l__tenkz_frolesty_tl
+      }
+    \tl_if_empty:NF \l__tenkz_fsizeopt_tl
+      {
+        \tl_put_right:Ne \l_tmpa_tl
+          { , \exp_not:V \l__tenkz_fsizeopt_tl }
       }
     \tl_if_empty:NF \l__tenkz_frame_glyph_options_tl
       {
@@ -112,6 +121,7 @@
   /tenkz/put/.is~family,
   /tenkz/put/dot/.code={\tl_set:Nn \l__tenkz_fshape_tl {dot}},
   /tenkz/put/box/.code={\tl_set:Nn \l__tenkz_fshape_tl {box}},
+  /tenkz/put/circle/.code={\tl_set:Nn \l__tenkz_fshape_tl {circle}},
   /tenkz/put/pill/.code={\tl_set:Nn \l__tenkz_fshape_tl {pill}},
   /tenkz/put/mpo/.code={\tl_set:Nn \l__tenkz_fshape_tl {mpo}},
   /tenkz/put/ring/.code={\tl_set:Nn \l__tenkz_fshape_tl {ring}},
@@ -119,6 +129,14 @@
   /tenkz/put/frame/.code=
     {\__tenkz_frame_parse_rotation:nN {#1} \l__tenkz_fangle_tl},
   /tenkz/put/ports/.store~in=\l__tenkz_fports_tl,
+  /tenkz/put/size/.is~choice,
+  /tenkz/put/size/s/.code={\tl_set:Nn \l__tenkz_fsize_tl {s}},
+  /tenkz/put/size/m/.code={\tl_set:Nn \l__tenkz_fsize_tl {m}},
+  /tenkz/put/size/l/.code={\tl_set:Nn \l__tenkz_fsize_tl {l}},
+  /tenkz/put/size/.unknown/.code={
+      \bool_set_false:N \l__tenkz_fkeys_valid_bool
+      \PackageError{tenkz}{Choice~'\pgfkeys@was@choice'~unknown~in~put~size}
+        {Use~s,~m,~or~l.}},
   % role= / species=: the semantic hue interface (see tenkz-core) —
   % the language's invariants cross the free-tier border.  Resolution
   % is pure style indirection (`<role> tensor` for the bead, `<role>
@@ -149,7 +167,7 @@
   % bearings are the alphabet, not the four.  The step is one clearance
   % band (\tenkz@r@labelclear) along the bearing and the anchor is the
   % bearing reversed, both read from the one bearing table in the core.
-  % Box/pill/mpo/ring skins inscribe their labels and ignore it.
+  % Box/circle/pill/mpo/ring skins inscribe their labels and ignore it.
   /tenkz/put/label~pos/.code={
       \tenkz_label_bearing:nnNNNTF {#1}
         {\tenkz@dim{\tenkz@r@labelclear}}
@@ -242,6 +260,9 @@
     \tl_clear:N \l__tenkz_fspec_tl
     \tl_set:Nn \l__tenkz_fangle_tl {0}
     \tl_clear:N \l__tenkz_fframeevent_tl
+    \tl_clear:N \l__tenkz_fsize_tl
+    \tl_clear:N \l__tenkz_fsizeopt_tl
+    \tl_clear:N \l__tenkz_fsizeevent_tl
     \tl_set:Nn \l__tenkz_flpos_tl {south}
     \bool_set_true:N \l__tenkz_fkeys_valid_bool
     \tl_if_empty:nF {#1} { \pgfqkeys{/tenkz/put}{#1} }
@@ -273,6 +294,23 @@
         species={\tenkz_free_word:N \l__tenkz_fspec_tl},
         frame={\__tenkz_frame_map:n {\l__tenkz_fangle_tl}} }
     \__tenkz_frame_prepare_atom:n {\l__tenkz_fangle_tl}
+    \tl_if_empty:NF \l__tenkz_fsize_tl
+      {
+        \str_if_eq:VnTF \l__tenkz_fshape_tl {dot}
+          {
+            \tl_set:Ne \l__tenkz_fsizeopt_tl
+              { tenkz~dot~size~\l__tenkz_fsize_tl }
+          }
+          {
+            \str_if_eq:VnF \l__tenkz_fshape_tl {boundary}
+              {
+                \tl_set:Ne \l__tenkz_fsizeopt_tl
+                  { tenkz~inscribed~size~\l__tenkz_fsize_tl }
+              }
+          }
+        \tl_set:Ne \l__tenkz_fsizeevent_tl
+          { |size=\l__tenkz_fsize_tl }
+      }
     \fp_compare:nNnF {\l__tenkz_fangle_tl} = {0}
       {
         \tl_set:Ne \l__tenkz_fframeevent_tl
@@ -292,13 +330,23 @@
     \begin{scope}[local~bounding~box=\l__tenkz_fbound_tl]
       \str_case:Vn \l__tenkz_fshape_tl
         {
-          {dot}  { \__tenkz_render_labelnode_named:nnnn
-                     {tensor, \l__tenkz_frolesty_tl} {#2} {#3} {}
+          {dot}  { \tl_if_empty:NTF \l__tenkz_fsizeopt_tl
+                     {
+                       \__tenkz_render_labelnode_named:nnnn
+                         {tensor, \l__tenkz_frolesty_tl} {#2} {#3} {}
+                     }
+                     {
+                       \__tenkz_render_labelnode_named:nnnn
+                         {tensor, \l__tenkz_frolesty_tl,
+                          \l__tenkz_fsizeopt_tl} {#2} {#3} {}
+                     }
                    \tl_if_blank:nF {#4}
                      { \exp_args:NV \tenkz_free_dot_label:nnn
                          \l__tenkz_flpos_tl {#2} {#4} } }
           {box}  { \tenkz_free_inscribed_node:nnnn
                      {box~tensor}{#2}{#3}{#4} }
+          {circle} { \tenkz_free_inscribed_node:nnnn
+                     {circle~tensor}{#2}{#3}{#4} }
           {pill} { \tenkz_free_inscribed_node:nnnn
                      {pill~tensor}{#2}{#3}{#4} }
           {mpo}  { \tenkz_free_inscribed_node:nnnn
@@ -325,7 +373,12 @@
         \exp_args:NV \clist_map_inline:nn \l__tenkz_fports_tl
           { \exp_args:Ne \tenkz_free_port:n { \tl_to_str:n { #2 . ##1 } } }
       }
-    \tenkz@event{atom|picture=\the\tenkz@pictureid|name=#2|kind=\tl_use:N \l__tenkz_fshape_tl|role=\tenkz_free_word:N \l__tenkz_frole_tl|species=\tenkz_free_word:N \l__tenkz_fspec_tl\tl_use:N \l__tenkz_fframeevent_tl}
+    \tenkz@event{atom|picture=\the\tenkz@pictureid|name=#2|%
+      kind=\tl_use:N \l__tenkz_fshape_tl|%
+      role=\tenkz_free_word:N \l__tenkz_frole_tl|%
+      species=\tenkz_free_word:N \l__tenkz_fspec_tl%
+      \tl_use:N \l__tenkz_fsizeevent_tl%
+      \tl_use:N \l__tenkz_fframeevent_tl}
       }
     \group_end:
     \tl_if_empty:NF \g__tenkz_free_atom_record_tl
