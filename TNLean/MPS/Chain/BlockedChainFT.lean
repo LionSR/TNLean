@@ -19,37 +19,6 @@ blocked tensors.
 * [arXiv:1804.04964](https://arxiv.org/abs/1804.04964)
 -/
 
-namespace MPSTensor
-
-variable {d D : ℕ}
-
-/-- Equivalence between `N`-block injectivity and injectivity of the blocked
-tensor `blockTensor A N`. -/
-lemma isNBlkInjective_iff_blockTensor_isInjective (A : MPSTensor d D) (N : ℕ) :
-    IsNBlkInjective A N ↔ IsInjective (blockTensor A N) := by
-  classical
-  have hRange :
-      Set.range (fun i : Fin (blockPhysDim d N) =>
-        evalWord A (List.ofFn (decodeBlock d N i))) =
-        Set.range (fun σ : Fin N → Fin d => evalWord A (List.ofFn σ)) := by
-    ext M
-    constructor
-    · rintro ⟨i, rfl⟩
-      exact ⟨decodeBlock d N i, rfl⟩
-    · rintro ⟨σ, rfl⟩
-      exact ⟨Fin.cast (blockPhysDim_eq_pow d N).symm (finFunctionFinEquiv σ), by
-        simp [decodeBlock, Fin.cast_cast]⟩
-  unfold IsNBlkInjective IsInjective blockTensor
-  have hSpan :
-      Submodule.span ℂ
-          (Set.range fun i : Fin (blockPhysDim d N) =>
-            evalWord A (List.ofFn (decodeBlock d N i))) =
-        Submodule.span ℂ (Set.range fun σ : Fin N → Fin d => evalWord A (List.ofFn σ)) := by
-    simp [hRange]
-  exact ⟨hSpan.trans, hSpan.symm.trans⟩
-
-end MPSTensor
-
 namespace MPSChainTensor
 
 variable {d D : ℕ}
