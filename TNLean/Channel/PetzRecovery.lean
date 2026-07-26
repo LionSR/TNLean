@@ -440,8 +440,8 @@ $A\times(B\times C)$ to $(A\times B)\times C$ so that `partialTraceRight`
 traces out $C$.
 
 This is the maximally mixed specialization of the reference in
-Hayden--Jozsa--Petz--Winter, arXiv:quant-ph/0304007v2, equation (10). It is not the Koashi--Imoto or
-Hayashi block decomposition. -/
+Hayden--Jozsa--Petz--Winter, arXiv:quant-ph/0304007v2, equation (10). It is
+not the Hayashi--Koashi--Imoto block decomposition. -/
 noncomputable def maximallyMixedTensorReference
     (ρ : Matrix (B × C) (B × C) ℂ) :
     Matrix ((Fin dA × B) × C) ((Fin dA × B) × C) ℂ :=
@@ -605,7 +605,7 @@ $(A\times B)\times C\simeq A\times(B\times C)$.
 This is the maximally mixed specialization of the tensor-product factorization
 in Hayden--Jozsa--Petz--Winter, arXiv:quant-ph/0304007v2, equation (10). It is
 an algebraic raw support-Petz statement,
-not the Koashi--Imoto decomposition. -/
+not the Hayashi--Koashi--Imoto block decomposition. -/
 theorem partialTraceRightPetzMap_maximallyMixedTensor_kronecker
     (ρ : Matrix (B × C) (B × C) ℂ) (hρ : ρ.PosSemidef)
     (A : Matrix (Fin dA) (Fin dA) ℂ) (X : Matrix B B ℂ) :
@@ -706,8 +706,8 @@ Petz map is $\operatorname{id}_A\otimes\mathcal R_{\rho_{BC}}$, after the
 canonical reassociation of product indices.
 
 This is the maximally mixed specialization of equation (10) of
-Hayden--Jozsa--Petz--Winter, arXiv:quant-ph/0304007v2. It is not a statement of the Koashi--Imoto
-or Hayashi decomposition. -/
+Hayden--Jozsa--Petz--Winter, arXiv:quant-ph/0304007v2. It is not the
+Hayashi--Koashi--Imoto block decomposition. -/
 theorem partialTraceRightPetzMap_maximallyMixedTensor
     (ρ : Matrix (B × C) (B × C) ℂ) (hρ : ρ.PosSemidef) :
     equivReindexMap (Equiv.prodAssoc (Fin dA) B C) ∘ₗ
