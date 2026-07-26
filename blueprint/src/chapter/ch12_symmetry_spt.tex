@@ -1,10 +1,10 @@
 \section{SPT Phase Labels and String-Order Universality}
 %% ---------------------------------------------------------
 
-The formal predicate in this section compares virtual cocycle labels.  It does
-not define physical phase equivalence.  The latter is supplied by the
-classification theorem of Chen--Gu--Wen and Schuch--P\'erez-Garc\'ia--Cirac
-under fixed symmetry, injectivity, and unique-ground-state hypotheses.
+The predicate in Definition~\ref{def:is_same_spt_phase} compares virtual
+cocycle labels.  Physical phase equivalence instead uses symmetric gapped
+Hamiltonian paths, with the endpoint representations embedded into a common
+physical space as in~\cite{Schuch2011Phases}.
 
 \begin{definition}[Equality of virtual cocycle labels]
     \label{def:is_same_spt_phase}
@@ -12,7 +12,7 @@ under fixed symmetry, injectivity, and unique-ground-state hypotheses.
     \leanok
     \uses{def:cohomologous_to, def:projective_rep}
     For tensors $A,B$ and a fixed physical representation
-    $U:G\to\GL_d(\C)$, the formal predicate called \emph{same SPT phase}
+    $U:G\to\GL_d(\C)$, the predicate called \emph{same SPT phase}
     asserts the existence of factor systems
     $\omega_A,\omega_B:G\times G\to\C^\times$ and projective bond
     representations $\rho_A,\rho_B$ such that
@@ -31,7 +31,7 @@ under fixed symmetry, injectivity, and unique-ground-state hypotheses.
 \begin{remark}[Scalar and character conventions]
     \label{rem:spt_scalar_character_conventions}
     \uses{def:is_same_spt_phase, def:h2_cx}
-    The formal factor systems take values in $\C^\times$.  For unitary bond
+    These factor systems take values in $\C^\times$.  For unitary bond
     representations one may choose unit-modulus representatives and obtain the
     physical classification label in $H^2(G,\mathrm U(1))$; this normalization
     is not an equality $\C^\times=\mathrm U(1)$.  Moreover,
@@ -46,28 +46,62 @@ under fixed symmetry, injectivity, and unique-ground-state hypotheses.
     \label{thm:spt_classification}
     \notready
     \uses{def:is_same_spt_phase, def:h2_cx}
-    Fix a symmetry group $G$ and its unitary on-site action, up to adjoining
-    symmetry-trivial local degrees of freedom.  In the injective MPS setting,
-    equivalently for unique ground states of finite-range parent Hamiltonians,
-    allow finite blocking, changes of physical and bond dimensions by trivial
-    ancillary sectors, and smooth deformations within the injective class.
-    Two tensors are connected by a symmetry-preserving uniformly
-    gapped path if and only if their virtual projective representations define
-    the same class in $H^2(G,\mathrm U(1))$
-    \cite{ChenGuWen2011,Schuch2011Phases}.
+    For $p=0,1$, let $H_p$ have a unique injective-MPS ground state on
+    $\mc H_p^{\otimes N}$ and commute with $(U_g^p)^{\otimes N}$, where
+    $U^p$ is a unitary representation of $G$ on $\mc H_p$.  Choose the
+    endpoint phase gauges of $U^0$ and $U^1$, embed the endpoint spaces into
+    \begin{align}
+       \mc H&=\mc H_0\oplus\mc H_1\oplus\mc H_{\mathrm{path}},&
+       U_g&=U_g^0\oplus U_g^1\oplus U_g^{\mathrm{path}},
+       \notag
+    \end{align}
+    with an arbitrary linear representation $U^{\mathrm{path}}$ on the third
+    summand, and interpret the endpoints after a common finite blocking.
+    Then a $U_g^{\otimes N}$-symmetric uniformly gapped path connects $H_0$
+    and $H_1$ if and only if the virtual projective representations of their
+    blocked injective MPS ground states determine the same class in
+    $H^2(G,\mathrm U(1))$~\cite[Section~II.F]{Schuch2011Phases}.
 \end{theorem}
 
 \begin{proof}
-    Along a symmetric gapped path, quasi-adiabatic continuation preserves the
-    projective edge action, so the $\mathrm U(1)$ factor-system class is
-    constant.  Conversely, choose gauges with the same cocycle representative,
-    block until the tensors are injective on one site, enlarge the bond spaces
-    by symmetry-trivial ancillas when their dimensions differ, and interpolate
-    through symmetric injective tensors.  The parent-Hamiltonian construction
-    then supplies a symmetric path with a uniform gap.  The formal development
-    contains the virtual cocycle label but not the Hamiltonian-path,
-    blocking/dimension-change, or gap-stability bridges, so this source
-    classification theorem remains unformalized.
+    First deform each blocked injective MPS to its isometric form; the
+    deformation preserves the symmetry relation
+    \begin{align}
+       U_g\mc P&=\mc P(V_g\otimes\overline{V_g}).
+       \notag
+    \end{align}
+    Along any continuous symmetric MPS path, the tensor and its induced
+    virtual action $V_g$ vary continuously.  The cohomology class is discrete,
+    so it cannot change along the path.  This proves necessity.
+
+    Conversely, let the endpoint isometric forms have virtual actions
+    $V_g^0$ and $V_g^1$ in the same cohomology class.  Embed their bond spaces
+    into the direct sum and interpolate between the maximally entangled bonds
+    by
+    \begin{align}
+       |\omega(\gamma)\rangle
+       &=(1-\gamma)\sum_{i=1}^{D_0}|i,i\rangle
+         +\gamma\sum_{i=D_0+1}^{D_0+D_1}|i,i\rangle.
+       \notag
+    \end{align}
+    The commuting parent Hamiltonians along this interpolation remain gapped.
+    Their symmetry is
+    \begin{align}
+      (V_g^0\oplus V_g^1)\otimes
+      (\overline{V_g^0}\oplus\overline{V_g^1})
+      &=\widehat U_g^0\oplus\widehat U_g^1
+        \oplus\widehat U_g^{\mathrm{path}},\\
+      \widehat U_g^{\mathrm{path}}
+      &=(V_g^0\otimes\overline{V_g^1})
+        \oplus(V_g^1\otimes\overline{V_g^0}).
+      \notag
+    \end{align}
+    Equality of the cohomology classes is exactly what makes the cross-term
+    action $\widehat U^{\mathrm{path}}$ a linear representation.  Conjugating
+    back by the endpoint isometries gives the common direct-sum physical
+    representation and the required symmetric gapped path.
+    % The Hamiltonian-path and isometric-form bridges are not yet represented
+    % by Lean declarations; the \notready marker records that status.
 \end{proof}
 
 \begin{theorem}[Virtual-boundary nondecay for injective MPV-symmetric tensors]%
