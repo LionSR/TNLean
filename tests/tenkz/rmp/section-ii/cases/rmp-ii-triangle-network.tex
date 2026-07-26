@@ -11,16 +11,22 @@
   \psi_{ijk} \;=\;
   \begin{tenkzfree}
     % the three tensors at the triangle corners
-    \tnput[dot]{t}{(0,9mm)}{}
-    \tnput[dot]{r}{(8mm,-4.5mm)}{}
-    \tnput[dot]{l}{(-8mm,-4.5mm)}{}
+    \tnput[dot]{t}{(0mm,8mm)}{}
+    \tnput[dot]{r}{(7mm,-4mm)}{}
+    \tnput[dot]{l}{(-7mm,-4mm)}{}
+    % the open physical indices end in named tips, so i, j and k are read
+    % at the tips as in the source; a join sets its label at mid-wire and
+    % on the vertical spoke that would put i ON the spoke
+    \tnput[boundary, label pos=north, ports={south:physical}]{ti}{(0mm,15mm)}{i}
+    \tnput[boundary, label pos=south, ports={north:physical}]{rj}{(13mm,-9mm)}{j}
+    \tnput[boundary, label pos=south, ports={north:physical}]{lk}{(-13mm,-9mm)}{k}
     % contracted virtual loop: alpha, beta, gamma
     \tnjoin[label=\alpha]{t}{r}
     \tnjoin[label=\beta]{r}{l}
     \tnjoin[label=\gamma]{l}{t}
     % open physical indices i, j, k, radially outward
-    \tnjoin[label=i]{t}{0,17mm}
-    \tnjoin[label=j]{r}{14mm,-10mm}
-    \tnjoin[label=k]{l}{-14mm,-10mm}
+    \tnjoin{ti.south}{t}
+    \tnjoin{r}{rj.north}
+    \tnjoin{l}{lk.north}
   \end{tenkzfree}
 \]
