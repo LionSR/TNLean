@@ -90,6 +90,17 @@ abstracted — record why, so it is not re-proposed).
 
 ## Completed refactors
 
+### Positive-congruence similarity evaluation
+- **Pattern:** the spectral-radius proof repeatedly unfolded `similarityMap`
+  and asked broad `simp` calls to rediscover the same inverse and Hermitian
+  square-root identities.
+- **Reuse:** the local `hsim_apply` equation records that evaluation once.
+  The transformed eigenvector proof then cancels the two inverse pairs through
+  an explicit matrix identity instead of normalizing the whole expression.
+- **Result:** the main Wolf 6.3 declaration falls from 6.21 to 5.60 seconds in
+  the declaration profiler, and the clean full-source check completes in
+  15.34 seconds.
+
 ### Inverse physical action from a twisted companion
 - **Pattern:** the virtual-unitary construction in `StringOrderAux.lean`
   combined scalar normalization, transfer-map scaling, and the full inverse
