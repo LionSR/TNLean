@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.MPDO.BNTAlgebraTensorClause
 import TNLean.MPS.MPDO.VerticalSectorCoefficientComparison
-import TNLean.Analysis.CoisometricCompression
+import TNLean.MPS.SharedInfra.BlockAssembly
 import TNLean.MPS.Tactic.Basic
 
 /-!
@@ -45,48 +45,6 @@ theorem verticalBNTMPO_verticalTensor_blockTwo (M : MPOTensor d D) :
     Matrix.mul_apply, Matrix.sum_apply, Matrix.submatrix_apply,
     Matrix.kroneckerMap_apply]
 
-end MPOTensor
-
-namespace MPSTensor
-
-/-- A tensor reconstructed through a coisometry has the same positive-length
-closed-chain coefficients as the tensor on the retained space.
-
-The positive-length restriction is necessary because the two tensors may
-have different bond dimensions. This is the trace-preserving reconstruction
-used for CPSV16, Appendix C.4, lines 2011--2018; the reconstruction itself is
-the vertical canonical-form relation of Proposition 4.13, lines 1863--1870. -/
-theorem sameMPV₂Pos_of_coisometry_reconstruction
-    {s d n : ℕ} (T : MPSTensor s d) (B : MPSTensor s n)
-    (U : Matrix (Fin n) (Fin d) ℂ)
-    (hU : U * Uᴴ = 1)
-    (hReconstruct : ∀ v, T v = Uᴴ * B v * U) :
-    SameMPV₂Pos T B := by
-  mpv_ext
-  have hEval : ∀ (v : Fin s) (w : List (Fin s)),
-      evalWord T (v :: w) = Uᴴ * evalWord B (v :: w) * U := by
-    intro v w
-    induction w generalizing v with
-    | nil => simp [hReconstruct]
-    | cons v' w ih =>
-      change T v * evalWord T (v' :: w) =
-        Uᴴ * (B v * evalWord B (v' :: w)) * U
-      rw [hReconstruct v, ih v']
-      simp only [Matrix.mul_assoc]
-      rw [← Matrix.mul_assoc U Uᴴ, hU, Matrix.one_mul]
-  have hword : List.ofFn σ ≠ [] := by
-    intro hzero
-    have hlength := congrArg List.length hzero
-    simp only [List.length_ofFn, List.length_nil] at hlength
-    omega
-  obtain ⟨v, w, hw⟩ := List.exists_cons_of_ne_nil hword
-  simp only [mpv, coeff, hw]
-  rw [hEval v w]
-  exact Matrix.trace_conjTranspose_mul_mul_of_mul_conjTranspose_eq_one U hU _
-
-end MPSTensor
-
-namespace MPOTensor
 
 variable {D g : ℕ} {dim mult : Fin g → ℕ}
 

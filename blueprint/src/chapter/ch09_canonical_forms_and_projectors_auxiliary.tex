@@ -320,6 +320,8 @@ the coefficient argument of Chapter~\ref{ch:bnt}.
 \begin{definition}[CPSV canonical form]
     \label{def:cpsv_canonical_form}
     \lean{MPSTensor.CPSVCanonicalFormData}
+    \lean{MPSTensor.CPSVCanonicalFormData.ofBlocks}
+    \lean{MPSTensor.CPSVCanonicalFormData.sameMPV₂Pos_toTensorFromBlocks}
     \lean{MPSTensor.IsCPSVCanonicalForm}
     \lean{MPSTensor.CPSVCanonicalFormData.IsWeightNormalized}
     \leanok
@@ -356,6 +358,52 @@ the coefficient argument of Chapter~\ref{ch:bnt}.
     The basis-of-normal-tensors refinement is
     Definition~\ref{def:bnt}; it is not part of canonical form itself.
 \end{definition}
+
+\begin{theorem}[Closed-chain expansion of CPSV canonical form]
+    \label{thm:cpsv_canonical_form_mpv_expansion}
+    \lean{MPSTensor.CPSVCanonicalFormData.mpv_eq_sum_weight_pow}
+    \leanok
+    \uses{def:cpsv_canonical_form, def:mpv}
+    % Maintainer source anchor: CPSV16 eq:II_Psi_k, lines 259--263.
+    For canonical-form data as in~(\ref{eq:cpsv_canonical_form}), every
+    positive length~$N$ and every configuration~$\sigma$ satisfy
+    \begin{align}
+        V^{(N)}(A)_\sigma
+         & =\sum_{k=1}^{r}\mu_k^N V^{(N)}(A_k)_\sigma.
+        \label{eq:cpsv_canonical_form_mpv_expansion}
+    \end{align}
+    Equivalently,
+    $\ket{V^{(N)}(A)}=\sum_{k=1}^{r}\mu_k^N\ket{V^{(N)}(A_k)}$.
+    This is the identity immediately following the canonical-form definition
+    in~\cite[Section~2.3]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:cpsv_canonical_form, thm:mpv_decomposition}
+    Induction on a nonempty physical word~$w$ of length~$N$, using
+    (\ref{eq:cpsv_canonical_form}) at each letter and
+    $UU^\dagger=\Id_S$ between adjacent letters, gives
+    \begin{align}
+        A^w
+         & =U^\dagger
+            \left(\bigoplus_{k=1}^{r}\mu_k^N A_k^w\right)U.
+        \label{eq:cpsv_canonical_form_word_reconstruction}
+    \end{align}
+    Applying cyclicity of the trace and $UU^\dagger=\Id_S$ to
+    (\ref{eq:cpsv_canonical_form_word_reconstruction}) gives
+    \begin{align}
+        \tr(A^w)
+         & =\tr\!\left(
+            \left(\bigoplus_{k=1}^{r}\mu_k^N A_k^w\right)UU^\dagger
+            \right)
+          =\tr\!\left(\bigoplus_{k=1}^{r}\mu_k^N A_k^w\right).
+        \label{eq:cpsv_canonical_form_trace_reconstruction}
+    \end{align}
+    Applying Theorem~\ref{thm:mpv_decomposition} to the right-hand side of
+    (\ref{eq:cpsv_canonical_form_trace_reconstruction}) yields
+    $\tr(A^w)=\sum_{k=1}^{r}\mu_k^N\tr(A_k^w)$, which is
+    (\ref{eq:cpsv_canonical_form_mpv_expansion}).
+\end{proof}
 
 The projector-closure result in
 Theorem~\ref{thm:projector_closure_canonical_form} gives normal blocks and
