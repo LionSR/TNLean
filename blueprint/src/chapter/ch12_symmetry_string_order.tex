@@ -1,10 +1,10 @@
 \section{Physical Endpoint String Order and Virtual-Boundary Nondecay}
 
 The source notion of string order uses physical endpoint operators and a
-nonidentity unitary string~\cite{PerezGarcia2008StringOrder}.  The formal
-development also studies a restricted virtual-boundary nondecay predicate and
-a virtual local-covariance relation.  These notions are stated separately
-below; equivalence with physical state symmetry requires additional bridges.
+nonidentity unitary string~\cite{PerezGarcia2008StringOrder}.  We also study a
+restricted virtual-boundary nondecay predicate and a virtual local-covariance
+relation.  These notions are stated separately below; equivalence with
+physical state symmetry requires additional hypotheses.
 
 \begin{definition}[Twisted transfer map]\label{def:twisted_transfer_map}
     \lean{MPSTensor.twistedTransferMap}
@@ -51,7 +51,7 @@ below; equivalence with physical state symmetry requires additional bridges.
     \lean{MPSTensor.stringOrderParam}
     \leanok
     \uses{def:twisted_transfer_map}
-    The formal \emph{stationary-boundary block-twist functional} is
+    The \emph{stationary-boundary block-twist functional} is
     \begin{align}
         T_L(A,u,\Lambda) &:= \tr\!(\Lambda \cdot \E_u^L(\Id)).
         \label{eq:symmetry_string_parameter}
@@ -96,8 +96,8 @@ below; equivalence with physical state symmetry requires additional bridges.
        \label{eq:symmetry_source_periodic_RL}
     \end{align}
     Identifying this periodic overlap with the normalized stationary-boundary
-    functional $T_L(A,u,\Lambda)$ requires a thermodynamic-boundary or
-    normalization bridge that is not presently formalized.  Thus
+    functional $T_L(A,u,\Lambda)$ requires a thermodynamic-boundary and
+    normalization hypothesis.  Thus
     Definition~\ref{def:string_order_param} must not be read as the literal
     source definition of $R_L(u)$.
 \end{definition}
@@ -142,6 +142,7 @@ below; equivalence with physical state symmetry requires additional bridges.
 
 \begin{lemma}[PGWSVC08 Lemma 1: twisted spectral radius]
     \label{lem:pgwsvc08_twisted_spectral_radius}
+    \notready
     \uses{def:twisted_transfer_map}
     Let $A$ represent a pure finitely correlated state in the canonical gauge
     $\E_A(\Id)=\Id$, $\E_A^*(\Lambda)=\Lambda$, with $\Lambda>0$ and
@@ -179,10 +180,23 @@ below; equivalence with physical state symmetry requires additional bridges.
     Cauchy--Schwarz is equivalent to
     (\ref{eq:pgwsvc08_lemma1_condition}); conversely that relation makes
     $e^{i\theta}$ an eigenvalue.  It also gives
-    $\E_A(V^\dagger V)=V^\dagger V$, hence purity forces
-    $V^\dagger V=\Id$.  Applying the same equality argument to two peripheral
-    eigenvectors shows that their quotient is a peripheral fixed direction of
-    $\E_A$; purity makes that direction unique, proving the final assertion.
+    $\E_A(V^\dagger V)=V^\dagger V$.  The fixed space of the pure canonical
+    transfer map is one-dimensional, so
+    $V^\dagger V=c\Id$ for some $c>0$.  Replacing $V$ by
+    $c^{-1/2}V$ makes it unitary without changing the intertwining relation.
+
+    If $V,V'$ are peripheral eigenmatrices with eigenvalues
+    $e^{i\theta},e^{i\theta'}$, respectively, the equality relations give the
+    exact identity
+    \begin{align}
+       \E_A(V^\dagger V')
+       &=e^{i(\theta'-\theta)}V^\dagger V'.
+       \notag
+    \end{align}
+    Purity leaves only the peripheral eigenvalue $1$, hence
+    $\theta'=\theta$ modulo $2\pi$.  The one-dimensional fixed space then
+    gives $V^\dagger V'\in\C\Id$, proving uniqueness of the peripheral
+    eigenvalue and its eigendirection.
 \end{proof}
 
 \begin{theorem}[PGWSVC08 Theorem 1: physical string-order criterion]
@@ -198,27 +212,39 @@ below; equivalence with physical state symmetry requires additional bridges.
        &\tr(V\Lambda A_nA_m^\dagger)&\ne0.
        \label{eq:pgwsvc08_theorem1}
     \end{align}
-    In the present development, the transfer criterion is treated on the
-    stronger one-site-injective surface.  The endpoint-realizability map from
-    arbitrary virtual matrices to physical endpoint operators is not yet
-    formalized, so the literal physical equivalence remains open.
+    The transfer criteria below assume one-site injectivity.  The literal
+    physical equivalence additionally requires that sufficiently long physical
+    endpoint operators realize the needed virtual boundary matrices.
 \end{theorem}
 
 \begin{proof}
-    Lemma~\ref{lem:pgwsvc08_twisted_spectral_radius} shows that a nonzero limit
-    requires a unique peripheral eigenvalue.  If $V$ and $Y$ are its right and
-    left eigenmatrices, the canonical fixed-point identities give
-    $Y=\Lambda V^\dagger$, and the asymptotic correlator factors as
+    Lemma~\ref{lem:pgwsvc08_twisted_spectral_radius} shows that a nonzero
+    limit requires a unique peripheral eigenvalue $e^{i\theta}$.  If $V$ and
+    $Y$ are the corresponding right and left eigenmatrices, then
+    $Y=\Lambda V^\dagger$, and the leading term retains its length-dependent
+    phase:
     \begin{align}
+       S_N(x,y,u)
+       &\longsim e^{iN\theta}
        \tr\!\bigl(Y\E_y(\Id)\bigr)
        \tr\!\bigl(\Lambda\E_x(V)\bigr).
        \notag
     \end{align}
-    Choosing $y=x^\dagger\widetilde u$ reduces nonvanishing to the second
-    condition in (\ref{eq:pgwsvc08_theorem1}); if it holds for $n,m$, take
-    $x=|n\rangle\langle m|$.  The reverse implication follows by the same
-    factorization.  Formal completion requires the physical endpoint bridge
-    stated in the theorem.
+    In the eigenbasis $u=\sum_j e^{i\theta_j}|\widetilde
+    j\rangle\langle\widetilde j|$, shift the string unitary by the
+    peripheral phase,
+    \begin{align}
+       \widetilde u
+       &:=e^{-i\theta}u
+        =\sum_j e^{i(\theta_j-\theta)}
+          |\widetilde j\rangle\langle\widetilde j|.
+       \notag
+    \end{align}
+    Then $\E_{\widetilde u}(V)=V$.  Choosing
+    $y=x^\dagger\widetilde u$ reduces nonvanishing to the second condition
+    in (\ref{eq:pgwsvc08_theorem1}); if it holds for $n,m$, take
+    $x=|n\rangle\langle m|$.  The reverse implication follows from the same
+    phase-retaining factorization and the endpoint-realizability hypothesis.
 \end{proof}
 
 \begin{theorem}[PGWSVC08 Theorem 2: physical state symmetry]
@@ -232,9 +258,9 @@ below; equivalence with physical state symmetry requires additional bridges.
         \rho(\E_u)&=1.
         \notag
     \end{align}
-    The formal theorem below proves the corresponding virtual local-covariance
-    criterion for a one-site-injective tensor; the bridge from that predicate
-    to invariance of all physical reduced states is absent.
+    The theorem below gives the corresponding virtual local-covariance
+    criterion for a one-site-injective tensor.  Passing between that condition
+    and invariance of every physical reduced state is an additional step.
 \end{theorem}
 
 \begin{proof}
@@ -257,7 +283,7 @@ below; equivalence with physical state symmetry requires additional bridges.
     \lean{MPSTensor.IsLocalSymmetry}
     \leanok
     \uses{def:mps_tensor}
-    The formal virtual local-covariance predicate holds for $A,u,\Lambda$ if
+    The virtual local-covariance predicate holds for $A,u,\Lambda$ if
     there exist a unitary
     matrix $V$ and a phase $\mu$ with $|\mu| = 1$ such that
     $V^\dagger \Lambda V = \Lambda$ and, for every physical index~$i$,
@@ -274,7 +300,7 @@ below; equivalence with physical state symmetry requires additional bridges.
     \lean{MPSTensor.HasStringOrder}
     \leanok
     \uses{def:string_order_boundary_param}
-    The formal virtual-boundary nondecay predicate holds for $u$ and
+    The virtual-boundary nondecay predicate holds for $u$ and
     $\Lambda$ if there exist boundary matrices $X,Y$ and a
     positive constant $c > 0$ such that
     $c \le \|R_L(u;X,Y)\|$ for all $L$, where
@@ -486,13 +512,11 @@ below; equivalence with physical state symmetry requires additional bridges.
     \lean{MPSTensor.condC2_imp_condC1_of_injective}
     \leanok
     \uses{def:condC2, def:condC1, def:injective}
-    The formal signature assumes that $A$ is one-site injective, that
-    $VV^\dagger=\Id$, and that the transfer map is covariant.  It concludes
-    that there is $u$ with $uu^\dagger=\Id$ satisfying the local physical
-    intertwining relation.  The injectivity argument is unused, so the proof
-    establishes the stronger implication under covariance and
-    $VV^\dagger=\Id$ alone, although the public declaration still carries the
-    redundant injectivity hypothesis.
+    Assume that $A$ is one-site injective, $VV^\dagger=\Id$, and the
+    transfer map is covariant.  Then there is $u$ with
+    $uu^\dagger=\Id$ satisfying the local physical intertwining relation.
+    In fact, covariance and $VV^\dagger=\Id$ alone imply the conclusion; the
+    injectivity hypothesis is unnecessary.
 \end{theorem}
 
 \begin{proof}
