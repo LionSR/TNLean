@@ -93,6 +93,7 @@ Detailed conventions live in `docs/`. Read the relevant file before working in t
 | [`docs/blueprint_style_guide.md`](docs/blueprint_style_guide.md) | LaTeX conventions, `\lean{}`/`\leanok` tags, notation table, `\uses` rules, blueprint build commands |
 | [`docs/prose_style.md`](docs/prose_style.md) | Prose conventions: no Lean jargon in the leanblueprint, banned software-engineering terms, banned LLM writing patterns (applies to `.tex` AND Lean docstrings/comments) |
 | [`docs/ci-automation.md`](docs/ci-automation.md) | CI workflows, auto-fix loops, iteration caps, commit message conventions |
+| [`docs/lake_build_cache.md`](docs/lake_build_cache.md) | Local Lake cache reuse and changed-module compilation-time limits |
 | [`docs/tactic_development.md`](docs/tactic_development.md) | Tactic self-improvement loop: detecting repeated proof patterns, promotion criteria, design rules for custom tactics/simp sets |
 | [`docs/tactic_patterns.md`](docs/tactic_patterns.md) | Living pattern ledger: promoted tactics, candidate patterns awaiting abstraction |
 
