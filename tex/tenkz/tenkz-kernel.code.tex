@@ -4567,6 +4567,14 @@
           \l__tenkz_kernel_ro_lane_tl
         \quark_if_no_value:NF \l__tenkz_kernel_ro_lane_tl
           {
+            % The drawn route needs one lane coordinate, but its crossing
+            % legs need the coordinate of the face each leg leaves.  Restore
+            % the whole measured box here so an all-side route does not make
+            % a south leg chase its north edge.
+            \prop_get:NnN \l__tenkz_kernel_ro_box_prop {##1}
+              \l__tenkz_kernel_ro_b_tl
+            \exp_last_unbraced:NV \__tenkz_kernel_r_route_box:nnnnn
+              \l__tenkz_kernel_ro_b_tl
             \seq_map_inline:Nn \l__tenkz_kernel_ro_leg_seq
               { \__tenkz_kernel_r_route_leg:nn {####1} {##1} }
           }
@@ -4583,9 +4591,26 @@
       }
     \prop_put:NVn \l__tenkz_kernel_r_legref_prop
       \l__tenkz_kernel_ro_b_tl {#2}
-    % Every lane travels with the axes it is a coordinate in.  Bare lane
-    % scalars from differently turned selections cannot be ordered, so retain
-    % all pairs and let the leg project each one into its own direction.
+    % Every lane travels with the axes it is a coordinate in.  For an
+    % all-side route, choose the edge of the face this leg actually leaves:
+    % north and south are distinct coordinates whenever the hull is not
+    % symmetric.  Bare lane scalars from differently turned selections cannot
+    % be ordered, so retain all pairs and let the leg project each one into
+    % its own direction.
+    \tl_set:Ne \l__tenkz_kernel_ro_side_tl { \tl_item:nn {#1} {1} }
+    \str_case:Vn \l__tenkz_kernel_ro_side_tl
+      {
+        {n}
+          {
+            \tl_set:Ne \l__tenkz_kernel_ro_lane_tl
+              { \fp_eval:n { \l__tenkz_kernel_ro_yb_fp } }
+          }
+        {s}
+          {
+            \tl_set:Ne \l__tenkz_kernel_ro_lane_tl
+              { \fp_eval:n { \l__tenkz_kernel_ro_y_fp } }
+          }
+      }
     \tl_set:Ne \l__tenkz_kernel_ro_row_tl
       {
         {
