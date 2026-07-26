@@ -729,33 +729,33 @@
     canonical-form data. The active listed indices are identified with pairs
     $(\alpha,k)$ consisting of a phase class and a copy, and every active copy
     retains its original nonzero coefficient $\nu_{\alpha,k}$, its bond
-    dimension, a unit phase, and an invertible gauge
-    $X_{\alpha,k}$. The chosen tensors $C_\alpha$ form a basis of normal
-    tensors. On the original listed coordinate space, including every
-    zero-weight coordinate, there are blocks $B_\ell$, still indexed by the
-    original $\ell$. There are also a block-diagonal gauge $G$ and the
-    original coisometry $V$ such that
+    dimension, a unit phase, and an invertible gauge $X_{\alpha,k}$. The
+    chosen tensors $C_\alpha$ form a basis of normal tensors. Adjoin the
+    inactive zero-weight indices to these pairs and call the resulting grouped
+    index set $\mathcal G$. There is an explicit equivalence from the dependent
+    coordinates of $\mathcal G$ to the original flattened listed coordinates.
+    If $T_{\mathrm{grp}}$ is the grouped direct sum, reindexed along this
+    equivalence, then there are a block-diagonal gauge $G$ and the original
+    coisometry $V$ such that
     \begin{align}
         \bigoplus_\ell\mu_\ell A_\ell^i
-        &=G\left(\bigoplus_\ell\mu_\ell B_\ell^i\right)G^{-1},
+        &=GT_{\mathrm{grp}}^iG^{-1},
         \label{eq:cpsv_prop_4_13_active_bnt}
     \end{align}
     and
     \begin{align}
-        A^i
-        &=V^\dagger G\left(\bigoplus_\ell\mu_\ell B_\ell^i\right)G^{-1}V.
+        A^i&=V^\dagger GT_{\mathrm{grp}}^iG^{-1}V.
         \label{eq:cpsv_prop_4_13_active_reconstruction}
     \end{align}
     \begin{align}
         VV^\dagger&=\Id.
         \label{eq:cpsv_prop_4_13_original_coisometry}
     \end{align}
-    For the active index corresponding to $(\alpha,k)$,
-    $B_\ell^i=\zeta_{\alpha,k}C_\alpha^i$ with
-    $|\zeta_{\alpha,k}|=1$; for an inactive index, $\mu_\ell=0$ and
-    $B_\ell=A_\ell$. This is an in-place conjugation, not yet an exact
-    direct sum reindexed by the class-copy pairs. No active-coordinate deletion
-    or selecting coisometry is part of the proved refinement.
+    The active summands of $T_{\mathrm{grp}}$ are
+    $\nu_{\alpha,k}\zeta_{\alpha,k}C_\alpha^i$, with
+    $|\zeta_{\alpha,k}|=1$. Every inactive summand is the original listed block
+    with coefficient zero. Thus the grouped coordinates are exact without
+    deleting the inactive complement or introducing a selecting coisometry.
 
     Let $H^{(N)}$ be the positive operator generated horizontally by
     $\widetilde M$. If
@@ -770,11 +770,9 @@
         \label{eq:cpsv_prop_4_13_first_site}
     \end{align}
     Write $Y_R(P)$ and $Y_C(P)$ for the right and central first-site
-    contractions determined by $P$. The active class-copy equivalence and the
-    in-place conjugation above are now formalized. One must still turn them into
-    an exact class-copy-coordinate direct sum and then prove the
-    representative-grouped form of Lemma~L on the retained coordinates, giving,
-    for every $\alpha$ and $i$,
+    contractions determined by $P$. The exact grouped-coordinate direct sum is
+    now formalized. The next missing step is the representative-grouped form of
+    Lemma~L on these retained coordinates, giving, for every $\alpha$ and $i$,
     \begin{align}
         Y_R(P)C_\alpha^i&=Y_C(P)C_\alpha^i.
         \label{eq:cpsv_prop_4_13_missing_active_separation}
@@ -858,10 +856,10 @@
 
 % Formalization status: the theorem above remains \notready. The theorem below
 % proves the same conclusion from the stronger normalized BNT-refined horizontal
-% form. For literal canonical form, the active class-copy equivalence and
-% in-place conjugation are complete. Explicit class-copy-coordinate regrouping,
-% retained-coordinate Lemma L separation, and passage through the listed gauge
-% and ambient coisometry into the vertical tensor remain open.
+% form. For literal canonical form, the exact class-copy-plus-inactive
+% coordinate regrouping is complete. Retained-coordinate Lemma L separation and
+% passage through the listed gauge and ambient coisometry into the vertical
+% tensor remain open.
 
 \begin{theorem}[BNT-refined horizontal form implies vertical canonical form]
     \label{thm:vertical_cf_of_horizontal_cf}

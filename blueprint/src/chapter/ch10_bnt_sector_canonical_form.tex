@@ -177,13 +177,27 @@ single family.
 % Source anchor: CPSV16 Proposition 4.13, lines 1863--1921.
 \begin{theorem}[Structured active BNT refinement of CPSV canonical form]
     \label{thm:cpsv_canonical_form_active_bnt_refinement}
-    \lean{MPSTensor.CPSVCanonicalFormData.ActiveBNTRefinement}
-    \lean{MPSTensor.CPSVCanonicalFormData.activeClassCopyEquiv}
-    \lean{MPSTensor.CPSVCanonicalFormData.exists_activeBNTRefinement}
+    \lean{MPSTensor.CPSVCanonicalFormData.ActiveBNTRefinement,
+        MPSTensor.CPSVCanonicalFormData.exists_activeBNTRefinement}
+    \lean{MPSTensor.CPSVCanonicalFormData.activeClassCopyEquiv,
+        MPSTensor.CPSVCanonicalFormData.Inactive,
+        MPSTensor.CPSVCanonicalFormData.GroupedIndex,
+        MPSTensor.CPSVCanonicalFormData.groupedIndexEquiv,
+        MPSTensor.CPSVCanonicalFormData.groupedCoordinateEquiv,
+        MPSTensor.CPSVCanonicalFormData.groupedTotalDim_eq}
+    \lean{MPSTensor.CPSVCanonicalFormData.ActiveBNTRefinement.groupedWeight,
+        MPSTensor.CPSVCanonicalFormData.ActiveBNTRefinement.groupedBlocks,
+        MPSTensor.CPSVCanonicalFormData.ActiveBNTRefinement.groupedTensor,
+        MPSTensor.CPSVCanonicalFormData.ActiveBNTRefinement.regroupedTensor_eq_groupedTensor,
+        MPSTensor.CPSVCanonicalFormData.ActiveBNTRefinement.groupedRegroupLetterwise,
+        MPSTensor.CPSVCanonicalFormData.ActiveBNTRefinement.reconstructGrouped}
+    \lean{MPSTensor.blockIndexCoordinateEquiv,
+        MPSTensor.toTensorFromBlocks_eq_reindex_blockDiagonal_equiv}
     \leanok
     \uses{def:cpsv_canonical_form, def:mpv_phase_class_data,
         thm:cpsv_canonical_form_bnt_characterization,
-        thm:cpsv_normal_mpv_phase_gauge, def:global_gauge_of_blocks}
+        thm:cpsv_normal_mpv_phase_gauge, def:block_diagonal_tensor,
+        def:global_gauge_of_blocks}
     Let
     \begin{align}
         A^i&=U^\dagger\left(\bigoplus_{k=1}^{r}\mu_kA_k^i\right)U.
@@ -193,17 +207,21 @@ single family.
         UU^\dagger&=\Id.
         \label{eq:cpsv_active_refinement_coisometry}
     \end{align}
-    be literal CPSV canonical-form data, and put
-    $K_{\mathrm{act}}=\{k:\mu_k\ne0\}$. There are phase classes $j$, copy
-    multiplicities $r_j$, and an equivalence
+    be literal CPSV canonical-form data. Put
+    $K_{\mathrm{act}}=\{k:\mu_k\ne0\}$ and
+    $K_0=\{k:\mu_k=0\}$. There are phase classes $j$, copy multiplicities
+    $r_j$, and an equivalence
     \begin{align}
-        \{(j,q):1\leq q\leq r_j\}&\simeq K_{\mathrm{act}}.
-        \label{eq:cpsv_active_refinement_equiv}
+        \mathcal G
+        :=\{(j,q):1\leq q\leq r_j\}\sqcup K_0
+        &\simeq\{1,\ldots,r\}.
+        \label{eq:cpsv_active_refinement_grouped_equiv}
     \end{align}
-    Each class has a representative $C_j$. If the copy $(j,q)$ corresponds to
-    $k\in K_{\mathrm{act}}$, then its bond dimension equals that of $C_j$ and
-    there are $\zeta_k\in\C$, with $|\zeta_k|=1$, and
-    $X_k\in\GL_{D_k}(\C)$ such that
+    Its active restriction identifies the class-copy pairs with
+    $K_{\mathrm{act}}$. Each class has a representative $C_j$. If the copy
+    $(j,q)$ corresponds to $k\in K_{\mathrm{act}}$, then its bond dimension
+    equals that of $C_j$ and there are $\zeta_k\in\C$, with $|\zeta_k|=1$,
+    and $X_k\in\GL_{D_k}(\C)$ such that
     \begin{align}
         A_k^i&=\zeta_kX_kC_j^iX_k^{-1}.
         \label{eq:cpsv_active_refinement_copy}
@@ -211,40 +229,58 @@ single family.
     The copy retains the original coefficient $\mu_k$, and the representatives
     $(C_j)_j$ form a basis of normal tensors for $A$.
 
-    Define $B_k^i=\zeta_kC_j^i$ and $Y_k=X_k$ on active indices, while
-    $B_k=A_k$ and $Y_k=\Id$ when $\mu_k=0$. These blocks remain indexed by the
-    original listed coordinate $k$; the class-copy equivalence is recorded
-    separately and is not used to reindex the direct sum. After the dimension
-    identifications in~(\ref{eq:cpsv_active_refinement_copy}), the
-    block-diagonal gauge $G=\bigoplus_kY_k$ satisfies, letter by letter,
+    Enumerate $\mathcal G$. The induced equivalence $\Phi$ between the
+    dependent grouped block coordinates and the original flattened listed
+    coordinates gives
+    \begin{align}
+        \sum_{x\in\mathcal G}D_x&=\sum_{k=1}^{r}D_k.
+        \label{eq:cpsv_active_refinement_total_dim}
+    \end{align}
+    For $x=(j,q)$, let $\widehat\mu_x$ be the original weight of that copy and
+    let $\widehat B_x^i=\zeta_xC_j^i$, with the required dimension
+    identification. For $x\in K_0$, let $\widehat\mu_x=0$ and retain the
+    original block $\widehat B_x=A_x$. Define the grouped tensor by
+    \begin{align}
+        T_{\mathrm{grp}}^i
+        &=\operatorname{reindex}_{\Phi}
+          \left(\bigoplus_{x\in\mathcal G}
+          \widehat\mu_x\widehat B_x^i\right).
+        \label{eq:cpsv_active_refinement_grouped_tensor}
+    \end{align}
+    If $G=\bigoplus_kY_k$ is the block-diagonal gauge, with $Y_k=X_k$ on
+    active indices and $Y_k=\Id$ on $K_0$, then, letter by letter,
     \begin{align}
         \bigoplus_{k=1}^{r}\mu_kA_k^i
-        &=G\left(\bigoplus_{k=1}^{r}\mu_kB_k^i\right)G^{-1},
+        &=GT_{\mathrm{grp}}^iG^{-1},
         \label{eq:cpsv_active_refinement_regroup}
     \end{align}
-    and hence
+    and
     \begin{align}
-        A^i
-        &=U^\dagger G\left(\bigoplus_{k=1}^{r}\mu_kB_k^i\right)G^{-1}U.
+        A^i&=U^\dagger GT_{\mathrm{grp}}^iG^{-1}U.
         \label{eq:cpsv_active_refinement_reconstruction}
     \end{align}
-    Thus the direct sum is conjugated in place on its original listed
-    coordinates. The zero-weight coordinates remain literal zero-weight
-    summands. This result neither deletes them nor gives a class-copy-indexed
-    direct-sum identity or a coisometric selector onto the active coordinates.
+    Thus the class-copy coordinates and the inactive complement are explicit,
+    while every zero-weight listed block remains present. No deletion of the
+    inactive coordinates and no coisometric selector onto the active part is
+    asserted.
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{def:mpv_phase_class_data,
         thm:cpsv_canonical_form_bnt_characterization,
-        thm:cpsv_normal_mpv_phase_gauge, def:global_gauge_of_blocks}
+        thm:cpsv_normal_mpv_phase_gauge, def:block_diagonal_tensor,
+        def:global_gauge_of_blocks}
     Enumerate the active indices by their phase classes and choose one normal
     representative in each class. The normal-tensor phase theorem gives the
     dimension equality, unit phase, and invertible gauge in
     (\ref{eq:cpsv_active_refinement_copy}). The BNT characterization proves
-    that the representatives form a basis of normal tensors. Extend the list
-    by leaving every zero-weight block unchanged and assigning it the identity
-    gauge. Block-diagonal conjugation on the original listed coordinates gives
+    that the representatives form a basis of normal tensors. Adjoin the
+    inactive complement to the class-copy order. Reindexing the dependent block
+    coordinates gives $\Phi$ and
+    (\ref{eq:cpsv_active_refinement_total_dim}). The exact heterogeneous
+    block-diagonal reindexing identity identifies the grouped tensor with the
+    representative copies in the original retained-coordinate space.
+    Block-diagonal conjugation then gives
     (\ref{eq:cpsv_active_refinement_regroup}); substitution into
     (\ref{eq:cpsv_active_refinement_original}) gives
     (\ref{eq:cpsv_active_refinement_reconstruction}) with the original
