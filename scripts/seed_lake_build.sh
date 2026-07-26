@@ -40,6 +40,36 @@ validate_root() {
     die "worktree belongs to a different repository: $path"
 }
 
+validate_packages() {
+  local source_root="$1"
+  local package_name
+  local expected_rev
+  local package_root
+  local actual_rev
+  while IFS=$'\t' read -r package_name expected_rev; do
+    package_root="$source_root/.lake/packages/$package_name"
+    test -d "$package_root" && test ! -L "$package_root" ||
+      die "Git package is missing or symlinked: $package_name"
+    actual_rev="$(git -C "$package_root" rev-parse HEAD 2>/dev/null)" ||
+      die "Git package is not a checkout: $package_name"
+    test "$actual_rev" = "$expected_rev" ||
+      die "Git package revision differs from lake-manifest.json: $package_name"
+    test -z "$(git -C "$package_root" status --porcelain --untracked-files=all)" ||
+      die "Git package has local changes: $package_name"
+  done < <(
+    python3 - "$source_root/lake-manifest.json" <<'PY'
+import json
+import sys
+
+with open(sys.argv[1], encoding="utf-8") as manifest_file:
+    manifest = json.load(manifest_file)
+for package in manifest.get("packages", []):
+    if package.get("type") == "git":
+        print(f"{package['name']}\t{package['rev']}")
+PY
+  )
+}
+
 cleanup() {
   if test -n "${STAGING_DIR:-}" && test -d "$STAGING_DIR"; then
     find "$STAGING_DIR" -depth -delete
@@ -81,6 +111,7 @@ validate_root "$TARGET_PATH"
 SOURCE_ROOT="$(canonical_dir "$SOURCE_PATH")"
 TARGET_ROOT="$(canonical_dir "$TARGET_PATH")"
 test "$SOURCE_ROOT" != "$TARGET_ROOT" || die "source and target worktrees must differ"
+test ! -L "$SOURCE_ROOT/.lake" || die "source .lake must not be a symlink"
 test -d "$SOURCE_ROOT/.lake/build" || die "source has no .lake/build"
 test -d "$SOURCE_ROOT/.lake/packages" || die "source has no .lake/packages"
 test ! -e "$TARGET_ROOT/.lake" && test ! -L "$TARGET_ROOT/.lake" ||
@@ -90,6 +121,7 @@ for input in lean-toolchain lake-manifest.json lakefile.toml; do
   cmp -s "$SOURCE_ROOT/$input" "$TARGET_ROOT/$input" ||
     die "build input differs between source and target: $input"
 done
+validate_packages "$SOURCE_ROOT"
 
 if test "$DRY_RUN" = "true"; then
   echo "seed-lake-build: dry-run passed"
@@ -98,8 +130,8 @@ if test "$DRY_RUN" = "true"; then
   exit 0
 fi
 
-STAGING_DIR="$TARGET_ROOT/.lake.seed.$$"
-/bin/cp -cR "$SOURCE_ROOT/.lake" "$STAGING_DIR"
-mv "$STAGING_DIR" "$TARGET_ROOT/.lake"
+STAGING_DIR="$TARGET_ROOT/.lake"
+mkdir "$STAGING_DIR" 2>/dev/null || die "target already has .lake"
+/bin/cp -cR "$SOURCE_ROOT/.lake/." "$STAGING_DIR"
 STAGING_DIR=""
 echo "seed-lake-build: cloned $SOURCE_ROOT/.lake into $TARGET_ROOT/.lake"
