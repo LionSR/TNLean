@@ -90,6 +90,16 @@ abstracted — record why, so it is not re-proposed).
 
 ## Completed refactors
 
+### Anticommuting-involution projective multiplication
+- **Pattern:** split both `Z₂ × Z₂` inputs into sixteen cases, expand two concrete
+  `2 × 2` matrices entrywise, and normalize every resulting scalar expression.
+- **Reuse:** `mul_of_anticommuting_involutions` in `MPS/Examples/ZMod2.lean`
+  proves the multiplication table once from the two involution laws and their
+  anticommutation law. `clusterProjRep` now supplies only those three relations.
+- **Result:** the concrete sixteen-case proof in `MPS/Examples/Cluster.lean`
+  is replaced by one exact application; its previously profiled 31-second
+  declaration falls below the 200-millisecond profiler threshold.
+
 ### Support left-right and relative-modular intertwining
 - **Pattern:** `supportRelativeModular_sourceB_solution` and
   `supportLeftRightSupportInv_mulVec_sourceB_eq_projected_relativeModular`
