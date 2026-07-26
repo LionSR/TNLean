@@ -58,7 +58,7 @@ Proposition~4.13 implication.
 
 \section{Formal proof}
 
-The formal proof first establishes the literal horizontal canonical-form
+The formal proof first establishes the normalized BNT-refined horizontal-form
 reduction described below.\footnote{Formal declaration:
 \leanid{MPOTensor.IsHorizontalCF.exists\_not\_commute\_of\_displaced} in
 \doclink{TNLean/MPS/MPDO/HorizontalBNT}.}  Suppose, to the contrary, that
@@ -67,7 +67,7 @@ $Q_1$ commutes with $H^{(N+1)}$ for every $N$.  Idempotence of $Q$ gives
   Q_1H^{(N+1)}=Q_1H^{(N+1)}Q_1.
 \]
 After writing these as first-site contractions of the doubled-index tensor,
-the literal representative-grouped Lemma~L yields
+the normalized BNT-refined representative-grouped Lemma~L yields
 $Q\widetilde M=Q\widetilde MQ$, contradicting displacement.
 
 The cyclic decomposition and its letter shift are formalized in

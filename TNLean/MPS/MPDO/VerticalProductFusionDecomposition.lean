@@ -216,10 +216,6 @@ private theorem groupedFusionCoisometry_reconstruction
 /-- The positive original-label corners determine the fusion coisometries of
 the BNT family.
 
-**Scope restriction (BNT-refined horizontal form):** `IsHorizontalCF` is
-stronger than the literal CPSV canonical form used in Appendix C.4 through
-Proposition 4.13; see `docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex`.
-
 **Scope restriction (active product BNT):** Only active product corners are
 retained.  A BNT label absent from a fixed product pair has zero fusion
 multiplicity.  Documented in
