@@ -232,14 +232,6 @@
 % The self-overlap and no-sector-match theorems are already formal statements;
 % the full periodic overlap dichotomy still requires assembling these pieces
 % with the remaining sector-match argument.
-\begin{theorem}[Self-overlap along period multiples]\label{thm:periodic_self_overlap_tendsto}
-    \lean{MPSTensor.periodicSelfOverlap_tendsto}
-    \leanok
-    \uses{def:periodic_tensor}
-    If $A$ is $m$-periodic, then
-    $\lim_{N\to\infty}O_{AA}(mN)=m$.
-\end{theorem}
-
 \begin{theorem}[Different periods imply asymptotic orthogonality]%
     \label{thm:periodic_overlap_zero_ne_period}
     \lean{MPSTensor.periodicOverlap_tendsto_zero_of_ne_period}

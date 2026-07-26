@@ -183,54 +183,6 @@ single family.
     not derivable from the per-block normality hypotheses alone.
 \end{definition}
 
-\begin{theorem}[Self-overlap along peripheral-period multiples]
-    \label{thm:bnt_periodic_self_overlap_tendsto}
-    \lean{MPSTensor.periodicSelfOverlap_tendsto}
-    \leanok
-    \uses{def:mpv_overlap,def:irreducible_tensor,def:left_canonical_tensor,
-        def:peripheral_eigenvalues}
-    Let $D>0$ and $m>0$. Let $A$ be a left-canonical irreducible MPS tensor
-    with bond dimension $D$, and suppose that the peripheral eigenvalues of
-    its transfer map are exactly $\{z\in\C:z^m=1\}$. Then
-    $O_{AA}(mn)\longrightarrow m$.
-\end{theorem}
-
-\begin{theorem}[Primitivity and normality from normalized self-overlap]
-    \label{thm:bnt_primitivity_normality_from_self_overlap}
-    \lean{MPSTensor.isPrimitive_and_isNormal_of_irreducible_leftCanonical_selfOverlap_tendsto_one}
-    \leanok
-    \uses{def:irreducible_tensor, def:mpv_overlap, def:normal,
-        thm:bnt_periodic_self_overlap_tendsto, thm:normal_tp_primitive_irred}
-    Let $A$ be an irreducible left-canonical tensor of positive bond dimension.
-    If $O_{AA}(N)\longrightarrow1$, then the transfer map of $A$ is primitive
-    and $A$ is normal.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    \uses{thm:bnt_periodic_self_overlap_tendsto,
-        thm:normal_tp_primitive_irred}
-    Let $m$ be the peripheral period. Along its multiples,
-    $O_{AA}(mn)\longrightarrow m$. The assumed full limit gives
-    $O_{AA}(mn)\to1$, hence $m=1$. The transfer map is therefore primitive,
-    and irreducibility and left-canonicality give normality.
-\end{proof}
-
-\begin{corollary}[Normality from normalized self-overlap]
-    \label{thm:bnt_normality_from_self_overlap}
-    \lean{MPSTensor.isNormal_of_irreducible_leftCanonical_selfOverlap_tendsto_one}
-    \leanok
-    \uses{thm:bnt_primitivity_normality_from_self_overlap}
-    Let $A$ be an irreducible left-canonical tensor of positive bond dimension.
-    If $O_{AA}(N)\to1$, then $A$ is normal.
-\end{corollary}
-
-\begin{proof}
-    \leanok
-    This is the normality conclusion of
-    Theorem~\ref{thm:bnt_primitivity_normality_from_self_overlap}.
-\end{proof}
-
 \begin{corollary}[Basis blocks of a BNT canonical form are normal]
     \label{cor:sector_bnt_cf_basis_normal}
     \lean{MPSTensor.IsBNTCanonicalForm.basis_isNormal}
