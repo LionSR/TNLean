@@ -16,7 +16,9 @@ identity map on a finite matrix factor.
 ## Main results
 
 * `Matrix.tensorMapIdLM_isKrausCPTP`: tensoring a Kraus-form channel with the
-  identity preserves its Kraus-form channel structure.
+  identity on the second factor preserves its Kraus-form channel structure.
+* `Matrix.idTensorMapLM_isKrausCPTP`: tensoring the identity on the first factor
+  with a Kraus-form channel preserves its Kraus-form channel structure.
 
 This is the finite-dimensional localization operation used when a physical
 channel acts on one site of a blocked matrix-product density operator while
@@ -63,5 +65,21 @@ theorem tensorMapIdLM_isKrausCPTP
     rw [← map_sum ((Matrix.kroneckerBilinear (R := ℂ)).flip
       (1 : Matrix δ δ ℂ)), hAtp]
     exact Matrix.one_kronecker_one
+
+/-- Tensoring the identity on a finite matrix factor with a trace-preserving
+completely positive matrix map preserves the trace-preserving completely
+positive property. -/
+theorem idTensorMapLM_isKrausCPTP
+    {S : Matrix α α ℂ →ₗ[ℂ] Matrix β β ℂ}
+    (hS : IsKrausCPTP S) :
+    IsKrausCPTP (idTensorMapLM (δ := δ) S) := by
+  change IsKrausCPTP
+    (equivReindexMap (Equiv.prodComm β δ) ∘ₗ tensorMapIdLM S ∘ₗ
+      equivReindexMap (Equiv.prodComm δ α))
+  exact isKrausCPTP_comp
+    (isKrausCPTP_comp
+      (equivReindexMap_isKrausCPTP (Equiv.prodComm δ α))
+      (tensorMapIdLM_isKrausCPTP hS))
+    (equivReindexMap_isKrausCPTP (Equiv.prodComm β δ))
 
 end Matrix
