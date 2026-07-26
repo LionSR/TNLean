@@ -104,8 +104,10 @@ three stages visible in the source:
 \end{enumerate}
 The target statement is now in place: the vertical canonical form is stated
 on the vertically viewed tensor, whose letters are indexed by the horizontal
-bond pair and whose matrices act on the physical space, in the isometry form
-of the source; an earlier statement on the diagonal tensor $i\mapsto M^{ii}$
+bond pair and whose matrices act on the physical space, in the rectangular
+orientation of the source.  In that orientation the displayed map is a
+coisometry onto the retained sectors; an earlier statement on the diagonal
+tensor $i\mapsto M^{ii}$
 has been removed.  The definitional realignment is recorded in
 \path{cpgsv17_vertical_tensor_definition.tex}.
 
@@ -214,7 +216,9 @@ representative at length zero.  The resulting orthogonal sector maps are
 assembled into the final coisometry in
 \path{TNLean/MPS/MPDO/VerticalCanonicalForm.lean}.  Together with the MPDO
 positivity hypothesis, the normalized BNT-refined horizontal form therefore
-gives the vertical canonical-form identities.
+gives the displayed vertical identity and exact reconstruction.  The source
+prints the former; the latter is implicit in its assertion that the vertical
+tensor is itself in canonical form and is not displayed as a separate formula.
 
 \paragraph{Verdict.}
 The horizontal-to-vertical implication is complete under the normalized

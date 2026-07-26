@@ -35,10 +35,12 @@ where the matrices $\mu_\alpha$ are positive and diagonal and the tensors
 $M_\alpha$ form a basis of normal tensors (source lines~943--951 and
 1863--1870).
 
-Let $s$ be the dimension of the right-hand side of
-\eqref{eq:vertical-form}. In the displayed orientation,
-$U:\mathbb C^D\to\mathbb C^s$ maps the original physical space onto the
-retained nonzero sector space. Consequently
+Let $d$ be the original physical dimension and let $s$ be the dimension of
+the right-hand side of \eqref{eq:vertical-form}.  When the generic
+canonical-form dimension bound \eqref{eq:dimension-bound} is applied
+vertically, it reads $s\leq d$.  In the displayed orientation,
+$U:\mathbb C^d\to\mathbb C^s$ maps the physical space onto the retained
+nonzero sector space. Consequently
 \begin{equation}
   UU^\dagger=I_s,
   \qquad
@@ -46,9 +48,11 @@ retained nonzero sector space. Consequently
   \label{eq:coisometry}
 \end{equation}
 where $P$ is the support projection of the nonzero sectors. Equality
-$U^\dagger U=I_D$ holds only when there is no zero complement. It is not part
-of the hypotheses or conclusion of Proposition~4.13.  The assertion that the
-discarded complement is a zero sector is the reconstruction identity
+$U^\dagger U=I_d$ holds only when there is no zero complement. It is not part
+of the hypotheses or conclusion of Proposition~4.13.  The source does not
+print a reverse identity separately.  Its preceding assertion that
+$\widetilde M$ is in canonical form says that the discarded complement is a
+zero sector, which is recorded explicitly by the reconstruction identity
 \begin{equation}
   \widetilde M
   =U^\dagger\left(\bigoplus_\alpha
@@ -166,7 +170,9 @@ asserted.
 The vertical canonical-form predicate now requires $UU^\dagger=I_s$ in the
 orientation of \eqref{eq:vertical-form}, together with
 \eqref{eq:reconstruction}. This is the source-faithful conclusion compatible
-with \eqref{eq:dimension-bound}: the retained part is represented
+with \eqref{eq:dimension-bound}: the displayed compression is printed in the
+proposition, while reconstruction records its preceding canonical-form claim.
+The retained part is represented
 rectangularly, while the omitted part is required to be zero. No full-support
 assumption is added to that conclusion.  The theorem in
 \path{TNLean/MPS/MPDO/VerticalCanonicalForm.lean}.\footnote{The corresponding
