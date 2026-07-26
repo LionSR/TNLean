@@ -49,8 +49,9 @@ one noncommuting length.  Normalized BNT-refined horizontal form supplies such
 a length: otherwise the representative-grouped Lemma L would turn simultaneous
 commutation into the forbidden letter-level invariance.  At that same length,
 full-period word invariance gives commutation with $[H^{(N)}]^p$, and
-positivity removes the power.  This proves the periodic-sector step on the
-stronger BNT-refined surface, not from the literal source hypotheses; see
+positivity removes the power.  This proves the periodic-sector step under
+normalized BNT-refined horizontal form, which is stronger than the literal
+CPSV canonical-form hypothesis; see
 `docs/paper-gaps/cpgsv17_periodic_sector_projector.tex`.
 
 ## Main results

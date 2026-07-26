@@ -8,19 +8,21 @@ import TNLean.MPS.MPDO.VerticalBNT
 /-!
 # Nonemptiness of the retained vertical phase classes
 
-This file proves that the vertical decomposition of a horizontally canonical
-matrix product density operator contains a nonzero sector.  The literal
-reconstruction of the vertical tensor then shows that the finite partition of
-the retained sectors into matrix-product-vector phase classes is nonempty.
+This file proves that the vertical decomposition of a matrix product density
+operator in normalized BNT-refined horizontal form contains a nonzero sector.
+This horizontal hypothesis is stronger than literal CPSV canonical form.  The
+literal reconstruction of the vertical tensor then shows that the finite
+partition of the retained sectors into matrix-product-vector phase classes is
+nonempty.
 
 This is the nonemptiness observation used in arXiv:1606.00608, Proposition
 `prop:vertical`, lines 1895--1902.
 
 ## Main result
 
-* `IsHorizontalCF.exists_nonempty_verticalBNTGrouping`: a horizontally
-  canonical matrix product density operator has a retained vertical
-  decomposition whose phase-class family is nonempty.
+* `IsHorizontalCF.exists_nonempty_verticalBNTGrouping`: a matrix product
+  density operator in normalized BNT-refined horizontal form has a retained
+  vertical decomposition whose phase-class family is nonempty.
 -/
 
 open scoped Matrix BigOperators ComplexOrder
@@ -74,7 +76,10 @@ private theorem bntCanonicalForm_toTensor_ne_zero
       Matrix.reindex_apply, Matrix.blockDiagonal'_apply_eq] using hentry.symm
   exact (mul_eq_zero.mp this).resolve_left hweight
 
-/-- The vertical tensor of a horizontally canonical MPO tensor is nonzero.
+/-- The vertical tensor of an MPO tensor in normalized BNT-refined horizontal
+form is nonzero.
+
+This horizontal hypothesis is stronger than literal CPSV canonical form.
 
 Source: arXiv:1606.00608, canonical form at lines 237--246 and Proposition
 `prop:vertical`, lines 1895--1902. -/
@@ -108,10 +113,11 @@ theorem IsHorizontalCF.verticalTensor_ne_zero
         (G : Matrix (Fin S.totalDim) (Fin S.totalDim) ℂ)) hi
   simpa [Matrix.mul_assoc] using hcancel
 
-/-- A horizontally canonical matrix product density operator has a nonempty
-family of retained vertical phase classes.
+/-- A matrix product density operator in normalized BNT-refined horizontal form
+has a nonempty family of retained vertical phase classes.
 
-The retained normal sectors reconstruct every vertical letter.  Since the
+This horizontal hypothesis is stronger than literal CPSV canonical form.  The
+retained normal sectors reconstruct every vertical letter.  Since the
 vertical tensor is nonzero, the sector index set is nonempty.  Its partition
 into matrix-product-vector phase classes is therefore nonempty as well.
 
