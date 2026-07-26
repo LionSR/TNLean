@@ -3,6 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import Mathlib.Analysis.CStarAlgebra.Classes
+import Mathlib.Analysis.CStarAlgebra.Matrix
 import Mathlib.Analysis.Matrix.HermitianFunctionalCalculus
 import Mathlib.LinearAlgebra.Matrix.Reindex
 
@@ -26,7 +28,10 @@ quantum relative-entropy stack.
   calculus under reindexing.
 * `Matrix.cfc_conj_unitary` — covariance of the continuous functional calculus
   under conjugation by a unitary.
+* `Matrix.cfc_diagonal` — entrywise functional calculus for real diagonal matrices.
 -/
+
+open scoped Matrix.Norms.L2Operator
 
 namespace Matrix
 
@@ -99,5 +104,91 @@ theorem cfc_conj_unitary {A : Matrix n n ℂ} (hA : A.IsHermitian) (f : ℝ → 
   have hconj := StarAlgHomClass.map_cfc φ f A hcont hcontφ hsa hsa'
   rw [happ, happ] at hconj
   exact hconj.symm
+
+section Diagonal
+
+variable {n : Type*} [Fintype n] [DecidableEq n]
+
+/-- The `C⋆`-algebra structure on matrices from the `L²`-operator norm, used
+locally to identify the abstract continuous functional calculus on a diagonal
+matrix. -/
+noncomputable local instance diagonalMatrixCStarAlgebra : CStarAlgebra (Matrix n n ℂ) where
+
+/-- The real spectrum of a real-valued diagonal matrix is the range of its diagonal. -/
+private lemma spectrum_real_ofReal_diagonal (g : n → ℝ) :
+    spectrum ℝ (diagonal (fun i => (g i : ℂ))) = Set.range g := by
+  ext x
+  rw [← spectrum.algebraMap_mem_iff (S := ℂ), Complex.coe_algebraMap, spectrum_diagonal]
+  simp only [Set.mem_range, Complex.ofReal_inj]
+
+/-- Membership of a diagonal entry in the real spectrum of the diagonal matrix. -/
+private lemma mem_spectrum_real_ofReal_diagonal (g : n → ℝ) (i : n) :
+    g i ∈ spectrum ℝ (diagonal (fun i => (g i : ℂ))) :=
+  (spectrum_real_ofReal_diagonal g).symm ▸ ⟨i, rfl⟩
+
+/-- The star-algebra homomorphism
+`C(spectrum ℝ (diagonal (g·)), ℝ) →⋆ₐ[ℝ] Matrix n n ℂ` that evaluates a function
+along the diagonal entries. It coincides with `cfcHom` of the
+diagonal matrix by uniqueness, which is the content of `cfc_diagonal`. -/
+private noncomputable def diagonalCfcAux (g : n → ℝ) :
+    C(spectrum ℝ (diagonal (fun i => (g i : ℂ))), ℝ) →⋆ₐ[ℝ] Matrix n n ℂ where
+  toFun p := diagonal fun i => ((p ⟨g i, mem_spectrum_real_ofReal_diagonal g i⟩ : ℝ) : ℂ)
+  map_zero' := by simp only [ContinuousMap.coe_zero, Pi.zero_apply, Complex.ofReal_zero,
+    diagonal_zero]
+  map_one' := by
+    simp only [ContinuousMap.coe_one, Pi.one_apply, Complex.ofReal_one, diagonal_one]
+  map_mul' p q := by
+    simp only [ContinuousMap.coe_mul, Pi.mul_apply, Complex.ofReal_mul, diagonal_mul_diagonal]
+  map_add' p q := by
+    simp only [ContinuousMap.coe_add, Pi.add_apply, Complex.ofReal_add, diagonal_add]
+  commutes' r := by
+    change diagonal (fun _ => ((r : ℝ) : ℂ)) = algebraMap ℝ (Matrix n n ℂ) r
+    rw [Matrix.algebraMap_eq_diagonal]
+    rfl
+  map_star' p := by
+    show diagonal (fun i => (((star p) ⟨g i, _⟩ : ℝ) : ℂ))
+      = star (diagonal (fun i => ((p ⟨g i, _⟩ : ℝ) : ℂ)))
+    rw [star_eq_conjTranspose, diagonal_conjTranspose]
+    congr 1; ext i
+    simp only [Pi.star_apply, RCLike.star_def, star_trivial, Complex.conj_ofReal]
+
+/-- **Continuous functional calculus of a real-valued diagonal matrix.** For a
+real-valued diagonal `diagonal (fun i => (g i : ℂ))` and a function `f` continuous on the
+range of the entries, the calculus acts entrywise:
+`cfc f (diagonal (g·)) = diagonal (fun i => (f (g i) : ℂ))`. -/
+theorem cfc_diagonal (g : n → ℝ) (f : ℝ → ℝ)
+    (hf : ContinuousOn f (Set.range g) := by cfc_cont_tac) :
+    cfc f (diagonal (fun i => (g i : ℂ)))
+      = diagonal (fun i => (f (g i) : ℂ)) := by
+  set D : Matrix n n ℂ := diagonal (fun i => (g i : ℂ)) with hD
+  have hsa : IsSelfAdjoint D := by
+    rw [isSelfAdjoint_iff, hD, star_eq_conjTranspose, diagonal_conjTranspose]
+    congr 1; ext i; simp [Complex.conj_ofReal]
+  have hfspec : ContinuousOn f (spectrum ℝ D) := by
+    rw [hD, spectrum_real_ofReal_diagonal]; exact hf
+  -- The hand-built map agrees with `cfcHom` by uniqueness.
+  have hfindim : FiniteDimensional ℝ C(spectrum ℝ D, ℝ) :=
+    FiniteDimensional.of_injective (ContinuousMap.coeFnLinearMap ℝ (M := ℝ))
+      DFunLike.coe_injective
+  have hcont : Continuous (diagonalCfcAux g) := by
+    have : Continuous ((diagonalCfcAux g).toLinearMap) :=
+      LinearMap.continuous_of_finiteDimensional _
+    exact this
+  have hid : diagonalCfcAux g ((ContinuousMap.id ℝ).restrict (spectrum ℝ D)) = D := by
+    ext i j
+    rcases eq_or_ne i j with rfl | hij
+    · simp only [diagonalCfcAux, ContinuousMap.restrict_apply, ContinuousMap.id_apply,
+        StarAlgHom.coe_mk', AlgHom.coe_mk, RingHom.coe_mk, MonoidHom.coe_mk, OneHom.coe_mk,
+        diagonal_apply_eq, hD]
+    · simp only [diagonalCfcAux, StarAlgHom.coe_mk', AlgHom.coe_mk, RingHom.coe_mk,
+        MonoidHom.coe_mk, OneHom.coe_mk, diagonal_apply_ne _ hij, hD]
+  have hHom := cfcHom_eq_of_continuous_of_map_id (a := D) hsa (diagonalCfcAux g) hcont hid
+  rw [cfc_apply f D hsa hfspec, hHom]
+  ext i j
+  rcases eq_or_ne i j with rfl | hij
+  · simp [diagonalCfcAux, diagonal_apply_eq]
+  · simp [diagonalCfcAux, diagonal_apply_ne _ hij]
+
+end Diagonal
 
 end Matrix
