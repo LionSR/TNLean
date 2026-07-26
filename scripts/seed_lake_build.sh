@@ -17,7 +17,7 @@ die() {
 }
 
 canonical_dir() {
-  (cd "$1" && pwd -P)
+  (CDPATH='' cd -- "$1" && pwd -P)
 }
 
 worktree_root() {
