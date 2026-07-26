@@ -143,7 +143,9 @@ test -d "$SOURCE_ROOT/.lake/build" && test ! -L "$SOURCE_ROOT/.lake/build" ||
 test -d "$SOURCE_ROOT/.lake/packages" && test ! -L "$SOURCE_ROOT/.lake/packages" ||
   die "source has no regular .lake/packages"
 NESTED_CACHE_LINK="$(
-  find "$SOURCE_ROOT/.lake" -type l \( -name build -o -name packages \) -print -quit
+  find "$SOURCE_ROOT/.lake" -type l \
+    \( -name .lake -o -name build -o -name packages -o -path '*/.lake/build/*' \) \
+    -print -quit
 )"
 test -z "$NESTED_CACHE_LINK" ||
   die "source contains a symlinked Lake cache directory: $NESTED_CACHE_LINK"

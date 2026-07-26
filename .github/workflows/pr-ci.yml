@@ -24,6 +24,8 @@ on:
       - 'scripts/test_lean_file_policies.py'
       - 'scripts/lake_build_hotspots.py'
       - 'scripts/test_lake_build_hotspots.py'
+      - 'scripts/seed_lake_build.sh'
+      - 'scripts/test_seed_lake_build.sh'
       - 'docs/ci-automation.md'
       - 'docs/CONTRIBUTING.md'
       - '.github/workflows/pr-ci.yml'
@@ -82,6 +84,8 @@ on:
       - 'scripts/test_lean_file_policies.py'
       - 'scripts/lake_build_hotspots.py'
       - 'scripts/test_lake_build_hotspots.py'
+      - 'scripts/seed_lake_build.sh'
+      - 'scripts/test_seed_lake_build.sh'
       - 'docs/ci-automation.md'
       - 'docs/CONTRIBUTING.md'
       - '.github/workflows/pr-ci.yml'
@@ -177,6 +181,8 @@ jobs:
               - 'scripts/test_lean_file_policies.py'
               - 'scripts/lake_build_hotspots.py'
               - 'scripts/test_lake_build_hotspots.py'
+              - 'scripts/seed_lake_build.sh'
+              - 'scripts/test_seed_lake_build.sh'
               - 'docs/ci-automation.md'
               - 'docs/CONTRIBUTING.md'
             blueprint:
@@ -447,6 +453,9 @@ jobs:
 
       - name: Test Lean compilation-time checker
         run: python3 scripts/test_lake_build_hotspots.py
+
+      - name: Check local cache-seeding shell syntax
+        run: bash -n scripts/seed_lake_build.sh scripts/test_seed_lake_build.sh
 
       # Ordinary Lean modules over 1000 lines fail. The exact root aggregator
       # exemption is accepted only while its uncommented content is import-only.
