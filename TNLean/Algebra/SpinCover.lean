@@ -184,7 +184,7 @@ def spinHalfCover : GL (Fin 2) ℂ →* Matrix (Fin 3) (Fin 3) ℂ where
 lemma pauliConjAd_swap (U : GL (Fin 2) ℂ) (i j : Fin 3) :
     pauliConjAd U i j = pauliConjAd U⁻¹ j i := by
   simp only [pauliConjAd, inv_inv]
-  congr 1
+  apply congrArg (fun z : ℂ => z / 2)
   rw [show pauli i * (U : Matrix (Fin 2) (Fin 2) ℂ) * pauli j *
       ((U⁻¹ : GL (Fin 2) ℂ) : Matrix (Fin 2) (Fin 2) ℂ) =
       (pauli i * (U : Matrix (Fin 2) (Fin 2) ℂ)) *
@@ -422,20 +422,21 @@ the angle comes from the argument of the corresponding unit complex number. -/
 lemma exists_cos_sin {c s : ℝ} (h : c ^ 2 + s ^ 2 = 1) :
     ∃ θ : ℝ, Real.cos θ = c ∧ Real.sin θ = s := by
   have hn : ‖(⟨c, s⟩ : ℂ)‖ = 1 := by
-    rw [Complex.norm_def, Complex.normSq_mk, show c * c + s * s = 1 by nlinarith [h]]; simp
+    rw [Complex.norm_def, Complex.normSq_mk,
+      show c * c + s * s = 1 by nlinarith only [h]]
+    simp
   have hz : (⟨c, s⟩ : ℂ) ≠ 0 := by
     intro hc; rw [Complex.ext_iff] at hc
-    simp only [Complex.zero_re, Complex.zero_im] at hc; nlinarith [hc.1, hc.2]
+    simp only [Complex.zero_re, Complex.zero_im] at hc
+    nlinarith only [h, hc.1, hc.2]
   exact ⟨Complex.arg (⟨c, s⟩ : ℂ), by rw [Complex.cos_arg hz, hn]; simp,
     by rw [Complex.sin_arg, hn]; simp⟩
 
-set_option maxHeartbeats 1100000 in
 -- The Euler decomposition verifies all nine entries of a three-by-three rotation
 -- against the product of three coordinate rotations, each closed by a polynomial
--- certificate over the orthonormality and cofactor relations; this exceeds the
--- default elaboration budget.  Ordering the cofactor `linear_combination` branches
--- ahead of the `nlinarith` fallback, and trimming the `nlinarith` hints to the
--- three relations it needs, keeps the budget well below twice the default.
+-- certificate over the orthonormality and cofactor relations.  Arithmetic calls
+-- are restricted with `only` to avoid passing the full matrix context to each
+-- normalization.
 lemma so3_euler_decomp (M : Matrix (Fin 3) (Fin 3) ℝ)
     (hM : M ∈ Matrix.specialOrthogonalGroup (Fin 3) ℝ) :
     ∃ α β γ : ℝ, M = rotZ α * rotX β * rotZ γ := by
@@ -465,46 +466,54 @@ lemma so3_euler_decomp (M : Matrix (Fin 3) (Fin 3) ℝ)
   have cof00 : M 0 0 = M 1 1 * M 2 2 - M 1 2 * M 2 1 := by
     have := cof 0 0; simp only [Matrix.adjugate_fin_three, Matrix.of_apply, Matrix.cons_val',
       Matrix.cons_val_zero, Matrix.cons_val_fin_one, Matrix.empty_val'] at this
-    linarith [this]
+    linarith only [this]
   have cof01 : M 1 0 = -(M 0 1 * M 2 2) + M 0 2 * M 2 1 := by
     have := cof 0 1; simp only [Matrix.adjugate_fin_three, Matrix.of_apply, Matrix.cons_val',
       Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.cons_val_fin_one,
       Matrix.empty_val'] at this
-    linarith [this]
+    linarith only [this]
   have cof10 : M 0 1 = -(M 1 0 * M 2 2) + M 1 2 * M 2 0 := by
     have := cof 1 0; simp only [Matrix.adjugate_fin_three, Matrix.of_apply, Matrix.cons_val',
       Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.cons_val_fin_one,
       Matrix.empty_val'] at this
-    linarith [this]
+    linarith only [this]
   have cof11 : M 1 1 = M 0 0 * M 2 2 - M 0 2 * M 2 0 := by
     have := cof 1 1; simp only [Matrix.adjugate_fin_three, Matrix.of_apply, Matrix.cons_val',
       Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.cons_val_fin_one,
       Matrix.empty_val'] at this
-    linarith [this]
+    linarith only [this]
   -- norms of relevant rows/cols
   have hr22 : M 2 0 * M 2 0 + M 2 1 * M 2 1 + M 2 2 * M 2 2 = 1 := by
     have := row 2 2; rwa [if_pos rfl] at this
   have hc22 : M 0 2 * M 0 2 + M 1 2 * M 1 2 + M 2 2 * M 2 2 = 1 := by
     have := col 2 2; rwa [if_pos rfl] at this
   have hbound : M 2 2 ^ 2 ≤ 1 := by
-    nlinarith [hr22, sq_nonneg (M 2 0), sq_nonneg (M 2 1)]
+    nlinarith only [hr22, sq_nonneg (M 2 0), sq_nonneg (M 2 1)]
   set sβ := Real.sqrt (1 - M 2 2 ^ 2) with hsβdef
   have hsβsq : sβ ^ 2 = 1 - M 2 2 ^ 2 := by
-    rw [hsβdef, Real.sq_sqrt (by nlinarith [hbound])]
-  obtain ⟨β, hcosβ, hsinβ⟩ := exists_cos_sin (c := M 2 2) (s := sβ) (by nlinarith [hsβsq])
+    rw [hsβdef, Real.sq_sqrt (by nlinarith only [hbound])]
+  obtain ⟨β, hcosβ, hsinβ⟩ :=
+    exists_cos_sin (c := M 2 2) (s := sβ) (by nlinarith only [hsβsq])
   by_cases hs : sβ = 0
   · -- gimbal lock: sin β = 0, so M 2 2 = ±1 and the off-axis entries vanish
     have h22sq : M 2 2 ^ 2 = 1 := by
       have : sβ ^ 2 = 0 := by rw [hs]; ring
-      rw [this] at hsβsq; linarith [hsβsq]
-    have hz20 : M 2 0 = 0 := by nlinarith [hr22, h22sq, sq_nonneg (M 2 0), sq_nonneg (M 2 1)]
-    have hz21 : M 2 1 = 0 := by nlinarith [hr22, h22sq, sq_nonneg (M 2 0), sq_nonneg (M 2 1)]
-    have hz02 : M 0 2 = 0 := by nlinarith [hc22, h22sq, sq_nonneg (M 0 2), sq_nonneg (M 1 2)]
-    have hz12 : M 1 2 = 0 := by nlinarith [hc22, h22sq, sq_nonneg (M 0 2), sq_nonneg (M 1 2)]
+      rw [this] at hsβsq
+      linarith only [hsβsq]
+    have hz20 : M 2 0 = 0 := by
+      nlinarith only [hr22, h22sq, sq_nonneg (M 2 0), sq_nonneg (M 2 1)]
+    have hz21 : M 2 1 = 0 := by
+      nlinarith only [hr22, h22sq, sq_nonneg (M 2 0), sq_nonneg (M 2 1)]
+    have hz02 : M 0 2 = 0 := by
+      nlinarith only [hc22, h22sq, sq_nonneg (M 0 2), sq_nonneg (M 1 2)]
+    have hz12 : M 1 2 = 0 := by
+      nlinarith only [hc22, h22sq, sq_nonneg (M 0 2), sq_nonneg (M 1 2)]
     have hcol0 : M 0 0 ^ 2 + M 1 0 ^ 2 = 1 := by
-      have := col 0 0; rw [if_pos rfl] at this; nlinarith [this, hz20]
+      have := col 0 0
+      rw [if_pos rfl] at this
+      nlinarith only [this, hz20]
     obtain ⟨α, hcosα, hsinα⟩ :=
-      exists_cos_sin (c := M 0 0) (s := M 1 0) (by nlinarith [hcol0])
+      exists_cos_sin (c := M 0 0) (s := M 1 0) (by nlinarith only [hcol0])
     refine ⟨α, β, 0, ?_⟩
     ext i j
     fin_cases i <;> fin_cases j <;>
@@ -521,10 +530,10 @@ lemma so3_euler_decomp (M : Matrix (Fin 3) (Fin 3) ℝ)
   · have hsβne : sβ ≠ 0 := hs
     obtain ⟨α, hcosα, hsinα⟩ := exists_cos_sin (c := -M 1 2 / sβ) (s := M 0 2 / sβ) (by
       rw [div_pow, div_pow, ← add_div, div_eq_one_iff_eq (pow_ne_zero 2 hsβne)]
-      nlinarith [hc22, hsβsq])
+      nlinarith only [hc22, hsβsq])
     obtain ⟨γ, hcosγ, hsinγ⟩ := exists_cos_sin (c := M 2 1 / sβ) (s := M 2 0 / sβ) (by
       rw [div_pow, div_pow, ← add_div, div_eq_one_iff_eq (pow_ne_zero 2 hsβne)]
-      nlinarith [hr22, hsβsq])
+      nlinarith only [hr22, hsβsq])
     refine ⟨α, β, γ, ?_⟩
     ext i j
     fin_cases i <;> fin_cases j <;>
@@ -539,7 +548,7 @@ lemma so3_euler_decomp (M : Matrix (Fin 3) (Fin 3) ℝ)
         | linear_combination M 0 1 * hsβsq + cof10 - M 2 2 * cof01
         | linear_combination M 1 0 * hsβsq + cof01 - M 2 2 * cof10
         | linear_combination M 1 1 * hsβsq + cof11 + M 2 2 * cof00
-        | nlinarith [hsβsq, hr22, hc22]
+        | nlinarith only [hsβsq, hr22, hc22]
 
 /-! ### Lifting the cover through products -/
 
