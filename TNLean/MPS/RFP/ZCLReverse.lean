@@ -342,7 +342,14 @@ theorem not_isPositiveGapPhysicalCID_basisDirectSum_of_basis_spectral_pair
 
 /-- Conditional reverse implication at the multiplicity-one representative.
 The additional hypothesis is precisely the spectral assertion invoked at
-arXiv:1606.00608, line 1250 for a non-idempotent normal block. -/
+arXiv:1606.00608, line 1250 for a non-idempotent normal block.
+
+**Scope restriction (arXiv:1606.00608, Theorem `TheoremZCLPure`, lines
+1248--1268):** this theorem uses positive-gap CID, one unit-weight copy of each
+BNT basis tensor, and the normalized nonzero subleading spectral pair asserted
+at line 1250. It does not prove that spectral assertion or cover raw weighted
+repeated copies. See
+`docs/paper-gaps/cpsv16_pure_zcl_local_orthogonality_scope.tex`. -/
 theorem isTransferIdempotent_basisDirectSum_of_isPositiveGapBNTZCL_of_spectral_pair
     (hCF : IsBNTCanonicalForm P)
     (hspectral : ∀ j : Fin P.basisCount,
@@ -371,7 +378,13 @@ theorem isTransferIdempotent_basisDirectSum_of_isPositiveGapBNTZCL_of_spectral_p
     exact IsIdempotentElem.zero
 
 /-- Conditional equivalence between positive-gap BNT zero correlation length
-and transfer idempotence for the multiplicity-one representative. -/
+and transfer idempotence for the multiplicity-one representative.
+
+**Scope restriction (arXiv:1606.00608, Theorem `TheoremZCLPure`, lines
+1248--1268):** the reverse implication assumes the normalized nonzero
+subleading spectral pair from line 1250 and excludes adjacent-gap CID and raw
+weighted repeated copies. See
+`docs/paper-gaps/cpsv16_pure_zcl_local_orthogonality_scope.tex`. -/
 theorem isPositiveGapBNTZCL_basisDirectSum_iff_isTransferIdempotent_of_spectral_pair
     (hCF : IsBNTCanonicalForm P)
     (hspectral : ∀ j : Fin P.basisCount,
@@ -411,7 +424,14 @@ theorem isPositiveGapBNTZCL_basisDirectSum_iff_isTransferIdempotent_of_spectral_
     · exact hRFP
 
 /-- Source physical BNT zero correlation length implies transfer idempotence at
-the multiplicity-one representative under the line-1250 spectral assertion. -/
+the multiplicity-one representative under the line-1250 spectral assertion.
+
+**Scope restriction (arXiv:1606.00608, Theorem `TheoremZCLPure`, lines
+1248--1268):** although the premise uses source physical CID, the tensor is the
+multiplicity-one unit-weight representative and the proof assumes the
+normalized nonzero subleading spectral pair from line 1250. Raw weighted
+repeated copies remain outside the conclusion. See
+`docs/paper-gaps/cpsv16_pure_zcl_local_orthogonality_scope.tex`. -/
 theorem isTransferIdempotent_basisDirectSum_of_isPhysicalBNTZCL_of_spectral_pair
     (hCF : IsBNTCanonicalForm P)
     (hspectral : ∀ j : Fin P.basisCount,
