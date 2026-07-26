@@ -208,6 +208,49 @@ def IsCPSVCanonicalForm (A : MPSTensor d D) : Prop :=
 
 namespace CPSVCanonicalFormData
 
+/-- The weighted direct sum of positive-dimensional normal blocks is in literal
+CPSV canonical form, with the retained coordinates equal to the ambient
+coordinates.
+
+Source: arXiv:1606.00608, eq. `II_CF1`, lines 237--244. -/
+noncomputable def ofBlocks {r : ℕ} {dim : Fin r → ℕ}
+    (dim_pos : ∀ k, 0 < dim k) (weights : Fin r → ℂ)
+    (blocks : (k : Fin r) → MPSTensor d (dim k))
+    (blocks_normal : ∀ k, IsNormalTensor (blocks k)) :
+    CPSVCanonicalFormData (toTensorFromBlocks (d := d) weights blocks) where
+  r := r
+  dim := dim
+  dim_pos := dim_pos
+  weights := weights
+  blocks := blocks
+  blocks_normal := blocks_normal
+  total_dim_le := le_rfl
+  ambient_coisometry := 1
+  coisometric := by simp
+  reconstruct := by simp
+
+/-- Literal CPSV canonical-form data reconstruct the same positive-length MPV
+family as their retained weighted direct sum.
+
+Source: arXiv:1606.00608, eq. `II_CF1`, lines 237--244. -/
+theorem sameMPV₂Pos_toTensorFromBlocks (data : CPSVCanonicalFormData A) :
+    SameMPV₂Pos A (toTensorFromBlocks (d := d) data.weights data.blocks) :=
+  sameMPV₂Pos_of_coisometry_reconstruction A
+    (toTensorFromBlocks (d := d) data.weights data.blocks)
+    data.ambient_coisometry data.coisometric data.reconstruct
+
+/-- The closed-chain coefficients of a CPSV canonical-form tensor are the
+sum of the block coefficients weighted by the corresponding powers.
+
+Source: arXiv:1606.00608, eq. `II_Psi_k`, lines 259--263. -/
+theorem mpv_eq_sum_weight_pow (data : CPSVCanonicalFormData A)
+    {N : ℕ} (hN : 0 < N) (σ : Fin N → Fin d) :
+    mpv A σ =
+      ∑ k : Fin data.r, data.weights k ^ N * mpv (data.blocks k) σ := by
+  rw [data.sameMPV₂Pos_toTensorFromBlocks N hN σ]
+  simpa [smul_eq_mul] using
+    mpv_toTensorFromBlocks_eq_sum data.weights data.blocks σ
+
 /-- CPSV16 line 246's weight convention, separated from literal canonical-form
 membership.  The unit weight is required exactly when the ambient tensor is
 nonzero; no retained weight is required to be nonzero.
