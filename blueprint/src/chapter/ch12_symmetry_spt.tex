@@ -1,45 +1,115 @@
 \section{SPT Phase Labels and String-Order Universality}
 %% ---------------------------------------------------------
 
-Two injective symmetric tensors are defined to be in the same
-symmetry-protected topological (SPT) phase when their virtual
-representation cocycles are cohomologous. The identification of this
-cocycle class with phase equivalence under symmetric gapped paths is the
-classification theorem of Chen, Gu, and Wen~\cite{ChenGuWen2011} and
-Schuch, P\'erez-Garc\'ia, and Cirac~\cite[Section~II.F]{Schuch2011Phases}
-(Remark~\ref{rem:spt_classification_scope}). The theorems of
-this section show that string order holds for every injective symmetric
-tensor with canonical normalisations, so existence of string order is a
-symmetry diagnostic and does not separate SPT phases
-(Remark~\ref{rem:string_order_symmetry_diagnostic}).
+The predicate in Definition~\ref{def:is_same_spt_phase} compares virtual
+cocycle labels.  Physical phase equivalence instead uses symmetric gapped
+Hamiltonian paths, with the endpoint representations embedded into a common
+physical space as in~\cite{Schuch2011Phases}.
 
-\begin{definition}[Same SPT phase]\label{def:is_same_spt_phase}
+\begin{definition}[Equality of virtual cocycle labels]
+    \label{def:is_same_spt_phase}
     \lean{MPSTensor.IsSameSPTPhase}
     \leanok
     \uses{def:cohomologous_to, def:projective_rep}
-    Injective tensors $A$ and $B$, both symmetric under an on-site
-    representation $U \colon G \to \GL_{d}(\C)$, are in the \emph{same SPT
-        phase} if there exist virtual cocycles $\omega_A,\omega_B$ with
-    corresponding projective representations that intertwine the
-    respective twisted tensors and satisfy
-    $\omega_A\sim\omega_B$ (cohomologous).
+    For tensors $A,B$ and a fixed physical representation
+    $U:G\to\GL_d(\C)$, the predicate called \emph{same SPT phase}
+    asserts the existence of factor systems
+    $\omega_A,\omega_B:G\times G\to\C^\times$ and projective bond
+    representations $\rho_A,\rho_B$ such that
+    \begin{align}
+      \widetilde A_g^i
+        &=\rho_A(g^{-1})A^i\rho_A(g^{-1})^{-1},\\
+      \widetilde B_g^i
+        &=\rho_B(g^{-1})B^i\rho_B(g^{-1})^{-1},
+      \notag
+    \end{align}
+    exactly, and $\omega_A\sim\omega_B$.  Thus the predicate is equality of
+    virtual factor-system classes.  It neither quantifies over Hamiltonian
+    paths nor states physical phase equivalence.
 \end{definition}
 
-\begin{remark}[Scope of the classification theorem]%
-    \label{rem:spt_classification_scope}
-    \uses{def:is_same_spt_phase}
-    For injective tensors with a fixed on-site symmetry and no symmetry
-    breaking, two tensors can be connected by a symmetric gapped path if
-    and only if their virtual cocycle classes in $H^2(G,\mathrm{U}(1))$
-    coincide (\cite{ChenGuWen2011};
-    \cite[Section~II.F]{Schuch2011Phases}). The results below use only the
-    virtual cocycle class and its gauge independence
-    (Theorem~\ref{thm:cocycle_gauge_independence}), and
-    Definition~\ref{def:is_same_spt_phase} takes cohomologous cocycles as
-    the definition of phase equality.
+\begin{remark}[Scalar and character conventions]
+    \label{rem:spt_scalar_character_conventions}
+    \uses{def:is_same_spt_phase, def:h2_cx}
+    These factor systems take values in $\C^\times$.  For unitary bond
+    representations one may choose unit-modulus representatives and obtain the
+    physical classification label in $H^2(G,\mathrm U(1))$; this normalization
+    is not an equality $\C^\times=\mathrm U(1)$.  Moreover,
+    Definition~\ref{def:is_same_spt_phase} requires exact tensor equations.
+    A physical state symmetry may instead act on an MPS vector by a
+    one-dimensional character $\chi(g)$, producing a scalar factor in the
+    local tensor equation.  Exact MPV-family equality and such a character are
+    distinct hypotheses.
 \end{remark}
 
-\begin{theorem}[String order holds for injective symmetric MPS]%
+\begin{theorem}[One-dimensional symmetric gapped-phase classification]
+    \label{thm:spt_classification}
+    \notready
+    \uses{def:is_same_spt_phase, def:h2_cx}
+    For $p=0,1$, let $H_p$ be a translationally invariant, finite-range,
+    bounded-strength Hamiltonian that is uniformly gapped above a unique
+    injective-MPS ground state on $\mc H_p^{\otimes N}$.  Suppose that $H_p$
+    commutes with $(U_g^p)^{\otimes N}$, where $U^p$ is a unitary
+    representation of $G$ on $\mc H_p$, and choose the endpoint phase gauges.
+    After a common finite blocking, there exist a path-sector Hilbert space
+    $\mc H_{\mathrm{path}}$ and a linear representation
+    $U^{\mathrm{path}}$ such that the endpoints embed into
+    \begin{align}
+       \mc H&=\mc H_0\oplus\mc H_1\oplus\mc H_{\mathrm{path}},&
+       U_g&=U_g^0\oplus U_g^1\oplus U_g^{\mathrm{path}},
+       \notag
+    \end{align}
+    and are connected by a continuous path of translationally invariant,
+    finite-range, bounded-strength Hamiltonians commuting with
+    $U_g^{\otimes N}$ and having a gap bounded uniformly below in the system
+    size and path parameter, if and only if the virtual projective
+    representations of the blocked injective MPS ground states determine the
+    same class in
+    $H^2(G,\mathrm U(1))$~\cite[Section~II.F]{Schuch2011Phases}.
+\end{theorem}
+
+\begin{proof}
+    First deform each blocked injective MPS to its isometric form; the
+    deformation preserves the symmetry relation
+    \begin{align}
+       U_g\mc P&=\mc P(V_g\otimes\overline{V_g}).
+       \notag
+    \end{align}
+    Along any continuous symmetric MPS path, the tensor and its induced
+    virtual action $V_g$ vary continuously.  The cohomology class is discrete,
+    so it cannot change along the path.  This proves necessity.
+
+    Conversely, let the endpoint isometric forms have virtual actions
+    $V_g^0$ and $V_g^1$ in the same cohomology class.  Embed their bond spaces
+    into the direct sum and interpolate between the maximally entangled bonds
+    by
+    \begin{align}
+       |\omega(\gamma)\rangle
+       &=(1-\gamma)\sum_{i=1}^{D_0}|i,i\rangle
+         +\gamma\sum_{i=D_0+1}^{D_0+D_1}|i,i\rangle.
+       \notag
+    \end{align}
+    The commuting parent Hamiltonians along this interpolation remain gapped.
+    Their symmetry is
+    \begin{align}
+      (V_g^0\oplus V_g^1)\otimes
+      (\overline{V_g^0}\oplus\overline{V_g^1})
+      &=\widehat U_g^0\oplus\widehat U_g^1
+        \oplus\widehat U_g^{\mathrm{path}},\\
+      \widehat U_g^{\mathrm{path}}
+      &=(V_g^0\otimes\overline{V_g^1})
+        \oplus(V_g^1\otimes\overline{V_g^0}).
+      \notag
+    \end{align}
+    Equality of the cohomology classes is exactly what makes the cross-term
+    action $\widehat U^{\mathrm{path}}$ a linear representation.  Conjugating
+    back by the endpoint isometries gives the common direct-sum physical
+    representation and the required symmetric gapped path.
+    % The Hamiltonian-path and isometric-form bridges are not yet represented
+    % by Lean declarations; the \notready marker records that status.
+\end{proof}
+
+\begin{theorem}[Virtual-boundary nondecay for injective MPV-symmetric tensors]%
     \label{thm:has_string_order_of_symmetric_injective}
     \lean{MPSTensor.hasStringOrder_of_symmetric_injective}
     \leanok
@@ -47,7 +117,8 @@ symmetry diagnostic and does not separate SPT phases
     Let $A$ be an injective tensor, symmetric under a unitary
     representation $U$. Assume $\E_A(\Id)=\Id$, $\Lambda$ is positive
     definite, $\tr(\Lambda)=1$, and $\E_A^\dagger(\Lambda)=\Lambda$.
-    Then string order exists for every group element $g$.
+    Then the virtual-boundary nondecay predicate holds for every group
+    element $g$.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -69,45 +140,19 @@ symmetry diagnostic and does not separate SPT phases
     unitary and phase.
     By Theorem~\ref{thm:boundary_state_invariant_of_virtual_unitary}, this
     unitary preserves the boundary state, so
-    Lemma~\ref{lem:has_string_order_of_local_symmetry} gives string order.
+    Lemma~\ref{lem:has_string_order_of_local_symmetry} gives
+    virtual-boundary nondecay.
 \end{proof}
 
-\begin{theorem}[String order existence agrees for any two injective symmetric tensors]%
-    \label{thm:has_string_order_iff_of_symmetric_injective}
-    \lean{MPSTensor.hasStringOrder_iff_of_symmetric_injective}
-    \leanok
-    \uses{def:has_string_order, def:on_site_symmetric, def:injective}
-    If $A$ and $B$ are injective, both on-site symmetric under a
-    unitary representation $U$, and if $\E_A(\Id)=\Id$,
-    $\E_B(\Id)=\Id$, $\Lambda_A$ and $\Lambda_B$ are positive
-    definite, $\tr(\Lambda_A)=1$, $\tr(\Lambda_B)=1$,
-    $\E_A^\dagger(\Lambda_A)=\Lambda_A$, and
-    $\E_B^\dagger(\Lambda_B)=\Lambda_B$, then for every $g \in G$,
-    string order exists for $A$ with twist $U(g)$ if and only if it
-    exists for~$B$. In particular, since
-    Definition~\ref{def:is_same_spt_phase} implies on-site symmetry
-    for both tensors, this theorem applies to tensors in the same SPT
-    phase; it applies equally to symmetric tensors in different SPT
-    phases.
-\end{theorem}
-
-\begin{proof}\leanok
-    \uses{thm:has_string_order_of_symmetric_injective}
-    Both directions follow from
-    Theorem~\ref{thm:has_string_order_of_symmetric_injective}, which
-    shows that string order holds universally for injective symmetric
-    tensors with canonical normalisations.
-\end{proof}
-
-\begin{remark}[String order detects symmetry, not the SPT phase]%
+\begin{remark}[Virtual-boundary nondecay does not determine the SPT label]%
     \label{rem:string_order_symmetry_diagnostic}
     \uses{thm:has_string_order_iff_of_symmetric_injective}
     Theorem~\ref{thm:has_string_order_of_symmetric_injective} applies to
     every injective symmetric tensor with canonical normalisations,
     irrespective of its cocycle class, so tensors in different SPT phases
-    all have string order for every group element. Existence of string
-    order is equivalent to the local symmetry itself
+    all satisfy virtual-boundary nondecay for every group element.  This
+    nondecay is equivalent to virtual local covariance
     (Theorem~\ref{thm:string_order_iff_local_symmetry}); the invariant
     that separates SPT phases is the cohomology class of the virtual
-    representation cocycle (Definition~\ref{def:is_same_spt_phase}).
+    representation cocycle (Theorem~\ref{thm:spt_classification}).
 \end{remark}
