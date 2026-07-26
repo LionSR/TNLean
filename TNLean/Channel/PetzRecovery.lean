@@ -43,6 +43,16 @@ reference matrix.
   reference matrix.
 * `Matrix.partialTraceRightPetzChannel_partialTraceRight`: recovery by the
   completed channel.
+* `Matrix.productTensorReference`: a general product reference with canonical
+  reassociation.
+* `Matrix.partialTraceRightPetzMap_productTensor_kronecker`: elementary-tensor
+  raw factorization with support compression on the first factor.
+* `Matrix.partialTraceRightPetzMap_productTensor`: the corresponding global
+  linear-map factorization.
+* `Matrix.partialTraceRightPetzMap_productTensor_apply_of_left_supported`:
+  identity-tensored recovery on inputs supported in the first factor.
+* `Matrix.partialTraceRightPetzMap_productTensor_of_posDef_left`: global
+  identity-tensored recovery when the first factor is positive definite.
 * `Matrix.maximallyMixedTensorReference`: the maximally mixed tensor-product
   reference from HJPW equation (10), with reassociated product indices.
 * `Matrix.partialTraceLeft_maximallyMixedTensorReference`: the retained
@@ -401,6 +411,313 @@ theorem partialTraceRightPetzChannel_partialTraceRight
 
 end PartialTrace
 
+section HJPWProductReferenceFactorization
+
+variable {A B C : Type*} [Fintype A] [DecidableEq A]
+  [Fintype B] [DecidableEq B] [Fintype C] [DecidableEq C]
+
+/-- The product reference $\rho_A\otimes\rho_{BC}$ from HJPW Theorem 3,
+equation (10), reindexed from $A\times(B\times C)$ to $(A\times B)\times C$ so
+that `partialTraceRight` traces out $C$.
+
+This definition is the corrected general-first-factor reference requested in
+issue #4890. -/
+noncomputable def productTensorReference
+    (ρA : Matrix A A ℂ) (ρBC : Matrix (B × C) (B × C) ℂ) :
+    Matrix ((A × B) × C) ((A × B) × C) ℂ :=
+  (ρA ⊗ₖ ρBC).submatrix (Equiv.prodAssoc A B C) (Equiv.prodAssoc A B C)
+
+omit [Fintype A] [DecidableEq A] [Fintype B] [DecidableEq B]
+  [Fintype C] [DecidableEq C] in
+/-- The product reference in HJPW Theorem 3, equation (10), is positive
+semidefinite when both factors are positive semidefinite. This is part of the
+product-reference stack requested in issue #4890. -/
+theorem productTensorReference_posSemidef
+    [Finite A] [Finite B] [Finite C]
+    {ρA : Matrix A A ℂ} {ρBC : Matrix (B × C) (B × C) ℂ}
+    (hA : ρA.PosSemidef) (hBC : ρBC.PosSemidef) :
+    (productTensorReference ρA ρBC).PosSemidef := by
+  classical
+  letI := Fintype.ofFinite A
+  letI := Fintype.ofFinite B
+  letI := Fintype.ofFinite C
+  exact (hA.kronecker hBC).submatrix _
+
+omit [Fintype A] [DecidableEq A] [Fintype B] [DecidableEq B] [DecidableEq C] in
+/-- The retained $AB$ marginal of the product reference from HJPW Theorem 3,
+equation (10), is $\rho_A\otimes\rho_B$. This is the right-marginal identity
+requested in issue #4890. -/
+theorem partialTraceRight_productTensorReference
+    (ρA : Matrix A A ℂ) (ρBC : Matrix (B × C) (B × C) ℂ) :
+    partialTraceRight (productTensorReference ρA ρBC) =
+      ρA ⊗ₖ partialTraceRight ρBC := by
+  ext ⟨a, b⟩ ⟨a', b'⟩
+  simp [productTensorReference, partialTraceRight_apply,
+    Matrix.kroneckerMap_apply, Finset.mul_sum]
+
+/-- The square root of the product reference from HJPW Theorem 3, equation
+(10), factors across its two positive-semidefinite factors after canonical
+reassociation. This supports the corrected factorization in issue #4890. -/
+theorem cfcSqrt_productTensorReference
+    (ρA : Matrix A A ℂ) (ρBC : Matrix (B × C) (B × C) ℂ)
+    (hA : ρA.PosSemidef) (hBC : ρBC.PosSemidef) :
+    (productTensorReference_posSemidef hA hBC).isHermitian.cfc Real.sqrt =
+      (hA.isHermitian.cfc Real.sqrt ⊗ₖ hBC.isHermitian.cfc Real.sqrt).submatrix
+        (Equiv.prodAssoc A B C) (Equiv.prodAssoc A B C) := by
+  rw [← (productTensorReference_posSemidef hA hBC).isHermitian.cfc_eq]
+  change cfc Real.sqrt
+      ((ρA ⊗ₖ ρBC).submatrix (Equiv.prodAssoc A B C) (Equiv.prodAssoc A B C)) = _
+  have hcfc := Matrix.cfc_submatrix_equiv (hA.kronecker hBC).isHermitian Real.sqrt
+    (Equiv.prodAssoc A B C).symm
+  rw [show cfc Real.sqrt
+      ((ρA ⊗ₖ ρBC).submatrix (Equiv.prodAssoc A B C) (Equiv.prodAssoc A B C)) =
+      (cfc Real.sqrt (ρA ⊗ₖ ρBC)).submatrix
+        (Equiv.prodAssoc A B C) (Equiv.prodAssoc A B C) by
+      simpa only [Equiv.symm_symm] using hcfc]
+  congr 1
+  have hsqrt := hA.sqrt_kronecker hBC
+  rw [CFC.sqrt_eq_real_sqrt (ρA ⊗ₖ ρBC) (hA.kronecker hBC).nonneg,
+    CFC.sqrt_eq_real_sqrt ρA hA.nonneg,
+    CFC.sqrt_eq_real_sqrt ρBC hBC.nonneg,
+    cfcₙ_eq_cfc, cfcₙ_eq_cfc, cfcₙ_eq_cfc,
+    hA.isHermitian.cfc_eq, hBC.isHermitian.cfc_eq] at hsqrt
+  exact hsqrt
+
+omit [DecidableEq C] in
+/-- The support inverse square root of the $AB$ marginal of the product
+reference in HJPW Theorem 3, equation (10), factors across $A$ and $B$.
+This is the singular-support identity needed for issue #4890. -/
+theorem supportInvSqrt_partialTraceRight_productTensorReference
+    (ρA : Matrix A A ℂ) (ρBC : Matrix (B × C) (B × C) ℂ)
+    (hA : ρA.PosSemidef) (hBC : ρBC.PosSemidef) :
+    (PosSemidef.partialTraceRight
+      (productTensorReference_posSemidef hA hBC)).supportInvSqrt =
+      hA.supportInvSqrt ⊗ₖ (PosSemidef.partialTraceRight hBC).supportInvSqrt := by
+  unfold PosSemidef.supportInvSqrt
+  rw [← (PosSemidef.partialTraceRight
+      (productTensorReference_posSemidef hA hBC)).isHermitian.cfc_eq,
+    ← hA.isHermitian.cfc_eq,
+    ← (PosSemidef.partialTraceRight hBC).isHermitian.cfc_eq,
+    partialTraceRight_productTensorReference]
+  have hfac := hA.supportInvSqrt_kronecker
+    (PosSemidef.partialTraceRight hBC)
+  unfold PosSemidef.supportInvSqrt at hfac
+  rw [← (hA.kronecker
+      (PosSemidef.partialTraceRight hBC)).isHermitian.cfc_eq,
+    ← hA.isHermitian.cfc_eq,
+    ← (PosSemidef.partialTraceRight hBC).isHermitian.cfc_eq] at hfac
+  exact hfac
+
+omit [DecidableEq C] in
+/-- The support projector of the $AB$ marginal of the product reference in
+HJPW Theorem 3, equation (10), is $P_A\otimes P_B$. This is the
+right-marginal support identity requested in issue #4890. -/
+theorem supportProj_partialTraceRight_productTensorReference
+    (ρA : Matrix A A ℂ) (ρBC : Matrix (B × C) (B × C) ℂ)
+    (hA : ρA.PosSemidef) (hBC : ρBC.PosSemidef) :
+    (PosSemidef.partialTraceRight
+      (productTensorReference_posSemidef hA hBC)).isHermitian.supportProj =
+      hA.isHermitian.supportProj ⊗ₖ
+        (PosSemidef.partialTraceRight hBC).isHermitian.supportProj := by
+  let hτ := PosSemidef.partialTraceRight
+    (productTensorReference_posSemidef hA hBC)
+  rw [← hτ.supportInvSqrt_mul_self_mul_supportInvSqrt,
+    supportInvSqrt_partialTraceRight_productTensorReference ρA ρBC hA hBC,
+    partialTraceRight_productTensorReference ρA ρBC,
+    ← Matrix.mul_kronecker_mul, ← Matrix.mul_kronecker_mul,
+    hA.supportInvSqrt_mul_self_mul_supportInvSqrt,
+    (PosSemidef.partialTraceRight hBC).supportInvSqrt_mul_self_mul_supportInvSqrt]
+
+/-- The linear support-compression map $X\mapsto PXP$. For a support projector
+$P=P_A$, this is the first tensor factor in the globally valid raw Petz
+factorization from HJPW Theorem 3, equation (10), as corrected in issue #4890. -/
+noncomputable def supportCompressionMap
+    (P : Matrix A A ℂ) : Matrix A A ℂ →ₗ[ℂ] Matrix A A ℂ where
+  toFun X := P * X * P
+  map_add' X Y := by simp [Matrix.mul_add, Matrix.add_mul]
+  map_smul' c X := by simp
+
+/-- Evaluation of the projective support-compression map used in the corrected
+HJPW equation (10) factorization from issue #4890. -/
+@[simp]
+theorem supportCompressionMap_apply (P X : Matrix A A ℂ) :
+    supportCompressionMap P X = P * X * P := rfl
+
+/-- **HJPW Theorem 3, equation (10), elementary-tensor form.** For an arbitrary
+positive-semidefinite first factor, the globally defined raw support-Petz map
+sends $A_0\otimes X$ to
+$(P_AA_0P_A)\otimes\mathcal R^{\mathrm{raw}}_{\rho_{BC}}(X)$ after canonical
+reassociation.
+
+This is the corrected singular-first-factor statement of issue #4890. It does
+not replace $P_AA_0P_A$ by $A_0$ unless the input is supported or $\rho_A$ is
+positive definite, and it makes no claim about TNLean's generic completed
+channel. -/
+theorem partialTraceRightPetzMap_productTensor_kronecker
+    (ρA : Matrix A A ℂ) (ρBC : Matrix (B × C) (B × C) ℂ)
+    (hA : ρA.PosSemidef) (hBC : ρBC.PosSemidef)
+    (A₀ : Matrix A A ℂ) (X : Matrix B B ℂ) :
+    equivReindexMap (Equiv.prodAssoc A B C)
+        (partialTraceRightPetzMap
+          (productTensorReference ρA ρBC)
+          (productTensorReference_posSemidef hA hBC)
+          (A₀ ⊗ₖ X)) =
+      (hA.isHermitian.supportProj * A₀ * hA.isHermitian.supportProj) ⊗ₖ
+        partialTraceRightPetzMap ρBC hBC X := by
+  rw [partialTraceRightPetzMap_apply, partialTraceRightPetzMap_apply]
+  rw [cfcSqrt_productTensorReference ρA ρBC hA hBC,
+    supportInvSqrt_partialTraceRight_productTensorReference ρA ρBC hA hBC]
+  change (Matrix.reindexAlgEquiv ℂ ℂ (Equiv.prodAssoc A B C)) (_ * _ * _) = _
+  rw [map_mul, map_mul]
+  simp only [Matrix.coe_reindexAlgEquiv, Matrix.reindex_apply]
+  rw [show (((hA.isHermitian.cfc Real.sqrt ⊗ₖ
+        hBC.isHermitian.cfc Real.sqrt).submatrix
+        (Equiv.prodAssoc A B C) (Equiv.prodAssoc A B C)).submatrix
+        (Equiv.prodAssoc A B C).symm (Equiv.prodAssoc A B C).symm) =
+      hA.isHermitian.cfc Real.sqrt ⊗ₖ hBC.isHermitian.cfc Real.sqrt by
+    ext i j
+    rfl]
+  rw [show (leftKroneckerEmbed (n := C)
+        ((hA.supportInvSqrt ⊗ₖ
+            (PosSemidef.partialTraceRight hBC).supportInvSqrt) *
+          (A₀ ⊗ₖ X) *
+          (hA.supportInvSqrt ⊗ₖ
+            (PosSemidef.partialTraceRight hBC).supportInvSqrt))).submatrix
+        (Equiv.prodAssoc A B C).symm (Equiv.prodAssoc A B C).symm =
+      (hA.supportInvSqrt * A₀ * hA.supportInvSqrt) ⊗ₖ
+        leftKroneckerEmbed (n := C)
+          ((PosSemidef.partialTraceRight hBC).supportInvSqrt * X *
+            (PosSemidef.partialTraceRight hBC).supportInvSqrt) by
+    simp only [leftKroneckerEmbed_apply]
+    rw [← Matrix.mul_kronecker_mul, ← Matrix.mul_kronecker_mul]
+    ext ⟨a, bc⟩ ⟨a', bc'⟩
+    simp only [Matrix.submatrix_apply, Matrix.kroneckerMap_apply,
+      Equiv.prodAssoc_symm_apply]
+    ring]
+  rw [← Matrix.mul_kronecker_mul, ← Matrix.mul_kronecker_mul]
+  have hfirst :
+      hA.isHermitian.cfc Real.sqrt *
+          (hA.supportInvSqrt * A₀ * hA.supportInvSqrt) *
+          hA.isHermitian.cfc Real.sqrt =
+        hA.isHermitian.supportProj * A₀ * hA.isHermitian.supportProj := by
+    calc
+      _ = (hA.isHermitian.cfc Real.sqrt * hA.supportInvSqrt) * A₀ *
+          (hA.supportInvSqrt * hA.isHermitian.cfc Real.sqrt) := by
+        simp only [Matrix.mul_assoc]
+      _ = _ := by
+        rw [hA.cfc_sqrt_mul_supportInvSqrt,
+          hA.supportInvSqrt_mul_cfc_sqrt]
+        rfl
+  rw [hfirst]
+
+/-- **HJPW Theorem 3, equation (10), global raw-map factorization.** For a
+possibly singular positive-semidefinite $\rho_A$, the globally defined raw map
+is the local recovery map tensored with support compression on $A$:
+\[
+  \mathcal R^{\mathrm{raw}}_{\rho_A\otimes\rho_{BC}}
+  = \mathcal C_{P_A}\otimes
+    \mathcal R^{\mathrm{raw}}_{\rho_{BC}}.
+\]
+
+This is the corrected global statement of issue #4890. It deliberately does
+not claim a global identity-tensored formula for singular $\rho_A$ or a
+factorization of TNLean's generic completed channel. -/
+theorem partialTraceRightPetzMap_productTensor
+    (ρA : Matrix A A ℂ) (ρBC : Matrix (B × C) (B × C) ℂ)
+    (hA : ρA.PosSemidef) (hBC : ρBC.PosSemidef) :
+    equivReindexMap (Equiv.prodAssoc A B C) ∘ₗ
+        partialTraceRightPetzMap
+          (productTensorReference ρA ρBC)
+          (productTensorReference_posSemidef hA hBC) =
+      idTensorMapLM (δ := A) (partialTraceRightPetzMap ρBC hBC) ∘ₗ
+        tensorMapIdLM (δ := B)
+          (supportCompressionMap hA.isHermitian.supportProj) := by
+  apply LinearMap.ext
+  intro X
+  obtain ⟨A₀, Y, hX⟩ :=
+    hasOperatorSchmidtDecomposition_operatorSchmidtRank X
+  rw [hX]
+  simp only [LinearMap.comp_apply, map_sum]
+  apply Finset.sum_congr rfl
+  intro i _
+  rw [tensorMapIdLM_apply, tensorMapId_kronecker,
+    idTensorMapLM_apply, idTensorMap_kronecker,
+    supportCompressionMap_apply]
+  exact partialTraceRightPetzMap_productTensor_kronecker
+    ρA ρBC hA hBC (A₀ i) (Y i)
+
+/-- Applying support compression on the $A$ factor is the same as sandwiching
+by $P_A\otimes\mathbf 1_B$. This is the supported-input condition used in the
+HJPW equation (10) corollary requested in issue #4890. -/
+theorem tensorMapId_supportCompressionMap
+    {ρA : Matrix A A ℂ} (hA : ρA.PosSemidef)
+    (X : Matrix (A × B) (A × B) ℂ) :
+    tensorMapIdLM (δ := B) (supportCompressionMap hA.isHermitian.supportProj) X =
+      (hA.isHermitian.supportProj ⊗ₖ (1 : Matrix B B ℂ)) * X *
+        (hA.isHermitian.supportProj ⊗ₖ (1 : Matrix B B ℂ)) := by
+  ext ⟨a, b⟩ ⟨a', b'⟩
+  simp only [tensorMapIdLM_apply, tensorMapId_apply,
+    supportCompressionMap_apply, Matrix.mul_apply,
+    bipartiteSlice_apply, Matrix.kroneckerMap_apply, one_apply]
+  simp_rw [Fintype.sum_prod_type]
+  simp
+
+/-- **Supported-input corollary of HJPW Theorem 3, equation (10).** If an input
+on $A\otimes B$ is supported by $P_A$ on its left tensor factor, then the
+support compression in the raw product-reference factorization disappears,
+and the map agrees with
+$\operatorname{id}_A\otimes\mathcal R^{\mathrm{raw}}_{\rho_{BC}}$.
+
+This is the supported-input statement requested in issue #4890. It does not
+assert this identity on unsupported inputs when $\rho_A$ is singular. -/
+theorem partialTraceRightPetzMap_productTensor_apply_of_left_supported
+    (ρA : Matrix A A ℂ) (ρBC : Matrix (B × C) (B × C) ℂ)
+    (hA : ρA.PosSemidef) (hBC : ρBC.PosSemidef)
+    (X : Matrix (A × B) (A × B) ℂ)
+    (hX : (hA.isHermitian.supportProj ⊗ₖ (1 : Matrix B B ℂ)) * X *
+      (hA.isHermitian.supportProj ⊗ₖ (1 : Matrix B B ℂ)) = X) :
+    equivReindexMap (Equiv.prodAssoc A B C)
+        (partialTraceRightPetzMap
+          (productTensorReference ρA ρBC)
+          (productTensorReference_posSemidef hA hBC) X) =
+      idTensorMapLM (δ := A) (partialTraceRightPetzMap ρBC hBC) X := by
+  have hglobal := congrArg (fun T ↦ T X)
+    (partialTraceRightPetzMap_productTensor ρA ρBC hA hBC)
+  simp only [LinearMap.comp_apply] at hglobal
+  rw [tensorMapId_supportCompressionMap (B := B) hA X, hX] at hglobal
+  exact hglobal
+
+/-- **Positive-definite-left corollary of HJPW Theorem 3, equation (10).** If
+$\rho_A$ is positive definite, then $P_A=\mathbf 1_A$ and the global raw
+product-reference Petz map is literally
+$\operatorname{id}_A\otimes\mathcal R^{\mathrm{raw}}_{\rho_{BC}}$ after
+canonical reassociation.
+
+This is the full-support global corollary requested in issue #4890. It makes no
+claim about the generic completed channel for singular $\rho_A$. -/
+theorem partialTraceRightPetzMap_productTensor_of_posDef_left
+    (ρA : Matrix A A ℂ) (ρBC : Matrix (B × C) (B × C) ℂ)
+    (hA : ρA.PosDef) (hBC : ρBC.PosSemidef) :
+    equivReindexMap (Equiv.prodAssoc A B C) ∘ₗ
+        partialTraceRightPetzMap
+          (productTensorReference ρA ρBC)
+          (productTensorReference_posSemidef hA.posSemidef hBC) =
+      idTensorMapLM (δ := A) (partialTraceRightPetzMap ρBC hBC) := by
+  rw [partialTraceRightPetzMap_productTensor ρA ρBC hA.posSemidef hBC]
+  have hproj : hA.posSemidef.isHermitian.supportProj = 1 :=
+    hA.supportProj_eq_one
+  have hcompression : supportCompressionMap hA.posSemidef.isHermitian.supportProj =
+      (LinearMap.id : Matrix A A ℂ →ₗ[ℂ] Matrix A A ℂ) := by
+    apply LinearMap.ext
+    intro X
+    change hA.posSemidef.isHermitian.supportProj * X *
+      hA.posSemidef.isHermitian.supportProj = X
+    rw [hproj]
+    simp
+  rw [hcompression, tensorMapIdLM_id, LinearMap.comp_id]
+
+end HJPWProductReferenceFactorization
+
 section HJPWTensorFactorization
 
 variable {dA : ℕ} [NeZero dA]
@@ -675,11 +992,13 @@ $(A\times B)\times C\simeq A\times(B\times C)$.
 This is the maximally mixed specialization of the tensor-product factorization
 in Hayden--Jozsa--Petz--Winter, arXiv:quant-ph/0304007v2, equation (10).
 
-**Scope restriction (docs/paper-gaps/hjpw04_petz_factorization_maximally_mixed_scope.tex):**
-HJPW equation (10) allows a general first-factor state, whereas this theorem
-proves only the $d_A^{-1}\mathbf 1_A\otimes\rho_{BC}$ case. The unrestricted
-factorization remains future work, and this raw support-Petz identity does not
-imply the Koashi--Imoto/Hayashi block decomposition. -/
+**Maximally mixed specialization
+(docs/paper-gaps/hjpw04_petz_factorization_maximally_mixed_scope.tex):**
+This theorem proves only the $d_A^{-1}\mathbf 1_A\otimes\rho_{BC}$ case.
+The general support-compressed raw identity is
+`partialTraceRightPetzMap_productTensor`; its positive-definite-left corollary
+recovers the literal identity-tensored formula. Neither result implies the
+Koashi--Imoto/Hayashi block decomposition. -/
 theorem partialTraceRightPetzMap_maximallyMixedTensor_kronecker
     (ρ : Matrix (B × C) (B × C) ℂ) (hρ : ρ.PosSemidef)
     (A : Matrix (Fin dA) (Fin dA) ℂ) (X : Matrix B B ℂ) :
@@ -818,11 +1137,13 @@ canonical reassociation of product indices.
 This is the maximally mixed specialization of equation (10) of
 Hayden--Jozsa--Petz--Winter, arXiv:quant-ph/0304007v2.
 
-**Scope restriction (docs/paper-gaps/hjpw04_petz_factorization_maximally_mixed_scope.tex):**
-HJPW equation (10) allows a general first-factor state, whereas this theorem
-proves only the $d_A^{-1}\mathbf 1_A\otimes\rho_{BC}$ case. The unrestricted
-factorization remains future work, and this raw support-Petz identity does not
-imply the Koashi--Imoto/Hayashi block decomposition. -/
+**Maximally mixed specialization
+(docs/paper-gaps/hjpw04_petz_factorization_maximally_mixed_scope.tex):**
+This theorem proves only the $d_A^{-1}\mathbf 1_A\otimes\rho_{BC}$ case.
+The general support-compressed raw identity is
+`partialTraceRightPetzMap_productTensor`; its positive-definite-left corollary
+recovers the literal identity-tensored formula. Neither result implies the
+Koashi--Imoto/Hayashi block decomposition. -/
 theorem partialTraceRightPetzMap_maximallyMixedTensor
     (ρ : Matrix (B × C) (B × C) ℂ) (hρ : ρ.PosSemidef) :
     equivReindexMap (Equiv.prodAssoc (Fin dA) B C) ∘ₗ
