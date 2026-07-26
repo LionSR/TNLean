@@ -18,5 +18,17 @@
     \tnjoin[route=arc, out=90, in=180]{w.north}{l.west}
     \tnjoin{l.east}{n.west}
   }\end{tenkzfree}
-  =\text{quarter-turn}.
+  =
+  \begin{tenkzfree}\tngroup[frame={rotate=90}]{
+    \tnput[ring]{l}{(6mm,-6mm)}{\lambda}
+    \tnput[box]{n}{(0mm,10mm)}{} \tnput[box]{w}{(-10mm,0mm)}{}
+    \tnput[box]{s}{(0mm,-10mm)}{} \tnput[box]{e}{(10mm,0mm)}{}
+    \tnjoin[dir]{n.north}{0mm,18mm} \tnjoin[dir]{w.west}{-18mm,0mm}
+    \tnjoin[dir]{0mm,-18mm}{s.south} \tnjoin[dir]{18mm,0mm}{e.east}
+    \tnjoin[route=arc, out=0, in=90]{n.east}{e.north}
+    \tnjoin[route=arc, out=-90, in=0]{e.south}{l.east}
+    \tnjoin{l.west}{s.east}
+    \tnjoin[route=arc, out=180, in=-90]{s.west}{w.south}
+    \tnjoin[route=arc, out=90, in=180]{w.north}{n.west}
+  }\end{tenkzfree}.
 \]

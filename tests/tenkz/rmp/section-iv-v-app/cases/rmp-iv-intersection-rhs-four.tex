@@ -8,23 +8,23 @@
 \[
   \begin{tenkzfree}
     \tnput[box, ports={west:virtual,east:virtual,north:physical}]
-      {b}{(-2mm,0mm)}{B}
+      {b}{(7mm,0mm)}{B}
     \tnput[box, ports={west:virtual,east:virtual,north:physical}]
-      {c}{(8mm,0mm)}{C}
-    \tnput[pill, ports={west:virtual,east:virtual,135:physical}]
-      {r}{(0mm,-8mm)}{\qquad R\qquad}
+      {c}{(19mm,0mm)}{C}
+    \tnput[pill, ports={160:physical,120:virtual,east:virtual}]
+      {r}{(4mm,-7mm)}{\qquad R\qquad}
     \tnput[box, ports={225:physical,315:physical,135:physical,45:physical}]
-      {s}{(-5mm,9mm)}{\quad S\quad}
-    \tnput[boundary, ports={south:physical}]{sL}{(-8mm,18mm)}{}
-    \tnput[boundary, ports={south:physical}]{sR}{(-2mm,18mm)}{}
-    \tnput[boundary, ports={south:virtual}]{bV}{(2mm,12mm)}{}
-    \tnput[boundary, ports={south:virtual}]{cV}{(5mm,12mm)}{}
-    \tnput[boundary, ports={south:physical}]{cP}{(8mm,12mm)}{}
-    \tnjoin[route=arc,out=180,in=180]{b.west}{r.west}
+      {s}{(1mm,8mm)}{\;S\;}
+    \tnput[boundary, ports={south:physical}]{sL}{(-4mm,14mm)}{}
+    \tnput[boundary, ports={south:physical}]{sR}{(6mm,14mm)}{}
+    \tnput[boundary, ports={south:virtual}]{bV}{(11mm,6mm)}{}
+    \tnput[boundary, ports={south:virtual}]{cV}{(15mm,6mm)}{}
+    \tnput[boundary, ports={south:physical}]{cP}{(19mm,6mm)}{}
+    \tnjoin[route=vh]{r.120}{b.west}
     \tnjoin[route=arc,out=0,in=0]{c.east}{r.east}
     \tnjoin[route=hv]{b.east}{bV.south}
     \tnjoin[route=hv]{c.west}{cV.south}
-    \tnjoin[route=hv]{r.135}{s.225}
+    \tnjoin[route=vh]{r.160}{s.225}
     \tnjoin[route=vh]{b.north}{s.315}
     \tnjoin{c.north}{cP.south}
     \tnjoin[route=hv]{s.135}{sL.south}
