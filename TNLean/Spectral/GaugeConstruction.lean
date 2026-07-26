@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Spectral.MixedTransfer
+import TNLean.Algebra.ComplexPhasePositivity
 import TNLean.Channel.FixedPoint.CanonicalGauge
 import TNLean.Channel.Schwarz.Basic
 
@@ -543,11 +544,7 @@ theorem gaugePhaseEquiv_of_gauged_intertwining [NeZero D]
   let B' : MPSTensor d D := gaugeTensor SB B
   have hSA_u : IsUnit SA.det := Ne.isUnit hSA_det
   have hSB_u : IsUnit SB.det := Ne.isUnit hSB_det
-  have hμ_ne0 : μ ≠ 0 := by
-    intro h0
-    have : (‖μ‖ : ℝ) = 0 := by
-      simp only [h0, norm_zero]
-    linarith [hμ, this]
+  have hμ_ne0 : μ ≠ 0 := Complex.ne_zero_of_norm_eq_one hμ
   have hper : ∀ i : Fin d, B' i = μ⁻¹ • (X'⁻¹ * A' i * X') := by
     intro i
     have hAX : A' i * X' = μ • X' * B' i := by
@@ -594,7 +591,7 @@ theorem gaugePhaseEquiv_of_gauged_intertwining [NeZero D]
       _ = SA * SA⁻¹ := by rw [h2]
       _ = 1 := h3
   let Ygl : GL (Fin D) ℂ := ⟨Ymat, Yinv, hYmul, hYinv_mul⟩
-  refine ⟨Ygl, μ⁻¹, inv_ne_zero (norm_ne_zero_iff.mp (by rw [hμ]; norm_num)), ?_⟩
+  refine ⟨Ygl, μ⁻¹, inv_ne_zero (Complex.ne_zero_of_norm_eq_one hμ), ?_⟩
   intro i
   have : B i = μ⁻¹ • (Ymat * A i * Yinv) := by
     have hBi : B i = SB * B' i * SB⁻¹ := by

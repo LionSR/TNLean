@@ -114,6 +114,72 @@
     the identity with $\tau$ on the left.
 \end{proof}
 
+\begin{theorem}[Multiplicative functional calculus on positive tensor products]
+    \label{thm:multiplicative_functional_calculus_tensor_product}
+    \lean{Matrix.cfc_kronecker_of_mul_posSemidef}
+    \leanok
+    Let $A$ and $B$ be positive semidefinite, and let $f\colon\R\to\R$ be
+    multiplicative on the non-negative reals. Then
+    \begin{align}
+        f(A\otimes B)&=f(A)\otimes f(B).
+        \label{eq:entropy_cfc_tensor_product}
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    Diagonalize $A$ and $B$. In the resulting product eigenbasis, the
+    eigenvalues of $A\otimes B$ are $a_i b_j$ with $a_i,b_j\geq 0$, and the
+    claim follows from $f(a_i b_j)=f(a_i)f(b_j)$.
+\end{proof}
+
+\begin{theorem}[Square roots and supports of tensor products]
+    \label{thm:support_inverse_square_root_tensor_product}
+    \lean{Matrix.PosSemidef.sqrt_kronecker}
+    \lean{Matrix.PosSemidef.supportInvSqrt_kronecker}
+    \lean{Matrix.PosSemidef.cfc_sqrt_mul_supportInvSqrt}
+    \lean{Matrix.PosSemidef.supportInvSqrt_mul_cfc_sqrt}
+    \lean{Matrix.PosSemidef.supportProj_kronecker}
+    \lean{Matrix.PosDef.supportProj_eq_one}
+    \leanok
+    \uses{def:support_inverse_square_root}
+    Let $A$ and $B$ be positive semidefinite. Their positive square roots,
+    support inverse square roots, and support projections satisfy
+    \begin{align}
+        \sqrt{A\otimes B}
+        &=\sqrt A\otimes\sqrt B,
+        \notag\\
+        (A\otimes B)^{-1/2}_{\mathrm{supp}}
+        &=A^{-1/2}_{\mathrm{supp}}\otimes B^{-1/2}_{\mathrm{supp}},
+        \notag\\
+        P_{A\otimes B}
+        &=P_A\otimes P_B.
+        \label{eq:entropy_support_tensor_product}
+    \end{align}
+    Moreover,
+    \begin{align}
+        \sqrt A\,A^{-1/2}_{\mathrm{supp}}
+        =A^{-1/2}_{\mathrm{supp}}\sqrt A
+        &=P_A.
+        \label{eq:entropy_support_sqrt_cancellation}
+    \end{align}
+    If $A$ is positive definite, then $P_A=\mathbf 1$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:multiplicative_functional_calculus_tensor_product,
+        lem:support_inverse_square_root_sandwich,
+        lem:support_inverse_square_root_positive_definite}
+    Diagonalize both factors. The eigenvalues of $A\otimes B$ are the products
+    $a_i b_j$. Both the square-root function and the function that equals
+    $x^{-1/2}$ for $x>0$ and zero at $x=0$ are multiplicative on the
+    non-negative reals. For the support projectors, apply the sandwich identity
+    to $A\otimes B$, factor the support inverse square root and matrix products,
+    and apply the sandwich identity to each factor. The cancellation identities
+    follow entrywise. If $A$ is positive definite, then
+    $A^{-1/2}_{\mathrm{supp}}=(\sqrt A)^{-1}$ and $\sqrt A$ is invertible.
+    Hence the cancellation identity gives $P_A=\sqrt A(\sqrt A)^{-1}=\mathbf 1$.
+\end{proof}
+
 \begin{lemma}[Support inverse square root under scaling and a maximally mixed factor]
     \label{lem:support_inverse_square_root_maximally_mixed}
     \lean{Matrix.PosSemidef.supportInvSqrt_smul}

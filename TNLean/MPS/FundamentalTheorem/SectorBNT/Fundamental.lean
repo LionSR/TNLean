@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.ComplexPhasePositivity
 import TNLean.MPS.FundamentalTheorem.SectorBNT.CoeffIdentity
 import TNLean.MPS.FundamentalTheorem.SectorBNT.CopyWeightMatching
 import TNLean.MPS.FundamentalTheorem.SectorBNT.ProportionalMatch
@@ -282,10 +283,8 @@ theorem ft_sector_bnt_proportional_global_gauge_of_copy_weight_matching
       (P := P) (Q := Q) hP hQ hProp
   refine ⟨β, hDim, ζ, Xblock, hζ_norm, hConj, ?_⟩
   intro W
-  have hζ_ne : ∀ k : Fin Q.basisCount, ζ k ≠ 0 := by
-    intro k hzero
-    have hnorm := hζ_norm k
-    simp [hzero] at hnorm
+  have hζ_ne : ∀ k : Fin Q.basisCount, ζ k ≠ 0 := fun k =>
+    Complex.ne_zero_of_norm_eq_one (hζ_norm k)
   exact sector_bnt_global_gauge_of_copy_weight_matching
     (P := P) (Q := Q) β hDim ζ Xblock hζ_ne hConj W
 
@@ -341,10 +340,8 @@ theorem ft_sector_bnt_proportional_global_gauge_of_coeff_identity
       (P := P) (Q := Q) hP hQ hProp
   refine ⟨β, hDim, ζ, Xblock, hζ_norm, hConj, ?_⟩
   intro hCoeff
-  have hζ_ne : ∀ k : Fin Q.basisCount, ζ k ≠ 0 := by
-    intro k hzero
-    have hnorm := hζ_norm k
-    simp [hzero] at hnorm
+  have hζ_ne : ∀ k : Fin Q.basisCount, ζ k ≠ 0 := fun k =>
+    Complex.ne_zero_of_norm_eq_one (hζ_norm k)
   let W : SectorBNTCopyWeightMatching (P := P) (Q := Q) β ζ :=
     SectorBNTCopyWeightMatching.of_coeff_identity
       (P := P) (Q := Q) β ζ hζ_ne hCoeff
@@ -419,10 +416,8 @@ theorem ft_sector_bnt_equal_matched_copy_weight_witnesses
     exact norm_eq_one_of_selfOverlap_scale (ζ := ζ k) hAA hBB
       (mpvOverlap_self_scale_of_mpv_eq_pow_mul (A := P.basis (β k)) (B := Q.basis k)
         (ζ := ζ k) (hMpv k))
-  have hζ_ne : ∀ k : Fin Q.basisCount, ζ k ≠ 0 := by
-    intro k hzero
-    have hnorm := hζ_norm k
-    simp [hzero] at hnorm
+  have hζ_ne : ∀ k : Fin Q.basisCount, ζ k ≠ 0 := fun k =>
+    Complex.ne_zero_of_norm_eq_one (hζ_norm k)
   have hCoeff := coeff_identity_via_matched_mpv_phase hP hEqual β ζ
     (fun k N _hN σ => hMpv k N σ)
   let W : SectorBNTCopyWeightMatching (P := P) (Q := Q) β ζ :=
@@ -457,10 +452,8 @@ theorem ft_sector_bnt_equal_sector_data
   let hMatch : ∀ k : Fin Q.basisCount, ∃ h : P.basisDim (β k) = Q.basisDim k,
       GaugePhaseEquiv (cast (congr_arg (MPSTensor d) h) (P.basis (β k))) (Q.basis k) :=
     fun k => by
-      refine ⟨hDim k, Xblock k, ζ k, ?_, hConj k⟩
-      intro hzero
-      have hnorm := hζ_norm k
-      simp [hzero] at hnorm
+      exact ⟨hDim k, Xblock k, ζ k,
+        Complex.ne_zero_of_norm_eq_one (hζ_norm k), hConj k⟩
   have hCopies : ∀ k : Fin Q.basisCount, P.copies (β k) = Q.copies k := by
     intro k
     have hcard := Fintype.card_congr (W.copy_equiv k)
@@ -525,10 +518,8 @@ theorem ft_sector_bnt_equal_global_gauge
   obtain ⟨β, hDim, ζ, Xblock, hζ_norm, hConj, ⟨W⟩⟩ :=
     ft_sector_bnt_equal_matched_copy_weight_witnesses
       (P := P) (Q := Q) hP hQ hEqual
-  have hζ_ne : ∀ k : Fin Q.basisCount, ζ k ≠ 0 := by
-    intro k hzero
-    have hnorm := hζ_norm k
-    simp [hzero] at hnorm
+  have hζ_ne : ∀ k : Fin Q.basisCount, ζ k ≠ 0 := fun k =>
+    Complex.ne_zero_of_norm_eq_one (hζ_norm k)
   let hCopies : ∀ k : Fin Q.basisCount, P.copies (β k) = Q.copies k := by
     intro k
     have hcard := Fintype.card_congr (W.copy_equiv k)

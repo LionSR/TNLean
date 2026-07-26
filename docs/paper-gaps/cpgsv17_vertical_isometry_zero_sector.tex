@@ -35,10 +35,12 @@ where the matrices $\mu_\alpha$ are positive and diagonal and the tensors
 $M_\alpha$ form a basis of normal tensors (source lines~943--951 and
 1863--1870).
 
-Let $s$ be the dimension of the right-hand side of
-\eqref{eq:vertical-form}. In the displayed orientation,
-$U:\mathbb C^D\to\mathbb C^s$ maps the original physical space onto the
-retained nonzero sector space. Consequently
+Let $d$ be the original physical dimension and let $s$ be the dimension of
+the right-hand side of \eqref{eq:vertical-form}.  When the generic
+canonical-form dimension bound \eqref{eq:dimension-bound} is applied
+vertically, it reads $s\leq d$.  In the displayed orientation,
+$U:\mathbb C^d\to\mathbb C^s$ maps the physical space onto the retained
+nonzero sector space. Consequently
 \begin{equation}
   UU^\dagger=I_s,
   \qquad
@@ -46,9 +48,11 @@ retained nonzero sector space. Consequently
   \label{eq:coisometry}
 \end{equation}
 where $P$ is the support projection of the nonzero sectors. Equality
-$U^\dagger U=I_D$ holds only when there is no zero complement. It is not part
-of the hypotheses or conclusion of Proposition~4.13.  The assertion that the
-discarded complement is a zero sector is the reconstruction identity
+$U^\dagger U=I_d$ holds only when there is no zero complement. It is not part
+of the hypotheses or conclusion of Proposition~4.13.  The source does not
+print a reverse identity separately.  Its preceding assertion that
+$\widetilde M$ is in canonical form says that the discarded complement is a
+zero sector, which is recorded explicitly by the reconstruction identity
 \begin{equation}
   \widetilde M
   =U^\dagger\left(\bigoplus_\alpha
@@ -165,15 +169,21 @@ asserted.
 
 The vertical canonical-form predicate now requires $UU^\dagger=I_s$ in the
 orientation of \eqref{eq:vertical-form}, together with
-\eqref{eq:reconstruction}. This is the source-faithful statement compatible
-with \eqref{eq:dimension-bound}: the retained part is represented
+\eqref{eq:reconstruction}. This is the source-faithful conclusion compatible
+with \eqref{eq:dimension-bound}: the displayed compression is printed in the
+proposition, while reconstruction records its preceding canonical-form claim.
+The retained part is represented
 rectangularly, while the omitted part is required to be zero. No full-support
-assumption is added to Proposition~4.13.  The construction of the canonical
-form from horizontal canonical form is proved in
-\path{TNLean/MPS/MPDO/VerticalCanonicalForm.lean}.\footnote{The corresponding
-declaration is \leanid{MPOTensor.verticalCF_of_horizontalCF}.}  It uses this
-corrected coisometry condition.  The correction itself is tracked in
-\ghissue{3869}.
+assumption is added to that conclusion.  The theorem in
+\path{TNLean/MPS/MPDO/VerticalCanonicalForm.lean}\footnote{The corresponding
+declaration is \leanid{MPOTensor.verticalCF_of_horizontalCF}.} uses this
+corrected coisometry condition under the normalized BNT-refined horizontal
+form.  Its retained sectors fill the horizontal bond space, every copy weight
+is nonzero, all copy weights have modulus at most one, at least one has modulus
+one, and the normal blocks are grouped over BNT representatives.  This is
+strictly stronger than the literal CPSV canonical form of Proposition~4.13,
+so the literal implication remains open.  The coisometry correction itself is
+tracked in \ghissue{3869}.
 
 The source-generated support identities and their trace consequences are
 proved in
@@ -186,12 +196,14 @@ trace consequences are
 \leanid{MPOTensor.transportedVerticalSectorS_trace_of_source_generated}.}
 
 \paragraph{Verdict.}
-The earlier two-sided-unitary condition was a stronger statement absent from
-the source and was false when the vertically viewed tensor had a zero sector.
-Replacing it by the coisometry identity $UU^\dagger=I$, while retaining exact
-reconstruction from the nonzero sectors, is a corrected definitional
-mismatch. The correction changes no hypothesis of Proposition~4.13 and
-introduces no new mathematical assumption.
+The earlier two-sided-unitary condition was absent from the source and was
+false when the vertically viewed tensor had a zero sector.  Replacing it by
+the coisometry identity $UU^\dagger=I$, while retaining exact reconstruction
+from the nonzero sectors, corrects the conclusion without adding a
+full-support hypothesis.  The current theorem proves this corrected conclusion
+only under the normalized BNT-refined horizontal form, which is strictly
+stronger than literal CPSV canonical form.  The literal Proposition~4.13
+implication remains open.
 
 \bibliographystyle{alpha}
 \bibliography{references}

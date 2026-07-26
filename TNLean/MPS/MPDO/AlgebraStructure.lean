@@ -360,7 +360,13 @@ theorem coe_reconstructFromBlockedCoefficients_apply
     ((data.reconstructFromBlockedCoefficients n a : data.A n) : Mat) =
       ∑ i, a i • ((data.blockedBasis n i : data.A n) : Mat) := by
   rw [reconstructFromBlockedCoefficients_apply (data := data) (n := n) (a := a)]
-  simp
+  change (data.A n).subtype (∑ i, a i • data.blockedBasis n i) =
+    ∑ i, a i • ((data.blockedBasis n i : data.A n) : Mat)
+  rw [map_sum]
+  refine Finset.sum_congr rfl ?_
+  intro i _
+  rw [map_smul]
+  rfl
 
 /-- Coordinates of an ambient matrix already known to lie in `A n`. -/
 noncomputable def toBlockedCoefficientsOfMem
@@ -422,9 +428,17 @@ theorem coe_mul_eq_sum_blockedStructureCoefficients
     ((data.m n (data.blockedBasis n i) (data.blockedBasis n j) : data.A (2 * n)) : Mat) =
       ∑ k, data.blockedStructureCoefficients n i j k •
         ((data.blockedBasis (2 * n) k : data.A (2 * n)) : Mat) := by
-  simpa [reconstructFromBlockedStructureCoefficients] using
-    coe_reconstructFromBlockedCoefficients_apply
-      (data := data) (n := 2 * n) (a := data.blockedStructureCoefficients n i j)
+  calc
+    ((data.m n (data.blockedBasis n i) (data.blockedBasis n j) :
+        data.A (2 * n)) : Mat) =
+        ((data.reconstructFromBlockedCoefficients (2 * n)
+          (data.blockedStructureCoefficients n i j) : data.A (2 * n)) : Mat) :=
+      congrArg (fun x : data.A (2 * n) => (x : Mat))
+        (reconstructFromBlockedStructureCoefficients data n i j).symm
+    _ = ∑ k, data.blockedStructureCoefficients n i j k •
+          ((data.blockedBasis (2 * n) k : data.A (2 * n)) : Mat) :=
+      coe_reconstructFromBlockedCoefficients_apply
+        (data := data) (n := 2 * n) (a := data.blockedStructureCoefficients n i j)
 
 /-- The coefficient family of the inclusion image of a chosen basis element. -/
 noncomputable def blockedInclusionCoefficients

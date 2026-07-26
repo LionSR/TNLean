@@ -14,10 +14,10 @@ letter by taking the corresponding linear combination of the local tensor
 matrices.  Such marked letters commute with weighted direct sums and are
 covariant under a common virtual similarity.
 
-For a tensor in literal horizontal canonical form, equality of every closed
-chain with one such marked letter implies equality of the marked tensors.
-The proof passes to the representative-indexed sector decomposition, applies
-representative-grouped marked separation, and returns through the literal
+For a tensor in normalized BNT-refined horizontal form, equality of every
+closed chain with one such marked letter implies equality of the marked
+tensors.  The proof passes to the representative-indexed sector decomposition,
+applies representative-grouped marked separation, and returns through the
 block-diagonal gauge.
 
 The restriction to the physical-letter span is essential: closed chains do
@@ -32,8 +32,8 @@ not detect arbitrary off-diagonal matrices between repeated sectors.
 * `linearMarkedTensor_gauge`: linear marking is covariant under a common
   virtual similarity.
 * `MPOTensor.IsHorizontalCF.linearMarkedTensor_eq_of_trace_agree`: closed
-  marked-chain equality separates physical-letter marks in literal
-  horizontal canonical form.
+  marked-chain equality separates physical-letter marks in normalized
+  BNT-refined horizontal form.
 
 ## References
 
@@ -172,7 +172,7 @@ namespace MPOTensor.IsHorizontalCF
 variable {d e D : ℕ}
 
 /-- Closed chains with one marked letter separate two physical-letter marks
-for a tensor in literal horizontal canonical form.
+for a tensor in normalized BNT-refined horizontal form.
 
 For coefficient families `f` and `g`, suppose that replacing the first
 physical letter by `sum_z f u z M^z` or by `sum_z g u z M^z` gives equal
@@ -184,8 +184,10 @@ bond-space marks would give a false statement because closed chains cannot
 detect off-diagonal matrices between repeated sectors.
 
 This is the physical-insertion scope of Lemma L in arXiv:1606.00608,
-Appendix C.3, lines 1835--1858, transported through the literal horizontal
-block gauge used in Proposition 4.13, lines 1909--1919. -/
+Appendix C.3, lines 1835--1858, under the stronger `IsHorizontalCF` hypothesis.
+It does not provide the retained-coordinate separation from literal CPSV
+canonical form needed by Proposition 4.13; see
+`docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex`. -/
 theorem linearMarkedTensor_eq_of_trace_agree
     (M : MPOTensor d D) (hHorizontal : M.IsHorizontalCF)
     (f g : Fin e → Fin (d * d) → ℂ)

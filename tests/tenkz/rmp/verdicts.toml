@@ -2,7 +2,7 @@
 # Schema: scripts/tenkz_rmp.py (load_verdicts).  Any status may be
 # recorded, including failure; the check rejects lies, never gaps.
 schema_version = 1
-campaign_sha256 = "b0ff17e2b8fc9b7d419cd44a716868983d647ef7759032ad9e78bbb295c6a405"
+campaign_sha256 = "d3ab42613f410f9c58200bb39e5e76f13549d279cde5e56397b8a74d2a8901f6"
 
 [[verdict]]
 id = "rmp-ii-peps-projection"
@@ -829,10 +829,10 @@ id = "rmp-iv-ground-space-2d"
 status = "cosmetic-gap"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
-case_sha256 = "7f2aa7c6549e7654961c8ca23186cbc58a95a315e62034e7e652fbea2d85d9bc"
+case_sha256 = "8b313a309719662f981e64635fe625ce3163f1808763d4e555c25349d9a7cbbd"
 reviewed = "2026-07-26"
-renderer = "fable-countersign-reading-2026-07-26-200dpi"
-note = "hue fixed; arrowed legs still absent"
+renderer = "codex-region-label-math-review-2026-07-26"
+note = "border hue; arrowed legs absent"
 
 [[verdict]]
 id = "rmp-iv-intersection-lhs-one"
@@ -939,22 +939,22 @@ id = "rmp-iv-intersection-lhs-six"
 status = "cosmetic-gap"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
-defects = []
-case_sha256 = "db38b30adfb2d3fa64a681cfc86cb783c9740aeb37d86aa25b2285395928b032"
+defects = ["extra-element", "wrong-contraction"]
+case_sha256 = "8e641c279e19732fb45bcfcbe96671de558f162c784f855e4bc07b8c4b0f06f9"
 reviewed = "2026-07-26"
-renderer = "fable-countersign-reading-2026-07-26-200dpi"
-note = "nesting strict on all four sides; bonds cut at the window"
+renderer = "codex-region-label-math-review-2026-07-26"
+note = "nesting drawn as overlap plus an invented lattice"
 
 [[verdict]]
 id = "rmp-iv-intersection-rhs-six"
 status = "cosmetic-gap"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
-defects = []
-case_sha256 = "059c4e05c99cd5bfd09e0b5f52401fda9c2c840da19f8f3142df874ffb69af0d"
+defects = ["extra-element", "wrong-contraction"]
+case_sha256 = "94b10a0aa16350e3a4efe7116be10bf12ab2a3f8e6480504fe4ca567d48a110c"
 reviewed = "2026-07-26"
-renderer = "fable-countersign-reading-2026-07-26-200dpi"
-note = "nesting strict on all four sides; bonds cut at the window"
+renderer = "codex-region-label-math-review-2026-07-26"
+note = "same"
 
 [[verdict]]
 id = "rmp-app-toric-primal"
@@ -1064,14 +1064,13 @@ note = "squared; the two-colour strings still absent"
 
 [[verdict]]
 id = "rmp-workbench-ii-v-tensor-definition"
-status = "structural-gap"
+status = "faithful"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
-defects = ["missing-element"]
-case_sha256 = "a0988d954cd20eae17e37894703f86e60654dfb500f36c994627c5becf7f17ae"
+case_sha256 = "e7e3ccd081d403bb141899657722ecb12dba13b33579a2a3758d2c968f5e6a29"
 reviewed = "2026-07-26"
-renderer = "fable-countersign-reading-2026-07-26-200dpi"
-note = "cups draw; the V to A-bar contraction still absent"
+renderer = "codex-source-boundary-review-2026-07-26"
+second_viewer = "pr-4863-source-review-2026-07-26"
 
 [[verdict]]
 id = "rmp-workbench-ii-boundary-a-old"

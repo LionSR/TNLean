@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.ComplexPhasePositivity
 import TNLean.MPS.RFP.ZeroCorrelationLength
 import TNLean.MPS.Core.MultiBlock
 import TNLean.Spectral.TransferOperatorGapNT
@@ -370,9 +371,8 @@ theorem phases_eq_of_isTransferIdempotent_directSum_scaled_self
     (hRFP : IsTransferIdempotent
       (directSumTensor (fun q : Fin r ↦ (fun i ↦ μ q • A i : MPSTensor d D))))
     (q q' : Fin r) : μ q = μ q' := by
-  have hμ_ne : ∀ q, μ q ≠ 0 := by
-    intro q hq
-    simpa [hq] using hμ q
+  have hμ_ne : ∀ q, μ q ≠ 0 := fun q =>
+    Complex.ne_zero_of_norm_eq_one (hμ q)
   have hphase : μ q * starRingEnd ℂ (μ q') = 1 := by
     have hidem :=
       (isTransferIdempotent_directSumTensor_iff_pairwise_mixedTransferMap₂_isIdempotentElem

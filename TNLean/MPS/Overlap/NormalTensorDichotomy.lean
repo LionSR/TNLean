@@ -167,9 +167,7 @@ theorem EventuallyNonzeroProportionalMPV₂.exists_unit_phase_power_of_isNormalT
   · refine ⟨ζ⁻¹, ?_, ?_⟩
     · rw [norm_inv, hζ, inv_one]
     · intro N _hN σ
-      have hζ0 : ζ ≠ 0 := by
-        intro h
-        simp [h] at hζ
+      have hζ0 : ζ ≠ 0 := Complex.ne_zero_of_norm_eq_one hζ
       have hComponent := congrArg (fun v : MPVSpace d N ↦ v σ) (hState N)
       simp only [mpvState_apply, PiLp.smul_apply, smul_eq_mul] at hComponent
       rw [hComponent, ← mul_assoc, ← mul_pow, inv_mul_cancel₀ hζ0, one_pow, one_mul]

@@ -1,0 +1,16 @@
+% Negative regression: one unsupported member invalidates the whole selector.
+\documentclass{standalone}
+\usepackage{tenkz}
+\makeatletter
+\ExplSyntaxOn
+\file_input:n { tenkz-kernel.code.tex }
+\ExplSyntaxOff
+\makeatother
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[rows={wire}, cols=2, bonds=none, physical=none]
+  \tn[name=a]{A} & \tn[name=b]{B}
+  \tnwire[name=w]{a.e}{b.w}
+  \tnmark[form=enclosure]{{a,w,b}}{}
+\end{tenkz}
+\end{document}

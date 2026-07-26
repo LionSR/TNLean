@@ -121,14 +121,18 @@ namespace MPOTensor
 
 variable {d D : ℕ}
 
-/-- Horizontal canonical form for an MPO tensor.
+/-- Normalized BNT-refined horizontal form for an MPO tensor.
 
 The doubled-index tensor is the representative-indexed BNT sector
-decomposition, with one invertible gauge on each repeated copy.  Thus the
+decomposition, with one invertible gauge on each repeated copy. Thus the
 global gauge is the block direct sum of the copy gauges, rather than an
-arbitrary similarity that could mix distinct sectors.  Repeated
+arbitrary similarity that could mix distinct sectors. Repeated
 gauge-equivalent copies are grouped over one representative and retain their
-individual nonzero weights.  There is no additional all-zero summand.
+individual nonzero weights. There is no additional all-zero summand.
+
+**Scope restriction (BNT-refined horizontal form):** this predicate is stronger
+than the literal CPSV canonical form; see
+`docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex`.
 
 Source: arXiv:1606.00608, canonical form at lines 237--244 and the BNT
 decomposition `eq:II_ABasicTensors` at lines 281--301. -/
@@ -149,7 +153,7 @@ def IsHorizontalCF (M : MPOTensor d D) : Prop :=
                     GL (Fin S.totalDim) ℂ) :
                   Matrix (Fin S.totalDim) (Fin S.totalDim) ℂ))
 
-/-- A literal horizontal canonical form gives its positive-length BNT MPV
+/-- Normalized BNT-refined horizontal form gives its positive-length BNT MPV
 representation.
 
 The block direct sum of the copy similarities leaves every closed
@@ -330,7 +334,7 @@ theorem representative_braRight_eq_ketLeftBraRight_of_invariant
 
 /-- **Lemma L on the original bond space.**
 
-Let `M` be in literal horizontal canonical form.  If two physical operators
+Let `M` be in normalized BNT-refined horizontal form. If two physical operators
 have the same first-site action on every matrix product vector of `M`, then
 their inserted tensors are equal on the original bond space:
 \[
@@ -369,8 +373,9 @@ theorem IsHorizontalCF.insertedTensor_eq_of_firstSiteActionAgree
     S.insertedTensor_toTensor_eq_of_basis Y Z hBasis
   exact MPSTensor.insertedTensor_eq_of_gauge X hX' Y Z hSector
 
-/-- A displaced idempotent for a tensor in horizontal canonical form fails to
-commute with the generated density operator at some positive chain length.
+/-- A displaced idempotent for a tensor in normalized BNT-refined horizontal
+form fails to commute with the generated density operator at some positive
+chain length.
 
 If commutation held at every positive length, idempotence would give the
 one-sided first-site identities for the two-sided compression.  The literal
@@ -429,7 +434,7 @@ theorem IsHorizontalCF.exists_not_commute_of_displaced
   have hij := congrFun hTensor (finProdFinEquiv (i, j))
   simpa [toMPSTensor] using hij
 
-/-- The public horizontal canonical-form predicate supplies the
+/-- The normalized BNT-refined horizontal-form predicate supplies the
 representative-indexed invariant-projection conclusion.
 
 The witness is the BNT sector decomposition occurring in `IsHorizontalCF`.

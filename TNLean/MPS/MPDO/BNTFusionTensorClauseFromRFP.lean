@@ -12,16 +12,20 @@ import TNLean.MPS.MPDO.RFPPositiveFusionDecomposition
 /-!
 # The BNT fusion clause from the MPDO renormalization fixed-point condition
 
-This file completes the implication from statement (i) to statement (iii) of
-CPSV16, Theorem 4.14.  The transported one-site and two-site vertical forms
-give both representations of the blocked closed-chain operator.  Eventual
-linear independence of the BNT operators compares their coefficients, and
-the positive power-sum lemma gives the length-one trace-scalar identity.
+This file proves the implication from statement (i) to statement (iii) of
+CPSV16, Theorem 4.14, for an MPDO in normalized BNT-refined horizontal form.
+The transported one-site and two-site vertical forms give both representations
+of the blocked closed-chain operator.  Eventual linear independence of the BNT
+operators compares their coefficients, and the positive power-sum lemma gives
+the length-one trace-scalar identity.  The corresponding implication from the
+literal CPSV canonical form remains open; see
+`docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex`.
 
 ## Main result
 
-* `HasBNTFusionTensorClause.of_isRFPViaTS` constructs the source-faithful
-  active-support fusion clause from the Definition 4.1 RFP maps.
+* `HasBNTFusionTensorClause.of_isRFPViaTS` constructs the active-support fusion
+  clause from the Definition 4.1 RFP maps under the normalized BNT-refined
+  horizontal-form hypothesis.
 
 ## References
 
@@ -299,9 +303,13 @@ theorem hasIdempotentCoefficientForm_of_blockedRepresentations
 
 namespace HasBNTFusionTensorClause
 
-/-- **Theorem 4.14(i) implies (iii).** A horizontal-canonical MPDO satisfying
-the Definition 4.1 renormalization fixed-point condition has the
-source-faithful active-support BNT fusion clause.
+/-- **BNT-refined Theorem 4.14(i) implies (iii).** An MPDO in normalized
+BNT-refined horizontal form that satisfies the Definition 4.1 renormalization
+fixed-point condition has the active-support BNT fusion clause.
+
+**Scope restriction (BNT-refined horizontal form):** `IsHorizontalCF` is
+stronger than the literal CPSV canonical form used in Theorem 4.14 through
+Proposition 4.13; see `docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex`.
 
 The one-site vertical decomposition supplies the BNT tensors, multiplicities,
 and positive weights.

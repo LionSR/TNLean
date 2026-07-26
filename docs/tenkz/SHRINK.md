@@ -868,3 +868,30 @@ pictures that have since been redrawn from the sources directly.
 | flag:lonely-type:positive-integer|role-list | keep-because: the union type serves `sheets=` alone now that the condensation panel left the planes genre for the oblique sheet; the type is the planes genre's spelling and follows that genre's fate at the front-end consolidation; expiry 0.8 |
 
 No ledger row changes and no other flag verdict is re-examined here.
+
+### 2026-07-26 — corrections to the symmetry-redraw entry's audit record
+
+The entry "the symmetry redraw raises the escape meter by thirty-six"
+above carries two record errors, found in review (#4906). The ledger is
+append-only, so the original stands and this section corrects it.
+
+**The per-panel escape breakdown was wrong.** The entry credited thirteen
+pairs to the self-braiding panel and five each to the idempotent and the
+first two braids; recounted from the pre-redraw tree, those panels gained
+nothing. The true breakdown of the eighteen `out=`/`in=` pairs: twelve in
+pulling through, three in the fourth braid, two each in the first braid
+and both R-tensors, one in the third braid, and four *removed* from the
+first torus panel, whose wrapped word no longer hand-routes. The total
+the meter recorded was and remains correct.
+
+**The tngroup verdict lacked its machine token.** The prose asserted the
+same 0.8 tenure as the two frame keys but omitted the parsable token, and
+the lexical lifetime parser satisfied itself on the word "permanent" from
+the neighbouring sugar-shape flag's history. The row is re-stated with
+the token:
+
+| flag | verdict |
+|---|---|
+| flag:consumers:command:tngroup | keep-because: the command carrying the group transform, with two demand-corpus consumers from the anyon panels; its shape was already affirmed against the sugar detector, and its consumer tenure follows the same 0.8 close as the two frame keys; expiry 0.8 |
+
+No meters move and no ledger row changes here.
