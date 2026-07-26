@@ -18,7 +18,7 @@
     A tensor $A$ is in \emph{irreducible form} if it is block-diagonal,
     \begin{align}
         A^i
-        &=\bigoplus_{j\in J}\mu_j A_j^i,
+         & =\bigoplus_{j\in J}\mu_j A_j^i,
         \notag
     \end{align}
     where each block $A_j$ is an $m_j$-periodic tensor. Following
@@ -35,9 +35,9 @@
 
 \begin{remark}[Normal canonical form gives irreducible form]
     \label{rem:irr_form_vs_ncf}
-\lean{MPSTensor.toIsIrreducibleFormOfPhaseNormalized,
-    MPSTensor.toIsIrreducibleFormOfPhaseNormalized_period_eq_one}
-\leanok
+    \lean{MPSTensor.toIsIrreducibleFormOfPhaseNormalized,
+        MPSTensor.toIsIrreducibleFormOfPhaseNormalized_period_eq_one}
+    \leanok
     Let $A^i=\bigoplus_j\mu_j A_j^i$ be a normal canonical block family with
     nonzero complex weights. Replacing $\mu_j$ by $|\mu_j|$ and $A_j$ by
     $(\mu_j/|\mu_j|)A_j$ gives the positive-weight irreducible form convention
@@ -49,7 +49,7 @@
 
 \begin{remark}[Irreducible form allows higher periods]
     \label{rem:irreducible_form_higher_periods}
-\notready
+    \notready
     The converse containment is not part of the implication above.
     Irreducible form permits periodic blocks with period larger than~$1$; for
     instance, the antiferromagnetic example has period~$2$.
@@ -149,7 +149,7 @@ of~\cite{DeLasCuevas2017Irreducible}.
     The rotated block-diagonal tensor satisfies
     \begin{align}
         \left(\bigoplus_k\mu_k A_k\right)_u
-        &=\bigoplus_k\mu_k(A_k)_u.
+         & =\bigoplus_k\mu_k(A_k)_u.
         \notag
     \end{align}
 \end{theorem}
@@ -192,12 +192,11 @@ of~\cite{DeLasCuevas2017Irreducible}.
     Assume the periodic equal-case theorem: tensors in irreducible form~II
     with equal MPV families are $Z$-gauge equivalent.  Let $A$ be in
     irreducible form~II, and suppose $B:=A_M$ is also in irreducible form~II
-    with $\mc V(A)=\mc V(B)$.  Then there are $m>0$, an invertible matrix $Y$,
-    and a matrix $Z\in\MN D$ such that
+    with $\mc V(A)=\mc V(B)$. Then there are $m>0$, an invertible matrix $Y$,
+    and a matrix $Z\in\MN D$ such that, for every physical index $i$,
     \begin{align}
-       [Z,A^i]&=0,& Z^m&=\Id_D,& ZA^i&=YB^iY^{-1}
-       \qquad\text{for every $i$}.
-       \notag
+        [Z,A^i] & =0, & Z^m & =\Id_D, & ZA^i & =YB^iY^{-1}.
+        \notag
     \end{align}
     Thus $A$ and $B$ are related by a genuine $\mathbb Z_m$ virtual gauge,
     not merely by a scalar root of unity.
