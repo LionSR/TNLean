@@ -16,7 +16,7 @@ BNT canonical form hypotheses of left-canonicity and irreducibility, the
 matched gauges may be chosen unitary.
 
 This is the proportional part of Canonical Form II in Cirac et al.,
-arXiv:1606.00608, Corollary C.5, lines 1197–1199.
+arXiv:1606.00608, Corollary A.6, lines 1197–1199.
 -/
 
 open scoped Matrix BigOperators
@@ -36,7 +36,7 @@ The BNT hypotheses already include left canonicity and irreducibility for each
 basis tensor.  Thus no hypothesis beyond those of the proportional BNT theorem
 is needed for this refinement.
 
-Source: Cirac et al., arXiv:1606.00608, Corollary C.5, lines 1197–1199. -/
+Source: Cirac et al., arXiv:1606.00608, Corollary A.6, lines 1197–1199. -/
 theorem ft_sector_bnt_proportional_unitary_sector_match_witnesses
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
@@ -93,7 +93,7 @@ is the same phase that occurs in the copy-weight identity. Repeating each
 sector unitary over its matched copies therefore gives a unitary block-diagonal
 global gauge in matched flattened coordinates.
 
-Source: arXiv:1606.00608, Corollary C.5 and Appendix MPV proof,
+Source: arXiv:1606.00608, Corollary A.6 and Appendix MPV proof,
 lines 1182--1199. -/
 theorem ft_sector_bnt_equal_unitary_global_gauge_witnesses
     {P Q : SectorDecomposition d}

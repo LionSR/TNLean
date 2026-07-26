@@ -153,7 +153,7 @@ Theorem~\ref{thm:sector_bnt_equal_global_gauge}.
     Explicitly, for $X=\bigoplus_k X_k$,
     \begin{align}
         \bigoplus_k \mu_k B_k^i
-        &= X \left(\bigoplus_k \mu_k A_k^i\right) X^{-1}.
+         & = X \left(\bigoplus_k \mu_k A_k^i\right) X^{-1}.
         \label{eq:aft_multiBlock_global_conj}
     \end{align}
 \end{lemma}
@@ -247,7 +247,7 @@ Theorem~\ref{thm:sector_bnt_equal_global_gauge}.
     by reindexing the blocks along $e$:
     \begin{align}
         V^{(N)}\!\left(\bigoplus_k \mu_k A_k\right)_\sigma
-        &=
+         & =
         V^{(N)}\!\left(\bigoplus_k \mu_{e(k)} A_{e(k)}\right)_\sigma.
         \notag
     \end{align}
@@ -334,49 +334,11 @@ Theorem~\ref{thm:sector_bnt_equal_global_gauge}.
 \subsection{Equal-case block matching with differing bond dimensions}%
 \label{sec:different_bond_dimension_equal_case_ft}
 
-The same-index lemmas above assume a fixed block correspondence. The
-equal-case theorem on the BNT canonical form instead derives the
-sector matching from the same-MPV hypothesis alone, allowing different
-sector counts and bond dimensions before matching.
-
-\begin{lemma}[Equal-case block matching with differing bond dimensions]%
-    \label{lem:ft_sector_bnt_equal_sector_data_different_dims}
-    \lean{MPSTensor.ft_sector_bnt_equal_sector_data}
-    \leanok
-    \uses{def:same_mpv2_pos, def:sector_bnt_cf, def:gauge_phase_equiv}
-    Let $P$ and $Q$ be two BNT canonical forms
-    (Definition~\ref{def:sector_bnt_cf}), each admitting a unit-modulus copy
-    weight in every basis sector, possibly with different sector counts and
-    different bond dimensions before matching.
-    If their block-diagonal tensors generate the same MPV family at every
-    positive length (Definition~\ref{def:same_mpv2_pos}), then the basis
-    sectors are bijectively matched by a permutation $\beta$, each matched
-    basis pair is gauge-phase equivalent
-    (Definition~\ref{def:gauge_phase_equiv}), the matched copy multiplicities
-    agree, and the copy weights agree up to a unit-modulus phase $\zeta$ and a
-    copy-index reindexing.
-    This is the sector-data form of the equal-case theorem
-    \cite[Corollary~2.11, lines 354--361 and appendix 1172--1192]{Cirac2016MPDO_arXiv};
-    the corresponding global gauge corollary is recorded in
-    Chapter~\ref{ch:ft_proof}.
-    % Maintainer note (Lean): the global-gauge companion is
-    % MPSTensor.ft_sector_bnt_equal_global_gauge in
-    % TNLean/MPS/FundamentalTheorem/SectorBNT/Fundamental.lean.
-\end{lemma}
-
-\begin{proof}
-    \leanok
-    On the BNT canonical form, the proof proceeds in three steps:
-    bijective block matching from non-decaying cross-overlaps, coefficient
-    identity via the global-gauge phase $\zeta$, and multiset comparison of
-    the scalar power sums recovering matched copy multiplicities and
-    weights up to $\zeta^{-1}$.
-    % Maintainer note (Lean): the three steps are formalised as
-    % StrongMatch.bijective_match_of_sameMPV,
-    % CoeffIdentity.coeff_identity_via_global_gauge, and
-    % WeightEquiv.matched_sector_weight_equiv in
-    % TNLean/MPS/FundamentalTheorem/SectorBNT/.
-\end{proof}
+The same-index lemmas above assume a fixed block correspondence. The equal-case
+sector matching with initially different sector counts and bond dimensions is
+Theorem~\ref{thm:ft_sector_bnt_equal_sector_data_different_dims} of
+Chapter~\ref{ch:ft_proof}; its global-gauge consequence is
+Theorem~\ref{thm:sector_bnt_equal_global_gauge}.
 
 %% ---------------------------------------------------------
 \section{Translation-invariant reduction and global symmetry}%
@@ -504,7 +466,7 @@ scalar factor.
         % tensor.  The upper leg is i; both terms have signature (1,1,1,0).
         \begin{tenkz}[physical=up]
             \tnX{X(h)X(g)} & \tn[up=$i$]{A} &
-                \tnX{(X(h)X(g))^{-1}}
+            \tnX{(X(h)X(g))^{-1}}
         \end{tenkz}
         $ = $
         \begin{tenkz}[physical=up]
