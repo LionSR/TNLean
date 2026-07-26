@@ -14,7 +14,7 @@ physical state symmetry requires additional hypotheses.
     \emph{twisted transfer map} is
     \begin{align}
         \E_u(X)
-        &:= \sum_{n,n'} \bra{n'} u \ket{n}
+         & := \sum_{n,n'} \bra{n'} u \ket{n}
         A_n\, X\, A_{n'}^\dagger.
         \label{eq:symmetry_twisted_transfer}
     \end{align}
@@ -36,11 +36,11 @@ physical state symmetry requires additional hypotheses.
     % free because the map has not consumed X.
     % boundary|virtual-west=2|virtual-east=2|physical-up=0|physical-down=0.
     \begin{align}
-        &\begin{tenkz}[rows={ket,op:none,bra}]
-            \tn{A_n} \\
-            \tn[role=operator]{u} \\
-            \tn*{A_{n'}}
-        \end{tenkz}.
+         & \begin{tenkz}[rows={ket,op:none,bra}]
+               \tn{A_n} \\
+               \tn[role=operator]{u} \\
+               \tn*{A_{n'}}
+           \end{tenkz}.
         \notag
     \end{align}
     The upper and lower black nodes denote $A_n$ and $A_{n'}^\dagger$, and the
@@ -53,7 +53,7 @@ physical state symmetry requires additional hypotheses.
     \uses{def:twisted_transfer_map}
     The \emph{stationary-boundary block-twist functional} is
     \begin{align}
-        T_L(A,u,\Lambda) &:= \tr\!(\Lambda \cdot \E_u^L(\Id)).
+        T_L(A,u,\Lambda) & := \tr\!(\Lambda \cdot \E_u^L(\Id)).
         \label{eq:symmetry_string_parameter}
     \end{align}
     In tensor-network notation this is the length-$L$ doubled chain with a
@@ -70,14 +70,14 @@ physical state symmetry requires additional hypotheses.
     % Boundary signature: virtual-west=0 | virtual-east=0 |
     % physical-up=0 | physical-down=0.
     \begin{align}
-        &\begin{tenkz}[rows={ket,op:none,bra},
-                      west={cup=$\Lambda$}, east=cup]
-            \tn{A} & \tn{A} & \tndots & \tn{A} \\
-            \tn[role=operator]{u} & \tn[role=operator]{u} & \tndots &
-                \tn[role=operator]{u} \\
-            \tn*{A}\tnspan[brace below]{4}{$L\text{ sites}$} &
-                \tn*{A} & \tndots & \tn*{A}
-        \end{tenkz}.
+         & \begin{tenkz}[rows={ket,op:none,bra},
+                   west={cup=$\Lambda$}, east=cup]
+               \tn{A} & \tn{A} & \tndots & \tn{A} \\
+               \tn[role=operator]{u} & \tn[role=operator]{u} & \tndots &
+               \tn[role=operator]{u} \\
+               \tn*{A}\tnspan[brace below]{4}{$L\text{ sites}$} &
+               \tn*{A} & \tndots & \tn*{A}
+           \end{tenkz}.
         \notag
     \end{align}
     The boundary matrix $\Lambda$ is contracted into the virtual boundary, the
@@ -92,8 +92,8 @@ physical state symmetry requires additional hypotheses.
     For the periodic length-$L$ matrix product vector $|\Psi_L(A)\rangle$, the
     source quantity is literally
     \begin{align}
-       R_L(u)&:=\langle\Psi_L(A)|u^{\otimes L}|\Psi_L(A)\rangle.
-       \label{eq:symmetry_source_periodic_RL}
+        R_L(u) & :=\langle\Psi_L(A)|u^{\otimes L}|\Psi_L(A)\rangle.
+        \label{eq:symmetry_source_periodic_RL}
     \end{align}
     Identifying this periodic overlap with the normalized stationary-boundary
     functional $T_L(A,u,\Lambda)$ requires a thermodynamic-boundary and
@@ -111,7 +111,7 @@ physical state symmetry requires additional hypotheses.
     \cite[display~SOPMP, lines~176--181]{PerezGarcia2008StringOrder} is
     \begin{align}
         S_N(x,y,u)
-        &:= \tr\!(\Lambda\,\E_x\,\E_u^N(\E_y(\Id))).
+         & := \tr\!(\Lambda\,\E_x\,\E_u^N(\E_y(\Id))).
         \label{eq:symmetry_physical_string}
     \end{align}
     This is the physical-endpoint expression corresponding to
@@ -149,17 +149,17 @@ physical state symmetry requires additional hypotheses.
     $\E_A(\Id)=\Id$, $\E_A^*(\Lambda)=\Lambda$, with $\Lambda>0$ and
     $\tr(\Lambda)=1$.  For every physical unitary $u$,
     \begin{align}
-       \rho(\E_u)&\le1.
-       \notag
+        \rho(\E_u) & \le1.
+        \notag
     \end{align}
     Equality holds if and only if there are a unitary $V$ and
-    $\theta\in[0,2\pi)$ satisfying, in an eigenbasis
-    $u=\sum_j e^{i\theta_j}|\widetilde j\rangle\langle\widetilde j|$,
+    $\theta\in[0,2\pi)$ satisfying the following identity for every $j$ in an
+    eigenbasis
+    $u=\sum_j e^{i\theta_j}|\widetilde j\rangle\langle\widetilde j|$:
     \begin{align}
-       V^\dagger\widetilde A_j
-       &=e^{i(\theta-\theta_j)}\widetilde A_jV^\dagger
-       \qquad\text{for every $j$}.
-       \label{eq:pgwsvc08_lemma1_condition}
+        V^\dagger\widetilde A_j
+         & =e^{i(\theta-\theta_j)}\widetilde A_jV^\dagger.
+        \label{eq:pgwsvc08_lemma1_condition}
     \end{align}
     Moreover, $\E_u$ has at most one eigenvalue of modulus one.
 \end{lemma}
@@ -168,14 +168,14 @@ physical state symmetry requires additional hypotheses.
     Let $\E_u(V)=\lambda V$.  Multiplication by $\Lambda V^\dagger$, the
     trace, and Cauchy--Schwarz give
     \begin{align}
-      |\lambda|\tr(V\Lambda V^\dagger)
-      &\le
-      \left(\sum_j\tr(V\widetilde A_j^\dagger\Lambda
-          \widetilde A_jV^\dagger)\right)^{1/2}
-      \left(\sum_j\tr(\widetilde A_j^\dagger V\Lambda V^\dagger
-          \widetilde A_j)\right)^{1/2}\\
-      &=\tr(V\Lambda V^\dagger).
-      \notag
+        |\lambda|\tr(V\Lambda V^\dagger)
+         & \le
+        \left(\sum_j\tr(V\widetilde A_j^\dagger\Lambda
+        \widetilde A_jV^\dagger)\right)^{1/2}
+        \left(\sum_j\tr(\widetilde A_j^\dagger V\Lambda V^\dagger
+        \widetilde A_j)\right)^{1/2} \\
+         & =\tr(V\Lambda V^\dagger).
+        \notag
     \end{align}
     Faithfulness of $\Lambda$ yields $|\lambda|\le1$.  Equality in
     Cauchy--Schwarz is equivalent to
@@ -190,9 +190,9 @@ physical state symmetry requires additional hypotheses.
     $e^{i\theta},e^{i\theta'}$, respectively, the equality relations give the
     exact identity
     \begin{align}
-       \E_A(V^\dagger V')
-       &=e^{i(\theta'-\theta)}V^\dagger V'.
-       \notag
+        \E_A(V^\dagger V')
+         & =e^{i(\theta'-\theta)}V^\dagger V'.
+        \notag
     \end{align}
     Purity leaves only the peripheral eigenvalue $1$, hence
     $\theta'=\theta$ modulo $2\pi$.  The one-dimensional fixed space then
@@ -210,9 +210,9 @@ physical state symmetry requires additional hypotheses.
     there exist a unitary $\widetilde u\ne\Id$, a unitary virtual matrix $V$,
     and physical indices $n,m$ such that
     \begin{align}
-       \E_{\widetilde u}(V)&=V,
-       &\tr(V\Lambda A_nA_m^\dagger)&\ne0.
-       \label{eq:pgwsvc08_theorem1}
+        \E_{\widetilde u}(V) & =V,
+                             & \tr(V\Lambda A_nA_m^\dagger) & \ne0.
+        \label{eq:pgwsvc08_theorem1}
     \end{align}
     The transfer criteria below assume one-site injectivity.  The literal
     physical equivalence additionally requires that sufficiently long physical
@@ -225,22 +225,24 @@ physical state symmetry requires additional hypotheses.
     $Y$ are the corresponding right and left eigenmatrices, then
     $Y=\Lambda V^\dagger$, and the leading term retains its length-dependent
     phase:
+    % Local fix: restore the omitted peripheral factor e^{iN\theta}; see
+    % docs/paper-gaps/pgwsvc08_string_order_virtual_boundary.tex.
     \begin{align}
-       S_N(x,y,u)
-       &=e^{iN\theta}
-       \tr\!\bigl(Y\E_y(\Id)\bigr)
-       \tr\!\bigl(\Lambda\E_x(V)\bigr)+o(1).
-       \notag
+        S_N(x,y,u)
+         & =e^{iN\theta}
+        \tr\!\bigl(Y\E_y(\Id)\bigr)
+        \tr\!\bigl(\Lambda\E_x(V)\bigr)+o(1).
+        \notag
     \end{align}
     In the eigenbasis $u=\sum_j e^{i\theta_j}|\widetilde
-    j\rangle\langle\widetilde j|$, shift the string unitary by the
+        j\rangle\langle\widetilde j|$, shift the string unitary by the
     peripheral phase,
     \begin{align}
-       \widetilde u
-       &:=e^{-i\theta}u
+        \widetilde u
+         & :=e^{-i\theta}u
         =\sum_j e^{i(\theta_j-\theta)}
-          |\widetilde j\rangle\langle\widetilde j|.
-       \notag
+        |\widetilde j\rangle\langle\widetilde j|.
+        \notag
     \end{align}
     Then $\E_{\widetilde u}(V)=V$.  Choosing
     $y=x^\dagger\widetilde u$ reduces nonvanishing to the second condition
@@ -258,7 +260,7 @@ physical state symmetry requires additional hypotheses.
     state is invariant under $u^{\otimes N}$ on every $N$-site reduced density
     operator if and only if
     \begin{align}
-        \rho(\E_u)&=1.
+        \rho(\E_u) & =1.
         \notag
     \end{align}
     The theorem below gives the corresponding virtual local-covariance
@@ -278,9 +280,9 @@ physical state symmetry requires additional hypotheses.
     Conversely, physical invariance gives, for length-independent boundary
     tensors $L,R$,
     \begin{align}
-      D^{-2}&\le\tr(\varrho_N^2)
-       =\tr\!\left[L(\E_u\otimes\E_{u^\dagger})^N(R)\right].
-       \notag
+        D^{-2} & \le\tr(\varrho_N^2)
+        =\tr\!\left[L(\E_u\otimes\E_{u^\dagger})^N(R)\right].
+        \notag
     \end{align}
     Exponential decay would contradict this bound, so $\rho(\E_u)=1$.
 \end{proof}
@@ -295,7 +297,7 @@ physical state symmetry requires additional hypotheses.
     $V^\dagger \Lambda V = \Lambda$ and, for every physical index~$i$,
     \begin{align}
         \sum_j u_{ij}\, A^j
-        &= \mu\, V\, A^i\, V^\dagger.
+         & = \mu\, V\, A^i\, V^\dagger.
         \label{eq:symmetry_local_covariance}
     \end{align}
     The unitary $V$ intertwines the physical action of~$u$ with a virtual
@@ -306,20 +308,25 @@ physical state symmetry requires additional hypotheses.
     \lean{MPSTensor.HasStringOrder}
     \leanok
     \uses{def:string_order_boundary_param}
+    For boundary matrices $X,Y\in\MN{D}$, set explicitly
+    \begin{align}
+        R_L(u;X,Y)
+         & :=\tr\!\bigl(\Lambda X\E_u^L(Y)\bigr).
+        \notag
+    \end{align}
     The virtual-boundary nondecay predicate holds for $u$ and
-    $\Lambda$ if there exist boundary matrices $X,Y$ and a
-    positive constant $c > 0$ such that
-    $c \le \|R_L(u;X,Y)\|$ for all $L$, where
-    $R_L(u;X,Y)$ is the boundary-refined string-order parameter.
-    Thus some boundary-refined string-order sequence does not decay to zero.
+    $\Lambda$ if there exist $X,Y$ and a positive constant $c>0$ such that
+    $c\le\|R_L(u;X,Y)\|$ for every $L$. Thus some virtual-boundary sequence
+    does not decay to zero.
 
-    String order is here an existence statement over the virtual matrices
-    $X,Y$, for a fixed twist $u$; no claim is made for any particular
+    Virtual-boundary nondecay is an existence statement over the virtual
+    matrices $X,Y$, for a fixed twist $u$; no claim is made for any particular
     boundary choice. Definition~\ref{def:has_physical_string_order} records
-    the physical-endpoint source definition, which quantifies existentially
-    over $u,x,y$ and requires a positive limit rather than a lower bound
-    uniform in the length; that paper also notes that the correlator for a
-    particular endpoint choice can vanish even when the symmetry is present.
+    the physical-endpoint string-order notion from the source, which quantifies
+    existentially over $u,x,y$ and requires a positive limit rather than a lower
+    bound uniform in the length. That paper also notes that the correlator for
+    a particular endpoint choice can vanish even when the physical symmetry is
+    present.
     % Deviation recorded in docs/paper-gaps/pgwsvc08_string_order_virtual_boundary.tex.
 \end{definition}
 
@@ -371,7 +378,7 @@ physical state symmetry requires additional hypotheses.
     virtual conjugation:
     \begin{align}
         \E(V X V^\dagger)
-        &= V\, \E(X)\, V^\dagger.
+         & = V\, \E(X)\, V^\dagger.
         \label{eq:symmetry_transfer_covariance}
     \end{align}
     In doubled-layer notation, the virtual operators slide through the local
@@ -415,7 +422,7 @@ physical state symmetry requires additional hypotheses.
     $E = \sum_i A_i \otimes \bar A_i$ with $V \otimes \bar V$ is
     \begin{align}
         V\, \E_1(X)\, V^\dagger
-        &= \E_1(V X V^\dagger).
+         & = \E_1(V X V^\dagger).
         \label{eq:symmetry_doubled_commutation}
     \end{align}
 \end{definition}
@@ -602,7 +609,7 @@ physical state symmetry requires additional hypotheses.
     satisfy $u u^\dagger = \Id$.
     If
     \begin{align}
-        \E_u(X) &= \lambda X
+        \E_u(X) & = \lambda X
         \label{eq:symmetry_twisted_eigen_mod_one}
     \end{align}
     for some nonzero $X \in \MN{D}$ with $|\lambda|=1$, then $A$ is
@@ -635,8 +642,9 @@ physical state symmetry requires additional hypotheses.
         def:gauge_phase_equiv, def:injective}
     Let $A$ be injective, let $\Lambda \in \MN{D}$, and assume
     $u u^\dagger = \Id$ and $\E_A(\Id)=\Id$.
-    If string order exists for $u$ with boundary parameter $\Lambda$, then $A$
-    is gauge-phase equivalent to the companion tensor $B_u$.
+    If virtual-boundary nondecay holds for $u$ with boundary parameter
+    $\Lambda$, then $A$ is gauge-phase equivalent to the companion tensor
+    $B_u$.
 \end{theorem}
 
 \begin{proof}
@@ -645,7 +653,7 @@ physical state symmetry requires additional hypotheses.
         thm:twisted_transfer_spectral_radius_le_one,
         thm:twisted_transfer_modulus_one_gauge_phase}
     If $\rho(\E_u) < 1$, Lemma~\ref{lem:boundary_string_order_tendsto_zero}
-    forces every boundary string-order sequence to decay to zero, contradicting
+    forces every virtual-boundary sequence to decay to zero, contradicting
     Definition~\ref{def:has_string_order}.
     Hence $\rho(\E_u) \ge 1$.
     Theorem~\ref{thm:twisted_transfer_spectral_radius_le_one} shows that every
@@ -666,7 +674,7 @@ physical state symmetry requires additional hypotheses.
     physical index~$i$,
     \begin{align}
         \sum_j u_{ij} A^j
-        &= \mu\, V A^i V^\dagger.
+         & = \mu\, V A^i V^\dagger.
         \label{eq:symmetry_phased_covariance}
     \end{align}
 \end{theorem}
@@ -695,7 +703,7 @@ physical state symmetry requires additional hypotheses.
     $\sum_j u_{ij} A^j = \mu\, V A^i V^\dagger$ with $V$ unitary.
     Then $V$ is an eigenmatrix of the twisted transfer map:
     \begin{align}
-        \E_u(V) &= \mu V.
+        \E_u(V) & = \mu V.
         \label{eq:symmetry_virtual_eigenmatrix}
     \end{align}
 \end{theorem}
@@ -719,12 +727,12 @@ physical state symmetry requires additional hypotheses.
     index~$i$,
     \begin{align}
         \sum_j u_{ij} A^j
-        &= \mu\, V A^i V^\dagger,
+         & = \mu\, V A^i V^\dagger,
         \label{eq:symmetry_boundary_covariance}
     \end{align}
     then
     \begin{align}
-        V^\dagger \Lambda V &= \Lambda.
+        V^\dagger \Lambda V & = \Lambda.
         \label{eq:symmetry_boundary_invariance}
     \end{align}
 \end{theorem}
@@ -747,8 +755,8 @@ physical state symmetry requires additional hypotheses.
     \leanok
     \uses{def:local_symmetry, def:has_string_order}
     Assume $\tr(\Lambda)=1$ and $\E_A(\Id)=\Id$.
-    If $u$ is a local symmetry of $A$ with respect to $\Lambda$, then string
-    order exists for $u$.
+    If $A,u,\Lambda$ satisfy virtual local covariance, then virtual-boundary
+    nondecay holds for $u$.
 \end{lemma}
 
 \begin{proof}
@@ -756,14 +764,14 @@ physical state symmetry requires additional hypotheses.
     \uses{thm:twisted_transfer_eigen_of_virtual_unitary,
         def:string_order_boundary_param}
     Choose the boundary matrices $X = V^\dagger$ and $Y = V$, where $V$ is the
-    unitary from the local-symmetry datum.
+    unitary from the virtual local-covariance datum.
     By Theorem~\ref{thm:twisted_transfer_eigen_of_virtual_unitary},
     one has $\E_u^L(V)=\mu^L V$.
     Therefore
     \begin{align}
         R_L(u;V^\dagger,V)
-        &= \mu^L \tr(\Lambda)
-         = \mu^L,
+         & = \mu^L \tr(\Lambda)
+        = \mu^L,
         \notag
     \end{align}
     whose norm is constantly $1$.
@@ -778,7 +786,7 @@ physical state symmetry requires additional hypotheses.
     Let $A$ be injective, and assume $u u^\dagger = \Id$, $\E_A(\Id)=\Id$,
     $\Lambda$ is positive definite, $\tr(\Lambda)=1$, and
     $\E_A^\dagger(\Lambda)=\Lambda$.
-    Then $u$ is a local symmetry if and only if there exist a unitary
+    Then virtual local covariance holds if and only if there exist a unitary
     $V \in \MN{D}$ and a phase $\mu$ with $|\mu|=1$ such that
     $\E_u(V) = \mu V$.
     By Theorem~\ref{thm:twisted_transfer_spectral_radius_le_one}, this witness
@@ -799,7 +807,7 @@ physical state symmetry requires additional hypotheses.
     Theorem~\ref{thm:virtual_unitary_of_twisted_gauge_phase} yields a virtual
     unitary and phase satisfying the local covariance relation, and
     Theorem~\ref{thm:boundary_state_invariant_of_virtual_unitary} gives the
-    boundary-state invariance needed for local symmetry.
+    boundary-state invariance needed for virtual local covariance.
 \end{proof}
 
 \begin{theorem}[Virtual-boundary nondecay $\Leftrightarrow$ virtual local covariance]%
@@ -809,8 +817,9 @@ physical state symmetry requires additional hypotheses.
     \uses{def:has_string_order, def:local_symmetry, def:injective}
     For an injective MPS, assume $u u^\dagger = \Id$,
     $\E_A(\Id)=\Id$, $\Lambda$ is positive definite,
-    $\tr(\Lambda)=1$, and $\E_A^\dagger(\Lambda)=\Lambda$. Then string
-    order for $u$ exists iff $u$ is a local symmetry.
+    $\tr(\Lambda)=1$, and $\E_A^\dagger(\Lambda)=\Lambda$. Then
+    virtual-boundary nondecay for $u$ holds if and only if $A,u,\Lambda$
+    satisfy virtual local covariance.
 \end{theorem}
 
 \begin{proof}
@@ -819,14 +828,15 @@ physical state symmetry requires additional hypotheses.
         thm:virtual_unitary_of_twisted_gauge_phase,
         thm:boundary_state_invariant_of_virtual_unitary,
         lem:has_string_order_of_local_symmetry}
-    If string order exists, Theorem~\ref{thm:string_order_implies_twisted_gauge_phase}
-    gives a gauge-phase equivalence with the companion tensor.
+    If virtual-boundary nondecay holds,
+    Theorem~\ref{thm:string_order_implies_twisted_gauge_phase} gives a
+    gauge-phase equivalence with the companion tensor.
     Theorem~\ref{thm:virtual_unitary_of_twisted_gauge_phase} extracts a virtual
     unitary and phase from that equivalence, and
     Theorem~\ref{thm:boundary_state_invariant_of_virtual_unitary} shows that the
-    same unitary preserves the boundary state, so one obtains local symmetry.
-    Conversely, Lemma~\ref{lem:has_string_order_of_local_symmetry} turns local
-    symmetry into a non-decaying boundary string-order sequence.
+    same unitary preserves the boundary state, so one obtains virtual local
+    covariance. Conversely, Lemma~\ref{lem:has_string_order_of_local_symmetry}
+    turns virtual local covariance into a nondecaying virtual-boundary sequence.
 \end{proof}
 
 \begin{theorem}[Virtual unitary from virtual-boundary nondecay]%
@@ -836,8 +846,9 @@ physical state symmetry requires additional hypotheses.
     \uses{def:has_string_order, def:injective}
     For an injective MPS, let $\Lambda \in \MN{D}$, and assume
     $u u^\dagger = \Id$ and $\E_A(\Id)=\Id$.
-    If string order exists for $u$ with boundary parameter $\Lambda$, then
-    there exists a virtual unitary $V$ and a unit-modulus scalar $\mu$ such that
+    If virtual-boundary nondecay holds for $u$ with boundary parameter
+    $\Lambda$, then there exists a virtual unitary $V$ and a unit-modulus
+    scalar $\mu$ such that
     $\sum_j u_{ij} A^j = \mu\, V A^i V^\dagger$ for all~$i$.
     Diagrammatically this is the same local intertwining relation,
     but only up to an overall unit scalar on the virtual side:
@@ -867,7 +878,8 @@ physical state symmetry requires additional hypotheses.
     \leanok
     \uses{thm:string_order_implies_twisted_gauge_phase,
         thm:virtual_unitary_of_twisted_gauge_phase}
-    String order first gives gauge-phase equivalence with the companion tensor by
+    Virtual-boundary nondecay first gives gauge-phase equivalence with the
+    companion tensor by
     Theorem~\ref{thm:string_order_implies_twisted_gauge_phase}.
     Theorem~\ref{thm:virtual_unitary_of_twisted_gauge_phase} then normalizes the
     resulting intertwiner to a unitary and produces the phase $\mu$.

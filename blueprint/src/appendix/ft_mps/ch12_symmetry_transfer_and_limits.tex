@@ -43,17 +43,20 @@ physical endpoint correlator of Definition~\ref{def:physical_string_order_param}
     \label{lem:transfer_map_twisted_companion}
     \lean{MPSTensor.transferMap_twistedMixedCompanion_eq}
     \leanok
-    \uses{def:twisted_mixed_companion, thm:kraus_rectangular_freedom}
-    If $uu^\dagger=\Id_d$, then the companion family $B_u$ satisfies
+    \uses{def:twisted_mixed_companion, def:transfer_map}
+    If $uu^\dagger=\Id_d$, then for every $X\in\MN{D}$ the companion family
+    $B_u$ satisfies
     \begin{align}
-        \E_{B_u}(X) & =\E_A(X)
-        \qquad (X\in\MN{D}).
+        \E_{B_u}(X) & =\E_A(X).
         \notag
     \end{align}
 \end{lemma}
 
 \begin{proof}\leanok
-    Expand $B_u^n=\sum_{n'}\overline{u_{n'n}}A^{n'}$.  The coefficient of
+    \uses{thm:kraus_same_map_of_unitary_combination}
+    Theorem~\ref{thm:kraus_same_map_of_unitary_combination} applies to the
+    unitary combination defining $B_u$. Equivalently, expand
+    $B_u^n=\sum_{n'}\overline{u_{n'n}}A^{n'}$. The coefficient of
     $A^jX(A^k)^\dagger$ in $\E_{B_u}(X)$ is
     \begin{align}
         \sum_n\overline{u_{jn}}u_{kn}
@@ -63,20 +66,21 @@ physical endpoint correlator of Definition~\ref{def:physical_string_order_param}
     All off-diagonal terms vanish and the diagonal terms sum to $\E_A(X)$.
 \end{proof}
 
-\begin{definition}[Boundary string order parameter]%
+\begin{definition}[Virtual-boundary twist functional]%
     \label{def:string_order_boundary_param}
     \lean{MPSTensor.stringOrderBoundaryParam}
     \leanok
     \uses{def:twisted_transfer_map, def:string_order_param}
     For a boundary state $\Lambda$ and boundary matrices $X,Y \in \MN{D}$, the
-    \emph{boundary string order parameter} is
+    \emph{virtual-boundary twist functional} is
     \begin{align}
         R_L(u;X,Y)
          & := \tr\!(\Lambda X \E_u^L(Y)).
         \label{eq:symmetry_boundary_string}
     \end{align}
-    The ordinary string order parameter is the special case $X=Y=\Id$.
-    The matrices $X,Y$ act on the virtual level. In the string correlator
+    The special case $X=Y=\Id$ is the stationary-boundary block-twist
+    functional of Definition~\ref{def:string_order_param}. The matrices $X,Y$
+    act on the virtual level. In the physical string correlator
     of~\cite{PerezGarcia2008StringOrder} the string of twists is instead
     flanked by local operators $x,y$ acting on physical sites; expanding
     such operators in the transfer picture produces particular virtual
@@ -87,14 +91,14 @@ physical endpoint correlator of Definition~\ref{def:physical_string_order_param}
     % Deviation recorded in docs/paper-gaps/pgwsvc08_string_order_virtual_boundary.tex.
 \end{definition}
 
-\begin{lemma}[String order prevents decay to zero]
+\begin{lemma}[Virtual-boundary nondecay prevents convergence to zero]
     \label{lem:not_tendsto_zero_of_hasStringOrder}
     \lean{MPSTensor.not_tendsto_zero_of_hasStringOrder}
     \leanok
     \uses{def:has_string_order}
-    If $A$ has string order for $u$ with respect to a boundary state
-    $\Lambda$, then for some boundary matrices $X,Y$ the sequence
-    $R_L(u;X,Y)$ does not tend to $0$ as $L \to \infty$.
+    If virtual-boundary nondecay holds for $A,u,\Lambda$, then for some boundary
+    matrices $X,Y$ the sequence $R_L(u;X,Y)$ does not tend to $0$ as
+    $L\to\infty$.
 \end{lemma}
 
 \begin{proof}
@@ -140,30 +144,47 @@ placed in one trace-preserving gauge obtained from their common transfer map.
     \lean{MPSTensor.TwistedTPGaugeSetup}
     \leanok
     \uses{def:twisted_mixed_companion}
-    A \emph{common trace-preserving gauge setup} for $(A,u)$ consists of the
-    companion $B_u$, a positive definite fixed point $\sigma$ of the adjoint
-    transfer map, its positive square root $S=\sigma^{1/2}$, and the gauged
-    tensors
+    A \emph{common trace-preserving gauge setup} for $(A,u)$ consists of a
+    tensor $B$ equal to the companion $B_u$ and satisfying
+    $\E_B(X)=\E_A(X)$ for every $X\in\MN{D}$. It also includes a positive
+    definite matrix $\sigma$ fixed by the adjoint transfer map of $B$, its
+    positive square root $S$, and gauged tensors $A',B'$ satisfying
     \begin{align}
-        A'^i & =SA^iS^{-1}, & B'^i & =SB_u^iS^{-1},
+        B & =B_u,
+          & \E_B(X)                & =\E_A(X),
+          & \E_{B^\dagger}(\sigma) & =\sigma,
+          & \sigma                 & >0,          \\
+        S & =\sigma^{1/2},
+          & S^\dagger              & =S,
+          & A'^i                   & =SA^iS^{-1},
+          & B'^i                   & =SB^iS^{-1}.
         \notag
     \end{align}
-    together with
-    $\sum_i(A'^i)^\dagger A'^i=\sum_i(B'^i)^\dagger B'^i=\Id$ and
-    irreducibility of both gauged tensors, together with the inverse and
-    adjoint identities for $S$ used in these calculations.
+    In addition,
+    \begin{align}
+        SS^{-1}                   & =S^{-1}S=\Id,
+                                  & S^\dagger(S^\dagger)^{-1} & =\Id,
+                                  & (S^{-1})^\dagger          & =S^{-1}, \\
+        \sum_i(A'^i)^\dagger A'^i & =\Id,
+                                  & \sum_i(B'^i)^\dagger B'^i & =\Id,
+        \notag
+    \end{align}
+    together with irreducibility of both $A'$ and $B'$. These identities
+    complete the common trace-preserving gauge data.
 \end{definition}
 
-\begin{theorem}[Construction of the common trace-preserving gauge]
-    \label{thm:twisted_tp_gauge_setup}
+\begin{definition}[Construction of the common trace-preserving gauge]
+    \label{def:twisted_tp_gauge_setup_construction}
     \lean{MPSTensor.twistedTPGaugeSetup}
     \leanok
     \uses{def:twisted_tp_gauge_setup, lem:transfer_map_twisted_companion,
         thm:psd_fp_unique}
-    Let $D>0$.  If $A$ is injective, $uu^\dagger=\Id_d$, and
-    $\E_A(\Id)=\Id$, then $(A,u)$ admits the setup of
+    Let $D>0$. If $A$ is injective, $uu^\dagger=\Id_d$, and
+    $\E_A(\Id)=\Id$, define the common trace-preserving gauge setup for
+    $(A,u)$ by choosing the unique positive definite stationary state of the
+    adjoint channel and using the data in
     Definition~\ref{def:twisted_tp_gauge_setup}.
-\end{theorem}
+\end{definition}
 
 \begin{proof}\leanok
     Injectivity makes $\E_A$ irreducible.  The adjoint channel therefore has a
@@ -180,15 +201,15 @@ placed in one trace-preserving gauge obtained from their common transfer map.
     the asserted properties.
 \end{proof}
 
-\begin{lemma}[Twisted eigenvalues survive the common gauge]
-    \label{lem:twisted_tp_gauge_has_eigenvalue}
+\begin{theorem}[Twisted eigenvalues survive the common gauge]
+    \label{thm:twisted_tp_gauge_has_eigenvalue}
     \lean{MPSTensor.twistedTPGaugeSetup_hasEigenvalue}
     \leanok
     \uses{def:twisted_tp_gauge_setup,
         lem:twisted_transfer_eq_mixed_transfer}
     If $V\ne0$ and $\E_u(V)=\lambda V$, then $\lambda$ is an eigenvalue of the
     mixed transfer map $F_{A',B'}$ in any common trace-preserving gauge setup.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}\leanok
     By Lemma~\ref{lem:twisted_transfer_eq_mixed_transfer}, the original
@@ -204,7 +225,7 @@ placed in one trace-preserving gauge obtained from their common transfer map.
 \section{Boundary and limit support}
 \label{sec:app_symmetry_boundary_limits}
 
-\begin{lemma}[Spectral radius $<1$ forces boundary-string decay]%
+\begin{lemma}[Spectral radius $<1$ forces virtual-boundary decay]%
     \label{lem:boundary_string_order_tendsto_zero}
     \lean{MPSTensor.stringOrderBoundaryParam_tendsto_zero_of_spectralRadius_lt_one}
     \leanok
@@ -238,8 +259,8 @@ and the canonical fixed-point hypotheses from the main chapter.
     definite, $\tr(\Lambda_A)=1$, $\tr(\Lambda_B)=1$,
     $\E_A^\dagger(\Lambda_A)=\Lambda_A$, and
     $\E_B^\dagger(\Lambda_B)=\Lambda_B$, then for every $g \in G$,
-    string order exists for $A$ with twist $U(g)$ if and only if it
-    exists for~$B$. In particular, since
+    virtual-boundary nondecay holds for $A$ with twist $U(g)$ if and only if it
+    holds for~$B$. In particular, since
     Definition~\ref{def:is_same_spt_phase} implies on-site symmetry
     for both tensors, this theorem applies to tensors in the same SPT
     phase; it applies equally to symmetric tensors in different SPT
@@ -250,6 +271,6 @@ and the canonical fixed-point hypotheses from the main chapter.
     \uses{thm:has_string_order_of_symmetric_injective}
     Both directions follow from
     Theorem~\ref{thm:has_string_order_of_symmetric_injective}, which
-    shows that string order holds universally for injective symmetric
-    tensors with canonical normalisations.
+    shows that virtual-boundary nondecay holds universally for injective
+    symmetric tensors with canonical normalisations.
 \end{proof}
