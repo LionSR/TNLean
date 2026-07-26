@@ -8,7 +8,6 @@ import TNLean.Channel.Irreducible.Basic
 import TNLean.Channel.Irreducible.KrausSetup
 import TNLean.Channel.Irreducible.SpectralRadius
 import TNLean.Channel.Irreducible.TraceAdjoint
-import TNLean.Algebra.MatrixOperatorSpace
 
 /-!
 # Irreducibility from spectral properties (Wolf Theorem 6.4)

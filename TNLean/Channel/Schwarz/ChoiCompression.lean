@@ -6,6 +6,7 @@ Authors: Sirui Lu
 import TNLean.Channel.SchmidtRank
 import TNLean.Channel.Schwarz.PositiveOnAbelian.Basic
 import TNLean.Channel.Schwarz.TwoPositive
+import TNLean.Algebra.MatrixRankBaseChange
 import Mathlib.Analysis.InnerProductSpace.Positive
 import Mathlib.Analysis.InnerProductSpace.Projection.Basic
 import Mathlib.Analysis.InnerProductSpace.PiL2

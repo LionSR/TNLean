@@ -4,17 +4,6 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Channel.Semigroup.Basic
-import TNLean.Channel.Semigroup.Kernel
-import TNLean.Channel.Irreducible.Basic
-import TNLean.Channel.Irreducible.FromSpectral
-import TNLean.Channel.Peripheral.Spectrum
-import TNLean.Channel.Peripheral.IrreducibleChannel
-import TNLean.Channel.Peripheral.PeriodicityRemoval
-import TNLean.Channel.Peripheral.ClosureFixedPoint
-import TNLean.Channel.FixedPoint.Cesaro
-import TNLean.Channel.Primitive
-import TNLean.MPS.Irreducible.Adjoint
-import TNLean.Spectral.TransferOperatorGap
 import Mathlib.Analysis.Calculus.Deriv.Mul
 import Mathlib.NumberTheory.Real.Irrational
 

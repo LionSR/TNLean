@@ -5,7 +5,6 @@ Authors: TNLean contributors
 -/
 import TNLean.Algebra.ComplexPhasePositivity
 import TNLean.Channel.FixedPoint.CanonicalGauge
-import TNLean.Channel.Semigroup.Primitivity.Basic
 
 open scoped Matrix ComplexOrder MatrixOrder BigOperators NNReal TNOperatorSpace
 open Matrix Finset NormedSpace

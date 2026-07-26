@@ -3,9 +3,6 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Channel.Schwarz.PositiveOnAbelian.Basic
-import TNLean.Channel.Schwarz.PositiveOnAbelian.Characterization
-import TNLean.Channel.Schwarz.PositiveOnAbelian.Consequences
 
 /-!
 # Positive maps on commuting / abelian matrix domains

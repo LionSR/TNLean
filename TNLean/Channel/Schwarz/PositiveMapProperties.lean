@@ -4,7 +4,6 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Algebra.KroneckerFactorPositivity
-import TNLean.Algebra.MatrixOperatorSpace
 import TNLean.Channel.Basic
 import Mathlib.Analysis.CStarAlgebra.Matrix
 import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Unital

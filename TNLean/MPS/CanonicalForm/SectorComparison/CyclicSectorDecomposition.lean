@@ -9,6 +9,7 @@ import TNLean.Channel.Peripheral.Conjugation
 import TNLean.Channel.Schwarz.MultiplicativeDomainFull
 import TNLean.MPS.Periodic.SectorIrreducibility
 import TNLean.MPS.CanonicalForm.CyclicSectors.CornerBridge
+import TNLean.Channel.Peripheral.CyclicDecomposition.Primitivity
 
 open scoped Matrix BigOperators ComplexOrder MatrixOrder
 open Filter

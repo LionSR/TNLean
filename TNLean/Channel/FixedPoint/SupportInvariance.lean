@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Channel.FixedPoint.StationaryProjection
 import TNLean.Channel.Schwarz.Basic
+import TNLean.Channel.Basic
 
 /-!
 # Support invariance for Kraus maps

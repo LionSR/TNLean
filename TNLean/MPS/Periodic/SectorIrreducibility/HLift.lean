@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Periodic.SectorIrreducibility.HLiftCore
 import TNLean.Channel.Schwarz.MultiplicativeDomainFull
+import TNLean.Channel.Peripheral.CyclicDecomposition.Primitivity
 
 /-!
 # Sector irreducibility: the `hLift` construction

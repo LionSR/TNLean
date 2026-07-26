@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.Analysis.MatrixSqrt
 import TNLean.Channel.KrausRepresentation
 import TNLean.Channel.PartialTrace
+import TNLean.Algebra.TracePairing
 import Mathlib.Data.Matrix.PEquiv
 import Mathlib.LinearAlgebra.Matrix.Reindex
 

@@ -3,23 +3,7 @@ Copyright (c) 2025 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Channel.PartialTrace
-import TNLean.Channel.MaximallyEntangled
-import TNLean.Channel.TensorMap
-import TNLean.Channel.ChoiJamiolkowski
-import TNLean.Channel.KrausRank
-import TNLean.Channel.KrausRepresentation
-import TNLean.Channel.KrausUnitaryFreedom
-import TNLean.Channel.Stinespring
-import TNLean.Channel.OrderedCP
-import TNLean.Channel.RadonNikodym
-import TNLean.Channel.OpenSystem
 import TNLean.Channel.POVM
-import TNLean.Channel.POVM.Uniqueness
-import TNLean.Channel.TransferMatrix
-import TNLean.Channel.WolfProps
-import TNLean.Channel.NormalForm
-import TNLean.Channel.LorentzNormalForm
 
 /-!
 # Wolf Lecture Notes — Chapter 2: Representations

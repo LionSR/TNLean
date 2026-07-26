@@ -4,9 +4,4 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Channel.Semigroup.LindbladForm.Basic
-import TNLean.Channel.Semigroup.LindbladForm.ChoiCCP
-import TNLean.Channel.Semigroup.LindbladForm.EulerStep
-import TNLean.Channel.Semigroup.LindbladForm.TraceBridge
-import TNLean.Channel.Semigroup.LindbladForm.GKSLTheorem
-import TNLean.Channel.Semigroup.LindbladForm.Uniqueness
 

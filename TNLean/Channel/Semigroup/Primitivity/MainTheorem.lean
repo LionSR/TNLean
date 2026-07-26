@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Channel.Semigroup.Primitivity.IrreducibleAnalysis
+import TNLean.Channel.Semigroup.Primitivity.Basic
 
 open scoped Matrix ComplexOrder MatrixOrder BigOperators NNReal TNOperatorSpace
 open Matrix Finset NormedSpace

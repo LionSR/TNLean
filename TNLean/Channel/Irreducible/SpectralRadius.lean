@@ -5,12 +5,10 @@ Authors: TNLean contributors
 -/
 import TNLean.Algebra.MatrixOperatorSpace
 import TNLean.Channel.Irreducible.KrausSetup
-import TNLean.Channel.Irreducible.PerronFrobenius
 import TNLean.Channel.Irreducible.Similarity
 import TNLean.Channel.Irreducible.TraceAdjoint
 import TNLean.Channel.Peripheral.Conjugation
 import TNLean.MPS.Core.TPGauge
-import TNLean.Spectral.TransferOperatorGap
 import Mathlib.Algebra.Module.Equiv.Basic
 import Mathlib.LinearAlgebra.Matrix.GeneralLinearGroup.Defs
 

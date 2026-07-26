@@ -3,9 +3,9 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Algebra.MatrixOperatorSpace
 import TNLean.Algebra.MatrixAux
 import TNLean.Channel.Semigroup.ReducibleQDS.Defs
+import TNLean.Channel.Semigroup.LindbladForm.GKSLTheorem
 
 /-!
 # Generator-Level Compression Preservation (Wolf Proposition 7.6, (3) ↔ (4))

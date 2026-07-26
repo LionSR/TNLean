@@ -6,6 +6,7 @@ Authors: Sirui Lu
 import TNLean.Channel.SchmidtNumber
 import TNLean.Algebra.MatrixRankClosed
 import TNLean.Analysis.ConvexHullCompact
+import TNLean.Algebra.MatrixRankBaseChange
 
 /-!
 # Compactness of the Schmidt-number state set

@@ -5,7 +5,6 @@ Authors: TNLean contributors
 -/
 import TNLean.Channel.Schwarz.StrongSubadditivityPosDef
 import TNLean.Entropy.TripartiteTrace
-import TNLean.Entropy.VonNeumann
 
 /-!
 # Strong subadditivity (theorem formulation and basic corollaries)

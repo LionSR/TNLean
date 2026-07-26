@@ -3,35 +3,6 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Analysis.MeanErgodic
-import TNLean.Channel.FixedPoint.Algebra
-import TNLean.Channel.FixedPoint.Cesaro
-import TNLean.Channel.FixedPoint.MeanErgodicProjection
-import TNLean.Channel.FixedPoint.MeanErgodicAdjoint
-import TNLean.Channel.FixedPoint.FullSupportBlockRetraction
-import TNLean.Channel.FixedPoint.TraceAdjointDensityBlocks
-import TNLean.Channel.FixedPoint.ConditionalExpectation
-import TNLean.Channel.FixedPoint.StationarySupport
-import TNLean.Channel.FixedPoint.CornerFixedPoints
-import TNLean.Channel.FixedPoint.WedderburnDecomp
-import TNLean.Channel.FixedPoint.BlockForm
-import TNLean.Channel.FixedPoint.CornerBlockForm
-import TNLean.Channel.FixedPoint.Corollaries
-import TNLean.Channel.FixedPoint.WeightedCornerFixedPoints
-import TNLean.Channel.FixedPoint.MaximalSupport
-import TNLean.Channel.FixedPoint.MaximalRank
-import TNLean.Channel.Irreducible.Ergodicity
-import TNLean.Channel.Irreducible.Basic
-import TNLean.Channel.Irreducible.Growth
-import TNLean.Channel.Irreducible.PerronFrobenius
-import TNLean.Channel.Irreducible.SpectralRadius
-import TNLean.Channel.Irreducible.FromSpectral
-import TNLean.Channel.Peripheral.Spectrum
-import TNLean.Channel.PerronFrobenius.Existence
-import TNLean.Channel.Irreducible.Similarity
-import TNLean.QPF.Assembly
-import TNLean.Wielandt.Primitivity.Equivalence
-import TNLean.Channel.WolfChapter6Wrappers
 
 /-!
 # Wolf Chapter 6 — Spectral Properties: Public Theorem Index

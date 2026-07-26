@@ -6,7 +6,6 @@ Authors: TNLean contributors
 import Mathlib.Data.Matrix.Block
 import Mathlib.LinearAlgebra.Matrix.Kronecker
 import Mathlib.LinearAlgebra.UnitaryGroup
-import TNLean.Analysis.Entropy
 
 /-!
 # Quantum-Markov-chain decomposition data

@@ -3,12 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Channel.Basic
-import TNLean.Channel.KrausRepresentation
-import TNLean.Channel.Stinespring
 import TNLean.Algebra.FinSum
 import TNLean.Algebra.MatrixGramUnitary
-import TNLean.Algebra.TracePairing
 
 /-!
 # Rectangular Kraus freedom (Wolf Theorem 2.1 item 4, necessary direction)

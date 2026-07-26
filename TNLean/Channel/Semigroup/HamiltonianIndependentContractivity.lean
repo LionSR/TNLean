@@ -4,6 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Channel.Semigroup.RelaxationConditions
+import TNLean.Channel.Semigroup.LindbladForm.GKSLTheorem
+import TNLean.Channel.Semigroup.ReducibleQDS.Equivalence
 
 /-!
 # Algebraic companion to the Hamiltonian-independent contractivity conjecture

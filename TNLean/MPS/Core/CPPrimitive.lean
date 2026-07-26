@@ -7,6 +7,7 @@ import TNLean.MPS.Core.Transfer
 import TNLean.Algebra.MatrixAux
 import TNLean.Channel.Irreducible.Basic
 import TNLean.Channel.Schwarz.KadisonSchwarz
+import TNLean.Channel.Basic
 
 /-! ## MPS injectivity implies irreducibility of the transfer map
 
