@@ -45,6 +45,11 @@ reference matrix.
   completed channel.
 * `Matrix.maximallyMixedTensorReference`: the maximally mixed tensor-product
   reference from HJPW equation (10), with reassociated product indices.
+* `Matrix.partialTraceLeft_maximallyMixedTensorReference`: the retained
+  marginal of the maximally mixed tensor reference.
+* `Matrix.trace_maximallyMixedTensorReference`: the reference trace identity.
+* `Matrix.supportProj_partialTraceRight_maximallyMixedTensorReference`: the
+  factorization of the marginal support projector.
 * `Matrix.partialTraceRightPetzMap_maximallyMixedTensor_kronecker`:
   factorization of the raw Petz map on elementary tensors.
 * `Matrix.partialTraceRightPetzMap_maximallyMixedTensor`: the raw Petz map for

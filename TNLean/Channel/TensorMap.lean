@@ -35,6 +35,7 @@ act trivially on an ancillary factor.
 * `Matrix.tensorMapIdLM_comp`: the lift preserves composition.
 * `Matrix.idTensorMap_kronecker`: `(id ⊗ T)(A ⊗ B) = A ⊗ T(B)`
 * `Matrix.idTensorMapLM_id`: the second-factor identity lift is the identity.
+* `Matrix.idTensorMapLM_add`: the second-factor lift preserves addition.
 * `Matrix.idTensorMapLM_comp`: the second-factor lift preserves composition.
 
 ## References

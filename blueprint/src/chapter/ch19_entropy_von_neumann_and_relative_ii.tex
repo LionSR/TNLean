@@ -251,6 +251,61 @@
     operators.
 \end{proof}
 
+\begin{theorem}[Marginals and trace of the maximally mixed reference]
+    \label{thm:entropy_maximally_mixed_tensor_marginals}
+    \lean{Matrix.partialTraceRight_maximallyMixedTensorReference,
+        Matrix.partialTraceLeft_maximallyMixedTensorReference,
+        Matrix.trace_maximallyMixedTensorReference}
+    \leanok
+    \uses{def:entropy_maximally_mixed_tensor_reference,
+        def:partial_trace_left}
+    For the reference in~(\ref{eq:entropy_hjpw_product_reference}),
+    \begin{align}
+        \tr_C\sigma_{ABC}
+        &=d_A^{-1}\mathbf 1_A\otimes\rho_B,
+        \notag\\
+        \tr_{AB}\sigma_{ABC}
+        &=\rho_C,
+        \notag\\
+        \tr(\sigma_{ABC})
+        &=\tr(\rho_{BC}).
+        \label{eq:entropy_mixed_reference_trace}
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    Expand the two partial traces in a product basis. The sum over the
+    $d_A$ diagonal entries cancels the factor $d_A^{-1}$. Trace invariance under
+    a partial trace then gives the last identity.
+\end{proof}
+
+\begin{theorem}[Support projector of the maximally mixed marginal]
+    \label{thm:entropy_maximally_mixed_support_projector}
+    \lean{Matrix.supportProj_partialTraceRight_maximallyMixedTensorReference}
+    \leanok
+    \uses{thm:entropy_maximally_mixed_tensor_marginals,
+        lem:support_inverse_square_root_maximally_mixed, def:support_proj}
+    If $P_B$ is the support projector of $\rho_B$, then the support projector of
+    $d_A^{-1}\mathbf 1_A\otimes\rho_B$ is
+    \begin{align}
+        P_{AB}
+        &=\mathbf 1_A\otimes P_B.
+        \label{eq:entropy_mixed_reference_support}
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:support_inverse_square_root_sandwich,
+        lem:support_inverse_square_root_maximally_mixed}
+    Insert the factorized support inverse into
+    $P_{AB}=\sigma_{AB,\mathrm{supp}}^{-1/2}
+    \sigma_{AB}\sigma_{AB,\mathrm{supp}}^{-1/2}$. The scalar factors cancel,
+    and the remaining sandwich is
+    $\mathbf 1_A\otimes
+    (\rho_{B,\mathrm{supp}}^{-1/2}\rho_B
+    \rho_{B,\mathrm{supp}}^{-1/2})=\mathbf 1_A\otimes P_B$.
+\end{proof}
+
 \begin{theorem}[Complete positivity of the support Petz map]
     \label{thm:partial_trace_support_petz_map_cp}
     \lean{Matrix.partialTraceRightPetzMap_isKrausCP}
@@ -398,6 +453,92 @@
     (\ref{eq:entropy_petz_complement_trace}). Adding
     (\ref{eq:entropy_petz_complement_trace}) to
     (\ref{eq:entropy_support_petz_trace}) gives trace preservation.
+\end{proof}
+
+\begin{theorem}[Factorization of the complementary preparation term]
+    \label{thm:entropy_petz_complement_maximally_mixed_tensor}
+    \lean{Matrix.partialTraceRightPetzComplementMap_maximallyMixedTensor_kronecker,
+        Matrix.partialTraceRightPetzComplementMap_maximallyMixedTensor}
+    \leanok
+    \uses{def:partial_trace_petz_complement,
+        thm:entropy_maximally_mixed_support_projector,
+        thm:entropy_maximally_mixed_tensor_marginals}
+    For the reference in~(\ref{eq:entropy_hjpw_product_reference}), the chosen
+    complementary preparation term factors as
+    \begin{align}
+        \mathcal C_{\sigma_{ABC}}
+        &=\operatorname{id}_A\otimes\mathcal C_{\rho_{BC}}.
+        \label{eq:entropy_petz_complement_factorization}
+    \end{align}
+    after the canonical reassociation of the three tensor factors. This is a
+    property of the support completion in
+    (\ref{eq:entropy_petz_complement}), not a statement of
+    \cite[equation~(10)]{Hayden2004Structure}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:entropy_maximally_mixed_support_projector,
+        thm:entropy_maximally_mixed_tensor_marginals}
+    From~(\ref{eq:entropy_mixed_reference_support}),
+    $Q_{AB}=\mathbf 1_A\otimes Q_B$, while
+    $\tr_{AB}\sigma_{ABC}=\rho_C$. Hence
+    \begin{align}
+        \mathcal C_{\sigma_{ABC}}(A_0\otimes X_B)
+        &=(\mathbf 1_A\otimes Q_B)(A_0\otimes X_B)
+          (\mathbf 1_A\otimes Q_B)\otimes\rho_C
+        \notag\\
+        &=A_0\otimes\mathcal C_{\rho_{BC}}(X_B).
+        \notag
+    \end{align}
+    A finite product-operator decomposition gives the result for every input.
+\end{proof}
+
+\begin{theorem}[Factorization of the completed Petz channel]
+    \label{thm:entropy_completed_petz_maximally_mixed_tensor}
+    \lean{Matrix.partialTraceRightPetzChannel_maximallyMixedTensor}
+    \leanok
+    \uses{def:partial_trace_petz_channel,
+        thm:entropy_petz_maximally_mixed_tensor,
+        thm:entropy_petz_complement_maximally_mixed_tensor}
+    For the reference in~(\ref{eq:entropy_hjpw_product_reference}),
+    \begin{align}
+        \widehat{\mathcal R}_{\sigma_{ABC}}
+        &=\operatorname{id}_A\otimes
+          \widehat{\mathcal R}_{\rho_{BC}}.
+        \label{eq:entropy_completed_petz_factorization}
+    \end{align}
+    The raw support-map summand is the maximally mixed specialization of
+    \cite[equation~(10)]{Hayden2004Structure}. The complementary summand is the
+    support completion in~(\ref{eq:entropy_petz_complement}). This theorem does
+    not assert a Koashi--Imoto decomposition.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:entropy_petz_maximally_mixed_tensor,
+        thm:entropy_petz_complement_maximally_mixed_tensor}
+    Add~(\ref{eq:entropy_hjpw_petz_factorization}) and
+    (\ref{eq:entropy_petz_complement_factorization}), and use additivity of the
+    tensor product of linear maps.
+\end{proof}
+
+\begin{theorem}[Channel property for the maximally mixed reference]
+    \label{thm:entropy_completed_petz_maximally_mixed_cptp}
+    \lean{Matrix.partialTraceRightPetzChannel_maximallyMixedTensor_isKrausCPTP}
+    \leanok
+    \uses{thm:partial_trace_petz_channel_cptp,
+        thm:entropy_maximally_mixed_tensor_marginals,
+        def:is_kraus_cptp}
+    If $\rho_{BC}$ is positive semidefinite with trace one, then
+    $\widehat{\mathcal R}_{\sigma_{ABC}}$ is completely positive and trace
+    preserving.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:partial_trace_petz_channel_cptp,
+        thm:entropy_maximally_mixed_tensor_marginals}
+    By~(\ref{eq:entropy_mixed_reference_trace}),
+    $\tr(\sigma_{ABC})=\tr(\rho_{BC})=1$. Apply the channel property of the
+    completed Petz map.
 \end{proof}
 
 \begin{theorem}[Agreement on the marginal support]
