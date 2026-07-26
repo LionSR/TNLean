@@ -1,0 +1,310 @@
+\begin{lemma}[Perron gauges preserve primitivity]
+    \label{lem:perron_gauge_primitive_iff}
+    \lean{MPSTensor.isPrimitive_transferMap_tpGauge_iff}
+    \leanok
+    \uses{def:primitive_channel}
+    Let $\sigma$ be positive definite. The transfer map of the Perron gauge
+    determined by $\sigma$ is primitive if and only if the original transfer
+    map is primitive.
+\end{lemma}
+
+\begin{proof}\leanok
+    The two transfer maps are similar through the invertible congruence
+    $X\mapsto\sigma^{-1/2}X\sigma^{-1/2}$. Similar linear maps have the same
+    spectrum, so the condition that $1$ is the only eigenvalue on the unit
+    circle is unchanged.
+\end{proof}
+
+\begin{theorem}[Spectral normality gives a pure trace-preserving gauge]
+    \label{thm:cpsv_normal_tp_gauge}
+    \lean{MPSTensor.IsNormalTensor.exists_tpGauge}
+    \leanok
+    \uses{def:nt_cpsv}
+    Let $A$ be a normal tensor of positive bond dimension in the sense of
+    \cite[Section~2.2]{Cirac2016MPDO_arXiv}. There is a positive definite
+    matrix $\sigma$ such that the gauge obtained from $\sigma$ is
+    trace-preserving, primitive, and irreducible. No scalar rescaling is
+    needed.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:perron_gauge_primitive_iff}
+    The irreducible Perron--Frobenius theorem gives positive definite right and
+    left eigenvectors with positive eigenvalues $r$ and $t$. The spectral
+    normalization gives $r=1$. Adjointness with respect to the trace pairing
+    gives $r\,\Tr(\sigma\rho)=t\,\Tr(\sigma\rho)$. Since $\sigma$ and $\rho$
+    are positive definite, their pairing is nonzero, hence $t=1$. Thus the
+    Perron gauge is a pure similarity. Irreducibility and primitivity are
+    invariant under this similarity.
+\end{proof}
+
+\begin{theorem}[Spectral normality gives eventual block injectivity]
+    \label{thm:cpsv_normal_eventually_injective}
+    \lean{MPSTensor.IsNormalTensor.isNormal}
+    \leanok
+    \uses{def:nt_cpsv, def:normal}
+    Every positive-bond-dimension normal tensor in the sense of
+    \cite[Section~2.2]{Cirac2016MPDO_arXiv} is injective after blocking by some
+    finite length.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:cpsv_normal_tp_gauge, thm:normal_tp_primitive_irred}
+    Apply Theorem~\ref{thm:cpsv_normal_tp_gauge}. The trace-preserving,
+    primitive, irreducible representative is eventually block-injective, and
+    gauge invariance transports this conclusion back to the original tensor.
+\end{proof}
+
+\begin{theorem}[A coefficient-form BNT is an algebraic BNT]
+    \label{thm:cpsv_bnt_is_bnt}
+    \lean{MPSTensor.IsCPSVBasisOfNormalTensors.isBNT}
+    \leanok
+    \uses{def:bnt, def:bnt_cpsv,
+        lem:cpsv_bnt_block_dimensions_positive,
+        thm:cpsv_normal_eventually_injective}
+    If $(A_j)_{j=1}^{g}$ is a coefficient-form basis of normal tensors for
+    $A$, then $(A_j)_{j=1}^{g}$ is an algebraic basis of normal tensors for
+    $A$. Only this implication from spectral normality to algebraic normality
+    is asserted.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:cpsv_bnt_block_dimensions_positive,
+        thm:cpsv_normal_eventually_injective}
+    Every block has positive bond dimension, so spectral normality implies
+    eventual block injectivity for each block. The spanning identities and
+    eventual linear independence are unchanged.
+\end{proof}
+
+\begin{lemma}[Transport of an algebraic BNT along positive-length MPV equality]
+    \label{lem:bnt_of_same_mpv2_pos}
+    \lean{MPSTensor.IsBNT.of_sameMPV₂Pos}
+    \leanok
+    \uses{def:bnt, def:same_mpv2_pos}
+    Let $A$ and $A'$ have the same matrix product vectors at every positive
+    length. If $(A_j)_{j=1}^{g}$ is a basis of normal tensors for $A$, then
+    the same family is a basis of normal tensors for $A'$.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:bnt, def:same_mpv2_pos}
+    Substitute the positive-length MPV equality into the spanning identity
+    for $A$. Normality and eventual linear independence depend only on the
+    family $(A_j)_{j=1}^{g}$.
+\end{proof}
+
+\begin{theorem}[Non-decaying rectangular overlap determines the bond dimension]
+    \label{thm:rect_overlap_norm_one_dim_eq}
+    \lean{MPSTensor.dim_eq_of_mpvOverlap_norm_tendsto_one_of_irreducible_TP}
+    \leanok
+    \uses{def:mpv_overlap, def:irreducible_tensor, def:tp_kraus}
+    Let $A$ and $B$ be irreducible trace-preserving tensors of positive,
+    possibly different, bond dimensions. If $|O_{AB}(N)|\longrightarrow 1$,
+    then their bond dimensions are equal.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:overlap_decay_rect_irr_tp}
+    If the bond dimensions differed, the rectangular overlap-decay theorem
+    would give $O_{AB}(N)\to0$, and hence $|O_{AB}(N)|\to0$, contradicting the
+    assumed limit.
+\end{proof}
+
+\begin{theorem}[Phase-equivalent normal tensors are gauge-phase equivalent]
+    \label{thm:cpsv_normal_mpv_phase_gauge}
+    \lean{MPSTensor.IsNormalTensor.exists_apply_ne_zero}
+    \lean{MPSTensor.IsNormalTensor.selfOverlap_tendsto_one}
+    \lean{MPSTensor.isNormalTensor_cast_iff}
+    \lean{MPSTensor.norm_eq_one_of_gaugePhase_cast_of_isNormalTensor}
+    \lean{MPSTensor.MPVBlockPhaseEquiv.dim_eq_and_gaugePhaseEquiv_of_isNormalTensor}
+    \leanok
+    \uses{def:nt_cpsv, def:mpv_block_phase_equiv,
+        def:gauge_phase_equiv}
+    Let $A$ and $B$ be normal tensors of positive, possibly different, bond
+    dimensions. Suppose that, for some nonzero $\zeta\in\C$,
+    $\ket{V^{(N)}(B)}=\zeta^N\ket{V^{(N)}(A)}$ for $N\geq 0$.
+    Then the bond dimensions are equal and there is an invertible matrix $X$
+    and a scalar $\eta$ of unit modulus such that
+    $B^i=\eta X A^iX^{-1}$ for every physical letter $i$. This is the gauge
+    recovery used in \cite[Appendix~A]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:cpsv_normal_tp_gauge, thm:rect_overlap_norm_one_dim_eq,
+        thm:nt_overlap_norm_one_gauge}
+    Apply Theorem~\ref{thm:cpsv_normal_tp_gauge} to both tensors. Gauge
+    invariance of matrix product vectors preserves the phase relation, whose
+    self-overlap identities imply unit modulus for the phase. The resulting
+    rectangular cross-overlap has norm tending to one. If the bond dimensions
+    differed, Theorem~\ref{thm:rect_overlap_norm_one_dim_eq} would give a
+    contradiction. Thus the bond dimensions agree, and the
+    unit-overlap rigidity theorem gives a gauge-phase equivalence between the
+    trace-preserving representatives. Conjugating by the two Perron gauges
+    gives the asserted relation for $A$ and $B$.
+\end{proof}
+
+\begin{theorem}[Normal-tensor overlap dichotomy]
+    \label{thm:cpsv_normal_overlap_dichotomy}
+    \lean{MPSTensor.IsNormalTensor.overlap_dichotomy}
+    \leanok
+    \uses{def:nt_cpsv, def:mpv_overlap, def:gauge_phase_equiv}
+    Let $A$ and $B$ be normal tensors of positive, possibly different, bond
+    dimensions. Their self-overlaps satisfy
+    \begin{align}
+        O_{AA}(N) & \longrightarrow 1,
+        \notag                         \\
+        O_{BB}(N) & \longrightarrow 1.
+        \notag
+    \end{align}
+    Moreover, either $O_{AB}(N)\longrightarrow 0$, or their bond dimensions
+    are equal; call the common value $D$. Then there are $X\in\GL_D(\C)$ and
+    $\zeta\in\C$, with $|\zeta|=1$, such that
+    $B^i=\zeta X A^iX^{-1}$ for every physical letter $i$. In the latter case,
+    $|O_{AB}(N)|\to 1$. This is
+    \cite[Lemma~A.2]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:cpsv_normal_tp_gauge, thm:overlap_decay_rect_irr_tp,
+        thm:overlap_decay_irr_tp, thm:gauge_invariance,
+        thm:gauge_phase_mpv_scaling, thm:cpsv_normal_mpv_phase_gauge}
+    Put both tensors in their pure trace-preserving gauges. If their bond
+    dimensions differ, rectangular overlap decay gives $O_{AB}(N)\to0$. If
+    their dimensions agree but they are not gauge-phase equivalent, the
+    equal-dimension overlap-decay theorem gives the same conclusion. In the
+    remaining case, $B^i=\zeta X A^iX^{-1}$. By
+    Theorem~\ref{thm:cpsv_normal_mpv_phase_gauge}, $|\zeta|=1$. Hence
+    \begin{align}
+        O_{AB}(N)
+         & =\overline{\zeta}^{\,N}O_{AA}(N),
+        \notag                               \\
+        |O_{AB}(N)|
+         & =|O_{AA}(N)|\longrightarrow1.
+        \notag
+    \end{align}
+\end{proof}
+
+\begin{theorem}[Exact phase alternative for normal tensors]
+    \label{thm:cpsv_normal_mpv_phase_alternative}
+    \lean{MPSTensor.IsNormalTensor.mpv_phase_alternative}
+    \leanok
+    \uses{def:nt_cpsv, def:mpv_overlap, def:mpv_state}
+    Let $A$ and $B$ be normal tensors of positive, possibly different, bond
+    dimensions. Then either $O_{AB}(N)\to0$, or there is a phase
+    $\zeta\in\C$, with $|\zeta|=1$, such that
+    $\ket{V^{(N)}(B)}=\zeta^N\ket{V^{(N)}(A)}$ for every chain length $N$.
+    This is \cite[Corollary~A.3]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:cpsv_normal_overlap_dichotomy,
+        thm:gauge_phase_mpv_scaling}
+    Apply Theorem~\ref{thm:cpsv_normal_overlap_dichotomy}. In its second
+    alternative, gauge-phase covariance gives
+    $V^{(N)}(B)_\sigma=\zeta^N V^{(N)}(A)_\sigma$ for every configuration
+    $\sigma$, and hence the asserted equality of vectors.
+\end{proof}
+
+\begin{theorem}[Unit overlap from eventual proportionality]
+    \label{thm:eventual_proportional_normalized_overlap_norm_one}
+    \lean{MPSTensor.mpvOverlap_norm_tendsto_one_of_eventually_proportionalMPV₂}
+    \leanok
+    \uses{def:mpv_overlap}
+    Let $A$ and $B$ be tensors, possibly with different bond dimensions, whose
+    self-overlaps tend to one. Suppose that, for all sufficiently large $N$,
+    there is $c_N\in\C$ such that
+    $\ket{V^{(N)}(A)}=c_N\ket{V^{(N)}(B)}$. Then $|O_{AB}(N)|\to1$.
+\end{theorem}
+
+\begin{proof}\leanok
+    The proportionality relation gives
+    \begin{align}
+        O_{AB}(N) & =c_NO_{BB}(N),
+        \notag                         \\
+        O_{AA}(N) & =|c_N|^2O_{BB}(N).
+        \notag
+    \end{align}
+    Hence $|c_N|^2\to1$ and therefore $|c_N|\to1$. The first identity now
+    gives $|O_{AB}(N)|\to1$.
+\end{proof}
+
+\begin{theorem}[Geometric proportionality phase for normal tensors]
+    \label{thm:normal_proportional_mpv_geometric_phase}
+    \lean{MPSTensor.EventuallyNonzeroProportionalMPV₂.%
+        exists_unit_phase_power_of_isNormalTensor}
+    \leanok
+    \uses{def:nt_cpsv, def:mpv_state,
+        def:eventually_nonzero_proportional_mpv}
+    Let $A$ and $B$ be normal tensors of positive, possibly different, bond
+    dimensions. Suppose that, for all sufficiently large $N$, their matrix
+    product vectors are proportional by a nonzero scalar. Then there is
+    $a\in\C$, with $|a|=1$, such that
+    $\ket{V^{(N)}(A)}=a^N\ket{V^{(N)}(B)}$ for every positive $N$.
+    This is the one-normal-block consequence of
+    \cite[Corollary~A.3 and the proof of Theorem~2.10]{Cirac2016MPDO_arXiv}.
+    % Maintainer note: this determines only the unit-phase part for normalized
+    % normal blocks. The distinct positive-rescaling problem is recorded in
+    % docs/paper-gaps/cpsv16_commuting_form_to_sal.tex.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:eventual_proportional_normalized_overlap_norm_one,
+        thm:cpsv_normal_mpv_phase_alternative,
+        thm:cpsv_normal_mpv_phase_gauge}
+    Normality gives $O_{AA}(N)\to1$ and $O_{BB}(N)\to1$, so
+    Theorem~\ref{thm:eventual_proportional_normalized_overlap_norm_one} gives
+    $|O_{AB}(N)|\to1$. The first alternative in
+    Theorem~\ref{thm:cpsv_normal_mpv_phase_alternative} gives
+    $O_{AB}(N)\to0$, hence $|O_{AB}(N)|\to0$, a contradiction. In the
+    remaining alternative,
+    $\ket{V^{(N)}(B)}=\zeta^N\ket{V^{(N)}(A)}$ with $|\zeta|=1$; take
+    $a=\zeta^{-1}$.
+\end{proof}
+
+\begin{corollary}[Positive-length geometric proportionality phase]
+    \label{cor:normal_positive_proportional_mpv_geometric_phase}
+    \lean{MPSTensor.NonzeroProportionalMPV₂.%
+        exists_unit_phase_power_of_isNormalTensor}
+    \leanok
+    \uses{def:nt_cpsv, def:mpv_state,
+        def:nonzero_proportional_mpv}
+    Let $A$ and $B$ be normal tensors of positive, possibly different, bond
+    dimensions. Suppose that, for every positive $N$, their matrix product
+    vectors are proportional by a nonzero scalar. Then there is $a\in\C$,
+    with $|a|=1$, such that
+    $\ket{V^{(N)}(A)}=a^N\ket{V^{(N)}(B)}$ for every positive $N$.
+    This is the positive-length one-normal-block consequence of
+    \cite[Corollary~A.3 and Theorem~2.10]{Cirac2016MPDO_arXiv}.
+\end{corollary}
+
+\begin{proof}\leanok
+    \uses{lem:nonzero_proportional_mpv_basic,
+        thm:normal_proportional_mpv_geometric_phase}
+    Positive-length nonzero proportionality implies eventual nonzero
+    proportionality. Apply
+    Theorem~\ref{thm:normal_proportional_mpv_geometric_phase}.
+\end{proof}
+
+\begin{theorem}[Separated normal tensors are eventually independent]
+    \label{thm:cpsv_normal_separated_eventually_li}
+    \lean{MPSTensor.exists_eventually_linearIndependent_of_normalTensor_blocks_not_gaugePhaseEquiv}
+    \leanok
+    \uses{def:nt_cpsv, def:blocks_not_gauge_phase_equiv}
+    Let $(A_j)_{j=1}^g$ be a finite family of positive-bond-dimension normal
+    tensors, no two of which are gauge-phase equivalent after identifying
+    equal bond dimensions. Then the matrix product vectors
+    $\{\ket{V^{(N)}(A_j)}\}_{j=1}^g$ are linearly independent for all
+    sufficiently large $N$, as in
+    \cite[Appendix~A]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:cpsv_normal_tp_gauge,
+        lem:bnt_finite_index_overlap_orthonormal_li}
+    Put every tensor in the pure trace-preserving gauge of
+    Theorem~\ref{thm:cpsv_normal_tp_gauge}. Distinct gauge-phase classes have
+    overlaps tending to zero, while each self-overlap tends to one. The finite
+    Gram matrix therefore tends to the identity and is invertible for all
+    sufficiently large lengths. Gauge invariance of matrix product vectors
+    gives the conclusion for the original tensors.
+\end{proof}

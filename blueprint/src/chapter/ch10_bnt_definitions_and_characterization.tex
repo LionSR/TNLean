@@ -1,0 +1,320 @@
+\section{Bases of normal tensors}
+
+\begin{definition}[Basis of Normal Tensors (BNT)]\label{def:bnt}
+    \lean{MPSTensor.IsBNT}
+    \leanok
+    \uses{def:normal, def:mpv}
+    A \emph{basis of normal tensors} (BNT) for a total tensor $A_{\mathrm{tot}}$
+    consists of $g$ block tensors $(A_1, \ldots, A_g)$ with bond dimensions
+    $(D_1, \ldots, D_g)$ such that each $A_j$ is normal
+    (Definition~\ref{def:normal}); at each system size~$N\geq1$ the MPV of
+    $A_{\mathrm{tot}}$ lies in the span of the block MPVs
+    $\{\ket{V^{(N)}(A_j)}\}_{j=1}^g$; and for sufficiently large~$N$ those block
+    MPVs are linearly independent. This is \cite[Definition~IV.2]{Cirac2021Matrix}.
+    In the canonical-form characterization of
+    \cite[Section~2.3]{Cirac2016MPDO_arXiv}, a BNT is a minimal family of
+    representatives for $\widetilde A_k^i = e^{i\phi_k} X_k A_j^i X_k^{-1}$ among
+    the normal blocks.
+\end{definition}
+
+\begin{definition}[Basis of normal tensors, coefficient form]\label{def:bnt_cpsv}
+    \lean{MPSTensor.IsCPSVBasisOfNormalTensors}
+    \leanok
+    \uses{def:nt_cpsv, def:mpv}
+    % Source: Cirac2017MPDO_AnnPhys \S~II.C, lines 271--274.
+    The coefficient form of a basis of normal tensors: each block $A_j$ is a
+    CPSV normal tensor (Definition~\ref{def:nt_cpsv}), the MPV of $A$ is given at
+    every positive length by explicit coefficients $c_j^{(N)} \in \C$ with
+    $\ket{V^{(N)}(A)} = \sum_{j=1}^{g} c_j^{(N)} \ket{V^{(N)}(A_j)}$, and the
+    block MPVs $\{\ket{V^{(N)}(A_j)}\}$ are eventually linearly independent.
+\end{definition}
+
+\begin{lemma}[Positive bond dimensions in a coefficient-form BNT]
+    \label{lem:cpsv_bnt_block_dimensions_positive}
+    \lean{MPSTensor.IsCPSVBasisOfNormalTensors.blocks_dim_pos}
+    \leanok
+    \uses{def:bnt_cpsv}
+    Every block in a coefficient-form basis of normal tensors has positive
+    bond dimension.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:bnt_cpsv}
+    Eventual linear independence makes the matrix product vector of each block
+    nonzero at some positive length. A tensor with zero bond dimension has
+    zero matrix product vector at every length, which is a contradiction.
+\end{proof}
+
+\begin{lemma}[Bond dimension one implies irreducibility]
+    \label{lem:bond_dimension_one_irreducible}
+    \lean{MPSTensor.isIrreducibleTensor_of_bondDim_one}
+    \leanok
+    \uses{def:irreducible_tensor}
+    Every tensor with a one-dimensional bond space is irreducible.
+\end{lemma}
+
+\begin{proof}\leanok
+    The only orthogonal projections on a one-dimensional complex vector space
+    are zero and the identity.
+\end{proof}
+
+\begin{lemma}[Normality in bond dimension one]
+    \label{lem:bond_dimension_one_identity_transfer_normal}
+    \lean{MPSTensor.isNormalTensor_of_bondDim_one_of_transferMap_eq_id}
+    \leanok
+    \uses{def:nt_cpsv, lem:bond_dimension_one_irreducible}
+    A tensor with one-dimensional bond space and identity transfer map is a
+    normal tensor.
+\end{lemma}
+
+\begin{proof}\leanok
+    Irreducibility follows from the preceding lemma. The identity transfer map
+    has spectral radius one, and its only eigenvalue is one.
+\end{proof}
+
+\begin{theorem}[Distinct BNT members are not gauge-phase equivalent]
+    \label{thm:cpsv_bnt_blocks_not_gaugePhaseEquiv}
+    \lean{MPSTensor.IsCPSVBasisOfNormalTensors.blocks_not_gaugePhaseEquiv}
+    \leanok
+    \uses{def:bnt_cpsv, def:blocks_not_gauge_phase_equiv}
+    Distinct members of a basis of normal tensors are not gauge-phase
+    equivalent after identifying equal bond dimensions.
+\end{theorem}
+
+\begin{proof}\leanok
+    At every sufficiently large length the matrix product vectors of the basis
+    members are linearly independent. A gauge-phase equivalence between two
+    distinct members would give
+    $\ket{V^{(N)}(A_k)}=\zeta^N\ket{V^{(N)}(A_j)}$ for a nonzero scalar
+    $\zeta$. Thus one vector would be a scalar multiple of the other,
+    contradicting linear independence.
+\end{proof}
+
+\begin{theorem}[Characterization by canonical-form representatives]
+    \label{thm:cpsv_bnt_characterization}
+    \lean{MPSTensor.isCPSVBasisOfNormalTensors_iff_canonicalForm_covered_and_minimal}
+    \leanok
+    \uses{def:bnt_cpsv, def:nt_cpsv, def:block_diagonal_tensor,
+        def:same_mpv2_pos, def:blocks_not_gauge_phase_equiv}
+    Let $A$ have a canonical-form MPV expansion
+    \begin{align}
+        \ket{V^{(N)}(A)}
+         & = \sum_{k=1}^{r}\mu_k^N\ket{V^{(N)}(\widetilde A_k)}
+        \notag
+    \end{align}
+    at every positive length, where the tensors $\widetilde A_k$ are normal
+    tensors of positive bond dimension. Set
+    $K_{\mathrm{act}}=\{k:\mu_k\ne0\}$. Let $(A_j)_{j=1}^{g}$ be tensors of
+    positive bond dimension. Then
+    $(A_j)_{j=1}^{g}$ is a basis of normal tensors for $A$ if and only if:
+    \begin{enumerate}
+        \item every $A_j$ is normal;
+        \item for every $k\in K_{\mathrm{act}}$ there are an index $j$, an
+              invertible matrix $X_k$, and a phase $e^{i\phi_k}$ such that
+              $\widetilde A_k^i=e^{i\phi_k}X_kA_j^iX_k^{-1}$ for every
+              physical index $i$;
+        \item no two distinct tensors $A_j$ and $A_{j'}$ are related in this
+              way.
+    \end{enumerate}
+    This is \cite[Proposition~2.7]{Cirac2016MPDO_arXiv}, with the literal
+    canonical-form display restricted to its active blocks.
+    % Local correction documented in
+    % docs/paper-gaps/cpsv16_bnt_characterization_active_blocks.tex.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:cpsv_normal_mpv_phase_gauge,
+        thm:cpsv_normal_mpv_phase_alternative,
+        thm:cpsv_bnt_blocks_not_gaugePhaseEquiv,
+        lem:bnt_finite_index_overlap_orthonormal_li,
+        lem:finite_geometric_sum_eventual_vanishing,
+        lem:sector_decomposition_coeff_not_eventually_zero,
+        def:mpv_phase_class_data,
+        thm:cpsv_normal_separated_eventually_li,
+        thm:mpv_decomposition}
+    First discard the zero-weight summands; they contribute zero at every
+    positive length. Reindex the remaining summands, group them into the MPV
+    phase classes of Definition~\ref{def:mpv_phase_class_data}, and choose one
+    representative from each class. By
+    Theorem~\ref{thm:cpsv_bnt_blocks_not_gaugePhaseEquiv}, eventual linear
+    independence of a BNT excludes gauge-phase equivalence between two
+    distinct $A_j$.
+
+    Suppose that some phase-class representative is not gauge-phase equivalent
+    to any $A_j$. Partition all phase classes into the unmatched classes $T$
+    and the remaining classes. Every remaining representative is a nonzero
+    scalar multiple of some $\ket{V^{(N)}(A_j)}$ at each positive length.
+    Distinct unmatched representatives have vanishing mutual overlaps, and
+    their overlaps with every $A_j$ also vanish. Explicitly, for $t\ne t'$ in
+    $T$ and every $j$,
+    \begin{align}
+        O_{\widetilde A_t\widetilde A_{t'}}(N) & \longrightarrow0,
+        \notag                                                     \\
+        O_{\widetilde A_t A_j}(N)              & \longrightarrow0.
+        \notag
+    \end{align}
+    By Lemma~\ref{lem:bnt_finite_index_overlap_orthonormal_li}, the combined
+    family
+    \begin{align}
+        \{\ket{V^{(N)}(\widetilde A_t)}:t\in T\}
+        \cup \{\ket{V^{(N)}(A_j)}:1\leq j\leq g\}
+        \notag
+    \end{align}
+    is linearly independent for all sufficiently large $N$. Comparing the
+    canonical-form expansion with the BNT expansion gives a relation
+    \begin{align}
+        \sum_{t\in T}c_{N,t}\ket{V^{(N)}(\widetilde A_t)}
+        +\sum_{j=1}^{g}\alpha_{N,j}\ket{V^{(N)}(A_j)}
+         & =0.
+        \notag
+    \end{align}
+    Linear independence forces every $c_{N,t}$ to vanish. Hence the
+    coefficient of every unmatched phase class vanishes for all sufficiently
+    large $N$.
+    For an unmatched class $t$, let $q$ range over its active canonical-form
+    summands, write $\mu_q$ for the corresponding canonical-form weight, and
+    write $\zeta_q$ for the phase relating that summand to the chosen
+    representative. Then
+    $c_{N,t}=\sum_{q\in t}(\zeta_q\mu_q)^N$.
+    Every base $\zeta_q\mu_q$ is nonzero because only active summands occur.
+    Eventual vanishing of this finite geometric sum would imply vanishing at
+    $N=0$, where its value is the positive number of summands in the class.
+    This contradiction proves coverage. The normal-tensor phase theorem turns
+    the resulting MPV phase relation into the stated gauge-phase relation.
+
+    Conversely, coverage gives, for each canonical-form summand,
+    $\ket{V^{(N)}(\widetilde A_k)}
+        =\zeta_k^N\ket{V^{(N)}(A_{j(k)})}$. Hence
+    \begin{align}
+        \ket{V^{(N)}(A)}
+         & = \sum_j
+        \left(\sum_{k:j(k)=j}(\mu_k\zeta_k)^N\right)
+        \ket{V^{(N)}(A_j)}.
+        \notag
+    \end{align}
+    This is the required BNT span at every positive length. Pairwise
+    gauge-phase distinction and normality give eventual linear independence,
+    completing the converse.
+\end{proof}
+
+\begin{theorem}[Failure of literal BNT uniqueness]
+    \label{thm:cpsv_bnt_uniqueness_counterexample}
+    \lean{MPSTensor.exists_isCPSVBasisOfNormalTensors_unequal_card}
+    \leanok
+    \uses{def:bnt_cpsv, def:nt_cpsv, def:same_mpv2_pos,
+        def:block_diagonal_tensor}
+    There is a normal tensor with a one-block canonical-form expansion which
+    admits two bases of normal tensors of different cardinalities. Hence the
+    unrestricted uniqueness sentence of
+    \cite[Appendix~A, line~1148]{Cirac2016MPDO_arXiv} does not follow from the
+    literal definition of a basis of normal tensors.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpv_decomposition}
+    Take physical dimension two and bond dimension one. Let $A_0$ be supported
+    on physical symbol zero and let $A_1$ be supported on physical symbol one:
+    \begin{align}
+        A_0^0 & =1,
+        \notag      \\
+        A_0^1 & =0,
+        \notag      \\
+        A_1^0 & =0,
+        \notag      \\
+        A_1^1 & =1.
+        \notag
+    \end{align}
+    Both transfer maps are the identity on the one-dimensional matrix algebra:
+    $\E_{A_j}(X)=X$ for $j=0,1$. Hence both tensors are normal. At every
+    positive length,
+    \begin{align}
+        \ket{V^{(N)}(A_0)} & =\ket{0\cdots0},
+        \notag                                \\
+        \ket{V^{(N)}(A_1)} & =\ket{1\cdots1}.
+        \notag
+    \end{align}
+    Thus $(A_0)$ and $(A_0,A_1)$ are both bases of normal tensors for $A_0$.
+    Indeed, for every $N\geq 1$, the second expansion is
+    $\ket{V^{(N)}(A_0)}
+        =1\cdot\ket{V^{(N)}(A_0)}+0\cdot\ket{V^{(N)}(A_1)}$.
+    Their index sets have cardinalities one and two, so they cannot be related
+    by a bijection.
+    % The missing converse-coverage condition is documented in
+    % docs/paper-gaps/cpsv16_bnt_uniqueness_zero_coefficient.tex.
+\end{proof}
+
+\begin{theorem}[Restricted BNT uniqueness under converse coverage]
+    \label{thm:cpsv_bnt_uniqueness_converse_coverage}
+    \lean{MPSTensor.IsCPSVBasisOfNormalTensors.equiv_of_converse_coverage}
+    \leanok
+    \uses{def:bnt_cpsv, def:nt_cpsv, def:same_mpv2_pos,
+        def:block_diagonal_tensor, def:gauge_phase_equiv}
+    Let $A$ have a canonical-form MPV expansion
+    \begin{align}
+        \ket{V^{(N)}(A)}
+         & =\sum_{k=0}^{r-1}\mu_k^N\ket{V^{(N)}(\widetilde A_k)}
+        \notag
+    \end{align}
+    at every positive length, where the tensors $\widetilde A_k$ are normal
+    and have positive bond dimensions.
+    Let $(A_j)_{j=0}^{g_1-1}$ and $(B_l)_{l=0}^{g_2-1}$ be two bases of normal
+    tensors for $A$, all of whose members have positive bond dimensions.
+    Assume that every $A_j$ and every $B_l$ is related by a phase and an
+    invertible gauge to a block $\widetilde A_k$ with $\mu_k\ne0$. Then there
+    is a bijection
+    $e:\{0,\ldots,g_1-1\}\to\{0,\ldots,g_2-1\}$ such that the bond dimensions of
+    $A_j$ and $B_{e(j)}$ agree and
+    $B_{e(j)}^i=\zeta_jX_jA_j^iX_j^{-1}$, with $|\zeta_j|=1$, for every $j$
+    and every physical index $i$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:cpsv_bnt_characterization,
+        thm:cpsv_bnt_blocks_not_gaugePhaseEquiv,
+        thm:cpsv_normal_mpv_phase_gauge,
+        lem:gauge_phase_equiv_cast_compose, def:gauge_phase_equiv}
+    For each $A_j$, choose an active canonical-form block
+    $\widetilde A_{\ell(j)}$ representing it, and then choose a member
+    $B_{f(j)}$ representing that block. If $f(j)=f(j')$, then
+    \begin{align}
+        A_j
+         & \sim_{\mathrm{gp}}\widetilde A_{\ell(j)}
+        \sim_{\mathrm{gp}}B_{f(j)}
+        =B_{f(j')}\sim_{\mathrm{gp}}\widetilde A_{\ell(j')}
+        \sim_{\mathrm{gp}}A_{j'}.
+        \notag
+    \end{align}
+    Minimality of the first basis gives $j=j'$, so $f$ is injective.
+    Reversing the roles of the two bases gives an injection in the other
+    direction. Since both index sets are finite, $f$ is bijective; set $e=f$.
+    Write the two relations through the chosen active block as
+    \begin{align}
+        \widetilde A_{\ell(j)}^i
+         & =\zeta_{1,j}X_{1,j}A_j^iX_{1,j}^{-1},
+        \notag                                        \\
+        \widetilde A_{\ell(j)}^i
+         & =\zeta_{2,j}X_{2,j}B_{e(j)}^iX_{2,j}^{-1}.
+        \notag
+    \end{align}
+    Solving the second identity for $B_{e(j)}^i$ and using the first gives
+    \begin{align}
+        B_{e(j)}^i
+         & =(\zeta_{2,j}^{-1}\zeta_{1,j})
+        (X_{2,j}^{-1}X_{1,j})A_j^i(X_{1,j}^{-1}X_{2,j}).
+        \notag
+    \end{align}
+    Denote the scalar and gauge in this identity by $\zeta_j$ and $X_j$.
+    The gauge-phase relation gives
+    \begin{align}
+        O_{B_{e(j)}B_{e(j)}}(N)
+         & =(\zeta_j\overline{\zeta_j})^N O_{A_jA_j}(N)
+        =|\zeta_j|^{2N}O_{A_jA_j}(N).
+        \notag
+    \end{align}
+    Normality gives
+    $O_{A_jA_j}(N)\to1$ and $O_{B_{e(j)}B_{e(j)}}(N)\to1$; hence the last
+    identity forces $|\zeta_j|=1$.
+    % This is the converse-coverage restriction documented in
+    % docs/paper-gaps/cpsv16_bnt_uniqueness_zero_coefficient.tex, not the
+    % unrestricted sentence at arXiv:1606.00608, Appendix A, line 1148.
+\end{proof}

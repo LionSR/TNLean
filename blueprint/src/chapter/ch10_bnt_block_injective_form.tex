@@ -1,0 +1,340 @@
+\begin{definition}[Fixed-length block-injective canonical-form condition]
+    \label{def:blockwise_product_word_span}
+    \lean{MPSTensor.WordTupleSpanTop}
+    \leanok
+    For a fixed blocked length $m$, the fixed-length form of the
+    block-injective canonical-form condition is
+    \begin{align}
+        \spn\{(A_1^\omega,\ldots,A_g^\omega):|\omega|=m\}
+         & =
+        \prod_{j=1}^g \MN{D_j}.
+        \notag
+    \end{align}
+    Equivalently,
+    \begin{align}
+        \forall X=(X_j)_j\in\bigoplus_{j=1}^g \MN{D_j},
+        \quad
+        \exists (c_\omega(X))_{|\omega|=m},
+        \quad
+        (X_j)_{j=1}^g
+         & =
+        \sum_{|\omega|=m} c_\omega(X)
+        (A_1^\omega,\ldots,A_g^\omega).
+        \notag
+    \end{align}
+    This is the fixed-length form of the block-injective canonical-form
+    condition of \cite[lines~2113--2117]{Cirac2021Matrix}.
+\end{definition}
+
+\begin{lemma}[BNT block separation with an injective prefix]
+    \label{lem:bnt_direct_sum_injective_prefix_word_span}
+    \lean{MPSTensor.hasPairBlockSeparatingWords_threeBlock_of_blocksNotGaugePhaseEquiv_c1}
+    \lean{MPSTensor.propBlockInjective_of_blocksNotGaugePhaseEquiv_directSum_c1}
+    \lean{MPSTensor.wordTupleSpanTop_of_blocksNotGaugePhaseEquiv_directSum_selectors_c1}
+    \lean{MPSTensor.exists_wordTupleSpanTop_of_blocksNotGaugePhaseEquiv_directSum_selectors_c1}
+    \leanok
+    \uses{def:bnt_cpsv, def:nt_cpsv, def:blocks_not_gauge_phase_equiv,
+        def:left_canonical_tensor, def:mpv_overlap,
+        def:blockwise_product_word_span}
+    Let $A^1,\ldots,A^r$ be normalized representatives of a basis of normal
+    tensors: each representative is irreducible, the family is left-canonical,
+    the self-overlaps are normalized, and no two distinct same-dimensional
+    representatives are gauge-phase equivalent. Fix $L_0>0$. Assume that, for
+    every block $j$, the map
+    \begin{align}
+        \Gamma_{L_0}^{A^j}:\MN{D_j} & \longrightarrow (\C^d)^{\otimes L_0},
+        \notag                                                                     \\
+        X                           & \longmapsto \sum_{|u|=L_0}\tr(XA^j_u)\ket{u}
+        \notag
+    \end{align}
+    is injective, and that the homogeneous word spans at the two source
+    lengths are full:
+    \begin{align}
+        \spn\{A^j_u:|u|=L_0+1\}    & = \MN{D_j},
+        \notag                                   \\
+        \spn\{A^j_v:|v|=3(L_0+1)\} & = \MN{D_j}.
+        \notag
+    \end{align}
+    Then, for every ordered pair $k\ne j$, there are coefficients
+    $c^{k,j}_\omega$ such that
+    \begin{align}
+        \sum_{|\omega|=3(L_0+1)} c^{k,j}_\omega A^k_\omega & = \Id,
+        \notag                                                      \\
+        \sum_{|\omega|=3(L_0+1)} c^{k,j}_\omega A^j_\omega & = 0.
+        \notag
+    \end{align}
+    The simultaneous block-word tuples at length
+    $(L_0+1)+3(r-1)(L_0+1)$ span the full product algebra
+    $\prod_{j=1}^r \MN{D_j}$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{def:bnt_cpsv, def:blockwise_product_word_span,
+        thm:trace_nondeg, thm:cpsv_bnt_blocks_not_gaugePhaseEquiv,
+        thm:normal_proportional_mpv_geometric_phase}
+    Put $\ell=L_0+1$ and $S=3\ell$. For a block $A^q$, define the
+    boundary-to-local-space map
+    \begin{align}
+        T_n^q:\MN{D_q} & \longrightarrow (\C^d)^{\otimes n},
+        \notag                                               \\
+        T_n^q(Z)       & =\sum_{|t|=n}\tr(ZA_t^q)\ket{t},
+        \notag
+    \end{align}
+    and its range $\mathcal G_n^q=\operatorname{ran}T_n^q$. This is the same
+    map as $\Gamma_n^{A^q}$, up to cyclically moving $Z$ inside the trace.
+    The full word span at a length $n$ makes $T_n^q$ injective: if
+    $T_n^q(Z)=0$, then $\tr(ZM)=0$ for every $M\in\MN{D_q}$, whence $Z=0$
+    by nondegeneracy of the trace pairing.
+
+    Fix two distinct blocks and relabel them $A$ and $B$ so that their bond
+    dimensions satisfy $D_B\leq D_A$. We claim that
+    \begin{align}
+        \mathcal G_S^A\cap\mathcal G_S^B & =\{0\}.
+        \notag
+    \end{align}
+    Suppose instead that $0\ne\psi$ lies in this intersection. Since the
+    length-$S$ word spans are full, $T_S^A$ and $T_S^B$ are injective, so there
+    are nonzero matrices $X\in\MN{D_A}$ and $Y\in\MN{D_B}$ with
+    $\psi=T_S^A(X)=T_S^B(Y)$. Splitting every length-$S$ word into three
+    length-$\ell$ words gives
+    \begin{align}
+        \tr(XA_{uvw}) & =\tr(YB_{uvw})
+                      &                & (|u|=|v|=|w|=\ell).
+        \notag
+    \end{align}
+
+    We now derive the local-space inclusion without suppressing the intervening
+    map. Since the length-$\ell$ words of $A$ span $\MN{D_A}$ and $X\ne0$,
+    the two-sided products span the same algebra:
+    \begin{align}
+        \spn\{A_uXA_v:|u|=|v|=\ell\} & =\MN{D_A}.
+        \notag
+    \end{align}
+    Indeed, after expanding arbitrary left and right factors in length-$\ell$
+    words, the left-hand side is the span of $MXN$ with
+    $M,N\in\MN{D_A}$; a nonzero entry of $X$, together with matrix units for
+    $M$ and $N$, produces every matrix unit. Hence, for any
+    $Z\in\MN{D_A}$, there are scalars $a_{u,v}$ such that
+    \begin{align}
+        Z & =\sum_{u,v}a_{u,v}A_uXA_v.
+        \notag
+    \end{align}
+    Define the corresponding boundary matrix for $B$ by
+    \begin{align}
+        R(Z) & =\sum_{u,v}a_{u,v}B_uYB_v\in\MN{D_B}.
+        \notag
+    \end{align}
+    For each length-$\ell$ word $t$, cyclicity of the trace and the three-block
+    relation above, applied to the concatenated word $vtu$, give
+    \begin{align}
+        \tr(ZA_t)
+         & =\sum_{u,v}a_{u,v}\tr(XA_vA_tA_u)
+        \notag                               \\
+         & =\sum_{u,v}a_{u,v}\tr(YB_vB_tB_u)
+        \notag                               \\
+         & =\tr(R(Z)B_t).
+        \notag
+    \end{align}
+    Thus $T_\ell^A(Z)=T_\ell^B(R(Z))$. Although the coefficients in a
+    representation of $Z$ need not be unique, their existence for each $Z$ is
+    enough to prove
+    \begin{align}
+        \mathcal G_\ell^A & \subseteq\mathcal G_\ell^B.
+        \notag
+    \end{align}
+
+    Both $T_\ell^A$ and $T_\ell^B$ are injective, so their ranges have
+    dimensions $D_A^2$ and $D_B^2$. The inclusion just proved therefore yields
+    \begin{align}
+        D_A^2
+         & =\dim\mathcal G_\ell^A
+        \leq\dim\mathcal G_\ell^B
+        =D_B^2.
+        \notag
+    \end{align}
+    On the other hand, the chosen orientation $D_B\leq D_A$ gives
+    $D_B^2\leq D_A^2$. Hence $D_A=D_B$ and the inclusion is an equality.
+    If the original bond dimensions were unequal, the strict reverse inequality
+    would already contradict the local-space inclusion. In the remaining
+    equal-dimensional case, identify the two bond index sets through this
+    equality, as in the BNT same-dimension comparison. For
+    $N>\ell$, let $\mathcal C_N^q(\ell)$ be the intersection of the translates
+    of $\mathcal G_\ell^q$ around the periodic chain. Equality
+    $\mathcal G_\ell^A=\mathcal G_\ell^B$ implies
+    \begin{align}
+        \mathcal C_N^A(\ell) & =\mathcal C_N^B(\ell).
+        \notag
+    \end{align}
+    We justify the needed injective uniqueness step here. A vector satisfying
+    every translated length-$\ell$ local constraint can be cut successively
+    around the ring. Injectivity of $T_{L_0}^q$ makes the resulting boundary
+    matrix unique at each cut, so consistency at adjacent cuts gives one
+    matrix $Z$ satisfying
+    \begin{align}
+        ZA_i^q & =A_i^qZ \qquad (0\leq i<d).
+        \notag
+    \end{align}
+    Since the length-$\ell$ words span $\MN{D_q}$, their commutant consists
+    only of scalar matrices. Thus $Z$ is scalar, and the translated local
+    constraints identify the periodic intersection, for $N>\ell$, with the
+    MPS line
+    \begin{align}
+        \mathcal C_N^A(\ell) & =\spn\{\Psi_N(A)\},
+                             &
+        \mathcal C_N^B(\ell) & =\spn\{\Psi_N(B)\},
+        \notag                                               \\
+        \Psi_N(A)            & =\sum_{|w|=N}\tr(A_w)\ket{w},
+                             &
+        \Psi_N(B)            & =\sum_{|w|=N}\tr(B_w)\ket{w}.
+        \notag
+    \end{align}
+    Consequently, equality of the local spaces forces
+    $\Psi_N(A)=c_N\Psi_N(B)$ for some scalar $c_N$ at every such $N$.
+    The normalized self-overlaps are the squared norms of these vectors and
+    tend to one. Hence both vectors, and therefore $c_N$, are nonzero for all
+    sufficiently large $N$. Theorem~\ref{thm:normal_proportional_mpv_geometric_phase}
+    now turns this eventual nonzero proportionality into a gauge-phase
+    equivalence. This contradicts
+    Theorem~\ref{thm:cpsv_bnt_blocks_not_gaugePhaseEquiv} for the two distinct
+    BNT representatives. Thus
+    $\mathcal G_S^A\cap\mathcal G_S^B=\{0\}$, and hence the same assertion for
+    the original ordering of the pair.
+
+    The direct sum map
+    \begin{align}
+        \Phi_{k,j}:\MN{D_k}\oplus\MN{D_j}
+              & \longrightarrow (\C^d)^{\otimes S},
+        \notag                                      \\
+        (X,Y) & \longmapsto T_S^k(X)+T_S^j(Y)
+        \notag
+    \end{align}
+    is now injective: the trivial intersection handles the two summands, and
+    each $T_S^q$ is injective. All spaces are finite-dimensional, so the dual
+    map is surjective. Under the nondegenerate trace pairings, it sends word
+    coefficients $(c_\omega)_\omega$ to
+    \begin{align}
+        \left(\sum_{|\omega|=S}c_\omega A^k_\omega,
+        \sum_{|\omega|=S}c_\omega A^j_\omega\right).
+        \notag
+    \end{align}
+    Surjectivity at $(\Id,0)$ gives the asserted pair selector.
+
+    For fixed $k$, multiply its selectors against the other $r-1$ blocks.
+    Concatenation multiplies word evaluations, so this gives coefficients
+    $b_v^{(k)}$ at length $(r-1)S$ satisfying
+    \begin{align}
+        \sum_{|v|=(r-1)S}b_v^{(k)}A^j_v
+         & =\delta_{j,k}\Id.
+        \notag
+    \end{align}
+    Given $X_k\in\MN{D_k}$, the full length-$\ell$ word span writes
+    $X_k=\sum_{|u|=\ell}a_u^{(k)}A^k_u$. Concatenating this expansion with the
+    selector realizes the tuple supported at $k$ with value $X_k$, at the
+    exact length
+    \begin{align}
+        \ell+(r-1)S
+         & =(L_0+1)+3(r-1)(L_0+1).
+        \notag
+    \end{align}
+    Summing these supported tuples over $k$ yields every element of the stated
+    product algebra.
+\end{proof}
+
+\begin{theorem}[Simultaneous one-letter span after blocking a BNT]
+    \label{thm:cpsv_bnt_blocked_simultaneous_span}
+    \lean{MPSTensor.IsCPSVBasisOfNormalTensors.%
+        exists_positive_wordTupleSpanTop}
+    \lean{MPSTensor.wordTupleSpanTop_blockTensor_one}
+    \lean{MPSTensor.IsCPSVBasisOfNormalTensors.%
+        exists_blocked_wordTupleSpanTop_one}
+    \leanok
+    \uses{def:bnt_cpsv, def:blocked_tensor,
+        def:blockwise_product_word_span}
+    Let $(A_j)_{j=1}^g$ be a basis of normal tensors, with bond dimensions
+    $D_j$. There is a positive integer $L$ such that the one-letter
+    evaluations of the blocked tensors span the full product algebra:
+    \begin{align}
+        \spn_{\C}\left\{((A_1^{[L]})^i,\ldots,(A_g^{[L]})^i)
+        : 0\leq i<d^L\right\}
+         & = \prod_{j=1}^g \MN{D_j}.
+        \notag
+    \end{align}
+    This is the existence form of simultaneous block injectivity associated
+    with \cite[lines~317--345]{Cirac2016MPDO_arXiv}; no numerical bound on
+    $L$ is asserted here.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:cpsv_bnt_block_dimensions_positive,
+        thm:cpsv_bnt_blocks_not_gaugePhaseEquiv,
+        thm:cpsv_normal_tp_gauge,
+        thm:normal_tp_primitive_irred,
+        thm:common_exact_block_injectivity_normal_left_canonical,
+        thm:wordspan_blk_inj_succ,
+        thm:peripheral_primitive_irreducible_overlap_one,
+        lem:gauge_invariance_block_injective,
+        lem:bnt_direct_sum_injective_prefix_word_span}
+    Every block has positive bond dimension, and distinct blocks are not
+    gauge-phase equivalent after equal bond dimensions are identified. Put
+    each block in its trace-preserving Perron gauge. The gauged blocks are
+    irreducible and primitive, form a left-canonical family, and have
+    normalized self-overlaps. Choose a common positive length $p$ at which
+    every gauged block is block-injective. Positive-length propagation gives
+    block injectivity at $p+1$ and at $3(p+1)$.
+
+    Use the pair-selector conclusion of
+    Lemma~\ref{lem:bnt_direct_sum_injective_prefix_word_span} with $L_0=p$.
+    Thus, for each ordered pair $k\ne j$, there is a length-$3(p+1)$ word
+    combination whose value is $\Id$ on block $k$ and $0$ on block $j$.
+    For fixed $k$, multiply the $g-1$ selectors indexed by $j\ne k$.
+    Concatenation multiplies their block evaluations and gives a selector of
+    length
+    \begin{align}
+        3(g-1)(p+1)
+        \notag
+    \end{align}
+    whose value is $\Id$ on block $k$ and $0$ on every other block. Gauge
+    equivalence carries these selector identities back to the original blocks.
+
+    The original blocks also have full length-$p$ word span, since block
+    injectivity is invariant under the Perron gauge. Given
+    $X_k\in\MN{D_k}$, choose a length-$p$ word combination evaluating to
+    $X_k$ on block $k$, and concatenate it with the selector for $k$. This
+    realizes the product-algebra tuple supported at $k$ with value $X_k$.
+    Summing over $k$ gives the full simultaneous span at the constructed
+    length
+    \begin{align}
+        L
+         & =p+3(g-1)(p+1).
+        \notag
+    \end{align}
+    Since $p>0$, this length is positive. Finally, a one-letter evaluation of
+    $A_j^{[L]}$ is precisely a length-$L$ word evaluation of $A_j$. Hence
+    blocking these $L$ sites turns the simultaneous word span just obtained
+    into the asserted simultaneous one-letter span.
+\end{proof}
+
+Let $A$ be a tensor in canonical form, and let $A_1,\ldots,A_g$ be a basis of
+normal tensors of $A$. For suitable coefficients $\mu_{j,q}$ and invertible
+matrices $X_{j,q}$, write
+$M_j=\diag(\mu_{j,1},\ldots,\mu_{j,r_j})$ and
+$X=\bigoplus_{j=1}^{g}\bigoplus_{q=1}^{r_j}X_{j,q}$. Then
+% Source: CPSV16, Section 2.3, labels eq:II_ABasicTensors and eq:II_X,
+% source lines 283--301; rendered Equations (20a)--(21).
+% Source-faithfulness verdict: the display labelled Eq19 in the source replaces
+% direct sums by tensor products and is explicitly declared nonliteral at
+% source lines 304--313; it is rendered as Equation (23).
+% Index/type verdict: A^i_{alpha,beta} has physical index i and virtual indices
+% alpha,beta; j and q select direct-sum summands and are not contraction legs.
+\begin{align}
+    A^i
+     & =X\left[\bigoplus_{j=1}^{g}
+             \left(M_j\otimes A_j^i\right)\right]X^{-1}
+    =\bigoplus_{j=1}^{g}\bigoplus_{q=1}^{r_j}
+    \mu_{j,q}X_{j,q}A_j^iX_{j,q}^{-1}.
+    \label{eq:bnt_found_canonical_decomp}
+\end{align}
+This is \cite[Section~2.3, Equations~(20a)--(21)]{Cirac2016MPDO_arXiv}.
+The decomposition (\ref{eq:bnt_found_canonical_decomp}) is used below to
+separate the normal blocks.
