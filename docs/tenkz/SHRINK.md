@@ -806,5 +806,6 @@ two at each scope, which is short of tenure and so still flagged.
 |---|---|
 | flag:consumers:key:group:frame | keep-because: the rotation the anyon panels need is one transform read at three scopes, and the two here are its first demand-corpus consumers; the redraw campaign supplies the rest or the scope dies at the 0.8 close; expiry 0.8 |
 | flag:consumers:key:object:frame | keep-because: same concept at atom scope; a single turned tensor is the case a group cannot express, and it earns tenure with the campaign or dies with it; expiry 0.8 |
+| flag:consumers:command:tngroup | keep-because: the command carrying that transform, flagged for consumers for the first time now that two panels use it; its shape was already affirmed permanent against the sugar detector, and its tenure follows the same 0.8 close as the two keys above |
 
 No ledger row changes and no other flag verdict is re-examined here.
