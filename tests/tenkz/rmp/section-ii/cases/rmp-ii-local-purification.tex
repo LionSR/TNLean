@@ -12,9 +12,13 @@
     \tn[box]{O}
   \end{tenkz}
   \;=\;
-  % RHS: X^{-1} capsule | A over conj(A) | X capsule
+  % RHS: X^{-1} capsule | A over conj(A) | X capsule.  A gauge transform
+  % and its inverse are one operator and its inverse: the two capsules
+  % carry the same claim on the page, so the X label is padded to the
+  % width of X^{-1} and both capsules come out the same size.
   \begin{tenkz}[rows={op, op}]
-    \tnX[wires=2]{X^{-1}} & \tn[box]{A} & \tnX[wires=2]{X}\\
+    \tnX[wires=2]{X^{-1}} & \tn[box]{A} &
+      \tnX[wires=2]{\hphantom{{}^{-}}X\hphantom{{}^{1}}}\\
     & \tn*[box]{A} &
   \end{tenkz}
 \]

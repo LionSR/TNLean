@@ -18,12 +18,15 @@
 
 % panel 2 - the fat-graph depiction, free tier: the two directed wires
 % crossing with no glyph at the crossing (the fat graph IS the tensor).
+% The physical wire pierces the virtual one away from its midpoint, so
+% the level name a - which a join always sets at mid-wire - reads over
+% clear paper instead of over the physical wire.
 \[
   \begin{tenkzfree}
-    \tnput[dot, label pos=west,  ports={east:virtual}]{j}{(0,0)}{j}
-    \tnput[dot, label pos=east,  ports={west:virtual}]{k}{(26mm,0)}{k}
-    \tnput[dot, label pos=south, ports={north:physical}]{n}{(13mm,-13mm)}{n}
-    \tnput[dot, label pos=north, ports={south:physical}]{m}{(13mm,13mm)}{m}
+    \tnput[dot, label pos=west,  ports={east:virtual}]{j}{(0mm,0mm)}{j}
+    \tnput[dot, label pos=east,  ports={west:virtual}]{k}{(26mm,0mm)}{k}
+    \tnput[dot, label pos=south, ports={north:physical}]{n}{(18mm,-9mm)}{n}
+    \tnput[dot, label pos=north, ports={south:physical}]{m}{(18mm,9mm)}{m}
     \tnjoin[dir, label=a]{j.east}{k.west}
     \tnjoin[dir]{n.north}{m.south}
   \end{tenkzfree}

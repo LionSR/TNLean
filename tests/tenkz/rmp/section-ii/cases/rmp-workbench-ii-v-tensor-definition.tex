@@ -7,7 +7,10 @@
 %   590-596; archival output DefV.pdf
 % Capabilities: grid, typed-ports
 \[
-  \begin{tenkz}[rows={ket:nopair,bra},boundary=none,
+  % boundary=none silently outranks the two cup words below it, so the
+  % declared closure drew as two free-floating glyphs; the cup words are
+  % the closure and state the boundary on their own
+  \begin{tenkz}[rows={ket:nopair,bra},
                 west={cup=$l^{1/2}$},east=cup]
     \tn[box]{V}\\
     \tn*[box]{A}
