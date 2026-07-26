@@ -485,6 +485,52 @@ the coefficient argument of Chapter~\ref{ch:bnt}.
     (\ref{eq:cpsv_canonical_form_mpv_expansion}).
 \end{proof}
 
+\begin{theorem}[BNT characterization for CPSV canonical form]
+    \label{thm:cpsv_canonical_form_bnt_characterization}
+    \lean{MPSTensor.CPSVCanonicalFormData.isCPSVBasisOfNormalTensors_iff_covered_and_minimal}
+    \leanok
+    \uses{def:cpsv_canonical_form, def:bnt_cpsv}
+    % Maintainer source anchors: CPSV16 prop:char-BNT, lines 278--301 and 1137--1148.
+    Let $A$ have canonical-form data as in~(\ref{eq:cpsv_canonical_form}), and
+    let $(B_j)_{j=1}^{g}$ have positive bond dimensions. With
+    $K_{\mathrm{act}}=\{k:\mu_k\ne0\}$, the family $(B_j)_{j=1}^{g}$ is a
+    basis of normal tensors for $A$ if and only if
+    \begin{align}
+        &\bigl(\forall j,\ B_j\text{ is normal}\bigr)
+        \notag\\
+        &\quad\land
+        \bigl(\forall k\in K_{\mathrm{act}},\ \exists j,X_k,\phi_k,\
+        \forall i,\ A_k^i=e^{i\phi_k}X_kB_j^iX_k^{-1}\bigr)
+        \notag\\
+        &\quad\land
+        \bigl(\forall j\ne j',\ \nexists X,\phi,\ \forall i,\
+        B_{j'}^i=e^{i\phi}XB_j^iX^{-1}\bigr).
+        \label{eq:cpsv_cf_bnt_characterization}
+    \end{align}
+    Each displayed conjugacy also requires the two bond dimensions to agree,
+    and every scalar $e^{i\phi}$ has modulus one. This is
+    \cite[Proposition~2.7 and Appendix~A]{Cirac2016MPDO_arXiv}, specialized to
+    the literal canonical-form data.
+
+    \textbf{Local fix (active blocks):} coverage in
+    (\ref{eq:cpsv_cf_bnt_characterization}) applies only to listed blocks with
+    $\mu_k\ne0$. The display defining canonical form permits $\mu_k=0$, and a
+    zero-weight block contributes nothing to any positive-length matrix product
+    vector. Thus the theorem does not claim coverage of every syntactically
+    listed block. The comparison is recorded in
+    \path{docs/paper-gaps/cpsv16_bnt_characterization_active_blocks.tex}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:cpsv_canonical_form, thm:cpsv_bnt_characterization}
+    The canonical-form data supply normality of every $A_k$ and the
+    positive-length identity
+    $\ket{V^{(N)}(A)}=\sum_k\mu_k^N\ket{V^{(N)}(A_k)}$.
+    Substitution of these two facts into
+    Theorem~\ref{thm:cpsv_bnt_characterization} gives
+    (\ref{eq:cpsv_cf_bnt_characterization}).
+\end{proof}
+
 The projector-closure result in
 Theorem~\ref{thm:projector_closure_canonical_form} gives normal blocks and
 orthogonal ambient embeddings under the source hypotheses. Combining these
