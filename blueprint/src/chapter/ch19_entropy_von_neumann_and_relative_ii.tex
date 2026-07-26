@@ -114,8 +114,26 @@
     the identity with $\tau$ on the left.
 \end{proof}
 
-\begin{lemma}[Square roots and supports of tensor products]
-    \label{lem:support_inverse_square_root_tensor_product}
+\begin{theorem}[Multiplicative functional calculus on positive tensor products]
+    \label{thm:multiplicative_functional_calculus_tensor_product}
+    \lean{Matrix.cfc_kronecker_of_mul_posSemidef}
+    \leanok
+    Let $A$ and $B$ be positive semidefinite, and let $f\colon\R\to\R$ be
+    multiplicative on the non-negative reals. Then
+    \begin{align}
+        f(A\otimes B)&=f(A)\otimes f(B).
+        \label{eq:entropy_cfc_tensor_product}
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    Diagonalize $A$ and $B$. In the resulting product eigenbasis, the
+    eigenvalues of $A\otimes B$ are $a_i b_j$ with $a_i,b_j\geq 0$, and the
+    claim follows from $f(a_i b_j)=f(a_i)f(b_j)$.
+\end{proof}
+
+\begin{theorem}[Square roots and supports of tensor products]
+    \label{thm:support_inverse_square_root_tensor_product}
     \lean{Matrix.PosSemidef.sqrt_kronecker}
     \lean{Matrix.PosSemidef.supportInvSqrt_kronecker}
     \lean{Matrix.PosSemidef.cfc_sqrt_mul_supportInvSqrt}
@@ -123,7 +141,7 @@
     \lean{Matrix.PosSemidef.supportProj_kronecker}
     \lean{Matrix.PosDef.supportProj_eq_one}
     \leanok
-    \uses{def:support_inverse_square_root,lem:support_inverse_square_root_sandwich}
+    \uses{def:support_inverse_square_root}
     Let $A$ and $B$ be positive semidefinite. Their positive square roots,
     support inverse square roots, and support projections satisfy
     \begin{align}
@@ -145,9 +163,11 @@
         \label{eq:entropy_support_sqrt_cancellation}
     \end{align}
     If $A$ is positive definite, then $P_A=\mathbf 1$.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}\leanok
+    \uses{thm:multiplicative_functional_calculus_tensor_product,
+        lem:support_inverse_square_root_sandwich}
     Diagonalize both factors. The eigenvalues of $A\otimes B$ are the products
     $a_i b_j$. Both the square-root function and the function that equals
     $x^{-1/2}$ for $x>0$ and zero at $x=0$ are multiplicative on the
