@@ -14,6 +14,7 @@ This repository uses [Claude Code](https://docs.anthropic.com/en/docs/claude-cod
   - [CI Failure Auto-Fix](#ci-failure-auto-fix-auto-fixyml)
   - [Blueprint Auto-Fix](#blueprint-auto-fix-auto-fixyml)
   - [Lean Module Policy](#lean-module-policy-pr-ciyml-file-length-job)
+  - [Changed Lean Compilation-Time Gate](#changed-lean-compilation-time-gate-pr-ciyml-build-job)
   - [Lean Linter-Warning Sweep](#lean-linter-warning-sweep-housekeepingyml-linter-sweep-job)
   - [Lean Linter-Warning Auto-Fix](#lean-linter-warning-auto-fix-lean-linter-warning-autofixyml)
   - [Review Comment Auto-Fix](#review-comment-auto-fix-auto-fixyml)
@@ -82,6 +83,7 @@ When you push to a PR branch, several things happen in parallel:
   ├──┤                                                              │
   │  │  PR CI — build job                                           │
   │  │  Runs `lake build` to check that the code compiles.          │
+  │  │  Warns at 25s per changed Lean file; fails at 50s.           │
   │  │                                                              │
   │  └───────────┬──────────────────────────────────────────────────┘
   │              │
@@ -164,6 +166,17 @@ Here is exactly what happens:
 **Thread management**: When triggered by a new push (`synchronize`), the review checks its own previous comments. If a previous bot comment has been addressed by the new commits, it resolves that thread automatically. It never resolves threads authored by humans.
 
 **Concurrency**: One review pipeline per PR at a time; later completions queue rather than cancel a review in progress.
+
+---
+
+### Changed Lean Compilation-Time Gate (`pr-ci.yml`, `build` job)
+
+After `lake build`, PR CI parses the captured Lake job timings for changed
+`.lean` files. A changed module taking at least 25 seconds receives a GitHub
+warning annotation; a changed module taking at least 50 seconds receives an
+error annotation and fails the build job. Unchanged modules do not affect this
+PR ratchet. The local commands and cache-reuse procedure are documented in
+[`lake_build_cache.md`](lake_build_cache.md).
 
 ---
 
