@@ -32,8 +32,16 @@ while the source worktree is running a Lake command. The target `.lake` is an
 inaccessible reservation until the completed clone is atomically swapped into
 place, so a target Lake process cannot observe a partial cache.
 
-After seeding, run the desired `lake build` or `lake env lean` command. Lake
-will reuse unchanged artifacts and rebuild files changed on the branch.
+TNLean build artifacts are reused only when the source and target worktrees are
+at the same Git commit. If their commits differ, the command seeds only the
+validated dependency packages, including prebuilt Mathlib artifacts, and
+leaves the target without `.lake/build`. This prevents Lean from loading stale
+TNLean `.olean` files whose declarations no longer match the target source.
+
+At an identical commit, run the desired `lake build` or `lake env lean`
+command and Lake will reuse the full build. After a cross-commit seed, run
+`lake build` first so TNLean is rebuilt against the seeded dependencies; only
+then run targeted `lake env lean` checks.
 
 ## Sort build timings
 
