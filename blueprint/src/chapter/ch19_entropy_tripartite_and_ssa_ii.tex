@@ -357,6 +357,73 @@
     $C\opvec(\mathbf 1^{\mathsf T})=\opvec(B^{\mathsf T})$, which is the claim.
 \end{proof}
 
+\begin{theorem}[Support left-right solution as a projected relative-modular resolvent]
+    \label{thm:support_left_right_projected_relative_modular}
+    \lean{Matrix.supportLeftRightSupportInv_mulVec_sourceB_eq_projected_relativeModular}
+    \lean{Matrix.supportSourceBQuadratic_eq_projected_relativeModular}
+    \leanok
+    Let $A,B$ be positive semidefinite, let $t>0$, set
+    \begin{align}
+        S&=A\otimes\mathbf 1+t(\mathbf 1\otimes B^{\mathsf T}),&
+        R&=t\mathbf 1+A\otimes(B^+)^{\mathsf T},
+        \notag
+    \end{align}
+    and let $P_B$ be the support projection of $B$. Then
+    \begin{align}
+        S^+\opvec(B^{\mathsf T})
+        &=
+        (\mathbf 1\otimes P_B^{\mathsf T})R^{-1}
+          \opvec(\mathbf 1^{\mathsf T}).
+        \notag
+    \end{align}
+    Consequently,
+    \begin{align}
+        \re\left\langle
+          \opvec(B^{\mathsf T}),S^+\opvec(B^{\mathsf T})
+        \right\rangle
+        &=
+        \re\left\langle
+          \opvec(B^{\mathsf T}),
+          (\mathbf 1\otimes P_B^{\mathsf T})R^{-1}
+            \opvec(\mathbf 1^{\mathsf T})
+        \right\rangle.
+        \notag
+    \end{align}
+    This is the one-pair algebraic identification used in the singular
+    equality argument of Jen\v{c}ov\'a--Ruskai,
+    arXiv:0903.2895v4, lines~783--790. It does not assert that equality of
+    relative entropies gives a common resolvent for a finite family.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:support_relative_modular_source_solution,
+      lem:support_inverse_square_root_generalized_inverse}
+    Put
+    \begin{align}
+        P&=\mathbf 1\otimes P_B^{\mathsf T},&
+        C&=\mathbf 1\otimes B^{\mathsf T},&
+        D&=\mathbf 1\otimes(B^+)^{\mathsf T}.
+        \notag
+    \end{align}
+    The generalized-inverse identities give $SP=CR$, $CD=P$, and $P^2=P$.
+    The preceding lemma shows that
+    $y=PR^{-1}\opvec(\mathbf 1^{\mathsf T})$ satisfies
+    $Sy=\opvec(B^{\mathsf T})$, and $Py=y$.
+    Every vector $v$ satisfying $Pv=v$ lies in the range of $S$, since
+    \begin{align}
+        S\bigl(PR^{-1}Dv\bigr)&=CDv=Pv=v.
+        \notag
+    \end{align}
+    In particular, $y$ lies in the range of $S$, so the support projection
+    $P_S$ of $S$ satisfies $P_Sy=y$. Therefore
+    \begin{align}
+        S^+\opvec(B^{\mathsf T})=S^+Sy=P_Sy=y.
+        \notag
+    \end{align}
+    Pairing this vector equality with $\opvec(B^{\mathsf T})$ and taking
+    real parts gives the quadratic identity.
+\end{proof}
+
 \begin{lemma}[Support relative-modular square-root evaluation]
     \label{lem:support_relative_modular_sqrt_evaluation}
     \lean{Matrix.supportRelativeModular_sqrt_mulVec_vec_one}
