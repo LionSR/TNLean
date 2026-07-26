@@ -139,9 +139,12 @@ abstracted — record why, so it is not re-proposed).
   `norm_ne_zero_iff.mp (by rw [h]; exact one_ne_zero)`.
 - **Reuse:** `Complex.ne_zero_of_norm_eq_one` in
   `TNLean/Algebra/ComplexPhasePositivity.lean` now states this scalar fact once.
-- **Result:** ten call sites across `BNTCharacterization.lean`,
-  `BNTUniqueness.lean`, `BNTExistence.lean`, `BeigiLoopBNTIdentification.lean`,
-  and `GroupStructure.lean` use the shared lemma. All theorem statements and
+- **Result:** a repository-wide semantic audit migrated 26 call sites across
+  16 files, including nested `inv_ne_zero` uses and tactic-form contradiction
+  proofs. No exact-hypothesis conversion from `h : ‖z‖ = 1` to `z ≠ 0`
+  remains outside the shared lemma itself. The related proof from
+  `star α * α = 1` in `PeripheralUnitary.lean` remains separate because its
+  premise is not the helper's norm equality. All theorem statements and
   mathematical scopes are unchanged.
 
 ### Support left-right and relative-modular intertwining

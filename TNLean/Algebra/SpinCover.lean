@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.ComplexPhasePositivity
 import Mathlib.LinearAlgebra.UnitaryGroup
 import Mathlib.LinearAlgebra.Matrix.GeneralLinearGroup.Basic
 import Mathlib.Algebra.BigOperators.Field
@@ -425,10 +426,7 @@ lemma exists_cos_sin {c s : ℝ} (h : c ^ 2 + s ^ 2 = 1) :
     rw [Complex.norm_def, Complex.normSq_mk,
       show c * c + s * s = 1 by nlinarith only [h]]
     simp
-  have hz : (⟨c, s⟩ : ℂ) ≠ 0 := by
-    intro hc; rw [Complex.ext_iff] at hc
-    simp only [Complex.zero_re, Complex.zero_im] at hc
-    nlinarith only [h, hc.1, hc.2]
+  have hz : (⟨c, s⟩ : ℂ) ≠ 0 := Complex.ne_zero_of_norm_eq_one hn
   exact ⟨Complex.arg (⟨c, s⟩ : ℂ), by rw [Complex.cos_arg hz, hn]; simp,
     by rw [Complex.sin_arg, hn]; simp⟩
 
