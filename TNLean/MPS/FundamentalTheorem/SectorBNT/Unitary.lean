@@ -58,9 +58,7 @@ theorem ft_sector_bnt_proportional_unitary_sector_match_witnesses
   have hGPE : ∀ k : Fin Q.basisCount,
       GaugePhaseEquiv
         (cast (congr_arg (MPSTensor d) (hDim k)) (P.basis (β k))) (Q.basis k) :=
-    fun k => ⟨X k, ζ₀ k, by
-      intro hzero
-      simpa [hzero] using hζ₀ k, hConj k⟩
+    fun k => ⟨X k, ζ₀ k, Complex.ne_zero_of_norm_eq_one (hζ₀ k), hConj k⟩
   have hUnitary : ∀ k : Fin Q.basisCount,
       ∃ (U : Matrix.unitaryGroup (Fin (Q.basisDim k)) ℂ) (ζ : ℂ), ‖ζ‖ = 1 ∧
         ∀ i, Q.basis k i = ζ •
