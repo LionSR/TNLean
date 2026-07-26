@@ -19,6 +19,7 @@ import TNLean.Channel.Irreducible.Growth.OrthogonalTrace
 import TNLean.Channel.Irreducible.Growth.Preservation
 import TNLean.Channel.Irreducible.KrausSetup
 import TNLean.Channel.Irreducible.PerronFrobenius
+import TNLean.Channel.Irreducible.Scaling
 import TNLean.Channel.Irreducible.Similarity
 import TNLean.Channel.Irreducible.SpectralRadius
 import TNLean.Channel.Irreducible.TraceAdjoint
