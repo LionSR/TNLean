@@ -50,6 +50,12 @@ reference matrix.
 * `Matrix.partialTraceRightPetzMap_maximallyMixedTensor`: the raw Petz map for
   the maximally mixed tensor reference factors as the identity on the first
   tensor factor and the Petz map on the remaining factors.
+* `Matrix.partialTraceRightPetzComplementMap_maximallyMixedTensor`: the
+  complementary support-completion term has the same factorization.
+* `Matrix.partialTraceRightPetzChannel_maximallyMixedTensor`: the completed
+  Petz channel factors as the identity tensored with the local channel.
+* `Matrix.partialTraceRightPetzChannel_maximallyMixedTensor_isKrausCPTP`: the
+  completed channel is CPTP when the local reference has trace one.
 
 ## References
 
@@ -529,6 +535,35 @@ theorem cfcSqrt_maximallyMixedTensorReference
   rw [((maximallyMixedOn_posDef (dA := dA)).posSemidef.kronecker
     hρ).isHermitian.cfc_eq, cfcSqrt_maximallyMixedOn_kronecker ρ hρ]
 
+omit [Fintype C] [DecidableEq B] [DecidableEq C] in
+/-- Tracing out the untouched $A\times B$ factors from the maximally mixed
+specialization of HJPW equation (10) gives the $C$ marginal of $\rho_{BC}$. -/
+theorem partialTraceLeft_maximallyMixedTensorReference
+    (ρ : Matrix (B × C) (B × C) ℂ) :
+    partialTraceLeft (maximallyMixedTensorReference (dA := dA) ρ) =
+      partialTraceLeft ρ := by
+  ext c c'
+  simp only [maximallyMixedTensorReference, maximallyMixedOn,
+    partialTraceLeft_apply, Matrix.kroneckerMap_apply, Matrix.smul_apply,
+    Matrix.submatrix_apply, Equiv.prodAssoc_apply, smul_eq_mul,
+    Fintype.sum_prod_type]
+  rw [Finset.sum_comm]
+  simp only [one_apply_eq, mul_one, Finset.sum_const, Finset.card_univ,
+    Fintype.card_fin, nsmul_eq_mul]
+  have hd : (dA : ℂ) ≠ 0 := by exact_mod_cast NeZero.ne dA
+  apply Finset.sum_congr rfl
+  intro b _
+  rw [← mul_assoc, mul_inv_cancel₀ hd, one_mul]
+
+omit [DecidableEq B] [DecidableEq C] in
+/-- The maximally mixed tensor reference has the same trace as $\rho_{BC}$. -/
+theorem trace_maximallyMixedTensorReference
+    (ρ : Matrix (B × C) (B × C) ℂ) :
+    Matrix.trace (maximallyMixedTensorReference (dA := dA) ρ) =
+      Matrix.trace ρ := by
+  rw [← trace_partialTraceLeft,
+    partialTraceLeft_maximallyMixedTensorReference, trace_partialTraceLeft]
+
 omit [DecidableEq C] in
 /-- For the maximally mixed specialization of HJPW equation (10), the support
 inverse square root of the $AB$ marginal is $\sqrt{d_A}\,\mathbf 1_A\otimes\rho_B^{-1/2}$ on its
@@ -566,6 +601,65 @@ theorem supportInvSqrt_partialTraceRight_maximallyMixedTensorReference
   congr 1
   exact Matrix.PosSemidef.supportInvSqrt_one_kronecker
     (PosSemidef.partialTraceRight hρ)
+
+omit [DecidableEq C] in
+/-- The support projector of the $AB$ marginal in the maximally mixed
+specialization of HJPW equation (10) is the identity on $A$ tensored with the
+support projector of $\rho_B$.
+
+The proof uses the support-inverse sandwich
+$\tau^{-1/2}\tau\tau^{-1/2}=P_{\operatorname{supp}\tau}$ together with the
+specialized support-inverse factorization above. -/
+theorem supportProj_partialTraceRight_maximallyMixedTensorReference
+    (ρ : Matrix (B × C) (B × C) ℂ) (hρ : ρ.PosSemidef) :
+    (PosSemidef.partialTraceRight
+      (maximallyMixedTensorReference_posSemidef
+        (dA := dA) hρ)).isHermitian.supportProj =
+      (1 : Matrix (Fin dA) (Fin dA) ℂ) ⊗ₖ
+        (PosSemidef.partialTraceRight hρ).isHermitian.supportProj := by
+  let hτ := PosSemidef.partialTraceRight
+    (maximallyMixedTensorReference_posSemidef (dA := dA) hρ)
+  have hsupport := hτ.supportInvSqrt_mul_self_mul_supportInvSqrt
+  rw [← hsupport]
+  rw [supportInvSqrt_partialTraceRight_maximallyMixedTensorReference ρ hρ,
+    partialTraceRight_maximallyMixedTensorReference]
+  simp only [maximallyMixedOn, Matrix.smul_mul, Matrix.mul_smul]
+  rw [← Matrix.mul_kronecker_mul, ← Matrix.mul_kronecker_mul,
+    Matrix.one_mul, Matrix.mul_one,
+    (PosSemidef.partialTraceRight hρ).supportInvSqrt_mul_self_mul_supportInvSqrt]
+  have hc : (0 : ℝ) < (dA : ℝ)⁻¹ := inv_pos.mpr (by
+    exact_mod_cast Nat.pos_of_ne_zero (NeZero.ne dA))
+  have hs : Real.sqrt ((dA : ℝ)⁻¹) ≠ 0 := Real.sqrt_ne_zero'.mpr hc
+  have hcancelR : (Real.sqrt ((dA : ℝ)⁻¹))⁻¹ *
+      (Real.sqrt ((dA : ℝ)⁻¹))⁻¹ * (dA : ℝ)⁻¹ = 1 := by
+    calc
+      _ = (Real.sqrt ((dA : ℝ)⁻¹) *
+          Real.sqrt ((dA : ℝ)⁻¹))⁻¹ * (dA : ℝ)⁻¹ := by
+        rw [mul_inv]
+      _ = ((dA : ℝ)⁻¹)⁻¹ * (dA : ℝ)⁻¹ := by
+        rw [← pow_two, Real.sq_sqrt hc.le]
+      _ = 1 := inv_mul_cancel₀ (ne_of_gt hc)
+  have hcancelC : (((Real.sqrt ((dA : ℝ)⁻¹))⁻¹ : ℝ) : ℂ) *
+      (((Real.sqrt ((dA : ℝ)⁻¹))⁻¹ : ℝ) : ℂ) * (dA : ℂ)⁻¹ = 1 := by
+    simpa only [Complex.ofReal_mul, Complex.ofReal_inv,
+      Complex.ofReal_natCast, Complex.ofReal_one] using
+      congrArg (fun x : ℝ ↦ (x : ℂ)) hcancelR
+  ext i j
+  simp only [Matrix.smul_apply, Matrix.kroneckerMap_apply, one_apply,
+    smul_eq_mul]
+  by_cases hij : i.1 = j.1
+  · simp only [hij, if_pos, Complex.real_smul]
+    rw [mul_one, one_mul]
+    change (((Real.sqrt ((dA : ℝ)⁻¹))⁻¹ : ℝ) : ℂ) *
+      ((((Real.sqrt ((dA : ℝ)⁻¹))⁻¹ : ℝ) : ℂ) *
+        ((dA : ℂ)⁻¹ *
+          (PosSemidef.partialTraceRight hρ).isHermitian.supportProj i.2 j.2)) = _
+    calc
+      _ = ((((Real.sqrt ((dA : ℝ)⁻¹))⁻¹ : ℝ) : ℂ) *
+          (((Real.sqrt ((dA : ℝ)⁻¹))⁻¹ : ℝ) : ℂ) * (dA : ℂ)⁻¹) *
+          (PosSemidef.partialTraceRight hρ).isHermitian.supportProj i.2 j.2 := by ring
+      _ = _ := by rw [hcancelC, one_mul]
+  · simp [hij]
 
 /-- **Maximally mixed specialization of HJPW equation (10), elementary-tensor
 algebra.** For the reference
@@ -675,6 +769,42 @@ theorem partialTraceRightPetzMap_maximallyMixedTensor_kronecker
         (A i.1 j.1 * Z) := by ring
     _ = A i.1 j.1 * Z := by rw [hcancel, one_mul]
 
+/-- **Complementary-term compatibility, elementary-tensor form.** For the
+maximally mixed tensor reference, TNLean's complementary measure-and-prepare
+term acts as the identity on $A$ and as the local complementary term on $B$,
+after canonical reassociation.
+
+This statement concerns TNLean's support completion; it is not part of HJPW
+equation (10). -/
+theorem partialTraceRightPetzComplementMap_maximallyMixedTensor_kronecker
+    (ρ : Matrix (B × C) (B × C) ℂ) (hρ : ρ.PosSemidef)
+    (A : Matrix (Fin dA) (Fin dA) ℂ) (X : Matrix B B ℂ) :
+    equivReindexMap (Equiv.prodAssoc (Fin dA) B C)
+        (partialTraceRightPetzComplementMap
+          (maximallyMixedTensorReference (dA := dA) ρ)
+          (maximallyMixedTensorReference_posSemidef (dA := dA) hρ)
+          (A ⊗ₖ X)) =
+      A ⊗ₖ partialTraceRightPetzComplementMap ρ hρ X := by
+  rw [partialTraceRightPetzComplementMap_apply,
+    partialTraceRightPetzComplementMap_apply]
+  rw [supportProj_partialTraceRight_maximallyMixedTensorReference ρ hρ,
+    partialTraceLeft_maximallyMixedTensorReference]
+  let P := (PosSemidef.partialTraceRight hρ).isHermitian.supportProj
+  have hQ : (1 : Matrix (Fin dA × B) (Fin dA × B) ℂ) -
+      (1 : Matrix (Fin dA) (Fin dA) ℂ) ⊗ₖ P =
+      (1 : Matrix (Fin dA) (Fin dA) ℂ) ⊗ₖ (1 - P) := by
+    ext ⟨a, b⟩ ⟨a', b'⟩
+    by_cases haa : a = a' <;> by_cases hbb : b = b' <;>
+      simp [haa, hbb, Matrix.kroneckerMap_apply]
+  rw [hQ, ← Matrix.mul_kronecker_mul, ← Matrix.mul_kronecker_mul,
+    Matrix.one_mul, Matrix.mul_one]
+  ext ⟨a, bc⟩ ⟨a', bc'⟩
+  simp only [equivReindexMap, LinearEquiv.coe_toLinearMap,
+    Matrix.coe_reindexLinearEquiv, Matrix.reindex_apply,
+    Matrix.submatrix_apply, Matrix.kroneckerMap_apply,
+    Equiv.prodAssoc_symm_apply]
+  rw [Matrix.partialTraceLeft_apply, mul_assoc]
+
 /-- **Maximally mixed specialization of HJPW equation (10), raw Petz-map
 factorization.** For
 $\sigma_{ABC}=d_A^{-1}\mathbf 1_A\otimes\rho_{BC}$, the raw partial-trace
@@ -707,6 +837,66 @@ theorem partialTraceRightPetzMap_maximallyMixedTensor
   rw [idTensorMapLM_apply, idTensorMap_kronecker]
   exact partialTraceRightPetzMap_maximallyMixedTensor_kronecker
     ρ hρ (A i) (Y i)
+
+/-- **Complementary-term compatibility.** For the maximally mixed tensor
+reference, TNLean's complementary measure-and-prepare term factors as the
+identity on $A$ tensored with the local complementary term on $B$, after
+canonical reassociation.
+
+This is a compatibility property of TNLean's support completion, not a claim
+from HJPW equation (10). -/
+theorem partialTraceRightPetzComplementMap_maximallyMixedTensor
+    (ρ : Matrix (B × C) (B × C) ℂ) (hρ : ρ.PosSemidef) :
+    equivReindexMap (Equiv.prodAssoc (Fin dA) B C) ∘ₗ
+        partialTraceRightPetzComplementMap
+          (maximallyMixedTensorReference (dA := dA) ρ)
+          (maximallyMixedTensorReference_posSemidef (dA := dA) hρ) =
+      idTensorMapLM (δ := Fin dA)
+        (partialTraceRightPetzComplementMap ρ hρ) := by
+  apply LinearMap.ext
+  intro X
+  obtain ⟨A, Y, hX⟩ :=
+    hasOperatorSchmidtDecomposition_operatorSchmidtRank X
+  rw [hX]
+  simp only [LinearMap.comp_apply, map_sum]
+  apply Finset.sum_congr rfl
+  intro i _
+  rw [idTensorMapLM_apply, idTensorMap_kronecker]
+  exact partialTraceRightPetzComplementMap_maximallyMixedTensor_kronecker
+    ρ hρ (A i) (Y i)
+
+/-- **Completed-channel factorization.** For the maximally mixed tensor
+reference, TNLean's completed partial-trace Petz channel is the identity on
+$A$ tensored with the completed local channel on $B$, after canonical
+reassociation.
+
+The raw support-map summand is the maximally mixed specialization of HJPW
+equation (10). The complementary summand is TNLean's support-completion
+compatibility and is not asserted by that equation. This theorem does not
+invoke or assert a Koashi--Imoto decomposition. -/
+theorem partialTraceRightPetzChannel_maximallyMixedTensor
+    (ρ : Matrix (B × C) (B × C) ℂ) (hρ : ρ.PosSemidef) :
+    equivReindexMap (Equiv.prodAssoc (Fin dA) B C) ∘ₗ
+        partialTraceRightPetzChannel
+          (maximallyMixedTensorReference (dA := dA) ρ)
+          (maximallyMixedTensorReference_posSemidef (dA := dA) hρ) =
+      idTensorMapLM (δ := Fin dA) (partialTraceRightPetzChannel ρ hρ) := by
+  rw [partialTraceRightPetzChannel, LinearMap.comp_add,
+    partialTraceRightPetzMap_maximallyMixedTensor,
+    partialTraceRightPetzComplementMap_maximallyMixedTensor,
+    partialTraceRightPetzChannel, idTensorMapLM_add]
+
+/-- The completed Petz channel for the maximally mixed tensor reference is
+trace-preserving and completely positive whenever $\rho_{BC}$ has trace one. -/
+theorem partialTraceRightPetzChannel_maximallyMixedTensor_isKrausCPTP
+    (ρ : Matrix (B × C) (B × C) ℂ) (hρ : ρ.PosSemidef)
+    (hρtrace : Matrix.trace ρ = 1) :
+    IsKrausCPTP
+      (partialTraceRightPetzChannel
+        (maximallyMixedTensorReference (dA := dA) ρ)
+        (maximallyMixedTensorReference_posSemidef (dA := dA) hρ)) := by
+  apply partialTraceRightPetzChannel_isKrausCPTP
+  rw [trace_maximallyMixedTensorReference, hρtrace]
 
 end HJPWTensorFactorization
 
