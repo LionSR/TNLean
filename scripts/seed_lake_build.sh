@@ -16,6 +16,9 @@ die() {
   exit 1
 }
 
+test "$(/usr/bin/uname -s)" = "Darwin" ||
+  die "requires macOS with APFS clone support"
+
 canonical_dir() {
   (CDPATH='' cd -- "$1" && pwd -P)
 }
@@ -148,7 +151,8 @@ test -d "$SOURCE_ROOT/.lake/packages" && test ! -L "$SOURCE_ROOT/.lake/packages"
   die "source has no regular .lake/packages"
 NESTED_CACHE_LINK="$(
   find "$SOURCE_ROOT/.lake" -type l \
-    \( -name .lake -o -name build -o -name packages -o -path '*/.lake/build/*' \) \
+    \( -name .lake -o -name build -o -name packages \
+      -o -path '*/.lake/build/*' -o -path '*/.lake/lakefile.*' \) \
     -print -quit
 )"
 test -z "$NESTED_CACHE_LINK" ||

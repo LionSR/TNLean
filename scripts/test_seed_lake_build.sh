@@ -107,6 +107,18 @@ unlink "$REPO/.lake/packages/mathlib/.lake"
 mv "$REPO/.lake/packages/mathlib/.lake.real" \
   "$REPO/.lake/packages/mathlib/.lake"
 
+printf 'artifact\n' \
+  >"$REPO/.lake/packages/mathlib/.lake/lakefile.olean.real"
+ln -s lakefile.olean.real \
+  "$REPO/.lake/packages/mathlib/.lake/lakefile.olean"
+if "$REPO/scripts/seed_lake_build.sh" "$TARGET" --dry-run 2>"$TEST_ROOT/error.log"; then
+  echo "symlinked Lakefile artifact unexpectedly passed" >&2
+  exit 1
+fi
+rg -q "source contains a symlinked Lake cache directory" "$TEST_ROOT/error.log"
+unlink "$REPO/.lake/packages/mathlib/.lake/lakefile.olean"
+find "$REPO/.lake/packages/mathlib/.lake/lakefile.olean.real" -delete
+
 mv "$REPO/.lake/packages/mathlib/.lake/build/lib/lean/Mathlib.olean" \
   "$REPO/.lake/packages/mathlib/.lake/build/lib/lean/Mathlib.olean.missing"
 if "$REPO/scripts/seed_lake_build.sh" "$TARGET" --dry-run 2>"$TEST_ROOT/error.log"; then
