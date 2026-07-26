@@ -5,7 +5,6 @@ Authors: TNLean contributors
 -/
 import TNLean.Analysis.MatrixSqrt
 import Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.Rpow.IntegralRepresentation
-import Mathlib.LinearAlgebra.Matrix.Vec
 
 /-!
 # Functional calculus from common resolvent vectors
@@ -42,6 +41,11 @@ attribute [local instance] Matrix.instL2OpNormedAddCommGroup
 attribute [local instance] Matrix.instL2OpNormedRing
 attribute [local instance] Matrix.instL2OpNormedAlgebra
 
+private instance {n : Type*} [Fintype n] :
+    NonUnitalContinuousFunctionalCalculus ℝ (Matrix n n ℂ) IsSelfAdjoint := by
+  letI := Classical.decEq n
+  exact ContinuousFunctionalCalculus.toNonUnital
+
 /-- Resolvent form of the Löwner real-power integrand. -/
 private lemma cfc_rpowIntegrand₀₁_eq_resolvent
     {n : Type*} [Fintype n] [DecidableEq n]
@@ -50,25 +54,32 @@ private lemma cfc_rpowIntegrand₀₁_eq_resolvent
     cfc (Real.rpowIntegrand₀₁ p t) A =
       t ^ (p - 1) • (1 : Matrix n n ℂ) -
         t ^ p • (t • (1 : Matrix n n ℂ) + A)⁻¹ := by
-  have hEq : ({A | (0 : Matrix n n ℂ) ≤ A}.EqOn
-      (cfc (Real.rpowIntegrand₀₁ p t))
-      (fun X : Matrix n n ℂ ↦
-        algebraMap ℝ (Matrix n n ℂ) (t ^ (p - 1)) -
-          t ^ p • Ring.inverse (algebraMap ℝ (Matrix n n ℂ) t + X))) := by
-    intro X hX
-    rw [Real.rpowIntegrand₀₁_eq_sub (by grind) ht]
-    have hg : ContinuousOn (fun z : ℝ ↦ (t + z)⁻¹) (spectrum ℝ X) := by
-      fun_prop (disch := grind -abstractProof)
-    have hspectrum : ∀ r ∈ spectrum ℝ X, t + r ≠ 0 := by
-      grind
-    have hcfc := cfc_sub (fun _ : ℝ ↦ t ^ (p - 1))
-      (fun z : ℝ ↦ t ^ p * (t + z)⁻¹) X
-    rw [hcfc, cfc_const .., cfc_const_mul .., cfc_inv _ _ hspectrum ..,
-      cfc_const_add .., cfc_id' ..]
   have hA_nonneg : (0 : Matrix n n ℂ) ≤ A :=
     Matrix.nonneg_iff_posSemidef.mpr hA
-  have hcalc := hEq hA_nonneg
-  simpa [Algebra.algebraMap_eq_smul_one, ← Matrix.nonsing_inv_eq_ringInverse] using hcalc
+  rw [Real.rpowIntegrand₀₁_eq_sub (ne_of_lt hp.2) ht]
+  have hg : ContinuousOn (fun z : ℝ ↦ (t + z)⁻¹) (spectrum ℝ A) := by
+    apply (continuous_const.add continuous_id).continuousOn.inv₀
+    intro z hz
+    have hz_nonneg := spectrum_nonneg_of_nonneg hA_nonneg hz
+    exact ne_of_gt (add_pos_of_pos_of_nonneg ht hz_nonneg)
+  have hspectrum : ∀ r ∈ spectrum ℝ A, t + r ≠ 0 := by
+    intro r hr
+    have hr_nonneg := spectrum_nonneg_of_nonneg hA_nonneg hr
+    exact ne_of_gt (add_pos_of_pos_of_nonneg ht hr_nonneg)
+  have hself : IsSelfAdjoint A := hA.isHermitian
+  have hg_mul : ContinuousOn (fun z : ℝ ↦ t ^ p * (t + z)⁻¹) (spectrum ℝ A) :=
+    continuousOn_const.mul hg
+  have hadd : ContinuousOn (fun z : ℝ ↦ t + z) (spectrum ℝ A) :=
+    (continuous_const.add continuous_id).continuousOn
+  have hcfc := cfc_sub (fun _ : ℝ ↦ t ^ (p - 1))
+    (fun z : ℝ ↦ t ^ p * (t + z)⁻¹) A continuousOn_const hg_mul
+  have hcfc_add :
+      cfc (fun z : ℝ ↦ t + z) A = algebraMap ℝ (Matrix n n ℂ) t + A := by
+    simpa only [id_eq, cfc_id' ℝ A hself] using
+      cfc_const_add t (fun z : ℝ ↦ z) A continuous_id.continuousOn hself
+  rw [hcfc, cfc_const _ _ hself, cfc_const_mul _ _ _ hg,
+    cfc_inv _ _ hspectrum hadd hself, hcfc_add]
+  simp only [Algebra.algebraMap_eq_smul_one, ← Matrix.nonsing_inv_eq_ringInverse]
 
 /-- Equality of all positive shifted resolvents after a fixed matrix is applied
 to their values on a vector implies the corresponding equality for positive
@@ -100,10 +111,12 @@ theorem mulVec_sqrt_mulVec_eq_of_mulVec_resolvent_mulVec_eq
     have hTnonneg : (0 : Matrix n n ℂ) ≤ T := hT.nonneg
     have hcontS : ContinuousOn (Real.rpowIntegrand₀₁ (p : ℝ) t)
         (quasispectrum ℝ S) :=
-      (Real.continuousOn_rpowIntegrand₀₁_Ici hp ht).mono (by grind)
+      (Real.continuousOn_rpowIntegrand₀₁_Ici hp ht).mono
+        (fun z hz ↦ quasispectrum_nonneg_of_nonneg S hSnonneg z hz)
     have hcontT : ContinuousOn (Real.rpowIntegrand₀₁ (p : ℝ) t)
         (quasispectrum ℝ T) :=
-      (Real.continuousOn_rpowIntegrand₀₁_Ici hp ht).mono (by grind)
+      (Real.continuousOn_rpowIntegrand₀₁_Ici hp ht).mono
+        (fun z hz ↦ quasispectrum_nonneg_of_nonneg T hTnonneg z hz)
     rw [cfcₙ_eq_cfc hcontS, cfcₙ_eq_cfc hcontT,
       cfc_rpowIntegrand₀₁_eq_resolvent hS hp ht,
       cfc_rpowIntegrand₀₁_eq_resolvent hT hp ht]
