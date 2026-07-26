@@ -65,10 +65,16 @@ for its sector-level conclusion.
         lem:sector_bnt_norm_phase_of_matched_mpv}
     Theorem~\ref{thm:sector_bnt_proportional_bijective_match} gives a bijection
     $\beta:J(Q)\simeq J(P)$ together with equal bond dimensions, gauge-phase
-    equivalence, and nondecaying overlap for every matched pair. Its proof
-    partitions the decaying $P$-sectors, substitutes exact $Q$-sector relations
-    for the complement, applies linear independence to the restricted decaying
-    $P$-family together with all $Q$-sectors, and then reverses direction; basis
+    equivalence, and
+    \begin{align}
+        O_{P_{\beta(k)}Q_k}(N)
+         & \not\longrightarrow 0
+        \notag
+    \end{align}
+    for every matched pair. Its proof defines
+    $T=\{j\in J(P):O_{P_jQ_k}(N)\to0\text{ for every }k\}$, substitutes exact
+    $Q$-sector relations for $j\notin T$, applies linear independence to
+    $\{P_j:j\in T\}\cup\{Q_k:k\in J(Q)\}$, and reverses direction; basis
     separation and finiteness turn the resulting matches into $\beta$.
 
     Unpack each matched gauge-phase equivalence to choose an invertible matrix
@@ -191,7 +197,7 @@ for its sector-level conclusion.
 \end{proof}
 
 \begin{theorem}[Equal-case sector and copy matching with differing bond dimensions]%
-    \label{lem:ft_sector_bnt_equal_sector_data_different_dims}
+    \label{thm:ft_sector_bnt_equal_sector_data_different_dims}
     \lean{MPSTensor.ft_sector_bnt_equal_sector_data}
     \leanok
     \uses{def:same_mpv2_pos, def:sector_bnt_cf, def:gauge_phase_equiv,

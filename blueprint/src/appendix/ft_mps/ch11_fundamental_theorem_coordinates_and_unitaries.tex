@@ -121,42 +121,37 @@ Theorem~\ref{thm:sector_bnt_equal_mps_gaugeEquiv_literal}.
     $G_\rho^{-1}=G_{\rho^{-1}}$, which gives the second identity.
 \end{proof}
 
-\begin{lemma}[Unitarity of a permutation gauge]
-    \label{lem:ft_perm_gl_unitary}
-    \uses{def:ft_perm_gl, lem:ft_perm_gl_identities}
-    The permutation gauge $G_\rho$ is unitary.
-\end{lemma}
-
-\begin{proof}
-    Every row and every column of $\Pi_\rho$ contains exactly one nonzero
-    entry, equal to $1$. Hence
-    \begin{align}
-        \Pi_\rho\Pi_{\rho^{-1}}
-         & =\Id,
-         &
-        \Pi_\rho^\dagger
-         & =\Pi_{\rho^{-1}}.
-        \notag
-    \end{align}
-    Together with Lemma~\ref{lem:ft_perm_gl_identities}, these identities show
-    that $G_\rho^\dagger=G_\rho^{-1}$.
-\end{proof}
+Every row and every column of $\Pi_\rho$ contains exactly one nonzero entry,
+equal to $1$. Hence
+\begin{align}
+    \Pi_\rho\Pi_{\rho^{-1}}
+     & =\Id,
+     &
+    \Pi_\rho^\dagger
+     & =\Pi_{\rho^{-1}}.
+    \notag
+\end{align}
+Together with Lemma~\ref{lem:ft_perm_gl_identities}, these identities show that
+$G_\rho^\dagger=G_\rho^{-1}$, so the permutation gauge is unitary.
 
 The coordinate equivalence of Definition~\ref{def:ft_sector_flat_equiv}
-induces a permutation $\rho$ after the total-dimension identification. For any
-matrix $M$, conjugation by its permutation gauge reindexes both matrix
-coordinates:
+induces a permutation $\rho$ after the total-dimension identification. With the
+permutation-matrix convention used here, conjugation reindexes both matrix
+coordinates by $\rho$:
 \begin{align}
-    G_\rho M G_\rho^{-1}
-     & =M\circ(\rho^{-1}\times\rho^{-1}).
+    \bigl(G_\rho M G_\rho^{-1}\bigr)_{ij}
+     & =M_{\rho(i),\rho(j)}.
     \label{eq:app_ft_perm_conjugation}
 \end{align}
-Applying (\ref{eq:app_ft_perm_conjugation}) to $P_{\mathrm{tot}}^i$ gives the
-matched-coordinate tensor. Composing $G_\rho$ with the block-diagonal gauge
-therefore gives the literal gauge of
-Theorem~\ref{thm:sector_bnt_equal_mps_gaugeEquiv_literal}. This also explains
-why the total-dimension cast and the sector permutation must occur in that
-order.
+Equivalently, the right-hand side is the submatrix of $M$ along
+$\rho\times\rho$. A convention with inverse indices merely replaces the chosen
+permutation by $\rho^{-1}$; we use the convention in
+(\ref{eq:app_ft_perm_conjugation}) to match the formal coordinate identity.
+Applying that identity to $P_{\mathrm{tot}}^i$ gives the matched-coordinate
+tensor. Composing $G_\rho$ with the block-diagonal gauge therefore gives the
+literal gauge of Theorem~\ref{thm:sector_bnt_equal_mps_gaugeEquiv_literal}.
+This also explains why the total-dimension cast and the sector permutation must
+occur in that order.
 
 \section{Unitary witness refinements}
 \label{sec:app_ft_unitary_witnesses}

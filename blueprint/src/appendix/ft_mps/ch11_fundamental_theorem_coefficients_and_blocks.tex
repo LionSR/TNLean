@@ -15,17 +15,27 @@ to be a phase.
     Let $P$ and $Q$ be BNT canonical forms whose total MPV families are
     eventually nonzero and proportional. There is a bijection
     $\beta:J(Q)\simeq J(P)$ such that every $Q_k$ has an equal-dimensional,
-    gauge-phase-equivalent partner $P_{\beta(k)}$, and their cross-overlap does
-    not tend to zero.
+    gauge-phase-equivalent partner $P_{\beta(k)}$ satisfying
+    \begin{align}
+        O_{P_{\beta(k)}Q_k}(N)
+         & \not\longrightarrow 0.
+        \notag
+    \end{align}
 \end{theorem}
 
 \begin{proof}\leanok
     Apply the full-basis matching theorem first from $Q$ to $P$ and then to the
-    reverse proportionality from $P$ to $Q$. If two sectors had the same
-    partner, transitivity of gauge-phase equivalence would contradict BNT basis
-    separation. Both partner maps are therefore injective. The two finite
-    sector sets have equal cardinality, so the forward map is bijective and
-    retains its dimension, gauge, and nondecay properties.
+    reverse proportionality from $P$ to $Q$. If $P_j$ and $P_{j'}$ had the same
+    partner $Q_k$, then symmetry and transitivity would give
+    \begin{align}
+        P_j\sim_{\mathrm{gp}}Q_k\sim_{\mathrm{gp}}P_{j'}
+         & \Longrightarrow P_j\sim_{\mathrm{gp}}P_{j'},
+        \notag
+    \end{align}
+    contradicting BNT basis separation. Both partner maps are therefore
+    injective. The two finite sector sets have equal cardinality, so the forward
+    map is bijective and retains the displayed overlap limit together with the
+    dimension and gauge data.
 \end{proof}
 
 \begin{lemma}[Unit phase from matched normalized BNT blocks]%
@@ -58,10 +68,10 @@ to be a phase.
 \end{proof}
 
 
-\section{Coefficient identities from gauge data}
+\section{Coefficient identities from gauge-phase equalities}
 \label{sec:app_ft_coefficient_identities}
 
-The main coefficient theorem takes the matched phases as data. The next result
+The main coefficient theorem takes the matched phases as input. The next result
 shows how those phases are selected from gauge-phase equivalences before the
 linear-independence argument is applied.
 

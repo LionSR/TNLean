@@ -242,14 +242,24 @@ leading one), the off-diagonal contributions that obstructed the one-copy
 peeling argument vanish exactly here, and the comparison is the clean
 full-basis linear-independence identity.
 
-This identity is *not* the `SectorBNTCopyWeightMatching.of_coeff_identity` input:
-that lemma needs the scalar-free identity `P.coeff N (β k) = (ζ k)^N * Q.coeff N
-k`.  Eliminating `c N` — equivalently, showing `c N = ξ^N` for a single fixed
-phase `ξ`, so the power can be absorbed into `ζ` — is the residual
-length-scalar control step that the present lemma isolates.  It is documented in
-`docs/paper-gaps/cpsv16_proportional_length_scalar_gap.tex`; until it is
-discharged, the proportional global gauge remains the conditional theorem
-`ft_sector_bnt_proportional_global_gauge_of_coeff_identity`. -/
+This scalar-threaded identity is the complete coefficient conclusion under the
+proportional hypotheses.  In general `c N` need not equal `ξ^N` for any fixed
+phase `ξ`: if `C` is a normalized normal tensor, then
+`P = C ⊕ (1/2) C` and `Q = C ⊕ (1/3) C` have proportional positive-length MPV
+families with
+
+`c N = (1 + 2⁻ᴺ) / (1 + 3⁻ᴺ)`,
+
+which is not geometric.  The counterexample and its consequences are recorded
+in `docs/paper-gaps/cpsv16_proportional_length_scalar_gap.tex`.
+
+The scalar-free identity required by
+`SectorBNTCopyWeightMatching.of_coeff_identity`, and hence copy-weight matching
+or a global gauge, therefore needs an extra hypothesis.  It holds in the
+equal-MPV case, where the global scalar is `1`.  The theorem
+`ft_sector_bnt_proportional_global_gauge_of_coeff_identity` records the valid
+conditional implication rather than a residual step of the proportional
+fundamental theorem. -/
 theorem coeff_identity_via_matched_mpv_phase_proportional
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P)
