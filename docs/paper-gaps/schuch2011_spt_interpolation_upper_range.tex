@@ -1,0 +1,74 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
+
+\input{command}
+
+\title{Schuch--P\'erez-Garc{\'\i}a--Cirac SPT Interpolation: Upper-Range Correction}
+\author{}
+\date{2026-07-26}
+
+\begin{document}
+\maketitle
+
+\section{Source construction}
+
+Section~II.F of arXiv:1010.3732 connects two symmetric injective matrix
+product states after passing to their isometric forms. Let their bond
+dimensions be $D_0$ and $D_1$. The two bond spaces are embedded as consecutive
+summands of a space of dimension $D_0+D_1$, and the interpolation is intended
+to move between maximally entangled vectors supported on those two summands.
+The source display in
+\path{Papers/1010.3732/paper_v3.tex}, lines~900--903, reads
+\begin{align}
+  |\omega(\gamma)\rangle
+  &=(1-\gamma)\sum_{i=1}^{D_0}|i,i\rangle +\gamma\sum_{i=D_0+1}^{D_1}|i,i\rangle,
+  \tag{source display}
+\end{align}
+and immediately says that this state has bond dimension $D_0+D_1$.
+
+\section{Issue and correction}
+
+The second summand must occupy the $D_1$ coordinates following the first
+$D_0$ coordinates. Its index set is therefore
+\begin{align}
+  \{D_0+1,\ldots,D_0+D_1\},
+\end{align}
+not $\{D_0+1,\ldots,D_1\}$. The corrected interpolation is
+\begin{align}
+  |\omega(\gamma)\rangle
+  &=(1-\gamma)\sum_{i=1}^{D_0}|i,i\rangle +\gamma\sum_{i=D_0+1}^{D_0+D_1}|i,i\rangle.
+  \tag{corrected interpolation}
+\end{align}
+At $\gamma=0$ this is the maximally entangled vector on the first bond
+summand, while at $\gamma=1$ it is the maximally entangled vector on the
+second bond summand. The corrected upper limit also agrees with the stated
+ambient bond dimension $D_0+D_1$. The source upper limit can otherwise make
+the second sum empty, for example when $D_0\geq D_1$.
+
+\section{Blueprint and formal status}
+
+The corrected display occurs in the proof of the blueprint theorem
+\path{thm:spt_classification} in
+\path{blueprint/src/chapter/ch12_symmetry_spt.tex}, where an inline
+\path{Local fix} comment points to this note. The nearby separation argument
+at source lines~929--953 is explicitly restricted to smooth MPS paths. The
+blueprint theorem is correspondingly restricted to symmetric MPS paths and
+their parent Hamiltonians; it does not claim invariance under arbitrary gapped
+Hamiltonian paths.
+
+The formal predicate \leanid{MPSTensor.IsSameSPTPhase} records equality of the
+virtual cocycle labels, not the interpolation. The blueprint classification
+theorem is marked \path{notready}; no Lean declaration implements this path or
+relies on the corrected summation range.
+
+\section{Verdict}
+
+The replacement of $D_1$ by $D_0+D_1$ is a local source correction. It restores
+the intended direct-sum coordinates and is the version used in the blueprint.
+The MPS/parent-Hamiltonian path restriction is a scope clarification matching
+the source proof.
+
+\end{document}
