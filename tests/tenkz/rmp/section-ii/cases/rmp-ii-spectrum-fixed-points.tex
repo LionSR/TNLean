@@ -7,16 +7,20 @@
 %   II/ImagesReview Section II.tex lines 519-534
 % Capabilities: grid, typed-ports
 \[
+  % Both fixed points ride the doubled virtual wire: the product is the
+  % object whose spectrum is taken, and the cup is the fold at which the
+  % two orders differ.  boundary=none silently outranked the cup word, so
+  % each side used to draw one capsule and no closure at all.
   \mathrm{eig}\left(
-  \begin{tenkz}[rows={ket:nopair,bra}, boundary=none, west=cup]
-    \tnX[wires=2]{\rho^L}\\
+  \begin{tenkz}[rows={ket:nopair,bra}, west=cup]
+    \tnX[wires=2]{\rho^R} & \tnX[wires=2]{\rho^L}\\
     &
   \end{tenkz}
   \right)
   \;=\;
   \mathrm{eig}\left(
-  \begin{tenkz}[rows={ket:nopair,bra}, boundary=none, east=cup]
-    \tnX[wires=2]{\rho^R}\\
+  \begin{tenkz}[rows={ket:nopair,bra}, east=cup]
+    \tnX[wires=2]{\rho^L} & \tnX[wires=2]{\rho^R}\\
     &
   \end{tenkz}
   \right)

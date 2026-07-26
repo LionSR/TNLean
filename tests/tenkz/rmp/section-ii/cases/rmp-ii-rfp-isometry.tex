@@ -12,10 +12,11 @@
     \tn[box]{A} & \tn[box]{A}
   \end{tenkz}
   \;=\;
-  % RHS: sum_j U_{(i_1 i_2), j} A^j - U keeps one leg per blocked
-  % site; the vertical U-A bond is the summed physical index j
+  % RHS: sum_j U_{(i_1 i_2), j} A^j - U keeps one OPEN leg per blocked
+  % site (i_1, i_2) on its upper face, and the single vertical U-A bond
+  % below it is the summed physical index j
   \begin{tenkz}[rows={op:none, ket}]
-    \tn[pill, wide=2, down at={1,2}]{U} & \\
+    \tn[pill, wide=2, up at={1,2}]{U} & \\
     \tn[box, wide=2]{A} &
   \end{tenkz}
 \]

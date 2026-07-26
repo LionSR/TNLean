@@ -6,44 +6,50 @@
 % Source: author source ImagesReview Section II/ImagesReview Section II.tex lines
 %   473-483; archival output sec2fig7c (b).pdf
 % Capabilities: free-graph, typed-ports
+%
+% One step throughout: sites two steps apart, every leg one step long,
+% the two rows three steps apart so the upper row's down legs and the
+% lower row's up legs read as four open indices rather than one wire.
+% The shift site is a SQUARE, as in the source; an unlabelled inscribed
+% glyph is strut-tall and glyphbox-wide, so its label carries a width pad.
 \[
   \begin{tenkzfree}
     \tnput[box,ports={north:virtual,south:virtual,east:virtual,west:virtual}]
-      {a1}{(0mm,0mm)}{}
+      {a1}{(0mm,0mm)}{\hphantom{W}}
     \tnput[box,ports={north:virtual,south:virtual,east:virtual,west:virtual}]
-      {a2}{(14mm,0mm)}{}
+      {a2}{(12mm,0mm)}{\hphantom{W}}
     \tnput[box,ports={north:virtual,south:virtual,east:virtual,west:virtual}]
-      {a3}{(28mm,0mm)}{}
+      {a3}{(24mm,0mm)}{\hphantom{W}}
     \tnput[box,ports={north:virtual,south:virtual,east:virtual,west:virtual}]
-      {a4}{(42mm,0mm)}{}
+      {a4}{(36mm,0mm)}{\hphantom{W}}
     \tnput[box,ports={north:virtual,south:virtual,east:virtual,west:virtual}]
-      {b1}{(0mm,16mm)}{}
+      {b1}{(0mm,18mm)}{\hphantom{W}}
     \tnput[box,ports={north:virtual,south:virtual,east:virtual,west:virtual}]
-      {b2}{(14mm,16mm)}{}
+      {b2}{(12mm,18mm)}{\hphantom{W}}
     \tnput[box,ports={north:virtual,south:virtual,east:virtual,west:virtual}]
-      {b3}{(28mm,16mm)}{}
+      {b3}{(24mm,18mm)}{\hphantom{W}}
     \tnput[box,ports={north:virtual,south:virtual,east:virtual,west:virtual}]
-      {b4}{(42mm,16mm)}{}
-    \tnput[boundary,ports={east:virtual}]{aw}{(-7mm,0mm)}{}
-    \tnput[boundary,ports={west:virtual}]{ae}{(49mm,0mm)}{}
-    \tnput[boundary,ports={east:virtual}]{bw}{(-7mm,16mm)}{}
-    \tnput[boundary,ports={west:virtual}]{be}{(49mm,16mm)}{}
-    \tnput[boundary,ports={south:virtual}]{an1}{(0mm,7mm)}{}
-    \tnput[boundary,ports={south:virtual}]{an2}{(14mm,7mm)}{}
-    \tnput[boundary,ports={south:virtual}]{an3}{(28mm,7mm)}{}
-    \tnput[boundary,ports={south:virtual}]{an4}{(42mm,7mm)}{}
-    \tnput[boundary,ports={north:virtual}]{as1}{(0mm,-7mm)}{}
-    \tnput[boundary,ports={north:virtual}]{as2}{(14mm,-7mm)}{}
-    \tnput[boundary,ports={north:virtual}]{as3}{(28mm,-7mm)}{}
-    \tnput[boundary,ports={north:virtual}]{as4}{(42mm,-7mm)}{}
-    \tnput[boundary,ports={south:virtual}]{bn1}{(0mm,23mm)}{}
-    \tnput[boundary,ports={south:virtual}]{bn2}{(14mm,23mm)}{}
-    \tnput[boundary,ports={south:virtual}]{bn3}{(28mm,23mm)}{}
-    \tnput[boundary,ports={south:virtual}]{bn4}{(42mm,23mm)}{}
-    \tnput[boundary,ports={north:virtual}]{bs1}{(0mm,9mm)}{}
-    \tnput[boundary,ports={north:virtual}]{bs2}{(14mm,9mm)}{}
-    \tnput[boundary,ports={north:virtual}]{bs3}{(28mm,9mm)}{}
-    \tnput[boundary,ports={north:virtual}]{bs4}{(42mm,9mm)}{}
+      {b4}{(36mm,18mm)}{\hphantom{W}}
+    \tnput[boundary,ports={east:virtual}]{aw}{(-6mm,0mm)}{}
+    \tnput[boundary,ports={west:virtual}]{ae}{(42mm,0mm)}{}
+    \tnput[boundary,ports={east:virtual}]{bw}{(-6mm,18mm)}{}
+    \tnput[boundary,ports={west:virtual}]{be}{(42mm,18mm)}{}
+    \tnput[boundary,ports={south:virtual}]{an1}{(0mm,6mm)}{}
+    \tnput[boundary,ports={south:virtual}]{an2}{(12mm,6mm)}{}
+    \tnput[boundary,ports={south:virtual}]{an3}{(24mm,6mm)}{}
+    \tnput[boundary,ports={south:virtual}]{an4}{(36mm,6mm)}{}
+    \tnput[boundary,ports={north:virtual}]{as1}{(0mm,-6mm)}{}
+    \tnput[boundary,ports={north:virtual}]{as2}{(12mm,-6mm)}{}
+    \tnput[boundary,ports={north:virtual}]{as3}{(24mm,-6mm)}{}
+    \tnput[boundary,ports={north:virtual}]{as4}{(36mm,-6mm)}{}
+    \tnput[boundary,ports={south:virtual}]{bn1}{(0mm,24mm)}{}
+    \tnput[boundary,ports={south:virtual}]{bn2}{(12mm,24mm)}{}
+    \tnput[boundary,ports={south:virtual}]{bn3}{(24mm,24mm)}{}
+    \tnput[boundary,ports={south:virtual}]{bn4}{(36mm,24mm)}{}
+    \tnput[boundary,ports={north:virtual}]{bs1}{(0mm,12mm)}{}
+    \tnput[boundary,ports={north:virtual}]{bs2}{(12mm,12mm)}{}
+    \tnput[boundary,ports={north:virtual}]{bs3}{(24mm,12mm)}{}
+    \tnput[boundary,ports={north:virtual}]{bs4}{(36mm,12mm)}{}
     \tnjoin{aw.east}{a1.west} \tnjoin{a1.east}{a2.west}
     \tnjoin{a2.east}{a3.west} \tnjoin{a3.east}{a4.west}
     \tnjoin{a4.east}{ae.west}
