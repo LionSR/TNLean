@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import Mathlib.Data.Complex.Basic
 import Mathlib.LinearAlgebra.Matrix.Kronecker
+import Mathlib.LinearAlgebra.Matrix.Reindex
 
 /-!
 # Tensor products of a linear map with the identity
@@ -147,12 +148,21 @@ theorem tensorMapIdLM_comp
 
 /-! ## A linear map on the second tensor factor -/
 
+private noncomputable def swapFactorsLinearEquiv (α δ : Type*) :
+    Matrix (α × δ) (α × δ) ℂ ≃ₗ[ℂ] Matrix (δ × α) (δ × α) ℂ :=
+  Matrix.reindexLinearEquiv ℂ ℂ (Equiv.prodComm α δ) (Equiv.prodComm α δ)
+
+private theorem swapFactorsLinearEquiv_symm (α δ : Type*) :
+    (swapFactorsLinearEquiv α δ).symm = swapFactorsLinearEquiv δ α := by
+  simp only [swapFactorsLinearEquiv, Matrix.symm_reindexLinearEquiv,
+    Equiv.prodComm_symm]
+
 /-- Extract the `(i₁, j₁)`-block of a bipartite matrix, viewed as a matrix on
 its second factor. -/
 noncomputable def bipartiteBlock
     (X : Matrix (δ × α) (δ × α) ℂ)
     (i₁ j₁ : δ) : Matrix α α ℂ :=
-  fun i₂ j₂ => X (i₁, i₂) (j₁, j₂)
+  bipartiteSlice (swapFactorsLinearEquiv δ α X) i₁ j₁
 
 @[simp]
 theorem bipartiteBlock_apply
@@ -166,7 +176,7 @@ noncomputable def idTensorMap
     (T : Matrix α α ℂ →ₗ[ℂ] Matrix β β ℂ)
     (X : Matrix (δ × α) (δ × α) ℂ) :
     Matrix (δ × β) (δ × β) ℂ :=
-  fun ⟨i₁, i₂⟩ ⟨j₁, j₂⟩ => (T (bipartiteBlock X i₁ j₁)) i₂ j₂
+  swapFactorsLinearEquiv β δ (tensorMapId T (swapFactorsLinearEquiv δ α X))
 
 @[simp]
 theorem idTensorMap_apply
@@ -180,28 +190,23 @@ theorem idTensorMap_apply
 noncomputable def idTensorMapLM
     (T : Matrix α α ℂ →ₗ[ℂ] Matrix β β ℂ) :
     Matrix (δ × α) (δ × α) ℂ →ₗ[ℂ]
-    Matrix (δ × β) (δ × β) ℂ where
-  toFun := idTensorMap T
-  map_add' X Y := by
-    ext ⟨i₁, i₂⟩ ⟨j₁, j₂⟩
-    simp only [idTensorMap_apply, Matrix.add_apply]
-    rw [show bipartiteBlock (X + Y) i₁ j₁ =
-      bipartiteBlock X i₁ j₁ + bipartiteBlock Y i₁ j₁ from by
-        ext; simp [bipartiteBlock]]
-    simp [map_add]
-  map_smul' c X := by
-    ext ⟨i₁, i₂⟩ ⟨j₁, j₂⟩
-    simp only [idTensorMap_apply, Matrix.smul_apply, smul_eq_mul, RingHom.id_apply]
-    rw [show bipartiteBlock (c • X) i₁ j₁ =
-      c • bipartiteBlock X i₁ j₁ from by
-        ext; simp [bipartiteBlock, Matrix.smul_apply, smul_eq_mul]]
-    simp [map_smul]
+    Matrix (δ × β) (δ × β) ℂ :=
+  (swapFactorsLinearEquiv β δ).toLinearMap ∘ₗ
+    tensorMapIdLM T ∘ₗ (swapFactorsLinearEquiv δ α).toLinearMap
 
 @[simp]
 theorem idTensorMapLM_apply
     (T : Matrix α α ℂ →ₗ[ℂ] Matrix β β ℂ)
     (X : Matrix (δ × α) (δ × α) ℂ) :
     idTensorMapLM T X = idTensorMap T X := rfl
+
+private theorem swapFactorsLinearEquiv_kronecker
+    (A : Matrix α α ℂ) (B : Matrix δ δ ℂ) :
+    swapFactorsLinearEquiv α δ (kroneckerMap (· * ·) A B) =
+      kroneckerMap (· * ·) B A := by
+  ext ⟨i, j⟩ ⟨k, l⟩
+  simp [swapFactorsLinearEquiv, Matrix.coe_reindexLinearEquiv,
+    Matrix.reindex_apply, Matrix.kroneckerMap_apply, mul_comm]
 
 /-- Applying a map to the second factor of a Kronecker product applies it only
 to that factor. -/
@@ -210,12 +215,8 @@ theorem idTensorMap_kronecker
     (A : Matrix δ δ ℂ) (B : Matrix α α ℂ) :
     idTensorMap T (kroneckerMap (· * ·) A B) =
       kroneckerMap (· * ·) A (T B) := by
-  ext ⟨i₁, i₂⟩ ⟨j₁, j₂⟩
-  simp only [idTensorMap_apply, kroneckerMap_apply]
-  rw [show bipartiteBlock (kroneckerMap (· * ·) A B) i₁ j₁ =
-    (A i₁ j₁) • B from by
-      ext a b; simp [bipartiteBlock, kroneckerMap_apply]]
-  simp [map_smul, Matrix.smul_apply, smul_eq_mul]
+  rw [idTensorMap, swapFactorsLinearEquiv_kronecker,
+    tensorMapId_kronecker, swapFactorsLinearEquiv_kronecker]
 
 /-- Tensoring the identity map on the first factor with the identity map on the
 second gives the identity map on the product matrix algebra. -/
@@ -223,10 +224,12 @@ second gives the identity map on the product matrix algebra. -/
 theorem idTensorMapLM_id :
     idTensorMapLM (δ := δ) (LinearMap.id : Matrix α α ℂ →ₗ[ℂ] Matrix α α ℂ) =
       LinearMap.id := by
+  rw [idTensorMapLM, tensorMapIdLM_id]
   apply LinearMap.ext
   intro X
-  ext ⟨i₁, i₂⟩ ⟨j₁, j₂⟩
-  rfl
+  change swapFactorsLinearEquiv α δ (swapFactorsLinearEquiv δ α X) = X
+  rw [← swapFactorsLinearEquiv_symm]
+  exact (swapFactorsLinearEquiv δ α).symm_apply_apply X
 
 /-- Tensoring the identity on the first factor with a linear map preserves
 composition. -/
@@ -237,7 +240,7 @@ theorem idTensorMapLM_comp
       idTensorMapLM (δ := δ) S ∘ₗ idTensorMapLM (δ := δ) T := by
   apply LinearMap.ext
   intro X
-  ext ⟨i₁, i₂⟩ ⟨j₁, j₂⟩
-  rfl
+  simp only [idTensorMapLM, LinearMap.comp_apply, tensorMapIdLM_comp]
+  congr 1
 
 end Matrix
