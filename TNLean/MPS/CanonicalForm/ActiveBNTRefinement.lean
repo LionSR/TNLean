@@ -14,6 +14,12 @@ MPV phase classes.  Each active copy retains its original weight, unit phase, di
 identity, and invertible gauge relative to a chosen normal representative.  The inactive
 listed blocks remain as zero-weight summands.
 
+**Local fix (zero-weight listed blocks):** Literal Lean `CPSVCanonicalFormData` permits
+syntactically listed zero-weight blocks, whereas the source canonical-form construction lists
+nonzero blocks.  Retaining them as zero-weight inactive coordinates preserves the exact ambient
+dimensions without treating them as physical BNT copies.  See
+`docs/paper-gaps/cpsv16_bnt_characterization_active_blocks.tex`.
+
 The grouped order is the sum of the phase-class copy coordinates and the inactive complement.
 An explicit equivalence identifies this order with the original listed blocks, and its induced
 flattened-coordinate permutation gives exact letterwise direct-sum and ambient-reconstruction
@@ -106,73 +112,129 @@ The displayed zero-weight coordinates are retained as literal zero summands.  Th
 letter, not merely positive-length MPV equalities.  The ambient rectangular map keeps the
 coisometry orientation `U * Uᴴ = 1`.
 
+**Local fix (zero-weight listed blocks):** Literal Lean `CPSVCanonicalFormData` permits
+syntactically listed zero-weight blocks, while the source construction lists nonzero blocks.
+The inactive coordinates retain zero weight to preserve exact ambient dimensions and are not
+asserted to be physical BNT copies.  See
+`docs/paper-gaps/cpsv16_bnt_characterization_active_blocks.tex`.
+
 Source: arXiv:1606.00608, lines 265--301, 1080--1117, and 1135--1146.
 Proposition 4.13, lines 1863--1921, uses this refinement downstream. -/
 structure ActiveBNTRefinement (data : CPSVCanonicalFormData A) where
-  /-- Equality between the chosen representative's bond dimension and this copy's dimension. -/
+  /-- Equality between the chosen representative's bond dimension and this copy's dimension.
+
+  Source: arXiv:1606.00608, lines 265--301 and the normal-tensor gauge theorem at
+  lines 1080--1117. -/
   copyDimEq : ∀ k : data.Active,
     data.dim (data.activeRepresentativeIndex (data.activeClassCopy k).1) = data.dim k
-  /-- The unit phase multiplying this active copy of its representative. -/
+  /-- The unit phase multiplying this active copy of its representative.
+
+  Source: arXiv:1606.00608, lines 265--301 and 1080--1117. -/
   copyPhase : data.Active → ℂ
-  /-- The phase of every active copy has unit modulus. -/
+  /-- The phase of every active copy has unit modulus.
+
+  Source: the normal-tensor gauge theorem in arXiv:1606.00608, lines 1080--1117. -/
   copyPhaseNorm : ∀ k : data.Active, ‖copyPhase k‖ = 1
-  /-- The invertible gauge from the representative coordinates to this copy's coordinates. -/
+  /-- The invertible gauge from the representative coordinates to this copy's coordinates.
+
+  Source: the normal-tensor gauge theorem in arXiv:1606.00608, lines 1080--1117. -/
   copyGauge : ∀ k : data.Active, GL (Fin (data.dim k)) ℂ
-  /-- Exact letterwise gauge-phase relation for every active copy. -/
+  /-- Exact letterwise gauge-phase relation for every active copy.
+
+  Source: the normal-tensor gauge theorem in arXiv:1606.00608, lines 1080--1117. -/
   copyRelation : ∀ (k : data.Active) i,
     data.blocks k i = copyPhase k •
       ((copyGauge k : Matrix _ _ ℂ) *
         (cast (congr_arg (MPSTensor d) (copyDimEq k))
           (data.blocks (data.activeRepresentativeIndex (data.activeClassCopy k).1))) i *
         (↑((copyGauge k)⁻¹) : Matrix _ _ ℂ))
-  /-- The original scalar weight of each active copy. -/
+  /-- The original scalar weight of each active copy.
+
+  Source: arXiv:1606.00608, lines 265--301. -/
   copyWeight : data.Active → ℂ
-  /-- The copy weight is exactly the weight at its original displayed index. -/
+  /-- The copy weight is exactly the weight at its original displayed index.
+
+  Source: the weighted normal-block expansion in arXiv:1606.00608, lines 265--301. -/
   copyWeightEq : ∀ k : data.Active, copyWeight k = data.weights k
-  /-- Every chosen representative is a normal tensor. -/
+  /-- Every chosen representative is a normal tensor.
+
+  Source: arXiv:1606.00608, lines 265--280 and 1135--1146. -/
   representativeNormal : ∀ j,
     IsNormalTensor (data.blocks (data.activeRepresentativeIndex j))
-  /-- Distinct chosen representatives are not gauge-phase equivalent. -/
+  /-- Distinct chosen representatives are not gauge-phase equivalent.
+
+  Source: the BNT minimality argument in arXiv:1606.00608, lines 1135--1146. -/
   representativesNotEquiv :
     BlocksNotGaugePhaseEquiv (d := d)
       (fun j => data.blocks (data.activeRepresentativeIndex j))
-  /-- The representative family is a basis of normal tensors for the original tensor. -/
+  /-- The representative family is a basis of normal tensors for the original tensor.
+
+  Source: arXiv:1606.00608, lines 265--280 and 1135--1146. -/
   representativesBNT :
     IsCPSVBasisOfNormalTensors A
       (fun j => ⟨data.dim (data.activeRepresentativeIndex j),
         data.blocks (data.activeRepresentativeIndex j)⟩)
   /-- One same-dimensional representative copy at every displayed index.  Inactive indices are
-  left unchanged because their displayed scalar weight is zero. -/
+  left unchanged because their displayed scalar weight is zero.
+
+  Source: active copies follow arXiv:1606.00608, lines 265--301 and 1080--1117; retaining the
+  inactive complement is the formal preparation used downstream in Proposition 4.13,
+  lines 1863--1921. -/
   regroupedBlocks : (k : Fin data.r) → MPSTensor d (data.dim k)
-  /-- The block gauge at every displayed index. -/
+  /-- The block gauge at every displayed index.
+
+  Source: active gauges follow arXiv:1606.00608, lines 1080--1117; identity gauges on inactive
+  zero-weight coordinates are the formal preparation used downstream in Proposition 4.13,
+  lines 1863--1921. -/
   listedGauge : (k : Fin data.r) → GL (Fin (data.dim k)) ℂ
-  /-- Active entries of `regroupedBlocks` are phase multiples of their class representatives. -/
+  /-- Active entries of `regroupedBlocks` are phase multiples of their class representatives.
+
+  Source: arXiv:1606.00608, lines 265--301 and the gauge theorem at lines 1080--1117. -/
   regroupedBlocksActive : ∀ k : data.Active,
     regroupedBlocks k = fun i => copyPhase k •
       (cast (congr_arg (MPSTensor d) (copyDimEq k))
         (data.blocks (data.activeRepresentativeIndex (data.activeClassCopy k).1))) i
-  /-- Inactive displayed entries remain the original blocks and continue to carry zero weight. -/
+  /-- Inactive displayed entries remain the original blocks and continue to carry zero weight.
+
+  Source: the literal listed direct sum is arXiv:1606.00608, Section II.A, lines 214--245 and
+  eq. `II_CF1`; retaining syntactic zero-weight entries is the local fix described above. -/
   regroupedBlocksInactive : ∀ k, data.weights k = 0 →
     regroupedBlocks k = data.blocks k
-  /-- Every original displayed block is the conjugate of its regrouped block. -/
+  /-- Every original displayed block is the conjugate of its regrouped block.
+
+  Source: arXiv:1606.00608, lines 1080--1117, applied to the Section II.A listed blocks. -/
   blocksEqListedGaugeConj : ∀ k i,
     data.blocks k i =
       (listedGauge k : Matrix _ _ ℂ) * regroupedBlocks k i *
         (↑((listedGauge k)⁻¹) : Matrix _ _ ℂ)
-  /-- Exact letterwise regrouping of the displayed direct sum. -/
+  /-- Exact letterwise regrouping of the displayed direct sum.
+
+  Source: the listed direct sum is arXiv:1606.00608, Section II.A, lines 214--245 and
+  eq. `II_CF1`; this exact coordinate identity is formal preparation used downstream in
+  Proposition 4.13, lines 1863--1921. -/
   regroupLetterwise : ∀ i,
     toTensorFromBlocks (d := d) data.weights data.blocks i =
       (globalGaugeOfBlocks listedGauge : Matrix _ _ ℂ) *
         toTensorFromBlocks (d := d) data.weights regroupedBlocks i *
         (↑((globalGaugeOfBlocks listedGauge)⁻¹) : Matrix _ _ ℂ)
-  /-- The original ambient coisometry from literal CPSV canonical form. -/
+  /-- The original ambient coisometry from literal CPSV canonical form.
+
+  Source: arXiv:1606.00608, Section II.A, lines 214--245 and eq. `II_CF1`. -/
   ambientCoisometry : Matrix (Fin (∑ k : Fin data.r, data.dim k)) (Fin D) ℂ
   /-- The retained rectangular map is exactly the original ambient coisometry in the literal
-  canonical-form witness. -/
+  canonical-form witness.
+
+  Source: arXiv:1606.00608, Section II.A, lines 214--245 and eq. `II_CF1`. -/
   ambientCoisometryEq : ambientCoisometry = data.ambient_coisometry
-  /-- The ambient rectangular map is a coisometry, in the orientation `U * Uᴴ = 1`. -/
+  /-- The ambient rectangular map is a coisometry, in the orientation `U * Uᴴ = 1`.
+
+  Source: arXiv:1606.00608, Section II.A, lines 214--245 and eq. `II_CF1`. -/
   ambientCoisometric : ambientCoisometry * ambientCoisometryᴴ = 1
-  /-- Exact ambient reconstruction through the regrouped direct sum and its block gauge. -/
+  /-- Exact ambient reconstruction through the regrouped direct sum and its block gauge.
+
+  Source: the ambient reconstruction is arXiv:1606.00608, Section II.A, lines 214--245 and
+  eq. `II_CF1`; the grouped-coordinate form is formal preparation used downstream in
+  Proposition 4.13, lines 1863--1921. -/
   reconstructRegrouped : ∀ i,
     A i = ambientCoisometryᴴ *
       ((globalGaugeOfBlocks listedGauge : Matrix _ _ ℂ) *
