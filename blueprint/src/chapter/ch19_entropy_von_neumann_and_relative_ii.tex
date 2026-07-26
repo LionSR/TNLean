@@ -114,6 +114,49 @@
     the identity with $\tau$ on the left.
 \end{proof}
 
+\begin{lemma}[Square roots and supports of tensor products]
+    \label{lem:support_inverse_square_root_tensor_product}
+    \lean{Matrix.PosSemidef.sqrt_kronecker}
+    \lean{Matrix.PosSemidef.supportInvSqrt_kronecker}
+    \lean{Matrix.PosSemidef.cfc_sqrt_mul_supportInvSqrt}
+    \lean{Matrix.PosSemidef.supportInvSqrt_mul_cfc_sqrt}
+    \lean{Matrix.PosSemidef.supportProj_kronecker}
+    \lean{Matrix.PosDef.supportProj_eq_one}
+    \leanok
+    \uses{def:support_inverse_square_root,lem:support_inverse_square_root_sandwich}
+    Let $A$ and $B$ be positive semidefinite. Their positive square roots,
+    support inverse square roots, and support projections satisfy
+    \begin{align}
+        \sqrt{A\otimes B}
+        &=\sqrt A\otimes\sqrt B,
+        \notag\\
+        (A\otimes B)^{-1/2}_{\mathrm{supp}}
+        &=A^{-1/2}_{\mathrm{supp}}\otimes B^{-1/2}_{\mathrm{supp}},
+        \notag\\
+        P_{A\otimes B}
+        &=P_A\otimes P_B.
+        \label{eq:entropy_support_tensor_product}
+    \end{align}
+    Moreover,
+    \begin{align}
+        \sqrt A\,A^{-1/2}_{\mathrm{supp}}
+        =A^{-1/2}_{\mathrm{supp}}\sqrt A
+        &=P_A.
+        \label{eq:entropy_support_sqrt_cancellation}
+    \end{align}
+    If $A$ is positive definite, then $P_A=\mathbf 1$.
+\end{lemma}
+
+\begin{proof}\leanok
+    Diagonalize both factors. The eigenvalues of $A\otimes B$ are the products
+    $a_i b_j$. Both the square-root function and the function that equals
+    $x^{-1/2}$ for $x>0$ and zero at $x=0$ are multiplicative on the
+    non-negative reals. The support indicator is multiplicative there as well.
+    The cancellation identities follow entrywise. For a positive-definite
+    matrix every eigenvalue is nonzero, so its support projection is the
+    identity.
+\end{proof}
+
 \begin{lemma}[Support inverse square root under scaling and a maximally mixed factor]
     \label{lem:support_inverse_square_root_maximally_mixed}
     \lean{Matrix.PosSemidef.supportInvSqrt_smul}

@@ -25,6 +25,8 @@ theory development.
   original matrix.
 * `Matrix.PosSemidef.sqrt_smul`: the positive square root commutes with
   nonnegative real scaling.
+* `Matrix.PosSemidef.sqrt_kronecker`: positive square roots factor across
+  Kronecker products.
 * `Matrix.PosSemidef.blockDiagonal'`: a finite dependent block diagonal of
   positive-semidefinite matrices is positive semidefinite.
 * `Matrix.PosSemidef.supportInvSqrt`: the inverse square root on the support.
@@ -32,9 +34,10 @@ theory development.
 * `Matrix.PosDef.supportInvSqrt_eq_inv_sqrt`: agreement with the ordinary
   inverse square root for positive-definite matrices.
 * `Matrix.PosSemidef.supportInvSqrt_smul`: compatibility with positive scaling.
-* `Matrix.PosSemidef.supportInvSqrt_kronecker_one` and
-  `Matrix.PosSemidef.supportInvSqrt_one_kronecker`: compatibility with the
-  unital tensor embeddings.
+* `Matrix.PosSemidef.supportInvSqrt_kronecker`: support inverse square roots
+  factor across arbitrary positive-semidefinite Kronecker products.
+* `Matrix.PosSemidef.supportProj_kronecker`: support projections factor across
+  arbitrary positive-semidefinite Kronecker products.
 * `Matrix.PosSemidef.supportInvSqrt_sq_mul_self` and
   `Matrix.PosSemidef.self_mul_supportInvSqrt_sq`: generalized-inverse identities.
 * `Matrix.PosSemidef.star_dotProduct_supportInv_mulVec_eq_of_mulVec_eq`:
@@ -61,6 +64,22 @@ theorem PosSemidef.sqrt_smul
     hscaled.nonneg hcand.nonneg).2
   rw [Matrix.smul_mul, Matrix.mul_smul, smul_smul,
     CFC.sqrt_mul_sqrt_self A hA.nonneg, Real.mul_self_sqrt hc]
+
+open scoped Classical in
+/-- The positive square root factors across Kronecker products of
+positive-semidefinite matrices:
+\[
+  \sqrt{A \otimes B} = \sqrt A \otimes \sqrt B.
+\] -/
+theorem PosSemidef.sqrt_kronecker
+    {n m : Type*} [Fintype n] [Fintype m]
+    {A : Matrix n n ℂ} {B : Matrix m m ℂ} (hA : A.PosSemidef) (hB : B.PosSemidef) :
+    CFC.sqrt (A ⊗ₖ B) = CFC.sqrt A ⊗ₖ CFC.sqrt B := by
+  rw [CFC.sqrt_eq_real_sqrt (A ⊗ₖ B) (hA.kronecker hB).nonneg,
+    CFC.sqrt_eq_real_sqrt A hA.nonneg, CFC.sqrt_eq_real_sqrt B hB.nonneg,
+    cfcₙ_eq_cfc, cfcₙ_eq_cfc, cfcₙ_eq_cfc]
+  exact Matrix.cfc_kronecker_of_mul_posSemidef hA hB Real.sqrt
+    (fun x y hx _hy ↦ Real.sqrt_mul hx y)
 
 variable {n : Type*} [Fintype n] [DecidableEq n]
 
@@ -191,6 +210,29 @@ theorem PosSemidef.supportInvSqrt_smul {ρ : Matrix n n ℂ}
     (fun x : ℝ ↦ if x ≠ 0 then (Real.sqrt x)⁻¹ else 0) ρ
     (hf := ρ.finite_real_spectrum.continuousOn _)]
 
+/-- The support inverse square root factors across Kronecker products
+of positive-semidefinite matrices:
+\[
+  (A \otimes B)^{-1/2}_{\mathrm{supp}}
+    = A^{-1/2}_{\mathrm{supp}} \otimes B^{-1/2}_{\mathrm{supp}}.
+\]
+The zero-eigenvalue convention is essential when either factor is singular. -/
+theorem PosSemidef.supportInvSqrt_kronecker
+    {m : Type*} [Fintype m] [DecidableEq m]
+    {A : Matrix n n ℂ} {B : Matrix m m ℂ} (hA : A.PosSemidef) (hB : B.PosSemidef) :
+    (hA.kronecker hB).supportInvSqrt = hA.supportInvSqrt ⊗ₖ hB.supportInvSqrt := by
+  unfold PosSemidef.supportInvSqrt
+  rw [← (hA.kronecker hB).isHermitian.cfc_eq, ← hA.isHermitian.cfc_eq,
+    ← hB.isHermitian.cfc_eq]
+  apply Matrix.cfc_kronecker_of_mul_posSemidef hA hB
+  intro x y hx _hy
+  by_cases hx0 : x = 0
+  · simp [hx0]
+  by_cases hy0 : y = 0
+  · simp [hy0]
+  rw [if_pos (mul_ne_zero hx0 hy0), if_pos hx0, if_pos hy0, Real.sqrt_mul hx,
+    mul_inv]
+
 /-- The support inverse square root commutes with the unital left tensor
 embedding. This is the tensor functional-calculus identity for the support
 inverse in Hayden--Jozsa--Petz--Winter, arXiv:quant-ph/0304007v2, Theorem 3,
@@ -220,6 +262,41 @@ theorem PosSemidef.supportInvSqrt_one_kronecker
     ← hρ.isHermitian.cfc_eq]
   exact Matrix.cfc_one_kronecker hρ.isHermitian
     (fun x : ℝ ↦ if x ≠ 0 then (Real.sqrt x)⁻¹ else 0)
+
+/-- Multiplying the positive square root by the support inverse square
+root gives the support projection. -/
+theorem PosSemidef.cfc_sqrt_mul_supportInvSqrt
+    {ρ : Matrix n n ℂ} (hρ : ρ.PosSemidef) :
+    hρ.isHermitian.cfc Real.sqrt * hρ.supportInvSqrt = hρ.supportProj := by
+  let f : ℝ → ℝ := fun x ↦ if x ≠ 0 then (Real.sqrt x)⁻¹ else 0
+  change hρ.isHermitian.cfc Real.sqrt * hρ.isHermitian.cfc f =
+    hρ.isHermitian.supportProj
+  rw [← hρ.isHermitian.cfc_mul]
+  unfold Matrix.IsHermitian.cfc Matrix.IsHermitian.supportProj
+  rw [Unitary.conjStarAlgAut_apply]
+  have hdiag :
+      Matrix.diagonal ((RCLike.ofReal : ℝ → ℂ) ∘
+          (fun x ↦ Real.sqrt x * f x) ∘ hρ.isHermitian.eigenvalues) =
+        Matrix.diagonal (fun i ↦
+          if hρ.isHermitian.eigenvalues i ≠ 0 then (1 : ℂ) else 0) := by
+    congr 1
+    funext i
+    simp only [Function.comp_apply]
+    by_cases hi : hρ.isHermitian.eigenvalues i = 0
+    · simp [f, hi]
+    · have hsqrt : Real.sqrt (hρ.isHermitian.eigenvalues i) ≠ 0 :=
+        Real.sqrt_ne_zero'.mpr (lt_of_le_of_ne (hρ.eigenvalues_nonneg i) (Ne.symm hi))
+      simp [f, hi, hsqrt]
+  rw [hdiag]
+
+/-- Multiplying the support inverse square root by the positive square root gives
+the support projection. -/
+theorem PosSemidef.supportInvSqrt_mul_cfc_sqrt
+    {ρ : Matrix n n ℂ} (hρ : ρ.PosSemidef) :
+    hρ.supportInvSqrt * hρ.isHermitian.cfc Real.sqrt = hρ.supportProj := by
+  simpa [Matrix.conjTranspose_mul, hρ.supportInvSqrt_isHermitian.eq,
+    hρ.cfc_sqrt_isHermitian.eq, hρ.supportProj_isHermitian.eq] using
+      congrArg Matrix.conjTranspose hρ.cfc_sqrt_mul_supportInvSqrt
 
 /-- Sandwiching a positive-semidefinite matrix by its support inverse square
 root gives its support projection.  This is the spectral support identity
@@ -265,6 +342,34 @@ theorem PosSemidef.supportInvSqrt_mul_self_mul_supportInvSqrt
           simpa [f, hi] using congrArg Complex.ofReal hreal
       unfold Matrix.IsHermitian.supportProj
       rw [Matrix.IsHermitian.cfc, Unitary.conjStarAlgAut_apply, hdiag]
+
+/-- The support projection factors across Kronecker products of
+positive-semidefinite matrices:
+\[
+  P_{A \otimes B} = P_A \otimes P_B.
+\] -/
+theorem PosSemidef.supportProj_kronecker
+    {m : Type*} [Fintype m] [DecidableEq m]
+    {A : Matrix n n ℂ} {B : Matrix m m ℂ} (hA : A.PosSemidef) (hB : B.PosSemidef) :
+    (hA.kronecker hB).supportProj = hA.supportProj ⊗ₖ hB.supportProj := by
+  change (hA.kronecker hB).isHermitian.supportProj =
+    hA.isHermitian.supportProj ⊗ₖ hB.isHermitian.supportProj
+  rw [← (hA.kronecker hB).supportInvSqrt_mul_self_mul_supportInvSqrt,
+    hA.supportInvSqrt_kronecker hB, ← Matrix.mul_kronecker_mul,
+    ← Matrix.mul_kronecker_mul, hA.supportInvSqrt_mul_self_mul_supportInvSqrt,
+    hB.supportInvSqrt_mul_self_mul_supportInvSqrt]
+
+/-- A positive-definite matrix has full support. -/
+theorem PosDef.supportProj_eq_one {ρ : Matrix n n ℂ} (hρ : ρ.PosDef) :
+    hρ.posSemidef.supportProj = 1 := by
+  rw [← hρ.posSemidef.cfc_sqrt_mul_supportInvSqrt,
+    hρ.supportInvSqrt_eq_inv_sqrt]
+  have hsqrt : CFC.sqrt ρ = hρ.isHermitian.cfc Real.sqrt := by
+    rw [CFC.sqrt_eq_real_sqrt ρ hρ.posSemidef.nonneg, cfcₙ_eq_cfc,
+      hρ.isHermitian.cfc_eq]
+  rw [← hsqrt]
+  exact Matrix.mul_nonsing_inv _ ((Matrix.isUnit_iff_isUnit_det _).mp
+    ((CFC.isUnit_sqrt_iff ρ hρ.posSemidef.nonneg).mpr hρ.isUnit))
 
 /-- The square of the support inverse square root is a generalized inverse:
 multiplying it by the original matrix gives the support projection.
