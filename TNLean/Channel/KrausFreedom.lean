@@ -156,7 +156,7 @@ theorem kraus_rectangular_freedom
             if c = x₁ then star (K α a b) else 0 := by
           rw [Finset.sum_eq_single a (fun x _ hx => by simp [Ne.symm hx])
               (fun h => absurd (Finset.mem_univ _) h)]
-          split_ifs <;> simp_all
+          simp
         rw [h_inner]; split_ifs <;> simp
       simp_rw [step₁]; simp [Finset.sum_ite_eq, Finset.mem_univ]
     rw [collapse, collapse] at h_entry
