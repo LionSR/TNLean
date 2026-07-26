@@ -669,11 +669,13 @@
 \end{proof}
 
 % Source anchor: CPSV16 Proposition 4.13, statement and proof at lines 1863--1922.
+% Local fix (rectangular coisometry and reconstruction): the source calls U an
+% isometry and prints only the compressed identity. See
+% docs/paper-gaps/cpgsv17_vertical_isometry_zero_sector.tex.
 \begin{theorem}[Vertical canonical form of a canonical MPDO]
     \label{thm:vertical_cf_of_cpsv_canonical_form}
     \notready
-    \uses{def:mpdo, def:cpsv_canonical_form, def:vertical_cf_mpdo,
-        thm:cpsv_canonical_form_bnt_existence}
+    \uses{def:mpdo, def:cpsv_canonical_form, def:vertical_cf_mpdo}
     Let $M$ be an MPO tensor whose doubled-index MPS tensor is in the literal
     CPSV canonical form. If $M$ generates matrix product density operators,
     then $M$ is in canonical form in the vertical direction. More precisely,
@@ -706,7 +708,9 @@
     including the permitted zero orthogonal complement.
 \end{theorem}
 
-\begin{proof}
+\begin{proof}[Proof outline]
+    \uses{thm:cpsv_canonical_form_bnt_existence,
+        thm:representative_grouped_insert_eq}
     Write $A$ for the doubled-index MPS tensor of $M$. If $A=0$, take no
     retained sectors; the unique map onto the zero-dimensional sector space
     gives the conclusion. Suppose henceforth that $A\ne0$. Begin with its
@@ -737,11 +741,12 @@
           =H^{(N)}P_1.
         \label{eq:cpsv_prop_4_13_first_site}
     \end{align}
-    After compression by $V$, Lemma~L applied to the active decomposition
-    (\ref{eq:cpsv_prop_4_13_active_bnt}) separates the first-site insertions
-    block by block. Reconstructing with $V$ yields
-    $\widetilde MP=P\widetilde MP$. Hence
-    $(\Id-P)\widetilde MP=0$, so every one-sided invariant subspace is
+    The missing step is to prove that the representative-grouped Lemma~L
+    remains applicable after compression to
+    (\ref{eq:cpsv_prop_4_13_active_bnt}) and that its separated identity carries
+    back through the ambient coisometry $V$. Once this is established, it gives
+    $\widetilde MP=P\widetilde MP$, hence
+    $(\Id-P)\widetilde MP=0$. Thus every one-sided invariant subspace is
     reducing.
 
     There are no nontrivial periodic vertical sectors. Otherwise a cyclic
@@ -770,9 +775,10 @@
     $\mu_{\alpha,k}>0$ for every copy.
 
     Self-adjointness of the same sector compressions gives the marked-chain
-    identity used in the proof of Proposition~4.13. A second application
-    of Lemma~L transfers this equality to the local tensors. Normal-tensor
-    rigidity then makes the relative Gram matrix scalar: for every $k$ there
+    identity used in the proof of Proposition~4.13. A second instance of the
+    same retained-coordinate separation would transfer this equality to the
+    local tensors. Normal-tensor rigidity would then make the relative Gram
+    matrix scalar: for every $k$ there
     is $\omega_{\alpha,k}>0$ such that
     \begin{align}
         X_{\alpha,k}^\dagger X_{\alpha,k}
