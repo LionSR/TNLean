@@ -20,50 +20,6 @@
     are $X$ and $0$, respectively.
 \end{proof}
 
-\begin{lemma}[Sharp BNT block separation without an injective prefix]
-    \label{lem:bnt_direct_sum_block_separation_word_span}
-    \lean{MPSTensor.wordTupleSpanTop_mul_pred_of_forall_pairWordTupleSpanTop}
-    \lean{MPSTensor.wordTupleSpanTop_mul_pred_of_forall_pairTraceSeparatingAt}
-    \lean{MPSTensor.wordTupleSpanTop_threeBlock_mul_pred_of_blocksNotGaugePhaseEquiv_c1}
-    \leanok
-    \uses{lem:bnt_direct_sum_injective_prefix_word_span,
-        lem:pair_product_span_arbitrary_first_value,
-        lem:block_separating_equations_from_pairwise_separation}
-    Let $A^1,\ldots,A^r$ satisfy the normalization, irreducibility,
-    non-equivalence, injective-prefix, and full-word-span hypotheses of
-    Lemma~\ref{lem:bnt_direct_sum_injective_prefix_word_span} for some
-    $L_0>0$. If $r\geq2$, then the simultaneous block-word tuples at the
-    source length $3(r-1)(L_0+1)$ span the full product algebra
-    $\prod_{j=1}^r\MN{D_j}$.
-\end{lemma}
-
-\begin{proof}
-    \leanok
-    \uses{lem:bnt_direct_sum_injective_prefix_word_span,
-        lem:direct_sum_two_block_dimension_step,
-        lem:pair_trace_separation_to_pairwise_block_separation,
-        lem:pair_product_span_arbitrary_first_value,
-        lem:block_separating_equations_from_pairwise_separation}
-    For a prescribed matrix $X_k$ on block $k$, choose an anchor block $j$.
-    Lemma~\ref{lem:pair_product_span_arbitrary_first_value} gives a
-    length-$3(L_0+1)$ tuple $M$ with $(M_k,M_j)=(X_k,0)$. For every
-    $\ell\notin\{k,j\}$, choose a selector $N^{(\ell)}$ with
-    $N^{(\ell)}_k=\Id$ and $N^{(\ell)}_\ell=0$, and put
-    $C_t = M_t\prod_{\ell\notin\{k,j\}}N^{(\ell)}_t$.
-    Then
-    \begin{align}
-        C_k &= X_k,
-        \notag\\
-        C_j &= 0,
-        \notag\\
-        C_\ell &= M_\ell(\cdots)0(\cdots) = 0 \quad (\ell\notin\{k,j\}).
-        \notag
-    \end{align}
-    Thus $C$ is supported only on block $k$, at length
-    $3(r-1)(L_0+1)$. Summing these tuples over $k$ realizes every element of
-    the product algebra.
-\end{proof}
-
 \begin{lemma}[Blockwise matrix equality from trace pairings]
     \label{lem:block_matrices_equal_from_trace_pairings}
     \lean{MPSTensor.block_matrices_eq_of_wordTupleSpanTop_trace}
@@ -82,7 +38,7 @@
     For every word $w$ of length $m$,
     \begin{align}
         \sum_j\tr\!\left((X_j-Y_j)A^j_w\right)
-        &=
+         & =
         \sum_j\tr(X_jA^j_w)
         -
         \sum_j\tr(Y_jA^j_w) =
@@ -122,7 +78,7 @@
     two expressions for $\psi$ gives
     \begin{align}
         \sum_j\tr\!\left(A^j_b C^j_a A^j_w\right)
-        &=
+         & =
         \sum_j\tr\!\left(A^j_bE_jA^j_aA^j_w\right).
         \notag
     \end{align}
@@ -143,7 +99,7 @@
     all words $w$ of length $m$,
     \begin{align}
         \sum_j \tr\!\left(A^j_b C^j_a A^j_w\right)
-        &=
+         & =
         \sum_j \tr\!\left(D^j_b A^j_a A^j_w\right).
         \notag
     \end{align}
@@ -177,7 +133,7 @@
     word $\beta$ of length $K$, and every middle word $w$ of length $m$,
     \begin{align}
         \sum_j\tr\!\left(A^j_\beta C^j_\rho A^j_w\right)
-        &=
+         & =
         \sum_j\tr\!\left(D^j_\beta A^j_\rho A^j_w\right),
         \notag
     \end{align}
@@ -213,7 +169,7 @@
     $K$ and every middle word $w$ of length $m$,
     \begin{align}
         \sum_j\tr\!\left(A^j_\beta C^j_\rho A^j_w\right)
-        &=
+         & =
         \sum_j\tr\!\left((X_jA^j_\beta)A^j_\rho A^j_w\right),
         \notag
     \end{align}
@@ -244,16 +200,16 @@
     Let $(A_a)_{a\in I}$, $(C_a)_{a\in I}$, and $(D_b)_{b\in I}$ be matrices
     in $\MD$, indexed by a finite alphabet. If
     \begin{align}
-        \sum_a A_a A_a^\dagger &= \Id,
-        \notag\\
-        A_b C_a &= D_b A_a
+        \sum_a A_a A_a^\dagger & = \Id,
+        \notag                             \\
+        A_b C_a                & = D_b A_a
         \notag
     \end{align}
     for all $a,b\in I$, and if $E=\sum_a C_a A_a^\dagger$, then
     \begin{align}
-        D_b &= A_bE,
-        \notag\\
-        A_bC_a &= A_bEA_a
+        D_b    & = A_bE,
+        \notag             \\
+        A_bC_a & = A_bEA_a
         \notag
     \end{align}
     for all $a,b\in I$.
@@ -267,16 +223,16 @@
     by a set $I$. If $(B_a)_{a\in J}$ and $(C_a)_{a\in J}$ are indexed by
     $J$, and if, for all $a\in J$ and $b\in I$,
     \begin{align}
-        \sum_a B_aB_a^\dagger &= \Id,
-        \notag\\
-        A_bC_a &= D_bB_a,
+        \sum_a B_aB_a^\dagger & = \Id,
+        \notag                            \\
+        A_bC_a                & = D_bB_a,
         \notag
     \end{align}
     then, with $E=\sum_a C_aB_a^\dagger$, one has
     \begin{align}
-        D_b &= A_bE,
-        \notag\\
-        A_bC_a &= A_bEB_a.
+        D_b    & = A_bE,
+        \notag              \\
+        A_bC_a & = A_bEB_a.
         \notag
     \end{align}
     This includes the case where $I$ and $J$ are word sets of different
@@ -288,7 +244,7 @@
     Multiply $D_b$ by the normalization:
     \begin{align}
         D_b
-        &=
+         & =
         D_b\sum_a A_aA_a^\dagger =
         \sum_a D_bA_aA_a^\dagger =
         \sum_a A_bC_aA_a^\dagger =
@@ -299,7 +255,7 @@
     $A_bC_a=A_bEA_a$. For two alphabets, the corresponding step is
     \begin{align}
         D_b
-        &=
+         & =
         D_b\sum_a B_aB_a^\dagger =
         \sum_a D_bB_aB_a^\dagger =
         \sum_a A_bC_aB_a^\dagger =
@@ -325,7 +281,7 @@
     $\rho$, and every middle word $w$ of length $m$,
     \begin{align}
         \sum_j\tr\!\left(A^j_\beta C^j_\rho A^j_w\right)
-        &=
+         & =
         \sum_j\tr\!\left(D^j_\beta A^j_\rho A^j_w\right).
         \notag
     \end{align}
@@ -335,9 +291,9 @@
     $E^j = \sum_\rho C^j_\rho\left(A^j_\rho\right)^\dagger$
     such that, for every wrapped word $\beta$ and complementary word $\rho$,
     \begin{align}
-        D^j_\beta &= A^j_\beta E^j,
-        \notag\\
-        A^j_\beta C^j_\rho &= A^j_\beta E^jA^j_\rho.
+        D^j_\beta          & = A^j_\beta E^j,
+        \notag                                        \\
+        A^j_\beta C^j_\rho & = A^j_\beta E^jA^j_\rho.
         \notag
     \end{align}
     This is the calculation in
@@ -358,15 +314,15 @@
     two word alphabets, gives
     \begin{align}
         E^j
-        &=
+         & =
         \sum_\rho C^j_\rho\left(A^j_\rho\right)^\dagger,
-        \notag\\
+        \notag \\
         D^j_\beta
-        &=
+         & =
         A^j_\beta E^j,
-        \notag\\
+        \notag \\
         A^j_\beta C^j_\rho
-        &=
+         & =
         A^j_\beta E^jA^j_\rho.
         \notag
     \end{align}
@@ -385,7 +341,7 @@
     and every middle word $w$ of length $m$,
     \begin{align}
         \sum_j\tr\!\left(A^j_\beta C^j_\rho A^j_w\right)
-        &=
+         & =
         \sum_j\tr\!\left(((\mu_j^NX_j)A^j_\beta)A^j_\rho A^j_w\right).
         \notag
     \end{align}
@@ -395,9 +351,9 @@
     $E^j = \sum_\rho C^j_\rho\left(A^j_\rho\right)^\dagger$
     such that, for every wrapped word $\beta$ and complementary word $\rho$,
     \begin{align}
-        (\mu_j^NX_j)A^j_\beta &= A^j_\beta E^j,
-        \notag\\
-        A^j_\beta C^j_\rho &= A^j_\beta E^jA^j_\rho.
+        (\mu_j^NX_j)A^j_\beta & = A^j_\beta E^j,
+        \notag                                           \\
+        A^j_\beta C^j_\rho    & = A^j_\beta E^jA^j_\rho.
         \notag
     \end{align}
     This is the boundary-matrix calculation in
@@ -429,7 +385,7 @@
     Then, for every complementary word $\rho$, with
     \begin{align}
         E_\rho
-        &=
+         & =
         \left(\sum_\gamma C_\gamma A_\gamma^\dagger\right)A_\rho,
         \notag
     \end{align}
@@ -447,7 +403,7 @@
     the compatibility hypothesis gives
     \begin{align}
         (X A_\beta)A_\rho
-        &=
+         & =
         A_\beta C_\rho =
         A_\beta E A_\rho =
         A_\beta E_\rho.
@@ -469,7 +425,7 @@
     word $\rho$, and every middle word $w$ of length $m$,
     \begin{align}
         \sum_j\tr\!\left(A^j_\beta C^j_\rho A^j_w\right)
-        &=
+         & =
         \sum_j\tr\!\left((X_jA^j_\beta)A^j_\rho A^j_w\right).
         \notag
     \end{align}
@@ -505,9 +461,9 @@
     $\sigma=(\sigma_1,\ldots,\sigma_{n+2})$, define
     \begin{align}
         \alpha(\sigma)
-        &=
+         & =
         \tr\!\left(A_{\sigma_{n+2}} C_{\sigma_1}
-            A_{\sigma_2}\cdots A_{\sigma_{n+1}}\right).
+        A_{\sigma_2}\cdots A_{\sigma_{n+1}}\right).
         \notag
     \end{align}
     Then $\alpha\in G_{n+2}(A)$.
@@ -518,14 +474,14 @@
     The boundary identity gives
     \begin{align}
         A_{\sigma_{n+2}} C_{\sigma_1}
-        &=
+         & =
         A_{\sigma_{n+2}}EA_{\sigma_1}.
         \notag
     \end{align}
     Hence, by cyclicity of the trace,
     \begin{align}
         \alpha(\sigma)
-        &=
+         & =
         \tr\!\left(A_{\sigma_1}A_{\sigma_2}\cdots A_{\sigma_{n+2}}E\right),
         \notag
     \end{align}
@@ -544,9 +500,9 @@
     $\sigma=(\sigma_1,\ldots,\sigma_{n+2})$, define
     \begin{align}
         \alpha_j(\sigma)
-        &=
+         & =
         \tr\!\left(A^j_{\sigma_{n+2}} C^j_{\sigma_1}
-            A^j_{\sigma_2}\cdots A^j_{\sigma_{n+1}}\right).
+        A^j_{\sigma_2}\cdots A^j_{\sigma_{n+1}}\right).
         \notag
     \end{align}
     Then
@@ -559,10 +515,10 @@
     Fix $j$. By the assumed boundary identity and cyclicity of the trace,
     \begin{align}
         \tr\!\left(A^j_{\sigma_{n+2}} C^j_{\sigma_1}
-            A^j_{\sigma_2}\cdots A^j_{\sigma_{n+1}}\right)
-        &=
+        A^j_{\sigma_2}\cdots A^j_{\sigma_{n+1}}\right)
+         & =
         \tr\!\left(A^j_{\sigma_1}A^j_{\sigma_2}\cdots
-            A^j_{\sigma_{n+2}}E^j\right).
+        A^j_{\sigma_{n+2}}E^j\right).
         \notag
     \end{align}
     Thus $\alpha_j$ is the image of $E^j$ under the parametrization of
@@ -581,20 +537,20 @@
     $\psi\in(\C^d)^{\otimes(n+2)}$ has the left-boundary trace decomposition
     \begin{align}
         \psi
-        &=
+         & =
         \sum_j\alpha_j,
-        \notag\\
+        \notag \\
         \alpha_j(i_1,\ldots,i_{n+2})
-        &=
+         & =
         \tr\!\left(A^j_{i_{n+2}} C^j_{i_1}
-            A^j_{i_2}\cdots A^j_{i_{n+1}}\right),
+        A^j_{i_2}\cdots A^j_{i_{n+1}}\right),
         \notag
     \end{align}
     and suppose that the two trace decompositions agree for every middle word:
     \begin{align}
         \sum_j
         \tr\!\left(A^j_b C^j_a A^j_w\right)
-        &=
+         & =
         \sum_j
         \tr\!\left(D^j_b A^j_a A^j_w\right).
         \notag
@@ -610,9 +566,9 @@
     $A^j_bC^j_a = D^j_bA^j_a$
     for every $j,a,b$. By the normalization,
     \begin{align}
-        D^j_b &= D^j_b\sum_a A^j_aA^{j\,\dagger}_a = \sum_a A^j_bC^j_aA^{j\,\dagger}_a = A^j_bE^j,
-        \notag\\
-        E^j &:= \sum_a C^j_aA^{j\,\dagger}_a.
+        D^j_b & = D^j_b\sum_a A^j_aA^{j\,\dagger}_a = \sum_a A^j_bC^j_aA^{j\,\dagger}_a = A^j_bE^j,
+        \notag                                                                                      \\
+        E^j   & := \sum_a C^j_aA^{j\,\dagger}_a.
         \notag
     \end{align}
     Hence $A^j_bC^j_a=A^j_bE^jA^j_a$.
