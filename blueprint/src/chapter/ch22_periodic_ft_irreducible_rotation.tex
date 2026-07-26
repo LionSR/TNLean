@@ -55,9 +55,47 @@
     instance, the antiferromagnetic example has period~$2$.
 \end{remark}
 
-\noindent Physical-index rotation was introduced in
-Definition~\ref{def:rotate_physical} (Chapter~\ref{ch:symmetry}).
-The following compatibility theorems are proved in the present chapter.
+Physical-index rotation is the local operation used in the symmetry
+application of the periodic Fundamental Theorem.  The definition and its MPV
+expansion are recorded here because they supply the physical action used in the
+periodic analysis of~\cite{DeLasCuevas2017Irreducible}.  The conditional
+corollary below is an assembly statement for the formal periodic theorem, not a
+claim that its hypotheses have already been derived from the source.
+
+\begin{definition}[Physical-index rotation]%
+    \label{def:rotate_physical}
+    \lean{MPSTensor.rotatePhysical}
+    \leanok
+    \uses{def:mps_tensor}
+    Given a matrix $M \in \MN{d}$ and an MPS tensor~$A$,
+    the \emph{physical-index rotation} is the tensor
+    $(A_M)^i := \sum_j M_{ij}\, A^j$.
+    When the matrix is a unitary $u$, the rotation is written $A_u$.
+\end{definition}
+
+\begin{lemma}[Matrix product vector under physical rotation]
+    \label{lem:mpv_rotate_physical}
+    \lean{MPSTensor.mpv_rotatePhysical}
+    \leanok
+    \uses{def:rotate_physical, def:mpv}
+    For a length-$N$ physical configuration
+    $s=(s_0,\ldots,s_{N-1})$, physical rotation satisfies
+    \begin{align}
+        \tr((A_M)^{s_0}\cdots(A_M)^{s_{N-1}})
+        &=
+        \sum_{t\in\{0,\ldots,d-1\}^N}
+        \left(\prod_{n=0}^{N-1}M_{s_n,t_n}\right)
+        \tr(A^{t_0}\cdots A^{t_{N-1}}).
+        \label{eq:symmetry_mpv_rotation}
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    Substitute $(A_M)^{s_n}=\sum_{t_n}M_{s_n,t_n}A^{t_n}$ at each
+    site, distribute the finite sums through the ordered matrix product, and
+    use linearity of the trace to obtain
+    (\ref{eq:symmetry_mpv_rotation}).
+\end{proof}
 
 \begin{theorem}[Transfer map preserved by physical rotation]%
     \label{thm:transfer_map_rotate_physical}
@@ -181,4 +219,24 @@ The following compatibility theorems are proved in the present chapter.
     transfers via Theorem~\ref{thm:same_mpv_rotate_physical}, and
     block-diagonal compatibility follows from
     Theorem~\ref{thm:rotate_physical_blocks}.
+\end{proof}
+
+\begin{corollary}[Periodic symmetry yields gauge equivalence up to a root of unity]%
+    \label{cor:symmetry_periodic_assembly}
+    \lean{MPSTensor.zGaugeEquiv_of_isIrreducibleForm_sameMPV_rotatePhysical}
+    \leanok
+    \uses{def:rotate_physical, def:same_mpv}
+    Assume the periodic equal-case gauge theorem for tensors in irreducible
+    form~II. Let $A$ be in irreducible form~II and
+    let $M$ be a matrix such that $B := A_M$ is also in irreducible form~II and
+    $\mc{V}(A) = \mc{V}(B)$. Then there is $m > 0$ such that $A$ and~$B$ are
+    gauge equivalent up to an $m$-th root of unity.
+\end{corollary}
+
+\begin{proof}\leanok
+    Apply the assumed periodic equal-case theorem to $A$ and $B$, which are in
+    irreducible form~II and have equal MPV families.  This is the formal
+    specialization used in the symmetry application; it does not itself prove
+    the periodic Fundamental Theorem of
+    \cite{DeLasCuevas2017Irreducible}.
 \end{proof}
