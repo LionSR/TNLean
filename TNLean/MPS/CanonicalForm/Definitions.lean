@@ -24,13 +24,14 @@ operators: Renormalization fixed points and boundary theories"):
 * canonical form II (CFII), `MPSTensor.IsCPSVCanonicalFormII`, and
 * basis of normal tensors (BNT), `MPSTensor.IsCPSVBasisOfNormalTensors`.
 
-The canonical-form (CF) decomposition of arXiv:1606.00608 eq. `II_CF1` and its
-normalization paragraph (`Papers/1606.00608/MPDO-22-12-17-2.tex:237-246`) are
-recorded by `MPSTensor.CPSVCanonicalFormData` and
-`MPSTensor.IsCPSVCanonicalForm`.  This source-level predicate retains equality
-of positive-length MPV families and allows the sum of the retained block bond
-dimensions to be smaller than the original bond dimension.  It does not add
-left-canonical normalization, weight ordering, or BNT separation.
+The literal canonical-form (CF) decomposition of arXiv:1606.00608 eq. `II_CF1`
+is recorded by `MPSTensor.CPSVCanonicalFormData` and
+`MPSTensor.IsCPSVCanonicalForm`.  A coisometry embeds the retained weighted
+direct sum into the original bond space, whose remaining coordinates are zero.
+The line-246 normalization convention is the separate predicate
+`MPSTensor.CPSVCanonicalFormData.IsWeightNormalized`; it is not part of literal
+CF membership.  None of these definitions adds weight ordering or BNT
+separation.
 
 The existing canonical-form layer (`TNLean.PiAlgebra.CanonicalFormSepAux`,
 `TNLean.MPS.BNT.Construction`) contains several strengthenings of these definitions
@@ -167,41 +168,56 @@ theorem isNormalTensor_of_bondDim_one_of_transferMap_eq_id
 
 /-! ## CPSV canonical form (CF) -/
 
-/-- Witness data for the CPSV canonical form of `A`.
+/-- Witness data for the literal CPSV canonical form of `A`.
 
-This is arXiv:1606.00608, Section 2.3, lines 214--246: the positive-length MPV
-family of `A` is represented by weighted normal blocks.  Blocks that contribute
-only to the length-zero trace may be omitted, so the retained total bond
-dimension is bounded above by `D` rather than required to equal it.  The empty
-family represents the identically-zero positive-length MPV family; consequently
-the unit-modulus normalization is conditional on `0 < r`. -/
+This is arXiv:1606.00608, Section 2.3, lines 214--245 and eq. `II_CF1`.
+The retained weighted direct sum occupies a coisometrically embedded subspace
+of the original bond space.  Its orthogonal complement consists literally of
+the omitted zero coordinates. -/
 structure CPSVCanonicalFormData (A : MPSTensor d D) where
-  /-- Number of retained normal blocks. -/
+  /-- Number of retained normal blocks (CPSV16, lines 214--225). -/
   r : ℕ
-  /-- Bond dimension of each retained block. -/
+  /-- Bond dimension of each retained block (CPSV16, lines 219--225). -/
   dim : Fin r → ℕ
-  /-- Scalar weight of each retained block. -/
+  /-- Every retained block has positive bond dimension (CPSV16, lines 219--225). -/
+  dim_pos : ∀ k, 0 < dim k
+  /-- Scalar weight of each retained block (CPSV16, eq. `II_Aiplusk1`). -/
   weights : Fin r → ℂ
-  /-- Retained normal blocks. -/
+  /-- Retained normal blocks (CPSV16, eq. `II_CF1`). -/
   blocks : (k : Fin r) → MPSTensor d (dim k)
-  /-- Every retained block is normal in the sense of CPSV16, lines 233--235. -/
+  /-- Every retained block is normal (CPSV16, lines 233--245 and eq. `II_CF1`). -/
   blocks_normal : ∀ k, IsNormalTensor (blocks k)
-  /-- The weighted direct sum represents the same MPV family at every positive length. -/
-  sameMPV_pos : SameMPV₂Pos A (toTensorFromBlocks (d := d) weights blocks)
-  /-- Removing length-zero-only blocks cannot increase the total bond dimension. -/
-  bondDim_le : ∑ k : Fin r, dim k ≤ D
-  /-- CPSV16, line 246: all retained weights have modulus at most one. -/
-  weight_norm_le_one : ∀ k, ‖weights k‖ ≤ 1
-  /-- CPSV16, line 246, with the empty-family exception for the zero MPV family. -/
-  weight_unit_exists : 0 < r → ∃ k, ‖weights k‖ = 1
+  /-- The retained direct sum fits inside the original bond space (CPSV16, lines 219--225). -/
+  total_dim_le : ∑ k : Fin r, dim k ≤ D
+  /-- Coisometric inclusion implementing the zero ambient coordinates of CPSV16, lines 219--225. -/
+  ambient_coisometry : Matrix (Fin (∑ k : Fin r, dim k)) (Fin D) ℂ
+  /-- The retained coordinates embed coisometrically (CPSV16, lines 214--225). -/
+  coisometric : ambient_coisometry * ambient_coisometryᴴ = 1
+  /-- Exact eq. `II_CF1` reconstruction, including the zero coordinates of
+  CPSV16, lines 219--225. -/
+  reconstruct : ∀ i,
+    A i = ambient_coisometryᴴ * toTensorFromBlocks (d := d) weights blocks i *
+      ambient_coisometry
 
-/-- A tensor is in CPSV canonical form when it admits retained-block witness data.
+/-- A tensor is in literal CPSV canonical form when it has an exact retained-block
+reconstruction in its ambient bond space.
 
-Source: arXiv:1606.00608, Section 2.3, lines 214--246. -/
+Source: arXiv:1606.00608, Section 2.3, lines 214--245 and eq. `II_CF1`. -/
 def IsCPSVCanonicalForm (A : MPSTensor d D) : Prop :=
   Nonempty (CPSVCanonicalFormData A)
 
 namespace CPSVCanonicalFormData
+
+/-- CPSV16 line 246's weight convention, separated from literal canonical-form
+membership.  The unit weight is required exactly when the ambient tensor is
+nonzero; no retained weight is required to be nonzero.
+
+Source: arXiv:1606.00608, Section 2.3, line 246. -/
+structure IsWeightNormalized (data : CPSVCanonicalFormData A) : Prop where
+  /-- Every retained weight has modulus at most one (CPSV16, line 246). -/
+  weight_norm_le_one : ∀ k, ‖data.weights k‖ ≤ 1
+  /-- A nonzero ambient tensor has a retained unit-modulus weight (CPSV16, line 246). -/
+  weight_unit_exists : A ≠ 0 → ∃ k, ‖data.weights k‖ = 1
 
 /-- Witness data determine the corresponding CPSV canonical-form predicate. -/
 theorem isCPSVCanonicalForm (data : CPSVCanonicalFormData A) :
@@ -220,21 +236,23 @@ end IsCPSVCanonicalForm
 
 /-! ## CPSV canonical form II (CFII) -/
 
-/-- Witness data for CPSV canonical form II.
+/-- Witness data for literal CPSV canonical form II.
 
-This is arXiv:1606.00608, Appendix A, lines 1054--1077.  It uses the same
-retained-block canonical-form witness as `CPSVCanonicalFormData` and adds the
-two blockwise normalization conditions: left-canonical form and a diagonal
-positive-definite fixed point of the transfer map. -/
+This is arXiv:1606.00608, Appendix A, lines 1054--1077.  It extends the exact
+ambient reconstruction in `CPSVCanonicalFormData` by the two blockwise
+normalization conditions: left-canonical form and a diagonal positive-definite
+fixed point of the transfer map. -/
 structure CPSVCanonicalFormIIData (A : MPSTensor d D) extends CPSVCanonicalFormData A where
-  /-- Every retained block is left-canonical, as in CPSV16 Appendix A. -/
-  blocks_leftCanonical : ∀ k, IsLeftCanonical (blocks k)
-  /-- Every retained block has diagonal positive-definite Perron data fixed by its transfer map. -/
-  blocks_fixedPoint :
+  /-- Every retained block is left-canonical (CPSV16, Appendix A, eq. `TP`). -/
+  blocks_left_canonical : ∀ k, IsLeftCanonical (blocks k)
+  /-- Every block has diagonal positive-definite fixed-point data (CPSV16,
+  Appendix A, eq. `Lambda`). -/
+  blocks_fixed_point :
     ∀ k, ∃ Λ : Matrix (Fin (dim k)) (Fin (dim k)) ℂ,
       Λ.PosDef ∧ Λ.IsDiag ∧ transferMap (blocks k) Λ = Λ
 
-/-- A tensor is in CPSV canonical form II when it admits normalized retained-block data.
+/-- A tensor is in literal CPSV canonical form II when it admits exactly
+reconstructed, blockwise normalized retained-block data.
 
 Source: arXiv:1606.00608, Appendix A, lines 1054--1077. -/
 def IsCPSVCanonicalFormII (A : MPSTensor d D) : Prop :=
@@ -247,7 +265,7 @@ theorem isCPSVCanonicalFormII (data : CPSVCanonicalFormIIData A) :
     IsCPSVCanonicalFormII A :=
   ⟨data⟩
 
-/-- Forgetting the blockwise normalization leaves CPSV canonical-form data. -/
+/-- Forgetting the blockwise normalization leaves literal CPSV canonical-form data. -/
 theorem isCPSVCanonicalForm (data : CPSVCanonicalFormIIData A) :
     IsCPSVCanonicalForm A :=
   data.toCPSVCanonicalFormData.isCPSVCanonicalForm
@@ -260,7 +278,7 @@ namespace IsCPSVCanonicalFormII
 noncomputable def data (h : IsCPSVCanonicalFormII A) : CPSVCanonicalFormIIData A :=
   Classical.choice h
 
-/-- Canonical form II is, in particular, CPSV canonical form. -/
+/-- Canonical form II is, in particular, literal CPSV canonical form. -/
 theorem isCPSVCanonicalForm (h : IsCPSVCanonicalFormII A) : IsCPSVCanonicalForm A :=
   ⟨h.data.toCPSVCanonicalFormData⟩
 

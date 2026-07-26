@@ -53,25 +53,37 @@
 
 
 \begin{definition}[CPSV canonical form II]\label{def:cpsv_cfii}
+    \lean{MPSTensor.CPSVCanonicalFormIIData}
     \lean{MPSTensor.IsCPSVCanonicalFormII}
     \leanok
-    \uses{def:cpsv_canonical_form}
-    In canonical form II of \cite[Appendix~A]{Cirac2016MPDO_arXiv}, the same
-    retained normal blocks and weights as in
-    (\ref{eq:cpsv_canonical_form}) are normalized blockwise. For every retained
-    block $A_k$,
+    \uses{def:cpsv_canonical_form, def:nt_cpsv, def:block_diagonal_tensor}
+    In canonical form II of \cite[Appendix~A]{Cirac2016MPDO_arXiv}, there are
+    positive retained dimensions $D_k$, normal tensors $A_k$, weights $\mu_k$,
+    and, for $S=\sum_kD_k\le D$, a matrix $U\in\C^{S\times D}$ such that
+    \begin{align}
+        UU^\dagger
+         & =\Id_S,
+        \notag\\
+        A^i
+         & =U^\dagger\!\left(\bigoplus_k\mu_kA_k^i\right)U
+        \qquad (1\le i\le d).
+        \label{eq:cpsv_cfii_ambient}
+    \end{align}
+    Thus omitted bond-space coordinates are literally zero. Every retained
+    block additionally satisfies
     \begin{align}
         \sum_i(A_k^i)^\dagger A_k^i
-         & =\Id,
-        \notag         \\
+         & =\Id_{D_k},
+        \notag\\
         \E_{A_k}(\Lambda_k)
          & =\Lambda_k,
         \notag
     \end{align}
-    where $\Lambda_k>0$ is diagonal. Thus CFII retains the positive-length MPV
-    representation, the bond-dimension inequality, and the weight normalization
-    of canonical form; the displayed identities are its additional blockwise
-    normalization conditions.
+    where $\Lambda_k$ is diagonal and positive definite. These are exactly the
+    additional blockwise conditions: no ordering, injectivity, gauge data, or
+    basis-of-normal-tensors assumptions are included. The line-246 convention
+    (\ref{eq:cpsv_weight_normalization}) remains a separate condition on the
+    underlying canonical-form data.
 \end{definition}
 
 \begin{theorem}[Diagonal Perron normalization for an irreducible TP tensor]

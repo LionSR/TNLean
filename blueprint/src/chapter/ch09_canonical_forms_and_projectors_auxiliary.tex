@@ -319,36 +319,50 @@ the coefficient argument of Chapter~\ref{ch:bnt}.
 
 \begin{definition}[CPSV canonical form]
     \label{def:cpsv_canonical_form}
+    \lean{MPSTensor.CPSVCanonicalFormData}
     \lean{MPSTensor.IsCPSVCanonicalForm}
+    \lean{MPSTensor.CPSVCanonicalFormData.IsWeightNormalized}
     \leanok
-    \uses{def:nt_cpsv}
-    In the canonical form of \cite[Section~2.3]{Cirac2016MPDO_arXiv}, the
-    positive-length MPV family of $A$ has the following retained-block
-    representation for every $N>0$:
+    \uses{def:nt_cpsv, def:block_diagonal_tensor}
+    Let $A=(A^i)_{i=1}^d$ have bond dimension $D$. It is in the canonical
+    form of \cite[Section~2.3]{Cirac2016MPDO_arXiv} if there are positive
+    integers $D_1,\ldots,D_r$, normal tensors $A_k$ of bond dimension $D_k$,
+    weights $\mu_k\in\C$, and, writing $S=\sum_kD_k$, a matrix
+    $U\in\C^{S\times D}$ such that $S\le D$,
     \begin{align}
-        V^{(N)}(A)
-         & =V^{(N)}\!\left(\bigoplus_{k=1}^r\mu_kA_k\right).
+        UU^\dagger
+         & =\Id_S,
+        \notag\\
+        A^i
+         & =U^\dagger\!\left(\bigoplus_{k=1}^r\mu_kA_k^i\right)U
+        \qquad (1\le i\le d).
         \tag{CF}\label{eq:cpsv_canonical_form}
     \end{align}
-    where every $A_k$ is a normal tensor. If $D_k$ is the bond dimension of
-    $A_k$ and $D$ is the bond dimension of $A$, then
-    $\sum_{k=1}^r D_k\le D$. The weights satisfy $|\mu_k|\le1$; when $r>0$,
-    at least one weight has modulus one.
+    Thus the complement of the retained direct sum consists literally of zero
+    bond-space coordinates. In particular, $r=0$ is possible only when $A=0$.
 
-    \textbf{Local fix (zero-family normalization):} The source states the
-    unit-modulus convention without an exception. An identically zero
-    positive-length MPV family is represented here by the empty family, for
-    which the unit-modulus condition is vacuous. This deviation is recorded in
-    \path{docs/paper-gaps/cpsv16_cf_normalization_and_proportional_comparison.tex}.
+    The convention in line~246 of \cite{Cirac2016MPDO_arXiv} is a separate
+    normalization of these data, not part of canonical-form membership:
+    \begin{align}
+        |\mu_k|
+         & \le1\quad\text{for every }k,
+        \notag\\
+        A\ne0
+         & \Longrightarrow\exists k,\ |\mu_k|=1.
+        \label{eq:cpsv_weight_normalization}
+    \end{align}
+    No weight is required to be nonzero, and no ordering or separation condition
+    is imposed.
 
     The basis-of-normal-tensors refinement is
     Definition~\ref{def:bnt}; it is not part of canonical form itself.
 \end{definition}
 
-A sufficient criterion for (\ref{eq:cpsv_canonical_form}) is that $A$ have
-no nontrivial periodic vectors and that every orthogonal projection $P$
-satisfying $PA^i=PA^iP$ also satisfy $A^iP=PA^iP$. This criterion is proved in
-Theorem~\ref{thm:projector_closure_canonical_form}.
+The projector-closure result in
+Theorem~\ref{thm:projector_closure_canonical_form} constructs the normal blocks
+and their orthogonal ambient embeddings under the source hypotheses. It does
+not yet package those witnesses as the bundled predicate in
+Definition~\ref{def:cpsv_canonical_form}.
 
 This source definition is distinct from the stronger normal-canonical-form
 conditions below. The renormalization fixed-point analysis uses a separate
