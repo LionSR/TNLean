@@ -29,17 +29,21 @@ will reuse unchanged artifacts and rebuild files changed on the branch.
 
 ## Sort build timings
 
-Save a build log and list every job taking at least 50 seconds:
+Save a build log and list every job taking at least 25 seconds:
 
 ```bash
 lake build 2>&1 | tee /tmp/tnlean-build.log
 python3 scripts/lake_build_hotspots.py /tmp/tnlean-build.log
 ```
 
-The report is tab-separated and sorted from slowest to fastest. To make the
-same 50-second limit a local or CI gate, add `--fail-over-threshold`; use
-`--threshold` to override the limit. Timings are local diagnostic evidence,
-not benchmarks comparable across machines.
+The report is tab-separated and sorted from slowest to fastest. It exits
+unsuccessfully if any reported job takes at least 50 seconds. Use
+`--warn-threshold` and `--error-threshold` to override these limits.
+
+Pull-request CI applies the same policy only to changed Lean files: 25 seconds
+creates a warning annotation on the file, and 50 seconds fails the build job.
+Timings are local diagnostic evidence, not benchmarks comparable across
+machines.
 
 Lightweight tests do not run Lean:
 

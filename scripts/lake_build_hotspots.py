@@ -37,6 +37,20 @@ def parse_timed_jobs(log_text: str) -> list[TimedJob]:
     return sorted(jobs, key=lambda job: (-job.seconds, job.job))
 
 
+def lean_module(path: str) -> str | None:
+    """Return the Lake module name for a Lean source path."""
+    normalized = path.strip().replace("\\", "/")
+    if not normalized.endswith(".lean"):
+        return None
+    return normalized.removesuffix(".lean").replace("/", ".")
+
+
+def changed_jobs(jobs: Sequence[TimedJob], paths: Sequence[str]) -> list[TimedJob]:
+    """Keep jobs corresponding to changed Lean source files."""
+    modules = {module for path in paths if (module := lean_module(path)) is not None}
+    return [job for job in jobs if job.job in modules]
+
+
 def render_tsv(jobs: Sequence[TimedJob], threshold: float, limit: int | None) -> str:
     """Render jobs at or above threshold as a deterministic TSV report."""
     selected = [job for job in jobs if job.seconds >= threshold]
@@ -47,29 +61,76 @@ def render_tsv(jobs: Sequence[TimedJob], threshold: float, limit: int | None) ->
     return "\n".join(lines) + "\n"
 
 
+def render_github_annotations(
+    jobs: Sequence[TimedJob],
+    paths: Sequence[str],
+    warn_threshold: float,
+    error_threshold: float,
+) -> str:
+    """Render GitHub annotations for slow changed Lean modules."""
+    module_paths = {
+        module: path.strip()
+        for path in paths
+        if (module := lean_module(path)) is not None
+    }
+    lines = []
+    for job in jobs:
+        if job.seconds < warn_threshold:
+            continue
+        level = "error" if job.seconds >= error_threshold else "warning"
+        lines.append(
+            f"::{level} file={module_paths[job.job]}::"
+            f"{job.job} compiled in {job.seconds:.3f}s "
+            f"(warning at {warn_threshold:g}s, error at {error_threshold:g}s)"
+        )
+    return "\n".join(lines) + ("\n" if lines else "")
+
+
 def main(argv: Sequence[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("log", type=Path, help="Lake build log")
     parser.add_argument(
-        "--threshold",
+        "--warn-threshold",
+        type=float,
+        default=25.0,
+        help="minimum elapsed seconds to warn and report (default: 25)",
+    )
+    parser.add_argument(
+        "--error-threshold",
         type=float,
         default=50.0,
-        help="minimum elapsed seconds to report (default: 50)",
+        help="minimum elapsed seconds to fail (default: 50)",
     )
     parser.add_argument("--limit", type=int, help="maximum number of jobs to report")
     parser.add_argument(
-        "--fail-over-threshold",
-        action="store_true",
-        help="exit unsuccessfully when any job reaches the threshold",
+        "--changed-files-from",
+        type=Path,
+        help="only check Lean source paths listed in this newline-delimited file",
     )
     args = parser.parse_args(argv)
-    if args.threshold < 0:
-        parser.error("--threshold must be nonnegative")
+    if args.warn_threshold < 0:
+        parser.error("--warn-threshold must be nonnegative")
+    if args.error_threshold < args.warn_threshold:
+        parser.error("--error-threshold must be at least --warn-threshold")
     if args.limit is not None and args.limit < 1:
         parser.error("--limit must be positive")
     jobs = parse_timed_jobs(args.log.read_text(encoding="utf-8", errors="replace"))
-    print(render_tsv(jobs, args.threshold, args.limit), end="")
-    return int(args.fail_over_threshold and any(job.seconds >= args.threshold for job in jobs))
+    paths = None
+    if args.changed_files_from is not None:
+        paths = args.changed_files_from.read_text(encoding="utf-8").splitlines()
+        jobs = changed_jobs(jobs, paths)
+    print(render_tsv(jobs, args.warn_threshold, args.limit), end="")
+    if paths is not None:
+        print(
+            render_github_annotations(
+                jobs,
+                paths,
+                args.warn_threshold,
+                args.error_threshold,
+            ),
+            end="",
+        )
+    return int(any(job.seconds >= args.error_threshold for job in jobs))
 
 
 if __name__ == "__main__":

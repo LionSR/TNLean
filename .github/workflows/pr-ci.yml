@@ -22,6 +22,8 @@ on:
       - 'scripts/check_oversized_lean_files.py'
       - 'scripts/lean_import_syntax.py'
       - 'scripts/test_lean_file_policies.py'
+      - 'scripts/lake_build_hotspots.py'
+      - 'scripts/test_lake_build_hotspots.py'
       - 'docs/ci-automation.md'
       - 'docs/CONTRIBUTING.md'
       - '.github/workflows/pr-ci.yml'
@@ -78,6 +80,8 @@ on:
       - 'scripts/check_oversized_lean_files.py'
       - 'scripts/lean_import_syntax.py'
       - 'scripts/test_lean_file_policies.py'
+      - 'scripts/lake_build_hotspots.py'
+      - 'scripts/test_lake_build_hotspots.py'
       - 'docs/ci-automation.md'
       - 'docs/CONTRIBUTING.md'
       - '.github/workflows/pr-ci.yml'
@@ -166,6 +170,8 @@ jobs:
               - 'lake-manifest.json'
               - 'scripts/LintStyle.lean'
               - 'scripts/nolints-style.txt'
+              - 'scripts/lake_build_hotspots.py'
+              - 'scripts/test_lake_build_hotspots.py'
             module_policy:
               - 'scripts/check_numbered_lean_files.py'
               - 'scripts/check_oversized_lean_files.py'
@@ -320,6 +326,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
 
       - name: Restore Lean build cache
         uses: actions/cache/restore@v4
@@ -331,7 +339,29 @@ jobs:
 
       - uses: leanprover/lean-action@v1
         with:
+          build: false
           use-github-cache: false
+
+      - name: Build Lean project and capture timings
+        run: |
+          set -o pipefail
+          lake build 2>&1 | tee "$RUNNER_TEMP/lake-build.log"
+
+      - name: Check changed Lean compilation times
+        if: github.event_name == 'pull_request'
+        env:
+          BASE_REF: origin/${{ github.event.pull_request.base.ref }}
+        run: |
+          git fetch --no-tags origin \
+            "+refs/heads/${{ github.event.pull_request.base.ref }}:refs/remotes/origin/${{ github.event.pull_request.base.ref }}"
+          git diff --merge-base --name-only --diff-filter=AMR "$BASE_REF" -- '*.lean' \
+            > "$RUNNER_TEMP/changed-lean-files.txt"
+          python3 scripts/lake_build_hotspots.py \
+            "$RUNNER_TEMP/lake-build.log" \
+            --changed-files-from "$RUNNER_TEMP/changed-lean-files.txt"
+
+      - name: Test Lean compilation-time checker
+        run: python3 scripts/test_lake_build_hotspots.py
 
       - name: Run text-based style linter
         run: lake exe lint_style --github

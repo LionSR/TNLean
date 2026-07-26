@@ -52,25 +52,52 @@ class LakeBuildHotspotTests(unittest.TestCase):
         )
         self.assertEqual([job.job for job in jobs], ["TNLean.A", "TNLean.Z"])
 
-    def test_gate_fails_when_job_reaches_default_fifty_second_threshold(self) -> None:
+    def test_changed_file_gate_warns_at_twenty_five_and_fails_at_fifty(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             log = Path(directory) / "lake.log"
+            changed = Path(directory) / "changed.txt"
             log.write_text(
-                "Built TNLean.Acceptable (49.9s)\nBuilt TNLean.TooSlow (50s)\n",
+                "\n".join(
+                    [
+                        "Built TNLean.Unchanged (80s)",
+                        "Built TNLean.Warning (25s)",
+                        "Built TNLean.TooSlow (50s)",
+                    ]
+                ),
+                encoding="utf-8",
+            )
+            changed.write_text(
+                "TNLean/Warning.lean\nTNLean/TooSlow.lean\nREADME.md\n",
                 encoding="utf-8",
             )
             output = io.StringIO()
             with contextlib.redirect_stdout(output):
-                status = hotspots.main([str(log), "--fail-over-threshold"])
+                status = hotspots.main([str(log), "--changed-files-from", str(changed)])
         self.assertEqual(status, 1)
-        self.assertEqual(output.getvalue(), "seconds\tjob\n50.000\tTNLean.TooSlow\n")
+        self.assertEqual(
+            output.getvalue(),
+            "\n".join(
+                [
+                    "seconds\tjob",
+                    "50.000\tTNLean.TooSlow",
+                    "25.000\tTNLean.Warning",
+                    "::error file=TNLean/TooSlow.lean::TNLean.TooSlow compiled in 50.000s "
+                    "(warning at 25s, error at 50s)",
+                    "::warning file=TNLean/Warning.lean::TNLean.Warning compiled in 25.000s "
+                    "(warning at 25s, error at 50s)",
+                    "",
+                ]
+            ),
+        )
 
-    def test_gate_passes_when_all_jobs_are_below_threshold(self) -> None:
+    def test_changed_file_gate_ignores_unmodified_slow_modules(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             log = Path(directory) / "lake.log"
-            log.write_text("Built TNLean.Acceptable (49.9s)\n", encoding="utf-8")
+            changed = Path(directory) / "changed.txt"
+            log.write_text("Built TNLean.Unchanged (80s)\n", encoding="utf-8")
+            changed.write_text("TNLean/Changed.lean\n", encoding="utf-8")
             with contextlib.redirect_stdout(io.StringIO()):
-                status = hotspots.main([str(log), "--fail-over-threshold"])
+                status = hotspots.main([str(log), "--changed-files-from", str(changed)])
         self.assertEqual(status, 0)
 
 
