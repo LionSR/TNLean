@@ -12,6 +12,7 @@ import TNLean.MPS.RFP.AppendixBChainCommutation
 import TNLean.MPS.RFP.AppendixBCommutation
 import TNLean.MPS.RFP.AppendixBSupport
 import TNLean.MPS.RFP.Assembly
+import TNLean.MPS.RFP.BNTDirectSumBasis
 import TNLean.MPS.RFP.BNTOrthogonality
 import TNLean.MPS.RFP.BNTWeightCounterexample
 import TNLean.MPS.RFP.BeigiEventuallyConstantSectorGraph
@@ -41,4 +42,5 @@ import TNLean.MPS.RFP.ResidualIsometry
 import TNLean.MPS.RFP.ResidualWordSpan
 import TNLean.MPS.RFP.StructuralForm
 import TNLean.MPS.RFP.StructuralFull
+import TNLean.MPS.RFP.ZCLReverse
 import TNLean.MPS.RFP.ZeroCorrelationLength
