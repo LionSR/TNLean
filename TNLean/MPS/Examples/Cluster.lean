@@ -358,13 +358,19 @@ private def clusterGaugeZ : GL (Fin 2) ℂ :=
     (clusterGaugeZ : Matrix (Fin 2) (Fin 2) ℂ) = !![1, 0; 0, -1] :=
   Matrix.GeneralLinearGroup.val_mkOfDetNeZero _ _
 
+private lemma clusterGaugeZ_sq :
+    (!![(1 : ℂ), 0; 0, -1] : Matrix (Fin 2) (Fin 2) ℂ) *
+        !![(1 : ℂ), 0; 0, -1] = 1 := by
+  ext i j
+  fin_cases i <;> fin_cases j <;>
+    simp [Matrix.mul_apply, Fin.sum_univ_two]
+
 private lemma clusterGaugeZ_inv_val :
     ((clusterGaugeZ⁻¹ : GL (Fin 2) ℂ) : Matrix (Fin 2) (Fin 2) ℂ) = !![1, 0; 0, -1] := by
   have hsq : clusterGaugeZ * clusterGaugeZ = 1 := by
     apply Units.ext
     simp only [Units.val_mul, Units.val_one, clusterGaugeZ_val]
-    ext i j; fin_cases i <;> fin_cases j <;>
-      simp [Matrix.mul_apply, Fin.sum_univ_two]
+    exact clusterGaugeZ_sq
   rw [show clusterGaugeZ⁻¹ = clusterGaugeZ from inv_eq_of_mul_eq_one_right hsq,
     clusterGaugeZ_val]
 
@@ -412,6 +418,10 @@ lemma cluster_gauge_anticomm :
     (!![(1 : ℂ), 0; 0, -1]) * pauliX = -(pauliX * !![(1 : ℂ), 0; 0, -1]) := by
   ext i j; fin_cases i <;> fin_cases j <;>
     simp [pauliX, Matrix.mul_apply, Fin.sum_univ_two, Matrix.neg_apply, Matrix.of_apply]
+
+private lemma cluster_gauge_anticomm' :
+    pauliX * !![(1 : ℂ), 0; 0, -1] = -(!![(1 : ℂ), 0; 0, -1] * pauliX) := by
+  simpa using (congrArg Neg.neg cluster_gauge_anticomm).symm
 
 /-! #### Gauge equivalences for the three nontrivial group elements -/
 
@@ -505,22 +515,20 @@ open TNLean.Algebra in
 def clusterProjRep : ProjectiveRepresentation (D := 2) clusterOmega where
   X := clusterRepX
   map_mul' g h := by
-    have hX : pauliX = !![(0 : ℂ), 1; 1, 0] := by
-      ext a b; fin_cases a <;> fin_cases b <;> simp [pauliX, Matrix.of_apply]
-    rcases zmod2sq_cases g with rfl | rfl | rfl | rfl <;>
-      rcases zmod2sq_cases h with rfl | rfl | rfl | rfl <;>
-      rw [clusterOmega_apply_val] <;>
-      simp only [clusterRepX, ← ofAdd_add, Prod.mk_add_mk, toAdd_ofAdd, toAdd_one,
-        Units.val_mul, Units.val_one, clusterGaugeZ_val, clusterGaugeX_val, hX,
-        show (1 : ZMod 2) + 1 = 0 from by decide, show (0 : ZMod 2) + 1 = 1 from by decide,
-        show (1 : ZMod 2) + 0 = 1 from by decide, show (0 : ZMod 2) + 0 = 0 from by decide,
-        one_ne_zero, ↓reduceIte, and_self, and_true, true_and,
-        mul_one, one_mul] <;>
-      (ext a b; fin_cases a <;> fin_cases b <;>
-        simp only [Matrix.mul_apply, Fin.sum_univ_two, Matrix.smul_apply, Matrix.one_apply,
-          smul_eq_mul, Matrix.of_apply, Matrix.cons_val', Matrix.cons_val_zero,
-          Matrix.cons_val_one, Matrix.empty_val', Matrix.cons_val_fin_one,
-          Fin.mk_zero] <;> norm_num)
+    rw [clusterOmega_apply_val]
+    have hZ (p : Prop) [Decidable p] :
+        ((if p then 1 else clusterGaugeZ : GL (Fin 2) ℂ) :
+          Matrix (Fin 2) (Fin 2) ℂ) =
+          if p then 1 else !![(1 : ℂ), 0; 0, -1] := by
+      split <;> simp
+    have hX (p : Prop) [Decidable p] :
+        ((if p then 1 else clusterGaugeX : GL (Fin 2) ℂ) :
+          Matrix (Fin 2) (Fin 2) ℂ) =
+          if p then 1 else pauliX := by
+      split <;> simp
+    simp only [clusterRepX, Units.val_mul, hZ, hX]
+    exact mul_of_anticommuting_involutions _ _ clusterGaugeZ_sq pauliX_sq
+      cluster_gauge_anticomm' g h
 
 open TNLean.Algebra in
 /-- `clusterOmega` is a genuine `2`-cocycle: it is the factor system of the
