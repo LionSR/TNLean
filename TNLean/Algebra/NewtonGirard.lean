@@ -185,7 +185,6 @@ private lemma T_trace_recursion (M : Matrix n n R) (l : ℕ) :
       (M.map C) ^ l * Adj - (X : R[X]) • ((M.map C) ^ l * Adj * M.map C) := by
     have hFF : F = (1 : Matrix n n R[X]) - (X : R[X]) • M.map C := rfl
     rw [hFF, Matrix.mul_sub, Matrix.mul_one]
-    congr 1
     rw [mul_smul_comm]
   have h_lhs : Matrix.trace ((M.map C) ^ l * Adj * F) =
       Matrix.trace ((M.map C) ^ l * Adj) -
