@@ -59,14 +59,14 @@
     \uses{def:cpsv_canonical_form, def:nt_cpsv, def:block_diagonal_tensor}
     In canonical form II of \cite[Appendix~A]{Cirac2016MPDO_arXiv}, there are
     positive retained dimensions $D_k$, normal tensors $A_k$, weights $\mu_k$,
-    and, for $S=\sum_kD_k\le D$, a matrix $U\in\C^{S\times D}$ such that
+    and, for $S=\sum_kD_k\le D$, a matrix $U\in\C^{S\times D}$ such
+    that, for every physical index~$i$,
     \begin{align}
         UU^\dagger
          & =\Id_S,
         \notag\\
         A^i
-         & =U^\dagger\!\left(\bigoplus_k\mu_kA_k^i\right)U
-        \qquad (1\le i\le d).
+         & =U^\dagger\!\left(\bigoplus_k\mu_kA_k^i\right)U.
         \label{eq:cpsv_cfii_ambient}
     \end{align}
     Thus omitted bond-space coordinates are literally zero. Every retained

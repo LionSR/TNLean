@@ -324,18 +324,17 @@ the coefficient argument of Chapter~\ref{ch:bnt}.
     \lean{MPSTensor.CPSVCanonicalFormData.IsWeightNormalized}
     \leanok
     \uses{def:nt_cpsv, def:block_diagonal_tensor}
-    Let $A=(A^i)_{i=1}^d$ have bond dimension $D$. It is in the canonical
+    Let $A$ have bond dimension $D$. It is in the canonical
     form of \cite[Section~2.3]{Cirac2016MPDO_arXiv} if there are positive
     integers $D_1,\ldots,D_r$, normal tensors $A_k$ of bond dimension $D_k$,
     weights $\mu_k\in\C$, and, writing $S=\sum_kD_k$, a matrix
-    $U\in\C^{S\times D}$ such that $S\le D$,
+    $U\in\C^{S\times D}$ such that $S\le D$ and, for every physical index~$i$,
     \begin{align}
         UU^\dagger
          & =\Id_S,
         \notag\\
         A^i
-         & =U^\dagger\!\left(\bigoplus_{k=1}^r\mu_kA_k^i\right)U
-        \qquad (1\le i\le d).
+         & =U^\dagger\!\left(\bigoplus_{k=1}^r\mu_kA_k^i\right)U.
         \tag{CF}\label{eq:cpsv_canonical_form}
     \end{align}
     Thus the complement of the retained direct sum consists literally of zero
