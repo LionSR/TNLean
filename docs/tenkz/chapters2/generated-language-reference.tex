@@ -95,6 +95,7 @@ picture & \texttt{east} & side-\allowbreak{}policy & inherit & East \allowbreak{
 picture & \texttt{north} & side-\allowbreak{}policy & inherit & North \allowbreak{}boundary \allowbreak{}policy. \\
 picture & \texttt{south} & side-\allowbreak{}policy & inherit & South \allowbreak{}boundary \allowbreak{}policy. \\
 picture & \texttt{frame} & frame-\allowbreak{}spec & flat & Picture \allowbreak{}coordinate \allowbreak{}frame. \\
+group & \texttt{frame} & frame-\allowbreak{}spec & flat & Group-\allowbreak{}local \allowbreak{}coordinate \allowbreak{}frame. \\
 picture & \texttt{trace \allowbreak{}style} & enum(\allowbreak{}racetrack\textbar{}\allowbreak{}hooks) & racetrack & Closure \allowbreak{}rendering \allowbreak{}policy. \\
 picture & \texttt{trace} & trace-\allowbreak{}spec & empty & Closed \allowbreak{}interface \allowbreak{}segments \allowbreak{}or \allowbreak{}physical \allowbreak{}trace. \\
 picture & \texttt{open} & cell-\allowbreak{}set & empty & Open \allowbreak{}interface \allowbreak{}segments. \\
@@ -140,9 +141,10 @@ object & \texttt{physical} & physical-\allowbreak{}policy & empty & Cell \allowb
 object & \texttt{role} & semantic-\allowbreak{}role & empty & Semantic \allowbreak{}theme \allowbreak{}role. \\
 object & \texttt{species} & declared-\allowbreak{}name & empty & Semantic \allowbreak{}species. \\
 object & \texttt{label} & math & empty & Lattice-\allowbreak{}site \allowbreak{}label. \\
-object & \texttt{label \allowbreak{}pos} & compass & auto & Object \allowbreak{}label \allowbreak{}policy. \\
+object & \texttt{label \allowbreak{}pos} & angle & auto & Object \allowbreak{}label \allowbreak{}policy. \\
 object & \texttt{label \allowbreak{}shift} & dimension-\allowbreak{}pair & zero & Object \allowbreak{}label \allowbreak{}adjustment. \\
 object & \texttt{ports} & typed-\allowbreak{}port-\allowbreak{}list & empty & Free-\allowbreak{}atom \allowbreak{}typed \allowbreak{}ports. \\
+object & \texttt{frame} & frame-\allowbreak{}spec & flat & Atom-\allowbreak{}local \allowbreak{}coordinate \allowbreak{}frame. \\
 object & \texttt{no \allowbreak{}legs} & flag & false & Suppress \allowbreak{}physical \allowbreak{}ports. \\
 object & \texttt{removed} & flag & false & Remove \allowbreak{}a \allowbreak{}lattice \allowbreak{}atom. \\
 object & \texttt{tree \allowbreak{}style} & enum(\allowbreak{}wire\textbar{}\allowbreak{}ribbon) & wire & Fusion-\allowbreak{}tree \allowbreak{}strand \allowbreak{}style. \\
@@ -164,13 +166,13 @@ region & \texttt{slot} & semantic-\allowbreak{}slot & selected & Region \allowbr
 region & \texttt{outline} & flag & false & Outline-\allowbreak{}only \allowbreak{}region. \\
 region & \texttt{inset} & number & 0 & Nested-\allowbreak{}region \allowbreak{}inset. \\
 region & \texttt{label} & math & empty & Region \allowbreak{}label. \\
-region & \texttt{label \allowbreak{}pos} & compass & auto & Region \allowbreak{}label \allowbreak{}policy. \\
+region & \texttt{label \allowbreak{}pos} & angle & auto & Region \allowbreak{}label \allowbreak{}policy. \\
 region & \texttt{name} & identifier & generated & Addressable \allowbreak{}region \allowbreak{}name. \\
 region & \texttt{group} & name-\allowbreak{}list & empty & Free-\allowbreak{}graph \allowbreak{}region \allowbreak{}members. \\
 annotation & \texttt{brace \allowbreak{}above} & flag & false & Brace \allowbreak{}annotation \allowbreak{}above \allowbreak{}a \allowbreak{}span. \\
 annotation & \texttt{brace \allowbreak{}below} & flag & false & Brace \allowbreak{}annotation \allowbreak{}below \allowbreak{}a \allowbreak{}span. \\
 annotation & \texttt{box} & flag & false & Boxed \allowbreak{}span \allowbreak{}annotation. \\
-annotation & \texttt{label \allowbreak{}pos} & compass & auto & Span-\allowbreak{}label \allowbreak{}position. \\
+annotation & \texttt{label \allowbreak{}pos} & angle & auto & Span-\allowbreak{}label \allowbreak{}position. \\
 atom-\allowbreak{}declaration & \texttt{skin} & silhouette-\allowbreak{}name & dot & Declared \allowbreak{}atom \allowbreak{}silhouette. \\
 atom-\allowbreak{}declaration & \texttt{ports} & typed-\allowbreak{}port-\allowbreak{}list & empty & Declared \allowbreak{}atom \allowbreak{}ports. \\
 kernel-\allowbreak{}picture & \texttt{rows} & row-\allowbreak{}list & {wire} & Chain \allowbreak{}row \allowbreak{}topology; \allowbreak{}non-\allowbreak{}wire \allowbreak{}rows \allowbreak{}populate. \\
@@ -201,7 +203,7 @@ kernel-\allowbreak{}atom & \texttt{ports} & typed-\allowbreak{}port-\allowbreak{
 kernel-\allowbreak{}atom & \texttt{up} & math-\allowbreak{}list & empty & Outward \allowbreak{}physical \allowbreak{}labels,\allowbreak{} \allowbreak{}page-\allowbreak{}up. \\
 kernel-\allowbreak{}atom & \texttt{down} & math-\allowbreak{}list & empty & Outward \allowbreak{}physical \allowbreak{}labels,\allowbreak{} \allowbreak{}page-\allowbreak{}down. \\
 kernel-\allowbreak{}atom & \texttt{species} & declared-\allowbreak{}name & empty & Semantic \allowbreak{}species. \\
-kernel-\allowbreak{}atom & \texttt{label~pos} & compass & auto & Label \allowbreak{}quadrant. \\
+kernel-\allowbreak{}atom & \texttt{label~pos} & angle & auto & Label \allowbreak{}quadrant. \\
 kernel-\allowbreak{}atom & \texttt{nudge} & pair & zero & Quarter-\allowbreak{}pitch \allowbreak{}displacement. \\
 kernel-\allowbreak{}atom & \texttt{void} & void-\allowbreak{}policy & unset & Hole \allowbreak{}or \allowbreak{}removed \allowbreak{}site. \\
 kernel-\allowbreak{}atom & \texttt{conjugate} & flag & false & Conjugate \allowbreak{}glyph \allowbreak{}orientation. \\
@@ -216,13 +218,14 @@ kernel-\allowbreak{}wire & \texttt{species} & declared-\allowbreak{}name & empty
 kernel-\allowbreak{}wire & \texttt{wind} & pair & zero & Homotopy \allowbreak{}class \allowbreak{}on \allowbreak{}traced \allowbreak{}frames. \\
 kernel-\allowbreak{}wire & \texttt{around} & address-\allowbreak{}list & empty & Silhouette \allowbreak{}detour \allowbreak{}targets. \\
 kernel-\allowbreak{}wire & \texttt{cross} & crossing-\allowbreak{}list & empty & Declared \allowbreak{}over \allowbreak{}and \allowbreak{}under \allowbreak{}crossings. \\
+kernel-\allowbreak{}wire & \texttt{crossing} & enum(\allowbreak{}over\textbar{}\allowbreak{}under\textbar{}\allowbreak{}alternate\textbar{}\allowbreak{}alternate=over\textbar{}\allowbreak{}alternate=under) & empty & Default \allowbreak{}crossing \allowbreak{}order \allowbreak{}at \allowbreak{}every \allowbreak{}crossing \allowbreak{}the \allowbreak{}string \allowbreak{}makes. \\
 kernel-\allowbreak{}wire & \texttt{dir} & direction-\allowbreak{}policy & none & Direction \allowbreak{}mark \allowbreak{}of \allowbreak{}a \allowbreak{}directed \allowbreak{}index. \\
 kernel-\allowbreak{}wire & \texttt{name} & identifier & generated & Addressable \allowbreak{}name. \\
 kernel-\allowbreak{}wire & \texttt{closed} & flag & false & A \allowbreak{}smooth \allowbreak{}closed \allowbreak{}cycle; \allowbreak{}takes \allowbreak{}no \allowbreak{}ends. \\
 kernel-\allowbreak{}mark & \texttt{form} & enum(\allowbreak{}brace-\allowbreak{}above\textbar{}\allowbreak{}brace-\allowbreak{}below\textbar{}\allowbreak{}enclosure\textbar{}\allowbreak{}cut\textbar{}\allowbreak{}band\textbar{}\allowbreak{}label\textbar{}\allowbreak{}prose) & label & Mark \allowbreak{}form. \\
 kernel-\allowbreak{}mark & \texttt{slot} & semantic-\allowbreak{}slot & selected & Semantic \allowbreak{}tint. \\
 kernel-\allowbreak{}mark & \texttt{inset} & number & 0 & Nested-\allowbreak{}contour \allowbreak{}step. \\
-kernel-\allowbreak{}mark & \texttt{label~pos} & compass & auto & Label \allowbreak{}quadrant. \\
+kernel-\allowbreak{}mark & \texttt{label~pos} & angle & auto & Label \allowbreak{}quadrant. \\
 kernel-\allowbreak{}mark & \texttt{nudge} & pair & zero & Quarter-\allowbreak{}pitch \allowbreak{}displacement. \\
 kernel-\allowbreak{}mark & \texttt{name} & identifier & generated & Addressable \allowbreak{}name. \\
 kernel-\allowbreak{}mark & \texttt{outline} & flag & false & Contour \allowbreak{}without \allowbreak{}tint. \\

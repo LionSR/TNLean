@@ -21,14 +21,14 @@
     % black fusion bar splitting g -> k_y h (top), k_x^{-1} (mid)
     \tnput[box]{W}{(0mm,2mm)}{}
     % gray action bars, staircase
-    \tnput[box]{Va}{(10mm,-4mm)}{}
-    \tnput[box]{Vb}{(17mm,-1mm)}{}
+    \tnput[box]{Va}{(13mm,-6mm)}{}
+    \tnput[box]{Vb}{(23mm,-1mm)}{}
     \tnjoin[label=g]{-6mm,2mm}{W.west}
     % k_y h leaves over the top; k_y S-curves down to the next picture
     \tnjoin[label={k_yh}]{W.north east}{20mm,6mm}
     \tnjoin[route=curve, out=0, in=180, label={k_y}]{20mm,6mm}{30mm,3mm}
     \tnjoin[label={k_x^{\text{-}1}}]{W.south east}{Va.north west}
-    \tnjoin[label={x}]{0mm,-7mm}{Va.south west}
+    \tnjoin[label={x}]{0mm,-10mm}{Va.south west}
     \tnjoin[label={x_0}]{Va.east}{Vb.south west}
     \tnjoin[label={h}]{6mm,1mm}{Vb.north west}
     \tnjoin[label={x_0}]{Vb.east}{30mm,-1mm}

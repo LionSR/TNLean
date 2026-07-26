@@ -66,11 +66,14 @@
 % \tnput[<glyph keys>]{<name>}{<coordinate>}{<label>}
 %   glyph keys: dot|box|pill|mpo|ring|boundary (skin),
 %   ports={e:virtual, ph:physical, ...},
-%   label pos=north|south|east|west (dot skin only)
+%   label pos=<compass bearing, cardinal or diagonal> (dot skin only)
 \tl_new:N \l__tenkz_fshape_tl    % \tnput skin word (free-owned: the tiers
                                  % share only L0/L1, never each other's locals)
 \tl_new:N \l__tenkz_fports_tl
 \tl_new:N \l__tenkz_flpos_tl
+\tl_new:N \l__tenkz_flanchor_tl % the label anchor, reversed from the bearing
+\dim_new:N \l__tenkz_fldx_dim   % the outward step along that bearing
+\dim_new:N \l__tenkz_fldy_dim
 \tl_new:N \l__tenkz_frole_tl     % \tnput role word (empty = none)
 \tl_new:N \l__tenkz_fspec_tl     % \tnput species name (empty = none)
 \tl_new:N \l__tenkz_fangle_tl    % atom-local frame rotation in degrees
@@ -137,23 +140,28 @@
           \bool_set_false:N \l__tenkz_fkeys_valid_bool
           \msg_error:nnn { tenkz } { unknown-species } {#1}
         }},
-  % label pos = north|south|east|west: which side of a BEAD carries its
-  % external label (default south, the historical band).  A vertical or
-  % rotated chain sends a wire through the south band at every dot
-  % (plane_sweep3 panel 2a: the rotated transfer matrix E), so the free
-  % tier must let the label yield the busy side -- one clearance band
-  % (\tenkz@r@labelclear) beyond the named compass point, label anchored
-  % opposite.  Box/pill/mpo/ring skins inscribe their labels and ignore it.
-  /tenkz/put/label~pos/.is~choice,
-  /tenkz/put/label~pos/north/.code={\tl_set:Nn \l__tenkz_flpos_tl {north}},
-  /tenkz/put/label~pos/south/.code={\tl_set:Nn \l__tenkz_flpos_tl {south}},
-  /tenkz/put/label~pos/east/.code ={\tl_set:Nn \l__tenkz_flpos_tl {east}},
-  /tenkz/put/label~pos/west/.code ={\tl_set:Nn \l__tenkz_flpos_tl {west}},
-  /tenkz/put/label~pos/.unknown/.code={
-      \bool_set_false:N \l__tenkz_fkeys_valid_bool
-      \PackageError{tenkz}
-        {Choice~'\pgfkeys@was@choice'~unknown~in~put~label~pos}
-        {Use~north,~south,~east,~or~west.}},
+  % label pos = a compass bearing: which way a BEAD hangs its external
+  % label (default south, the historical band).  A vertical or rotated
+  % chain sends a wire through the south band at every dot (plane_sweep3
+  % panel 2a: the rotated transfer matrix E), so the free tier must let
+  % the label yield the busy side.  A crossing sends wires through the
+  % four cardinal bands at once, and only a diagonal is left: the eight
+  % bearings are the alphabet, not the four.  The step is one clearance
+  % band (\tenkz@r@labelclear) along the bearing and the anchor is the
+  % bearing reversed, both read from the one bearing table in the core.
+  % Box/pill/mpo/ring skins inscribe their labels and ignore it.
+  /tenkz/put/label~pos/.code={
+      \tenkz_label_bearing:nnNNNTF {#1}
+        {\tenkz@dim{\tenkz@r@labelclear}}
+        \l__tenkz_flanchor_tl \l__tenkz_fldx_dim \l__tenkz_fldy_dim
+        { \tl_set:Nn \l__tenkz_flpos_tl {#1} }
+        {
+          \bool_set_false:N \l__tenkz_fkeys_valid_bool
+          \PackageError{tenkz}
+            {Choice~'#1'~unknown~in~put~label~pos}
+            {Use~north,~south,~east,~west~or~one~of~the~four~diagonals~
+             (`north~east'~and~its~three~partners).}
+        }},
 }
 \pgfkeysdef{/tenkz/put/.unknown}
   {
@@ -162,27 +170,23 @@
       {Check~the~\token_to_str:N \tnput~option~spelling.}
   }
 
-% the dot label at compass side #1: label node one clearance band beyond
-% the bead's #1 anchor, anchored on the opposite side so the text extends
-% outward; #2 the bead's node name, #3 the label tokens.  `south` emits
-% exactly the historical band (the pre-key path), so default renders are
-% unchanged.
+% the dot label at bearing #1: the label node stands one clearance band
+% out from the bead's own boundary point in that direction, anchored on
+% the reversed bearing so the text extends outward; #2 the bead's node
+% name, #3 the label tokens.  Boundary point, step and anchor all come
+% from the one bearing, so a diagonal needs no case of its own.
 \cs_new_protected:Npn \tenkz_free_dot_label:nnn #1#2#3
   {
-    \str_case:nn {#1}
+    \tenkz_label_bearing:nnNNNT {#1} {\tenkz@dim{\tenkz@r@labelclear}}
+      \l__tenkz_flanchor_tl \l__tenkz_fldx_dim \l__tenkz_fldy_dim
       {
-        {south} { \__tenkz_render_labelnode:nnn {tn~label, anchor=north}
-                    {($(#2.south)-(0,\tenkz@dim{\tenkz@r@labelclear})$)}
-                    { $\tenkz@labelsize #3$ } }
-        {north} { \__tenkz_render_labelnode:nnn {tn~label, anchor=south}
-                    {($(#2.north)+(0,\tenkz@dim{\tenkz@r@labelclear})$)}
-                    { $\tenkz@labelsize #3$ } }
-        {east}  { \__tenkz_render_labelnode:nnn {tn~label, anchor=west}
-                    {($(#2.east)+(\tenkz@dim{\tenkz@r@labelclear},0)$)}
-                    { $\tenkz@labelsize #3$ } }
-        {west}  { \__tenkz_render_labelnode:nnn {tn~label, anchor=east}
-                    {($(#2.west)-(\tenkz@dim{\tenkz@r@labelclear},0)$)}
-                    { $\tenkz@labelsize #3$ } }
+        \__tenkz_render_labelnode:nnn
+          { tn~label, anchor=\l__tenkz_flanchor_tl }
+          {
+            ($(#2.#1)+(\dim_use:N \l__tenkz_fldx_dim,
+                       \dim_use:N \l__tenkz_fldy_dim)$)
+          }
+          { $\tenkz@labelsize #3$ }
       }
   }
 

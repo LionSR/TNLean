@@ -809,3 +809,25 @@ two at each scope, which is short of tenure and so still flagged.
 | flag:consumers:command:tngroup | keep-because: the command carrying that transform, flagged for consumers for the first time now that two panels use it; its shape was already affirmed permanent against the sugar detector, and its tenure follows the same 0.8 close as the two keys above |
 
 No ledger row changes and no other flag verdict is re-examined here.
+
+### 2026-07-26 — the case sweep raises the two demand meters again
+
+M3 rises from 312 to 326 and M4 from 14.70 to 14.88, for the same reasons the
+entry above records and against the same verdict.
+
+The section-IV windows and the workbench relations redrawn in this change hand-
+route the strings that leave a site, travel around something, and return. The
+kernel says that in one word and the corpus cannot speak the kernel, so each
+such string is spelt with the two tombstoned keys and each spelling is counted
+here. The rise is the surface swap's absence, priced again.
+
+The fidelity meter rises because these panels gained the indices their sources
+assert. A figure that stops drawing less than its source gains lines, and this
+meter exists to catch the opposite trade.
+
+One further note for whoever lands last: three redraw branches now move these
+two meters independently, and none of the three counted the others. The union
+needs one recomputation on the final tree, and the number recorded here is
+correct for this branch alone.
+
+Census-correction: #4709
