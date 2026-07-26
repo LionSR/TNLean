@@ -153,16 +153,30 @@ family.
         \notag
     \end{align}
     or equivalently
-    $\Gamma_S^{A^k}(X)=\Gamma_S^{A^j}(-Y)$. Via the injective boundary maps,
-    this is the canonical identification
+    $\Gamma_S^{A^k}(X)=\Gamma_S^{A^j}(-Y)$. There is therefore a linear map
+    \begin{align}
+        \Theta:\operatorname{im}(\Phi_{kj})^\perp
+         & \longrightarrow
+        \mathcal G_S(A^k)\cap\mathcal G_S(A^j),
+         &
+        \Theta(X,Y)
+         & =\Gamma_S^{A^k}(X)=\Gamma_S^{A^j}(-Y).
+        \notag
+    \end{align}
+    It is injective because both boundary maps are injective. Conversely, if
+    $\psi$ lies in the intersection, there are unique $X$ and $Z$ with
+    $\Gamma_S^{A^k}(X)=\psi=\Gamma_S^{A^j}(Z)$; the pair $(X,-Z)$ annihilates
+    $\operatorname{im}(\Phi_{kj})$ and maps to $\psi$. This construction is
+    the inverse of $\Theta$, so the two spaces are isomorphic:
     \begin{align}
         \operatorname{im}(\Phi_{kj})^\perp
-         & =\mathcal G_S(A^k)\cap\mathcal G_S(A^j).
+         & \cong\mathcal G_S(A^k)\cap\mathcal G_S(A^j).
         \label{eq:app_bnt_pair_map_annihilator}
     \end{align}
     The right-hand side vanishes by
-    \ref{eq:app_bnt_three_block_intersection_zero}. The trace pairing is
-    nondegenerate and all spaces are finite-dimensional, so
+    \ref{eq:app_bnt_three_block_intersection_zero}, and hence so does the
+    annihilator. The trace pairing is nondegenerate and all spaces are
+    finite-dimensional, so
     $\operatorname{im}(\Phi_{kj})^\perp=\{0\}$ implies that $\Phi_{kj}$ is
     surjective. Surjectivity first gives an arbitrary value on one block and
     zero on an anchor block; the selector construction then chooses
