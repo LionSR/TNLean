@@ -1,0 +1,30 @@
+% Regression: an all-side route gives each crossed leg the lane of the face
+% that leg leaves, even when the measured hull is asymmetric.
+\documentclass{standalone}
+\usepackage{tenkz}
+\makeatletter
+\ExplSyntaxOn
+\file_input:n { tenkz-kernel.code.tex }
+\ExplSyntaxOff
+\makeatother
+\begin{document}
+\tenkzkernel
+\ExplSyntaxOn
+\prop_clear:N \l__tenkz_kernel_ro_legs_prop
+\fp_set:Nn \l__tenkz_kernel_ro_y_fp {-1}
+\fp_set:Nn \l__tenkz_kernel_ro_yb_fp {4}
+\tl_set:Nn \l__tenkz_kernel_ro_lane_tl {4}
+\tl_set:Nn \l__tenkz_kernel_ro_tau_tl {0}
+\__tenkz_kernel_r_route_leg:nn {{n}{1}{1}} {wire-1}
+\__tenkz_kernel_r_route_leg:nn {{s}{2}{1}} {wire-1}
+\prop_get:NnN \l__tenkz_kernel_ro_legs_prop
+  {leg-n-1-1} \l_tmpa_tl
+\tl_if_eq:NnF \l_tmpa_tl {{{4}{0}}}
+  { \errmessage{the north leg did not receive the north lane} }
+\prop_get:NnN \l__tenkz_kernel_ro_legs_prop
+  {leg-s-2-1} \l_tmpa_tl
+\tl_if_eq:NnF \l_tmpa_tl {{{-1}{0}}}
+  { \errmessage{the south leg received the north lane} }
+\ExplSyntaxOff
+\mbox{parsed}
+\end{document}

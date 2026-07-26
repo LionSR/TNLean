@@ -512,7 +512,7 @@ grep -Fq 'check|relation=3|result=off|reason=third' \
   echo "FAIL: the later equation opt-out was silently dropped" >&2
   exit 1
 }
-echo "PASS: forty-five review regressions hold"
+echo "PASS: forty-seven review regressions hold"
 
 fail=0
 for pair in s1 s2 s3 s4 s5 s6 s7 s8; do
