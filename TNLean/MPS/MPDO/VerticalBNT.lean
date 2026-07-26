@@ -28,10 +28,8 @@ and deduces that the grouped coefficient is positive.  The positive-diagonal
 isometry asserted at lines 1895--1896 and the gauge normalization and final
 coisometry argument at lines 1903--1921 are not included.
 
-The formal grouping starts from normalized BNT-refined horizontal form, which
-is stronger than the literal CPSV canonical form.  The missing active-refinement
-and coisometry transport are recorded in
-`docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex`.
+The grouping assumes normalized BNT-refined horizontal form, which is stronger
+than the literal CPSV canonical form.
 
 ## Main statement
 

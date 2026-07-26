@@ -627,16 +627,12 @@ $Q\widetilde M\ne Q\widetilde MQ$ — fails to commute with the density
 operator $H^{(N)}$ at every length.
 
 This is the horizontal-canonical-form step of the periodic-sector argument.
-The source assumes the tensor is in literal canonical form in the horizontal
-direction.  The available formal Lemma L in
-`TNLean/MPS/MPDO/HorizontalBNT.lean` instead assumes normalized BNT-refined
-horizontal form and turns the full positive-length family
-of first-site identities into the letter-level invariance
-$Q\widetilde M=Q\widetilde MQ$.  The predicate below records the stronger
-all-length assertion printed by the source.  The proof of Proposition 4.13
-does not require this assertion: the theorem
-`hasNoPeriodicVectors_verticalTensor_of_horizontalCF` uses the single
-noncommuting length supplied by the contrapositive of Lemma L. -/
+The source assumes literal canonical form in the horizontal direction.  Under
+normalized BNT-refined horizontal form, Lemma L turns the full positive-length
+family of first-site identities into the letter-level invariance
+$Q\widetilde M=Q\widetilde MQ$.  The all-length assertion below is stronger
+than needed: `hasNoPeriodicVectors_verticalTensor_of_horizontalCF` uses the
+single noncommuting length supplied by the contrapositive of Lemma L. -/
 def NoninvariantProjectorNoncommuting {d D : ℕ} (M : MPOTensor d D) : Prop :=
   ∀ Q : Matrix (Fin d) (Fin d) ℂ, Q.IsHermitian → IsIdempotentElem Q →
     M.ketLeftMul Q ≠ (M.ketLeftMul Q).braRightMul Q →
