@@ -386,7 +386,9 @@ private theorem mutualInformation_bipartition_eq_of_isRFPViaTS_of_right_eq
 form satisfying the local renormalization fixed-point equations saturates the
 area law.
 
-This horizontal hypothesis is stronger than literal CPSV canonical form.
+**Scope restriction (BNT-refined horizontal form):** The horizontal hypothesis
+`IsHorizontalCF` is stronger than the literal CPSV canonical form; see
+`docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex`.
 
 The two local channels transfer one site across a consecutive bipartition.
 Data processing in both directions gives equality of the bipartite mutual
@@ -450,10 +452,13 @@ theorem isSAL_of_isRFPViaTS (M : MPOTensor d D)
 form satisfying the local renormalization fixed-point equations has zero
 correlation length and saturates the area law.
 
-This horizontal hypothesis is stronger than literal CPSV canonical form.
+**Scope restriction (BNT-refined horizontal form):** The horizontal hypothesis
+`IsHorizontalCF` is stronger than the literal CPSV canonical form; see
+`docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex`.
 
-This is Proposition `propsimple` of arXiv:1606.00608.  The nonzero
-physical-trace transfer required by source ZCL is derived from the nonzero
+Under this normalized BNT-refined horizontal hypothesis, the theorem specializes
+Proposition `propsimple` of arXiv:1606.00608. The nonzero physical-trace transfer
+required by source ZCL is derived from the nonzero
 one-site ring; it is not an additional hypothesis.
 
 Source: arXiv:1606.00608, Proposition `propsimple`, Appendix C,

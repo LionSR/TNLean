@@ -36,8 +36,12 @@ isometries retained.
 Let `M` generate matrix product density operators and be in normalized
 BNT-refined horizontal form.  The nonzero irreducible reducing corners of its
 vertically viewed tensor can be written as positive scalar multiples of normal
-tensors.  This horizontal hypothesis is stronger than literal CPSV canonical
-form.
+tensors.
+
+**Scope restriction (BNT-refined horizontal form):** The horizontal hypothesis
+`IsHorizontalCF` is stronger than the literal CPSV canonical form; see
+`docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex`.
+
 Their physical isometries remain pairwise orthogonal, both intertwining
 identities and the exact compression formula are preserved, and the retained
 corners reconstruct every vertical letter literally.

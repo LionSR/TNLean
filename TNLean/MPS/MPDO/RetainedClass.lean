@@ -79,7 +79,9 @@ private theorem bntCanonicalForm_toTensor_ne_zero
 /-- The vertical tensor of an MPO tensor in normalized BNT-refined horizontal
 form is nonzero.
 
-This horizontal hypothesis is stronger than literal CPSV canonical form.
+**Scope restriction (BNT-refined horizontal form):** The horizontal hypothesis
+`IsHorizontalCF` is stronger than the literal CPSV canonical form; see
+`docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex`.
 
 Source: arXiv:1606.00608, canonical form at lines 237--246 and Proposition
 `prop:vertical`, lines 1895--1902. -/
@@ -116,8 +118,11 @@ theorem IsHorizontalCF.verticalTensor_ne_zero
 /-- A matrix product density operator in normalized BNT-refined horizontal form
 has a nonempty family of retained vertical phase classes.
 
-This horizontal hypothesis is stronger than literal CPSV canonical form.  The
-retained normal sectors reconstruct every vertical letter.  Since the
+**Scope restriction (BNT-refined horizontal form):** The horizontal hypothesis
+`IsHorizontalCF` is stronger than the literal CPSV canonical form; see
+`docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex`.
+
+The retained normal sectors reconstruct every vertical letter.  Since the
 vertical tensor is nonzero, the sector index set is nonempty.  Its partition
 into matrix-product-vector phase classes is therefore nonempty as well.
 
