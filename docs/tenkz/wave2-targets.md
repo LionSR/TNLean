@@ -89,9 +89,9 @@ Otherwise it is **unowned**. The scan finds 107 labelled blocks: 90 owned and
 | `veryold` | 501–520 | owned: `rmp-iii-a-g-injective-projector`, `rmp-workbench-iii-mpo-injective-white` |
 | `Explaining the MPO-injective PEPS` | 521–537 | owned: `rmp-iii-a-mpo-injective`, `rmp-workbench-iii-mpo-on-peps-definition` |
 | `Eq.60now57` | 538–552 | owned: `rmp-iii-a-mpo-action`, `rmp-workbench-iii-eq60-now` |
-| `Eq63now59` | 553–562 | owned: `rmp-iii-a-torus-one`, `rmp-workbench-iii-enlarged-mpo-black` |
-| `Ed58now ->Torus` | 563–571 | owned: `rmp-iii-a-torus-three`, `rmp-workbench-iii-eq59` |
-| `Eq62 (now 60)` | 572–603 | owned: `rmp-iii-a-torus-two`, `rmp-workbench-iii-eq59` |
+| `Eq63now59` | 553–562 | owned: `rmp-iii-a-torus-two`, `rmp-workbench-iii-enlarged-mpo-black` |
+| `Ed58now ->Torus` | 563–571 | owned: `rmp-iii-a-torus-one`, `rmp-workbench-iii-eq59` |
+| `Eq62 (now 60)` | 572–603 | owned: `rmp-iii-a-torus-three`, `rmp-workbench-iii-eq59` |
 | `4MPO` | 604–621 | owned: `rmp-workbench-iii-g-injective-mpo` |
 | `PEPS4` | 622–630 | owned: `rmp-workbench-iii-peps-renormalization-one` |
 | `PEPS4 renorm` | 631–643 | owned: `rmp-workbench-iii-peps-renormalization-two` |

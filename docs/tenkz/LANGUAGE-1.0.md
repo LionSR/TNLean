@@ -402,7 +402,7 @@ order is mathematical content and the renderer never guesses it.
 
 **Winding.** `wind={p,q}` records the homotopy class of a closed string on a
 frame with traced sides; the rendered path realizes that class or errors.
-<!-- Consumers: rmp-iii-a-torus-one/-two/-three, rmp-workbench-iii-eq59. -->
+<!-- Consumers: rmp-iii-a-torus-one, rmp-workbench-iii-eq59. -->
 
 **Detours.** `around=<address list>` routes the wire past the named records
 against their measured silhouettes plus daylight — the pulling-through
