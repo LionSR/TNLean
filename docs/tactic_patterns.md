@@ -80,6 +80,21 @@ abstracted — record why, so it is not re-proposed).
 
 ## Completed refactors
 
+### Support left-right and relative-modular intertwining
+- **Pattern:** `supportRelativeModular_sourceB_solution` and
+  `supportLeftRightSupportInv_mulVec_sourceB_eq_projected_relativeModular`
+  each proved positive definiteness of
+  `t • 1 + A ⊗ₖ hB.supportInvᵀ` and expanded the same matrix calculation
+  \(S(1 \otimes P_B^{\mathsf T}) = (1 \otimes B^{\mathsf T})R\).
+- **Reuse:** Both proofs now use `supportRelativeModular_resolvent_posDef` and
+  `supportLeftRightSuperoperator_mul_supportProj_eq` from
+  `Channel/Schwarz/SupportRelativeModular.lean`. The intertwining theorem only
+  assumes positivity of `B`; positivity of `A` is confined to the positive-definiteness
+  theorem.
+- **Result:** The two Lean files have 49 insertions and 45 deletions: the repeated
+  derivations are replaced by two source-facing algebraic lemmas and their call sites.
+  All pre-existing public theorem statements and mathematical scope are unchanged.
+
 ### Non-decaying-overlap dimension and gauge-phase dichotomy
 - **Pattern:** The `hDim`/`hGPE` tails of
   `exists_state_scalar_of_nondecaying_overlap` (`MatchAux.lean`) and
