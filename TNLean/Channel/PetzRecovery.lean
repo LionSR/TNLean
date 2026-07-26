@@ -42,6 +42,13 @@ reference matrix.
   reference matrix.
 * `Matrix.partialTraceRightPetzChannel_partialTraceRight`: recovery by the
   completed channel.
+* `Matrix.maximallyMixedTensorReference`: the maximally mixed tensor-product
+  reference from HJPW equation (10), with reassociated product indices.
+* `Matrix.partialTraceRightPetzMap_maximallyMixedTensor_kronecker`:
+  factorization of the raw Petz map on elementary tensors.
+* `Matrix.partialTraceRightPetzMap_maximallyMixedTensor`: the raw Petz map for
+  the maximally mixed tensor reference factors as the identity on the first
+  tensor factor and the Petz map on the remaining factors.
 
 ## References
 
