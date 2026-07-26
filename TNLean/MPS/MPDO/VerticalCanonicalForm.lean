@@ -10,16 +10,16 @@ import TNLean.MPS.MPDO.VerticalCoisometry
 /-!
 # Vertical canonical form of matrix product density operators
 
-The grouped vertical decomposition of a horizontally canonical matrix product
-density operator supplies a basis of normal tensors and normalized physical
-sector maps.  The resulting positive weights and sector maps give the
-coisometry and the two exact block-diagonal identities of the vertical
-canonical form.
+The grouped vertical decomposition of a matrix product density operator in
+normalized BNT-refined horizontal form supplies a basis of normal tensors and
+normalized physical sector maps. The resulting positive weights and sector
+maps give the coisometry and the two exact block-diagonal identities of the
+vertical canonical form.
 
 ## Main result
 
-* `MPOTensor.verticalCF_of_horizontalCF`: every horizontally canonical matrix
-  product density operator is in vertical canonical form.
+* `MPOTensor.verticalCF_of_horizontalCF`: every matrix product density operator
+  in normalized BNT-refined horizontal form is in vertical canonical form.
 
 ## References
 
@@ -33,13 +33,20 @@ namespace MPOTensor
 
 variable {d D : ℕ}
 
-/-- A horizontally canonical matrix product density operator is also in
-vertical canonical form.
+/-- A matrix product density operator in normalized BNT-refined horizontal form
+is also in vertical canonical form.
 
 The same grouped vertical decomposition supplies both the algebraic basis of
 normal tensors and the normalized physical sector maps.  Their positive
 weights, orthogonal isometric ranges, intertwinings, and exact reconstruction
 then combine to give the vertical coisometry.
+
+**Scope restriction (BNT-refined horizontal form):** `IsHorizontalCF` is
+stronger than the literal CPSV canonical form assumed by Proposition 4.13.  The
+literal implication remains open at the Lemma L separation after active-block
+refinement and transport through the ambient coisometry; see
+`docs/paper-gaps/cpgsv17_vertical_isometry_zero_sector.tex` for this scope and
+`docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex` for the missing step.
 
 Source: arXiv:1606.00608, Proposition 4.13, lines 1863--1921. -/
 theorem verticalCF_of_horizontalCF (M : MPOTensor d D)

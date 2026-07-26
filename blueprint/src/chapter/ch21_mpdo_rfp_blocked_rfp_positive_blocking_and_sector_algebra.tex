@@ -175,14 +175,14 @@ physical indices, as in
     column reindexing preserves positive semidefiniteness.
 \end{proof}
 
-\begin{lemma}[Two-site blocking preserves horizontal canonical form]
+\begin{lemma}[Two-site blocking preserves normalized BNT-refined horizontal form]
     \label{lem:mpdo_horizontal_cf_block_two}
     \lean{MPOTensor.IsHorizontalCF.blockTwo}
     \leanok
     \uses{def:horizontal_cf_mpdo, def:mpdo_two_site_blocking,
         thm:sector_bnt_cf_block_tensor}
-    If an MPO tensor $K$ is in horizontal canonical form, then its two-site
-    blocking $K^{[2]}$ is again in horizontal canonical form.
+    If an MPO tensor $K$ is in normalized BNT-refined horizontal form, then its
+    two-site blocking $K^{[2]}$ is again in that form.
 \end{lemma}
 
 \begin{proof}
@@ -201,7 +201,7 @@ physical indices, as in
     original block-diagonal virtual gauge and $S$ its sector tensor, word
     evaluation gives $((K^{[2]})^{\mathrm{MPS}})_i=X(\varphi^*(S^{[2]}))_iX^{-1}$.
     Therefore this blocked decomposition and the same copy gauges witness
-    horizontal canonical form for $K^{[2]}$.
+    normalized BNT-refined horizontal form for $K^{[2]}$.
 \end{proof}
 
 \begin{theorem}[One-site and two-site vertical canonical forms]
@@ -211,8 +211,9 @@ physical indices, as in
     \uses{thm:vertical_cf_of_horizontal_cf,
         thm:mpdo_block_two_as_positive_blocking,
         lem:mpdo_horizontal_cf_block_two}
-    Let $K$ be a horizontally canonical MPO tensor that generates matrix
-    product density operators. Then both $K$ and $K^{[2]}$ satisfy the
+    Let $K$ be an MPO tensor in normalized BNT-refined horizontal form that
+    generates matrix product density operators. Then both $K$ and $K^{[2]}$
+    satisfy the
     vertical canonical-form conditions of
     Definition~\ref{def:vertical_cf_mpdo}.
     This is the initial canonical-form step in
@@ -220,8 +221,8 @@ physical indices, as in
 \end{theorem}
 
 \begin{proof}\leanok
-    The preceding blocking results show that $K^{[2]}$ is horizontally
-    canonical and generates matrix product density operators. Apply
+    The preceding blocking results show that $K^{[2]}$ is in normalized
+    BNT-refined horizontal form and generates matrix product density operators. Apply
     Theorem~\ref{thm:vertical_cf_of_horizontal_cf} first to $K$ and then to
     $K^{[2]}$.
 \end{proof}

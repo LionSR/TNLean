@@ -354,6 +354,10 @@ positive diagonal multiplicity matrices and coisometries onto the active
 product sectors.  The adjoint coisometries reconstruct every product letter,
 including when a common zero corner is discarded by the forward map.
 
+**Scope restriction (BNT-refined horizontal form):** `IsHorizontalCF` is
+stronger than the literal CPSV canonical form used in Appendix C.4 through
+Proposition 4.13; see `docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex`.
+
 **Scope restriction (active product BNT):** Only active product corners are
 retained.  A one-site BNT label absent from a fixed product pair has zero
 fusion multiplicity.  Documented in

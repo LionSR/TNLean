@@ -179,8 +179,8 @@
     Suppose that the vertical reading of $M$ is reconstructed from a retained
     tensor $A$ by a coisometry $U$. The two-site blocking is then reconstructed
     from the product of two copies of $A$ by the Kronecker square of $U$.
-    Moreover, if $M$ is horizontally canonical and generates positive
-    operators, this retained product tensor has invariant-projector closure
+    Moreover, if $M$ is in normalized BNT-refined horizontal form and generates
+    positive operators, this retained product tensor has invariant-projector closure
     and has no nontrivial periodic vectors. No full-support assumption is
     imposed on the retained bond space.
 \end{theorem}
@@ -189,8 +189,8 @@
     The Kronecker square of a coisometry is again a coisometry. Expanding a
     blocked vertical letter gives the product of the two one-site
     reconstructions and hence the asserted exact compression formula.
-    Horizontal canonical form and positivity are preserved by two-site
-    blocking. Invariant-projector closure descends to an exact reducing
+    Normalized BNT-refined horizontal form and positivity are preserved by
+    two-site blocking. Invariant-projector closure descends to an exact reducing
     compression, while a periodic vector in the compression would embed
     isometrically as a periodic vector of the blocked vertical tensor.
 \end{proof}
@@ -291,8 +291,8 @@
       thm:mpdo_retained_vertical_product_canonical_hypotheses,
       lem:matrix_sigma_block_inclusion}
     Suppose that the one-site vertical tensor has the stated exact
-    coisometric reconstruction, that $M$ is horizontally canonical, and that
-    $M$ generates positive operators. Then simultaneous retained-product
+    coisometric reconstruction, that $M$ is in normalized BNT-refined
+    horizontal form, and that $M$ generates positive operators. Then simultaneous retained-product
     spectral data exist. In copy coordinates, the assembled vertical tensor
     is the direct sum of the weighted simple blocks. The canonical inclusion
     of each copy is an isometry, intertwines in both directions, and its
@@ -483,8 +483,8 @@ activeCoefficient_mul_phase_pos}
       thm:mpdo_retained_product_spectral_family_exists,
       thm:mpdo_grouped_sector_compression_nonzero,
       thm:mpdo_sector_weight_pos}
-    Suppose that $M$ is horizontally canonical and generates positive
-    operators. Assume exact coisometric reconstructions of its one-site and
+    Suppose that $M$ is in normalized BNT-refined horizontal form and generates
+    positive operators. Assume exact coisometric reconstructions of its one-site and
     blocked vertical tensors, positive multiplicities and weights for the
     blocked BNT, and normality of its BNT representatives. For every active
     product corner $j$, one has $0<\lambda_j\zeta_j$.
@@ -496,8 +496,8 @@ activeCoefficient_mul_phase_pos}
     weight by hypothesis. The active corner has weight
     $\lambda_j\zeta_j$ by its exact compression and gauge--phase identity.
     This scalar is nonzero because $\lambda_j>0$ and $|\zeta_j|=1$.
-    Normality gives a nonzero range-projection corner; horizontal canonicality
-    separates it at some finite chain length. The sector-weight comparison
+    Normality gives a nonzero range-projection corner; the BNT-refined horizontal
+    hypothesis separates it at some finite chain length. The sector-weight comparison
     with the distinguished reference corner then yields
     $\lambda_j\zeta_j>0$.
 \end{proof}
@@ -686,8 +686,8 @@ toBNTFusionCoisometryFamily}
     Under the one-site and two-site vertical basis-of-normal-tensors
     decompositions and the two completely positive, trace-preserving
     physical-closure transport identities, assume that the one-site tensor
-    is in horizontal canonical form and defines a matrix product density
-    operator. Then there are positive diagonal multiplicity matrices
+    is in normalized BNT-refined horizontal form and defines a matrix product
+    density operator. Then there are positive diagonal multiplicity matrices
     $\chi_{\alpha,\beta,\gamma}$ and matrices $U_{\alpha,\beta}$ such that
     every diagonal entry is positive and
     \begin{align}
@@ -747,8 +747,8 @@ toBNTFusionCoisometryFamily}
     \uses{def:is_rfp_via_ts,
       thm:vertical_cf_of_horizontal_cf,
       thm:mpdo_transported_vertical_product_positive_fusion_decomposition}
-    Let $M$ be in horizontal canonical form, generate matrix product density
-    operators, and satisfy the renormalization fixed-point condition of
+    Let $M$ be in normalized BNT-refined horizontal form, generate matrix
+    product density operators, and satisfy the renormalization fixed-point condition of
     Definition~\ref{def:is_rfp_via_ts}. Then one may choose a vertical basis
     of normal tensors $\{M_\alpha\}_\alpha$ for which there are positive
     diagonal matrices $\chi_{\alpha,\beta,\gamma}$ and matrices
@@ -770,9 +770,10 @@ toBNTFusionCoisometryFamily}
           U_{\alpha,\beta}.
       \notag
     \end{align}
-    Thus the original renormalization fixed-point, horizontal-canonical, and
-    matrix-product-density-operator assumptions suffice for the positive
-    fusion decomposition of CPSV16, Appendix C.4, lines 2020--2029.
+    Thus the renormalization fixed-point and matrix-product-density-operator
+    assumptions, together with normalized BNT-refined horizontal form, imply
+    the positive fusion decomposition of CPSV16, Appendix C.4, lines
+    2020--2029.
 
     \textbf{Scope restriction (active product BNT):} Only active product
     corners occur. A label absent from a fixed product pair has zero fusion
@@ -790,9 +791,10 @@ toBNTFusionCoisometryFamily}
 \end{theorem}
 
 \begin{proof}\leanok
-    Apply Proposition~4.13 to $M$ and to its two-site blocking, retaining in
-    each case the literal basis-of-normal-tensors assertion, the positive
-    multiplicity matrices, and both coisometric decomposition identities.
+    Apply the proved normalized BNT-refined specialization of
+    Proposition~4.13 to $M$ and to its two-site blocking. In each case, retain
+    the CPSV basis-of-normal-tensors assertion, the positive multiplicity
+    matrices, and both coisometric decomposition identities.
     Unpack the two completely positive, trace-preserving maps in the
     renormalization fixed-point condition. The preceding transported-sector
     theorem then supplies the positive diagonal family, the row

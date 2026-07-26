@@ -506,9 +506,9 @@ theorem verticalTensor_blockTwo_squared_coisometry_reconstruction
 /-- The squared retained product inherits projector closure and absence of
 periodic vectors from the blocked vertical tensor.
 
-The one-site coisometric reconstruction is squared exactly. Horizontal
-canonical form and positivity pass to two-site blocking, so the blocked
-vertical tensor has the two canonical-form hypotheses. The preceding
+The one-site coisometric reconstruction is squared exactly. Normalized
+BNT-refined horizontal form and positivity pass to two-site blocking, so the
+blocked vertical tensor has the two canonical-form hypotheses. The preceding
 coisometric transfer theorem then passes both hypotheses to the retained
 product tensor, including when its active support is smaller than the full
 product bond space.
