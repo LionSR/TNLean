@@ -98,7 +98,8 @@ Listed for completeness; detailed MPDO coverage audit is out of scope.
 
 | Paper label | Lines | Paper description | Lean location | Status |
 |---|---|---|---|---|
-| Defn CFII (l.1058) | 1058–1060 | CFII: CF + trace-preserving CPM + full-rank diagonal fixed point | `TNLean/MPS/CanonicalForm/Existence.lean` (`CFII` data) | `leanok` |
+| Defn CFII (l.1058) | 1058–1071 | CFII: CF + trace-preserving CPM + full-rank diagonal fixed point | `TNLean/MPS/CanonicalForm/Definitions.lean` (`CPSVCanonicalFormIIData`) | `leanok` |
+| Eq. `II_XAX` | 1072–1077 | Every CF tensor has a nonsingular same-ambient gauge representative in CFII | `TNLean/MPS/CanonicalForm/CPSVCanonicalFormII.lean` (`CPSVCanonicalFormData.exists_gaugeEquiv_canonicalFormII`) | `leanok` |
 | **Lemma `equalMPS`** (l.1080) | 1080–1091 | Two NMPVs: overlap → 0 or 1; if 1, gauge-phase equivalent | `TNLean/MPS/Overlap/NormalTensorDichotomy.lean` (`IsNormalTensor.overlap_dichotomy`) | `leanok` |
 | **Corollary `eqV`** (l.1121) | 1121–1128 | NMPV overlap → 0 or equal up to phase factor e^{iφN} | `TNLean/MPS/Overlap/NormalTensorDichotomy.lean` (`IsNormalTensor.mpv_phase_alternative`) | `leanok` |
 | **Corollary `Lem1`** (l.1131) | 1131–1133 | Orthogonal NMPVs are eventually linearly independent | `TNLean/MPS/CanonicalForm/PhaseClassSectorData.lean` (`exists_eventually_linearIndependent_of_tp_primitive_irr_blocks_of_blocksNotGaugePhaseEquiv`) | `leanok` |
