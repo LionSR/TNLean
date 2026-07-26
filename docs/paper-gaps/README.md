@@ -112,6 +112,10 @@ For MPDO renormalization fixed points:
   subadditivity. The support-compressed tensor logarithm, the bipartite entropy
   identity, and the exact Hayden--Jozsa--Petz--Winter equality criterion are
   formalized. This note is now a closure record.
+- `hjpw04_petz_factorization_maximally_mixed_scope.tex` records that the current
+  raw Petz-map factorization proves HJPW equation (10) only when the first
+  factor is maximally mixed. The unrestricted product-reference factorization
+  and the separate Koashi--Imoto/Hayashi structural step remain open.
 - `cpsv16_zcl_canonical_form_normalization.tex` records the corresponding
   normalization issue for mixed-state ZCL.
 
