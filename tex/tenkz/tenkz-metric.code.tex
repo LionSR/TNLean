@@ -144,6 +144,9 @@
   { rounded-corner~radius~of~traces~and~hulls }
 \__tenkz_metric_declare:nnn {glyphbox} {0.22}
   { inscribed-glyph~minimum~and~span-decoration~overhang }
+\__tenkz_metric_declare:nnn {glyphref} {0.50}
+  { size-class~reference~width:~box,~pill~and~capsule~read~as~one~family,~
+    and~a~bond~keeps~as~much~ink~as~the~glyphs~it~joins }
 \__tenkz_metric_declare:nnn {wireglyph} {0.30}
   { on-wire~glyphs~sit~ON~a~wire~and~must~read~over~it }
 \__tenkz_metric_declare:nnn {wireglyphcap} {0.15}
@@ -207,7 +210,7 @@
     {layersep}, {physleg}, {stub}, {daylight}, {labelclear},
     {dotlabelband}, {inlinephysleg}, {inlinelabelclear}, {dotdia},
     {tallover}, {phtracereach}, {pairtracereach}, {corner}, {glyphbox},
-    {wireglyph}, {wireglyphcap}, {fusionwidth}, {fuseover}
+    {glyphref}, {wireglyph}, {wireglyphcap}, {fusionwidth}, {fuseover}
   }
   { \exp_args:Nne \__tenkz_metric_assert:nn {#1} { \use:c { tenkz@r@ #1 } } }
 % The registry owns the floors: with core's \def table retired, the

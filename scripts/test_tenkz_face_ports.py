@@ -1146,6 +1146,67 @@ def main() -> int:
             print(invalid_run.stdout)
             print("FAIL: an embedded cup= substring bypassed the lattice side policy")
             return 1
+        # A cup is a contraction the picture asserts.  One row offers one end,
+        # so no bend can be drawn, and a picture that drew nothing here would
+        # deny the contraction without saying so.
+        barren_cup = work / "barren-grid-cup.tex"
+        barren_cup.write_text(
+            r"""\documentclass{standalone}
+\usepackage{tenkz}
+\begin{document}
+\begin{tenkz}[rows={ket}, east=cup]
+  \tn{A}
+\end{tenkz}
+\end{document}
+""",
+            encoding="utf-8",
+        )
+        barren_run = subprocess.run(
+            [engine, "-interaction=nonstopmode", "-halt-on-error", barren_cup.name],
+            cwd=work,
+            env=env,
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+        )
+        if barren_run.returncode == 0 or "east=cup bends no pair" not in (
+            barren_run.stdout
+        ):
+            print(barren_run.stdout)
+            print("FAIL: a grid cup that bends nothing passed in silence")
+            return 1
+        # The declared cup outranks the picture boundary: a sealed picture that
+        # names a cup on one side draws that bend and seals the other side.
+        sealed_cup = work / "sealed-grid-cup.tex"
+        sealed_cup.write_text(
+            r"""\documentclass{standalone}
+\usepackage{tenkz}
+\begin{document}
+\begin{tenkz}[sandwich, boundary=none, east=cup]
+  \tn{A}\\
+  \tn*{A}
+\end{tenkz}
+\end{document}
+""",
+            encoding="utf-8",
+        )
+        sealed_run = subprocess.run(
+            [engine, "-interaction=nonstopmode", "-halt-on-error", sealed_cup.name],
+            cwd=work,
+            env=env,
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+        )
+        if sealed_run.returncode:
+            print(sealed_run.stdout)
+            print("FAIL: a cup on a sealed picture did not compile")
+            return 1
+        sealed_events = (work / "sealed-grid-cup.tnlog").read_text(encoding="utf-8")
+        if "cup|picture=1|side=east|top=1|bottom=2" not in sealed_events:
+            print(sealed_events)
+            print("FAIL: boundary=none swallowed the cup the picture declared")
+            return 1
         audit = Audit(work / "face-ports.tnlog", None)
         audit.parse_log()
         audit.check_dialects()

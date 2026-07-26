@@ -302,8 +302,13 @@
 % ONE word per side, LAST wins: a policy word retracts an earlier cup on
 % the same side and a cup retracts an earlier policy word, so
 % `west=cup, west=open` reads as `west=open` -- the doctrine above, made
-% mechanical (without the mutual clearing the cup bools would survive a
-% later word and the cup would draw anyway).
+% mechanical (without the retraction the cup bools would survive a later
+% word and the cup would draw anyway).
+% Both writers fill the SAME slot, the side-policy tl: `cup` is a word of
+% the alphabet, not a private flag beside it.  A cup that emptied the slot
+% would drop its side back to the picture policy, and `boundary=none,
+% east=cup` would then read as `east=none` -- the declared bend silently
+% unmade by the weaker statement it was written to override.
 \cs_new_protected:Npn \tenkz_side_word:nn #1#2
   {
     \str_if_eq:nnTF {#1} {west}
@@ -319,10 +324,10 @@
     \str_if_eq:nnTF {#1} {west}
       { \bool_set_true:N \l__tenkz_closew_bool
         \tl_set:Nn \l__tenkz_closewmat_tl {#2}
-        \tl_clear:N \l__tenkz_westpol_tl }
+        \tl_set:Nn \l__tenkz_westpol_tl {cup} }
       { \bool_set_true:N \l__tenkz_closee_bool
         \tl_set:Nn \l__tenkz_closeemat_tl {#2}
-        \tl_clear:N \l__tenkz_eastpol_tl }
+        \tl_set:Nn \l__tenkz_eastpol_tl {cup} }
   }
 % split a `cup=$m$' value at its (catcode-12) equals sign
 \cs_new_protected:Npn \tenkz_side_cupval:nw #1 cup=#2 \q_stop
@@ -1941,6 +1946,12 @@
               }
           }
       }
+    % A declared cup that bends nothing is the one failure the picture
+    % cannot show: the ink it omits is a contraction the source asserted.
+    % Say so here, where the eligibility that produced the empty list is
+    % still in hand.
+    \int_compare:nNnT { \seq_count:N \l_tmpa_seq } < {2}
+      { \msg_error:nnn {tenkz}{cup-no-pair} {#1} }
     \bool_while_do:nn
       { \int_compare_p:nNn { \seq_count:N \l_tmpa_seq } > {1} }
       {
@@ -2113,6 +2124,8 @@
 \seq_new:N \l__tenkz_rows_seq
 \seq_new:N \l__tenkz_cells_seq
 \tl_new:N \l__tenkz_cell_tl
+% the class reference width of the cell being drawn, span included
+\tl_new:N \l__tenkz_widthopt_tl
 
 \cs_new_protected:Npn \tenkz_parse_body:n #1
   {
@@ -2175,6 +2188,17 @@
     #1=trace~names~a~trace~closure~on~one~side~only;~a~row~closes~back~
     to~itself~through~BOTH~ends,~so~no~closure~is~drawn~(the~side~stays~
     sealed).~State~`west=trace,~east=trace'~--~or~its~alias~`periodic'.
+  }
+% a cup declared on a side where no two rows present an end.  A cup is a
+% contraction the picture asserts; drawing nothing would state the
+% opposite of what was written, and state it invisibly.
+\msg_new:nnn { tenkz } { cup-no-pair }
+  {
+    #1=cup~bends~no~pair:~fewer~than~two~rows~present~a~free~virtual~end~
+    on~the~#1~side.~A~row~loses~its~end~when~a~rows=~word~seals~that~
+    side~(`#1~none'),~when~a~fusion~bar~or~a~combined=~face~consumes~it,~
+    or~when~the~row~carries~no~virtual~port~there.~Open~the~rows~that~
+    should~be~tied,~or~drop~the~cup.
   }
 
 % drop the vertically-unsupported records, one warning each
@@ -2423,8 +2447,16 @@
       { \tl_put_right:Ne \l__tenkz_xstyle_tl
           { , \exp_not:V \l__tenkz_rolesty_tl } }
     % dot is the only skin without an inscribed label; box/mpo/pill share one
-    % labelled-node path and differ only by their tikz style (pill also pins a
-    % minimum width so a wide label grows the capsule sideways, not taller)
+    % labelled-node path and differ only by their tikz style.  Each carries
+    % the class reference width from its skin; a wide=k glyph claims k
+    % columns, so its width is the span it owns plus that one reference --
+    % the reference and the span are the only quantities a width may read.
+    \tl_set:Ne \l__tenkz_widthopt_tl
+      {
+        minimum~width = \dim_eval:n
+          { \tenkz@pitch * (\l__tenkz_cwide_int - 1)
+            + \tenkz@dim{\tenkz@r@glyphref} }
+      }
     \str_case:Vn \l__tenkz_cshape_tl
       {
         {dot}
@@ -2438,13 +2470,15 @@
               { \tenkz_node_name:nn{#1}{#2} }
               { tensor, \l__tenkz_rolesty_tl }
           }
-        {box}  { \tenkz_glyph_node:nnn {#1}{#2}{box~tensor} }
-        {mpo}  { \tenkz_glyph_node:nnn {#1}{#2}{mpo~tensor} }
+        {box}
+          { \tenkz_glyph_node:nne {#1}{#2}
+              { box~tensor, \l__tenkz_widthopt_tl } }
+        {mpo}
+          { \tenkz_glyph_node:nne {#1}{#2}
+              { mpo~tensor, \l__tenkz_widthopt_tl } }
         {pill}
-          { \tenkz_glyph_node:nnn {#1}{#2}
-              { pill~tensor, minimum~width=\dim_eval:n
-                  { \tenkz@pitch * (\l__tenkz_cwide_int - 1)
-                    + 0.5\tenkz@pitch } } }
+          { \tenkz_glyph_node:nne {#1}{#2}
+              { pill~tensor, \l__tenkz_widthopt_tl } }
         % triangle skins inscribe the label only under the box policy; the
         % dot policy keeps the glyph empty and the dot-label pass places the
         % label beside it, in a free quadrant, like a bead's
@@ -2652,6 +2686,10 @@ code=combined-side|value=\tl_to_str:N \l__tenkz_fcombined_tl}
       }
     \tenkz_glyph_node_aux:nnV {#1}{#2} \l_tmpa_tl
   }
+% The option list reaches pgfkeys unexpanded, so a caller assembling it in a
+% token list hands over one macro token and pgfkeys reads the whole thing as
+% a key name.  This variant expands the list first.
+\cs_generate_variant:Nn \tenkz_glyph_node:nnn { nne }
 \cs_new_protected:Npn \tenkz_glyph_node_aux:nnn #1#2#3
   {
     % (x, y) is the glyph centre in the logical frame.  The picture map
@@ -4388,35 +4426,20 @@ picture=\the\tenkz@pictureid|code=combined-attach|row=##1}
     \tl_if_empty:NT \l__tenkz_clshift_tl
       { \tl_set:Nn \l__tenkz_clshift_tl {0pt,0pt} }
     \tl_set:Nn \l__tenkz_dot_label_tl {#3}
-    % compass table: node point, opposite label anchor, and the outward
-    % (dx,dy); a cardinal nudges one clearance band along its axis, a
-    % diagonal 0.7 of a band on each axis.  The east/west rows serve the
-    % vertical frame (whose compass maps south/north to east/west) and a
-    % user-given `label pos=east|west` in any frame; the F branch warns
-    % instead of dropping the label -- vanishing ink is the one
-    % forbidden outcome.
-    \str_case:VnF \l_tmpa_tl
+    % One bearing settles the whole placement: the bead's own boundary
+    % point in that direction, the outward step of one clearance band
+    % along it, and the anchor, which is the bearing reversed.  The
+    % east/west bearings serve the vertical frame (whose compass maps
+    % south/north to east/west) and a user-given `label pos=east|west` in
+    % any frame; a word that is no bearing warns instead of dropping the
+    % label -- vanishing ink is the one forbidden outcome.
+    \tenkz_label_bearing:VnNNNTF \l_tmpa_tl
+      {\tenkz@dim{\tenkz@r@labelclear}}
+      \l__tenkz_dlanchor_tl \l__tenkz_dldx_dim \l__tenkz_dldy_dim
       {
-        {south}      { \tenkz_dot_label_at:nnnn {south}      {north}
-                         {0}{-\tenkz@dim{\tenkz@r@labelclear}} }
-        {north}      { \tenkz_dot_label_at:nnnn {north}      {south}
-                         {0}{\tenkz@dim{\tenkz@r@labelclear}} }
-        {east}       { \tenkz_dot_label_at:nnnn {east}       {west}
-                         {\tenkz@dim{\tenkz@r@labelclear}}{0} }
-        {west}       { \tenkz_dot_label_at:nnnn {west}       {east}
-                         {-\tenkz@dim{\tenkz@r@labelclear}}{0} }
-        {south~west} { \tenkz_dot_label_at:nnnn {south~west} {north~east}
-                         {-0.7\tenkz@dim{\tenkz@r@labelclear}}
-                         {-0.7\tenkz@dim{\tenkz@r@labelclear}} }
-        {south~east} { \tenkz_dot_label_at:nnnn {south~east} {north~west}
-                         {0.7\tenkz@dim{\tenkz@r@labelclear}}
-                         {-0.7\tenkz@dim{\tenkz@r@labelclear}} }
-        {north~west} { \tenkz_dot_label_at:nnnn {north~west} {south~east}
-                         {-0.7\tenkz@dim{\tenkz@r@labelclear}}
-                         {0.7\tenkz@dim{\tenkz@r@labelclear}} }
-        {north~east} { \tenkz_dot_label_at:nnnn {north~east} {south~west}
-                         {0.7\tenkz@dim{\tenkz@r@labelclear}}
-                         {0.7\tenkz@dim{\tenkz@r@labelclear}} }
+        \tenkz_dot_label_at:VVnn \l_tmpa_tl \l__tenkz_dlanchor_tl
+          {\dim_use:N \l__tenkz_dldx_dim}
+          {\dim_use:N \l__tenkz_dldy_dim}
       }
       {
         \msg_warning:nne { tenkz } { label-pos }
@@ -4426,8 +4449,11 @@ code=label-pos|pos=\tl_to_str:N \l_tmpa_tl}
       }
   }
 \cs_generate_variant:Nn \tenkz_dot_label_place:nnn { nnV }
-% place a bead's external label: node compass point #1, opposite label anchor
-% #2, outward offset (#3,#4); the text is \l__tenkz_dot_label_tl
+\tl_new:N \l__tenkz_dlanchor_tl
+\dim_new:N \l__tenkz_dldx_dim
+\dim_new:N \l__tenkz_dldy_dim
+% place a bead's external label: node compass point #1, reversed-bearing label
+% anchor #2, outward offset (#3,#4); the text is \l__tenkz_dot_label_tl
 \cs_new_protected:Npn \tenkz_dot_label_at:nnnn #1#2#3#4
   {
     \__tenkz_render_labelnode:nnn
@@ -4435,6 +4461,7 @@ code=label-pos|pos=\tl_to_str:N \l_tmpa_tl}
       { ($(\l__tenkz_pa_tl.#1)+(#3,#4)$) }
       { $\tenkz@labelsize \tl_use:N \l__tenkz_dot_label_tl$ }
   }
+\cs_generate_variant:Nn \tenkz_dot_label_at:nnnn { VVnn }
 
 % -- decorations: spans, cuts, bond labels ------------------------------
 \cs_new_protected:Npn \tenkz_draw_decorations:
@@ -4948,6 +4975,12 @@ code=label-pos|pos=\tl_to_str:N \l_tmpa_tl}
 % -> open|none), built once per picture by \tenkz_record_rowsides: from
 % the exact colon-split mod segments (a substring test would let `west
 % open` open BOTH sides through its `open` letters).
+% The question is whether the row presents a FREE VIRTUAL END on that
+% side, not whether a stub is inked there: `open` and `cup` both answer
+% yes, and the two consumers then part company.  The stub pass draws the
+% end unless the cup derivation claimed it; the cup derivation bends the
+% claimed ends in pairs.  `none` and `trace` answer no -- a sealed side
+% has no end, and a traced row's end already returns to itself.
 \cs_new_protected:Npn \tenkz_row_open_side:nnN #1#2#3
   {
     \bool_set_false:N #3
@@ -4961,7 +4994,9 @@ code=label-pos|pos=\tl_to_str:N \l_tmpa_tl}
         \tl_if_empty:NTF \l_tmpb_tl
           { \str_if_eq:VnT \l__tenkz_boundary_tl {open}
               { \bool_set_true:N #3 } }
-          { \str_if_eq:VnT \l_tmpb_tl {open}
+          { \bool_lazy_or:nnT
+              { \str_if_eq_p:Vn \l_tmpb_tl {open} }
+              { \str_if_eq_p:Vn \l_tmpb_tl {cup} }
               { \bool_set_true:N #3 } }
       }
   }
