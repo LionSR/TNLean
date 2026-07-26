@@ -135,8 +135,8 @@ derivation are formalized in `TNLean/MPS/MPDO/StackedLayers.lean`, which
 reduces this hypothesis to `PeriodicVectorYieldsCyclicProjector`; the
 cyclic projections themselves, with their word invariance and single-letter
 displacement, are constructed in `TNLean/MPS/MPDO/CyclicProjector.lean`,
-which proves the source-shaped conclusion from normalized BNT-refined
-horizontal form by using one noncommuting length.  The predicate below retains
+which proves the conclusion from normalized BNT-refined horizontal form by
+using one noncommuting length.  The predicate below retains
 stronger all-length formulation as an auxiliary interface. -/
 def PeriodicVectorYieldsProjector (M : MPOTensor d D) : Prop :=
   ∀ ⦃n : ℕ⦄ (V : Matrix (Fin d) (Fin n) ℂ) (B : MPSTensor (D * D) n)
