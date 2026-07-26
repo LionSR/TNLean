@@ -741,11 +741,22 @@
           =H^{(N)}P_1.
         \label{eq:cpsv_prop_4_13_first_site}
     \end{align}
-    The missing step is to prove that the representative-grouped Lemma~L
-    remains applicable after compression to
-    (\ref{eq:cpsv_prop_4_13_active_bnt}) and that its separated identity carries
-    back through the ambient coisometry $V$. Once this is established, it gives
-    $\widetilde MP=P\widetilde MP$, hence
+    Write $Y_R(P)$ and $Y_C(P)$ for the right and central first-site
+    contractions determined by $P$. The missing step is to prove that the
+    representative-grouped Lemma~L remains applicable after compression to
+    (\ref{eq:cpsv_prop_4_13_active_bnt}), so that
+    \begin{align}
+        Y_R(P)C_\alpha^i&=Y_C(P)C_\alpha^i
+        \qquad\text{for every $\alpha$ and $i$},
+        \label{eq:cpsv_prop_4_13_missing_active_separation}
+    \end{align}
+    and then to carry this separated identity back through the ambient
+    coisometry $V$ to obtain
+    \begin{align}
+        \widetilde MP&=P\widetilde MP.
+        \label{eq:cpsv_prop_4_13_missing_coisometry_transport}
+    \end{align}
+    Once these two implications are established,
     $(\Id-P)\widetilde MP=0$. Thus every one-sided invariant subspace is
     reducing.
 
@@ -776,10 +787,17 @@
 
     Self-adjointness of the same sector compressions gives the marked-chain
     identity used in the proof of Proposition~4.13. A second instance of the
-    same retained-coordinate separation would transfer this equality to the
-    local tensors. Normal-tensor rigidity would then make the relative Gram
-    matrix scalar: for every $k$ there
-    is $\omega_{\alpha,k}>0$ such that
+    missing retained-coordinate separation must transfer it to the local
+    Gram-conjugation identity
+    \begin{align}
+        (X_{\alpha,k}^\dagger X_{\alpha,k})M_\alpha^v
+        (X_{\alpha,k}^\dagger X_{\alpha,k})^{-1}
+        &=(X_{\alpha,1}^\dagger X_{\alpha,1})M_\alpha^v
+        (X_{\alpha,1}^\dagger X_{\alpha,1})^{-1}.
+        \label{eq:cpsv_prop_4_13_missing_gram_conjugation}
+    \end{align}
+    Normal-tensor rigidity would then make the relative Gram matrix scalar:
+    for every $k$ there is $\omega_{\alpha,k}>0$ such that
     \begin{align}
         X_{\alpha,k}^\dagger X_{\alpha,k}
         &=\omega_{\alpha,k}

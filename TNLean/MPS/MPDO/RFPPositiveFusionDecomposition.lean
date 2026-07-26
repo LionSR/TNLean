@@ -203,6 +203,12 @@ theorem cpsvVerticalDecomposition_of_grouped_orthogonal_sectors
 /-- Horizontal canonical form and MPDO positivity furnish a vertical
 decomposition which retains the literal CPSV16 basis predicate.
 
+**Scope restriction:** `IsHorizontalCF` is a normalized BNT-refined hypothesis,
+strictly stronger than the literal CPSV canonical form assumed by Proposition
+4.13.  The literal implication remains open at the Lemma L separation after
+active-block refinement and transport through the ambient coisometry; see
+`docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex`.
+
 Source: arXiv:1606.00608, Proposition 4.13, lines 1863--1921. -/
 theorem IsHorizontalCF.exists_cpsvVerticalDecomposition
     (M : MPOTensor d D) (hHorizontal : IsHorizontalCF M) (hM : IsMPDO M) :
