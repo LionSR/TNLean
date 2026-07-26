@@ -928,3 +928,40 @@ The increase records that source correction; no package surface or parser
 changes here.
 
 Census-correction: #4954
+
+### 2026-07-27 — local site geometry closes three source gaps
+
+The executable compatibility ledger gains two object properties. `size=`
+gives a source-corpus object one of the existing small, medium, and large
+metric classes; `circle` gives a labelled object a plain circular outline.
+Their public parsers add four leaf paths: `label pos=` and `size=` on lattice
+sites, and `circle` and `size=` on free atoms. The first path implements an
+object property already present in the registry; the other three expose the
+two new rows through their relevant compatibility genres. They do not enlarge
+the canonical kernel atom or claim picture-size inheritance.
+
+The additions have direct source consumers. The anyon-pair panel places its
+three labels in the quadrants drawn by the archival figure. The condensation
+panel distinguishes four large endpoints from four small intermediate beads.
+Seven occurrences of the \(\lambda\) intertwiner now use a plain inscribed
+circle rather than a semantically unrelated ring.
+
+Extension-gate: #4939
+
+Extension-gate: #4940
+
+Extension-gate: #4942
+
+M3 falls from 355 to 354 because the anyon-pair panel no longer reshears its
+entire plane merely to move one label. M4 rises from 16.24 to 16.30 because
+the source cases now state their local label quadrants and marker sizes
+explicitly. The additional lines distinguish geometry that the former
+one-size, one-quadrant language could not express.
+
+Census-correction: #4939
+
+One consumer flag is raised by the new local size property:
+
+| flag | verdict |
+|---|---|
+| flag:consumers:key:object:size | keep-because: the condensation source supplies one manifested panel with eight independent local-size uses, four small and four large; this is repeated demand within one mathematical figure rather than a speculative option, but it remains below the cross-file tenure threshold and must gain two further source-faithful benchmark consumers or be reconsidered at the 1.0 close; expiry 1.0 |

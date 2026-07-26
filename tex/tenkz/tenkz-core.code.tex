@@ -28,8 +28,8 @@
 % tenkz environment, \tnpic, tenkzlattice, and tenkzfree.  These environments
 % group, so a picture-local assignment scopes itself; tenkzcd cells inherit
 % it through the \tnpic objects they contain.  Explicit per-cell skins (dot,
-% box, pill, mpo) always override the policy.  The event stream records the
-% RESOLVED skin.
+% box, circle, pill, mpo) always override the policy.  The event stream
+% records the RESOLVED skin.
 
 % Triangle skins (tri=l / tri=r) borrow the isosceles-triangle node shape;
 % the library itself loads with the rest of tenkz.sty's tikz libraries.
@@ -166,6 +166,12 @@
       inner sep=1.6pt, minimum size=\tenkz@dim{\tenkz@r@glyphbox},
       minimum width=\tenkz@dim{\tenkz@r@glyphref},
       line width=\tenkz@wirewidth, text=tenkzInk},
+  % A labelled circle is distinct from the filled dot and the on-wire
+  % capsule: it carries mathematics inside a plain-ink circular outline.
+  % The common glyph reference is its diameter floor.  TikZ's circle shape
+  % then enlarges both axes together when a wider label requires more room.
+  circle tensor/.style={box tensor,
+      tenkz audited glyph={circle}{0pt}, circle},
   mpo tensor/.style={box tensor},
   pill tensor/.style={tenkz audited glyph={roundrect}{2.2pt},
       draw=tenkzInk, fill=tenkzPaper,
@@ -284,6 +290,27 @@
   marked site/.style={draw=tenkzMarked, fill=tenkzMarked},
   extra site/.style={draw=tenkzExtra, fill=tenkzExtra},
   passive site/.style={draw=tenkzPassive, fill=tenkzPassive},
+  % Compatibility-object size classes act on the metric floor, not by an
+  % affine canvas transform: the audited glyph measures the actual enlarged
+  % silhouette.  This is the transitional free renderer's content-sized
+  % contract, not the canonical kernel's fixed two-axis atom contract.
+  % Labelled skins take 3/4, 1, or 5/4 of their common reference width; dots
+  % use the existing cluster, ordinary, and inscribed-glyph diameters.
+  % Medium repeats the established reference extent exactly.
+  tenkz inscribed size s/.style={
+      minimum width=\dimexpr
+        \tenkz@r@glyphref\tenkz@pitch * 3 / 4\relax},
+  tenkz inscribed size m/.style={
+      minimum width=\tenkz@dim{\tenkz@r@glyphref}},
+  tenkz inscribed size l/.style={
+      minimum width=\dimexpr
+        \tenkz@r@glyphref\tenkz@pitch * 5 / 4\relax},
+  tenkz dot size s/.style={
+      minimum size=\tenkz@dim{\tenkz@r@clusterdot}},
+  tenkz dot size m/.style={
+      minimum size=\tenkz@dim{\tenkz@r@dotdia}},
+  tenkz dot size l/.style={
+      minimum size=\tenkz@dim{\tenkz@r@glyphbox}},
   % directionality marks (design brief): an OUTGOING arrow is the vector space
   % V, an INCOMING one its dual V*; contraction joins out-to-in, and REVERSING
   % a barb is the dual/inverse representation -- so `reversed` variants flip

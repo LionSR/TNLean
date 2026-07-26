@@ -5,20 +5,11 @@
 % Source: author source ImagesReview Section III/ImagesReview Section III.tex lines
 %   170-197; archival output ImagesReview Section III.pdf
 % Capabilities: free-graph, regions, typed-ports
-% Note: `ring' with no role renders as a red (tenkzAction) stadium, always,
-%   regardless of role -- the on-wire-matrix style hardcodes draw=tenkzAction
-%   and only a role override (draw=<role colour> appended after) changes it.
-%   role=passive is the only role that yields an unhued (grey, not
-%   red/blue/violet) outline; no public skin gives a true circle in plain
-%   tenkzInk black with an inscribed label (`dot' is solid-filled with an
-%   EXTERNAL label, not inscribed; `pill'/`box' are plain black but a
-%   rounded/sharp rectangle, not a circle). role=passive on `ring' is kept
-%   as the closest available compromise (unhued, oval, label inside).
 \[
   \begin{tenkzfree}
     \tnput[box]{n}{(0mm,8mm)}{} \tnput[box]{e}{(8mm,0mm)}{}
     \tnput[box]{s}{(0mm,-8mm)}{} \tnput[box]{w}{(-8mm,0mm)}{}
-    \tnput[ring, role=passive]{lam}{(-8mm,8mm)}{\lambda}
+    \tnput[circle]{lam}{(-8mm,8mm)}{\lambda}
     \tnput[box]{top}{(0mm,16mm)}{} \tnput[box]{left}{(-16mm,0mm)}{}
     % the four-tensor ring: n-e and e-s turn at the plaquette's own corners;
     % w-n is routed explicitly through the lambda intertwiner. The whole
@@ -41,7 +32,7 @@
   \begin{tenkzfree}
     \tnput[box]{n}{(0mm,8mm)}{} \tnput[box]{e}{(8mm,0mm)}{}
     \tnput[box]{s}{(0mm,-8mm)}{} \tnput[box]{w}{(-8mm,0mm)}{}
-    \tnput[ring, role=passive]{lam}{(-8mm,8mm)}{\lambda}
+    \tnput[circle]{lam}{(-8mm,8mm)}{\lambda}
     \tnput[box]{bottom}{(0mm,-16mm)}{} \tnput[box]{right}{(16mm,0mm)}{}
     \tnjoin[route=hv,role=operator]{n.east}{e.north}
     \tnjoin[route=vh,role=operator]{e.south}{s.east}
