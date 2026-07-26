@@ -35,6 +35,7 @@ act trivially on an ancillary factor.
 * `Matrix.tensorMapIdLM_comp`: the lift preserves composition.
 * `Matrix.idTensorMap_kronecker`: `(id ⊗ T)(A ⊗ B) = A ⊗ T(B)`
 * `Matrix.idTensorMapLM_id`: the second-factor identity lift is the identity.
+* `Matrix.idTensorMapLM_add`: the second-factor lift preserves addition.
 * `Matrix.idTensorMapLM_comp`: the second-factor lift preserves composition.
 
 ## References
@@ -230,6 +231,17 @@ theorem idTensorMapLM_id :
   change swapFactorsLinearEquiv α δ (swapFactorsLinearEquiv δ α X) = X
   rw [← swapFactorsLinearEquiv_symm]
   exact (swapFactorsLinearEquiv δ α).symm_apply_apply X
+
+/-- Tensoring the identity on the first factor with a sum of linear maps
+preserves the sum. -/
+theorem idTensorMapLM_add
+    (T S : Matrix α α ℂ →ₗ[ℂ] Matrix β β ℂ) :
+    idTensorMapLM (δ := δ) (T + S) =
+      idTensorMapLM (δ := δ) T + idTensorMapLM (δ := δ) S := by
+  apply LinearMap.ext
+  intro X
+  ext ⟨i₁, i₂⟩ ⟨j₁, j₂⟩
+  rfl
 
 /-- Tensoring the identity on the first factor with a linear map preserves
 composition. -/
