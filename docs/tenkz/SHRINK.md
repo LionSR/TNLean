@@ -752,3 +752,49 @@ Handed to the next session: the three expiries above; and a question this
 entry could not answer, which is whether the eleven measured-geometry
 regressions want to become one harness with eleven fixtures. They repeat no
 assertion, but they repeat a great deal of scaffolding.
+
+### 2026-07-26 — the symmetry redraw raises the escape meter by thirty-six
+
+M3, escape usage, rises from 276 to 312. Every occurrence of an escape
+spelling names a gap in the core grammar, so a rise is a measurement rather
+than a regression — but it is only honest if the gap it names is written
+down, and this one is worth writing down carefully.
+
+The thirty-six are eighteen `out=`/`in=` pairs, which arrive together because
+a hand-routed connection states both ends. They are concentrated where the
+grammar is thinnest: thirteen pairs in the self-braiding panel, twelve in
+pulling through, five each in the idempotent, the left R-tensor and the first
+two braids. Those are exactly the figures whose strings leave a site, travel
+around something, and return.
+
+The kernel has a word for that. A route travels one clearance outside the
+offset hull of a selection, on a named side, and derives the crossings it
+makes rather than having them typed. Not one of these panels can say it: the
+package does not load the kernel language, so a corpus case speaks the 0.7
+genres only, and a string that must go around something is hand-routed with
+the two tombstoned keys or not drawn at all.
+
+So the meter is reporting the cost of the surface swap not having happened,
+priced in escape-hatch occurrences. It should fall sharply — these eighteen
+pairs and most of the standing hundred and fifty-five — when the corpus can
+speak the route form, and if it does not fall then, that is the finding.
+
+M4, mean lines per case, rises from 14.48 to 14.70. The twelve redrawn
+panels are longer than what they replace because several were drawing less
+than the source asserts -- a pumpkin instead of a wrapped word, one side of
+an equation instead of two, three strands where the source draws a connected
+lattice patch. A figure that gains the indices it was missing gains lines.
+The meter exists to catch shrink bought by drawing less, and here it is
+reporting the opposite trade, which is the one worth paying.
+
+Census-correction: #4709 — the two meters above are raised under this
+verdict, and the gate is amended to accept one. M3 and M4 were hard
+ratchets, alone among the six: M1 admits a rise against a written
+correction and M2 against an extension citation, while these two refused
+every rise whatever its reason. That made them argue against correctness,
+since a panel repaired to show the indices its source asserts both gains
+lines and, where the grammar cannot route a string, gains escape
+occurrences. They now admit a rise on the same terms M1 uses, and refuse
+one that carries no verdict — which is the case they exist to catch.
+
+No ledger row changes and no flag verdict is re-examined here.

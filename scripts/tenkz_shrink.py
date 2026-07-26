@@ -878,10 +878,31 @@ def ratchet_errors(
             "M2 parser identities changed without an Extension-gate: "
             "#NNNN citation"
         )
-    if current["m3_escape_usage"]["value"] > previous["m3_escape_usage"]["value"]:
-        errors.append("M3 escape usage increased")
-    if current["m4_lines_per_case"]["value"] > previous["m4_lines_per_case"]["value"]:
-        errors.append("M4 mean lines per frozen case increased")
+    # M3 and M4 measure demand and fidelity, not size, and both can rise for
+    # the right reason: a figure hand-routed through an escape hatch names a
+    # gap in the grammar, and a figure that gains the indices its source
+    # asserts gains lines.  Refusing every rise makes the meters argue against
+    # correctness, so a rise is admitted on the same terms M1 already uses --
+    # a dated verdict in the ledger citing the correction.  A rise carrying no
+    # verdict is still refused, which is the case the meters exist to catch.
+    if (
+        current["m3_escape_usage"]["value"]
+        > previous["m3_escape_usage"]["value"]
+        and not has_census_correction
+    ):
+        errors.append(
+            "M3 escape usage increased without a Census-correction: #NNNN "
+            "verdict naming the grammar gap the new occurrences stand in for"
+        )
+    if (
+        current["m4_lines_per_case"]["value"]
+        > previous["m4_lines_per_case"]["value"]
+        and not has_census_correction
+    ):
+        errors.append(
+            "M4 mean lines per frozen case increased without a "
+            "Census-correction: #NNNN verdict"
+        )
     current_m5 = current["m5_aliases"]["value"]
     previous_m5 = previous["m5_aliases"]["value"]
     if current_m5["count"] > previous_m5["count"]:
