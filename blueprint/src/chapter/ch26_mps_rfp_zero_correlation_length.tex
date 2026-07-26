@@ -357,6 +357,27 @@
     $\E_{j,j'}=0$.
 \end{proof}
 
+\begin{theorem}[Basis direct sum is in literal CPSV canonical form]%
+    \label{thm:bnt_cf_basis_direct_sum_is_cpsv_cf}
+    \lean{MPSTensor.IsBNTCanonicalForm.isCPSVCanonicalForm_basisDirectSum}
+    \leanok
+    \uses{def:cpsv_canonical_form, def:sector_bnt_cf}
+    Let $P$ be an auxiliary BNT sector decomposition with distinct basis
+    tensors $(A_j)_j$. The multiplicity-one unit-weight tensor
+    $A=\bigoplus_j A_j$ is in literal CPSV canonical form, with retained
+    weights all equal to $1$, retained blocks $(A_j)_j$, and the identity
+    ambient coisometry. This statement does not reconstruct the raw weighted
+    repeated-copy tensor represented by $P$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{cor:sector_bnt_cf_basis_normal}
+    Every retained dimension is positive. Each $A_j$ is irreducible and
+    left-canonical, hence normal by
+    Corollary~\ref{cor:sector_bnt_cf_basis_normal}. The unit-weight retained
+    direct sum equals $A$, so the identity coisometry gives the required exact
+    reconstruction.
+\end{proof}
+
 \begin{theorem}[Auxiliary BNT basis gives a basis for its direct sum]%
     \label{thm:bnt_cf_basis_is_bnt_for_direct_sum}
     \lean{MPSTensor.IsBNTCanonicalForm.isCPSVBasisOfNormalTensors_basisDirectSum}
@@ -622,6 +643,38 @@
     Theorem~\ref{thm:direct_sum_transfer_idempotent_iff_pairwise_mixed} gives
     $\E_A^2=\E_A$. The reverse implication is
     Theorem~\ref{thm:is_positive_gap_bnt_zcl_of_is_rfp_direct_sum}.
+\end{proof}
+
+\begin{theorem}[Conditional positive-gap ZCL implication for commuting parent ground spaces]%
+    \label{thm:positive_gap_bnt_zcl_conditional_nncph}
+    \lean{MPSTensor.IsBNTCanonicalForm.isPositiveGapBNTZCL_implies_hasNNCPHGroundSpaces_basisDirectSum_of_spectral_pair}
+    \leanok
+    \uses{def:is_positive_gap_bnt_zcl, def:sector_bnt_cf,
+        def:has_nncph_ground_spaces}
+    Let $P$ and $A=\bigoplus_j A_j$ satisfy the multiplicity-one unit-weight
+    hypotheses of
+    Theorem~\ref{thm:positive_gap_bnt_zcl_conditional_converse}, including its
+    normalized nonzero subleading spectral pair for every non-idempotent
+    block. If $A$ has positive-gap BNT zero correlation length, then for every
+    $N>2$ its translated two-site parent interactions commute and their common
+    kernel is
+    \begin{align}
+        \ker H_N&=\spn_{\C}\{\ket{V^{(N)}(A_j)}:j\}.
+        \notag
+    \end{align}
+    This is only the conditional corrected implication from (ii) to (iii) of
+    \cite[Theorem~3.10]{Cirac2016MPDO_arXiv}, not a three-way equivalence.
+% The normalized nonzero subleading spectral pair remains an explicit
+% hypothesis; CPSV16 line 1250 does not exclude a nilpotent zero-Jordan part.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:positive_gap_bnt_zcl_conditional_converse,
+        thm:rfp_multiplicity_one_bnt_has_nncph_ground_spaces}
+    Theorem~\ref{thm:positive_gap_bnt_zcl_conditional_converse} gives
+    $\E_A^2=\E_A$. The multiplicity-one fixed-point theorem
+    \ref{thm:rfp_multiplicity_one_bnt_has_nncph_ground_spaces} then gives the
+    commuting parent interactions and the stated common kernel for every
+    $N>2$.
 \end{proof}
 
 \begin{theorem}[Physical ZCL implies idempotence under the spectral assumption]%

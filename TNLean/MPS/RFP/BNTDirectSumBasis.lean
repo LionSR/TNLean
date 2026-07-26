@@ -31,6 +31,27 @@ namespace IsBNTCanonicalForm
 
 variable {P : SectorDecomposition d}
 
+/-- The multiplicity-one unit-weight direct sum of the distinct basis tensors
+is in literal CPSV canonical form.
+
+Each basis tensor is normal because it is irreducible and left-canonical, and
+its retained coordinates are exactly the ambient direct-sum coordinates.
+
+**Scope restriction (multiplicity-one unit weights):** the statement covers
+one unit-weight copy of each distinct basis tensor. It does not reconstruct the
+raw weighted repeated-copy tensor of arXiv:1606.00608, eq. `II_CF1`; see
+`docs/paper-gaps/cpsv16_pure_zcl_local_orthogonality_scope.tex`. -/
+theorem isCPSVCanonicalForm_basisDirectSum
+    (hCF : IsBNTCanonicalForm P) :
+    IsCPSVCanonicalForm (directSumTensor P.basis) := by
+  letI : ∀ j : Fin P.basisCount, NeZero (P.basisDim j) :=
+    fun j ↦ ⟨(hCF.basis_dim_pos j).ne'⟩
+  rw [← toTensorFromBlocks_one_eq_directSumTensor P.basis]
+  exact
+    (CPSVCanonicalFormData.ofBlocks hCF.basis_dim_pos (fun _ ↦ 1) P.basis
+      (fun j ↦ isNormalTensor_of_isNormal_leftCanonical (P.basis j)
+        (hCF.basis_isNormal j) (hCF.basis_left_canonical j))).isCPSVCanonicalForm
+
 /-- The distinct basis tensors of a BNT canonical form are a basis of normal
 tensors for their direct-sum tensor.
 
