@@ -23,7 +23,7 @@ This is the nonsingular gauge asserted in arXiv:1606.00608, Appendix A,
 lines 1058--1077 and eq. `II_XAX`.
 -/
 
-open scoped Matrix BigOperators
+open scoped Matrix BigOperators ComplexOrder
 
 namespace MPSTensor
 
@@ -45,20 +45,52 @@ noncomputable def coisometryExtendGL {r n : ℕ}
   have hQU : Q * Uᴴ = 0 := by
     simp only [Q, P, Matrix.sub_mul, Matrix.one_mul, Matrix.mul_assoc, hU,
       Matrix.mul_one, sub_self]
-  have hQQ : Q * Q = Q := by
-    simp only [Q, P]
+  have hPP : P * P = P := by
+    simp only [P]
     calc
-      (1 - Uᴴ * U) * (1 - Uᴴ * U) =
-          1 - Uᴴ * U - Uᴴ * U + Uᴴ * (U * Uᴴ) * U := by noncomm_ring
-      _ = 1 - Uᴴ * U := by rw [hU]; simp
+      (Uᴴ * U) * (Uᴴ * U) = Uᴴ * (U * Uᴴ) * U := by
+        simp only [Matrix.mul_assoc]
+      _ = Uᴴ * U := by rw [hU]; simp
+  have hQQ : Q * Q = Q := by
+    calc
+      Q * Q = (1 - P) * (1 - P) := rfl
+      _ = 1 - P - P + P * P := by noncomm_ring
+      _ = 1 - P := by rw [hPP]; abel
+  have hGU : G * Uᴴ = Uᴴ * (X : Matrix (Fin r) (Fin r) ℂ) := by
+    simp only [G, Matrix.add_mul, hQU, add_zero]
+    calc
+      (Uᴴ * (X : Matrix (Fin r) (Fin r) ℂ) * U) * Uᴴ =
+          Uᴴ * (X : Matrix (Fin r) (Fin r) ℂ) * (U * Uᴴ) := by
+            simp only [Matrix.mul_assoc]
+      _ = Uᴴ * (X : Matrix (Fin r) (Fin r) ℂ) := by rw [hU, Matrix.mul_one]
+  have hHU : H * Uᴴ =
+      Uᴴ * (((X⁻¹ : GL (Fin r) ℂ) : Matrix (Fin r) (Fin r) ℂ)) := by
+    simp only [H, Matrix.add_mul, hQU, add_zero]
+    calc
+      (Uᴴ * (((X⁻¹ : GL (Fin r) ℂ) : Matrix (Fin r) (Fin r) ℂ)) * U) * Uᴴ =
+          Uᴴ * (((X⁻¹ : GL (Fin r) ℂ) : Matrix (Fin r) (Fin r) ℂ)) *
+            (U * Uᴴ) := by simp only [Matrix.mul_assoc]
+      _ = Uᴴ * (((X⁻¹ : GL (Fin r) ℂ) : Matrix (Fin r) (Fin r) ℂ)) := by
+        rw [hU, Matrix.mul_one]
+  have hGQ : G * Q = Q := by
+    simp only [G, Matrix.add_mul, hQQ, Matrix.mul_assoc, hUQ, Matrix.mul_zero]
+    exact zero_add Q
+  have hHQ : H * Q = Q := by
+    simp only [H, Matrix.add_mul, hQQ, Matrix.mul_assoc, hUQ, Matrix.mul_zero]
+    exact zero_add Q
   have hGH : G * H = 1 := by
-    simp only [G, H, Matrix.mul_add, Matrix.add_mul, Matrix.mul_assoc]
-    rw [hU, Matrix.one_mul, hUQ, Matrix.mul_zero, hQU, Matrix.zero_mul, hQQ]
-    simp
+    rw [show H = Uᴴ * (((X⁻¹ : GL (Fin r) ℂ) : Matrix (Fin r) (Fin r) ℂ)) * U + Q
+      from rfl, Matrix.mul_add, hGQ]
+    rw [← Matrix.mul_assoc G
+      (Uᴴ * (((X⁻¹ : GL (Fin r) ℂ) : Matrix (Fin r) (Fin r) ℂ))) U,
+      ← Matrix.mul_assoc G Uᴴ, hGU]
+    simp [Q, P, Matrix.mul_assoc]
   have hHG : H * G = 1 := by
-    simp only [G, H, Matrix.mul_add, Matrix.add_mul, Matrix.mul_assoc]
-    rw [hU, Matrix.one_mul, hUQ, Matrix.mul_zero, hQU, Matrix.zero_mul, hQQ]
-    simp
+    rw [show G = Uᴴ * (X : Matrix (Fin r) (Fin r) ℂ) * U + Q from rfl,
+      Matrix.mul_add, hHQ]
+    rw [← Matrix.mul_assoc H (Uᴴ * (X : Matrix (Fin r) (Fin r) ℂ)) U,
+      ← Matrix.mul_assoc H Uᴴ, hHU]
+    simp [Q, P, Matrix.mul_assoc]
   exact ⟨G, H, hGH, hHG⟩
 
 @[simp] theorem coisometryExtendGL_val {r n : ℕ}
@@ -74,6 +106,33 @@ noncomputable def coisometryExtendGL {r n : ℕ}
         (1 - Uᴴ * U) := by
   rfl
 
+/-- The extended gauge acts on the retained coisometric inclusion as the
+original retained-space gauge. -/
+theorem coisometryExtendGL_mul_conjTranspose {r n : ℕ}
+    (U : Matrix (Fin r) (Fin n) ℂ) (hU : U * Uᴴ = 1) (X : GL (Fin r) ℂ) :
+    (coisometryExtendGL U hU X : Matrix (Fin n) (Fin n) ℂ) * Uᴴ =
+      Uᴴ * (X : Matrix (Fin r) (Fin r) ℂ) := by
+  rw [coisometryExtendGL_val, Matrix.add_mul]
+  have hComplement : (1 - Uᴴ * U) * Uᴴ = 0 := by
+    simp only [Matrix.sub_mul, Matrix.one_mul, Matrix.mul_assoc, hU, Matrix.mul_one,
+      sub_self]
+  rw [hComplement, add_zero]
+  simp only [Matrix.mul_assoc, hU, Matrix.mul_one]
+
+/-- The coisometry intertwines the inverse extended gauge with the inverse
+retained-space gauge. -/
+theorem mul_coisometryExtendGL_inv {r n : ℕ}
+    (U : Matrix (Fin r) (Fin n) ℂ) (hU : U * Uᴴ = 1) (X : GL (Fin r) ℂ) :
+    U * (((coisometryExtendGL U hU X)⁻¹ : GL (Fin n) ℂ) :
+      Matrix (Fin n) (Fin n) ℂ) =
+      (((X⁻¹ : GL (Fin r) ℂ) : Matrix (Fin r) (Fin r) ℂ)) * U := by
+  rw [coisometryExtendGL_inv_val, Matrix.mul_add]
+  have hComplement : U * (1 - Uᴴ * U) = 0 := by
+    simp only [Matrix.mul_sub, Matrix.mul_one, ← Matrix.mul_assoc, hU, Matrix.one_mul,
+      sub_self]
+  rw [hComplement, add_zero]
+  simp only [← Matrix.mul_assoc, hU, Matrix.one_mul]
+
 private structure CFIIBlockGaugeData {m : ℕ} (A : MPSTensor d m) where
   block : MPSTensor d m
   gauge : GaugeEquiv A block
@@ -88,7 +147,7 @@ private theorem IsNormalTensor.exists_cfiiBlockGaugeData {m : ℕ} [NeZero m]
   obtain ⟨σ, _hσ, _hσfix, hTP, hGaugeTP, _hPrimitive, hIrreducible⟩ :=
     hA.exists_tpGauge
   let T : MPSTensor d m := tpGauge A σ
-  obtain ⟨V, Λ, hSame, hΛPos, hΛDiag, hLeft, hΛFix⟩ :=
+  obtain ⟨V, Λ, _hSame, hΛPos, hΛDiag, hLeft, hΛFix⟩ :=
     exists_CFII_data_of_TP_of_isIrreducibleTensor T hTP hIrreducible (NeZero.pos m)
   let B : MPSTensor d m := fun i =>
     (V : Matrix (Fin m) (Fin m) ℂ)ᴴ * T i * (V : Matrix (Fin m) (Fin m) ℂ)
@@ -109,13 +168,13 @@ nonsingular gauge.
 Source: arXiv:1606.00608, Appendix A, lines 1058--1077 and eq. `II_XAX`. -/
 theorem CPSVCanonicalFormData.exists_gaugeEquiv_canonicalFormII
     {A : MPSTensor d D} (data : CPSVCanonicalFormData A) :
-    ∃ B : MPSTensor d D, GaugeEquiv A B ∧ CPSVCanonicalFormIIData B := by
+    ∃ B : MPSTensor d D, GaugeEquiv A B ∧ IsCPSVCanonicalFormII B := by
   classical
-  let blockData : (k : Fin data.r) → CFIIBlockGaugeData (data.blocks k) := fun k =>
-    @Classical.choice _
+  let blockData : (k : Fin data.r) → CFIIBlockGaugeData (data.blocks k) := fun k => by
+    letI : NeZero (data.dim k) := NeZero.of_pos (data.dim_pos k)
+    exact Classical.choice
       (IsNormalTensor.exists_cfiiBlockGaugeData (A := data.blocks k)
-        (m := data.dim k) (hA := data.blocks_normal k)
-        (NeZero.of_pos (data.dim_pos k)))
+        (m := data.dim k) (hA := data.blocks_normal k))
   let newBlocks : (k : Fin data.r) → MPSTensor d (data.dim k) :=
     fun k => (blockData k).block
   let blockGauge : (k : Fin data.r) → GL (Fin (data.dim k)) ℂ :=
@@ -143,20 +202,39 @@ theorem CPSVCanonicalFormData.exists_gaugeEquiv_canonicalFormII
       data.weights data.blocks newBlocks blockGauge hBlockGauge
   have hGU : (G : Matrix (Fin D) (Fin D) ℂ) * Uᴴ =
       Uᴴ * (X : Matrix (Fin (∑ k : Fin data.r, data.dim k))
-        (Fin (∑ k : Fin data.r, data.dim k)) ℂ) := by
-    simp [G, U, Matrix.mul_assoc, data.coisometric]
+        (Fin (∑ k : Fin data.r, data.dim k)) ℂ) :=
+    coisometryExtendGL_mul_conjTranspose U data.coisometric X
   have hUGinv : U * (((G⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)) =
       (((X⁻¹ : GL (Fin (∑ k : Fin data.r, data.dim k)) ℂ)) :
         Matrix (Fin (∑ k : Fin data.r, data.dim k))
-          (Fin (∑ k : Fin data.r, data.dim k)) ℂ) * U := by
-    simp [G, U, Matrix.mul_assoc, data.coisometric]
+          (Fin (∑ k : Fin data.r, data.dim k)) ℂ) * U :=
+    mul_coisometryExtendGL_inv U data.coisometric X
   have hGauge : GaugeEquiv A B := by
     refine ⟨G, fun i => ?_⟩
     rw [data.reconstruct i]
-    simp only [B, hDirect i, Matrix.mul_assoc, hGU, hUGinv]
+    let C := toTensorFromBlocks data.weights data.blocks i
+    let Xmat : Matrix (Fin (∑ k : Fin data.r, data.dim k))
+        (Fin (∑ k : Fin data.r, data.dim k)) ℂ := X
+    let Xinv : Matrix (Fin (∑ k : Fin data.r, data.dim k))
+        (Fin (∑ k : Fin data.r, data.dim k)) ℂ :=
+      ((X⁻¹ : GL (Fin (∑ k : Fin data.r, data.dim k)) ℂ) : Matrix _ _ ℂ)
+    let Gmat : Matrix (Fin D) (Fin D) ℂ := G
+    let Ginv : Matrix (Fin D) (Fin D) ℂ :=
+      ((G⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)
+    have hGU' : Gmat * Uᴴ = Uᴴ * Xmat := hGU
+    have hUGinv' : U * Ginv = Xinv * U := hUGinv
+    have hDirect' : toTensorFromBlocks data.weights newBlocks i = Xmat * C * Xinv :=
+      hDirect i
+    change Uᴴ * toTensorFromBlocks data.weights newBlocks i * U = _
+    calc
+      Uᴴ * toTensorFromBlocks data.weights newBlocks i * U =
+          Uᴴ * (Xmat * C * Xinv) * U := by rw [hDirect']
+      _ = (Uᴴ * Xmat) * C * (Xinv * U) := by simp only [Matrix.mul_assoc]
+      _ = (Gmat * Uᴴ) * C * (U * Ginv) := by rw [hGU', hUGinv']
+      _ = Gmat * (Uᴴ * C * U) * Ginv := by simp only [Matrix.mul_assoc]
   refine ⟨B, hGauge, ?_⟩
-  refine
-    { r := data.r
+  refine ⟨{
+      r := data.r
       dim := data.dim
       dim_pos := data.dim_pos
       weights := data.weights
@@ -167,7 +245,7 @@ theorem CPSVCanonicalFormData.exists_gaugeEquiv_canonicalFormII
       coisometric := data.coisometric
       reconstruct := fun _ => rfl
       blocks_left_canonical := fun k => (blockData k).leftCanonical
-      blocks_fixed_point := fun k => (blockData k).fixedPoint }
+      blocks_fixed_point := fun k => (blockData k).fixedPoint }⟩
 
 /-- Every tensor in literal CPSV canonical form is gauge-equivalent, in the
 same ambient bond dimension, to a tensor in literal canonical form II.
@@ -177,6 +255,6 @@ theorem IsCPSVCanonicalForm.exists_gaugeEquiv_canonicalFormII
     {A : MPSTensor d D} (hA : IsCPSVCanonicalForm A) :
     ∃ B : MPSTensor d D, GaugeEquiv A B ∧ IsCPSVCanonicalFormII B := by
   obtain ⟨B, hGauge, dataB⟩ := hA.data.exists_gaugeEquiv_canonicalFormII
-  exact ⟨B, hGauge, dataB.isCPSVCanonicalFormII⟩
+  exact ⟨B, hGauge, dataB⟩
 
 end MPSTensor
