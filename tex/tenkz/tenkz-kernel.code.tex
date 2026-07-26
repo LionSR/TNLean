@@ -193,11 +193,10 @@
       \l__tenkz_kernel_match_seq
       { \__tenkz_kernel_addr_cell:N #2 }
       {
-    % production 10: a .. b -- the records between two addresses in the
-    % frame's own order.  It is tried before every production whose tail
-    % pattern would swallow the joiner, and it is spelt with a range, not a
-    % hyphen: a cluster member is named `a-2-2`, and a hyphen cannot be told
-    % from a name the language itself generates.
+    % production 10: a .. b -- a selector range.  Current selectors resolve
+    % cell corners; wire places and frame stations are not yet included.  It is
+    % tried before every production whose tail would swallow the joiner and
+    % is spelt with a range, not a hyphen: a cluster member is named `a-2-2`.
     \regex_extract_once:nnNTF
       { \A (.+?) \s* \.\. \s* (.+) \Z } {#1}
       \l__tenkz_kernel_match_seq
@@ -493,39 +492,6 @@
             \__tenkz_kernel_addr:nN
               {##1} \l__tenkz_kernel_list_item_tl
           }
-      }
-  }
-
-\cs_new_protected:Npn \__tenkz_kernel_validate_mark_target:n #1
-  {
-    \regex_extract_once:nnNTF
-      {
-        \A \s*
-        ( \( \s* \d+ \s* , \s* \d+ \s* \) )
-        \s* - \s*
-        ( \( \s* \d+ \s* , \s* \d+ \s* \) )
-        \s* \Z
-      }
-      {#1} \l__tenkz_kernel_match_seq
-      {
-        \tl_set:Ne \l__tenkz_kernel_list_tl
-          {
-            { \seq_item:Nn \l__tenkz_kernel_match_seq {2} } ,
-            { \seq_item:Nn \l__tenkz_kernel_match_seq {3} }
-          }
-        \exp_args:NV \__tenkz_kernel_validate_address_list:n
-          \l__tenkz_kernel_list_tl
-      }
-      {
-        % Positional mark targets do not pass through picture option parsing,
-        % so protect their cell-coordinate commas here.
-        \tl_set:Nn \l__tenkz_kernel_list_tl {#1}
-        \regex_replace_all:nnN
-          { \( \s* (\d+) \s* , \s* (\d+) \s* \) }
-          { \cB\{ \( \1 , \2 \) \cE\} }
-          \l__tenkz_kernel_list_tl
-        \exp_args:NV \__tenkz_kernel_validate_address_list:n
-          \l__tenkz_kernel_list_tl
       }
   }
 
@@ -1340,12 +1306,32 @@
     \__tenkz_model_map_ids:nn {mark}
       {
         \tl_set:Nn \l__tenkz_model_last_tl {##1}
-        \__tenkz_model_get:nnN {##1} {target}
-          \l__tenkz_kernel_list_tl
+        \__tenkz_model_get:nnN {##1} {form} \l__tenkz_kernel_list_item_tl
+        \__tenkz_model_get:nnN {##1} {target} \l__tenkz_kernel_list_tl
         \quark_if_no_value:NF \l__tenkz_kernel_list_tl
           {
-            \exp_args:NV \__tenkz_kernel_validate_mark_target:n
-              \l__tenkz_kernel_list_tl
+            \str_case:Vn \l__tenkz_kernel_list_item_tl
+              {
+                {enclosure}
+                  {
+                    \__tenkz_kernel_select:VN \l__tenkz_kernel_list_tl
+                      \l__tenkz_kernel_sel_seq
+                    \bool_if:NT \l__tenkz_kernel_sel_valid_bool
+                      {
+                        \tl_set:Ne \l__tenkz_kernel_sel_tl
+                          { \seq_use:Nn \l__tenkz_kernel_sel_seq {,} }
+                        \exp_args:NnnnV \__tenkz_model_normalize_field:nnnn
+                          {##1} {target} {members} \l__tenkz_kernel_sel_tl
+                      }
+                  }
+                {label}
+                  {
+                    \__tenkz_kernel_addr:VN \l__tenkz_kernel_list_tl
+                      \l__tenkz_kernel_list_item_tl
+                    \exp_args:NnnnV \__tenkz_model_normalize_field:nnnn
+                      {##1} {target} {node} \l__tenkz_kernel_list_item_tl
+                  }
+              }
           }
       }
   }
@@ -2760,12 +2746,14 @@
   }
 
 % ---------- the selector and the offset hull -----------------------------------
-% A selector names a SET of records, and one grammar serves everywhere a set
-% is named: an address, a braced list of addresses, or a range.  What the
-% model keeps is the resolved membership -- the record ids -- and never the
-% expression that produced it, so containment between two selections is a
-% fact the model holds rather than a number an author types.
+% A selector names a SET of atom records: an address, a braced list of
+% addresses, a cell range, or the whole picture.  Named cluster carriers
+% expand to their generated members.  What the model keeps for enclosure
+% marks is the resolved membership -- canonical record ids -- and never the
+% expression that produced it; route selectors retain their author spelling
+% until their own model-normalization landing.
 \seq_new:N \l__tenkz_kernel_sel_seq
+\seq_new:N \l__tenkz_kernel_sel_work_seq
 \seq_new:N \l__tenkz_kernel_sel_obst_seq
 \seq_new:N \l__tenkz_kernel_leg_sel_seq
 \seq_new:N \l__tenkz_kernel_leg_obst_seq
@@ -2788,18 +2776,49 @@
 \tl_new:N \l__tenkz_kernel_hull_b_tl
 \tl_new:N \l__tenkz_kernel_hull_skin_tl
 \tl_new:N \l__tenkz_kernel_hull_turn_tl
+\tl_new:N \l__tenkz_kernel_hull_measure_name_tl
+\tl_new:N \l__tenkz_kernel_hull_shape_tl
+\tl_new:N \l__tenkz_kernel_hull_box_tl
+\tl_new:N \l__tenkz_kernel_hull_xmin_tl
+\tl_new:N \l__tenkz_kernel_hull_xmax_tl
+\tl_new:N \l__tenkz_kernel_hull_ymin_tl
+\tl_new:N \l__tenkz_kernel_hull_ymax_tl
 \tl_new:N \l__tenkz_kernel_sel_tl
 \bool_new:N \l__tenkz_kernel_sel_bool
+\bool_new:N \l__tenkz_kernel_sel_valid_bool
+\int_new:N \l__tenkz_kernel_hull_box_int
+\prop_new:N \l__tenkz_kernel_hull_live_prop
+\prop_new:N \l__tenkz_kernel_hull_measured_prop
+\dim_new:N \l__tenkz_kernel_hull_west_dim
+\dim_new:N \l__tenkz_kernel_hull_east_dim
+\dim_new:N \l__tenkz_kernel_hull_south_dim
+\dim_new:N \l__tenkz_kernel_hull_north_dim
+\dim_new:N \l__tenkz_kernel_hull_xone_dim
+\dim_new:N \l__tenkz_kernel_hull_yone_dim
+\dim_new:N \l__tenkz_kernel_hull_xtwo_dim
+\dim_new:N \l__tenkz_kernel_hull_ytwo_dim
+\dim_new:N \l__tenkz_kernel_hull_xthree_dim
+\dim_new:N \l__tenkz_kernel_hull_ythree_dim
+\fp_new:N \l__tenkz_kernel_hull_xoff_fp
+\fp_new:N \l__tenkz_kernel_hull_yoff_fp
+\fp_new:N \l__tenkz_kernel_hull_xrot_fp
+\fp_new:N \l__tenkz_kernel_hull_yrot_fp
+\tl_new:N \l__tenkz_kernel_sel_row_a_tl
+\tl_new:N \l__tenkz_kernel_sel_col_a_tl
+\tl_new:N \l__tenkz_kernel_sel_row_b_tl
+\tl_new:N \l__tenkz_kernel_sel_col_b_tl
 \msg_new:nnn {tenkz}{kernel-selector-empty}
   { [TKZ-KERNEL-SELECTOR-EMPTY]~the~selection~'#1'~names~no~record }
-\msg_new:nnn {tenkz}{kernel-selector-range}
-  { [TKZ-KERNEL-SELECTOR-RANGE]~a~range~needs~two~cells;~'#1'~gives~
-    another~kind~of~address }
+\msg_new:nnn {tenkz}{kernel-selector-kind}
+  { [TKZ-KERNEL-SELECTOR-KIND]~the~selection~'#1'~does~not~resolve~
+    only~to~atoms~or~a~range~of~cells }
 
 % selector text #1 -> the record ids it names, in #2
 \cs_new_protected:Npn \__tenkz_kernel_select:nN #1#2
   {
     \seq_clear:N #2
+    \seq_clear:N \l__tenkz_kernel_sel_work_seq
+    \bool_set_true:N \l__tenkz_kernel_sel_valid_bool
     \tl_set:Nn \l__tenkz_kernel_sel_tl {#1}
     \tl_trim_spaces:N \l__tenkz_kernel_sel_tl
     \str_if_eq:VnTF \l__tenkz_kernel_sel_tl {picture}
@@ -2807,7 +2826,11 @@
         % The whole picture is a selection like any other.  This is why the
         % corridor's own word retires: a wire that travels around everything
         % selects everything, and needs no second spelling to say so.
-        \__tenkz_model_map_ids:nn {atom} { \seq_put_right:Nn #2 {##1} }
+        \__tenkz_model_map_ids:nn {atom}
+          {
+            \__tenkz_kernel_select_record:nnN
+              {##1} {picture} \l__tenkz_kernel_sel_work_seq
+          }
       }
       {
     % A braced list is one group and nothing else.  A range whose ends
@@ -2826,17 +2849,40 @@
         \tl_set:Ne \l__tenkz_kernel_sel_tl
           { \exp_args:NV \tl_head:n \l__tenkz_kernel_sel_tl }
         \exp_args:NV \clist_map_inline:nn \l__tenkz_kernel_sel_tl
-          { \__tenkz_kernel_select_one:nN {##1} #2 }
+          {
+            \__tenkz_kernel_select_addr:nN
+              {##1} \l__tenkz_kernel_sel_work_seq
+          }
       }
       {
         \exp_args:NV \__tenkz_kernel_select_addr:nN
-          \l__tenkz_kernel_sel_tl #2
+          \l__tenkz_kernel_sel_tl \l__tenkz_kernel_sel_work_seq
       }
       }
-    \seq_if_empty:NT #2
-      { \msg_error:nnn {tenkz}{kernel-selector-empty} {#1} }
+    \bool_if:NT \l__tenkz_kernel_sel_valid_bool
+      {
+        \seq_if_empty:NT \l__tenkz_kernel_sel_work_seq
+          {
+            \bool_set_false:N \l__tenkz_kernel_sel_valid_bool
+            \msg_error:nnn {tenkz}{kernel-selector-empty} {#1}
+          }
+      }
+    \bool_if:NTF \l__tenkz_kernel_sel_valid_bool
+      {
+        \__tenkz_model_canonicalize_ids:NN
+          \l__tenkz_kernel_sel_work_seq #2
+      }
+      { \seq_clear:N #2 }
   }
 \cs_generate_variant:Nn \__tenkz_kernel_select:nN { VN }
+
+\cs_new_protected:Npn \__tenkz_kernel_mark_members:nN #1#2
+  {
+    \__tenkz_model_get:nnN {#1} {members} \l__tenkz_kernel_sel_tl
+    \quark_if_no_value:NTF \l__tenkz_kernel_sel_tl
+      { \seq_clear:N #2 }
+      { \exp_args:NNV \seq_set_from_clist:Nn #2 \l__tenkz_kernel_sel_tl }
+  }
 
 % one address of a selector: a range spreads over the block it corners,
 % anything else names the single record it resolves to
@@ -2851,7 +2897,8 @@
   }
 \cs_generate_variant:Nn \__tenkz_kernel_select_addr:nN { VN }
 
-% the atom occupying the cell or carrying the name #1
+% The atom occupying a cell or carrying a name.  A cluster carrier is a
+% semantic group: selecting its name selects its generated member atoms.
 \cs_new_protected:Npn \__tenkz_kernel_select_one:nN #1#2
   {
     \tl_set:Nn \l_tmpa_tl {#1}
@@ -2860,41 +2907,126 @@
     \quark_if_no_value:NTF \l_tmpb_tl
       {
         \exp_args:NV \__tenkz_kernel_addr:nN \l_tmpa_tl \l_tmpb_tl
-        \str_if_eq:eeT
-          { \__tenkz_kernel_node_item:Nn \l_tmpb_tl {kind} } {cell}
+        \str_case:enF
+          { \__tenkz_kernel_node_item:Nn \l_tmpb_tl {kind} }
           {
-            \exp_args:Nee \__tenkz_kernel_select_cell:nnN
-              { \__tenkz_kernel_node_item:Nn \l_tmpb_tl {row} }
-              { \__tenkz_kernel_node_item:Nn \l_tmpb_tl {col} }
-              \l_tmpb_tl
-            \quark_if_no_value:NF \l_tmpb_tl
-              { \seq_put_right:NV #2 \l_tmpb_tl }
+            {cell}
+              {
+                \exp_args:Nee \__tenkz_kernel_select_cell:nnN
+                  { \__tenkz_kernel_node_item:Nn \l_tmpb_tl {row} }
+                  { \__tenkz_kernel_node_item:Nn \l_tmpb_tl {col} }
+                  \l_tmpb_tl
+                \quark_if_no_value:NTF \l_tmpb_tl
+                  { \__tenkz_kernel_selector_reject:n {#1} }
+                  { \__tenkz_kernel_select_record:VnN \l_tmpb_tl {#1} #2 }
+              }
+            {record}
+              { \__tenkz_kernel_selector_reject:n {#1} }
           }
+          { \__tenkz_kernel_selector_reject:n {#1} }
       }
-      { \seq_put_right:NV #2 \l_tmpb_tl }
+      { \__tenkz_kernel_select_record:VnN \l_tmpb_tl {#1} #2 }
   }
 
-% a range of cells corners a block; every occupied cell inside joins
+\cs_new_protected:Npn \__tenkz_kernel_select_record:nnN #1#2#3
+  {
+    \prop_get:NnN \l__tenkz_model_class_prop {#1} \l_tmpa_tl
+    \str_if_eq:VnTF \l_tmpa_tl {atom}
+      {
+        \__tenkz_model_get:nnN {#1} {cluster} \l_tmpa_tl
+        \quark_if_no_value:NTF \l_tmpa_tl
+          { \seq_put_right:Nn #3 {#1} }
+          {
+            \__tenkz_model_get:nnN {#1} {name} \l_tmpa_tl
+            \__tenkz_model_map_ids:nn {atom}
+              {
+                \__tenkz_model_get:nnN {##1} {cluster-of} \l_tmpb_tl
+                \quark_if_no_value:NF \l_tmpb_tl
+                  {
+                    \str_if_eq:eeT
+                      { \tl_use:N \l_tmpb_tl } { \tl_use:N \l_tmpa_tl }
+                      { \seq_put_right:Nn #3 {##1} }
+                  }
+              }
+          }
+      }
+      { \__tenkz_kernel_selector_reject:n {#2} }
+  }
+\cs_generate_variant:Nn \__tenkz_kernel_select_record:nnN { VnN }
+
+\cs_new_protected:Npn \__tenkz_kernel_selector_reject:n #1
+  {
+    \bool_if:NT \l__tenkz_kernel_sel_valid_bool
+      {
+        \bool_set_false:N \l__tenkz_kernel_sel_valid_bool
+        \msg_error:nnn {tenkz}{kernel-selector-kind} {#1}
+      }
+  }
+
+% A range of cells corners a block; every occupied cell inside joins.  Other
+% address kinds belong to later selector cases.
 \cs_new_protected:Npn \__tenkz_kernel_select_range:nN #1#2
   {
-    \exp_args:Ne \__tenkz_kernel_select_corner:nNN
-      { \__tenkz_kernel_node_item:nn {#1} {first} }
-      \l__tenkz_kernel_r_row_tl \l__tenkz_kernel_r_col_tl
-    \exp_args:Ne \__tenkz_kernel_select_corner:nNN
-      { \__tenkz_kernel_node_item:nn {#1} {second} }
-      \l__tenkz_kernel_r_b_tl \l__tenkz_kernel_r_c_tl
-    \int_step_inline:nnn
-      { \int_min:nn { \l__tenkz_kernel_r_row_tl } { \l__tenkz_kernel_r_b_tl } }
-      { \int_max:nn { \l__tenkz_kernel_r_row_tl } { \l__tenkz_kernel_r_b_tl } }
+    \tl_set:Ne \l_tmpa_tl { \__tenkz_kernel_node_item:nn {#1} {first} }
+    \tl_set:Ne \l_tmpb_tl { \__tenkz_kernel_node_item:nn {#1} {second} }
+    \str_if_eq:eeTF
+      { \__tenkz_kernel_node_item:Nn \l_tmpa_tl {kind} }
+      {cell}
       {
-        \int_step_inline:nnn
-          { \int_min:nn { \l__tenkz_kernel_r_col_tl } { \l__tenkz_kernel_r_c_tl } }
-          { \int_max:nn { \l__tenkz_kernel_r_col_tl } { \l__tenkz_kernel_r_c_tl } }
+        \str_if_eq:eeTF
+          { \__tenkz_kernel_node_item:Nn \l_tmpb_tl {kind} }
+          {cell}
           {
-            \__tenkz_kernel_select_cell:nnN {##1} {####1} \l_tmpb_tl
-            \quark_if_no_value:NF \l_tmpb_tl
-              { \seq_put_right:NV #2 \l_tmpb_tl }
+            \exp_args:NV \__tenkz_kernel_select_corner:nNN
+              \l_tmpa_tl
+              \l__tenkz_kernel_sel_row_a_tl \l__tenkz_kernel_sel_col_a_tl
+            \exp_args:NV \__tenkz_kernel_select_corner:nNN
+              \l_tmpb_tl
+              \l__tenkz_kernel_sel_row_b_tl \l__tenkz_kernel_sel_col_b_tl
+            \int_step_inline:nnn
+              {
+                \int_min:nn
+                  { \l__tenkz_kernel_sel_row_a_tl }
+                  { \l__tenkz_kernel_sel_row_b_tl }
+              }
+              {
+                \int_max:nn
+                  { \l__tenkz_kernel_sel_row_a_tl }
+                  { \l__tenkz_kernel_sel_row_b_tl }
+              }
+              {
+                \int_step_inline:nnn
+                  {
+                    \int_min:nn
+                      { \l__tenkz_kernel_sel_col_a_tl }
+                      { \l__tenkz_kernel_sel_col_b_tl }
+                  }
+                  {
+                    \int_max:nn
+                      { \l__tenkz_kernel_sel_col_a_tl }
+                      { \l__tenkz_kernel_sel_col_b_tl }
+                  }
+                  {
+                    \__tenkz_kernel_select_cell:nnN
+                      {##1} {####1} \l_tmpb_tl
+                    \quark_if_no_value:NF \l_tmpb_tl
+                      {
+                        \__tenkz_kernel_select_record:VnN
+                          \l_tmpb_tl
+                          { \__tenkz_kernel_node_item:nn {#1} {text} }
+                          #2
+                      }
+                  }
+              }
           }
+          {
+            \exp_args:Ne \__tenkz_kernel_selector_reject:n
+              { \__tenkz_kernel_node_item:nn {#1} {text} }
+          }
+      }
+      {
+        \exp_args:Ne \__tenkz_kernel_selector_reject:n
+          { \__tenkz_kernel_node_item:nn {#1} {text} }
       }
   }
 % The atom standing on a cell, whichever way it got there.  The occupancy
@@ -2926,16 +3058,8 @@
 \bool_new:N \l__tenkz_kernel_sel_at_bool
 \cs_new_protected:Npn \__tenkz_kernel_select_corner:nNN #1#2#3
   {
-    \str_if_eq:eeTF { \__tenkz_kernel_node_item:nn {#1} {kind} } {cell}
-      {
-        \tl_set:Ne #2 { \__tenkz_kernel_node_item:nn {#1} {row} }
-        \tl_set:Ne #3 { \__tenkz_kernel_node_item:nn {#1} {col} }
-      }
-      {
-        \msg_error:nne {tenkz}{kernel-selector-range}
-          { \__tenkz_kernel_node_item:nn {#1} {text} }
-        \tl_set:Nn #2 {1} \tl_set:Nn #3 {1}
-      }
+    \tl_set:Ne #2 { \__tenkz_kernel_node_item:nn {#1} {row} }
+    \tl_set:Ne #3 { \__tenkz_kernel_node_item:nn {#1} {col} }
   }
 
 % THE OFFSET HULL.  Every member contributes its centre, resolved through the
@@ -2943,6 +3067,223 @@
 % largest of theirs, which is the geometry stage's own fold.  Asking the frame
 % rather than reading the row and column as page positions is the whole point:
 % a contour drawn from integers is right only while the frame is the identity.
+\cs_new_protected:Npn \__tenkz_kernel_hull_measure_reset:
+  {
+    \prop_clear:N \l__tenkz_kernel_hull_live_prop
+    \prop_clear:N \l__tenkz_kernel_hull_measured_prop
+    % Box registers are a reusable per-picture pool.  Atom ids are global,
+    % so keying allocations by id would consume one finite TeX box register
+    % for every measured glyph across the whole document.
+    \int_zero:N \l__tenkz_kernel_hull_box_int
+  }
+
+% The first pass measures frame-settled atoms before routes and legs ask for
+% their hull.  A second pass, after wire-carried tensors settle, measures only
+% the new atoms.  No author label token can therefore enter two boxes.
+\cs_new_protected:Npn \__tenkz_kernel_hull_measure_settled:
+  {
+    \__tenkz_model_map_ids:nn {atom}
+      {
+        \prop_if_in:NnF \l__tenkz_kernel_hull_measured_prop {##1}
+          {
+            \prop_get:NnN \l__tenkz_kernel_dep_state_prop {##1}
+              \l__tenkz_kernel_hull_a_tl
+            \str_if_eq:VnT \l__tenkz_kernel_hull_a_tl {settled}
+              { \__tenkz_kernel_hull_measure_atom:n {##1} }
+          }
+      }
+  }
+
+\cs_new_protected:Npn \__tenkz_kernel_hull_measure_atom:n #1
+  {
+    \prop_put:Nnn \l__tenkz_kernel_hull_measured_prop {#1} { }
+    % A cluster carrier is a group and has no glyph of its own.
+    \__tenkz_model_get:nnN {#1} {cluster} \l__tenkz_kernel_hull_a_tl
+    \quark_if_no_value:NT \l__tenkz_kernel_hull_a_tl
+      {
+        \__tenkz_model_get:nnN {#1} {skin} \l__tenkz_kernel_hull_skin_tl
+        \quark_if_no_value:NT \l__tenkz_kernel_hull_skin_tl
+          { \tl_set:Nn \l__tenkz_kernel_hull_skin_tl {dot} }
+        \str_case:VnF \l__tenkz_kernel_hull_skin_tl
+          {
+            {dot}  { }
+            {dots} { }
+            {none} { }
+          }
+          { \__tenkz_kernel_hull_measure_glyph:n {#1} }
+      }
+  }
+
+% Author label tokens enter one box.  The invisible local-axis measurement
+% and the final turned node copy that box, so sizing cannot execute the
+% author's tokens twice.
+\cs_new_protected:Npn \__tenkz_kernel_hull_measure_glyph:n #1
+  {
+    \int_incr:N \l__tenkz_kernel_hull_box_int
+    \tl_set:Ne \l__tenkz_kernel_hull_box_tl
+      {
+        l__tenkz_kernel_hull_box_
+        \int_use:N \l__tenkz_kernel_hull_box_int _box
+      }
+    \cs_if_exist:cF { \tl_use:N \l__tenkz_kernel_hull_box_tl }
+      { \box_new:c { \tl_use:N \l__tenkz_kernel_hull_box_tl } }
+    \prop_put:NnV \l__tenkz_kernel_hull_live_prop {#1/box}
+      \l__tenkz_kernel_hull_box_tl
+    \__tenkz_model_get:nnN {#1} {label} \l__tenkz_kernel_hull_a_tl
+    \quark_if_no_value:NT \l__tenkz_kernel_hull_a_tl
+      { \tl_clear:N \l__tenkz_kernel_hull_a_tl }
+    \exp_args:NnV \__tenkz_kernel_r_atom_glyph_style:nnN
+      {#1} \l__tenkz_kernel_hull_skin_tl \l__tenkz_kernel_hull_b_tl
+    \__tenkz_kernel_r_turn:nN {#1} \l__tenkz_kernel_r_ink_turn_tl
+    \tl_set:Ne \l__tenkz_kernel_hull_measure_name_tl
+      { tenkz_hull_\int_use:N \g__tenkz_kernel_picture_int _#1 }
+    \group_begin:
+      \use:c {tenkz@bboxcapturefalse}
+      \exp_args:NVV \__tenkz_render_measure_node:nnn
+        \l__tenkz_kernel_hull_b_tl
+        \l__tenkz_kernel_hull_measure_name_tl
+        {
+          \hbox_gset:cn { \tl_use:N \l__tenkz_kernel_hull_box_tl }
+            {
+              \__tenkz_kernel_r_upright:n
+                {
+                  $ \use:c {tenkz@labelsize}
+                    \tl_use:N \l__tenkz_kernel_hull_a_tl $
+                }
+            }
+          \exp_args:Nc \tex_copy:D
+            { \tl_use:N \l__tenkz_kernel_hull_box_tl }
+        }
+    \group_end:
+    \tl_set:Ne \l__tenkz_kernel_hull_shape_tl
+      {
+        \use:c
+          { pgf@sh@ns@\tl_use:N \l__tenkz_kernel_hull_measure_name_tl }
+      }
+    \str_if_eq:VnTF \l__tenkz_kernel_hull_shape_tl {isosceles~triangle}
+      {
+        \prop_put:Nnn \l__tenkz_kernel_hull_live_prop {#1/family}
+          {triangle}
+        \pgfextractx \l__tenkz_kernel_hull_xone_dim
+          {
+            \pgfpointanchor
+              {\tl_use:N \l__tenkz_kernel_hull_measure_name_tl}{apex}
+          }
+        \pgfextracty \l__tenkz_kernel_hull_yone_dim
+          {
+            \pgfpointanchor
+              {\tl_use:N \l__tenkz_kernel_hull_measure_name_tl}{apex}
+          }
+        \pgfextractx \l__tenkz_kernel_hull_xtwo_dim
+          {
+            \pgfpointanchor
+              {\tl_use:N \l__tenkz_kernel_hull_measure_name_tl}{left~corner}
+          }
+        \pgfextracty \l__tenkz_kernel_hull_ytwo_dim
+          {
+            \pgfpointanchor
+              {\tl_use:N \l__tenkz_kernel_hull_measure_name_tl}{left~corner}
+          }
+        \pgfextractx \l__tenkz_kernel_hull_xthree_dim
+          {
+            \pgfpointanchor
+              {\tl_use:N \l__tenkz_kernel_hull_measure_name_tl}{right~corner}
+          }
+        \pgfextracty \l__tenkz_kernel_hull_ythree_dim
+          {
+            \pgfpointanchor
+              {\tl_use:N \l__tenkz_kernel_hull_measure_name_tl}{right~corner}
+          }
+        \dim_set:Nn \l__tenkz_kernel_hull_west_dim
+          {
+            \dim_min:nn { \l__tenkz_kernel_hull_xone_dim }
+              {
+                \dim_min:nn { \l__tenkz_kernel_hull_xtwo_dim }
+                  { \l__tenkz_kernel_hull_xthree_dim }
+              }
+          }
+        \dim_set:Nn \l__tenkz_kernel_hull_east_dim
+          {
+            \dim_max:nn { \l__tenkz_kernel_hull_xone_dim }
+              {
+                \dim_max:nn { \l__tenkz_kernel_hull_xtwo_dim }
+                  { \l__tenkz_kernel_hull_xthree_dim }
+              }
+          }
+        \dim_set:Nn \l__tenkz_kernel_hull_south_dim
+          {
+            \dim_min:nn { \l__tenkz_kernel_hull_yone_dim }
+              {
+                \dim_min:nn { \l__tenkz_kernel_hull_ytwo_dim }
+                  { \l__tenkz_kernel_hull_ythree_dim }
+              }
+          }
+        \dim_set:Nn \l__tenkz_kernel_hull_north_dim
+          {
+            \dim_max:nn { \l__tenkz_kernel_hull_yone_dim }
+              {
+                \dim_max:nn { \l__tenkz_kernel_hull_ytwo_dim }
+                  { \l__tenkz_kernel_hull_ythree_dim }
+              }
+          }
+      }
+      {
+        \prop_put:Nnn \l__tenkz_kernel_hull_live_prop {#1/family} {rect}
+        \pgfextractx \l__tenkz_kernel_hull_west_dim
+          {
+            \pgfpointanchor
+              {\tl_use:N \l__tenkz_kernel_hull_measure_name_tl}{west}
+          }
+        \pgfextractx \l__tenkz_kernel_hull_east_dim
+          {
+            \pgfpointanchor
+              {\tl_use:N \l__tenkz_kernel_hull_measure_name_tl}{east}
+          }
+        \pgfextracty \l__tenkz_kernel_hull_south_dim
+          {
+            \pgfpointanchor
+              {\tl_use:N \l__tenkz_kernel_hull_measure_name_tl}{south}
+          }
+        \pgfextracty \l__tenkz_kernel_hull_north_dim
+          {
+            \pgfpointanchor
+              {\tl_use:N \l__tenkz_kernel_hull_measure_name_tl}{north}
+          }
+      }
+    \prop_put:Nee \l__tenkz_kernel_hull_live_prop {#1/xmin}
+      {
+        \fp_eval:n
+          {
+            \dim_to_fp:n { \l__tenkz_kernel_hull_west_dim }
+            / \dim_to_fp:n { \use:c {tenkz@pitch} }
+          }
+      }
+    \prop_put:Nee \l__tenkz_kernel_hull_live_prop {#1/xmax}
+      {
+        \fp_eval:n
+          {
+            \dim_to_fp:n { \l__tenkz_kernel_hull_east_dim }
+            / \dim_to_fp:n { \use:c {tenkz@pitch} }
+          }
+      }
+    \prop_put:Nee \l__tenkz_kernel_hull_live_prop {#1/ymin}
+      {
+        \fp_eval:n
+          {
+            \dim_to_fp:n { \l__tenkz_kernel_hull_south_dim }
+            / \dim_to_fp:n { \use:c {tenkz@pitch} }
+          }
+      }
+    \prop_put:Nee \l__tenkz_kernel_hull_live_prop {#1/ymax}
+      {
+        \fp_eval:n
+          {
+            \dim_to_fp:n { \l__tenkz_kernel_hull_north_dim }
+            / \dim_to_fp:n { \use:c {tenkz@pitch} }
+          }
+      }
+  }
+
 \cs_new_protected:Npn \__tenkz_kernel_hull_obstacles:NN #1#2
   {
     \seq_clear:N #2
@@ -2950,12 +3291,88 @@
       {
         \__tenkz_kernel_r_xy:nNN {##1}
           \l__tenkz_kernel_hull_x_fp \l__tenkz_kernel_hull_y_fp
-        \__tenkz_kernel_hull_skin:nN {##1} \l__tenkz_kernel_hull_skin_tl
-        \seq_put_right:Ne #2
+        \prop_get:NnNTF \l__tenkz_kernel_hull_live_prop {##1/xmin}
+          \l__tenkz_kernel_hull_xmin_tl
           {
-            \exp_not:V \l__tenkz_kernel_hull_skin_tl
-            { \fp_eval:n { \l__tenkz_kernel_hull_x_fp } }
-            { \fp_eval:n { \l__tenkz_kernel_hull_y_fp } }
+            \prop_get:NnN \l__tenkz_kernel_hull_live_prop {##1/xmax}
+              \l__tenkz_kernel_hull_xmax_tl
+            \prop_get:NnN \l__tenkz_kernel_hull_live_prop {##1/ymin}
+              \l__tenkz_kernel_hull_ymin_tl
+            \prop_get:NnN \l__tenkz_kernel_hull_live_prop {##1/ymax}
+              \l__tenkz_kernel_hull_ymax_tl
+            \prop_get:NnN \l__tenkz_kernel_hull_live_prop {##1/family}
+              \l__tenkz_kernel_hull_shape_tl
+            \quark_if_no_value:NT \l__tenkz_kernel_hull_shape_tl
+              { \tl_set:Nn \l__tenkz_kernel_hull_shape_tl {rect} }
+            \__tenkz_kernel_r_turn:nN {##1} \l__tenkz_kernel_hull_turn_tl
+            \fp_set:Nn \l__tenkz_kernel_hull_xoff_fp
+              {
+                ( \l__tenkz_kernel_hull_xmin_tl
+                  + \l__tenkz_kernel_hull_xmax_tl ) / 2
+              }
+            \fp_set:Nn \l__tenkz_kernel_hull_yoff_fp
+              {
+                ( \l__tenkz_kernel_hull_ymin_tl
+                  + \l__tenkz_kernel_hull_ymax_tl ) / 2
+              }
+            \fp_set:Nn \l__tenkz_kernel_hull_xrot_fp
+              {
+                \l__tenkz_kernel_hull_xoff_fp
+                  * cosd( \l__tenkz_kernel_hull_turn_tl )
+                - \l__tenkz_kernel_hull_yoff_fp
+                  * sind( \l__tenkz_kernel_hull_turn_tl )
+              }
+            \fp_set:Nn \l__tenkz_kernel_hull_yrot_fp
+              {
+                \l__tenkz_kernel_hull_xoff_fp
+                  * sind( \l__tenkz_kernel_hull_turn_tl )
+                + \l__tenkz_kernel_hull_yoff_fp
+                  * cosd( \l__tenkz_kernel_hull_turn_tl )
+              }
+            \seq_put_right:Ne #2
+              {
+                { \tl_use:N \l__tenkz_kernel_hull_shape_tl }
+                {
+                  \fp_eval:n
+                    {
+                      ( \l__tenkz_kernel_hull_xmax_tl
+                        - \l__tenkz_kernel_hull_xmin_tl ) / 2
+                    }
+                }
+                {
+                  \fp_eval:n
+                    {
+                      ( \l__tenkz_kernel_hull_ymax_tl
+                        - \l__tenkz_kernel_hull_ymin_tl ) / 2
+                    }
+                }
+                {0}
+                { \tl_use:N \l__tenkz_kernel_hull_turn_tl }
+                {
+                  \fp_eval:n
+                    {
+                      \l__tenkz_kernel_hull_x_fp
+                      + \l__tenkz_kernel_hull_xrot_fp
+                    }
+                }
+                {
+                  \fp_eval:n
+                    {
+                      \l__tenkz_kernel_hull_y_fp
+                      + \l__tenkz_kernel_hull_yrot_fp
+                    }
+                }
+              }
+          }
+          {
+            \__tenkz_kernel_hull_skin:nN {##1}
+              \l__tenkz_kernel_hull_skin_tl
+            \seq_put_right:Ne #2
+              {
+                \exp_not:V \l__tenkz_kernel_hull_skin_tl
+                { \fp_eval:n { \l__tenkz_kernel_hull_x_fp } }
+                { \fp_eval:n { \l__tenkz_kernel_hull_y_fp } }
+              }
           }
       }
   }
@@ -4311,11 +4728,11 @@
             \__tenkz_model_get:nnN {##1} {form} \l__tenkz_kernel_leg_tl
             \str_if_eq:VnT \l__tenkz_kernel_leg_tl {enclosure}
               {
-                \__tenkz_model_get:nnN {##1} {target} \l__tenkz_kernel_leg_tl
+                \__tenkz_model_get:nnN {##1} {members} \l__tenkz_kernel_leg_tl
                 \quark_if_no_value:NF \l__tenkz_kernel_leg_tl
                   {
-                    \__tenkz_kernel_select:VN \l__tenkz_kernel_leg_tl
-                      \l__tenkz_kernel_leg_sel_seq
+                    \exp_args:NNV \seq_set_from_clist:Nn
+                      \l__tenkz_kernel_leg_sel_seq \l__tenkz_kernel_leg_tl
                     \seq_if_in:NnT \l__tenkz_kernel_leg_sel_seq {#1}
                       {
                         \__tenkz_kernel_hull_obstacles:NN
@@ -5425,27 +5842,27 @@
       }
       { \__tenkz_kernel_r_atom_glyph:n {#1} }
   }
-% box, ring, tri: the label is inscribed; spans grow the glyph so it
-% visibly covers the wires it terminates (wide= spans columns, the page x
-% axis; wires= spans rows)
-\cs_new_protected:Npn \__tenkz_kernel_r_atom_glyph:n #1
+% The complete unturned live style of an inscribed glyph.  Measurement and
+% ink share it; the caller adds the record's turn after measuring in the
+% glyph's own axes.
+\cs_new_protected:Npn \__tenkz_kernel_r_atom_glyph_style:nnN #1#2#3
   {
     \__tenkz_kernel_r_span:nNN {#1}
       \l__tenkz_kernel_r_row_tl \l__tenkz_kernel_r_col_tl
-    \str_case:VnF \l__tenkz_kernel_r_tl
+    \str_case:nnF {#2}
       {
-        {box}  { \tl_set:Nn \l__tenkz_kernel_r_c_tl { box~tensor } }
-        {ring} { \tl_set:Nn \l__tenkz_kernel_r_c_tl { on-wire~matrix } }
-        {tri}  { \tl_set:Nn \l__tenkz_kernel_r_c_tl { left~canonical~tensor } }
+        {box}  { \tl_set:Nn #3 { box~tensor } }
+        {ring} { \tl_set:Nn #3 { on-wire~matrix } }
+        {tri}  { \tl_set:Nn #3 { left~canonical~tensor } }
       }
       {
         \msg_error:nnee {tenkz}{kernel-render-todo}
-          { skin = \tl_use:N \l__tenkz_kernel_r_tl } {#1}
-        \tl_set:Nn \l__tenkz_kernel_r_c_tl { box~tensor }
+          { skin = #2 } {#1}
+        \tl_set:Nn #3 { box~tensor }
       }
     \int_compare:nNnT { \l__tenkz_kernel_r_row_tl } > {1}
       {
-        \tl_put_right:Ne \l__tenkz_kernel_r_c_tl
+        \tl_put_right:Ne #3
           {
             , minimum~width = \__tenkz_kernel_r_pt:n
                 {
@@ -5456,7 +5873,7 @@
       }
     \int_compare:nNnT { \l__tenkz_kernel_r_col_tl } > {1}
       {
-        \tl_put_right:Ne \l__tenkz_kernel_r_c_tl
+        \tl_put_right:Ne #3
           {
             , minimum~height = \__tenkz_kernel_r_pt:n
                 {
@@ -5465,6 +5882,15 @@
                 }
           }
       }
+  }
+
+% box, ring, tri: the label is inscribed; spans grow the glyph so it
+% visibly covers the wires it terminates (wide= spans columns, the page x
+% axis; wires= spans rows)
+\cs_new_protected:Npn \__tenkz_kernel_r_atom_glyph:n #1
+  {
+    \exp_args:NnV \__tenkz_kernel_r_atom_glyph_style:nnN
+      {#1} \l__tenkz_kernel_r_tl \l__tenkz_kernel_r_c_tl
     \tl_put_right:Nn \l__tenkz_kernel_r_c_tl { , alias = #1 }
     % Ink the frame measures lies in the frame; ink the frame only places
     % stays upright.  A skin is measured, so it turns with its carrier; the
@@ -5478,11 +5904,24 @@
       }
     % pgfkeys splits its option list on the commas it can see; an unexpanded
     % variable is one opaque key, so the style reaches the node expanded.
-    \__tenkz_render_atom_labelled:nen {#1}
-      { \l__tenkz_kernel_r_c_tl }
+    \prop_if_in:NnTF \l__tenkz_kernel_hull_live_prop {#1/xmin}
       {
-        \__tenkz_kernel_r_upright:n
-          { $ \use:c {tenkz@labelsize} \tl_use:N \l__tenkz_kernel_r_b_tl $ }
+        \prop_get:NnN \l__tenkz_kernel_hull_live_prop {#1/box}
+          \l__tenkz_kernel_hull_box_tl
+        \__tenkz_render_atom_labelled:nen {#1}
+          { \l__tenkz_kernel_r_c_tl }
+          {
+            \exp_args:Nc \tex_copy:D
+              { \tl_use:N \l__tenkz_kernel_hull_box_tl }
+          }
+      }
+      {
+        \__tenkz_render_atom_labelled:nen {#1}
+          { \l__tenkz_kernel_r_c_tl }
+          {
+            \__tenkz_kernel_r_upright:n
+              { $ \use:c {tenkz@labelsize} \tl_use:N \l__tenkz_kernel_r_b_tl $ }
+          }
       }
   }
 \tl_new:N \l__tenkz_kernel_r_ink_turn_tl
@@ -5523,36 +5962,11 @@
 % the two pre-surgery path copies the engine froze for beads.
 \cs_new_protected:Npn \__tenkz_kernel_r_mark_label:n #1
   {
-    \__tenkz_model_get:nnN {#1} {target} \l__tenkz_kernel_r_tl
-    \exp_args:NnV \regex_extract_once:nnNTF
-      { \A \s* crossing \s+ of \s+ (.+) \s+ and \s+ (.+) \Z }
-      \l__tenkz_kernel_r_tl \l__tenkz_kernel_match_seq
-      {
-        % crossid itself uses the shared regex scratch sequence, so preserve
-        % both operands before resolving either one.
-        \tl_set:Ne \l__tenkz_kernel_r_b_tl
-          { \seq_item:Nn \l__tenkz_kernel_match_seq {2} }
-        \tl_set:Ne \l__tenkz_kernel_r_c_tl
-          { \seq_item:Nn \l__tenkz_kernel_match_seq {3} }
-        \exp_args:NV \__tenkz_kernel_r_crossid:nN
-          \l__tenkz_kernel_r_b_tl \l__tenkz_kernel_r_b_tl
-        \exp_args:NV \__tenkz_kernel_r_crossid:nN
-          \l__tenkz_kernel_r_c_tl \l__tenkz_kernel_r_c_tl
-        \exp_args:NnVV \__tenkz_kernel_r_crossing:nnn
-          {kernel-mark-crossing}
-          \l__tenkz_kernel_r_b_tl
-          \l__tenkz_kernel_r_c_tl
-        \__tenkz_geom_xy:nNN {kernel-mark-crossing}
-          \l__tenkz_kernel_r_x_fp \l__tenkz_kernel_r_y_fp
-        \__tenkz_kernel_r_mark_label_ink:n {#1}
-      }
-      {
-        \__tenkz_kernel_addr:VN \l__tenkz_kernel_r_tl \l__tenkz_kernel_r_node_tl
-        \__tenkz_kernel_r_node:V \l__tenkz_kernel_r_node_tl
-        \__tenkz_kernel_r_xy:nNN { \tl_use:N \l__tenkz_kernel_r_node_tl }
-          \l__tenkz_kernel_r_x_fp \l__tenkz_kernel_r_y_fp
-        \__tenkz_kernel_r_mark_label_ink:n {#1}
-      }
+    \__tenkz_model_get:nnN {#1} {node} \l__tenkz_kernel_r_node_tl
+    \__tenkz_kernel_r_node:V \l__tenkz_kernel_r_node_tl
+    \__tenkz_kernel_r_xy:nNN { \tl_use:N \l__tenkz_kernel_r_node_tl }
+      \l__tenkz_kernel_r_x_fp \l__tenkz_kernel_r_y_fp
+    \__tenkz_kernel_r_mark_label_ink:n {#1}
   }
 \cs_new_protected:Npn \__tenkz_kernel_r_mark_label_ink:n #1
   {
@@ -5609,8 +6023,7 @@
 % page rectangle it has always been.
 \cs_new_protected:Npn \__tenkz_kernel_r_mark_enclosure:n #1
   {
-    \__tenkz_model_get:nnN {#1} {target} \l__tenkz_kernel_r_tl
-    \__tenkz_kernel_select:VN \l__tenkz_kernel_r_tl \l__tenkz_kernel_sel_seq
+    \__tenkz_kernel_mark_members:nN {#1} \l__tenkz_kernel_sel_seq
     \__tenkz_kernel_hull_obstacles:NN
       \l__tenkz_kernel_sel_seq \l__tenkz_kernel_sel_obst_seq
     \__tenkz_kernel_hull_turn:NN \l__tenkz_kernel_sel_seq
@@ -5761,9 +6174,7 @@
               \__tenkz_kernel_r_pt:n { \l__tenkz_kernel_r_y_fp }
             )
           }
-          {
-            $ \use:c {tenkz@labelsize} \tl_use:N \l__tenkz_kernel_r_b_tl $
-          }
+          { \tl_use:N \l__tenkz_kernel_r_b_tl }
       }
   }
 
@@ -5820,6 +6231,8 @@
         baseline = \__tenkz_kernel_r_pt:n { \__tenkz_kernel_r_axis: } ,
         tenkz~every~picture
       ]
+    \__tenkz_kernel_hull_measure_reset:
+    \__tenkz_kernel_hull_measure_settled:
     \__tenkz_kernel_r_prescan:
     % The ordinary-wire pass may now settle its endpoint dependencies.  A
     % curve reached through `on w t` is declared here without ink, so the
@@ -5835,6 +6248,7 @@
     \int_set:Nn \l__tenkz_kernel_dep_stage_int {2}
     \__tenkz_model_map_ids:nn {atom} { \__tenkz_kernel_settle:n {##1} }
     \__tenkz_model_map_ids:nn {atom} { \__tenkz_kernel_r_atom_turn:n {##1} }
+    \__tenkz_kernel_hull_measure_settled:
     \__tenkz_kernel_r_atoms:
     \seq_map_inline:Nn \l__tenkz_kernel_r_after_atom_seq
       { \__tenkz_kernel_r_physical_trace:n {##1} }
