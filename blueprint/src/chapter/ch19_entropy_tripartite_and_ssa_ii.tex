@@ -362,8 +362,6 @@
     \lean{Matrix.supportLeftRightSupportInv_mulVec_sourceB_eq_projected_relativeModular}
     \lean{Matrix.supportSourceBQuadratic_eq_projected_relativeModular}
     \leanok
-    \uses{lem:support_relative_modular_source_solution,
-      lem:support_inverse_square_root_generalized_inverse}
     Let $A,B$ be positive semidefinite, let $t>0$, set
     \begin{align}
         S&=A\otimes\mathbf 1+t(\mathbf 1\otimes B^{\mathsf T}),&
@@ -398,6 +396,8 @@
 \end{lemma}
 
 \begin{proof}\leanok
+    \uses{lem:support_relative_modular_source_solution,
+      lem:support_inverse_square_root_generalized_inverse}
     Put
     \begin{align}
         P&=\mathbf 1\otimes P_B^{\mathsf T},&

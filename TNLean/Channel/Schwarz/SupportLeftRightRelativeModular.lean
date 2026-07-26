@@ -3,7 +3,6 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Analysis.RelativeEntropySupportLeftRightQuadratic
 import TNLean.Channel.Schwarz.SupportRelativeModular
 
 /-!
@@ -79,29 +78,13 @@ theorem supportLeftRightSupportInv_mulVec_sourceB_eq_projected_relativeModular
   let y : n × n → ℂ := P *ᵥ (res⁻¹ *ᵥ e)
   have hBplus_mul : Bplus * B = hB.isHermitian.supportProj := by
     simpa only [Bplus] using hB.supportInv_mul_self
-  have hBplusPSD : Bplus.PosSemidef := by
-    simpa only [Bplus, PosSemidef.supportInv,
-      hB.supportInvSqrt_isHermitian.eq] using
-        posSemidef_conjTranspose_mul_self hB.supportInvSqrt
-  have hdelta : delta.PosSemidef := hA.kronecker hBplusPSD.transpose
-  have hres : res.PosDef :=
-    (Matrix.PosDef.one.smul ht).add_posSemidef hdelta
+  have hres : res.PosDef := by
+    simpa only [res, delta, Bplus] using
+      supportRelativeModular_resolvent_posDef hA hB ht
   letI : Invertible res := hres.isUnit.invertible
-  have hCdelta :
-      C * delta = A ⊗ₖ hB.isHermitian.supportProjᵀ := by
-    dsimp only [C, delta]
-    rw [← Matrix.mul_kronecker_mul, Matrix.one_mul,
-      ← Matrix.transpose_mul, hBplus_mul]
-  have hBTP : Bᵀ * hB.isHermitian.supportProjᵀ = Bᵀ := by
-    rw [← Matrix.transpose_mul, hB.isHermitian.supportProj_mul_self]
   have hSP : S * P = C * res := by
-    dsimp only [S, supportLeftRightSuperoperator, P, C, res]
-    rw [Matrix.add_mul, Matrix.smul_mul,
-      ← Matrix.mul_kronecker_mul, ← Matrix.mul_kronecker_mul,
-      Matrix.mul_one, Matrix.one_mul, hBTP,
-      Matrix.mul_add, Matrix.mul_smul, Matrix.mul_one, hCdelta]
-    simp only [Matrix.mul_one]
-    abel
+    simpa only [S, P, C, res, delta, Bplus] using
+      supportLeftRightSuperoperator_mul_supportProj_eq (A := A) hB t
   have hCD : C * D = P := by
     dsimp only [C, D, P]
     rw [← Matrix.mul_kronecker_mul, Matrix.one_mul,
