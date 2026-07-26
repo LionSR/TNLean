@@ -1,0 +1,16 @@
+% Regression: midway resolves both named operands before placing the atom.
+\documentclass{standalone}
+\usepackage{tenkz}
+\makeatletter
+\ExplSyntaxOn
+\file_input:n { tenkz-kernel.code.tex }
+\ExplSyntaxOff
+\makeatother
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[rows={ket}, cols=2, bonds=none]
+  \tn[name=A]{A} & \tn[name=B]{B}
+  \tn[at={midway A and B}, name=M]{M}
+\end{tenkz}
+\mbox{parsed}
+\end{document}
