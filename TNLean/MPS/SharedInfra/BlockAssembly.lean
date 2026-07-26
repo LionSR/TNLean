@@ -3,16 +3,19 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Analysis.CoisometricCompression
 import TNLean.MPS.Core.MultiBlock
 import TNLean.MPS.Overlap.Basic
+import TNLean.MPS.Tactic.Basic
 
 /-!
 # Shared direct-sum tensor infrastructure for MPS tensors
 
 This file factors out the lightweight block-diagonal tensor constructor
-`toTensorFromBlocks`, its word-evaluation expansion, and its MPV expansion
-formula so shared infrastructure can depend on direct-sum tensor formulas
-without importing gauge-equivalence theorems.
+`toTensorFromBlocks`, its word-evaluation and MPV expansions, and
+`sameMPV₂Pos_of_coisometry_reconstruction`. Shared infrastructure can therefore
+use direct-sum and coisometric-reconstruction formulas without importing
+gauge-equivalence theorems.
 -/
 
 open scoped Matrix BigOperators
@@ -54,6 +57,39 @@ theorem evalWord_toTensorFromBlocks_eq_reindex_blockDiagonal
         (Matrix.blockDiagonal' fun k => (μ k) ^ w.length • evalWord (A k) w) := by
       congr 1
       simpa [BD] using evalWord_blockDiagonal'_smul (μ := μ) (A := A) w
+
+/-- A tensor reconstructed through a coisometry has the same positive-length
+closed-chain coefficients as the tensor on the retained space.
+
+The positive-length restriction is necessary because the tensors may have
+different bond dimensions, hence different length-zero traces. -/
+theorem sameMPV₂Pos_of_coisometry_reconstruction
+    {s d n : ℕ} (T : MPSTensor s d) (B : MPSTensor s n)
+    (U : Matrix (Fin n) (Fin d) ℂ)
+    (hU : U * Uᴴ = 1)
+    (hReconstruct : ∀ v, T v = Uᴴ * B v * U) :
+    SameMPV₂Pos T B := by
+  mpv_ext
+  have hEval : ∀ (v : Fin s) (w : List (Fin s)),
+      evalWord T (v :: w) = Uᴴ * evalWord B (v :: w) * U := by
+    intro v w
+    induction w generalizing v with
+    | nil => simp [hReconstruct]
+    | cons v' w ih =>
+      change T v * evalWord T (v' :: w) =
+        Uᴴ * (B v * evalWord B (v' :: w)) * U
+      rw [hReconstruct v, ih v']
+      simp only [Matrix.mul_assoc]
+      rw [← Matrix.mul_assoc U Uᴴ, hU, Matrix.one_mul]
+  have hword : List.ofFn σ ≠ [] := by
+    intro hzero
+    have hlength := congrArg List.length hzero
+    simp only [List.length_ofFn, List.length_nil] at hlength
+    omega
+  obtain ⟨v, w, hw⟩ := List.exists_cons_of_ne_nil hword
+  simp only [mpv, coeff, hw]
+  rw [hEval v w]
+  exact Matrix.trace_conjTranspose_mul_mul_of_mul_conjTranspose_eq_one U hU _
 
 /-- MPV of `toTensorFromBlocks` expands as a sum over blocks. -/
 theorem mpv_toTensorFromBlocks_eq_sum
