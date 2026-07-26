@@ -895,3 +895,26 @@ the token:
 | flag:consumers:command:tngroup | keep-because: the command carrying the group transform, with two demand-corpus consumers from the anyon panels; its shape was already affirmed against the sugar detector, and its consumer tenure follows the same 0.8 close as the two frame keys; expiry 0.8 |
 
 No meters move and no ledger row changes here.
+
+### 2026-07-26 — the torus source correction exposes two curved cycles
+
+M3, escape usage, rises from 331 to 355. The twenty-four occurrences are
+twelve `out=`/`in=` pairs in the two curved panels corrected against their
+archival figures. Ten pairs draw the literal torus boundary, its opening, and
+the two noncontractible MPO cycles that cross at the distinguished tensor.
+The remaining two draw the pulling arrow and the short auxiliary closure in
+the two-window pulling-through identity.
+
+These are the same free-graph routing gaps recorded in the preceding redraw
+entries. The public free genre has no torus surface and no route determined by
+a homotopy class, so the source's curved geometry must be stated by its two
+endpoint tangents. The rise therefore records the cost of replacing three
+cyclically misassigned panels by the figures their sources assert.
+
+M4, mean lines per case, rises from 15.87 to 16.23. The former cases drew a
+periodic word, a partial lattice crossing, and a one-box equation under the
+wrong citations. Their replacements draw the torus surface and the complete
+two-window PEPS relation. The additional lines state mathematical content
+that was previously absent.
+
+Census-correction: #4910

@@ -2,7 +2,7 @@
 # Schema: scripts/tenkz_rmp.py (load_verdicts).  Any status may be
 # recorded, including failure; the check rejects lies, never gaps.
 schema_version = 1
-campaign_sha256 = "d3ab42613f410f9c58200bb39e5e76f13549d279cde5e56397b8a74d2a8901f6"
+campaign_sha256 = "d3232258c93d676072d9aaf7e400a6223527192be24a137fed2a098c4be955d9"
 
 [[verdict]]
 id = "rmp-ii-peps-projection"
@@ -655,35 +655,35 @@ note = "ring topology preserved; hatching and hue lost"
 [[verdict]]
 id = "rmp-iii-a-torus-one"
 status = "cosmetic-gap"
-pairing = "wrong-source"
-defects = []
-case_sha256 = "2644dac8dafaa0c2e1d3105e9dbc8c7250afca7d8c6aafce2458f7a7439158c1"
+pairing = "verified"
+pairing_by = "codex-three-cycle-source-review-2026-07-26"
+defects = ["weight-mismatch"]
+case_sha256 = "a92ca845b4d83ca7968b1d5bc9ddb94bd275b671e7f369fc0c44031a74c4b433"
 reviewed = "2026-07-26"
-renderer = "fable-countersign-reading-2026-07-26-200dpi"
-note = "the wrapped word is drawn, marked site blue; faithful refused at countersign while the asset pairing is wrong (#4910) -- the case matches author lines 553-562, the mapped asset is the torus surface"
+renderer = "codex-three-cycle-source-review-2026-07-26"
+note = "The marked square is outlined rather than solid, and the public arc curvature differs slightly."
 
 [[verdict]]
 id = "rmp-iii-a-torus-two"
-status = "blocked"
+status = "cosmetic-gap"
 pairing = "verified"
-pairing_by = "pairing-sweep-two-viewers-2026-07-23"
-defects = ["wrong-contraction"]
-missing = ["torus-cycle", "crossing-order"]
-case_sha256 = "3b7baa6deaba935b1c793583f2661e75984d914bf0e863a31941a137f8ec429f"
-reviewed = "2026-07-23"
-renderer = "maintainer-page-review-2026-07-23"
-note = "crossing string operators + resolution missing"
+pairing_by = "codex-three-cycle-source-review-2026-07-26"
+defects = ["weight-mismatch"]
+case_sha256 = "6e186412fe0111f0db70f573c0e54801fff6619ef8c7e5c52d3e58ab4810b5d1"
+reviewed = "2026-07-26"
+renderer = "codex-three-cycle-source-review-2026-07-26"
+note = "The marked box and its physical legs use the public theme rather than the source's vivid blue-red ink."
 
 [[verdict]]
 id = "rmp-iii-a-torus-three"
-status = "blocked"
-pairing = "wrong-source"
-defects = ["wrong-contraction"]
-missing = ["torus-cycle", "string-slide"]
-case_sha256 = "d089fc838c7e3e85dd1696757bb3955cbbff27b131697955b16fcc965d2fe7c0"
-reviewed = "2026-07-23"
-renderer = "maintainer-page-review-2026-07-23"
-note = "Author panel shows one torus loop with insertion i, not the declared before-and-after string-slide equation."
+status = "cosmetic-gap"
+pairing = "verified"
+pairing_by = "codex-three-cycle-source-review-2026-07-26"
+defects = ["weight-mismatch"]
+case_sha256 = "d682056d9065d829f41f8ef70abe907dd9bb3677ab67e47a9e38e0188a8c7e45"
+reviewed = "2026-07-26"
+renderer = "codex-three-cycle-source-review-2026-07-26"
+note = "The enlarged crossing is blue-outlined rather than solid blue."
 
 [[verdict]]
 id = "rmp-iii-b-anyon-pair"
