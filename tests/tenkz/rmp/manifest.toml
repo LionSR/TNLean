@@ -1038,15 +1038,15 @@ corpus = "published"
 section = "section-iii-a"
 order = 62
 case = "tests/tenkz/rmp/section-iii-a/cases/rmp-iii-a-torus-one.tex"
-formula = "A noncontractible MPO loop with crossing tensor i labels a torus state."
-ink = "Canonical public tenkzfree closed horizontal and vertical cycles."
-boundary = "Both MPO cycles are closed; the diagram is a scalar torus sector."
-source = "paper TN-Review-main.tex line 1584; author source ImagesReview Section III/ImagesReview Section III.tex lines 553-562"
+formula = "Two noncontractible MPO cycles cross at tensor i on the torus."
+ink = "The torus boundary and its central opening are black, while the two noncontractible MPO cycles are red and meet at the blue tensor i."
+boundary = "Both MPO cycles close through the identified torus boundary, so the diagram has no free tensor index and represents a scalar state."
+source = "paper TN-Review-main.tex line 1584; author source ImagesReview Section III/ImagesReview Section III.tex lines 563-571"
 capabilities = ["free-graph", "torus-cycle", "crossing-tensor"]
 paper_context_only = false
 fixture = "tests/tenkz/t2_sptintertwin.tex"
 author_source = "ImagesReview Section III/ImagesReview Section III.tex"
-author_lines = "553-562"
+author_lines = "563-571"
 placements = [{ order = 62, line = 1584, asset = "fig3_fig3-pepe_Eq61.pdf" }]
 
 [[target]]
@@ -1055,15 +1055,15 @@ corpus = "published"
 section = "section-iii-a"
 order = 63
 case = "tests/tenkz/rmp/section-iii-a/cases/rmp-iii-a-torus-two.tex"
-formula = "Enlarged horizontal O_g and vertical O_h strings cross on the PEPS."
-ink = "Canonical public tenkzlattice with orthogonal distinguished MPO paths."
-boundary = "The 5x5 PEPS patch is open; both MPO strings cross its boundary."
-source = "paper TN-Review-main.tex line 1594; author source ImagesReview Section III/ImagesReview Section III.tex lines 572-602"
-capabilities = ["lattice", "orthogonal-strings", "crossing-tensor"]
+formula = "A five-tensor enlarged MPO word, with its fourth tensor marked."
+ink = "Canonical public tenkz grid grammar; the MPO bond is distinguished and the marked tensor uses the marked semantic role."
+boundary = "The virtual MPO bond is periodic; all ten physical legs are open."
+source = "paper TN-Review-main.tex line 1594; author source ImagesReview Section III/ImagesReview Section III.tex lines 553-562; archival output fig3_fig3-pepe_Eq62.pdf"
+capabilities = ["grid", "mpo-word", "periodic-closure", "marked-insertion"]
 paper_context_only = false
 fixture = "tests/tenkz/t2_sptintertwin.tex"
 author_source = "ImagesReview Section III/ImagesReview Section III.tex"
-author_lines = "572-602"
+author_lines = "553-562"
 placements = [{ order = 63, line = 1594, asset = "fig3_fig3-pepe_Eq62.pdf" }]
 
 [[target]]
@@ -1072,15 +1072,15 @@ corpus = "published"
 section = "section-iii-a"
 order = 64
 case = "tests/tenkz/rmp/section-iii-a/cases/rmp-iii-a-torus-three.tex"
-formula = "Sliding O_g through O_h conjugates h to ghg^{-1} at the crossing."
-ink = "Canonical public tenkzfree before-and-after crossing equation."
-boundary = "Four MPO string ends are open on each side of the equation."
-source = "paper TN-Review-main.tex line 1605; author source ImagesReview Section III/ImagesReview Section III.tex lines 563-571"
-capabilities = ["free-graph", "crossing-tensor", "string-slide"]
+formula = "Moving O_g through the PEPS past O_h inserts the rails g^{-1} and g."
+ink = "Canonical public tenkzfree rendering of the two 5x5 PEPS windows."
+boundary = "The PEPS bonds and both MPO strings remain open at the window."
+source = "arXiv:2011.12127, TN-Review-main.tex lines 1602-1606; author source ImagesReview Section III/ImagesReview Section III.tex lines 572-603."
+capabilities = ["free-graph", "peps-window", "crossing-tensor", "string-slide"]
 paper_context_only = false
 fixture = "tests/tenkz/t2_sptintertwin.tex"
 author_source = "ImagesReview Section III/ImagesReview Section III.tex"
-author_lines = "563-571"
+author_lines = "572-603"
 placements = [{ order = 64, line = 1605, asset = "fig3_fig3-pepe_neweq60.pdf" }]
 
 [[target]]
