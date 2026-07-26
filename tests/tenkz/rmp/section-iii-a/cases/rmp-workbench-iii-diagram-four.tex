@@ -7,13 +7,20 @@
 % Capabilities: free-graph, four-arm-closure, coproduct
 \[
   \begin{tenkzfree}
-    \tnput[ring]{l}{(0mm,0mm)}{\lambda}
+    \tnput[ring]{l}{(-6mm,6mm)}{\lambda}
     \tnput[box]{n}{(0mm,8mm)}{} \tnput[box]{e}{(8mm,0mm)}{}
     \tnput[box]{s}{(0mm,-8mm)}{} \tnput[box]{w}{(-8mm,0mm)}{}
-    \tnjoin{l.north}{n.south} \tnjoin{l.east}{e.west}
-    \tnjoin{l.south}{s.north} \tnjoin{l.west}{w.east}
+    \tnjoin[route=arc, out=0, in=90]{n.east}{e.north}
+    \tnjoin[route=arc, out=-90, in=0]{e.south}{s.east}
+    \tnjoin[route=arc, out=180, in=-90]{s.west}{w.south}
+    \tnjoin[route=arc, out=90, in=180]{w.north}{l.west}
+    \tnjoin{l.east}{n.west}
+    \tnjoin{n.north}{0mm,16mm} \tnjoin{e.east}{16mm,0mm}
+    \tnjoin{0mm,-16mm}{s.south} \tnjoin{-16mm,0mm}{w.west}
   \end{tenkzfree}
   =\Delta^3\!\left(
-    \begin{tenkz}[boundary=periodic]\tnX{\lambda}&\tn{}\end{tenkz}
+    \begin{tenkz}[boundary=periodic, physical=up, tensor style=box]
+      \tnX{\lambda}&\tn{}
+    \end{tenkz}
   \right).
 \]
