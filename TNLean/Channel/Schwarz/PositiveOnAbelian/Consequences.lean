@@ -75,9 +75,6 @@ private lemma commute_parts_of_normal
     OfNat.ofNat_ne_zero, or_self, not_false_eq_true, Commute.smul_right_iff₀] using
     (hsum_sub.smul_left (1 / 2 : ℂ)).smul_right (Complex.I / 2 : ℂ)
 
-set_option maxHeartbeats 800000 in
--- Elaborating the simultaneous-diagonalization argument expands enough basis-level
--- definitions that the default heartbeat limit times out during `whnf`.
 private lemma exists_diagonal_family_of_normal
     {A : Mat} (hA : Aᴴ * A = A * Aᴴ) :
     ∃ (s : Type) (_ : Fintype s) (_ : DecidableEq s)
@@ -227,16 +224,10 @@ private lemma exists_diagonal_family_of_normal
   have hAstarAb (a : s) : Matrix.toEuclideanLin (Aᴴ * A) (b a) =
       (star (eig a) * eig a) • b a := by
     apply (WithLp.ofLp_injective 2)
-    have hmul : Aᴴ.mulVec (A.mulVec (b a).ofLp) = ((star (eig a) * eig a) • b a).ofLp := by
-      rw [hAb_ofLp a]
-      calc
-        Aᴴ.mulVec (eig a • (b a).ofLp) = eig a • (Aᴴ.mulVec (b a).ofLp) := by
-          rw [Matrix.mulVec_smul]
-        _ = eig a • (star (eig a) • (b a).ofLp) := by rw [hAstarb_ofLp a]
-        _ = ((star (eig a) * eig a) • b a).ofLp := by
-            simp only [WithLp.ofLp_smul, smul_smul, mul_comm]
-    simpa only [Matrix.ofLp_toLpLin (p := 2) (q := 2), Matrix.toLin'_apply,
-      Matrix.mulVec_mulVec, WithLp.ofLp_smul] using hmul
+    change (Aᴴ * A).mulVec (b a).ofLp =
+      ((star (eig a) * eig a) • b a).ofLp
+    rw [← Matrix.mulVec_mulVec, hAb_ofLp a, Matrix.mulVec_smul, hAstarb_ofLp a]
+    rw [WithLp.ofLp_smul, smul_smul, mul_comm]
   have hAstarA_matrix : Aᴴ * A = ∑ i, (star (eig i) * eig i) • P i := by
     apply Matrix.toEuclideanLin.injective
     simpa only [P, map_sum, map_smul, LinearEquiv.apply_symm_apply] using
