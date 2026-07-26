@@ -84,7 +84,7 @@ on the bond space.
     \label{lem:twisted_tensor_block_comm}
     \lean{MPSTensor.twistedTensor_blockTensor_comm}
     \leanok
-    \uses{def:block_kron_action, def:block_tensor, def:twisted_tensor,
+    \uses{def:block_kron_action, def:blocked_tensor, def:twisted_tensor,
         lem:eval_word_twisted_tensor}
     For every $g\in G$ and $L\ge0$,
     \begin{align}
@@ -557,9 +557,9 @@ make this precise and establish the quotient $H^2(G,\C^{\times})$.
 
 \subsection{Non-triviality via the commutator phase}
 
-For an abelian symmetry group the cohomology class of a factor system is
-detected by an antisymmetric pairing, which gives a computable test for
-non-triviality.
+For an abelian symmetry group, the antisymmetric commutator phase is invariant
+under a change of cocycle representative.  A nonunit value therefore witnesses
+non-triviality; no converse is asserted here.
 
 \begin{definition}[Commutator phase]\label{def:comm_phase}
     \lean{TNLean.Algebra.ScalarCocycle.commPhase}
