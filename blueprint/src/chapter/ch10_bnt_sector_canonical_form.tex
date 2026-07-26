@@ -141,6 +141,7 @@ single family.
 
 \begin{definition}[BNT canonical form]%
     \label{def:sector_bnt_cf}
+    \label{lem:sector_bnt_weight_unit_exists_of_struct}
     \lean{MPSTensor.IsBNTCanonicalForm}
     \lean{MPSTensor.IsBNTCanonicalForm.weight_unit_exists_of_struct}
     \leanok
@@ -387,29 +388,18 @@ and the combined-family linear independence.
     criterion (Lemma~\ref{lem:bnt_two_family_overlap_orthonormal_li}).
 \end{proof}
 
-\begin{lemma}[Unit-modulus weight witness from the canonical-form normalization]%
-    \label{lem:sector_bnt_weight_unit_exists_of_struct}
-    \lean{MPSTensor.IsBNTCanonicalForm.weight_unit_exists_of_struct}
-    \leanok
-    \uses{def:sector_bnt_cf}
-    Under the BNT canonical form, the
-    \cite[Section~2.3]{Cirac2016MPDO_arXiv} unit-modulus existential provides
-    indices $(j_*,q_*)$ with $|\mu_{j_*,q_*}| = 1$.
-\end{lemma}
-
-\begin{proof}\leanok
-    The canonical-form normalization includes a unit-modulus weight
-    $|\mu_{j_*,q_*}| = 1$.
-\end{proof}
-
 \begin{example}[$C \oplus (1/2)C$, unequal-modulus admissibility]%
     \label{ex:sector_bnt_halvedDecomp}
     \lean{MPSTensor.SectorBNT.Examples.halvedDecomp}
     \leanok
-    \uses{def:sector_bnt_cf}
-    The single-sector two-copy decomposition with raw weights $(1, 1/2)$ is a BNT
-    canonical form, so unequal-modulus copies are admissible: $|1/2| \le 1$ and
-    the unit witness is the first copy.
+    \uses{def:sector_weight_data}
+    For any tensor $C$, this construction forms a single-sector, two-copy
+    decomposition with basis tensor $C$ and raw weights $(1,1/2)$. Thus the
+    sector data themselves allow unequal-modulus copies. If $C$ additionally
+    has positive bond dimension, is irreducible and left-canonical, has
+    normalized nonzero self-overlap, and satisfies the BNT independence clause,
+    these data satisfy Definition~\ref{def:sector_bnt_cf}; those hypotheses are
+    not consequences of the construction alone.
 \end{example}
 
 \subsection{Single-copy sector decompositions}
@@ -609,9 +599,7 @@ gives the arbitrary-input statement, conditional on the weight normalization.
     \textbf{Scope restriction (nonzero MPV family).} The source proposition
     says ``for any tensor'', but the zero MPV family cannot supply the global
     unit-modulus weight imposed immediately before it. The hypothesis above
-    is exactly the exclusion of this degenerate case. This boundary is
-    recorded in
-    \path{docs/paper-gaps/cpsv16_cf_normalization_and_proportional_comparison.tex}.
+    is exactly the exclusion of this degenerate case.
 \end{theorem}
 
 \begin{proof}\leanok

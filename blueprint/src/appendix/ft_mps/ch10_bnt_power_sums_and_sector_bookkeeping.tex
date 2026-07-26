@@ -195,27 +195,6 @@ bond dimension $D_{\mathrm{tot}}=\sum_j r_jD_j$.
     \end{align}
 \end{proof}
 
-\begin{theorem}[Indices, dimensions, weights, and representatives under blocking]%
-    \label{thm:sector_decomposition_block_tensor_data}
-    \lean{MPSTensor.SectorDecomposition.blockTensor_basis}
-    \lean{MPSTensor.SectorDecomposition.blockTensor_weight}
-    \lean{MPSTensor.SectorDecomposition.blockTensor_copies}
-    \lean{MPSTensor.SectorDecomposition.blockTensor_totalCopies}
-    \lean{MPSTensor.SectorDecomposition.blockTensor_flatDim}
-    \lean{MPSTensor.SectorDecomposition.blockTensor_totalDim}
-    \lean{MPSTensor.SectorDecomposition.blockTensor_flatWeight}
-    \lean{MPSTensor.SectorDecomposition.blockTensor_flatBasis}
-    \leanok
-    \uses{def:sector_decomposition_block_tensor}
-    Physical blocking preserves the copy sets and bond dimensions. On the
-    flattened copy index, the weight is raised to the $p$-th power and the
-    representative is replaced by its $p$-site blocking.
-\end{theorem}
-
-\begin{proof}\leanok\uses{def:sector_decomposition_block_tensor}
-    These identities follow directly from the definition.
-\end{proof}
-
 \begin{theorem}[Blocked sector coefficients and assembled tensor]%
     \label{thm:sector_decomposition_block_tensor_mpv}
     \lean{MPSTensor.SectorDecomposition.coeff_blockTensor}
@@ -300,4 +279,104 @@ bond dimension $D_{\mathrm{tot}}=\sum_j r_jD_j$.
     Expanding the sector decomposition gives the left-hand side of
     (\ref{eq:canonical_single_copy_sector}), which is the finite block-sum
     expression for $\bigoplus_k\mu_kB_k$.
+\end{proof}
+
+\begin{lemma}[Sector-decomposition coefficient is not eventually zero]
+    \label{lem:sector_decomposition_coeff_not_eventually_zero}
+    \lean{MPSTensor.SectorDecomposition.coeff_not_eventually_zero}
+    \leanok
+    \uses{def:sector_weight_data,
+        lem:finite_geometric_sum_eventual_vanishing}
+    For any sector decomposition $P$ and any sector $j$, the coefficient
+    $c_{P,j}^{(N)}=\sum_q\mu_{j,q}^N$ is not eventually zero in $N$.
+\end{lemma}
+
+\begin{proof}\leanok
+    If the coefficient vanished for every $N\geq M$, the finite geometric-sum
+    extrapolation would make it vanish at every non-negative exponent. However,
+    at exponent zero, $c_{P,j}^{(0)}=\sum_q\mu_{j,q}^0=r_j>0$, which is
+    impossible.
+\end{proof}
+
+\begin{lemma}[Sector coefficient is not eventually zero]
+    \label{lem:sector_bnt_coeff_not_eventually_zero}
+    \lean{MPSTensor.IsBNTCanonicalForm.coeff_not_eventually_zero}
+    \leanok
+    \uses{def:sector_bnt_cf,
+        lem:sector_decomposition_coeff_not_eventually_zero}
+    For a BNT canonical form $P$ and any sector $j$, the sector coefficient
+    $c_{P,j}^{(N)} = \sum_q \mu_{j,q}^N$ is not eventually zero in $N$. Only
+    nonvanishing of the copy weights is used, not any modulus condition.
+\end{lemma}
+
+\begin{proof}\leanok
+    Apply Lemma~\ref{lem:sector_decomposition_coeff_not_eventually_zero}; its
+    conclusion does not require the canonical-form assumptions.
+\end{proof}
+
+\subsection{Proportional matching and finite bijection extraction}
+\label{subsec:app_bnt_proportional_matching}
+
+The equal-MPV matching theorems in Chapter~\ref{ch:bnt} are specializations of
+an eventual proportionality argument. We record that general mechanism and the
+finite-set construction used to package matches in both directions.
+
+\begin{theorem}[Exact sector matching under eventual proportionality]
+    \label{lem:sector_bnt_proportional_exact_match}
+    \lean{MPSTensor.exists_block_match_exact_of_eventuallyProportional}
+    \leanok
+    \uses{def:sector_bnt_cf, lem:sector_bnt_combined_family_eventually_li,
+        lem:sector_bnt_coeff_not_eventually_zero}
+    Let $P$ and $Q$ be BNT canonical forms whose total MPV families are
+    eventually nonzero and proportional. For every sector $j$ of $P$, there is
+    a sector $k$ of $Q$ with equal bond dimension, gauge-phase-equivalent basis
+    tensor after the dimension identification, and non-decaying cross-overlap.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:sector_bnt_combined_family_eventually_li,
+        lem:sector_bnt_coeff_not_eventually_zero,
+        thm:nt_overlap_norm_one_gauge}
+    If the chosen sector decayed against every sector of $Q$, separate the
+    non-decaying matched sectors from the decaying residue. The combined-family
+    Gram criterion makes that residue together with the $Q$ family eventually
+    linearly independent. Exact coefficient extraction would then make the
+    chosen sector coefficient eventually zero, contradicting its power-sum
+    nonvanishing. The resulting non-decaying overlap gives dimension equality
+    and gauge-phase equivalence by normal-block overlap rigidity.
+\end{proof}
+
+\begin{theorem}[Full-basis matching under eventual proportionality]
+    \label{lem:sector_bnt_proportional_full_basis_match}
+    \lean{MPSTensor.forall_k_exists_j_nondecaying_overlap_of_eventuallyProportional}
+    \leanok
+    \uses{lem:sector_bnt_proportional_exact_match}
+    Under the same hypotheses, every sector of $Q$ has an equal-dimensional,
+    gauge-phase-equivalent partner in $P$ with non-decaying cross-overlap.
+\end{theorem}
+
+\begin{proof}\leanok
+    Reverse the eventual proportionality and apply
+    Theorem~\ref{lem:sector_bnt_proportional_exact_match} to each sector of
+    $Q$; symmetry of the overlap converts the resulting witness to the stated
+    orientation.
+\end{proof}
+
+\begin{lemma}[Bijection from matches in both directions]
+    \label{lem:sector_bnt_bijection_from_matches}
+    \lean{MPSTensor.bijection_from_matches}
+    \leanok
+    \uses{def:sector_bnt_cf}
+    Suppose every sector of $Q$ has an equal-dimensional,
+    gauge-phase-equivalent partner in $P$ with non-decaying overlap, and the
+    converse holds from $P$ to $Q$. Then the forward partners may be chosen as
+    a bijection between the two finite sector sets, preserving all three
+    properties.
+\end{lemma}
+
+\begin{proof}\leanok
+    Basis separation makes each partner map injective: two sectors with the
+    same partner would be gauge-phase equivalent to one another. The injections
+    in both directions force equal finite cardinalities, so the forward map is
+    bijective.
 \end{proof}
