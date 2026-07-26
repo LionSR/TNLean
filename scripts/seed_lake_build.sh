@@ -95,7 +95,11 @@ cleanup() {
     fi
   fi
   if test -n "${STAGING_DIR:-}" && test -d "$STAGING_DIR"; then
-    find "$STAGING_DIR" -depth -delete
+    staging_inode="$(stat -f %i "$STAGING_DIR" 2>/dev/null || true)"
+    if test -n "$staging_inode" &&
+      test "$staging_inode" = "${STAGING_INODE:-}"; then
+      find "$STAGING_DIR" -depth -delete
+    fi
   fi
 }
 trap cleanup EXIT
@@ -109,6 +113,7 @@ PRIMARY_ROOT="$(
     head -n 1
 )"
 STAGING_DIR=""
+STAGING_INODE=""
 PACKAGE_LIST_FILE=""
 RESERVATION_DIR=""
 RESERVATION_INODE=""
@@ -175,8 +180,11 @@ RESERVATION_DIR="$TARGET_ROOT/.lake"
 mkdir "$RESERVATION_DIR" 2>/dev/null || die "target already has .lake"
 RESERVATION_INODE="$(stat -f %i "$RESERVATION_DIR")"
 chmod 000 "$RESERVATION_DIR"
-STAGING_DIR="$TARGET_ROOT/.lake.seed.$$"
+STAGING_DIR="$(/usr/bin/mktemp -d "$TARGET_ROOT/.lake.seed.XXXXXX")"
+STAGING_INODE="$(stat -f %i "$STAGING_DIR")"
 /bin/cp -cR "$SOURCE_ROOT/.lake/." "$STAGING_DIR"
+test "$(stat -f %i "$STAGING_DIR")" = "$STAGING_INODE" ||
+  die "staging directory changed during clone"
 python3 - "$STAGING_DIR" "$RESERVATION_DIR" <<'PY'
 import ctypes
 import os
@@ -203,9 +211,11 @@ if result != 0:
     error = ctypes.get_errno()
     raise OSError(error, os.strerror(error))
 PY
-RESERVATION_DIR="$STAGING_DIR"
-chmod 700 "$RESERVATION_DIR"
-find "$RESERVATION_DIR" -depth -delete
-STAGING_DIR=""
+STAGING_INODE="$RESERVATION_INODE"
 RESERVATION_DIR=""
+RESERVATION_INODE=""
+chmod 700 "$STAGING_DIR"
+find "$STAGING_DIR" -depth -delete
+STAGING_DIR=""
+STAGING_INODE=""
 echo "seed-lake-build: cloned $SOURCE_ROOT/.lake into $TARGET_ROOT/.lake"
