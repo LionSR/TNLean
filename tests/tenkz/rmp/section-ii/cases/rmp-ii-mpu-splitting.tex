@@ -32,17 +32,23 @@
     \tnjoin{w.east}{v.west}
   \end{tenkzfree}
   \;=\;
+  % third panel: the MIRRORED splitting, as in the source - u now reaches
+  % WEST and v EAST, so the two factorizations are the even-odd and the
+  % odd-even one.  The bead labels sit on the free side of each bead,
+  % clear of both the vertical wire and the bead's own leg.
   \begin{tenkzfree}
-    \tnput[dot,role=marked,ports={north:physical,south:virtual,east:physical}]
+    \tnput[dot,role=marked,label pos=east,
+           ports={north:physical,south:virtual,west:physical}]
       {u}{(0mm,4mm)}{u}
-    \tnput[dot,role=extra,ports={north:virtual,south:physical,west:physical}]
+    \tnput[dot,role=extra,label pos=west,
+           ports={north:virtual,south:physical,east:physical}]
       {v}{(0mm,-4mm)}{v}
     \tnput[boundary,ports={south:physical}]{n}{(0mm,11mm)}{}
     \tnput[boundary,ports={north:physical}]{s}{(0mm,-11mm)}{}
-    \tnput[boundary,ports={west:physical}]{e}{(9mm,4mm)}{}
-    \tnput[boundary,ports={east:physical}]{w}{(-9mm,-4mm)}{}
+    \tnput[boundary,ports={east:physical}]{w}{(-9mm,4mm)}{}
+    \tnput[boundary,ports={west:physical}]{e}{(9mm,-4mm)}{}
     \tnjoin{n.south}{u.north} \tnjoin{u.south}{v.north}
-    \tnjoin{v.south}{s.north} \tnjoin{u.east}{e.west}
-    \tnjoin{w.east}{v.west}
+    \tnjoin{v.south}{s.north} \tnjoin{w.east}{u.west}
+    \tnjoin{v.east}{e.west}
   \end{tenkzfree}
 \]
