@@ -2877,7 +2877,9 @@
 \cs_new_protected:Npn \__tenkz_kernel_mark_members:nN #1#2
   {
     \__tenkz_model_get:nnN {#1} {members} \l__tenkz_kernel_sel_tl
-    \exp_args:NNV \seq_set_from_clist:Nn #2 \l__tenkz_kernel_sel_tl
+    \quark_if_no_value:NTF \l__tenkz_kernel_sel_tl
+      { \seq_clear:N #2 }
+      { \exp_args:NNV \seq_set_from_clist:Nn #2 \l__tenkz_kernel_sel_tl }
   }
 
 % one address of a selector: a range spreads over the block it corners,
@@ -3145,6 +3147,8 @@
       }
     \str_if_eq:VnTF \l__tenkz_kernel_hull_shape_tl {isosceles~triangle}
       {
+        \prop_put:Nnn \l__tenkz_kernel_hull_live_prop {#1/family}
+          {triangle}
         \pgfextractx \l__tenkz_kernel_hull_xone_dim
           {
             \pgfpointanchor
@@ -3209,6 +3213,7 @@
           }
       }
       {
+        \prop_put:Nnn \l__tenkz_kernel_hull_live_prop {#1/family} {rect}
         \pgfextractx \l__tenkz_kernel_hull_west_dim
           {
             \pgfpointanchor
@@ -3280,6 +3285,10 @@
               \l__tenkz_kernel_hull_ymin_tl
             \prop_get:NnN \l__tenkz_kernel_hull_live_prop {##1/ymax}
               \l__tenkz_kernel_hull_ymax_tl
+            \prop_get:NnN \l__tenkz_kernel_hull_live_prop {##1/family}
+              \l__tenkz_kernel_hull_shape_tl
+            \quark_if_no_value:NT \l__tenkz_kernel_hull_shape_tl
+              { \tl_set:Nn \l__tenkz_kernel_hull_shape_tl {rect} }
             \__tenkz_kernel_r_turn:nN {##1} \l__tenkz_kernel_hull_turn_tl
             \fp_set:Nn \l__tenkz_kernel_hull_xoff_fp
               {
@@ -3307,7 +3316,7 @@
               }
             \seq_put_right:Ne #2
               {
-                {rect}
+                { \tl_use:N \l__tenkz_kernel_hull_shape_tl }
                 {
                   \fp_eval:n
                     {

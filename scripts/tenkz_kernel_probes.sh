@@ -268,6 +268,21 @@ if [ -f "$WORK/n_selector_mixed.tnlog" ] &&
   echo "FAIL: a rejected mixed selector retained partial membership" >&2
   exit 1
 fi
+rm -f "$WORK"/n_selector_mixed.{aux,log,pdf,tnlog}
+( cd "$WORK" &&
+  TEXINPUTS="$REPO/tex/tenkz//:" \
+    timeout 120 xelatex -interaction=nonstopmode \
+    "$selector_negative" >"$WORK/n_selector_mixed.recovery.transcript" 2>&1
+) || true
+[ -f "$WORK/n_selector_mixed.pdf" ] || {
+  echo "FAIL: rejected selector did not survive TeX error recovery" >&2
+  exit 1
+}
+if grep -Eq 'TeX capacity exceeded|q_no_value|Emergency stop' \
+    "$WORK/n_selector_mixed.recovery.transcript"; then
+  echo "FAIL: rejected selector leaked missing membership into rendering" >&2
+  exit 1
+fi
 
 missing_onwire="$KERNEL/negative/n_missing_onwire.tex"
 if ( cd "$WORK" &&
