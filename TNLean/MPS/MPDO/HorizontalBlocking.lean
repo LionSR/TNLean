@@ -10,8 +10,8 @@ import TNLean.MPS.MPDO.PhysicalBlocking
 /-!
 # Normalized BNT-refined horizontal form under two-site blocking
 
-Two-site physical blocking preserves normalized BNT-refined horizontal form. The sector
-representatives and copy weights are blocked, the physical alphabet is
+Two-site physical blocking preserves normalized BNT-refined horizontal form.
+The sector representatives and copy weights are blocked, the physical alphabet is
 relabeled by the canonical ket--bra equivalence, and every copy retains its
 original virtual gauge.
 
