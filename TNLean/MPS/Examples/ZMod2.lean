@@ -131,4 +131,43 @@ lemma ofCommutingInvolutions_mul_conjTranspose (P₁ P₂ : Matrix n n ℂ)
       mul_assoc P₁ P₂ ((P₂)ᴴ * (P₁)ᴴ), ← mul_assoc P₂ (P₂)ᴴ (P₁)ᴴ,
       h₂U, one_mul, h₁U]
 
+/-- Two anticommuting involutions obey the standard `Z₂ × Z₂` projective
+multiplication law with factor `(-1)^(g₂ h₁)`. -/
+lemma mul_of_anticommuting_involutions (P₁ P₂ : Matrix n n ℂ)
+    (h₁ : P₁ * P₁ = 1) (h₂ : P₂ * P₂ = 1) (hc : P₂ * P₁ = -(P₁ * P₂))
+    (g h : Multiplicative (ZMod 2 × ZMod 2)) :
+    ((if (Multiplicative.toAdd g).1 = 0 then 1 else P₁) *
+          (if (Multiplicative.toAdd g).2 = 0 then 1 else P₂)) *
+        ((if (Multiplicative.toAdd h).1 = 0 then 1 else P₁) *
+          (if (Multiplicative.toAdd h).2 = 0 then 1 else P₂)) =
+      (if (Multiplicative.toAdd g).2 = 1 ∧ (Multiplicative.toAdd h).1 = 1
+        then (-1 : ℂ) else 1) •
+        ((if (Multiplicative.toAdd (g * h)).1 = 0 then 1 else P₁) *
+          (if (Multiplicative.toAdd (g * h)).2 = 0 then 1 else P₂)) := by
+  rcases zmod2sq_cases g with rfl | rfl | rfl | rfl <;>
+    rcases zmod2sq_cases h with rfl | rfl | rfl | rfl <;>
+    simp only [← ofAdd_add, Prod.mk_add_mk, toAdd_ofAdd, toAdd_one,
+      Prod.fst_zero, Prod.snd_zero,
+      show (1 : ZMod 2) + 1 = 0 from by decide,
+      show (0 : ZMod 2) + 1 = 1 from by decide,
+      show (1 : ZMod 2) + 0 = 1 from by decide,
+      show (0 : ZMod 2) + 0 = 0 from by decide,
+      one_ne_zero, zero_ne_one, ↓reduceIte, and_self, and_true, true_and,
+      mul_one, one_mul, one_smul, neg_one_smul] <;>
+    first
+    | exact h₁
+    | exact h₂
+    | exact hc
+    | rw [← mul_assoc, h₁, one_mul]
+    | rw [mul_assoc, h₂, mul_one]
+    | rw [hc, ← mul_assoc, h₁, one_mul]
+    | rw [← mul_assoc, hc, neg_mul, mul_assoc, h₂, mul_one]
+    | rw [mul_assoc, hc, mul_neg, ← mul_assoc, h₁, one_mul]
+    | rw [mul_neg, h₁]
+    | rw [← mul_assoc, hc, neg_mul, mul_assoc, h₂, mul_one]
+    | rw [mul_assoc, hc, mul_neg, ← mul_assoc, h₁, one_mul]
+    | rw [mul_assoc, hc, mul_neg, ← mul_assoc, h₁, one_mul]
+    | rw [mul_assoc, ← mul_assoc P₂ P₁ P₂, hc, neg_mul, mul_assoc P₁ P₂ P₂,
+        h₂, mul_one, mul_neg, h₁]
+
 end MPSTensor
