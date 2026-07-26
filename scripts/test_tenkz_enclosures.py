@@ -431,6 +431,25 @@ DUPLICATE_RECOVERY = r"""
 \end{document}
 """
 
+REGION_ROLE_RECOVERY = r"""
+\documentclass{article}
+\usepackage{tenkz}
+\pagestyle{empty}
+\newcommand*{\tenkzTestRejectedRegionRoleLabel}{%
+  \typeout{TENKZ-REJECTED-REGION-ROLE-LABEL}$R$}
+\newcommand*{\tenkzTestValidRegionAfterRole}{%
+  \typeout{TENKZ-VALID-REGION-AFTER-ROLE}$S$}
+\begin{document}
+\begin{tenkzlattice}[
+    rows=2, cols=2, frame=oblique, physical=up,
+    boundary=none, outer legs=none]
+  \tnregion[label={\tenkzTestRejectedRegionRoleLabel}, role=marked]{(1,1)}
+  \tnregion[name=S, label={\tenkzTestValidRegionAfterRole}]{(2,2)}
+\end{tenkzlattice}
+\typeout{TENKZ-REGION-ROLE-RECOVERED}
+\end{document}
+"""
+
 
 SPAN_SYNTAX_RECOVERY = r"""
 \documentclass{article}
@@ -712,6 +731,50 @@ region|picture=1|lang=free|slot=selected|members=a|outline=0|name=a
         if sum("|name=good" in line for line in recovery_joins) != 1:
             raise AssertionError(
                 f"valid recovery control emitted {recovery_joins!r}"
+            )
+
+        # `role=` describes sites and edges, whereas a region is classified
+        # by `slot=`.  The exact option combination from #4930 must stop at
+        # that grammatical distinction, before label-anchor geometry runs.
+        role_recovered = compile_tex(
+            engine, work, "region-role-recovery", REGION_ROLE_RECOVERY,
+            env, halt_on_error=False,
+        )
+        if role_recovered.returncode == 0:
+            raise AssertionError("region-role recovery compilation succeeded")
+        if "A lattice region has no 'role' key" not in role_recovered.stdout:
+            print(role_recovered.stdout)
+            raise AssertionError("region-role recovery missed its diagnostic")
+        for opaque_error in (
+            "Missing $ inserted",
+            "No shape named",
+            "no shape known",
+        ):
+            if opaque_error in role_recovered.stdout:
+                print(role_recovered.stdout)
+                raise AssertionError(
+                    f"region-role recovery reached {opaque_error!r}"
+                )
+        for marker in (
+            "TENKZ-VALID-REGION-AFTER-ROLE",
+            "TENKZ-REGION-ROLE-RECOVERED",
+        ):
+            if marker not in role_recovered.stdout:
+                print(role_recovered.stdout)
+                raise AssertionError(
+                    f"region-role recovery missed {marker!r}"
+                )
+        if "TENKZ-REJECTED-REGION-ROLE-LABEL" in role_recovered.stdout:
+            raise AssertionError("rejected region-role label reached drawing")
+        role_events = (work / "region-role-recovery.tnlog").read_text(
+            encoding="utf-8"
+        ).splitlines()
+        role_regions = [
+            line for line in role_events if line.startswith("region|")
+        ]
+        if len(role_regions) != 1 or "|cells=2-2" not in role_regions[0]:
+            raise AssertionError(
+                f"invalid region role emitted events {role_regions!r}"
             )
 
         # A duplicate semantic name is a rejected transaction, not merely a
