@@ -380,6 +380,8 @@ jobs:
           if [ "$timing_status" -eq 0 ]; then
             while IFS= read -r path; do
               case "$path" in
+                # Keep this aligned with EXCLUDED_TOP_LEVEL_DIRECTORIES in
+                # scripts/generate_import_aggregators.py.
                 TNLean/Archive/*.lean)
                   module="${path%.lean}"
                   module="${module//\//.}"

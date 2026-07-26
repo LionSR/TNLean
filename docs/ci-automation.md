@@ -180,6 +180,12 @@ proof-error auto-fixer, which only handles failures of the `build` job.
 Unchanged modules do not affect this PR ratchet. The local commands and
 cache-reuse procedure are documented in [`lake_build_cache.md`](lake_build_cache.md).
 
+`TNLean/Archive/*.lean` is excluded from the default root target, so changed
+Archive modules are built explicitly before their timings are checked. A
+genuine Archive compilation error fails the `build` job and follows the normal
+Lean proof-error auto-fix path; a timing-only breach still fails only the
+separate `compile-time` job.
+
 ---
 
 ### Issue Automation (`issue-automation.yml`)

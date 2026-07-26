@@ -120,6 +120,15 @@ class LakeBuildHotspotTests(unittest.TestCase):
             "",
         )
 
+    def test_changed_file_gate_includes_native_facets(self) -> None:
+        jobs = [hotspots.TimedJob("LintStyle:c.o", 51.0)]
+        paths = ["scripts/LintStyle.lean"]
+        self.assertEqual(hotspots.changed_jobs(jobs, paths), jobs)
+        self.assertIn(
+            "::error file=scripts/LintStyle.lean::LintStyle:c.o compiled in 51.000s",
+            hotspots.render_github_annotations(jobs, paths, 25.0, 50.0),
+        )
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -52,7 +52,7 @@ def lean_modules(path: str) -> set[str]:
 def changed_jobs(jobs: Sequence[TimedJob], paths: Sequence[str]) -> list[TimedJob]:
     """Keep jobs corresponding to changed Lean source files."""
     modules = {module for path in paths for module in lean_modules(path)}
-    return [job for job in jobs if job.job in modules]
+    return [job for job in jobs if job.job.partition(":")[0] in modules]
 
 
 def render_tsv(jobs: Sequence[TimedJob], threshold: float, limit: int | None) -> str:
@@ -81,7 +81,7 @@ def render_github_annotations(
     for job in jobs:
         if job.seconds < warn_threshold:
             continue
-        path = module_paths.get(job.job)
+        path = module_paths.get(job.job.partition(":")[0])
         if path is None:
             continue
         level = "error" if job.seconds >= error_threshold else "warning"
