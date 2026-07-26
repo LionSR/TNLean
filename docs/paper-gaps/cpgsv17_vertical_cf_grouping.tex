@@ -270,15 +270,19 @@ the unsupported diagonal-restriction statement from \ghissue{2537}.
 
 To eliminate the stronger hypothesis, first use
 \path{MPSTensor.CPSVCanonicalFormData.exists_isCPSVBasisOfNormalTensors} to
-pass from the literal decomposition to its active BNT representatives and
-ambient coisometry.  The missing lemma must establish the Lemma~L first-site
-insertion separation on those retained coordinates and carry the separated
-identity back through the coisometry.  With that statement in place, the
-invariant-projector argument, periodic-sector exclusion, positivity of the
-vertical multiplicities, grouped Gram normalization, and final coisometric
-reconstruction can be replayed without assuming \path{MPOTensor.IsHorizontalCF}.
-This yields the literal Proposition~4.13 theorem rather than an adapter through
-the stronger predicate.
+obtain the active BNT representatives.  That theorem does not retain the
+active-index equivalence, the copy weights and gauges, or the ambient
+coisometry.  One must therefore strengthen its conclusion to a structured
+active-refinement witness carrying those data and the exact reconstruction.
+The missing lemma must then establish the Lemma~L first-site insertion
+separation on the retained coordinates and carry the separated identity back
+through the coisometry.  With that statement in place, the invariant-projector
+argument, periodic-sector exclusion, positivity of the vertical
+multiplicities, grouped Gram normalization, and final coisometric
+reconstruction can be replayed without assuming
+\path{MPOTensor.IsHorizontalCF}.  This yields
+the literal Proposition~4.13 theorem rather than an adapter through the
+stronger predicate.
 
 \bibliographystyle{alpha}
 \bibliography{references}

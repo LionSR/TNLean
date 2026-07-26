@@ -710,7 +710,18 @@
 
 \begin{proof}[Proof outline]
     \uses{thm:cpsv_canonical_form_bnt_existence,
-        thm:representative_grouped_insert_eq}
+        thm:representative_grouped_insert_eq,
+        thm:projector_closure_irreducible_corners,
+        thm:mpdo_no_periodic_sector_projector,
+        thm:psd_commute_of_commute_pow,
+        lem:irreducible_transfer_perron_pair,
+        lem:irreducible_block_spectral_normalization,
+        thm:cpsv_normal_mpv_phase_gauge,
+        thm:cpsv_normal_separated_eventually_li,
+        thm:mpdo_sector_compression_trace_pos,
+        thm:mpdo_sector_weight_pos,
+        thm:normal_tensor_gram_rigidity,
+        thm:vertical_sector_coisometry}
     Write $A$ for the doubled-index MPS tensor of $M$. If $A=0$, take no
     retained sectors; the unique map onto the zero-dimensional sector space
     gives the conclusion. Suppose henceforth that $A\ne0$. Begin with its
@@ -730,7 +741,8 @@
     including omission of all zero-weight blocks, follows from the literal
     hypothesis; it does not assume normalized BNT-refined horizontal form.
 
-    Let $H^{(N)}$ be the positive operator generated horizontally by $M$. If
+    Let $H^{(N)}$ be the positive operator generated horizontally by
+    $\widetilde M$. If
     an orthogonal projector $P$ on the physical space satisfies
     $P\widetilde M=P\widetilde MP$, and $P_1$ acts on the first site, then
     self-adjointness gives
@@ -744,14 +756,13 @@
     Write $Y_R(P)$ and $Y_C(P)$ for the right and central first-site
     contractions determined by $P$. The missing step is to prove that the
     representative-grouped Lemma~L remains applicable after compression to
-    (\ref{eq:cpsv_prop_4_13_active_bnt}), so that
+    (\ref{eq:cpsv_prop_4_13_active_bnt}), so that, for every $\alpha$ and $i$,
     \begin{align}
-        Y_R(P)C_\alpha^i&=Y_C(P)C_\alpha^i
-        \qquad\text{for every $\alpha$ and $i$},
+        Y_R(P)C_\alpha^i&=Y_C(P)C_\alpha^i.
         \label{eq:cpsv_prop_4_13_missing_active_separation}
     \end{align}
-    and then to carry this separated identity back through the ambient
-    coisometry $V$ to obtain
+    This identity must then be carried back through the ambient coisometry $V$
+    to obtain
     \begin{align}
         \widetilde MP&=P\widetilde MP.
         \label{eq:cpsv_prop_4_13_missing_coisometry_transport}
@@ -760,6 +771,9 @@
     $(\Id-P)\widetilde MP=0$. Thus every one-sided invariant subspace is
     reducing.
 
+    % Local fix (periodic-sector quantifier): use one noncommuting chain length,
+    % not the all-length assertion printed in the source. See
+    % docs/paper-gaps/cpgsv17_periodic_sector_projector.tex.
     There are no nontrivial periodic vertical sectors. Otherwise a cyclic
     projector $Q$ and an integer $p>1$ would commute with
     $[H^{(N)}]^p$ but not with $H^{(N)}$. Since $H^{(N)}$ is positive

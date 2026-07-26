@@ -51,9 +51,10 @@ line~1889.  That stronger assertion is unnecessary: the positivity argument
 at lines~1890--1893 is pointwise in $N$, so the same existential witness
 suffices.
 
-This is a local correction of the intermediate statement, not a restriction
-of Proposition~4.13.  The final no-periodic-vectors theorem has exactly the
-source hypotheses.
+This is a local correction of the intermediate statement.  Under the
+normalized BNT-refined horizontal hypothesis used by the formal theorem, it
+adds no further restriction.  It does not close the literal
+Proposition~4.13 implication.
 
 \section{Formal proof}
 
@@ -82,24 +83,28 @@ with $H^{(N+1)}$, a contradiction.\footnote{Formal conclusion:
 \leanid{MPOTensor.hasNoPeriodicVectors\_verticalTensor\_of\_horizontalCF}
 in \doclink{TNLean/MPS/MPDO/CyclicProjector}.}
 
-The proof introduces no additional mathematical assumption.
+Within the normalized BNT-refined horizontal form used here, the proof
+introduces no additional mathematical assumption.
 
 \section{Status}
 
-The periodic-sector step of Proposition~4.13 is complete for every
-horizontally canonical matrix product density operator.  The earlier
-all-length condition remains only as a stronger conditional auxiliary
-statement and is not used by the source-faithful theorem.\footnote{Formal
-predicate: \leanid{MPOTensor.NoninvariantProjectorNoncommuting}.}
+The periodic-sector step is complete under the normalized BNT-refined
+hypothesis \path{MPOTensor.IsHorizontalCF}.  The earlier all-length condition
+remains only as a stronger conditional auxiliary statement and is not used by
+this step.\footnote{Formal predicate:
+\leanid{MPOTensor.NoninvariantProjectorNoncommuting}.}
 
 The invariant-projector and no-periodic-vector criterion, the nonzero sector
 compressions, positivity of the vertical weights, the dressed-adjoint
-identities, and the physical-space coisometry are now combined in the proof of
+identities, and the physical-space coisometry are combined in the proof of
 \path{MPOTensor.verticalCF_of_horizontalCF} in
-\path{TNLean/MPS/MPDO/VerticalCanonicalForm.lean}.  Thus the
-horizontal-to-vertical implication of Proposition~4.13 is complete.
+\path{TNLean/MPS/MPDO/VerticalCanonicalForm.lean}.  This proves the
+horizontal-to-vertical implication under \path{MPOTensor.IsHorizontalCF},
+which is strictly stronger than the literal CPSV canonical form assumed in
+Proposition~4.13.  The literal implication remains open.
 
-\paragraph{Verdict.} Local correction.
+\paragraph{Verdict.} Conditional periodic-sector step complete; literal
+Proposition~4.13 open.
 
 \bibliographystyle{alpha}
 \bibliography{references}
