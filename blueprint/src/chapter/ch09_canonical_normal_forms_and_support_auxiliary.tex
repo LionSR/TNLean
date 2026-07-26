@@ -53,22 +53,25 @@
 
 
 \begin{definition}[CPSV canonical form II]\label{def:cpsv_cfii}
-    \notready
+    \lean{MPSTensor.IsCPSVCanonicalFormII}
+    \leanok
     \uses{def:cpsv_canonical_form}
-    A tensor is in \emph{canonical form II} (CFII) if it is in the CPSV
-    canonical form (\ref{eq:cpsv_canonical_form}) and, for every normal block
-    $A_k$, the associated completely positive map is trace-preserving and has a
-    full-rank diagonal fixed point:
+    In canonical form II of \cite[Appendix~A]{Cirac2016MPDO_arXiv}, the same
+    retained normal blocks and weights as in
+    (\ref{eq:cpsv_canonical_form}) are normalized blockwise. For every retained
+    block $A_k$,
     \begin{align}
         \sum_i(A_k^i)^\dagger A_k^i
          & =\Id,
         \notag         \\
         \E_{A_k}(\Lambda_k)
-         & =\Lambda_k.
+         & =\Lambda_k,
         \notag
     \end{align}
-    Here $\Lambda_k>0$ is diagonal. Thus CFII includes the canonical-form and normal-block hypotheses; the two
-    displayed identities alone are only its normalization component.
+    where $\Lambda_k>0$ is diagonal. Thus CFII retains the positive-length MPV
+    representation, the bond-dimension inequality, and the weight normalization
+    of canonical form; the displayed identities are its additional blockwise
+    normalization conditions.
 \end{definition}
 
 \begin{theorem}[Diagonal Perron normalization for an irreducible TP tensor]

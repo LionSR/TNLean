@@ -4,19 +4,24 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.CanonicalForm.Reduction
+import TNLean.MPS.Core.CanonicalNormalization
 import TNLean.MPS.Core.Transfer
 import TNLean.MPS.Overlap.Basic
 import TNLean.MPS.SharedInfra.BlockAssembly
 import TNLean.Channel.Peripheral.Spectrum
+import Mathlib.Analysis.Matrix.PosDef
+import Mathlib.LinearAlgebra.Matrix.IsDiag
 
 /-!
-# Normal tensor and basis of normal tensors (CPSV16)
+# CPSV canonical forms and normal tensors
 
-This module records the definitions of two of the central notions
+This module records four central notions
 from arXiv:1606.00608 (Cirac–Pérez-García–Schuch–Verstraete, "Matrix product density
 operators: Renormalization fixed points and boundary theories"):
 
-* normal tensor (NT), `MPSTensor.IsNormalTensor`, and
+* normal tensor (NT), `MPSTensor.IsNormalTensor`,
+* canonical form (CF), `MPSTensor.IsCPSVCanonicalForm`,
+* canonical form II (CFII), `MPSTensor.IsCPSVCanonicalFormII`, and
 * basis of normal tensors (BNT), `MPSTensor.IsCPSVBasisOfNormalTensors`.
 
 The canonical-form (CF) decomposition of arXiv:1606.00608 eq. `II_CF1` and its
@@ -71,7 +76,7 @@ by `IsNormalTensor`.
 Follows `docs/MATHLIB_style.md` and `docs/MATHLIB_naming.md`.
 -/
 
-open scoped Matrix BigOperators Matrix.Norms.Operator
+open scoped Matrix BigOperators Matrix.Norms.Operator ComplexOrder MatrixOrder
 
 namespace MPSTensor
 
@@ -212,6 +217,54 @@ noncomputable def data (h : IsCPSVCanonicalForm A) : CPSVCanonicalFormData A :=
   Classical.choice h
 
 end IsCPSVCanonicalForm
+
+/-! ## CPSV canonical form II (CFII) -/
+
+/-- Witness data for CPSV canonical form II.
+
+This is arXiv:1606.00608, Appendix A, lines 1054--1077.  It uses the same
+retained-block canonical-form witness as `CPSVCanonicalFormData` and adds the
+two blockwise normalization conditions: left-canonical form and a diagonal
+positive-definite fixed point of the transfer map. -/
+structure CPSVCanonicalFormIIData (A : MPSTensor d D) extends CPSVCanonicalFormData A where
+  /-- Every retained block is left-canonical, as in CPSV16 Appendix A. -/
+  blocks_leftCanonical : ∀ k, IsLeftCanonical (blocks k)
+  /-- Every retained block has diagonal positive-definite Perron data fixed by its transfer map. -/
+  blocks_fixedPoint :
+    ∀ k, ∃ Λ : Matrix (Fin (dim k)) (Fin (dim k)) ℂ,
+      Λ.PosDef ∧ Λ.IsDiag ∧ transferMap (blocks k) Λ = Λ
+
+/-- A tensor is in CPSV canonical form II when it admits normalized retained-block data.
+
+Source: arXiv:1606.00608, Appendix A, lines 1054--1077. -/
+def IsCPSVCanonicalFormII (A : MPSTensor d D) : Prop :=
+  Nonempty (CPSVCanonicalFormIIData A)
+
+namespace CPSVCanonicalFormIIData
+
+/-- Canonical-form-II witness data determine the corresponding predicate. -/
+theorem isCPSVCanonicalFormII (data : CPSVCanonicalFormIIData A) :
+    IsCPSVCanonicalFormII A :=
+  ⟨data⟩
+
+/-- Forgetting the blockwise normalization leaves CPSV canonical-form data. -/
+theorem isCPSVCanonicalForm (data : CPSVCanonicalFormIIData A) :
+    IsCPSVCanonicalForm A :=
+  data.toCPSVCanonicalFormData.isCPSVCanonicalForm
+
+end CPSVCanonicalFormIIData
+
+namespace IsCPSVCanonicalFormII
+
+/-- Choose normalized retained-block data from a canonical-form-II predicate. -/
+noncomputable def data (h : IsCPSVCanonicalFormII A) : CPSVCanonicalFormIIData A :=
+  Classical.choice h
+
+/-- Canonical form II is, in particular, CPSV canonical form. -/
+theorem isCPSVCanonicalForm (h : IsCPSVCanonicalFormII A) : IsCPSVCanonicalForm A :=
+  ⟨h.data.toCPSVCanonicalFormData⟩
+
+end IsCPSVCanonicalFormII
 
 /-! ## Basis of normal tensors (BNT) -/
 
