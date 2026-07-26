@@ -265,6 +265,20 @@ abstracted — record why, so it is not re-proposed).
 Seeded from `scripts/tactic_pattern_scan.py` (2026-07-18 scan; re-run for
 current counts and full location lists).
 
+### positive-map resolvent distribution — candidate
+- **Pattern:** distribute a positive linear map and a nonnegative real scalar
+  through the shifted-resolvent difference, commute the scalar identity shift,
+  and normalize the resulting module expression.
+- **Seen:** 2 occurrences in
+  `TNLean/Channel/Schwarz/OperatorJensenAux.lean`:
+  `positiveMap_rpowIntegrand₀₁_jensen` and
+  `positiveMap_rpowIntegrand₁₂_jensen`.
+- **Abstraction:** a shared algebraic lemma parameterized by the exponent
+  identities for the concave and convex integrands, if a third occurrence
+  appears.
+- **Notes:** Below the rule-of-three promotion threshold; keep the explicit
+  rewrites until another consumer fixes the common statement's useful shape.
+
 ### invariant-subspace two-block fork — candidate
 - **Pattern:** the general and strict invariant-subspace decompositions repeated the
   spectral split, block construction, and MPV calculation.
