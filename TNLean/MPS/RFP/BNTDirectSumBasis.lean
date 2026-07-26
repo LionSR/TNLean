@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.CanonicalForm.NormalTensorGauge
+import TNLean.MPS.Periodic.NormalizedSelfOverlap
 import TNLean.MPS.RFP.BNTOrthogonality
 
 /-!
