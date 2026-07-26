@@ -70,7 +70,7 @@ if "$REPO/scripts/seed_lake_build.sh" "$TARGET" --dry-run 2>"$TEST_ROOT/error.lo
   echo "symlinked source cache unexpectedly passed" >&2
   exit 1
 fi
-rg -q "source .lake must not be a symlink" "$TEST_ROOT/error.log"
+/usr/bin/grep -q "source .lake must not be a symlink" "$TEST_ROOT/error.log"
 unlink "$REPO/.lake"
 mv "$REPO/.lake.real" "$REPO/.lake"
 
@@ -81,7 +81,7 @@ for cache_child in build packages; do
     echo "symlinked source cache child unexpectedly passed: $cache_child" >&2
     exit 1
   fi
-  rg -q "source has no regular .lake/$cache_child" "$TEST_ROOT/error.log"
+  /usr/bin/grep -q "source has no regular .lake/$cache_child" "$TEST_ROOT/error.log"
   unlink "$REPO/.lake/$cache_child"
   mv "$REPO/.lake/$cache_child.real" "$REPO/.lake/$cache_child"
 done
@@ -93,7 +93,7 @@ if "$REPO/scripts/seed_lake_build.sh" "$TARGET" --dry-run 2>"$TEST_ROOT/error.lo
   echo "nested symlinked dependency cache unexpectedly passed" >&2
   exit 1
 fi
-rg -q "source contains a symlinked Lake cache directory" "$TEST_ROOT/error.log"
+/usr/bin/grep -q "source contains a symlinked Lake cache directory" "$TEST_ROOT/error.log"
 unlink "$REPO/.lake/packages/mathlib/.lake/build"
 mv "$REPO/.lake/packages/mathlib/.lake/build.real" \
   "$REPO/.lake/packages/mathlib/.lake/build"
@@ -105,7 +105,7 @@ if "$REPO/scripts/seed_lake_build.sh" "$TARGET" --dry-run 2>"$TEST_ROOT/error.lo
   echo "symlinked dependency .lake unexpectedly passed" >&2
   exit 1
 fi
-rg -q "source contains a symlinked Lake cache directory" "$TEST_ROOT/error.log"
+/usr/bin/grep -q "source contains a symlinked Lake cache directory" "$TEST_ROOT/error.log"
 unlink "$REPO/.lake/packages/mathlib/.lake"
 mv "$REPO/.lake/packages/mathlib/.lake.real" \
   "$REPO/.lake/packages/mathlib/.lake"
@@ -118,7 +118,7 @@ if "$REPO/scripts/seed_lake_build.sh" "$TARGET" --dry-run 2>"$TEST_ROOT/error.lo
   echo "symlinked Lakefile artifact unexpectedly passed" >&2
   exit 1
 fi
-rg -q "source contains a symlinked Lake cache directory" "$TEST_ROOT/error.log"
+/usr/bin/grep -q "source contains a symlinked Lake cache directory" "$TEST_ROOT/error.log"
 unlink "$REPO/.lake/packages/mathlib/.lake/lakefile.olean"
 find "$REPO/.lake/packages/mathlib/.lake/lakefile.olean.real" -delete
 
@@ -128,7 +128,7 @@ if "$REPO/scripts/seed_lake_build.sh" "$TARGET" --dry-run 2>"$TEST_ROOT/error.lo
   echo "missing prebuilt Mathlib cache unexpectedly passed" >&2
   exit 1
 fi
-rg -q "source lacks prebuilt Mathlib artifacts" "$TEST_ROOT/error.log"
+/usr/bin/grep -q "source lacks prebuilt Mathlib artifacts" "$TEST_ROOT/error.log"
 mv "$REPO/.lake/packages/mathlib/.lake/build/lib/lean/Mathlib.olean.missing" \
   "$REPO/.lake/packages/mathlib/.lake/build/lib/lean/Mathlib.olean"
 
@@ -138,7 +138,7 @@ if "$REPO/scripts/seed_lake_build.sh" "$TARGET" --dry-run 2>"$TEST_ROOT/error.lo
   echo "invalid manifest unexpectedly passed" >&2
   exit 1
 fi
-rg -q "cannot parse Git packages from lake-manifest.json" "$TEST_ROOT/error.log"
+/usr/bin/grep -q "cannot parse Git packages from lake-manifest.json" "$TEST_ROOT/error.log"
 printf '{"packages":[{"name":"mathlib","type":"git","rev":"%s"}]}\n' \
   "$DEPENDENCY_REV" >"$REPO/lake-manifest.json"
 /bin/cp "$REPO/lake-manifest.json" "$TARGET/lake-manifest.json"
@@ -148,7 +148,7 @@ if "$REPO/scripts/seed_lake_build.sh" "$TARGET" --dry-run 2>"$TEST_ROOT/error.lo
   echo "modified dependency unexpectedly passed" >&2
   exit 1
 fi
-rg -q "Git package has local changes: mathlib" "$TEST_ROOT/error.log"
+/usr/bin/grep -q "Git package has local changes: mathlib" "$TEST_ROOT/error.log"
 printf 'dependency\n' >"$REPO/.lake/packages/mathlib/tracked"
 
 /bin/cp "$REPO/.lake/packages/mathlib/.git/index" \
@@ -158,7 +158,7 @@ if "$REPO/scripts/seed_lake_build.sh" "$TARGET" --dry-run 2>"$TEST_ROOT/error.lo
   echo "unreadable dependency status unexpectedly passed" >&2
   exit 1
 fi
-rg -q "cannot read Git package status: mathlib" "$TEST_ROOT/error.log"
+/usr/bin/grep -q "cannot read Git package status: mathlib" "$TEST_ROOT/error.log"
 mv "$REPO/.lake/packages/mathlib/.git/index.saved" \
   "$REPO/.lake/packages/mathlib/.git/index"
 
@@ -170,10 +170,19 @@ if "$REPO/scripts/seed_lake_build.sh" "$TARGET" --dry-run 2>"$TEST_ROOT/error.lo
   echo "linked dependency worktree unexpectedly passed" >&2
   exit 1
 fi
-rg -q "Git package metadata is not self-contained" "$TEST_ROOT/error.log"
+/usr/bin/grep -q "Git package metadata is not self-contained" "$TEST_ROOT/error.log"
 find "$REPO/.lake/packages/mathlib/.git" -delete
 mv "$REPO/.lake/packages/mathlib/.git.real" \
   "$REPO/.lake/packages/mathlib/.git"
+
+printf '%s\n' "$TEST_ROOT/external-objects" \
+  >"$REPO/.lake/packages/mathlib/.git/objects/info/alternates"
+if "$REPO/scripts/seed_lake_build.sh" "$TARGET" --dry-run 2>"$TEST_ROOT/error.log"; then
+  echo "shared dependency object storage unexpectedly passed" >&2
+  exit 1
+fi
+/usr/bin/grep -q "Git package uses external object storage" "$TEST_ROOT/error.log"
+find "$REPO/.lake/packages/mathlib/.git/objects/info/alternates" -delete
 
 (
   cd "$REPO"
@@ -192,6 +201,6 @@ if "$REPO/scripts/seed_lake_build.sh" "$TARGET" 2>"$TEST_ROOT/error.log"; then
   echo "second seed unexpectedly succeeded" >&2
   exit 1
 fi
-rg -q "target already has .lake" "$TEST_ROOT/error.log"
+/usr/bin/grep -q "target already has .lake" "$TEST_ROOT/error.log"
 
 echo "Lake build seed integration test passed"

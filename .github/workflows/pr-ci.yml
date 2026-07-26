@@ -366,6 +366,7 @@ jobs:
         run: |
           set -o pipefail
           timing_status=0
+          archive_build_failed=false
           git fetch --no-tags origin \
             "+refs/heads/${{ github.event.pull_request.base.ref }}:refs/remotes/origin/${{ github.event.pull_request.base.ref }}" \
             || timing_status=$?
@@ -383,7 +384,10 @@ jobs:
                   module="${module//\//.}"
                   lake build "$module" 2>&1 \
                     | tee -a "$RUNNER_TEMP/lake-build.log" \
-                    || timing_status=$?
+                    || {
+                      timing_status=$?
+                      archive_build_failed=true
+                    }
                   ;;
               esac
               [ "$timing_status" -eq 0 ] || break
@@ -401,6 +405,9 @@ jobs:
             *) result=error ;;
           esac
           echo "result=$result" >> "$GITHUB_OUTPUT"
+          if [ "$archive_build_failed" = true ]; then
+            exit 1
+          fi
 
       - name: Run text-based style linter
         run: lake exe lint_style --github

@@ -50,6 +50,7 @@ validate_packages() {
   local package_root
   local actual_rev
   local package_status
+  local metadata_link
   PACKAGE_LIST_FILE="$(mktemp "${TMPDIR:-/tmp}/tnlean-lake-packages.XXXXXX")" ||
     die "cannot create temporary package list"
   if ! python3 - "$source_root/lake-manifest.json" >"$PACKAGE_LIST_FILE" <<'PY'
@@ -71,6 +72,14 @@ PY
       die "Git package is missing or symlinked: $package_name"
     test -d "$package_root/.git" && test ! -L "$package_root/.git" ||
       die "Git package metadata is not self-contained: $package_name"
+    test ! -e "$package_root/.git/objects/info/alternates" &&
+      test ! -L "$package_root/.git/objects/info/alternates" ||
+      die "Git package uses external object storage: $package_name"
+    metadata_link="$(
+      find "$package_root/.git" -type l -print -quit
+    )"
+    test -z "$metadata_link" ||
+      die "Git package metadata contains a symlink: $package_name"
     actual_rev="$(git -C "$package_root" rev-parse HEAD 2>/dev/null)" ||
       die "Git package is not a checkout: $package_name"
     test "$actual_rev" = "$expected_rev" ||
