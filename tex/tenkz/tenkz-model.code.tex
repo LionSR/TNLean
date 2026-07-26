@@ -16,6 +16,7 @@
 \seq_new:N \l__tenkz_model_wire_seq
 \seq_new:N \l__tenkz_model_mark_seq
 \seq_new:N \l__tenkz_model_frame_seq
+\seq_new:N \l__tenkz_model_record_seq
 \prop_new:N \l__tenkz_model_record_prop   % "id/field" -> normalized value
 \prop_new:N \l__tenkz_model_class_prop    % "id" -> class word
 \prop_new:N \l__tenkz_model_picture_prop  % picture-level fields
@@ -36,6 +37,7 @@
     \seq_clear:N \l__tenkz_model_wire_seq
     \seq_clear:N \l__tenkz_model_mark_seq
     \seq_clear:N \l__tenkz_model_frame_seq
+    \seq_clear:N \l__tenkz_model_record_seq
     \prop_clear:N \l__tenkz_model_record_prop
     \prop_clear:N \l__tenkz_model_class_prop
     \prop_clear:N \l__tenkz_model_picture_prop
@@ -61,6 +63,7 @@
         \tl_set:Ne \l__tenkz_model_last_tl
           { #1 - \int_use:N \l__tenkz_model_next_int }
         \seq_put_right:cV { l__tenkz_model_ #1 _seq } \l__tenkz_model_last_tl
+        \seq_put_right:NV \l__tenkz_model_record_seq \l__tenkz_model_last_tl
         \prop_put:NVn \l__tenkz_model_class_prop \l__tenkz_model_last_tl {#1}
         \keyval_parse:nnn
           { \msg_error:nnnn {tenkz}{model-malformed} {#1} }
@@ -88,6 +91,30 @@
     \bool_if:NTF \l__tenkz_model_validated_bool
       { \msg_error:nn {tenkz}{model-frozen} }
       { \prop_put:Nee \l__tenkz_model_record_prop {#1/#2} {#3} }
+  }
+
+% Replace an author expression by the semantic field value derived from it.
+% The expression does not survive the model freeze.
+\cs_new_protected:Npn \__tenkz_model_normalize_field:nnnn #1#2#3#4
+  {
+    \bool_if:NTF \l__tenkz_model_validated_bool
+      { \msg_error:nn {tenkz}{model-frozen} }
+      {
+        \exp_args:NNe \prop_remove:Nn \l__tenkz_model_record_prop {#1/#2}
+        \prop_put:Nee \l__tenkz_model_record_prop {#1/#3} {#4}
+      }
+  }
+
+% A set of record ids has one representation: declaration order, without
+% repetitions.  Consumers may therefore compare membership directly.
+\cs_new_protected:Npn \__tenkz_model_canonicalize_ids:NN #1#2
+  {
+    \seq_clear:N #2
+    \seq_map_inline:Nn \l__tenkz_model_record_seq
+      {
+        \seq_if_in:NnT #1 {##1}
+          { \seq_put_right:Nn #2 {##1} }
+      }
   }
 
 % Public-to-the-package constructors, one per record class.  Field

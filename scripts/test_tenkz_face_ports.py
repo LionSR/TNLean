@@ -895,7 +895,7 @@ SOURCE = r"""
     west=trace, east=trace, north=none, south=none]
   \tenkzObstacleProbe{8}
   \tenkzBBoxLeadProbe
-  \tnregion[slot=selected, label={R_{\mathrm{boundary}}},
+  \tnregion[slot=selected, label={$R_{\mathrm{boundary}}$},
     label at=south east]{(1-2,1-2)}
   \tnedge[distinguished, label=$E_{\mathrm{boundary}}$]{(1,1)-(1,2)}
 \end{tenkzlattice}
@@ -996,12 +996,12 @@ REGION_LABEL_SOURCE = r"""
   {
     \str_case:nn {#6}
       {
-        {F} { \dim_set:Nn \l__tenkzl_test_expected_m_dim
+        {$F$} { \dim_set:Nn \l__tenkzl_test_expected_m_dim
           { \tenkz@r@latticemargin\tenkz@pitch } }
-        {N} { \dim_set:Nn \l__tenkzl_test_expected_m_dim
+        {$N$} { \dim_set:Nn \l__tenkzl_test_expected_m_dim
           { \tenkz@r@latticemargin\tenkz@pitch
             - \tenkz@r@regionnest\tenkz@pitch * (2) } }
-        {O} { \dim_set:Nn \l__tenkzl_test_expected_m_dim
+        {$O$} { \dim_set:Nn \l__tenkzl_test_expected_m_dim
           { \tenkz@r@latticemargin\tenkz@pitch
             - \tenkz@r@regionnest\tenkz@pitch * (1) } }
       }
@@ -1034,15 +1034,15 @@ REGION_LABEL_SOURCE = r"""
 \makeatother
 \begin{document}
 \begin{tenkzlattice}[rows=2, cols=2, boundary=none, outer legs=none]
-  \tnregion[label=F, label at=north west]{(1-2,1-2)}
+  \tnregion[label=$F$, label at=north west]{(1-2,1-2)}
 \end{tenkzlattice}
 \begin{tenkzlattice}[rows=3, cols=3, boundary=none, outer legs=none]
   \tnregion[slot=secondary]{(1-3,1-3)}
-  \tnregion[inset=2, label=N, label at=north east]{(2,2)}
+  \tnregion[inset=2, label=$N$, label at=north east]{(2,2)}
 \end{tenkzlattice}
 \begin{tenkzlattice}[
     rows=2, cols=2, frame=oblique, boundary=none, outer legs=none]
-  \tnregion[inset=1, label=O, label at=south east]{(1-2,1-2)}
+  \tnregion[inset=1, label=$O$, label at=south east]{(1-2,1-2)}
 \end{tenkzlattice}
 \ExplSyntaxOn
 \int_compare:nNnF { \g__tenkzl_test_label_count_int } = {3}

@@ -90,6 +90,18 @@ abstracted — record why, so it is not re-proposed).
 
 ## Completed refactors
 
+### Blocked-basis coercion reconstruction
+- **Pattern:** blocked support-algebra coordinate proofs coerced finite sums
+  into ambient matrices with unrestricted `simp`, which launched an expensive
+  and irrelevant search for a `Nonempty` instance on the basis index.
+- **Reuse:** `coe_reconstructFromBlockedCoefficients_apply` now transports the
+  reconstruction equation through the subalgebra subtype map explicitly with
+  `map_sum` and `map_smul`; the product formula composes the two reconstruction
+  equations directly.
+- **Result:** the worst reconstruction declaration falls from 1.68 seconds to
+  below one second in the declaration profiler, and a clean full-source check
+  completes in 15.39 seconds.
+
 ### Positive-congruence similarity evaluation
 - **Pattern:** the spectral-radius proof repeatedly unfolded `similarityMap`
   and asked broad `simp` calls to rediscover the same inverse and Hermitian
@@ -127,9 +139,12 @@ abstracted — record why, so it is not re-proposed).
   `norm_ne_zero_iff.mp (by rw [h]; exact one_ne_zero)`.
 - **Reuse:** `Complex.ne_zero_of_norm_eq_one` in
   `TNLean/Algebra/ComplexPhasePositivity.lean` now states this scalar fact once.
-- **Result:** ten call sites across `BNTCharacterization.lean`,
-  `BNTUniqueness.lean`, `BNTExistence.lean`, `BeigiLoopBNTIdentification.lean`,
-  and `GroupStructure.lean` use the shared lemma. All theorem statements and
+- **Result:** a repository-wide semantic audit migrated 32 call sites across
+  18 files, including nested `inv_ne_zero` uses and tactic-form contradiction
+  proofs. No exact-hypothesis conversion from `h : ‖z‖ = 1` to `z ≠ 0`
+  remains outside the shared lemma itself. The related proof from
+  `star α * α = 1` in `PeripheralUnitary.lean` remains separate because its
+  premise is not the helper's norm equality. All theorem statements and
   mathematical scopes are unchanged.
 
 ### Support left-right and relative-modular intertwining

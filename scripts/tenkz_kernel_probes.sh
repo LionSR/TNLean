@@ -6,6 +6,7 @@ set -euo pipefail
 REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 KERNEL="$REPO/tests/tenkz/kernel"
 GOLDEN="$KERNEL/golden.sha256"
+PIXEL_GOLDEN="$KERNEL/golden-pixels.sha256"
 MODE=${1:---check}
 
 WORK="$(mktemp -d "${TMPDIR:-/tmp}/tenkz-kernel.XXXXXX")"
@@ -197,6 +198,59 @@ replaced_bond_count=$(
   exit 1
 }
 
+selector_log="$WORK/r_selector_normalization.tnlog"
+canonical_three_count=$(
+  grep -Fc '|form=enclosure|members=atom-1,atom-2,atom-3' "$selector_log" ||
+    true
+)
+[ "$canonical_three_count" -eq 2 ] || {
+  echo "FAIL: range/list selectors did not share one canonical membership" >&2
+  exit 1
+}
+grep -Fq '|form=enclosure|members=atom-2' "$selector_log" || {
+  echo "FAIL: a single-address selector did not normalize to its atom" >&2
+  exit 1
+}
+grep -Fq '|form=enclosure|members=atom-6,atom-7,atom-8,atom-9' \
+    "$selector_log" || {
+  echo "FAIL: a named cluster did not normalize to its generated members" >&2
+  exit 1
+}
+if grep -Fq '|target=' "$selector_log"; then
+  echo "FAIL: an author selector survived model normalization" >&2
+  exit 1
+fi
+grep -Fq 'TENKZ-HULL-LABEL-USES=1' "$WORK/r_hull_live.tex.transcript" || {
+  echo "FAIL: live hull measurement evaluated an author label more than once" >&2
+  exit 1
+}
+grep -Fq 'TENKZ-HULL-BOX-POOL=1' "$WORK/r_hull_live.tex.transcript" || {
+  echo "FAIL: live hull boxes were not reused across pictures" >&2
+  exit 1
+}
+command -v pdftoppm >/dev/null 2>&1 || {
+  echo "FAIL: live-hull pixel gate requires pdftoppm" >&2
+  exit 1
+}
+if ! pdftoppm -singlefile -png -r 300 \
+    "$WORK/r_hull_live.pdf" "$WORK/r_hull_live" >/dev/null 2>&1; then
+  echo "FAIL: live-hull fixture could not be rasterized" >&2
+  exit 1
+fi
+[ -f "$WORK/r_hull_live.png" ] || {
+  echo "FAIL: live-hull rasterizer produced no PNG" >&2
+  exit 1
+}
+PIXEL_CURRENT="$WORK/current-pixels.sha256"
+# This is intentionally an exact-toolchain pixel pin.  After an approved
+# XeTeX, Poppler, or font update, inspect the full-resolution render and run
+# this script with --snapshot to accept the new raster.
+python3 -c \
+  'import hashlib,sys
+data = open(sys.argv[1], "rb").read()
+print(hashlib.sha256(data).hexdigest(), "", "r_hull_live.png")' \
+  "$WORK/r_hull_live.png" >"$PIXEL_CURRENT"
+
 negative="$KERNEL/negative/n_diagonal_port.tex"
 if ( cd "$WORK" &&
      TEXINPUTS="$REPO/tex/tenkz//:" \
@@ -210,6 +264,43 @@ grep -Fq '[TKZ-LANG-ADDRESS]' "$WORK/n_diagonal_port.transcript" || {
   tail -20 "$WORK/n_diagonal_port.transcript" >&2
   exit 1
 }
+
+selector_negative="$KERNEL/negative/n_selector_mixed.tex"
+if ( cd "$WORK" &&
+     TEXINPUTS="$REPO/tex/tenkz//:" \
+       timeout 120 xelatex -interaction=nonstopmode -halt-on-error \
+       "$selector_negative" >"$WORK/n_selector_mixed.transcript" 2>&1 ); then
+  echo "FAIL: a mixed atom/wire selector was accepted" >&2
+  exit 1
+fi
+selector_kind_count=$(
+  grep -Fc '[TKZ-KERNEL-SELECTOR-KIND]' \
+    "$WORK/n_selector_mixed.transcript" || true
+)
+[ "$selector_kind_count" -eq 1 ] || {
+  echo "FAIL: mixed selector did not emit exactly one selector diagnostic" >&2
+  exit 1
+}
+if [ -f "$WORK/n_selector_mixed.tnlog" ] &&
+   grep -Fq '|members=' "$WORK/n_selector_mixed.tnlog"; then
+  echo "FAIL: a rejected mixed selector retained partial membership" >&2
+  exit 1
+fi
+rm -f "$WORK"/n_selector_mixed.{aux,log,pdf,tnlog}
+( cd "$WORK" &&
+  TEXINPUTS="$REPO/tex/tenkz//:" \
+    timeout 120 xelatex -interaction=nonstopmode \
+    "$selector_negative" >"$WORK/n_selector_mixed.recovery.transcript" 2>&1
+) || true
+[ -f "$WORK/n_selector_mixed.pdf" ] || {
+  echo "FAIL: rejected selector did not survive TeX error recovery" >&2
+  exit 1
+}
+if grep -Eq 'TeX capacity exceeded|q_no_value|Emergency stop' \
+    "$WORK/n_selector_mixed.recovery.transcript"; then
+  echo "FAIL: rejected selector leaked missing membership into rendering" >&2
+  exit 1
+fi
 
 missing_onwire="$KERNEL/negative/n_missing_onwire.tex"
 if ( cd "$WORK" &&
@@ -512,7 +603,7 @@ grep -Fq 'check|relation=3|result=off|reason=third' \
   echo "FAIL: the later equation opt-out was silently dropped" >&2
   exit 1
 }
-echo "PASS: forty-seven review regressions hold"
+echo "PASS: fifty review regressions hold"
 
 fail=0
 for pair in s1 s2 s3 s4 s5 s6 s7 s8; do
@@ -533,7 +624,9 @@ CURRENT="$WORK/current.sha256"
 
 if [ "$MODE" = "--snapshot" ]; then
   cp "$CURRENT" "$GOLDEN"
+  cp "$PIXEL_CURRENT" "$PIXEL_GOLDEN"
   echo "PASS: froze $(wc -l <"$GOLDEN" | tr -d ' ') kernel record streams"
+  echo "PASS: froze live-hull pixel baseline"
   exit "$fail"
 fi
 if ! diff -u "$GOLDEN" "$CURRENT"; then
@@ -541,4 +634,9 @@ if ! diff -u "$GOLDEN" "$CURRENT"; then
   exit 1
 fi
 echo "PASS: $(wc -l <"$GOLDEN" | tr -d ' ') kernel record streams byte-identical"
+if ! diff -u "$PIXEL_GOLDEN" "$PIXEL_CURRENT"; then
+  echo "FAIL: live-hull pixels diverged from their pin" >&2
+  exit 1
+fi
+echo "PASS: live-hull pixels byte-identical"
 exit "$fail"

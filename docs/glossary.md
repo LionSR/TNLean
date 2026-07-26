@@ -426,8 +426,10 @@ model different levels of data and different sources.
 ### MPDO canonical-form predicates
 
 - `MPOTensor.IsHorizontalCF` in `TNLean/MPS/MPDO/HorizontalBNT.lean` is the
-  representative-indexed horizontal BNT decomposition from arXiv:1606.00608,
-  lines 237--244 and 281--301.
+  normalized representative-indexed BNT-refined horizontal decomposition. It
+  is stronger than the literal CPSV canonical form from arXiv:1606.00608,
+  lines 237--244; see
+  `docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex`.
 - `MPOTensor.IsPerCopyHorizontalCF` in
   `TNLean/MPS/MPDO/PerCopyHorizontalCF.lean` is an older, stronger flattened
   per-copy separation condition. Its gap from the source is recorded in
@@ -436,9 +438,10 @@ model different levels of data and different sources.
 - `MPOTensor.IsVerticalCF` in `TNLean/MPS/MPDO/VerticalCF.lean` is the vertical
   basis decomposition with positive multiplicities, positive diagonal weights,
   and a coisometry `U` satisfying `U * Uᴴ = 1` (equivalently, `Uᴴ` is an
-  isometry), sourced to arXiv:1606.00608 lines 1901 and 1956. The reverse
-  identity is deliberately absent so zero sectors may be discarded; this
-  caveat is recorded in
+  isometry), sourced to arXiv:1606.00608 lines 1901 and 1956. It requires both
+  the compressed block identity and exact reconstruction by `Uᴴ` and `U`.
+  Reconstruction still permits an omitted all-zero complement because `Uᴴ * U`
+  is the retained-support projection; see
   `docs/paper-gaps/cpgsv17_vertical_isometry_zero_sector.tex`.
 - `MPOTensor.IsSimpleCanonicalForm` in `TNLean/MPS/MPDO/SimpleTensor.lean` is
   horizontal canonical form plus the MPDO and nonnilpotent-sector conditions of

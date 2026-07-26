@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.ComplexPhasePositivity
 import TNLean.MPS.FundamentalTheorem.SectorBNT.Fundamental
 import TNLean.MPS.FundamentalTheorem.UnitaryGauge
 import TNLean.MPS.SharedInfra.BlockGauge
@@ -57,9 +58,7 @@ theorem ft_sector_bnt_proportional_unitary_sector_match_witnesses
   have hGPE : ∀ k : Fin Q.basisCount,
       GaugePhaseEquiv
         (cast (congr_arg (MPSTensor d) (hDim k)) (P.basis (β k))) (Q.basis k) :=
-    fun k => ⟨X k, ζ₀ k, by
-      intro hzero
-      simpa [hzero] using hζ₀ k, hConj k⟩
+    fun k => ⟨X k, ζ₀ k, Complex.ne_zero_of_norm_eq_one (hζ₀ k), hConj k⟩
   have hUnitary : ∀ k : Fin Q.basisCount,
       ∃ (U : Matrix.unitaryGroup (Fin (Q.basisDim k)) ℂ) (ζ : ℂ), ‖ζ‖ = 1 ∧
         ∀ i, Q.basis k i = ζ •
@@ -130,9 +129,8 @@ theorem ft_sector_bnt_equal_unitary_global_gauge_witnesses
   classical
   obtain ⟨β, hDim, ζ, Xblock, hζ, hConj, ⟨W⟩⟩ :=
     ft_sector_bnt_equal_matched_copy_weight_witnesses hP hQ hEqual
-  have hζ_ne : ∀ k : Fin Q.basisCount, ζ k ≠ 0 := by
-    intro k hzero
-    simpa [hzero] using hζ k
+  have hζ_ne : ∀ k : Fin Q.basisCount, ζ k ≠ 0 := fun k =>
+    Complex.ne_zero_of_norm_eq_one (hζ k)
   have hUnitary : ∀ k : Fin Q.basisCount,
       ∃ U : Matrix.unitaryGroup (Fin (Q.basisDim k)) ℂ,
         ∀ i, Q.basis k i = ζ k •

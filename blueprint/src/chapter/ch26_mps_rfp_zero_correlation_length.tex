@@ -656,10 +656,15 @@
     Theorem~\ref{thm:positive_gap_bnt_zcl_conditional_converse}, including its
     normalized nonzero subleading spectral pair for every non-idempotent
     block. If $A$ has positive-gap BNT zero correlation length, then for every
-    $N>2$ its translated two-site parent interactions commute and their common
-    kernel is
+    $N>2$ its translated two-site parent interactions satisfy all three
+    ground-space conditions:
     \begin{align}
-        \ker H_2^{(N)}&=\spn_{\C}\{\ket{V^{(N)}(A_j)}:j\}.
+        h_i h_j&=h_j h_i,
+        \notag\\
+        h_iV^{(N)}(A)&=0,
+        \notag\\
+        \ker H_2^{(N)}(A)
+        &=\spn\bigl\{V^{(N)}(A_j):j=1,\ldots,g\bigr\}.
         \notag
     \end{align}
     This is only the conditional corrected implication from (ii) to (iii) of
@@ -673,8 +678,8 @@
     Theorem~\ref{thm:positive_gap_bnt_zcl_conditional_converse} gives
     $\E_A^2=\E_A$. The multiplicity-one fixed-point theorem
     \ref{thm:rfp_multiplicity_one_bnt_has_nncph_ground_spaces} then gives the
-    commuting parent interactions and the stated common kernel for every
-    $N>2$.
+    commuting parent interactions, zero-energy direct-sum state, and stated
+    common kernel for every $N>2$.
 \end{proof}
 
 \begin{theorem}[Physical ZCL implies idempotence under the spectral assumption]%

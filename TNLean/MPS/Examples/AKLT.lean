@@ -269,6 +269,11 @@ private def akltGaugeGL : GL (Fin 2) ℂ :=
     (akltGaugeGL : Matrix (Fin 2) (Fin 2) ℂ) = akltGaugeMat :=
   Matrix.GeneralLinearGroup.val_mkOfDetNeZero _ _
 
+private lemma akltGaugeMat_sq : akltGaugeMat * akltGaugeMat = -1 := by
+  ext i j
+  fin_cases i <;> fin_cases j <;>
+    simp [akltGaugeMat, Matrix.mul_apply, Fin.sum_univ_two]
+
 private lemma akltGaugeGL_inv_val :
     ((akltGaugeGL⁻¹ : GL (Fin 2) ℂ) : Matrix (Fin 2) (Fin 2) ℂ) = !![0, -1; 1, 0] := by
   have : akltGaugeGL * (Matrix.GeneralLinearGroup.mkOfDetNeZero
@@ -394,13 +399,19 @@ private def akltGaugeZ : GL (Fin 2) ℂ :=
     (akltGaugeZ : Matrix (Fin 2) (Fin 2) ℂ) = !![1, 0; 0, -1] :=
   Matrix.GeneralLinearGroup.val_mkOfDetNeZero _ _
 
+private lemma akltGaugeZ_sq :
+    (!![(1 : ℂ), 0; 0, -1] : Matrix (Fin 2) (Fin 2) ℂ) *
+        !![(1 : ℂ), 0; 0, -1] = 1 := by
+  ext i j
+  fin_cases i <;> fin_cases j <;>
+    simp [Matrix.mul_apply, Fin.sum_univ_two]
+
 private lemma akltGaugeZ_inv_val :
     ((akltGaugeZ⁻¹ : GL (Fin 2) ℂ) : Matrix (Fin 2) (Fin 2) ℂ) = !![1, 0; 0, -1] := by
   have hsq : akltGaugeZ * akltGaugeZ = 1 := by
     apply Units.ext
     simp only [Units.val_mul, Units.val_one, akltGaugeZ_val]
-    ext i j; fin_cases i <;> fin_cases j <;>
-      simp [Matrix.mul_apply, Fin.sum_univ_two]
+    exact akltGaugeZ_sq
   rw [show akltGaugeZ⁻¹ = akltGaugeZ from inv_eq_of_mul_eq_one_right hsq, akltGaugeZ_val]
 
 /-- The virtual gauge for the combined element, `iσy · σz = [[0, -1], [-1, 0]]`. -/
@@ -429,6 +440,14 @@ lemma aklt_gauge_anticomm :
       -(!![(1 : ℂ), 0; 0, -1] * !![(0 : ℂ), 1; -1, 0]) := by
   ext i j; fin_cases i <;> fin_cases j <;>
     simp [Matrix.mul_apply, Fin.sum_univ_two, Matrix.neg_apply]
+
+private lemma aklt_gauge_anticomm' :
+    (!![(1 : ℂ), 0; 0, -1]) * akltGaugeMat =
+      -(akltGaugeMat * !![(1 : ℂ), 0; 0, -1]) := by
+  rw [akltGaugeMat]
+  have h := congrArg Neg.neg aklt_gauge_anticomm
+  rw [neg_neg] at h
+  exact h.symm
 
 /-! #### Twists by the second and combined generators -/
 
@@ -552,17 +571,20 @@ the third nontrivial element acts by their product `iσy σz`. -/
 def akltProjRep : ProjectiveRepresentation (D := 2) akltOmega where
   X := akltRepX
   map_mul' g h := by
-    rcases zmod2sq_cases g with rfl | rfl | rfl | rfl <;>
-      rcases zmod2sq_cases h with rfl | rfl | rfl | rfl <;>
-      rw [akltOmega_apply_val] <;>
-      simp only [akltRepX, ← ofAdd_add, Prod.mk_add_mk, toAdd_ofAdd, toAdd_one,
-        Units.val_mul, Units.val_one, akltGaugeGL_val, akltGaugeZ_val, akltGaugeMat,
-        show (1 : ZMod 2) + 1 = 0 from by decide, show (0 : ZMod 2) + 1 = 1 from by decide,
-        show (1 : ZMod 2) + 0 = 1 from by decide, show (0 : ZMod 2) + 0 = 0 from by decide,
-        one_ne_zero, ↓reduceIte, and_self, and_true, true_and, mul_one, one_mul] <;>
-      (ext a b; fin_cases a <;> fin_cases b <;>
-        simp [Matrix.mul_apply, Fin.sum_univ_two, Matrix.smul_apply, Matrix.one_apply,
-          smul_eq_mul])
+    rw [akltOmega_apply_val]
+    have hY (p : Prop) [Decidable p] :
+        ((if p then 1 else akltGaugeGL : GL (Fin 2) ℂ) :
+          Matrix (Fin 2) (Fin 2) ℂ) =
+          if p then 1 else akltGaugeMat := by
+      split <;> simp
+    have hZ (p : Prop) [Decidable p] :
+        ((if p then 1 else akltGaugeZ : GL (Fin 2) ℂ) :
+          Matrix (Fin 2) (Fin 2) ℂ) =
+          if p then 1 else !![(1 : ℂ), 0; 0, -1] := by
+      split <;> simp
+    simp only [akltRepX, Units.val_mul, hY, hZ]
+    exact mul_of_anticommuting_neg_involution _ _
+      akltGaugeMat_sq akltGaugeZ_sq aklt_gauge_anticomm' g h
 
 open TNLean.Algebra in
 /-- `akltOmega` is a genuine `2`-cocycle: it is the factor system of the

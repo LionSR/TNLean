@@ -404,7 +404,7 @@
     Theorem~\ref{thm:representative_grouped_marked_separation}.
 \end{proof}
 
-\begin{corollary}[Physical-letter marked separation in horizontal canonical form]
+\begin{corollary}[Physical-letter marked separation in BNT-refined horizontal form]
     \label{cor:horizontal_cf_linear_marked_separation}
     \lean{MPSTensor.linearMarkedTensor}
     \lean{MPSTensor.linearMarkedTensor_toTensorFromBlocks}
@@ -415,7 +415,7 @@
     \leanok
     \uses{def:horizontal_cf_mpdo,
         cor:bnt_marked_representative_separation}
-    Let $M$ be an MPO tensor in literal horizontal canonical form. For two
+    Let $M$ be an MPO tensor in normalized BNT-refined horizontal form. For two
     coefficient families $f_{u,z}$ and $g_{u,z}$, put
     $C^u=\sum_z f_{u,z}M^z$ and $E^u=\sum_z g_{u,z}M^z$.
     If $\tr(C^uM^w)=\tr(E^uM^w)$ for every marked index $u$ and every word
@@ -433,8 +433,8 @@
 \begin{proof}
     \leanok
     \uses{cor:bnt_marked_representative_separation}
-    Pass through the block-diagonal similarity in the literal horizontal
-    canonical form. Linear combinations of physical letters are covariant
+    Pass through the block-diagonal similarity in the normalized BNT-refined
+    horizontal form. Linear combinations of physical letters are covariant
     under this similarity, and cyclicity of the trace removes it from each
     closed marked chain. On the representative-indexed sector
     decomposition one has

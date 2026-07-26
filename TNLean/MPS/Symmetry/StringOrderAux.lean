@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.ComplexPhasePositivity
 import TNLean.MPS.Symmetry.StringOrderDefs
 import TNLean.MPS.Core.CPPrimitive
 import TNLean.MPS.Core.TPGauge
@@ -696,8 +697,7 @@ theorem boundaryState_invariant_of_virtualUnitary
     simp at hΛtr
   haveI : NeZero D := ⟨hD⟩
   let B : MPSTensor d D := twistedMixedCompanion A u
-  have hμ_ne : μ ≠ 0 := by
-    intro h; simp [h] at hμ
+  have hμ_ne : μ ≠ 0 := Complex.ne_zero_of_norm_eq_one hμ
   have hμ_sq : star μ * μ = 1 := by
     rw [← starRingEnd_apply, Complex.conj_mul', hμ]; simp
   have huc : uᴴ * u = 1 := mul_eq_one_comm.mp hu

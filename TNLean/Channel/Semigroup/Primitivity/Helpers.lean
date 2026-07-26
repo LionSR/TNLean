@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.ComplexPhasePositivity
 import TNLean.Channel.FixedPoint.CanonicalGauge
 import TNLean.Channel.Semigroup.Primitivity.Basic
 
@@ -208,17 +209,13 @@ theorem bounded_root_of_peripheral_closed_powers [NeZero D]
   rcases Nat.lt_or_gt_of_ne hab_ne with hlt | hgt
   · refine ⟨(b : ℕ) - (a : ℕ), Nat.sub_pos_of_lt hlt, ?_, ?_⟩
     · exact Nat.sub_le _ _ |>.trans (Nat.le_of_lt_succ b.2)
-    · have hμ_ne : μ ≠ 0 := by
-        rw [← norm_ne_zero_iff, hμ.2]
-        norm_num
+    · have hμ_ne : μ ≠ 0 := Complex.ne_zero_of_norm_eq_one hμ.2
       exact mul_left_cancel₀ (pow_ne_zero _ hμ_ne) (by
         rw [← pow_add, Nat.add_sub_cancel' hlt.le, mul_one]
         exact hab'.symm)
   · refine ⟨(a : ℕ) - (b : ℕ), Nat.sub_pos_of_lt hgt, ?_, ?_⟩
     · exact Nat.sub_le _ _ |>.trans (Nat.le_of_lt_succ a.2)
-    · have hμ_ne : μ ≠ 0 := by
-        rw [← norm_ne_zero_iff, hμ.2]
-        norm_num
+    · have hμ_ne : μ ≠ 0 := Complex.ne_zero_of_norm_eq_one hμ.2
       exact mul_left_cancel₀ (pow_ne_zero _ hμ_ne) (by
         rw [← pow_add, Nat.add_sub_cancel' hgt.le, mul_one]
         exact hab')

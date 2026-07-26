@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.ComplexPhasePositivity
 import TNLean.MPS.Irreducible.FormII
 import TNLean.MPS.Irreducible.PeriodicBlocking
 import TNLean.MPS.Core.Blocking
@@ -212,8 +213,7 @@ theorem equivalentBlocks_iff_gaugeEquiv {A B : MPSTensor d D} :
 theorem RepeatedBlocks.symm {A B : MPSTensor d D}
     (h : RepeatedBlocks A B) : RepeatedBlocks B A := by
   rcases h with ⟨ξ, Y, hξ, hY⟩
-  have hξ_ne : ξ ≠ 0 := by
-    intro h0; simp [h0] at hξ
+  have hξ_ne : ξ ≠ 0 := Complex.ne_zero_of_norm_eq_one hξ
   refine ⟨ξ⁻¹, Y⁻¹, by simp [norm_inv, hξ], ?_⟩
   intro i
   have hYi := hY i
