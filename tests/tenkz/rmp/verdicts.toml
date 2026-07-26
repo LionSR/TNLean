@@ -1070,6 +1070,7 @@ pairing_by = "pairing-sweep-two-viewers-2026-07-23"
 case_sha256 = "e7e3ccd081d403bb141899657722ecb12dba13b33579a2a3758d2c968f5e6a29"
 reviewed = "2026-07-26"
 renderer = "codex-source-boundary-review-2026-07-26"
+second_viewer = "pr-4863-source-review-2026-07-26"
 
 [[verdict]]
 id = "rmp-workbench-ii-boundary-a-old"
