@@ -19,25 +19,27 @@ scripts/seed_lake_build.sh TARGET_WORKTREE SOURCE_WORKTREE
 The command requires both paths to belong to the same repository, identical
 `lean-toolchain`, `lake-manifest.json`, and `lakefile.toml` files, an existing
 source `.lake/build` and `.lake/packages`, and an absent target `.lake`.
-`cp -c` creates independent writable files and fails instead of falling back
-to a full copy when APFS cloning is unavailable. Do not seed while the source
-worktree is running a Lake command.
+macOS `/bin/cp -c` creates independent writable files and fails instead of
+falling back to a full copy when APFS cloning is unavailable. The absolute path
+keeps Homebrew GNU coreutils from shadowing the APFS-aware command. Do not seed
+while the source worktree is running a Lake command.
 
 After seeding, run the desired `lake build` or `lake env lean` command. Lake
 will reuse unchanged artifacts and rebuild files changed on the branch.
 
 ## Sort build timings
 
-Save a build log and rank jobs above a chosen duration:
+Save a build log and list every job taking at least 50 seconds:
 
 ```bash
 lake build 2>&1 | tee /tmp/tnlean-build.log
-python3 scripts/lake_build_hotspots.py /tmp/tnlean-build.log \
-  --threshold 30 --limit 25
+python3 scripts/lake_build_hotspots.py /tmp/tnlean-build.log
 ```
 
-The report is tab-separated and sorted from slowest to fastest. Timings are
-local diagnostic evidence, not benchmarks comparable across machines.
+The report is tab-separated and sorted from slowest to fastest. To make the
+same 50-second limit a local or CI gate, add `--fail-over-threshold`; use
+`--threshold` to override the limit. Timings are local diagnostic evidence,
+not benchmarks comparable across machines.
 
 Lightweight tests do not run Lean:
 

@@ -3,7 +3,11 @@
 
 from __future__ import annotations
 
+import contextlib
+import io
+import tempfile
 import unittest
+from pathlib import Path
 
 import lake_build_hotspots as hotspots
 
@@ -47,6 +51,27 @@ class LakeBuildHotspotTests(unittest.TestCase):
             "[1/2] Built TNLean.Z (12s)\n[2/2] Built TNLean.A (12s)\n"
         )
         self.assertEqual([job.job for job in jobs], ["TNLean.A", "TNLean.Z"])
+
+    def test_gate_fails_when_job_reaches_default_fifty_second_threshold(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            log = Path(directory) / "lake.log"
+            log.write_text(
+                "Built TNLean.Acceptable (49.9s)\nBuilt TNLean.TooSlow (50s)\n",
+                encoding="utf-8",
+            )
+            output = io.StringIO()
+            with contextlib.redirect_stdout(output):
+                status = hotspots.main([str(log), "--fail-over-threshold"])
+        self.assertEqual(status, 1)
+        self.assertEqual(output.getvalue(), "seconds\tjob\n50.000\tTNLean.TooSlow\n")
+
+    def test_gate_passes_when_all_jobs_are_below_threshold(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            log = Path(directory) / "lake.log"
+            log.write_text("Built TNLean.Acceptable (49.9s)\n", encoding="utf-8")
+            with contextlib.redirect_stdout(io.StringIO()):
+                status = hotspots.main([str(log), "--fail-over-threshold"])
+        self.assertEqual(status, 0)
 
 
 if __name__ == "__main__":

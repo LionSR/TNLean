@@ -31,12 +31,19 @@ printf 'compiled\n' >"$REPO/.lake/build/example.olean"
 printf 'dependency\n' >"$REPO/.lake/packages/example"
 
 mkdir -p "$TEST_ROOT/scripts"
+mkdir -p "$TEST_ROOT/bin"
+cat >"$TEST_ROOT/bin/cp" <<'EOF'
+#!/usr/bin/env bash
+echo "PATH cp must not be used" >&2
+exit 99
+EOF
+chmod +x "$TEST_ROOT/bin/cp"
 (
   cd "$REPO"
   CDPATH="$TEST_ROOT" scripts/seed_lake_build.sh "$TARGET" --dry-run >/dev/null
 )
 "$REPO/scripts/seed_lake_build.sh" "$TARGET" --dry-run >/dev/null
-"$REPO/scripts/seed_lake_build.sh" "$TARGET" >/dev/null
+PATH="$TEST_ROOT/bin:$PATH" "$REPO/scripts/seed_lake_build.sh" "$TARGET" >/dev/null
 test -f "$TARGET/.lake/build/example.olean"
 test -f "$TARGET/.lake/packages/example"
 test ! -L "$TARGET/.lake"

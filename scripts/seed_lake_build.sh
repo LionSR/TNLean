@@ -99,7 +99,7 @@ if test "$DRY_RUN" = "true"; then
 fi
 
 STAGING_DIR="$TARGET_ROOT/.lake.seed.$$"
-cp -cR "$SOURCE_ROOT/.lake" "$STAGING_DIR"
+/bin/cp -cR "$SOURCE_ROOT/.lake" "$STAGING_DIR"
 mv "$STAGING_DIR" "$TARGET_ROOT/.lake"
 STAGING_DIR=""
 echo "seed-lake-build: cloned $SOURCE_ROOT/.lake into $TARGET_ROOT/.lake"

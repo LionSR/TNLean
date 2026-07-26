@@ -53,10 +53,15 @@ def main(argv: Sequence[str] | None = None) -> int:
     parser.add_argument(
         "--threshold",
         type=float,
-        default=30.0,
-        help="minimum elapsed seconds to report (default: 30)",
+        default=50.0,
+        help="minimum elapsed seconds to report (default: 50)",
     )
     parser.add_argument("--limit", type=int, help="maximum number of jobs to report")
+    parser.add_argument(
+        "--fail-over-threshold",
+        action="store_true",
+        help="exit unsuccessfully when any job reaches the threshold",
+    )
     args = parser.parse_args(argv)
     if args.threshold < 0:
         parser.error("--threshold must be nonnegative")
@@ -64,7 +69,7 @@ def main(argv: Sequence[str] | None = None) -> int:
         parser.error("--limit must be positive")
     jobs = parse_timed_jobs(args.log.read_text(encoding="utf-8", errors="replace"))
     print(render_tsv(jobs, args.threshold, args.limit), end="")
-    return 0
+    return int(args.fail_over_threshold and any(job.seconds >= args.threshold for job in jobs))
 
 
 if __name__ == "__main__":
