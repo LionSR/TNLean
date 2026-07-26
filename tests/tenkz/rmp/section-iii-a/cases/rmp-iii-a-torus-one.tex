@@ -7,15 +7,21 @@
 % Capabilities: free-graph, torus-cycle, crossing-tensor
 \[
   \begin{tenkzfree}
-    \tnput[box]{i}{(0mm,-7mm)}{i}
-    \tnput[mpo]{W}{(-14mm,0mm)}{}
-    \tnput[mpo]{E}{(14mm,0mm)}{}
-    \tnput[mpo]{N}{(0mm,8mm)}{}
-    \tnput[mpo]{S}{(0mm,-14mm)}{}
-    \tnjoin[route=arc, out=90, in=90]{W.north}{E.north}
-    \tnjoin[route=arc, out=-90, in=-90]{E.south}{W.south}
-    \tnjoin[route=arc, out=180, in=180]{N.west}{S.west}
-    \tnjoin[route=arc, out=0, in=0]{S.east}{N.east}
-    \tnjoin{N.south}{i.north} \tnjoin{i.south}{S.north}
+    % the MPO word around the cycle, with the crossing tensor i marked
+    \tnput[box]{w1}{(-16mm,0mm)}{} \tnput[box]{w2}{(-8mm,0mm)}{}
+    \tnput[box, role=marked]{wi}{(0mm,0mm)}{i}
+    \tnput[box]{w4}{(8mm,0mm)}{} \tnput[box]{w5}{(16mm,0mm)}{}
+    \tnjoin{w1.east}{w2.west} \tnjoin{w2.east}{wi.west}
+    \tnjoin{wi.east}{w4.west} \tnjoin{w4.east}{w5.west}
+    % every tensor of the word carries one rising and one falling index
+    \tnjoin{w1.north}{-16mm,7mm} \tnjoin{-16mm,-7mm}{w1.south}
+    \tnjoin{w2.north}{-8mm,7mm} \tnjoin{-8mm,-7mm}{w2.south}
+    \tnjoin{wi.north}{0mm,7mm} \tnjoin{0mm,-7mm}{wi.south}
+    \tnjoin{w4.north}{8mm,7mm} \tnjoin{8mm,-7mm}{w4.south}
+    \tnjoin{w5.north}{16mm,7mm} \tnjoin{16mm,-7mm}{w5.south}
+    % the cycle closes outside the word: the bond leaves the east end and
+    % re-enters at the west, clearing every falling index on the way
+    \tnjoin[route=vh]{w5.east}{-23mm,-11mm}
+    \tnjoin[route=vh]{-23mm,-11mm}{w1.west}
   \end{tenkzfree}.
 \]
