@@ -235,8 +235,8 @@
     \uses{def:mpdo, def:horizontal_cf_mpdo, def:vertical_tensor_mpdo,
         def:invariant_projector_closure,
         thm:representative_one_sub_mp_zero}
-    Let $M$ be in horizontal canonical form and generate matrix product
-    density operators. If an orthogonal projection $P$ satisfies
+    Let $M$ be in normalized BNT-refined horizontal form and generate matrix
+    product density operators. If an orthogonal projection $P$ satisfies
     $P\widetilde M_v=P\widetilde M_vP$ for every vertical letter $v$, then it
     also satisfies $\widetilde M_vP=P\widetilde M_vP$ for every vertical
     letter $v$. Thus the vertically viewed tensor has invariant-projector
@@ -247,7 +247,7 @@
     \leanok
     \uses{thm:representative_one_sub_mp_zero}
     Translate the left-invariance identity into the one-site ket and bra
-    actions of the original tensor. The horizontal canonical-form version of
+    actions of the original tensor. The normalized BNT-refined version of
     Lemma~L gives the opposite one-sided identity. Translating back to the
     vertically viewed tensor proves the claim.
 \end{proof}
@@ -580,8 +580,8 @@
 
 \begin{proof}
     \leanok
-    The unit-modulus weight witness in the horizontal canonical form, together
-    with left canonicity of its representative, makes the doubled-index tensor
+    The unit-modulus weight witness in the normalized BNT-refined horizontal
+    form, together with left canonicity of its representative, makes the doubled-index tensor
     nonzero. Hence its vertical reshaping $\widetilde M$ is nonzero. If the
     retained decomposition had no sector,
     (\ref{eq:mpdo_vertical_grouped_reconstruction}) would make every letter of
@@ -594,8 +594,8 @@
     \lean{MPOTensor.IsHorizontalCF.verticalTensor_ne_zero}
     \leanok
     \uses{def:horizontal_cf_mpdo, def:vertical_tensor_mpdo}
-    If an MPO tensor $M$ is in horizontal canonical form, then its vertical
-    reshaping is nonzero: $\widetilde M\ne0$.
+    If an MPO tensor $M$ is in normalized BNT-refined horizontal form, then
+    its vertical reshaping is nonzero: $\widetilde M\ne0$.
     This is the nonvanishing observation used in
     \cite[Proposition~4.13, lines~1895--1902]{Cirac2016MPDO_arXiv}.
 \end{theorem}
@@ -604,8 +604,8 @@
     \leanok
     \uses{def:horizontal_cf_mpdo, def:vertical_tensor_mpdo,
         lem:sector_bnt_weight_unit_exists_of_struct}
-    Write the doubled-index tensor in horizontal canonical form as
-    $\widehat M=GSG^{-1}$, where $S$ is the weighted direct sum of its basis
+    Write the doubled-index tensor in normalized BNT-refined horizontal form
+    as $\widehat M=GSG^{-1}$, where $S$ is the weighted direct sum of its basis
     tensors. Choose a copy whose weight has unit modulus. Its basis tensor
     cannot have every letter equal to zero, since left canonicity gives
     $\sum_i(A^i)^\dagger A^i=\Id$.
@@ -619,10 +619,10 @@
     \label{thm:mpdo_vertical_grouped_is_bnt}
     \lean{MPOTensor.isBNT_verticalTensor_of_grouping}
     \leanok
-    \uses{def:horizontal_cf_mpdo, def:vertical_tensor_mpdo, def:bnt,
+    \uses{def:vertical_tensor_mpdo, def:bnt,
         def:bnt_cpsv, def:mpv_phase_class_data}
-    Let $M$ be in horizontal canonical form and put $T=\widetilde M$. Let
-    $B_k$ have bond dimension $d_k$, let $\mu_k\in\C$, and let
+    Let $M$ be an MPO tensor and put $T=\widetilde M$. Let $B_k$ have bond
+    dimension $d_k$, let $\mu_k\in\C$, and let
     $V_k:\C^{d_k}\to\C^d$ be an isometry for $0\leq k<r$. Assume, for every
     vertical letter $v$, that
     \begin{align}

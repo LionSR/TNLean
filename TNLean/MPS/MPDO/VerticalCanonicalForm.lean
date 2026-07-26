@@ -12,9 +12,9 @@ import TNLean.MPS.MPDO.VerticalCoisometry
 
 The grouped vertical decomposition of a matrix product density operator in
 normalized BNT-refined horizontal form supplies a basis of normal tensors and
-normalized physical sector maps.  The resulting positive weights and sector maps give the
-coisometry and the two exact block-diagonal identities of the vertical
-canonical form.
+normalized physical sector maps. The resulting positive weights and sector
+maps give the coisometry and the two exact block-diagonal identities of the
+vertical canonical form.
 
 ## Main result
 
