@@ -37,6 +37,7 @@ import TNLean.Channel.Schwarz.SchwarzNormal
 import TNLean.Channel.Schwarz.SchwarzNotCP
 import TNLean.Channel.Schwarz.SchwarzSubnormal
 import TNLean.Channel.Schwarz.StrongSubadditivityPosDef
+import TNLean.Channel.Schwarz.SupportLeftRightRelativeModular
 import TNLean.Channel.Schwarz.SupportRelativeModular
 import TNLean.Channel.Schwarz.SupportResolvent
 import TNLean.Channel.Schwarz.SupportSourceBDefect
