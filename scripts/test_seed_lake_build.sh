@@ -55,8 +55,10 @@ chmod +x "$TEST_ROOT/bin/cp"
 cat >"$TEST_ROOT/bin/lake" <<'EOF'
 #!/usr/bin/env bash
 test "$*" = "exe cache get"
+printf 'called\n' >>"$LAKE_CALL_LOG"
 EOF
 chmod +x "$TEST_ROOT/bin/lake"
+export LAKE_CALL_LOG="$TEST_ROOT/lake-calls.log"
 PATH="$TEST_ROOT/bin:$PATH"
 
 mv "$REPO/.lake" "$REPO/.lake.real"
@@ -150,7 +152,9 @@ mv "$REPO/.lake/packages/mathlib/.git/index.saved" \
   CDPATH="$TEST_ROOT" scripts/seed_lake_build.sh "$TARGET" --dry-run >/dev/null
 )
 "$REPO/scripts/seed_lake_build.sh" "$TARGET" --dry-run >/dev/null
+test ! -e "$LAKE_CALL_LOG"
 PATH="$TEST_ROOT/bin:$PATH" "$REPO/scripts/seed_lake_build.sh" "$TARGET" >/dev/null
+test -s "$LAKE_CALL_LOG"
 test -f "$TARGET/.lake/build/example.olean"
 test -f "$TARGET/.lake/packages/mathlib/tracked"
 test -f "$TARGET/.lake/packages/mathlib/.lake/build/lib/lean/Mathlib.olean"

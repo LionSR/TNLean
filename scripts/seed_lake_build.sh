@@ -107,10 +107,9 @@ trap cleanup EXIT
 SCRIPT_DIR="$(canonical_dir "$(dirname "${BASH_SOURCE[0]}")")"
 SCRIPT_ROOT="$(worktree_root "$SCRIPT_DIR")"
 REPO_COMMON_DIR="$(common_dir "$SCRIPT_ROOT")"
+WORKTREE_LIST="$(git -C "$SCRIPT_ROOT" worktree list --porcelain)"
 PRIMARY_ROOT="$(
-  git -C "$SCRIPT_ROOT" worktree list --porcelain |
-    sed -n 's/^worktree //p' |
-    head -n 1
+  sed -n '/^worktree / { s/^worktree //; p; q; }' <<<"$WORKTREE_LIST"
 )"
 STAGING_DIR=""
 STAGING_INODE=""
@@ -161,20 +160,23 @@ for input in lean-toolchain lake-manifest.json lakefile.toml; do
   cmp -s "$SOURCE_ROOT/$input" "$TARGET_ROOT/$input" ||
     die "build input differs between source and target: $input"
 done
+validate_packages "$SOURCE_ROOT"
+
+if test "$DRY_RUN" = "true"; then
+  test -f "$SOURCE_ROOT/.lake/packages/mathlib/.lake/build/lib/lean/Mathlib.olean" ||
+    die "source lacks prebuilt Mathlib artifacts"
+  echo "seed-lake-build: dry-run passed"
+  echo "seed-lake-build: source: $SOURCE_ROOT/.lake"
+  echo "seed-lake-build: target: $TARGET_ROOT/.lake"
+  exit 0
+fi
+
 (
   cd "$SOURCE_ROOT"
   lake exe cache get
 ) || die "failed to fetch current prebuilt Mathlib artifacts"
 test -f "$SOURCE_ROOT/.lake/packages/mathlib/.lake/build/lib/lean/Mathlib.olean" ||
   die "source lacks prebuilt Mathlib artifacts after 'lake exe cache get'"
-validate_packages "$SOURCE_ROOT"
-
-if test "$DRY_RUN" = "true"; then
-  echo "seed-lake-build: dry-run passed"
-  echo "seed-lake-build: source: $SOURCE_ROOT/.lake"
-  echo "seed-lake-build: target: $TARGET_ROOT/.lake"
-  exit 0
-fi
 
 RESERVATION_DIR="$TARGET_ROOT/.lake"
 mkdir "$RESERVATION_DIR" 2>/dev/null || die "target already has .lake"
