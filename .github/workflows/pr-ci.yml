@@ -364,6 +364,7 @@ jobs:
         env:
           BASE_REF: origin/${{ github.event.pull_request.base.ref }}
         run: |
+          set -o pipefail
           timing_status=0
           git fetch --no-tags origin \
             "+refs/heads/${{ github.event.pull_request.base.ref }}:refs/remotes/origin/${{ github.event.pull_request.base.ref }}" \
@@ -373,6 +374,20 @@ jobs:
               --merge-base --name-only --diff-filter=AMR "$BASE_REF" -- '*.lean' \
               > "$RUNNER_TEMP/changed-lean-files.txt" \
               || timing_status=$?
+          fi
+          if [ "$timing_status" -eq 0 ]; then
+            while IFS= read -r path; do
+              case "$path" in
+                TNLean/Archive/*.lean)
+                  module="${path%.lean}"
+                  module="${module//\//.}"
+                  lake build "$module" 2>&1 \
+                    | tee -a "$RUNNER_TEMP/lake-build.log" \
+                    || timing_status=$?
+                  ;;
+              esac
+              [ "$timing_status" -eq 0 ] || break
+            done < "$RUNNER_TEMP/changed-lean-files.txt"
           fi
           if [ "$timing_status" -eq 0 ]; then
             python3 scripts/lake_build_hotspots.py \

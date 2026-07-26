@@ -69,6 +69,8 @@ PY
     package_root="$source_root/.lake/packages/$package_name"
     test -d "$package_root" && test ! -L "$package_root" ||
       die "Git package is missing or symlinked: $package_name"
+    test -d "$package_root/.git" && test ! -L "$package_root/.git" ||
+      die "Git package metadata is not self-contained: $package_name"
     actual_rev="$(git -C "$package_root" rev-parse HEAD 2>/dev/null)" ||
       die "Git package is not a checkout: $package_name"
     test "$actual_rev" = "$expected_rev" ||

@@ -54,7 +54,10 @@ EOF
 chmod +x "$TEST_ROOT/bin/cp"
 cat >"$TEST_ROOT/bin/lake" <<'EOF'
 #!/usr/bin/env bash
-test "$*" = "exe cache get"
+if test "$*" != "exe cache get"; then
+  echo "unexpected lake arguments: $*" >&2
+  exit 2
+fi
 printf 'called\n' >>"$LAKE_CALL_LOG"
 EOF
 chmod +x "$TEST_ROOT/bin/lake"
@@ -158,6 +161,19 @@ fi
 rg -q "cannot read Git package status: mathlib" "$TEST_ROOT/error.log"
 mv "$REPO/.lake/packages/mathlib/.git/index.saved" \
   "$REPO/.lake/packages/mathlib/.git/index"
+
+mv "$REPO/.lake/packages/mathlib/.git" \
+  "$REPO/.lake/packages/mathlib/.git.real"
+printf 'gitdir: %s\n' "$REPO/.lake/packages/mathlib/.git.real" \
+  >"$REPO/.lake/packages/mathlib/.git"
+if "$REPO/scripts/seed_lake_build.sh" "$TARGET" --dry-run 2>"$TEST_ROOT/error.log"; then
+  echo "linked dependency worktree unexpectedly passed" >&2
+  exit 1
+fi
+rg -q "Git package metadata is not self-contained" "$TEST_ROOT/error.log"
+find "$REPO/.lake/packages/mathlib/.git" -delete
+mv "$REPO/.lake/packages/mathlib/.git.real" \
+  "$REPO/.lake/packages/mathlib/.git"
 
 (
   cd "$REPO"
