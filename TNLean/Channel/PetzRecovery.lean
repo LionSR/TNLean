@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Algebra.OperatorSchmidt
+import TNLean.Analysis.CfcConjugation
 import TNLean.Analysis.MatrixSqrt
 import TNLean.Channel.KrausCPTP
 import TNLean.Channel.MarginalSupportAbsorption
@@ -395,42 +396,6 @@ variable {dA : ℕ} [NeZero dA]
 variable {B C : Type*} [Fintype B] [DecidableEq B]
   [Fintype C] [DecidableEq C]
 
-private noncomputable def petzReindexStarAlgHom {m n : Type*}
-    [Fintype m] [DecidableEq m] [Fintype n] [DecidableEq n] (e : m ≃ n) :
-    Matrix m m ℂ →⋆ₐ[ℂ] Matrix n n ℂ where
-  toFun M := M.submatrix e.symm e.symm
-  map_one' := by simp [Matrix.submatrix_one_equiv]
-  map_mul' A B := by
-    rw [← Matrix.submatrix_mul_equiv A B e.symm e.symm e.symm]
-  map_zero' := by simp
-  map_add' A B := by simp [Matrix.submatrix_add]
-  commutes' r := by
-    rw [Algebra.algebraMap_eq_smul_one, Algebra.algebraMap_eq_smul_one,
-      show (r • (1 : Matrix m m ℂ)).submatrix e.symm e.symm =
-          r • ((1 : Matrix m m ℂ).submatrix e.symm e.symm) from rfl,
-      Matrix.submatrix_one_equiv]
-  map_star' A := by
-    rw [star_eq_conjTranspose, star_eq_conjTranspose,
-      Matrix.conjTranspose_submatrix]
-
-private theorem petzCfc_submatrix_equiv {m n : Type*}
-    [Fintype m] [DecidableEq m] [Fintype n] [DecidableEq n]
-    {A : Matrix m m ℂ} (hA : A.IsHermitian) (f : ℝ → ℝ) (e : m ≃ n) :
-    cfc f (A.submatrix e.symm e.symm) =
-      (cfc f A).submatrix e.symm e.symm := by
-  have hcont : ContinuousOn f (spectrum ℝ A) :=
-    A.finite_real_spectrum.continuousOn f
-  have hcontφ : Continuous (petzReindexStarAlgHom e) :=
-    LinearMap.continuous_of_finiteDimensional
-      ((petzReindexStarAlgHom e : Matrix m m ℂ →ₗ[ℂ] Matrix n n ℂ))
-  have hsa : IsSelfAdjoint A := hA
-  have hsa' : IsSelfAdjoint (petzReindexStarAlgHom e A) := by
-    change (A.submatrix e.symm e.symm).IsHermitian
-    exact hA.submatrix e.symm
-  simpa [petzReindexStarAlgHom] using
-    (StarAlgHomClass.map_cfc (petzReindexStarAlgHom e) f A
-      hcont hcontφ hsa hsa').symm
-
 /-- The maximally mixed matrix on a nonzero `Fin dA` index. -/
 noncomputable def maximallyMixedOn : Matrix (Fin dA) (Fin dA) ℂ :=
   (dA : ℂ)⁻¹ • (1 : Matrix (Fin dA) (Fin dA) ℂ)
@@ -550,7 +515,7 @@ theorem cfcSqrt_maximallyMixedTensorReference
       ((maximallyMixedOn (dA := dA) ⊗ₖ ρ).submatrix
         (Equiv.prodAssoc (Fin dA) B C)
         (Equiv.prodAssoc (Fin dA) B C)) = _
-  have hcfc := petzCfc_submatrix_equiv
+  have hcfc := Matrix.cfc_submatrix_equiv
     (((maximallyMixedOn_posDef (dA := dA)).posSemidef.kronecker
       hρ).isHermitian) Real.sqrt (Equiv.prodAssoc (Fin dA) B C).symm
   rw [show cfc Real.sqrt

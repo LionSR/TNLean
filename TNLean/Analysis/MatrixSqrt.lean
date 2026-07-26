@@ -207,7 +207,9 @@ theorem PosSemidef.supportInvSqrt_kronecker_one
     (fun x : ℝ ↦ if x ≠ 0 then (Real.sqrt x)⁻¹ else 0)
 
 /-- The support inverse square root commutes with the unital right tensor
-embedding. -/
+embedding. This is the dual tensor functional-calculus identity for the support
+inverse in Hayden--Jozsa--Petz--Winter, arXiv:quant-ph/0304007v2, Theorem 3,
+equation (8). -/
 theorem PosSemidef.supportInvSqrt_one_kronecker
     {m : Type*} [Fintype m] [DecidableEq m]
     {ρ : Matrix n n ℂ} (hρ : ρ.PosSemidef) :
