@@ -317,40 +317,51 @@ the coefficient argument of Chapter~\ref{ch:bnt}.
     so condition~(ii) alone does not characterize normality.
 \end{remark}
 
-\begin{definition}[CPSV canonical form and basis of normal tensors]
+\begin{definition}[CPSV canonical form]
     \label{def:cpsv_canonical_form}
-    \notready
-    \uses{def:nt_cpsv}
-    In the canonical form of \cite[Section~2.3]{Cirac2016MPDO_arXiv},
+    \lean{MPSTensor.CPSVCanonicalFormData}
+    \lean{MPSTensor.IsCPSVCanonicalForm}
+    \lean{MPSTensor.CPSVCanonicalFormData.IsWeightNormalized}
+    \leanok
+    \uses{def:nt_cpsv, def:block_diagonal_tensor}
+    Let $A$ have bond dimension $D$. It is in the canonical
+    form of \cite[Section~2.3]{Cirac2016MPDO_arXiv} if there are positive
+    integers $D_1,\ldots,D_r$, normal tensors $A_k$ of bond dimension $D_k$,
+    weights $\mu_k\in\C$, and, writing $S=\sum_kD_k$, a matrix
+    $U\in\C^{S\times D}$ such that $S\le D$ and, for every physical index~$i$,
     \begin{align}
+        UU^\dagger
+         & =\Id_S,
+        \notag\\
         A^i
-         & =\bigoplus_{k=1}^r\mu_kA_k^i,
+         & =U^\dagger\!\left(\bigoplus_{k=1}^r\mu_kA_k^i\right)U.
         \tag{CF}\label{eq:cpsv_canonical_form}
     \end{align}
-    where every $A_k$ is a normal tensor. For a nonzero positive-length MPV
-    family, the states are not normalized, so the common scalar may be chosen
-    such that $|\mu_k|\le1$ for every~$k$ and at least one weight has modulus
-    one.
+    Thus the complement of the retained direct sum consists literally of zero
+    bond-space coordinates. In particular, $r=0$ is possible only when $A=0$.
 
-    \textbf{Local fix (zero-family normalization):} The source states the
-    unit-modulus convention without an exception. An identically zero
-    positive-length MPV family has no nonempty retained family on which a
-    unit-modulus weight can be attained, so here it is represented by the empty
-    family. This deviation is recorded in
-    \path{docs/paper-gaps/cpsv16_cf_normalization_and_proportional_comparison.tex}.
+    The convention in line~246 of \cite{Cirac2016MPDO_arXiv} is a separate
+    normalization of these data, not part of canonical-form membership:
+    \begin{align}
+        |\mu_k|
+         & \le1\quad\text{for every }k,
+        \notag\\
+        A\ne0
+         & \Longrightarrow\exists k,\ |\mu_k|=1.
+        \label{eq:cpsv_weight_normalization}
+    \end{align}
+    No weight is required to be nonzero, and no ordering or separation condition
+    is imposed.
 
-    A basis of normal tensors for $A$ is a family $(C_j)_{j=1}^g$ of normal
-    tensors such that $V^{(N)}(A)$ lies in the span of the
-    $V^{(N)}(C_j)$ for every~$N$, and these vectors are linearly independent for
-    every sufficiently large~$N$. Equivalently, each normal block $A_k$ in
-    (\ref{eq:cpsv_canonical_form}) is gauge-phase equivalent to some $C_j$, and
-    the family $(C_j)$ is minimal under gauge-phase equivalence.
-
-    A sufficient criterion for (\ref{eq:cpsv_canonical_form}) is that $A$ have
-    no nontrivial periodic vectors and that every orthogonal projection $P$
-    satisfying $PA^i=PA^iP$ also satisfy $A^iP=PA^iP$. This is the criterion
-    proved in Theorem~\ref{thm:projector_closure_canonical_form}.
+    The basis-of-normal-tensors refinement is
+    Definition~\ref{def:bnt}; it is not part of canonical form itself.
 \end{definition}
+
+The projector-closure result in
+Theorem~\ref{thm:projector_closure_canonical_form} gives normal blocks and
+orthogonal ambient embeddings under the source hypotheses. Combining these
+embeddings into one coisometry gives
+Definition~\ref{def:cpsv_canonical_form}.
 
 This source definition is distinct from the stronger normal-canonical-form
 conditions below. The renormalization fixed-point analysis uses a separate
