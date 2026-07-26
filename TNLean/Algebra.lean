@@ -29,6 +29,7 @@ import TNLean.Algebra.HermitianHelpers
 import TNLean.Algebra.IrreducibleTensorAction
 import TNLean.Algebra.KroneckerFactorPositivity
 import TNLean.Algebra.ListProduct
+import TNLean.Algebra.MatrixAlgEquiv
 import TNLean.Algebra.MatrixAux
 import TNLean.Algebra.MatrixGramUnitary
 import TNLean.Algebra.MatrixOperatorSpace
