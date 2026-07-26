@@ -31,14 +31,6 @@ tensor in literal horizontal canonical form, one noncommuting length suffices
 for the periodic-sector contradiction, so the stronger all-length condition is
 not required.
 
-## Main definitions
-
-* `ketLeftMul` and `braRightMul`: the vertically viewed products
-  $P\widetilde M$ and $\widetilde M P$.
-* `firstSiteMatrix`: the operator $P\otimes\Id^{\otimes N}$ on an
-  $(N+1)$-site chain; these operators compose site by site,
-  $P_1Q_1=(PQ)_1$.
-
 ## Main results
 
 * `firstSiteMatrix_mul_mpo_of_ketLeftMul_invariant`: one-sided tensor
