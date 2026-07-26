@@ -111,6 +111,16 @@ abstracted — record why, so it is not re-proposed).
   is replaced by one exact application; its previously profiled 31-second
   declaration falls below the 200-millisecond profiler threshold.
 
+### Unit-norm complex scalars are nonzero
+- **Pattern:** proofs repeatedly converted `h : ‖z‖ = 1` into `z ≠ 0` with
+  `norm_ne_zero_iff.mp (by rw [h]; exact one_ne_zero)`.
+- **Reuse:** `Complex.ne_zero_of_norm_eq_one` in
+  `TNLean/Algebra/ComplexPhasePositivity.lean` now states this scalar fact once.
+- **Result:** ten call sites across `BNTCharacterization.lean`,
+  `BNTUniqueness.lean`, `BNTExistence.lean`, `BeigiLoopBNTIdentification.lean`,
+  and `GroupStructure.lean` use the shared lemma. All theorem statements and
+  mathematical scopes are unchanged.
+
 ### Support left-right and relative-modular intertwining
 - **Pattern:** `supportRelativeModular_sourceB_solution` and
   `supportLeftRightSupportInv_mulVec_sourceB_eq_projected_relativeModular`
@@ -299,6 +309,21 @@ current counts and full location lists).
   appears.
 - **Notes:** Below the rule-of-three promotion threshold; keep the explicit
   rewrites until another consumer fixes the common statement's useful shape.
+
+### active canonical-form block restriction — candidate
+- **Pattern:** restrict a finite canonical-form block family to indices with
+  nonzero weight, choose `Fintype.equivFin` coordinates for that subtype, and
+  pull back the dependent bond dimensions and blocks along the equivalence.
+- **Seen:** 2 occurrences, in
+  `isCPSVBasisOfNormalTensors_iff_canonicalForm_covered_and_minimal`
+  (`BNTCharacterization.lean`) and
+  `CPSVCanonicalFormData.exists_isCPSVBasisOfNormalTensors`
+  (`BNTExistence.lean`). This remains below the rule-of-three threshold.
+- **Abstraction (proposed):** if a third occurrence appears, package the active
+  subtype, finite equivalence, dimensions, and dependent block family in a
+  reusable low-level construction.
+- **Notes:** Any promotion must preserve the restriction to nonzero-weight
+  blocks; it must not assert coverage of zero-weight listed blocks.
 
 ### invariant-subspace two-block fork — candidate
 - **Pattern:** the general and strict invariant-subspace decompositions repeated the

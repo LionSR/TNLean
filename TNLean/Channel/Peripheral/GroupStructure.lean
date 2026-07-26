@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.ComplexPhasePositivity
 import TNLean.Channel.Peripheral.CyclicDecomposition
 import Mathlib.RingTheory.RootsOfUnity.Basic
 import Mathlib.GroupTheory.SpecificGroups.Cyclic
@@ -335,7 +336,7 @@ theorem peripheral_eigenvalues_cyclic_structure
   -- Elements of peripheralEigenvalues are nonzero (they have norm 1)
   have hne_zero : ∀ μ : ℂ, μ ∈ peripheralEigenvalues E → μ ≠ 0 := by
     intro μ ⟨_, hμ_norm⟩
-    exact norm_ne_zero_iff.mp (by rw [hμ_norm]; exact one_ne_zero)
+    exact Complex.ne_zero_of_norm_eq_one hμ_norm
   -- Step 1: Construct a finite subgroup of ℂˣ from peripheral eigenvalues
   let periphSubgroup : Subgroup ℂˣ :=
     { carrier := {u : ℂˣ | (u : ℂ) ∈ peripheralEigenvalues E}

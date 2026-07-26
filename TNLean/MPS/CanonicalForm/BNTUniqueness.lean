@@ -219,10 +219,10 @@ theorem IsCPSVBasisOfNormalTensors.equiv_of_converse_coverage
     obtain ⟨k, hdim₂, X₂, ζ₂, hζ₂, hrel₂⟩ := hCover₂ l hl
     have hGE₁ : GaugePhaseEquiv
         (cast (congr_arg (MPSTensor d) hdim₁) (basis₁ j)) (blocks l) :=
-      ⟨X₁, ζ₁, norm_ne_zero_iff.mp (by rw [hζ₁]; exact one_ne_zero), hrel₁⟩
+      ⟨X₁, ζ₁, Complex.ne_zero_of_norm_eq_one hζ₁, hrel₁⟩
     have hGE₂ : GaugePhaseEquiv
         (cast (congr_arg (MPSTensor d) hdim₂) (basis₂ k)) (blocks l) :=
-      ⟨X₂, ζ₂, norm_ne_zero_iff.mp (by rw [hζ₂]; exact one_ne_zero), hrel₂⟩
+      ⟨X₂, ζ₂, Complex.ne_zero_of_norm_eq_one hζ₂, hrel₂⟩
     refine ⟨k, hdim₁.trans hdim₂.symm, ?_⟩
     simpa using gaugePhaseEquiv_cast_compose_via_centre
       hdim₁.symm hdim₂.symm
@@ -259,10 +259,10 @@ theorem IsCPSVBasisOfNormalTensors.equiv_of_converse_coverage
     obtain ⟨k, hdim₁, X₁, ζ₁, hζ₁, hrel₁⟩ := hCover₁ l hl
     have hGE₂ : GaugePhaseEquiv
         (cast (congr_arg (MPSTensor d) hdim₂) (basis₂ j)) (blocks l) :=
-      ⟨X₂, ζ₂, norm_ne_zero_iff.mp (by rw [hζ₂]; exact one_ne_zero), hrel₂⟩
+      ⟨X₂, ζ₂, Complex.ne_zero_of_norm_eq_one hζ₂, hrel₂⟩
     have hGE₁ : GaugePhaseEquiv
         (cast (congr_arg (MPSTensor d) hdim₁) (basis₁ k)) (blocks l) :=
-      ⟨X₁, ζ₁, norm_ne_zero_iff.mp (by rw [hζ₁]; exact one_ne_zero), hrel₁⟩
+      ⟨X₁, ζ₁, Complex.ne_zero_of_norm_eq_one hζ₁, hrel₁⟩
     refine ⟨k, hdim₂.trans hdim₁.symm, ?_⟩
     simpa using gaugePhaseEquiv_cast_compose_via_centre
       hdim₂.symm hdim₁.symm
