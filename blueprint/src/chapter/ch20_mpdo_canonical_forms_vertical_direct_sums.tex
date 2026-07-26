@@ -668,14 +668,33 @@
     $T$.
 \end{proof}
 
-\begin{theorem}[Horizontal canonical form implies vertical canonical form]
+% Source anchor: CPSV16 Proposition 4.13, statement at lines 1863--1870.
+\begin{theorem}[Vertical canonical form of a canonical MPDO]
+    \label{thm:vertical_cf_of_cpsv_canonical_form}
+    \notready
+    \uses{def:mpdo, def:cpsv_canonical_form, def:vertical_cf_mpdo}
+    Let $M$ be an MPO tensor whose doubled-index MPS tensor is in the literal
+    CPSV canonical form. If $M$ generates matrix product density operators,
+    then $M$ is in canonical form in the vertical direction. More precisely,
+    there is a basis of normal tensors $\{M_\alpha\}_\alpha$ for the vertically
+    viewed tensor $\widetilde M$, together with positive diagonal matrices
+    $\mu_\alpha$ and an isometry $U$ such that
+    \begin{align}
+        U\widetilde M U^\dagger
+         &=\bigoplus_\alpha\mu_\alpha\otimes M_\alpha.
+        \label{eq:cpsv_prop_4_13_vertical_form}
+    \end{align}
+    This is \cite[Proposition~4.13]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+
+\begin{theorem}[BNT-refined horizontal form implies vertical canonical form]
     \label{thm:vertical_cf_of_horizontal_cf}
     \lean{MPOTensor.verticalCF_of_horizontalCF}
     \lean{MPOTensor.IsHorizontalCF.exists_cpsvVerticalDecomposition}
     \leanok
     \uses{def:mpdo, def:horizontal_cf_mpdo, def:vertical_cf_mpdo}
-    A tensor in horizontal canonical form that generates matrix product
-    density operators is also in canonical form in the vertical direction:
+    A tensor in normalized BNT-refined horizontal form that generates matrix
+    product density operators is also in canonical form in the vertical direction:
     there exist a basis of normal tensors $\{M_\alpha\}_\alpha$ for the
     vertically viewed tensor $\widetilde M$, positive diagonal matrices
     $\mu_\alpha$, and a coisometry $U$ from the physical space onto the
@@ -689,9 +708,12 @@
         \widetilde M&=U^\dagger BU.
         \notag
     \end{align}
-    The latter declaration retains the literal CPSV16 basis-of-normal-tensors
-    predicate together with these same positive and coisometric data.
-    This is \cite[Proposition~4.13]{Cirac2016MPDO_arXiv}.
+    The conclusion includes the CPSV16 basis-of-normal-tensors condition,
+    together with the positive weights and the coisometric realization. Its
+    hypothesis is the normalized BNT-refined form of
+    Definition~\ref{def:horizontal_cf_mpdo}, rather than the literal CPSV
+    canonical form assumed in
+    Theorem~\ref{thm:vertical_cf_of_cpsv_canonical_form}.
 \end{theorem}
 
 \begin{proof}
