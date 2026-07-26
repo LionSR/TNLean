@@ -62,6 +62,39 @@ theorem glReindex_transportedAbsorbedGauge_eq (B : Tensor (torusGraph width heig
   subst hb
   exact glReindex_self hcast _
 
+/-- The translated coefficient witness when its edge gauge is the transported reference gauge. -/
+private noncomputable def transportedEdgeCoeffIdentityWitness
+    {A B : Tensor (torusGraph width height) d}
+    (hA : IsTorusTranslationInvariant A) (hB : IsTorusTranslationInvariant B)
+    (a : ZMod width) (b : ZMod height) (R : Finset (TorusVertex width height))
+    (f : {f : Edge (torusGraph width height) //
+      IsRegionBoundaryEdge (G := torusGraph width height) R f})
+    (hE : A.bondDim f.1 = B.bondDim f.1)
+    (Z : GL (Fin (B.bondDim f.1)) ℂ)
+    (hposB : ∀ g : Edge (torusGraph width height), 0 < B.bondDim g)
+    (hRB : RegionBlockedTensorInjective (G := torusGraph width height) B R)
+    (hCB : RegionBlockedTensorInjective (G := torusGraph width height) B (Finset.univ \ R))
+    (hid : ∀ (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ)
+      (σ : RegionPhysicalConfig (V := TorusVertex width height) (d := d) R)
+      (τ : RegionPhysicalConfig (V := TorusVertex width height) (d := d) (Finset.univ \ R)),
+      regionInsertedCoeff (G := torusGraph width height) A R f M σ τ =
+        regionInsertedCoeff (G := torusGraph width height) B R f
+          ((Z : Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ) *
+              Matrix.reindexAlgEquiv ℂ ℂ (finCongr hE) M *
+            (↑Z⁻¹ : Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ)) σ τ)
+    (hEX : A.bondDim (boundaryEdgeMap (translate a b) R f).1 =
+      B.bondDim (boundaryEdgeMap (translate a b) R f).1) :
+    EdgeCoeffIdentityWitness A B (boundaryEdgeMap (translate a b) R f).1
+      (glReindex (bondDim_boundaryEdgeMap_translate hB a b R f).symm Z)
+      (glReindex (bondDim_boundaryEdgeMap_translate hB a b R f).symm Z) hEX :=
+  edgeCoeffIdentityWitness_translate hA hB a b R f hE Z hposB hRB hCB hid
+    (glReindex (bondDim_boundaryEdgeMap_translate hB a b R f).symm Z) hEX (by
+      intro M σ' τ'
+      obtain ⟨σ, τ, rfl, rfl⟩ :=
+        exists_regionPhysicalConfig_translate_preimage (d := d) a b R σ' τ'
+      exact regionInsertedCoeff_translate_coeffIdentity_conj hA hB a b R f hE Z hid hEX
+        (glReindex (bondDim_boundaryEdgeMap_translate hB a b R f).symm Z) rfl M σ τ)
+
 /-- **The translation-covariant absorbed gauge family on the torus.**
 
 For a translation-invariant pair `A`, `B` on the torus with matched bond dimensions, positive
@@ -174,7 +207,9 @@ theorem exists_torusCovariantAbsorbedGaugeFamily
     have hmap : Edge.map (translate a' b') (torusHorizontalReferenceEdge xhStart yhStart) =
         Edge.map (translate a b) (torusHorizontalReferenceEdge xhStart yhStart) := hspec.symm
     obtain ⟨ha, hb⟩ := translate_param_unique_right hw _ hmap
-    exact glReindex_transportedAbsorbedGauge_eq B hB Rh fh Zh ha hb _
+    subst a'
+    subst b'
+    exact glReindex_self _ _
   have hUv : ∀ (a : ZMod width) (b : ZMod height),
       X (Edge.map (translate a b) (torusVerticalReferenceEdge xvStart yvStart)) =
         transportedAbsorbedGauge B hB Rv fv Zv a b := by
@@ -196,7 +231,9 @@ theorem exists_torusCovariantAbsorbedGaugeFamily
     have hmap : Edge.map (translate a' b') (torusVerticalReferenceEdge xvStart yvStart) =
         Edge.map (translate a b) (torusVerticalReferenceEdge xvStart yvStart) := hspec.symm
     obtain ⟨ha, hb⟩ := translate_param_unique_up hh _ hmap
-    exact glReindex_transportedAbsorbedGauge_eq B hB Rv fv Zv ha hb _
+    subst a'
+    subst b'
+    exact glReindex_self _ _
   -- The two reference boundary edges have their first stored endpoint in the reference region.
   have hmemh : fh.1.1.1 ∈ Rh :=
     (torusHorizontalRectangleBlockingDatum hAr hUA hxh0 hyh0 hxhw hyhh).left_mem_red
@@ -239,14 +276,8 @@ theorem exists_torusCovariantAbsorbedGaugeFamily
         (bondDim_boundaryEdgeMap_translate hA a b Rh fh).trans
           (hEh.trans (bondDim_boundaryEdgeMap_translate hB a b Rh fh).symm)
       refine edgeAbsorbed_of_edgeCoeffIdentityWitness
-        (edgeCoeffIdentityWitness_translate hA hB a b Rh fh hEh Zh hposB hRB hCB hZh
-          (glReindex (bondDim_boundaryEdgeMap_translate hB a b Rh fh).symm Zh) hEX ?_)
+        (transportedEdgeCoeffIdentityWitness hA hB a b Rh fh hEh Zh hposB hRB hCB hZh hEX)
         hbd X (hUh a b) hposA σ N
-      intro M σ' τ'
-      obtain ⟨σ₀, τ₀, rfl, rfl⟩ :=
-        exists_regionPhysicalConfig_translate_preimage (d := d) a b Rh σ' τ'
-      exact regionInsertedCoeff_translate_coeffIdentity_conj hA hB a b Rh fh hEh Zh hZh
-        hEX (glReindex (bondDim_boundaryEdgeMap_translate hB a b Rh fh).symm Zh) rfl M σ₀ τ₀
     · obtain ⟨⟨a, b⟩, rfl⟩ :=
         translate_verticalReferenceEdge (xStart := xvStart) (yStart := yvStart) he
       have hRB : RegionBlockedTensorInjective (G := torusGraph width height) B Rv := by
@@ -262,14 +293,8 @@ theorem exists_torusCovariantAbsorbedGaugeFamily
         (bondDim_boundaryEdgeMap_translate hA a b Rv fv).trans
           (hEv.trans (bondDim_boundaryEdgeMap_translate hB a b Rv fv).symm)
       refine edgeAbsorbed_of_edgeCoeffIdentityWitness
-        (edgeCoeffIdentityWitness_translate hA hB a b Rv fv hEv Zv hposB hRB hCB hZv
-          (glReindex (bondDim_boundaryEdgeMap_translate hB a b Rv fv).symm Zv) hEX ?_)
+        (transportedEdgeCoeffIdentityWitness hA hB a b Rv fv hEv Zv hposB hRB hCB hZv hEX)
         hbd X (hUv a b) hposA σ N
-      intro M σ' τ'
-      obtain ⟨σ₀, τ₀, rfl, rfl⟩ :=
-        exists_regionPhysicalConfig_translate_preimage (d := d) a b Rv σ' τ'
-      exact regionInsertedCoeff_translate_coeffIdentity_conj hA hB a b Rv fv hEv Zv hZv
-        hEX (glReindex (bondDim_boundaryEdgeMap_translate hB a b Rv fv).symm Zv) rfl M σ₀ τ₀
 
 end PEPS
 end TNLean
