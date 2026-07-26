@@ -321,15 +321,8 @@ private theorem toAdjointLinearMap_conjTranspose_mul_self_eq_sum_commutator
       (∑ j, (A * F.L j - F.L j * A)ᴴ * (A * F.L j - F.L j * A)) =
       φ (Aᴴ * A) - φ Aᴴ * A - Aᴴ * φ A + Aᴴ * S * A := by
     simp_rw [hRHS_expand]
-    simp only [Finset.sum_sub_distrib, Finset.sum_add_distrib]
-    congr 1
-    · congr 1
-      · congr 1
-        -- ∑ (F.L j)ᴴ * Aᴴ * F.L j * A = φ(A†) · A
-        exact (Finset.sum_mul _ _ _).symm
-      -- A† · ∑ (F.L j)ᴴ * A * F.L j = A† · φ(A)
-      exact (Finset.mul_sum _ _ _).symm
-    -- ∑ A† · ((F.L j)ᴴ * F.L j) * A = A† · S · A
+    simp only [Finset.sum_sub_distrib, Finset.sum_add_distrib, φ, Kraus.adjointMap]
+    rw [← Finset.sum_mul, ← Finset.mul_sum]
     rw [← Finset.sum_mul, ← Finset.mul_sum, hS_def]
   -- Part 3: Connect LHS to the same expression
   rw [toAdjointLinearMap_apply_raw, hRHS_sum]
