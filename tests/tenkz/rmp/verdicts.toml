@@ -604,12 +604,12 @@ id = "rmp-iii-a-spt-mpo"
 status = "blocked"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
-defects = ["placement-illegible"]
+defects = []
 missing = ["strings"]
-case_sha256 = "d607cc45d0422379134a2c6f2549ec691bfcd6ac4a5bc2cb45ff08a9a56d50e7"
-reviewed = "2026-07-25"
-renderer = "rotation-frame-source-review-2026-07-25"
-note = "Diagonal action frames are now represented; the string geometry remains incomplete."
+case_sha256 = "189c1381d9f7393d3591368d23853cfdc52e625fe4a3d57f10a1f4c1eae88c83"
+reviewed = "2026-07-26"
+renderer = "fable-countersign-reading-2026-07-26-200dpi"
+note = "Diagonal action frames are represented and the g labels ride clear of the boxes; the string geometry remains incomplete."
 
 [[verdict]]
 id = "rmp-iii-a-spt-intertwiner"
@@ -1235,10 +1235,10 @@ status = "structural-gap"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
 defects = ["missing-element"]
-case_sha256 = "6662a6585538ff91fed601a06c111feb7dcdaf591c9c149fcaa1461e931c5233"
-reviewed = "2026-07-23"
-renderer = "maintainer-page-review-2026-07-23"
-note = "physical legs and colored virtual index dropped"
+case_sha256 = "f083acc3ab3d2d2fb5585993d69643f33fa027ecb155382d86cafb364d050de1"
+reviewed = "2026-07-26"
+renderer = "fable-countersign-reading-2026-07-26-200dpi"
+note = "physical legs still dropped; the bond labels now parse (the case had misspelt the range syntax and the literal printed across the boxes, silently)"
 
 [[verdict]]
 id = "rmp-workbench-iii-f-tensor"
