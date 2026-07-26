@@ -16,6 +16,7 @@ TIMED_JOB_RE = re.compile(
     r"(?P<unit>ms|s|m|h)\)\s*$"
 )
 SECONDS_PER_UNIT = {"ms": 0.001, "s": 1.0, "m": 60.0, "h": 3600.0}
+TIMING_LIMIT_EXIT = 50
 
 
 @dataclass(frozen=True)
@@ -133,7 +134,9 @@ def main(argv: Sequence[str] | None = None) -> int:
             ),
             end="",
         )
-    return int(any(job.seconds >= args.error_threshold for job in jobs))
+    if any(job.seconds >= args.error_threshold for job in jobs):
+        return TIMING_LIMIT_EXIT
+    return 0
 
 
 if __name__ == "__main__":

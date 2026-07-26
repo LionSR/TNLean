@@ -74,7 +74,7 @@ class LakeBuildHotspotTests(unittest.TestCase):
             output = io.StringIO()
             with contextlib.redirect_stdout(output):
                 status = hotspots.main([str(log), "--changed-files-from", str(changed)])
-        self.assertEqual(status, 1)
+        self.assertEqual(status, hotspots.TIMING_LIMIT_EXIT)
         self.assertEqual(
             output.getvalue(),
             "\n".join(

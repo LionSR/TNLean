@@ -317,7 +317,7 @@ jobs:
   build:
     needs: changes
     outputs:
-      compilation-time-result: ${{ steps.compilation-time.outcome }}
+      compilation-time-result: ${{ steps.compilation-time.outputs.result }}
     if: |
       !cancelled() && (
         github.event_name != 'pull_request' ||
@@ -355,17 +355,30 @@ jobs:
       - name: Check changed Lean compilation times
         id: compilation-time
         if: github.event_name == 'pull_request'
-        continue-on-error: true
         env:
           BASE_REF: origin/${{ github.event.pull_request.base.ref }}
         run: |
+          timing_status=0
           git fetch --no-tags origin \
-            "+refs/heads/${{ github.event.pull_request.base.ref }}:refs/remotes/origin/${{ github.event.pull_request.base.ref }}"
-          git diff --merge-base --name-only --diff-filter=AMR "$BASE_REF" -- '*.lean' \
-            > "$RUNNER_TEMP/changed-lean-files.txt"
-          python3 scripts/lake_build_hotspots.py \
-            "$RUNNER_TEMP/lake-build.log" \
-            --changed-files-from "$RUNNER_TEMP/changed-lean-files.txt"
+            "+refs/heads/${{ github.event.pull_request.base.ref }}:refs/remotes/origin/${{ github.event.pull_request.base.ref }}" \
+            || timing_status=$?
+          if [ "$timing_status" -eq 0 ]; then
+            git diff --merge-base --name-only --diff-filter=AMR "$BASE_REF" -- '*.lean' \
+              > "$RUNNER_TEMP/changed-lean-files.txt" \
+              || timing_status=$?
+          fi
+          if [ "$timing_status" -eq 0 ]; then
+            python3 scripts/lake_build_hotspots.py \
+              "$RUNNER_TEMP/lake-build.log" \
+              --changed-files-from "$RUNNER_TEMP/changed-lean-files.txt" \
+              || timing_status=$?
+          fi
+          case "$timing_status" in
+            0) result=success ;;
+            50) result=limit ;;
+            *) result=error ;;
+          esac
+          echo "result=$result" >> "$GITHUB_OUTPUT"
 
       - name: Run text-based style linter
         run: lake exe lint_style --github
@@ -392,10 +405,17 @@ jobs:
         env:
           TIMING_RESULT: ${{ needs.build.outputs.compilation-time-result }}
         run: |
-          if [ "$TIMING_RESULT" != "success" ]; then
-            echo "::error::A changed Lean module reached the 50-second compilation limit"
-            exit 1
-          fi
+          case "$TIMING_RESULT" in
+            success) ;;
+            limit)
+              echo "::error::A changed Lean module reached the 50-second compilation limit"
+              exit 1
+              ;;
+            *)
+              echo "::error::The changed-module compilation-time checker failed"
+              exit 1
+              ;;
+          esac
 
   file-length:
     name: Check Lean module policies

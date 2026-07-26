@@ -43,9 +43,9 @@ unsuccessfully if any reported job takes at least 50 seconds. Use
 `--warn-threshold` and `--error-threshold` to override these limits.
 
 Pull-request CI applies the same policy only to changed Lean files: 25 seconds
-creates a warning annotation on the file, and 50 seconds fails the build job.
-Timings are local diagnostic evidence, not benchmarks comparable across
-machines.
+creates a warning annotation on the file, and 50 seconds fails the separate
+`compile-time` job. Timings are local diagnostic evidence, not benchmarks
+comparable across machines.
 
 Lightweight tests do not run Lean:
 
