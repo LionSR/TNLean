@@ -4,29 +4,34 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.CanonicalForm.Reduction
+import TNLean.MPS.Core.CanonicalNormalization
 import TNLean.MPS.Core.Transfer
 import TNLean.MPS.Overlap.Basic
+import TNLean.MPS.SharedInfra.BlockAssembly
 import TNLean.Channel.Peripheral.Spectrum
+import Mathlib.Analysis.Matrix.PosDef
+import Mathlib.LinearAlgebra.Matrix.IsDiag
 
 /-!
-# Normal tensor and basis of normal tensors (CPSV16)
+# CPSV canonical forms and normal tensors
 
-This module records the definitions of two of the central notions
+This module records four central notions
 from arXiv:1606.00608 (Cirac–Pérez-García–Schuch–Verstraete, "Matrix product density
 operators: Renormalization fixed points and boundary theories"):
 
-* normal tensor (NT), `MPSTensor.IsNormalTensor`, and
+* normal tensor (NT), `MPSTensor.IsNormalTensor`,
+* canonical form (CF), `MPSTensor.IsCPSVCanonicalForm`,
+* canonical form II (CFII), `MPSTensor.IsCPSVCanonicalFormII`, and
 * basis of normal tensors (BNT), `MPSTensor.IsCPSVBasisOfNormalTensors`.
 
-The canonical-form (CF) decomposition of arXiv:1606.00608 eq. `II_CF1` plus the
-normalization paragraph (`Papers/1606.00608/MPDO-22-12-17-2.tex:237-246`) is not
-introduced here as a separate predicate.  The later normal canonical form
-predicate `MPSTensor.IsCanonicalFormSepAux.IsNormalCanonicalForm` records the
-strengthened form used in the Fundamental Theorem: normal blocks together with
-left-canonical normalization, non-increasing nonzero weight moduli, primitive
-transfer maps, and positive block dimensions.  The global CPSV normalization
-`‖μ k‖ ≤ 1` with a unit-modulus witness remains a separate source hypothesis
-when it is needed.
+The literal canonical-form (CF) decomposition of arXiv:1606.00608 eq. `II_CF1`
+is recorded by `MPSTensor.CPSVCanonicalFormData` and
+`MPSTensor.IsCPSVCanonicalForm`.  A coisometry embeds the retained weighted
+direct sum into the original bond space, whose remaining coordinates are zero.
+The line-246 normalization convention is the separate predicate
+`MPSTensor.CPSVCanonicalFormData.IsWeightNormalized`; it is not part of literal
+CF membership.  None of these definitions adds weight ordering or BNT
+separation.
 
 The existing canonical-form layer (`TNLean.PiAlgebra.CanonicalFormSepAux`,
 `TNLean.MPS.BNT.Construction`) contains several strengthenings of these definitions
@@ -72,7 +77,7 @@ by `IsNormalTensor`.
 Follows `docs/MATHLIB_style.md` and `docs/MATHLIB_naming.md`.
 -/
 
-open scoped Matrix BigOperators Matrix.Norms.Operator
+open scoped Matrix BigOperators Matrix.Norms.Operator ComplexOrder MatrixOrder
 
 namespace MPSTensor
 
@@ -160,6 +165,124 @@ theorem isNormalTensor_of_bondDim_one_of_transferMap_eq_id
       simp only [LinearMap.id_apply, Matrix.smul_apply, smul_eq_mul] at hEq00
       apply mul_right_cancel₀ hX00
       simpa using hEq00.symm
+
+/-! ## CPSV canonical form (CF) -/
+
+/-- Witness data for the literal CPSV canonical form of `A`.
+
+This is arXiv:1606.00608, Section 2.3, lines 214--245 and eq. `II_CF1`.
+The retained weighted direct sum occupies a coisometrically embedded subspace
+of the original bond space.  Its orthogonal complement consists literally of
+the omitted zero coordinates. -/
+structure CPSVCanonicalFormData (A : MPSTensor d D) where
+  /-- Number of retained normal blocks (CPSV16, lines 214--225). -/
+  r : ℕ
+  /-- Bond dimension of each retained block (CPSV16, lines 219--225). -/
+  dim : Fin r → ℕ
+  /-- Every retained block has positive bond dimension (CPSV16, lines 219--225). -/
+  dim_pos : ∀ k, 0 < dim k
+  /-- Scalar weight of each retained block (CPSV16, eq. `II_Aiplusk1`). -/
+  weights : Fin r → ℂ
+  /-- Retained normal blocks (CPSV16, eq. `II_CF1`). -/
+  blocks : (k : Fin r) → MPSTensor d (dim k)
+  /-- Every retained block is normal (CPSV16, lines 233--245 and eq. `II_CF1`). -/
+  blocks_normal : ∀ k, IsNormalTensor (blocks k)
+  /-- The retained direct sum fits inside the original bond space (CPSV16, lines 219--225). -/
+  total_dim_le : ∑ k : Fin r, dim k ≤ D
+  /-- Coisometric inclusion implementing the zero ambient coordinates of CPSV16, lines 219--225. -/
+  ambient_coisometry : Matrix (Fin (∑ k : Fin r, dim k)) (Fin D) ℂ
+  /-- The retained coordinates embed coisometrically (CPSV16, lines 214--225). -/
+  coisometric : ambient_coisometry * ambient_coisometryᴴ = 1
+  /-- Exact eq. `II_CF1` reconstruction, including the zero coordinates of
+  CPSV16, lines 219--225. -/
+  reconstruct : ∀ i,
+    A i = ambient_coisometryᴴ * toTensorFromBlocks (d := d) weights blocks i *
+      ambient_coisometry
+
+/-- A tensor is in literal CPSV canonical form when it has an exact retained-block
+reconstruction in its ambient bond space.
+
+Source: arXiv:1606.00608, Section 2.3, lines 214--245 and eq. `II_CF1`. -/
+def IsCPSVCanonicalForm (A : MPSTensor d D) : Prop :=
+  Nonempty (CPSVCanonicalFormData A)
+
+namespace CPSVCanonicalFormData
+
+/-- CPSV16 line 246's weight convention, separated from literal canonical-form
+membership.  The unit weight is required exactly when the ambient tensor is
+nonzero; no retained weight is required to be nonzero.
+
+Source: arXiv:1606.00608, Section 2.3, line 246. -/
+structure IsWeightNormalized (data : CPSVCanonicalFormData A) : Prop where
+  /-- Every retained weight has modulus at most one (CPSV16, line 246). -/
+  weight_norm_le_one : ∀ k, ‖data.weights k‖ ≤ 1
+  /-- A nonzero ambient tensor has a retained unit-modulus weight (CPSV16, line 246). -/
+  weight_unit_exists : A ≠ 0 → ∃ k, ‖data.weights k‖ = 1
+
+/-- Witness data determine the corresponding CPSV canonical-form predicate. -/
+theorem isCPSVCanonicalForm (data : CPSVCanonicalFormData A) :
+    IsCPSVCanonicalForm A :=
+  ⟨data⟩
+
+end CPSVCanonicalFormData
+
+namespace IsCPSVCanonicalForm
+
+/-- Choose retained-block witness data from a CPSV canonical-form predicate. -/
+noncomputable def data (h : IsCPSVCanonicalForm A) : CPSVCanonicalFormData A :=
+  Classical.choice h
+
+end IsCPSVCanonicalForm
+
+/-! ## CPSV canonical form II (CFII) -/
+
+/-- Witness data for literal CPSV canonical form II.
+
+This is arXiv:1606.00608, Appendix A, lines 1054--1077.  It extends the exact
+ambient reconstruction in `CPSVCanonicalFormData` by the two blockwise
+normalization conditions: left-canonical form and a diagonal positive-definite
+fixed point of the transfer map. -/
+structure CPSVCanonicalFormIIData (A : MPSTensor d D) extends CPSVCanonicalFormData A where
+  /-- Every retained block is left-canonical (CPSV16, Appendix A, eq. `TP`). -/
+  blocks_left_canonical : ∀ k, IsLeftCanonical (blocks k)
+  /-- Every block has diagonal positive-definite fixed-point data (CPSV16,
+  Appendix A, eq. `Lambda`). -/
+  blocks_fixed_point :
+    ∀ k, ∃ Λ : Matrix (Fin (dim k)) (Fin (dim k)) ℂ,
+      Λ.PosDef ∧ Λ.IsDiag ∧ transferMap (blocks k) Λ = Λ
+
+/-- A tensor is in literal CPSV canonical form II when it admits exactly
+reconstructed, blockwise normalized retained-block data.
+
+Source: arXiv:1606.00608, Appendix A, lines 1054--1077. -/
+def IsCPSVCanonicalFormII (A : MPSTensor d D) : Prop :=
+  Nonempty (CPSVCanonicalFormIIData A)
+
+namespace CPSVCanonicalFormIIData
+
+/-- Canonical-form-II witness data determine the corresponding predicate. -/
+theorem isCPSVCanonicalFormII (data : CPSVCanonicalFormIIData A) :
+    IsCPSVCanonicalFormII A :=
+  ⟨data⟩
+
+/-- Forgetting the blockwise normalization leaves literal CPSV canonical-form data. -/
+theorem isCPSVCanonicalForm (data : CPSVCanonicalFormIIData A) :
+    IsCPSVCanonicalForm A :=
+  data.toCPSVCanonicalFormData.isCPSVCanonicalForm
+
+end CPSVCanonicalFormIIData
+
+namespace IsCPSVCanonicalFormII
+
+/-- Choose normalized retained-block data from a canonical-form-II predicate. -/
+noncomputable def data (h : IsCPSVCanonicalFormII A) : CPSVCanonicalFormIIData A :=
+  Classical.choice h
+
+/-- Canonical form II is, in particular, literal CPSV canonical form. -/
+theorem isCPSVCanonicalForm (h : IsCPSVCanonicalFormII A) : IsCPSVCanonicalForm A :=
+  ⟨h.data.toCPSVCanonicalFormData⟩
+
+end IsCPSVCanonicalFormII
 
 /-! ## Basis of normal tensors (BNT) -/
 
