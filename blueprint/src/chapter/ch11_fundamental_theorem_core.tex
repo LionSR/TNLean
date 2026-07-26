@@ -18,8 +18,6 @@ for its sector-level conclusion.
     \lean{MPSTensor.ft_sector_bnt_proportional_sector_match_witnesses}
     \leanok
     \uses{def:sector_bnt_cf,
-        def:gauge_phase_equiv,
-        thm:gauge_phase_mpv_scaling,
         thm:sector_bnt_proportional_bijective_match,
         lem:sector_bnt_norm_phase_of_matched_mpv}
     Let $P$ and $Q$ be BNT canonical forms whose total tensors generate
@@ -65,58 +63,16 @@ for its sector-level conclusion.
 \begin{proof}\leanok
     \uses{thm:sector_bnt_proportional_bijective_match,
         lem:sector_bnt_norm_phase_of_matched_mpv}
-    Fix $j_0\in J(P)$ and suppose, for contradiction, that the overlap of
-    $P_{j_0}$ with every $Q$-sector decays. Define
-    \begin{align}
-        T
-         & =\bigl\{j\in J(P):
-        O_{P_jQ_k}(N)\longrightarrow 0\text{ for every }k\in J(Q)\bigr\}.
-        \notag
-    \end{align}
-    Thus $j_0\in T$. For each $j\notin T$, choose a sector $Q_{k(j)}$ for
-    which the overlap does not decay. The normal-overlap analysis then supplies
-    scalars $\alpha_j(N)$ such that, at every length,
-    \begin{align}
-        \ket{V^{(N)}(P_j)}
-         & =\alpha_j(N)\ket{V^{(N)}(Q_{k(j)})}.
-        \notag
-    \end{align}
+    Theorem~\ref{thm:sector_bnt_proportional_bijective_match} gives a bijection
+    $\beta:J(Q)\simeq J(P)$ together with equal bond dimensions, gauge-phase
+    equivalence, and nondecaying overlap for every matched pair. Its proof
+    partitions the decaying $P$-sectors, substitutes exact $Q$-sector relations
+    for the complement, applies linear independence to the restricted decaying
+    $P$-family together with all $Q$-sectors, and then reverses direction; basis
+    separation and finiteness turn the resulting matches into $\beta$.
 
-    At a sufficiently large length $N$, write the full proportionality equation
-    as
-    \begin{align}
-        \sum_{j\in J(P)}c_N^{(j)}(P)\ket{V^{(N)}(P_j)}
-         & =c_N\sum_{k\in J(Q)}c_N^{(k)}(Q)
-        \ket{V^{(N)}(Q_k)},
-        \notag
-    \end{align}
-    where $c_N\ne0$. Split the left-hand sum into $T$ and its complement,
-    substitute the displayed scalar relations for all $j\notin T$, and group
-    their contributions according to the common value of $k(j)$. The result is
-    a zero linear combination of
-    \begin{align}
-        \bigl\{\ket{V^{(N)}(P_j)}:j\in T\bigr\}
-        \mathbin{\cup}
-        \bigl\{\ket{V^{(N)}(Q_k)}:k\in J(Q)\bigr\}.
-        \notag
-    \end{align}
-    All cross-overlaps between the two displayed parts decay by the definition
-    of $T$, so this restricted union is linearly independent for all
-    sufficiently large $N$. Extracting the coefficient of
-    $\ket{V^{(N)}(P_{j_0})}$ gives $c_N^{(j_0)}(P)=0$ eventually, contradicting
-    the nonvanishing property of a BNT basis coefficient. Therefore every
-    $P$-sector has a $Q$-sector with nondecaying overlap.
-
-    Interchange $P$ and $Q$ to obtain partners in the reverse direction. For
-    each nondecaying pair, the normal-overlap dichotomy gives equality of bond
-    dimensions and gauge-phase equivalence. Basis separation makes either
-    chosen partner map injective: if two basis sectors had the same partner,
-    they would be gauge-phase equivalent to one another. The injections in both
-    directions and finiteness yield a bijection
-    $\beta:J(Q)\simeq J(P)$.
-
-    Choose an invertible matrix $X_k$ and a nonzero scalar $\zeta_k$ from each
-    matched gauge-phase relation. This gives
+    Unpack each matched gauge-phase equivalence to choose an invertible matrix
+    $X_k$ and a nonzero scalar $\zeta_k$. This gives
     $Q_k^i=\zeta_kX_kP_{\beta(k)}^iX_k^{-1}$ and, by taking traces around a
     positive-length word,
     \begin{align}
@@ -124,13 +80,14 @@ for its sector-level conclusion.
          & =\zeta_k^N V^{(N)}(P_{\beta(k)})_\sigma.
         \notag
     \end{align}
-    The normalized self-overlap limits then satisfy
+    Lemma~\ref{lem:sector_bnt_norm_phase_of_matched_mpv} applies to this MPV
+    identity. Equivalently, the normalized self-overlaps satisfy
     \begin{align}
         O_{Q_kQ_k}(N)
          & =|\zeta_k|^{2N}O_{P_{\beta(k)}P_{\beta(k)}}(N),
         \notag
     \end{align}
-    and both outer sequences tend to $1$. Thus $|\zeta_k|=1$.
+    and both outer sequences tend to $1$, which forces $|\zeta_k|=1$.
 \end{proof}
 
 \begin{lemma}[Full-basis coefficient identity from matched phases]%
@@ -477,6 +434,8 @@ cancel before the block gauges are assembled.
 
 \begin{remark}[Proportional sector matching does not determine copy weights]%
     \label{rem:proportional_length_scalar_gap}
+    % Correction documented in
+    % docs/paper-gaps/cpsv16_proportional_length_scalar_gap.tex.
     The proportional theorem determines the normal sectors, but it does not
     determine the copy weights or imply conjugacy of the total tensors. Let
     $C$ be a normalized normal tensor and consider the one-sector BNT forms
