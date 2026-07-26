@@ -634,7 +634,6 @@ theorem supportProj_partialTraceRight_maximallyMixedTensorReference
     (PosSemidef.partialTraceRight hρ).supportInvSqrt_mul_self_mul_supportInvSqrt]
   have hc : (0 : ℝ) < (dA : ℝ)⁻¹ := inv_pos.mpr (by
     exact_mod_cast Nat.pos_of_ne_zero (NeZero.ne dA))
-  have hs : Real.sqrt ((dA : ℝ)⁻¹) ≠ 0 := Real.sqrt_ne_zero'.mpr hc
   have hcancelR : (Real.sqrt ((dA : ℝ)⁻¹))⁻¹ *
       (Real.sqrt ((dA : ℝ)⁻¹))⁻¹ * (dA : ℝ)⁻¹ = 1 := by
     calc
