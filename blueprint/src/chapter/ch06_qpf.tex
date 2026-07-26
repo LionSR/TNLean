@@ -378,8 +378,22 @@ and~\cite{Evans1978Spectral}.
     Section~\ref{sec:app_qpf_gauge}.
 \end{proof}
 
+\begin{definition}[Left-canonical normalization]
+    \label{def:left_canonical_tensor}
+    \lean{MPSTensor.IsLeftCanonical}
+    \leanok
+    An MPS tensor $A=(A^i)_i$ is left-canonical when
+    \begin{align}
+        \sum_i (A^i)^\dagger A^i
+         & =\Id.
+        \notag
+    \end{align}
+    Equivalently, its Kraus map is trace-preserving.
+\end{definition}
+
 \begin{theorem}[Left-canonical (trace-preserving) gauge]\label{thm:left_canonical_gauge}
     \lean{gauged_tracePreserving}
+    \uses{def:left_canonical_tensor}
     \leanok
     Let $\sigma$ be a fixed point of the adjoint transfer map
     $\sum_i (A^i)^\dagger \sigma A^i = \sigma$,

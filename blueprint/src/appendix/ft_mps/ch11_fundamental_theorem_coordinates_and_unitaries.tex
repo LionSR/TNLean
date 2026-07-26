@@ -1,0 +1,227 @@
+\section{Matched flattened coordinates}
+\label{sec:app_ft_matched_coordinates}
+
+Let $\beta:J(Q)\simeq J(P)$ match the basis sectors and let $\tau_k$ match the
+copies in sector $k$. Flatten the pair $(k,q)$ to the copy index of $Q$. The
+matched $P$-data on that index are the weight and tensor
+\begin{align}
+    \widetilde\mu_{k,q}
+     & =\mu_{\beta(k),\tau_k(q)},
+    &
+    \widetilde P_{k,q}
+     & =P_{\beta(k)},
+    \notag
+\end{align}
+where the second expression is read after the matched bond-dimension
+identification. The block gauge repeats $X_k$ on every copy $q$.
+
+\begin{definition}[Matched weights, tensors, and repeated gauges]
+    \label{def:ft_matched_flat_data}
+    \lean{MPSTensor.matched_p_weight,
+        MPSTensor.matched_p_basis,
+        MPSTensor.matched_block_gauge}
+    \leanok
+    The matched flattened data are the functions
+    $\widetilde\mu$, $\widetilde P$, and $(k,q)\mapsto X_k$ defined above on
+    the flattened copy coordinates of $Q$.
+\end{definition}
+
+\begin{lemma}[Equality of the matched total bond dimensions]
+    \label{lem:ft_total_dim_eq_of_match}
+    \lean{MPSTensor.SectorDecomposition.totalDim_eq_of_match}
+    \leanok
+    \uses{def:ft_matched_flat_data}
+    If matched sectors have equal bond dimensions and matched copy sets are
+    bijective, then $P$ and $Q$ have the same total bond dimension.
+\end{lemma}
+
+\begin{proof}\leanok
+    Reindex first by the sector bijection and then by each copy bijection.
+    Every summand $\dim P_{\beta(k)}$ becomes $\dim Q_k$, so
+    \begin{align}
+        \sum_{j\in J(P)}r_j(P)\dim P_j
+         & =\sum_{k\in J(Q)}r_k(Q)\dim Q_k.
+        \notag
+    \end{align}
+\end{proof}
+
+\begin{definition}[Sector and bond-coordinate equivalences]
+    \label{def:ft_sector_flat_equiv}
+    \lean{MPSTensor.SectorDecomposition.sectorFlatSigmaEquiv,
+        MPSTensor.SectorDecomposition.sectorFlatDimEquiv}
+    \leanok
+    \uses{lem:ft_total_dim_eq_of_match}
+    The sector bijection, copy bijections, and bond-dimension equalities induce
+    an equivalence of the dependent triples $(j,q,a)$ and $(k,q',a')$. After
+    flattening the dependent bond coordinate, this gives an equivalence of the
+    standard total bond-index sets.
+\end{definition}
+
+\begin{proof}\leanok
+    Send $(k,q,a)$ to
+    $(\beta(k),\tau_k(q),a)$, using the bond-dimension equality to identify the
+    last coordinate. The inverse uses $\beta^{-1}$ and $\tau_k^{-1}$. Both
+    composites are the identity componentwise. Conjugating by the standard
+    equivalence between dependent triples and a finite interval gives the
+    flattened bond-coordinate equivalence.
+\end{proof}
+
+\begin{theorem}[Equal-MPV gauge with all matched witnesses]
+    \label{thm:sector_bnt_equal_mps_gaugeEquiv_witnesses}
+    \lean{MPSTensor.ft_sector_bnt_equal_mps_gaugeEquiv_witnesses}
+    \leanok
+    \uses{thm:sector_bnt_equal_global_gauge,
+        lem:ft_total_dim_eq_of_match, def:ft_matched_flat_data}
+    Under the hypotheses of the equal-MPV theorem, one may choose
+    simultaneously the sector bijection, bond-dimension equalities, copy
+    bijections, phases, block gauges, total-dimension equality, and the
+    flattened global gauge. They satisfy the matched block and weight
+    identities of Theorem~\ref{thm:sector_bnt_equal_global_gauge}, together
+    with the conjugation of $Q$ by the matched-coordinate $P$-tensor.
+\end{theorem}
+
+\begin{proof}\leanok
+    Theorem~\ref{thm:sector_bnt_equal_global_gauge} supplies all witnesses
+    except the displayed equality of total dimensions. Apply
+    Lemma~\ref{lem:ft_total_dim_eq_of_match} to its sector and copy bijections.
+    The resulting equality identifies the total bond spaces, while the global
+    conjugation equation is unchanged.
+\end{proof}
+
+\section{Permutation gauges and literal coordinates}
+\label{sec:app_ft_permutation_gauges}
+
+The matched $P$-tensor has the correct blocks but lists them in $Q$-order. A
+permutation matrix restores the literal order of $P$. We record its invertible
+and unitary forms before proving the coordinate conversion used in
+Theorem~\ref{thm:sector_bnt_equal_mps_gaugeEquiv_literal}.
+
+\begin{definition}[Invertible permutation gauge]
+    \label{def:ft_perm_gl}
+    \lean{MPSTensor.permGL}
+    \leanok
+    For a permutation $\rho$ of a finite bond-index set, let $\Pi_\rho$ be its
+    permutation matrix. The corresponding element of the general linear group
+    is denoted $G_\rho$.
+\end{definition}
+
+\begin{lemma}[Matrix, inverse, and unitary identities for a permutation gauge]
+    \label{lem:ft_perm_gl_identities}
+    \lean{MPSTensor.permGL_val,
+        MPSTensor.permGL_inv_val,
+        MPSTensor.permGL_mem_unitaryGroup}
+    \leanok
+    \uses{def:ft_perm_gl}
+    The matrix of $G_\rho$ is $\Pi_\rho$, its inverse is
+    $\Pi_{\rho^{-1}}$, and it is unitary.
+\end{lemma}
+
+\begin{proof}\leanok
+    Every row and every column of $\Pi_\rho$ contains exactly one nonzero
+    entry, equal to $1$. Hence
+    \begin{align}
+        \Pi_\rho\Pi_{\rho^{-1}}
+         & =\Id,
+        &
+        \Pi_\rho^\dagger
+         & =\Pi_{\rho^{-1}}.
+        \notag
+    \end{align}
+    These identities give both the inverse formula and unitarity.
+\end{proof}
+
+The coordinate equivalence of Definition~\ref{def:ft_sector_flat_equiv}
+induces a permutation $\rho$ after the total-dimension identification. For any
+matrix $M$, conjugation by its permutation gauge reindexes both matrix
+coordinates:
+\begin{align}
+    G_\rho M G_\rho^{-1}
+     & =M\circ(\rho^{-1}\times\rho^{-1}).
+    \label{eq:app_ft_perm_conjugation}
+\end{align}
+Applying (\ref{eq:app_ft_perm_conjugation}) to $P_{\mathrm{tot}}^i$ gives the
+matched-coordinate tensor. Composing $G_\rho$ with the block-diagonal gauge
+therefore gives the literal gauge of
+Theorem~\ref{thm:sector_bnt_equal_mps_gaugeEquiv_literal}. This also explains
+why the total-dimension cast and the sector permutation must occur in that
+order.
+
+\section{Unitary witness refinements}
+\label{sec:app_ft_unitary_witnesses}
+
+The main text proves that a specified gauge between left-canonical irreducible
+sectors can be replaced by a unitary without changing its phase. We record the
+existential form and then repeat the construction over every matched copy.
+
+\begin{lemma}[Unitary gauge for left-canonical irreducible tensors]
+    \label{lem:left_canonical_irreducible_unitary_gauge}
+    \lean{MPSTensor.exists_unitaryConj_gaugePhase_of_leftCanonical_irreducible}
+    \leanok
+    \uses{def:left_canonical_tensor, def:gauge_phase_equiv,
+        def:irreducible_tensor,
+        lem:left_canonical_irreducible_same_phase_unitary_gauge}
+    Let $A$ and $B$ be left-canonical irreducible tensors of common positive bond
+    dimension that are gauge-phase equivalent. Then the gauge can be taken
+    unitary: there are a unitary matrix $U$ and a scalar $\zeta$ with
+    $|\zeta|=1$ such that, for every physical index~$i$,
+    \begin{align}
+        B^i&=\zeta\,UA^iU^\dagger. \notag
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:left_canonical_irreducible_same_phase_unitary_gauge}
+    Unpack the gauge-phase equivalence as
+    $B^i=\zeta XA^iX^{-1}$ with $X$ invertible and $\zeta\ne0$.
+    Lemma~\ref{lem:left_canonical_irreducible_same_phase_unitary_gauge}
+    replaces $X$ by a unitary $U$ while retaining this same phase and proves
+    $|\zeta|=1$.
+\end{proof}
+
+\begin{lemma}[Unitary gauge in matched sector coordinates]
+    \label{lem:sector_bnt_equal_unitary_matched_gauge}
+    \lean{MPSTensor.ft_sector_bnt_equal_unitary_global_gauge_witnesses}
+    \leanok
+    \uses{lem:sector_bnt_equal_matched_copy_weight_witnesses,
+        lem:left_canonical_irreducible_same_phase_unitary_gauge,
+        thm:sector_bnt_global_gauge_of_copy_weight_matching,
+        lem:unitary_global_gauge_of_blocks}
+    Let $P$ and $Q$ be BNT canonical forms whose total tensors generate the
+    same MPV family at every positive length. There are a sector bijection
+    $\beta$, copy bijections $\tau_k$, phases $\zeta_k$, sector unitaries $U_k$,
+    and a unitary block-diagonal matrix $X$ such that
+    \begin{align}
+        Q_k^i
+        &= \zeta_k U_kP_{\beta(k)}^iU_k^\dagger,
+        \notag\\
+        \nu_{k,q}
+        &= \zeta_k^{-1}\mu_{\beta(k),\tau_k(q)},
+        \notag\\
+        |\zeta_k|
+        &= 1.
+        \notag
+    \end{align}
+    The matched sectors and copies have equal bond dimensions and
+    multiplicities. If $P_{\mathrm{match}}$ denotes the corresponding
+    reordered block assembly, then
+    $Q_{\mathrm{flat}}^i=XP_{\mathrm{match}}^iX^{-1}$.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:sector_bnt_equal_matched_copy_weight_witnesses,
+        lem:left_canonical_irreducible_same_phase_unitary_gauge,
+        lem:unitary_global_gauge_of_blocks}
+    Apply Lemma~\ref{lem:left_canonical_irreducible_same_phase_unitary_gauge}
+    to each matched sector, retaining the phase in the copy-weight identity.
+    Repeating $U_k$ on every copy gives $X=\bigoplus_{k,q}U_k$, which is unitary
+    by Lemma~\ref{lem:unitary_global_gauge_of_blocks}. For every matched copy
+    $(k,q)$,
+    \begin{align}
+        \nu_{k,q}Q_k^i
+        &= \zeta_k^{-1}\mu_{\beta(k),\tau_k(q)}
+          \zeta_k U_kP_{\beta(k)}^iU_k^\dagger
+        = \mu_{\beta(k),\tau_k(q)}U_kP_{\beta(k)}^iU_k^\dagger.
+        \notag
+    \end{align}
+    These are precisely the blocks of
+    $Q_{\mathrm{flat}}^i=XP_{\mathrm{match}}^iX^{-1}$.
+\end{proof}

@@ -1,42 +1,17 @@
-\section{Coefficient identity, copy weights, and the block-diagonal gauge}
+\section{Coefficient identities and copy weights}
 \label{sec:sector_bnt_full_basis_global_gauge}
 
-The bijective matching theorem of Chapter~\ref{ch:bnt}
-(Theorem~\ref{thm:sector_bnt_bijective_match_of_sameMPV}) gives the sector
-phases $\zeta_k$ and block gauges $X_k$. The coefficient comparison of
-\cite[Appendix MPV proof, lines~1187--1188]{Cirac2016MPDO_arXiv} then turns the
-equality of total MPV families into the per-sector coefficient identity
-$c_N^{(\beta(k))}(P)=\zeta_k^N\,c_N^{(k)}(Q)$. Neither
-step uses a per-sector unit-modulus hypothesis.
+Let $P$ and $Q$ be BNT canonical forms. Their basis sectors are normalized,
+left-canonical, and aperiodic, and their raw copy weights satisfy the global
+normalization of Definition~\ref{def:sector_bnt_cf}. This is the normalized
+surface used for the proof. The literal CPSV canonical form is brought to this
+surface by the reduction and normalization of Chapters~\ref{ch:canonical}
+and~\ref{ch:bnt}.
 
-\begin{lemma}[Unit phase from matched normalized BNT blocks]%
-    \label{lem:sector_bnt_norm_phase_of_matched_mpv}
-    \lean{MPSTensor.IsBNTCanonicalForm.norm_phase_of_matched_mpv}
-    \leanok
-    \uses{def:sector_bnt_cf}
-    Let $P$ and $Q$ be BNT canonical forms. If, for every positive length $N$
-    and word $\sigma$, a sector $P_j$ and a sector $Q_k$ have MPV families
-    related by
-    \begin{align}
-        V^{(N)}(Q_k)_\sigma
-        &= \zeta^N V^{(N)}(P_j)_\sigma,
-        \label{eq:ft_matched_mpv_phase_norm}
-    \end{align}
-    then $|\zeta|=1$.
-\end{lemma}
-
-\begin{proof}\leanok
-    The BNT normalization gives self-overlap limits of modulus $1$ for both
-    sectors. The MPV identity (\ref{eq:ft_matched_mpv_phase_norm}) gives, for
-    every positive $N$,
-    \begin{align}
-        O_{Q_kQ_k}(N)
-        &= |\zeta|^{2N}\,O_{P_jP_j}(N).
-        \notag
-    \end{align}
-    Since $O_{Q_kQ_k}(N)\to1$ and $O_{P_jP_j}(N)\to1$, taking limits forces
-    $|\zeta|^{2N}\to1$ and hence $|\zeta|=1$.
-\end{proof}
+The proportional statement below allows nonzero projective proportionality for
+all sufficiently large lengths. The source assumption of proportionality at
+every positive length is a special case. No copy-weight comparison is needed
+for its sector-level conclusion.
 
 \begin{theorem}[Proportional sector matching with unit phases]%
     \label{thm:sector_bnt_proportional_sector_match_witnesses}
@@ -45,6 +20,7 @@ step uses a per-sector unit-modulus hypothesis.
     \uses{def:sector_bnt_cf,
         def:gauge_phase_equiv,
         thm:gauge_phase_mpv_scaling,
+        thm:sector_bnt_proportional_bijective_match,
         lem:sector_bnt_norm_phase_of_matched_mpv}
     Let $P$ and $Q$ be BNT canonical forms whose total tensors generate
     eventually nonzero proportional MPV families.
@@ -86,53 +62,39 @@ step uses a per-sector unit-modulus hypothesis.
     % docs/paper-gaps/cpsv16_global_vs_persector_unit_witness.tex.
 \end{theorem}
 
-\begin{proof}\leanok\uses{lem:sector_bnt_norm_phase_of_matched_mpv}
-    Apply the proportional sector-matching theorem to obtain the bijection and
-    dimension-compatible gauge-phase equivalences. Choosing the gauges and
-    scalars gives $Q_k^i=\zeta_kX_kP_{\beta(k)}^iX_k^{-1}$, and therefore
+\begin{proof}\leanok
+    \uses{thm:sector_bnt_proportional_bijective_match,
+        lem:sector_bnt_norm_phase_of_matched_mpv}
+    Fix a sector $Q_k$. If its overlap with every $P_j$ decayed, the combined
+    family of the $P$-sectors and $Q_k$ would be linearly independent for all
+    sufficiently large lengths. Expanding the proportionality relation in that
+    family would then make the nonzero coefficient of $Q_k$ vanish, a
+    contradiction. Hence some overlap does not decay. The normal-tensor overlap
+    dichotomy gives a partner $P_j$ of the same bond dimension and a
+    gauge-phase relation.
+
+    Apply the same argument with $P$ and $Q$ interchanged. Basis separation
+    makes the resulting partner maps injective: two sectors with one partner
+    would be gauge-phase equivalent to each other. The injections in both
+    directions force equal finite cardinalities, and the forward partners may
+    therefore be chosen as a bijection $\beta:J(Q)\simeq J(P)$.
+
+    Choose an invertible matrix $X_k$ and a nonzero scalar $\zeta_k$ from each
+    matched gauge-phase relation. This gives
+    $Q_k^i=\zeta_kX_kP_{\beta(k)}^iX_k^{-1}$ and, by taking traces around a
+    positive-length word,
     \begin{align}
-        O_{Q_kQ_k}(N)
-        &= |\zeta_k|^{2N}O_{P_{\beta(k)}P_{\beta(k)}}(N).
+        V^{(N)}(Q_k)_\sigma
+         & =\zeta_k^N V^{(N)}(P_{\beta(k)})_\sigma.
         \notag
     \end{align}
-    The normalized self-overlap limits give
-    $O_{Q_kQ_k}(N)\to1$ and $O_{P_{\beta(k)}P_{\beta(k)}}(N)\to1$, so
-    $|\zeta_k|^{2N}\to1$ and hence $|\zeta_k|=1$. The MPV scalar-power
-    identity follows from the same gauge equation (\ref{eq:ft_gauge_relation}):
-    $V^{(N)}(Q_k)_\sigma=\zeta_k^NV^{(N)}(P_{\beta(k)})_\sigma$.
-\end{proof}
-
-\begin{lemma}[Full-basis coefficient identity from matched sectors]%
-    \label{lem:sector_bnt_coeff_identity_via_global_gauge}
-    \lean{MPSTensor.coeff_identity_via_global_gauge}
-    \leanok
-    \uses{def:sector_bnt_cf,
-        def:gauge_phase_equiv}
-    Let $P$ and $Q$ be BNT canonical forms with the same MPV family at every
-    positive length, matched by a bijection $\beta:J(Q)\simeq J(P)$ with
-    bond-dimension equalities and a
-    gauge-phase equivalence between $Q_k$ and $P_{\beta(k)}$ for every $k$. Then
-    each sector carries a unit-modulus phase $\zeta_k$, and eventually
+    The normalized self-overlap limits then satisfy
     \begin{align}
-        c_N^{(\beta(k))}(P)
-        &= \zeta_k^N\,c_N^{(k)}(Q).
-        \label{eq:ft_coeff_identity}
+        O_{Q_kQ_k}(N)
+         & =|\zeta_k|^{2N}O_{P_{\beta(k)}P_{\beta(k)}}(N),
+        \notag
     \end{align}
-    This is the equal-MPV coefficient comparison of
-    \cite[Appendix MPV proof, lines~1187--1188]{Cirac2016MPDO_arXiv}.
-\end{lemma}
-
-\begin{proof}\leanok
-    \uses{lem:sector_bnt_norm_phase_of_matched_mpv,
-        lem:sector_bnt_coeff_identity_via_matched_mpv_phase}
-    For each matched sector, the gauge-phase equivalence gives
-    $V^{(N)}(Q_k)_\sigma=\zeta_k^NV^{(N)}(P_{\beta(k)})_\sigma$.
-    Lemma~\ref{lem:sector_bnt_norm_phase_of_matched_mpv} gives
-    $|\zeta_k|=1$. Applying
-    Lemma~\ref{lem:sector_bnt_coeff_identity_via_matched_mpv_phase} to the
-    same phases gives
-    $c_N^{(\beta(k))}(P)=\zeta_k^Nc_N^{(k)}(Q)$ for all sufficiently
-    large $N$.
+    and both outer sequences tend to $1$. Thus $|\zeta_k|=1$.
 \end{proof}
 
 \begin{lemma}[Full-basis coefficient identity from matched phases]%
@@ -186,9 +148,6 @@ step uses a per-sector unit-modulus hypothesis.
     independence, for all sufficiently large $N$.
 \end{proof}
 
-The coefficient identity (\ref{eq:ft_coeff_identity}) is now converted, sector
-by sector, into a matching of the individual copy weights.
-
 \begin{definition}[Copy-weight matching for matched BNT sectors]%
     \label{def:sector_bnt_copy_weight_matching}
     \lean{MPSTensor.SectorBNTCopyWeightMatching}
@@ -201,7 +160,7 @@ by sector, into a matching of the individual copy weights.
     \cite[Appendix MPV proof, line~1188]{Cirac2016MPDO_arXiv}.
 \end{definition}
 
-\begin{lemma}[Copy-weight matching from matched-sector coefficient identities]%
+\begin{definition}[Copy-weight matching from matched-sector coefficient identities]%
     \label{lem:sector_bnt_copy_weight_matching_of_coeff_identity}
     \lean{MPSTensor.SectorBNTCopyWeightMatching.of_coeff_identity}
     \leanok
@@ -217,7 +176,7 @@ by sector, into a matching of the individual copy weights.
     hold eventually, then the phases $\zeta_k$ determine a copy-weight matching
     $\nu_{k,q}=\zeta_k^{-1}\mu_{\beta(k),\tau_k(q)}$. This is, sector by sector,
     \cite[Appendix MPV proof, line~1188]{Cirac2016MPDO_arXiv}.
-\end{lemma}
+\end{definition}
 
 \begin{proof}\leanok
     Eventually the coefficient identity
@@ -235,8 +194,61 @@ by sector, into a matching of the individual copy weights.
     $\nu_{k,q}=\zeta_k^{-1}\mu_{\beta(k),\tau_k(q)}$.
 \end{proof}
 
-The matched block gauges and copy weights now combine into a single
-block-diagonal gauge.
+\begin{theorem}[Equal-case sector and copy matching with differing bond dimensions]%
+    \label{lem:ft_sector_bnt_equal_sector_data_different_dims}
+    \lean{MPSTensor.ft_sector_bnt_equal_sector_data}
+    \leanok
+    \uses{def:same_mpv2_pos, def:sector_bnt_cf, def:gauge_phase_equiv,
+        thm:sector_bnt_bijective_match_of_sameMPV,
+        lem:sector_bnt_coeff_identity_via_matched_mpv_phase,
+        lem:sector_bnt_copy_weight_matching_of_coeff_identity}
+    Let $P$ and $Q$ be BNT canonical forms, possibly with different sector
+    counts and different bond dimensions before matching. If their total
+    tensors generate the same MPV family at every positive length, then there
+    is a bijection $\beta:J(Q)\simeq J(P)$ such that each matched basis pair
+    has equal bond dimension and is gauge-phase equivalent. The matched copy
+    multiplicities agree, and there are unit phases $\zeta_k$ and copy
+    bijections $\tau_k$ satisfying
+    \begin{align}
+        Q_k^i
+         & =\zeta_kX_kP_{\beta(k)}^iX_k^{-1},
+        \notag\\
+        \nu_{k,q}
+         & =\zeta_k^{-1}\mu_{\beta(k),\tau_k(q)}.
+        \notag
+    \end{align}
+    Only the global weight normalization in
+    Definition~\ref{def:sector_bnt_cf} is assumed; no unit-modulus copy is
+    required in each sector. This is the sector-data form of
+    \cite[Corollary~2.11 and Appendix~A, lines~1182--1188]
+    {Cirac2016MPDO_arXiv}.
+\end{theorem}
+
+\begin{proof}\leanok
+    First, Theorem~\ref{thm:sector_bnt_bijective_match_of_sameMPV} gives the
+    sector bijection, the bond-dimension equalities, and the gauge-phase
+    relations. Choose their phases $\zeta_k$ and use the normalized
+    self-overlaps to obtain $|\zeta_k|=1$. Second,
+    Lemma~\ref{lem:sector_bnt_coeff_identity_via_matched_mpv_phase} expands the
+    equality of the two total MPVs in the matched $P$-basis. Eventual linear
+    independence gives, for every $k$ and all sufficiently large $N$,
+    \begin{align}
+        c_N^{(\beta(k))}(P)
+         & =\zeta_k^N c_N^{(k)}(Q).
+        \notag
+    \end{align}
+    Third, expand both coefficients as finite power sums. Their eventual
+    equality determines the two multisets of nonzero copy weights, so the
+    multiplicities agree and a copy bijection $\tau_k$ realizes the identity
+    $\nu_{k,q}=\zeta_k^{-1}\mu_{\beta(k),\tau_k(q)}$.
+\end{proof}
+
+\section{The equal-MPV global gauge}
+\label{sec:ft_equal_global_gauge}
+
+For equal MPV families, the sector phases occur twice: in the matched tensor
+relation and with the inverse power in the matched copy weights. They therefore
+cancel before the block gauges are assembled.
 
 \begin{definition}[Flattened block-diagonal gauge]%
     \label{def:global_gauge_of_blocks}
@@ -249,53 +261,6 @@ block-diagonal gauge.
     $\{0,\ldots,\sum_k D_k-1\}$ of the assembled tensor. The result is an
     element of $\GL_{\sum_k D_k}(\C)$.
 \end{definition}
-
-\begin{lemma}[Unitary block-diagonal gauges]
-    \label{lem:unitary_global_gauge_of_blocks}
-    \lean{MPSTensor.unitaryGL,
-        MPSTensor.globalGaugeOfBlocks_unitaryGL_mem}
-    \leanok
-    \uses{def:global_gauge_of_blocks}
-    A unitary matrix $U_k$ defines an invertible block gauge with inverse
-    $U_k^\dagger$. If every block gauge is unitary, then the flattened
-    block-diagonal gauge $U=\bigoplus_k U_k$ is unitary.
-\end{lemma}
-\begin{proof}\leanok
-    The products are computed blockwise:
-    \begin{align}
-        U U^\dagger
-        &= \bigoplus_k U_kU_k^\dagger
-        = \bigoplus_k\mathbb 1
-        = \mathbb 1.
-        \notag
-    \end{align}
-\end{proof}
-
-\begin{lemma}[Direct-sum conjugation by the flattened gauge]%
-    \label{lem:tensor_from_blocks_globalGauge_conj}
-    \lean{MPSTensor.toTensorFromBlocks_eq_globalGaugeOfBlocks_conj,
-        MPSTensor.gaugeEquiv_toTensorFromBlocks_of_blockConj}
-    \leanok
-    \uses{def:global_gauge_of_blocks, def:block_diagonal_tensor, def:gauge_equiv}
-    If, for every block $k$ and physical index $i$,
-    $B_k^i=X_kA_k^iX_k^{-1}$, then the weighted direct sums satisfy
-    \begin{align}
-        \bigoplus_k \mu_k B_k^i
-        &=
-        X\left(\bigoplus_k \mu_k A_k^i\right)X^{-1},
-        \notag
-    \end{align}
-    where $X$ is the flattened block-diagonal gauge from
-    Definition~\ref{def:global_gauge_of_blocks}. Hence the two assembled
-    tensors are gauge equivalent.
-\end{lemma}
-
-\begin{proof}\leanok
-    Multiplication of block-diagonal matrices is computed blockwise. The scalar
-    weight $\mu_k$ commutes with the conjugation on the $k$th block, and the
-    reindexing from dependent block coordinates to the flattened bond index
-    preserves products and inverses.
-\end{proof}
 
 \begin{theorem}[Global gauge from matched sectors and copy weights]%
     \label{thm:sector_bnt_global_gauge_of_matched_weights}
@@ -342,168 +307,6 @@ block-diagonal gauge.
     block conjugacies into the direct-sum gauge
     $X=\bigoplus_k(\mathbf{1}_{r_k}\otimes X_k)$.
 \end{proof}
-
-\begin{theorem}[Global gauge from a copy-weight matching]%
-    \label{thm:sector_bnt_global_gauge_of_copy_weight_matching}
-    \lean{MPSTensor.sector_bnt_global_gauge_of_copy_weight_matching}
-    \leanok
-    \uses{def:sector_bnt_copy_weight_matching,
-        thm:sector_bnt_global_gauge_of_matched_weights}
-    Suppose that the sectors of $P$ and $Q$ are matched, with
-    bond-dimension equalities, nonzero phases, and block gauges satisfying
-    $Q_k^i=\zeta_k X_kP_{\beta(k)}^iX_k^{-1}$.
-    If the same phases also give a copy-weight matching, then the flattened
-    $Q$-tensor is obtained from the matched-coordinate $P$-tensor by the
-    direct-sum gauge $X=\bigoplus_k(\mathbf{1}_{r_k}\otimes X_k)$.
-    This is only a reformulation of
-    Theorem~\ref{thm:sector_bnt_global_gauge_of_matched_weights}.
-\end{theorem}
-
-\begin{proof}\leanok
-    The copy-weight matching supplies
-    $\nu_{k,q}=\zeta_k^{-1}\mu_{\beta(k),\tau_k(q)}$. Together with
-    $Q_k^i=\zeta_kX_kP_{\beta(k)}^iX_k^{-1}$, these are exactly the two
-    hypotheses (\ref{eq:ft_matched_weights_hypotheses}) of
-    Theorem~\ref{thm:sector_bnt_global_gauge_of_matched_weights}.
-\end{proof}
-
-We can now state the proportional global gauge, first from a copy-weight
-matching and then from the coefficient identities that produce one.
-
-\begin{theorem}[Conditional proportional global gauge from a copy-weight matching]%
-    \label{thm:sector_bnt_proportional_global_gauge_of_copy_weight_matching}
-    \lean{MPSTensor.ft_sector_bnt_proportional_global_gauge_of_copy_weight_matching}
-    \leanok
-    \uses{def:sector_bnt_copy_weight_matching,
-        thm:sector_bnt_proportional_sector_match_witnesses,
-        thm:sector_bnt_global_gauge_of_copy_weight_matching}
-    Let $P$ and $Q$ be BNT canonical forms whose total tensors generate
-    eventually nonzero proportional MPV families.
-    Then the proportional sector-matching theorem gives $\beta$, the
-    bond-dimension equalities, the unit phases $\zeta_k$, and the block gauges
-    $X_k$. If the remaining proportional coefficient comparison supplies a
-    copy-weight matching for these same phases, then the flattened
-    $Q$-tensor is obtained from the matched-coordinate $P$-tensor by the
-    direct-sum gauge $X=\bigoplus_k(\mathbf{1}_{r_k}\otimes X_k)$.
-    % Per-sector unit-modulus restriction eliminated by the exact matcher;
-    % closure recorded in
-    % docs/paper-gaps/cpsv16_global_vs_persector_unit_witness.tex.
-\end{theorem}
-
-\begin{proof}\leanok
-    The proportional sector-matching theorem supplies $\beta$, $X_k$, and
-    unit phases $\zeta_k$ satisfying
-    $Q_k^i=\zeta_kX_kP_{\beta(k)}^iX_k^{-1}$. Since $|\zeta_k|=1$, each
-    $\zeta_k$ is nonzero. A copy-weight matching gives
-    $\nu_{k,q}=\zeta_k^{-1}\mu_{\beta(k),\tau_k(q)}$, so
-    Theorem~\ref{thm:sector_bnt_global_gauge_of_copy_weight_matching} gives the
-    direct-sum gauge.
-\end{proof}
-
-\begin{theorem}[Conditional proportional global gauge from coefficient identities]%
-    \label{thm:sector_bnt_proportional_global_gauge_of_coeff_identity}
-    \lean{MPSTensor.ft_sector_bnt_proportional_global_gauge_of_coeff_identity}
-    \leanok
-    \uses{lem:sector_bnt_copy_weight_matching_of_coeff_identity,
-        thm:sector_bnt_proportional_global_gauge_of_copy_weight_matching}
-    Let $P$ and $Q$ be BNT canonical forms whose total tensors generate
-    eventually nonzero proportional MPV families.
-    Then there are a bijection $\beta:J(Q)\simeq J(P)$, bond-dimension
-    equalities, unit-modulus phases $\zeta_k$, and block gauges $X_k$ such that
-    $Q_k^i=\zeta_k X_kP_{\beta(k)}^iX_k^{-1}$ for every sector $k$ and physical
-    index $i$. If these same phases satisfy the matched-sector coefficient
-    identities $c_N^{(\beta(k))}(P)=\zeta_k^N\,c_N^{(k)}(Q)$ for all
-    sufficiently large $N$, then they determine a copy-weight matching and
-    hence the flattened $Q$-tensor is obtained from the matched-coordinate
-    $P$-tensor by the direct-sum gauge
-    $X=\bigoplus_k(\mathbf{1}_{r_k}\otimes X_k)$.
-    % Per-sector unit-modulus restriction eliminated by the exact matcher;
-    % closure recorded in
-    % docs/paper-gaps/cpsv16_global_vs_persector_unit_witness.tex.
-\end{theorem}
-
-\begin{proof}\leanok
-    The sector-matching theorem gives $\beta$, $X_k$, and $|\zeta_k|=1$ with
-    $Q_k^i=\zeta_kX_kP_{\beta(k)}^iX_k^{-1}$. Since $\zeta_k\ne0$, the
-    coefficient identities
-    $c_N^{(\beta(k))}(P)=\zeta_k^Nc_N^{(k)}(Q)$ produce
-    $\nu_{k,q}=\zeta_k^{-1}\mu_{\beta(k),\tau_k(q)}$ by
-    Lemma~\ref{lem:sector_bnt_copy_weight_matching_of_coeff_identity}.
-    Theorem~\ref{thm:sector_bnt_proportional_global_gauge_of_copy_weight_matching}
-    then applies to this copy-weight matching.
-\end{proof}
-
-The coefficient-identity hypothesis of
-Theorem~\ref{thm:sector_bnt_proportional_global_gauge_of_coeff_identity} is the
-scalar-free identity (\ref{eq:ft_coeff_identity}). From the proportional MPV
-hypothesis alone one obtains the same identity carrying the global length-scalar
-of the proportionality, recorded next.
-
-\begin{lemma}[Proportional matched-phase coefficient identity, scalar-threaded]%
-    \label{lem:sector_bnt_coeff_identity_via_matched_mpv_phase_proportional}
-    \lean{MPSTensor.coeff_identity_via_matched_mpv_phase_proportional}
-    \leanok
-    \uses{def:sector_bnt_cf, lem:eventual_coeff_eq_of_eventual_li}
-    Let $P$ be a BNT canonical form and $Q$ a sector decomposition whose total
-    tensors generate eventually nonzero proportional MPV families. Suppose a
-    bijection $\beta:J(Q)\simeq J(P)$ and scalars $\zeta_k$ satisfy the matched
-    MPV phase identities (\ref{eq:ft_phase_relation_hyp}) for every sector $k$.
-    Then there is a single eventually-nonzero scalar sequence $c_N$ and a
-    threshold $N_0$ such that, for all $N>N_0$ and every $k\in J(Q)$,
-    \begin{align}
-        c_N^{(\beta(k))}(P)
-        &= c_N\,\zeta_k^N\,c_N^{(k)}(Q).
-        \label{eq:ft_coeff_identity_threaded}
-    \end{align}
-    The scalar $c_N$ is the same for every sector $k$: it is the single global
-    proportionality scalar of \cite[Theorem~\texttt{thm1}, lines~1167--1170]%
-    {Cirac2016MPDO_arXiv} at length $N$.
-\end{lemma}
-
-\begin{proof}\leanok
-    For each $N$ on the proportionality tail, expand both total MPVs in their
-    sector bases and use the global proportionality scalar $c_N$:
-    \begin{align}
-        \sum_{j\in J(P)} c_N^{(j)}(P)\ket{V^{(N)}(P_j)}
-        &=
-        c_N\sum_{k\in J(Q)} c_N^{(k)}(Q)\ket{V^{(N)}(Q_k)}.
-        \notag
-    \end{align}
-    The matched phase identities (\ref{eq:ft_phase_relation_hyp}) give
-    $\ket{V^{(N)}(Q_k)}=\zeta_k^N\ket{V^{(N)}(P_{\beta(k)})}$; because every
-    sector is matched, reindexing the $Q$-sum by $\beta$ rewrites the right-hand
-    side entirely in the $P$-basis. The BNT eventual linear independence of the
-    $P$-basis and Lemma~\ref{lem:eventual_coeff_eq_of_eventual_li} then extract
-    the coefficient identities (\ref{eq:ft_coeff_identity_threaded}) for all
-    sufficiently large $N$.
-\end{proof}
-
-\begin{remark}[Residual length-scalar control]%
-    \label{rem:proportional_length_scalar_gap}
-    The identity (\ref{eq:ft_coeff_identity_threaded}) discharges the hypothesis
-    of Theorem~\ref{thm:sector_bnt_proportional_global_gauge_of_coeff_identity}
-    --- equivalently (\ref{eq:ft_coeff_identity}) --- precisely when
-    $c_N\equiv1$ on the proportionality tail. More generally, if $c_N=\xi^N$ for one fixed phase
-    $\xi$, then the coefficient identity uses the phases $\xi\zeta_k$, whereas
-    the matched block relation still uses $\zeta_k$. Copy-weight recovery and
-    block-gauge assembly therefore leave the common factor $\xi^{-1}$ and yield
-    conjugacy up to that phase, not the exact conjugacy asserted by the current
-    conditional theorem. Establishing such a pure phase-power form for the
-    global proportionality scalar is a separate length-scalar control statement
-    requiring peripheral-spectrum or almost-periodicity analysis of the bounded
-    power sums $c_N^{(j)}(\cdot)$; it is not derivable from
-    (\ref{eq:ft_coeff_identity_threaded}) alone. This distinction is consistent
-    with the sectorwise gauge-phase conclusion of
-    \cite[Theorem~\texttt{thm1}]{Cirac2016MPDO_arXiv}. Until an appropriate
-    full-tensor theorem allowing the residual common phase is supplied, the
-    unconditional full-tensor proportional gauge equivalence is not stated; the
-    unconditional per-normal-tensor proportional fundamental theorem is
-    Theorem~\ref{thm:cpgsv_multiblock_ft_source}.
-    % Paper-gap note:
-    % docs/paper-gaps/cpsv16_proportional_length_scalar_gap.tex.
-\end{remark}
-
-In the equal-MPV case all ingredients are unconditional.
 
 \begin{lemma}[Equal-MPV matched copy-weight witnesses]%
     \label{lem:sector_bnt_equal_matched_copy_weight_witnesses}
@@ -633,113 +436,43 @@ In the equal-MPV case all ingredients are unconditional.
     (\ref{eq:ft_literal_gauge_Y}).
 \end{proof}
 
-\begin{lemma}[Unitary gauge in matched sector coordinates]
-    \label{lem:sector_bnt_equal_unitary_matched_gauge}
-    \lean{MPSTensor.ft_sector_bnt_equal_unitary_global_gauge_witnesses}
-    \leanok
-    \uses{thm:sector_bnt_equal_global_gauge,
-        lem:left_canonical_irreducible_same_phase_unitary_gauge,
-        lem:unitary_global_gauge_of_blocks}
-    Let $P$ and $Q$ be BNT canonical forms whose total tensors generate the
-    same MPV family at every positive length. There are a sector bijection
-    $\beta$, copy bijections $\tau_k$, phases $\zeta_k$, sector unitaries $U_k$,
-    and a unitary block-diagonal matrix $X$ such that
+\begin{remark}[Proportional sector matching does not determine copy weights]%
+    \label{rem:proportional_length_scalar_gap}
+    The proportional theorem determines the normal sectors, but it does not
+    determine the copy weights or imply conjugacy of the total tensors. Let
+    $C$ be a normalized normal tensor and consider the one-sector BNT forms
     \begin{align}
-        Q_k^i
-        &= \zeta_k U_kP_{\beta(k)}^iU_k^\dagger,
-        \notag\\
-        \nu_{k,q}
-        &= \zeta_k^{-1}\mu_{\beta(k),\tau_k(q)},
-        \notag\\
-        |\zeta_k|
-        &= 1.
+        P
+         & =C\oplus \tfrac12 C,
+        &
+        Q
+         & =C\oplus \tfrac13 C.
         \notag
     \end{align}
-    The matched sectors and copies have equal bond dimensions and
-    multiplicities. If $P_{\mathrm{match}}$ denotes the corresponding
-    reordered block assembly, then
-    $Q_{\mathrm{flat}}^i=XP_{\mathrm{match}}^iX^{-1}$.
-\end{lemma}
-\begin{proof}\leanok
-    \uses{lem:sector_bnt_equal_matched_copy_weight_witnesses,
-        lem:left_canonical_irreducible_same_phase_unitary_gauge,
-        lem:unitary_global_gauge_of_blocks}
-    Apply Lemma~\ref{lem:left_canonical_irreducible_same_phase_unitary_gauge}
-    to each matched sector, retaining the phase in the copy-weight identity.
-    Repeating $U_k$ on every copy gives $X=\bigoplus_{k,q}U_k$, which is unitary
-    by Lemma~\ref{lem:unitary_global_gauge_of_blocks}. For every matched copy
-    $(k,q)$,
+    Their positive-length MPV families are
     \begin{align}
-        \nu_{k,q}Q_k^i
-        &= \zeta_k^{-1}\mu_{\beta(k),\tau_k(q)}
-          \zeta_k U_kP_{\beta(k)}^iU_k^\dagger
-        = \mu_{\beta(k),\tau_k(q)}U_kP_{\beta(k)}^iU_k^\dagger.
+        V^{(N)}(P)
+         & =(1+2^{-N})V^{(N)}(C),
+        &
+        V^{(N)}(Q)
+         & =(1+3^{-N})V^{(N)}(C).
         \notag
     \end{align}
-    These are precisely the blocks of
-    $Q_{\mathrm{flat}}^i=XP_{\mathrm{match}}^iX^{-1}$.
-\end{proof}
+    They are nonzero and proportional with
+    \begin{align}
+        c_N
+         & =\frac{1+2^{-N}}{1+3^{-N}},
+        \notag
+    \end{align}
+    but $(c_N)_N$ is not a geometric sequence $\xi^N$. For a one-dimensional
+    choice of $C$, the total matrices have eigenvalue multisets
+    $\{1,\tfrac12\}$ and $\{1,\tfrac13\}$, so they are not conjugate, even
+    after multiplication by a common phase.
 
-\begin{corollary}[Canonical Form II unitary refinement in the equal case]%
-    \label{cor:sector_bnt_equal_unitary_global_gauge}
-    \lean{MPSTensor.fundamentalTheorem_equal_canonicalForm_unitary}
-    \leanok
-    \uses{lem:sector_bnt_equal_unitary_matched_gauge}
-    Let $P$ and $Q$ be BNT canonical forms whose total tensors generate the
-    same MPV family at every positive length. Their total bond dimensions
-    agree; writing the common value as $D$, there is a unitary matrix
-    $U\in\mathrm{U}(D)$ such that, for every physical index~$i$,
-    \begin{align}
-        Q_{\mathrm{tot}}^i
-        &= U P_{\mathrm{tot}}^i U^\dagger.
-        \notag
-    \end{align}
-    This is the equal case of
-    \cite[Corollary~C.5]{Cirac2016MPDO_arXiv}.
-\end{corollary}
-
-\begin{proof}\leanok
-    \uses{lem:sector_bnt_equal_unitary_matched_gauge}
-    For each matched sector, retain the phase in both identities
-    \begin{align}
-        Q_k^i
-        &= \zeta_k U_kP_{\beta(k)}^iU_k^\dagger,
-        \notag\\
-        \nu_{k,q}
-        &= \zeta_k^{-1}\mu_{\beta(k),\tau_k(q)}.
-        \notag
-    \end{align}
-    For every matched copy $(k,q)$,
-    \begin{align}
-        \nu_{k,q}\zeta_k
-        &= \zeta_k^{-1}\mu_{\beta(k),\tau_k(q)}\zeta_k
-        = \mu_{\beta(k),\tau_k(q)}.
-        \notag
-    \end{align}
-    Hence $Q_{\mathrm{flat}}^i=XP_{\mathrm{match}}^iX^{-1}$. Repeating $U_k$
-    on its matched copies gives
-    \begin{align}
-        X
-        &= \bigoplus_{k,q}U_k,
-        \notag\\
-        X^\dagger X
-        &= \mathbb 1.
-        \notag
-    \end{align}
-    If $\Pi$ is the permutation matrix restoring the original sector and copy
-    order, then $\Pi^\dagger\Pi=\mathbb 1$. Hence
-    \begin{align}
-        U
-        &= X\Pi,
-        \notag\\
-        U^\dagger U
-        &= \mathbb 1,
-        \notag
-    \end{align}
-    and the permutation of matched coordinates gives
-    \begin{align}
-        Q_{\mathrm{tot}}^i
-        &= UP_{\mathrm{tot}}^iU^\dagger.
-        \notag
-    \end{align}
-\end{proof}
+    Thus the scalar-free coefficient identity used in copy-weight recovery is
+    an additional hypothesis in the proportional setting, not a consequence
+    awaiting an analytic estimate. CPSV16 Theorem~2.10 asserts the sector
+    matching proved in Theorem~\ref{thm:cpgsv_multiblock_ft_source}. The
+    copy-weight recovery and global block gauge belong to the equal-MPV
+    Corollary~2.11, where the proportionality scalar is identically $1$.
+\end{remark}
