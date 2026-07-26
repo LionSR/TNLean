@@ -28,16 +28,19 @@ git -C "$REPO" worktree add --detach -q "$TARGET" HEAD
 
 mkdir -p "$REPO/.lake/build" "$REPO/.lake/packages"
 printf 'compiled\n' >"$REPO/.lake/build/example.olean"
-mkdir "$REPO/.lake/packages/example"
-git -C "$REPO/.lake/packages/example" init -q
-printf 'dependency\n' >"$REPO/.lake/packages/example/tracked"
-git -C "$REPO/.lake/packages/example" add tracked
-git -C "$REPO/.lake/packages/example" \
+mkdir "$REPO/.lake/packages/mathlib"
+git -C "$REPO/.lake/packages/mathlib" init -q
+printf '/.lake/\n' >"$REPO/.lake/packages/mathlib/.gitignore"
+printf 'dependency\n' >"$REPO/.lake/packages/mathlib/tracked"
+git -C "$REPO/.lake/packages/mathlib" add .gitignore tracked
+git -C "$REPO/.lake/packages/mathlib" \
   -c user.name=Test \
   -c user.email=test@example.com \
   commit -qm "Initialize dependency"
-DEPENDENCY_REV="$(git -C "$REPO/.lake/packages/example" rev-parse HEAD)"
-printf '{"packages":[{"name":"example","type":"git","rev":"%s"}]}\n' \
+DEPENDENCY_REV="$(git -C "$REPO/.lake/packages/mathlib" rev-parse HEAD)"
+mkdir -p "$REPO/.lake/packages/mathlib/.lake/build/lib/lean"
+printf 'prebuilt\n' >"$REPO/.lake/packages/mathlib/.lake/build/lib/lean/Mathlib.olean"
+printf '{"packages":[{"name":"mathlib","type":"git","rev":"%s"}]}\n' \
   "$DEPENDENCY_REV" >"$REPO/lake-manifest.json"
 cp "$REPO/lake-manifest.json" "$TARGET/lake-manifest.json"
 
@@ -72,6 +75,28 @@ for cache_child in build packages; do
   mv "$REPO/.lake/$cache_child.real" "$REPO/.lake/$cache_child"
 done
 
+mv "$REPO/.lake/packages/mathlib/.lake/build" \
+  "$REPO/.lake/packages/mathlib/.lake/build.real"
+ln -s build.real "$REPO/.lake/packages/mathlib/.lake/build"
+if "$REPO/scripts/seed_lake_build.sh" "$TARGET" --dry-run 2>"$TEST_ROOT/error.log"; then
+  echo "nested symlinked dependency cache unexpectedly passed" >&2
+  exit 1
+fi
+rg -q "source contains a symlinked Lake cache directory" "$TEST_ROOT/error.log"
+unlink "$REPO/.lake/packages/mathlib/.lake/build"
+mv "$REPO/.lake/packages/mathlib/.lake/build.real" \
+  "$REPO/.lake/packages/mathlib/.lake/build"
+
+mv "$REPO/.lake/packages/mathlib/.lake/build/lib/lean/Mathlib.olean" \
+  "$REPO/.lake/packages/mathlib/.lake/build/lib/lean/Mathlib.olean.missing"
+if "$REPO/scripts/seed_lake_build.sh" "$TARGET" --dry-run 2>"$TEST_ROOT/error.log"; then
+  echo "missing prebuilt Mathlib cache unexpectedly passed" >&2
+  exit 1
+fi
+rg -q "source lacks prebuilt Mathlib artifacts" "$TEST_ROOT/error.log"
+mv "$REPO/.lake/packages/mathlib/.lake/build/lib/lean/Mathlib.olean.missing" \
+  "$REPO/.lake/packages/mathlib/.lake/build/lib/lean/Mathlib.olean"
+
 printf '{\n' >"$REPO/lake-manifest.json"
 printf '{\n' >"$TARGET/lake-manifest.json"
 if "$REPO/scripts/seed_lake_build.sh" "$TARGET" --dry-run 2>"$TEST_ROOT/error.log"; then
@@ -79,17 +104,17 @@ if "$REPO/scripts/seed_lake_build.sh" "$TARGET" --dry-run 2>"$TEST_ROOT/error.lo
   exit 1
 fi
 rg -q "cannot parse Git packages from lake-manifest.json" "$TEST_ROOT/error.log"
-printf '{"packages":[{"name":"example","type":"git","rev":"%s"}]}\n' \
+printf '{"packages":[{"name":"mathlib","type":"git","rev":"%s"}]}\n' \
   "$DEPENDENCY_REV" >"$REPO/lake-manifest.json"
 cp "$REPO/lake-manifest.json" "$TARGET/lake-manifest.json"
 
-printf 'modified\n' >>"$REPO/.lake/packages/example/tracked"
+printf 'modified\n' >>"$REPO/.lake/packages/mathlib/tracked"
 if "$REPO/scripts/seed_lake_build.sh" "$TARGET" --dry-run 2>"$TEST_ROOT/error.log"; then
   echo "modified dependency unexpectedly passed" >&2
   exit 1
 fi
-rg -q "Git package has local changes: example" "$TEST_ROOT/error.log"
-printf 'dependency\n' >"$REPO/.lake/packages/example/tracked"
+rg -q "Git package has local changes: mathlib" "$TEST_ROOT/error.log"
+printf 'dependency\n' >"$REPO/.lake/packages/mathlib/tracked"
 
 (
   cd "$REPO"
@@ -98,7 +123,8 @@ printf 'dependency\n' >"$REPO/.lake/packages/example/tracked"
 "$REPO/scripts/seed_lake_build.sh" "$TARGET" --dry-run >/dev/null
 PATH="$TEST_ROOT/bin:$PATH" "$REPO/scripts/seed_lake_build.sh" "$TARGET" >/dev/null
 test -f "$TARGET/.lake/build/example.olean"
-test -f "$TARGET/.lake/packages/example/tracked"
+test -f "$TARGET/.lake/packages/mathlib/tracked"
+test -f "$TARGET/.lake/packages/mathlib/.lake/build/lib/lean/Mathlib.olean"
 test ! -L "$TARGET/.lake"
 
 if "$REPO/scripts/seed_lake_build.sh" "$TARGET" 2>"$TEST_ROOT/error.log"; then

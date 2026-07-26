@@ -126,6 +126,13 @@ test -d "$SOURCE_ROOT/.lake/build" && test ! -L "$SOURCE_ROOT/.lake/build" ||
   die "source has no regular .lake/build"
 test -d "$SOURCE_ROOT/.lake/packages" && test ! -L "$SOURCE_ROOT/.lake/packages" ||
   die "source has no regular .lake/packages"
+NESTED_CACHE_LINK="$(
+  find "$SOURCE_ROOT/.lake" -type l \( -name build -o -name packages \) -print -quit
+)"
+test -z "$NESTED_CACHE_LINK" ||
+  die "source contains a symlinked Lake cache directory: $NESTED_CACHE_LINK"
+test -f "$SOURCE_ROOT/.lake/packages/mathlib/.lake/build/lib/lean/Mathlib.olean" ||
+  die "source lacks prebuilt Mathlib artifacts; run 'lake exe cache get' first"
 test ! -e "$TARGET_ROOT/.lake" && test ! -L "$TARGET_ROOT/.lake" ||
   die "target already has .lake"
 

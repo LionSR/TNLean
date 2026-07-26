@@ -20,7 +20,10 @@ The command requires both paths to belong to the same repository, identical
 `lean-toolchain`, `lake-manifest.json`, and `lakefile.toml` files, an existing
 regular, non-symlinked source `.lake`, `.lake/build`, and `.lake/packages`
 directories, and an absent target `.lake`. Git dependency checkouts must be
-clean and at the revisions recorded in `lake-manifest.json`.
+clean and at the revisions recorded in `lake-manifest.json`; nested Lake build
+directories must not be symlinks; and Mathlib's prebuilt `Mathlib.olean` must
+already be present. If it is missing, run `lake exe cache get` in the source
+worktree before seeding.
 macOS `/bin/cp -c` creates independent writable files and fails instead of
 falling back to a full copy when APFS cloning is unavailable. The absolute path
 keeps Homebrew GNU coreutils from shadowing the APFS-aware command. Do not seed
