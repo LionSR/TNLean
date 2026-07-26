@@ -1,0 +1,227 @@
+#!/usr/bin/env bash
+# Lightweight integration test for seed_lake_build.sh.
+set -euo pipefail
+
+SCRIPT_SOURCE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -P)"
+TEST_ROOT="$(mktemp -d "${TMPDIR:-/tmp}/tnlean-lake-seed-test.XXXXXX")"
+
+cleanup() {
+  find "$TEST_ROOT" -depth -delete
+}
+trap cleanup EXIT
+
+REPO="$TEST_ROOT/repo"
+TARGET="$TEST_ROOT/target"
+mkdir -p "$REPO/scripts"
+cp "$SCRIPT_SOURCE/seed_lake_build.sh" "$REPO/scripts/seed_lake_build.sh"
+printf 'leanprover/lean4:v4.32.0\n' >"$REPO/lean-toolchain"
+printf '{}\n' >"$REPO/lake-manifest.json"
+printf 'name = "LakeSeedTest"\n' >"$REPO/lakefile.toml"
+printf '/.lake/\n' >"$REPO/.gitignore"
+git -C "$REPO" init -q
+git -C "$REPO" add .
+git -C "$REPO" \
+  -c user.name=Test \
+  -c user.email=test@example.com \
+  commit -qm "Initialize test repository"
+git -C "$REPO" worktree add --detach -q "$TARGET" HEAD
+
+mkdir -p "$REPO/.lake/build" "$REPO/.lake/packages"
+printf 'compiled\n' >"$REPO/.lake/build/example.olean"
+mkdir "$REPO/.lake/packages/mathlib"
+git -C "$REPO/.lake/packages/mathlib" init -q
+printf '/.lake/\n' >"$REPO/.lake/packages/mathlib/.gitignore"
+printf 'dependency\n' >"$REPO/.lake/packages/mathlib/tracked"
+git -C "$REPO/.lake/packages/mathlib" add .gitignore tracked
+git -C "$REPO/.lake/packages/mathlib" \
+  -c user.name=Test \
+  -c user.email=test@example.com \
+  commit -qm "Initialize dependency"
+DEPENDENCY_REV="$(git -C "$REPO/.lake/packages/mathlib" rev-parse HEAD)"
+mkdir -p "$REPO/.lake/packages/mathlib/.lake/build/lib/lean"
+printf 'prebuilt\n' >"$REPO/.lake/packages/mathlib/.lake/build/lib/lean/Mathlib.olean"
+printf '{"packages":[{"name":"mathlib","type":"git","rev":"%s"}]}\n' \
+  "$DEPENDENCY_REV" >"$REPO/lake-manifest.json"
+/bin/cp "$REPO/lake-manifest.json" "$TARGET/lake-manifest.json"
+
+mkdir -p "$TEST_ROOT/scripts"
+mkdir -p "$TEST_ROOT/bin"
+cat >"$TEST_ROOT/bin/cp" <<'EOF'
+#!/usr/bin/env bash
+echo "PATH cp must not be used" >&2
+exit 99
+EOF
+chmod +x "$TEST_ROOT/bin/cp"
+cat >"$TEST_ROOT/bin/lake" <<'EOF'
+#!/usr/bin/env bash
+if test "$*" != "exe cache get"; then
+  echo "unexpected lake arguments: $*" >&2
+  exit 2
+fi
+printf 'called\n' >>"$LAKE_CALL_LOG"
+EOF
+chmod +x "$TEST_ROOT/bin/lake"
+export LAKE_CALL_LOG="$TEST_ROOT/lake-calls.log"
+PATH="$TEST_ROOT/bin:$PATH"
+
+mv "$REPO/.lake" "$REPO/.lake.real"
+ln -s .lake.real "$REPO/.lake"
+if "$REPO/scripts/seed_lake_build.sh" "$TARGET" --dry-run 2>"$TEST_ROOT/error.log"; then
+  echo "symlinked source cache unexpectedly passed" >&2
+  exit 1
+fi
+/usr/bin/grep -q "source .lake must not be a symlink" "$TEST_ROOT/error.log"
+unlink "$REPO/.lake"
+mv "$REPO/.lake.real" "$REPO/.lake"
+
+for cache_child in build packages; do
+  mv "$REPO/.lake/$cache_child" "$REPO/.lake/$cache_child.real"
+  ln -s "$cache_child.real" "$REPO/.lake/$cache_child"
+  if "$REPO/scripts/seed_lake_build.sh" "$TARGET" --dry-run 2>"$TEST_ROOT/error.log"; then
+    echo "symlinked source cache child unexpectedly passed: $cache_child" >&2
+    exit 1
+  fi
+  /usr/bin/grep -q "source has no regular .lake/$cache_child" "$TEST_ROOT/error.log"
+  unlink "$REPO/.lake/$cache_child"
+  mv "$REPO/.lake/$cache_child.real" "$REPO/.lake/$cache_child"
+done
+
+mv "$REPO/.lake/packages/mathlib/.lake/build" \
+  "$REPO/.lake/packages/mathlib/.lake/build.real"
+ln -s build.real "$REPO/.lake/packages/mathlib/.lake/build"
+if "$REPO/scripts/seed_lake_build.sh" "$TARGET" --dry-run 2>"$TEST_ROOT/error.log"; then
+  echo "nested symlinked dependency cache unexpectedly passed" >&2
+  exit 1
+fi
+/usr/bin/grep -q "source contains a symlinked Lake cache directory" "$TEST_ROOT/error.log"
+unlink "$REPO/.lake/packages/mathlib/.lake/build"
+mv "$REPO/.lake/packages/mathlib/.lake/build.real" \
+  "$REPO/.lake/packages/mathlib/.lake/build"
+
+mv "$REPO/.lake/packages/mathlib/.lake" \
+  "$REPO/.lake/packages/mathlib/.lake.real"
+ln -s .lake.real "$REPO/.lake/packages/mathlib/.lake"
+if "$REPO/scripts/seed_lake_build.sh" "$TARGET" --dry-run 2>"$TEST_ROOT/error.log"; then
+  echo "symlinked dependency .lake unexpectedly passed" >&2
+  exit 1
+fi
+/usr/bin/grep -q "source contains a symlinked Lake cache directory" "$TEST_ROOT/error.log"
+unlink "$REPO/.lake/packages/mathlib/.lake"
+mv "$REPO/.lake/packages/mathlib/.lake.real" \
+  "$REPO/.lake/packages/mathlib/.lake"
+
+printf 'artifact\n' \
+  >"$REPO/.lake/packages/mathlib/.lake/lakefile.olean.real"
+ln -s lakefile.olean.real \
+  "$REPO/.lake/packages/mathlib/.lake/lakefile.olean"
+if "$REPO/scripts/seed_lake_build.sh" "$TARGET" --dry-run 2>"$TEST_ROOT/error.log"; then
+  echo "symlinked Lakefile artifact unexpectedly passed" >&2
+  exit 1
+fi
+/usr/bin/grep -q "source contains a symlinked Lake cache directory" "$TEST_ROOT/error.log"
+unlink "$REPO/.lake/packages/mathlib/.lake/lakefile.olean"
+find "$REPO/.lake/packages/mathlib/.lake/lakefile.olean.real" -delete
+
+mv "$REPO/.lake/packages/mathlib/.lake/build/lib/lean/Mathlib.olean" \
+  "$REPO/.lake/packages/mathlib/.lake/build/lib/lean/Mathlib.olean.missing"
+if "$REPO/scripts/seed_lake_build.sh" "$TARGET" --dry-run 2>"$TEST_ROOT/error.log"; then
+  echo "missing prebuilt Mathlib cache unexpectedly passed" >&2
+  exit 1
+fi
+/usr/bin/grep -q "source lacks prebuilt Mathlib artifacts" "$TEST_ROOT/error.log"
+mv "$REPO/.lake/packages/mathlib/.lake/build/lib/lean/Mathlib.olean.missing" \
+  "$REPO/.lake/packages/mathlib/.lake/build/lib/lean/Mathlib.olean"
+
+printf '{\n' >"$REPO/lake-manifest.json"
+printf '{\n' >"$TARGET/lake-manifest.json"
+if "$REPO/scripts/seed_lake_build.sh" "$TARGET" --dry-run 2>"$TEST_ROOT/error.log"; then
+  echo "invalid manifest unexpectedly passed" >&2
+  exit 1
+fi
+/usr/bin/grep -q "cannot parse Git packages from lake-manifest.json" "$TEST_ROOT/error.log"
+printf '{"packages":[{"name":"mathlib","type":"git","rev":"%s"}]}\n' \
+  "$DEPENDENCY_REV" >"$REPO/lake-manifest.json"
+/bin/cp "$REPO/lake-manifest.json" "$TARGET/lake-manifest.json"
+
+printf 'modified\n' >>"$REPO/.lake/packages/mathlib/tracked"
+if "$REPO/scripts/seed_lake_build.sh" "$TARGET" --dry-run 2>"$TEST_ROOT/error.log"; then
+  echo "modified dependency unexpectedly passed" >&2
+  exit 1
+fi
+/usr/bin/grep -q "Git package has local changes: mathlib" "$TEST_ROOT/error.log"
+printf 'dependency\n' >"$REPO/.lake/packages/mathlib/tracked"
+
+/bin/cp "$REPO/.lake/packages/mathlib/.git/index" \
+  "$REPO/.lake/packages/mathlib/.git/index.saved"
+: >"$REPO/.lake/packages/mathlib/.git/index"
+if "$REPO/scripts/seed_lake_build.sh" "$TARGET" --dry-run 2>"$TEST_ROOT/error.log"; then
+  echo "unreadable dependency status unexpectedly passed" >&2
+  exit 1
+fi
+/usr/bin/grep -q "cannot read Git package status: mathlib" "$TEST_ROOT/error.log"
+mv "$REPO/.lake/packages/mathlib/.git/index.saved" \
+  "$REPO/.lake/packages/mathlib/.git/index"
+
+mv "$REPO/.lake/packages/mathlib/.git" \
+  "$REPO/.lake/packages/mathlib/.git.real"
+printf 'gitdir: %s\n' "$REPO/.lake/packages/mathlib/.git.real" \
+  >"$REPO/.lake/packages/mathlib/.git"
+if "$REPO/scripts/seed_lake_build.sh" "$TARGET" --dry-run 2>"$TEST_ROOT/error.log"; then
+  echo "linked dependency worktree unexpectedly passed" >&2
+  exit 1
+fi
+/usr/bin/grep -q "Git package metadata is not self-contained" "$TEST_ROOT/error.log"
+find "$REPO/.lake/packages/mathlib/.git" -delete
+mv "$REPO/.lake/packages/mathlib/.git.real" \
+  "$REPO/.lake/packages/mathlib/.git"
+
+printf '%s\n' "$TEST_ROOT/external-common-metadata" \
+  >"$REPO/.lake/packages/mathlib/.git/commondir"
+if "$REPO/scripts/seed_lake_build.sh" "$TARGET" --dry-run 2>"$TEST_ROOT/error.log"; then
+  echo "external dependency common metadata unexpectedly passed" >&2
+  exit 1
+fi
+/usr/bin/grep -q "Git package uses external common metadata" "$TEST_ROOT/error.log"
+find "$REPO/.lake/packages/mathlib/.git/commondir" -delete
+
+printf '%s\n' "$TEST_ROOT/external-objects" \
+  >"$REPO/.lake/packages/mathlib/.git/objects/info/alternates"
+if "$REPO/scripts/seed_lake_build.sh" "$TARGET" --dry-run 2>"$TEST_ROOT/error.log"; then
+  echo "shared dependency object storage unexpectedly passed" >&2
+  exit 1
+fi
+/usr/bin/grep -q "Git package uses external object storage" "$TEST_ROOT/error.log"
+find "$REPO/.lake/packages/mathlib/.git/objects/info/alternates" -delete
+
+mkdir "$TEST_ROOT/external-worktree"
+git --git-dir="$REPO/.lake/packages/mathlib/.git" \
+  config core.worktree "$TEST_ROOT/external-worktree"
+if "$REPO/scripts/seed_lake_build.sh" "$TARGET" --dry-run 2>"$TEST_ROOT/error.log"; then
+  echo "external dependency worktree unexpectedly passed" >&2
+  exit 1
+fi
+/usr/bin/grep -q "Git package worktree points outside its package root" \
+  "$TEST_ROOT/error.log"
+git --git-dir="$REPO/.lake/packages/mathlib/.git" \
+  config --unset core.worktree
+
+(
+  cd "$REPO"
+  CDPATH="$TEST_ROOT" scripts/seed_lake_build.sh "$TARGET" --dry-run >/dev/null
+)
+"$REPO/scripts/seed_lake_build.sh" "$TARGET" --dry-run >/dev/null
+test ! -e "$LAKE_CALL_LOG"
+PATH="$TEST_ROOT/bin:$PATH" "$REPO/scripts/seed_lake_build.sh" "$TARGET" >/dev/null
+test -s "$LAKE_CALL_LOG"
+test -f "$TARGET/.lake/build/example.olean"
+test -f "$TARGET/.lake/packages/mathlib/tracked"
+test -f "$TARGET/.lake/packages/mathlib/.lake/build/lib/lean/Mathlib.olean"
+test ! -L "$TARGET/.lake"
+
+if "$REPO/scripts/seed_lake_build.sh" "$TARGET" 2>"$TEST_ROOT/error.log"; then
+  echo "second seed unexpectedly succeeded" >&2
+  exit 1
+fi
+/usr/bin/grep -q "target already has .lake" "$TEST_ROOT/error.log"
+
+echo "Lake build seed integration test passed"
