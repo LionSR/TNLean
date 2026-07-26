@@ -559,9 +559,10 @@ a gauge-phase match. The following two results isolate that spectral step.
 \end{lemma}
 
 \begin{proof}\leanok
+    \uses{thm:overlap_trace, lem:spectral_radius_pow_zero}
     If the mixed-transfer spectral radius were less than~$1$, the iterated
     mixed transfer map would tend to zero in operator norm, hence so would its
-    trace. By (\ref{eq:canonical_overlap_trace}), the overlap would tend to
+    trace. By (\ref{eq:spectral_overlap_trace}), the overlap would tend to
     zero, contradicting the hypothesis.
 \end{proof}
 
