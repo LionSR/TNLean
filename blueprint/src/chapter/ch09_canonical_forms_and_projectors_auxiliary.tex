@@ -317,40 +317,38 @@ the coefficient argument of Chapter~\ref{ch:bnt}.
     so condition~(ii) alone does not characterize normality.
 \end{remark}
 
-\begin{definition}[CPSV canonical form and basis of normal tensors]
+\begin{definition}[CPSV canonical form]
     \label{def:cpsv_canonical_form}
-    \notready
+    \lean{MPSTensor.IsCPSVCanonicalForm}
+    \leanok
     \uses{def:nt_cpsv}
-    In the canonical form of \cite[Section~2.3]{Cirac2016MPDO_arXiv},
+    In the canonical form of \cite[Section~2.3]{Cirac2016MPDO_arXiv}, the
+    positive-length MPV family of $A$ has a retained-block representation
     \begin{align}
-        A^i
-         & =\bigoplus_{k=1}^r\mu_kA_k^i,
+        V^{(N)}(A)
+         & =V^{(N)}\!\left(\bigoplus_{k=1}^r\mu_kA_k\right),
+        && N>0,
         \tag{CF}\label{eq:cpsv_canonical_form}
     \end{align}
-    where every $A_k$ is a normal tensor. For a nonzero positive-length MPV
-    family, the states are not normalized, so the common scalar may be chosen
-    such that $|\mu_k|\le1$ for every~$k$ and at least one weight has modulus
-    one.
+    where every $A_k$ is a normal tensor. If $D_k$ is the bond dimension of
+    $A_k$ and $D$ is the bond dimension of $A$, then
+    $\sum_{k=1}^r D_k\le D$. The weights satisfy $|\mu_k|\le1$; when $r>0$,
+    at least one weight has modulus one.
 
     \textbf{Local fix (zero-family normalization):} The source states the
     unit-modulus convention without an exception. An identically zero
-    positive-length MPV family has no nonempty retained family on which a
-    unit-modulus weight can be attained, so here it is represented by the empty
-    family. This deviation is recorded in
+    positive-length MPV family is represented here by the empty family, for
+    which the unit-modulus condition is vacuous. This deviation is recorded in
     \path{docs/paper-gaps/cpsv16_cf_normalization_and_proportional_comparison.tex}.
 
-    A basis of normal tensors for $A$ is a family $(C_j)_{j=1}^g$ of normal
-    tensors such that $V^{(N)}(A)$ lies in the span of the
-    $V^{(N)}(C_j)$ for every~$N$, and these vectors are linearly independent for
-    every sufficiently large~$N$. Equivalently, each normal block $A_k$ in
-    (\ref{eq:cpsv_canonical_form}) is gauge-phase equivalent to some $C_j$, and
-    the family $(C_j)$ is minimal under gauge-phase equivalence.
-
-    A sufficient criterion for (\ref{eq:cpsv_canonical_form}) is that $A$ have
-    no nontrivial periodic vectors and that every orthogonal projection $P$
-    satisfying $PA^i=PA^iP$ also satisfy $A^iP=PA^iP$. This is the criterion
-    proved in Theorem~\ref{thm:projector_closure_canonical_form}.
+    The basis-of-normal-tensors refinement is
+    Definition~\ref{def:bnt}; it is not part of canonical form itself.
 \end{definition}
+
+A sufficient criterion for (\ref{eq:cpsv_canonical_form}) is that $A$ have
+no nontrivial periodic vectors and that every orthogonal projection $P$
+satisfying $PA^i=PA^iP$ also satisfy $A^iP=PA^iP$. This criterion is proved in
+Theorem~\ref{thm:projector_closure_canonical_form}.
 
 This source definition is distinct from the stronger normal-canonical-form
 conditions below. The renormalization fixed-point analysis uses a separate

@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.CanonicalForm.Reduction
 import TNLean.MPS.Core.Transfer
 import TNLean.MPS.Overlap.Basic
+import TNLean.MPS.SharedInfra.BlockAssembly
 import TNLean.Channel.Peripheral.Spectrum
 
 /-!
@@ -18,15 +19,13 @@ operators: Renormalization fixed points and boundary theories"):
 * normal tensor (NT), `MPSTensor.IsNormalTensor`, and
 * basis of normal tensors (BNT), `MPSTensor.IsCPSVBasisOfNormalTensors`.
 
-The canonical-form (CF) decomposition of arXiv:1606.00608 eq. `II_CF1` plus the
-normalization paragraph (`Papers/1606.00608/MPDO-22-12-17-2.tex:237-246`) is not
-introduced here as a separate predicate.  The later normal canonical form
-predicate `MPSTensor.IsCanonicalFormSepAux.IsNormalCanonicalForm` records the
-strengthened form used in the Fundamental Theorem: normal blocks together with
-left-canonical normalization, non-increasing nonzero weight moduli, primitive
-transfer maps, and positive block dimensions.  The global CPSV normalization
-`‖μ k‖ ≤ 1` with a unit-modulus witness remains a separate source hypothesis
-when it is needed.
+The canonical-form (CF) decomposition of arXiv:1606.00608 eq. `II_CF1` and its
+normalization paragraph (`Papers/1606.00608/MPDO-22-12-17-2.tex:237-246`) are
+recorded by `MPSTensor.CPSVCanonicalFormData` and
+`MPSTensor.IsCPSVCanonicalForm`.  This source-level predicate retains equality
+of positive-length MPV families and allows the sum of the retained block bond
+dimensions to be smaller than the original bond dimension.  It does not add
+left-canonical normalization, weight ordering, or BNT separation.
 
 The existing canonical-form layer (`TNLean.PiAlgebra.CanonicalFormSepAux`,
 `TNLean.MPS.BNT.Construction`) contains several strengthenings of these definitions
@@ -160,6 +159,59 @@ theorem isNormalTensor_of_bondDim_one_of_transferMap_eq_id
       simp only [LinearMap.id_apply, Matrix.smul_apply, smul_eq_mul] at hEq00
       apply mul_right_cancel₀ hX00
       simpa using hEq00.symm
+
+/-! ## CPSV canonical form (CF) -/
+
+/-- Witness data for the CPSV canonical form of `A`.
+
+This is arXiv:1606.00608, Section 2.3, lines 214--246: the positive-length MPV
+family of `A` is represented by weighted normal blocks.  Blocks that contribute
+only to the length-zero trace may be omitted, so the retained total bond
+dimension is bounded above by `D` rather than required to equal it.  The empty
+family represents the identically-zero positive-length MPV family; consequently
+the unit-modulus normalization is conditional on `0 < r`. -/
+structure CPSVCanonicalFormData (A : MPSTensor d D) where
+  /-- Number of retained normal blocks. -/
+  r : ℕ
+  /-- Bond dimension of each retained block. -/
+  dim : Fin r → ℕ
+  /-- Scalar weight of each retained block. -/
+  weights : Fin r → ℂ
+  /-- Retained normal blocks. -/
+  blocks : (k : Fin r) → MPSTensor d (dim k)
+  /-- Every retained block is normal in the sense of CPSV16, lines 233--235. -/
+  blocks_normal : ∀ k, IsNormalTensor (blocks k)
+  /-- The weighted direct sum represents the same MPV family at every positive length. -/
+  sameMPV_pos : SameMPV₂Pos A (toTensorFromBlocks (d := d) weights blocks)
+  /-- Removing length-zero-only blocks cannot increase the total bond dimension. -/
+  bondDim_le : ∑ k : Fin r, dim k ≤ D
+  /-- CPSV16, line 246: all retained weights have modulus at most one. -/
+  weight_norm_le_one : ∀ k, ‖weights k‖ ≤ 1
+  /-- CPSV16, line 246, with the empty-family exception for the zero MPV family. -/
+  weight_unit_exists : 0 < r → ∃ k, ‖weights k‖ = 1
+
+/-- A tensor is in CPSV canonical form when it admits retained-block witness data.
+
+Source: arXiv:1606.00608, Section 2.3, lines 214--246. -/
+def IsCPSVCanonicalForm (A : MPSTensor d D) : Prop :=
+  Nonempty (CPSVCanonicalFormData A)
+
+namespace CPSVCanonicalFormData
+
+/-- Witness data determine the corresponding CPSV canonical-form predicate. -/
+theorem isCPSVCanonicalForm (data : CPSVCanonicalFormData A) :
+    IsCPSVCanonicalForm A :=
+  ⟨data⟩
+
+end CPSVCanonicalFormData
+
+namespace IsCPSVCanonicalForm
+
+/-- Choose retained-block witness data from a CPSV canonical-form predicate. -/
+noncomputable def data (h : IsCPSVCanonicalForm A) : CPSVCanonicalFormData A :=
+  Classical.choice h
+
+end IsCPSVCanonicalForm
 
 /-! ## Basis of normal tensors (BNT) -/
 
