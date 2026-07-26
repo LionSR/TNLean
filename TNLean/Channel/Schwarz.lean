@@ -20,6 +20,7 @@ import TNLean.Channel.Schwarz.MultiplicativeDomainFull
 import TNLean.Channel.Schwarz.MultiplicativeDomainPowers
 import TNLean.Channel.Schwarz.OperatorConvexity
 import TNLean.Channel.Schwarz.OperatorJensenAux
+import TNLean.Channel.Schwarz.OperatorJensenIntegrands
 import TNLean.Channel.Schwarz.OperatorMonotone
 import TNLean.Channel.Schwarz.PetzEqualityPrerequisites
 import TNLean.Channel.Schwarz.PetzRecoverySupport
