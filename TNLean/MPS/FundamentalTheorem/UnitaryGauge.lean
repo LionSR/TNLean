@@ -54,7 +54,7 @@ uniqueness of the positive semidefinite fixed point up to scale.  Hence
 \]
 
 This is the unitary-gauge input used both in the Fundamental Theorem refinement
-of arXiv:1606.00608, Corollary C.5, and in the periodic corner-unitary argument
+of arXiv:1606.00608, Corollary A.6, and in the periodic corner-unitary argument
 of arXiv:1708.00029, Appendix A, lines 1110--1117.
 -/
 
@@ -159,7 +159,7 @@ unitary matrix \(U\) without changing \(\zeta\), and \(|\zeta|=1\):
 
 Retaining the phase is needed in the equal-MPV case because the same phase
 occurs in the matched copy-weight identity. Source: arXiv:1606.00608,
-Corollary C.5, lines 1197--1199. -/
+Corollary A.6, lines 1197--1199. -/
 theorem exists_unitaryConj_of_gaugePhase_data_of_leftCanonical_irreducible
     [NeZero D] {A B : MPSTensor d D}
     (X : GL (Fin D) ℂ) (ζ : ℂ) (hζ_ne : ζ ≠ 0)
@@ -320,7 +320,7 @@ theorem exists_unitaryConj_of_gaugePhase_data_of_leftCanonical_irreducible
 
 /-- **Per-sector unitarity of the canonical-form gauge.**
 
-Source: arXiv:1606.00608, Corollary C.5; arXiv:1708.00029, Appendix A.
+Source: arXiv:1606.00608, Corollary A.6; arXiv:1708.00029, Appendix A.
 
 If \(A=(A^i)_i\) and \(B=(B^i)_i\) are left-canonical irreducible MPS tensors
 related by a gauge-phase equivalence, then the gauge can be taken unitary: there
