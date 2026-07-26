@@ -267,20 +267,26 @@ section.
 \begin{theorem}[Tensor extension preserves trace-preserving complete positivity]
     \label{thm:mpdo_tensor_map_id_cptp}
     \lean{Matrix.tensorMapIdLM_isKrausCPTP}
+    \lean{Matrix.idTensorMapLM_isKrausCPTP}
     \leanok
-    \uses{def:tensor_map_id, def:is_kraus_cptp}
+    \uses{def:tensor_map_id, def:mpdo_id_tensor_map, def:is_kraus_cptp,
+        thm:mpdo_equiv_reindex_cptp, lem:is_kraus_cptp_comp}
     Let $\mathcal S:\End_{\C}(H)\to
         \End_{\C}(K)$ be trace-preserving and completely positive,
     and let $R$ be another finite-dimensional space. Then
     \begin{align}
         \mathcal S\otimes\id_R:
         \End_{\C}(H\otimes R)&\longrightarrow
-        \End_{\C}(K\otimes R)
+        \End_{\C}(K\otimes R),
+        \notag\\
+        \id_R\otimes\mathcal S:
+        \End_{\C}(R\otimes H)&\longrightarrow
+        \End_{\C}(R\otimes K)
         \notag
     \end{align}
-    is trace-preserving and completely positive. If $(A_a)_a$ is a Kraus
-    family for $\mathcal S$, then
-    $(A_a\otimes I_R)_a$ is a Kraus family for its tensor extension.
+    are trace-preserving and completely positive. If $(A_a)_a$ is a Kraus
+    family for $\mathcal S$, then $(A_a\otimes I_R)_a$ and
+    $(I_R\otimes A_a)_a$ are Kraus families for the two tensor extensions.
 \end{theorem}
 \begin{proof}
     \leanok
@@ -297,6 +303,8 @@ section.
           =I_H\otimes I_R.
         \notag
     \end{align}
+    Conjugating by the canonical factor swaps gives the second extension,
+    whose Kraus operators are $I_R\otimes A_a$.
 \end{proof}
 
 \begin{definition}[Rectangular Kraus map]
