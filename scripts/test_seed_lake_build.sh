@@ -184,6 +184,18 @@ fi
 /usr/bin/grep -q "Git package uses external object storage" "$TEST_ROOT/error.log"
 find "$REPO/.lake/packages/mathlib/.git/objects/info/alternates" -delete
 
+mkdir "$TEST_ROOT/external-worktree"
+git --git-dir="$REPO/.lake/packages/mathlib/.git" \
+  config core.worktree "$TEST_ROOT/external-worktree"
+if "$REPO/scripts/seed_lake_build.sh" "$TARGET" --dry-run 2>"$TEST_ROOT/error.log"; then
+  echo "external dependency worktree unexpectedly passed" >&2
+  exit 1
+fi
+/usr/bin/grep -q "Git package worktree points outside its package root" \
+  "$TEST_ROOT/error.log"
+git --git-dir="$REPO/.lake/packages/mathlib/.git" \
+  config --unset core.worktree
+
 (
   cd "$REPO"
   CDPATH="$TEST_ROOT" scripts/seed_lake_build.sh "$TARGET" --dry-run >/dev/null

@@ -51,6 +51,7 @@ validate_packages() {
   local actual_rev
   local package_status
   local metadata_link
+  local reported_root
   PACKAGE_LIST_FILE="$(mktemp "${TMPDIR:-/tmp}/tnlean-lake-packages.XXXXXX")" ||
     die "cannot create temporary package list"
   if ! python3 - "$source_root/lake-manifest.json" >"$PACKAGE_LIST_FILE" <<'PY'
@@ -80,6 +81,10 @@ PY
     )"
     test -z "$metadata_link" ||
       die "Git package metadata contains a symlink: $package_name"
+    reported_root="$(git -C "$package_root" rev-parse --show-toplevel 2>/dev/null)" ||
+      die "Git package is not a checkout: $package_name"
+    test "$(canonical_dir "$reported_root")" = "$(canonical_dir "$package_root")" ||
+      die "Git package worktree points outside its package root: $package_name"
     actual_rev="$(git -C "$package_root" rev-parse HEAD 2>/dev/null)" ||
       die "Git package is not a checkout: $package_name"
     test "$actual_rev" = "$expected_rev" ||
