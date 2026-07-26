@@ -30,8 +30,8 @@ coordinates.  The two global direct-sum factors commute because the multiplicity
 scalar identity in every configuration.  Applying the adjoint vertical map reconstructs the
 original density exactly.
 
-The source-facing RFP wrappers obtain their fusion clause only from normalized
-BNT-refined horizontal form.  They do not establish the corresponding
+The RFP-derived theorems obtain their fusion clause only from normalized
+BNT-refined horizontal form. They do not establish the corresponding
 construction from the literal CPSV canonical form; see
 `docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex`.
 

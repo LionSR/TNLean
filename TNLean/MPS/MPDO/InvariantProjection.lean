@@ -316,8 +316,8 @@ arXiv:1606.00608, lines 1888--1893 (equation eq2:proof.IV.12).  It does not
 construct the orthogonal projector $Q$ associated with a nontrivial vertical
 period or establish its commutation with $[H^{(N)}]^p$.  Those ingredients are
 combined in `TNLean/MPS/MPDO/CyclicProjector.lean`, where one noncommuting
-length gives the contradiction for a tensor in literal horizontal canonical
-form. -/
+length gives the contradiction under normalized BNT-refined horizontal form.
+The corresponding literal CPSV canonical-form implication remains open. -/
 theorem mpo_commute_of_commute_pow (M : MPOTensor d D) (hM : IsMPDO M) (N : ℕ)
     (hN : 0 < N) {p : ℕ} (hp : p ≠ 0)
     {Q : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ}
