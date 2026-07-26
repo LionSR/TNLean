@@ -486,7 +486,7 @@
 \begin{proof}\leanok
     \uses{thm:zcl_subleading_pair_excludes_cid,
         thm:direct_sum_transfer_idempotent_iff_pairwise_mixed,
-        thm:rfp_implies_positive_gap_bnt_zcl_cf_basis_direct_sum}
+        thm:is_positive_gap_bnt_zcl_of_is_rfp_direct_sum}
     If some $\E_j$ were not idempotent, its assumed spectral pair would
     contradict physical CID by
     Theorem~\ref{thm:zcl_subleading_pair_excludes_cid}. Thus every diagonal
@@ -494,7 +494,7 @@
     off-diagonal mixed transfer map zero, so
     Theorem~\ref{thm:direct_sum_transfer_idempotent_iff_pairwise_mixed} gives
     $\E_A^2=\E_A$. The reverse implication is
-    Theorem~\ref{thm:rfp_implies_positive_gap_bnt_zcl_cf_basis_direct_sum}.
+    Theorem~\ref{thm:is_positive_gap_bnt_zcl_of_is_rfp_direct_sum}.
 \end{proof}
 
 \begin{theorem}[Source physical ZCL implies idempotence under the spectral assumption]%
@@ -508,7 +508,8 @@
     $\E_A^2=\E_A$.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{thm:positive_gap_bnt_zcl_conditional_converse}
+    \uses{thm:positive_gap_bnt_zcl_conditional_converse,
+        lem:is_positive_gap_bnt_zcl_of_source_bnt_zcl}
     Source physical CID includes all positive-gap configurations. Apply the
     forward implication in
     Theorem~\ref{thm:positive_gap_bnt_zcl_conditional_converse}.

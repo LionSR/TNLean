@@ -246,7 +246,13 @@ incompatible with positive-gap physical correlation independence.
 
 The right eigenvector is retained because the source argument assumes the full
 normalized pair. The displayed orientation of the two observables uses the left
-eigenvector equation. -/
+eigenvector equation.
+
+**Scope restriction (arXiv:1606.00608, Theorem `TheoremZCLPure`, lines
+1248--1268):** the conclusion negates `IsPositiveGapPhysicalCID`, rather than
+the source's unrestricted physical CID, and the spectral package is an explicit
+premise. See
+`docs/paper-gaps/cpsv16_pure_zcl_local_orthogonality_scope.tex`. -/
 theorem not_isPositiveGapPhysicalCID_basisDirectSum_of_basis_spectral_pair
     (hCF : IsBNTCanonicalForm P) (j : Fin P.basisCount)
     {ν : ℂ} {r l : Matrix (Fin (P.basisDim j)) (Fin (P.basisDim j)) ℂ}
