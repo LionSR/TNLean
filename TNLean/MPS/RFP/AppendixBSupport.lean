@@ -109,15 +109,17 @@ Source: arXiv:1606.00608, equations (3.16)--(3.17), lines 549--578. -/
     (∏ t : Fin N, star (hStruct.U (σ t) (p t).1 (p t).2)) *
       ∑ q : Fin N → Fin D × Fin D,
         (∏ t : Fin N, hStruct.U (σ t) (q t).1 (q t).2) * v q) = v p
-  let g (q : Fin N → Fin D × Fin D) (t : Fin N) (i : Fin d) : ℂ :=
-    star (hStruct.U i (p t).1 (p t).2) * hStruct.U i (q t).1 (q t).2
   have hfactor (q : Fin N → Fin D × Fin D) :
-      Finset.univ.sum (fun σ : Cfg d N ↦
-        Finset.univ.prod fun t : Fin N ↦ g q t (σ t)) =
-        Finset.univ.prod (fun t : Fin N ↦ Finset.univ.sum fun i : Fin d ↦ g q t i) := by
+      (∑ σ : Cfg d N, ∏ t : Fin N,
+        star (hStruct.U (σ t) (p t).1 (p t).2) *
+          hStruct.U (σ t) (q t).1 (q t).2) =
+        ∏ t : Fin N, ∑ i : Fin d,
+          star (hStruct.U i (p t).1 (p t).2) *
+            hStruct.U i (q t).1 (q t).2 := by
     simpa only [Fintype.piFinset_univ] using
       (Finset.sum_prod_piFinset (R := ℂ) (Finset.univ : Finset (Fin d))
-        (fun t i ↦ g q t i))
+        (fun t i ↦
+          star (hStruct.U i (p t).1 (p t).2) * hStruct.U i (q t).1 (q t).2))
   have hdelta (q : Fin N → Fin D × Fin D) :
       (∏ t : Fin N, if p t = q t then (1 : ℂ) else 0) =
         if p = q then 1 else 0 := by
@@ -162,11 +164,15 @@ Source: arXiv:1606.00608, equations (3.16)--(3.17), lines 549--578. -/
           ∏ t : Fin N, ∑ i : Fin d,
             star (hStruct.U i (p t).1 (p t).2) *
               hStruct.U i (q t).1 (q t).2 by
-        simpa [g] using hfactor q]
+        exact hfactor q]
     _ = v p := by
       simp_rw [hStruct.hU_pair]
       simp_rw [hdelta]
-      simp
+      rw [Finset.sum_eq_single p]
+      · simp
+      · intro q _ hqp
+        simp [Ne.symm hqp]
+      · simp
 
 /-- Every tensor power of the physical map is injective.
 
