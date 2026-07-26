@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.MPDO.SourceBNTBlocking
 import TNLean.MPS.MPDO.VerticalSectorCoordinates
-import Mathlib.LinearAlgebra.FixedSubmodule
+import TNLean.MPS.MPDO.VerticalSectorFixedPointProductSpan
 
 /-!
 # Generation of vertical BNT sector algebras
@@ -227,20 +227,6 @@ theorem one_mem_product_span_of_weightedVerticalBondContractions
       rfl
   rw [← hRange]
   exact hOneRaw
-
-/-- The span of all $L$-fold products of fixed points of a linear
-endomorphism of the vertical-sector algebra.
-
-This is the space denoted by $C_L(\mathcal F)$ in the dimension argument of the
-general MPDO renormalization fixed-point theorem.
-
-Source: arXiv:1606.00608, Appendix C.4, lines 1980--1993. -/
-def fixedPointProductSpan
-    {g : ℕ} {dim : Fin g → ℕ} (L : ℕ)
-    (F : VerticalSectorAlgebra dim →ₗ[ℂ] VerticalSectorAlgebra dim) :
-    Submodule ℂ (VerticalSectorAlgebra dim) :=
-  Submodule.span ℂ (Set.range fun X : Fin L → F.fixedSubmodule =>
-    fun α => (List.ofFn fun t => (X t : VerticalSectorAlgebra dim) α).prod)
 
 /-- Sectorwise multiplication by nonzero scalars is a linear equivalence of
 the direct product of the BNT matrix algebras. -/
