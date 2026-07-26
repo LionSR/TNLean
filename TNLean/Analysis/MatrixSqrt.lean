@@ -233,6 +233,8 @@ theorem PosSemidef.supportInvSqrt_kronecker
   rw [if_pos (mul_ne_zero hx0 hy0), if_pos hx0, if_pos hy0, Real.sqrt_mul hx,
     mul_inv]
 
+-- Keep the two unital specializations below on the direct embedding lemmas: this avoids
+-- introducing a separate support-inverse-square-root computation for the identity matrix.
 /-- The support inverse square root commutes with the unital left tensor
 embedding. This is the tensor functional-calculus identity for the support
 inverse in Hayden--Jozsa--Petz--Winter, arXiv:quant-ph/0304007v2, Theorem 3,
