@@ -12,6 +12,7 @@ trap cleanup EXIT
 
 REPO="$TEST_ROOT/repo"
 TARGET="$TEST_ROOT/target"
+MISMATCH_TARGET="$TEST_ROOT/mismatch-target"
 mkdir -p "$REPO/scripts"
 cp "$SCRIPT_SOURCE/seed_lake_build.sh" "$REPO/scripts/seed_lake_build.sh"
 printf 'leanprover/lean4:v4.32.0\n' >"$REPO/lean-toolchain"
@@ -223,5 +224,27 @@ if "$REPO/scripts/seed_lake_build.sh" "$TARGET" 2>"$TEST_ROOT/error.log"; then
   exit 1
 fi
 /usr/bin/grep -q "target already has .lake" "$TEST_ROOT/error.log"
+
+git -C "$REPO" add lake-manifest.json
+git -C "$REPO" \
+  -c user.name=Test \
+  -c user.email=test@example.com \
+  commit -qm "Pin dependency revision"
+git -C "$REPO" worktree add --detach -q "$MISMATCH_TARGET" HEAD
+printf 'new revision\n' >"$REPO/revision-marker"
+git -C "$REPO" add revision-marker
+git -C "$REPO" \
+  -c user.name=Test \
+  -c user.email=test@example.com \
+  commit -qm "Advance source revision"
+PATH="$TEST_ROOT/bin:$PATH" \
+  "$REPO/scripts/seed_lake_build.sh" "$MISMATCH_TARGET" \
+  >"$TEST_ROOT/mismatch.log"
+test -f "$MISMATCH_TARGET/.lake/packages/mathlib/tracked"
+test -f \
+  "$MISMATCH_TARGET/.lake/packages/mathlib/.lake/build/lib/lean/Mathlib.olean"
+test ! -e "$MISMATCH_TARGET/.lake/build"
+/usr/bin/grep -q "omitted TNLean build artifacts from different source revision" \
+  "$TEST_ROOT/mismatch.log"
 
 echo "Lake build seed integration test passed"
