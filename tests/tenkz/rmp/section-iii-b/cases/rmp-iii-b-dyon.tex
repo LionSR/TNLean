@@ -7,13 +7,16 @@
 % Capabilities: free-graph, marked-region, open-string
 \[
   \begin{tenkzfree}
-    \tnput[pill, label pos=south]{flux}{(0,0)}{h}
-    \tnput[box, label pos=north]{charge}{(7mm,0)}{\alpha}
-    \tnjoin{-15mm,0mm}{flux.west}
-    \tnjoin{flux.east}{15mm,0mm}
-    \tnjoin{0mm,-15mm}{flux.south}
-    \tnjoin{flux.north}{0mm,15mm}
-    \tnjoin{flux}{0mm,8mm}
-    \tnjoin[route=arc, out=45, in=225, label=h]{charge.east}{18mm,14mm}
+    % the PEPS site inside the flux disk, with the charge on its east leg
+    \tnput[dot]{P}{(0mm,0mm)}{}
+    \tnput[mpo, role=extra]{c}{(8mm,0mm)}{\alpha}
+    \tnput[dot, role=operator]{f}{(14mm,0mm)}{}
+    \tnjoin{-11mm,0mm}{P.west} \tnjoin{P.east}{c.west}
+    \tnjoin{c.east}{f.west} \tnjoin{f.east}{20mm,0mm}
+    \tnjoin{-6mm,-8mm}{P.south west} \tnjoin{P.north east}{6mm,8mm}
+    \tnjoin{P.north}{0mm,9mm}
+    \tnregion[slot=secondary]{P, c}
+    % the flux string leaving the disk
+    \tnjoin[role=operator, route=arc, out=-70, in=150, label=h]{f.south}{22mm,-11mm}
   \end{tenkzfree}
 \]
