@@ -39,20 +39,9 @@ here determine the BNT canonical-form conditions below.
     \end{align}
 \end{definition}
 
-
-
 \begin{definition}[Physical blocking of a sector decomposition]%
     \label{def:sector_decomposition_block_tensor}
-    \label{thm:sector_decomposition_block_tensor_data}
     \lean{MPSTensor.SectorDecomposition.blockTensor}
-    \lean{MPSTensor.SectorDecomposition.blockTensor_basis}
-    \lean{MPSTensor.SectorDecomposition.blockTensor_weight}
-    \lean{MPSTensor.SectorDecomposition.blockTensor_copies}
-    \lean{MPSTensor.SectorDecomposition.blockTensor_totalCopies}
-    \lean{MPSTensor.SectorDecomposition.blockTensor_flatDim}
-    \lean{MPSTensor.SectorDecomposition.blockTensor_totalDim}
-    \lean{MPSTensor.SectorDecomposition.blockTensor_flatWeight}
-    \lean{MPSTensor.SectorDecomposition.blockTensor_flatBasis}
     \leanok
     \uses{def:sector_weight_data, def:blocked_tensor}
     Let $P$ be a sector decomposition with representatives $A_j$,
@@ -70,9 +59,27 @@ here determine the BNT canonical-form conditions below.
     its $p$-site blocking, and raises each flattened weight to the $p$-th power.
 \end{definition}
 
+\begin{theorem}[Indices, dimensions, weights, and representatives under blocking]%
+    \label{thm:sector_decomposition_block_tensor_data}
+    \lean{MPSTensor.SectorDecomposition.blockTensor_basis}
+    \lean{MPSTensor.SectorDecomposition.blockTensor_weight}
+    \lean{MPSTensor.SectorDecomposition.blockTensor_copies}
+    \lean{MPSTensor.SectorDecomposition.blockTensor_totalCopies}
+    \lean{MPSTensor.SectorDecomposition.blockTensor_flatDim}
+    \lean{MPSTensor.SectorDecomposition.blockTensor_totalDim}
+    \lean{MPSTensor.SectorDecomposition.blockTensor_flatWeight}
+    \lean{MPSTensor.SectorDecomposition.blockTensor_flatBasis}
+    \leanok
+    \uses{def:sector_decomposition_block_tensor}
+    Physical blocking preserves the copy sets and bond dimensions. On the
+    flattened copy index, it raises the weight to the $p$-th power and replaces
+    the representative by its $p$-site blocking.
+\end{theorem}
 
-
-
+\begin{proof}\leanok
+    \uses{def:sector_decomposition_block_tensor}
+    These identities follow directly from the definition.
+\end{proof}
 
 \begin{lemma}[Sector decomposition formula]%
     \label{lem:paper_decomp_formula}
@@ -136,15 +143,9 @@ single family.
     bijection with the original block indices.
 \end{definition}
 
-
-
-
-
 \begin{definition}[BNT canonical form]%
     \label{def:sector_bnt_cf}
-    \label{lem:sector_bnt_weight_unit_exists_of_struct}
     \lean{MPSTensor.IsBNTCanonicalForm}
-    \lean{MPSTensor.IsBNTCanonicalForm.weight_unit_exists_of_struct}
     \leanok
     \uses{def:sector_weight_data}
     Given a sector decomposition $P$, these conditions define the normalized,
@@ -184,6 +185,20 @@ single family.
     $C \oplus (1/2) C$, and $C \oplus (-C) \oplus (1/2) C$) and is
     not derivable from the per-block normality hypotheses alone.
 \end{definition}
+
+\begin{lemma}[Unit-modulus weight witness from the canonical-form normalization]%
+    \label{lem:sector_bnt_weight_unit_exists_of_struct}
+    \lean{MPSTensor.IsBNTCanonicalForm.weight_unit_exists_of_struct}
+    \leanok
+    \uses{def:sector_bnt_cf}
+    Under the BNT canonical form, the
+    \cite[Section~2.3]{Cirac2016MPDO_arXiv} normalization provides indices
+    $(j_*,q_*)$ with $|\mu_{j_*,q_*}|=1$.
+\end{lemma}
+
+\begin{proof}\leanok
+    This is the unit-modulus existential in the canonical-form normalization.
+\end{proof}
 
 \begin{corollary}[Basis blocks of a BNT canonical form are normal]
     \label{cor:sector_bnt_cf_basis_normal}
@@ -408,10 +423,6 @@ and the combined-family linear independence.
 A weighted block sum is the one-copy case of the sector decomposition used
 below. Equal or repeated sectors require the full coefficient formalism.
 
-
-
-
-
 \subsection{Prepared-block construction of BNT canonical forms}%
 \label{subsec:paperbnt_supplier}
 
@@ -420,8 +431,6 @@ blocks from the normalized-weight BNT construction: the prepared blocks are
 trace-preserving, primitive, irreducible, and injective; normalized weights then
 quotient gauge-phase-equivalent blocks into sectors to produce the canonical
 form of Definition~\ref{def:sector_bnt_cf}.
-
-
 
 \begin{theorem}[Prepared BNT blocks after blocking]%
     \label{thm:prepared_bnt_blocks_after_blocking}
@@ -445,7 +454,7 @@ form of Definition~\ref{def:sector_bnt_cf}.
     Apply the common primitive irreducible block decomposition to $(A,A)$,
     giving a positive blocking length and a nonzero weighted family of
     trace-preserving primitive irreducible blocks with the positive-length MPV
-    identity. Lemma~\ref{thm:common_injective_blocking_tp_primitive_irreducible_family}
+    identity. Theorem~\ref{thm:common_injective_blocking_tp_primitive_irreducible_family}
     supplies one common further blocking making every block one-site injective
     while preserving the other hypotheses; finally identify the iterated blocked
     alphabet with the direct one.
@@ -513,10 +522,6 @@ $|O_{YX}(N)|\to 1$.
 If their bond dimensions differed, the rectangular overlap-decay theorem would
 give $O_{YX}(N)\to 0$, a contradiction.
 
-
-
-
-
 \begin{theorem}[Gauge realization of prepared phase-equivalent NTs]%
     \label{thm:prepared_phase_equiv_gauge}
     \lean{MPSTensor.gaugePhaseEquiv_of_MPVBlockPhaseEquiv_of_tp_primitive_irr}
@@ -542,14 +547,8 @@ give $O_{YX}(N)\to 0$, a contradiction.
     contradicts the assumed scalar-power identity at every positive length.
 \end{proof}
 
-
-
-
-
 Combining the after-blocking preparation with the normalized-weight construction
 gives the arbitrary-input statement, conditional on the weight normalization.
-
-
 
 \begin{remark}[Arbitrary-input reduction]%
     \label{rem:arbitrary_input_reduction_gap}
@@ -564,10 +563,6 @@ gives the arbitrary-input statement, conditional on the weight normalization.
     Theorem~\ref{thm:paperbnt_supplier_after_blocking_normalized} below, which
     discharges both hypotheses at the price of one positive scalar per site.
 \end{remark}
-
-
-
-
 
 \begin{theorem}[Normalized BNT form after blocking for a nonzero MPV family]%
     \label{thm:paperbnt_supplier_after_blocking_normalized}

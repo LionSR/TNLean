@@ -121,10 +121,47 @@ projection.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{lem:sector_bnt_proportional_exact_match}
-    Equality of the positive-length MPV families is eventual nonzero
-    proportionality with scalar $1$. Apply the proportional exact matcher of
-    Lemma~\ref{lem:sector_bnt_proportional_exact_match}.
+    \uses{lem:sector_bnt_proportional_exact_match,
+        lem:sector_bnt_combined_family_eventually_li,
+        lem:sector_bnt_coeff_not_eventually_zero,
+        thm:nt_overlap_norm_one_gauge}
+    Equality of the positive-length MPV families gives eventual nonzero
+    proportionality with scalar $1$. We spell out the fixed-length argument
+    used by Lemma~\ref{lem:sector_bnt_proportional_exact_match}.
+
+    Fix a sector $j_0$ of $P$, and let $T$ be the set of sectors of $P$ whose
+    cross-overlap with every sector of $Q$ tends to zero. Suppose
+    $j_0\in T$. For each $j\notin T$, choose a sector $k(j)$ of $Q$ with
+    non-decaying cross-overlap. Normal-block overlap rigidity supplies a
+    scalar sequence $\alpha_j(N)$ such that
+    \begin{align}
+        V^{(N)}(P_j)
+         & =\alpha_j(N)V^{(N)}(Q_{k(j)}).
+        \notag
+    \end{align}
+    The restricted combined family
+    \begin{align}
+        \mathcal F_N
+         & :=
+        \{V^{(N)}(P_j):j\in T\}
+        \cup\{V^{(N)}(Q_k):k\in J(Q)\}.
+        \label{eq:bnt_exact_match_restricted_family}
+    \end{align}
+    is linearly independent for all sufficiently large $N$: overlaps across
+    the two displayed parts decay by the definition of $T$, while the
+    within-family hypotheses follow from the BNT canonical forms.
+
+    At one such length, expand the common MPV in the $P$- and $Q$-sector
+    decompositions. Substitute the displayed scalar relation for every
+    $j\notin T$ and collect terms with the same $Q$-sector. This gives a
+    linear relation over the family
+    (\ref{eq:bnt_exact_match_restricted_family}) whose coefficient at
+    $V^{(N)}(P_{j_0})$ is exactly $c_{P,j_0}^{(N)}$. Linear independence
+    forces $c_{P,j_0}^{(N)}=0$ for every sufficiently large $N$, contradicting
+    Lemma~\ref{lem:sector_bnt_coeff_not_eventually_zero}. Hence some sector
+    $k_0$ has non-decaying cross-overlap with $P_{j_0}$. The unequal-dimension
+    and equal-dimension overlap dichotomies then give
+    $\dim_P(j_0)=\dim_Q(k_0)$ and the asserted gauge-phase equivalence.
 \end{proof}
 
 \begin{theorem}[Strong existential matching, full-basis form]

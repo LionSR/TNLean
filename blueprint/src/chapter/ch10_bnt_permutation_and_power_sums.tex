@@ -5,16 +5,79 @@ the blocks must agree up to a permutation and per-block gauge phases. The
 argument turns the equality of spans into an invertible change-of-basis matrix,
 then analyses its asymptotics through the overlaps.
 
-
-
-
-
 The change-of-basis matrix is now used to match the blocks. We first treat
 equal block counts, then remove that restriction.
 
+\begin{theorem}[Permutation rigidity for equal block counts]
+    \label{thm:bnt_perm_same_card}
+    \lean{MPSTensor.exists_perm_dimEq_gaugePhaseEquiv_of_overlapOrtho}
+    \leanok
+    \uses{def:injective, def:mpv_overlap, def:gauge_phase_equiv}
+    Let $(A_j)_{j=1}^g$ and $(B_j)_{j=1}^g$ be injective families of positive
+    bond dimension satisfying trace-preserving normalization, with self-overlaps tending to~$1$ and
+    off-diagonal overlaps tending to~$0$ within each family. If the spans of
+    the MPV states agree for every system size $N$, then there is a permutation
+    $\pi$ of $\{1, \ldots, g\}$ such that $A_j$ and $B_{\pi(j)}$ have the
+    same bond dimension and are gauge-phase equivalent.
+\end{theorem}
 
+\begin{proof}\leanok\uses{lem:bnt_eventual_change_basis, thm:overlap_decay, thm:overlap_decay_rect}
+    For large $N$, Lemma~\ref{lem:bnt_eventual_change_basis} gives an
+    invertible matrix $U_N$ relating the two MPV families. Fix $j$ and write
+    $\ket{V^{(N)}(B_j)}=\sum_i u_{ij}^{(N)}\ket{V^{(N)}(A_i)}$. With
+    $G_A(N)=(O_{A_iA_\ell}(N))_{i,\ell}$ and
+    $b_j(N)=(O_{A_iB_j}(N))_i$, this gives
+    \begin{align}
+        G_A(N)\overline{u_j(N)}
+         & =b_j(N).
+        \notag
+    \end{align}
+    Moreover,
+    \begin{align}
+        O_{B_jB_j}(N)
+         & =u_j(N)^{\top}G_A(N)\overline{u_j(N)}.
+        \notag
+    \end{align}
+    If all mixed overlaps $O_{A_iB_j}(N)$ tended to $0$, then
+    $b_j(N)\to0$; since $G_A(N)\to\Id$, one obtains
+    $\overline{u_j(N)}\to0$ and hence $u_j(N)\to0$. Thus
+    $O_{B_jB_j}(N)\to0$, contradicting $O_{B_jB_j}(N)\to1$.
+    Thus each $B_j$ has a matched block $A_{f(j)}$ with non-decaying mixed
+    overlap. Theorems~\ref{thm:overlap_decay_rect}
+    and~\ref{thm:overlap_decay} then force equal bond dimension and
+    gauge-phase equivalence for each match. Off-diagonal decay within the
+    $B$-family makes $f$ injective, hence bijective, and its inverse is the
+    required permutation.
+\end{proof}
 
+\begin{lemma}[Permutation rigidity with asymptotically orthonormal overlaps]\label{lem:bnt_perm_simple}
+    \lean{MPSTensor.exists_eq_numBlocks_and_equiv_gaugePhase_of_overlapOrtho}
+    \leanok
+    \uses{def:injective, def:mpv, def:mpv_overlap, def:gauge_phase_equiv}
+    Let $(A_j)_{j=1}^{g_A}$ and $(B_k)_{k=1}^{g_B}$ be two
+    families of injective tensors of positive bond dimension satisfying the TP normalization
+    $\sum_i (A_j^i)^\dagger A_j^i = \Id$ and
+    $\sum_i (B_k^i)^\dagger B_k^i = \Id$, whose self-overlaps
+    converge to~$1$ and whose cross-overlaps within each
+    family converge to~$0$.
+    If for every system size~$N$,
+    \begin{align}
+        \spn_{\C}\{\ket{V^{(N)}(A_j)} : 1 \le j \le g_A\}
+         & =
+        \spn_{\C}\{\ket{V^{(N)}(B_k)} : 1 \le k \le g_B\}, \notag
+    \end{align}
+    then $g_A = g_B$, and there is a permutation $\pi$ of the common
+    block index set such that $A_j$ and $B_{\pi(j)}$ have the same bond
+    dimension and are gauge-phase equivalent for each~$j$.
+\end{lemma}
 
+\begin{proof}\leanok\uses{lem:bnt_overlap_orthonormal_li, thm:bnt_perm_same_card}
+    By Lemma~\ref{lem:bnt_overlap_orthonormal_li}, both families are
+    linearly independent for all sufficiently large $N$. At such an $N$, the
+    common span has the same dimension when computed from the $A$-family or
+    the $B$-family, so $g_A = g_B$. After identifying the two index sets,
+    Theorem~\ref{thm:bnt_perm_same_card} yields the permutation conclusion.
+\end{proof}
 
 The two preceding results obtain the block matching from the asymptotic
 orthonormality of the overlaps. The same matching is obtained by the exact
@@ -96,10 +159,6 @@ basis tensors are compared: the coefficient $\sum_q \mu_{j,q}^N$ then equals
 $\sum_q (\nu_{j,q} e^{i\phi_j})^N$, and Newton--Girard recovers the weight
 multiset with multiplicity.
 
-
-
-
-
 \begin{theorem}[Finite-range equal power sums imply equal multisets]
     \label{thm:bounded_power_sum_multiset}
     \lean{Matrix.sum_pow_eq_implies_multiset_eq_of_le_card,
@@ -155,8 +214,6 @@ multiset with multiplicity.
     Theorem~\ref{thm:bounded_power_sum_multiset} gives $m=0$, contradicting
     $m\geq 1$.
 \end{proof}
-
-
 
 % Maintainer note: Theorems thm:newton_girard and thm:power_sum_multiset feed the
 % equal-MPV corollary of Section~\ref{sec:ft_equal_proportional_cases}, where the
