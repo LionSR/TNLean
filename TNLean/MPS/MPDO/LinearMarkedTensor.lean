@@ -14,10 +14,10 @@ letter by taking the corresponding linear combination of the local tensor
 matrices.  Such marked letters commute with weighted direct sums and are
 covariant under a common virtual similarity.
 
-For a tensor in literal horizontal canonical form, equality of every closed
-chain with one such marked letter implies equality of the marked tensors.
-The proof passes to the representative-indexed sector decomposition, applies
-representative-grouped marked separation, and returns through the literal
+For a tensor in normalized BNT-refined horizontal form, equality of every
+closed chain with one such marked letter implies equality of the marked
+tensors.  The proof passes to the representative-indexed sector decomposition,
+applies representative-grouped marked separation, and returns through the
 block-diagonal gauge.
 
 The restriction to the physical-letter span is essential: closed chains do
