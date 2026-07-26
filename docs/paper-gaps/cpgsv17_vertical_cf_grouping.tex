@@ -268,21 +268,49 @@ Proposition~4.13, so the literal theorem remains open.  The proved restricted
 result follows the grouped vertical sectors used in the paper and does not use
 the unsupported diagonal-restriction statement from \ghissue{2537}.
 
-To eliminate the stronger hypothesis, first use
-\path{MPSTensor.CPSVCanonicalFormData.exists_isCPSVBasisOfNormalTensors} to
-obtain the active BNT representatives.  That theorem does not retain the
-active-index equivalence, the copy weights and gauges, or the ambient
-coisometry.  One must therefore strengthen its conclusion to a structured
-active-refinement witness carrying those data and the exact reconstruction.
-The missing lemma must then establish the Lemma~L first-site insertion
-separation on the retained coordinates and carry the separated identity back
-through the coisometry.  With that statement in place, the invariant-projector
-argument, periodic-sector exclusion, positivity of the vertical
-multiplicities, grouped Gram normalization, and final coisometric
-reconstruction can be replayed without assuming
-\path{MPOTensor.IsHorizontalCF}.  This yields
-the literal Proposition~4.13 theorem rather than an adapter through the
-stronger predicate.
+A first part of the preparatory dependency for eliminating the stronger
+hypothesis is now formalized.  The structure
+\path{MPSTensor.CPSVCanonicalFormData.ActiveBNTRefinement} and its constructor
+\path{MPSTensor.CPSVCanonicalFormData.exists_activeBNTRefinement} retain an
+explicit equivalence between phase-class copies and the original nonzero-weight
+listed blocks.  Every active copy keeps its original coefficient and bond
+dimension, together with a unit phase, an invertible gauge, and the exact
+letterwise gauge-phase relation to its representative.  The representatives
+form a CPSV basis of normal tensors.
+
+The construction does not delete the zero-weight listed coordinates.  It leaves
+them as literal zero-weight summands and assigns them the identity block gauge.
+The replacement blocks remain indexed by the original listed coordinate $k$;
+the explicit class-copy equivalence is stored separately.  If $G$ is the
+resulting block-diagonal gauge, it proves, for every letter $i$,
+\begin{equation}
+  \bigoplus_k\mu_kA_k^i
+  =G\left(\bigoplus_k\mu_kB_k^i\right)G^{-1},
+  \label{eq:completed-active-regrouping}
+\end{equation}
+and, using the original ambient coisometry $U$ with $UU^\dagger=I$,
+\begin{equation}
+  A^i
+  =U^\dagger G\left(\bigoplus_k\mu_kB_k^i\right)G^{-1}U.
+  \label{eq:completed-active-reconstruction}
+\end{equation}
+Thus the in-place listed direct-sum conjugation and the ambient reconstruction
+are exact letterwise identities.  The present API does not yet state the direct
+sum on explicit class-copy coordinates, and it claims no selector onto the
+active coordinates.
+
+Issue~\ghissue{4956} and literal Proposition~4.13 remain open.  The next
+preparatory result must combine the stored equivalence with the in-place
+identity to produce an exact class-copy-coordinate direct sum.  The subsequent
+missing result is the representative-grouped form of Lemma~L on the retained
+coordinates, followed by the argument carrying that identity through the block
+gauge and the ambient coisometry into the vertically viewed tensor.  If a later
+proof removes the inactive coordinates, it must additionally construct an
+explicit coisometric selector and prove its reconstruction identity.  Once this
+boundary is crossed, the invariant-projector argument, periodic-sector
+exclusion, positivity of the vertical multiplicities, grouped Gram
+normalization, and final coisometric reconstruction can be replayed without
+assuming \path{MPOTensor.IsHorizontalCF}.
 
 \bibliographystyle{alpha}
 \bibliography{references}
