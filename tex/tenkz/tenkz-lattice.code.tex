@@ -1157,8 +1157,18 @@
 \pgfkeysdef{/tenkz/region/.unknown}
   {
     \bool_set_false:N \l__tenkzl_region_valid_bool
-    \PackageError{tenkz}{Unknown~lattice-region~key~'\pgfkeyscurrentname'}
-      {Check~the~\token_to_str:N \tnregion~option~spelling.}
+    \str_if_eq:eeTF {\pgfkeyscurrentname} {role}
+      {
+        \PackageError{tenkz}{A~lattice~region~has~no~'role'~key}
+          {Use~the~slot~key~with~value~selected,~secondary,~complement,~
+           collar~or~neutral~for~\token_to_str:N \tnregion.^^J
+           The~role~key~belongs~to~\token_to_str:N \tnsite~and~
+           \token_to_str:N \tnedge.}
+      }
+      {
+        \PackageError{tenkz}{Unknown~lattice-region~key~'\pgfkeyscurrentname'}
+          {Check~the~\token_to_str:N \tnregion~option~spelling.}
+      }
   }
 
 \cs_new_protected:Npn \tenkz_lattice_region:nn #1#2
