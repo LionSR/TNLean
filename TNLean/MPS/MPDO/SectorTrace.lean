@@ -4,7 +4,9 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import Mathlib.LinearAlgebra.Trace
-import TNLean.MPS.MPDO.InvariantProjection
+import TNLean.Algebra.ListProduct
+import TNLean.MPS.MPDO.FirstSite
+import TNLean.MPS.MPDO.VerticalCF
 import TNLean.MPS.MPDO.ZCL
 
 /-!
@@ -192,29 +194,9 @@ along the horizontal bond. -/
 theorem sum_evalWord_diag_eq_verticalLoop_pow (M : MPOTensor d D) (N : ℕ) :
     ∑ σ : Fin N → Fin d, evalWord M (List.ofFn σ) (List.ofFn σ) =
       verticalLoop M ^ N := by
-  induction N with
-  | zero =>
-      simp only [pow_zero, Fintype.sum_unique, List.ofFn_zero, evalWord_nil]
-  | succ N ih =>
-      rw [sum_fin_succ_eq_sum_cons
-        (fun σ : Fin (N + 1) → Fin d => evalWord M (List.ofFn σ) (List.ofFn σ))]
-      have hof : ∀ (a : Fin d) (ρ : Fin N → Fin d),
-          List.ofFn (Fin.cons a ρ : Fin (N + 1) → Fin d) = a :: List.ofFn ρ := by
-        intro a ρ
-        simp [List.ofFn_succ, Fin.cons_zero, Fin.cons_succ]
-      calc
-        ∑ a : Fin d, ∑ ρ : Fin N → Fin d,
-            evalWord M (List.ofFn (Fin.cons a ρ)) (List.ofFn (Fin.cons a ρ))
-            = ∑ a : Fin d, ∑ ρ : Fin N → Fin d,
-                M a a * evalWord M (List.ofFn ρ) (List.ofFn ρ) := by
-              refine Finset.sum_congr rfl fun a _ => Finset.sum_congr rfl fun ρ _ => ?_
-              rw [hof a ρ, evalWord_cons]
-        _ = (∑ a : Fin d, M a a) *
-              ∑ ρ : Fin N → Fin d, evalWord M (List.ofFn ρ) (List.ofFn ρ) :=
-              (Finset.sum_mul_sum _ _ _ _).symm
-        _ = verticalLoop M ^ (N + 1) := by
-              rw [ih, pow_succ']
-              rfl
+  rw [verticalLoop, physTraceTransfer, ← List.prod_replicate,
+    ← List.ofFn_const, List.prod_ofFn_sum]
+  exact Finset.sum_congr rfl fun σ _ => evalWord_ofFn M σ σ
 
 /-- **The trace of the density operator is a chain of vertical loops:**
 $\tr H^{(N)} = \tr(E^N)$ with `E` the single-site vertical loop.  This is the
