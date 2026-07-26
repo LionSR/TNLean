@@ -6,14 +6,17 @@
 % Source: paper TN-Review-main.tex line 807; author source ImagesReview Section
 %   II/ImagesReview Section II.tex lines 650-684
 % Capabilities: grid, typed-ports
+%
+% west=none seals the west side on its own; boundary=none silently
+% outranked the east cup word beside it, so the pair drew unclosed.
 \[
   \rho_R \;=\;
-  \begin{tenkz}[rows={ket:nopair, bra}, boundary=none, east=cup]
-    \tn{} & \tnX{}\\
-    \tn*{} & \tnX{}
+  \begin{tenkz}[rows={ket:nopair, bra}, west=none, east=cup]
+    \tn{} & \tnX{B^{\bar I}}\\
+    \tn*{} & \tnX{B^{\bar I}}
   \end{tenkz}
   \;=\;
-  \begin{tenkz}[rows={ket:nopair, bra}, boundary=none, east=cup]
+  \begin{tenkz}[rows={ket:nopair, bra}, west=none, east=cup]
     \tn[box]{U^{A}_{I}} &
       \tnX{\sigma^{A}}\tnspan[brace above]{2}{\sigma_{\partial R}} &
       \tnX{\sigma^{B}}\\
