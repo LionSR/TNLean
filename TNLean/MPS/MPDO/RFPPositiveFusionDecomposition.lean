@@ -10,14 +10,15 @@ import TNLean.MPS.MPDO.VerticalProductFusionDecomposition
 
 This file derives the positive fusion decomposition of the one-site vertical
 basis of normal tensors directly from the renormalization fixed-point maps,
-horizontal canonical form, and matrix-product-density-operator positivity.
+normalized BNT-refined horizontal form, and matrix-product-density-operator
+positivity.
 
 ## Main results
 
 * `CPSVVerticalDecomposition`: a vertical canonical decomposition retaining
   the source basis-of-normal-tensors predicate.
 * `IsHorizontalCF.exists_cpsvVerticalDecomposition`: construction of this
-  decomposition from horizontal canonical form and positivity.
+  decomposition from normalized BNT-refined horizontal form and positivity.
 * `exists_positiveFusionDecomposition_of_isRFPViaTS`: the source-facing
   positive fusion theorem of CPSV16, Appendix C.4, lines 2020--2029.
 
@@ -258,13 +259,18 @@ theorem IsHorizontalCF.exists_cpsvVerticalDecomposition
     (fun j ↦ blocks (C.repr j)) hBNT W hWIso hWOrth hWInter
     hWReconstructFlat
 
-/-- A horizontally canonical matrix product density operator satisfying the
-renormalization fixed-point condition has a positive fusion decomposition of
-its vertical basis of normal tensors.
+/-- A matrix product density operator in normalized BNT-refined horizontal form
+that satisfies the renormalization fixed-point condition has a positive fusion
+decomposition of its vertical basis of normal tensors.
 
 For every pair of BNT labels, the fusion map is a coisometry onto the active
 direct sum.  Both forward conjugation and exact reconstruction are asserted,
 so zero product tensors and proper active supports are permitted.
+
+**Scope restriction (BNT-refined horizontal form):** `IsHorizontalCF` is
+stronger than the literal CPSV canonical form used in Appendix C.4 through
+Proposition 4.13.  The literal implication remains open; see
+`docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex`.
 
 **Scope restriction (active product BNT):** Only active product corners are
 retained.  A BNT label absent from a fixed product pair has zero fusion

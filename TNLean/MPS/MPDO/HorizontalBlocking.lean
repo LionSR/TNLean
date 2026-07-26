@@ -8,9 +8,9 @@ import TNLean.MPS.MPDO.HorizontalBNT
 import TNLean.MPS.MPDO.PhysicalBlocking
 
 /-!
-# Horizontal canonical form under two-site blocking
+# Normalized BNT-refined horizontal form under two-site blocking
 
-Two-site physical blocking preserves horizontal canonical form. The sector
+Two-site physical blocking preserves normalized BNT-refined horizontal form. The sector
 representatives and copy weights are blocked, the physical alphabet is
 relabeled by the canonical ket--bra equivalence, and every copy retains its
 original virtual gauge.
@@ -26,11 +26,16 @@ namespace MPOTensor
 
 variable {d D : ℕ}
 
-/-- Two-site physical blocking preserves horizontal canonical form.
+/-- Two-site physical blocking preserves normalized BNT-refined horizontal
+form.
 
 The proof blocks the BNT sector decomposition, transports it through the
 canonical ket--bra physical-index equivalence, and uses the same block-diagonal
 virtual gauge on every blocked word.
+
+**Scope restriction (BNT-refined horizontal form):** This theorem starts from
+`IsHorizontalCF`, not from literal CPSV canonical form; see
+`docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex`.
 
 Source: arXiv:1606.00608, Appendix C.4, lines 1951--1956. -/
 theorem IsHorizontalCF.blockTwo {M : MPOTensor d D}
