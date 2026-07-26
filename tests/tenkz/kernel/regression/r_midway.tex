@@ -4,6 +4,51 @@
 \makeatletter
 \ExplSyntaxOn
 \file_input:n { tenkz-kernel.code.tex }
+\ExplSyntaxOn
+\fp_new:N \l__tenkz_test_ax_fp
+\fp_new:N \l__tenkz_test_ay_fp
+\fp_new:N \l__tenkz_test_bx_fp
+\fp_new:N \l__tenkz_test_by_fp
+\fp_new:N \l__tenkz_test_mx_fp
+\fp_new:N \l__tenkz_test_my_fp
+\tl_new:N \l__tenkz_test_id_tl
+\cs_new_protected:Npn \__tenkz_test_xy:nNN #1#2#3
+  {
+    \prop_get:NnN \l__tenkz_kernel_named_prop {#1}
+      \l__tenkz_test_id_tl
+    \exp_args:NV \__tenkz_kernel_r_xy:nNN \l__tenkz_test_id_tl #2#3
+  }
+\cs_new_eq:NN \__tenkz_test_render: \__tenkz_kernel_render:
+\cs_set_protected:Npn \__tenkz_kernel_render:
+  {
+    \__tenkz_test_render:
+    \__tenkz_test_xy:nNN {A}
+      \l__tenkz_test_ax_fp \l__tenkz_test_ay_fp
+    \__tenkz_test_xy:nNN {B}
+      \l__tenkz_test_bx_fp \l__tenkz_test_by_fp
+    \__tenkz_test_xy:nNN {M}
+      \l__tenkz_test_mx_fp \l__tenkz_test_my_fp
+    \fp_compare:nNnF
+      {
+        abs
+          (
+            \l__tenkz_test_mx_fp
+            - ( \l__tenkz_test_ax_fp + \l__tenkz_test_bx_fp ) / 2
+          )
+      }
+      < { 0.000001 }
+      { \errmessage{midway~x-coordinate~is~not~the~operand~midpoint} }
+    \fp_compare:nNnF
+      {
+        abs
+          (
+            \l__tenkz_test_my_fp
+            - ( \l__tenkz_test_ay_fp + \l__tenkz_test_by_fp ) / 2
+          )
+      }
+      < { 0.000001 }
+      { \errmessage{midway~y-coordinate~is~not~the~operand~midpoint} }
+  }
 \ExplSyntaxOff
 \makeatother
 \begin{document}
