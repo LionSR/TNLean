@@ -5,9 +5,56 @@
 % Source: author source ImagesReview Section III/ImagesReview Section III.tex lines
 %   170-197; archival output ImagesReview Section III.pdf
 % Capabilities: lattice, regions, typed-ports
+% Note: `ring' with no role renders as a red (tenkzAction) stadium, always,
+%   regardless of role -- the on-wire-matrix style hardcodes draw=tenkzAction
+%   and only a role override (draw=<role colour> appended after) changes it.
+%   role=passive is the only role that yields an unhued (grey, not
+%   red/blue/violet) outline; no public skin gives a true circle in plain
+%   tenkzInk black with an inscribed label (`dot' is solid-filled with an
+%   EXTERNAL label, not inscribed; `pill'/`box' are plain black but a
+%   rounded/sharp rectangle, not a circle). role=passive on `ring' is kept
+%   as the closest available compromise (unhued, oval, label inside).
 \[
-  \begin{tenkzlattice}[rows=2, cols=2, frame=oblique,
-                           physical=up, outer legs=both]
-    \tnsite{(1,1)}
-\end{tenkzlattice}
+  \begin{tenkzfree}
+    \tnput[box]{n}{(0mm,8mm)}{} \tnput[box]{e}{(8mm,0mm)}{}
+    \tnput[box]{s}{(0mm,-8mm)}{} \tnput[box]{w}{(-8mm,0mm)}{}
+    \tnput[ring, role=passive]{lam}{(-8mm,8mm)}{\lambda}
+    \tnput[box]{top}{(0mm,16mm)}{} \tnput[box]{left}{(-16mm,0mm)}{}
+    % the four-tensor ring: n-e and e-s turn at the plaquette's own corners;
+    % w-n is routed explicitly through the lambda intertwiner. The whole
+    % ring is role=operator (red), matching the author block.
+    \tnjoin[route=hv,role=operator]{n.east}{e.north}
+    \tnjoin[route=vh,role=operator]{e.south}{s.east}
+    \tnjoin[route=hv,role=operator]{s.west}{w.south}
+    \tnjoin[role=operator]{w.north}{lam.south}
+    \tnjoin[role=operator]{lam.east}{n.west}
+    % the two pendant actions feed INTO the ring on this panel
+    \tnjoin[dir]{top.south}{n.north} \tnjoin{top.north}{0mm,20mm}
+    \tnjoin[dir]{left.east}{w.west} \tnjoin{left.west}{-20mm,0mm}
+    % the ring's own open half-edges leave outward
+    \tnjoin[dir]{s.south}{0mm,-12mm}
+    \tnjoin[dir]{e.east}{12mm,0mm}
+    % the boundary string sweeps around the top-left, outside the ring
+    \tnjoin[route=arc,out=90,in=180,role=operator]{left.north}{top.west}
+  \end{tenkzfree}
+  \;=\;
+  \begin{tenkzfree}
+    \tnput[box]{n}{(0mm,8mm)}{} \tnput[box]{e}{(8mm,0mm)}{}
+    \tnput[box]{s}{(0mm,-8mm)}{} \tnput[box]{w}{(-8mm,0mm)}{}
+    \tnput[ring, role=passive]{lam}{(-8mm,8mm)}{\lambda}
+    \tnput[box]{bottom}{(0mm,-16mm)}{} \tnput[box]{right}{(16mm,0mm)}{}
+    \tnjoin[route=hv,role=operator]{n.east}{e.north}
+    \tnjoin[route=vh,role=operator]{e.south}{s.east}
+    \tnjoin[route=hv,role=operator]{s.west}{w.south}
+    \tnjoin[role=operator]{w.north}{lam.south}
+    \tnjoin[role=operator]{lam.east}{n.west}
+    % the ring's own open half-edges arrive from outward
+    \tnjoin[dir]{0mm,12mm}{n.north}
+    \tnjoin[dir]{-12mm,0mm}{w.west}
+    % the two pendant actions drain OUT of the ring on this panel
+    \tnjoin[dir]{s.south}{bottom.north} \tnjoin{bottom.south}{0mm,-20mm}
+    \tnjoin[dir]{e.east}{right.west} \tnjoin{right.east}{20mm,0mm}
+    % the boundary string sweeps around the bottom-right, outside the ring
+    \tnjoin[route=arc,out=270,in=0,role=operator]{right.south}{bottom.east}
+  \end{tenkzfree}
 \]
