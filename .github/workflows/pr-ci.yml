@@ -22,6 +22,10 @@ on:
       - 'scripts/check_oversized_lean_files.py'
       - 'scripts/lean_import_syntax.py'
       - 'scripts/test_lean_file_policies.py'
+      - 'scripts/lake_build_hotspots.py'
+      - 'scripts/test_lake_build_hotspots.py'
+      - 'scripts/seed_lake_build.sh'
+      - 'scripts/test_seed_lake_build.sh'
       - 'docs/ci-automation.md'
       - 'docs/CONTRIBUTING.md'
       - '.github/workflows/pr-ci.yml'
@@ -78,6 +82,10 @@ on:
       - 'scripts/check_oversized_lean_files.py'
       - 'scripts/lean_import_syntax.py'
       - 'scripts/test_lean_file_policies.py'
+      - 'scripts/lake_build_hotspots.py'
+      - 'scripts/test_lake_build_hotspots.py'
+      - 'scripts/seed_lake_build.sh'
+      - 'scripts/test_seed_lake_build.sh'
       - 'docs/ci-automation.md'
       - 'docs/CONTRIBUTING.md'
       - '.github/workflows/pr-ci.yml'
@@ -171,6 +179,10 @@ jobs:
               - 'scripts/check_oversized_lean_files.py'
               - 'scripts/lean_import_syntax.py'
               - 'scripts/test_lean_file_policies.py'
+              - 'scripts/lake_build_hotspots.py'
+              - 'scripts/test_lake_build_hotspots.py'
+              - 'scripts/seed_lake_build.sh'
+              - 'scripts/test_seed_lake_build.sh'
               - 'docs/ci-automation.md'
               - 'docs/CONTRIBUTING.md'
             blueprint:
@@ -310,6 +322,8 @@ jobs:
 
   build:
     needs: changes
+    outputs:
+      compilation-time-result: ${{ steps.compilation-time.outputs.result }}
     if: |
       !cancelled() && (
         github.event_name != 'pull_request' ||
@@ -320,6 +334,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
 
       - name: Restore Lean build cache
         uses: actions/cache/restore@v4
@@ -331,7 +347,70 @@ jobs:
 
       - uses: leanprover/lean-action@v1
         with:
+          build: false
           use-github-cache: false
+
+      - name: Build Lean project and capture timings
+        run: |
+          set -eo pipefail
+          {
+            lake build
+            lake build lint_style
+          } 2>&1 | tee "$RUNNER_TEMP/lake-build.log"
+
+      - name: Check changed Lean compilation times
+        id: compilation-time
+        if: github.event_name == 'pull_request'
+        env:
+          BASE_REF_NAME: ${{ github.event.pull_request.base.ref }}
+          BASE_REF: origin/${{ github.event.pull_request.base.ref }}
+        run: |
+          set -o pipefail
+          timing_status=0
+          archive_build_failed=false
+          git fetch --no-tags origin \
+            "+refs/heads/$BASE_REF_NAME:refs/remotes/origin/$BASE_REF_NAME" \
+            || timing_status=$?
+          if [ "$timing_status" -eq 0 ]; then
+            git -c core.quotePath=false diff \
+              --merge-base --name-only --diff-filter=AMR "$BASE_REF" -- '*.lean' \
+              > "$RUNNER_TEMP/changed-lean-files.txt" \
+              || timing_status=$?
+          fi
+          if [ "$timing_status" -eq 0 ]; then
+            while IFS= read -r path; do
+              case "$path" in
+                # Keep this aligned with EXCLUDED_TOP_LEVEL_DIRECTORIES in
+                # scripts/generate_import_aggregators.py.
+                TNLean/Archive/*.lean)
+                  module="${path%.lean}"
+                  module="${module//\//.}"
+                  lake build "$module" 2>&1 \
+                    | tee -a "$RUNNER_TEMP/lake-build.log" \
+                    || {
+                      timing_status=$?
+                      archive_build_failed=true
+                    }
+                  ;;
+              esac
+              [ "$timing_status" -eq 0 ] || break
+            done < "$RUNNER_TEMP/changed-lean-files.txt"
+          fi
+          if [ "$timing_status" -eq 0 ]; then
+            python3 scripts/lake_build_hotspots.py \
+              "$RUNNER_TEMP/lake-build.log" \
+              --changed-files-from "$RUNNER_TEMP/changed-lean-files.txt" \
+              || timing_status=$?
+          fi
+          case "$timing_status" in
+            0) result=success ;;
+            50) result=limit ;;
+            *) result=error ;;
+          esac
+          echo "result=$result" >> "$GITHUB_OUTPUT"
+          if [ "$archive_build_failed" = true ]; then
+            exit 1
+          fi
 
       - name: Run text-based style linter
         run: lake exe lint_style --github
@@ -344,6 +423,31 @@ jobs:
         with:
           path: ${{ env.BUILD_CACHE_PATHS }}
           key: tnlean-build-${{ hashFiles('lean-toolchain', 'lake-manifest.json', 'lakefile.toml') }}-${{ github.sha }}
+
+  compile-time:
+    name: Check changed Lean compilation times
+    needs: [changes, build]
+    if: |
+      !cancelled() &&
+      github.event_name == 'pull_request' &&
+      needs.build.result == 'success'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Enforce changed-module timing limit
+        env:
+          TIMING_RESULT: ${{ needs.build.outputs.compilation-time-result }}
+        run: |
+          case "$TIMING_RESULT" in
+            success) ;;
+            limit)
+              echo "::error::A changed Lean module reached the 50-second compilation limit"
+              exit 1
+              ;;
+            *)
+              echo "::error::The changed-module compilation-time checker failed"
+              exit 1
+              ;;
+          esac
 
   file-length:
     name: Check Lean module policies
@@ -371,6 +475,14 @@ jobs:
 
       - name: Test Lean module-policy checkers
         run: PYTHONPATH=scripts python3 scripts/test_lean_file_policies.py -v
+
+      - name: Test Lean compilation-time checker
+        run: python3 scripts/test_lake_build_hotspots.py
+
+      - name: Check local cache-seeding shell syntax
+        run: |
+          bash -n scripts/seed_lake_build.sh
+          bash -n scripts/test_seed_lake_build.sh
 
       # Ordinary Lean modules over 1000 lines fail. The exact root aggregator
       # exemption is accepted only while its uncommented content is import-only.
