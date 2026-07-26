@@ -186,6 +186,57 @@
     (\ref{eq:entropy_support_petz}).
 \end{lemma}
 
+
+\begin{definition}[Maximally mixed tensor reference]
+    \label{def:entropy_maximally_mixed_tensor_reference}
+    \lean{Matrix.maximallyMixedTensorReference}
+    \leanok
+    Let $d_A>0$ and let $\rho_{BC}$ be positive semidefinite. Define
+    \begin{align}
+        \sigma_{ABC}
+        &=d_A^{-1}\mathbf 1_A\otimes\rho_{BC}.
+        \label{eq:entropy_hjpw_product_reference}
+    \end{align}
+    The tensor factors are reassociated when $C$ is traced out.
+\end{definition}
+
+\begin{theorem}[Petz factorization for a maximally mixed factor]
+    \label{thm:entropy_petz_maximally_mixed_tensor}
+    \lean{Matrix.partialTraceRightPetzMap_maximallyMixedTensor}
+    \leanok
+    \uses{def:entropy_maximally_mixed_tensor_reference,
+        def:partial_trace_support_petz_map}
+    For the reference in~(\ref{eq:entropy_hjpw_product_reference}), the support
+    Petz map for $\tr_C$ factors as
+    \begin{align}
+        \mathcal R_{\sigma_{ABC}}
+        &=\operatorname{id}_A\otimes\mathcal R_{\rho_{BC}}.
+        \label{eq:entropy_hjpw_petz_factorization}
+    \end{align}
+    after the canonical identification
+    $(H_A\otimes H_B)\otimes H_C\cong
+    H_A\otimes(H_B\otimes H_C)$. This is
+    \cite[equation~(10)]{Hayden2004Structure}. It is the tensor-product
+    identity for the Petz support formula, not the Koashi--Imoto decomposition.
+\end{theorem}
+
+\begin{proof}\leanok
+    The marginal of~(\ref{eq:entropy_hjpw_product_reference}) is
+    $d_A^{-1}\mathbf 1_A\otimes\rho_B$. Functional calculus gives
+    \begin{align}
+        \sqrt{\sigma_{ABC}}
+        &=d_A^{-1/2}\mathbf 1_A\otimes\sqrt{\rho_{BC}},
+        \notag\\
+        \sigma_{AB,\mathrm{supp}}^{-1/2}
+        &=d_A^{1/2}\mathbf 1_A\otimes
+          \rho_{B,\mathrm{supp}}^{-1/2}.
+        \notag
+    \end{align}
+    The scalar factors cancel in the Petz sandwich. The identity follows first
+    for $A_0\otimes X_B$ and then for every operator by a finite sum of product
+    operators.
+\end{proof}
+
 \begin{theorem}[Complete positivity of the support Petz map]
     \label{thm:partial_trace_support_petz_map_cp}
     \lean{Matrix.partialTraceRightPetzMap_isKrausCP}
