@@ -87,8 +87,12 @@ cleanup() {
     find "$PACKAGE_LIST_FILE" -delete
   fi
   if test -n "${RESERVATION_DIR:-}" && test -d "$RESERVATION_DIR"; then
-    chmod 700 "$RESERVATION_DIR"
-    find "$RESERVATION_DIR" -depth -delete
+    reservation_inode="$(stat -f %i "$RESERVATION_DIR" 2>/dev/null || true)"
+    if test -n "$reservation_inode" &&
+      test "$reservation_inode" = "${RESERVATION_INODE:-}"; then
+      chmod 700 "$RESERVATION_DIR"
+      find "$RESERVATION_DIR" -depth -delete
+    fi
   fi
   if test -n "${STAGING_DIR:-}" && test -d "$STAGING_DIR"; then
     find "$STAGING_DIR" -depth -delete
@@ -107,6 +111,7 @@ PRIMARY_ROOT="$(
 STAGING_DIR=""
 PACKAGE_LIST_FILE=""
 RESERVATION_DIR=""
+RESERVATION_INODE=""
 DRY_RUN="false"
 
 test "$#" -ge 1 || {
@@ -166,6 +171,7 @@ fi
 
 RESERVATION_DIR="$TARGET_ROOT/.lake"
 mkdir "$RESERVATION_DIR" 2>/dev/null || die "target already has .lake"
+RESERVATION_INODE="$(stat -f %i "$RESERVATION_DIR")"
 chmod 000 "$RESERVATION_DIR"
 STAGING_DIR="$TARGET_ROOT/.lake.seed.$$"
 /bin/cp -cR "$SOURCE_ROOT/.lake/." "$STAGING_DIR"

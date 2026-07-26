@@ -53,7 +53,8 @@ creates a warning annotation on the file, and 50 seconds fails the separate
 `compile-time` job. Timings are local diagnostic evidence, not benchmarks
 comparable across machines.
 
-Lightweight tests do not run Lean:
+Lightweight tests do not run Lean. The shell integration test is macOS-only
+because it exercises the APFS clone operation, so run it manually on macOS:
 
 ```bash
 python3 scripts/test_lake_build_hotspots.py
