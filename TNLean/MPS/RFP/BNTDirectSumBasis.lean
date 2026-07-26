@@ -10,8 +10,9 @@ import TNLean.MPS.RFP.BNTOrthogonality
 /-!
 # BNT basis data for the unit-weight direct sum
 
-This file packages a BNT canonical form as a CPSV basis of normal tensors for
-its multiplicity-one unit-weight direct-sum representative.
+This file proves that the multiplicity-one unit-weight direct-sum representative
+of a BNT canonical form is in literal CPSV canonical form and that its distinct
+blocks form a CPSV basis of normal tensors.
 -/
 
 open scoped Matrix BigOperators

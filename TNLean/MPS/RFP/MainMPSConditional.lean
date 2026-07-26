@@ -12,9 +12,12 @@ import TNLean.MPS.RFP.ZCLReverse
 This file proves the corrected positive-gap implication from zero correlation
 length to nearest-neighbor commuting parent-Hamiltonian ground spaces for the
 multiplicity-one unit-weight representative.
--/
 
-open scoped Matrix
+## References
+
+* Cirac--Perez-Garcia--Schuch--Verstraete, arXiv:1606.00608, Theorem 3.10,
+  lines 534--541, and its proof in Appendix B, lines 1248--1268.
+-/
 
 namespace MPSTensor
 
