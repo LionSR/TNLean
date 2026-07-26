@@ -87,6 +87,61 @@
     underlying canonical-form data.
 \end{definition}
 
+\begin{theorem}[Canonical form admits a canonical-form-II gauge]
+    \label{thm:cpsv_cf_to_cfii_gauge}
+    \lean{MPSTensor.CPSVCanonicalFormData.exists_gaugeEquiv_canonicalFormII}
+    \lean{MPSTensor.IsCPSVCanonicalForm.exists_gaugeEquiv_canonicalFormII}
+    \leanok
+    \uses{def:cpsv_canonical_form, def:cpsv_cfii}
+    Let $A$ be a tensor in CPSV canonical form, with ambient bond dimension
+    $D$. Then there is a tensor $B$ of the same bond dimension and an
+    $G\in\GL(D,\C)$ such that, for every physical index~$i$,
+    \begin{align}
+        B^i
+         & =G A^iG^{-1}.
+    \end{align}
+    Moreover, $B$ is in canonical form II. This is the nonsingular gauge
+    assertion of \cite[Appendix~A]{Cirac2016MPDO_arXiv}.
+    % Maintainer source anchor: arXiv:1606.00608, lines 1058--1077,
+    % especially eq:II_TPLambda and eq:II_XAX at lines 1062--1077.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:cpsv_normal_tp_gauge, thm:CFII_data,
+        def:global_gauge_of_blocks}
+    Write the retained part of the canonical-form decomposition as
+    $C^i=\bigoplus_k\mu_kA_k^i$, and let
+    $U\in\C^{S\times D}$ satisfy $UU^\dagger=\Id_S$ and
+    $A^i=U^\dagger C^iU$. For each normal block, first choose its pure
+    trace-preserving Perron gauge and then diagonalize its positive definite
+    fixed point by a unitary. This gives $X_k\in\GL(D_k,\C)$ and blocks
+    $B_k$ satisfying the two canonical-form-II identities. Put
+    $X=\bigoplus_kX_k$ and extend it to the omitted zero coordinates by
+    \begin{align}
+        G
+         & =U^\dagger XU+(\Id_D-U^\dagger U),
+        \notag\\
+        G^{-1}
+         & =U^\dagger X^{-1}U+(\Id_D-U^\dagger U).
+    \end{align}
+    The identity $UU^\dagger=\Id_S$ gives $GG^{-1}=G^{-1}G=\Id_D$ and
+    \begin{align}
+        GU^\dagger
+         & =U^\dagger X,
+        \notag\\
+        UG^{-1}
+         & =X^{-1}U.
+    \end{align}
+    Therefore
+    \begin{align}
+        GA^iG^{-1}
+         & =U^\dagger X C^iX^{-1}U
+          =U^\dagger\!\left(\bigoplus_k\mu_kB_k^i\right)U,
+    \end{align}
+    which has the same ambient reconstruction and satisfies canonical form II.
+\end{proof}
+
 \begin{theorem}[Diagonal Perron normalization for an irreducible TP tensor]
     \label{thm:form_II}
     \lean{MPSTensor.exists_unitary_diag_posDef_fixedPoint_of_TP_of_isIrreducibleTensor}
