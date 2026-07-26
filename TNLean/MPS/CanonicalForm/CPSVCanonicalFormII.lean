@@ -93,12 +93,15 @@ noncomputable def coisometryExtendGL {r n : ℕ}
     simp [Q, P, Matrix.mul_assoc]
   exact ⟨G, H, hGH, hHG⟩
 
+/-- The matrix underlying the extended gauge is the retained gauge plus the
+identity on the orthogonal complement. -/
 @[simp] theorem coisometryExtendGL_val {r n : ℕ}
     (U : Matrix (Fin r) (Fin n) ℂ) (hU : U * Uᴴ = 1) (X : GL (Fin r) ℂ) :
     (coisometryExtendGL U hU X : Matrix (Fin n) (Fin n) ℂ) =
       Uᴴ * (X : Matrix (Fin r) (Fin r) ℂ) * U + (1 - Uᴴ * U) := by
   rfl
 
+/-- The inverse extended gauge is obtained by extending the inverse retained gauge. -/
 @[simp] theorem coisometryExtendGL_inv_val {r n : ℕ}
     (U : Matrix (Fin r) (Fin n) ℂ) (hU : U * Uᴴ = 1) (X : GL (Fin r) ℂ) :
     (((coisometryExtendGL U hU X)⁻¹ : GL (Fin n) ℂ) : Matrix (Fin n) (Fin n) ℂ) =
