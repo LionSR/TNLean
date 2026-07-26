@@ -19,12 +19,6 @@ blocked tensors.
 * [arXiv:1804.04964](https://arxiv.org/abs/1804.04964)
 -/
 
-namespace MPSTensor
-
-variable {d D : ℕ}
-
-end MPSTensor
-
 namespace MPSChainTensor
 
 variable {d D : ℕ}
