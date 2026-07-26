@@ -60,6 +60,29 @@ rg -q "source .lake must not be a symlink" "$TEST_ROOT/error.log"
 unlink "$REPO/.lake"
 mv "$REPO/.lake.real" "$REPO/.lake"
 
+for cache_child in build packages; do
+  mv "$REPO/.lake/$cache_child" "$REPO/.lake/$cache_child.real"
+  ln -s "$cache_child.real" "$REPO/.lake/$cache_child"
+  if "$REPO/scripts/seed_lake_build.sh" "$TARGET" --dry-run 2>"$TEST_ROOT/error.log"; then
+    echo "symlinked source cache child unexpectedly passed: $cache_child" >&2
+    exit 1
+  fi
+  rg -q "source has no regular .lake/$cache_child" "$TEST_ROOT/error.log"
+  unlink "$REPO/.lake/$cache_child"
+  mv "$REPO/.lake/$cache_child.real" "$REPO/.lake/$cache_child"
+done
+
+printf '{\n' >"$REPO/lake-manifest.json"
+printf '{\n' >"$TARGET/lake-manifest.json"
+if "$REPO/scripts/seed_lake_build.sh" "$TARGET" --dry-run 2>"$TEST_ROOT/error.log"; then
+  echo "invalid manifest unexpectedly passed" >&2
+  exit 1
+fi
+rg -q "cannot parse Git packages from lake-manifest.json" "$TEST_ROOT/error.log"
+printf '{"packages":[{"name":"example","type":"git","rev":"%s"}]}\n' \
+  "$DEPENDENCY_REV" >"$REPO/lake-manifest.json"
+cp "$REPO/lake-manifest.json" "$TARGET/lake-manifest.json"
+
 printf 'modified\n' >>"$REPO/.lake/packages/example/tracked"
 if "$REPO/scripts/seed_lake_build.sh" "$TARGET" --dry-run 2>"$TEST_ROOT/error.log"; then
   echo "modified dependency unexpectedly passed" >&2

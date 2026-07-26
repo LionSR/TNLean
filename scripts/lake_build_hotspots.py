@@ -37,17 +37,20 @@ def parse_timed_jobs(log_text: str) -> list[TimedJob]:
     return sorted(jobs, key=lambda job: (-job.seconds, job.job))
 
 
-def lean_module(path: str) -> str | None:
-    """Return the Lake module name for a Lean source path."""
+def lean_modules(path: str) -> set[str]:
+    """Return possible Lake module names for a Lean source path."""
     normalized = path.strip().replace("\\", "/")
     if not normalized.endswith(".lean"):
-        return None
-    return normalized.removesuffix(".lean").replace("/", ".")
+        return set()
+    modules = {normalized.removesuffix(".lean").replace("/", ".")}
+    if normalized.startswith("scripts/"):
+        modules.add(Path(normalized).stem)
+    return modules
 
 
 def changed_jobs(jobs: Sequence[TimedJob], paths: Sequence[str]) -> list[TimedJob]:
     """Keep jobs corresponding to changed Lean source files."""
-    modules = {module for path in paths if (module := lean_module(path)) is not None}
+    modules = {module for path in paths for module in lean_modules(path)}
     return [job for job in jobs if job.job in modules]
 
 
@@ -71,7 +74,7 @@ def render_github_annotations(
     module_paths = {
         module: path.strip()
         for path in paths
-        if (module := lean_module(path)) is not None
+        for module in lean_modules(path)
     }
     lines = []
     for job in jobs:

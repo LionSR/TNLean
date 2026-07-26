@@ -346,8 +346,11 @@ jobs:
 
       - name: Build Lean project and capture timings
         run: |
-          set -o pipefail
-          lake build 2>&1 | tee "$RUNNER_TEMP/lake-build.log"
+          set -eo pipefail
+          {
+            lake build
+            lake build lint_style
+          } 2>&1 | tee "$RUNNER_TEMP/lake-build.log"
 
       - name: Check changed Lean compilation times
         id: compilation-time
