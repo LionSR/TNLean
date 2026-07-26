@@ -85,7 +85,7 @@ physical state symmetry requires additional hypotheses.
     is traced.
 \end{definition}
 
-\begin{definition}[Periodic finite-chain overlap of PGWSVC08]
+\begin{definition}[Periodic finite-chain symmetry overlap]
     \label{def:source_periodic_string_overlap}
     \notready
     \uses{def:mpv}
@@ -140,11 +140,12 @@ physical state symmetry requires additional hypotheses.
     realizability statement.
 \end{definition}
 
-\begin{lemma}[PGWSVC08 Lemma 1: twisted spectral radius]
+\begin{lemma}[Twisted spectral-radius bound and peripheral rigidity]
     \label{lem:pgwsvc08_twisted_spectral_radius}
     \notready
     \uses{def:twisted_transfer_map}
-    Let $A$ represent a pure finitely correlated state in the canonical gauge
+    This is Lemma~1 of~\cite{PerezGarcia2008StringOrder}.  Let $A$ represent
+    a pure finitely correlated state in the canonical gauge
     $\E_A(\Id)=\Id$, $\E_A^*(\Lambda)=\Lambda$, with $\Lambda>0$ and
     $\tr(\Lambda)=1$.  For every physical unitary $u$,
     \begin{align}
@@ -199,12 +200,13 @@ physical state symmetry requires additional hypotheses.
     eigenvalue and its eigendirection.
 \end{proof}
 
-\begin{theorem}[PGWSVC08 Theorem 1: physical string-order criterion]
+\begin{theorem}[Physical endpoint criterion for string order]
     \label{thm:pgwsvc08_physical_string_order}
     \notready
     \uses{def:has_physical_string_order,
         lem:pgwsvc08_twisted_spectral_radius}
-    A pure finitely correlated state has physical string order if and only if
+    This is Theorem~1 of~\cite{PerezGarcia2008StringOrder}.  A pure finitely
+    correlated state has physical string order if and only if
     there exist a unitary $\widetilde u\ne\Id$, a unitary virtual matrix $V$,
     and physical indices $n,m$ such that
     \begin{align}
@@ -247,11 +249,12 @@ physical state symmetry requires additional hypotheses.
     phase-retaining factorization and the endpoint-realizability hypothesis.
 \end{proof}
 
-\begin{theorem}[PGWSVC08 Theorem 2: physical state symmetry]
+\begin{theorem}[Physical state symmetry and twisted spectral radius]
     \label{thm:pgwsvc08_physical_symmetry}
     \notready
-    \uses{lem:pgwsvc08_twisted_spectral_radius}
-    For a pure finitely correlated state and a unitary $u\ne\Id$, the physical
+    \uses{lem:pgwsvc08_twisted_spectral_radius, thm:psd_fp_unique}
+    This is Theorem~2 of~\cite{PerezGarcia2008StringOrder}.  For a pure
+    finitely correlated state and a unitary $u\ne\Id$, the physical
     state is invariant under $u^{\otimes N}$ on every $N$-site reduced density
     operator if and only if
     \begin{align}
@@ -265,9 +268,12 @@ physical state symmetry requires additional hypotheses.
 
 \begin{proof}
     If $\rho(\E_u)=1$, Lemma~\ref{lem:pgwsvc08_twisted_spectral_radius} gives
-    a unitary $V$ satisfying the local intertwining relation, and its proof
-    first shows that $V\Lambda V^\dagger$ is an adjoint fixed point.  Uniqueness
-    gives $V\Lambda V^\dagger=\Lambda$, equivalently
+    a unitary $V$ satisfying the local intertwining relation.  Substitution of
+    that relation into the adjoint transfer map, together with
+    $\E_A^\dagger(\Lambda)=\Lambda$, gives
+    $\E_A^\dagger(V\Lambda V^\dagger)=V\Lambda V^\dagger$.
+    This positive fixed point has trace one, so uniqueness gives
+    $V\Lambda V^\dagger=\Lambda$, equivalently
     $V^\dagger\Lambda V=\Lambda$, which yields the physical symmetry.
     Conversely, physical invariance gives, for length-independent boundary
     tensors $L,R$,

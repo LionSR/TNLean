@@ -31,7 +31,7 @@ reordering basis states rather than by a general linear map. % The statements of
     Given an on-site symmetry datum $(u, \sigma)$, the
     \emph{permutation-twisted tensor} at group element $g$ is
     \begin{align}
-        (A^{\sigma_g})^i &:= A^{\sigma(g)(i)}.
+        (A^{\sigma_g})^i & := A^{\sigma(g)(i)}.
         \label{eq:symmetry_perm_twist}
     \end{align}
     In tensor-network notation the local tensor is unchanged and only the
@@ -48,7 +48,7 @@ reordering basis states rather than by a general linear map. % The statements of
         \begin{tenkz}[physical=up]
             \tn[up=$i$]{A}
         \end{tenkz}
-        &\qquad \xrightarrow{\sigma_g} \qquad
+         & \qquad \xrightarrow{\sigma_g} \qquad
         \begin{tenkz}[physical=up]
             \tn[up=$\sigma(g)(i)$]{A}
         \end{tenkz}.
@@ -82,7 +82,7 @@ $\sigma(h)$ acts first on the index.
     If $\sigma(gh) = \sigma(g) \circ \sigma(h)$ for all $g, h \in G$,
     then
     \begin{align}
-        A^{\sigma_{gh}} &= (A^{\sigma_g})^{\sigma_h}.
+        A^{\sigma_{gh}} & = (A^{\sigma_g})^{\sigma_h}.
         \label{eq:symmetry_perm_composition}
     \end{align}
 \end{lemma}
@@ -90,8 +90,8 @@ $\sigma(h)$ acts first on the index.
 \begin{proof}\leanok\uses{def:perm_twisted_tensor}
     Expanding both sides gives
     $(A^{\sigma_{gh}})^i
-    = A^{\sigma(g)(\sigma(h)(i))}
-    = ((A^{\sigma_g})^{\sigma_h})^i$.
+        = A^{\sigma(g)(\sigma(h)(i))}
+        = ((A^{\sigma_g})^{\sigma_h})^i$.
     Diagrammatically this is just two consecutive relabellings of the same
     local tensor:
     % Formula: A^i \xrightarrow{\sigma_h} A^{\sigma(h)(i)}
@@ -107,7 +107,7 @@ $\sigma(h)$ acts first on the index.
     % physical-up=1|physical-down=0.
     \begin{align}
         \tnpic[physical=up]{\tn[up=$i$]{A}}
-        &\qquad \xrightarrow{\sigma_h} \qquad
+         & \qquad \xrightarrow{\sigma_h} \qquad
         \tnpic[physical=up]{\tn[up=$\sigma(h)(i)$]{A}}
         \qquad \xrightarrow{\sigma_g} \qquad
         \tnpic[physical=up]{\tn[up=$\sigma(g)(\sigma(h)(i))$]{A}}.
@@ -141,7 +141,7 @@ The same bookkeeping applies to a general matrix acting on the physical index.
     $s=(s_0,\ldots,s_{N-1})$, physical rotation satisfies
     \begin{align}
         \tr((A_M)^{s_0}\cdots(A_M)^{s_{N-1}})
-        &=
+         & =
         \sum_{t\in\{0,\ldots,d-1\}^N}
         \left(\prod_{n=0}^{N-1}M_{s_n,t_n}\right)
         \tr(A^{t_0}\cdots A^{t_{N-1}}).
@@ -163,11 +163,11 @@ The same bookkeeping applies to a general matrix acting on the physical index.
     \uses{def:twisted_tensor}
     For a word $b:\{0,\ldots,L-1\}\to\{0,\ldots,d-1\}$,
     \begin{align}
-      A_g^{b_0}\cdots A_g^{b_{L-1}}
-      &=\sum_{v:\{0,\ldots,L-1\}\to\{0,\ldots,d-1\}}
+        A_g^{b_0}\cdots A_g^{b_{L-1}}
+         & =\sum_{v:\{0,\ldots,L-1\}\to\{0,\ldots,d-1\}}
         \left(\prod_{k=0}^{L-1}U(g)_{b_kv_k}\right)
         A^{v_0}\cdots A^{v_{L-1}}.
-      \label{eq:app_symmetry_twisted_word}
+        \label{eq:app_symmetry_twisted_word}
     \end{align}
 \end{lemma}
 
