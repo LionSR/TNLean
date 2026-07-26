@@ -143,6 +143,37 @@ single family.
     bijection with the original block indices.
 \end{definition}
 
+\begin{theorem}[Active-block BNT existence for CPSV canonical form]
+    \label{thm:cpsv_canonical_form_bnt_existence}
+    \lean{MPSTensor.CPSVCanonicalFormData.exists_isCPSVBasisOfNormalTensors}
+    \leanok
+    \uses{def:cpsv_canonical_form, def:bnt_cpsv}
+    % Maintainer source anchors: CPSV16 prop:char-BNT, lines 271--280 and 1137--1146.
+    Every tensor with literal CPSV canonical-form data admits a finite basis of
+    normal tensors $(B_j)_{j=1}^{g}$, each of positive bond dimension. The
+    family is obtained from
+    $K_{\mathrm{act}}=\{k:\mu_k\ne0\}$ by choosing one representative from
+    each matrix-product-vector phase class of the active blocks.
+
+    This statement does not cover zero-weight listed blocks: they contribute
+    nothing to any positive-length matrix product vector. It also makes no
+    unrestricted uniqueness claim about arbitrary bases of normal tensors.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:cpsv_canonical_form_bnt_characterization,
+        def:mpv_phase_class_data, thm:cpsv_normal_mpv_phase_gauge}
+    Discard the zero-weight blocks and partition the remaining finite family by
+    matrix-product-vector phase equivalence. Choose one representative from
+    each class. The representatives are normal and have positive bond
+    dimensions. Distinct representatives are not gauge-phase equivalent. For
+    every active block, the normal-tensor phase theorem identifies its bond
+    dimension with that of its representative and realizes their phase
+    relation by a similarity and a unit-modulus scalar.
+    Theorem~\ref{thm:cpsv_canonical_form_bnt_characterization} now gives the
+    basis-of-normal-tensors conditions.
+\end{proof}
+
 \begin{definition}[BNT canonical form]%
     \label{def:sector_bnt_cf}
     \lean{MPSTensor.IsBNTCanonicalForm}

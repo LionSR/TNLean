@@ -50,7 +50,7 @@ private lemma overlap_tendsto_zero_of_not_mpvBlockPhaseEquiv
   · exfalso
     apply hNot
     refine ⟨ζ, ?_, ?_⟩
-    · exact norm_ne_zero_iff.mp (by rw [hζ]; exact one_ne_zero)
+    · exact Complex.ne_zero_of_norm_eq_one hζ
     · intro N _hN σ
       have hEq := congrArg (fun v : MPVSpace d N => v σ) (hState N)
       simpa [mpvState_apply, PiLp.smul_apply, smul_eq_mul] using hEq
@@ -388,7 +388,7 @@ private theorem isCPSVBasisOfNormalTensors_iff_active_blocks_covered_and_minimal
     · intro j k hjk hdim hUnit
       obtain ⟨X, ζ, hζnorm, hrel⟩ := hUnit
       exact hBasisDistinct j k hjk hdim
-        ⟨X, ζ, norm_ne_zero_iff.mp (by rw [hζnorm]; exact one_ne_zero), hrel⟩
+        ⟨X, ζ, Complex.ne_zero_of_norm_eq_one hζnorm, hrel⟩
   · rintro ⟨hBasisNormal, hCover, hUnitDistinct⟩
     have hDistinct : BlocksNotGaugePhaseEquiv (d := d) basis := by
       intro j k hjk hdim hGPE
@@ -404,7 +404,7 @@ private theorem isCPSVBasisOfNormalTensors_iff_active_blocks_covered_and_minimal
           (cast (congr_arg (MPSTensor d) (hdimOf k)) (basis (jOf k)))
           (blocks k) := fun k =>
       ⟨XOf k, ζOf k,
-        norm_ne_zero_iff.mp (by rw [hζnormOf k]; exact one_ne_zero), hrelOf k⟩
+        Complex.ne_zero_of_norm_eq_one (hζnormOf k), hrelOf k⟩
     have hPhase : ∀ k : Fin r,
         MPVBlockPhaseEquiv (basis (jOf k)) (blocks k) := fun k =>
       MPVBlockPhaseEquiv.of_gaugePhaseEquiv_cast
