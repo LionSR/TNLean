@@ -1,0 +1,255 @@
+\section{Stationary-boundary twist support}
+\label{sec:app_symmetry_stationary_twists}
+
+Fix an MPS tensor $A=(A^i)_{i=0}^{d-1}$, a physical matrix $u$, and a
+stationary boundary matrix $\Lambda\in\MN{D}$.  The twisted transfer map
+$\E_u$ is Definition~\ref{def:twisted_transfer_map}.  The next constructions
+are virtual-boundary functionals; they should not be confused with the
+physical endpoint correlator of Definition~\ref{def:physical_string_order_param}.
+
+\begin{definition}[Twisted companion tensor]\label{def:twisted_mixed_companion}
+    \lean{MPSTensor.twistedMixedCompanion}
+    \leanok
+    \uses{def:mps_tensor}
+    For an MPS tensor $A$ and a physical-index matrix $u$, define the
+    companion tensor $B_u$ by
+    \begin{align}
+        B_u^n
+         & := \sum_{n'=0}^{d-1} \overline{u_{n'n}}\, A^{n'}.
+        \label{eq:symmetry_companion_tensor}
+    \end{align}
+\end{definition}
+
+\begin{lemma}[Twisted transfer as a mixed transfer operator]%
+    \label{lem:twisted_transfer_eq_mixed_transfer}
+    \lean{MPSTensor.twistedTransferMap_eq_mixedTransfer}
+    \leanok
+    \uses{def:twisted_transfer_map, def:twisted_mixed_companion, def:mixed_transfer}
+    The twisted transfer map of $A$ is the mixed transfer operator of the pair
+    $(A,B_u)$:
+    \begin{align}
+        \E_u & = F_{A,B_u}.
+        \label{eq:symmetry_twisted_mixed_transfer}
+    \end{align}
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Expand both definitions and rearrange the double sum.
+\end{proof}
+
+
+\begin{lemma}[The companion tensor has the same transfer map]
+    \label{lem:transfer_map_twisted_companion}
+    \lean{MPSTensor.transferMap_twistedMixedCompanion_eq}
+    \leanok
+    \uses{def:twisted_mixed_companion, thm:kraus_rectangular_freedom}
+    If $uu^\dagger=\Id_d$, then the companion family $B_u$ satisfies
+    \begin{align}
+        \E_{B_u}(X) & =\E_A(X)
+        \qquad (X\in\MN{D}).
+        \notag
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    Expand $B_u^n=\sum_{n'}\overline{u_{n'n}}A^{n'}$.  The coefficient of
+    $A^jX(A^k)^\dagger$ in $\E_{B_u}(X)$ is
+    \begin{align}
+        \sum_n\overline{u_{jn}}u_{kn}
+         & =(uu^\dagger)_{kj}=\delta_{kj}.
+        \notag
+    \end{align}
+    All off-diagonal terms vanish and the diagonal terms sum to $\E_A(X)$.
+\end{proof}
+
+\begin{definition}[Boundary string order parameter]%
+    \label{def:string_order_boundary_param}
+    \lean{MPSTensor.stringOrderBoundaryParam}
+    \leanok
+    \uses{def:twisted_transfer_map, def:string_order_param}
+    For a boundary state $\Lambda$ and boundary matrices $X,Y \in \MN{D}$, the
+    \emph{boundary string order parameter} is
+    \begin{align}
+        R_L(u;X,Y)
+         & := \tr\!(\Lambda X \E_u^L(Y)).
+        \label{eq:symmetry_boundary_string}
+    \end{align}
+    The ordinary string order parameter is the special case $X=Y=\Id$.
+    The matrices $X,Y$ act on the virtual level. In the string correlator
+    of~\cite{PerezGarcia2008StringOrder} the string of twists is instead
+    flanked by local operators $x,y$ acting on physical sites; expanding
+    such operators in the transfer picture produces particular virtual
+    matrices, and \cite{PerezGarcia2008StringOrder} argues that for
+    injective tensors, physical operators on sufficiently many sites
+    produce every virtual matrix. The results below are stated directly
+    in this virtual-boundary form.
+    % Deviation recorded in docs/paper-gaps/pgwsvc08_string_order_virtual_boundary.tex.
+\end{definition}
+
+\begin{lemma}[String order prevents decay to zero]
+    \label{lem:not_tendsto_zero_of_hasStringOrder}
+    \lean{MPSTensor.not_tendsto_zero_of_hasStringOrder}
+    \leanok
+    \uses{def:has_string_order}
+    If $A$ has string order for $u$ with respect to a boundary state
+    $\Lambda$, then for some boundary matrices $X,Y$ the sequence
+    $R_L(u;X,Y)$ does not tend to $0$ as $L \to \infty$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{def:has_string_order}
+    A uniform lower bound $c \le \|R_L(u;X,Y)\|$ is incompatible with
+    convergence to $0$.
+\end{proof}
+
+
+\section{Kraus mixing, transfer expansions, and a common TP gauge}
+\label{sec:app_symmetry_common_tp_gauge}
+
+The spectral estimates in the main chapter compare $A$ with $B_u$.  They are
+placed in one trace-preserving gauge obtained from their common transfer map.
+
+\begin{lemma}[Unitary Kraus mixing]\label{lem:unitary_kraus_mixing}
+    \lean{MPSTensor.unitary_kraus_mixing}
+    \leanok
+    If $u$ is unitary, then replacing Kraus operators $\{A_i\}$ by
+    their unitary mixtures $\{\sum_j u_{ij} A_j\}$ preserves the
+    channel:
+    \begin{align}
+        \sum_i \left(\sum_j u_{ij} A_j\right)\, Y
+        \left(\sum_j u_{ij} A_j\right)^\dagger
+         & =
+        \sum_i A_i\, Y\, A_i^\dagger.
+        \label{eq:symmetry_unitary_kraus_mixing}
+    \end{align}
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{thm:kraus_same_map_of_unitary_combination}
+    This is exactly the usual invariance of a Kraus decomposition under a
+    unitary change of Kraus operators; see
+    Theorem~\ref{thm:kraus_same_map_of_unitary_combination}.
+\end{proof}
+
+
+\begin{definition}[Common trace-preserving gauge for a twisted pair]
+    \label{def:twisted_tp_gauge_setup}
+    \lean{MPSTensor.TwistedTPGaugeSetup}
+    \leanok
+    \uses{def:twisted_mixed_companion}
+    A \emph{common trace-preserving gauge setup} for $(A,u)$ consists of the
+    companion $B_u$, a positive definite fixed point $\sigma$ of the adjoint
+    transfer map, its positive square root $S=\sigma^{1/2}$, and the gauged
+    tensors
+    \begin{align}
+        A'^i & =SA^iS^{-1}, & B'^i & =SB_u^iS^{-1},
+        \notag
+    \end{align}
+    together with
+    $\sum_i(A'^i)^\dagger A'^i=\sum_i(B'^i)^\dagger B'^i=\Id$ and
+    irreducibility of both gauged tensors, together with the inverse and
+    adjoint identities for $S$ used in these calculations.
+\end{definition}
+
+\begin{theorem}[Construction of the common trace-preserving gauge]
+    \label{thm:twisted_tp_gauge_setup}
+    \lean{MPSTensor.twistedTPGaugeSetup}
+    \leanok
+    \uses{def:twisted_tp_gauge_setup, lem:transfer_map_twisted_companion,
+        thm:psd_fp_unique}
+    Let $D>0$.  If $A$ is injective, $uu^\dagger=\Id_d$, and
+    $\E_A(\Id)=\Id$, then $(A,u)$ admits the setup of
+    Definition~\ref{def:twisted_tp_gauge_setup}.
+\end{theorem}
+
+\begin{proof}\leanok
+    Injectivity makes $\E_A$ irreducible.  The adjoint channel therefore has a
+    positive definite stationary state $\sigma$.  By
+    Lemma~\ref{lem:transfer_map_twisted_companion}, $A$ and $B_u$ have the same
+    transfer map, hence the same adjoint fixed point.  Put $S=\sigma^{1/2}$.
+    Positivity makes $S$ invertible, and direct substitution gives
+    \begin{align}
+        \sum_i(SA^iS^{-1})^\dagger(SA^iS^{-1})     & =\Id, \\
+        \sum_i(SB_u^iS^{-1})^\dagger(SB_u^iS^{-1}) & =\Id.
+        \notag
+    \end{align}
+    Similarity preserves irreducibility, so the two gauged families have all
+    the asserted properties.
+\end{proof}
+
+\begin{lemma}[Twisted eigenvalues survive the common gauge]
+    \label{lem:twisted_tp_gauge_has_eigenvalue}
+    \lean{MPSTensor.twistedTPGaugeSetup_hasEigenvalue}
+    \leanok
+    \uses{def:twisted_tp_gauge_setup,
+        lem:twisted_transfer_eq_mixed_transfer}
+    If $V\ne0$ and $\E_u(V)=\lambda V$, then $\lambda$ is an eigenvalue of the
+    mixed transfer map $F_{A',B'}$ in any common trace-preserving gauge setup.
+\end{lemma}
+
+\begin{proof}\leanok
+    By Lemma~\ref{lem:twisted_transfer_eq_mixed_transfer}, the original
+    equation is $F_{A,B_u}(V)=\lambda V$.  Multiplying on the left and right by
+    $S$ and using $S^\dagger=S$ gives
+    \begin{align}
+        F_{A',B'}(SVS) & =\lambda SVS.
+        \notag
+    \end{align}
+    Since $S$ is invertible, $SVS\ne0$.
+\end{proof}
+
+\section{Boundary and limit support}
+\label{sec:app_symmetry_boundary_limits}
+
+\begin{lemma}[Spectral radius $<1$ forces boundary-string decay]%
+    \label{lem:boundary_string_order_tendsto_zero}
+    \lean{MPSTensor.stringOrderBoundaryParam_tendsto_zero_of_spectralRadius_lt_one}
+    \leanok
+    \uses{def:string_order_boundary_param, def:twisted_transfer_map}
+    If $\rho(\E_u) < 1$, then, as $L \to \infty$, for all boundary matrices
+    $X,Y,\Lambda \in \MN{D}$ one has
+    $R_L(u;X,Y) \longrightarrow 0$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    In finite dimension, $\rho(\E_u) < 1$ implies $\E_u^L \to 0$ in operator
+    norm. Composing with the fixed trace pairing
+    $Z \mapsto \tr(\Lambda X Z)$ gives the stated scalar convergence.
+\end{proof}
+
+\section{Routine universality corollary}
+\label{sec:app_symmetry_universality}
+
+The following consequence uses only the virtual MPV-family symmetry predicate
+and the canonical fixed-point hypotheses from the main chapter.
+
+\begin{theorem}[Virtual-boundary nondecay agrees for two injective MPV-symmetric tensors]%
+    \label{thm:has_string_order_iff_of_symmetric_injective}
+    \lean{MPSTensor.hasStringOrder_iff_of_symmetric_injective}
+    \leanok
+    \uses{def:has_string_order, def:on_site_symmetric, def:injective}
+    If $A$ and $B$ are injective, both on-site symmetric under a
+    unitary representation $U$, and if $\E_A(\Id)=\Id$,
+    $\E_B(\Id)=\Id$, $\Lambda_A$ and $\Lambda_B$ are positive
+    definite, $\tr(\Lambda_A)=1$, $\tr(\Lambda_B)=1$,
+    $\E_A^\dagger(\Lambda_A)=\Lambda_A$, and
+    $\E_B^\dagger(\Lambda_B)=\Lambda_B$, then for every $g \in G$,
+    string order exists for $A$ with twist $U(g)$ if and only if it
+    exists for~$B$. In particular, since
+    Definition~\ref{def:is_same_spt_phase} implies on-site symmetry
+    for both tensors, this theorem applies to tensors in the same SPT
+    phase; it applies equally to symmetric tensors in different SPT
+    phases.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:has_string_order_of_symmetric_injective}
+    Both directions follow from
+    Theorem~\ref{thm:has_string_order_of_symmetric_injective}, which
+    shows that string order holds universally for injective symmetric
+    tensors with canonical normalisations.
+\end{proof}

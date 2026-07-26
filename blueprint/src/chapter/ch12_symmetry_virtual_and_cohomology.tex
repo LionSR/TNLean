@@ -1,59 +1,5 @@
-\section{Physical Symmetries Give Virtual Gauges}
-
-\begin{definition}[Physical-index rotation]%
-    \label{def:rotate_physical}
-    \lean{MPSTensor.rotatePhysical}
-    \leanok
-    \uses{def:mps_tensor}
-    Given a matrix $M \in \MN{d}$ and an MPS tensor~$A$,
-    the \emph{physical-index rotation} is the tensor
-    $(A_M)^i := \sum_j M_{ij}\, A^j$.
-    When the matrix is a unitary $u$, the rotation is written $A_u$.
-\end{definition}
-
-\begin{lemma}[Matrix product vector under physical rotation]
-    \label{lem:mpv_rotate_physical}
-    \lean{MPSTensor.mpv_rotatePhysical}
-    \leanok
-    \uses{def:rotate_physical, def:mpv}
-    For a length-$N$ physical configuration
-    $s=(s_0,\ldots,s_{N-1})$, physical rotation satisfies
-    \begin{align}
-        \tr((A_M)^{s_0}\cdots(A_M)^{s_{N-1}})
-        &=
-        \sum_{t\in\{0,\ldots,d-1\}^N}
-        \left(\prod_{n=0}^{N-1}M_{s_n,t_n}\right)
-        \tr(A^{t_0}\cdots A^{t_{N-1}}).
-        \label{eq:symmetry_mpv_rotation}
-    \end{align}
-\end{lemma}
-
-\begin{proof}\leanok
-    Substitute $(A_M)^{s_n}=\sum_{t_n}M_{s_n,t_n}A^{t_n}$ at each
-    site, distribute the finite sums through the ordered matrix product, and
-    use linearity of the trace to obtain
-    (\ref{eq:symmetry_mpv_rotation}).
-\end{proof}
-
-\begin{corollary}[Periodic symmetry yields gauge equivalence up to a root of unity]%
-    \label{cor:symmetry_periodic_assembly}
-    \lean{MPSTensor.zGaugeEquiv_of_isIrreducibleForm_sameMPV_rotatePhysical}
-    \leanok
-    \uses{def:rotate_physical, def:same_mpv}
-    Suppose that for any two tensors in irreducible form~II with the same MPV
-    family there is $m > 0$ making them gauge equivalent up to an $m$-th root of
-    unity. Let $A$ be in irreducible form~II and
-    let $M$ be a matrix such that $B := A_M$ is also in irreducible form~II and
-    $\mc{V}(A) = \mc{V}(B)$. Then there is $m > 0$ such that $A$ and~$B$ are
-    gauge equivalent up to an $m$-th root of unity.
-\end{corollary}
-
-\begin{proof}\leanok
-    Apply the assumed equivalence to $A$ and $B$, which are in irreducible
-    form~II with $\mc{V}(A) = \mc{V}(B)$.
-\end{proof}
-
-\section{Virtual Representation Theorem}\label{sec:injective_symmetry_cocycle}
+\section{Virtual Local Covariance and Projective Bond Actions}
+\label{sec:injective_symmetry_cocycle}
 
 With a full group of on-site symmetries (rather than just a single
 unitary), the resulting gauges determine a projective representation
@@ -68,18 +14,22 @@ on the bond space.
     $i \in \{0,\ldots,d{-}1\}$, by
     \begin{align}
         \widetilde{A}_g^i
-        &:=\sum_{j=0}^{d-1}U(g)_{ij}\,A^j.
+         & :=\sum_{j=0}^{d-1}U(g)_{ij}\,A^j.
         \label{eq:symmetry_twisted_tensor}
     \end{align}
 \end{definition}
 
-\begin{definition}[On-site symmetry]\label{def:on_site_symmetric}
+\begin{definition}[MPV-family invariance under physical twists]\label{def:on_site_symmetric}
     \lean{MPSTensor.IsOnSiteSymmetric}
     \leanok
     \uses{def:twisted_tensor, def:same_mpv}
-    A tensor $A$ is \emph{on-site symmetric} under a group
-    representation $U : G \to \GL_{d}(\C)$ if
-    $\mc{V}(A) = \mc{V}(\widetilde{A}_g)$ for every $g \in G$.
+    The predicate called on-site symmetry requires
+    $\mc{V}(A)=\mc{V}(\widetilde A_g)$ for every $g\in G$, where
+    $U:G\to\GL_d(\C)$ acts on the physical index.  This is equality of
+    periodic MPV families and is the hypothesis used to construct virtual
+    local gauges.  It is not, by itself, the source notion that every reduced
+    density operator of an infinite physical state is invariant under
+    $U(g)^{\otimes N}$.
 \end{definition}
 
 \begin{lemma}[Functoriality of twisting]\label{lem:twisted_tensor_mul}
@@ -89,7 +39,7 @@ on the bond space.
     The twisted tensor satisfies the composition law
     \begin{align}
         \widetilde{A}_{gh}
-        &=\widetilde{(\widetilde{A}_h)}_g,
+         & =\widetilde{(\widetilde{A}_h)}_g,
         \label{eq:symmetry_twist_composition}
     \end{align}
     i.e.\ twisting by $gh$ is the same as first twisting by~$h$
@@ -114,6 +64,59 @@ on the bond space.
     Since $U(1)=\Id_d$, each component in
     (\ref{eq:symmetry_twisted_tensor}) reduces to
     $\sum_j\delta_{ij}\,A^j=A^i$.
+\end{proof}
+
+\begin{definition}[Blocked on-site action]
+    \label{def:block_kron_action}
+    \lean{MPSTensor.blockKronAction}
+    \leanok
+    \uses{def:twisted_tensor}
+    For a block of $L$ physical sites, the induced action is the
+    Kronecker-power representation
+    \begin{align}
+        U^{[L]}(g) & :=U(g)^{\otimes L}
+        \in\GL_{d^L}(\C).
+        \notag
+    \end{align}
+\end{definition}
+
+\begin{lemma}[Twisting commutes with blocking]
+    \label{lem:twisted_tensor_block_comm}
+    \lean{MPSTensor.twistedTensor_blockTensor_comm}
+    \leanok
+    \uses{def:block_kron_action, def:blocked_tensor, def:twisted_tensor,
+        lem:eval_word_twisted_tensor}
+    For every $g\in G$ and $L\ge0$,
+    \begin{align}
+        \widetilde{(A^{[L]})}^{\,U^{[L]}}_g
+         & =(\widetilde A_g)^{[L]}.
+        \label{eq:symmetry_twist_block_comm}
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    Decode a blocked physical index as a word of length $L$ and use the word
+    expansion from Lemma~\ref{lem:eval_word_twisted_tensor}.  Reindexing the
+    sum over words by the blocked index gives exactly the Kronecker-product
+    matrix coefficients on the left of
+    (\ref{eq:symmetry_twist_block_comm}).
+\end{proof}
+
+\begin{theorem}[MPV-family symmetry is preserved by blocking]
+    \label{thm:on_site_symmetric_block_tensor}
+    \lean{MPSTensor.isOnSiteSymmetric_blockTensor}
+    \leanok
+    \uses{def:on_site_symmetric, def:block_kron_action,
+        lem:twisted_tensor_block_comm}
+    If $A$ has MPV-family invariance under $U$, then $A^{[L]}$ has
+    MPV-family invariance under $U^{[L]}$ for every $L$.
+\end{theorem}
+
+\begin{proof}\leanok
+    Equation~(\ref{eq:symmetry_twist_block_comm}) identifies the twisted
+    blocked tensor with the blocking of the twisted tensor.  Equality of MPV
+    families is preserved by blocking, so the defining equality for $A$
+    yields the defining equality for $A^{[L]}$.
 \end{proof}
 
 \begin{lemma}[Symmetric twists are gauge equivalent]%
@@ -157,7 +160,7 @@ on the bond space.
     in the single-block case) such that, for every physical index~$i$,
     \begin{align}
         \widetilde{A}_g^{\,i}
-        &=\varphi(g)\,X(g)\,A^i\,X(g)^{-1}.
+         & =\varphi(g)\,X(g)\,A^i\,X(g)^{-1}.
         \label{eq:symmetry_virtual_equation}
     \end{align}
 \end{theorem}
@@ -252,7 +255,7 @@ on the bond space.
     $g,h \in G$,
     \begin{align}
         \rho(g) \rho(h)
-        &=\omega(g,h) \rho(gh).
+         & =\omega(g,h) \rho(gh).
         \label{eq:symmetry_projective_law}
     \end{align}
 \end{definition}
@@ -266,7 +269,7 @@ on the bond space.
     and $D > 0$, then $\omega$ satisfies the 2-cocycle identity
     \begin{align}
         \omega(g,h) \omega(gh,k)
-        &=\omega(g,hk) \omega(h,k).
+         & =\omega(g,hk) \omega(h,k).
         \label{eq:symmetry_cocycle_identity}
     \end{align}
 \end{lemma}
@@ -296,7 +299,7 @@ on the bond space.
         \item a map $\rho : G \to \GL_{D}(\C)$ satisfying, for all $g,h \in G$,
               \begin{align}
                   \rho(g) \rho(h)
-                  &=\omega(g,h) \rho(gh).
+                   & =\omega(g,h) \rho(gh).
                   \notag
               \end{align}
     \end{enumerate}
@@ -304,13 +307,13 @@ on the bond space.
     one has, for every $g \in G$ and $i \in \{0,\ldots,d{-}1\}$,
     \begin{align}
         \widetilde{A}_g^i
-        &=X(g)\,A^i\,X(g)^{-1}.
+         & =X(g)\,A^i\,X(g)^{-1}.
         \label{eq:symmetry_virtual_gauge}
     \end{align}
     In tensor-network notation, for each fixed~$g$ this is the local gauge
     relation
     \begin{align}
-        &
+         &
         % Formula/source: Papers/0802.0447/StringOrder-v10.tex,
         % lines 328--349, gives the unitary u,V specialization
         % (V^\dagger = V^{-1}); the surrounding fundamental theorem supplies
@@ -349,7 +352,7 @@ on the bond space.
     $\omega'(h,g)$ such that
     \begin{align}
         X(h)\,X(g)
-        &=\omega'(h,g)\,X(gh).
+         & =\omega'(h,g)\,X(gh).
         \label{eq:symmetry_gauge_factor}
     \end{align}
 
@@ -369,7 +372,7 @@ on the bond space.
     2-cocycle identity for all $g,h,k \in G$:
     \begin{align}
         \omega(g,h) \omega(gh,k)
-        &=\omega(g,hk) \omega(h,k).
+         & =\omega(g,hk) \omega(h,k).
         \notag
     \end{align}
 \end{corollary}
@@ -397,7 +400,7 @@ make this precise and establish the quotient $H^2(G,\C^{\times})$.
     $\varphi \colon G \to \C^{\times}$ such that, for all $g,h \in G$,
     \begin{align}
         \omega(g,h)
-        &=\varphi(g)\varphi(h)\varphi(gh)^{-1}.
+         & =\varphi(g)\varphi(h)\varphi(gh)^{-1}.
         \label{eq:symmetry_coboundary}
     \end{align}
 \end{definition}
@@ -411,41 +414,10 @@ make this precise and establish the quotient $H^2(G,\C^{\times})$.
     $\varphi \colon G \to \C^{\times}$ such that, for all $g,h \in G$,
     \begin{align}
         \omega_1(g,h)
-        &=\varphi(g)\varphi(h)\varphi(gh)^{-1}\omega_2(g,h).
+         & =\varphi(g)\varphi(h)\varphi(gh)^{-1}\omega_2(g,h).
         \label{eq:symmetry_cohomologous}
     \end{align}
 \end{definition}
-
-\begin{theorem}[Cohomology relation is an equivalence relation]%
-    \label{thm:cohomologous_equivalence}
-    \lean{TNLean.Algebra.ScalarCocycle.CohomologousTo.equivalence}
-    \leanok
-    \uses{def:cohomologous_to}
-    The relation ``cohomologous to'' is reflexive, symmetric, and
-    transitive on the set of scalar 2-cocycles.
-\end{theorem}
-
-\begin{proof}\leanok\uses{def:cohomologous_to}
-    Reflexivity: take $\varphi=1$.
-    Symmetry: replace $\varphi$ by $\varphi^{-1}$.
-    Transitivity: compose the witnesses $\varphi$ and $\psi$ pointwise
-    in (\ref{eq:symmetry_cohomologous}).
-\end{proof}
-
-\begin{lemma}[Coboundary iff cohomologous to the trivial cocycle]%
-    \label{lem:coboundary_iff_cohomologous_one}
-    \lean{TNLean.Algebra.ScalarCocycle.isCoboundary_iff_cohomologousTo_one}
-    \leanok
-    \uses{def:is_coboundary, def:cohomologous_to}
-    A cocycle $\omega$ is a coboundary if and only if
-    $\omega \sim \Id$, where $\Id(g,h)=1$ for all $g,h$.
-\end{lemma}
-
-\begin{proof}\leanok\uses{def:is_coboundary, def:cohomologous_to}
-    Both directions follow by absorbing or introducing the factor
-    $\Id(g,h)=1$ via $x\cdot 1=x$ in
-    (\ref{eq:symmetry_cohomologous}).
-\end{proof}
 
 \begin{theorem}[Gauge independence of the cocycle class]%
     \label{thm:cocycle_gauge_independence}
@@ -463,8 +435,11 @@ make this precise and establish the quotient $H^2(G,\C^{\times})$.
 \begin{proof}\leanok
     \uses{thm:virtual_rep_injective, lem:gauge_unique_up_to_scalar,
         def:cohomologous_to}
-    For each $g$, gauge uniqueness gives a nonzero scalar $f(g)$ with
-    $X_2(g^{-1})=f(g)\,X_1(g^{-1})$.
+    Gauge uniqueness gives nonzero scalars $f(k)$ with
+    $X_2(k)=f(k)\,X_1(k)$ for every physical twist $k$.  Since the
+    projective representation is $\rho_a(g)=X_a(g^{-1})$, setting
+    $k=g^{-1}$ gives
+    $\rho_2(g)=f(g^{-1})\rho_1(g)$.
     Equivalently, for each fixed $g$ the two local gauges
     \begin{tenkzequation}
         % Formula/source: Papers/0802.0447/StringOrder-v10.tex,
@@ -501,7 +476,8 @@ make this precise and establish the quotient $H^2(G,\C^{\times})$.
     yields
     \begin{align}
         \omega_2(g,h)
-        &=f(g)\,f(h)\,f(gh)^{-1}\omega_1(g,h).
+         & =f(g^{-1})\,f(h^{-1})\,f((gh)^{-1})^{-1}
+        \omega_1(g,h).
         \label{eq:symmetry_gauge_coboundary}
     \end{align}
     Thus, (\ref{eq:symmetry_gauge_coboundary}) has precisely the form
@@ -515,10 +491,27 @@ make this precise and establish the quotient $H^2(G,\C^{\times})$.
     \emph{2-cocycle} if it satisfies, for all $g,h,k \in G$,
     \begin{align}
         \omega(g,h) \omega(gh,k)
-        &=\omega(g,hk) \omega(h,k).
+         & =\omega(g,hk) \omega(h,k).
         \notag
     \end{align}
 \end{definition}
+
+\begin{theorem}[A projective factor system is a cocycle]
+    \label{thm:is_cocycle_of_projective_rep}
+    \lean{TNLean.Algebra.ScalarCocycle.isCocycle_of_projRep}
+    \leanok
+    \uses{def:is_cocycle, def:projective_rep, lem:cocycle_of_assoc}
+    If $D>0$ and $\rho:G\to\GL_D(\C)$ obeys
+    $\rho(g)\rho(h)=\omega(g,h)\rho(gh)$, then $\omega$ is a
+    $\C^\times$-valued $2$-cocycle.
+\end{theorem}
+
+\begin{proof}\leanok
+    Associativity gives the scalar identity of
+    Lemma~\ref{lem:cocycle_of_assoc}.  Because the inclusion
+    $\C^\times\hookrightarrow\C$ is injective, the same identity holds in
+    $\C^\times$, which is precisely Definition~\ref{def:is_cocycle}.
+\end{proof}
 
 \begin{definition}[Second cohomology quotient]\label{def:h2_cx}
     \lean{TNLean.Algebra.H2}
@@ -527,21 +520,23 @@ make this precise and establish the quotient $H^2(G,\C^{\times})$.
     The second cohomology set is the quotient
     \begin{align}
         H^2(G,\C^{\times})
-        &:=Z^2(G,\C^{\times})/{\sim},
+         & :=Z^2(G,\C^{\times})/{\sim},
         \label{eq:symmetry_h2_quotient}
     \end{align}
     where $\sim$ is the coboundary-equivalence relation.
 \end{definition}
 
-\begin{definition}[Projective equivalence]\label{def:projectively_equivalent}
+\begin{definition}[Agreement of factor-system cohomology classes]\label{def:projectively_equivalent}
     \lean{TNLean.Algebra.ProjectivelyEquivalent}
     \leanok
     \uses{def:projective_rep, def:cohomologous_to}
-    Two projective representations are \emph{projectively equivalent}
-    when their factor systems are cohomologous.
+    The relation called projective equivalence holds precisely when
+    the two factor systems are cohomologous.  It compares their classes in
+    $H^2(G,\C^\times)$; it does not assert an intertwining equivalence between
+    the underlying representation spaces.
 \end{definition}
 
-\begin{theorem}[Projective equivalence and cohomologous cocycles]%
+\begin{theorem}[Factor-system class agreement]%
     \label{thm:projrep_equiv_iff_cohomologous}
     \lean{TNLean.Algebra.projRep_equiv_iff_cohomologous}
     \leanok
@@ -550,7 +545,7 @@ make this precise and establish the quotient $H^2(G,\C^{\times})$.
     $\omega_1,\omega_2$. Then
     \begin{align}
         \rho_1 \sim_{\mathrm{proj}} \rho_2
-        &\iff \omega_1 \sim \omega_2.
+         & \iff \omega_1 \sim \omega_2.
         \label{eq:symmetry_projective_equivalence}
     \end{align}
 \end{theorem}
@@ -562,9 +557,9 @@ make this precise and establish the quotient $H^2(G,\C^{\times})$.
 
 \subsection{Non-triviality via the commutator phase}
 
-For an abelian symmetry group the cohomology class of a factor system is
-detected by an antisymmetric pairing, which gives a computable test for
-non-triviality.
+For an abelian symmetry group, the antisymmetric commutator phase is invariant
+under a change of cocycle representative.  A nonunit value therefore witnesses
+non-triviality; no converse is asserted here.
 
 \begin{definition}[Commutator phase]\label{def:comm_phase}
     \lean{TNLean.Algebra.ScalarCocycle.commPhase}
@@ -590,11 +585,11 @@ non-triviality.
     $gh=hg$ and the commutativity of $\C^{\times}$ gives
     \begin{align}
         \beta_{\omega_1}(g,h)
-        &=
+         & =
         \frac{\varphi(g)\varphi(h)\varphi(gh)^{-1} \omega_2(g,h)}
-             {\varphi(h)\varphi(g)\varphi(hg)^{-1} \omega_2(h,g)}
-        \notag\\
-        &=\frac{\omega_2(g,h)}{\omega_2(h,g)}
+        {\varphi(h)\varphi(g)\varphi(hg)^{-1} \omega_2(h,g)}
+        \notag                                  \\
+         & =\frac{\omega_2(g,h)}{\omega_2(h,g)}
         =\beta_{\omega_2}(g,h),
         \label{eq:symmetry_comm_phase_invariance}
     \end{align}

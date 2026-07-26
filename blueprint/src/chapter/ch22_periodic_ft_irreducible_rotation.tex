@@ -55,9 +55,10 @@
     instance, the antiferromagnetic example has period~$2$.
 \end{remark}
 
-\noindent Physical-index rotation was introduced in
-Definition~\ref{def:rotate_physical} (Chapter~\ref{ch:symmetry}).
-The following compatibility theorems are proved in the present chapter.
+Physical-index rotation and its MPV expansion are recorded in
+Section~\ref{sec:app_symmetry_permutations}.  The compatibility results below
+supply the physical action used in the periodic analysis
+of~\cite{DeLasCuevas2017Irreducible}.
 
 \begin{theorem}[Transfer map preserved by physical rotation]%
     \label{thm:transfer_map_rotate_physical}
@@ -181,4 +182,29 @@ The following compatibility theorems are proved in the present chapter.
     transfers via Theorem~\ref{thm:same_mpv_rotate_physical}, and
     block-diagonal compatibility follows from
     Theorem~\ref{thm:rotate_physical_blocks}.
+\end{proof}
+
+\begin{corollary}[Periodic symmetry yields finite-order $Z$-gauge equivalence]%
+    \label{cor:symmetry_periodic_assembly}
+    \lean{MPSTensor.zGaugeEquiv_of_isIrreducibleForm_sameMPV_rotatePhysical}
+    \leanok
+    \uses{def:rotate_physical, def:same_mpv, def:z_gauge_equiv}
+    Assume the periodic equal-case theorem: tensors in irreducible form~II
+    with equal MPV families are $Z$-gauge equivalent.  Let $A$ be in
+    irreducible form~II, and suppose $B:=A_M$ is also in irreducible form~II
+    with $\mc V(A)=\mc V(B)$.  Then there are $m>0$, an invertible matrix $Y$,
+    and a matrix $Z\in\MN D$ such that
+    \begin{align}
+       [Z,A^i]&=0,& Z^m&=\Id_D,& ZA^i&=YB^iY^{-1}
+       \qquad\text{for every $i$}.
+       \notag
+    \end{align}
+    Thus $A$ and $B$ are related by a genuine $\mathbb Z_m$ virtual gauge,
+    not merely by a scalar root of unity.
+\end{corollary}
+
+\begin{proof}\leanok
+    Apply the assumed periodic equal-case theorem to $A$ and $B$.  Its
+    $Z$-gauge conclusion supplies $m$, $Y$, and $Z$ with the three displayed
+    identities by Definition~\ref{def:z_gauge_equiv}.
 \end{proof}

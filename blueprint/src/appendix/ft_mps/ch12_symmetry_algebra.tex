@@ -1,0 +1,330 @@
+The physical index set is $I=\{0,\ldots,d-1\}$, the bond algebra is
+$\MN{D}$, and $G$ denotes a group.  All sums below are finite.  The first
+section treats permutation actions on $I$; the second isolates scalar
+uniqueness for two gauges of the same injective tensor; the third records the
+elementary factor-system bookkeeping used in the cohomology discussion of
+Chapter~\ref{ch:symmetry}.
+
+\section{Permutation reindexing and identity bookkeeping}
+\label{sec:app_symmetry_permutations}
+
+The linear-combination twist $\widetilde{A}_g^i = \sum_j U(g)_{ij}\, A^j$
+is the standard form used in the virtual representation theorem.
+The following alternative formulation replaces the matrix action by a
+permutation of the physical index; it is useful for symmetries that act by
+reordering basis states rather than by a general linear map. % The statements of this section are auxiliary constructions not
+% directly sourced from~\cite{PerezGarcia2008StringOrder}.
+
+\begin{definition}[Permutation symmetry datum]\label{def:on_site_symmetry_perm}
+    \lean{MPSTensor.OnSiteSymmetry}
+    \leanok
+    An \emph{on-site symmetry datum} for a group $G$ on a physical
+    space of dimension $d$ consists of a matrix-valued map
+    $u : G \to \MN{d}$ and a physical-index action
+    $\sigma : G \to \mathrm{End}(\{0,\ldots,d{-}1\})$.
+\end{definition}
+
+\begin{definition}[Permutation-twisted tensor]\label{def:perm_twisted_tensor}
+    \lean{MPSTensor.TwistedTensor}
+    \leanok
+    \uses{def:on_site_symmetry_perm, def:mps_tensor}
+    Given an on-site symmetry datum $(u, \sigma)$, the
+    \emph{permutation-twisted tensor} at group element $g$ is
+    \begin{align}
+        (A^{\sigma_g})^i & := A^{\sigma(g)(i)}.
+        \label{eq:symmetry_perm_twist}
+    \end{align}
+    In tensor-network notation the local tensor is unchanged and only the
+    physical leg is relabelled:
+    % Formula: (A^{\sigma_g})^i = A^{\sigma(g)(i)}.
+    % Source verdict: the adjacent defining identity is the source; there is
+    % no dedicated source figure.
+    % Ink-to-index: i and \sigma(g)(i) label the free upper physical stub of
+    % the same one-site tensor A; the relabelling arrow carries no index.
+    % Contractions: none.
+    % Paired boundary: boundary|virtual-west=1|virtual-east=1|
+    % physical-up=1|physical-down=0.
+    \begin{align}
+        \begin{tenkz}[physical=up]
+            \tn[up=$i$]{A}
+        \end{tenkz}
+         & \qquad \xrightarrow{\sigma_g} \qquad
+        \begin{tenkz}[physical=up]
+            \tn[up=$\sigma(g)(i)$]{A}
+        \end{tenkz}.
+        \notag
+    \end{align}
+\end{definition}
+
+\begin{lemma}[Identity permutation twist]\label{lem:perm_twisted_one}
+    \lean{MPSTensor.TwistedTensor_one}
+    \leanok
+    \uses{def:perm_twisted_tensor}
+    If $\sigma(1) = \id$, then $(A^{\sigma_1})^i = A^i$ for all~$i$.
+\end{lemma}
+
+\begin{proof}\leanok\uses{def:perm_twisted_tensor}
+    The claim follows from $\sigma(1)(i) = i$ for all~$i$.
+\end{proof}
+
+\noindent\emph{Composition order.}
+The linear-combination twist (Lemma~\ref{lem:twisted_tensor_mul}) composes as
+$\widetilde{(\widetilde{A}_h)}_g = \widetilde{A}_{gh}$, applying $h$ first
+then~$g$. The permutation twist below uses the same left-action convention
+$\sigma(gh) = \sigma(g) \circ \sigma(h)$, so
+$(A^{\sigma_g})^{\sigma_h} = A^{\sigma_{gh}}$; the inner permutation
+$\sigma(h)$ acts first on the index.
+
+\begin{lemma}[Composition of permutation twists]\label{lem:perm_twisted_mul}
+    \lean{MPSTensor.TwistedTensor_mul}
+    \leanok
+    \uses{def:perm_twisted_tensor}
+    If $\sigma(gh) = \sigma(g) \circ \sigma(h)$ for all $g, h \in G$,
+    then
+    \begin{align}
+        A^{\sigma_{gh}} & = (A^{\sigma_g})^{\sigma_h}.
+        \label{eq:symmetry_perm_composition}
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok\uses{def:perm_twisted_tensor}
+    Expanding both sides gives
+    $(A^{\sigma_{gh}})^i
+        = A^{\sigma(g)(\sigma(h)(i))}
+        = ((A^{\sigma_g})^{\sigma_h})^i$.
+    Diagrammatically this is just two consecutive relabellings of the same
+    local tensor:
+    % Formula: A^i \xrightarrow{\sigma_h} A^{\sigma(h)(i)}
+    %   \xrightarrow{\sigma_g} A^{\sigma(g)(\sigma(h)(i))}.
+    % Source verdict: the adjacent componentwise equality is the source;
+    % there is no dedicated source figure.
+    % Ink-to-index: the three upper stubs carry, from left to right, the free
+    % physical indices i, \sigma(h)(i), and \sigma(g)(\sigma(h)(i)).  The two
+    % arrows record relabelling by \sigma_h and then \sigma_g; they are not
+    % tensor-network contractions.
+    % Contractions: none in any panel.
+    % Common boundary: boundary|virtual-west=1|virtual-east=1|
+    % physical-up=1|physical-down=0.
+    \begin{align}
+        \tnpic[physical=up]{\tn[up=$i$]{A}}
+         & \qquad \xrightarrow{\sigma_h} \qquad
+        \tnpic[physical=up]{\tn[up=$\sigma(h)(i)$]{A}}
+        \qquad \xrightarrow{\sigma_g} \qquad
+        \tnpic[physical=up]{\tn[up=$\sigma(g)(\sigma(h)(i))$]{A}}.
+        \notag
+    \end{align}
+\end{proof}
+
+
+
+\subsection{Linear physical-index rotations}
+
+The same bookkeeping applies to a general matrix acting on the physical index.
+
+\begin{definition}[Physical-index rotation]%
+    \label{def:rotate_physical}
+    \lean{MPSTensor.rotatePhysical}
+    \leanok
+    \uses{def:mps_tensor}
+    Given a matrix $M \in \MN{d}$ and an MPS tensor~$A$,
+    the \emph{physical-index rotation} is the tensor
+    $(A_M)^i := \sum_j M_{ij}\, A^j$.
+    When the matrix is a unitary $u$, the rotation is written $A_u$.
+\end{definition}
+
+\begin{lemma}[Matrix product vector under physical rotation]
+    \label{lem:mpv_rotate_physical}
+    \lean{MPSTensor.mpv_rotatePhysical}
+    \leanok
+    \uses{def:rotate_physical, def:mpv}
+    For a length-$N$ physical configuration
+    $s=(s_0,\ldots,s_{N-1})$, physical rotation satisfies
+    \begin{align}
+        \tr((A_M)^{s_0}\cdots(A_M)^{s_{N-1}})
+         & =
+        \sum_{t\in\{0,\ldots,d-1\}^N}
+        \left(\prod_{n=0}^{N-1}M_{s_n,t_n}\right)
+        \tr(A^{t_0}\cdots A^{t_{N-1}}).
+        \label{eq:symmetry_mpv_rotation}
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    Substitute $(A_M)^{s_n}=\sum_{t_n}M_{s_n,t_n}A^{t_n}$ at each
+    site, distribute the finite sums through the ordered matrix product, and
+    use linearity of the trace to obtain
+    (\ref{eq:symmetry_mpv_rotation}).
+\end{proof}
+
+\begin{lemma}[Word expansion for a twisted tensor]
+    \label{lem:eval_word_twisted_tensor}
+    \lean{MPSTensor.evalWord_twistedTensor_ofFn}
+    \leanok
+    \uses{def:twisted_tensor}
+    For a word $b:\{0,\ldots,L-1\}\to\{0,\ldots,d-1\}$,
+    \begin{align}
+        A_g^{b_0}\cdots A_g^{b_{L-1}}
+         & =\sum_{v:\{0,\ldots,L-1\}\to\{0,\ldots,d-1\}}
+        \left(\prod_{k=0}^{L-1}U(g)_{b_kv_k}\right)
+        A^{v_0}\cdots A^{v_{L-1}}.
+        \label{eq:app_symmetry_twisted_word}
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    Substitute $A_g^{b_k}=\sum_{v_k}U(g)_{b_kv_k}A^{v_k}$ into the ordered
+    product.  Repeated distributivity gives one summand for each function
+    $v$, scalar coefficients commute past the matrices and multiply, and the
+    remaining ordered product is $A^{v_0}\cdots A^{v_{L-1}}$.
+\end{proof}
+
+\section{Gauge ratios and scalar uniqueness}
+\label{sec:app_symmetry_gauge_ratios}
+
+The virtual representation theorem
+(Theorem~\ref{thm:virtual_rep_injective}) relies on the fact that
+composing two gauge transformations yields another gauge up to a
+scalar factor.
+
+\begin{lemma}[Gauge ratio commutes with tensor matrices]%
+    \label{lem:gauge_ratio_commutes}
+    \lean{MPSTensor.gauge_ratio_commutes}
+    \leanok
+    \uses{def:gauge_equiv}
+    Diagrammatically, the hypothesis is that the two local gauges
+    \begin{center}
+        % B^i = X A^i X^{-1}: the red capsules act on the west and east
+        % virtual indices of A^i; the upper leg is the free index i.
+        % Both sides have boundary signature (1,1,1,0).
+        \begin{tenkz}[physical=up]
+            \tn[up=$i$]{B}
+        \end{tenkz}
+        $ = $
+        \begin{tenkz}[physical=up]
+            \tnX{X} & \tn[up=$i$]{A} & \tnX{X^{-1}}
+        \end{tenkz}
+
+        \qquad\text{and}\qquad
+
+        % B^i = Y A^i Y^{-1}: this second gauge has the same source,
+        % target, and free physical index as the X-gauge above.  Both
+        % sides again have boundary signature (1,1,1,0).
+        \begin{tenkz}[physical=up]
+            \tn[up=$i$]{B}
+        \end{tenkz}
+        $ = $
+        \begin{tenkz}[physical=up]
+            \tnX{Y} & \tn[up=$i$]{A} & \tnX{Y^{-1}}
+        \end{tenkz}
+    \end{center}
+    produce the same target tensor $B^i$ from the same source tensor
+    $A^i$.
+    If $X, Y \in \GL_D(\C)$ both conjugate an MPS tensor $A$ to the same
+    tensor $B$ (i.e.\ $B^i = X A^i X^{-1} = Y A^i Y^{-1}$ for all $i$),
+    then $Y^{-1} X$ commutes with every $A^i$.
+\end{lemma}
+
+\begin{proof}\leanok
+    Direct matrix calculation: conjugating both gauge relations and
+    composing gives $(Y^{-1} X) A^i = A^i (Y^{-1} X)$.
+\end{proof}
+
+\begin{lemma}[Gauge ratio is scalar for injective tensors]%
+    \label{lem:gauge_ratio_isScalar}
+    \lean{MPSTensor.gauge_ratio_isScalar}
+    \leanok
+    \uses{lem:gauge_ratio_commutes, def:injective, lem:center_scalar}
+    Under the same hypotheses, if $A$ is additionally injective, then
+    $Y^{-1} X = \lambda \Id_D$ for some scalar $\lambda \in \C$.
+\end{lemma}
+
+\begin{proof}\leanok\uses{lem:gauge_ratio_commutes, lem:center_scalar}
+    The same two-gauge picture shows that the ratio $Y^{-1}X$ acts
+    invisibly on the local tensor.
+    By Lemma~\ref{lem:gauge_ratio_commutes}, $Y^{-1}X$ commutes with
+    all $A^i$.
+    Since $\{A^i\}$ spans $\MN{D}$, the matrix $Y^{-1}X$ commutes
+    with all of $\MN{D}$.
+    By Lemma~\ref{lem:center_scalar}, it is a scalar matrix.
+\end{proof}
+
+\begin{theorem}[Projective multiplication law for gauge matrices]%
+    \label{thm:gaugeMatrix_projective_mul}
+    \lean{MPSTensor.gaugeMatrix_projective_mul}
+    \leanok
+    \uses{lem:gauge_ratio_isScalar, def:injective,
+        def:on_site_symmetric, lem:twisted_tensor_mul}
+    Let $A$ be an injective MPS tensor with on-site symmetry under a
+    group representation $U : G \to \GL_d(\C)$.
+    For each $g \in G$, let $X(g) \in \GL_D(\C)$ satisfy
+    $\widetilde{A}_g^i = X(g)\, A^i\, X(g)^{-1}$ for all~$i$.
+    Then for all $g, h \in G$, there exists $c(g,h) \in \C$ such that
+    $X(h)\, X(g) = c(g,h)\, X(g \cdot h)$.
+    In fact $c(g,h) \ne 0$ since both sides are invertible, so
+    $c(g,h) \in \C^{\times}$. Diagrammatically, the two candidate gauges
+    are competing local replacements for the same twisted tensor:
+    \begin{center}
+        % (X(h)X(g)) A^i (X(h)X(g))^{-1}
+        %   = X(gh) A^i X(gh)^{-1}: the two candidate gauges act on
+        % the same virtual indices of A^i and produce the same twisted
+        % tensor.  The upper leg is i; both terms have signature (1,1,1,0).
+        \begin{tenkz}[physical=up]
+            \tnX{X(h)X(g)} & \tn[up=$i$]{A} &
+            \tnX{(X(h)X(g))^{-1}}
+        \end{tenkz}
+        $ = $
+        \begin{tenkz}[physical=up]
+            \tnX{X(gh)} & \tn[up=$i$]{A} & \tnX{X(gh)^{-1}}
+        \end{tenkz}
+    \end{center}
+    and both sides conjugate $A^i$ to the same twisted tensor
+    $\widetilde{A}_{gh}^i$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:gauge_ratio_isScalar, lem:twisted_tensor_mul}
+    By the composition law $\widetilde{A}_{gh} = \widetilde{(\widetilde{A}_h)}_g$
+    (Lemma~\ref{lem:twisted_tensor_mul}), both $X(h)\,X(g)$ and $X(gh)$
+    conjugate $A$ to $\widetilde{A}_{gh}$.
+    Lemma~\ref{lem:gauge_ratio_isScalar} then gives the scalar factor.
+\end{proof}
+
+\section{Cocycle equivalence and coboundaries}
+\label{sec:app_symmetry_cocycles}
+
+Let $\omega_1,\omega_2:G\times G\to\C^\times$ be arbitrary scalar
+$2$-cochains.  The definitions of coboundary and cohomology are
+Definitions~\ref{def:is_coboundary} and~\ref{def:cohomologous_to}.
+
+\begin{theorem}[Cohomology relation is an equivalence relation]%
+    \label{thm:cohomologous_equivalence}
+    \lean{TNLean.Algebra.ScalarCocycle.CohomologousTo.equivalence}
+    \leanok
+    \uses{def:cohomologous_to}
+    The relation ``cohomologous to'' is reflexive, symmetric, and
+    transitive on the set of $\C^\times$-valued scalar $2$-cochains, and
+    therefore also on the subset of cocycles.
+\end{theorem}
+
+\begin{proof}\leanok\uses{def:cohomologous_to}
+    Reflexivity: take $\varphi=1$.
+    Symmetry: replace $\varphi$ by $\varphi^{-1}$.
+    Transitivity: compose the witnesses $\varphi$ and $\psi$ pointwise
+    in (\ref{eq:symmetry_cohomologous}).
+\end{proof}
+
+
+\begin{lemma}[Coboundary iff cohomologous to the trivial cocycle]%
+    \label{lem:coboundary_iff_cohomologous_one}
+    \lean{TNLean.Algebra.ScalarCocycle.isCoboundary_iff_cohomologousTo_one}
+    \leanok
+    \uses{def:is_coboundary, def:cohomologous_to}
+    A scalar $2$-cochain $\omega$ is a coboundary if and only if
+    $\omega \sim \Id$, where $\Id(g,h)=1$ for all $g,h$.
+\end{lemma}
+
+\begin{proof}\leanok\uses{def:is_coboundary, def:cohomologous_to}
+    Both directions follow by absorbing or introducing the factor
+    $\Id(g,h)=1$ via $x\cdot 1=x$ in
+    (\ref{eq:symmetry_cohomologous}).
+\end{proof}

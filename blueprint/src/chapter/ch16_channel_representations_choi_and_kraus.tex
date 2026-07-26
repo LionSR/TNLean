@@ -436,26 +436,6 @@ extends to isometric mixing between different Kraus index spaces.
     Specialise Theorem~\ref{thm:kraus_dual_eq_of_map_eq} at $Y = \Id$.
 \end{proof}
 
-\begin{theorem}[Rectangular Kraus freedom]\label{thm:kraus_rectangular_freedom}
-    \lean{kraus_rectangular_freedom}
-    \leanok
-    \uses{thm:kraus_dual_eq_of_map_eq, thm:kraus_conjTranspose_mul_eq_of_map_eq}
-    If $\sum_\alpha B_\alpha X B_\alpha^\dagger = \sum_j A_j X A_j^\dagger$
-    for all $X$ and $r_2 \le r_1$ (where $\{B_\alpha\}_{\alpha=0}^{r_1-1}$
-    is the larger family and $\{A_j\}_{j=0}^{r_2-1}$ the smaller),
-    then there exists a rectangular isometry
-    $V$ ($r_1 \times r_2$, $V^\dagger V = \Id_{r_2}$) such that
-    $B_\alpha = \sum_j V_{\alpha j}\,A_j$.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    Pad the smaller family to size $r_1$, establish Gram matrix equality
-    $M_B^\dagger M_B = M_{A'}^\dagger M_{A'}$ from dual map equality,
-    construct a partial isometry via inner product preservation on the
-    range, and extend to a full isometry $V$ with $V^\dagger V = \Id_{r_2}$.
-\end{proof}
-
 \begin{theorem}[Rectangular Kraus freedom with general finite index types]\label{thm:kraus_rectangular_freedom'}
     \lean{kraus_rectangular_freedom'}
     \leanok
