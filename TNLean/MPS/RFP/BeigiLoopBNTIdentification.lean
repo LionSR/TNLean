@@ -106,10 +106,7 @@ theorem isNormalTensor_of_isNormal_isTransferIdempotent [NeZero D]
                 rw [hXeq, map_smul, hXeq, smul_smul]
           _ = 0 := sub_eq_zero.mpr hIdemX
       exact sub_eq_zero.mp ((smul_eq_zero.mp hzero).resolve_right hXne)
-    have hμne : μ ≠ 0 := by
-      intro hzero
-      subst μ
-      norm_num at hμnorm
+    have hμne : μ ≠ 0 := Complex.ne_zero_of_norm_eq_one hμnorm
     apply mul_left_cancel₀ hμne
     simpa only [mul_one] using hμIdem
   have hScaled : IsNormalTensor (fun i =>

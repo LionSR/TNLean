@@ -452,10 +452,8 @@ theorem ft_sector_bnt_equal_sector_data
   let hMatch : ∀ k : Fin Q.basisCount, ∃ h : P.basisDim (β k) = Q.basisDim k,
       GaugePhaseEquiv (cast (congr_arg (MPSTensor d) h) (P.basis (β k))) (Q.basis k) :=
     fun k => by
-      refine ⟨hDim k, Xblock k, ζ k, ?_, hConj k⟩
-      intro hzero
-      have hnorm := hζ_norm k
-      simp [hzero] at hnorm
+      exact ⟨hDim k, Xblock k, ζ k,
+        Complex.ne_zero_of_norm_eq_one (hζ_norm k), hConj k⟩
   have hCopies : ∀ k : Fin Q.basisCount, P.copies (β k) = Q.copies k := by
     intro k
     have hcard := Fintype.card_congr (W.copy_equiv k)
