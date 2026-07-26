@@ -364,6 +364,96 @@ theorem twistedTPGaugeSetup_hasEigenvalue [NeZero D]
     simpa [hBot] using hMem
   exact hGauge_ne (Submodule.mem_bot ℂ |>.mp this)
 
+/-- Inverting a unitary physical action transports a virtual symmetry relation
+for the twisted companion back to the original tensor. -/
+private theorem inverse_physical_action_of_twisted_companion
+    (A : MPSTensor d D)
+    (u : Matrix (Fin d) (Fin d) ℂ)
+    (hu : u * uᴴ = 1)
+    (U : Matrix (Fin D) (Fin D) ℂ)
+    (hU : Uᴴ * U = 1)
+    (ζ : ℂ)
+    (hζ : ζ ≠ 0)
+    (hBi : ∀ j : Fin d,
+      twistedMixedCompanion A u j = ζ • (U * A j * Uᴴ))
+    (i : Fin d) :
+    ∑ j : Fin d, u i j • A j = ζ⁻¹ • (Uᴴ * A i * Uᴴᴴ) := by
+  let B : MPSTensor d D := twistedMixedCompanion A u
+  have hsum :
+      ∑ j : Fin d, u i j • B j = A i := by
+    have hcoeff :
+        ∀ n' : Fin d,
+          ∑ j : Fin d, u i j * (starRingEnd ℂ) (u n' j) = if i = n' then 1 else 0 := by
+      intro n'
+      have hentry := congrFun (congrFun hu i) n'
+      simpa [Matrix.mul_apply, Matrix.conjTranspose_apply, Matrix.one_apply] using hentry
+    calc
+      ∑ j : Fin d, u i j • B j
+          = ∑ j : Fin d, ∑ n' : Fin d, (u i j * (starRingEnd ℂ) (u n' j)) • A n' := by
+              refine Finset.sum_congr rfl ?_
+              intro j _
+              have hBj :
+                  B j = ∑ n' : Fin d, (starRingEnd ℂ) (u n' j) • A n' := by
+                simp [B, twistedMixedCompanion]
+              rw [hBj]
+              simpa [smul_smul, mul_assoc] using
+                (Finset.smul_sum (s := Finset.univ)
+                  (f := fun n' : Fin d => (starRingEnd ℂ) (u n' j) • A n')
+                  (r := u i j))
+      _ = ∑ n' : Fin d, ∑ j : Fin d, (u i j * (starRingEnd ℂ) (u n' j)) • A n' := by
+            rw [Finset.sum_comm]
+      _ = ∑ n' : Fin d, (∑ j : Fin d, u i j * (starRingEnd ℂ) (u n' j)) • A n' := by
+            refine Finset.sum_congr rfl ?_
+            intro n' _
+            simpa using
+              (Finset.sum_smul (s := Finset.univ)
+                (f := fun j : Fin d => u i j * (starRingEnd ℂ) (u n' j))
+                (x := A n')).symm
+      _ = ∑ n' : Fin d, (if i = n' then 1 else 0) • A n' := by
+            simp [hcoeff]
+      _ = A i := by
+            simp
+  have hsum_virtual : A i = ζ • (U * (∑ j : Fin d, u i j • A j) * Uᴴ) := by
+    calc
+      A i = ∑ j : Fin d, u i j • B j := hsum.symm
+      _ = ∑ j : Fin d, u i j • (ζ • (U * A j * Uᴴ)) := by
+            simp [B, hBi]
+      _ = ζ • (U * (∑ j : Fin d, u i j • A j) * Uᴴ) := by
+            simp [Finset.smul_sum, Finset.mul_sum, Finset.sum_mul, mul_comm,
+              smul_smul, Matrix.mul_assoc]
+  have hconj := congrArg (fun M => Uᴴ * M * U) hsum_virtual
+  have htransport : Uᴴ * A i * U = ζ • (∑ j : Fin d, u i j • A j) := by
+    calc
+      Uᴴ * A i * U = Uᴴ * (ζ • (U * (∑ j : Fin d, u i j • A j) * Uᴴ)) * U := by
+            simpa [Matrix.mul_assoc] using hconj
+      _ = ζ • (∑ j : Fin d, u i j • A j) := by
+            calc
+              Uᴴ * (ζ • (U * (∑ j : Fin d, u i j • A j) * Uᴴ)) * U
+                  = ζ • (Uᴴ * ((U * (∑ j : Fin d, u i j • A j) * Uᴴ) * U)) := by
+                      simp [Matrix.mul_assoc]
+              _ = ζ • ((Uᴴ * U) * (∑ j : Fin d, u i j • A j) * (Uᴴ * U)) := by
+                      simp [Matrix.mul_assoc]
+              _ = ζ • (∑ j : Fin d, u i j • A j) := by
+                      simp [hU]
+  calc
+    ∑ j : Fin d, u i j • A j = ζ⁻¹ • (ζ • (∑ j : Fin d, u i j • A j)) := by
+          simp [hζ, smul_smul]
+    _ = ζ⁻¹ • (Uᴴ * A i * U) := by
+          rw [htransport]
+    _ = ζ⁻¹ • (Uᴴ * A i * Uᴴᴴ) := by
+          simp
+
+/-- Scaling every Kraus matrix scales the transfer map by the squared scalar. -/
+private lemma transferMap_smul_apply
+    (c : ℂ)
+    (A : MPSTensor d D)
+    (X : Matrix (Fin D) (Fin D) ℂ) :
+    transferMap (fun i => c • A i) X =
+      (c * starRingEnd ℂ c) • transferMap A X := by
+  simp only [transferMap_apply, Matrix.conjTranspose_smul]
+  simp_rw [smul_mul_assoc, mul_smul_comm, smul_smul, ← Finset.smul_sum]
+  rfl
+
 /-- If the twisted companion family is gauge-phase equivalent to `A`, the gauge
 matrix can be normalized to a unitary and converted into the phased virtual
 symmetry relation from the string-order paper. -/
@@ -414,25 +504,14 @@ theorem virtualUnitary_of_gaugePhaseEquiv_twisted
   have hQ_eigC : transferMap C Q = Q := by
     calc
       transferMap C Q = X * transferMap A (Xin * Q * Xinᴴ) * Xᴴ := by
-        simpa [C, X, Xin, Matrix.mul_assoc] using transferMap_gauge_conj A Xgl Q
+        simpa only [C, X, Xin, Matrix.GeneralLinearGroup.coe_inv] using
+          transferMap_gauge_conj A Xgl Q
       _ = X * transferMap A 1 * Xᴴ := by rw [hXinQ]
-      _ = Q := by simp [Q, hNorm]
+      _ = Q := by rw [hNorm, Matrix.mul_one]
   have hQ_eigB : transferMap B Q = (Complex.normSq ζ : ℂ) • Q := by
-    calc
-      transferMap B Q = transferMap (fun i => ζ • C i) Q := by
-        simp [hB_C]
-      _ = ∑ i : Fin d, (ζ • C i) * Q * (ζ • C i)ᴴ := by
-            simp [transferMap_apply]
-      _ = ∑ i : Fin d, (Complex.normSq ζ : ℂ) • (C i * Q * (C i)ᴴ) := by
-            apply Finset.sum_congr rfl
-            intro i _
-            simp [Matrix.conjTranspose_smul, smul_smul,
-              Complex.normSq_eq_conj_mul_self, mul_comm]
-      _ = (Complex.normSq ζ : ℂ) • ∑ i : Fin d, C i * Q * (C i)ᴴ := by
-            simp [Finset.smul_sum]
-      _ = (Complex.normSq ζ : ℂ) • transferMap C Q := by
-            simp [transferMap_apply]
-      _ = (Complex.normSq ζ : ℂ) • Q := by rw [hQ_eigC]
+    rw [hB_C, transferMap_smul_apply, hQ_eigC]
+    congr 1
+    simpa [Complex.normSq_eq_conj_mul_self] using mul_comm ζ (starRingEnd ℂ ζ)
   have hQ_eigA : transferMap A Q = (Complex.normSq ζ : ℂ) • Q := by
     rw [← hB_eq Q]
     exact hQ_eigB
@@ -533,8 +612,13 @@ theorem virtualUnitary_of_gaugePhaseEquiv_twisted
   · simpa using hU_unitary_right
   · simpa using hU_unitary_left
   · have hζ_norm : ‖ζ‖ = 1 := by
-      nlinarith [norm_nonneg ζ,
-        show ‖ζ‖ ^ 2 = 1 from by simpa [Complex.normSq_eq_norm_sq] using hζ_sq_eq_one]
+      have hs : ‖ζ‖ ^ 2 = 1 :=
+        (Complex.normSq_eq_norm_sq ζ).symm.trans hζ_sq_eq_one
+      rcases sq_eq_one_iff.mp hs with h | h
+      · exact h
+      · have hn := norm_nonneg ζ
+        rw [h] at hn
+        norm_num at hn
     simp [norm_inv, hζ_norm]
   · intro i
     have hBi : ∀ j : Fin d, B j = ζ • (U * A j * Uᴴ) := by
@@ -543,80 +627,15 @@ theorem virtualUnitary_of_gaugePhaseEquiv_twisted
         B j = ζ • (X * A j * Xin) := hX j
         _ = ζ • ((a • U) * A j * (a⁻¹ • Uᴴ)) := by rw [hX_eq, hXinv_eq]
         _ = ζ • (U * A j * Uᴴ) := by
-              congr 1
+              apply congrArg (ζ • ·)
               calc
                 (a • U) * A j * (a⁻¹ • Uᴴ)
-                    = (a • (U * A j)) * (a⁻¹ • Uᴴ) := by
-                        simp [Matrix.mul_assoc]
-                _ = (a * a⁻¹) • ((U * A j) * Uᴴ) := by
-                      simpa [Matrix.mul_assoc] using
-                        smul_mul_smul_comm a (U * A j) a⁻¹ Uᴴ
-                _ = (a * a⁻¹) • (U * A j * Uᴴ) := by
-                      simp [Matrix.mul_assoc]
-                _ = U * A j * Uᴴ := by simp [ha_ne0]
-    have hsum :
-        ∑ j : Fin d, u i j • B j = A i := by
-      have hcoeff :
-          ∀ n' : Fin d,
-            ∑ j : Fin d, u i j * (starRingEnd ℂ) (u n' j) = if i = n' then 1 else 0 := by
-        intro n'
-        have hentry := congrFun (congrFun hu i) n'
-        simpa [Matrix.mul_apply, Matrix.conjTranspose_apply, Matrix.one_apply] using hentry
-      calc
-        ∑ j : Fin d, u i j • B j
-            = ∑ j : Fin d, ∑ n' : Fin d, (u i j * (starRingEnd ℂ) (u n' j)) • A n' := by
-                refine Finset.sum_congr rfl ?_
-                intro j _
-                have hBj :
-                    B j = ∑ n' : Fin d, (starRingEnd ℂ) (u n' j) • A n' := by
-                  simp [B, twistedMixedCompanion]
-                rw [hBj]
-                simpa [smul_smul, mul_assoc] using
-                  (Finset.smul_sum (s := Finset.univ)
-                    (f := fun n' : Fin d => (starRingEnd ℂ) (u n' j) • A n')
-                    (r := u i j))
-        _ = ∑ n' : Fin d, ∑ j : Fin d, (u i j * (starRingEnd ℂ) (u n' j)) • A n' := by
-              rw [Finset.sum_comm]
-        _ = ∑ n' : Fin d, (∑ j : Fin d, u i j * (starRingEnd ℂ) (u n' j)) • A n' := by
-              refine Finset.sum_congr rfl ?_
-              intro n' _
-              simpa using
-                (Finset.sum_smul (s := Finset.univ)
-                  (f := fun j : Fin d => u i j * (starRingEnd ℂ) (u n' j))
-                  (x := A n')).symm
-        _ = ∑ n' : Fin d, (if i = n' then 1 else 0) • A n' := by
-              simp [hcoeff]
-        _ = A i := by
-              simp
-    have htransport : Uᴴ * A i * U = ζ • (∑ j : Fin d, u i j • A j) := by
-      have hsum_virtual : A i = ζ • (U * (∑ j : Fin d, u i j • A j) * Uᴴ) := by
-        calc
-          A i = ∑ j : Fin d, u i j • B j := hsum.symm
-          _ = ∑ j : Fin d, u i j • (ζ • (U * A j * Uᴴ)) := by
-                simp [hBi]
-          _ = ζ • (U * (∑ j : Fin d, u i j • A j) * Uᴴ) := by
-                simp [Finset.smul_sum, Finset.mul_sum, Finset.sum_mul, mul_comm,
-                  smul_smul, Matrix.mul_assoc]
-      have hconj := congrArg (fun M => Uᴴ * M * U) hsum_virtual
-      calc
-        Uᴴ * A i * U = Uᴴ * (ζ • (U * (∑ j : Fin d, u i j • A j) * Uᴴ)) * U := by
-              simpa [Matrix.mul_assoc] using hconj
-        _ = ζ • (∑ j : Fin d, u i j • A j) := by
-              calc
-                Uᴴ * (ζ • (U * (∑ j : Fin d, u i j • A j) * Uᴴ)) * U
-                    = ζ • (Uᴴ * ((U * (∑ j : Fin d, u i j • A j) * Uᴴ) * U)) := by
-                        simp [Matrix.mul_assoc]
-                _ = ζ • ((Uᴴ * U) * (∑ j : Fin d, u i j • A j) * (Uᴴ * U)) := by
-                        simp [Matrix.mul_assoc]
-                _ = ζ • (∑ j : Fin d, u i j • A j) := by
-                        simp [hU_unitary_right]
-    calc
-      ∑ j : Fin d, u i j • A j = ζ⁻¹ • (ζ • (∑ j : Fin d, u i j • A j)) := by
-            simp [hζ, smul_smul]
-      _ = ζ⁻¹ • (Uᴴ * A i * U) := by
-            rw [htransport]
-      _ = ζ⁻¹ • (Uᴴ * A i * Uᴴᴴ) := by
-            simp
+                    = (a • (U * A j)) * (a⁻¹ • Uᴴ) := by rw [smul_mul_assoc]
+                _ = (a * a⁻¹) • ((U * A j) * Uᴴ) :=
+                      smul_mul_smul_comm a (U * A j) a⁻¹ Uᴴ
+                _ = U * A j * Uᴴ := by rw [mul_inv_cancel₀ ha_ne0, one_smul]
+    exact inverse_physical_action_of_twisted_companion A u hu U hU_unitary_right ζ hζ
+      (fun j => by simpa [B] using hBi j) i
 
 /-- A phased virtual symmetry immediately produces a peripheral eigenvector of the
 twisted transfer map. -/
