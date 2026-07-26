@@ -797,4 +797,14 @@ lines and, where the grammar cannot route a string, gains escape
 occurrences. They now admit a rise on the same terms M1 uses, and refuse
 one that carries no verdict — which is the case they exist to catch.
 
-No ledger row changes and no flag verdict is re-examined here.
+Two flags are raised for the first time by these redraws and are answered
+here. The shared `frame=` concept landed at group and object scope under
+`Extension-gate: #4700` with no consumers at all; the panels below give it
+two at each scope, which is short of tenure and so still flagged.
+
+| flag | verdict |
+|---|---|
+| flag:consumers:key:group:frame | keep-because: the rotation the anyon panels need is one transform read at three scopes, and the two here are its first demand-corpus consumers; the redraw campaign supplies the rest or the scope dies at the 0.8 close; expiry 0.8 |
+| flag:consumers:key:object:frame | keep-because: same concept at atom scope; a single turned tensor is the case a group cannot express, and it earns tenure with the campaign or dies with it; expiry 0.8 |
+
+No ledger row changes and no other flag verdict is re-examined here.
