@@ -6,11 +6,30 @@
 %   lines 631-643; archival output PEPSrenom2.pdf
 % Capabilities: lattice, blocking, equation-composition
 \[
-  \begin{tenkzlattice}[rows=2,cols=2,frame=oblique,outer legs=both]
-    \tnsite{(1,1)} \tnsite{(1,2)} \tnsite{(2,1)} \tnsite{(2,2)}
-  \end{tenkzlattice}
-  \longmapsto
-  \begin{tenkzlattice}[rows=1,cols=1,frame=oblique,outer legs=both]
-    \tnsite{(1,1)}
-  \end{tenkzlattice}.
+  \begin{tenkzfree}
+    % the coarse-grained effective four-leg tensor and the four original
+    % sites, one per corner
+    \tnput[box]{c}{(0mm,0mm)}{}
+    \tnput[box]{ne}{(16mm,16mm)}{} \tnput[box]{nw}{(-16mm,16mm)}{}
+    \tnput[box]{se}{(16mm,-16mm)}{} \tnput[box]{sw}{(-16mm,-16mm)}{}
+    % each corner atom keeps its own slanted (fused/hatched) legs -- one
+    % inward to the block tensor, one continuing the same diagonal outward,
+    % and a free cross-diagonal pair
+    \tnjoin[fused]{c.north east}{ne.south west}
+    \tnjoin[fused]{ne.north east}{24mm,24mm}
+    \tnjoin[fused]{8mm,24mm}{ne.north west}
+    \tnjoin[fused]{ne.south east}{24mm,8mm}
+    \tnjoin[fused]{c.north west}{nw.south east}
+    \tnjoin[fused]{nw.north west}{-24mm,24mm}
+    \tnjoin[fused]{-8mm,24mm}{nw.north east}
+    \tnjoin[fused]{nw.south west}{-24mm,8mm}
+    \tnjoin[fused]{c.south east}{se.north west}
+    \tnjoin[fused]{se.south east}{24mm,-24mm}
+    \tnjoin[fused]{8mm,-24mm}{se.south west}
+    \tnjoin[fused]{se.north east}{24mm,-8mm}
+    \tnjoin[fused]{c.south west}{sw.north east}
+    \tnjoin[fused]{sw.south west}{-24mm,-24mm}
+    \tnjoin[fused]{-8mm,-24mm}{sw.south east}
+    \tnjoin[fused]{sw.north west}{-24mm,-8mm}
+  \end{tenkzfree}.
 \]

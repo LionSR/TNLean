@@ -6,13 +6,83 @@
 %   III/ImagesReview Section III.tex lines 329-356
 % Capabilities: lattice, typed-ports
 \[
-\begin{tenkzlattice}[rows=6, cols=6, outer legs=both]
-  % blocked sites (2i-1..2i, 2j-1..2j), i,j = 1..3
-  \tnregion[slot=selected]{(1-2,1-2)} \tnregion[slot=selected]{(1-2,3-4)}
-  \tnregion[slot=selected]{(1-2,5-6)}
-  \tnregion[slot=selected]{(3-4,1-2)} \tnregion[slot=selected]{(3-4,3-4)}
-  \tnregion[slot=selected]{(3-4,5-6)}
-  \tnregion[slot=selected]{(5-6,1-2)} \tnregion[slot=selected]{(5-6,3-4)}
-  \tnregion[slot=selected]{(5-6,5-6)}
-\end{tenkzlattice}
+  \begin{tenkzfree}
+    \tnjoin{-5mm,0mm}{5mm,0mm}  \tnjoin{0mm,0mm}{0mm,-5mm}
+    \tnjoin{0mm,0mm}{2mm,2mm}  \tnjoin{-5mm,-10mm}{5mm,-10mm}
+    \tnjoin{0mm,-10mm}{0mm,-5mm}  \tnjoin{0mm,-10mm}{2mm,-8mm}
+    \tnjoin{-5mm,20mm}{5mm,20mm}  \tnjoin{0mm,20mm}{0mm,15mm}
+    \tnjoin{0mm,20mm}{2mm,22mm}  \tnjoin{-5mm,10mm}{5mm,10mm}
+    \tnjoin{0mm,10mm}{0mm,15mm}  \tnjoin{0mm,10mm}{2mm,12mm}
+    \tnjoin{-5mm,40mm}{5mm,40mm}  \tnjoin{0mm,40mm}{0mm,35mm}
+    \tnjoin{0mm,40mm}{2mm,42mm}  \tnjoin{-5mm,30mm}{5mm,30mm}
+    \tnjoin{0mm,30mm}{0mm,35mm}  \tnjoin{0mm,30mm}{2mm,32mm}
+    \tnjoin{15mm,0mm}{25mm,0mm}  \tnjoin{20mm,0mm}{20mm,-5mm}
+    \tnjoin{20mm,0mm}{22mm,2mm}  \tnjoin{15mm,-10mm}{25mm,-10mm}
+    \tnjoin{20mm,-10mm}{20mm,-5mm}  \tnjoin{20mm,-10mm}{22mm,-8mm}
+    \tnjoin{15mm,20mm}{25mm,20mm}  \tnjoin{20mm,20mm}{20mm,15mm}
+    \tnjoin{20mm,20mm}{22mm,22mm}  \tnjoin{15mm,10mm}{25mm,10mm}
+    \tnjoin{20mm,10mm}{20mm,15mm}  \tnjoin{20mm,10mm}{22mm,12mm}
+    \tnjoin{15mm,40mm}{25mm,40mm}  \tnjoin{20mm,40mm}{20mm,35mm}
+    \tnjoin{20mm,40mm}{22mm,42mm}  \tnjoin{15mm,30mm}{25mm,30mm}
+    \tnjoin{20mm,30mm}{20mm,35mm}  \tnjoin{20mm,30mm}{22mm,32mm}
+    \tnjoin{35mm,0mm}{45mm,0mm}  \tnjoin{40mm,0mm}{40mm,-5mm}
+    \tnjoin{40mm,0mm}{42mm,2mm}  \tnjoin{35mm,-10mm}{45mm,-10mm}
+    \tnjoin{40mm,-10mm}{40mm,-5mm}  \tnjoin{40mm,-10mm}{42mm,-8mm}
+    \tnjoin{35mm,20mm}{45mm,20mm}  \tnjoin{40mm,20mm}{40mm,15mm}
+    \tnjoin{40mm,20mm}{42mm,22mm}  \tnjoin{35mm,10mm}{45mm,10mm}
+    \tnjoin{40mm,10mm}{40mm,15mm}  \tnjoin{40mm,10mm}{42mm,12mm}
+    \tnjoin{35mm,40mm}{45mm,40mm}  \tnjoin{40mm,40mm}{40mm,35mm}
+    \tnjoin{40mm,40mm}{42mm,42mm}  \tnjoin{35mm,30mm}{45mm,30mm}
+    \tnjoin{40mm,30mm}{40mm,35mm}  \tnjoin{40mm,30mm}{42mm,32mm}
+    \tnjoin{5mm,10mm}{15mm,10mm}  \tnjoin{10mm,10mm}{10mm,5mm}
+    \tnjoin{10mm,10mm}{12mm,12mm}  \tnjoin{5mm,0mm}{15mm,0mm}
+    \tnjoin{10mm,0mm}{10mm,5mm}  \tnjoin{10mm,0mm}{12mm,2mm}
+    \tnjoin{5mm,30mm}{15mm,30mm}  \tnjoin{10mm,30mm}{10mm,25mm}
+    \tnjoin{10mm,30mm}{12mm,32mm}  \tnjoin{5mm,20mm}{15mm,20mm}
+    \tnjoin{10mm,20mm}{10mm,25mm}  \tnjoin{10mm,20mm}{12mm,22mm}
+    \tnjoin{25mm,10mm}{35mm,10mm}  \tnjoin{30mm,10mm}{30mm,5mm}
+    \tnjoin{30mm,10mm}{32mm,12mm}  \tnjoin{25mm,0mm}{35mm,0mm}
+    \tnjoin{30mm,0mm}{30mm,5mm}  \tnjoin{30mm,0mm}{32mm,2mm}
+    \tnjoin{25mm,30mm}{35mm,30mm}  \tnjoin{30mm,30mm}{30mm,25mm}
+    \tnjoin{30mm,30mm}{32mm,32mm}  \tnjoin{25mm,20mm}{35mm,20mm}
+    \tnjoin{30mm,20mm}{30mm,25mm}  \tnjoin{30mm,20mm}{32mm,22mm}
+    \tnjoin{45mm,10mm}{55mm,10mm}  \tnjoin{50mm,10mm}{50mm,5mm}
+    \tnjoin{50mm,10mm}{52mm,12mm}  \tnjoin{45mm,0mm}{55mm,0mm}
+    \tnjoin{50mm,0mm}{50mm,5mm}  \tnjoin{50mm,0mm}{52mm,2mm}
+    \tnjoin{45mm,30mm}{55mm,30mm}  \tnjoin{50mm,30mm}{50mm,25mm}
+    \tnjoin{50mm,30mm}{52mm,32mm}  \tnjoin{45mm,20mm}{55mm,20mm}
+    \tnjoin{50mm,20mm}{50mm,25mm}  \tnjoin{50mm,20mm}{52mm,22mm}
+    \tnjoin{5mm,-10mm}{15mm,-10mm}  \tnjoin{10mm,-10mm}{10mm,-15mm}
+    \tnjoin{10mm,-10mm}{12mm,-8mm}  \tnjoin{5mm,40mm}{15mm,40mm}
+    \tnjoin{10mm,40mm}{10mm,45mm}  \tnjoin{10mm,40mm}{12mm,42mm}
+    \tnjoin{25mm,-10mm}{35mm,-10mm}  \tnjoin{30mm,-10mm}{30mm,-15mm}
+    \tnjoin{30mm,-10mm}{32mm,-8mm}  \tnjoin{25mm,40mm}{35mm,40mm}
+    \tnjoin{30mm,40mm}{30mm,45mm}  \tnjoin{30mm,40mm}{32mm,42mm}
+    \tnjoin{45mm,-10mm}{55mm,-10mm}  \tnjoin{50mm,-10mm}{50mm,-15mm}
+    \tnjoin{50mm,-10mm}{52mm,-8mm}  \tnjoin{45mm,40mm}{55mm,40mm}
+    \tnjoin{50mm,40mm}{50mm,45mm}  \tnjoin{50mm,40mm}{52mm,42mm}
+    \tnput[dot]{b1}{(5mm,40mm)}{}  \tnput[dot]{b2}{(15mm,40mm)}{}
+    \tnput[dot]{b3}{(25mm,40mm)}{}  \tnput[dot]{b4}{(35mm,40mm)}{}
+    \tnput[dot]{b5}{(45mm,40mm)}{}  \tnput[dot]{b6}{(0mm,35mm)}{}
+    \tnput[dot]{b7}{(20mm,35mm)}{}  \tnput[dot]{b8}{(40mm,35mm)}{}
+    \tnput[dot]{b9}{(5mm,30mm)}{}  \tnput[dot]{b10}{(15mm,30mm)}{}
+    \tnput[dot]{b11}{(25mm,30mm)}{}  \tnput[dot]{b12}{(35mm,30mm)}{}
+    \tnput[dot]{b13}{(45mm,30mm)}{}  \tnput[dot]{b14}{(10mm,25mm)}{}
+    \tnput[dot]{b15}{(30mm,25mm)}{}  \tnput[dot]{b16}{(50mm,25mm)}{}
+    \tnput[dot]{b17}{(5mm,20mm)}{}  \tnput[dot]{b18}{(15mm,20mm)}{}
+    \tnput[dot]{b19}{(25mm,20mm)}{}  \tnput[dot]{b20}{(35mm,20mm)}{}
+    \tnput[dot]{b21}{(45mm,20mm)}{}  \tnput[dot]{b22}{(0mm,15mm)}{}
+    \tnput[dot]{b23}{(20mm,15mm)}{}  \tnput[dot]{b24}{(40mm,15mm)}{}
+    \tnput[dot]{b25}{(5mm,10mm)}{}  \tnput[dot]{b26}{(15mm,10mm)}{}
+    \tnput[dot]{b27}{(25mm,10mm)}{}  \tnput[dot]{b28}{(35mm,10mm)}{}
+    \tnput[dot]{b29}{(45mm,10mm)}{}  \tnput[dot]{b30}{(10mm,5mm)}{}
+    \tnput[dot]{b31}{(30mm,5mm)}{}  \tnput[dot]{b32}{(50mm,5mm)}{}
+    \tnput[dot]{b33}{(5mm,0mm)}{}  \tnput[dot]{b34}{(15mm,0mm)}{}
+    \tnput[dot]{b35}{(25mm,0mm)}{}  \tnput[dot]{b36}{(35mm,0mm)}{}
+    \tnput[dot]{b37}{(45mm,0mm)}{}  \tnput[dot]{b38}{(0mm,-5mm)}{}
+    \tnput[dot]{b39}{(20mm,-5mm)}{}  \tnput[dot]{b40}{(40mm,-5mm)}{}
+    \tnput[dot]{b41}{(5mm,-10mm)}{}  \tnput[dot]{b42}{(15mm,-10mm)}{}
+    \tnput[dot]{b43}{(25mm,-10mm)}{}  \tnput[dot]{b44}{(35mm,-10mm)}{}
+    \tnput[dot]{b45}{(45mm,-10mm)}{}
+  \end{tenkzfree}
 \]

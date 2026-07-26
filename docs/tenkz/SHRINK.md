@@ -831,3 +831,40 @@ needs one recomputation on the final tree, and the number recorded here is
 correct for this branch alone.
 
 Census-correction: #4709
+
+### 2026-07-26 — the section-III sweep prices two more gaps
+
+M3, escape usage, rises from 326 to 331. Four of the five occurrences are
+two `out=`/`in=` pairs in the historical composite, whose two red boundary
+strings each sweep around a panel and must be hand-routed — the same
+strings gap the two entries above price, met again in the one figure the
+corpus had been drawing as something else entirely. The fifth is one
+`plane rise=` override in the anyon pair: the site label has exactly one
+bearing, hard-coded to the north-east quadrant, so the only way to clear a
+label from an oblique sheet's converging legs is to reshear the whole
+sheet. A per-site label bearing would retire that occurrence; the gap is
+tracked with the sweep's follow-up issues.
+
+M4, mean lines per case, rises from 14.88 to 15.88. Seven panels were
+redrawn against their sources and six of them grew, the GHZ brick patch
+most of all: the source builds it from four foreach loops, and the free
+genre has no repetition form, so the masonry is transcribed element-wise.
+Each of the seven now draws what its source asserts — a doubled string
+instead of one, a masonry patch instead of a blocking cartoon, an
+orthogonal isometry reduction instead of an invented operator box — and
+a figure that stops drawing less than its source gains lines.
+
+Census-correction: #4709
+
+One flag is newly raised by this sweep and answered here. The sweep
+removed two of `outer legs=`'s three demand-corpus consumers, because both
+spelt a boundary their sources do not draw — the key was standing in for
+pictures that have since been redrawn from the sources directly.
+
+| flag | verdict |
+|---|---|
+| flag:consumers:key:picture:outer legs | keep-because: its one remaining consumer is a manifest-paired fixture, and losing case consumers to *more faithful* drawings is not evidence against the key — it is evidence the two departed cases never needed it; it earns new consumers with the redraw campaign or dies at the 0.8 close; expiry 0.8 |
+| flag:consumers:key:object:down at | keep-because: the reduction proof no longer spells its isometry with `down at=`, which drops the key to two consumers on the same more-faithful-drawing grounds as the row above; same tenure terms; expiry 0.8 |
+| flag:lonely-type:positive-integer|role-list | keep-because: the union type serves `sheets=` alone now that the condensation panel left the planes genre for the oblique sheet; the type is the planes genre's spelling and follows that genre's fate at the front-end consolidation; expiry 0.8 |
+
+No ledger row changes and no other flag verdict is re-examined here.
