@@ -83,7 +83,7 @@ When you push to a PR branch, several things happen in parallel:
   ├──┤                                                              │
   │  │  PR CI — build job                                           │
   │  │  Runs `lake build` to check that the code compiles.          │
-  │  │  Warns at 25s per changed Lean file; fails at 50s.           │
+  │  │  Separate `compile-time`: warn at 25s; fail at 50s.          │
   │  │                                                              │
   │  └───────────┬──────────────────────────────────────────────────┘
   │              │
