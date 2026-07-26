@@ -828,9 +828,9 @@ id = "rmp-iv-ground-space-2d"
 status = "cosmetic-gap"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
-case_sha256 = "69043b767a17af580641d0b709578714f36f37ed0c19af657c89a5643e589b5b"
-reviewed = "2026-07-23"
-renderer = "maintainer-page-review-2026-07-23"
+case_sha256 = "8b313a309719662f981e64635fe625ce3163f1808763d4e555c25349d9a7cbbd"
+reviewed = "2026-07-26"
+renderer = "codex-region-label-math-review-2026-07-26"
 note = "border hue; arrowed legs absent"
 
 [[verdict]]
@@ -940,9 +940,9 @@ status = "structural-gap"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
 defects = ["extra-element", "wrong-contraction"]
-case_sha256 = "588dfde26a9915ce2abc5ef822954ad51ecbc4996a9a130a5a255c1ec29324f9"
-reviewed = "2026-07-23"
-renderer = "maintainer-page-review-2026-07-23"
+case_sha256 = "8e641c279e19732fb45bcfcbe96671de558f162c784f855e4bc07b8c4b0f06f9"
+reviewed = "2026-07-26"
+renderer = "codex-region-label-math-review-2026-07-26"
 note = "nesting drawn as overlap plus an invented lattice"
 
 [[verdict]]
@@ -951,9 +951,9 @@ status = "structural-gap"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
 defects = ["extra-element", "wrong-contraction"]
-case_sha256 = "e2e87f9e10390dcc0882bafdb325f54e01aae9db38ee27b3a09d714e8cca54d7"
-reviewed = "2026-07-23"
-renderer = "maintainer-page-review-2026-07-23"
+case_sha256 = "94b10a0aa16350e3a4efe7116be10bf12ab2a3f8e6480504fe4ca567d48a110c"
+reviewed = "2026-07-26"
+renderer = "codex-region-label-math-review-2026-07-26"
 note = "same"
 
 [[verdict]]
