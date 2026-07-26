@@ -224,9 +224,27 @@ grep -Fq 'TENKZ-HULL-LABEL-USES=1' "$WORK/r_hull_live.tex.transcript" || {
   echo "FAIL: live hull measurement evaluated an author label more than once" >&2
   exit 1
 }
-pdftoppm -singlefile -png -r 300 \
-  "$WORK/r_hull_live.pdf" "$WORK/r_hull_live" >/dev/null 2>&1
+grep -Fq 'TENKZ-HULL-BOX-POOL=1' "$WORK/r_hull_live.tex.transcript" || {
+  echo "FAIL: live hull boxes were not reused across pictures" >&2
+  exit 1
+}
+command -v pdftoppm >/dev/null 2>&1 || {
+  echo "FAIL: live-hull pixel gate requires pdftoppm" >&2
+  exit 1
+}
+if ! pdftoppm -singlefile -png -r 300 \
+    "$WORK/r_hull_live.pdf" "$WORK/r_hull_live" >/dev/null 2>&1; then
+  echo "FAIL: live-hull fixture could not be rasterized" >&2
+  exit 1
+fi
+[ -f "$WORK/r_hull_live.png" ] || {
+  echo "FAIL: live-hull rasterizer produced no PNG" >&2
+  exit 1
+}
 PIXEL_CURRENT="$WORK/current-pixels.sha256"
+# This is intentionally an exact-toolchain pixel pin.  After an approved
+# XeTeX, Poppler, or font update, inspect the full-resolution render and run
+# this script with --snapshot to accept the new raster.
 python3 -c \
   'import hashlib,sys
 data = open(sys.argv[1], "rb").read()

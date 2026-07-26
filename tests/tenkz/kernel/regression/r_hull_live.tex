@@ -32,4 +32,11 @@
   \tnmark[form=enclosure]{{custom,anchor}}{}
 \end{tenkz}
 \typeout{TENKZ-HULL-LABEL-USES=\the\tenkzhulllabeluses}
+\ExplSyntaxOn
+\cs_if_exist:cF { l__tenkz_kernel_hull_box_1_box }
+  { \tex_errmessage:D { TENKZ-HULL-BOX-POOL-MISSING } }
+\cs_if_exist:cT { l__tenkz_kernel_hull_box_2_box }
+  { \tex_errmessage:D { TENKZ-HULL-BOX-POOL-GREW-ACROSS-PICTURES } }
+\typeout{TENKZ-HULL-BOX-POOL=1}
+\ExplSyntaxOff
 \end{document}

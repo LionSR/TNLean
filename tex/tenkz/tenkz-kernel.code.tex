@@ -2778,6 +2778,7 @@
 \tl_new:N \l__tenkz_kernel_hull_turn_tl
 \tl_new:N \l__tenkz_kernel_hull_measure_name_tl
 \tl_new:N \l__tenkz_kernel_hull_shape_tl
+\tl_new:N \l__tenkz_kernel_hull_box_tl
 \tl_new:N \l__tenkz_kernel_hull_xmin_tl
 \tl_new:N \l__tenkz_kernel_hull_xmax_tl
 \tl_new:N \l__tenkz_kernel_hull_ymin_tl
@@ -2785,6 +2786,7 @@
 \tl_new:N \l__tenkz_kernel_sel_tl
 \bool_new:N \l__tenkz_kernel_sel_bool
 \bool_new:N \l__tenkz_kernel_sel_valid_bool
+\int_new:N \l__tenkz_kernel_hull_box_int
 \prop_new:N \l__tenkz_kernel_hull_live_prop
 \prop_new:N \l__tenkz_kernel_hull_measured_prop
 \dim_new:N \l__tenkz_kernel_hull_west_dim
@@ -3069,6 +3071,10 @@
   {
     \prop_clear:N \l__tenkz_kernel_hull_live_prop
     \prop_clear:N \l__tenkz_kernel_hull_measured_prop
+    % Box registers are a reusable per-picture pool.  Atom ids are global,
+    % so keying allocations by id would consume one finite TeX box register
+    % for every measured glyph across the whole document.
+    \int_zero:N \l__tenkz_kernel_hull_box_int
   }
 
 % The first pass measures frame-settled atoms before routes and legs ask for
@@ -3113,8 +3119,16 @@
 % author's tokens twice.
 \cs_new_protected:Npn \__tenkz_kernel_hull_measure_glyph:n #1
   {
-    \cs_if_exist:cF { l__tenkz_kernel_hull_#1_box }
-      { \box_new:c { l__tenkz_kernel_hull_#1_box } }
+    \int_incr:N \l__tenkz_kernel_hull_box_int
+    \tl_set:Ne \l__tenkz_kernel_hull_box_tl
+      {
+        l__tenkz_kernel_hull_box_
+        \int_use:N \l__tenkz_kernel_hull_box_int _box
+      }
+    \cs_if_exist:cF { \tl_use:N \l__tenkz_kernel_hull_box_tl }
+      { \box_new:c { \tl_use:N \l__tenkz_kernel_hull_box_tl } }
+    \prop_put:NnV \l__tenkz_kernel_hull_live_prop {#1/box}
+      \l__tenkz_kernel_hull_box_tl
     \__tenkz_model_get:nnN {#1} {label} \l__tenkz_kernel_hull_a_tl
     \quark_if_no_value:NT \l__tenkz_kernel_hull_a_tl
       { \tl_clear:N \l__tenkz_kernel_hull_a_tl }
@@ -3129,7 +3143,7 @@
         \l__tenkz_kernel_hull_b_tl
         \l__tenkz_kernel_hull_measure_name_tl
         {
-          \hbox_gset:cn { l__tenkz_kernel_hull_#1_box }
+          \hbox_gset:cn { \tl_use:N \l__tenkz_kernel_hull_box_tl }
             {
               \__tenkz_kernel_r_upright:n
                 {
@@ -3137,7 +3151,8 @@
                     \tl_use:N \l__tenkz_kernel_hull_a_tl $
                 }
             }
-          \exp_args:Nc \tex_copy:D { l__tenkz_kernel_hull_#1_box }
+          \exp_args:Nc \tex_copy:D
+            { \tl_use:N \l__tenkz_kernel_hull_box_tl }
         }
     \group_end:
     \tl_set:Ne \l__tenkz_kernel_hull_shape_tl
@@ -5891,9 +5906,14 @@
     % variable is one opaque key, so the style reaches the node expanded.
     \prop_if_in:NnTF \l__tenkz_kernel_hull_live_prop {#1/xmin}
       {
+        \prop_get:NnN \l__tenkz_kernel_hull_live_prop {#1/box}
+          \l__tenkz_kernel_hull_box_tl
         \__tenkz_render_atom_labelled:nen {#1}
           { \l__tenkz_kernel_r_c_tl }
-          { \exp_args:Nc \tex_copy:D { l__tenkz_kernel_hull_#1_box } }
+          {
+            \exp_args:Nc \tex_copy:D
+              { \tl_use:N \l__tenkz_kernel_hull_box_tl }
+          }
       }
       {
         \__tenkz_render_atom_labelled:nen {#1}
