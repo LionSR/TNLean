@@ -550,9 +550,8 @@ theorem peripheral_eigenvalue_multiplicity_one
         _ = ((γ * γ⁻¹ : ℂ)) • (X * (U : MatrixAlg D)ᴴ) := by
               rw [smul_mul_assoc, mul_smul_comm, smul_smul]
         _ = X * (U : MatrixAlg D)ᴴ := by
-              have hγ_ne : γ ≠ 0 := by
-                intro hγ0
-                simpa [hγ0] using hγ.2
+              have hγ_ne : γ ≠ 0 :=
+                Complex.ne_zero_of_norm_eq_one hγ.2
               simp [hγ_ne]
     obtain ⟨c, hc⟩ := MPSTensor.fixed_eq_scalar_of_irreducible_unital
       (K := K) hUnital hIrr (X * (U : MatrixAlg D)ᴴ) hXU_fix

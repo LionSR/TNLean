@@ -3,6 +3,7 @@ Copyright (c) 2025 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.ComplexPhasePositivity
 import TNLean.Channel.Primitive
 import TNLean.Channel.Irreducible.Basic
 import Mathlib.LinearAlgebra.Eigenspace.Basic
@@ -106,9 +107,7 @@ theorem isRootOfUnity_of_finite_powers (μ : ℂ) (hμ : ‖μ‖ = 1)
     fun hinj => Set.infinite_range_of_injective hinj hrange_fin
   simp only [Function.Injective, not_forall] at hninj
   obtain ⟨n₁, n₂, heq, hne⟩ := hninj
-  have hμ_ne : μ ≠ 0 := by
-    rw [← norm_ne_zero_iff, hμ]
-    norm_num
+  have hμ_ne : μ ≠ 0 := Complex.ne_zero_of_norm_eq_one hμ
   rcases Nat.lt_or_gt_of_ne hne with h | h
   · exact ⟨n₂ - n₁, Nat.sub_pos_of_lt h,
       mul_left_cancel₀ (pow_ne_zero _ hμ_ne) (by

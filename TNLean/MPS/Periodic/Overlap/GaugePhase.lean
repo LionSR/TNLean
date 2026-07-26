@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.ComplexPhasePositivity
 import TNLean.MPS.FundamentalTheorem.UnitaryGauge
 import TNLean.MPS.Periodic.Defs
 
@@ -35,8 +36,7 @@ theorem repeatedBlocks_of_gaugePhaseData_norm_one
           ζ • ((X : Matrix (Fin D) (Fin D) ℂ) * A i *
             ((X⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ))) :
     RepeatedBlocks A B := by
-  have hζ_ne : ζ ≠ 0 := by
-    exact norm_ne_zero_iff.mp (by rw [hζ_norm]; norm_num)
+  have hζ_ne : ζ ≠ 0 := Complex.ne_zero_of_norm_eq_one hζ_norm
   refine ⟨ζ⁻¹, X⁻¹, by rw [norm_inv, hζ_norm, inv_one], ?_⟩
   intro i
   simp only [inv_inv]
