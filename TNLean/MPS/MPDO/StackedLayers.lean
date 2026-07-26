@@ -356,9 +356,10 @@ normalized BNT-refined horizontal form, the direct theorem
 `hasNoPeriodicVectors_verticalTensor_of_horizontalCF` avoids this stronger
 all-length hypothesis by using one noncommuting length.
 
-**Scope restriction (BNT-refined horizontal form):** The horizontal hypothesis
-`IsHorizontalCF` is stronger than the literal CPSV canonical form; see
-`docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex`. -/
+**Scope restriction (conditional cyclic-projector interface):** This predicate
+requires the supplied projector to fail to commute with the density operator at
+every length. The direct BNT-refined theorem needs only one noncommuting length;
+see `docs/paper-gaps/cpgsv17_periodic_sector_projector.tex`. -/
 def PeriodicVectorYieldsCyclicProjector (M : MPOTensor d D) : Prop :=
   ∀ ⦃n : ℕ⦄ (V : Matrix (Fin d) (Fin n) ℂ) (B : MPSTensor (D * D) n)
     (ρ : Matrix (Fin n) (Fin n) ℂ) (r : ℝ),
