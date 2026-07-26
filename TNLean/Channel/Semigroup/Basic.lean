@@ -5,21 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Algebra.MatrixOperatorSpace
 import TNLean.Channel.Basic
-
-import Mathlib.Analysis.Normed.Algebra.Exponential
-import Mathlib.Analysis.Normed.Operator.Basic
-import Mathlib.Analysis.Normed.Operator.Mul
-import Mathlib.Analysis.SpecialFunctions.Exponential
-import Mathlib.Analysis.ODE.Gronwall
 import Mathlib.Analysis.ODE.ExistUnique
-import Mathlib.Topology.Algebra.Module.FiniteDimension
-import Mathlib.Topology.Metrizable.Uniformity
-import Mathlib.Analysis.Complex.RealDeriv
-import Mathlib.Analysis.Calculus.Deriv.Mul
-import Mathlib.Analysis.Calculus.Deriv.Slope
-import Mathlib.Analysis.Calculus.Deriv.Shift
-import Mathlib.Analysis.Normed.Ring.Units
-import Mathlib.MeasureTheory.Integral.IntervalIntegral.FundThmCalculus
 
 /-!
 # Quantum Dynamical Semigroups — Definitions and Proposition 7.1
@@ -78,8 +64,9 @@ theorem norm_exp_sub_one_sub_self_le
   rw [htail_eq]
   have hsummable_tail : Summable (fun n : ℕ =>
       ‖((Nat.factorial (n + 2) : ℂ)⁻¹) • x ^ (n + 2)‖) := by
-    exact (summable_nat_add_iff 2).2
-      (by simpa using NormedSpace.norm_expSeries_summable' (𝕂 := ℂ) x)
+    simpa [Function.comp_def] using
+      (NormedSpace.norm_expSeries_summable' (𝕂 := ℂ) x).comp_injective
+        (fun _ _ h ↦ Nat.add_right_cancel h)
   have hsummable_cmp : Summable (fun n : ℕ => ‖x‖ ^ 2 * (‖x‖ ^ n / Nat.factorial n)) :=
     (Real.summable_pow_div_factorial ‖x‖).mul_left (‖x‖ ^ 2)
   have hterm : ∀ n : ℕ,
