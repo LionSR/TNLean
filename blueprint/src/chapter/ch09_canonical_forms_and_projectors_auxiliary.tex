@@ -1,9 +1,213 @@
 \section{Translation-invariant canonical form}
 
+\begin{definition}[Unnormalized positive-length PGVWC07 witness]%
+    \label{def:pgvwc07_positive_length_witness}
+    \lean{MPSTensor.PGVWC07PositiveLengthWitness}
+    \leanok
+    An unnormalized positive-length PGVWC07 witness for a tensor~$A$ consists
+    of finitely many blocks $(A_k)_{k=1}^r$ of positive bond dimensions and
+    positive real weights $(a_k)_{k=1}^r$. Each block is unital, has only scalar
+    transfer-map fixed points, and has a diagonal positive-definite fixed point
+    $\Lambda_k$ for the adjoint transfer map. Moreover,
+    \begin{align}
+        V^{(N)}(A)_\sigma
+         & =
+        V^{(N)}\!\left(\bigoplus_{k=1}^r a_kA_k\right)_\sigma
+        \qquad(N>0),
+        \notag
+    \end{align}
+    and the retained bond dimensions satisfy $\sum_k\dim(A_k)\le D$.
+\end{definition}
+
+\begin{theorem}[Construction of the positive-length PGVWC07 witness]%
+    \label{thm:pgvwc07_positive_length_witness}
+    \lean{MPSTensor.isIrreducibleTensor_smul}
+    \lean{MPSTensor.exists_pgvwc07_unital_dualDiag_data_of_irreducible}
+    \lean{MPSTensor.exists_pgvwc07_unital_dualDiag_blockwise}
+    \lean{MPSTensor.exists_pgvwc07_unital_dualDiag_from_arbitrary}
+    \lean{MPSTensor.exists_pgvwc07_positiveLengthWitness}
+    \leanok
+    \uses{def:pgvwc07_positive_length_witness,
+        thm:nonzero_irreducible_block_decomposition,
+        thm:unital_data_irreducible,
+        thm:irreducible_tensor_to_action,
+        lem:irreducible_action_to_tensor,
+        thm:irreducible_unital_scalar_fixed_point,
+        thm:pgvwc07_dual_diag_unital}
+    Every MPS tensor has an unnormalized positive-length PGVWC07 witness.
+    More precisely, the construction has four stages. First, a nonzero
+    irreducible block remains irreducible under nonzero scalar rescaling and can
+    be put in a unital gauge with scalar fixed-point space and a diagonal
+    positive-definite dual fixed point. Second, this construction is applied to
+    each member of a finite nonzero irreducible block family. Third, the
+    nonzero irreducible decomposition of an arbitrary tensor supplies that
+    family and the total bond-dimension bound. Finally, these blocks, weights,
+    and fixed points form a witness in the sense of
+    Definition~\ref{def:pgvwc07_positive_length_witness}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:pgvwc07_positive_length_witness,
+        thm:nonzero_irreducible_block_decomposition,
+        thm:unital_data_irreducible,
+        thm:irreducible_tensor_to_action,
+        lem:irreducible_action_to_tensor,
+        thm:irreducible_unital_scalar_fixed_point,
+        thm:pgvwc07_dual_diag_unital}
+    Follow \cite[Theorem~4]{PerezGarcia2007Matrix}. The nonzero irreducible
+    decomposition is obtained by strict dimension induction. On a nonzero
+    current block, Perron--Frobenius gives a positive semidefinite eigenvector
+    at a positive spectral radius. If it is singular, positivity makes its
+    support invariant: $(\Id-P)A^iP=0$. After diagonalizing $P$, every letter is
+    upper block triangular and the finite-ring trace splits as
+    \begin{align}
+        \tr(A^{i_1}\cdots A^{i_N})
+         & =\tr(A_1^{i_1}\cdots A_1^{i_N})
+        +\tr(A_2^{i_1}\cdots A_2^{i_N}).
+        \notag
+    \end{align}
+    Discard all-zero blocks and repeat on the two strictly smaller diagonal
+    blocks. This gives the finite nonzero irreducible family of
+    Theorem~\ref{thm:nonzero_irreducible_block_decomposition}.
+
+    For each retained irreducible block, divide by the square root of its
+    positive spectral radius and conjugate by the square root of its
+    positive-definite Perron eigenvector. Theorem~\ref{thm:unital_data_irreducible}
+    gives the unital identity
+    \begin{align}
+        \sum_i A_k^i(A_k^i)^\dagger
+         & =\Id.
+        \notag
+    \end{align}
+    Nonzero scalar rescaling preserves irreducibility. The proof passes
+    from tensor irreducibility to irreducibility of the matrix action, carries
+    invariant subspaces through the gauge similarity, and returns to tensor
+    irreducibility using Theorem~\ref{thm:irreducible_tensor_to_action} and
+    Lemma~\ref{lem:irreducible_action_to_tensor}. Hence
+    Theorem~\ref{thm:irreducible_unital_scalar_fixed_point} makes every fixed
+    point scalar. Theorem~\ref{thm:pgvwc07_dual_diag_unital} then diagonalizes a
+    positive-definite dual fixed point by a unitary without changing unitality.
+
+    Apply this single-block construction to every member of the finite family.
+    The square roots of the block spectral radii become positive weights, gauge
+    invariance preserves every positive-length MPV coefficient, and the block
+    dimensions are unchanged. Combining this blockwise result with the initial
+    decomposition yields the arbitrary-input unnormalized form and its bound
+    $\sum_k\dim(A_k)\le D$. Together these conclusions give the structured witness.
+\end{proof}
+
+\begin{theorem}[Finite normalization of a nonempty PGVWC07 witness]%
+    \label{thm:pgvwc07_positive_length_weight_normalization}
+    \lean{MPSTensor.PGVWC07PositiveLengthWitness.block_count_pos_of_exists_ne_zero_mpv}
+    \lean{MPSTensor.PGVWC07PositiveLengthWitness.exists_weight_normalization}
+    \leanok
+    \uses{def:pgvwc07_positive_length_witness}
+    Let $W$ be an unnormalized positive-length witness with positive weights
+    $a_k$. If some positive-length MPV coefficient of the original tensor is
+    nonzero, then $W$ has at least one block. For any nonempty witness, define
+    \begin{align}
+        s
+         & :=\max_{1\le k\le r}a_k,
+        \notag                      \\
+        \nu_k
+         & :=\frac{a_k}{s}.
+        \notag
+    \end{align}
+    Then $s>0$, every $\nu_k$ is positive, $|\nu_k|\le1$, and
+    $|\nu_k|=1$ for at least one~$k$. For every $N>0$,
+    \begin{align}
+        V^{(N)}(A)_\sigma
+         & =s^N
+        V^{(N)}\!\left(\bigoplus_k\nu_kA_k\right)_\sigma.
+        \label{eq:canonical_pgvwc_weight_normalization}
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:pgvwc07_positive_length_witness}
+    If the witness had no blocks, its weighted block tensor would have zero MPV
+    coefficients at every positive length, contrary to the assumed nonzero
+    coefficient. Thus $r>0$. Since the finite family $(a_k)$ is nonempty and
+    every $a_k>0$, its maximum $s$ is positive. The definition
+    $\nu_k=a_k/s$ gives $0<\nu_k\le1$, and any maximizing index has
+    $\nu_k=1$. Finally, $a_k=s\nu_k$ for every~$k$, so homogeneity of a
+    length-$N$ matrix product vector gives
+    (\ref{eq:canonical_pgvwc_weight_normalization}).
+\end{proof}
+
+\begin{theorem}[Normalized exact form for a nonzero MPV family]%
+    \label{thm:pgvwc07_ti_canonical_form_nonzero}
+    \lean{MPSTensor.exists_pgvwc07_normalized_exact_form_after_rescaling_of_exists_ne_zero_mpv}
+    \leanok
+    \uses{thm:pgvwc07_positive_length_witness,
+        thm:pgvwc07_positive_length_weight_normalization}
+    Suppose that $V^{(N)}(A)_\sigma\neq0$ for some $N>0$ and some
+    word~$\sigma$. Then there are a scalar $s>0$ and a nonempty finite family
+    of positive-bond-dimension blocks $(A_k)_{k=1}^r$ with positive weights
+    $(\mu_k)_{k=1}^r$ such that $s^{-1}A$ and
+    $\bigoplus_k\mu_kA_k$ have identical MPV coefficients at every positive
+    length. The weights satisfy $|\mu_k|\le1$, with equality for at least one
+    block, and
+    \begin{align}
+        \sum_i A_k^i(A_k^i)^\dagger
+         & =\Id,
+        \notag        \\
+        \sum_i(A_k^i)^\dagger\Lambda_kA_k^i
+         & =\Lambda_k
+        \label{eq:canonical_pgvwc_nonzero_block_conditions}
+    \end{align}
+    for a diagonal positive-definite matrix $\Lambda_k$. Every fixed point of
+    $\E_{A_k}$ is a scalar multiple of $\Id$, and
+    $\sum_k\dim(A_k)\le D$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:pgvwc07_positive_length_witness,
+        thm:pgvwc07_positive_length_weight_normalization}
+    Choose the structured witness from
+    Theorem~\ref{thm:pgvwc07_positive_length_witness}. The assumed nonzero
+    coefficient makes its block family nonempty, so
+    Theorem~\ref{thm:pgvwc07_positive_length_weight_normalization} supplies
+    $s>0$ and the normalized positive weights. Equation
+    (\ref{eq:canonical_pgvwc_weight_normalization}) and homogeneity give
+    \begin{align}
+        V^{(N)}(s^{-1}A)_\sigma
+         & =s^{-N}V^{(N)}(A)_\sigma
+        =V^{(N)}\!\left(\bigoplus_k\mu_kA_k\right)_\sigma.
+        \notag
+    \end{align}
+    The witness satisfies all required block conditions and the bond-dimension
+    bound.
+\end{proof}
+
+\begin{theorem}[Zero/nonzero alternative for the normalized exact form]%
+    \label{thm:pgvwc07_ti_canonical_form_dichotomy}
+    \lean{MPSTensor.exists_pgvwc07_normalized_exact_form_after_rescaling_or_forall_pos_mpv_eq_zero}
+    \leanok
+    \uses{thm:pgvwc07_ti_canonical_form_nonzero}
+    For every MPS tensor~$A$, one of the following alternatives holds:
+    \begin{enumerate}
+        \item $V^{(N)}(A)_\sigma=0$ for every $N>0$ and every
+              word~$\sigma$;
+        \item there are a scalar $s>0$ and a nonempty normalized block family
+              satisfying all conclusions of
+              Theorem~\ref{thm:pgvwc07_ti_canonical_form_nonzero}.
+    \end{enumerate}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:pgvwc07_ti_canonical_form_nonzero}
+    Split according to whether there exist $N>0$ and $\sigma$ with
+    $V^{(N)}(A)_\sigma\neq0$. In that case apply
+    Theorem~\ref{thm:pgvwc07_ti_canonical_form_nonzero}. If no such pair
+    exists, every positive-length coefficient vanishes.
+\end{proof}
+
 \begin{theorem}[Translation-invariant canonical form]%
     \label{thm:pgvwc07_ti_canonical_form}
     \lean{MPSTensor.exists_pgvwc07_normalized_exact_form_after_rescaling_allow_empty}
     \leanok
+    \uses{thm:pgvwc07_ti_canonical_form_dichotomy}
     % Source: PerezGarcia2007Matrix, Theorem 4.
     % Block decomposition, three block conditions, and bond-dimension bound.
     % Proof order to preserve: spectral-radius normalization and full-rank
@@ -21,10 +225,10 @@
     nonempty, then some weight has norm~$1$. For each block,
     \begin{align}
         \sum_i A_k^i(A_k^i)^\dagger
-        &= \Id,
-        \notag\\
+         & = \Id,
+        \notag          \\
         \sum_i (A_k^i)^\dagger \Lambda_k A_k^i
-        &= \Lambda_k.
+         & = \Lambda_k.
         \label{eq:canonical_pgvwc_block_conditions}
     \end{align}
     Here $\Lambda_k$ is diagonal, positive, and full-rank, and each block has
@@ -39,19 +243,14 @@
     spectral-radius normalization step made explicit.
 \end{theorem}
 
-\begin{remark}[Source proof order]\label{rem:pgvwc07_ti_canonical_source_order}
-    The proof follows
-    \cite[Theorem~4]{PerezGarcia2007Matrix} in order: normalize the
-    spectral radius and use a full-rank positive fixed point to obtain the
-    unital gauge; derive the invariant support projection from a singular
-    positive fixed point by the positivity contradiction; split the finite-ring
-    trace into the supported and orthogonal summands; iterate, using a
-    non-scalar fixed point to split further until each block has only scalar
-    fixed points; and finally repeat the fixed-point argument for the dual map
-    and diagonalize the resulting full-rank positive fixed point by a unitary
-    gauge. The primitive-block results below are used only after their
-    hypotheses have been obtained from this argument.
-\end{remark}
+\begin{proof}\leanok
+    \uses{thm:pgvwc07_ti_canonical_form_dichotomy}
+    Apply Theorem~\ref{thm:pgvwc07_ti_canonical_form_dichotomy}. If every
+    positive-length coefficient vanishes, take $s=1$ and the empty retained
+    family; the block conditions and bond-dimension bound are vacuous, and the
+    MPV identity is the zero identity. In the nonzero branch, use the nonempty
+    normalized family supplied by the second alternative.
+\end{proof}
 
 \begin{remark}[CPSV blocked canonical form (source statement)]%
     \label{rem:cpgsv_canonical_form_source}
@@ -67,15 +266,19 @@
     The blocked canonical-form reduction of
     \cite[Section~2.3]{Cirac2016MPDO_arXiv} and
     \cite[Section~IV.A]{Cirac2021Matrix} states that an arbitrary
-    translation-invariant MPS tensor becomes, after blocking by some period
-    $p\ge 1$, the direct sum of an all-zero summand and a weighted family of
-    normal tensors $\bigoplus_k \mu_k B_k$ with $|\mu_k|\le 1$ and at least one
-    $|\mu_k|=1$. The closest proved results here are
-    Theorem~\ref{thm:tp_primitive_blockdecomp} and
-    Theorem~\ref{thm:paperbnt_supplier_after_blocking}; the source upper
-    normalization $|\mu_k|\le 1$ with a unit-modulus witness is the one
-    remaining input, recorded in
-    Remark~\ref{rem:arbitrary_input_reduction_gap}.
+    translation-invariant MPS tensor becomes, after blocking, a weighted family
+    of normal tensors, up to a summand that vanishes on every positive-length
+    ring. Four statements must be distinguished. Theorem~\ref{thm:pgvwc07_ti_canonical_form}
+    gives the unconditional PGVWC07 normalized exact form before period removal.
+    Theorem~\ref{thm:tp_primitive_blockdecomp} gives the prepared
+    trace-preserving primitive-block reduction. For a family with a nonzero
+    positive-length coefficient,
+    Theorem~\ref{thm:paperbnt_weight_normalization} normalizes the weights and
+    Theorem~\ref{thm:paperbnt_supplier_after_blocking_normalized} gives the
+    normalized BNT form, including its per-site scalar. If every
+    positive-length coefficient vanishes, there is no nonempty family from
+    which to choose a unit-modulus weight; this exceptional zero family is
+    represented by the empty retained family instead.
 \end{remark}
 
 \section{Normal tensors and canonical forms}\label{sec:cpsv_canonical_defs}
@@ -85,13 +288,13 @@ This section records the CPSV definitions of \emph{normal tensor} and
 tensors is stated in Chapter~\ref{ch:bnt}. Write
 \begin{align}
     \sigma_\partial(\E)
-    &=
+     & =
     \{\lambda\in\sigma(\E):|\lambda|=r(\E)\}
     \label{eq:canonical_peripheral_spectrum}
 \end{align}
 for the peripheral spectrum of a transfer map $\E$, where $r(\E)$ is its
-spectral radius. The stronger predicates used later
-(Definition~\ref{def:is_normal_canonical_form} and the canonical-form predicate
+spectral radius. The stronger conditions used later
+(Definition~\ref{def:is_normal_canonical_form} and the canonical-form conditions
 of Chapter~\ref{ch:bnt}) add left-canonical normalization and spectral
 primitivity. The weight moduli are taken non-increasing, not strictly
 decreasing; equal-modulus and repeated-copy sectors are retained and compared by
@@ -114,20 +317,52 @@ the coefficient argument of Chapter~\ref{ch:bnt}.
     so condition~(ii) alone does not characterize normality.
 \end{remark}
 
-The CPSV \emph{canonical form} (CF) of a tensor $A$ is the normal-block
-decomposition $A^i\cong\bigoplus_{k=1}^r\mu_kA_k^i$, with weights normalized by
-$|\mu_k|\le 1$ and with at least one $|\mu_k|=1$; see
-\cite[Section~2.3]{Cirac2016MPDO_arXiv}. In the statements below, the structural
-part is supplied by the stronger normal canonical form of
-Definition~\ref{def:is_normal_canonical_form}, and the global weight
-normalization is invoked as a separate source hypothesis where needed.
+\begin{definition}[CPSV canonical form and basis of normal tensors]
+    \label{def:cpsv_canonical_form}
+    \notready
+    \uses{def:nt_cpsv}
+    In the canonical form of \cite[Section~2.3]{Cirac2016MPDO_arXiv},
+    \begin{align}
+        A^i
+         & =\bigoplus_{k=1}^r\mu_kA_k^i,
+        \tag{CF}\label{eq:cpsv_canonical_form}
+    \end{align}
+    where every $A_k$ is a normal tensor. For a nonzero positive-length MPV
+    family, the states are not normalized, so the common scalar may be chosen
+    such that $|\mu_k|\le1$ for every~$k$ and at least one weight has modulus
+    one.
 
-\begin{remark}[Relation to the strong predicates]
+    \textbf{Local fix (zero-family normalization):} The source states the
+    unit-modulus convention without an exception. An identically zero
+    positive-length MPV family has no nonempty retained family on which a
+    unit-modulus weight can be attained, so here it is represented by the empty
+    family. This deviation is recorded in
+    \path{docs/paper-gaps/cpsv16_cf_normalization_and_proportional_comparison.tex}.
+
+    A basis of normal tensors for $A$ is a family $(C_j)_{j=1}^g$ of normal
+    tensors such that $V^{(N)}(A)$ lies in the span of the
+    $V^{(N)}(C_j)$ for every~$N$, and these vectors are linearly independent for
+    every sufficiently large~$N$. Equivalently, each normal block $A_k$ in
+    (\ref{eq:cpsv_canonical_form}) is gauge-phase equivalent to some $C_j$, and
+    the family $(C_j)$ is minimal under gauge-phase equivalence.
+
+    A sufficient criterion for (\ref{eq:cpsv_canonical_form}) is that $A$ have
+    no nontrivial periodic vectors and that every orthogonal projection $P$
+    satisfying $PA^i=PA^iP$ also satisfy $A^iP=PA^iP$. This is the criterion
+    proved in Theorem~\ref{thm:projector_closure_canonical_form}.
+\end{definition}
+
+This source definition is distinct from the stronger normal-canonical-form
+conditions below. The renormalization fixed-point analysis uses a separate
+block-injective canonical-form criterion; it is not the CPSV canonical-form
+definition.
+
+\begin{remark}[Relation to the stronger conditions]
     A tensor $A$ which is irreducible
     (Definition~\ref{def:irreducible_tensor}), has transfer map of spectral
     radius one, and has primitive transfer map is normal in the sense of
     Definition~\ref{def:nt_cpsv}. The reverse implications from the stronger
-    predicates of Definition~\ref{def:is_normal_canonical_form} and of
+    conditions of Definition~\ref{def:is_normal_canonical_form} and of
     Chapter~\ref{ch:bnt} require the fundamental-theorem step or the
     algebraic-to-spectral normality equivalence, established later.
 \end{remark}
@@ -140,13 +375,13 @@ normalization is invoked as a separate source hypothesis where needed.
     phase rescaling preserves $\sum_i(A^i)^\dagger A^i=\Id$; and the MPV of a
     weighted block-diagonal tensor factorizes as
     $\mu_k^NV^{(N)}(A_k)_\sigma
-    =\eta_k^N|\mu_k|^NV^{(N)}(A_k)_\sigma$, with
+        =\eta_k^N|\mu_k|^NV^{(N)}(A_k)_\sigma$, with
     $\eta_k:=\mu_k/|\mu_k|$.
 
     Left-canonical normalization is required before the blocks can be compared.
     Without it, the implication
     $\mc{V}(\bigoplus_k\mu_kA_k)=\mc{V}(\bigoplus_k\mu_kB_k)
-    \Rightarrow\forall k,\ \mc{V}(A_k)=\mc{V}(B_k)$
+        \Rightarrow\forall k,\ \mc{V}(A_k)=\mc{V}(B_k)$
     already fails for two scalar blocks: for $\mu=(1,2)$, $A=(1,3/2)$, and
     $B=(3,1/2)$, the two direct sums generate identical MPV families but the
     first blocks differ at $N=1$. Left-canonical normalization removes this
@@ -155,7 +390,7 @@ normalization is invoked as a separate source hypothesis where needed.
     which requires no ordering of the weight moduli.
 \end{remark}
 
-\section{Projector criteria and decomposition auxiliaries}
+\section{Projector criterion for canonical decomposition}
 
 \begin{definition}[Invariant-projector closure]
     \label{def:invariant_projector_closure}
@@ -169,130 +404,6 @@ normalization is invoked as a separate source hypothesis where needed.
     form of~\cite[Section~2]{Cirac2016MPDO_arXiv}.
 \end{definition}
 
-\begin{theorem}[Invariant projections are reducing under projector closure]
-    \label{thm:invariant_projector_closure_commutes}
-    \lean{MPSTensor.commutes_of_hasInvariantProjectorClosure_of_lowerZero}
-    \leanok
-    \uses{def:invariant_projector_closure}
-    Suppose that $A$ has invariant-projector closure and that $P$ is an
-    orthogonal projection satisfying $(\Id-P)A^iP=0$ for all~$i$. Then $P$
-    reduces every tensor matrix: $PA^i=A^iP$ for all~$i$.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    \uses{def:invariant_projector_closure}
-    The lower-corner relation gives
-    $(\Id-P)A^i=(\Id-P)A^i(\Id-P)$. Applying projector closure to $\Id-P$
-    gives $A^i(\Id-P)=(\Id-P)A^i(\Id-P)$, hence the upper corner
-    $PA^i(\Id-P)$ also vanishes. Therefore $PA^i=PA^iP=A^iP$.
-\end{proof}
-
-\begin{theorem}[Invariant-projector closure gives a reducing projection]
-    \label{thm:exists_reducing_projection_of_invariant_projector}
-    \lean{MPSTensor.exists_reducing_projection_of_hasInvariantProj}
-    \leanok
-    \uses{def:has_inv_proj, def:invariant_projector_closure}
-    If $A$ has invariant-projector closure and admits a nontrivial invariant
-    projection, then it admits a nontrivial orthogonal projection commuting
-    with every $A^i$.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    \uses{thm:invariant_projector_closure_commutes}
-    Apply Theorem~\ref{thm:invariant_projector_closure_commutes} to the
-    projection supplied by Definition~\ref{def:has_inv_proj}.
-\end{proof}
-
-\begin{lemma}[Support isometry of an orthogonal projection]
-    \label{lem:projection_support_isometry}
-    \lean{IsOrthogonalProjection.exists_support_isometry}
-    \leanok
-    \uses{def:orthogonal_projection_channel}
-    Every orthogonal projection $P$ on $\C^D$ factors through an isometry:
-    there are $n\in\N$ and $V\in\C^{D\times n}$ such that
-    \begin{align}
-        V^\dagger V
-        &= \Id,
-        \notag\\
-        VV^\dagger
-        &= P,
-        \notag\\
-        n
-        &= \tr(P).
-        \label{eq:canonical_projection_isometry}
-    \end{align}
-\end{lemma}
-
-\begin{proof}
-    \leanok
-    Since $P$ is Hermitian and idempotent, its eigenvalues are $0$ and $1$.
-    Writing $n=\tr(P)$, unitary diagonalization gives
-    \begin{align}
-        P
-        &=
-        U\diag(\underbrace{1,\ldots,1}_{n},0,\ldots,0)U^\dagger.
-        \notag
-    \end{align}
-    The matrix $V\in\C^{D\times n}$ formed by the first $n$ columns of $U$
-    satisfies (\ref{eq:canonical_projection_isometry}).
-\end{proof}
-
-\begin{lemma}[Corner tensors inherit projector closure]
-    \label{lem:projector_closure_corner}
-    \lean{MPSTensor.hasInvariantProjectorClosure_compress_of_commutes}
-    \leanok
-    \uses{def:invariant_projector_closure, def:orthogonal_projection_channel}
-    Let $A$ have invariant-projector closure, and let $V$ be an isometry,
-    $V^\dagger V=\Id$, whose range projection $VV^\dagger$ commutes with every
-    $A^i$. Then the corner tensor $B^i=V^\dagger A^iV$ again has
-    invariant-projector closure.
-\end{lemma}
-
-\begin{proof}
-    \leanok
-    \uses{def:invariant_projector_closure}
-    Let $Q$ be an orthogonal projection with $QB^i=QB^iQ$ for all~$i$.
-    Then $VQV^\dagger$ is an orthogonal projection. Commutation of
-    $VV^\dagger$ with each $A^i$ gives $V^\dagger A^i=B^iV^\dagger$, so
-    left-invariance of $Q$ yields
-    \begin{align}
-        (VQV^\dagger)A^i
-        &=VQB^iV^\dagger
-        =VQB^iQV^\dagger
-        =(VQV^\dagger)A^i(VQV^\dagger).
-        \notag
-    \end{align}
-    Projector closure for $A$ yields
-    $A^i(VQV^\dagger)=(VQV^\dagger)A^i(VQV^\dagger)$, and compressing both
-    sides between $V^\dagger$ and $V$ returns $B^iQ=QB^iQ$.
-\end{proof}
-
-\begin{lemma}[Matrix product vectors split along an isometric partition]
-    \label{lem:mpv_partition_isometries}
-    \lean{MPSTensor.sameMPV₂_toTensorFromBlocks_of_isometry_family}
-    \leanok
-    \uses{def:same_mpv2, def:block_diagonal_tensor}
-    Let $V_1,\ldots,V_r$ be isometries, $V_k^\dagger V_k=\Id$, with
-    $\sum_kV_kV_k^\dagger=\Id$, and suppose $A^iV_k=V_kB_k^i$ for some
-    tensors $B_1,\ldots,B_r$. Then
-    $\mc{V}(A)=\mc{V}(\bigoplus_{k=1}^rB_k)$.
-\end{lemma}
-
-\begin{proof}
-    \leanok
-    The intertwining relation propagates from letters to words, so
-    $A^wV_k=V_kB_k^w$ for every word~$w$. Inserting the partition of unity
-    $\sum_kV_kV_k^\dagger=\Id$ into the trace and cycling gives
-    \begin{align}
-        \tr(A^w)
-        &=\sum_{k=1}^r\tr\!\left(V_k^\dagger A^wV_k\right)
-        =\sum_{k=1}^r\tr(B_k^w),
-        \notag
-    \end{align}
-    which is the matrix product vector of the direct sum.
-\end{proof}
 
 \begin{theorem}[Decomposition into irreducible corners under projector closure]
     \label{thm:projector_closure_irreducible_corners}
@@ -325,7 +436,7 @@ normalization is invoked as a separate source hypothesis where needed.
     corners are orthogonal because
     \begin{align}
         V_1^\dagger V_2
-        &=V_1^\dagger P(\Id-P)V_2
+         & =V_1^\dagger P(\Id-P)V_2
         =0.
         \notag
     \end{align}
@@ -352,167 +463,6 @@ normalization is invoked as a separate source hypothesis where needed.
     of~\cite[Section~2]{Cirac2016MPDO_arXiv}.
 \end{definition}
 
-\begin{lemma}[Transfer map of an intertwined corner]
-    \label{lem:transfer_map_corner_intertwine}
-    \lean{MPSTensor.transferMap_conj_of_intertwine}
-    \lean{MPSTensor.hasEigenvalue_transferMap_of_intertwine}
-    \leanok
-    \uses{def:transfer_map}
-    Let $V$ satisfy $A^iV=VB^i$ for all~$i$. Then, for every $X$,
-    \begin{align}
-        \E_A(VXV^\dagger)
-        &=V\E_B(X)V^\dagger.
-        \label{eq:canonical_corner_transfer}
-    \end{align}
-    If moreover $V^\dagger V=\Id$, then every eigenvalue of $\E_B$ is an
-    eigenvalue of $\E_A$.
-\end{lemma}
-
-\begin{proof}
-    \leanok
-    Expanding the left-hand side of (\ref{eq:canonical_corner_transfer})
-    termwise, the intertwining $A^iV=VB^i$ and its adjoint
-    $V^\dagger(A^i)^\dagger=(B^i)^\dagger V^\dagger$ move both factors past
-    $V$ and $V^\dagger$. For the eigenvalue statement, if
-    $\E_B(X)=\mu X$ with $X\neq0$, then
-    $\E_A(VXV^\dagger)=\mu VXV^\dagger$, and $VXV^\dagger\neq0$ because
-    compression with the isometry gives $V^\dagger(VXV^\dagger)V=X$.
-\end{proof}
-
-\begin{lemma}[Perron eigenpair of a nonzero irreducible tensor]
-    \label{lem:irreducible_transfer_perron_pair}
-    \lean{MPSTensor.exists_posDef_transferMap_eigenvector_of_irreducible}
-    \leanok
-    \uses{def:irreducible_tensor, def:transfer_map}
-    Let $B$ be an irreducible MPS tensor of positive bond dimension, not all
-    of whose matrices vanish. Then there are $\rho>0$ and $r>0$ with
-    $\E_B(\rho)=r\rho$.
-\end{lemma}
-
-\begin{proof}
-    \leanok
-    \uses{thm:pf_eigenvector_existence, def:irreducible_cp}
-    Irreducibility of the tensor makes the transfer map an irreducible
-    completely positive map, and a nonzero matrix makes it nonzero, so it
-    does not annihilate any nonzero PSD matrix. The Perron--Frobenius theorem
-    for positive maps (Theorem~\ref{thm:pf_eigenvector_existence}) gives a
-    nonzero PSD eigenvector with eigenvalue $r>0$, and irreducibility upgrades
-    it to a positive-definite one
-    (\cite[Theorem~6.3(2)]{Wolf2012Quantum}).
-\end{proof}
-
-\begin{lemma}[Spectral normalization of an irreducible block]
-    \label{lem:irreducible_block_spectral_normalization}
-    \lean{MPSTensor.isNormalTensor_invSqrt_smul_of_unique_peripheral}
-    \leanok
-    \uses{def:irreducible_tensor, def:transfer_map, def:nt_cpsv}
-    Let $B$ be an irreducible MPS tensor of positive bond dimension with
-    $\E_B(\rho)=r\rho$ for some $\rho>0$ and $r>0$, and suppose every
-    eigenvalue of $\E_B$ of modulus~$r$ equals~$r$. Then $r^{-1/2}B$ is a
-    normal tensor.
-\end{lemma}
-
-\begin{proof}
-    \leanok
-    \uses{def:nt_cpsv, thm:spectral_radius_pf_irred}
-    The rescaling identity $\E_{r^{-1/2}B}(X)=r^{-1}\E_B(X)$ gives
-    $\E_{r^{-1/2}B}(\rho)=r^{-1}r\rho=\rho$, so $\rho$ is a
-    positive-definite fixed point of $\E_{r^{-1/2}B}$. The rescaled map
-    remains irreducible and completely positive, so
-    Theorem~\ref{thm:spectral_radius_pf_irred} identifies its spectral radius
-    with the eigenvalue one. The eigenvalues of modulus one of
-    $\E_{r^{-1/2}B}$ are the eigenvalues of $\E_B$ of modulus~$r$, divided by
-    $r$; by hypothesis the only such eigenvalue is one, so the peripheral
-    eigenvalue set is $\{1\}$. Irreducibility is unchanged by a nonzero
-    rescaling.
-\end{proof}
-
-\begin{lemma}[Canonical inclusion of a dependent direct summand]
-    \label{lem:matrix_sigma_block_inclusion}
-    \lean{Matrix.sigmaBlockInclusion}
-    \lean{Matrix.sigmaBlockInclusion_isometry}
-    \lean{Matrix.blockDiagonal'_mul_sigmaBlockInclusion}
-    \lean{Matrix.sigmaBlockInclusion_conjTranspose_mul_blockDiagonal'}
-    \lean{Matrix.sigmaBlockInclusion_compression}
-    \lean{Matrix.blockDiagonal'_eq_sum_sigmaBlockInclusion}
-    \lean{Matrix.blockDiagonal'_commute_sigmaBlockInclusion_rangeProjection}
-    \leanok
-    Let $E_k:H_k\to\bigoplus_lH_l$ be the canonical inclusion and let
-    $B=\bigoplus_lB_l$. Then
-    \begin{align}
-        E_k^\dagger E_k
-        &=\Id,
-        \notag\\
-        BE_k
-        &=E_kB_k,
-        \notag\\
-        E_k^\dagger B
-        &=B_kE_k^\dagger,
-        \notag\\
-        E_k^\dagger BE_k
-        &=B_k,
-        \notag\\
-        B
-        &=\sum_kE_kB_kE_k^\dagger.
-        \label{eq:canonical_direct_summand}
-    \end{align}
-    In particular, $B$ commutes with the range projection
-    $E_kE_k^\dagger$.
-\end{lemma}
-
-\begin{proof}\leanok
-    The identities in (\ref{eq:canonical_direct_summand}) follow directly
-    from the defining block-diagonal entries. The relations
-    $BE_k=E_kB_k$ and $E_k^\dagger B=B_kE_k^\dagger$ imply that $B$
-    commutes with $E_kE_k^\dagger$.
-\end{proof}
-
-\begin{lemma}[Canonical hypotheses descend to dependent direct summands]
-    \label{lem:canonical_hypotheses_dependent_direct_summand}
-    \lean{MPSTensor.projectorClosure_and_noPeriodicVectors_block_of_reindex_eq_blockDiagonal}
-    \leanok
-    \uses{lem:matrix_sigma_block_inclusion,
-        def:invariant_projector_closure, def:no_periodic_vectors}
-    Suppose that, after a change of coordinates, $A$ is the dependent direct
-    sum of tensors $B_k$. If $A$ has invariant-projector closure and no
-    nontrivial periodic vectors, then every $B_k$ has both properties. The
-    assertion also applies to summands of dimension zero.
-\end{lemma}
-
-\begin{proof}\leanok
-    Transport the canonical inclusion of the $k$-th summand back to the bond
-    coordinates of $A$. This is an isometry which intertwines $B_k$ with
-    $A$ on both sides, and its range projection commutes with every letter of
-    $A$. Projector closure therefore descends by exact compression. A
-    periodic vector of $B_k$ would embed through the same isometry as a
-    periodic vector of $A$.
-\end{proof}
-
-\begin{lemma}[Closed-chain equality from an exact isometric decomposition]
-    \label{lem:same_mpv_exact_isometric_decomposition}
-    \lean{MPSTensor.sameMPV₂Pos_toTensorFromBlocks_of_reconstruction}
-    \leanok
-    \uses{def:same_mpv2_pos, def:block_diagonal_tensor}
-    Suppose that isometries $V_k$ satisfy
-    \begin{align}
-        V_k^\dagger A^i
-        &=(\mu_kB_k^i)V_k^\dagger,
-        \notag\\
-        A^i
-        &=\sum_kV_k(\mu_kB_k^i)V_k^\dagger.
-        \label{eq:canonical_exact_reconstruction}
-    \end{align}
-    Then $A$ and $\bigoplus_k\mu_kB_k$ have the same matrix product vectors
-    at every positive length.
-\end{lemma}
-
-\begin{proof}\leanok
-    Expand the first letter by the reconstruction formula in
-    (\ref{eq:canonical_exact_reconstruction}). In each summand, move the
-    remaining word through $V_k^\dagger$ using the intertwining relation.
-    Cyclicity of the trace places $V_k^\dagger V_k=\Id$ next to the weighted
-    block word, leaving precisely its closed-chain trace.
-\end{proof}
 
 \begin{theorem}[Sufficient condition for canonical form]
     \label{thm:projector_closure_canonical_form}
@@ -528,7 +478,7 @@ normalization is invoked as a separate source hypothesis where needed.
     $\sum_kD_k\le D$, and nonzero weights $\mu_1,\ldots,\mu_r$ such that
     \begin{align}
         \mc{V}^+(A)
-        &=
+         & =
         \mc{V}^+\!\left(\bigoplus_{k=1}^r\mu_kA_k\right).
         \label{eq:canonical_projector_decomp}
     \end{align}
@@ -536,10 +486,10 @@ normalization is invoked as a separate source hypothesis where needed.
     orthogonal ranges such that
     \begin{align}
         A^iV_k
-        &=V_k(\mu_kA_k^i),
-        \notag\\
+         & =V_k(\mu_kA_k^i),
+        \notag                                \\
         A^i
-        &=\sum_kV_k(\mu_kA_k^i)V_k^\dagger.
+         & =\sum_kV_k(\mu_kA_k^i)V_k^\dagger.
         \label{eq:canonical_projector_isometries}
     \end{align}
     This is the sufficient condition for canonical form
@@ -569,7 +519,7 @@ normalization is invoked as a separate source hypothesis where needed.
     every word $w$ of positive length~$N$ the weight cancels:
     \begin{align}
         \mu_k^N\tr(A_k^w)
-        &=
+         & =
         (r_k^{1/2})^N(r_k^{-1/2})^N\tr(B_k^w)
         =
         \tr(B_k^w).
