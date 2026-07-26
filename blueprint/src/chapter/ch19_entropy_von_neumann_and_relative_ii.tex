@@ -210,47 +210,6 @@
     $(A\times B)\times C$, the right partial trace removes $C$.
 \end{definition}
 
-\begin{theorem}[Petz factorization for a maximally mixed factor]
-    \label{thm:entropy_petz_maximally_mixed_tensor}
-    \lean{Matrix.partialTraceRightPetzMap_maximallyMixedTensor}
-    \leanok
-    \uses{def:entropy_maximally_mixed_tensor_reference,
-        def:partial_trace_support_petz_map}
-    For the reference in~(\ref{eq:entropy_hjpw_product_reference}), the support
-    Petz map for $\tr_C$ factors as
-    \begin{align}
-        \mathcal R_{\sigma_{ABC}}
-        &=\operatorname{id}_A\otimes\mathcal R_{\rho_{BC}}.
-        \label{eq:entropy_hjpw_petz_factorization}
-    \end{align}
-    after the canonical identification
-    $(H_A\otimes H_B)\otimes H_C\cong
-    H_A\otimes(H_B\otimes H_C)$. This is the maximally mixed specialization
-    of \cite[equation~(10)]{Hayden2004Structure}. It is the tensor-product
-    identity for the raw Petz support formula, not the
-    Hayashi--Koashi--Imoto block decomposition.
-\end{theorem}
-
-\begin{proof}\leanok
-    \uses{lem:partial_trace_support_petz_map_apply,
-        lem:support_inverse_square_root_maximally_mixed,
-        def:bipartite_operator_schmidt_rank}
-    The marginal of~(\ref{eq:entropy_hjpw_product_reference}) is
-    $d_A^{-1}\mathbf 1_A\otimes\rho_B$. Functional calculus gives
-    \begin{align}
-        \sqrt{\sigma_{ABC}}
-        &=d_A^{-1/2}\mathbf 1_A\otimes\sqrt{\rho_{BC}},
-        \notag\\
-        \sigma_{AB,\mathrm{supp}}^{-1/2}
-        &=d_A^{1/2}\mathbf 1_A\otimes
-          \rho_{B,\mathrm{supp}}^{-1/2}.
-        \notag
-    \end{align}
-    The scalar factors cancel in the Petz sandwich. The identity follows first
-    for $A_0\otimes X_B$ and then for every operator by a finite sum of product
-    operators.
-\end{proof}
-
 \begin{theorem}[Marginals and trace of the maximally mixed reference]
     \label{thm:entropy_maximally_mixed_tensor_marginals}
     \lean{Matrix.partialTraceRight_maximallyMixedTensorReference,
@@ -258,7 +217,7 @@
         Matrix.trace_maximallyMixedTensorReference}
     \leanok
     \uses{def:entropy_maximally_mixed_tensor_reference,
-        def:partial_trace_left}
+        def:partial_trace, def:partial_trace_left}
     For the reference in~(\ref{eq:entropy_hjpw_product_reference}),
     \begin{align}
         \tr_C\sigma_{ABC}
@@ -279,12 +238,73 @@
     a partial trace then gives the last identity.
 \end{proof}
 
+\begin{theorem}[Support inverse square root of the maximally mixed marginal]
+    \label{thm:entropy_maximally_mixed_support_inverse}
+    \lean{Matrix.supportInvSqrt_partialTraceRight_maximallyMixedTensorReference}
+    \leanok
+    \uses{thm:entropy_maximally_mixed_tensor_marginals,
+        lem:support_inverse_square_root_maximally_mixed,
+        def:support_inverse_square_root}
+    If $\rho_{BC}$ is positive semidefinite and $\rho_B=\tr_C\rho_{BC}$, then
+    \begin{align}
+        \sigma_{AB,\mathrm{supp}}^{-1/2}
+        &=\sqrt{d_A}\,\mathbf 1_A\otimes
+          \rho_{B,\mathrm{supp}}^{-1/2}.
+        \label{eq:entropy_mixed_reference_support_inverse}
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:entropy_maximally_mixed_tensor_marginals,
+        lem:support_inverse_square_root_maximally_mixed}
+    The marginal identity gives
+    $\sigma_{AB}=d_A^{-1}\mathbf 1_A\otimes\rho_B$.
+    Apply the support-inverse scaling identity and the tensor identity for an
+    auxiliary left factor. Since $d_A>0$,
+    $(\sqrt{d_A^{-1}})^{-1}=\sqrt{d_A}$.
+\end{proof}
+
+\begin{theorem}[Petz factorization for a maximally mixed factor]
+    \label{thm:entropy_petz_maximally_mixed_tensor}
+    \lean{Matrix.partialTraceRightPetzMap_maximallyMixedTensor_kronecker,
+        Matrix.partialTraceRightPetzMap_maximallyMixedTensor}
+    \leanok
+    \uses{def:entropy_maximally_mixed_tensor_reference,
+        def:partial_trace_support_petz_map,
+        thm:entropy_maximally_mixed_support_inverse}
+    For the reference in~(\ref{eq:entropy_hjpw_product_reference}), the support
+    Petz map for $\tr_C$ factors as
+    \begin{align}
+        \mathcal R_{\sigma_{ABC}}
+        &=\operatorname{id}_A\otimes\mathcal R_{\rho_{BC}}.
+        \label{eq:entropy_hjpw_petz_factorization}
+    \end{align}
+    after the canonical identification
+    $(H_A\otimes H_B)\otimes H_C\cong
+    H_A\otimes(H_B\otimes H_C)$. This is the maximally mixed specialization
+    of \cite[equation~(10)]{Hayden2004Structure}. It is the tensor-product
+    identity for the raw Petz support formula, not the
+    Hayashi--Koashi--Imoto block decomposition.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:entropy_maximally_mixed_support_inverse}
+    Functional calculus gives
+    $\sqrt{\sigma_{ABC}}
+      =d_A^{-1/2}\mathbf 1_A\otimes\sqrt{\rho_{BC}}$.
+    Theorem~\ref{thm:entropy_maximally_mixed_support_inverse} gives the
+    corresponding factorization of the marginal support inverse.
+    The scalar factors cancel in the Petz sandwich. The identity follows first
+    for $A_0\otimes X_B$ and then for every operator by a finite sum of product
+    operators.
+\end{proof}
+
 \begin{theorem}[Support projector of the maximally mixed marginal]
     \label{thm:entropy_maximally_mixed_support_projector}
     \lean{Matrix.supportProj_partialTraceRight_maximallyMixedTensorReference}
     \leanok
     \uses{thm:entropy_maximally_mixed_tensor_marginals,
-        lem:support_inverse_square_root_maximally_mixed, def:support_proj}
+        thm:entropy_maximally_mixed_support_inverse, def:support_proj}
     If $P_B$ is the support projector of $\rho_B$, then the support projector of
     $d_A^{-1}\mathbf 1_A\otimes\rho_B$ is
     \begin{align}
@@ -296,7 +316,7 @@
 
 \begin{proof}\leanok
     \uses{lem:support_inverse_square_root_sandwich,
-        lem:support_inverse_square_root_maximally_mixed}
+        thm:entropy_maximally_mixed_support_inverse}
     Insert the factorized support inverse into
     $P_{AB}=\sigma_{AB,\mathrm{supp}}^{-1/2}
     \sigma_{AB}\sigma_{AB,\mathrm{supp}}^{-1/2}$. The scalar factors cancel,
@@ -470,8 +490,8 @@
         &=\operatorname{id}_A\otimes\mathcal C_{\rho_{BC}}.
         \label{eq:entropy_petz_complement_factorization}
     \end{align}
-    after the canonical reassociation of the three tensor factors. This is a
-    property of the support completion in
+    after the canonical reassociation of the three tensor factors. This is
+    TNLean-specific support-completion algebra from
     (\ref{eq:entropy_petz_complement}), not a statement of
     \cite[equation~(10)]{Hayden2004Structure}.
 \end{theorem}
@@ -507,10 +527,12 @@
           \widehat{\mathcal R}_{\rho_{BC}}.
         \label{eq:entropy_completed_petz_factorization}
     \end{align}
-    The raw support-map summand is the maximally mixed specialization of
-    \cite[equation~(10)]{Hayden2004Structure}. The complementary summand is the
-    support completion in~(\ref{eq:entropy_petz_complement}). This theorem does
-    not assert a Koashi--Imoto decomposition.
+    after canonical reassociation of the three tensor factors. The raw
+    support-map summand is the maximally mixed specialization of
+    \cite[equation~(10)]{Hayden2004Structure}. The complementary summand is
+    TNLean-specific support-completion algebra from
+    (\ref{eq:entropy_petz_complement}). This theorem does not assert a
+    Hayashi--Koashi--Imoto decomposition.
 \end{theorem}
 
 \begin{proof}\leanok
