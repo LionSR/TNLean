@@ -749,20 +749,11 @@ lemma positiveMap_rpowIntegrand₀₁_jensen
   have ht_pow : t ^ (p - 1) = t ^ p * t⁻¹ := by
     rw [Real.rpow_sub_one ht.ne']
     ring
-  have ht_pow' : t ^ (-1 + p) = t ^ p * t⁻¹ := by
-    rw [show -1 + p = p - 1 by ring, ht_pow]
-  have ht_powC :
-      ((t ^ (-1 + p) : ℝ) : ℂ) = ((t ^ p : ℝ) : ℂ) * (t : ℂ)⁻¹ := by
-    rw [ht_pow', Complex.ofReal_mul, Complex.ofReal_inv]
-  have ht_powC₂ :
-      ((t ^ (p + -1) : ℝ) : ℂ) = ((t ^ p : ℝ) : ℂ) * (t : ℂ)⁻¹ := by
-    rw [show p + -1 = -1 + p by ring, ht_powC]
   convert hscaled using 1
-  ext i j
-  simp [LinearMap.map_smul_of_tower, sub_eq_add_neg, smul_add, add_comm,
-    add_left_comm, add_assoc]
-  simp [ht_powC₂]
-  ring_nf
+  rw [map_sub, LinearMap.map_smul_of_tower, LinearMap.map_smul_of_tower]
+  rw [add_comm (t • (1 : MatD)) A, add_comm (t • (1 : MatD)) (T A)]
+  rw [smul_sub, smul_add, smul_smul, smul_sub, ht_pow]
+  module
 
 /-- Scalar resolvent expansion of the convex Löwner-integral integrand
 `Real.rpowIntegrand₁₂ p t`: for `t > 0`,
