@@ -230,10 +230,10 @@ theorem spectralRadius_eq_of_posDef_eigenvector_of_irreducible_cp
   have hρ_ne : ρ ≠ 0 := (Matrix.PosDef.isUnit hρ_pd).ne_zero
   have hE_ne : E ≠ 0 := by
     intro hE0
-    have hsmul : (r : ℂ) • ρ = 0 := by
-      simpa [hE0] using hEig.symm
+    rw [hE0, LinearMap.zero_apply] at hEig
     exact hρ_ne
-      ((eq_zero_or_eq_zero_of_smul_eq_zero hsmul).resolve_left (by exact_mod_cast hr.ne'))
+      ((eq_zero_or_eq_zero_of_smul_eq_zero hEig.symm).resolve_left
+        (by exact_mod_cast hr.ne'))
   obtain ⟨σ, t, hσ_pd, ht_pos, hσ_eig⟩ :=
     hSetup.exists_posDef_adjoint_eigenvector hE_ne
   have htrace : ∀ X : Matrix (Fin D) (Fin D) ℂ,
@@ -283,6 +283,11 @@ theorem spectralRadius_eq_of_posDef_eigenvector_of_irreducible_cp
     exact Matrix.inv_inv_of_invertible S
   have hS_inv_herm : (S⁻¹)ᴴ = S⁻¹ := by
     simpa [hS_herm] using Matrix.conjTranspose_nonsing_inv S
+  have hsim_apply (X : Matrix (Fin D) (Fin D) ℂ) :
+      similarityMap (D := D) S⁻¹ E X =
+        S * E (S⁻¹ * X * S⁻¹) * S := by
+    simp only [similarityMap, hS_inv_inv, hS_inv_herm]
+    rfl
   set A' : MPSTensor n D := fun i => d • K i with hA'_def
   have hA'_fix : MPSTensor.transferMap (d := n) (D := D) (fun i => (A' i)ᴴ) σ = σ := by
     simp only [hA'_def, MPSTensor.transferMap_apply, Matrix.conjTranspose_smul,
@@ -331,7 +336,7 @@ theorem spectralRadius_eq_of_posDef_eigenvector_of_irreducible_cp
             rw [hE_eq]
             simp [MPSTensor.transferMap_apply]
       _ = ((↑r : ℂ)⁻¹ • similarityMap (D := D) S⁻¹ E) X := by
-            simp [similarityMap, hS_inv_inv, hS_inv_herm, Matrix.mul_assoc]
+            rw [LinearMap.smul_apply, hsim_apply]
   set E' : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ :=
     (↑r : ℂ)⁻¹ • similarityMap (D := D) S⁻¹ E with hE'_def
   -- The TP-normalized map has spectral radius `≤ 1`. In the formal proof we
@@ -353,10 +358,16 @@ theorem spectralRadius_eq_of_posDef_eigenvector_of_irreducible_cp
   have hY_eig : E' (S * ρ * S) = S * ρ * S := by
     calc
       E' (S * ρ * S)
-          = (↑r : ℂ)⁻¹ • (S * E (((S⁻¹ * S) * ρ) * (S * S⁻¹)) * S) := by
-              simp [hE'_def, similarityMap, hS_inv_inv, hS_inv_herm, Matrix.mul_assoc]
+          = (↑r : ℂ)⁻¹ • (S * E (S⁻¹ * (S * ρ * S) * S⁻¹) * S) := by
+              rw [hE'_def, LinearMap.smul_apply, hsim_apply]
       _ = (↑r : ℂ)⁻¹ • (S * E ρ * S) := by
-            rw [hS_inv_mul, one_mul, hS_mul_inv, mul_one]
+            have hinner : S⁻¹ * (S * ρ * S) * S⁻¹ = ρ := by
+              calc
+                S⁻¹ * (S * ρ * S) * S⁻¹ =
+                    (S⁻¹ * S) * ρ * (S * S⁻¹) := by
+                      simp only [Matrix.mul_assoc]
+                _ = ρ := by rw [hS_inv_mul, one_mul, hS_mul_inv, mul_one]
+            rw [hinner]
       _ = (↑r : ℂ)⁻¹ • (S * ((↑r : ℂ) • ρ) * S) := by rw [hEig]
       _ = S * ρ * S := by
             rw [Matrix.mul_smul, Matrix.smul_mul, smul_smul, inv_mul_cancel₀]
