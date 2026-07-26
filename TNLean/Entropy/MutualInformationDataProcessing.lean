@@ -3,10 +3,10 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Entropy.MutualInformation
 import TNLean.Channel.LocalizedKrausCPTP
-import TNLean.Channel.TensorMap
 import TNLean.Channel.Stinespring
+import TNLean.Channel.TensorMap
+import TNLean.Entropy.MutualInformation
 
 /-!
 # Data processing for bipartite mutual information

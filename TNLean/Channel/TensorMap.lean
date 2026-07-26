@@ -3,15 +3,15 @@ Copyright (c) 2025 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import Mathlib.LinearAlgebra.Matrix.Kronecker
 import Mathlib.Data.Complex.Basic
+import Mathlib.LinearAlgebra.Matrix.Kronecker
 
 /-!
 # Tensor product of a linear map with the identity
 
-This file defines tensor products with an identity factor, including `T ⊗ id` for a linear map
-`T : M_d(ℂ) →ₗ[ℂ] M_{d'}(ℂ)` with the identity on `M_{d''}(ℂ)`,
-producing a linear map on bipartite matrices, and the corresponding `id ⊗ T` construction.
+This file defines tensor products with an identity factor. It includes `T ⊗ id`
+for a linear map `T : M_d(ℂ) →ₗ[ℂ] M_{d'}(ℂ)` and the corresponding
+`id ⊗ T` construction on bipartite matrices.
 
 This is the key operation for constructing the Choi matrix
 `τ = (T ⊗ id)(|Ω⟩⟨Ω|)` in the Choi–Jamiolkowski isomorphism.
@@ -31,7 +31,7 @@ This is the key operation for constructing the Choi matrix
 * `Matrix.tensorMapIdLM_id`: the lift of the identity map is the identity.
 * `Matrix.tensorMapIdLM_comp`: the lift preserves composition.
 * `Matrix.idTensorMap_kronecker`: `(id ⊗ T)(A ⊗ B) = A ⊗ T(B)`
-* `Matrix.idTensorMapLM_id`: the second-factor lift of the identity is the identity.
+* `Matrix.idTensorMapLM_id`: the second-factor identity lift is the identity.
 * `Matrix.idTensorMapLM_comp`: the second-factor lift preserves composition.
 
 ## References
@@ -142,7 +142,6 @@ theorem tensorMapIdLM_comp
   intro X
   ext ⟨i₁, i₂⟩ ⟨j₁, j₂⟩
   rfl
-
 
 /-! ## A linear map on the second tensor factor -/
 

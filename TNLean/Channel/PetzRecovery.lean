@@ -3,11 +3,11 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.OperatorSchmidt
 import TNLean.Analysis.MatrixSqrt
 import TNLean.Channel.KrausCPTP
 import TNLean.Channel.MarginalSupportAbsorption
 import TNLean.Channel.TensorMap
-import TNLean.Algebra.OperatorSchmidt
 
 /-!
 # A trace-preserving Petz transpose channel for a partial trace
@@ -382,7 +382,6 @@ theorem partialTraceRightPetzChannel_partialTraceRight
 
 end PartialTrace
 
-
 section HJPWTensorFactorization
 
 variable {dA : ℕ} [NeZero dA]
@@ -440,8 +439,8 @@ $\sigma_{ABC}=d_A^{-1}\mathbf 1_A\otimes\rho_{BC}$, reindexed from
 $A\times(B\times C)$ to $(A\times B)\times C$ so that `partialTraceRight`
 traces out $C$.
 
-This is the reference used in Hayden--Jozsa--Petz--Winter,
-arXiv:quant-ph/0304007v2, equation (10). It is not the Koashi--Imoto or
+This is the maximally mixed specialization of the reference in
+Hayden--Jozsa--Petz--Winter, arXiv:quant-ph/0304007v2, equation (10). It is not the Koashi--Imoto or
 Hayashi block decomposition. -/
 noncomputable def maximallyMixedTensorReference
     (ρ : Matrix (B × C) (B × C) ℂ) :
@@ -449,16 +448,22 @@ noncomputable def maximallyMixedTensorReference
   (maximallyMixedOn (dA := dA) ⊗ₖ ρ).submatrix
     (Equiv.prodAssoc (Fin dA) B C) (Equiv.prodAssoc (Fin dA) B C)
 
+omit [Fintype B] [DecidableEq B] [Fintype C] [DecidableEq C] in
 /-- The maximally mixed tensor reference is positive semidefinite whenever
 $\rho_{BC}$ is positive semidefinite. -/
 theorem maximallyMixedTensorReference_posSemidef
+    [Finite B] [Finite C]
     {ρ : Matrix (B × C) (B × C) ℂ} (hρ : ρ.PosSemidef) :
     (maximallyMixedTensorReference (dA := dA) ρ).PosSemidef := by
+  classical
+  letI := Fintype.ofFinite B
+  letI := Fintype.ofFinite C
   exact (maximallyMixedOn_posDef (dA := dA)).posSemidef.kronecker hρ
     |>.submatrix _
 
-/-- Tracing $C$ from the HJPW equation (10) reference gives
-$d_A^{-1}\mathbf 1_A\otimes\rho_B$. -/
+omit [NeZero dA] [Fintype B] [DecidableEq B] [DecidableEq C] in
+/-- Tracing $C$ from the maximally mixed specialization of HJPW equation (10)
+gives $d_A^{-1}\mathbf 1_A\otimes\rho_B$. -/
 theorem partialTraceRight_maximallyMixedTensorReference
     (ρ : Matrix (B × C) (B × C) ℂ) :
     partialTraceRight (maximallyMixedTensorReference (dA := dA) ρ) =
@@ -520,8 +525,8 @@ private theorem cfcSqrt_maximallyMixedOn_kronecker
         ((1 : Matrix (Fin dA) (Fin dA) ℂ) ⊗ₖ
           hρ.isHermitian.cfc Real.sqrt) := by rw [Complex.coe_smul]
 
-/-- The square root in the HJPW equation (10) reference factors into the
-maximally mixed normalization and the square root of $\rho_{BC}$, after the
+/-- The square root in the maximally mixed specialization of HJPW equation
+(10) factors into the dimension normalization and the square root of $\rho_{BC}$, after the
 canonical product-index reassociation. -/
 theorem cfcSqrt_maximallyMixedTensorReference
     (ρ : Matrix (B × C) (B × C) ℂ) (hρ : ρ.PosSemidef) :
@@ -552,8 +557,9 @@ theorem cfcSqrt_maximallyMixedTensorReference
   rw [((maximallyMixedOn_posDef (dA := dA)).posSemidef.kronecker
     hρ).isHermitian.cfc_eq, cfcSqrt_maximallyMixedOn_kronecker ρ hρ]
 
-/-- The support inverse square root of the $AB$ marginal of the HJPW equation
-(10) reference is $\sqrt{d_A}\,\mathbf 1_A\otimes\rho_B^{-1/2}$ on its
+omit [DecidableEq C] in
+/-- For the maximally mixed specialization of HJPW equation (10), the support
+inverse square root of the $AB$ marginal is $\sqrt{d_A}\,\mathbf 1_A\otimes\rho_B^{-1/2}$ on its
 support. -/
 theorem supportInvSqrt_partialTraceRight_maximallyMixedTensorReference
     (ρ : Matrix (B × C) (B × C) ℂ) (hρ : ρ.PosSemidef) :
@@ -589,14 +595,16 @@ theorem supportInvSqrt_partialTraceRight_maximallyMixedTensorReference
   exact Matrix.PosSemidef.supportInvSqrt_one_kronecker
     (PosSemidef.partialTraceRight hρ)
 
-/-- **HJPW equation (10), elementary-tensor algebra.** For the reference
+/-- **Maximally mixed specialization of HJPW equation (10), elementary-tensor
+algebra.** For the reference
 $\sigma_{ABC}=d_A^{-1}\mathbf 1_A\otimes\rho_{BC}$, the raw partial-trace
 Petz support formula sends every elementary tensor $A_0\otimes X_B$ to
 $A_0\otimes\mathcal R_{\rho_{BC}}(X_B)$, up to the canonical reassociation
 $(A\times B)\times C\simeq A\times(B\times C)$.
 
-This is the tensor-product factorization in Hayden--Jozsa--Petz--Winter,
-arXiv:quant-ph/0304007v2, equation (10). It is an algebraic Petz-map statement,
+This is the maximally mixed specialization of the tensor-product factorization
+in Hayden--Jozsa--Petz--Winter, arXiv:quant-ph/0304007v2, equation (10). It is
+an algebraic raw support-Petz statement,
 not the Koashi--Imoto decomposition. -/
 theorem partialTraceRightPetzMap_maximallyMixedTensor_kronecker
     (ρ : Matrix (B × C) (B × C) ℂ) (hρ : ρ.PosSemidef)
@@ -691,13 +699,14 @@ theorem partialTraceRightPetzMap_maximallyMixedTensor_kronecker
         (A i.1 j.1 * Z) := by ring
     _ = A i.1 j.1 * Z := by rw [hcancel, one_mul]
 
-/-- **HJPW equation (10), raw Petz-map factorization.** For
+/-- **Maximally mixed specialization of HJPW equation (10), raw Petz-map
+factorization.** For
 $\sigma_{ABC}=d_A^{-1}\mathbf 1_A\otimes\rho_{BC}$, the raw partial-trace
 Petz map is $\operatorname{id}_A\otimes\mathcal R_{\rho_{BC}}$, after the
 canonical reassociation of product indices.
 
-This is equation (10) of Hayden--Jozsa--Petz--Winter,
-arXiv:quant-ph/0304007v2. It is not a statement of the Koashi--Imoto
+This is the maximally mixed specialization of equation (10) of
+Hayden--Jozsa--Petz--Winter, arXiv:quant-ph/0304007v2. It is not a statement of the Koashi--Imoto
 or Hayashi decomposition. -/
 theorem partialTraceRightPetzMap_maximallyMixedTensor
     (ρ : Matrix (B × C) (B × C) ℂ) (hρ : ρ.PosSemidef) :

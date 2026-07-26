@@ -206,7 +206,6 @@ theorem PosSemidef.supportInvSqrt_kronecker_one
   exact Matrix.cfc_kronecker_one hρ.isHermitian
     (fun x : ℝ ↦ if x ≠ 0 then (Real.sqrt x)⁻¹ else 0)
 
-
 /-- The support inverse square root commutes with the unital right tensor
 embedding. -/
 theorem PosSemidef.supportInvSqrt_one_kronecker
