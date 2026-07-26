@@ -6,9 +6,11 @@
 %   IV/ImagesReview Section IV.tex lines 173-190 (growing back L)
 % Capabilities: lattice, regions, typed-ports
 \[
-  \begin{tenkzlattice}[rows=2, cols=3, frame=oblique, physical=up]
-    \tnsite[label=$A$]{(1,1)} \tnsite[label=$B$]{(1,2)}
-    \tnregion[outline, inset=1]{(1-2,1-2)}
-    \tnregion[outline, label=$L$, label pos=south east]{(1-2,1-3)}
+  \begin{tenkzlattice}[rows=3, cols=4, frame=oblique, physical=up,
+                       boundary=open]
+    \tnsite[label=$A$, role=operator]{(1,2)}
+    \tnsite[label=$B$, role=operator]{(1,3)}
+    \tnregion[slot=neutral, outline, inset=1]{(1,2-3)}
+    \tnregion[slot=neutral, outline, label=L, label pos=south east]{(1-3,1-4)}
   \end{tenkzlattice}
 \]

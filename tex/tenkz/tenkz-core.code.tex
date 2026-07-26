@@ -92,6 +92,20 @@
 \def\tenkz@r@glyphbox{0.22}    % inscribed-glyph minimum: box side, pill
                                % height; also the span decorations' lateral
                                % overhang beyond their first and last column
+\def\tenkz@r@glyphref{0.50}    % the size-class reference WIDTH: the one
+                               % extent every inscribed-label glyph reaches
+                               % before its label starts to move it, so a box
+                               % beside a pill beside an on-wire capsule read
+                               % as one family and no author states a width.
+                               % Half the pitch is the pill's own long-
+                               % standing width, shared out rather than
+                               % reinvented: glyph and bond then alternate in
+                               % equal measure, and the contracted index
+                               % between two glyphs keeps as much ink as the
+                               % glyphs it joins.  A label wider than the
+                               % reference still grows its glyph -- the
+                               % reference is a floor, and unequal ink says
+                               % the name outgrew its class
 \def\tenkz@r@wireglyph{0.30}   % on-wire glyph minimum: on-wire matrix size,
                                % canonical-tensor height -- taller than the
                                % box floor because these glyphs sit ON a
@@ -141,10 +155,16 @@
       draw=tenkzInk, fill=tenkzInk,
       circle, inner sep=0pt,
       minimum size=\tenkz@dim{\tenkz@r@dotdia}, line width=\tenkz@wirewidth},
+  % The three labelled skins share ONE reference width (\tenkz@r@glyphref):
+  % a box beside a pill, and an operator beside its inverse, read as the
+  % same kind of object because the class fixes the extent, not the label.
+  % Height stays per class -- a box is square at its floor, a pill and an
+  % on-wire capsule are deliberately flatter.
   box tensor/.style={tenkz audited glyph={rect}{0pt},
       draw=tenkzInk, fill=tenkzPaper,
       rectangle,
       inner sep=1.6pt, minimum size=\tenkz@dim{\tenkz@r@glyphbox},
+      minimum width=\tenkz@dim{\tenkz@r@glyphref},
       line width=\tenkz@wirewidth, text=tenkzInk},
   mpo tensor/.style={box tensor},
   pill tensor/.style={tenkz audited glyph={roundrect}{2.2pt},
@@ -152,6 +172,7 @@
       rectangle,
       rounded corners=2.2pt, inner xsep=3.2pt, inner ysep=2.2pt,
       minimum height=\tenkz@dim{\tenkz@r@glyphbox},
+      minimum width=\tenkz@dim{\tenkz@r@glyphref},
       line width=\tenkz@wirewidth, text=tenkzInk},
   % capsule, not circle: the height is pinned by `minimum size`, and a wide
   % label (an inverse, a product) grows the glyph only sideways, so every
@@ -166,6 +187,7 @@
       rounded corners=\tenkz@dim{\tenkz@r@wireglyphcap},
       inner xsep=1.8pt, inner ysep=1.4pt,
       minimum size=\tenkz@dim{\tenkz@r@wireglyph},
+      minimum width=\tenkz@dim{\tenkz@r@glyphref},
       line width=\tenkz@wirewidth, text=tenkzInk},
   % the style's public 0.6 name; \tnX is the documented alias
   ring tensor/.style={on-wire matrix},
@@ -1528,6 +1550,80 @@
   }
 \prg_generate_conditional_variant:Nnn \tenkz_enclosure_if_registered:n
   { V } { T, F, TF }
+
+% ---------- label placement: one bearing, two consequences ----------
+% A label's placement is a bearing read in its host's own axes; the compass
+% words are sugar for the eight right and half-right angles of that bearing,
+% and nothing else.  ONE bearing settles both quantities a placed label
+% needs: the outward step from the host's boundary point, and the anchor,
+% which is the same bearing turned through half a turn.  Choosing the two
+% separately is how a label comes to step one way and hang the other, so
+% they are derived here, from one table, and never stated side by side.
+%
+% The table holds each word's outward direction as a pair of signs.  The
+% anchor is read back out of the same table under the negated pair, and the
+% step is that direction made a unit vector and scaled by the caller's
+% clearance band -- so a diagonal label stands exactly as far from its host
+% as a cardinal one, and no factor is written down.
+\prop_new:N \g__tenkz_bearing_prop      % word -> "sx,sy"
+\prop_new:N \g__tenkz_bearing_word_prop % "sx,sy" -> word
+\cs_new_protected:Npn \__tenkz_bearing_declare:nnn #1#2#3
+  {
+    \prop_gput:Nnn \g__tenkz_bearing_prop {#1} {#2,#3}
+    \prop_gput:Nnn \g__tenkz_bearing_word_prop {#2,#3} {#1}
+  }
+\__tenkz_bearing_declare:nnn {east}       { 1}{ 0}
+\__tenkz_bearing_declare:nnn {north~east} { 1}{ 1}
+\__tenkz_bearing_declare:nnn {north}      { 0}{ 1}
+\__tenkz_bearing_declare:nnn {north~west} {-1}{ 1}
+\__tenkz_bearing_declare:nnn {west}       {-1}{ 0}
+\__tenkz_bearing_declare:nnn {south~west} {-1}{-1}
+\__tenkz_bearing_declare:nnn {south}      { 0}{-1}
+\__tenkz_bearing_declare:nnn {south~east} { 1}{-1}
+
+% \tenkz_label_bearing:nnNNN {word} {clearance band} \anchor \dx \dy
+% True when the word is a placement; then the anchor tl holds the opposite
+% compass word and the two dimensions hold the outward step.
+\tl_new:N \l__tenkz_bearing_tl
+\clist_new:N \l__tenkz_bearing_clist
+\int_new:N \l__tenkz_bearing_sx_int
+\int_new:N \l__tenkz_bearing_sy_int
+\dim_new:N \l__tenkz_bearing_band_dim
+\prg_new_protected_conditional:Npnn \tenkz_label_bearing:nnNNN #1#2#3#4#5
+    { T, F, TF }
+  {
+    \prop_get:NnNTF \g__tenkz_bearing_prop {#1} \l__tenkz_bearing_tl
+      {
+        \clist_set:NV \l__tenkz_bearing_clist \l__tenkz_bearing_tl
+        \int_set:Nn \l__tenkz_bearing_sx_int
+          { \clist_item:Nn \l__tenkz_bearing_clist {1} }
+        \int_set:Nn \l__tenkz_bearing_sy_int
+          { \clist_item:Nn \l__tenkz_bearing_clist {2} }
+        \prop_get:NeN \g__tenkz_bearing_word_prop
+          {
+            \int_eval:n { -\l__tenkz_bearing_sx_int } ,
+            \int_eval:n { -\l__tenkz_bearing_sy_int }
+          } #3
+        \dim_set:Nn \l__tenkz_bearing_band_dim {#2}
+        \dim_set:Nn #4 { \__tenkz_bearing_step:N \l__tenkz_bearing_sx_int }
+        \dim_set:Nn #5 { \__tenkz_bearing_step:N \l__tenkz_bearing_sy_int }
+        \prg_return_true:
+      }
+      { \prg_return_false: }
+  }
+% one component of the unit bearing, scaled by the band
+\cs_new:Npn \__tenkz_bearing_step:N #1
+  {
+    \fp_to_dim:n
+      {
+        \int_use:N #1 /
+          sqrt( \l__tenkz_bearing_sx_int * \l__tenkz_bearing_sx_int
+              + \l__tenkz_bearing_sy_int * \l__tenkz_bearing_sy_int )
+          * \dim_to_fp:n { \l__tenkz_bearing_band_dim }
+      }
+  }
+\prg_generate_conditional_variant:Nnn \tenkz_label_bearing:nnNNN
+  { VnNNN } { T, F, TF }
 
 % Resolve one enclosure label position to its label anchor and displacement.
 % Both option parsing and final placement use this conditional, so there is

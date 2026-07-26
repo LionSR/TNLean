@@ -122,7 +122,10 @@ The canonical examples include these distinctions:
 - `boundary=periodic` closes each row to itself; `west=cup` or `east=cup`
   connects adjacent layers.
 - `boundary=none` seals an object; omitting it retains the canonical open
-  boundary when the object is a matrix or map.
+  boundary when the object is a matrix or map. A side that names its own
+  policy overrides the picture's: `boundary=none, east=cup` seals the west
+  and bends the east, because the specific statement outranks the general
+  one. A cup that finds no pair to bend is an error, not a blank space.
 - `route=arc` is canonical; `route=curve` is a compatibility alias.
 - `tenkzplanes` spells a lattice preset; it does not own keys with new types.
 
