@@ -6,150 +6,143 @@
 
 \input{./command}
 
-\title{The Length-Dependent Proportionality Scalar in the CPSV16 Proportional
-BNT Coefficient Comparison}
+\title{Length-Dependent Scalars Do Not Determine Copy Weights in the
+Proportional BNT Theorem}
 \author{}
-\date{2026-06-23}
+\date{2026-07-26}
 
 \begin{document}
 \maketitle
 
 \section{The source statement}
 
-Cirac--Perez-Garcia--Schuch--Verstraete 2016 (arXiv:1606.00608), Theorem
-\texttt{thm1} (lines 1167--1170), assumes that two translationally invariant
-matrix product states generate \emph{proportional} matrix product vectors: for
-every length \(N\) there is a nonzero scalar \(c_N\) with
-\[
-  V^{(N)}(P_{\mathrm{tot}})_\sigma = c_N\, V^{(N)}(Q_{\mathrm{tot}})_\sigma
-  \qquad \text{for all } \sigma \in \{1,\dots,d\}^N .
-\]
-The formal predicate is \texttt{EventuallyNonzeroProportionalMPV\textsubscript{2}}
-(the eventual form used in the proof, after the linear-independence Lemma
-\texttt{Lem1} at line 1182).  The conclusion of Theorem \texttt{thm1} is a global
-gauge equivalence \emph{up to a single phase}.
+Cirac--P\'erez-Garc\'ia--Schuch--Verstraete state in
+\cite[Theorem~2.10 and Appendix~A, lines~1167--1183]
+{Cirac2016MPDO_arXiv} that proportional matrix-product-vector families in
+canonical form have bijectively matched bases of normal tensors. For each
+matched pair there are a phase $\zeta_k$ and an invertible matrix $X_k$ such
+that
+\begin{align}
+    Q_k^i
+     & =\zeta_kX_kP_{\beta(k)}^iX_k^{-1}.
+    \label{eq:sector-match}
+\end{align}
+The theorem does not assert that the two total tensors are conjugate, even up
+to a common phase. Copy-weight recovery and the block-diagonal global gauge
+occur in the equal-MPV Corollary~2.11, not in the proportional theorem.
 
-\section{What the new BNT surface already proves}
+The formal proportional theorem uses eventual nonzero projective
+proportionality: for all sufficiently large $N$, one nonzero scalar $c_N$
+satisfies
+\begin{align}
+    V^{(N)}(P_{\mathrm{tot}})
+     & =c_NV^{(N)}(Q_{\mathrm{tot}}).
+    \label{eq:proportional-total}
+\end{align}
+The source assumption at every positive length is a special case.\footnote{The
+    formal proportional theorem is
+    \leanid{MPSTensor.fundamentalTheorem_proportional_canonicalForm} in
+    \doclink{TNLean/MPS/FundamentalTheorem/SectorBNT/FundamentalCoord}.}
 
-On the \texttt{SectorDecomposition} / \texttt{IsBNTCanonicalForm} surface the
-proportional sector-matching theorem
-(\texttt{ft\_sector\_bnt\_proportional\_sector\_match\_witnesses}) already
-supplies, for two BNT canonical forms \(P\) and \(Q\):
+\section{The coefficient identity retaining the global scalar}
+
+Write
+\begin{align}
+    c_N^{(j)}(P)
+     & =\sum_q\mu_{j,q}^N,
+     &
+    c_N^{(k)}(Q)
+     & =\sum_q\nu_{k,q}^N.
+\end{align}
+Substituting the matched-sector relation (\ref{eq:sector-match}) into
+(\ref{eq:proportional-total}), reindexing by $\beta$, and applying eventual
+linear independence of the $P$-basis gives
+\begin{align}
+    c_N^{(\beta(k))}(P)
+     & =c_N\zeta_k^N c_N^{(k)}(Q)
+    \label{eq:threaded}
+\end{align}
+for every sector $k$ and all sufficiently large $N$.\footnote{The formal
+    coefficient identity that retains the global scalar is
+    \leanid{MPSTensor.coeff_identity_via_matched_mpv_phase_proportional} in
+    \doclink{TNLean/MPS/FundamentalTheorem/SectorBNT/CoeffIdentity}.}
+The same $c_N$ occurs in every sector because it is the scalar relating the two
+total vectors.
+
+The equal-MPV argument has $c_N=1$. It then compares the two finite power sums
+\begin{align}
+    \sum_q\mu_{\beta(k),q}^N
+     & =\sum_q(\zeta_k\nu_{k,q})^N
+\end{align}
+and recovers the copy-weight multiset. For a general proportional family,
+(\ref{eq:threaded}) does not supply this scalar-free identity.
+
+\section{Counterexample}
+
+Let $C$ be a normalized normal tensor and consider the one-sector BNT forms
+\begin{align}
+    P
+     & =C\oplus\tfrac12C,
+     &
+    Q
+     & =C\oplus\tfrac13C.
+\end{align}
+Both forms obey the canonical weight normalization: every weight has modulus at
+most $1$, and each form has a unit-modulus weight. Their MPV families are
+\begin{align}
+    V^{(N)}(P)
+     & =(1+2^{-N})V^{(N)}(C),
+     &
+    V^{(N)}(Q)
+     & =(1+3^{-N})V^{(N)}(C).
+\end{align}
+Thus they are nonzero and proportional at every positive length with
+\begin{align}
+    c_N
+     & =\frac{1+2^{-N}}{1+3^{-N}}.
+\end{align}
+This sequence is not of the form $\xi^N$ for a fixed phase $\xi$.
+
+For a one-dimensional choice of $C$, the two total matrices have eigenvalue
+multisets
+\begin{align}
+    \left\{1,\tfrac12\right\}
+    \quad\text{and}\quad
+    \left\{1,\tfrac13\right\}.
+\end{align}
+Similarity preserves eigenvalues, and multiplication by a common phase merely
+multiplies both eigenvalues by that phase. Consequently the two total tensors
+are not conjugate, even up to a common phase.
+
+\section{Conclusion}
+
+\textbf{Verdict: correction of a prior mathematical assessment; there is no
+    mathematical gap.} The source proportional theorem never requires copy-weight
+recovery or a global gauge, and the counterexample proves that this stronger
+claim is false under the proportional theorem's hypotheses. In particular,
+there is no missing theorem asserting that the proportionality scalar of two
+BNT canonical forms must be a geometric phase sequence. The valid conclusions
+are:
 \begin{itemize}
-  \item a bijection \(\beta : J(Q) \simeq J(P)\) between the normal-tensor
-        sectors;
-  \item per-sector bond-dimension equalities \(\dim P_{\beta(k)} = \dim Q_k\);
-  \item per-sector unit-modulus phases \(\zeta_k\), \(|\zeta_k| = 1\), and block
-        gauges \(X_k\) with
-        \[
-          Q_k^i = \zeta_k\, X_k\, P_{\beta(k)}^i\, X_k^{-1};
-        \]
-  \item the matched MPV power identities, for \emph{every} sector \(k\),
-        \[
-          V^{(N)}(Q_k)_\sigma = \zeta_k^N\, V^{(N)}(P_{\beta(k)})_\sigma .
-        \]
+    \item proportional total MPVs determine a bijection and gauge-phase
+          equivalence of the normal sectors;
+    \item the coefficient identity retains one arbitrary length-dependent
+          global scalar $c_N$;
+    \item scalar-free coefficient identities, copy-weight matching, and a
+          global block gauge require additional hypotheses;
+    \item in the equal-MPV corollary, $c_N=1$, so power-sum recovery and the
+          global gauge follow.
 \end{itemize}
 
-Because every sector --- not only the leading pair --- is matched with its own
-phase identity, the off-diagonal contributions that obstructed the one-copy
-peeling argument of the 2026-05-13 probe
-(\texttt{docs/audits/2026-05-13\_cpsv16\_ft\_exact\_leading\_coeff.md}) vanish
-\emph{exactly}, not merely asymptotically.  The full-basis linear-independence
-coefficient comparison therefore goes through cleanly.  Writing
-\[
-  c_N^{(j)}(P) = \sum_{q} \mu_{j,q}^N, \qquad
-  c_N^{(k)}(Q) = \sum_{q} \nu_{k,q}^N,
-\]
-substituting the per-sector phase identities into the proportional MPV identity,
-reindexing the \(Q\)-sum by \(\beta\), and applying the BNT eventual linear
-independence of the \(P\)-basis gives, for a single eventually-nonzero scalar
-sequence \(c_N\) shared across all sectors and all sufficiently large \(N\),
-\begin{equation}\label{eq:threaded}
-  c_N^{(\beta(k))}(P) = c_N \,\zeta_k^N\, c_N^{(k)}(Q)
-  \qquad \text{for every } k \in J(Q).
-\end{equation}
-This is the content of
-\texttt{MPSTensor.coeff\_identity\_via\_matched\_mpv\_phase\_proportional}.  The
-scalar \(c_N\) is the \emph{same} for every sector \(k\) because it is the single
-global proportionality scalar of Theorem \texttt{thm1}.
+The conditional implications from scalar-free coefficient identities to a
+global gauge remain correct.\footnote{The formal conditional global-gauge
+    construction is
+    \leanid{MPSTensor.ft_sector_bnt_proportional_global_gauge_of_coeff_identity}
+    in \doclink{TNLean/MPS/FundamentalTheorem/SectorBNT/Fundamental}.}
+They are additional consequences, not unfinished parts of CPSV16
+Theorem~2.10.
 
-\section{The residual obstruction}
-
-The copy-weight recovery step
-(\texttt{SectorBNTCopyWeightMatching.of\_coeff\_identity}, Appendix MPV proof
-line 1188) compares the per-copy power-sum multisets through
-\[
-  \sum_q \mu_{\beta(k),q}^N = \zeta_k^N \sum_q \nu_{k,q}^N
-  = \sum_q (\zeta_k \nu_{k,q})^N ,
-\]
-and extracts the copy permutation by finite power-sum uniqueness.  This requires
-the \emph{scalar-free} identity
-\begin{equation}\label{eq:scalarfree}
-  c_N^{(\beta(k))}(P) = \zeta_k^N\, c_N^{(k)}(Q),
-\end{equation}
-i.e.\ exactly~(\ref{eq:threaded}) with \(c_N \equiv 1\).  A length-dependent
-factor \(c_N\) breaks the multiset comparison: distinct lengths would impose
-incompatible scalings.
-
-Equation~(\ref{eq:threaded}) holds with \(c_N \equiv 1\) if and only if
-\(c_N = \xi^N\) for a single fixed phase \(\xi\): then the power \(\xi^N\) is
-absorbed into the sector phases by replacing \(\zeta_k\) with \(\xi^{-1}\zeta_k\),
-recovering~(\ref{eq:scalarfree}).  (The gauge-phase conclusion of Theorem
-\texttt{thm1}, \(Q^i = \xi\, Y\, P^i\, Y^{-1}\), itself \emph{forces}
-\(c_N = \xi^N\) on the trace, so this is the necessary and sufficient form.)
-
-The missing step is therefore:
-\begin{quote}
-  the global proportionality scalar \(c_N\) of two BNT canonical forms is a pure
-  phase power \(\xi^N\) with \(|\xi| = 1\).
-\end{quote}
-This is a length-scalar control statement.  Under the BNT normalization
-\(|\mu_{j,q}| \le 1\), \(|\nu_{k,q}| \le 1\), with a global unit witness on each
-side, the sector coefficients \(c_N^{(j)}(\cdot)\) are bounded almost-periodic
-power sums that do not decay.  Pinning \(c_N\) to a single geometric phase
-sequence requires peripheral-spectrum / almost-periodicity analysis of these
-power sums that is not currently available in the library; it cannot be derived
-from~(\ref{eq:threaded}) alone, since~(\ref{eq:threaded}) determines \(c_N\) only
-up to the joint scaling of the matched coefficient pairs.
-
-\section{Status and elimination plan}
-
-\begin{itemize}
-  \item \textbf{Proved (faithful, sorry-free):} the threaded identity
-        (\ref{eq:threaded}),
-        \texttt{coeff\_identity\_via\_matched\_mpv\_phase\_proportional} in
-        \path{TNLean/MPS/FundamentalTheorem/SectorBNT/CoeffIdentity.lean}.  No
-        hypothesis absent from Theorem \texttt{thm1} is added.
-  \item \textbf{Conditional (already on \texttt{main}):}
-        \texttt{ft\_sector\_bnt\_proportional\_global\_gauge\_of\_coeff\_identity}
-        takes the scalar-free identity~(\ref{eq:scalarfree}) as an explicit
-        hypothesis and concludes the direct-sum global gauge.
-  \item \textbf{Open:} prove \(c_N = \xi^N\) for a fixed phase \(\xi\), discharge
-        the hypothesis of the conditional theorem, and hence obtain the
-        unconditional proportional global-gauge theorem at the full-tensor level
-        (the literal Theorem \texttt{thm1}).
-\end{itemize}
-
-Until the length-scalar control statement is proved, the unconditional
-full-tensor proportional gauge equivalence cannot be stated faithfully: omitting
-the control would require either a \texttt{sorry} or a hypothesis absent from
-Theorem \texttt{thm1}.  The per-sector (basis-level) proportional fundamental
-theorem,
-\texttt{MPSTensor.fundamentalTheorem\_proportional\_canonicalForm}, is
-unconditional and records the per-normal-tensor gauge-phase conclusion that does
-not need the copy-weight comparison.
-
-\section{References}
-
-\begin{itemize}
-  \item arXiv:1606.00608, Theorem \texttt{thm1}, lines 1167--1170 (statement),
-        line 1182 (matching), lines 1184--1192 (Appendix MPV coefficient
-        comparison and global gauge).
-  \item arXiv:2011.12127, Definition 4.2 (two-layer BNT canonical form).
-  \item \path{docs/audits/2026-05-13_cpsv16_ft_exact_leading_coeff.md}
-        (the one-copy-surface obstruction superseded by full sector matching).
-  \item \path{docs/paper-gaps/cpsv16_global_vs_persector_unit_witness.tex}
-        (the BNT weight normalization used above).
-\end{itemize}
+\bibliographystyle{alpha}
+\bibliography{references}
 
 \end{document}

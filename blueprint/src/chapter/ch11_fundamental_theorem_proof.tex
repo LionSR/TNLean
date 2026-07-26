@@ -1,32 +1,32 @@
 \chapter{Proof of the Fundamental Theorem}\label{ch:ft_proof}
 
 For BNT canonical forms $P$ and $Q$, write the weighted direct sums over
-normal-tensor sectors $P^i=\bigoplus_j\mu_jP_j^i$ and $Q^i=\bigoplus_k\nu_kQ_k^i$.
-The proportional theorem gives a bijection $\beta$ of the normal-tensor
-sectors with unit-modulus phases $\zeta_k$, invertible matrices $X_k$, and
-$Q_k^i=\zeta_kX_kP_{\beta(k)}^iX_k^{-1}$;
-the equal-MPV corollary collapses the per-block phases into a single $X$ with
-$Q_{\mathrm{tot}}^i=XP_{\mathrm{tot}}^iX^{-1}$. Given the sector matching of
-Chapter~\ref{ch:bnt}, extract the per-sector coefficient identities
-$c_N^{(\beta(k))}(P)=\zeta_k^N\,c_N^{(k)}(Q)$ from eventual linear independence,
-recover the copy weights by finite power-sum comparison, and
-combine the block gauges into $X=\bigoplus_k(\mathbf 1_{r_k}\otimes X_k)$.
+normal-tensor sectors as $P^i=\bigoplus_{j,q}\mu_{j,q}P_j^i$ and
+$Q^i=\bigoplus_{k,q}\nu_{k,q}Q_k^i$. The proportional theorem matches the
+normal sectors by a bijection $\beta$, unit phases $\zeta_k$, and invertible
+matrices $X_k$ satisfying
+\begin{align}
+    Q_k^i
+     & =\zeta_kX_kP_{\beta(k)}^iX_k^{-1}.
+    \notag
+\end{align}
+It does not determine the copy weights. In the equal-MPV case, eventual linear
+independence gives
+\begin{align}
+    c_N^{(\beta(k))}(P)
+     & =\zeta_k^N c_N^{(k)}(Q).
+    \notag
+\end{align}
+Finite power-sum comparison then gives
+$\nu_{k,q}=\zeta_k^{-1}\mu_{\beta(k),\tau_k(q)}$. Thus the sector phases do
+not become equal: each phase cancels against the inverse phase in its matched
+copy weight. The remaining block conjugacies assemble into
+$X=\bigoplus_k(\mathbf 1_{r_k}\otimes X_k)$, and a sector-coordinate
+permutation yields the literal global gauge.
 
-Throughout, ``eventually'' abbreviates ``for all sufficiently large $N$'': there
-is $N_0$ such that the stated relation holds for every $N>N_0$. The comparison is
-made at a fixed such $N$, where BNT linear independence detects a vanishing
-coefficient even when $|\mu|<1$ lets it decay.
-
-% NOTE: The Fundamental Theorem proof is formalised on the BNT
-% canonical-form statements of Chapter~\ref{ch:bnt}. The Lean targets are
-% MPSTensor.ft_sector_bnt_equal_global_gauge and
-% MPSTensor.ft_sector_bnt_equal_mps_gaugeEquiv_literal in
-% TNLean/MPS/FundamentalTheorem/SectorBNT/Fundamental.lean. The two
-% canonical-form source theorems of this chapter are
-% MPSTensor.fundamentalTheorem_proportional_canonicalForm (proportional,
-% Theorem II.1) and MPSTensor.fundamentalTheorem_equal_canonicalForm
-% (equal, Corollary II.2) in
-% TNLean/MPS/FundamentalTheorem/SectorBNT/FundamentalCoord.lean.
+Throughout, ``eventually'' means ``for all sufficiently large $N$''. At a
+fixed length in that range, BNT linear independence detects exact coefficient
+equalities even when a weight of modulus less than $1$ makes its powers decay.
 
 \input{chapter/ch11_fundamental_theorem_core}
 \input{chapter/ch11_fundamental_theorem_cases}

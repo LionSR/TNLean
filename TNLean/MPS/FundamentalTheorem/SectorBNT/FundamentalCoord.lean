@@ -559,7 +559,7 @@ length, their literal total tensors are related by a unitary gauge.  The gauge
 is the product of the block-diagonal direct sum of the matched sector unitaries
 and the unitary permutation that restores the original sector coordinates.
 
-Source: Cirac et al., arXiv:1606.00608, Corollary C.5, lines 1197--1199. -/
+Source: Cirac et al., arXiv:1606.00608, Corollary A.6, lines 1197--1199. -/
 private theorem ft_sector_bnt_equal_mps_unitaryGauge_literal
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
@@ -690,7 +690,7 @@ Two BNT canonical forms generating the same MPV family at every positive
 length are related by one unitary global gauge after identifying their equal
 total bond dimensions.
 
-Source: Cirac et al., arXiv:1606.00608, Corollary C.5, lines 1197--1199. -/
+Source: Cirac et al., arXiv:1606.00608, Corollary A.6, lines 1197--1199. -/
 theorem fundamentalTheorem_equal_canonicalForm_unitary
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
