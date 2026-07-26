@@ -477,6 +477,8 @@
     (\ref{eq:entropy_support_petz_trace}) gives trace preservation.
 \end{proof}
 
+% Source boundary: the complementary factorization is support-completion algebra,
+% not part of HJPW equation (10).
 \begin{theorem}[Factorization of the complementary preparation term]
     \label{thm:entropy_petz_complement_maximally_mixed_tensor}
     \lean{Matrix.partialTraceRightPetzComplementMap_maximallyMixedTensor_kronecker,
@@ -492,9 +494,9 @@
         &=\operatorname{id}_A\otimes\mathcal C_{\rho_{BC}}.
         \label{eq:entropy_petz_complement_factorization}
     \end{align}
-    after the canonical reassociation of the three tensor factors. This is
-    TNLean-specific support-completion algebra from
-    (\ref{eq:entropy_petz_complement}), not a statement of
+    after the canonical reassociation of the three tensor factors. This follows
+    from the chosen support completion in
+    (\ref{eq:entropy_petz_complement}), not from
     \cite[equation~(10)]{Hayden2004Structure}.
 \end{theorem}
 
@@ -516,6 +518,8 @@
     A finite product-operator decomposition gives the result for every input.
 \end{proof}
 
+% Source boundary: only the raw summand is attributed to HJPW equation (10);
+% the complementary summand is the chosen support completion.
 \begin{theorem}[Factorization of the completed Petz channel]
     \label{thm:entropy_completed_petz_maximally_mixed_tensor}
     \lean{Matrix.partialTraceRightPetzChannel_maximallyMixedTensor}
@@ -532,8 +536,8 @@
     \end{align}
     after canonical reassociation of the three tensor factors. The raw
     support-map summand is the maximally mixed specialization of
-    \cite[equation~(10)]{Hayden2004Structure}. The complementary summand is
-    TNLean-specific support-completion algebra from
+    \cite[equation~(10)]{Hayden2004Structure}. The complementary summand comes
+    from the chosen support completion in
     (\ref{eq:entropy_petz_complement}). This theorem does not assert a
     Hayashi--Koashi--Imoto decomposition.
 \end{theorem}
