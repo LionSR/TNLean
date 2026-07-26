@@ -1139,6 +1139,9 @@
       \msg_error:nnn {tenkz}{region-slot}{\pgfkeys@was@choice}},
   /tenkz/region/outline/.code=
       {\bool_set_true:N \l__tenkzl_routline_bool},
+  % A region label is author content: render it exactly as supplied.  In
+  % particular, mathematics carries its own `$...$` delimiters, as it does
+  % for the other public tenkz label keys.
   /tenkz/region/label/.store~in=\l__tenkzl_rlabel_tl,
   % label pos= is the 0.6 placement spelling (one vocabulary across
   % every label kind); label at= stays as its alias
@@ -4007,7 +4010,7 @@
     \__tenkz_render_labelnode_named:nnnn {tn~label, anchor=\l__tenkzl_tmp_tl}
       {tenkzl-region-label-probe}
       { ( \dim_use:N \l__tenkzl_px_dim , \dim_use:N \l__tenkzl_py_dim ) }
-      { $#6$ }
+      {#6}
     \tenkzl_record_obstacle_bbox:n {tenkzl-region-label-probe}
     % A corner label deliberately occupies the pocket beside its extreme
     % site.  Under an oblique frame its flipped anchor can also meet the one
@@ -4036,7 +4039,7 @@
     \__tenkz_render_labelnode_named:nnnn {tn~label, anchor=#1}
       {tenkzl-region-label-probe}
       { ( \dim_use:N \l__tenkzl_px_dim , \dim_use:N \l__tenkzl_py_dim ) }
-      { $#4$ }
+      {#4}
     \tenkzl_record_obstacle_bbox:n {tenkzl-region-label-probe}
   }
 \cs_new_protected:Npn \tenkzl_label_place:nn #1#2
@@ -4089,7 +4092,7 @@
               {tenkzl-region-label-probe}
               { ( \dim_use:N \l__tenkzl_px_dim ,
                   \dim_use:N \l__tenkzl_py_dim ) }
-              { $#2$ }
+              {#2}
             \tenkzl_record_obstacle_bbox:n {tenkzl-region-label-probe} }
       }
   }
