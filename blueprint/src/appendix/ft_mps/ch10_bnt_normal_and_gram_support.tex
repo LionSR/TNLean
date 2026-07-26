@@ -167,3 +167,52 @@ arguments.
     off-diagonal limits inside each block, and the mixed overlap hypothesis gives
     the off-diagonal limits between the two blocks.
 \end{proof}
+
+The following two linear-algebra consequences package the eventual Gram-matrix
+criterion and its coefficient-extraction corollary.
+
+\begin{lemma}[Eventual linear independence from overlap orthonormality]
+    \label{lem:bnt_overlap_orthonormal_li}
+    \lean{MPSTensor.eventually_linearIndependent_of_overlap_tendsto_orthonormal}
+    \leanok
+    \uses{def:mpv_overlap, lem:bnt_finite_index_overlap_orthonormal_li}
+    Let $(A_j)_{j=1}^g$ be a finite family of tensors such that
+    $O_{A_jA_j}(N) \to 1$ for each $j$ and $O_{A_iA_j}(N) \to 0$
+    for $i \neq j$. Then the MPV states
+    $\{\ket{V^{(N)}(A_j)}\}_{j=1}^g$ are linearly independent for all
+    sufficiently large~$N$.
+\end{lemma}
+
+\begin{proof}\leanok
+    Apply Lemma~\ref{lem:bnt_finite_index_overlap_orthonormal_li} with
+    $I = \{1,\ldots,g\}$.
+\end{proof}
+
+The same conclusion is often more convenient with an explicit threshold rather
+than the eventual quantifier.
+
+
+
+Eventual linear independence is also what converts an equality of two finite
+linear combinations into equality of their coefficients; this is the mechanism
+behind the coefficient identities of Chapter~\ref{ch:ft_proof}.
+
+\begin{lemma}[Eventual coefficient extraction from linear independence]%
+    \label{lem:eventual_coeff_eq_of_eventual_li}
+    \lean{MPSTensor.coefficient_eventually_eq_of_eventually_linearIndependent}
+    \leanok
+    If a finite family of vectors is linearly independent for all sufficiently
+    large $N$, and two finite linear combinations of that family are equal
+    for all sufficiently large $N$, then the corresponding coefficients are
+    equal for all sufficiently large $N$.
+\end{lemma}
+
+\begin{proof}\leanok
+    Move the two linear combinations to one side. Linear independence forces
+    each coefficient difference to vanish at every sufficiently large length.
+\end{proof}
+
+When two BNT families must be compared against each other, the same
+Gram-matrix criterion applies to their disjoint union, provided the mixed
+overlaps also decay. This is the form used in the exact sector matching of
+Section~\ref{sec:sector_bnt_strong_match}.
