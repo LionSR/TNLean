@@ -15,7 +15,9 @@ This file compares the chosen one-site vertical basis in a tensor-attached
 BNT algebra clause with a vertical canonical decomposition of the two-site
 blocking.  The same-length product law identifies the sectorwise power sums,
 and positivity turns them into the multiplicity-spectrum comparison used in
-the algebra-to-RFP implication.
+the algebra-to-RFP implication.  The source-facing constructions assume
+normalized BNT-refined horizontal form; they do not establish the corresponding
+claim from the literal CPSV canonical form.
 
 ## Main results
 
@@ -148,6 +150,11 @@ in `H`.  No renormalization maps or pre-existing one-site/two-site sector
 correspondence are assumed: full support of the two positive vertical
 decompositions derives the sector relabelling, and eventual BNT linear
 independence derives the power-sum equality.
+
+**Scope restriction (BNT-refined horizontal form):** `IsHorizontalCF` is the
+normalized BNT-refined horizontal form, stronger than the literal CPSV
+canonical form used in Appendix C.4 through Proposition 4.13; see
+`docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex`.
 
 **Scope restriction (invertible gauge):** The result retains bond-dimension
 equality and phase-one invertible conjugacy, but does not prove the line-2057
@@ -704,7 +711,12 @@ noncomputable def toTwoSiteExactSectorGauge
       rw [hzetaOne γ, one_smul] at hExact
       exact hExact }
 
-/-- The exact sector gauges determine the source-derived two-site multiplicity spectrum.
+/-- The exact sector gauges determine the two-site multiplicity spectrum under
+normalized BNT-refined horizontal form.
+
+**Scope restriction (BNT-refined horizontal form):** `IsHorizontalCF` is
+stronger than the literal CPSV canonical form; see
+`docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex`.
 
 Source: arXiv:1606.00608, Appendix C.4, lines 2046--2058 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
@@ -714,8 +726,12 @@ noncomputable def toTwoSiteMultiplicitySpectrum
     TwoSiteMultiplicitySpectrum H :=
   (H.toTwoSiteExactSectorGauge hHorizontal hM).toTwoSiteMultiplicitySpectrum
 
-/-- The source-derived two-site multiplicity spectrum entails the corresponding
-multiplicity-spectrum comparison.
+/-- The two-site multiplicity spectrum under normalized BNT-refined horizontal
+form entails the corresponding multiplicity-spectrum comparison.
+
+**Scope restriction (BNT-refined horizontal form):** `IsHorizontalCF` is
+stronger than the literal CPSV canonical form; see
+`docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex`.
 
 Source: arXiv:1606.00608, Appendix C.4, lines 2046--2058 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/

@@ -45,12 +45,13 @@ unconditionally:
 
 The source also states that $Q$ fails to commute with the density operator
 $H^{(N)}$ at every length (arXiv:1606.00608, line 1889).  The proof needs only
-one noncommuting length.  Horizontal canonical form supplies such a length:
-otherwise the representative-grouped Lemma L would turn simultaneous
+one noncommuting length.  Normalized BNT-refined horizontal form supplies such
+a length: otherwise the representative-grouped Lemma L would turn simultaneous
 commutation into the forbidden letter-level invariance.  At that same length,
 full-period word invariance gives commutation with $[H^{(N)}]^p$, and
-positivity removes the power.  Thus the periodic-sector step is proved with
-the source hypotheses, without the stronger all-length inequality.
+positivity removes the power.  This proves the periodic-sector step on the
+stronger BNT-refined surface, not from the literal source hypotheses; see
+`docs/paper-gaps/cpgsv17_periodic_sector_projector.tex`.
 
 ## Main results
 
@@ -69,9 +70,9 @@ the source hypotheses, without the stronger all-length inequality.
 * `MPOTensor.hasNoPeriodicVectors_verticalTensor_of_noncommutation`: granted
   the hypothesis, a matrix product density operator has no nontrivial
   periodic vectors in the vertical direction.
-* `MPOTensor.hasNoPeriodicVectors_verticalTensor_of_horizontalCF`: a
-  horizontally canonical matrix product density operator has no nontrivial
-  periodic vectors in the vertical direction.
+* `MPOTensor.hasNoPeriodicVectors_verticalTensor_of_horizontalCF`: an MPDO in
+  normalized BNT-refined horizontal form has no nontrivial periodic vectors in
+  the vertical direction.
 
 ## References
 
@@ -625,10 +626,10 @@ $Q\widetilde M\ne Q\widetilde MQ$ — fails to commute with the density
 operator $H^{(N)}$ at every length.
 
 This is the horizontal-canonical-form step of the periodic-sector argument.
-The source assumes the tensor is in canonical form in the horizontal
-direction; the argument of lines 1874--1887 (Lemma L of the appendix,
-formalized for the literal representative-indexed horizontal canonical form
-in `TNLean/MPS/MPDO/HorizontalBNT.lean`) turns the full positive-length family
+The source assumes the tensor is in literal canonical form in the horizontal
+direction.  The available formal Lemma L in
+`TNLean/MPS/MPDO/HorizontalBNT.lean` instead assumes normalized BNT-refined
+horizontal form and turns the full positive-length family
 of first-site identities into the letter-level invariance
 $Q\widetilde M=Q\widetilde MQ$.  The predicate below records the stronger
 all-length assertion printed by the source.  The proof of Proposition 4.13
@@ -648,7 +649,7 @@ displacement upgrades to the all-length non-commutation family through the
 hypothesis.  This reduces the periodic-sector step of the proof of
 Proposition 4.13 of arXiv:1606.00608, lines 1888--1893, to the explicit
 all-length non-commutation interface.  This is a stronger conditional
-formulation than the unconditional horizontal-canonical-form theorem below. -/
+formulation than the normalized BNT-refined theorem below. -/
 theorem periodicVectorYieldsCyclicProjector_of_noncommutation
     {d D : ℕ} (M : MPOTensor d D)
     (hNC : NoninvariantProjectorNoncommuting M) :
@@ -667,9 +668,10 @@ and its word invariance constructed from the cyclic decomposition of the
 peripheral spectrum (Wolf 2012, Theorem 6.6) rather than assumed.
 
 **Scope restriction (conditional on the non-commutation family):** the
-hypothesis requires noncommutation at every length.  The source-faithful
-theorem `hasNoPeriodicVectors_verticalTensor_of_horizontalCF` instead uses
-the one noncommuting length supplied by horizontal canonical form. -/
+hypothesis requires noncommutation at every length.  The theorem
+`hasNoPeriodicVectors_verticalTensor_of_horizontalCF` instead uses one
+noncommuting length supplied by normalized BNT-refined horizontal form; it is
+not the literal source theorem. -/
 theorem hasNoPeriodicVectors_verticalTensor_of_noncommutation
     {d D : ℕ} (M : MPOTensor d D) (hM : IsMPDO M)
     (hNC : NoninvariantProjectorNoncommuting M) :
@@ -703,7 +705,7 @@ Proposition 4.13 allows `M` to be reducible, decomposed horizontally into
 several gauge-inequivalent canonical-form blocks with weights; this theorem
 covers the sub-case where `M`'s own tensor is already (single-letter)
 injective.  The theorem `hasNoPeriodicVectors_verticalTensor_of_horizontalCF`
-below treats the general horizontal canonical form. -/
+below treats normalized BNT-refined horizontal form. -/
 theorem hasNoPeriodicVectors_verticalTensor_of_isInjective
     {d D : ℕ} (M : MPOTensor d D) (hM : IsMPDO M)
     (hInj : MPSTensor.IsInjective M.toMPSTensor) :
@@ -721,26 +723,32 @@ theorem hasNoPeriodicVectors_verticalTensor_of_isInjective
   exact ketLeftMul_eq_braRightMul_of_commute_of_isInjective M hInj hQidem
     (mpo_commute_of_commute_pow M hM 2 (by omega) hp hCommPow)
 
-/-- **The periodic-sector step for a horizontally canonical matrix product
-density operator.**
+/-- **The periodic-sector step for an MPDO in normalized BNT-refined
+horizontal form.**
 
-The vertically viewed tensor of a horizontally canonical MPDO has no
-nontrivial periodic vector.  A periodic vector supplies an orthogonal
-projector displaced by one vertical layer and invariant under every word of
-one full period.  Horizontal canonical form shows that this displacement
-forces noncommutation with the density operator at some positive length.
+The vertically viewed tensor of an MPDO in normalized BNT-refined horizontal
+form has no nontrivial periodic vector.  A periodic vector supplies an
+orthogonal projector displaced by one vertical layer and invariant under every
+word of one full period.  The BNT-refined horizontal form shows that this
+displacement forces noncommutation with the density operator at some positive
+length.
 Full-period invariance gives commutation with the corresponding power of that
 density operator, while positivity removes the power and gives a
 contradiction.
 
 This proves the periodic-sector paragraph of arXiv:1606.00608,
-Proposition 4.13, lines 1888--1893.  Only one noncommuting length is needed;
-the source states the stronger all-length inequality, but the contradiction
-is pointwise in the length.
+Proposition 4.13, lines 1888--1893, only under the stronger BNT-refined
+horizontal hypothesis.  One noncommuting length is enough; the source states
+the stronger all-length inequality, but the contradiction is pointwise in the
+length.
+
+**Scope restriction (BNT-refined horizontal form):** `IsHorizontalCF` is
+stronger than the literal CPSV canonical form.  The literal periodic-sector
+step remains open; see `docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex`.
 
 **Local fix (noncommuting length):** the all-length inequality printed at
-source line 1889 is replaced by the existential consequence of the literal
-Lemma L, which is sufficient at lines 1890--1893.  Documented in
+source line 1889 is replaced by the existential consequence of the available
+BNT-refined Lemma L, which is sufficient at lines 1890--1893.  Documented in
 `docs/paper-gaps/cpgsv17_periodic_sector_projector.tex`. -/
 theorem hasNoPeriodicVectors_verticalTensor_of_horizontalCF
     (M : MPOTensor d D) (hM : IsMPDO M) (hHorizontal : IsHorizontalCF M) :

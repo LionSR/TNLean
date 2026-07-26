@@ -19,17 +19,18 @@ $$
 $$
 where $P_1=P\otimes\Id^{\otimes N}$.  Given an MPV-level BNT representation,
 Lemma L transfers these identities to every minimal representative, where they
-say $(\Id-P)MP=0$. The further transport to the original MPO letters uses the
-literal horizontal canonical form and is carried out in
-`TNLean.MPS.MPDO.HorizontalBNT`.
+say $(\Id-P)MP=0$.  Transport to the original MPO letters is currently proved
+only for normalized BNT-refined horizontal form in
+`TNLean.MPS.MPDO.HorizontalBNT`; the literal active-refinement transport remains
+open.
 
 The file also specializes the positive-semidefinite power-commutation theorem
 to matrix product density operators.  This is only the final operator
 implication in source lines 1888--1893.  The cyclic projector and its word
 invariance are constructed in `TNLean/MPS/MPDO/CyclicProjector.lean`; for a
-tensor in literal horizontal canonical form, one noncommuting length suffices
-for the periodic-sector contradiction, so the stronger all-length condition is
-not required.
+tensor in normalized BNT-refined horizontal form, one noncommuting length
+suffices for the periodic-sector contradiction.  The corresponding literal
+canonical-form transport remains open.
 
 ## Main results
 

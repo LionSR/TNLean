@@ -773,6 +773,11 @@ constructed internally.  The conclusion includes the preceding all-label
 density decomposition, factor commutator, terminal spectral refinement, and
 the retained commuting nearest-neighbor Gibbs formula.
 
+**Scope restriction (BNT-refined horizontal form):** The RFP-derived clause is
+available here only under normalized BNT-refined horizontal form
+(`IsHorizontalCF`), which is stronger than the literal CPSV canonical form. See
+`docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex`.
+
 Source: arXiv:1606.00608, lines 999--1016.
 
 **Scope restriction (retained vertical coordinates):** The Gibbs

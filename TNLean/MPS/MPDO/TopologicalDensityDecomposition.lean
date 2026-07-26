@@ -30,6 +30,11 @@ coordinates.  The two global direct-sum factors commute because the multiplicity
 scalar identity in every configuration.  Applying the adjoint vertical map reconstructs the
 original density exactly.
 
+The source-facing RFP wrappers obtain their fusion clause only from normalized
+BNT-refined horizontal form.  They do not establish the corresponding
+construction from the literal CPSV canonical form; see
+`docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex`.
+
 ## References
 
 * [Cirac--Perez-Garcia--Schuch--Verstraete 2017] arXiv:1606.00608,
@@ -663,11 +668,16 @@ namespace MPOTensor
 
 /-- **Line-999 density decomposition for an RFP MPDO.**
 
-A horizontal-canonical MPDO satisfying the source renormalization fixed-point condition
-admits one BNT fusion clause whose same multiplicities, positive weights, rectangular vertical
+An MPDO in normalized BNT-refined horizontal form satisfying the source
+renormalization fixed-point condition admits one BNT fusion clause whose same
+multiplicities, positive weights, rectangular vertical
 coisometry, fusion histories, and terminal operators give the all-initial-label density
 decomposition at every positive chain length.  No caller-supplied compatibility hypothesis is
 required.
+
+**Scope restriction (BNT-refined horizontal form):** `IsHorizontalCF` is
+stronger than the literal CPSV canonical form used by Proposition 4.13 and
+Theorem 4.14; see `docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex`.
 
 Source: arXiv:1606.00608, Theorem 4.14 and the density identity at line 999.  This theorem
 stops before the commutator at line 1001 and makes no spectral or Gibbs-state assertion.
@@ -685,11 +695,16 @@ theorem exists_topologicalDensityDecomposition_of_isRFPViaTS
 
 /-- **All-label density-factor commutator for an RFP MPDO.**
 
-A horizontal-canonical MPDO satisfying the source renormalization fixed-point condition
-admits one BNT fusion clause that gives both the exact all-label density decomposition and
+An MPDO in normalized BNT-refined horizontal form satisfying the source
+renormalization fixed-point condition admits one BNT fusion clause that gives
+both the exact all-label density decomposition and
 the commutator between its multiplicity-weight and reconstructed recursive factors at every
 positive chain length.  No caller-supplied fusion clause or compatibility hypothesis is
 required.
+
+**Scope restriction (BNT-refined horizontal form):** `IsHorizontalCF` is
+stronger than the literal CPSV canonical form used by Proposition 4.13 and
+Theorem 4.14; see `docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex`.
 
 Source: arXiv:1606.00608, density decomposition and commutator at lines 999--1002.
 This theorem makes no length-independence, terminal spectral, projector, or Gibbs-state

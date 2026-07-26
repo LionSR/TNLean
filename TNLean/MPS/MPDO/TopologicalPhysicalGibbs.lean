@@ -657,6 +657,11 @@ constructed internally. For every chain of length `N + 2`, the local
 translates commute, the projectors are pairwise orthogonal and commute with
 the Gibbs factor, and their weighted Gibbs sum is the physical MPDO.
 
+**Scope restriction (BNT-refined horizontal form):** The RFP-derived clause is
+available here only under normalized BNT-refined horizontal form
+(`IsHorizontalCF`), which is stronger than the literal CPSV canonical form. See
+`docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex`.
+
 Source: CPSV16, lines 1013–1016, with the local two-site convention of
 Definition 4.8, lines 831–847.
 

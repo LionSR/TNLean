@@ -28,6 +28,11 @@ and deduces that the grouped coefficient is positive.  The positive-diagonal
 isometry asserted at lines 1895--1896 and the gauge normalization and final
 coisometry argument at lines 1903--1921 are not included.
 
+The formal grouping starts from normalized BNT-refined horizontal form, which
+is stronger than the literal CPSV canonical form.  The missing active-refinement
+and coisometry transport are recorded in
+`docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex`.
+
 ## Main statement
 
 * `IsHorizontalCF.exists_verticalBNTGrouping_with_isometry`: the normalized
@@ -46,15 +51,19 @@ namespace MPOTensor
 
 variable {d D : ℕ}
 
-/-- A nonzero vertical corner of a horizontally canonical tensor has a
-nonzero first-site sector compression at some chain length.
+/-- A nonzero vertical corner of a tensor in normalized BNT-refined horizontal
+form has a nonzero first-site sector compression at some chain length.
 
 If every compression by `P` vanished, their matrix entries would say that the
 two-sided first-site insertion by `P` has the same matrix product vectors as
-zero.  Lemma L for the horizontal canonical form would then make the inserted
+zero.  Lemma L for the BNT-refined horizontal form would then make the inserted
 tensor itself zero, forcing every corner $P\widetilde M_vP$ to vanish.  This is
 the separation assertion used in the proof of Proposition 4.13 of
-arXiv:1606.00608, line 1898. -/
+arXiv:1606.00608, line 1898.
+
+**Scope restriction (BNT-refined horizontal form):** `IsHorizontalCF` is
+stronger than the literal CPSV canonical form; see
+`docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex`. -/
 theorem IsHorizontalCF.exists_sectorCompression_ne_zero_of_corner
     (M : MPOTensor d D) (hHorizontal : IsHorizontalCF M)
     (P : Matrix (Fin d) (Fin d) ℂ)
@@ -136,8 +145,9 @@ theorem exists_rangeProjection_corner_ne_zero
       hV, Matrix.mul_one]] at hcancel
   simpa using hcancel
 
-/-- Group the normalized vertical corners of a horizontally canonical MPDO by
-their gauge-phase classes while retaining the physical reducing isometries.
+/-- Group the normalized vertical corners of an MPDO in normalized BNT-refined
+horizontal form by their gauge-phase classes while retaining the physical
+reducing isometries.
 
 For each class `j` and copy `q`, the original normalized corner is
 
@@ -156,7 +166,11 @@ arXiv:1606.00608, lines 1898--1902, using the BNT characterization at lines
 1135--1148 and the preceding isometry-preserving vertical sector theorem.  The
 positive-diagonal isometry asserted at lines 1895--1896 and the subsequent
 gauge normalization and coisometry argument at lines 1903--1921 are not
-included. -/
+included.
+
+**Scope restriction (BNT-refined horizontal form):** `IsHorizontalCF` is
+stronger than the literal CPSV canonical form; see
+`docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex`. -/
 theorem IsHorizontalCF.exists_verticalBNTGrouping_with_isometry
     (M : MPOTensor d D) (hHorizontal : IsHorizontalCF M) (hM : IsMPDO M) :
     ∃ (r : ℕ) (dim : Fin r → ℕ) (μ : Fin r → ℂ)

@@ -35,10 +35,10 @@ spectrum (Wolf 2012, Theorem 6.6) applied to the vertical transfer map
 supplies the projector with its word invariance and single-letter
 displacement (`TNLean/MPS/MPDO/CyclicProjector.lean`).  The all-length
 non-commutation family remains available as a stronger conditional
-formulation.  For a tensor in horizontal canonical form, the theorem
-`hasNoPeriodicVectors_verticalTensor_of_horizontalCF` instead uses the one
-noncommuting length supplied by the contrapositive of Lemma L and proves the
-source conclusion without this hypothesis.
+formulation.  For a tensor in normalized BNT-refined horizontal form, the
+theorem `hasNoPeriodicVectors_verticalTensor_of_horizontalCF` instead uses the
+one noncommuting length supplied by the contrapositive of the available Lemma L.
+The literal canonical-form conclusion remains open.
 
 ## Main definitions
 
@@ -135,8 +135,8 @@ derivation are formalized in `TNLean/MPS/MPDO/StackedLayers.lean`, which
 reduces this hypothesis to `PeriodicVectorYieldsCyclicProjector`; the
 cyclic projections themselves, with their word invariance and single-letter
 displacement, are constructed in `TNLean/MPS/MPDO/CyclicProjector.lean`,
-which also proves the source conclusion directly from horizontal canonical
-form by using one noncommuting length.  The predicate below retains the
+which proves the source-shaped conclusion from normalized BNT-refined
+horizontal form by using one noncommuting length.  The predicate below retains
 stronger all-length formulation as an auxiliary interface. -/
 def PeriodicVectorYieldsProjector (M : MPOTensor d D) : Prop :=
   ∀ ⦃n : ℕ⦄ (V : Matrix (Fin d) (Fin n) ℂ) (B : MPSTensor (D * D) n)
@@ -159,10 +159,10 @@ density operators rules such a projector out.
 
 **Scope restriction (conditional on the supplied projector):** the source
 draws the projector from the general theory of the peripheral spectrum; here
-that implication is the explicit all-length hypothesis.  The general theorem
-for a tensor in literal horizontal canonical form is proved in
-`TNLean/MPS/MPDO/CyclicProjector.lean` from one noncommuting length.  Recorded
-in `docs/paper-gaps/cpgsv17_periodic_sector_projector.tex`. -/
+that implication is the explicit all-length hypothesis.  The theorem in
+`TNLean/MPS/MPDO/CyclicProjector.lean` uses one noncommuting length but assumes
+normalized BNT-refined horizontal form, not the literal CPSV canonical form.
+Recorded in `docs/paper-gaps/cpgsv17_periodic_sector_projector.tex`. -/
 theorem hasNoPeriodicVectors_verticalTensor (M : MPOTensor d D)
     (hM : IsMPDO M) (hYield : PeriodicVectorYieldsProjector M) :
     MPSTensor.HasNoPeriodicVectors (verticalTensor M) := by
