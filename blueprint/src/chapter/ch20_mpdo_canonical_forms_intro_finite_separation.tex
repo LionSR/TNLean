@@ -5,13 +5,14 @@
 % The three examples after Theorem 4.9 are numbered 4.10--4.12; hence
 % `Prop:IV.12` is Proposition 4.13 in the arXiv source.
 
-\begin{definition}[Horizontal canonical form for an MPO]\label{def:horizontal_cf_mpdo}
+\begin{definition}[Normalized BNT-refined horizontal form for an MPO]
+    \label{def:horizontal_cf_mpdo}
     \lean{MPOTensor.IsHorizontalCF}
     \leanok
     \uses{def:mpo_tensor, def:sector_bnt_cf, def:gauge_equiv}
-    An MPO tensor is in \emph{horizontal canonical form} if its doubled-index
-    MPS tensor is a BNT sector decomposition with an independent gauge on
-    every repeated copy:
+    An MPO tensor is in \emph{normalized BNT-refined horizontal form} if its
+    doubled-index MPS tensor is a BNT sector decomposition with an independent
+    gauge on every repeated copy:
     \begin{align}
         M^{ab}
          & =\bigoplus_{j=0}^{g-1}\bigoplus_{q=0}^{r_j-1}
@@ -36,8 +37,15 @@
          & =\bigoplus_{j,q}X_{j,q}.
         \notag
     \end{align}
-    This is the canonical form and its BNT decomposition in
-    \cite[lines~237--246 and 281--301]{Cirac2016MPDO_arXiv}.
+    This is a strengthened representative-grouped form of the canonical
+    decomposition in \cite[Section~2.3]{Cirac2016MPDO_arXiv}. In contrast with
+    Definition~\ref{def:cpsv_canonical_form}, the retained direct sum has the
+    full bond dimension, every copy weight is nonzero and normalized, and
+    gauge-equivalent normal blocks are grouped over a BNT representative with
+    a separate gauge for each copy. It is therefore not the literal CPSV
+    canonical-form hypothesis.
+    % Source anchors: CPSV16 lines 214--246 for literal CF and lines 281--301
+    % for the BNT representative decomposition.
 \end{definition}
 
 \begin{definition}[MPV representation associated with horizontal canonical form]
