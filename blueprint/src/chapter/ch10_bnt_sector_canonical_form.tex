@@ -3,7 +3,7 @@
 
 % Source: Cirac2016MPDO_arXiv \S~II lines 287--301; Cirac2021Matrix
 % Definition~4.2, Proposition~4.3, lines 1864--1884.
-This section introduces the BNT canonical-form predicate of
+This section introduces the BNT canonical-form conditions of
 \cite[Section~2]{Cirac2016MPDO_arXiv}, defined on a sector decomposition with raw
 sector weights $\mu_{j,q}$ and coefficients $c_N^{(j)} = \sum_q \mu_{j,q}^{\,N}$;
 no equal-modulus factorization is assumed.
@@ -11,8 +11,8 @@ no equal-modulus factorization is assumed.
 \subsection{Sector decompositions and phase matching}
 \label{sec:bnt_sector_decompositions}
 
-The sector decomposition and the MPV phase-equivalence predicates introduced
-here feed the BNT canonical-form predicate below.
+The sector decomposition and the MPV phase-equivalence relations introduced
+here determine the BNT canonical-form conditions below.
 
 \begin{definition}[Sector weights and sector decomposition]%
     \label{def:sector_weight_data}
@@ -24,7 +24,7 @@ here feed the BNT canonical-form predicate below.
     $q \in \{1,\ldots,r_j\}$, and the sector coefficients
     \begin{align}
         c_{S,j}^{(N)}
-        &:=
+         & :=
         \sum_{q=1}^{r_j} \mu_{j,q}^N.
         \label{eq:bnt_sector_coeff_def}
     \end{align}
@@ -71,9 +71,9 @@ here feed the BNT canonical-form predicate below.
     multiplicities $r_j$, and copy weights $\mu_{j,q}$. Its physical
     $p$-site blocking has the same representative and copy indices, with
     \begin{align}
-        A_j&\longmapsto A_j^{[p]},
-        \notag\\
-        \mu_{j,q}&\longmapsto \mu_{j,q}^{p}.
+        A_j       & \longmapsto A_j^{[p]},
+        \notag                                 \\
+        \mu_{j,q} & \longmapsto \mu_{j,q}^{p}.
         \notag
     \end{align}
     The two-layer decomposition is
@@ -138,7 +138,7 @@ here feed the BNT canonical-form predicate below.
     the MPV satisfies
     \begin{align}
         V^{(N)}(A_{\mathrm{tot}})_\sigma
-        &=
+         & =
         \sum_{j=1}^{g} c_{S,j}^{(N)} V^{(N)}(A_j)_\sigma.
         \label{eq:bnt_sector_decomp}
     \end{align}
@@ -224,8 +224,8 @@ single family.
     \lean{MPSTensor.IsBNTCanonicalForm}
     \leanok
     \uses{def:sector_weight_data}
-    Given a sector decomposition $P$, the BNT canonical-form predicate
-    records the minimal BNT hypotheses of
+    Given a sector decomposition $P$, the BNT canonical-form conditions
+    record the minimal BNT hypotheses of
     \cite{Cirac2016MPDO_arXiv,Cirac2021Matrix} without any equal-modulus
     or strict-ordering condition on the raw sector weights. It asserts that
     each basis block has positive bond dimension, is irreducible,
@@ -235,15 +235,15 @@ single family.
     equivalent after identifying equal bond dimensions; and the
     \cite[Section~2.3]{Cirac2016MPDO_arXiv} canonical-form normalization holds,
     \begin{align}
-        \forall (j,q),\quad &|\mu_{j,q}| \le 1,
-        \notag\\
-        \exists\, (j_*,q_*),\quad &|\mu_{j_*,q_*}| = 1.
+        \forall (j,q),\quad       & |\mu_{j,q}| \le 1,
+        \notag                                           \\
+        \exists\, (j_*,q_*),\quad & |\mu_{j_*,q_*}| = 1.
         \notag
     \end{align}
     The MPV expansion takes the raw two-layer form
     \begin{align}
         V^{(N)}(P)_\sigma
-        &=
+         & =
         \sum_{j=1}^{g}
         \left(\sum_{q=1}^{r_j} \mu_{j,q}^N\right)
         V^{(N)}(P_j)_\sigma,
@@ -368,7 +368,7 @@ single family.
     representatives were gauge-phase equivalent, then for some nonzero
     $\zeta$ and every $N$,
     $\ket{V^{(N)}(A_k^{[p]})}
-    =\zeta^N\ket{V^{(N)}(A_j^{[p]})}$.
+        =\zeta^N\ket{V^{(N)}(A_j^{[p]})}$.
     Writing these two vectors as $f_k$ and $f_j$ gives
     $1\cdot f_k=\zeta^N\cdot f_j$ in an eventually linearly independent
     family, and therefore $k=j$. Finally,
@@ -497,6 +497,44 @@ and the combined-family linear independence.
     the unit witness is the first copy.
 \end{example}
 
+\subsection{Single-copy sector decompositions}
+
+A weighted block sum is the one-copy case of the sector decomposition used
+below. Equal or repeated sectors require the full coefficient formalism.
+
+\begin{definition}[Single-copy sector decomposition]
+    \label{def:trivial_sector_decomp}
+    \lean{MPSTensor.trivialSectorDecomp}
+    \leanok
+    \uses{def:sector_weight_data}
+    Given nonzero weights $(\mu_k)_{k=1}^r$ and blocks $(B_k)_{k=1}^r$, the
+    \emph{single-copy sector decomposition} has $r$ sectors, one basis block
+    $B_k$ per sector, multiplicity~$1$, and sector weight $\mu_k$. As a finite
+    sum,
+    \begin{align}
+        \sum_{k=1}^{r}\mu_k^{\,N}V^{(N)}(B_k)_\sigma
+         & =
+        V^{(N)}\!\left(\bigoplus_k\mu_kB_k\right)_\sigma.
+        \label{eq:canonical_single_copy_sector}
+    \end{align}
+\end{definition}
+
+\begin{lemma}[Single-copy sector decomposition preserves the represented family]
+    \label{lem:trivial_sector_decomp_same_mpv}
+    \lean{MPSTensor.sameMPV₂_trivialSectorDecomp}
+    \leanok
+    \uses{def:trivial_sector_decomp}
+    The single-copy sector decomposition of $(\mu_k,B_k)_k$ represents the same
+    MPS family as $\bigoplus_k\mu_kB_k$.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:trivial_sector_decomp}
+    Expanding the sector decomposition gives the left-hand side of
+    (\ref{eq:canonical_single_copy_sector}), which is the finite block-sum
+    expression for $\bigoplus_k\mu_kB_k$.
+\end{proof}
+
 \subsection{Prepared-block construction of BNT canonical forms}%
 \label{subsec:paperbnt_supplier}
 
@@ -589,9 +627,9 @@ form by quotienting gauge-phase-equivalent blocks into sectors.
     hypotheses the phase-class construction applies, and for distinct
     representatives $B_j$, $B_{j'}$ ($j \neq j'$) the cross-overlap decays,
     \begin{align}
-        \lim_{N\to\infty} O_{B_j B_{j'}}(N)&=0,
-        \notag\\
-        \lim_{N\to\infty} O_{B_j B_j}(N)&=1,
+        \lim_{N\to\infty} O_{B_j B_{j'}}(N) & =0,
+        \notag                                    \\
+        \lim_{N\to\infty} O_{B_j B_j}(N)    & =1,
         \notag
     \end{align}
     which gives the eventual linear-independence condition with no injectivity
@@ -608,9 +646,9 @@ $\ket{V^{(N)}(Y)}=\zeta^N\ket{V^{(N)}(X)}$ with $\zeta\neq0$. The normalized
 self-overlaps give $|O_{XX}(N)|\to 1$. The phase relation gives the
 cross-overlap identity
 \begin{align}
-    O_{YX}(N)&=\zeta^N O_{XX}(N),
-    \notag\\
-    |O_{YX}(N)|&=|\zeta|^N |O_{XX}(N)|.
+    O_{YX}(N)   & =\zeta^N O_{XX}(N),
+    \notag                                \\
+    |O_{YX}(N)| & =|\zeta|^N |O_{XX}(N)|.
     \notag
 \end{align}
 Since the same normalization forces $|\zeta|=1$, this gives
@@ -638,7 +676,7 @@ give $O_{YX}(N)\to 0$, a contradiction.
     dimension,
     \begin{align}
         \sum_{j=1}^{g}\sum_{q=1}^{r_j}\dim(P_j)
-        &=
+         & =
         \sum_{j=1}^{g}\sum_{q=1}^{r_j}D_{e(j,q)}
         =
         \sum_{k=1}^{r}D_k.
@@ -665,9 +703,9 @@ give $O_{YX}(N)\to 0$, a contradiction.
     The normalized self-overlaps give $|O_{XX}(N)|\to 1$, and the phase relation
     gives
     \begin{align}
-        O_{YX}(N)&=\zeta^N O_{XX}(N),
-        \notag\\
-        |O_{YX}(N)|&=|\zeta|^N |O_{XX}(N)|.
+        O_{YX}(N)   & =\zeta^N O_{XX}(N),
+        \notag                                \\
+        |O_{YX}(N)| & =|\zeta|^N |O_{XX}(N)|.
         \notag
     \end{align}
     Since the same normalization forces $|\zeta|=1$, this gives
@@ -796,9 +834,9 @@ gives the arbitrary-input statement, conditional on the weight normalization.
     For nonzero weights $\mu_1,\ldots,\mu_r$ with $r\geq1$ there is a positive
     real $m$ such that every normalized weight satisfies
     \begin{align}
-        \Bigl|\frac{\mu_k}{m}\Bigr|&\leq1,
-        \notag\\
-        \frac{\mu_k}{m}&\neq0,
+        \Bigl|\frac{\mu_k}{m}\Bigr| & \leq1,
+        \notag                               \\
+        \frac{\mu_k}{m}             & \neq0,
         \notag
     \end{align}
     and at least one normalized weight has unit modulus,
@@ -813,6 +851,20 @@ gives the arbitrary-input statement, conditional on the weight normalization.
     family is attained, positive because every weight is nonzero, an upper
     bound for every modulus, and equal to the modulus of the attaining
     weight.
+\end{proof}
+
+\begin{lemma}[Common scalar rescaling of block weights]%
+    \label{lem:mpv_to_tensor_from_blocks_weight_mul_left}
+    \lean{MPSTensor.mpv_toTensorFromBlocks_weight_mul_left}
+    \leanok
+    Multiplying every block weight in a block-diagonal MPS tensor by a scalar
+    $c$ multiplies every length-$N$ MPV coefficient by $c^N$.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpv_decomposition}
+    Expand the block-diagonal MPV coefficient as a finite sum over blocks and
+    factor $c^N$ out of the sum.
 \end{proof}
 
 \begin{theorem}[Normalized BNT form after blocking for a nonzero MPV family]%
@@ -835,7 +887,7 @@ gives the arbitrary-input statement, conditional on the weight normalization.
     $N$,
     \begin{align}
         V^{(N)}(A^{[p]})
-        &=m^{N}\,V^{(N)}(P).
+         & =m^{N}\,V^{(N)}(P).
         \label{eq:bnt_sector_normalized_family}
     \end{align}
     The scalar $m^{N}$ is the per-site normalization cost of the line-246
@@ -866,13 +918,13 @@ gives the arbitrary-input statement, conditional on the weight normalization.
     Lemma~\ref{lem:mpv_to_tensor_from_blocks_weight_mul_left},
     \begin{align}
         V^{(N)}(A^{[p]})
-        &=
+         & =
         V^{(N)}\left(\bigoplus_k \mu_k\,B_k\right)
         =
         V^{(N)}\Bigl(\bigoplus_k
         m\,\frac{\mu_k}{m}\,B_k\Bigr),
-        \notag\\
-        &=
+        \notag \\
+         & =
         m^{N}\,V^{(N)}\left(\bigoplus_k \frac{\mu_k}{m}\,B_k\right)
         =
         m^{N}\,V^{(N)}(P).
