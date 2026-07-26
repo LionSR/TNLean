@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.ParentHamiltonian.BNTBlockDiagonalBoundaryClosing
 import TNLean.MPS.ParentHamiltonian.GroundSpaceSpanning
+import TNLean.MPS.RFP.BNTDirectSumBasis
 import TNLean.MPS.RFP.ResidualWordSpan
 
 /-!
@@ -339,13 +340,6 @@ theorem chainGroundSpace_toTensorFromBlocks_eq_iSup_of_wordTupleSpanTop_one
   exact chainGroundSpace_toTensorFromBlocks_eq_iSup_chainGroundSpace_of_boundary_closing
     μ A hμ (by omega) (by omega) hClose
 
-/-- The unit-weight block tensor is the direct-sum tensor. -/
-theorem toTensorFromBlocks_one_eq_directSumTensor
-    (A : (j : Fin r) → MPSTensor d (dim j)) :
-    toTensorFromBlocks (d := d) (fun _ ↦ 1) A = directSumTensor A := by
-  funext i
-  simp [toTensorFromBlocks, directSumTensor]
-
 namespace IsBNTCanonicalForm
 
 variable {P : SectorDecomposition d}
@@ -397,40 +391,6 @@ theorem rfp_hasParentHamiltonianGroundSpaceSpanning_basisDirectSum
       have hInj : IsInjective (P.basis j) :=
         rfp_nt_structural (P.basis j) (hnormal j) hBlockRFP
       exact chainGroundSpace_eq_mpvSubmodule hInj (by omega) (by omega) (by omega)
-
-/-- The distinct basis tensors of a BNT canonical form are a basis of normal
-tensors for their direct-sum tensor.
-
-Each basis block of a BNT canonical form is irreducible and left-canonical
-with normalized self-overlap, hence a spectrally normalized normal tensor; the
-MPV family of the unit-weight direct sum is the plain sum of the block MPV
-families; and the eventual linear independence of the basis MPV states is part
-of the canonical form. This is the basis-of-normal-tensors relation of
-arXiv:1606.00608, lines 271--274, at the explicit multiplicity-one unit-weight
-representative $A=\bigoplus_j A_j$ used in the proof of Theorem
-`thm:main-MPS`, lines 534--541.
-
-**Scope restriction (multiplicity-one unit weights):** the statement covers
-the direct sum of the distinct basis tensors with one unit-weight copy each.
-Repeated copies and raw sector weights remain outside this statement; see
-docs/paper-gaps/cpsv16_pure_zcl_local_orthogonality_scope.tex. -/
-theorem isCPSVBasisOfNormalTensors_basisDirectSum
-    (hCF : IsBNTCanonicalForm P) :
-    IsCPSVBasisOfNormalTensors (directSumTensor P.basis)
-      (fun j => ⟨P.basisDim j, P.basis j⟩) := by
-  letI : ∀ j : Fin P.basisCount, NeZero (P.basisDim j) :=
-    fun j ↦ ⟨(hCF.basis_dim_pos j).ne'⟩
-  refine {
-    blocks_normal := fun j ↦
-      isNormalTensor_of_isNormal_leftCanonical (P.basis j)
-        (hCF.basis_isNormal j) (hCF.basis_left_canonical j)
-    spans_mpv := ?_
-    eventually_li := by exact hCF.bnt_data }
-  intro N _hN
-  refine ⟨fun _ ↦ 1, fun σ ↦ ?_⟩
-  rw [← toTensorFromBlocks_one_eq_directSumTensor P.basis,
-    mpv_toTensorFromBlocks_eq_sum]
-  simp
 
 /-- **Corrected forward direction of the main MPS theorem (RFP ⟹ ZCL) at the
 multiplicity-one representative.**
