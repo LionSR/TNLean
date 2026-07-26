@@ -10,10 +10,12 @@
     (Definition~\ref{def:normal}); at each system size~$N\geq1$ the MPV of
     $A_{\mathrm{tot}}$ lies in the span of the block MPVs
     $\{\ket{V^{(N)}(A_j)}\}_{j=1}^g$; and for sufficiently large~$N$ those block
-    MPVs are linearly independent. This is \cite[Definition~IV.2]{Cirac2021Matrix}.
-    In the canonical-form characterization of
+    MPVs are linearly independent. Here normality means eventual block
+    injectivity, as in Definition~\ref{def:normal}. Thus this is the algebraic
+    form of \cite[Definition~IV.2]{Cirac2021Matrix}, rather than its primitive-channel
+    formulation. In the canonical-form characterization of
     \cite[Section~2.3]{Cirac2016MPDO_arXiv}, a BNT is a minimal family of
-    representatives for $\widetilde A_k^i = e^{i\phi_k} X_k A_j^i X_k^{-1}$ among
+    representatives for $\widetilde A_k^i=e^{i\phi_k}X_kA_j^iX_k^{-1}$ among
     the normal blocks.
 \end{definition}
 
@@ -27,13 +29,11 @@
     every positive length by explicit coefficients $c_j^{(N)} \in \C$ with
     $\ket{V^{(N)}(A)} = \sum_{j=1}^{g} c_j^{(N)} \ket{V^{(N)}(A_j)}$, and the
     block MPVs $\{\ket{V^{(N)}(A_j)}\}$ are eventually linearly independent.
+    This is the literal coefficient-form definition of
+    \cite[Section~2.3]{Cirac2016MPDO_arXiv}. It differs from
+    Definition~\ref{def:bnt} only in the chosen normality predicate; the bridge
+    between the two forms is Theorem~\ref{thm:cpsv_bnt_is_bnt}.
 \end{definition}
-
-
-
-
-
-
 
 \begin{theorem}[Distinct BNT members are not gauge-phase equivalent]
     \label{thm:cpsv_bnt_blocks_not_gaugePhaseEquiv}
@@ -79,10 +79,11 @@
         \item no two distinct tensors $A_j$ and $A_{j'}$ are related in this
               way.
     \end{enumerate}
-    This is \cite[Proposition~2.7]{Cirac2016MPDO_arXiv}, with the literal
-    canonical-form display restricted to its active blocks.
-    % Local correction documented in
-    % docs/paper-gaps/cpsv16_bnt_characterization_active_blocks.tex.
+    This is \cite[Proposition~2.7]{Cirac2016MPDO_arXiv}, with one necessary
+    local correction: the coverage clause is restricted to the active blocks.
+    The source canonical-form syntax permits $\mu_k=0$, but such a summand
+    contributes nothing to any positive-length MPV and therefore cannot be
+    recovered from the BNT spanning property.
 \end{theorem}
 
 \begin{proof}\leanok

@@ -28,6 +28,42 @@
 
 
 
+\begin{theorem}[Direct-sum block injectivity at the source length]
+    \label{lem:bnt_direct_sum_block_separation_word_span}
+    \lean{MPSTensor.wordTupleSpanTop_mul_pred_of_forall_pairWordTupleSpanTop}
+    \lean{MPSTensor.wordTupleSpanTop_mul_pred_of_forall_pairTraceSeparatingAt}
+    \lean{MPSTensor.wordTupleSpanTop_threeBlock_mul_pred_of_blocksNotGaugePhaseEquiv_c1}
+    \leanok
+    \uses{def:blockwise_product_word_span,
+        def:blocks_not_gauge_phase_equiv,
+        lem:bnt_direct_sum_injective_prefix_word_span}
+    Let $(A_j)_{j=1}^g$ be irreducible left-canonical tensors with normalized
+    self-overlaps and with no gauge-phase-equivalent distinct blocks. Suppose
+    $g\geq2$, $L_0>0$, and every $A_j$ is block-injective at lengths $L_0$,
+    $L_0+1$, and $3(L_0+1)$. Then
+    \begin{align}
+        \spn\{(A_1^\omega,\ldots,A_g^\omega):
+              |\omega|=3(g-1)(L_0+1)\}
+         & =\prod_{j=1}^{g}\MN{D_j}.
+        \notag
+    \end{align}
+    This is the direct-sum induction length in
+    \cite[lines~1346--1408]{PerezGarcia2007Matrix}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{lem:bnt_direct_sum_injective_prefix_word_span}
+    Lemma~\ref{lem:bnt_direct_sum_injective_prefix_word_span} gives homogeneous
+    pair-trace separation at $S=3(L_0+1)$. For a chosen anchor block, pair
+    separation prescribes an arbitrary matrix there and zero on one other
+    block. Multiplying $g-1$ such homogeneous combinations removes the other
+    blocks one at a time. Induction on the number of removed blocks therefore
+    realizes every tuple supported on the anchor at length $(g-1)S$. Summing
+    over the anchors gives the full product algebra at
+    $3(g-1)(L_0+1)$.
+\end{proof}
+
 \begin{theorem}[Simultaneous one-letter span after blocking a BNT]
     \label{thm:cpsv_bnt_blocked_simultaneous_span}
     \lean{MPSTensor.IsCPSVBasisOfNormalTensors.%
@@ -59,47 +95,20 @@
         thm:normal_tp_primitive_irred,
         thm:common_exact_block_injectivity_normal_left_canonical,
         thm:wordspan_blk_inj_succ,
-        thm:peripheral_primitive_irreducible_overlap_one,
-        lem:gauge_invariance_block_injective,
-        lem:bnt_direct_sum_injective_prefix_word_span}
-    Every block has positive bond dimension, and distinct blocks are not
-    gauge-phase equivalent after equal bond dimensions are identified. Put
-    each block in its trace-preserving Perron gauge. The gauged blocks are
-    irreducible and primitive, form a left-canonical family, and have
-    normalized self-overlaps. Choose a common positive length $p$ at which
-    every gauged block is block-injective. Positive-length propagation gives
-    block injectivity at $p+1$ and at $3(p+1)$.
+        lem:bnt_direct_sum_block_separation_word_span,
+        lem:gauge_invariance_block_injective}
+    Put each BNT representative in its trace-preserving Perron gauge. The
+    gauged family is irreducible and left-canonical, has normalized
+    self-overlaps, and remains gauge-phase separated. Choose a common positive
+    length $p$ at which every gauged block is block-injective. Propagation of
+    homogeneous word spans gives block injectivity at $p+1$ and $3(p+1)$.
 
-    Use the pair-selector conclusion of
-    Lemma~\ref{lem:bnt_direct_sum_injective_prefix_word_span} with $L_0=p$.
-    Thus, for each ordered pair $k\ne j$, there is a length-$3(p+1)$ word
-    combination whose value is $\Id$ on block $k$ and $0$ on block $j$.
-    For fixed $k$, multiply the $g-1$ selectors indexed by $j\ne k$.
-    Concatenation multiplies their block evaluations and gives a selector of
-    length
-    \begin{align}
-        3(g-1)(p+1)
-        \notag
-    \end{align}
-    whose value is $\Id$ on block $k$ and $0$ on every other block. Gauge
-    equivalence carries these selector identities back to the original blocks.
-
-    The original blocks also have full length-$p$ word span, since block
-    injectivity is invariant under the Perron gauge. Given
-    $X_k\in\MN{D_k}$, choose a length-$p$ word combination evaluating to
-    $X_k$ on block $k$, and concatenate it with the selector for $k$. This
-    realizes the product-algebra tuple supported at $k$ with value $X_k$.
-    Summing over $k$ gives the full simultaneous span at the constructed
-    length
-    \begin{align}
-        L
-         & =p+3(g-1)(p+1).
-        \notag
-    \end{align}
-    Since $p>0$, this length is positive. Finally, a one-letter evaluation of
-    $A_j^{[L]}$ is precisely a length-$L$ word evaluation of $A_j$. Hence
-    blocking these $L$ sites turns the simultaneous word span just obtained
-    into the asserted simultaneous one-letter span.
+    If there is one representative, its length-$p$ word span is already the
+    required product-algebra span. If there are at least two,
+    Theorem~\ref{lem:bnt_direct_sum_block_separation_word_span} gives the simultaneous span
+    at $L=3(g-1)(p+1)$. Conjugating each block back from its Perron gauge
+    preserves the product span. Finally, length-$L$ words of $A_j$ are the
+    one-letter evaluations of $A_j^{[L]}$, which proves the blocked statement.
 \end{proof}
 
 Let $A$ be a tensor in canonical form, and let $A_1,\ldots,A_g$ be a basis of

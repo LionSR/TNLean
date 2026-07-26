@@ -20,50 +20,6 @@
     are $X$ and $0$, respectively.
 \end{proof}
 
-\begin{lemma}[Sharp BNT block separation without an injective prefix]
-    \label{lem:bnt_direct_sum_block_separation_word_span}
-    \lean{MPSTensor.wordTupleSpanTop_mul_pred_of_forall_pairWordTupleSpanTop}
-    \lean{MPSTensor.wordTupleSpanTop_mul_pred_of_forall_pairTraceSeparatingAt}
-    \lean{MPSTensor.wordTupleSpanTop_threeBlock_mul_pred_of_blocksNotGaugePhaseEquiv_c1}
-    \leanok
-    \uses{lem:bnt_direct_sum_injective_prefix_word_span,
-        lem:pair_product_span_arbitrary_first_value,
-        lem:block_separating_equations_from_pairwise_separation}
-    Let $A^1,\ldots,A^r$ satisfy the normalization, irreducibility,
-    non-equivalence, injective-prefix, and full-word-span hypotheses of
-    Lemma~\ref{lem:bnt_direct_sum_injective_prefix_word_span} for some
-    $L_0>0$. If $r\geq2$, then the simultaneous block-word tuples at the
-    source length $3(r-1)(L_0+1)$ span the full product algebra
-    $\prod_{j=1}^r\MN{D_j}$.
-\end{lemma}
-
-\begin{proof}
-    \leanok
-    \uses{lem:bnt_direct_sum_injective_prefix_word_span,
-        lem:direct_sum_two_block_dimension_step,
-        lem:pair_trace_separation_to_pairwise_block_separation,
-        lem:pair_product_span_arbitrary_first_value,
-        lem:block_separating_equations_from_pairwise_separation}
-    For a prescribed matrix $X_k$ on block $k$, choose an anchor block $j$.
-    Lemma~\ref{lem:pair_product_span_arbitrary_first_value} gives a
-    length-$3(L_0+1)$ tuple $M$ with $(M_k,M_j)=(X_k,0)$. For every
-    $\ell\notin\{k,j\}$, choose a selector $N^{(\ell)}$ with
-    $N^{(\ell)}_k=\Id$ and $N^{(\ell)}_\ell=0$, and put
-    $C_t = M_t\prod_{\ell\notin\{k,j\}}N^{(\ell)}_t$.
-    Then
-    \begin{align}
-        C_k &= X_k,
-        \notag\\
-        C_j &= 0,
-        \notag\\
-        C_\ell &= M_\ell(\cdots)0(\cdots) = 0 \quad (\ell\notin\{k,j\}).
-        \notag
-    \end{align}
-    Thus $C$ is supported only on block $k$, at length
-    $3(r-1)(L_0+1)$. Summing these tuples over $k$ realizes every element of
-    the product algebra.
-\end{proof}
-
 \begin{lemma}[Blockwise matrix equality from trace pairings]
     \label{lem:block_matrices_equal_from_trace_pairings}
     \lean{MPSTensor.block_matrices_eq_of_wordTupleSpanTop_trace}

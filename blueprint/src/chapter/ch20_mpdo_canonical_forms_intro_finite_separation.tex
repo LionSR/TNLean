@@ -241,7 +241,6 @@
 
 \begin{remark}[Finite witnesses for block-injective canonical form]%
     \label{rem:word_tuple_span_top}
-    \lean{MPSTensor.WordTupleSpanTop}
     \lean{MPSTensor.BlockEntryIndex}
     \lean{MPSTensor.wordEntryFamily}
     \lean{MPSTensor.duplicateScalarBlocks_counterexample}
@@ -556,65 +555,4 @@ This is the inverse identity in
     $X=\sum_{|w|=L}c_wA_0^w$.
     Since the family has only the block $A_0$, this is precisely the required
     simultaneous word-tuple spanning identity.
-\end{proof}
-
-\begin{theorem}[Sharp finite-length block separation]
-    \label{thm:sharp_bnt_block_separation}
-    \lean{MPSTensor.IsBNTCanonicalForm.exists_basis_wordTupleSpanTop_le_three_totalDim_pow_five}
-    \lean{MPSTensor.three_mul_pred_mul_pow_four_add_one_le_three_mul_pow_five}
-    \leanok
-    \uses{thm:bnt_representatives_exact_total_dimension_pow_four,
-        thm:sector_basis_dimension_le_total_dimension,
-        lem:single_block_word_tuple_span,
-        lem:bnt_direct_sum_block_separation_word_span}
-    Let $P$ be a BNT canonical form with total bond dimension $D$. There is a
-    positive integer $N\leq3D^5$ such that the simultaneous word evaluations
-    of the minimal representatives at length $N$ span their full product
-    matrix algebra.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    \uses{thm:bnt_representatives_exact_total_dimension_pow_four,
-        thm:wordspan_blk_inj_succ,
-        lem:direct_sum_two_block_dimension_step,
-        lem:single_block_word_tuple_span,
-        lem:pair_product_span_arbitrary_first_value,
-        lem:bnt_direct_sum_block_separation_word_span,
-        thm:sector_basis_dimension_le_total_dimension}
-    Let $g$ be the number of minimal representatives. The common exact
-    injective length is $D^4$. If $g=1$, ordinary block injectivity gives the
-    simultaneous span at length $D^4$.
-
-    Suppose $g\geq2$. Since $D^4\leq D^4+1\leq3(D^4+1)$,
-    Theorem~\ref{thm:wordspan_blk_inj_succ} propagates block injectivity to
-    the latter two lengths. Lemma~\ref{lem:direct_sum_two_block_dimension_step}
-    then gives the full pair span at length $3(D^4+1)$ for every pair of
-    distinct representatives. For each block $k$,
-    Lemma~\ref{lem:pair_product_span_arbitrary_first_value} gives a tuple $M$
-    with $M_k=X_k$ and $M_j=0$ for a chosen anchor block $j$. For every
-    $\ell\notin\{k,j\}$, choose an identity--zero selector $N^{(\ell)}$ and
-    form
-    $C_t=M_t\prod_{\ell\notin\{k,j\}}N^{(\ell)}_t$.
-    Since $N^{(\ell)}_k=I$ and $N^{(\ell)}_\ell=0$,
-    \begin{align}
-        C_k
-        &=X_k,
-        \notag\\
-        C_j
-        &=0,
-        \notag\\
-        C_\ell
-        &=M_\ell(\cdots)0(\cdots)=0
-        \quad(\ell\notin\{k,j\}).
-        \notag
-    \end{align}
-    Thus $C$ is supported only on block $k$. Summing over $k$ gives the full
-    simultaneous span at length $N=3(g-1)(D^4+1)$.
-    Each representative has positive dimension and occurs at least once, so
-    $g\leq D$. Hence
-    $N\leq3(D-1)(D^4+1)\leq3D^5$,
-    where the last inequality follows from $D-1\leq D^4$.
-    This is the bound in
-    \cite[lines~340--345]{Cirac2016MPDO_arXiv}.
 \end{proof}

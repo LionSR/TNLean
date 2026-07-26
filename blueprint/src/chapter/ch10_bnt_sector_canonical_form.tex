@@ -29,7 +29,14 @@ here determine the BNT canonical-form conditions below.
         \label{eq:bnt_sector_coeff_def}
     \end{align}
     A \emph{sector decomposition} consists of the basis blocks
-    $(A_j)_{j=1}^g$ together with these multiplicities and weights.
+    $(A_j)_{j=1}^g$ together with these multiplicities and weights. If $A_j$
+    has bond dimension $D_j$, then the flattened copy family has total bond
+    dimension
+    \begin{align}
+        D_{\mathrm{tot}}
+         & =\sum_{j=1}^{g}r_jD_j.
+        \notag
+    \end{align}
 \end{definition}
 
 
@@ -37,6 +44,14 @@ here determine the BNT canonical-form conditions below.
 \begin{definition}[Physical blocking of a sector decomposition]%
     \label{def:sector_decomposition_block_tensor}
     \lean{MPSTensor.SectorDecomposition.blockTensor}
+    \lean{MPSTensor.SectorDecomposition.blockTensor_basis}
+    \lean{MPSTensor.SectorDecomposition.blockTensor_weight}
+    \lean{MPSTensor.SectorDecomposition.blockTensor_copies}
+    \lean{MPSTensor.SectorDecomposition.blockTensor_totalCopies}
+    \lean{MPSTensor.SectorDecomposition.blockTensor_flatDim}
+    \lean{MPSTensor.SectorDecomposition.blockTensor_totalDim}
+    \lean{MPSTensor.SectorDecomposition.blockTensor_flatWeight}
+    \lean{MPSTensor.SectorDecomposition.blockTensor_flatBasis}
     \leanok
     \uses{def:sector_weight_data, def:blocked_tensor}
     Let $P$ be a sector decomposition with representatives $A_j$,
@@ -49,10 +64,9 @@ here determine the BNT canonical-form conditions below.
         \notag
     \end{align}
     The two-layer decomposition is
-    \cite[lines~283--301]{Cirac2016MPDO_arXiv}.
-    Its blocked form is an auxiliary construction for the planned formal proof
-    of Appendix~C.3, Lemma~L, lines~1835--1858; it is not stated there as a
-    separate construction.
+    \cite[lines~283--301]{Cirac2016MPDO_arXiv}. Blocking preserves the copy
+    index sets and bond dimensions, replaces each flattened representative by
+    its $p$-site blocking, and raises each flattened weight to the $p$-th power.
 \end{definition}
 
 
@@ -128,14 +142,18 @@ single family.
 \begin{definition}[BNT canonical form]%
     \label{def:sector_bnt_cf}
     \lean{MPSTensor.IsBNTCanonicalForm}
+    \lean{MPSTensor.IsBNTCanonicalForm.weight_unit_exists_of_struct}
     \leanok
     \uses{def:sector_weight_data}
-    Given a sector decomposition $P$, the BNT canonical-form conditions
-    record the minimal BNT hypotheses of
-    \cite{Cirac2016MPDO_arXiv,Cirac2021Matrix} without any equal-modulus
-    or strict-ordering condition on the raw sector weights. It asserts that
-    each basis block has positive bond dimension, is irreducible,
-    and left-canonical; the normalized self-overlap of every basis block
+    Given a sector decomposition $P$, these conditions define the normalized,
+    left-canonical, aperiodic BNT surface used below. This is stronger than the
+    abstract BNT of Definition~\ref{def:bnt} and the literal coefficient-form
+    BNT of Definition~\ref{def:bnt_cpsv}: besides spanning and eventual linear
+    independence, it fixes irreducible left-canonical representatives, their
+    self-overlap normalization, gauge-phase separation, and the canonical-form
+    weight normalization. It imposes no equal-modulus factorization or strict
+    ordering on the raw weights. Explicitly, each basis block has positive bond
+    dimension, is irreducible, and is left-canonical; the normalized self-overlap of every basis block
     converges to $1$; the basis MPV family is eventually linearly
     independent; distinct same-dimension basis blocks are not gauge-phase
     equivalent after identifying equal bond dimensions; and the
@@ -310,6 +328,45 @@ single family.
     By Theorem~\ref{thm:sector_basis_dimension_le_total_dimension},
     $D_j^4\leq D^4$. Write $D^4=D_j^4+k$ and apply positive-length
     propagation $k$ times.
+\end{proof}
+
+\begin{theorem}[CPSV simultaneous block-injectivity bound]
+    \label{thm:sharp_bnt_block_separation}
+    \lean{MPSTensor.IsBNTCanonicalForm.exists_basis_wordTupleSpanTop_le_three_totalDim_pow_five}
+    \lean{MPSTensor.three_mul_pred_mul_pow_four_add_one_le_three_mul_pow_five}
+    \leanok
+    \uses{def:sector_bnt_cf, def:blockwise_product_word_span,
+        thm:bnt_representatives_exact_total_dimension_pow_four,
+        lem:bnt_direct_sum_block_separation_word_span}
+    Let $P$ be a BNT canonical form with total bond dimension $D$. There is a
+    positive integer $N\leq3D^5$ such that its representatives have the
+    simultaneous fixed-length span
+    \begin{align}
+        \spn\{(A_1^\omega,\ldots,A_g^\omega):|\omega|=N\}
+         & =\prod_{j=1}^{g}\MN{D_j}.
+        \notag
+    \end{align}
+    This is the block-injectivity estimate in
+    \cite[lines~340--345]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:bnt_representatives_exact_total_dimension_pow_four,
+        lem:bnt_direct_sum_block_separation_word_span,
+        thm:sector_basis_dimension_le_total_dimension}
+    Every representative is block-injective at $D^4$, and homogeneous-span
+    propagation gives the same conclusion at $D^4+1$ and $3(D^4+1)$. If
+    $g=1$, take $N=D^4$. If $g\geq2$, apply
+    Theorem~\ref{lem:bnt_direct_sum_block_separation_word_span} with $L_0=D^4$ and take
+    \begin{align}
+        N & =3(g-1)(D^4+1).
+        \notag
+    \end{align}
+    The positive bond dimension of every representative gives $g\leq D$.
+    Consequently $N\leq3D^5$; the same estimate also covers the one-block
+    case. The unit-modulus weight required by the BNT normalization ensures
+    $D>0$.
 \end{proof}
 
 The matching arguments below read off three facts from a BNT canonical form: the
