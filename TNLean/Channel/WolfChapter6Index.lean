@@ -135,7 +135,7 @@ Uses Brouwer's fixed-point theorem on density matrices (proved in
 
 ### Wolf Proposition 6.6 (Similarity preserving irreducibility) — FORMALIZED
 
-* Scalar case: `isIrreducibleMap_smul` — `TNLean.Channel.PerronFrobenius.Existence`
+* Scalar case: `isIrreducibleMap_smul` — `TNLean.Channel.Irreducible.Scaling`
 * Similarity case: `isIrreducibleMap_similarity` — `TNLean.Channel.Irreducible.Similarity`
 * Full Wolf form `T' = c C⁻¹ T(C · C†) C⁻†`:
   `isIrreducibleMap_full_similarity` (and the stronger
