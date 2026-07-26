@@ -14,7 +14,7 @@
     every repeated copy:
     \begin{align}
         M^{ab}
-        &=\bigoplus_{j=0}^{g-1}\bigoplus_{q=0}^{r_j-1}
+         & =\bigoplus_{j=0}^{g-1}\bigoplus_{q=0}^{r_j-1}
         \mu_{j,q}X_{j,q}A_j^{ab}X_{j,q}^{-1}.
         \label{eq:mpdo_horizontal_cf}
     \end{align}
@@ -30,10 +30,10 @@
     block-diagonal matrix $X=\bigoplus_{j,q}X_{j,q}$,
     \begin{align}
         M^{ab}
-        &=X\left[\bigoplus_{j,q}\mu_{j,q}A_j^{ab}\right]X^{-1},
-        \notag\\
+         & =X\left[\bigoplus_{j,q}\mu_{j,q}A_j^{ab}\right]X^{-1},
+        \notag                                                    \\
         X
-        &=\bigoplus_{j,q}X_{j,q}.
+         & =\bigoplus_{j,q}X_{j,q}.
         \notag
     \end{align}
     This is the canonical form and its BNT decomposition in
@@ -102,13 +102,13 @@
         \end{tenkz}
     \end{center}
     \caption{Horizontal canonical form of the doubled tensor: the gauge $X$,
-    the direct sum of basis tensors $\mathcal K_j$ carrying the ket and bra
-    indices, and $X^{-1}$. In the source
-    specialized simple-biCF/ZCL display the weights $\mu_j$ are independent
-    of the copy index and absorbed into the basis tensors, so the
-    basis tensors depend only on the block index $j$ while the gauge factors
-    $X_{j,q}$ depend on both block indices. This is
-    \cite[Appendix~C.2, lines~1660--1665]{Cirac2016MPDO_arXiv}.}
+        the direct sum of basis tensors $\mathcal K_j$ carrying the ket and bra
+        indices, and $X^{-1}$. In the source
+        specialized simple-biCF/ZCL display the weights $\mu_j$ are independent
+        of the copy index and absorbed into the basis tensors, so the
+        basis tensors depend only on the block index $j$ while the gauge factors
+        $X_{j,q}$ depend on both block indices. This is
+        \cite[Appendix~C.2, lines~1660--1665]{Cirac2016MPDO_arXiv}.}
     \label{fig:mpdo_horizontal_canonical_form}
 \end{figure}
 
@@ -140,7 +140,7 @@
     vertical view:
     \begin{align}
         \widetilde{M^\dagger}_{a,b}
-        &=(\widetilde M_{b,a})^\dagger.
+         & =(\widetilde M_{b,a})^\dagger.
         \label{eq:mpdo_adjoint_reflection}
     \end{align}
 \end{lemma}
@@ -165,13 +165,13 @@
     space such that
     \begin{align}
         U\widetilde MU^\dagger
-        &=B,
-        \notag\\
+         & =B,
+        \notag                                           \\
         \widetilde M
-        &=U^\dagger B U,
-        \notag\\
+         & =U^\dagger B U,
+        \notag                                           \\
         B
-        &=\bigoplus_\alpha \mu_\alpha\otimes M_\alpha.
+         & =\bigoplus_\alpha \mu_\alpha\otimes M_\alpha.
         \label{eq:mpdo_vertical_cf}
     \end{align}
     This is the conclusion of
@@ -198,50 +198,49 @@
 
 \begin{figure}[ht]
     \centering
-        % U \widetilde M U^dagger = bigoplus_alpha mu_alpha (x) M_alpha
-        % (arXiv:1606.00608, Proposition 4.13, eq. UMU and figure
-        % MPDO_UMU.png).  The physical isometry does not represent a plain
-        % Kronecker product: two copy-tensor junctions thread one shared
-        % multiplicity index through both mu_alpha and M_alpha.  Only
-        % M_alpha carries the open virtual legs.  Both sides have boundary
-        % signature
-        % (virtual-west=1 | virtual-east=1 | physical-up=3 |
-        % physical-down=3).
-        \begin{tenkz}[rows={op:none, op, op:none}, tensor style=box]
-            \tn[pill, wide=3, legs at={1,2,3}]{U} & & \\
-            \tn[wide=3]{\widetilde M} & & \\
-            \tn[pill, wide=3, legs at={1,2,3}]{U^\dagger} & &
-        \end{tenkz}
-        $ = \bigoplus_\alpha $
-        \begin{tenkzfree}
-            \tnput[box]{mu}{(10mm,7mm)}{\mu_\alpha}
-            \tnput[box, ports={west:virtual, east:virtual, north:physical,
-                south:physical, 158:physical}]{M}{(34mm,0mm)}{M_\alpha}
-            \tnput[dot]{d1}{(0mm,7mm)}{}
-            \tnput[dot]{d2}{(20mm,7mm)}{}
-            \tnput[dot, ports={east:physical}]{d3}{(d2 |- M.158)}{}
-            \tnjoin{$(d1)+(0mm,5mm)$}{$(d1)+(0mm,-19mm)$}
-            \tnjoin{$(d2)+(0mm,5mm)$}{$(d2)+(0mm,-19mm)$}
-            \tnjoin{$(M.west)+(-10mm,0mm)$}{M.west}
-            \tnjoin{M.east}{$(M.east)+(10mm,0mm)$}
-            \tnjoin{M.north}{$(M.north)+(0mm,7mm)$}
-            \tnjoin{M.south}{$(M.south)+(0mm,-7mm)$}
-            \tnjoin{d1}{mu.west}
-            \tnjoin{d2}{mu.east}
-            \tnjoin{d3.east}{M.158}
-        \end{tenkzfree}
+    % U \widetilde M U^dagger = bigoplus_alpha mu_alpha (x) M_alpha
+    % (arXiv:1606.00608, Proposition 4.13, eq. UMU and figure
+    % MPDO_UMU.png).  The physical isometry does not represent a plain
+    % Kronecker product: two copy-tensor junctions thread one shared
+    % multiplicity index through both mu_alpha and M_alpha.  Only
+    % M_alpha carries the open virtual legs.  Both sides have boundary
+    % signature
+    % (virtual-west=1 | virtual-east=1 | physical-up=3 |
+    % physical-down=3).
+    \begin{tenkz}[rows={op:none, op, op:none}, tensor style=box]
+        \tn[pill, wide=3, legs at={1,2,3}]{U} & & \\
+        \tn[wide=3]{\widetilde M} & & \\
+        \tn[pill, wide=3, legs at={1,2,3}]{U^\dagger} & &
+    \end{tenkz}
+    $ = \bigoplus_\alpha $
+    \begin{tenkzfree}
+        \tnput[box]{mu}{(10mm,7mm)}{\mu_\alpha}
+        \tnput[box, ports={west:virtual, east:virtual, north:physical,
+                    south:physical, 158:physical}]{M}{(34mm,0mm)}{M_\alpha}
+        \tnput[dot]{d1}{(0mm,7mm)}{}
+        \tnput[dot]{d2}{(20mm,7mm)}{}
+        \tnput[dot, ports={east:physical}]{d3}{(d2 |- M.158)}{}
+        \tnjoin{$(d1)+(0mm,5mm)$}{$(d1)+(0mm,-19mm)$}
+        \tnjoin{$(d2)+(0mm,5mm)$}{$(d2)+(0mm,-19mm)$}
+        \tnjoin{$(M.west)+(-10mm,0mm)$}{M.west}
+        \tnjoin{M.east}{$(M.east)+(10mm,0mm)$}
+        \tnjoin{M.north}{$(M.north)+(0mm,7mm)$}
+        \tnjoin{M.south}{$(M.south)+(0mm,-7mm)$}
+        \tnjoin{d1}{mu.west}
+        \tnjoin{d2}{mu.east}
+        \tnjoin{d3.east}{M.158}
+    \end{tenkzfree}
     \caption{Vertical direct-sum form of the tensor: after the physical
-    isometry $U$, each block factorizes as the positive diagonal weight
-    $\mu_\alpha$ on the multiplicity factor times the basis tensor $M_\alpha$,
-    and only $M_\alpha$ carries the virtual legs. This is the decomposition
-    $U\widetilde MU^\dagger=\bigoplus_\alpha\mu_\alpha\otimes M_\alpha$ of
-    \cite[Proposition~4.13, lines~1864--1870]{Cirac2016MPDO_arXiv}.}
+        isometry $U$, each block factorizes as the positive diagonal weight
+        $\mu_\alpha$ on the multiplicity factor times the basis tensor $M_\alpha$,
+        and only $M_\alpha$ carries the virtual legs. This is the decomposition
+        $U\widetilde MU^\dagger=\bigoplus_\alpha\mu_\alpha\otimes M_\alpha$ of
+        \cite[Proposition~4.13, lines~1864--1870]{Cirac2016MPDO_arXiv}.}
     \label{fig:mpdo_vertical_direct_sum}
 \end{figure}
 
 \begin{remark}[Finite witnesses for block-injective canonical form]%
     \label{rem:word_tuple_span_top}
-    \lean{MPSTensor.WordTupleSpanTop}
     \lean{MPSTensor.BlockEntryIndex}
     \lean{MPSTensor.wordEntryFamily}
     \lean{MPSTensor.duplicateScalarBlocks_counterexample}
@@ -254,7 +253,6 @@
     \lean{MPSTensor.HasBlockSelectorWords}
     \lean{MPSTensor.PropBlockInjective}
     \lean{MPSTensor.wordTupleSpanTop_of_propBlockInjective}
-    \lean{MPSTensor.hasBiCF_of_propBlockInjective}
     \lean{MPSTensor.duplicateScalarBlocks_not_hasBiCF}
     \lean{MPOTensor.horizontalCFData_of_wordTupleSpanTop}
     \lean{MPOTensor.horizontalCFData_of_wordEntryFamily_linearIndependent}
@@ -267,8 +265,8 @@
     span the full product algebra of block matrices,
     \begin{align}
         \spn_{\C}\bigl\{\,(A_k^w)_k
-            : w \in \{0,\ldots,d{-}1\}^L\,\bigr\}
-        &=\textstyle\prod_k \MN{D_k}.
+        : w \in \{0,\ldots,d{-}1\}^L\,\bigr\}
+         & =\textstyle\prod_k \MN{D_k}.
         \label{eq:mpdo_word_tuple_span}
     \end{align}
     The corresponding finite-length separation property is that some length
@@ -277,8 +275,8 @@
     matrices,
     \begin{align}
         \Bigl(\forall\, w \in \{0,\ldots,d{-}1\}^L,\
-            \textstyle\sum_k \tr(\Delta_k A_k^w) = 0\Bigr)
-        &\implies \forall k,\ \Delta_k = 0.
+        \textstyle\sum_k \tr(\Delta_k A_k^w) = 0\Bigr)
+         & \implies \forall k,\ \Delta_k = 0.
         \label{eq:mpdo_finite_separation}
     \end{align}
     Spanning at length~$L$ gives separation at the same length: a trace
@@ -316,10 +314,10 @@
     $(c_w)_{w\in\{0,\ldots,d{-}1\}^S}$ with
     \begin{align}
         \sum_w c_w A_k^w
-        &=\Id,
-        \notag\\
+         & =\Id,
+        \notag   \\
         \sum_w c_w A_j^w
-        &=0
+         & =0
         \quad(j\neq k).
         \notag
     \end{align}
@@ -332,7 +330,7 @@ The inverse tensor of a block-injective canonical form satisfies
 \begin{align}
     \sum_p(\mathcal K_j^p)_{\alpha,\beta}
     (K^{-1,p}_{j'})_{\alpha',\beta'}
-    &=\delta_{\alpha,\alpha'}\delta_{\beta,\beta'}\delta_{j,j'}.
+     & =\delta_{\alpha,\alpha'}\delta_{\beta,\beta'}\delta_{j,j'}.
     \label{eq:mpdo_inverse_tensor}
 \end{align}
 Writing $K=X(\bigoplus_j\mathcal K_j)X^{-1}$ in this contraction places the
@@ -352,20 +350,20 @@ $\mathcal K_j$ with the label $j$:
     % missing public spelling.
     \begin{tenkzfree}[tensor style=box, compact]
         \tnput[box, ports={west:virtual,east:virtual,
-                north:physical,south:physical}]
-            {biInvOne}{(0,8mm)}{K^{-1}}
+                    north:physical,south:physical}]
+        {biInvOne}{(0,8mm)}{K^{-1}}
         \tnput[box, ports={west:virtual,east:virtual,north:physical}]
-            {biKOne}{(0,-5mm)}{K}
+        {biKOne}{(0,-5mm)}{K}
         \tnput[boundary, ports={east:virtual}]
-            {biInvOneWest}{(-8mm,8mm)}{}
+        {biInvOneWest}{(-8mm,8mm)}{}
         \tnput[boundary, ports={west:virtual}]
-            {biInvOneEast}{(8mm,8mm)}{}
+        {biInvOneEast}{(8mm,8mm)}{}
         \tnput[boundary, ports={east:virtual}]
-            {biKOneWest}{(-8mm,-5mm)}{}
+        {biKOneWest}{(-8mm,-5mm)}{}
         \tnput[boundary, ports={west:virtual}]
-            {biKOneEast}{(8mm,-5mm)}{}
+        {biKOneEast}{(8mm,-5mm)}{}
         \tnput[boundary, ports={south:physical}]
-            {biOutOne}{(0,18mm)}{}
+        {biOutOne}{(0,18mm)}{}
         \tnjoin{biInvOneWest.east}{biInvOne.west}
         \tnjoin{biInvOne.east}{biInvOneEast.west}
         \tnjoin{biKOneWest.east}{biKOne.west}
@@ -384,47 +382,47 @@ $\mathcal K_j$ with the label $j$:
     % remains (physical-up=1 | physical-down=0).
     \begin{tenkzfree}[tensor style=box, compact]
         \tnput[box, ports={west:virtual,east:virtual,
-                north:physical,south:physical}]
-            {biInvTwo}{(18mm,15mm)}{K^{-1}}
+                    north:physical,south:physical}]
+        {biInvTwo}{(18mm,15mm)}{K^{-1}}
         \tnput[box, ports={west:virtual,east:virtual,
-                south west:virtual,south east:virtual}]
-            {biXTwo}{(0,0)}{X}
+                    south west:virtual,south east:virtual}]
+        {biXTwo}{(0,0)}{X}
         \tnput[box, ports={west:virtual,east:virtual,
-                north:physical,south:virtual}]
-            {biKTwo}{(18mm,0)}{\mathcal K_j}
+                    north:physical,south:virtual}]
+        {biKTwo}{(18mm,0)}{\mathcal K_j}
         \tnput[box, ports={west:virtual,east:virtual,
-                south west:virtual,south east:virtual}]
-            {biXinvTwo}{(36mm,0)}{X^{-1}}
+                    south west:virtual,south east:virtual}]
+        {biXinvTwo}{(36mm,0)}{X^{-1}}
         \tnput[boundary, ports={east:virtual}]
-            {biInvTwoWest}{(10mm,15mm)}{}
+        {biInvTwoWest}{(10mm,15mm)}{}
         \tnput[boundary, ports={west:virtual}]
-            {biInvTwoEast}{(26mm,15mm)}{}
+        {biInvTwoEast}{(26mm,15mm)}{}
         \tnput[boundary, ports={east:virtual}]
-            {biGaugeTwoWest}{(-7mm,0)}{}
+        {biGaugeTwoWest}{(-7mm,0)}{}
         \tnput[boundary, ports={west:virtual}]
-            {biGaugeTwoEast}{(43mm,0)}{}
+        {biGaugeTwoEast}{(43mm,0)}{}
         \tnput[boundary, ports={south:physical}]
-            {biOutTwo}{(18mm,27mm)}{}
+        {biOutTwo}{(18mm,27mm)}{}
         \tnput[boundary, label pos=west, ports={east:virtual}]
-            {biJTwoWest}{(-7mm,-10mm)}{j}
+        {biJTwoWest}{(-7mm,-10mm)}{j}
         \tnput[dot, ports={west:virtual,east:virtual,
-                north:virtual,south:virtual}]
-            {biXjTwo}{(biXTwo.south west |- 0,-10mm)}{}
+                    north:virtual,south:virtual}]
+        {biXjTwo}{(biXTwo.south west |- 0,-10mm)}{}
         \tnput[dot, ports={west:virtual,east:virtual,north:virtual}]
-            {biKjTwo}{(18mm,-10mm)}{}
+        {biKjTwo}{(18mm,-10mm)}{}
         \tnput[dot, ports={west:virtual,east:virtual,
-                north:virtual,south:virtual}]
-            {biXinvjTwo}{(biXinvTwo.south west |- 0,-10mm)}{}
+                    north:virtual,south:virtual}]
+        {biXinvjTwo}{(biXinvTwo.south west |- 0,-10mm)}{}
         \tnput[boundary, ports={west:virtual}]
-            {biJTwoEast}{(43mm,-10mm)}{}
+        {biJTwoEast}{(43mm,-10mm)}{}
         \tnput[boundary, label pos=west, ports={east:virtual}]
-            {biQTwoWest}{(-7mm,-18mm)}{q}
+        {biQTwoWest}{(-7mm,-18mm)}{q}
         \tnput[dot, ports={west:virtual,east:virtual,north:virtual}]
-            {biXqTwo}{(biXTwo.south east |- 0,-18mm)}{}
+        {biXqTwo}{(biXTwo.south east |- 0,-18mm)}{}
         \tnput[dot, ports={west:virtual,east:virtual,north:virtual}]
-            {biXinvqTwo}{(biXinvTwo.south east |- 0,-18mm)}{}
+        {biXinvqTwo}{(biXinvTwo.south east |- 0,-18mm)}{}
         \tnput[boundary, ports={west:virtual}]
-            {biQTwoEast}{(43mm,-18mm)}{}
+        {biQTwoEast}{(43mm,-18mm)}{}
         \tnjoin{biInvTwoWest.east}{biInvTwo.west}
         \tnjoin{biInvTwo.east}{biInvTwoEast.west}
         \tnjoin{biOutTwo.south}{biInvTwo.north}
@@ -458,46 +456,46 @@ $\mathcal K_j$ with the label $j$:
     % virtual-east=4 | physical-up=1 | physical-down=0).
     \begin{tenkzfree}[tensor style=box, compact]
         \tnput[box, ports={west:virtual,east:virtual,
-                south west:virtual,south east:virtual}]
-            {biXThree}{(0,0)}{X}
+                    south west:virtual,south east:virtual}]
+        {biXThree}{(0,0)}{X}
         \tnput[box, ports={west:virtual,east:virtual,
-                south west:virtual,south east:virtual}]
-            {biXinvThree}{(36mm,0)}{X^{-1}}
+                    south west:virtual,south east:virtual}]
+        {biXinvThree}{(36mm,0)}{X^{-1}}
         \tnput[boundary, ports={east:virtual}]
-            {biGaugeThreeWest}{(-7mm,0)}{}
+        {biGaugeThreeWest}{(-7mm,0)}{}
         \tnput[boundary, ports={west:virtual}]
-            {biGaugeThreeEast}{(43mm,0)}{}
+        {biGaugeThreeEast}{(43mm,0)}{}
         \tnput[boundary, ports={east:virtual}]
-            {biLeftUnit}{(9mm,10mm)}{}
+        {biLeftUnit}{(9mm,10mm)}{}
         \tnput[boundary, ports={west:virtual}]
-            {biRightUnit}{(27mm,10mm)}{}
+        {biRightUnit}{(27mm,10mm)}{}
         \tnput[boundary, ports={south:physical}]
-            {biOutThree}{(18mm,14mm)}{}
+        {biOutThree}{(18mm,14mm)}{}
         \tnput[boundary, label pos=west, ports={east:virtual}]
-            {biJThreeWest}{(-7mm,-10mm)}{j}
+        {biJThreeWest}{(-7mm,-10mm)}{j}
         \tnput[dot, ports={west:virtual,east:virtual,
-                north:virtual,south:virtual}]
-            {biXjThree}{(biXThree.south west |- 0,-10mm)}{}
+                    north:virtual,south:virtual}]
+        {biXjThree}{(biXThree.south west |- 0,-10mm)}{}
         \tnput[dot, ports={west:virtual,east:virtual,north:physical}]
-            {biDeltaThree}{(18mm,-10mm)}{}
+        {biDeltaThree}{(18mm,-10mm)}{}
         \tnput[dot, ports={west:virtual,east:virtual,
-                north:virtual,south:virtual}]
-            {biXinvjThree}{(biXinvThree.south west |- 0,-10mm)}{}
+                    north:virtual,south:virtual}]
+        {biXinvjThree}{(biXinvThree.south west |- 0,-10mm)}{}
         \tnput[boundary, ports={west:virtual}]
-            {biJThreeEast}{(43mm,-10mm)}{}
+        {biJThreeEast}{(43mm,-10mm)}{}
         \tnput[boundary, label pos=west, ports={east:virtual}]
-            {biQThreeWest}{(-7mm,-18mm)}{q}
+        {biQThreeWest}{(-7mm,-18mm)}{q}
         \tnput[dot, ports={west:virtual,east:virtual,north:virtual}]
-            {biXqThree}{(biXThree.south east |- 0,-18mm)}{}
+        {biXqThree}{(biXThree.south east |- 0,-18mm)}{}
         \tnput[dot, ports={west:virtual,east:virtual,north:virtual}]
-            {biXinvqThree}{(biXinvThree.south east |- 0,-18mm)}{}
+        {biXinvqThree}{(biXinvThree.south east |- 0,-18mm)}{}
         \tnput[boundary, ports={west:virtual}]
-            {biQThreeEast}{(43mm,-18mm)}{}
+        {biQThreeEast}{(43mm,-18mm)}{}
         \tnjoin{biGaugeThreeWest.east}{biXThree.west}
         \tnjoin[route=arc,out=0,in=0]
-            {biXThree.east}{biLeftUnit.east}
+        {biXThree.east}{biLeftUnit.east}
         \tnjoin[route=arc,out=180,in=180]
-            {biXinvThree.west}{biRightUnit.west}
+        {biXinvThree.west}{biRightUnit.west}
         \tnjoin{biXinvThree.east}{biGaugeThreeEast.west}
         \tnjoin{biOutThree.south}{biDeltaThree.north}
         \tnjoin{biXThree.south west}{biXjThree.north}
@@ -556,65 +554,4 @@ This is the inverse identity in
     $X=\sum_{|w|=L}c_wA_0^w$.
     Since the family has only the block $A_0$, this is precisely the required
     simultaneous word-tuple spanning identity.
-\end{proof}
-
-\begin{theorem}[Sharp finite-length block separation]
-    \label{thm:sharp_bnt_block_separation}
-    \lean{MPSTensor.IsBNTCanonicalForm.exists_basis_wordTupleSpanTop_le_three_totalDim_pow_five}
-    \lean{MPSTensor.three_mul_pred_mul_pow_four_add_one_le_three_mul_pow_five}
-    \leanok
-    \uses{thm:bnt_representatives_exact_total_dimension_pow_four,
-        thm:sector_basis_dimension_le_total_dimension,
-        lem:single_block_word_tuple_span,
-        lem:bnt_direct_sum_block_separation_word_span}
-    Let $P$ be a BNT canonical form with total bond dimension $D$. There is a
-    positive integer $N\leq3D^5$ such that the simultaneous word evaluations
-    of the minimal representatives at length $N$ span their full product
-    matrix algebra.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    \uses{thm:bnt_representatives_exact_total_dimension_pow_four,
-        thm:wordspan_blk_inj_succ,
-        lem:direct_sum_two_block_dimension_step,
-        lem:single_block_word_tuple_span,
-        lem:pair_product_span_arbitrary_first_value,
-        lem:bnt_direct_sum_block_separation_word_span,
-        thm:sector_basis_dimension_le_total_dimension}
-    Let $g$ be the number of minimal representatives. The common exact
-    injective length is $D^4$. If $g=1$, ordinary block injectivity gives the
-    simultaneous span at length $D^4$.
-
-    Suppose $g\geq2$. Since $D^4\leq D^4+1\leq3(D^4+1)$,
-    Theorem~\ref{thm:wordspan_blk_inj_succ} propagates block injectivity to
-    the latter two lengths. Lemma~\ref{lem:direct_sum_two_block_dimension_step}
-    then gives the full pair span at length $3(D^4+1)$ for every pair of
-    distinct representatives. For each block $k$,
-    Lemma~\ref{lem:pair_product_span_arbitrary_first_value} gives a tuple $M$
-    with $M_k=X_k$ and $M_j=0$ for a chosen anchor block $j$. For every
-    $\ell\notin\{k,j\}$, choose an identity--zero selector $N^{(\ell)}$ and
-    form
-    $C_t=M_t\prod_{\ell\notin\{k,j\}}N^{(\ell)}_t$.
-    Since $N^{(\ell)}_k=I$ and $N^{(\ell)}_\ell=0$,
-    \begin{align}
-        C_k
-        &=X_k,
-        \notag\\
-        C_j
-        &=0,
-        \notag\\
-        C_\ell
-        &=M_\ell(\cdots)0(\cdots)=0
-        \quad(\ell\notin\{k,j\}).
-        \notag
-    \end{align}
-    Thus $C$ is supported only on block $k$. Summing over $k$ gives the full
-    simultaneous span at length $N=3(g-1)(D^4+1)$.
-    Each representative has positive dimension and occurs at least once, so
-    $g\leq D$. Hence
-    $N\leq3(D-1)(D^4+1)\leq3D^5$,
-    where the last inequality follows from $D-1\leq D^4$.
-    This is the bound in
-    \cite[lines~340--345]{Cirac2016MPDO_arXiv}.
 \end{proof}

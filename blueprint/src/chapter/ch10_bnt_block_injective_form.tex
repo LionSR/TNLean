@@ -1,0 +1,152 @@
+\section{Block-injective consequences for BNT families}
+
+The overlap separation of normal blocks yields a simultaneous product-algebra
+span after blocking. We first state the fixed-length span condition and then
+apply it to coefficient-form and sector BNTs.
+
+\begin{definition}[Fixed-length block-injective canonical-form condition]
+    \label{def:blockwise_product_word_span}
+    \lean{MPSTensor.WordTupleSpanTop}
+    \leanok
+    For a fixed blocked length $m$, the fixed-length form of the
+    block-injective canonical-form condition is
+    \begin{align}
+        \spn\{(A_1^\omega,\ldots,A_g^\omega):|\omega|=m\}
+         & =
+        \prod_{j=1}^g \MN{D_j}.
+        \notag
+    \end{align}
+    Equivalently,
+    \begin{align}
+        \forall X=(X_j)_j\in\bigoplus_{j=1}^g \MN{D_j},
+        \quad
+        \exists (c_\omega(X))_{|\omega|=m},
+        \quad
+        (X_j)_{j=1}^g
+         & =
+        \sum_{|\omega|=m} c_\omega(X)
+        (A_1^\omega,\ldots,A_g^\omega).
+        \notag
+    \end{align}
+    This is the fixed-length form of the block-injective canonical-form
+    condition of \cite[lines~2113--2117]{Cirac2021Matrix}.
+\end{definition}
+
+\begin{lemma}[Direct-sum block injectivity at the source length]
+    \label{lem:bnt_direct_sum_block_separation_word_span}
+    \lean{MPSTensor.wordTupleSpanTop_mul_pred_of_forall_pairWordTupleSpanTop}
+    \lean{MPSTensor.wordTupleSpanTop_mul_pred_of_forall_pairTraceSeparatingAt}
+    \lean{MPSTensor.wordTupleSpanTop_threeBlock_mul_pred_of_blocksNotGaugePhaseEquiv_c1}
+    \leanok
+    \uses{def:blockwise_product_word_span,
+        def:blocks_not_gauge_phase_equiv,
+        lem:bnt_direct_sum_injective_prefix_word_span}
+    Let $(A_j)_{j=1}^g$ be irreducible left-canonical tensors with normalized
+    self-overlaps and with no gauge-phase-equivalent distinct blocks. Suppose
+    $g\geq2$, $L_0>0$, and every $A_j$ is block-injective at lengths $L_0$,
+    $L_0+1$, and $3(L_0+1)$. Then
+    \begin{align}
+        \spn\{(A_1^\omega,\ldots,A_g^\omega):
+        |\omega|=3(g-1)(L_0+1)\}
+         & =\prod_{j=1}^{g}\MN{D_j}.
+        \notag
+    \end{align}
+    This is the direct-sum induction length in
+    \cite[lines~1346--1408]{PerezGarcia2007Matrix}.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:bnt_direct_sum_injective_prefix_word_span}
+    Lemma~\ref{lem:bnt_direct_sum_injective_prefix_word_span} gives homogeneous
+    pair-trace separation at $S=3(L_0+1)$. For a chosen anchor block, pair
+    separation prescribes an arbitrary matrix there and zero on one other
+    block. Multiplying $g-1$ such homogeneous combinations removes the other
+    blocks one at a time. Induction on the number of removed blocks therefore
+    realizes every tuple supported on the anchor at length $(g-1)S$. Summing
+    over the anchors gives the full product algebra at
+    $3(g-1)(L_0+1)$.
+\end{proof}
+
+\begin{theorem}[Simultaneous one-letter span after blocking a BNT]
+    \label{thm:cpsv_bnt_blocked_simultaneous_span}
+    \lean{MPSTensor.IsCPSVBasisOfNormalTensors.%
+        exists_positive_wordTupleSpanTop}
+    \lean{MPSTensor.wordTupleSpanTop_blockTensor_one}
+    \lean{MPSTensor.IsCPSVBasisOfNormalTensors.%
+        exists_blocked_wordTupleSpanTop_one}
+    \leanok
+    \uses{def:bnt_cpsv, def:blocked_tensor,
+        def:blockwise_product_word_span}
+    Let $(A_j)_{j=1}^g$ be a basis of normal tensors, with bond dimensions
+    $D_j$. There is a positive integer $L$ such that the one-letter
+    evaluations of the blocked tensors span the full product algebra:
+    \begin{align}
+        \spn_{\C}\left\{((A_1^{[L]})^i,\ldots,(A_g^{[L]})^i)
+        : 0\leq i<d^L\right\}
+         & = \prod_{j=1}^g \MN{D_j}.
+        \notag
+    \end{align}
+    This is the existence form of simultaneous block injectivity associated
+    with \cite[lines~317--345]{Cirac2016MPDO_arXiv}; no numerical bound on
+    $L$ is asserted here.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:cpsv_bnt_block_dimensions_positive,
+        thm:cpsv_bnt_blocks_not_gaugePhaseEquiv,
+        thm:cpsv_normal_tp_gauge,
+        thm:normal_tp_primitive_irred,
+        thm:common_exact_block_injectivity_normal_left_canonical,
+        thm:wordspan_blk_inj_succ,
+        lem:bnt_direct_sum_block_separation_word_span,
+        lem:gauge_invariance_block_injective}
+    Put each BNT representative in its trace-preserving Perron gauge. The
+    gauged family is irreducible and left-canonical, has normalized
+    self-overlaps, and remains gauge-phase separated. Choose a common positive
+    length $p$ at which every gauged block is block-injective. Propagation of
+    homogeneous word spans gives block injectivity at $p+1$ and $3(p+1)$.
+
+    Lemma~\ref{lem:bnt_direct_sum_block_separation_word_span} gives pairwise
+    separation at length $S=3(p+1)$. Write
+    $g\mathbin{\dot-}1=\max\{g-1,0\}$. Multiplying one separator for each of
+    the other blocks gives a selector of length $(g\mathbin{\dot-}1)S$ for
+    every block.
+    Transport these selectors back from the Perron gauges. Gauge invariance
+    also gives block injectivity of every original block at length $p$.
+    Concatenating the injective prefix with the selectors yields the full
+    product-algebra span at
+    \begin{align}
+        L
+         & =p+(g\mathbin{\dot-}1)S
+        =p+3(g\mathbin{\dot-}1)(p+1)>0.
+        \notag
+    \end{align}
+    The truncated factor makes the same construction valid for empty and
+    singleton families. Finally, length-$L$ words of $A_j$ are the
+    one-letter evaluations of $A_j^{[L]}$, which proves the blocked statement.
+\end{proof}
+
+Let $A$ be a tensor in canonical form, and let $A_1,\ldots,A_g$ be a basis of
+normal tensors of $A$. For suitable coefficients $\mu_{j,q}$ and invertible
+matrices $X_{j,q}$, write
+$M_j=\diag(\mu_{j,1},\ldots,\mu_{j,r_j})$ and
+$X=\bigoplus_{j=1}^{g}\bigoplus_{q=1}^{r_j}X_{j,q}$. Then
+% Source: CPSV16, Section 2.3, labels eq:II_ABasicTensors and eq:II_X,
+% source lines 283--301; rendered Equations (20a)--(21).
+% Source-faithfulness verdict: the display labelled Eq19 in the source replaces
+% direct sums by tensor products and is explicitly declared nonliteral at
+% source lines 304--313; it is rendered as Equation (23).
+% Index/type verdict: A^i_{alpha,beta} has physical index i and virtual indices
+% alpha,beta; j and q select direct-sum summands and are not contraction legs.
+\begin{align}
+    A^i
+     & =X\left[\bigoplus_{j=1}^{g}
+             \left(M_j\otimes A_j^i\right)\right]X^{-1}
+    =\bigoplus_{j=1}^{g}\bigoplus_{q=1}^{r_j}
+    \mu_{j,q}X_{j,q}A_j^iX_{j,q}^{-1}.
+    \label{eq:bnt_found_canonical_decomp}
+\end{align}
+This is \cite[Section~2.3, Equations~(20a)--(21)]{Cirac2016MPDO_arXiv}.
+The decomposition (\ref{eq:bnt_found_canonical_decomp}) is used below to
+separate the normal blocks.

@@ -106,46 +106,12 @@ with a basis sector of the other. The non-vanishing of the sector coefficients
 isolates the matched sector exactly, with no limit of a single-sector
 projection.
 
-\begin{lemma}[Sector-decomposition coefficient is not eventually zero]
-    \label{lem:sector_decomposition_coeff_not_eventually_zero}
-    \lean{MPSTensor.SectorDecomposition.coeff_not_eventually_zero}
-    \leanok
-    \uses{def:sector_weight_data,
-        lem:finite_geometric_sum_eventual_vanishing}
-    For any sector decomposition $P$ and any sector $j$, the coefficient
-    $c_{P,j}^{(N)}=\sum_q\mu_{j,q}^N$ is not eventually zero in $N$.
-\end{lemma}
-
-\begin{proof}\leanok
-    If the coefficient vanished for every $N\geq M$, the finite geometric-sum
-    extrapolation would make it vanish at every non-negative exponent. However,
-    at exponent zero, $c_{P,j}^{(0)}=\sum_q\mu_{j,q}^0=r_j>0$, which is
-    impossible.
-\end{proof}
-
-\begin{lemma}[Sector coefficient is not eventually zero]
-    \label{lem:sector_bnt_coeff_not_eventually_zero}
-    \lean{MPSTensor.IsBNTCanonicalForm.coeff_not_eventually_zero}
-    \leanok
-    \uses{def:sector_bnt_cf,
-        lem:sector_decomposition_coeff_not_eventually_zero}
-    For a BNT canonical form $P$ and any sector $j$, the sector coefficient
-    $c_{P,j}^{(N)} = \sum_q \mu_{j,q}^N$ is not eventually zero in $N$. Only
-    nonvanishing of the copy weights is used, not any modulus condition.
-\end{lemma}
-
-\begin{proof}\leanok
-    Apply Lemma~\ref{lem:sector_decomposition_coeff_not_eventually_zero}; its
-    conclusion does not require the canonical-form assumptions.
-\end{proof}
-
 \begin{theorem}[Exact single-sector matching]
     \label{thm:sector_bnt_exact_block_match}
     \lean{MPSTensor.exists_block_match_exact}
     \leanok
-    \uses{def:sector_bnt_cf,
-        lem:sector_bnt_combined_family_eventually_li,
-        lem:sector_bnt_coeff_not_eventually_zero}
+    \uses{def:sector_bnt_cf, def:same_mpv2_pos,
+        thm:sector_bnt_proportional_exact_match}
     Let $P, Q$ be two BNT canonical forms with the same MPV family (at all
     positive lengths). For every sector $j$ of $P$ there exist a sector $k$ of
     $Q$ with matched bond dimension $\dim_P(j) = \dim_Q(k)$, a gauge-phase
@@ -155,30 +121,10 @@ projection.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{lem:sector_bnt_combined_family_eventually_li,
-        lem:sector_bnt_coeff_not_eventually_zero}
-    Suppose $j$ decays against every sector of $Q$, and let $T$ be the set of
-    $P$-sectors with this property. For $j' \notin T$ the overlap dichotomy
-    turns a non-decaying overlap with some $Q_{k(j')}$ into a gauge-phase
-    equivalence, hence a scalar $\omega_{j'} \in \C^\times$ with
-    $V^{(N)}(P_{j'}) = \omega_{j'}^{N} V^{(N)}(Q_{k(j')})$, so
-    $V^{(N)}(P_{j'})$ lies in the span of $\{V^{(N)}(Q_k)\}_k$. The family
-    $\{P_{j'} : j'\in T\}\cup\{Q_k\}_k$ then has all pairwise cross-overlaps
-    decaying, hence is eventually linearly independent
-    (Lemma~\ref{lem:sector_bnt_combined_family_eventually_li}). Rewriting the
-    common-MPV identity over this family,
-    \begin{align}
-        \sum_{j'\in T} c_N^{(j')}\, V^{(N)}(P_{j'})
-         & = \sum_{k}\Bigl(c_N^{(k)}
-        - \sum_{j'\notin T,\, k(j')=k}
-        c_N^{(j')}\omega_{j'}^{N}\Bigr) V^{(N)}(Q_k),
-        \notag
-    \end{align}
-    exact coefficient extraction forces $c_N^{(j)} = 0$ at each fixed large
-    $N$, contradicting
-    Lemma~\ref{lem:sector_bnt_coeff_not_eventually_zero}. Hence a matched
-    sector $k$ exists; the gauge-phase equivalence is recovered from the
-    non-decaying overlap by the irreducible trace-preserving overlap dichotomy.
+    \uses{thm:sector_bnt_proportional_exact_match}
+    Equality at every positive length gives eventual nonzero proportionality
+    with scalar $1$. Apply
+    Theorem~\ref{thm:sector_bnt_proportional_exact_match} to the chosen sector.
 \end{proof}
 
 \begin{theorem}[Strong existential matching, full-basis form]
@@ -186,7 +132,7 @@ projection.
     \lean{MPSTensor.forall_k_exists_j_nondecaying_overlap_of_sameMPV}
     \leanok
     \uses{def:sector_bnt_cf, def:same_mpv2_pos,
-        thm:sector_bnt_exact_block_match}
+        thm:sector_bnt_proportional_full_basis_match}
     Let $P, Q$ be two BNT canonical forms with the same MPV family at every
     positive length. Then for every sector $k$ of $Q$ there exist a sector $j$
     of $P$ with matched bond dimension $\dim_P(j) = \dim_Q(k)$, a gauge-phase
@@ -195,10 +141,9 @@ projection.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:sector_bnt_exact_block_match}
-    Apply Theorem~\ref{thm:sector_bnt_exact_block_match} with the roles of $P$
-    and $Q$ swapped and the same-MPV hypothesis flipped by symmetry of
-    gauge-phase equivalence and overlap convergence.
+    \uses{thm:sector_bnt_proportional_full_basis_match}
+    Convert equality to eventual nonzero proportionality with scalar $1$ and
+    apply Theorem~\ref{thm:sector_bnt_proportional_full_basis_match}.
 \end{proof}
 
 \subsection{Bijective matching by symmetry}
@@ -214,7 +159,8 @@ $B_k = e^{i\phi_k} X_k A_{j_k} X_k^{-1}$ holds on the full basis
     \label{thm:sector_bnt_bijective_match_of_sameMPV}
     \lean{MPSTensor.bijective_match_of_sameMPV}
     \leanok
-    \uses{thm:sector_bnt_exact_block_match,
+    \uses{thm:sector_bnt_forall_unit_k_exists_j_nondecaying_overlap_of_sameMPV,
+        lem:sector_bnt_bijection_from_matches,
         def:sector_bnt_cf, def:same_mpv2_pos}
     Let $P, Q$ be two BNT canonical forms with the same MPV family at every
     positive length. Then there is a bijection
@@ -225,66 +171,9 @@ $B_k = e^{i\phi_k} X_k A_{j_k} X_k^{-1}$ holds on the full basis
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:sector_bnt_exact_block_match}
-    Theorem~\ref{thm:sector_bnt_exact_block_match} applied to $(Q, P)$ gives a
-    matching map $m : J(Q) \to J(P)$, and applied to $(P, Q)$ a matching map
-    $J(P) \to J(Q)$.
-
-    \emph{Injectivity of $m$.} If $m(k_1) = m(k_2) = j$, the two witnesses give
-    a common centre $P_j$ gauge-phase equivalent, after identifying bond
-    dimensions, to both $Q_{k_1}$ and $Q_{k_2}$; transitivity yields a
-    gauge-phase equivalence $Q_{k_1} \sim Q_{k_2}$ under
-    $\dim_Q(k_1) = \dim_Q(k_2)$. The basis-distinctness clause on $Q$ then
-    forces $k_1 = k_2$; the reverse map is injective by symmetry.
-    % Source: basis-distinctness clause, Cirac2016MPDO_arXiv lines 264--279.
-
-    \emph{Bijection.} The two injections give equal finite sector counts, so $m$
-    is a bijection $\beta : J(Q) \simeq J(P)$.
-\end{proof}
-
-\section{Overlap rigidity for normal blocks}
-\label{sec:bnt_overlap_rigidity}
-
-The BNT matching argument ultimately turns a non-decaying mixed overlap into
-a gauge-phase match. The following two results isolate that spectral step.
-
-\begin{lemma}[Mixed-transfer spectral radius from unit-modulus overlap]%
-    \label{lem:overlap_norm_one_implies_spectral_radius_ge_one}
-    \lean{MPSTensor.mixedTransferSpectralRadius_ge_one_of_mpvOverlap_norm_tendsto_one}
-    \leanok
-    \uses{def:mpv_overlap}
-    Let $A$ and $B$ have the same bond dimension. If
-    $\|\braket{V^{(N)}(A)}{V^{(N)}(B)}\|\to1$, then the mixed transfer map has
-    spectral radius at least~$1$.
-\end{lemma}
-
-\begin{proof}\leanok
-    If the mixed-transfer spectral radius were less than~$1$, the iterated
-    mixed transfer map would tend to zero in operator norm, hence so would its
-    trace. By (\ref{eq:canonical_overlap_trace}), the overlap would tend to
-    zero, contradicting the hypothesis.
-\end{proof}
-
-\begin{theorem}[Gauge-phase equivalence from unit-modulus overlap]%
-    \label{thm:nt_overlap_norm_one_gauge}
-    \lean{MPSTensor.gaugePhaseEquiv_of_overlap_norm_tendsto_one_of_irreducible_TP}
-    \leanok
-    \uses{def:irreducible_tensor, def:tp_kraus, def:gauge_phase_equiv,
-        def:mpv_overlap}
-    Let $A$ and $B$ be irreducible MPS tensors of the same bond dimension with
-    $\sum_i(A^i)^\dagger A^i=\Id$ and
-    $\sum_i(B^i)^\dagger B^i=\Id$. If
-    $\|\braket{V^{(N)}(A)}{V^{(N)}(B)}\|\to1$, then $A$ and $B$ are
-    gauge-phase equivalent.
-    % Same-bond-dimension case of \cite[Lemma~equalMPS]{Cirac2016MPDO_arXiv};
-    % proportionality of MPVs is not assumed.
-\end{theorem}
-
-\begin{proof}\leanok
-    \uses{lem:overlap_norm_one_implies_spectral_radius_ge_one,
-        thm:modulus_one_gauge_irr_tp}
-    By Lemma~\ref{lem:overlap_norm_one_implies_spectral_radius_ge_one}, the
-    mixed-transfer spectral radius is at least~$1$, and
-    Theorem~\ref{thm:modulus_one_gauge_irr_tp} then gives gauge-phase
-    equivalence.
+    \uses{thm:sector_bnt_forall_unit_k_exists_j_nondecaying_overlap_of_sameMPV,
+        lem:sector_bnt_bijection_from_matches}
+    Apply the full-basis matcher in both directions, using symmetry of the
+    same-MPV relation. Lemma~\ref{lem:sector_bnt_bijection_from_matches}
+    converts these two families of matches into the required bijection.
 \end{proof}

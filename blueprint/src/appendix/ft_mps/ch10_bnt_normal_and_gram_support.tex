@@ -1,0 +1,216 @@
+\section{Elementary normal-tensor and Gram-matrix support}
+\label{sec:app_bnt_normal_gram}
+
+Throughout this section, $V^{(N)}(A)$ denotes the length-$N$ matrix product
+vector of a tensor $A$, and $O_{AB}(N)$ denotes the corresponding mixed
+overlap.  We first record elementary consequences of the two notions of
+normality used in Chapter~\ref{ch:bnt}, and then prove the finite-family
+linear-independence criteria used in the BNT characterization and matching
+arguments.
+
+\begin{lemma}[Positive bond dimensions in a coefficient-form BNT]
+    \label{lem:cpsv_bnt_block_dimensions_positive}
+    \lean{MPSTensor.IsCPSVBasisOfNormalTensors.blocks_dim_pos}
+    \leanok
+    \uses{def:bnt_cpsv}
+    Every block in a coefficient-form basis of normal tensors has positive
+    bond dimension.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:bnt_cpsv}
+    Eventual linear independence makes the matrix product vector of each block
+    nonzero at some positive length. A tensor with zero bond dimension has
+    zero matrix product vector at every length, which is a contradiction.
+\end{proof}
+
+\begin{lemma}[Bond dimension one implies irreducibility]
+    \label{lem:bond_dimension_one_irreducible}
+    \lean{MPSTensor.isIrreducibleTensor_of_bondDim_one}
+    \leanok
+    \uses{def:irreducible_tensor}
+    Every tensor with a one-dimensional bond space is irreducible.
+\end{lemma}
+
+\begin{proof}\leanok
+    The only orthogonal projections on a one-dimensional complex vector space
+    are zero and the identity.
+\end{proof}
+
+\begin{lemma}[Normality in bond dimension one]
+    \label{lem:bond_dimension_one_identity_transfer_normal}
+    \lean{MPSTensor.isNormalTensor_of_bondDim_one_of_transferMap_eq_id}
+    \leanok
+    \uses{def:nt_cpsv, lem:bond_dimension_one_irreducible}
+    A tensor with one-dimensional bond space and identity transfer map is a
+    normal tensor.
+\end{lemma}
+
+\begin{proof}\leanok
+    Irreducibility follows from the preceding lemma. The identity transfer map
+    has spectral radius one, and its only eigenvalue is one.
+\end{proof}
+
+\begin{lemma}[Perron gauges preserve primitivity]
+    \label{lem:perron_gauge_primitive_iff}
+    \lean{MPSTensor.isPrimitive_transferMap_tpGauge_iff}
+    \leanok
+    \uses{def:primitive_channel}
+    Let $\sigma$ be positive definite. The transfer map of the Perron gauge
+    determined by $\sigma$ is primitive if and only if the original transfer
+    map is primitive.
+\end{lemma}
+
+\begin{proof}\leanok
+    The two transfer maps are similar through the invertible congruence
+    $X\mapsto\sigma^{-1/2}X\sigma^{-1/2}$. Similar linear maps have the same
+    spectrum, so the condition that $1$ is the only eigenvalue on the unit
+    circle is unchanged.
+\end{proof}
+
+\begin{lemma}[Preservation of an algebraic BNT under positive-length MPV equality]
+    \label{lem:bnt_of_same_mpv2_pos}
+    \lean{MPSTensor.IsBNT.of_sameMPV₂Pos}
+    \leanok
+    \uses{def:bnt, def:same_mpv2_pos}
+    Let $A$ and $A'$ have the same matrix product vectors at every positive
+    length. If $(A_j)_{j=1}^{g}$ is a basis of normal tensors for $A$, then
+    the same family is a basis of normal tensors for $A'$.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:bnt, def:same_mpv2_pos}
+    Substitute the positive-length MPV equality into the spanning identity
+    for $A$. Normality and eventual linear independence depend only on the
+    family $(A_j)_{j=1}^{g}$.
+\end{proof}
+
+\begin{corollary}[Positive-length geometric proportionality phase]
+    \label{cor:normal_positive_proportional_mpv_geometric_phase}
+    \lean{MPSTensor.NonzeroProportionalMPV₂.%
+        exists_unit_phase_power_of_isNormalTensor}
+    \leanok
+    \uses{def:nt_cpsv, def:mpv_state,
+        def:nonzero_proportional_mpv}
+    Let $A$ and $B$ be normal tensors of positive, possibly different, bond
+    dimensions. Suppose that, for every positive $N$, their matrix product
+    vectors are proportional by a nonzero scalar. Then there is $a\in\C$,
+    with $|a|=1$, such that
+    $\ket{V^{(N)}(A)}=a^N\ket{V^{(N)}(B)}$ for every positive $N$.
+    This is the positive-length one-normal-block consequence of
+    \cite[Corollary~A.3 and Theorem~2.10]{Cirac2016MPDO_arXiv}.
+\end{corollary}
+
+\begin{proof}\leanok
+    \uses{lem:nonzero_proportional_mpv_basic,
+        thm:normal_proportional_mpv_geometric_phase}
+    Positive-length nonzero proportionality implies eventual nonzero
+    proportionality. Apply
+    Theorem~\ref{thm:normal_proportional_mpv_geometric_phase}.
+\end{proof}
+
+\begin{lemma}[Eventual linear independence from finite-index overlap orthonormality]
+    \label{lem:bnt_finite_index_overlap_orthonormal_li}
+    \lean{MPSTensor.eventually_linearIndependent_of_finite_overlap_tendsto_orthonormal}
+    \leanok
+    \uses{def:mpv_overlap}
+    Let $I$ be a finite index set and let $(A_i)_{i \in I}$ be a finite
+    family of tensors such that $O_{A_iA_i}(N) \to 1$ for each $i$, and
+    $O_{A_iA_j}(N) \to 0$ whenever $i \neq j$. Then the MPV states
+    $\{\ket{V^{(N)}(A_i)}\}_{i \in I}$ are linearly independent for all
+    sufficiently large~$N$.
+\end{lemma}
+
+\begin{proof}\leanok
+    The Gram matrix of the family $\{\ket{V^{(N)}(A_i)}\}_{i \in I}$
+    converges entrywise to the identity matrix. Hence for all sufficiently
+    large $N$ it is invertible, so the MPV states are linearly independent.
+\end{proof}
+
+The same conclusion is often more convenient with an explicit threshold rather
+than the eventual quantifier.
+
+\begin{theorem}[Existential BNT independence from overlap limits]%
+    \label{thm:bnt_li_from_overlap_limits_exists}
+    \lean{MPSTensor.exists_eventually_linearIndependent_of_overlap_tendsto_orthonormal}
+    \leanok
+    \uses{lem:bnt_overlap_orthonormal_li}
+    If the self-overlaps of a finite block family tend to $1$ and the
+    cross-overlaps of distinct blocks tend to $0$, then the MPV states are
+    linearly independent for all sufficiently large system sizes.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:bnt_overlap_orthonormal_li}
+    This is Lemma~\ref{lem:bnt_overlap_orthonormal_li}, restated with an
+    explicit threshold $N_0$.
+\end{proof}
+
+\begin{lemma}[Eventual linear independence for two families]%
+    \label{lem:bnt_two_family_overlap_orthonormal_li}
+    \lean{MPSTensor.eventually_linearIndependent_of_two_family_overlap_tendsto_orthonormal}
+    \leanok
+    \uses{def:mpv_overlap, lem:bnt_finite_index_overlap_orthonormal_li}
+    Let $(A_j)_{j=1}^{g_A}$ and $(B_k)_{k=1}^{g_B}$ be finite families of
+    tensors. Suppose the overlaps inside each family are asymptotically
+    orthonormal, and suppose every mixed overlap
+    $O_{A_jB_k}(N)$ tends to~$0$. Then the combined MPV family
+    \begin{align}
+        \{\ket{V^{(N)}(A_j)}\}_{j=1}^{g_A}
+        \cup
+        \{\ket{V^{(N)}(B_k)}\}_{k=1}^{g_B}
+        \notag
+    \end{align}
+    is linearly independent for all sufficiently large~$N$.
+\end{lemma}
+
+\begin{proof}\leanok
+    Apply the finite-index Gram-matrix criterion to the disjoint union of the two
+    index sets. The within-family hypotheses give the diagonal and
+    off-diagonal limits inside each block, and the mixed overlap hypothesis gives
+    the off-diagonal limits between the two blocks.
+\end{proof}
+
+The following two linear-algebra consequences package the eventual Gram-matrix
+criterion and its coefficient-extraction corollary.
+
+\begin{lemma}[Eventual linear independence from overlap orthonormality]
+    \label{lem:bnt_overlap_orthonormal_li}
+    \lean{MPSTensor.eventually_linearIndependent_of_overlap_tendsto_orthonormal}
+    \leanok
+    \uses{def:mpv_overlap, lem:bnt_finite_index_overlap_orthonormal_li}
+    Let $(A_j)_{j=1}^g$ be a finite family of tensors such that
+    $O_{A_jA_j}(N) \to 1$ for each $j$ and $O_{A_iA_j}(N) \to 0$
+    for $i \neq j$. Then the MPV states
+    $\{\ket{V^{(N)}(A_j)}\}_{j=1}^g$ are linearly independent for all
+    sufficiently large~$N$.
+\end{lemma}
+
+\begin{proof}\leanok
+    Apply Lemma~\ref{lem:bnt_finite_index_overlap_orthonormal_li} with
+    $I = \{1,\ldots,g\}$.
+\end{proof}
+
+Eventual linear independence is also what converts an equality of two finite
+linear combinations into equality of their coefficients; this is the mechanism
+behind the coefficient identities of Chapter~\ref{ch:ft_proof}.
+
+\begin{lemma}[Eventual coefficient extraction from linear independence]%
+    \label{lem:eventual_coeff_eq_of_eventual_li}
+    \lean{MPSTensor.coefficient_eventually_eq_of_eventually_linearIndependent}
+    \leanok
+    If a finite family of vectors is linearly independent for all sufficiently
+    large $N$, and two finite linear combinations of that family are equal
+    for all sufficiently large $N$, then the corresponding coefficients are
+    equal for all sufficiently large $N$.
+\end{lemma}
+
+\begin{proof}\leanok
+    Move the two linear combinations to one side. Linear independence forces
+    each coefficient difference to vanish at every sufficiently large length.
+\end{proof}
+
+When two BNT families must be compared against each other, the same
+Gram-matrix criterion applies to their disjoint union, provided the mixed
+overlaps also decay. This is the form used in the exact sector matching of
+Section~\ref{sec:sector_bnt_strong_match}.
