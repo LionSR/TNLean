@@ -200,17 +200,16 @@ private lemma cluster_single_11_in_wordSpan :
 
 /-- The cluster tensor is `2`-block injective: products of length `2` span `M₂(ℂ)`. -/
 theorem cluster_isNBlkInjective_two : IsNBlkInjective clusterTensor 2 := by
-  rw [IsNBlkInjective, eq_top_iff]
-  intro M _
-  have hM : M = M 0 0 • Matrix.single 0 0 1 + M 0 1 • Matrix.single 0 1 1 +
-      M 1 0 • Matrix.single 1 0 1 + M 1 1 • Matrix.single 1 1 1 := by
-    ext a b; fin_cases a <;> fin_cases b <;> simp [Matrix.single]
-  rw [hM]
-  exact Submodule.add_mem _ (Submodule.add_mem _ (Submodule.add_mem _
-    (Submodule.smul_mem _ _ cluster_single_00_in_wordSpan)
-    (Submodule.smul_mem _ _ cluster_single_01_in_wordSpan))
-    (Submodule.smul_mem _ _ cluster_single_10_in_wordSpan))
-    (Submodule.smul_mem _ _ cluster_single_11_in_wordSpan)
+  rw [IsNBlkInjective]
+  apply (Submodule.eq_top_iff_forall_basis_mem
+    (Matrix.stdBasis ℂ (Fin 2) (Fin 2))).2
+  rintro ⟨i, j⟩
+  rw [Matrix.stdBasis_eq_single]
+  fin_cases i <;> fin_cases j
+  · exact cluster_single_00_in_wordSpan
+  · exact cluster_single_01_in_wordSpan
+  · exact cluster_single_10_in_wordSpan
+  · exact cluster_single_11_in_wordSpan
 
 /-- The cluster tensor is normal: it is `2`-block-injective. -/
 theorem cluster_isNormal : IsNormal clusterTensor :=
@@ -274,37 +273,18 @@ private lemma decode_3 : decodeBlock 2 2 (Fin.cast cluster_blockPhysDim.symm 3) 
 /-- The length-`2` blocked cluster tensor is injective: its four matrices span
 `M₂(ℂ)`.  This is the blocked-tensor form of `cluster_isNBlkInjective_two`. -/
 theorem clusterBlocked_isInjective : IsInjective clusterBlocked := by
-  rw [IsInjective, eq_top_iff]
-  intro M _
-  have hspan : ∀ p q : Fin 2, Matrix.single p q (1 : ℂ) ∈
-      Submodule.span ℂ (Set.range clusterBlocked) := by
-    have mem : ∀ i : Fin 4, clusterBlocked i ∈ Submodule.span ℂ (Set.range clusterBlocked) :=
-      fun i => Submodule.subset_span ⟨i, rfl⟩
-    intro p q
-    fin_cases p <;> fin_cases q
-    · refine (show Matrix.single (0 : Fin 2) 0 (1 : ℂ) = clusterBlocked 0 + clusterBlocked 1 from
-        by ext a b; fin_cases a <;> fin_cases b <;>
-          simp [Matrix.single, Matrix.add_apply, smul_eq_mul]; norm_num) ▸
-        Submodule.add_mem _ (mem 0) (mem 1)
-    · refine (show Matrix.single (0 : Fin 2) 1 (1 : ℂ) = clusterBlocked 2 - clusterBlocked 3 from
-        by ext a b; fin_cases a <;> fin_cases b <;>
-          simp [Matrix.single, Matrix.sub_apply, smul_eq_mul]; norm_num) ▸
-        Submodule.sub_mem _ (mem 2) (mem 3)
-    · refine (show Matrix.single (1 : Fin 2) 0 (1 : ℂ) = clusterBlocked 0 - clusterBlocked 1 from
-        by ext a b; fin_cases a <;> fin_cases b <;>
-          simp [Matrix.single, Matrix.sub_apply, smul_eq_mul]; norm_num) ▸
-        Submodule.sub_mem _ (mem 0) (mem 1)
-    · refine (show Matrix.single (1 : Fin 2) 1 (1 : ℂ) = clusterBlocked 2 + clusterBlocked 3 from
-        by ext a b; fin_cases a <;> fin_cases b <;>
-          simp [Matrix.single, Matrix.add_apply, smul_eq_mul]; norm_num) ▸
-        Submodule.add_mem _ (mem 2) (mem 3)
-  have hM : M = M 0 0 • Matrix.single 0 0 1 + M 0 1 • Matrix.single 0 1 1 +
-      M 1 0 • Matrix.single 1 0 1 + M 1 1 • Matrix.single 1 1 1 := by
-    ext a b; fin_cases a <;> fin_cases b <;> simp [Matrix.single]
-  rw [hM]
-  exact Submodule.add_mem _ (Submodule.add_mem _ (Submodule.add_mem _
-    (Submodule.smul_mem _ _ (hspan 0 0)) (Submodule.smul_mem _ _ (hspan 0 1)))
-    (Submodule.smul_mem _ _ (hspan 1 0))) (Submodule.smul_mem _ _ (hspan 1 1))
+  have hRange :
+      Set.range clusterBlocked = Set.range (blockTensor clusterTensor 2) := by
+    ext M
+    constructor
+    · rintro ⟨i, rfl⟩
+      exact ⟨Fin.cast cluster_blockPhysDim.symm i, rfl⟩
+    · rintro ⟨i, rfl⟩
+      exact ⟨Fin.cast cluster_blockPhysDim i, by
+        simp [clusterBlocked, Fin.cast_cast]⟩
+  rw [IsInjective, hRange]
+  exact (isNBlkInjective_iff_blockTensor_isInjective clusterTensor 2).1
+    cluster_isNBlkInjective_two
 
 /-! ### The Z₂ × Z₂ on-site symmetry of the blocked tensor
 
@@ -336,6 +316,16 @@ private lemma clusterPhysX1X2_comm :
   ext i j; fin_cases i <;> fin_cases j <;>
     simp [clusterPhysX1, clusterPhysX2, Matrix.mul_apply, Fin.sum_univ_four]
 
+private lemma clusterPhysX1_conjTranspose : clusterPhysX1ᴴ = clusterPhysX1 := by
+  ext i j
+  fin_cases i <;> fin_cases j <;>
+    simp [clusterPhysX1, Matrix.conjTranspose_apply]
+
+private lemma clusterPhysX2_conjTranspose : clusterPhysX2ᴴ = clusterPhysX2 := by
+  ext i j
+  fin_cases i <;> fin_cases j <;>
+    simp [clusterPhysX2, Matrix.conjTranspose_apply]
+
 /-- The `Z₂ × Z₂` on-site representation on the blocked physical space.  The two
 generators act by `σx ⊗ I` and `I ⊗ σx`. -/
 def clusterZ2Z2Action :
@@ -345,16 +335,19 @@ def clusterZ2Z2Action :
 
 @[simp] private lemma clusterZ2Z2Action_10 :
     clusterZ2Z2Action (Multiplicative.ofAdd ((1, 0) : ZMod 2 × ZMod 2)) = clusterPhysX1 := by
-  simp only [clusterZ2Z2Action, ofCommutingInvolutions_ofAdd_10]
+  exact ofCommutingInvolutions_ofAdd_10 clusterPhysX1 clusterPhysX2
+    clusterPhysX1_sq clusterPhysX2_sq clusterPhysX1X2_comm
 
 @[simp] private lemma clusterZ2Z2Action_01 :
     clusterZ2Z2Action (Multiplicative.ofAdd ((0, 1) : ZMod 2 × ZMod 2)) = clusterPhysX2 := by
-  simp only [clusterZ2Z2Action, ofCommutingInvolutions_ofAdd_01]
+  exact ofCommutingInvolutions_ofAdd_01 clusterPhysX1 clusterPhysX2
+    clusterPhysX1_sq clusterPhysX2_sq clusterPhysX1X2_comm
 
 @[simp] private lemma clusterZ2Z2Action_11 :
     clusterZ2Z2Action (Multiplicative.ofAdd ((1, 1) : ZMod 2 × ZMod 2)) =
       clusterPhysX1 * clusterPhysX2 := by
-  simp only [clusterZ2Z2Action, ofCommutingInvolutions_ofAdd_11]
+  exact ofCommutingInvolutions_ofAdd_11 clusterPhysX1 clusterPhysX2
+    clusterPhysX1_sq clusterPhysX2_sq clusterPhysX1X2_comm
 
 /-! #### Virtual gauges `σz`, `σx`, and `σz σx` -/
 
@@ -626,18 +619,10 @@ two generators act by real symmetric involutive permutation matrices, so each
 group element equals its own adjoint inverse. -/
 private theorem clusterZ2Z2Action_unitary (g : Multiplicative (ZMod 2 × ZMod 2)) :
     clusterZ2Z2Action g * (clusterZ2Z2Action g)ᴴ = 1 := by
-  rcases zmod2sq_cases g with rfl | rfl | rfl | rfl
-  · simp
-  · rw [clusterZ2Z2Action_10]
-    ext i j; fin_cases i <;> fin_cases j <;>
-      simp [clusterPhysX1, Matrix.mul_apply, Fin.sum_univ_four, Matrix.conjTranspose_apply]
-  · rw [clusterZ2Z2Action_01]
-    ext i j; fin_cases i <;> fin_cases j <;>
-      simp [clusterPhysX2, Matrix.mul_apply, Fin.sum_univ_four, Matrix.conjTranspose_apply]
-  · rw [clusterZ2Z2Action_11]
-    ext i j; fin_cases i <;> fin_cases j <;>
-      simp [clusterPhysX1, clusterPhysX2, Matrix.mul_apply, Fin.sum_univ_four,
-        Matrix.conjTranspose_apply]
+  exact ofCommutingInvolutions_mul_conjTranspose clusterPhysX1 clusterPhysX2
+    clusterPhysX1_sq clusterPhysX2_sq clusterPhysX1X2_comm
+    (by rw [clusterPhysX1_conjTranspose, clusterPhysX1_sq])
+    (by rw [clusterPhysX2_conjTranspose, clusterPhysX2_sq]) g
 
 /-- **The cluster state has string order under its `Z₂ × Z₂` symmetry.**
 

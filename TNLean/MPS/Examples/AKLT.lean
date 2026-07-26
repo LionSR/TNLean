@@ -222,17 +222,16 @@ private lemma single_10_in_wordSpan :
 
 /-- The AKLT tensor is 2-block injective: products of length 2 span M₂(ℂ). -/
 theorem aklt_isNBlkInjective_two : IsNBlkInjective akltTensor 2 := by
-  rw [IsNBlkInjective, eq_top_iff]
-  intro M _
-  have hM : M = M 0 0 • Matrix.single 0 0 1 + M 0 1 • Matrix.single 0 1 1 +
-      M 1 0 • Matrix.single 1 0 1 + M 1 1 • Matrix.single 1 1 1 := by
-    ext a b; fin_cases a <;> fin_cases b <;> simp [Matrix.single]
-  rw [hM]
-  exact Submodule.add_mem _ (Submodule.add_mem _ (Submodule.add_mem _
-    (Submodule.smul_mem _ _ single_00_in_wordSpan)
-    (Submodule.smul_mem _ _ single_01_in_wordSpan))
-    (Submodule.smul_mem _ _ single_10_in_wordSpan))
-    (Submodule.smul_mem _ _ single_11_in_wordSpan)
+  rw [IsNBlkInjective]
+  apply (Submodule.eq_top_iff_forall_basis_mem
+    (Matrix.stdBasis ℂ (Fin 2) (Fin 2))).2
+  rintro ⟨i, j⟩
+  rw [Matrix.stdBasis_eq_single]
+  fin_cases i <;> fin_cases j
+  · exact single_00_in_wordSpan
+  · exact single_01_in_wordSpan
+  · exact single_10_in_wordSpan
+  · exact single_11_in_wordSpan
 
 /-- The AKLT tensor is normal: it is `2`-block-injective. -/
 theorem aklt_isNormal : IsNormal akltTensor :=
@@ -352,6 +351,16 @@ private lemma akltPhysP1P2_comm : akltPhysP1 * akltPhysP2 = akltPhysP2 * akltPhy
   ext i j; fin_cases i <;> fin_cases j <;>
     simp [akltPhysP1, akltPhysP2, Matrix.mul_apply, Fin.sum_univ_three]
 
+private lemma akltPhysP1_conjTranspose : akltPhysP1ᴴ = akltPhysP1 := by
+  ext i j
+  fin_cases i <;> fin_cases j <;>
+    simp [akltPhysP1, Matrix.conjTranspose_apply]
+
+private lemma akltPhysP2_conjTranspose : akltPhysP2ᴴ = akltPhysP2 := by
+  ext i j
+  fin_cases i <;> fin_cases j <;>
+    simp [akltPhysP2, Matrix.conjTranspose_apply]
+
 /-- The `Z₂ × Z₂` on-site representation on the spin-1 physical space.  The two
 generators act by two commuting spin-1 `π`-rotations about orthogonal axes. -/
 def akltZ2Z2Action :
@@ -361,16 +370,19 @@ def akltZ2Z2Action :
 
 @[simp] private lemma akltZ2Z2Action_10 :
     akltZ2Z2Action (Multiplicative.ofAdd ((1, 0) : ZMod 2 × ZMod 2)) = akltPhysP1 := by
-  simp only [akltZ2Z2Action, ofCommutingInvolutions_ofAdd_10]
+  exact ofCommutingInvolutions_ofAdd_10 akltPhysP1 akltPhysP2
+    akltPhysP1_sq akltPhysP2_sq akltPhysP1P2_comm
 
 @[simp] private lemma akltZ2Z2Action_01 :
     akltZ2Z2Action (Multiplicative.ofAdd ((0, 1) : ZMod 2 × ZMod 2)) = akltPhysP2 := by
-  simp only [akltZ2Z2Action, ofCommutingInvolutions_ofAdd_01]
+  exact ofCommutingInvolutions_ofAdd_01 akltPhysP1 akltPhysP2
+    akltPhysP1_sq akltPhysP2_sq akltPhysP1P2_comm
 
 @[simp] private lemma akltZ2Z2Action_11 :
     akltZ2Z2Action (Multiplicative.ofAdd ((1, 1) : ZMod 2 × ZMod 2)) =
       akltPhysP1 * akltPhysP2 := by
-  simp only [akltZ2Z2Action, ofCommutingInvolutions_ofAdd_11]
+  exact ofCommutingInvolutions_ofAdd_11 akltPhysP1 akltPhysP2
+    akltPhysP1_sq akltPhysP2_sq akltPhysP1P2_comm
 
 /-! #### Virtual gauges `σz` and `iσy σz` -/
 
@@ -498,18 +510,10 @@ generators act by real symmetric involutive matrices, so each group element equa
 its own adjoint inverse. -/
 theorem aklt_isUnitary_Z2Z2 (g : Multiplicative (ZMod 2 × ZMod 2)) :
     akltZ2Z2Action g * (akltZ2Z2Action g)ᴴ = 1 := by
-  rcases zmod2sq_cases g with rfl | rfl | rfl | rfl
-  · simp
-  · rw [akltZ2Z2Action_10]
-    ext i j; fin_cases i <;> fin_cases j <;>
-      simp [akltPhysP1, Matrix.mul_apply, Fin.sum_univ_three, Matrix.conjTranspose_apply]
-  · rw [akltZ2Z2Action_01]
-    ext i j; fin_cases i <;> fin_cases j <;>
-      simp [akltPhysP2, Matrix.mul_apply, Fin.sum_univ_three, Matrix.conjTranspose_apply]
-  · rw [akltZ2Z2Action_11]
-    ext i j; fin_cases i <;> fin_cases j <;>
-      simp [akltPhysP1, akltPhysP2, Matrix.mul_apply, Fin.sum_univ_three,
-        Matrix.conjTranspose_apply]
+  exact ofCommutingInvolutions_mul_conjTranspose akltPhysP1 akltPhysP2
+    akltPhysP1_sq akltPhysP2_sq akltPhysP1P2_comm
+    (by rw [akltPhysP1_conjTranspose, akltPhysP1_sq])
+    (by rw [akltPhysP2_conjTranspose, akltPhysP2_sq]) g
 
 /-! ### The AKLT factor system is the non-trivial class of `H²(Z₂ × Z₂, U(1))`
 

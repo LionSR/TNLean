@@ -8,6 +8,7 @@ import Mathlib.Algebra.Group.TypeTags.Basic
 import Mathlib.Algebra.Group.TypeTags.Finite
 import Mathlib.Data.Matrix.Mul
 import Mathlib.Data.Complex.Basic
+import Mathlib.LinearAlgebra.Matrix.ConjTranspose
 
 /-!
 # Z₂ and Z₂ × Z₂ group lemmas for MPS examples
@@ -22,6 +23,8 @@ on-site symmetry by a pair of commuting involutions on the physical space.
 * `ofCommutingInvolutions` : the `Z₂ × Z₂` representation built from two
   commuting involutions `P₁`, `P₂` on a finite-dimensional space.
 -/
+
+open scoped Matrix
 
 namespace MPSTensor
 
@@ -111,5 +114,21 @@ lemma ofCommutingInvolutions_ofAdd_11 (P₁ P₂ : Matrix n n ℂ) (h₁ : P₁ 
       P₁ * P₂ := by
   simp only [ofCommutingInvolutions_apply, toAdd_ofAdd, show (1 : ZMod 2) ≠ 0 from by decide,
     ↓reduceIte]
+
+/-- A representation built from two commuting involutions is unitary when both
+generators are unitary. -/
+lemma ofCommutingInvolutions_mul_conjTranspose (P₁ P₂ : Matrix n n ℂ)
+    (h₁ : P₁ * P₁ = 1) (h₂ : P₂ * P₂ = 1) (hc : P₁ * P₂ = P₂ * P₁)
+    (h₁U : P₁ * (P₁)ᴴ = 1) (h₂U : P₂ * (P₂)ᴴ = 1)
+    (g : Multiplicative (ZMod 2 × ZMod 2)) :
+    ofCommutingInvolutions P₁ P₂ h₁ h₂ hc g *
+        (ofCommutingInvolutions P₁ P₂ h₁ h₂ hc g)ᴴ = 1 := by
+  rcases zmod2sq_cases g with rfl | rfl | rfl | rfl
+  · simp
+  · simpa only [ofCommutingInvolutions_ofAdd_10] using h₁U
+  · simpa only [ofCommutingInvolutions_ofAdd_01] using h₂U
+  · rw [ofCommutingInvolutions_ofAdd_11, Matrix.conjTranspose_mul,
+      mul_assoc P₁ P₂ ((P₂)ᴴ * (P₁)ᴴ), ← mul_assoc P₂ (P₂)ᴴ (P₁)ᴴ,
+      h₂U, one_mul, h₁U]
 
 end MPSTensor
