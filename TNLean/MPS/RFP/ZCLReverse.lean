@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Channel.FixedPoint.StationarySupport
-import TNLean.MPS.CanonicalForm.NormalTensorGauge
+import TNLean.MPS.RFP.BNTDirectSumBasis
 import TNLean.MPS.RFP.PhysicalObservableRealization
 
 /-!
@@ -410,20 +410,7 @@ theorem isPositiveGapBNTZCL_basisDirectSum_iff_isTransferIdempotent_of_spectral_
     letI : ∀ j : Fin P.basisCount, NeZero (P.basisDim j) :=
       fun j ↦ ⟨(hCF.basis_dim_pos j).ne'⟩
     apply isPositiveGapBNTZCL_of_isTransferIdempotent_directSum P.basis
-    · refine {
-        blocks_normal := fun j ↦
-          isNormalTensor_of_isNormal_leftCanonical (P.basis j)
-            (hCF.basis_isNormal j) (hCF.basis_left_canonical j)
-        spans_mpv := ?_
-        eventually_li := hCF.bnt_data }
-      intro N _hN
-      refine ⟨fun _ ↦ 1, fun σ ↦ ?_⟩
-      rw [← show toTensorFromBlocks (d := d) (fun _ ↦ 1) P.basis =
-          directSumTensor P.basis by
-        funext i
-        simp [toTensorFromBlocks, directSumTensor],
-        mpv_toTensorFromBlocks_eq_sum]
-      simp
+    · exact hCF.isCPSVBasisOfNormalTensors_basisDirectSum
     · exact hCF.basis_irreducible
     · exact hCF.basis_left_canonical
     · exact hCF.basis_distinct
