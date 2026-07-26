@@ -10,16 +10,16 @@ import TNLean.MPS.MPDO.VerticalCoisometry
 /-!
 # Vertical canonical form of matrix product density operators
 
-The grouped vertical decomposition of a horizontally canonical matrix product
-density operator supplies a basis of normal tensors and normalized physical
-sector maps.  The resulting positive weights and sector maps give the
+The grouped vertical decomposition of a matrix product density operator in
+normalized BNT-refined horizontal form supplies a basis of normal tensors and
+normalized physical sector maps.  The resulting positive weights and sector maps give the
 coisometry and the two exact block-diagonal identities of the vertical
 canonical form.
 
 ## Main result
 
-* `MPOTensor.verticalCF_of_horizontalCF`: every horizontally canonical matrix
-  product density operator is in vertical canonical form.
+* `MPOTensor.verticalCF_of_horizontalCF`: every matrix product density operator
+  in normalized BNT-refined horizontal form is in vertical canonical form.
 
 ## References
 
@@ -33,8 +33,8 @@ namespace MPOTensor
 
 variable {d D : ℕ}
 
-/-- A horizontally canonical matrix product density operator is also in
-vertical canonical form.
+/-- A matrix product density operator in normalized BNT-refined horizontal form
+is also in vertical canonical form.
 
 The same grouped vertical decomposition supplies both the algebraic basis of
 normal tensors and the normalized physical sector maps.  Their positive

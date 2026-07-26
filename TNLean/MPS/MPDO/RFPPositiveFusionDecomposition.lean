@@ -19,8 +19,8 @@ positivity.
   the source basis-of-normal-tensors predicate.
 * `IsHorizontalCF.exists_cpsvVerticalDecomposition`: construction of this
   decomposition from normalized BNT-refined horizontal form and positivity.
-* `exists_positiveFusionDecomposition_of_isRFPViaTS`: the source-facing
-  positive fusion theorem of CPSV16, Appendix C.4, lines 2020--2029.
+* `exists_positiveFusionDecomposition_of_isRFPViaTS`: the BNT-refined positive
+  fusion theorem corresponding to CPSV16, Appendix C.4, lines 2020--2029.
 
 ## References
 
@@ -201,8 +201,8 @@ theorem cpsvVerticalDecomposition_of_grouped_orthogonal_sectors
     reconstruction := hReconstruction
   }⟩
 
-/-- Horizontal canonical form and MPDO positivity furnish a vertical
-decomposition which retains the literal CPSV16 basis predicate.
+/-- Normalized BNT-refined horizontal form and MPDO positivity furnish a
+vertical decomposition which retains the literal CPSV16 basis predicate.
 
 **Scope restriction (BNT-refined horizontal form):** `IsHorizontalCF` is
 stronger than the literal CPSV canonical form assumed by Proposition 4.13.  The
