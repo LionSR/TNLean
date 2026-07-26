@@ -1,0 +1,331 @@
+\section{Change of basis, power sums, and sector bookkeeping}
+\label{sec:app_bnt_power_sector}
+
+This section collects the finite-dimensional linear algebra behind alternative
+BNT comparisons, the extrapolation identities for finite sums of geometric
+sequences, and the bookkeeping identities for sector decompositions.  A sector
+has copy weights $\mu_{j,q}\ne0$, coefficient
+$c_{N,j}=\sum_q\mu_{j,q}^N$, representative bond dimension $D_j$, and total
+bond dimension $D_{\mathrm{tot}}=\sum_j r_jD_j$.
+
+\begin{lemma}[Invertible change of basis]
+    \label{lem:bnt_invertible_change_basis}
+    \lean{exists_invertible_changeBasis}
+    \leanok
+    Let $v_1, \ldots, v_g$ and $w_1, \ldots, w_g$ be two linearly independent
+    families in a complex vector space with the same span. Then there exists an
+    invertible matrix $U \in \GL_g(\C)$ such that
+    $w_j = \sum_{i=1}^g U_{ij} v_i$ for every $j$.
+\end{lemma}
+
+\begin{proof}\leanok
+    Because the two families span the same subspace, each $w_j$ has a unique
+    expansion in the basis $\{v_i\}_{i=1}^g$; these coefficients form the
+    columns of $U$. If $U a = 0$, then the corresponding linear relation among
+    the $w_j$ is trivial because the $w_j$ are linearly independent. Thus $U$
+    is injective, hence invertible.
+\end{proof}
+
+\begin{lemma}[Eventual change of basis from equal spans]
+    \label{lem:bnt_eventual_change_basis}
+    \lean{MPSTensor.eventually_exists_invertible_changeBasis}
+    \leanok
+    \uses{lem:bnt_invertible_change_basis, def:mpv_overlap}
+    If two finite families of blocks have asymptotically orthonormal overlaps
+    within each family and their MPV spans agree for every system size $N$,
+    then for all sufficiently large $N$ there exists an invertible matrix
+    $U_N$ expressing the MPV states of one family as linear combinations of
+    the MPV states of the other.
+\end{lemma}
+
+\begin{proof}\leanok\uses{lem:bnt_overlap_orthonormal_li, lem:bnt_invertible_change_basis}
+    By Lemma~\ref{lem:bnt_overlap_orthonormal_li}, both families are
+    linearly independent for all sufficiently large $N$. At such an $N$, the
+    span equality lets us apply Lemma~\ref{lem:bnt_invertible_change_basis}.
+\end{proof}
+
+\begin{lemma}[Eventual vanishing of a finite geometric sum]
+    \label{lem:finite_geometric_sum_eventual_vanishing}
+    \lean{MPSTensor.SectorWeightData.geom_sum_eventually_zero}
+    \leanok
+    Let $w_1,\ldots,w_n$ be nonzero complex numbers. If
+    $\sum_i c_i w_i^N=0$ for every sufficiently large $N$, then the same
+    equality holds for every non-negative exponent.
+\end{lemma}
+
+\begin{proof}\leanok
+    Induct on the number of terms. Subtracting $w_1$ times the equality at
+    exponent $N$ from the equality at exponent $N+1$ gives
+    $\sum_{i=2}^{n} c_i(w_i-w_1)w_i^N=0$.
+    The induction hypothesis yields this equality at every exponent, so the
+    original sum $S_N=\sum_i c_iw_i^N$ satisfies $S_{N+1}=w_1S_N$ for every
+    $N$. Since $S_N$ eventually vanishes and $w_1\ne0$, it follows that
+    $S_0=0$ and hence $S_N=0$ for every $N$.
+\end{proof}
+
+\begin{lemma}[Eventual power-sum equality holds at every exponent]
+    \label{lem:eventual_power_sum_equality_all_exponents}
+    \lean{MPSTensor.SectorWeightData.power_sums_eq_of_eventually_eq_hetero}
+    \leanok
+    \uses{lem:finite_geometric_sum_eventual_vanishing}
+    Let $a_1,\ldots,a_m$ and $b_1,\ldots,b_n$ be nonzero complex numbers. If
+    their power sums agree for every sufficiently large exponent, then
+    $\sum_i a_i^k=\sum_j b_j^k$ for every non-negative exponent $k$.
+\end{lemma}
+
+\begin{proof}\leanok
+    Set $w_l=a_l$ for $l\leq m$ and $w_{m+l}=b_l$ for $l\leq n$, with
+    coefficients $c_l=1$ for $l\leq m$ and $c_l=-1$ for $l>m$. Then
+    $\sum_{l=1}^{m+n}c_lw_l^k=\sum_i a_i^k-\sum_j b_j^k$.
+    The hypothesis makes this expression zero for every sufficiently large
+    $k$. Lemma~\ref{lem:finite_geometric_sum_eventual_vanishing} makes it zero
+    for every $k$, which is the required power-sum equality.
+\end{proof}
+
+\begin{theorem}[Equal power sums imply equal multisets]\label{thm:power_sum_multiset}
+    \lean{Matrix.sum_pow_eq_implies_multiset_eq}
+    \leanok
+    Let $\alpha, \beta : \{0, \ldots, n-1\} \to \C$.
+    If $\sum_i \alpha_i^k = \sum_i \beta_i^k$ for all $k \ge 1$,
+    then the multisets $\{\alpha_i\}$ and $\{\beta_i\}$ are equal.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:newton_girard}
+    Construct diagonal matrices $\diag(\alpha)$ and
+    $\diag(\beta)$. The power-sum hypothesis gives
+    $\tr(\diag(\alpha)^k) = \tr(\diag(\beta)^k)$.
+    By Theorem~\ref{thm:newton_girard}, the characteristic
+    polynomials agree: $\prod_i (X - \alpha_i) = \prod_i (X - \beta_i)$.
+    Extracting roots gives multiset equality.
+\end{proof}
+
+\begin{theorem}[Representative dimensions are bounded by the total bond dimension]
+    \label{thm:sector_basis_dimension_le_total_dimension}
+    \lean{MPSTensor.SectorDecomposition.basisDim_le_totalDim}
+    \lean{MPSTensor.SectorDecomposition.basisCount_le_totalDim}
+    \leanok
+    \uses{def:sector_weight_data}
+    Let the representative $A_j$ have bond dimension $D_j$, and let $D$ be
+    the bond dimension of the flattened sector tensor. Then $D_j\leq D$.
+    If every $D_j$ is positive and there are $g$ representatives, then also
+    $g\leq D$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:sector_weight_data}
+    Since $r_j>0$, choose one copy of $A_j$. Its contribution $D_j$ is one
+    non-negative summand in the total dimension of the flattened copy family,
+    so $D_j\leq D$.
+
+    For the second assertion, every representative has multiplicity
+    $r_j\geq1$, and each copy has positive dimension $D_j>0$. Therefore
+    \begin{align}
+        g=\sum_j1
+        \leq\sum_j r_j
+        \leq\sum_j r_jD_j
+        =D.
+        \notag
+    \end{align}
+\end{proof}
+
+\begin{theorem}[Blocked sector coefficients and assembled tensor]%
+    \label{thm:sector_decomposition_block_tensor_mpv}
+    \lean{MPSTensor.SectorDecomposition.coeff_blockTensor}
+    \lean{MPSTensor.SectorDecomposition.sameMPV₂_blockTensor_toTensor}
+    \leanok
+    \uses{def:sector_decomposition_block_tensor, thm:block_tensor_to_tensor_from_blocks}
+    The coefficient of the blocked decomposition satisfies
+    \begin{align}
+        c_{P^{[p]},j}^{(N)}
+        =\sum_q(\mu_{j,q}^{p})^N
+        =c_{P,j}^{(Np)}.
+        \label{eq:bnt_sector_block_coeff}
+    \end{align}
+    Moreover, blocking the tensor assembled from $P$ gives the same MPV family
+    as the tensor assembled from the blocked sector decomposition.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:block_tensor_to_tensor_from_blocks}
+    The coefficient identity in
+    (\ref{eq:bnt_sector_block_coeff}) is $(\mu^p)^N=\mu^{pN}$. The tensor
+    identity is Theorem~\ref{thm:block_tensor_to_tensor_from_blocks} applied to
+    the flattened copy family.
+\end{proof}
+
+\begin{lemma}[Existence of an MPV phase class]
+    \label{lem:mpv_phase_class_nonempty}
+    \lean{MPSTensor.MPVPhaseClassData.g_pos_of_r_pos}
+    \leanok
+    \uses{def:mpv_phase_class_data}
+    A nonempty finite family of blocks has at least one MPV phase class.
+\end{lemma}
+
+\begin{proof}\leanok
+    Choose one original block index. Its occurrence in the phase-class
+    enumeration supplies a phase class containing it.
+\end{proof}
+
+\begin{lemma}[Regrouping a matrix sum by MPV phase classes]
+    \label{lem:mpv_phase_class_regroup_matrix}
+    \lean{MPSTensor.MPVPhaseClassData.regroup_matrix}
+    \leanok
+    \uses{def:mpv_phase_class_data}
+    Let $F_k$ be a finite family of square matrices indexed by the original
+    blocks. If $k=(j,q)$ enumerates the copies in the MPV phase classes, then
+    $\sum_j\sum_q F_{j,q}=\sum_k F_k$.
+\end{lemma}
+
+\begin{proof}\leanok
+    Evaluate both sides at a pair of matrix indices and apply the bijective
+    enumeration of the finite phase-class quotient.
+\end{proof}
+
+\begin{definition}[Single-copy sector decomposition]
+    \label{def:trivial_sector_decomp}
+    \lean{MPSTensor.trivialSectorDecomp}
+    \leanok
+    \uses{def:sector_weight_data}
+    Given nonzero weights $(\mu_k)_{k=1}^r$ and blocks $(B_k)_{k=1}^r$, the
+    \emph{single-copy sector decomposition} has $r$ sectors, one basis block
+    $B_k$ per sector, multiplicity~$1$, and sector weight $\mu_k$. As a finite
+    sum,
+    \begin{align}
+        \sum_{k=1}^{r}\mu_k^{\,N}V^{(N)}(B_k)_\sigma
+         & =
+        V^{(N)}\!\left(\bigoplus_k\mu_kB_k\right)_\sigma.
+        \label{eq:canonical_single_copy_sector}
+    \end{align}
+\end{definition}
+
+\begin{lemma}[Single-copy sector decomposition preserves the represented family]
+    \label{lem:trivial_sector_decomp_same_mpv}
+    \lean{MPSTensor.sameMPV₂_trivialSectorDecomp}
+    \leanok
+    \uses{def:trivial_sector_decomp}
+    The single-copy sector decomposition of $(\mu_k,B_k)_k$ represents the same
+    MPS family as $\bigoplus_k\mu_kB_k$.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:trivial_sector_decomp}
+    Expanding the sector decomposition gives the left-hand side of
+    (\ref{eq:canonical_single_copy_sector}), which is the finite block-sum
+    expression for $\bigoplus_k\mu_kB_k$.
+\end{proof}
+
+\begin{lemma}[Sector-decomposition coefficient is not eventually zero]
+    \label{lem:sector_decomposition_coeff_not_eventually_zero}
+    \lean{MPSTensor.SectorDecomposition.coeff_not_eventually_zero}
+    \leanok
+    \uses{def:sector_weight_data,
+        lem:finite_geometric_sum_eventual_vanishing}
+    For any sector decomposition $P$ and any sector $j$, the coefficient
+    $c_{P,j}^{(N)}=\sum_q\mu_{j,q}^N$ is not eventually zero in $N$.
+\end{lemma}
+
+\begin{proof}\leanok
+    If the coefficient vanished for every $N\geq M$, the finite geometric-sum
+    extrapolation would make it vanish at every non-negative exponent. However,
+    at exponent zero, $c_{P,j}^{(0)}=\sum_q\mu_{j,q}^0=r_j>0$, which is
+    impossible.
+\end{proof}
+
+\begin{lemma}[Sector coefficient is not eventually zero]
+    \label{lem:sector_bnt_coeff_not_eventually_zero}
+    \lean{MPSTensor.IsBNTCanonicalForm.coeff_not_eventually_zero}
+    \leanok
+    \uses{def:sector_bnt_cf,
+        lem:sector_decomposition_coeff_not_eventually_zero}
+    For a BNT canonical form $P$ and any sector $j$, the sector coefficient
+    $c_{P,j}^{(N)} = \sum_q \mu_{j,q}^N$ is not eventually zero in $N$. Only
+    nonvanishing of the copy weights is used, not any modulus condition.
+\end{lemma}
+
+\begin{proof}\leanok
+    Apply Lemma~\ref{lem:sector_decomposition_coeff_not_eventually_zero}; its
+    conclusion does not require the canonical-form assumptions.
+\end{proof}
+
+\subsection{Proportional matching and finite bijection extraction}
+\label{subsec:app_bnt_proportional_matching}
+
+The equal-MPV matching theorems in Chapter~\ref{ch:bnt} are specializations of
+an eventual proportionality argument. We record that general mechanism and the
+finite-set construction used to package matches in both directions.
+
+\begin{theorem}[Exact sector matching under eventual proportionality]
+    \label{thm:sector_bnt_proportional_exact_match}
+    \lean{MPSTensor.exists_block_match_exact_of_eventuallyProportional}
+    \leanok
+    \uses{def:sector_bnt_cf, lem:sector_bnt_combined_family_eventually_li,
+        lem:sector_bnt_coeff_not_eventually_zero}
+    Let $P$ and $Q$ be BNT canonical forms whose total MPV families are
+    eventually nonzero and proportional. For every sector $j$ of $P$, there is
+    a sector $k$ of $Q$ with equal bond dimension, gauge-phase-equivalent basis
+    tensor after the dimension identification, and non-decaying cross-overlap.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:sector_bnt_combined_family_eventually_li,
+        lem:sector_bnt_coeff_not_eventually_zero,
+        cor:sector_bnt_cf_basis_normal,
+        thm:cpsv_normal_overlap_dichotomy,
+        thm:gauge_phase_mpv_scaling}
+    Suppose the chosen sector decays against every sector of $Q$, and separate
+    all such $P$-sectors from the remaining ones. For each remaining sector,
+    choose a $Q$-sector with non-decaying overlap. Both blocks are normal by the
+    canonical-form hypotheses. Theorem~\ref{thm:cpsv_normal_overlap_dichotomy}
+    rules out its decay alternative and supplies equal bond dimensions and a
+    gauge-phase relation with a unit phase. Gauge-phase covariance therefore
+    expresses that $P$-sector MPV as a geometric scalar multiple of the chosen
+    $Q$-sector MPV.
+
+    Substitute these relations into the eventual proportionality identity.
+    The combined-family Gram criterion makes the decaying residue together
+    with the $Q$ family eventually linearly independent. Exact coefficient
+    extraction then makes the chosen sector coefficient eventually zero,
+    contradicting its power-sum nonvanishing. Thus a non-decaying partner
+    exists. A second application of
+    Theorem~\ref{thm:cpsv_normal_overlap_dichotomy} rules out decay and gives
+    the required dimension equality and gauge-phase equivalence; no
+    modulus-one overlap limit is assumed.
+\end{proof}
+
+\begin{theorem}[Full-basis matching under eventual proportionality]
+    \label{thm:sector_bnt_proportional_full_basis_match}
+    \lean{MPSTensor.forall_k_exists_j_nondecaying_overlap_of_eventuallyProportional}
+    \leanok
+    \uses{thm:sector_bnt_proportional_exact_match}
+    Under the same hypotheses, every sector of $Q$ has an equal-dimensional,
+    gauge-phase-equivalent partner in $P$ with non-decaying cross-overlap.
+\end{theorem}
+
+\begin{proof}\leanok
+    Reverse the eventual proportionality and apply
+    Theorem~\ref{thm:sector_bnt_proportional_exact_match} to each sector of
+    $Q$; symmetry of the overlap converts the resulting witness to the stated
+    orientation.
+\end{proof}
+
+\begin{lemma}[Bijection from matches in both directions]
+    \label{lem:sector_bnt_bijection_from_matches}
+    \lean{MPSTensor.bijection_from_matches}
+    \leanok
+    \uses{def:sector_bnt_cf}
+    Suppose every sector of $Q$ has an equal-dimensional,
+    gauge-phase-equivalent partner in $P$ with non-decaying overlap, and the
+    converse holds from $P$ to $Q$. Then the forward partners may be chosen as
+    a bijection between the two finite sector sets, preserving all three
+    properties.
+\end{lemma}
+
+\begin{proof}\leanok
+    Basis separation makes each partner map injective: two sectors with the
+    same partner would be gauge-phase equivalent to one another. The injections
+    in both directions force equal finite cardinalities, so the forward map is
+    bijective.
+\end{proof}
