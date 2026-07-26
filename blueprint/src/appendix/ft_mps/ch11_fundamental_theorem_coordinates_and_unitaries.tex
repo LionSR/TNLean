@@ -105,18 +105,29 @@ Theorem~\ref{thm:sector_bnt_equal_mps_gaugeEquiv_literal}.
     is denoted $G_\rho$.
 \end{definition}
 
-\begin{lemma}[Matrix, inverse, and unitary identities for a permutation gauge]
+\begin{lemma}[Matrix and inverse identities for a permutation gauge]
     \label{lem:ft_perm_gl_identities}
     \lean{MPSTensor.permGL_val,
-        MPSTensor.permGL_inv_val,
-        MPSTensor.permGL_mem_unitaryGroup}
+        MPSTensor.permGL_inv_val}
     \leanok
     \uses{def:ft_perm_gl}
-    The matrix of $G_\rho$ is $\Pi_\rho$, its inverse is
-    $\Pi_{\rho^{-1}}$, and it is unitary.
+    The matrix of $G_\rho$ is $\Pi_\rho$, and the matrix of its inverse is
+    $\Pi_{\rho^{-1}}$.
 \end{lemma}
 
 \begin{proof}\leanok
+    The first identity is the definition of the permutation gauge. Since the
+    inverse permutation reverses the coordinate relabelling,
+    $G_\rho^{-1}=G_{\rho^{-1}}$, which gives the second identity.
+\end{proof}
+
+\begin{lemma}[Unitarity of a permutation gauge]
+    \label{lem:ft_perm_gl_unitary}
+    \uses{lem:ft_perm_gl_identities}
+    The permutation gauge $G_\rho$ is unitary.
+\end{lemma}
+
+\begin{proof}
     Every row and every column of $\Pi_\rho$ contains exactly one nonzero
     entry, equal to $1$. Hence
     \begin{align}
@@ -127,7 +138,8 @@ Theorem~\ref{thm:sector_bnt_equal_mps_gaugeEquiv_literal}.
          & =\Pi_{\rho^{-1}}.
         \notag
     \end{align}
-    These identities give both the inverse formula and unitarity.
+    Together with Lemma~\ref{lem:ft_perm_gl_identities}, these identities show
+    that $G_\rho^\dagger=G_\rho^{-1}$.
 \end{proof}
 
 The coordinate equivalence of Definition~\ref{def:ft_sector_flat_equiv}

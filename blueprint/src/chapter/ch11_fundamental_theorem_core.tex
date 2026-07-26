@@ -65,19 +65,55 @@ for its sector-level conclusion.
 \begin{proof}\leanok
     \uses{thm:sector_bnt_proportional_bijective_match,
         lem:sector_bnt_norm_phase_of_matched_mpv}
-    Fix a sector $Q_k$. If its overlap with every $P_j$ decayed, the combined
-    family of the $P$-sectors and $Q_k$ would be linearly independent for all
-    sufficiently large lengths. Expanding the proportionality relation in that
-    family would then make the nonzero coefficient of $Q_k$ vanish, a
-    contradiction. Hence some overlap does not decay. The normal-tensor overlap
-    dichotomy gives a partner $P_j$ of the same bond dimension and a
-    gauge-phase relation.
+    Fix $j_0\in J(P)$ and suppose, for contradiction, that the overlap of
+    $P_{j_0}$ with every $Q$-sector decays. Define
+    \begin{align}
+        T
+         & =\bigl\{j\in J(P):
+        O_{P_jQ_k}(N)\longrightarrow 0\text{ for every }k\in J(Q)\bigr\}.
+        \notag
+    \end{align}
+    Thus $j_0\in T$. For each $j\notin T$, choose a sector $Q_{k(j)}$ for
+    which the overlap does not decay. The normal-overlap analysis then supplies
+    scalars $\alpha_j(N)$ such that, at every length,
+    \begin{align}
+        \ket{V^{(N)}(P_j)}
+         & =\alpha_j(N)\ket{V^{(N)}(Q_{k(j)})}.
+        \notag
+    \end{align}
 
-    Apply the same argument with $P$ and $Q$ interchanged. Basis separation
-    makes the resulting partner maps injective: two sectors with one partner
-    would be gauge-phase equivalent to each other. The injections in both
-    directions force equal finite cardinalities, and the forward partners may
-    therefore be chosen as a bijection $\beta:J(Q)\simeq J(P)$.
+    At a sufficiently large length $N$, write the full proportionality equation
+    as
+    \begin{align}
+        \sum_{j\in J(P)}c_N^{(j)}(P)\ket{V^{(N)}(P_j)}
+         & =c_N\sum_{k\in J(Q)}c_N^{(k)}(Q)
+        \ket{V^{(N)}(Q_k)},
+        \notag
+    \end{align}
+    where $c_N\ne0$. Split the left-hand sum into $T$ and its complement,
+    substitute the displayed scalar relations for all $j\notin T$, and group
+    their contributions according to the common value of $k(j)$. The result is
+    a zero linear combination of
+    \begin{align}
+        \bigl\{\ket{V^{(N)}(P_j)}:j\in T\bigr\}
+        \mathbin{\cup}
+        \bigl\{\ket{V^{(N)}(Q_k)}:k\in J(Q)\bigr\}.
+        \notag
+    \end{align}
+    All cross-overlaps between the two displayed parts decay by the definition
+    of $T$, so this restricted union is linearly independent for all
+    sufficiently large $N$. Extracting the coefficient of
+    $\ket{V^{(N)}(P_{j_0})}$ gives $c_N^{(j_0)}(P)=0$ eventually, contradicting
+    the nonvanishing property of a BNT basis coefficient. Therefore every
+    $P$-sector has a $Q$-sector with nondecaying overlap.
+
+    Interchange $P$ and $Q$ to obtain partners in the reverse direction. For
+    each nondecaying pair, the normal-overlap dichotomy gives equality of bond
+    dimensions and gauge-phase equivalence. Basis separation makes either
+    chosen partner map injective: if two basis sectors had the same partner,
+    they would be gauge-phase equivalent to one another. The injections in both
+    directions and finiteness yield a bijection
+    $\beta:J(Q)\simeq J(P)$.
 
     Choose an invertible matrix $X_k$ and a nonzero scalar $\zeta_k$ from each
     matched gauge-phase relation. This gives
