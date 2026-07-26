@@ -115,12 +115,15 @@ decomposition, not from flattening horizontal weights;
 restriction of horizontal blocks does not preserve normality.  Neither note
 documented the definitional mismatch addressed here: the former predicate
 placed the conclusion of Proposition~4.13 on the wrong tensor.  The
-source-faithful horizontal-to-vertical implication is proved by
+horizontal-to-vertical implication is proved by
 \path{MPOTensor.verticalCF_of_horizontalCF} in
-\path{TNLean/MPS/MPDO/VerticalCanonicalForm.lean}; the blueprint entry for
-Proposition~4.13 in
-\path{blueprint/src/chapter/ch20_mpdo_canonical_forms.tex} records the same
-result.
+\path{TNLean/MPS/MPDO/VerticalCanonicalForm.lean} under the normalized
+BNT-refined hypothesis \path{MPOTensor.IsHorizontalCF}.  This hypothesis has
+full horizontal bond dimension and BNT representative grouping; every copy
+weight is nonzero, all have modulus at most one, and at least one has modulus
+one.  It is strictly stronger than the literal CPSV
+canonical form assumed in Proposition~4.13, whose vertical conclusion remains
+open.  The blueprint records these as separate statements.
 
 \paragraph{Verdict.}
 This is a corrected definitional mismatch.  The former predicate placed the
@@ -131,11 +134,13 @@ carry the multiplicity coefficients $m_\alpha=\tr(\mu_\alpha)$ of
 \eqref{eq:umu}; a proof of the surrogate would therefore not have formalized
 the proposition.  The realignment restores the source-faithful vertical tensor
 definition.  The later correction in
-\path{cpgsv17_vertical_isometry_zero_sector.tex} restores the source's
-one-sided isometry condition in the presence of zero sectors.  The
-horizontal-to-vertical implication of Proposition~4.13 is proved in
-\path{TNLean/MPS/MPDO/VerticalCanonicalForm.lean} using this corrected
-definition.
+\path{cpgsv17_vertical_isometry_zero_sector.tex} expresses the source's
+one-sided condition as a coisometry onto the retained nonzero sectors and
+retains exact reconstruction.  The horizontal-to-vertical implication is
+proved with this corrected definition under the normalized BNT-refined
+hypothesis \path{MPOTensor.IsHorizontalCF}.  Since that hypothesis is strictly
+stronger than literal CPSV canonical form, the literal Proposition~4.13
+implication remains open.
 
 \bibliographystyle{alpha}
 \bibliography{references}

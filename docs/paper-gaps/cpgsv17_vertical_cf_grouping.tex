@@ -99,6 +99,17 @@ used in the source declaration.
 
 \section{Boundary of the present result}
 
+The results described below assume the normalized BNT-refined horizontal form
+\path{MPOTensor.IsHorizontalCF}: the retained sectors fill the horizontal bond
+space, every repeated-copy weight is nonzero, all copy weights have modulus at
+most one, at least one has modulus one, and the normal blocks are already
+grouped over BNT representatives.  This is strictly stronger than the literal CPSV canonical
+form of Proposition~4.13, which allows an omitted zero complement and does not
+include this normalized representative grouping.  Thus the completed
+construction below proves the vertical conclusion under the stronger
+horizontal hypothesis; the implication from literal CPSV canonical form
+remains open.
+
 An earlier auxiliary route compared one scalar weight $\mu_\alpha$ with
 several weights $\omega_{\alpha,j}$ under the additional identities
 \begin{equation}
@@ -245,10 +256,12 @@ horizontal scalar weights and diagonal restrictions, remains a false route
 rather than a consequence of the proposition.
 
 \paragraph{Verdict.}
-The source-faithful horizontal-to-vertical implication of Proposition~4.13 is
-complete.  The proof follows the grouped vertical sectors used in the paper;
-it does not use the unsupported diagonal-restriction statement from
-\ghissue{2537}.
+The horizontal-to-vertical implication is complete under the normalized
+BNT-refined hypothesis \path{MPOTensor.IsHorizontalCF}.  That hypothesis is
+strictly stronger than the literal CPSV canonical form assumed in
+Proposition~4.13, so the literal theorem remains open.  The proved restricted
+result follows the grouped vertical sectors used in the paper and does not use
+the unsupported diagonal-restriction statement from \ghissue{2537}.
 
 \bibliographystyle{alpha}
 \bibliography{references}

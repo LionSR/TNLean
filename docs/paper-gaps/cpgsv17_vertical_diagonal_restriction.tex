@@ -83,6 +83,15 @@ restrictions of the horizontal basis.
 
 \section{The corrected formal target}
 
+The theorem currently proved assumes the normalized BNT-refined horizontal
+form \path{MPOTensor.IsHorizontalCF}.  In particular, the retained sectors
+have full horizontal bond dimension, every copy weight is nonzero, all copy
+weights have modulus at most one, at least one has modulus one, and the normal
+blocks are grouped over BNT representatives.  This
+is strictly stronger than the literal CPSV canonical form in
+Proposition~4.13.  The constructions summarized below are complete on this
+stronger surface; the literal canonical-form implication remains open.
+
 A source-faithful proof of Proposition~4.13 should begin with both horizontal
 canonical form and the MPDO positivity hypothesis.  It should then formalize the
 three stages visible in the source:
@@ -203,13 +212,16 @@ basis-of-normal-tensors property is established in
 reconstruction at positive lengths and a retained positive-dimensional
 representative at length zero.  The resulting orthogonal sector maps are
 assembled into the final coisometry in
-\path{TNLean/MPS/MPDO/VerticalCanonicalForm.lean}, which proves the literal
-vertical canonical-form identity from the MPDO hypotheses.
+\path{TNLean/MPS/MPDO/VerticalCanonicalForm.lean}.  Together with the MPDO
+positivity hypothesis, the normalized BNT-refined horizontal form therefore
+gives the vertical canonical-form identities.
 
 \paragraph{Verdict.}
-The source-faithful horizontal-to-vertical implication of Proposition~4.13 is
-complete.  The diagonal-restriction route remains a false strengthening and
-plays no part in the proof.
+The horizontal-to-vertical implication is complete under the normalized
+BNT-refined hypothesis \path{MPOTensor.IsHorizontalCF}, which is strictly
+stronger than the literal CPSV canonical form of Proposition~4.13.  The
+literal theorem remains open.  The diagonal-restriction route remains a false
+strengthening and plays no part in the proved restricted result.
 
 \bibliographystyle{alpha}
 \bibliography{references}
