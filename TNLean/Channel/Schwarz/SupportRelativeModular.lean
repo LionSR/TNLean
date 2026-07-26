@@ -3,8 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Analysis.RelativeEntropySupportLeftRightQuadratic
 import TNLean.Analysis.ResolventFunctionalCalculus
-import TNLean.Analysis.MatrixSqrt
 
 /-!
 # Relative modular square roots on singular supports
@@ -18,6 +18,9 @@ reference matrix is represented as the square of its support inverse square root
 * `Matrix.one_kronecker_transpose_mulVec_vec_transpose` identifies the
   Kronecker matrix that represents right multiplication on a transposed
   vectorization.
+* `Matrix.supportRelativeModular_resolvent_posDef` and
+  `Matrix.supportLeftRightSuperoperator_mul_supportProj_eq` give positivity and
+  the support-resolvent intertwining identity.
 * `Matrix.supportRelativeModular_sqrt_mulVec_vec_one` evaluates the positive
   square root of the support relative-modular matrix on the vectorized identity.
 * `Matrix.supportRelativeModular_sourceB_solution` gives the canonical
@@ -51,6 +54,43 @@ theorem one_kronecker_transpose_mulVec_vec_transpose
   rw [Matrix.kronecker_mulVec_vec]
   simp only [Matrix.transpose_mul, Matrix.transpose_one, Matrix.mul_one]
 
+/-- A positive shift of the support relative-modular matrix is positive definite. -/
+theorem supportRelativeModular_resolvent_posDef
+    {n : Type*} [Fintype n] [DecidableEq n]
+    {A B : Matrix n n ℂ} (hA : A.PosSemidef) (hB : B.PosSemidef)
+    {t : ℝ} (ht : 0 < t) :
+    (t • (1 : Matrix (n × n) (n × n) ℂ) +
+      A ⊗ₖ hB.supportInvᵀ).PosDef := by
+  have hBplusPSD : hB.supportInv.PosSemidef := by
+    simpa only [PosSemidef.supportInv, hB.supportInvSqrt_isHermitian.eq] using
+      posSemidef_conjTranspose_mul_self hB.supportInvSqrt
+  exact (Matrix.PosDef.one.smul ht).add_posSemidef
+    (hA.kronecker hBplusPSD.transpose)
+
+/-- The support projection intertwines the left-right operator with the shifted
+support relative-modular matrix. -/
+theorem supportLeftRightSuperoperator_mul_supportProj_eq
+    {n : Type*} [Fintype n] [DecidableEq n]
+    {A B : Matrix n n ℂ} (hB : B.PosSemidef) (t : ℝ) :
+    supportLeftRightSuperoperator A B t *
+        ((1 : Matrix n n ℂ) ⊗ₖ hB.isHermitian.supportProjᵀ) =
+      ((1 : Matrix n n ℂ) ⊗ₖ Bᵀ) *
+        (t • (1 : Matrix (n × n) (n × n) ℂ) +
+          A ⊗ₖ hB.supportInvᵀ) := by
+  have hCdelta :
+      ((1 : Matrix n n ℂ) ⊗ₖ Bᵀ) * (A ⊗ₖ hB.supportInvᵀ) =
+        A ⊗ₖ hB.isHermitian.supportProjᵀ := by
+    rw [← Matrix.mul_kronecker_mul, Matrix.one_mul,
+      ← Matrix.transpose_mul, hB.supportInv_mul_self]
+  have hBTP : Bᵀ * hB.isHermitian.supportProjᵀ = Bᵀ := by
+    rw [← Matrix.transpose_mul, hB.isHermitian.supportProj_mul_self]
+  rw [supportLeftRightSuperoperator, Matrix.add_mul, Matrix.smul_mul,
+    ← Matrix.mul_kronecker_mul, ← Matrix.mul_kronecker_mul,
+    Matrix.mul_one, Matrix.one_mul, hBTP, Matrix.mul_add,
+    Matrix.mul_smul, Matrix.mul_one, hCdelta]
+  simp only [Matrix.mul_one]
+  abel
+
 /-- The canonical support-domain vector built from the generalized relative
 modular resolvent solves the singular source equation.
 
@@ -78,30 +118,14 @@ theorem supportRelativeModular_sourceB_solution
   let S := A ⊗ₖ (1 : Matrix n n ℂ) +
     t • ((1 : Matrix n n ℂ) ⊗ₖ Bᵀ)
   let C := (1 : Matrix n n ℂ) ⊗ₖ Bᵀ
-  have hBplus : Bplus * B = hB.isHermitian.supportProj := by
-    simpa only [Bplus] using hB.supportInvSqrt_sq_mul_self
-  have hBplusPSD : Bplus.PosSemidef := by
-    simpa only [Bplus, hB.supportInvSqrt_isHermitian.eq] using
-      posSemidef_conjTranspose_mul_self hB.supportInvSqrt
-  have hdelta : delta.PosSemidef := hA.kronecker hBplusPSD.transpose
-  have hres : res.PosDef :=
-    (Matrix.PosDef.one.smul ht).add_posSemidef hdelta
+  have hres : res.PosDef := by
+    simpa only [res, delta, Bplus, PosSemidef.supportInv] using
+      supportRelativeModular_resolvent_posDef hA hB ht
   letI : Invertible res := hres.isUnit.invertible
-  have hCdelta : C * delta =
-      A ⊗ₖ hB.isHermitian.supportProjᵀ := by
-    dsimp only [C, delta]
-    rw [← Matrix.mul_kronecker_mul, Matrix.one_mul,
-      ← Matrix.transpose_mul, hBplus]
-  have hBTP : Bᵀ * hB.isHermitian.supportProjᵀ = Bᵀ := by
-    rw [← Matrix.transpose_mul, hB.isHermitian.supportProj_mul_self]
   have hSP : S * P = C * res := by
-    dsimp only [S, P, C, res]
-    rw [Matrix.add_mul, Matrix.smul_mul,
-      ← Matrix.mul_kronecker_mul, ← Matrix.mul_kronecker_mul,
-      Matrix.mul_one, Matrix.one_mul, hBTP,
-      Matrix.mul_add, Matrix.mul_smul, Matrix.mul_one, hCdelta]
-    simp only [Matrix.mul_one]
-    abel
+    simpa only [S, supportLeftRightSuperoperator, P, C, res, delta, Bplus,
+      PosSemidef.supportInv] using
+        supportLeftRightSuperoperator_mul_supportProj_eq (A := A) hB t
   have hCe : C *ᵥ Matrix.vec (1 : Matrix n n ℂ)ᵀ = Matrix.vec Bᵀ := by
     simpa only [C, Matrix.one_mul] using
       one_kronecker_transpose_mulVec_vec_transpose (1 : Matrix n n ℂ) B
