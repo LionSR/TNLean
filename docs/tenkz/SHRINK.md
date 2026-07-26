@@ -918,3 +918,13 @@ two-window PEPS relation. The additional lines state mathematical content
 that was previously absent.
 
 Census-correction: #4910
+
+### 2026-07-27 — the MPO-word correction synchronizes the line census
+
+PR~#4954 replaces one shared long-bond label by the four adjacent bond labels
+shown in the source MPO word. Spelling those four labels wraps the option list
+across two non-comment lines and raises the 130-case mean from 16.23 to 16.24.
+The increase records that source correction; no package surface or parser
+changes here.
+
+Census-correction: #4954
