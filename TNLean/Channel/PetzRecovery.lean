@@ -451,7 +451,6 @@ noncomputable def maximallyMixedTensorReference
 
 /-- The maximally mixed tensor reference is positive semidefinite whenever
 $\rho_{BC}$ is positive semidefinite. -/
-omit [Fintype B] [DecidableEq B] [Fintype C] [DecidableEq C] in
 theorem maximallyMixedTensorReference_posSemidef
     {ρ : Matrix (B × C) (B × C) ℂ} (hρ : ρ.PosSemidef) :
     (maximallyMixedTensorReference (dA := dA) ρ).PosSemidef := by
@@ -460,7 +459,6 @@ theorem maximallyMixedTensorReference_posSemidef
 
 /-- Tracing $C$ from the HJPW equation (10) reference gives
 $d_A^{-1}\mathbf 1_A\otimes\rho_B$. -/
-omit [NeZero dA] [Fintype B] [DecidableEq B] [DecidableEq C] in
 theorem partialTraceRight_maximallyMixedTensorReference
     (ρ : Matrix (B × C) (B × C) ℂ) :
     partialTraceRight (maximallyMixedTensorReference (dA := dA) ρ) =
@@ -557,7 +555,6 @@ theorem cfcSqrt_maximallyMixedTensorReference
 /-- The support inverse square root of the $AB$ marginal of the HJPW equation
 (10) reference is $\sqrt{d_A}\,\mathbf 1_A\otimes\rho_B^{-1/2}$ on its
 support. -/
-omit [DecidableEq C] in
 theorem supportInvSqrt_partialTraceRight_maximallyMixedTensorReference
     (ρ : Matrix (B × C) (B × C) ℂ) (hρ : ρ.PosSemidef) :
     (PosSemidef.partialTraceRight
