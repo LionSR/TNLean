@@ -75,6 +75,7 @@
 
 \begin{theorem}[Uniqueness of the positive rescaling phase]%
     \label{thm:positive_rescaling_phase_unique}
+    \lean{Complex.ne_zero_of_norm_eq_one}
     \lean{Complex.unitsPhase}
     \lean{Complex.phase}
     \lean{Complex.phase_smul_posSemidef}
@@ -84,9 +85,10 @@
     \uses{lem:possemidef_and_neg_possemidef}
     Let $M\ne0$. If $c_1,c_2\ne0$ and both $c_1M$ and $c_2M$ are positive
     semidefinite, then $c_1=t c_2$ for some positive real number $t$.
-    In particular, every nonzero scalar $c$ has a unit-modulus part
-    $u=c/|c|$, positivity of $cM$ implies positivity of $uM$, and there is
-    at most one such unit scalar when $M\ne0$.
+    Every complex scalar of unit modulus is nonzero. In particular, every
+    nonzero scalar $c$ has a unit-modulus part $u=c/|c|$, positivity of $cM$
+    implies positivity of $uM$, and there is at most one such unit scalar when
+    $M\ne0$.
 \end{theorem}
 
 \begin{proof}

@@ -21,6 +21,10 @@ noncomputable section
 
 namespace Complex
 
+/-- A complex scalar of unit norm is nonzero. -/
+theorem ne_zero_of_norm_eq_one {z : ℂ} (h : ‖z‖ = 1) : z ≠ 0 :=
+  norm_ne_zero_iff.mp (by rw [h]; exact one_ne_zero)
+
 /-- The unit-modulus part of a nonzero complex number, as a multiplicative map. -/
 def unitsPhase : Units ℂ →* Circle where
   toFun z := ⟨(z : ℂ) / ‖(z : ℂ)‖, by

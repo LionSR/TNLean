@@ -130,7 +130,7 @@ private lemma overlap_tendsto_zero_of_not_mpvBlockPhaseEquiv
   · exact hZero
   · exfalso
     apply hNot
-    refine ⟨ζ, norm_ne_zero_iff.mp (by rw [hζ]; exact one_ne_zero), ?_⟩
+    refine ⟨ζ, Complex.ne_zero_of_norm_eq_one hζ, ?_⟩
     intro N _hN σ
     have hEq := congrArg (fun v : MPVSpace d N => v σ) (hState N)
     simpa [mpvState_apply, PiLp.smul_apply, smul_eq_mul] using hEq

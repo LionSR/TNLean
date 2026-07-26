@@ -85,6 +85,6 @@ theorem CPSVCanonicalFormData.exists_isCPSVBasisOfNormalTensors
     obtain ⟨X, ζ, hζnorm, hrel⟩ := hUnit
     apply classes.blocks_not_equiv j k hjk hdim
     exact ⟨X, ζ,
-      norm_ne_zero_iff.mp (by rw [hζnorm]; exact one_ne_zero), hrel⟩
+      Complex.ne_zero_of_norm_eq_one hζnorm, hrel⟩
 
 end MPSTensor
