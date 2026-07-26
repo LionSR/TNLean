@@ -2,7 +2,7 @@
 # Schema: scripts/tenkz_rmp.py (load_verdicts).  Any status may be
 # recorded, including failure; the check rejects lies, never gaps.
 schema_version = 1
-campaign_sha256 = "2ddff10f7de9703dc9a8e3a9ae21f730286a176a3224c9ef965d1a10cd70d270"
+campaign_sha256 = "d3232258c93d676072d9aaf7e400a6223527192be24a137fed2a098c4be955d9"
 
 [[verdict]]
 id = "rmp-ii-peps-projection"
@@ -10,21 +10,22 @@ status = "structural-gap"
 pairing = "verified"
 pairing_by = "codex-pairing-sweep-2026-07-24"
 defects = ["missing-element"]
-case_sha256 = "8988128ff431b1160e79e74c42cafec9d542663e0b59def46b84e48c373654f9"
-reviewed = "2026-07-23"
-renderer = "maintainer-page-review-2026-07-23"
-note = "projections/entangled-bond layer absent from the tenkz panel"
+case_sha256 = "29d67a807d79597690399bf93957ccb913f345e15c150fedcf7df39af13c46ca"
+reviewed = "2026-07-26"
+renderer = "fable-countersign-reading-2026-07-26-200dpi"
+note = "boundary repaired; projector layer still absent"
 
 [[verdict]]
 id = "rmp-ii-triangle-network"
-status = "cosmetic-gap"
+status = "faithful"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
-defects = ["label-collision", "weight-mismatch"]
-case_sha256 = "0f6df027e29727895cdb3d2c233999cdd04b6530d88d80a1cc6e91a2cb7439da"
-reviewed = "2026-07-23"
-renderer = "maintainer-page-review-2026-07-23"
-note = "labels touch legs; twice as loose as source; wants n-valent primitive"
+defects = []
+case_sha256 = "df3c7aa56b961c5c79b684a44adc49c12973da14777e0eea732f373c7a3c08a8"
+second_viewer = "LionSR-delegated-fable-countersign-2026-07-26"
+reviewed = "2026-07-26"
+renderer = "fable-countersign-reading-2026-07-26-200dpi"
+note = "every label at its spoke tip"
 
 [[verdict]]
 id = "rmp-ii-mps-marginal"
@@ -43,10 +44,10 @@ status = "cosmetic-gap"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
 defects = ["weight-mismatch"]
-case_sha256 = "ef273f5280f7e3d25102bff6a83a4d843a298020b615a43f8d50f69f4b9f89ea"
-reviewed = "2026-07-23"
-renderer = "maintainer-page-review-2026-07-23"
-note = "trace loops as tall brackets vs compact loops"
+case_sha256 = "3735c246263f3d39157f9c23bad072fb2f414042fda93115b91fff4ed56847d7"
+reviewed = "2026-07-26"
+renderer = "fable-countersign-reading-2026-07-26-200dpi"
+note = "boundary repaired; trace loops still tall"
 
 [[verdict]]
 id = "rmp-ii-mpo-sheet"
@@ -54,32 +55,33 @@ status = "cosmetic-gap"
 pairing = "verified"
 pairing_by = "codex-pairing-sweep-2026-07-24"
 defects = ["label-collision"]
-case_sha256 = "02f15c77e9641b096ce8fae576f5eacb649ecd8188bb8bb7bf703b36c9a88fa8"
-reviewed = "2026-07-24"
-renderer = "source-split-page-review-2026-07-24"
-note = "wire label a overlaps ink"
+case_sha256 = "89287a3f411ee22f4f882c5e46345ed78d9aacaad0eb832b9f46a63fada59720"
+reviewed = "2026-07-26"
+renderer = "fable-countersign-reading-2026-07-26-200dpi"
+note = "REFUSED faithful at countersign: the manifest formula names the 4-valent tensor the case draws, but author lines 305-309 compile to the five-site row; pairing discrepancy, not a drawing defect"
 
 [[verdict]]
 id = "rmp-ii-pepo-sheet"
 status = "faithful"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
-case_sha256 = "ea74f5bc2d43c9f670366c484dacff041e1480a8493a4e8d2a334129173c225d"
-reviewed = "2026-07-24"
-renderer = "source-split-page-review-2026-07-24"
-second_viewer = "pairing-sweep-two-viewers-2026-07-23"
-note = "maintainer: OK"
+case_sha256 = "4a5c24349e11934bde6130bbb3c942466ce1abf14464bc8270957af781d65bb7"
+reviewed = "2026-07-26"
+renderer = "fable-countersign-reading-2026-07-26-200dpi"
+second_viewer = "LionSR-delegated-fable-countersign-2026-07-26"
+note = "the sixteen boundary legs it claimed are drawn"
 
 [[verdict]]
 id = "rmp-ii-local-purification"
-status = "cosmetic-gap"
+status = "faithful"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
-defects = ["weight-mismatch"]
-case_sha256 = "cb8efea89861560dc5255d7910610cd50e8fa908b1453c6e749b20c52fe0b79f"
-reviewed = "2026-07-23"
-renderer = "maintainer-page-review-2026-07-23"
-note = "X and X^-1 blocks must be the same size"
+defects = []
+case_sha256 = "a32c36171b592ea0921ba90ab68e908ee5b7372f25019cb3ba39eaa15d1d6787"
+second_viewer = "LionSR-delegated-fable-countersign-2026-07-26"
+reviewed = "2026-07-26"
+renderer = "fable-countersign-reading-2026-07-26-200dpi"
+note = "X and X^-1 at one reference width"
 
 [[verdict]]
 id = "rmp-ii-mpu-unitarity"
@@ -105,14 +107,15 @@ note = "maintainer: good; a/b spacing explicitly not to pre-optimize"
 
 [[verdict]]
 id = "rmp-ii-mpu-splitting"
-status = "cosmetic-gap"
+status = "faithful"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
-defects = ["label-collision"]
-case_sha256 = "a4aeb03fed76a057ce34e2cd28e91f0f9c59349247ff98b1861656f5f31ee169"
-reviewed = "2026-07-23"
-renderer = "maintainer-page-review-2026-07-23"
-note = "labels overlap the diagram on one side"
+defects = []
+case_sha256 = "6267ce542209d4bb59dd29134a3634e27134f2dba7c791e0361fa06a3a7bf972"
+second_viewer = "LionSR-delegated-fable-countersign-2026-07-26"
+reviewed = "2026-07-26"
+renderer = "fable-countersign-reading-2026-07-26-200dpi"
+note = "U = u over v = beads; mirrored panel, labels clear"
 
 [[verdict]]
 id = "rmp-ii-mpu-brickwork"
@@ -127,14 +130,15 @@ note = "the two sides depict different contractions"
 
 [[verdict]]
 id = "rmp-ii-mpu-wrap"
-status = "cosmetic-gap"
+status = "faithful"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
-defects = ["weight-mismatch"]
-case_sha256 = "71e33253f892d8625d11f2fc3cf2b2fcb61e03a571cab593286674f659ffc1aa"
-reviewed = "2026-07-23"
-renderer = "maintainer-page-review-2026-07-23"
-note = "ring not a regular square; less symmetric than source"
+defects = []
+case_sha256 = "d4951780afa0a75624d71ddc52cbe28fb23e58b72d8544fb626bce62c5cf7849"
+second_viewer = "LionSR-delegated-fable-countersign-2026-07-26"
+reviewed = "2026-07-26"
+renderer = "fable-countersign-reading-2026-07-26-200dpi"
+note = "square sites, congruent quarter turns"
 
 [[verdict]]
 id = "rmp-ii-mpu-two-shift"
@@ -190,14 +194,14 @@ note = "rhoL/rhoR tails need the designed tail idiom"
 
 [[verdict]]
 id = "rmp-ii-spectrum-fixed-points"
-status = "structural-gap"
+status = "cosmetic-gap"
 pairing = "verified"
 pairing_by = "codex-pairing-sweep-2026-07-24"
-defects = ["wrong-contraction"]
-case_sha256 = "2c45ba59b4bdc8516fed1ee7b73b4524fdf81a58f1425fb311684e4f45cb4309"
-reviewed = "2026-07-23"
-renderer = "maintainer-page-review-2026-07-23"
-note = "LHS unfaithful to source"
+defects = []
+case_sha256 = "396fb62773accd8efdd87682582df59f5a3776684cbac176461e0cecdaf5c9eb"
+reviewed = "2026-07-26"
+renderer = "fable-countersign-reading-2026-07-26-200dpi"
+note = "relation corrected"
 
 [[verdict]]
 id = "rmp-ii-blocking"
@@ -310,31 +314,32 @@ id = "rmp-ii-boundary-region"
 status = "cosmetic-gap"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
-case_sha256 = "ad3812a87de279f5319438162711503aa6dd7812d5c8a44a960c08887811a0c7"
-reviewed = "2026-07-23"
-renderer = "maintainer-page-review-2026-07-23"
-note = "region contour parallelogram vs ellipse; leg arrows absent"
+case_sha256 = "6e426e14aa9fcc234a6538f342cd26c1d705a5801cf3d2534ff01c93b5aab62c"
+reviewed = "2026-07-26"
+renderer = "fable-countersign-reading-2026-07-26-200dpi"
+note = "sheet boundary repaired"
 
 [[verdict]]
 id = "rmp-ii-boundary-state"
 status = "cosmetic-gap"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
-case_sha256 = "01d1d4f957c3506e3293d6197cb5459f75ce91fa36ae56ea1ecad7759909a871"
-reviewed = "2026-07-23"
-renderer = "maintainer-page-review-2026-07-23"
-note = "sigma_dR brace vs dotted box; matches otherwise"
+case_sha256 = "42699a192a7cbe7b21ec793d3ac0f6f7a64e42701d116dc4248e2f67445000ff"
+reviewed = "2026-07-26"
+renderer = "fable-countersign-reading-2026-07-26-200dpi"
+note = "lasso closes; sigma_dR brace where the source draws a box"
 
 [[verdict]]
 id = "rmp-ii-rfp-isometry"
-status = "structural-gap"
+status = "faithful"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
-defects = ["wrong-contraction"]
-case_sha256 = "61f481524ba4af1d4b9d3bb98ada0651dbd424364de23e88d5ff7ee18aa0e076"
-reviewed = "2026-07-23"
-renderer = "maintainer-page-review-2026-07-23"
-note = "maintainer: mathematically wrong"
+defects = []
+case_sha256 = "91449cbf943a79faea338a1bd08af51760310f89b7c607fbfd20d324f3823df8"
+second_viewer = "LionSR-delegated-fable-countersign-2026-07-26"
+reviewed = "2026-07-26"
+renderer = "fable-countersign-reading-2026-07-26-200dpi"
+note = "matches fig2_fig2-pepe_AAeqUA; AA = U over the grouped A"
 
 [[verdict]]
 id = "rmp-ii-zcl-mpdo"
@@ -363,10 +368,10 @@ status = "cosmetic-gap"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
 defects = ["extra-element"]
-case_sha256 = "e0c403318a91b0c7f4b3b06be8ae017b1d38fecf42e77dd9868fa93048bd9038"
-reviewed = "2026-07-23"
-renderer = "maintainer-page-review-2026-07-23"
-note = "should be vertically more compact; drop the not-in-source contrast diagram"
+case_sha256 = "b0d85cb0034c40140639d169d1454b7d2d7419f357e0e9baf76b8971e7b47148"
+reviewed = "2026-07-26"
+renderer = "fable-countersign-reading-2026-07-26-200dpi"
+note = "contrast panel gone; hooks wider"
 
 [[verdict]]
 id = "rmp-ii-peps-rg"
@@ -374,22 +379,21 @@ status = "structural-gap"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
 defects = ["wrong-contraction"]
-case_sha256 = "c76a3968b52c4343185ff0775463f9cd233ffb57fbf53634587bf7d8ed280549"
-reviewed = "2026-07-23"
-renderer = "maintainer-page-review-2026-07-23"
-note = "LHS unfaithful"
+case_sha256 = "a800e4831edb7799b1fec1fc34cf118d944036a66d2e481cca195ac2a5f1bce8"
+reviewed = "2026-07-26"
+renderer = "fable-countersign-reading-2026-07-26-200dpi"
+note = "panel (a) fixed; (b)-(d) second factors still flat"
 
 [[verdict]]
 id = "rmp-ii-inverse-renormalization"
-status = "blocked"
+status = "cosmetic-gap"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
-defects = ["missing-element"]
-missing = ["rotated-action"]
-case_sha256 = "40ffc634b2cddec8ec6961b21a70de9788aedbd7c5323c9d21ba71c2e809b036"
-reviewed = "2026-07-23"
-renderer = "maintainer-page-review-2026-07-23"
-note = "diagonal X legs and skewed plaquette flattened"
+defects = []
+case_sha256 = "c86b528b63d567b1fa3b2e97e19c4effb061d754acf7ae5aa2070ed0df8b411a"
+reviewed = "2026-07-26"
+renderer = "fable-countersign-reading-2026-07-26-200dpi"
+note = "both panels match newfig13; residual spacing looseness only"
 
 [[verdict]]
 id = "rmp-iii-a-symmetry-sector"
@@ -489,11 +493,11 @@ note = "context-only; clean"
 id = "rmp-iii-a-mpo-tensor"
 status = "faithful"
 pairing = "context-only"
-case_sha256 = "2b5e04f00e637719ddec11b167a55f335dea0baac820797a5fa7469460dc927c"
-reviewed = "2026-07-23"
-renderer = "maintainer-page-review-2026-07-23"
-second_viewer = "visual-referee-2026-07-23"
-note = "context-only; clean"
+case_sha256 = "d6bebbd2a09602edfe1e374b3e0995f25594902acb1038e26845d5f1953e64cb"
+reviewed = "2026-07-26"
+renderer = "fable-countersign-reading-2026-07-26-200dpi"
+second_viewer = "LionSR-delegated-fable-countersign-2026-07-26"
+note = "equivalence twin of the 4-valent tensor definition"
 
 [[verdict]]
 id = "rmp-iii-a-peps-tensor"
@@ -514,15 +518,14 @@ note = "Judged faithful in the maintainer review; awaiting pairing verification.
 
 [[verdict]]
 id = "rmp-iii-a-pulling-through"
-status = "blocked"
+status = "cosmetic-gap"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
-defects = ["text-substitution"]
-missing = ["pulling-through"]
-case_sha256 = "bf4590dabd16a5d10ee4048bec230811fdc17d0d7bbd65644988686a94396e5e"
-reviewed = "2026-07-25"
-renderer = "rotation-frame-source-review-2026-07-25"
-note = "Rotated action frames are now represented; the second diagram remains text."
+defects = []
+case_sha256 = "626620ef711c9d9a4bf12d273dc2b33664ee62dda62fde89274f603f2db10208"
+reviewed = "2026-07-26"
+renderer = "fable-countersign-reading-2026-07-26-200dpi"
+note = "no prose remains; both sides are diagrams"
 
 [[verdict]]
 id = "rmp-iii-a-commuting-hamiltonian"
@@ -536,14 +539,14 @@ note = "h glyph style differs"
 
 [[verdict]]
 id = "rmp-iii-a-proof-one"
-status = "structural-gap"
+status = "cosmetic-gap"
 pairing = "verified"
 pairing_by = "codex-pairing-sweep-2026-07-24"
-defects = ["wrong-contraction"]
-case_sha256 = "ce982e9a8edb037b3b40993f1768990a19369cca12ecfc03d5e3eb70c393a2f6"
-reviewed = "2026-07-23"
-renderer = "maintainer-page-review-2026-07-23"
-note = "RHS lacks the V_alpha copy-dot; LHS rearranged"
+defects = []
+case_sha256 = "fc7e1a29b3172e94113d6b29e8510bbcb7bafd493f2e91a723d3676a76a8ee0f"
+reviewed = "2026-07-26"
+renderer = "fable-countersign-reading-2026-07-26-200dpi"
+note = "orthogonal reduction; invented boxes removed; RHS copy-dot restored"
 
 [[verdict]]
 id = "rmp-iii-a-proof-two"
@@ -568,15 +571,14 @@ note = "stacked fusion flattened to one row"
 
 [[verdict]]
 id = "rmp-iii-a-ghz-state"
-status = "blocked"
+status = "cosmetic-gap"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
-defects = ["missing-element"]
-missing = ["rotated-action"]
-case_sha256 = "d7e01a4af1c1938249be940e8aebf76d3a1eea42ae83f03efd1e7eab2ad4cfc5"
-reviewed = "2026-07-23"
-renderer = "maintainer-page-review-2026-07-23"
-note = "slanted brick lattice + directed legs axis-aligned"
+defects = []
+case_sha256 = "e2b5df2b4ed6e773e2988e8fcd7ab4f300db7ebaaef8a7d6ecf5e1a0df485702"
+reviewed = "2026-07-26"
+renderer = "fable-countersign-reading-2026-07-26-200dpi"
+note = "masonry patch with diagonal stubs; truncated to the line cap (#4931 for the lattice-genre gaps)"
 
 [[verdict]]
 id = "rmp-iii-a-ghz-tensor"
@@ -602,12 +604,12 @@ id = "rmp-iii-a-spt-mpo"
 status = "blocked"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
-defects = ["placement-illegible"]
+defects = []
 missing = ["strings"]
-case_sha256 = "d607cc45d0422379134a2c6f2549ec691bfcd6ac4a5bc2cb45ff08a9a56d50e7"
-reviewed = "2026-07-25"
-renderer = "rotation-frame-source-review-2026-07-25"
-note = "Diagonal action frames are now represented; the string geometry remains incomplete."
+case_sha256 = "189c1381d9f7393d3591368d23853cfdc52e625fe4a3d57f10a1f4c1eae88c83"
+reviewed = "2026-07-26"
+renderer = "fable-countersign-reading-2026-07-26-200dpi"
+note = "Diagonal action frames are represented and the g labels ride clear of the boxes; the string geometry remains incomplete."
 
 [[verdict]]
 id = "rmp-iii-a-spt-intertwiner"
@@ -685,37 +687,37 @@ note = "The enlarged crossing is blue-outlined rather than solid blue."
 
 [[verdict]]
 id = "rmp-iii-b-anyon-pair"
-status = "structural-gap"
+status = "faithful"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
-defects = ["missing-element"]
-case_sha256 = "a01f800ccbb791105d63aa7968f5ea18c5005493189b14da0ecf22361dd2f28b"
-reviewed = "2026-07-23"
-renderer = "maintainer-page-review-2026-07-23"
-note = "maintainer: big mistakes from here through condensation; endpoints unmarked"
+defects = []
+case_sha256 = "56899e6be84f165c9b0e0fa6d1f770cc87adc2729cf2f4a70cf9a6d78c7653a2"
+second_viewer = "LionSR-delegated-fable-countersign-2026-07-26"
+reviewed = "2026-07-26"
+renderer = "fable-countersign-reading-2026-07-26-200dpi"
+note = "endpoints and the intermediate site marked; a label clear at midway (#4929)"
 
 [[verdict]]
 id = "rmp-iii-b-idempotent"
-status = "structural-gap"
+status = "cosmetic-gap"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
-defects = ["wrong-contraction"]
-case_sha256 = "444d7860cce886f2a48ef98bb851aa054db2b8bd96919118394a1a8c667efdae"
-reviewed = "2026-07-23"
-renderer = "maintainer-page-review-2026-07-23"
-note = "maintainer: very bad"
+defects = []
+case_sha256 = "78db68fa8af66c8e8a805e416e5cd39155e5ca4ab603033f954df0bc68e95cc0"
+reviewed = "2026-07-26"
+renderer = "fable-countersign-reading-2026-07-26-200dpi"
+note = "contraction corrected"
 
 [[verdict]]
 id = "rmp-iii-b-dyon"
-status = "blocked"
+status = "cosmetic-gap"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
-defects = ["missing-element", "extra-element"]
-missing = ["marked-region", "open-string"]
-case_sha256 = "49f0b014bf4aecc6aca21d82d0f83edb205726706a64659e4c0912bf4349be94"
-reviewed = "2026-07-23"
-renderer = "maintainer-page-review-2026-07-23"
-note = "region + charge tile lost; spurious box added"
+defects = []
+case_sha256 = "820df42656341a06d623ed6f12427c9569b5dd4c337f62ddec9a67b4e3eae95e"
+reviewed = "2026-07-26"
+renderer = "fable-countersign-reading-2026-07-26-200dpi"
+note = "marked region and open string are drawn"
 
 [[verdict]]
 id = "rmp-iii-b-self-braiding"
@@ -724,9 +726,9 @@ pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
 defects = ["wrong-contraction"]
 missing = ["crossing-order"]
-case_sha256 = "4df0138b91a06d6fab005a8a99dfbd94f7f18a2e0b10a857191c34f36d8fbb8b"
-reviewed = "2026-07-23"
-renderer = "maintainer-page-review-2026-07-23"
+case_sha256 = "6e85b8d4e93e00149c42574181262836f5a50c6a836cc92fadc1782aef914ddf"
+reviewed = "2026-07-26"
+renderer = "fable-countersign-reading-2026-07-26-200dpi"
 note = "twist rendered without crossings"
 
 [[verdict]]
@@ -736,9 +738,9 @@ pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
 defects = ["missing-element"]
 missing = ["multi-strand-braid", "crossing-order"]
-case_sha256 = "d7f136d878873c32365636c404a84b87ede71460c7e2967648bca5e1554bf036"
-reviewed = "2026-07-23"
-renderer = "maintainer-page-review-2026-07-23"
+case_sha256 = "28c8fe58cac3d0b363bbb25958ebed9e5092fe3023021d63cd6c1f47ad8df923"
+reviewed = "2026-07-26"
+renderer = "fable-countersign-reading-2026-07-26-200dpi"
 note = "winding strings on lattice reduced to a bare tree"
 
 [[verdict]]
@@ -748,9 +750,9 @@ pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
 defects = ["missing-element"]
 missing = ["braid-resolver", "crossing-order"]
-case_sha256 = "19252fba00503eee1b25ced1943c06fb6a12a91eabf6590a23d5f805bd5110ba"
-reviewed = "2026-07-23"
-renderer = "maintainer-page-review-2026-07-23"
+case_sha256 = "1e8f40c641e7c1313a5f822206d62e10c115cfb788b3e4a974e1dc41895f611e"
+reviewed = "2026-07-26"
+renderer = "fable-countersign-reading-2026-07-26-200dpi"
 note = "same"
 
 [[verdict]]
@@ -760,10 +762,10 @@ pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
 defects = ["missing-element"]
 missing = ["multi-strand-braid", "crossing-order"]
-case_sha256 = "c7a1758d65d89f59258be5be21458b228f5fe1c5b15f76c0519f60e1984c863e"
-reviewed = "2026-07-23"
-renderer = "maintainer-page-review-2026-07-23"
-note = "a braid with no crossing"
+case_sha256 = "de2dfb44e937e79fe077de7c109913a5d8b4f9648cf82bd7c455d0df5f51b360"
+reviewed = "2026-07-26"
+renderer = "fable-countersign-reading-2026-07-26-200dpi"
+note = "one connected patch; source panel 1 has no crossing"
 
 [[verdict]]
 id = "rmp-iii-b-braid-two"
@@ -772,9 +774,9 @@ pairing = "verified"
 pairing_by = "codex-pairing-sweep-2026-07-24"
 defects = ["wrong-contraction"]
 missing = ["crossing-order"]
-case_sha256 = "fc29d9924a6e86485b779cda198b53924b9e74c84aa4703e9b9bfc639d53e535"
-reviewed = "2026-07-23"
-renderer = "maintainer-page-review-2026-07-23"
+case_sha256 = "c7053c4276baa7a4a2a7a3f840062f668a9ca0b6bdd8730185b804a33f5745bb"
+reviewed = "2026-07-26"
+renderer = "fable-countersign-reading-2026-07-26-200dpi"
 note = "crossing drawn but over/under unmarked"
 
 [[verdict]]
@@ -784,10 +786,10 @@ pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
 defects = ["wrong-contraction"]
 missing = ["braid-resolver", "crossing-order"]
-case_sha256 = "0a9f7566c25c03a8d4de4bf82ec92b33b2a6e92f1d1f1f3912235aa9af0912a1"
-reviewed = "2026-07-23"
-renderer = "maintainer-page-review-2026-07-23"
-note = "over/under ambiguous"
+case_sha256 = "a7f0ab912c6ab9eba666ba8c60afb271c9c08461cffd19017ec26bc0dc0fee2f"
+reviewed = "2026-07-26"
+renderer = "fable-countersign-reading-2026-07-26-200dpi"
+note = "rail repair only; crossing order still unspeakable (#4908)"
 
 [[verdict]]
 id = "rmp-iii-b-braid-four"
@@ -796,21 +798,21 @@ pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
 defects = ["wrong-contraction"]
 missing = ["braid-resolver", "crossing-order"]
-case_sha256 = "ce85620ec67b9b2862677bcdfb1893fd0cf26c689f2af28b93b1ad5da6457780"
-reviewed = "2026-07-23"
-renderer = "maintainer-page-review-2026-07-23"
-note = "same"
+case_sha256 = "74efc4adff265d3962013c79f090a4f3e9ca84e397aa53f1d6c3fa6221c20253"
+reviewed = "2026-07-26"
+renderer = "fable-countersign-reading-2026-07-26-200dpi"
+note = "stray diagonals removed; crossing order still unspeakable (#4908)"
 
 [[verdict]]
 id = "rmp-iii-b-condensation"
-status = "structural-gap"
+status = "cosmetic-gap"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
-defects = ["wrong-contraction"]
-case_sha256 = "13ab0c2cf47fa64682f5a923a9cc94e35438296e9d9a8e5d9de4dda0ba63a2c4"
-reviewed = "2026-07-23"
-renderer = "maintainer-page-review-2026-07-23"
-note = "2.5D condensation lattice drawn as a 3D cube; markers lost"
+defects = []
+case_sha256 = "d9c7b828d20c6e0e9c99625cb377b03472e4fa4bd20ffdc495e671bdfb2f72fc"
+reviewed = "2026-07-26"
+renderer = "fable-countersign-reading-2026-07-26-200dpi"
+note = "slanted sheet, doubled string, blue markers; uniform marker size (#4931)"
 
 [[verdict]]
 id = "rmp-iv-ground-space-1d"
@@ -904,14 +906,13 @@ note = "Five-leg boundary restored; the free identity wire is horizontal, not U-
 
 [[verdict]]
 id = "rmp-iv-intersection-rhs-four"
-status = "blocked"
+status = "cosmetic-gap"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
-missing = ["enclosure-marks"]
-case_sha256 = "c9af76a99a4965c00f149cba37d4f4580aefec1a8f269b44dbfebcc70b3d49f3"
-reviewed = "2026-07-23"
-renderer = "maintainer-page-review-2026-07-23"
-note = "layout and wrap"
+case_sha256 = "81b8f7eff947096b70a72db1c74bcf5afb9ae1c452ef3e6859da7cb1f26c4727"
+reviewed = "2026-07-26"
+renderer = "fable-countersign-reading-2026-07-26-200dpi"
+note = "crossing removed; five open ends match Rtensor4"
 
 [[verdict]]
 id = "rmp-iv-intersection-lhs-five"
@@ -935,7 +936,7 @@ note = "Boundary types match; the equivalent C--X contraction is mirrored."
 
 [[verdict]]
 id = "rmp-iv-intersection-lhs-six"
-status = "structural-gap"
+status = "cosmetic-gap"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
 defects = ["extra-element", "wrong-contraction"]
@@ -946,7 +947,7 @@ note = "nesting drawn as overlap plus an invented lattice"
 
 [[verdict]]
 id = "rmp-iv-intersection-rhs-six"
-status = "structural-gap"
+status = "cosmetic-gap"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
 defects = ["extra-element", "wrong-contraction"]
@@ -1003,10 +1004,10 @@ status = "cosmetic-gap"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
 defects = ["missing-element"]
-case_sha256 = "e8ad89a1f8b3158a78b8b74581d9edf617fc4ee2ee4485701a4a36ab7ecabe44"
-reviewed = "2026-07-23"
-renderer = "maintainer-page-review-2026-07-23"
-note = "2 vs 4 triangles per side; connector glyph"
+case_sha256 = "3afa8ab06f286b75e13326b974d6a6dde1fd3454a689a405bc2c07fc6986acdc"
+reviewed = "2026-07-26"
+renderer = "fable-countersign-reading-2026-07-26-200dpi"
+note = "east cup draws; two triangles where the source has four"
 
 [[verdict]]
 id = "rmp-workbench-ii-peps-rg-workbench"
@@ -1014,9 +1015,9 @@ status = "blocked"
 pairing = "wrong-source"
 defects = ["missing-element"]
 missing = ["equation-composition"]
-case_sha256 = "923608f9b92ec96093e3310794f87b1607e279f5b56a64f1a0ef5b4cb4237bbb"
-reviewed = "2026-07-23"
-renderer = "maintainer-page-review-2026-07-23"
+case_sha256 = "bd15cb94c6f9bf2cda623269fac1c1e303ce5bcb68a3fb0bdf9f97c4ada2f089"
+reviewed = "2026-07-26"
+renderer = "fable-countersign-reading-2026-07-26-200dpi"
 note = "Author panel shows four tensor-factorization subfigures, not a unitary acting on a 2x2 PEPS plaquette."
 
 [[verdict]]
@@ -1024,10 +1025,10 @@ id = "rmp-workbench-ii-positive-mpo-old"
 status = "cosmetic-gap"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
-case_sha256 = "4c2158b5624f3c55075ceac8471ea302a9575fe2c3a789724907b97f93fe2df0"
-reviewed = "2026-07-23"
-renderer = "maintainer-page-review-2026-07-23"
-note = "box size and rounding"
+case_sha256 = "cc6d76f54d4ba63af11ca177b9ac6bd7e81e1ccf01cb0cc7a82d9040e7aa8576"
+reviewed = "2026-07-26"
+renderer = "fable-countersign-reading-2026-07-26-200dpi"
+note = "X sizes equal"
 
 [[verdict]]
 id = "rmp-workbench-ii-peps-gauge-old"
@@ -1056,10 +1057,10 @@ pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
 defects = ["missing-element"]
 missing = ["strings"]
-case_sha256 = "3971438b30e9fc677a79919087c56771458fb00db29e74417ab7574c5ecb13cf"
-reviewed = "2026-07-23"
-renderer = "maintainer-page-review-2026-07-23"
-note = "inter-row wrap wires absent"
+case_sha256 = "4873ed41cd452d1413cb4e6a410e88d3c80705f837cf51301a35ba98001d0081"
+reviewed = "2026-07-26"
+renderer = "fable-countersign-reading-2026-07-26-200dpi"
+note = "squared; the two-colour strings still absent"
 
 [[verdict]]
 id = "rmp-workbench-ii-v-tensor-definition"
@@ -1076,9 +1077,9 @@ id = "rmp-workbench-ii-boundary-a-old"
 status = "cosmetic-gap"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
-case_sha256 = "575952d40a1297f6e5650434d8a745d14bda1020135397d138ea0818efd80904"
-reviewed = "2026-07-23"
-renderer = "maintainer-page-review-2026-07-23"
+case_sha256 = "eddf83c8684234043fcd337b16b3ee04165bd1bdf4d6a6044bd31928529fbd4c"
+reviewed = "2026-07-26"
+renderer = "fable-countersign-reading-2026-07-26-200dpi"
 note = "region shape, arrows, Rbar label"
 
 [[verdict]]
@@ -1098,9 +1099,9 @@ pairing = "verified"
 pairing_by = "codex-pairing-sweep-2026-07-24"
 defects = ["missing-element"]
 missing = ["equation-composition"]
-case_sha256 = "b0cded7c1bee18eda923beceae990775328ef6f9e95c1e685715b91495bca607"
-reviewed = "2026-07-24"
-renderer = "source-split-page-review-2026-07-24"
+case_sha256 = "817a30c81db766a8a53d5c0ca100ff7fb52ddb749b86d246d6e555ea8c865a16"
+reviewed = "2026-07-26"
+renderer = "fable-countersign-reading-2026-07-26-200dpi"
 note = "archival panel (a) remains outside the canonical fine-graining case"
 
 [[verdict]]
@@ -1108,21 +1109,21 @@ id = "rmp-workbench-ii-historical-composite"
 status = "cosmetic-gap"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
-case_sha256 = "e0f583574a77e83053676015333adf0365df0e27959fe0fde545a906f2c328e1"
-reviewed = "2026-07-23"
-renderer = "maintainer-page-review-2026-07-23"
+case_sha256 = "50ed78a0039cf8f6c7c4f0c6b72bebadd52975b3323b23e7888a1332f2c3dc19"
+reviewed = "2026-07-26"
+renderer = "fable-countersign-reading-2026-07-26-200dpi"
 note = "3D cube vs flat tilted grid idiom"
 
 [[verdict]]
 id = "rmp-workbench-iii-eq50"
-status = "structural-gap"
+status = "cosmetic-gap"
 pairing = "verified"
 pairing_by = "codex-pairing-sweep-2026-07-24"
-defects = ["missing-element"]
-case_sha256 = "86fc66482074e8e1fdf16864d9c40ad3d94b8a67d7d191b84f82d9b43afc712c"
-reviewed = "2026-07-23"
-renderer = "maintainer-page-review-2026-07-23"
-note = "up/down legs dropped from the box"
+defects = []
+case_sha256 = "0a6ee52a71831cbc7f9aa1c31e006ac8b248d8597f5088b3c42c16d35c927344"
+reviewed = "2026-07-26"
+renderer = "fable-countersign-reading-2026-07-26-200dpi"
+note = "four legs, as in Eq50.pdf"
 
 [[verdict]]
 id = "rmp-workbench-iii-eq51"
@@ -1170,37 +1171,36 @@ note = "box node and legs omitted; loop reoriented"
 
 [[verdict]]
 id = "rmp-workbench-iii-diagram-three"
-status = "blocked"
+status = "cosmetic-gap"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
-defects = ["text-substitution"]
-missing = ["ring-closure"]
-case_sha256 = "442c65c0001e5a1e77c581e5405cd9965d9f001cb4d642c406dafb2d0e2af9fb"
-reviewed = "2026-07-25"
-renderer = "rotation-frame-source-review-2026-07-25"
-note = "The rotated action is represented; the second closure remains text."
+defects = []
+case_sha256 = "5990440c34cc73d60e64f0b06bf6872546587c7b04d1318e30a999dfbc10db9b"
+reviewed = "2026-07-26"
+renderer = "fable-countersign-reading-2026-07-26-200dpi"
+note = "no text remains on either side"
 
 [[verdict]]
 id = "rmp-workbench-iii-historical-composite"
-status = "unfaithful"
+status = "cosmetic-gap"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
-defects = ["unfaithful-substitution"]
-case_sha256 = "902485aae85a5ba738ece07588b0733c3e4ce97ee6cf5722f8e98808529eaba7"
-reviewed = "2026-07-23"
-renderer = "maintainer-page-review-2026-07-23"
-note = "already judged"
+defects = []
+case_sha256 = "b40b11e6bf666015840666693fbe36983a366398db62d885b35f799ceeb5b3f6"
+reviewed = "2026-07-26"
+renderer = "fable-countersign-reading-2026-07-26-200dpi"
+note = "two-panel composite with both red arcs; grey stadium for the black-circle lambda (#4931)"
 
 [[verdict]]
 id = "rmp-workbench-iii-diagram-four"
-status = "structural-gap"
+status = "cosmetic-gap"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
-defects = ["wrong-contraction"]
-case_sha256 = "563c8a8fd39ec16eba232305f2ac1461ea56cde51d89e78194e137d587537feb"
-reviewed = "2026-07-23"
-renderer = "maintainer-page-review-2026-07-23"
-note = "ring connectivity drawn as a star"
+defects = []
+case_sha256 = "c9f23740730839c14ab6768ad7ce031ee49ce0b9a4962a834a5ad45e33d6b721"
+reviewed = "2026-07-26"
+renderer = "fable-countersign-reading-2026-07-26-200dpi"
+note = "ring connectivity restored"
 
 [[verdict]]
 id = "rmp-workbench-iii-eq50-reduced"
@@ -1235,10 +1235,10 @@ status = "structural-gap"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
 defects = ["missing-element"]
-case_sha256 = "6662a6585538ff91fed601a06c111feb7dcdaf591c9c149fcaa1461e931c5233"
-reviewed = "2026-07-23"
-renderer = "maintainer-page-review-2026-07-23"
-note = "physical legs and colored virtual index dropped"
+case_sha256 = "f083acc3ab3d2d2fb5585993d69643f33fa027ecb155382d86cafb364d050de1"
+reviewed = "2026-07-26"
+renderer = "fable-countersign-reading-2026-07-26-200dpi"
+note = "physical legs still dropped; the bond labels now parse (the case had misspelt the range syntax and the literal printed across the boxes, silently)"
 
 [[verdict]]
 id = "rmp-workbench-iii-f-tensor"
@@ -1374,22 +1374,22 @@ note = "circles to squares; leg stubs dropped"
 
 [[verdict]]
 id = "rmp-workbench-iii-peps-renormalization-one"
-status = "structural-gap"
+status = "cosmetic-gap"
 pairing = "verified"
 pairing_by = "codex-pairing-sweep-2026-07-24"
-defects = ["wrong-contraction"]
-case_sha256 = "b66bf731a47fed9136a546454685f449953f4cc083d1f8c4cd086036229ee727"
-reviewed = "2026-07-23"
-renderer = "maintainer-page-review-2026-07-23"
-note = "plaquette rotated to a diamond; hatched bonds lost"
+defects = []
+case_sha256 = "291c78ad7ddbb7b07563a32152bcdfa1edac10d781d70f3edaf60b4e242d07bd"
+reviewed = "2026-07-26"
+renderer = "fable-countersign-reading-2026-07-26-200dpi"
+note = "bare upright square, eight arms; fused sides stand in for hatch ticks (#4931)"
 
 [[verdict]]
 id = "rmp-workbench-iii-peps-renormalization-two"
-status = "structural-gap"
+status = "cosmetic-gap"
 pairing = "verified"
 pairing_by = "codex-pairing-sweep-2026-07-24"
-defects = ["missing-element", "extra-element"]
-case_sha256 = "5c51bc00cddf72446d1cf45a67c7ad986439c6305a5c07e08657c14341fe2557"
-reviewed = "2026-07-23"
-renderer = "maintainer-page-review-2026-07-23"
-note = "lattice replaced by a cube and arrow"
+defects = []
+case_sha256 = "af2c4c359748c2642b73675f2439090a8f03ed9de3ecc1486e7448d5a1b5e5cb"
+reviewed = "2026-07-26"
+renderer = "fable-countersign-reading-2026-07-26-200dpi"
+note = "central effective tensor, four corner blocks, slanted fused legs"
