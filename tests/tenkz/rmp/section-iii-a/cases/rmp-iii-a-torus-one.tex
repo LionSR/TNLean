@@ -1,27 +1,39 @@
 % Target: rmp-iii-a-torus-one
-% Formula: A noncontractible MPO loop with crossing tensor i labels a torus state.
-% Ink: Canonical public tenkzfree closed horizontal and vertical cycles.
-% Boundary: Both MPO cycles are closed; the diagram is a scalar torus sector.
+% Formula: Two noncontractible MPO cycles cross at tensor i on the torus.
+% Ink: The torus boundary and its central opening are black, while the
+%   two noncontractible MPO cycles are red and meet at the blue tensor i.
+% Boundary: Both MPO cycles close through the identified torus boundary, so
+%   the diagram has no free tensor index and represents a scalar state.
 % Source: paper TN-Review-main.tex line 1584; author source ImagesReview Section
-%   III/ImagesReview Section III.tex lines 553-562
+%   III/ImagesReview Section III.tex lines 563-571
 % Capabilities: free-graph, torus-cycle, crossing-tensor
 \[
   \begin{tenkzfree}
-    % the MPO word around the cycle, with the crossing tensor i marked
-    \tnput[box]{w1}{(-16mm,0mm)}{} \tnput[box]{w2}{(-8mm,0mm)}{}
-    \tnput[box, role=marked]{wi}{(0mm,0mm)}{i}
-    \tnput[box]{w4}{(8mm,0mm)}{} \tnput[box]{w5}{(16mm,0mm)}{}
-    \tnjoin{w1.east}{w2.west} \tnjoin{w2.east}{wi.west}
-    \tnjoin{wi.east}{w4.west} \tnjoin{w4.east}{w5.west}
-    % every tensor of the word carries one rising and one falling index
-    \tnjoin{w1.north}{-16mm,7mm} \tnjoin{-16mm,-7mm}{w1.south}
-    \tnjoin{w2.north}{-8mm,7mm} \tnjoin{-8mm,-7mm}{w2.south}
-    \tnjoin{wi.north}{0mm,7mm} \tnjoin{0mm,-7mm}{wi.south}
-    \tnjoin{w4.north}{8mm,7mm} \tnjoin{8mm,-7mm}{w4.south}
-    \tnjoin{w5.north}{16mm,7mm} \tnjoin{16mm,-7mm}{w5.south}
-    % the cycle closes outside the word: the bond leaves the east end and
-    % re-enters at the west, clearing every falling index on the way
-    \tnjoin[route=vh]{w5.east}{-23mm,-11mm}
-    \tnjoin[route=vh]{-23mm,-11mm}{w1.west}
-  \end{tenkzfree}.
+    % The two outer arcs represent the identified boundary of the torus.
+    \tnjoin[route=arc,out=90,in=180]{-26mm,0mm}{0mm,13mm}
+    \tnjoin[route=arc,out=0,in=90]{0mm,13mm}{26mm,0mm}
+    \tnjoin[route=arc,out=-90,in=0]{26mm,0mm}{0mm,-13mm}
+    \tnjoin[route=arc,out=180,in=-90]{0mm,-13mm}{-26mm,0mm}
+    % The two inner arcs expose the opening of the torus.
+    \tnjoin[route=arc,out=25,in=155]{-12mm,1mm}{12mm,1mm}
+    \tnjoin[route=arc,out=-25,in=-155]{-14mm,2mm}{14mm,2mm}
+    % The two red MPO cycles wind in the two torus directions and cross at i.
+    \tnput[box, role=marked,
+      ports={north:virtual,east:virtual,south:virtual,west:virtual}]
+      {wi}{(0mm,-8mm)}{}
+    \tnput[boundary, label pos=east]{ilabel}{(1.5mm,-8mm)}{i}
+    % The horizontal cycle closes around the central opening.
+    \tnjoin[role=operator,route=arc,out=90,in=180]
+      {-20mm,0mm}{0mm,9mm}
+    \tnjoin[role=operator,route=arc,out=0,in=90]
+      {0mm,9mm}{20mm,0mm}
+    \tnjoin[role=operator,route=arc,out=-90,in=0]
+      {20mm,0mm}{wi.east}
+    \tnjoin[role=operator,route=arc,out=180,in=-90]
+      {wi.west}{-20mm,0mm}
+    % The second cycle runs from the inner opening through i to the identified
+    % outer boundary.
+    \tnjoin[role=operator]{0mm,1mm}{wi.north}
+    \tnjoin[role=operator]{wi.south}{0mm,-13mm}
+  \end{tenkzfree}
 \]

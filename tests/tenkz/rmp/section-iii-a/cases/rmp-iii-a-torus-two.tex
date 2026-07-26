@@ -1,22 +1,14 @@
 % Target: rmp-iii-a-torus-two
-% Formula: Enlarged horizontal O_g and vertical O_h strings cross on the PEPS.
-% Ink: Canonical public tenkzlattice with orthogonal distinguished MPO paths.
-% Boundary: The 5x5 PEPS patch is open; both MPO strings cross its boundary.
+% Formula: A five-tensor enlarged MPO word, with its fourth tensor marked.
+% Ink: Canonical public tenkz grid grammar; the MPO bond is distinguished and
+%   the marked tensor uses the marked semantic role.
+% Boundary: The virtual MPO bond is periodic; all ten physical legs are open.
 % Source: paper TN-Review-main.tex line 1594; author source ImagesReview Section
-%   III/ImagesReview Section III.tex lines 572-602
-% Capabilities: lattice, orthogonal-strings, crossing-tensor
+%   III/ImagesReview Section III.tex lines 553-562; archival output
+%   fig3_fig3-pepe_Eq62.pdf
+% Capabilities: grid, mpo-word, periodic-closure, marked-insertion
 \[
-  \begin{tenkzlattice}[rows=5, cols=5, frame=flat, physical=up]
-    \tnsite{(1,1)} \tnsite{(1,2)} \tnsite{(1,3)} \tnsite{(1,4)}
-    \tnsite{(1,5)}
-    \tnsite{(2,3)} \tnsite{(3,3)} \tnsite{(4,3)} \tnsite{(5,3)}
-    \tnedge[role=operator]{(1,1)-(1,2)}
-    \tnedge[role=operator]{(1,2)-(1,3)}
-    \tnedge[role=operator]{(1,3)-(1,4)}
-    \tnedge[role=operator]{(1,4)-(1,5)}
-    \tnedge[role=operator]{(1,3)-(2,3)}
-    \tnedge[role=operator]{(2,3)-(3,3)}
-    \tnedge[role=operator]{(3,3)-(4,3)}
-    \tnedge[role=operator]{(4,3)-(5,3)}
-  \end{tenkzlattice}_{\ O_g\cap O_h}.
+  \begin{tenkz}[rows={op:operator}, boundary=periodic, tensor style=box]
+    \tn{}&\tn{}&\tn{}&\tn[role=marked]{}&\tn{}
+  \end{tenkz}
 \]
