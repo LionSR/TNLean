@@ -268,6 +268,18 @@ Proposition~4.13, so the literal theorem remains open.  The proved restricted
 result follows the grouped vertical sectors used in the paper and does not use
 the unsupported diagonal-restriction statement from \ghissue{2537}.
 
+To eliminate the stronger hypothesis, first use
+\path{MPSTensor.CPSVCanonicalFormData.exists_isCPSVBasisOfNormalTensors} to
+pass from the literal decomposition to its active BNT representatives and
+ambient coisometry.  The missing lemma must establish the Lemma~L first-site
+insertion separation on those retained coordinates and carry the separated
+identity back through the coisometry.  With that statement in place, the
+invariant-projector argument, periodic-sector exclusion, positivity of the
+vertical multiplicities, grouped Gram normalization, and final coisometric
+reconstruction can be replayed without assuming \path{MPOTensor.IsHorizontalCF}.
+This yields the literal Proposition~4.13 theorem rather than an adapter through
+the stronger predicate.
+
 \bibliographystyle{alpha}
 \bibliography{references}
 
