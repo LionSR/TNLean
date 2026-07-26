@@ -19,9 +19,9 @@ $$
 $$
 where $P_1=P\otimes\Id^{\otimes N}$.  Given an MPV-level BNT representation,
 Lemma L transfers these identities to every minimal representative, where they
-say $(\Id-P)MP=0$.  Transport to the original MPO letters is currently proved
-only for normalized BNT-refined horizontal form in
-`TNLean.MPS.MPDO.HorizontalBNT`, under normalized BNT-refined horizontal form.
+say $(\Id-P)MP=0$. For tensors in the normalized BNT-refined horizontal form
+of `TNLean.MPS.MPDO.HorizontalBNT`, these identities also hold for the original
+MPO letters.
 
 The file also specializes the positive-semidefinite power-commutation theorem
 to matrix product density operators.  This is only the final operator

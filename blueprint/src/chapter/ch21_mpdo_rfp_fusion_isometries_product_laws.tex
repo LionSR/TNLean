@@ -194,8 +194,7 @@
     \leanok
     \uses{def:is_rfp_via_ts,
         def:vertical_cf_mpdo,
-        def:mpdo_bnt_fusion_tensor_clause,
-        thm:vertical_cf_of_horizontal_cf}
+        def:mpdo_bnt_fusion_tensor_clause}
     Let $M$ be a matrix product density operator in normalized BNT-refined
     horizontal form. If the one-site and two-site physical closures are
     related in both directions by trace-preserving completely positive maps
@@ -204,6 +203,7 @@
     fusion matrices satisfy the length-one idempotent trace-scalar identity.
 \end{theorem}
 \begin{proof}\leanok
+    \uses{thm:vertical_cf_of_horizontal_cf}
     Choose vertical canonical decompositions of the one-site tensor and its
     two-site blocking. Transporting the two physical maps through these
     decompositions identifies their normal sectors and yields the positive

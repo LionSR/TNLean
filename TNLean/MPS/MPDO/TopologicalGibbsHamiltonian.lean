@@ -775,7 +775,8 @@ the retained commuting nearest-neighbor Gibbs formula.
 
 **Scope restriction (BNT-refined horizontal form):** This theorem assumes
 normalized BNT-refined horizontal form (`IsHorizontalCF`), which is stronger
-than the literal CPSV canonical form.
+than the literal CPSV canonical form. The additional grouping hypothesis is detailed
+in `docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex`.
 
 Source: arXiv:1606.00608, lines 999--1016.
 
