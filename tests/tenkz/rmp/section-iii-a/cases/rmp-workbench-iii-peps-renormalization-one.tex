@@ -7,11 +7,12 @@
 % Capabilities: free-graph, four-site-plaquette, renormalization
 \[
   \begin{tenkzfree}
-    \tnput[box]{n}{(0mm,8mm)}{} \tnput[box]{e}{(8mm,0mm)}{}
-    \tnput[box]{s}{(0mm,-8mm)}{} \tnput[box]{w}{(-8mm,0mm)}{}
-    \tnjoin{n.east}{e.north} \tnjoin{e.south}{s.east}
-    \tnjoin{s.west}{w.south} \tnjoin{w.north}{n.west}
-    \tnjoin{n.north}{0mm,16mm} \tnjoin{e.east}{16mm,0mm}
-    \tnjoin{0mm,-16mm}{s.south} \tnjoin{-16mm,0mm}{w.west}
+    % each side is one fused (paired/hatched) bond spanning tail-to-tail; the
+    % four sides cross pairwise at the square's corners -- a bare square of
+    % bonds, matching the author block, which places no tensor here.
+    \tnjoin[fused]{-12mm,8mm}{12mm,8mm}
+    \tnjoin[fused]{-12mm,-8mm}{12mm,-8mm}
+    \tnjoin[fused]{8mm,-12mm}{8mm,12mm}
+    \tnjoin[fused]{-8mm,-12mm}{-8mm,12mm}
   \end{tenkzfree}.
 \]

@@ -6,12 +6,26 @@
 %   III/ImagesReview Section III.tex lines 363-375
 % Capabilities: grid, local-intertwiner, equation-composition
 \[
-  \begin{tenkz}[rows={op:none, op:operator}, tensor style=box]
-    \tn{O_\alpha} & \tn[pill, up at=1, down at=1]{V_\alpha}\\
-    \tn{A} &
-  \end{tenkz}
+  \begin{tenkzfree}[tensor style=box]
+    \tnput[pill]{V}{(16mm,0mm)}{V_\alpha}
+    \tnput[box]{a}{($(V.north west)+(-12mm,0mm)$)}{\alpha}
+    \tnput[dot]{d}{($(V.south west)+(-12mm,0mm)$)}{}
+    \tnjoin{a.east}{V.north west}
+    \tnjoin{d.east}{V.south west}
+    \tnjoin{$(a.west)+(-12mm,0mm)$}{a.west}
+    \tnjoin{a.north}{$(a.north)+(0mm,7mm)$}
+    \tnjoin{$(d.west)+(-12mm,0mm)$}{d.west}
+    \tnjoin{d.north}{a.south}
+    \tnjoin{V.east}{$(V.east)+(12mm,0mm)$}
+  \end{tenkzfree}
   =
-  \begin{tenkz}[physical=up, tensor style=box]
-    \tn{A}
-  \end{tenkz}.
+  \begin{tenkzfree}[tensor style=box]
+    \tnput[pill]{V}{(0mm,0mm)}{V_\alpha}
+    \tnput[dot]{d}{($(V.east)+(16mm,0mm)$)}{}
+    \tnjoin{V.east}{d.west}
+    \tnjoin{$(V.north west)+(-12mm,0mm)$}{V.north west}
+    \tnjoin{$(V.south west)+(-12mm,0mm)$}{V.south west}
+    \tnjoin{d.north}{$(d.north)+(0mm,7mm)$}
+    \tnjoin{d.east}{$(d.east)+(12mm,0mm)$}
+  \end{tenkzfree}.
 \]
