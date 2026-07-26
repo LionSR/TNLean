@@ -317,6 +317,32 @@ the coefficient argument of Chapter~\ref{ch:bnt}.
     so condition~(ii) alone does not characterize normality.
 \end{remark}
 
+\begin{theorem}[Algebraically normal left-canonical tensors are CPSV normal]
+    \label{thm:is_normal_tensor_of_is_normal_left_canonical}
+    \lean{MPSTensor.isNormalTensor_of_isNormal_leftCanonical}
+    \leanok
+    \uses{def:normal, def:left_canonical_tensor, def:nt_cpsv,
+        def:strongly_irreducible_paper}
+    Let $D>0$. If $A$ is algebraically normal and left-canonical, then
+    \begin{align}
+        A
+         & \text{ is a CPSV normal tensor}.
+        \label{eq:is_normal_tensor_of_is_normal_left_canonical}
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:normal, def:left_canonical_tensor, def:nt_cpsv,
+        def:strongly_irreducible_paper}
+    Algebraic normality together with
+    $\sum_i(A^i)^\dagger A^i=\Id$ makes the transfer map strongly irreducible.
+    It consequently has a positive-definite fixed point, no nontrivial
+    invariant projection, and peripheral spectrum $\{1\}$. The fixed-point
+    eigenvalue and left-canonical normalization give $r(\E_A)=1$. Thus no
+    scalar rescaling remains, and the two conditions in
+    Definition~\ref{def:nt_cpsv} hold for $A$ itself.
+\end{proof}
+
 \begin{definition}[CPSV canonical form]
     \label{def:cpsv_canonical_form}
     \lean{MPSTensor.CPSVCanonicalFormData}
@@ -358,6 +384,60 @@ the coefficient argument of Chapter~\ref{ch:bnt}.
     The basis-of-normal-tensors refinement is
     Definition~\ref{def:bnt}; it is not part of canonical form itself.
 \end{definition}
+
+\begin{theorem}[CPSV canonical-form representative after blocking]
+    \label{thm:cpsv_canonical_form_representative_after_blocking}
+    \lean{MPSTensor.exists_cpsvCanonicalForm_representative_after_blocking}
+    \leanok
+    \uses{def:cpsv_canonical_form, def:blocked_tensor, def:same_mpv2_pos,
+        thm:unconditional_common_primitive_irreducible_blocks,
+        thm:normal_tp_primitive_irred,
+        thm:is_normal_tensor_of_is_normal_left_canonical}
+    % Maintainer source anchor: CPSV16 lines 214--251, especially
+    % eq:II_Aiplusk1, eq:II_CF1, and the proposition at lines 249--251.
+    For every tensor $A$, there are a positive integer $p$, a bond dimension
+    $D'$, and a tensor $B$ of physical dimension $d^p$ and bond dimension
+    $D'$ such that $B\in\mathrm{CF}$ and, for every $N\ge1$,
+    \begin{align}
+        V^{(N)}(A^{[p]})_\sigma
+         & =V^{(N)}(B)_\sigma.
+        \label{eq:cpsv_canonical_form_representative_after_blocking}
+    \end{align}
+    Here $B$ is another tensor generating the same positive-length MPV family.
+    The assertion $B\in\mathrm{CF}$ is literal in the bond coordinates of $B$;
+    no assertion is made that $A^{[p]}$ itself is literally in canonical form
+    in its original bond coordinates.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:unconditional_common_primitive_irreducible_blocks,
+        thm:normal_tp_primitive_irred,
+        thm:is_normal_tensor_of_is_normal_left_canonical,
+        def:cpsv_canonical_form}
+    Apply Theorem~\ref{thm:unconditional_common_primitive_irreducible_blocks}
+    to $A$ and itself. It gives $p\ge1$, weights $\mu_k$, and
+    left-canonical, primitive, tensor-irreducible blocks $C_k$ such that, for
+    every $N\ge1$,
+    \begin{align}
+        V^{(N)}(A^{[p]})_\sigma
+         & =V^{(N)}\!\left(\bigoplus_k\mu_kC_k\right)_\sigma.
+        \label{eq:cpsv_after_blocking_direct_sum}
+    \end{align}
+    First, Theorem~\ref{thm:normal_tp_primitive_irred} makes each $C_k$
+    algebraically normal. Second,
+    Theorem~\ref{thm:is_normal_tensor_of_is_normal_left_canonical} combines
+    this conclusion with the left-canonical identity to make each $C_k$ a CPSV
+    normal tensor. Hence
+    \begin{align}
+        B
+         & :=\bigoplus_k\mu_kC_k
+        \label{eq:cpsv_after_blocking_representative}
+    \end{align}
+    satisfies the literal block-diagonal equation~\eqref{eq:cpsv_canonical_form},
+    so $B\in\mathrm{CF}$. Equation~\eqref{eq:cpsv_after_blocking_direct_sum}
+    gives the second part of
+    \eqref{eq:cpsv_canonical_form_representative_after_blocking}.
+\end{proof}
 
 \begin{theorem}[Closed-chain expansion of CPSV canonical form]
     \label{thm:cpsv_canonical_form_mpv_expansion}
