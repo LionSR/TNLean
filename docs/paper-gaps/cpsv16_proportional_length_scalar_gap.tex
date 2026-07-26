@@ -39,7 +39,10 @@ satisfies
      & =c_NV^{(N)}(Q_{\mathrm{tot}}).
     \label{eq:proportional-total}
 \end{align}
-The source assumption at every positive length is a special case.
+The source assumption at every positive length is a special case.\footnote{The
+    formal proportional theorem is
+    \leanid{MPSTensor.fundamentalTheorem_proportional_canonicalForm} in
+    \doclink{TNLean/MPS/FundamentalTheorem/SectorBNT/FundamentalCoord}.}
 
 \section{The coefficient identity retaining the global scalar}
 
@@ -59,8 +62,12 @@ linear independence of the $P$-basis gives
      & =c_N\zeta_k^N c_N^{(k)}(Q)
     \label{eq:threaded}
 \end{align}
-for every sector $k$ and all sufficiently large $N$. The same $c_N$ occurs in
-every sector because it is the scalar relating the two total vectors.
+for every sector $k$ and all sufficiently large $N$.\footnote{The formal
+    coefficient identity that retains the global scalar is
+    \leanid{MPSTensor.coeff_identity_via_matched_mpv_phase_proportional} in
+    \doclink{TNLean/MPS/FundamentalTheorem/SectorBNT/CoeffIdentity}.}
+The same $c_N$ occurs in every sector because it is the scalar relating the two
+total vectors.
 
 The equal-MPV argument has $c_N=1$. It then compares the two finite power sums
 \begin{align}
@@ -109,10 +116,13 @@ are not conjugate, even up to a common phase.
 
 \section{Conclusion}
 
-There is no missing theorem asserting that the proportionality scalar of two
-BNT canonical forms must be a geometric phase sequence. The counterexample
-shows that such a statement is false under the proportional theorem's
-hypotheses. The valid conclusions are:
+\textbf{Verdict: correction of a prior mathematical assessment; there is no
+    mathematical gap.} The source proportional theorem never requires copy-weight
+recovery or a global gauge, and the counterexample proves that this stronger
+claim is false under the proportional theorem's hypotheses. In particular,
+there is no missing theorem asserting that the proportionality scalar of two
+BNT canonical forms must be a geometric phase sequence. The valid conclusions
+are:
 \begin{itemize}
     \item proportional total MPVs determine a bijection and gauge-phase
           equivalence of the normal sectors;
@@ -125,8 +135,12 @@ hypotheses. The valid conclusions are:
 \end{itemize}
 
 The conditional implications from scalar-free coefficient identities to a
-global gauge remain correct. They are additional consequences, not unfinished
-parts of CPSV16 Theorem~2.10.
+global gauge remain correct.\footnote{The formal conditional global-gauge
+    construction is
+    \leanid{MPSTensor.ft_sector_bnt_proportional_global_gauge_of_coeff_identity}
+    in \doclink{TNLean/MPS/FundamentalTheorem/SectorBNT/Fundamental}.}
+They are additional consequences, not unfinished parts of CPSV16
+Theorem~2.10.
 
 \bibliographystyle{alpha}
 \bibliography{references}
