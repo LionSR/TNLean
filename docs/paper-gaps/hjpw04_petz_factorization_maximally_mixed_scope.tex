@@ -7,7 +7,7 @@
 
 \input{command}
 
-\title{Maximally mixed scope of the HJPW Petz factorization}
+\title{Support scope of the HJPW product-reference Petz factorization}
 \author{}
 \date{2026-07-26}
 
@@ -16,68 +16,129 @@
 
 \section{Source statement}
 
-For the partial trace
-$T=\operatorname{id}_A\otimes\operatorname{tr}_C$ and the product reference
+Let
 \begin{align}
-  \sigma_{ABC}=\rho_A\otimes\rho_{BC},
+  T&=\operatorname{id}_A\otimes\operatorname{tr}_C,
+  &\sigma_{ABC}&=\rho_A\otimes\rho_{BC}.
 \end{align}
-Hayden--Jozsa--Petz--Winter derive the factorization
+Hayden--Jozsa--Petz--Winter write the recovery operation as
 \begin{align}
   \widehat T=\operatorname{id}_A\otimes\widehat R
   \label{eq:hjpw-general-factorization}
 \end{align}
-in equation~(10), where $\widehat R$ is the Petz recovery map associated with
-$\rho_{BC}$ and $\operatorname{tr}_C$. Their first-factor state $\rho_A$ is
-general; it is not assumed to be maximally mixed.
+in equation~(10), where $\widehat R$ is associated with $\rho_{BC}$ and
+$\operatorname{tr}_C$. Their Petz formula is specified on the support of
+$T\sigma$. Thus equation~\eqref{eq:hjpw-general-factorization} is literal on
+the reduced support spaces. On the full ambient matrix algebras it requires a
+choice of extension away from those supports.
 
-\section{Formalized specialization}
+\section{Global raw formula}
 
-The current formalization takes
+Let $P_A$ be the support projection of $\rho_A$. The product reference and its
+retained marginal satisfy
 \begin{align}
-  \rho_A=d_A^{-1}\mathbf 1_A
+  \sigma_{ABC}&=\rho_A\otimes\rho_{BC},
+  &\operatorname{tr}_C\sigma_{ABC}
+    &=\rho_A\otimes\rho_B,
+  &\rho_B&=\operatorname{tr}_C\rho_{BC}.
 \end{align}
-and proves the raw support-Petz identity first on elementary tensors,
+For positive semidefinite factors, square roots, support inverse square roots,
+and support projections factor across the tensor product. Consequently the raw
+support-Petz map on the full ambient algebra is
 \begin{align}
-  \mathcal R_{d_A^{-1}\mathbf 1_A\otimes\rho_{BC}}(A_0\otimes X_B)
-  =A_0\otimes\mathcal R_{\rho_{BC}}(X_B),
+  \mathcal R^{\mathrm{raw}}_{\rho_A\otimes\rho_{BC}}
+  &=\mathcal S_{P_A}\otimes
+    \mathcal R^{\mathrm{raw}}_{\rho_{BC}},
+  &\mathcal S_{P_A}(X)&=P_AXP_A.
+  \label{eq:hjpw-global-support-factorization}
 \end{align}
-then on every bipartite matrix by an operator-Schmidt decomposition.
-The corresponding formal declarations are
+Equivalently,
+\begin{align}
+  \mathcal R^{\mathrm{raw}}_{\rho_A\otimes\rho_{BC}}(A_0\otimes X_B)
+  &=(P_AA_0P_A)\otimes
+    \mathcal R^{\mathrm{raw}}_{\rho_{BC}}(X_B).
+\end{align}
+All identities use the canonical reassociation
+$(A\times B)\times C\simeq A\times(B\times C)$.
+
+The corresponding declarations are
 \begin{center}
   \small
-  \leanid{Matrix.partialTraceRightPetzMap_maximallyMixedTensor_kronecker}\\
-  \leanid{Matrix.partialTraceRightPetzMap_maximallyMixedTensor}
+  \leanid{Matrix.productTensorReference}\\
+  \leanid{Matrix.productTensorReference_posSemidef}\\
+  \leanid{Matrix.partialTraceRight_productTensorReference}\\
+  \leanid{Matrix.cfcSqrt_productTensorReference}\\
+  \leanid{Matrix.supportInvSqrt_partialTraceRight_productTensorReference}\\
+  \leanid{Matrix.supportProj_partialTraceRight_productTensorReference}\\
+  \leanid{Matrix.supportCompressionMap}\\
+  \leanid{Matrix.partialTraceRightPetzMap_productTensor_kronecker}\\
+  \leanid{Matrix.partialTraceRightPetzMap_productTensor}
 \end{center}
 in \doclink{TNLean/Channel/PetzRecovery}.
 
-The maximally mixed hypothesis makes the first-factor support full and reduces
-the first-factor square-root and support-inverse-square-root terms to scalar
-multiples of the identity. Those scalars cancel in the Petz sandwich. This
-establishes a correct specialization of~\eqref{eq:hjpw-general-factorization},
-not the unrestricted source statement.
+\section{Identity-tensored corollaries and extension boundary}
 
-\section{Open boundary}
+If an input $X$ is supported on the first factor,
+\begin{align}
+  (P_A\otimes\mathbf 1_B)X(P_A\otimes\mathbf 1_B)=X,
+\end{align}
+then support compression disappears and
+\begin{align}
+  \mathcal R^{\mathrm{raw}}_{\rho_A\otimes\rho_{BC}}(X)
+  &=(\operatorname{id}_A\otimes
+    \mathcal R^{\mathrm{raw}}_{\rho_{BC}})(X).
+\end{align}
+If $\rho_A$ is positive definite, then $P_A=\mathbf 1_A$, so this identity
+holds globally. These conclusions are formalized by
+\begin{center}
+  \small
+  \leanid{Matrix.tensorMapId_supportCompressionMap}\\
+  \leanid{Matrix.partialTraceRightPetzMap_productTensor_apply_of_left_supported}\\
+  \leanid{Matrix.partialTraceRightPetzMap_productTensor_of_posDef_left}.
+\end{center}
 
-The unrestricted factorization remains future work. It requires treating an
-arbitrary first-factor state $\rho_A$, including the distinction between the
-raw formula on its support and a channel extension on the complementary
-subspace when $\rho_A$ is singular. The resulting theorem should recover
-HJPW equation~(10) without replacing $\rho_A$ by
-$d_A^{-1}\mathbf 1_A$.
+If $\rho_A$ is singular, the ambient raw map is not globally
+$\operatorname{id}_A\otimes\mathcal R^{\mathrm{raw}}_{\rho_{BC}}$. For
+example, an operator supported in the kernel of $\rho_A$ is killed by
+$X\mapsto P_AXP_A$ but not by the identity map. A global channel of the form
+$\operatorname{id}_A\otimes\widehat{\mathcal R}_{\rho_{BC}}$ is therefore a
+chosen tensor-compatible extension of the support formula.
 
-Neither the elementary-tensor identity nor its linear extension proves the
-Koashi--Imoto/Hayashi direct-sum decomposition of equality states. That
-structural theorem requires the separate invariant-state analysis following
-the recovery factorization in HJPW.
+TNLean's generic completed channel uses the complementary projection
+\begin{align}
+  \mathbf 1_{AB}-P_A\otimes P_B.
+\end{align}
+For singular $\rho_A$ this projection does not generally factor as the
+identity on $A$ tensored with a projection on $B$. No factorization of that
+generic completed channel is claimed. The existing maximally mixed completed
+factorization is valid because the first-factor support is full.
 
-This scope restriction is tracked by
-\href{https://github.com/LionSR/TNLean/issues/4229}{TNLean issue \#4229}.
+\section{Remaining structural theorem}
+
+Equation~\eqref{eq:hjpw-global-support-factorization} supplies the
+product-reference recovery factorization required before the structural part
+of the HJPW argument. It does not prove the Koashi--Imoto decomposition for a
+family of recovered states. The remaining step must identify one common direct
+sum
+\begin{align}
+  H_B\cong\bigoplus_j H_{B_j^L}\otimes H_{B_j^R}
+\end{align}
+and describe the action of the middle-system channel on every summand so that
+the full family has the quantum-Markov form. The singular-support
+equality-to-recovery theorem remains a separate analytic obligation. Beyond
+it, this family-level invariant-state and channel-action
+theorem is the remaining structural obstruction to replacing the forward
+Hayashi strong-subadditivity equality assumption used in the CPSV16 argument.
 
 \section{Classification}
 
-\emph{Open scope restriction.}  The formal theorem is mathematically correct
-for the maximally mixed first factor, while HJPW equation~(10) allows a general
-first-factor state.
+\emph{Raw factorization complete; structural implication open.} The general
+positive-semidefinite product reference, its marginal and support calculus, the
+global support-compressed raw formula, and the supported-input and
+positive-definite-left corollaries are formalized. The generic completed
+singular channel is outside this claim. Singular-support equality-to-recovery
+and the family-level Koashi--Imoto channel-action theorem remain open as
+separate later steps.
 
 \begin{thebibliography}{9}
 

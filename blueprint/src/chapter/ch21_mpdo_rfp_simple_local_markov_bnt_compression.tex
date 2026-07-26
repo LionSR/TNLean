@@ -405,10 +405,16 @@ strong subadditivity for a normalized three-site reduced state.
 
 \begin{proof}
     \leanok
-    \uses{thm:entropy_ssa_equality_quantum_markov}
-    This is exactly the forward implication of the Hayashi equality
-    characterization: equality in strong subadditivity yields a quantum Markov
-    decomposition on the middle subsystem.
+    \uses{thm:entropy_ssa_equality_quantum_markov,
+        thm:entropy_petz_product_tensor}
+    This is the forward implication of the Hayashi equality
+    characterization. The product-reference raw Petz formula, including its
+    singular-support compression, is given by
+    Theorem~\ref{thm:entropy_petz_product_tensor}. The singular-support
+    equality-to-recovery theorem is still separate. Beyond it, the remaining
+    structural ingredient is the family-level Koashi--Imoto decomposition and
+    the induced action of the middle-system channel on its common direct-sum
+    factors.
 \end{proof}
 
 \begin{lemma}[Partial trace along a right tensor factor]
