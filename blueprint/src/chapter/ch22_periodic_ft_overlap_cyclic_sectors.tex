@@ -8,8 +8,8 @@
     $k$ and every physical letter $i$ there exists a family
     $P_0,\ldots,P_{m-1}$ such that each $P_u$ is an orthogonal projection,
     \begin{align}
-        P_u^\dagger&=P_u,\qquad P_u^2=P_u, \notag\\
-        \sum_{u=0}^{m-1}P_u&=\Id, \notag
+        P_u^\dagger         & =P_u,\qquad P_u^2=P_u, \notag \\
+        \sum_{u=0}^{m-1}P_u & =\Id, \notag
     \end{align}
     and $P_{k+1}A^i=A^iP_k$.
 \end{theorem}
@@ -18,9 +18,9 @@
     Choose the projection family contained in the cyclic sector decomposition.
     It satisfies
     \begin{align}
-        P_u^\dagger&=P_u,\qquad P_u^2=P_u, \notag\\
-        \sum_uP_u&=\Id, \notag\\
-        \E_A^\dagger(P_{u+1})&=P_u. \notag
+        P_u^\dagger           & =P_u,\qquad P_u^2=P_u, \notag \\
+        \sum_uP_u             & =\Id, \notag                  \\
+        \E_A^\dagger(P_{u+1}) & =P_u. \notag
     \end{align}
     Apply Theorem~\ref{thm:offdiag_shift_adjoint_cyclic_shift}.
 \end{proof}
@@ -35,8 +35,8 @@
     physical letter $i$ there exists a family $P_0,\ldots,P_{m-1}$ such that
     each $P_u$ is an orthogonal projection,
     \begin{align}
-        P_u^\dagger&=P_u,\qquad P_u^2=P_u, \notag\\
-        \sum_{u=0}^{m-1}P_u&=\Id, \notag
+        P_u^\dagger         & =P_u,\qquad P_u^2=P_u, \notag \\
+        \sum_{u=0}^{m-1}P_u & =\Id, \notag
     \end{align}
     and
     \begin{align}
@@ -48,9 +48,9 @@
     Choose the projection family contained in the cyclic sector decomposition.
     It satisfies
     \begin{align}
-        P_u^\dagger&=P_u,\qquad P_u^2=P_u, \notag\\
-        \sum_uP_u&=\Id, \notag\\
-        \E_A^\dagger(P_{u+1})&=P_u. \notag
+        P_u^\dagger           & =P_u,\qquad P_u^2=P_u, \notag \\
+        \sum_uP_u             & =\Id, \notag                  \\
+        \E_A^\dagger(P_{u+1}) & =P_u. \notag
     \end{align}
     Apply Theorem~\ref{thm:eq_sum_offdiag_adjoint_cyclic_shift}.
 \end{proof}
@@ -106,8 +106,8 @@
         U^\dagger P_kU
         =
         \begin{pmatrix}
-            I&0\\
-            0&0
+            I & 0 \\
+            0 & 0
         \end{pmatrix}. \notag
     \end{align}
     Write $B^i=U^\dagger(A^{(m)})^iU$, and let $B_{kk}^i$ be the corner block
@@ -118,19 +118,19 @@
         X\longmapsto
         U
         \begin{pmatrix}
-            V_kXV_k^\dagger&0\\
-            0&0
+            V_kXV_k^\dagger & 0 \\
+            0               & 0
         \end{pmatrix}
         U^\dagger. \notag
     \end{align}
     Hence
     \begin{align}
         \varphi_k(C_k^i)
-        &=
+         & =
         U
         \begin{pmatrix}
-            B_{kk}^i&0\\
-            0&0
+            B_{kk}^i & 0 \\
+            0        & 0
         \end{pmatrix}
         U^\dagger
         =P_k(A^{(m)})^iP_k. \notag
@@ -145,9 +145,9 @@
     If $A$ is periodic with period $m$, then the cyclic-sector decomposition of
     $A^{(m)}$ may be chosen with rectangular support isometries $V_k$ such that
     \begin{align}
-        V_k^\dagger V_k&=\Id, \notag\\
-        V_kV_k^\dagger&=P_k, \notag\\
-        \varphi_k(X)&=V_kXV_k^\dagger. \notag
+        V_k^\dagger V_k & =\Id, \notag             \\
+        V_kV_k^\dagger  & =P_k, \notag             \\
+        \varphi_k(X)    & =V_kXV_k^\dagger. \notag
     \end{align}
     In particular, the same isometries realize the corner-letter identity
     $\varphi_k(C_k^i)=P_k(A^{(m)})^iP_k$.
@@ -180,12 +180,12 @@
     trace-sum identity, where $T$ is the one-site rotation of physical words:
     \begin{align}
         O_{A_{u+1},B_{v+1}}(N)
-        &=\sum_{\tau\in[d]^{Nm}}\tr(P_{u+1}A^\tau)
-            \overline{\tr(Q_{v+1}B^\tau)} \notag\\
-        &=\sum_{\tau\in[d]^{Nm}}\tr(P_{u+1}A^{T\tau})
-            \overline{\tr(Q_{v+1}B^{T\tau})} \notag\\
-        &=\sum_{\tau\in[d]^{Nm}}\tr(P_uA^\tau)
-            \overline{\tr(Q_vB^\tau)}
+         & =\sum_{\tau\in[d]^{Nm}}\tr(P_{u+1}A^\tau)
+        \overline{\tr(Q_{v+1}B^\tau)} \notag            \\
+         & =\sum_{\tau\in[d]^{Nm}}\tr(P_{u+1}A^{T\tau})
+        \overline{\tr(Q_{v+1}B^{T\tau})} \notag         \\
+         & =\sum_{\tau\in[d]^{Nm}}\tr(P_uA^\tau)
+        \overline{\tr(Q_vB^\tau)}
         =O_{A_u,B_v}(N).
         \label{eq:pft_sector_overlap_transport}
     \end{align}
@@ -203,13 +203,13 @@
     Let $A$ be periodic of period $m$. Let $P_0,\ldots,P_{m-1}$ be
     orthogonal projections satisfying
     \begin{align}
-        \sum_{k=0}^{m-1}P_k&=\Id, \notag\\
-        \E_A^\dagger(P_{k+1})&=P_k. \notag
+        \sum_{k=0}^{m-1}P_k   & =\Id, \notag \\
+        \E_A^\dagger(P_{k+1}) & =P_k. \notag
     \end{align}
     If
     \begin{align}
-        U&=P_uUP_v,\qquad P_uP_v=0, \notag\\
-        \E_A^m(U)&=\zeta U,\qquad |\zeta|=1, \notag
+        U         & =P_uUP_v,\qquad P_uP_v=0, \notag  \\
+        \E_A^m(U) & =\zeta U,\qquad |\zeta|=1, \notag
     \end{align}
     then $U=0$.
 \end{lemma}
@@ -260,9 +260,9 @@
     $\spec_{\mathrm{per}}(\E_A)=\spec_{\mathrm{per}}(\E_B)$. Since
     \begin{align}
         \spec_{\mathrm{per}}(\E_A)
-        &=\{e^{2\pi ir/m_A}:0\le r<m_A\}, \notag\\
+         & =\{e^{2\pi ir/m_A}:0\le r<m_A\}, \notag \\
         \spec_{\mathrm{per}}(\E_B)
-        &=\{e^{2\pi ir/m_B}:0\le r<m_B\},
+         & =\{e^{2\pi ir/m_B}:0\le r<m_B\},
         \label{eq:pft_periodic_set_equality}
     \end{align}
     equality of the two finite sets in (\ref{eq:pft_periodic_set_equality})
@@ -288,14 +288,14 @@
     period $m$. Let $A_u$ and $B_v$ be period-blocked sector tensors of virtual
     dimensions $d_u$ and $e_v$, indexed by $u,v\in\Z_m$, such that
     \begin{align}
-        \bar A&\sim\bigoplus_{u\in\Z_m}A_u, \notag\\
-        \bar B&\sim\bigoplus_{v\in\Z_m}B_v, \notag
+        \bar A & \sim\bigoplus_{u\in\Z_m}A_u, \notag \\
+        \bar B & \sim\bigoplus_{v\in\Z_m}B_v, \notag
     \end{align}
     with unit weights, and the two decompositions are cyclic sector
     decompositions. Assume each sector is left-canonical:
     \begin{align}
-        \sum_{\alpha}(A_u^\alpha)^\dagger A_u^\alpha&=I_{d_u}, \notag\\
-        \sum_{\alpha}(B_v^\alpha)^\dagger B_v^\alpha&=I_{e_v}. \notag
+        \sum_{\alpha}(A_u^\alpha)^\dagger A_u^\alpha & =I_{d_u}, \notag \\
+        \sum_{\alpha}(B_v^\alpha)^\dagger B_v^\alpha & =I_{e_v}. \notag
     \end{align}
     Assume $d_u\ne0$ for every $u$ and $e_v\ne0$ for every $v$, and
     whenever $d_u=e_v$, the corresponding sector tensors are not gauge-phase
@@ -322,16 +322,16 @@
     For each sector pair $(u,v)$,
     \begin{align}
         d_u=e_v,\quad A_u\not\sim_{\mathrm{gp}}B_v
-        &\quad\Longrightarrow\quad
-        \lim_{N\to\infty}O_{A_uB_v}(N)=0, \notag\\
+         & \quad\Longrightarrow\quad
+        \lim_{N\to\infty}O_{A_uB_v}(N)=0, \notag \\
         d_u\ne e_v
-        &\quad\Longrightarrow\quad
+         & \quad\Longrightarrow\quad
         \lim_{N\to\infty}O_{A_uB_v}(N)=0. \notag
     \end{align}
     The finite double sum (\ref{eq:pft_overlap_double_sum}) therefore gives
     \begin{align}
         \lim_{N\to\infty}O_{\bar A\bar B}(N)
-        &=
+         & =
         \sum_{u\in\Z_m}\sum_{v\in\Z_m}
         \lim_{N\to\infty}O_{A_uB_v}(N)
         =0. \notag
@@ -343,16 +343,16 @@
     $V^{(N)}(\bar B)_\sigma=\zeta^N V^{(N)}(\bar A)_\sigma$, and
     \begin{align}
         O_{\bar A\bar B}(N)
-        &=\overline{\zeta}^{\,N}O_{\bar A\bar A}(N), \notag\\
+         & =\overline{\zeta}^{\,N}O_{\bar A\bar A}(N), \notag \\
         O_{\bar B\bar B}(N)
-        &=|\zeta|^{2N}O_{\bar A\bar A}(N). \notag
+         & =|\zeta|^{2N}O_{\bar A\bar A}(N). \notag
     \end{align}
     Since
     $\lim_{N\to\infty}O_{\bar A\bar A}(N)
-      =\lim_{N\to\infty}O_{\bar B\bar B}(N)=m>0$,
+        =\lim_{N\to\infty}O_{\bar B\bar B}(N)=m>0$,
     \begin{align}
         1
-        &=
+         & =
         \lim_{N\to\infty}
         \frac{O_{\bar B\bar B}(N)}{O_{\bar A\bar A}(N)}
         =
@@ -409,7 +409,7 @@
     equal to $1$. For $k<n$,
     \begin{align}
         \varphi_k\varphi_{k+1}^{-1}
-        &=
+         & =
         (\kappa_0\cdots\kappa_{k-1})^{-1}
         (\kappa_0\cdots\kappa_k)
         =\kappa_k. \notag
@@ -476,17 +476,17 @@
         lem:left_canonical_irreducible_unitary_gauge}
     Let $m\ge1$, and let $A$ and $B$ carry the cyclic off-diagonal structure
     \begin{align}
-        A^i&=\sum_uP_uA^iP_{u+1}, \notag\\
-        B^i&=\sum_vQ_vB^iQ_{v+1}, \notag
+        A^i & =\sum_uP_uA^iP_{u+1}, \notag \\
+        B^i & =\sum_vQ_vB^iQ_{v+1}, \notag
     \end{align}
     with $P_u$ and $Q_v$ families of orthogonal projections summing to the
     identity. Let $q$ be the cyclic offset between the matched sector labels,
     and let each $U_v$ be a corner partial isometry from the $Q_v$ corner onto
     the $P_{v-q}$ corner, that is,
     \begin{align}
-        U_v&=P_{v-q}U_vQ_v, \notag\\
-        U_v^\dagger U_v&=Q_v, \notag\\
-        U_vU_v^\dagger&=P_{v-q}. \notag
+        U_v             & =P_{v-q}U_vQ_v, \notag \\
+        U_v^\dagger U_v & =Q_v, \notag           \\
+        U_vU_v^\dagger  & =P_{v-q}. \notag
     \end{align}
     Assume the per-site proportionality of
     \cite[eq.~result]{DeLasCuevas2017Irreducible},
@@ -512,8 +512,8 @@
     the diagonal terms are $U_vU_v^\dagger=P_{v-q}$ and
     $U_v^\dagger U_v=Q_v$, so
     \begin{align}
-        UU^\dagger&=\sum_uP_u=\Id, \notag\\
-        U^\dagger U&=\sum_vQ_v=\Id. \notag
+        UU^\dagger  & =\sum_uP_u=\Id, \notag \\
+        U^\dagger U & =\sum_vQ_v=\Id. \notag
     \end{align}
     The off-diagonal structure of $B$ makes $Q_vB^iQ_w$ vanish unless
     $w=v+1$, so
@@ -521,7 +521,7 @@
     per-site proportionality over $u$ and reindexing by $v=u+q$ gives
     \begin{align}
         \zeta UB^iU^\dagger
-        &=
+         & =
         \sum_v\zeta\,U_vQ_vB^iQ_{v+1}U_{v+1}^\dagger
         =
         \sum_uP_uA^iP_{u+1}

@@ -9,7 +9,7 @@
     linear map $F_{AB}:\MN{D}\to\MN{D}$ defined by
     \begin{align}
         F_{AB}(X)
-        &:=\sum_{i=0}^{d-1}A^iX(B^i)^\dagger.
+         & :=\sum_{i=0}^{d-1}A^iX(B^i)^\dagger.
         \label{eq:spectral_mixed_transfer}
     \end{align}
 \end{definition}
@@ -22,10 +22,10 @@
     dimension $D_2$, possibly with $D_1\neq D_2$, the
     \emph{rectangular mixed transfer operator} is the map
     $F_{AB}^{\mathrm{rect}}:
-    M_{D_1\times D_2}(\C)\to M_{D_1\times D_2}(\C)$ defined by
+        M_{D_1\times D_2}(\C)\to M_{D_1\times D_2}(\C)$ defined by
     \begin{align}
         F_{AB}^{\mathrm{rect}}(X)
-        &:=\sum_{i=0}^{d-1}A^iX(B^i)^\dagger.
+         & :=\sum_{i=0}^{d-1}A^iX(B^i)^\dagger.
         \label{eq:spectral_mixed_transfer_rect}
     \end{align}
 \end{definition}
@@ -38,7 +38,7 @@ Section~\ref{sec:app_spectral_mixed_trace}.
 
 Recall from (\ref{eq:mps_overlap}) that
 $O_{AB}(N)=\sum_{\sigma\in\{0,\ldots,d{-}1\}^N}
-V^{(N)}(A)_\sigma\overline{V^{(N)}(B)_\sigma}$.
+    V^{(N)}(A)_\sigma\overline{V^{(N)}(B)_\sigma}$.
 This section rewrites that scalar as the operator trace of the mixed
 transfer power.
 
@@ -49,7 +49,7 @@ transfer power.
     For tensors $A$ and $B$ of bond dimension $D\geq1$,
     \begin{align}
         O_{AB}(N)
-        &=\Tr(F_{AB}^N).
+         & =\Tr(F_{AB}^N).
         \label{eq:spectral_overlap_trace}
     \end{align}
 \end{lemma}
@@ -63,11 +63,11 @@ transfer power.
     the sums over matrix-unit indices gives
     \begin{align}
         \Tr(F_{AB}^N)
-        &=\sum_\sigma
-          \tr(A^\sigma)\overline{\tr(B^\sigma)}
-          =\sum_\sigma
-          V^{(N)}(A)_\sigma\overline{V^{(N)}(B)_\sigma}
-          =O_{AB}(N).
+         & =\sum_\sigma
+        \tr(A^\sigma)\overline{\tr(B^\sigma)}
+        =\sum_\sigma
+        V^{(N)}(A)_\sigma\overline{V^{(N)}(B)_\sigma}
+        =O_{AB}(N).
         \notag
     \end{align}
     The rectangular case, Lemma~\ref{thm:overlap_trace_rect}, is the same
@@ -82,7 +82,7 @@ transfer power.
     dimension $D_2\geq1$,
     \begin{align}
         O_{AB}(N)
-        &=\Tr((F_{AB}^{\mathrm{rect}})^N).
+         & =\Tr((F_{AB}^{\mathrm{rect}})^N).
         \label{eq:spectral_overlap_trace_rect}
     \end{align}
 \end{lemma}
@@ -191,16 +191,16 @@ a block embedding of a mixed-transfer eigenvector.
     Form
     \begin{align}
         C^i
-        &:=
+         & :=
         \begin{pmatrix}
-            A'^i & 0\\
-            0 & B'^i
+            A'^i & 0    \\
+            0    & B'^i
         \end{pmatrix},
-        &
+         &
         Y
-        &:=
+         & :=
         \begin{pmatrix}
-            0 & X'\\
+            0 & X' \\
             0 & 0
         \end{pmatrix}.
         \notag
@@ -221,10 +221,10 @@ a block embedding of a mixed-transfer eigenvector.
     Expanding the block relations from Step~3 gives
     \begin{align}
         X'(B'^i)^\dagger
-        &=\mu(A'^i)^\dagger X',
-        &
+         & =\mu(A'^i)^\dagger X',
+         &
         A'^iX'
-        &=\mu X'B'^i.
+         & =\mu X'B'^i.
         \notag
     \end{align}
     The corresponding multiplicative identities make $X'^\dagger X'$ and
@@ -284,10 +284,10 @@ a block embedding of a mixed-transfer eigenvector.
     such that, for every physical index $i$,
     \begin{align}
         X(B^i)^\dagger
-        &=\mu(A^i)^\dagger X,
-        &
+         & =\mu(A^i)^\dagger X,
+         &
         A^iX
-        &=\mu XB^i,
+         & =\mu XB^i,
         \label{eq:spectral_rect_intertwining}
     \end{align}
     then $D_1=D_2$.
@@ -304,7 +304,7 @@ a block embedding of a mixed-transfer eigenvector.
     $\ker(X)$ is invariant under every matrix; injectivity of the resulting
     map forces $\ker(X)=0$, giving $D_2\leq D_1$. Taking adjoints of the
     second relation gives $X^\dagger(A^i)^\dagger=\overline\mu(B^i)^\dagger
-    X^\dagger$, so the same argument applied to $X^\dagger$ shows
+        X^\dagger$, so the same argument applied to $X^\dagger$ shows
     $\ker(X^\dagger)$ is invariant under every $(A^i)^\dagger$ and hence
     trivial, giving $D_1\leq D_2$.
 \end{proof}
@@ -407,8 +407,8 @@ proved in Section~\ref{sec:app_spectral_decay}.
     (\ref{eq:spectral_trace_expansion}),
     \begin{align}
         O_{AB}(N)
-        &=\Tr(F_{AB}^N)
-          =\sum_{p,q}(F_{AB}^N(E_{pq}))_{pq}.
+         & =\Tr(F_{AB}^N)
+        =\sum_{p,q}(F_{AB}^N(E_{pq}))_{pq}.
         \notag
     \end{align}
     Theorem~\ref{thm:transfer_pow_zero} makes every summand tend to zero.
