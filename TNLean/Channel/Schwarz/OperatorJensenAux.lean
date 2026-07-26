@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Channel.Basic
 import TNLean.Channel.Schwarz.OperatorJensenIntegrands
+import Mathlib.MeasureTheory.Integral.Bochner.Basic
 
 /-!
 # Finite-POVM compression lemmas for operator Jensen
