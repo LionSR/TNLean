@@ -101,9 +101,7 @@ def A : Mat4 := e 1 0 + e 2 1 + e 0 3
 def B : Mat4 := e 3 2
 
 private lemma A_cube : A ^ 3 = e 2 3 := by
-  ext i j
-  fin_cases i <;> fin_cases j <;>
-    simp [A, e, pow_succ, Matrix.mul_apply, Fin.sum_univ_succ]
+  simp [A, e, pow_succ, Matrix.mul_add, Matrix.add_mul]
 
 /-- The two matrices generate all sixteen standard matrix units and hence the
 full unital algebra $M_4(ℂ)$. -/
@@ -170,10 +168,21 @@ arXiv:2602.16067v1 (source lines 615--635). -/
 theorem dissipator_sum_x :
     dissipator A x + dissipator B x =
       -e 0 0 + e 1 1 + e 2 2 - e 3 3 := by
-  ext i j
-  fin_cases i <;> fin_cases j <;>
-    simp [dissipator, A, B, x, e, Matrix.mul_apply, Fin.sum_univ_succ]
-    <;> norm_num
+  simp only [dissipator, A, e, Fin.isValue, x, Matrix.mul_sub, Matrix.add_mul,
+    Matrix.single_mul_single_same, mul_one, ne_eq, one_ne_zero, not_false_eq_true,
+    Matrix.single_mul_single_of_ne, add_zero, Fin.reduceEq, sub_zero,
+    Matrix.conjTranspose_add, Matrix.conjTranspose_single, star_one, Matrix.mul_add,
+    zero_ne_one, one_div, zero_add, Matrix.smul_single, smul_eq_mul, Matrix.sub_mul,
+    sub_self, B, zero_sub, neg_mul, smul_neg, sub_neg_eq_add]
+  have hhalf (i : Fin 4) :
+      Matrix.single i i (2 : ℂ)⁻¹ = (2 : ℂ)⁻¹ • e i i := by
+    simp [e]
+  rw [hhalf 0, hhalf 2]
+  norm_num
+  change e 1 1 - (1 / 2 : ℂ) • e 0 0 - (1 / 2 : ℂ) • e 0 0 +
+      (-e 3 3 + (1 / 2 : ℂ) • e 2 2 + (1 / 2 : ℂ) • e 2 2) =
+    -e 0 0 + e 1 1 + e 2 2 - e 3 3
+  module
 
 end HICFourDimensionalExample
 
