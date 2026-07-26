@@ -167,16 +167,17 @@
 
 \begin{proof}\leanok
     \uses{thm:multiplicative_functional_calculus_tensor_product,
-        lem:support_inverse_square_root_sandwich}
+        lem:support_inverse_square_root_sandwich,
+        lem:support_inverse_square_root_positive_definite}
     Diagonalize both factors. The eigenvalues of $A\otimes B$ are the products
     $a_i b_j$. Both the square-root function and the function that equals
     $x^{-1/2}$ for $x>0$ and zero at $x=0$ are multiplicative on the
     non-negative reals. For the support projectors, apply the sandwich identity
     to $A\otimes B$, factor the support inverse square root and matrix products,
     and apply the sandwich identity to each factor. The cancellation identities
-    follow entrywise. For a positive-definite
-    matrix every eigenvalue is nonzero, so its support projection is the
-    identity.
+    follow entrywise. If $A$ is positive definite, then
+    $A^{-1/2}_{\mathrm{supp}}=(\sqrt A)^{-1}$ and $\sqrt A$ is invertible.
+    Hence the cancellation identity gives $P_A=\sqrt A(\sqrt A)^{-1}=\mathbf 1$.
 \end{proof}
 
 \begin{lemma}[Support inverse square root under scaling and a maximally mixed factor]
