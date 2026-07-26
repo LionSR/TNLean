@@ -363,7 +363,8 @@ jobs:
             "+refs/heads/${{ github.event.pull_request.base.ref }}:refs/remotes/origin/${{ github.event.pull_request.base.ref }}" \
             || timing_status=$?
           if [ "$timing_status" -eq 0 ]; then
-            git diff --merge-base --name-only --diff-filter=AMR "$BASE_REF" -- '*.lean' \
+            git -c core.quotePath=false diff \
+              --merge-base --name-only --diff-filter=AMR "$BASE_REF" -- '*.lean' \
               > "$RUNNER_TEMP/changed-lean-files.txt" \
               || timing_status=$?
           fi

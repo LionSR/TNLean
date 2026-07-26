@@ -46,6 +46,7 @@ validate_packages() {
   local expected_rev
   local package_root
   local actual_rev
+  local package_status
   PACKAGE_LIST_FILE="$(mktemp "${TMPDIR:-/tmp}/tnlean-lake-packages.XXXXXX")" ||
     die "cannot create temporary package list"
   if ! python3 - "$source_root/lake-manifest.json" >"$PACKAGE_LIST_FILE" <<'PY'
@@ -69,7 +70,12 @@ PY
       die "Git package is not a checkout: $package_name"
     test "$actual_rev" = "$expected_rev" ||
       die "Git package revision differs from lake-manifest.json: $package_name"
-    test -z "$(git -C "$package_root" status --porcelain --untracked-files=all)" ||
+    if ! package_status="$(
+      git -C "$package_root" status --porcelain --untracked-files=all
+    )"; then
+      die "cannot read Git package status: $package_name"
+    fi
+    test -z "$package_status" ||
       die "Git package has local changes: $package_name"
   done <"$PACKAGE_LIST_FILE"
   find "$PACKAGE_LIST_FILE" -delete
@@ -79,6 +85,10 @@ PY
 cleanup() {
   if test -n "${PACKAGE_LIST_FILE:-}" && test -f "$PACKAGE_LIST_FILE"; then
     find "$PACKAGE_LIST_FILE" -delete
+  fi
+  if test -n "${RESERVATION_DIR:-}" && test -d "$RESERVATION_DIR"; then
+    chmod 700 "$RESERVATION_DIR"
+    find "$RESERVATION_DIR" -depth -delete
   fi
   if test -n "${STAGING_DIR:-}" && test -d "$STAGING_DIR"; then
     find "$STAGING_DIR" -depth -delete
@@ -96,6 +106,7 @@ PRIMARY_ROOT="$(
 )"
 STAGING_DIR=""
 PACKAGE_LIST_FILE=""
+RESERVATION_DIR=""
 DRY_RUN="false"
 
 test "$#" -ge 1 || {
@@ -131,8 +142,6 @@ NESTED_CACHE_LINK="$(
 )"
 test -z "$NESTED_CACHE_LINK" ||
   die "source contains a symlinked Lake cache directory: $NESTED_CACHE_LINK"
-test -f "$SOURCE_ROOT/.lake/packages/mathlib/.lake/build/lib/lean/Mathlib.olean" ||
-  die "source lacks prebuilt Mathlib artifacts; run 'lake exe cache get' first"
 test ! -e "$TARGET_ROOT/.lake" && test ! -L "$TARGET_ROOT/.lake" ||
   die "target already has .lake"
 
@@ -140,6 +149,12 @@ for input in lean-toolchain lake-manifest.json lakefile.toml; do
   cmp -s "$SOURCE_ROOT/$input" "$TARGET_ROOT/$input" ||
     die "build input differs between source and target: $input"
 done
+(
+  cd "$SOURCE_ROOT"
+  lake exe cache get
+) || die "failed to fetch current prebuilt Mathlib artifacts"
+test -f "$SOURCE_ROOT/.lake/packages/mathlib/.lake/build/lib/lean/Mathlib.olean" ||
+  die "source lacks prebuilt Mathlib artifacts after 'lake exe cache get'"
 validate_packages "$SOURCE_ROOT"
 
 if test "$DRY_RUN" = "true"; then
@@ -149,8 +164,40 @@ if test "$DRY_RUN" = "true"; then
   exit 0
 fi
 
-STAGING_DIR="$TARGET_ROOT/.lake"
-mkdir "$STAGING_DIR" 2>/dev/null || die "target already has .lake"
+RESERVATION_DIR="$TARGET_ROOT/.lake"
+mkdir "$RESERVATION_DIR" 2>/dev/null || die "target already has .lake"
+chmod 000 "$RESERVATION_DIR"
+STAGING_DIR="$TARGET_ROOT/.lake.seed.$$"
 /bin/cp -cR "$SOURCE_ROOT/.lake/." "$STAGING_DIR"
+python3 - "$STAGING_DIR" "$RESERVATION_DIR" <<'PY'
+import ctypes
+import os
+import sys
+
+libc = ctypes.CDLL(None, use_errno=True)
+renameatx_np = libc.renameatx_np
+renameatx_np.argtypes = [
+    ctypes.c_int,
+    ctypes.c_char_p,
+    ctypes.c_int,
+    ctypes.c_char_p,
+    ctypes.c_uint,
+]
+renameatx_np.restype = ctypes.c_int
+result = renameatx_np(
+    -2,
+    os.fsencode(sys.argv[1]),
+    -2,
+    os.fsencode(sys.argv[2]),
+    0x00000002,
+)
+if result != 0:
+    error = ctypes.get_errno()
+    raise OSError(error, os.strerror(error))
+PY
+RESERVATION_DIR="$STAGING_DIR"
+chmod 700 "$RESERVATION_DIR"
+find "$RESERVATION_DIR" -depth -delete
 STAGING_DIR=""
+RESERVATION_DIR=""
 echo "seed-lake-build: cloned $SOURCE_ROOT/.lake into $TARGET_ROOT/.lake"

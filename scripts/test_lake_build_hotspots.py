@@ -63,12 +63,14 @@ class LakeBuildHotspotTests(unittest.TestCase):
                         "Built TNLean.Warning (25s)",
                         "Built TNLean.TooSlow (50s)",
                         "Built LintStyle (30s)",
+                        "Built TNLean.Σlow (26s)",
                     ]
                 ),
                 encoding="utf-8",
             )
             changed.write_text(
-                "TNLean/Warning.lean\nTNLean/TooSlow.lean\nscripts/LintStyle.lean\nREADME.md\n",
+                "TNLean/Warning.lean\nTNLean/TooSlow.lean\nscripts/LintStyle.lean\n"
+                "TNLean/Σlow.lean\nREADME.md\n",
                 encoding="utf-8",
             )
             output = io.StringIO()
@@ -82,10 +84,13 @@ class LakeBuildHotspotTests(unittest.TestCase):
                     "seconds\tjob",
                     "50.000\tTNLean.TooSlow",
                     "30.000\tLintStyle",
+                    "26.000\tTNLean.Σlow",
                     "25.000\tTNLean.Warning",
                     "::error file=TNLean/TooSlow.lean::TNLean.TooSlow compiled in 50.000s "
                     "(warning at 25s, error at 50s)",
                     "::warning file=scripts/LintStyle.lean::LintStyle compiled in 30.000s "
+                    "(warning at 25s, error at 50s)",
+                    "::warning file=TNLean/Σlow.lean::TNLean.Σlow compiled in 26.000s "
                     "(warning at 25s, error at 50s)",
                     "::warning file=TNLean/Warning.lean::TNLean.Warning compiled in 25.000s "
                     "(warning at 25s, error at 50s)",

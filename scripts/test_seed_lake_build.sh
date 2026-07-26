@@ -42,7 +42,7 @@ mkdir -p "$REPO/.lake/packages/mathlib/.lake/build/lib/lean"
 printf 'prebuilt\n' >"$REPO/.lake/packages/mathlib/.lake/build/lib/lean/Mathlib.olean"
 printf '{"packages":[{"name":"mathlib","type":"git","rev":"%s"}]}\n' \
   "$DEPENDENCY_REV" >"$REPO/lake-manifest.json"
-cp "$REPO/lake-manifest.json" "$TARGET/lake-manifest.json"
+/bin/cp "$REPO/lake-manifest.json" "$TARGET/lake-manifest.json"
 
 mkdir -p "$TEST_ROOT/scripts"
 mkdir -p "$TEST_ROOT/bin"
@@ -52,6 +52,12 @@ echo "PATH cp must not be used" >&2
 exit 99
 EOF
 chmod +x "$TEST_ROOT/bin/cp"
+cat >"$TEST_ROOT/bin/lake" <<'EOF'
+#!/usr/bin/env bash
+test "$*" = "exe cache get"
+EOF
+chmod +x "$TEST_ROOT/bin/lake"
+PATH="$TEST_ROOT/bin:$PATH"
 
 mv "$REPO/.lake" "$REPO/.lake.real"
 ln -s .lake.real "$REPO/.lake"
@@ -106,7 +112,7 @@ fi
 rg -q "cannot parse Git packages from lake-manifest.json" "$TEST_ROOT/error.log"
 printf '{"packages":[{"name":"mathlib","type":"git","rev":"%s"}]}\n' \
   "$DEPENDENCY_REV" >"$REPO/lake-manifest.json"
-cp "$REPO/lake-manifest.json" "$TARGET/lake-manifest.json"
+/bin/cp "$REPO/lake-manifest.json" "$TARGET/lake-manifest.json"
 
 printf 'modified\n' >>"$REPO/.lake/packages/mathlib/tracked"
 if "$REPO/scripts/seed_lake_build.sh" "$TARGET" --dry-run 2>"$TEST_ROOT/error.log"; then
@@ -115,6 +121,17 @@ if "$REPO/scripts/seed_lake_build.sh" "$TARGET" --dry-run 2>"$TEST_ROOT/error.lo
 fi
 rg -q "Git package has local changes: mathlib" "$TEST_ROOT/error.log"
 printf 'dependency\n' >"$REPO/.lake/packages/mathlib/tracked"
+
+/bin/cp "$REPO/.lake/packages/mathlib/.git/index" \
+  "$REPO/.lake/packages/mathlib/.git/index.saved"
+: >"$REPO/.lake/packages/mathlib/.git/index"
+if "$REPO/scripts/seed_lake_build.sh" "$TARGET" --dry-run 2>"$TEST_ROOT/error.log"; then
+  echo "unreadable dependency status unexpectedly passed" >&2
+  exit 1
+fi
+rg -q "cannot read Git package status: mathlib" "$TEST_ROOT/error.log"
+mv "$REPO/.lake/packages/mathlib/.git/index.saved" \
+  "$REPO/.lake/packages/mathlib/.git/index"
 
 (
   cd "$REPO"

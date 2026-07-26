@@ -23,11 +23,14 @@ directories, and an absent target `.lake`. Git dependency checkouts must be
 clean and at the revisions recorded in `lake-manifest.json`; nested Lake build
 directories must not be symlinks; and Mathlib's prebuilt `Mathlib.olean` must
 already be present. If it is missing, run `lake exe cache get` in the source
-worktree before seeding.
+worktree before seeding. The seed command also runs `lake exe cache get` itself
+to verify that the prebuilt artifacts match the current manifest revision.
 macOS `/bin/cp -c` creates independent writable files and fails instead of
 falling back to a full copy when APFS cloning is unavailable. The absolute path
 keeps Homebrew GNU coreutils from shadowing the APFS-aware command. Do not seed
-while the source worktree is running a Lake command.
+while the source worktree is running a Lake command. The target `.lake` is an
+inaccessible reservation until the completed clone is atomically swapped into
+place, so a target Lake process cannot observe a partial cache.
 
 After seeding, run the desired `lake build` or `lake env lean` command. Lake
 will reuse unchanged artifacts and rebuild files changed on the branch.
