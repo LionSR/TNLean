@@ -44,6 +44,7 @@ import TNLean.Channel.PartialTrace
 import TNLean.Channel.PartialTranspose
 import TNLean.Channel.Peripheral
 import TNLean.Channel.PerronFrobenius
+import TNLean.Channel.PetzProductReference
 import TNLean.Channel.PetzRecovery
 import TNLean.Channel.PositiveConditionalExpectation
 import TNLean.Channel.PositiveConditionalExpectationDirectSum
