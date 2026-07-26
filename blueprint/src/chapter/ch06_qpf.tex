@@ -80,6 +80,67 @@ and~\cite{Evans1978Spectral}.
     $\dim\ker A\leq D-1$, which proves (\ref{eq:qpf_growth_pd}).
 \end{proof}
 
+\begin{theorem}[Kernel inclusion forces positive definiteness]
+    \label{thm:kernel_inclusion_pd_irred}
+    \lean{posDef_of_ker_subset_irreducible_cp}
+    \leanok
+    \uses{def:irreducible_cp}
+    Let $E$ be an irreducible completely positive map on $\MN{D}$.
+    If $\rho\geq0$, $\rho\neq0$, and
+    \begin{align}
+        \ker\rho
+         & \subseteq\ker E(\rho),
+        \notag
+    \end{align}
+    then $\rho$ is positive definite.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Write $E(X)=\sum_i K_iXK_i^\dagger$ and let $Q$ be the support
+    projection of $\rho$.  For $v\in\ker\rho$, the kernel inclusion gives
+    \begin{align}
+        0
+         & =v^\dagger E(\rho)v
+          =\sum_i(K_i^\dagger v)^\dagger\rho(K_i^\dagger v).
+        \notag
+    \end{align}
+    Every summand is non-negative, so
+    $K_i^\dagger(\ker\rho)\subseteq\ker\rho$ for every~$i$.  Equivalently,
+    for every~$X$,
+    \begin{align}
+        Q E(QXQ)Q
+         & =E(QXQ).
+        \notag
+    \end{align}
+    Irreducibility forces $Q\in\{0,I\}$, while $\rho\neq0$ rules out
+    $Q=0$.  Thus $Q=I$, so $\ker\rho=\{0\}$ and $\rho>0$.
+\end{proof}
+
+\begin{theorem}[PSD eigenvectors are positive definite]
+    \label{thm:psd_eigenvector_pd_irred}
+    \lean{posDef_of_posSemidef_eigenvector_irreducible_cp}
+    \leanok
+    \uses{def:irreducible_cp}
+    Let $E$ be an irreducible completely positive map on $\MN{D}$.
+    If $\rho\geq0$, $\rho\neq0$, $r>0$, and
+    $E(\rho)=r\rho$, then $\rho$ is positive definite.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:kernel_inclusion_pd_irred}
+    The eigenvector equation gives
+    \begin{align}
+        \ker\rho
+         & =\ker E(\rho).
+        \notag
+    \end{align}
+    Hence $\ker\rho\subseteq\ker E(\rho)$.
+    Theorem~\ref{thm:kernel_inclusion_pd_irred} then forces $\rho$ to be
+    positive definite.
+\end{proof}
+
 \begin{theorem}[PSD fixed point is positive definite --- irreducible version]
     \label{thm:psd_fp_pd_irred}
     \lean{MPSTensor.posSemidef_fixedPoint_isPosDef_of_irreducible}
@@ -134,7 +195,7 @@ and~\cite{Evans1978Spectral}.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:psd_fp_pd_irred}
+    \uses{thm:injective_irreducible, thm:psd_fp_pd_irred}
     Injectivity implies irreducibility of the transfer map. Apply
     Theorem~\ref{thm:psd_fp_pd_irred}.
 \end{proof}
@@ -222,7 +283,7 @@ and~\cite{Evans1978Spectral}.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:psd_fp_unique_irred}
+    \uses{thm:injective_irreducible, thm:psd_fp_unique_irred}
     Injectivity implies irreducibility of the transfer map. Apply
     Theorem~\ref{thm:psd_fp_unique_irred}.
 \end{proof}
@@ -242,7 +303,7 @@ and~\cite{Evans1978Spectral}.
 
 \begin{proof}
     \leanok
-    \uses{thm:pf_eigenvector_existence, thm:psd_fp_pd_irred}
+    \uses{thm:pf_eigenvector_existence, thm:psd_eigenvector_pd_irred}
     Extract Kraus operators $K$ for $E$.
     Irreducibility of $E$ passes to the adjoint transfer map
     $E^\dagger(X) = \sum_i K_i^\dagger X K_i$,
@@ -250,7 +311,7 @@ and~\cite{Evans1978Spectral}.
     The Perron--Frobenius existence theorem
     (Theorem~\ref{thm:pf_eigenvector_existence}) together with the
     irreducible positive-definiteness upgrade
-    (Theorem~\ref{thm:psd_fp_pd_irred}) gives a positive definite
+    (Theorem~\ref{thm:psd_eigenvector_pd_irred}) gives a positive definite
     eigenvector $\tau > 0$ with eigenvalue $t > 0$:
     $E^\dagger(\tau) = t\tau$.
     For any nonzero positive semidefinite $X$ with $E(X) = sX$, the
@@ -763,14 +824,15 @@ The TP-gauge application follows~\cite[Appendix~A]{Cirac2016MPDO_arXiv}.
 \begin{proof}
     \leanok
     \uses{lem:cesaro_mean_density, lem:cesaro_subseq_fixed,
-        thm:psd_fp_pd_irred, thm:psd_fp_unique_irred}
+        thm:psd_eigenvector_pd_irred, thm:psd_eigenvector_unique_irred}
     Every Ces\`aro mean (\ref{eq:channel_cesaro_mean}) of a density matrix
     stays inside the compact convex set of density matrices, so a subsequence
-    converges.
-    Its limit is a fixed point by the telescope identity
-    (\ref{eq:channel_cesaro_telescope}), positive definiteness follows from
-    irreducibility, and uniqueness comes from the uniqueness of positive
-    semidefinite Perron eigenvectors at eigenvalue~$1$.
+    converges to a density matrix~$\sigma$.  The telescope identity
+    (\ref{eq:channel_cesaro_telescope}) gives
+    $E(\sigma)=\sigma$.  Theorem~\ref{thm:psd_eigenvector_pd_irred}
+    makes $\sigma$ positive definite.  If $\tau$ is another density-matrix
+    fixed point, Theorem~\ref{thm:psd_eigenvector_unique_irred} gives
+    $\tau=c\sigma$.  Taking traces yields $1=c$, hence $\tau=\sigma$.
 \end{proof}
 
 \begin{theorem}[Ces\`aro convergence for irreducible channels]
