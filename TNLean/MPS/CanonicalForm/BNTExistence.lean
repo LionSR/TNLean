@@ -23,10 +23,15 @@ variable {d D : ℕ} {A : MPSTensor d D}
 restricting to nonzero-weight blocks and choosing one representative from each
 MPV phase-equivalence class.
 
-Zero-weight blocks are not covered: they contribute nothing to any positive-length
-matrix product vector. The conclusion is the existence part of the construction
-underlying arXiv:1606.00608, Proposition `prop:char-BNT`, lines 271--280 and
-1137--1146, with this active-block restriction made explicit. -/
+**Scope restriction (active blocks):** Literal canonical-form syntax permits
+zero-weight listed blocks. The formal theorem covers only blocks with nonzero
+weight because zero-weight blocks contribute nothing to any positive-length
+matrix product vector. See
+`docs/paper-gaps/cpsv16_bnt_characterization_active_blocks.tex`.
+
+The conclusion is the existence part of the construction underlying
+arXiv:1606.00608, Proposition `prop:char-BNT`, lines 271--280 and 1137--1146,
+with this active-block restriction made explicit. -/
 theorem CPSVCanonicalFormData.exists_isCPSVBasisOfNormalTensors
     (data : CPSVCanonicalFormData A) :
     ∃ g : ℕ, ∃ dimB : Fin g → ℕ,
