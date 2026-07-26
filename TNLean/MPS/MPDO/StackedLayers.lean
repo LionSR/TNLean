@@ -354,9 +354,11 @@ non-commutation hypothesis `NoninvariantProjectorNoncommuting` through
 `periodicVectorYieldsCyclicProjector_of_noncommutation`.  For a tensor in
 normalized BNT-refined horizontal form, the direct theorem
 `hasNoPeriodicVectors_verticalTensor_of_horizontalCF` avoids this stronger
-all-length hypothesis by using one noncommuting length.  This hypothesis is
-stronger than literal CPSV canonical form; the distinction is
-recorded in `docs/paper-gaps/cpgsv17_periodic_sector_projector.tex`. -/
+all-length hypothesis by using one noncommuting length.
+
+**Scope restriction (BNT-refined horizontal form):** The horizontal hypothesis
+`IsHorizontalCF` is stronger than the literal CPSV canonical form; see
+`docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex`. -/
 def PeriodicVectorYieldsCyclicProjector (M : MPOTensor d D) : Prop :=
   ∀ ⦃n : ℕ⦄ (V : Matrix (Fin d) (Fin n) ℂ) (B : MPSTensor (D * D) n)
     (ρ : Matrix (Fin n) (Fin n) ℂ) (r : ℝ),
@@ -395,11 +397,11 @@ projectors.  This is the periodic-sector step in the proof of Proposition
 4.13 of arXiv:1606.00608, lines 1888--1893, with the commutation family
 derived from the stacked-layers identity rather than assumed.
 
-**Scope restriction (conditional on the supplied cyclic projector):** this
-theorem retains the stronger all-length projector hypothesis.  Under normalized
+**Scope restriction (conditional on the supplied cyclic projector):** This
+theorem retains the stronger all-length projector hypothesis. Under normalized
 BNT-refined horizontal form, `hasNoPeriodicVectors_verticalTensor_of_horizontalCF`
-uses the same invariant projector at one noncommuting length.  This horizontal
-hypothesis is stronger than literal CPSV canonical form. -/
+uses the same invariant projector at one noncommuting length; see
+`docs/paper-gaps/cpgsv17_periodic_sector_projector.tex`. -/
 theorem hasNoPeriodicVectors_verticalTensor_of_cyclicProjector
     (M : MPOTensor d D) (hM : IsMPDO M)
     (hCyc : PeriodicVectorYieldsCyclicProjector M) :

@@ -739,13 +739,14 @@ horizontal hypothesis.  One noncommuting length is enough; the source states
 the stronger all-length inequality, but the contradiction is pointwise in the
 length.
 
-**Scope restriction (BNT-refined horizontal form):** `IsHorizontalCF` is
-stronger than the literal CPSV canonical form; no literal canonical-form
-conclusion is asserted.
+**Scope restriction (BNT-refined horizontal form):** The horizontal hypothesis
+`IsHorizontalCF` is stronger than the literal CPSV canonical form; see
+`docs/paper-gaps/cpgsv17_periodic_sector_projector.tex`.
 
 **Local fix (noncommuting length):** the all-length inequality printed at
 source line 1889 is replaced by the existential consequence of the BNT-refined
-Lemma L, which is sufficient at lines 1890--1893. -/
+Lemma L, which is sufficient at lines 1890--1893; see
+`docs/paper-gaps/cpgsv17_periodic_sector_projector.tex`. -/
 theorem hasNoPeriodicVectors_verticalTensor_of_horizontalCF
     (M : MPOTensor d D) (hM : IsMPDO M) (hHorizontal : IsHorizontalCF M) :
     MPSTensor.HasNoPeriodicVectors (verticalTensor M) := by

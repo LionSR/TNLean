@@ -157,11 +157,12 @@ $p$-periodic vector would supply an orthogonal projector with the
 commutation identities eq2:proof.IV.12, and positive semidefiniteness of the
 density operators rules such a projector out.
 
-**Scope restriction (conditional on the supplied projector):** the source
+**Scope restriction (conditional on the supplied projector):** The source
 draws the projector from the general theory of the peripheral spectrum; here
-that implication is the explicit all-length hypothesis.  The theorem in
+that implication is the explicit all-length hypothesis. The theorem in
 `TNLean/MPS/MPDO/CyclicProjector.lean` uses one noncommuting length but assumes
-normalized BNT-refined horizontal form, not the literal CPSV canonical form. -/
+normalized BNT-refined horizontal form, not the literal CPSV canonical form;
+see `docs/paper-gaps/cpgsv17_periodic_sector_projector.tex`. -/
 theorem hasNoPeriodicVectors_verticalTensor (M : MPOTensor d D)
     (hM : IsMPDO M) (hYield : PeriodicVectorYieldsProjector M) :
     MPSTensor.HasNoPeriodicVectors (verticalTensor M) := by

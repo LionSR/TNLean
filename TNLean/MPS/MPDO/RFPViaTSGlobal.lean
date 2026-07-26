@@ -247,7 +247,9 @@ theorem exists_global_renormalization_maps (M : MPOTensor d D)
 /-- An MPDO in normalized BNT-refined horizontal form satisfying Definition
 4.1 has nonzero trace at every positive chain length.
 
-This horizontal hypothesis is stronger than literal CPSV canonical form.
+**Scope restriction (BNT-refined horizontal form):** The horizontal hypothesis
+`IsHorizontalCF` is stronger than the literal CPSV canonical form; see
+`docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex`.
 
 The BNT representation supplies one sufficiently long nonzero density
 operator. Positivity makes its trace nonzero. Definition 4.1 makes the
