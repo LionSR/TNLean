@@ -1,0 +1,93 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+
+\input{command}
+
+\title{Maximally mixed scope of the HJPW Petz factorization}
+\author{}
+\date{2026-07-26}
+
+\begin{document}
+\maketitle
+
+\section{Source statement}
+
+For the partial trace
+$T=\operatorname{id}_A\otimes\operatorname{tr}_C$ and the product reference
+\begin{align}
+  \sigma_{ABC}=\rho_A\otimes\rho_{BC},
+\end{align}
+Hayden--Jozsa--Petz--Winter derive the factorization
+\begin{align}
+  \widehat T=\operatorname{id}_A\otimes\widehat R
+  \label{eq:hjpw-general-factorization}
+\end{align}
+in equation~(10), where $\widehat R$ is the Petz recovery map associated with
+$\rho_{BC}$ and $\operatorname{tr}_C$. Their first-factor state $\rho_A$ is
+general; it is not assumed to be maximally mixed.
+
+\section{Formalized specialization}
+
+The current formalization takes
+\begin{align}
+  \rho_A=d_A^{-1}\mathbf 1_A
+\end{align}
+and proves the raw support-Petz identity first on elementary tensors,
+\begin{align}
+  \mathcal R_{d_A^{-1}\mathbf 1_A\otimes\rho_{BC}}(A_0\otimes X_B)
+  =A_0\otimes\mathcal R_{\rho_{BC}}(X_B),
+\end{align}
+then on every bipartite matrix by an operator-Schmidt decomposition.
+The corresponding formal declarations are
+\begin{center}
+  \small
+  \leanid{Matrix.partialTraceRightPetzMap_maximallyMixedTensor_kronecker}\\
+  \leanid{Matrix.partialTraceRightPetzMap_maximallyMixedTensor}
+\end{center}
+in \doclink{TNLean/Channel/PetzRecovery}.
+
+The maximally mixed hypothesis makes the first-factor support full and reduces
+the first-factor square-root and support-inverse-square-root terms to scalar
+multiples of the identity. Those scalars cancel in the Petz sandwich. This
+establishes a correct specialization of~\eqref{eq:hjpw-general-factorization},
+not the unrestricted source statement.
+
+\section{Open boundary}
+
+The unrestricted factorization remains future work. It requires treating an
+arbitrary first-factor state $\rho_A$, including the distinction between the
+raw formula on its support and a channel extension on the complementary
+subspace when $\rho_A$ is singular. The resulting theorem should recover
+HJPW equation~(10) without replacing $\rho_A$ by
+$d_A^{-1}\mathbf 1_A$.
+
+Neither the elementary-tensor identity nor its linear extension proves the
+Koashi--Imoto/Hayashi direct-sum decomposition of equality states. That
+structural theorem requires the separate invariant-state analysis following
+the recovery factorization in HJPW.
+
+This scope restriction is tracked by
+\href{https://github.com/LionSR/TNLean/issues/4229}{TNLean issue \#4229}.
+
+\section{Classification}
+
+\emph{Open scope restriction.}  The formal theorem is mathematically correct
+for the maximally mixed first factor, while HJPW equation~(10) allows a general
+first-factor state.
+
+\begin{thebibliography}{9}
+
+\bibitem{HJPW2004}
+  P.~Hayden, R.~Jozsa, D.~Petz, and A.~Winter,
+  \emph{Structure of states which satisfy strong subadditivity of quantum
+  entropy with equality},
+  Communications in Mathematical Physics \textbf{246} (2004), 359--374;
+  arXiv:quant-ph/0304007v2.
+
+\end{thebibliography}
+
+\end{document}

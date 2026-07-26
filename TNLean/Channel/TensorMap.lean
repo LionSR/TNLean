@@ -7,14 +7,13 @@ import Mathlib.Data.Complex.Basic
 import Mathlib.LinearAlgebra.Matrix.Kronecker
 
 /-!
-# Tensor product of a linear map with the identity
+# Tensor products of a linear map with the identity
 
-This file defines tensor products with an identity factor. It includes `T ⊗ id`
-for a linear map `T : M_d(ℂ) →ₗ[ℂ] M_{d'}(ℂ)` and the corresponding
-`id ⊗ T` construction on bipartite matrices.
-
-This is the key operation for constructing the Choi matrix
-`τ = (T ⊗ id)(|Ω⟩⟨Ω|)` in the Choi–Jamiolkowski isomorphism.
+This file defines the actions `T ⊗ id` and `id ⊗ T` on bipartite matrices for a
+linear map `T : M_d(ℂ) →ₗ[ℂ] M_{d'}(ℂ)`. The first-factor action constructs the
+Choi matrix `τ = (T ⊗ id)(|Ω⟩⟨Ω|)` in the Choi–Jamiolkowski isomorphism. The
+second-factor action expresses tensor-product channels and recovery maps that
+act trivially on an ancillary factor.
 
 ## Main definitions
 
@@ -22,6 +21,9 @@ This is the key operation for constructing the Choi matrix
 * `Matrix.tensorMapId`: `(T ⊗ id)(X)` for a linear map `T` and bipartite
   matrix `X`
 * `Matrix.tensorMapIdLM`: `tensorMapId T` as a linear map
+* `Matrix.bipartiteBlock`: the `(i₁, j₁)`-block of a bipartite matrix
+* `Matrix.idTensorMap`: `(id ⊗ T)(X)` for a linear map `T` and bipartite
+  matrix `X`
 * `Matrix.idTensorMapLM`: `idTensorMap T` as a linear map on the second factor
 
 ## Main results
