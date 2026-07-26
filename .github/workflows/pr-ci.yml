@@ -362,13 +362,14 @@ jobs:
         id: compilation-time
         if: github.event_name == 'pull_request'
         env:
+          BASE_REF_NAME: ${{ github.event.pull_request.base.ref }}
           BASE_REF: origin/${{ github.event.pull_request.base.ref }}
         run: |
           set -o pipefail
           timing_status=0
           archive_build_failed=false
           git fetch --no-tags origin \
-            "+refs/heads/${{ github.event.pull_request.base.ref }}:refs/remotes/origin/${{ github.event.pull_request.base.ref }}" \
+            "+refs/heads/$BASE_REF_NAME:refs/remotes/origin/$BASE_REF_NAME" \
             || timing_status=$?
           if [ "$timing_status" -eq 0 ]; then
             git -c core.quotePath=false diff \
