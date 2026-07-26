@@ -163,6 +163,14 @@ validate_root "$TARGET_PATH"
 SOURCE_ROOT="$(canonical_dir "$SOURCE_PATH")"
 TARGET_ROOT="$(canonical_dir "$TARGET_PATH")"
 test "$SOURCE_ROOT" != "$TARGET_ROOT" || die "source and target worktrees must differ"
+SOURCE_REV="$(git -C "$SOURCE_ROOT" rev-parse HEAD)" ||
+  die "cannot read source revision"
+TARGET_REV="$(git -C "$TARGET_ROOT" rev-parse HEAD)" ||
+  die "cannot read target revision"
+REUSE_TNLEAN_BUILD="false"
+if test "$SOURCE_REV" = "$TARGET_REV"; then
+  REUSE_TNLEAN_BUILD="true"
+fi
 test ! -L "$SOURCE_ROOT/.lake" || die "source .lake must not be a symlink"
 test -d "$SOURCE_ROOT/.lake/build" && test ! -L "$SOURCE_ROOT/.lake/build" ||
   die "source has no regular .lake/build"
@@ -191,6 +199,11 @@ if test "$DRY_RUN" = "true"; then
   echo "seed-lake-build: dry-run passed"
   echo "seed-lake-build: source: $SOURCE_ROOT/.lake"
   echo "seed-lake-build: target: $TARGET_ROOT/.lake"
+  if test "$REUSE_TNLEAN_BUILD" = "true"; then
+    echo "seed-lake-build: TNLean build artifacts will be reused"
+  else
+    echo "seed-lake-build: TNLean build artifacts will be omitted (different revisions)"
+  fi
   exit 0
 fi
 
@@ -207,7 +220,11 @@ RESERVATION_INODE="$(stat -f %i "$RESERVATION_DIR")"
 chmod 000 "$RESERVATION_DIR"
 STAGING_DIR="$(/usr/bin/mktemp -d "$TARGET_ROOT/.lake.seed.XXXXXX")"
 STAGING_INODE="$(stat -f %i "$STAGING_DIR")"
-/bin/cp -cR "$SOURCE_ROOT/.lake/." "$STAGING_DIR"
+if test "$REUSE_TNLEAN_BUILD" = "true"; then
+  /bin/cp -cR "$SOURCE_ROOT/.lake/." "$STAGING_DIR"
+else
+  /bin/cp -cR "$SOURCE_ROOT/.lake/packages" "$STAGING_DIR/packages"
+fi
 test "$(stat -f %i "$STAGING_DIR")" = "$STAGING_INODE" ||
   die "staging directory changed during clone"
 python3 - "$STAGING_DIR" "$RESERVATION_DIR" <<'PY'
@@ -243,4 +260,9 @@ chmod 700 "$STAGING_DIR"
 find "$STAGING_DIR" -depth -delete
 STAGING_DIR=""
 STAGING_INODE=""
-echo "seed-lake-build: cloned $SOURCE_ROOT/.lake into $TARGET_ROOT/.lake"
+if test "$REUSE_TNLEAN_BUILD" = "true"; then
+  echo "seed-lake-build: cloned $SOURCE_ROOT/.lake into $TARGET_ROOT/.lake"
+else
+  echo "seed-lake-build: cloned dependency packages into $TARGET_ROOT/.lake"
+  echo "seed-lake-build: omitted TNLean build artifacts from different source revision"
+fi
