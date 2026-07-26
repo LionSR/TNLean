@@ -21,16 +21,15 @@ where $P_1=P\otimes\Id^{\otimes N}$.  Given an MPV-level BNT representation,
 Lemma L transfers these identities to every minimal representative, where they
 say $(\Id-P)MP=0$.  Transport to the original MPO letters is currently proved
 only for normalized BNT-refined horizontal form in
-`TNLean.MPS.MPDO.HorizontalBNT`; the literal active-refinement transport remains
-open.
+`TNLean.MPS.MPDO.HorizontalBNT`, under normalized BNT-refined horizontal form.
 
 The file also specializes the positive-semidefinite power-commutation theorem
 to matrix product density operators.  This is only the final operator
 implication in source lines 1888--1893.  The cyclic projector and its word
 invariance are constructed in `TNLean/MPS/MPDO/CyclicProjector.lean`; for a
 tensor in normalized BNT-refined horizontal form, one noncommuting length
-suffices for the periodic-sector contradiction.  The corresponding literal
-canonical-form transport remains open.
+suffices for the periodic-sector contradiction.  No corresponding literal
+canonical-form transport is asserted.
 
 ## Main results
 
@@ -317,7 +316,7 @@ construct the orthogonal projector $Q$ associated with a nontrivial vertical
 period or establish its commutation with $[H^{(N)}]^p$.  Those ingredients are
 combined in `TNLean/MPS/MPDO/CyclicProjector.lean`, where one noncommuting
 length gives the contradiction under normalized BNT-refined horizontal form.
-The corresponding literal CPSV canonical-form implication remains open. -/
+No corresponding literal CPSV canonical-form implication is asserted. -/
 theorem mpo_commute_of_commute_pow (M : MPOTensor d D) (hM : IsMPDO M) (N : ℕ)
     (hN : 0 < N) {p : ℕ} (hp : p ≠ 0)
     {Q : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ}

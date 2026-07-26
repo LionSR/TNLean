@@ -740,13 +740,12 @@ the stronger all-length inequality, but the contradiction is pointwise in the
 length.
 
 **Scope restriction (BNT-refined horizontal form):** `IsHorizontalCF` is
-stronger than the literal CPSV canonical form.  The literal periodic-sector
-step remains open; see `docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex`.
+stronger than the literal CPSV canonical form; no literal canonical-form
+conclusion is asserted.
 
 **Local fix (noncommuting length):** the all-length inequality printed at
-source line 1889 is replaced by the existential consequence of the available
-BNT-refined Lemma L, which is sufficient at lines 1890--1893.  Documented in
-`docs/paper-gaps/cpgsv17_periodic_sector_projector.tex`. -/
+source line 1889 is replaced by the existential consequence of the BNT-refined
+Lemma L, which is sufficient at lines 1890--1893. -/
 theorem hasNoPeriodicVectors_verticalTensor_of_horizontalCF
     (M : MPOTensor d D) (hM : IsMPDO M) (hHorizontal : IsHorizontalCF M) :
     MPSTensor.HasNoPeriodicVectors (verticalTensor M) := by

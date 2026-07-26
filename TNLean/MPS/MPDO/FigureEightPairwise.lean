@@ -19,7 +19,7 @@ have equal marked chains after Gram dressing.
 The final separation uses only marks in the span of the physical letters of
 the horizontal tensor.  The corner equations give the required coefficient
 families explicitly, and normalized BNT-refined horizontal form separates them.
-The corresponding literal canonical-form separation remains open.
+No corresponding literal canonical-form separation is asserted.
 
 ## Main results
 

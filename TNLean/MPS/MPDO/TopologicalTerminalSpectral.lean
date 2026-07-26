@@ -25,9 +25,9 @@ by the one-site positivity theorem for the original MPDO.
 * `MPOTensor.BNTFusionTensorClause.hasTerminalSpectralProjectorRefinement`:
   a length-independent fusion clause has the all-label spectral refinement.
 * `MPOTensor.terminalSpectralProjectorRefinement_of_isRFPViaTS`: under
-  normalized BNT-refined horizontal form, the source-facing theorem makes all
-  spectral choices internally.  The literal canonical-form implication remains
-  open.
+  normalized BNT-refined horizontal form, the theorem makes all spectral
+  choices internally.  This hypothesis is stronger than literal CPSV
+  canonical form.
 
 ## References
 

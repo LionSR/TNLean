@@ -399,8 +399,7 @@ derived from the stacked-layers identity rather than assumed.
 theorem retains the stronger all-length projector hypothesis.  Under normalized
 BNT-refined horizontal form, `hasNoPeriodicVectors_verticalTensor_of_horizontalCF`
 uses the same invariant projector at one noncommuting length.  This horizontal
-hypothesis is stronger than literal CPSV canonical form.  Recorded in
-`docs/paper-gaps/cpgsv17_periodic_sector_projector.tex`. -/
+hypothesis is stronger than literal CPSV canonical form. -/
 theorem hasNoPeriodicVectors_verticalTensor_of_cyclicProjector
     (M : MPOTensor d D) (hM : IsMPDO M)
     (hCyc : PeriodicVectorYieldsCyclicProjector M) :

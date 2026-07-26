@@ -10,8 +10,8 @@ import TNLean.MPS.MPDO.GroupedFigure8
 # Gram and unitary normalization of grouped vertical sectors
 
 This file applies normal-tensor rigidity to the grouped Figure 8 comparison
-constructed from normalized BNT-refined horizontal form.  The literal CPSV
-canonical-form refinement remains open.
+constructed from normalized BNT-refined horizontal form, which is stronger
+than literal CPSV canonical form.
 
 ## Main results
 

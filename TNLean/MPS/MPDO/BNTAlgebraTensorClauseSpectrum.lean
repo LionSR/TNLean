@@ -15,9 +15,9 @@ This file compares the chosen one-site vertical basis in a tensor-attached
 BNT algebra clause with a vertical canonical decomposition of the two-site
 blocking.  The same-length product law identifies the sectorwise power sums,
 and positivity turns them into the multiplicity-spectrum comparison used in
-the algebra-to-RFP implication.  The source-facing constructions assume
-normalized BNT-refined horizontal form; they do not establish the corresponding
-claim from the literal CPSV canonical form.
+the algebra-to-RFP implication.  The constructions below assume normalized
+BNT-refined horizontal form, which is stronger than literal CPSV canonical
+form.
 
 ## Main results
 
