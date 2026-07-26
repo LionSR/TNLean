@@ -170,13 +170,13 @@ jobs:
               - 'lake-manifest.json'
               - 'scripts/LintStyle.lean'
               - 'scripts/nolints-style.txt'
-              - 'scripts/lake_build_hotspots.py'
-              - 'scripts/test_lake_build_hotspots.py'
             module_policy:
               - 'scripts/check_numbered_lean_files.py'
               - 'scripts/check_oversized_lean_files.py'
               - 'scripts/lean_import_syntax.py'
               - 'scripts/test_lean_file_policies.py'
+              - 'scripts/lake_build_hotspots.py'
+              - 'scripts/test_lake_build_hotspots.py'
               - 'docs/ci-automation.md'
               - 'docs/CONTRIBUTING.md'
             blueprint:
@@ -316,6 +316,8 @@ jobs:
 
   build:
     needs: changes
+    outputs:
+      compilation-time-result: ${{ steps.compilation-time.outcome }}
     if: |
       !cancelled() && (
         github.event_name != 'pull_request' ||
@@ -348,7 +350,9 @@ jobs:
           lake build 2>&1 | tee "$RUNNER_TEMP/lake-build.log"
 
       - name: Check changed Lean compilation times
+        id: compilation-time
         if: github.event_name == 'pull_request'
+        continue-on-error: true
         env:
           BASE_REF: origin/${{ github.event.pull_request.base.ref }}
         run: |
@@ -359,9 +363,6 @@ jobs:
           python3 scripts/lake_build_hotspots.py \
             "$RUNNER_TEMP/lake-build.log" \
             --changed-files-from "$RUNNER_TEMP/changed-lean-files.txt"
-
-      - name: Test Lean compilation-time checker
-        run: python3 scripts/test_lake_build_hotspots.py
 
       - name: Run text-based style linter
         run: lake exe lint_style --github
@@ -374,6 +375,24 @@ jobs:
         with:
           path: ${{ env.BUILD_CACHE_PATHS }}
           key: tnlean-build-${{ hashFiles('lean-toolchain', 'lake-manifest.json', 'lakefile.toml') }}-${{ github.sha }}
+
+  compile-time:
+    name: Check changed Lean compilation times
+    needs: [changes, build]
+    if: |
+      !cancelled() &&
+      github.event_name == 'pull_request' &&
+      needs.build.result == 'success'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Enforce changed-module timing limit
+        env:
+          TIMING_RESULT: ${{ needs.build.outputs.compilation-time-result }}
+        run: |
+          if [ "$TIMING_RESULT" != "success" ]; then
+            echo "::error::A changed Lean module reached the 50-second compilation limit"
+            exit 1
+          fi
 
   file-length:
     name: Check Lean module policies
@@ -401,6 +420,9 @@ jobs:
 
       - name: Test Lean module-policy checkers
         run: PYTHONPATH=scripts python3 scripts/test_lean_file_policies.py -v
+
+      - name: Test Lean compilation-time checker
+        run: python3 scripts/test_lake_build_hotspots.py
 
       # Ordinary Lean modules over 1000 lines fail. The exact root aggregator
       # exemption is accepted only while its uncommented content is import-only.

@@ -14,7 +14,7 @@ This repository uses [Claude Code](https://docs.anthropic.com/en/docs/claude-cod
   - [CI Failure Auto-Fix](#ci-failure-auto-fix-auto-fixyml)
   - [Blueprint Auto-Fix](#blueprint-auto-fix-auto-fixyml)
   - [Lean Module Policy](#lean-module-policy-pr-ciyml-file-length-job)
-  - [Changed Lean Compilation-Time Gate](#changed-lean-compilation-time-gate-pr-ciyml-build-job)
+  - [Changed Lean Compilation-Time Gate](#changed-lean-compilation-time-gate-pr-ciyml)
   - [Lean Linter-Warning Sweep](#lean-linter-warning-sweep-housekeepingyml-linter-sweep-job)
   - [Lean Linter-Warning Auto-Fix](#lean-linter-warning-auto-fix-lean-linter-warning-autofixyml)
   - [Review Comment Auto-Fix](#review-comment-auto-fix-auto-fixyml)
@@ -169,14 +169,16 @@ Here is exactly what happens:
 
 ---
 
-### Changed Lean Compilation-Time Gate (`pr-ci.yml`, `build` job)
+### Changed Lean Compilation-Time Gate (`pr-ci.yml`)
 
 After `lake build`, PR CI parses the captured Lake job timings for changed
 `.lean` files. A changed module taking at least 25 seconds receives a GitHub
 warning annotation; a changed module taking at least 50 seconds receives an
-error annotation and fails the build job. Unchanged modules do not affect this
-PR ratchet. The local commands and cache-reuse procedure are documented in
-[`lake_build_cache.md`](lake_build_cache.md).
+error annotation and fails the separate `compile-time` job. Keeping the timing
+gate separate prevents a performance regression from invoking the Lean
+proof-error auto-fixer, which only handles failures of the `build` job.
+Unchanged modules do not affect this PR ratchet. The local commands and
+cache-reuse procedure are documented in [`lake_build_cache.md`](lake_build_cache.md).
 
 ---
 
