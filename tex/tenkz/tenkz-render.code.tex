@@ -157,6 +157,21 @@
       {#3}
   }
 
+% Measure the exact live node selected by #1 without contributing ink or a
+% bounding box.  The caller disables geometry events around this probe.
+\cs_new_protected:Npn \__tenkz_render_measure_node:nnn #1#2#3
+  {
+    \node
+      [
+        #1 ,
+        overlay ,
+        draw~opacity = 0 ,
+        fill~opacity = 0 ,
+        text~opacity = 0
+      ]
+      (#2) at (0pt,0pt) {#3};
+  }
+
 % ---------- labels ------------------------------------------------------------
 % Text never rotates.  The anchor is a pure function of the outward angle:
 % the label sits beyond the ink along that angle and anchors on its own

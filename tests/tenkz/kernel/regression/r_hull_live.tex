@@ -1,0 +1,32 @@
+% Regression: hulls measure the live glyph and author label tokens only once.
+\documentclass[varwidth]{standalone}
+\usepackage{tenkz}
+\makeatletter
+\ExplSyntaxOn
+\file_input:n { tenkz-kernel.code.tex }
+\ExplSyntaxOff
+\makeatother
+\newcount\tenkzhulllabeluses
+\newcommand{\tenkzcountedlabel}{%
+  \global\advance\tenkzhulllabeluses by 1 WIDELABEL123456789%
+}
+\tikzset{
+  left canonical tensor/.append style={
+    shape=rectangle,
+    minimum width=3cm,
+    minimum height=1cm
+  }
+}
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[rows={wire}, cols=1, bonds=none, physical=none]
+  \tn[skin=box,name=wide]{\tenkzcountedlabel}
+  \tnmark[form=enclosure]{wide}{}
+\end{tenkz}
+\par
+\begin{tenkz}[rows={wire}, cols=1, bonds=none, physical=none]
+  \tn[skin=tri,name=custom]{T}
+  \tnmark[form=enclosure]{custom}{}
+\end{tenkz}
+\typeout{TENKZ-HULL-LABEL-USES=\the\tenkzhulllabeluses}
+\end{document}
