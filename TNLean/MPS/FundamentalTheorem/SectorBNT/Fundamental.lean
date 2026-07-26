@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.FundamentalTheorem.SectorBNT.CoeffIdentity
 import TNLean.MPS.FundamentalTheorem.SectorBNT.CopyWeightMatching
 import TNLean.MPS.FundamentalTheorem.SectorBNT.ProportionalMatch
+import TNLean.MPS.FundamentalTheorem.SectorBNT.StrongMatch
 import TNLean.MPS.FundamentalTheorem.Multi
 
 /-!
