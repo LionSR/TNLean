@@ -528,12 +528,12 @@ note = "the pairing reading caught both panels leaving the virtual wire open whe
 id = "rmp-iii-a-pulling-through"
 status = "cosmetic-gap"
 pairing = "verified"
-pairing_by = "pairing-sweep-two-viewers-2026-07-23"
-defects = []
-case_sha256 = "626620ef711c9d9a4bf12d273dc2b33664ee62dda62fde89274f603f2db10208"
-reviewed = "2026-07-26"
-renderer = "fable-countersign-reading-2026-07-26-200dpi"
-note = "no prose remains; both sides are diagrams"
+pairing_by = "site-glyph-source-review-2026-07-27"
+defects = ["weight-mismatch"]
+case_sha256 = "727970202a5fdaf241d32375be517d707b8056513119b0636998659190ef48fe"
+reviewed = "2026-07-27"
+renderer = "site-glyph-source-review-2026-07-27"
+note = "Both pulling-through panels and their lambda circles are present; curve weight and spacing differ slightly."
 
 [[verdict]]
 id = "rmp-iii-a-commuting-hamiltonian"
@@ -695,15 +695,14 @@ note = "The enlarged crossing is blue-outlined rather than solid blue."
 
 [[verdict]]
 id = "rmp-iii-b-anyon-pair"
-status = "faithful"
+status = "structural-gap"
 pairing = "verified"
-pairing_by = "pairing-sweep-two-viewers-2026-07-23"
-defects = []
-case_sha256 = "56899e6be84f165c9b0e0fa6d1f770cc87adc2729cf2f4a70cf9a6d78c7653a2"
-second_viewer = "LionSR-delegated-fable-countersign-2026-07-26"
-reviewed = "2026-07-26"
-renderer = "fable-countersign-reading-2026-07-26-200dpi"
-note = "endpoints and the intermediate site marked; a label clear at midway (#4929)"
+pairing_by = "site-glyph-source-review-2026-07-27"
+defects = ["missing-element"]
+case_sha256 = "8276fb9f7baf3dcf015c98ec31ed64a69bc0908e2d542779b66db45c6d7a32c5"
+reviewed = "2026-07-27"
+renderer = "site-glyph-source-review-2026-07-27"
+note = "The i, a, and i* labels now occupy the source quadrants; the source's second small, unlabeled intermediate marked site remains absent."
 
 [[verdict]]
 id = "rmp-iii-b-idempotent"
@@ -813,14 +812,14 @@ note = "stray diagonals removed; crossing order still unspeakable (#4908)"
 
 [[verdict]]
 id = "rmp-iii-b-condensation"
-status = "cosmetic-gap"
+status = "structural-gap"
 pairing = "verified"
-pairing_by = "pairing-sweep-two-viewers-2026-07-23"
-defects = []
-case_sha256 = "d9c7b828d20c6e0e9c99625cb377b03472e4fa4bd20ffdc495e671bdfb2f72fc"
-reviewed = "2026-07-26"
-renderer = "fable-countersign-reading-2026-07-26-200dpi"
-note = "slanted sheet, doubled string, blue markers; uniform marker size (#4931)"
+pairing_by = "site-glyph-source-review-2026-07-27"
+defects = ["wrong-contraction"]
+case_sha256 = "033d6e38ffc6058505a2b9dd7a9b2f903deb1da96e01edb0aca04ef7fcbb43df"
+reviewed = "2026-07-27"
+renderer = "site-glyph-source-review-2026-07-27"
+note = "Endpoint and intermediate marker sizes now agree with the source; the extended oblique lattice and longer doubled strings remain reduced."
 
 [[verdict]]
 id = "rmp-iv-ground-space-1d"
@@ -1179,36 +1178,37 @@ note = "Y restored above A with the loop closing in the physical direction, as t
 
 [[verdict]]
 id = "rmp-workbench-iii-diagram-three"
-status = "cosmetic-gap"
+status = "blocked"
 pairing = "verified"
-pairing_by = "pairing-sweep-two-viewers-2026-07-23"
-defects = []
-case_sha256 = "5990440c34cc73d60e64f0b06bf6872546587c7b04d1318e30a999dfbc10db9b"
-reviewed = "2026-07-26"
-renderer = "fable-countersign-reading-2026-07-26-200dpi"
-note = "no text remains on either side"
+pairing_by = "site-glyph-source-review-2026-07-27"
+defects = ["text-substitution"]
+missing = ["ring-closure"]
+case_sha256 = "62ba5d00bd656aa43ca283e78de25b3962756fac5422eb84292f077d29d3ef52"
+reviewed = "2026-07-27"
+renderer = "site-glyph-source-review-2026-07-27"
+note = "The lambda intertwiners now use the source's plain circles; the recorded closure gap remains outside this change."
 
 [[verdict]]
 id = "rmp-workbench-iii-historical-composite"
-status = "cosmetic-gap"
+status = "unfaithful"
 pairing = "verified"
-pairing_by = "pairing-sweep-two-viewers-2026-07-23"
-defects = []
-case_sha256 = "b40b11e6bf666015840666693fbe36983a366398db62d885b35f799ceeb5b3f6"
-reviewed = "2026-07-26"
-renderer = "fable-countersign-reading-2026-07-26-200dpi"
-note = "two-panel composite with both red arcs; grey stadium for the black-circle lambda (#4931)"
+pairing_by = "site-glyph-source-review-2026-07-27"
+defects = ["unfaithful-substitution"]
+case_sha256 = "963da646b7f74433662c68fd43cdd5762fd50bf7239957245ae3710d068a9849"
+reviewed = "2026-07-27"
+renderer = "site-glyph-source-review-2026-07-27"
+note = "The lambda intertwiners now use the source's plain circles; the recorded unfaithful substitution remains."
 
 [[verdict]]
 id = "rmp-workbench-iii-diagram-four"
-status = "cosmetic-gap"
+status = "structural-gap"
 pairing = "verified"
-pairing_by = "pairing-sweep-two-viewers-2026-07-23"
-defects = []
-case_sha256 = "c9f23740730839c14ab6768ad7ce031ee49ce0b9a4962a834a5ad45e33d6b721"
-reviewed = "2026-07-26"
-renderer = "fable-countersign-reading-2026-07-26-200dpi"
-note = "ring connectivity restored"
+pairing_by = "site-glyph-source-review-2026-07-27"
+defects = ["wrong-contraction"]
+case_sha256 = "dd026ccb53f643b7598a21ddc152dc5382f246df5513de56ea03f6389a2a9ed0"
+reviewed = "2026-07-27"
+renderer = "site-glyph-source-review-2026-07-27"
+note = "The lambda intertwiner now uses the source's plain circle; the recorded ring-connectivity gap remains."
 
 [[verdict]]
 id = "rmp-workbench-iii-eq50-reduced"

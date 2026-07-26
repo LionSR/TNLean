@@ -332,7 +332,7 @@ DUPLICATE_RECOVERY = r"""
 \cs_new_protected:Npn \tenkzTestBadFreeRegistry
   {
     \clist_map_inline:nn
-      {badarc,badtype,badfree,badpos,badputkey,badspeciesatom,
+      {badarc,badtype,badfree,badpos,badputkey,badsize,badspeciesatom,
        badrole,badjoinkey,badspeciesjoin,badendpoint,badspaced,
        badportsformat,badportstype,badfreekey}
       {
@@ -370,6 +370,7 @@ DUPLICATE_RECOVERY = r"""
   \tnput[box, ports={west:physical}]{d}{(2,-1)}{D}
   \tnput[box, label pos=sideways]{badpos}{(5,0)}{\tenkzTestRejectedInk}
   \tnput[box, mystery=1]{badputkey}{(6,0)}{\tenkzTestRejectedInk}
+  \tnput[circle, size=xl]{badsize}{(6,1)}{\tenkzTestRejectedInk}
   \tnput[box, species=undeclared]{badspeciesatom}{(7,0)}
     {\tenkzTestRejectedInk}
   \tnput[box]{}{(8,0)}{\tenkzTestRejectedInk}
@@ -794,6 +795,9 @@ region|picture=1|lang=free|slot=selected|members=a|outline=0|name=a
         if duplicate_recovered.stdout.count("already defined in this") < 3:
             print(duplicate_recovered.stdout)
             raise AssertionError("duplicate recovery missed a diagnostic")
+        if "unknown in put size" not in duplicate_recovered.stdout:
+            print(duplicate_recovered.stdout)
+            raise AssertionError("invalid free size missed its diagnostic")
         if "TENKZ-DUPLICATE-RECOVERED" not in duplicate_recovered.stdout:
             print(duplicate_recovered.stdout)
             raise AssertionError("duplicate recovery did not reach its sentinel")
@@ -850,7 +854,7 @@ region|picture=1|lang=free|slot=selected|members=a|outline=0|name=a
             f"|name={name}|" in line
             for line in duplicate_atoms
             for name in (
-                "badpos", "badputkey", "badspeciesatom",
+                "badpos", "badputkey", "badsize", "badspeciesatom",
                 "badportsformat", "badportstype",
             )
         ) or any("|name=|" in line for line in duplicate_atoms):

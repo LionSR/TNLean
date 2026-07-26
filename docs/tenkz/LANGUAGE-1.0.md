@@ -616,6 +616,15 @@ at the next shrink session (§11).
 Deleted spellings stay in the registry as tombstones; the linter rejects
 them forever with the migration hint. No deleted spelling is ever reused.
 
+The frozen source corpus still passes through the compatibility renderers
+while its figures migrate. Their executable `object` ledger may therefore
+repair a source-facing deficiency without enlarging the canonical kernel:
+`\tnsite` and `\tnput` accept a local `size=s|m|l`, with `m` as the
+compatibility default, and `\tnput[circle]` supplies a plain inscribed circle.
+These paths do not inherit the canonical picture size. Their inscribed labels
+retain the compatibility renderer's historical content-sized outline; this
+is not the fixed two-axis atom contract of §7.
+
 | Dead spelling | Migration |
 |---|---|
 | `tenkzfree`, `tenkzcd`, `tenkzlattice`, `tenkzplanes` | `tenkz` with `lattice=`/`planes` sugar; fusion trees are `\tntree`; commutative diagrams belong to tikz-cd, outside this language |
