@@ -267,36 +267,40 @@ section.
 \begin{theorem}[Tensor extension preserves trace-preserving complete positivity]
     \label{thm:mpdo_tensor_map_id_cptp}
     \lean{Matrix.tensorMapIdLM_isKrausCPTP}
+    \lean{Matrix.idTensorMapLM_isKrausCPTP}
     \leanok
-    \uses{def:tensor_map_id, def:is_kraus_cptp}
+    \uses{def:tensor_map_id, def:mpdo_id_tensor_map, def:is_kraus_cptp,
+        thm:mpdo_equiv_reindex_cptp, lem:is_kraus_cptp_comp}
     Let $\mathcal S:\End_{\C}(H)\to
         \End_{\C}(K)$ be trace-preserving and completely positive,
     and let $R$ be another finite-dimensional space. Then
     \begin{align}
         \mathcal S\otimes\id_R:
         \End_{\C}(H\otimes R)&\longrightarrow
-        \End_{\C}(K\otimes R)
+        \End_{\C}(K\otimes R),
+        \notag\\
+        \id_R\otimes\mathcal S:
+        \End_{\C}(R\otimes H)&\longrightarrow
+        \End_{\C}(R\otimes K)
         \notag
     \end{align}
-    is trace-preserving and completely positive. If $(A_a)_a$ is a Kraus
-    family for $\mathcal S$, then
-    $(A_a\otimes I_R)_a$ is a Kraus family for its tensor extension.
+    are trace-preserving and completely positive.
 \end{theorem}
 \begin{proof}
     \leanok
-    The tensor extension has the Kraus form
+    The first assertion is the tensor-extension closure theorem. For the
+    second, let $\tau_H:R\otimes H\simeq H\otimes R$ and
+    $\tau_K:K\otimes R\simeq R\otimes K$ be the canonical factor swaps. Then
     \begin{align}
-        (\mathcal S\otimes\id_R)(X)
-        &=\sum_a(A_a\otimes I_R)X(A_a\otimes I_R)^\dagger.
+        \id_R\otimes\mathcal S
+        &=\mathcal R_{\tau_K}\circ
+          (\mathcal S\otimes\id_R)\circ\mathcal R_{\tau_H},
         \notag
     \end{align}
-    Its normalization follows from that of the original family:
-    \begin{align}
-        \sum_a(A_a\otimes I_R)^\dagger(A_a\otimes I_R)
-        &=\left(\sum_a A_a^\dagger A_a\right)\otimes I_R
-          =I_H\otimes I_R.
-        \notag
-    \end{align}
+    where $\mathcal R_\tau$ denotes reindexing both matrix coordinates along
+    $\tau$. Both reindexing maps are trace-preserving and completely positive,
+    so closure under composition proves the claim. No choice of Kraus family
+    is needed for this preservation statement.
 \end{proof}
 
 \begin{definition}[Rectangular Kraus map]
