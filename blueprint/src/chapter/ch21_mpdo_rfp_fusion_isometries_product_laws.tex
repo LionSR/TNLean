@@ -188,17 +188,17 @@
     \cite[Proposition~4.13, lines~943--951]{Cirac2016MPDO_arXiv}.
 \end{definition}
 
-\begin{theorem}[Renormalization fixed points have active-sector fusion]%
+\begin{theorem}[BNT-refined renormalization fixed points have active-sector fusion]%
     \label{thm:mpdo_rfp_to_bnt_fusion_tensor}
     \lean{MPOTensor.HasBNTFusionTensorClause.of_isRFPViaTS}
     \leanok
     \uses{def:is_rfp_via_ts,
         def:vertical_cf_mpdo,
         def:mpdo_bnt_fusion_tensor_clause}
-    Let $M$ be a matrix product density operator in horizontal canonical form.
-    If the one-site and two-site physical closures are related in both
-    directions by trace-preserving completely positive maps as in
-    Definition~4.1, then a vertical canonical decomposition of $M$ has the
+    Let $M$ be a matrix product density operator in normalized BNT-refined
+    horizontal form. If the one-site and two-site physical closures are
+    related in both directions by trace-preserving completely positive maps
+    as in Definition~4.1, then a vertical canonical decomposition of $M$ has the
     active-sector fusion clause above. In particular, its positive diagonal
     fusion matrices satisfy the length-one idempotent trace-scalar identity.
 \end{theorem}

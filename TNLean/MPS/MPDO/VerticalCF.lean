@@ -676,7 +676,7 @@ theorem sameMPV₂Pos_toTensorFromBlocks_verticalAssembledTensor_of_equiv
   · exact Equiv.sum_comp e
       (fun p : (α : Fin g) × Fin (mult α) ↦ (ω p.1 p.2) ^ N • MPSTensor.mpv (A p.1) σ)
 
--- The implication `verticalCF_of_horizontalCF` from arXiv:1606.00608,
--- Proposition 4.13, is proved in `VerticalCanonicalForm.lean`.
+-- The BNT-refined implication `verticalCF_of_horizontalCF` is proved in
+-- `VerticalCanonicalForm.lean`; literal Proposition 4.13 remains open.
 
 end MPOTensor

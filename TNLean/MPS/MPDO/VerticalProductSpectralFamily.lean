@@ -90,7 +90,11 @@ structure RetainedProductSpectralFamily
     (∑ k, localDim p k) ≤ dim p.1.1 * dim p.2.1
 
 /-- The local spectral decompositions may be chosen simultaneously for every
-retained copy pair.  Empty active families are preserved. -/
+retained copy pair.  Empty active families are preserved.
+
+**Scope restriction (BNT-refined horizontal form):** `IsHorizontalCF` is
+stronger than the literal CPSV canonical form used in Appendix C.4 through
+Proposition 4.13; see `docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex`. -/
 theorem exists_retainedProductSpectralFamily
     {g d D : ℕ} (dim mult : Fin g → ℕ)
     (weight : (α : Fin g) → Fin (mult α) → ℂ)

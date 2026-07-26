@@ -235,8 +235,8 @@
     \uses{def:mpdo, def:horizontal_cf_mpdo, def:vertical_tensor_mpdo,
         def:invariant_projector_closure,
         thm:representative_one_sub_mp_zero}
-    Let $M$ be in horizontal canonical form and generate matrix product
-    density operators. If an orthogonal projection $P$ satisfies
+    Let $M$ be in normalized BNT-refined horizontal form and generate matrix
+    product density operators. If an orthogonal projection $P$ satisfies
     $P\widetilde M_v=P\widetilde M_vP$ for every vertical letter $v$, then it
     also satisfies $\widetilde M_vP=P\widetilde M_vP$ for every vertical
     letter $v$. Thus the vertically viewed tensor has invariant-projector
@@ -247,7 +247,7 @@
     \leanok
     \uses{thm:representative_one_sub_mp_zero}
     Translate the left-invariance identity into the one-site ket and bra
-    actions of the original tensor. The horizontal canonical-form version of
+    actions of the original tensor. The normalized BNT-refined version of
     Lemma~L gives the opposite one-sided identity. Translating back to the
     vertically viewed tensor proves the claim.
 \end{proof}
@@ -580,8 +580,8 @@
 
 \begin{proof}
     \leanok
-    The unit-modulus weight witness in the horizontal canonical form, together
-    with left canonicity of its representative, makes the doubled-index tensor
+    The unit-modulus weight witness in the normalized BNT-refined horizontal
+    form, together with left canonicity of its representative, makes the doubled-index tensor
     nonzero. Hence its vertical reshaping $\widetilde M$ is nonzero. If the
     retained decomposition had no sector,
     (\ref{eq:mpdo_vertical_grouped_reconstruction}) would make every letter of
@@ -594,8 +594,8 @@
     \lean{MPOTensor.IsHorizontalCF.verticalTensor_ne_zero}
     \leanok
     \uses{def:horizontal_cf_mpdo, def:vertical_tensor_mpdo}
-    If an MPO tensor $M$ is in horizontal canonical form, then its vertical
-    reshaping is nonzero: $\widetilde M\ne0$.
+    If an MPO tensor $M$ is in normalized BNT-refined horizontal form, then
+    its vertical reshaping is nonzero: $\widetilde M\ne0$.
     This is the nonvanishing observation used in
     \cite[Proposition~4.13, lines~1895--1902]{Cirac2016MPDO_arXiv}.
 \end{theorem}
@@ -604,8 +604,8 @@
     \leanok
     \uses{def:horizontal_cf_mpdo, def:vertical_tensor_mpdo,
         lem:sector_bnt_weight_unit_exists_of_struct}
-    Write the doubled-index tensor in horizontal canonical form as
-    $\widehat M=GSG^{-1}$, where $S$ is the weighted direct sum of its basis
+    Write the doubled-index tensor in normalized BNT-refined horizontal form
+    as $\widehat M=GSG^{-1}$, where $S$ is the weighted direct sum of its basis
     tensors. Choose a copy whose weight has unit modulus. Its basis tensor
     cannot have every letter equal to zero, since left canonicity gives
     $\sum_i(A^i)^\dagger A^i=\Id$.
@@ -619,10 +619,10 @@
     \label{thm:mpdo_vertical_grouped_is_bnt}
     \lean{MPOTensor.isBNT_verticalTensor_of_grouping}
     \leanok
-    \uses{def:horizontal_cf_mpdo, def:vertical_tensor_mpdo, def:bnt,
+    \uses{def:vertical_tensor_mpdo, def:bnt,
         def:bnt_cpsv, def:mpv_phase_class_data}
-    Let $M$ be in horizontal canonical form and put $T=\widetilde M$. Let
-    $B_k$ have bond dimension $d_k$, let $\mu_k\in\C$, and let
+    Let $M$ be an MPO tensor and put $T=\widetilde M$. Let $B_k$ have bond
+    dimension $d_k$, let $\mu_k\in\C$, and let
     $V_k:\C^{d_k}\to\C^d$ be an isometry for $0\leq k<r$. Assume, for every
     vertical letter $v$, that
     \begin{align}
@@ -668,7 +668,10 @@
     $T$.
 \end{proof}
 
-% Source anchor: CPSV16 Proposition 4.13, statement at lines 1863--1870.
+% Source anchor: CPSV16 Proposition 4.13, statement and proof at lines 1863--1922.
+% Local fix (rectangular coisometry and reconstruction): the source calls U an
+% isometry and prints only the compressed identity. See
+% docs/paper-gaps/cpgsv17_vertical_isometry_zero_sector.tex.
 \begin{theorem}[Vertical canonical form of a canonical MPDO]
     \label{thm:vertical_cf_of_cpsv_canonical_form}
     \notready
@@ -678,14 +681,164 @@
     then $M$ is in canonical form in the vertical direction. More precisely,
     there is a basis of normal tensors $\{M_\alpha\}_\alpha$ for the vertically
     viewed tensor $\widetilde M$, together with positive diagonal matrices
-    $\mu_\alpha$ and an isometry $U$ such that
+    $\mu_\alpha$ and a coisometry $U$ from the physical space onto the retained
+    nonzero sectors. Writing
+    $B=\bigoplus_\alpha\mu_\alpha\otimes M_\alpha$, one has
     \begin{align}
-        U\widetilde M U^\dagger
-         &=\bigoplus_\alpha\mu_\alpha\otimes M_\alpha.
+        UU^\dagger&=\Id.
+        \label{eq:cpsv_prop_4_13_coisometry}
+    \end{align}
+    \begin{align}
+        U\widetilde M U^\dagger&=B.
         \label{eq:cpsv_prop_4_13_vertical_form}
     \end{align}
-    This is \cite[Proposition~4.13]{Cirac2016MPDO_arXiv}.
+    \begin{align}
+        \widetilde M&=U^\dagger BU.
+        \label{eq:cpsv_prop_4_13_reconstruction}
+    \end{align}
+    The source explicitly displays
+    (\ref{eq:cpsv_prop_4_13_vertical_form}) and calls $U$ an isometry
+    \cite[Proposition~4.13]{Cirac2016MPDO_arXiv}. In this rectangular
+    orientation, however, $U$ maps the physical space onto the retained sector
+    space and satisfies (\ref{eq:cpsv_prop_4_13_coisometry}); thus $U$ is a
+    coisometry and $U^\dagger$ is the isometric inclusion. The reverse identity
+    (\ref{eq:cpsv_prop_4_13_reconstruction}) is not displayed separately in
+    the proposition. It records the exact reconstruction implicit in the
+    preceding assertion that $\widetilde M$ is itself in canonical form,
+    including the permitted zero orthogonal complement.
 \end{theorem}
+
+\begin{proof}[Proof outline]
+    \uses{thm:cpsv_canonical_form_bnt_existence,
+        thm:representative_grouped_insert_eq,
+        thm:projector_closure_irreducible_corners,
+        thm:mpdo_no_periodic_sector_projector,
+        thm:psd_commute_of_commute_pow,
+        lem:irreducible_transfer_perron_pair,
+        lem:irreducible_block_spectral_normalization,
+        thm:cpsv_normal_mpv_phase_gauge,
+        thm:cpsv_normal_separated_eventually_li,
+        thm:mpdo_sector_compression_trace_pos,
+        thm:mpdo_sector_weight_pos,
+        thm:normal_tensor_gram_rigidity,
+        thm:vertical_sector_coisometry}
+    Write $A$ for the doubled-index MPS tensor of $M$. If $A=0$, take no
+    retained sectors; the unique map onto the zero-dimensional sector space
+    gives the conclusion. Suppose henceforth that $A\ne0$. Begin with its
+    literal canonical-form decomposition and discard the blocks with zero
+    coefficient. Partition the remaining normal blocks by gauge-phase
+    equivalence, and choose one representative $C_\alpha$ in each class. The
+    resulting coefficients $\nu_{\alpha,k}$ are nonzero. Thus there are an
+    active tensor $C$ and a coisometry $V$ such that
+    \begin{align}
+        C^i
+        &=\bigoplus_{\alpha,k}
+          \nu_{\alpha,k}X_{\alpha,k}C_\alpha^iX_{\alpha,k}^{-1},
+        \label{eq:cpsv_prop_4_13_active_bnt}
+    \end{align}
+    and $A^i=V^\dagger C^iV$. The tensors $C_\alpha$ form the basis of
+    normal tensors associated with the active canonical form. This refinement,
+    including omission of all zero-weight blocks, follows from the literal
+    hypothesis; it does not assume normalized BNT-refined horizontal form.
+
+    Let $H^{(N)}$ be the positive operator generated horizontally by
+    $\widetilde M$. If
+    an orthogonal projector $P$ on the physical space satisfies
+    $P\widetilde M=P\widetilde MP$, and $P_1$ acts on the first site, then
+    self-adjointness gives
+    \begin{align}
+        P_1H^{(N)}
+        &=P_1H^{(N)}P_1
+          =(P_1H^{(N)}P_1)^\dagger
+          =H^{(N)}P_1.
+        \label{eq:cpsv_prop_4_13_first_site}
+    \end{align}
+    Write $Y_R(P)$ and $Y_C(P)$ for the right and central first-site
+    contractions determined by $P$. The missing step is to prove that the
+    representative-grouped Lemma~L remains applicable after compression to
+    (\ref{eq:cpsv_prop_4_13_active_bnt}), so that, for every $\alpha$ and $i$,
+    \begin{align}
+        Y_R(P)C_\alpha^i&=Y_C(P)C_\alpha^i.
+        \label{eq:cpsv_prop_4_13_missing_active_separation}
+    \end{align}
+    This identity must then be carried back through the ambient coisometry $V$
+    to obtain
+    \begin{align}
+        \widetilde MP&=P\widetilde MP.
+        \label{eq:cpsv_prop_4_13_missing_coisometry_transport}
+    \end{align}
+    Once these two implications are established,
+    $(\Id-P)\widetilde MP=0$. Thus every one-sided invariant subspace is
+    reducing.
+
+    % Local fix (periodic-sector quantifier): use one noncommuting chain length,
+    % not the all-length assertion printed in the source. See
+    % docs/paper-gaps/cpgsv17_periodic_sector_projector.tex.
+    There are no nontrivial periodic vertical sectors. Otherwise a cyclic
+    projector $Q$ and an integer $p>1$ would commute with
+    $[H^{(N)}]^p$ but not with $H^{(N)}$. Since $H^{(N)}$ is positive
+    semidefinite, it is the positive $p$-th root of $[H^{(N)}]^p$; therefore
+    every operator commuting with $[H^{(N)}]^p$ also commutes with
+    $H^{(N)}$, a contradiction. Invariant-projector closure and the absence
+    of periodic sectors give a direct sum of normal vertical sectors.
+
+    Group gauge-equivalent vertical sectors over the representatives
+    $M_\alpha$. For each active copy $(\alpha,k)$, let $P_{\alpha,k}$ be its
+    range projection. At some length its compression is nonzero and positive
+    semidefinite, and its trace has the form
+    \begin{align}
+        \tr\!\left(P_{\alpha,k}H^{(N)}P_{\alpha,k}\right)
+        &=\mu_{\alpha,k}d_\alpha^{(N)}>0.
+        \label{eq:cpsv_prop_4_13_positive_weight}
+    \end{align}
+    Absorb the phase of one nonzero coefficient into $M_\alpha$, so that the
+    reference coefficient satisfies $\mu_{\alpha,1}>0$. The identity for
+    the original copy first gives $d_\alpha^{(N)}\ne0$. Hence the reference
+    compression has nonzero trace $\mu_{\alpha,1}d_\alpha^{(N)}$ and is
+    nonzero. Its positivity then gives $d_\alpha^{(N)}>0$, and
+    (\ref{eq:cpsv_prop_4_13_positive_weight}) implies
+    $\mu_{\alpha,k}>0$ for every copy.
+
+    Self-adjointness of the same sector compressions gives the marked-chain
+    identity used in the proof of Proposition~4.13. A second instance of the
+    missing retained-coordinate separation must transfer it to the local
+    Gram-conjugation identity
+    \begin{align}
+        (X_{\alpha,k}^\dagger X_{\alpha,k})M_\alpha^v
+        (X_{\alpha,k}^\dagger X_{\alpha,k})^{-1}
+        &=(X_{\alpha,1}^\dagger X_{\alpha,1})M_\alpha^v
+        (X_{\alpha,1}^\dagger X_{\alpha,1})^{-1}.
+        \label{eq:cpsv_prop_4_13_missing_gram_conjugation}
+    \end{align}
+    Normal-tensor rigidity would then make the relative Gram matrix scalar:
+    for every $k$ there is $\omega_{\alpha,k}>0$ such that
+    \begin{align}
+        X_{\alpha,k}^\dagger X_{\alpha,k}
+        &=\omega_{\alpha,k}
+          X_{\alpha,1}^\dagger X_{\alpha,1}.
+        \label{eq:cpsv_prop_4_13_gram}
+    \end{align}
+    Choose $X_{\alpha,1}=\Id$ and replace each remaining gauge by
+    $\omega_{\alpha,k}^{-1/2}X_{\alpha,k}$. The gauges are then unitary, while
+    their conjugation actions are unchanged.
+
+    Compose these unitary bond gauges with the mutually orthogonal inclusions
+    of the retained vertical sectors, and take their adjoints as the block-row
+    map $U$. The orthogonality of the sector ranges gives
+    (\ref{eq:cpsv_prop_4_13_coisometry}), and the sector intertwinings give
+    (\ref{eq:cpsv_prop_4_13_vertical_form}). Invariant-projector closure makes
+    the retained support reducing, while the complement is the all-zero
+    sector. Summing the sector reconstructions therefore gives the exact
+    identity (\ref{eq:cpsv_prop_4_13_reconstruction}).
+
+    The preceding paragraphs recast the source proof on the active retained
+    coordinates required by the literal canonical-form definition.
+\end{proof}
+
+% Formalization status: the theorem above remains \notready. The theorem below
+% proves the same conclusion from the stronger normalized BNT-refined horizontal
+% form. For literal canonical form, the missing step is Lemma L separation after
+% passage to the active decomposition and back through the ambient coisometry.
 
 \begin{theorem}[BNT-refined horizontal form implies vertical canonical form]
     \label{thm:vertical_cf_of_horizontal_cf}

@@ -19,7 +19,8 @@
 Proposition~4.13 (source label \path{Prop:IV.12}) of
 \cite{Cirac2016MPDO_arXiv} states that a canonical-form
 tensor generating matrix product density operators is also in canonical form
-in the vertical direction.  After a physical isometry, the tensor has the form
+in the vertical direction.  With the rectangular map called an isometry in
+that proposition, the tensor has the form
 \begin{equation}
   U\widetilde M U^\dagger
   =
@@ -98,6 +99,18 @@ In this displayed name, the plain digit~$2$ denotes the subscripted character
 used in the source declaration.
 
 \section{Boundary of the present result}
+
+The results described below assume the normalized BNT-refined horizontal form
+\path{MPOTensor.IsHorizontalCF}: the retained sectors fill the horizontal bond
+space, every repeated-copy weight is nonzero, all copy weights have modulus at
+most one, at least one has modulus one, and the normal blocks are already
+grouped over BNT representatives.  This is strictly stronger than the
+literal CPSV canonical form of Proposition~4.13, which allows an omitted zero
+complement and does not
+include this normalized representative grouping.  Thus the completed
+construction below proves the vertical conclusion under the stronger
+horizontal hypothesis; the implication from literal CPSV canonical form
+remains open.
 
 An earlier auxiliary route compared one scalar weight $\mu_\alpha$ with
 several weights $\omega_{\alpha,j}$ under the additional identities
@@ -238,17 +251,38 @@ tensors.
 Finally, \path{MPOTensor.verticalCF_of_horizontalCF} in
 \path{TNLean/MPS/MPDO/VerticalCanonicalForm.lean} applies the orthogonal sector
 coisometry theorem and identifies the dependent sector pairs $(\alpha,q)$
-with the standard finite direct-sum coordinates.  This gives the literal
-vertical canonical-form identities of Proposition~4.13.  The original
+with the standard finite direct-sum coordinates.  This gives the displayed
+identity of Proposition~4.13 together with the exact reconstruction implicit
+in its preceding assertion that the vertical
+tensor is in canonical form.  The reverse reconstruction is not separately
+printed in the proposition.  The original
 formulation of \ghissue{2537}, interpreted as a direct conversion of the
 horizontal scalar weights and diagonal restrictions, remains a false route
 rather than a consequence of the proposition.
 
 \paragraph{Verdict.}
-The source-faithful horizontal-to-vertical implication of Proposition~4.13 is
-complete.  The proof follows the grouped vertical sectors used in the paper;
-it does not use the unsupported diagonal-restriction statement from
-\ghissue{2537}.
+The horizontal-to-vertical implication is complete under the normalized
+BNT-refined hypothesis \path{MPOTensor.IsHorizontalCF}.  That hypothesis is
+strictly stronger than the literal CPSV canonical form assumed in
+Proposition~4.13, so the literal theorem remains open.  The proved restricted
+result follows the grouped vertical sectors used in the paper and does not use
+the unsupported diagonal-restriction statement from \ghissue{2537}.
+
+To eliminate the stronger hypothesis, first use
+\path{MPSTensor.CPSVCanonicalFormData.exists_isCPSVBasisOfNormalTensors} to
+obtain the active BNT representatives.  That theorem does not retain the
+active-index equivalence, the copy weights and gauges, or the ambient
+coisometry.  One must therefore strengthen its conclusion to a structured
+active-refinement witness carrying those data and the exact reconstruction.
+The missing lemma must then establish the Lemma~L first-site insertion
+separation on the retained coordinates and carry the separated identity back
+through the coisometry.  With that statement in place, the invariant-projector
+argument, periodic-sector exclusion, positivity of the vertical
+multiplicities, grouped Gram normalization, and final coisometric
+reconstruction can be replayed without assuming
+\path{MPOTensor.IsHorizontalCF}.  This yields
+the literal Proposition~4.13 theorem rather than an adapter through the
+stronger predicate.
 
 \bibliographystyle{alpha}
 \bibliography{references}
