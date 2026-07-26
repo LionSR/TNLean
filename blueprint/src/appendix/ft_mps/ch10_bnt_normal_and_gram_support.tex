@@ -127,6 +127,9 @@ arguments.
     large $N$ it is invertible, so the MPV states are linearly independent.
 \end{proof}
 
+The same conclusion is often more convenient with an explicit threshold rather
+than the eventual quantifier.
+
 \begin{theorem}[Existential BNT independence from overlap limits]%
     \label{thm:bnt_li_from_overlap_limits_exists}
     \lean{MPSTensor.exists_eventually_linearIndependent_of_overlap_tendsto_orthonormal}
@@ -187,9 +190,6 @@ criterion and its coefficient-extraction corollary.
     Apply Lemma~\ref{lem:bnt_finite_index_overlap_orthonormal_li} with
     $I = \{1,\ldots,g\}$.
 \end{proof}
-
-The same conclusion is often more convenient with an explicit threshold rather
-than the eventual quantifier.
 
 Eventual linear independence is also what converts an equality of two finite
 linear combinations into equality of their coefficients; this is the mechanism

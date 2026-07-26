@@ -124,7 +124,9 @@ projection.
     \uses{lem:sector_bnt_proportional_exact_match,
         lem:sector_bnt_combined_family_eventually_li,
         lem:sector_bnt_coeff_not_eventually_zero,
-        thm:nt_overlap_norm_one_gauge}
+        cor:sector_bnt_cf_basis_normal,
+        thm:cpsv_normal_overlap_dichotomy,
+        thm:gauge_phase_mpv_scaling}
     Equality of the positive-length MPV families gives eventual nonzero
     proportionality with scalar $1$. We spell out the fixed-length argument
     used by Lemma~\ref{lem:sector_bnt_proportional_exact_match}.
@@ -132,11 +134,16 @@ projection.
     Fix a sector $j_0$ of $P$, and let $T$ be the set of sectors of $P$ whose
     cross-overlap with every sector of $Q$ tends to zero. Suppose
     $j_0\in T$. For each $j\notin T$, choose a sector $k(j)$ of $Q$ with
-    non-decaying cross-overlap. Normal-block overlap rigidity supplies a
-    scalar sequence $\alpha_j(N)$ such that
+    non-decaying cross-overlap. The canonical-form hypotheses make
+    $P_j$ and $Q_{k(j)}$ normal. Apply
+    Theorem~\ref{thm:cpsv_normal_overlap_dichotomy}: non-decay rules out its
+    first alternative, so the second gives equal bond dimensions, a
+    gauge-phase equivalence
+    $Q_{k(j)}^i=\zeta_jX_jP_j^iX_j^{-1}$, and $|\zeta_j|=1$.
+    Gauge-phase covariance then gives the geometric scalar relation
     \begin{align}
         V^{(N)}(P_j)
-         & =\alpha_j(N)V^{(N)}(Q_{k(j)}).
+         & =\zeta_j^{-N}V^{(N)}(Q_{k(j)}).
         \notag
     \end{align}
     The restricted combined family
@@ -159,8 +166,9 @@ projection.
     $V^{(N)}(P_{j_0})$ is exactly $c_{P,j_0}^{(N)}$. Linear independence
     forces $c_{P,j_0}^{(N)}=0$ for every sufficiently large $N$, contradicting
     Lemma~\ref{lem:sector_bnt_coeff_not_eventually_zero}. Hence some sector
-    $k_0$ has non-decaying cross-overlap with $P_{j_0}$. The unequal-dimension
-    and equal-dimension overlap dichotomies then give
+    $k_0$ has non-decaying cross-overlap with $P_{j_0}$. Apply
+    Theorem~\ref{thm:cpsv_normal_overlap_dichotomy} once more. Its decay
+    alternative is impossible, so its gauge-phase alternative gives
     $\dim_P(j_0)=\dim_Q(k_0)$ and the asserted gauge-phase equivalence.
 \end{proof}
 

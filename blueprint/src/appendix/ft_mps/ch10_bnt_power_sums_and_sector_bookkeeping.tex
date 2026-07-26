@@ -272,14 +272,27 @@ finite-set construction used to package matches in both directions.
 \begin{proof}\leanok
     \uses{lem:sector_bnt_combined_family_eventually_li,
         lem:sector_bnt_coeff_not_eventually_zero,
-        thm:nt_overlap_norm_one_gauge}
-    If the chosen sector decayed against every sector of $Q$, separate the
-    non-decaying matched sectors from the decaying residue. The combined-family
-    Gram criterion makes that residue together with the $Q$ family eventually
-    linearly independent. Exact coefficient extraction would then make the
-    chosen sector coefficient eventually zero, contradicting its power-sum
-    nonvanishing. The resulting non-decaying overlap gives dimension equality
-    and gauge-phase equivalence by normal-block overlap rigidity.
+        cor:sector_bnt_cf_basis_normal,
+        thm:cpsv_normal_overlap_dichotomy,
+        thm:gauge_phase_mpv_scaling}
+    Suppose the chosen sector decays against every sector of $Q$, and separate
+    all such $P$-sectors from the remaining ones. For each remaining sector,
+    choose a $Q$-sector with non-decaying overlap. Both blocks are normal by the
+    canonical-form hypotheses. Theorem~\ref{thm:cpsv_normal_overlap_dichotomy}
+    rules out its decay alternative and supplies equal bond dimensions and a
+    gauge-phase relation with a unit phase. Gauge-phase covariance therefore
+    expresses that $P$-sector MPV as a geometric scalar multiple of the chosen
+    $Q$-sector MPV.
+
+    Substitute these relations into the eventual proportionality identity.
+    The combined-family Gram criterion makes the decaying residue together
+    with the $Q$ family eventually linearly independent. Exact coefficient
+    extraction then makes the chosen sector coefficient eventually zero,
+    contradicting its power-sum nonvanishing. Thus a non-decaying partner
+    exists. A second application of
+    Theorem~\ref{thm:cpsv_normal_overlap_dichotomy} rules out decay and gives
+    the required dimension equality and gauge-phase equivalence; no
+    modulus-one overlap limit is assumed.
 \end{proof}
 
 \begin{lemma}[Full-basis matching under eventual proportionality]

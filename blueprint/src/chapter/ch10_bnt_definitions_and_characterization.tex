@@ -79,11 +79,17 @@
         \item no two distinct tensors $A_j$ and $A_{j'}$ are related in this
               way.
     \end{enumerate}
-    This is \cite[Proposition~2.7]{Cirac2016MPDO_arXiv}, with one necessary
-    local correction: the coverage clause is restricted to the active blocks.
-    The source canonical-form syntax permits $\mu_k=0$, but such a summand
-    contributes nothing to any positive-length MPV and therefore cannot be
-    recovered from the BNT spanning property.
+    This is \cite[Proposition~2.7]{Cirac2016MPDO_arXiv}, with the following
+    necessary local correction.
+
+    \textbf{Local fix (active blocks):} the coverage clause is restricted to
+    $K_{\mathrm{act}}$. The literal source canonical-form display permits
+    $\mu_k=0$, but such a summand contributes nothing to any positive-length
+    MPV and therefore cannot be recovered from the BNT spanning property.
+    Removing the zero-weight summands leaves every positive-length MPV
+    unchanged and restores the nonzero-weight hypothesis of the source
+    phase-class argument. The comparison is recorded in
+    \path{docs/paper-gaps/cpsv16_bnt_characterization_active_blocks.tex}.
 \end{theorem}
 
 \begin{proof}\leanok
