@@ -13,6 +13,7 @@ import TNLean.MPS.CanonicalForm.BNTGrouping
 import TNLean.MPS.CanonicalForm.BNTTransport
 import TNLean.MPS.CanonicalForm.BNTUniqueness
 import TNLean.MPS.CanonicalForm.BlockingViaAdjoint
+import TNLean.MPS.CanonicalForm.CPSVAfterBlocking
 import TNLean.MPS.CanonicalForm.CommonPeriodCyclicSectors
 import TNLean.MPS.CanonicalForm.CyclicSectors
 import TNLean.MPS.CanonicalForm.CyclicSectors.Basic
