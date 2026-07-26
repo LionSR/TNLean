@@ -3,28 +3,25 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.CanonicalForm.BNTExistence
+import TNLean.MPS.CanonicalForm.BNTCharacterization
 import TNLean.MPS.SharedInfra.BlockGauge
 
 /-!
-# Structured active BNT refinements of CPSV canonical form
+# Active BNT refinements of CPSV canonical form
 
-This module retains the data discarded by the existential BNT construction.  Starting from
-literal `CPSVCanonicalFormData`, it enumerates the nonzero-weight blocks, quotients them by
-MPV phase equivalence, and records the dimension, phase, and invertible gauge of every copy
-relative to its chosen representative.
+A literal CPSV canonical form is restricted to its nonzero-weight blocks and partitioned into
+MPV phase classes.  Each active copy retains its original weight, unit phase, dimension
+identity, and invertible gauge relative to a chosen normal representative.  The inactive
+listed blocks remain as zero-weight summands.
 
-Zero-weight displayed blocks are not deleted.  They remain as literal zero-weight summands in
-the exact direct sum.  Consequently the original ambient coisometry is retained unchanged,
-with orientation `U * Uᴴ = 1`.  The active summands are replaced letterwise by gauged phase
-copies of their representatives, while inactive summands are left untouched.  A block-diagonal
-gauge then gives an exact letterwise regrouping and an exact ambient reconstruction.
+The grouped order is the sum of the phase-class copy coordinates and the inactive complement.
+An explicit equivalence identifies this order with the original listed blocks, and its induced
+flattened-coordinate permutation gives exact letterwise direct-sum and ambient-reconstruction
+identities.
 
-This is the preparatory active-refinement step in the proof of Proposition 4.13 of
-arXiv:1606.00608, lines 1863--1921.  It does not assert the retained-coordinate Lemma L or the
-vertical canonical-form conclusion of that proposition.
+The phase classes follow arXiv:1606.00608, lines 265--301 and 1135--1146; the gauge witnesses
+follow lines 1080--1117.  Proposition 4.13, lines 1863--1921, uses these data downstream.
 -/
-
 open scoped Matrix BigOperators
 
 namespace MPSTensor
@@ -67,7 +64,7 @@ noncomputable def activePhaseClasses (data : CPSVCanonicalFormData A) :
 /-- Equivalence between phase-class copies and the original nonzero-weight displayed blocks.
 
 This is the explicit retained-index identification used in the copy enumeration at
-arXiv:1606.00608, lines 1894--1901. -/
+arXiv:1606.00608, lines 265--301 and 1135--1146. -/
 noncomputable def activeClassCopyEquiv (data : CPSVCanonicalFormData A) :
     (Σ j : Fin data.activePhaseClasses.g,
       Fin (data.activePhaseClasses.copies j)) ≃ data.Active :=
@@ -91,7 +88,6 @@ noncomputable def activeClassCopy (data : CPSVCanonicalFormData A) (k : data.Act
     Σ j : Fin data.activePhaseClasses.g, Fin (data.activePhaseClasses.copies j) :=
   data.activeClassCopyEquiv.symm k
 
-@[simp]
 theorem activeClassCopy_activeClassCopyEquiv (data : CPSVCanonicalFormData A)
     (j : Fin data.activePhaseClasses.g)
     (q : Fin (data.activePhaseClasses.copies j)) :
@@ -106,83 +102,255 @@ invertible gauge realizing that copy as a gauged phase multiple of the chosen re
 The representative family is a CPSV basis of normal tensors.
 
 The displayed zero-weight coordinates are retained as literal zero summands.  The fields
-`regroup_letterwise` and `reconstruct_regrouped` are therefore exact matrix identities at every
+`regroupLetterwise` and `reconstructRegrouped` are therefore exact matrix identities at every
 letter, not merely positive-length MPV equalities.  The ambient rectangular map keeps the
 coisometry orientation `U * Uᴴ = 1`.
 
-Source: arXiv:1606.00608, Proposition 4.13, lines 1863--1921, especially the copy enumeration
-and gauges at lines 1894--1905. -/
+Source: arXiv:1606.00608, lines 265--301, 1080--1117, and 1135--1146.
+Proposition 4.13, lines 1863--1921, uses this refinement downstream. -/
 structure ActiveBNTRefinement (data : CPSVCanonicalFormData A) where
   /-- Equality between the chosen representative's bond dimension and this copy's dimension. -/
-  copy_dim_eq : ∀ k : data.Active,
+  copyDimEq : ∀ k : data.Active,
     data.dim (data.activeRepresentativeIndex (data.activeClassCopy k).1) = data.dim k
   /-- The unit phase multiplying this active copy of its representative. -/
-  copy_phase : data.Active → ℂ
+  copyPhase : data.Active → ℂ
   /-- The phase of every active copy has unit modulus. -/
-  copy_phase_norm : ∀ k : data.Active, ‖copy_phase k‖ = 1
+  copyPhaseNorm : ∀ k : data.Active, ‖copyPhase k‖ = 1
   /-- The invertible gauge from the representative coordinates to this copy's coordinates. -/
-  copy_gauge : ∀ k : data.Active, GL (Fin (data.dim k)) ℂ
+  copyGauge : ∀ k : data.Active, GL (Fin (data.dim k)) ℂ
   /-- Exact letterwise gauge-phase relation for every active copy. -/
-  copy_relation : ∀ (k : data.Active) i,
-    data.blocks k i = copy_phase k •
-      ((copy_gauge k : Matrix _ _ ℂ) *
-        (cast (congr_arg (MPSTensor d) (copy_dim_eq k))
+  copyRelation : ∀ (k : data.Active) i,
+    data.blocks k i = copyPhase k •
+      ((copyGauge k : Matrix _ _ ℂ) *
+        (cast (congr_arg (MPSTensor d) (copyDimEq k))
           (data.blocks (data.activeRepresentativeIndex (data.activeClassCopy k).1))) i *
-        (↑((copy_gauge k)⁻¹) : Matrix _ _ ℂ))
+        (↑((copyGauge k)⁻¹) : Matrix _ _ ℂ))
   /-- The original scalar weight of each active copy. -/
-  copy_weight : data.Active → ℂ
+  copyWeight : data.Active → ℂ
   /-- The copy weight is exactly the weight at its original displayed index. -/
-  copy_weight_eq : ∀ k : data.Active, copy_weight k = data.weights k
+  copyWeightEq : ∀ k : data.Active, copyWeight k = data.weights k
   /-- Every chosen representative is a normal tensor. -/
-  representative_normal : ∀ j,
+  representativeNormal : ∀ j,
     IsNormalTensor (data.blocks (data.activeRepresentativeIndex j))
   /-- Distinct chosen representatives are not gauge-phase equivalent. -/
-  representatives_not_equiv :
+  representativesNotEquiv :
     BlocksNotGaugePhaseEquiv (d := d)
       (fun j => data.blocks (data.activeRepresentativeIndex j))
   /-- The representative family is a basis of normal tensors for the original tensor. -/
-  representatives_bnt :
+  representativesBNT :
     IsCPSVBasisOfNormalTensors A
       (fun j => ⟨data.dim (data.activeRepresentativeIndex j),
         data.blocks (data.activeRepresentativeIndex j)⟩)
   /-- One same-dimensional representative copy at every displayed index.  Inactive indices are
   left unchanged because their displayed scalar weight is zero. -/
-  regrouped_blocks : (k : Fin data.r) → MPSTensor d (data.dim k)
+  regroupedBlocks : (k : Fin data.r) → MPSTensor d (data.dim k)
   /-- The block gauge at every displayed index. -/
-  listed_gauge : (k : Fin data.r) → GL (Fin (data.dim k)) ℂ
-  /-- Active entries of `regrouped_blocks` are phase multiples of their class representatives. -/
-  regrouped_blocks_active : ∀ k : data.Active,
-    regrouped_blocks k = fun i => copy_phase k •
-      (cast (congr_arg (MPSTensor d) (copy_dim_eq k))
+  listedGauge : (k : Fin data.r) → GL (Fin (data.dim k)) ℂ
+  /-- Active entries of `regroupedBlocks` are phase multiples of their class representatives. -/
+  regroupedBlocksActive : ∀ k : data.Active,
+    regroupedBlocks k = fun i => copyPhase k •
+      (cast (congr_arg (MPSTensor d) (copyDimEq k))
         (data.blocks (data.activeRepresentativeIndex (data.activeClassCopy k).1))) i
   /-- Inactive displayed entries remain the original blocks and continue to carry zero weight. -/
-  regrouped_blocks_inactive : ∀ k, data.weights k = 0 →
-    regrouped_blocks k = data.blocks k
+  regroupedBlocksInactive : ∀ k, data.weights k = 0 →
+    regroupedBlocks k = data.blocks k
   /-- Every original displayed block is the conjugate of its regrouped block. -/
-  blocks_eq_listed_gauge_conj : ∀ k i,
+  blocksEqListedGaugeConj : ∀ k i,
     data.blocks k i =
-      (listed_gauge k : Matrix _ _ ℂ) * regrouped_blocks k i *
-        (↑((listed_gauge k)⁻¹) : Matrix _ _ ℂ)
+      (listedGauge k : Matrix _ _ ℂ) * regroupedBlocks k i *
+        (↑((listedGauge k)⁻¹) : Matrix _ _ ℂ)
   /-- Exact letterwise regrouping of the displayed direct sum. -/
-  regroup_letterwise : ∀ i,
+  regroupLetterwise : ∀ i,
     toTensorFromBlocks (d := d) data.weights data.blocks i =
-      (globalGaugeOfBlocks listed_gauge : Matrix _ _ ℂ) *
-        toTensorFromBlocks (d := d) data.weights regrouped_blocks i *
-        (↑((globalGaugeOfBlocks listed_gauge)⁻¹) : Matrix _ _ ℂ)
+      (globalGaugeOfBlocks listedGauge : Matrix _ _ ℂ) *
+        toTensorFromBlocks (d := d) data.weights regroupedBlocks i *
+        (↑((globalGaugeOfBlocks listedGauge)⁻¹) : Matrix _ _ ℂ)
   /-- The original ambient coisometry from literal CPSV canonical form. -/
-  ambient_coisometry : Matrix (Fin (∑ k : Fin data.r, data.dim k)) (Fin D) ℂ
+  ambientCoisometry : Matrix (Fin (∑ k : Fin data.r, data.dim k)) (Fin D) ℂ
   /-- The retained rectangular map is exactly the original ambient coisometry in the literal
   canonical-form witness. -/
-  ambient_coisometry_eq : ambient_coisometry = data.ambient_coisometry
+  ambientCoisometryEq : ambientCoisometry = data.ambient_coisometry
   /-- The ambient rectangular map is a coisometry, in the orientation `U * Uᴴ = 1`. -/
-  ambient_coisometric : ambient_coisometry * ambient_coisometryᴴ = 1
+  ambientCoisometric : ambientCoisometry * ambientCoisometryᴴ = 1
   /-- Exact ambient reconstruction through the regrouped direct sum and its block gauge. -/
-  reconstruct_regrouped : ∀ i,
-    A i = ambient_coisometryᴴ *
-      ((globalGaugeOfBlocks listed_gauge : Matrix _ _ ℂ) *
-        toTensorFromBlocks (d := d) data.weights regrouped_blocks i *
-        (↑((globalGaugeOfBlocks listed_gauge)⁻¹) : Matrix _ _ ℂ)) *
-      ambient_coisometry
+  reconstructRegrouped : ∀ i,
+    A i = ambientCoisometryᴴ *
+      ((globalGaugeOfBlocks listedGauge : Matrix _ _ ℂ) *
+        toTensorFromBlocks (d := d) data.weights regroupedBlocks i *
+        (↑((globalGaugeOfBlocks listedGauge)⁻¹) : Matrix _ _ ℂ)) *
+      ambientCoisometry
+
+/-- Inactive displayed blocks, retained as the complement of the nonzero-weight blocks. -/
+abbrev Inactive (data : CPSVCanonicalFormData A) :=
+  {k : Fin data.r // ¬ data.weights k ≠ 0}
+
+/-- The grouped block order: phase class and copy for every active block, followed by the
+inactive complement. -/
+abbrev GroupedIndex (data : CPSVCanonicalFormData A) :=
+  (Σ j : Fin data.activePhaseClasses.g, Fin (data.activePhaseClasses.copies j)) ⊕
+    data.Inactive
+
+/-- Equivalence from the grouped class/copy-plus-inactive order to the original listed blocks. -/
+noncomputable def groupedIndexEquiv (data : CPSVCanonicalFormData A) :
+    data.GroupedIndex ≃ Fin data.r :=
+  (Equiv.sumCongr data.activeClassCopyEquiv (Equiv.refl data.Inactive)).trans
+    (Equiv.sumCompl fun k : Fin data.r => data.weights k ≠ 0)
+
+/-- Number of blocks in the grouped order, including the inactive complement. -/
+noncomputable def groupedCount (data : CPSVCanonicalFormData A) : ℕ :=
+  Fintype.card data.GroupedIndex
+
+/-- Enumeration of the grouped class/copy-plus-inactive order. -/
+noncomputable def groupedEnum (data : CPSVCanonicalFormData A) :
+    Fin data.groupedCount ≃ data.GroupedIndex :=
+  (Fintype.equivFin data.GroupedIndex).symm
+
+/-- Equivalence from the finite grouped enumeration to the original listed block indices. -/
+noncomputable def groupedListedEquiv (data : CPSVCanonicalFormData A) :
+    Fin data.groupedCount ≃ Fin data.r :=
+  data.groupedEnum.trans data.groupedIndexEquiv
+
+/-- Position of a class/copy or inactive block in the finite grouped enumeration. -/
+noncomputable def groupedPosition (data : CPSVCanonicalFormData A)
+    (x : data.GroupedIndex) : Fin data.groupedCount :=
+  data.groupedEnum.symm x
+
+/-- Bond dimension at a grouped block position. -/
+noncomputable def groupedDim (data : CPSVCanonicalFormData A) :
+    Fin data.groupedCount → ℕ :=
+  fun l => data.dim (data.groupedListedEquiv l)
+
+/-- Original scalar weight at a grouped block position. -/
+noncomputable def ActiveBNTRefinement.groupedWeight
+    {data : CPSVCanonicalFormData A} (_ref : data.ActiveBNTRefinement) :
+    Fin data.groupedCount → ℂ :=
+  fun l => data.weights (data.groupedListedEquiv l)
+
+/-- Representative copy, or unchanged inactive block, at a grouped block position. -/
+noncomputable def ActiveBNTRefinement.groupedBlocks
+    {data : CPSVCanonicalFormData A} (ref : data.ActiveBNTRefinement) :
+    (l : Fin data.groupedCount) → MPSTensor d (data.groupedDim l) :=
+  fun l => ref.regroupedBlocks (data.groupedListedEquiv l)
+
+/-- The flattened coordinate permutation from grouped block coordinates to the original
+listed direct-sum coordinates. -/
+noncomputable def groupedCoordinateEquiv (data : CPSVCanonicalFormData A) :
+    (Σ l : Fin data.groupedCount, Fin (data.groupedDim l)) ≃
+      Fin (∑ k : Fin data.r, data.dim k) :=
+  blockIndexCoordinateEquiv data.dim data.groupedListedEquiv
+
+/-- The grouped class/copy-plus-inactive order has exactly the original retained dimension. -/
+theorem groupedTotalDim_eq (data : CPSVCanonicalFormData A) :
+    (∑ l : Fin data.groupedCount, data.groupedDim l) =
+      ∑ k : Fin data.r, data.dim k := by
+  simpa only [Fintype.card_fin, Fintype.card_sigma] using
+    Fintype.card_congr data.groupedCoordinateEquiv
+
+/-- Exact grouped tensor in the original flattened retained-coordinate space.
+
+The raw block diagonal is ordered by phase class and copy, followed by the inactive complement;
+`groupedCoordinateEquiv` is the explicit permutation into the original retained coordinates.
+
+Source: arXiv:1606.00608, lines 265--301 and 1135--1146; this coordinate form is used
+in Proposition 4.13, lines 1863--1921. -/
+noncomputable def ActiveBNTRefinement.groupedTensor
+    {data : CPSVCanonicalFormData A} (ref : data.ActiveBNTRefinement) :
+    MPSTensor d (∑ k : Fin data.r, data.dim k) := fun i =>
+  Matrix.reindex data.groupedCoordinateEquiv data.groupedCoordinateEquiv
+    (Matrix.blockDiagonal' fun l : Fin data.groupedCount =>
+      ref.groupedWeight l • ref.groupedBlocks l i)
+
+/-- A grouped class/copy coordinate maps to its original active displayed block. -/
+theorem groupedIndexEquiv_inl (data : CPSVCanonicalFormData A)
+    (jq : Σ j : Fin data.activePhaseClasses.g,
+      Fin (data.activePhaseClasses.copies j)) :
+    data.groupedIndexEquiv (Sum.inl jq) = data.activeClassCopyEquiv jq := by
+  rfl
+
+/-- A grouped inactive coordinate maps to its original displayed block. -/
+theorem groupedIndexEquiv_inr (data : CPSVCanonicalFormData A) (k : data.Inactive) :
+    data.groupedIndexEquiv (Sum.inr k) = k := by
+  rfl
+
+/-- The finite position of a grouped coordinate maps to the same original listed block. -/
+theorem groupedListedEquiv_groupedPosition (data : CPSVCanonicalFormData A)
+    (x : data.GroupedIndex) :
+    data.groupedListedEquiv (data.groupedPosition x) = data.groupedIndexEquiv x := by
+  simp [groupedListedEquiv, groupedPosition, groupedEnum]
+
+/-- Locate an active phase-class copy in the original listed block family. -/
+theorem groupedListedEquiv_activeCopy (data : CPSVCanonicalFormData A)
+    (jq : Σ j : Fin data.activePhaseClasses.g,
+      Fin (data.activePhaseClasses.copies j)) :
+    data.groupedListedEquiv (data.groupedPosition (Sum.inl jq)) =
+      data.activeClassCopyEquiv jq := by
+  rw [data.groupedListedEquiv_groupedPosition, data.groupedIndexEquiv_inl]
+
+/-- Locate an inactive complement block in the original listed block family. -/
+theorem groupedListedEquiv_inactive (data : CPSVCanonicalFormData A) (k : data.Inactive) :
+    data.groupedListedEquiv (data.groupedPosition (Sum.inr k)) = k := by
+  rw [data.groupedListedEquiv_groupedPosition, data.groupedIndexEquiv_inr]
+
+/-- The grouped weight at a phase-class copy is its original displayed weight. -/
+theorem ActiveBNTRefinement.groupedWeight_activeCopy
+    {data : CPSVCanonicalFormData A} (ref : data.ActiveBNTRefinement)
+    (jq : Σ j : Fin data.activePhaseClasses.g,
+      Fin (data.activePhaseClasses.copies j)) :
+    ref.groupedWeight (data.groupedPosition (Sum.inl jq)) =
+      data.weights (data.activeClassCopyEquiv jq) := by
+  simp only [ActiveBNTRefinement.groupedWeight]
+  rw [data.groupedListedEquiv_activeCopy]
+
+/-- Inactive grouped weights vanish exactly. -/
+theorem ActiveBNTRefinement.groupedWeight_inactive
+    {data : CPSVCanonicalFormData A} (ref : data.ActiveBNTRefinement) (k : data.Inactive) :
+    ref.groupedWeight (data.groupedPosition (Sum.inr k)) = 0 := by
+  simp only [ActiveBNTRefinement.groupedWeight]
+  rw [data.groupedListedEquiv_inactive]
+  exact not_ne_iff.mp k.property
+
+/-- Exact permutation identity between the in-place regrouped direct sum and the explicit
+class/copy-plus-inactive grouped tensor. -/
+theorem ActiveBNTRefinement.regroupedTensor_eq_groupedTensor
+    {data : CPSVCanonicalFormData A} (ref : data.ActiveBNTRefinement) (i : Fin d) :
+    toTensorFromBlocks (d := d) data.weights ref.regroupedBlocks i = ref.groupedTensor i := by
+  change toTensorFromBlocks (d := d) data.weights ref.regroupedBlocks i =
+    Matrix.reindex (blockIndexCoordinateEquiv data.dim data.groupedListedEquiv)
+      (blockIndexCoordinateEquiv data.dim data.groupedListedEquiv)
+      (Matrix.blockDiagonal' fun l : Fin data.groupedCount =>
+        data.weights (data.groupedListedEquiv l) •
+          ref.regroupedBlocks (data.groupedListedEquiv l) i)
+  exact toTensorFromBlocks_eq_reindex_blockDiagonal_equiv data.weights ref.regroupedBlocks
+    data.groupedListedEquiv i
+
+/-- Exact letterwise class/copy-plus-inactive regrouping. The equation displays both the
+flattened coordinate permutation and the block-diagonal copy gauges.
+
+Source: arXiv:1606.00608, lines 265--301, 1080--1117, and 1135--1146. This is
+the structured input used downstream in Proposition 4.13, lines 1863--1921. -/
+theorem ActiveBNTRefinement.groupedRegroupLetterwise
+    {data : CPSVCanonicalFormData A} (ref : data.ActiveBNTRefinement) (i : Fin d) :
+    toTensorFromBlocks (d := d) data.weights data.blocks i =
+      (globalGaugeOfBlocks ref.listedGauge : Matrix _ _ ℂ) *
+        Matrix.reindex data.groupedCoordinateEquiv data.groupedCoordinateEquiv
+          (Matrix.blockDiagonal' fun l : Fin data.groupedCount =>
+            ref.groupedWeight l • ref.groupedBlocks l i) *
+        (↑((globalGaugeOfBlocks ref.listedGauge)⁻¹) : Matrix _ _ ℂ) := by
+  rw [ref.regroupLetterwise i, ref.regroupedTensor_eq_groupedTensor i]
+  rfl
+
+/-- Exact ambient reconstruction from the explicitly grouped tensor. The rectangular map is
+the original CPSV coisometry, with orientation `U * Uᴴ = 1`.
+
+Source: arXiv:1606.00608, eq. `II_CF1`, lines 237--244; the grouped coordinates follow
+lines 265--301, 1080--1117, and 1135--1146 and are used in Proposition 4.13. -/
+theorem ActiveBNTRefinement.reconstructGrouped
+    {data : CPSVCanonicalFormData A} (ref : data.ActiveBNTRefinement) (i : Fin d) :
+    A i = ref.ambientCoisometryᴴ *
+      ((globalGaugeOfBlocks ref.listedGauge : Matrix _ _ ℂ) * ref.groupedTensor i *
+        (↑((globalGaugeOfBlocks ref.listedGauge)⁻¹) : Matrix _ _ ℂ)) *
+      ref.ambientCoisometry := by
+  rw [ref.reconstructRegrouped i, ref.regroupedTensor_eq_groupedTensor i]
 
 /-- Every literal CPSV canonical-form decomposition has a structured active BNT refinement.
 
@@ -191,7 +359,8 @@ their coordinates is asserted.  Active indices are equivalently enumerated by ph
 copy, and every copy carries its original weight and a unit-phase gauge witness.  The final two
 identities are exact at each physical letter.
 
-Source: arXiv:1606.00608, Proposition 4.13, lines 1863--1921. -/
+Source: arXiv:1606.00608, lines 265--301, 1080--1117, and 1135--1146;
+Proposition 4.13, lines 1863--1921, is the downstream application. -/
 theorem exists_activeBNTRefinement (data : CPSVCanonicalFormData A) :
     Nonempty data.ActiveBNTRefinement := by
   classical
@@ -290,26 +459,26 @@ theorem exists_activeBNTRefinement (data : CPSVCanonicalFormData A) :
     toTensorFromBlocks_eq_globalGaugeOfBlocks_conj data.weights
       regroupedBlocks data.blocks listedGauge hBlocksGauge
   refine ⟨{
-    copy_dim_eq := copyDimEq
-    copy_phase := copyPhase
-    copy_phase_norm := copyPhaseNorm
-    copy_gauge := copyGauge
-    copy_relation := copyRelation
-    copy_weight := copyWeight
-    copy_weight_eq := fun _ => rfl
-    representative_normal := hRepresentativeNormal
-    representatives_not_equiv := hRepresentativesNotEquiv
-    representatives_bnt := hRepresentativesBNT
-    regrouped_blocks := regroupedBlocks
-    listed_gauge := listedGauge
-    regrouped_blocks_active := hRegroupedActive
-    regrouped_blocks_inactive := hRegroupedInactive
-    blocks_eq_listed_gauge_conj := hBlocksGauge
-    regroup_letterwise := hRegroup
-    ambient_coisometry := data.ambient_coisometry
-    ambient_coisometry_eq := rfl
-    ambient_coisometric := data.coisometric
-    reconstruct_regrouped := ?_
+    copyDimEq := copyDimEq
+    copyPhase := copyPhase
+    copyPhaseNorm := copyPhaseNorm
+    copyGauge := copyGauge
+    copyRelation := copyRelation
+    copyWeight := copyWeight
+    copyWeightEq := fun _ => rfl
+    representativeNormal := hRepresentativeNormal
+    representativesNotEquiv := hRepresentativesNotEquiv
+    representativesBNT := hRepresentativesBNT
+    regroupedBlocks := regroupedBlocks
+    listedGauge := listedGauge
+    regroupedBlocksActive := hRegroupedActive
+    regroupedBlocksInactive := hRegroupedInactive
+    blocksEqListedGaugeConj := hBlocksGauge
+    regroupLetterwise := hRegroup
+    ambientCoisometry := data.ambient_coisometry
+    ambientCoisometryEq := rfl
+    ambientCoisometric := data.coisometric
+    reconstructRegrouped := ?_
   }⟩
   intro i
   rw [data.reconstruct i, hRegroup i]
@@ -317,7 +486,8 @@ theorem exists_activeBNTRefinement (data : CPSVCanonicalFormData A) :
 /-- Choose the structured active BNT refinement canonically supplied by
 `exists_activeBNTRefinement`.
 
-Source: arXiv:1606.00608, Proposition 4.13, lines 1863--1921. -/
+Source: arXiv:1606.00608, lines 265--301, 1080--1117, and 1135--1146;
+Proposition 4.13, lines 1863--1921, is the downstream application. -/
 noncomputable def activeBNTRefinement (data : CPSVCanonicalFormData A) :
     data.ActiveBNTRefinement :=
   Classical.choice data.exists_activeBNTRefinement
