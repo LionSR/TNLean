@@ -76,6 +76,16 @@ abstracted — record why, so it is not re-proposed).
   imports the algebra module directly.  The two older symmetry proofs now pass through
   `evalWord_ofFn_eq_prod` and these shared identities.
 
+### ofCommutingInvolutions_mul_conjTranspose — promoted
+- **Pattern:** split a `Z₂ × Z₂` element into four cases, expand the representation,
+  and prove unitarity from two unitary commuting involutions.
+- **Seen:** the cluster-state and AKLT examples each used a four-case finite-matrix
+  proof for their physical action.
+- **Abstraction:** `ofCommutingInvolutions_mul_conjTranspose` in
+  `TNLean/MPS/Examples/ZMod2.lean`.
+- **Notes:** each example now supplies only the involution, commutation, and generator
+  unitarity facts. The public action and unitarity theorem statements are unchanged.
+
 ---
 
 ## Completed refactors
@@ -94,6 +104,15 @@ abstracted — record why, so it is not re-proposed).
 - **Result:** The two Lean files have 49 insertions and 45 deletions: the repeated
   derivations are replaced by two source-facing algebraic lemmas and their call sites.
   All pre-existing public theorem statements and mathematical scope are unchanged.
+
+### Concrete two-block injectivity through the standard matrix basis
+- **Pattern:** prove that an arbitrary `2 × 2` matrix lies in a range span by
+  expanding its four entries as a hand-written linear combination of matrix units.
+- **Reuse:** `cluster_isNBlkInjective_two` and `aklt_isNBlkInjective_two` now use
+  `Submodule.eq_top_iff_forall_basis_mem` with `Matrix.stdBasis`, discharging the
+  four basis cases from their existing matrix-unit membership lemmas.
+- **Result:** both theorem statements are unchanged, and their previously profiled
+  multi-second declarations fall below the one-second profiler threshold.
 
 ### Non-decaying-overlap dimension and gauge-phase dichotomy
 - **Pattern:** The `hDim`/`hGPE` tails of

@@ -149,6 +149,31 @@ noncomputable def blockTensor (A : MPSTensor d D) (L : ℕ) :
     blockTensor (d := d) (D := D) A 1 i = A (singleBlockEquiv d i) := by
   simp [blockTensor, MPSTensor.evalWord]
 
+/-- Equivalence between `N`-block injectivity and injectivity of the blocked
+tensor `blockTensor A N`. -/
+lemma isNBlkInjective_iff_blockTensor_isInjective (A : MPSTensor d D) (N : ℕ) :
+    IsNBlkInjective A N ↔ IsInjective (blockTensor A N) := by
+  classical
+  have hRange :
+      Set.range (fun i : Fin (blockPhysDim d N) =>
+        evalWord A (List.ofFn (decodeBlock d N i))) =
+        Set.range (fun σ : Fin N → Fin d => evalWord A (List.ofFn σ)) := by
+    ext M
+    constructor
+    · rintro ⟨i, rfl⟩
+      exact ⟨decodeBlock d N i, rfl⟩
+    · rintro ⟨σ, rfl⟩
+      exact ⟨Fin.cast (blockPhysDim_eq_pow d N).symm (finFunctionFinEquiv σ), by
+        simp [decodeBlock, Fin.cast_cast]⟩
+  unfold IsNBlkInjective IsInjective blockTensor
+  have hSpan :
+      Submodule.span ℂ
+          (Set.range fun i : Fin (blockPhysDim d N) =>
+            evalWord A (List.ofFn (decodeBlock d N i))) =
+        Submodule.span ℂ (Set.range fun σ : Fin N → Fin d => evalWord A (List.ofFn σ)) := by
+    simp [hRange]
+  exact ⟨hSpan.trans, hSpan.symm.trans⟩
+
 /-- Flatten a word in blocked indices into an ordinary word in `Fin d` (list-level). -/
 noncomputable def flattenBlockedWord (d L : ℕ) : List (Fin (blockPhysDim d L)) → List (Fin d)
   | w => (w.map (wordOfBlock d L)).flatten
