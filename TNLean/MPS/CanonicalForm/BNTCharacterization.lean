@@ -536,4 +536,37 @@ theorem isCPSVBasisOfNormalTensors_iff_canonicalForm_covered_and_minimal
     simpa [dimActive, blocksActive] using
       hCover (activeEquiv k) (activeEquiv k).property
 
+/-- Characterization of a basis of normal tensors for literal CPSV canonical-form data.
+
+This specializes arXiv:1606.00608, Proposition 2.7 (`prop:char-BNT`, lines
+271--301 and 1137--1148), to the data of eq. `II_CF1`.
+
+**Local fix (active blocks):** Only blocks with nonzero weight are covered: a
+syntactically listed zero-weight block contributes nothing to any positive-length
+matrix product vector. See
+`docs/paper-gaps/cpsv16_bnt_characterization_active_blocks.tex`. -/
+theorem CPSVCanonicalFormData.isCPSVBasisOfNormalTensors_iff_covered_and_minimal
+    {g : ℕ} {dimB : Fin g → ℕ} [∀ j, NeZero (dimB j)]
+    (data : CPSVCanonicalFormData A)
+    (basis : (j : Fin g) → MPSTensor d (dimB j)) :
+    IsCPSVBasisOfNormalTensors A (fun j ↦ ⟨dimB j, basis j⟩) ↔
+      (∀ j, IsNormalTensor (basis j)) ∧
+      (∀ k : Fin data.r, data.weights k ≠ 0 →
+        ∃ j : Fin g, ∃ hdim : dimB j = data.dim k,
+        ∃ X : GL (Fin (data.dim k)) ℂ, ∃ ζ : ℂ, ‖ζ‖ = 1 ∧
+          ∀ i, data.blocks k i = ζ •
+            ((X : Matrix (Fin (data.dim k)) (Fin (data.dim k)) ℂ) *
+              (cast (congr_arg (MPSTensor d) hdim) (basis j)) i *
+              (↑(X⁻¹) : Matrix (Fin (data.dim k)) (Fin (data.dim k)) ℂ))) ∧
+      (∀ j k : Fin g, j ≠ k → ∀ hdim : dimB j = dimB k,
+        ¬ ∃ X : GL (Fin (dimB k)) ℂ, ∃ ζ : ℂ, ‖ζ‖ = 1 ∧
+          ∀ i, basis k i = ζ •
+            ((X : Matrix (Fin (dimB k)) (Fin (dimB k)) ℂ) *
+              (cast (congr_arg (MPSTensor d) hdim) (basis j)) i *
+              (↑(X⁻¹) : Matrix (Fin (dimB k)) (Fin (dimB k)) ℂ))) := by
+  letI : ∀ k, NeZero (data.dim k) := fun k ↦ ⟨Nat.ne_of_gt (data.dim_pos k)⟩
+  exact isCPSVBasisOfNormalTensors_iff_canonicalForm_covered_and_minimal
+    A data.weights data.blocks basis data.blocks_normal
+      data.sameMPV₂Pos_toTensorFromBlocks
+
 end MPSTensor
