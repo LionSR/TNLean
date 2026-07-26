@@ -505,10 +505,14 @@ private theorem tripleFusionComparison_final_entry_intertwines_of_lengthIndepend
   have hEntry := congrArg
     (fun X => X (Fam.leftFinalRow α β γ ε ⟨δL, μL, νL, bL⟩)
       (Fam.rightFinalRow α β γ ε' ⟨δR, μR, νR, bR⟩)) hFull
-  simpa [Matrix.mul_apply, Matrix.blockDiagonal'_apply,
-    leftFinalRow, rightFinalRow, Fintype.sum_sigma,
-    Fintype.sum_prod_type, Matrix.one_apply, MPOTensor.toMPSTensor]
-    using hEntry
+  simpa only [MPOTensor.toMPSTensor, MPSTensor.finProdFinEquiv_divNat,
+    MPSTensor.finProdFinEquiv_modNat, leftFinalRow, rightFinalRow,
+    Matrix.mul_apply, Matrix.blockDiagonal'_apply, Matrix.kroneckerMap_apply,
+    Matrix.one_apply, ite_mul, one_mul, zero_mul, mul_ite, mul_zero, dite_mul,
+    Fintype.sum_sigma, Finset.sum_dite_irrel, Fintype.sum_prod_type,
+    Finset.sum_const_zero, Finset.sum_dite_eq, Finset.mem_univ, ↓reduceIte,
+    cast_eq, Finset.sum_ite_irrel, Finset.sum_ite_eq, mul_dite,
+    Finset.sum_dite_eq', Finset.sum_ite_eq'] using hEntry
 
 private theorem rectangularIntertwiner_eq_zero_of_selectorWords
     {d D₁ D₂ S : ℕ} (A : MPSTensor d D₁) (B : MPSTensor d D₂)
@@ -647,9 +651,13 @@ theorem exists_tripleFusionComparison_finalSector_eq_kronecker_one_of_separation
             (Fam.tensor ε).toMPSTensor ij) := by
     intro ij
     ext ⟨⟨δL, μL, νL⟩, bL⟩ ⟨⟨δR, μR, νR⟩, bR⟩
-    simpa [C, Matrix.mul_apply,
-      leftFinalIndexEquiv_symm_apply, rightFinalIndexEquiv_symm_apply,
-      Fintype.sum_prod_type, Matrix.one_apply] using
+    simpa only [C, Matrix.submatrix_submatrix, Matrix.mul_apply,
+      Matrix.kroneckerMap_apply, Matrix.one_apply, ite_mul, one_mul, zero_mul,
+      Matrix.submatrix_apply, Function.comp_apply,
+      rightFinalIndexEquiv_symm_apply, Fintype.sum_prod_type,
+      Finset.sum_ite_irrel, Finset.sum_const_zero, Finset.sum_ite_eq,
+      Finset.mem_univ, ↓reduceIte, leftFinalIndexEquiv_symm_apply, mul_ite,
+      mul_zero, Finset.sum_ite_eq'] using
       Fam.tripleFusionComparison_final_entry_intertwines_of_lengthIndependent
         c hχ hLI α β γ ε ε δL δR μL νL μR νR bL bR ij
   obtain ⟨F, hF⟩ :=
