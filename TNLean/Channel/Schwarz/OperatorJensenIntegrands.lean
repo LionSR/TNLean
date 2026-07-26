@@ -53,6 +53,9 @@ lemma cfc_rpowIntegrand₀₁_eq_resolvent
   have hcalc := hEq hA_nonneg
   simpa [Algebra.algebraMap_eq_smul_one, ← Matrix.nonsing_inv_eq_ringInverse] using hcalc
 
+/-- Scalar resolvent expansion of the convex Löwner-integral integrand
+`Real.rpowIntegrand₁₂ p t`: for `t > 0`,
+`rpowIntegrand₁₂ p t x = t ^ (p - 2) * x + t ^ p * (t + x)⁻¹ - t ^ (p - 1)`. -/
 private lemma rpowIntegrand₁₂_eq_resolvent_scalar {p t : ℝ} (ht : 0 < t) :
     Real.rpowIntegrand₁₂ p t =
       fun x => t ^ (p - 2) * x + t ^ p * (t + x)⁻¹ - t ^ (p - 1) := by
