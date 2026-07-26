@@ -12,16 +12,20 @@ import TNLean.MPS.MPDO.RFPPositiveFusionDecomposition
 /-!
 # The BNT fusion clause from the MPDO renormalization fixed-point condition
 
-This file completes the implication from statement (i) to statement (iii) of
-CPSV16, Theorem 4.14.  The transported one-site and two-site vertical forms
-give both representations of the blocked closed-chain operator.  Eventual
-linear independence of the BNT operators compares their coefficients, and
-the positive power-sum lemma gives the length-one trace-scalar identity.
+This file proves the implication from statement (i) to statement (iii) of
+CPSV16, Theorem 4.14, for an MPDO in normalized BNT-refined horizontal form.
+The transported one-site and two-site vertical forms give both representations
+of the blocked closed-chain operator.  Eventual linear independence of the BNT
+operators compares their coefficients, and the positive power-sum lemma gives
+the length-one trace-scalar identity.  The corresponding implication from the
+literal CPSV canonical form remains open; see
+`docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex`.
 
 ## Main result
 
-* `HasBNTFusionTensorClause.of_isRFPViaTS` constructs the source-faithful
-  active-support fusion clause from the Definition 4.1 RFP maps.
+* `HasBNTFusionTensorClause.of_isRFPViaTS` constructs the active-support fusion
+  clause from the Definition 4.1 RFP maps under the normalized BNT-refined
+  horizontal-form hypothesis.
 
 ## References
 
