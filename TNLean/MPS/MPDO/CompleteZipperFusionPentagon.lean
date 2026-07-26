@@ -921,19 +921,22 @@ theorem inversePrintedFMatrix_pentagon
     (fun M => M ⟨f, g, mu, nu, rho⟩ ⟨j, i, gamma, delta, kappa⟩)
     (Fus.threeEdgeInversePrintedFMatrix_eq_twoEdgeInversePrintedFMatrix
       a b c d e)
-  simpa [threeEdgeInversePrintedFMatrix, twoEdgeInversePrintedFMatrix,
-    leftInnerToLeftAssocInversePrintedFMatrix,
-    middleToLeftInnerInversePrintedFMatrix,
-    rightAssocToMiddleInversePrintedFMatrix,
-    pairToLeftAssocInversePrintedFMatrix,
-    rightAssocToPairInversePrintedFMatrix,
-    leftPathFirstSourceEquiv, leftPathFirstTargetEquiv,
-    leftPathSecondSourceEquiv, leftPathSecondTargetEquiv,
-    leftPathThirdSourceEquiv, leftPathThirdTargetEquiv,
+  simpa only [mul_assoc, threeEdgeInversePrintedFMatrix,
+    leftInnerToLeftAssocInversePrintedFMatrix, leftPathFirstSourceEquiv,
+    Equiv.coe_fn_mk, leftPathFirstTargetEquiv,
+    middleToLeftInnerInversePrintedFMatrix, leftPathSecondSourceEquiv,
+    Prod.mk.eta, leftPathSecondTargetEquiv,
+    rightAssocToMiddleInversePrintedFMatrix, leftPathThirdSourceEquiv,
+    leftPathThirdTargetEquiv, Matrix.mul_apply, submatrix_apply,
+    blockDiagonal'_apply, kroneckerMap_apply, Matrix.one_apply, mul_ite,
+    mul_one, mul_zero, ite_mul, one_mul, zero_mul, mul_dite, dite_mul,
+    Fintype.sum_sigma, Finset.sum_dite_irrel, Fintype.sum_prod_type,
+    Finset.sum_const_zero, Finset.sum_dite_eq', Finset.mem_univ,
+    ↓reduceIte, cast_eq, Finset.sum_ite_eq', Finset.sum_dite_eq,
+    Finset.sum_ite_irrel, Finset.sum_ite_eq, Finset.mul_sum,
+    twoEdgeInversePrintedFMatrix, pairToLeftAssocInversePrintedFMatrix,
     rightPathFirstSourceEquiv, rightPathFirstTargetEquiv,
-    rightPathSecondSourceEquiv, rightPathSecondTargetEquiv,
-    Matrix.mul_apply, Fintype.sum_sigma, Fintype.sum_prod_type,
-    Matrix.blockDiagonal'_apply, Matrix.one_apply, Finset.mul_sum,
-    mul_assoc] using h
+    rightAssocToPairInversePrintedFMatrix, rightPathSecondSourceEquiv,
+    rightPathSecondTargetEquiv] using h
 
 end MPOTensor.CompleteZipperFusionFamily
