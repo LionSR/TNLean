@@ -7,16 +7,17 @@
 % Capabilities: free-graph, braid-resolver, crossing-order
 \[
   \begin{tenkzfree}
-    \tnput[dot]{j}{(0mm,-8mm)}{j}
-    \tnput[dot]{i}{(12mm,-8mm)}{i}
-    \tnput[dot]{b}{(0mm,8mm)}{b}
-    \tnput[box]{R}{(15mm,5mm)}{\mathcal R_{j,a}}
-    \tnjoin{-9mm,-8mm}{j.west} \tnjoin{i.east}{21mm,-8mm}
-    \tnjoin{-9mm,8mm}{b.west} \tnjoin{R.east}{23mm,8mm}
-    \tnjoin[route=arc, out=90, in=-90]{b.north}{-4mm,16mm}
-    \tnjoin[route=arc, out=-45, in=135]{b.south east}{i.north west}
-    \tnjoin[route=arc, out=-90, in=90]{i.south}{12mm,-16mm}
-    \tnjoin[route=arc, out=45, in=225]{j.north east}{R.south west}
-    \tnjoin{R.north}{15mm,16mm}
+    \tnput[dot, role=extra, label pos=south]{j}{(0mm,-7mm)}{j}
+    \tnput[dot, role=marked, label pos=west]{i}{(10mm,-7mm)}{i}
+    \tnput[dot, role=extra, label pos=north]{b}{(0mm,7mm)}{b}
+    % the resolver stands off the rails, where the a-j crossing was
+    \tnput[box]{R}{(16mm,1mm)}{\mathcal R_{j,a}}
+    \tnjoin{-9mm,-7mm}{j.west} \tnjoin{j.east}{i.west} \tnjoin{i.east}{25mm,-7mm}
+    \tnjoin{-9mm,7mm}{b.west} \tnjoin{b.east}{25mm,7mm}
+    \tnjoin[role=operator, route=arc, out=90, in=-90]{b.north}{-3mm,13mm}
+    \tnjoin[role=operator, route=arc, out=-45, in=135]{b.south east}{i.north west}
+    \tnjoin[role=operator, route=arc, out=-90, in=90]{i.south}{10mm,-13mm}
+    \tnjoin[role=operator, route=arc, out=45, in=225]{j.north east}{R.south west}
+    \tnjoin[role=operator, route=arc, out=90, in=-135]{R.north}{22mm,12mm}
   \end{tenkzfree}
 \]

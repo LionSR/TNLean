@@ -8,44 +8,38 @@
 \[
   \begin{tenkzfree}
     % outer winding: four MPO tensors
-    \tnput[mpo]{Wo}{(-24mm,0)}{}
-    \tnput[mpo]{No}{(0,13mm)}{}
-    \tnput[mpo]{Eo}{(24mm,0)}{}
-    \tnput[mpo]{So}{(0,-13mm)}{}
+    \tnput[mpo]{Wo}{(-17mm,0)}{} \tnput[mpo]{No}{(4mm,10mm)}{}
+    \tnput[mpo]{Eo}{(17mm,0)}{} \tnput[mpo]{So}{(0,-9mm)}{}
     % inner winding: three MPO tensors and the marked tensor j
-    \tnput[mpo]{Wi}{(-14mm,0)}{}
-    \tnput[mpo]{Ni}{(0,7mm)}{}
-    \tnput[mpo]{Ei}{(14mm,0)}{}
-    \tnput[mpo]{J}{(6mm,-7mm)}{j}
+    \tnput[mpo]{Wi}{(-9mm,0)}{} \tnput[mpo]{Ni}{(-4mm,5mm)}{}
+    \tnput[mpo]{Ei}{(9mm,0)}{} \tnput[mpo, role=marked]{J}{(4mm,-5mm)}{j}
     % ONE strand, wound twice; every MPO tensor carries exactly two
     % string legs.  Inner winding: J -> Wi -> Ni -> Ei ...
-    \tnjoin[route=arc, out=180, in=-90]{J.west}{Wi.south}
-    \tnjoin[route=arc, out=90, in=180]{Wi.north}{Ni.west}
-    \tnjoin[route=arc, out=0, in=90]{Ni.east}{Ei.north}
+    \tnjoin[role=operator, route=arc, out=180, in=-90]{J.west}{Wi.south}
+    \tnjoin[role=operator, route=arc, out=90, in=180]{Wi.north}{Ni.west}
+    \tnjoin[role=operator, route=arc, out=0, in=90]{Ni.east}{Ei.north}
     % ... crossover down into the outer winding (SE sector) ...
-    \tnjoin[route=arc, out=-90, in=0]{Ei.south}{So.east}
+    \tnjoin[role=operator, route=arc, out=-90, in=0]{Ei.south}{So.east}
     % ... outer winding: So -> Wo -> No -> Eo ...
-    \tnjoin[route=arc, out=180, in=-90]{So.west}{Wo.south}
-    \tnjoin[route=arc, out=90, in=180]{Wo.north}{No.west}
-    \tnjoin[route=arc, out=0, in=90]{No.east}{Eo.north}
+    \tnjoin[role=operator, route=arc, out=180, in=-90]{So.west}{Wo.south}
+    \tnjoin[role=operator, route=arc, out=90, in=180]{Wo.north}{No.west}
+    \tnjoin[role=operator, route=arc, out=0, in=90]{No.east}{Eo.north}
     % ... crossover back into J: closes the doubly-wound ring, crossing
     % the first SE connector once (the flattened self-braiding)
-    \tnjoin[route=arc, out=-90, in=0]{Eo.south}{J.east}
-    % the free string end at the marked tensor, crossing the outer loop
-    \tnjoin[route=arc, out=-60, in=160]{J.south}{18mm,-19mm}
+    \tnjoin[role=operator, route=arc, out=-90, in=0]{Eo.south}{J.east}
+    % the free string end at the marked tensor
+    \tnjoin[role=operator, route=arc, out=-60, in=160]{J.south}{13mm,-14mm}
   \end{tenkzfree}
   \;=\; e^{i\phi_j}\;
   \begin{tenkzfree}
     % single winding: three MPO tensors and the marked tensor j
-    \tnput[mpo]{W}{(-16mm,0)}{}
-    \tnput[mpo]{N}{(0,9mm)}{}
-    \tnput[mpo]{E}{(16mm,0)}{}
-    \tnput[mpo]{J}{(4mm,-9mm)}{j}
-    \tnjoin[route=arc, out=90, in=180]{W.north}{N.west}
-    \tnjoin[route=arc, out=0, in=90]{N.east}{E.north}
-    \tnjoin[route=arc, out=-90, in=0]{E.south}{J.east}
-    \tnjoin[route=arc, out=180, in=-90]{J.west}{W.south}
+    \tnput[mpo]{W}{(-11mm,0)}{} \tnput[mpo]{N}{(0,6mm)}{}
+    \tnput[mpo]{E}{(11mm,0)}{} \tnput[mpo, role=marked]{J}{(3mm,-6mm)}{j}
+    \tnjoin[role=operator, route=arc, out=90, in=180]{W.north}{N.west}
+    \tnjoin[role=operator, route=arc, out=0, in=90]{N.east}{E.north}
+    \tnjoin[role=operator, route=arc, out=-90, in=0]{E.south}{J.east}
+    \tnjoin[role=operator, route=arc, out=180, in=-90]{J.west}{W.south}
     % free string end
-    \tnjoin{J.south east}{12mm,-15mm}
+    \tnjoin[role=operator]{J.south east}{9mm,-11mm}
   \end{tenkzfree}
 \]
