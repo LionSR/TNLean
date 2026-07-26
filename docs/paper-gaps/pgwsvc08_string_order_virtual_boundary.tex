@@ -6,8 +6,7 @@
 
 \input{command}
 
-\title{PGWSVC08 String Order: Physical Endpoints versus Virtual Boundary
-  Witnesses}
+\title{PGWSVC08 Physical String Order versus Virtual-Boundary Nondecay}
 \author{}
 \date{2026-06-11}
 
@@ -68,7 +67,34 @@ $S_m := \operatorname{span}\{A_{n_1}\cdots A_{n_m} A_{m_m}^\dagger
 matrix algebra $M_D(\mathbb C)$, so endpoint operators on sufficiently
 many physical sites reach every $D \times D$ matrix.
 
-\section{The formalized physical and virtual forms}
+\section{The restored peripheral phase}
+
+The source passage at lines~241--255 chooses right and left peripheral
+matrices $V,Y$ for an eigenvalue $\lambda=e^{i\theta}$. Iterating the twisted
+transfer map contributes $\lambda^N$, so the leading asymptotic term is
+\begin{align}
+  S_N(x,y,u,\Psi_\infty)
+  &=e^{iN\theta}
+    \tr\bigl[Y\mathcal E_y(\mathbb 1)\bigr]
+    \tr\bigl[\Lambda\mathcal E_x(V)\bigr]+o(1).
+  \tag{corrected asymptotic}
+\end{align}
+Lines~249--250 of the source display only the product of the two traces and
+omit $e^{iN\theta}$. The factor is required before the subsequent rephasing
+$\widetilde u=e^{-i\theta}u$. Its omission does not affect the absolute-value
+nonvanishing criterion because $|e^{iN\theta}|=1$, but it does affect the
+complex asymptotic formula itself.
+
+The blueprint therefore restores the factor in the proof of
+\path{thm:pgwsvc08_physical_string_order} in
+\path{blueprint/src/chapter/ch12_symmetry_string_order.tex}. The correlator is
+formalized as \leanid{MPSTensor.physicalStringOrderParam}; the source theorem
+and this asymptotic argument remain marked \path{notready}, so no Lean theorem
+is claimed for the restored expansion. The status is a deliberate local source
+correction, documented by the inline \path{Local fix} comment at the corrected
+display.
+
+\section{The formalized physical and virtual-boundary forms}
 
 The transfer-form physical correlator is now a formal definition:
 \[
@@ -83,23 +109,24 @@ unitary $u\ne \mathbb 1$, physical endpoint operators $x,y$, and a
 number $s>0$ such that $|S_N(x,y,u)|\to s$.\footnote{\leanid{MPSTensor.HasPhysicalStringOrder},
   same file.}
 
-The main theorems presently use a virtual-boundary form.  The boundary
-string-order expression is
+The main theorems presently use virtual-boundary nondecay. Its
+virtual-boundary twist functional is
 $\tr(\Lambda X\, \mathcal E_u^L(Y))$ with arbitrary
 $X, Y \in M_D(\mathbb C)$,\footnote{\leanid{MPSTensor.stringOrderBoundaryParam},
-  \path{TNLean/MPS/Symmetry/StringOrderDefs.lean}.} and string order is
-the existence of such $X, Y$ together with a constant $c > 0$ bounding
+  \path{TNLean/MPS/Symmetry/StringOrderDefs.lean}.} and the nondecay predicate
+is the existence of such $X,Y$ together with a constant $c>0$ bounding
 $\lVert \tr(\Lambda X\, \mathcal E_u^L(Y)) \rVert$ from below at every
-length $L$.\footnote{\leanid{MPSTensor.HasStringOrder}, same file.}  The
-equivalence of string order with local symmetry, and the universality of
-string order for injective on-site-symmetric tensors with canonical
-normalisations, are proved for this virtual
-form.\footnote{\leanid{MPSTensor.stringOrder_iff_localSymmetry},
+length $L$.\footnote{\leanid{MPSTensor.HasStringOrder}, same file.} The
+formal development proves the equivalence of virtual-boundary nondecay with
+virtual local covariance, and the universality of virtual-boundary nondecay for
+injective on-site-symmetric tensors with canonical normalisations.\footnote{
+  \leanid{MPSTensor.stringOrder_iff_localSymmetry},
   \leanid{MPSTensor.hasStringOrder_of_symmetric_injective},
   \leanid{MPSTensor.hasStringOrder_iff_of_symmetric_injective},
   \path{TNLean/MPS/Symmetry/StringOrder.lean}.}
 
-The virtual statement differs from the physical source statement in four ways.
+Virtual-boundary nondecay differs from physical endpoint string order in four
+ways.
 
 \begin{enumerate}
   \item \emph{Physical versus virtual endpoints.}  The source
@@ -120,23 +147,23 @@ The virtual statement differs from the physical source statement in four ways.
         same expressive range when $\Lambda$ is positive definite, as it
         is in all theorems concerned, but the formal expression is not
         the literal transfer form of the source.
-  \item \emph{Fixed versus existential twist.}  The source's ``has
-        string order'' quantifies existentially over the unitary $u$;
-        the formal predicate fixes $u$ as a parameter, in the style of
-        the source's Theorem~2.  The formal version is the finer
-        statement, and the existential form is recoverable from it.
+  \item \emph{Fixed versus existential twist.} Physical endpoint string order
+        quantifies existentially over the unitary $u$, whereas
+        virtual-boundary nondecay fixes $u$ as a parameter, in the style of
+        the source's Theorem~2. The fixed-twist version is the finer statement,
+        and an existential version is recoverable from it.
 \end{enumerate}
 
 \section{Verdict}
 
-The virtual-boundary reformulation is mathematically sound, and for the
-injective tensors that all concerned theorems treat, the existential
-physical-endpoint and existential virtual-boundary criteria are
-equivalent by the source's own span argument.  The physical correlator
-and the positive-limit source predicate are now formal definitions, but
-that equivalence is still the part with no formal counterpart: the
-development proves its string-order theorems for the virtual form only.
-Elimination: prove the realizability of virtual boundary matrices by
+Virtual-boundary nondecay is mathematically sound, and for the injective tensors
+that all concerned theorems treat, the existential physical-endpoint
+string-order and existential virtual-boundary criteria are equivalent by the
+source's own span argument. The physical correlator and the positive-limit
+source predicate are now formal definitions, but that equivalence is still the
+part with no formal counterpart: the development proves its nondecay theorems
+for virtual boundary witnesses only. Elimination requires proving the
+realizability of virtual boundary matrices by
 physical endpoint operators for injective tensors (a starting point is the
 single-site realization
 \leanid{MPSTensor.physRealize}\footnote{\path{TNLean/MPS/Chain/VirtualInsertion.lean},
