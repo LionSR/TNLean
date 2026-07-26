@@ -257,8 +257,8 @@ The equal-MPV matching theorems in Chapter~\ref{ch:bnt} are specializations of
 an eventual proportionality argument. We record that general mechanism and the
 finite-set construction used to package matches in both directions.
 
-\begin{lemma}[Exact sector matching under eventual proportionality]
-    \label{lem:sector_bnt_proportional_exact_match}
+\begin{theorem}[Exact sector matching under eventual proportionality]
+    \label{thm:sector_bnt_proportional_exact_match}
     \lean{MPSTensor.exists_block_match_exact_of_eventuallyProportional}
     \leanok
     \uses{def:sector_bnt_cf, lem:sector_bnt_combined_family_eventually_li,
@@ -267,7 +267,7 @@ finite-set construction used to package matches in both directions.
     eventually nonzero and proportional. For every sector $j$ of $P$, there is
     a sector $k$ of $Q$ with equal bond dimension, gauge-phase-equivalent basis
     tensor after the dimension identification, and non-decaying cross-overlap.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}\leanok
     \uses{lem:sector_bnt_combined_family_eventually_li,
@@ -295,18 +295,18 @@ finite-set construction used to package matches in both directions.
     modulus-one overlap limit is assumed.
 \end{proof}
 
-\begin{lemma}[Full-basis matching under eventual proportionality]
-    \label{lem:sector_bnt_proportional_full_basis_match}
+\begin{theorem}[Full-basis matching under eventual proportionality]
+    \label{thm:sector_bnt_proportional_full_basis_match}
     \lean{MPSTensor.forall_k_exists_j_nondecaying_overlap_of_eventuallyProportional}
     \leanok
-    \uses{lem:sector_bnt_proportional_exact_match}
+    \uses{thm:sector_bnt_proportional_exact_match}
     Under the same hypotheses, every sector of $Q$ has an equal-dimensional,
     gauge-phase-equivalent partner in $P$ with non-decaying cross-overlap.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}\leanok
     Reverse the eventual proportionality and apply
-    Lemma~\ref{lem:sector_bnt_proportional_exact_match} to each sector of
+    Theorem~\ref{thm:sector_bnt_proportional_exact_match} to each sector of
     $Q$; symmetry of the overlap converts the resulting witness to the stated
     orientation.
 \end{proof}

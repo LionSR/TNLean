@@ -137,8 +137,9 @@ Section~\ref{sec:app_spectral_periodicity}.
     \label{thm:periodic_self_overlap_tendsto}
     \lean{MPSTensor.periodicSelfOverlap_tendsto}
     \leanok
-    \uses{def:mpv_overlap,def:irreducible_tensor,def:left_canonical_tensor,
-        def:peripheral_eigenvalues}
+    \uses{def:mpv_overlap, def:irreducible_tensor,
+        def:left_canonical_tensor, def:peripheral_eigenvalues,
+        def:blocked_tensor}
     Let $D>0$ and $m>0$. Let $A$ be a left-canonical irreducible MPS tensor
     with bond dimension $D$, and suppose that the peripheral eigenvalues of
     its transfer map are exactly $\{z\in\C:z^m=1\}$. Then
@@ -147,54 +148,36 @@ Section~\ref{sec:app_spectral_periodicity}.
 
 \begin{proof}
     \leanok
-    \uses{thm:overlap_trace, thm:qpf_irreducible,
-        thm:peripheral_multiplicity_one, thm:eigenvalue_bound}
-    By the overlap--trace identity \ref{eq:spectral_overlap_trace},
+    \uses{thm:cyclic_sector_decomp_after_blocking_isometry,
+        thm:blocked_sector_unconditional, thm:primitive_overlap,
+        thm:overlap_decay_irr_tp, thm:overlap_decay_rect_irr_tp}
+    Apply
+    Theorem~\ref{thm:cyclic_sector_decomp_after_blocking_isometry} to the
+    period-$m$ blocking $A^{[m]}$. It gives $m$ nonzero cyclic-sector
+    tensors $C_0,\ldots,C_{m-1}$, each left-canonical, whose unit-weight direct
+    sum has the same MPV family as $A^{[m]}$. The cyclic-sector relations make
+    every $C_u$ primitive and irreducible. Distinct sectors are not
+    gauge-phase equivalent. Hence the primitive self-overlap limit and the
+    equal- and unequal-dimension overlap-decay theorems give
     \begin{align}
-        O_{AA}(mn) & =\Tr\!\left(\E_A^{mn}\right).
+        O_{C_uC_v}(n)
+         & \longrightarrow
+        \begin{cases}
+            1, & u=v,     \\
+            0, & u\neq v.
+        \end{cases}
         \notag
     \end{align}
-    We first justify the multiplicities without imposing unitality on
-    $\E_A$. Since $A$ is left-canonical, $\E_A$ is trace-preserving, and its
-    Frobenius adjoint $\E_A^\dagger$ is unital. Irreducibility also passes to
-    the adjoint: a subspace invariant under every adjoint Kraus operator has
-    orthogonal complement invariant under every original Kraus operator.
-    Theorem~\ref{thm:qpf_irreducible} supplies a positive-definite fixed point
-    $\rho$ of $\E_A$, which is the adjoint fixed point required when applying
-    Theorem~\ref{thm:peripheral_multiplicity_one} to the unital map
-    $\E_A^\dagger$.
-
-    Adjoint eigenvalues are complex conjugates, and rank--nullity for
-    $\E_A-\lambda\Id$ and its adjoint gives
+    Expanding the overlap of the unit-weight direct sum and taking the finite
+    sum of these limits yields
     \begin{align}
-        \dim\ker(\E_A-\lambda\Id)
-         & =\dim\ker(\E_A^\dagger-\overline\lambda\Id).
+        O_{A^{[m]}A^{[m]}}(n)
+         & =\sum_{u,v\in\Z_m}O_{C_uC_v}(n)
+        \longrightarrow m.
         \notag
     \end{align}
-    Thus the one-dimensional peripheral eigenspaces of $\E_A^\dagger$ give
-    one-dimensional peripheral eigenspaces of $\E_A$. Complete positivity and
-    trace preservation make
-    $\E_A$ contractive on Hermitian matrices in trace norm. Decomposing an
-    arbitrary matrix into its Hermitian and skew-Hermitian parts therefore
-    gives a uniform bound on the powers of $\E_A$. A peripheral eigenvalue
-    cannot have a nontrivial Jordan block, since such a block would make the
-    powers grow polynomially. Hence every peripheral eigenvalue of $\E_A$ has
-    algebraic multiplicity one.
-
-    By hypothesis, these peripheral eigenvalues are exactly the $m$-th roots
-    $1,\gamma,\ldots,\gamma^{m-1}$. Write the trace of a power as the sum of
-    the corresponding powers of all eigenvalues, counted with algebraic
-    multiplicity. Every nonperipheral eigenvalue $\nu$ satisfies $|\nu|<1$ by
-    the peripheral-spectrum definition and the eigenvalue bound, so its
-    contribution $\nu^{mn}$ tends to zero.
-    For the peripheral roots,
-    \begin{align}
-        \sum_{q=0}^{m-1}(\gamma^q)^{mn}
-         & =\sum_{q=0}^{m-1}1=m.
-        \notag
-    \end{align}
-    The nonperipheral contribution vanishes, and hence
-    $O_{AA}(mn)\longrightarrow m$.
+    Finally, blocking identifies
+    $O_{A^{[m]}A^{[m]}}(n)=O_{AA}(mn)$, which proves the claim.
 \end{proof}
 
 \begin{theorem}[Primitivity and normality from normalized self-overlap]
@@ -218,14 +201,14 @@ Section~\ref{sec:app_spectral_periodicity}.
     and irreducibility and left-canonicality give normality.
 \end{proof}
 
-\begin{corollary}[Normality from normalized self-overlap]
+\begin{theorem}[Normality from normalized self-overlap]
     \label{thm:bnt_normality_from_self_overlap}
     \lean{MPSTensor.isNormal_of_irreducible_leftCanonical_selfOverlap_tendsto_one}
     \leanok
     \uses{thm:bnt_primitivity_normality_from_self_overlap}
     Let $A$ be an irreducible left-canonical tensor of positive bond dimension.
     If $O_{AA}(N)\to1$, then $A$ is normal.
-\end{corollary}
+\end{theorem}
 
 \begin{proof}
     \leanok

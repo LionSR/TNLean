@@ -107,11 +107,23 @@ apply it to coefficient-form and sector BNTs.
     length $p$ at which every gauged block is block-injective. Propagation of
     homogeneous word spans gives block injectivity at $p+1$ and $3(p+1)$.
 
-    If there is one representative, its length-$p$ word span is already the
-    required product-algebra span. If there are at least two,
-    Lemma~\ref{lem:bnt_direct_sum_block_separation_word_span} gives the simultaneous span
-    at $L=3(g-1)(p+1)$. Conjugating each block back from its Perron gauge
-    preserves the product span. Finally, length-$L$ words of $A_j$ are the
+    Lemma~\ref{lem:bnt_direct_sum_block_separation_word_span} gives pairwise
+    separation at length $S=3(p+1)$. Write
+    $g\mathbin{\dot-}1=\max\{g-1,0\}$. Multiplying one separator for each of
+    the other blocks gives a selector of length $(g\mathbin{\dot-}1)S$ for
+    every block.
+    Transport these selectors back from the Perron gauges. Gauge invariance
+    also gives block injectivity of every original block at length $p$.
+    Concatenating the injective prefix with the selectors yields the full
+    product-algebra span at
+    \begin{align}
+        L
+         & =p+(g\mathbin{\dot-}1)S
+        =p+3(g\mathbin{\dot-}1)(p+1)>0.
+        \notag
+    \end{align}
+    The truncated factor makes the same construction valid for empty and
+    singleton families. Finally, length-$L$ words of $A_j$ are the
     one-letter evaluations of $A_j^{[L]}$, which proves the blocked statement.
 \end{proof}
 

@@ -111,7 +111,7 @@ projection.
     \lean{MPSTensor.exists_block_match_exact}
     \leanok
     \uses{def:sector_bnt_cf, def:same_mpv2_pos,
-        lem:sector_bnt_proportional_exact_match}
+        thm:sector_bnt_proportional_exact_match}
     Let $P, Q$ be two BNT canonical forms with the same MPV family (at all
     positive lengths). For every sector $j$ of $P$ there exist a sector $k$ of
     $Q$ with matched bond dimension $\dim_P(j) = \dim_Q(k)$, a gauge-phase
@@ -121,55 +121,10 @@ projection.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{lem:sector_bnt_proportional_exact_match,
-        lem:sector_bnt_combined_family_eventually_li,
-        lem:sector_bnt_coeff_not_eventually_zero,
-        cor:sector_bnt_cf_basis_normal,
-        thm:cpsv_normal_overlap_dichotomy,
-        thm:gauge_phase_mpv_scaling}
-    Equality of the positive-length MPV families gives eventual nonzero
-    proportionality with scalar $1$. We spell out the fixed-length argument
-    used by Lemma~\ref{lem:sector_bnt_proportional_exact_match}.
-
-    Fix a sector $j_0$ of $P$, and let $T$ be the set of sectors of $P$ whose
-    cross-overlap with every sector of $Q$ tends to zero. Suppose
-    $j_0\in T$. For each $j\notin T$, choose a sector $k(j)$ of $Q$ with
-    non-decaying cross-overlap. The canonical-form hypotheses make
-    $P_j$ and $Q_{k(j)}$ normal. Apply
-    Theorem~\ref{thm:cpsv_normal_overlap_dichotomy}: non-decay rules out its
-    first alternative, so the second gives equal bond dimensions, a
-    gauge-phase equivalence
-    $Q_{k(j)}^i=\zeta_jX_jP_j^iX_j^{-1}$, and $|\zeta_j|=1$.
-    Gauge-phase covariance then gives the geometric scalar relation
-    \begin{align}
-        V^{(N)}(P_j)
-         & =\zeta_j^{-N}V^{(N)}(Q_{k(j)}).
-        \notag
-    \end{align}
-    The restricted combined family
-    \begin{align}
-        \mathcal F_N
-         & :=
-        \{V^{(N)}(P_j):j\in T\}
-        \cup\{V^{(N)}(Q_k):k\in J(Q)\}.
-        \label{eq:bnt_exact_match_restricted_family}
-    \end{align}
-    is linearly independent for all sufficiently large $N$: overlaps across
-    the two displayed parts decay by the definition of $T$, while the
-    within-family hypotheses follow from the BNT canonical forms.
-
-    At one such length, expand the common MPV in the $P$- and $Q$-sector
-    decompositions. Substitute the displayed scalar relation for every
-    $j\notin T$ and collect terms with the same $Q$-sector. This gives a
-    linear relation over the family
-    (\ref{eq:bnt_exact_match_restricted_family}) whose coefficient at
-    $V^{(N)}(P_{j_0})$ is exactly $c_{P,j_0}^{(N)}$. Linear independence
-    forces $c_{P,j_0}^{(N)}=0$ for every sufficiently large $N$, contradicting
-    Lemma~\ref{lem:sector_bnt_coeff_not_eventually_zero}. Hence some sector
-    $k_0$ has non-decaying cross-overlap with $P_{j_0}$. Apply
-    Theorem~\ref{thm:cpsv_normal_overlap_dichotomy} once more. Its decay
-    alternative is impossible, so its gauge-phase alternative gives
-    $\dim_P(j_0)=\dim_Q(k_0)$ and the asserted gauge-phase equivalence.
+    \uses{thm:sector_bnt_proportional_exact_match}
+    Equality at every positive length gives eventual nonzero proportionality
+    with scalar $1$. Apply
+    Theorem~\ref{thm:sector_bnt_proportional_exact_match} to the chosen sector.
 \end{proof}
 
 \begin{theorem}[Strong existential matching, full-basis form]
@@ -177,7 +132,7 @@ projection.
     \lean{MPSTensor.forall_k_exists_j_nondecaying_overlap_of_sameMPV}
     \leanok
     \uses{def:sector_bnt_cf, def:same_mpv2_pos,
-        lem:sector_bnt_proportional_full_basis_match}
+        thm:sector_bnt_proportional_full_basis_match}
     Let $P, Q$ be two BNT canonical forms with the same MPV family at every
     positive length. Then for every sector $k$ of $Q$ there exist a sector $j$
     of $P$ with matched bond dimension $\dim_P(j) = \dim_Q(k)$, a gauge-phase
@@ -186,9 +141,9 @@ projection.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{lem:sector_bnt_proportional_full_basis_match}
+    \uses{thm:sector_bnt_proportional_full_basis_match}
     Convert equality to eventual nonzero proportionality with scalar $1$ and
-    apply Lemma~\ref{lem:sector_bnt_proportional_full_basis_match}.
+    apply Theorem~\ref{thm:sector_bnt_proportional_full_basis_match}.
 \end{proof}
 
 \subsection{Bijective matching by symmetry}
