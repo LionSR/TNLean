@@ -81,9 +81,12 @@ def render_github_annotations(
     for job in jobs:
         if job.seconds < warn_threshold:
             continue
+        path = module_paths.get(job.job)
+        if path is None:
+            continue
         level = "error" if job.seconds >= error_threshold else "warning"
         lines.append(
-            f"::{level} file={module_paths[job.job]}::"
+            f"::{level} file={path}::"
             f"{job.job} compiled in {job.seconds:.3f}s "
             f"(warning at {warn_threshold:g}s, error at {error_threshold:g}s)"
         )

@@ -109,6 +109,17 @@ class LakeBuildHotspotTests(unittest.TestCase):
                 status = hotspots.main([str(log), "--changed-files-from", str(changed)])
         self.assertEqual(status, 0)
 
+    def test_annotations_ignore_jobs_without_a_matching_path(self) -> None:
+        self.assertEqual(
+            hotspots.render_github_annotations(
+                [hotspots.TimedJob("TNLean.Unchanged", 80.0)],
+                ["TNLean/Changed.lean"],
+                warn_threshold=25.0,
+                error_threshold=50.0,
+            ),
+            "",
+        )
+
 
 if __name__ == "__main__":
     unittest.main()
