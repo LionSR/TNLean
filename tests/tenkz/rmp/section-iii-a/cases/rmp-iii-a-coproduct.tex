@@ -1,17 +1,17 @@
 % Target: rmp-iii-a-coproduct
 % Formula: Delta sends the local boundary element XA to the two-site word XAA.
 % Ink: Canonical public tenkz equation between one-site and two-site words.
-% Boundary: Both sides have one open west and one open east virtual index.
+% Boundary: Both sides close the virtual index in a loop; the physical legs stay open.
 % Source: paper TN-Review-main.tex line 1350; author source ImagesReview Section
 %   III/ImagesReview Section III.tex lines 150-163
 % Capabilities: grid, equation-composition, boundary-insertion
 \[
   \Delta\!\left(
-  \begin{tenkz}[physical=up, tensor style=box]
+  \begin{tenkz}[boundary=periodic, physical=up, tensor style=box]
     \tnX{X} & \tn{A}
   \end{tenkz}\right)
   =
-  \begin{tenkz}[physical=up, tensor style=box]
+  \begin{tenkz}[boundary=periodic, physical=up, tensor style=box]
     \tnX{X} & \tn{A} & \tn{A}
   \end{tenkz}.
 \]
