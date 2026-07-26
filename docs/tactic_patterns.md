@@ -90,6 +90,18 @@ abstracted — record why, so it is not re-proposed).
 
 ## Completed refactors
 
+### Blocked-basis coercion reconstruction
+- **Pattern:** blocked support-algebra coordinate proofs coerced finite sums
+  into ambient matrices with unrestricted `simp`, which launched an expensive
+  and irrelevant search for a `Nonempty` instance on the basis index.
+- **Reuse:** `coe_reconstructFromBlockedCoefficients_apply` now transports the
+  reconstruction equation through the subalgebra subtype map explicitly with
+  `map_sum` and `map_smul`; the product formula composes the two reconstruction
+  equations directly.
+- **Result:** the worst reconstruction declaration falls from 1.68 seconds to
+  below one second in the declaration profiler, and a clean full-source check
+  completes in 15.39 seconds.
+
 ### Positive-congruence similarity evaluation
 - **Pattern:** the spectral-radius proof repeatedly unfolded `similarityMap`
   and asked broad `simp` calls to rediscover the same inverse and Hermitian
