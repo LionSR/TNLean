@@ -3,13 +3,13 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Sirui Lu
 -/
+import TNLean.Analysis.CfcConjugation
 import TNLean.Analysis.MarginalSupport
 import TNLean.Channel.PartialTrace
 import TNLean.Channel.Schwarz.WeylTwirl
 import TNLean.Channel.Schwarz.RelativeEntropyConvexity
 import TNLean.Channel.Schwarz.RelativeEntropyUnitaryInvariance
 import TNLean.Channel.Schwarz.RelativeEntropyAncillaAdditivity
-import Mathlib.LinearAlgebra.Matrix.Reindex
 import Mathlib.LinearAlgebra.UnitaryGroup
 
 /-!
@@ -101,44 +101,6 @@ namespace Matrix
 section Reindex
 
 variable {m n : Type*} [Fintype m] [DecidableEq m] [Fintype n] [DecidableEq n]
-
-/-- Reindexing the rows and columns by a bijection, as a star algebra
-homomorphism of complex matrix algebras. -/
-noncomputable def reindexStarAlgHom (e : m ≃ n) :
-    Matrix m m ℂ →⋆ₐ[ℂ] Matrix n n ℂ where
-  toFun M := M.submatrix e.symm e.symm
-  map_one' := by simp [Matrix.submatrix_one_equiv]
-  map_mul' A B := by rw [← Matrix.submatrix_mul_equiv A B e.symm e.symm e.symm]
-  map_zero' := by simp
-  map_add' A B := by simp [Matrix.submatrix_add]
-  commutes' r := by
-    rw [Algebra.algebraMap_eq_smul_one, Algebra.algebraMap_eq_smul_one,
-      show (r • (1 : Matrix m m ℂ)).submatrix e.symm e.symm
-          = r • ((1 : Matrix m m ℂ).submatrix e.symm e.symm) from rfl,
-      Matrix.submatrix_one_equiv]
-  map_star' A := by
-    rw [star_eq_conjTranspose, star_eq_conjTranspose, Matrix.conjTranspose_submatrix]
-
-@[simp] theorem reindexStarAlgHom_apply (e : m ≃ n) (M : Matrix m m ℂ) :
-    reindexStarAlgHom e M = M.submatrix e.symm e.symm := rfl
-
-/-- **Functional calculus through a reindexing.** For a Hermitian matrix $A$, a
-real function $f$, and a bijection $e$ of the index set,
-$f(A_{e^{-1},\,e^{-1}}) = (f(A))_{e^{-1},\,e^{-1}}$. This is the instance of
-`StarAlgHomClass.map_cfc` at the reindexing homomorphism `reindexStarAlgHom`. -/
-theorem cfc_submatrix_equiv {A : Matrix m m ℂ} (hA : A.IsHermitian) (f : ℝ → ℝ) (e : m ≃ n) :
-    cfc f (A.submatrix e.symm e.symm) = (cfc f A).submatrix e.symm e.symm := by
-  have hcont : ContinuousOn f (spectrum ℝ A) := A.finite_real_spectrum.continuousOn f
-  have hcontφ : Continuous (reindexStarAlgHom (m := m) (n := n) e) :=
-    LinearMap.continuous_of_finiteDimensional
-      ((reindexStarAlgHom (m := m) (n := n) e : Matrix m m ℂ →ₗ[ℂ] Matrix n n ℂ))
-  have hsa : IsSelfAdjoint A := hA
-  have hsa' : IsSelfAdjoint (reindexStarAlgHom e A) := by
-    rw [reindexStarAlgHom_apply, IsSelfAdjoint, star_eq_conjTranspose,
-      Matrix.conjTranspose_submatrix, hA.eq]
-  simpa [reindexStarAlgHom_apply] using
-    (StarAlgHomClass.map_cfc (reindexStarAlgHom (m := m) (n := n) e) f A
-      hcont hcontφ hsa hsa').symm
 
 /-- **The matrix logarithm is covariant under a reindexing.** For a Hermitian
 matrix $A$ and a bijection $e$ of the index set,

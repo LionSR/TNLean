@@ -32,8 +32,9 @@ theory development.
 * `Matrix.PosDef.supportInvSqrt_eq_inv_sqrt`: agreement with the ordinary
   inverse square root for positive-definite matrices.
 * `Matrix.PosSemidef.supportInvSqrt_smul`: compatibility with positive scaling.
-* `Matrix.PosSemidef.supportInvSqrt_kronecker_one`: compatibility with the
-  unital left tensor embedding.
+* `Matrix.PosSemidef.supportInvSqrt_kronecker_one` and
+  `Matrix.PosSemidef.supportInvSqrt_one_kronecker`: compatibility with the
+  unital tensor embeddings.
 * `Matrix.PosSemidef.supportInvSqrt_sq_mul_self` and
   `Matrix.PosSemidef.self_mul_supportInvSqrt_sq`: generalized-inverse identities.
 * `Matrix.PosSemidef.star_dotProduct_supportInv_mulVec_eq_of_mulVec_eq`:
@@ -203,6 +204,21 @@ theorem PosSemidef.supportInvSqrt_kronecker_one
   rw [← (hρ.kronecker (Matrix.PosSemidef.one (n := m))).isHermitian.cfc_eq,
     ← hρ.isHermitian.cfc_eq]
   exact Matrix.cfc_kronecker_one hρ.isHermitian
+    (fun x : ℝ ↦ if x ≠ 0 then (Real.sqrt x)⁻¹ else 0)
+
+/-- The support inverse square root commutes with the unital right tensor
+embedding. This is the dual tensor functional-calculus identity for the support
+inverse in Hayden--Jozsa--Petz--Winter, arXiv:quant-ph/0304007v2, Theorem 3,
+equation (8). -/
+theorem PosSemidef.supportInvSqrt_one_kronecker
+    {m : Type*} [Fintype m] [DecidableEq m]
+    {ρ : Matrix n n ℂ} (hρ : ρ.PosSemidef) :
+    ((Matrix.PosSemidef.one (n := m)).kronecker hρ).supportInvSqrt =
+      (1 : Matrix m m ℂ) ⊗ₖ hρ.supportInvSqrt := by
+  unfold PosSemidef.supportInvSqrt
+  rw [← ((Matrix.PosSemidef.one (n := m)).kronecker hρ).isHermitian.cfc_eq,
+    ← hρ.isHermitian.cfc_eq]
+  exact Matrix.cfc_one_kronecker hρ.isHermitian
     (fun x : ℝ ↦ if x ≠ 0 then (Real.sqrt x)⁻¹ else 0)
 
 /-- Sandwiching a positive-semidefinite matrix by its support inverse square

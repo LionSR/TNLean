@@ -3,9 +3,12 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.OperatorSchmidt
+import TNLean.Analysis.CfcConjugation
 import TNLean.Analysis.MatrixSqrt
 import TNLean.Channel.KrausCPTP
 import TNLean.Channel.MarginalSupportAbsorption
+import TNLean.Channel.TensorMap
 
 /-!
 # A trace-preserving Petz transpose channel for a partial trace
@@ -40,6 +43,13 @@ reference matrix.
   reference matrix.
 * `Matrix.partialTraceRightPetzChannel_partialTraceRight`: recovery by the
   completed channel.
+* `Matrix.maximallyMixedTensorReference`: the maximally mixed tensor-product
+  reference from HJPW equation (10), with reassociated product indices.
+* `Matrix.partialTraceRightPetzMap_maximallyMixedTensor_kronecker`:
+  factorization of the raw Petz map on elementary tensors.
+* `Matrix.partialTraceRightPetzMap_maximallyMixedTensor`: the raw Petz map for
+  the maximally mixed tensor reference factors as the identity on the first
+  tensor factor and the Petz map on the remaining factors.
 
 ## References
 
@@ -379,5 +389,325 @@ theorem partialTraceRightPetzChannel_partialTraceRight
       _ = partialTraceRight σ := hτ.isHermitian.mul_supportProj_self
 
 end PartialTrace
+
+section HJPWTensorFactorization
+
+variable {dA : ℕ} [NeZero dA]
+variable {B C : Type*} [Fintype B] [DecidableEq B]
+  [Fintype C] [DecidableEq C]
+
+/-- The maximally mixed matrix on a nonzero `Fin dA` index. -/
+noncomputable def maximallyMixedOn : Matrix (Fin dA) (Fin dA) ℂ :=
+  (dA : ℂ)⁻¹ • (1 : Matrix (Fin dA) (Fin dA) ℂ)
+
+/-- The maximally mixed matrix is positive definite. -/
+theorem maximallyMixedOn_posDef : (maximallyMixedOn (dA := dA)).PosDef := by
+  apply Matrix.PosDef.smul Matrix.PosDef.one
+  rw [inv_pos]
+  exact_mod_cast Nat.pos_of_ne_zero (NeZero.ne dA)
+
+/-- The reference
+$\sigma_{ABC}=d_A^{-1}\mathbf 1_A\otimes\rho_{BC}$, reindexed from
+$A\times(B\times C)$ to $(A\times B)\times C$ so that `partialTraceRight`
+traces out $C$.
+
+This is the maximally mixed specialization of the reference in
+Hayden--Jozsa--Petz--Winter, arXiv:quant-ph/0304007v2, equation (10). It is
+not the Hayashi--Koashi--Imoto block decomposition. -/
+noncomputable def maximallyMixedTensorReference
+    (ρ : Matrix (B × C) (B × C) ℂ) :
+    Matrix ((Fin dA × B) × C) ((Fin dA × B) × C) ℂ :=
+  (maximallyMixedOn (dA := dA) ⊗ₖ ρ).submatrix
+    (Equiv.prodAssoc (Fin dA) B C) (Equiv.prodAssoc (Fin dA) B C)
+
+omit [Fintype B] [DecidableEq B] [Fintype C] [DecidableEq C] in
+/-- The maximally mixed tensor reference is positive semidefinite whenever
+$\rho_{BC}$ is positive semidefinite. -/
+theorem maximallyMixedTensorReference_posSemidef
+    [Finite B] [Finite C]
+    {ρ : Matrix (B × C) (B × C) ℂ} (hρ : ρ.PosSemidef) :
+    (maximallyMixedTensorReference (dA := dA) ρ).PosSemidef := by
+  classical
+  letI := Fintype.ofFinite B
+  letI := Fintype.ofFinite C
+  exact (maximallyMixedOn_posDef (dA := dA)).posSemidef.kronecker hρ
+    |>.submatrix _
+
+omit [NeZero dA] [Fintype B] [DecidableEq B] [DecidableEq C] in
+/-- Tracing $C$ from the maximally mixed specialization of HJPW equation (10)
+gives $d_A^{-1}\mathbf 1_A\otimes\rho_B$. -/
+theorem partialTraceRight_maximallyMixedTensorReference
+    (ρ : Matrix (B × C) (B × C) ℂ) :
+    partialTraceRight (maximallyMixedTensorReference (dA := dA) ρ) =
+      maximallyMixedOn (dA := dA) ⊗ₖ partialTraceRight ρ := by
+  ext ⟨a, b⟩ ⟨a', b'⟩
+  simp [maximallyMixedTensorReference, maximallyMixedOn,
+    partialTraceRight_apply, Matrix.kroneckerMap_apply,
+    Matrix.smul_apply, Finset.mul_sum]
+
+private theorem cfcSqrt_maximallyMixedOn_kronecker
+    (ρ : Matrix (B × C) (B × C) ℂ) (hρ : ρ.PosSemidef) :
+    ((maximallyMixedOn_posDef (dA := dA)).posSemidef.kronecker hρ).isHermitian.cfc
+        Real.sqrt =
+      (Real.sqrt ((dA : ℝ)⁻¹) : ℂ) •
+        ((1 : Matrix (Fin dA) (Fin dA) ℂ) ⊗ₖ
+          hρ.isHermitian.cfc Real.sqrt) := by
+  let c : ℝ := (dA : ℝ)⁻¹
+  have hc : 0 ≤ c := by positivity
+  have hbase : maximallyMixedOn (dA := dA) ⊗ₖ ρ =
+      c • ((1 : Matrix (Fin dA) (Fin dA) ℂ) ⊗ₖ ρ) := by
+    ext a b
+    simp [maximallyMixedOn, c, Matrix.kroneckerMap_apply,
+      Matrix.smul_apply]
+    ring
+  have hsqrt :=
+    ((Matrix.PosSemidef.one (n := Fin dA)).kronecker hρ).sqrt_smul hc
+  have hleft : CFC.sqrt (maximallyMixedOn (dA := dA) ⊗ₖ ρ) =
+      ((maximallyMixedOn_posDef (dA := dA)).posSemidef.kronecker
+        hρ).isHermitian.cfc Real.sqrt := by
+    rw [CFC.sqrt_eq_real_sqrt _
+      ((maximallyMixedOn_posDef (dA := dA)).posSemidef.kronecker hρ).nonneg,
+      cfcₙ_eq_cfc,
+      ((maximallyMixedOn_posDef (dA := dA)).posSemidef.kronecker
+        hρ).isHermitian.cfc_eq]
+  have hright : CFC.sqrt
+      ((1 : Matrix (Fin dA) (Fin dA) ℂ) ⊗ₖ ρ) =
+      ((Matrix.PosSemidef.one (n := Fin dA)).kronecker
+        hρ).isHermitian.cfc Real.sqrt := by
+    rw [CFC.sqrt_eq_real_sqrt _
+      ((Matrix.PosSemidef.one (n := Fin dA)).kronecker hρ).nonneg,
+      cfcₙ_eq_cfc,
+      ((Matrix.PosSemidef.one (n := Fin dA)).kronecker
+        hρ).isHermitian.cfc_eq]
+  calc
+    _ = CFC.sqrt (maximallyMixedOn (dA := dA) ⊗ₖ ρ) := hleft.symm
+    _ = CFC.sqrt
+        (c • ((1 : Matrix (Fin dA) (Fin dA) ℂ) ⊗ₖ ρ)) := by rw [← hbase]
+    _ = Real.sqrt c • CFC.sqrt
+        ((1 : Matrix (Fin dA) (Fin dA) ℂ) ⊗ₖ ρ) := hsqrt
+    _ = Real.sqrt c •
+        ((Matrix.PosSemidef.one (n := Fin dA)).kronecker
+          hρ).isHermitian.cfc Real.sqrt := by rw [hright]
+    _ = Real.sqrt c • ((1 : Matrix (Fin dA) (Fin dA) ℂ) ⊗ₖ
+        hρ.isHermitian.cfc Real.sqrt) := by
+      rw [← ((Matrix.PosSemidef.one (n := Fin dA)).kronecker
+        hρ).isHermitian.cfc_eq,
+        Matrix.cfc_one_kronecker hρ.isHermitian, hρ.isHermitian.cfc_eq]
+    _ = (Real.sqrt ((dA : ℝ)⁻¹) : ℂ) •
+        ((1 : Matrix (Fin dA) (Fin dA) ℂ) ⊗ₖ
+          hρ.isHermitian.cfc Real.sqrt) := by rw [Complex.coe_smul]
+
+/-- The square root in the maximally mixed specialization of HJPW equation
+(10) factors into the dimension normalization and the square root of $\rho_{BC}$, after the
+canonical product-index reassociation. -/
+theorem cfcSqrt_maximallyMixedTensorReference
+    (ρ : Matrix (B × C) (B × C) ℂ) (hρ : ρ.PosSemidef) :
+    (maximallyMixedTensorReference_posSemidef
+      (dA := dA) hρ).isHermitian.cfc Real.sqrt =
+      ((Real.sqrt ((dA : ℝ)⁻¹) : ℂ) •
+        ((1 : Matrix (Fin dA) (Fin dA) ℂ) ⊗ₖ
+          hρ.isHermitian.cfc Real.sqrt)).submatrix
+        (Equiv.prodAssoc (Fin dA) B C)
+        (Equiv.prodAssoc (Fin dA) B C) := by
+  rw [← (maximallyMixedTensorReference_posSemidef
+    (dA := dA) hρ).isHermitian.cfc_eq]
+  change cfc Real.sqrt
+      ((maximallyMixedOn (dA := dA) ⊗ₖ ρ).submatrix
+        (Equiv.prodAssoc (Fin dA) B C)
+        (Equiv.prodAssoc (Fin dA) B C)) = _
+  have hcfc := Matrix.cfc_submatrix_equiv
+    (((maximallyMixedOn_posDef (dA := dA)).posSemidef.kronecker
+      hρ).isHermitian) Real.sqrt (Equiv.prodAssoc (Fin dA) B C).symm
+  rw [show cfc Real.sqrt
+      ((maximallyMixedOn (dA := dA) ⊗ₖ ρ).submatrix
+        (Equiv.prodAssoc (Fin dA) B C)
+        (Equiv.prodAssoc (Fin dA) B C)) =
+      (cfc Real.sqrt (maximallyMixedOn (dA := dA) ⊗ₖ ρ)).submatrix
+        (Equiv.prodAssoc (Fin dA) B C)
+        (Equiv.prodAssoc (Fin dA) B C) by
+        simpa only [Equiv.symm_symm] using hcfc]
+  rw [((maximallyMixedOn_posDef (dA := dA)).posSemidef.kronecker
+    hρ).isHermitian.cfc_eq, cfcSqrt_maximallyMixedOn_kronecker ρ hρ]
+
+omit [DecidableEq C] in
+/-- For the maximally mixed specialization of HJPW equation (10), the support
+inverse square root of the $AB$ marginal is $\sqrt{d_A}\,\mathbf 1_A\otimes\rho_B^{-1/2}$ on its
+support. -/
+theorem supportInvSqrt_partialTraceRight_maximallyMixedTensorReference
+    (ρ : Matrix (B × C) (B × C) ℂ) (hρ : ρ.PosSemidef) :
+    (PosSemidef.partialTraceRight
+      (maximallyMixedTensorReference_posSemidef
+        (dA := dA) hρ)).supportInvSqrt =
+      (Real.sqrt ((dA : ℝ)⁻¹))⁻¹ •
+        ((1 : Matrix (Fin dA) (Fin dA) ℂ) ⊗ₖ
+          (PosSemidef.partialTraceRight hρ).supportInvSqrt) := by
+  classical
+  let c : ℝ := (dA : ℝ)⁻¹
+  have hc : 0 < c := inv_pos.mpr (by
+    exact_mod_cast Nat.pos_of_ne_zero (NeZero.ne dA))
+  have hmarg :
+      partialTraceRight (maximallyMixedTensorReference (dA := dA) ρ) =
+        c • ((1 : Matrix (Fin dA) (Fin dA) ℂ) ⊗ₖ
+          partialTraceRight ρ) := by
+    rw [partialTraceRight_maximallyMixedTensorReference]
+    ext a b
+    simp [maximallyMixedOn, c, Matrix.kroneckerMap_apply,
+      Matrix.smul_apply]
+    ring
+  let hbase := (Matrix.PosSemidef.one (n := Fin dA)).kronecker
+    (PosSemidef.partialTraceRight hρ)
+  have hscaled := hbase.supportInvSqrt_smul hc
+  unfold PosSemidef.supportInvSqrt at hscaled ⊢
+  rw [← (PosSemidef.partialTraceRight
+    (maximallyMixedTensorReference_posSemidef
+      (dA := dA) hρ)).isHermitian.cfc_eq,
+    hmarg, (hbase.smul hc.le).isHermitian.cfc_eq]
+  rw [hscaled]
+  congr 1
+  exact Matrix.PosSemidef.supportInvSqrt_one_kronecker
+    (PosSemidef.partialTraceRight hρ)
+
+/-- **Maximally mixed specialization of HJPW equation (10), elementary-tensor
+algebra.** For the reference
+$\sigma_{ABC}=d_A^{-1}\mathbf 1_A\otimes\rho_{BC}$, the raw partial-trace
+Petz support formula sends every elementary tensor $A_0\otimes X_B$ to
+$A_0\otimes\mathcal R_{\rho_{BC}}(X_B)$, up to the canonical reassociation
+$(A\times B)\times C\simeq A\times(B\times C)$.
+
+This is the maximally mixed specialization of the tensor-product factorization
+in Hayden--Jozsa--Petz--Winter, arXiv:quant-ph/0304007v2, equation (10).
+
+**Scope restriction (docs/paper-gaps/hjpw04_petz_factorization_maximally_mixed_scope.tex):**
+HJPW equation (10) allows a general first-factor state, whereas this theorem
+proves only the $d_A^{-1}\mathbf 1_A\otimes\rho_{BC}$ case. The unrestricted
+factorization remains future work, and this raw support-Petz identity does not
+imply the Koashi--Imoto/Hayashi block decomposition. -/
+theorem partialTraceRightPetzMap_maximallyMixedTensor_kronecker
+    (ρ : Matrix (B × C) (B × C) ℂ) (hρ : ρ.PosSemidef)
+    (A : Matrix (Fin dA) (Fin dA) ℂ) (X : Matrix B B ℂ) :
+    equivReindexMap (Equiv.prodAssoc (Fin dA) B C)
+        (partialTraceRightPetzMap
+          (maximallyMixedTensorReference (dA := dA) ρ)
+          (maximallyMixedTensorReference_posSemidef (dA := dA) hρ)
+          (A ⊗ₖ X)) =
+      A ⊗ₖ partialTraceRightPetzMap ρ hρ X := by
+  rw [partialTraceRightPetzMap_apply, partialTraceRightPetzMap_apply]
+  rw [cfcSqrt_maximallyMixedTensorReference ρ hρ,
+    supportInvSqrt_partialTraceRight_maximallyMixedTensorReference ρ hρ]
+  change (Matrix.reindexAlgEquiv ℂ ℂ (Equiv.prodAssoc (Fin dA) B C))
+    (_ * _ * _) = _
+  rw [map_mul, map_mul]
+  simp only [Matrix.coe_reindexAlgEquiv, Matrix.reindex_apply]
+  rw [show ((((Real.sqrt ((dA : ℝ)⁻¹) : ℂ) •
+        ((1 : Matrix (Fin dA) (Fin dA) ℂ) ⊗ₖ
+          hρ.isHermitian.cfc Real.sqrt)).submatrix
+        (Equiv.prodAssoc (Fin dA) B C)
+        (Equiv.prodAssoc (Fin dA) B C)).submatrix
+        (Equiv.prodAssoc (Fin dA) B C).symm
+        (Equiv.prodAssoc (Fin dA) B C).symm) =
+      (Real.sqrt ((dA : ℝ)⁻¹) : ℂ) •
+        ((1 : Matrix (Fin dA) (Fin dA) ℂ) ⊗ₖ
+          hρ.isHermitian.cfc Real.sqrt) by ext; rfl]
+  rw [show (leftKroneckerEmbed (n := C)
+        ((Real.sqrt ((dA : ℝ)⁻¹))⁻¹ •
+            ((1 : Matrix (Fin dA) (Fin dA) ℂ) ⊗ₖ
+              (PosSemidef.partialTraceRight hρ).supportInvSqrt) *
+          (A ⊗ₖ X) *
+          (Real.sqrt ((dA : ℝ)⁻¹))⁻¹ •
+            ((1 : Matrix (Fin dA) (Fin dA) ℂ) ⊗ₖ
+              (PosSemidef.partialTraceRight hρ).supportInvSqrt))).submatrix
+        (Equiv.prodAssoc (Fin dA) B C).symm
+        (Equiv.prodAssoc (Fin dA) B C).symm =
+      A ⊗ₖ leftKroneckerEmbed (n := C)
+        ((Real.sqrt ((dA : ℝ)⁻¹))⁻¹ •
+            (PosSemidef.partialTraceRight hρ).supportInvSqrt * X *
+          (Real.sqrt ((dA : ℝ)⁻¹))⁻¹ •
+            (PosSemidef.partialTraceRight hρ).supportInvSqrt) by
+      simp only [leftKroneckerEmbed_apply, Matrix.smul_mul,
+        Matrix.mul_smul, Matrix.smul_kronecker]
+      rw [← Matrix.mul_kronecker_mul, ← Matrix.mul_kronecker_mul,
+        Matrix.one_mul, Matrix.mul_one]
+      ext ⟨a, bc⟩ ⟨a', bc'⟩
+      simp [Matrix.submatrix_apply, Matrix.kroneckerMap_apply,
+        Matrix.smul_apply]
+      ring]
+  simp only [Matrix.smul_mul, Matrix.mul_smul]
+  rw [← Matrix.mul_kronecker_mul, ← Matrix.mul_kronecker_mul,
+    Matrix.one_mul, Matrix.mul_one]
+  have hc : (0 : ℝ) < (dA : ℝ)⁻¹ := inv_pos.mpr (by
+    exact_mod_cast Nat.pos_of_ne_zero (NeZero.ne dA))
+  have hs : Real.sqrt ((dA : ℝ)⁻¹) ≠ 0 :=
+    Real.sqrt_ne_zero'.mpr hc
+  simp only [smul_smul]
+  rw [← Complex.coe_smul, map_smul]
+  simp only [Matrix.mul_smul, Matrix.smul_mul]
+  ext i j
+  simp only [Matrix.smul_apply, smul_eq_mul, Matrix.kroneckerMap_apply]
+  have hcancelR :
+      (Real.sqrt ((dA : ℝ)⁻¹) * Real.sqrt ((dA : ℝ)⁻¹)) *
+        ((Real.sqrt ((dA : ℝ)⁻¹))⁻¹ *
+          (Real.sqrt ((dA : ℝ)⁻¹))⁻¹) = 1 := by
+    calc
+      _ = (Real.sqrt ((dA : ℝ)⁻¹) *
+          (Real.sqrt ((dA : ℝ)⁻¹))⁻¹) *
+        (Real.sqrt ((dA : ℝ)⁻¹) *
+          (Real.sqrt ((dA : ℝ)⁻¹))⁻¹) := by ring
+      _ = 1 := by rw [mul_inv_cancel₀ hs, one_mul]
+  have hcancel : ((Real.sqrt ((dA : ℝ)⁻¹) : ℂ) *
+      Real.sqrt ((dA : ℝ)⁻¹)) *
+      (((Real.sqrt ((dA : ℝ)⁻¹))⁻¹ *
+        (Real.sqrt ((dA : ℝ)⁻¹))⁻¹ : ℝ) : ℂ) = 1 := by
+    exact_mod_cast hcancelR
+  set Z : ℂ := (hρ.isHermitian.cfc Real.sqrt *
+    leftKroneckerEmbed (n := C)
+      ((PosSemidef.partialTraceRight hρ).supportInvSqrt * X *
+        (PosSemidef.partialTraceRight hρ).supportInvSqrt) *
+    hρ.isHermitian.cfc Real.sqrt) i.2 j.2 with hZ
+  change (Real.sqrt ((dA : ℝ)⁻¹) : ℂ) *
+    Real.sqrt ((dA : ℝ)⁻¹) *
+    (A i.1 j.1 * ((((Real.sqrt ((dA : ℝ)⁻¹))⁻¹ *
+      (Real.sqrt ((dA : ℝ)⁻¹))⁻¹ : ℝ) : ℂ) * Z)) = A i.1 j.1 * Z
+  calc
+    _ = (((Real.sqrt ((dA : ℝ)⁻¹) : ℂ) *
+        Real.sqrt ((dA : ℝ)⁻¹)) *
+        (((Real.sqrt ((dA : ℝ)⁻¹))⁻¹ *
+          (Real.sqrt ((dA : ℝ)⁻¹))⁻¹ : ℝ) : ℂ)) *
+        (A i.1 j.1 * Z) := by ring
+    _ = A i.1 j.1 * Z := by rw [hcancel, one_mul]
+
+/-- **Maximally mixed specialization of HJPW equation (10), raw Petz-map
+factorization.** For
+$\sigma_{ABC}=d_A^{-1}\mathbf 1_A\otimes\rho_{BC}$, the raw partial-trace
+Petz map is $\operatorname{id}_A\otimes\mathcal R_{\rho_{BC}}$, after the
+canonical reassociation of product indices.
+
+This is the maximally mixed specialization of equation (10) of
+Hayden--Jozsa--Petz--Winter, arXiv:quant-ph/0304007v2.
+
+**Scope restriction (docs/paper-gaps/hjpw04_petz_factorization_maximally_mixed_scope.tex):**
+HJPW equation (10) allows a general first-factor state, whereas this theorem
+proves only the $d_A^{-1}\mathbf 1_A\otimes\rho_{BC}$ case. The unrestricted
+factorization remains future work, and this raw support-Petz identity does not
+imply the Koashi--Imoto/Hayashi block decomposition. -/
+theorem partialTraceRightPetzMap_maximallyMixedTensor
+    (ρ : Matrix (B × C) (B × C) ℂ) (hρ : ρ.PosSemidef) :
+    equivReindexMap (Equiv.prodAssoc (Fin dA) B C) ∘ₗ
+        partialTraceRightPetzMap
+          (maximallyMixedTensorReference (dA := dA) ρ)
+          (maximallyMixedTensorReference_posSemidef (dA := dA) hρ) =
+      idTensorMapLM (δ := Fin dA) (partialTraceRightPetzMap ρ hρ) := by
+  apply LinearMap.ext
+  intro X
+  obtain ⟨A, Y, hX⟩ :=
+    hasOperatorSchmidtDecomposition_operatorSchmidtRank X
+  rw [hX]
+  simp only [LinearMap.comp_apply, map_sum]
+  apply Finset.sum_congr rfl
+  intro i _
+  rw [idTensorMapLM_apply, idTensorMap_kronecker]
+  exact partialTraceRightPetzMap_maximallyMixedTensor_kronecker
+    ρ hρ (A i) (Y i)
+
+end HJPWTensorFactorization
 
 end Matrix
