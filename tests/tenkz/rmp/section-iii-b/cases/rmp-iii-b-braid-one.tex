@@ -7,14 +7,26 @@
 % Capabilities: free-graph, multi-strand-braid, crossing-order
 \[
   \begin{tenkzfree}
-    \tnput[dot]{j}{(0mm,-8mm)}{j}
-    \tnput[dot]{i}{(12mm,-8mm)}{i}
-    \tnput[dot]{a}{(6mm,8mm)}{a}
-    \tnput[dot]{b}{(-4mm,8mm)}{b}
-    \tnjoin{-10mm,-8mm}{j.west} \tnjoin{i.east}{22mm,-8mm}
-    \tnjoin{-10mm,8mm}{b.west} \tnjoin{a.east}{22mm,8mm}
-    \tnjoin[route=arc, out=-90, in=90]{j.south}{0mm,-16mm}
-    \tnjoin[route=arc, out=90, in=-90]{j.north}{b.south}
-    \tnjoin[route=arc, out=-90, in=90]{a.south}{i.north}
+    % the two-by-two lattice patch carrying the two anyons
+    \tnput[dot, role=extra, label pos=south]{j}{(-5mm,-6mm)}{j}
+    \tnput[dot, role=marked, label pos=south]{i}{(7mm,-6mm)}{i}
+    \tnput[dot]{p}{(-5mm,6mm)}{} \tnput[dot]{q}{(7mm,6mm)}{}
+    \tnput[dot, role=extra]{bl}{(-11mm,-6mm)}{}
+    \tnput[dot, role=marked, label pos=south]{a}{(1mm,6mm)}{a}
+    \tnput[dot, role=extra, label pos=west]{bb}{(-5mm,-13mm)}{b}
+    \tnjoin{-16mm,-6mm}{bl.west} \tnjoin{bl.east}{j.west}
+    \tnjoin{j.east}{i.west} \tnjoin{i.east}{16mm,-6mm}
+    \tnjoin{-16mm,6mm}{p.west} \tnjoin{p.east}{a.west}
+    \tnjoin{a.east}{q.west} \tnjoin{q.east}{16mm,6mm}
+    \tnjoin{-5mm,-16mm}{bb.south} \tnjoin{bb.north}{j.south}
+    \tnjoin{j.north}{p.south} \tnjoin{p.north}{-5mm,12mm}
+    \tnjoin{7mm,-12mm}{i.south} \tnjoin{i.north}{q.south} \tnjoin{q.north}{7mm,12mm}
+    % the b string: it enters below, rounds the j anyon, and leaves above
+    \tnjoin[role=operator, route=arc, out=0, in=-45]{bb.east}{j.south east}
+    \tnjoin[role=operator, route=arc, out=180, in=-90]{bb.west}{bl.south}
+    \tnjoin[role=operator, route=arc, out=90, in=-90]{bl.north}{-11mm,12mm}
+    % the a string: it descends past the upper rail into the i anyon
+    \tnjoin[role=operator, route=arc, out=90, in=-90]{a.north}{1mm,12mm}
+    \tnjoin[role=operator, route=arc, out=-45, in=135]{a.south east}{i.north west}
   \end{tenkzfree}
 \]

@@ -7,44 +7,33 @@
 % Capabilities: free-graph, ring-closure, typed-ports
 \[
   \begin{tenkzfree}
-    % the PEPS tensor: physical leg up, horizontal + diagonal lattice
-    % wires; the label takes the free south side (west carries the wire)
-    \tnput[dot, label pos=south]{C}{(0,0)}{i}
-    \tnjoin{C.north}{0mm,7mm}
-    % four MPO tensors of the ring, on the lattice wires
-    \tnput[mpo]{W}{(-16mm,0)}{}
-    \tnput[mpo]{E}{(16mm,0)}{}
-    \tnput[mpo]{N}{(8mm,10mm)}{}
-    \tnput[mpo]{S}{(-8mm,-10mm)}{}
-    % horizontal wire through W, C, E
-    \tnjoin{-24mm,0mm}{W.west}
-    \tnjoin{W.east}{C.west}
-    \tnjoin{C.east}{E.west}
-    \tnjoin{E.east}{24mm,0mm}
-    % diagonal wire through S, C, N
-    \tnjoin{-14mm,-17mm}{S.south west}
-    \tnjoin{S.north east}{C.south west}
-    \tnjoin{C.north east}{N.south west}
-    \tnjoin{N.north east}{14mm,17mm}
-    % the marked MPO tensor j on the ring, free string end exiting SE
-    \tnput[mpo]{J}{(12mm,-9mm)}{j}
-    \tnjoin{J.south east}{20mm,-15mm}
-    % the MPO ring: arcs threading W -> N -> E -> J -> S -> W
-    \tnjoin[route=arc, out=90, in=180]{W.north}{N.west}
-    \tnjoin[route=arc, out=0, in=90]{N.east}{E.north}
-    \tnjoin[route=arc, out=-90, in=45]{E.south}{J.north east}
-    \tnjoin[route=arc, out=225, in=0]{J.south west}{S.east}
-    \tnjoin[route=arc, out=180, in=-90]{S.west}{W.south}
+    % the PEPS tensor: physical leg up, horizontal and diagonal lattice wires
+    \tnput[dot, role=marked, label pos=south]{C}{(0,0)}{i}
+    \tnjoin{C.north}{0mm,6mm}
+    % the four MPO tensors the ring places on the four virtual legs
+    \tnput[mpo]{W}{(-11mm,0)}{} \tnput[mpo]{E}{(11mm,0)}{}
+    \tnput[mpo]{N}{(6mm,7mm)}{} \tnput[mpo]{S}{(-6mm,-7mm)}{}
+    \tnjoin{-17mm,0mm}{W.west} \tnjoin{W.east}{C.west}
+    \tnjoin{C.east}{E.west} \tnjoin{E.east}{17mm,0mm}
+    \tnjoin{-10mm,-12mm}{S.south west} \tnjoin{S.north east}{C.south west}
+    \tnjoin{C.north east}{N.south west} \tnjoin{N.north east}{10mm,12mm}
+    % the marked tensor j on the ring, free string end exiting south east
+    \tnput[mpo, role=marked]{J}{(7mm,-7mm)}{j}
+    \tnjoin[role=operator]{J.south east}{13mm,-12mm}
+    % the MPO ring: W -> N -> E -> J -> S -> W
+    \tnjoin[role=operator, route=arc, out=90, in=180]{W.north}{N.west}
+    \tnjoin[role=operator, route=arc, out=0, in=90]{N.east}{E.north}
+    \tnjoin[role=operator, route=arc, out=-90, in=45]{E.south}{J.north east}
+    \tnjoin[role=operator, route=arc, out=225, in=0]{J.south west}{S.east}
+    \tnjoin[role=operator, route=arc, out=180, in=-90]{S.west}{W.south}
   \end{tenkzfree}
   \;=\;\delta_{i,j}\;
   \begin{tenkzfree}
-    % the bare tensor: same legs, one residual string stub to the SE
-    \tnput[dot, label pos=south]{D}{(0,0)}{i}
-    \tnjoin{D.north}{0mm,7mm}
-    \tnjoin{-10mm,0mm}{D.west}
-    \tnjoin{D.east}{10mm,0mm}
-    \tnjoin{-7mm,-9mm}{D.south west}
-    \tnjoin{D.north east}{7mm,9mm}
-    \tnjoin{D.south east}{8mm,-6mm}
+    % the bare tensor: same legs, one residual string stub to the south east
+    \tnput[dot, role=marked, label pos=south]{D}{(0,0)}{i}
+    \tnjoin{D.north}{0mm,6mm}
+    \tnjoin{-9mm,0mm}{D.west} \tnjoin{D.east}{9mm,0mm}
+    \tnjoin{-6mm,-7mm}{D.south west} \tnjoin{D.north east}{6mm,7mm}
+    \tnjoin[role=operator]{D.south east}{7mm,-5mm}
   \end{tenkzfree}
 \]

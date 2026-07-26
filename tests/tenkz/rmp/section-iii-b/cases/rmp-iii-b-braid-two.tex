@@ -7,16 +7,16 @@
 % Capabilities: free-graph, multi-strand-braid, crossing-order
 \[
   \begin{tenkzfree}
-    \tnput[dot]{j}{(0mm,-8mm)}{j}
-    \tnput[dot]{i}{(12mm,-8mm)}{i}
-    \tnput[dot]{a}{(12mm,8mm)}{a}
-    \tnput[dot]{b}{(0mm,8mm)}{b}
-    \tnjoin{-9mm,-8mm}{j.west} \tnjoin{i.east}{21mm,-8mm}
-    \tnjoin{-9mm,8mm}{b.west} \tnjoin{a.east}{21mm,8mm}
-    \tnjoin[route=arc, out=90, in=-90]{b.north}{-4mm,16mm}
-    \tnjoin[route=arc, out=-45, in=135]{b.south east}{i.north west}
-    \tnjoin[route=arc, out=-90, in=90]{i.south}{12mm,-16mm}
-    \tnjoin[route=arc, out=45, in=225]{j.north east}{a.south west}
-    \tnjoin[route=arc, out=90, in=-90]{a.north}{16mm,16mm}
+    \tnput[dot, role=extra, label pos=south]{j}{(0mm,-7mm)}{j}
+    \tnput[dot, role=marked, label pos=south]{i}{(10mm,-7mm)}{i}
+    \tnput[dot, role=marked, label pos=north]{a}{(10mm,7mm)}{a}
+    \tnput[dot, role=extra, label pos=north]{b}{(0mm,7mm)}{b}
+    \tnjoin{-9mm,-7mm}{j.west} \tnjoin{i.east}{19mm,-7mm}
+    \tnjoin{-9mm,7mm}{b.west} \tnjoin{a.east}{19mm,7mm}
+    \tnjoin[role=operator, route=arc, out=90, in=-90]{b.north}{-4mm,14mm}
+    \tnjoin[role=operator, route=arc, out=-45, in=135]{b.south east}{i.north west}
+    \tnjoin[role=operator, route=arc, out=-90, in=90]{i.south}{10mm,-14mm}
+    \tnjoin[role=operator, route=arc, out=45, in=225]{j.north east}{a.south west}
+    \tnjoin[role=operator, route=arc, out=90, in=-90]{a.north}{14mm,14mm}
   \end{tenkzfree}
 \]

@@ -7,11 +7,10 @@
 % Capabilities: lattice, path-string, marked-endpoints
 \[
   \begin{tenkzlattice}[rows=3, cols=3, frame=oblique, physical=up]
-    \tnsite{(1,1)}
-    \tnsite{(1,2)} \tnsite{(1,3)}
+    \tnsite{(1,1)} \tnsite{(1,2)} \tnsite[role=marked, label={$i$}]{(1,3)}
     \tnsite{(2,1)} \tnsite{(2,2)} \tnsite{(2,3)}
-    \tnsite{(3,1)} \tnsite{(3,2)} \tnsite{(3,3)}
-    \tnedge[role=operator]{(1,1)-(2,2)}
-    \tnedge[role=operator]{(2,2)-(3,3)}
-  \end{tenkzlattice}_{\ i^*\rightarrow a\rightarrow i}
+    \tnsite[role=marked, label={$i^{*}$}]{(3,1)} \tnsite{(3,2)} \tnsite{(3,3)}
+    \tnedge[role=operator]{(3,1)-(2,2)}
+    \tnedge[role=operator, label={a}]{(2,2)-(1,3)}
+  \end{tenkzlattice}
 \]
