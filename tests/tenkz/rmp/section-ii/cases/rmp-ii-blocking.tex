@@ -7,12 +7,10 @@
 %   II/ImagesReview Section II.tex lines 535-540
 % Capabilities: grid, typed-ports
 \[
-  % one 3-leg site  ->  two 3-leg sites sharing a new bond
-  \begin{tenkz}[physical=up]
-    \tn{}
-  \end{tenkz}
-  \;\longrightarrow\;
-  \begin{tenkz}[physical=up]
-    \tn{} & \tn{}
+  A^{i}_{\alpha,\beta} \;=\;
+  % V: one down leg alpha in, two up legs (i, beta) out - the author's
+  % one-site isometry definition, not a two-site blocking pair
+  \begin{tenkz}[rows={op:none}, tensor style=box]
+    \tn[pill, wide=2, up at={1,2}, up={$i$,$\beta$}, down={$\alpha$}]{V} &
   \end{tenkz}
 \]

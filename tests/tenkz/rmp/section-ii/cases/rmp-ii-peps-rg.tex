@@ -22,18 +22,22 @@
     \tnsite{(1,1)}
 \end{tenkzlattice}
   \;\otimes\;
-  % three 1-leg beads: leg up / leg east / leg west
-  \begin{tenkz}[physical=up, west=none, east=none]
-    \tn{}
-  \end{tenkz}
+  % three beads with depth (a sheet): up+south / west+up+north / up+east,
+  % matching the source's three oblique corner tensors
+  \begin{tenkzlattice}[rows=1, cols=1, frame=oblique, boundary=open,
+                       physical=up, west=none, east=none, north=none]
+    \tnsite{(1,1)}
+\end{tenkzlattice}
   \;
-  \begin{tenkz}[west=none]
-    \tn{}
-  \end{tenkz}
+  \begin{tenkzlattice}[rows=1, cols=1, frame=oblique, boundary=open,
+                       physical=up, east=none, south=none]
+    \tnsite{(1,1)}
+\end{tenkzlattice}
   \;
-  \begin{tenkz}[east=none]
-    \tn{}
-  \end{tenkz}
+  \begin{tenkzlattice}[rows=1, cols=1, frame=oblique, boundary=open,
+                       physical=up, west=none, north=none, south=none]
+    \tnsite{(1,1)}
+\end{tenkzlattice}
 \]
 
 (c)
@@ -43,10 +47,22 @@
     \tnsite{(1,1)}
 \end{tenkzlattice}
   \;\otimes\;
-  % two bonded 3-leg tensors, outer virtual sides sealed
-  \begin{tenkz}[physical=up, west=none, east=none]
-    \tn{} & \tn{}
-  \end{tenkz}
+  % three independent beads with depth (a sheet): west+up / up+south /
+  % up+north, matching the source's three separate oblique corner tensors
+  \begin{tenkzlattice}[rows=1, cols=1, frame=oblique, boundary=open,
+                       physical=up, east=none, north=none, south=none]
+    \tnsite{(1,1)}
+\end{tenkzlattice}
+  \;
+  \begin{tenkzlattice}[rows=1, cols=1, frame=oblique, boundary=open,
+                       physical=up, west=none, east=none, north=none]
+    \tnsite{(1,1)}
+\end{tenkzlattice}
+  \;
+  \begin{tenkzlattice}[rows=1, cols=1, frame=oblique, boundary=open,
+                       physical=up, west=none, east=none, south=none]
+    \tnsite{(1,1)}
+\end{tenkzlattice}
 \]
 
 (d)
@@ -61,8 +77,11 @@
     \tnsite{(1,1)}
 \end{tenkzlattice}
   \;\otimes\;
-  % the bead whose virtual wire closes on itself: hooks trace closure
-  \begin{tenkz}[physical=up, boundary=periodic, trace style=hooks]
+  % the bead whose virtual wire closes on itself: hooks trace closure,
+  % opening upward as the source draws it (frame rotated 180 degrees, with
+  % physical=down pre-compensating so the physical leg still points up)
+  \begin{tenkz}[physical=down, boundary=periodic, trace style=hooks,
+                frame={rotate=180}]
     \tn{}
   \end{tenkz}
 \]
