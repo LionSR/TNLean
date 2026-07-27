@@ -357,10 +357,10 @@ section = "section-ii"
 order = 21
 case = "tests/tenkz/rmp/section-ii/cases/rmp-ii-circuit.tex"
 formula = "|psi> = (prod_{layers l} (x)_k U^{(l)}_k) |0>."
-ink = "Canonical public tenkz environment with rotated gate frames; no raw TikZ."
-boundary = "The initial state closes the input; four circuit wires remain open after the gates."
+ink = "Canonical public tenkzfree doubling-tree pyramid; no raw TikZ."
+boundary = "The initial state closes the input; eight circuit wires remain open after the gates."
 source = "paper TN-Review-main.tex line 518; author source ImagesReview Section II/ImagesReview Section II.tex lines 547-571"
-capabilities = ["grid", "typed-ports", "rotated-action"]
+capabilities = ["free-graph", "typed-ports"]
 paper_context_only = false
 fixture = "tests/tenkz/hard11_v4.tex"
 author_source = "ImagesReview Section II/ImagesReview Section II.tex"

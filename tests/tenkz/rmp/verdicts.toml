@@ -2,18 +2,18 @@
 # Schema: scripts/tenkz_rmp.py (load_verdicts).  Any status may be
 # recorded, including failure; the check rejects lies, never gaps.
 schema_version = 1
-campaign_sha256 = "17651574faa898c3fb6a948834ff4fa7916a2fb79b3c1e2cdd230fc52091ef21"
+campaign_sha256 = "c9506b2a14433030e43b4835bf365f13414e68af5e3f74860b7b20c21b05e07e"
 
 [[verdict]]
 id = "rmp-ii-peps-projection"
-status = "structural-gap"
+status = "cosmetic-gap"
 pairing = "verified"
 pairing_by = "codex-pairing-sweep-2026-07-24"
-defects = ["missing-element"]
-case_sha256 = "29d67a807d79597690399bf93957ccb913f345e15c150fedcf7df39af13c46ca"
-reviewed = "2026-07-26"
-renderer = "fable-countersign-reading-2026-07-26-200dpi"
-note = "boundary repaired; projector layer still absent"
+defects = []
+case_sha256 = "f6d4f06a733d5a507344be0241cc30793f2c6170b2ab20207a4cbef2811a2b40"
+reviewed = "2026-07-27"
+renderer = "fable-structural-redraw-2026-07-27-200dpi"
+note = "the projector layer is drawn: one enclosure per site over the entangled-bond sheet, with A and the |phi) bond named"
 
 [[verdict]]
 id = "rmp-ii-triangle-network"
@@ -119,14 +119,14 @@ note = "U = u over v = beads; mirrored panel, labels clear"
 
 [[verdict]]
 id = "rmp-ii-mpu-brickwork"
-status = "structural-gap"
+status = "cosmetic-gap"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
-defects = ["wrong-contraction"]
-case_sha256 = "049609e0f915ef085445a70bccb9117452963b7d84aae8b4d9b95e0044fe72af"
-reviewed = "2026-07-23"
-renderer = "maintainer-page-review-2026-07-23"
-note = "the two sides depict different contractions"
+defects = []
+case_sha256 = "2a3f532e16c8c31610a5f6f05aa7be42a18814508041238c5249e842ff9a5eea"
+reviewed = "2026-07-27"
+renderer = "fable-structural-redraw-2026-07-27-200dpi"
+note = "both sides now expose the same twelve legs; the type advisory (operator word vs circuit) is inherent to the identity"
 
 [[verdict]]
 id = "rmp-ii-mpu-wrap"
@@ -209,13 +209,13 @@ note = "relation corrected"
 
 [[verdict]]
 id = "rmp-ii-blocking"
-status = "structural-gap"
+status = "cosmetic-gap"
 pairing = "wrong-source"
-defects = ["wrong-contraction"]
-case_sha256 = "1489833e4ebc0e26a3e33bcb81efedd3115bd6641b91c7eaf157a44c213d818c"
-reviewed = "2026-07-23"
-renderer = "maintainer-page-review-2026-07-23"
-note = "Author panel shows the one-site isometry definition A^i_{alpha beta} = V, not the declared two-site blocking identity."
+defects = []
+case_sha256 = "9a3509bb83e834de5019e52b2cf693563c571cd241eb3ba3ff1d30e1d5cdae41"
+reviewed = "2026-07-27"
+renderer = "fable-structural-redraw-2026-07-27-200dpi"
+note = "redrawn as the one-site isometry V the author panel defines, on the t2_isometry idiom"
 
 [[verdict]]
 id = "rmp-ii-staircase"
@@ -229,14 +229,14 @@ note = "vertically mirrored vs source; V-glyph aspect"
 
 [[verdict]]
 id = "rmp-ii-circuit"
-status = "structural-gap"
+status = "cosmetic-gap"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
-defects = ["wrong-contraction"]
-case_sha256 = "18c1336b9ee9e02401a3b6e24066c2424ff1b6528b2fc8467c5b17a4577ac43c"
-reviewed = "2026-07-25"
-renderer = "rotation-frame-source-review-2026-07-25"
-note = "Rotated gate frames are now represented; the source tree still has eight outputs."
+defects = []
+case_sha256 = "c4da21fc6103ee2d6be46567f644d06cdd2b8a3da6b7b6fab00138e156314a84"
+reviewed = "2026-07-27"
+renderer = "fable-structural-redraw-2026-07-27-200dpi"
+note = "the doubling tree reaches the source's eight outputs as a compact pyramid: four gates over two over the root, |0> below. Ink and boundary prose realigned with the drift checker"
 
 [[verdict]]
 id = "rmp-ii-sv17"
@@ -379,14 +379,14 @@ note = "contrast panel gone; hooks wider"
 
 [[verdict]]
 id = "rmp-ii-peps-rg"
-status = "structural-gap"
+status = "cosmetic-gap"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
-defects = ["wrong-contraction"]
-case_sha256 = "a800e4831edb7799b1fec1fc34cf118d944036a66d2e481cca195ac2a5f1bce8"
-reviewed = "2026-07-26"
-renderer = "fable-countersign-reading-2026-07-26-200dpi"
-note = "panel (a) fixed; (b)-(d) second factors still flat"
+defects = []
+case_sha256 = "9877c4477a043535031b33389778b14b909c7464aff891b263857dfac04229b7"
+reviewed = "2026-07-27"
+renderer = "fable-structural-redraw-2026-07-27-200dpi"
+note = "all second factors carry their per-bead leg subsets; the corner bead's wrap hooks open upward as the source draws, rounded and crossing where the source squares them apart"
 
 [[verdict]]
 id = "rmp-ii-inverse-renormalization"
@@ -401,13 +401,13 @@ note = "both panels match newfig13; residual spacing looseness only"
 
 [[verdict]]
 id = "rmp-iii-a-symmetry-sector"
-status = "structural-gap"
+status = "cosmetic-gap"
 pairing = "wrong-source"
-defects = ["wrong-contraction"]
-case_sha256 = "f26371091985278de8fc2bc3b93ee63f542ec371ba86c3183b1b7947de3cefca"
-reviewed = "2026-07-23"
-renderer = "maintainer-page-review-2026-07-23"
-note = "Author panel shows the S_{alpha,g} string-order construction, not the declared plain MPS formula."
+defects = []
+case_sha256 = "bfd845a008acc7aa1b96c3521925cf86768b9c5a908d8065e0ad5234c04a5ec3"
+reviewed = "2026-07-27"
+renderer = "fable-structural-redraw-2026-07-27-200dpi"
+note = "redrawn as the author panel's S_{alpha,g} construction: two closed sandwich loops, R riding the internal ket-bra bond, X_g and X_g-dagger on the rails. The manifest formula still declares the plain MPS expectation -- the wrong-source tag stands until that prose is realigned (same family as rmp-ii-mpo-sheet)"
 
 [[verdict]]
 id = "rmp-iii-a-f-symbol"

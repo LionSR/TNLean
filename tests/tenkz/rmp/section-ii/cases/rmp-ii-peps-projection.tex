@@ -10,5 +10,24 @@
 \begin{tenkzlattice}[rows=4, cols=4, frame=oblique, boundary=open,
                      physical=up]
   \tnsite{(1,1)}
+  % Projector layer: one region A[v] enclosing each vertex's bond
+  % crossing, sitting over the |phi)_e entangled-pair sheet below it
+  \tnregion{(1,1)}
+  \tnregion{(1,2)}
+  \tnregion{(1,3)}
+  \tnregion{(1,4)}
+  \tnregion{(2,1)}
+  \tnregion{(2,2)}
+  \tnregion{(2,3)}
+  \tnregion{(2,4)}
+  \tnregion{(3,1)}
+  \tnregion{(3,2)}
+  \tnregion{(3,3)}
+  \tnregion{(3,4)}
+  \tnregion{(4,1)}
+  \tnregion{(4,2)}
+  \tnregion{(4,3)}
+  \tnregion[label=$A$]{(4,4)}
+  \tnedge[label=$|\phi)$]{(3,3)-(3,4)}
 \end{tenkzlattice}
 \]
