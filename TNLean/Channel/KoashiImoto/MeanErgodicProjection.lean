@@ -7,19 +7,19 @@ import TNLean.Channel.KoashiImoto.SingleWitness
 import TNLean.Channel.FixedPoint.MeanErgodicAdjoint
 
 /-!
-# HJPW's mean-ergodic projection onto the common invariant algebra
+# A trace-adjoint projection onto HJPW's common invariant algebra
 
 HJPW, arXiv:quant-ph/0304007v2, lines 838-851, introduces a Cesàro-limit projection `P_0^*`
 onto `A_0`. This file defines the corresponding map as the trace-pairing adjoint of the
 finite-dimensional Schrödinger mean-ergodic projection for the single witness `F_0` from
 `Kraus.exists_preservingKrausFamily_adjointFixedPointsStarSubalgebra_eq`. The machinery in
 `TNLean.Analysis.MeanErgodic` and `TNLean.Channel.FixedPoint.MeanErgodicAdjoint` proves that this
-map is a positive, unital, idempotent retraction onto the adjoint fixed points. A bridge lemma
+map is a positive, unital, idempotent retraction onto the adjoint fixed points. A lemma
 identifies the trace-pairing adjoint of a Schrödinger Kraus map with its Heisenberg adjoint
 `Kraus.adjointMap`.
 
 This file does not prove that the Cesàro averages of the Heisenberg iterates converge to the
-packaged map; that source identity remains a separate analytic statement.
+trace-adjoint projection; that source identity remains a separate analytic statement.
 
 ## Main declarations
 
@@ -29,8 +29,8 @@ packaged map; that source identity remains a separate analytic statement.
   action is a trace-preserving map.
 * `Kraus.traceAdjointMap_mapLM`: the trace-pairing adjoint of a Kraus family's Schrödinger
   action is its Heisenberg adjoint map.
-* `Kraus.commonInvariantMeanErgodicProjection`: HJPW's `P_0^*`, the mean-ergodic projection of
-  the single witness `F_0`'s Heisenberg adjoint, derived via
+* `Kraus.commonInvariantMeanErgodicProjection`: the trace-adjoint projection associated with
+  the single witness `F_0`, derived via
   `IsPositiveMap.traceAdjoint_meanErgodicProjection_isPositiveUnitalRetraction`.
 * `Kraus.commonInvariantMeanErgodicProjection_isPositiveMap`,
   `Kraus.commonInvariantMeanErgodicProjection_one`,
@@ -143,12 +143,12 @@ theorem isTracePreservingMap_commonInvariantMapLM {Kidx : Type*} [Fintype Kidx] 
     IsTracePreservingMap (commonInvariantMapLM hρbar) :=
   isTracePreservingMap_mapLM_of_isTP _ (commonInvariantKrausFamily hρbar).isPreserving.1
 
-/-- **The packaged projection `P_0^*`.**
+/-- **The trace-adjoint projection associated with `F_0`.**
 
 This is the trace-pairing adjoint of the finite-dimensional Schrödinger mean-ergodic projection
-for the single witness `F_0`. Its positivity, unitality, idempotence, and range agree with HJPW's
-projection onto `A_0` (arXiv:quant-ph/0304007v2, lines 838-851). The convergence of the
-Heisenberg Cesàro averages to this map is not asserted here. -/
+for the single witness `F_0`. It is positive, unital, and idempotent, with range `A_0`. HJPW
+denotes the Heisenberg Cesàro limit by `P_0^*` (arXiv:quant-ph/0304007v2, lines 838-851);
+convergence of those averages to this map is not asserted here. -/
 noncomputable def commonInvariantMeanErgodicProjection
     {Kidx : Type*} [Fintype Kidx] [Nonempty Kidx] {ρ : Kidx → Mat}
     (hρbar : (commonAverage ρ).PosDef) : Mat →ₗ[ℂ] Mat :=

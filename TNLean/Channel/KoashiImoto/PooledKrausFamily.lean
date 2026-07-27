@@ -30,8 +30,8 @@ the remaining content of lines 847-849, short of identifying `A_0` itself
 * `Kraus.isPreserving_pooledKfam`: the pooled family preserves `ρ` when every block does
   (HJPW, line 849).
 * `Kraus.averagedPreservingKrausFamily`: the pooled family bundled as a `PreservingKrausFamily`.
-* `Kraus.krausCommutant_pooledKfam_eq_iInf`: the Kraus commutant of the pooled family is the
-  intersection of the individual commutants.
+* `Kraus.krausCommutantStarSubalgebra_pooledKfam_eq_iInf`: the Kraus commutant of the
+  pooled family is the intersection of the individual commutants.
 * `Kraus.adjointFixedPointsStarSubalgebra_pooledKfam_eq_iInf`: the adjoint fixed-point
   subalgebra of the pooled family is the intersection of those of the individual families,
   via `Kraus.adjointFixedPointsStarSubalgebra_eq_krausCommutantStarSubalgebra` and the
