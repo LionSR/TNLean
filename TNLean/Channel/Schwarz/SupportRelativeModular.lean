@@ -35,8 +35,10 @@ reference matrix is represented as the square of its support inverse square root
   Entropy and Related Trace Functions, with Conditions for Equality*,
   arXiv:0903.2895v4, §4.2, lines 766--793.
 
-The preceding singular equality-to-resolvent step at lines 717--720 is not
-formalized here; see `docs/paper-gaps/cpsv16_ssa_equality_hayashi_markov.tex`.
+The preceding singular equality-to-resolvent step is formalized downstream in
+`TNLean.Channel.Schwarz.SupportRelativeEntropyEquality`. The later
+support functional-calculus and recovery steps are tracked in
+`docs/paper-gaps/cpsv16_ssa_equality_hayashi_markov.tex`.
 -/
 
 open scoped Matrix ComplexOrder Kronecker MatrixOrder
@@ -190,9 +192,9 @@ This is the positive-square-root specialization of the singular-support
 functional-calculus step in Jenčová--Ruskai, arXiv:0903.2895v4, §4.2,
 lines 788--793. The restriction by the support projection is essential: the
 source asserts equality only on the complement of the kernel of the smaller
-reference matrix. This theorem does not supply that resolvent equality from
-equality in data processing; the missing preceding step is recorded in
-`docs/paper-gaps/cpsv16_ssa_equality_hayashi_markov.tex`. -/
+reference matrix. The required finite-family resolvent equality from
+relative-entropy equality is supplied downstream by
+`supportRelativeModular_resolvent_mulVec_eq_of_relativeEntropy_sum_eq`. -/
 theorem supportRelativeModular_sqrt_ratio_eq_of_resolvent_mulVec_eq
     {n : Type*} [Fintype n] [DecidableEq n]
     {A B C D : Matrix n n ℂ}

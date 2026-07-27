@@ -36,8 +36,10 @@ half-line.
   the positive-semidefinite extension at lines 717--720 and 766--793.
 
 This file proves the integral and continuity infrastructure and the
-pointwise vanishing of the source-\(B\) defect. Common projected resolvents
-and Petz recovery are not asserted here.
+pointwise vanishing of the source-\(B\) defect. The common projected
+resolvent is derived downstream in
+`TNLean.Channel.Schwarz.SupportRelativeEntropyEquality`; Petz recovery is not
+asserted here.
 -/
 
 open scoped Matrix BigOperators ComplexOrder
@@ -252,8 +254,9 @@ source-\(B\) support defect vanish at every \(t>0\).
 The proof follows the equality passage of Jenčová--Ruskai,
 arXiv:0903.2895v4, lines 433--435, 652--674, and 788--790: the nonnegative
 gap integrand has zero integral, hence vanishes almost everywhere, and
-continuity upgrades this to pointwise vanishing. This theorem stops before
-the common projected resolvent conclusion at lines 788--793. -/
+continuity upgrades this to pointwise vanishing. The common projected
+resolvent conclusion at lines 788--793 is derived downstream in
+`supportRelativeModular_resolvent_mulVec_eq_of_relativeEntropy_sum_eq`. -/
 theorem supportSourceBDefect_eq_zero_of_relativeEntropy_sum_eq
     {ι : Type*} [Fintype ι] [Nonempty ι]
     (A B : ι → Matrix n n ℂ)

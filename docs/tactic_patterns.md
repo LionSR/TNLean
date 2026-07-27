@@ -644,6 +644,25 @@ spectral split → block extraction → MPV calculation → strict bounds
   definitions and the subsequent arithmetic that isolates the source-\(B\) defect
   outside the eventual helper.
 
+### right-support range witness for a left--right operator — candidate
+- **Pattern:** factor the left--right operator through the right-support
+  projection and the shifted relative-modular resolvent, construct
+  `P R⁻¹ D y` for a `P`-fixed vector `y`, and use the witness to show that
+  the support projection of the left--right operator fixes `y`.
+- **Seen:** 2 occurrences in
+  `TNLean/Channel/Schwarz/SupportLeftRightRelativeModular.lean`, in
+  `supportRightProj_mul_supportLeftRightSupportProj_eq` and
+  `supportLeftRightSupportInv_mulVec_sourceB_eq_projected_relativeModular`
+  (2026-07-27).
+- **Abstraction (proposed):** a range-inclusion lemma stating that the range
+  of `1 ⊗ P_Bᵀ` is contained in the range of
+  `A ⊗ 1 + t(1 ⊗ Bᵀ)` for `t > 0`, with the projection-absorption identity
+  and the one-pair source solution as consumers.
+- **Notes:** Below the rule-of-three threshold. Keep the explicit witness in
+  both proofs until another independent consumer establishes the promotion
+  threshold; the surrounding conclusions and final generalized-inverse
+  calculation differ.
+
 ---
 
 ## Rejected
