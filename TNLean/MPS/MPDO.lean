@@ -63,6 +63,7 @@ import TNLean.MPS.MPDO.BiCFDerivation.Selectors
 import TNLean.MPS.MPDO.BlockedBNTFusionIsometries
 import TNLean.MPS.MPDO.BlockedCompleteZipper
 import TNLean.MPS.MPDO.BlockedRFPConstruction
+import TNLean.MPS.MPDO.CPSVRepresentativeGroupedLemmaL
 import TNLean.MPS.MPDO.CommonWeightAbsorption
 import TNLean.MPS.MPDO.CommutingBondEtaBoundaryTrace
 import TNLean.MPS.MPDO.CommutingBondEtaCyclicCore
