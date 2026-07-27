@@ -112,8 +112,9 @@ canonical-form conclusion below is proved under the stronger horizontal
 hypothesis.  Under literal CPSV canonical form, periodic exclusion, the normal
 vertical block decomposition, finite-chain separation of every nonzero
 vertical corner, and vertical phase-class grouping with positive effective
-coefficients are now complete.  Normalization of the grouped sectors and the
-final coisometry remain open.
+coefficients, actual-grouped Figure~8, and unitary normalization of the grouped
+gauges are now complete.  Construction of the normalized physical sector maps
+and the final coisometry remain open.
 
 An earlier auxiliary route compared one scalar weight $\mu_\alpha$ with
 several weights $\omega_{\alpha,j}$ under the additional identities
@@ -274,8 +275,10 @@ $\mu_{\alpha,k}=c_{\alpha,k}$
 Gram-conjugation identity of the second displayed diagram at source
 lines~1914--1919 is proved in
 \path{TNLean/MPS/MPDO/FigureEightPairwise.lean}.  The dependent identification with
-the actual grouped sector and its distinguished copy is proved in
-\path{TNLean/MPS/MPDO/GroupedFigure8.lean}.  This argument does not identify
+the actual grouped sector and its distinguished copy is proved under the
+normalized BNT-refined hypothesis in
+\path{TNLean/MPS/MPDO/GroupedFigure8.lean} and under literal CPSV canonical
+form in \path{TNLean/MPS/MPDO/CPSVGroupedFigure8.lean}.  Neither argument identifies
 either corner separately with the raw reflected adjoint.  The scalar
 commutant of
 the normal tensor $M_\alpha$
@@ -289,15 +292,20 @@ X_{\alpha,k}^\dagger X_{\alpha,k}
 The relative gauge $X_{\alpha,k}X_{\alpha,1}^{-1}$ becomes unitary after
 division by $\sqrt{\omega_{\alpha,k}}$.  The grouping theorem now exposes its choice
 $X_{\alpha,1}=\Id$, giving the normalization printed by the source
-(\path{MPOTensor.IsMPDO.grouped_sector_gram_eq_pos_smul_one} and
+under the normalized BNT-refined hypothesis by
+\path{MPOTensor.IsMPDO.grouped_sector_gram_eq_pos_smul_one} and
 \path{MPOTensor.IsMPDO.grouped_sector_exists_unitary_normalization} in
-\path{TNLean/MPS/MPDO/GroupedGramNormalization.lean}).
+\path{TNLean/MPS/MPDO/GroupedGramNormalization.lean}.  The literal counterparts
+\path{MPSTensor.IsCPSVCanonicalForm.grouped_sector_gram_eq_pos_smul_one} and
+\path{MPSTensor.IsCPSVCanonicalForm.grouped_sector_exists_unitary_normalization}
+are proved in \path{TNLean/MPS/MPDO/CPSVGroupedGramNormalization.lean}.
 
 The reflected marked-chain, two-sector separation, and dependent-dimension
 identification of source lines~1909--1919 are therefore complete, as is the
 positive scalar Gram identity and unitary normalization of every grouped
-gauge.  The normalized gauges are expressed on the representative bond
-spaces and composed with the physical sector isometries in
+gauge.  Under the stronger normalized BNT-refined hypothesis, the normalized gauges
+are expressed on the representative bond spaces and composed with the physical
+sector isometries in
 \path{TNLean/MPS/MPDO/NormalizedGroupedSectors.lean}.  The resulting maps
 $W_{\alpha,q}$ have mutually orthogonal isometric ranges, satisfy the
 representative intertwining identities, and reconstruct every vertical letter
@@ -334,11 +342,12 @@ closure, displaced-projector noncommutation at some length, periodic exclusion,
 the normal vertical block decomposition, literal sector-compression
 separation, actual vertical phase-class grouping with positive effective
 coefficients, the pairwise Figure~8 Gram-dressing identity, and the positive
-relative Gram scalar are complete.  The two
-Figure~8 statements are conditional on two vertical corners satisfying the
-displayed similarity equations.  Normalization of the grouped sectors and the
-final vertical canonical-form
-theorem with its coisometry remain open.  The proved statements retain every
+relative Gram scalar are complete.  The actual grouped corners also satisfy
+the Figure~8 Gram identity; every grouped gauge has Gram matrix
+$\omega_{\alpha,q}\Id$ with $\omega_{\alpha,q}>0$, and inverse-square-root
+rescaling makes it unitary.  Construction of the normalized physical sector
+maps and the final vertical canonical-form theorem with its coisometry remain
+open.  The proved statements retain every
 inactive listed coordinate with weight zero and do not
 use the unsupported diagonal-restriction statement from \ghissue{2537}.
 These Proposition~4.13 statements are distinct from the Appendix~C.4
@@ -503,8 +512,9 @@ the literal marked Lemma~L argument.
 Literal Proposition~4.13 nevertheless remains open.  Periodic exclusion,
 the normal vertical corners with exact reconstruction
 \eqref{eq:literal-normal-corners}, and their phase-class grouping with positive
-effective coefficients are complete.  One must still normalize the grouped
-sector maps and obtain the final vertical canonical form and coisometry
+effective coefficients, actual-grouped Figure~8, and unitary gauge normalization
+are complete.  One must still construct the normalized physical sector maps
+and obtain the final vertical canonical form and coisometry
 satisfying $UU^\dagger=I$.  The current results do not assert
 $U^\dagger U=I$.  This remaining
 Proposition~4.13 work is independent of the Appendix~C.4 positive-fusion

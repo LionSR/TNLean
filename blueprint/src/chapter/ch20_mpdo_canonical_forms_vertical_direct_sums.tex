@@ -469,10 +469,9 @@
 
 \begin{theorem}[Vertical normal sectors grouped into BNT representatives]
     \label{thm:mpdo_vertical_bnt_grouping_with_isometries}
-    \lean{MPSTensor.IsCPSVCanonicalForm.%
-        exists_verticalBNTGrouping_with_isometry}
+    \lean{MPOTensor.IsHorizontalCF.exists_verticalBNTGrouping_with_isometry}
     \leanok
-    \uses{def:mpdo, def:cpsv_canonical_form, def:vertical_tensor_mpdo,
+    \uses{def:mpdo, def:horizontal_cf_mpdo, def:vertical_tensor_mpdo,
         def:bnt_cpsv, def:mpv_phase_class_data}
     Under the same hypotheses, partition the normalized vertical sectors by
     equality of their matrix product vector families up to a fixed nonzero
@@ -490,7 +489,7 @@
     normal tensors for the weighted block tensor
     $\bigoplus_k\nu_kB_k$. Every grouped coefficient
     $\nu_{\alpha,q}\zeta_{\alpha,q}$ is positive. With the physical isometries
-    from Theorem~\ref{thm:mpdo_literal_normal_vertical_corners}
+    from Theorem~\ref{thm:mpdo_vertical_normal_sectors_with_isometries}
     retained unchanged, one has both reducing identities, exact compression,
     and the literal reconstruction
     \begin{align}
@@ -511,6 +510,73 @@
 \end{theorem}
 
 \begin{proof}\leanok
+    \uses{thm:mpdo_vertical_normal_sectors_with_isometries,
+        thm:cpsv_normal_mpv_phase_gauge,
+        thm:cpsv_normal_separated_eventually_li,
+        thm:mpdo_grouped_sector_compression_nonzero,
+        def:mpdo_sector_projector, thm:mpdo_sector_weight_pos}
+    Take one representative from each phase class.
+    Theorem~\ref{thm:cpsv_normal_mpv_phase_gauge} gives equality of bond
+    dimensions and (\ref{eq:mpdo_vertical_gauge_phase}) for every copy.
+    Distinct representatives are gauge-phase separated by construction, so
+    Theorem~\ref{thm:cpsv_normal_separated_eventually_li} gives eventual linear
+    independence. The phase-class regrouping of the finite sum gives the BNT
+    expansion. The representative copy is assigned the identity gauge and
+    phase one, while the self-overlap normalization of normal tensors shows
+    that every phase has unit modulus. Substitution into the two intertwining
+    identities, the compression identity, and the reconstruction
+    (\ref{eq:mpdo_vertical_normal_reconstruction}) proves all remaining
+    algebraic assertions without altering any physical isometry. Cyclicity of
+    trace gives the sector-loop identities. The nonzero-corner separation
+    theorem supplies a nonzero compression for every sector, and the sector
+    trace identity and MPDO positivity then make every grouped coefficient
+    positive.
+\end{proof}
+
+\begin{theorem}[Literal vertical normal sectors grouped into BNT representatives]
+    \label{thm:cpsv_literal_vertical_bnt_grouping_with_isometries}
+    \lean{MPSTensor.IsCPSVCanonicalForm.%
+        exists_verticalBNTGrouping_with_isometry}
+    \leanok
+    \uses{def:mpdo, def:cpsv_canonical_form, def:vertical_tensor_mpdo,
+        def:bnt_cpsv, def:mpv_phase_class_data}
+    Under the same hypotheses, partition the normalized vertical sectors by
+    equality of their matrix product vector families up to a fixed nonzero
+    scalar per site. There are normal representatives $M_\alpha$, an enumeration
+    $k=(\alpha,q)$ of the original sectors, invertible matrices
+    $X_{\alpha,q}$, and complex numbers $\zeta_{\alpha,q}$ of unit modulus,
+    with $X_{\alpha,1}=\Id$ and $\zeta_{\alpha,1}=1$, such that
+    \begin{align}
+        B_{\alpha,q}^v
+        &=\zeta_{\alpha,q}X_{\alpha,q}
+          M_\alpha^vX_{\alpha,q}^{-1}.
+        \label{eq:cpsv_literal_vertical_gauge_phase}
+    \end{align}
+    The representatives are pairwise gauge-phase distinct and form a basis of
+    normal tensors for the weighted block tensor
+    $\bigoplus_k\nu_kB_k$. Every grouped coefficient
+    $\nu_{\alpha,q}\zeta_{\alpha,q}$ is positive. With the physical isometries
+    from Theorem~\ref{thm:mpdo_literal_normal_vertical_corners}
+    retained unchanged, one has both reducing identities, exact compression,
+    and the literal reconstruction
+    \begin{align}
+        \widetilde M_v
+        &=\sum_\alpha\sum_q
+          V_{\alpha,q}
+          \bigl(\nu_{\alpha,q}\zeta_{\alpha,q}
+          X_{\alpha,q}M_\alpha^vX_{\alpha,q}^{-1}\bigr)
+          V_{\alpha,q}^\dagger.
+        \label{eq:cpsv_literal_vertical_grouped_reconstruction}
+    \end{align}
+    For each pair $(\alpha,q)$, the range projector of $V_{\alpha,q}$ obeys
+    the representative-loop identity and gives a nonzero compression at some
+    finite length. This is the decomposition and positivity argument of
+    \cite[Proposition~4.13, lines 1898--1902]{Cirac2016MPDO_arXiv}. The
+    relative Gram identity and proportional-unitary normalization of
+    lines~1903--1908 are not asserted here.
+\end{theorem}
+
+\begin{proof}\leanok
     \uses{thm:mpdo_literal_normal_vertical_corners,
         thm:cpsv_normal_mpv_phase_gauge,
         thm:cpsv_normal_separated_eventually_li,
@@ -519,7 +585,7 @@
         def:mpdo_sector_projector, thm:mpdo_sector_weight_pos}
     Take one representative from each phase class.
     Theorem~\ref{thm:cpsv_normal_mpv_phase_gauge} gives equality of bond
-    dimensions and (\ref{eq:mpdo_vertical_gauge_phase}) for every copy.
+    dimensions and (\ref{eq:cpsv_literal_vertical_gauge_phase}) for every copy.
     Distinct representatives are gauge-phase separated by construction, so
     Theorem~\ref{thm:cpsv_normal_separated_eventually_li} gives eventual linear
     independence. The phase-class regrouping of the finite sum gives the BNT
