@@ -9,16 +9,9 @@
 %
 % Declarative reading: the hard08 vocabulary — an op-type row whose side
 % stubs are sealed (rows={op:none}: the gate has no horizontal indices),
-% one pill glyph wide=2 with `legs at={1,2}` for the two up legs and a
-% down leg for alpha.  The up=/down= lists label the legs leg-by-leg.
-%
-% STILL-BLOCKED (confirmed by render + .tnlog): `legs at` has no per-side
-% form — on an op row it multiplies BOTH sides, so the picture gains a
-% spurious second down leg at column 2 and the boundary signature logs
-% physical-down=2 where the reference has exactly one input leg.  Missing
-% primitive: per-side leg placement on a wide glyph, e.g.
-% `up legs at={1,2}, down legs at={1}` (tenkz-grid.code.tex:366-372 has
-% only the both-sides `legs at`).
+% one pill glyph wide=2 with `up at={1,2}` for the two output legs and the
+% default single down leg for alpha.  The up=/down= lists label the legs
+% leg-by-leg.
 \documentclass[varwidth=19cm, border=6pt]{standalone}
 \usepackage{amsmath, amssymb}
 \usepackage{tenkz}
@@ -27,7 +20,7 @@
   A^{i}_{\alpha,\beta} \;=\;
   % V: one down leg alpha in, two up legs (i, beta) out
   \begin{tenkz}[rows={op:none}, tensor style=box]
-    \tn[pill, wide=2, legs at={1,2}, up={$i$,$\beta$}, down={$\alpha$}]{V} &
+    \tn[pill, wide=2, up at={1,2}, up={$i$,$\beta$}, down={$\alpha$}]{V} &
   \end{tenkz}
 \]
 \end{document}
