@@ -311,26 +311,8 @@ theorem representative_braRight_eq_ketLeftBraRight_of_invariant
     (hQM : M.ketLeftMul Q = (M.ketLeftMul Q).braRightMul Q) :
     ∀ j, MPSTensor.insertedTensor (MPSTensor.braRightAction Q) (S.basis j) =
       MPSTensor.insertedTensor (MPSTensor.ketLeftBraRightAction Q) (S.basis j) := by
-  refine representative_opposite_insert_eq_of_rotated_mpo_entries M S hCF hM Q ?_ ?_
-  · intro N ρ
-    have h := firstSiteMatrix_mul_mpo_of_ketLeftMul_invariant M Q hQM N
-    have h2 := Matrix.ext_iff.mpr h
-      (Fin.cons (ρ 0).divNat fun n => (ρ (Fin.succ n)).divNat)
-      (Fin.cons (ρ 0).modNat fun n => (ρ (Fin.succ n)).modNat)
-    rw [mul_firstSiteMatrix_apply] at h2
-    simp only [firstSiteMatrix_mul_apply] at h2
-    simp only [Fin.cons_zero, Function.comp_def, Fin.cons_succ] at h2
-    rw [h2]
-    simp only [Finset.sum_mul]
-    exact Finset.sum_comm
-  · intro N ρ
-    have h := firstSiteMatrix_mul_mpo_comm M hMpdo hQ hQM N
-    have h2 := Matrix.ext_iff.mpr h
-      (Fin.cons (ρ 0).divNat fun n => (ρ (Fin.succ n)).divNat)
-      (Fin.cons (ρ 0).modNat fun n => (ρ (Fin.succ n)).modNat)
-    rw [mul_firstSiteMatrix_apply, firstSiteMatrix_mul_apply] at h2
-    simp only [Fin.cons_zero, Function.comp_def, Fin.cons_succ] at h2
-    exact h2
+  exact hCF.insertedTensor_basis_eq_of_sameMPV₂Pos_firstSiteActionAgree M.toMPSTensor hM
+    (firstSiteActionAgree_braRight_ketLeftBraRight_of_invariant M hMpdo hQ hQM)
 
 /-- **Lemma L on the original bond space.**
 

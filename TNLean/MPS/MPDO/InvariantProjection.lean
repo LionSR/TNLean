@@ -136,6 +136,59 @@ theorem firstSiteMatrix_mul_mpo_comm
   rw [hInv]
   exact (sub_eq_zero.mp hcorner).symm
 
+/-- A one-sided invariant Hermitian matrix gives the opposite-corner first-site identity on the
+original doubled-index tensor.
+
+Positivity turns `P₁ H = P₁ H P₁` into `P₁ H = H P₁`.  Their matrix entries identify the
+first-site actions of `M P` and `P M P` at every positive chain length.
+
+Source: arXiv:1606.00608, Proposition 4.13, lines 1873--1887. -/
+theorem firstSiteActionAgree_braRight_ketLeftBraRight_of_invariant
+    (M : MPOTensor d D) (hMpdo : IsMPDO M)
+    {P : Matrix (Fin d) (Fin d) ℂ} (hP : P.IsHermitian)
+    (hPM : M.ketLeftMul P = (M.ketLeftMul P).braRightMul P) :
+    MPSTensor.FirstSiteActionAgree M.toMPSTensor
+      (MPSTensor.braRightAction P) (MPSTensor.ketLeftBraRightAction P) := by
+  have hInv : ∀ (N : ℕ) (ρ : Fin (N + 1) → Fin (d * d)),
+      (∑ i : Fin d, P (ρ 0).divNat i *
+        mpo M (N + 1) (Fin.cons i (fun n => (ρ (Fin.succ n)).divNat))
+          (Fin.cons (ρ 0).modNat (fun n => (ρ (Fin.succ n)).modNat)) =
+      ∑ i : Fin d, ∑ j : Fin d, P (ρ 0).divNat i *
+        mpo M (N + 1) (Fin.cons i (fun n => (ρ (Fin.succ n)).divNat))
+          (Fin.cons j (fun n => (ρ (Fin.succ n)).modNat)) * P j (ρ 0).modNat) := by
+    intro N ρ
+    have h := firstSiteMatrix_mul_mpo_of_ketLeftMul_invariant M P hPM N
+    have h2 := Matrix.ext_iff.mpr h
+      (Fin.cons (ρ 0).divNat fun n => (ρ (Fin.succ n)).divNat)
+      (Fin.cons (ρ 0).modNat fun n => (ρ (Fin.succ n)).modNat)
+    rw [mul_firstSiteMatrix_apply] at h2
+    simp only [firstSiteMatrix_mul_apply] at h2
+    simp only [Fin.cons_zero, Function.comp_def, Fin.cons_succ] at h2
+    rw [h2]
+    simp only [Finset.sum_mul]
+    exact Finset.sum_comm
+  have hComm : ∀ (N : ℕ) (ρ : Fin (N + 1) → Fin (d * d)),
+      (∑ i : Fin d, P (ρ 0).divNat i *
+        mpo M (N + 1) (Fin.cons i (fun n => (ρ (Fin.succ n)).divNat))
+          (Fin.cons (ρ 0).modNat (fun n => (ρ (Fin.succ n)).modNat)) =
+      ∑ j : Fin d,
+        mpo M (N + 1)
+          (Fin.cons (ρ 0).divNat (fun n => (ρ (Fin.succ n)).divNat))
+          (Fin.cons j (fun n => (ρ (Fin.succ n)).modNat)) * P j (ρ 0).modNat) := by
+    intro N ρ
+    have h := firstSiteMatrix_mul_mpo_comm M hMpdo hP hPM N
+    have h2 := Matrix.ext_iff.mpr h
+      (Fin.cons (ρ 0).divNat fun n => (ρ (Fin.succ n)).divNat)
+      (Fin.cons (ρ 0).modNat fun n => (ρ (Fin.succ n)).modNat)
+    rw [mul_firstSiteMatrix_apply, firstSiteMatrix_mul_apply] at h2
+    simp only [Fin.cons_zero, Function.comp_def, Fin.cons_succ] at h2
+    exact h2
+  have hLeftRight := MPSTensor.firstSiteActionAgree_ketLeft_braRight M P hComm
+  have hLeftCorner :=
+    MPSTensor.firstSiteActionAgree_ketLeft_ketLeftBraRight M P hInv
+  intro N ρ
+  exact (hLeftRight N ρ).symm.trans (hLeftCorner N ρ)
+
 /-- Let the doubled-index tensor of an MPDO have the same positive-length MPV
 family as a BNT sector decomposition, and let \(P\) be Hermitian with
 \(P\widetilde M=P\widetilde M P\).  On every minimal BNT representative, the
@@ -160,26 +213,8 @@ theorem basis_braRight_eq_ketLeftBraRight_of_invariant
     (hPM : M.ketLeftMul P = (M.ketLeftMul P).braRightMul P) :
     ∀ k, MPSTensor.insertedTensor (MPSTensor.braRightAction P) (S.basis k) =
       MPSTensor.insertedTensor (MPSTensor.ketLeftBraRightAction P) (S.basis k) := by
-  refine basis_opposite_insert_eq_of_rotated_mpo_entries M S hCF hM P ?_ ?_
-  · intro N ρ
-    have h := firstSiteMatrix_mul_mpo_of_ketLeftMul_invariant M P hPM N
-    have h2 := Matrix.ext_iff.mpr h
-      (Fin.cons (ρ 0).divNat fun n ↦ (ρ (Fin.succ n)).divNat)
-      (Fin.cons (ρ 0).modNat fun n ↦ (ρ (Fin.succ n)).modNat)
-    rw [mul_firstSiteMatrix_apply] at h2
-    simp only [firstSiteMatrix_mul_apply] at h2
-    simp only [Fin.cons_zero, Function.comp_def, Fin.cons_succ] at h2
-    rw [h2]
-    simp only [Finset.sum_mul]
-    exact Finset.sum_comm
-  · intro N ρ
-    have h := firstSiteMatrix_mul_mpo_comm M hMpdo hP hPM N
-    have h2 := Matrix.ext_iff.mpr h
-      (Fin.cons (ρ 0).divNat fun n ↦ (ρ (Fin.succ n)).divNat)
-      (Fin.cons (ρ 0).modNat fun n ↦ (ρ (Fin.succ n)).modNat)
-    rw [mul_firstSiteMatrix_apply, firstSiteMatrix_mul_apply] at h2
-    simp only [Fin.cons_zero, Function.comp_def, Fin.cons_succ] at h2
-    exact h2
+  exact hCF.insertedTensor_basis_eq_of_sameMPV₂Pos_firstSiteActionAgree M.toMPSTensor hM
+    (firstSiteActionAgree_braRight_ketLeftBraRight_of_invariant M hMpdo hP hPM)
 
 /-- Let the doubled-index tensor of an MPDO have a horizontal block-injective
 canonical-form decomposition, and let $P$ be Hermitian with
@@ -206,26 +241,9 @@ theorem blockwise_braRight_eq_ketLeftBraRight_of_invariant
     (hPM : M.ketLeftMul P = (M.ketLeftMul P).braRightMul P) :
     ∀ k, MPSTensor.insertedTensor (MPSTensor.braRightAction P) (A k) =
       MPSTensor.insertedTensor (MPSTensor.ketLeftBraRightAction P) (A k) := by
-  refine blockwise_opposite_insert_eq_of_rotated_mpo_entries M A hCF hM P ?_ ?_
-  · intro N ρ
-    have h := firstSiteMatrix_mul_mpo_of_ketLeftMul_invariant M P hPM N
-    have h2 := Matrix.ext_iff.mpr h
-      (Fin.cons (ρ 0).divNat fun n => (ρ (Fin.succ n)).divNat)
-      (Fin.cons (ρ 0).modNat fun n => (ρ (Fin.succ n)).modNat)
-    rw [mul_firstSiteMatrix_apply] at h2
-    simp only [firstSiteMatrix_mul_apply] at h2
-    simp only [Fin.cons_zero, Function.comp_def, Fin.cons_succ] at h2
-    rw [h2]
-    simp only [Finset.sum_mul]
-    exact Finset.sum_comm
-  · intro N ρ
-    have h := firstSiteMatrix_mul_mpo_comm M hMpdo hP hPM N
-    have h2 := Matrix.ext_iff.mpr h
-      (Fin.cons (ρ 0).divNat fun n => (ρ (Fin.succ n)).divNat)
-      (Fin.cons (ρ 0).modNat fun n => (ρ (Fin.succ n)).modNat)
-    rw [mul_firstSiteMatrix_apply, firstSiteMatrix_mul_apply] at h2
-    simp only [Fin.cons_zero, Function.comp_def, Fin.cons_succ] at h2
-    exact h2
+  apply blockwise_insert_eq_of_mpv_agree A hCF
+  exact (firstSiteActionAgree_braRight_ketLeftBraRight_of_invariant M hMpdo hP hPM).of_sameMPVPos
+    hM
 
 /-- **Commutation at a two-site chain forces letter-level invariance, for a
 single-letter injective tensor.**
