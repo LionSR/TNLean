@@ -48,7 +48,7 @@ theorem. This is tracked by issue #873 under the proposition-level tracker #81.
 
 ## 2. Coverage crosswalk: CPSV16 (arXiv:1606.00608)
 
-At revision `a483570b1bfd3f39eb9f6292e74d9df99a8c4df0`, the paper has 45 theorem-like occurrences and 40 distinct results. The occurrence-level count is 26 complete, 10 partial, and 9 not-ready; the distinct-result count is 23 complete, 8 partial, and 9 not-ready. Here **not-ready** means that the printed statement is false, ambiguous, or depends essentially on a formally refuted source lemma. It does not mean that every printed result has been formalized.
+At revision `a483570b1bfd3f39eb9f6292e74d9df99a8c4df0`, the paper has 45 theorem-like occurrences and 40 distinct results. The occurrence-level count is 24 complete, 12 partial, and 9 not-ready; the distinct-result count is 21 complete, 10 partial, and 9 not-ready. Here **not-ready** means that the printed statement is false, ambiguous, or depends essentially on a formally refuted source lemma. It does not mean that every printed result has been formalized.
 
 ### 2.1 Section II — Matrix Product Vectors (pure-state canonical form)
 
@@ -59,7 +59,7 @@ At revision `a483570b1bfd3f39eb9f6292e74d9df99a8c4df0`, the paper has 45 theorem
 | Prop (l.253) | 253–255 | Projector criterion for canonical form | `TNLean/MPS/CanonicalForm/ProjectorClosureSpectral.lean` (`MPSTensor.exists_normalTensor_blockDecomp_with_isometry_of_hasInvariantProjectorClosure`) | **complete**; #2634 closed |
 | Prop 2.7 (l.278, `prop:char-BNT`) | 278–280 | BNT characterization: every active canonical-form normal tensor is gauge-phase-equivalent to a basis element | `TNLean/MPS/CanonicalForm/BNTCharacterization.lean` (`MPSTensor.isCPSVBasisOfNormalTensors_iff_canonicalForm_covered_and_minimal`) | **partial** — the active-block characterization is complete, but positive-length MPVs cannot determine listed zero-weight blocks; see `docs/paper-gaps/cpsv16_bnt_characterization_active_blocks.tex` |
 | Defn "injective" (l.317, `defnbi`) | 317–322 | A normal tensor is injective when its matrices span the full matrix algebra; biCF is block-injective canonical form | `TNLean/MPS/Defs.lean` (`MPSTensor.IsInjective`) and the biCF development under `TNLean/MPS/MPDO/BiCFDerivation/` | `leanok` |
-| Prop (l.342, `propblockinj`) | 342–345 | After blocking at most $3D^5$ spins, any canonical-form tensor becomes biCF | `TNLean/MPS/MPDO/BiCFDerivation/BNTDirectSum.lean` (`IsBNTCanonicalForm.exists_basis_wordTupleSpanTop_le_three_totalDim_pow_five`) with `MPSTensor.hasBiCF_of_propBlockInjective` | **complete**; #3952 closed and #3998 merged |
+| Prop (l.342, `propblockinj`) | 342–345 | After blocking at most $3D^5$ spins, any canonical-form tensor becomes biCF | `TNLean/MPS/MPDO/BiCFDerivation/BNTDirectSum.lean` (`IsBNTCanonicalForm.exists_basis_wordTupleSpanTop_le_three_totalDim_pow_five`) with `MPSTensor.hasBiCF_of_propBlockInjective` | **partial** — the bound is proved for the stronger packaged `IsBNTCanonicalForm` surface, but the printed proposition starts from literal canonical form; the zero-weight ambiguity in Proposition 2.7 prevents the missing unconditional conversion |
 | **Theorem II.1** (l.349, `thm1`) | 349–352 | Fundamental theorem of MPVs, proportional case | `TNLean/MPS/FundamentalTheorem/SectorBNT/FundamentalCoord.lean` (`MPSTensor.fundamentalTheorem_proportional_canonicalForm`) | **complete** |
 | **Corollary II.2** (l.354, `II_cor2`) | 354–361 | Equal MPVs imply conjugacy by an invertible matrix | `TNLean/MPS/FundamentalTheorem/SectorBNT/FundamentalCoord.lean` (`MPSTensor.fundamentalTheorem_equal_canonicalForm`) | **complete** |
 
@@ -134,7 +134,7 @@ At revision `a483570b1bfd3f39eb9f6292e74d9df99a8c4df0`, the paper has 45 theorem
 | Lemma `lemmus` | 1647–1650 | ZCL makes repeated-copy weights independent of the copy index | `TNLean/MPS/MPDO/SimpleTensor.lean` (`MPOTensor.weight_copy_independent_of_isSourceZCL`) | **complete** |
 | Lemma | 1680–1691 | SAL gives separating orthogonal projectors | `TNLean/MPS/MPDO/BNTSeparatingProjectors.lean`; `BNTSourceSectorProjectors.lean` | **complete** |
 | Prop `prop2to3` | 1740–1743 | SAL and ZCL imply the blockwise structural form | `TNLean/MPS/MPDO/BNTSeparatingProjectors.lean`; `BNTSourceSectorProjectors.lean`; `docs/paper-gaps/cpgsv17_pf_rank_one.tex` | **not-ready** — the printed proof requires the false rank-one conclusion of Lemma C.5 |
-| Prop `prop3to4` | 1786–1789 | Blockwise structure gives the GSNNCH form | `TNLean/MPS/MPDO/BNTSectorCommutingFamily.lean`; `GSNNCHOrthogonalSectors.lean` | **complete** |
+| Prop `prop3to4` | 1786–1789 | Blockwise structure gives the GSNNCH form | `TNLean/MPS/MPDO/BNTSectorCommutingFamily.lean` (`hasGSNNCHForm_of_bntSectorSAL`); `GSNNCHOrthogonalSectors.lean` | **partial** — the current assembly assumes sectorwise SAL together with inverse, closure, nonzero-closing, and word-span data; no theorem derives those inputs from the printed blockwise structural condition alone |
 | Prop `prop4to2` | 1801–1804 | GSNNCH gives SAL | `TNLean/MPS/MPDO/OrthogonalSectorAreaLaw.lean`; `LocalOrthogonalSumAreaLaw.lean`; `PhysicalSectorFactorization.lean`; `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex` | **partial** — the statement omits the ZCL hypothesis used in its proof; the corrected sectorwise-ZCL result still depends on #4175/#4459 |
 | Prop `prop2to5` | 1810–1813 | SAL and ZCL give the two trace-preserving maps | `TNLean/MPS/MPDO/PhysicalSectorCoarseGrainingIdentity.lean`; `PhysicalSectorRefinementIdentity.lean`; `PhysicalSectorBlockedRFP.lean` | **not-ready** — the conditional maps are constructed, but deriving their neighboring trace factorization from the printed hypotheses uses false Lemma C.5 |
 
@@ -279,7 +279,7 @@ These are known oversized (documented in #1512/#1522) and do not block unrelated
 
 ## 7. Key remaining coverage gaps
 
-The 17 non-complete distinct CPSV16 results are all partial, source-ambiguous,
+The 19 non-complete distinct CPSV16 results are all partial, source-ambiguous,
 formally refuted, research-level, owner-held, or scope-restricted by the current
 formal interface. No important owner-free, source-faithful, implementation-ready
 slice remained at the synchronized revision.
@@ -287,6 +287,7 @@ slice remained at the synchronized revision.
 | Status | Paper | Result | Current certificate | Ownership |
 |---|---|---|---|---|
 | Partial | CPSV16 | Prop. 2.7, BNT characterization | Active blocks are characterized; listed zero-weight blocks are invisible to positive-length MPVs | Source clarification required |
+| Partial | CPSV16 | Proposition `propblockinj` | The $3D^5$ bound is proved for packaged BNT data, not for every literal canonical-form tensor | Blocked by the same zero-weight ambiguity as Proposition 2.7 |
 | Partial | CPSV16 | Theorem 3.1, renormalization-flow limit | The blocking-isometry equation and canonical-form block convergence are proved, but the printed flow-limit iff is not formalized | No source-level flow-limit predicate is currently available |
 | Not-ready | CPSV16 | Theorem 3.8 | Raw weights and the Bell-pair adjacent-gap example refute the two unrestricted directions | Corrected branch #2633, assigned to `LionSR` |
 | Not-ready | CPSV16 | Theorem 3.10 | Inherits Theorem 3.8 counterexamples; line 1250 also fails for nilpotent zero-Jordan defects | #2633, assigned to `LionSR` |
@@ -300,6 +301,7 @@ slice remained at the synchronized revision.
 | Not-ready | CPSV16 | Lemma C.5 (`SALZCL`) | A formal injective four-sector counterexample has SAL and source ZCL but no rank-one active trace factorization | #4270 closed by counterexample |
 | Not-ready | CPSV16 | Structural corollary, lines 1503–1506 | Its printed proof depends on false Lemma C.5 | No source-faithful replacement known |
 | Partial | CPSV16 | Proposition `4to2`, lines 1597–1601 | The selected tensor satisfies all-cut SAL; comparison with the original tensor is missing | #4175/#4459, assigned to `LionSR` |
+| Partial | CPSV16 | Proposition `prop3to4` | The current GSNNCH assembly assumes sectorwise SAL and auxiliary inverse/closure/span data not yet derived from the printed blockwise structure | No source-hypothesis capstone is currently present |
 | Not-ready | CPSV16 | Proposition `prop2to3` | Its printed SAL+ZCL proof depends on false Lemma C.5 | No source-faithful replacement known |
 | Partial | CPSV16 | Proposition `prop4to2` | The statement omits the ZCL hypothesis used in the proof and shares the original-to-selected-tensor gap | #4175/#4459, assigned to `LionSR` |
 | Not-ready | CPSV16 | Proposition `prop2to5` | Conditional maps exist, but the printed derivation of their factorization uses false Lemma C.5 | No unconditional source theorem available |
