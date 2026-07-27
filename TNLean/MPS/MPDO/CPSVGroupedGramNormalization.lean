@@ -4,20 +4,19 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.CanonicalForm.NormalCommutant
-import TNLean.MPS.MPDO.GroupedFigure8
+import TNLean.MPS.MPDO.CPSVGroupedFigureEight
 
 /-!
-# Gram and unitary normalization of grouped vertical sectors
+# Gram and unitary normalization of literal grouped vertical sectors
 
-This file applies normal-tensor rigidity to the grouped Figure 8 comparison
-constructed from normalized BNT-refined horizontal form, which is stronger
-than literal CPSV canonical form.
+This file applies normal-tensor rigidity to the actual-grouped Figure 8
+comparison constructed directly from literal CPSV canonical form.
 
 ## Main results
 
-* `IsMPDO.grouped_sector_gram_eq_pos_smul_one`: each grouped gauge has Gram
+* `MPSTensor.IsCPSVCanonicalForm.grouped_sector_gram_eq_pos_smul_one`: each grouped gauge has Gram
   matrix equal to a positive real multiple of the identity.
-* `IsMPDO.grouped_sector_exists_unitary_normalization`: rescaling the grouped
+* `MPSTensor.IsCPSVCanonicalForm.grouped_sector_exists_unitary_normalization`: rescaling the grouped
   gauge by the inverse square root of that scalar makes it unitary.
 
 ## References
@@ -28,7 +27,9 @@ than literal CPSV canonical form.
 
 open scoped Matrix ComplexOrder
 
-namespace MPOTensor
+open MPOTensor
+
+namespace MPSTensor.IsCPSVCanonicalForm
 
 variable {d D : ℕ}
 
@@ -42,17 +43,13 @@ local notation "C" => MPSTensor.mpvPhaseClassData blocks
 /-- The Gram matrix of an actual grouped vertical-sector gauge is a positive
 real multiple of the identity.
 
-All hypotheses are clauses furnished by
-`IsHorizontalCF.exists_verticalBNTGrouping_with_isometry`.
-
-**Scope restriction (BNT-refined horizontal form):** `IsHorizontalCF` is the
-normalized BNT-refined horizontal form, stronger than the literal CPSV
-canonical form; see `docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex`.
+All hypotheses after `hM` are clauses furnished by
+`IsCPSVCanonicalForm.exists_verticalBNTGrouping_with_isometry`.
 
 Source: arXiv:1606.00608, proof of Proposition 4.13, lines 1903--1921. -/
-theorem IsMPDO.grouped_sector_gram_eq_pos_smul_one
-    {M : MPOTensor d D} (hM : IsMPDO M)
-    (hHorizontal : IsHorizontalCF M)
+theorem grouped_sector_gram_eq_pos_smul_one
+    {M : MPOTensor d D} (hCanonical : IsCPSVCanonicalForm M.toMPSTensor)
+    (hM : IsMPDO M)
     (μ : Fin r → ℂ) (V : (k : Fin r) → Matrix (Fin d) (Fin (dim k)) ℂ)
     (hDimPos : ∀ k, 0 < dim k)
     (hNormal : ∀ k, MPSTensor.IsNormalTensor (blocks k))
@@ -87,7 +84,7 @@ theorem IsMPDO.grouped_sector_gram_eq_pos_smul_one
           (((X j q : Matrix (Fin (dim ((C).enum j q)))
             (Fin (dim ((C).enum j q))) ℂ)ᴴ * X j q)⁻¹) = A v := by
     intro v
-    simpa [A] using IsMPDO.grouped_sector_gram_conj_eq blocks hM hHorizontal
+    simpa [A] using hCanonical.grouped_sector_gram_conj_eq blocks hM
       μ V hdim X ζ hXDist hCoeffPos hCorner j q v
   exact hNormalA.gram_eq_pos_smul_one_of_gram_conj_eq
     (Matrix.isUnits_det_units (X j q)) hGramConj
@@ -95,17 +92,13 @@ theorem IsMPDO.grouped_sector_gram_eq_pos_smul_one
 /-- Every actual grouped vertical-sector gauge becomes unitary after division
 by the square root of its positive Gram scalar.
 
-All hypotheses are clauses furnished by
-`IsHorizontalCF.exists_verticalBNTGrouping_with_isometry`.
-
-**Scope restriction (BNT-refined horizontal form):** `IsHorizontalCF` is the
-normalized BNT-refined horizontal form, stronger than the literal CPSV
-canonical form; see `docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex`.
+All hypotheses after `hM` are clauses furnished by
+`IsCPSVCanonicalForm.exists_verticalBNTGrouping_with_isometry`.
 
 Source: arXiv:1606.00608, proof of Proposition 4.13, lines 1903--1921. -/
-theorem IsMPDO.grouped_sector_exists_unitary_normalization
-    {M : MPOTensor d D} (hM : IsMPDO M)
-    (hHorizontal : IsHorizontalCF M)
+theorem grouped_sector_exists_unitary_normalization
+    {M : MPOTensor d D} (hCanonical : IsCPSVCanonicalForm M.toMPSTensor)
+    (hM : IsMPDO M)
     (μ : Fin r → ℂ) (V : (k : Fin r) → Matrix (Fin d) (Fin (dim k)) ℂ)
     (hDimPos : ∀ k, 0 < dim k)
     (hNormal : ∀ k, MPSTensor.IsNormalTensor (blocks k))
@@ -131,7 +124,7 @@ theorem IsMPDO.grouped_sector_exists_unitary_normalization
             (Fin (dim ((C).enum j q))) ℂ) ∈
         Matrix.unitaryGroup (Fin (dim ((C).enum j q))) ℂ := by
   obtain ⟨ω, hω, hGram⟩ :=
-    IsMPDO.grouped_sector_gram_eq_pos_smul_one blocks hM hHorizontal μ V
+    hCanonical.grouped_sector_gram_eq_pos_smul_one blocks hM μ V
       hDimPos hNormal hdim X ζ hXDist hCoeffPos hCorner j q
   exact ⟨ω, hω,
     Matrix.smul_mem_unitaryGroup_of_conjTranspose_mul_self_eq_smul_one
@@ -139,4 +132,4 @@ theorem IsMPDO.grouped_sector_exists_unitary_normalization
 
 end GroupedSectors
 
-end MPOTensor
+end MPSTensor.IsCPSVCanonicalForm

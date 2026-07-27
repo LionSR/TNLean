@@ -286,6 +286,42 @@ theorem IsNormal.gram_eq_pos_smul_gram_of_gram_conj_eq
     exact (Complex.ext (Complex.ofReal_re c.re)
       (by rw [Complex.ofReal_im]; exact hcIm)).symm
 
+/-- **Equation eq3 with the distinguished gauge fixed to the identity.**
+If an invertible gauge's Gram conjugation fixes every letter of a normal
+tensor, then its Gram matrix is a positive real multiple of the identity.
+
+Source: arXiv:1606.00608, proof of Proposition 4.13, lines 1903--1921. -/
+theorem IsNormal.gram_eq_pos_smul_one_of_gram_conj_eq
+    {A : MPSTensor d D} (hA : IsNormal A)
+    {X : Matrix (Fin D) (Fin D) ℂ} (hX : IsUnit X.det)
+    (hgram : ∀ i, Xᴴ * X * A i * (Xᴴ * X)⁻¹ = A i) :
+    ∃ ω : ℝ, 0 < ω ∧ Xᴴ * X = (ω : ℂ) • 1 := by
+  have hOne : IsUnit (1 : Matrix (Fin D) (Fin D) ℂ).det := by
+    simp
+  obtain ⟨ω, hω, hGram⟩ :=
+    hA.gram_eq_pos_smul_gram_of_gram_conj_eq hX hOne (fun i => by
+      simpa using hgram i)
+  exact ⟨ω, hω, by simpa using hGram⟩
+
+/-- An invertible gauge whose Gram conjugation fixes a normal tensor becomes
+unitary after division by the square root of its positive Gram scalar.
+
+Source: arXiv:1606.00608, proof of Proposition 4.13, lines 1903--1921. -/
+theorem IsNormal.exists_unitary_normalization_of_gram_conj_eq
+    {A : MPSTensor d D} (hA : IsNormal A)
+    {X : Matrix (Fin D) (Fin D) ℂ} (hX : IsUnit X.det)
+    (hgram : ∀ i, Xᴴ * X * A i * (Xᴴ * X)⁻¹ = A i) :
+    ∃ ω : ℝ, 0 < ω ∧
+      ((Real.sqrt ω : ℂ))⁻¹ • X ∈ Matrix.unitaryGroup (Fin D) ℂ := by
+  obtain ⟨ω, hω, hGram⟩ :=
+    hA.gram_eq_pos_smul_one_of_gram_conj_eq hX hgram
+  have hOne : IsUnit (1 : Matrix (Fin D) (Fin D) ℂ).det := by
+    simp
+  have hUnit := Matrix.smul_mul_nonsing_inv_mem_unitaryGroup_of_gram_eq_smul
+    (X := X) (Y := (1 : Matrix (Fin D) (Fin D) ℂ)) hOne hω
+    (by simpa using hGram)
+  exact ⟨ω, hω, by simpa using hUnit⟩
+
 /-- **Conditional relative equation eq3 from a common dressed target.**  If two
 invertible gauges dress every letter of a normal tensor to the same target,
 then their Gram matrices differ by a positive real scalar.  The target may
