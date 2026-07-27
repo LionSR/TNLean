@@ -53,11 +53,17 @@ that the tensor generates nonzero density operators at the lengths under
 consideration; it does not add an independent nonvanishing hypothesis to the
 Appendix~C proposition.
 
-The formal predicate \leanid{MPOTensor.IsHorizontalCF} used below is the
+The formal predicate \leanid{MPOTensor.IsHorizontalCF} used below is a
 representative-grouped BNT decomposition: gauge-equivalent copies are grouped
-over one minimal normal representative and retain their nonzero weights.  It
-formalizes the source assumption that $K$ is in biCF at lines 849--850.  It is
-not the restricted per-copy predicate
+over one minimal normal representative, retain their nonzero weights, and
+exhaust the ambient virtual space.  In particular, it excludes an additional
+all-zero virtual summand.  The literal source canonical-form construction
+allows $\sum_k D_k\leq D$, explicitly noting that there can be zero
+blocks.\footnote{Source:
+\path{Papers/1606.00608/MPDO-22-12-17-2.tex:214--219}.}
+Thus \leanid{MPOTensor.IsHorizontalCF} is stronger than the literal
+canonical-form surface used by the source biCF assumption at lines 849--850.
+It is not the restricted per-copy predicate
 \leanid{MPOTensor.HorizontalCFData}, which demands
 separation of every copy individually and is strictly stronger than the
 source's grouped canonical form.
@@ -141,32 +147,34 @@ $S_L+S_{N-L}-S_N=I_L$.\footnote{Formal declarations:
 \leanid{MPOTensor.mutualInfoChain_eq_mutualInformation} in
 \doclink{TNLean/MPS/MPDO/MutualInfoBridge}.}
 
-Nonvanishing is not an additional source assumption in this implication.
-Horizontal canonical form gives one nonzero positive-length ring, positivity
-makes its trace nonzero, and the renormalization equations make the
-physical-trace transfer idempotent.  The trace is therefore nonzero at every
-positive length.\footnote{Formal declaration:
+Within the BNT-refined horizontal scope, nonvanishing is not an additional
+assumption in this implication.  Horizontal canonical form gives one nonzero
+positive-length ring, positivity makes its trace nonzero, and the
+renormalization equations make the physical-trace transfer idempotent.  The
+trace is therefore nonzero at every positive length.\footnote{Formal declaration:
 \leanid{MPOTensor.trace_mpo_ne_zero_of_isHorizontalCF_isMPDO_isRFPViaTS} in
 \doclink{TNLean/MPS/MPDO/RFPViaTSGlobal}.}
 
 Combining the consecutive-cut correspondence, the two exact local-channel
 identities, data processing in both directions, and positive-length
-nonvanishing proves the SAL conclusion.  At length one, the same nonvanishing
-rules out a zero physical-trace transfer.  Combining its idempotence with the
-SAL conclusion proves the full source proposition, namely ZCL and
-SAL.\footnote{Formal declarations:
+nonvanishing proves the SAL conclusion under
+\leanid{MPOTensor.IsHorizontalCF}.  At length one, the same nonvanishing rules
+out a zero physical-trace transfer.  Combining its idempotence with the SAL
+conclusion proves ZCL and SAL on this restricted surface.\footnote{Formal declarations:
 \leanid{MPOTensor.isSAL_of_isRFPViaTS} and
 \leanid{MPOTensor.isSourceZCL_and_isSAL_of_isRFPViaTS} in
 \doclink{TNLean/MPS/MPDO/RFPViaTSSAL}.}
 
-\paragraph{Classification.}
-This gap is resolved.  The formal SAL predicate is restricted to positive
-chain lengths, the normalized consecutive-cut state is identified with the
-existing prefix-entropy expression for $I_L$, and the RFP hypotheses imply
-normalization, source ZCL, and the equality $I_L=I_{L+1}$.  Thus Proposition
-\texttt{propsimple} is present with its full conclusion.  No simplicity
-hypothesis is used in this forward implication, in agreement with the source
-proof.  The horizontal hypothesis is the representative-grouped formalization
-of the source biCF assumption, not the stronger per-copy separation predicate.
+\paragraph{Classification: scope restriction.}
+The verdict is a scope restriction, and the gap is partially resolved.  Under
+\leanid{MPOTensor.IsHorizontalCF}, the normalized consecutive-cut state is
+identified with the existing prefix-entropy expression for $I_L$, and the RFP
+hypotheses imply normalization, source ZCL, and the equality
+$I_L=I_{L+1}$.  The remaining gap is the all-zero virtual summand permitted by
+the literal source canonical form at lines 214--219: no theorem yet restricts
+such a tensor to its active virtual subspace and transports the RFP, MPDO, ZCL,
+and SAL properties back to the original zero-tailed tensor.  Proposition
+\texttt{propsimple} is therefore only partially covered.  No simplicity
+hypothesis is used within the established BNT-refined scope.
 
 \end{document}
