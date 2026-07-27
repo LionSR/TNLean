@@ -52,7 +52,25 @@ At revision `a483570b1bfd3f39eb9f6292e74d9df99a8c4df0`, the paper has 45 theorem
 
 The distinct count is the 40 source `thm`, `prop`, `cor`, and `lem`
 environments. The occurrence count adds five Appendix A/D restatements.
-Explanatory rows for proof segments are not counted separately.
+The following ledger makes the count reproducible from source line numbers:
+
+- **Complete (15 distinct):** 249, 253, 606, 945, 1080, 1121, 1130,
+  1351, 1406, 1510, 1569, 1647, 1680, 1835, and 2221.
+- **Partial (14 distinct):** 278, 342, 349, 398, 583, 801, 851, 972,
+  1013, 1274, 1333, 1597, 1786, and 1801.
+- **Not-ready (11 distinct):** 354, 500, 534, 543, 777, 1155, 1197,
+  1484, 1503, 1740, and 1810.
+- **Additional occurrences:** the Appendix A restatements at 1137, 1167,
+  and 1172 inherit partial, partial, and not-ready status, respectively; the
+  Appendix D restatements at 1863 and 1929 inherit complete and partial status.
+  Thus the five restatements add one complete, three partial, and one not-ready
+  occurrence, giving the displayed totals 16/17/12.
+
+Definitions, equations, and explanatory proof-segment rows are not counted.
+In particular, Eq. `II_XAX` at 1072--1077 is excluded, while the purification
+equivalence is counted because it is the `thm` environment beginning at line
+777.  The Appendix B rows at 1209--1244, 1246--1271, and 1305--1307 are proof
+segments of Theorems 3.1 and 3.10, not additional theorem occurrences.
 
 ### 2.1 Section II — Matrix Product Vectors (pure-state canonical form)
 
