@@ -106,8 +106,8 @@ At revision `a483570b1bfd3f39eb9f6292e74d9df99a8c4df0`, the paper has 45 theorem
 | **Corollary `Lem1`** (l.1130) | 1130–1133 | Orthogonal normal MPVs are eventually linearly independent | `TNLean/MPS/CanonicalForm/PhaseClassSectorData.lean`; `TNLean/MPS/BNT/Basic.lean` | **complete** |
 | Restatement of `prop:char-BNT` | 1137–1142 | BNT characterization | `TNLean/MPS/CanonicalForm/BNTCharacterization.lean` | **partial restatement** — inherits the zero-weight ambiguity at lines 278–280 |
 | **Lemma `Lem:app_simple`** (l.1155) | 1155–1163 | Equality of finite power sums implies equality of multisets | `TNLean/Algebra/ScalarPowerSumIdentity.lean` | **complete** |
-| Restatement of `thm1` | 1167–1170 | Proportional fundamental theorem | `MPSTensor.fundamentalTheorem_proportional_canonicalForm` | **complete restatement** |
-| Restatement of `II_cor2` | 1172–1179 | Equal-MPV fundamental theorem | `MPSTensor.fundamentalTheorem_equal_canonicalForm` | **complete restatement** |
+| Restatement of `thm1` | 1167–1170 | Proportional fundamental theorem | `TNLean/MPS/FundamentalTheorem/SectorBNT/FundamentalCoord.lean` (`MPSTensor.fundamentalTheorem_proportional_canonicalForm`) | **complete restatement** |
+| Restatement of `II_cor2` | 1172–1179 | Equal-MPV fundamental theorem | `TNLean/MPS/FundamentalTheorem/SectorBNT/FundamentalCoord.lean` (`MPSTensor.fundamentalTheorem_equal_canonicalForm`) | **complete restatement** |
 | **Corollary `thm:Fundamental-CFII`** (l.1197) | 1197–1199 | CFII refinement with unitary global and block gauges | `TNLean/MPS/FundamentalTheorem/SectorBNT/FundamentalCoord.lean` (`MPSTensor.fundamentalTheorem_equal_canonicalForm_unitary`) and `SectorBNT/Unitary.lean` | **complete** |
 
 ### 2.5 Appendix B — Proofs of Section III
