@@ -323,8 +323,9 @@
         def:mpdo_topological_density_operator,
         def:mpdo_single_kraus_map,
         def:mpdo_sitewise_physical_matrix}
-    Let $M$ be a matrix product density operator in horizontal canonical form
-    and suppose that it satisfies the renormalization fixed-point condition.
+    Let $M$ be a matrix product density operator in normalized BNT-refined
+    horizontal form and suppose that it satisfies the renormalization
+    fixed-point condition.
     There is one vertical canonical decomposition and one compatible family of
     fusion coisometries such that, for every $N>0$, the rectangular vertical
     coisometry $V$ satisfies the two exact equations
@@ -341,6 +342,12 @@
     line~1001, length independence, or the subsequent spectral and Gibbs
     decomposition.
 
+    \textbf{Scope restriction (BNT-refined horizontal form):}
+    the normalized BNT-refined horizontal hypothesis is stronger than the
+    literal CPSV canonical-form hypothesis.
+    % This is not the literal Proposition 4.13 route; see
+    % docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex.
+
     \textbf{Local fix (rectangular vertical map):} The second equality uses
     exact reconstruction from the retained nonzero sectors of
     Proposition~4.13 and Appendix~C.4, lines~2020--2029, not a square-unitary
@@ -351,8 +358,10 @@
     \uses{thm:mpdo_rfp_to_bnt_fusion_tensor,
         thm:mpdo_topological_projector_recursion,
         lem:mpdo_sitewise_physical_coordinate_congruence}
-    Proposition~4.13 gives a rectangular coisometry onto the retained nonzero
-    vertical sectors, together with exact reconstruction from those sectors.
+    Under the normalized BNT-refined horizontal hypothesis, the vertical
+    canonical-form theorem gives a rectangular coisometry onto the retained
+    nonzero vertical sectors, together with exact reconstruction from those
+    sectors.
     In the retained coordinates, one-site matrix entries are block diagonal in
     the label and multiplicity coordinate. Hence a closed chain vanishes
     between different sitewise configurations. Within one configuration, the
@@ -376,8 +385,9 @@
     \leanok
     \uses{def:horizontal_cf_mpdo, def:mpdo, def:is_rfp_via_ts,
         def:mpdo_topological_density_operator}
-    Let $M$ be a matrix product density operator in horizontal canonical form
-    and suppose that it satisfies the renormalization fixed-point condition.
+    Let $M$ be a matrix product density operator in normalized BNT-refined
+    horizontal form and suppose that it satisfies the renormalization
+    fixed-point condition.
     One choice of the vertical canonical decomposition and fusion
     coisometries satisfies, for every $N>0$,
     \begin{align}
@@ -392,6 +402,11 @@
     \cite[lines~1000--1002]{Cirac2016MPDO_arXiv}. No additional compatibility
     hypothesis is imposed. This statement makes no length-independence,
     terminal spectral, projection, Hamiltonian, or Gibbs-state assertion.
+
+    \textbf{Scope restriction (BNT-refined horizontal form):}
+    the normalized BNT-refined horizontal hypothesis is stronger than the
+    literal CPSV canonical-form hypothesis.
+    % Scope tracking: docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex.
 \end{corollary}
 \begin{proof}\leanok
     \uses{thm:mpdo_rfp_to_bnt_fusion_tensor}
@@ -420,11 +435,14 @@
         HasTerminalSpectralProjectorRefinement}
     \lean{MPOTensor.rfpBNTFusionTensorClause}
     \leanok
-    \uses{def:mpdo_bnt_fusion_tensor_clause,
+    \uses{def:horizontal_cf_mpdo, def:mpdo, def:is_rfp_via_ts,
+        def:mpdo_bnt_fusion_tensor_clause,
         def:mpdo_topological_density_operator,
-        def:mpdo_topological_projector_recursion}
-    Fix the fusion clause selected by the renormalization fixed-point
-    construction. For every terminal label $\gamma$, close the horizontal
+        def:mpdo_topological_projector_recursion,
+        thm:mpdo_rfp_to_bnt_fusion_tensor}
+    For an MPDO in normalized BNT-refined horizontal form satisfying the
+    renormalization fixed-point condition, fix the fusion clause selected by
+    that construction. For every terminal label $\gamma$, close the horizontal
     operator leg of $M_\gamma$ to obtain a matrix $K_\gamma$ on its bond
     space. Its spectral indices are pairs $s=(\gamma,k)$ with
     $0\leq k<D_\gamma$.
@@ -435,6 +453,11 @@
     coisometry, and assemble over all sitewise label and multiplicity
     configurations. Denote the resulting all-label operator at positive
     chain length $N$ by $P_s^{(N)}$.
+
+    \textbf{Scope restriction (BNT-refined horizontal form):}
+    the normalized BNT-refined horizontal hypothesis is stronger than the
+    literal CPSV canonical-form hypothesis.
+    % Scope tracking: docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex.
 \end{definition}
 
 \begin{theorem}[Terminal spectral projectors for a length-independent RFP
@@ -458,8 +481,9 @@
     \uses{def:horizontal_cf_mpdo, def:mpdo, def:is_rfp_via_ts,
         def:mpdo_terminal_spectral_refinement,
         cor:mpdo_topological_density_factor_commutator}
-    Let $M$ be a matrix product density operator in horizontal canonical form
-    satisfying the renormalization fixed-point condition. Fix internally the
+    Let $M$ be a matrix product density operator in normalized BNT-refined
+    horizontal form satisfying the renormalization fixed-point condition. Fix
+    internally the
     fusion clause supplied by that construction, and suppose that its positive
     trace-power coefficients are independent of the positive chain length.
     Then $K_\gamma$ is positive semidefinite for every terminal label, so
@@ -497,7 +521,14 @@
     The length-independence assumption here is clause-relative: it is stated
     on the coefficients of the fixed clause selected from the
     renormalization fixed-point construction, not on an arbitrary
-    fusion clause. This theorem stops at
+    fusion clause.
+
+    \textbf{Scope restriction (BNT-refined horizontal form):}
+    the normalized BNT-refined horizontal hypothesis is stronger than the
+    literal CPSV canonical-form hypothesis.
+    % Scope tracking: docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex.
+
+    This theorem stops at
     \cite[lines~1003--1012]{Cirac2016MPDO_arXiv}; it does not assert the
     commuting nearest-neighbor Hamiltonian or Gibbs-state conclusion beginning
     at line~1013.
@@ -593,8 +624,9 @@
     \uses{def:horizontal_cf_mpdo, def:mpdo, def:is_rfp_via_ts,
         def:mpdo_topological_gibbs_data_at_least_two,
         thm:mpdo_terminal_spectral_projector_refinement}
-    Let $M$ be a matrix product density operator in horizontal canonical form
-    satisfying the renormalization fixed-point condition. Select the fusion
+    Let $M$ be a matrix product density operator in normalized BNT-refined
+    horizontal form satisfying the renormalization fixed-point condition.
+    Select the fusion
     clause supplied by that condition and suppose that its positive
     trace-power coefficients are independent of the positive chain length.
     There are non-negative numbers $\lambda_1,\ldots,\lambda_d$, independent
@@ -621,6 +653,12 @@
     Applying the adjoint retained-row map at every site reconstructs
     $\rho^{(L)}(M)$ from the right-hand side of
     (\ref{eq:rfp_retained_gibbs_sum}).
+
+    \textbf{Scope restriction (BNT-refined horizontal form):}
+    the normalized BNT-refined horizontal hypothesis is stronger than the
+    literal CPSV canonical-form hypothesis.
+    % The literal implication remains open; see
+    % docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex.
 
     \textbf{Scope restriction (retained vertical coordinates):}
     the formula is an equality for $R_L$ on the retained vertical space, not
@@ -661,8 +699,9 @@
     \uses{thm:mpdo_topological_gibbs_at_least_two}
     \lean{MPOTensor.physicalTopologicalGibbsDecomposition_of_isRFPViaTS}
     \leanok
-    Let $M$ be as in
-    Theorem~\ref{thm:mpdo_topological_gibbs_at_least_two}. There are
+    Let $M$ be in normalized BNT-refined horizontal form and satisfy the
+    hypotheses of Theorem~\ref{thm:mpdo_topological_gibbs_at_least_two}. There
+    are
     non-negative numbers $\lambda_1,\ldots,\lambda_d$ and one fixed Hermitian
     two-site matrix $\widehat h$, all independent of the chain length. For
     every $L\geq2$, let
@@ -682,6 +721,11 @@
           e^{-\widehat H_L}.
         \label{eq:rfp_physical_gibbs_sum}
     \end{align}
+
+    \textbf{Scope restriction (BNT-refined horizontal form):}
+    the normalized BNT-refined horizontal hypothesis is stronger than the
+    literal CPSV canonical-form hypothesis.
+    % Scope tracking: docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex.
 
     \textbf{Local fix (physical complement):}
     the retained one-site energy is compressed to physical coordinates and
@@ -724,9 +768,8 @@
     $L=1$ instance is therefore undefined without an author or erratum
     convention. The source construction is defined for $L\geq2$, and no
     length-one theorem is asserted. The physical-coordinate theorem above
-    proves the result on this domain; the undefined length-one convention
-    remains open. See
-    \path{docs/paper-gaps/cpsv16_topological_gibbs_physical_complement.tex}
-    and
-    \path{docs/paper-gaps/cpsv16_topological_gibbs_length_one.tex}.
+    proves the result on this domain; no $L=1$ statement follows without an
+    additional convention.
+    % See docs/paper-gaps/cpsv16_topological_gibbs_physical_complement.tex
+    % and docs/paper-gaps/cpsv16_topological_gibbs_length_one.tex.
 \end{remark}
