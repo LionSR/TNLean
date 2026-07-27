@@ -62,10 +62,11 @@ density operators, and the block-diagonal equality.} The forward direction is an
 external stand-in: that implication is a theorem of Ruskai, of
 Hayden--Jozsa--Petz--Winter, and of Hayashi, but its proof rests on the full
 singular-support saturation-to-recovery theorem and the structural analysis of
-recovered states.  Positive-definite saturation-to-recovery and the
-trace-preserving extension of the support Petz map are now available; the
-singular-support extension and structural step are not.  The reverse direction
-is proved from the entropy-additivity sub-lemmas listed below.
+recovered states.  The singular-support saturation-to-raw-recovery implication,
+its positive-definite specialization, and the trace-preserving extension of the
+support Petz map are now available.  The family-level structural step remains
+open.  The reverse direction is proved from the entropy-additivity sub-lemmas
+listed below.
 
 \section{The point at issue: only the forward direction is consumed}
 
@@ -79,12 +80,12 @@ downstream. Its proof is the deep part of the characterization: it requires
 recovery-map theory and the Petz transpose channel, that is, the analysis of
 when the data-processing inequality for relative entropy is saturated and the
 reconstruction of the discarded subsystem from a recovery map. This recovery-map
-argument still lacks the singular-support extension of saturation-to-recovery
-and the subsequent structural analysis, which is why the forward direction is
-treated as an external assumption rather than proved.  The positive-definite
-recovery implication and
-the complementary trace-preserving extension of the support Petz map have now
-been supplied and are no longer part of this gap.
+argument now includes the singular-support saturation-to-raw-recovery
+implication.  The subsequent family-level invariant-state and direct-sum
+analysis is still missing, which is why the forward direction is treated as an
+external assumption rather than proved.  The recovery implication and the
+complementary trace-preserving extension of the support Petz map are no longer
+part of this gap.
 
 \paragraph{Reverse direction (tractable, currently unused).}
 The implication \eqref{eq:qmc} $\Rightarrow$~\eqref{eq:ssa-eq} --- a state of the
@@ -153,8 +154,8 @@ The reverse half uses the following entropy-additivity sub-lemmas, all proved in
 
 With these five facts the reverse implication is a finite computation, now
 carried out in \path{TNLean/Analysis/EntropyMarkovReverse.lean}; the
-forward implication remains an external assumption until the singular-support
-recovery extension and the structural analysis are available.
+forward implication remains an external assumption until the family-level
+structural analysis is available.
 
 \section{Trace-preserving Petz channel now available}
 
@@ -368,10 +369,10 @@ L\"owner integral representation of the power $p=1/2$.
 \leanid{Matrix.partialTraceRightPetzMap_eq_of_relativeEntropy_eq_posDef} in
 \path{TNLean/Channel/Schwarz/WeylRelativeEntropyIntegral.lean}.}
 Thus equality under the partial trace implies raw Petz recovery for positive
-definite inputs.  The remaining analytic work is the extension of this passage
-to singular supports.
+definite inputs.  The support-domain argument below extends this passage to
+singular supports.
 
-One part of that extension is now available.  Jen\v{c}ov\'a--Ruskai extend the
+Jen\v{c}ov\'a--Ruskai extend the
 definition and convexity argument directly to positive semidefinite pairs with
 $\ker B\subseteq\ker A$; see arXiv:0903.2895v4, lines 717--720.  Their singular
 equality argument then obtains the common relative-modular resolvent on the
@@ -546,9 +547,16 @@ finite-family common projected resolvent theorem.  The kernel inclusion used
 for the unprojected source-$A$ inequality remains an exact hypothesis of this
 source-facing equality theorem.  The finite-Weyl specialization now supplies
 the projected resolvent hypothesis for the support functional-calculus step.
-What remains is to carry its conclusion through the singular Weyl
-inverse-square-root sandwich and Petz-recovery argument.  Thus the singular
-Petz recovery identity is still unformalized.
+The zero Weyl summand, the unweighted-sum normalization, and the projected
+square-root-ratio theorem now carry this conclusion through the singular
+inverse-square-root sandwich and raw Petz-recovery argument.
+\footnote{Formal declarations:
+\leanid{Matrix.unweightedWeylSum_eq_smul_partialTraceRight_kronecker} in
+\path{TNLean/Channel/Schwarz/WeylSupportRelativeEntropyEquality.lean};
+\leanid{Matrix.weyl_support_sqrt_ratio_eq_of_partialTraceRight_eq},
+\leanid{Matrix.weyl_support_identity_sandwich_of_partialTraceRight_eq}, and
+\leanid{Matrix.partialTraceRightPetzMap_eq_of_relativeEntropy_eq} in
+\path{TNLean/Channel/Schwarz/WeylSupportPetzRecovery.lean}.}
 
 In particular, the affine regularizations used to prove the inequality cannot
 by themselves prove its equality case.  Equality at the limiting pair implies
@@ -590,43 +598,46 @@ of \cite[Theorem~3, equation~(8)]{HaydenJozsaPetzWinter2004}.
 \leanid{Matrix.partialTraceRightPetzMap_eq_of_weyl_identity_sandwich} in
 \path{TNLean/Channel/Schwarz/PetzEqualityPrerequisites.lean}.}
 The algebraic implication itself is conditional on the displayed operator
-identity.  The positive-definite finite-Weyl argument above now supplies that
-identity from equality of relative entropy under the partial trace.  No claim
-is made here for an arbitrary convex ensemble or for singular inputs.
+identity.  The finite-Weyl argument now supplies that identity from equality
+of relative entropy under the partial trace for positive-semidefinite inputs
+satisfying $\ker\sigma\subseteq\ker\rho$.  No claim is made here for an
+arbitrary convex ensemble.
 
-The exact remaining analytic implication is the singular-support equality case
-of data processing:
+The singular-support equality case of data processing is now formalized in
+finite Weyl coordinates:
 \begin{align}
   D(\rho\Vert\sigma)
     =D(\operatorname{tr}_R\rho\Vert\operatorname{tr}_R\sigma)
   \quad\Longrightarrow\quad
   \mathcal R_\sigma(\operatorname{tr}_R\rho)=\rho.
 \end{align}
-This is the forward implication of
-\cite[Theorem~3]{HaydenJozsaPetzWinter2004}.  The present proof of data
-processing establishes the inequality by regularization, unitary averaging,
-and joint convexity.  On singular supports its equality analysis now reaches
-the common projected Weyl resolvent.  What remains is the support
-inverse-square-root sandwich and raw Petz recovery.
-After this analytic implication, the proof of the block decomposition still
-requires the invariant-state decomposition used in
+This is the raw support-map identity entering the forward implication of
+\cite[Theorem~3]{HaydenJozsaPetzWinter2004}.  The proof does not infer
+equality for positive affine regularizations.  Instead, the
+support-restricted finite-family equality theorem gives the common projected
+Weyl resolvent; the support functional calculus gives the projected
+square-root ratio; and the kernel inclusion reduces its Gram identity to the
+displayed Petz sandwich.
+
+The proof of the block decomposition still requires the invariant-state
+decomposition used in
 \cite[Theorem~6]{HaydenJozsaPetzWinter2004}; that is the
-Koashi--Imoto structural step.  Both steps remain necessary before the forward
-external assumption can be removed.
+Koashi--Imoto structural step.  This structural step remains necessary before
+the forward external assumption can be removed.
 
 \section{Verdict}
 
 The strong-subadditivity equality characterization is now split into a proved
 reverse direction and a postulated forward direction. Only the forward
 direction, equality implies quantum-Markov-chain structure, still needs the
-singular-support recovery theorem and the structural analysis of recovered
-states; positive-definite recovery and the trace-preserving Petz channel are
-now available.  The forward direction alone is postulated. The reverse
-direction, a block-diagonal product state attains equality, is proved from
-entropy additivity over weighted direct sums and tensor factors together with
-unitary and reindexing invariance.
-Until those remaining steps are formalized, the forward direction remains the
-irreducible unproved content of this characterization.
+family-level structural analysis of recovered states.  Singular-support raw
+recovery, positive-definite recovery, and the trace-preserving Petz channel are
+available.  The forward direction alone is postulated. The reverse direction,
+a block-diagonal product state attains equality, is proved from entropy
+additivity over weighted direct sums and tensor factors together with unitary
+and reindexing invariance.  Until the structural step is formalized, the
+forward direction remains the irreducible unproved content of this
+characterization.
 
 \begin{thebibliography}{9}
 

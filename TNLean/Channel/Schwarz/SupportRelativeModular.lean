@@ -226,4 +226,108 @@ theorem supportRelativeModular_sqrt_ratio_eq_of_resolvent_mulVec_eq
     one_kronecker_transpose_mulVec_vec_transpose] at hsqrt
   exact Matrix.transpose_injective (Matrix.vec_inj.mp hsqrt)
 
+/-- Equality of support-projected square-root ratios gives the support Petz
+sandwich when the kernel of the reference matrix is contained in the kernel
+of the first matrix.
+
+This is the algebraic Gram-matrix step after the support functional-calculus
+conclusion of Jenčová--Ruskai, arXiv:0903.2895v4, lines 788--793. It supplies
+the sandwich entering the singular Petz formula of
+Hayden--Jozsa--Petz--Winter, arXiv:quant-ph/0304007v2, Theorem 3,
+equation (8). -/
+theorem supportRelativeModular_sandwich_eq_of_sqrt_ratio_eq
+    {n : Type*} [Fintype n] [DecidableEq n]
+    {A B C D : Matrix n n ℂ}
+    (hA : A.PosSemidef) (hB : B.PosSemidef)
+    (hC : C.PosSemidef) (hD : D.PosSemidef)
+    (hker : ∀ v : n → ℂ, B *ᵥ v = 0 → A *ᵥ v = 0)
+    (hratio :
+      (CFC.sqrt A * hB.supportInvSqrt) * hB.isHermitian.supportProj =
+        (CFC.sqrt C * hD.supportInvSqrt) * hB.isHermitian.supportProj) :
+    hB.isHermitian.cfc Real.sqrt *
+        (hD.supportInvSqrt * C * hD.supportInvSqrt) *
+        hB.isHermitian.cfc Real.sqrt = A := by
+  have hsqrtA : (CFC.sqrt A)ᴴ = CFC.sqrt A :=
+    (Matrix.nonneg_iff_posSemidef.mp (CFC.sqrt_nonneg A)).isHermitian.eq
+  have hsqrtC : (CFC.sqrt C)ᴴ = CFC.sqrt C :=
+    (Matrix.nonneg_iff_posSemidef.mp (CFC.sqrt_nonneg C)).isHermitian.eq
+  have hPstar :
+      (hB.isHermitian.supportProj)ᴴ = hB.isHermitian.supportProj :=
+    hB.isHermitian.supportProj_isHermitian.eq
+  have hgram := congrArg (fun X => Xᴴ * X) hratio
+  have hleftGram :
+      ((CFC.sqrt A * hB.supportInvSqrt) * hB.isHermitian.supportProj)ᴴ *
+          ((CFC.sqrt A * hB.supportInvSqrt) * hB.isHermitian.supportProj) =
+        hB.isHermitian.supportProj *
+          (hB.supportInvSqrt * A * hB.supportInvSqrt) *
+          hB.isHermitian.supportProj := by
+    simp only [Matrix.conjTranspose_mul, hPstar,
+      hB.supportInvSqrt_isHermitian.eq, hsqrtA, Matrix.mul_assoc]
+    rw [← Matrix.mul_assoc (CFC.sqrt A) (CFC.sqrt A)
+      (hB.supportInvSqrt * hB.isHermitian.supportProj),
+      CFC.sqrt_mul_sqrt_self A hA.nonneg]
+  have hrightGram :
+      ((CFC.sqrt C * hD.supportInvSqrt) * hB.isHermitian.supportProj)ᴴ *
+          ((CFC.sqrt C * hD.supportInvSqrt) * hB.isHermitian.supportProj) =
+        hB.isHermitian.supportProj *
+          (hD.supportInvSqrt * C * hD.supportInvSqrt) *
+          hB.isHermitian.supportProj := by
+    simp only [Matrix.conjTranspose_mul, hPstar,
+      hD.supportInvSqrt_isHermitian.eq, hsqrtC, Matrix.mul_assoc]
+    rw [← Matrix.mul_assoc (CFC.sqrt C) (CFC.sqrt C)
+      (hD.supportInvSqrt * hB.isHermitian.supportProj),
+      CFC.sqrt_mul_sqrt_self C hC.nonneg]
+  have hcore :
+      hB.isHermitian.supportProj *
+          (hB.supportInvSqrt * A * hB.supportInvSqrt) *
+          hB.isHermitian.supportProj =
+        hB.isHermitian.supportProj *
+          (hD.supportInvSqrt * C * hD.supportInvSqrt) *
+          hB.isHermitian.supportProj :=
+    hleftGram.symm.trans (hgram.trans hrightGram)
+  have hAright :
+      A * hB.isHermitian.supportProj = A :=
+    hB.isHermitian.mul_supportProj_eq_self_of_mulVec_kernel_le hker
+  have hAleft :
+      hB.isHermitian.supportProj * A = A := by
+    simpa only [Matrix.conjTranspose_mul, hPstar, hA.isHermitian.eq] using
+      congrArg Matrix.conjTranspose hAright
+  have hAPA :
+      hB.isHermitian.supportProj * A * hB.isHermitian.supportProj = A := by
+    rw [hAleft, hAright]
+  calc
+    hB.isHermitian.cfc Real.sqrt *
+          (hD.supportInvSqrt * C * hD.supportInvSqrt) *
+          hB.isHermitian.cfc Real.sqrt =
+        (hB.isHermitian.cfc Real.sqrt * hB.isHermitian.supportProj) *
+          (hD.supportInvSqrt * C * hD.supportInvSqrt) *
+          (hB.isHermitian.supportProj * hB.isHermitian.cfc Real.sqrt) := by
+      rw [hB.cfc_sqrt_mul_supportProj, hB.supportProj_mul_cfc_sqrt]
+    _ = hB.isHermitian.cfc Real.sqrt *
+        (hB.isHermitian.supportProj *
+          (hD.supportInvSqrt * C * hD.supportInvSqrt) *
+          hB.isHermitian.supportProj) *
+        hB.isHermitian.cfc Real.sqrt := by
+      simp only [Matrix.mul_assoc]
+    _ = hB.isHermitian.cfc Real.sqrt *
+        (hB.isHermitian.supportProj *
+          (hB.supportInvSqrt * A * hB.supportInvSqrt) *
+          hB.isHermitian.supportProj) *
+        hB.isHermitian.cfc Real.sqrt := by
+      rw [hcore]
+    _ = (hB.isHermitian.cfc Real.sqrt *
+          hB.isHermitian.supportProj * hB.supportInvSqrt) *
+        A *
+        (hB.supportInvSqrt * hB.isHermitian.supportProj *
+          hB.isHermitian.cfc Real.sqrt) := by
+      simp only [Matrix.mul_assoc]
+    _ = hB.isHermitian.supportProj * A * hB.isHermitian.supportProj := by
+      rw [Matrix.mul_assoc hB.supportInvSqrt hB.isHermitian.supportProj
+          (hB.isHermitian.cfc Real.sqrt),
+        hB.supportProj_mul_cfc_sqrt, hB.cfc_sqrt_mul_supportProj,
+        hB.cfc_sqrt_mul_supportInvSqrt,
+        hB.supportInvSqrt_mul_cfc_sqrt]
+      congr
+    _ = A := hAPA
+
 end Matrix
