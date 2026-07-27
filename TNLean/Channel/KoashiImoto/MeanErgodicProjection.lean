@@ -27,7 +27,7 @@ packaged map; that source identity remains a separate analytic statement.
   (it is completely positive).
 * `Kraus.isTracePreservingMap_mapLM_of_isTP`: a trace-preserving Kraus family's Schrödinger
   action is a trace-preserving map.
-* `Matrix.traceAdjointMap_mapLM`: the trace-pairing adjoint of a Kraus family's Schrödinger
+* `Kraus.traceAdjointMap_mapLM`: the trace-pairing adjoint of a Kraus family's Schrödinger
   action is its Heisenberg adjoint map.
 * `Kraus.commonInvariantMeanErgodicProjection`: HJPW's `P_0^*`, the mean-ergodic projection of
   the single witness `F_0`'s Heisenberg adjoint, derived via
@@ -58,7 +58,7 @@ variable {D : ℕ}
 
 local notation "Mat" => Matrix (Fin D) (Fin D) ℂ
 
-section Bridge
+section TraceAdjointHeisenbergIdentification
 
 variable {d : ℕ}
 
@@ -105,7 +105,7 @@ theorem traceAdjointMap_mapLM (K : Fin d → Mat) :
   rw [Matrix.trace_traceAdjointMap_mul, mapLM_apply, adjointMapLM_apply,
     trace_mul_map_eq_trace_adjointMap_mul]
 
-end Bridge
+end TraceAdjointHeisenbergIdentification
 
 section CommonInvariantProjection
 
