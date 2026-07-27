@@ -139,10 +139,13 @@ canonical decomposition, not by declaring the diagonal restrictions of the
 horizontal blocks to be normal blocks.
 
 The exact reindexing step \eqref{eq:regrouped-mpv} is therefore complete once
-the bijection and the pointwise block identifications are known. The
-one-sided invariant-matrix calculation from source lines~1874--1887 now gives
-invariant-projector closure for the vertically viewed tensor
+the bijection and the pointwise block identifications are known. Under the
+normalized BNT-refined hypothesis, the one-sided invariant-matrix calculation
+from source lines~1874--1887 gives invariant-projector closure for the
+vertically viewed tensor
 (\path{MPOTensor.IsHorizontalCF.hasInvariantProjectorClosure_verticalTensor}).
+For literal CPSV canonical form, the same conclusion is now proved by
+\path{MPSTensor.IsCPSVCanonicalForm.hasInvariantProjectorClosure_verticalTensor}.
 The general decomposition under this closure condition produces a complete
 orthogonal family of irreducible reducing corners, with isometries, both
 intertwining identities, exact compression, and equality of matrix product
@@ -210,7 +213,7 @@ $\mu_{\alpha,k}$ in the source is $\mu_{\alpha,k}=c_{\alpha,k}$
 \path{TNLean/MPS/MPDO/SectorTrace.lean}).  For the unitary gauges, the
 pairwise Gram-conjugation identity of the second displayed diagram at source
 lines~1914--1919 is proved in
-\path{TNLean/MPS/MPDO/FigureEightPairwise.lean}.  The dependent transport to
+\path{TNLean/MPS/MPDO/FigureEightPairwise.lean}.  The dependent identification with
 the actual grouped sector and its distinguished copy is proved in
 \path{TNLean/MPS/MPDO/GroupedFigure8.lean}.  This argument does not identify
 either corner separately with the raw reflected adjoint.  The scalar
@@ -231,9 +234,9 @@ $X_{\alpha,1}=\Id$, giving the normalization printed by the source
 \path{TNLean/MPS/MPDO/GroupedGramNormalization.lean}).
 
 The reflected marked-chain, two-sector separation, and dependent-dimension
-transport of source lines~1909--1919 are therefore complete, as is the
+identification of source lines~1909--1919 are therefore complete, as is the
 positive scalar Gram identity and unitary normalization of every grouped
-gauge.  The normalized gauges are transported to the representative bond
+gauge.  The normalized gauges are expressed on the representative bond
 spaces and composed with the physical sector isometries in
 \path{TNLean/MPS/MPDO/NormalizedGroupedSectors.lean}.  The resulting maps
 $W_{\alpha,q}$ have mutually orthogonal isometric ranges, satisfy the
@@ -264,12 +267,14 @@ rather than a consequence of the proposition.
 The horizontal-to-vertical implication is complete under the normalized
 BNT-refined hypothesis \path{MPOTensor.IsHorizontalCF}.  That hypothesis is
 strictly stronger than the literal CPSV canonical form assumed in
-Proposition~4.13, so the literal theorem remains open.  For the literal
-hypothesis, active regrouping and the representative-grouped Lemma~L on the
-retained coordinates are complete; the listed-gauge and ambient-coisometry
-passage to the physical vertical tensor is not.  The proved restricted result
-follows the grouped vertical sectors used in the paper and does not use the
-unsupported diagonal-restriction statement from \ghissue{2537}.
+Proposition~4.13, so the literal theorem remains open.  Under the literal
+hypothesis, active regrouping, marked Lemma~L on both the retained and original
+bond spaces, physical first-site insertion equality, and invariant-projector
+closure are complete.  The physical Figure-8/Gram proportionality and
+conjugation argument, followed by the final vertical canonical-form theorem
+with its coisometry, remain open.  The proved statements retain every inactive
+listed coordinate with weight zero and do not use the unsupported
+diagonal-restriction statement from \ghissue{2537}.
 
 The preparatory dependency tracked by \ghissue{4956} is now complete.  The
 structure \path{MPSTensor.CPSVCanonicalFormData.ActiveBNTRefinement} and its
@@ -375,17 +380,53 @@ groupedMarkedTensor_basis_eq_of_trace_agree} and
 insertedTensor_representative_eq_of_firstSiteActionAgree}.  These conclusions
 require no additional normalization hypothesis.
 
-Literal Proposition~4.13 nevertheless remains open.  The physical first-site
-and marked-chain identities are stated for the original vertically viewed
-tensor.  They must still be carried through the listed block gauge in
-\eqref{eq:completed-active-regrouping} and the ambient coisometry in
-\eqref{eq:completed-active-reconstruction} to obtain the corresponding
-full-coordinate hypotheses for $T_{\mathrm{grp}}$.  In particular, the local
-Gram-conjugation identity of source lines~1909--1919 has not been obtained from
-the physical compression identity on this literal-CF surface.  The
-invariant-projector conclusion, the physical Gram step, and the final
-coisometric vertical assembly therefore remain open without
-\path{MPOTensor.IsHorizontalCF}.
+The original-space marked step is now complete in
+\path{TNLean/MPS/MPDO/CPSVOriginalSpaceLemmaL.lean}.  If
+$A^i=V^\dagger B^iV$ and $VV^\dagger=I$, then a marked matrix
+$C=V^\dagger EV$ satisfies
+\begin{equation}
+  \operatorname{tr}(CA^w)=\operatorname{tr}(EB^w)
+  \label{eq:original-marked-coisometry}
+\end{equation}
+for every tail word $w$, including the empty word.  The marked matrix makes
+the closed chain nonempty, so \eqref{eq:original-marked-coisometry} does not
+assert an unmarked length-zero matrix-product-vector equality.  This is
+\path{MPSTensor.trace_marked_mul_evalWord_of_coisometry_reconstruction}; the
+linear-marked specialization is
+\path{MPSTensor.trace_linearMarkedTensor_mul_evalWord_of_coisometry_reconstruction}.
+
+Linear marking of $T_{\mathrm{grp}}$ is exactly the full grouped marked tensor:
+\path{MPSTensor.CPSVCanonicalFormData.ActiveBNTRefinement.%
+linearMarkedTensor_groupedTensor_eq_groupedMarkedTensor}.  Active copies carry
+$\lambda_{\alpha,q}$ times the representative mark, while inactive marked
+blocks vanish because their raw weights are zero.  Combining this identity,
+\eqref{eq:original-marked-coisometry}, the listed gauge, and the retained
+representative theorem proves literal-CF marked Lemma~L on the original bond
+space:
+\path{MPSTensor.CPSVCanonicalFormData.ActiveBNTRefinement.%
+linearMarkedTensor_eq_of_trace_agree} and
+\path{MPSTensor.IsCPSVCanonicalForm.linearMarkedTensor_eq_of_trace_agree}.
+No equality is asserted for the insertion into an individual inactive block.
+
+For physical first-site actions, the preceding result gives
+\path{MPSTensor.CPSVCanonicalFormData.ActiveBNTRefinement.%
+insertedTensor_eq_of_firstSiteActionAgree} and its predicate-level form
+\path{MPSTensor.IsCPSVCanonicalForm.%
+insertedTensor_eq_of_firstSiteActionAgree}.  Positivity supplies the required
+first-site agreement from a one-sided invariant orthogonal projection through
+\path{MPOTensor.firstSiteActionAgree_braRight_ketLeftBraRight_of_invariant}.
+Consequently,
+\path{MPSTensor.IsCPSVCanonicalForm.%
+hasInvariantProjectorClosure_verticalTensor} proves invariant-projector
+closure of the vertical tensor under literal CPSV canonical form and
+\path{MPOTensor.IsMPDO}.
+
+Literal Proposition~4.13 nevertheless remains open.  The physical Figure-8
+argument of source lines~1909--1919 must still derive the Gram-conjugation and
+positive proportionality identities for the grouped gauges.  These identities
+must then be combined with the reducing vertical sectors to obtain the final
+vertical canonical form and the coisometry satisfying $UU^\dagger=I$.  The
+current results do not assert $U^\dagger U=I$.
 \bibliographystyle{alpha}
 \bibliography{references}
 

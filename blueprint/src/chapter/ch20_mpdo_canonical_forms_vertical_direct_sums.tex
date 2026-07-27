@@ -228,6 +228,46 @@
     $e(k)$ in the second, so reindexing by $e$ proves the equality.
 \end{proof}
 
+\begin{theorem}[Invariant vertical projections in literal CPSV canonical form]
+    \label{thm:mpdo_vertical_projector_closure_literal_cpsv}
+    \lean{MPSTensor.CPSVCanonicalFormData.ActiveBNTRefinement.%
+        hasInvariantProjectorClosure_verticalTensor}
+    \lean{MPSTensor.IsCPSVCanonicalForm.hasInvariantProjectorClosure_verticalTensor}
+    \leanok
+    \uses{def:mpdo, def:cpsv_canonical_form, def:vertical_tensor_mpdo,
+        def:invariant_projector_closure,
+        thm:representative_one_sub_mp_zero,
+        thm:cpsv_original_coordinate_marked_lemma_l}
+    Let $M$ generate matrix product density operators, and suppose that its
+    doubled-index MPS tensor is in literal CPSV canonical form. If an
+    orthogonal projection $P$ satisfies
+    $P\widetilde M_v=P\widetilde M_vP$ for every vertical letter $v$, then
+    \begin{align}
+        \widetilde M_vP&=P\widetilde M_vP
+        \label{eq:cpsv_literal_vertical_projector_closure}
+    \end{align}
+    for every $v$. Thus the vertically viewed tensor has
+    invariant-projector closure.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:representative_one_sub_mp_zero,
+        thm:cpsv_original_coordinate_marked_lemma_l}
+    The left-invariance hypothesis gives
+    $P_1H^{(N)}=P_1H^{(N)}P_1$ at every positive length. Since $H^{(N)}$ is
+    positive and $P=P^\dagger$,
+    \begin{align}
+        P_1H^{(N)}&=P_1H^{(N)}P_1=H^{(N)}P_1.
+        \label{eq:cpsv_literal_first_site_commutation}
+    \end{align}
+    The matrix coefficients of
+    (\ref{eq:cpsv_literal_first_site_commutation}) give agreement of the
+    corresponding first-site actions. The original-coordinate marked
+    Lemma~L gives equality of their inserted tensors on the original bond
+    space. Reading this equality as a vertical one-site action yields
+    (\ref{eq:cpsv_literal_vertical_projector_closure}).
+\end{proof}
+
 \begin{theorem}[Invariant vertical projections are reducing]
     \label{thm:mpdo_vertical_projector_closure}
     \lean{MPOTensor.IsHorizontalCF.hasInvariantProjectorClosure_verticalTensor}
@@ -713,6 +753,8 @@
         thm:cpsv_active_representative_sector_decomposition,
         thm:cpsv_full_coordinate_marked_trace_identity,
         thm:cpsv_retained_representative_grouped_lemma_l,
+        thm:cpsv_original_coordinate_marked_lemma_l,
+        thm:mpdo_vertical_projector_closure_literal_cpsv,
         thm:projector_closure_irreducible_corners,
         thm:mpdo_no_periodic_sector_projector,
         thm:psd_commute_of_commute_pow,
@@ -783,24 +825,18 @@
         Y_R(P)C_\alpha^i&=Y_C(P)C_\alpha^i
         \label{eq:cpsv_prop_4_13_active_separation}
     \end{align}
-    whenever the corresponding first-site equality has been established on
-    $T_{\mathrm{grp}}$.
-
-    The remaining step is to derive that grouped first-site equality from
-    (\ref{eq:cpsv_prop_4_13_first_site}) through the listed block gauge $G$ and
-    the ambient coisometry $V$, and then to carry
-    (\ref{eq:cpsv_prop_4_13_active_separation}) back to the vertically viewed
-    tensor. This must give
+    on every active representative. Theorem~\ref{thm:cpsv_original_coordinate_marked_lemma_l}
+    then uses the listed block gauge and the ambient coisometry, with
+    $VV^\dagger=\Id$, to give the original-space inserted-tensor equality.
+    Theorem~\ref{thm:mpdo_vertical_projector_closure_literal_cpsv} therefore
+    yields
     \begin{align}
         \widetilde MP&=P\widetilde MP.
-        \label{eq:cpsv_prop_4_13_missing_coisometry_transport}
+        \label{eq:cpsv_prop_4_13_projector_closure}
     \end{align}
-    This listed-gauge and ambient-coisometry implication remains open. If an
-    argument instead removes the zero-weight coordinates, it must also
-    construct an explicit coisometric selector and
-    prove the corresponding reconstruction identity. Once this passage is
-    established, $(\Id-P)\widetilde MP=0$, so every one-sided invariant
-    subspace is reducing.
+    Thus every one-sided invariant subspace is reducing. The inactive listed
+    coordinates remain present with weight zero throughout this argument; no
+    insertion identity is asserted for an individual inactive block.
 
     % Local fix (periodic-sector quantifier): use one noncommuting chain length,
     % not the all-length assertion printed in the source. See
@@ -830,15 +866,14 @@
     (\ref{eq:cpsv_prop_4_13_positive_weight}) implies
     $\mu_{\alpha,k}>0$ for every copy.
 
-    Self-adjointness of the same sector compressions gives the marked-chain
+    Self-adjointness of the sector compressions gives the marked-chain
     identity used in the proof of Proposition~4.13. The full-coordinate trace
-    identity of Theorem~\ref{thm:cpsv_full_coordinate_marked_trace_identity} and
+    identity of Theorem~\ref{thm:cpsv_full_coordinate_marked_trace_identity},
     the marked form of
-    Theorem~\ref{thm:cpsv_retained_representative_grouped_lemma_l} separate the
-    representative marks once the required full-coordinate trace equality is
-    known. It remains to derive that equality from the physical compression
-    identity through $G$ and $V$. In particular, the passage to the local
-    Gram-conjugation identity
+    Theorem~\ref{thm:cpsv_retained_representative_grouped_lemma_l}, and the
+    original-coordinate marked Lemma~L identify the corresponding marks on the
+    original bond space. The remaining physical Figure-8 argument must turn
+    these marked identities into the local Gram-conjugation identity
     \begin{align}
         (X_{\alpha,k}^\dagger X_{\alpha,k})M_\alpha^v
         (X_{\alpha,k}^\dagger X_{\alpha,k})^{-1}
@@ -876,9 +911,9 @@
 % proves the same conclusion from the stronger normalized BNT-refined horizontal
 % form. For literal canonical form, the exact class-copy-plus-inactive
 % coordinate regrouping, active representative sector decomposition, and
-% retained-coordinate Lemma L are complete. Passage through the listed gauge
-% and ambient coisometry into the vertical tensor, including the physical
-% Gram-conjugation identity and final assembly, remains open.
+% retained-coordinate and original-coordinate forms of Lemma L, the original
+% inserted-tensor equality, and invariant-projector closure are complete. The
+% physical Figure-8/Gram argument and final coisometric grouping remain open.
 
 \begin{theorem}[BNT-refined horizontal form implies vertical canonical form]
     \label{thm:vertical_cf_of_horizontal_cf}

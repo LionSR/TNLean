@@ -5,6 +5,10 @@
     \lean{MPSTensor.SectorDecomposition.insertedTensor_toTensor_eq_of_basis}
     \lean{MPSTensor.insertedTensor_eq_of_gauge}
     \lean{MPOTensor.IsHorizontalCF.insertedTensor_eq_of_firstSiteActionAgree}
+    \lean{MPSTensor.CPSVCanonicalFormData.ActiveBNTRefinement.%
+        insertedTensor_eq_of_firstSiteActionAgree}
+    \lean{MPSTensor.IsCPSVCanonicalForm.insertedTensor_eq_of_firstSiteActionAgree}
+    \lean{MPOTensor.firstSiteActionAgree_braRight_ketLeftBraRight_of_invariant}
     \lean{MPOTensor.representative_opposite_insert_eq_of_rotated_mpo_entries}
     \lean{MPOTensor.representative_braRight_eq_ketLeftBraRight_of_invariant}
     \lean{MPOTensor.IsHorizontalCF.exists_representative_braRight_eq_ketLeftBraRight}
@@ -14,6 +18,7 @@
         def:mpdo_three_first_site_contractions,
         thm:representative_grouped_insert_eq,
         thm:postblocked_representative_grouped_insert_eq,
+        thm:cpsv_original_coordinate_marked_lemma_l,
         thm:mpdo_first_site_invariant_comm}
     Let $M$ be in normalized BNT-refined horizontal form. For doubled-index
     matrices
@@ -34,12 +39,20 @@
     $Q_1H^{(N)}=Q_1H^{(N)}Q_1$ and
     $Q_1H^{(N)}=H^{(N)}Q_1$ at every positive length.
 
-    \textbf{Scope restriction (BNT-refined horizontal form):}
-    the normalized BNT-refined horizontal hypothesis is stronger than the
-    literal CPSV canonical-form hypothesis.
-    % The literal first-site reduction remains part of the active-refinement
-    % and coisometry-transport gap recorded in
-    % docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex.
+    The corresponding literal-CF assertion also holds. Let $A$ be in
+    literal CPSV canonical form. If the first-site actions of $Y,Z\in\MN{d}$
+    agree on every positive-length matrix product vector of $A$, then
+    \begin{align}
+        YA&=ZA
+        \label{eq:cpsv_literal_first_site_inserted}
+    \end{align}
+    on the original bond space. In particular, suppose that $M$ generates
+    matrix product density operators, $P=P^\dagger$, and
+    $P\widetilde M=P\widetilde MP$. Positivity gives agreement of the
+    first-site actions associated with $\widetilde MP$ and
+    $P\widetilde MP$ at every positive length. Hence
+    (\ref{eq:cpsv_literal_first_site_inserted}) gives the opposite one-sided
+    identity on the original bond space.
 
     This is the representative-indexed conclusion of the invariant-projection
     step in
@@ -54,20 +67,29 @@
     \leanok
     \uses{thm:representative_grouped_insert_eq,
         thm:postblocked_representative_grouped_insert_eq,
+        thm:cpsv_original_coordinate_marked_lemma_l,
         thm:mpdo_first_site_invariant_comm}
-    For the general assertion, positive-length MPV equality transports the first-site
-    identity to the BNT sector decomposition. The representative-grouped
+    For the normalized BNT-refined assertion, positive-length MPV equality
+    gives the first-site identity for the BNT sector decomposition. The representative-grouped
     Lemma~L gives $YA_j=ZA_j$ for every representative. First-site insertion
     commutes with the weighted direct sum, and conjugating each copy by its
     gauge gives $YM=ZM$ on the original bond space.
 
     For the specialized assertion, positivity and Hermiticity give
-    $Q_1H^{(N)}=Q_1H^{(N)}Q_1=H^{(N)}Q_1$. Transport these two identities to
-    the BNT sector decomposition and apply the
+    $Q_1H^{(N)}=Q_1H^{(N)}Q_1=H^{(N)}Q_1$. These two identities give the
+    corresponding first-site equalities for the BNT sector decomposition. Apply the
     representative-grouped Lemma~L to identify first $Y_L(Q)A_j$ with
     $Y_C(Q)A_j$ and then with $Y_R(Q)A_j$. Transitivity gives the stated
     equality for every representative, and the same direct-sum and copy-gauge
     argument gives the literal equality on $\widetilde M$.
+
+    For literal CPSV canonical form, first-site agreement is a marked-trace
+    identity on the original tensor. Theorem~\ref{thm:cpsv_original_coordinate_marked_lemma_l}
+    identifies the two linear marks and gives
+    (\ref{eq:cpsv_literal_first_site_inserted}). In the invariant-projection
+    case, positivity first yields
+    $P_1H^{(N)}=P_1H^{(N)}P_1=H^{(N)}P_1$; its matrix coefficients are exactly
+    the required first-site agreement.
 \end{proof}
 
 \begin{lemma}[Blockwise equality from agreement on the MPV family]
@@ -451,8 +473,8 @@ tensor. This is the contraction in
         thm:blockwise_opposite_insert_eq}
     Lemma~\ref{lem:mpdo_three_first_site_contraction_coefficients} turns the
     two operator identities into equality of the corresponding first-site
-    contractions. Equality of matrix product vectors transports these
-    equalities to the chosen canonical-form decomposition. Apply
+    contractions. Equality of matrix product vectors gives these
+    equalities for the chosen canonical-form decomposition. Apply
     Theorem~\ref{thm:blockwise_opposite_insert_eq} with
     $(Y_L,Y_C,Y_R)$.
 \end{proof}
