@@ -359,6 +359,7 @@
 
 \begin{theorem}[Support left-right solution as a projected relative-modular resolvent]
     \label{thm:support_left_right_projected_relative_modular}
+    \lean{Matrix.supportRightProj_mul_supportLeftRightSupportProj_eq}
     \lean{Matrix.supportLeftRightSupportInv_mulVec_sourceB_eq_projected_relativeModular}
     \lean{Matrix.supportSourceBQuadratic_eq_projected_relativeModular}
     \leanok
@@ -424,6 +425,59 @@
     real parts gives the quadratic identity.
 \end{proof}
 
+\begin{theorem}[Relative-entropy equality gives common projected shifted relative-modular resolvents]
+    \label{thm:support_relative_entropy_equality_common_projected_resolvent}
+    \lean{Matrix.supportRightProj_mul_sumSupportRightProj_eq}
+    \lean{Matrix.supportRelativeModular_resolvent_mulVec_eq_of_relativeEntropy_sum_eq}
+    \leanok
+    \uses{thm:support_sourceB_defect_zero_of_relative_entropy_sum_eq,
+      thm:support_sourceB_zero_defect_common_left_right_solution,
+      thm:support_left_right_projected_relative_modular}
+    Let $I$ be a finite nonempty set. For each $i\in I$, let $A_i$ and $B_i$
+    be positive-semidefinite matrices satisfying
+    $\ker B_i\subseteq\ker A_i$. Put
+    \begin{align}
+        A_\Sigma&=\sum_{i\in I}A_i,&
+        B_\Sigma&=\sum_{i\in I}B_i,
+        \notag
+    \end{align}
+    and suppose that
+    \begin{align}
+        D(A_\Sigma\Vert B_\Sigma)
+        &=
+        \sum_{i\in I}D(A_i\Vert B_i).
+        \notag
+    \end{align}
+    Then, for every $i\in I$ and $t>0$,
+    \begin{align}
+      &(\mathbf 1\otimes P_{B_i}^{\mathsf T})
+        \bigl(t\mathbf 1+
+          A_i\otimes(B_i^+)^{\mathsf T}\bigr)^{-1}
+        \opvec(\mathbf 1^{\mathsf T})
+        \notag\\
+      &\qquad=
+        (\mathbf 1\otimes P_{B_i}^{\mathsf T})
+        \bigl(t\mathbf 1+
+          A_\Sigma\otimes(B_\Sigma^+)^{\mathsf T}\bigr)^{-1}
+        \opvec(\mathbf 1^{\mathsf T}).
+        \notag
+    \end{align}
+    Thus the shifted relative-modular resolvents agree on
+    $(\ker B_i)^\perp$. The local support projection is essential; no
+    ambient equality is asserted. This is the support-restricted conclusion
+    of Jen\v{c}ov\'a--Ruskai, arXiv:0903.2895v4, lines~766--793.
+\end{theorem}
+
+\begin{proof}\leanok
+    Relative-entropy equality makes the source-$B$ defect vanish for every
+    positive parameter. The common left--right solution theorem and the
+    one-pair projected relative-modular identity then compare the local
+    solution with the summed solution. The local right-support projection
+    absorbs both the support projection of the local left--right operator and
+    the right-support projection of the summed reference matrix. Applying it
+    to the common-solution identity gives the displayed equality.
+\end{proof}
+
 \begin{lemma}[Support relative-modular square-root evaluation]
     \label{lem:support_relative_modular_sqrt_evaluation}
     \lean{Matrix.supportRelativeModular_sqrt_mulVec_vec_one}
@@ -484,8 +538,8 @@
     projection $P_B$ is essential: the source gives the common generalized
     resolvents only after restriction to $(\ker B)^\perp$. Deriving this
     restricted equality requires the preceding singular equality argument and
-    its kernel hypotheses.
-    % Formalization status: the preceding equality-to-resolvent step remains open.
+    its kernel hypotheses; these are supplied for finite families by
+    Theorem~\ref{thm:support_relative_entropy_equality_common_projected_resolvent}.
 \end{lemma}
 
 \begin{proof}\leanok

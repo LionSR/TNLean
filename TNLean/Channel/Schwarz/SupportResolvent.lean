@@ -20,8 +20,8 @@ gives a common generalized-inverse solution after projection to each support.
 
 * `Matrix.support_resolvent_residual_identity`: the difference of the
   generalized-inverse quadratic forms is a sum of residual quadratic forms.
-* `Matrix.support_resolvent_eq_of_defect_eq_zero`: zero defect gives a common
-  solution after projection to each support.
+* `Matrix.support_resolvent_eq_of_defect_eq_zero`: vanishing real part of the
+  defect gives a common solution after projection to each support.
 
 ## References
 
@@ -207,15 +207,18 @@ lemma support_resolvent_quadratic_sum_sub_nonneg
   rw [hres] at hresidual_nonneg
   exact (Complex.nonneg_iff.mp hresidual_nonneg).1
 
-/-- **Zero support-resolvent defect gives a common solution on each
+/-- **Zero real support-resolvent defect gives a common solution on each
 support.** Under the hypotheses of `support_resolvent_residual_identity`, if
-the generalized-inverse quadratic defect vanishes, then the generalized
-solution for each summand is the restriction of the summed solution to that
-summand's support.
+the real part of the generalized-inverse quadratic defect vanishes, then the
+generalized solution for each summand is the restriction of the summed
+solution to that summand's support.
 
 This is the support-domain form of the common-resolvent conclusion
-`(basiceq)` in Jenčová--Ruskai, arXiv:0903.2895v4, §3.1. Its residual
-calculation is the one in the Appendix, equations `(Mj)` and `(eq:Schz1)`. -/
+`(basiceq)` in Jenčová--Ruskai, arXiv:0903.2895v4, §3.1 and lines
+652--660. Its residual calculation is the one in the Appendix, equations
+`(Mj)` and `(eq:Schz1)`. The residual identity makes the complex defect a
+sum of nonnegative quadratic forms, so its imaginary part vanishes
+automatically. -/
 theorem support_resolvent_eq_of_defect_eq_zero
     {ι : Type*} [Fintype ι] [Nonempty ι]
     (S : ι → Matrix n n ℂ) (b : ι → n → ℂ)
@@ -234,8 +237,8 @@ theorem support_resolvent_eq_of_defect_eq_zero
       let hSbar : Sbar.PosSemidef :=
         Matrix.posSemidef_sum Finset.univ fun i _ ↦ hS i
       let Gbar := hSbar.supportInvSqrt * hSbar.supportInvSqrt
-      (∑ i, dotProduct (star (b i)) (G i *ᵥ b i)) -
-        dotProduct (star bbar) (Gbar *ᵥ bbar) = 0) :
+      ((∑ i, dotProduct (star (b i)) (G i *ᵥ b i)) -
+        dotProduct (star bbar) (Gbar *ᵥ bbar)).re = 0) :
     let Sbar := ∑ i, S i
     let bbar := ∑ i, b i
     let G := fun i ↦ (hS i).supportInvSqrt * (hS i).supportInvSqrt
@@ -255,11 +258,32 @@ theorem support_resolvent_eq_of_defect_eq_zero
   let Gbar : Matrix n n ℂ := hSbar.supportInvSqrt * hSbar.supportInvSqrt
   let x : n → ℂ := Gbar *ᵥ bbar
   have hresid := support_resolvent_residual_identity S b hS hb hbar
+  have hdefect_re :
+      ((∑ i, dotProduct (star (b i)) (G i *ᵥ b i)) -
+        dotProduct (star bbar) (Gbar *ᵥ bbar)).re = 0 := by
+    simpa only [Sbar, bbar, hSbar, G, Gbar] using hzero
+  have hdefect_nonneg :
+      (0 : ℂ) ≤
+        (∑ i, dotProduct (star (b i)) (G i *ᵥ b i)) -
+          dotProduct (star bbar) (Gbar *ᵥ bbar) := by
+    rw [← hresid]
+    apply Finset.sum_nonneg
+    intro i _
+    have hGi : (G i).PosSemidef := by
+      simpa only [G, (hS i).supportInvSqrt_isHermitian.eq] using
+        posSemidef_conjTranspose_mul_self (hS i).supportInvSqrt
+    exact hGi.dotProduct_mulVec_nonneg (b i - S i *ᵥ x)
+  have hdefect_zero :
+      (∑ i, dotProduct (star (b i)) (G i *ᵥ b i)) -
+          dotProduct (star bbar) (Gbar *ᵥ bbar) = 0 := by
+    apply Complex.ext
+    · simpa using hdefect_re
+    · simpa using (Complex.nonneg_iff.mp hdefect_nonneg).2.symm
   have hreszero :
       ∑ i, dotProduct (star (b i - S i *ᵥ x))
         (G i *ᵥ (b i - S i *ᵥ x)) = 0 := by
     rw [hresid]
-    exact hzero
+    exact hdefect_zero
   intro i
   let H : Matrix n n ℂ := (hS i).supportInvSqrt
   let P : Matrix n n ℂ := (hS i).isHermitian.supportProj
