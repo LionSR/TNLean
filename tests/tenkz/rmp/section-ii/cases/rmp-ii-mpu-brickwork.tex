@@ -6,8 +6,9 @@
 %   II/ImagesReview Section II.tex lines 450-464
 % Capabilities: grid, typed-ports
 \[
-  % LHS: six simple MPU tensors on the virtual wire
-  \begin{tenkz}[rows={op}]
+  % LHS: six simple MPU tensors, the bond closing trivially at both
+  % outer ends so only the six physical wires stay open (Boundary)
+  \begin{tenkz}[rows={op}, west=none, east=none]
     \tn[box]{U} & \tn[box]{U} & \tn[box]{U} &
       \tn[box]{U} & \tn[box]{U} & \tn[box]{U}
   \end{tenkz}

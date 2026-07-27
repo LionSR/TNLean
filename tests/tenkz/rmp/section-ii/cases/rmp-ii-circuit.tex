@@ -1,18 +1,46 @@
 % Target: rmp-ii-circuit
 % Formula: |psi> = (prod_{layers l} (x)_k U^{(l)}_k) |0>.
-% Ink: Canonical public tenkz environment with rotated gate frames; no raw TikZ.
-% Boundary: The initial state closes the input; four circuit wires remain open after
+% Ink: Canonical public tenkzfree doubling-tree pyramid; no raw TikZ.
+% Boundary: The initial state closes the input; eight circuit wires remain open after
 %   the gates.
 % Source: paper TN-Review-main.tex line 518; author source ImagesReview Section
 %   II/ImagesReview Section II.tex lines 547-571
-% Capabilities: grid, typed-ports, rotated-action
+% Capabilities: free-graph, typed-ports
 \[
-  % rows = wires; col 1: |0> source; col 2: rotated gate on wires 2-3;
-  % col 3: rotated brick-offset gates on wires 1-2 and 3-4
-  \begin{tenkz}[rows={wire,wire,wire,wire}, west=none]
-     & & \tn[box, frame={rotate=90}, wires=2]{}\\
-    \tn[dot]{|0\rangle} & \tn[box, frame={rotate=90}, wires=2]{} & \\
-     & & \tn[box, frame={rotate=90}, wires=2]{}\\
-     & &
-  \end{tenkz}
+  % compact vertical pyramid, whole-step coordinates: four two-output
+  % gates on top, two wider gates in the middle, one root gate at the
+  % bottom, eight open output stubs, |0> hanging below the root
+  \begin{tenkzfree}
+    \tnput[box,ports={south:physical,north west:physical,north east:physical}]
+      {l1}{(-18mm,18mm)}{}
+    \tnput[box,ports={south:physical,north west:physical,north east:physical}]
+      {l2}{(-6mm,18mm)}{}
+    \tnput[box,ports={south:physical,north west:physical,north east:physical}]
+      {l3}{(6mm,18mm)}{}
+    \tnput[box,ports={south:physical,north west:physical,north east:physical}]
+      {l4}{(18mm,18mm)}{}
+    \tnput[boundary,ports={south:physical}]{l1o1}{(-22mm,24mm)}{}
+    \tnput[boundary,ports={south:physical}]{l1o2}{(-14mm,24mm)}{}
+    \tnput[boundary,ports={south:physical}]{l2o1}{(-10mm,24mm)}{}
+    \tnput[boundary,ports={south:physical}]{l2o2}{(-2mm,24mm)}{}
+    \tnput[boundary,ports={south:physical}]{l3o1}{(2mm,24mm)}{}
+    \tnput[boundary,ports={south:physical}]{l3o2}{(10mm,24mm)}{}
+    \tnput[boundary,ports={south:physical}]{l4o1}{(14mm,24mm)}{}
+    \tnput[boundary,ports={south:physical}]{l4o2}{(22mm,24mm)}{}
+    \tnjoin{l1.north west}{l1o1.south} \tnjoin{l1.north east}{l1o2.south}
+    \tnjoin{l2.north west}{l2o1.south} \tnjoin{l2.north east}{l2o2.south}
+    \tnjoin{l3.north west}{l3o1.south} \tnjoin{l3.north east}{l3o2.south}
+    \tnjoin{l4.north west}{l4o1.south} \tnjoin{l4.north east}{l4o2.south}
+    \tnput[box,ports={south:physical,north west:physical,north east:physical}]
+      {m1}{(-12mm,9mm)}{}
+    \tnput[box,ports={south:physical,north west:physical,north east:physical}]
+      {m2}{(12mm,9mm)}{}
+    \tnjoin{m1.north west}{l1.south} \tnjoin{m1.north east}{l2.south}
+    \tnjoin{m2.north west}{l3.south} \tnjoin{m2.north east}{l4.south}
+    \tnput[box,ports={south:physical,north west:physical,north east:physical}]
+      {r}{(0mm,0mm)}{}
+    \tnjoin{r.north west}{m1.south} \tnjoin{r.north east}{m2.south}
+    \tnput[dot,ports={north:physical}]{z}{(0mm,-9mm)}{|0\rangle}
+    \tnjoin{z.north}{r.south}
+  \end{tenkzfree}
 \]
