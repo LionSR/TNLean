@@ -1,155 +1,187 @@
 # Source audit: analytic infrastructure for the Q2 proof
 
 **Date:** 2026-07-16
-**Scope:** Matrix trace norm, locally integrable time-dependent Lindblad propagators,
-weak-* compactness of convex-hull-valued controls and continuity of controlled
-trajectories, and degenerate Hermitian eigenvalue perturbation.
-**Primary local source audited:** Michael M. Wolf, *Quantum Channels & Operations:
-Guided Tour*, TeX transcription in `Notes/WolfNoteTexSource/`.
-**Comparison source:** Wolff--Malz--Trivedi, *Contractivity of time-dependent
-driven-dissipative systems*, arXiv:2602.16067v1 (2026), abbreviated **WMT**.
-**Mathlib snapshot:** rescanned against the upgraded `origin/main` target,
-Lean/Mathlib v4.32.0, Mathlib revision
-`81a5d257c8e410db227a6665ed08f64fea08e997`.  The checked-out audit branch
-still has a v4.31.0 toolchain file; all v4.32 source comparisons and the
-trace-norm compatibility test were performed without changing that branch.
 
----
+**Updated:** 2026-07-27
+
+**Question:** Which parts of the Q2 proof are supplied by Michael M. Wolf's
+lecture notes, and which analytic results require other sources or direct
+proofs?
+
+**Primary source:** Michael M. Wolf, *Quantum Channels & Operations: Guided
+Tour*, July 5, 2012.
+
+**Comparison source:** Lasse H. Wolff, Daniel Malz, and Rahul Trivedi,
+*Contractivity of time-dependent driven-dissipative systems*,
+arXiv:2602.16067v1, February 17, 2026, abbreviated **WMT**.
+
+**Repository transcription:** `Notes/WolfNoteTexSource/`.
+
+**Current formalization snapshot:** `origin/main` at commit `8cbb6217f`, with
+Lean 4.32.0 and Mathlib revision
+`81a5d257c8e410db227a6665ed08f64fea08e997`.
 
 ## Executive conclusion
 
-Wolf is a reliable source for the **static finite-dimensional trace/Schatten norm
-background** and for **homogeneous, time-independent quantum dynamical
-semigroups**.  Wolf is not a source for the full analytic infrastructure required
-by Q2:
+Wolf supplies the static finite-dimensional trace-norm theory and the
+homogeneous, time-independent semigroup theory relevant to Q2. He does not
+supply the other analytic ingredients used by the proof.
 
-1. Chapter 8 defines the trace norm and proves variational duality, but does not
-   prove its directional derivative at singular Hermitian matrices.
-2. Chapter 7 treats constant generators and one-parameter semigroups, not
-   propagators for locally integrable non-autonomous generators.
-3. The notes contain no weak-* compactness theory for measurable controls and no
-   weak-* continuity theorem for controlled trajectories.
-4. Chapter 6 contains spectral decompositions and resolvents, but no degenerate
-   Hermitian first-order perturbation theorem.
+1. Chapter 8, Section 8.1 defines the trace norm and gives its absolute-value
+   and variational descriptions. The corresponding foundational results,
+   including the triangle inequality and trace-norm contractivity of positive
+   trace-preserving maps on Hermitian inputs, are already formalized on current
+   `origin/main`.
+2. Wolf does not prove the one-sided directional derivative of the trace norm
+   at a singular Hermitian matrix.
+3. Chapter 7 treats fixed generators and one-parameter semigroups. It does not
+   construct propagators for locally integrable time-dependent generators.
+4. Wolf contains no weak-* compactness theorem for convex-valued measurable
+   controls and no weak-* continuity theorem for the corresponding
+   trajectories.
+5. Chapter 6 develops static spectral calculus, but not first-order splitting
+   of a degenerate Hermitian eigenvalue.
 
-WMT Proposition 19 states the target trace-norm right-derivative formula and
-cites Kato for the spectral perturbation step.  WMT merely **asserts** existence
-of the locally integrable time-dependent propagator by writing a time-ordered
-exponential; it does not prove the existence, uniqueness, cocycle, stability, or
-CPTP properties needed for a faithful Lean development.  Consequently, the Q2
-formalization should separate the Wolf-derived static API from the external or
-direct analytic developments.
+WMT Proposition 19 states the trace-norm right-derivative formula used in its
+contractivity argument. Its proof invokes finite-dimensional perturbation
+theory and contains a regularity issue that must be treated explicitly in a
+formal proof. WMT also writes the locally integrable evolution as a time-ordered
+exponential, but does not prove the existence, uniqueness, cocycle, stability,
+or positivity results needed for Q2.
 
-### Lean/Mathlib 4.32 rescout
+The next trace-norm contribution should therefore start from the four modules
+already imported by `TNLean/Analysis.lean`:
 
-The v4.32 upgrade does not change the source verdict.  A direct comparison of
-Mathlib revisions v4.31.0 and v4.32.0 found:
+- `TNLean/Analysis/SchattenNorm.lean`;
+- `TNLean/Analysis/TraceNormAbs.lean`;
+- `TNLean/Analysis/TraceNormVariational.lean`;
+- `TNLean/Analysis/TraceNormContractivity.lean`.
 
-- no new `traceNorm`, Schatten norm, or nuclear norm declaration;
-- no Hermitian eigenvalue perturbation, eigenvalue-continuity, or matrix-sign
-  API sufficient for Proposition 19;
-- no non-autonomous propagator, Peano--Baker, or locally-integrable linear ODE
-  construction; the changes in `Mathlib.Analysis.ODE` are only maintenance;
-- the existing Banach--Alaoglu theorems remain available;
-- `ContinuousLinearMap.lpPairing` already provides the useful `L∞`/`L¹`
-  integration pairing, while v4.32 adds `WeakDual.extendRCLikeL` for real/complex
-  weak-dual transport; neither supplies the missing `L∞ ≃ (L¹)′` or admissible
-  control compactness theorem.
+It should add the Hermitian directional-derivative theory rather than recreate
+the trace-norm foundation.
 
-Separately, TNLean already has a basic trace-norm prototype on branch
-`feat/analysis-schatten-one`.  Cherry-picking its two implementation commits
-onto upgraded `origin/main` and compiling
-`TNLean/Analysis/SchattenNorm.lean` under Lean/Mathlib v4.32.0 succeeded without
-source changes.  Thus the first implementation PR should be resumed and rebased,
-not restarted.
+## Exact source and version
 
----
+The TNLean bibliographies identify Wolf's notes in
+`blueprint/src/references.bib:51-58` and
+`docs/paper-gaps/references.bib:178-185`. The archived title page gives the
+version date July 5, 2012. The second page warns that parts of the notes remain
+incomplete or erroneous, so this audit distinguishes definitions, collected
+statements, proof sketches, and full proofs.
+
+The Chapter 8 transcription is
+`Notes/WolfNoteTexSource/ch08_distance_measures.tex`. Its header says that the
+transcription is partial and stops at the heading of Section 8.8. The archived
+PDF was therefore also checked for absence claims. Printed theorem numbers in
+this audit refer to the July 5, 2012 PDF. Local source locations refer to the
+repository transcription and should be used to locate the text when the
+transcription's automatic numbering differs from the printed notes.
+
+WMT was checked against the LaTeX source of arXiv:2602.16067v1. In
+`main_aps.tex`, the locally integrable evolution is introduced at lines 161-164,
+Proposition 19 is stated at lines 624-636, and its appendix proof occupies lines
+1053-1129. The perturbation step cites Kato, Section 2.6, at lines 1085-1089.
+This audit verifies what WMT states and how it uses the citation. It does not
+identify a theorem in Kato whose hypotheses and conclusion already match the
+exact Lean statement; that theorem-level source check remains part of the
+directional-derivative work.
+
+The formalization inventory below was recomputed from current `origin/main`,
+not from an earlier feature branch. Both `lean-toolchain` and
+`lake-manifest.json` record the Lean/Mathlib 4.32.0 upgrade at this snapshot.
 
 ## Coverage table
 
-| Ingredient | Wolf coverage | WMT coverage | Formalization reliability | Current Mathlib/TNLean support | Missing Lean lemmas | Recommended source hierarchy |
-|---|---|---|---|---|---|---|
-| **Matrix trace norm and variational/directional derivative theory** | **Partial.** Chapter 8, §8.1, `ch08_distance_measures.tex:44-203`: Schatten and Ky Fan norms at lines 63-75; `‖A‖₁ = tr |A|` at lines 86-95; Hölder trace duality Eq. (8.6); Ky Fan variational formula Eq. (8.9); theorem *Variational ways to p-norms*, Eqs. (8.10)-(8.13); dual norm Eq. (8.14). No sign matrix, subgradient, or directional derivative. | **Proposition 19**, label `prop:right time derivative form`, lines 624-635, gives the right derivative along driven Lindblad evolution. Its proof is in the appendix, lines 1053-1129, and invokes Kato at lines 1085-1089. | Wolf is reliable for definitions and duality, but insufficient for differentiation. WMT is a useful target statement, not a self-contained foundational source. | Mathlib 4.32 still has `LinearMap.singularValues` but no packaged Schatten-1 norm or singular-value triangle inequality. TNLean branch `feat/analysis-schatten-one` already defines `Matrix.schattenOneNorm`/`Matrix.traceNorm` and proves support expansions, nonnegativity, and definiteness. That prototype was compile-tested successfully against v4.32, but it is not yet on upgraded `origin/main` and does not yet prove the norm, duality, or derivative API. | Complete the existing prototype with norm axioms, unitary invariance, Hermitian eigenvalue formula, operator-norm duality, kernel projection and matrix sign, one-sided directional derivative, and commutator cancellation. | Existing TNLean prototype + Mathlib singular values → Wolf §8.1 for conventions/duality → Kato plus a direct finite-dimensional trace-norm corollary → WMT Proposition 19 as application. |
-| **Propagators for locally integrable time-dependent Lindblad generators** | **Absent.** Chapter 7 proves the homogeneous semigroup theory: Eq. (7.1), differential equation (7.2), Proposition 7.1 (`T_t = e^{tL}`), Duhamel Lemma 7.1 and Eq. (7.10), Dyson--Phillips Eq. (7.13), and time-independent GKSL forms Eqs. (7.20)-(7.23). The note source contains no `T_{t,s}`, locally integrable generator, or non-autonomous propagator theorem. | At source line 164, after Eq. `time_dep_lindblad`, WMT says that local integrability gives a unique solution `E_{t,s} = T exp(∫ L_τ dτ)`. This is an assertion and notation, not a construction or proof. | **Insufficient as cited.** A time-ordered exponential symbol does not establish existence, uniqueness, absolute continuity, the cocycle law, stability, or CPTP preservation. | Mathlib has Bochner integration, Gronwall, and continuous-vector-field Picard--Lindelöf, including `IsPicardLindelof.exists_eq_forall_mem_Icc_hasDerivWithinAt`, but no ready-made locally-integrable linear evolution family. TNLean has constant-generator `expSemigroupCLM` and constant-generator Duhamel/Dyson results. | Volterra/Peano--Baker construction for `L ∈ L¹_loc`; uniqueness; integral equation; absolute continuity; identity and cocycle; `L¹` stability estimate; step-function approximation; Hermiticity, trace, positivity, and complete-positivity preservation. | Standard Carathéodory linear ODE theorem or direct Peano--Baker proof → direct step-approximation/CPTP closure proof → WMT only for notation and intended application. Wolf only for the constant-generator specialization. |
-| **Weak-* compactness of convex-hull-valued controls and weak-* continuity of trajectories** | **Absent.** Chapter 4 §4.1 is finite-dimensional convex optimization/SDP duality. It contains no Banach--Alaoglu theorem, `L∞` control space, relaxed controls, or weak-* trajectory theorem. | **Absent.** WMT quantifies over locally integrable Hamiltonians but does not prove compactness of an admissible control class, existence of optimizing controls, or weak-* continuity of the propagator. | Requires an external functional-analysis/control source and substantial direct proof. Wolf and WMT should not be cited for this ingredient. | Mathlib 4.32 has `WeakDual.isCompact_closedBall`, `WeakDual.isSeqCompact_closedBall`, and `ContinuousLinearMap.lpPairing`, which supplies the Hölder integral map from `Lp`--in particular `L∞`--into the dual of its conjugate `Lp` space. The new `WeakDual.extendRCLikeL` helps pass between real and complex weak duals. There is still no `L∞ ≃ (L¹)′` equivalence/isometry or closed-image theorem, no a.e. convex-valued control compactness theorem, and no trajectory-continuity API. TNLean has only `TNLean.IsCompact.convexHull` for finite-dimensional point sets. | Complete the `L∞`-to-weak-dual bridge or use an alternative compactness representation; prove weak-* sequential compactness and closedness of a.e. simplex/convex-hull constraints; measurable representatives; uniform trajectory bounds/equicontinuity; passage to the limit in the control-affine integral equation; weak-* control convergence implying uniform trajectory convergence. | Mathlib `lpPairing` and Banach--Alaoglu foundation → standard `L∞`/optimal-control source → direct finite-dimensional controlled-propagator continuity proof. |
-| **Degenerate Hermitian eigenvalue perturbation** | **Absent.** Chapter 6's resolvent discussion, `ch06_spectral_properties.tex:286-332`, gives Eqs. (6.17)-(6.21), including contour spectral projections and holomorphic functional calculus. It does not give first-order eigenvalue splitting in a degenerate eigenspace. Chapter 7 perturbation theory concerns constant semigroup generators, not eigenvalue branches. | Used in the proof of Proposition 19 at lines 1085-1089 and again in the proof following Proposition 26 at lines 1171-1175. WMT says to diagonalize the compressed perturbation inside each degenerate eigenspace and cites Kato §2.6. | WMT is an application sketch. Kato or a direct finite-dimensional theorem is needed as the actual source. | Mathlib has Hermitian spectral decomposition, eigenvalues, eigenvector unitaries, and singular values. TNLean has extremal-eigenvalue and spectral-shift helpers in `TNLean/Algebra/HermitianHelpers.lean`. Neither contains a first-order degenerate perturbation theorem. | For `A + εB`, identify the first-order shifts near an eigenvalue `λ` with the eigenvalues of `P_λ B P_λ`; establish the required `o(ε)` control; derive the zero-eigenspace term in the trace-norm derivative. | Kato, Chapter II §§5-6 → direct Hermitian-matrix and trace-norm corollaries → WMT Proposition 19 as downstream use. Wolf is not a source. |
+| Q2 ingredient | Wolf location and proof status | WMT location and proof status | Current Mathlib/TNLean support | Remaining formalization | Source recommendation |
+|---|---|---|---|---|---|
+| **Matrix trace norm** | Chapter 8, Section 8.1, printed pp. 131-133; local lines 63-202. Wolf defines Schatten norms and the trace norm, states `‖A‖₁ = tr |A|`, and gives a variational formula. Some Section 8.1 arguments are sketches. Theorem 8.16, local lines 898-918, proves contractivity of positive trace-preserving maps on Hermitian matrices. | Proposition 19, lines 624-636, uses the trace norm along a driven Lindblad trajectory. The appendix proof, lines 1053-1129, invokes first-order perturbation theory. | Mathlib supplies singular values and finite-dimensional spectral calculus. Current TNLean defines `Matrix.traceNorm`, proves `‖A‖₁ = Re tr |A|`, scalar homogeneity, two-sided unitary invariance, the attained unitary variational formula, the triangle inequality, and trace-norm contractivity for positive trace-preserving maps on Hermitian inputs. All four trace-norm modules are imported by `TNLean/Analysis.lean`. | A Hermitian eigenvalue formula convenient for differentiation; matrix sign and kernel compression; the one-sided directional derivative at singular matrices; commutator cancellation in that derivative. A bundled norm structure and operator-norm duality may be useful, but are not prerequisites for the Q2 derivative if the Hermitian variational formula is proved directly. | Wolf for definitions, variational facts, and contractivity; a theorem-level perturbation source or direct finite-dimensional proof for the derivative; WMT Proposition 19 as the downstream application. |
+| **Locally integrable linear and Lindblad propagators** | Absent. Chapter 7 proves the fixed-generator semigroup law, the exponential representation, Duhamel's formula, the Dyson--Phillips expansion, and time-independent GKSL structure. | At line 164 WMT says that local integrability gives a unique solution and writes `E_{t,s} = T exp(∫ L_τ dτ)`. No construction or proof is supplied there. | Mathlib has Bochner integration, Grönwall inequalities, and ordinary differential-equation results for more regular vector fields. TNLean has `expSemigroupCLM`, fixed-generator differentiation, Duhamel bounds, Dyson--Phillips results, and time-independent Lindblad structure. No current module constructs the required evolution family for an `L¹_loc` coefficient. | Existence and uniqueness of absolutely continuous trajectories; the Volterra integral equation; identity and cocycle laws; norm and `L¹` stability bounds; approximation by step coefficients; Hermiticity, trace, positivity, and complete-positivity preservation. | A standard Carathéodory linear-ODE source or a direct finite-dimensional Volterra proof. Use Wolf only for the constant-generator specialization and WMT only for the intended notation and application. |
+| **Weak-* compact convex-valued controls and trajectory continuity** | Absent. Chapter 4 treats finite-dimensional convex optimization and semidefinite programming, not weak-* compactness of measurable controls. | Absent. WMT quantifies over locally integrable Hamiltonians but does not prove compactness of an admissible control class or continuity under weak-* convergence. | Mathlib provides `WeakDual.isCompact_closedBall`, `WeakDual.isSeqCompact_closedBall`, and `ContinuousLinearMap.lpPairing`. TNLean proves finite-dimensional compactness of convex hulls in `TNLean/Analysis/ConvexHullCompact.lean`. There is no current theorem giving weak-* compactness of the almost-everywhere convex constraint or uniform convergence of controlled trajectories. | A concrete finite-dimensional representation of the `L∞` control space in a weak dual; weak-* closedness of the pointwise convex constraint; measurable representatives; uniform trajectory bounds and equicontinuity; passage to the limit in the control-affine integral equation. | Mathlib Banach--Alaoglu and `lpPairing`, together with a standard optimal-control or functional-analysis source and a direct finite-dimensional trajectory proof. Do not cite Wolf or WMT for this step. |
+| **Degenerate Hermitian first-order perturbation** | Absent. Chapter 6, local lines 286-332, contains resolvents, contour spectral projections, and holomorphic functional calculus, but not first-order splitting inside a degenerate eigenspace. | Used in the proof of Proposition 19 at lines 1085-1089 and again near lines 1171-1175. WMT describes diagonalizing the compressed perturbation on each degenerate eigenspace and cites Kato, Section 2.6. | Mathlib and TNLean provide Hermitian spectral decompositions, eigenvalue enumerations, support projections, positive and negative parts, and extremal-eigenvalue facts. No current declaration proves first-order degenerate eigenvalue splitting or the singular trace-norm derivative. | A theorem for the first-order eigenvalue shifts of `A + εB`, or a direct convex-analytic proof of the trace-norm directional derivative that avoids constructing individual eigenvalue branches. | Verify the exact theorem in Kato or another perturbation reference before citing it in theorem documentation. A direct finite-dimensional proof is also acceptable. WMT is an application sketch, not the foundational source. |
 
----
+## Wolf source inventory
 
-## Exact Wolf source inventory
+### Trace and Schatten norms
 
-### Chapter 8: trace and Schatten norms
-
-The useful Wolf material is concentrated in
+The relevant Chapter 8 material is in
 `Notes/WolfNoteTexSource/ch08_distance_measures.tex`:
 
-- §8.1, *Norms*, lines 44-203.
-- Schatten `p`-norm and Ky Fan `k`-norm definitions: lines 63-75.
-- Monotonicity of Schatten norms: Eq. **(8.1)**, lines 77-85.
-- Trace norm `‖A‖₁ = tr |A|`: lines 86-95.
-- Theorem *Unitarily invariant norms*: lines 106-142.
-- Trace Hölder inequality: Eq. **(8.6)**, lines 144-148.
-- §8.1 paragraph *Variational characterization of norms*: lines 170-202.
-- Ky Fan variational formula: Eq. **(8.9)**.
-- Theorem *Variational ways to p-norms*: Eqs. **(8.10)-(8.13)**.
-- General dual norm: Eq. **(8.14)**.
+- Section 8.1, *Norms*, local lines 44-203;
+- Schatten `p`-norm and Ky Fan `k`-norm definitions, lines 63-75;
+- monotonicity of Schatten norms, Eq. (8.1), lines 77-85;
+- `‖A‖₁ = tr |A|`, lines 86-95;
+- Theorem 8.2, *Unitarily invariant norms*, local lines 106-142;
+- trace Hölder inequality, Eq. (8.6), lines 144-148;
+- Theorem 8.3 and the variational formulas, local lines 170-202;
+- Theorem 8.16 and Eqs. (8.79)-(8.80), local lines 898-918.
 
-This supports a static trace-norm PR.  It does not support the derivative theorem
-needed in WMT Proposition 19.
+Theorem 8.3 contains a proof sketch with an explicit ellipsis. Theorem 8.16
+contains a proof. These distinctions should remain visible in declaration
+documentation.
 
-### Chapter 7: homogeneous semigroups only
+Nothing in this material states the derivative
+
+```text
+D⁺ ‖·‖₁(X;Y)
+  = tr(sign(X)Y) + ‖P_ker(X) Y P_ker(X)‖₁
+```
+
+for singular Hermitian `X`.
+
+### Homogeneous semigroups
 
 `Notes/WolfNoteTexSource/ch07_semigroup_structure.tex` contains:
 
-- §7.1, *Dynamical semigroups*, beginning at line 36.
-- Semigroup law: Eq. **(7.1)**.
-- Constant-generator ODE: Eq. **(7.2)**.
-- **Proposition 7.1**, *From continuous semigroups to differentiable groups*,
-  lines 67-85.
-- Duhamel formula: **Lemma 7.1**, Eq. **(7.10)**.
-- Perturbation estimate: **Corollary 7.1**, Eq. **(7.12)**.
-- Dyson--Phillips series: Eq. **(7.13)**.
-- §7.2, *Quantum dynamical semigroups*, beginning at line 154.
-- **Proposition 7.2**, conditional complete positivity, Eqs. **(7.14)-(7.15)**.
-- **Proposition 7.3**, completely positive dynamical semigroups.
-- Theorem *Generators for semigroups of quantum channels*, Eqs.
-  **(7.20)-(7.23)**.
+- the semigroup law, Eq. (7.1);
+- the fixed-generator equation, Eq. (7.2);
+- the exponential representation of a continuous finite-dimensional
+  semigroup;
+- Duhamel's formula, Eq. (7.10);
+- the perturbation estimate, Eq. (7.12);
+- the Dyson--Phillips expansion, Eq. (7.13);
+- the time-independent quantum dynamical semigroup and GKSL results,
+  Eqs. (7.14)-(7.23).
 
-All of these are time-independent.  The notes do not define or construct a
-non-autonomous evolution family `E_{t,s}`.
+These results concern one fixed generator. The notes do not define a two-time
+evolution family `E_{t,s}` for a merely locally integrable coefficient.
 
-### Chapter 6: static spectral calculus, not perturbation theory
+### Static spectral calculus
 
-The relevant material is the paragraph *Resolvents* in
-`ch06_spectral_properties.tex:286-332`:
+The resolvent discussion in
+`Notes/WolfNoteTexSource/ch06_spectral_properties.tex:286-332` contains:
 
-- resolvent definition: Eq. **(6.17)**;
-- resolvent series: Eq. **(6.18)**;
-- contour spectral projection: Eq. **(6.20)**;
-- holomorphic functional calculus: Eq. **(6.21)**.
+- the resolvent, Eq. (6.17);
+- the resolvent series, Eq. (6.18);
+- the contour spectral projection, Eq. (6.20);
+- the holomorphic functional calculus, Eq. (6.21).
 
-These results are useful possible ingredients for a direct perturbation proof,
-but Wolf does not state the degenerate first-order theorem.
+These are possible ingredients for perturbation theory. They do not state the
+first-order splitting theorem used by WMT.
 
-### Chapter 4: no weak-* control theory
+### No weak-* control theory
 
-Chapter 4 §4.1 addresses finite-dimensional convex optimization and Lagrange
-or SDP duality.  It does not discuss weak-* topologies, Banach--Alaoglu,
-measurable control functions, or compactness of admissible controls.
+Chapter 4, Section 4.1 concerns finite-dimensional convex optimization,
+Lagrange duality, and semidefinite programming. It contains no Banach--Alaoglu
+theorem, `L∞` control space, relaxed-control compactness theorem, or weak-*
+continuity theorem for trajectories.
 
----
+## WMT Proposition 19 and the varying-direction issue
 
-## WMT Proposition 19 and its analytic caveat
-
-WMT Proposition 19, *Right time-derivative of the trace norm under Lindblad
-evolution*, states the exact downstream formula required in the contractivity
-argument.  Its appendix defines
+WMT Proposition 19 states that, for
+`x(t) = E_{t,s}(ρ - σ)`, the function `‖x(t)‖₁` is right differentiable and gives
+an explicit expression in an eigenbasis of `x(t)`. The appendix begins with
 
 ```text
-Δ_ε(t) = (1/ε) ∫_[t,t+ε] (-i[H(τ),x(t)] + D x(t)) dτ
+x(t+ε) - x(t) = ε Δ_ε(t) + o(ε),
 ```
 
-and uses the fixed-direction expansion
+where
+
+```text
+Δ_ε(t) = (1/ε) ∫_[t,t+ε] (-i[H(τ),x(t)] + D x(t)) dτ.
+```
+
+It then applies the fixed-direction expansion
 
 ```text
 ‖x + εΔ‖₁ = ‖x‖₁
@@ -160,184 +192,186 @@ and uses the fixed-direction expansion
 
 with `R_{x,Δ}(ε) = o(ε)` for fixed `x` and `Δ`.
 
-For direct formalization, an extra justification is needed: in the WMT
-application, `Δ = Δ_ε(t)` itself depends on `ε`.  Under only local integrability
-of `H`, the averages `(1/ε)∫ H` need not be uniformly bounded at every time.
-Thus an `o(ε)` estimate proved only for each fixed direction cannot simply be
-substituted without a uniform remainder estimate.  The preceding replacement
-of the varying state `x(τ)` by the frozen state `x(t)` also requires a careful
-argument at this regularity.
+The direction in the application is `Δ_ε(t)`, which depends on `ε`. Local
+integrability of `H` does not give a uniform bound on every interval average
+`ε⁻¹∫_[t,t+ε] H(τ)dτ` at every time. A remainder estimate established only for
+each fixed direction cannot be substituted into this varying family without
+an additional uniformity argument. Freezing `x(τ)` at `x(t)` also requires a
+regularity estimate compatible with the stated hypotheses.
 
-A robust Lean proof should use one of the following approaches:
+A formal proof can avoid this gap in several ways:
 
-1. first prove the result for bounded piecewise-continuous controls and later
-   extend it by approximation;
-2. move to an interaction picture, removing the Hamiltonian term exactly by
-   unitary conjugation before differentiating the trace norm; or
-3. prove a perturbation remainder estimate uniform over the actual family of
-   averaged directions.
+1. prove the formula first for bounded piecewise-continuous controls and pass to
+   the required class by approximation;
+2. pass to an interaction picture, where unitary invariance removes the
+   Hamiltonian evolution before the trace norm is differentiated;
+3. prove a perturbation remainder estimate uniform on the bounded family of
+   directions that actually occurs;
+4. use the convex directional derivative of the trace norm together with an
+   absolutely continuous chain rule whose hypotheses are verified directly.
 
-Kato supplies the fixed finite-dimensional degenerate perturbation theorem, but
-not this `ε`-dependent-direction passage automatically.
-
----
+This caveat concerns the analytic passage to the time derivative. It does not
+invalidate the finite-dimensional directional-derivative formula itself.
 
 ## Current TNLean inventory
 
-The time-independent Wolf Chapter 7 infrastructure is already substantially
-present.  In addition, the parallel feature branch `feat/analysis-schatten-one`
-contains a v4.32-compatible first slice of the trace-norm API:
+The current `origin/main` inventory is as follows.
 
-- `TNLean/Analysis/SchattenNorm.lean` on `feat/analysis-schatten-one`
-  - `Matrix.schattenOneNorm` and `Matrix.traceNorm`;
-  - finite-support, rank-range, and `Fin D` singular-value sum formulas;
-  - nonnegativity, zero characterization, and positivity away from zero;
-  - compile-tested after cherry-picking onto Lean/Mathlib v4.32.0;
-  - not yet present on upgraded `origin/main`, and not yet a complete norm API.
-- `TNLean/Channel/Semigroup/Basic.lean`
-  - `expSemigroupCLM`;
-  - `hasDerivAt_expSemigroupCLM`;
-  - `continuousDynSemigroup_eq_exp` (Wolf Proposition 7.1).
-- `TNLean/Channel/Semigroup/Perturbation.lean`
-  - `duhamel_formula`;
-  - `perturbation_bound`;
-  - Dyson--Phillips terms, convergence, remainder estimates, and series identity.
-- `TNLean/Channel/Semigroup/LindbladForm/`
-  - conditional complete positivity and time-independent GKSL infrastructure.
-- `TNLean/Channel/Semigroup/HamiltonianIndependentContractivity.lean`
-  - explicitly records that it formalizes only algebraic companions to WMT and
-    not the full analytic conjecture;
-  - references Proposition 19 but does not define the trace norm or its derivative.
-- `TNLean/Analysis/ConvexHullCompact.lean`
-  - finite-dimensional compactness of the convex hull of a compact set.
-- `TNLean/Algebra/HermitianHelpers.lean`
-  - static extremal-eigenvalue and spectral-shift tools, not perturbation theory.
+### Trace norm
 
-The static Chapter 7 material therefore should not be duplicated in the Q2
-analytic PR series.
+- `TNLean/Analysis/SchattenNorm.lean`
+  - defines `Matrix.schattenOneNorm` and `Matrix.traceNorm`;
+  - proves finite-support and finite-dimensional singular-value sum formulas;
+  - proves nonnegativity, definiteness, and strict positivity away from zero;
+  - gives the sum of square roots of the eigenvalues of `A†A`.
+- `TNLean/Analysis/TraceNormAbs.lean`
+  - proves `Matrix.traceNorm_eq_re_trace_abs`;
+  - proves scalar homogeneity;
+  - proves left, right, and two-sided unitary invariance.
+- `TNLean/Analysis/TraceNormVariational.lean`
+  - proves the upper bound and attainment in Wolf's unitary variational
+    formula;
+  - identifies the trace norm as the corresponding supremum;
+  - proves `Matrix.traceNorm_add_le`.
+- `TNLean/Analysis/TraceNormContractivity.lean`
+  - proves the positive/negative-part formula for Hermitian matrices;
+  - proves trace-norm contraction under positive trace-preserving maps;
+  - proves trace-distance contraction for two positive semidefinite inputs.
 
----
+These modules were merged through PRs #4031, #4051, #4052, #4073, and #4078
+and are imported by the generated `TNLean/Analysis.lean` aggregator. The audit
+must not describe them as an unmerged or incomplete feature-branch snapshot.
 
-## Recommended PR decomposition
+### Fixed-generator semigroups
 
-### PR 1: rebase and complete the general matrix trace norm -- the genuine Wolf PR
+- `TNLean/Channel/Semigroup/Basic.lean` contains `expSemigroupCLM`, its
+  derivative, and the exponential representation of continuous finite-
+  dimensional semigroups.
+- `TNLean/Channel/Semigroup/Perturbation.lean` contains Duhamel's formula,
+  perturbation bounds, and the Dyson--Phillips expansion.
+- `TNLean/Channel/Semigroup/LindbladForm/` and related modules contain the
+  time-independent positivity and GKSL theory.
+- `TNLean/Channel/Semigroup/HamiltonianIndependentContractivity.lean` proves
+  algebraic facts surrounding WMT's question. Its module documentation
+  explicitly excludes the full analytic HIC theorem.
 
-Primary source: Wolf Chapter 8 §8.1, supplemented by Mathlib singular values.
-Start from the already reviewed prototype on `feat/analysis-schatten-one`; rebase
-or cherry-pick it onto the Lean/Mathlib v4.32 branch rather than redefining the
-foundational declarations.
+### Compactness and spectral ingredients
 
-The existing branch already supplies `Matrix.traceNorm`, singular-value sum
-expansions, nonnegativity, and definiteness.  The completed target API should
-include declarations morally equivalent to:
+- `TNLean/Analysis/ConvexHullCompact.lean` proves compactness of a convex hull
+  in a finite-dimensional real normed space. It does not prove compactness of
+  a set of measurable controls.
+- `TNLean/Algebra/HermitianHelpers.lean` contains static extremal-eigenvalue and
+  spectral-shift results, not first-order perturbation theory.
+- `TNLean/Algebra/PosSemidefSupport.lean` supplies support projections and
+  kernel absorption. These results are likely reusable in the singular
+  directional-derivative proof.
 
-```lean
-Matrix.traceNorm
-Matrix.traceNorm_eq_sum_singularValues
-Matrix.traceNorm_eq_trace_abs
-Matrix.traceNorm_eq_sum_abs_eigenvalues_of_isHermitian
-Matrix.traceNorm_unitary_mul
-Matrix.traceNorm_mul_unitary
-Matrix.traceNorm_conj_unitary
-Matrix.traceNorm_dual_opNorm
-Matrix.abs_trace_mul_le_traceNorm_mul_opNorm
-Matrix.continuous_traceNorm
-```
+## Recommended contribution sequence
 
-This should be a general matrix norm, not a function defined only on Hermitian
-matrices.
+### PR 1: Hermitian trace-norm spectral and sign formulas
 
-### PR 2: degenerate perturbation and the trace-norm directional derivative
-
-Primary source: Kato, Chapter II §§5-6.  WMT Proposition 19 is the target
-application, not the foundational source.
-
-Desired endpoints include:
+Build directly on `SchattenNorm`, `TraceNormAbs`, `TraceNormVariational`, and
+`PosSemidefSupport`. Add only the results needed to express the derivative on a
+Hermitian matrix:
 
 ```lean
-Matrix.IsHermitian.firstOrder_eigenvalues_add_smul
-Matrix.IsHermitian.hasRightDerivAt_traceNorm_add_smul
-Matrix.trace_sign_commutator_eq_zero
-Matrix.traceNorm_rightDerivative_commutator_add
+Matrix.IsHermitian.traceNorm_eq_sum_abs_eigenvalues
+Matrix.IsHermitian.sign
+Matrix.IsHermitian.kernelProj
+Matrix.IsHermitian.trace_sign_mul
+Matrix.IsHermitian.traceNorm_eq_max_orderInterval
 ```
 
-The principal formula is
+The exact declaration names may follow the surrounding TNLean conventions.
+The mathematical content should identify the sign and kernel projection by
+Hermitian functional calculus and prove the order-interval variational formula
+used by the Q2 source proof.
+
+### PR 2: one-sided trace-norm directional derivative
+
+Prove, for Hermitian `X` and `Y`,
 
 ```text
-D⁺ ‖X‖₁[Δ]
-  = re (tr (sign(X) Δ)) + ‖P_ker(X) Δ P_ker(X)‖₁.
+D⁺ ‖·‖₁(X;Y)
+  = Re tr(sign(X)Y) + ‖P_ker(X) Y P_ker(X)‖₁.
 ```
+
+Then prove the commutator cancellation and the specialization to a Lindblad
+direction. Before citing Kato in declaration documentation, identify the exact
+edition, theorem, and hypotheses. If the proof instead uses the variational
+formula and finite-dimensional convex analysis, cite that source directly.
 
 ### PR 3: locally integrable linear propagators
 
-Construct the finite-dimensional Volterra/Peano--Baker propagator for
-`L ∈ L¹_loc` and prove:
+For finite-dimensional `L ∈ L¹_loc`, construct the evolution family and prove:
 
-- existence and uniqueness of the absolutely continuous trajectory;
-- the integral equation;
+- existence and uniqueness of absolutely continuous trajectories;
+- the Volterra integral equation;
 - `E_{s,s} = I` and the cocycle law;
-- norm bounds and stability with respect to `L¹` perturbations.
+- exponential norm bounds;
+- stability under `L¹` perturbations.
 
-This is not a Wolf PR.
+This contribution is not sourced from Wolf.
 
-### PR 4: locally integrable Lindblad propagators are CPTP
+### PR 4: locally integrable Lindblad propagators
 
-Build on PR 3 and the existing constant-generator GKSL API.  Approximate by
-stepwise-constant generators and prove closure of Hermiticity preservation,
-trace preservation, positivity, and complete positivity.
+Use stepwise-constant approximation and the existing fixed-generator Lindblad
+theory to prove preservation of Hermiticity, trace, positivity, and complete
+positivity. Apply `Matrix.traceNorm_map_le_of_positive_of_tracePreserving` to
+obtain trace-norm contraction on Hermitian differences. This avoids reproving
+the static contraction theorem inside the propagator development.
 
 ### PR 5: weak-* compact admissible controls
 
-Define bounded controls whose values lie almost everywhere in a fixed compact
-convex hull.  Prove weak-* sequential compactness and weak-* closedness of the
-pointwise constraint using Mathlib's `WeakDual` Banach--Alaoglu API plus the
-necessary `L∞` integration bridge.
+Represent the finite-dimensional `L∞` control space in a weak dual, prove
+weak-* sequential compactness of bounded controls, and prove weak-* closedness
+of the almost-everywhere compact convex constraint. The proof should state
+precisely where `ContinuousLinearMap.lpPairing` and the weak-dual
+Banach--Alaoglu theorems are used.
 
 ### PR 6: weak-* continuity of controlled trajectories
 
-For the finite-dimensional control-affine Lindblad equation, prove that
-weak-* convergence of bounded controls implies uniform convergence of the
-corresponding trajectories or propagators on compact time intervals.  The proof
-should pass to the limit in the integral equation and use the stability and
-Gronwall infrastructure from PR 3.
+For a bounded finite-dimensional control-affine equation, prove that weak-*
+convergence of controls implies uniform convergence of the corresponding
+trajectories on compact intervals. Pass to the limit in the Volterra equation
+and use the bounds from PR 3.
 
-### PR 7: Q2 assembly
+### PR 7: proof of uniform Hamiltonian-independent contractivity
 
-Extract a convergent admissible-control subsequence, pass to the trajectory
-limit, and apply the trace-norm/contractivity theorem.
+Combine the compactness theorem, continuity of trajectories, the trace-norm
+directional derivative, and the algebraic jump-generation argument to prove
+the Q2 theorem. The proof should use the total weighted jump family at singular
+matrices, because the trace-norm directional derivative is not linear in the
+direction.
 
----
+## Attribution policy
 
-## Source policy for theorem documentation
-
-Use the following attribution discipline in Lean docstrings and PR descriptions:
-
-- **Wolf:** trace/Schatten norm definitions and variational duality; homogeneous
-  semigroups; Duhamel/Dyson formulas; time-independent GKSL structure.
-- **WMT:** Proposition 19's target derivative formula and its role in the driven
-  Lindblad contractivity argument.
-- **Kato:** degenerate first-order Hermitian eigenvalue perturbation.
-- **External standard ODE source or direct proof:** locally integrable
-  propagators.
-- **Mathlib Banach--Alaoglu plus external control/functional analysis or direct
-  proof:** weak-* compactness and control-to-trajectory continuity.
-
-Do not cite Wolf for the non-autonomous propagator, weak-* control compactness,
-or degenerate perturbation theorem.  Do not cite WMT's time-ordered exponential
-sentence as if it were a proof of locally integrable propagator existence.
-
----
+- Cite **Wolf Chapter 8** for the trace-norm definition, the absolute-value and
+  variational descriptions, and Theorem 8.16 contractivity. Distinguish the
+  Section 8.1 proof sketches from results with complete proofs.
+- Cite **Wolf Chapter 7** only for fixed-generator semigroups, Duhamel and
+  Dyson--Phillips formulas, and time-independent GKSL structure.
+- Cite **WMT Proposition 19** for the target derivative formula and its role in
+  the driven contractivity argument. Do not cite the time-ordered exponential
+  sentence as a proof of propagator existence.
+- Cite **Kato or another perturbation source** only after matching an exact
+  theorem to the formal statement. WMT's citation to Kato, Section 2.6, is not
+  by itself a theorem-level source check.
+- Cite **Mathlib Banach--Alaoglu and `lpPairing` results**, together with an
+  external control source or a direct proof, for weak-* compactness and
+  trajectory continuity.
+- Describe current TNLean support by modules on `origin/main`. Do not recommend
+  restoring obsolete feature-branch commits whose content has already merged.
 
 ## Final status
 
 | Question | Answer |
 |---|---|
-| Are all four analytic ingredients explicitly in Wolf? | **No.** |
-| Is Wolf sufficient as the sole faithful formalization source? | **No.** |
-| Did Mathlib v4.32 add any of the four missing turnkey APIs? | **No.** It adds useful weak-dual transport infrastructure, but no trace norm, non-autonomous propagator, admissible-control compactness theorem, or degenerate eigenvalue perturbation theorem. |
-| Is there a useful Wolf-first PR? | **Yes:** rebase and complete the existing `feat/analysis-schatten-one` prototype into the general matrix trace norm and Chapter 8 §8.1 variational API. |
-| Does the existing trace-norm prototype survive the v4.32 upgrade? | **Yes.** Its implementation commits compile successfully when cherry-picked onto upgraded `origin/main`. |
-| Is the existing Wolf Chapter 7 semigroup API reusable? | **Yes:** constant-generator semigroups, Duhamel/Dyson, and GKSL are already substantially formalized. |
-| Must locally integrable propagator existence be proved independently? | **Yes.** WMT only states it. |
-| Must weak-* control compactness and trajectory continuity be developed independently? | **Yes.** |
-| What is the primary source for degenerate perturbation? | **Kato, Chapter II §§5-6**, followed by a direct trace-norm corollary. |
+| Are all four analytic ingredients explicitly proved in Wolf? | **No.** Wolf covers the static trace norm and fixed-generator semigroups, but not the singular derivative, locally integrable propagators, weak-* control compactness, or degenerate first-order perturbation. |
+| Is the trace-norm foundation already on the target branch? | **Yes.** `SchattenNorm`, `TraceNormAbs`, `TraceNormVariational`, and `TraceNormContractivity` are present on current `origin/main` and imported by `TNLean/Analysis.lean`. |
+| Which trace-norm results are already formalized? | The singular-value definition, `Re tr |A|`, scalar homogeneity, unitary invariance, the attained unitary variational formula, the triangle inequality, and contractivity of positive trace-preserving maps on Hermitian inputs. |
+| What trace-norm result remains central to Q2? | The one-sided directional derivative at a singular Hermitian matrix, including the compressed kernel term and commutator cancellation. |
+| Does Mathlib provide the missing non-autonomous or control theorem directly? | **No result was found** for the required locally integrable evolution family, convex-valued weak-* compact controls, or weak-* continuity of trajectories. Mathlib does provide Bochner integration, Grönwall inequalities, weak-dual Banach--Alaoglu, and `lpPairing`. |
+| Does WMT prove locally integrable propagator existence? | **No.** It states uniqueness and writes a time-ordered exponential at source line 164. |
+| Is WMT Proposition 19 sufficient as a foundational derivative proof? | **Not without an additional regularity argument.** Its appendix inserts an `ε`-dependent averaged direction into a remainder estimate stated for a fixed direction. |
+| What should the next contribution do? | Start from the trace-norm modules already on `origin/main` and prove the Hermitian sign, kernel-compression, and one-sided directional-derivative results. |
