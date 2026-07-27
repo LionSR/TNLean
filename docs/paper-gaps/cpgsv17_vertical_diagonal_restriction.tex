@@ -81,20 +81,20 @@ More importantly, even with positivity available, the proposition constructs a
 new vertical basis of normal tensors rather than reusing the diagonal
 restrictions of the horizontal basis.
 
-\section{The corrected formal target}
+\section{The corrected formal theorem}
 
-The theorem currently proved assumes the normalized BNT-refined horizontal
-form \path{MPOTensor.IsHorizontalCF}.  In particular, the retained sectors
-have full horizontal bond dimension, every copy weight is nonzero, all copy
-weights have modulus at most one, at least one has modulus one, and the normal
-blocks are grouped over BNT representatives.  This
-is strictly stronger than the literal CPSV canonical form in
-Proposition~4.13.  The constructions summarized below are complete on this
-stronger surface; the literal canonical-form implication remains open.
+The literal theorem now proved assumes the CPSV canonical form of
+Proposition~4.13 together with the MPDO positivity hypothesis and concludes
+vertical canonical form.\footnote{Formal declaration:
+\leanid{MPOTensor.verticalCF\_of\_cpsvCanonicalForm} in
+\doclink{TNLean/MPS/MPDO/CPSVVerticalCanonicalForm}.}
+A separate theorem retains the normalized BNT-refined horizontal hypothesis
+\path{MPOTensor.IsHorizontalCF} for arguments that already use that stronger
+form.\footnote{Formal declaration:
+\leanid{MPOTensor.verticalCF\_of\_horizontalCF} in
+\doclink{TNLean/MPS/MPDO/VerticalCanonicalForm}.}
 
-A source-faithful proof of Proposition~4.13 should begin with both horizontal
-canonical form and the MPDO positivity hypothesis.  It should then formalize the
-three stages visible in the source:
+The proof follows the three stages visible in the source:
 \begin{enumerate}
     \item use positivity and the first-site insertion lemma to rule out one-sided
       invariant projections in the vertical direction;
@@ -116,6 +116,10 @@ restriction remains useful as an auxiliary identity.  It cannot supply the
 normal blocks of the vertical canonical form.  In particular, Newton--Girard
 identities for scalar weights address only the multiplicity coefficients; they
 cannot restore matrix directions discarded by the restriction $(i,j)\mapsto(i,i)$.
+The vertical phase-class grouping and the resulting positive diagonal
+coefficients are described in
+\path{cpgsv17_vertical_cf_grouping.tex}; they do not arise from diagonal
+restriction.
 
 The first operator identity at lines~1873--1887 is now formalized: if $H\geq0$,
 $P=P^*$, and $PH=PHP$, then
@@ -220,12 +224,18 @@ gives the displayed vertical identity and exact reconstruction.  The source
 prints the former; the latter is implicit in its assertion that the vertical
 tensor is itself in canonical form and is not displayed as a separate formula.
 
+The corresponding constructions under literal CPSV canonical form are
+summarized in \path{cpgsv17_vertical_cf_grouping.tex}.  They give
+\path{MPOTensor.verticalCF_of_cpsvCanonicalForm} without using diagonal
+restriction.
+
 \paragraph{Verdict.}
-The horizontal-to-vertical implication is complete under the normalized
-BNT-refined hypothesis \path{MPOTensor.IsHorizontalCF}, which is strictly
-stronger than the literal CPSV canonical form of Proposition~4.13.  The
-literal theorem remains open.  The diagonal-restriction route remains a false
-strengthening and plays no part in the proved restricted result.
+Literal Proposition~4.13 is complete, and the stronger theorem under
+\path{MPOTensor.IsHorizontalCF} remains available separately.  Neither proof
+uses diagonal restriction to obtain the normal vertical representatives; that
+route remains false.  Proposition~4.13 does not settle the positive-fusion
+problem of Appendix~C.4 or the renormalization fixed-point characterization of
+Theorem~4.14.
 
 \bibliographystyle{alpha}
 \bibliography{references}

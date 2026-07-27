@@ -1,5 +1,10 @@
 # Scouting Report: arXiv:1606.00608 — Sections 3, 4, Appendices B–D
 
+> [!IMPORTANT]
+> This report is a historical scouting snapshot dated 2026-03-25. For the
+> maintained paper-to-code coverage record, see
+> [`2026-05-08-mps-ft-paper-coverage.md`](2026-05-08-mps-ft-paper-coverage.md).
+
 **Paper**: "Matrix Product Density Operators: Renormalization Fixed Points and Boundary Theories"
 **Authors**: Cirac, Perez-Garcia, Schuch, Verstraete (2017, Ann. Phys. 378, 100–149)
 **Date of scouting**: 2026-03-25

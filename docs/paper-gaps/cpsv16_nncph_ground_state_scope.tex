@@ -362,10 +362,12 @@ Its two-site ground space is spanned by $|01\rangle$ and $|10\rangle$.  The
 corresponding one-dimensional sectors have only the edges $0\to1$ and
 $1\to0$, so the self-loop sum is zero, whereas the project-local one-site
 ground space has dimension $d=2$.  Thus the project-local result is recorded
-separately, while Beigi's
-ordered-cycle theorem remains stated for $N\geq2$.  The source-level one-site
-convention remains open in \ghissue{4400}; \ghissue{4655} records the current
-project-local boundary.
+separately, while Beigi's ordered-cycle theorem is proved for every
+source-defined length $N\geq2$, including the two opposite orientations at
+$N=2$.  The resolved source boundary is recorded in \ghissue{4400}: no cited
+source defines the two-site operator $H_1$ or a convention for the coincident
+periodic edge at $N=1$.  \ghissue{4655} records the separate project-local
+boundary.
 
 The remaining finite graph comparison in Beigi's Section~IV is now proved
 without an axiom.  For a finite directed graph with nonnegative integral edge weights,
@@ -461,9 +463,10 @@ parent Hamiltonian.  Its Euclidean-space form is recorded by
 \hspace{0pt}\leanid{loopProductState_mem_parentHamiltonianGroundSpaceES}.
 The proof uses Beigi's local edge-ground-space condition from source
 lines 487--500 and the positive-loop specialization at lines 602--606.  The
-restriction $N\geq2$ is the nondegenerate range of the two-site periodic
-parent Hamiltonian used here; the length-one convention remains part of
-\ghissue{4400}.  At every positive length the loop vectors are nonzero by
+restriction $N\geq2$ is the source-defined range of the two-site periodic
+parent Hamiltonian used here.  As recorded by the resolved clarification in
+\ghissue{4400}, no source-defined coincident-edge convention extends this
+statement to $N=1$.  At every positive length the loop vectors are nonzero by
 \leanid{MPSTensor.BeigiSectorGraphData.}
 \hspace{0pt}\leanid{loopProductStateES_ne_zero}, and distinct loop vectors are
 orthogonal by
