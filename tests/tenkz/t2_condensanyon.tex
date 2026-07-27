@@ -6,26 +6,34 @@
 % connected by TWO parallel red string operators (one per sheet) that run
 % diagonally across the double layer, dressing the crossed bonds with
 % small blue matrices.
-% Declarative attempt: tenkzplanes (the ket-over-bra oblique double layer)
-% with a \tnedge chain approximating the ket-sheet string as straight
-% distinguished-edge segments along the diagonal.
-% Honest gaps / blockers: \tnsite has no marking slot, so the anyonic
-% endpoint pairs cannot render as marked (blue) sites; \tnedge reaches
-% only the ket sheet, so the second (bra-sheet) string cannot be stated;
-% no lattice string primitive (ordered cell path -> smooth over-bond
-% curve with dressing marks), so the string renders as a kinked chain of
-% straight plaquette diagonals.
+% Declarative reading: tenkzplanes is the ket-over-bra oblique double layer.
+% Per-sheet coordinates repeat the same marked path on sheet 1 (ket) and
+% sheet 0 (bra), as the source repeats every segment and marker at y=+/-0.2.
 \documentclass[varwidth=19cm, border=6pt]{standalone}
 \usepackage{amsmath, amssymb}
 \usepackage{tenkz}
 \begin{document}
 
 \[
-  \begin{tenkzplanes}[rows=4, cols=4]
-    % the ket-sheet string a ... abar along the main diagonal
-    \tnedge{(4,1)-(3,2)}
-    \tnedge{(3,2)-(2,3)}
-    \tnedge{(2,3)-(1,4)}
+  \begin{tenkzplanes}[rows=6, cols=4, plane slant=0.30, sheet sep=0.25]
+    \tnsite[role=marked, size=l]{(1,2,1)}
+    \tnsite[role=marked, size=s]{(2,2,1)}
+    \tnsite[role=marked, size=s]{(3,2,1)}
+    \tnsite[role=marked, size=s]{(4,2,1)}
+    \tnsite[role=marked, size=l]{(5,3,1)}
+    \tnsite[role=marked, size=l]{(1,2,0)}
+    \tnsite[role=marked, size=s]{(2,2,0)}
+    \tnsite[role=marked, size=s]{(3,2,0)}
+    \tnsite[role=marked, size=s]{(4,2,0)}
+    \tnsite[role=marked, size=l]{(5,3,0)}
+    \tnedge[role=operator]{(1,2,1)-(2,2,1)}
+    \tnedge[role=operator]{(2,2,1)-(3,2,1)}
+    \tnedge[role=operator]{(3,2,1)-(4,2,1)}
+    \tnedge[role=operator]{(4,2,1)-(5,3,1)}
+    \tnedge[role=operator]{(1,2,0)-(2,2,0)}
+    \tnedge[role=operator]{(2,2,0)-(3,2,0)}
+    \tnedge[role=operator]{(3,2,0)-(4,2,0)}
+    \tnedge[role=operator]{(4,2,0)-(5,3,0)}
   \end{tenkzplanes}
 \]
 
