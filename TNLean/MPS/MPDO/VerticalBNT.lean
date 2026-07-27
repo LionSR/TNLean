@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.CanonicalForm.NormalTensorGauge
-import TNLean.MPS.MPDO.SectorTrace
+import TNLean.MPS.MPDO.SectorCompressionSeparation
 import TNLean.MPS.MPDO.VerticalSpectral
 
 /-!
@@ -52,12 +52,9 @@ variable {d D : ℕ}
 /-- A nonzero vertical corner of a tensor in normalized BNT-refined horizontal
 form has a nonzero first-site sector compression at some chain length.
 
-If every compression by `P` vanished, their matrix entries would say that the
-two-sided first-site insertion by `P` has the same matrix product vectors as
-zero.  Lemma L for the BNT-refined horizontal form would then make the inserted
-tensor itself zero, forcing every corner $P\widetilde M_vP$ to vanish.  This is
-the separation assertion used in the proof of Proposition 4.13 of
-arXiv:1606.00608, line 1898.
+This is the separation assertion used in the proof of Proposition 4.13 of
+arXiv:1606.00608, line 1898.  It follows from Lemma L for the BNT-refined
+horizontal form, Appendix C.3, lines 1835--1858.
 
 **Scope restriction (BNT-refined horizontal form):** `IsHorizontalCF` is
 stronger than the literal CPSV canonical form; see
@@ -67,40 +64,8 @@ theorem IsHorizontalCF.exists_sectorCompression_ne_zero_of_corner
     (P : Matrix (Fin d) (Fin d) ℂ)
     (hcorner : ∃ v, P * verticalTensor M v * P ≠ 0) :
     ∃ N, sectorCompression M P N ≠ 0 := by
-  by_contra hnone
-  simp only [not_exists, not_not] at hnone
-  have hAct : MPSTensor.FirstSiteActionAgree M.toMPSTensor
-      (MPSTensor.ketLeftBraRightAction P) 0 := by
-    intro N ρ
-    rw [MPSTensor.ketLeftBraRightAction_mpv]
-    simp only [Matrix.zero_apply, zero_mul, Finset.sum_const_zero]
-    have hentry := Matrix.ext_iff.mpr (hnone N)
-      (Fin.cons (ρ 0).divNat fun n => (ρ (Fin.succ n)).divNat)
-      (Fin.cons (ρ 0).modNat fun n => (ρ (Fin.succ n)).modNat)
-    rw [sectorCompression_def, mul_firstSiteMatrix_apply] at hentry
-    simp only [firstSiteMatrix_mul_apply] at hentry
-    simp only [Fin.cons_zero, Function.comp_def, Fin.cons_succ,
-      Matrix.zero_apply] at hentry
-    rw [← hentry]
-    simp only [Finset.sum_mul]
-    exact Finset.sum_comm
-  have hInserted := hHorizontal.insertedTensor_eq_of_firstSiteActionAgree M hAct
-  have hTensor : ((M.ketLeftMul P).braRightMul P).toMPSTensor = 0 := by
-    rw [← insertedTensor_ketLeftBraRightAction_toMPSTensor]
-    rw [hInserted]
-    ext v a b
-    simp [MPSTensor.insertedTensor]
-  have hMzero : (M.ketLeftMul P).braRightMul P = 0 := by
-    funext i j
-    have hij := congrFun hTensor (finProdFinEquiv (i, j))
-    simpa [toMPSTensor] using hij
-  obtain ⟨v, hv⟩ := hcorner
-  apply hv
-  have hv0 : verticalTensor ((M.ketLeftMul P).braRightMul P) v = 0 := by
-    rw [hMzero]
-    rfl
-  rw [verticalTensor_braRightMul, verticalTensor_ketLeftMul] at hv0
-  exact hv0
+  exact exists_sectorCompression_ne_zero_of_corner_of_insertedTensor_eq M
+    (hHorizontal.insertedTensor_eq_of_firstSiteActionAgree M) P hcorner
 
 /-- A nonzero normal representative gives a nonzero physical range corner
 through an exact gauge-corner identity.
