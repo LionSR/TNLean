@@ -75,8 +75,8 @@
     $\mu_{j,q}^{M}$. It yields $r\geq1$ such that
     $c_j^{(Mr)}=\sum_q(\mu_{j,q}^{M})^r\neq0$.
     Since $Mr-1\geq L_0$, the fixed-length argument applies with
-    $L=Mr-1$. Finally, equality of positive-length MPV families transports the
-    first-site hypothesis to the sector-decomposition tensor.
+    $L=Mr-1$. Finally, equality of the positive-length MPV families gives the
+    first-site hypothesis for the sector-decomposition tensor.
 \end{proof}
 
 \begin{definition}[Direct sum with one marked letter]
@@ -282,6 +282,76 @@
     (\ref{eq:cpsv_retained_first_site_action}).
 \end{proof}
 
+% Source anchors: CPSV16 Appendix C.3, lines 1835--1858, and
+% Proposition 4.13, lines 1873--1887.
+\begin{theorem}[Original-coordinate marked Lemma L]
+    \label{thm:cpsv_original_coordinate_marked_lemma_l}
+    \lean{MPSTensor.trace_marked_mul_evalWord_of_coisometry_reconstruction}
+    \lean{MPSTensor.linearMarkedTensor_coisometry_reconstruction}
+    \lean{MPSTensor.trace_linearMarkedTensor_mul_evalWord_of_coisometry_reconstruction}
+    \lean{MPSTensor.CPSVCanonicalFormData.ActiveBNTRefinement.%
+        linearMarkedTensor_groupedTensor_eq_groupedMarkedTensor}
+    \lean{MPSTensor.CPSVCanonicalFormData.ActiveBNTRefinement.%
+        linearMarkedTensor_eq_of_trace_agree}
+    \lean{MPSTensor.IsCPSVCanonicalForm.linearMarkedTensor_eq_of_trace_agree}
+    \leanok
+    \uses{thm:cpsv_canonical_form_active_bnt_refinement,
+        thm:cpsv_full_coordinate_marked_trace_identity,
+        thm:cpsv_retained_representative_grouped_lemma_l}
+    Let $A$ be in literal CPSV canonical form. For canonical-form data and
+    its active BNT refinement, write
+    \begin{align}
+        A^i&=V^\dagger B^iV,
+        \notag\\
+        VV^\dagger&=\Id.
+        \label{eq:cpsv_original_coisometry_reconstruction}
+    \end{align}
+    where $B^i=GT_{\mathrm{grp}}^iG^{-1}$, $G$ is the listed block gauge,
+    and $T_{\mathrm{grp}}$ retains every inactive listed coordinate with
+    weight zero. If marked matrices satisfy $C=V^\dagger EV$, then for every
+    word $w$, including the empty word,
+    \begin{align}
+        \tr(CA^w)&=\tr(EB^w).
+        \label{eq:cpsv_original_marked_trace}
+    \end{align}
+    The marked matrix makes the closed chain nonempty; no equality of
+    unmarked empty-word matrix product vectors is asserted.
+
+    For a linear physical mark $f$, the linear marking of
+    $T_{\mathrm{grp}}$ is exactly its full grouped marked tensor. Each active
+    copy $(j,q)$ carries
+    $\lambda_{j,q}f(C_j)$, where
+    $\lambda_{j,q}=\nu_{k(j,q)}\zeta_{k(j,q)}$, while every inactive marked
+    block is zero. For two linear marks $f$ and $g$, put
+    $F_A^u=\sum_i f_{ui}A^i$ and $G_A^u=\sum_i g_{ui}A^i$. If
+    \begin{align}
+        \tr\!\left(F_A^uA^w\right)
+        &=\tr\!\left(G_A^uA^w\right)
+        \label{eq:cpsv_original_linear_marked_agreement}
+    \end{align}
+    for every marked letter $u$ and every word $w$, then $F_A=G_A$ on the
+    original bond space.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:cpsv_full_coordinate_marked_trace_identity,
+        thm:cpsv_retained_representative_grouped_lemma_l}
+    Induction on $w$ in (\ref{eq:cpsv_original_coisometry_reconstruction})
+    gives
+    $CA^w=V^\dagger EB^wV$. Cyclicity of trace and $VV^\dagger=\Id$ give
+    (\ref{eq:cpsv_original_marked_trace}). Linearity of the physical mark
+    gives the grouped marked tensor, with inactive blocks killed by their
+    zero weights.
+
+    Apply (\ref{eq:cpsv_original_marked_trace}) to both sides of
+    (\ref{eq:cpsv_original_linear_marked_agreement}), remove the block gauge
+    by cyclicity of trace, and use
+    Theorem~\ref{thm:cpsv_retained_representative_grouped_lemma_l} on the
+    active representatives. The resulting equality of the full grouped
+    marked tensors, followed by
+    (\ref{eq:cpsv_original_coisometry_reconstruction}), gives $F_A=G_A$.
+\end{proof}
+
 \begin{definition}[First-site action on a physical block]
     \label{def:first_site_action_physical_blocking}
     \lean{MPSTensor.firstSiteActionOnBlock}
@@ -307,7 +377,7 @@
     \leanok
     \uses{def:first_site_action_physical_blocking, def:blocked_tensor,
         def:l_blk_injective}
-    This auxiliary statement supplies the transport needed to combine the
+    This auxiliary statement supplies the identity needed to combine the
     block-injectivity argument
     \cite[lines~318--345]{Cirac2016MPDO_arXiv} with Appendix~C.3, Lemma~L
     \cite[lines~1835--1858]{Cirac2016MPDO_arXiv}.
@@ -443,7 +513,7 @@
     resulting injective tensors gives pair trace separation at original
     length $6p$. The
     bijection between blocked words of length $6$ and original words of length
-    $6p$ transports this to pair trace separation for the $p$-blocked
+    $6p$ gives pair trace separation for the $p$-blocked
     representatives. The preceding selector argument then applies verbatim
     to $P^{[p]}$.
 
