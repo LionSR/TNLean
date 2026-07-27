@@ -24,6 +24,13 @@ def _is_int(value: str) -> bool:
     return _parse_int(value) is not None
 
 
+def _is_picture_id(value: str) -> bool:
+    """Dialect pictures use integer ids; the kernel prefixes its own with k."""
+    if value.startswith("k"):
+        return _is_int(value[1:])
+    return _is_int(value)
+
+
 def _is_number(value: str) -> bool:
     return NUMBER_RE.fullmatch(value) is not None
 
@@ -78,9 +85,9 @@ def _any(value: str) -> bool:
 # Numeric slots are validated strictly: they are cell/row coordinates, and
 # a coordinate that is not an integer addresses nothing.
 FIELD_VALIDATORS: dict[str, dict[str, Callable[[str], bool]]] = {
-    "picture": {"id": _is_int, "lang": _any},
+    "picture": {"id": _is_picture_id, "lang": _any},
     "frame": {
-        "picture": _is_int,
+        "picture": _is_picture_id,
         "scope": _enum("picture", "group"),
         "map": _any,
         "a": _is_number,
@@ -88,43 +95,43 @@ FIELD_VALIDATORS: dict[str, dict[str, Callable[[str], bool]]] = {
         "c": _is_number,
         "d": _is_number,
     },
-    "label-use": {"picture": _is_int},
+    "label-use": {"picture": _is_picture_id},
     "label-anchor-site": {
-        "picture": _is_int,
+        "picture": _is_picture_id,
         "label": _is_positive_int,
         "x": _is_int,
         "y": _is_int,
     },
     "ink-use": {
-        "picture": _is_int,
+        "picture": _is_picture_id,
         "class": _enum("glyph", "wire"),
         "id": _is_positive_int,
         "shape": _enum("rect", "circle", "roundrect", "triangle"),
     },
-    "atom": {"picture": _is_int, "cell": _is_cell, "name": _any, "kind": _any},
+    "atom": {"picture": _is_picture_id, "cell": _is_cell, "name": _any, "kind": _any},
     "faceports": {
-        "picture": _is_int,
+        "picture": _is_picture_id,
         "cell": _is_cell,
         "face": _enum("up", "down", "west", "east"),
         "arity": _is_nonnegative_int,
         "at": _any,
     },
     "pairleg": {
-        "picture": _is_int,
+        "picture": _is_picture_id,
         "upper": _is_cell,
         "lower": _is_cell,
         "upper-port": _is_pairleg_port,
         "column": _is_int,
     },
     "bond": {
-        "picture": _is_int,
+        "picture": _is_picture_id,
         "row": _is_int,
         "from": _is_int,
         "to": _is_int,
         "dir": _enum("none", "left", "right", "forward", "reverse"),
     },
     "trace": {
-        "picture": _is_int,
+        "picture": _is_picture_id,
         "row": _is_int,
         "side": _enum("above", "below"),
         "lang": _enum("lattice"),
@@ -135,19 +142,19 @@ FIELD_VALIDATORS: dict[str, dict[str, Callable[[str], bool]]] = {
         "to": _is_cell,
     },
     "hooks": {
-        "picture": _is_int,
+        "picture": _is_picture_id,
         "row": _is_int,
         "side": _enum("above", "below"),
     },
     "pairtrace": {
-        "picture": _is_int,
+        "picture": _is_picture_id,
         "row": _is_int,
         "col": _is_int,
         "site": _is_cell,
     },
-    "phtrace": {"picture": _is_int, "row": _is_int, "col": _is_int},
+    "phtrace": {"picture": _is_picture_id, "row": _is_int, "col": _is_int},
     "cup": {
-        "picture": _is_int,
+        "picture": _is_picture_id,
         "lang": _enum("lattice"),
         "side": _enum("west", "east", "north", "south"),
         "top": _is_int,
@@ -157,10 +164,10 @@ FIELD_VALIDATORS: dict[str, dict[str, Callable[[str], bool]]] = {
         "sheet-b": _is_int,
         "matrix": _is_int,
     },
-    "hole": {"picture": _is_int, "row": _is_int, "col": _is_int},
-    "warning": {"picture": _is_int, "code": _any},
+    "hole": {"picture": _is_picture_id, "row": _is_int, "col": _is_int},
+    "warning": {"picture": _is_picture_id, "code": _any},
     "boundary": {
-        "picture": _is_int,
+        "picture": _is_picture_id,
         "virtual-west": _is_int,
         "virtual-east": _is_int,
         "virtual-north": _is_int,
@@ -169,7 +176,7 @@ FIELD_VALIDATORS: dict[str, dict[str, Callable[[str], bool]]] = {
         "physical-down": _is_int,
     },
     "bbox": {
-        "picture": _is_int,
+        "picture": _is_picture_id,
         "class": _enum("label", "wire"),
         "id": _is_positive_int,
         "xmin": _is_int,
@@ -180,7 +187,7 @@ FIELD_VALIDATORS: dict[str, dict[str, Callable[[str], bool]]] = {
         "radius": _is_nonnegative_int,
     },
     "glyph-geometry": {
-        "picture": _is_int,
+        "picture": _is_picture_id,
         "owner": _is_positive_int,
         "shape": _enum("rect", "circle", "roundrect", "triangle"),
         "xmin": _is_int,
@@ -197,7 +204,7 @@ FIELD_VALIDATORS: dict[str, dict[str, Callable[[str], bool]]] = {
         "y3": _is_int,
     },
     "wire-geometry": {
-        "picture": _is_int,
+        "picture": _is_picture_id,
         "owner": _is_positive_int,
         "shape": _enum("rect-minus-label"),
         "xmin": _is_int,
@@ -214,15 +221,15 @@ FIELD_VALIDATORS: dict[str, dict[str, Callable[[str], bool]]] = {
         "cut-id": _is_positive_int,
     },
     "lattice": {
-        "picture": _is_int,
+        "picture": _is_picture_id,
         "rows": _is_positive_int,
         "cols": _is_positive_int,
         "sheets": _is_positive_int,
         "roles": _any,
     },
-    "site": {"picture": _is_int, "cell": _is_lattice_cell, "mode": _enum("removed")},
+    "site": {"picture": _is_picture_id, "cell": _is_lattice_cell, "mode": _enum("removed")},
     "region": {
-        "picture": _is_int,
+        "picture": _is_picture_id,
         "lang": _enum("free", "lattice"),
         "slot": _enum(
             "selected", "secondary", "complement", "collar", "neutral", "group"
@@ -233,16 +240,16 @@ FIELD_VALIDATORS: dict[str, dict[str, Callable[[str], bool]]] = {
         "name": _any,
     },
     "edge": {
-        "picture": _is_int,
+        "picture": _is_picture_id,
         "from": _is_lattice_cell,
         "to": _is_lattice_cell,
         "role": _enum("none", "operator", "marked", "extra", "passive"),
     },
-    "cdcell": {"picture": _is_int, "index": _is_int},
-    "cdobject": {"picture": _is_int, "cell": _is_cell},
-    "cdarrow": {"picture": _is_int, "from": _any, "to": _any},
+    "cdcell": {"picture": _is_picture_id, "index": _is_int},
+    "cdobject": {"picture": _is_picture_id, "cell": _is_cell},
+    "cdarrow": {"picture": _is_picture_id, "from": _any, "to": _any},
     "cdmap": {
-        "picture": _is_int,
+        "picture": _is_picture_id,
         "from": _is_cell,
         "to": _is_cell,
         "fused": _enum("0", "1"),
@@ -250,7 +257,7 @@ FIELD_VALIDATORS: dict[str, dict[str, Callable[[str], bool]]] = {
         "species": _any,
     },
     "tree": {
-        "picture": _is_int,
+        "picture": _is_picture_id,
         "id": _is_positive_int,
         "style": _enum("wire", "ribbon"),
         "leaves": _is_positive_int,
@@ -259,9 +266,9 @@ FIELD_VALIDATORS: dict[str, dict[str, Callable[[str], bool]]] = {
         "role": _enum("none", "operator", "marked", "extra", "passive"),
         "species": _any,
     },
-    "join": {"picture": _is_int, "from": _any, "to": _any},
+    "join": {"picture": _is_picture_id, "from": _any, "to": _any},
     "span": {
-        "picture": _is_int,
+        "picture": _is_picture_id,
         "row": _is_positive_int,
         "col": _is_positive_int,
         "length": _is_positive_int,
@@ -280,7 +287,7 @@ class Event:
 
 @dataclass
 class Picture:
-    ident: int
+    ident: int | str
     lang: str
     line: int
     events: list[Event] = field(default_factory=list)
@@ -405,9 +412,12 @@ def parse_log(
                 )
                 valid = False
         if kind == "picture":
-            if not valid or "id" not in attrs or not _is_int(attrs["id"]):
+            if not valid or "id" not in attrs or not _is_picture_id(attrs["id"]):
                 continue
-            picture_id = int(attrs["id"])
+            # Dialect ids stay integers (every existing consumer indexes with
+            # them); kernel ids keep their k-prefixed spelling as strings.
+            raw_id = attrs["id"]
+            picture_id = raw_id if raw_id.startswith("k") else int(raw_id)
             lang = attrs.get("lang", "")
             if known_langs is not None and lang not in known_langs:
                 advisory(
@@ -430,9 +440,9 @@ def parse_log(
         if check_event is not None:
             check_event(event)
         reference = attrs.get("picture", "")
-        if not _is_int(reference):
+        if not _is_picture_id(reference):
             continue
-        picture_id = int(reference)
+        picture_id = reference if reference.startswith("k") else int(reference)
         if picture_id == 0 and kind == "tree":
             continue
         if picture_id not in by_id:
