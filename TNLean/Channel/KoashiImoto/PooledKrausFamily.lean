@@ -11,9 +11,9 @@ import TNLean.Channel.KoashiImoto.CommonInvariantAlgebra
 HJPW, arXiv:quant-ph/0304007v2, lines 847-849: given finitely many preserving Kraus families
 `F_1, ..., F_M`, "there is `F_0 ∈ F` such that `A_0 = A_{F_0}`. We may take, for example,
 `F_0 = (1/M) ∑_μ F_μ`". This file constructs that averaged channel `F_0` at the level of Kraus
-operators: the Kraus operators of every `F_μ` are pooled into one family (reindexed from the
-dependent sum `Σ μ, Fin (r μ)` to a single `Fin` via `finSigmaFinEquiv`) and scaled by `1/√M`, so
-that the pooled Kraus map is exactly the average `(1/M) ∑_μ map (F μ).Kfam` -- the Schrödinger
+operators: the Kraus operators of every `F_μ` are pooled into one family, reindexed from the
+dependent sum `Σ μ, Fin (r μ)` to a single `Fin` via `finSigmaFinEquiv`, and scaled by `1/√M`.
+Thus the pooled Kraus map is exactly the average `(1/M) ∑_μ map (F μ).Kfam` -- the Schrödinger
 action of a Kraus family is quadratic in its Kraus operators, so a `1/√M` rescaling of every
 operator produces a `1/M` rescaling of the map. It proves the pooled family preserves `ρ`
 (`isPreserving_pooledKfam`), and that its adjoint fixed-point subalgebra is exactly the
@@ -53,8 +53,8 @@ variable {M : ℕ} [NeZero M] {r : Fin M → ℕ}
 
 /-- **The pooling scale factor.**
 
-HJPW, arXiv:quant-ph/0304007v2, line 849: `F_0 = (1/M) ∑_μ F_μ`. Since the Schrödinger action of
-a Kraus family is quadratic in its Kraus operators, scaling every pooled Kraus operator by
+HJPW, arXiv:quant-ph/0304007v2, line 849: `F_0 = (1/M) ∑_μ F_μ`. The Schrödinger action of a
+Kraus family is quadratic in its Kraus operators, so scaling every pooled Kraus operator by
 `1/√M` scales the pooled Kraus map by `1/M`, realizing the average. -/
 noncomputable def poolScale (M : ℕ) : ℝ := (Real.sqrt M)⁻¹
 
@@ -64,7 +64,8 @@ theorem poolScale_sq : poolScale M * poolScale M = (M : ℝ)⁻¹ := by
   rw [← mul_inv, Real.mul_self_sqrt (Nat.cast_nonneg M)]
 
 omit [NeZero M] in
-theorem cpow_poolScale_sq : ((poolScale M : ℝ) : ℂ) * ((poolScale M : ℝ) : ℂ) = (M : ℂ)⁻¹ := by
+theorem cpow_poolScale_sq :
+    ((poolScale M : ℝ) : ℂ) * ((poolScale M : ℝ) : ℂ) = (M : ℂ)⁻¹ := by
   rw [← Complex.ofReal_mul, poolScale_sq (M := M), Complex.ofReal_inv, Complex.ofReal_natCast]
 
 /-- **The pooled Kraus family.**
@@ -77,8 +78,8 @@ noncomputable def pooledKfam (K : (μ : Fin M) → Fin (r μ) → Mat) :
   fun k => ((poolScale M : ℝ) : ℂ) • K (finSigmaFinEquiv.symm k).1 (finSigmaFinEquiv.symm k).2
 
 omit [NeZero M] in
-/-- A sum over the pooled index `Fin (∑ μ, r μ)`, reindexed along `finSigmaFinEquiv`, splits into
-the double sum over `μ` and the Kraus index of `K μ`. -/
+/-- A sum over the pooled index `Fin (∑ μ, r μ)`, reindexed along `finSigmaFinEquiv`, splits
+into the double sum over `μ` and the Kraus index of `K μ`. -/
 private theorem sum_pooled_reindex {β : Type*} [AddCommMonoid β]
     (f : (Σ _μ : Fin M, Fin (r _μ)) → β) :
     ∑ k : Fin (∑ μ, r μ), f (finSigmaFinEquiv.symm k) = ∑ μ, ∑ i, f ⟨μ, i⟩ := by

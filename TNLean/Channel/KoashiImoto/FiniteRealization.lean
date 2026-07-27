@@ -10,8 +10,9 @@ import TNLean.Channel.KoashiImoto.CommonInvariantAlgebra
 
 HJPW, arXiv:quant-ph/0304007v2, lines 844-846: the common invariant algebra
 `A_0 = ⋂_{F ∈ F} A_F` (an intersection over the possibly infinite set of preserving operations)
-"can actually be presented as a finite intersection `A_0 = A_{F_1} ∩ ... ∩ A_{F_M}`, ... [b]ecause
-all dimensions are finite." This file proves that step: an infimum of a family of
+"can actually be presented as a finite intersection
+`A_0 = A_{F_1} ∩ ... ∩ A_{F_M}`, ... [b]ecause all dimensions are finite." This file proves that
+step: an infimum of a family of
 star-subalgebras of a finite-dimensional matrix algebra, indexed by an arbitrary nonempty type,
 always equals the infimum over some finite nonempty subfamily.
 
@@ -113,8 +114,9 @@ families.
 theorem exists_finset_preservingKrausFamily_iInf_eq (ρ : Kidx → Mat)
     (hρbar : (commonAverage ρ).PosDef) :
     ∃ S : Finset (PreservingKrausFamily ρ), S.Nonempty ∧
-      ⨅ F ∈ S, adjointFixedPointsStarSubalgebra F.Kfam F.isPreserving.1 hρbar F.map_commonAverage
-        = commonInvariantStarSubalgebra ρ hρbar :=
+      (⨅ F ∈ S,
+        adjointFixedPointsStarSubalgebra F.Kfam F.isPreserving.1 hρbar F.map_commonAverage) =
+          commonInvariantStarSubalgebra ρ hρbar :=
   StarSubalgebra.exists_finset_iInf_eq
     (fun F : PreservingKrausFamily ρ =>
       adjointFixedPointsStarSubalgebra F.Kfam F.isPreserving.1 hρbar F.map_commonAverage)
