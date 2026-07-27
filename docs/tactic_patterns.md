@@ -116,6 +116,17 @@ abstracted — record why, so it is not re-proposed).
 
 ## Completed refactors
 
+### Canonical-form sector-compression separation
+- **Pattern:** the horizontal BNT-refined and literal CPSV surfaces separately turned
+  vanishing finite-chain compressions into zero first-site insertions, then converted
+  the insertion equality back into vanishing vertical corners.
+- **Reuse:**
+  `MPOTensor.exists_sectorCompression_ne_zero_of_corner_of_insertedTensor_eq` accepts
+  the original-space Lemma L provider; each canonical-form surface supplies its own
+  insertion-equality theorem.
+- **Result:** both public sector-compression separation statements are thin wrappers,
+  and the shared argument uses no positivity, grouping, or weight normalization.
+
 ### Displaced-projector periodic contradiction
 - **Pattern:** two canonical-form surfaces separately derived first-site insertion equality
   from hypothetical all-length commutation, then repeated the same periodic-vector

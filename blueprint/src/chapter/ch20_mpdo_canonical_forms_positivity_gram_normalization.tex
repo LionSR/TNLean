@@ -166,6 +166,48 @@
     the projector and proves its loop identity.
 \end{definition}
 
+\begin{theorem}[Literal sector-compression separation]
+    \label{thm:cpsv_literal_sector_compression_nonzero}
+    \lean{MPSTensor.IsCPSVCanonicalForm.exists_sectorCompression_ne_zero_of_corner}
+    \leanok
+    \uses{def:cpsv_canonical_form, def:vertical_tensor_mpdo,
+        def:mpdo_vertical_loops}
+    Let $M$ be an MPO tensor whose doubled-index MPS tensor is in literal CPSV
+    canonical form, and let $P\in\MN{d}$. If one vertical letter has a nonzero
+    two-sided corner, then some finite-chain first-site compression is nonzero:
+    \begin{align}
+        \left(\exists v,\;P\widetilde M_vP\ne0\right)
+        &\Longrightarrow
+        \left(\exists N\geq0,\;P_1H^{(N+1)}P_1\ne0\right),
+        \label{eq:cpsv_literal_sector_compression_separation}
+    \end{align}
+    where $P_1=P\otimes\Id^{\otimes N}$. This is the separation assertion at
+    \cite[Proposition~4.13, line~1898]{Cirac2016MPDO_arXiv}, obtained from
+    Lemma~L in \cite[Appendix~C.3, lines~1835--1858]{Cirac2016MPDO_arXiv}.
+    It uses neither positivity of $H^{(N+1)}$ nor a grouping of the vertical
+    sectors.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{lem:mpdo_three_first_site_contraction_coefficients,
+        thm:representative_one_sub_mp_zero,
+        lem:mpdo_first_site_insertions_vertical_mul,
+        def:mpdo_vertical_one_site_actions}
+    Suppose that $P_1H^{(N+1)}P_1=0$ for every $N\geq0$. By the coefficient
+    formula for the doubled-index first-site contraction, the two-sided action
+    $Y_C(P)$ and the zero action agree on every positive-length matrix product
+    vector of the doubled-index tensor. Literal Lemma~L therefore identifies
+    their inserted tensors. For every vertical letter $v$, the insertion
+    identity then gives
+    \begin{align}
+        P\widetilde M_vP&=0.
+        \label{eq:cpsv_literal_sector_compression_zero_corner}
+    \end{align}
+    This contradicts the hypothesis in
+    (\ref{eq:cpsv_literal_sector_compression_separation}).
+\end{proof}
+
 \begin{theorem}[A nonzero vertical corner has a nonzero sector compression]
     \label{thm:mpdo_grouped_sector_compression_nonzero}
     \lean{MPOTensor.IsHorizontalCF.exists_sectorCompression_ne_zero_of_corner}
@@ -187,12 +229,10 @@
     This is the separation step used in
     \cite[Proposition~4.13, line 1898]{Cirac2016MPDO_arXiv}.
 
-    \textbf{Scope restriction (BNT-refined horizontal form):}
-    the normalized BNT-refined horizontal hypothesis is stronger than the
-    literal CPSV canonical-form hypothesis.
-    % The literal canonical-form version remains part of the missing Lemma-L
-    % and active-refinement step recorded in
-    % docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex.
+    The normalized BNT-refined horizontal hypothesis is stronger than the
+    literal CPSV canonical-form hypothesis. The literal separation statement is
+    Theorem~\ref{thm:cpsv_literal_sector_compression_nonzero}; it does not by
+    itself construct the grouped vertical sectors used here.
 \end{theorem}
 
 \begin{proof}\leanok
