@@ -443,9 +443,18 @@ there.
 and
 \leanid{Matrix.supportRelativeEntropyFamilyGapIntegrand_continuousOn} in
 \path{TNLean/Channel/Schwarz/SupportRelativeEntropyGap.lean}.}
-The remaining analytic passage must use nonnegativity and continuity to
-deduce pointwise vanishing from a zero integral and then derive the common
-projected shifted relative-modular resolvent.
+The two defect inequalities make this integrand nonnegative.  If the
+relative entropy of the summed pair equals the sum of the individual
+relative entropies, its integral is zero.  Almost-everywhere vanishing and
+continuity then give pointwise vanishing for every $t>0$; in particular, the
+source-$B$ defect vanishes there.
+\footnote{Formal declarations:
+\leanid{Matrix.supportRelativeEntropyFamilyGapIntegrand_nonneg} and
+\leanid{Matrix.supportSourceBDefect_eq_zero_of_relativeEntropy_sum_eq} in
+\path{TNLean/Channel/Schwarz/SupportRelativeEntropyGap.lean}.}
+The remaining passage must derive the common projected shifted
+relative-modular resolvent from this fixed-parameter source-$B$ defect
+equality.
 Following the latter step, consider two positive semidefinite pairs $(A,B)$ and
 $(C,D)$.  Let $P_B$ be the support projection of the first reference matrix
 $B$, and write
@@ -495,13 +504,14 @@ $\operatorname{vec}(B^{\mathsf T})$.  This uses only the generalized-inverse
 identity $(B^{-1/2}_{\mathrm{supp}})^2B=P_B$.  The one-pair identity above
 also identifies this vector with the support-generalized-inverse solution of
 the left--right equation, and hence identifies the two source-$B$ quadratic
-forms.  Together with the two defect inequalities, it still does not show that
-equality of relative entropies makes either defect vanish.  The
-zero-integral-to-pointwise-vanishing passage and the resulting finite-family
-common projected resolvent theorem remain unformalized.  The kernel inclusion
-is already used for the unprojected source-$A$ inequality and remains an exact
-hypothesis of that source-facing equality theorem.  Consequently the singular
-Petz recovery identity is also still unformalized.
+forms.  Together with the integral and continuity argument above, equality
+of relative entropies now makes the real-valued source-$B$ defect vanish at
+every positive parameter.  What remains is to convert that equality into
+the complex quadratic-residual equality and derive the finite-family common
+projected resolvent theorem.  The kernel inclusion is already used for the
+unprojected source-$A$ inequality and remains an exact hypothesis of that
+source-facing equality theorem.  Consequently the singular Petz recovery
+identity is also still unformalized.
 
 In particular, the affine regularizations used to prove the inequality cannot
 by themselves prove its equality case.  Equality at the limiting pair implies

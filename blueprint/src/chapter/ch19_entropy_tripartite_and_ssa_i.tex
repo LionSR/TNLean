@@ -914,10 +914,76 @@
     one-pair continuity theorem and finite summation.
 \end{proof}
 
-% Open in #4435: the finite-family gap integral and both fixed-parameter
-% defect inequalities are established. It remains to pass from a zero
-% integral to pointwise vanishing and derive the common projected
-% relative-modular resolvent.
+\begin{theorem}[Nonnegativity of the finite-family support gap integrand]
+    \label{thm:support_relative_entropy_family_gap_integrand_nonnegative}
+    \lean{Matrix.supportRelativeEntropyFamilyGapIntegrand_nonneg}
+    \leanok
+    \uses{lem:support_sourceB_quadratic_sum_sub_nonnegative,
+        lem:unprojected_support_sourceA_quadratic_sum_sub_nonnegative}
+    Under the hypotheses and notation of
+    Theorem~\ref{thm:support_relative_entropy_family_gap_integral},
+    for every $t>0$ one has
+    \begin{align}
+        0
+        &\leq
+        \frac{\operatorname{Def}_A(t)+
+          t\operatorname{Def}_B(t)}{1+t}.
+        \notag
+    \end{align}
+    This is the coefficient-correct combination of the two source defects
+    in $(\mathrm{intAB})$ of Jen\v{c}ov\'a--Ruskai,
+    arXiv:0903.2895v4, lines~423--435.
+\end{theorem}
+
+\begin{proof}\leanok
+    Both defects are nonnegative. Since $t>0$ and $1+t>0$, multiplying the
+    source-$B$ defect by $t$, adding the source-$A$ defect, and dividing by
+    $1+t$ preserves nonnegativity.
+\end{proof}
+
+\begin{theorem}[Relative-entropy equality annihilates the source-$B$ defect]
+    \label{thm:support_sourceB_defect_zero_of_relative_entropy_sum_eq}
+    \lean{Matrix.supportSourceBDefect_eq_zero_of_relativeEntropy_sum_eq}
+    \leanok
+    \uses{thm:support_relative_entropy_family_gap_integral,
+        thm:support_relative_entropy_family_gap_integrand_nonnegative,
+        lem:unprojected_support_sourceA_quadratic_sum_sub_nonnegative,
+        lem:support_sourceB_quadratic_sum_sub_nonnegative}
+    Under the hypotheses of
+    Theorem~\ref{thm:support_relative_entropy_family_gap_integral}, suppose
+    \begin{align}
+        D(A_\Sigma\Vert B_\Sigma)
+        &=
+        \sum_{i\in I}D(A_i\Vert B_i).
+        \notag
+    \end{align}
+    Then, for every $t>0$,
+    \begin{align}
+        \operatorname{Def}_B(t)
+        &=
+        \sum_{i\in I}Q^B_{A_i,B_i}(t)
+          -Q^B_{A_\Sigma,B_\Sigma}(t)
+        =0.
+        \notag
+    \end{align}
+    This is the source-$B$ pointwise-vanishing passage in
+    Jen\v{c}ov\'a--Ruskai, arXiv:0903.2895v4, lines~433--435, 652--674,
+    and 788--790. The common projected resolvent conclusion at
+    lines~788--793 is not asserted here.
+\end{theorem}
+
+\begin{proof}\leanok
+    The relative-entropy equality and
+    (\ref{eq:support_relative_entropy_family_gap_integral}) make the
+    integral of the nonnegative function $F$ vanish. Hence $F=0$ almost
+    everywhere. Its continuity on the open positive half-line upgrades
+    this to $F(t)=0$ for every $t>0$. Both defects are nonnegative, so
+    $\operatorname{Def}_A(t)+t\operatorname{Def}_B(t)=0$, and $t>0$
+    forces $\operatorname{Def}_B(t)=0$.
+\end{proof}
+
+% Open in #4435: it remains to convert the pointwise source-B defect
+% equality into the common projected relative-modular resolvent.
 
 \begin{theorem}[Spectral resolvent representation of relative entropy]
     \label{thm:relative_entropy_resolvent_integral}
