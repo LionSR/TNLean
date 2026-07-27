@@ -110,9 +110,10 @@ complement and does not
 include this normalized representative grouping.  Thus the full vertical
 canonical-form conclusion below is proved under the stronger horizontal
 hypothesis.  Under literal CPSV canonical form, periodic exclusion, the normal
-vertical block decomposition, and finite-chain separation of every nonzero
-vertical corner are now complete.  Actual vertical phase-class grouping,
-normalization of the grouped sectors, and the final coisometry remain open.
+vertical block decomposition, finite-chain separation of every nonzero
+vertical corner, and vertical phase-class grouping with positive grouped
+coefficients are now complete.  Grouped Figure~8 normalization and the final
+coisometry remain open.
 
 An earlier auxiliary route compared one scalar weight $\mu_\alpha$ with
 several weights $\omega_{\alpha,j}$ under the additional identities
@@ -183,9 +184,9 @@ pairwise orthogonal isometries $V_k$ satisfying
   \widetilde M_v&=\sum_kV_k(\nu_kB_k^v)V_k^\dagger.
   \label{eq:literal-normal-corners}
 \end{align}
-The omitted orthogonal complement is an all-zero sector.  This theorem does
-not partition the $B_k$ into gauge-equivalent representative families and
-does not produce the positive diagonal multiplicities or final coisometry of
+The omitted orthogonal complement is an all-zero sector.  The phase-class theorem below partitions these $B_k$ into gauge-equivalent
+representative families and proves positivity of the grouped coefficients. It
+does not prove the grouped Figure~8 normalization or final coisometry of
 Proposition~4.13.
 
 The literal sector-compression separation is also complete in
@@ -202,14 +203,20 @@ If all the compressions vanished, the two-sided first-site insertion by $P$
 would agree with zero on every positive-length matrix product vector.
 Original-space Lemma~L would then make the inserted tensor, and hence every
 corner $P\widetilde M_vP$, vanish.  This implication uses neither positivity
-nor vertical phase-class grouping.  It completes only the separation clause
-at source line~1898; the later trace argument cannot be applied to the source
-sectors until those sectors have actually been grouped.
+nor vertical phase-class grouping.  It proves the separation clause at source line~1898.  Combined with the
+literal normal-corner decomposition and the phase-class argument below, it supplies
+the nonzero compression needed by the later trace argument.
 
 The normalized corners are now grouped by matrix-product-vector phase class
-in
-\path{MPOTensor.IsHorizontalCF.exists_verticalBNTGrouping_with_isometry}
-(\path{TNLean/MPS/MPDO/VerticalBNT.lean}).  One normal representative is
+under both hypotheses.  The common argument is
+\path{MPOTensor.exists_verticalBNTGrouping_with_isometry_of_decomposition}
+in \path{TNLean/MPS/MPDO/VerticalBNT.lean}.  Its literal specialization is
+\path{MPSTensor.IsCPSVCanonicalForm.%
+exists_verticalBNTGrouping_with_isometry} in
+\path{TNLean/MPS/MPDO/CPSVVerticalBNT.lean}; the normalized BNT-refined
+specialization retains the name
+\path{MPOTensor.IsHorizontalCF.exists_verticalBNTGrouping_with_isometry}.
+One normal representative is
 chosen from each class.  Every copy has the same bond dimension as its
 representative and is a unit-modulus scalar times an invertible conjugate of
 that representative; the scalar of the chosen representative is one.  The
@@ -247,8 +254,9 @@ normalized BNT-refined horizontal hypothesis is
 quantifier correction is recorded in
 \path{docs/paper-gaps/cpgsv17_periodic_sector_projector.tex}.
 
-Under the normalized BNT-refined horizontal hypothesis, the positive-weight
-step of source lines~1898--1902 is complete.  For each grouped sector, write
+Under both literal CPSV canonical form and the normalized BNT-refined
+horizontal hypothesis, the positive-weight step of source lines~1898--1902 is
+complete.  For each grouped sector, write
 $\nu_{\alpha,k}$ for the raw sector weight, $\zeta_{\alpha,k}$ for its phase
 relative to the chosen representative, and
 $c_{\alpha,k}=\nu_{\alpha,k}\zeta_{\alpha,k}$ for the grouped coefficient.
@@ -263,10 +271,9 @@ the normalization $c_{\alpha,1}=\nu_{\alpha,1}>0$.  Thus the coefficient
 denoted by $\mu_{\alpha,k}$ in the source is
 $\mu_{\alpha,k}=c_{\alpha,k}$
 (\path{TNLean/MPS/MPDO/VerticalBNT.lean} and
-\path{TNLean/MPS/MPDO/SectorTrace.lean}).  Under literal CPSV canonical form,
-only the algebraic separation implication above is presently available: no
-positivity of a grouped coefficient is claimed before the actual vertical
-phase classes and their loop identities have been constructed.  For the
+\path{TNLean/MPS/MPDO/SectorTrace.lean}).  Under literal CPSV canonical form, the phase classes, their loop identities,
+and the positivity of every grouped coefficient are supplied by the literal
+specialization above.  For the
 unitary gauges, the pairwise Gram-conjugation identity of the second displayed diagram at source
 lines~1914--1919 is proved in
 \path{TNLean/MPS/MPDO/FigureEightPairwise.lean}.  The dependent identification with
@@ -321,20 +328,20 @@ rather than a consequence of the proposition.
 
 \paragraph{Verdict.}
 The horizontal-to-vertical implication is complete under the normalized
-BNT-refined hypothesis \path{MPOTensor.IsHorizontalCF}.  That hypothesis is
-strictly stronger than the literal CPSV canonical form assumed in
-Proposition~4.13, so the literal theorem remains open.  Under the literal
+BNT-refined hypothesis \path{MPOTensor.IsHorizontalCF}.  Under the literal
+CPSV canonical form assumed in Proposition~4.13, the remaining obligations
+begin after the phase-class grouping proved here.  Under the literal
 hypothesis, active regrouping, marked Lemma~L on both the retained and original
 bond spaces, physical first-site insertion equality, invariant-projector
 closure, displaced-projector noncommutation at some length, periodic exclusion,
 the normal vertical block decomposition, literal sector-compression
-separation, the pairwise Figure~8 Gram-dressing identity, and the positive
+separation, vertical phase-class grouping with positive coefficients and exact
+reconstruction, the pairwise Figure~8 Gram-dressing identity, and the positive
 relative Gram scalar are complete.  The two
 Figure~8 statements are conditional on two vertical corners satisfying the
 displayed similarity equations; they do not group the normal corners into
-actual representative families.  Actual vertical phase-class grouping,
-normalization of the grouped sectors, and the final vertical canonical-form
-theorem with its coisometry remain open.  The proved statements retain every
+actual representative families.  Grouped Figure~8 normalization and the final vertical canonical-form theorem
+with its coisometry remain open.  The proved statements retain every
 inactive listed coordinate with weight zero and do not
 use the unsupported diagonal-restriction statement from \ghissue{2537}.
 These Proposition~4.13 statements are distinct from the Appendix~C.4

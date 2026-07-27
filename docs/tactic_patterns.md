@@ -116,6 +116,18 @@ abstracted — record why, so it is not re-proposed).
 
 ## Completed refactors
 
+### Vertical phase-class grouping from decomposition and separation
+- **Pattern:** the normalized BNT-refined and literal CPSV surfaces supply the same
+  normal vertical decomposition and nonzero-corner separation inputs before an identical
+  phase-class, gauge, BNT, loop, positivity, and reconstruction argument.
+- **Reuse:**
+  `MPOTensor.exists_verticalBNTGrouping_with_isometry_of_decomposition` accepts those two
+  source-specific inputs. Each public canonical-form theorem supplies its own normal-corner
+  decomposition and sector-compression separation theorem.
+- **Result:** the roughly 280-line mathematical argument is shared without an adapter between
+  the two canonical-form predicates; both public theorem statements retain the full dependent
+  existential conclusion.
+
 ### Canonical-form sector-compression separation
 - **Pattern:** the horizontal BNT-refined and literal CPSV surfaces separately turned
   vanishing finite-chain compressions into zero first-site insertions, then converted

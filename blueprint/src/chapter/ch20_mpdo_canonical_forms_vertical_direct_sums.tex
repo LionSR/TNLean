@@ -469,9 +469,10 @@
 
 \begin{theorem}[Vertical normal sectors grouped into BNT representatives]
     \label{thm:mpdo_vertical_bnt_grouping_with_isometries}
-    \lean{MPOTensor.IsHorizontalCF.exists_verticalBNTGrouping_with_isometry}
+    \lean{MPSTensor.IsCPSVCanonicalForm.%
+        exists_verticalBNTGrouping_with_isometry}
     \leanok
-    \uses{def:mpdo, def:horizontal_cf_mpdo, def:vertical_tensor_mpdo,
+    \uses{def:mpdo, def:cpsv_canonical_form, def:vertical_tensor_mpdo,
         def:bnt_cpsv, def:mpv_phase_class_data}
     Under the same hypotheses, partition the normalized vertical sectors by
     equality of their matrix product vector families up to a fixed nonzero
@@ -489,7 +490,7 @@
     normal tensors for the weighted block tensor
     $\bigoplus_k\nu_kB_k$. Every grouped coefficient
     $\nu_{\alpha,q}\zeta_{\alpha,q}$ is positive. With the physical isometries
-    from Theorem~\ref{thm:mpdo_vertical_normal_sectors_with_isometries}
+    from Theorem~\ref{thm:mpdo_literal_normal_vertical_corners}
     retained unchanged, one has both reducing identities, exact compression,
     and the literal reconstruction
     \begin{align}
@@ -510,10 +511,10 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:mpdo_vertical_normal_sectors_with_isometries,
+    \uses{thm:mpdo_literal_normal_vertical_corners,
         thm:cpsv_normal_mpv_phase_gauge,
         thm:cpsv_normal_separated_eventually_li,
-        thm:mpdo_grouped_sector_compression_nonzero,
+        thm:cpsv_literal_sector_compression_nonzero,
         def:mpdo_sector_projector, thm:mpdo_sector_weight_pos}
     Take one representative from each phase class.
     Theorem~\ref{thm:cpsv_normal_mpv_phase_gauge} gives equality of bond
@@ -1068,8 +1069,8 @@
 % inserted-tensor equality, invariant-projector closure, literal periodic
 % exclusion, the normal vertical block decomposition, literal sector-compression
 % separation, and the conditional pairwise Figure-8/Gram identities are complete.
-% Actual vertical phase-class grouping, normalization of the grouped sectors, and
-% the final coisometry remain open.
+% Literal vertical phase-class grouping is complete. Grouped Figure-8 normalization
+% and the final coisometry remain open.
 
 \begin{theorem}[BNT-refined horizontal form implies vertical canonical form]
     \label{thm:vertical_cf_of_horizontal_cf}
