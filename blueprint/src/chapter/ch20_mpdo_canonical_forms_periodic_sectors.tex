@@ -322,6 +322,90 @@
     projections.
 \end{proof}
 
+\begin{theorem}[A displaced idempotent fails to commute at some length]
+    \label{thm:cpsv_literal_displaced_noncommutation}
+    \lean{MPSTensor.IsCPSVCanonicalForm.exists_not_commute_of_displaced}
+    \leanok
+    \uses{def:cpsv_canonical_form, def:mpo_family,
+        def:mpdo_vertical_one_site_actions}
+    Let $M$ be an MPO tensor whose doubled-index MPS tensor is in literal
+    CPSV canonical form. If $Q^2=Q$ and
+    $Q\widetilde M\ne Q\widetilde M Q$, then there is an integer $N\geq0$
+    such that, for $Q_1=Q\otimes\Id^{\otimes N}$,
+    \begin{align}
+        Q_1H^{(N+1)}&\ne H^{(N+1)}Q_1.
+        \label{eq:cpsv_literal_displaced_noncommutation}
+    \end{align}
+    Thus a displaced idempotent has a noncommuting chain length. The
+    proof of \cite[Proposition~4.13, lines~1888--1893]{Cirac2016MPDO_arXiv}
+    only requires this existential conclusion, not noncommutation at every
+    length.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:representative_one_sub_mp_zero,
+        lem:mpdo_first_site_insertions_vertical_mul}
+    Suppose instead that $Q_1H^{(N+1)}=H^{(N+1)}Q_1$ for every $N\geq0$.
+    Idempotence gives
+    \begin{align}
+        Q_1H^{(N+1)}
+        &=Q_1^2H^{(N+1)}
+         =Q_1H^{(N+1)}Q_1.
+        \notag
+    \end{align}
+    Taking matrix coefficients yields equality of the one-sided first-site
+    contractions. The literal form of Lemma~L in
+    Theorem~\ref{thm:representative_one_sub_mp_zero} identifies the two
+    inserted tensors on the original bond space. By
+    Lemma~\ref{lem:mpdo_first_site_insertions_vertical_mul}, this equality is
+    $Q\widetilde M=Q\widetilde M Q$, contradicting the displacement.
+\end{proof}
+
+\begin{theorem}[Literal canonical form excludes vertical periodic sectors]
+    \label{thm:mpdo_vertical_no_periodic_vectors_literal_cpsv}
+    \lean{MPOTensor.hasNoPeriodicVectors_verticalTensor_of_cpsvCanonicalForm}
+    \leanok
+    \uses{def:mpdo, def:cpsv_canonical_form, def:vertical_tensor_mpdo,
+        def:no_periodic_vectors}
+    Let $M$ generate matrix product density operators, and suppose that its
+    doubled-index MPS tensor is in literal CPSV canonical form. Then the
+    vertically viewed tensor $\widetilde M$ has no nontrivial periodic
+    vectors.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mpdo_displaced_invariant_projector,
+        thm:cpsv_literal_displaced_noncommutation,
+        thm:mpo_stacked_vertical_letters,
+        thm:mpo_stacked_layers_power,
+        thm:mpdo_first_site_invariant_comm,
+        thm:psd_commute_of_commute_pow}
+    A nontrivial periodic vector supplies an integer $p\geq1$ and an
+    orthogonal projector $Q$ such that every word $A_w$ of length $p$ in the
+    letters of $\widetilde M$ satisfies $QA_w=QA_wQ$, while
+    $Q\widetilde M\ne Q\widetilde M Q$
+    (Theorem~\ref{thm:mpdo_displaced_invariant_projector}). By
+    Theorem~\ref{thm:cpsv_literal_displaced_noncommutation}, there is a length
+    $N+1$ for which
+    \begin{align}
+        Q_1H^{(N+1)}&\ne H^{(N+1)}Q_1.
+        \notag
+    \end{align}
+    The word invariance and the vertical-stack identity give
+    \begin{align}
+        Q_1[H^{(N+1)}]^p&=[H^{(N+1)}]^pQ_1.
+        \notag
+    \end{align}
+    Since $H^{(N+1)}$ is positive semidefinite,
+    Theorem~\ref{thm:psd_commute_of_commute_pow} implies
+    $Q_1H^{(N+1)}=H^{(N+1)}Q_1$, a contradiction. This is the periodic
+    exclusion in
+    \cite[Proposition~4.13, lines~1888--1893]{Cirac2016MPDO_arXiv}, with the
+    single noncommuting length supplied by Lemma~L.
+\end{proof}
+
 \begin{theorem}[BNT-refined horizontal form excludes vertical periodic sectors]
     \label{thm:mpdo_vertical_no_periodic_vectors_horizontal_cf}
     \lean{MPOTensor.IsHorizontalCF.exists_not_commute_of_displaced}
@@ -343,9 +427,8 @@
     \textbf{Scope restriction (BNT-refined horizontal form):}
     the normalized BNT-refined horizontal hypothesis is stronger than the
     literal CPSV canonical-form hypothesis.
-    % The literal periodic-sector conclusion remains part of the
-    % active-refinement and coisometry-transport gap recorded in
-    % docs/paper-gaps/cpgsv17_periodic_sector_projector.tex.
+    % The literal canonical-form conclusion is
+    % Theorem~\ref{thm:mpdo_vertical_no_periodic_vectors_literal_cpsv}.
 \end{theorem}
 
 \begin{proof}
@@ -392,11 +475,11 @@
     lines~1874--1887 turns all-length commutation of $Q_1$ with $H^{(N)}$
     into the letter-level invariance $Q\widetilde M=Q\widetilde MQ$. This
     argument uses the normalized BNT-refined horizontal hypothesis. The
-    all-length condition is a stronger auxiliary assumption than is needed
-    % The corresponding literal canonical-form transport remains open.
-    for Theorem~\ref{thm:mpdo_vertical_no_periodic_vectors_horizontal_cf},
-    which uses the single noncommuting length supplied by the contrapositive
-    of Lemma~L.
+    all-length condition is stronger than is needed for either
+    Theorem~\ref{thm:mpdo_vertical_no_periodic_vectors_literal_cpsv} or
+    Theorem~\ref{thm:mpdo_vertical_no_periodic_vectors_horizontal_cf}; each
+    uses a single noncommuting length supplied by the contrapositive of
+    Lemma~L.
 \end{definition}
 
 \begin{theorem}[Reduction of the periodic-sector step to the
