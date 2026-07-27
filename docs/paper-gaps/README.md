@@ -117,8 +117,12 @@ For MPDO renormalization fixed points:
   factors globally as first-factor support compression tensored with local raw
   recovery; the identity-tensored formula holds on supported inputs and
   globally for a positive-definite first factor. No factorization is claimed
-  for TNLean's generic completed singular channel. The family-level
-  Koashi--Imoto/Hayashi channel-action theorem remains open.
+  for TNLean's generic completed singular channel. Independently, the common
+  invariant algebra of a finite jointly invariant family, its finite
+  realization by a single preserving operation, and the mean-ergodic
+  projection onto it are formalized under an explicit full-support hypothesis
+  on the common average. The family-level tensor-product state decomposition
+  and Koashi--Imoto/Hayashi channel-action theorem remain open.
 - `cpsv16_zcl_canonical_form_normalization.tex` records the corresponding
   normalization issue for mixed-state ZCL.
 
