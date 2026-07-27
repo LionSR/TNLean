@@ -33,4 +33,9 @@
 % earlier stage that references them fails at load (the lockout).
 \input{tenkz-render.code.tex}
 
+% The kernel language stage loads after render so its records meet the same
+% ink primitives; \tenkzkernel stays an explicit per-group opt-in until the
+% S4 swap makes it the surface (#4908).
+\input{tenkz-kernel.code.tex}
+
 \endinput
