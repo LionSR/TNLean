@@ -107,10 +107,11 @@ most one, at least one has modulus one, and the normal blocks are already
 grouped over BNT representatives.  This is strictly stronger than the
 literal CPSV canonical form of Proposition~4.13, which allows an omitted zero
 complement and does not
-include this normalized representative grouping.  Thus the completed
-construction below proves the vertical conclusion under the stronger
-horizontal hypothesis; the implication from literal CPSV canonical form
-remains open.
+include this normalized representative grouping.  Thus the full vertical
+canonical-form conclusion below is proved under the stronger horizontal
+hypothesis.  Under literal CPSV canonical form, periodic exclusion and the
+normal vertical block decomposition are now complete, but representative
+BNT grouping, normalization, and the final coisometry remain open.
 
 An earlier auxiliary route compared one scalar weight $\mu_\alpha$ with
 several weights $\omega_{\alpha,j}$ under the additional identities
@@ -163,6 +164,29 @@ in \path{TNLean/MPS/MPDO/VerticalSpectral.lean}).  The complement of their
 range projections consists precisely of the omitted zero corners, so no
 false completeness assertion is made after this removal.
 
+The same normal-corner conclusion is now complete under literal CPSV canonical
+form.  The theorem
+\path{MPSTensor.IsCPSVCanonicalForm.%
+exists_normal_verticalBlockDecomp_with_isometry} in
+\path{TNLean/MPS/MPDO/CPSVPeriodicExclusion.lean} combines literal
+invariant-projector closure with literal periodic exclusion.  It produces
+positive-dimensional normal blocks $B_k$, positive weights $\nu_k$, and
+pairwise orthogonal isometries $V_k$ satisfying
+\begin{align}
+  \widetilde M_vV_k&=V_k(\nu_kB_k^v),
+  \\
+  V_k^\dagger\widetilde M_v&=(\nu_kB_k^v)V_k^\dagger,
+  \\
+  \nu_kB_k^v&=V_k^\dagger\widetilde M_vV_k,
+  \\
+  \widetilde M_v&=\sum_kV_k(\nu_kB_k^v)V_k^\dagger.
+  \label{eq:literal-normal-corners}
+\end{align}
+The omitted orthogonal complement is an all-zero sector.  This theorem does
+not partition the $B_k$ into gauge-equivalent representative families and
+does not produce the positive diagonal multiplicities or final coisometry of
+Proposition~4.13.
+
 The normalized corners are now grouped by matrix-product-vector phase class
 in
 \path{MPOTensor.IsHorizontalCF.exists_verticalBNTGrouping_with_isometry}
@@ -188,12 +212,20 @@ the bond dimensions within each phase class is obtained from non-decay of the
 positive-length rectangular overlap, as in Lemma~\texttt{equalMPS}; the
 empty-word coefficient is not used in this comparison.
 
-The periodic-sector exclusion is also complete:
-\path{MPOTensor.hasNoPeriodicVectors_verticalTensor_of_horizontalCF} derives
-the displaced cyclic projector associated with a nontrivial period, together
-with its full-period word invariance, and contradicts positivity at a suitable
-chain length. The source prints an all-length inequality, whereas the proof
-only needs one noncommuting length; this local correction is recorded in
+The periodic-sector exclusion is also complete under both hypotheses.  Under
+literal CPSV canonical form,
+\path{MPSTensor.IsCPSVCanonicalForm.exists_not_commute_of_displaced} proves
+that every displaced idempotent fails to commute with the generated density
+operator at some chain length.  The theorem
+\path{MPOTensor.hasNoPeriodicVectors_verticalTensor_of_cpsvCanonicalForm}
+then combines the displaced cyclic projector of a nontrivial period, its
+full-period word invariance, the stacked-layer power identity, and positivity
+to exclude periodic vectors of $\widetilde M$.  The source prints
+noncommutation at every length, whereas this argument requires and proves only
+the existence of one noncommuting length.  The same conclusion under the
+normalized BNT-refined horizontal hypothesis is
+\path{MPOTensor.hasNoPeriodicVectors_verticalTensor_of_horizontalCF}.  The
+quantifier correction is recorded in
 \path{docs/paper-gaps/cpgsv17_periodic_sector_projector.tex}.
 
 The positive-weight step of source lines~1898--1902 is now complete.  For each
@@ -270,13 +302,15 @@ strictly stronger than the literal CPSV canonical form assumed in
 Proposition~4.13, so the literal theorem remains open.  Under the literal
 hypothesis, active regrouping, marked Lemma~L on both the retained and original
 bond spaces, physical first-site insertion equality, invariant-projector
-closure, the pairwise Figure~8 Gram-dressing identity, and the positive
-relative Gram scalar are complete.  The two Figure~8 statements are conditional
-on two vertical corners satisfying the displayed similarity equations; they do
-not construct the actual representative groups or corners.  Literal periodic
-exclusion and spectral grouping, normalized grouped sectors, and the final
-vertical canonical-form theorem with its coisometry remain open.  The proved
-statements retain every inactive listed coordinate with weight zero and do not
+closure, displaced-projector noncommutation at some length, periodic exclusion,
+the normal vertical block decomposition, the pairwise Figure~8 Gram-dressing
+identity, and the positive relative Gram scalar are complete.  The two
+Figure~8 statements are conditional on two vertical corners satisfying the
+displayed similarity equations; they do not group the normal corners into
+actual representative families.  Vertical BNT grouping, normalization of the
+grouped sectors, and the final vertical canonical-form theorem with its
+coisometry remain open.  The proved statements retain every inactive listed
+coordinate with weight zero and do not
 use the unsupported diagonal-restriction statement from \ghissue{2537}.
 These Proposition~4.13 statements are distinct from the Appendix~C.4
 positive-fusion question tracked by \ghissue{4648}.
@@ -437,13 +471,15 @@ lines~1909--1921 for any two corners satisfying the source's positive
 similarity equations.  They preserve all inactive listed coordinates through
 the literal marked Lemma~L argument.
 
-Literal Proposition~4.13 nevertheless remains open.  One must still construct
-the actual vertical representative groups and their corners, prove periodic
-exclusion and spectral grouping from literal canonical form, form the normalized
-grouped sectors, and obtain the final vertical canonical form and coisometry
-satisfying $UU^\dagger=I$.  The current results do not assert
-$U^\dagger U=I$.  This remaining Proposition~4.13 work is independent of the
-Appendix~C.4 positive-fusion question tracked by \ghissue{4648}.
+Literal Proposition~4.13 nevertheless remains open.  Periodic exclusion and
+the normal vertical corners are complete, with the exact reconstruction
+\eqref{eq:literal-normal-corners}.  One must still partition these corners into
+vertical BNT representative families, prove the required grouped positivity
+and normalization statements for the actual representatives, and obtain the
+final vertical canonical form and coisometry satisfying $UU^\dagger=I$.  The
+current results do not assert $U^\dagger U=I$.  This remaining
+Proposition~4.13 work is independent of the Appendix~C.4 positive-fusion
+question tracked by \ghissue{4648}.
 \bibliographystyle{alpha}
 \bibliography{references}
 

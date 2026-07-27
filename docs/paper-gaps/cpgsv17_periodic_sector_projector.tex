@@ -51,24 +51,27 @@ line~1889.  That stronger assertion is unnecessary: the positivity argument
 at lines~1890--1893 is pointwise in $N$, so the same existential witness
 suffices.
 
-This is a local correction of the intermediate statement.  Under the
-normalized BNT-refined horizontal hypothesis used by the formal theorem, it
-adds no further restriction.  It does not close the literal
-Proposition~4.13 implication.
+This is a local correction of the intermediate statement.  The corrected
+periodic-sector implication is now proved both from literal CPSV canonical
+form and from the stronger normalized BNT-refined horizontal form.  It closes
+the periodic-exclusion step of Proposition~4.13, not the remaining grouping,
+normalization, and coisometry steps.
 
 \section{Formal proof}
 
-The formal proof first establishes the normalized BNT-refined horizontal-form
-reduction described below.\footnote{Formal declaration:
-\leanid{MPOTensor.IsHorizontalCF.exists\_not\_commute\_of\_displaced} in
-\doclink{TNLean/MPS/MPDO/HorizontalBNT}.}  Suppose, to the contrary, that
-$Q_1$ commutes with $H^{(N+1)}$ for every $N$.  Idempotence of $Q$ gives
+The literal proof establishes the corrected implication in
+\leanid{MPSTensor.IsCPSVCanonicalForm.exists\_not\_commute\_of\_displaced}
+in \doclink{TNLean/MPS/MPDO/CPSVPeriodicExclusion}.  Suppose, to the contrary,
+that $Q_1$ commutes with $H^{(N+1)}$ for every $N$.  Idempotence of $Q$ gives
 \[
   Q_1H^{(N+1)}=Q_1H^{(N+1)}Q_1.
 \]
 After writing these as first-site contractions of the doubled-index tensor,
-the normalized BNT-refined representative-grouped Lemma~L yields
-$Q\widetilde M=Q\widetilde MQ$, contradicting displacement.
+the original-space form of Lemma~L yields
+$Q\widetilde M=Q\widetilde MQ$, contradicting displacement.  The stronger
+normalized BNT-refined horizontal-form variant is
+\leanid{MPOTensor.IsHorizontalCF.exists\_not\_commute\_of\_displaced} in
+\doclink{TNLean/MPS/MPDO/HorizontalBNT}.
 
 The cyclic decomposition and its letter shift are formalized in
 \path{TNLean/MPS/MPDO/CyclicProjector.lean}.  They give $p\ge1$, an
@@ -79,32 +82,35 @@ to the $p$-fold vertically stacked tensor, so
   Q_1[H^{(N+1)}]^p=[H^{(N+1)}]^pQ_1.
 \]
 The positive-semidefinite power-commutation theorem then gives commutation
-with $H^{(N+1)}$, a contradiction.\footnote{Formal conclusion:
+with $H^{(N+1)}$, a contradiction.  The literal conclusion is
+\leanid{MPOTensor.hasNoPeriodicVectors\_verticalTensor\_of\_cpsvCanonicalForm}
+in \doclink{TNLean/MPS/MPDO/CPSVPeriodicExclusion}; the stronger-hypothesis
+variant is
 \leanid{MPOTensor.hasNoPeriodicVectors\_verticalTensor\_of\_horizontalCF}
-in \doclink{TNLean/MPS/MPDO/CyclicProjector}.}
+in \doclink{TNLean/MPS/MPDO/CyclicProjector}.
 
-Within the normalized BNT-refined horizontal form used here, the proof
-introduces no additional mathematical assumption.
+Neither proof introduces an assumption beyond its stated canonical-form and
+MPDO hypotheses.
 
 \section{Status}
 
-The periodic-sector step is complete under the normalized BNT-refined
-hypothesis \path{MPOTensor.IsHorizontalCF}.  The earlier all-length condition
-remains only as a stronger conditional auxiliary statement and is not used by
-this step.\footnote{Formal predicate:
+The periodic-sector step is complete under literal CPSV canonical form and
+under the stronger normalized BNT-refined hypothesis
+\path{MPOTensor.IsHorizontalCF}.  The earlier all-length condition remains
+only as a stronger conditional auxiliary statement and is not used by either
+proof.\footnote{Formal predicate:
 \leanid{MPOTensor.NoninvariantProjectorNoncommuting}.}
 
-The invariant-projector and no-periodic-vector criterion, the nonzero sector
-compressions, positivity of the vertical weights, the dressed-adjoint
-identities, and the physical-space coisometry are combined in the proof of
-\path{MPOTensor.verticalCF_of_horizontalCF} in
-\path{TNLean/MPS/MPDO/VerticalCanonicalForm.lean}.  This proves the
-horizontal-to-vertical implication under \path{MPOTensor.IsHorizontalCF},
-which is strictly stronger than the literal CPSV canonical form assumed in
-Proposition~4.13.  The literal implication remains open.
+Combining literal periodic exclusion with literal invariant-projector closure
+gives the normal vertical corners with positive weights and exact letterwise
+reconstruction in
+\leanid{MPSTensor.IsCPSVCanonicalForm.exists\_normal\_verticalBlockDecomp\_with\_isometry}.
+Proposition~4.13 remains open only at the subsequent vertical BNT grouping,
+normalization of the grouped representatives, and final coisometry.  These
+steps are distinct from the Appendix~C.4 positive-fusion question.
 
-\paragraph{Verdict.} Conditional periodic-sector step complete; literal
-Proposition~4.13 open.
+\paragraph{Verdict.} Literal periodic-sector step complete; Proposition~4.13
+remains open at grouping, normalization, and the final coisometry.
 
 \bibliographystyle{alpha}
 \bibliography{references}

@@ -71,6 +71,8 @@ CPSV canonical-form hypothesis; see
 * `MPOTensor.hasNoPeriodicVectors_verticalTensor_of_noncommutation`: granted
   the hypothesis, a matrix product density operator has no nontrivial
   periodic vectors in the vertical direction.
+* `MPOTensor.hasNoPeriodicVectors_verticalTensor_of_exists_not_commute_of_displaced`:
+  one noncommuting length for every displaced idempotent excludes periodic vectors.
 * `MPOTensor.hasNoPeriodicVectors_verticalTensor_of_horizontalCF`: an MPDO in
   normalized BNT-refined horizontal form has no nontrivial periodic vectors in
   the vertical direction.
@@ -720,6 +722,37 @@ theorem hasNoPeriodicVectors_verticalTensor_of_isInjective
   exact ketLeftMul_eq_braRightMul_of_commute_of_isInjective M hInj hQidem
     (mpo_commute_of_commute_pow M hM 2 (by omega) hp hCommPow)
 
+/-- The vertically viewed tensor of an MPDO has no nontrivial periodic vectors whenever
+every displaced idempotent fails to commute with the density operator at some chain length.
+
+A periodic vector supplies a displaced projector invariant under one full period. At the
+noncommuting length, full-period invariance gives commutation with the corresponding power of
+the density operator, while positivity removes that power and yields a contradiction.
+
+**Local fix (noncommuting length):** the source prints noncommutation at every length, but the
+periodic-sector contradiction only needs one length; see
+`docs/paper-gaps/cpgsv17_periodic_sector_projector.tex`.
+
+Source: arXiv:1606.00608, Proposition 4.13, lines 1888--1893. -/
+theorem hasNoPeriodicVectors_verticalTensor_of_exists_not_commute_of_displaced
+    (M : MPOTensor d D) (hM : IsMPDO M)
+    (hNoncomm : ∀ {Q : Matrix (Fin d) (Fin d) ℂ}, IsIdempotentElem Q →
+      M.ketLeftMul Q ≠ (M.ketLeftMul Q).braRightMul Q →
+        ∃ N : ℕ, ¬ Commute (firstSiteMatrix Q N) (mpo M (N + 1))) :
+    MPSTensor.HasNoPeriodicVectors (verticalTensor M) := by
+  intro n V B ρ r hV hint hirr hρ hr hfix μ hμ hnorm
+  by_contra hne
+  obtain ⟨p, Q, hp, hQherm, hQidem, hword, hdisp⟩ :=
+    exists_displaced_invariant_projector_of_periodic_vector M V B ρ r hV hint
+      hirr hρ hr hfix μ hμ hnorm hne
+  obtain ⟨N, hN⟩ := hNoncomm hQidem hdisp
+  apply hN
+  have hCommPow : Commute (firstSiteMatrix Q N) (mpo M (N + 1) ^ p) := by
+    have h := firstSiteMatrix_mul_mpo_comm (stackedTensor M p)
+      (hM.stackedTensor p) hQherm (stackedTensor_ketLeftMul_invariant M hword) N
+    rwa [mpo_stackedTensor] at h
+  exact mpo_commute_of_commute_pow M hM (N + 1) (by omega) hp hCommPow
+
 /-- **The periodic-sector step for an MPDO in normalized BNT-refined
 horizontal form.**
 
@@ -750,17 +783,7 @@ Lemma L, which is sufficient at lines 1890--1893; see
 theorem hasNoPeriodicVectors_verticalTensor_of_horizontalCF
     (M : MPOTensor d D) (hM : IsMPDO M) (hHorizontal : IsHorizontalCF M) :
     MPSTensor.HasNoPeriodicVectors (verticalTensor M) := by
-  intro n V B ρ r hV hint hirr hρ hr hfix μ hμ hnorm
-  by_contra hne
-  obtain ⟨p, Q, hp, hQherm, hQidem, hword, hdisp⟩ :=
-    exists_displaced_invariant_projector_of_periodic_vector M V B ρ r hV hint
-      hirr hρ hr hfix μ hμ hnorm hne
-  obtain ⟨N, hN⟩ := hHorizontal.exists_not_commute_of_displaced M hQidem hdisp
-  apply hN
-  have hCommPow : Commute (firstSiteMatrix Q N) (mpo M (N + 1) ^ p) := by
-    have h := firstSiteMatrix_mul_mpo_comm (stackedTensor M p)
-      (hM.stackedTensor p) hQherm (stackedTensor_ketLeftMul_invariant M hword) N
-    rwa [mpo_stackedTensor] at h
-  exact mpo_commute_of_commute_pow M hM (N + 1) (by omega) hp hCommPow
+  exact hasNoPeriodicVectors_verticalTensor_of_exists_not_commute_of_displaced M hM
+    fun hQidem hdisp => hHorizontal.exists_not_commute_of_displaced M hQidem hdisp
 
 end MPOTensor

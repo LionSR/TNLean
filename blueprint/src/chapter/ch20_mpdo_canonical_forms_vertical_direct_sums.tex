@@ -419,6 +419,54 @@
     is a zero sector.
 \end{proof}
 
+\begin{theorem}[Normal vertical corners in literal CPSV canonical form]
+    \label{thm:mpdo_literal_normal_vertical_corners}
+    \lean{MPSTensor.IsCPSVCanonicalForm.%
+        exists_normal_verticalBlockDecomp_with_isometry}
+    \leanok
+    \uses{def:mpdo, def:cpsv_canonical_form, def:vertical_tensor_mpdo,
+        def:normal}
+    Let $M$ generate matrix product density operators, and suppose that its
+    doubled-index MPS tensor is in literal CPSV canonical form. Then there are
+    positive integers $d_k$, positive scalars $\nu_k$, normal tensors $B_k$ of
+    bond dimension $d_k$, and isometries
+    $V_k:\C^{d_k}\to\C^d$ with pairwise orthogonal ranges. For every sector
+    $k$ and every vertical letter $v$,
+    \begin{align}
+        \widetilde M_vV_k&=V_k(\nu_kB_k^v),
+        \notag\\
+        V_k^\dagger\widetilde M_v&=(\nu_kB_k^v)V_k^\dagger,
+        \notag\\
+        \nu_kB_k^v&=V_k^\dagger\widetilde M_vV_k.
+        \notag
+    \end{align}
+    Every vertical letter is reconstructed by
+    \begin{align}
+        \widetilde M_v
+        &=\sum_kV_k(\nu_kB_k^v)V_k^\dagger.
+        \label{eq:mpdo_literal_normal_vertical_reconstruction}
+    \end{align}
+    The omitted orthogonal complement is an all-zero sector. This is the
+    normal-corner intermediate between the periodic exclusion at
+    lines~1889--1893 and the grouped vertical representation used at line~1898
+    of \cite[Proposition~4.13]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mpdo_vertical_projector_closure_literal_cpsv,
+        thm:mpdo_vertical_no_periodic_vectors_literal_cpsv,
+        thm:projector_closure_canonical_form}
+    Theorem~\ref{thm:mpdo_vertical_projector_closure_literal_cpsv} gives
+    invariant-projector closure for $\widetilde M$, and
+    Theorem~\ref{thm:mpdo_vertical_no_periodic_vectors_literal_cpsv} excludes
+    its nontrivial periodic vectors. Applying
+    Theorem~\ref{thm:projector_closure_canonical_form} then gives normal
+    nonzero corners with positive spectral weights and orthogonal isometries,
+    together with the stated intertwining, compression, and reconstruction
+    formulas.
+\end{proof}
+
 \begin{theorem}[Vertical normal sectors grouped into BNT representatives]
     \label{thm:mpdo_vertical_bnt_grouping_with_isometries}
     \lean{MPOTensor.IsHorizontalCF.exists_verticalBNTGrouping_with_isometry}
@@ -843,11 +891,8 @@
         thm:cpsv_retained_representative_grouped_lemma_l,
         thm:cpsv_original_coordinate_marked_lemma_l,
         thm:mpdo_vertical_projector_closure_literal_cpsv,
-        thm:projector_closure_irreducible_corners,
-        thm:mpdo_no_periodic_sector_projector,
-        thm:psd_commute_of_commute_pow,
-        lem:irreducible_transfer_perron_pair,
-        lem:irreducible_block_spectral_normalization,
+        thm:mpdo_vertical_no_periodic_vectors_literal_cpsv,
+        thm:mpdo_literal_normal_vertical_corners,
         thm:cpsv_normal_mpv_phase_gauge,
         thm:cpsv_normal_separated_eventually_li,
         thm:mpdo_sector_compression_trace_pos,
@@ -931,20 +976,34 @@
     % Local fix (periodic-sector quantifier): use one noncommuting chain length,
     % not the all-length assertion printed in the source. See
     % docs/paper-gaps/cpgsv17_periodic_sector_projector.tex.
-    It remains to exclude nontrivial periodic vertical sectors under the
-    literal canonical-form hypothesis. A cyclic projector $Q$ and an integer
-    $p>1$ would commute with $[H^{(N)}]^p$ but not with $H^{(N)}$. Since
-    $H^{(N)}$ is positive semidefinite, it is the positive $p$-th root of
-    $[H^{(N)}]^p$; therefore every operator commuting with $[H^{(N)}]^p$
-    also commutes with $H^{(N)}$, a contradiction. Together with
-    invariant-projector closure, this exclusion must yield the normal vertical
-    sectors and their spectral grouping.
+    Theorem~\ref{thm:mpdo_vertical_no_periodic_vectors_literal_cpsv}
+    excludes nontrivial periodic vertical sectors. Its proof uses the
+    displaced cyclic projector $Q$ and one length $N+1$ for which
+    $Q_1H^{(N+1)}\ne H^{(N+1)}Q_1$; full-period invariance gives commutation
+    with $[H^{(N+1)}]^p$, and positivity gives the contradictory commutation
+    with $H^{(N+1)}$ itself.
 
-    It also remains to construct the actual vertical representative groups
-    and their corners over tensors $M_\alpha$. For each active copy
-    $(\alpha,k)$, let $P_{\alpha,k}$ be its
-    range projection. At some length its compression is nonzero and positive
-    semidefinite, and its trace has the form
+    Combining this exclusion with invariant-projector closure gives the
+    normal corners of
+    Theorem~\ref{thm:mpdo_literal_normal_vertical_corners}. Thus there are
+    positive weights $\nu_k$, normal tensors $B_k$, and isometries $V_k$ with
+    pairwise orthogonal ranges such that
+    \begin{align}
+        \widetilde M_vV_k&=V_k(\nu_kB_k^v),
+        \notag\\
+        V_k^\dagger\widetilde M_v&=(\nu_kB_k^v)V_k^\dagger,
+        \notag\\
+        \widetilde M_v&=\sum_kV_k(\nu_kB_k^v)V_k^\dagger.
+        \label{eq:cpsv_prop_4_13_normal_corners}
+    \end{align}
+    This completes periodic exclusion and the normal vertical block
+    decomposition under the literal canonical-form hypothesis.
+
+    It remains to group the tensors $B_k$ into actual vertical representative
+    families over tensors $M_\alpha$. After such a grouping, let
+    $P_{\alpha,k}$ be the range projection of the corner indexed by
+    $(\alpha,k)$. At some length its compression must be nonzero and positive
+    semidefinite, and its trace must have the form
     \begin{align}
         \tr\!\left(P_{\alpha,k}H^{(N)}P_{\alpha,k}\right)
         &=\mu_{\alpha,k}d_\alpha^{(N)}>0.
@@ -1002,10 +1061,10 @@
 % form. For literal canonical form, the exact class-copy-plus-inactive
 % coordinate regrouping, active representative sector decomposition, and
 % retained-coordinate and original-coordinate forms of Lemma L, the original
-% inserted-tensor equality, invariant-projector closure, and the conditional
-% pairwise Figure-8/Gram identities are complete. Actual vertical representative
-% groups and corners, literal periodic exclusion and spectral grouping, normalized
-% grouped sectors, and the final coisometry remain open.
+% inserted-tensor equality, invariant-projector closure, literal periodic
+% exclusion, the normal vertical block decomposition, and the conditional pairwise
+% Figure-8/Gram identities are complete. Vertical representative grouping,
+% normalization of the grouped sectors, and the final coisometry remain open.
 
 \begin{theorem}[BNT-refined horizontal form implies vertical canonical form]
     \label{thm:vertical_cf_of_horizontal_cf}

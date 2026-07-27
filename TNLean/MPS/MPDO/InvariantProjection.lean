@@ -39,6 +39,8 @@ canonical-form transport is asserted.
   $P_1H^{(N+1)}=H^{(N+1)}P_1$.
 * `basis_braRight_eq_ketLeftBraRight_of_invariant`: $(\Id-P)MP=0$ on every
   representative in an MPV-level BNT representation.
+* `exists_not_commute_of_displaced_of_insertedTensor_eq`: original-tensor Lemma L
+  turns displacement into noncommutation at some chain length.
 * `mpo_commute_of_commute_pow`: commutation with a nonzero power of an MPDO
   density operator implies commutation with that density operator.
 
@@ -74,6 +76,57 @@ theorem verticalTensor_braRightMul (M : MPOTensor d D)
   ext i j
   simp [verticalTensor, braRightMul, Matrix.mul_apply, Matrix.sum_apply,
     mul_comm]
+
+/-- Inserting the doubled-index left action gives the doubled-index tensor of
+left multiplication of the vertically viewed MPO tensor.
+
+Source: arXiv:1606.00608, Proposition 4.13, lines 1873--1887. -/
+theorem insertedTensor_ketLeftAction_toMPSTensor
+    (M : MPOTensor d D) (Q : Matrix (Fin d) (Fin d) ℂ) :
+    MPSTensor.insertedTensor (MPSTensor.ketLeftAction Q) M.toMPSTensor =
+      (M.ketLeftMul Q).toMPSTensor := by
+  funext p
+  rw [MPSTensor.insertedTensor]
+  change (∑ q : Fin (d * d),
+      MPSTensor.ketLeftAction Q p q • M q.divNat q.modNat) =
+    ∑ k : Fin d, Q p.divNat k • M k p.modNat
+  rw [← finProdFinEquiv.sum_comp]
+  rw [Fintype.sum_prod_type]
+  simp only [MPSTensor.ketLeftAction, MPSTensor.finProdFinEquiv_divNat,
+    MPSTensor.finProdFinEquiv_modNat, ite_smul, zero_smul]
+  apply Finset.sum_congr rfl
+  intro i _
+  rw [Fintype.sum_eq_single p.modNat]
+  · simp
+  · intro j hj
+    rw [if_neg (Ne.symm hj)]
+
+/-- Inserting the doubled-index two-sided action gives the doubled-index tensor
+of two-sided multiplication of the vertically viewed MPO tensor.
+
+Source: arXiv:1606.00608, Proposition 4.13, lines 1873--1887. -/
+theorem insertedTensor_ketLeftBraRightAction_toMPSTensor
+    (M : MPOTensor d D) (Q : Matrix (Fin d) (Fin d) ℂ) :
+    MPSTensor.insertedTensor
+        (MPSTensor.ketLeftBraRightAction Q) M.toMPSTensor =
+      ((M.ketLeftMul Q).braRightMul Q).toMPSTensor := by
+  funext p
+  rw [MPSTensor.insertedTensor]
+  change (∑ q : Fin (d * d),
+      MPSTensor.ketLeftBraRightAction Q p q • M q.divNat q.modNat) =
+    ∑ j : Fin d, Q j p.modNat • (∑ k : Fin d, Q p.divNat k • M k j)
+  rw [← finProdFinEquiv.sum_comp]
+  rw [Fintype.sum_prod_type]
+  simp only [MPSTensor.ketLeftBraRightAction,
+    MPSTensor.finProdFinEquiv_divNat, MPSTensor.finProdFinEquiv_modNat]
+  simp_rw [Finset.smul_sum, smul_smul]
+  rw [Finset.sum_comm]
+  apply Finset.sum_congr rfl
+  intro j _
+  apply Finset.sum_congr rfl
+  intro k _
+  congr 1
+  ring
 
 /-- If the vertically viewed tensor satisfies $P\widetilde M=P\widetilde M P$,
 then for every tail length $N$ the density operator satisfies
@@ -188,6 +241,68 @@ theorem firstSiteActionAgree_braRight_ketLeftBraRight_of_invariant
     MPSTensor.firstSiteActionAgree_ketLeft_ketLeftBraRight M P hInv
   intro N ρ
   exact (hLeftRight N ρ).symm.trans (hLeftCorner N ρ)
+
+/-- A displaced idempotent fails to commute with the generated density operator at some
+chain length whenever Lemma L separates first-site actions on the original tensor.
+
+If commutation held at every length, idempotence would give equality of the one-sided
+first-site actions. The supplied insertion-equality theorem would then give the forbidden
+letterwise identity.
+
+**Local fix (noncommuting length):** the source prints noncommutation at every length, but its
+contradiction is pointwise and only needs the length produced here; see
+`docs/paper-gaps/cpgsv17_periodic_sector_projector.tex`.
+
+Source: arXiv:1606.00608, Proposition 4.13, lines 1888--1893. -/
+theorem exists_not_commute_of_displaced_of_insertedTensor_eq
+    (M : MPOTensor d D)
+    (hInsert : ∀ {Y Z : Matrix (Fin (d * d)) (Fin (d * d)) ℂ},
+      MPSTensor.FirstSiteActionAgree M.toMPSTensor Y Z →
+        MPSTensor.insertedTensor Y M.toMPSTensor =
+          MPSTensor.insertedTensor Z M.toMPSTensor)
+    {Q : Matrix (Fin d) (Fin d) ℂ} (hQidem : IsIdempotentElem Q)
+    (hdisp : M.ketLeftMul Q ≠ (M.ketLeftMul Q).braRightMul Q) :
+    ∃ N : ℕ, ¬ Commute (firstSiteMatrix Q N) (mpo M (N + 1)) := by
+  classical
+  by_contra hnone
+  simp only [not_exists, not_not] at hnone
+  apply hdisp
+  have hAct : MPSTensor.FirstSiteActionAgree M.toMPSTensor
+      (MPSTensor.ketLeftAction Q) (MPSTensor.ketLeftBraRightAction Q) := by
+    apply MPSTensor.firstSiteActionAgree_ketLeft_ketLeftBraRight M Q
+    intro N ρ
+    have hQ1idem : firstSiteMatrix Q N * firstSiteMatrix Q N =
+        firstSiteMatrix Q N := by
+      rw [firstSiteMatrix_mul_firstSiteMatrix, hQidem]
+    have hOneSided : firstSiteMatrix Q N * mpo M (N + 1) =
+        firstSiteMatrix Q N * mpo M (N + 1) * firstSiteMatrix Q N := by
+      calc
+        firstSiteMatrix Q N * mpo M (N + 1) =
+            firstSiteMatrix Q N * firstSiteMatrix Q N * mpo M (N + 1) := by
+              rw [hQ1idem]
+        _ = firstSiteMatrix Q N *
+            (firstSiteMatrix Q N * mpo M (N + 1)) := by rw [Matrix.mul_assoc]
+        _ = firstSiteMatrix Q N *
+            (mpo M (N + 1) * firstSiteMatrix Q N) := by rw [(hnone N).eq]
+        _ = firstSiteMatrix Q N * mpo M (N + 1) *
+            firstSiteMatrix Q N := by rw [Matrix.mul_assoc]
+    have h2 := Matrix.ext_iff.mpr hOneSided
+      (Fin.cons (ρ 0).divNat fun n => (ρ (Fin.succ n)).divNat)
+      (Fin.cons (ρ 0).modNat fun n => (ρ (Fin.succ n)).modNat)
+    rw [mul_firstSiteMatrix_apply] at h2
+    simp only [firstSiteMatrix_mul_apply] at h2
+    simp only [Fin.cons_zero, Function.comp_def, Fin.cons_succ] at h2
+    rw [h2]
+    simp only [Finset.sum_mul]
+    exact Finset.sum_comm
+  have hTensor : (M.ketLeftMul Q).toMPSTensor =
+      ((M.ketLeftMul Q).braRightMul Q).toMPSTensor := by
+    rw [← insertedTensor_ketLeftAction_toMPSTensor,
+      ← insertedTensor_ketLeftBraRightAction_toMPSTensor]
+    exact hInsert hAct
+  funext i j
+  have hij := congrFun hTensor (finProdFinEquiv (i, j))
+  simpa [toMPSTensor] using hij
 
 /-- Let the doubled-index tensor of an MPDO have the same positive-length MPV
 family as a BNT sector decomposition, and let \(P\) be Hermitian with
@@ -332,9 +447,9 @@ This is the final operator implication in the contradiction at
 arXiv:1606.00608, lines 1888--1893 (equation eq2:proof.IV.12).  It does not
 construct the orthogonal projector $Q$ associated with a nontrivial vertical
 period or establish its commutation with $[H^{(N)}]^p$.  Those ingredients are
-combined in `TNLean/MPS/MPDO/CyclicProjector.lean`, where one noncommuting
-length gives the contradiction under normalized BNT-refined horizontal form.
-No corresponding literal CPSV canonical-form implication is asserted. -/
+combined in `TNLean/MPS/MPDO/CyclicProjector.lean` under normalized BNT-refined
+horizontal form and in `TNLean/MPS/MPDO/CPSVPeriodicExclusion.lean` under
+literal CPSV canonical form. -/
 theorem mpo_commute_of_commute_pow (M : MPOTensor d D) (hM : IsMPDO M) (N : ℕ)
     (hN : 0 < N) {p : ℕ} (hp : p ≠ 0)
     {Q : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ}
