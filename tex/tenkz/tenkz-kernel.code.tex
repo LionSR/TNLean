@@ -31,6 +31,10 @@
 
 \ExplSyntaxOn
 
+% Load guard: tenkz.sty loads this stage; a document that also inputs the
+% file directly (the pre-bridge fixture spelling) must not redefine it.
+\cs_if_exist:NT \tenkzkernel { \tex_endinput:D }
+
 % ---------- messages --------------------------------------------------------
 % Every diagnostic names the offending record or node and the source address
 % text, so a failure is findable without re-reading the picture.
@@ -6537,8 +6541,10 @@
 \NewDocumentCommand \tnmark { O{} m m }
   { \__tenkz_kernel_tnmark:nnn {#1} {#2} {#3} }
 % The dialect composition layer installs \tngroup first; the kernel switch
-% deliberately replaces that renderer-backed binding with the record grammar.
-\RenewDocumentCommand \tngroup { O{} m }
+% (\tenkzkernel, below) replaces that renderer-backed binding with the
+% record grammar -- at opt-in, never at load, so the bridge leaves the 0.7
+% group untouched for every document that does not ask for the kernel.
+\NewDocumentCommand \__tenkz_kernel_tngroup_cmd { O{} m }
   { \__tenkz_kernel_tngroup:nn {#1} {#2} }
 \NewDocumentCommand \tndeclare { m m m }
   { \__tenkz_kernel_tndeclare:nnn {#1} {#2} {#3} }
@@ -6567,6 +6573,7 @@
     \cs_set_eq:NN \tenkzeq \__tenkz_kernel_eq_env_begin_cmd
     \cs_set_eq:NN \endtenkzeq \__tenkz_kernel_eq_end:
     \cs_set_eq:NN \tnset \__tenkz_kernel_tnset:n
+    \cs_set_eq:NN \tngroup \__tenkz_kernel_tngroup_cmd
   }
 
 \ExplSyntaxOff
