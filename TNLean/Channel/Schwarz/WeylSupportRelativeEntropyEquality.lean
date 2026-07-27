@@ -54,6 +54,47 @@ noncomputable def unweightedWeylSum
     Matrix (Fin dS × ZMod dC) (Fin dS × ZMod dC) ℂ :=
   ∑ g, unweightedWeylConjugate ζ M g
 
+/-- The unweighted finite Weyl sum is `dC ^ 2` times the partial trace tensored
+with the maximally mixed ancilla. -/
+theorem unweightedWeylSum_eq_smul_partialTraceRight_kronecker
+    {dS dC : ℕ} [NeZero dC] {ζ : ℂ} (hζ : IsPrimitiveRoot ζ dC)
+    (M : Matrix (Fin dS × ZMod dC) (Fin dS × ZMod dC) ℂ) :
+    unweightedWeylSum ζ M =
+      ((dC : ℝ) ^ 2) •
+        (partialTraceRight M ⊗ₖ
+          ((dC : ℂ)⁻¹ • (1 : Matrix (ZMod dC) (ZMod dC) ℂ))) := by
+  classical
+  have hsum :
+      unweightedWeylSum ζ M =
+        ∑ a : ZMod dC, ∑ b : ZMod dC,
+          ((1 : Matrix (Fin dS) (Fin dS) ℂ) ⊗ₖ weyl ζ a b) * M *
+            ((1 : Matrix (Fin dS) (Fin dS) ℂ) ⊗ₖ weyl ζ a b)ᴴ := by
+    simp only [unweightedWeylSum, unweightedWeylConjugate,
+      ← Finset.univ_product_univ, Finset.sum_product]
+  rw [hsum]
+  have htwirl := sum_kronecker_one_weyl_conj (S := Fin dS) hζ M
+  have hdC : ((dC : ℂ) ^ 2) ≠ 0 := by
+    exact pow_ne_zero 2 (by exact_mod_cast NeZero.ne dC)
+  calc
+    (∑ a : ZMod dC, ∑ b : ZMod dC,
+        ((1 : Matrix (Fin dS) (Fin dS) ℂ) ⊗ₖ weyl ζ a b) * M *
+          ((1 : Matrix (Fin dS) (Fin dS) ℂ) ⊗ₖ weyl ζ a b)ᴴ) =
+        ((dC : ℂ) ^ 2) •
+          (((dC : ℂ) ^ 2)⁻¹ •
+            ∑ a : ZMod dC, ∑ b : ZMod dC,
+              ((1 : Matrix (Fin dS) (Fin dS) ℂ) ⊗ₖ weyl ζ a b) * M *
+                ((1 : Matrix (Fin dS) (Fin dS) ℂ) ⊗ₖ weyl ζ a b)ᴴ) := by
+      rw [smul_smul, mul_inv_cancel₀ hdC, one_smul]
+    _ = ((dC : ℂ) ^ 2) •
+        (partialTraceRight M ⊗ₖ
+          ((dC : ℂ)⁻¹ • (1 : Matrix (ZMod dC) (ZMod dC) ℂ))) := by
+      rw [htwirl]
+    _ = ((dC : ℝ) ^ 2) •
+        (partialTraceRight M ⊗ₖ
+          ((dC : ℂ)⁻¹ • (1 : Matrix (ZMod dC) (ZMod dC) ℂ))) := by
+      ext i j
+      norm_num
+
 /-- Positive semidefiniteness is preserved by an unweighted Weyl conjugation. -/
 theorem PosSemidef.unweightedWeylConjugate
     {dS dC : ℕ} [NeZero dC]

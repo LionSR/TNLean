@@ -138,6 +138,8 @@
     \lean{Matrix.PosSemidef.supportInvSqrt_kronecker}
     \lean{Matrix.PosSemidef.cfc_sqrt_mul_supportInvSqrt}
     \lean{Matrix.PosSemidef.supportInvSqrt_mul_cfc_sqrt}
+    \lean{Matrix.PosSemidef.cfc_sqrt_mul_supportProj}
+    \lean{Matrix.PosSemidef.supportProj_mul_cfc_sqrt}
     \lean{Matrix.PosSemidef.supportProj_kronecker}
     \lean{Matrix.PosDef.supportProj_eq_one}
     \leanok
@@ -161,6 +163,11 @@
         =A^{-1/2}_{\mathrm{supp}}\sqrt A
         &=P_A.
         \label{eq:entropy_support_sqrt_cancellation}
+    \end{align}
+    The same support projection absorbs the square root:
+    \begin{align}
+        \sqrt A\,P_A=P_A\sqrt A&=\sqrt A.
+        \notag
     \end{align}
     If $A$ is positive definite, then $P_A=\mathbf 1$.
 \end{theorem}
