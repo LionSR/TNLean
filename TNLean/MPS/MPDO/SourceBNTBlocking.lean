@@ -231,14 +231,8 @@ theorem IsCPSVBasisOfNormalTensors.eventually_wordTupleSpanTop
     hasBlockSelectorWords_of_wordTupleSpanTop B hSpan
   have hAtP : ∀ j, IsNBlkInjective (B j) p :=
     fun j => isNBlkInjective_of_wordTupleSpanTop B hSpan j
-  refine ⟨p + p, ?_⟩
-  intro L hL
-  have hp_le_prefix : p ≤ L - p := by omega
-  have hprefix : ∀ j, IsNBlkInjective (B j) (L - p) := fun j =>
-    isNBlkInjective_of_le hp (hAtP j) hp_le_prefix
-  have h := wordTupleSpanTop_of_common_blockInjective_of_blockSelectorWords
-    B hprefix hSelectors
-  simpa [Nat.sub_add_cancel (by omega : p ≤ L)] using h
+  exact eventually_wordTupleSpanTop_of_blockSelectorWords_of_isNBlkInjective
+    B hSelectors hp hAtP
 
 /-- A basis of normal tensors becomes simultaneously injective after one
 common positive blocking.

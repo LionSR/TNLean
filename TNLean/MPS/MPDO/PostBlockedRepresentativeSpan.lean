@@ -36,6 +36,27 @@ period-window hypothesis is used.
 
 open scoped Matrix BigOperators
 
+namespace MPSTensor
+
+variable {d g : ℕ} {dim : Fin g → ℕ}
+
+/-- Fixed block selectors and block injectivity at one positive length give simultaneous
+word-tuple span at every sufficiently large length. -/
+theorem eventually_wordTupleSpanTop_of_blockSelectorWords_of_isNBlkInjective
+    (A : (k : Fin g) → MPSTensor d (dim k))
+    {s p : ℕ} (hSel : HasBlockSelectorWords A s) (hp : 0 < p)
+    (hAtP : ∀ k, IsNBlkInjective (A k) p) :
+    ∃ L₀ : ℕ, ∀ L ≥ L₀, WordTupleSpanTop A L := by
+  refine ⟨s + p, ?_⟩
+  intro L hL
+  have hs_le : s ≤ L := by omega
+  have hp_le : p ≤ L - s := by omega
+  have hSpan := wordTupleSpanTop_of_common_blockInjective_of_blockSelectorWords A
+    (fun k => isNBlkInjective_of_le hp (hAtP k) hp_le) hSel
+  simpa [Nat.sub_add_cancel hs_le] using hSpan
+
+end MPSTensor
+
 namespace MPSTensor.IsBNTCanonicalForm
 
 variable {d : ℕ} {P : SectorDecomposition d}
@@ -86,13 +107,8 @@ theorem eventuallyRepresentativeWordTupleSpan_of_basis_injective
     simpa [selectorLength] using
       hasBlockSelectorWords_of_pairBlockSeparatingWords P.basis hPair
   change ∃ L₀ : ℕ, ∀ L ≥ L₀, WordTupleSpanTop P.basis L
-  refine ⟨selectorLength + 1, ?_⟩
-  intro L hL
-  have hSelectorLength_le : selectorLength ≤ L := by omega
-  have hPrefixPos : 0 < L - selectorLength := by omega
-  have hSpan := wordTupleSpanTop_of_common_blockInjective_of_blockSelectorWords
-    P.basis (fun j ↦ hBlkPos j (L - selectorLength) hPrefixPos) hSelectors
-  simpa [Nat.sub_add_cancel hSelectorLength_le] using hSpan
+  exact eventually_wordTupleSpanTop_of_blockSelectorWords_of_isNBlkInjective
+    P.basis (p := 1) hSelectors (by omega) (fun j => hBlkPos j 1 (by omega))
 
 /-- Physical blocking transports the BNT hypotheses needed for simultaneous
 representative separation, without asserting preservation of the entire
@@ -185,14 +201,9 @@ theorem eventuallyRepresentativeWordTupleSpan_blockTensor
       (MPSTensor.blockTensor (P.basis j) p) n).mp
       (wordSpan_eq_top_of_isInjective (hInj j) hn)
   change ∃ L₁ : ℕ, ∀ L ≥ L₁, WordTupleSpanTop (P.blockTensor p).basis L
-  refine ⟨selectorLength + 1, ?_⟩
-  intro L hL
-  have hSelectorLength_le : selectorLength ≤ L := by omega
-  have hPrefixPos : 0 < L - selectorLength := by omega
-  have hSpan := wordTupleSpanTop_of_common_blockInjective_of_blockSelectorWords
-    (P.blockTensor p).basis
-    (fun j ↦ hBlkPos j (L - selectorLength) hPrefixPos) hSelectors
-  simpa [Nat.sub_add_cancel hSelectorLength_le] using hSpan
+  exact eventually_wordTupleSpanTop_of_blockSelectorWords_of_isNBlkInjective
+    (P.blockTensor p).basis (p := 1) hSelectors (by omega)
+      (fun j => hBlkPos j 1 (by omega))
 
 /-- The representatives of a BNT canonical form have eventual simultaneous word-tuple span.
 
@@ -261,13 +272,8 @@ theorem eventuallyRepresentativeWordTupleSpan
     simpa [selectorLength] using
       hasBlockSelectorWords_of_pairBlockSeparatingWords P.basis hPair
   change ∃ L₁ : ℕ, ∀ L ≥ L₁, WordTupleSpanTop P.basis L
-  refine ⟨selectorLength + p, ?_⟩
-  intro L hL
-  have hSelectorLength_le : selectorLength ≤ L := by omega
-  have hPrefix : p ≤ L - selectorLength := by omega
-  have hSpan := wordTupleSpanTop_of_common_blockInjective_of_blockSelectorWords
-    P.basis (fun j ↦ hAtLeastP j (L - selectorLength) hPrefix) hSelectors
-  simpa [Nat.sub_add_cancel hSelectorLength_le] using hSpan
+  exact eventually_wordTupleSpanTop_of_blockSelectorWords_of_isNBlkInjective
+    P.basis hSelectors hp hAtP
 
 /-- Representative-grouped Lemma L for an already injectively blocked BNT
 canonical form.

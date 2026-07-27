@@ -8,6 +8,7 @@ import TNLean.MPS.MPDO.RepresentativeGroupedMarkedLemmaL
 import TNLean.MPS.MPDO.SourceBNTBlocking
 import TNLean.MPS.Overlap.CastLemmas
 import TNLean.MPS.SharedInfra.Scaling
+import TNLean.MPS.Tactic.Basic
 
 /-!
 # Lemma L for active refinements of literal CPSV canonical form
@@ -104,7 +105,7 @@ Source: arXiv:1606.00608, lines 265--301 and Appendix C.3, lines 1843--1858. -/
 theorem groupedTensor_sameMPV₂Pos_representativeSectorDecomposition :
     SameMPV₂Pos ref.groupedTensor ref.representativeSectorDecomposition.toTensor := by
   classical
-  intro N hN σ
+  mpv_ext
   let P := ref.representativeSectorDecomposition
   have hGrouped : ref.groupedTensor =
       toTensorFromBlocks (d := d) data.weights ref.regroupedBlocks := by

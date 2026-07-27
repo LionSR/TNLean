@@ -36,6 +36,18 @@ abstracted — record why, so it is not re-proposed).
 - **Abstraction:** `@[mps_transfer]` simp set + `transfer_simp` macro
   (`TNLean/MPS/Tactic/Basic.lean`).
 
+### eventual word-tuple span from selectors — promoted
+- **Pattern:** propagate block injectivity from a positive length to the prefix remaining after
+  a fixed selector suffix, concatenate the prefix and suffix, and simplify their total length.
+- **Seen:** four occurrences across `PostBlockedRepresentativeSpan.lean` and
+  `SourceBNTBlocking.lean` before promotion.
+- **Abstraction:**
+  `eventually_wordTupleSpanTop_of_blockSelectorWords_of_isNBlkInjective` in
+  `TNLean/MPS/MPDO/PostBlockedRepresentativeSpan.lean`.
+- **Notes:** the shared theorem gives the explicit eventual threshold `s + p`; all four
+  source-facing theorem statements and their selector-plus-injective-prefix proof route remain
+  unchanged.
+
 ### peps_prod_entry_congr — promoted
 - **Pattern:** product congruence followed by component-function extensionality:
   `refine Finset.prod_congr rfl (fun w _ => ?_); congr 1; funext ie`.
