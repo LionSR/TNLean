@@ -1,6 +1,6 @@
-% Regression: affine rotation at picture, nested-group, and atom scope.
-% Formula: framed atoms compose rotations while their labels remain upright.
-% Coordinates, asymmetric borders, and the \tnX capsule rotate; labels stay upright.
+% Regression: affine rotation at picture, nested-group, atom, and cup-label scope.
+% Formula: framed atoms compose rotations while labels and cup matrices stay upright.
+% Coordinates, asymmetric borders, and the \tnX capsule rotate; labels stay clear.
 \documentclass[varwidth=14cm, border=6pt]{standalone}
 \usepackage{tenkz}
 \begin{document}
@@ -21,5 +21,12 @@
     \tnput[box]{d}{(22mm,0mm)}{D}
     \tnjoin{e.east}{d.west}
   \end{tenkzfree}
+  \qquad
+  \begin{tenkz}[rows={ket,op:west none:east none,bra}, frame={rotate=180},
+                tensor style=box, west={cup=$\rho_r$}, east={cup=$\rho_l$}]
+    \tnX{X_g} & \tn{A}\\
+    \tnskip & \tn[dot]{R_{\bar\alpha}}\\
+    \tnghost{} & \tn{A}
+  \end{tenkz}
 \]
 \end{document}

@@ -13,19 +13,21 @@
 % carrying the symmetry insertion R (on the ket-bra physical bond) and the
 % on-site action X_g on the lower ket rail, as at y=-0.75 in the author
 % source.  The op row is side-sealed so the west/east cups bend only the
-% bra and ket rails.
+% bra and ket rails.  The 180-degree public frame keeps the supported
+% ket-op-bra contraction order while placing the ket rail below as in the
+% source; body columns and cup labels are reversed before that rotation.
 \[
-  \begin{tenkz}[rows={bra, op:west none:east none, ket}, tensor style=box,
-                west={cup=$\rho_l$}, east={cup=$\rho_r$}]
-    \tn{A} & \tnghost{}\\
-    \tn[dot]{R_{\bar\alpha}} & \tnskip\\
-    \tn{A} & \tnX{X_g}
+  \begin{tenkz}[rows={ket, op:west none:east none, bra}, frame={rotate=180},
+                tensor style=box, west={cup=$\rho_r$}, east={cup=$\rho_l$}]
+    \tnX{X_g} & \tn{A}\\
+    \tnskip & \tn[dot]{R_{\bar\alpha}}\\
+    \tnghost{} & \tn{A}
   \end{tenkz}
   \qquad
-  \begin{tenkz}[rows={bra, op:west none:east none, ket}, tensor style=box,
-                west={cup=$\rho_l$}, east={cup=$\rho_r$}]
-    \tnghost{} & \tn{A}\\
-    \tnskip & \tn[dot]{R_\alpha}\\
-    \tnX{X_g^\dagger} & \tn{A}
+  \begin{tenkz}[rows={ket, op:west none:east none, bra}, frame={rotate=180},
+                tensor style=box, west={cup=$\rho_r$}, east={cup=$\rho_l$}]
+    \tn{A} & \tnX{X_g^\dagger}\\
+    \tn[dot]{R_\alpha} & \tnskip\\
+    \tn{A} & \tnghost{}
   \end{tenkz}
 \]
