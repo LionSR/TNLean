@@ -1,33 +1,14 @@
 % Target: rmp-ii-mpo-sheet
-% Formula: The 4-valent MPO tensor has directed virtual wire a: j -> k.
-% Ink: Canonical public tenkz, tenkzfree environments; no raw TikZ.
-% Boundary: West/east virtual and north/south physical ports are open in both
-%   depictions.
+% Formula: An MPO is defined by the row network: tensors on an open virtual chain,
+%   each with one bra and one ket physical index.
+% Ink: Canonical public tenkz five-site MPO row of dot tensors; no raw TikZ.
+% Boundary: The virtual chain is open at west and east; every site's two physical
+%   legs are open.
 % Source: paper TN-Review-main.tex line 361; author source ImagesReview Section
 %   II/ImagesReview Section II.tex lines 305-309
-% Capabilities: grid, free-graph, typed-ports
-% panel 1 - the same tensor in the grid language: an MPO site with open
-% virtual indices j (west), k (east) and physical legs m (up), n (down);
-% bond dir=right orients the virtual level j -> k as in the paper.
+% Capabilities: grid, typed-ports
 \[
-  \begin{tenkz}[physical=updown, west label=$j$, east label=$k$,
-                bond dir=right]
-    \tn[up=$m$, down=$n$]{}
+  \begin{tenkz}[physical=updown]
+    \tn{} & \tn{} & \tn{} & \tn{} & \tn{}
   \end{tenkz}
-\]
-
-% panel 2 - the fat-graph depiction, free tier: the two directed wires
-% crossing with no glyph at the crossing (the fat graph IS the tensor).
-% The physical wire pierces the virtual one away from its midpoint, so
-% the level name a - which a join always sets at mid-wire - reads over
-% clear paper instead of over the physical wire.
-\[
-  \begin{tenkzfree}
-    \tnput[dot, label pos=west,  ports={east:virtual}]{j}{(0mm,0mm)}{j}
-    \tnput[dot, label pos=east,  ports={west:virtual}]{k}{(26mm,0mm)}{k}
-    \tnput[dot, label pos=south, ports={north:physical}]{n}{(18mm,-9mm)}{n}
-    \tnput[dot, label pos=north, ports={south:physical}]{m}{(18mm,9mm)}{m}
-    \tnjoin[dir, label=a]{j.east}{k.west}
-    \tnjoin[dir]{n.north}{m.south}
-  \end{tenkzfree}
 \]
