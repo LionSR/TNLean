@@ -31,6 +31,10 @@
 
 \ExplSyntaxOn
 
+% Load guard: tenkz.sty loads this stage; a document that also inputs the
+% file directly (the pre-bridge fixture spelling) must not redefine it.
+\cs_if_exist:NT \tenkzkernel { \tex_endinput:D }
+
 % ---------- messages --------------------------------------------------------
 % Every diagnostic names the offending record or node and the source address
 % text, so a failure is findable without re-reading the picture.
