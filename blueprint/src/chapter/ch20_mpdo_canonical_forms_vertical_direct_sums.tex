@@ -708,6 +708,96 @@
     $T$.
 \end{proof}
 
+\begin{theorem}[Pairwise Figure~8 identity under literal canonical form]
+    \label{thm:cpsv_literal_pairwise_vertical_gram_conjugation}
+    \lean{MPSTensor.IsCPSVCanonicalForm.gramDressing_eq_of_two_grouped_corners}
+    \leanok
+    \uses{def:mpdo, def:cpsv_canonical_form,
+        thm:mpdo_reflected_marked_chain,
+        thm:cpsv_original_coordinate_marked_lemma_l}
+    Let $M$ be an MPO tensor whose doubled-index MPS tensor is in the literal
+    CPSV canonical form, and suppose that $M$ generates positive semidefinite
+    operators on every nonempty chain. Let $A$ be a tensor, let $X$ and $Y$ be
+    invertible matrices, and suppose that two vertical corners satisfy
+    \begin{align}
+        V_X^\dagger\widetilde M^vV_X
+        &=c_X X A^vX^{-1},
+        &
+        c_X&>0,
+        \notag\\
+        V_Y^\dagger\widetilde M^vV_Y
+        &=c_Y Y A^vY^{-1},
+        &
+        c_Y&>0.
+        \notag
+    \end{align}
+    Then the Gram-dressed tensors agree:
+    \begin{align}
+        (X^\dagger X)A^v(X^\dagger X)^{-1}
+        &=(Y^\dagger Y)A^v(Y^\dagger Y)^{-1}
+        \label{eq:cpsv_literal_pairwise_gram_conj}
+    \end{align}
+    for every vertical letter $v$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpdo_reflected_marked_chain,
+        thm:cpsv_original_coordinate_marked_lemma_l}
+    For $Z=X,Y$, set
+    \begin{align}
+        f^Z_{(r,s),(i,j)}
+        &=c_Z^{-1}\overline{(V_Z Z)_{ir}}
+          \bigl(V_Z(Z^{-1})^\dagger\bigr)_{js}.
+        \notag
+    \end{align}
+    The corner identity identifies the mark with coefficients $f^Z$ with the
+    horizontal slice of $(Z^\dagger Z)A^v(Z^\dagger Z)^{-1}$.
+    Self-adjointness of the two corner compressions identifies both closed
+    marked chains with the same reflected chain. The original-coordinate
+    marked Lemma~L for literal canonical form therefore gives equality of the
+    two marks, hence (\ref{eq:cpsv_literal_pairwise_gram_conj}).
+\end{proof}
+
+\begin{theorem}[Positive relative Gram scalar under literal canonical form]
+    \label{thm:cpsv_literal_positive_relative_gram_scalar}
+    \lean{MPSTensor.IsCPSVCanonicalForm.gram_eq_pos_smul_gram_of_two_grouped_corners}
+    \leanok
+    \uses{thm:cpsv_literal_pairwise_vertical_gram_conjugation,
+        thm:normal_tensor_gram_rigidity}
+    Let $M$ be an MPO tensor whose doubled-index MPS tensor is in the literal
+    CPSV canonical form, and suppose that $M$ generates positive semidefinite
+    operators on every nonempty chain. Let $A$ be normal, let $X$ and $Y$ be
+    invertible matrices, and suppose that
+    \begin{align}
+        V_X^\dagger\widetilde M^vV_X
+        &=c_X X A^vX^{-1},
+        &
+        c_X&>0,
+        \notag\\
+        V_Y^\dagger\widetilde M^vV_Y
+        &=c_Y Y A^vY^{-1},
+        &
+        c_Y&>0.
+        \notag
+    \end{align}
+    Then there is a real number $\omega>0$ such that
+    \begin{align}
+        X^\dagger X&=\omega\,Y^\dagger Y.
+        \label{eq:cpsv_literal_positive_relative_gram}
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:cpsv_literal_pairwise_vertical_gram_conjugation,
+        thm:normal_tensor_gram_rigidity}
+    Equation~(\ref{eq:cpsv_literal_pairwise_gram_conj}) makes the ratio of the
+    two Gram matrices commute with every letter of $A$. Normality makes this
+    ratio scalar, and positive definiteness makes the scalar a positive real
+    number.
+\end{proof}
+
+% These two theorems concern Figures 7--8 in the proof of Proposition 4.13.
+% They are not the Appendix C.4 positive-fusion statement tracked by #4648.
 % Source anchor: CPSV16 Proposition 4.13, statement and proof at lines 1863--1922.
 % Local fix (rectangular coisometry and reconstruction): the source calls U an
 % isometry and prints only the compressed identity. See
@@ -764,6 +854,8 @@
         thm:cpsv_normal_separated_eventually_li,
         thm:mpdo_sector_compression_trace_pos,
         thm:mpdo_sector_weight_pos,
+        thm:cpsv_literal_pairwise_vertical_gram_conjugation,
+        thm:cpsv_literal_positive_relative_gram_scalar,
         thm:normal_tensor_gram_rigidity,
         thm:vertical_sector_coisometry}
     Write $A$ for the doubled-index MPS tensor of $M$. If $A=0$, take no
@@ -841,16 +933,18 @@
     % Local fix (periodic-sector quantifier): use one noncommuting chain length,
     % not the all-length assertion printed in the source. See
     % docs/paper-gaps/cpgsv17_periodic_sector_projector.tex.
-    There are no nontrivial periodic vertical sectors. Otherwise a cyclic
-    projector $Q$ and an integer $p>1$ would commute with
-    $[H^{(N)}]^p$ but not with $H^{(N)}$. Since $H^{(N)}$ is positive
-    semidefinite, it is the positive $p$-th root of $[H^{(N)}]^p$; therefore
-    every operator commuting with $[H^{(N)}]^p$ also commutes with
-    $H^{(N)}$, a contradiction. Invariant-projector closure and the absence
-    of periodic sectors give a direct sum of normal vertical sectors.
+    It remains to exclude nontrivial periodic vertical sectors under the
+    literal canonical-form hypothesis. A cyclic projector $Q$ and an integer
+    $p>1$ would commute with $[H^{(N)}]^p$ but not with $H^{(N)}$. Since
+    $H^{(N)}$ is positive semidefinite, it is the positive $p$-th root of
+    $[H^{(N)}]^p$; therefore every operator commuting with $[H^{(N)}]^p$
+    also commutes with $H^{(N)}$, a contradiction. Together with
+    invariant-projector closure, this exclusion must yield the normal vertical
+    sectors and their spectral grouping.
 
-    Group gauge-equivalent vertical sectors over the representatives
-    $M_\alpha$. For each active copy $(\alpha,k)$, let $P_{\alpha,k}$ be its
+    It also remains to construct the actual vertical representative groups
+    and their corners over tensors $M_\alpha$. For each active copy
+    $(\alpha,k)$, let $P_{\alpha,k}$ be its
     range projection. At some length its compression is nonzero and positive
     semidefinite, and its trace has the form
     \begin{align}
@@ -866,30 +960,28 @@
     (\ref{eq:cpsv_prop_4_13_positive_weight}) implies
     $\mu_{\alpha,k}>0$ for every copy.
 
-    Self-adjointness of the sector compressions gives the marked-chain
-    identity used in the proof of Proposition~4.13. The full-coordinate trace
-    identity of Theorem~\ref{thm:cpsv_full_coordinate_marked_trace_identity},
-    the marked form of
-    Theorem~\ref{thm:cpsv_retained_representative_grouped_lemma_l}, and the
-    original-coordinate marked Lemma~L identify the corresponding marks on the
-    original bond space. The remaining physical Figure-8 argument must turn
-    these marked identities into the local Gram-conjugation identity
+    Once these actual corners are available, the pairwise Figure~8
+    identity is complete under the literal canonical-form hypothesis.
+    Theorem~\ref{thm:cpsv_literal_pairwise_vertical_gram_conjugation} gives
     \begin{align}
         (X_{\alpha,k}^\dagger X_{\alpha,k})M_\alpha^v
         (X_{\alpha,k}^\dagger X_{\alpha,k})^{-1}
         &=(X_{\alpha,1}^\dagger X_{\alpha,1})M_\alpha^v
-        (X_{\alpha,1}^\dagger X_{\alpha,1})^{-1}
-        \label{eq:cpsv_prop_4_13_missing_gram_conjugation}
+        (X_{\alpha,1}^\dagger X_{\alpha,1})^{-1}.
+        \label{eq:cpsv_prop_4_13_gram_conjugation}
     \end{align}
-    remains open. Normal-tensor rigidity would then make the relative Gram
-    matrix scalar:
-    for every $k$ there is $\omega_{\alpha,k}>0$ such that
+    If $M_\alpha$ is normal,
+    Theorem~\ref{thm:cpsv_literal_positive_relative_gram_scalar} gives a real
+    number $\omega_{\alpha,k}>0$ such that
     \begin{align}
         X_{\alpha,k}^\dagger X_{\alpha,k}
         &=\omega_{\alpha,k}
           X_{\alpha,1}^\dagger X_{\alpha,1}.
         \label{eq:cpsv_prop_4_13_gram}
     \end{align}
+    These pairwise statements belong to Figures~7--8 in the proof of
+    Proposition~4.13. They are distinct from the positive-fusion statement in
+    Appendix~C.4 tracked by issue~\#4648.
     Choose $X_{\alpha,1}=\Id$ and replace each remaining gauge by
     $\omega_{\alpha,k}^{-1/2}X_{\alpha,k}$. The gauges are then unitary, while
     their conjugation actions are unchanged.
@@ -912,8 +1004,10 @@
 % form. For literal canonical form, the exact class-copy-plus-inactive
 % coordinate regrouping, active representative sector decomposition, and
 % retained-coordinate and original-coordinate forms of Lemma L, the original
-% inserted-tensor equality, and invariant-projector closure are complete. The
-% physical Figure-8/Gram argument and final coisometric grouping remain open.
+% inserted-tensor equality, invariant-projector closure, and the conditional
+% pairwise Figure-8/Gram identities are complete. Actual vertical representative
+% groups and corners, literal periodic exclusion and spectral grouping, normalized
+% grouped sectors, and the final coisometry remain open.
 
 \begin{theorem}[BNT-refined horizontal form implies vertical canonical form]
     \label{thm:vertical_cf_of_horizontal_cf}
