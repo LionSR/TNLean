@@ -144,9 +144,11 @@ The dimensions and coefficients are positive, the blocks are normal, the
 embeddings are orthogonal isometries, and both intertwining identities,
 corner compression, and letterwise reconstruction hold exactly.
 
-This is the normal-corner part of arXiv:1606.00608, Proposition 4.13,
-lines 1894--1898.  It does not group gauge-equivalent corners into a vertical
-BNT or prove the final normalization and coisometry statement; see
+This is the normal-corner intermediate needed between the periodic exclusion
+at lines 1889--1893 and the grouped vertical representation used at line 1898
+of arXiv:1606.00608, Proposition 4.13.  It does not group gauge-equivalent
+corners into a vertical BNT or prove the final normalization and coisometry
+statement; see
 `docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex`. -/
 theorem exists_normal_verticalBlockDecomp_with_isometry
     (M : MPOTensor d D)

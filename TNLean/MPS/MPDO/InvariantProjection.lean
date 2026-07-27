@@ -332,9 +332,9 @@ This is the final operator implication in the contradiction at
 arXiv:1606.00608, lines 1888--1893 (equation eq2:proof.IV.12).  It does not
 construct the orthogonal projector $Q$ associated with a nontrivial vertical
 period or establish its commutation with $[H^{(N)}]^p$.  Those ingredients are
-combined in `TNLean/MPS/MPDO/CyclicProjector.lean`, where one noncommuting
-length gives the contradiction under normalized BNT-refined horizontal form.
-No corresponding literal CPSV canonical-form implication is asserted. -/
+combined in `TNLean/MPS/MPDO/CyclicProjector.lean` under normalized BNT-refined
+horizontal form and in `TNLean/MPS/MPDO/CPSVPeriodicExclusion.lean` under
+literal CPSV canonical form. -/
 theorem mpo_commute_of_commute_pow (M : MPOTensor d D) (hM : IsMPDO M) (N : ℕ)
     (hN : 0 < N) {p : ℕ} (hp : p ≠ 0)
     {Q : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ}
