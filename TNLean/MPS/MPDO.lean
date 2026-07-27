@@ -67,6 +67,7 @@ import TNLean.MPS.MPDO.CPSVFigureEight
 import TNLean.MPS.MPDO.CPSVOriginalSpaceLemmaL
 import TNLean.MPS.MPDO.CPSVPeriodicExclusion
 import TNLean.MPS.MPDO.CPSVRepresentativeGroupedLemmaL
+import TNLean.MPS.MPDO.CPSVVerticalBNT
 import TNLean.MPS.MPDO.CommonWeightAbsorption
 import TNLean.MPS.MPDO.CommutingBondEtaBoundaryTrace
 import TNLean.MPS.MPDO.CommutingBondEtaCyclicCore
@@ -200,6 +201,7 @@ import TNLean.MPS.MPDO.RepresentativeGroupedMarkedLemmaL
 import TNLean.MPS.MPDO.RetainedClass
 import TNLean.MPS.MPDO.SALArbitraryCut
 import TNLean.MPS.MPDO.SALPhysicalSectorCyclicPositivity
+import TNLean.MPS.MPDO.SectorCompressionSeparation
 import TNLean.MPS.MPDO.SectorEtaContraction
 import TNLean.MPS.MPDO.SectorEtaOperator
 import TNLean.MPS.MPDO.SectorEtaPositivity

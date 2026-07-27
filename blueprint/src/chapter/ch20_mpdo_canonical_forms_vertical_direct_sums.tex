@@ -893,6 +893,7 @@
         thm:mpdo_vertical_projector_closure_literal_cpsv,
         thm:mpdo_vertical_no_periodic_vectors_literal_cpsv,
         thm:mpdo_literal_normal_vertical_corners,
+        thm:cpsv_literal_sector_compression_nonzero,
         thm:cpsv_normal_mpv_phase_gauge,
         thm:cpsv_normal_separated_eventually_li,
         thm:mpdo_sector_compression_trace_pos,
@@ -1002,8 +1003,11 @@
     It remains to group the tensors $B_k$ into actual vertical representative
     families over tensors $M_\alpha$. After such a grouping, let
     $P_{\alpha,k}$ be the range projection of the corner indexed by
-    $(\alpha,k)$. At some length its compression must be nonzero and positive
-    semidefinite, and its trace must have the form
+    $(\alpha,k)$. Theorem~\ref{thm:cpsv_literal_sector_compression_nonzero}
+    gives a length at which its compression is nonzero. Since $M$ generates
+    matrix product density operators, that compression is positive
+    semidefinite; Theorem~\ref{thm:mpdo_sector_compression_trace_pos} then
+    makes its trace positive. The sector trace identity has the form
     \begin{align}
         \tr\!\left(P_{\alpha,k}H^{(N)}P_{\alpha,k}\right)
         &=\mu_{\alpha,k}d_\alpha^{(N)}>0.
@@ -1062,9 +1066,10 @@
 % coordinate regrouping, active representative sector decomposition, and
 % retained-coordinate and original-coordinate forms of Lemma L, the original
 % inserted-tensor equality, invariant-projector closure, literal periodic
-% exclusion, the normal vertical block decomposition, and the conditional pairwise
-% Figure-8/Gram identities are complete. Vertical representative grouping,
-% normalization of the grouped sectors, and the final coisometry remain open.
+% exclusion, the normal vertical block decomposition, literal sector-compression
+% separation, and the conditional pairwise Figure-8/Gram identities are complete.
+% Actual vertical phase-class grouping, normalization of the grouped sectors, and
+% the final coisometry remain open.
 
 \begin{theorem}[BNT-refined horizontal form implies vertical canonical form]
     \label{thm:vertical_cf_of_horizontal_cf}
