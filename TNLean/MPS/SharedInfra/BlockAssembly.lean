@@ -31,6 +31,56 @@ noncomputable def toTensorFromBlocks {r : ℕ} {dim : Fin r → ℕ}
   (Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv)
     (Matrix.blockDiagonal' fun k => (μ k) • (A k i))
 
+/-- Flatten the dependent block coordinates after reindexing the block family by an
+equivalence. -/
+noncomputable def blockIndexCoordinateEquiv {r : ℕ} {ι : Type*}
+    (dim : Fin r → ℕ) (e : ι ≃ Fin r) :
+    (Σ k : ι, Fin (dim (e k))) ≃ Fin (∑ k : Fin r, dim k) :=
+  (Equiv.sigmaCongr e (fun _ => Equiv.refl _)).trans finSigmaFinEquiv
+
+/-- Exact letterwise reindexing of a heterogeneous block-diagonal tensor.
+
+The right side is assembled in the `ι` block order and then permuted into the flattened
+coordinates of the original `Fin r` family. Unlike `mpv_toTensorFromBlocks_reindex`, this is
+an equality of matrices at each letter. -/
+theorem toTensorFromBlocks_eq_reindex_blockDiagonal_equiv
+    {r : ℕ} {ι : Type*} [DecidableEq ι]
+    {dim : Fin r → ℕ} (μ : Fin r → ℂ)
+    (A : (k : Fin r) → MPSTensor d (dim k)) (e : ι ≃ Fin r) (i : Fin d) :
+    toTensorFromBlocks (d := d) μ A i =
+      Matrix.reindex (blockIndexCoordinateEquiv dim e) (blockIndexCoordinateEquiv dim e)
+        (Matrix.blockDiagonal' fun k : ι => μ (e k) • A (e k) i) := by
+  classical
+  let se : (Σ k : ι, Fin (dim (e k))) ≃ (Σ k : Fin r, Fin (dim k)) :=
+    Equiv.sigmaCongr e (fun _ => Equiv.refl _)
+  have hrawInv :
+      Matrix.reindex se.symm se.symm
+          (Matrix.blockDiagonal' (fun k : Fin r => μ k • A k i)) =
+        Matrix.blockDiagonal' (fun k : ι => μ (e k) • A (e k) i) := by
+    ext x y
+    rcases x with ⟨kx, x⟩
+    rcases y with ⟨ky, y⟩
+    simp only [Matrix.reindex_apply]
+    dsimp [se]
+    by_cases h : kx = ky
+    · subst ky
+      change Matrix.blockDiagonal' (fun k : Fin r => μ k • A k i)
+        ⟨e kx, x⟩ ⟨e kx, y⟩ = _
+      simp
+    · rw [Matrix.blockDiagonal'_apply_ne _ _ _ h]
+      rw [Matrix.blockDiagonal'_apply_ne]
+      exact fun he => h (e.injective he)
+  have hraw :
+      Matrix.blockDiagonal' (fun k : Fin r => μ k • A k i) =
+        Matrix.reindex se se
+          (Matrix.blockDiagonal' fun k : ι => μ (e k) • A (e k) i) :=
+    (Equiv.symm_apply_eq (Matrix.reindex se se)).mp hrawInv
+  change Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv
+      (Matrix.blockDiagonal' (fun k : Fin r => μ k • A k i)) = _
+  rw [hraw]
+  ext a b
+  rfl
+
 /-- Word evaluation of `toTensorFromBlocks` is the reindexed block diagonal of
 the component word evaluations, with the scalar weight `μ k` contributing the
 factor `(μ k) ^ w.length` on block `k`. -/
