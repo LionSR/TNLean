@@ -64,6 +64,8 @@ import TNLean.MPS.MPDO.BlockedBNTFusionIsometries
 import TNLean.MPS.MPDO.BlockedCompleteZipper
 import TNLean.MPS.MPDO.BlockedRFPConstruction
 import TNLean.MPS.MPDO.CPSVFigureEight
+import TNLean.MPS.MPDO.CPSVGroupedFigureEight
+import TNLean.MPS.MPDO.CPSVGroupedGramNormalization
 import TNLean.MPS.MPDO.CPSVOriginalSpaceLemmaL
 import TNLean.MPS.MPDO.CPSVPeriodicExclusion
 import TNLean.MPS.MPDO.CPSVRepresentativeGroupedLemmaL
@@ -115,6 +117,7 @@ import TNLean.MPS.MPDO.GSNNCHOrthogonalSectors
 import TNLean.MPS.MPDO.GSNNCHSectorSum
 import TNLean.MPS.MPDO.GroupedFigure8
 import TNLean.MPS.MPDO.GroupedGramNormalization
+import TNLean.MPS.MPDO.GroupedReferenceCorner
 import TNLean.MPS.MPDO.HayashiSectorComparison
 import TNLean.MPS.MPDO.HayashiSectorProjector
 import TNLean.MPS.MPDO.HorizontalBNT

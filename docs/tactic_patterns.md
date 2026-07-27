@@ -116,6 +116,19 @@ abstracted — record why, so it is not re-proposed).
 
 ## Completed refactors
 
+### Distinguished grouped reference corner
+- **Pattern:** the horizontal BNT-refined and literal CPSV actual-grouped Figure~8 proofs
+  both select the zero-index copy, use its identity gauge, and transport its physical corner
+  through the equality of bond dimensions with a chosen copy.
+- **Reuse:** `MPOTensor.exists_distinguished_grouped_reference_corner` in
+  `TNLean/MPS/MPDO/GroupedReferenceCorner.lean` constructs the transported positive corner
+  without any canonical-form hypothesis. The two Figure~8 theorems supply only their own
+  pairwise marked-separation result.
+- **Result:** the existing horizontal theorem keeps its statement, the literal theorem uses
+  the same dimension-dependent construction, and neither canonical-form surface is adapted
+  to the other. Identity-reference Gram rigidity is shared through
+  `MPSTensor.IsNormal.gram_eq_pos_smul_one_of_gram_conj_eq`.
+
 ### Canonical-form sector-compression separation
 - **Pattern:** the horizontal BNT-refined and literal CPSV surfaces separately turned
   vanishing finite-chain compressions into zero first-site insertions, then converted
