@@ -2,7 +2,7 @@
 # Schema: scripts/tenkz_rmp.py (load_verdicts).  Any status may be
 # recorded, including failure; the check rejects lies, never gaps.
 schema_version = 1
-campaign_sha256 = "8417d7dcbb4c469f6b519effd237e05a341ef7742283ab7b7db5c2fd2dc075d8"
+campaign_sha256 = "a08ea3fa15e0fce33337be33e55e80b6f7790d5b4ef3f4f7859cfa6cb0bb6a5a"
 
 [[verdict]]
 id = "rmp-ii-peps-projection"
@@ -51,14 +51,15 @@ note = "boundary repaired; trace loops still tall"
 
 [[verdict]]
 id = "rmp-ii-mpo-sheet"
-status = "cosmetic-gap"
+status = "faithful"
 pairing = "verified"
 pairing_by = "codex-pairing-sweep-2026-07-24"
-defects = ["label-collision"]
-case_sha256 = "89287a3f411ee22f4f882c5e46345ed78d9aacaad0eb832b9f46a63fada59720"
-reviewed = "2026-07-26"
-renderer = "fable-countersign-reading-2026-07-26-200dpi"
-note = "REFUSED faithful at countersign: the manifest formula names the 4-valent tensor the case draws, but author lines 305-309 compile to the five-site row; pairing discrepancy, not a drawing defect"
+defects = []
+case_sha256 = "75dfe6893593acb030416c34b177d059ed5fb272319b584dfcd46c0a5a6b61e0"
+reviewed = "2026-07-27"
+renderer = "fable-prose-realignment-2026-07-27-220dpi"
+second_viewer = "LionSR-delegated-fable-countersign-2026-07-26"
+note = "the paper defines the MPO by the row network (sec2fig5MPO, the paired placement asset), so the formula is realigned and the case redrawn as the five-dot row -- site for site against the compiled author lines. The earlier refusal's discrepancy is resolved at its root"
 
 [[verdict]]
 id = "rmp-ii-pepo-sheet"
@@ -402,13 +403,14 @@ note = "both panels match newfig13; residual spacing looseness only"
 
 [[verdict]]
 id = "rmp-iii-a-symmetry-sector"
-status = "cosmetic-gap"
+status = "faithful"
 pairing = "verified"
 pairing_by = "fable-structural-redraw-2026-07-27"
 defects = []
 case_sha256 = "93516fff17365be3dee7ccde3def372093f91c749244bd52064ff568e2122213"
 reviewed = "2026-07-27"
 renderer = "fable-structural-redraw-2026-07-27-200dpi"
+second_viewer = "LionSR-delegated-fable-countersign-2026-07-26"
 note = "the S_{alpha,g} case uses the supported ket-op-bra contraction order in a 180-degree frame, preserving the lower-ket X_g actions at author-source y=-0.75"
 
 [[verdict]]
@@ -503,7 +505,7 @@ case_sha256 = "d6bebbd2a09602edfe1e374b3e0995f25594902acb1038e26845d5f1953e64cb"
 reviewed = "2026-07-26"
 renderer = "fable-countersign-reading-2026-07-26-200dpi"
 second_viewer = "LionSR-delegated-fable-countersign-2026-07-26"
-note = "equivalence twin of the 4-valent tensor definition"
+note = "the 4-valent tensor definition in its own right; the former sheet twin now draws the row"
 
 [[verdict]]
 id = "rmp-iii-a-peps-tensor"
