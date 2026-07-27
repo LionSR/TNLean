@@ -174,30 +174,6 @@ theorem IsHorizontalCF.hasHorizontalCFMPVRepresentation
   intro N _hN σ
   exact (hGauge.sameMPV N σ).symm
 
-/-- Inserting the doubled-index left action gives the doubled-index tensor of
-left multiplication of the vertically viewed MPO tensor.
-
-Source: arXiv:1606.00608, Proposition 4.13, lines 1873--1887. -/
-theorem insertedTensor_ketLeftAction_toMPSTensor
-    (M : MPOTensor d D) (Q : Matrix (Fin d) (Fin d) ℂ) :
-    MPSTensor.insertedTensor (MPSTensor.ketLeftAction Q) M.toMPSTensor =
-      (M.ketLeftMul Q).toMPSTensor := by
-  funext p
-  rw [MPSTensor.insertedTensor]
-  change (∑ q : Fin (d * d),
-      MPSTensor.ketLeftAction Q p q • M q.divNat q.modNat) =
-    ∑ k : Fin d, Q p.divNat k • M k p.modNat
-  rw [← finProdFinEquiv.sum_comp]
-  rw [Fintype.sum_prod_type]
-  simp only [MPSTensor.ketLeftAction, MPSTensor.finProdFinEquiv_divNat,
-    MPSTensor.finProdFinEquiv_modNat, ite_smul, zero_smul]
-  apply Finset.sum_congr rfl
-  intro i _
-  rw [Fintype.sum_eq_single p.modNat]
-  · simp
-  · intro j hj
-    rw [if_neg (Ne.symm hj)]
-
 /-- Inserting the doubled-index right action gives the doubled-index tensor of
 right multiplication of the vertically viewed MPO tensor.
 
@@ -219,33 +195,6 @@ theorem insertedTensor_braRightAction_toMPSTensor
   · simp
   · intro i hi
     simp [hi.symm]
-
-/-- Inserting the doubled-index two-sided action gives the doubled-index tensor
-of two-sided multiplication of the vertically viewed MPO tensor.
-
-Source: arXiv:1606.00608, Proposition 4.13, lines 1873--1887. -/
-theorem insertedTensor_ketLeftBraRightAction_toMPSTensor
-    (M : MPOTensor d D) (Q : Matrix (Fin d) (Fin d) ℂ) :
-    MPSTensor.insertedTensor
-        (MPSTensor.ketLeftBraRightAction Q) M.toMPSTensor =
-      ((M.ketLeftMul Q).braRightMul Q).toMPSTensor := by
-  funext p
-  rw [MPSTensor.insertedTensor]
-  change (∑ q : Fin (d * d),
-      MPSTensor.ketLeftBraRightAction Q p q • M q.divNat q.modNat) =
-    ∑ j : Fin d, Q j p.modNat • (∑ k : Fin d, Q p.divNat k • M k j)
-  rw [← finProdFinEquiv.sum_comp]
-  rw [Fintype.sum_prod_type]
-  simp only [MPSTensor.ketLeftBraRightAction,
-    MPSTensor.finProdFinEquiv_divNat, MPSTensor.finProdFinEquiv_modNat]
-  simp_rw [Finset.smul_sum, smul_smul]
-  rw [Finset.sum_comm]
-  apply Finset.sum_congr rfl
-  intro j _
-  apply Finset.sum_congr rfl
-  intro k _
-  congr 1
-  ring
 
 /-- The two first-site identities in Proposition 4.13 imply equality of the
 opposite-corner insertions on every BNT representative.
@@ -374,47 +323,8 @@ theorem IsHorizontalCF.exists_not_commute_of_displaced
     {Q : Matrix (Fin d) (Fin d) ℂ} (hQidem : IsIdempotentElem Q)
     (hdisp : M.ketLeftMul Q ≠ (M.ketLeftMul Q).braRightMul Q) :
     ∃ N : ℕ, ¬ Commute (firstSiteMatrix Q N) (mpo M (N + 1)) := by
-  classical
-  by_contra hnone
-  simp only [not_exists, not_not] at hnone
-  apply hdisp
-  have hAct : MPSTensor.FirstSiteActionAgree M.toMPSTensor
-      (MPSTensor.ketLeftAction Q) (MPSTensor.ketLeftBraRightAction Q) := by
-    apply MPSTensor.firstSiteActionAgree_ketLeft_ketLeftBraRight M Q
-    intro N ρ
-    have hQ1idem : firstSiteMatrix Q N * firstSiteMatrix Q N =
-        firstSiteMatrix Q N := by
-      rw [firstSiteMatrix_mul_firstSiteMatrix, hQidem]
-    have hOneSided : firstSiteMatrix Q N * mpo M (N + 1) =
-        firstSiteMatrix Q N * mpo M (N + 1) * firstSiteMatrix Q N := by
-      calc
-        firstSiteMatrix Q N * mpo M (N + 1) =
-            firstSiteMatrix Q N * firstSiteMatrix Q N * mpo M (N + 1) := by
-              rw [hQ1idem]
-        _ = firstSiteMatrix Q N *
-            (firstSiteMatrix Q N * mpo M (N + 1)) := by rw [Matrix.mul_assoc]
-        _ = firstSiteMatrix Q N *
-            (mpo M (N + 1) * firstSiteMatrix Q N) := by rw [(hnone N).eq]
-        _ = firstSiteMatrix Q N * mpo M (N + 1) *
-            firstSiteMatrix Q N := by rw [Matrix.mul_assoc]
-    have h2 := Matrix.ext_iff.mpr hOneSided
-      (Fin.cons (ρ 0).divNat fun n => (ρ (Fin.succ n)).divNat)
-      (Fin.cons (ρ 0).modNat fun n => (ρ (Fin.succ n)).modNat)
-    rw [mul_firstSiteMatrix_apply] at h2
-    simp only [firstSiteMatrix_mul_apply] at h2
-    simp only [Fin.cons_zero, Function.comp_def, Fin.cons_succ] at h2
-    rw [h2]
-    simp only [Finset.sum_mul]
-    exact Finset.sum_comm
-  have hInsert := hHorizontal.insertedTensor_eq_of_firstSiteActionAgree M hAct
-  have hTensor : (M.ketLeftMul Q).toMPSTensor =
-      ((M.ketLeftMul Q).braRightMul Q).toMPSTensor := by
-    rw [← insertedTensor_ketLeftAction_toMPSTensor,
-      ← insertedTensor_ketLeftBraRightAction_toMPSTensor]
-    exact hInsert
-  funext i j
-  have hij := congrFun hTensor (finProdFinEquiv (i, j))
-  simpa [toMPSTensor] using hij
+  exact exists_not_commute_of_displaced_of_insertedTensor_eq M
+    (hHorizontal.insertedTensor_eq_of_firstSiteActionAgree M) hQidem hdisp
 
 /-- The normalized BNT-refined horizontal-form predicate supplies the
 representative-indexed invariant-projection conclusion.
