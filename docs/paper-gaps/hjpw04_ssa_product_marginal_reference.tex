@@ -131,6 +131,31 @@ processing.  This is formalized by the declaration
 \end{center}
 No recovery map or Petz equality theorem is needed for this step.
 
+\section{Downstream recovery corollary}
+
+The equality criterion above now feeds the singular-support Petz theorem.
+The automatic inclusion
+\begin{align}
+  \ker(\rho_A\otimes\rho_{BC})\subseteq\ker\rho_{ABC}
+\end{align}
+is formalized by \leanid{Matrix.product_marginal_support}. Consequently,
+strong-subadditivity equality implies
+\begin{align}
+  \mathcal R^{\mathrm{raw}}_{\rho_A\otimes\rho_{BC}}(\rho_{AB})
+  &=\rho_{ABC},\\
+  (\operatorname{id}_A\otimes
+    \widehat{\mathcal R}_{\rho_{BC}})(\rho_{AB})
+  &=\rho_{ABC}.
+\end{align}
+The declarations
+\leanid{Matrix.partialTraceRightPetzMap_product_marginal_recovery_of_isSSAEquality}
+and
+\leanid{Matrix.idTensor_partialTraceRightPetzChannel_traceC_ABC_eq_of_isSSAEquality}
+formalize HJPW Theorem~3 and equations (8), (10), and (11) at this exact
+product reference. The identity-tensored statement is supported-input only;
+it does not assert a global factorization of the generic completed singular
+product-reference channel.
+
 \section{Verdict}
 
 The gap is closed.  Equality in strong subadditivity is identified with

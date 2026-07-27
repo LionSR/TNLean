@@ -49,6 +49,18 @@ abstracted — record why, so it is not re-proposed).
   theorem; the same theorem is also used to transport partial-trace Petz
   recovery from finite cyclic coordinates to arbitrary finite products.
 
+### tripartite right partial trace after reassociation — promoted
+- **Pattern:** reassociate a matrix indexed by
+  \(A\times(B\times C)\) to \((A\times B)\times C\), expand the right
+  partial trace, and identify the result with the direct tripartite trace over
+  \(C\).
+- **Seen:** three occurrences across `StrongSubadditivityPosDef.lean` and
+  `SSAEqualityPetzRecovery.lean` before promotion.
+- **Abstraction:** `Matrix.partialTraceRight_submatrix_prodAssoc` in
+  `TNLean/Analysis/Entropy.lean`.
+- **Notes:** the two strong-subadditivity data-processing proofs and the HJPW
+  product-reference recovery proof now use the shared reassociation identity.
+
 ### eventual word-tuple span from selectors — promoted
 - **Pattern:** propagate block injectivity from a positive length to the prefix remaining after
   a fixed selector suffix, concatenate the prefix and suffix, and simplify their total length.

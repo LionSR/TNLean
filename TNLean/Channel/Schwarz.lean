@@ -34,6 +34,7 @@ import TNLean.Channel.Schwarz.RelativeEntropyConvexity
 import TNLean.Channel.Schwarz.RelativeEntropyDataProcessing
 import TNLean.Channel.Schwarz.RelativeEntropyUnitaryInvariance
 import TNLean.Channel.Schwarz.SSAEqualityDPI
+import TNLean.Channel.Schwarz.SSAEqualityPetzRecovery
 import TNLean.Channel.Schwarz.SchwarzNormal
 import TNLean.Channel.Schwarz.SchwarzNotCP
 import TNLean.Channel.Schwarz.SchwarzSubnormal
