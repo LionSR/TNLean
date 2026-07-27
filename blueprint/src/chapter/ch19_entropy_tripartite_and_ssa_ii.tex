@@ -857,6 +857,108 @@
     \cite{Hayden2004Structure}.
 \end{definition}
 
+The finite-dimensional operator-algebraic step of the
+Hayden--Jozsa--Petz--Winter derivation of the Koashi--Imoto theorem
+(\cite[Appendix~A]{Hayden2004Structure}) begins with the common invariant
+algebra of a family of jointly invariant states.
+
+\begin{definition}[Preserving operations and common average]
+    \label{def:koashi_imoto_preserving_average}
+    \lean{Kraus.IsPreserving, Kraus.PreservingKrausFamily,
+        Kraus.isPreserving_id, Kraus.commonAverage}
+    \leanok
+    Let $\rho_1,\ldots,\rho_K$ be density matrices in $\MN{D}$, $K\ge1$. A
+    trace-preserving completely positive Kraus family $F$ \emph{preserves}
+    $\rho_1,\ldots,\rho_K$ if $F\rho_k=\rho_k$ for every $k$. Write
+    \begin{align}
+        \mathbf F
+        &=\{F:\forall k,\ F\rho_k=\rho_k\}
+        \label{eq:koashi_imoto_preserving_set}
+    \end{align}
+    for the set of such operations -- non-empty since the identity operation
+    belongs to it -- and
+    \begin{align}
+        \bar\rho
+        &=\frac1K\sum_{k=1}^K\rho_k
+        \label{eq:koashi_imoto_common_average}
+    \end{align}
+    for their common average.
+\end{definition}
+
+\begin{lemma}[A preserving operation fixes the common average]
+    \label{lem:koashi_imoto_preserving_fixes_average}
+    \lean{Kraus.map_commonAverage_of_isPreserving}
+    \leanok
+    \uses{def:koashi_imoto_preserving_average}
+    Every $F\in\mathbf F$ satisfies $F\bar\rho=\bar\rho$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Linearity turns $F\rho_k=\rho_k$ for every $k$ into
+    $F\bar\rho=\frac1K\sum_kF\rho_k=\frac1K\sum_k\rho_k=\bar\rho$.
+\end{proof}
+
+% Scope restriction documented in
+% docs/paper-gaps/hjpw04_petz_factorization_maximally_mixed_scope.tex.
+\begin{definition}[Common invariant algebra]
+    \label{def:koashi_imoto_common_invariant_algebra}
+    \lean{Kraus.commonInvariantStarSubalgebra,
+        Kraus.mem_commonInvariantStarSubalgebra}
+    \leanok
+    \uses{def:koashi_imoto_preserving_average,
+        lem:koashi_imoto_preserving_fixes_average,
+        thm:adjointFixedPointsStarSubalgebra}
+    Assume in addition that the common average $\bar\rho$ of
+    Definition~\ref{def:koashi_imoto_preserving_average} is positive
+    definite. Hayden--Jozsa--Petz--Winter instead reduce to this case by
+    shrinking to the joint support of $\rho_1,\ldots,\rho_K$; that reduction
+    is not re-derived here. By
+    Lemma~\ref{lem:koashi_imoto_preserving_fixes_average}, $\bar\rho$ is a
+    positive definite fixed point of every $F\in\mathbf F$, so
+    Theorem~\ref{thm:adjointFixedPointsStarSubalgebra} makes the fixed-point
+    set of each adjoint map,
+    \begin{align}
+        A_F
+        &=\{X:F^*(X)=X\},
+        \notag
+    \end{align}
+    a $*$-subalgebra of $\MN{D}$. The \emph{common invariant algebra} is
+    \begin{align}
+        A_0
+        &=\bigcap_{F\in\mathbf F}A_F,
+        \label{eq:koashi_imoto_common_invariant_algebra}
+    \end{align}
+    and $X\in A_0$ if and only if $F^*(X)=X$ for every $F\in\mathbf F$.
+\end{definition}
+
+\begin{theorem}[Block form of the common invariant algebra]
+    \label{thm:koashi_imoto_common_invariant_algebra_block_form}
+    \lean{Kraus.exists_unitary_conj_blockDiagonal_iff_commonInvariantStarSubalgebra}
+    \leanok
+    \uses{def:koashi_imoto_common_invariant_algebra,
+        thm:starSubalgebra_unitary_block_diagonal_iff}
+    Under the hypotheses of
+    Definition~\ref{def:koashi_imoto_common_invariant_algebra}, there are
+    $L\in\N$, positive dimensions $d_0,\ldots,d_{L-1}$ and multiplicities
+    $m_0,\ldots,m_{L-1}$ with $\sum_\ell d_\ell m_\ell=D$, and a unitary
+    $U\in\MN{D}$ such that a matrix $A\in\MN{D}$ belongs to $A_0$ exactly
+    when
+    \begin{align}
+        U^\dagger A U
+        &=\bigoplus_{\ell=0}^{L-1}\Id_{m_\ell}\otimes B_\ell
+        \notag
+    \end{align}
+    for some matrices $B_\ell\in\MN{d_\ell}$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:starSubalgebra_unitary_block_diagonal_iff}
+    Direct specialization of
+    Theorem~\ref{thm:starSubalgebra_unitary_block_diagonal_iff} to $S=A_0$.
+\end{proof}
+
 \begin{theorem}[Hayashi SSA-equality characterization]
     \label{thm:hayashi_ssa_equality_characterization}
     \lean{hayashi_ssa_equality_characterization}
@@ -879,10 +981,17 @@
     the raw product-reference Petz map and its support behavior are given by
     Theorems~\ref{thm:entropy_petz_product_tensor} and
     \ref{thm:entropy_petz_product_tensor_corollaries}. The singular-support
-    equality-to-recovery theorem remains separate. After that analytic step,
-    one still needs the family-level Koashi--Imoto decomposition of the recovered
-    states, including the action of the middle-system channel on the common
-    direct-sum factors. This forward implication remains axiomatic. The
+    equality-to-recovery theorem remains separate. Independently, the common
+    invariant algebra and its block form (Definition~%
+    \ref{def:koashi_imoto_common_invariant_algebra} and
+    Theorem~\ref{thm:koashi_imoto_common_invariant_algebra_block_form}) supply
+    the finite-dimensional operator-algebraic first step of the
+    Koashi--Imoto argument, under an explicit full-support hypothesis on the
+    common average in place of the joint-support reduction. The finite
+    realization of that intersection by a single preserving operation, the
+    resulting family-level tensor-product state decomposition, and the action
+    of the middle-system channel on the common direct-sum factors all remain
+    open. This forward implication therefore remains axiomatic. The
     biconditional combines the two directions.
 
     This equality criterion is cited here as an input for the later MPDO arguments.
