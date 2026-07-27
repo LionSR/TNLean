@@ -42,9 +42,10 @@ of the original pair with that of its maximally mixed extension on the support
 of the reference matrix.
 
 The support projection is essential: Jenčová--Ruskai,
-arXiv:0903.2895v4, lines 788--793, pass from the common relative-modular
-resolvent to the square root only on the complement of the kernel. This is the
-analytic square-root step toward the Petz identity in
+arXiv:0903.2895v4, lines 788--793, obtain the common relative-modular
+resolvent only on the complement of the kernel and pass through functional
+calculus; here this is specialized to the square root. This is the analytic
+square-root step toward the Petz identity in
 Hayden--Jozsa--Petz--Winter, arXiv:quant-ph/0304007v2, Theorem 3,
 equation (8). -/
 theorem weyl_support_sqrt_ratio_eq_of_partialTraceRight_eq
