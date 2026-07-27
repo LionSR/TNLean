@@ -4,19 +4,30 @@
 % Boundary: Four lattice legs and six string endpoints are open.
 % Source: paper TN-Review-main.tex line 1676; author source ImagesReview Section
 %   III/ImagesReview Section III.tex lines 826-862
-% Capabilities: free-graph, multi-strand-braid, crossing-order
+% Capabilities: grid, multi-strand-braid, crossing-order
 \[
-  \begin{tenkzfree}
-    \tnput[dot, role=extra, label pos=south]{j}{(0mm,-7mm)}{j}
-    \tnput[dot, role=marked, label pos=south]{i}{(10mm,-7mm)}{i}
-    \tnput[dot, role=marked, label pos=north]{a}{(10mm,7mm)}{a}
-    \tnput[dot, role=extra, label pos=north]{b}{(0mm,7mm)}{b}
-    \tnjoin{-9mm,-7mm}{j.west} \tnjoin{i.east}{19mm,-7mm}
-    \tnjoin{-9mm,7mm}{b.west} \tnjoin{a.east}{19mm,7mm}
-    \tnjoin[role=operator, route=arc, out=90, in=-90]{b.north}{-4mm,14mm}
-    \tnjoin[role=operator, route=arc, out=-45, in=135]{b.south east}{i.north west}
-    \tnjoin[role=operator, route=arc, out=-90, in=90]{i.south}{10mm,-14mm}
-    \tnjoin[role=operator, route=arc, out=45, in=225]{j.north east}{a.south west}
-    \tnjoin[role=operator, route=arc, out=90, in=-90]{a.north}{14mm,14mm}
-  \end{tenkzfree}
+  % The author's panel weaves the two strings through the plaquette without a
+  % string-string crossing: the b string rounds the anyon i across its south
+  % leg, and each string-lattice crossing carries its dot.  The kernel routes
+  % below say exactly that; every dot stands at the address of its crossing.
+  \tenkzkernel
+  \begin{tenkz}[rows={wire,wire}, cols=2, bonds=none]
+    \tn[at=(1,1), name=b, role=extra, label pos=nw]{b}
+    \tn[at=(1,2), name=a, role=marked, label pos=ne]{a}
+    \tn[at=(2,1), name=j, role=extra, label pos=sw]{j}
+    \tn[at=(2,2), name=i, role=marked, label pos=se]{i}
+    \tnwire{open w}{b.w} \tnwire{b.e}{a.w} \tnwire{a.e}{open e}
+    \tnwire{open w}{j.w} \tnwire{j.e}{i.w} \tnwire{i.e}{open e}
+    \tnwire{b.n}{open n} \tnwire{b.s}{j.n} \tnwire{j.s}{open s}
+    \tnwire{a.n}{open n} \tnwire{a.s}{i.n} \tnwire{i.s}{open s}
+    \tnwire[kind=string, species=operator, name=sb,
+            via={0.3 w of b, midway b and j, midway j and i,
+                 0.3 s of i, 0.3 e of i, 0.3 e of midway i and a}]{open n}{a.315}
+    \tnwire[kind=string, species=operator, name=sa,
+            via={midway i and a, midway b and a, 0.3 n of a}]{i.45}{open e}
+    \tn[at=0.3 w of b]{}      \tn[at=midway b and j]{}
+    \tn[at=midway j and i]{}  \tn[at=0.3 s of i]{}
+    \tn[at=0.3 e of i]{}      \tn[at=midway i and a]{}
+    \tn[at=midway b and a]{}  \tn[at=0.3 n of a]{}
+  \end{tenkz}
 \]

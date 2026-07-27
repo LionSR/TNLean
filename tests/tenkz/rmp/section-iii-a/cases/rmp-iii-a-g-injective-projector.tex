@@ -4,40 +4,39 @@
 % Boundary: Resolved by the public environment; open indices remain explicit.
 % Source: paper TN-Review-main.tex line 1483; author source ImagesReview Section
 %   III/ImagesReview Section III.tex lines 468-520
-% Capabilities: free-graph, typed-ports
+% Capabilities: grid, typed-ports
 \[
-  \frac{1}{|G|}\sum_{g\in G}\;
-  % LHS: one group action per virtual leg; barbs give V (out) vs V* (in)
-  \begin{tenkzfree}
-    \tnput[ring]{lw}{(-0.8,0)}{L_g}
-    \tnput[ring]{le}{(0.8,0)}{L_g}
-    \tnput[ring]{lt}{(0,0.8)}{L_g}
-    \tnput[ring]{lb}{(0,-0.8)}{L_g}
-    % west leg flows east, east leg flows west (the inverse action),
-    % top flows down, bottom flows up: all toward the plaquette centre
-    \tnjoin[dir]{-1.45,0}{lw.west}   \tnjoin[dir]{lw.east}{-0.2,0}
-    \tnjoin[dir]{1.45,0}{le.east}    \tnjoin[dir]{le.west}{0.2,0}
-    \tnjoin[dir]{0,1.45}{lt.north}   \tnjoin[dir]{lt.south}{0,0.2}
-    \tnjoin[dir]{0,-1.45}{lb.south}  \tnjoin[dir]{lb.north}{0,-0.2}
-  \end{tenkzfree}
-  \;=\;
-  % RHS: the red ring through the four PEPS tensors, dot on the NW corner
-  \begin{tenkzfree}[tensor style=box]
-    \tnput[box]{n}{(0,0.8)}{}
-    \tnput[box]{e}{(0.8,0)}{}
-    \tnput[box]{s}{(0,-0.8)}{}
-    \tnput[box]{w}{(-0.8,0)}{}
-    \tnput[dot]{d}{(-0.8,0.8)}{}
-    % black lattice legs through each tensor (physical ink of the source)
-    \tnjoin{-1.45,0}{w.west}  \tnjoin{w.east}{-0.35,0}
-    \tnjoin{1.45,0}{e.east}   \tnjoin{e.west}{0.35,0}
-    \tnjoin{0,1.45}{n.north}  \tnjoin{n.south}{0,0.35}
-    \tnjoin{0,-1.45}{s.south} \tnjoin{s.north}{0,-0.35}
-    % the symmetry ring (source: RED) with the orientation dot at NW
-    \tnjoin{d.east}{n.west}
-    \tnjoin[route=hv]{n.east}{e.north}
-    \tnjoin[route=vh]{e.south}{s.east}
-    \tnjoin[route=hv]{s.west}{w.south}
-    \tnjoin{w.north}{d.south}
-  \end{tenkzfree}
+  % Author panel (lines 468-497): the pulling-through equality for the
+  % G-injective tensor.  A virtual g-string crosses the west and north legs,
+  % with a group-action box at each crossing; pulled through the tensor it
+  % crosses the east and south legs instead.  The action boxes stand on the
+  % string at its measured leg crossings.
+  \tenkzkernel
+  \begin{tenkzeq}[size=m]
+    \begin{tenkz}[rows={wire,wire,wire,wire,wire}, cols=5, bonds=none]
+      \tn[at=(3,3), name=A]{}
+      \tnwire[kind=index]{A.w}{(3,1)}
+      \tnwire[kind=index]{A.e}{(3,5)}
+      \tnwire[kind=index]{A.s}{(5,3)}
+      \tnwire[kind=index]{A.n}{(1,3)}
+      \tnwire[kind=string, species=g, name=g, via={(3,2), (2,3)}]{(4,2)}{(2,4)}
+      \tn[skin=box, at=on g 0.28]{}
+      \tn[skin=box, at=on g 0.72]{}
+      \tnmark[form=label]{(2,2)}{$g$}
+      \tnmark[form=label]{(4,4)}{$A$}
+    \end{tenkz}
+    =
+    \begin{tenkz}[rows={wire,wire,wire,wire,wire}, cols=5, bonds=none]
+      \tn[at=(3,3), name=A]{}
+      \tnwire[kind=index]{A.w}{(3,1)}
+      \tnwire[kind=index]{A.e}{(3,5)}
+      \tnwire[kind=index]{A.s}{(5,3)}
+      \tnwire[kind=index]{A.n}{(1,3)}
+      \tnwire[kind=string, species=g, name=g, via={(3,4), (4,3)}]{(2,4)}{(4,2)}
+      \tn[skin=box, at=on g 0.30]{}
+      \tn[skin=box, at=on g 0.70]{}
+      \tnmark[form=label]{(4,4)}{$g$}
+      \tnmark[form=label]{(2,2)}{$A$}
+    \end{tenkz}
+  \end{tenkzeq}
 \]

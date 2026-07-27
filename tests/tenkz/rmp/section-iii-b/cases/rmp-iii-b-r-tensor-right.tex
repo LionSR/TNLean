@@ -13,16 +13,22 @@
     \tnput[box]{R}{(9mm,1mm)}{\mathcal R_{i,b}}
     \tnjoin{-14mm,9mm}{i.west} \tnjoin{i.east}{20mm,9mm}
     \tnjoin{0mm,18mm}{i.north} \tnjoin{i.south}{0mm,-16mm}
-    \tnjoin[role=operator, route=arc, out=-45, in=180]{i.south east}{R.west}
+    \tnjoin[role=operator]{i.south east}{R.north}
+    % the lattice vertex where the vertical rail crosses the lower rail
+    \tnput[dot]{v}{(0mm,-8mm)}{}
     % the b, a, b strands on the lower rail, east of the vertical rail
-    \tnput[dot, role=extra, label pos=south]{bL}{(4mm,-8mm)}{b}
-    \tnput[dot, role=marked, label pos=south]{a}{(9mm,-8mm)}{a}
-    \tnput[dot, role=extra, label pos=south]{bR}{(14mm,-8mm)}{b}
-    \tnjoin{-14mm,-8mm}{bL.west} \tnjoin{bL.east}{a.west}
+    \tnput[dot, role=extra, label pos=south west]{bL}{(4mm,-8mm)}{b}
+    \tnput[dot, role=marked, label pos=south west]{a}{(9mm,-8mm)}{a}
+    \tnput[dot, role=extra, label pos=south west]{bR}{(14mm,-8mm)}{b}
+    \tnjoin{-14mm,-8mm}{v.west} \tnjoin{v.east}{bL.west} \tnjoin{bL.east}{a.west}
     \tnjoin{a.east}{bR.west} \tnjoin{bR.east}{20mm,-8mm}
     % the three resolved strands leave the box for b, a, b
-    \tnjoin[role=operator, route=arc, out=-135, in=90]{R.south west}{bL.north}
-    \tnjoin[role=operator, route=arc, out=-90, in=90]{R.south}{a.north}
-    \tnjoin[role=operator, route=arc, out=-45, in=90]{R.south east}{bR.north}
+    \tnjoin[role=operator]{R.south west}{bL.north}
+    \tnjoin[role=operator]{R.south}{a.north}
+    \tnjoin[role=operator]{R.south east}{bR.north}
+    % the strands continue past the rail as the open string ends
+    \tnjoin[role=operator]{bL.south}{4mm,-14mm}
+    \tnjoin[role=operator]{a.south}{9mm,-14mm}
+    \tnjoin[role=operator]{bR.south}{14mm,-14mm}
   \end{tenkzfree}
 \]
