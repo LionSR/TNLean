@@ -996,3 +996,22 @@ to the source's trace.
 Census-correction: #4709
 
 No ledger row changes and no flag verdict is re-examined here.
+
+### 2026-07-27 — the condensation endpoint repair prices one sheet vector
+
+M3 rises from 355 to 356.  The six-row condensation panel must keep the
+author source's two marked paths interleaved while leaving both paired
+endpoints visually distinct and physically open.  The derived plane
+separation splits the construction into two disjoint slabs, while the former
+`sheet sep=` value overlaps the large endpoint markers and triggers the
+interleave and near-coincidence guards.  One expert `sheet vector=` therefore
+states the source-measured vertical offset; `row vector=` replaces the former
+`plane slant=` escape and preserves its reviewed 0.30/0.45 projection without
+a boundary-band warning.
+
+M4 remains 17.01.  The new endpoint and projection data are written without
+raising the frozen case-line mean.
+
+Census-correction: #4969
+
+No ledger row changes and no flag verdict is re-examined here.

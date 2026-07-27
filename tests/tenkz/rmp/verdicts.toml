@@ -406,10 +406,10 @@ status = "cosmetic-gap"
 pairing = "verified"
 pairing_by = "fable-structural-redraw-2026-07-27"
 defects = []
-case_sha256 = "adf950d9776130532e317cc46119d950942223ccd71cec480680862f1acc59ae"
+case_sha256 = "f14cd361972a9a45073fa094d7dfffaa0f9d012e132c0b8f563c522e3d1ff488"
 reviewed = "2026-07-27"
 renderer = "fable-structural-redraw-2026-07-27-200dpi"
-note = "the S_{alpha,g} metadata now names the two closed sandwich loops, R insertions, and X_g actions drawn by the case"
+note = "the S_{alpha,g} metadata now names the two closed sandwich loops, R insertions, and lower-ket X_g actions at author-source y=-0.75"
 
 [[verdict]]
 id = "rmp-iii-a-f-symbol"
@@ -819,10 +819,10 @@ status = "cosmetic-gap"
 pairing = "verified"
 pairing_by = "site-glyph-source-review-2026-07-27"
 defects = []
-case_sha256 = "6d64d7467d8c31bd0ea3eb36cf4288f4ab8d423ec6f190957a7f075f0218e333"
+case_sha256 = "68f4c81d4a9fe55378b30e9f8d0c4425919b69f7a31b5b3dfd88215f92d679c4"
 reviewed = "2026-07-27"
 renderer = "fable-residual-batch-2026-07-27-200dpi"
-note = "the source's identical marked path is now stated on ket and bra sheets with explicit sheet coordinates; the 6x4 source grid and paired endpoints are restored"
+note = "the source's identical marked path is stated on warning-free ket and bra sheet vectors; the 6x4 grid and distinct uncontracted paired endpoints are restored"
 
 [[verdict]]
 id = "rmp-iv-ground-space-1d"

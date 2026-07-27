@@ -2,26 +2,27 @@
 % Formula: S_{alpha,g} is the two-loop string-order construction with
 %   R_{bar alpha}, R_alpha, X_g, and X_g^dagger insertions.
 % Ink: Two fixed-point sandwich loops with R on the internal physical bonds and
-%   the on-site symmetry action on the ket rails.
+%   the on-site symmetry action on the lower ket rails.
 % Boundary: Both loops close their virtual ends through rho_l and rho_r; all
 %   physical indices are contracted.
 % Source: paper TN-Review-main.tex line 1184; author source ImagesReview Section
 %   III/ImagesReview Section III.tex lines 114-132
 % Capabilities: grid, typed-ports
 % The string-order expectation <S_{alpha,g}>: two sandwich loops, each a
-% ket-A/bra-A pair closed west/east through the fixed points rho_l, rho_r,
+% bra-A/ket-A pair closed west/east through the fixed points rho_l, rho_r,
 % carrying the symmetry insertion R (on the ket-bra physical bond) and the
-% on-site action X_g on the ket rail.  The op row is side-sealed so the
-% west/east cups bend only the ket and bra rails.
+% on-site action X_g on the lower ket rail, as at y=-0.75 in the author
+% source.  The op row is side-sealed so the west/east cups bend only the
+% bra and ket rails.
 \[
-  \begin{tenkz}[rows={ket, op:west none:east none, bra}, tensor style=box,
+  \begin{tenkz}[rows={bra, op:west none:east none, ket}, tensor style=box,
                 west={cup=$\rho_l$}, east={cup=$\rho_r$}]
     \tn{A} & \tnghost{}\\
     \tn[dot]{R_{\bar\alpha}} & \tnskip\\
     \tn{A} & \tnX{X_g}
   \end{tenkz}
   \qquad
-  \begin{tenkz}[rows={ket, op:west none:east none, bra}, tensor style=box,
+  \begin{tenkz}[rows={bra, op:west none:east none, ket}, tensor style=box,
                 west={cup=$\rho_l$}, east={cup=$\rho_r$}]
     \tnghost{} & \tn{A}\\
     \tnskip & \tn[dot]{R_\alpha}\\
