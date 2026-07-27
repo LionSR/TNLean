@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Channel.OrderedCP
 import TNLean.Channel.KrausFreedom
+import TNLean.Channel.PartialTrace
 
 /-!
 # Radon–Nikodym theorem for CP maps and open-system representation
