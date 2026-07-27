@@ -12,5 +12,22 @@
     \tnput[ring]{s}{(0mm,-8mm)}{L_g} \tnput[ring]{w}{(-8mm,0mm)}{L_g}
     \tnjoin[dir]{0mm,16mm}{n.north} \tnjoin[dir]{16mm,0mm}{e.east}
     \tnjoin[dir]{0mm,-16mm}{s.south} \tnjoin[dir]{-16mm,0mm}{w.west}
-  \end{tenkzfree}=P_G.
+    \tnjoin[dir]{n.south}{0mm,2mm} \tnjoin[dir]{e.west}{2mm,0mm}
+    \tnjoin[dir]{s.north}{0mm,-2mm} \tnjoin[dir]{w.east}{-2mm,0mm}
+  \end{tenkzfree}
+  =
+  \begin{tenkzfree}[tensor style=box]
+    \tnput[box]{bn}{(0mm,8mm)}{} \tnput[box]{be}{(8mm,0mm)}{}
+    \tnput[box]{bs}{(0mm,-8mm)}{} \tnput[box]{bw}{(-8mm,0mm)}{}
+    \tnput[dot]{bd}{(-8mm,8mm)}{}
+    \tnjoin{0mm,14.5mm}{bn.north}   \tnjoin{bn.south}{0mm,3.5mm}
+    \tnjoin{14.5mm,0mm}{be.east}    \tnjoin{be.west}{3.5mm,0mm}
+    \tnjoin{0mm,-14.5mm}{bs.south}  \tnjoin{bs.north}{0mm,-3.5mm}
+    \tnjoin{-14.5mm,0mm}{bw.west}   \tnjoin{bw.east}{-3.5mm,0mm}
+    \tnjoin{bd.east}{bn.west}
+    \tnjoin[route=hv]{bn.east}{be.north}
+    \tnjoin[route=vh]{be.south}{bs.east}
+    \tnjoin[route=hv]{bs.west}{bw.south}
+    \tnjoin{bw.north}{bd.south}
+  \end{tenkzfree}.
 \]
