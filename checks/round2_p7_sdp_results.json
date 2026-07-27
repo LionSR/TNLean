@@ -1,0 +1,450 @@
+{
+  "normalized_toric_scan": {
+    "-0.1": {
+      "1to2": {
+        "forward": {
+          "closure_res": 3.659662572985667e-10,
+          "min_eig": 0.22499999974894072,
+          "status": "optimal",
+          "tp_res": 1.4638652512388717e-09
+        },
+        "reverse": {
+          "closure_res": null,
+          "min_eig": null,
+          "status": "infeasible",
+          "tp_res": null
+        }
+      },
+      "2to3": {
+        "forward": {
+          "closure_res": 9.30644339369735e-10,
+          "min_eig": 0.1124999988976321,
+          "status": "optimal",
+          "tp_res": 7.445154937002485e-09
+        },
+        "reverse": {
+          "closure_res": null,
+          "min_eig": null,
+          "status": "infeasible",
+          "tp_res": null
+        }
+      }
+    },
+    "-0.25": {
+      "1to2": {
+        "forward": {
+          "closure_res": 3.8522802656149047e-10,
+          "min_eig": 0.1874999988220259,
+          "status": "optimal",
+          "tp_res": 1.4517520519063964e-09
+        },
+        "reverse": {
+          "closure_res": null,
+          "min_eig": null,
+          "status": "infeasible",
+          "tp_res": null
+        }
+      },
+      "2to3": {
+        "forward": {
+          "closure_res": 9.319471305779814e-10,
+          "min_eig": 0.09374999863979333,
+          "status": "optimal",
+          "tp_res": 7.455576822579246e-09
+        },
+        "reverse": {
+          "closure_res": null,
+          "min_eig": null,
+          "status": "infeasible",
+          "tp_res": null
+        }
+      }
+    },
+    "-0.5": {
+      "1to2": {
+        "forward": {
+          "closure_res": 1.535032365107547e-09,
+          "min_eig": 0.12499999728209132,
+          "status": "optimal",
+          "tp_res": 1.4086243282918076e-09
+        },
+        "reverse": {
+          "closure_res": null,
+          "min_eig": null,
+          "status": "infeasible",
+          "tp_res": null
+        }
+      },
+      "2to3": {
+        "forward": {
+          "closure_res": 9.365783149029028e-10,
+          "min_eig": 0.062499998214358275,
+          "status": "optimal",
+          "tp_res": 7.49262685229013e-09
+        },
+        "reverse": {
+          "closure_res": null,
+          "min_eig": null,
+          "status": "infeasible",
+          "tp_res": null
+        }
+      }
+    },
+    "-0.75": {
+      "1to2": {
+        "forward": {
+          "closure_res": 3.4319171948737903e-09,
+          "min_eig": 0.06249999575841122,
+          "status": "optimal",
+          "tp_res": 1.3372032370284614e-09
+        },
+        "reverse": {
+          "closure_res": null,
+          "min_eig": null,
+          "status": "infeasible",
+          "tp_res": null
+        }
+      },
+      "2to3": {
+        "forward": {
+          "closure_res": 9.442234077949863e-10,
+          "min_eig": 0.031249997800612748,
+          "status": "optimal",
+          "tp_res": 7.553787484404495e-09
+        },
+        "reverse": {
+          "closure_res": null,
+          "min_eig": null,
+          "status": "infeasible",
+          "tp_res": null
+        }
+      }
+    },
+    "-0.9": {
+      "1to2": {
+        "forward": {
+          "closure_res": 4.917158930028975e-09,
+          "min_eig": 0.02499999485674987,
+          "status": "optimal",
+          "tp_res": 1.281039274658724e-09
+        },
+        "reverse": {
+          "closure_res": null,
+          "min_eig": null,
+          "status": "infeasible",
+          "tp_res": null
+        }
+      },
+      "2to3": {
+        "forward": {
+          "closure_res": 1.2060061005403355e-09,
+          "min_eig": 0.012499997560889785,
+          "status": "optimal",
+          "tp_res": 7.601710372284742e-09
+        },
+        "reverse": {
+          "closure_res": null,
+          "min_eig": null,
+          "status": "infeasible",
+          "tp_res": null
+        }
+      }
+    },
+    "-1.0": {
+      "1to2": {
+        "forward": {
+          "closure_res": 8.434475173846323e-09,
+          "min_eig": -9.236316622041917e-09,
+          "status": "optimal",
+          "tp_res": 3.2073657063591554e-09
+        },
+        "reverse": {
+          "closure_res": 4.996003610813204e-16,
+          "min_eig": 1.918222716010251e-16,
+          "status": "optimal",
+          "tp_res": 3.3306690738754696e-16
+        }
+      },
+      "2to3": {
+        "forward": {
+          "closure_res": 2.226480444456058e-09,
+          "min_eig": -3.4433096153511946e-09,
+          "status": "optimal",
+          "tp_res": 9.73463332165636e-09
+        },
+        "reverse": {
+          "closure_res": 8.326672684688674e-16,
+          "min_eig": -1.579089822920977e-16,
+          "status": "optimal",
+          "tp_res": 2.1094237467877974e-15
+        }
+      }
+    },
+    "0.0": {
+      "1to2": {
+        "forward": {
+          "closure_res": 3.665336367753014e-10,
+          "min_eig": 0.25000000036653264,
+          "status": "optimal",
+          "tp_res": 1.4661345471012055e-09
+        },
+        "reverse": {
+          "closure_res": 5.551115123125783e-16,
+          "min_eig": 0.4999999999999973,
+          "status": "optimal",
+          "tp_res": 1.2212453270876722e-15
+        }
+      },
+      "2to3": {
+        "forward": {
+          "closure_res": 9.303998821375004e-10,
+          "min_eig": 0.12499999906959963,
+          "status": "optimal",
+          "tp_res": 7.443199279144608e-09
+        },
+        "reverse": {
+          "closure_res": 3.885780586188048e-16,
+          "min_eig": 0.24999999999999964,
+          "status": "optimal",
+          "tp_res": 1.3322676295501878e-15
+        }
+      }
+    },
+    "0.1": {
+      "1to2": {
+        "forward": {
+          "closure_res": 3.659662572985667e-10,
+          "min_eig": 0.22499999974894075,
+          "status": "optimal",
+          "tp_res": 1.4638650291942668e-09
+        },
+        "reverse": {
+          "closure_res": null,
+          "min_eig": null,
+          "status": "infeasible",
+          "tp_res": null
+        }
+      },
+      "2to3": {
+        "forward": {
+          "closure_res": 9.306443116141594e-10,
+          "min_eig": 0.11249999889763221,
+          "status": "optimal",
+          "tp_res": 7.445154492913275e-09
+        },
+        "reverse": {
+          "closure_res": null,
+          "min_eig": null,
+          "status": "infeasible",
+          "tp_res": null
+        }
+      }
+    },
+    "0.25": {
+      "1to2": {
+        "forward": {
+          "closure_res": 3.852280230920435e-10,
+          "min_eig": 0.1874999988220259,
+          "status": "optimal",
+          "tp_res": 1.4517520519063964e-09
+        },
+        "reverse": {
+          "closure_res": null,
+          "min_eig": null,
+          "status": "infeasible",
+          "tp_res": null
+        }
+      },
+      "2to3": {
+        "forward": {
+          "closure_res": 9.319471028224058e-10,
+          "min_eig": 0.0937499986397936,
+          "status": "optimal",
+          "tp_res": 7.455577266668456e-09
+        },
+        "reverse": {
+          "closure_res": null,
+          "min_eig": null,
+          "status": "infeasible",
+          "tp_res": null
+        }
+      }
+    },
+    "0.5": {
+      "1to2": {
+        "forward": {
+          "closure_res": 1.5350323789853348e-09,
+          "min_eig": 0.12499999728209135,
+          "status": "optimal",
+          "tp_res": 1.4086245503364125e-09
+        },
+        "reverse": {
+          "closure_res": null,
+          "min_eig": null,
+          "status": "infeasible",
+          "tp_res": null
+        }
+      },
+      "2to3": {
+        "forward": {
+          "closure_res": 9.365784259252052e-10,
+          "min_eig": 0.06249999821435818,
+          "status": "optimal",
+          "tp_res": 7.492627407401642e-09
+        },
+        "reverse": {
+          "closure_res": null,
+          "min_eig": null,
+          "status": "infeasible",
+          "tp_res": null
+        }
+      }
+    },
+    "0.75": {
+      "1to2": {
+        "forward": {
+          "closure_res": 3.4319171948737903e-09,
+          "min_eig": 0.06249999575841116,
+          "status": "optimal",
+          "tp_res": 1.3372030149838565e-09
+        },
+        "reverse": {
+          "closure_res": null,
+          "min_eig": null,
+          "status": "infeasible",
+          "tp_res": null
+        }
+      },
+      "2to3": {
+        "forward": {
+          "closure_res": 9.44223421672774e-10,
+          "min_eig": 0.031249997800612783,
+          "status": "optimal",
+          "tp_res": 7.55378726235989e-09
+        },
+        "reverse": {
+          "closure_res": null,
+          "min_eig": null,
+          "status": "infeasible",
+          "tp_res": null
+        }
+      }
+    },
+    "0.9": {
+      "1to2": {
+        "forward": {
+          "closure_res": 4.917158930028975e-09,
+          "min_eig": 0.02499999485674987,
+          "status": "optimal",
+          "tp_res": 1.281039274658724e-09
+        },
+        "reverse": {
+          "closure_res": null,
+          "min_eig": null,
+          "status": "infeasible",
+          "tp_res": null
+        }
+      },
+      "2to3": {
+        "forward": {
+          "closure_res": 1.206006058906972e-09,
+          "min_eig": 0.01249999756088973,
+          "status": "optimal",
+          "tp_res": 7.60171026126244e-09
+        },
+        "reverse": {
+          "closure_res": null,
+          "min_eig": null,
+          "status": "infeasible",
+          "tp_res": null
+        }
+      }
+    },
+    "1.0": {
+      "1to2": {
+        "forward": {
+          "closure_res": 8.434475118335172e-09,
+          "min_eig": -9.236316643345085e-09,
+          "status": "optimal",
+          "tp_res": 3.2073659284037603e-09
+        },
+        "reverse": {
+          "closure_res": 6.661338147750939e-16,
+          "min_eig": -8.621485038892221e-17,
+          "status": "optimal",
+          "tp_res": 5.551115123125783e-16
+        }
+      },
+      "2to3": {
+        "forward": {
+          "closure_res": 2.2264804999672094e-09,
+          "min_eig": -3.4433096965216436e-09,
+          "status": "optimal",
+          "tp_res": 9.734632988589453e-09
+        },
+        "reverse": {
+          "closure_res": 6.38378239159465e-16,
+          "min_eig": -5.1366975982327156e-17,
+          "status": "optimal",
+          "tp_res": 1.3322676295501878e-15
+        }
+      }
+    }
+  },
+  "product_1to2": {
+    "forward": {
+      "closure_res": 8.053914146710639e-09,
+      "min_eig": 0.05689659252401009,
+      "status": "optimal",
+      "tp_res": 9.551719193368058e-09
+    },
+    "reverse": {
+      "closure_res": 6.106226635438361e-16,
+      "min_eig": 0.20868027320151342,
+      "status": "optimal",
+      "tp_res": 1.6653345369377348e-15
+    }
+  },
+  "toric_q1_as_printed_1to2": {
+    "forward": {
+      "closure_res": null,
+      "min_eig": null,
+      "status": "infeasible",
+      "tp_res": null
+    },
+    "reverse": {
+      "closure_res": null,
+      "min_eig": null,
+      "status": "infeasible",
+      "tp_res": null
+    }
+  },
+  "toric_q1_normalized_1to2": {
+    "forward": {
+      "closure_res": 8.434475118335172e-09,
+      "min_eig": -9.236316643345085e-09,
+      "status": "optimal",
+      "tp_res": 3.2073659284037603e-09
+    },
+    "reverse": {
+      "closure_res": 6.661338147750939e-16,
+      "min_eig": -8.621485038892221e-17,
+      "status": "optimal",
+      "tp_res": 5.551115123125783e-16
+    }
+  },
+  "toric_q1_normalized_2to3": {
+    "forward": {
+      "closure_res": 2.2264804999672094e-09,
+      "min_eig": -3.4433096965216436e-09,
+      "status": "optimal",
+      "tp_res": 9.734632988589453e-09
+    },
+    "reverse": {
+      "closure_res": 6.38378239159465e-16,
+      "min_eig": -5.1366975982327156e-17,
+      "status": "optimal",
+      "tp_res": 1.3322676295501878e-15
+    }
+  }
+}
