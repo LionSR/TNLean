@@ -268,7 +268,7 @@ theorem posSemidef_fixedPoint_unique
     (A : MPSTensor d D) (hA : IsInjective A)
     (ρ σ : Matrix (Fin D) (Fin D) ℂ)
     (hρ_psd : ρ.PosSemidef) (hρ_ne : ρ ≠ 0)
-    (hσ_psd : σ.PosSemidef) (hσ_ne : σ ≠ 0)
+    (hσ_psd : σ.PosSemidef)
     (hρ_fix : transferMap (d := d) (D := D) A ρ = ρ)
     (hσ_fix : transferMap (d := d) (D := D) A σ = σ) :
     ∃ c : ℂ, σ = c • ρ := by

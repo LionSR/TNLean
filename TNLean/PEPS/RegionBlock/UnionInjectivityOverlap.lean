@@ -19,10 +19,10 @@ source's four-region two-step inverse application.
 
 The source decomposes the vertex set into four pairwise-disjoint blocks
 `P₀ = A \ B`, `P₁ = A ∩ B`, `P₂ = B \ A`, and `P₃ = (A ∪ B)ᶜ`, with
-`A = P₀ ∪ P₁`, `B = P₁ ∪ P₂`, and `A ∪ B = P₀ ∪ P₁ ∪ P₂`. A coefficient family
-`c` annihilating the blocked weights of `A ∪ B` is stripped of `A` by its left
-inverse (the host weight, read as a function of the `A` physical leg, factors
-through the `A`-block map; the blocks `A` and `B \ A` form a disjoint
+`A = P₀ ∪ P₁`, `B = P₁ ∪ P₂`, and `A ∪ B = P₀ ∪ P₁ ∪ P₂`. A coefficient
+family `c` annihilating the blocked weights of `A ∪ B` is stripped of `A` by
+its left inverse (the host weight, read as a function of the `A` physical leg,
+factors through the `A`-block map; the blocks `A` and `B \ A` form a disjoint
 two-block split of the host, so this is the landed three-block blue strip with
 `blue := A`, `complement := B \ A`). The residual is a coupling through the
 `B \ A` block. Re-inserting the overlap `A ∩ B` rebuilds the `B`-block weight,
@@ -168,9 +168,9 @@ theorem overlapRightGeometry_univ_sdiff_red (R₁ R₂ : Finset V) :
 
 The source proof inverts the two injective regions in sequence. With the two
 overlap geometries this is two applications of the landed blue strip
-(`ThreeBlockGeometry.complCoeff_combination_eq_zero`), one for each region: stripping `R₁` leaves the
-residual coupling through `R₂ \ R₁`, and stripping `R₂` leaves the residual
-coupling through `R₁ \ R₂`. -/
+(`ThreeBlockGeometry.complCoeff_combination_eq_zero`), one for each region:
+stripping `R₁` leaves the residual coupling through `R₂ \ R₁`, and stripping
+`R₂` leaves the residual coupling through `R₁ \ R₂`. -/
 
 open scoped Classical in
 /-- **The first strip (region `R₁`).** A coefficient family `c` annihilating the
