@@ -7,14 +7,24 @@
 % Capabilities: free-graph, virtual-action, typed-ports
 \[
   \begin{tenkzfree}
-    \tnput[dot]{A}{(0mm,0mm)}{A} \tnput[ring]{u}{(0mm,9mm)}{u_g}
+    \tnput[dot, ports={90:physical,180:virtual,0:virtual,
+        45:virtual,225:virtual}]{A}{(0mm,0mm)}{A}
+    \tnput[ring]{u}{(0mm,9mm)}{u_g}
     \tnjoin{-14mm,0mm}{A.west} \tnjoin{A.east}{14mm,0mm}
-    \tnjoin{0mm,-14mm}{A.south} \tnjoin{A.north}{u.south}
+    \tnjoin{A.north}{u.south} \tnjoin{u.north}{0mm,16mm}
+    \tnjoin{A.45}{10mm,10mm} \tnjoin{-10mm,-10mm}{A.225}
   \end{tenkzfree}
   =\begin{tenkzfree}
-    \tnput[dot]{A}{(0mm,0mm)}{A}
-    \tnput[ring]{w}{(-9mm,0mm)}{w_g} \tnput[ring]{v}{(0mm,9mm)}{v_g}
+    \tnput[dot, ports={90:physical,180:virtual,0:virtual,
+        45:virtual,225:virtual}]{A}{(0mm,0mm)}{A}
+    \tnput[ring]{w}{(-9mm,0mm)}{w_g}
+    \tnput[ring]{wd}{(9mm,0mm)}{w_g^\dagger}
+    \tnput[ring]{v}{(-7mm,-7mm)}{v_g}
+    \tnput[ring]{vd}{(7mm,7mm)}{v_g^\dagger}
     \tnjoin{-16mm,0mm}{w.west} \tnjoin{w.east}{A.west}
-    \tnjoin{A.east}{16mm,0mm} \tnjoin{A.north}{v.south}
+    \tnjoin{A.east}{wd.west} \tnjoin{wd.east}{16mm,0mm}
+    \tnjoin{A.north}{0mm,9mm}
+    \tnjoin{A.45}{vd.225} \tnjoin{vd.45}{14mm,14mm}
+    \tnjoin{A.225}{v.45} \tnjoin{v.225}{-14mm,-14mm}
   \end{tenkzfree}.
 \]

@@ -965,3 +965,34 @@ One consumer flag is raised by the new local size property:
 | flag | verdict |
 |---|---|
 | flag:consumers:key:object:size | keep-because: the condensation source supplies one manifested panel with eight independent local-size uses, four small and four large; this is repeated demand within one mathematical figure rather than a speculative option, but it remains below the cross-file tenure threshold and must gain two further source-faithful benchmark consumers or be reconsidered at the 1.0 close; expiry 1.0 |
+
+### 2026-07-27 — the structural burn-down raises the fidelity meter alone
+
+M4, mean lines per case, rises from 16.30 to 16.95. Fifteen structural
+panels and three unreviewed ones were redrawn against their sources, and
+what they gained is exactly what the meter watches for in reverse: closed
+rings where open ones stood, a projector layer, a doubling tree's third
+level, stacked fusion, the string-order construction. A figure that stops
+drawing less than its source gains lines.
+
+M3 does not move. Eighteen files changed and not one reached for an
+escape spelling — the drawing pass stayed inside the core grammar, which
+is the first structural campaign to do so. The demand the earlier
+entries priced remains where it was.
+
+Census-correction: #4709
+
+No ledger row changes and no flag verdict is re-examined here.
+
+### 2026-07-27 — the residual batch prices one reshear
+
+M3 rises from 354 to 355: one `plane slant=` override in the condensation
+panel, needed to keep the extended six-row sheet inside the geometry
+guard at the readable band. The same gap the anyon sheet priced — a
+sheet's shear is picture-global where the demand is local — met once
+more. M4 rises from 16.95 to 17.01 as the sheet and its strings extend
+to the source's trace.
+
+Census-correction: #4709
+
+No ledger row changes and no flag verdict is re-examined here.
