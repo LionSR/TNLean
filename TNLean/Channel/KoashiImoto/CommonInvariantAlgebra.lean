@@ -33,6 +33,13 @@ the single witness `F_0` with `A_0 = A_{F_0}` (lines 844-847), the associated te
 state decomposition, block channel action, Petz recovery, or the Koashi-Imoto theorem
 (`thm:koashi`) itself.
 
+**Scope restriction (joint support):** HJPW reduce to the case where `(1/K) ∑_k ρ_k` has full
+support on the working Hilbert space by shrinking to the joint support of the `ρ_k`
+(arXiv:quant-ph/0304007v2, lines 761-763). This file does not derive that reduction; every
+declaration that builds the fixed-point subalgebra instead takes `PosDef (commonAverage ρ)` as
+an explicit hypothesis. Documented in
+`docs/paper-gaps/hjpw04_petz_factorization_maximally_mixed_scope.tex`.
+
 ## Main declarations
 
 * `Kraus.commonAverage`: the common average `(1/K) ∑_k ρ_k` of a finite, nonempty family of
@@ -140,7 +147,12 @@ HJPW, arXiv:quant-ph/0304007v2, line 843: `A_0 = ⋂_{F ∈ F} A_F`, the interse
 CPTP Kraus family preserving `ρ` of the fixed-point subalgebra of its adjoint map
 (`Kraus.adjointFixedPointsStarSubalgebra`, Wolf Theorem 6.12). The positive-definiteness of
 the common average `commonAverage ρ` is taken as an explicit hypothesis here, matching the
-joint-support reduction of lines 761-763 rather than re-deriving it. -/
+joint-support reduction of lines 761-763 rather than re-deriving it.
+
+**Scope restriction (joint support):** `hρbar : PosDef (commonAverage ρ)` replaces HJPW's
+source reduction to the joint support of the `ρ_k` (arXiv:quant-ph/0304007v2, lines 761-763);
+that reduction is not derived here. Documented in
+`docs/paper-gaps/hjpw04_petz_factorization_maximally_mixed_scope.tex`. -/
 noncomputable def commonInvariantStarSubalgebra (ρ : Kidx → Mat)
     (hρbar : (commonAverage ρ).PosDef) : StarSubalgebra ℂ Mat :=
   ⨅ F : PreservingKrausFamily ρ,
@@ -150,7 +162,12 @@ omit [Nonempty Kidx] in
 /-- **Membership in the common invariant `*`-subalgebra.**
 
 `X` lies in `A_0` iff it is fixed by the adjoint map of every CPTP Kraus family preserving
-`ρ` (HJPW, arXiv:quant-ph/0304007v2, line 843). -/
+`ρ` (HJPW, arXiv:quant-ph/0304007v2, line 843).
+
+**Scope restriction (joint support):** inherits the `PosDef (commonAverage ρ)` hypothesis of
+`commonInvariantStarSubalgebra` in place of HJPW's joint-support reduction
+(arXiv:quant-ph/0304007v2, lines 761-763). Documented in
+`docs/paper-gaps/hjpw04_petz_factorization_maximally_mixed_scope.tex`. -/
 theorem mem_commonInvariantStarSubalgebra (ρ : Kidx → Mat)
     (hρbar : (commonAverage ρ).PosDef) (X : Mat) :
     X ∈ commonInvariantStarSubalgebra ρ hρbar ↔
@@ -163,7 +180,12 @@ omit [Nonempty Kidx] in
 
 A direct specialization of the generic star-subalgebra block form
 (`StarSubalgebra.exists_unitary_conj_blockDiagonal_iff`, Wolf Eq. (1.39) / Theorem 6.14) to
-`A_0`. -/
+`A_0`.
+
+**Scope restriction (joint support):** inherits the `PosDef (commonAverage ρ)` hypothesis of
+`commonInvariantStarSubalgebra` in place of HJPW's joint-support reduction
+(arXiv:quant-ph/0304007v2, lines 761-763). Documented in
+`docs/paper-gaps/hjpw04_petz_factorization_maximally_mixed_scope.tex`. -/
 theorem exists_unitary_conj_blockDiagonal_iff_commonInvariantStarSubalgebra
     (ρ : Kidx → Mat) (hρbar : (commonAverage ρ).PosDef) :
     ∃ (Kc : ℕ) (d m : Fin Kc → ℕ) (e : ((k : Fin Kc) × (Fin (m k) × Fin (d k))) ≃ Fin D)

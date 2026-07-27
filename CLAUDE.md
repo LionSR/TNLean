@@ -55,7 +55,7 @@ See `docs/import_structure.md`; `TNLean.lean` is generated.
 |-------|---------|---------|
 | **0** | `Algebra/`, `Analysis/`, `Topology/`, `Axioms/` | Matrix lemmas, trace pairings, Gram matrices, Frobenius norms, Skolem-Noether, cocycle cohomology, Brouwer FPT |
 | **1-2** | `Channel/` (Basic, Choi, Kraus, Stinespring, Transfer) | Quantum channel representations (Wolf Ch. 2) |
-| **2b-2c** | `Channel/Schwarz/`, `Channel/FixedPoint/`, `Channel/Irreducible/`, `Channel/Peripheral/`, `Channel/Semigroup/`, `QPF/`, `Spectral/` | Kadison-Schwarz, Perron-Frobenius, spectral theory, peripheral spectrum, GKSL semigroups (Wolf Ch. 5-7) |
+| **2b-2c** | `Channel/Schwarz/`, `Channel/FixedPoint/`, `Channel/Irreducible/`, `Channel/Peripheral/`, `Channel/Semigroup/`, `Channel/KoashiImoto/`, `QPF/`, `Spectral/` | Kadison-Schwarz, Perron-Frobenius, spectral theory, peripheral spectrum, GKSL semigroups (Wolf Ch. 5-7); common invariant algebra of jointly invariant states (HJPW appendix) |
 | **3** | `MPS/Defs`, `MPS/Chain/`, `MPS/Core/`, `MPS/Overlap/` | MPSTensor definition, word evaluation, blocking, transfer matrices, overlap matrices |
 | **4** | `MPS/FundamentalTheorem/`, `MPS/Symmetry/` | Single-block FT, gauge equivalence, on-site/virtual symmetries, cocycle coboundary |
 | **5** | `MPS/BNT/`, `MPS/CanonicalForm/`, `MPS/Structure/`, `MPS/Irreducible/`, `MPS/Periodic/`, `MPS/FundamentalTheorem/Multi/` | Multi-block assembly, BNT canonical forms, permutation rigidity, periodic tensors |
