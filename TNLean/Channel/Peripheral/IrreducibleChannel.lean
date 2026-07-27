@@ -9,6 +9,7 @@ import TNLean.Channel.Irreducible.PerronFrobenius
 import TNLean.Channel.Schwarz.PositiveMapProperties
 import TNLean.Channel.KrausRepresentation
 import TNLean.MPS.CanonicalForm.BlockingViaAdjoint
+import TNLean.Spectral.TransferOperatorGap
 
 /-!
 # Channel-level formulations for peripheral spectrum and primitivity
