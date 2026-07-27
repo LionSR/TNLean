@@ -117,7 +117,7 @@ ENVIRONMENT_LANGS = {
     "tenkzfree": "free",
 }
 
-KNOWN_LANGS = set(ENVIRONMENT_LANGS.values())
+KNOWN_LANGS = set(ENVIRONMENT_LANGS.values()) | {"kernel"}
 
 # Empty-picture hard check applies exactly to the spec's list (section 5.4).
 EMPTY_CHECK_LANGS = {"grid", "lattice", "free"}
