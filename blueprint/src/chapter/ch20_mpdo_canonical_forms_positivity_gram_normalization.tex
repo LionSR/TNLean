@@ -208,10 +208,44 @@
     (\ref{eq:cpsv_literal_sector_compression_separation}).
 \end{proof}
 
+\begin{theorem}[A gauge corner gives a nonzero range-projector corner]
+    \label{thm:mpdo_range_projection_corner_nonzero}
+    \lean{MPOTensor.exists_rangeProjection_corner_ne_zero}
+    \leanok
+    \uses{def:nt_cpsv, def:vertical_tensor_mpdo}
+    Let $M$ be an MPO tensor of physical dimension $d$ and bond dimension
+    $D$. Let $A$ be a CPSV normal tensor of positive bond dimension $n$ and
+    physical dimension $D^2$, let $V\in\C^{d\times n}$ be an isometry, let
+    $X\in\C^{n\times n}$ be invertible, and let $\omega$ be nonzero. Suppose
+    that, for every vertical letter $v$,
+    \begin{align}
+        \omega X A_v X^{-1}
+        &=V^\dagger\widetilde M_vV.
+        \label{eq:mpdo_gauge_corner}
+    \end{align}
+    Then the range projector $VV^\dagger$ has a nonzero vertical corner:
+    \begin{align}
+        (VV^\dagger)\widetilde M_v(VV^\dagger)&\ne 0
+        \label{eq:mpdo_range_projector_corner}
+    \end{align}
+    for some $v$.
+    This is the algebraic nonvanishing step used in
+    \cite[Proposition~4.13, line 1898]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:cpsv_normal_nonzero_letter}
+    Normality supplies a letter $v$ for which $A_v\ne 0$. Since $\omega$ is
+    nonzero and $X$ is invertible, the left-hand side of
+    (\ref{eq:mpdo_gauge_corner}) is nonzero. If
+    (\ref{eq:mpdo_range_projector_corner}) vanished, multiplying it by
+    $V^\dagger$ and $V$ and using $V^\dagger V=1$ would contradict
+    (\ref{eq:mpdo_gauge_corner}).
+\end{proof}
+
 \begin{theorem}[A nonzero vertical corner has a nonzero sector compression]
     \label{thm:mpdo_grouped_sector_compression_nonzero}
     \lean{MPOTensor.IsHorizontalCF.exists_sectorCompression_ne_zero_of_corner}
-    \lean{MPOTensor.exists_rangeProjection_corner_ne_zero}
     \leanok
     \uses{def:horizontal_cf_mpdo, def:mpdo_vertical_loops,
         def:vertical_tensor_mpdo, thm:representative_one_sub_mp_zero,
@@ -220,12 +254,6 @@
     matrix for which
     $P\widetilde M_vP$ is nonzero for some vertical letter $v$. Then the
     first-site compression $P_1H^{(N+1)}P_1$ is nonzero for some $N$.
-    Under the same normalized BNT-refined horizontal-form hypothesis, suppose
-    in addition
-    that $A$ is a normal tensor, $V$ is an isometry, and the compression by
-    $V$ is a nonzero scalar multiple of an invertible conjugate of $A$. Then
-    the range projector $VV^\dagger$ has a nonzero vertical corner and hence a
-    nonzero first-site compression.
     This is the separation step used in
     \cite[Proposition~4.13, line 1898]{Cirac2016MPDO_arXiv}.
 
@@ -240,11 +268,6 @@
     first-site insertion by $P$ has the same matrix product vectors as zero.
     Lemma~L on the normalized BNT-refined horizontal form would then force the
     inserted tensor itself to vanish, contrary to the assumed nonzero corner.
-    For the range-projector specialization, normality supplies a nonzero
-    letter of $A$. A nonzero scalar and an invertible conjugation preserve
-    this letter. If every $VV^\dagger$ corner vanished, compressing by
-    $V^\dagger$ and $V$ and using $V^\dagger V=1$ would contradict the exact
-    gauge-corner identity.
 \end{proof}
 
 \begin{theorem}[The sector trace identity]
