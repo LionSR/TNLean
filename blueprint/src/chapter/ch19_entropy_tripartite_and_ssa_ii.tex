@@ -1373,7 +1373,7 @@ algebra of a family of jointly invariant states.
     \label{thm:koashi_imoto_single_witness}
     \lean{Kraus.exists_preservingKrausFamily_adjointFixedPointsStarSubalgebra_eq}
     \leanok
-    \uses{thm:koashi_imoto_finite_realization}
+    \uses{def:koashi_imoto_common_invariant_algebra}
     Under the hypotheses of Definition~\ref{def:koashi_imoto_common_invariant_algebra},
     there is $F_0\in\mathbf F$ with $A_0=A_{F_0}$.
 \end{theorem}
@@ -1399,15 +1399,15 @@ algebra of a family of jointly invariant states.
     \label{def:koashi_imoto_mean_ergodic_projection}
     \lean{Kraus.commonInvariantMeanErgodicProjection}
     \leanok
-    \uses{thm:koashi_imoto_single_witness,
-        thm:positive_unital_adjoint_mean_ergodic_retraction}
+    \uses{def:mean_ergodic_projection,
+        thm:koashi_imoto_single_witness}
     Fix $F_0\in\mathbf F$ with $A_0=A_{F_0}$ as in
     Theorem~\ref{thm:koashi_imoto_single_witness}. Let $P_0$ be the
     finite-dimensional mean-ergodic projection of the Schr\"odinger map $F_0$,
-    and define $P_0^*$ as its trace-pairing adjoint. This packages the
-    projection used by Hayden--Jozsa--Petz--Winter. The convergence of the
-    Ces\`aro averages of the Heisenberg iterates $(F_0^*)^n$ to this map is not
-    asserted here.
+    and define $P_0^*$ as its trace-pairing adjoint. Hayden--Jozsa--Petz--Winter
+    denote the Heisenberg Ces\`aro limit by $P_0^*$. The convergence of the
+    Ces\`aro averages of the iterates $(F_0^*)^n$ to the trace-adjoint
+    projection defined here is not asserted.
 \end{definition}
 
 \begin{theorem}[The projection onto $A_0$]
@@ -1452,10 +1452,12 @@ algebra of a family of jointly invariant states.
     Theorem~\ref{thm:hayashi_ssa_equality_reverse}. For the forward implication,
     the raw product-reference Petz map and its support behavior are given by
     Theorems~\ref{thm:entropy_petz_product_tensor} and
-    \ref{thm:entropy_petz_product_tensor_corollaries}. The singular-support
-    equality-to-recovery theorem remains separate. Independently, the common
-    invariant algebra, its block form, its finite realization by a single
-    preserving operation, and the projection onto it (Definition~%
+    \ref{thm:entropy_petz_product_tensor_corollaries}. At equality, HJPW
+    equation~(11), both for the supported raw map and for a completed local
+    channel, is Theorem~\ref{thm:ssa_equality_product_marginal_petz_recovery}.
+    Independently, the common invariant algebra, its block form, its finite
+    realization by a single preserving operation, and the projection onto it
+    (Definition~%
     \ref{def:koashi_imoto_common_invariant_algebra},
     Theorem~\ref{thm:koashi_imoto_common_invariant_algebra_block_form},
     Theorem~\ref{thm:koashi_imoto_single_witness}, and
