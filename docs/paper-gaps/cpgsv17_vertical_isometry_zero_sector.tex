@@ -167,22 +167,24 @@ asserted.
 
 \section{Formal correction}
 
-The vertical canonical-form predicate now requires $UU^\dagger=I_s$ in the
+The vertical canonical-form predicate requires $UU^\dagger=I_s$ in the
 orientation of \eqref{eq:vertical-form}, together with
 \eqref{eq:reconstruction}. This is the source-faithful conclusion compatible
 with \eqref{eq:dimension-bound}: the displayed compression is printed in the
 proposition, while reconstruction records its preceding canonical-form claim.
 The retained part is represented
 rectangularly, while the omitted part is required to be zero. No full-support
-assumption is added to that conclusion.  The theorem in
-\path{TNLean/MPS/MPDO/VerticalCanonicalForm.lean}\footnote{The corresponding
-declaration is \leanid{MPOTensor.verticalCF_of_horizontalCF}.} uses this
-corrected coisometry condition under the normalized BNT-refined horizontal
-form.  Its retained sectors fill the horizontal bond space, every copy weight
-is nonzero, all copy weights have modulus at most one, at least one has modulus
-one, and the normal blocks are grouped over BNT representatives.  This is
-strictly stronger than the literal CPSV canonical form of Proposition~4.13,
-so the literal implication remains open.  The coisometry correction itself is
+assumption is added to that conclusion.  Literal Proposition~4.13 now uses
+this corrected condition in
+\path{TNLean/MPS/MPDO/CPSVVerticalCanonicalForm.lean}.\footnote{Formal
+declaration: \leanid{MPOTensor.verticalCF\_of\_cpsvCanonicalForm}.}
+The theorem under the normalized BNT-refined horizontal form remains available
+separately in
+\path{TNLean/MPS/MPDO/VerticalCanonicalForm.lean}.\footnote{Formal declaration:
+\leanid{MPOTensor.verticalCF\_of\_horizontalCF}.}
+The vertical phase-class grouping and normalization that precede both
+coisometry constructions are recorded in
+\path{cpgsv17_vertical_cf_grouping.tex}.  The coisometry correction itself is
 tracked in \ghissue{3869}.
 
 The source-generated support identities and their trace consequences are
@@ -200,10 +202,13 @@ The earlier two-sided-unitary condition was absent from the source and was
 false when the vertically viewed tensor had a zero sector.  Replacing it by
 the coisometry identity $UU^\dagger=I$, while retaining exact reconstruction
 from the nonzero sectors, corrects the conclusion without adding a
-full-support hypothesis.  The current theorem proves this corrected conclusion
-only under the normalized BNT-refined horizontal form, which is strictly
-stronger than literal CPSV canonical form.  The literal Proposition~4.13
-implication remains open.
+full-support hypothesis.  Literal Proposition~4.13 and the separate stronger
+horizontal theorem now prove this corrected conclusion.  This completion does
+not supply a trace-preserving map on every element of the finite products in
+Appendix~C.4; the support conditions
+\eqref{eq:transported-image-preservation} remain necessary there.  It also
+does not prove the renormalization fixed-point characterization of
+Theorem~4.14.
 
 \bibliographystyle{alpha}
 \bibliography{references}

@@ -859,10 +859,33 @@
     \leanok
     \uses{thm:cpsv_literal_grouped_sector_unitary_normalization,
         thm:cpsv_literal_vertical_bnt_grouping_with_isometries}
-    For each copy, use its positive Gram scalar to absorb the normalized
-    unitary gauge into the physical isometry. Unitarity preserves the isometry
-    equation and pairwise orthogonality. The intertwining identity loses the
-    internal similarity, while the Gram identity converts each normalized
-    corner back to the original grouped corner. Summing these corner identities
-    gives (\ref{eq:cpsv_literal_normalized_reconstruction}).
+    For each copy, put
+    $Q_{\alpha,q}=\omega_{\alpha,q}^{-1/2}X_{\alpha,q}$ and
+    $W_{\alpha,q}=V_{\alpha,q}Q_{\alpha,q}$. Unitarity of
+    $Q_{\alpha,q}$ preserves the isometry equation and pairwise
+    orthogonality. Substituting $W_{\alpha,q}=V_{\alpha,q}Q_{\alpha,q}$
+    into the intertwining identity gives
+    \begin{align}
+        \widetilde M_vW_{\alpha,q}
+        &=V_{\alpha,q}\bigl(
+          c_{\alpha,q}\omega_{\alpha,q}^{-1/2}
+          X_{\alpha,q}M_\alpha^v
+          X_{\alpha,q}^{-1}X_{\alpha,q}\bigr)
+        \notag\\
+        &=W_{\alpha,q}(c_{\alpha,q}M_\alpha^v).
+        \notag
+    \end{align}
+    Thus the adjacent factors
+    $X_{\alpha,q}^{-1}X_{\alpha,q}$ cancel and leave the undressed
+    representative $M_\alpha^v$. The Gram identity
+    $X_{\alpha,q}^\dagger X_{\alpha,q}
+    =\omega_{\alpha,q}\Id$ also gives
+    \begin{align}
+        Q_{\alpha,q}(c_{\alpha,q}M_\alpha^v)Q_{\alpha,q}^\dagger
+        &=c_{\alpha,q}X_{\alpha,q}M_\alpha^vX_{\alpha,q}^{-1}.
+        \notag
+    \end{align}
+    Hence conjugation by $W_{\alpha,q}$ reproduces the original grouped
+    corner. Summing these equalities gives
+    (\ref{eq:cpsv_literal_normalized_reconstruction}).
 \end{proof}
