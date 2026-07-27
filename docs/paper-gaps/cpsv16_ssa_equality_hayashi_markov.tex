@@ -426,9 +426,26 @@ pair.
 \leanid{Matrix.supportSourceBQuadratic_sum_sub_nonneg} in
 \path{TNLean/Channel/Schwarz/SupportSourceDefect.lean}.}
 These are fixed-$t$ algebraic inequalities.  The remaining analytic passage
-must identify the finite-family relative-entropy gap with the integral of the
-two defects, use nonnegativity and continuity to deduce pointwise vanishing,
-and then derive the common projected shifted relative-modular resolvent.
+now identifies the finite-family relative-entropy gap with the integral of
+the two defects:
+\[
+  \sum_i D(A_i\Vert B_i)
+    -D\!\left(\sum_iA_i\middle\Vert\sum_iB_i\right)
+  =
+  \int_0^\infty
+    \frac{\operatorname{Def}_A(t)+t\operatorname{Def}_B(t)}{1+t}\,dt .
+\]
+The gap integrand is continuous on the positive half-line and integrable
+there.
+\footnote{Formal declarations:
+\leanid{Matrix.supportRelativeEntropyFamilyGapIntegrand},
+\leanid{Matrix.supportRelativeEntropyFamilyGapIntegrand_integrableOn_and_integral_eq},
+and
+\leanid{Matrix.supportRelativeEntropyFamilyGapIntegrand_continuousOn} in
+\path{TNLean/Channel/Schwarz/SupportRelativeEntropyGap.lean}.}
+The remaining analytic passage must use nonnegativity and continuity to
+deduce pointwise vanishing from a zero integral and then derive the common
+projected shifted relative-modular resolvent.
 Following the latter step, consider two positive semidefinite pairs $(A,B)$ and
 $(C,D)$.  Let $P_B$ be the support projection of the first reference matrix
 $B$, and write
@@ -480,11 +497,11 @@ also identifies this vector with the support-generalized-inverse solution of
 the left--right equation, and hence identifies the two source-$B$ quadratic
 forms.  Together with the two defect inequalities, it still does not show that
 equality of relative entropies makes either defect vanish.  The
-integral-and-continuity argument and the resulting finite-family common
-projected resolvent theorem remain unformalized.  The kernel inclusion is
-already used for the unprojected source-$A$ inequality and remains an exact hypothesis
-of that source-facing equality theorem.  Consequently the singular Petz
-recovery identity is also still unformalized.
+zero-integral-to-pointwise-vanishing passage and the resulting finite-family
+common projected resolvent theorem remain unformalized.  The kernel inclusion
+is already used for the unprojected source-$A$ inequality and remains an exact
+hypothesis of that source-facing equality theorem.  Consequently the singular
+Petz recovery identity is also still unformalized.
 
 In particular, the affine regularizations used to prove the inequality cannot
 by themselves prove its equality case.  Equality at the limiting pair implies
