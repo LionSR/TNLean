@@ -48,7 +48,7 @@ theorem. This is tracked by issue #873 under the proposition-level tracker #81.
 
 ## 2. Coverage crosswalk: CPSV16 (arXiv:1606.00608)
 
-At revision `a483570b1bfd3f39eb9f6292e74d9df99a8c4df0`, the paper has 45 theorem-like occurrences and 40 distinct results. The occurrence-level count is 24 complete, 12 partial, and 9 not-ready; the distinct-result count is 21 complete, 10 partial, and 9 not-ready. Here **not-ready** means that the printed statement is false, ambiguous, or depends essentially on a formally refuted source lemma. It does not mean that every printed result has been formalized.
+At revision `a483570b1bfd3f39eb9f6292e74d9df99a8c4df0`, the paper has 45 theorem-like occurrences and 40 distinct results. The occurrence-level count is 16 complete, 16 partial, and 13 not-ready; the distinct-result count is 15 complete, 13 partial, and 12 not-ready. Here **not-ready** means that the printed statement is false, ambiguous, or depends essentially on a formally refuted source lemma. It does not mean that every printed result has been formalized.
 
 ### 2.1 Section II — Matrix Product Vectors (pure-state canonical form)
 
@@ -60,8 +60,8 @@ At revision `a483570b1bfd3f39eb9f6292e74d9df99a8c4df0`, the paper has 45 theorem
 | Prop 2.7 (l.278, `prop:char-BNT`) | 278–280 | BNT characterization: every active canonical-form normal tensor is gauge-phase-equivalent to a basis element | `TNLean/MPS/CanonicalForm/BNTCharacterization.lean` (`MPSTensor.isCPSVBasisOfNormalTensors_iff_canonicalForm_covered_and_minimal`) | **partial** — the active-block characterization is complete, but positive-length MPVs cannot determine listed zero-weight blocks; see `docs/paper-gaps/cpsv16_bnt_characterization_active_blocks.tex` |
 | Defn "injective" (l.317, `defnbi`) | 317–322 | A normal tensor is injective when its matrices span the full matrix algebra; biCF is block-injective canonical form | `TNLean/MPS/Defs.lean` (`MPSTensor.IsInjective`) and the biCF development under `TNLean/MPS/MPDO/BiCFDerivation/` | `leanok` |
 | Prop (l.342, `propblockinj`) | 342–345 | After blocking at most $3D^5$ spins, any canonical-form tensor becomes biCF | `TNLean/MPS/MPDO/BiCFDerivation/BNTDirectSum.lean` (`IsBNTCanonicalForm.exists_basis_wordTupleSpanTop_le_three_totalDim_pow_five`) with `MPSTensor.hasBiCF_of_propBlockInjective` | **partial** — the bound is proved for the stronger packaged `IsBNTCanonicalForm` surface, but the printed proposition starts from literal canonical form; the zero-weight ambiguity in Proposition 2.7 prevents the missing unconditional conversion |
-| **Theorem II.1** (l.349, `thm1`) | 349–352 | Fundamental theorem of MPVs, proportional case | `TNLean/MPS/FundamentalTheorem/SectorBNT/FundamentalCoord.lean` (`MPSTensor.fundamentalTheorem_proportional_canonicalForm`) | **complete** |
-| **Corollary II.2** (l.354, `II_cor2`) | 354–361 | Equal MPVs imply conjugacy by an invertible matrix | `TNLean/MPS/FundamentalTheorem/SectorBNT/FundamentalCoord.lean` (`MPSTensor.fundamentalTheorem_equal_canonicalForm`) | **complete** |
+| **Theorem II.1** (l.349, `thm1`) | 349–352 | Fundamental theorem of MPVs, proportional case | `TNLean/MPS/FundamentalTheorem/SectorBNT/FundamentalCoord.lean` (`MPSTensor.fundamentalTheorem_proportional_canonicalForm`); `docs/paper-gaps/cpsv16_bnt_characterization_active_blocks.tex` | **partial** — the theorem covers the active, nonzero BNT sector under the packaged BNT hypothesis, while the printed statement starts from literal canonical form, which may list inactive zero-weight blocks |
+| **Corollary II.2** (l.354, `II_cor2`) | 354–361 | Equal MPVs imply conjugacy by an invertible matrix | `TNLean/MPS/FundamentalTheorem/SectorBNT/FundamentalCoord.lean` (`MPSTensor.fundamentalTheorem_equal_canonicalForm`); `docs/paper-gaps/cpsv16_bnt_characterization_active_blocks.tex` | **not-ready** — literal canonical form permits inactive zero-weight blocks, which positive-length MPVs cannot detect; tensors with equal MPVs may therefore have different ambient dimensions, contradicting the printed dimension and global-conjugacy conclusion |
 
 ### 2.2 Section III — Pure States: Renormalization of MPS (RFP / ZCL / NNCPH)
 
@@ -69,12 +69,12 @@ At revision `a483570b1bfd3f39eb9f6292e74d9df99a8c4df0`, the paper has 45 theorem
 |---|---|---|---|---|
 | **Theorem 3.1** (l.398, `thm:renormalization-flow`) | 398–405 | A tensor appears as a renormalization-flow limit iff two blocked physical sites are related to one site by an isometry | `TNLean/MPS/RFP/Defs.lean` (`MPSTensor.isTransferIdempotent_iff_kraus_isometry`, `HasPhysicalBlockingIsometry`); `TNLean/MPS/RFP/Convergence.lean` (`rg_flow_converges_of_cf`) | **partial** — the blocking-isometry equation and convergence of each canonical-form block to an idempotent transfer map are proved, but no formal predicate identifies the original tensor itself as a flow limit or proves the printed iff with that predicate |
 | Defn RFP (l.420, `defRFP`) | 420–424 | Pure-state RFP condition | `TNLean/MPS/RFP/Defs.lean` (`HasPhysicalBlockingIsometry`) | `leanok` |
-| Defn CID (l.438) | 438–446 | Correlations independent of distance | `TNLean/MPS/RFP/ZeroCorrelationLength.lean` (`MPSTensor.IsCID`) | `leanok` |
-| Defn LO (l.468, `DefLO`) | 468–474 | Local orthogonality | `TNLean/MPS/RFP/ZeroCorrelationLength.lean` (`MPSTensor.IsLocallyOrthogonal`) | `leanok` |
-| Defn ZCL (l.476) | 476–478 | ZCL = LO and CID | `TNLean/MPS/RFP/ZeroCorrelationLength.lean` (`MPSTensor.IsZCL`) | `leanok` |
+| Defn CID (l.438) | 438–446 | Correlations independent of distance | `TNLean/MPS/RFP/ZeroCorrelationLength.lean` (`MPSTensor.IsPhysicalCID`) | `leanok` |
+| Defn LO (l.468, `DefLO`) | 468–474 | Local orthogonality | `TNLean/MPS/RFP/ZeroCorrelationLength.lean` (`MPSTensor.IsBNTLocallyOrthogonal`) | `leanok` |
+| Defn ZCL (l.476) | 476–478 | ZCL = LO and CID | `TNLean/MPS/RFP/ZeroCorrelationLength.lean` (`MPSTensor.IsPhysicalBNTZCL`) | `leanok` |
 | Defn transfer matrix (l.482) | 482–488 | Transfer map | `TNLean/MPS/Core/Transfer.lean` (`transferMap`) | `leanok` |
 | **Theorem 3.8** (l.500, `TheoremZCLPure`) | 500–503 | ZCL iff the transfer map is idempotent | `TNLean/MPS/RFP/BNTWeightCounterexample.lean`; `TNLean/MPS/RFP/BellPairCIDObstruction.lean`; `docs/paper-gaps/cpsv16_pure_zcl_raw_weight_counterexample.tex`; `docs/paper-gaps/cpsv16_pure_zcl_adjacent_gap_cid_scope.tex` | **not-ready** — raw weights refute ZCL⇒idempotence, and the Bell-pair chain at zero complementary gap refutes the unrestricted reverse implication; corrected restricted work is owner-held under #2633 |
-| Defn parent Hamiltonian (l.522) | 522–525 | NNCPH definition | `TNLean/MPS/ParentHamiltonian/Commuting.lean` (`MPSTensor.IsNNCPH`) | `leanok` |
+| Defn parent Hamiltonian (l.522) | 522–525 | NNCPH definition | `TNLean/MPS/ParentHamiltonian/Commuting.lean` (`MPSTensor.HasNNCPHGroundSpaces`) | `leanok` |
 | **Theorem 3.10** (l.534, `thm:main-MPS`) | 534–541 | RFP iff ZCL iff NNCPH | `TNLean/MPS/RFP/ZCLReverse.lean`; `TNLean/MPS/RFP/PhysicalObservableRealization.lean`; corrected one-block results including `rfp_iff_zcl` | **not-ready** — the printed equivalence inherits the Theorem 3.8 counterexamples, and the reverse proof at line 1250 fails for nilpotent zero-Jordan defects; #2633 is assigned to `LionSR` |
 | **Theorem 3.11** (l.543, `thm:charact-MPS`) | 543–555 | Repeated-copy structural characterization of RFP | `TNLean/MPS/RFP/StructuralFull.lean` (`MPSTensor.rfp_nt_structural_full`); `TNLean/MPS/RFP/PhaseMultiplicityCounterexample.lean`; `TNLean/MPS/RFP/ResidualIsometry.lean` | **not-ready** — the displayed physical isometry has no copy index; the literal shared-map reading is contradicted by the phase-flip repeated-copy tensor; #2598 closed as a source obstruction |
 | Corollary 3.12 (l.583, `III_cor3`) | 583–590 | Structural form of the BNT elements of an RFP tensor | `TNLean/MPS/RFP/StructuralFull.lean`; `TNLean/MPS/RFP/ResidualIsometry.lean` | **not-ready** — inherits the repeated-copy physical-map ambiguity of Theorem 3.11 |
@@ -105,17 +105,17 @@ At revision `a483570b1bfd3f39eb9f6292e74d9df99a8c4df0`, the paper has 45 theorem
 | **Corollary `eqV`** (l.1121) | 1121–1128 | Normal MPVs are asymptotically orthogonal or differ by a length-dependent phase | `TNLean/MPS/Overlap/NormalTensorDichotomy.lean` (`MPSTensor.IsNormalTensor.mpv_phase_alternative`) | **complete** |
 | **Corollary `Lem1`** (l.1130) | 1130–1133 | Orthogonal normal MPVs are eventually linearly independent | `TNLean/MPS/CanonicalForm/PhaseClassSectorData.lean`; `TNLean/MPS/BNT/Basic.lean` | **complete** |
 | Restatement of `prop:char-BNT` | 1137–1142 | BNT characterization | `TNLean/MPS/CanonicalForm/BNTCharacterization.lean` | **partial restatement** — inherits the zero-weight ambiguity at lines 278–280 |
-| **Lemma `Lem:app_simple`** (l.1155) | 1155–1163 | Equality of finite power sums implies equality of multisets | `TNLean/Algebra/ScalarPowerSumIdentity.lean` | **complete** |
-| Restatement of `thm1` | 1167–1170 | Proportional fundamental theorem | `TNLean/MPS/FundamentalTheorem/SectorBNT/FundamentalCoord.lean` (`MPSTensor.fundamentalTheorem_proportional_canonicalForm`) | **complete restatement** |
-| Restatement of `II_cor2` | 1172–1179 | Equal-MPV fundamental theorem | `TNLean/MPS/FundamentalTheorem/SectorBNT/FundamentalCoord.lean` (`MPSTensor.fundamentalTheorem_equal_canonicalForm`) | **complete restatement** |
-| **Corollary `thm:Fundamental-CFII`** (l.1197) | 1197–1199 | CFII refinement with unitary global and block gauges | `TNLean/MPS/FundamentalTheorem/SectorBNT/FundamentalCoord.lean` (`MPSTensor.fundamentalTheorem_equal_canonicalForm_unitary`) and `SectorBNT/Unitary.lean` | **complete** |
+| **Lemma `Lem:app_simple`** (l.1155) | 1155–1163 | Equality of finite power sums implies equality of multisets | `TNLean/Algebra/ScalarPowerSumIdentity.lean`; `docs/paper-gaps/power_sum_alternative_route.tex` | **not-ready** — the positive-power sums of \([1]\) and \([1,0]\) agree although the multisets differ; the formal alternatives either assume nonzero entries or conclude equality only after filtering out zeros |
+| Restatement of `thm1` | 1167–1170 | Proportional fundamental theorem | `TNLean/MPS/FundamentalTheorem/SectorBNT/FundamentalCoord.lean` (`MPSTensor.fundamentalTheorem_proportional_canonicalForm`); `docs/paper-gaps/cpsv16_bnt_characterization_active_blocks.tex` | **partial restatement** — mirrors the active, nonzero BNT scope gap of Theorem II.1 |
+| Restatement of `II_cor2` | 1172–1179 | Equal-MPV fundamental theorem | `TNLean/MPS/FundamentalTheorem/SectorBNT/FundamentalCoord.lean` (`MPSTensor.fundamentalTheorem_equal_canonicalForm`); `docs/paper-gaps/cpsv16_bnt_characterization_active_blocks.tex` | **not-ready restatement** — mirrors the inactive zero-weight block obstruction to Corollary II.2 |
+| **Corollary `thm:Fundamental-CFII`** (l.1197) | 1197–1199 | CFII refinement with unitary global and block gauges | `TNLean/MPS/FundamentalTheorem/SectorBNT/FundamentalCoord.lean` (`MPSTensor.fundamentalTheorem_equal_canonicalForm_unitary`) and `SectorBNT/Unitary.lean`; `docs/paper-gaps/cpsv16_bnt_characterization_active_blocks.tex`; `docs/paper-gaps/cpsv16_global_vs_persector_unit_witness.tex` | **not-ready** — literal CFII still permits zero weights and therefore inherits Corollary II.2's false dimension and global-unitary conclusion; the Lean unitary theorem covers the active, nonzero BNT surface |
 
 ### 2.5 Appendix B — Proofs of Section III
 
 | Paper label | Lines | Paper description | Lean location | Status |
 |---|---|---|---|---|
-| Renormalization flow convergence | 1209–1244 | Renormalization flow from canonical form converges | `TNLean/MPS/RFP/Convergence.lean` (`rg_flow_converges_of_cf`) | **complete** |
-| **Lemma `lem:charact-NT-pure-RFP`** | 1274–1289 | Normal-tensor RFP structural theorem | `TNLean/MPS/RFP/StructuralFull.lean` (`MPSTensor.rfp_nt_structural_full`) | **complete** |
+| Renormalization flow convergence | 1209–1244 | Renormalization flow from canonical form converges | `TNLean/MPS/RFP/Convergence.lean` (`rg_flow_converges_of_cf`) | **partial** — the current theorem gives convergence for each fixed canonical-form block \(k\); the source proves convergence of the full weighted canonical-form transfer, including the copy and mixed-block terms |
+| **Lemma `lem:charact-NT-pure-RFP`** | 1274–1289 | Normal-tensor RFP structural theorem | `TNLean/MPS/RFP/StructuralFull.lean` (`MPSTensor.rfp_nt_structural_full`); `docs/paper-gaps/cpsv16_rfp_isometry_scope.tex` | **partial** — the forward theorem assumes an extra left-canonical equation, the converse is separate, and no iff capstone under exactly the printed source hypotheses is present |
 | Theorem 3.10 reverse-proof step | 1246–1271 | The printed ZCL-to-RFP argument uses a nonzero subleading eigenvalue | `TNLean/MPS/RFP/ZCLReverse.lean`; `TNLean/MPS/RFP/PhysicalObservableRealization.lean` | **not-ready** for the printed argument — a non-idempotent map may have only a nilpotent Jordan defect at eigenvalue zero; corrected conditional work is tracked by owner-held #2633 |
 | Theorem 3.10 RFP⇒NNCPH | 1305–1307 | RFP gives a nearest-neighbor commuting parent Hamiltonian | Corrected representative-level theorems in `TNLean/MPS/ParentHamiltonian/Commuting.lean` and the conditional capstone merged by #4860 | **not-ready** as part of the printed unrestricted equivalence; raw repeated-copy insertions remain outside the proved representative theorem; #2633 is owner-held |
 
@@ -128,7 +128,7 @@ At revision `a483570b1bfd3f39eb9f6292e74d9df99a8c4df0`, the paper has 45 theorem
 | Lemma `propSN` | 1406–1411 | SAL gives a positive physical-sector factorization with primitive active trace matrix | `TNLean/MPS/MPDO/InverseMapActiveSectorPrimitivity.lean` (`exists_positive_physicalSectorFactorization_activeSectorTraceMatrix_isPrimitive_of_isSAL`) | **complete** |
 | Lemma `SALZCL` / Lemma C.5 | 1484–1502 | SAL and ZCL force the active trace matrix to have rank one | `TNLean/MPS/MPDO/ActiveSectorSpanningAreaLaw.lean` (`ActiveSectorSpanningCounterexample.tensor_refutes_printed_sal_zcl_rank_one_inference`); `docs/paper-gaps/cpgsv17_pf_rank_one.tex` | **not-ready** — an injective four-sector counterexample satisfies SAL and source ZCL but has no rank-one active trace factorization; #4270 closed by the formal counterexample |
 | Corollary | 1503–1506 | SAL and ZCL imply the displayed structural form | Conditional neighboring-factorization constructions in `TNLean/MPS/MPDO/BlockedRFPConstruction.lean` and related modules | **not-ready** — the only printed derivation uses false Lemma C.5 |
-| Prop `3to5` | 1510–1517 | The structural data give trace-preserving coarse-graining and refinement maps | `TNLean/MPS/MPDO/PhysicalSectorCoarseGrainingIdentity.lean`; `PhysicalSectorRefinementIdentity.lean`; `PhysicalSectorBlockedRFP.lean`; `BlockedRFPConstruction.lean` | **complete** |
+| Prop `3to5` | 1510–1517 | The structural data give trace-preserving coarse-graining and refinement maps | `TNLean/MPS/MPDO/PhysicalSectorCoarseGrainingIdentity.lean`; `PhysicalSectorRefinementIdentity.lean`; `PhysicalSectorBlockedRFP.lean`; `PhysicalSectorPhysicalTransport.lean` (`NeighboringTraceFactorization.blockTwo_isRFPViaTS`); `BlockedRFPConstruction.lean`; `docs/paper-gaps/cpgsv17_mpdo_blocked_rfp_physical_transport.tex` | **complete** — the physical-transport theorem carries the sector-coordinate channels back to the original blocked tensor |
 | Prop `3to4` | 1569–1577 | SAL gives the commuting product form | `TNLean/MPS/MPDO/CommutingFormBridge.lean`; `GSNNCHSectorSum.lean`; related physical-sector modules | **complete** |
 | Prop `4to2` | 1597–1601 | Commuting form and ZCL imply SAL | `TNLean/MPS/MPDO/PhysicalSectorFactorization.lean` (`PhysicalSectorFactorization.isSAL_of_isSourceZCL`); `CyclicActiveAreaLaw.lean`; `FixedBondPositivePhysicalSectorRepresentative.lean`; `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex` | **partial** — the selected fixed tensor has the required factorization and satisfies all-cut SAL, but comparison with the original injective normal tensor remains #4175/#4459, both assigned to `LionSR` |
 | Lemma `lemmus` | 1647–1650 | ZCL makes repeated-copy weights independent of the copy index | `TNLean/MPS/MPDO/SimpleTensor.lean` (`MPOTensor.weight_copy_independent_of_isSourceZCL`) | **complete** |
@@ -251,16 +251,18 @@ under #2633.
 
 ## 5. Note on Theorem 4.4 (CPSV21) naming
 
-The source-faithful sector-BNT theorems now cover both CPSV16 Theorem II.1
-and Corollary II.2. CPSV21 Theorem 4.4 is the corresponding proportional
-fundamental theorem; it should not be confused with the older single-block or
-conditional sector-matching reductions.
+The sector-BNT theorems cover the active, nonzero BNT form of CPSV16
+Theorem II.1 and its equal-MPV specialization. They do not discharge the
+inactive zero-weight block ambiguity in the literal canonical-form statements
+of Theorem II.1 and Corollary II.2. CPSV21 Theorem 4.4 is the corresponding
+proportional fundamental theorem; it should not be confused with the older
+single-block or conditional sector-matching reductions.
 
 | Lean declaration | Paper | CPSV16 relation |
 |---|---|---|
 | `MPSTensor.fundamentalTheorem_proportional_canonicalForm` | CPSV21 Theorem 4.4 | CPSV16 Theorem II.1 (`thm1`) |
 | `MPSTensor.fundamentalTheorem_equal_canonicalForm` | equal-MPV specialization | CPSV16 Corollary II.2 (`II_cor2`) |
-| `MPSTensor.fundamentalTheorem_equal_canonicalForm_unitary` | CFII unitary refinement | CPSV16 `thm:Fundamental-CFII` |
+| `MPSTensor.fundamentalTheorem_equal_canonicalForm_unitary` | Active, nonzero BNT unitary refinement | CPSV16 `thm:Fundamental-CFII` |
 
 ---
 
@@ -279,7 +281,7 @@ These are known oversized (documented in #1512/#1522) and do not block unrelated
 
 ## 7. Key remaining coverage gaps
 
-The 19 non-complete distinct CPSV16 results are all partial, source-ambiguous,
+The 25 non-complete distinct CPSV16 results are all partial, source-ambiguous,
 formally refuted, research-level, owner-held, or scope-restricted by the current
 formal interface. No important owner-free, source-faithful, implementation-ready
 slice remained at the synchronized revision.
@@ -288,11 +290,17 @@ slice remained at the synchronized revision.
 |---|---|---|---|---|
 | Partial | CPSV16 | Prop. 2.7, BNT characterization | Active blocks are characterized; listed zero-weight blocks are invisible to positive-length MPVs | Source clarification required |
 | Partial | CPSV16 | Proposition `propblockinj` | The $3D^5$ bound is proved for packaged BNT data, not for every literal canonical-form tensor | Blocked by the same zero-weight ambiguity as Proposition 2.7 |
+| Partial | CPSV16 | Theorem II.1 | The sector-BNT theorem covers active, nonzero BNT data, not every literal canonical-form block list | `docs/paper-gaps/cpsv16_bnt_characterization_active_blocks.tex` |
+| Not-ready | CPSV16 | Corollary II.2 | Inactive zero-weight blocks can change the ambient dimension without changing any positive-length MPV | `docs/paper-gaps/cpsv16_bnt_characterization_active_blocks.tex` |
+| Not-ready | CPSV16 | Appendix A Lemma `Lem:app_simple` | \([1]\) and \([1,0]\) have identical positive-power sums but different multisets; the formal corrections require nonzero entries or filter zeros | `TNLean/Algebra/ScalarPowerSumIdentity.lean`; `docs/paper-gaps/power_sum_alternative_route.tex` |
+| Not-ready | CPSV16 | Appendix A CFII refinement | Literal CFII permits zero weights and inherits the false dimension/global-unitary conclusion; the Lean theorem covers active, nonzero BNT data | `docs/paper-gaps/cpsv16_bnt_characterization_active_blocks.tex`; `docs/paper-gaps/cpsv16_global_vs_persector_unit_witness.tex` |
 | Partial | CPSV16 | Theorem 3.1, renormalization-flow limit | The blocking-isometry equation and canonical-form block convergence are proved, but the printed flow-limit iff is not formalized | No source-level flow-limit predicate is currently available |
 | Not-ready | CPSV16 | Theorem 3.8 | Raw weights and the Bell-pair adjacent-gap example refute the two unrestricted directions | Corrected branch #2633, assigned to `LionSR` |
 | Not-ready | CPSV16 | Theorem 3.10 | Inherits Theorem 3.8 counterexamples; line 1250 also fails for nilpotent zero-Jordan defects | #2633, assigned to `LionSR` |
 | Not-ready | CPSV16 | Theorem 3.11 | The repeated-copy physical isometry lacks a copy index; the literal shared-map reading is false | #2598 closed as source obstruction |
 | Not-ready | CPSV16 | Corollary 3.12 | Inherits Theorem 3.11's repeated-copy ambiguity | Source clarification required |
+| Partial | CPSV16 | Appendix B renormalization-flow convergence | Convergence is proved per fixed block \(k\), not for the full weighted canonical-form transfer with copy and mixed-block terms | Full-flow assembly remains open |
+| Partial | CPSV16 | Appendix B normal-tensor structural lemma | The forward theorem assumes an extra left-canonical equation, the converse is separate, and no source-hypothesis iff capstone is present | `docs/paper-gaps/cpsv16_rfp_isometry_scope.tex` |
 | Not-ready | CPSV16 | Purification RFP equivalence | Nilpotent hidden bond sectors refute the global-to-local implication | #3947 closed as not planned |
 | Partial | CPSV16 | Proposition 4.5 | Monotonicity is proved; the thermodynamic limit is refuted; the finite $4\log D$ bound remains open | #4169/#4242/#4295, assigned to `LionSR` |
 | Partial | CPSV16 | Theorem 4.9 | Lemma C.5 is false; commuting-form-to-SAL and the recovery alternative remain incomplete | #4175/#4459 and #4228/#4405, assigned to `LionSR`; #4961/#4962 are dependent research follow-ups |
