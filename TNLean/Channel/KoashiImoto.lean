@@ -9,3 +9,4 @@ Authors: TNLean contributors
 -- Generated aggregator module: TNLean.Channel.KoashiImoto
 
 import TNLean.Channel.KoashiImoto.CommonInvariantAlgebra
+import TNLean.Channel.KoashiImoto.FiniteRealization
