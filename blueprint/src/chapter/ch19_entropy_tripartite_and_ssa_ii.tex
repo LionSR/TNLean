@@ -881,6 +881,81 @@
     recovery identity.
 \end{proof}
 
+\begin{lemma}[Product-coordinate covariance of the partial trace and Petz map]
+    \label{lem:partial_trace_petz_product_reindexing}
+    \lean{Matrix.partialTraceRight_submatrix_prod_equiv}
+    \lean{Matrix.partialTraceRightPetzMap_submatrix_prod_equiv}
+    \leanok
+    Let $e_L:H_L\to H_L'$ and $e_R:H_R\to H_R'$ be bijections, and write
+    $Z^{e_L\otimes e_R}$ for the corresponding simultaneous relabelling of
+    the rows and columns of $Z$. Then
+    \begin{align}
+        \tr_{R'}\bigl(Z^{e_L\otimes e_R}\bigr)
+        &=(\tr_R Z)^{e_L},
+        \label{eq:petz_product_reindexing_trace}\\
+        \mathcal R_{\sigma^{e_L\otimes e_R}}
+          \bigl(X^{e_L}\bigr)
+        &=\bigl(\mathcal R_\sigma(X)\bigr)^{e_L\otimes e_R}.
+        \label{eq:petz_product_reindexing_map}
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    The first identity follows by changing the summation index in the partial
+    trace. Functional calculus commutes with a relabelling by a bijection, so
+    both $\sqrt{\sigma}$ and the support inverse square root of $\tr_R\sigma$
+    have the same covariance. The embedding
+    $X\mapsto X\otimes\mathbf 1_R$ and matrix multiplication also commute with
+    the product relabelling, which gives
+    (\ref{eq:petz_product_reindexing_map}).
+\end{proof}
+
+\begin{theorem}[Petz recovery under equality in data processing]
+    \label{thm:petz_recovery_of_dpi_equality}
+    \lean{Matrix.partialTraceRightPetzMap_eq_of_relativeEntropy_eq_general_support}
+    \lean{Matrix.partialTraceRightPetzChannel_recovery_of_dpi_equality}
+    \leanok
+    \uses{def:quantum_relative_entropy, def:partial_trace,
+        def:partial_trace_petz_channel}
+    Let $\rho$ and $\sigma$ be density operators on the finite-dimensional
+    product $H_L\otimes H_R$ such that
+    $\ker\sigma\subseteq\ker\rho$. If
+    \begin{align}
+        D(\rho\Vert\sigma)
+        &=D(\tr_R\rho\Vert\tr_R\sigma),
+        \label{eq:petz_dpi_equality}
+    \end{align}
+    then the completed partial-trace Petz channel associated with $\sigma$
+    recovers $\rho$:
+    \begin{align}
+        \widehat{\mathcal R}_\sigma(\tr_R\rho)
+        &=\rho.
+        \label{eq:petz_dpi_recovery}
+    \end{align}
+    This is the right-partial-trace forward implication of
+    \cite[Theorem~3, equation~(8)]{Hayden2004Structure}. The additional
+    off-support term belongs to the trace-preserving completion and vanishes
+    on $\tr_R\rho$; it is not part of the formula in the cited equation.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:partial_trace_saturation_support_petz_recovery,
+        lem:partial_trace_petz_product_reindexing,
+        lem:relative_entropy_submatrix_equiv,
+        thm:partial_trace_petz_channel_first_marginal_agreement}
+    Choose bijections from $H_L$ to a finite standard basis and from $H_R$ to
+    a finite cyclic basis. Relative entropy, the support inclusion, and the
+    equality (\ref{eq:petz_dpi_equality}) are unchanged under this product
+    relabelling. Theorem~
+    \ref{thm:partial_trace_saturation_support_petz_recovery} gives raw Petz
+    recovery in the cyclic coordinates, and Lemma~
+    \ref{lem:partial_trace_petz_product_reindexing} transports the identity
+    back to $H_L\otimes H_R$. Finally, Theorem~
+    \ref{thm:partial_trace_petz_channel_first_marginal_agreement} identifies
+    the completed channel with the raw support formula at $\tr_R\rho$, giving
+    (\ref{eq:petz_dpi_recovery}).
+\end{proof}
+
 \begin{theorem}[Relative entropy against the product of the marginals]
     \label{thm:relative_entropy_product_marginals}
     \lean{quantumRelativeEntropy_product_marginals}

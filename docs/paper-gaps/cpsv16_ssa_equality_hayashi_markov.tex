@@ -603,7 +603,7 @@ of relative entropy under the partial trace for positive-semidefinite inputs
 satisfying $\ker\sigma\subseteq\ker\rho$.  No claim is made here for an
 arbitrary convex ensemble.
 
-The singular-support equality case of data processing is now formalized in
+The singular-support equality case of data processing is first formalized in
 finite Weyl coordinates:
 \begin{align}
   D(\rho\Vert\sigma)
@@ -619,6 +619,25 @@ Weyl resolvent; the support functional calculus gives the projected
 square-root ratio; and the kernel inclusion reduces its Gram identity to the
 displayed Petz sandwich.
 
+Product-coordinate covariance transports this identity to arbitrary finite
+tensor factors. For density operators, the support condition also makes the
+chosen trace-preserving completion agree with the raw support formula on
+$\operatorname{tr}_R\rho$. Consequently the source-facing conclusion is
+\begin{align}
+  D(\rho\Vert\sigma)
+    =D(\operatorname{tr}_R\rho\Vert\operatorname{tr}_R\sigma)
+  \quad\Longrightarrow\quad
+  \widehat{\mathcal R}_\sigma(\operatorname{tr}_R\rho)=\rho.
+\end{align}
+The complementary preparation term in
+$\widehat{\mathcal R}_\sigma$ is the chosen trace-preserving extension and is
+not part of \cite[Equation~(8)]{HaydenJozsaPetzWinter2004}.
+\footnote{Formal declarations:
+\leanid{Matrix.partialTraceRightPetzMap_submatrix_prod_equiv},
+\leanid{Matrix.partialTraceRightPetzMap_eq_of_relativeEntropy_eq_general_support},
+and
+\leanid{Matrix.partialTraceRightPetzChannel_recovery_of_dpi_equality}.}
+
 The proof of the block decomposition still requires the invariant-state
 decomposition used in
 \cite[Theorem~6]{HaydenJozsaPetzWinter2004}; that is the
@@ -630,9 +649,11 @@ the forward external assumption can be removed.
 The strong-subadditivity equality characterization is now split into a proved
 reverse direction and a postulated forward direction. Only the forward
 direction, equality implies quantum-Markov-chain structure, still needs the
-family-level structural analysis of recovered states.  Singular-support raw
-recovery, positive-definite recovery, and the trace-preserving Petz channel are
-available.  The forward direction alone is postulated. The reverse direction,
+family-level structural analysis of recovered states. Source-facing
+completed-channel recovery from equality in data processing is available on
+arbitrary finite tensor factors, together with positive-definite recovery and
+the trace-preserving Petz channel. The forward structural direction alone is
+postulated. The reverse direction,
 a block-diagonal product state attains equality, is proved from entropy
 additivity over weighted direct sums and tensor factors together with unitary
 and reindexing invariance.  Until the structural step is formalized, the
