@@ -407,8 +407,28 @@ The corresponding source-$B$ quadratic forms are therefore equal.
 and
 \leanid{Matrix.supportSourceBQuadratic_eq_projected_relativeModular} in
 \path{TNLean/Channel/Schwarz/SupportLeftRightRelativeModular.lean}.}
-The remaining gap is the singular finite-family passage from equality of the
-summed defects to a common relative-modular resolvent.
+For a finite family $(A_i,B_i)$, both fixed-parameter quadratic defects are
+now nonnegative.  Under $\ker B_i\subseteq\ker A_i$, the source-$A$ defect is
+\[
+  \sum_i Q^A_{A_i,B_i}(t)
+    -Q^A_{\sum_iA_i,\sum_iB_i}(t)\geq0,
+\]
+where the source is the unprojected matrix $A_i$; the corresponding
+source-$B$ inequality requires no kernel inclusion:
+\[
+  \sum_i Q^B_{A_i,B_i}(t)
+    -Q^B_{\sum_iA_i,\sum_iB_i}(t)\geq0.
+\]
+The kernel inclusions for the summands imply the same inclusion for the summed
+pair.
+\footnote{Formal declarations:
+\leanid{Matrix.rawSupportSourceAQuadratic_sum_sub_nonneg} and
+\leanid{Matrix.supportSourceBQuadratic_sum_sub_nonneg} in
+\path{TNLean/Channel/Schwarz/SupportSourceDefect.lean}.}
+These are fixed-$t$ algebraic inequalities.  The remaining analytic passage
+must identify the finite-family relative-entropy gap with the integral of the
+two defects, use nonnegativity and continuity to deduce pointwise vanishing,
+and then derive the common projected shifted relative-modular resolvent.
 Following the latter step, consider two positive semidefinite pairs $(A,B)$ and
 $(C,D)$.  Let $P_B$ be the support projection of the first reference matrix
 $B$, and write
@@ -458,14 +478,13 @@ $\operatorname{vec}(B^{\mathsf T})$.  This uses only the generalized-inverse
 identity $(B^{-1/2}_{\mathrm{supp}})^2B=P_B$.  The one-pair identity above
 also identifies this vector with the support-generalized-inverse solution of
 the left--right equation, and hence identifies the two source-$B$ quadratic
-forms.  It does not supply equality with a second pair's resolvent.  One must
-still pass from equality of the singular finite-family summed defects to
-equality of the corresponding common relative-modular resolvents.
-
-The kernel inclusion belongs to the preceding source theorem that must derive
-the support-restricted common resolvents from equality in data processing.  That
-theorem is not yet formalized, and therefore neither is the singular Petz
-recovery identity.
+forms.  Together with the two defect inequalities, it still does not show that
+equality of relative entropies makes either defect vanish.  The
+integral-and-continuity argument and the resulting finite-family common
+projected resolvent theorem remain unformalized.  The kernel inclusion is
+already used for the unprojected source-$A$ inequality and remains an exact hypothesis
+of that source-facing equality theorem.  Consequently the singular Petz
+recovery identity is also still unformalized.
 
 In particular, the affine regularizations used to prove the inequality cannot
 by themselves prove its equality case.  Equality at the limiting pair implies

@@ -144,6 +144,69 @@ theorem support_resolvent_residual_identity
   rw [hleft, hright, hlast, hx]
   ring
 
+/-- **The finite-family support-resolvent quadratic defect is nonnegative.**
+Under the same support assumptions as the residual identity above, the sum of
+the support-generalized-inverse quadratic forms dominates the quadratic form
+of the summed matrix and source:
+\[
+  0 \leq \operatorname{Re}\left(
+    \sum_i \langle b_i,S_i^+b_i\rangle
+      -\left\langle\sum_i b_i,
+        \left(\sum_i S_i\right)^+\sum_i b_i\right\rangle\right).
+\]
+
+This is the support-domain consequence of the residual calculation in
+Jenčová--Ruskai, arXiv:0903.2895v4, Appendix, equations `(Mj)`,
+`(eq:Schz1)`, and `(eq:Schwzt)`. -/
+lemma support_resolvent_quadratic_sum_sub_nonneg
+    {ι : Type*} [Fintype ι] [Nonempty ι]
+    (S : ι → Matrix n n ℂ) (b : ι → n → ℂ)
+    (hS : ∀ i, (S i).PosSemidef)
+    (hb : ∀ i, (hS i).isHermitian.supportProj *ᵥ b i = b i)
+    (hbar :
+      let Sbar := ∑ i, S i
+      let bbar := ∑ i, b i
+      let hSbar : Sbar.PosSemidef :=
+        Matrix.posSemidef_sum Finset.univ fun i _ ↦ hS i
+      hSbar.isHermitian.supportProj *ᵥ bbar = bbar) :
+    let Sbar := ∑ i, S i
+    let bbar := ∑ i, b i
+    let G := fun i ↦ (hS i).supportInv
+    let hSbar : Sbar.PosSemidef :=
+      Matrix.posSemidef_sum Finset.univ fun i _ ↦ hS i
+    let Gbar := hSbar.supportInv
+    0 ≤ ((∑ i, dotProduct (star (b i)) (G i *ᵥ b i)) -
+      dotProduct (star bbar) (Gbar *ᵥ bbar)).re := by
+  classical
+  dsimp only
+  let Sbar : Matrix n n ℂ := ∑ i, S i
+  let bbar : n → ℂ := ∑ i, b i
+  let hSbar : Sbar.PosSemidef :=
+    Matrix.posSemidef_sum Finset.univ fun i _ ↦ hS i
+  let G : ι → Matrix n n ℂ := fun i ↦ (hS i).supportInv
+  let Gbar : Matrix n n ℂ := hSbar.supportInv
+  let x : n → ℂ := Gbar *ᵥ bbar
+  have hres :
+      ∑ i, dotProduct (star (b i - S i *ᵥ x))
+        (G i *ᵥ (b i - S i *ᵥ x)) =
+        (∑ i, dotProduct (star (b i)) (G i *ᵥ b i)) -
+          dotProduct (star bbar) (Gbar *ᵥ bbar) := by
+    simpa only [Sbar, bbar, hSbar, G, Gbar, x,
+      Matrix.PosSemidef.supportInv] using
+      support_resolvent_residual_identity S b hS hb hbar
+  have hresidual_nonneg :
+      (0 : ℂ) ≤ ∑ i, dotProduct (star (b i - S i *ᵥ x))
+        (G i *ᵥ (b i - S i *ᵥ x)) := by
+    apply Finset.sum_nonneg
+    intro i _
+    have hGi : (G i).PosSemidef := by
+      simpa only [G, Matrix.PosSemidef.supportInv,
+        (hS i).supportInvSqrt_isHermitian.eq] using
+        posSemidef_conjTranspose_mul_self (hS i).supportInvSqrt
+    exact hGi.dotProduct_mulVec_nonneg (b i - S i *ᵥ x)
+  rw [hres] at hresidual_nonneg
+  exact (Complex.nonneg_iff.mp hresidual_nonneg).1
+
 /-- **Zero support-resolvent defect gives a common solution on each
 support.** Under the hypotheses of `support_resolvent_residual_identity`, if
 the generalized-inverse quadratic defect vanishes, then the generalized
