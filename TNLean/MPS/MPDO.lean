@@ -66,10 +66,12 @@ import TNLean.MPS.MPDO.BlockedRFPConstruction
 import TNLean.MPS.MPDO.CPSVFigureEight
 import TNLean.MPS.MPDO.CPSVGroupedFigureEight
 import TNLean.MPS.MPDO.CPSVGroupedGramNormalization
+import TNLean.MPS.MPDO.CPSVNormalizedGroupedSectors
 import TNLean.MPS.MPDO.CPSVOriginalSpaceLemmaL
 import TNLean.MPS.MPDO.CPSVPeriodicExclusion
 import TNLean.MPS.MPDO.CPSVRepresentativeGroupedLemmaL
 import TNLean.MPS.MPDO.CPSVVerticalBNT
+import TNLean.MPS.MPDO.CPSVVerticalCanonicalForm
 import TNLean.MPS.MPDO.CommonWeightAbsorption
 import TNLean.MPS.MPDO.CommutingBondEtaBoundaryTrace
 import TNLean.MPS.MPDO.CommutingBondEtaCyclicCore
@@ -137,6 +139,7 @@ import TNLean.MPS.MPDO.LocalPurificationRFP
 import TNLean.MPS.MPDO.MutualInfoBridge
 import TNLean.MPS.MPDO.MutualInfoMonotone
 import TNLean.MPS.MPDO.NeighboringPreparation
+import TNLean.MPS.MPDO.NormalizedGroupedSectorMaps
 import TNLean.MPS.MPDO.NormalizedGroupedSectors
 import TNLean.MPS.MPDO.OperatorProduct
 import TNLean.MPS.MPDO.OrthogonalSectorAreaLaw

@@ -3,25 +3,32 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.MPDO.GroupedGramNormalization
+import TNLean.MPS.MPDO.CPSVGroupedGramNormalization
 import TNLean.MPS.MPDO.NormalizedGroupedSectorMaps
 
 /-!
-# Normalized physical maps from horizontal canonical form
+# Normalized physical maps from literal CPSV canonical form
 
-This file supplies the positive Gram scalars from normalized BNT-refined
-horizontal form and applies the canonical-form-independent grouped-sector map
-construction.
+The literal grouped Figure 8 identity supplies a positive Gram scalar for each
+grouped gauge.  Absorbing the corresponding normalized unitary into the
+physical isometry gives orthogonal representative-sector maps and preserves
+the exact vertical reconstruction.
+
+## Main result
+
+* `MPSTensor.IsCPSVCanonicalForm.exists_normalized_grouped_sector_maps`
 
 ## References
 
 * Cirac--Perez-Garcia--Schuch--Verstraete, arXiv:1606.00608,
-  Proposition 4.13, lines 1895--1921.
+  Proposition 4.13, lines 1903--1921.
 -/
 
 open scoped Matrix BigOperators ComplexOrder
 
-namespace MPOTensor
+open MPOTensor
+
+namespace MPSTensor.IsCPSVCanonicalForm
 
 variable {d D : ℕ}
 
@@ -42,12 +49,12 @@ isometries with mutually orthogonal ranges and intertwine the vertical tensor
 with the undressed representative tensors.
 
 All hypotheses are clauses furnished by
-`IsHorizontalCF.exists_verticalBNTGrouping_with_isometry`.
+`IsCPSVCanonicalForm.exists_verticalBNTGrouping_with_isometry`.
 
 Source: arXiv:1606.00608, proof of Proposition 4.13, lines 1895--1921. -/
-theorem IsMPDO.exists_normalized_grouped_sector_maps
-    {M : MPOTensor d D} (hM : IsMPDO M)
-    (hHorizontal : IsHorizontalCF M)
+theorem exists_normalized_grouped_sector_maps
+    {M : MPOTensor d D} (hCanonical : IsCPSVCanonicalForm M.toMPSTensor)
+    (hM : IsMPDO M)
     (mu : Fin r → ℂ) (V : (k : Fin r) → Matrix (Fin d) (Fin (dim k)) ℂ)
     (hDimPos : ∀ k, 0 < dim k)
     (hNormal : ∀ k, MPSTensor.IsNormalTensor (blocks k))
@@ -103,9 +110,9 @@ theorem IsMPDO.exists_normalized_grouped_sector_maps
           W ⟨j, q⟩ *
             ((mu ((C).enum j q) * zeta j q) • blocks ((C).repr j) v) *
             (W ⟨j, q⟩)ᴴ := by
-  apply exists_normalized_grouped_sector_maps_of_gram blocks mu V hdim X zeta
+  apply MPOTensor.exists_normalized_grouped_sector_maps_of_gram blocks mu V hdim X zeta
   · intro j q
-    exact hM.grouped_sector_gram_eq_pos_smul_one blocks hHorizontal mu V
+    exact hCanonical.grouped_sector_gram_eq_pos_smul_one blocks hM mu V
       hDimPos hNormal hdim X zeta hXDist hCoeffPos hCorner j q
   · exact hIso
   · exact hOrth
@@ -114,4 +121,4 @@ theorem IsMPDO.exists_normalized_grouped_sector_maps
 
 end GroupedSectors
 
-end MPOTensor
+end MPSTensor.IsCPSVCanonicalForm
