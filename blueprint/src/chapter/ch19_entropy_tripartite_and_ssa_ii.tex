@@ -992,6 +992,34 @@
     $D(\rho\,\| \sigma)=-S(\rho)-\re\tr(\rho\log\sigma)$.
 \end{proof}
 
+\begin{lemma}[Support of a bipartite state in the product of its marginals]
+    \label{lem:product_marginal_support}
+    \lean{Matrix.product_marginal_support}
+    \leanok
+    \uses{def:partial_trace, def:partial_trace_left,
+        thm:marginal_support_left_absorption,
+        thm:marginal_support_right_absorption,
+        thm:right_marginal_support_left_absorption,
+        thm:right_marginal_support_right_absorption}
+    Let $\omega_{XY}$ be positive semidefinite. Then
+    \begin{align}
+        \ker(\omega_X\otimes\omega_Y)
+        &\subseteq \ker\omega_{XY}.
+        \notag
+    \end{align}
+    Equivalently, $\omega_{XY}$ is supported on
+    $\operatorname{supp}\omega_X\otimes\operatorname{supp}\omega_Y$.
+\end{lemma}
+
+\begin{proof}\leanok
+    The support projection of $\omega_X\otimes\omega_Y$ is
+    $P_X\otimes P_Y$. The lifted projections
+    $P_X\otimes\mathbf 1_Y$ and $\mathbf 1_X\otimes P_Y$ both fix
+    $\omega_{XY}$, so their product $P_X\otimes P_Y$ fixes it as well.
+    Every vector annihilated by the product of the marginals is therefore
+    annihilated by $\omega_{XY}$.
+\end{proof}
+
 \begin{theorem}[SSA equality as saturation for the product marginals]
     \label{thm:ssa_equality_product_marginal_dpi}
     \lean{isSSAEquality_iff_product_marginal_data_processing_eq}
@@ -1044,6 +1072,61 @@
         [\rho_A\otimes\rho_B]_{(a,b),(a',b')}.
         \notag
     \end{align}
+\end{proof}
+
+\begin{theorem}[Product-reference Petz recovery at SSA equality]
+    \label{thm:ssa_equality_product_marginal_petz_recovery}
+    \lean{Matrix.partialTraceRightPetzMap_product_marginal_recovery_of_isSSAEquality}
+    \lean{Matrix.idTensor_partialTraceRightPetzMap_traceC_ABC_eq_of_isSSAEquality}
+    \lean{Matrix.partialTraceRightPetzChannel_traceA_ABC_isKrausCPTP}
+    \lean{Matrix.idTensor_partialTraceRightPetzChannel_traceC_ABC_eq_of_isSSAEquality}
+    \leanok
+    \uses{thm:ssa_equality_product_marginal_dpi,
+        lem:product_marginal_support,
+        thm:petz_recovery_of_dpi_equality,
+        thm:entropy_petz_product_tensor_corollaries,
+        thm:partial_trace_petz_channel_cptp,
+        thm:partial_trace_petz_channel_supported_agreement}
+    Let $\rho_{ABC}$ be a tripartite density matrix attaining equality in
+    strong subadditivity. The raw Petz support map for the reference
+    $\rho_A\otimes\rho_{BC}$ recovers $\rho_{ABC}$ from $\rho_{AB}$.
+    Moreover,
+    \begin{align}
+        \rho_{ABC}
+        &=
+        (\operatorname{id}_A\otimes
+          \mathcal R^{\mathrm{raw}}_{\rho_{BC}})(\rho_{AB})
+        =
+        (\operatorname{id}_A\otimes
+          \widehat{\mathcal R}_{\rho_{BC}})(\rho_{AB}),
+        \notag
+    \end{align}
+    where $\widehat{\mathcal R}_{\rho_{BC}}$ is a trace-preserving completely
+    positive extension of the support formula. This is equation~(11) of
+    \cite{Hayden2004Structure}, obtained from Theorem~3 and equation~(8)
+    together with the supported form of equation~(10).
+
+    No marginal is required to be invertible. If $\rho_A$ is singular, the
+    displayed factorization is asserted on the supported input
+    $\rho_{AB}$ only; it is not a global factorization of an ambient
+    product-reference completion.
+\end{theorem}
+
+\begin{proof}\leanok
+    Equality in strong subadditivity gives equality in relative-entropy data
+    processing for $\rho_{ABC}$ and
+    $\rho_A\otimes\rho_{BC}$. Lemma~
+    \ref{lem:product_marginal_support} supplies the required support
+    inclusion, and Theorem~\ref{thm:petz_recovery_of_dpi_equality} gives raw
+    recovery after the canonical reassociation of the tensor factors.
+
+    The state $\rho_{AB}$ is fixed on both sides by
+    $P_A\otimes\mathbf 1_B$, so the supported product-reference
+    factorization removes the first-factor support compression. It is also
+    fixed by $\mathbf 1_A\otimes P_B$; hence every $B$-block lies in the
+    support of $\rho_B$. The completed local channel therefore agrees with
+    its raw support formula on every block, proving both displayed
+    identities.
 \end{proof}
 
 \begin{theorem}[SSA equality as saturation for a maximally mixed reference]

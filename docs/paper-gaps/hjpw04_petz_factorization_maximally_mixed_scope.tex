@@ -113,6 +113,43 @@ identity on $A$ tensored with a projection on $B$. No factorization of that
 generic completed channel is claimed. The existing maximally mixed completed
 factorization is valid because the first-factor support is full.
 
+\section{SSA product-reference specialization}
+
+For every positive semidefinite bipartite operator $\omega_{XY}$,
+\begin{align}
+  \ker(\omega_X\otimes\omega_Y)\subseteq\ker\omega_{XY}.
+\end{align}
+Thus the product-marginal reference automatically satisfies the support
+condition in HJPW Theorem~3. If a tripartite density matrix attains equality
+in strong subadditivity, the raw product-reference Petz map recovers it:
+\begin{align}
+  \mathcal R^{\mathrm{raw}}_{\rho_A\otimes\rho_{BC}}(\rho_{AB})
+  &=\rho_{ABC}.
+\end{align}
+Since $\rho_{AB}$ is supported by both $P_A\otimes\mathbf 1_B$ and
+$\mathbf 1_A\otimes P_B$, the supported factorization and the local
+trace-preserving completion give
+\begin{align}
+  (\operatorname{id}_A\otimes
+    \mathcal R^{\mathrm{raw}}_{\rho_{BC}})(\rho_{AB})
+  &=
+  (\operatorname{id}_A\otimes
+    \widehat{\mathcal R}_{\rho_{BC}})(\rho_{AB})
+  =\rho_{ABC}.
+\end{align}
+These are HJPW equations (10)--(11) on the supported input. They are
+formalized in \doclink{TNLean/Channel/Schwarz/SSAEqualityPetzRecovery} by
+\begin{center}
+  \small
+  \leanid{Matrix.product_marginal_support}\\
+  \leanid{Matrix.partialTraceRightPetzMap_product_marginal_recovery_of_isSSAEquality}\\
+  \leanid{Matrix.idTensor_partialTraceRightPetzMap_traceC_ABC_eq_of_isSSAEquality}\\
+  \leanid{Matrix.partialTraceRightPetzChannel_traceA_ABC_isKrausCPTP}\\
+  \leanid{Matrix.idTensor_partialTraceRightPetzChannel_traceC_ABC_eq_of_isSSAEquality}.
+\end{center}
+No global identity-tensored factorization of TNLean's generic completed
+singular product-reference channel is claimed.
+
 \section{Remaining structural theorem}
 
 Equation~\eqref{eq:hjpw-global-support-factorization} supplies the
@@ -183,11 +220,14 @@ structural obstructions identified in the previous section.
 
 \section{Classification}
 
-\emph{Raw factorization complete; structural implication open.} The general
+\emph{Product-reference recovery complete; structural implication open.} The general
 positive-semidefinite product reference, its marginal and support calculus, the
 global support-compressed raw formula, and the supported-input and
 positive-definite-left corollaries are formalized. The generic completed
-singular channel is outside this claim. Independently, the common invariant
+singular product-reference channel is outside this claim. The exact SSA
+specialization now proves HJPW equation (11), both for the identity-tensored
+raw support formula and for a completed local recovery channel on
+$\rho_{AB}$. Independently, the common invariant
 Heisenberg-picture star-subalgebra $A_0$ of a finite family of jointly
 invariant states, its membership characterization, and its generic block form
 are formalized under an explicit full-support hypothesis on the common

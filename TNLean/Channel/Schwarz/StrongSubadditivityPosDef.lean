@@ -464,13 +464,10 @@ theorem quantumRelativeEntropy_traceC_le [NeZero dC]
     (S := Fin dA × Fin dB) (T := Fin dC)
     (ρ := ρ.submatrix r.symm r.symm) (σ := σ.submatrix r.symm r.symm) hρr hσr
   rw [quantumRelativeEntropy_submatrix_equiv hρ.isHermitian hσ.isHermitian r] at hbase
-  have hImage : ∀ X : Matrix (Fin dA × Fin dB × Fin dC) (Fin dA × Fin dB × Fin dC) ℂ,
-      partialTraceRight (X.submatrix r.symm r.symm) = traceC_ABC X := by
-    intro X
-    ext q₁ q₂
-    simp only [partialTraceRight_apply, Matrix.submatrix_apply, traceC_ABC, hr,
-      Equiv.symm_symm, Equiv.prodAssoc_apply]
-  rw [hImage ρ, hImage σ] at hbase
+  rw [show partialTraceRight (ρ.submatrix r.symm r.symm) = traceC_ABC ρ by
+      simpa only [hr, Equiv.symm_symm] using partialTraceRight_submatrix_prodAssoc ρ,
+    show partialTraceRight (σ.submatrix r.symm r.symm) = traceC_ABC σ by
+      simpa only [hr, Equiv.symm_symm] using partialTraceRight_submatrix_prodAssoc σ] at hbase
   exact hbase
 
 /-- The partial trace over the third factor of a positive definite tripartite
@@ -547,13 +544,10 @@ theorem quantumRelativeEntropy_traceC_le_support [NeZero dC]
     (S := Fin dA × Fin dB) (T := Fin dC)
     (ρ := ρ.submatrix r.symm r.symm) (σ := σ.submatrix r.symm r.symm) hρr hσr hsuppr
   rw [quantumRelativeEntropy_submatrix_equiv hρ.isHermitian hσ.isHermitian r] at hbase
-  have hImage : ∀ X : Matrix (Fin dA × Fin dB × Fin dC) (Fin dA × Fin dB × Fin dC) ℂ,
-      partialTraceRight (X.submatrix r.symm r.symm) = traceC_ABC X := by
-    intro X
-    ext q₁ q₂
-    simp only [partialTraceRight_apply, Matrix.submatrix_apply, traceC_ABC, hr,
-      Equiv.symm_symm, Equiv.prodAssoc_apply]
-  rw [hImage ρ, hImage σ] at hbase
+  rw [show partialTraceRight (ρ.submatrix r.symm r.symm) = traceC_ABC ρ by
+      simpa only [hr, Equiv.symm_symm] using partialTraceRight_submatrix_prodAssoc ρ,
+    show partialTraceRight (σ.submatrix r.symm r.symm) = traceC_ABC σ by
+      simpa only [hr, Equiv.symm_symm] using partialTraceRight_submatrix_prodAssoc σ] at hbase
   exact hbase
 
 end DataProcessingGeneral
