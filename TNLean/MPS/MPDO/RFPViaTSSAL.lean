@@ -146,8 +146,7 @@ theorem tensorMapBoth_bipartitionedNormalizedMPO
   ext p q
   rcases p with ⟨pA, pB⟩
   rcases q with ⟨qA, qB⟩
-  simp only [Matrix.tensorMapBoth, Matrix.idTensorMap, Matrix.submatrix_apply,
-    Matrix.tensorMapId_apply, Prod.swap_prod_mk]
+  simp only [Matrix.tensorMapBoth, Matrix.idTensorMap]
   simp only [coarsenFirstBlock, Matrix.equivReindexMap]
   let uA : Fin (a + 2) → Fin d := finFunctionFinEquiv.symm pA
   let vA : Fin (a + 2) → Fin d := finFunctionFinEquiv.symm qA
@@ -212,8 +211,7 @@ theorem tensorMapBoth_bipartitionedNormalizedMPO_reverse
   ext p q
   rcases p with ⟨pA, pB⟩
   rcases q with ⟨qA, qB⟩
-  simp only [Matrix.tensorMapBoth, Matrix.idTensorMap, Matrix.submatrix_apply,
-    Matrix.tensorMapId_apply, Prod.swap_prod_mk]
+  simp only [Matrix.tensorMapBoth, Matrix.idTensorMap]
   simp only [refineFirstBlock, Matrix.equivReindexMap]
   let uA : Fin (a + 1) → Fin d := finFunctionFinEquiv.symm pA
   let vA : Fin (a + 1) → Fin d := finFunctionFinEquiv.symm qA

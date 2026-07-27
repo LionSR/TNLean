@@ -207,7 +207,7 @@ theorem exists_mem_unitaryGroup_trace_conjTranspose_mul_eq (A : Matrix (Fin D) (
       rw [hf]
       simp only [inner_smul_left, inner_smul_right]
       ring
-    show ⟪f i, f j⟫_ℂ = _
+    change ⟪f i, f j⟫_ℂ = _
     rw [hinner, hgg i j]
     rcases eq_or_ne i j with rfl | hij
     · have hlpos : 0 < lam i := (hlam0 i).lt_of_ne (Ne.symm hi)

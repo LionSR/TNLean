@@ -592,9 +592,12 @@ theorem mulTensor_verticalAssembledTensor_reindex
   rcases x with ⟨⟨⟨α, q⟩, ⟨β, r⟩⟩, ⟨i, j⟩⟩
   rcases y with ⟨⟨⟨α', q'⟩, ⟨β', r'⟩⟩, ⟨i', j'⟩⟩
   simp only [Matrix.reindex_apply, Matrix.submatrix_apply]
-  simp [productRetainedEquiv, verticalProductSectorEquiv,
-    retainedVerticalProductTensor, weightedVerticalProductBlock,
-    toMPSTensor, mulTensor_apply, verticalBNTMPO_apply]
+  simp only [retainedVerticalProductTensor, toMPSTensor, MPSTensor.finProdFinEquiv_divNat,
+    MPSTensor.finProdFinEquiv_modNat, productRetainedEquiv, verticalProductSectorEquiv,
+    Equiv.symm_trans, Equiv.symm_mk, Equiv.prodCongr_symm, Equiv.symm_symm,
+    Equiv.trans_apply, Equiv.coe_fn_mk, Equiv.prodCongr_apply, Prod.map_apply,
+    mulTensor_apply, verticalBNTMPO_apply, Matrix.submatrix_apply,
+    Equiv.symm_apply_apply, weightedVerticalProductBlock]
   by_cases hp :
       ((⟨α, q⟩ : (α : Fin g) × Fin (mult α)),
         (⟨β, r⟩ : (α : Fin g) × Fin (mult α))) =
