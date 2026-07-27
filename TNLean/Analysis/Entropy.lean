@@ -496,6 +496,32 @@ noncomputable def traceAC_ABC
     Matrix (Fin dB) (Fin dB) ℂ :=
   fun b₁ b₂ => ∑ a : Fin dA, ∑ c : Fin dC, ρ (a, b₁, c) (a, b₂, c)
 
+/-- Reassociating a tripartite matrix from \(A \times (B \times C)\) to
+\((A \times B) \times C\) and taking the right partial trace gives
+\(\operatorname{tr}_C \rho_{ABC}\). -/
+theorem partialTraceRight_submatrix_prodAssoc
+    (ρ : Matrix (Fin dA × Fin dB × Fin dC)
+      (Fin dA × Fin dB × Fin dC) ℂ) :
+    partialTraceRight
+        (ρ.submatrix (Equiv.prodAssoc (Fin dA) (Fin dB) (Fin dC))
+          (Equiv.prodAssoc (Fin dA) (Fin dB) (Fin dC))) =
+      traceC_ABC ρ := by
+  ext q₁ q₂
+  simp only [partialTraceRight_apply, Matrix.submatrix_apply, traceC_ABC,
+    Equiv.prodAssoc_apply]
+
+/-- Tracing out \(A\) after tracing out \(C\) gives the same \(B\)-marginal
+as tracing out \(C\) after tracing out \(A\). -/
+theorem partialTraceLeft_traceC_ABC_eq_partialTraceRight_traceA_ABC
+    (ρ : Matrix (Fin dA × Fin dB × Fin dC)
+      (Fin dA × Fin dB × Fin dC) ℂ) :
+    partialTraceLeft (traceC_ABC ρ) =
+      partialTraceRight (traceA_ABC ρ) := by
+  ext b₁ b₂
+  simp only [partialTraceLeft_apply, partialTraceRight_apply, traceC_ABC,
+    traceA_ABC]
+  rw [Finset.sum_comm]
+
 /-! ### Hermiticity preservation for partial traces -/
 
 /-- Partial trace over A preserves Hermiticity. -/
