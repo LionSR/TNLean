@@ -3,21 +3,22 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.MPDO.FigureEightPairwise
+import TNLean.MPS.MPDO.CPSVFigureEight
+import TNLean.MPS.MPDO.CPSVVerticalBNT
 import TNLean.MPS.MPDO.GroupedReferenceCorner
-import TNLean.MPS.MPDO.VerticalBNT
 
 /-!
-# Figure 8 for grouped vertical sectors
+# Figure 8 for actual grouped sectors under literal CPSV canonical form
 
-This file applies the pairwise reflected form of Lemma L to the actual
-vertical corners and gauges furnished by the grouped vertical decomposition
-under normalized BNT-refined horizontal form.
+The literal vertical BNT grouping supplies positive corner equations for every
+copy of each phase-class representative.  Comparing a copy with its
+identity-gauge distinguished reference corner gives the actual-grouped Figure
+8 identity under literal CPSV canonical form.
 
 ## Main result
 
-* `IsMPDO.grouped_sector_gram_conj_eq`: the Gram conjugation of each grouped
-  copy fixes the transported representative tensor.
+* `MPSTensor.IsCPSVCanonicalForm.grouped_sector_gram_conj_eq`: each actual
+  grouped gauge fixes the transported representative by Gram conjugation.
 
 ## References
 
@@ -26,8 +27,9 @@ under normalized BNT-refined horizontal form.
 -/
 
 open scoped Matrix ComplexOrder
+open MPOTensor
 
-namespace MPOTensor
+namespace MPSTensor.IsCPSVCanonicalForm
 
 variable {d D : ℕ}
 
@@ -38,26 +40,21 @@ variable (blocks : (k : Fin r) → MPSTensor (D * D) (dim k))
 
 local notation "C" => MPSTensor.mpvPhaseClassData blocks
 
-/-- **Figure 8 for an actual grouped sector and its distinguished copy.**
+/-- **Figure 8 for an actual grouped sector under literal CPSV canonical form.**
 
-Assume the phase-class gauges, positive coefficients, and physical corner
-identities furnished by `exists_verticalBNTGrouping_with_isometry`.  For each
-copy `q`, transport the distinguished physical corner to the bond dimension
-of `q` and apply the pairwise reflected form of Lemma L.  The resulting Gram
-conjugation fixes the transported representative tensor.
+The distinguished corner is transported to the copy's bond dimension and has
+identity gauge.  The literal pairwise Figure 8 theorem compares it with the
+chosen copy, so conjugation by the copy's Gram matrix fixes every letter of the
+transported representative.
 
-No identity between an individual dressed tensor and its raw reflected
-adjoint is used or asserted.
-
-**Scope restriction (BNT-refined horizontal form):** `IsHorizontalCF` is the
-normalized BNT-refined horizontal form, stronger than the literal CPSV
-canonical form; see `docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex`.
+All hypotheses after `hM` are clauses of
+`IsCPSVCanonicalForm.exists_verticalBNTGrouping_with_isometry`.
 
 Source: arXiv:1606.00608, proof of Proposition 4.13, Figures 7--8 and lines
-1909--1919. -/
-theorem IsMPDO.grouped_sector_gram_conj_eq
-    {M : MPOTensor d D} (hM : IsMPDO M)
-    (hHorizontal : IsHorizontalCF M)
+1903--1919. -/
+theorem grouped_sector_gram_conj_eq
+    {M : MPOTensor d D} (hCanonical : IsCPSVCanonicalForm M.toMPSTensor)
+    (hM : IsMPDO M)
     (μ : Fin r → ℂ) (V : (k : Fin r) → Matrix (Fin d) (Fin (dim k)) ℂ)
     (hdim : ∀ j q, dim ((C).repr j) = dim ((C).enum j q))
     (X : (j : Fin (C).g) → (q : Fin ((C).copies j)) →
@@ -96,11 +93,11 @@ theorem IsMPDO.grouped_sector_gram_conj_eq
             (Fin (dim ((C).enum j q))) ℂ)) := by
     intro w
     simpa [cq, A] using (hCorner j q w).symm
-  have hGram := hHorizontal.gramDressing_eq_of_two_grouped_corners
+  have hGram := hCanonical.gramDressing_eq_of_two_grouped_corners
     M hM A (V ((C).enum j q)) W (X j q) 1 cq c0
     (hCoeffPos j q) hc0 hCornerq (by intro w; simpa [A] using hCorner0 w)
   simpa [gramDressing, A] using congrFun hGram v
 
 end GroupedSectors
 
-end MPOTensor
+end MPSTensor.IsCPSVCanonicalForm
