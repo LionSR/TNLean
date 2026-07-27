@@ -130,15 +130,69 @@ it, this family-level invariant-state and channel-action
 theorem is the remaining structural obstruction to replacing the forward
 Hayashi strong-subadditivity equality assumption used in the CPSV16 argument.
 
+\section{Common invariant algebra: formalized under an explicit full-support hypothesis}
+
+A first slice of the operator-algebraic Koashi--Imoto appendix (HJPW, Appendix A,
+lines 755--855) is now formalized independently of the product-reference
+recovery step above. For a finite, nonempty family of states $\rho_1,\dots,\rho_K$,
+the set
+\begin{align}
+  {\bf F}=\bigl\{F:\forall k\ F\rho_k=\rho_k\bigr\}
+\end{align}
+of trace-preserving completely positive operations leaving every $\rho_k$
+invariant (lines 825--827) is formalized as a bundled Kraus-family type, and the
+common invariant algebra
+\begin{align}
+  A_0=\bigcap_{F\in{\bf F}}A_F,
+  \qquad
+  A_F=\{X:F^*(X)=X\},
+\end{align}
+(line 843) is formalized as the intersection, over every such $F$, of the
+fixed-point $*$-subalgebra of the adjoint map -- together with its membership
+characterization and the generic block form of a star-subalgebra specialized to
+$A_0$. The corresponding declarations are
+\begin{center}
+  \small
+  \leanid{Kraus.commonAverage}\\
+  \leanid{Kraus.IsPreserving}\\
+  \leanid{Kraus.PreservingKrausFamily}\\
+  \leanid{Kraus.map_commonAverage_of_isPreserving}\\
+  \leanid{Kraus.commonInvariantStarSubalgebra}\\
+  \leanid{Kraus.mem_commonInvariantStarSubalgebra}\\
+  \leanid{Kraus.exists_unitary_conj_blockDiagonal_iff_commonInvariantStarSubalgebra}
+\end{center}
+in \doclink{TNLean/Channel/KoashiImoto/CommonInvariantAlgebra}.
+
+HJPW's argument reduces to the case where the common average
+$(1/K)\sum_k\rho_k$ has full support, by shrinking the working Hilbert space to
+the joint support of the $\rho_k$ (lines 761--763). That reduction is not
+derived here: every declaration that builds $A_0$ instead takes positive
+definiteness of the common average as an explicit hypothesis. Beyond this
+scope restriction, none of the following are claimed: the joint-support
+reduction itself; the finite realization $A_0=A_{F_1}\cap\dots\cap A_{F_M}$
+or the single witness $F_0$ with $A_0=A_{F_0}$ (lines 844--847); the
+associated tensor-product state decomposition
+$\rho_k=\bigoplus_j q_{j|k}\rho_{j|k}\otimes\omega_j$; the middle-system
+block channel action on the summands; the singular-support
+equality-to-recovery theorem of the section above; or elimination of the
+Hayashi strong-subadditivity forward-implication axiom. These remain the open
+structural obstructions identified in the previous section.
+
 \section{Classification}
 
 \emph{Raw factorization complete; structural implication open.} The general
 positive-semidefinite product reference, its marginal and support calculus, the
 global support-compressed raw formula, and the supported-input and
 positive-definite-left corollaries are formalized. The generic completed
-singular channel is outside this claim. Singular-support equality-to-recovery
-and the family-level Koashi--Imoto channel-action theorem remain open as
-separate later steps.
+singular channel is outside this claim. Independently, the common invariant
+Heisenberg-picture star-subalgebra $A_0$ of a finite family of jointly
+invariant states, its membership characterization, and its generic block form
+are formalized under an explicit full-support hypothesis on the common
+average, in place of HJPW's joint-support reduction. Singular-support
+equality-to-recovery, the joint-support reduction itself, the finite
+realization of $A_0$ by a single witness $F_0$, the family-level tensor-product
+state decomposition, and the Koashi--Imoto channel-action theorem all remain
+open as separate later steps.
 
 \begin{thebibliography}{9}
 
