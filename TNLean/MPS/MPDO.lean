@@ -64,7 +64,7 @@ import TNLean.MPS.MPDO.BlockedBNTFusionIsometries
 import TNLean.MPS.MPDO.BlockedCompleteZipper
 import TNLean.MPS.MPDO.BlockedRFPConstruction
 import TNLean.MPS.MPDO.CPSVFigureEight
-import TNLean.MPS.MPDO.CPSVGroupedFigure8
+import TNLean.MPS.MPDO.CPSVGroupedFigureEight
 import TNLean.MPS.MPDO.CPSVGroupedGramNormalization
 import TNLean.MPS.MPDO.CPSVOriginalSpaceLemmaL
 import TNLean.MPS.MPDO.CPSVPeriodicExclusion
