@@ -116,6 +116,17 @@ abstracted — record why, so it is not re-proposed).
 
 ## Completed refactors
 
+### Displaced-projector periodic contradiction
+- **Pattern:** two canonical-form surfaces separately derived first-site insertion equality
+  from hypothetical all-length commutation, then repeated the same periodic-vector
+  contradiction at the resulting noncommuting length.
+- **Reuse:** `MPOTensor.exists_not_commute_of_displaced_of_insertedTensor_eq` accepts the
+  original-tensor Lemma L provider, and
+  `MPOTensor.hasNoPeriodicVectors_verticalTensor_of_exists_not_commute_of_displaced` accepts
+  the resulting displaced-idempotent noncommutation provider.
+- **Result:** the horizontal BNT-refined and literal CPSV public theorems are thin wrappers;
+  their statements and existential chain-length quantifiers are unchanged.
+
 ### Blocked-basis coercion reconstruction
 - **Pattern:** blocked support-algebra coordinate proofs coerced finite sums
   into ambient matrices with unrestricted `simp`, which launched an expensive

@@ -42,9 +42,11 @@ If commutation held at every length, idempotence would give equality of the
 one-sided first-site actions.  The original-space Lemma L then gives the
 forbidden letterwise identity.
 
-Source: arXiv:1606.00608, Proposition 4.13, lines 1888--1893.  The existential
-length is the pointwise correction recorded in
-`docs/paper-gaps/cpgsv17_periodic_sector_projector.tex`. -/
+**Local fix (noncommuting length):** the source prints noncommutation at every
+length, but its contradiction is pointwise and only needs the existential length
+proved here; see `docs/paper-gaps/cpgsv17_periodic_sector_projector.tex`.
+
+Source: arXiv:1606.00608, Proposition 4.13, lines 1888--1893. -/
 theorem exists_not_commute_of_displaced
     (M : MPOTensor d D)
     (hCanonical : IsCPSVCanonicalForm M.toMPSTensor)
@@ -54,47 +56,8 @@ theorem exists_not_commute_of_displaced
     ∃ N : ℕ,
       ¬ Commute (MPOTensor.firstSiteMatrix Q N)
         (MPOTensor.mpo M (N + 1)) := by
-  classical
-  by_contra hnone
-  simp only [not_exists, not_not] at hnone
-  apply hdisp
-  have hAct : FirstSiteActionAgree M.toMPSTensor
-      (ketLeftAction Q) (ketLeftBraRightAction Q) := by
-    apply firstSiteActionAgree_ketLeft_ketLeftBraRight M Q
-    intro N ρ
-    have hQ1idem : firstSiteMatrix Q N * firstSiteMatrix Q N =
-        firstSiteMatrix Q N := by
-      rw [firstSiteMatrix_mul_firstSiteMatrix, hQidem]
-    have hOneSided : firstSiteMatrix Q N * mpo M (N + 1) =
-        firstSiteMatrix Q N * mpo M (N + 1) * firstSiteMatrix Q N := by
-      calc
-        firstSiteMatrix Q N * mpo M (N + 1) =
-            firstSiteMatrix Q N * firstSiteMatrix Q N * mpo M (N + 1) := by
-              rw [hQ1idem]
-        _ = firstSiteMatrix Q N *
-            (firstSiteMatrix Q N * mpo M (N + 1)) := by rw [Matrix.mul_assoc]
-        _ = firstSiteMatrix Q N *
-            (mpo M (N + 1) * firstSiteMatrix Q N) := by rw [(hnone N).eq]
-        _ = firstSiteMatrix Q N * mpo M (N + 1) *
-            firstSiteMatrix Q N := by rw [Matrix.mul_assoc]
-    have h2 := Matrix.ext_iff.mpr hOneSided
-      (Fin.cons (ρ 0).divNat fun n => (ρ (Fin.succ n)).divNat)
-      (Fin.cons (ρ 0).modNat fun n => (ρ (Fin.succ n)).modNat)
-    rw [mul_firstSiteMatrix_apply] at h2
-    simp only [firstSiteMatrix_mul_apply] at h2
-    simp only [Fin.cons_zero, Function.comp_def, Fin.cons_succ] at h2
-    rw [h2]
-    simp only [Finset.sum_mul]
-    exact Finset.sum_comm
-  have hInsert := hCanonical.insertedTensor_eq_of_firstSiteActionAgree M.toMPSTensor hAct
-  have hTensor : (M.ketLeftMul Q).toMPSTensor =
-      ((M.ketLeftMul Q).braRightMul Q).toMPSTensor := by
-    rw [← insertedTensor_ketLeftAction_toMPSTensor,
-      ← insertedTensor_ketLeftBraRightAction_toMPSTensor]
-    exact hInsert
-  funext i j
-  have hij := congrFun hTensor (finProdFinEquiv (i, j))
-  simpa [MPOTensor.toMPSTensor] using hij
+  exact exists_not_commute_of_displaced_of_insertedTensor_eq M
+    (hCanonical.insertedTensor_eq_of_firstSiteActionAgree M.toMPSTensor) hQidem hdisp
 
 end MPSTensor.IsCPSVCanonicalForm
 
@@ -110,24 +73,19 @@ period.  Literal Lemma L gives a chain length where the projector does not
 commute with the density operator.  Full-period invariance gives commutation
 with the corresponding power, while positivity removes that power.
 
+**Local fix (noncommuting length):** the all-length inequality printed at source
+line 1889 is replaced by the existential consequence of literal Lemma L, which is
+sufficient at lines 1890--1893; see
+`docs/paper-gaps/cpgsv17_periodic_sector_projector.tex`.
+
 Source: arXiv:1606.00608, Proposition 4.13, lines 1888--1893. -/
 theorem hasNoPeriodicVectors_verticalTensor_of_cpsvCanonicalForm
     (M : MPOTensor d D)
     (hM : M.IsMPDO)
     (hCanonical : MPSTensor.IsCPSVCanonicalForm M.toMPSTensor) :
     MPSTensor.HasNoPeriodicVectors (verticalTensor M) := by
-  intro n V B ρ r hV hint hirr hρ hr hfix μ hμ hnorm
-  by_contra hne
-  obtain ⟨p, Q, hp, hQherm, hQidem, hword, hdisp⟩ :=
-    exists_displaced_invariant_projector_of_periodic_vector M V B ρ r hV hint
-      hirr hρ hr hfix μ hμ hnorm hne
-  obtain ⟨N, hN⟩ := hCanonical.exists_not_commute_of_displaced M hQidem hdisp
-  apply hN
-  have hCommPow : Commute (firstSiteMatrix Q N) (mpo M (N + 1) ^ p) := by
-    have h := firstSiteMatrix_mul_mpo_comm (stackedTensor M p)
-      (hM.stackedTensor p) hQherm (stackedTensor_ketLeftMul_invariant M hword) N
-    rwa [mpo_stackedTensor] at h
-  exact mpo_commute_of_commute_pow M hM (N + 1) (by omega) hp hCommPow
+  exact hasNoPeriodicVectors_verticalTensor_of_exists_not_commute_of_displaced M hM
+    fun hQidem hdisp => hCanonical.exists_not_commute_of_displaced M hQidem hdisp
 
 end MPOTensor
 
