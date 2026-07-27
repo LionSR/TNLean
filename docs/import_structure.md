@@ -32,7 +32,7 @@ were formerly documented inline in `TNLean.lean`:
 | 2 | `Channel`, `Entropy` | Quantum channels; Choi, Kraus, and Stinespring theory; entropy and recovery. |
 | 2a | `Axioms` | Explicit axiomatized inputs such as Brouwer, entropy inequalities, and operator convexity. |
 | 2b | `Channel.Schwarz` and related analysis | Schwarz inequalities, operator convexity and monotonicity, and relative-entropy results. |
-| 2c | `Channel.FixedPoint`, `Channel.Irreducible`, `Channel.Peripheral`, `Channel.Semigroup`, `QPF`, `Spectral` | Fixed points, quantum Perron--Frobenius theory, peripheral spectrum, spectral gaps, and semigroups. |
+| 2c | `Channel.FixedPoint`, `Channel.Irreducible`, `Channel.Peripheral`, `Channel.Semigroup`, `Channel.KoashiImoto`, `QPF`, `Spectral` | Fixed points, quantum Perron--Frobenius theory, peripheral spectrum, spectral gaps, semigroups, and the common invariant algebra of jointly invariant states. |
 | 3 | `MPS.Chain`, `MPS.Core`, `MPS.Overlap` | Matrix-product tensor definitions, words, blocking, transfer matrices, and overlaps. |
 | 3b | `MPS.MPDO` | MPO, MPDO, and LPDO foundations. |
 | 4 | `MPS.FundamentalTheorem`, `MPS.Symmetry` | The single-block fundamental theorem and symmetry consequences. |
