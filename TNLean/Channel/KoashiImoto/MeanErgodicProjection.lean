@@ -43,9 +43,9 @@ adjoint (`Kraus.adjointMap`), via nondegeneracy of the trace pairing.
 (arXiv:quant-ph/0304007v2, lines 761-763). Documented in
 `docs/paper-gaps/hjpw04_petz_factorization_maximally_mixed_scope.tex`.
 
-As in `SingleWitness.lean`, every declaration below states
-`{Kidx : Type*} [Fintype Kidx] [Nonempty Kidx] {ρ : Kidx → Mat}` inline in its own signature
-rather than via a shared `variable` line, for the same reason recorded there.
+As in `SingleWitness.lean`, the declarations below state the finite state-family instances in
+their own signatures so that dependent projections through the bundled witness remain stable
+during elaboration.
 -/
 
 open scoped Matrix ComplexOrder MatrixOrder BigOperators Matrix.Norms.Frobenius
@@ -149,8 +149,9 @@ the projection onto `A_0` derived from `F_0^*` by `P_0^*`." This is the finite-d
 mean-ergodic projection of the Heisenberg-picture adjoint of the single witness `F_0`, built
 from `LinearMap.meanErgodicProjection` (`TNLean.Analysis.MeanErgodic`) via the trace-pairing
 adjoint. -/
-noncomputable def commonInvariantMeanErgodicProjection {Kidx : Type*} [Fintype Kidx]
-    [Nonempty Kidx] {ρ : Kidx → Mat} (hρbar : (commonAverage ρ).PosDef) : Mat →ₗ[ℂ] Mat :=
+noncomputable def commonInvariantMeanErgodicProjection
+    {Kidx : Type*} [Fintype Kidx] [Nonempty Kidx] {ρ : Kidx → Mat}
+    (hρbar : (commonAverage ρ).PosDef) : Mat →ₗ[ℂ] Mat :=
   Matrix.traceAdjointMap
     (LinearMap.meanErgodicProjection (commonInvariantMapLM hρbar)
       ((isPositiveMap_commonInvariantMapLM hρbar).hasBoundedOrbits_of_tracePreserving
