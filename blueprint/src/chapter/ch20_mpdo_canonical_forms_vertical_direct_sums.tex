@@ -710,7 +710,9 @@
 
 \begin{proof}[Proof outline]
     \uses{thm:cpsv_canonical_form_active_bnt_refinement,
-        thm:representative_grouped_insert_eq,
+        thm:cpsv_active_representative_sector_decomposition,
+        thm:cpsv_full_coordinate_marked_trace_identity,
+        thm:cpsv_retained_representative_grouped_lemma_l,
         thm:projector_closure_irreducible_corners,
         thm:mpdo_no_periodic_sector_projector,
         thm:psd_commute_of_commute_pow,
@@ -770,25 +772,35 @@
         \label{eq:cpsv_prop_4_13_first_site}
     \end{align}
     Write $Y_R(P)$ and $Y_C(P)$ for the right and central first-site
-    contractions determined by $P$. The exact grouped-coordinate direct sum is
-    now formalized. The next missing step is the representative-grouped form of
-    Lemma~L on these retained coordinates, giving, for every $\alpha$ and $i$,
+    contractions determined by $P$. The active representative sector
+    decomposition has weights
+    $\lambda_{\alpha,k}=\nu_{\alpha,k}\zeta_{\alpha,k}$, all nonzero, and its
+    representatives have simultaneous word-tuple separation at every
+    sufficiently large length. It has the same matrix product vectors as
+    $T_{\mathrm{grp}}$ at every positive length. Hence
+    Theorem~\ref{thm:cpsv_retained_representative_grouped_lemma_l} gives
     \begin{align}
-        Y_R(P)C_\alpha^i&=Y_C(P)C_\alpha^i.
-        \label{eq:cpsv_prop_4_13_missing_active_separation}
+        Y_R(P)C_\alpha^i&=Y_C(P)C_\alpha^i
+        \label{eq:cpsv_prop_4_13_active_separation}
     \end{align}
-    This identity must then be carried through the listed block gauge and the
-    ambient coisometry $V$ into the vertically viewed tensor, to obtain
+    whenever the corresponding first-site equality has been established on
+    $T_{\mathrm{grp}}$.
+
+    The remaining step is to derive that grouped first-site equality from
+    (\ref{eq:cpsv_prop_4_13_first_site}) through the listed block gauge $G$ and
+    the ambient coisometry $V$, and then to carry
+    (\ref{eq:cpsv_prop_4_13_active_separation}) back to the vertically viewed
+    tensor. This must give
     \begin{align}
         \widetilde MP&=P\widetilde MP.
         \label{eq:cpsv_prop_4_13_missing_coisometry_transport}
     \end{align}
-    If a later argument instead removes the zero-weight coordinates, it must
-    also construct an explicit coisometric selector and prove the corresponding
-    reconstruction identity. Once the retained-coordinate Lemma~L statement
-    and the passage to $\widetilde M$ are established,
-    $(\Id-P)\widetilde MP=0$. Thus every one-sided invariant subspace is
-    reducing.
+    This listed-gauge and ambient-coisometry implication remains open. If an
+    argument instead removes the zero-weight coordinates, it must also
+    construct an explicit coisometric selector and
+    prove the corresponding reconstruction identity. Once this passage is
+    established, $(\Id-P)\widetilde MP=0$, so every one-sided invariant
+    subspace is reducing.
 
     % Local fix (periodic-sector quantifier): use one noncommuting chain length,
     % not the all-length assertion printed in the source. See
@@ -819,17 +831,23 @@
     $\mu_{\alpha,k}>0$ for every copy.
 
     Self-adjointness of the same sector compressions gives the marked-chain
-    identity used in the proof of Proposition~4.13. A second instance of the
-    missing retained-coordinate separation must transfer it to the local
+    identity used in the proof of Proposition~4.13. The full-coordinate trace
+    identity of Theorem~\ref{thm:cpsv_full_coordinate_marked_trace_identity} and
+    the marked form of
+    Theorem~\ref{thm:cpsv_retained_representative_grouped_lemma_l} separate the
+    representative marks once the required full-coordinate trace equality is
+    known. It remains to derive that equality from the physical compression
+    identity through $G$ and $V$. In particular, the passage to the local
     Gram-conjugation identity
     \begin{align}
         (X_{\alpha,k}^\dagger X_{\alpha,k})M_\alpha^v
         (X_{\alpha,k}^\dagger X_{\alpha,k})^{-1}
         &=(X_{\alpha,1}^\dagger X_{\alpha,1})M_\alpha^v
-        (X_{\alpha,1}^\dagger X_{\alpha,1})^{-1}.
+        (X_{\alpha,1}^\dagger X_{\alpha,1})^{-1}
         \label{eq:cpsv_prop_4_13_missing_gram_conjugation}
     \end{align}
-    Normal-tensor rigidity would then make the relative Gram matrix scalar:
+    remains open. Normal-tensor rigidity would then make the relative Gram
+    matrix scalar:
     for every $k$ there is $\omega_{\alpha,k}>0$ such that
     \begin{align}
         X_{\alpha,k}^\dagger X_{\alpha,k}
@@ -857,9 +875,10 @@
 % Formalization status: the theorem above remains \notready. The theorem below
 % proves the same conclusion from the stronger normalized BNT-refined horizontal
 % form. For literal canonical form, the exact class-copy-plus-inactive
-% coordinate regrouping is complete. Retained-coordinate Lemma L separation and
-% passage through the listed gauge and ambient coisometry into the vertical
-% tensor remain open.
+% coordinate regrouping, active representative sector decomposition, and
+% retained-coordinate Lemma L are complete. Passage through the listed gauge
+% and ambient coisometry into the vertical tensor, including the physical
+% Gram-conjugation identity and final assembly, remains open.
 
 \begin{theorem}[BNT-refined horizontal form implies vertical canonical form]
     \label{thm:vertical_cf_of_horizontal_cf}

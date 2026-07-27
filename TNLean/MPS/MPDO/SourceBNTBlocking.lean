@@ -189,6 +189,51 @@ theorem IsCPSVBasisOfNormalTensors.exists_positive_wordTupleSpanTop
       B hOriginalAtP hSelectors
   exact ⟨p + selectorLength, Nat.add_pos_left hp selectorLength, hSpan⟩
 
+/-- A simultaneous product-algebra word span makes each component block injective
+at the same length. -/
+theorem isNBlkInjective_of_wordTupleSpanTop
+    {g : ℕ} {dim : Fin g → ℕ}
+    (B : (j : Fin g) → MPSTensor d (dim j)) {L : ℕ}
+    (hSpan : WordTupleSpanTop B L) (j : Fin g) :
+    IsNBlkInjective (B j) L := by
+  classical
+  unfold IsNBlkInjective
+  apply top_unique
+  intro M _
+  let target : (k : Fin g) → Matrix (Fin (dim k)) (Fin (dim k)) ℂ :=
+    fun k => if h : k = j then cast (congrArg (fun n => Matrix (Fin n) (Fin n) ℂ)
+      (congrArg dim h.symm)) M else 0
+  have htarget : target ∈ Submodule.span ℂ (Set.range (wordTuple B L)) := by
+    rw [hSpan]
+    exact Submodule.mem_top
+  rcases (Submodule.mem_span_range_iff_exists_fun ℂ).mp htarget with ⟨c, hc⟩
+  apply (Submodule.mem_span_range_iff_exists_fun ℂ).2
+  refine ⟨c, ?_⟩
+  have hj := congrArg (fun X => X j) hc
+  simpa [target, wordTuple, Fintype.linearCombination_apply] using hj
+
+/-- Representative word tuples of a CPSV basis of normal tensors span their product
+matrix algebra at every sufficiently large length.
+
+Starting from one positive simultaneous span, its component words remain injective at
+all larger lengths.  The original span also supplies fixed block selectors; concatenating
+an injective prefix with those selectors gives the simultaneous span at each large length.
+
+Source: arXiv:1606.00608, lines 317--345, used in Appendix C.3, Lemma L,
+lines 1835--1858. -/
+theorem IsCPSVBasisOfNormalTensors.eventually_wordTupleSpanTop
+    {g : ℕ} {dim : Fin g → ℕ}
+    {A : MPSTensor d D} {B : (j : Fin g) → MPSTensor d (dim j)}
+    (hBNT : IsCPSVBasisOfNormalTensors A (fun j => ⟨dim j, B j⟩)) :
+    ∃ L₀ : ℕ, ∀ L ≥ L₀, WordTupleSpanTop B L := by
+  obtain ⟨p, hp, hSpan⟩ := hBNT.exists_positive_wordTupleSpanTop
+  have hSelectors : HasBlockSelectorWords B p :=
+    hasBlockSelectorWords_of_wordTupleSpanTop B hSpan
+  have hAtP : ∀ j, IsNBlkInjective (B j) p :=
+    fun j => isNBlkInjective_of_wordTupleSpanTop B hSpan j
+  exact eventually_wordTupleSpanTop_of_blockSelectorWords_of_isNBlkInjective
+    B hSelectors hp hAtP
+
 /-- A basis of normal tensors becomes simultaneously injective after one
 common positive blocking.
 
