@@ -4,7 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Algebra.MatrixGramUnitary
-import TNLean.MPS.MPDO.VerticalBNT
+import TNLean.MPS.CanonicalForm.PhaseCover
+import TNLean.MPS.MPDO.VerticalCF
 
 /-!
 # Normalized maps for grouped vertical sectors
