@@ -138,7 +138,17 @@ noncomputable def supportRelativeEntropyLeftRightIntegrand
   (supportSourceAQuadratic hA hB t - (Matrix.trace B).re +
       t * supportSourceBQuadratic hA hB t) / (1 + t)
 
-private lemma spectral_support_sourceA_solution
+/-- For \(t>0\), the spectral source-\(A\) construction solves the singular
+left--right equation
+\[
+  AX+tXB=AP_B,
+\]
+where \(P_B\) is the support projection of \(B\).
+
+This is the support-domain source \(X_j=A_jK\), with \(K=1\), in the
+Jenčová--Ruskai residual calculation, arXiv:0903.2895v4, Appendix,
+equations `(Mj)`, `(eq:Schz1)`, and `(eq:Schwzt)`. -/
+theorem supportLeftRight_sourceA_solution
     {A B : Matrix n n ℂ} (hA : A.PosSemidef) (hB : B.PosSemidef)
     {t : ℝ} (ht : 0 < t) :
     let UA : Matrix n n ℂ := hA.isHermitian.eigenvectorUnitary
@@ -561,7 +571,7 @@ theorem supportSourceAQuadratic_spectral
   have hsolution : A * X + t • (X * B) =
       A * hB.isHermitian.supportProj := by
     simpa only [UA, UB, α, β, W, Y, X] using
-      spectral_support_sourceA_solution hA hB ht
+      supportLeftRight_sourceA_solution hA hB ht
   have hvec : S *ᵥ vec Xᵀ = b := by
     change
       (A ⊗ₖ (1 : Matrix n n ℂ) +

@@ -641,6 +641,7 @@
     \lean{Matrix.rawSupportSourceAQuadratic}
     \lean{Matrix.supportSourceBQuadratic}
     \lean{Matrix.supportRelativeEntropyLeftRightIntegrand}
+    \lean{Matrix.supportLeftRight_sourceA_solution}
     \lean{Matrix.supportSourceAQuadratic_spectral}
     \lean{Matrix.supportSourceBQuadratic_spectral}
     \lean{Matrix.supportRelativeEntropyLeftRightIntegrand_eq_spectral}
@@ -775,7 +776,7 @@
     No kernel inclusion between $A_i$ and $B_i$ is required. This lemma is a
     positive-semidefinite support-domain extension of the positive-definite
     calculation in equations $(\mathrm{Mj})$, $(\mathrm{eq:Schz1})$, and
-    $(\mathrm{eq:Schwzt})$ at lines~1299--1328 of Jen\v{c}ov\'a--Ruskai,
+    $(\mathrm{eq:Schwzt})$ at lines~1313--1343 of Jen\v{c}ov\'a--Ruskai,
     arXiv:0903.2895v4; their generalized-inverse notation is given at
     lines~254--262. The paper does not state this extension. Its later
     singular equality theorem at lines~761--785 assumes
@@ -799,11 +800,65 @@
     the displayed defect as a sum of nonnegative quadratic residuals.
 \end{proof}
 
-% Open in #4435: the singular, support-domain passage from the finite-Weyl
-% equality above to the common-resolvent conclusion remains to be proved.
-% The positive-definite relative-modular theorem and the generic
-% support-residual identity and common-solution theorem below are already
-% established; this comment does not reopen them.
+\begin{lemma}[Nonnegativity of the finite-family unprojected source-$A$ support defect]
+    \label{lem:unprojected_support_sourceA_quadratic_sum_sub_nonnegative}
+    \lean{Matrix.rawSupportSourceAQuadratic_sum_sub_nonneg}
+    \leanok
+    \uses{thm:relative_entropy_support_left_right_quadratic,
+      lem:support_resolvent_residual_identity}
+    Let $I$ be a finite nonempty set. For each $i\in I$, let $A_i$ and $B_i$
+    be positive-semidefinite matrices of the same size satisfying
+    $\ker B_i\subseteq\ker A_i$. For $t>0$, write
+    \begin{align}
+        Q^A_{A_i,B_i}(t)
+        &=
+        \re\left\langle
+          \opvec(A_i^{\mathsf T}),
+          \bigl(A_i\otimes\mathbf 1+
+            t(\mathbf 1\otimes B_i^{\mathsf T})\bigr)^+
+          \opvec(A_i^{\mathsf T})
+        \right\rangle.
+        \notag
+    \end{align}
+    Then
+    \begin{align}
+        0
+        &\leq
+        \sum_{i\in I}Q^A_{A_i,B_i}(t)
+          -Q^A_{\sum_i A_i,\sum_i B_i}(t).
+        \notag
+    \end{align}
+    The kernel inclusions for the summands imply
+    $\ker(\sum_i B_i)\subseteq\ker(\sum_i A_i)$. This lemma is the
+    source-$A$ support-domain extension of the positive-definite residual
+    calculation in equations $(\mathrm{Mj})$, $(\mathrm{eq:Schz1})$, and
+    $(\mathrm{eq:Schwzt})$ at lines~1313--1343 of Jen\v{c}ov\'a--Ruskai,
+    arXiv:0903.2895v4. The paper does not state this fixed-parameter
+    extension separately. The lemma does not assert that equality of relative
+    entropies makes the defect vanish.
+\end{lemma}
+
+\begin{proof}\leanok
+    Put
+    \begin{align}
+        S_i
+        &=A_i\otimes\mathbf 1+t(\mathbf 1\otimes B_i^{\mathsf T}),&
+        a_i&=\opvec(A_i^{\mathsf T}).
+        \notag
+    \end{align}
+    The inclusion $\ker B_i\subseteq\ker A_i$ gives $A_iP_{B_i}=A_i$.
+    The source-$A$ left--right equation therefore places $a_i$ in the
+    support of $S_i$. Positivity shows that a vector annihilated by
+    $\sum_i B_i$ is annihilated by every $B_i$, and hence by every $A_i$.
+    Thus the summed source also lies in the support of the summed operator.
+    The support-resolvent residual identity writes the displayed difference
+    as a sum of nonnegative quadratic residuals.
+\end{proof}
+
+% Open in #4435: both fixed-parameter defect inequalities are established.
+% It remains to express the finite-family relative-entropy gap as their
+% integral, pass from a zero integral to pointwise vanishing by continuity,
+% and derive the common projected relative-modular resolvent.
 
 \begin{theorem}[Spectral resolvent representation of relative entropy]
     \label{thm:relative_entropy_resolvent_integral}
@@ -867,6 +922,7 @@
 \begin{lemma}[Residual identity on the supports]
     \label{lem:support_resolvent_residual_identity}
     \lean{Matrix.support_resolvent_residual_identity}
+    \lean{Matrix.support_resolvent_quadratic_sum_sub_nonneg}
     \lean{Matrix.IsHermitian.star_mulVec_dotProduct}
     \leanok
     \uses{def:support_inverse_square_root}
@@ -888,6 +944,15 @@
         \sum_i \langle b_i-S_i x,G_i(b_i-S_i x)\rangle
         &=\sum_i\langle b_i,G_i b_i\rangle-\langle b,Gb\rangle.
         \label{eq:entropy_residual_identity}
+    \end{align}
+    In particular,
+    \begin{align}
+        0
+        &\leq
+        \re\left(
+          \sum_i\langle b_i,G_i b_i\rangle-\langle b,Gb\rangle
+        \right).
+        \notag
     \end{align}
     Jen\v{c}ov\'a and Ruskai give the positive-definite residual expansion in
     equations~$(\mathrm{Mj})$ and~$(\mathrm{eq:Schz1})$ of the Appendix to
