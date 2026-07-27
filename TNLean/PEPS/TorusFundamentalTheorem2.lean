@@ -225,7 +225,7 @@ theorem bondDim_eq_of_normalTorusRectangle
         A.bondDim (torusRightEdge p) = A.bondDim (
             translateEdge (p.1 - xref) (p.2 - yref) (torusRightEdge (xref, yref))) := by
           rw [translateEdge_torusRightEdge (p.1 - xref) (p.2 - yref) (xref, yref)]
-          simp [sub_add_cancel]
+          simp
         _ = A.bondDim (torusRightEdge (xref, yref)) :=
           bondDim_translateEdge_of_translationInvariant hA _ _ _
         _ = A.bondDim eh := by rw [← heh_eq]
@@ -234,7 +234,7 @@ theorem bondDim_eq_of_normalTorusRectangle
         B.bondDim (torusRightEdge p) = B.bondDim (
             translateEdge (p.1 - xref) (p.2 - yref) (torusRightEdge (xref, yref))) := by
           rw [translateEdge_torusRightEdge (p.1 - xref) (p.2 - yref) (xref, yref)]
-          simp [sub_add_cancel]
+          simp
         _ = B.bondDim (torusRightEdge (xref, yref)) :=
           bondDim_translateEdge_of_translationInvariant hB _ _ _
         _ = B.bondDim eh := by rw [← heh_eq]
@@ -247,7 +247,7 @@ theorem bondDim_eq_of_normalTorusRectangle
         A.bondDim (torusUpEdge p) = A.bondDim (
             translateEdge (p.1 - xvref) (p.2 - yvref) (torusUpEdge (xvref, yvref))) := by
           rw [translateEdge_torusUpEdge (p.1 - xvref) (p.2 - yvref) (xvref, yvref)]
-          simp [sub_add_cancel]
+          simp
         _ = A.bondDim (torusUpEdge (xvref, yvref)) :=
           bondDim_translateEdge_of_translationInvariant hA _ _ _
         _ = A.bondDim ev := by rw [← hev_eq]
@@ -256,7 +256,7 @@ theorem bondDim_eq_of_normalTorusRectangle
         B.bondDim (torusUpEdge p) = B.bondDim (
             translateEdge (p.1 - xvref) (p.2 - yvref) (torusUpEdge (xvref, yvref))) := by
           rw [translateEdge_torusUpEdge (p.1 - xvref) (p.2 - yvref) (xvref, yvref)]
-          simp [sub_add_cancel]
+          simp
         _ = B.bondDim (torusUpEdge (xvref, yvref)) :=
           bondDim_translateEdge_of_translationInvariant hB _ _ _
         _ = B.bondDim ev := by rw [← hev_eq]

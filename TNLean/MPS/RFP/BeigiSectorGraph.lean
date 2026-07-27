@@ -222,9 +222,11 @@ private theorem groundBond_eq_one_sub_toMatrix' :
     groundBond A = 1 - LinearMap.toMatrix' (parentInteraction A 2) := by
   classical
   ext x y
-  simp [groundBond, twoSiteParentGroundProjectorMatrix,
+  simp only [groundBond, twoSiteParentGroundProjectorMatrix,
     twoSiteParentInteractionMatrix, Matrix.reindex_apply,
-    Matrix.submatrix_apply, Matrix.one_apply]
+    finTwoArrowEquiv_symm_apply, Equiv.symm_symm, finTwoArrowEquiv_apply,
+    Equiv.toFun_as_coe, piFinTwoEquiv_apply, Fin.isValue, Matrix.submatrix_apply,
+    Matrix.sub_apply, Matrix.one_apply, Prod.mk.injEq, LinearMap.toMatrix'_apply]
   · have hx : ![x 0, x 1] = x := by
       funext j
       fin_cases j <;> rfl
@@ -263,10 +265,12 @@ private theorem embedLocalOperator_groundBond_eq_one_sub {N : ℕ} (hN : 2 ≤ N
         rw [← replaceWindow_extractWindow 2 hN i τ]
         rw [← h, hστ]
       simp [hEq, hExtract]
-  · simp [MPOTensor.embedLocalOperator_apply, hστ, Matrix.one_apply]
-    intro hEq
-    subst τ
-    exact hστ (by simp [MPOTensor.AgreesOutsideWindow])
+  · have hne : σ ≠ τ := by
+      intro hEq
+      subst τ
+      exact hστ (by simp [MPOTensor.AgreesOutsideWindow])
+    simp only [MPOTensor.embedLocalOperator_apply, hστ, if_false,
+      Matrix.sub_apply, Matrix.one_apply, hne, sub_zero]
 
 private theorem singleKrausMap_groundBond_eq_transformedGroundBond
     (F : BeigiSectorGraphData A) :

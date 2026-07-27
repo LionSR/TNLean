@@ -443,7 +443,7 @@ private theorem nonempty_markovDecomposition_tripartite
     mul_one, Matrix.kroneckerMap_one_one, one_div, Matrix.submatrix_diagonal_equiv,
     one_mul, Matrix.conjTranspose_one, HayashiMarkov.abcEquiv, markovMiddleEquiv,
     oneSiteEquiv, Equiv.symm_trans, Equiv.symm_symm, sectorEquiv, Fin.isValue,
-    Equiv.prodCongr_symm, Equiv.refl_symm, Equiv.symm_mk, Nat.reduceAdd,
+    Equiv.prodCongr_symm, Equiv.refl_symm, Equiv.symm_mk,
     Fin.zero_eta, Equiv.prodCongr_apply, Equiv.coe_refl, Equiv.coe_trans,
     Equiv.funUnique_symm_apply, Equiv.coe_fn_mk, Prod.map_apply, id_eq,
     Function.comp_apply, Matrix.diagonal_mul, p, Complex.ofReal_inv,
