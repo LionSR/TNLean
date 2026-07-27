@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Channel.Schwarz.SupportRelativeModular
+import TNLean.Channel.Schwarz.PetzRecoverySupport
 import TNLean.Channel.Schwarz.WeylSupportRelativeEntropyEquality
 
 /-!
@@ -21,6 +22,8 @@ partial trace.
   support Petz sandwich.
 * `Matrix.partialTraceRightPetzMap_eq_of_relativeEntropy_eq` proves raw
   recovery by the partial-trace Petz map.
+* `Matrix.partialTraceRightPetzChannel_recovery_of_dpi_equality` gives the
+  arbitrary-index density-state result for the completed Petz channel.
 
 ## References
 
@@ -184,6 +187,140 @@ theorem partialTraceRightPetzMap_eq_of_relativeEntropy_eq
     partialTraceRightPetzMap σ hσ (partialTraceRight ρ) = ρ := by
   apply partialTraceRightPetzMap_eq_of_weyl_identity_sandwich hσ
   exact weyl_support_identity_sandwich_of_partialTraceRight_eq
+    hρ hσ hsupp heq
+
+/-- Equality in right-partial-trace data processing is invariant under
+equivalence reindexing of both tensor factors. -/
+private theorem quantumRelativeEntropy_partialTraceRight_eq_submatrix_prod_equiv
+    {L R L' R' : Type*}
+    [Fintype L] [DecidableEq L] [Fintype R] [DecidableEq R]
+    [Fintype L'] [DecidableEq L'] [Fintype R'] [DecidableEq R']
+    {ρ σ : Matrix (L × R) (L × R) ℂ}
+    (hρ : ρ.PosSemidef) (hσ : σ.PosSemidef)
+    (eL : L ≃ L') (eR : R ≃ R')
+    (heq : quantumRelativeEntropy ρ σ =
+      quantumRelativeEntropy (partialTraceRight ρ) (partialTraceRight σ)) :
+    quantumRelativeEntropy
+        (ρ.submatrix (eL.prodCongr eR).symm (eL.prodCongr eR).symm)
+        (σ.submatrix (eL.prodCongr eR).symm (eL.prodCongr eR).symm) =
+      quantumRelativeEntropy
+        (partialTraceRight
+          (ρ.submatrix (eL.prodCongr eR).symm (eL.prodCongr eR).symm))
+        (partialTraceRight
+          (σ.submatrix (eL.prodCongr eR).symm
+            (eL.prodCongr eR).symm)) := by
+  rw [quantumRelativeEntropy_submatrix_equiv
+      hρ.isHermitian hσ.isHermitian (eL.prodCongr eR),
+    partialTraceRight_submatrix_prod_equiv eL eR ρ,
+    partialTraceRight_submatrix_prod_equiv eL eR σ,
+    quantumRelativeEntropy_submatrix_equiv
+      (partialTraceRight_isHermitian hρ.isHermitian)
+      (partialTraceRight_isHermitian hσ.isHermitian) eL]
+  exact heq
+
+/-- Reindexing a square matrix along an equivalence is injective. -/
+private theorem eq_of_submatrix_equiv_eq
+    {m n : Type*} (e : m ≃ n) {A B : Matrix m m ℂ}
+    (h : A.submatrix e.symm e.symm = B.submatrix e.symm e.symm) :
+    A = B := by
+  ext i j
+  have hij := congrArg (fun M => M (e i) (e j)) h
+  simpa only [Matrix.submatrix_apply, Equiv.symm_apply_apply] using hij
+
+/-- Transport raw Petz recovery from a finite Weyl coordinate model along
+specified equivalences of the two tensor factors. -/
+private theorem partialTraceRightPetzMap_eq_of_relativeEntropy_eq_of_equiv
+    {L R : Type*} [Fintype L] [DecidableEq L]
+    [Fintype R] [DecidableEq R]
+    {dL dR : ℕ} [NeZero dR]
+    (eL : L ≃ Fin dL) (eR : R ≃ ZMod dR)
+    {ρ σ : Matrix (L × R) (L × R) ℂ}
+    (hρ : ρ.PosSemidef) (hσ : σ.PosSemidef)
+    (hsupp : ∀ v : L × R → ℂ, σ *ᵥ v = 0 → ρ *ᵥ v = 0)
+    (heq : quantumRelativeEntropy ρ σ =
+      quantumRelativeEntropy (partialTraceRight ρ) (partialTraceRight σ)) :
+    partialTraceRightPetzMap σ hσ (partialTraceRight ρ) = ρ := by
+  let e := eL.prodCongr eR
+  have hρ' : (ρ.submatrix e.symm e.symm).PosSemidef :=
+    hρ.submatrix e.symm
+  have hσ' : (σ.submatrix e.symm e.symm).PosSemidef :=
+    hσ.submatrix e.symm
+  have hsupp' := mulVec_submatrix_support e hsupp
+  have hptrρ :
+      partialTraceRight (ρ.submatrix e.symm e.symm) =
+        (partialTraceRight ρ).submatrix eL.symm eL.symm :=
+    partialTraceRight_submatrix_prod_equiv eL eR ρ
+  have heq' :
+      quantumRelativeEntropy
+          (ρ.submatrix e.symm e.symm)
+          (σ.submatrix e.symm e.symm) =
+        quantumRelativeEntropy
+          (partialTraceRight (ρ.submatrix e.symm e.symm))
+          (partialTraceRight (σ.submatrix e.symm e.symm)) :=
+    quantumRelativeEntropy_partialTraceRight_eq_submatrix_prod_equiv
+      hρ hσ eL eR heq
+  have hbase :=
+    partialTraceRightPetzMap_eq_of_relativeEntropy_eq
+      hρ' hσ' hsupp' heq'
+  rw [hptrρ,
+    partialTraceRightPetzMap_submatrix_prod_equiv eL eR σ hσ
+      (partialTraceRight ρ)] at hbase
+  exact eq_of_submatrix_equiv_eq e hbase
+
+/-- Equality in right-partial-trace data processing on an arbitrary finite
+product index implies recovery by the raw partial-trace Petz map.
+
+The coordinate-free statement is obtained by transporting the finite Weyl
+model above along equivalences of both tensor factors. It is the
+right-partial-trace forward implication of Hayden--Jozsa--Petz--Winter,
+arXiv:quant-ph/0304007v2, Theorem 3 and equation (8), on the explicit
+finite-relative-entropy support domain. -/
+theorem partialTraceRightPetzMap_eq_of_relativeEntropy_eq_general_support
+    {L R : Type*} [Fintype L] [DecidableEq L]
+    [Fintype R] [DecidableEq R] [Nonempty R]
+    {ρ σ : Matrix (L × R) (L × R) ℂ}
+    (hρ : ρ.PosSemidef) (hσ : σ.PosSemidef)
+    (hsupp : ∀ v : L × R → ℂ, σ *ᵥ v = 0 → ρ *ᵥ v = 0)
+    (heq : quantumRelativeEntropy ρ σ =
+      quantumRelativeEntropy (partialTraceRight ρ) (partialTraceRight σ)) :
+    partialTraceRightPetzMap σ hσ (partialTraceRight ρ) = ρ := by
+  classical
+  set dL := Fintype.card L
+  set dR := Fintype.card R
+  letI : NeZero dR := ⟨by simp [dR, Fintype.card_ne_zero (α := R)]⟩
+  set eL : L ≃ Fin dL := Fintype.equivFin L
+  set eR : R ≃ ZMod dR :=
+    (Fintype.equivFin R).trans (ZMod.finEquiv dR).toEquiv
+  exact partialTraceRightPetzMap_eq_of_relativeEntropy_eq_of_equiv
+    eL eR hρ hσ hsupp heq
+
+/-- Equality in right-partial-trace data processing for density matrices
+implies recovery by the completed partial-trace Petz channel.
+
+This is the right-partial-trace forward implication of
+Hayden--Jozsa--Petz--Winter, arXiv:quant-ph/0304007v2, Theorem 3 and
+equation (8), on the explicit finite-relative-entropy support domain. The raw
+support formula gives the recovery identity; the channel's off-support
+preparation term is the separately chosen trace-preserving completion and
+vanishes on the recovered marginal. -/
+theorem partialTraceRightPetzChannel_recovery_of_dpi_equality
+    {L R : Type*} [Fintype L] [DecidableEq L]
+    [Fintype R] [DecidableEq R]
+    {ρ σ : Matrix (L × R) (L × R) ℂ}
+    (hρ : ρ.PosSemidef) (hσ : σ.PosSemidef)
+    (hρtrace : ρ.trace = 1) (hσtrace : σ.trace = 1)
+    (hsupp : ∀ v : L × R → ℂ, σ *ᵥ v = 0 → ρ *ᵥ v = 0)
+    (heq : quantumRelativeEntropy ρ σ =
+      quantumRelativeEntropy (partialTraceRight ρ) (partialTraceRight σ)) :
+    partialTraceRightPetzChannel σ hσ (partialTraceRight ρ) = ρ := by
+  classical
+  let ρIndex := Classical.choice (nonempty_of_trace_eq_one ρ hρtrace)
+  let σIndex := Classical.choice (nonempty_of_trace_eq_one σ hσtrace)
+  letI : Nonempty L := ⟨ρIndex.1⟩
+  letI : Nonempty R := ⟨σIndex.2⟩
+  rw [partialTraceRightPetzChannel_apply_partialTraceRight_of_support
+    hρ hσ hsupp]
+  exact partialTraceRightPetzMap_eq_of_relativeEntropy_eq_general_support
     hρ hσ hsupp heq
 
 end Matrix

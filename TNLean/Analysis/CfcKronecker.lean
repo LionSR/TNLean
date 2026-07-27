@@ -60,6 +60,20 @@ noncomputable def leftKroneckerEmbed :
 @[simp] theorem leftKroneckerEmbed_apply (A : Matrix m m ℂ) :
     leftKroneckerEmbed (n := n) A = A ⊗ₖ (1 : Matrix n n ℂ) := rfl
 
+/-- The left tensor embedding commutes with equivalence reindexing of both
+tensor factors. -/
+theorem leftKroneckerEmbed_submatrix_prod_equiv
+    {m' n' : Type*} [Fintype m'] [DecidableEq m']
+    [Fintype n'] [DecidableEq n']
+    (em : m ≃ m') (en : n ≃ n') (A : Matrix m m ℂ) :
+    leftKroneckerEmbed (n := n') (A.submatrix em.symm em.symm) =
+      (leftKroneckerEmbed (n := n) A).submatrix
+        (em.prodCongr en).symm (em.prodCongr en).symm := by
+  simpa only [leftKroneckerEmbed_apply, Matrix.submatrix_one_equiv,
+    Equiv.prodCongr_symm, Equiv.prodCongr_apply] using
+    Matrix.kroneckerMap_submatrix_submatrix (fun x y : ℂ ↦ x * y)
+      A (1 : Matrix n n ℂ) em.symm em.symm en.symm en.symm
+
 /-- The unital right tensor embedding $B \mapsto \mathbf 1 \otimes B$ as a star
 algebra homomorphism of complex matrix algebras. -/
 noncomputable def rightKroneckerEmbed :

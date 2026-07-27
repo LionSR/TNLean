@@ -435,11 +435,8 @@ theorem quantumRelativeEntropy_partialTraceRight_le_general
       partialTraceRight (X.submatrix e.symm e.symm)
         = (partialTraceRight X).submatrix eS.symm eS.symm := by
     intro X
-    rw [partialTraceRight_submatrix_left eS.symm X,
-      partialTraceRight_submatrix_right eT.symm
-        (X.submatrix (Prod.map eS.symm id) (Prod.map eS.symm id)),
-      Matrix.submatrix_submatrix]
-    congr 1
+    simpa only [hedef] using
+      partialTraceRight_submatrix_prod_equiv eS eT X
   rw [hptr ρ, hptr σ,
     quantumRelativeEntropy_submatrix_equiv
       (partialTraceRight_isHermitian hρ.isHermitian)
