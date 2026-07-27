@@ -98,6 +98,43 @@ theorem PosSemidef.cfc_sqrt_isHermitian {ρ : Matrix n n ℂ} (hρ : ρ.PosSemid
     · simp [Matrix.diagonal_apply_ne _ hij, Matrix.diagonal_apply_ne _ (Ne.symm hij)]
   exact Matrix.isHermitian_mul_mul_conjTranspose _ hD
 
+/-- The positive square root is absorbed on the right by the support
+projection of the original positive-semidefinite matrix. -/
+theorem PosSemidef.cfc_sqrt_mul_supportProj
+    {ρ : Matrix n n ℂ} (hρ : ρ.PosSemidef) :
+    hρ.isHermitian.cfc Real.sqrt * hρ.isHermitian.supportProj =
+      hρ.isHermitian.cfc Real.sqrt := by
+  rw [hρ.isHermitian.cfc_form Real.sqrt]
+  unfold Matrix.IsHermitian.supportProj
+  let U := (hρ.isHermitian.eigenvectorUnitary : Matrix n n ℂ)
+  let D := Matrix.diagonal
+    (fun i => ((Real.sqrt (hρ.isHermitian.eigenvalues i) : ℝ) : ℂ))
+  let P := Matrix.diagonal
+    (fun i => if hρ.isHermitian.eigenvalues i ≠ 0 then (1 : ℂ) else 0)
+  have hU : star U * U = 1 := by
+    exact Unitary.coe_star_mul_self hρ.isHermitian.eigenvectorUnitary
+  change (U * D * star U) * (U * P * star U) = U * D * star U
+  simp only [Matrix.mul_assoc]
+  rw [← Matrix.mul_assoc (star U) U (P * star U), hU, Matrix.one_mul,
+    ← Matrix.mul_assoc D P (star U)]
+  congr 2
+  simp only [D, P, Matrix.diagonal_mul_diagonal]
+  congr 1
+  funext i
+  by_cases hi : hρ.isHermitian.eigenvalues i = 0
+  · simp [hi]
+  · simp [hi]
+
+/-- The positive square root is absorbed on the left by the support projection
+of the original positive-semidefinite matrix. -/
+theorem PosSemidef.supportProj_mul_cfc_sqrt
+    {ρ : Matrix n n ℂ} (hρ : ρ.PosSemidef) :
+    hρ.isHermitian.supportProj * hρ.isHermitian.cfc Real.sqrt =
+      hρ.isHermitian.cfc Real.sqrt := by
+  simpa only [Matrix.conjTranspose_mul, hρ.cfc_sqrt_isHermitian.eq,
+    hρ.isHermitian.supportProj_isHermitian.eq] using
+      congrArg Matrix.conjTranspose hρ.cfc_sqrt_mul_supportProj
+
 /-- The square of the Hermitian functional-calculus square root recovers the
 positive-semidefinite matrix. -/
 theorem PosSemidef.cfc_sqrt_mul_self {ρ : Matrix n n ℂ} (hρ : ρ.PosSemidef) :

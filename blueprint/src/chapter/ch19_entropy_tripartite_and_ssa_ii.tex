@@ -547,6 +547,28 @@
     applied to this finite family gives the displayed projected resolvent.
 \end{proof}
 
+\begin{lemma}[Unweighted finite-Weyl sum normalization]
+    \label{lem:unweighted_weyl_sum_normalization}
+    \lean{Matrix.unweightedWeylSum_eq_smul_partialTraceRight_kronecker}
+    \leanok
+    \uses{lem:twirl_partial_trace}
+    Let $X$ be a matrix on
+    $\mathcal H_S\otimes\mathbb C^{d_C}$ and let
+    $U_g=\mathbf 1\otimes W_g$ for the $d_C^2$ Weyl indices. Then
+    \begin{align}
+        \sum_g U_g XU_g^\dagger
+        &=
+        d_C^2\bigl((\tr_CX)\otimes d_C^{-1}\mathbf 1_C\bigr).
+        \notag
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    The uniform Weyl twirl is
+    $(\tr_CX)\otimes d_C^{-1}\mathbf 1_C$. Multiplying its defining identity
+    by $d_C^2$ gives the unweighted sum.
+\end{proof}
+
 \begin{lemma}[Support relative-modular square-root evaluation]
     \label{lem:support_relative_modular_sqrt_evaluation}
     \lean{Matrix.supportRelativeModular_sqrt_mulVec_vec_one}
@@ -773,6 +795,90 @@
     \end{align}
     The support Petz formula therefore identifies the left-hand side of the
     assumed sandwich identity with $\mathcal R_\sigma(\tr_C\rho)$.
+\end{proof}
+
+\begin{theorem}[Support-domain Petz recovery]
+    \label{thm:partial_trace_saturation_support_petz_recovery}
+    \lean{Matrix.supportRelativeModular_sandwich_eq_of_sqrt_ratio_eq}
+    \lean{Matrix.weyl_support_sqrt_ratio_eq_of_partialTraceRight_eq}
+    \lean{Matrix.weyl_support_identity_sandwich_of_partialTraceRight_eq}
+    \lean{Matrix.partialTraceRightPetzMap_eq_of_relativeEntropy_eq}
+    \leanok
+    In the finite Weyl coordinates
+    $\mathbb C^{d_S}\otimes\mathbb C^{\mathbb Z/d_C\mathbb Z}$, let
+    $\rho$ and $\sigma$ be positive semidefinite matrices satisfying
+    $\ker\sigma\subseteq\ker\rho$, and suppose that
+    \begin{align}
+        D(\rho\Vert\sigma)
+        &=D(\tr_C\rho\Vert\tr_C\sigma).
+        \notag
+    \end{align}
+    Put
+    \begin{align}
+        \overline\rho
+        &=(\tr_C\rho)\otimes d_C^{-1}\mathbf 1_C,
+        &
+        \overline\sigma
+        &=(\tr_C\sigma)\otimes d_C^{-1}\mathbf 1_C.
+        \notag
+    \end{align}
+    If $P_\sigma$ is the orthogonal projection onto
+    $(\ker\sigma)^\perp$, then
+    \begin{align}
+        \bigl(\sqrt\rho\,\sigma^{-1/2}_{\mathrm{supp}}\bigr)P_\sigma
+        &=
+        \bigl(\sqrt{\overline\rho}\,
+          \overline\sigma^{-1/2}_{\mathrm{supp}}\bigr)P_\sigma,
+        \notag\\
+        \sqrt\sigma\,\overline\sigma^{-1/2}_{\mathrm{supp}}
+          \overline\rho\,\overline\sigma^{-1/2}_{\mathrm{supp}}
+          \sqrt\sigma
+        &=\rho.
+        \notag
+    \end{align}
+    Consequently,
+    $\mathcal R_\sigma(\tr_C\rho)=\rho$ for the raw support Petz map.
+    The projected relative-modular argument follows
+    Jen\v{c}ov\'a--Ruskai, arXiv:0903.2895v4, lines~766--793, and the
+    recovery formula is
+    \cite[Theorem~3, equation~(8)]{Hayden2004Structure}.
+    This result does not assert the middle-space direct-sum decomposition in
+    \cite[Lemma~\textup{Lsigma3}, lines~1351--1363]
+      {Cirac2016MPDO_arXiv}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:partial_trace_saturation_common_projected_weyl_resolvent,
+        lem:unweighted_weyl_sum_normalization,
+        lem:support_relative_modular_sqrt_ratio,
+        thm:support_inverse_square_root_tensor_product,
+        thm:support_projection_absorption_kernel_inclusion,
+        thm:weyl_identity_sandwich_petz_recovery}
+    Use the zero Weyl index in
+    Theorem~\ref{thm:partial_trace_saturation_common_projected_weyl_resolvent}.
+    Lemma~\ref{lem:support_relative_modular_sqrt_ratio} gives the projected
+    square-root ratio for $(\rho,\sigma)$ and the unweighted Weyl sums.
+    Lemma~\ref{lem:unweighted_weyl_sum_normalization} identifies those sums
+    with $d_C^2\overline\rho$ and $d_C^2\overline\sigma$. The factors
+    $\sqrt{d_C^2}$ and $(\sqrt{d_C^2})^{-1}$ cancel, giving the first displayed
+    equality.
+
+    Taking the adjoint product of that equality gives
+    \begin{align}
+        P_\sigma\sigma^{-1/2}_{\mathrm{supp}}\rho
+          \sigma^{-1/2}_{\mathrm{supp}}P_\sigma
+        &=
+        P_\sigma\overline\sigma^{-1/2}_{\mathrm{supp}}
+          \overline\rho\,
+          \overline\sigma^{-1/2}_{\mathrm{supp}}P_\sigma.
+        \notag
+    \end{align}
+    The support projection absorbs $\sqrt\sigma$ on both sides, while
+    $\ker\sigma\subseteq\ker\rho$ gives
+    $P_\sigma\rho P_\sigma=\rho$. Multiplying the last equality by
+    $\sqrt\sigma$ on the left and right therefore yields the support sandwich.
+    Theorem~\ref{thm:weyl_identity_sandwich_petz_recovery} gives the raw Petz
+    recovery identity.
 \end{proof}
 
 \begin{theorem}[Relative entropy against the product of the marginals]
