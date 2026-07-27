@@ -2,7 +2,7 @@
 # Schema: scripts/tenkz_rmp.py (load_verdicts).  Any status may be
 # recorded, including failure; the check rejects lies, never gaps.
 schema_version = 1
-campaign_sha256 = "8c1f4c1ce0fdf35d0c467f5ec7c065d1be55fd8f94f7b3066ff46b5773ad015f"
+campaign_sha256 = "ec9466395efd0a9e42db78f30a6fc1a47001f8ee69dd09aa0d571d7037011735"
 
 [[verdict]]
 id = "rmp-ii-peps-projection"
@@ -785,27 +785,25 @@ note = "the two strands nest through their bead stations without crossing each o
 
 [[verdict]]
 id = "rmp-iii-b-braid-three"
-status = "blocked"
+status = "cosmetic-gap"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
-defects = ["wrong-contraction"]
-missing = ["braid-resolver", "crossing-order"]
-case_sha256 = "a7f0ab912c6ab9eba666ba8c60afb271c9c08461cffd19017ec26bc0dc0fee2f"
-reviewed = "2026-07-26"
-renderer = "fable-countersign-reading-2026-07-26-200dpi"
-note = "rail repair only; crossing order still unspeakable (#4908)"
+defects = []
+case_sha256 = "1b6b18c1485c32cb3f160b320601eabd25777912654278b6eeed809adffd711a"
+reviewed = "2026-07-28"
+renderer = "fable-wave-b-acceptance-2026-07-28-200dpi"
+note = "the strings wind through their bead stations into R_{j,a} with j and i at their corners; hue and the source lattice slant differ"
 
 [[verdict]]
 id = "rmp-iii-b-braid-four"
-status = "blocked"
+status = "cosmetic-gap"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
-defects = ["wrong-contraction"]
-missing = ["braid-resolver", "crossing-order"]
-case_sha256 = "74efc4adff265d3962013c79f090a4f3e9ca84e397aa53f1d6c3fa6221c20253"
-reviewed = "2026-07-26"
-renderer = "fable-countersign-reading-2026-07-26-200dpi"
-note = "stray diagonals removed; crossing order still unspeakable (#4908)"
+defects = []
+case_sha256 = "d7a901828b21cfea11cc56becafee13d38fdacf4ed1de9d2b92e4c1731fba82c"
+reviewed = "2026-07-28"
+renderer = "fable-wave-b-acceptance-2026-07-28-200dpi"
+note = "both R boxes stacked on the strings with i and j at the rails; the source slants its boxes as parallelograms"
 
 [[verdict]]
 id = "rmp-iii-b-condensation"
@@ -1058,11 +1056,11 @@ status = "blocked"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
 defects = ["missing-element"]
-missing = ["strings"]
+missing = ["skin-pairings"]
 case_sha256 = "4873ed41cd452d1413cb4e6a410e88d3c80705f837cf51301a35ba98001d0081"
-reviewed = "2026-07-26"
+reviewed = "2026-07-28"
 renderer = "fable-countersign-reading-2026-07-26-200dpi"
-note = "squared; the two-colour strings still absent"
+note = "the panel contains no string: the wrap is the tensor's own property. Three spellings were probed and refused -- a declared skin with pairings= raises TKZ-KERNEL-RENDER-TODO, strings through boxes are painted over by the glyph fill, and the free tier's arc route needs the tombstoned escape pair. Missing: renderer support for a declared skin's pairing ink over its own glyph"
 
 [[verdict]]
 id = "rmp-workbench-ii-v-tensor-definition"
@@ -1290,15 +1288,14 @@ note = "glyph and leg geometry"
 
 [[verdict]]
 id = "rmp-workbench-iii-g-injective-pull"
-status = "blocked"
+status = "cosmetic-gap"
 pairing = "verified"
 pairing_by = "codex-pairing-sweep-2026-07-24"
-defects = ["missing-element"]
-missing = ["pulling-through", "strings"]
-case_sha256 = "b6d5abc6a5a3c80785845334c1ca0d477676acb881a154f83213cb74a79edd8b"
-reviewed = "2026-07-24"
-renderer = "source-split-page-review-2026-07-24"
-note = "g string, hatched legs, U_g node absent"
+defects = []
+case_sha256 = "5d063fdf7744179e73c015568338f3b20f6a92f2c4f52ea864c0588c37036c45"
+reviewed = "2026-07-28"
+renderer = "fable-wave-b-acceptance-2026-07-28-200dpi"
+note = "the g string pulls through and U_g appears on the diagonal, with the action boxes riding the string on both sides"
 
 [[verdict]]
 id = "rmp-workbench-iii-intertwining-mpo"
@@ -1312,15 +1309,14 @@ note = "line weight only"
 
 [[verdict]]
 id = "rmp-workbench-iii-mpo-injective-white"
-status = "blocked"
+status = "cosmetic-gap"
 pairing = "verified"
 pairing_by = "codex-pairing-sweep-2026-07-24"
-defects = ["missing-element"]
-missing = ["pulling-through", "strings"]
-case_sha256 = "b5ec1826dc126e0cbcb646e9638335cfed25390950644c5773267277ef0fffcf"
-reviewed = "2026-07-23"
-renderer = "maintainer-page-review-2026-07-23"
-note = "colored strings replaced by boxes"
+defects = []
+case_sha256 = "2eed9f1865380c16bc26b7979cd4560c188bbea8ba353d9e899a12fe1bed6899"
+reviewed = "2026-07-28"
+renderer = "fable-wave-b-acceptance-2026-07-28-200dpi"
+note = "the g string crosses the site and pulls to the far side, drawn as strings rather than the substituted boxes"
 
 [[verdict]]
 id = "rmp-workbench-iii-mpo-on-peps-definition"
@@ -1362,9 +1358,9 @@ pairing_by = "codex-pairing-sweep-2026-07-24"
 defects = ["wrong-contraction"]
 missing = ["torus-cycle", "strings"]
 case_sha256 = "7db4fda71b564be5465f92bd10bf3c47e756e1327b6166b8d1050f07dcbc7ece"
-reviewed = "2026-07-23"
+reviewed = "2026-07-28"
 renderer = "maintainer-page-review-2026-07-23"
-note = "torus with wound strings collapsed to a two-box loop"
+note = "the kernel attempt drew one loop on a bare grid where the source draws a torus, an arrow to a lattice carrying O_g and O_h strings, and the equality panel with the g-inverse-g pair; refused at review as a different figure"
 
 [[verdict]]
 id = "rmp-workbench-iii-g-injective-mpo"

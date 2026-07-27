@@ -4,20 +4,36 @@
 % Boundary: Two lattice rails and four string endpoints are open.
 % Source: paper TN-Review-main.tex line 1680; author source ImagesReview Section
 %   III/ImagesReview Section III.tex lines 900-924
-% Capabilities: free-graph, braid-resolver, crossing-order
+% Capabilities: grid, braid-resolver, crossing-order
 \[
-  \begin{tenkzfree}
-    \tnput[dot, role=extra, label pos=north]{j}{(0mm,10mm)}{j}
-    \tnput[box]{Rja}{(9mm,4mm)}{\mathcal R_{j,a}}
-    \tnput[box]{Rib}{(9mm,-4mm)}{\mathcal R_{i,b}}
-    \tnput[dot, role=marked, label pos=south]{i}{(0mm,-10mm)}{i}
-    \tnjoin{-10mm,10mm}{j.west} \tnjoin{j.east}{20mm,10mm}
-    \tnjoin{-10mm,-10mm}{i.west} \tnjoin{i.east}{20mm,-10mm}
-    \tnjoin[role=operator, route=arc, out=-90, in=135]{j.south}{Rja.north west}
-    \tnjoin[role=operator]{Rja.south}{Rib.north}
-    \tnjoin[role=operator, route=arc, out=225, in=90]{Rib.south west}{i.north}
-    \tnjoin[role=operator, route=arc, out=0, in=180]{-4mm,4mm}{Rja.west}
-    \tnjoin[role=operator, route=arc, out=0, in=-135]{Rja.east}{18mm,12mm}
-    \tnjoin[role=operator, route=arc, out=0, in=135]{Rib.east}{18mm,-12mm}
-  \end{tenkzfree}
+  \tenkzkernel
+  \begin{tenkz}[rows={wire,wire,wire,wire}, cols=4, bonds=none]
+    % anyons j and i sit where the transversal lattice line meets the rails
+    \tn[at=(1,2), name=j, role=extra, label pos=nw]{j}
+    \tn[at=(4,2), name=i, role=marked, label pos=sw]{i}
+    % the stacked resolver boxes; drawn over the strings, they conceal the
+    % resolved order exactly as the author's white boxes do
+    \tn[at=(2,3), skin=box, name=Rja]{R_{j,a}}
+    \tn[at=(3,3), skin=box, name=Rib]{R_{i,b}}
+    % two rails and the transversal line through both anyons
+    \tnwire{1 w of j}{j.w} \tnwire{j.e}{2 e of j}
+    \tnwire{1 w of i}{i.w} \tnwire{i.e}{2 e of i}
+    \tnwire{0.5 n of j}{j.n} \tnwire{j.s}{i.n} \tnwire{i.s}{0.5 s of i}
+    % the j strand threads both resolvers, swings under R_{i,b}, and leaves
+    % west across the lattice line
+    \tnwire[kind=string, species=operator, name=sj,
+            via={0.2 w of Rja, 0.2 w of midway Rja and Rib, 0.2 w of Rib,
+                 midway i and Rib,
+                 0.4 se of midway j and i,
+                 midway j and i}]{j.315}{1 w of midway j and i}
+    % the a strand rises out of R_{i,b}, through R_{j,a} and the upper rail
+    \tnwire[kind=string, species=operator, name=sa]
+           {0.2 e of Rib}{0.5 n of 0.2 e of (1,3)}
+    % the i strand enters R_{i,b} from below
+    \tnwire[kind=string, species=operator, name=si,
+            via={0.35 s of Rib}]{i.20}{0.12 e of Rib}
+    % marker beads where strings pierce lattice lines
+    \tn[at=0.2 e of (1,3), role=marked, name=xa]{}
+    \tn[at=midway j and i, role=extra, name=xj]{}
+  \end{tenkz}
 \]
