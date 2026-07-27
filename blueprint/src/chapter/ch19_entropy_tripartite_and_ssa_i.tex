@@ -855,10 +855,69 @@
     as a sum of nonnegative quadratic residuals.
 \end{proof}
 
-% Open in #4435: both fixed-parameter defect inequalities are established.
-% It remains to express the finite-family relative-entropy gap as their
-% integral, pass from a zero integral to pointwise vanishing by continuity,
-% and derive the common projected relative-modular resolvent.
+\begin{theorem}[Finite-family support relative-entropy gap integral]
+    \label{thm:support_relative_entropy_family_gap_integral}
+    \lean{Matrix.supportRelativeEntropyFamilyGapIntegrand}
+    \lean{Matrix.supportRelativeEntropyFamilyGapIntegrand_integrableOn_and_integral_eq}
+    \lean{Matrix.supportRelativeEntropyFamilyGapIntegrand_continuousOn}
+    \leanok
+    \uses{thm:relative_entropy_support_spectral_integral,
+        thm:relative_entropy_support_left_right_quadratic}
+    Let $I$ be a finite nonempty set. For each $i\in I$, let $A_i$ and $B_i$
+    be positive-semidefinite matrices of the same size satisfying
+    $\ker B_i\subseteq\ker A_i$. Put
+    \begin{align}
+        A_\Sigma&=\sum_{i\in I}A_i,&
+        B_\Sigma&=\sum_{i\in I}B_i,
+        \notag\\
+        \operatorname{Def}_A(t)
+        &=
+        \sum_{i\in I}Q^A_{A_i,B_i}(t)
+          -Q^A_{A_\Sigma,B_\Sigma}(t),&
+        \operatorname{Def}_B(t)
+        &=
+        \sum_{i\in I}Q^B_{A_i,B_i}(t)
+          -Q^B_{A_\Sigma,B_\Sigma}(t).
+        \notag
+    \end{align}
+    Then the function
+    \begin{align}
+        F(t)
+        &=
+        \frac{\operatorname{Def}_A(t)+
+          t\operatorname{Def}_B(t)}{1+t}
+        \notag
+    \end{align}
+    is continuous on $(0,\infty)$ and integrable there, and
+    \begin{align}
+        \int_0^\infty F(t)\,dt
+        &=
+        \sum_{i\in I}D(A_i\Vert B_i)
+          -D(A_\Sigma\Vert B_\Sigma).
+        \label{eq:support_relative_entropy_family_gap_integral}
+    \end{align}
+    This is the finite-family support-domain form of
+    $(\mathrm{intspec})$ and $(\mathrm{intAB})$ in
+    Jen\v{c}ov\'a--Ruskai, arXiv:0903.2895v4, lines~406--431, with the
+    positive-semidefinite convention and kernel hypotheses at
+    lines~717--720 and 766--785.
+\end{theorem}
+
+\begin{proof}\leanok
+    The kernel inclusions for the summands imply
+    $\ker B_\Sigma\subseteq\ker A_\Sigma$. Apply the one-pair
+    support-domain integral representation to every $(A_i,B_i)$ and to
+    $(A_\Sigma,B_\Sigma)$. The pointwise left--right identities identify the
+    difference of the spectral integrands with $F$; linearity of trace
+    cancels the terms involving $\operatorname{tr}(B_i)$. Finite summation
+    commutes with the integral. Continuity follows from the corresponding
+    one-pair continuity theorem and finite summation.
+\end{proof}
+
+% Open in #4435: the finite-family gap integral and both fixed-parameter
+% defect inequalities are established. It remains to pass from a zero
+% integral to pointwise vanishing and derive the common projected
+% relative-modular resolvent.
 
 \begin{theorem}[Spectral resolvent representation of relative entropy]
     \label{thm:relative_entropy_resolvent_integral}
