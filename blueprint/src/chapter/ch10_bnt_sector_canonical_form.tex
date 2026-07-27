@@ -288,6 +288,60 @@ single family.
     coisometry $U$.
 \end{proof}
 
+% Source anchors: CPSV16 lines 265--301, 317--345, and Appendix C.3,
+% lines 1835--1858. Inactive listed blocks remain in the full grouped tensor.
+\begin{theorem}[Active representative sector decomposition]
+    \label{thm:cpsv_active_representative_sector_decomposition}
+    \lean{MPSTensor.CPSVCanonicalFormData.ActiveBNTRefinement.%
+        representativeSectorDecomposition}
+    \lean{MPSTensor.CPSVCanonicalFormData.ActiveBNTRefinement.%
+        eventuallyRepresentativeWordTupleSpan}
+    \lean{MPSTensor.CPSVCanonicalFormData.ActiveBNTRefinement.%
+        groupedTensor_sameMPV₂Pos_representativeSectorDecomposition}
+    \leanok
+    \uses{thm:cpsv_canonical_form_active_bnt_refinement,
+        thm:cpsv_bnt_blocked_simultaneous_span, def:sector_weight_data}
+    In the notation of
+    Theorem~\ref{thm:cpsv_canonical_form_active_bnt_refinement}, let
+    $k(j,q)\in K_{\mathrm{act}}$ be the listed block corresponding to the
+    class-copy pair $(j,q)$. The active representatives $C_j$ define a sector
+    decomposition $P_{\mathrm{act}}$ with copy weights
+    \begin{align}
+        \lambda_{j,q}
+        &=\nu_{k(j,q)}\zeta_{k(j,q)}.
+        \label{eq:cpsv_active_representative_weight}
+    \end{align}
+    Every copy weight in $P_{\mathrm{act}}$ is nonzero. The representatives have simultaneous
+    word-tuple separation at every sufficiently large length.
+
+    The sector decomposition contains only the active class-copy pairs. The
+    full grouped tensor $T_{\mathrm{grp}}$ of
+    Theorem~\ref{thm:cpsv_canonical_form_active_bnt_refinement} still contains
+    every inactive zero-weight listed coordinate. For every positive length
+    $N$, the two tensors generate the same matrix product vector:
+    \begin{align}
+        V^{(N)}(T_{\mathrm{grp}})
+        &=V^{(N)}(P_{\mathrm{act}}).
+        \label{eq:cpsv_active_representative_positive_mpv}
+    \end{align}
+    No equality at length zero is asserted, since deleting inactive bond
+    coordinates changes the empty-word coefficient.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:cpsv_canonical_form_active_bnt_refinement,
+        thm:cpsv_bnt_blocked_simultaneous_span, lem:paper_decomp_formula}
+    The active class-copy equivalence reindexes the nonzero listed blocks.
+    (\ref{eq:cpsv_active_representative_weight}) combines the original
+    coefficient with the unit phase relating its block to $C_j$; both factors
+    are nonzero. The basis-of-normal-tensors condition and
+    Theorem~\ref{thm:cpsv_bnt_blocked_simultaneous_span} give eventual
+    simultaneous word-tuple separation for the representatives. At positive
+    length, every inactive contribution contains a positive power of its zero
+    coefficient and vanishes. Reindexing the remaining finite sum by $(j,q)$
+    gives (\ref{eq:cpsv_active_representative_positive_mpv}).
+\end{proof}
+
 \begin{definition}[BNT canonical form]%
     \label{def:sector_bnt_cf}
     \lean{MPSTensor.IsBNTCanonicalForm}

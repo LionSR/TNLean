@@ -72,6 +72,8 @@ apply it to coefficient-form and sector BNTs.
     \label{thm:cpsv_bnt_blocked_simultaneous_span}
     \lean{MPSTensor.IsCPSVBasisOfNormalTensors.%
         exists_positive_wordTupleSpanTop}
+    \lean{MPSTensor.IsCPSVBasisOfNormalTensors.%
+        eventually_wordTupleSpanTop}
     \lean{MPSTensor.wordTupleSpanTop_blockTensor_one}
     \lean{MPSTensor.IsCPSVBasisOfNormalTensors.%
         exists_blocked_wordTupleSpanTop_one}
@@ -87,9 +89,16 @@ apply it to coefficient-form and sector BNTs.
          & = \prod_{j=1}^g \MN{D_j}.
         \notag
     \end{align}
+    Moreover, there is $L_0$ such that, for every $L\geq L_0$, the
+    unblocked word tuples have the simultaneous span
+    \begin{align}
+        \spn_{\C}\{(A_1^\omega,\ldots,A_g^\omega):|\omega|=L\}
+        &=\prod_{j=1}^g\MN{D_j}.
+        \notag
+    \end{align}
     This is the existence form of simultaneous block injectivity associated
     with \cite[lines~317--345]{Cirac2016MPDO_arXiv}; no numerical bound on
-    $L$ is asserted here.
+    $L$ or $L_0$ is asserted here.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -123,8 +132,12 @@ apply it to coefficient-form and sector BNTs.
         \notag
     \end{align}
     The truncated factor makes the same construction valid for empty and
-    singleton families. Finally, length-$L$ words of $A_j$ are the
-    one-letter evaluations of $A_j^{[L]}$, which proves the blocked statement.
+    singleton families. The same span provides selectors and block
+    injectivity at length $L$. For every sufficiently large $n$, concatenate
+    an $(n-L)$-letter injective prefix with these selectors to obtain the full
+    product-algebra span at length $n$. Finally, length-$L$ words of $A_j$ are
+    the one-letter evaluations of $A_j^{[L]}$, which proves the blocked
+    statement.
 \end{proof}
 
 Let $A$ be a tensor in canonical form, and let $A_1,\ldots,A_g$ be a basis of
