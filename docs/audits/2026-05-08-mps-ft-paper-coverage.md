@@ -48,7 +48,7 @@ theorem. This is tracked by issue #873 under the proposition-level tracker #81.
 
 ## 2. Coverage crosswalk: CPSV16 (arXiv:1606.00608)
 
-At revision `a483570b1bfd3f39eb9f6292e74d9df99a8c4df0`, the paper has 45 theorem-like occurrences and 40 distinct results. The occurrence-level count is 28 complete, 8 partial, and 9 not-ready; the distinct-result count is 25 complete, 6 partial, and 9 not-ready. Here **not-ready** means that the printed statement is false, ambiguous, or depends essentially on a formally refuted source lemma. It does not mean that every printed result has been formalized.
+At revision `a483570b1bfd3f39eb9f6292e74d9df99a8c4df0`, the paper has 45 theorem-like occurrences and 40 distinct results. The occurrence-level count is 26 complete, 10 partial, and 9 not-ready; the distinct-result count is 23 complete, 8 partial, and 9 not-ready. Here **not-ready** means that the printed statement is false, ambiguous, or depends essentially on a formally refuted source lemma. It does not mean that every printed result has been formalized.
 
 ### 2.1 Section II — Matrix Product Vectors (pure-state canonical form)
 
@@ -67,7 +67,7 @@ At revision `a483570b1bfd3f39eb9f6292e74d9df99a8c4df0`, the paper has 45 theorem
 
 | Paper label | Lines | Paper description | Lean location | Status |
 |---|---|---|---|---|
-| **Theorem 3.1** (l.398, `thm:renormalization-flow`) | 398–405 | RFP limit iff two blocked physical sites are related to one site by an isometry | `TNLean/MPS/RFP/Defs.lean` (`MPSTensor.isTransferIdempotent_iff_kraus_isometry`, `HasPhysicalBlockingIsometry`) | **complete** |
+| **Theorem 3.1** (l.398, `thm:renormalization-flow`) | 398–405 | A tensor appears as a renormalization-flow limit iff two blocked physical sites are related to one site by an isometry | `TNLean/MPS/RFP/Defs.lean` (`MPSTensor.isTransferIdempotent_iff_kraus_isometry`, `HasPhysicalBlockingIsometry`); `TNLean/MPS/RFP/Convergence.lean` (`rg_flow_converges_of_cf`) | **partial** — the blocking-isometry equation and convergence of each canonical-form block to an idempotent transfer map are proved, but no formal predicate identifies the original tensor itself as a flow limit or proves the printed iff with that predicate |
 | Defn RFP (l.420, `defRFP`) | 420–424 | Pure-state RFP condition | `TNLean/MPS/RFP/Defs.lean` (`HasPhysicalBlockingIsometry`) | `leanok` |
 | Defn CID (l.438) | 438–446 | Correlations independent of distance | `TNLean/MPS/RFP/ZeroCorrelationLength.lean` (`MPSTensor.IsCID`) | `leanok` |
 | Defn LO (l.468, `DefLO`) | 468–474 | Local orthogonality | `TNLean/MPS/RFP/ZeroCorrelationLength.lean` (`MPSTensor.IsLocallyOrthogonal`) | `leanok` |
@@ -93,7 +93,7 @@ At revision `a483570b1bfd3f39eb9f6292e74d9df99a8c4df0`, the paper has 45 theorem
 | **Theorem 4.9** (l.851, `thm:main-simple`) | 851–893 | Equivalence of the five simple-MPDO conditions | `TNLean/MPS/MPDO/RFPViaTSSAL.lean`; `TNLean/MPS/MPDO/ActiveSectorSpanningAreaLaw.lean`; `TNLean/MPS/MPDO/PhysicalSectorFactorization.lean`; `TNLean/Channel/PetzProductReference.lean` | **partial** — the RFP-forward implication, GSNNCH constructions, conditional channels, and all-cut Markov results are proved; the printed Lemma C.5 rank-one step is false, and commuting-form-to-SAL still lacks #4459. The core lane #4175/#4459 and alternatives #4228/#4405 are owner-held; #4961/#4962 are not independent implementation-ready leaves |
 | **Proposition 4.13** (source label `Prop:IV.12`, l.945) | 945–952; proof 1863–1922 | A literal CPSV canonical-form MPDO tensor is vertically in canonical form | `TNLean/MPS/MPDO/CPSVVerticalCanonicalForm.lean` (`MPOTensor.verticalCF_of_cpsvCanonicalForm`) and its prerequisite modules | **complete** — the theorem constructs positive grouped weights and a rectangular coisometry $U$ with $UU^\dagger=I$, $U\widetilde M U^\dagger=\bigoplus_\alpha\mu_\alpha\otimes M_\alpha$, and $\widetilde M=U^\dagger(\bigoplus_\alpha\mu_\alpha\otimes M_\alpha)U$; it does not assert $U^\dagger U=I$ |
 | **Theorem 4.14** (source label `thm:IV.13`, l.972) | 972–993; proof 1929–2088 | RFP iff the tensor-attached BNT algebra condition iff the fusion-isometry condition | `TNLean/MPS/MPDO/BNTAlgebraTensorClause.lean`; `BNTAlgebraTensorClauseSpectrum.lean`; `BNTFusionTensorClauseFromRFP.lean`; `AlgebraFusionCounterexample.lean` | **partial** — several directions and the tensor-attached data are complete; algebra⇒RFP still requires #4648, then #4645, then the CPTP construction and #3949. All three issues are assigned to `LionSR`; Proposition 4.13 does not supply the missing marked/common-target comparison |
-| Theorem (l.1013) | 1013–1016 | Length-independent coefficients imply a topological-projector commuting Gibbs form | `TNLean/MPS/MPDO/TopologicalPhysicalGibbs.lean` (`MPOTensor.physicalTopologicalGibbsDecomposition_of_isRFPViaTS`) | **complete** |
+| Theorem (l.1013) | 1013–1016 | Length-independent coefficients imply a topological-projector commuting Gibbs form | `TNLean/MPS/MPDO/TopologicalPhysicalGibbs.lean` (`MPOTensor.physicalTopologicalGibbsDecomposition_of_isRFPViaTS`) | **partial** — the physical decomposition is proved for chains of length at least two under the stronger BNT-refined `IsHorizontalCF` hypothesis; the printed theorem assumes only an RFP MPDO and does not state that restriction |
 
 ### 2.4 Appendix A — Proofs of Section II
 
@@ -279,14 +279,15 @@ These are known oversized (documented in #1512/#1522) and do not block unrelated
 
 ## 7. Key remaining coverage gaps
 
-The 15 non-complete distinct CPSV16 results are all partial, source-ambiguous,
-formally refuted, research-level, or owner-held. No important owner-free,
-source-faithful, implementation-ready slice remained at the synchronized
-revision.
+The 17 non-complete distinct CPSV16 results are all partial, source-ambiguous,
+formally refuted, research-level, owner-held, or scope-restricted by the current
+formal interface. No important owner-free, source-faithful, implementation-ready
+slice remained at the synchronized revision.
 
 | Status | Paper | Result | Current certificate | Ownership |
 |---|---|---|---|---|
 | Partial | CPSV16 | Prop. 2.7, BNT characterization | Active blocks are characterized; listed zero-weight blocks are invisible to positive-length MPVs | Source clarification required |
+| Partial | CPSV16 | Theorem 3.1, renormalization-flow limit | The blocking-isometry equation and canonical-form block convergence are proved, but the printed flow-limit iff is not formalized | No source-level flow-limit predicate is currently available |
 | Not-ready | CPSV16 | Theorem 3.8 | Raw weights and the Bell-pair adjacent-gap example refute the two unrestricted directions | Corrected branch #2633, assigned to `LionSR` |
 | Not-ready | CPSV16 | Theorem 3.10 | Inherits Theorem 3.8 counterexamples; line 1250 also fails for nilpotent zero-Jordan defects | #2633, assigned to `LionSR` |
 | Not-ready | CPSV16 | Theorem 3.11 | The repeated-copy physical isometry lacks a copy index; the literal shared-map reading is false | #2598 closed as source obstruction |
@@ -295,6 +296,7 @@ revision.
 | Partial | CPSV16 | Proposition 4.5 | Monotonicity is proved; the thermodynamic limit is refuted; the finite $4\log D$ bound remains open | #4169/#4242/#4295, assigned to `LionSR` |
 | Partial | CPSV16 | Theorem 4.9 | Lemma C.5 is false; commuting-form-to-SAL and the recovery alternative remain incomplete | #4175/#4459 and #4228/#4405, assigned to `LionSR`; #4961/#4962 are dependent research follow-ups |
 | Partial | CPSV16 | Theorem 4.14 | Algebra⇒RFP still needs the tensor-attached Gram comparison, unitary normalization, and CPTP maps | #4648 → #4645 → #3949, assigned to `LionSR` |
+| Partial | CPSV16 | Topological-projector commuting Gibbs theorem, lines 1013–1016 | The physical decomposition is proved only above one site and under the stronger `IsHorizontalCF` hypothesis | Literal-RFP scope extension remains open |
 | Not-ready | CPSV16 | Lemma C.5 (`SALZCL`) | A formal injective four-sector counterexample has SAL and source ZCL but no rank-one active trace factorization | #4270 closed by counterexample |
 | Not-ready | CPSV16 | Structural corollary, lines 1503–1506 | Its printed proof depends on false Lemma C.5 | No source-faithful replacement known |
 | Partial | CPSV16 | Proposition `4to2`, lines 1597–1601 | The selected tensor satisfies all-cut SAL; comparison with the original tensor is missing | #4175/#4459, assigned to `LionSR` |
