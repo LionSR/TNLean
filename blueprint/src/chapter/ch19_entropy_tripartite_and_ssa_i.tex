@@ -458,6 +458,34 @@
     $\log(cA)-\log(cB)$. Linearity of the trace then gives the result.
 \end{proof}
 
+\begin{lemma}[Support-domain positive homogeneity of relative entropy]
+    \label{lem:relative_entropy_support_positive_homogeneity}
+    \lean{Matrix.quantumRelativeEntropy_smul_support}
+    \leanok
+    \uses{def:quantum_relative_entropy,
+        def:hermitian_support_projection,
+        thm:support_projection_absorption_kernel_inclusion}
+    Let $A$ and $B$ be positive semidefinite and suppose that
+    $\ker B\subseteq\ker A$. If $c>0$, then
+    \begin{align}
+        D(cA\Vert cB)
+        &=cD(A\Vert B).
+        \label{eq:entropy_support_homogeneity}
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    On the support of a positive semidefinite matrix,
+    \begin{align}
+        \log(cA)&=(\log c)P_A+\log A.
+        \notag
+    \end{align}
+    The support projection $P_A$ fixes $A$ on the right. The kernel
+    inclusion also makes $P_B$ fix $A$ on the right. Hence the two
+    terms containing $\log c$ cancel in the trace-log difference, and
+    linearity of the trace gives the result.
+\end{proof}
+
 \begin{theorem}[Partial-trace saturation gives zero weighted Weyl gap]
     \label{thm:partial_trace_saturation_weyl_gap_zero}
     \lean{Matrix.weylRelativeEntropyGap_eq_zero_of_partialTraceRight_eq}

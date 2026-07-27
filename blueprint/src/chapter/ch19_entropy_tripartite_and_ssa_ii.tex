@@ -478,6 +478,75 @@
     to the common-solution identity gives the displayed equality.
 \end{proof}
 
+\begin{theorem}[Partial-trace saturation gives common projected Weyl resolvents]
+    \label{thm:partial_trace_saturation_common_projected_weyl_resolvent}
+    \lean{Matrix.unweightedWeylConjugate}
+    \lean{Matrix.unweightedWeylSum}
+    \lean{Matrix.PosSemidef.unweightedWeylConjugate}
+    \lean{Matrix.PosSemidef.unweightedWeylSum}
+    \lean{Matrix.unweightedWeylConjugate_zero_zero}
+    \lean{Matrix.weyl_supportRelativeModular_resolvent_mulVec_eq_of_partialTraceRight_eq}
+    \leanok
+    \uses{thm:relative_entropy_weyl_jensen_eq,
+      lem:relative_entropy_support_positive_homogeneity,
+      thm:weyl_operator_unitary,
+      thm:support_relative_entropy_equality_common_projected_resolvent}
+    Let $\rho$ and $\sigma$ be positive semidefinite matrices satisfying
+    $\ker\sigma\subseteq\ker\rho$, and suppose that
+    \begin{align}
+        D(\rho\Vert\sigma)
+        &=D(\tr_C\rho\Vert\tr_C\sigma).
+        \notag
+    \end{align}
+    Fix a primitive $d_C$-th root of unity, put
+    $U_g=\mathbf 1\otimes W_g$, and define the unweighted Weyl family
+    \begin{align}
+        A_g&=U_g\rho U_g^\dagger,&
+        B_g&=U_g\sigma U_g^\dagger,&
+        A_\Sigma&=\sum_g A_g,&
+        B_\Sigma&=\sum_g B_g.
+        \notag
+    \end{align}
+    Then, for every Weyl index $g$ and every $t>0$,
+    \begin{align}
+      &(\mathbf 1\otimes P_{B_g}^{\mathsf T})
+        \bigl(t\mathbf 1+
+          A_g\otimes(B_g^+)^{\mathsf T}\bigr)^{-1}
+        \opvec(\mathbf 1^{\mathsf T})
+        \notag\\
+      &\qquad=
+        (\mathbf 1\otimes P_{B_g}^{\mathsf T})
+        \bigl(t\mathbf 1+
+          A_\Sigma\otimes(B_\Sigma^+)^{\mathsf T}\bigr)^{-1}
+        \opvec(\mathbf 1^{\mathsf T}).
+        \notag
+    \end{align}
+    In particular, the zero Weyl index gives the projected resolvent of
+    the original pair $(\rho,\sigma)$. No ambient resolvent equality is
+    asserted. The support convention is that of Jen\v{c}ov\'a--Ruskai,
+    arXiv:0903.2895v4, lines~717--720, and their common-resolvent equality
+    argument is at lines~766--793. This is one analytic step toward the
+    recovery implication of
+    Hayden--Jozsa--Petz--Winter, Theorem~3 and equation~(8); it is not the
+    direct-sum Markov decomposition invoked in CPSV16, Lemma
+    \texttt{Lsigma3}.
+\end{theorem}
+
+\begin{proof}\leanok
+    Unitary conjugation preserves positive semidefiniteness and transports
+    the kernel inclusion to every pair $(A_g,B_g)$. The kernel of the sum
+    of the $B_g$ is contained in the kernel of the sum of the $A_g$.
+    The finite Weyl Jensen equality and
+    Lemma~\ref{lem:relative_entropy_support_positive_homogeneity} give
+    \begin{align}
+        D(A_\Sigma\Vert B_\Sigma)
+        &=\sum_g D(A_g\Vert B_g).
+        \notag
+    \end{align}
+    Theorem~\ref{thm:support_relative_entropy_equality_common_projected_resolvent}
+    applied to this finite family gives the displayed projected resolvent.
+\end{proof}
+
 \begin{lemma}[Support relative-modular square-root evaluation]
     \label{lem:support_relative_modular_sqrt_evaluation}
     \lean{Matrix.supportRelativeModular_sqrt_mulVec_vec_one}
