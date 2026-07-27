@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.CanonicalForm.ProjectorClosureDecomposition
-import TNLean.MPS.MPDO.HorizontalBNT
+import TNLean.MPS.MPDO.CPSVOriginalSpaceLemmaL
 
 /-!
 # Reducing sectors of the vertically viewed tensor
@@ -67,6 +67,80 @@ theorem IsHorizontalCF.hasInvariantProjectorClosure_verticalTensor
     hHorizontal.braRight_eq_ketLeftBraRight_of_invariant M hM hP.1 hLeft
   rw [← verticalTensor_braRightMul, hRight, verticalTensor_braRightMul,
     verticalTensor_ketLeftMul]
+
+end MPOTensor
+
+namespace MPSTensor.CPSVCanonicalFormData.ActiveBNTRefinement
+
+open MPOTensor
+
+variable {d D : ℕ}
+
+/-- Every invariant orthogonal projection of the vertically viewed tensor is reducing when the
+original doubled-index tensor carries a literal CPSV canonical-form refinement and generates
+matrix product density operators.
+
+The two positive-length first-site identities follow from positivity.  Lemma L in the original
+bond coordinates identifies the opposite-corner insertions, after which the vertical identities
+give right invariance.
+
+Source: arXiv:1606.00608, Proposition 4.13, lines 1873--1887. -/
+theorem hasInvariantProjectorClosure_verticalTensor
+    (M : MPOTensor d D) (data : MPSTensor.CPSVCanonicalFormData M.toMPSTensor)
+    (ref : data.ActiveBNTRefinement) (hM : IsMPDO M) :
+    MPSTensor.HasInvariantProjectorClosure (verticalTensor M) := by
+  intro P hP hInv v
+  have hLeft : M.ketLeftMul P = (M.ketLeftMul P).braRightMul P := by
+    funext i j
+    ext a b
+    let w := finProdFinEquiv (a, b)
+    have hw : verticalTensor (M.ketLeftMul P) w =
+        verticalTensor ((M.ketLeftMul P).braRightMul P) w := by
+      rw [verticalTensor_ketLeftMul, verticalTensor_braRightMul,
+        verticalTensor_ketLeftMul]
+      exact hInv w
+    have hij := congrFun (congrFun hw i) j
+    simpa [w, verticalTensor_finProdFinEquiv] using hij
+  have hAct := firstSiteActionAgree_braRight_ketLeftBraRight_of_invariant
+    M hM hP.1 hLeft
+  have hInserted := ref.insertedTensor_eq_of_firstSiteActionAgree hAct
+  have hRight : M.braRightMul P = (M.ketLeftMul P).braRightMul P := by
+    have hTensor : (M.braRightMul P).toMPSTensor =
+        ((M.ketLeftMul P).braRightMul P).toMPSTensor := by
+      rw [← insertedTensor_braRightAction_toMPSTensor,
+        ← insertedTensor_ketLeftBraRightAction_toMPSTensor]
+      exact hInserted
+    funext i j
+    have hij := congrFun hTensor (finProdFinEquiv (i, j))
+    simpa [toMPSTensor] using hij
+  rw [← verticalTensor_braRightMul, hRight, verticalTensor_braRightMul,
+    verticalTensor_ketLeftMul]
+
+end MPSTensor.CPSVCanonicalFormData.ActiveBNTRefinement
+
+namespace MPSTensor.IsCPSVCanonicalForm
+
+open MPOTensor
+
+variable {d D : ℕ}
+
+/-- Literal CPSV canonical form and MPDO positivity imply invariant-projector closure for the
+vertically viewed tensor.
+
+Source: arXiv:1606.00608, Proposition 4.13, lines 1873--1887. -/
+theorem hasInvariantProjectorClosure_verticalTensor
+    (M : MPOTensor d D) (hCanonical : MPSTensor.IsCPSVCanonicalForm M.toMPSTensor)
+    (hM : IsMPDO M) :
+    MPSTensor.HasInvariantProjectorClosure (verticalTensor M) := by
+  let data := Classical.choice hCanonical
+  let ref := data.activeBNTRefinement
+  exact ref.hasInvariantProjectorClosure_verticalTensor M data hM
+
+end MPSTensor.IsCPSVCanonicalForm
+
+namespace MPOTensor
+
+variable {d D : ℕ}
 
 /-- Complete orthogonal decomposition of the vertically viewed tensor into
 irreducible reducing corners.

@@ -54,14 +54,15 @@ theorem trace_marked_mul_evalWord_of_coisometry_reconstruction
     induction w with
     | nil =>
         intro C E hCE
-        simpa [hCE]
+        simp [hCE]
     | cons i w ih =>
         intro C E hCE
-        rw [evalWord_cons, Matrix.mul_assoc]
-        apply ih (C * A i) (E * B i)
-        rw [hCE, hReconstruct i]
-        simp only [Matrix.mul_assoc]
-        rw [← Matrix.mul_assoc V Vᴴ, hV, Matrix.one_mul]
+        simp only [evalWord_cons]
+        have hNext : C * A i = Vᴴ * (E * B i) * V := by
+          rw [hCE, hReconstruct i]
+          simp only [Matrix.mul_assoc]
+          rw [← Matrix.mul_assoc V Vᴴ, hV, Matrix.one_mul]
+        simpa only [Matrix.mul_assoc] using ih (C * A i) (E * B i) hNext
   rw [hChain w C E hMarked]
   exact Matrix.trace_conjTranspose_mul_mul_of_mul_conjTranspose_eq_one V hV _
 
@@ -91,6 +92,13 @@ theorem trace_linearMarkedTensor_mul_evalWord_of_coisometry_reconstruction
   trace_marked_mul_evalWord_of_coisometry_reconstruction A B V hV hReconstruct
     _ _ (linearMarkedTensor_coisometry_reconstruction f A B V hReconstruct u) w
 
+private theorem cast_linearMarkedTensor
+    {m n : ℕ} (h : m = n) (f : Fin e → Fin d → ℂ) (A : MPSTensor d m) :
+    cast (congr_arg (MPSTensor e) h) (linearMarkedTensor f A) =
+      linearMarkedTensor f (cast (congr_arg (MPSTensor d) h) A) := by
+  subst n
+  rfl
+
 namespace CPSVCanonicalFormData.ActiveBNTRefinement
 
 variable {A : MPSTensor d D} {data : CPSVCanonicalFormData A}
@@ -111,25 +119,52 @@ theorem linearMarkedTensor_groupedTensor_eq_groupedMarkedTensor
   rw [← funext ref.regroupedTensor_eq_groupedTensor,
     linearMarkedTensor_toTensorFromBlocks]
   rw [groupedMarkedTensor]
-  congr 1
-  funext k u
-  by_cases hk : data.weights k ≠ 0
-  · let ka : data.Active := ⟨k, hk⟩
-    change data.weights k • linearMarkedTensor f (ref.regroupedBlocks k) u =
-      ref.groupedMarkedBlocks
-        (fun j => linearMarkedTensor f (data.blocks (data.activeRepresentativeIndex j))) k u
-    rw [ref.groupedMarkedBlocks_active _ ka, ref.regroupedBlocksActive ka]
-    simp only [linearMarkedTensor, Pi.smul_apply]
-    simp_rw [Finset.smul_sum, smul_smul]
-    apply Finset.sum_congr rfl
-    intro z _
-    rw [show data.weights k * (ref.copyPhase ka * f u z) =
-        (data.weights k * ref.copyPhase ka) * f u z by ring]
-    rfl
-  · change data.weights k • linearMarkedTensor f (ref.regroupedBlocks k) u =
-      ref.groupedMarkedBlocks
-        (fun j => linearMarkedTensor f (data.blocks (data.activeRepresentativeIndex j))) k u
-    simp [groupedMarkedBlocks, hk]
+  have hBlocks : ∀ k,
+      data.weights k • linearMarkedTensor f (ref.regroupedBlocks k) =
+        ref.groupedMarkedBlocks
+          (fun j => linearMarkedTensor f
+            (data.blocks (data.activeRepresentativeIndex j))) k := by
+    intro k
+    funext u
+    by_cases hk : data.weights k ≠ 0
+    · let ka : data.Active := ⟨k, hk⟩
+      change data.weights k • linearMarkedTensor f (ref.regroupedBlocks k) u =
+        ref.groupedMarkedBlocks
+          (fun j => linearMarkedTensor f (data.blocks (data.activeRepresentativeIndex j))) k u
+      rw [ref.groupedMarkedBlocks_active _ ka, ref.regroupedBlocksActive ka]
+      rw [cast_linearMarkedTensor (ref.copyDimEq ka)]
+      simp only [linearMarkedTensor, Pi.smul_apply, Finset.smul_sum, smul_smul]
+      apply Finset.sum_congr rfl
+      intro z _
+      congr 1
+      ring
+    · change data.weights k • linearMarkedTensor f (ref.regroupedBlocks k) u =
+        ref.groupedMarkedBlocks
+          (fun j => linearMarkedTensor f (data.blocks (data.activeRepresentativeIndex j))) k u
+      have hzero : data.weights k = 0 := not_ne_iff.mp hk
+      rw [hzero]
+      simp [groupedMarkedBlocks, hk]
+  unfold toTensorFromBlocks
+  funext u
+  change (Matrix.reindexLinearEquiv ℂ ℂ finSigmaFinEquiv finSigmaFinEquiv)
+      (Matrix.blockDiagonal' fun k =>
+        data.weights k • linearMarkedTensor f (ref.regroupedBlocks k) u) =
+    (Matrix.reindexLinearEquiv ℂ ℂ finSigmaFinEquiv finSigmaFinEquiv)
+      (Matrix.blockDiagonal' fun k =>
+        (1 : ℂ) • ref.groupedMarkedBlocks
+          (fun j => linearMarkedTensor f
+            (data.blocks (data.activeRepresentativeIndex j))) k u)
+  have hBlockDiagonal :
+      (Matrix.blockDiagonal' fun k =>
+        data.weights k • linearMarkedTensor f (ref.regroupedBlocks k) u) =
+      (Matrix.blockDiagonal' fun k =>
+        (1 : ℂ) • ref.groupedMarkedBlocks
+          (fun j => linearMarkedTensor f
+            (data.blocks (data.activeRepresentativeIndex j))) k u) := by
+    congr 1
+    funext k
+    simpa using congrFun (hBlocks k) u
+  rw [hBlockDiagonal]
 
 /-- **Lemma L in the original bond coordinates of a literal CPSV canonical form.**
 
@@ -206,5 +241,32 @@ theorem insertedTensor_eq_of_firstSiteActionAgree
     hAct.trace_evalWord u (List.ofFn w)
 
 end CPSVCanonicalFormData.ActiveBNTRefinement
+
+namespace IsCPSVCanonicalForm
+
+/-- Predicate-level form of Lemma L in the original bond coordinates of a literal CPSV canonical
+form. -/
+theorem linearMarkedTensor_eq_of_trace_agree
+    (A : MPSTensor d D) (hCanonical : IsCPSVCanonicalForm A)
+    (f g : Fin e → Fin d → ℂ)
+    (hTrace : ∀ (L : ℕ) (u : Fin e) (w : Fin L → Fin d),
+      Matrix.trace (linearMarkedTensor f A u * evalWord A (List.ofFn w)) =
+        Matrix.trace (linearMarkedTensor g A u * evalWord A (List.ofFn w))) :
+    linearMarkedTensor f A = linearMarkedTensor g A := by
+  let data := Classical.choice hCanonical
+  let ref := data.activeBNTRefinement
+  exact ref.linearMarkedTensor_eq_of_trace_agree f g hTrace
+
+/-- Predicate-level physical first-site Lemma L in the original bond coordinates of a literal
+CPSV canonical form. -/
+theorem insertedTensor_eq_of_firstSiteActionAgree
+    (A : MPSTensor d D) (hCanonical : IsCPSVCanonicalForm A)
+    {Y Z : Matrix (Fin d) (Fin d) ℂ} (hAct : FirstSiteActionAgree A Y Z) :
+    insertedTensor Y A = insertedTensor Z A := by
+  let data := Classical.choice hCanonical
+  let ref := data.activeBNTRefinement
+  exact ref.insertedTensor_eq_of_firstSiteActionAgree hAct
+
+end IsCPSVCanonicalForm
 
 end MPSTensor
