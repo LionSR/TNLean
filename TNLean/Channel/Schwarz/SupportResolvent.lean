@@ -145,9 +145,9 @@ theorem support_resolvent_residual_identity
   ring
 
 /-- **The finite-family support-resolvent quadratic defect is nonnegative.**
-Under the hypotheses of `support_resolvent_residual_identity`, the sum of the
-support-generalized-inverse quadratic forms dominates the quadratic form of
-the summed matrix and source:
+Under the same support assumptions as the residual identity above, the sum of
+the support-generalized-inverse quadratic forms dominates the quadratic form
+of the summed matrix and source:
 \[
   0 \leq \operatorname{Re}\left(
     \sum_i \langle b_i,S_i^+b_i\rangle
