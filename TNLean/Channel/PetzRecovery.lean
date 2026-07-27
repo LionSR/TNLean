@@ -95,6 +95,54 @@ theorem partialTraceRightPetzMap_apply
     (PosSemidef.partialTraceRight hσ).supportInvSqrt_isHermitian.eq,
     Matrix.mul_assoc]
 
+/-- The raw partial-trace Petz map commutes with equivalence reindexing of
+both tensor factors. -/
+theorem partialTraceRightPetzMap_submatrix_prod_equiv
+    {L' R' : Type*} [Fintype L'] [DecidableEq L']
+    [Fintype R'] [DecidableEq R']
+    (eL : L ≃ L') (eR : R ≃ R')
+    (σ : Matrix (L × R) (L × R) ℂ) (hσ : σ.PosSemidef)
+    (X : Matrix L L ℂ) :
+    partialTraceRightPetzMap
+        (σ.submatrix (eL.prodCongr eR).symm (eL.prodCongr eR).symm)
+        (hσ.submatrix (eL.prodCongr eR).symm)
+        (X.submatrix eL.symm eL.symm) =
+      (partialTraceRightPetzMap σ hσ X).submatrix
+        (eL.prodCongr eR).symm (eL.prodCongr eR).symm := by
+  let e := eL.prodCongr eR
+  have hptr :
+      partialTraceRight (σ.submatrix e.symm e.symm) =
+        (partialTraceRight σ).submatrix eL.symm eL.symm :=
+    partialTraceRight_submatrix_prod_equiv eL eR σ
+  have hsqrt :
+      (hσ.submatrix e.symm).isHermitian.cfc Real.sqrt =
+        (hσ.isHermitian.cfc Real.sqrt).submatrix e.symm e.symm := by
+    rw [← (hσ.submatrix e.symm).isHermitian.cfc_eq,
+      ← hσ.isHermitian.cfc_eq]
+    exact cfc_submatrix_equiv hσ.isHermitian Real.sqrt e
+  have hinv :
+      (PosSemidef.partialTraceRight (hσ.submatrix e.symm)).supportInvSqrt =
+        (PosSemidef.partialTraceRight hσ).supportInvSqrt.submatrix
+          eL.symm eL.symm := by
+    have htransport :
+        (PosSemidef.partialTraceRight
+            (hσ.submatrix e.symm)).supportInvSqrt =
+          ((PosSemidef.partialTraceRight hσ).submatrix
+            eL.symm).supportInvSqrt := by
+      rw [PosSemidef.supportInvSqrt, PosSemidef.supportInvSqrt,
+        ← (PosSemidef.partialTraceRight
+          (hσ.submatrix e.symm)).isHermitian.cfc_eq,
+        ← ((PosSemidef.partialTraceRight hσ).submatrix
+          eL.symm).isHermitian.cfc_eq, hptr]
+    exact htransport.trans
+      ((PosSemidef.partialTraceRight hσ).supportInvSqrt_submatrix_equiv eL)
+  rw [partialTraceRightPetzMap_apply, partialTraceRightPetzMap_apply,
+    hsqrt, hinv]
+  simp only [Matrix.submatrix_mul_equiv]
+  rw [leftKroneckerEmbed_submatrix_prod_equiv eL eR]
+  dsimp only [e]
+  rw [Matrix.submatrix_mul_equiv, Matrix.submatrix_mul_equiv]
+
 /-- The raw partial-trace Petz map is completely positive in rectangular Kraus
 form.  This is the complete-positivity part of the support formula in
 Hayden--Jozsa--Petz--Winter, arXiv:quant-ph/0304007v2,

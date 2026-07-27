@@ -36,6 +36,19 @@ abstracted — record why, so it is not re-proposed).
 - **Abstraction:** `@[mps_transfer]` simp set + `transfer_simp` macro
   (`TNLean/MPS/Tactic/Basic.lean`).
 
+### partial trace under product reindexing — promoted
+- **Pattern:** split a simultaneous relabelling of both tensor factors into
+  left- and right-factor submatrices, change the summation index in the traced
+  factor, and compose the resulting submatrices.
+- **Seen:** three occurrences across `PartialTrace.lean`,
+  `RelativeEntropyDataProcessing.lean`, and `StrongSubadditivityPosDef.lean`
+  before promotion.
+- **Abstraction:** `Matrix.partialTraceRight_submatrix_prod_equiv` in
+  `TNLean/Channel/PartialTrace.lean`.
+- **Notes:** the two data-processing proofs now call the shared covariance
+  theorem; the same theorem is also used to transport partial-trace Petz
+  recovery from finite cyclic coordinates to arbitrary finite products.
+
 ### eventual word-tuple span from selectors — promoted
 - **Pattern:** propagate block injectivity from a positive length to the prefix remaining after
   a fixed selector suffix, concatenate the prefix and suffix, and simplify their total length.

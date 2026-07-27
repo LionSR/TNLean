@@ -160,6 +160,18 @@ noncomputable def PosSemidef.supportInvSqrt {ρ : Matrix n n ℂ}
     (hρ : ρ.PosSemidef) : Matrix n n ℂ :=
   hρ.isHermitian.cfc fun x ↦ if x ≠ 0 then (Real.sqrt x)⁻¹ else 0
 
+/-- The support inverse square root commutes with reindexing by an
+equivalence. -/
+theorem PosSemidef.supportInvSqrt_submatrix_equiv
+    {m : Type*} [Fintype m] [DecidableEq m]
+    {ρ : Matrix n n ℂ} (hρ : ρ.PosSemidef) (e : n ≃ m) :
+    (hρ.submatrix e.symm).supportInvSqrt =
+      hρ.supportInvSqrt.submatrix e.symm e.symm := by
+  rw [PosSemidef.supportInvSqrt, PosSemidef.supportInvSqrt,
+    ← (hρ.submatrix e.symm).isHermitian.cfc_eq, ← hρ.isHermitian.cfc_eq]
+  exact cfc_submatrix_equiv hρ.isHermitian
+    (fun x ↦ if x ≠ 0 then (Real.sqrt x)⁻¹ else 0) e
+
 /-- The generalized inverse of a positive-semidefinite matrix on its support:
 the zero eigenspace is sent to zero and every positive eigenvalue \(x\) is sent
 to \(x^{-1}\).

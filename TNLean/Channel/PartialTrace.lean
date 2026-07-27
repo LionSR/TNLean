@@ -427,6 +427,21 @@ theorem partialTraceRight_submatrix_right {α β β' : Type*} [Fintype β] [Fint
   simp only [partialTraceRight_apply, Matrix.submatrix_apply, Prod.map_apply, id_eq]
   exact (g.sum_comp (fun k => Z (i, k) (j, k))).symm
 
+/-- The right partial trace commutes with simultaneous equivalence reindexing
+of both factors. -/
+theorem partialTraceRight_submatrix_prod_equiv
+    {α α' β β' : Type*} [Fintype β] [Fintype β']
+    (eα : α ≃ α') (eβ : β ≃ β')
+    (Z : Matrix (α × β) (α × β) ℂ) :
+    partialTraceRight
+        (Z.submatrix (eα.prodCongr eβ).symm (eα.prodCongr eβ).symm) =
+      (partialTraceRight Z).submatrix eα.symm eα.symm := by
+  rw [partialTraceRight_submatrix_left eα.symm Z,
+    partialTraceRight_submatrix_right eβ.symm
+      (Z.submatrix (Prod.map eα.symm id) (Prod.map eα.symm id)),
+    Matrix.submatrix_submatrix]
+  congr 1
+
 /-- **Partial trace over the first (left) tensor factor** (`tr_A`).
 
 For a matrix `X : M_{d·d'}(ℂ)` indexed by `(Fin d × Fin d')`, the partial
