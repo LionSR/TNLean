@@ -1030,3 +1030,30 @@ escape spelling in any of the five.
 Census-correction: #4709
 
 No ledger row changes and no flag verdict is re-examined here.
+
+### 2026-07-27 — the route form pays: the escape meter falls by seventy-four
+
+M3 falls from 356 to 282. Nine blocked panels were redrawn through the
+kernel bridge -- the braid family's declared crossings, the g-string
+pulling-through pair, the F-symbol's anyon-line crossing, the two-shift
+MPU, and the CZX site clusters -- and not one of them spells out= or in=.
+Every entry since the symmetry redraw priced these occurrences as "the
+cost of the surface swap not having happened," and promised the meter
+would fall sharply when the corpus could speak the route form. It has,
+and by more than the redraw waves added: the meter now reads below the
+276 the campaign started from priced against a corpus that draws far
+more than it did then.
+
+M4 ticks up from 17.63 to 17.65: the kernel says in a wire declaration
+what the hand-routed spelling said in coordinates, and the two
+hundredths are the labels and stations the nine panels gained.
+
+Census-correction: #4709
+
+One flag is newly raised and answered here.
+
+| flag | verdict |
+|---|---|
+| flag:sugar-shaped:command:tenkzkernel | keep-because: the switch is not sugar for anything -- it is the S4 swap's own handle, rebinding the environments to the kernel grammar for the group; it dies at the swap when the kernel becomes the surface and the opt-in has nothing left to opt into; expiry 1.0 |
+
+No ledger row changes and no other flag verdict is re-examined here.

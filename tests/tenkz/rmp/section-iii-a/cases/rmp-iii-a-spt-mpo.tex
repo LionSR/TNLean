@@ -4,27 +4,44 @@
 % Boundary: Four virtual legs, one physical leg, and two g-string ends are open.
 % Source: paper TN-Review-main.tex line 1459; author source ImagesReview Section
 %   III/ImagesReview Section III.tex lines 414-444
-% Capabilities: free-graph, pulling-through, crossing-order, rotated-action
+% Capabilities: grid, pulling-through, crossing-order, rotated-action
 \[
-  \begin{tenkzfree}\tngroup[frame=flat]{
-    \tnput[dot]{A}{(0mm,0mm)}{A}
-    \tnput[box]{xw}{(-9mm,0mm)}{}
-    \tnput[box,frame={rotate=45}]{xn}{(0mm,9mm)}{}
-    \tnjoin{-18mm,0mm}{xw.west} \tnjoin{xw.east}{A.west}
-    \tnjoin{A.east}{18mm,0mm}
-    \tnjoin{0mm,-18mm}{A.south}
-    \tnjoin{A.north}{xn.south} \tnjoin{xn.north}{0mm,18mm}
-    \tnjoin[route=arc, out=90, in=180, label=g]{xw}{xn}
-  }\end{tenkzfree}
-  =U_g
-  \begin{tenkzfree}\tngroup[frame=flat]{
-    \tnput[dot]{A}{(0mm,0mm)}{A}
-    \tnput[box]{xe}{(9mm,0mm)}{}
-    \tnput[box,frame={rotate=45}]{xs}{(0mm,-9mm)}{}
-    \tnjoin{-18mm,0mm}{A.west} \tnjoin{A.east}{xe.west}
-    \tnjoin{xe.east}{18mm,0mm}
-    \tnjoin{0mm,-18mm}{xs.south} \tnjoin{xs.north}{A.south}
-    \tnjoin{A.north}{0mm,18mm}
-    \tnjoin[route=arc, out=0, in=270, label=g]{xs}{xe}
-  }\end{tenkzfree}.
+  \tenkzkernel
+  \begin{tenkzeq}[size=m]
+    \begin{tenkz}[rows={wire,wire,wire}, cols=3, bonds=none]
+      % the PEPS star: two lattice lines through A, physical leg up
+      \tnwire[kind=string, species=lattice, name=vx]{(2,1)}{(2,3)}
+      \tnwire[kind=string, species=lattice, name=vd,
+              cross={over at crossing of vd and vx}]{(3,1)}{(1,3)}
+      \tn[at=(2,2), name=A, ports={90:physical}]{}
+      \tnwire[name=wp]{A.90}{midway (1,2) and (2,2)}
+      % the g string wraps the northwest corner, crossing two legs
+      \tnwire[kind=string, species=g, name=g,
+              via={midway (1,1) and (2,2), midway (2,2) and (1,3)},
+              cross={over at crossing of g and vx,
+                     over at crossing of g and vd}]
+        {midway (2,1) and (3,1)}{midway (1,3) and (2,3)}
+      \tn[skin=box, at=crossing of g and vx]{}
+      \tn[skin=box, at=crossing of g and vd]{}
+      \tnmark[form=label, label pos=nw]{on g 0.35}{$g$}
+    \end{tenkz}
+    =
+    \begin{tenkz}[rows={wire,wire,wire}, cols=3, bonds=none]
+      \tnwire[kind=string, species=lattice, name=vx]{(2,1)}{(2,3)}
+      \tnwire[kind=string, species=lattice, name=vd,
+              cross={over at crossing of vd and vx}]{(3,1)}{(1,3)}
+      \tn[at=(2,2), name=A, ports={90:physical}]{}
+      \tnwire[name=wp]{A.90}{(1,2)}
+      \tn[at=midway A and (1,2), label pos=w]{U_g}
+      % the same string, pulled through to the southeast corner
+      \tnwire[kind=string, species=g, name=g,
+              via={midway (2,2) and (3,3), midway (2,2) and (3,1)},
+              cross={over at crossing of g and vx,
+                     over at crossing of g and vd}]
+        {midway (1,3) and (2,3)}{midway (2,1) and (3,1)}
+      \tn[skin=box, at=crossing of g and vx]{}
+      \tn[skin=box, at=crossing of g and vd]{}
+      \tnmark[form=label, label pos=se]{on g 0.65}{$g$}
+    \end{tenkz}
+  \end{tenkzeq}.
 \]

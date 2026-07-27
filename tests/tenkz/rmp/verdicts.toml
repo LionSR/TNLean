@@ -2,7 +2,7 @@
 # Schema: scripts/tenkz_rmp.py (load_verdicts).  Any status may be
 # recorded, including failure; the check rejects lies, never gaps.
 schema_version = 1
-campaign_sha256 = "0c5fce705d1bec9947427ba3a608daff6960e09c0a2d02ed0f9aea5dfd21443c"
+campaign_sha256 = "8c1f4c1ce0fdf35d0c467f5ec7c065d1be55fd8f94f7b3066ff46b5773ad015f"
 
 [[verdict]]
 id = "rmp-ii-peps-projection"
@@ -143,15 +143,14 @@ note = "square sites, congruent quarter turns"
 
 [[verdict]]
 id = "rmp-ii-mpu-two-shift"
-status = "blocked"
+status = "cosmetic-gap"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
-defects = ["missing-element"]
-missing = ["crossing-order"]
-case_sha256 = "058359354801f856e388fd33565901f017132bcddaaf8065c149dbced2658ebe"
-reviewed = "2026-07-23"
-renderer = "maintainer-page-review-2026-07-23"
-note = "inter-row shift wires decoupled; needs declared crossings"
+defects = []
+case_sha256 = "7210d80b33c212cf43812d1a89d581ba1571ca8bcd21937dff7e63973aa64a71"
+reviewed = "2026-07-27"
+renderer = "fable-wave-b-acceptance-2026-07-27-200dpi"
+note = "the kernel form LANGUAGE-1.0 section 12.4 fixes for this target: two traced rows, four inter-row shift strings, both crossings declared and rendered under; the author box-turn ink is the mpu-wrap-second skin-pairings property"
 
 [[verdict]]
 id = "rmp-ii-mpu-normal-form"
@@ -415,15 +414,14 @@ note = "the S_{alpha,g} case uses the supported ket-op-bra contraction order in 
 
 [[verdict]]
 id = "rmp-iii-a-f-symbol"
-status = "blocked"
+status = "cosmetic-gap"
 pairing = "verified"
 pairing_by = "codex-pairing-sweep-2026-07-24"
-defects = ["missing-element"]
-missing = ["strings"]
-case_sha256 = "99c6f69e3a18e781849a40a90adf434d4c68fec53d858f044bbcd5cfc05145da"
-reviewed = "2026-07-23"
-renderer = "maintainer-page-review-2026-07-23"
-note = "author draws the MPO/anyon-string realization; abstract tree substituted"
+defects = []
+case_sha256 = "95222124e362a3cd5cabdb41c708bede81c90a547f6264409773ad29c1559203"
+reviewed = "2026-07-27"
+renderer = "fable-wave-b-acceptance-2026-07-27-200dpi"
+note = "the author string realization: c over a at the declared crossing, four quadrant sectors, six labels at their stations; c blue in the sector species where the source paints black, arrowheads recorded as dir but not yet inked"
 
 [[verdict]]
 id = "rmp-iii-a-boundary-algebra-n"
@@ -613,15 +611,14 @@ note = "Author panel shows an unlabeled black bond node, not the declared Hadama
 
 [[verdict]]
 id = "rmp-iii-a-spt-mpo"
-status = "blocked"
+status = "cosmetic-gap"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
 defects = []
-missing = ["strings"]
-case_sha256 = "189c1381d9f7393d3591368d23853cfdc52e625fe4a3d57f10a1f4c1eae88c83"
-reviewed = "2026-07-26"
-renderer = "fable-countersign-reading-2026-07-26-200dpi"
-note = "Diagonal action frames are represented and the g labels ride clear of the boxes; the string geometry remains incomplete."
+case_sha256 = "f1e08b4c9dceddd32e2c2dab02db6b3a2706e9fac933cf7a0a8d1bcd341e42b2"
+reviewed = "2026-07-27"
+renderer = "fable-wave-b-acceptance-2026-07-27-200dpi"
+note = "the g string pulls through with its action boxes riding the string over the measured legs on both sides; hue conventions differ"
 
 [[verdict]]
 id = "rmp-iii-a-spt-intertwiner"
@@ -635,14 +632,13 @@ note = "mirrored operator order; small glyphs"
 
 [[verdict]]
 id = "rmp-iii-a-g-injective-projector"
-status = "blocked"
+status = "cosmetic-gap"
 pairing = "wrong-source"
-defects = ["missing-element"]
-missing = ["strings", "group-average"]
-case_sha256 = "1c058a3d5d0553c3121dce40d646e6d3e732cba57fe772f1e0041355adaaf9a2"
-reviewed = "2026-07-23"
-renderer = "maintainer-page-review-2026-07-23"
-note = "Author panel shows a g-string pulling-through equality, not the declared four-leg group-average projector P_G."
+defects = []
+case_sha256 = "1e7f27cdde08b7f232b7cb497f1da84d31e0abf23450a5eeb061c46dd930aaa0"
+reviewed = "2026-07-27"
+renderer = "fable-wave-b-acceptance-2026-07-27-200dpi"
+note = "the pulling-through equality with the g string crossing west/north then east/south and action boxes on the string; g and A labelled per panel at review"
 
 [[verdict]]
 id = "rmp-iii-a-mpo-action"
@@ -745,51 +741,47 @@ note = "twist rendered without crossings"
 
 [[verdict]]
 id = "rmp-iii-b-r-tensor-left"
-status = "blocked"
+status = "cosmetic-gap"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
-defects = ["missing-element"]
-missing = ["multi-strand-braid", "crossing-order"]
-case_sha256 = "28c8fe58cac3d0b363bbb25958ebed9e5092fe3023021d63cd6c1f47ad8df923"
-reviewed = "2026-07-26"
-renderer = "fable-countersign-reading-2026-07-26-200dpi"
-note = "winding strings on lattice reduced to a bare tree"
+defects = []
+case_sha256 = "43a1b039b03c2da88117f65bd366a77409df88b580ec1d6be39d3ab99d8e0524"
+reviewed = "2026-07-27"
+renderer = "fable-wave-b-acceptance-2026-07-27-200dpi"
+note = "the three strings wind from i down through the b, a, b stations with the under-i detour; hue and pitch differ"
 
 [[verdict]]
 id = "rmp-iii-b-r-tensor-right"
-status = "blocked"
+status = "cosmetic-gap"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
-defects = ["missing-element"]
-missing = ["braid-resolver", "crossing-order"]
-case_sha256 = "1e8f40c641e7c1313a5f822206d62e10c115cfb788b3e4a974e1dc41895f611e"
-reviewed = "2026-07-26"
-renderer = "fable-countersign-reading-2026-07-26-200dpi"
-note = "same"
+defects = []
+case_sha256 = "4d9ba84be6abdfb0a51d65b67f09061e8e6cdfe9914aa40985d9e239e003821c"
+reviewed = "2026-07-27"
+renderer = "fable-wave-b-acceptance-2026-07-27-200dpi"
+note = "i strings into R_{i,b} which fans to b, a, b; the R box upright where the source slants a parallelogram"
 
 [[verdict]]
 id = "rmp-iii-b-braid-one"
-status = "blocked"
+status = "cosmetic-gap"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
-defects = ["missing-element"]
-missing = ["multi-strand-braid", "crossing-order"]
-case_sha256 = "de2dfb44e937e79fe077de7c109913a5d8b4f9648cf82bd7c455d0df5f51b360"
-reviewed = "2026-07-26"
-renderer = "fable-countersign-reading-2026-07-26-200dpi"
-note = "one connected patch; source panel 1 has no crossing"
+defects = []
+case_sha256 = "616c219d5c451894b19126188662978e398b279ae332b40d9ea6347a63f0a036"
+reviewed = "2026-07-27"
+renderer = "fable-wave-b-acceptance-2026-07-27-200dpi"
+note = "winding strings restored to the lattice patch with j, b, i, a at their stations; the strands do not cross each other, as the source draws"
 
 [[verdict]]
 id = "rmp-iii-b-braid-two"
-status = "blocked"
+status = "cosmetic-gap"
 pairing = "verified"
 pairing_by = "codex-pairing-sweep-2026-07-24"
-defects = ["wrong-contraction"]
-missing = ["crossing-order"]
-case_sha256 = "c7053c4276baa7a4a2a7a3f840062f668a9ca0b6bdd8730185b804a33f5745bb"
-reviewed = "2026-07-26"
-renderer = "fable-countersign-reading-2026-07-26-200dpi"
-note = "crossing drawn but over/under unmarked"
+defects = []
+case_sha256 = "2f762e187d7fa340dcb72a43f286c157d400874248886c5f2dc3adacd9d9016f"
+reviewed = "2026-07-27"
+renderer = "fable-wave-b-acceptance-2026-07-27-200dpi"
+note = "the two strands nest through their bead stations without crossing each other -- the side-by-side against the flattened source shows every meeting occluded by a bead; the old crossing was the previous body's invention"
 
 [[verdict]]
 id = "rmp-iii-b-braid-three"
@@ -990,15 +982,14 @@ note = "context-only; clean"
 
 [[verdict]]
 id = "rmp-app-czx-state"
-status = "blocked"
+status = "cosmetic-gap"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
-defects = ["wrong-contraction", "missing-element"]
-missing = ["cluster-groups"]
-case_sha256 = "bdbdf45f743a2b544b58802b09de53fcbc46add0c7711bec0b3d88b00d8aed88"
-reviewed = "2026-07-23"
-renderer = "maintainer-page-review-2026-07-23"
-note = "maintainer: totally wrong; composite sites + doubled bonds"
+defects = []
+case_sha256 = "eb9eeda387e4e28beb833ac856e97f5ffd6b070fb397eaf03be6a6a3a16fc1c6"
+reviewed = "2026-07-27"
+renderer = "fable-wave-b-acceptance-2026-07-27-200dpi"
+note = "sites grouped as the source groups them -- four sub-spins per red circle, wired to neighbours into one connected lattice; enclosure fill lighter than the source"
 
 [[verdict]]
 id = "rmp-workbench-ii-newfig7"

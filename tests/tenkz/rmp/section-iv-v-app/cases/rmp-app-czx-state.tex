@@ -4,17 +4,44 @@
 % Boundary: The displayed patch has open virtual bonds on every outer lattice site.
 % Source: paper TN-Review-main.tex line 2511; author source ImagesReview Section
 %   V/ImagesReview Section V.tex lines 147-219
-% Capabilities: lattice, regions, semantic-roles
+% Capabilities: grid, regions, semantic-roles
 \[
-  \begin{tenkzlattice}[rows=3, cols=3, frame=flat, boundary=open]
-    \tnsite[role=operator]{(1,1)} \tnsite[role=operator]{(1,2)}
-    \tnsite[role=operator]{(1,3)} \tnsite[role=operator]{(2,1)}
-    \tnsite[role=operator]{(2,2)} \tnsite[role=operator]{(2,3)}
-    \tnsite[role=operator]{(3,1)} \tnsite[role=operator]{(3,2)}
-    \tnsite[role=operator]{(3,3)}
-    \tnregion[slot=neutral, outline]{(1-2,1-2)}
-    \tnregion[slot=neutral, outline]{(1-2,2-3)}
-    \tnregion[slot=neutral, outline]{(2-3,1-2)}
-    \tnregion[slot=neutral, outline]{(2-3,2-3)}
-  \end{tenkzlattice}
+  \tenkzkernel
+  \begin{tenkz}[lattice={3x3}, bonds=none]
+    \tn[cluster={2x2}, name=a]{} & \tn[cluster={2x2}, name=b]{}
+      & \tn[cluster={2x2}, name=c]{} \\
+    \tn[cluster={2x2}, name=d]{} & \tn[cluster={2x2}, name=e]{}
+      & \tn[cluster={2x2}, name=f]{} \\
+    \tn[cluster={2x2}, name=g]{} & \tn[cluster={2x2}, name=h]{}
+      & \tn[cluster={2x2}, name=i]{}
+    \tnwire{a-1-2}{b-1-1} \tnwire{a-2-2}{b-2-1}
+    \tnwire{b-1-2}{c-1-1} \tnwire{b-2-2}{c-2-1}
+    \tnwire{d-1-2}{e-1-1} \tnwire{d-2-2}{e-2-1}
+    \tnwire{e-1-2}{f-1-1} \tnwire{e-2-2}{f-2-1}
+    \tnwire{g-1-2}{h-1-1} \tnwire{g-2-2}{h-2-1}
+    \tnwire{h-1-2}{i-1-1} \tnwire{h-2-2}{i-2-1}
+    \tnwire{a-2-1}{d-1-1} \tnwire{a-2-2}{d-1-2}
+    \tnwire{b-2-1}{e-1-1} \tnwire{b-2-2}{e-1-2}
+    \tnwire{c-2-1}{f-1-1} \tnwire{c-2-2}{f-1-2}
+    \tnwire{d-2-1}{g-1-1} \tnwire{d-2-2}{g-1-2}
+    \tnwire{e-2-1}{h-1-1} \tnwire{e-2-2}{h-1-2}
+    \tnwire{f-2-1}{i-1-1} \tnwire{f-2-2}{i-1-2}
+    \tnwire{a-1-1}{open n} \tnwire{a-1-2}{open n} \tnwire{b-1-1}{open n}
+    \tnwire{b-1-2}{open n} \tnwire{c-1-1}{open n} \tnwire{c-1-2}{open n}
+    \tnwire{g-2-1}{open s} \tnwire{g-2-2}{open s} \tnwire{h-2-1}{open s}
+    \tnwire{h-2-2}{open s} \tnwire{i-2-1}{open s} \tnwire{i-2-2}{open s}
+    \tnwire{a-1-1}{open w} \tnwire{a-2-1}{open w} \tnwire{d-1-1}{open w}
+    \tnwire{d-2-1}{open w} \tnwire{g-1-1}{open w} \tnwire{g-2-1}{open w}
+    \tnwire{c-1-2}{open e} \tnwire{c-2-2}{open e} \tnwire{f-1-2}{open e}
+    \tnwire{f-2-2}{open e} \tnwire{i-1-2}{open e} \tnwire{i-2-2}{open e}
+    \tnmark[form=enclosure, slot=secondary]{{a-1-1, a-1-2, a-2-1, a-2-2}}{}
+    \tnmark[form=enclosure, slot=secondary]{{b-1-1, b-1-2, b-2-1, b-2-2}}{}
+    \tnmark[form=enclosure, slot=secondary]{{c-1-1, c-1-2, c-2-1, c-2-2}}{}
+    \tnmark[form=enclosure, slot=secondary]{{d-1-1, d-1-2, d-2-1, d-2-2}}{}
+    \tnmark[form=enclosure, slot=secondary]{{e-1-1, e-1-2, e-2-1, e-2-2}}{}
+    \tnmark[form=enclosure, slot=secondary]{{f-1-1, f-1-2, f-2-1, f-2-2}}{}
+    \tnmark[form=enclosure, slot=secondary]{{g-1-1, g-1-2, g-2-1, g-2-2}}{}
+    \tnmark[form=enclosure, slot=secondary]{{h-1-1, h-1-2, h-2-1, h-2-2}}{}
+    \tnmark[form=enclosure, slot=secondary]{{i-1-1, i-1-2, i-2-1, i-2-2}}{}
+  \end{tenkz}
 \]
