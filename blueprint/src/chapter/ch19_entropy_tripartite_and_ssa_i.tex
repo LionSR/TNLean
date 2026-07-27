@@ -800,6 +800,50 @@
     the displayed defect as a sum of nonnegative quadratic residuals.
 \end{proof}
 
+\begin{theorem}[Vanishing source-$B$ defect gives common left--right solutions]
+    \label{thm:support_sourceB_zero_defect_common_left_right_solution}
+    \lean{Matrix.supportLeftRightSupportInv_mulVec_sourceB_eq_of_defect_eq_zero}
+    \leanok
+    \uses{lem:support_sourceB_quadratic_sum_sub_nonnegative,
+      thm:support_resolvent_zero_defect}
+    Under the hypotheses and notation of
+    Lemma~\ref{lem:support_sourceB_quadratic_sum_sub_nonnegative}, suppose
+    that the source-$B$ defect vanishes:
+    \begin{align}
+        \sum_{i\in I}Q^B_{A_i,B_i}(t)
+          -Q^B_{A_\Sigma,B_\Sigma}(t)
+        &=0.
+        \notag
+    \end{align}
+    Put
+    \begin{align}
+        S_i&=A_i\otimes\mathbf 1+
+          t(\mathbf 1\otimes B_i^{\mathsf T}),&
+        S_\Sigma&=\sum_{i\in I}S_i,
+        \notag
+    \end{align}
+    and let $P_{S_i}$ be the support projection of $S_i$. Then
+    \begin{align}
+        S_i^+\opvec(B_i^{\mathsf T})
+        &=
+        P_{S_i}S_\Sigma^+\opvec(B_\Sigma^{\mathsf T})
+        \qquad(i\in I).
+        \notag
+    \end{align}
+    This is the fixed-parameter support-domain residual step behind
+    $(\mathrm{basiceq})$ in Jen\v{c}ov\'a--Ruskai,
+    arXiv:0903.2895v4, lines~652--660 and 788--790. No kernel inclusion is
+    needed for this algebraic implication.
+\end{theorem}
+
+\begin{proof}\leanok
+    The source vectors lie in the supports of their left--right operators,
+    and their sum lies in the support of $S_\Sigma$. The vanishing real
+    defect and the support-resolvent residual identity force every quadratic
+    residual to vanish. The common-solution conclusion follows after
+    projection to the support of each $S_i$.
+\end{proof}
+
 \begin{lemma}[Nonnegativity of the finite-family unprojected source-$A$ support defect]
     \label{lem:unprojected_support_sourceA_quadratic_sum_sub_nonnegative}
     \lean{Matrix.rawSupportSourceAQuadratic_sum_sub_nonneg}
@@ -968,8 +1012,9 @@
     \end{align}
     This is the source-$B$ pointwise-vanishing passage in
     Jen\v{c}ov\'a--Ruskai, arXiv:0903.2895v4, lines~433--435, 652--674,
-    and 788--790. The common projected resolvent conclusion at
-    lines~788--793 is not asserted here.
+    and 788--790. The common projected resolvent conclusion is stated
+    downstream in
+    Theorem~\ref{thm:support_relative_entropy_equality_common_projected_resolvent}.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -981,9 +1026,6 @@
     $\operatorname{Def}_A(t)+t\operatorname{Def}_B(t)=0$, and $t>0$
     forces $\operatorname{Def}_B(t)=0$.
 \end{proof}
-
-% Open in #4435: it remains to convert the pointwise source-B defect
-% equality into the common projected relative-modular resolvent.
 
 \begin{theorem}[Spectral resolvent representation of relative entropy]
     \label{thm:relative_entropy_resolvent_integral}
@@ -1100,7 +1142,7 @@
     last three terms combine to $-\langle b,Gb\rangle$.
 \end{proof}
 
-\begin{theorem}[Zero support-resolvent defect gives a common solution]
+\begin{theorem}[Vanishing real support-resolvent defect gives a common solution]
     \label{thm:support_resolvent_zero_defect}
     \lean{Matrix.support_resolvent_eq_of_defect_eq_zero}
     \leanok
@@ -1108,7 +1150,9 @@
     Under the hypotheses and notation of
     Lemma~\ref{lem:support_resolvent_residual_identity}, suppose that
     \begin{align}
-        \sum_i\langle b_i,G_i b_i\rangle-\langle b,Gb\rangle
+        \re\left(
+          \sum_i\langle b_i,G_i b_i\rangle-\langle b,Gb\rangle
+        \right)
         &=0.
         \label{eq:entropy_zero_defect}
     \end{align}
@@ -1127,9 +1171,11 @@
 \begin{proof}\leanok
     \uses{lem:support_resolvent_residual_identity,
           lem:support_inverse_square_root_generalized_inverse}
-    Lemma~\ref{lem:support_resolvent_residual_identity} writes
-    (\ref{eq:entropy_zero_defect}) as a finite sum of non-negative quadratic
-    forms. Hence $G_i(b_i-S_ix)=0$ for every $i$.
+    Lemma~\ref{lem:support_resolvent_residual_identity} writes the complex
+    defect in (\ref{eq:entropy_zero_defect}) as a finite sum of non-negative
+    quadratic forms. Its imaginary part therefore vanishes automatically,
+    while the hypothesis makes its real part vanish. Hence
+    $G_i(b_i-S_ix)=0$ for every $i$.
     Multiplication by $S_i$ shows that $P_i(b_i-S_ix)=0$. Both $b_i$ and
     $S_ix$ lie in the support of $S_i$, so $b_i=S_ix$. Multiplication by
     $G_i$ now gives (\ref{eq:entropy_common_solution}).

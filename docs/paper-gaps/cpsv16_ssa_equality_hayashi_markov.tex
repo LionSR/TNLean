@@ -423,7 +423,10 @@ The kernel inclusions for the summands imply the same inclusion for the summed
 pair.
 \footnote{Formal declarations:
 \leanid{Matrix.rawSupportSourceAQuadratic_sum_sub_nonneg} and
-\leanid{Matrix.supportSourceBQuadratic_sum_sub_nonneg} in
+\leanid{Matrix.supportSourceBQuadratic_sum_sub_nonneg},
+\leanid{Matrix.supportLeftRightSupportInv_mulVec_sourceB_eq_of_defect_eq_zero},
+and
+\leanid{Matrix.supportRightProj_mul_sumSupportRightProj_eq} in
 \path{TNLean/Channel/Schwarz/SupportSourceDefect.lean}.}
 These are fixed-$t$ algebraic inequalities.  The remaining analytic passage
 now identifies the finite-family relative-entropy gap with the integral of
@@ -452,10 +455,20 @@ source-$B$ defect vanishes there.
 \leanid{Matrix.supportRelativeEntropyFamilyGapIntegrand_nonneg} and
 \leanid{Matrix.supportSourceBDefect_eq_zero_of_relativeEntropy_sum_eq} in
 \path{TNLean/Channel/Schwarz/SupportRelativeEntropyGap.lean}.}
-The remaining passage must derive the common projected shifted
-relative-modular resolvent from this fixed-parameter source-$B$ defect
-equality.
-Following the latter step, consider two positive semidefinite pairs $(A,B)$ and
+The residual identity now converts this real-valued defect equality into the
+common support-generalized-inverse solution.  The local right-support
+projection absorbs both the support projection of the local left--right
+operator and the right-support projection of the summed reference matrix.
+Consequently the local and summed shifted relative-modular resolvents agree
+after the local right-support projection, for every summand and every
+positive parameter.
+\footnote{Formal declarations:
+\leanid{Matrix.supportRightProj_mul_supportLeftRightSupportProj_eq} in
+\path{TNLean/Channel/Schwarz/SupportLeftRightRelativeModular.lean}, and
+\leanid{Matrix.supportRelativeModular_resolvent_mulVec_eq_of_relativeEntropy_sum_eq}
+in
+\path{TNLean/Channel/Schwarz/SupportRelativeEntropyEquality.lean}.}
+Following this step, consider two positive semidefinite pairs $(A,B)$ and
 $(C,D)$.  Let $P_B$ be the support projection of the first reference matrix
 $B$, and write
 $B^+=(B^{-1/2}_{\mathrm{supp}})^2$ and
@@ -506,12 +519,14 @@ also identifies this vector with the support-generalized-inverse solution of
 the left--right equation, and hence identifies the two source-$B$ quadratic
 forms.  Together with the integral and continuity argument above, equality
 of relative entropies now makes the real-valued source-$B$ defect vanish at
-every positive parameter.  What remains is to convert that equality into
-the complex quadratic-residual equality and derive the finite-family common
-projected resolvent theorem.  The kernel inclusion is already used for the
-unprojected source-$A$ inequality and remains an exact hypothesis of that
-source-facing equality theorem.  Consequently the singular Petz recovery
-identity is also still unformalized.
+every positive parameter.  Nonnegativity of the complex quadratic residuals
+makes their imaginary parts vanish, so the real equality yields the
+finite-family common projected resolvent theorem.  The kernel inclusion used
+for the unprojected source-$A$ inequality remains an exact hypothesis of this
+source-facing equality theorem.  What remains is to apply the resulting
+support functional-calculus identity through the singular Weyl
+inverse-square-root sandwich and Petz-recovery argument.  Thus the singular
+Petz recovery identity is still unformalized.
 
 In particular, the affine regularizations used to prove the inequality cannot
 by themselves prove its equality case.  Equality at the limiting pair implies

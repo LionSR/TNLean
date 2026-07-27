@@ -43,6 +43,92 @@ open scoped Matrix ComplexOrder MatrixOrder Kronecker
 
 namespace Matrix
 
+/-- The right-support projection absorbs the support projection of the
+left-right operator:
+\[
+  (1\otimes P_B^{\mathsf T})P_{A\otimes 1+t(1\otimes B^{\mathsf T})}
+  =1\otimes P_B^{\mathsf T}.
+\]
+
+The range witness is the support-domain algebra underlying the restriction to
+\((\ker B)^\perp\) in Jenčová--Ruskai, arXiv:0903.2895v4, lines 766--790. -/
+theorem supportRightProj_mul_supportLeftRightSupportProj_eq
+    {n : Type*} [Fintype n] [DecidableEq n]
+    {A B : Matrix n n ℂ} (hA : A.PosSemidef) (hB : B.PosSemidef)
+    {t : ℝ} (ht : 0 < t) :
+    let P := (1 : Matrix n n ℂ) ⊗ₖ hB.isHermitian.supportProjᵀ
+    let hS := supportLeftRightSuperoperator_posSemidef hA hB ht.le
+    P * hS.isHermitian.supportProj = P := by
+  let Bplus := hB.supportInv
+  let res := t • (1 : Matrix (n × n) (n × n) ℂ) +
+    A ⊗ₖ Bplusᵀ
+  let P := (1 : Matrix n n ℂ) ⊗ₖ hB.isHermitian.supportProjᵀ
+  let S := supportLeftRightSuperoperator A B t
+  let C := (1 : Matrix n n ℂ) ⊗ₖ Bᵀ
+  let D := (1 : Matrix n n ℂ) ⊗ₖ Bplusᵀ
+  let hS : S.PosSemidef := by
+    simpa only [S] using
+      supportLeftRightSuperoperator_posSemidef hA hB ht.le
+  have hBplus_mul : Bplus * B = hB.isHermitian.supportProj := by
+    simpa only [Bplus] using hB.supportInv_mul_self
+  have hres : res.PosDef := by
+    simpa only [res, Bplus] using
+      supportRelativeModular_resolvent_posDef hA hB ht
+  letI : Invertible res := hres.isUnit.invertible
+  have hSP : S * P = C * res := by
+    simpa only [S, P, C, res, Bplus] using
+      supportLeftRightSuperoperator_mul_supportProj_eq (A := A) hB t
+  have hCD : C * D = P := by
+    dsimp only [C, D, P]
+    rw [← Matrix.mul_kronecker_mul, Matrix.one_mul,
+      ← Matrix.transpose_mul, hBplus_mul]
+  have hPidem : P * P = P := by
+    dsimp only [P]
+    rw [← Matrix.mul_kronecker_mul, Matrix.one_mul,
+      ← Matrix.transpose_mul, hB.isHermitian.supportProj_idem]
+  have hPS : hS.isHermitian.supportProj * P = P := by
+    rw [Matrix.ext_iff_mulVec]
+    intro v
+    let y : n × n → ℂ := P *ᵥ v
+    have hyP : P *ᵥ y = y := by
+      calc
+        P *ᵥ y = (P * P) *ᵥ v := by
+          exact Matrix.mulVec_mulVec v P P
+        _ = y := by rw [hPidem]
+    let w : n × n → ℂ := P *ᵥ (res⁻¹ *ᵥ (D *ᵥ y))
+    have hrange : S *ᵥ w = y := by
+      calc
+        S *ᵥ w = (S * P) *ᵥ (res⁻¹ *ᵥ (D *ᵥ y)) := by
+          exact Matrix.mulVec_mulVec (res⁻¹ *ᵥ (D *ᵥ y)) S P
+        _ = (C * res) *ᵥ (res⁻¹ *ᵥ (D *ᵥ y)) := by rw [hSP]
+        _ = C *ᵥ ((res * res⁻¹) *ᵥ (D *ᵥ y)) := by
+          simp only [Matrix.mulVec_mulVec, Matrix.mul_assoc]
+        _ = C *ᵥ (D *ᵥ y) := by
+          rw [Matrix.mul_inv_of_invertible]
+          simp
+        _ = (C * D) *ᵥ y := Matrix.mulVec_mulVec y C D
+        _ = P *ᵥ y := by rw [hCD]
+        _ = y := hyP
+    have hySupport : hS.isHermitian.supportProj *ᵥ y = y := by
+      rw [← hrange]
+      conv_lhs => rw [Matrix.mulVec_mulVec]
+      rw [hS.isHermitian.supportProj_mul_self]
+    calc
+      (hS.isHermitian.supportProj * P) *ᵥ v =
+          hS.isHermitian.supportProj *ᵥ y := by
+        rw [Matrix.mulVec_mulVec]
+      _ = y := hySupport
+      _ = P *ᵥ v := rfl
+  have hPherm : P.IsHermitian := by
+    change
+      ((1 : Matrix n n ℂ) ⊗ₖ hB.isHermitian.supportProjᵀ)ᴴ =
+        (1 : Matrix n n ℂ) ⊗ₖ hB.isHermitian.supportProjᵀ
+    rw [Matrix.conjTranspose_kronecker, Matrix.conjTranspose_one,
+      (hB.isHermitian.supportProj_isHermitian.transpose).eq]
+  have hstar := congrArg Matrix.conjTranspose hPS
+  simpa only [Matrix.conjTranspose_mul, hPherm.eq,
+    hS.isHermitian.supportProj_isHermitian.eq] using hstar
+
 /-- The support-generalized-inverse source-\(B\) solution of the left-right
 operator is the projected shifted relative-modular solution:
 \[
