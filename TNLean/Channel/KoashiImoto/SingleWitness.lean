@@ -22,14 +22,11 @@ to produce that single witness `F_0`.
   preserving Kraus family `F_0` whose adjoint fixed-point subalgebra is exactly the common
   invariant algebra `A_0` (HJPW, arXiv:quant-ph/0304007v2, lines 846-847).
 
-Every declaration below states `{Kidx : Type*} [Fintype Kidx] [Nonempty Kidx] {ρ : Kidx → Mat}`
-inline in its own signature rather than via a shared `variable` line. This is deliberate: with a
-shared ambient `variable` binding these hypotheses, the kernel needlessly re-derives the
-finite-dimensional defeq between `averagedPreservingKrausFamily`'s fields and their `pooledKfam`
-unfoldings on every use, which silently degrades to `sorryAx` recovery instead of failing loudly.
-Restating the same hypotheses inline avoids that path entirely; see
-`Kraus.averagedPreservingKrausFamily_Kfam` / `Kraus.averagedPreservingKrausFamily_isTP` in
-`PooledKrausFamily.lean`, proved once (outside any such ambient binding) and reused here by `rw`.
+The declarations below state the finite state-family instances in their own signatures. This keeps
+dependent projections through `averagedPreservingKrausFamily` stable during elaboration. The
+projection lemmas `Kraus.averagedPreservingKrausFamily_Kfam` and
+`Kraus.averagedPreservingKrausFamily_isTP` expose the corresponding fields without unfolding the
+bundled family.
 -/
 
 open scoped Matrix ComplexOrder MatrixOrder BigOperators
