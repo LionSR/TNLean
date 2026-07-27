@@ -142,6 +142,23 @@ noncomputable def averagedPreservingKrausFamily {Kidx : Type*} {ρ : Kidx → Ma
     ⟨isTP_pooledKfam _ (fun μ => (F μ).isPreserving.1),
       isPreserving_pooledKfam _ (fun μ => (F μ).isPreserving.2)⟩
 
+/-- The Kraus family of the pooled/averaged witness, spelled out at the `pooledKfam` level.
+
+Proved as a standalone `rfl` lemma, in the same section as `averagedPreservingKrausFamily` itself
+(before `Fintype`/`Nonempty` hypotheses on the state index enter scope elsewhere in this
+development), so downstream files can `rw` through it instead of relying on the kernel to unfold
+`averagedPreservingKrausFamily` afresh in a different typeclass context. -/
+theorem averagedPreservingKrausFamily_Kfam {Kidx : Type*} {ρ : Kidx → Mat}
+    (F : Fin M → PreservingKrausFamily ρ) :
+    (averagedPreservingKrausFamily F).Kfam = pooledKfam (fun μ => (F μ).Kfam) := rfl
+
+/-- The `IsTP` witness of the pooled/averaged family, spelled out at the `isTP_pooledKfam`
+level. See `Kraus.averagedPreservingKrausFamily_Kfam` for why this is recorded standalone. -/
+theorem averagedPreservingKrausFamily_isTP {Kidx : Type*} {ρ : Kidx → Mat}
+    (F : Fin M → PreservingKrausFamily ρ) :
+    (averagedPreservingKrausFamily F).isPreserving.1
+      = isTP_pooledKfam (fun μ => (F μ).Kfam) (fun μ => (F μ).isPreserving.1) := rfl
+
 /-- **A pooled family fixed by every block fixes the (single) common average.**
 
 The single-matrix specialization of `Kraus.map_pooledKfam` needed to feed
