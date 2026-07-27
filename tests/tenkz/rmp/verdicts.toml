@@ -1190,14 +1190,14 @@ note = "The lambda intertwiners now use the source's plain circles; the recorded
 
 [[verdict]]
 id = "rmp-workbench-iii-historical-composite"
-status = "unfaithful"
+status = "cosmetic-gap"
 pairing = "verified"
 pairing_by = "site-glyph-source-review-2026-07-27"
-defects = ["unfaithful-substitution"]
+defects = []
 case_sha256 = "963da646b7f74433662c68fd43cdd5762fd50bf7239957245ae3710d068a9849"
 reviewed = "2026-07-27"
-renderer = "site-glyph-source-review-2026-07-27"
-note = "The lambda intertwiners now use the source's plain circles; the recorded unfaithful substitution remains."
+renderer = "fable-composite-rederivation-2026-07-27-250dpi"
+note = "the unfaithful record predates the #4929 wholesale redraw and was carried forward by a glyph-scoped review; re-derived element for element against the compiled author block: ring of four boxes on the red path, lambda circle at the ring's shoulder, both pendants with the source's arrow directions, external boxes, and both sweeping arcs attaching wire-to-pendant on the correct corners (top-left on the LHS, bottom-right on the RHS). Residue is placement nuance: the top pendant sits offset in the source and its arc meets the opposite side"
 
 [[verdict]]
 id = "rmp-workbench-iii-diagram-four"
