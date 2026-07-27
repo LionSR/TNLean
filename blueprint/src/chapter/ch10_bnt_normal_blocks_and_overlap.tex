@@ -82,9 +82,23 @@ matching between normal blocks.
     assumed limit.
 \end{proof}
 
+\begin{theorem}[A normal tensor has a nonzero letter]
+    \label{thm:cpsv_normal_nonzero_letter}
+    \lean{MPSTensor.IsNormalTensor.exists_apply_ne_zero}
+    \leanok
+    \uses{def:nt_cpsv, def:transfer_map}
+    Let $A$ be a CPSV normal tensor of positive bond dimension. Then
+    $A^i\ne 0$ for some physical letter $i$.
+\end{theorem}
+
+\begin{proof}\leanok
+    If every letter vanished, then the transfer map would vanish and its
+    spectral radius would be zero, contradicting the spectral-radius-one
+    normalization of a CPSV normal tensor.
+\end{proof}
+
 \begin{theorem}[Phase-equivalent normal tensors are gauge-phase equivalent]
     \label{thm:cpsv_normal_mpv_phase_gauge}
-    \lean{MPSTensor.IsNormalTensor.exists_apply_ne_zero}
     \lean{MPSTensor.IsNormalTensor.selfOverlap_tendsto_one}
     \lean{MPSTensor.isNormalTensor_cast_iff}
     \lean{MPSTensor.norm_eq_one_of_gaugePhase_cast_of_isNormalTensor}
