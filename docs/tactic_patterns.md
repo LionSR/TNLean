@@ -129,6 +129,18 @@ abstracted — record why, so it is not re-proposed).
   to the other. Identity-reference Gram rigidity is shared through
   `MPSTensor.IsNormal.gram_eq_pos_smul_one_of_gram_conj_eq`.
 
+### Positive-Gram provider for normalized grouped sectors
+- **Pattern:** the horizontal BNT-refined and literal CPSV grouped-sector theorems
+  differed only in how they obtained a positive scalar Gram identity for each
+  copy gauge.
+- **Reuse:** `MPOTensor.exists_normalized_grouped_sector_maps_of_gram` takes this
+  positive-Gram provider as its sole canonical-form-specific input and proves the
+  common isometry, orthogonality, intertwining, and exact reconstruction clauses.
+- **Result:** `MPOTensor.IsMPDO.exists_normalized_grouped_sector_maps` and
+  `MPSTensor.IsCPSVCanonicalForm.exists_normalized_grouped_sector_maps` remain
+  separate public wrappers, each supplying its own Gram theorem without adapting
+  one canonical-form hypothesis to the other.
+
 ### Canonical-form sector-compression separation
 - **Pattern:** the horizontal BNT-refined and literal CPSV surfaces separately turned
   vanishing finite-chain compressions into zero first-site insertions, then converted
