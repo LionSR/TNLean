@@ -2,7 +2,7 @@
 # Schema: scripts/tenkz_rmp.py (load_verdicts).  Any status may be
 # recorded, including failure; the check rejects lies, never gaps.
 schema_version = 1
-campaign_sha256 = "a08ea3fa15e0fce33337be33e55e80b6f7790d5b4ef3f4f7859cfa6cb0bb6a5a"
+campaign_sha256 = "0c5fce705d1bec9947427ba3a608daff6960e09c0a2d02ed0f9aea5dfd21443c"
 
 [[verdict]]
 id = "rmp-ii-peps-projection"
@@ -1023,14 +1023,13 @@ note = "east cup draws; two triangles where the source has four"
 
 [[verdict]]
 id = "rmp-workbench-ii-peps-rg-workbench"
-status = "blocked"
+status = "cosmetic-gap"
 pairing = "wrong-source"
-defects = ["missing-element"]
-missing = ["equation-composition"]
-case_sha256 = "bd15cb94c6f9bf2cda623269fac1c1e303ce5bcb68a3fb0bdf9f97c4ada2f089"
-reviewed = "2026-07-26"
-renderer = "fable-countersign-reading-2026-07-26-200dpi"
-note = "Author panel shows four tensor-factorization subfigures, not a unitary acting on a 2x2 PEPS plaquette."
+defects = []
+case_sha256 = "a157963e9b3d764d6358448759f987d6abe978c7a1e03412a3fd1d1118acb984"
+reviewed = "2026-07-27"
+renderer = "fable-wave-a-acceptance-2026-07-27-200dpi"
+note = "the unitary is asserted as math-mode application U(...) around the plaquette, the accepted coproduct idiom; the source itself never draws U as a box"
 
 [[verdict]]
 id = "rmp-workbench-ii-positive-mpo-old"
@@ -1106,15 +1105,14 @@ note = "color coding lost"
 
 [[verdict]]
 id = "rmp-workbench-ii-peps-fine-graining"
-status = "blocked"
+status = "cosmetic-gap"
 pairing = "verified"
 pairing_by = "codex-pairing-sweep-2026-07-24"
-defects = ["missing-element"]
-missing = ["equation-composition"]
+defects = []
 case_sha256 = "817a30c81db766a8a53d5c0ca100ff7fb52ddb749b86d246d6e555ea8c865a16"
-reviewed = "2026-07-26"
-renderer = "fable-countersign-reading-2026-07-26-200dpi"
-note = "archival panel (a) remains outside the canonical fine-graining case"
+reviewed = "2026-07-27"
+renderer = "fable-wave-a-acceptance-2026-07-27-200dpi"
+note = "the checked-in case already draws panel (b), the site-to-patch fine-graining its formula scopes; the blocked demand predated the structured-grid redraw"
 
 [[verdict]]
 id = "rmp-workbench-ii-historical-composite"
@@ -1183,15 +1181,14 @@ note = "Y restored above A with the loop closing in the physical direction, as t
 
 [[verdict]]
 id = "rmp-workbench-iii-diagram-three"
-status = "blocked"
+status = "cosmetic-gap"
 pairing = "verified"
 pairing_by = "site-glyph-source-review-2026-07-27"
-defects = ["text-substitution"]
-missing = ["ring-closure"]
+defects = []
 case_sha256 = "62ba5d00bd656aa43ca283e78de25b3962756fac5422eb84292f077d29d3ef52"
 reviewed = "2026-07-27"
-renderer = "site-glyph-source-review-2026-07-27"
-note = "The lambda intertwiners now use the source's plain circles; the recorded closure gap remains outside this change."
+renderer = "fable-wave-a-acceptance-2026-07-27-200dpi"
+note = "the checked-in case already closes both pentagon rings around the relocated lambda; the blocked demand predated that body. Residue: two dir marks orient by the ports mechanism, not per-edge"
 
 [[verdict]]
 id = "rmp-workbench-iii-historical-composite"
@@ -1270,27 +1267,25 @@ note = "explicit F box vs boxless smooth crossing"
 
 [[verdict]]
 id = "rmp-workbench-iii-eq59-now"
-status = "blocked"
+status = "cosmetic-gap"
 pairing = "verified"
 pairing_by = "codex-pairing-sweep-2026-07-24"
-defects = ["text-substitution"]
-missing = ["group-average", "ring-closure"]
-case_sha256 = "a4a006c1ad1a9c999e49effb3519fe93511a6ee3ae18f784870bc6890224c1ba"
-reviewed = "2026-07-23"
-renderer = "maintainer-page-review-2026-07-23"
-note = "already judged"
+defects = []
+case_sha256 = "b7c2b06bbbbfb83c6e2b8535ac69b3232d431af702635f60c85f8b7275944fbe"
+reviewed = "2026-07-27"
+renderer = "fable-wave-a-acceptance-2026-07-27-200dpi"
+note = "the group average is spelt as mathematics around the diagram and the projector ring closes through elbow routes; residue: black ring and stadium L_g where the source is red with circles"
 
 [[verdict]]
 id = "rmp-workbench-iii-ghz-state-workbench"
-status = "blocked"
+status = "cosmetic-gap"
 pairing = "verified"
 pairing_by = "codex-pairing-sweep-2026-07-24"
-defects = ["missing-element"]
-missing = ["staggered-sites"]
-case_sha256 = "f8084905eb3db9149a415ce492dad3d4c5d71d816279849d827ce1080b09fc0a"
-reviewed = "2026-07-23"
-renderer = "maintainer-page-review-2026-07-23"
-note = "staggering and arrow legs flattened"
+defects = []
+case_sha256 = "79a14233161fe53d54bce99a1f6a77ba6f3da19a5c16bffb101bf4e8739e2901"
+reviewed = "2026-07-27"
+renderer = "fable-wave-a-acceptance-2026-07-27-200dpi"
+note = "the dense masonry checkerboard, transcribed as the equivalence twin of rmp-iii-a-ghz-state -- both targets cite author lines 329-356 -- with the twin declared in the manifest"
 
 [[verdict]]
 id = "rmp-workbench-iii-ghz-up"

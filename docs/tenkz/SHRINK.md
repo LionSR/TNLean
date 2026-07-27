@@ -1015,3 +1015,18 @@ raising the frozen case-line mean.
 Census-correction: #4969
 
 No ledger row changes and no flag verdict is re-examined here.
+
+### 2026-07-27 — wave A retires five blocked demands by drawing
+
+M4 rises from 16.92 to 17.63. Five of the six demands the blocked table
+recorded against missing capabilities turned out to be expressible in the
+present grammar: two were already drawn (the demands predated the bodies),
+and three are drawn now — the group average as mathematics around the
+diagram, the projector ring through elbow routes, and the workbench GHZ
+checkerboard as the declared equivalence twin of its published sibling.
+The masonry twin carries most of the rise. M3 does not move: no new
+escape spelling in any of the five.
+
+Census-correction: #4709
+
+No ledger row changes and no flag verdict is re-examined here.
