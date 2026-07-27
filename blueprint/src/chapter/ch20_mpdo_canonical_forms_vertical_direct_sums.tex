@@ -961,14 +961,9 @@
         thm:mpdo_vertical_projector_closure_literal_cpsv,
         thm:mpdo_vertical_no_periodic_vectors_literal_cpsv,
         thm:mpdo_literal_normal_vertical_corners,
-        thm:cpsv_literal_sector_compression_nonzero,
-        thm:cpsv_normal_mpv_phase_gauge,
-        thm:cpsv_normal_separated_eventually_li,
-        thm:mpdo_sector_compression_trace_pos,
-        thm:mpdo_sector_weight_pos,
-        thm:cpsv_literal_pairwise_vertical_gram_conjugation,
-        thm:cpsv_literal_positive_relative_gram_scalar,
-        thm:normal_tensor_gram_rigidity,
+        thm:cpsv_literal_vertical_bnt_grouping_with_isometries,
+        thm:cpsv_literal_grouped_sector_gram_conjugation,
+        thm:cpsv_literal_grouped_sector_unitary_normalization,
         thm:vertical_sector_coisometry}
     Write $A$ for the doubled-index MPS tensor of $M$. If $A=0$, take no
     retained sectors; the unique map onto the zero-dimensional sector space
@@ -1068,52 +1063,34 @@
     This completes periodic exclusion and the normal vertical block
     decomposition under the literal canonical-form hypothesis.
 
-    It remains to group the tensors $B_k$ into actual vertical representative
-    families over tensors $M_\alpha$. After such a grouping, let
-    $P_{\alpha,k}$ be the range projection of the corner indexed by
-    $(\alpha,k)$. Theorem~\ref{thm:cpsv_literal_sector_compression_nonzero}
-    gives a length at which its compression is nonzero. Since $M$ generates
-    matrix product density operators, that compression is positive
-    semidefinite; Theorem~\ref{thm:mpdo_sector_compression_trace_pos} then
-    makes its trace positive. The sector trace identity has the form
-    \begin{align}
-        \tr\!\left(P_{\alpha,k}H^{(N)}P_{\alpha,k}\right)
-        &=\mu_{\alpha,k}d_\alpha^{(N)}>0.
-        \label{eq:cpsv_prop_4_13_positive_weight}
-    \end{align}
-    Absorb the phase of one nonzero coefficient into $M_\alpha$, so that the
-    reference coefficient satisfies $\mu_{\alpha,1}>0$. The identity for
-    the original copy first gives $d_\alpha^{(N)}\ne0$. Hence the reference
-    compression has nonzero trace $\mu_{\alpha,1}d_\alpha^{(N)}$ and is
-    nonzero. Its positivity then gives $d_\alpha^{(N)}>0$, and
-    (\ref{eq:cpsv_prop_4_13_positive_weight}) implies
-    $\mu_{\alpha,k}>0$ for every copy.
+    Theorem~\ref{thm:cpsv_literal_vertical_bnt_grouping_with_isometries}
+    groups these normal corners into actual vertical representative families
+    over tensors $M_\alpha$. It retains the physical isometries, both
+    intertwining identities, exact corner compression, and the literal
+    reconstruction. Every effective coefficient
+    $\mu_{\alpha,k}=\nu_{\alpha,k}\zeta_{\alpha,k}$ is positive. Thus the
+    phase-class grouping and the positivity argument of source
+    lines~1898--1902 are complete under the literal canonical-form hypothesis.
 
-    Once these actual corners are available, the pairwise Figure~8
-    identity is complete under the literal canonical-form hypothesis.
-    Theorem~\ref{thm:cpsv_literal_pairwise_vertical_gram_conjugation} gives
+    On these actual grouped corners,
+    Theorem~\ref{thm:cpsv_literal_grouped_sector_gram_conjugation} gives
     \begin{align}
         (X_{\alpha,k}^\dagger X_{\alpha,k})M_\alpha^v
         (X_{\alpha,k}^\dagger X_{\alpha,k})^{-1}
-        &=(X_{\alpha,1}^\dagger X_{\alpha,1})M_\alpha^v
-        (X_{\alpha,1}^\dagger X_{\alpha,1})^{-1}.
+        &=M_\alpha^v.
         \label{eq:cpsv_prop_4_13_gram_conjugation}
     \end{align}
-    If $M_\alpha$ is normal,
-    Theorem~\ref{thm:cpsv_literal_positive_relative_gram_scalar} gives a real
-    number $\omega_{\alpha,k}>0$ such that
+    Theorem~\ref{thm:cpsv_literal_grouped_sector_unitary_normalization}
+    then gives a real number $\omega_{\alpha,k}>0$ such that
     \begin{align}
         X_{\alpha,k}^\dagger X_{\alpha,k}
-        &=\omega_{\alpha,k}
-          X_{\alpha,1}^\dagger X_{\alpha,1}.
+        &=\omega_{\alpha,k}\Id,
         \label{eq:cpsv_prop_4_13_gram}
     \end{align}
-    These pairwise statements belong to Figures~7--8 in the proof of
+    and $\omega_{\alpha,k}^{-1/2}X_{\alpha,k}$ is unitary. These are the
+    actual-grouped Figure~8 and gauge-normalization conclusions of
     Proposition~4.13. They are distinct from the tensor-attached two-site
     marked problem in Appendix~C.4.
-    Choose $X_{\alpha,1}=\Id$ and replace each remaining gauge by
-    $\omega_{\alpha,k}^{-1/2}X_{\alpha,k}$. The gauges are then unitary, while
-    their conjugation actions are unchanged.
 
     Compose these unitary bond gauges with the mutually orthogonal inclusions
     of the retained vertical sectors, and take their adjoints as the block-row
@@ -1135,9 +1112,9 @@
 % retained-coordinate and original-coordinate forms of Lemma L, the original
 % inserted-tensor equality, invariant-projector closure, literal periodic
 % exclusion, the normal vertical block decomposition, literal sector-compression
-% separation, and the conditional pairwise Figure-8/Gram identities are complete.
-% Actual vertical phase-class grouping, normalization of the grouped sectors, and
-% the final coisometry remain open.
+% separation, literal phase-class grouping, actual-grouped Figure Eight, and
+% unitary gauge normalization are complete. Construction of the normalized
+% physical sector maps and the final coisometry remain open.
 
 \begin{theorem}[BNT-refined horizontal form implies vertical canonical form]
     \label{thm:vertical_cf_of_horizontal_cf}
