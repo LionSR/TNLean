@@ -18,8 +18,8 @@ have equal marked chains after Gram dressing.
 
 The final separation uses only marks in the span of the physical letters of
 the horizontal tensor.  The corner equations give the required coefficient
-families explicitly, and normalized BNT-refined horizontal form separates them.
-No corresponding literal canonical-form separation is asserted.
+families explicitly.  This module uses normalized BNT-refined horizontal form;
+`TNLean.MPS.MPDO.CPSVFigureEight` gives the literal-CPSV counterpart.
 
 ## Main results
 

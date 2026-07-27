@@ -10,10 +10,10 @@ import TNLean.MPS.MPDO.FigureEightPairwise
 /-!
 # Figure 8 for literal CPSV canonical form
 
-The reflected marked-chain identity identifies the Gram-dressed chains of two vertical corners of
-one normal representative.  Lemma L for literal CPSV canonical form then gives equality of the two
-Gram-dressed tensors on the original horizontal bond space.  Normality of the representative makes
-the two Gram matrices positive real scalar multiples of one another.
+The reflected marked-chain identity identifies the Gram-dressed chains of two supplied vertical
+corners of one representative.  Lemma L for literal CPSV canonical form then gives equality of the
+two Gram-dressed tensors on the original horizontal bond space.  When the representative is normal,
+commutant rigidity makes the two Gram matrices positive real scalar multiples of one another.
 
 Inactive listed horizontal coordinates remain present throughout Lemma L; their contributions
 vanish only through their zero raw weights.
@@ -45,6 +45,10 @@ similarities by `X` and `Y`.  The reflected marked-chain identity makes their Gr
 chains equal.  Lemma L for the literal CPSV canonical form separates the corresponding physical
 linear marks, giving
 $X^\dagger X A^v (X^\dagger X)^{-1}=Y^\dagger Y A^v (Y^\dagger Y)^{-1}$.
+
+**Scope restriction (conditional corners):** The theorem assumes the two positive corner
+similarity equations; it does not construct the representative group or its corners.  See
+`docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex`.
 
 Source: arXiv:1606.00608, proof of Proposition 4.13, Figures 7--8 and lines 1909--1919. -/
 theorem gramDressing_eq_of_two_grouped_corners
@@ -102,6 +106,10 @@ theorem gramDressing_eq_of_two_grouped_corners
 
 If the common representative is normal, equality of the two Gram conjugations implies
 $X^\dagger X=\omega\,Y^\dagger Y$ for a real number $\omega>0$.
+
+**Scope restriction (conditional corners):** The theorem assumes the two positive corner
+similarity equations; it does not construct the representative group or its corners.  See
+`docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex`.
 
 Source: arXiv:1606.00608, proof of Proposition 4.13, equation `eq3:proof.IV.12` and lines
 1909--1921. -/
