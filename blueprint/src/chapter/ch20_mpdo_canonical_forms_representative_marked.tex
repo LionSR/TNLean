@@ -184,8 +184,8 @@
 \end{proof}
 
 % Source anchors: CPSV16 Appendix C.3, lines 1835--1858 and 1909--1919.
-\begin{theorem}[Full-coordinate marked trace bridge]
-    \label{thm:cpsv_full_coordinate_marked_trace_bridge}
+\begin{theorem}[Full-coordinate marked trace identity]
+    \label{thm:cpsv_full_coordinate_marked_trace_identity}
     \lean{MPSTensor.CPSVCanonicalFormData.ActiveBNTRefinement.%
         groupedMarkedBlocks}
     \lean{MPSTensor.CPSVCanonicalFormData.ActiveBNTRefinement.%
@@ -215,7 +215,7 @@
         \notag\\
         &=\sum_j\left(\sum_q\lambda_{j,q}^{|w|+1}\right)
           \tr\!\left(C_j^sC_j^w\right).
-        \label{eq:cpsv_full_coordinate_marked_trace_bridge}
+        \label{eq:cpsv_full_coordinate_marked_trace_identity}
     \end{align}
     The exponent $|w|+1$ includes the factor at the marked site. Inactive
     coordinates contribute zero.
@@ -230,7 +230,7 @@
     replace each active block by its unit-phase representative. The marked
     block supplies one factor $\lambda_{j,q}$ and the word supplies
     $|w|$ further factors. Summing first over $q$ gives
-    (\ref{eq:cpsv_full_coordinate_marked_trace_bridge}).
+    (\ref{eq:cpsv_full_coordinate_marked_trace_identity}).
 \end{proof}
 
 \begin{theorem}[Retained-coordinate representative-grouped Lemma L]
@@ -240,7 +240,7 @@
     \lean{MPSTensor.CPSVCanonicalFormData.ActiveBNTRefinement.%
         insertedTensor_representative_eq_of_firstSiteActionAgree}
     \leanok
-    \uses{thm:cpsv_full_coordinate_marked_trace_bridge,
+    \uses{thm:cpsv_full_coordinate_marked_trace_identity,
         thm:cpsv_active_representative_sector_decomposition,
         thm:representative_grouped_marked_separation,
         thm:representative_grouped_insert_eq}
@@ -265,11 +265,11 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:cpsv_full_coordinate_marked_trace_bridge,
+    \uses{thm:cpsv_full_coordinate_marked_trace_identity,
         thm:cpsv_active_representative_sector_decomposition,
         thm:representative_grouped_marked_separation,
         thm:representative_grouped_insert_eq}
-    Theorem~\ref{thm:cpsv_full_coordinate_marked_trace_bridge} changes
+    Theorem~\ref{thm:cpsv_full_coordinate_marked_trace_identity} rewrites
     (\ref{eq:cpsv_retained_marked_trace_agreement}) into marked-trace
     agreement for $P_{\mathrm{act}}$. Its representatives have eventual
     word-tuple separation, and every copy weight is nonzero. Theorem~\ref{thm:representative_grouped_marked_separation}

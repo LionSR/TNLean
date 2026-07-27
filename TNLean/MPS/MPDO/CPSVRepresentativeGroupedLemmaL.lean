@@ -230,7 +230,7 @@ private theorem trace_groupedMarkedTensor_mul_evalWord_eq_sum
     Matrix.trace_blockDiagonal']
   simp only [one_smul, Algebra.mul_smul_comm, Matrix.trace_smul, smul_eq_mul]
 
-/-- Exact closed-chain trace bridge from the full grouped marked tensor to the active
+/-- Exact closed-chain trace identity from the full grouped marked tensor to the active
 representative sector marked tensor.
 
 The mark supplies one factor `ν * ζ` and each tail site supplies another, so a copy contributes
