@@ -262,8 +262,8 @@ theorem posSemidef_fixedPoint_unique_of_irreducible
         (posSemidef_fixedPoint_isPosDef_of_irreducible A hIrr τ hτ_psd hτ_ne hτ_fix)
         hτ_not_pd
 
-/-- **Uniqueness** (Wolf Theorem 6.3(2), non-degeneracy): any two nonzero PSD
-fixed points of an injective transfer map are proportional. -/
+/-- **Uniqueness** (Wolf Theorem 6.3(2), non-degeneracy): any PSD fixed point
+of an injective transfer map is proportional to a given nonzero PSD fixed point. -/
 theorem posSemidef_fixedPoint_unique
     (A : MPSTensor d D) (hA : IsInjective A)
     (ρ σ : Matrix (Fin D) (Fin D) ℂ)

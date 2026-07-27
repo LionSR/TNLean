@@ -269,8 +269,7 @@ private theorem embedLocalOperator_groundBond_eq_one_sub {N : ℕ} (hN : 2 ≤ N
       intro hEq
       subst τ
       exact hστ (by simp [MPOTensor.AgreesOutsideWindow])
-    simp only [MPOTensor.embedLocalOperator_apply, hστ, if_false,
-      Matrix.sub_apply, Matrix.one_apply, hne, sub_zero]
+    simp [MPOTensor.embedLocalOperator_apply, hστ, hne]
 
 private theorem singleKrausMap_groundBond_eq_transformedGroundBond
     (F : BeigiSectorGraphData A) :
