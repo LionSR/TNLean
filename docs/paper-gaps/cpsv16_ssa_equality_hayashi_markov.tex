@@ -468,6 +468,27 @@ positive parameter.
 \leanid{Matrix.supportRelativeModular_resolvent_mulVec_eq_of_relativeEntropy_sum_eq}
 in
 \path{TNLean/Channel/Schwarz/SupportRelativeEntropyEquality.lean}.}
+This generic result is now specialized to the finite Weyl family produced by
+partial-trace saturation.  For the unweighted conjugates
+$A_g=U_g\rho U_g^\dagger$ and $B_g=U_g\sigma U_g^\dagger$, positive-scalar
+homogeneity on the support domain converts the weighted Jensen equality into
+\begin{align}
+  D\Bigl(\sum_gA_g\Bigm\Vert\sum_gB_g\Bigr)
+  =\sum_gD(A_g\Vert B_g).
+\end{align}
+Unitary conjugation transports the local kernel inclusions, while positivity
+of the summands transports them to the summed pair.  Hence the generic theorem
+gives the common projected relative-modular resolvent for every Weyl summand.
+At the zero Weyl index, the local pair is exactly $(\rho,\sigma)$.
+\footnote{Formal declarations:
+\leanid{Matrix.quantumRelativeEntropy_smul_support} in
+\path{TNLean/Analysis/RelativeEntropySupportIntegral.lean}, and
+\leanid{Matrix.weyl_supportRelativeModular_resolvent_mulVec_eq_of_partialTraceRight_eq}
+in
+\path{TNLean/Channel/Schwarz/WeylSupportRelativeEntropyEquality.lean}.}
+This is the analytic specialization required before the support
+square-root-ratio step.  It does not yet assert that ratio, the Petz sandwich,
+or recovery.
 Following this step, consider two positive semidefinite pairs $(A,B)$ and
 $(C,D)$.  Let $P_B$ be the support projection of the first reference matrix
 $B$, and write
@@ -523,8 +544,9 @@ every positive parameter.  Nonnegativity of the complex quadratic residuals
 makes their imaginary parts vanish, so the real equality yields the
 finite-family common projected resolvent theorem.  The kernel inclusion used
 for the unprojected source-$A$ inequality remains an exact hypothesis of this
-source-facing equality theorem.  What remains is to apply the resulting
-support functional-calculus identity through the singular Weyl
+source-facing equality theorem.  The finite-Weyl specialization now supplies
+the projected resolvent hypothesis for the support functional-calculus step.
+What remains is to carry its conclusion through the singular Weyl
 inverse-square-root sandwich and Petz-recovery argument.  Thus the singular
 Petz recovery identity is still unformalized.
 
@@ -583,10 +605,9 @@ of data processing:
 This is the forward implication of
 \cite[Theorem~3]{HaydenJozsaPetzWinter2004}.  The present proof of data
 processing establishes the inequality by regularization, unitary averaging,
-and joint convexity.  In the positive-definite case its equality analysis now
-reaches the common Weyl resolvent solution, the inverse-square-root sandwich,
-and raw Petz recovery.  What remains is to control the same passage on the
-supports of singular inputs.
+and joint convexity.  On singular supports its equality analysis now reaches
+the common projected Weyl resolvent.  What remains is the support
+inverse-square-root sandwich and raw Petz recovery.
 After this analytic implication, the proof of the block decomposition still
 requires the invariant-state decomposition used in
 \cite[Theorem~6]{HaydenJozsaPetzWinter2004}; that is the

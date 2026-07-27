@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.PosSemidefSupport
 import TNLean.Analysis.RelativeEntropyResolventIntegral
 
 /-!
@@ -15,6 +16,8 @@ so no nonintegrable unweighted zero-reference term is introduced.
 
 ## Main results
 
+* `quantumRelativeEntropy_smul_support` proves positive homogeneity on the
+  finite-relative-entropy support domain.
 * `supportRelativeEntropySpectralIntegrand` is the finite support-domain
   spectral integrand.
 * `supportRelativeEntropySpectralIntegrand_integrableOn_and_integral_eq_quantumRelativeEntropy`
@@ -108,6 +111,77 @@ theorem relativeEntropyScalar_mul_integrableOn_and_integral_of_nonneg
       rw [sub_zero, mul_right_comm a (Real.log a) w, haw, zero_mul]
 
 variable {n : Type*} [Fintype n] [DecidableEq n]
+
+open scoped Matrix.Norms.L2Operator in
+private theorem log_smul_posSemidef {A : Matrix n n ℂ}
+    (hA : A.PosSemidef) {c : ℝ} (hc : 0 < c) :
+    CFC.log (c • A) =
+      (Real.log c) • hA.isHermitian.supportProj + CFC.log A := by
+  let p : ℝ → ℝ := fun x ↦ if x ≠ 0 then 1 else 0
+  have hp : ContinuousOn p (spectrum ℝ A) :=
+    A.finite_real_spectrum.continuousOn p
+  have hlog : ContinuousOn Real.log (spectrum ℝ A) :=
+    A.finite_real_spectrum.continuousOn Real.log
+  have hlogScaled :
+      ContinuousOn Real.log ((c • ·) '' spectrum ℝ A) :=
+    (A.finite_real_spectrum.image (c • ·)).continuousOn Real.log
+  have hsupport : cfc p A = hA.isHermitian.supportProj := by
+    rw [hA.isHermitian.cfc_eq, Matrix.IsHermitian.cfc,
+      Unitary.conjStarAlgAut_apply]
+    simp only [Matrix.IsHermitian.supportProj, p, Function.comp_def]
+    congr 2
+    ext i j
+    simp [Matrix.diagonal_apply]
+  rw [CFC.log, CFC.log, ← cfc_comp_smul (p := IsSelfAdjoint) c Real.log A
+    hlogScaled hA.isHermitian.isSelfAdjoint, ← hsupport,
+    ← cfc_smul (p := IsSelfAdjoint) (Real.log c) p A hp,
+    ← cfc_add (p := IsSelfAdjoint) (a := A)
+      (fun x ↦ (Real.log c) • p x) Real.log
+      (hf := A.finite_real_spectrum.continuousOn _)
+      (hg := hlog)]
+  apply cfc_congr
+  intro x _
+  simp only [p, smul_eq_mul]
+  by_cases hx : x = 0
+  · simp [hx]
+  · rw [if_pos hx, Real.log_mul hc.ne' hx]
+    ring
+
+open scoped Matrix.Norms.L2Operator in
+/-- Simultaneous multiplication of two positive-semidefinite arguments by a
+positive scalar multiplies their relative entropy by the same scalar, provided
+the kernel of the second argument is contained in the kernel of the first.
+
+This auxiliary scaling identity is used to pass from the uniformly weighted
+finite Weyl family to its unweighted form. It is a consequence of the
+positive-semidefinite support convention used by Jenčová--Ruskai,
+arXiv:0903.2895v4, lines 717--720.
+
+The kernel condition is the finite-relative-entropy support condition. It makes
+the two support-projection terms in `log (cA) = (log c) P_A + log A` cancel. -/
+theorem quantumRelativeEntropy_smul_support {A B : Matrix n n ℂ}
+    (hA : A.PosSemidef) (hB : B.PosSemidef)
+    (hker : ∀ v : n → ℂ, B *ᵥ v = 0 → A *ᵥ v = 0)
+    {c : ℝ} (hc : 0 < c) :
+    quantumRelativeEntropy (c • A) (c • B) =
+      c * quantumRelativeEntropy A B := by
+  have hAPA : A * hA.isHermitian.supportProj = A :=
+    hA.isHermitian.mul_supportProj_self
+  have hAPB : A * hB.isHermitian.supportProj = A :=
+    hB.isHermitian.mul_supportProj_eq_self_of_mulVec_kernel_le hker
+  unfold quantumRelativeEntropy
+  rw [log_smul_posSemidef hA hc,
+    log_smul_posSemidef hB hc, smul_mul]
+  have hinside :
+      A * ((Real.log c) • hA.isHermitian.supportProj + CFC.log A -
+        ((Real.log c) • hB.isHermitian.supportProj + CFC.log B)) =
+        A * (CFC.log A - CFC.log B) := by
+    rw [Matrix.mul_sub, Matrix.mul_add, Matrix.mul_add,
+      Matrix.mul_smul, Matrix.mul_smul, hAPA, hAPB]
+    rw [Matrix.mul_sub]
+    abel
+  rw [hinside]
+  simp [Matrix.trace_smul]
 
 open scoped Matrix.Norms.L2Operator in
 /-- If the kernel of a positive-semidefinite reference matrix `B` is contained
