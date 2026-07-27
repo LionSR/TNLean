@@ -2,7 +2,7 @@
 # Schema: scripts/tenkz_rmp.py (load_verdicts).  Any status may be
 # recorded, including failure; the check rejects lies, never gaps.
 schema_version = 1
-campaign_sha256 = "7c95c25efa5238f1a7b4a150c4ab3631f076568cf17e2c80bc3485ae49c8502f"
+campaign_sha256 = "f86a55c5ca66dc40fa5237c32eecf8463826e8070547d6cb85710568bbc12346"
 
 [[verdict]]
 id = "rmp-ii-peps-projection"
@@ -406,10 +406,10 @@ status = "cosmetic-gap"
 pairing = "verified"
 pairing_by = "fable-structural-redraw-2026-07-27"
 defects = []
-case_sha256 = "f14cd361972a9a45073fa094d7dfffaa0f9d012e132c0b8f563c522e3d1ff488"
+case_sha256 = "93516fff17365be3dee7ccde3def372093f91c749244bd52064ff568e2122213"
 reviewed = "2026-07-27"
 renderer = "fable-structural-redraw-2026-07-27-200dpi"
-note = "the S_{alpha,g} metadata now names the two closed sandwich loops, R insertions, and lower-ket X_g actions at author-source y=-0.75"
+note = "the S_{alpha,g} case uses the supported ket-op-bra contraction order in a 180-degree frame, preserving the lower-ket X_g actions at author-source y=-0.75"
 
 [[verdict]]
 id = "rmp-iii-a-f-symbol"

@@ -5381,6 +5381,7 @@ code=label-pos|pos=\tl_to_str:N \l_tmpa_tl}
 % label band by construction (labels live at column abscissae).
 \dim_new:N \l__tenkz_cupx_dim   % common abscissa where the turn starts
 \dim_new:N \l__tenkz_cupry_dim  % vertical radius: half the pair's row gap
+\dim_new:N \l__tenkz_cuplabeldist_dim
 \tl_new:N \l__tenkz_cupmat_tl   % this cup's on-bend matrix (may be empty)
 
 \tl_new:N \l__tenkz_cupside_tl
@@ -5483,18 +5484,63 @@ code=label-pos|pos=\tl_to_str:N \l_tmpa_tl}
           { \dim_use:N \l__tenkz_y_dim }
           { tzcup\the\tenkz@pictureid-#1-#2 }
           { tensor }
-        \str_if_eq:nnTF {#1}{east}
+        % Flat keeps the historical dot-edge node anchors byte-for-byte.  A
+        % rotated picture cannot reuse page-east/page-west node anchors: map
+        % the centre-to-label displacement by the picture angle and use the
+        % audited external-label band, which clears the transformed dot hull.
+        \fp_compare:nNnTF {\l__tenkz_frame_picture_angle_tl} = {0}
           {
-            \__tenkz_render_labelnode:nnn { tn~label, anchor=west }
-              { ($(tzcup\the\tenkz@pictureid-#1-#2.east)
-                 +(\tenkz@dim{\tenkz@r@labelclear},0)$) }
-              { \tl_use:N \l__tenkz_cupmat_tl }
+            \str_if_eq:nnTF {#1}{east}
+              {
+                \__tenkz_render_labelnode:nnn { tn~label, anchor=west }
+                  { ($(tzcup\the\tenkz@pictureid-#1-#2.east)
+                     +(\tenkz@dim{\tenkz@r@labelclear},0)$) }
+                  { \tl_use:N \l__tenkz_cupmat_tl }
+              }
+              {
+                \__tenkz_render_labelnode:nnn { tn~label, anchor=east }
+                  { ($(tzcup\the\tenkz@pictureid-#1-#2.west)
+                     +(-\tenkz@dim{\tenkz@r@labelclear},0)$) }
+                  { \tl_use:N \l__tenkz_cupmat_tl }
+              }
           }
           {
-            \__tenkz_render_labelnode:nnn { tn~label, anchor=east }
-              { ($(tzcup\the\tenkz@pictureid-#1-#2.west)
-                 +(-\tenkz@dim{\tenkz@r@labelclear},0)$) }
-              { \tl_use:N \l__tenkz_cupmat_tl }
+            \dim_set:Nn \l__tenkz_cuplabeldist_dim
+              { \tenkz@dim{\tenkz@r@dotlabelband}
+                + \tenkz@wirewidth }
+            \str_if_eq:nnTF {#1}{east}
+              {
+                \__tenkz_render_labelnode:nnn
+                  { tn~label,
+                    anchor=\fp_eval:n
+                      { \l__tenkz_frame_picture_angle_tl + 180
+                        - 360 * floor(
+                            (\l__tenkz_frame_picture_angle_tl + 180) / 360) },
+                    xshift=\fp_to_dim:n
+                      { cosd(\l__tenkz_frame_picture_angle_tl)
+                        * \dim_to_fp:n{\l__tenkz_cuplabeldist_dim} },
+                    yshift=\fp_to_dim:n
+                      { sind(\l__tenkz_frame_picture_angle_tl)
+                        * \dim_to_fp:n{\l__tenkz_cuplabeldist_dim} } }
+                  { (tzcup\the\tenkz@pictureid-#1-#2.center) }
+                  { \tl_use:N \l__tenkz_cupmat_tl }
+              }
+              {
+                \__tenkz_render_labelnode:nnn
+                  { tn~label,
+                    anchor=\fp_eval:n
+                      { \l__tenkz_frame_picture_angle_tl
+                        - 360 * floor(
+                            \l__tenkz_frame_picture_angle_tl / 360) },
+                    xshift=\fp_to_dim:n
+                      { cosd(\l__tenkz_frame_picture_angle_tl + 180)
+                        * \dim_to_fp:n{\l__tenkz_cuplabeldist_dim} },
+                    yshift=\fp_to_dim:n
+                      { sind(\l__tenkz_frame_picture_angle_tl + 180)
+                        * \dim_to_fp:n{\l__tenkz_cuplabeldist_dim} } }
+                  { (tzcup\the\tenkz@pictureid-#1-#2.center) }
+                  { \tl_use:N \l__tenkz_cupmat_tl }
+              }
           }
       }
   }
