@@ -712,9 +712,7 @@
     \label{thm:cpsv_literal_pairwise_vertical_gram_conjugation}
     \lean{MPSTensor.IsCPSVCanonicalForm.gramDressing_eq_of_two_grouped_corners}
     \leanok
-    \uses{def:mpdo, def:cpsv_canonical_form,
-        thm:mpdo_reflected_marked_chain,
-        thm:cpsv_original_coordinate_marked_lemma_l}
+    \uses{def:mpdo, def:cpsv_canonical_form, def:vertical_tensor_mpdo}
     Let $M$ be an MPO tensor whose doubled-index MPS tensor is in the literal
     CPSV canonical form, and suppose that $M$ generates positive semidefinite
     operators on every nonempty chain. Let $A$ be a tensor, let $X$ and $Y$ be
@@ -762,8 +760,8 @@
     \label{thm:cpsv_literal_positive_relative_gram_scalar}
     \lean{MPSTensor.IsCPSVCanonicalForm.gram_eq_pos_smul_gram_of_two_grouped_corners}
     \leanok
-    \uses{thm:cpsv_literal_pairwise_vertical_gram_conjugation,
-        thm:normal_tensor_gram_rigidity}
+    \uses{def:mpdo, def:cpsv_canonical_form, def:vertical_tensor_mpdo,
+        def:normal}
     Let $M$ be an MPO tensor whose doubled-index MPS tensor is in the literal
     CPSV canonical form, and suppose that $M$ generates positive semidefinite
     operators on every nonempty chain. Let $A$ be normal, let $X$ and $Y$ be
