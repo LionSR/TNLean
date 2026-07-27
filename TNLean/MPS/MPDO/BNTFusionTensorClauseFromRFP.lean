@@ -17,8 +17,9 @@ CPSV16, Theorem 4.14, for an MPDO in normalized BNT-refined horizontal form.
 The transported one-site and two-site vertical forms give both representations
 of the blocked closed-chain operator.  Eventual linear independence of the BNT
 operators compares their coefficients, and the positive power-sum lemma gives
-the length-one trace-scalar identity.  The corresponding implication from the
-literal CPSV canonical form remains open; see
+the length-one trace-scalar identity.  The corresponding Theorem 4.14
+implication from the literal CPSV canonical form is not established here.
+Literal Proposition 4.13 is complete; see
 `docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex`.
 
 ## Main result

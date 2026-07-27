@@ -116,16 +116,15 @@ decomposition, not from flattening horizontal weights;
 \path{cpgsv17_vertical_diagonal_restriction.tex} records that diagonal
 restriction of horizontal blocks does not preserve normality.  Neither note
 documented the definitional mismatch addressed here: the former predicate
-placed the conclusion of Proposition~4.13 on the wrong tensor.  The
-horizontal-to-vertical implication is proved by
-\path{MPOTensor.verticalCF_of_horizontalCF} in
-\path{TNLean/MPS/MPDO/VerticalCanonicalForm.lean} under the normalized
-BNT-refined hypothesis \path{MPOTensor.IsHorizontalCF}.  This hypothesis has
-full horizontal bond dimension and BNT representative grouping; every copy
-weight is nonzero, all have modulus at most one, and at least one has modulus
-one.  It is strictly stronger than the literal CPSV
-canonical form assumed in Proposition~4.13, whose vertical conclusion remains
-open.  The blueprint records these as separate statements.
+placed the conclusion of Proposition~4.13 on the wrong tensor.  The literal
+horizontal-to-vertical implication is now proved by
+\path{MPOTensor.verticalCF_of_cpsvCanonicalForm} in
+\path{TNLean/MPS/MPDO/CPSVVerticalCanonicalForm.lean}.  It assumes the literal
+CPSV canonical form and MPDO positivity of Proposition~4.13.  The earlier
+theorem \path{MPOTensor.verticalCF_of_horizontalCF} in
+\path{TNLean/MPS/MPDO/VerticalCanonicalForm.lean} remains as a separate result
+under the stronger normalized BNT-refined hypothesis
+\path{MPOTensor.IsHorizontalCF}.
 
 \paragraph{Verdict.}
 This is a corrected definitional mismatch.  The former predicate placed the
@@ -139,10 +138,13 @@ definition.  The later correction in
 \path{cpgsv17_vertical_isometry_zero_sector.tex} expresses the source's
 one-sided condition as a coisometry onto the retained nonzero sectors and
 retains exact reconstruction.  The horizontal-to-vertical implication is
-proved with this corrected definition under the normalized BNT-refined
-hypothesis \path{MPOTensor.IsHorizontalCF}.  Since that hypothesis is strictly
-stronger than literal CPSV canonical form, the literal Proposition~4.13
-implication remains open.
+proved with this corrected definition under the literal CPSV canonical-form
+and MPDO hypotheses, and the stronger normalized BNT-refined theorem remains
+available separately.  The phase-class grouping and positive diagonal
+coefficients used in the proof are detailed in
+\path{cpgsv17_vertical_cf_grouping.tex}.  This completes Proposition~4.13 but
+does not prove the positive-fusion statement in Appendix~C.4 or the
+renormalization fixed-point characterization in Theorem~4.14.
 
 \bibliographystyle{alpha}
 \bibliography{references}
