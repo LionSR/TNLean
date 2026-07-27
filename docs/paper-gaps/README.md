@@ -119,10 +119,11 @@ For MPDO renormalization fixed points:
   globally for a positive-definite first factor. No factorization is claimed
   for TNLean's generic completed singular channel. Independently, the common
   invariant algebra of a finite jointly invariant family, its finite
-  realization by a single preserving operation, and the mean-ergodic
-  projection onto it are formalized under an explicit full-support hypothesis
-  on the common average. The family-level tensor-product state decomposition
-  and Koashi--Imoto/Hayashi channel-action theorem remain open.
+  realization by a single preserving operation, and a positive unital
+  idempotent projection onto it are formalized under an explicit full-support
+  hypothesis on the common average. The corresponding Heisenberg Ces\`aro
+  convergence identity, the family-level tensor-product state decomposition,
+  and the Koashi--Imoto/Hayashi channel-action theorem remain open.
 - `cpsv16_zcl_canonical_form_normalization.tex` records the corresponding
   normalization issue for mixed-state ZCL.
 

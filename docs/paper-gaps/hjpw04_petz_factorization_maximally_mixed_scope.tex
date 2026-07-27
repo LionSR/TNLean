@@ -194,10 +194,12 @@ characterization and the generic block form of a star-subalgebra specialized to
 $A_0$. Because all dimensions are finite, $A_0$ is additionally realized as a
 finite intersection $A_0=A_{F_1}\cap\dots\cap A_{F_M}$, and by a single
 preserving operation $F_0=(1/M)\sum_{\mu=1}^M F_\mu$ with $A_0=A_{F_0}$
-(lines 844--849). The mean-ergodic projection
-$P_0^*=\lim_{N\to\infty}(1/N)\sum_{n=1}^N(F_0^*)^n$ onto $A_0$ derived from
-$F_0^*$ (lines 838--851) is positive, unital, and idempotent, with range
-exactly $A_0$. The corresponding declarations are
+(lines 844--849). The trace-pairing adjoint of the Schr\"odinger mean-ergodic
+projection for $F_0$ is formalized as $P_0^*$. It is positive, unital, and
+idempotent, with range exactly $A_0$. HJPW writes this projection as the
+Ces\`aro limit of the Heisenberg iterates (lines 838--851); convergence of those
+adjoint averages to the packaged map is not yet formalized. The corresponding
+declarations are
 \begin{center}
   \small
   \leanid{Kraus.commonAverage}\\
@@ -243,17 +245,17 @@ positive-definite-left corollaries are formalized. The generic completed
 singular product-reference channel is outside this claim. The exact SSA
 specialization now proves HJPW equation (11), both for the identity-tensored
 raw support formula and for a completed local recovery channel on
-$\rho_{AB}$. Independently, the common invariant
- Heisenberg-picture star-subalgebra $A_0$ of a finite family of jointly
- invariant states, its membership characterization, its generic block form, its
- finite realization by a single preserving operation $F_0$, and the mean-ergodic
- projection $P_0^*$ onto it are formalized under an explicit full-support
- hypothesis on the common average, in place of HJPW's joint-support reduction.
- Singular-support equality-to-recovery is formalized on arbitrary finite product
- coordinates, including the completed channel on the supported marginal. The
- joint-support reduction itself, the family-level tensor-product state
- decomposition, and the Koashi--Imoto channel-action theorem remain open as
- separate later steps.
+$\rho_{AB}$. Singular-support equality-to-recovery is formalized on arbitrary
+finite product coordinates, including the completed channel on the supported
+marginal. Independently, the common invariant Heisenberg-picture star-subalgebra
+$A_0$ of a finite family of jointly invariant states, its membership
+characterization, its generic block form, its finite realization by a single
+preserving operation $F_0$, and the positive unital idempotent projection
+$P_0^*$ onto it are formalized under an explicit full-support hypothesis on the
+common average, in place of HJPW's joint-support reduction. The Heisenberg
+Ces\`aro convergence identity for $P_0^*$, the joint-support reduction itself,
+the family-level tensor-product state decomposition, and the Koashi--Imoto
+channel-action theorem remain open as separate later steps.
 
 \begin{thebibliography}{9}
 
