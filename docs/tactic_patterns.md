@@ -627,6 +627,23 @@ spectral split → block extraction → MPV calculation → strict bounds
   `NormalEdgeBlockingData.toThreeBlockGeometry` mirror-kill (see #4522), which would
   change the occurrence count before any promotion.
 
+### continuous nonnegative function with zero integral — candidate
+- **Pattern:** on the open positive half-line, turn pointwise nonnegativity into an
+  almost-everywhere inequality, use integrability and a zero integral to obtain
+  almost-everywhere vanishing, then use continuity and
+  `Measure.eqOn_open_of_ae_eq` to obtain pointwise vanishing.
+- **Seen:** 2 occurrences across 2 files:
+  `TNLean/Channel/Schwarz/WeylRelativeEntropyIntegral.lean` in
+  `weyl_sourceB_defect_eq_zero_of_gap_eq_zero`, and
+  `TNLean/Channel/Schwarz/SupportRelativeEntropyGap.lean` in
+  `supportSourceBDefect_eq_zero_of_relativeEntropy_sum_eq` (2026-07-27).
+- **Abstraction (proposed):** a measure-theoretic lemma taking `IntegrableOn f (Ioi 0)`,
+  `ContinuousOn f (Ioi 0)`, nonnegativity on `Ioi 0`, and zero restricted integral,
+  and returning `EqOn f 0 (Ioi 0)`.
+- **Notes:** Below the rule-of-three threshold. Keep the application-specific integrand
+  definitions and the subsequent arithmetic that isolates the source-\(B\) defect
+  outside the eventual helper.
+
 ---
 
 ## Rejected
