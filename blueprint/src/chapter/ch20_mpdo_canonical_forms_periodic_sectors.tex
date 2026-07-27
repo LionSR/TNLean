@@ -322,7 +322,7 @@
     projections.
 \end{proof}
 
-\begin{theorem}[Horizontal canonical form excludes vertical periodic sectors]
+\begin{theorem}[BNT-refined horizontal form excludes vertical periodic sectors]
     \label{thm:mpdo_vertical_no_periodic_vectors_horizontal_cf}
     \lean{MPOTensor.IsHorizontalCF.exists_not_commute_of_displaced}
     \lean{MPOTensor.hasNoPeriodicVectors_verticalTensor_of_horizontalCF}
@@ -333,11 +333,19 @@
         thm:mpdo_displaced_invariant_projector,
         thm:mpo_stacked_layers_power, thm:mpdo_first_site_invariant_comm,
         thm:psd_commute_of_commute_pow}
-    Let $M$ be in horizontal canonical form. If an idempotent $Q$ satisfies
+    Let $M$ be in normalized BNT-refined horizontal form. If an idempotent
+    $Q$ satisfies
     $Q\widetilde M\ne Q\widetilde MQ$, then for some $N\ge 0$,
     $Q_1H^{(N+1)}\ne H^{(N+1)}Q_1$.
     Consequently, if $M$ generates matrix product density operators, then
     $\widetilde M$ has no nontrivial periodic vectors.
+
+    \textbf{Scope restriction (BNT-refined horizontal form):}
+    the normalized BNT-refined horizontal hypothesis is stronger than the
+    literal CPSV canonical-form hypothesis.
+    % The literal periodic-sector conclusion remains part of the
+    % active-refinement and coisometry-transport gap recorded in
+    % docs/paper-gaps/cpgsv17_periodic_sector_projector.tex.
 \end{theorem}
 
 \begin{proof}
@@ -382,9 +390,10 @@
     \cite[Proposition~4.13]{Cirac2016MPDO_arXiv} assumes the tensor is in
     canonical form in the horizontal direction, and the argument of
     lines~1874--1887 turns all-length commutation of $Q_1$ with $H^{(N)}$
-    into the letter-level invariance $Q\widetilde M=Q\widetilde MQ$. The
-    literal transport through a horizontal canonical form is proved. This
+    into the letter-level invariance $Q\widetilde M=Q\widetilde MQ$. This
+    argument uses the normalized BNT-refined horizontal hypothesis. The
     all-length condition is a stronger auxiliary assumption than is needed
+    % The corresponding literal canonical-form transport remains open.
     for Theorem~\ref{thm:mpdo_vertical_no_periodic_vectors_horizontal_cf},
     which uses the single noncommuting length supplied by the contrapositive
     of Lemma~L.
@@ -468,5 +477,5 @@
     invariance that the displacement forbids.
 
     Theorem~\ref{thm:mpdo_vertical_no_periodic_vectors_horizontal_cf}
-    gives the corresponding result for a general horizontal canonical form.
+    gives the corresponding result for normalized BNT-refined horizontal form.
 \end{proof}

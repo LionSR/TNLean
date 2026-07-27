@@ -174,23 +174,32 @@
     \uses{def:horizontal_cf_mpdo, def:mpdo_vertical_loops,
         def:vertical_tensor_mpdo, thm:representative_one_sub_mp_zero,
         thm:cpsv_normal_mpv_phase_gauge}
-    Let $M$ be horizontally canonical and let $P$ be a matrix for which
+    Let $M$ be in normalized BNT-refined horizontal form and let $P$ be a
+    matrix for which
     $P\widetilde M_vP$ is nonzero for some vertical letter $v$. Then the
     first-site compression $P_1H^{(N+1)}P_1$ is nonzero for some $N$.
-    Under the same horizontal canonical-form hypothesis, suppose in addition
+    Under the same normalized BNT-refined horizontal-form hypothesis, suppose
+    in addition
     that $A$ is a normal tensor, $V$ is an isometry, and the compression by
     $V$ is a nonzero scalar multiple of an invertible conjugate of $A$. Then
     the range projector $VV^\dagger$ has a nonzero vertical corner and hence a
     nonzero first-site compression.
     This is the separation step used in
     \cite[Proposition~4.13, line 1898]{Cirac2016MPDO_arXiv}.
+
+    \textbf{Scope restriction (BNT-refined horizontal form):}
+    the normalized BNT-refined horizontal hypothesis is stronger than the
+    literal CPSV canonical-form hypothesis.
+    % The literal canonical-form version remains part of the missing Lemma-L
+    % and active-refinement step recorded in
+    % docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex.
 \end{theorem}
 
 \begin{proof}\leanok
     If every compression vanished, its matrix entries would say that the
     first-site insertion by $P$ has the same matrix product vectors as zero.
-    Lemma~L for the horizontal canonical form would then force the inserted
-    tensor itself to vanish, contrary to the assumed nonzero corner.
+    Lemma~L on the normalized BNT-refined horizontal form would then force the
+    inserted tensor itself to vanish, contrary to the assumed nonzero corner.
     For the range-projector specialization, normality supplies a nonzero
     letter of $A$. A nonzero scalar and an invertible conjugation preserve
     this letter. If every $VV^\dagger$ corner vanished, compressing by
@@ -353,7 +362,7 @@
     \uses{def:mpdo, def:horizontal_cf_mpdo,
         thm:mpdo_reflected_marked_chain,
         cor:horizontal_cf_linear_marked_separation}
-    Let $M$ be in horizontal canonical form and generate positive
+    Let $M$ be in normalized BNT-refined horizontal form and generate positive
     semidefinite operators on every nonempty chain. Suppose two vertical
     corners are positive scalar multiples of similarities of the same tensor
     $A$:
@@ -379,6 +388,11 @@
     the subsequent proportionality of the Gram matrices. This is the
     pairwise conclusion of Figures~7--8 in
     \cite[Proposition~4.13, lines~1909--1919]{Cirac2016MPDO_arXiv}.
+
+    \textbf{Scope restriction (BNT-refined horizontal form):}
+    the normalized BNT-refined horizontal hypothesis is stronger than the
+    literal CPSV canonical-form hypothesis.
+    % Scope tracking: docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex.
 \end{theorem}
 
 \begin{proof}
@@ -459,8 +473,8 @@
     \end{align}
     Hence any two gauges satisfying this conditional identity with the same
     target have equal Gram conjugations, and the ratio of their Gram matrices
-    commutes with $B$. This is a useful algebraic route from an abstract common
-    target to the relative identity in
+    commutes with $B$. This gives the relative identity from an abstract common
+    target in
     \cite[Proposition~4.13, lines 1909--1919]{Cirac2016MPDO_arXiv}.
     The reflected marked-chain argument in the source does not identify the
     target separately for either sector.
@@ -570,11 +584,11 @@
     \uses{thm:mpdo_grouped_sector_gram_conjugation,
         thm:eq3_of_dressed_adjoint,
         thm:mpdo_vertical_bnt_grouping_with_isometries}
-    In the grouped vertical decomposition of a horizontally canonical
-    matrix-product density operator, let $X_{\alpha,k}$ be the gauge of a
-    copy of the normal representative $M_\alpha$, with the distinguished
-    gauge fixed to $X_{\alpha,1}=\Id$. Then there is a positive real number
-    $\omega_{\alpha,k}$ such that
+    In the grouped vertical decomposition of a matrix-product density
+    operator in normalized BNT-refined horizontal form, let $X_{\alpha,k}$ be
+    the gauge of a copy of the normal representative $M_\alpha$. Fix the
+    distinguished gauge to $X_{\alpha,1}=\Id$. Then there is a positive real
+    number $\omega_{\alpha,k}$ such that
     \begin{align}
         X_{\alpha,k}^\dagger X_{\alpha,k}
         &=\omega_{\alpha,k}\Id,
@@ -585,6 +599,12 @@
     \end{align}
     and $U_{\alpha,k}$ is unitary. This is the normalization in
     \cite[Proposition~4.13, lines~1903--1921]{Cirac2016MPDO_arXiv}.
+
+    \textbf{Scope restriction (BNT-refined horizontal form):}
+    the normalized BNT-refined horizontal hypothesis is stronger than the
+    literal CPSV canonical-form hypothesis.
+    % The literal canonical-form refinement gap is recorded in
+    % docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex.
 \end{theorem}
 
 \begin{proof}

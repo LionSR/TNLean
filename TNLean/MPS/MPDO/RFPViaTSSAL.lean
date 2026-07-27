@@ -10,14 +10,17 @@ import TNLean.MPS.MPDO.RFPViaTSGlobal
 /-!
 # Saturation of the area law for MPDO renormalization fixed points
 
-This file proves Proposition `propsimple`: a horizontally canonical matrix
-product density operator satisfying the local renormalization fixed-point
-equations has source zero correlation length and saturates the area law.  The
+This file proves the normalized BNT-refined specialization of Proposition
+`propsimple`: a matrix product density operator in normalized BNT-refined
+horizontal form satisfying the local renormalization fixed-point equations has
+source zero correlation length and saturates the area law.  The
 SAL proof first establishes the two exact finite-chain identities obtained by
 transferring one site across a bipartition, applies mutual-information data
 processing in both directions, and then identifies bipartite mutual information
-with the chain quantity `I_L`.  Horizontal canonical form, positivity, and the
-fixed-point equations supply nonzero trace at every positive length; simplicity
+with the chain quantity `I_L`.  Normalized BNT-refined horizontal form,
+positivity, and the fixed-point equations supply nonzero trace at every positive
+length; this horizontal hypothesis is stronger than literal CPSV canonical form,
+and simplicity
 is not used in this implication.
 
 Source: arXiv:1606.00608, Appendix C, lines 1333--1341.  See
@@ -340,8 +343,8 @@ This is the conditional entropic conclusion of Appendix C.  It still does not
 assert Proposition `propsimple`, because identifying this flattened bipartite
 quantity with `mutualInfoChain` and assembling the positive-chain SAL statement
 remain separate steps.  The required nonzero trace follows separately from
-horizontal canonical form, the MPDO condition, and the renormalization maps;
-source simplicity is not used in this implication.
+normalized BNT-refined horizontal form, the MPDO condition, and the
+renormalization maps; source simplicity is not used in this implication.
 
 Source: arXiv:1606.00608, Definition 4.1 and Appendix C,
 lines 1333--1341.
@@ -379,15 +382,20 @@ private theorem mutualInformation_bipartition_eq_of_isRFPViaTS_of_right_eq
   exact mutualInformation_bipartition_eq_of_isRFPViaTS
     M hRFP N a b hIn hOut hM htr
 
-/-- A horizontally canonical matrix product density operator satisfying the
-local renormalization fixed-point equations saturates the area law.
+/-- A matrix product density operator in normalized BNT-refined horizontal
+form satisfying the local renormalization fixed-point equations saturates the
+area law.
+
+**Scope restriction (BNT-refined horizontal form):** The horizontal hypothesis
+`IsHorizontalCF` is stronger than the literal CPSV canonical form; see
+`docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex`.
 
 The two local channels transfer one site across a consecutive bipartition.
 Data processing in both directions gives equality of the bipartite mutual
 informations, and `mutualInfoChain_eq_mutualInformation` identifies these with
-the chain quantities `I_L` and `I_{L+1}`.  Horizontal canonical form,
-positivity, and the fixed-point equations give the nonzero trace required to
-normalize every positive-length ring.  No empty-chain condition is used.
+the chain quantities `I_L` and `I_{L+1}`.  Normalized BNT-refined horizontal
+form, positivity, and the fixed-point equations give the nonzero trace required
+to normalize every positive-length ring.  No empty-chain condition is used.
 
 Source: arXiv:1606.00608, Proposition `propsimple`, Appendix C,
 lines 1333--1341, under the canonical-form and density-operator standing
@@ -440,12 +448,17 @@ theorem isSAL_of_isRFPViaTS (M : MPOTensor d D)
       (mutualInfoChain_eq_mutualInformation M N₀ (a + 2)
         (hHalf.trans_le (Nat.div_le_self N₀ 2)) (hM N₀ hNpos)).symm
 
-/-- A horizontally canonical matrix product density operator satisfying the
-local renormalization fixed-point equations has zero correlation length and
-saturates the area law.
+/-- A matrix product density operator in normalized BNT-refined horizontal
+form satisfying the local renormalization fixed-point equations has zero
+correlation length and saturates the area law.
 
-This is Proposition `propsimple` of arXiv:1606.00608.  The nonzero
-physical-trace transfer required by source ZCL is derived from the nonzero
+**Scope restriction (BNT-refined horizontal form):** The horizontal hypothesis
+`IsHorizontalCF` is stronger than the literal CPSV canonical form; see
+`docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex`.
+
+Under this normalized BNT-refined horizontal hypothesis, the theorem specializes
+Proposition `propsimple` of arXiv:1606.00608. The nonzero physical-trace transfer
+required by source ZCL is derived from the nonzero
 one-site ring; it is not an additional hypothesis.
 
 Source: arXiv:1606.00608, Proposition `propsimple`, Appendix C,

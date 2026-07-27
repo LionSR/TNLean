@@ -462,9 +462,10 @@
     =I(\sigma^{(N)}_{a+2:b+1})$.
     This is the channel calculation in
     \cite[Appendix~C, lines~1333--1341]{Cirac2016MPDO_arXiv}. For the forward
-    implication of the source proposition, the required nonzero trace follows
-    from horizontal canonical form, the MPDO condition, and the renormalization
-    maps; simplicity is not used.
+    implication proved here, the required nonzero trace follows from normalized
+    BNT-refined horizontal form, the MPDO condition, and the renormalization
+    maps; simplicity is not used. This horizontal hypothesis is stronger than
+    literal CPSV canonical form.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -474,25 +475,27 @@
     mutual informations.
 \end{proof}
 
-\begin{lemma}[Nonvanishing of positive-length RFP rings]
+\begin{lemma}[Nonvanishing of positive-length BNT-refined RFP rings]
     \label{lem:mpdo_rfp_positive_length_trace_nonzero}
     \lean{MPOTensor.firstSiteMatrix_one,
       MPOTensor.trace_mpo_ne_zero_of_isHorizontalCF_isMPDO_isRFPViaTS}
     \leanok
     \uses{def:is_rfp_via_ts}
-    Let $M$ be horizontally canonical, generate positive semidefinite ring
-    operators, and satisfy the local renormalization fixed-point equations.
+    Let $M$ be in normalized BNT-refined horizontal form, generate positive
+    semidefinite ring operators, and satisfy the local renormalization
+    fixed-point equations. This horizontal hypothesis is stronger than literal
+    CPSV canonical form.
     Then $\tr\rho^{(N)}(M)\neq0$ for every $N\geq1$.
 \end{lemma}
 
 \begin{proof}\leanok
-    Horizontal canonical form gives a nonzero sector compression for one
-    positive length. Positivity makes its trace nonzero. The fixed-point
+    Normalized BNT-refined horizontal form gives a nonzero sector compression
+    for one positive length. Positivity makes its trace nonzero. The fixed-point
     equations make the physical-trace transfer idempotent, so the trace of its
     positive powers is independent of the positive exponent.
 \end{proof}
 
-\begin{theorem}[Renormalization fixed points saturate the area law]
+\begin{theorem}[BNT-refined renormalization fixed points saturate the area law]
     \label{thm:mpdo_rfp_implies_sal}
     \lean{MPOTensor.isSAL_of_isRFPViaTS}
     \leanok
@@ -500,14 +503,16 @@
       lem:mpdo_rfp_transfer_across_cut,
       thm:mpdo_rfp_split_mutual_information_eq,
       lem:mpdo_rfp_positive_length_trace_nonzero}
-    Let $M$ be a horizontally canonical matrix product density operator which
-    satisfies the local renormalization fixed-point equations of
-    Definition~4.1. Then $M$ saturates the area law:
+    Let $M$ be a matrix product density operator in normalized BNT-refined
+    horizontal form which satisfies the local renormalization fixed-point
+    equations of Definition~4.1. This horizontal hypothesis is stronger than
+    literal CPSV canonical form. Then $M$ saturates the area law:
     $I_L(M)=I_{L+1}(M)$ whenever
     $1\leq L<\lfloor N/2\rfloor$.
-    This is the forward implication of Proposition~\texttt{propsimple} in
-    Appendix~C of \cite{Cirac2016MPDO_arXiv}. Simplicity is among the ambient
-    hypotheses of Theorem~4.9 but is not used in this implication.
+    This is the normalized BNT-refined specialization of the forward
+    implication of Proposition~\texttt{propsimple} in Appendix~C of
+    \cite{Cirac2016MPDO_arXiv}. Simplicity is among the ambient hypotheses of
+    Theorem~4.9 but is not used in this implication.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -518,17 +523,19 @@
     the normalization at every positive chain length.
 \end{proof}
 
-\begin{theorem}[Renormalization fixed points have ZCL and SAL]
+\begin{theorem}[BNT-refined renormalization fixed points have ZCL and SAL]
     \label{thm:mpdo_rfp_implies_zcl_and_sal}
     \lean{MPOTensor.isSourceZCL_and_isSAL_of_isRFPViaTS}
     \leanok
     \uses{thm:rfp_via_ts_source_zcl,
       lem:mpdo_rfp_positive_length_trace_nonzero,
       thm:mpdo_rfp_implies_sal}
-    Let $M$ be a horizontally canonical matrix product density operator which
-    satisfies the local renormalization fixed-point equations of
-    Definition~4.1. Then $M$ has source zero correlation length and saturates
-    the area law. This is Proposition~\texttt{propsimple} in Appendix~C of
+    Let $M$ be a matrix product density operator in normalized BNT-refined
+    horizontal form which satisfies the local renormalization fixed-point
+    equations of Definition~4.1. This horizontal hypothesis is stronger than
+    literal CPSV canonical form. Then $M$ has source zero correlation length
+    and saturates the area law. This is the normalized-BNT-refined
+    specialization of Proposition~\texttt{propsimple} in Appendix~C of
     \cite{Cirac2016MPDO_arXiv}, lines~1333--1341.
 \end{theorem}
 

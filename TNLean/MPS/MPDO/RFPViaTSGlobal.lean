@@ -40,9 +40,9 @@ source argument are recorded in
   the localized maps respectively insert and remove one tensor in every periodic MPO.
 * `MPOTensor.exists_global_renormalization_maps`: a renormalization fixed point
   supplies localized channels with the global physical-closure identities.
-* `MPOTensor.trace_mpo_ne_zero_of_isHorizontalCF_isMPDO_isRFPViaTS`: a
-  horizontally canonical MPDO satisfying Definition 4.1 has nonzero trace at
-  every positive chain length.
+* `MPOTensor.trace_mpo_ne_zero_of_isHorizontalCF_isMPDO_isRFPViaTS`: an MPDO
+  in normalized BNT-refined horizontal form satisfying Definition 4.1 has
+  nonzero trace at every positive chain length.
 
 ## References
 
@@ -244,8 +244,12 @@ theorem exists_global_renormalization_maps (M : MPOTensor d D)
   exact ⟨S, T, hS, hT, coarsenFirstTwoSites_physCloseN M S hSclose,
     refineFirstSite_physCloseN M T hTclose⟩
 
-/-- A horizontally canonical MPDO satisfying Definition 4.1 has nonzero trace
-at every positive chain length.
+/-- An MPDO in normalized BNT-refined horizontal form satisfying Definition
+4.1 has nonzero trace at every positive chain length.
+
+**Scope restriction (BNT-refined horizontal form):** The horizontal hypothesis
+`IsHorizontalCF` is stronger than the literal CPSV canonical form; see
+`docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex`.
 
 The BNT representation supplies one sufficiently long nonzero density
 operator. Positivity makes its trace nonzero. Definition 4.1 makes the
