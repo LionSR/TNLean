@@ -52,15 +52,15 @@ abstracted — record why, so it is not re-proposed).
 - **Pattern:** extract the two doubled-index matrix entries from
   `P₁ H = P₁ H P₁` and `P₁ H = H P₁`, rewrite them as first-site action identities,
   and compose through the common left action.
-- **Seen:** duplicated in the BNT-basis and representative-level invariant-projection
-  proofs in `InvariantProjection.lean` and `HorizontalBNT.lean`; the literal CPSV
-  original-space proof requires the same identity.
+- **Seen:** formerly handwritten in the BNT-basis and per-block proofs in
+  `InvariantProjection.lean` and the representative proof in `HorizontalBNT.lean`; the
+  literal CPSV original-space invariant proof uses the same identity.
 - **Abstraction:**
   `MPOTensor.firstSiteActionAgree_braRight_ketLeftBraRight_of_invariant` in
   `TNLean/MPS/MPDO/InvariantProjection.lean`.
 - **Notes:** the abstraction concludes the physical positive-length identity before any
-  canonical-form separation. Both older callers and the literal CPSV caller now supply it to
-  their respective forms of Lemma L.
+  canonical-form separation. The BNT-basis, representative, per-block, and literal CPSV
+  original-space callers now supply it to their respective forms of Lemma L.
 
 ### peps_prod_entry_congr — promoted
 - **Pattern:** product congruence followed by component-function extensionality:

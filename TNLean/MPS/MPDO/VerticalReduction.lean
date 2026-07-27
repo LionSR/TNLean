@@ -24,7 +24,11 @@ normalization or grouping into a basis of normal tensors is asserted here.
 
 * `MPOTensor.IsHorizontalCF.hasInvariantProjectorClosure_verticalTensor`:
   every one-sided invariant orthogonal projection of the vertically viewed
-  tensor is reducing.
+  tensor is reducing under normalized BNT-refined horizontal form.
+* `ActiveBNTRefinement.hasInvariantProjectorClosure_verticalTensor`: the same
+  closure from explicit literal-CF data and its active BNT refinement.
+* `MPSTensor.IsCPSVCanonicalForm.hasInvariantProjectorClosure_verticalTensor`:
+  the predicate-level literal-CF conclusion.
 * `MPOTensor.IsHorizontalCF.exists_irreducible_verticalBlockDecomp_with_isometry`:
   the physical space splits into complete orthogonal irreducible reducing
   sectors for the vertically viewed tensor.

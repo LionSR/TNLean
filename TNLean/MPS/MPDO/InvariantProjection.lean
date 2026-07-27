@@ -241,26 +241,9 @@ theorem blockwise_braRight_eq_ketLeftBraRight_of_invariant
     (hPM : M.ketLeftMul P = (M.ketLeftMul P).braRightMul P) :
     ∀ k, MPSTensor.insertedTensor (MPSTensor.braRightAction P) (A k) =
       MPSTensor.insertedTensor (MPSTensor.ketLeftBraRightAction P) (A k) := by
-  refine blockwise_opposite_insert_eq_of_rotated_mpo_entries M A hCF hM P ?_ ?_
-  · intro N ρ
-    have h := firstSiteMatrix_mul_mpo_of_ketLeftMul_invariant M P hPM N
-    have h2 := Matrix.ext_iff.mpr h
-      (Fin.cons (ρ 0).divNat fun n => (ρ (Fin.succ n)).divNat)
-      (Fin.cons (ρ 0).modNat fun n => (ρ (Fin.succ n)).modNat)
-    rw [mul_firstSiteMatrix_apply] at h2
-    simp only [firstSiteMatrix_mul_apply] at h2
-    simp only [Fin.cons_zero, Function.comp_def, Fin.cons_succ] at h2
-    rw [h2]
-    simp only [Finset.sum_mul]
-    exact Finset.sum_comm
-  · intro N ρ
-    have h := firstSiteMatrix_mul_mpo_comm M hMpdo hP hPM N
-    have h2 := Matrix.ext_iff.mpr h
-      (Fin.cons (ρ 0).divNat fun n => (ρ (Fin.succ n)).divNat)
-      (Fin.cons (ρ 0).modNat fun n => (ρ (Fin.succ n)).modNat)
-    rw [mul_firstSiteMatrix_apply, firstSiteMatrix_mul_apply] at h2
-    simp only [Fin.cons_zero, Function.comp_def, Fin.cons_succ] at h2
-    exact h2
+  apply blockwise_insert_eq_of_mpv_agree A hCF
+  exact (firstSiteActionAgree_braRight_ketLeftBraRight_of_invariant M hMpdo hP hPM).of_sameMPVPos
+    hM
 
 /-- **Commutation at a two-site chain forces letter-level invariance, for a
 single-letter injective tensor.**
