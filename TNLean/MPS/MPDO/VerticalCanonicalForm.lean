@@ -43,13 +43,9 @@ then combine to give the vertical coisometry.
 
 **Scope restriction (BNT-refined horizontal form):** `IsHorizontalCF` is
 stronger than the literal CPSV canonical form assumed by Proposition 4.13.
-For literal canonical form, the listed-gauge and ambient-coisometry identities,
-Lemma L on the original bond space, and invariant-projector closure are now
-proved.  The remaining implication requires the physical Figure-8 Gram
-proportionality and conjugation identity, followed by the final vertical
-canonical-form grouping through a coisometry; see
-`docs/paper-gaps/cpgsv17_vertical_isometry_zero_sector.tex` and
-`docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex`.
+The source-faithful literal implication is proved independently by
+`verticalCF_of_cpsvCanonicalForm`; this theorem retains the stronger horizontal
+interface for its existing consumers.
 
 Source: arXiv:1606.00608, Proposition 4.13, lines 1863--1921. -/
 theorem verticalCF_of_horizontalCF (M : MPOTensor d D)
