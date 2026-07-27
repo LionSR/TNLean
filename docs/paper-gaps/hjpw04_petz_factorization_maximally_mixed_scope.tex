@@ -173,8 +173,8 @@ strong-subadditivity equality assumption used in the CPSV16 argument.
 
 \section{Common invariant algebra: formalized under an explicit full-support hypothesis}
 
-A first slice of the operator-algebraic Koashi--Imoto appendix (HJPW, Appendix A,
-lines 755--855) is now formalized independently of the product-reference
+A slice of the operator-algebraic Koashi--Imoto appendix (HJPW, Appendix A,
+lines 755--851) is now formalized independently of the product-reference
 recovery step above. For a finite, nonempty family of states $\rho_1,\dots,\rho_K$,
 the set
 \begin{align}
@@ -191,7 +191,13 @@ common invariant algebra
 (line 843) is formalized as the intersection, over every such $F$, of the
 fixed-point $*$-subalgebra of the adjoint map -- together with its membership
 characterization and the generic block form of a star-subalgebra specialized to
-$A_0$. The corresponding declarations are
+$A_0$. Because all dimensions are finite, $A_0$ is additionally realized as a
+finite intersection $A_0=A_{F_1}\cap\dots\cap A_{F_M}$, and by a single
+preserving operation $F_0=(1/M)\sum_{\mu=1}^M F_\mu$ with $A_0=A_{F_0}$
+(lines 844--849). The mean-ergodic projection
+$P_0^*=\lim_{N\to\infty}(1/N)\sum_{n=1}^N(F_0^*)^n$ onto $A_0$ derived from
+$F_0^*$ (lines 838--851) is positive, unital, and idempotent, with range
+exactly $A_0$. The corresponding declarations are
 \begin{center}
   \small
   \leanid{Kraus.commonAverage}\\
@@ -200,9 +206,21 @@ $A_0$. The corresponding declarations are
   \leanid{Kraus.map_commonAverage_of_isPreserving}\\
   \leanid{Kraus.commonInvariantStarSubalgebra}\\
   \leanid{Kraus.mem_commonInvariantStarSubalgebra}\\
-  \leanid{Kraus.exists_unitary_conj_blockDiagonal_iff_commonInvariantStarSubalgebra}
+  \leanid{Kraus.exists_unitary_conj_blockDiagonal_iff_commonInvariantStarSubalgebra}\\
+  \leanid{Kraus.exists_finset_preservingKrausFamily_iInf_eq}\\
+  \leanid{Kraus.averagedPreservingKrausFamily}\\
+  \leanid{Kraus.exists_preservingKrausFamily_adjointFixedPointsStarSubalgebra_eq}\\
+  \leanid{Kraus.commonInvariantMeanErgodicProjection}\\
+  \leanid{Kraus.commonInvariantMeanErgodicProjection_isPositiveMap}\\
+  \leanid{Kraus.commonInvariantMeanErgodicProjection_one}\\
+  \leanid{Kraus.commonInvariantMeanErgodicProjection_idempotent}\\
+  \leanid{Kraus.mem_range_commonInvariantMeanErgodicProjection_iff}
 \end{center}
-in \doclink{TNLean/Channel/KoashiImoto/CommonInvariantAlgebra}.
+in \doclink{TNLean/Channel/KoashiImoto/CommonInvariantAlgebra},
+\doclink{TNLean/Channel/KoashiImoto/FiniteRealization},
+\doclink{TNLean/Channel/KoashiImoto/PooledKrausFamily},
+\doclink{TNLean/Channel/KoashiImoto/SingleWitness}, and
+\doclink{TNLean/Channel/KoashiImoto/MeanErgodicProjection}.
 
 HJPW's argument reduces to the case where the common average
 $(1/K)\sum_k\rho_k$ has full support, by shrinking the working Hilbert space to
@@ -210,9 +228,7 @@ the joint support of the $\rho_k$ (lines 761--763). That reduction is not
 derived here: every declaration that builds $A_0$ instead takes positive
 definiteness of the common average as an explicit hypothesis. Beyond this
 scope restriction, none of the following are claimed: the joint-support
-reduction itself; the finite realization $A_0=A_{F_1}\cap\dots\cap A_{F_M}$
-or the single witness $F_0$ with $A_0=A_{F_0}$ (lines 844--847); the
-associated tensor-product state decomposition
+reduction itself; the associated tensor-product state decomposition
 $\rho_k=\bigoplus_j q_{j|k}\rho_{j|k}\otimes\omega_j$; the middle-system
 block channel action on the summands; or elimination of the Hayashi
 strong-subadditivity forward-implication axiom. These remain the open
@@ -228,15 +244,16 @@ singular product-reference channel is outside this claim. The exact SSA
 specialization now proves HJPW equation (11), both for the identity-tensored
 raw support formula and for a completed local recovery channel on
 $\rho_{AB}$. Independently, the common invariant
-Heisenberg-picture star-subalgebra $A_0$ of a finite family of jointly
-invariant states, its membership characterization, and its generic block form
-are formalized under an explicit full-support hypothesis on the common
-average, in place of HJPW's joint-support reduction. Singular-support
-equality-to-recovery is formalized on arbitrary finite product coordinates,
-including the completed channel on the supported marginal. The joint-support
-reduction itself, the finite realization of $A_0$ by a single witness $F_0$,
-the family-level tensor-product state decomposition, and the Koashi--Imoto
-channel-action theorem remain open as separate later steps.
+ Heisenberg-picture star-subalgebra $A_0$ of a finite family of jointly
+ invariant states, its membership characterization, its generic block form, its
+ finite realization by a single preserving operation $F_0$, and the mean-ergodic
+ projection $P_0^*$ onto it are formalized under an explicit full-support
+ hypothesis on the common average, in place of HJPW's joint-support reduction.
+ Singular-support equality-to-recovery is formalized on arbitrary finite product
+ coordinates, including the completed channel on the supported marginal. The
+ joint-support reduction itself, the family-level tensor-product state
+ decomposition, and the Koashi--Imoto channel-action theorem remain open as
+ separate later steps.
 
 \begin{thebibliography}{9}
 

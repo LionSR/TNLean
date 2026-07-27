@@ -1346,6 +1346,92 @@ algebra of a family of jointly invariant states.
     Theorem~\ref{thm:starSubalgebra_unitary_block_diagonal_iff} to $S=A_0$.
 \end{proof}
 
+\begin{theorem}[Finite realization of the common invariant algebra]
+    \label{thm:koashi_imoto_finite_realization}
+    \lean{Kraus.exists_finset_preservingKrausFamily_iInf_eq}
+    \leanok
+    \uses{def:koashi_imoto_common_invariant_algebra}
+    Under the hypotheses of Definition~\ref{def:koashi_imoto_common_invariant_algebra},
+    there are finitely many operations $F_1,\ldots,F_M\in\mathbf F$, $M\ge1$, with
+    \begin{align}
+        A_0=A_{F_1}\cap\cdots\cap A_{F_M}.
+        \notag
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Because $\MN{D}$ is finite-dimensional, among the finite intersections
+    $\bigcap_{F\in S}A_F$ over finite sets $S\subseteq\mathbf F$ containing a
+    fixed operation, one of minimal dimension already equals $A_0$: enlarging
+    $S$ by one more operation either leaves the intersection unchanged or
+    strictly decreases its dimension, and dimension cannot decrease
+    indefinitely.
+\end{proof}
+
+\begin{theorem}[A single operation realizes the common invariant algebra]
+    \label{thm:koashi_imoto_single_witness}
+    \lean{Kraus.exists_preservingKrausFamily_adjointFixedPointsStarSubalgebra_eq}
+    \leanok
+    \uses{thm:koashi_imoto_finite_realization}
+    Under the hypotheses of Definition~\ref{def:koashi_imoto_common_invariant_algebra},
+    there is $F_0\in\mathbf F$ with $A_0=A_{F_0}$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:koashi_imoto_finite_realization}
+    Take $F_1,\ldots,F_M\in\mathbf F$ as in
+    Theorem~\ref{thm:koashi_imoto_finite_realization} and pool their Kraus
+    operators, each rescaled by $1/\sqrt M$, into a single Kraus family
+    representing
+    \begin{align}
+        F_0=\frac1M\sum_{\mu=1}^M F_\mu.
+        \notag
+    \end{align}
+    Rescaling every pooled Kraus operator by $1/\sqrt M$ turns the sum of the
+    $M$ trace-preservation identities into a single one, so $F_0\in\mathbf F$;
+    rescaling a Kraus operator by a nonzero scalar does not change the
+    operators it commutes with, so $A_{F_0}=A_{F_1}\cap\cdots\cap A_{F_M}=A_0$.
+\end{proof}
+
+\begin{definition}[The projection onto the common invariant algebra]
+    \label{def:koashi_imoto_mean_ergodic_projection}
+    \lean{Kraus.commonInvariantMeanErgodicProjection}
+    \leanok
+    \uses{thm:koashi_imoto_single_witness,
+        thm:positive_unital_adjoint_mean_ergodic_retraction}
+    Fix $F_0\in\mathbf F$ with $A_0=A_{F_0}$ as in
+    Theorem~\ref{thm:koashi_imoto_single_witness}. The Ces\`aro averages of
+    the iterates of $F_0^*$ converge, and $P_0^*$ denotes their limit,
+    \begin{align}
+        P_0^*
+        &=\lim_{N\to\infty}\frac1N\sum_{n=1}^N(F_0^*)^n.
+        \notag
+    \end{align}
+\end{definition}
+
+\begin{theorem}[The projection onto $A_0$]
+    \label{thm:koashi_imoto_mean_ergodic_projection_properties}
+    \lean{Kraus.commonInvariantMeanErgodicProjection_isPositiveMap,
+        Kraus.commonInvariantMeanErgodicProjection_one,
+        Kraus.commonInvariantMeanErgodicProjection_idempotent,
+        Kraus.mem_range_commonInvariantMeanErgodicProjection_iff}
+    \leanok
+    \uses{def:koashi_imoto_mean_ergodic_projection}
+    The map $P_0^*$ is positive, unital, and idempotent, and its range is
+    exactly $A_0$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:koashi_imoto_mean_ergodic_projection,
+        thm:positive_unital_adjoint_mean_ergodic_retraction}
+    Theorem~\ref{thm:positive_unital_adjoint_mean_ergodic_retraction} applied
+    to $F_0$ gives that $P_0^*$ is positive, unital, and idempotent, with
+    range equal to the fixed-point set of $F_0^*$, which is $A_{F_0}=A_0$.
+\end{proof}
+
 \begin{theorem}[Hayashi SSA-equality characterization]
     \label{thm:hayashi_ssa_equality_characterization}
     \lean{hayashi_ssa_equality_characterization}
@@ -1369,17 +1455,19 @@ algebra of a family of jointly invariant states.
     Theorems~\ref{thm:entropy_petz_product_tensor} and
     \ref{thm:entropy_petz_product_tensor_corollaries}. The singular-support
     equality-to-recovery theorem remains separate. Independently, the common
-    invariant algebra and its block form (Definition~%
-    \ref{def:koashi_imoto_common_invariant_algebra} and
-    Theorem~\ref{thm:koashi_imoto_common_invariant_algebra_block_form}) supply
-    the finite-dimensional operator-algebraic first step of the
-    Koashi--Imoto argument, under an explicit full-support hypothesis on the
-    common average in place of the joint-support reduction. The finite
-    realization of that intersection by a single preserving operation, the
-    resulting family-level tensor-product state decomposition, and the action
-    of the middle-system channel on the common direct-sum factors all remain
-    open. This forward implication therefore remains axiomatic. The
-    biconditional combines the two directions.
+    invariant algebra, its block form, its finite realization by a single
+    preserving operation, and the projection onto it (Definition~%
+    \ref{def:koashi_imoto_common_invariant_algebra},
+    Theorem~\ref{thm:koashi_imoto_common_invariant_algebra_block_form},
+    Theorem~\ref{thm:koashi_imoto_single_witness}, and
+    Definition~\ref{def:koashi_imoto_mean_ergodic_projection}) supply the
+    finite-dimensional operator-algebraic core of the Koashi--Imoto argument,
+    under an explicit full-support hypothesis on the common average in place
+    of the joint-support reduction. The resulting family-level
+    tensor-product state decomposition and the action of the middle-system
+    channel on the common direct-sum factors remain open. This forward
+    implication therefore remains axiomatic. The biconditional combines the
+    two directions.
 
     This equality criterion is cited here as an input for the later MPDO arguments.
     It is the equality criterion needed by Appendix~C of arXiv:1606.00608.
