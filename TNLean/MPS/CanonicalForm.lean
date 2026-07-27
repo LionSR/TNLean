@@ -8,6 +8,7 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.MPS.CanonicalForm
 
+import TNLean.MPS.CanonicalForm.ActiveBNTRefinement
 import TNLean.MPS.CanonicalForm.BNTCharacterization
 import TNLean.MPS.CanonicalForm.BNTExistence
 import TNLean.MPS.CanonicalForm.BNTGrouping
