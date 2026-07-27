@@ -30,10 +30,24 @@ that proposition, the tensor has the form
 where each $\mu_\alpha$ is positive and diagonal and the tensors
 $M_\alpha$ form a basis of normal tensors.  Here $\widetilde M$ is the tensor
 viewed in the vertical direction, with letters indexed by the horizontal bond
-pair and matrices acting on the physical space; the formal vertical
-canonical-form statement is placed on exactly this tensor, in the isometry
-form \eqref{eq:source-vertical-form}, as recorded in
-\path{cpgsv17_vertical_tensor_definition.tex}.
+pair and matrices acting on the physical space. In the rectangular orientation
+of this display, $U$ maps the physical space onto the retained sector space and
+therefore satisfies
+\begin{equation}
+  UU^\dagger=I.
+  \label{eq:source-coisometry}
+\end{equation}
+The exact vertical canonical-form statement also contains the reverse identity
+\begin{equation}
+  \widetilde M
+  =U^\dagger\left(\bigoplus_\alpha \mu_\alpha\otimes M_\alpha\right)U.
+  \label{eq:source-vertical-reconstruction}
+\end{equation}
+The source calls $U$ an isometry and prints only
+\eqref{eq:source-vertical-form}; the orientation
+\eqref{eq:source-coisometry} and reverse reconstruction
+\eqref{eq:source-vertical-reconstruction} are the source-faithful rectangular
+form recorded in \path{cpgsv17_vertical_tensor_definition.tex}.
 
 The proof has a definite order.  It first uses positivity of the generated
 operators and Lemma~L to exclude one-sided transitions and nontrivial periodic
@@ -100,21 +114,17 @@ used in the source declaration.
 
 \section{Boundary of the present result}
 
-The results described below assume the normalized BNT-refined horizontal form
-\path{MPOTensor.IsHorizontalCF}: the retained sectors fill the horizontal bond
-space, every repeated-copy weight is nonzero, all copy weights have modulus at
-most one, at least one has modulus one, and the normal blocks are already
-grouped over BNT representatives.  This is strictly stronger than the
-literal CPSV canonical form of Proposition~4.13, which allows an omitted zero
-complement and does not
-include this normalized representative grouping.  Thus the full vertical
-canonical-form conclusion below is proved under the stronger horizontal
-hypothesis.  Under literal CPSV canonical form, periodic exclusion, the normal
-vertical block decomposition, finite-chain separation of every nonzero
-vertical corner, and vertical phase-class grouping with positive effective
-coefficients, actual-grouped Figure~8, and unitary normalization of the grouped
-gauges are now complete.  Construction of the normalized physical sector maps
-and the final coisometry remain open.
+The normalized BNT-refined horizontal form
+\path{MPOTensor.IsHorizontalCF} is strictly stronger than the literal CPSV
+canonical form of Proposition~4.13: its retained sectors fill the horizontal
+bond space, every repeated-copy weight is nonzero, and its normal blocks are
+already grouped over BNT representatives.  The stronger horizontal theorem is
+preserved, but the literal implication is now proved independently.  Under
+literal CPSV canonical form, periodic exclusion, the normal vertical block
+decomposition, finite-chain separation, vertical phase-class grouping with
+positive effective coefficients, actual-grouped Figure~8, unitary gauge
+normalization, normalized physical sector maps, and the final rectangular
+coisometry are all complete.
 
 An earlier auxiliary route compared one scalar weight $\mu_\alpha$ with
 several weights $\omega_{\alpha,j}$ under the additional identities
@@ -185,10 +195,10 @@ pairwise orthogonal isometries $V_k$ satisfying
   \widetilde M_v&=\sum_kV_k(\nu_kB_k^v)V_k^\dagger.
   \label{eq:literal-normal-corners}
 \end{align}
-The omitted orthogonal complement is an all-zero sector.  This theorem does
-not partition the $B_k$ into gauge-equivalent representative families and
-does not produce the positive diagonal multiplicities or final coisometry of
-Proposition~4.13.
+The omitted orthogonal complement is an all-zero sector.  This theorem alone
+does not partition the $B_k$ into gauge-equivalent representative families;
+the subsequent grouping, normalization, and
+coisometry results complete Proposition~4.13.
 
 The literal sector-compression separation is also complete in
 \path{MPSTensor.IsCPSVCanonicalForm.%
@@ -229,10 +239,9 @@ some finite length.  The MPDO trace argument then proves that every grouped
 coefficient is positive.  This is the phase-class decomposition and positivity
 argument of source lines~1898--1902, obtained by combining the BNT
 characterization at lines~1135--1148 with the preceding isometry-preserving
-vertical sector theorem.  By itself it does not formalize the
-positive-diagonal isometry asserted at lines~1895--1896, the subsequent gauge
-normalization, or the final coisometry; the gauge normalization is supplied
-below.  Equality of
+vertical sector theorem.  The subsequent gauge normalization and coisometry
+construction turn this grouped decomposition into the positive-diagonal form asserted at
+lines~1895--1921.  Equality of
 the bond dimensions within each phase class is obtained from non-decay of the
 positive-length rectangular overlap, as in Lemma~\texttt{equalMPS}; the
 empty-word coefficient is not used in this comparison.
@@ -303,13 +312,14 @@ are proved in \path{TNLean/MPS/MPDO/CPSVGroupedGramNormalization.lean}.
 The reflected marked-chain, two-sector separation, and dependent-dimension
 identification of source lines~1909--1919 are therefore complete, as is the
 positive scalar Gram identity and unitary normalization of every grouped
-gauge.  Under the stronger normalized BNT-refined hypothesis, the normalized gauges
-are expressed on the representative bond spaces and composed with the physical
-sector isometries in
-\path{TNLean/MPS/MPDO/NormalizedGroupedSectors.lean}.  The resulting maps
-$W_{\alpha,q}$ have mutually orthogonal isometric ranges, satisfy the
-representative intertwining identities, and reconstruct every vertical letter
-exactly.
+gauge.  For the normalized BNT-refined hypothesis, the normalized gauges are
+composed with the physical sector isometries in
+\path{TNLean/MPS/MPDO/NormalizedGroupedSectors.lean}.  The literal counterpart
+\path{MPSTensor.IsCPSVCanonicalForm.exists_normalized_grouped_sector_maps} is
+proved in \path{TNLean/MPS/MPDO/CPSVNormalizedGroupedSectors.lean}.  In both
+cases the resulting maps $W_{\alpha,q}$ have mutually orthogonal isometric
+ranges, satisfy the representative intertwining identities, and reconstruct
+every vertical letter exactly.
 
 The representatives are shown to form an algebraic basis of normal tensors
 for the original vertical tensor in
@@ -320,38 +330,31 @@ the dimension identity required by the definition of a basis of normal
 tensors.
 
 Finally, \path{MPOTensor.verticalCF_of_horizontalCF} in
-\path{TNLean/MPS/MPDO/VerticalCanonicalForm.lean} applies the orthogonal sector
-coisometry theorem and identifies the dependent sector pairs $(\alpha,q)$
-with the standard finite direct-sum coordinates.  This gives the displayed
-identity of Proposition~4.13 together with the exact reconstruction implicit
-in its preceding assertion that the vertical
-tensor is in canonical form.  The reverse reconstruction is not separately
-printed in the proposition.  The original
-formulation of \ghissue{2537}, interpreted as a direct conversion of the
-horizontal scalar weights and diagonal restrictions, remains a false route
-rather than a consequence of the proposition.
+\path{TNLean/MPS/MPDO/VerticalCanonicalForm.lean} and the independent literal
+theorem \path{MPOTensor.verticalCF_of_cpsvCanonicalForm} in
+\path{TNLean/MPS/MPDO/CPSVVerticalCanonicalForm.lean} apply the shared
+orthogonal-sector coisometry theorem.  They identify the dependent sector pairs
+$(\alpha,q)$ with the standard finite direct-sum coordinates and prove
+\eqref{eq:source-coisometry}, \eqref{eq:source-vertical-form}, and
+\eqref{eq:source-vertical-reconstruction}.  The reverse reconstruction is not
+printed separately in the proposition.  The original formulation of
+\ghissue{2537}, interpreted as a direct conversion of the horizontal scalar
+weights and diagonal restrictions, remains a false route rather than a
+consequence of the proposition.
 
 \paragraph{Verdict.}
-The horizontal-to-vertical implication is complete under the normalized
-BNT-refined hypothesis \path{MPOTensor.IsHorizontalCF}.  That hypothesis is
-strictly stronger than the literal CPSV canonical form assumed in
-Proposition~4.13, so the full literal theorem remains open.  Under the literal
-hypothesis, active regrouping, marked Lemma~L on both the retained and original
-bond spaces, physical first-site insertion equality, invariant-projector
-closure, displaced-projector noncommutation at some length, periodic exclusion,
-the normal vertical block decomposition, literal sector-compression
-separation, actual vertical phase-class grouping with positive effective
-coefficients, the pairwise Figure~8 Gram-dressing identity, and the positive
-relative Gram scalar are complete.  The actual grouped corners also satisfy
-the Figure~8 Gram identity; every grouped gauge has Gram matrix
-$\omega_{\alpha,q}\Id$ with $\omega_{\alpha,q}>0$, and inverse-square-root
-rescaling makes it unitary.  Construction of the normalized physical sector
-maps and the final vertical canonical-form theorem with its coisometry remain
-open.  The proved statements retain every
-inactive listed coordinate with weight zero and do not
-use the unsupported diagonal-restriction statement from \ghissue{2537}.
-These Proposition~4.13 statements are distinct from the Appendix~C.4
-positive-fusion question tracked by \ghissue{4648}.
+Proposition~4.13 is complete under its literal CPSV canonical-form hypothesis.
+The theorem \path{MPOTensor.verticalCF_of_cpsvCanonicalForm} produces a basis
+of normal vertical representatives, positive diagonal multiplicities, and a
+rectangular coisometry $U$ satisfying $UU^\dagger=I$ together with both exact
+identities \eqref{eq:source-vertical-form} and
+\eqref{eq:source-vertical-reconstruction}.  The proof retains every inactive
+listed coordinate with weight zero until the vertical decomposition and does
+not use the unsupported diagonal-restriction statement from \ghissue{2537}.
+The stronger theorem for \path{MPOTensor.IsHorizontalCF} remains available
+separately.  These Proposition~4.13 statements are distinct from the
+Appendix~C.4 positive-fusion question tracked by \ghissue{4648} and from
+Theorem~4.14.
 
 The preparatory dependency tracked by \ghissue{4956} is now complete.  The
 structure \path{MPSTensor.CPSVCanonicalFormData.ActiveBNTRefinement} and its
@@ -509,15 +512,13 @@ lines~1909--1921 for any two corners satisfying the source's positive
 similarity equations.  They preserve all inactive listed coordinates through
 the literal marked Lemma~L argument.
 
-Literal Proposition~4.13 nevertheless remains open.  Periodic exclusion,
-the normal vertical corners with exact reconstruction
-\eqref{eq:literal-normal-corners}, and their phase-class grouping with positive
-effective coefficients, actual-grouped Figure~8, and unitary gauge normalization
-are complete.  One must still construct the normalized physical sector maps
-and obtain the final vertical canonical form and coisometry
-satisfying $UU^\dagger=I$.  The current results do not assert
-$U^\dagger U=I$.  This remaining
-Proposition~4.13 work is independent of the Appendix~C.4 positive-fusion
+Literal Proposition~4.13 is now complete.  The normalized physical sector
+maps are furnished by
+\path{MPSTensor.IsCPSVCanonicalForm.exists_normalized_grouped_sector_maps}, and
+\path{MPOTensor.verticalCF_of_cpsvCanonicalForm} constructs the final vertical
+canonical form.  Its rectangular map satisfies $UU^\dagger=I$, not in general
+$U^\dagger U=I$, and obeys both exact forward and reverse reconstruction
+identities.  This result is independent of the Appendix~C.4 positive-fusion
 question tracked by \ghissue{4648}.
 \bibliographystyle{alpha}
 \bibliography{references}

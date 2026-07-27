@@ -918,7 +918,8 @@
 % docs/paper-gaps/cpgsv17_vertical_isometry_zero_sector.tex.
 \begin{theorem}[Vertical canonical form of a canonical MPDO]
     \label{thm:vertical_cf_of_cpsv_canonical_form}
-    \notready
+    \lean{MPOTensor.verticalCF_of_cpsvCanonicalForm}
+    \leanok
     \uses{def:mpdo, def:cpsv_canonical_form, def:vertical_cf_mpdo}
     Let $M$ be an MPO tensor whose doubled-index MPS tensor is in the literal
     CPSV canonical form. If $M$ generates matrix product density operators,
@@ -953,6 +954,7 @@
 \end{theorem}
 
 \begin{proof}[Proof outline]
+    \leanok
     \uses{thm:cpsv_canonical_form_active_bnt_refinement,
         thm:cpsv_active_representative_sector_decomposition,
         thm:cpsv_full_coordinate_marked_trace_identity,
@@ -964,7 +966,9 @@
         thm:cpsv_literal_vertical_bnt_grouping_with_isometries,
         thm:cpsv_literal_grouped_sector_gram_conjugation,
         thm:cpsv_literal_grouped_sector_unitary_normalization,
-        thm:vertical_sector_coisometry}
+        thm:cpsv_literal_normalized_grouped_sector_maps,
+        thm:mpdo_vertical_grouped_is_bnt,
+        thm:vertical_cf_of_grouped_orthogonal_sectors}
     Write $A$ for the doubled-index MPS tensor of $M$. If $A=0$, take no
     retained sectors; the unique map onto the zero-dimensional sector space
     gives the conclusion. Suppose henceforth that $A\ne0$. Apply
@@ -1092,9 +1096,15 @@
     Proposition~4.13. They are distinct from the tensor-attached two-site
     marked problem in Appendix~C.4.
 
-    Compose these unitary bond gauges with the mutually orthogonal inclusions
-    of the retained vertical sectors, and take their adjoints as the block-row
-    map $U$. The orthogonality of the sector ranges gives
+    Theorem~\ref{thm:cpsv_literal_normalized_grouped_sector_maps} absorbs
+    these unitary bond gauges into the mutually orthogonal physical sector
+    maps. The resulting maps intertwine $\widetilde M$ with the undressed
+    representatives and reconstruct every vertical letter exactly.
+    Theorem~\ref{thm:mpdo_vertical_grouped_is_bnt} identifies the
+    representatives as a basis of normal tensors for
+    $\widetilde M$. Taking the adjoints of the normalized sector maps as the
+    block-row map $U$, Theorem~\ref{thm:vertical_cf_of_grouped_orthogonal_sectors}
+    gives
     (\ref{eq:cpsv_prop_4_13_coisometry}), and the sector intertwinings give
     (\ref{eq:cpsv_prop_4_13_vertical_form}). Invariant-projector closure makes
     the retained support reducing, while the complement is the all-zero
@@ -1105,16 +1115,8 @@
     coordinates required by the literal canonical-form definition.
 \end{proof}
 
-% Formalization status: the theorem above remains \notready. The theorem below
-% proves the same conclusion from the stronger normalized BNT-refined horizontal
-% form. For literal canonical form, the exact class-copy-plus-inactive
-% coordinate regrouping, active representative sector decomposition, and
-% retained-coordinate and original-coordinate forms of Lemma L, the original
-% inserted-tensor equality, invariant-projector closure, literal periodic
-% exclusion, the normal vertical block decomposition, literal sector-compression
-% separation, literal phase-class grouping, actual-grouped Figure Eight, and
-% unitary gauge normalization are complete. Construction of the normalized
-% physical sector maps and the final coisometry remain open.
+% The literal theorem above and the stronger horizontal theorem below are
+% independent wrappers over the shared grouped-sector BNT and coisometry results.
 
 \begin{theorem}[BNT-refined horizontal form implies vertical canonical form]
     \label{thm:vertical_cf_of_horizontal_cf}

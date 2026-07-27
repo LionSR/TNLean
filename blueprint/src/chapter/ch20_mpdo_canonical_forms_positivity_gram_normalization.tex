@@ -734,9 +734,9 @@
     \end{align}
     Consequently
     $U_{\alpha,q}=\omega_{\alpha,q}^{-1/2}X_{\alpha,q}$ is unitary.
-    This proves the normalization step of
-    \cite[Proposition~4.13, lines~1903--1921]{Cirac2016MPDO_arXiv}; it does not
-    yet construct the normalized physical sector maps or the final coisometry.
+    This proves the gauge-normalization step of
+    \cite[Proposition~4.13, lines~1903--1921]{Cirac2016MPDO_arXiv} and supplies
+    the positive Gram scalars used to normalize the physical sector maps.
 \end{theorem}
 
 \begin{proof}
@@ -821,4 +821,48 @@
     Substitution into every summand of the grouped reconstruction proves the
     final identity. Transport along the equality of bond dimensions changes
     only the coordinate labels.
+\end{proof}
+
+
+\begin{theorem}[Literal normalized physical maps of the grouped vertical sectors]
+    \label{thm:cpsv_literal_normalized_grouped_sector_maps}
+    \lean{MPSTensor.IsCPSVCanonicalForm.exists_normalized_grouped_sector_maps}
+    \leanok
+    \uses{thm:cpsv_literal_grouped_sector_unitary_normalization,
+        thm:cpsv_literal_vertical_bnt_grouping_with_isometries}
+    In the phase-class grouping obtained from literal CPSV canonical form, let
+    $Q_{\alpha,q}=\omega_{\alpha,q}^{-1/2}X_{\alpha,q}$ and
+    $W_{\alpha,q}=V_{\alpha,q}Q_{\alpha,q}$, after identifying the bond space
+    of each copy with that of its representative. Then
+    \begin{align}
+        W_{\alpha,q}^\dagger W_{\alpha,q}&=\Id,
+        \notag\\
+        W_{\alpha,q}^\dagger W_{\beta,p}&=0
+        \quad((\alpha,q)\ne(\beta,p)),
+        \notag\\
+        \widetilde M_vW_{\alpha,q}
+        &=W_{\alpha,q}(c_{\alpha,q}M_\alpha^v),
+        \notag
+    \end{align}
+    where $c_{\alpha,q}=\nu_{\alpha,q}\zeta_{\alpha,q}>0$. Moreover, every
+    vertical letter is reconstructed exactly:
+    \begin{align}
+        \widetilde M_v
+        &=\sum_\alpha\sum_q
+          W_{\alpha,q}(c_{\alpha,q}M_\alpha^v)
+          W_{\alpha,q}^\dagger.
+        \label{eq:cpsv_literal_normalized_reconstruction}
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:cpsv_literal_grouped_sector_unitary_normalization,
+        thm:cpsv_literal_vertical_bnt_grouping_with_isometries}
+    For each copy, use its positive Gram scalar to absorb the normalized
+    unitary gauge into the physical isometry. Unitarity preserves the isometry
+    equation and pairwise orthogonality. The intertwining identity loses the
+    internal similarity, while the Gram identity converts each normalized
+    corner back to the original grouped corner. Summing these corner identities
+    gives (\ref{eq:cpsv_literal_normalized_reconstruction}).
 \end{proof}

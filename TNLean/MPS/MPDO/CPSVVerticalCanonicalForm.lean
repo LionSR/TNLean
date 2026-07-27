@@ -3,23 +3,23 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.MPDO.NormalizedGroupedSectors
+import TNLean.MPS.MPDO.CPSVNormalizedGroupedSectors
+import TNLean.MPS.MPDO.CPSVVerticalBNT
 import TNLean.MPS.MPDO.VerticalBNTConstruction
 import TNLean.MPS.MPDO.VerticalCoisometry
 
 /-!
-# Vertical canonical form of matrix product density operators
+# Vertical canonical form from literal CPSV canonical form
 
-The grouped vertical decomposition of a matrix product density operator in
-normalized BNT-refined horizontal form supplies a basis of normal tensors and
-normalized physical sector maps. The resulting positive weights and sector
-maps give the coisometry and the two exact block-diagonal identities of the
-vertical canonical form.
+The literal CPSV canonical-form decomposition groups the normal vertical
+corners by matrix-product-vector phase class.  The grouped Figure 8 identity
+normalizes their internal gauges, after which the orthogonal physical sector
+maps assemble into the coisometry of the vertical canonical form.
 
 ## Main result
 
-* `MPOTensor.verticalCF_of_horizontalCF`: every matrix product density operator
-  in normalized BNT-refined horizontal form is in vertical canonical form.
+* `MPOTensor.verticalCF_of_cpsvCanonicalForm`: every matrix product density
+  operator in literal CPSV canonical form is in vertical canonical form.
 
 ## References
 
@@ -33,37 +33,33 @@ namespace MPOTensor
 
 variable {d D : ℕ}
 
-/-- A matrix product density operator in normalized BNT-refined horizontal form
-is also in vertical canonical form.
+/-- A matrix product density operator in literal CPSV canonical form is also
+in vertical canonical form.
 
-The same grouped vertical decomposition supplies both the algebraic basis of
-normal tensors and the normalized physical sector maps.  Their positive
-weights, orthogonal isometric ranges, intertwinings, and exact reconstruction
-then combine to give the vertical coisometry.
-
-**Scope restriction (BNT-refined horizontal form):** `IsHorizontalCF` is
-stronger than the literal CPSV canonical form assumed by Proposition 4.13.
-The source-faithful literal implication is proved independently by
-`verticalCF_of_cpsvCanonicalForm`; this theorem retains the stronger horizontal
-interface for its existing consumers.
+The literal grouped decomposition supplies a basis of normal representatives
+and positive grouped coefficients.  Gram normalization gives orthogonal
+isometric physical sector maps.  Their block row is the required coisometry,
+with orientation $U U^\dagger=I$, and the two direct-sum identities follow from
+the exact letterwise reconstruction.
 
 Source: arXiv:1606.00608, Proposition 4.13, lines 1863--1921. -/
-theorem verticalCF_of_horizontalCF (M : MPOTensor d D)
-    (hHorizontal : IsHorizontalCF M) (hM : IsMPDO M) :
+theorem verticalCF_of_cpsvCanonicalForm (M : MPOTensor d D)
+    (hCanonical : MPSTensor.IsCPSVCanonicalForm M.toMPSTensor)
+    (hM : IsMPDO M) :
     IsVerticalCF M := by
   classical
   obtain ⟨r, dim, mu, blocks, V, hDimPos, _, hNormal, hIso, _, _, hInterStar,
     _, hReconstruct, hdim, X, zeta, _, _, hXDist, _, _, hSpectralBNT, _, _, _, _,
     hCoeffPos, hGroupedIso, hGroupedOrth, hGroupedInter, _, hGroupedCorner,
     hGroupedReconstruct⟩ :=
-      hHorizontal.exists_verticalBNTGrouping_with_isometry M hM
+      hCanonical.exists_verticalBNTGrouping_with_isometry M hM
   let C := MPSTensor.mpvPhaseClassData blocks
   have hBNT : MPSTensor.IsBNT (verticalTensor M) C.g
       (fun j ↦ dim (C.repr j)) (fun j ↦ blocks (C.repr j)) :=
     isBNT_verticalTensor_of_grouping M mu blocks V hIso
       hInterStar hReconstruct hSpectralBNT
   obtain ⟨_, W, _, hWIso, hWOrth, hWInter, hWReconstruct⟩ :=
-    hM.exists_normalized_grouped_sector_maps blocks hHorizontal mu V hDimPos
+    hCanonical.exists_normalized_grouped_sector_maps blocks hM mu V hDimPos
       hNormal hdim X zeta hXDist hCoeffPos hGroupedIso hGroupedOrth
       hGroupedInter hGroupedCorner hGroupedReconstruct
   apply isVerticalCF_of_grouped_orthogonal_sectors M

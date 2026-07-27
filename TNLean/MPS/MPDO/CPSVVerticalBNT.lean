@@ -60,9 +60,11 @@ The representatives satisfy the BNT characterization of arXiv:1606.00608,
 lines 1135--1148.  Every effective grouped coefficient is positive by the
 sector-compression argument in Proposition 4.13, lines 1895--1902.
 
-The proportional Gram identity, normalized grouped-sector maps, and final
-coisometry from lines 1903--1921 are not included; see
-`docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex`. -/
+The theorem stops at grouping.  The proportional Gram identity, normalized
+grouped-sector maps, and final coisometry from lines 1903--1921 are proved in
+`MPSTensor.IsCPSVCanonicalForm.grouped_sector_gram_eq_pos_smul_one`,
+`MPSTensor.IsCPSVCanonicalForm.exists_normalized_grouped_sector_maps`, and
+`MPOTensor.verticalCF_of_cpsvCanonicalForm`. -/
 theorem exists_verticalBNTGrouping_with_isometry
     (M : MPOTensor d D)
     (hCanonical : MPSTensor.IsCPSVCanonicalForm M.toMPSTensor)
