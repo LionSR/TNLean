@@ -54,8 +54,9 @@ suffices.
 This is a local correction of the intermediate statement.  The corrected
 periodic-sector implication is now proved both from literal CPSV canonical
 form and from the stronger normalized BNT-refined horizontal form.  It closes
-the periodic-exclusion step of Proposition~4.13, not the remaining grouping,
-normalization, and coisometry steps.
+the periodic-exclusion step used in Proposition~4.13.  The later vertical
+phase-class grouping, gauge normalization, and coisometry construction are
+recorded in \path{cpgsv17_vertical_cf_grouping.tex}.
 
 \section{Formal proof}
 
@@ -105,12 +106,21 @@ Combining literal periodic exclusion with literal invariant-projector closure
 gives the normal vertical corners with positive weights and exact letterwise
 reconstruction in
 \leanid{MPSTensor.IsCPSVCanonicalForm.exists\_normal\_verticalBlockDecomp\_with\_isometry}.
-Proposition~4.13 remains open only at the subsequent vertical BNT grouping,
-normalization of the grouped representatives, and final coisometry.  These
-steps are distinct from the Appendix~C.4 positive-fusion question.
+The subsequent vertical phase-class grouping, normalization of the grouped
+representatives, and final coisometry are also complete.  Together they give
+the literal theorem
+\leanid{MPOTensor.verticalCF\_of\_cpsvCanonicalForm} in
+\doclink{TNLean/MPS/MPDO/CPSVVerticalCanonicalForm}.  The stronger theorem from
+the normalized BNT-refined horizontal form remains available separately.
 
-\paragraph{Verdict.} Literal periodic-sector step complete; Proposition~4.13
-remains open at grouping, normalization, and the final coisometry.
+This completion concerns Proposition~4.13 only.  It neither proves the
+positive-fusion statement in Appendix~C.4 nor the renormalization fixed-point
+characterization in Theorem~4.14.
+
+\paragraph{Verdict.} The printed all-length inequality is replaced by the
+existence of one noncommuting length.  This local correction suffices for the
+periodic-sector step, and literal Proposition~4.13 is now complete by the
+independent grouping, normalization, and coisometry results.
 
 \bibliographystyle{alpha}
 \bibliography{references}
