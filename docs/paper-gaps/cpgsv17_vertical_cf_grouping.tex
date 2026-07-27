@@ -269,12 +269,17 @@ BNT-refined hypothesis \path{MPOTensor.IsHorizontalCF}.  That hypothesis is
 strictly stronger than the literal CPSV canonical form assumed in
 Proposition~4.13, so the literal theorem remains open.  Under the literal
 hypothesis, active regrouping, marked Lemma~L on both the retained and original
-bond spaces, physical first-site insertion equality, and invariant-projector
-closure are complete.  The physical Figure-8/Gram proportionality and
-conjugation argument, followed by the final vertical canonical-form theorem
-with its coisometry, remain open.  The proved statements retain every inactive
-listed coordinate with weight zero and do not use the unsupported
-diagonal-restriction statement from \ghissue{2537}.
+bond spaces, physical first-site insertion equality, invariant-projector
+closure, the pairwise Figure~8 Gram-dressing identity, and the positive
+relative Gram scalar are complete.  The two Figure~8 statements are conditional
+on two vertical corners satisfying the displayed similarity equations; they do
+not construct the actual representative groups or corners.  Literal periodic
+exclusion and spectral grouping, normalized grouped sectors, and the final
+vertical canonical-form theorem with its coisometry remain open.  The proved
+statements retain every inactive listed coordinate with weight zero and do not
+use the unsupported diagonal-restriction statement from \ghissue{2537}.
+These Proposition~4.13 statements are distinct from the Appendix~C.4
+positive-fusion question tracked by \ghissue{4648}.
 
 The preparatory dependency tracked by \ghissue{4956} is now complete.  The
 structure \path{MPSTensor.CPSVCanonicalFormData.ActiveBNTRefinement} and its
@@ -421,12 +426,24 @@ hasInvariantProjectorClosure_verticalTensor} proves invariant-projector
 closure of the vertical tensor under literal CPSV canonical form and
 \path{MPOTensor.IsMPDO}.
 
-Literal Proposition~4.13 nevertheless remains open.  The physical Figure-8
-argument of source lines~1909--1919 must still derive the Gram-conjugation and
-positive proportionality identities for the grouped gauges.  These identities
-must then be combined with the reducing vertical sectors to obtain the final
-vertical canonical form and the coisometry satisfying $UU^\dagger=I$.  The
-current results do not assert $U^\dagger U=I$.
+The literal pairwise Figure~8 identity is now proved in
+\path{TNLean/MPS/MPDO/CPSVFigureEight.lean} as
+\path{MPSTensor.IsCPSVCanonicalForm.%
+gramDressing_eq_of_two_grouped_corners}.  For a normal common representative,
+\path{MPSTensor.IsCPSVCanonicalForm.%
+gram_eq_pos_smul_gram_of_two_grouped_corners} gives a real scalar $\omega>0$
+with $X^\dagger X=\omega Y^\dagger Y$.  These results cover source
+lines~1909--1921 for any two corners satisfying the source's positive
+similarity equations.  They preserve all inactive listed coordinates through
+the literal marked Lemma~L argument.
+
+Literal Proposition~4.13 nevertheless remains open.  One must still construct
+the actual vertical representative groups and their corners, prove periodic
+exclusion and spectral grouping from literal canonical form, form the normalized
+grouped sectors, and obtain the final vertical canonical form and coisometry
+satisfying $UU^\dagger=I$.  The current results do not assert
+$U^\dagger U=I$.  This remaining Proposition~4.13 work is independent of the
+Appendix~C.4 positive-fusion question tracked by \ghissue{4648}.
 \bibliographystyle{alpha}
 \bibliography{references}
 
