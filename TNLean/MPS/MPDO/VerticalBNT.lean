@@ -28,14 +28,13 @@ and deduces that the grouped coefficient is positive.  The positive-diagonal
 isometry asserted at lines 1895--1896 and the gauge normalization and final
 coisometry argument at lines 1903--1921 are not included.
 
-The grouping assumes normalized BNT-refined horizontal form, which is stronger
-than the literal CPSV canonical form.
+## Main statements
 
-## Main statement
-
-* `IsHorizontalCF.exists_verticalBNTGrouping_with_isometry`: the normalized
-  vertical corners grouped into BNT representatives, with the physical
-  isometries and literal reconstruction retained.
+* `exists_verticalBNTGrouping_with_isometry_of_decomposition`: normal vertical
+  corners with physical isometries and nonzero finite-chain compressions split
+  into BNT phase classes with positive grouped coefficients.
+* `IsHorizontalCF.exists_verticalBNTGrouping_with_isometry`: the specialization
+  to normalized BNT-refined horizontal form.
 
 ## References
 

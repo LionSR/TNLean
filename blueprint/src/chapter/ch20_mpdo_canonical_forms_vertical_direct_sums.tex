@@ -469,14 +469,15 @@
 
 \begin{theorem}[Vertical normal sectors grouped into BNT representatives]
     \label{thm:mpdo_vertical_bnt_grouping_with_isometries}
-    \lean{MPSTensor.IsCPSVCanonicalForm.%
-        exists_verticalBNTGrouping_with_isometry}
+    \lean{MPOTensor.IsHorizontalCF.exists_verticalBNTGrouping_with_isometry}
     \leanok
-    \uses{def:mpdo, def:cpsv_canonical_form, def:vertical_tensor_mpdo,
+    \uses{def:mpdo, def:horizontal_cf_mpdo, def:vertical_tensor_mpdo,
         def:bnt_cpsv, def:mpv_phase_class_data}
-    Under the same hypotheses, partition the normalized vertical sectors by
-    equality of their matrix product vector families up to a fixed nonzero
-    scalar per site. There are normal representatives $M_\alpha$, an enumeration
+    Let $M$ generate matrix product density operators and suppose that $M$
+    is in normalized BNT-refined horizontal form. Partition its normalized
+    vertical sectors by equality of their matrix product vector families up to
+    a fixed nonzero scalar per site. There are normal representatives
+    $M_\alpha$, an enumeration
     $k=(\alpha,q)$ of the original sectors, invertible matrices
     $X_{\alpha,q}$, and complex numbers $\zeta_{\alpha,q}$ of unit modulus,
     with $X_{\alpha,1}=\Id$ and $\zeta_{\alpha,1}=1$, such that
@@ -490,7 +491,7 @@
     normal tensors for the weighted block tensor
     $\bigoplus_k\nu_kB_k$. Every grouped coefficient
     $\nu_{\alpha,q}\zeta_{\alpha,q}$ is positive. With the physical isometries
-    from Theorem~\ref{thm:mpdo_literal_normal_vertical_corners}
+    from Theorem~\ref{thm:mpdo_vertical_normal_sectors_with_isometries}
     retained unchanged, one has both reducing identities, exact compression,
     and the literal reconstruction
     \begin{align}
@@ -511,10 +512,10 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:mpdo_literal_normal_vertical_corners,
+    \uses{thm:mpdo_vertical_normal_sectors_with_isometries,
         thm:cpsv_normal_mpv_phase_gauge,
         thm:cpsv_normal_separated_eventually_li,
-        thm:cpsv_literal_sector_compression_nonzero,
+        thm:mpdo_grouped_sector_compression_nonzero,
         def:mpdo_sector_projector, thm:mpdo_sector_weight_pos}
     Take one representative from each phase class.
     Theorem~\ref{thm:cpsv_normal_mpv_phase_gauge} gives equality of bond
@@ -527,6 +528,74 @@
     that every phase has unit modulus. Substitution into the two intertwining
     identities, the compression identity, and the reconstruction
     (\ref{eq:mpdo_vertical_normal_reconstruction}) proves all remaining
+    algebraic assertions without altering any physical isometry. Cyclicity of
+    trace gives the sector-loop identities. The nonzero-corner separation
+    theorem supplies a nonzero compression for every sector, and the sector
+    trace identity and MPDO positivity then make every grouped coefficient
+    positive.
+\end{proof}
+
+\begin{theorem}[Literal CPSV vertical sectors grouped into BNT representatives]
+    \label{thm:cpsv_literal_vertical_bnt_grouping_with_isometries}
+    \lean{MPSTensor.IsCPSVCanonicalForm.%
+        exists_verticalBNTGrouping_with_isometry}
+    \leanok
+    \uses{def:mpdo, def:cpsv_canonical_form, def:vertical_tensor_mpdo,
+        def:bnt_cpsv, def:mpv_phase_class_data}
+    Let $M$ generate matrix product density operators, and suppose that its
+    doubled-index MPS tensor is in literal CPSV canonical form. Partition the
+    normalized vertical sectors by equality of their matrix product vector
+    families up to a fixed nonzero scalar per site. There are normal representatives $M_\alpha$, an enumeration
+    $k=(\alpha,q)$ of the original sectors, invertible matrices
+    $X_{\alpha,q}$, and complex numbers $\zeta_{\alpha,q}$ of unit modulus,
+    with $X_{\alpha,1}=\Id$ and $\zeta_{\alpha,1}=1$, such that
+    \begin{align}
+        B_{\alpha,q}^v
+        &=\zeta_{\alpha,q}X_{\alpha,q}
+          M_\alpha^vX_{\alpha,q}^{-1}.
+        \label{eq:cpsv_literal_vertical_gauge_phase}
+    \end{align}
+    The representatives are pairwise gauge-phase distinct and form a basis of
+    normal tensors for the weighted block tensor
+    $\bigoplus_k\nu_kB_k$. Every grouped coefficient
+    $\nu_{\alpha,q}\zeta_{\alpha,q}$ is positive. With the physical isometries
+    from Theorem~\ref{thm:mpdo_literal_normal_vertical_corners}
+    retained unchanged, one has both reducing identities, exact compression,
+    and the literal reconstruction
+    \begin{align}
+        \widetilde M_v
+        &=\sum_\alpha\sum_q
+          V_{\alpha,q}
+          \bigl(\nu_{\alpha,q}\zeta_{\alpha,q}
+          X_{\alpha,q}M_\alpha^vX_{\alpha,q}^{-1}\bigr)
+          V_{\alpha,q}^\dagger.
+        \label{eq:cpsv_literal_vertical_grouped_reconstruction}
+    \end{align}
+    For each pair $(\alpha,q)$, the range projector of $V_{\alpha,q}$ obeys
+    the representative-loop identity and gives a nonzero compression at some
+    finite length. This is the decomposition and positivity argument of
+    \cite[Proposition~4.13, lines 1898--1902]{Cirac2016MPDO_arXiv}. The
+    relative Gram identity and proportional-unitary normalization of
+    lines~1903--1908 are not asserted here.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpdo_literal_normal_vertical_corners,
+        thm:cpsv_normal_mpv_phase_gauge,
+        thm:cpsv_normal_separated_eventually_li,
+        thm:cpsv_literal_sector_compression_nonzero,
+        def:mpdo_sector_projector, thm:mpdo_sector_weight_pos}
+    Take one representative from each phase class.
+    Theorem~\ref{thm:cpsv_normal_mpv_phase_gauge} gives equality of bond
+    dimensions and (\ref{eq:cpsv_literal_vertical_gauge_phase}) for every copy.
+    Distinct representatives are gauge-phase separated by construction, so
+    Theorem~\ref{thm:cpsv_normal_separated_eventually_li} gives eventual linear
+    independence. The phase-class regrouping of the finite sum gives the BNT
+    expansion. The representative copy is assigned the identity gauge and
+    phase one, while the self-overlap normalization of normal tensors shows
+    that every phase has unit modulus. Substitution into the two intertwining
+    identities, the compression identity, and the reconstruction
+    (\ref{eq:mpdo_literal_normal_vertical_reconstruction}) proves all remaining
     algebraic assertions without altering any physical isometry. Cyclicity of
     trace gives the sector-loop identities. The nonzero-corner separation
     theorem supplies a nonzero compression for every sector, and the sector
@@ -894,6 +963,7 @@
         thm:mpdo_vertical_projector_closure_literal_cpsv,
         thm:mpdo_vertical_no_periodic_vectors_literal_cpsv,
         thm:mpdo_literal_normal_vertical_corners,
+        thm:cpsv_literal_vertical_bnt_grouping_with_isometries,
         thm:cpsv_literal_sector_compression_nonzero,
         thm:cpsv_normal_mpv_phase_gauge,
         thm:cpsv_normal_separated_eventually_li,
@@ -1001,30 +1071,17 @@
     This completes periodic exclusion and the normal vertical block
     decomposition under the literal canonical-form hypothesis.
 
-    It remains to group the tensors $B_k$ into actual vertical representative
-    families over tensors $M_\alpha$. After such a grouping, let
-    $P_{\alpha,k}$ be the range projection of the corner indexed by
-    $(\alpha,k)$. Theorem~\ref{thm:cpsv_literal_sector_compression_nonzero}
-    gives a length at which its compression is nonzero. Since $M$ generates
-    matrix product density operators, that compression is positive
-    semidefinite; Theorem~\ref{thm:mpdo_sector_compression_trace_pos} then
-    makes its trace positive. The sector trace identity has the form
-    \begin{align}
-        \tr\!\left(P_{\alpha,k}H^{(N)}P_{\alpha,k}\right)
-        &=\mu_{\alpha,k}d_\alpha^{(N)}>0.
-        \label{eq:cpsv_prop_4_13_positive_weight}
-    \end{align}
-    Absorb the phase of one nonzero coefficient into $M_\alpha$, so that the
-    reference coefficient satisfies $\mu_{\alpha,1}>0$. The identity for
-    the original copy first gives $d_\alpha^{(N)}\ne0$. Hence the reference
-    compression has nonzero trace $\mu_{\alpha,1}d_\alpha^{(N)}$ and is
-    nonzero. Its positivity then gives $d_\alpha^{(N)}>0$, and
-    (\ref{eq:cpsv_prop_4_13_positive_weight}) implies
-    $\mu_{\alpha,k}>0$ for every copy.
+    Theorem~\ref{thm:cpsv_literal_vertical_bnt_grouping_with_isometries}
+    groups the tensors $B_k$ into actual representative families over normal
+    tensors $M_\alpha$. It retains the physical isometries and both reducing
+    identities, gives the exact reconstruction, and proves that every grouped
+    coefficient $\mu_{\alpha,k}$ is positive. Its proof uses the nonzero
+    finite-chain compression of each range projection together with the sector
+    trace identity and positivity of the generated density operator.
 
-    Once these actual corners are available, the pairwise Figure~8
-    identity is complete under the literal canonical-form hypothesis.
-    Theorem~\ref{thm:cpsv_literal_pairwise_vertical_gram_conjugation} gives
+    The remaining Figure~8 step would apply the conditional pairwise theorem
+    to these actual corners. Theorem~\ref{thm:cpsv_literal_pairwise_vertical_gram_conjugation}
+    gives
     \begin{align}
         (X_{\alpha,k}^\dagger X_{\alpha,k})M_\alpha^v
         (X_{\alpha,k}^\dagger X_{\alpha,k})^{-1}

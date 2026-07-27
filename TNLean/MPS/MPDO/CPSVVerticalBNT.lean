@@ -7,14 +7,16 @@ import TNLean.MPS.MPDO.CPSVPeriodicExclusion
 import TNLean.MPS.MPDO.VerticalBNT
 
 /-!
-# Sector-compression separation for a literal CPSV canonical form
+# Literal CPSV sector compression and vertical BNT grouping
 
-This file proves the finite-chain sector-compression separation step in the
-vertical canonical-form argument for matrix product density operators.  The
-proof applies physical first-site Lemma L in the original bond coordinates of
-a literal CPSV canonical form.
+For an MPDO in literal CPSV canonical form, every nonzero vertical corner has
+a nonzero finite-chain compression. The normalized vertical corners also
+split into matrix-product-vector phase classes whose normal representatives
+form a basis of normal tensors. Their grouped coefficients are positive, and
+the physical isometries preserve the reducing identities and exact vertical
+reconstruction.
 
-## Main statement
+## Main statements
 
 * `MPSTensor.IsCPSVCanonicalForm.exists_sectorCompression_ne_zero_of_corner`:
   every nonzero vertical corner has a nonzero finite-chain compression.

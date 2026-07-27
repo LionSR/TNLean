@@ -271,40 +271,36 @@ the normalization $c_{\alpha,1}=\nu_{\alpha,1}>0$.  Thus the coefficient
 denoted by $\mu_{\alpha,k}$ in the source is
 $\mu_{\alpha,k}=c_{\alpha,k}$
 (\path{TNLean/MPS/MPDO/VerticalBNT.lean} and
-\path{TNLean/MPS/MPDO/SectorTrace.lean}).  Under literal CPSV canonical form, the phase classes, their loop identities,
-and the positivity of every grouped coefficient are supplied by the literal
-specialization above.  For the
-unitary gauges, the pairwise Gram-conjugation identity of the second displayed diagram at source
+\path{TNLean/MPS/MPDO/SectorTrace.lean}).  Under literal CPSV canonical form,
+the phase classes, their loop identities, and the positivity of every grouped
+coefficient are supplied by the literal specialization above.  The pairwise
+Gram-conjugation identity of the second displayed diagram at source
 lines~1914--1919 is proved in
-\path{TNLean/MPS/MPDO/FigureEightPairwise.lean}.  The dependent identification with
-the actual grouped sector and its distinguished copy is proved in
-\path{TNLean/MPS/MPDO/GroupedFigure8.lean}.  This argument does not identify
-either corner separately with the raw reflected adjoint.  The scalar
-commutant of
-the normal tensor $M_\alpha$
-(\path{MPSTensor.IsNormal.eq_smul_one_of_commute}) makes the relative Gram
-ratio scalar.  Positivity of the two Gram matrices then gives
+\path{TNLean/MPS/MPDO/FigureEightPairwise.lean}.  Its literal CPSV
+specialization in \path{TNLean/MPS/MPDO/CPSVFigureEight.lean} applies to two
+supplied corners satisfying the displayed similarity equations.  These
+conditional pairwise statements do not identify those corners with copies in
+the literal grouping theorem.
+
+The dependent identification with an actual grouped sector and its
+distinguished copy in \path{TNLean/MPS/MPDO/GroupedFigure8.lean} currently
+uses the normalized BNT-refined horizontal grouping theorem.  Consequently,
+the positive scalar Gram identity and unitary normalization in
+\path{TNLean/MPS/MPDO/GroupedGramNormalization.lean}, and the normalized
+physical maps in \path{TNLean/MPS/MPDO/NormalizedGroupedSectors.lean}, are
+proved only under \path{MPOTensor.IsHorizontalCF}.  They give
 \[
 X_{\alpha,k}^\dagger X_{\alpha,k}
 =\omega_{\alpha,k}X_{\alpha,1}^\dagger X_{\alpha,1},
-\qquad \omega_{\alpha,k}>0.
+\qquad \omega_{\alpha,k}>0,
 \]
-The relative gauge $X_{\alpha,k}X_{\alpha,1}^{-1}$ becomes unitary after
-division by $\sqrt{\omega_{\alpha,k}}$.  The grouping theorem now exposes its choice
-$X_{\alpha,1}=\Id$, giving the normalization printed by the source
-(\path{MPOTensor.IsMPDO.grouped_sector_gram_eq_pos_smul_one} and
-\path{MPOTensor.IsMPDO.grouped_sector_exists_unitary_normalization} in
-\path{TNLean/MPS/MPDO/GroupedGramNormalization.lean}).
-
-The reflected marked-chain, two-sector separation, and dependent-dimension
-identification of source lines~1909--1919 are therefore complete, as is the
-positive scalar Gram identity and unitary normalization of every grouped
-gauge.  The normalized gauges are expressed on the representative bond
-spaces and composed with the physical sector isometries in
-\path{TNLean/MPS/MPDO/NormalizedGroupedSectors.lean}.  The resulting maps
-$W_{\alpha,q}$ have mutually orthogonal isometric ranges, satisfy the
-representative intertwining identities, and reconstruct every vertical letter
-exactly.
+and normalize the relative gauge after division by
+$\sqrt{\omega_{\alpha,k}}$.  No theorem yet connects this actual-sector
+Figure~8 argument to
+\path{MPSTensor.IsCPSVCanonicalForm.%
+exists_verticalBNTGrouping_with_isometry}.  Thus grouped Figure~8
+normalization remains open under the literal CPSV hypothesis, even though the
+phase classes and positive grouped coefficients are now available there.
 
 The representatives are shown to form an algebraic basis of normal tensors
 for the original vertical tensor in
