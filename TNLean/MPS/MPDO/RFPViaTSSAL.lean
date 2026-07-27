@@ -343,8 +343,8 @@ This is the conditional entropic conclusion of Appendix C.  It still does not
 assert Proposition `propsimple`, because identifying this flattened bipartite
 quantity with `mutualInfoChain` and assembling the positive-chain SAL statement
 remain separate steps.  The required nonzero trace follows separately from
-horizontal canonical form, the MPDO condition, and the renormalization maps;
-source simplicity is not used in this implication.
+normalized BNT-refined horizontal form, the MPDO condition, and the
+renormalization maps; source simplicity is not used in this implication.
 
 Source: arXiv:1606.00608, Definition 4.1 and Appendix C,
 lines 1333--1341.
@@ -393,9 +393,9 @@ area law.
 The two local channels transfer one site across a consecutive bipartition.
 Data processing in both directions gives equality of the bipartite mutual
 informations, and `mutualInfoChain_eq_mutualInformation` identifies these with
-the chain quantities `I_L` and `I_{L+1}`.  Horizontal canonical form,
-positivity, and the fixed-point equations give the nonzero trace required to
-normalize every positive-length ring.  No empty-chain condition is used.
+the chain quantities `I_L` and `I_{L+1}`.  Normalized BNT-refined horizontal
+form, positivity, and the fixed-point equations give the nonzero trace required
+to normalize every positive-length ring.  No empty-chain condition is used.
 
 Source: arXiv:1606.00608, Proposition `propsimple`, Appendix C,
 lines 1333--1341, under the canonical-form and density-operator standing
