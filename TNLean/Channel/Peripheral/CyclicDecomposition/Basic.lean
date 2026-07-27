@@ -3,7 +3,11 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Channel.Peripheral.Spectrum
+import TNLean.Channel.Peripheral.ClosureFixedPoint
+import TNLean.Channel.Peripheral.PeriodicityRemoval
 import TNLean.Channel.Schwarz.Basic
+import TNLean.QPF.Uniqueness
 import Mathlib.Analysis.CStarAlgebra.Projection
 import Mathlib.RingTheory.RootsOfUnity.PrimitiveRoots
 

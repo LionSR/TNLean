@@ -5,6 +5,7 @@ Authors: Sirui Lu
 -/
 import TNLean.Analysis.CfcConjugation
 import TNLean.Analysis.LiebScalarIntegral
+import TNLean.Analysis.MatrixOrderTopology
 import TNLean.Analysis.TraceCFC
 import Mathlib.Analysis.CStarAlgebra.Matrix
 import Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.Rpow.Basic

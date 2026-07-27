@@ -3,6 +3,12 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Channel.Peripheral.CyclicDecomposition.Basic
+import TNLean.Channel.Peripheral.CyclicDecomposition.PeripheralUnitary
+import TNLean.Channel.Peripheral.CyclicDecomposition.CyclicProjections
+import TNLean.Channel.Peripheral.CyclicDecomposition.Decomposition
+import TNLean.Channel.Peripheral.CyclicDecomposition.LetterShift
+import TNLean.Channel.Peripheral.CyclicDecomposition.Primitivity
 
 /-!
 # Cyclic decomposition of periodic irreducible channels
