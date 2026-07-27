@@ -1030,3 +1030,56 @@ escape spelling in any of the five.
 Census-correction: #4709
 
 No ledger row changes and no flag verdict is re-examined here.
+
+### 2026-07-27 — the route form pays: the escape meter falls by seventy-four
+
+M3 falls from 356 to 282. Nine blocked panels were redrawn through the
+kernel bridge -- the braid family's declared crossings, the g-string
+pulling-through pair, the F-symbol's anyon-line crossing, the two-shift
+MPU, and the CZX site clusters -- and not one of them spells out= or in=.
+Every entry since the symmetry redraw priced these occurrences as "the
+cost of the surface swap not having happened," and promised the meter
+would fall sharply when the corpus could speak the route form. It has,
+and by more than the redraw waves added: the meter now reads below the
+276 the campaign started from priced against a corpus that draws far
+more than it did then.
+
+M4 ticks up from 17.63 to 17.65: the kernel says in a wire declaration
+what the hand-routed spelling said in coordinates, and the two
+hundredths are the labels and stations the nine panels gained.
+
+Census-correction: #4709
+
+One flag is newly raised and answered here.
+
+| flag | verdict |
+|---|---|
+| flag:sugar-shaped:command:tenkzkernel | keep-because: the switch is not sugar for anything -- it is the S4 swap's own handle, rebinding the environments to the kernel grammar for the group; it dies at the swap when the kernel becomes the surface and the opt-in has nothing left to opt into; expiry 1.0 |
+
+No ledger row changes and no other flag verdict is re-examined here.
+
+### 2026-07-28 — the route form pays again: M3 reaches 254
+
+M3 falls from 282 to 254. Four more panels -- both remaining R-tensor
+braids and the two pulling-through workbench figures -- say their strings
+in the kernel and retire twenty-eight more hand-routed occurrences. The
+meter has now fallen a hundred and two from its peak and sits well below
+the 276 the campaign opened at, while the corpus draws crossings,
+windings and pull-throughs it could not say at all then. The prediction
+the symmetry-redraw entry recorded is discharged in full.
+
+M4 rises from 17.65 to 18.08: the four panels gained the strings, the
+stations and the labels their sources assert.
+
+Census-correction: #4709
+
+Two targets stay blocked with their demands sharpened by the attempt.
+The MPU wrap's demand is renamed from `strings` to `skin-pairings`: the
+panel contains no string at all, and three spellings were probed and
+refused -- the declared skin raises the renderer's own todo, strings
+through boxes are painted over by the glyph fill, and the free tier's
+arc needs the tombstoned escape pair. The torus cycle keeps its demand:
+a kernel attempt drew one loop on a bare grid where the source draws a
+torus and two lattice panels, and was refused at review.
+
+No ledger row changes and no flag verdict is re-examined here.

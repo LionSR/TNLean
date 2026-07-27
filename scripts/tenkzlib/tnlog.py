@@ -369,6 +369,9 @@ def parse_log(
     events: list[Event] = []
     pictures: list[Picture] = []
     by_id: dict[int, Picture] = {}
+    # The kernel writes its records inside their picture's group with no
+    # picture= field; nesting order is the reference.  Track the open one.
+    current_kernel: Picture | None = None
     for line_number, raw in enumerate(text.splitlines(), 1):
         line = raw.strip()
         if not line:
@@ -405,6 +408,11 @@ def parse_log(
                     )
                     valid = False
             if kind != "picture" and "picture" not in attrs:
+                if current_kernel is not None:
+                    # A kernel record: it belongs to the open kernel picture
+                    # by nesting, not by a picture= field.
+                    current_kernel.events.append(event)
+                    continue
                 hard(
                     "malformed-event",
                     where,
@@ -436,6 +444,7 @@ def parse_log(
             picture = Picture(picture_id, lang, line_number)
             by_id[picture_id] = picture
             pictures.append(picture)
+            current_kernel = picture if lang == "kernel" else None
             continue
         if check_event is not None:
             check_event(event)

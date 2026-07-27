@@ -4,29 +4,36 @@
 % Boundary: Two lattice rails and four string ends remain open.
 % Source: paper TN-Review-main.tex line 1668; author source ImagesReview Section
 %   III/ImagesReview Section III.tex lines 739-772
-% Capabilities: free-graph, multi-strand-braid, crossing-order
+% Capabilities: grid, multi-strand-braid, crossing-order
 \[
-  \begin{tenkzfree}
-    % the anyon i on the upper rail, ringed by four of its own string tensors
-    \tnput[dot, role=marked, label pos=west]{i}{(0mm,9mm)}{i}
-    \tnput[dot, role=extra]{iw}{(-6mm,9mm)}{} \tnput[dot, role=extra]{ie}{(6mm,9mm)}{}
-    \tnput[dot, role=extra]{iu}{(0mm,14mm)}{} \tnput[dot, role=extra]{id}{(0mm,4mm)}{}
-    \tnjoin{-14mm,9mm}{iw.west} \tnjoin{iw.east}{i.west}
-    \tnjoin{i.east}{ie.west} \tnjoin{ie.east}{16mm,9mm}
-    \tnjoin{0mm,18mm}{iu.north} \tnjoin{iu.south}{i.north}
-    \tnjoin{i.south}{id.north} \tnjoin{id.south}{0mm,-16mm}
-    % the string wraps the i site: it closes on the west through iw
-    \tnjoin[role=operator, route=arc, out=180, in=-90]{id.west}{iw.south}
-    \tnjoin[role=operator, route=arc, out=90, in=180]{iw.north}{iu.west}
-    % the b, a, b strands on the lower rail, east of the vertical rail
-    \tnput[dot, role=extra, label pos=south]{bL}{(4mm,-8mm)}{b}
-    \tnput[dot, role=marked, label pos=south]{a}{(9mm,-8mm)}{a}
-    \tnput[dot, role=extra, label pos=south]{bR}{(14mm,-8mm)}{b}
-    \tnjoin{-14mm,-8mm}{bL.west} \tnjoin{bL.east}{a.west}
-    \tnjoin{a.east}{bR.west} \tnjoin{bR.east}{20mm,-8mm}
-    % three strands descend from the ringed i to b, a, b
-    \tnjoin[role=operator, route=arc, out=-45, in=90]{id.south east}{bL.north}
-    \tnjoin[role=operator, route=arc, out=0, in=90]{ie.south east}{a.north}
-    \tnjoin[role=operator, route=arc, out=45, in=90]{iu.east}{bR.north}
-  \end{tenkzfree}
+  \tenkzkernel
+  \begin{tenkz}[rows={wire,wire,wire}, cols=4, bonds=none, physical=up]
+    % the anyon i and the plain lattice site below it; each site carries its
+    % physical leg
+    \tn[at=(1,2), name=i, role=marked, label pos=nw]{i}
+    \tn[at=(3,1), name=v]{}
+    % lattice rails: two horizontals and the transversal through both sites
+    \tnwire[name=uwest]{1 w of i}{i.w} \tnwire[name=ueast]{i.e}{2 e of i}
+    \tnwire{1 w of v}{v.w} \tnwire[name=lre]{v.e}{3 e of v}
+    \tnwire[name=du]{i.45}{1 n of 1 e of i}
+    \tnwire[name=dm]{i.225}{v.45}
+    \tnwire{v.225}{1 s of 1 w of v}
+    % string tensors: three on the lower rail, four ringing the anyon
+    \tn[at=on lre 0.31, name=bL, role=extra, label pos=s]{b}
+    \tn[at=on lre 0.48, name=aa, role=marked, label pos=s]{a}
+    \tn[at=on lre 0.65, name=bR, role=extra, label pos=s]{b}
+    \tn[at=on dm 0.3, name=rS, role=extra]{}
+    \tn[at=on uwest 0.5, name=rW, role=extra]{}
+    \tn[at=on du 0.5, name=rN, role=extra]{}
+    \tn[at=on ueast 0.25, name=rE, role=extra, label pos=ne]{b}
+    % the b string winds once around the anyon, passing over its physical leg
+    \tnwire[kind=string, species=operator, name=s,
+            via={(3,2), on dm 0.3, on uwest 0.5, 0.25 n of i, on du 0.5,
+                 on ueast 0.25, (3,3)},
+            cross={over at crossing of s and leg n of (1,2)}]
+           {1 s of (3,2)}{1 s of (3,3)}
+    % the i string leaves the anyon for the a tensor on the lower rail
+    \tnwire[kind=string, species=operator, name=t,
+            via={0.5 e of (3,2)}]{0.15 se of i}{1 s of 0.5 e of (3,2)}
+  \end{tenkz}
 \]
