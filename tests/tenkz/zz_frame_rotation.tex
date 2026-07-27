@@ -1,6 +1,7 @@
 % Regression: affine rotation at picture, nested-group, atom, and cup-label scope.
 % Formula: framed atoms compose rotations while labels and cup matrices stay upright.
 % Coordinates, asymmetric borders, and the \tnX capsule rotate; labels stay clear.
+% A full-turn frame is the flat identity, including its historical cup-label geometry.
 \documentclass[varwidth=14cm, border=6pt]{standalone}
 \usepackage{tenkz}
 \begin{document}
@@ -27,6 +28,12 @@
     \tnX{X_g} & \tn{A}\\
     \tnskip & \tn[dot]{R_{\bar\alpha}}\\
     \tnghost{} & \tn{A}
+  \end{tenkz}
+  \qquad
+  \begin{tenkz}[rows={ket,bra}, frame={rotate=360},
+                west={cup=$L$}, east={cup=$R$}]
+    \tn{I}\\
+    \tn{I}
   \end{tenkz}
 \]
 \end{document}

@@ -35,7 +35,14 @@
           \l__tenkz_frame_match_seq
           {
             \tl_set:Ne #2
-              { \fp_eval:n { \seq_item:Nn \l__tenkz_frame_match_seq {2} } }
+              {
+                \fp_eval:n
+                  {
+                    \seq_item:Nn \l__tenkz_frame_match_seq {2}
+                    - 360 * floor(
+                        \seq_item:Nn \l__tenkz_frame_match_seq {2} / 360)
+                  }
+              }
           }
           {
             \msg_error:nnV {tenkz}{frame-spec}
