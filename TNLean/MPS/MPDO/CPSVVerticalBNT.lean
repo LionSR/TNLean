@@ -4,20 +4,24 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.MPDO.CPSVOriginalSpaceLemmaL
+import TNLean.MPS.MPDO.CPSVPeriodicExclusion
 import TNLean.MPS.MPDO.SectorCompressionSeparation
+import TNLean.MPS.MPDO.VerticalBNT
 
 /-!
-# Sector-compression separation for a literal CPSV canonical form
+# Vertical BNT grouping for a literal CPSV canonical form
 
-This file proves the finite-chain sector-compression separation step in the
-vertical canonical-form argument for matrix product density operators.  The
-proof applies physical first-site Lemma L in the original bond coordinates of
-a literal CPSV canonical form.
+This file proves the finite-chain sector-compression separation step and uses
+it to group the normal vertical sectors of a literal CPSV canonical-form tensor
+by matrix-product-vector phase class.
 
 ## Main statement
 
 * `MPSTensor.IsCPSVCanonicalForm.exists_sectorCompression_ne_zero_of_corner`:
   every nonzero vertical corner has a nonzero finite-chain compression.
+* `MPSTensor.IsCPSVCanonicalForm.exists_verticalBNTGrouping_with_isometry`:
+  the literal vertical sectors grouped into BNT representatives with positive
+  coefficients.
 
 ## References
 
@@ -48,5 +52,24 @@ theorem exists_sectorCompression_ne_zero_of_corner
     ∃ N, MPOTensor.sectorCompression M P N ≠ 0 := by
   exact MPOTensor.exists_sectorCompression_ne_zero_of_corner_of_insertedTensor_eq M
     (hCanonical.insertedTensor_eq_of_firstSiteActionAgree M.toMPSTensor) P hcorner
+
+/-- Group the normal vertical corners of an MPDO in literal CPSV canonical
+form by their gauge-phase classes while retaining their physical isometries.
+
+The representatives satisfy the BNT characterization of arXiv:1606.00608,
+lines 1135--1148.  Every effective grouped coefficient is positive by the
+sector-compression argument in Proposition 4.13, lines 1895--1902.
+
+The proportional Gram identity, normalized grouped-sector maps, and final
+coisometry from lines 1903--1921 are not included; see
+`docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex`. -/
+theorem exists_verticalBNTGrouping_with_isometry
+    (M : MPOTensor d D)
+    (hCanonical : MPSTensor.IsCPSVCanonicalForm M.toMPSTensor)
+    (hM : MPOTensor.IsMPDO M) :
+    MPOTensor.HasVerticalBNTGroupingWithIsometry M := by
+  exact MPOTensor.exists_verticalBNTGrouping_with_isometry_of_decomposition M hM
+    (hCanonical.exists_normal_verticalBlockDecomp_with_isometry M hM)
+    (hCanonical.exists_sectorCompression_ne_zero_of_corner M)
 
 end MPSTensor.IsCPSVCanonicalForm

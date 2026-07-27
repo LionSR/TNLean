@@ -110,9 +110,10 @@ complement and does not
 include this normalized representative grouping.  Thus the full vertical
 canonical-form conclusion below is proved under the stronger horizontal
 hypothesis.  Under literal CPSV canonical form, periodic exclusion, the normal
-vertical block decomposition, and finite-chain separation of every nonzero
-vertical corner are now complete.  Actual vertical phase-class grouping,
-normalization of the grouped sectors, and the final coisometry remain open.
+vertical block decomposition, finite-chain separation of every nonzero
+vertical corner, and vertical phase-class grouping with positive effective
+coefficients are now complete.  Normalization of the grouped sectors and the
+final coisometry remain open.
 
 An earlier auxiliary route compared one scalar weight $\mu_\alpha$ with
 several weights $\omega_{\alpha,j}$ under the additional identities
@@ -207,9 +208,13 @@ at source line~1898; the later trace argument cannot be applied to the source
 sectors until those sectors have actually been grouped.
 
 The normalized corners are now grouped by matrix-product-vector phase class
-in
-\path{MPOTensor.IsHorizontalCF.exists_verticalBNTGrouping_with_isometry}
-(\path{TNLean/MPS/MPDO/VerticalBNT.lean}).  One normal representative is
+under the literal CPSV hypothesis in
+\path{MPSTensor.IsCPSVCanonicalForm.%
+exists_verticalBNTGrouping_with_isometry}
+(\path{TNLean/MPS/MPDO/CPSVVerticalBNT.lean}).  The normalized BNT-refined
+horizontal wrapper remains available as
+\path{MPOTensor.IsHorizontalCF.exists_verticalBNTGrouping_with_isometry}.
+One normal representative is
 chosen from each class.  Every copy has the same bond dimension as its
 representative and is a unit-modulus scalar times an invertible conjugate of
 that representative; the scalar of the chosen representative is one.  The
@@ -247,8 +252,9 @@ normalized BNT-refined horizontal hypothesis is
 quantifier correction is recorded in
 \path{docs/paper-gaps/cpgsv17_periodic_sector_projector.tex}.
 
-Under the normalized BNT-refined horizontal hypothesis, the positive-weight
-step of source lines~1898--1902 is complete.  For each grouped sector, write
+Under both the literal CPSV and normalized BNT-refined horizontal hypotheses,
+the positive-weight step of source lines~1898--1902 is complete.  For each
+grouped sector, write
 $\nu_{\alpha,k}$ for the raw sector weight, $\zeta_{\alpha,k}$ for its phase
 relative to the chosen representative, and
 $c_{\alpha,k}=\nu_{\alpha,k}\zeta_{\alpha,k}$ for the grouped coefficient.
@@ -262,12 +268,10 @@ $c_{\alpha,k}d_\alpha$, one obtains $d_\alpha>0$ and $c_{\alpha,k}>0$ under
 the normalization $c_{\alpha,1}=\nu_{\alpha,1}>0$.  Thus the coefficient
 denoted by $\mu_{\alpha,k}$ in the source is
 $\mu_{\alpha,k}=c_{\alpha,k}$
-(\path{TNLean/MPS/MPDO/VerticalBNT.lean} and
-\path{TNLean/MPS/MPDO/SectorTrace.lean}).  Under literal CPSV canonical form,
-only the algebraic separation implication above is presently available: no
-positivity of a grouped coefficient is claimed before the actual vertical
-phase classes and their loop identities have been constructed.  For the
-unitary gauges, the pairwise Gram-conjugation identity of the second displayed diagram at source
+(\path{TNLean/MPS/MPDO/VerticalBNT.lean},
+\path{TNLean/MPS/MPDO/CPSVVerticalBNT.lean}, and
+\path{TNLean/MPS/MPDO/SectorTrace.lean}).  For the unitary gauges, the pairwise
+Gram-conjugation identity of the second displayed diagram at source
 lines~1914--1919 is proved in
 \path{TNLean/MPS/MPDO/FigureEightPairwise.lean}.  The dependent identification with
 the actual grouped sector and its distinguished copy is proved in
@@ -323,17 +327,17 @@ rather than a consequence of the proposition.
 The horizontal-to-vertical implication is complete under the normalized
 BNT-refined hypothesis \path{MPOTensor.IsHorizontalCF}.  That hypothesis is
 strictly stronger than the literal CPSV canonical form assumed in
-Proposition~4.13, so the literal theorem remains open.  Under the literal
+Proposition~4.13, so the full literal theorem remains open.  Under the literal
 hypothesis, active regrouping, marked Lemma~L on both the retained and original
 bond spaces, physical first-site insertion equality, invariant-projector
 closure, displaced-projector noncommutation at some length, periodic exclusion,
 the normal vertical block decomposition, literal sector-compression
-separation, the pairwise Figure~8 Gram-dressing identity, and the positive
+separation, actual vertical phase-class grouping with positive effective
+coefficients, the pairwise Figure~8 Gram-dressing identity, and the positive
 relative Gram scalar are complete.  The two
 Figure~8 statements are conditional on two vertical corners satisfying the
-displayed similarity equations; they do not group the normal corners into
-actual representative families.  Actual vertical phase-class grouping,
-normalization of the grouped sectors, and the final vertical canonical-form
+displayed similarity equations.  Normalization of the grouped sectors and the
+final vertical canonical-form
 theorem with its coisometry remain open.  The proved statements retain every
 inactive listed coordinate with weight zero and do not
 use the unsupported diagonal-restriction statement from \ghissue{2537}.
@@ -496,13 +500,13 @@ lines~1909--1921 for any two corners satisfying the source's positive
 similarity equations.  They preserve all inactive listed coordinates through
 the literal marked Lemma~L argument.
 
-Literal Proposition~4.13 nevertheless remains open.  Periodic exclusion and
-the normal vertical corners are complete, with the exact reconstruction
-\eqref{eq:literal-normal-corners}.  One must still partition these corners into
-vertical BNT representative families, prove the required grouped positivity
-and normalization statements for the actual representatives, and obtain the
-final vertical canonical form and coisometry satisfying $UU^\dagger=I$.  The
-current results do not assert $U^\dagger U=I$.  This remaining
+Literal Proposition~4.13 nevertheless remains open.  Periodic exclusion,
+the normal vertical corners with exact reconstruction
+\eqref{eq:literal-normal-corners}, and their phase-class grouping with positive
+effective coefficients are complete.  One must still normalize the grouped
+sector maps and obtain the final vertical canonical form and coisometry
+satisfying $UU^\dagger=I$.  The current results do not assert
+$U^\dagger U=I$.  This remaining
 Proposition~4.13 work is independent of the Appendix~C.4 positive-fusion
 question tracked by \ghissue{4648}.
 \bibliographystyle{alpha}

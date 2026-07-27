@@ -28,19 +28,22 @@ and deduces that the grouped coefficient is positive.  The positive-diagonal
 isometry asserted at lines 1895--1896 and the gauge normalization and final
 coisometry argument at lines 1903--1921 are not included.
 
-The grouping assumes normalized BNT-refined horizontal form, which is stronger
-than the literal CPSV canonical form.
+The common proof is parameterized by a normal vertical block decomposition and
+finite-chain separation of nonzero corners.  Both literal CPSV canonical form
+and normalized BNT-refined horizontal form supply these interfaces.
 
-## Main statement
+## Main statements
 
 * `IsHorizontalCF.exists_verticalBNTGrouping_with_isometry`: the normalized
   vertical corners grouped into BNT representatives, with the physical
   isometries and literal reconstruction retained.
+* `MPSTensor.IsCPSVCanonicalForm.exists_verticalBNTGrouping_with_isometry`:
+  the same conclusion from literal CPSV canonical form.
 
 ## References
 
 * Cirac--Pérez-García--Schuch--Verstraete, arXiv:1606.00608, Proposition
-  `prop:vertical`, lines 1873--1921.
+  `Prop:IV.12`, lines 1873--1921.
 -/
 
 open scoped Matrix BigOperators ComplexOrder
@@ -108,9 +111,8 @@ theorem exists_rangeProjection_corner_ne_zero
       hV, Matrix.mul_one]] at hcancel
   simpa using hcancel
 
-/-- Group the normalized vertical corners of an MPDO in normalized BNT-refined
-horizontal form by their gauge-phase classes while retaining the physical
-reducing isometries.
+/-- An MPDO has its normalized vertical corners grouped by gauge-phase class
+while retaining the physical reducing isometries.
 
 For each class `j` and copy `q`, the original normalized corner is
 
@@ -131,11 +133,9 @@ positive-diagonal isometry asserted at lines 1895--1896 and the subsequent
 gauge normalization and coisometry argument at lines 1903--1921 are not
 included.
 
-**Scope restriction (BNT-refined horizontal form):** `IsHorizontalCF` is
-stronger than the literal CPSV canonical form; see
-`docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex`. -/
-theorem IsHorizontalCF.exists_verticalBNTGrouping_with_isometry
-    (M : MPOTensor d D) (hHorizontal : IsHorizontalCF M) (hM : IsMPDO M) :
+The proposition records the conclusion shared by the literal CPSV and
+normalized BNT-refined horizontal surfaces. -/
+def HasVerticalBNTGroupingWithIsometry (M : MPOTensor d D) : Prop :=
     ∃ (r : ℕ) (dim : Fin r → ℕ) (μ : Fin r → ℂ)
       (blocks : (k : Fin r) → MPSTensor (D * D) (dim k))
       (V : (k : Fin r) → Matrix (Fin d) (Fin (dim k)) ℂ),
@@ -222,11 +222,43 @@ theorem IsHorizontalCF.exists_verticalBNTGrouping_with_isometry
                     (blocks (classes.repr j))) v *
                   (↑((X j q)⁻¹) : Matrix (Fin (dim (classes.enum j q)))
                     (Fin (dim (classes.enum j q))) ℂ))) *
-              (V (classes.enum j q))ᴴ := by
+              (V (classes.enum j q))ᴴ
+
+/-- Group a normal vertical block decomposition by gauge-phase class when
+nonzero vertical corners are detected by finite-chain compressions.
+
+This is the common algebraic core of the BNT characterization at
+arXiv:1606.00608, lines 1135--1148, and the positivity argument in Proposition
+4.13, lines 1895--1902.  Canonical-form hypotheses enter only through the two
+supplied interfaces.  The Gram normalization and final coisometry argument at
+lines 1903--1921 are not included. -/
+theorem exists_verticalBNTGrouping_with_isometry_of_decomposition
+    (M : MPOTensor d D) (hM : IsMPDO M)
+    (hDecomp :
+      ∃ (r : ℕ) (dim : Fin r → ℕ) (μ : Fin r → ℂ)
+        (blocks : (k : Fin r) → MPSTensor (D * D) (dim k))
+        (V : (k : Fin r) → Matrix (Fin d) (Fin (dim k)) ℂ),
+        (∀ k, 0 < dim k) ∧
+        (∀ k, (0 : ℂ) < μ k) ∧
+        (∀ k, MPSTensor.IsNormalTensor (blocks k)) ∧
+        (∀ k, (V k)ᴴ * V k = 1) ∧
+        (∀ k l, k ≠ l → (V k)ᴴ * V l = 0) ∧
+        (∀ k v, verticalTensor M v * V k = V k * (μ k • blocks k v)) ∧
+        (∀ k v, (V k)ᴴ * verticalTensor M v =
+          (μ k • blocks k v) * (V k)ᴴ) ∧
+        (∀ k v, μ k • blocks k v =
+          (V k)ᴴ * verticalTensor M v * V k) ∧
+        ∀ v, verticalTensor M v =
+          ∑ k, V k * (μ k • blocks k v) * (V k)ᴴ)
+    (hSeparate :
+      ∀ P : Matrix (Fin d) (Fin d) ℂ,
+        (∃ v, P * verticalTensor M v * P ≠ 0) →
+          ∃ N, sectorCompression M P N ≠ 0) :
+    HasVerticalBNTGroupingWithIsometry M := by
   classical
   obtain ⟨r, dim, μ, blocks, V, hdimPos, hμPos, hNormal, hIso, hOrth,
     hInt, hIntStar, hCorner, hReconstruct⟩ :=
-    hHorizontal.exists_normal_verticalBlockDecomp_with_isometry M hM
+    hDecomp
   let classes := MPSTensor.mpvPhaseClassData blocks
   haveI : ∀ k, NeZero (dim k) := fun k => ⟨(hdimPos k).ne'⟩
   have hClassGauge : ∀ j q,
@@ -330,7 +362,7 @@ theorem IsHorizontalCF.exists_verticalBNTGrouping_with_isometry
       (μ (classes.enum j q) * ζ j q)
       (mul_ne_zero (hμPos (classes.enum j q)).ne' (hζNe j q))
       (hGroupedCorner j q)
-    exact hHorizontal.exists_sectorCompression_ne_zero_of_corner M _ hRange
+    exact hSeparate _ hRange
   have hCoeffPos : ∀ j q, (0 : ℂ) < μ (classes.enum j q) * ζ j q := by
     intro j q
     let q₀ : Fin (classes.copies j) := ⟨0, classes.copies_pos j⟩
@@ -419,5 +451,24 @@ theorem IsHorizontalCF.exists_verticalBNTGrouping_with_isometry
               refine Finset.sum_congr rfl fun j _ =>
                 Finset.sum_congr rfl fun q _ => ?_
               rw [hCornerEq j q v]
+
+/-- Group the normalized vertical corners of an MPDO in normalized BNT-refined
+horizontal form by their gauge-phase classes while retaining the physical
+reducing isometries.
+
+Source: the BNT characterization at arXiv:1606.00608, lines 1135--1148, and
+the phase-class decomposition and positivity argument in Proposition 4.13,
+lines 1895--1902.  The Gram normalization and final coisometry argument at
+lines 1903--1921 are not included.
+
+**Scope restriction (BNT-refined horizontal form):** `IsHorizontalCF` is
+stronger than the literal CPSV canonical form; see
+`docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex`. -/
+theorem IsHorizontalCF.exists_verticalBNTGrouping_with_isometry
+    (M : MPOTensor d D) (hHorizontal : IsHorizontalCF M) (hM : IsMPDO M) :
+    HasVerticalBNTGroupingWithIsometry M := by
+  exact exists_verticalBNTGrouping_with_isometry_of_decomposition M hM
+    (hHorizontal.exists_normal_verticalBlockDecomp_with_isometry M hM)
+    (hHorizontal.exists_sectorCompression_ne_zero_of_corner M)
 
 end MPOTensor
