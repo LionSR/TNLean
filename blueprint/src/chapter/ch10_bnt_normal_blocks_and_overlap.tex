@@ -86,12 +86,13 @@ matching between normal blocks.
     \label{thm:cpsv_normal_nonzero_letter}
     \lean{MPSTensor.IsNormalTensor.exists_apply_ne_zero}
     \leanok
-    \uses{def:nt_cpsv, def:transfer_map}
+    \uses{def:nt_cpsv}
     Let $A$ be a CPSV normal tensor of positive bond dimension. Then
     $A^i\ne 0$ for some physical letter $i$.
 \end{theorem}
 
 \begin{proof}\leanok
+    \uses{def:transfer_map}
     If every letter vanished, then the transfer map would vanish and its
     spectral radius would be zero, contradicting the spectral-radius-one
     normalization of a CPSV normal tensor.
