@@ -58,30 +58,35 @@ noncomputable def representativeSectorDecomposition : SectorDecomposition d wher
       (Complex.ne_zero_of_norm_eq_one (ref.copyPhaseNorm (activeCopy (data := data) j q)))
   }
 
+/-- The active sector decomposition has one basis block for each phase-class representative. -/
 @[simp] theorem representativeSectorDecomposition_basisCount :
     ref.representativeSectorDecomposition.basisCount = data.activePhaseClasses.g := rfl
 
+/-- A representative sector retains the chosen normal block's bond dimension. -/
 @[simp] theorem representativeSectorDecomposition_basisDim
     (j : Fin data.activePhaseClasses.g) :
     ref.representativeSectorDecomposition.basisDim j =
       data.dim (data.activeRepresentativeIndex j) := rfl
 
+/-- The basis tensor of a representative sector is its chosen normal block. -/
 @[simp] theorem representativeSectorDecomposition_basis
     (j : Fin data.activePhaseClasses.g) :
     ref.representativeSectorDecomposition.basis j =
       data.blocks (data.activeRepresentativeIndex j) := rfl
 
+/-- Sector multiplicities are the multiplicities of the active phase classes. -/
 @[simp] theorem representativeSectorDecomposition_copies
     (j : Fin data.activePhaseClasses.g) :
     ref.representativeSectorDecomposition.copies j =
       data.activePhaseClasses.copies j := rfl
 
+/-- Each active copy has weight equal to its raw listed weight times its phase. -/
 @[simp] theorem representativeSectorDecomposition_weight
     (j : Fin data.activePhaseClasses.g)
     (q : Fin (data.activePhaseClasses.copies j)) :
     ref.representativeSectorDecomposition.weight j q =
-      ref.copyWeight (activeCopy (data := data) j q) *
-        ref.copyPhase (activeCopy (data := data) j q) := rfl
+      ref.copyWeight (data.activeClassCopyEquiv ⟨j, q⟩) *
+        ref.copyPhase (data.activeClassCopyEquiv ⟨j, q⟩) := rfl
 
 /-- The source-native BNT predicate supplies eventual simultaneous word span for the chosen
 representatives.
@@ -171,6 +176,7 @@ noncomputable def groupedMarkedBlocks
         (C (data.activeClassCopy ka).1)
   else fun _ => 0
 
+/-- On an active listed coordinate, the marked block carries the raw weight and phase. -/
 @[simp] theorem groupedMarkedBlocks_active
     (C : (j : Fin data.activePhaseClasses.g) →
       MPSTensor e (data.dim (data.activeRepresentativeIndex j)))
@@ -222,7 +228,7 @@ private theorem trace_groupedMarkedTensor_mul_evalWord_eq_sum
   simp only [Matrix.coe_reindexLinearEquiv]
   rw [Matrix.trace_reindex, ← Matrix.blockDiagonal'_mul,
     Matrix.trace_blockDiagonal']
-  simp
+  simp only [one_smul, Algebra.mul_smul_comm, Matrix.trace_smul, smul_eq_mul]
 
 /-- Exact closed-chain trace bridge from the full grouped marked tensor to the active
 representative sector marked tensor.
@@ -315,9 +321,10 @@ theorem trace_groupedMarkedTensor_eq_representative_markedTensor
 
 /-- Representative-grouped marked Lemma L for a literal CPSV active refinement.
 
-If all full-coordinate grouped marked closed-chain traces agree, then the two marks agree on
-every chosen normal representative.  The inactive listed coordinates remain present in the
-hypothesis and vanish through their zero marked blocks.
+This is the algebraic arbitrary-marked-letter extension of the source's physical first-site
+statement.  If all full-coordinate grouped marked closed-chain traces agree, then the two marks
+agree on every chosen normal representative.  The inactive listed coordinates remain present
+in the hypothesis and vanish through their zero marked blocks.
 
 Source: arXiv:1606.00608, Appendix C.3, Lemma L, lines 1835--1858 and the marked use at
 lines 1909--1919. -/
