@@ -695,14 +695,15 @@ note = "The enlarged crossing is blue-outlined rather than solid blue."
 
 [[verdict]]
 id = "rmp-iii-b-anyon-pair"
-status = "structural-gap"
+status = "faithful"
 pairing = "verified"
 pairing_by = "site-glyph-source-review-2026-07-27"
-defects = ["missing-element"]
-case_sha256 = "8276fb9f7baf3dcf015c98ec31ed64a69bc0908e2d542779b66db45c6d7a32c5"
+defects = []
+case_sha256 = "e9b9fc0a997ba19f9e7ba210eb66e5aeee974d9434f7d42fc46586345b9465b2"
+second_viewer = "LionSR-delegated-fable-countersign-2026-07-26"
 reviewed = "2026-07-27"
-renderer = "site-glyph-source-review-2026-07-27"
-note = "The i, a, and i* labels now occupy the source quadrants; the source's second small, unlabeled intermediate marked site remains absent."
+renderer = "fable-residual-batch-2026-07-27-200dpi"
+note = "the string now bends through both intermediate marked sites (the unlabeled one and a), as the source draws its two-dot path"
 
 [[verdict]]
 id = "rmp-iii-b-idempotent"
@@ -812,14 +813,14 @@ note = "stray diagonals removed; crossing order still unspeakable (#4908)"
 
 [[verdict]]
 id = "rmp-iii-b-condensation"
-status = "structural-gap"
+status = "cosmetic-gap"
 pairing = "verified"
 pairing_by = "site-glyph-source-review-2026-07-27"
-defects = ["wrong-contraction"]
-case_sha256 = "033d6e38ffc6058505a2b9dd7a9b2f903deb1da96e01edb0aca04ef7fcbb43df"
+defects = []
+case_sha256 = "92ab0947225f1f96e638cd4dbaa273200ad5c183f12667c93dad70c774a63f9e"
 reviewed = "2026-07-27"
-renderer = "site-glyph-source-review-2026-07-27"
-note = "Endpoint and intermediate marker sizes now agree with the source; the extended oblique lattice and longer doubled strings remain reduced."
+renderer = "fable-residual-batch-2026-07-27-200dpi"
+note = "sheet extended to the source trace (4x6 with five-node doubled strings, one early bend); the finding text estimated eight columns but the pixel trace of the source foreach reads 4x6"
 
 [[verdict]]
 id = "rmp-iv-ground-space-1d"
@@ -1201,14 +1202,14 @@ note = "the unfaithful record predates the #4929 wholesale redraw and was carrie
 
 [[verdict]]
 id = "rmp-workbench-iii-diagram-four"
-status = "structural-gap"
+status = "cosmetic-gap"
 pairing = "verified"
 pairing_by = "site-glyph-source-review-2026-07-27"
-defects = ["wrong-contraction"]
-case_sha256 = "dd026ccb53f643b7598a21ddc152dc5382f246df5513de56ea03f6389a2a9ed0"
+defects = []
+case_sha256 = "902f09c114b778ba025f57c94dfd2e2feb16c2805824e26a0a76725b31165a22"
 reviewed = "2026-07-27"
-renderer = "site-glyph-source-review-2026-07-27"
-note = "The lambda intertwiner now uses the source's plain circle; the recorded ring-connectivity gap remains."
+renderer = "fable-residual-batch-2026-07-27-200dpi"
+note = "each ring box regains its short inward open leg; residue: the RHS lambda still renders as the pre-#4960 stadium while the LHS uses the plain circle"
 
 [[verdict]]
 id = "rmp-workbench-iii-eq50-reduced"

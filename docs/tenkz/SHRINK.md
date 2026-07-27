@@ -983,3 +983,16 @@ entries priced remains where it was.
 Census-correction: #4709
 
 No ledger row changes and no flag verdict is re-examined here.
+
+### 2026-07-27 — the residual batch prices one reshear
+
+M3 rises from 354 to 355: one `plane slant=` override in the condensation
+panel, needed to keep the extended six-row sheet inside the geometry
+guard at the readable band. The same gap the anyon sheet priced — a
+sheet's shear is picture-global where the demand is local — met once
+more. M4 rises from 16.95 to 17.01 as the sheet and its strings extend
+to the source's trace.
+
+Census-correction: #4709
+
+No ledger row changes and no flag verdict is re-examined here.

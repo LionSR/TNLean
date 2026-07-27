@@ -17,6 +17,12 @@
     \tnjoin{l.east}{n.west}
     \tnjoin{n.north}{0mm,16mm} \tnjoin{e.east}{16mm,0mm}
     \tnjoin{0mm,-16mm}{s.south} \tnjoin{-16mm,0mm}{w.west}
+    % source Dia4.pdf: each ring box carries a second, shorter leg on its
+    % free port, piercing the ring inward and left open (unconnected) --
+    % the north/east/south/west ports not already spent on the outward
+    % arm or the two ring joins.
+    \tnjoin{n.south}{0mm,4mm} \tnjoin{e.west}{4mm,0mm}
+    \tnjoin{s.north}{0mm,-4mm} \tnjoin{w.east}{-4mm,0mm}
   \end{tenkzfree}
   =\Delta^3\!\left(
     \begin{tenkz}[boundary=periodic, physical=up, tensor style=box]
