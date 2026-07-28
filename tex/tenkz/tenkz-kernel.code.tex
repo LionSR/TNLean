@@ -955,12 +955,23 @@
 \cs_new_protected:Npn \__tenkz_kernel_emit:
   {
     \int_gincr:N \g__tenkz_kernel_picture_int
+    % The shared renderer owns measured label and glyph events.  Give it the
+    % kernel picture identity without overloading the dialect picture counter.
+    \use:c {tenkz@auditpicturetrue}
+    \cs_set:cpe {tenkz@auditpictureid}
+      { k \int_use:N \g__tenkz_kernel_picture_int }
     \__tenkz_kernel_event:n
       { picture|id=k \int_use:N \g__tenkz_kernel_picture_int |lang=kernel }
     \clist_map_inline:nn { atom, wire, mark, frame }
       {
         \__tenkz_model_map_ids:nn {##1}
           { \__tenkz_kernel_emit_record:n {####1} }
+      }
+    \__tenkz_kernel_signature:N \l__tenkz_kernel_sig_tl
+    \__tenkz_kernel_event:n
+      {
+        kernel-boundary
+        |signature=\tl_use:N \l__tenkz_kernel_sig_tl
       }
   }
 \cs_new_protected:Npn \__tenkz_kernel_emit_record:n #1
@@ -4819,6 +4830,7 @@
           {
             \__tenkz_render_labelnode:nnn
               {
+                tenkz~audited~label ,
                 anchor = \exp_args:NV \__tenkz_render_label_anchor:n
                   \l__tenkz_kernel_leg_dir_tl ,
                 inner~sep = \__tenkz_dim:n {labelclear}
@@ -5765,6 +5777,7 @@
               \l__tenkz_kernel_r_x_fp \l__tenkz_kernel_r_y_fp
             \__tenkz_render_labelnode:nnn
               {
+                tenkz~audited~label ,
                 alias = #1 ,
                 inner~sep = \__tenkz_dim:n {labelclear} ,
                 fill = tenkzPaper
@@ -5828,6 +5841,7 @@
                   }
                 \__tenkz_render_labelnode:nnn
                   {
+                    tenkz~audited~label ,
                     anchor = \tl_use:N \l__tenkz_kernel_r_c_tl ,
                     inner~sep = \__tenkz_dim:n {labelclear}
                   }
@@ -5904,7 +5918,10 @@
     \fp_compare:nNnF { \l__tenkz_kernel_r_ink_turn_tl } = {0}
       {
         \tl_put_right:Ne \l__tenkz_kernel_r_c_tl
-          { , rotate = \tl_use:N \l__tenkz_kernel_r_ink_turn_tl }
+          {
+            , tenkz~glyph~frame =
+                \tl_use:N \l__tenkz_kernel_r_ink_turn_tl
+          }
       }
     % pgfkeys splits its option list on the commas it can see; an unexpanded
     % variable is one opaque key, so the style reaches the node expanded.
@@ -5996,6 +6013,7 @@
       {
         \__tenkz_render_labelnode:nnn
           {
+            tenkz~audited~label ,
             anchor = \exp_args:NV \__tenkz_render_label_anchor:n
               \l__tenkz_kernel_r_c_tl ,
             inner~sep = \__tenkz_dim:n {labelclear}
@@ -6171,7 +6189,10 @@
     \quark_if_no_value:NF \l__tenkz_kernel_r_b_tl
       {
         \__tenkz_render_labelnode:nnn
-          { inner~sep = \__tenkz_dim:n {labelclear} }
+          {
+            tenkz~audited~label ,
+            inner~sep = \__tenkz_dim:n {labelclear}
+          }
           {
             (
               \__tenkz_kernel_r_pt:n { \l__tenkz_kernel_r_x_fp } ,

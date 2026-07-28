@@ -81,6 +81,22 @@ def _any(value: str) -> bool:
     return value != ""
 
 
+def _anything(_value: str) -> bool:
+    return True
+
+
+def _is_kernel_record_id(value: str) -> bool:
+    return re.fullmatch(r"(?:atom|wire|mark|frame)-\d+", value) is not None
+
+
+def _is_address_id(value: str) -> bool:
+    return re.fullmatch(r"addr-\d+", value) is not None
+
+
+def _is_dimension(value: str) -> bool:
+    return re.fullmatch(r"-?(?:\d+(?:\.\d*)?|\.\d+)pt", value) is not None
+
+
 # kind -> {field: validator}; fields absent here are accepted as opaque.
 # Numeric slots are validated strictly: they are cell/row coordinates, and
 # a coordinate that is not an integer addresses nothing.
@@ -108,7 +124,60 @@ FIELD_VALIDATORS: dict[str, dict[str, Callable[[str], bool]]] = {
         "id": _is_positive_int,
         "shape": _enum("rect", "circle", "roundrect", "triangle"),
     },
-    "atom": {"picture": _is_picture_id, "cell": _is_cell, "name": _any, "kind": _any},
+    "atom": {
+        "picture": _is_picture_id,
+        "id": _is_kernel_record_id,
+        "cell": _is_cell,
+        "name": _any,
+        "kind": _any,
+    },
+    "wire": {
+        "picture": _is_picture_id,
+        "id": _is_kernel_record_id,
+        "kind": _enum("index", "string"),
+        "from": _is_address_id,
+        "to": _is_address_id,
+        "from-open": _enum("n", "e", "s", "w", "route"),
+        "to-open": _enum("n", "e", "s", "w", "route"),
+    },
+    "mark": {
+        "picture": _is_picture_id,
+        "id": _is_kernel_record_id,
+        "form": _enum("label", "enclosure", "prose"),
+    },
+    "string": {
+        "picture": _is_picture_id,
+        "id": _any,
+        "kind": _enum("open", "closed", "wind", "around"),
+        "pts": _is_positive_int,
+    },
+    "stringbead": {
+        "picture": _is_picture_id,
+        "id": _any,
+        "t": _is_number,
+        "x": _is_dimension,
+        "y": _is_dimension,
+    },
+    "stringcross": {
+        "picture": _is_picture_id,
+        "under": _any,
+        "over": _any,
+        "hits": _is_nonnegative_int,
+    },
+    "kernel-boundary": {
+        "picture": _is_picture_id,
+        "signature": _anything,
+    },
+    "check": {
+        "relation": _is_positive_int,
+        "result": _enum("equal", "mismatch", "off", "malformed"),
+        "reason": _any,
+        "panels": _is_nonnegative_int,
+        "relations": _is_nonnegative_int,
+        "signature": _anything,
+        "left": _anything,
+        "right": _anything,
+    },
     "faceports": {
         "picture": _is_picture_id,
         "cell": _is_cell,
@@ -303,6 +372,7 @@ class Picture:
             "wire-geometry",
             "frame",
             "boundary",
+            "kernel-boundary",
             "warning",
         }
         return [event for event in self.events if event.kind not in excluded]
@@ -322,6 +392,17 @@ class Picture:
                     )
                 except (KeyError, ValueError):
                     return None
+        return None
+
+    def kernel_boundary(self) -> tuple[str, ...] | None:
+        """Return the kernel's canonical exposed-index multiset."""
+        for event in self.events:
+            if event.kind == "kernel-boundary" and "signature" in event.attrs:
+                return tuple(
+                    item.strip()
+                    for item in event.attrs["signature"].split(",")
+                    if item.strip()
+                )
         return None
 
     def ncols(self) -> int:
@@ -345,7 +426,7 @@ class Picture:
 class ParsedLog:
     events: list[Event]
     pictures: list[Picture]
-    by_id: dict[int, Picture]
+    by_id: dict[int | str, Picture]
 
 
 FindingCallback = Callable[[str, str, str], None]
@@ -368,7 +449,7 @@ def parse_log(
     """Parse and validate one complete event stream."""
     events: list[Event] = []
     pictures: list[Picture] = []
-    by_id: dict[int, Picture] = {}
+    by_id: dict[int | str, Picture] = {}
     # The kernel writes its records inside their picture's group with no
     # picture= field; nesting order is the reference.  Track the open one.
     current_kernel: Picture | None = None
@@ -408,10 +489,23 @@ def parse_log(
                     )
                     valid = False
             if kind != "picture" and "picture" not in attrs:
-                if current_kernel is not None:
+                if current_kernel is not None and kind in {
+                    "atom",
+                    "wire",
+                    "mark",
+                    "frame",
+                    "string",
+                    "stringbead",
+                    "stringcross",
+                    "kernel-boundary",
+                }:
                     # A kernel record: it belongs to the open kernel picture
                     # by nesting, not by a picture= field.
                     current_kernel.events.append(event)
+                    continue
+                if kind == "check":
+                    if check_event is not None:
+                        check_event(event)
                     continue
                 hard(
                     "malformed-event",

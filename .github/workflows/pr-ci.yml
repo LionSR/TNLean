@@ -65,6 +65,7 @@ on:
       - 'scripts/test_tenkz_peps_torus.py'
       - 'scripts/test_tenkz_index_routing.py'
       - 'scripts/test_tenkz_tree.py'
+      - 'scripts/test_tenkz_kernel_audit.py'
       - 'scripts/test_tnlog.py'
       - 'scripts/test_texcase.py'
   pull_request:
@@ -125,6 +126,7 @@ on:
       - 'scripts/test_tenkz_peps_torus.py'
       - 'scripts/test_tenkz_index_routing.py'
       - 'scripts/test_tenkz_tree.py'
+      - 'scripts/test_tenkz_kernel_audit.py'
       - 'scripts/test_tnlog.py'
       - 'scripts/test_texcase.py'
   workflow_dispatch:
@@ -211,6 +213,7 @@ jobs:
               - 'scripts/test_tenkz_peps_torus.py'
               - 'scripts/test_tenkz_index_routing.py'
               - 'scripts/test_tenkz_tree.py'
+              - 'scripts/test_tenkz_kernel_audit.py'
               - 'scripts/test_tnlog.py'
               - 'scripts/test_texcase.py'
             corpus:
@@ -606,6 +609,7 @@ jobs:
         run: |
           python3 scripts/test_tnlog.py
           python3 scripts/test_texcase.py
+          python3 scripts/test_tenkz_kernel_audit.py
 
       # Build the root manual as well as its input chapters.  This is the
       # syntax gate for manual2.tex, tenkzmanual2.sty, and the expl3 package
