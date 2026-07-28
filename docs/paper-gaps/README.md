@@ -126,9 +126,11 @@ For MPDO renormalization fixed points:
   tensor-product state decomposition and HJPW Property~`2'` channel action are
   formalized. The joint-support coordinate reduction, state reconstruction,
   and restriction of preserving operations are also formalized, together with
-  the combined block form on the minimum joint support. The recovered
-  conditional-family transport and the generic Hayashi forward implication
-  remain open.
+  the combined block form on the minimum joint support. The finite
+  informationally complete effect family, conditional-slice separation, and
+  the nonzero normalized family fixed by the recovered middle-system channel
+  are formalized. Applying the joint-support block form to this recovered
+  family and completing the generic Hayashi forward implication remain open.
 - `cpsv16_zcl_canonical_form_normalization.tex` records the corresponding
   normalization issue for mixed-state ZCL.
 

@@ -22,6 +22,7 @@ import TNLean.Channel.Determinant.HilbertSchmidt
 import TNLean.Channel.Determinant.UnitaryCharacterization
 import TNLean.Channel.EntanglementWitness
 import TNLean.Channel.FixedPoint
+import TNLean.Channel.InformationallyCompleteEffects
 import TNLean.Channel.Irreducible
 import TNLean.Channel.KoashiImoto
 import TNLean.Channel.KrausCPTP

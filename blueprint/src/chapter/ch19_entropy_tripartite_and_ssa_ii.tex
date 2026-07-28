@@ -1129,6 +1129,117 @@
     identities.
 \end{proof}
 
+\begin{definition}[Finite separating family of effects]
+    \label{def:hjpw_finite_separating_effects}
+    \lean{Matrix.ICEffectIndex,
+        Matrix.informationallyCompleteEffect,
+        Matrix.informationallyCompleteEffect_posSemidef,
+        Matrix.informationallyCompleteEffect_le_one,
+        Matrix.conditionalSlice,
+        Matrix.conditionalSlice_eq_partialTraceLeft}
+    \leanok
+    For a finite-dimensional system $A$, there is a finite family of effects
+    $(M_s)_s$, with $0\leq M_s\leq\mathbf 1_A$, whose complex linear span is
+    the full matrix algebra on $A$. One member is the identity. For an
+    operator $X$ on $A\otimes B$, define its conditional slice by
+    \begin{align}
+        \xi_s(X)
+        &=
+        \tr_A\!\left(X(M_s\otimes\mathbf 1_B)\right).
+        \notag
+    \end{align}
+    The family may be chosen from the four rank-one effects occurring in the
+    polarization identity, scaled so that every member is bounded by the
+    identity.
+\end{definition}
+
+\begin{theorem}[Finite separation by conditional slices]
+    \label{thm:hjpw_finite_conditional_slice_separation}
+    \lean{Matrix.linearMap_eq_zero_of_apply_informationallyCompleteEffect_eq_zero,
+        Matrix.eq_of_conditionalSlice_informationallyCompleteEffect_eq}
+    \leanok
+    \uses{def:hjpw_finite_separating_effects}
+    If two operators $X,Y$ on $A\otimes B$ have
+    \begin{align}
+        \xi_s(X)=\xi_s(Y)
+    \end{align}
+    for every member of the finite effect family, then $X=Y$.
+\end{theorem}
+
+\begin{proof}\leanok
+    The polarization identity expresses every matrix unit as a complex linear
+    combination of the selected rank-one effects. Hence any linear map
+    vanishing on all selected effects vanishes on the full matrix algebra.
+    Apply this to each matrix entry of the difference of the two conditional
+    slice maps.
+\end{proof}
+
+\begin{theorem}[Finite recovered conditional family at SSA equality]
+    \label{thm:hjpw_recovered_conditional_family}
+    \lean{Matrix.recoveredMiddleChannel,
+        Matrix.recoveredMiddleChannel_isKrausCPTP,
+        Matrix.idTensor_recoveredMiddleChannel_traceC_ABC_eq,
+        Matrix.RecoveredEffectIndex,
+        Matrix.recoveredEffectIndex_nonempty,
+        Matrix.recoveredConditionalState,
+        Matrix.recoveredConditionalState_posSemidef,
+        Matrix.recoveredConditionalState_trace,
+        Matrix.map_conditionalSlice_eq_self_of_idTensorMap_eq_self,
+        Matrix.recoveredMiddleChannel_recoveredConditionalState,
+        Matrix.exists_recoveredConditionalPreservingKrausFamily}
+    \leanok
+    \uses{thm:ssa_equality_product_marginal_petz_recovery,
+        def:hjpw_finite_separating_effects}
+    Let $\rho_{ABC}$ be a tripartite density matrix attaining equality in
+    strong subadditivity, and put $\rho_{AB}=\tr_C\rho_{ABC}$. If
+    $\widehat{\mathcal R}:B\to B\otimes C$ is the completed recovery channel,
+    define
+    \begin{align}
+        \varphi
+        &=
+        \tr_C\circ\widehat{\mathcal R}.
+    \end{align}
+    Then $\varphi$ is trace-preserving and completely positive and
+    \begin{align}
+        (\operatorname{id}_A\otimes\varphi)(\rho_{AB})
+        &=
+        \rho_{AB}.
+    \end{align}
+    For each selected effect, let
+    \begin{align}
+        \xi_s
+        &=
+        \tr_A\!\left(\rho_{AB}(M_s\otimes\mathbf 1_B)\right),
+        &
+        p_s
+        &=
+        \tr(\xi_s).
+    \end{align}
+    The indices with $p_s\neq0$ form a finite nonempty set. For each such
+    index, positivity of $\xi_s$ makes $p_s$ real and positive, and
+    \begin{align}
+        \mu_s=p_s^{-1}\xi_s
+    \end{align}
+    is a density operator and $\varphi(\mu_s)=\mu_s$. Consequently a Kraus
+    representation of $\varphi$ gives a single preserving operation for this
+    finite nonempty density family.
+
+    This is the conditional-family construction in
+    \cite[Theorem~6, lines~493--505]{Hayden2004Structure}. Effects with
+    $p_s=0$ are omitted before normalization; no artificial conditional state
+    is introduced for them.
+\end{theorem}
+
+\begin{proof}\leanok
+    Compose equation~(11) with the partial trace over $C$ to obtain the fixed
+    point identity for $\rho_{AB}$. Conditional slicing commutes with every
+    linear map on $B$, so $\varphi(\xi_s)=\xi_s$. Positivity of $\rho_{AB}$
+    and $M_s$ gives positivity of $\xi_s$. On the nonzero-trace subtype,
+    scaling by $p_s^{-1}$ preserves positivity and makes the trace one; the
+    fixed-point equation is preserved by the same scaling. The identity
+    effect has probability $\tr(\rho_{AB})=1$, proving nonemptiness.
+\end{proof}
+
 \begin{theorem}[SSA equality as saturation for a maximally mixed reference]
     \label{thm:ssa_equality_maximally_mixed_reference_dpi}
     \lean{isSSAEquality_iff_maximally_mixed_reference_data_processing_eq}
@@ -1687,10 +1798,15 @@ algebra of a family of jointly invariant states.
     faithful support coordinates for an arbitrary finite family and restricts
     every preserving operation to them.
     Theorem~\ref{thm:koashi_imoto_joint_support_block_action} packages the
-    state blocks and operation action on that minimum joint support. Transport
-    to the recovered conditional family and assembly of the quantum-Markov
-    decomposition remain open. This forward implication therefore remains
-    axiomatic. The biconditional combines the two directions.
+    state blocks and operation action on that minimum joint support.
+    Theorem~\ref{thm:hjpw_recovered_conditional_family} now constructs the
+    finite nonempty invariant density family from the SSA recovery channel,
+    while Theorem~\ref{thm:hjpw_finite_conditional_slice_separation} supplies
+    the finite replacement for varying all effects. Applying the joint-support
+    block form to this family and assembling the resulting blocks into the
+    quantum-Markov decomposition remain open. This forward implication
+    therefore remains axiomatic. The biconditional combines the two
+    directions.
 
     This equality criterion is cited here as an input for the later MPDO arguments.
     It is the equality criterion needed by Appendix~C of arXiv:1606.00608.

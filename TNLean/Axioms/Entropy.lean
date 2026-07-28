@@ -35,12 +35,9 @@ clear to downstream files and to CI.
 ## TODO
 
 Remove the remaining axiom `hayashi_ssa_equality_characterization_forward` by
-proving the forward implication of the equality case. A faithful formalization
-is expected to require:
-1. Conditional mutual information and recovery maps (the Petz transpose channel)
-2. The saturation analysis of the data-processing inequality for relative
-   entropy
-3. The reconstruction of the discarded subsystem from a recovery map
+applying the formalized joint-support Koashi--Imoto block theorem to the
+finite recovered conditional family and assembling those blocks into the
+quantum-Markov decomposition of the tripartite state.
 
 ## References
 
@@ -80,8 +77,10 @@ direct sum `⊕_j (B_jᴸ ⊗ B_jᴿ)` and the state takes block-diagonal form
 This implication is the deep half of the characterization: its proof needs
 recovery-map and Petz-transpose theory, that is, the analysis of when the
 data-processing inequality for relative entropy is saturated and the
-reconstruction of the discarded subsystem from a recovery map. This machinery is
-not yet formalized in Mathlib or in this repository, so the forward direction is
+reconstruction of the discarded subsystem from a recovery map. The recovery
+channel, finite recovered conditional family, and joint-support
+Koashi--Imoto theorem are formalized; their blockwise application and the
+final quantum-Markov assembly remain open. The forward direction is therefore
 introduced here as a **sanctioned axiom**. The reverse direction is proved in
 `TNLean.Analysis.EntropyMarkovReverse` and the biconditional below combines the
 two; see `docs/paper-gaps/cpsv16_ssa_equality_hayashi_markov.tex`.
