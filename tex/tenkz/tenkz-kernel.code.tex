@@ -2127,6 +2127,7 @@
 \prop_new:N \l__tenkz_kernel_r_legdrawn_prop  % leg path id -> deferred (saved)
 \prop_new:N \l__tenkz_kernel_r_species_prop   % species word -> hue
 \prop_new:N \l__tenkz_kernel_r_skin_over_string_prop
+\clist_new:N \l__tenkz_kernel_r_skin_over_string_clist
 \seq_new:N  \l__tenkz_kernel_r_strings_seq    % string wire record ids
 \seq_new:N  \l__tenkz_kernel_r_after_atom_seq % physical traces need glyph borders
 \int_new:N  \l__tenkz_kernel_r_rows_int
@@ -2138,7 +2139,6 @@
 \tl_new:N   \l__tenkz_kernel_r_col_tl
 \tl_new:N   \l__tenkz_kernel_r_pts_tl
 \tl_new:N   \l__tenkz_kernel_r_sid_tl
-\tl_new:N   \l__tenkz_kernel_r_cross_record_tl
 \tl_new:N   \l__tenkz_kernel_r_hue_tl
 \tl_new:N   \l__tenkz_kernel_r_species_tl
 \tl_new:N   \l__tenkz_kernel_r_species_descriptor_tl
@@ -5944,7 +5944,6 @@
 % several crossings, whether the author wrote them or the route derived them.
 \cs_new_protected:Npn \__tenkz_kernel_r_crossings:n #1
   {
-    \tl_set:Nn \l__tenkz_kernel_r_cross_record_tl {#1}
     \__tenkz_model_get:nnN {#1} {cross} \l__tenkz_kernel_r_tl
     \quark_if_no_value:NF \l__tenkz_kernel_r_tl
       {
@@ -5987,52 +5986,71 @@
       {
         \exp_args:NVV \__tenkz_string_under:nn
           \l__tenkz_kernel_r_b_tl \l__tenkz_kernel_r_sid_tl
+        \exp_args:NVV \__tenkz_kernel_r_pairing_over_string:nn
+          \l__tenkz_kernel_r_b_tl \l__tenkz_kernel_r_sid_tl
       }
       {
         \exp_args:NVV \__tenkz_string_under:nn
           \l__tenkz_kernel_r_sid_tl \l__tenkz_kernel_r_b_tl
-        \__tenkz_kernel_r_pairing_over_string:
+        \exp_args:NVV \__tenkz_kernel_r_pairing_over_string:nn
+          \l__tenkz_kernel_r_sid_tl \l__tenkz_kernel_r_b_tl
       }
   }
-\cs_new_protected:Npn \__tenkz_kernel_r_pairing_over_string:
+\cs_new_protected:Npn \__tenkz_kernel_r_pairing_over_string:nn #1#2
   {
-    \__tenkz_model_get:nnN
-      { \l__tenkz_kernel_r_cross_record_tl } {kind}
+    % Crossing surgery is symmetric in its declaration owner: once the
+    % resolved under path is a generated pairing and the over path is an
+    % ordinary string, the opaque host must redraw that string locally.
+    \prop_get:NnN \l__tenkz_kernel_named_prop {#1}
       \l__tenkz_kernel_r_c_tl
-    \str_if_eq:VnT \l__tenkz_kernel_r_c_tl {pairing}
+    \quark_if_no_value:NF \l__tenkz_kernel_r_c_tl
       {
-        \prop_get:NVN \l__tenkz_kernel_named_prop
-          \l__tenkz_kernel_r_b_tl \l__tenkz_kernel_r_c_tl
-        \quark_if_no_value:NF \l__tenkz_kernel_r_c_tl
+        \__tenkz_model_get:nnN
+          { \l__tenkz_kernel_r_c_tl } {kind}
+          \l__tenkz_kernel_scratch_tl
+        \str_if_eq:VnT \l__tenkz_kernel_scratch_tl {pairing}
           {
-            \__tenkz_model_get:nnN
-              { \l__tenkz_kernel_r_c_tl } {kind}
-              \l__tenkz_kernel_scratch_tl
-            \str_if_eq:VnT \l__tenkz_kernel_scratch_tl {string}
+            \tl_set_eq:NN \l__tenkz_kernel_r_b_tl
+              \l__tenkz_kernel_r_c_tl
+            \prop_get:NnN \l__tenkz_kernel_named_prop {#2}
+              \l__tenkz_kernel_r_c_tl
+            \quark_if_no_value:NF \l__tenkz_kernel_r_c_tl
               {
                 \__tenkz_model_get:nnN
-                  { \l__tenkz_kernel_r_cross_record_tl } {host}
+                  { \l__tenkz_kernel_r_c_tl } {kind}
                   \l__tenkz_kernel_scratch_tl
-                \prop_get:NVN \l__tenkz_kernel_r_skin_over_string_prop
-                  \l__tenkz_kernel_scratch_tl \l__tenkz_kernel_r_c_tl
-                \quark_if_no_value:NTF \l__tenkz_kernel_r_c_tl
+                \str_if_eq:VnT \l__tenkz_kernel_scratch_tl {string}
                   {
-                    \prop_put:NVV
-                      \l__tenkz_kernel_r_skin_over_string_prop
+                    \__tenkz_model_get:nnN
+                      { \l__tenkz_kernel_r_b_tl } {host}
                       \l__tenkz_kernel_scratch_tl
-                      \l__tenkz_kernel_r_b_tl
-                  }
-                  {
-                    \exp_args:NVV \clist_if_in:nnF
-                      \l__tenkz_kernel_r_c_tl
-                      \l__tenkz_kernel_r_b_tl
+                    \prop_get:NVN
+                      \l__tenkz_kernel_r_skin_over_string_prop
+                      \l__tenkz_kernel_scratch_tl \l__tenkz_kernel_r_c_tl
+                    \quark_if_no_value:NTF \l__tenkz_kernel_r_c_tl
                       {
-                        \prop_put:NVx
+                        \prop_put:NVn
                           \l__tenkz_kernel_r_skin_over_string_prop
                           \l__tenkz_kernel_scratch_tl
+                          {#2}
+                      }
+                      {
+                        \clist_set:NV
+                          \l__tenkz_kernel_r_skin_over_string_clist
+                          \l__tenkz_kernel_r_c_tl
+                        \clist_if_in:NnF
+                          \l__tenkz_kernel_r_skin_over_string_clist {#2}
                           {
-                            \exp_not:V \l__tenkz_kernel_r_c_tl ,
-                            \exp_not:V \l__tenkz_kernel_r_b_tl
+                            \clist_put_right:Nn
+                              \l__tenkz_kernel_r_skin_over_string_clist
+                              {#2}
+                            \prop_put:NVx
+                              \l__tenkz_kernel_r_skin_over_string_prop
+                              \l__tenkz_kernel_scratch_tl
+                              {
+                                \exp_not:V
+                                  \l__tenkz_kernel_r_skin_over_string_clist
+                              }
                           }
                       }
                   }
@@ -6797,7 +6815,11 @@
         % only the declared over-strand, clipped to this host's measured box,
         % so its order at every unrelated atom on the same route is unchanged.
         \begin{scope}
-          \clip (#1.south~west) rectangle (#1.north~east);
+          \clip
+            (#1.south~west) --
+            (#1.south~east) --
+            (#1.north~east) --
+            (#1.north~west) -- cycle;
           \exp_args:NV \clist_map_inline:nn \l__tenkz_kernel_r_tl
             {
               \prop_get:NnN \l__tenkz_kernel_named_prop {##1}
