@@ -159,9 +159,14 @@ Koashi--Imoto state decomposition and the action of every preserving operation
 on its diagonal summands are now formalized below. The joint-support
 compression, state reconstruction, restriction of ambient preserving
 operations, and intertwining of their compressed and ambient actions are also
-formalized. To apply this result to an arbitrary recovered family, the
-remaining bridge must construct and transport the recovered conditional
-family and assemble one common direct sum
+formalized. The finite informationally complete effect family, conditional
+slices, nonzero normalization, and their common preserving channel are now
+constructed by
+\leanid{Matrix.exists_recoveredConditionalPreservingKrausFamily}; the slices
+separate bipartite operators by
+\leanid{Matrix.eq_of_conditionalSlice_informationallyCompleteEffect_eq}.
+The remaining bridge must apply the joint-support block theorem to this family
+and assemble one common direct sum
 \begin{align}
   H_B\cong\bigoplus_j H_{B_j^L}\otimes H_{B_j^R}
 \end{align}
@@ -171,7 +176,7 @@ finite-Weyl argument and transported to arbitrary finite product coordinates.
 For density operators, support agreement upgrades this equality to the chosen
 completed partial-trace Petz channel on the recovered marginal. This does not
 give a tensor-product factorization of the generic completed singular channel.
-The recovered conditional-family transport and quantum-Markov assembly are the
+The joint-support block application and quantum-Markov assembly are the
 remaining structural obstructions to replacing the forward Hayashi
 strong-subadditivity equality assumption used in the CPSV16 argument.
 
@@ -281,9 +286,10 @@ through the support isometry. The declaration
 \leanid{Kraus.exists_commonInvariant_normalizedStateBlockForm_preservingBlockAction_jointSupport}
 then packages the normalized state blocks and the action of every preserving
 operation on that minimum joint support; ambient preserving operations inherit
-this action by restriction and intertwining. Construction and transport of the
-recovered conditional family, assembly of the generic quantum-Markov
-decomposition, and elimination of the
+this action by restriction and intertwining. The finite recovered conditional
+family and one preserving Kraus realization are now constructed from SSA
+equality. Applying this block theorem to that family, assembling the generic
+quantum-Markov decomposition, and eliminating the
 external assumption for the forward Hayashi strong-subadditivity implication
 remain open.
 
@@ -314,9 +320,10 @@ summand. Thus full-support HJPW Property~$2'$ is also formalized. The
 Heisenberg Ces\`aro convergence identity for $P_0^*$ remains open. The
 joint-support coordinate reduction, density-family reconstruction, and
 restriction of preserving operations are formalized, as is the combined block
-form on the minimum joint support. The recovered conditional-family transport
-and the generic Hayashi forward implication remain open as separate later
-steps.
+form on the minimum joint support. The finite recovered conditional family,
+its separating effects, and its preserving middle-system channel are
+formalized. Applying the block form to this family and the generic Hayashi
+forward implication remain open as separate later steps.
 
 \begin{thebibliography}{9}
 
