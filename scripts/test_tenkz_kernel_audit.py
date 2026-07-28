@@ -13,6 +13,7 @@ GOOD_LOG = """\
 picture|id=k1|lang=kernel
 wire|id=wire-1|from=addr-1|kind=string|name=a|to=addr-2
 wire|id=wire-2|cross=under at crossing of a and b|from=addr-3|kind=string|name=b|to=addr-4
+wire|id=wire-3|from=addr-5|host=atom-1|kind=pairing|name=skin-atom-1-1|origin=skin|route=arc|species=shift|to=addr-6
 mark|id=mark-3|form=label
 kernel-boundary|signature=open:e, open:w
 string|id=a|kind=open|pts=2
@@ -50,6 +51,7 @@ def main() -> int:
     good = audit_log(GOOD_LOG)
     assert not good.findings, good.findings
     assert [event.kind for event in good.pictures[0].content()] == [
+        "wire",
         "wire",
         "wire",
         "mark",
