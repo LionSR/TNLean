@@ -8,7 +8,7 @@ import TNLean.Channel.KoashiImoto.RecoveredConditionalDilation.SectorAction
 /-!
 # Recovered conditional dilation block form
 
-This file packages the source-facing ambient block-coordinate dilation at
+This file provides the source-facing ambient block-coordinate dilation at
 equality in strong subadditivity.  It records one chosen pure-ancilla physical
 unitary, its supported agreement with the Petz channel, and the exact recovery
 identity in HJPW equation (11).  No equality of the two channels is asserted
@@ -501,8 +501,8 @@ block-coordinate dilation of equation (15), with a corresponding physical
 unitary and an exact realization of equation (11).
 
 This source-facing theorem constructs the recovered effect index and ambient
-bipartite block form internally.  Its conclusion packages the chosen ambient
-form together with its dilation witness, so no hypothesis beyond the
+bipartite block form internally.  Its conclusion combines the chosen ambient
+form with its dilation witness, so no hypothesis beyond the
 tripartite density-matrix and strong-subadditivity equality assumptions is
 added to HJPW Theorem 6.
 
