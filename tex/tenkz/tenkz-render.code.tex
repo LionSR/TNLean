@@ -51,6 +51,7 @@
 % emitted verbatim.
 \cs_new_protected:Npn \__tenkz_render_stroke:nn #1#2
   { \__tenkz_ink_path:nn {#1} {#2} }
+\cs_generate_variant:Nn \__tenkz_render_stroke:nn { en }
 % A coordinator-decided label node: #1 option tokens, #2 position tokens,
 % #3 content tokens.  The named form threads the positional node name --
 % pgf registers positional names before option processing, and name=
@@ -156,6 +157,7 @@
       { \fp_to_decimal:n { \l__tenkz_render_y_tl * \dim_to_fp:n { \tenkz@pitch } } pt }
       {#3}
   }
+\cs_generate_variant:Nn \__tenkz_render_atom_labelled:nnn { nen }
 
 % Measure the exact live node selected by #1 without contributing ink or a
 % bounding box.  The caller disables geometry events around this probe.
