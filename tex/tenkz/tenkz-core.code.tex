@@ -378,6 +378,9 @@
 % a bare \tntree logs picture=0.
 \newcount\tenkz@pictureid
 \newcount\tenkz@pictureuid
+\newif\iftenkz@auditpicture
+\tenkz@auditpicturefalse
+\def\tenkz@auditpictureid{\the\tenkz@pictureid}
 \AtBeginDocument{\immediate\openout\tenkz@log=\jobname.tnlog\tenkz@logopentrue}
 \AtEndDocument{\iftenkz@logopen\immediate\closeout\tenkz@log\fi}
 \def\tenkz@event#1{\iftenkz@logopen
@@ -386,6 +389,8 @@
 \def\tenkz@enclosurereset{}
 \def\tenkz@beginpicture#1{\global\advance\tenkz@pictureuid by 1\relax
   \tenkz@pictureid=\tenkz@pictureuid
+  \tenkz@auditpicturetrue
+  \def\tenkz@auditpictureid{\the\tenkz@pictureid}%
   \def\tenkz@picturelang{#1}%
   \tenkz@enclosurereset
   \tenkz@event{picture|id=\the\tenkz@pictureid|lang=#1}}
@@ -483,18 +488,18 @@
 \def\tenkz@begininkuse#1{%
   \global\advance\tenkz@inkuid by 1\relax
   \tenkz@inkowner=\tenkz@inkuid
-  \tenkz@event{ink-use|picture=\the\tenkz@pictureid|class=#1|%
+  \tenkz@event{ink-use|picture=\tenkz@auditpictureid|class=#1|%
     id=\the\tenkz@inkowner}}
 \def\tenkz@bboxlabeluse{%
   \iftenkz@bboxcapture
-    \ifnum\tenkz@pictureid>0\relax
+    \iftenkz@auditpicture
       \tenkz@inkowner=0\relax
-      \tenkz@event{label-use|picture=\the\tenkz@pictureid}%
+      \tenkz@event{label-use|picture=\tenkz@auditpictureid}%
     \fi
   \fi}
 \def\tenkz@writelabelbbox{%
   \global\advance\tenkz@bboxuid by 1\relax
-  \tenkz@event{bbox|picture=\the\tenkz@pictureid|class=label|%
+  \tenkz@event{bbox|picture=\tenkz@auditpictureid|class=label|%
     id=\the\tenkz@bboxuid|owner=\the\tenkz@inkowner|%
     xmin=\number\tenkz@bboxxmin|xmax=\number\tenkz@bboxxmax|%
     ymin=\number\tenkz@bboxymin|ymax=\number\tenkz@bboxymax|%
@@ -906,7 +911,7 @@
     \fi
   \fi
   \ifnum\tenkz@visibleinvalid=0\relax
-    \ifnum\tenkz@pictureid>0\relax
+    \iftenkz@auditpicture
       \begingroup
       \tenkz@requireidentitylinear{\tikzlastnode}{label}%
       \tenkz@requirelabelrectangle{\tikzlastnode}%
@@ -1128,7 +1133,7 @@
       isosceles triangle for a library-owned glyph.}%
   \fi\fi\fi}
 \def\tenkz@emitglyphinkuse{%
-  \tenkz@event{ink-use|picture=\the\tenkz@pictureid|class=glyph|%
+  \tenkz@event{ink-use|picture=\tenkz@auditpictureid|class=glyph|%
     id=\the\tenkz@inkowner|shape=\tenkz@glyphshape}}
 \def\tenkz@captureglyphgeometry#1#2#3{%
   \tenkz@checkrequiredlastauditowner{#3}%
@@ -1147,7 +1152,7 @@
     \edef\tenkz@visibleinvalid{\csname tenkz@invalid@#4\endcsname}%
     \ifnum\tenkz@visibleinvalid=0\relax
     \iftenkz@bboxcapture
-      \ifnum\tenkz@pictureid>0\relax
+      \iftenkz@auditpicture
       \global\advance\tenkz@inkuid by 1\relax
       \tenkz@inkowner=\tenkz@inkuid
       \tenkz@resolveglyphshape{#1}{#4}%
@@ -1294,7 +1299,7 @@
     \tenkz@glyphxtwo=0pt \tenkz@glyphytwo=0pt
     \tenkz@glyphxthree=0pt \tenkz@glyphythree=0pt
   \fi
-  \tenkz@event{glyph-geometry|picture=\the\tenkz@pictureid|%
+  \tenkz@event{glyph-geometry|picture=\tenkz@auditpictureid|%
     owner=\the\tenkz@inkowner|shape=\tenkz@glyphshape|%
     xmin=\number\tenkz@bboxxmin|xmax=\number\tenkz@bboxxmax|%
     ymin=\number\tenkz@bboxymin|ymax=\number\tenkz@bboxymax|%
@@ -1317,7 +1322,7 @@
 }
 \def\tenkz@installlabelaudit{%
   \tenkz@bboxlabeluse
-  \ifnum\tenkz@pictureid>0\relax
+  \iftenkz@auditpicture
     \global\advance\tenkz@glyphsnapuid by 1\relax
     \edef\tenkz@glyphsnaptoken{\the\tenkz@glyphsnapuid}%
     \edef\tenkz@auditinstallowner{\tenkz@glyphsnaptoken}%
@@ -1331,7 +1336,7 @@
   \fi}
 \def\tenkz@installglyphaudit#1#2{%
   \iftenkz@bboxcapture
-    \ifnum\tenkz@pictureid>0\relax
+    \iftenkz@auditpicture
       \global\advance\tenkz@glyphsnapuid by 1\relax
       \edef\tenkz@glyphsnaptoken{\the\tenkz@glyphsnapuid}%
       \edef\tenkz@auditinstallowner{\tenkz@glyphsnaptoken}%
@@ -1356,7 +1361,7 @@
   \fi}
 \def\tenkz@installdeferredglyphaudit{%
   \iftenkz@bboxcapture
-    \ifnum\tenkz@pictureid>0\relax
+    \iftenkz@auditpicture
       \global\advance\tenkz@glyphsnapuid by 1\relax
       \edef\tenkz@glyphsnaptoken{\the\tenkz@glyphsnapuid}%
       \edef\tenkz@auditinstallowner{\tenkz@glyphsnaptoken}%

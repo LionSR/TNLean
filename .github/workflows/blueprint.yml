@@ -28,6 +28,7 @@ on:
       - 'scripts/tenkzlib/**'
       - 'scripts/test_tnlog.py'
       - 'scripts/test_texcase.py'
+      - 'scripts/test_tenkz_kernel_audit.py'
       - 'scripts/test_tenkz_pic.py'
       - 'scripts/test_tenkz_equation_audit.py'
   workflow_dispatch:
@@ -67,6 +68,7 @@ jobs:
           python3 scripts/test_tenkz_equation_audit.py
           python3 scripts/test_tnlog.py
           python3 scripts/test_texcase.py
+          python3 scripts/test_tenkz_kernel_audit.py
 
       - name: Build blueprint bibliography
         run: python3 scripts/blueprint_bibtex.py
