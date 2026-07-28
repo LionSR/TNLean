@@ -688,10 +688,10 @@ status = "cosmetic-gap"
 pairing = "verified"
 pairing_by = "codex-three-cycle-source-review-2026-07-26"
 defects = ["weight-mismatch"]
-case_sha256 = "7c4e650548d4cbedf432e827b416f3597463bba5f2dd30a564c7986fc130ce6b"
+case_sha256 = "d10871d4fd955079040f92fbc8af81092af109fac4fdbc943e574e77503c54e4"
 reviewed = "2026-07-28"
 renderer = "codex-route-form-source-review-2026-07-28-180dpi"
-note = "The enlarged crossing is blue-outlined rather than solid blue."
+note = "The pull arrow remains outside the PEPS window; the enlarged crossing is blue-outlined rather than solid blue."
 
 [[verdict]]
 id = "rmp-iii-b-anyon-pair"

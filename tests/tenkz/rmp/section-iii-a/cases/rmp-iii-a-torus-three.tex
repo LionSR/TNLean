@@ -8,13 +8,11 @@
 \[
   \begin{tenkzfree}
     % The black bonds form the open 5x5 PEPS window.
-    \tnjoin{-19mm,16mm}{19mm,16mm}
-    \tnjoin{-19mm,8mm}{19mm,8mm}
+    \tnjoin{-19mm,16mm}{19mm,16mm} \tnjoin{-19mm,8mm}{19mm,8mm}
     \tnjoin{-19mm,0mm}{19mm,0mm}
     \tnjoin{-19mm,-8mm}{19mm,-8mm}
     \tnjoin{-19mm,-16mm}{19mm,-16mm}
-    \tnjoin{-16mm,19mm}{-16mm,-19mm}
-    \tnjoin{-8mm,19mm}{-8mm,-19mm}
+    \tnjoin{-16mm,19mm}{-16mm,-19mm} \tnjoin{-8mm,19mm}{-8mm,-19mm}
     \tnjoin{0mm,19mm}{0mm,-19mm}
     \tnjoin{8mm,19mm}{8mm,-19mm}
     \tnjoin{16mm,19mm}{16mm,-19mm}
@@ -35,7 +33,9 @@
     \tnput[dot,role=passive,label pos=south]{h5}{(4mm,-16mm)}{O_h}
 
     % This arrow records the downward pull of the horizontal MPO.
-    \tnjoin[dir,route=arc]{-22mm,18mm}{-22mm,-8mm}
+    \tnput[boundary,ports={255:virtual}]{pullTop}{(-22mm,18mm)}{}
+    \tnput[boundary,ports={105:virtual}]{pullBottom}{(-22mm,-8mm)}{}
+    \tnjoin[dir,route=arc]{pullTop.255}{pullBottom.105}
   \end{tenkzfree}
   =
   \begin{tenkzfree}
