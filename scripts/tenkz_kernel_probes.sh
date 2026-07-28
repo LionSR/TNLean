@@ -231,7 +231,7 @@ grep -Fq 'TENKZ-HULL-BOX-POOL=1' "$WORK/r_hull_live.tex.transcript" || {
 skin_pairing_count=$(
   grep -c '^wire.*|origin=skin|' "$WORK/k_skin_pairings.tnlog" || true
 )
-[ "$skin_pairing_count" -eq 25 ] || {
+[ "$skin_pairing_count" -eq 26 ] || {
   echo "FAIL: declared skin pairings were not materialized as WIRE records" >&2
   exit 1
 }
@@ -264,6 +264,11 @@ grep -Eq 'stringcross\|under=skin-atom-1-1\|over=wire-[0-9]+\|hits=1' \
 grep -Fq 'stringcross|under=skin-atom-1-1|over=index-probe|hits=1' \
   "$WORK/k_skin_pairings.tnlog" || {
   echo "FAIL: an index/pairing crossing missed the shared path ledger" >&2
+  exit 1
+}
+grep -Fq 'stringcross|under=leg-n-1-1|over=skin-atom-2-1|hits=1' \
+  "$WORK/k_skin_pairings.tnlog" || {
+  echo "FAIL: a coordinate-bearing pairing crossing was split at its comma" >&2
   exit 1
 }
 grep -Fq 'stringcross|under=skin-atom-1-1|over=skin-atom-1-3|hits=1' \
@@ -643,6 +648,11 @@ grep -Fq '[TKZ-SKIN-PAIRING-PARSE]' \
 grep -Fq '[TKZ-SKIN-PAIRING-PARSE]' \
   "$WORK/n_skin_pairing_item_parse.transcript" || {
   echo "FAIL: a malformed pairing item lacked TKZ-SKIN-PAIRING-PARSE" >&2
+  exit 1
+}
+grep -Fq "'malformed-item' must be one braced port-pair-list" \
+  "$WORK/n_skin_pairing_item_parse.transcript" || {
+  echo "FAIL: a malformed pairing item reported its host instead of its skin" >&2
   exit 1
 }
 grep -Fq '[TKZ-SKIN-PAIRING-CROSS-PARSE]' \

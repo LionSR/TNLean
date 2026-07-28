@@ -176,4 +176,16 @@
     cross={over at crossing of self and pairing 1 of index-host}
   ]{index-top}{index-bottom}
 \end{tenkz}
+\qquad
+\begin{tenkz}[rows={wire}, cols=1, bonds=none, physical=up]
+  \tn[at=(1,1), name=leg-carrier, skin=dot]{}
+  \tn[
+    at=0.2 n of leg-carrier,
+    name=leg-cross-host,
+    skin=crossed-box,
+    pairing cross={
+      1: over at crossing of self and leg n of (1,1)
+    }
+  ]{}
+\end{tenkz}
 \end{document}
