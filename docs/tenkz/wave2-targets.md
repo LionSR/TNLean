@@ -199,6 +199,7 @@ occurrence; the table does not deduplicate mathematically equivalent blocks.
 | `fusion-tree` | 1 | 0 | 1 |
 | `grid` | 2 | 0 | 2 |
 | `group-average` | 0 | 2 | 2 |
+| `kernel` | 0 | 0 | 0 |
 | `lattice` | 3 | 0 | 3 |
 | `marked-region` | 0 | 1 | 1 |
 | `multi-strand-braid` | 0 | 2 | 2 |
@@ -214,6 +215,11 @@ occurrence; the table does not deduplicate mathematically equivalent blocks.
 | `strings` | 0 | 7 | 7 |
 | `torus-cycle` | 0 | 4 | 4 |
 | `typed-ports` | 13 | 0 | 13 |
+
+`kernel` is listed to distinguish kernel-reachable pictures from 0.7 surface
+pictures, but it is not missing language demand. Its twelve current consumers
+are accepted targets recorded in the RMP manifest, so they do not enter either
+demand column.
 
 The `enclosure-marks` row is an audit exception rather than language demand.
 Its ten existing blockers are stale Section IV intersection verdicts: their

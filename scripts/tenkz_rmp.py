@@ -130,6 +130,7 @@ DEFECT_KINDS = (
 # Structural capability tags map one-to-one onto public constructs; a tag
 # without its construct in the case body is manifest drift, not judgment.
 STRUCTURAL_CAPABILITY_PATTERNS = {
+    "kernel": re.compile(r"\\tenkzkernel\b"),
     "grid": re.compile(r"\\begin\{tenkz\}|\\tnpic\b"),
     "lattice": re.compile(r"\\begin\{tenkzlattice\}|\\begin\{tenkzplanes\}"),
     "lattice-preset": re.compile(r"\\begin\{tenkzplanes\}"),
