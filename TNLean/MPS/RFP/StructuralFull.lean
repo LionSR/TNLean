@@ -571,11 +571,12 @@ theorem GaugeEquiv.isIsometryCanonicalForm_iff {A B : MPSTensor d D}
   have hCore : GaugeEquiv
       (fun i => Matrix.diagonal (fun k => (Real.sqrt (Λ k) : ℂ)) * U i) C := by
     refine ⟨Xg, fun i => ?_⟩
-    simpa [Xg, Matrix.mul_assoc] using hC_eq i
+    simpa only [Xg, Matrix.GeneralLinearGroup.val_mkOfDetNeZero,
+      Matrix.GeneralLinearGroup.coe_inv, Matrix.mul_assoc] using hC_eq i
   obtain ⟨Y, hY⟩ := hCore.trans hCE
   refine ⟨Y, Λ, U, Matrix.GeneralLinearGroup.det_ne_zero Y,
     hΛ_pos, hΛ_sum, hU_pair, fun i => ?_⟩
-  simpa [Matrix.mul_assoc] using hY i
+  simpa only [Matrix.GeneralLinearGroup.coe_inv, Matrix.mul_assoc] using hY i
 
 /-- **Trace-normalized isometry canonical form of Lemma B.1**
 (arXiv:1606.00608, Lemma charact-NT-pure-RFP, lines 1271--1301).

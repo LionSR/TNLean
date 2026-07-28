@@ -11,9 +11,9 @@ import TNLean.MPS.RFP.StructuralFull
 
 A spectrally normal tensor is a renormalization fixed point exactly when it has
 the single-block isometry form from Appendix B of arXiv:1606.00608. The forward
-implication first applies the pure Perron gauge into canonical form II, uses the
-left-canonical structural theorem there, and then returns through gauge
-invariance. The reverse implication is the direct rank-one transfer-map
+implication first passes to its left-canonical, trace-preserving Perron
+representative, uses the structural theorem there, and then returns through
+gauge invariance. The reverse implication is the direct rank-one transfer-map
 calculation.
 
 The diagonal dressing in `IsIsometryCanonicalForm` is the documented
@@ -29,17 +29,17 @@ variable {d D : ℕ}
 (arXiv:1606.00608, Lemma `charact-NT-pure-RFP`, lines 1274--1301).
 
 For a positive-bond-dimension normal tensor, transfer-map idempotence is
-equivalent to isometry canonical form. No external canonical-form-II or
-left-canonical hypothesis is required: the forward implication obtains a
-trace-preserving Perron gauge from normality, transports idempotence and
-algebraic normality to that gauge, applies the left-canonical Appendix B
-theorem, and transports the resulting structure back. The reverse implication
-is `isTransferIdempotent_of_isIsometryCanonicalForm`.
+equivalent to isometry canonical form. No external left-canonical hypothesis
+is required: the forward implication obtains a left-canonical,
+trace-preserving Perron representative from normality, carries idempotence and
+algebraic normality to that representative, applies the Appendix B theorem,
+and carries the resulting structure back. The reverse implication is
+`isTransferIdempotent_of_isIsometryCanonicalForm`.
 
 The diagonal factor is `sqrt Λ`, with `Λ` positive and trace-normalized, as
 explained in `IsIsometryCanonicalForm`. -/
-theorem isTransferIdempotent_iff_isIsometryCanonicalForm_of_isNormalTensor
-    (A : MPSTensor d D) [NeZero D] (hNT : IsNormalTensor A) :
+theorem IsNormalTensor.isTransferIdempotent_iff_isIsometryCanonicalForm
+    [NeZero D] {A : MPSTensor d D} (hNT : IsNormalTensor A) :
     IsTransferIdempotent A ↔ IsIsometryCanonicalForm A := by
   constructor
   · intro hRFP
