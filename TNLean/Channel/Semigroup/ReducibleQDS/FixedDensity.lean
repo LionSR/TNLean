@@ -5,6 +5,8 @@ Authors: TNLean contributors
 -/
 import TNLean.Channel.Semigroup.ReducibleQDS.Defs
 import TNLean.Channel.FixedPoint.SupportInvariance
+import TNLean.Channel.Semigroup.Kernel
+import TNLean.Channel.Semigroup.LindbladForm.GKSLTheorem
 
 /-!
 # Fixed Density ↔ Kernel Element (Wolf Proposition 7.6, (1) ↔ (2)) and (1) → (3)

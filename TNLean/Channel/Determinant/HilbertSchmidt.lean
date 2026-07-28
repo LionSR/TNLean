@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Channel.Determinant.Bound
 import TNLean.Algebra.MatrixAux
+import TNLean.Channel.Peripheral.IrreducibleChannel
 import Mathlib.Analysis.Complex.Polynomial.Basic
 import Mathlib.Analysis.InnerProductSpace.Positive
 import Mathlib.Analysis.InnerProductSpace.Trace

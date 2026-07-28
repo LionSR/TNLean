@@ -10,7 +10,6 @@ Authors: TNLean contributors
 -- `TNLean.MPS.CPPrimitive`, but listing them directly makes the local proof
 -- dependencies explicit.
 import TNLean.Channel.Irreducible.Basic
-import TNLean.Channel.Basic
 import TNLean.MPS.Core.CPPrimitive
 
 import Mathlib.Tactic.NoncommRing

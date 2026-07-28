@@ -6,6 +6,7 @@ Authors: Sirui Lu
 import TNLean.Channel.NPositivityChainStrict
 import TNLean.Channel.PartialTrace
 import TNLean.Channel.TensorMap
+import TNLean.Channel.PositiveExamples
 
 /-!
 # Wolf's reduction criterion

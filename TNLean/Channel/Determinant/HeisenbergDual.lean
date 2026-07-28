@@ -4,8 +4,6 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Channel.Determinant.HilbertSchmidt
-import TNLean.Channel.KrausRepresentation
-import TNLean.Channel.Schwarz.MultiplicativeDomainFull
 
 /-!
 # Heisenberg-dual multiplicativity from determinant saturation

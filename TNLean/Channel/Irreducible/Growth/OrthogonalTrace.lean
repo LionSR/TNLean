@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Channel.Irreducible.Growth.KernelDescent
+import TNLean.Channel.Schwarz.Basic
 
 /-!
 # Orthogonal-trace condition for irreducible CP maps

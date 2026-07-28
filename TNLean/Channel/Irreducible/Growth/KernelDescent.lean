@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.Channel.Irreducible.Growth.OneStep
 import TNLean.Channel.Irreducible.Growth.Preservation
 import TNLean.Algebra.MatrixAux
+import TNLean.Channel.Basic
 
 /-!
 # Kernel-descent proof of the growth condition

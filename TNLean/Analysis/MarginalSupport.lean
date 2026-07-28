@@ -5,7 +5,6 @@ Authors: TNLean contributors
 -/
 import TNLean.Analysis.MatrixSqrt
 import TNLean.Analysis.Entropy
-import TNLean.Analysis.TraceCFC
 
 /-!
 # Marginal support lemma for tripartite density matrices

@@ -6,7 +6,6 @@ Authors: Sirui Lu
 import TNLean.Channel.Schwarz.RelativeEntropyDataProcessing
 import TNLean.Channel.Schwarz.RelativeEntropyAncillaAdditivity
 import TNLean.Analysis.MarginalSupport
-import TNLean.Channel.MaximalOverlap
 import TNLean.Entropy.TripartiteTrace
 
 /-!

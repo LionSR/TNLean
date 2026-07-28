@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Channel.Irreducible.Basic
-import TNLean.Channel.Schwarz.Basic
+import TNLean.Channel.Basic
 import Mathlib.Tactic.NoncommRing
 
 /-!

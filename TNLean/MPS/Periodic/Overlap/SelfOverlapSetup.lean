@@ -22,6 +22,7 @@ import TNLean.Channel.Irreducible.PerronFrobenius
 import TNLean.Channel.Schwarz.MultiplicativeDomainFull
 
 import TNLean.Algebra.GramMatrixLI
+import TNLean.Channel.Peripheral.CyclicDecomposition.Primitivity
 import Mathlib.Analysis.InnerProductSpace.l2Space
 
 /-!

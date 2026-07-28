@@ -3,9 +3,9 @@ Copyright (c) 2026 Sirui Lu and TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Sirui Lu
 -/
-import TNLean.Channel.PositiveExamples
 import TNLean.Channel.MaximalOverlap
 import TNLean.Channel.Schwarz.ChoiCompression
+import TNLean.Algebra.MatrixRankBaseChange
 
 /-!
 # The map `T_η` and strictness of the n-positivity chain

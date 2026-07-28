@@ -5,6 +5,7 @@ Authors: Sirui Lu
 -/
 import TNLean.Channel.PartialTranspose
 import TNLean.Channel.ReductionCriterion
+import TNLean.Channel.PositiveExamples
 import Mathlib.Analysis.Matrix.Order
 
 /-!

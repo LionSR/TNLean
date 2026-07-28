@@ -4,8 +4,6 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Channel.Basic
-import TNLean.Channel.ChoiJamiolkowski
-import TNLean.Algebra.TracePairing
 
 /-!
 # Kraus representation theorem (Wolf Section 2.1, Theorem 2.1)

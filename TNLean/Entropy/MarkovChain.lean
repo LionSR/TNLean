@@ -6,7 +6,6 @@ Authors: TNLean contributors
 import TNLean.Axioms.Entropy
 import TNLean.Analysis.EntropyMarkovReverse
 import TNLean.Channel.PartialTrace
-import TNLean.Entropy.StrongSubadditivity
 
 /-!
 # SSA equality and quantum Markov-chain structure

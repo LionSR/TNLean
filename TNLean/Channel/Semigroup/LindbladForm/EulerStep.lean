@@ -7,7 +7,6 @@ import TNLean.Algebra.MatrixOperatorSpace
 import TNLean.Channel.Semigroup.LindbladForm.Basic
 import TNLean.Channel.Semigroup.LindbladForm.ChoiCCP
 import TNLean.Channel.Semigroup.CPClosure
-import TNLean.Channel.Semigroup.Dissipative
 import TNLean.Channel.Semigroup.ProductFormula
 import Mathlib.Analysis.Calculus.MeanValue
 

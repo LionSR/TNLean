@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Algebra.ComplexPhasePositivity
-import TNLean.Channel.Peripheral.CyclicDecomposition
+import TNLean.Channel.Peripheral.CyclicDecomposition.Decomposition
 import Mathlib.RingTheory.RootsOfUnity.Basic
 import Mathlib.GroupTheory.SpecificGroups.Cyclic
 import Mathlib.Analysis.Matrix.Spectrum

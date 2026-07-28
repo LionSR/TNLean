@@ -3,7 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Channel.Semigroup.ReducibleQDS
+import TNLean.Channel.Semigroup.LindbladForm.GKSLTheorem
+import TNLean.Channel.Semigroup.ReducibleQDS.Equivalence
 
 /-!
 # Wolf Corollary 7.2 — Sufficient conditions for non-reducibility

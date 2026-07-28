@@ -8,7 +8,6 @@ import Mathlib.Data.Matrix.Basis
 import Mathlib.Analysis.Matrix.Order
 import Mathlib.LinearAlgebra.Matrix.PosDef
 import Mathlib.Tactic.NoncommRing
-import TNLean.Algebra.MatrixAux
 import TNLean.Algebra.OrthogonalProjection
 
 /-!

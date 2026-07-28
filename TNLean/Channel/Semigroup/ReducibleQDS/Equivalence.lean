@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.Channel.Semigroup.ReducibleQDS.FixedDensity
 import TNLean.Channel.Semigroup.ReducibleQDS.GeneratorCompression
 import TNLean.Channel.Semigroup.ReducibleQDS.SubsequenceAnalysis
+import TNLean.Channel.Semigroup.LindbladForm.GKSLTheorem
 
 /-!
 # Reducibility Definition and Full Equivalence (Wolf Proposition 7.6)
