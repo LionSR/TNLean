@@ -15,7 +15,7 @@ tripartite split of a configuration on `a + b + c` contiguous spins, as the core
 analytic step toward the mutual-information monotonicity of arXiv:1606.00608,
 Proposition (`PropILILp1`, line 801).
 
-The axiomatised SSA (`Entropy.strongSubadditivity`) is stated on a flat product
+The proved SSA theorem (`Entropy.strongSubadditivity`) is stated on a flat product
 index `Fin dA × Fin dB × Fin dC`. The `tripartiteSplitEquiv` cast carries a
 configuration `Fin (a + b + c) → Fin d` onto `Fin (d^a) × Fin (d^b) × Fin (d^c)`,
 and `ssa_cast_ineq` transports SSA through that cast (the entropy of the cast
@@ -52,7 +52,7 @@ noncomputable def biSplitEquiv (d a b : ℕ) :
 
 /-- **Strong subadditivity through the contiguous-block cast.** For a trace-one
 positive semidefinite state `σ` on `a + b + c` spins, casting to the flat
-product index and applying the SSA axiom yields
+product index and applying the proved SSA theorem yields
 `S(σ) + S(tr_AC) ≤ S(tr_C) + S(tr_A)`, where the partial traces are taken of the
 cast state. -/
 theorem ssa_cast_ineq {d a b c : ℕ}

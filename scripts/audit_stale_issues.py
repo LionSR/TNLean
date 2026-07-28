@@ -78,14 +78,17 @@ _DECL_DEFN_RE = re.compile(
 
 _ALIAS_DEFN_RE = re.compile(
     r"^\s*(?:@\[[^\]]*\]\s*)?"
-    r"(?:protected\s+)?alias\s+([A-Za-z_][\w.']*)"
+    r"(?:(?:noncomputable|protected|private|local)\s+)*"
+    r"alias\s+([A-Za-z_][\w.']*)"
 )
 
-_ALIAS_PREFIX_RE = re.compile(
-    r"^\s*(?:@\[[^\]]*\]\s*)?(?:protected\s+)?alias\s*$"
+_ALIAS_HEADER_RE = re.compile(
+    r"^\s*(?:@\[[^\]]*\]\s*)?"
+    r"(?:(?:noncomputable|protected|private|local)\s+)*"
+    r"alias\s*$"
 )
 
-_ALIAS_CONTINUATION_RE = re.compile(r"^\s*([A-Za-z_][\w.']*)\s*:=")
+_ALIAS_NAME_RE = re.compile(r"^\s*([A-Za-z_][\w.']*)\s*:=")
 
 _STRUCTURE_DEFN_RE = re.compile(
     r"^\s*(?:@\[[^\]]*\]\s*)?"
@@ -239,16 +242,21 @@ def build_decl_index(lean_root: Path) -> set[str]:
             continue
         namespace_stack: list[str] = []
         active_structure_names: list[str] = []
-        pending_alias = False
+        pending_alias_header = False
+
+        def add_alias(declared: str) -> None:
+            names.add(declared.rsplit(".", 1)[-1])
+            names.add(declared)
+            if namespace_stack:
+                names.add(".".join([*namespace_stack, declared]))
+
         for line in text.splitlines():
-            if pending_alias:
-                pending_alias = False
-                if m := _ALIAS_CONTINUATION_RE.match(line):
-                    declared = m.group(1)
-                    names.add(declared.rsplit(".", 1)[-1])
-                    names.add(declared)
-                    if namespace_stack:
-                        names.add(".".join([*namespace_stack, declared]))
+            if pending_alias_header:
+                if not line.strip() or line.lstrip().startswith("--"):
+                    continue
+                pending_alias_header = False
+                if m := _ALIAS_NAME_RE.match(line):
+                    add_alias(m.group(1))
                     active_structure_names = []
                     continue
             if m := _NAMESPACE_RE.match(line):
@@ -269,16 +277,12 @@ def build_decl_index(lean_root: Path) -> set[str]:
                 # the namespace stack unless Lean text explicitly names the
                 # namespace being closed.
                 continue
-            if _ALIAS_PREFIX_RE.match(line):
-                pending_alias = True
+            if m := _ALIAS_DEFN_RE.match(line):
+                add_alias(m.group(1))
                 active_structure_names = []
                 continue
-            if m := _ALIAS_DEFN_RE.match(line):
-                declared = m.group(1)
-                names.add(declared.rsplit(".", 1)[-1])
-                names.add(declared)
-                if namespace_stack:
-                    names.add(".".join([*namespace_stack, declared]))
+            if _ALIAS_HEADER_RE.match(line):
+                pending_alias_header = True
                 active_structure_names = []
                 continue
             if m := _DECL_DEFN_RE.match(line):
