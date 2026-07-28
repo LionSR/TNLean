@@ -45,7 +45,7 @@ hash-pinned visual check required before changing a verdict.
 | `rmp-ii-mps-marginal` | K3 | Replace the heavy trace closure through the shared minimal closure idiom. |
 | `rmp-ii-peps-marginal` | K3 | Reduce excessive trace-loop height through the closure metric. |
 | `rmp-ii-mpu-brickwork` | K2 | Operator-word versus circuit presentation is inherent to the identity. |
-| `rmp-ii-mpu-two-shift` | K1 | Pairing geometry is a renderer skin property; re-review after the shared skin work. |
+| `rmp-ii-mpu-two-shift` | X | The case does not record the source pairing boxes or required open legs; migrate it to the complete workbench-twin model before review. |
 | `rmp-ii-mpu-normal-form` | K3 | The solid S-route is heavier and less compact than the graceful default should be. |
 | `rmp-ii-spectrum-transfer` | K3 | Supply the shared designed tail idiom for the two fixed-point tails. |
 | `rmp-ii-spectrum-fixed-points` | K2 | The relation is recorded as corrected; re-review as faithful. |
