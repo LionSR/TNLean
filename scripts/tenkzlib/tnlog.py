@@ -148,7 +148,7 @@ FIELD_VALIDATORS: dict[str, dict[str, Callable[[str], bool]]] = {
     "string": {
         "picture": _is_picture_id,
         "id": _any,
-        "kind": _enum("open", "closed"),
+        "kind": _enum("open", "closed", "wind", "around"),
         "pts": _is_positive_int,
     },
     "stringbead": {

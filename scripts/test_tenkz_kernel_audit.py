@@ -17,6 +17,8 @@ mark|id=mark-3|form=label
 kernel-boundary|signature=open:e, open:w
 string|id=a|kind=open|pts=2
 string|id=b|kind=open|pts=2
+string|id=c|kind=wind|pts=2
+string|id=d|kind=around|pts=2
 stringcross|under=b|over=a|hits=1
 check|relation=1|result=equal|signature=open:e, open:w
 """
@@ -51,6 +53,8 @@ def main() -> int:
         "wire",
         "wire",
         "mark",
+        "string",
+        "string",
         "string",
         "string",
         "stringcross",
