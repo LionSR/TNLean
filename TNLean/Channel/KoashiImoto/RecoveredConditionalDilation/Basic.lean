@@ -1138,6 +1138,25 @@ def RecoveredConditionalDilationInternal.ambientBipartiteBlockMatrix
       | Sum.inl _ => 0
       | Sum.inr k => σ k ⊗ₖ ω k)
 
+/-- The ambient tripartite direct sum in HJPW factor order, with zero
+complementary blocks and supported blocks `ω_j ⊗ τ_j`. -/
+def RecoveredConditionalDilationInternal.ambientTripartiteBlockMatrix
+    {z K dA dB dC : ℕ} {m d : Fin K → ℕ}
+    (eB : ((s : AmbientRecoveredBlockIndex z K) ×
+      (Fin (ambientRecoveredCommonDim m s) ×
+        Fin (ambientRecoveredConditionalDim d s))) ≃ Fin dB)
+    (ω : ∀ j : Fin K,
+      Matrix (Fin dA × Fin (d j)) (Fin dA × Fin (d j)) ℂ)
+    (τ : ∀ j : Fin K,
+      Matrix (Fin (m j) × Fin dC) (Fin (m j) × Fin dC) ℂ) :
+    Matrix (Fin dA × (Fin dB × Fin dC))
+      (Fin dA × (Fin dB × Fin dC)) ℂ :=
+  Matrix.reindex (recoveredTripartiteBlockEquiv eB)
+    (recoveredTripartiteBlockEquiv eB)
+    (Matrix.blockDiagonal' fun s => match s with
+      | Sum.inl _ => 0
+      | Sum.inr j => ω j ⊗ₖ τ j)
+
 set_option linter.flexible false in
 /-- Taking an `A`-block of the ambient bipartite direct sum leaves a
 middle-system direct sum with the corresponding conditional matrix entries. -/
@@ -1208,12 +1227,10 @@ theorem RecoveredConditionalDilationInternal.blockDilation_fixedEnv_idTensorMap_
     idTensorMapLM (δ := Fin dA)
         (pureAncillaRecovery c₀ k₀ (blockDilationUnitary eB Ulocal))
         (ambientBipartiteBlockMatrix eB σ ω) =
-      Matrix.reindex (recoveredTripartiteBlockEquiv eB)
-        (recoveredTripartiteBlockEquiv eB)
-        (Matrix.blockDiagonal' fun s => match s with
-          | Sum.inl _ => 0
-          | Sum.inr j => ω j ⊗ₖ rectangularKrausMap (fun i => L i j) (σ j)) := by
+      ambientTripartiteBlockMatrix eB ω
+        (fun j => rectangularKrausMap (fun i => L i j) (σ j)) := by
   classical
+  unfold ambientTripartiteBlockMatrix
   apply Matrix.ext
   rintro ⟨a, ⟨b, c⟩⟩ ⟨a', ⟨b', c'⟩⟩
   rw [← (recoveredTripartiteBlockEquiv eB).apply_symm_apply
