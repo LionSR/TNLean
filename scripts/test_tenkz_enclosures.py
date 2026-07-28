@@ -54,6 +54,13 @@ SOURCE = r"""
       }
       { \tex_errmessage:D { named~region~was~not~registered } }
   }
+\cs_new_protected:Npn \tenkzTestAnchorAngle:nn #1#2
+  {
+    \tenkz_free_anchor_angle:nN {#1} \l_tmpa_tl
+    \fp_compare:nNnF {\l_tmpa_tl} = {#2}
+      { \tex_errmessage:D { numeric~port~angle~#1~did~not~resolve~to~#2 } }
+  }
+\tenkzTestAnchorAngle:nn {.5} {0.5}
 \ExplSyntaxOff
 \makeatother
 \begin{document}
@@ -370,6 +377,8 @@ DUPLICATE_RECOVERY = r"""
   \tnput[box, ports={west:physical}]{d}{(2,-1)}{D}
   \tnput[dot, ports={22.5:virtual}]{decimalA}{(0,2)}{}
   \tnput[dot, ports={202.5:virtual}]{decimalB}{(2,2)}{}
+  \tnput[dot, ports={.5:virtual}]{leadingDecimalA}{(0,3)}{}
+  \tnput[dot, ports={180.5:virtual}]{leadingDecimalB}{(2,3)}{}
   \tnput[dot, frame={{rotate=90}}, ports={east:virtual}]{rotatedA}{(4,2)}{}
   \tnput[dot, ports={west:virtual}]{rotatedB}{(4,4)}{}
   \tngroup[frame={{rotate=90}}]{
@@ -405,6 +414,7 @@ DUPLICATE_RECOVERY = r"""
   \tnjoin[route=arc]{rawRotatedA.east}{rawRotatedB.west}
   \tnjoin[route=arc]{a.east}{b.center}
   \tnjoin[route=arc]{decimalA.22.5}{decimalB.202.5}
+  \tnjoin[route=arc]{leadingDecimalA..5}{leadingDecimalB.180.5}
   \tnjoin[route=arc]{rotatedA.east}{rotatedB.west}
   \tnjoin[route=arc]{groupedA.east}{groupedB.west}
   \tnjoin[name=badarc, route=arc, out=0, label={\tenkzTestBadArcInk}]
