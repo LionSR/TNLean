@@ -1,5 +1,7 @@
 %% Kernel fixture: declared skins resolve their base and ink ordered own-port
-%% pairings over the glyph with their declared species hues.
+%% pairings over the glyph with their declared species hues.  It also pins
+%% slotted span geometry, transparent aliases and ports, saved-route beads,
+%% alias ellipsis clearance, and declared string/pairing crossings.
 \documentclass{standalone}
 \usepackage{tenkz}
 \makeatletter
@@ -41,6 +43,15 @@
   base=none,
   pairings={90@1 > 0@1 : cool}
 }
+\tndeclare{skin}{plain-none}{base=none}
+\tndeclare{skin}{slotted-dot}{
+  base=dot,
+  pairings={90@2 > 270@1 : cool}
+}
+\tndeclare{skin}{crossed-box}{
+  base=box,
+  pairings={180@1 > 0@1 : warm}
+}
 \begin{tenkz}[rows={wire}, cols=3, frame=circle, bonds=none]
   \tn[at=(1,1), skin=shift-right]{}
   \tn[at=(1,2), skin=shift-left]{}
@@ -60,13 +71,16 @@
   \tn[at=(1,2), skin=shift-right]{}
   \tn[at=(1,3), skin=alias-ring]{R}
   \tn[at=(1,4), skin=alias-tri]{T}
-  \tn[at=(1,5), skin=alias-dots]{}
+  \tn[at=(1,5), skin=alias-dots, name=ellipsis]{}
   \tn[at=(1,6), skin=alias-none]{}
+  \tnwire{open e}{ellipsis.e}
 \end{tenkz}
 \qquad
 \begin{tenkz}[rows={wire}, cols=1, bonds=none]
   \tn[skin=dot, name=anchor]{}
   \tn[skin=shift-left, at=1 n of anchor]{}
+  \tn[skin=plain-none, name=aside, at=1 e of anchor]{}
+  \tnwire{open e}{aside.e}
 \end{tenkz}
 \qquad
 \begin{tenkz}[rows={wire}, cols=3, bonds=grid]
@@ -78,5 +92,26 @@
 \begin{tenkz}[rows={wire}, cols=1, bonds=none]
   \tn[at=(1,1), skin=shift-right]{}
   \tn[skin=dot, at=on skin-atom-1-1 0.5]{}
+\end{tenkz}
+\qquad
+\begin{tenkz}[rows={wire}, cols=2, bonds=none]
+  \tn[at=(1,1), skin=slotted-dot, wide=2]{}
+\end{tenkz}
+\qquad
+\begin{tenkz}[rows={wire}, cols=2, bonds=none]
+  \tn[at=(1,1), skin=plain-none, void=sealed]{}
+  \tn[at=(1,2), skin=plain-none, void=sealed]{}
+  \tnwire[kind=string, route={n of (1,1) .. (1,2)}]{open}{open}
+\end{tenkz}
+\qquad
+\begin{tenkz}[rows={wire,wire,wire}, cols=1, bonds=none]
+  \tn[at=(2,1), skin=crossed-box]{}
+  \tn[at=(1,1), skin=none, void=sealed]{}
+  \tn[at=(3,1), skin=none, void=sealed]{}
+  \tnwire[
+    kind=string,
+    name=probe,
+    cross={under at crossing of probe and skin-atom-1-1}
+  ]{(1,1)}{(3,1)}
 \end{tenkz}
 \end{document}
