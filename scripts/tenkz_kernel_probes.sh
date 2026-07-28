@@ -363,7 +363,7 @@ grep -Fq '[TKZ-LANG-ADDRESS]' "$WORK/n_diagonal_port.transcript" || {
   exit 1
 }
 
-for wind_case in n_wind_zero n_wind_via; do
+for wind_case in n_wind_zero n_wind_via n_wind_shape; do
   wind_negative="$KERNEL/negative/$wind_case.tex"
   if ( cd "$WORK" &&
        TEXINPUTS="$REPO/tex/tenkz//:" \
@@ -383,6 +383,24 @@ grep -Fq '[TKZ-WIND-VIA]' "$WORK/n_wind_via.transcript" || {
   tail -20 "$WORK/n_wind_via.transcript" >&2
   exit 1
 }
+grep -Fq '[TKZ-WIND-SHAPE]' "$WORK/n_wind_shape.transcript" || {
+  echo "FAIL: the malformed winding rejection lacked TKZ-WIND-SHAPE" >&2
+  tail -20 "$WORK/n_wind_shape.transcript" >&2
+  exit 1
+}
+for wind_case in n_wind_via n_wind_shape; do
+  rm -f "$WORK/$wind_case".{aux,log,pdf,tnlog}
+  ( cd "$WORK" &&
+    TEXINPUTS="$REPO/tex/tenkz//:" \
+      timeout 120 xelatex -interaction=nonstopmode \
+      "$KERNEL/negative/$wind_case.tex" \
+      >"$WORK/$wind_case.recovery.transcript" 2>&1 ) || true
+  if [ -f "$WORK/$wind_case.tnlog" ] &&
+     grep -Eq '^string\|' "$WORK/$wind_case.tnlog"; then
+    echo "FAIL: $wind_case drew a string after its rejection" >&2
+    exit 1
+  fi
+done
 
 selector_negative="$KERNEL/negative/n_selector_mixed.tex"
 if ( cd "$WORK" &&
