@@ -200,11 +200,12 @@ theorem recoveredMiddleChannel_recoveredConditionalState
 The active informationally complete effects form a finite nonempty index
 type.  Their normalized conditional slices are density matrices, and one
 Kraus representation of the recovered middle-system channel preserves every
-member.  The returned map identity ties the bundled Kraus family to
-`φ = Tr_C ∘ Rhat`, making the family directly suitable for the
-Koashi--Imoto joint-support reduction.
+member.  This is the finite invariant family used in the Koashi--Imoto
+joint-support reduction.
 
 Source: HJPW, arXiv:quant-ph/0304007v2, Theorem 6, lines 493--505. -/
+-- Maintainer note: the conclusion bundles the common Kraus representation and
+-- identifies its map with the recovered middle-system channel.
 theorem exists_recoveredConditionalPreservingKrausFamily
     (ρ_ABC : Matrix (Fin dA × Fin dB × Fin dC)
       (Fin dA × Fin dB × Fin dC) ℂ)
