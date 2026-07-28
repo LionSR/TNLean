@@ -1858,8 +1858,8 @@ algebra of a family of jointly invariant states.
     subspace, whereas equation~(14), lines 499--502, decomposes the ambient
     subsystem $B$. This restriction is documented in
     \path{docs/paper-gaps/hjpw04_petz_factorization_maximally_mixed_scope.tex}.
-    % Roadmap: extend these coordinates to ambient B before addressing the
-    % recovery-dilation block action of equation (15).
+    % The next theorem performs the ambient extension; equation (15) remains
+    % the following sequential step.
 \end{theorem}
 
 \begin{proof}
@@ -1875,6 +1875,53 @@ algebra of a family of jointly invariant states.
     $j$-th principal block. Positivity follows from positivity of principal
     blocks and of partial trace. Applying separation once more gives the
     displayed direct-sum equation, and taking traces gives the normalization.
+\end{proof}
+
+\begin{theorem}[Ambient recovered bipartite blocks]
+    \label{thm:hjpw_recovered_bipartite_ambient_blocks}
+    \lean{Matrix.exists_recoveredConditionalAmbientBipartiteBlockForm}
+    \leanok
+    \uses{thm:hjpw_recovered_bipartite_joint_support_blocks}
+    Let $\rho_{ABC}$ be a tripartite density matrix attaining equality in
+    strong subadditivity. Then the ambient middle subsystem has a direct-sum
+    tensor decomposition
+    \begin{align}
+        \mathcal H_B
+        =
+        \bigoplus_j \mathcal H_{b_j^L}\otimes
+            \mathcal H_{b_j^R}.
+    \end{align}
+    In unitary coordinates adapted to this decomposition there are density
+    matrices $\sigma_j$ and positive, not necessarily normalized operators
+    $\omega_j$ such that
+    \begin{align}
+        \rho_{AB}
+        &={}\bigoplus_j \sigma_j\otimes\omega_j,
+        \\
+        \sum_j\tr\omega_j
+        &=1.
+    \end{align}
+    The tensor factors are written in the reverse order from HJPW.
+    Directions complementary to the minimum joint support form
+    one-dimensional tensor sectors with zero $\omega_j$.
+
+    This is
+    \cite[Theorem~6, equations~(13)--(14)]{Hayden2004Structure},
+    lines~493--502.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:hjpw_recovered_bipartite_joint_support_blocks}
+    Extend the support isometry, after composing it with the support block
+    unitary, to a unitary on the ambient middle subsystem. Split the
+    orthogonal complement into one-dimensional tensor sectors. Give each
+    such sector its unique density matrix and the zero unnormalized
+    conditional factor. The supported sectors retain the factors from
+    Theorem~\ref{thm:hjpw_recovered_bipartite_joint_support_blocks}.
+    Lifting the unitary extension through subsystem $A$ and combining the
+    complementary zero block with the supported direct sum gives the
+    displayed ambient equation.
 \end{proof}
 
 \begin{theorem}[Hayashi SSA-equality characterization]
@@ -1930,11 +1977,13 @@ algebra of a family of jointly invariant states.
     recovered family.
     Theorem~\ref{thm:hjpw_recovered_bipartite_joint_support_blocks}
     reconstructs the bipartite marginal only in the same minimum-support
-    coordinates. Extending those coordinates to ambient $B$ to complete
-    equation~(14), proving the recovery-dilation block action of
-    equation~(15), and assembling the quantum-Markov decomposition remain
-    open. This forward implication therefore remains axiomatic. The
-    biconditional combines the two directions.
+    coordinates.
+    Theorem~\ref{thm:hjpw_recovered_bipartite_ambient_blocks} extends them to
+    all of $B$ and completes equations~(13)--(14). Proving the
+    recovery-dilation block action of equation~(15) and assembling the
+    quantum-Markov decomposition remain open. This forward implication
+    therefore remains axiomatic. The biconditional combines the two
+    directions.
 
     This equality criterion is cited here as an input for the later MPDO arguments.
     It is the equality criterion needed by Appendix~C of arXiv:1606.00608.

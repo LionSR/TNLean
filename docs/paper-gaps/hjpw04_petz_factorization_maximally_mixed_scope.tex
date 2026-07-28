@@ -303,11 +303,17 @@ proves that their traces sum to one, and establishes
 $\bigoplus_j\sigma_j\otimes\omega_j$ on the minimum joint support, with the
 tensor order reversed from HJPW. This is a scope-restricted joint-support
 variant toward HJPW equation~(14), not its ambient equivalence on $H_B$.
-Extending these coordinates to ambient $H_B$ to complete equation~(14),
-proving the recovery-dilation block action in equation~(15), assembling the
-generic quantum-Markov decomposition, and eliminating the external assumption
-for the
-forward Hayashi strong-subadditivity implication remain open.
+The declaration
+\leanid{Matrix.exists_recoveredConditionalAmbientBipartiteBlockForm}
+completes the support isometry to an ambient middle-system unitary and splits
+its orthogonal complement into one-dimensional zero-weight tensor sectors.
+It retains the supported positive factors, proves positivity on every ambient
+sector, and proves the total conditional trace is one. Thus HJPW
+equations~(13)--(14), lines 493--502, now hold on the ambient $H_B$ without an
+extra source hypothesis. Proving the recovery-dilation block action in
+equation~(15), assembling the generic quantum-Markov decomposition, and
+eliminating the external assumption for the forward Hayashi
+strong-subadditivity implication remain open.
 
 \section{Classification}
 
@@ -341,10 +347,12 @@ its separating effects, and its preserving middle-system channel are
 formalized. The joint-support block form and preserving-operation action have
 also been applied to this family, and the bipartite marginal is reconstructed
 in those same support coordinates. This is a scope-restricted joint-support
-variant toward HJPW equation~(14), not the ambient statement. Extending the
-coordinates to ambient $H_B$, the recovery-dilation block action of
-equation~(15), and the generic Hayashi forward implication remain open as
-separate sequential steps.
+variant toward HJPW equation~(14). The subsequent ambient extension now gives
+a direct sum of tensor factors on all of $H_B$, using one-dimensional
+zero-weight sectors on the orthogonal complement, and proves the full
+bipartite equation~(14). The recovery-dilation block action of equation~(15)
+and the generic Hayashi forward implication remain open as separate
+sequential steps.
 
 \begin{thebibliography}{9}
 
