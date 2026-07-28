@@ -701,6 +701,8 @@
 \__tenkz_kernel_value:nnn   { tenkz-kernel-atom } { up } { up }
 \__tenkz_kernel_value:nnn   { tenkz-kernel-atom } { down } { down }
 \__tenkz_kernel_value:nnn   { tenkz-kernel-atom } { species } { species }
+\__tenkz_kernel_choice:nnnn { tenkz-kernel-atom } { size }
+  { s, m, l } { size }
 \__tenkz_kernel_value:nnn   { tenkz-kernel-atom } { label~pos } { label-pos }
 \__tenkz_kernel_value:nnn   { tenkz-kernel-atom } { nudge } { nudge }
 \__tenkz_kernel_choice:nnnn { tenkz-kernel-atom } { void }
@@ -745,6 +747,7 @@
   { brace-above, brace-below, enclosure, cut, band, label, prose } { form }
 \__tenkz_kernel_choice:nnnn { tenkz-kernel-mark } { slot }
   { selected, secondary, complement, collar, neutral } { slot }
+\__tenkz_kernel_value:nnn   { tenkz-kernel-mark } { species } { species }
 \__tenkz_kernel_value:nnn   { tenkz-kernel-mark } { inset } { inset }
 \__tenkz_kernel_value:nnn   { tenkz-kernel-mark } { label~pos } { label-pos }
 \__tenkz_kernel_value:nnn   { tenkz-kernel-mark } { nudge } { nudge }
@@ -919,6 +922,15 @@
       { \A \s* ([1-9]\d*) \s* x \s* ([1-9]\d*) \s* \Z } {#2}
       \l__tenkz_kernel_match_seq
       {
+        \prop_get:NnN \l__tenkz_kernel_named_prop {#1} \l_tmpa_tl
+        \__tenkz_model_get:nnN
+          { \tl_use:N \l_tmpa_tl } {species} \l_tmpb_tl
+        \tl_clear:N \l__tenkz_kernel_scratch_tl
+        \quark_if_no_value:NF \l_tmpb_tl
+          {
+            \tl_set:Ne \l__tenkz_kernel_scratch_tl
+              { , species = \tl_use:N \l_tmpb_tl }
+          }
         \int_gincr:N \g__tenkz_kernel_group_int
         \__tenkz_model_record_frame:e
           {
@@ -934,6 +946,7 @@
                     kind = tn , skin = dot , name = #1 - ##1 - ####1 ,
                     cluster-of = #1 ,
                     group = g \int_use:N \g__tenkz_kernel_group_int
+                    \tl_use:N \l__tenkz_kernel_scratch_tl
                   }
                 \prop_put:Nee \l__tenkz_kernel_named_prop
                   { #1 - ##1 - ####1 } { \tl_use:N \l__tenkz_model_last_tl }
@@ -1429,6 +1442,7 @@
 % mints a one-label command; skins and species are descriptor tables the
 % style stage consumes.
 \prop_new:N \g__tenkz_kernel_species_prop
+\prop_new:N \g__tenkz_kernel_species_hue_prop
 \prop_new:N \g__tenkz_kernel_skin_prop
 \cs_new_protected:Npn \__tenkz_kernel_tndeclare:nnn #1#2#3
   {
@@ -1437,10 +1451,39 @@
         {atom}    { \__tenkz_kernel_declare_atom:nn {#2} {#3} }
         {skin}    { \__tenkz_kernel_declare_table:Nnn
                       \g__tenkz_kernel_skin_prop {#2} {#3} }
-        {species} { \__tenkz_kernel_declare_table:Nnn
-                      \g__tenkz_kernel_species_prop {#2} {#3} }
+        {species} { \__tenkz_kernel_declare_species:nn {#2} {#3} }
       }
       { \msg_error:nnn {tenkz}{kernel-declare-class} {#1} }
+  }
+\cs_new_protected:Npn \__tenkz_kernel_declare_species:nn #1#2
+  {
+    \__tenkz_kernel_declare_table:Nnn
+      \g__tenkz_kernel_species_prop {#1} {#2}
+    % Hue-less declarations receive a document-scope cycle slot now, in
+    % declaration order.  Reordering first uses in later pictures therefore
+    % cannot change the identity's ink.
+    \regex_extract_once:nnNF
+      { (?: \A | , ) \s* hue \s* = }
+      {#2}
+      \l__tenkz_kernel_r_hue_match_seq
+      {
+        \prop_if_in:NnF \g__tenkz_kernel_species_hue_prop {#1}
+          {
+            \int_set:Nn \l_tmpa_int
+              {
+                \int_mod:nn
+                  { \prop_count:N \g__tenkz_kernel_species_hue_prop }
+                  { \clist_count:N \c__tenkz_speccycle_clist }
+                + 1
+              }
+            \tl_set:Nx \l_tmpa_tl
+              {
+                \clist_item:Nn \c__tenkz_speccycle_clist
+                  { \l_tmpa_int }
+              }
+            \prop_gput:NnV \g__tenkz_kernel_species_hue_prop {#1} \l_tmpa_tl
+          }
+      }
   }
 \cs_new_protected:Npn \__tenkz_kernel_declare_table:Nnn #1#2#3
   {
@@ -2030,7 +2073,6 @@
 \prop_new:N \l__tenkz_kernel_r_species_prop   % species word -> hue
 \seq_new:N  \l__tenkz_kernel_r_strings_seq    % string wire record ids
 \seq_new:N  \l__tenkz_kernel_r_after_atom_seq % physical traces need glyph borders
-\seq_new:N  \l__tenkz_kernel_r_palette_seq
 \int_new:N  \l__tenkz_kernel_r_rows_int
 \int_new:N  \l__tenkz_kernel_r_cols_int
 \tl_new:N   \l__tenkz_kernel_r_tl
@@ -2041,6 +2083,13 @@
 \tl_new:N   \l__tenkz_kernel_r_pts_tl
 \tl_new:N   \l__tenkz_kernel_r_sid_tl
 \tl_new:N   \l__tenkz_kernel_r_hue_tl
+\tl_new:N   \l__tenkz_kernel_r_species_tl
+\tl_new:N   \l__tenkz_kernel_r_species_descriptor_tl
+\tl_new:N   \l__tenkz_kernel_r_mark_ink_tl
+\tl_new:N   \l__tenkz_kernel_r_wire_ink_tl
+\tl_new:N   \l__tenkz_kernel_r_wire_style_tl
+\tl_new:N   \l__tenkz_kernel_r_atom_style_tl
+\seq_new:N  \l__tenkz_kernel_r_hue_match_seq
 \tl_new:N   \l__tenkz_kernel_r_x_tl
 \tl_new:N   \l__tenkz_kernel_r_y_tl
 \tl_new:N   \l__tenkz_kernel_r_xb_tl
@@ -2790,6 +2839,8 @@
 \tl_new:N \l__tenkz_kernel_hull_a_tl
 \tl_new:N \l__tenkz_kernel_hull_b_tl
 \tl_new:N \l__tenkz_kernel_hull_skin_tl
+\tl_new:N \l__tenkz_kernel_hull_size_tl
+\tl_new:N \l__tenkz_kernel_hull_radius_tl
 \tl_new:N \l__tenkz_kernel_hull_turn_tl
 \tl_new:N \l__tenkz_kernel_hull_measure_name_tl
 \tl_new:N \l__tenkz_kernel_hull_shape_tl
@@ -3406,6 +3457,8 @@
             % a contour that clears the dot but cuts the label clears nothing
             \__tenkz_model_get:nnN {#1} {label} \l_tmpa_tl
             \__tenkz_model_get:nnN {#1} {cluster-of} \l_tmpb_tl
+            \__tenkz_kernel_hull_dot_radius:nN {#1}
+              \l__tenkz_kernel_hull_radius_tl
             \tl_set:Ne #2
               {
                 {circle}
@@ -3414,8 +3467,10 @@
                     {
                       \quark_if_no_value_p:N \l_tmpb_tl
                         ? ( \quark_if_no_value_p:N \l_tmpa_tl
-                              ? \__tenkz_metric_ratio:n {dotdia} / 2
-                              : \__tenkz_metric_ratio:n {dotlabelband} )
+                              ? \l__tenkz_kernel_hull_radius_tl
+                              : max(
+                                  \l__tenkz_kernel_hull_radius_tl ,
+                                  \__tenkz_metric_ratio:n {dotlabelband} ) )
                         : \__tenkz_metric_ratio:n {clusterdot} / 2
                     }
                 }
@@ -3448,6 +3503,34 @@
             { \tl_use:N \l__tenkz_kernel_hull_b_tl }
             {0}
             { \tl_use:N \l__tenkz_kernel_hull_turn_tl }
+          }
+      }
+  }
+% Radius of an ordinary dot's declared size class, in pitch units.  Cluster
+% children keep their sub-frame radius in the caller above.
+\cs_new_protected:Npn \__tenkz_kernel_hull_dot_radius:nN #1#2
+  {
+    \__tenkz_model_get:nnN {#1} {size} \l__tenkz_kernel_hull_size_tl
+    \quark_if_no_value:NTF \l__tenkz_kernel_hull_size_tl
+      { \tl_set:Ne #2 { \__tenkz_metric_ratio:n {dotdia} / 2 } }
+      {
+        \str_case:Vn \l__tenkz_kernel_hull_size_tl
+          {
+            {s}
+              {
+                \tl_set:Ne #2
+                  { \__tenkz_metric_ratio:n {clusterdot} / 2 }
+              }
+            {m}
+              {
+                \tl_set:Ne #2
+                  { \__tenkz_metric_ratio:n {dotdia} / 2 }
+              }
+            {l}
+              {
+                \tl_set:Ne #2
+                  { \__tenkz_metric_ratio:n {glyphbox} / 2 }
+              }
           }
       }
   }
@@ -4172,6 +4255,13 @@
   }
 
 % ---------- index-wire ink ---------------------------------------------------------------------
+\cs_new_protected:Npn \__tenkz_kernel_r_wire_stroke:nn #1#2
+  {
+    \tl_set:Ne \l__tenkz_kernel_r_wire_style_tl
+      { #1 , \tl_use:N \l__tenkz_kernel_r_wire_ink_tl }
+    \exp_args:NV \__tenkz_render_stroke:nn
+      \l__tenkz_kernel_r_wire_style_tl {#2}
+  }
 \cs_new_protected:Npn \__tenkz_kernel_r_wire_queue:n #1
   {
     \__tenkz_model_get:nnN {#1} {kind} \l__tenkz_kernel_r_tl
@@ -4188,6 +4278,8 @@
         % ink.  This predeclares any curve named by an `on w t` end while
         % leaving unrelated string event order unchanged.
         \__tenkz_kernel_settle:n {#1}
+        \__tenkz_kernel_r_wire_ink:nN {#1}
+          \l__tenkz_kernel_r_wire_ink_tl
         \__tenkz_model_get:nnN {#1} {origin} \l__tenkz_kernel_r_tl
         \quark_if_no_value:NTF \l__tenkz_kernel_r_tl
           { \__tenkz_kernel_r_wire_ends:n {#1} }
@@ -4226,7 +4318,7 @@
             \__tenkz_kernel_r_frame_xy:nnNN
               { \l__tenkz_kernel_r_col_tl } {1}
               \l__tenkz_kernel_r_xb_fp \l__tenkz_kernel_r_yb_fp
-            \__tenkz_render_stroke:nn { bond }
+            \__tenkz_kernel_r_wire_stroke:nn { bond }
               {
                 \__tenkz_kernel_r_pair:nn
                   { \l__tenkz_kernel_r_x_fp }
@@ -4265,7 +4357,7 @@
               { \l__tenkz_kernel_r_col_tl }
               { \l__tenkz_kernel_r_cols_int }
               \l__tenkz_kernel_r_xb_fp \l__tenkz_kernel_r_yb_fp
-            \__tenkz_render_stroke:nn { bond }
+            \__tenkz_kernel_r_wire_stroke:nn { bond }
               {
                 \__tenkz_kernel_r_pair:nn
                   { \l__tenkz_kernel_r_x_fp }
@@ -4302,7 +4394,7 @@
             \__tenkz_kernel_r_frame_xy:nnNN
               {1} { \l__tenkz_kernel_r_col_tl }
               \l__tenkz_kernel_r_xb_fp \l__tenkz_kernel_r_yb_fp
-            \__tenkz_render_stroke:nn { bond }
+            \__tenkz_kernel_r_wire_stroke:nn { bond }
               {
                 \__tenkz_kernel_r_pair:nn
                   { \l__tenkz_kernel_r_x_fp }
@@ -4341,7 +4433,7 @@
               { \l__tenkz_kernel_r_rows_int }
               { \l__tenkz_kernel_r_col_tl }
               \l__tenkz_kernel_r_xb_fp \l__tenkz_kernel_r_yb_fp
-            \__tenkz_render_stroke:nn { bond }
+            \__tenkz_kernel_r_wire_stroke:nn { bond }
               {
                 \__tenkz_kernel_r_pair:nn
                   { \l__tenkz_kernel_r_x_fp }
@@ -4462,7 +4554,7 @@
         % an ellipsis endpoint keeps daylight: the wire stops short of the dots
         \clist_map_inline:nn {from, to}
           { \__tenkz_kernel_r_dots_trim:nn {#1} {##1} }
-        \__tenkz_render_stroke:nn { bond }
+        \__tenkz_kernel_r_wire_stroke:nn { bond }
           {
             \__tenkz_kernel_r_pair:nn
               { \l__tenkz_kernel_r_x_fp } { \l__tenkz_kernel_r_y_fp }
@@ -4561,7 +4653,7 @@
                 + \__tenkz_metric_ratio:n {wrapreach}
               }
               \l__tenkz_kernel_r_xb_fp \l__tenkz_kernel_r_yb_fp
-            \__tenkz_render_stroke:nn { bond }
+            \__tenkz_kernel_r_wire_stroke:nn { bond }
               {
                 \__tenkz_kernel_r_pair:nn
                   { \l__tenkz_kernel_r_x_fp }
@@ -4586,7 +4678,7 @@
               }
               { \l__tenkz_kernel_r_col_tl }
               \l__tenkz_kernel_r_xb_fp \l__tenkz_kernel_r_yb_fp
-            \__tenkz_render_stroke:nn { bond }
+            \__tenkz_kernel_r_wire_stroke:nn { bond }
               {
                 \__tenkz_kernel_r_pair:nn
                   { \l__tenkz_kernel_r_x_fp }
@@ -4611,7 +4703,7 @@
               { \l__tenkz_kernel_r_row_tl + 1 }
               { \l__tenkz_kernel_r_col_tl }
               \l__tenkz_kernel_r_xb_fp \l__tenkz_kernel_r_yb_fp
-            \__tenkz_render_stroke:nn { bond }
+            \__tenkz_kernel_r_wire_stroke:nn { bond }
               {
                 \__tenkz_kernel_r_pair:nn
                   { \l__tenkz_kernel_r_x_fp }
@@ -4656,7 +4748,7 @@
       { \__tenkz_metric_ratio:n {pairtracereach} }
     \fp_set:Nn \l__tenkz_kernel_r_xc_fp
       { \l__tenkz_kernel_r_x_fp + \l__tenkz_kernel_r_reach_fp }
-    \__tenkz_render_stroke:nn { trace }
+    \__tenkz_kernel_r_wire_stroke:nn { trace }
       {
         \__tenkz_kernel_r_pair:nn
           { \l__tenkz_kernel_r_x_fp } { \l__tenkz_kernel_r_y_fp }
@@ -5073,31 +5165,89 @@
     \quark_if_no_value:NT #2 { \tl_set:Nn #2 {#1} }
   }
 
-% species -> hue, first species takes the first palette entry
+% Cache one undeclared or hue-less species in the house cycle.
+\cs_new_protected:Npn \__tenkz_kernel_r_cycle_hue:nN #1#2
+  {
+    \prop_get:NnNF \l__tenkz_kernel_r_species_prop {#1} #2
+      {
+        \tl_set:Ne #2
+          {
+            \clist_item:Nn \c__tenkz_speccycle_clist
+              {
+                \int_mod:nn
+                  { \prop_count:N \l__tenkz_kernel_r_species_prop }
+                  { \clist_count:N \c__tenkz_speccycle_clist }
+                + 1
+              }
+          }
+        \prop_put:NnV \l__tenkz_kernel_r_species_prop {#1} #2
+      }
+  }
+
+% Species -> hue.  An explicit hue is authoritative.  Hue-less declarations
+% and other named species take the house cycle in model-record order; the
+% undeclared prelude roles retain their fixed semantic hues.
 \cs_new_protected:Npn \__tenkz_kernel_r_hue:nN #1#2
   {
-    \__tenkz_model_get:nnN {#1} {species} \l__tenkz_kernel_r_c_tl
-    \quark_if_no_value:NTF \l__tenkz_kernel_r_c_tl
-      { \tl_set:Nn #2 { tenkzMarked } }
+    \__tenkz_model_get:nnN {#1} {species} \l__tenkz_kernel_r_species_tl
+    \quark_if_no_value:NTF \l__tenkz_kernel_r_species_tl
+      { \tl_set:Nn #2 { tenkzInk } }
       {
-        \prop_get:NVNF \l__tenkz_kernel_r_species_prop
-          \l__tenkz_kernel_r_c_tl #2
+        \prop_get:NVNTF \g__tenkz_kernel_species_prop
+          \l__tenkz_kernel_r_species_tl
+          \l__tenkz_kernel_r_species_descriptor_tl
           {
-            \int_compare:nNnTF
-              { \prop_count:N \l__tenkz_kernel_r_species_prop }
-              < { \seq_count:N \l__tenkz_kernel_r_palette_seq }
+            \exp_args:NnV \regex_extract_once:nnNTF
+              {
+                (?: \A | , ) \s* hue \s* = \s*
+                (?: \{ \s* )? (?: source: )?
+                ([^,{}\s]+) (?: \s* \} )?
+              }
+              \l__tenkz_kernel_r_species_descriptor_tl
+              \l__tenkz_kernel_r_hue_match_seq
               {
                 \tl_set:Ne #2
+                  { \seq_item:Nn \l__tenkz_kernel_r_hue_match_seq {2} }
+              }
+              {
+                \prop_get:NVNTF \g__tenkz_kernel_species_hue_prop
+                  \l__tenkz_kernel_r_species_tl #2
+                  { }
                   {
-                    \seq_item:Nn \l__tenkz_kernel_r_palette_seq
-                      {
-                        \prop_count:N \l__tenkz_kernel_r_species_prop + 1
-                      }
+                    \exp_args:NV \__tenkz_kernel_r_cycle_hue:nN
+                      \l__tenkz_kernel_r_species_tl #2
                   }
               }
-              { \tl_set:Nn #2 { tenkzMarked } }
-            \prop_put:NVV \l__tenkz_kernel_r_species_prop
-              \l__tenkz_kernel_r_c_tl #2
+          }
+          {
+            \str_case:VnF \l__tenkz_kernel_r_species_tl
+              {
+                {operator} { \tl_set:Nn #2 {tenkzOperator} }
+                {marked}   { \tl_set:Nn #2 {tenkzMarked} }
+                {extra}    { \tl_set:Nn #2 {tenkzExtra} }
+                {passive}  { \tl_set:Nn #2 {tenkzPassive} }
+              }
+              {
+                \exp_args:NV \__tenkz_kernel_r_cycle_hue:nN
+                  \l__tenkz_kernel_r_species_tl #2
+              }
+          }
+      }
+  }
+
+% Ink semantics shared by index wires and strings.
+\cs_new_protected:Npn \__tenkz_kernel_r_wire_ink:nN #1#2
+  {
+    \__tenkz_kernel_r_hue:nN {#1} \l__tenkz_kernel_r_hue_tl
+    \tl_set:Ne #2 { draw = \tl_use:N \l__tenkz_kernel_r_hue_tl }
+    \__tenkz_model_get:nnN {#1} {dir} \l__tenkz_kernel_r_c_tl
+    \quark_if_no_value:NF \l__tenkz_kernel_r_c_tl
+      {
+        \str_case:Vn \l__tenkz_kernel_r_c_tl
+          {
+            {to}   { \tl_put_right:Nn #2 { , dir~marks } }
+            {from} { \tl_put_right:Nn #2 { , dir~marks~reversed } }
+            {none} { }
           }
       }
   }
@@ -5676,10 +5826,11 @@
     \seq_map_inline:Nn \l__tenkz_kernel_r_strings_seq
       {
         \__tenkz_kernel_r_sid:nN {##1} \l__tenkz_kernel_r_sid_tl
-        \__tenkz_kernel_r_hue:nN {##1} \l__tenkz_kernel_r_hue_tl
-        \__tenkz_render_string:nn
-          { \tl_use:N \l__tenkz_kernel_r_sid_tl }
-          { draw = \tl_use:N \l__tenkz_kernel_r_hue_tl }
+        \__tenkz_kernel_r_wire_ink:nN {##1}
+          \l__tenkz_kernel_r_wire_ink_tl
+        \exp_args:NVV \__tenkz_render_string:nn
+          \l__tenkz_kernel_r_sid_tl
+          \l__tenkz_kernel_r_wire_ink_tl
       }
   }
 
@@ -5773,15 +5924,25 @@
         {none} { }
         {dots}
           {
-            \__tenkz_kernel_r_xy:nNN {#1}
-              \l__tenkz_kernel_r_x_fp \l__tenkz_kernel_r_y_fp
-            \__tenkz_render_labelnode:nnn
+            \tl_set:Nn \l__tenkz_kernel_r_atom_style_tl
               {
                 tenkz~audited~label ,
                 alias = #1 ,
                 inner~sep = \__tenkz_dim:n {labelclear} ,
                 fill = tenkzPaper
               }
+            \__tenkz_model_get:nnN {#1} {species}
+              \l__tenkz_kernel_r_species_tl
+            \quark_if_no_value:NF \l__tenkz_kernel_r_species_tl
+              {
+                \__tenkz_kernel_r_hue:nN {#1} \l__tenkz_kernel_r_hue_tl
+                \tl_put_right:Ne \l__tenkz_kernel_r_atom_style_tl
+                  { , text = \tl_use:N \l__tenkz_kernel_r_hue_tl }
+              }
+            \__tenkz_kernel_r_xy:nNN {#1}
+              \l__tenkz_kernel_r_x_fp \l__tenkz_kernel_r_y_fp
+            \exp_args:NV \__tenkz_render_labelnode:nnn
+              \l__tenkz_kernel_r_atom_style_tl
               {
                 (
                   \__tenkz_kernel_r_pt:n { \l__tenkz_kernel_r_x_fp } ,
@@ -5792,21 +5953,56 @@
           }
         {dot}
           {
+            \__tenkz_model_get:nnN {#1} {species}
+              \l__tenkz_kernel_r_species_tl
+            \__tenkz_model_get:nnN {#1} {size} \l__tenkz_kernel_r_row_tl
             % a spin on a cluster's sub-frame is drawn at the sub-frame's
             % scale: four of them read as one site, and at the site dot's
             % size they would read as one blot
             \__tenkz_model_get:nnN {#1} {cluster-of} \l__tenkz_kernel_r_c_tl
             \quark_if_no_value:NTF \l__tenkz_kernel_r_c_tl
               {
-                \__tenkz_render_atom_scaled:nnnn
-                  { dot } {#1} { } { , alias = #1 }
+                \tl_set:Ne \l__tenkz_kernel_r_atom_style_tl
+                  { , alias = #1 }
+                \quark_if_no_value:NF \l__tenkz_kernel_r_species_tl
+                  {
+                    \__tenkz_kernel_r_hue:nN {#1}
+                      \l__tenkz_kernel_r_hue_tl
+                    \tl_put_right:Ne \l__tenkz_kernel_r_atom_style_tl
+                      {
+                        , draw = \tl_use:N \l__tenkz_kernel_r_hue_tl
+                        , fill = \tl_use:N \l__tenkz_kernel_r_hue_tl
+                      }
+                  }
+                \quark_if_no_value:NF \l__tenkz_kernel_r_row_tl
+                  {
+                    \tl_put_right:Ne \l__tenkz_kernel_r_atom_style_tl
+                      {
+                        , tenkz~dot~size~
+                            \tl_use:N \l__tenkz_kernel_r_row_tl
+                      }
+                  }
+                \exp_args:NnnnV \__tenkz_render_atom_scaled:nnnn
+                  { dot } {#1} { } \l__tenkz_kernel_r_atom_style_tl
               }
               {
-                \__tenkz_render_atom_scaled:nnnn { dot } {#1} { }
+                \tl_set:Ne \l__tenkz_kernel_r_atom_style_tl
                   {
                     , alias = #1
                     , minimum~size = \__tenkz_dim:n {clusterdot}
                   }
+                \quark_if_no_value:NF \l__tenkz_kernel_r_species_tl
+                  {
+                    \__tenkz_kernel_r_hue:nN {#1}
+                      \l__tenkz_kernel_r_hue_tl
+                    \tl_put_right:Ne \l__tenkz_kernel_r_atom_style_tl
+                      {
+                        , draw = \tl_use:N \l__tenkz_kernel_r_hue_tl
+                        , fill = \tl_use:N \l__tenkz_kernel_r_hue_tl
+                      }
+                  }
+                \exp_args:NnnnV \__tenkz_render_atom_scaled:nnnn
+                  { dot } {#1} { } \l__tenkz_kernel_r_atom_style_tl
               }
             % a dot cannot inscribe text: its label sits in the label band,
             % on the side label pos names, default south
@@ -5839,12 +6035,19 @@
                     \exp_args:NV \__tenkz_render_label_anchor:n
                       \l__tenkz_kernel_r_c_tl
                   }
-                \__tenkz_render_labelnode:nnn
+                \tl_set:Ne \l__tenkz_kernel_r_atom_style_tl
                   {
                     tenkz~audited~label ,
                     anchor = \tl_use:N \l__tenkz_kernel_r_c_tl ,
                     inner~sep = \__tenkz_dim:n {labelclear}
                   }
+                \quark_if_no_value:NF \l__tenkz_kernel_r_species_tl
+                  {
+                    \tl_put_right:Ne \l__tenkz_kernel_r_atom_style_tl
+                      { , text = \tl_use:N \l__tenkz_kernel_r_hue_tl }
+                  }
+                \exp_args:NV \__tenkz_render_labelnode:nnn
+                  \l__tenkz_kernel_r_atom_style_tl
                   {
                     (
                       \__tenkz_kernel_r_pt:n { \l__tenkz_kernel_r_x_fp } ,
@@ -5878,6 +6081,17 @@
           { skin = #2 } {#1}
         \tl_set:Nn #3 { box~tensor }
       }
+    \__tenkz_model_get:nnN {#1} {size} \l__tenkz_kernel_r_x_tl
+    % An absent size keeps the established per-skin geometry.  Once a class
+    % is requested, all canonical skins use its reference on both axes.
+    \quark_if_no_value:NF \l__tenkz_kernel_r_x_tl
+      {
+        \tl_put_right:Ne #3
+          {
+            , tenkz~canonical~size~
+                \tl_use:N \l__tenkz_kernel_r_x_tl
+          }
+      }
     \int_compare:nNnT { \l__tenkz_kernel_r_row_tl } > {1}
       {
         \tl_put_right:Ne #3
@@ -5910,6 +6124,17 @@
     \exp_args:NnV \__tenkz_kernel_r_atom_glyph_style:nnN
       {#1} \l__tenkz_kernel_r_tl \l__tenkz_kernel_r_c_tl
     \tl_put_right:Nn \l__tenkz_kernel_r_c_tl { , alias = #1 }
+    \__tenkz_model_get:nnN {#1} {species}
+      \l__tenkz_kernel_r_species_tl
+    \quark_if_no_value:NF \l__tenkz_kernel_r_species_tl
+      {
+        \__tenkz_kernel_r_hue:nN {#1} \l__tenkz_kernel_r_hue_tl
+        \tl_put_right:Ne \l__tenkz_kernel_r_c_tl
+          {
+            , draw = \tl_use:N \l__tenkz_kernel_r_hue_tl
+            , text = \tl_use:N \l__tenkz_kernel_r_hue_tl
+          }
+      }
     % Ink the frame measures lies in the frame; ink the frame only places
     % stays upright.  A skin is measured, so it turns with its carrier; the
     % name inside it is placed, so it is turned back by the same angle and
@@ -6011,9 +6236,12 @@
     \__tenkz_model_get:nnN {#1} {label} \l__tenkz_kernel_r_b_tl
     \quark_if_no_value:NF \l__tenkz_kernel_r_b_tl
       {
+        \__tenkz_kernel_r_mark_text_ink:nN {#1}
+          \l__tenkz_kernel_r_mark_ink_tl
         \__tenkz_render_labelnode:nnn
           {
             tenkz~audited~label ,
+            \tl_use:N \l__tenkz_kernel_r_mark_ink_tl
             anchor = \exp_args:NV \__tenkz_render_label_anchor:n
               \l__tenkz_kernel_r_c_tl ,
             inner~sep = \__tenkz_dim:n {labelclear}
@@ -6035,6 +6263,16 @@
             )
           }
           { \tl_use:N \l__tenkz_kernel_r_b_tl }
+      }
+  }
+\cs_new_protected:Npn \__tenkz_kernel_r_mark_text_ink:nN #1#2
+  {
+    \tl_clear:N #2
+    \__tenkz_model_get:nnN {#1} {species} \l__tenkz_kernel_r_species_tl
+    \quark_if_no_value:NF \l__tenkz_kernel_r_species_tl
+      {
+        \__tenkz_kernel_r_hue:nN {#1} \l__tenkz_kernel_r_hue_tl
+        \tl_set:Ne #2 { text = \tl_use:N \l__tenkz_kernel_r_hue_tl , }
       }
   }
 
@@ -6110,22 +6348,28 @@
                 { \l__tenkz_kernel_r_xc_fp } { \l__tenkz_kernel_r_yc_fp } }
           }
       }
-    \__tenkz_model_get:nnN {#1} {slot} \l__tenkz_kernel_r_hue_tl
-    \quark_if_no_value:NTF \l__tenkz_kernel_r_hue_tl
-      { \tl_set:Nn \l__tenkz_kernel_r_hue_tl { tenkzPassive } }
+    \__tenkz_model_get:nnN {#1} {species} \l__tenkz_kernel_r_species_tl
+    \quark_if_no_value:NTF \l__tenkz_kernel_r_species_tl
       {
-        \tl_set:Ne \l__tenkz_kernel_r_hue_tl
+        % `slot` remains a compatibility spelling until the S4 surface swap.
+        \__tenkz_model_get:nnN {#1} {slot} \l__tenkz_kernel_r_hue_tl
+        \quark_if_no_value:NTF \l__tenkz_kernel_r_hue_tl
+          { \tl_set:Nn \l__tenkz_kernel_r_hue_tl { tenkzPassive } }
           {
-            \str_case:Vn \l__tenkz_kernel_r_hue_tl
+            \tl_set:Ne \l__tenkz_kernel_r_hue_tl
               {
-                {selected}   { tenkzMarked }
-                {secondary}  { tenkzAction }
-                {complement} { tenkzExtra }
-                {collar}     { tenkzPassive }
-                {neutral}    { tenkzPassive }
+                \str_case:Vn \l__tenkz_kernel_r_hue_tl
+                  {
+                    {selected}   { tenkzMarked }
+                    {secondary}  { tenkzAction }
+                    {complement} { tenkzExtra }
+                    {collar}     { tenkzPassive }
+                    {neutral}    { tenkzPassive }
+                  }
               }
           }
       }
+      { \__tenkz_kernel_r_hue:nN {#1} \l__tenkz_kernel_r_hue_tl }
     \__tenkz_render_stroke:en
       {
         draw = \tl_use:N \l__tenkz_kernel_r_hue_tl ,
@@ -6188,9 +6432,12 @@
     \__tenkz_model_get:nnN {#1} {label} \l__tenkz_kernel_r_b_tl
     \quark_if_no_value:NF \l__tenkz_kernel_r_b_tl
       {
+        \__tenkz_kernel_r_mark_text_ink:nN {#1}
+          \l__tenkz_kernel_r_mark_ink_tl
         \__tenkz_render_labelnode:nnn
           {
             tenkz~audited~label ,
+            \tl_use:N \l__tenkz_kernel_r_mark_ink_tl
             inner~sep = \__tenkz_dim:n {labelclear}
           }
           {
@@ -6227,8 +6474,16 @@
     \seq_clear:N \l__tenkz_kernel_r_strings_seq
     \seq_clear:N \l__tenkz_kernel_r_after_atom_seq
     \seq_clear:N \l__tenkz_kernel_ow_run_stack_seq
-    \seq_set_from_clist:Nn \l__tenkz_kernel_r_palette_seq
-      { tenkzMarked , tenkzAction , tenkzExtra , tenkzOperator }
+    % Document-scope hue-less declarations reserve their cycle slots before
+    % any picture-local undeclared name is assigned.  An unused declaration
+    % therefore cannot collide with an undeclared identity used earlier in
+    % this picture.
+    \prop_map_inline:Nn \g__tenkz_kernel_species_hue_prop
+      { \prop_put:Nnn \l__tenkz_kernel_r_species_prop {##1} {##2} }
+    % Resolve cycle assignment once in declaration order, before renderer
+    % staging separates wires from atoms.
+    \seq_map_inline:Nn \l__tenkz_model_record_seq
+      { \__tenkz_kernel_r_hue:nN {##1} \l__tenkz_kernel_r_hue_tl }
     \__tenkz_kernel_r_axis_read:
     \int_set:Nn \l__tenkz_kernel_r_rows_int { \__tenkz_kernel_rows: }
     \int_set:Nn \l__tenkz_kernel_r_cols_int { \__tenkz_kernel_cols: }

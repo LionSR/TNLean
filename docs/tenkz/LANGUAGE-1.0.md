@@ -83,7 +83,7 @@ Every frame contracts adjacent compatible cells by default: `bonds=grid`
 holds in chain and lattice frames alike, and `bonds=none` suppresses the
 frame-generated bonds.
 
-### 2.3 Atom keys (11)
+### 2.3 Atom keys (12)
 
 | Key | Type | Values | Default | Diagnostic family |
 |---|---|---|---|---|
@@ -95,6 +95,7 @@ frame-generated bonds.
 | `ports=` | typed-port-list | — | from skin | `TKZ-PORT-*` |
 | `frame=` | small-enum | `flat` `plane` `circle` | `flat` | `TKZ-FRAME-*` |
 | `species=` | identifier | — | empty | `TKZ-SPECIES-*` |
+| `size=` | small-enum | `s` `m` `l` | `m` | `TKZ-SIZE-*` |
 | `label pos=` | angle | a bearing in the record's own axes, or `auto` | `auto` | `TKZ-LABEL-*` |
 | `conjugate` | flag | — | false | `TKZ-ATOM-*` |
 | `void=` | small-enum | `open` `sealed` | unset | `TKZ-ATOM-*` |

@@ -1083,3 +1083,30 @@ a kernel attempt drew one loop on a bare grid where the source draws a
 torus and two lattice panels, and was refused at review.
 
 No ledger row changes and no flag verdict is re-examined here.
+
+### 2026-07-28 — recorded kernel semantics reach the ink
+
+Species hue and wire direction were already kernel record fields, but the
+renderer discarded both. They now resolve at the shared ink boundary:
+declared `source:` hues reproduce the cited palette, undeclared named species
+use the house cycle, and `dir=` selects the corresponding mid-wire barb.
+Unnamed records retain the ordinary theme ink.
+
+The canonical atom gains the existing `size=s|m|l` property and marks gain
+the already-specified `species=` property under the extension gate requested
+by the source-corpus audit. This raises M1 kernel rows from 136 to 138 and M2
+parser leaves from 221 to 223. It does not change M3. M4 rises from 18.08 to
+18.20 because eleven source cases now state their cited palettes explicitly
+instead of relying on encounter order. The focused regression records all
+three size classes, document-stable species hues, mark species, and wire
+direction while the ten kernel event streams remain byte-identical.
+
+Extension-gate: #5013
+
+Census-correction: #5013
+
+| flag | verdict |
+|---|---|
+| flag:consumers:key:kernel-atom:size | keep-because: #4931 records the condensation source's large endpoints and small intermediate beads, while #5013 makes the existing size-class answer reachable from canonical atoms; expiry 1.0 |
+| flag:consumers:key:kernel-mark:species | keep-because: #5013 implements the LANGUAGE-1.0 semantic-ink contract at mark scope and pins it in the focused kernel regression; the cited dyon, boundary-lasso, and injectivity-ring consumers migrate in the queued redraw waves; expiry 1.0 |
+| flag:sugar-shaped:command:tndeclare | keep-because: a species declaration binds one semantic identity to a cited palette across atoms, wires, and marks; it changes the document-scope descriptor table and cannot expand into picture records; expiry 1.0 |
