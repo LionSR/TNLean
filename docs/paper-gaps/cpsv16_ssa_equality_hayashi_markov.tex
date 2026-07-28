@@ -680,21 +680,25 @@ complete effect family and conditional slices
   \small
   \leanid{Matrix.eq_of_conditionalSlice_informationallyCompleteEffect_eq}\\
   \leanid{Matrix.idTensor_recoveredMiddleChannel_traceC_ABC_eq}\\
-  \leanid{Matrix.exists_recoveredConditionalPreservingKrausFamily}.
+  \leanid{Matrix.exists_recoveredConditionalPreservingKrausFamily}\\
+  \leanid{Matrix.exists_recoveredConditionalStateBlockForm_preservingBlockAction_jointSupport}.
 \end{center}
 These declarations construct a finite nonempty family of nonzero normalized
 conditional states fixed by
 $\varphi=\operatorname{Tr}_C\circ\widehat{\mathcal R}$ and prove that the
-finite slices separate bipartite operators. Applying the joint-support block
-form to this family and assembling the quantum-Markov decomposition remain
-necessary before the forward external assumption can be removed.
+finite slices separate bipartite operators. They also apply the joint-support
+block form to this family and retain the support-intertwining and
+preserving-operation action of $\varphi$. Extending the finite block equations
+to the bipartite marginal, lifting them through the recovery channel, and
+assembling the quantum-Markov decomposition remain necessary before the
+forward external assumption can be removed.
 
 \section{Verdict}
 
 The strong-subadditivity equality characterization is now split into a proved
 reverse direction and a postulated forward direction. Only the forward
 direction, equality implies quantum-Markov-chain structure, still needs the
-joint-support block theorem applied to the recovered family and the subsequent
+bipartite reconstruction, recovery-channel lifting, and subsequent
 quantum-Markov assembly.
 The full-support invariant-family state decomposition and preserving-operation
 block action are formalized. Source-facing
@@ -707,10 +711,10 @@ formalized, with zero-probability effects omitted before normalization. The
 remaining forward structural direction alone is postulated. The reverse direction,
 a block-diagonal product state attains equality, is proved from entropy
 additivity over weighted direct sums and tensor factors together with unitary
-and reindexing invariance. Until the joint-support block form is applied to the
-recovered conditional family and the quantum-Markov assembly is formalized,
-the forward direction remains the irreducible unproved content of this
-characterization.
+and reindexing invariance. The joint-support block form is now applied to the
+recovered conditional family. Until the bipartite and recovered tripartite
+blocks are assembled into the quantum-Markov decomposition, the forward
+direction remains the irreducible unproved content of this characterization.
 
 \begin{thebibliography}{9}
 

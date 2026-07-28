@@ -1755,6 +1755,54 @@ algebra of a family of jointly invariant states.
     identity for the family members.
 \end{proof}
 
+\begin{theorem}[Recovered conditional blocks on the joint support]
+    \label{thm:hjpw_recovered_conditional_joint_support_blocks}
+    \lean{Matrix.exists_recoveredConditionalStateBlockForm_preservingBlockAction_jointSupport}
+    \leanok
+    \uses{thm:hjpw_recovered_conditional_family,
+        thm:koashi_imoto_joint_support_block_action}
+    Let $\rho_{ABC}$ be a tripartite density matrix attaining equality in
+    strong subadditivity, and let $\mu_s$ be the finite nonempty family of
+    normalized conditional states obtained from the active separating
+    effects. On the minimum joint supporting subspace of this family there
+    are tensor-product direct-sum coordinates such that
+    \begin{align}
+        \widehat\mu_s
+        =
+        \bigoplus_j q_{j|s}\sigma_j\otimes\tau_{j|s},
+    \end{align}
+    where the weights form probability distributions and all factors are
+    density operators. The support isometry reconstructs every $\mu_s$.
+
+    The channel
+    \begin{align}
+        \varphi
+        =
+        \tr_C\circ\widehat{\mathcal R}
+    \end{align}
+    restricts to the same support and intertwines with its ambient action.
+    In these coordinates its action on each diagonal summand is
+    \begin{align}
+        \varphi_j\otimes\operatorname{id},
+        \qquad
+        \varphi_j(\sigma_j)=\sigma_j.
+    \end{align}
+    The tensor factors are written in the reverse order from HJPW.
+
+    This is the application of HJPW Theorem~6, lines 493--505, to
+    Properties~1 and~$2'$ from Appendix~A, lines 761--816 and 853--882.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Theorem~\ref{thm:hjpw_recovered_conditional_family} supplies a finite
+    nonempty density family together with a trace-preserving completely
+    positive operation fixing every member. Apply
+    Theorem~\ref{thm:koashi_imoto_joint_support_block_action} to this family.
+    Retain the support reconstruction, the normalized block equations, and
+    the restriction and block-action clauses for the preserving operation.
+\end{proof}
+
 \begin{theorem}[Hayashi SSA-equality characterization]
     \label{thm:hayashi_ssa_equality_characterization}
     \lean{hayashi_ssa_equality_characterization}
@@ -1802,8 +1850,11 @@ algebra of a family of jointly invariant states.
     Theorem~\ref{thm:hjpw_recovered_conditional_family} now constructs the
     finite nonempty invariant density family from the SSA recovery channel,
     while Theorem~\ref{thm:hjpw_finite_conditional_slice_separation} supplies
-    the finite replacement for varying all effects. Applying the joint-support
-    block form to this family and assembling the resulting blocks into the
+    the finite replacement for varying all effects.
+    Theorem~\ref{thm:hjpw_recovered_conditional_joint_support_blocks} applies
+    the joint-support block form and preserving-operation action to this
+    recovered family. Extending these block equations to the bipartite
+    marginal and lifting them through the recovery channel to assemble the
     quantum-Markov decomposition remain open. This forward implication
     therefore remains axiomatic. The biconditional combines the two
     directions.
