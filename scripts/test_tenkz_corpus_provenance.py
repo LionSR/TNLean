@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Regression checks for the independent tenkz handoff-name invariant."""
+"""Regression checks for independent tenkz corpus metadata invariants."""
 
 from __future__ import annotations
 
@@ -8,6 +8,8 @@ import os
 import subprocess
 import tempfile
 from pathlib import Path
+
+from tenkz_rmp import structural_capability_problems
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -35,7 +37,30 @@ def validate(path: Path) -> subprocess.CompletedProcess[str]:
     )
 
 
+def test_kernel_capability_owner() -> None:
+    kernel_body = r"\tenkzkernel{\begin{tenkz} A \end{tenkz}}"
+    if structural_capability_problems("good", ("kernel",), kernel_body):
+        raise AssertionError("exclusive kernel owner tag was rejected")
+
+    missing = structural_capability_problems("missing", ("grid",), kernel_body)
+    if not any("capability 'kernel' is missing" in problem for problem in missing):
+        raise AssertionError("nested grid tag hid a missing kernel owner tag")
+    if not any("exclusive owner tag 'kernel'" in problem for problem in missing):
+        raise AssertionError("kernel picture retained the nested grid tag")
+
+    mixed = structural_capability_problems(
+        "mixed", ("kernel", "grid"), kernel_body
+    )
+    if not any("exclusive owner tag 'kernel'" in problem for problem in mixed):
+        raise AssertionError("kernel picture accepted both structural owner tags")
+
+    bare_grid = r"\begin{tenkz} A \end{tenkz}"
+    if structural_capability_problems("grid", ("grid",), bare_grid):
+        raise AssertionError("bare grid owner tag was rejected")
+
+
 def main() -> int:
+    test_kernel_capability_owner()
     with PROVENANCE.open(encoding="utf-8", newline="") as stream:
         rows = list(csv.reader(stream, dialect="excel-tab"))
 
