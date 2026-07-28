@@ -9,7 +9,7 @@ import TNLean.Analysis.EntropyMarkovReverse
 /-!
 # Entropy inequalities and equality characterizations
 
-This compatibility module re-exports the proved Hayashi equality
+This compatibility module provides the proved Hayashi equality
 characterization under its established public names.
 
 ## Status
@@ -20,7 +20,7 @@ characterization under its established public names.
   concavity, and applied under the name `Entropy.strongSubadditivity`.
 * The Hayashi equality characterization is fully proved. The forward
   implication is `Matrix.hayashi_ssa_equality_characterization_forward` in
-  `TNLean.Analysis.EntropyMarkovForward` and is re-exported below under its
+  `TNLean.Analysis.EntropyMarkovForward` and is provided below under its
   established root name; the reverse implication is
   `hayashi_ssa_equality_characterization_reverse` in
   `TNLean.Analysis.EntropyMarkovReverse`. The biconditional

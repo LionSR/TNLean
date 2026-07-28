@@ -71,7 +71,7 @@ abbrev QuantumMarkovDecomposition
 /-- Equality in strong subadditivity is equivalent to the existence of a
 quantum-Markov-chain decomposition on the middle subsystem.
 
-This is a namespace wrapper for the proved theorem
+This is the namespace form of the proved theorem
 `_root_.hayashi_ssa_equality_characterization`.
 
 Source: blueprint `thm:entropy_ssa_equality_quantum_markov`. -/
@@ -96,7 +96,7 @@ theorem exists_quantumMarkovDecomposition_of_ssaEquality
 /-- Reverse direction of the Hayashi SSA-equality characterization: a
 quantum-Markov-chain decomposition forces equality in strong subadditivity.
 
-This wrapper uses the proved reverse theorem directly. -/
+This implication applies the proved reverse theorem directly. -/
 theorem isSSAEquality_of_quantumMarkovDecomposition
     (ρ_ABC : Matrix (Fin dA × Fin dB × Fin dC)
       (Fin dA × Fin dB × Fin dC) ℂ)
