@@ -19,10 +19,11 @@ arXiv:quant-ph/0304007v2, Appendix A, lines 853--856.  It stops before deriving 
 and normalizing the member-dependent matrix blocks into the probabilities and density
 matrices of Property 1 (lines 785--789); those steps begin at lines 857--858.
 
-## Main declaration
+## Main declarations
 
-* `Kraus.exists_commonInvariant_fixedPointBlockForm`: every state preserved by the common
-  witness `F₀` has the same density factors in one direct-sum tensor decomposition.
+* `Kraus.exists_commonInvariant_fixedPointBlockForm_with_algebra`: the common invariant
+  algebra and every preserved state in the same coordinates.
+* `Kraus.exists_commonInvariant_fixedPointBlockForm`: the corresponding state-only result.
 
 **Scope restriction (full support):** The common average is assumed positive definite on the
 ambient space, in place of HJPW's reduction to the joint support (lines 761--763).  This is
@@ -56,6 +57,49 @@ that normalization begins at lines 857--858.
 **Scope restriction (full support):** `hρbar` replaces HJPW's joint-support reduction
 (lines 761--763).  Documented in
 `docs/paper-gaps/hjpw04_petz_factorization_maximally_mixed_scope.tex`. -/
+theorem exists_commonInvariant_fixedPointBlockForm_with_algebra
+    {Kidx : Type*} [Fintype Kidx] [Nonempty Kidx] {ρ : Kidx → Mat}
+    (hρbar : (commonAverage ρ).PosDef) :
+    ∃ (K : ℕ) (d m : Fin K → ℕ)
+      (e : ((j : Fin K) × (Fin (m j) × Fin (d j))) ≃ Fin D)
+      (U : Mat) (σ : ∀ j, Matrix (Fin (m j)) (Fin (m j)) ℂ),
+      U ∈ Matrix.unitaryGroup (Fin D) ℂ ∧
+        (∀ j, 0 < d j) ∧ (∀ j, 0 < m j) ∧
+        (∀ j, (σ j).PosSemidef) ∧ (∀ j, (σ j).trace = 1) ∧
+        (∀ A : Mat, A ∈ commonInvariantStarSubalgebra ρ hρbar ↔
+          ∃ Y : ∀ j, Matrix (Fin (d j)) (Fin (d j)) ℂ,
+            star U * A * U =
+              Matrix.reindex e e
+                (Matrix.blockDiagonal' fun j ↦
+                  (1 : Matrix (Fin (m j)) (Fin (m j)) ℂ) ⊗ₖ Y j)) ∧
+        ∀ x, ∃ X : ∀ j, Matrix (Fin (d j)) (Fin (d j)) ℂ,
+          star U * ρ x * U =
+            Matrix.reindex e e (Matrix.blockDiagonal' fun j ↦ σ j ⊗ₖ X j) := by
+  have hSchwarz :
+      IsSchwarzMap (Matrix.traceAdjointMap (commonInvariantMapLM hρbar)) := by
+    exact isSchwarzMap_traceAdjointMap_mapLM_of_isTP _
+      (commonInvariantKrausFamily hρbar).isPreserving.1
+  have hρbarFix : commonInvariantMapLM hρbar (commonAverage ρ) = commonAverage ρ := by
+    exact (commonInvariantKrausFamily hρbar).map_commonAverage
+  obtain ⟨K, d, m, e, U, σ, hU, hd, hm, hAdjoint, hσpos, hσtrace, -, hfixed⟩ :=
+    IsPositiveMap.exists_block_densities_of_meanErgodicProjection_with_adjoint
+      (isPositiveMap_commonInvariantMapLM hρbar)
+      (isTracePreservingMap_commonInvariantMapLM hρbar) hSchwarz hρbar hρbarFix
+  refine ⟨K, d, m, e, U, σ, hU, hd, hm, hσpos, hσtrace, ?_, ?_⟩
+  · intro A
+    rw [← adjointFixedPointsStarSubalgebra_commonInvariantKrausFamily hρbar,
+      mem_adjointFixedPointsStarSubalgebra]
+    change adjointMap (commonInvariantKrausFamily hρbar).Kfam A = A ↔ _
+    simpa only [commonInvariantMapLM, traceAdjointMap_mapLM, adjointMapLM_apply] using hAdjoint A
+  · intro x
+    apply (hfixed (ρ x)).1
+    simpa only [commonInvariantMapLM, mapLM_apply] using
+      (commonInvariantKrausFamily hρbar).isPreserving.2 x
+
+/-- **Simultaneous density-block form of a full-support invariant family.**
+
+This is the state-only projection of
+`exists_commonInvariant_fixedPointBlockForm_with_algebra`. -/
 theorem exists_commonInvariant_fixedPointBlockForm
     {Kidx : Type*} [Fintype Kidx] [Nonempty Kidx] {ρ : Kidx → Mat}
     (hρbar : (commonAverage ρ).PosDef) :
@@ -68,19 +112,8 @@ theorem exists_commonInvariant_fixedPointBlockForm
         ∀ x, ∃ X : ∀ j, Matrix (Fin (d j)) (Fin (d j)) ℂ,
           star U * ρ x * U =
             Matrix.reindex e e (Matrix.blockDiagonal' fun j ↦ σ j ⊗ₖ X j) := by
-  have hSchwarz :
-      IsSchwarzMap (Matrix.traceAdjointMap (commonInvariantMapLM hρbar)) := by
-    exact isSchwarzMap_traceAdjointMap_mapLM_of_isTP _
-      (commonInvariantKrausFamily hρbar).isPreserving.1
-  have hρbarFix : commonInvariantMapLM hρbar (commonAverage ρ) = commonAverage ρ := by
-    exact (commonInvariantKrausFamily hρbar).map_commonAverage
-  obtain ⟨K, d, m, e, U, σ, hU, hd, hm, hσpos, hσtrace, -, hfixed⟩ :=
-    (isPositiveMap_commonInvariantMapLM hρbar).exists_block_densities_of_meanErgodicProjection
-      (isTracePreservingMap_commonInvariantMapLM hρbar) hSchwarz hρbar hρbarFix
-  refine ⟨K, d, m, e, U, σ, hU, hd, hm, hσpos, hσtrace, ?_⟩
-  intro x
-  apply (hfixed (ρ x)).1
-  simpa only [commonInvariantMapLM, mapLM_apply] using
-    (commonInvariantKrausFamily hρbar).isPreserving.2 x
+  obtain ⟨K, d, m, e, U, σ, hU, hd, hm, hσpos, hσtrace, -, hfamily⟩ :=
+    exists_commonInvariant_fixedPointBlockForm_with_algebra hρbar
+  exact ⟨K, d, m, e, U, σ, hU, hd, hm, hσpos, hσtrace, hfamily⟩
 
 end Kraus

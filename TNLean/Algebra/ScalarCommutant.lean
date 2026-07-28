@@ -286,6 +286,85 @@ theorem isBlockDiagonal'_of_commutes_blockProjection
 
 end Semiring
 
+section CommSemiring
+
+variable {R : Type*} [CommSemiring R]
+
+/-- The commutant of a dependent direct sum of full right matrix factors
+consists exactly of block-diagonal left-factor matrices. -/
+theorem commutes_blockDiagonal'_one_kronecker_iff
+    {m d : ι → Type*}
+    [Fintype ι] [(j : ι) → Fintype (m j)] [(j : ι) → DecidableEq (m j)]
+    [(j : ι) → Fintype (d j)] [(j : ι) → DecidableEq (d j)]
+    (X : Matrix ((j : ι) × (m j × d j)) ((j : ι) × (m j × d j)) R) :
+    (∀ B : (j : ι) → Matrix (d j) (d j) R,
+      X * Matrix.blockDiagonal' (fun j =>
+          (1 : Matrix (m j) (m j) R) ⊗ₖ B j) =
+        Matrix.blockDiagonal' (fun j =>
+          (1 : Matrix (m j) (m j) R) ⊗ₖ B j) * X) ↔
+    ∃ C : (j : ι) → Matrix (m j) (m j) R,
+      X = Matrix.blockDiagonal' (fun j =>
+        C j ⊗ₖ (1 : Matrix (d j) (d j) R)) := by
+  classical
+  constructor
+  · intro hComm
+    have hProjection (k : ι) :
+        Matrix.blockDiagonal' (fun j =>
+            (1 : Matrix (m j) (m j) R) ⊗ₖ
+              (Pi.single k (1 : Matrix (d k) (d k) R) :
+                (i : ι) → Matrix (d i) (d i) R) j) =
+          Matrix.blockProjection (n := fun j => m j × d j) (R := R) k := by
+      change Matrix.blockDiagonal' _ =
+        Matrix.blockDiagonal' (fun j =>
+          if j = k then (1 : Matrix (m j × d j) (m j × d j) R) else 0)
+      congr 1
+      funext j
+      by_cases hjk : j = k
+      · subst j
+        simp
+      · simp [hjk]
+    have hProjComm (k : ι) :
+        X * Matrix.blockProjection (n := fun j => m j × d j) (R := R) k =
+          Matrix.blockProjection (n := fun j => m j × d j) (R := R) k * X := by
+      rw [← hProjection k]
+      exact hComm (Pi.single k (1 : Matrix (d k) (d k) R))
+    obtain ⟨Xb, hX⟩ :=
+      Matrix.isBlockDiagonal'_of_commutes_blockProjection hProjComm
+    have hLocalComm (k : ι) (B : Matrix (d k) (d k) R) :
+        Xb k * ((1 : Matrix (m k) (m k) R) ⊗ₖ B) =
+          ((1 : Matrix (m k) (m k) R) ⊗ₖ B) * Xb k := by
+      have h := hComm
+        (Pi.single k B : (j : ι) → Matrix (d j) (d j) R)
+      rw [hX, ← Matrix.blockDiagonal'_mul, ← Matrix.blockDiagonal'_mul] at h
+      have hFamilies := Matrix.blockDiagonal'_injective h
+      have hk := congrFun hFamilies k
+      simpa using hk
+    have hLocal (k : ι) :
+        ∃ Ck : Matrix (m k) (m k) R,
+          Xb k = Ck ⊗ₖ (1 : Matrix (d k) (d k) R) := by
+      apply Matrix.exists_eq_kronecker_one_of_intertwines_span_eq_top
+        (A := fun B : Matrix (d k) (d k) R => B)
+        (C := Xb k)
+      · rw [show Set.range (fun B : Matrix (d k) (d k) R => B) = Set.univ by
+              ext B
+              simp,
+          Submodule.span_univ]
+      · intro B
+        exact (hLocalComm k B).symm
+    choose C hC using hLocal
+    refine ⟨C, ?_⟩
+    rw [hX]
+    congr 1
+    funext k
+    exact hC k
+  · rintro ⟨C, rfl⟩ B
+    rw [← Matrix.blockDiagonal'_mul, ← Matrix.blockDiagonal'_mul]
+    congr 1
+    funext k
+    simp only [← Matrix.mul_kronecker_mul, Matrix.mul_one, Matrix.one_mul]
+
+end CommSemiring
+
 end BlockDiagonal
 
 end Matrix
