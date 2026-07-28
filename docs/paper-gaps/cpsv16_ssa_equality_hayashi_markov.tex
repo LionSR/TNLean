@@ -80,14 +80,14 @@ set
   p_j=\operatorname{Re}\operatorname{tr}\omega_j.
 \end{align}
 Positivity gives $p_j\geq0$, and the ambient trace identity gives
-$\sum_jp_j=1$. On a supported sector with $p_j>0$, the left density operator is
-$\omega_j/p_j$ and the right density operator is the recovered state
-$\widehat\rho_j$. Total positive-semidefinite normalization is applied only
-when the final \leanid{HayashiMarkovDecomposition} is formed. If $p_j=0$, it
-chooses arbitrary normalized matrices on the corresponding left and right
-spaces; the factor $p_j$ makes these fillers invisible. In particular, these
-zero-weight and complementary fillers are not recovered physical states and do
-not occur in the raw identity~\eqref{eq:ambient-hjpw}.
+$\sum_jp_j=1$. On every supported sector, the right density operator is the
+recovered state $\widehat\rho_j$. When $p_j>0$, the left density operator is
+$\omega_j/p_j$. Total positive-semidefinite normalization is applied only when
+the final \leanid{HayashiMarkovDecomposition} is formed. If a supported sector
+has $p_j=0$, this normalization chooses a left filler while preserving
+$\widehat\rho_j$ on the right. On a complementary sector it may choose fillers
+on both sides. In either case the factor $p_j$ makes every filler invisible;
+fillers do not occur in the raw identity~\eqref{eq:ambient-hjpw}.
 
 \section{The two proved implications}
 
@@ -637,9 +637,10 @@ blocks. The theorem
 \leanid{Matrix.hayashi_ssa_equality_characterization_forward} then sets
 $p_j=\operatorname{Re}\operatorname{tr}\omega_j$, reverses the fibre order,
 uses the adjoint middle-system unitary, and performs the final total
-normalization. Supported recovered states remain the physical right factors;
-arbitrary normalized fillers occur only in zero-weight or complementary
-sectors.
+normalization. Every supported right factor remains its recovered physical
+state, including in a zero-weight supported sector. A zero-weight supported
+sector may use a filler only on the left, whereas a complementary sector may
+use fillers on both sides.
 
 The singular-support recovery scope is unchanged. Equality in data processing
 gives the raw support-Petz recovery identity, and on the recovered marginal the
