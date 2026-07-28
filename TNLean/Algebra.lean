@@ -45,6 +45,7 @@ import TNLean.Algebra.PerronFrobenius
 import TNLean.Algebra.PiSigmaEquiv
 import TNLean.Algebra.PiTensorProductPhase
 import TNLean.Algebra.PosSemidefSupport
+import TNLean.Algebra.PositiveSemidefiniteNormalization
 import TNLean.Algebra.ProjectionTriangularTrace
 import TNLean.Algebra.ProjectiveRepresentation
 import TNLean.Algebra.ScalarCommutant

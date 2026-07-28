@@ -12,5 +12,6 @@ import TNLean.Channel.KoashiImoto.CommonInvariantAlgebra
 import TNLean.Channel.KoashiImoto.FamilyFixedPointBlockForm
 import TNLean.Channel.KoashiImoto.FiniteRealization
 import TNLean.Channel.KoashiImoto.MeanErgodicProjection
+import TNLean.Channel.KoashiImoto.NormalizedFamilyBlockForm
 import TNLean.Channel.KoashiImoto.PooledKrausFamily
 import TNLean.Channel.KoashiImoto.SingleWitness
