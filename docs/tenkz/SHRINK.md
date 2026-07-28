@@ -1136,3 +1136,23 @@ vector census.
 Census-correction: #5015
 
 No ledger row changes and no flag verdict is re-examined here.
+
+### 2026-07-28 — skin topology and instance crossings separate
+
+A declared skin now retains only reusable own-port pairings. Crossings between
+one placed atom's generated pairing and picture-external wires move to the
+atom's indexed `pairing cross=` field. This prevents one skin declaration from
+copying an instance-specific crossing onto every atom and keeps comma-separated
+crossing lists outside the braced `pairings=` parser boundary.
+
+This raises M1 kernel rows from 138 to 139 and M2 parser leaves from 223 to
+224. M3 through M6 do not change.
+
+Extension-gate: #5009
+
+Census-correction: #5009
+
+| flag | verdict |
+|---|---|
+| flag:consumers:key:kernel-atom:pairing cross | keep-because: #5016 consumes instance crossings in the self-braiding redraw, while the kernel pairing fixture pins repeated indexed items and external pairing operands; expiry 1.0 |
+| flag:lonely-type:indexed-crossing-list | keep-because: the leading pairing index is the instance-to-generated-wire join and therefore differs from an ordinary wire crossing-list; #5016 consumes it; expiry 1.0 |

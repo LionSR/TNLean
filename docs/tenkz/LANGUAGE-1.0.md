@@ -83,7 +83,7 @@ Every frame contracts adjacent compatible cells by default: `bonds=grid`
 holds in chain and lattice frames alike, and `bonds=none` suppresses the
 frame-generated bonds.
 
-### 2.3 Atom keys (12)
+### 2.3 Atom keys (13)
 
 | Key | Type | Values | Default | Diagnostic family |
 |---|---|---|---|---|
@@ -95,6 +95,7 @@ frame-generated bonds.
 | `ports=` | typed-port-list | — | from skin | `TKZ-PORT-*` |
 | `frame=` | small-enum | `flat` `plane` `circle` | `flat` | `TKZ-FRAME-*` |
 | `species=` | identifier | — | empty | `TKZ-SPECIES-*` |
+| `pairing cross=` | indexed-crossing-list | `<pairing-number>: <crossing-declaration>, ...` | empty | `TKZ-SKIN-PAIRING-*` |
 | `size=` | small-enum | `s` `m` `l` | `m` | `TKZ-SIZE-*` |
 | `label pos=` | angle | a bearing in the record's own axes, or `auto` | `auto` | `TKZ-LABEL-*` |
 | `conjugate` | flag | — | false | `TKZ-ATOM-*` |
@@ -400,11 +401,13 @@ validation, not at reading order. A declared crossing whose paths do not
 intersect is `[TKZ-CROSS-NOT-FOUND]`. An undeclared geometric intersection
 of two wires is `[TKZ-CROSS-UNDECLARED]`. Both are hard errors: over/under
 order is mathematical content and the renderer never guesses it. Pairings in
-one skin inherit the order of their declared list. A pairing that meets any
-other wire carries an optional crossing clause in its declaration:
-`90@1 > 0@1 : R; cross=under at crossing of self and pairing 1 of B`.
-Here `B` is an author-named atom; `pairing 1 of B` names its first generated
-pairing without exposing the renderer's internal record id.
+one skin inherit the order of their declared list. Crossings outside the skin
+belong to an atom instance, not to the reusable skin declaration:
+`pairing cross={1: under at crossing of self and pairing 1 of B}`.
+The leading integer selects this atom's generated pairing. Here `B` is an
+author-named atom; `pairing 1 of B` names its first generated pairing without
+exposing the renderer's internal record id. Repeat the indexed item, separated
+by commas, when one pairing has several declared crossings.
 <!-- Consumers: rmp-iii-b-braid-one/-two/-three/-four,
      rmp-iii-b-self-braiding, rmp-iii-a-spt-mpo,
      rmp-iii-b-r-tensor-left/-right. -->
@@ -557,7 +560,7 @@ cycle.
 |---|---|---|---|
 | `hue=` | hue-source | house cycle name or `source:<color>` | species |
 | `base=` | identifier | a declared or default skin | skin |
-| `pairings=` | port-pair-list | `{n@1 > e@1 : R, ...}` own-port pairs, optionally followed by `; cross=...` | skin |
+| `pairings=` | port-pair-list | `{n@1 > e@1 : R, ...}` own-port pairs | skin |
 
 The standard prelude declares — as declarations, not kernel rows — the skins
 `pill`, `mpo`, `window`, `boundary`, the fuse atom, and the species
