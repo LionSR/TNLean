@@ -1515,11 +1515,33 @@ algebra of a family of jointly invariant states.
     Fix $F_0\in\mathbf F$ with $A_0=A_{F_0}$ as in
     Theorem~\ref{thm:koashi_imoto_single_witness}. Let $P_0$ be the
     finite-dimensional mean-ergodic projection of the Schr\"odinger map $F_0$,
-    and define $P_0^*$ as its trace-pairing adjoint. Hayden--Jozsa--Petz--Winter
-    denote the Heisenberg Ces\`aro limit by $P_0^*$. The convergence of the
-    Ces\`aro averages of the iterates $(F_0^*)^n$ to the trace-adjoint
-    projection defined here is not asserted.
+    and define $P_0^*$ as its trace-pairing adjoint.
 \end{definition}
+
+\begin{theorem}[Heisenberg Ces\`aro convergence to $P_0^*$]
+    \label{thm:koashi_imoto_heisenberg_cesaro_convergence}
+    \lean{Kraus.tendsto_birkhoffAverage_commonInvariantMeanErgodicProjection}
+    \leanok
+    \uses{def:koashi_imoto_mean_ergodic_projection,
+        thm:mean_ergodic_bounded_orbits}
+    For every $X\in\MN{D}$,
+    \begin{align}
+        \lim_{N\to\infty}\frac1N
+        \sum_{n=0}^{N-1}(F_0^*)^n(X)
+        =P_0^*(X).
+        \label{eq:koashi_imoto_heisenberg_cesaro_convergence}
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:koashi_imoto_mean_ergodic_projection,
+        thm:mean_ergodic_bounded_orbits}
+    The trace pairing transports every iterate of $F_0^*$ to the corresponding
+    iterate of $F_0$, and hence transports each finite Ces\`aro average.
+    Apply Theorem~\ref{thm:mean_ergodic_bounded_orbits} to $F_0$ and use
+    nondegeneracy of the trace pairing.
+\end{proof}
 
 \begin{theorem}[The projection onto $A_0$]
     \label{thm:koashi_imoto_mean_ergodic_projection_properties}
