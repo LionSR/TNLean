@@ -35,6 +35,17 @@ Source: HJPW, arXiv:quant-ph/0304007v2, Theorem 6, equation (13),
 lines 493--496. -/
 abbrev AmbientRecoveredBlockIndex (z K : ℕ) := Fin z ⊕ Fin K
 
+/-- Canonical inclusion of the joint-support coordinates into the right
+summand of the ambient middle subsystem.
+
+Source: HJPW, arXiv:quant-ph/0304007v2, Theorem 6, equation (13),
+lines 493--496. -/
+def ambientSupportEmbedding
+    {dB n : ℕ} (e₀ : (Fin (dB - n) ⊕ Fin n) ≃ Fin dB) :
+    Matrix (Fin dB) (Fin n) ℂ :=
+  (1 : Matrix (Fin dB) (Fin dB) ℂ).submatrix id
+    (fun s ↦ e₀ (Sum.inr s))
+
 /-- The common-factor dimension of an ambient recovered block. -/
 def ambientRecoveredCommonDim {z K : ℕ} (m : Fin K → ℕ) :
     AmbientRecoveredBlockIndex z K → ℕ
@@ -465,6 +476,14 @@ structure RecoveredConditionalAmbientBipartiteBlockForm
   e₀ : (Fin (dB - jointSupport.n) ⊕ Fin jointSupport.n) ≃ Fin dB
   U_B : Matrix (Fin dB) (Fin dB) ℂ
   U_B_unitary : U_B ∈ Matrix.unitaryGroup (Fin dB) ℂ
+  /-- The ambient unitary sends the canonical right-summand inclusion to the
+  adapted joint-support isometry.
+
+  Source: HJPW, arXiv:quant-ph/0304007v2, Theorem 6, equation (13),
+  lines 493--496. -/
+  ambient_support_isometry :
+    jointSupport.V * jointSupport.U =
+      U_B * ambientSupportEmbedding e₀
   /-- The ambient unitary extends the support coordinates: every matrix on the
   minimum joint support becomes its complementary zero extension.
 
@@ -553,9 +572,59 @@ theorem exists_recoveredConditionalAmbientBipartiteBlockForm
         rw [support.V_isometry]
         simp
       _ = 1 := hUleft
-  obtain ⟨e₀, U_B_group, hzero⟩ :=
-    Matrix.exists_unitary_zero_extension_eq Z hZ
+  have hinj : Function.Injective (Matrix.mulVecLin Z) := by
+    intro x y hxy
+    have hxy' : Z.mulVec x = Z.mulVec y := hxy
+    have h1 : (Zᴴ * Z).mulVec x = (Zᴴ * Z).mulVec y := by
+      simpa only [Matrix.mulVec_mulVec] using
+        congrArg (fun v ↦ Zᴴ.mulVec v) hxy'
+    simpa [hZ] using h1
+  have hnB : support.n ≤ dB := by
+    simpa using LinearMap.finrank_le_finrank_of_injective hinj
+  let e₀ : (Fin (dB - support.n) ⊕ Fin support.n) ≃ Fin dB :=
+    finSumFinEquiv |>.trans (finCongr (Nat.sub_add_cancel hnB))
+  let J : Matrix (Fin dB) (Fin support.n) ℂ :=
+    ambientSupportEmbedding e₀
+  have hJ : Jᴴ * J = 1 := by
+    rw [show Jᴴ = (1 : Matrix (Fin dB) (Fin dB) ℂ).submatrix
+        (fun s ↦ e₀ (Sum.inr s)) id by
+      simp [J, ambientSupportEmbedding]]
+    change
+      (1 : Matrix (Fin dB) (Fin dB) ℂ).submatrix
+          (fun s ↦ e₀ (Sum.inr s)) (Equiv.refl (Fin dB)) *
+        (1 : Matrix (Fin dB) (Fin dB) ℂ).submatrix
+          (Equiv.refl (Fin dB)) (fun s ↦ e₀ (Sum.inr s)) = 1
+    rw [Matrix.submatrix_mul_equiv]
+    simpa only [Matrix.one_mul] using
+      Matrix.submatrix_one (α := ℂ) (fun s ↦ e₀ (Sum.inr s))
+        fun x y h ↦ Sum.inr.inj (e₀.injective (by simpa using h))
+  obtain ⟨U_B_group, hZU⟩ :=
+    Matrix.exists_unitary_mul_eq_of_conjTranspose_mul_eq Z J
+      (hZ.trans hJ.symm)
   let U_B : Matrix (Fin dB) (Fin dB) ℂ := U_B_group
+  have hJAJ (A : Matrix (Fin support.n) (Fin support.n) ℂ) :
+      J * A * Jᴴ =
+        Matrix.reindex e₀ e₀ (Matrix.fromBlocks 0 0 0 A) := by
+    ext i k
+    rw [← e₀.apply_symm_apply i, ← e₀.apply_symm_apply k]
+    generalize e₀.symm i = i'
+    generalize e₀.symm k = k'
+    rcases i' with i' | i' <;> rcases k' with k' | k' <;>
+      simp [J, ambientSupportEmbedding, Matrix.mul_apply,
+        Matrix.reindex_apply, Matrix.one_apply]
+  have hzero :
+      ∀ A : Matrix (Fin support.n) (Fin support.n) ℂ,
+        Z * A * Zᴴ =
+          U_B * Matrix.reindex e₀ e₀ (Matrix.fromBlocks 0 0 0 A) *
+            star U_B := by
+    intro A
+    rw [hZU, Matrix.conjTranspose_mul]
+    simp only [Matrix.star_eq_conjTranspose, Matrix.mul_assoc]
+    calc
+      U_B * (J * (A * (Jᴴ * U_Bᴴ))) =
+          U_B * ((J * A * Jᴴ) * U_Bᴴ) := by
+            simp only [Matrix.mul_assoc]
+      _ = _ := by rw [hJAJ]
   have hambientSupportExtension :
       ∀ A : Matrix (Fin support.n) (Fin support.n) ℂ,
         (support.V * support.U) * A * (support.V * support.U)ᴴ =
@@ -635,6 +704,7 @@ theorem exists_recoveredConditionalAmbientBipartiteBlockForm
     e₀ := e₀
     U_B := U_B
     U_B_unitary := U_B_group.property
+    ambient_support_isometry := by simpa only [Z, J, U_B] using hZU
     ambient_support_extension := hambientSupportExtension
     ambient_d_pos := ?_
     ambient_m_pos := ?_

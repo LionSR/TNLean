@@ -1924,6 +1924,66 @@ algebra of a family of jointly invariant states.
     displayed ambient equation.
 \end{proof}
 
+\begin{theorem}[Recovered dilation in ambient block coordinates]
+    \label{thm:hjpw_recovered_dilation_ambient_blocks}
+    \lean{Matrix.exists_recoveredDilationBlockUnitary}
+    \leanok
+    \uses{thm:hjpw_recovered_bipartite_ambient_blocks,
+        thm:hjpw_recovered_conditional_joint_support_blocks}
+    Let $\rho_{ABC}$ be a tripartite density matrix attaining equality in
+    strong subadditivity, with the ambient decomposition
+    \begin{align}
+        \mathcal H_B
+        =
+        \bigoplus_j \mathcal H_{b_j^L}\otimes
+            \mathcal H_{b_j^R}
+    \end{align}
+    from
+    Theorem~\ref{thm:hjpw_recovered_bipartite_ambient_blocks}.
+    There are a finite-dimensional ancilla, a fixed pure ancilla vector,
+    and one unitary $U_{BCE}$ whose block-coordinate form is
+    \begin{align}
+        U_{BCE}
+        =
+        \bigoplus_j U_j\otimes\mathbf 1_{b_j^R}.
+    \end{align}
+    On every supported sector, $U_j$ dilates a trace-preserving completely
+    positive map that sends $\sigma_j$ to a state on $b_j^L C$ whose
+    $b_j^L$ marginal is $\sigma_j$. The resulting state is positive and has
+    trace one.
+
+    The recovery operation determined by the chosen unitary agrees with the
+    Petz recovery operation on every operator supported by the minimum joint
+    supporting subspace, and
+    \begin{align}
+        (\operatorname{id}_A\otimes\widehat{\mathcal R})(\rho_{AB})
+        =
+        \rho_{ABC}.
+    \end{align}
+    No equality of the two operations is asserted on the complementary
+    ambient sectors.
+
+    This is \cite[Theorem~6, equation~(15)]{Hayden2004Structure},
+    lines~547--560, using Appendix~A, Theorem~10, Property~2,
+    lines~791--800, the equivalence with Property~$2'$ in lines~808--823,
+    and the operation-level proof in lines~853--882.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Choose rectangular Kraus operators for the Petz recovery operation and
+    slice them along subsystem $C$. On the minimum joint supporting
+    subspace, Property~$2'$ makes every slice block diagonal with the identity
+    on $b_j^R$, while the induced operation on $b_j^L$ fixes $\sigma_j$.
+    Extend each sector Stinespring isometry from the same fixed pure ancilla
+    vector to a unitary. Their direct sum gives the block-coordinate unitary;
+    conjugating by the ambient change of basis gives the physical unitary.
+    Equality of the two Stinespring isometries on the support proves agreement
+    with the Petz operation there. The supported reconstruction of
+    $\rho_{AB}$ then transports the Petz recovery identity to the chosen
+    unitary recovery.
+\end{proof}
+
 \begin{theorem}[Hayashi SSA-equality characterization]
     \label{thm:hayashi_ssa_equality_characterization}
     \lean{hayashi_ssa_equality_characterization}

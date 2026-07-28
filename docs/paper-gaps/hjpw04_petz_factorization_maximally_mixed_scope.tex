@@ -165,22 +165,25 @@ constructed by
 \leanid{Matrix.exists_recoveredConditionalPreservingKrausFamily}; the slices
 separate bipartite operators by
 \leanid{Matrix.eq_of_conditionalSlice_informationallyCompleteEffect_eq}.
-The joint-support block theorem is now applied to this family. The remaining
-bridge must extend its coordinates to one ambient direct sum
+The joint-support block theorem is now applied to this family, and its
+coordinates extend to one ambient direct sum
 \begin{align}
   H_B\cong\bigoplus_j H_{B_j^L}\otimes H_{B_j^R}
 \end{align}
-before proving the recovery-dilation block action and assembling the
-quantum-Markov form. The singular-support
+with one-dimensional zero-weight complement sectors. One chosen
+pure-ancilla unitary now realizes the recovery-dilation block action of
+equation~(15), agrees with the Petz operation on the joint support, and
+produces normalized supported-sector states with the prescribed right
+marginals. Transporting those states into the tripartite direct sum and
+assembling the quantum-Markov form remain open. The singular-support
 equality-to-raw-recovery implication is now formalized by the projected
 finite-Weyl argument and transported to arbitrary finite product coordinates.
 For density operators, support agreement upgrades this equality to the chosen
 completed partial-trace Petz channel on the recovered marginal. This does not
 give a tensor-product factorization of the generic completed singular channel.
-The ambient coordinate extension, recovery-dilation block action, and
-quantum-Markov assembly are the remaining structural obstructions to
-replacing the forward Hayashi strong-subadditivity equality assumption used in
-the CPSV16 argument.
+Tripartite sector-state transport and quantum-Markov assembly are the
+remaining structural obstructions to replacing the forward Hayashi
+strong-subadditivity equality assumption used in the CPSV16 argument.
 
 \section{Common invariant algebra: formalized under an explicit full-support hypothesis}
 
@@ -310,10 +313,14 @@ its orthogonal complement into one-dimensional zero-weight tensor sectors.
 It retains the supported positive factors, proves positivity on every ambient
 sector, and proves the total conditional trace is one. Thus HJPW
 equations~(13)--(14), lines 493--502, now hold on the ambient $H_B$ without an
-extra source hypothesis. Proving the recovery-dilation block action in
-equation~(15), assembling the generic quantum-Markov decomposition, and
-eliminating the external assumption for the forward Hayashi
-strong-subadditivity implication remain open.
+extra source hypothesis. The declaration
+\leanid{Matrix.exists_recoveredDilationBlockUnitary} proves equation~(15)
+for one chosen pure-ancilla unitary, together with supported Petz agreement,
+the exact recovery identity, and normalized recovered states on the supported
+common-factor sectors. Transporting these states into the tripartite direct
+sum, assembling the generic quantum-Markov decomposition, and eliminating the
+external assumption for the forward Hayashi strong-subadditivity implication
+remain open.
 
 \section{Classification}
 
@@ -350,9 +357,11 @@ in those same support coordinates. This is a scope-restricted joint-support
 variant toward HJPW equation~(14). The subsequent ambient extension now gives
 a direct sum of tensor factors on all of $H_B$, using one-dimensional
 zero-weight sectors on the orthogonal complement, and proves the full
-bipartite equation~(14). The recovery-dilation block action of equation~(15)
-and the generic Hayashi forward implication remain open as separate
-sequential steps.
+bipartite equation~(14). The chosen recovery-dilation block action of
+equation~(15), its supported Petz agreement, and normalized recovered
+supported-sector states are also formalized. Tripartite sector-state transport,
+quantum-Markov assembly, and the generic Hayashi forward implication remain
+open as sequential steps.
 
 \begin{thebibliography}{9}
 
