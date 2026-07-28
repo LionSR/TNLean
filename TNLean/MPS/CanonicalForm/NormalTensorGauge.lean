@@ -57,14 +57,14 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
-/-- A positive-bond-dimension normal tensor admits a trace-preserving gauge
-with no scalar rescaling.
+/-- A normal tensor admits a trace-preserving gauge with no scalar rescaling.
 
 The tensor is normal in the sense of arXiv:1606.00608, lines 231--235: its
 transfer map has spectral radius one and unique peripheral eigenvalue one.
-The positive-definite left Perron eigenvector consequently has eigenvalue one,
-so the usual Perron gauge is a pure similarity of the original tensor. -/
-theorem IsNormalTensor.exists_tpGauge [NeZero D]
+The spectral-radius normalization forces positive bond dimension. The
+positive-definite left Perron eigenvector consequently has eigenvalue one, so
+the usual Perron gauge is a pure similarity of the original tensor. -/
+theorem IsNormalTensor.exists_tpGauge
     {A : MPSTensor d D} (h : IsNormalTensor A) :
     ∃ σ : Matrix (Fin D) (Fin D) ℂ,
       σ.PosDef ∧
@@ -74,6 +74,7 @@ theorem IsNormalTensor.exists_tpGauge [NeZero D]
       _root_.IsPrimitive
         (transferMap (d := d) (D := D) (tpGauge (d := d) (D := D) A σ)) ∧
       IsIrreducibleTensor (tpGauge (d := d) (D := D) A σ) := by
+  letI : NeZero D := ⟨h.bondDim_ne_zero⟩
   have hA : ∃ i, A i ≠ 0 := by
     by_contra hzero
     push Not at hzero
@@ -143,8 +144,9 @@ theorem IsNormalTensor.exists_tpGauge [NeZero D]
 
 /-- A normal tensor in the spectral sense of arXiv:1606.00608 is eventually
 block-injective. -/
-theorem IsNormalTensor.isNormal [NeZero D]
+theorem IsNormalTensor.isNormal
     {A : MPSTensor d D} (h : IsNormalTensor A) : IsNormal A := by
+  letI : NeZero D := ⟨h.bondDim_ne_zero⟩
   obtain ⟨σ, _hσ, _hσfix, hTP, hGauge, hPrim, hIrr⟩ := h.exists_tpGauge
   have hNormalGauge : IsNormal (tpGauge (d := d) (D := D) A σ) :=
     isNormal_of_tp_primitive_irreducible _ hTP hPrim hIrr

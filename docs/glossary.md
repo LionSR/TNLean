@@ -27,11 +27,12 @@ is deliberately source-faithful.
   `MPSTensor.hasEventuallyFullKrausRank_iff_isNormal`,
   `MPSTensor.IsInjective.isNormal`, and
   `MPSTensor.IsNormalTensor.isNormal`.
-- **Caveat:** `MPSTensor.IsNormalTensor.isNormal` requires `[NeZero D]`. There is
-  no equivalence theorem between `MPSTensor.IsNormal` and
+- **Caveat:** `MPSTensor.IsNormalTensor.isNormal` derives nonzero bond dimension
+  from the spectral-radius-one clause; it requires no external positivity
+  assumption. There is no equivalence theorem between `MPSTensor.IsNormal` and
   `MPSTensor.IsNormalTensor`, and this glossary makes no such claim. In
-  particular, the reverse direction would have to recover the
-  CPSV spectral-radius normalization, not just eventual block injectivity.
+  particular, the reverse direction would have to recover the CPSV
+  spectral-radius normalization, not just eventual block injectivity.
 
 ### `MPSTensor.IsNormalTensor`
 
@@ -47,9 +48,12 @@ is deliberately source-faithful.
   `MPSTensor.IsNormalTensor.isNormal`, and
   `MPSTensor.IsNormalTensor.selfOverlap_tendsto_one`, all in
   `TNLean/MPS/CanonicalForm/NormalTensorGauge.lean`.
-- **Caveat:** these bridges require `[NeZero D]` and run from the normalized
-  spectral predicate to downstream algebraic or asymptotic consequences. They
-  do **not** establish an equivalence with `MPSTensor.IsNormal`.
+- **Caveat:** `exists_tpGauge` and `isNormal` derive nonzero bond dimension
+  internally from spectral normality. Other asymptotic consequences may still
+  expose a positive-dimension instance in their signatures. These bridges run
+  only from the normalized spectral predicate to downstream algebraic or
+  asymptotic consequences; they do **not** establish an equivalence with
+  `MPSTensor.IsNormal`.
 
 ### Basis-level normality
 
@@ -64,8 +68,9 @@ is deliberately source-faithful.
   `Papers/1606.00608/MPDO-22-12-17-2.tex:271-274`, and arXiv:2011.12127,
   Definition 4.2, `Papers/2011.12127/TN-Review-main.tex:1846-1850`.
 - **Sanctioned bridges:**
-  `MPSTensor.IsCPSVBasisOfNormalTensors.blocks_dim_pos` derives the positive
-  block dimensions needed by `MPSTensor.IsNormalTensor.isNormal`, and
+  `MPSTensor.IsCPSVBasisOfNormalTensors.blocks_dim_pos` records block positivity
+  explicitly, while `MPSTensor.IsNormalTensor.isNormal` now derives it directly
+  from each block's spectral normality.
   `MPSTensor.IsCPSVBasisOfNormalTensors.isBNT` then forgets the spectral
   normality data to produce `MPSTensor.IsBNT`.
 - **Caveat:** this is a one-way implication, not an equivalence. Their block
