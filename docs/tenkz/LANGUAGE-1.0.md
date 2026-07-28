@@ -400,8 +400,11 @@ validation, not at reading order. A declared crossing whose paths do not
 intersect is `[TKZ-CROSS-NOT-FOUND]`. An undeclared geometric intersection
 of two wires is `[TKZ-CROSS-UNDECLARED]`. Both are hard errors: over/under
 order is mathematical content and the renderer never guesses it. Pairings in
-one skin inherit the order of their declared list; a pairing that meets any
-other wire still needs an ordinary `cross=` declaration.
+one skin inherit the order of their declared list. A pairing that meets any
+other wire carries an optional crossing clause in its declaration:
+`90@1 > 0@1 : R; cross=under at crossing of self and pairing 1 of B`.
+Here `B` is an author-named atom; `pairing 1 of B` names its first generated
+pairing without exposing the renderer's internal record id.
 <!-- Consumers: rmp-iii-b-braid-one/-two/-three/-four,
      rmp-iii-b-self-braiding, rmp-iii-a-spt-mpo,
      rmp-iii-b-r-tensor-left/-right. -->
@@ -554,7 +557,7 @@ cycle.
 |---|---|---|---|
 | `hue=` | hue-source | house cycle name or `source:<color>` | species |
 | `base=` | identifier | a declared or default skin | skin |
-| `pairings=` | port-pair-list | `{90@1 > 0@1 : R, ...}` pairs of own ports | skin |
+| `pairings=` | port-pair-list | `{n@1 > e@1 : R, ...}` own-port pairs, optionally followed by `; cross=...` | skin |
 
 The standard prelude declares — as declarations, not kernel rows — the skins
 `pill`, `mpo`, `window`, `boundary`, the fuse atom, and the species

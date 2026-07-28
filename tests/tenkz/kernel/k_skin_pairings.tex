@@ -15,7 +15,7 @@
 \tndeclare{species}{cool}{hue=source:blue}
 \tndeclare{skin}{shift-right}{
   base=box,
-  pairings={90@1 > 0@1 : cool, 270@1 > 180@1 : warm}
+  pairings={n@1 > e@1 : cool, s@1 > w@1 : warm}
 }
 \tndeclare{skin}{shift-left}{
   base=box,
@@ -52,6 +52,17 @@
   base=box,
   pairings={180@1 > 0@1 : warm}
 }
+\tndeclare{skin}{crossed-horizontal}{
+  base=box,
+  pairings={
+    w@1 > e@1 : warm;
+      cross=under at crossing of self and pairing 1 of cross-B
+  }
+}
+\tndeclare{skin}{crossed-vertical}{
+  base=box,
+  pairings={n@1 > s@1 : cool}
+}
 \begin{tenkz}[rows={wire}, cols=3, frame=circle, bonds=none]
   \tn[at=(1,1), skin=shift-right]{}
   \tn[at=(1,2), skin=shift-left]{}
@@ -81,6 +92,8 @@
   \tn[skin=shift-left, at=1 n of anchor]{}
   \tn[skin=plain-none, name=aside, at=1 e of anchor]{}
   \tnwire{open e}{aside.e}
+  \tnwire[kind=string, route=orth, name=aside-string]
+    {aside.n}{open n}
 \end{tenkz}
 \qquad
 \begin{tenkz}[rows={wire}, cols=3, bonds=grid]
@@ -92,6 +105,11 @@
 \begin{tenkz}[rows={wire}, cols=1, bonds=none]
   \tn[at=(1,1), skin=shift-right]{}
   \tn[skin=dot, at=on skin-atom-1-1 0.5]{}
+\end{tenkz}
+\qquad
+\begin{tenkz}[rows={wire}, cols=1, bonds=none]
+  \tn[at=(1,1), name=cross-A, skin=crossed-horizontal]{}
+  \tn[at=0 e of cross-A, name=cross-B, skin=crossed-vertical]{}
 \end{tenkz}
 \qquad
 \begin{tenkz}[rows={wire}, cols=2, bonds=none]
