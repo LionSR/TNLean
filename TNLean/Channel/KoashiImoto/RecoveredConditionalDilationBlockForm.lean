@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Algebra.PositiveSemidefiniteNormalization
+import TNLean.Channel.KoashiImoto.RecoveredConditionalDilation.AmbientBlockAction
 import TNLean.Channel.KoashiImoto.RecoveredConditionalDilation.SectorAction
 
 /-!
