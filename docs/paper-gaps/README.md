@@ -119,11 +119,14 @@ For MPDO renormalization fixed points:
   identity-tensored formula holds on supported inputs and globally for a
   positive-definite first factor. The recovered conditional family,
   joint-support block form, ambient equations (14)--(15), and final
-  probability normalization now prove the Hayashi forward implication. The
-  supported recovered states remain the positive-weight physical factors;
-  arbitrary normalized fillers occur only in zero-weight or complementary
-  sectors. No factorization is claimed for TNLean's generic completed singular
-  channel away from the supported input.
+  probability normalization now prove the Hayashi forward implication. Every
+  supported right factor remains its recovered physical state, including at
+  zero weight; only the left factor may then be a filler. Complementary sectors
+  may use fillers on both sides. No factorization is claimed for TNLean's
+  generic completed singular channel away from the supported input.
+- `cpsv16_ssa_equality_hayashi_markov.tex` records the completed, axiom-free
+  forward and reverse strong-subadditivity equality characterization and the
+  exact normalization boundary between supported and complementary sectors.
 - `cpsv16_zcl_canonical_form_normalization.tex` records the corresponding
   normalization issue for mixed-state ZCL.
 

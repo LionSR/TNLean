@@ -599,8 +599,7 @@ term \(H(\{p_j\})\) plus a weighted sum of component entropies, and the four
 terms of strong subadditivity cancel.
 
 Source: Hayashi, *Quantum Information: An Introduction*, Springer 2006,
-Theorem 5.24; blueprint `thm:hayashi_ssa_equality_characterization` (reverse
-implication). -/
+Theorem 5.24; blueprint `thm:hayashi_ssa_equality_reverse`. -/
 theorem hayashi_ssa_equality_characterization_reverse {dA dB dC : ℕ}
     (ρ_ABC : Matrix (Fin dA × Fin dB × Fin dC) (Fin dA × Fin dB × Fin dC) ℂ)
     (hρ_dm : ρ_ABC.PosSemidef ∧ ρ_ABC.trace = 1) :
