@@ -69,7 +69,7 @@ hash-pinned visual check required before changing a verdict.
 | `rmp-iii-a-proof-three` | K2 | The full fusion stack is present; red operator rails are the house semantic hue. |
 | `rmp-iii-a-ghz-state` | K1 | Masonry truncation belongs to the shared lattice-genre work tracked by #4931. |
 | `rmp-iii-a-ghz-tensor` | K2 | Copy dot versus labelled box and diagonal angle are equivalent house forms. |
-| `rmp-iii-a-hadamard` | K2 | The explicit Hadamard label is a faithful clarification of the source's unlabeled node. |
+| `rmp-iii-a-hadamard` | X | Its ledger pairing is `wrong-source`; repair and verify the source mapping before judging the explicit label. |
 | `rmp-iii-a-spt-mpo` | K2 | The string, action boxes, and measured-leg crossings are complete. |
 | `rmp-iii-a-spt-intertwiner` | K2 | Mirrored equivalent ordering and glyph scale are house presentation. |
 | `rmp-iii-a-g-injective-projector` | X | Its ledger pairing is `wrong-source`; repair the projector source mapping before any verdict promotion. |
@@ -105,7 +105,7 @@ hash-pinned visual check required before changing a verdict.
 | `rmp-app-czx-state` | K2 | Lighter enclosure fill is a public-theme choice. |
 | `rmp-workbench-ii-newfig7` | K2 | Crossing-gadget styling is a house-form difference. |
 | `rmp-workbench-ii-projector-on-pta` | K4 | Restore the two missing source triangles. |
-| `rmp-workbench-ii-peps-rg-workbench` | K2 | Mathematical U-application is the accepted coproduct idiom. |
+| `rmp-workbench-ii-peps-rg-workbench` | X | Its ledger pairing is `wrong-source`; repair and verify the source mapping before judging the U-application idiom. |
 | `rmp-workbench-ii-positive-mpo-old` | K3 | Recover the intended relative X sizes through the family skin. |
 | `rmp-workbench-ii-peps-gauge-old` | K3 | Preserve diagonal leg flow and smooth the marked detour tangents. |
 | `rmp-workbench-ii-peps-gauge-without-a` | K3 | Apply the same shared gauge-family geometry correction. |
@@ -123,7 +123,7 @@ hash-pinned visual check required before changing a verdict.
 | `rmp-workbench-iii-historical-composite` | K3 | All mathematical parts are present; only placement nuance remains. |
 | `rmp-workbench-iii-diagram-four` | K2 | Stadium versus circle is a house glyph difference. |
 | `rmp-workbench-iii-eq50-reduced` | K4 | Re-review and remove any labels not present in the source contract. |
-| `rmp-workbench-iii-dual-reduced` | X | The open intertwiner has no trace cyclicity; repair the source factor order. |
+| `rmp-workbench-iii-dual-reduced` | X | Challenge the current cyclic-equivalence note: the manifest declares an open intertwiner, so repair the source factor order. |
 | `rmp-workbench-iii-mpo-representation` | K1 | Virtual-index hue is a shared semantic-theme property. |
 | `rmp-workbench-iii-f-tensor` | K2 | An explicit F box faithfully replaces the source's boxless crossing. |
 | `rmp-workbench-iii-eq59-now` | K2 | Ring colour and stadium-versus-circle glyphs are house style. |
