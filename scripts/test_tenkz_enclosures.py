@@ -61,6 +61,7 @@ SOURCE = r"""
       { \tex_errmessage:D { numeric~port~angle~#1~did~not~resolve~to~#2 } }
   }
 \tenkzTestAnchorAngle:nn {.5} {0.5}
+\tenkzTestAnchorAngle:nn {22.} {22}
 \ExplSyntaxOff
 \makeatother
 \begin{document}
@@ -379,6 +380,8 @@ DUPLICATE_RECOVERY = r"""
   \tnput[dot, ports={202.5:virtual}]{decimalB}{(2,2)}{}
   \tnput[dot, ports={.5:virtual}]{leadingDecimalA}{(0,3)}{}
   \tnput[dot, ports={180.5:virtual}]{leadingDecimalB}{(2,3)}{}
+  \tnput[dot, ports={22.:virtual}]{trailingDecimalA}{(0,4)}{}
+  \tnput[dot, ports={202.:virtual}]{trailingDecimalB}{(2,4)}{}
   \tnput[dot, frame={{rotate=90}}, ports={east:virtual}]{rotatedA}{(4,2)}{}
   \tnput[dot, ports={west:virtual}]{rotatedB}{(4,4)}{}
   \tngroup[frame={{rotate=90}}]{
@@ -415,6 +418,7 @@ DUPLICATE_RECOVERY = r"""
   \tnjoin[route=arc]{a.east}{b.center}
   \tnjoin[route=arc]{decimalA.22.5}{decimalB.202.5}
   \tnjoin[route=arc]{leadingDecimalA..5}{leadingDecimalB.180.5}
+  \tnjoin[route=arc]{trailingDecimalA.22.}{trailingDecimalB.202.}
   \tnjoin[route=arc]{rotatedA.east}{rotatedB.west}
   \tnjoin[route=arc]{groupedA.east}{groupedB.west}
   \tnjoin[name=badarc, route=arc, out=0, label={\tenkzTestBadArcInk}]

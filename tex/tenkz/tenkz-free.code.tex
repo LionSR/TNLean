@@ -533,7 +533,7 @@
       }
       {
         \regex_match:nVTF
-          {\A [-+]? (?: [0-9]+ (?: \. [0-9]+ )? | \. [0-9]+ ) \Z}
+          {\A [-+]? (?: [0-9]+ (?: \. [0-9]* )? | \. [0-9]+ ) \Z}
           #2
           { }
           {\tl_clear:N #2}
@@ -672,7 +672,7 @@
           { \str_if_eq_p:Vn \l__tenkz_jroute_tl {arc} }
           { \str_if_eq_p:Vn \l__tenkz_jroute_tl {curve} }
           {
-            \bool_xor:nnT
+        \bool_xor:nnT
               { \tl_if_empty_p:N \l__tenkz_jout_tl }
               { \tl_if_empty_p:N \l__tenkz_jin_tl }
               {
