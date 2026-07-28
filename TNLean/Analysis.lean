@@ -15,6 +15,7 @@ import TNLean.Analysis.CoisometricCompression
 import TNLean.Analysis.ConvexHullCompact
 import TNLean.Analysis.Entropy
 import TNLean.Analysis.EntropyDecomposition
+import TNLean.Analysis.EntropyMarkovForward
 import TNLean.Analysis.EntropyMarkovReverse
 import TNLean.Analysis.HayashiMarkovStructure
 import TNLean.Analysis.KleinInequality

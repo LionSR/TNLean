@@ -8,13 +8,14 @@ import Mathlib.LinearAlgebra.Matrix.Kronecker
 import Mathlib.LinearAlgebra.UnitaryGroup
 import TNLean.Analysis.Entropy
 import TNLean.Analysis.HayashiMarkovStructure
+import TNLean.Analysis.EntropyMarkovForward
 import TNLean.Analysis.EntropyMarkovReverse
 
 /-!
-# Axiomatized entropy inequalities and equality characterizations
+# Entropy inequalities and equality characterizations
 
-This module isolates the sanctioned entropy axioms so that the axiom boundary is
-clear to downstream files and to CI.
+This compatibility module re-exports the proved Hayashi equality
+characterization under its established public names.
 
 ## Status
 
@@ -22,22 +23,12 @@ clear to downstream files and to CI.
   `strong_subadditivity_general` in
   `TNLean.Channel.Schwarz.StrongSubadditivityPosDef`, derived from Lieb
   concavity, and applied under the name `Entropy.strongSubadditivity`.
-* The Hayashi equality characterization is **split into a proved reverse
-  direction and a forward-only axiom**. The reverse implication, that a
-  quantum-Markov-chain state attains equality, is proved as
+* The Hayashi equality characterization is fully proved. The forward
+  implication is `hayashi_ssa_equality_characterization_forward` in
+  `TNLean.Analysis.EntropyMarkovForward`; the reverse implication is
   `hayashi_ssa_equality_characterization_reverse` in
-  `TNLean.Analysis.EntropyMarkovReverse`, from the entropy-additivity lemmas in
-  `TNLean.Analysis.EntropyDecomposition`. Only the forward implication, that
-  equality forces the block-diagonal structure, remains axiomatized as
-  `hayashi_ssa_equality_characterization_forward`; the biconditional
-  `hayashi_ssa_equality_characterization` combines the two.
-
-## TODO
-
-Remove the remaining axiom `hayashi_ssa_equality_characterization_forward` by
-applying the formalized joint-support Koashi--Imoto block theorem to the
-finite recovered conditional family and assembling those blocks into the
-quantum-Markov decomposition of the tripartite state.
+  `TNLean.Analysis.EntropyMarkovReverse`. The biconditional
+  `hayashi_ssa_equality_characterization` below combines them.
 
 ## References
 
@@ -65,38 +56,18 @@ section SSAEqualityCharacterization
 variable {dA dB dC : ℕ}
 
 /-- **Forward direction of the Hayashi / Ruskai / Hayden--Jozsa--Petz--Winter
-characterization of strong-subadditivity equality** (sanctioned axiom).
-
-For a tripartite density matrix `ρ_ABC`, equality in strong subadditivity forces
-`ρ_ABC` to have quantum-Markov-chain structure on the middle subsystem `B`: after
-a unitary change of basis on `B`, the Hilbert space of `B` decomposes as a finite
-direct sum `⊕_j (B_jᴸ ⊗ B_jᴿ)` and the state takes block-diagonal form
-`⊕_j p_j (ρ_{A B_jᴸ} ⊗ ρ_{B_jᴿ C})`, recorded by the structure
-`HayashiMarkovDecomposition ρ_ABC`.
-
-This implication is the deep half of the characterization: its proof needs
-recovery-map and Petz-transpose theory, that is, the analysis of when the
-data-processing inequality for relative entropy is saturated and the
-reconstruction of the discarded subsystem from a recovery map. The recovery
-channel, finite recovered conditional family, and joint-support
-Koashi--Imoto theorem are formalized; their blockwise application and the
-final quantum-Markov assembly remain open. The forward direction is therefore
-introduced here as a **sanctioned axiom**. The reverse direction is proved in
-`TNLean.Analysis.EntropyMarkovReverse` and the biconditional below combines the
-two; see `docs/paper-gaps/cpsv16_ssa_equality_hayashi_markov.tex`.
+characterization of strong-subadditivity equality.**
 
 Source: Hayashi, *Quantum Information: An Introduction*, Springer 2006,
-Theorem 5.24;
-Ruskai, JMP 43, 4358 (2002);
-Hayden--Jozsa--Petz--Winter, Commun. Math. Phys. 246, 359--374 (2004);
-arXiv:1606.00608 Appendix C;
-blueprint `thm:hayashi_ssa_equality_characterization`. -/
-axiom hayashi_ssa_equality_characterization_forward
+Theorem 5.24; Hayden--Jozsa--Petz--Winter, Commun. Math. Phys. 246,
+359--374 (2004), Theorem 6; arXiv:1606.00608 Appendix C. -/
+theorem hayashi_ssa_equality_characterization_forward
     (ρ_ABC : Matrix (Fin dA × Fin dB × Fin dC)
       (Fin dA × Fin dB × Fin dC) ℂ)
     (hρ_dm : ρ_ABC.PosSemidef ∧ ρ_ABC.trace = 1) :
     IsSSAEquality ρ_ABC hρ_dm.1.isHermitian
-      → Nonempty (HayashiMarkovDecomposition ρ_ABC)
+      → Nonempty (HayashiMarkovDecomposition ρ_ABC) :=
+  Matrix.hayashi_ssa_equality_characterization_forward ρ_ABC hρ_dm
 
 /-- **Hayashi / Ruskai / Hayden--Jozsa--Petz--Winter characterization of
 strong-subadditivity equality**.
@@ -108,13 +79,10 @@ subsystem `B`: after a unitary change of basis on `B`, the Hilbert space of
 block-diagonal form `⊕_j p_j (ρ_{A B_jᴸ} ⊗ ρ_{B_jᴿ C})`, recorded by the
 structure `HayashiMarkovDecomposition ρ_ABC`.
 
-The forward implication is the sanctioned axiom
-`hayashi_ssa_equality_characterization_forward`; the reverse implication is the
-proved theorem `hayashi_ssa_equality_characterization_reverse` in
-`TNLean.Analysis.EntropyMarkovReverse`. This biconditional combines the two, so
-its only axiomatic content is the forward direction. Downstream consumers should
-import the theorem statement from `TNLean/Entropy/MarkovChain.lean`, not this
-axiom module.
+The forward implication is proved in
+`TNLean.Analysis.EntropyMarkovForward`; the reverse implication is proved in
+`TNLean.Analysis.EntropyMarkovReverse`. Downstream consumers should import the
+public theorem statement from `TNLean/Entropy/MarkovChain.lean`.
 
 Source: Hayashi, *Quantum Information: An Introduction*, Springer 2006,
 Theorem 5.24;
@@ -128,7 +96,7 @@ theorem hayashi_ssa_equality_characterization
     (hρ_dm : ρ_ABC.PosSemidef ∧ ρ_ABC.trace = 1) :
     IsSSAEquality ρ_ABC hρ_dm.1.isHermitian
       ↔ Nonempty (HayashiMarkovDecomposition ρ_ABC) :=
-  ⟨hayashi_ssa_equality_characterization_forward ρ_ABC hρ_dm,
+  ⟨_root_.hayashi_ssa_equality_characterization_forward ρ_ABC hρ_dm,
     hayashi_ssa_equality_characterization_reverse ρ_ABC hρ_dm⟩
 
 end SSAEqualityCharacterization

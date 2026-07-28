@@ -17,8 +17,9 @@ characterization. It carries no axiom: the structure and its building blocks
 (the middle-system unitary lift, the direct-sum reindexings, and the
 block-diagonal state) are plain finite-dimensional matrix data.
 
-The forward axiom and the proved reverse direction of the characterization live
-in `TNLean.Axioms.Entropy` and `TNLean.Analysis.EntropyMarkovReverse`.
+The two proved directions of the characterization live in
+`TNLean.Analysis.EntropyMarkovForward` and
+`TNLean.Analysis.EntropyMarkovReverse`.
 
 ## References
 
