@@ -380,6 +380,25 @@ ambient bond space.
     \cite[Appendix~B, lines~1278, 1281--1283, 1300]{Cirac2016MPDO_arXiv}.
 \end{definition}
 
+\begin{lemma}[Gauge invariance of the square-root fixed-point form]%
+    \label{lem:isometry_canonical_form_gauge_invariant}
+    \lean{MPSTensor.GaugeEquiv.isIsometryCanonicalForm_iff}
+    \leanok
+    \uses{def:is_isometry_canonical_form}
+    Gauge-equivalent tensors have the square-root fixed-point form
+    simultaneously.
+\end{lemma}
+\begin{proof}\leanok
+    Write $A^i=X\sqrt\rho\,U^iX^{-1}$ and
+    $B^i=Y A^iY^{-1}$. Then
+    \begin{align}
+        B^i&=(YX)\sqrt\rho\,U^i(YX)^{-1}.
+        \notag
+    \end{align}
+    Thus the diagonal weight and pair-index isometry are unchanged. Applying
+    the same argument to the inverse gauge proves the converse.
+\end{proof}
+
 \begin{theorem}[Trace-normalized square-root form for a normal fixed point]%
     \label{thm:isometry_canonical_form_of_rfp_nt}
     \lean{MPSTensor.isIsometryCanonicalForm_of_rfp_nt}
@@ -501,6 +520,30 @@ ambient bond space.
     Idempotence then reduces to
     $\tr\!(X^{-1} R (X^{-1})^\dagger) = \tr(\rho) = 1$, the trace
     normalization, so $\E_A \circ \E_A = \E_A$.
+\end{proof}
+
+\begin{theorem}[Normal-tensor fixed-point characterization]%
+    \label{thm:normal_rfp_iff_isometry_canonical_form}
+    \lean{MPSTensor.isTransferIdempotent_iff_isIsometryCanonicalForm_of_isNormalTensor}
+    \leanok
+    \uses{thm:cpsv_normal_tp_gauge,
+        lem:isometry_canonical_form_gauge_invariant,
+        thm:isometry_canonical_form_of_rfp_nt,
+        thm:is_rfp_of_isometry_canonical_form}
+    A normal tensor of positive bond dimension is a renormalization fixed point
+    if and only if it has the square-root fixed-point form of
+    Definition~\ref{def:is_isometry_canonical_form}. No left-canonical
+    hypothesis is imposed on the original tensor. This is the corrected form
+    of Lemma~B.1 in \cite[Appendix~B, lines~1274--1301]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+\begin{proof}\leanok
+    For the forward implication, choose the pure trace-preserving Perron gauge
+    from Theorem~\ref{thm:cpsv_normal_tp_gauge}. Idempotence and algebraic
+    normality are invariant under this gauge, so
+    Theorem~\ref{thm:isometry_canonical_form_of_rfp_nt} gives the square-root
+    form for the gauged tensor. Lemma~\ref{lem:isometry_canonical_form_gauge_invariant}
+    gives the form for the original tensor. The reverse implication is
+    Theorem~\ref{thm:is_rfp_of_isometry_canonical_form}.
 \end{proof}
 
 \begin{theorem}[Per-block trace-normalized square-root form]%
