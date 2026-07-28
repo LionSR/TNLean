@@ -554,6 +554,29 @@ def IsIsometryCanonicalForm (A : MPSTensor d D) : Prop :=
         if p = q then 1 else 0) ∧
     (∀ i, A i = X * Matrix.diagonal (fun k => (Real.sqrt (Λ k) : ℂ)) * U i * X⁻¹)
 
+/-- Isometry canonical form is invariant under a virtual gauge change.
+
+The diagonal weight and residual physical isometry are unchanged; only the
+outer invertible matrix is composed with the gauge. This is the final
+similarity step in arXiv:1606.00608, Lemma `charact-NT-pure-RFP`, line 1301. -/
+theorem GaugeEquiv.isIsometryCanonicalForm_iff {A B : MPSTensor d D}
+    (hGauge : GaugeEquiv A B) :
+    IsIsometryCanonicalForm A ↔ IsIsometryCanonicalForm B := by
+  suffices ∀ {C E : MPSTensor d D}, GaugeEquiv C E →
+      IsIsometryCanonicalForm C → IsIsometryCanonicalForm E by
+    exact ⟨this hGauge, this hGauge.symm⟩
+  intro C E hCE hC
+  obtain ⟨X, Λ, U, hX_det, hΛ_pos, hΛ_sum, hU_pair, hC_eq⟩ := hC
+  let Xg : GL (Fin D) ℂ := Matrix.GeneralLinearGroup.mkOfDetNeZero X hX_det
+  have hCore : GaugeEquiv
+      (fun i => Matrix.diagonal (fun k => (Real.sqrt (Λ k) : ℂ)) * U i) C := by
+    refine ⟨Xg, fun i => ?_⟩
+    simpa [Xg, Matrix.mul_assoc] using hC_eq i
+  obtain ⟨Y, hY⟩ := hCore.trans hCE
+  refine ⟨Y, Λ, U, Matrix.GeneralLinearGroup.det_ne_zero Y,
+    hΛ_pos, hΛ_sum, hU_pair, fun i => ?_⟩
+  simpa [Matrix.mul_assoc] using hY i
+
 /-- **Trace-normalized isometry canonical form of Lemma B.1**
 (arXiv:1606.00608, Lemma charact-NT-pure-RFP, lines 1271--1301).
 
