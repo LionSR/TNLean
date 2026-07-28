@@ -1156,3 +1156,25 @@ Census-correction: #5009
 |---|---|
 | flag:consumers:key:kernel-atom:pairing cross | keep-because: #5016 consumes instance crossings in the self-braiding redraw, while the kernel pairing fixture pins repeated indexed items and external pairing operands; expiry 1.0 |
 | flag:lonely-type:indexed-crossing-list | keep-because: the leading pairing index is the instance-to-generated-wire join and therefore differs from an ordinary wire crossing-list; #5016 consumes it; expiry 1.0 |
+
+### 2026-07-28 — the final blocked RMP cases enter the kernel
+
+M3 falls from 91 to 29. The three cases assigned to #5016 account for the
+entire decrease of 62 escape occurrences: the double winding uses a declared
+self-crossing, the two MPU rows use reusable skin pairings, and the torus
+statement uses an identified lattice with closed `wind={1,0}` and
+`wind={0,1}` cycles before its complete two-panel lattice identity.
+
+M4 rises from 18.20 to 18.40 because the refused two-box torus sketch is
+replaced by all three source stages, including the pull arrow and the
+`g^{-1}`/`g` resolution. The two three-station resolution rails flank `O_h`
+and join each other above the marked tensor without terminating the vertical
+operator. The blocked count falls from three to zero. The shared event schema
+also accepts the `kind=pairing` WIRE records introduced by #5009; the focused
+audit regression pins that model-to-auditor contract, including author-facing
+pairing operands and inherited paint order between generated pairings.
+
+Census-correction: #5016
+
+No language-ledger row changes and no remaining flag verdict is re-examined
+here.

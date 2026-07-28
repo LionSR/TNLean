@@ -605,12 +605,57 @@ class Audit:
         for pic in self.pictures:
             if pic.lang != "kernel":
                 continue
-            strings = {
+            atom_ids = {
+                event.attrs["name"]: event.attrs["id"]
+                for event in pic.events
+                if event.kind == "atom"
+                and event.attrs.get("name")
+                and event.attrs.get("id")
+            }
+            wire_ids = {
+                event.attrs.get("name", event.attrs.get("id", ""))
+                for event in pic.events
+                if event.kind == "wire"
+            }
+            wire_ids.discard("")
+            pairing_hosts = {
+                event.attrs.get("name", event.attrs.get("id", "")):
+                    event.attrs.get("host", "")
+                for event in pic.events
+                if event.kind == "wire"
+                and event.attrs.get("kind") == "pairing"
+            }
+            pairing_hosts.pop("", None)
+            pairing_indices = {
+                name: int(match.group(1))
+                for name in pairing_hosts
+                if (
+                    match := re.fullmatch(r"skin-atom-\d+-([1-9]\d*)", name)
+                )
+            }
+            strings = wire_ids | {
                 event.attrs["id"]
                 for event in pic.events
                 if event.kind == "string" and event.attrs.get("id")
             }
+
+            def crossing_id(spelling: str, declaring: str) -> str:
+                text = spelling.strip()
+                if text == "self":
+                    return declaring
+                pairing = re.fullmatch(
+                    r"pairing\s+([1-9]\d*)\s+of\s+"
+                    r"([A-Za-z][A-Za-z0-9\-]*)",
+                    text,
+                )
+                if pairing is not None:
+                    host = atom_ids.get(pairing.group(2))
+                    if host is not None:
+                        return f"skin-{host}-{pairing.group(1)}"
+                return self._kernel_string_id(text)
+
             expected: Counter[tuple[str, str]] = Counter()
+            explicit_pairs: set[frozenset[str]] = set()
             for wire in (event for event in pic.events
                          if event.kind == "wire" and "cross" in event.attrs):
                 declaring = wire.attrs.get("name", wire.attrs.get("id", ""))
@@ -626,8 +671,8 @@ class Audit:
                     continue
                 for match in matches:
                     order, left_text, right_text = match.groups()
-                    left = self._kernel_string_id(left_text)
-                    right = self._kernel_string_id(right_text)
+                    left = crossing_id(left_text, declaring)
+                    right = crossing_id(right_text, declaring)
                     if declaring == left:
                         other = right
                     elif declaring == right:
@@ -645,6 +690,7 @@ class Audit:
                         else (other, declaring)
                     )
                     expected[pair] += 1
+                    explicit_pairs.add(frozenset(pair))
 
             rendered: Counter[tuple[str, str]] = Counter()
             for event in (event for event in pic.events
@@ -674,6 +720,25 @@ class Audit:
                         f"string(s): {', '.join(missing)}",
                     )
                 rendered[(under, over)] += 1
+
+            # Pairings declared by one skin inherit their mutual paint order
+            # from the declaration order.  They have no author-level `cross`
+            # field, but the renderer still records their actual occlusions.
+            # Treat only pairing/pairing intersections without an explicit
+            # declaration as inherited; every other crossing remains checked
+            # against author input above.
+            for pair, count in rendered.items():
+                if (
+                    pairing_hosts.get(pair[0])
+                    and pairing_hosts.get(pair[0]) == pairing_hosts.get(pair[1])
+                    and pair[0] in pairing_indices
+                    and pair[1] in pairing_indices
+                    and frozenset(pair) not in explicit_pairs
+                ):
+                    ordered = tuple(
+                        sorted(pair, key=pairing_indices.__getitem__)
+                    )
+                    expected[ordered] += count
 
             if expected != rendered:
                 self.hard(
