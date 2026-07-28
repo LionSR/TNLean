@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Channel.Peripheral.CyclicDecomposition.Basic
+import TNLean.QPF.Uniqueness
 
 /-!
 # Peripheral unitaries for irreducible Schwarz maps

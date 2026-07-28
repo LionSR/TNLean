@@ -7,6 +7,7 @@ import TNLean.Algebra.OperatorSchmidt
 import TNLean.Channel.KrausCPTP
 import TNLean.Channel.PartialTrace
 import TNLean.Channel.TensorMap
+import Mathlib.Analysis.InnerProductSpace.Positive
 
 /-!
 # Channel associated with a supported bipartite marginal

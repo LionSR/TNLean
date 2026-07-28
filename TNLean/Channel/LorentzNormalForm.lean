@@ -6,7 +6,6 @@ Authors: TNLean contributors
 import TNLean.Channel.Basic
 import TNLean.Channel.TransferMatrix
 import TNLean.Channel.ChoiJamiolkowski
-import TNLean.Channel.NormalForm
 import TNLean.Analysis.MatrixTraceInequalities
 import TNLean.Algebra.HermitianHelpers
 import Mathlib.Analysis.Matrix.PosDef

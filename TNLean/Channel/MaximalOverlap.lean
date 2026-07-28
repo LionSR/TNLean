@@ -7,6 +7,7 @@ import TNLean.Analysis.KyFanNorm
 import TNLean.Algebra.PosSemidefSupport
 import TNLean.Channel.SchmidtRank
 import TNLean.Channel.PartialTrace
+import TNLean.Algebra.MatrixRankBaseChange
 import Mathlib.Analysis.InnerProductSpace.PiL2
 import Mathlib.Analysis.Matrix.Spectrum
 

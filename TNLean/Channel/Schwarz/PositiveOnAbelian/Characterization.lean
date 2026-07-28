@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Channel.Schwarz.PositiveOnAbelian.Basic
+import TNLean.Channel.Schwarz.PositiveMapProperties
 
 /-!
 # Positivity on commuting block families

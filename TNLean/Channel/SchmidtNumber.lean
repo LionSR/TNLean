@@ -7,6 +7,7 @@ import TNLean.Channel.NPositivityChainStrict
 import TNLean.Channel.ReductionCriterion
 import TNLean.Channel.Separable
 import TNLean.Channel.Schwarz.ChoiCompression
+import TNLean.Algebra.MatrixRankBaseChange
 
 /-!
 # The Schmidt number and the full reduction criterion

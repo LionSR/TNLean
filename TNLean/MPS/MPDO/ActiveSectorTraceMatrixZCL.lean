@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.MPDO.PhysicalSectorTraceMatrix
 import TNLean.MPS.MPDO.SectorPairingTransfer
+import TNLean.Channel.MaximalOverlap
 
 /-!
 # Zero correlation length on an active-sector trace matrix

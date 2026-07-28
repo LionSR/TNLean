@@ -6,7 +6,6 @@ Authors: TNLean contributors
 import TNLean.Channel.Basic
 import TNLean.Algebra.MatrixAux
 import TNLean.Channel.Irreducible.Basic
-import TNLean.Channel.Schwarz.KadisonSchwarz
 
 import Mathlib.LinearAlgebra.Matrix.Trace
 import Mathlib.LinearAlgebra.Matrix.PosDef

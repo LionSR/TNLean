@@ -7,6 +7,7 @@ import TNLean.Wielandt.SpanGrowth.CumulativeSpan
 import TNLean.Wielandt.SpanGrowth.EigenvectorSpreading
 import TNLean.MPS.Core.Transfer
 import TNLean.Channel.Peripheral.Spectrum
+import TNLean.Channel.Irreducible.Basic
 
 /-!
 # Primitivity and index definitions for the quantum Wielandt theorem

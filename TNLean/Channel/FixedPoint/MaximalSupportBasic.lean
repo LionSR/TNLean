@@ -5,7 +5,6 @@ Authors: TNLean contributors
 -/
 import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Basic
 import TNLean.Algebra.HermitianHelpers
-import TNLean.Channel.FixedPoint.Cesaro
 import TNLean.Channel.FixedPoint.MeanErgodicProjection
 import TNLean.Channel.FixedPoint.StationaryProjection
 import TNLean.Channel.Schwarz.PositiveMapProperties

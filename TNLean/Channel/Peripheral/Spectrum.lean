@@ -5,7 +5,6 @@ Authors: TNLean contributors
 -/
 import TNLean.Algebra.ComplexPhasePositivity
 import TNLean.Channel.Primitive
-import TNLean.Channel.Irreducible.Basic
 import Mathlib.LinearAlgebra.Eigenspace.Basic
 import Mathlib.LinearAlgebra.Eigenspace.Minpoly
 import Mathlib.RingTheory.RootsOfUnity.Basic

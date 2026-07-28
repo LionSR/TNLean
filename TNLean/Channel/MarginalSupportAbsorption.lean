@@ -5,7 +5,6 @@ Authors: TNLean contributors
 -/
 import TNLean.Analysis.CfcKronecker
 import TNLean.Analysis.MarginalSupport
-import TNLean.Channel.MaximalOverlap
 import TNLean.Channel.PartialTrace
 
 /-!

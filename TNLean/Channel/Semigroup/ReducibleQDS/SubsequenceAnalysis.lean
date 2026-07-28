@@ -5,7 +5,8 @@ Authors: TNLean contributors
 -/
 import TNLean.Algebra.MatrixOperatorSpace
 import TNLean.Channel.Semigroup.ReducibleQDS.GeneratorCompression
-import TNLean.Channel.Irreducible.Basic
+import TNLean.Channel.FixedPoint.Cesaro
+import TNLean.Channel.Semigroup.LindbladForm.GKSLTheorem
 
 /-!
 # Subsequence Analysis: (4) → (2) via Cesàro + subsequences
