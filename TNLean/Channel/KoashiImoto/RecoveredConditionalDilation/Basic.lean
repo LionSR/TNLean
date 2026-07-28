@@ -152,7 +152,6 @@ private theorem fixedEnvEmbedding_conjTranspose_mul_self
   · have hts : t ≠ s := fun h => hst h.symm
     simp [fixedEnvEmbedding, Matrix.one_apply, hst, hts]
 
-@[simp]
 private theorem mul_fixedEnvEmbedding_apply
     {S E : Type*} [Fintype S] [DecidableEq S]
     [Fintype E] [DecidableEq E]
@@ -283,6 +282,52 @@ def dilationBlockEquiv
           (Equiv.prodAssoc (M i) (D i) E).symm) |>.trans
     ((Equiv.sigmaProdDistrib (fun i => M i × D i) E).symm.trans
       (eB.prodCongr (Equiv.refl E)))
+
+
+
+/-- Reindex a dependent middle-system direct sum after adjoining a spectator
+system and an output system.  Each block is ordered as the HJPW conditional
+factor followed by the recovered common-output factor. -/
+def RecoveredConditionalDilationInternal.recoveredTripartiteBlockEquiv
+    {I A B C : Type*} {M D : I → Type*}
+    (eB : ((i : I) × (M i × D i)) ≃ B) :
+    ((i : I) × ((A × D i) × (M i × C))) ≃ A × (B × C) :=
+  (Equiv.sigmaCongrRight fun i =>
+      (Equiv.prodComm (A × D i) (M i × C)).trans
+        (((Equiv.refl (M i × C)).prodCongr
+          (Equiv.prodComm A (D i))).trans
+            (Equiv.prodAssoc (M i × C) (D i) A).symm)) |>.trans
+    (Equiv.sigmaProdDistrib (fun i => (M i × C) × D i) A).symm |>.trans
+    ((dilationBlockEquiv eB).prodCongr (Equiv.refl A)) |>.trans
+    (Equiv.prodComm (B × C) A)
+
+@[simp]
+theorem RecoveredConditionalDilationInternal.recoveredTripartiteBlockEquiv_apply
+    {I A B C : Type*} {M D : I → Type*}
+    (eB : ((i : I) × (M i × D i)) ≃ B)
+    (i : I) (a : A) (d : D i) (m : M i) (c : C) :
+    recoveredTripartiteBlockEquiv eB ⟨i, ((a, d), (m, c))⟩ =
+      (a, (eB ⟨i, (m, d)⟩, c)) := by
+  rfl
+
+/-- The ambient matrix of a dependent direct sum of local dilation blocks. -/
+def RecoveredConditionalDilationInternal.blockDilationUnitary
+    {z K dB dC r : ℕ} {m d : Fin K → ℕ}
+    (eB : ((s : AmbientRecoveredBlockIndex z K) ×
+      (Fin (ambientRecoveredCommonDim m s) ×
+        Fin (ambientRecoveredConditionalDim d s))) ≃ Fin dB)
+    (Ulocal : ∀ s : AmbientRecoveredBlockIndex z K,
+      Matrix
+        (Fin (ambientRecoveredCommonDim m s) × (Fin dC × Fin r))
+        (Fin (ambientRecoveredCommonDim m s) × (Fin dC × Fin r)) ℂ) :
+    Matrix (Fin dB × (Fin dC × Fin r))
+      (Fin dB × (Fin dC × Fin r)) ℂ :=
+  let eD := dilationBlockEquiv (E := Fin dC × Fin r) eB
+  Matrix.reindex eD eD
+    (Matrix.blockDiagonal' fun s ↦
+      Ulocal s ⊗ₖ
+        (1 : Matrix (Fin (ambientRecoveredConditionalDim d s))
+          (Fin (ambientRecoveredConditionalDim d s)) ℂ))
 
 @[simp]
 private theorem dilationBlockEquiv_apply
@@ -663,6 +708,45 @@ private theorem blockDilation_fixedEnv_apply_support_ne
   exact Matrix.blockDiagonal'_apply_ne _ _ _
     (fun h ↦ hjj' (Sum.inr.inj h))
 
+/-- Supported rows do not receive a complementary input under the dependent
+block dilation. -/
+private theorem blockDilation_fixedEnv_apply_support_complement
+    {z K dB dC r : ℕ} {m d : Fin K → ℕ}
+    (eB : ((s : AmbientRecoveredBlockIndex z K) ×
+      (Fin (ambientRecoveredCommonDim m s) ×
+        Fin (ambientRecoveredConditionalDim d s))) ≃ Fin dB)
+    (c₀ : Fin dC) (k₀ : Fin r)
+    (Ulocal : ∀ s : AmbientRecoveredBlockIndex z K,
+      Matrix
+        (Fin (ambientRecoveredCommonDim m s) × (Fin dC × Fin r))
+        (Fin (ambientRecoveredCommonDim m s) × (Fin dC × Fin r)) ℂ)
+    (j : Fin K) (u : Fin (m j)) (v : Fin (d j))
+    (c : Fin dC) (i : Fin r) (z₀ : Fin z) (u' v' : Fin 1) :
+    let eD := dilationBlockEquiv (E := Fin dC × Fin r) eB
+    let Ublocks := Matrix.reindex eD eD
+      (Matrix.blockDiagonal' fun s ↦
+        Ulocal s ⊗ₖ
+          (1 : Matrix (Fin (ambientRecoveredConditionalDim d s))
+            (Fin (ambientRecoveredConditionalDim d s)) ℂ))
+    (Ublocks * fixedEnvEmbedding (S := Fin dB) (c₀, k₀))
+        (eB ⟨Sum.inr j, (u, v)⟩, (c, i))
+        (eB ⟨Sum.inl z₀, (u', v')⟩) = 0 := by
+  classical
+  dsimp only
+  rw [mul_fixedEnvEmbedding_apply]
+  let eD := dilationBlockEquiv (E := Fin dC × Fin r) eB
+  have hout :
+      (eB ⟨Sum.inr j, (u, v)⟩, (c, i)) =
+        eD ⟨Sum.inr j, ((u, (c, i)), v)⟩ := by rfl
+  have hin :
+      (eB ⟨Sum.inl z₀, (u', v')⟩, (c₀, k₀)) =
+        eD ⟨Sum.inl z₀, ((u', (c₀, k₀)), v')⟩ := by rfl
+  rw [hout, hin]
+  dsimp only [eD]
+  simp only [Matrix.reindex_apply, Matrix.submatrix_apply,
+    Equiv.symm_apply_apply]
+  exact Matrix.blockDiagonal'_apply_ne _ _ _ Sum.inr_ne_inl
+
 /-- Complement rows do not receive a supported input under the dependent
 block dilation. -/
 private theorem blockDilation_fixedEnv_apply_complement_support
@@ -824,5 +908,393 @@ theorem RecoveredConditionalDilationInternal.blockDilation_slice_support
         (fun j ↦ C (finProdFinEquiv (c, i)) j ⊗ₖ
           (1 : Matrix (Fin (d j)) (Fin (d j)) ℂ))
         (u, v) (u', v') hj).symm
+
+
+/-- Entrywise expansion of a rectangular Kraus map. -/
+theorem RecoveredConditionalDilationInternal.rectangularKrausMap_apply_entry
+    {I A B : Type*} [Fintype I] [Fintype A]
+    (K : I → Matrix B A ℂ) (X : Matrix A A ℂ) (b b' : B) :
+    rectangularKrausMap K X b b' =
+      ∑ i, ∑ x, ∑ y, K i b x * X x y * star (K i b' y) := by
+  simp only [rectangularKrausMap, LinearMap.coe_mk, AddHom.coe_mk,
+    Matrix.sum_apply, Matrix.mul_apply, Matrix.conjTranspose_apply]
+  simp_rw [Finset.sum_mul]
+  apply Finset.sum_congr rfl
+  intro i _
+  exact Finset.sum_comm
+
+/-- A fixed pure-ancilla recovery is the rectangular Kraus map obtained by
+slicing its dilation isometry along the discarded environment coordinate. -/
+theorem RecoveredConditionalDilationInternal.pureAncillaRecovery_eq_rectangularKrausMap
+    {B C R : Type*} [Fintype B] [DecidableEq B]
+    [Fintype C] [DecidableEq C] [Fintype R] [DecidableEq R]
+    (c₀ : C) (r₀ : R)
+    (U : Matrix (B × (C × R)) (B × (C × R)) ℂ)
+    (X : Matrix B B ℂ) :
+    pureAncillaRecovery c₀ r₀ U X =
+      rectangularKrausMap (fun i : R =>
+        fun bc b => (U * fixedEnvEmbedding (S := B) (c₀, r₀))
+          (bc.1, (bc.2, i)) b) X := by
+  let K : R → Matrix (B × C) B ℂ := fun i bc b =>
+    (U * fixedEnvEmbedding (S := B) (c₀, r₀))
+      (bc.1, (bc.2, i)) b
+  have hV : pureAncillaDilationIsometry c₀ r₀ U *
+        (1 : Matrix B B ℂ) =
+      stinespringVGen K * (1 : Matrix B B ℂ) := by
+    rw [Matrix.mul_one, Matrix.mul_one]
+    ext ⟨⟨b, c⟩, i⟩ x
+    rfl
+  have h := pureAncillaRecovery_eq_rectangularKrausMap_on_support
+    c₀ r₀ U K (1 : Matrix B B ℂ) hV X
+  simpa [K] using h
+
+/-- A supported entry of the named ambient block dilation is the local
+Stinespring entry tensored with the conditional identity. -/
+@[simp] private theorem blockDilationUnitary_fixedEnv_apply_support
+    {z K dB dC r : ℕ} {m d : Fin K → ℕ}
+    (eB : ((s : AmbientRecoveredBlockIndex z K) ×
+      (Fin (ambientRecoveredCommonDim m s) ×
+        Fin (ambientRecoveredConditionalDim d s))) ≃ Fin dB)
+    (c₀ : Fin dC) (k₀ : Fin r)
+    (L : Fin r → ∀ j : Fin K,
+      Matrix (Fin (m j) × Fin dC) (Fin (m j)) ℂ)
+    (Ulocal : ∀ s : AmbientRecoveredBlockIndex z K,
+      Matrix
+        (Fin (ambientRecoveredCommonDim m s) × (Fin dC × Fin r))
+        (Fin (ambientRecoveredCommonDim m s) × (Fin dC × Fin r)) ℂ)
+    (hUlocal : ∀ j,
+      Matrix.reindex (Equiv.prodAssoc (Fin (m j)) (Fin dC) (Fin r))
+          (Equiv.refl (Fin (m j))) (stinespringV (fun i ↦ L i j)) =
+        (by simpa only [ambientRecoveredCommonDim] using Ulocal (Sum.inr j)) *
+          fixedEnvEmbedding (S := Fin (m j)) (c₀, k₀))
+    (j : Fin K)
+    (u u' : Fin (ambientRecoveredCommonDim m (Sum.inr j)))
+    (v v' : Fin (ambientRecoveredConditionalDim d (Sum.inr j)))
+    (c : Fin dC) (i : Fin r) :
+    (blockDilationUnitary eB Ulocal *
+        fixedEnvEmbedding (S := Fin dB) (c₀, k₀))
+        (eB ⟨Sum.inr j, (u, v)⟩, (c, i))
+        (eB ⟨Sum.inr j, (u', v')⟩) =
+      L i j (u, c) u' *
+        (1 : Matrix (Fin (d j)) (Fin (d j)) ℂ) v v' := by
+  simpa [blockDilationUnitary] using
+    blockDilation_fixedEnv_apply_support eB c₀ k₀ L Ulocal hUlocal
+      j u v c i u' v'
+
+/-- A supported output entry of the named block dilation vanishes on every
+other supported input sector. -/
+@[simp] private theorem blockDilationUnitary_fixedEnv_apply_support_ne
+    {z K dB dC r : ℕ} {m d : Fin K → ℕ}
+    (eB : ((s : AmbientRecoveredBlockIndex z K) ×
+      (Fin (ambientRecoveredCommonDim m s) ×
+        Fin (ambientRecoveredConditionalDim d s))) ≃ Fin dB)
+    (c₀ : Fin dC) (k₀ : Fin r)
+    (Ulocal : ∀ s : AmbientRecoveredBlockIndex z K,
+      Matrix
+        (Fin (ambientRecoveredCommonDim m s) × (Fin dC × Fin r))
+        (Fin (ambientRecoveredCommonDim m s) × (Fin dC × Fin r)) ℂ)
+    {j j' : Fin K} (hjj' : j ≠ j')
+    (u : Fin (ambientRecoveredCommonDim m (Sum.inr j)))
+    (v : Fin (ambientRecoveredConditionalDim d (Sum.inr j)))
+    (c : Fin dC) (i : Fin r)
+    (u' : Fin (ambientRecoveredCommonDim m (Sum.inr j')))
+    (v' : Fin (ambientRecoveredConditionalDim d (Sum.inr j'))) :
+    (blockDilationUnitary eB Ulocal *
+        fixedEnvEmbedding (S := Fin dB) (c₀, k₀))
+        (eB ⟨Sum.inr j, (u, v)⟩, (c, i))
+        (eB ⟨Sum.inr j', (u', v')⟩) = 0 := by
+  simpa [blockDilationUnitary] using
+    blockDilation_fixedEnv_apply_support_ne eB c₀ k₀ Ulocal hjj'
+      u v c i u' v'
+
+/-- A supported output entry of the named block dilation vanishes on a
+complementary input. -/
+@[simp] private theorem blockDilationUnitary_fixedEnv_apply_support_complement
+    {z K dB dC r : ℕ} {m d : Fin K → ℕ}
+    (eB : ((s : AmbientRecoveredBlockIndex z K) ×
+      (Fin (ambientRecoveredCommonDim m s) ×
+        Fin (ambientRecoveredConditionalDim d s))) ≃ Fin dB)
+    (c₀ : Fin dC) (k₀ : Fin r)
+    (Ulocal : ∀ s : AmbientRecoveredBlockIndex z K,
+      Matrix
+        (Fin (ambientRecoveredCommonDim m s) × (Fin dC × Fin r))
+        (Fin (ambientRecoveredCommonDim m s) × (Fin dC × Fin r)) ℂ)
+    (j : Fin K)
+    (u : Fin (ambientRecoveredCommonDim m (Sum.inr j)))
+    (v : Fin (ambientRecoveredConditionalDim d (Sum.inr j)))
+    (c : Fin dC) (i : Fin r) (q : Fin z)
+    (u' : Fin (ambientRecoveredCommonDim m (Sum.inl q)))
+    (v' : Fin (ambientRecoveredConditionalDim d (Sum.inl q))) :
+    (blockDilationUnitary eB Ulocal *
+        fixedEnvEmbedding (S := Fin dB) (c₀, k₀))
+        (eB ⟨Sum.inr j, (u, v)⟩, (c, i))
+        (eB ⟨Sum.inl q, (u', v')⟩) = 0 := by
+  simpa [blockDilationUnitary] using
+    blockDilation_fixedEnv_apply_support_complement eB c₀ k₀ Ulocal
+      j u v c i q u' v'
+
+/-- A complementary output entry of the named block dilation vanishes on a
+supported input. -/
+@[simp] private theorem blockDilationUnitary_fixedEnv_apply_complement_support
+    {z K dB dC r : ℕ} {m d : Fin K → ℕ}
+    (eB : ((s : AmbientRecoveredBlockIndex z K) ×
+      (Fin (ambientRecoveredCommonDim m s) ×
+        Fin (ambientRecoveredConditionalDim d s))) ≃ Fin dB)
+    (c₀ : Fin dC) (k₀ : Fin r)
+    (Ulocal : ∀ s : AmbientRecoveredBlockIndex z K,
+      Matrix
+        (Fin (ambientRecoveredCommonDim m s) × (Fin dC × Fin r))
+        (Fin (ambientRecoveredCommonDim m s) × (Fin dC × Fin r)) ℂ)
+    (q : Fin z)
+    (u : Fin (ambientRecoveredCommonDim m (Sum.inl q)))
+    (v : Fin (ambientRecoveredConditionalDim d (Sum.inl q)))
+    (c : Fin dC) (i : Fin r) (j : Fin K)
+    (u' : Fin (ambientRecoveredCommonDim m (Sum.inr j)))
+    (v' : Fin (ambientRecoveredConditionalDim d (Sum.inr j))) :
+    (blockDilationUnitary eB Ulocal *
+        fixedEnvEmbedding (S := Fin dB) (c₀, k₀))
+        (eB ⟨Sum.inl q, (u, v)⟩, (c, i))
+        (eB ⟨Sum.inr j, (u', v')⟩) = 0 := by
+  simpa [blockDilationUnitary] using
+    blockDilation_fixedEnv_apply_complement_support eB c₀ k₀ Ulocal
+      q u v c i j u' v'
+
+/-- The ambient bipartite direct sum with zero complementary blocks. -/
+def RecoveredConditionalDilationInternal.ambientBipartiteBlockMatrix
+    {z K dA dB : ℕ} {m d : Fin K → ℕ}
+    (eB : ((s : AmbientRecoveredBlockIndex z K) ×
+      (Fin (ambientRecoveredCommonDim m s) ×
+        Fin (ambientRecoveredConditionalDim d s))) ≃ Fin dB)
+    (σ : ∀ j : Fin K, Matrix (Fin (m j)) (Fin (m j)) ℂ)
+    (ω : ∀ j : Fin K,
+      Matrix (Fin dA × Fin (d j)) (Fin dA × Fin (d j)) ℂ) :
+    Matrix (Fin dA × Fin dB) (Fin dA × Fin dB) ℂ :=
+  Matrix.reindex (recoveredBipartiteBlockEquiv eB)
+    (recoveredBipartiteBlockEquiv eB)
+    (Matrix.blockDiagonal' fun s => match s with
+      | Sum.inl _ => 0
+      | Sum.inr k => σ k ⊗ₖ ω k)
+
+set_option linter.flexible false in
+/-- Taking an `A`-block of the ambient bipartite direct sum leaves a
+middle-system direct sum with the corresponding conditional matrix entries. -/
+theorem RecoveredConditionalDilationInternal.bipartiteBlock_ambientBipartiteBlockMatrix
+    {z K dA dB : ℕ} {m d : Fin K → ℕ}
+    (eB : ((s : AmbientRecoveredBlockIndex z K) ×
+      (Fin (ambientRecoveredCommonDim m s) ×
+        Fin (ambientRecoveredConditionalDim d s))) ≃ Fin dB)
+    (σ : ∀ j : Fin K, Matrix (Fin (m j)) (Fin (m j)) ℂ)
+    (ω : ∀ j : Fin K,
+      Matrix (Fin dA × Fin (d j)) (Fin dA × Fin (d j)) ℂ)
+    (a a' : Fin dA) :
+    bipartiteBlock (ambientBipartiteBlockMatrix eB σ ω) a a' =
+      Matrix.reindex eB eB
+        (Matrix.blockDiagonal' fun s => match s with
+          | Sum.inl _ => 0
+          | Sum.inr j => fun uv uv' =>
+              σ j uv.1 uv'.1 * ω j (a, uv.2) (a', uv'.2)) := by
+  apply Matrix.ext
+  intro b b'
+  rw [← eB.apply_symm_apply b, ← eB.apply_symm_apply b']
+  generalize eB.symm b = x
+  generalize eB.symm b' = y
+  rcases x with ⟨s, u, v⟩
+  rcases y with ⟨t, u', v'⟩
+  rcases s with z | j <;> rcases t with z' | j' <;>
+    simp [ambientBipartiteBlockMatrix, bipartiteBlock_apply,
+      Matrix.reindex_apply, Matrix.submatrix_apply,
+      Matrix.blockDiagonal'_apply, Matrix.kroneckerMap_apply]
+  case inr.inr =>
+    by_cases h : j = j'
+    · subst j'
+      simp
+      exact Or.inl rfl
+    · simp [h]
+
+set_option linter.style.maxHeartbeats false in
+set_option linter.unusedSimpArgs false in
+set_option linter.flexible false in
+set_option maxHeartbeats 800000 in
+-- The entrywise direct-sum expansion requires a larger finite-sum reduction budget.
+/-- A dependent direct sum of pure-ancilla dilation blocks acts sectorwise on
+an ambient state whose complementary blocks vanish.  Supported blocks send
+`σ_j ⊗ ω_j` to `ω_j ⊗ ℛ_j(σ_j)`; the factor swap is the HJPW ordering.
+
+Only the supported Stinespring equations are assumed.  No action of the
+resulting channel is asserted on a nonzero complementary input. -/
+theorem RecoveredConditionalDilationInternal.blockDilation_fixedEnv_idTensorMap_blockDiagonal
+    {z K dA dB dC r : ℕ} {m d : Fin K → ℕ}
+    (eB : ((s : AmbientRecoveredBlockIndex z K) ×
+      (Fin (ambientRecoveredCommonDim m s) ×
+        Fin (ambientRecoveredConditionalDim d s))) ≃ Fin dB)
+    (c₀ : Fin dC) (k₀ : Fin r)
+    (L : Fin r → ∀ j : Fin K,
+      Matrix (Fin (m j) × Fin dC) (Fin (m j)) ℂ)
+    (Ulocal : ∀ s : AmbientRecoveredBlockIndex z K,
+      Matrix
+        (Fin (ambientRecoveredCommonDim m s) × (Fin dC × Fin r))
+        (Fin (ambientRecoveredCommonDim m s) × (Fin dC × Fin r)) ℂ)
+    (hUlocal : ∀ j,
+      Matrix.reindex (Equiv.prodAssoc (Fin (m j)) (Fin dC) (Fin r))
+          (Equiv.refl (Fin (m j))) (stinespringV (fun i ↦ L i j)) =
+        (by simpa only [ambientRecoveredCommonDim] using Ulocal (Sum.inr j)) *
+          fixedEnvEmbedding (S := Fin (m j)) (c₀, k₀))
+    (σ : ∀ j : Fin K, Matrix (Fin (m j)) (Fin (m j)) ℂ)
+    (ω : ∀ j : Fin K,
+      Matrix (Fin dA × Fin (d j)) (Fin dA × Fin (d j)) ℂ) :
+    idTensorMapLM (δ := Fin dA)
+        (pureAncillaRecovery c₀ k₀ (blockDilationUnitary eB Ulocal))
+        (ambientBipartiteBlockMatrix eB σ ω) =
+      Matrix.reindex (recoveredTripartiteBlockEquiv eB)
+        (recoveredTripartiteBlockEquiv eB)
+        (Matrix.blockDiagonal' fun s => match s with
+          | Sum.inl _ => 0
+          | Sum.inr j => ω j ⊗ₖ rectangularKrausMap (fun i => L i j) (σ j)) := by
+  classical
+  apply Matrix.ext
+  rintro ⟨a, ⟨b, c⟩⟩ ⟨a', ⟨b', c'⟩⟩
+  rw [← (recoveredTripartiteBlockEquiv eB).apply_symm_apply
+    (a, (b, c)), ← (recoveredTripartiteBlockEquiv eB).apply_symm_apply
+    (a', (b', c'))]
+  generalize (recoveredTripartiteBlockEquiv eB).symm (a, (b, c)) = x
+  generalize (recoveredTripartiteBlockEquiv eB).symm (a', (b', c')) = y
+  rcases x with ⟨s, ⟨⟨a, v⟩, ⟨u, c⟩⟩⟩
+  rcases y with ⟨t, ⟨⟨a', v'⟩, ⟨u', c'⟩⟩⟩
+  simp only [recoveredTripartiteBlockEquiv_apply,
+    Matrix.reindex_apply, Matrix.submatrix_apply, Equiv.symm_apply_apply]
+  have hx : (recoveredTripartiteBlockEquiv eB).symm
+      (a, (eB ⟨s, (u, v)⟩, c)) =
+      ⟨s, ((a, v), (u, c))⟩ := by
+    apply (recoveredTripartiteBlockEquiv eB).injective
+    rw [(recoveredTripartiteBlockEquiv eB).apply_symm_apply]
+    rfl
+  have hy : (recoveredTripartiteBlockEquiv eB).symm
+      (a', (eB ⟨t, (u', v')⟩, c')) =
+      ⟨t, ((a', v'), (u', c'))⟩ := by
+    apply (recoveredTripartiteBlockEquiv eB).injective
+    rw [(recoveredTripartiteBlockEquiv eB).apply_symm_apply]
+    rfl
+  rw [hx, hy]
+  rw [idTensorMapLM_apply, idTensorMap_apply,
+    bipartiteBlock_ambientBipartiteBlockMatrix,
+    pureAncillaRecovery_eq_rectangularKrausMap,
+    rectangularKrausMap_apply_entry]
+  rcases s with z | j <;> rcases t with z' | j'
+  all_goals simp_rw [← eB.sum_comp, Fintype.sum_sigma,
+    Fintype.sum_sum_type]
+  all_goals simp only [Matrix.reindex_apply, Matrix.submatrix_apply,
+    Equiv.symm_apply_apply, Matrix.blockDiagonal'_apply,
+    Matrix.zero_apply, ite_self, Sum.inl_ne_inr, Sum.inr_ne_inl,
+    mul_zero, zero_mul, star_zero, Finset.sum_const_zero, add_zero,
+    zero_add]
+  all_goals simp
+  case inl.inl =>
+    apply Finset.sum_eq_zero
+    intro i _
+    apply Finset.sum_eq_zero
+    intro k _
+    apply Finset.sum_eq_zero
+    intro x _
+    apply Finset.sum_eq_zero
+    intro y _
+    rw [blockDilationUnitary_fixedEnv_apply_complement_support]
+    simp
+  case inl.inr =>
+    apply Finset.sum_eq_zero
+    intro i _
+    apply Finset.sum_eq_zero
+    intro k _
+    apply Finset.sum_eq_zero
+    intro x _
+    apply Finset.sum_eq_zero
+    intro y _
+    rw [blockDilationUnitary_fixedEnv_apply_complement_support]
+    simp
+  case inr.inl =>
+    apply Finset.sum_eq_zero
+    intro i _
+    apply Finset.sum_eq_zero
+    intro k _
+    apply Finset.sum_eq_zero
+    intro x _
+    apply Finset.sum_eq_zero
+    intro y _
+    rw [blockDilationUnitary_fixedEnv_apply_complement_support]
+    simp
+  case inr.inr =>
+    by_cases hj : j = j'
+    · subst j'
+      simp only [if_pos rfl, cast_eq, Matrix.kroneckerMap_apply]
+      rw [rectangularKrausMap_apply_entry]
+      simp_rw [Finset.mul_sum]
+      apply Finset.sum_congr rfl
+      intro i _
+      rw [Finset.sum_eq_single j]
+      · have hKleft
+            (x : Fin (ambientRecoveredCommonDim m (Sum.inr j)) ×
+              Fin (ambientRecoveredConditionalDim d (Sum.inr j))) :
+            (blockDilationUnitary eB Ulocal *
+                fixedEnvEmbedding (S := Fin dB) (c₀, k₀))
+                (eB ⟨Sum.inr j, (u, v)⟩, (c, i))
+                (eB ⟨Sum.inr j, x⟩) =
+              L i j (u, c) x.1 *
+                (1 : Matrix (Fin (d j)) (Fin (d j)) ℂ) v x.2 :=
+          blockDilationUnitary_fixedEnv_apply_support
+            eB c₀ k₀ L Ulocal hUlocal j u x.1 v x.2 c i
+        have hKright
+            (y : Fin (ambientRecoveredCommonDim m (Sum.inr j)) ×
+              Fin (ambientRecoveredConditionalDim d (Sum.inr j))) :
+            (blockDilationUnitary eB Ulocal *
+                fixedEnvEmbedding (S := Fin dB) (c₀, k₀))
+                (eB ⟨Sum.inr j, (u', v')⟩, (c', i))
+                (eB ⟨Sum.inr j, y⟩) =
+              L i j (u', c') y.1 *
+                (1 : Matrix (Fin (d j)) (Fin (d j)) ℂ) v' y.2 :=
+          blockDilationUnitary_fixedEnv_apply_support
+            eB c₀ k₀ L Ulocal hUlocal j u' y.1 v' y.2 c' i
+        simp_rw [hKleft, hKright]
+        have hOneLeft
+            (q : Fin (ambientRecoveredConditionalDim d (Sum.inr j))) :
+            (1 : Matrix (Fin (d j)) (Fin (d j)) ℂ) v q =
+              if v = q then 1 else 0 := by
+          exact Matrix.one_apply
+        have hOneRight
+            (q : Fin (ambientRecoveredConditionalDim d (Sum.inr j))) :
+            (1 : Matrix (Fin (d j)) (Fin (d j)) ℂ) v' q =
+              if v' = q then 1 else 0 := by
+          exact Matrix.one_apply
+        simp_rw [Fintype.sum_prod_type, hOneLeft, hOneRight]
+        simp [apply_ite, Fintype.sum_ite_eq]
+        apply Finset.sum_congr rfl
+        intro x _
+        apply Finset.sum_congr rfl
+        intro y _
+        ac_rfl
+      · intro k _ hkj
+        apply Finset.sum_eq_zero
+        intro x _
+        apply Finset.sum_eq_zero
+        intro y _
+        rw [blockDilationUnitary_fixedEnv_apply_support_ne eB c₀ k₀
+          Ulocal (Ne.symm hkj)]
+        simp
+      · simp
+    · rw [dif_neg hj]
+      apply Finset.sum_eq_zero
+      intro i _
+      apply Finset.sum_eq_zero
+      intro k _
+      apply Finset.sum_eq_zero
+      intro x _
+      apply Finset.sum_eq_zero
+      intro y _
+      by_cases hjk : j = k
+      · subst k
+        rw [blockDilationUnitary_fixedEnv_apply_support_ne eB c₀ k₀
+          Ulocal (Ne.symm hj)]
+        simp
+      · rw [blockDilationUnitary_fixedEnv_apply_support_ne eB c₀ k₀
+          Ulocal hjk]
+        simp
 
 end Matrix

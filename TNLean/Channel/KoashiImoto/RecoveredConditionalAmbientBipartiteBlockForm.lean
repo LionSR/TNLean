@@ -349,7 +349,9 @@ private theorem one_kronecker_zero_extension_eq
         ((1 : Matrix (Fin dA) (Fin dA) ℂ) ⊗ₖ U_B) *
           idTensorMapLM E R *
           ((1 : Matrix (Fin dA) (Fin dA) ℂ) ⊗ₖ U_B)ᴴ := by
-    simpa only [T_U] using RecoveredConditionalDilationInternal.idTensorMap_conjugation U_B (idTensorMapLM E R)
+    simpa only [T_U] using
+      RecoveredConditionalDilationInternal.idTensorMap_conjugation
+        U_B (idTensorMapLM E R)
   have htensorComp :
       idTensorMapLM (T_U.comp E) R =
         idTensorMapLM T_U (idTensorMapLM E R) := by
