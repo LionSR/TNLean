@@ -140,9 +140,11 @@ and the declaration door takes them:
   pairings={90@1 > 0@1 : R, 270@1 > 180@1 : R}}
 ```
 
-That is the first row exactly; the mirrored declaration is the second. The
-renderer resolves the declared base and draws the pairings over its glyph.
-`strings` is simply the wrong need on this entry; the panel contains no string.
+That is the first row exactly; the mirrored declaration is the second. Before
+the model freezes, the kernel materializes each pairing as an `origin=skin`
+wire owned by the atom. The renderer then resolves the declared base and draws
+those records over its glyph. `strings` is simply the wrong need on this entry;
+the panel contains no string.
 
 ### The wrong-source one does not belong here
 
