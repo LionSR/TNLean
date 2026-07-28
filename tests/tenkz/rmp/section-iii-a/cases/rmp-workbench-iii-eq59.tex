@@ -15,11 +15,10 @@
   \begin{tenkz}[lattice={3x3},
       west=trace, east=trace, north=trace, south=trace]
     \tnwire[kind=string, species=operator, name=torus-horizontal, closed,
-      wind={1,0}, via={s outside}]
-    \tnwire[kind=string, species=operator, name=torus-vertical,
-      crossing=under,
+      wind={1,0}]
+    \tnwire[kind=string, species=operator, name=torus-vertical, closed,
+      wind={0,1}, crossing=under,
       cross={under at crossing of torus-vertical and torus-horizontal}]
-      {n outside}{s outside}
     \tn[skin=box, role=marked,
         at=crossing of torus-horizontal and torus-vertical]{i}
   \end{tenkz}

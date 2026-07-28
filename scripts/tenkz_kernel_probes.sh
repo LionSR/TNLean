@@ -59,6 +59,16 @@ grep -Fq '|name=wrap-1|origin=trace|row=1|' "$WORK/k_twoshift.tnlog" || {
   echo "FAIL: trace policy did not derive the per-row wrap-1 record" >&2
   exit 1
 }
+grep -Fq 'string|id=horizontal|kind=wind|class=1,0|pts=12' \
+    "$WORK/k_torus.tnlog" || {
+  echo "FAIL: the horizontal torus class did not reach the winding renderer" >&2
+  exit 1
+}
+grep -Fq 'string|id=vertical|kind=wind|class=0,1|pts=12' \
+    "$WORK/k_torus.tnlog" || {
+  echo "FAIL: the vertical torus class did not reach the winding renderer" >&2
+  exit 1
+}
 if grep -Eq 'name=(wrap|cup)-(west|east|north|south)' \
     "$WORK/k_twoshift.tnlog" "$WORK/r_cup.tnlog"; then
   echo "FAIL: a side-level closure survived normalization" >&2

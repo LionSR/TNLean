@@ -5800,6 +5800,24 @@
   }
 \cs_generate_variant:Nn \__tenkz_kernel_r_route_end_put:nn { nV }
 
+\cs_new_protected:Npn \__tenkz_kernel_r_declare_wind:n #1
+  {
+    \__tenkz_string_declare_wind:nnnnnnn
+      {#1}
+      { ( 1 + \l__tenkz_kernel_r_cols_int ) / 2 }
+      { - ( 1 + \l__tenkz_kernel_r_rows_int ) / 2 }
+      {
+        ( max(
+            \l__tenkz_kernel_r_cols_int,
+            \l__tenkz_kernel_r_rows_int
+          ) - 1 ) / 2
+        + \__tenkz_metric_ratio:n {outsidegap}
+      }
+      { \seq_item:Nn \l__tenkz_kernel_match_seq {2} }
+      { \seq_item:Nn \l__tenkz_kernel_match_seq {3} }
+      { \__tenkz_metric_ratio:n {outsidegap} / 2 }
+  }
+
 \cs_new_protected:Npn \__tenkz_kernel_r_string_free:n #1
   {
     \__tenkz_kernel_r_sid:nN {#1} \l__tenkz_kernel_r_sid_tl
@@ -5816,32 +5834,27 @@
     \prop_if_in:NeTF \l__tenkz_model_record_prop { #1 / closed }
       {
         % A closed string is one smooth cycle through its waypoints.  A
-        % wind={p,q} record depicts its homotopy class as the planar
-        % through-and-around loop: across the lattice middle along the
-        % wound direction, returning through the declared via points.
+        % wind={p,q} record instead delegates to the string engine's torus
+        % projection, so the declared class determines the rendered curve.
         \__tenkz_model_get:nnN {#1} {wind} \l__tenkz_kernel_r_c_tl
-        \quark_if_no_value:NF \l__tenkz_kernel_r_c_tl
+        \quark_if_no_value:NTF \l__tenkz_kernel_r_c_tl
           {
-            \tl_set:Ne \l__tenkz_kernel_r_b_tl
+            \exp_args:NVV \__tenkz_string_declare_closed:nn
+              \l__tenkz_kernel_r_sid_tl \l__tenkz_kernel_r_pts_tl
+          }
+          {
+            \regex_extract_once:nVNTF
+              { \A \s* ([-+]?\d+) \s* , \s* ([-+]?\d+) \s* \Z }
+              \l__tenkz_kernel_r_c_tl \l__tenkz_kernel_match_seq
               {
-                \__tenkz_kernel_r_ppt:nn
-                  { 1 - \__tenkz_metric_ratio:n {outsidegap} }
-                  { - ( 1 + \l__tenkz_kernel_r_rows_int ) / 2 }
-                \__tenkz_kernel_r_ppt:nn
-                  {
-                    \l__tenkz_kernel_r_cols_int
-                    + \__tenkz_metric_ratio:n {outsidegap}
-                  }
-                  { - ( 1 + \l__tenkz_kernel_r_rows_int ) / 2 }
+                \exp_args:NV \__tenkz_kernel_r_declare_wind:n
+                  \l__tenkz_kernel_r_sid_tl
               }
-            \tl_set:Ne \l__tenkz_kernel_r_pts_tl
               {
-                \tl_use:N \l__tenkz_kernel_r_b_tl
-                \tl_use:N \l__tenkz_kernel_r_pts_tl
+                \exp_args:NVV \__tenkz_string_declare_closed:nn
+                  \l__tenkz_kernel_r_sid_tl \l__tenkz_kernel_r_pts_tl
               }
           }
-        \exp_args:NVV \__tenkz_string_declare_closed:nn
-          \l__tenkz_kernel_r_sid_tl \l__tenkz_kernel_r_pts_tl
       }
       {
         % endpoints join the waypoint chain; each may be `open <dir>`

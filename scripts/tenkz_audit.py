@@ -626,6 +626,13 @@ class Audit:
                 and event.attrs.get("kind") == "pairing"
             }
             pairing_hosts.pop("", None)
+            pairing_indices = {
+                name: int(match.group(1))
+                for name in pairing_hosts
+                if (
+                    match := re.fullmatch(r"skin-atom-\d+-([1-9]\d*)", name)
+                )
+            }
             strings = wire_ids | {
                 event.attrs["id"]
                 for event in pic.events
@@ -724,9 +731,14 @@ class Audit:
                 if (
                     pairing_hosts.get(pair[0])
                     and pairing_hosts.get(pair[0]) == pairing_hosts.get(pair[1])
+                    and pair[0] in pairing_indices
+                    and pair[1] in pairing_indices
                     and frozenset(pair) not in explicit_pairs
                 ):
-                    expected[pair] += count
+                    ordered = tuple(
+                        sorted(pair, key=pairing_indices.__getitem__)
+                    )
+                    expected[ordered] += count
 
             if expected != rendered:
                 self.hard(

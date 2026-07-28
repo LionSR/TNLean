@@ -89,16 +89,24 @@ stringcross|under=skin-atom-1-1|over=wire-3|hits=1
     )
     assert not pairing_operand.findings, pairing_operand.findings
 
-    inherited_pairing_cross = audit_log(
-        """\
+    inherited_pairing_log = """\
 picture|id=k1|lang=kernel
 wire|id=wire-1|from=addr-1|host=atom-1|kind=pairing|name=skin-atom-1-1|origin=skin|to=addr-2
 wire|id=wire-2|from=addr-3|host=atom-1|kind=pairing|name=skin-atom-1-2|origin=skin|to=addr-4
 kernel-boundary|signature=
 stringcross|under=skin-atom-1-1|over=skin-atom-1-2|hits=1
 """
-    )
+    inherited_pairing_cross = audit_log(inherited_pairing_log)
     assert not inherited_pairing_cross.findings, inherited_pairing_cross.findings
+    reversed_pairing_cross = audit_log(
+        inherited_pairing_log.replace(
+            "under=skin-atom-1-1|over=skin-atom-1-2",
+            "under=skin-atom-1-2|over=skin-atom-1-1",
+        )
+    )
+    assert "kernel-crossing" in [
+        finding.rule for finding in reversed_pairing_cross.findings
+    ]
 
     unrelated_pairing_cross = audit_log(
         """\

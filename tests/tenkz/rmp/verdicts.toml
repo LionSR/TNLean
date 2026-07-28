@@ -733,10 +733,10 @@ status = "cosmetic-gap"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
 defects = []
-case_sha256 = "3e17dbe1598aa5d1f3787bb159a2af99dec243bb73342d99f9b98a71403d16a3"
+case_sha256 = "69ed59adcfa832770425b51918903b7d27f56d19805eeb8929fff9441a868235"
 reviewed = "2026-07-28"
-renderer = "codex-kernel-self-braiding-topology-review-2026-07-28-200dpi"
-note = "the double winding carries eight tensors plus the source tail crossing; the four-tensor single winding has an ordinary free tail"
+renderer = "codex-named-boundary-self-braiding-review-2026-07-28-120dpi"
+note = "the double winding carries eight tensors plus the source tail crossing and a named north boundary; the four-tensor single winding has an ordinary east-boundary tail"
 
 [[verdict]]
 id = "rmp-iii-b-r-tensor-left"
@@ -1354,9 +1354,9 @@ status = "cosmetic-gap"
 pairing = "verified"
 pairing_by = "codex-pairing-sweep-2026-07-24"
 defects = []
-case_sha256 = "b4292b2f6f08372a8e811070ee97be646fe39a4b1ddd272560a5c0b3642f9c7c"
+case_sha256 = "00da4cdf9dcaa1b80f9750e4c1d38bad4a38846745429390b70e39d40104c12b"
 reviewed = "2026-07-28"
-renderer = "codex-winding-lattice-source-topology-review-2026-07-28-180dpi"
+renderer = "codex-native-winding-lattice-source-review-2026-07-28-120dpi"
 note = "the torus has both identified noncontractible cycles; the 5x5 windows stay open, and the two three-station g rails join above the marked tensor while O_h stays vertical"
 
 [[verdict]]
