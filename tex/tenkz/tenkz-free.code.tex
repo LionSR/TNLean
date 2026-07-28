@@ -441,6 +441,8 @@
 \tl_new:N \l__tenkz_jarc_to_name_tl
 \tl_new:N \l__tenkz_jarc_from_anchor_tl
 \tl_new:N \l__tenkz_jarc_to_anchor_tl
+\tl_new:N \l__tenkz_jarc_from_frame_tl
+\tl_new:N \l__tenkz_jarc_to_frame_tl
 \clist_const:Nn \c__tenkz_jroutes_clist { straight, hv, vh, arc, curve }
 \pgfkeys{
   /tenkz/join/.is~family,
@@ -594,31 +596,41 @@
               {
                 \prop_get:NeNTF \g__tenkz_free_atom_angle_prop
                   {\the\tenkz@pictureid/\l__tenkz_jarc_from_name_tl}
-                  \l_tmpa_tl
+                  \l__tenkz_jarc_from_frame_tl
                   {
-                    \tenkz_free_angle_add:nN
+                    \prop_get:NeNTF \g__tenkz_free_atom_angle_prop
+                      {\the\tenkz@pictureid/\l__tenkz_jarc_to_name_tl}
+                      \l__tenkz_jarc_to_frame_tl
                       {
-                        \l_tmpa_tl - \l__tenkz_frame_group_angle_tl
+                        \tenkz_free_angle_add:nN
+                          {
+                            \l__tenkz_jarc_from_frame_tl
+                            - \l__tenkz_frame_group_angle_tl
+                          }
+                          \l__tenkz_jout_tl
+                        \tenkz_free_angle_add:nN
+                          {
+                            \l__tenkz_jarc_to_frame_tl
+                            - \l__tenkz_frame_group_angle_tl
+                          }
+                          \l__tenkz_jin_tl
+                        \tl_if_eq:NNT \l__tenkz_jarc_from_name_tl
+                          \l__tenkz_jarc_to_name_tl
+                          {
+                            \tenkz_free_angle_add:nN
+                              {180} \l__tenkz_jout_tl
+                            \tenkz_free_angle_add:nN
+                              {180} \l__tenkz_jin_tl
+                          }
                       }
-                      \l__tenkz_jout_tl
-                  }
-                  { }
-                \prop_get:NeNTF \g__tenkz_free_atom_angle_prop
-                  {\the\tenkz@pictureid/\l__tenkz_jarc_to_name_tl}
-                  \l_tmpa_tl
-                  {
-                    \tenkz_free_angle_add:nN
                       {
-                        \l_tmpa_tl - \l__tenkz_frame_group_angle_tl
+                        \tl_clear:N \l__tenkz_jout_tl
+                        \tl_clear:N \l__tenkz_jin_tl
                       }
-                      \l__tenkz_jin_tl
                   }
-                  { }
-                \tl_if_eq:NNT \l__tenkz_jarc_from_name_tl
-                  \l__tenkz_jarc_to_name_tl
                   {
-                    \tenkz_free_angle_add:nN {180} \l__tenkz_jout_tl
-                    \tenkz_free_angle_add:nN {180} \l__tenkz_jin_tl
+                    \tl_clear:N \l__tenkz_jout_tl
+                    \tl_clear:N \l__tenkz_jin_tl
                   }
               }
           }

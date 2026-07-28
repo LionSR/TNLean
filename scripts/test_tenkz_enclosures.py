@@ -399,7 +399,10 @@ DUPLICATE_RECOVERY = r"""
     {$(a)+(0mm,5mm)$}{$(b)+(0mm,5mm)$}
   \coordinate (rawA) at (0mm,10mm);
   \coordinate (rawB) at (20mm,10mm);
+  \node[rotate=90] (rawRotatedA) at (40mm,10mm) {};
+  \node (rawRotatedB) at (60mm,10mm) {};
   \tnjoin[name=raw, label={\tenkzTestValidRawJoinInk}]{rawA}{rawB}
+  \tnjoin[route=arc]{rawRotatedA.east}{rawRotatedB.west}
   \tnjoin[route=arc]{a.east}{b.center}
   \tnjoin[route=arc]{decimalA.22.5}{decimalB.202.5}
   \tnjoin[route=arc]{rotatedA.east}{rotatedB.west}
