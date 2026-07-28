@@ -11,9 +11,9 @@
     \tnput[dot]{A}{(0mm,0mm)}{A}
     \tnput[mpo]{w}{(-10mm,0mm)}{} \tnput[mpo]{n}{(0mm,10mm)}{}
     \tnput[mpo]{e}{(10mm,0mm)}{} \tnput[mpo]{s}{(0mm,-10mm)}{}
-    \tnjoin[route=arc,out=90,in=180]{w.north}{n.west}
-    \tnjoin[route=arc,out=0,in=90]{n.east}{e.north}
-    \tnjoin[route=arc,out=-90,in=0]{e.south}{s.east}
-    \tnjoin[route=arc,out=180,in=-90]{s.west}{w.south}
+    \tnjoin[route=arc]{w.north}{n.west}
+    \tnjoin[route=arc]{n.east}{e.north}
+    \tnjoin[route=arc]{e.south}{s.east}
+    \tnjoin[route=arc]{s.west}{w.south}
   \end{tenkzfree}.
 \]

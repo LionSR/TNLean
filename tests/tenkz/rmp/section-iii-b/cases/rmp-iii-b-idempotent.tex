@@ -21,11 +21,11 @@
     \tnput[mpo, role=marked]{J}{(7mm,-7mm)}{j}
     \tnjoin[role=operator]{J.south east}{13mm,-12mm}
     % the MPO ring: W -> N -> E -> J -> S -> W
-    \tnjoin[role=operator, route=arc, out=90, in=180]{W.north}{N.west}
-    \tnjoin[role=operator, route=arc, out=0, in=90]{N.east}{E.north}
-    \tnjoin[role=operator, route=arc, out=-90, in=45]{E.south}{J.north east}
-    \tnjoin[role=operator, route=arc, out=225, in=0]{J.south west}{S.east}
-    \tnjoin[role=operator, route=arc, out=180, in=-90]{S.west}{W.south}
+    \tnjoin[role=operator, route=arc]{W.north}{N.west}
+    \tnjoin[role=operator, route=arc]{N.east}{E.north}
+    \tnjoin[role=operator, route=arc]{E.south}{J.north east}
+    \tnjoin[role=operator, route=arc]{J.south west}{S.east}
+    \tnjoin[role=operator, route=arc]{S.west}{W.south}
   \end{tenkzfree}
   \;=\;\delta_{i,j}\;
   \begin{tenkzfree}

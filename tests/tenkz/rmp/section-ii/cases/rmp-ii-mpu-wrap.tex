@@ -36,14 +36,14 @@
     \tnjoin{n2.south}{s2.north} \tnjoin{s2.south}{b2.north}
     \tnjoin{n3.south}{s3.north} \tnjoin{s3.south}{b3.north}
     \tnjoin{n4.south}{s4.north} \tnjoin{s4.south}{b4.north}
-    \tnjoin[route=arc,out=-90,in=180]{s1.north}{s1.east}
-    \tnjoin[route=arc,out=90,in=0]{s1.south}{s1.west}
-    \tnjoin[route=arc,out=-90,in=180]{s2.north}{s2.east}
-    \tnjoin[route=arc,out=90,in=0]{s2.south}{s2.west}
-    \tnjoin[route=arc,out=-90,in=180]{s3.north}{s3.east}
-    \tnjoin[route=arc,out=90,in=0]{s3.south}{s3.west}
-    \tnjoin[route=arc,out=-90,in=180]{s4.north}{s4.east}
-    \tnjoin[route=arc,out=90,in=0]{s4.south}{s4.west}
+    \tnjoin[route=arc]{s1.north}{s1.east}
+    \tnjoin[route=arc]{s1.south}{s1.west}
+    \tnjoin[route=arc]{s2.north}{s2.east}
+    \tnjoin[route=arc]{s2.south}{s2.west}
+    \tnjoin[route=arc]{s3.north}{s3.east}
+    \tnjoin[route=arc]{s3.south}{s3.west}
+    \tnjoin[route=arc]{s4.north}{s4.east}
+    \tnjoin[route=arc]{s4.south}{s4.west}
     \tnjoin{w.east}{s1.west} \tnjoin{s1.east}{s2.west}
     \tnjoin{s2.east}{s3.west} \tnjoin{s3.east}{s4.west}
     \tnjoin{s4.east}{e.west}

@@ -8,19 +8,19 @@
 \[
   \begin{tenkzfree}
     % the splitting vertex; incoming MPO wire from the west, two out east
-    \tnput[dot, ports={west:virtual}]{V}{(0,0)}{}
+    \tnput[dot, ports={west:virtual, 40:virtual, -40:virtual}]{V}{(0,0)}{}
+    \tnput[boundary]{VeN}{(15mm,8mm)}{} \tnput[boundary]{VeS}{(15mm,-8mm)}{}
     \tnjoin[dir]{-16mm,0mm}{V.west}
-    \tnjoin[dir, route=arc, out=40, in=180]{V.north east}{15mm,8mm}
-    \tnjoin[dir, route=arc, out=-40, in=180]{V.south east}{15mm,-8mm}
+    \tnjoin[dir, route=arc]{V.40}{VeN.west} \tnjoin[dir, route=arc]{V.-40}{VeS.west}
     % the physical string, west of the vertex, crossing the incoming wire
     \tnjoin[dir]{-9mm,-7mm}{-9mm,7mm}
   \end{tenkzfree}
   \;=\;
   \begin{tenkzfree}
-    \tnput[dot, ports={west:virtual}]{W}{(0,0)}{}
+    \tnput[dot, ports={west:virtual, 40:virtual, -40:virtual}]{W}{(0,0)}{}
+    \tnput[boundary]{WeN}{(19mm,8mm)}{} \tnput[boundary]{WeS}{(19mm,-8mm)}{}
     \tnjoin[dir]{-13mm,0mm}{W.west}
-    \tnjoin[dir, route=arc, out=40, in=180]{W.north east}{19mm,8mm}
-    \tnjoin[dir, route=arc, out=-40, in=180]{W.south east}{19mm,-8mm}
+    \tnjoin[dir, route=arc]{W.40}{WeN.west} \tnjoin[dir, route=arc]{W.-40}{WeS.west}
     % the string, now east of the vertex, crossing BOTH split wires
     \tnjoin[dir]{13mm,-13mm}{13mm,13mm}
   \end{tenkzfree}
