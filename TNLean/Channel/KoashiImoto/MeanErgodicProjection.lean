@@ -19,8 +19,9 @@ map is a positive, unital, idempotent retraction onto the adjoint fixed points. 
 identifies the trace-pairing adjoint of a Schrödinger Kraus map with its Heisenberg adjoint
 `Kraus.adjointMap`.
 
-This file does not prove that the Cesàro averages of the Heisenberg iterates converge to the
-trace-adjoint projection; that source identity remains a separate analytic statement.
+The Cesàro averages of the Heisenberg iterates converge to this trace-adjoint projection.
+The proof transports the finite sums and iterates through the trace pairing and applies the
+finite-dimensional Schrödinger mean-ergodic theorem entrywise.
 
 ## Main declarations
 
@@ -35,6 +36,8 @@ trace-adjoint projection; that source identity remains a separate analytic state
 * `Kraus.commonInvariantMeanErgodicProjection`: the trace-adjoint projection associated with
   the single witness `F_0`, derived via
   `IsPositiveMap.traceAdjoint_meanErgodicProjection_isPositiveUnitalRetraction`.
+* `Kraus.tendsto_birkhoffAverage_commonInvariantMeanErgodicProjection`: the Heisenberg
+  Cesàro averages of `F_0^*` converge to `P_0^*`.
 * `Kraus.commonInvariantMeanErgodicProjection_isPositiveMap`,
   `Kraus.commonInvariantMeanErgodicProjection_one`,
   `Kraus.commonInvariantMeanErgodicProjection_idempotent`: positivity, unitality, and
@@ -123,6 +126,24 @@ end TraceAdjointHeisenbergIdentification
 
 section CommonInvariantProjection
 
+private theorem trace_traceAdjointMap_iterate_mul
+    (T : Mat →ₗ[ℂ] Mat) (n : ℕ) (Y X : Mat) :
+    Matrix.trace ((Matrix.traceAdjointMap T)^[n] Y * X) =
+      Matrix.trace (Y * T^[n] X) := by
+  induction n generalizing X with
+  | zero => rfl
+  | succ n ih =>
+      rw [Function.iterate_succ_apply', Matrix.trace_traceAdjointMap_mul, ih,
+        Function.iterate_succ_apply]
+
+private theorem trace_birkhoffAverage_traceAdjointMap_mul
+    (T : Mat →ₗ[ℂ] Mat) (n : ℕ) (Y X : Mat) :
+    Matrix.trace (birkhoffAverage ℂ (Matrix.traceAdjointMap T) _root_.id n Y * X) =
+      Matrix.trace (Y * birkhoffAverage ℂ T _root_.id n X) := by
+  simp only [birkhoffAverage, birkhoffSum, id_eq, Matrix.smul_mul, Matrix.mul_smul,
+    Matrix.sum_mul, Matrix.mul_sum, Matrix.trace_smul, Matrix.trace_sum,
+    trace_traceAdjointMap_iterate_mul]
+
 /-- **HJPW's single witness `F_0`.**
 
 arXiv:quant-ph/0304007v2, lines 846-849: the preserving Kraus family with `A_0 = A_{F_0}`,
@@ -162,7 +183,7 @@ theorem isTracePreservingMap_commonInvariantMapLM {Kidx : Type*} [Fintype Kidx] 
 This is the trace-pairing adjoint of the finite-dimensional Schrödinger mean-ergodic projection
 for the single witness `F_0`. It is positive, unital, and idempotent, with range `A_0`. HJPW
 denotes the Heisenberg Cesàro limit by `P_0^*` (arXiv:quant-ph/0304007v2, lines 838-851);
-convergence of those averages to this map is not asserted here. -/
+the convergence theorem appears below. -/
 noncomputable def commonInvariantMeanErgodicProjection
     {Kidx : Type*} [Fintype Kidx] [Nonempty Kidx] {ρ : Kidx → Mat}
     (hρbar : (commonAverage ρ).PosDef) : Mat →ₗ[ℂ] Mat :=
@@ -170,6 +191,77 @@ noncomputable def commonInvariantMeanErgodicProjection
     (LinearMap.meanErgodicProjection (commonInvariantMapLM hρbar)
       ((isPositiveMap_commonInvariantMapLM hρbar).hasBoundedOrbits_of_tracePreserving
         (isTracePreservingMap_commonInvariantMapLM hρbar)))
+
+/-- **The Heisenberg Cesàro averages for `F_0^*` converge to `P_0^*`.**
+
+HJPW, arXiv:quant-ph/0304007v2, lines 838-851, defines `P_0^*` as the Cesàro limit
+of the Heisenberg iterates of the single preserving operation `F_0`. This is that
+convergence identity under the explicit joint-support hypothesis used throughout
+this file. -/
+theorem tendsto_birkhoffAverage_commonInvariantMeanErgodicProjection
+    {Kidx : Type*} [Fintype Kidx] [Nonempty Kidx] {ρ : Kidx → Mat}
+    (hρbar : (commonAverage ρ).PosDef) (Y : Mat) :
+    Filter.Tendsto
+      (birkhoffAverage ℂ (Matrix.traceAdjointMap (commonInvariantMapLM hρbar))
+        _root_.id · Y)
+      Filter.atTop (nhds (commonInvariantMeanErgodicProjection hρbar Y)) := by
+  let T := commonInvariantMapLM hρbar
+  let hbounded :=
+    (isPositiveMap_commonInvariantMapLM hρbar).hasBoundedOrbits_of_tracePreserving
+      (isTracePreservingMap_commonInvariantMapLM hρbar)
+  let P := LinearMap.meanErgodicProjection T hbounded
+  change Filter.Tendsto
+    (birkhoffAverage ℂ (Matrix.traceAdjointMap T) _root_.id · Y)
+    Filter.atTop (nhds (Matrix.traceAdjointMap P Y))
+  change Filter.Tendsto
+    (fun n : ℕ => fun i j =>
+      birkhoffAverage ℂ (Matrix.traceAdjointMap T) _root_.id n Y i j)
+    Filter.atTop (nhds (fun i j => Matrix.traceAdjointMap P Y i j))
+  rw [tendsto_pi_nhds]
+  intro i
+  rw [tendsto_pi_nhds]
+  intro j
+  let traceMulY :=
+    (Matrix.traceLinearMap (Fin D) ℂ ℂ).comp (LinearMap.mulLeft ℂ Y)
+  have hlimit :=
+    (traceMulY.continuous_of_finiteDimensional.tendsto
+      (P (Matrix.single j i 1))).comp
+      (hbounded.tendsto_birkhoffAverage_meanErgodicProjection
+        (Matrix.single j i 1))
+  have hseq :
+      (fun n : ℕ =>
+        birkhoffAverage ℂ (Matrix.traceAdjointMap T) _root_.id n Y i j) =
+        fun n : ℕ => traceMulY
+          (birkhoffAverage ℂ T _root_.id n (Matrix.single j i 1)) := by
+    funext n
+    calc
+      birkhoffAverage ℂ (Matrix.traceAdjointMap T) _root_.id n Y i j =
+          Matrix.trace
+            (birkhoffAverage ℂ (Matrix.traceAdjointMap T) _root_.id n Y *
+              Matrix.single j i 1) := by
+            rw [Matrix.trace_mul_single, MulOpposite.op_one, one_smul]
+      _ = Matrix.trace
+          (Y * birkhoffAverage ℂ T _root_.id n (Matrix.single j i 1)) :=
+        trace_birkhoffAverage_traceAdjointMap_mul T n Y (Matrix.single j i 1)
+      _ = traceMulY
+          (birkhoffAverage ℂ T _root_.id n (Matrix.single j i 1)) := by
+        simp only [traceMulY, LinearMap.comp_apply, LinearMap.mulLeft_apply,
+          Matrix.traceLinearMap_apply]
+  have htarget :
+      traceMulY (P (Matrix.single j i 1)) = Matrix.traceAdjointMap P Y i j := by
+    calc
+      traceMulY (P (Matrix.single j i 1)) =
+          Matrix.trace (Y * P (Matrix.single j i 1)) := by
+        simp only [traceMulY, LinearMap.comp_apply, LinearMap.mulLeft_apply,
+          Matrix.traceLinearMap_apply]
+      _ = Matrix.trace
+          (Matrix.traceAdjointMap P Y * Matrix.single j i 1) :=
+        (Matrix.trace_traceAdjointMap_mul P Y (Matrix.single j i 1)).symm
+      _ = Matrix.traceAdjointMap P Y i j := by
+        rw [Matrix.trace_mul_single, MulOpposite.op_one, one_smul]
+  rw [hseq]
+  rw [htarget] at hlimit
+  simpa only [T, Function.comp_def] using hlimit
 
 /-- The defining bundle of properties of `P_0^*`, transported directly from
 `IsPositiveMap.traceAdjoint_meanErgodicProjection_isPositiveUnitalRetraction`. -/

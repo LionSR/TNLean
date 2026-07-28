@@ -207,9 +207,9 @@ preserving operation $F_0=(1/M)\sum_{\mu=1}^M F_\mu$ with $A_0=A_{F_0}$
 (lines 844--849). The trace-pairing adjoint of the Schr\"odinger mean-ergodic
 projection for $F_0$ is formalized as $P_0^*$. It is positive, unital, and
 idempotent, with range exactly $A_0$. HJPW writes this projection as the
-Ces\`aro limit of the Heisenberg iterates (lines 838--851); convergence of those
-adjoint averages to the trace-adjoint projection is not yet formalized. The
-corresponding declarations are
+Ces\`aro limit of the Heisenberg iterates (lines 838--851), and those adjoint
+averages converge to the trace-adjoint projection. The corresponding
+declarations are
 \begin{center}
   \small
   \leanid{Kraus.commonAverage}\\
@@ -223,6 +223,7 @@ corresponding declarations are
   \leanid{Kraus.averagedPreservingKrausFamily}\\
   \leanid{Kraus.exists_preservingKrausFamily_adjointFixedPointsStarSubalgebra_eq}\\
   \leanid{Kraus.commonInvariantMeanErgodicProjection}\\
+  \leanid{Kraus.tendsto_birkhoffAverage_commonInvariantMeanErgodicProjection}\\
   \leanid{Kraus.commonInvariantMeanErgodicProjection_isPositiveMap}\\
   \leanid{Kraus.commonInvariantMeanErgodicProjection_one}\\
   \leanid{Kraus.commonInvariantMeanErgodicProjection_idempotent}\\
@@ -320,9 +321,9 @@ invariant family is also formalized, with nonnegative weights summing to one
 and density matrices on both tensor factors. In the same coordinates, every
 preserving operation acts as a local trace-preserving completely positive
 operation fixing $\sigma_j$, tensored with the identity, on each diagonal
-summand. Thus full-support HJPW Property~$2'$ is also formalized. The
-Heisenberg Ces\`aro convergence identity for $P_0^*$ remains open. The
-joint-support coordinate reduction, density-family reconstruction, and
+summand. Thus full-support HJPW Property~$2'$ and the Heisenberg Ces\`aro
+convergence identity for $P_0^*$ are formalized. The joint-support coordinate
+reduction, density-family reconstruction, and
 restriction of preserving operations are formalized, as is the combined block
 form on the minimum joint support. The finite recovered conditional family,
 its separating effects, and its preserving middle-system channel are
