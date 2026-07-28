@@ -81,6 +81,12 @@ _ALIAS_DEFN_RE = re.compile(
     r"(?:protected\s+)?alias\s+([A-Za-z_][\w.']*)"
 )
 
+_ALIAS_PREFIX_RE = re.compile(
+    r"^\s*(?:@\[[^\]]*\]\s*)?(?:protected\s+)?alias\s*$"
+)
+
+_ALIAS_CONTINUATION_RE = re.compile(r"^\s*([A-Za-z_][\w.']*)\s*:=")
+
 _STRUCTURE_DEFN_RE = re.compile(
     r"^\s*(?:@\[[^\]]*\]\s*)?"
     r"(?:(?:noncomputable|protected|private|local)\s+)*"
@@ -233,7 +239,18 @@ def build_decl_index(lean_root: Path) -> set[str]:
             continue
         namespace_stack: list[str] = []
         active_structure_names: list[str] = []
+        pending_alias = False
         for line in text.splitlines():
+            if pending_alias:
+                pending_alias = False
+                if m := _ALIAS_CONTINUATION_RE.match(line):
+                    declared = m.group(1)
+                    names.add(declared.rsplit(".", 1)[-1])
+                    names.add(declared)
+                    if namespace_stack:
+                        names.add(".".join([*namespace_stack, declared]))
+                    active_structure_names = []
+                    continue
             if m := _NAMESPACE_RE.match(line):
                 namespace_stack.extend(m.group(1).split("."))
                 active_structure_names = []
@@ -251,6 +268,10 @@ def build_decl_index(lean_root: Path) -> set[str]:
                 # closes an unnamed ``section`` inside a namespace.  Do not pop
                 # the namespace stack unless Lean text explicitly names the
                 # namespace being closed.
+                continue
+            if _ALIAS_PREFIX_RE.match(line):
+                pending_alias = True
+                active_structure_names = []
                 continue
             if m := _ALIAS_DEFN_RE.match(line):
                 declared = m.group(1)
@@ -556,6 +577,8 @@ def _self_test(repo_root: Path) -> int:
             "`definitely_not_a_real_declaration`.\n"
             "Also cites the proved compatibility alias "
             "`hayashi_ssa_equality_characterization_forward`.\n"
+            "Also cites the multiline deprecated alias "
+            "`Matrix.conjTranspose_inv_cfc_sqrt_mul_self_of_posDef`.\n"
             "Also cites the structure field "
             "`AppendixBProductPairExtraction.localProjectors`.\n"
             "Also mentions `scripts/audit_stale_issues.py` (should be ignored)."
@@ -579,6 +602,10 @@ def _self_test(repo_root: Path) -> int:
     if "hayashi_ssa_equality_characterization_forward" in r.missing_decls:
         problems.append(
             "proved compatibility alias was incorrectly flagged as missing"
+        )
+    if "Matrix.conjTranspose_inv_cfc_sqrt_mul_self_of_posDef" in r.missing_decls:
+        problems.append(
+            "multiline deprecated alias was incorrectly flagged as missing"
         )
     if "AppendixBProductPairExtraction.localProjectors" in r.missing_decls:
         problems.append(
