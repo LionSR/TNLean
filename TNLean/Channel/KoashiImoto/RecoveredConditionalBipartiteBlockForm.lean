@@ -164,25 +164,36 @@ private theorem one_kronecker_reconstructs_of_recoveredConditionalState
 The target order is the one used by TNLean in HJPW Theorem 6, equation (14):
 the common factor precedes the joint A--conditional factor. -/
 def recoveredBipartiteBlockEquiv
-    {K : ℕ} {d m : Fin K → ℕ}
-    (e : ((j : Fin K) × (Fin (m j) × Fin (d j))) ≃ Fin n) :
-    ((j : Fin K) × (Fin (m j) × (Fin dA × Fin (d j)))) ≃
+    {ι : Type*} {d m : ι → ℕ}
+    (e : ((j : ι) × (Fin (m j) × Fin (d j))) ≃ Fin n) :
+    ((j : ι) × (Fin (m j) × (Fin dA × Fin (d j)))) ≃
       Fin dA × Fin n :=
   (Equiv.sigmaCongrRight fun j ↦
       (Equiv.refl (Fin (m j))).prodCongr
         (Equiv.prodComm (Fin dA) (Fin (d j)))
       |>.trans (Equiv.prodAssoc (Fin (m j)) (Fin (d j)) (Fin dA)).symm)
     |>.trans (Equiv.sigmaProdDistrib
-      (fun j : Fin K ↦ Fin (m j) × Fin (d j)) (Fin dA)).symm
+      (fun j : ι ↦ Fin (m j) × Fin (d j)) (Fin dA)).symm
     |>.trans (e.prodCongr (Equiv.refl (Fin dA)))
     |>.trans (Equiv.prodComm (Fin n) (Fin dA))
 
 @[simp]
-private theorem recoveredBipartiteBlockEquiv_symm_apply
-    {K : ℕ} {d m : Fin K → ℕ}
-    (e : ((j : Fin K) × (Fin (m j) × Fin (d j))) ≃ Fin n)
+theorem recoveredBipartiteBlockEquiv_apply
+    {ι : Type*} {d m : ι → ℕ}
+    (e : ((j : ι) × (Fin (m j) × Fin (d j))) ≃ Fin n)
     (a : Fin dA)
-    (z : (j : Fin K) × (Fin (m j) × Fin (d j))) :
+    (z : (j : ι) × (Fin (m j) × Fin (d j))) :
+    recoveredBipartiteBlockEquiv (dA := dA) e
+        ⟨z.1, (z.2.1, (a, z.2.2))⟩ =
+      (a, e z) := by
+  simp [recoveredBipartiteBlockEquiv]
+
+@[simp]
+theorem recoveredBipartiteBlockEquiv_symm_apply
+    {ι : Type*} {d m : ι → ℕ}
+    (e : ((j : ι) × (Fin (m j) × Fin (d j))) ≃ Fin n)
+    (a : Fin dA)
+    (z : (j : ι) × (Fin (m j) × Fin (d j))) :
     (recoveredBipartiteBlockEquiv (dA := dA) e).symm (a, e z) =
       ⟨z.1, (z.2.1, (a, z.2.2))⟩ := by
   simp [recoveredBipartiteBlockEquiv]
