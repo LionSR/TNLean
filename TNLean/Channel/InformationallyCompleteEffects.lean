@@ -13,7 +13,7 @@ import TNLean.Channel.WolfProps
 # A finite informationally complete family of effects
 
 This file constructs a finite family of positive effects whose complex span is
-the full matrix algebra.  The construction uses the four rank-one projectors in
+the full matrix algebra.  The construction uses the four rank-one effects in
 the polarization identity.
 
 This is the finite separation device for the conditional states in Hayden,
@@ -57,7 +57,7 @@ noncomputable def informationallyCompleteVector
 /-- A finite informationally complete family of positive effects.
 
 The distinguished member is the identity.  Every other member is the
-rank-one projector onto one of the four scaled polarization vectors. -/
+rank-one effect formed from one of the four scaled polarization vectors. -/
 noncomputable def informationallyCompleteEffect
     (s : ICEffectIndex D) : Matrix (Fin D) (Fin D) ℂ :=
   match s with
@@ -279,7 +279,13 @@ theorem map_conditionalSlice
   rw [conditionalSlice_eq_sum_smul_bipartiteBlock, map_sum]
   simp_rw [map_sum, map_smul]
   rw [conditionalSlice_eq_sum_smul_bipartiteBlock]
-  congr 1
+  apply Finset.sum_congr rfl
+  intro i _
+  apply Finset.sum_congr rfl
+  intro j _
+  apply congrArg (M j i • ·)
+  ext k l
+  simp [idTensorMapLM_apply, idTensorMap_apply]
 
 /-- Conditional slicing as a complex-linear map in the tested effect. -/
 noncomputable def conditionalSliceLM
