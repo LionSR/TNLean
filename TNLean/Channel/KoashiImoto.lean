@@ -9,6 +9,7 @@ Authors: TNLean contributors
 -- Generated aggregator module: TNLean.Channel.KoashiImoto
 
 import TNLean.Channel.KoashiImoto.CommonInvariantAlgebra
+import TNLean.Channel.KoashiImoto.FamilyFixedPointBlockForm
 import TNLean.Channel.KoashiImoto.FiniteRealization
 import TNLean.Channel.KoashiImoto.MeanErgodicProjection
 import TNLean.Channel.KoashiImoto.PooledKrausFamily
