@@ -137,7 +137,7 @@ hash-pinned visual check required before changing a verdict.
 | `rmp-workbench-iii-enlarged-mpo-black` | K2 | The closed five-box ring and marked site are complete. |
 | `rmp-workbench-iii-eq59` | K2 | Both windings, complete station counts, and joined resolution rails are present. |
 | `rmp-workbench-iii-g-injective-mpo` | X | The dropped eight half-edges are the complete declared boundary, not a cosmetic omission. |
-| `rmp-workbench-iii-peps-renormalization-one` | K1 | Hatch ticks belong to the shared fused-side/lattice-genre work in #4931. |
+| `rmp-workbench-iii-peps-renormalization-one` | X | The manifest requires four edge-centred PEPS atoms that the case omits; reconcile the contract before hatch review. |
 | `rmp-workbench-iii-peps-renormalization-two` | K2 | Effective tensor, corner blocks, and fused legs are complete. |
 
 ## Sweep order
