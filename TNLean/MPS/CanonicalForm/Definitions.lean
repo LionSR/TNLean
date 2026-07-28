@@ -100,7 +100,7 @@ uniqueness alone does not exclude eigenvalues of norm greater than one.
 
 This predicate is intentionally *weaker* than the TNLean strong predicate
 `MPSTensor.IsCanonicalFormSepAux.IsNormalCanonicalForm` (it does not require
-left-canonical normalization, weight ordering, or positive bond dimension).
+left-canonical normalization or weight ordering).
 -/
 structure IsNormalTensor (A : MPSTensor d D) : Prop where
   /-- (i) no nontrivial invariant orthogonal projection. -/
@@ -113,6 +113,24 @@ structure IsNormalTensor (A : MPSTensor d D) : Prop where
         (transferMap (d := d) (D := D) A)) = 1
   /-- (ii-b) the associated CPM has no unit-modulus eigenvalue other than one. -/
   primitive_transfer : _root_.IsPrimitive (transferMap (d := d) (D := D) A)
+
+/-- A normal tensor has nonzero bond dimension.
+
+Indeed, at bond dimension zero the matrix space, and hence its continuous
+endomorphism algebra, is subsingleton. The transfer operator is therefore zero
+and has spectral radius zero, contradicting the spectral-radius-one clause in
+arXiv:1606.00608, lines 233--235. -/
+theorem IsNormalTensor.bondDim_ne_zero {A : MPSTensor d D} (h : IsNormalTensor A) :
+    D ≠ 0 := by
+  intro hD
+  subst D
+  have hMap :
+      ((Module.End.toContinuousLinearMap (Matrix (Fin 0) (Fin 0) ℂ))
+        (transferMap (d := d) (D := 0) A)) = 0 :=
+    Subsingleton.elim _ _
+  have hspectral := h.spectral_radius_one
+  rw [hMap, spectrum.spectralRadius_zero] at hspectral
+  exact zero_ne_one hspectral
 
 /-- Every tensor of bond dimension one is irreducible: the only orthogonal
 projections on its one-dimensional bond space are zero and the identity. -/

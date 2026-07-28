@@ -527,21 +527,26 @@ ambient bond space.
     \lean{MPSTensor.IsNormalTensor.isTransferIdempotent_iff_isIsometryCanonicalForm}
     \leanok
     \uses{def:nt_cpsv, def:mps_transfer_idempotence,
-        def:is_isometry_canonical_form}
-    A normal tensor of positive bond dimension is a renormalization fixed point
-    if and only if it has the square-root fixed-point form of
-    Definition~\ref{def:is_isometry_canonical_form}. No left-canonical
-    hypothesis is imposed on the original tensor. This is the corrected form
-    of Lemma~B.1 in \cite[Appendix~B, lines~1274--1301]{Cirac2016MPDO_arXiv}.
+        def:is_isometry_canonical_form, thm:cpsv_normal_bond_dim_pos}
+    A normal tensor is a renormalization fixed point if and only if it has the
+    square-root fixed-point form of
+    Definition~\ref{def:is_isometry_canonical_form}. Its bond dimension is
+    necessarily positive, rather than subject to an additional hypothesis, and
+    no left-canonical hypothesis is imposed on the original tensor. This is the
+    corrected form of Lemma~B.1 in
+    \cite[Appendix~B, lines~1274--1301]{Cirac2016MPDO_arXiv}.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{thm:cpsv_normal_tp_gauge, thm:cpsv_normal_eventually_injective,
-        thm:gauge_invariance_normal, lem:rfp_parent_gauge_invariance,
+    \uses{thm:cpsv_normal_bond_dim_pos, thm:cpsv_normal_tp_gauge,
+        thm:cpsv_normal_eventually_injective, thm:gauge_invariance_normal,
+        lem:rfp_parent_gauge_invariance,
         lem:isometry_canonical_form_gauge_invariant,
         thm:isometry_canonical_form_of_rfp_nt,
         thm:is_rfp_of_isometry_canonical_form}
-    For the forward implication, choose the pure trace-preserving Perron gauge
-    from Theorem~\ref{thm:cpsv_normal_tp_gauge}. Idempotence and algebraic
+    Normality first gives positive bond dimension by
+    Theorem~\ref{thm:cpsv_normal_bond_dim_pos}. For the forward implication,
+    choose the pure trace-preserving Perron gauge from
+    Theorem~\ref{thm:cpsv_normal_tp_gauge}. Idempotence and algebraic
     normality are invariant under this gauge, so
     Theorem~\ref{thm:isometry_canonical_form_of_rfp_nt} gives the square-root
     form for the gauged tensor. Lemma~\ref{lem:isometry_canonical_form_gauge_invariant}

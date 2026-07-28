@@ -47,8 +47,9 @@ BNT elements.\footnote{Local source:
 \section{Formal boundary}
 
 The single-normal-tensor characterization is formalized under the exact source
-hypotheses.  If $A$ has positive bond dimension and is normal in the sense of
-CPSV16, then
+hypotheses.  If $A$ is normal in the sense of CPSV16, then its bond dimension
+is necessarily positive by
+\leanid{MPSTensor.IsNormalTensor.bondDim_ne_zero}, and one has
 \begin{align}
   A\text{ is a renormalization fixed point}
   \quad\Longleftrightarrow\quad
@@ -261,9 +262,9 @@ $\sum_\alpha\rho_{\alpha,\alpha}=\tr\rho$ for the diagonal fixed point.
 
 The left-canonical forward theorem
 \leanid{MPSTensor.isIsometryCanonicalForm_of_rfp_nt} proves this form for the
-Perron representative.  Gauge invariance then proves that every
-positive-bond-dimension normal tensor is a renormalization fixed point if and
-only if it admits the displayed square-root form, with no left-canonical
+Perron representative.  Gauge invariance then proves that every normal tensor
+is a renormalization fixed point if and only if it admits the displayed
+square-root form, with no bond-dimension or left-canonical
 hypothesis on the original tensor.  This is
 \leanid{MPSTensor.IsNormalTensor.isTransferIdempotent_iff_isIsometryCanonicalForm}.
 
@@ -485,8 +486,9 @@ unit pair-index convention the residual tensor satisfies
 \]
 while the contracted identity is instead
 $\sum_i (U_k^i)^\dagger U_k^i=D_k I$.  Thus the scalar normalization comparison
-is explicit.  For every positive-bond-dimension normal tensor, transfer
-idempotence is now equivalent to the trace-normalized square-root form by
+is explicit.  For every normal tensor, whose bond dimension is necessarily
+positive, transfer idempotence is now equivalent to the trace-normalized
+square-root form by
 \leanid{MPSTensor.IsNormalTensor.isTransferIdempotent_iff_isIsometryCanonicalForm}.
 The diagonal weight is
 $\Lambda_\alpha=\rho_{\alpha,\alpha}/\tr\rho$, and $\sqrt\Lambda$ dresses the
