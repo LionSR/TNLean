@@ -50,7 +50,7 @@ hash-pinned visual check required before changing a verdict.
 | `rmp-ii-spectrum-transfer` | K3 | Supply the shared designed tail idiom for the two fixed-point tails. |
 | `rmp-ii-spectrum-fixed-points` | K2 | The relation is recorded as corrected; re-review as faithful. |
 | `rmp-ii-blocking` | K2 | Case, manifest, and fixture metadata now agree; no residue is named. |
-| `rmp-ii-staircase` | K3 | Improve mirrored layout and the V-glyph aspect at the family level. |
+| `rmp-ii-staircase` | X | Re-audit the vertically mirrored source orientation before treating the V-glyph aspect as cosmetic. |
 | `rmp-ii-circuit` | K2 | The compact doubling tree carries the complete eight-output identity. |
 | `rmp-ii-ortho-left` | K2 | Thin house wires versus bold source wires are intentional styling. |
 | `rmp-ii-boundary-lasso` | K1 | Species hue is a shared theme property, not a case-local colour patch. |
@@ -71,7 +71,7 @@ hash-pinned visual check required before changing a verdict.
 | `rmp-iii-a-ghz-tensor` | K2 | Copy dot versus labelled box and diagonal angle are equivalent house forms. |
 | `rmp-iii-a-hadamard` | X | Its ledger pairing is `wrong-source`; repair and verify the source mapping before judging the explicit label. |
 | `rmp-iii-a-spt-mpo` | K2 | The string, action boxes, and measured-leg crossings are complete. |
-| `rmp-iii-a-spt-intertwiner` | K2 | Mirrored equivalent ordering and glyph scale are house presentation. |
+| `rmp-iii-a-spt-intertwiner` | X | The open fusion map has no trace cyclicity; restore the source factor order before reviewing glyph scale. |
 | `rmp-iii-a-g-injective-projector` | X | Its ledger pairing is `wrong-source`; repair the projector source mapping before any verdict promotion. |
 | `rmp-iii-a-mpo-action` | K3 | Restore a graceful diagonal physical-leg route. |
 | `rmp-iii-a-mpo-injective` | K1 | Hatching and semantic hue are shared renderer/theme properties. |
@@ -99,7 +99,7 @@ hash-pinned visual check required before changing a verdict.
 | `rmp-iv-intersection-lhs-four` | K2 | A horizontal free identity wire is equivalent to the source U-route. |
 | `rmp-iv-intersection-rhs-four` | K2 | The five open ends match and the spurious crossing is absent. |
 | `rmp-iv-intersection-lhs-five` | K2 | Sideways stubs preserve the restored three-leg boundary. |
-| `rmp-iv-intersection-rhs-five` | K2 | Mirroring preserves the equivalent C--X contraction. |
+| `rmp-iv-intersection-rhs-five` | X | Re-audit the mirrored open C--X contraction before accepting it as equivalent routing. |
 | `rmp-iv-intersection-lhs-six` | X | The ledger records `wrong-contraction`; move it out of `cosmetic-gap` before fixing the invented lattice. |
 | `rmp-iv-intersection-rhs-six` | X | The ledger records `wrong-contraction`; move it out of `cosmetic-gap` before fixing the invented lattice. |
 | `rmp-app-czx-state` | K2 | Lighter enclosure fill is a public-theme choice. |
