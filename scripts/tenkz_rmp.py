@@ -130,12 +130,41 @@ DEFECT_KINDS = (
 # Structural capability tags map one-to-one onto public constructs; a tag
 # without its construct in the case body is manifest drift, not judgment.
 STRUCTURAL_CAPABILITY_PATTERNS = {
+    "kernel": re.compile(r"\\tenkzkernel\b"),
     "grid": re.compile(r"\\begin\{tenkz\}|\\tnpic\b"),
     "lattice": re.compile(r"\\begin\{tenkzlattice\}|\\begin\{tenkzplanes\}"),
     "lattice-preset": re.compile(r"\\begin\{tenkzplanes\}"),
     "free-graph": re.compile(r"\\begin\{tenkzfree\}"),
     "fusion-tree": re.compile(r"\\tntree\b|\\begin\{tenkzcd\}"),
 }
+
+
+def structural_capability_problems(
+    target_id: str, capabilities: Sequence[str], body: str
+) -> list[str]:
+    """Return construct-witness and model-owner contradictions."""
+    problems: list[str] = []
+    kernel_body = bool(STRUCTURAL_CAPABILITY_PATTERNS["kernel"].search(body))
+    if kernel_body and "kernel" not in capabilities:
+        problems.append(
+            f"{target_id}: \\tenkzkernel owns the picture model but capability "
+            "'kernel' is missing"
+        )
+    if kernel_body and "grid" in capabilities:
+        problems.append(
+            f"{target_id}: capability tag 'grid' names the nested renderer of a "
+            "\\tenkzkernel picture; use the exclusive owner tag 'kernel'"
+        )
+    for capability in capabilities:
+        pattern = STRUCTURAL_CAPABILITY_PATTERNS.get(capability)
+        if pattern is not None and not pattern.search(body):
+            problems.append(
+                f"{target_id}: capability tag {capability!r} has no matching "
+                "construct in the case body (manifest drift)"
+            )
+    return problems
+
+
 # Statuses that already concede the figure is not a faithful reproduction;
 # automatic defect detection demands consistency from the rest.
 CONCEDING_STATUSES = {"structural-gap", "unfaithful", "blocked"}
@@ -1017,14 +1046,9 @@ def validate_verdict_consistency(targets: Sequence[Target], verdicts: dict[str, 
                     "declares diagram ink; record defects=[\"text-substitution\"] or a "
                     "conceding status"
                 )
-        # Structural capability tags must be witnessed by their construct.
-        for capability in target.capabilities:
-            pattern = STRUCTURAL_CAPABILITY_PATTERNS.get(capability)
-            if pattern is not None and not pattern.search(body):
-                problems.append(
-                    f"{target.id}: capability tag {capability!r} has no matching "
-                    "construct in the case body (manifest drift)"
-                )
+        problems.extend(
+            structural_capability_problems(target.id, target.capabilities, body)
+        )
     if problems:
         fail("verdict consistency failed:\n" + "\n".join(problems))
 

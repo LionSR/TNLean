@@ -87,6 +87,10 @@ Generated PDFs and PNGs are build artifacts, not committed source.
 
 - Each figure states `Formula`, `Ink`, `Boundary`, `Source`, and
   `Capabilities` in its source header where the corpus format requires them.
+- Structural capability tags name the public construct that owns the picture
+  model. A `\tenkzkernel` case therefore carries `kernel`, even when its
+  renderer contains a nested `tenkz` environment; `grid` is reserved for the
+  grid surface without the kernel wrapper.
 - A diagrammatic equation has the intended boundary signature on both sides.
 - A matrix keeps two open virtual indices, a doubled-space map keeps four,
   and a scalar keeps none.
