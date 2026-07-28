@@ -232,7 +232,7 @@ private theorem recoveredAmbientBipartiteBlockEquiv_symm_apply_support
 
 /-- Applying a conjugation to the second matrix factor is conjugation by the
 identity-tensored rectangular matrix. -/
-private theorem idTensorMap_conjugation
+theorem RecoveredConditionalDilationInternal.idTensorMap_conjugation
     {δ : Type*} [Fintype δ] [DecidableEq δ]
     {α β : Type*} [Fintype α]
     (Z : Matrix β α ℂ)
@@ -343,13 +343,15 @@ private theorem one_kronecker_zero_extension_eq
       idTensorMapLM T_Z R =
         ((1 : Matrix (Fin dA) (Fin dA) ℂ) ⊗ₖ Z) * R *
           ((1 : Matrix (Fin dA) (Fin dA) ℂ) ⊗ₖ Z)ᴴ := by
-    simpa only [T_Z] using idTensorMap_conjugation Z R
+    simpa only [T_Z] using RecoveredConditionalDilationInternal.idTensorMap_conjugation Z R
   have hconjU :
       idTensorMapLM T_U (idTensorMapLM E R) =
         ((1 : Matrix (Fin dA) (Fin dA) ℂ) ⊗ₖ U_B) *
           idTensorMapLM E R *
           ((1 : Matrix (Fin dA) (Fin dA) ℂ) ⊗ₖ U_B)ᴴ := by
-    simpa only [T_U] using idTensorMap_conjugation U_B (idTensorMapLM E R)
+    simpa only [T_U] using
+      RecoveredConditionalDilationInternal.idTensorMap_conjugation
+        U_B (idTensorMapLM E R)
   have htensorComp :
       idTensorMapLM (T_U.comp E) R =
         idTensorMapLM T_U (idTensorMapLM E R) := by

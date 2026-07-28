@@ -9,7 +9,7 @@
 
 \title{Support scope of the HJPW product-reference Petz factorization}
 \author{}
-\date{2026-07-26}
+\date{2026-07-28}
 
 \begin{document}
 \maketitle
@@ -174,16 +174,22 @@ with one-dimensional zero-weight complement sectors. One chosen
 pure-ancilla unitary now realizes the recovery-dilation block action of
 equation~(15), agrees with the Petz operation on the joint support, and
 produces normalized supported-sector states with the prescribed common-factor
-marginals. Transporting those states into the tripartite direct sum and
-assembling the quantum-Markov form remain open. The singular-support
-equality-to-raw-recovery implication is now formalized by the projected
-finite-Weyl argument and transported to arbitrary finite product coordinates.
+marginals. Equations~(11), (14), and~(15) now imply
+\begin{align}
+  W^\dagger\rho_{ABC}W
+  =0_\perp\oplus\bigoplus_j\omega_j\otimes\widehat\rho_j,
+\end{align}
+where $W=\mathbf 1_A\otimes(U_B\otimes\mathbf 1_C)$. The supported blocks are
+written in HJPW order $(A B_j^L)\otimes(B_j^R C)$, and every complementary
+block is zero. This identity is formalized by
+\leanid{Matrix.RecoveredConditionalDilationBlockForm.ambient_tripartite_block_form}.
+The singular-support equality-to-raw-recovery implication is now formalized by
+the projected finite-Weyl argument on arbitrary finite product coordinates.
 For density operators, support agreement upgrades this equality to the chosen
 completed partial-trace Petz channel on the recovered marginal. This does not
 give a tensor-product factorization of the generic completed singular channel.
-Tripartite sector-state transport and quantum-Markov assembly are the
-remaining structural obstructions to replacing the forward Hayashi
-strong-subadditivity equality assumption used in the CPSV16 argument.
+Probability normalization, zero-weight sector choices, the final quantum-Markov
+decomposition, and removal of the forward Hayashi assumption remain open.
 
 \section{Common invariant algebra: formalized under an explicit full-support hypothesis}
 
@@ -317,10 +323,17 @@ extra source hypothesis. The declaration
 \leanid{Matrix.exists_recoveredDilationBlockUnitary} proves equation~(15)
 for one chosen pure-ancilla unitary, together with supported Petz agreement,
 the exact recovery identity, and normalized recovered states on the supported
-common-factor sectors. Transporting these states into the tripartite direct
-sum, assembling the generic quantum-Markov decomposition, and eliminating the
-external assumption for the forward Hayashi strong-subadditivity implication
-remain open.
+common-factor sectors. The declaration
+\leanid{Matrix.RecoveredConditionalDilationBlockForm.ambient_tripartite_block_form}
+then combines equations~(11), (14), and~(15). With
+$W=\mathbf 1_A\otimes(U_B\otimes\mathbf 1_C)$, it proves
+\begin{align}
+  W^\dagger\rho_{ABC}W
+  =0_\perp\oplus\bigoplus_j\omega_j\otimes\widehat\rho_j
+\end{align}
+in HJPW factor order. Probability normalization, zero-weight sector choices,
+the generic quantum-Markov decomposition, and removal of the external forward
+assumption remain open.
 
 \section{Classification}
 
@@ -359,9 +372,11 @@ a direct sum of tensor factors on all of $H_B$, using one-dimensional
 zero-weight sectors on the orthogonal complement, and proves the full
 bipartite equation~(14). The chosen recovery-dilation block action of
 equation~(15), its supported Petz agreement, and normalized recovered
-supported-sector states are also formalized. Tripartite sector-state transport,
-quantum-Markov assembly, and the generic Hayashi forward implication remain
-open as sequential steps.
+supported-sector states are also formalized. The unnormalized ambient
+tripartite state now has zero complementary blocks and supported blocks
+$\omega_j\otimes\widehat\rho_j$ in HJPW factor order. Probability normalization,
+zero-weight sector choices, the quantum-Markov decomposition, and the generic
+Hayashi forward implication remain open.
 
 \begin{thebibliography}{9}
 

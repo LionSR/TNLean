@@ -152,7 +152,6 @@ private theorem fixedEnvEmbedding_conjTranspose_mul_self
   · have hts : t ≠ s := fun h => hst h.symm
     simp [fixedEnvEmbedding, Matrix.one_apply, hst, hts]
 
-@[simp]
 private theorem mul_fixedEnvEmbedding_apply
     {S E : Type*} [Fintype S] [DecidableEq S]
     [Fintype E] [DecidableEq E]
@@ -548,7 +547,7 @@ theorem RecoveredConditionalDilationInternal.supportReconstruction_mul_unitary
 
 /-- Entrywise supported-sector action of a dependent block dilation on a
 fixed pure environment input. -/
-private theorem blockDilation_fixedEnv_apply_support
+theorem RecoveredConditionalDilationInternal.blockDilation_fixedEnv_apply_support
     {z K dB dC r : ℕ} {m d : Fin K → ℕ}
     (eB : ((s : AmbientRecoveredBlockIndex z K) ×
       (Fin (ambientRecoveredCommonDim m s) ×
@@ -615,7 +614,7 @@ private theorem blockDilation_fixedEnv_apply_support
 
 /-- Different supported sectors do not mix under the dependent block
 dilation. -/
-private theorem blockDilation_fixedEnv_apply_support_ne
+theorem RecoveredConditionalDilationInternal.blockDilation_fixedEnv_apply_support_ne
     {z K dB dC r : ℕ} {m d : Fin K → ℕ}
     (eB : ((s : AmbientRecoveredBlockIndex z K) ×
       (Fin (ambientRecoveredCommonDim m s) ×
@@ -663,9 +662,48 @@ private theorem blockDilation_fixedEnv_apply_support_ne
   exact Matrix.blockDiagonal'_apply_ne _ _ _
     (fun h ↦ hjj' (Sum.inr.inj h))
 
+/-- Supported rows do not receive a complementary input under the dependent
+block dilation. -/
+theorem RecoveredConditionalDilationInternal.blockDilation_fixedEnv_apply_support_complement
+    {z K dB dC r : ℕ} {m d : Fin K → ℕ}
+    (eB : ((s : AmbientRecoveredBlockIndex z K) ×
+      (Fin (ambientRecoveredCommonDim m s) ×
+        Fin (ambientRecoveredConditionalDim d s))) ≃ Fin dB)
+    (c₀ : Fin dC) (k₀ : Fin r)
+    (Ulocal : ∀ s : AmbientRecoveredBlockIndex z K,
+      Matrix
+        (Fin (ambientRecoveredCommonDim m s) × (Fin dC × Fin r))
+        (Fin (ambientRecoveredCommonDim m s) × (Fin dC × Fin r)) ℂ)
+    (j : Fin K) (u : Fin (m j)) (v : Fin (d j))
+    (c : Fin dC) (i : Fin r) (z₀ : Fin z) (u' v' : Fin 1) :
+    let eD := dilationBlockEquiv (E := Fin dC × Fin r) eB
+    let Ublocks := Matrix.reindex eD eD
+      (Matrix.blockDiagonal' fun s ↦
+        Ulocal s ⊗ₖ
+          (1 : Matrix (Fin (ambientRecoveredConditionalDim d s))
+            (Fin (ambientRecoveredConditionalDim d s)) ℂ))
+    (Ublocks * fixedEnvEmbedding (S := Fin dB) (c₀, k₀))
+        (eB ⟨Sum.inr j, (u, v)⟩, (c, i))
+        (eB ⟨Sum.inl z₀, (u', v')⟩) = 0 := by
+  classical
+  dsimp only
+  rw [mul_fixedEnvEmbedding_apply]
+  let eD := dilationBlockEquiv (E := Fin dC × Fin r) eB
+  have hout :
+      (eB ⟨Sum.inr j, (u, v)⟩, (c, i)) =
+        eD ⟨Sum.inr j, ((u, (c, i)), v)⟩ := by rfl
+  have hin :
+      (eB ⟨Sum.inl z₀, (u', v')⟩, (c₀, k₀)) =
+        eD ⟨Sum.inl z₀, ((u', (c₀, k₀)), v')⟩ := by rfl
+  rw [hout, hin]
+  dsimp only [eD]
+  simp only [Matrix.reindex_apply, Matrix.submatrix_apply,
+    Equiv.symm_apply_apply]
+  exact Matrix.blockDiagonal'_apply_ne _ _ _ Sum.inr_ne_inl
+
 /-- Complement rows do not receive a supported input under the dependent
 block dilation. -/
-private theorem blockDilation_fixedEnv_apply_complement_support
+theorem RecoveredConditionalDilationInternal.blockDilation_fixedEnv_apply_complement_support
     {z K dB dC r : ℕ} {m d : Fin K → ℕ}
     (eB : ((s : AmbientRecoveredBlockIndex z K) ×
       (Fin (ambientRecoveredCommonDim m s) ×
