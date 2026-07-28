@@ -1945,12 +1945,15 @@ algebra of a family of jointly invariant states.
     \begin{align}
         U_{BCE}
         =
-        \bigoplus_j U_j\otimes\mathbf 1_{b_j^R}.
+        \bigoplus_j \mathbf 1_{b_j^L}\otimes U_j.
     \end{align}
     On every supported sector, $U_j$ dilates a trace-preserving completely
-    positive map that sends $\sigma_j$ to a state on $b_j^L C$ whose
-    $b_j^L$ marginal is $\sigma_j$. The resulting state is positive and has
+    positive map from $b_j^R$ to $b_j^R C$ that sends $\sigma_j$ to a state
+    whose $b_j^R$ marginal is $\sigma_j$. The resulting state is positive and has
     trace one.
+    TNLean stores each sector in the reverse coordinate order from HJPW, so
+    the corresponding Lean block matrix is
+    $U_j\otimes\mathbf 1_{b_j^L}$.
 
     The recovery operation determined by the chosen unitary agrees with the
     Petz recovery operation on every operator supported by the minimum joint
@@ -1974,7 +1977,7 @@ algebra of a family of jointly invariant states.
     Choose rectangular Kraus operators for the Petz recovery operation and
     slice them along subsystem $C$. On the minimum joint supporting
     subspace, Property~$2'$ makes every slice block diagonal with the identity
-    on $b_j^R$, while the induced operation on $b_j^L$ fixes $\sigma_j$.
+    on $b_j^L$, while the induced operation on $b_j^R$ fixes $\sigma_j$.
     Extend each sector Stinespring isometry from the same fixed pure ancilla
     vector to a unitary. Their direct sum gives the block-coordinate unitary;
     conjugating by the ambient change of basis gives the physical unitary.
