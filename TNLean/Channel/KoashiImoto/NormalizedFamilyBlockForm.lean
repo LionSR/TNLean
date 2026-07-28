@@ -19,10 +19,12 @@ This is the full-support specialization of HJPW, arXiv:quant-ph/0304007v2, Prope
 the normalized state decomposition at lines 857--858.  The action of preserving operations
 on the common factors, beginning at line 860, is not included.
 
-## Main declaration
+## Main declarations
 
-* `Kraus.exists_commonInvariant_normalizedStateBlockForm`: a common direct-sum tensor
-  decomposition with member-dependent probability weights and density matrices.
+* `Kraus.exists_commonInvariant_normalizedStateBlockForm_with_algebra`: the common
+  invariant algebra and normalized family in the same coordinates.
+* `Kraus.exists_commonInvariant_normalizedStateBlockForm`: the corresponding state-only
+  result.
 
 **Scope restriction (full support):** The common average is assumed positive definite on the
 ambient space, in place of HJPW's reduction to the joint support (lines 761--763).  This is
@@ -55,7 +57,7 @@ chosen to be maximally mixed; HJPW does not specify this irrelevant choice.
 **Scope restriction (full support):** `hρbar` replaces HJPW's joint-support reduction
 (lines 761--763).  Documented in
 `docs/paper-gaps/hjpw04_petz_factorization_maximally_mixed_scope.tex`. -/
-theorem exists_commonInvariant_normalizedStateBlockForm
+theorem exists_commonInvariant_normalizedStateBlockForm_with_algebra
     {Kidx : Type*} [Fintype Kidx] [Nonempty Kidx] {ρ : Kidx → Mat}
     (hρpos : ∀ x, (ρ x).PosSemidef) (hρtrace : ∀ x, (ρ x).trace = 1)
     (hρbar : (commonAverage ρ).PosDef) :
@@ -69,13 +71,19 @@ theorem exists_commonInvariant_normalizedStateBlockForm
         (∀ j, (σ j).PosSemidef) ∧ (∀ j, (σ j).trace = 1) ∧
         (∀ x j, 0 ≤ q x j) ∧ (∀ x, ∑ j, q x j = 1) ∧
         (∀ x j, (τ x j).PosSemidef) ∧ (∀ x j, (τ x j).trace = 1) ∧
+        (∀ A : Mat, A ∈ commonInvariantStarSubalgebra ρ hρbar ↔
+          ∃ Y : ∀ j, Matrix (Fin (d j)) (Fin (d j)) ℂ,
+            star U * A * U =
+              Matrix.reindex e e
+                (Matrix.blockDiagonal' fun j ↦
+                  (1 : Matrix (Fin (m j)) (Fin (m j)) ℂ) ⊗ₖ Y j)) ∧
         ∀ x, star U * ρ x * U =
           Matrix.reindex e e
             (Matrix.blockDiagonal' fun j ↦
               (q x j : ℂ) • (σ j ⊗ₖ τ x j)) := by
   classical
-  obtain ⟨K, d, m, e, U, σ, hU, hd, hm, hσpos, hσtrace, hfamily⟩ :=
-    exists_commonInvariant_fixedPointBlockForm hρbar
+  obtain ⟨K, d, m, e, U, σ, hU, hd, hm, hσpos, hσtrace, hAlgebra, hfamily⟩ :=
+    exists_commonInvariant_fixedPointBlockForm_with_algebra hρbar
   choose X hXform using hfamily
   have hXpos : ∀ x j, (X x j).PosSemidef := by
     intro x j
@@ -130,7 +138,7 @@ theorem exists_commonInvariant_normalizedStateBlockForm
     intro x j
     exact Matrix.normalizePosSemidef_trace ⟨0, hd j⟩ (hXpos x j)
   refine ⟨K, d, m, e, U, σ, q, τ, hU, hd, hm, hσpos, hσtrace,
-    hqnonneg, hqsum, hτpos, hτtrace, ?_⟩
+    hqnonneg, hqsum, hτpos, hτtrace, hAlgebra, ?_⟩
   intro x
   rw [hXform x]
   apply congrArg (Matrix.reindex e e)
@@ -141,5 +149,33 @@ theorem exists_commonInvariant_normalizedStateBlockForm
         σ j ⊗ₖ ((q x j : ℂ) • τ x j) := by
       rw [Matrix.trace_re_smul_normalizePosSemidef ⟨0, hd j⟩ (hXpos x j)]
     _ = (q x j : ℂ) • (σ j ⊗ₖ τ x j) := Matrix.kronecker_smul _ _ _
+
+/-- **Normalized state-block form of a full-support invariant family.**
+
+This is the state-only projection of
+`exists_commonInvariant_normalizedStateBlockForm_with_algebra`. -/
+theorem exists_commonInvariant_normalizedStateBlockForm
+    {Kidx : Type*} [Fintype Kidx] [Nonempty Kidx] {ρ : Kidx → Mat}
+    (hρpos : ∀ x, (ρ x).PosSemidef) (hρtrace : ∀ x, (ρ x).trace = 1)
+    (hρbar : (commonAverage ρ).PosDef) :
+    ∃ (K : ℕ) (d m : Fin K → ℕ)
+      (e : ((j : Fin K) × (Fin (m j) × Fin (d j))) ≃ Fin D)
+      (U : Mat) (σ : ∀ j, Matrix (Fin (m j)) (Fin (m j)) ℂ)
+      (q : Kidx → Fin K → ℝ)
+      (τ : Kidx → ∀ j, Matrix (Fin (d j)) (Fin (d j)) ℂ),
+      U ∈ Matrix.unitaryGroup (Fin D) ℂ ∧
+        (∀ j, 0 < d j) ∧ (∀ j, 0 < m j) ∧
+        (∀ j, (σ j).PosSemidef) ∧ (∀ j, (σ j).trace = 1) ∧
+        (∀ x j, 0 ≤ q x j) ∧ (∀ x, ∑ j, q x j = 1) ∧
+        (∀ x j, (τ x j).PosSemidef) ∧ (∀ x j, (τ x j).trace = 1) ∧
+        ∀ x, star U * ρ x * U =
+          Matrix.reindex e e
+            (Matrix.blockDiagonal' fun j ↦
+              (q x j : ℂ) • (σ j ⊗ₖ τ x j)) := by
+  obtain ⟨K, d, m, e, U, σ, q, τ, hU, hd, hm, hσpos, hσtrace,
+      hqnonneg, hqsum, hτpos, hτtrace, -, hfamily⟩ :=
+    exists_commonInvariant_normalizedStateBlockForm_with_algebra hρpos hρtrace hρbar
+  exact ⟨K, d, m, e, U, σ, q, τ, hU, hd, hm, hσpos, hσtrace,
+    hqnonneg, hqsum, hτpos, hτtrace, hfamily⟩
 
 end Kraus

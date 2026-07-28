@@ -74,6 +74,41 @@ theorem unitaryReindexLinearEquiv_symm_apply
   simp [unitaryReindexLinearEquiv, Unitary.toUnits,
     Matrix.symm_reindexLinearEquiv, Matrix.coe_reindexLinearEquiv, Matrix.mul_assoc]
 
+@[simp]
+theorem unitaryReindexLinearEquiv_one
+    {n H : Type*} [Fintype n] [DecidableEq n] [Fintype H] [DecidableEq H]
+    (e : H ≃ n) (U : Matrix n n ℂ) (hU : U ∈ Matrix.unitaryGroup n ℂ) :
+    unitaryReindexLinearEquiv e U hU 1 = 1 := by
+  rw [unitaryReindexLinearEquiv_apply, Matrix.mul_one,
+    Matrix.mem_unitaryGroup_iff'.mp hU]
+  exact Matrix.reindexLinearEquiv_one ℂ ℂ e.symm
+
+theorem unitaryReindexLinearEquiv_mul
+    {n H : Type*} [Fintype n] [DecidableEq n] [Fintype H] [DecidableEq H]
+    (e : H ≃ n) (U : Matrix n n ℂ) (hU : U ∈ Matrix.unitaryGroup n ℂ)
+    (A B : Matrix n n ℂ) :
+    unitaryReindexLinearEquiv e U hU (A * B) =
+      unitaryReindexLinearEquiv e U hU A *
+        unitaryReindexLinearEquiv e U hU B := by
+  rw [unitaryReindexLinearEquiv_apply, unitaryReindexLinearEquiv_apply,
+    unitaryReindexLinearEquiv_apply]
+  have hUright : U * star U = 1 := Matrix.mem_unitaryGroup_iff.mp hU
+  have hconj : star U * (A * B) * U =
+      (star U * A * U) * (star U * B * U) := by
+    calc
+      star U * (A * B) * U = star U * A * (U * star U) * B * U := by
+        rw [hUright]
+        simp only [Matrix.mul_one, Matrix.mul_assoc]
+      _ = (star U * A * U) * (star U * B * U) := by
+        simp only [Matrix.mul_assoc]
+  calc
+    Matrix.reindex e.symm e.symm (star U * (A * B) * U) =
+        Matrix.reindex e.symm e.symm
+          ((star U * A * U) * (star U * B * U)) := congrArg _ hconj
+    _ = Matrix.reindex e.symm e.symm (star U * A * U) *
+        Matrix.reindex e.symm e.symm (star U * B * U) :=
+      (Matrix.reindexLinearEquiv_mul ℂ ℂ e.symm e.symm e.symm _ _).symm
+
 /-- The inverse unitary block-coordinate change is adjoint to the forward
 change under the bilinear trace pairing:
 $\operatorname{tr}(\Phi^{-1}(X)A)=\operatorname{tr}(X\Phi(A))$. -/

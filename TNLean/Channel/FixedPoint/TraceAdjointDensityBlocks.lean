@@ -22,11 +22,13 @@ matrix-factor index.  Thus the left partial trace is over the multiplicity
 factor, and the Schrödinger-picture summand has the form
 $\sigma_k\otimes M_{d_k}(\mathbb C)$.
 
-## Main result
+## Main results
 
+* `IsPositiveMap.exists_block_densities_of_meanErgodicProjection_with_adjoint`:
+  the full-support density-block form in the same coordinates as the
+  trace-adjoint fixed-point algebra.
 * `IsPositiveMap.exists_block_densities_of_meanErgodicProjection`: the
-  full-support density-block form of the Cesàro projection and of the fixed
-  points.
+  corresponding Schrödinger-picture statement.
 
 ## References
 
@@ -106,7 +108,7 @@ complementary zero summand are completed in
 the opposite order.  Each summand is indexed by
 `Fin (m k) × Fin (d k)`, so `Matrix.partialTraceLeft` traces the multiplicity
 factor and the density block is $\sigma_k\otimes M_{d_k}(\mathbb C)$. -/
-theorem IsPositiveMap.exists_block_densities_of_meanErgodicProjection
+theorem IsPositiveMap.exists_block_densities_of_meanErgodicProjection_with_adjoint
     {T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ}
     (hT : IsPositiveMap T) (hTP : IsTracePreservingMap T)
     (hSchwarz : IsSchwarzMap (Matrix.traceAdjointMap T))
@@ -120,6 +122,12 @@ theorem IsPositiveMap.exists_block_densities_of_meanErgodicProjection
       (σ : ∀ k, Matrix (Fin (m k)) (Fin (m k)) ℂ),
       U ∈ Matrix.unitaryGroup (Fin D) ℂ ∧
         (∀ k, 0 < d k) ∧ (∀ k, 0 < m k) ∧
+        (∀ A : Matrix (Fin D) (Fin D) ℂ,
+          Matrix.traceAdjointMap T A = A ↔
+            ∃ Y : ∀ k, Matrix (Fin (d k)) (Fin (d k)) ℂ,
+              star U * A * U = Matrix.reindex e e
+                (Matrix.blockDiagonal' fun k ↦
+                  (1 : Matrix (Fin (m k)) (Fin (m k)) ℂ) ⊗ₖ Y k)) ∧
         (∀ k, (σ k).PosSemidef) ∧ (∀ k, (σ k).trace = 1) ∧
         (∀ B, P B = U * Matrix.reindex e e
           (Matrix.blockDiagonal' fun k ↦
@@ -134,7 +142,7 @@ theorem IsPositiveMap.exists_block_densities_of_meanErgodicProjection
   let P := LinearMap.meanErgodicProjection (𝕜 := ℂ)
     (E := Matrix (Fin D) (Fin D) ℂ) T
     (hT.hasBoundedOrbits_of_tracePreserving hTP)
-  obtain ⟨K, d, m, e, U, σ, hU, hd, hm, _, hσpos, hσtrace, hFormula⟩ :=
+  obtain ⟨K, d, m, e, U, σ, hU, hd, hm, hBlock, hσpos, hσtrace, hFormula⟩ :=
     hT.exists_block_densities_of_adjoint_meanErgodicProjection hTP hSchwarz hρ hρfix
   have hPFormula : ∀ B, P B = U * Matrix.reindex e e
       (Matrix.blockDiagonal' fun k ↦
@@ -194,7 +202,7 @@ theorem IsPositiveMap.exists_block_densities_of_meanErgodicProjection
         exact (Matrix.trace_density_blockMap_mul_eq σ (Φ A) (Φ B)).symm
       _ = Matrix.trace (Φ.symm (G (Φ B)) * A) :=
         (Matrix.trace_unitaryReindexLinearEquiv_symm_mul e U hU _ _).symm
-  refine ⟨K, d, m, e, U, σ, hU, hd, hm, hσpos, hσtrace, hPFormula, ?_⟩
+  refine ⟨K, d, m, e, U, σ, hU, hd, hm, hBlock, hσpos, hσtrace, hPFormula, ?_⟩
   intro B
   let Φ := Matrix.unitaryReindexLinearEquiv e U hU
   let G : Matrix ((k : Fin K) × (Fin (m k) × Fin (d k)))
@@ -244,3 +252,39 @@ theorem IsPositiveMap.exists_block_densities_of_meanErgodicProjection
           Matrix.unitaryReindexLinearEquiv_symm_apply] using hPFormula B
       _ = Φ.symm (Φ B) := by rw [hG]
       _ = B := Φ.symm_apply_apply B
+
+/-- **Schrödinger fixed-point blocks in the coordinates of the adjoint algebra.**
+
+This is the Schrödinger-picture projection of
+`IsPositiveMap.exists_block_densities_of_meanErgodicProjection_with_adjoint`.
+It retains the established API for clients that do not need the simultaneous
+trace-adjoint fixed-point characterization. -/
+theorem IsPositiveMap.exists_block_densities_of_meanErgodicProjection
+    {T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ}
+    (hT : IsPositiveMap T) (hTP : IsTracePreservingMap T)
+    (hSchwarz : IsSchwarzMap (Matrix.traceAdjointMap T))
+    {ρ : Matrix (Fin D) (Fin D) ℂ} (hρ : ρ.PosDef) (hρfix : T ρ = ρ) :
+    let P := LinearMap.meanErgodicProjection (𝕜 := ℂ)
+      (E := Matrix (Fin D) (Fin D) ℂ) T
+      (hT.hasBoundedOrbits_of_tracePreserving hTP)
+    ∃ (K : ℕ) (d m : Fin K → ℕ)
+      (e : ((k : Fin K) × (Fin (m k) × Fin (d k))) ≃ Fin D)
+      (U : Matrix (Fin D) (Fin D) ℂ)
+      (σ : ∀ k, Matrix (Fin (m k)) (Fin (m k)) ℂ),
+      U ∈ Matrix.unitaryGroup (Fin D) ℂ ∧
+        (∀ k, 0 < d k) ∧ (∀ k, 0 < m k) ∧
+        (∀ k, (σ k).PosSemidef) ∧ (∀ k, (σ k).trace = 1) ∧
+        (∀ B, P B = U * Matrix.reindex e e
+          (Matrix.blockDiagonal' fun k ↦
+            σ k ⊗ₖ Matrix.partialTraceLeft
+              (Matrix.directSumBlockCompression (m := m) (d := d) k
+                (Matrix.reindex e.symm e.symm (star U * B * U)))) * star U) ∧
+        ∀ B, T B = B ↔
+          ∃ X : ∀ k, Matrix (Fin (d k)) (Fin (d k)) ℂ,
+            star U * B * U = Matrix.reindex e e
+              (Matrix.blockDiagonal' fun k ↦ σ k ⊗ₖ X k) := by
+  dsimp only
+  obtain ⟨K, d, m, e, U, σ, hU, hd, hm, -, hσpos, hσtrace, hFormula, hFixed⟩ :=
+    hT.exists_block_densities_of_meanErgodicProjection_with_adjoint
+      hTP hSchwarz hρ hρfix
+  exact ⟨K, d, m, e, U, σ, hU, hd, hm, hσpos, hσtrace, hFormula, hFixed⟩
