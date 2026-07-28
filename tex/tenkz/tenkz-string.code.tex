@@ -170,6 +170,20 @@
     \prop_put:Nnn \l__tenkz_string_source_prop {#1} {caller}
   }
 
+% Save a route owned by a non-string model record.  It is addressable by the
+% same arclength and crossing queries as a string, but stays out of the string
+% crossing ledger and ink pass because its owner controls both ordering and
+% rendering.
+\cs_new_protected:Npn \__tenkz_string_save_route:nn #1#2
+  {
+    \prop_if_in:NnT \l__tenkz_string_kind_prop {#1}
+      { \msg_error:nnn {tenkz}{string-redeclared} {#1} }
+    \prop_put:Nnn \l__tenkz_string_kind_prop {#1} {route}
+    \prop_put:Nnn \l__tenkz_string_source_prop {#1} {generated}
+    \__tenkz_render_save_route:nn {#1} {#2}
+  }
+\cs_generate_variant:Nn \__tenkz_string_save_route:nn { nV }
+
 % load a token list of braced pairs {x,y}{x,y}... into the point seq
 \cs_new_protected:Npn \__tenkz_string_load_pts:n #1
   {

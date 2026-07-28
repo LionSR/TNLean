@@ -1,0 +1,19 @@
+% Negative regression: generated pairing names cannot replace author names.
+\documentclass{standalone}
+\usepackage{tenkz}
+\makeatletter
+\ExplSyntaxOn
+\file_input:n { tenkz-kernel.code.tex }
+\ExplSyntaxOff
+\makeatother
+\begin{document}
+\tenkzkernel
+\tndeclare{species}{cool}{hue=source:blue}
+\tndeclare{skin}{paired}{
+  base=box,
+  pairings={90@1 > 0@1 : cool}
+}
+\begin{tenkz}[rows={wire}, cols=1, bonds=none]
+  \tn[skin=paired, name=skin-atom-1-1]{}
+\end{tenkz}
+\end{document}
