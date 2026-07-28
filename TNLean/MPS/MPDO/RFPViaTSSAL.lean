@@ -10,18 +10,18 @@ import TNLean.MPS.MPDO.RFPViaTSGlobal
 /-!
 # Saturation of the area law for MPDO renormalization fixed points
 
-This file proves the normalized BNT-refined specialization of Proposition
-`propsimple`: a matrix product density operator in normalized BNT-refined
-horizontal form satisfying the local renormalization fixed-point equations has
-source zero correlation length and saturates the area law.  The
-SAL proof first establishes the two exact finite-chain identities obtained by
-transferring one site across a bipartition, applies mutual-information data
+This file proves Proposition `propsimple` under the explicit normalization
+condition that every positive-length MPO has nonzero trace.  This condition is
+implicit in the source's density-operator language.  A normalized BNT-refined
+horizontal form supplies it as a corollary, yielding the previously exposed
+horizontal-form specialization.
+
+The SAL proof first establishes the two exact finite-chain identities obtained
+by transferring one site across a bipartition, applies mutual-information data
 processing in both directions, and then identifies bipartite mutual information
-with the chain quantity `I_L`.  Normalized BNT-refined horizontal form,
-positivity, and the fixed-point equations supply nonzero trace at every positive
-length; this horizontal hypothesis is stronger than literal CPSV canonical form,
-and simplicity
-is not used in this implication.
+with the chain quantity `I_L`.  The one-site normalization condition and the
+vertical-loop trace identities supply the nonzero transfer matrix needed for
+source ZCL.  Simplicity is not used in this implication.
 
 Source: arXiv:1606.00608, Appendix C, lines 1333--1341.  See
 `docs/paper-gaps/cpsv16_rfp_sal_data_processing.tex`.
@@ -380,29 +380,25 @@ private theorem mutualInformation_bipartition_eq_of_isRFPViaTS_of_right_eq
   exact mutualInformation_bipartition_eq_of_isRFPViaTS
     M hRFP N a b hIn hOut hM htr
 
-/-- A matrix product density operator in normalized BNT-refined horizontal
-form satisfying the local renormalization fixed-point equations saturates the
-area law.
+/-- A matrix product density operator satisfying the local renormalization
+fixed-point equations saturates the area law, provided every positive-length
+ring has nonzero trace.
 
-**Scope restriction (BNT-refined horizontal form):** The horizontal hypothesis
-`IsHorizontalCF` is stronger than the literal CPSV canonical form; see
-`docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex`.
-
-The two local channels transfer one site across a consecutive bipartition.
-Data processing in both directions gives equality of the bipartite mutual
+The nonvanishing condition is exactly the normalization condition implicit in
+the source's density-operator language: it ensures that each positive-length
+MPO can be divided by its trace.  With this normalization available, the two
+local channels transfer one site across a consecutive bipartition.  Data
+processing in both directions gives equality of the bipartite mutual
 informations, and `mutualInfoChain_eq_mutualInformation` identifies these with
-the chain quantities `I_L` and `I_{L+1}`.  Normalized BNT-refined horizontal
-form, positivity, and the fixed-point equations give the nonzero trace required
-to normalize every positive-length ring.  No empty-chain condition is used.
+the chain quantities `I_L` and `I_{L+1}`.  No empty-chain condition is used.
 
 Source: arXiv:1606.00608, Proposition `propsimple`, Appendix C,
-lines 1333--1341, under the canonical-form and density-operator standing
-assumptions at lines 623--628 and 849--850. -/
-theorem isSAL_of_isRFPViaTS (M : MPOTensor d D)
-    (hHorizontal : MPOTensor.IsHorizontalCF M) (hM : IsMPDO M)
+lines 1333--1341. -/
+theorem isSAL_of_isRFPViaTS_of_trace_ne_zero (M : MPOTensor d D)
+    (hM : IsMPDO M)
+    (hTrace : ∀ N, 0 < N → Matrix.trace (mpo M N) ≠ 0)
     (hRFP : IsRFPViaTS M) : IsSAL M := by
-  refine ⟨hM, MPOTensor.trace_mpo_ne_zero_of_isHorizontalCF_isMPDO_isRFPViaTS
-    M hHorizontal hM hRFP, ?_⟩
+  refine ⟨hM, hTrace, ?_⟩
   intro N L hL hHalf
   obtain ⟨a, rfl⟩ := Nat.exists_eq_succ_of_ne_zero (by omega : L ≠ 0)
   let b := N - (a + 1) - 2
@@ -413,8 +409,7 @@ theorem isSAL_of_isRFPViaTS (M : MPOTensor d D)
   clear_value b
   subst N
   have hNpos : 0 < N₀ := by omega
-  have htr := MPOTensor.trace_mpo_ne_zero_of_isHorizontalCF_isMPDO_isRFPViaTS
-    M hHorizontal hM hRFP N₀ hNpos
+  have htr := hTrace N₀ hNpos
   have hKIn : N₀ - (a + 1) = b + 2 := by
     dsimp [N₀]
     omega
@@ -447,17 +442,63 @@ theorem isSAL_of_isRFPViaTS (M : MPOTensor d D)
         (hHalf.trans_le (Nat.div_le_self N₀ 2)) (hM N₀ hNpos)).symm
 
 /-- A matrix product density operator in normalized BNT-refined horizontal
-form satisfying the local renormalization fixed-point equations has zero
-correlation length and saturates the area law.
+form satisfying the local renormalization fixed-point equations saturates the
+area law.
+
+Normalized BNT-refined horizontal form supplies the nonzero positive-length
+traces that are implicit in the source's density-operator language.  The SAL
+argument itself is `isSAL_of_isRFPViaTS_of_trace_ne_zero`.
 
 **Scope restriction (BNT-refined horizontal form):** The horizontal hypothesis
 `IsHorizontalCF` is stronger than the literal CPSV canonical form; see
 `docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex`.
 
-Under this normalized BNT-refined horizontal hypothesis, the theorem specializes
-Proposition `propsimple` of arXiv:1606.00608. The nonzero physical-trace transfer
-required by source ZCL is derived from the nonzero
-one-site ring; it is not an additional hypothesis.
+Source: arXiv:1606.00608, Proposition `propsimple`, Appendix C,
+lines 1333--1341, under the canonical-form and density-operator standing
+assumptions at lines 623--628 and 849--850. -/
+theorem isSAL_of_isRFPViaTS (M : MPOTensor d D)
+    (hHorizontal : MPOTensor.IsHorizontalCF M) (hM : IsMPDO M)
+    (hRFP : IsRFPViaTS M) : IsSAL M := by
+  exact isSAL_of_isRFPViaTS_of_trace_ne_zero M hM
+    (trace_mpo_ne_zero_of_isHorizontalCF_isMPDO_isRFPViaTS
+      M hHorizontal hM hRFP) hRFP
+
+/-- A matrix product density operator satisfying the local renormalization
+fixed-point equations has source zero correlation length and saturates the area
+law, provided every positive-length ring has nonzero trace.
+
+Nonzero positive-length traces are the normalization condition implicit in the
+source's density-operator language.  The one-site instance, together with the
+vertical-loop trace identities, makes the physical trace-transfer matrix
+nonzero and hence yields source ZCL.  The full family normalizes the rings used
+in the area-law argument.
+
+Source: arXiv:1606.00608, Proposition `propsimple`, Appendix C,
+lines 1333--1341. -/
+theorem isSourceZCL_and_isSAL_of_isRFPViaTS_of_trace_ne_zero
+    (M : MPOTensor d D) (hM : IsMPDO M)
+    (hTrace : ∀ N, 0 < N → Matrix.trace (mpo M N) ≠ 0)
+    (hRFP : IsRFPViaTS M) : IsSourceZCL M ∧ IsSAL M := by
+  have hTransfer : physTraceTransfer M ≠ 0 := by
+    intro hZero
+    apply hTrace 1 Nat.zero_lt_one
+    rw [trace_mpo_eq_trace_verticalLoop_pow, verticalLoop_eq_physTraceTransfer, hZero]
+    simp
+  exact ⟨isSourceZCL_of_isRFPViaTS M hRFP hTransfer,
+    isSAL_of_isRFPViaTS_of_trace_ne_zero M hM hTrace hRFP⟩
+
+/-- A matrix product density operator in normalized BNT-refined horizontal
+form satisfying the local renormalization fixed-point equations has source zero
+correlation length and saturates the area law.
+
+Normalized BNT-refined horizontal form supplies the nonzero positive-length
+traces that are implicit in the source's density-operator language.  Source ZCL
+and SAL then follow from
+`isSourceZCL_and_isSAL_of_isRFPViaTS_of_trace_ne_zero`.
+
+**Scope restriction (BNT-refined horizontal form):** The horizontal hypothesis
+`IsHorizontalCF` is stronger than the literal CPSV canonical form; see
+`docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex`.
 
 Source: arXiv:1606.00608, Proposition `propsimple`, Appendix C,
 lines 1333--1341, under the canonical-form and density-operator standing
@@ -465,15 +506,8 @@ assumptions at lines 623--628 and 849--850. -/
 theorem isSourceZCL_and_isSAL_of_isRFPViaTS (M : MPOTensor d D)
     (hHorizontal : MPOTensor.IsHorizontalCF M) (hM : IsMPDO M)
     (hRFP : IsRFPViaTS M) : IsSourceZCL M ∧ IsSAL M := by
-  have hTrace :=
-    trace_mpo_ne_zero_of_isHorizontalCF_isMPDO_isRFPViaTS
-      M hHorizontal hM hRFP 1 Nat.zero_lt_one
-  have hTransfer : physTraceTransfer M ≠ 0 := by
-    intro hZero
-    apply hTrace
-    rw [trace_mpo_eq_trace_verticalLoop_pow, verticalLoop_eq_physTraceTransfer, hZero]
-    simp
-  exact ⟨isSourceZCL_of_isRFPViaTS M hRFP hTransfer,
-    isSAL_of_isRFPViaTS M hHorizontal hM hRFP⟩
+  exact isSourceZCL_and_isSAL_of_isRFPViaTS_of_trace_ne_zero M hM
+    (trace_mpo_ne_zero_of_isHorizontalCF_isMPDO_isRFPViaTS
+      M hHorizontal hM hRFP) hRFP
 
 end MPOTensor
