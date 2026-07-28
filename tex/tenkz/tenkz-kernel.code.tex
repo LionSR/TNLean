@@ -84,6 +84,9 @@
 \msg_new:nnn {tenkz}{kernel-name-collision}
   { [TKZ-LANG-NAME-COLLISION]~generated~name~'#1'~already~belongs~to~
     record~#2 }
+\msg_new:nnn {tenkz}{kernel-name-reserved}
+  { [TKZ-LANG-NAME-RESERVED]~name~'#1'~is~reserved~by~the~address~grammar~
+    (record~#2). }
 \msg_new:nnn {tenkz}{kernel-skin-cluster}
   { [TKZ-SKIN-PAIRING-CLUSTER]~declared~skin~'#1'~carries~pairings,~
     but~cluster~carrier~#2~is~a~group~with~no~glyph~or~own~ports. }
@@ -856,8 +859,16 @@
     \prop_get:NnN \l__tenkz_kernel_stage_prop {name} \l__tenkz_kernel_scratch_tl
     \quark_if_no_value:NF \l__tenkz_kernel_scratch_tl
       {
-        \prop_put:NeV \l__tenkz_kernel_named_prop
-          { \tl_use:N \l__tenkz_kernel_scratch_tl } \l__tenkz_model_last_tl
+        \str_if_eq:VnTF \l__tenkz_kernel_scratch_tl {self}
+          {
+            \msg_error:nnee {tenkz}{kernel-name-reserved}
+              {self} { \tl_use:N \l__tenkz_model_last_tl }
+          }
+          {
+            \prop_put:NeV \l__tenkz_kernel_named_prop
+              { \tl_use:N \l__tenkz_kernel_scratch_tl }
+              \l__tenkz_model_last_tl
+          }
       }
     \prop_clear:N \l__tenkz_kernel_stage_prop
   }
@@ -2126,8 +2137,12 @@
 \prop_new:N \l__tenkz_kernel_r_legref_prop    % leg path id -> referencing wire id
 \prop_new:N \l__tenkz_kernel_r_legdrawn_prop  % leg path id -> deferred (saved)
 \prop_new:N \l__tenkz_kernel_r_species_prop   % species word -> hue
-\prop_new:N \l__tenkz_kernel_r_skin_over_string_prop
-\clist_new:N \l__tenkz_kernel_r_skin_over_string_clist
+\prop_new:N \l__tenkz_kernel_r_sid_record_prop
+\prop_new:N \l__tenkz_kernel_r_index_style_prop
+\prop_new:N \l__tenkz_kernel_r_index_join_prop
+\prop_new:N \l__tenkz_kernel_r_skin_over_wire_prop
+\clist_new:N \l__tenkz_kernel_r_skin_over_wire_clist
+\seq_new:N  \l__tenkz_kernel_r_index_routes_seq
 \seq_new:N  \l__tenkz_kernel_r_strings_seq    % string wire record ids
 \seq_new:N  \l__tenkz_kernel_r_after_atom_seq % physical traces need glyph borders
 \int_new:N  \l__tenkz_kernel_r_rows_int
@@ -2139,6 +2154,11 @@
 \tl_new:N   \l__tenkz_kernel_r_col_tl
 \tl_new:N   \l__tenkz_kernel_r_pts_tl
 \tl_new:N   \l__tenkz_kernel_r_sid_tl
+\tl_new:N   \l__tenkz_kernel_r_wire_record_tl
+\tl_new:N   \l__tenkz_kernel_r_touch_a_tl
+\tl_new:N   \l__tenkz_kernel_r_touch_b_tl
+\tl_new:N   \l__tenkz_kernel_r_touch_c_tl
+\tl_new:N   \l__tenkz_kernel_r_touch_d_tl
 \tl_new:N   \l__tenkz_kernel_r_hue_tl
 \tl_new:N   \l__tenkz_kernel_r_species_tl
 \tl_new:N   \l__tenkz_kernel_r_species_descriptor_tl
@@ -4432,8 +4452,16 @@
   {
     \tl_set:Ne \l__tenkz_kernel_r_wire_style_tl
       { #1 , \tl_use:N \l__tenkz_kernel_r_wire_ink_tl }
-    \exp_args:NV \__tenkz_render_stroke:nn
-      \l__tenkz_kernel_r_wire_style_tl {#2}
+    \exp_args:NV \__tenkz_kernel_r_sid:nN
+      \l__tenkz_kernel_r_wire_record_tl \l__tenkz_kernel_r_sid_tl
+    \exp_args:NV \__tenkz_string_save_route:nn
+      \l__tenkz_kernel_r_sid_tl {#2}
+    \prop_put:NVV \l__tenkz_kernel_r_sid_record_prop
+      \l__tenkz_kernel_r_sid_tl \l__tenkz_kernel_r_wire_record_tl
+    \prop_put:NVV \l__tenkz_kernel_r_index_style_prop
+      \l__tenkz_kernel_r_wire_record_tl \l__tenkz_kernel_r_wire_style_tl
+    \seq_put_right:NV \l__tenkz_kernel_r_index_routes_seq
+      \l__tenkz_kernel_r_wire_record_tl
   }
 \cs_new_protected:Npn \__tenkz_kernel_r_wire_queue:n #1
   {
@@ -4443,6 +4471,7 @@
   }
 \cs_new_protected:Npn \__tenkz_kernel_r_wire:n #1
   {
+    \tl_set:Nn \l__tenkz_kernel_r_wire_record_tl {#1}
     \__tenkz_model_get:nnN {#1} {kind} \l__tenkz_kernel_r_tl
     \str_if_eq:VnTF \l__tenkz_kernel_r_tl {string}
       { }
@@ -5986,22 +6015,22 @@
       {
         \exp_args:NVV \__tenkz_string_under:nn
           \l__tenkz_kernel_r_b_tl \l__tenkz_kernel_r_sid_tl
-        \exp_args:NVV \__tenkz_kernel_r_pairing_over_string:nn
+        \exp_args:NVV \__tenkz_kernel_r_pairing_over_wire:nn
           \l__tenkz_kernel_r_b_tl \l__tenkz_kernel_r_sid_tl
       }
       {
         \exp_args:NVV \__tenkz_string_under:nn
           \l__tenkz_kernel_r_sid_tl \l__tenkz_kernel_r_b_tl
-        \exp_args:NVV \__tenkz_kernel_r_pairing_over_string:nn
+        \exp_args:NVV \__tenkz_kernel_r_pairing_over_wire:nn
           \l__tenkz_kernel_r_sid_tl \l__tenkz_kernel_r_b_tl
       }
   }
-\cs_new_protected:Npn \__tenkz_kernel_r_pairing_over_string:nn #1#2
+\cs_new_protected:Npn \__tenkz_kernel_r_pairing_over_wire:nn #1#2
   {
     % Crossing surgery is symmetric in its declaration owner: once the
     % resolved under path is a generated pairing and the over path is an
-    % ordinary string, the opaque host must redraw that string locally.
-    \prop_get:NnN \l__tenkz_kernel_named_prop {#1}
+    % ordinary wire, the opaque host must redraw that wire locally.
+    \prop_get:NnN \l__tenkz_kernel_r_sid_record_prop {#1}
       \l__tenkz_kernel_r_c_tl
     \quark_if_no_value:NF \l__tenkz_kernel_r_c_tl
       {
@@ -6012,44 +6041,44 @@
           {
             \tl_set_eq:NN \l__tenkz_kernel_r_b_tl
               \l__tenkz_kernel_r_c_tl
-            \prop_get:NnN \l__tenkz_kernel_named_prop {#2}
+            \prop_get:NnN \l__tenkz_kernel_r_sid_record_prop {#2}
               \l__tenkz_kernel_r_c_tl
             \quark_if_no_value:NF \l__tenkz_kernel_r_c_tl
               {
                 \__tenkz_model_get:nnN
                   { \l__tenkz_kernel_r_c_tl } {kind}
                   \l__tenkz_kernel_scratch_tl
-                \str_if_eq:VnT \l__tenkz_kernel_scratch_tl {string}
+                \str_if_eq:VnF \l__tenkz_kernel_scratch_tl {pairing}
                   {
                     \__tenkz_model_get:nnN
                       { \l__tenkz_kernel_r_b_tl } {host}
                       \l__tenkz_kernel_scratch_tl
                     \prop_get:NVN
-                      \l__tenkz_kernel_r_skin_over_string_prop
+                      \l__tenkz_kernel_r_skin_over_wire_prop
                       \l__tenkz_kernel_scratch_tl \l__tenkz_kernel_r_c_tl
                     \quark_if_no_value:NTF \l__tenkz_kernel_r_c_tl
                       {
                         \prop_put:NVn
-                          \l__tenkz_kernel_r_skin_over_string_prop
+                          \l__tenkz_kernel_r_skin_over_wire_prop
                           \l__tenkz_kernel_scratch_tl
                           {#2}
                       }
                       {
                         \clist_set:NV
-                          \l__tenkz_kernel_r_skin_over_string_clist
+                          \l__tenkz_kernel_r_skin_over_wire_clist
                           \l__tenkz_kernel_r_c_tl
                         \clist_if_in:NnF
-                          \l__tenkz_kernel_r_skin_over_string_clist {#2}
+                          \l__tenkz_kernel_r_skin_over_wire_clist {#2}
                           {
                             \clist_put_right:Nn
-                              \l__tenkz_kernel_r_skin_over_string_clist
+                              \l__tenkz_kernel_r_skin_over_wire_clist
                               {#2}
                             \prop_put:NVx
-                              \l__tenkz_kernel_r_skin_over_string_prop
+                              \l__tenkz_kernel_r_skin_over_wire_prop
                               \l__tenkz_kernel_scratch_tl
                               {
                                 \exp_not:V
-                                  \l__tenkz_kernel_r_skin_over_string_clist
+                                  \l__tenkz_kernel_r_skin_over_wire_clist
                               }
                           }
                       }
@@ -6099,13 +6128,22 @@
 
 \cs_new_protected:Npn \__tenkz_kernel_r_strings:
   {
-    \prop_clear:N \l__tenkz_kernel_r_skin_over_string_prop
+    \prop_clear:N \l__tenkz_kernel_r_skin_over_wire_prop
     % The graph fixes the order in which curves are routed: one whose end is a
     % tensor waits for that tensor, and one whose end is a tensor standing on
     % another curve waits for that curve first.
     \seq_map_inline:Nn \l__tenkz_kernel_r_strings_seq
       { \__tenkz_kernel_settle:n {##1} }
     \seq_map_inline:Nn \l__tenkz_kernel_r_strings_seq
+      {
+        \__tenkz_kernel_r_sid:nN {##1} \l__tenkz_kernel_r_sid_tl
+        \prop_put:NVn \l__tenkz_kernel_r_sid_record_prop
+          \l__tenkz_kernel_r_sid_tl {##1}
+      }
+    \__tenkz_kernel_r_index_joins:
+    \seq_map_inline:Nn \l__tenkz_kernel_r_strings_seq
+      { \__tenkz_kernel_r_crossings:n {##1} }
+    \seq_map_inline:Nn \l__tenkz_kernel_r_index_routes_seq
       { \__tenkz_kernel_r_crossings:n {##1} }
     \seq_map_inline:Nn \l__tenkz_kernel_r_skin_routes_seq
       { \__tenkz_kernel_r_crossings:n {##1} }
@@ -6113,7 +6151,10 @@
       { ! \seq_if_empty_p:N \l__tenkz_string_ids_seq }
       { ! \prop_if_empty_p:N \l__tenkz_kernel_r_legdrawn_prop }
       { \__tenkz_string_resolve: }
-    % gapped legs first (they sit under), then the strings, species-hued
+    % Ordinary index wires retain their original first ink pass, now using
+    % the crossing-policed saved path.  Gapped legs and strings follow.
+    \seq_map_inline:Nn \l__tenkz_kernel_r_index_routes_seq
+      { \__tenkz_kernel_r_index_route:n {##1} }
     \prop_map_inline:Nn \l__tenkz_kernel_r_legdrawn_prop
       { \__tenkz_render_string:nn {##1} { draw = tenkzInk } }
     \seq_map_inline:Nn \l__tenkz_kernel_r_strings_seq
@@ -6125,6 +6166,223 @@
           \l__tenkz_kernel_r_sid_tl
           \l__tenkz_kernel_r_wire_ink_tl
       }
+  }
+
+\cs_new_protected:Npn \__tenkz_kernel_r_index_joins:
+  {
+    \prop_clear:N \l__tenkz_kernel_r_index_join_prop
+    \seq_map_inline:Nn \l__tenkz_kernel_r_index_routes_seq
+      {
+        \tl_set:Nn \l__tenkz_kernel_r_wire_record_tl {##1}
+        \__tenkz_kernel_r_sid:nN {##1} \l__tenkz_kernel_r_sid_tl
+        \seq_map_inline:Nn \l__tenkz_string_ids_seq
+          {
+            \str_if_eq:VnF \l__tenkz_kernel_r_sid_tl {####1}
+              {
+                \prop_if_in:NeF \l__tenkz_kernel_r_index_join_prop
+                  { \l__tenkz_kernel_r_sid_tl / ####1 }
+                  {
+                    \prop_put:Nen \l__tenkz_kernel_r_index_join_prop
+                      { \l__tenkz_kernel_r_sid_tl / ####1 } {seen}
+                    \prop_put:Nen \l__tenkz_kernel_r_index_join_prop
+                      { ####1 / \l__tenkz_kernel_r_sid_tl } {seen}
+                    \tl_set:Nn \l__tenkz_kernel_r_b_tl {####1}
+                    \prop_get:NnN \l__tenkz_kernel_r_sid_record_prop {####1}
+                      \l__tenkz_kernel_r_c_tl
+                    \quark_if_no_value:NTF \l__tenkz_kernel_r_c_tl
+                      {
+                        \exp_args:NVV \__tenkz_string_touch:nn
+                          \l__tenkz_kernel_r_sid_tl
+                          \l__tenkz_kernel_r_b_tl
+                      }
+                      {
+                        \__tenkz_model_get:nnN
+                          { \l__tenkz_kernel_r_c_tl } {kind}
+                          \l__tenkz_kernel_scratch_tl
+                        \str_if_eq:VnTF
+                          \l__tenkz_kernel_scratch_tl {pairing}
+                          {
+                            \exp_args:NVV
+                              \__tenkz_kernel_r_wires_share_port:nnTF
+                              \l__tenkz_kernel_r_wire_record_tl
+                              \l__tenkz_kernel_r_c_tl
+                              {
+                                \exp_args:NVV \__tenkz_string_touch:nn
+                                  \l__tenkz_kernel_r_sid_tl
+                                  \l__tenkz_kernel_r_b_tl
+                              }
+                              {
+                                \exp_args:NVV
+                                  \__tenkz_string_endpoint_meeting:nnTF
+                                  \l__tenkz_kernel_r_sid_tl
+                                  \l__tenkz_kernel_r_b_tl
+                                  {
+                                    \exp_args:NVV \__tenkz_string_join:nn
+                                      \l__tenkz_kernel_r_sid_tl
+                                      \l__tenkz_kernel_r_b_tl
+                                  }
+                                  { }
+                              }
+                          }
+                          {
+                            \exp_args:NVV \__tenkz_string_touch:nn
+                              \l__tenkz_kernel_r_sid_tl
+                              \l__tenkz_kernel_r_b_tl
+                          }
+                      }
+                  }
+              }
+          }
+      }
+  }
+
+\prg_new_protected_conditional:Npnn
+  \__tenkz_kernel_r_wires_share_port:nn #1#2 {T,F,TF}
+  {
+    \bool_set_false:N \l_tmpa_bool
+    % An ordinary index ending on the pairing's carrier is attached to that
+    % carrier, even when grid sugar represented the end by its occupied cell
+    % rather than by an explicit port node.
+    \__tenkz_model_get:nnN {#2} {host} \l__tenkz_kernel_r_touch_c_tl
+    \quark_if_no_value:NF \l__tenkz_kernel_r_touch_c_tl
+      {
+        \__tenkz_model_get:nnN
+          { \l__tenkz_kernel_r_touch_c_tl } {node}
+          \l__tenkz_kernel_r_touch_d_tl
+        \clist_map_inline:nn {from,to}
+          {
+            \__tenkz_model_get:nnN {#1} {##1}
+              \l__tenkz_kernel_r_touch_a_tl
+            \quark_if_no_value:NF \l__tenkz_kernel_r_touch_a_tl
+              {
+                \str_case:en
+                  {
+                    \__tenkz_kernel_node_item:Nn
+                      \l__tenkz_kernel_r_touch_a_tl {kind}
+                  }
+                  {
+                    {port}
+                      {
+                        \exp_args:NV \__tenkz_kernel_r_port_record:nN
+                          \l__tenkz_kernel_r_touch_a_tl
+                          \l__tenkz_kernel_r_touch_b_tl
+                        \str_if_eq:VVT
+                          \l__tenkz_kernel_r_touch_b_tl
+                          \l__tenkz_kernel_r_touch_c_tl
+                          { \bool_set_true:N \l_tmpa_bool }
+                      }
+                    {cell}
+                      {
+                        \bool_lazy_and:nnT
+                          {
+                            \str_if_eq_p:ee
+                              {
+                                \__tenkz_kernel_r_item:nn
+                                  { \l__tenkz_kernel_r_touch_a_tl } {row}
+                              }
+                              {
+                                \__tenkz_kernel_r_item:nn
+                                  { \l__tenkz_kernel_r_touch_d_tl } {row}
+                              }
+                          }
+                          {
+                            \str_if_eq_p:ee
+                              {
+                                \__tenkz_kernel_r_item:nn
+                                  { \l__tenkz_kernel_r_touch_a_tl } {col}
+                              }
+                              {
+                                \__tenkz_kernel_r_item:nn
+                                  { \l__tenkz_kernel_r_touch_d_tl } {col}
+                              }
+                          }
+                          { \bool_set_true:N \l_tmpa_bool }
+                      }
+                  }
+              }
+          }
+      }
+    \clist_map_inline:nn {from,to}
+      {
+        \__tenkz_model_get:nnN {#1} {##1} \l__tenkz_kernel_r_touch_a_tl
+        \quark_if_no_value:NF \l__tenkz_kernel_r_touch_a_tl
+          {
+            \clist_map_inline:nn {from,to}
+              {
+                \__tenkz_model_get:nnN {#2} {####1}
+                  \l__tenkz_kernel_r_touch_b_tl
+                \quark_if_no_value:NF \l__tenkz_kernel_r_touch_b_tl
+                  {
+                    \str_if_eq:eeT
+                      {
+                        \__tenkz_kernel_node_item:Nn
+                          \l__tenkz_kernel_r_touch_a_tl {kind}
+                      }
+                      {port}
+                      {
+                        \str_if_eq:eeT
+                          {
+                            \__tenkz_kernel_node_item:Nn
+                              \l__tenkz_kernel_r_touch_b_tl {kind}
+                          }
+                          {port}
+                          {
+                            \exp_args:NV \__tenkz_kernel_r_port_record:nN
+                              \l__tenkz_kernel_r_touch_a_tl
+                              \l__tenkz_kernel_r_touch_c_tl
+                            \exp_args:NV \__tenkz_kernel_r_port_record:nN
+                              \l__tenkz_kernel_r_touch_b_tl
+                              \l__tenkz_kernel_r_touch_d_tl
+                            \bool_lazy_and:nnT
+                              {
+                                \str_if_eq_p:VV
+                                  \l__tenkz_kernel_r_touch_c_tl
+                                  \l__tenkz_kernel_r_touch_d_tl
+                              }
+                              {
+                                \str_if_eq_p:ee
+                                  {
+                                    \__tenkz_kernel_r_item:nn
+                                      { \l__tenkz_kernel_r_touch_a_tl } {face}
+                                  }
+                                  {
+                                    \__tenkz_kernel_r_item:nn
+                                      { \l__tenkz_kernel_r_touch_b_tl } {face}
+                                  }
+                              }
+                              {
+                                \str_if_eq:eeT
+                                  {
+                                    \__tenkz_kernel_r_item:nn
+                                      { \l__tenkz_kernel_r_touch_a_tl } {slot}
+                                  }
+                                  {
+                                    \__tenkz_kernel_r_item:nn
+                                      { \l__tenkz_kernel_r_touch_b_tl } {slot}
+                                  }
+                                  { \bool_set_true:N \l_tmpa_bool }
+                              }
+                          }
+                      }
+                  }
+              }
+          }
+      }
+    \bool_if:NTF \l_tmpa_bool { \prg_return_true: } { \prg_return_false: }
+  }
+
+\cs_new_protected:Npn \__tenkz_kernel_r_index_route:n #1
+  {
+    \__tenkz_kernel_r_sid:nN {#1} \l__tenkz_kernel_r_sid_tl
+    \prop_get:NnN \l__tenkz_kernel_r_index_style_prop {#1}
+      \l__tenkz_kernel_r_wire_style_tl
+    \tl_set:Ne \l__tenkz_kernel_r_wire_style_tl
+      {
+        spath/use = { \tl_use:N \l__tenkz_kernel_r_sid_tl } ,
+        \tl_use:N \l__tenkz_kernel_r_wire_style_tl
+      }
+    \exp_args:NV \__tenkz_render_stroke:nn
+      \l__tenkz_kernel_r_wire_style_tl { }
   }
 
 % ---------- atom ink -----------------------------------------------------------------------------
@@ -6259,7 +6517,7 @@
                   }
                   { \phantom { $ \cdots $ } }
                 \__tenkz_kernel_r_skin_wires:n {#1}
-                \__tenkz_kernel_r_skin_over_strings:n {#1}
+                \__tenkz_kernel_r_skin_over_wires:n {#1}
                 \__tenkz_kernel_r_dots_label:n {#1}
               }
               {
@@ -6340,7 +6598,7 @@
                   { dot } {#1} { } \l__tenkz_kernel_r_atom_style_tl
               }
             \__tenkz_kernel_r_skin_wires:n {#1}
-            \__tenkz_kernel_r_skin_over_strings:n {#1}
+            \__tenkz_kernel_r_skin_over_wires:n {#1}
             \quark_if_no_value:NF \l__tenkz_kernel_r_species_tl
               {
                 \__tenkz_kernel_r_hue:nN {#1}
@@ -6600,6 +6858,8 @@
     \exp_args:NVV \__tenkz_string_save_route:nn
       \l__tenkz_kernel_r_skin_wire_name_tl
       \l__tenkz_kernel_scratch_tl
+    \prop_put:NVn \l__tenkz_kernel_r_sid_record_prop
+      \l__tenkz_kernel_r_skin_wire_name_tl {#1}
     \__tenkz_kernel_r_skin_wire_order:n {#1}
   }
 
@@ -6805,14 +7065,14 @@
       { \tl_use:N \l__tenkz_kernel_r_b_tl }
       { \__tenkz_kernel_r_skin_wire:n {#1} }
   }
-\cs_new_protected:Npn \__tenkz_kernel_r_skin_over_strings:n #1
+\cs_new_protected:Npn \__tenkz_kernel_r_skin_over_wires:n #1
   {
-    \prop_get:NnN \l__tenkz_kernel_r_skin_over_string_prop {#1}
+    \prop_get:NnN \l__tenkz_kernel_r_skin_over_wire_prop {#1}
       \l__tenkz_kernel_r_tl
     \quark_if_no_value:NF \l__tenkz_kernel_r_tl
       {
-        % The opaque base is drawn after the ordinary string pass.  Redraw
-        % only the declared over-strand, clipped to this host's measured box,
+        % The opaque base is drawn after the ordinary wire pass.  Redraw only
+        % the declared over-strand, clipped to this host's measured box,
         % so its order at every unrelated atom on the same route is unchanged.
         \begin{scope}
           \clip
@@ -6821,19 +7081,42 @@
             (#1.north~east) --
             (#1.north~west) -- cycle;
           \exp_args:NV \clist_map_inline:nn \l__tenkz_kernel_r_tl
-            {
-              \prop_get:NnN \l__tenkz_kernel_named_prop {##1}
-                \l__tenkz_kernel_r_c_tl
-              \quark_if_no_value:NF \l__tenkz_kernel_r_c_tl
-                {
-                  \exp_args:NV \__tenkz_kernel_r_wire_ink:nN
-                    \l__tenkz_kernel_r_c_tl
-                    \l__tenkz_kernel_r_wire_ink_tl
-                  \exp_args:NnV \__tenkz_render_string:nn
-                    {##1} \l__tenkz_kernel_r_wire_ink_tl
-                }
-            }
+            { \__tenkz_kernel_r_skin_over_wire:n {##1} }
         \end{scope}
+      }
+  }
+\cs_new_protected:Npn \__tenkz_kernel_r_skin_over_wire:n #1
+  {
+    \prop_get:NnN \l__tenkz_kernel_r_sid_record_prop {#1}
+      \l__tenkz_kernel_r_c_tl
+    \quark_if_no_value:NF \l__tenkz_kernel_r_c_tl
+      {
+        \__tenkz_model_get:nnN
+          { \l__tenkz_kernel_r_c_tl } {kind} \l__tenkz_kernel_scratch_tl
+        \str_case:Vn \l__tenkz_kernel_scratch_tl
+          {
+            {string}
+              {
+                \exp_args:NV \__tenkz_kernel_r_wire_ink:nN
+                  \l__tenkz_kernel_r_c_tl
+                  \l__tenkz_kernel_r_wire_ink_tl
+                \exp_args:NnV \__tenkz_render_string:nn
+                  {#1} \l__tenkz_kernel_r_wire_ink_tl
+              }
+            {index}
+              {
+                \prop_get:NVN \l__tenkz_kernel_r_index_style_prop
+                  \l__tenkz_kernel_r_c_tl
+                  \l__tenkz_kernel_r_wire_style_tl
+                \tl_set:Ne \l__tenkz_kernel_r_wire_style_tl
+                  {
+                    spath/use = {#1} ,
+                    \tl_use:N \l__tenkz_kernel_r_wire_style_tl
+                  }
+                \exp_args:NV \__tenkz_render_stroke:nn
+                  \l__tenkz_kernel_r_wire_style_tl { }
+              }
+          }
       }
   }
 
@@ -6914,7 +7197,7 @@
           }
       }
     \__tenkz_kernel_r_skin_wires:n {#1}
-    \__tenkz_kernel_r_skin_over_strings:n {#1}
+    \__tenkz_kernel_r_skin_over_wires:n {#1}
     \prop_if_in:NnT \l__tenkz_kernel_skin_pairing_host_prop {#1}
       { \__tenkz_kernel_r_skin_label:n {#1} }
   }
@@ -7243,6 +7526,10 @@
     \prop_clear:N \l__tenkz_kernel_r_placed_prop
     \prop_clear:N \l__tenkz_kernel_r_legdrawn_prop
     \prop_clear:N \l__tenkz_kernel_r_species_prop
+    \prop_clear:N \l__tenkz_kernel_r_sid_record_prop
+    \prop_clear:N \l__tenkz_kernel_r_index_style_prop
+    \prop_clear:N \l__tenkz_kernel_r_index_join_prop
+    \seq_clear:N \l__tenkz_kernel_r_index_routes_seq
     \seq_clear:N \l__tenkz_kernel_r_strings_seq
     \seq_clear:N \l__tenkz_kernel_r_skin_routes_seq
     \seq_clear:N \l__tenkz_kernel_r_after_atom_seq
@@ -7518,8 +7805,7 @@
           }
       }
       {
-        \msg_error:nnee {tenkz}{kernel-render-todo}
-          { malformed~skin~pairing~'#2' } {#1}
+        \msg_error:nne {tenkz}{kernel-skin-pairings-parse} {#1}
       }
   }
 \cs_new_protected:Npn \__tenkz_kernel_skin_pairing_end:nnnn #1#2#3#4
