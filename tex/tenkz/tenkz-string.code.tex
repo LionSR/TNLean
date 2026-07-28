@@ -68,6 +68,7 @@
 \prop_new:N \l__tenkz_string_source_prop     % id -> caller|generated
 \seq_new:N \l__tenkz_string_cross_seq        % {under}{over} pairs
 \seq_new:N \l__tenkz_string_join_seq         % unordered endpoint joins
+\seq_new:N \l__tenkz_string_touch_seq        % shared semantic wire ports
 \seq_new:N \l__tenkz_string_gap_ids_seq      % under paths awaiting one gap pass
 \seq_new:N \l__tenkz_string_self_gap_ids_seq % self paths awaiting branch gap
 \seq_new:N \l__tenkz_string_processed_seq    % directed crossing pairs split
@@ -141,6 +142,7 @@
     \prop_clear:N \l__tenkz_string_source_prop
     \seq_clear:N \l__tenkz_string_cross_seq
     \seq_clear:N \l__tenkz_string_join_seq
+    \seq_clear:N \l__tenkz_string_touch_seq
     \seq_clear:N \l__tenkz_string_gap_ids_seq
     \seq_clear:N \l__tenkz_string_self_gap_ids_seq
     \seq_clear:N \l__tenkz_string_processed_seq
@@ -429,6 +431,13 @@
     \prop_if_in:NnF \l__tenkz_string_kind_prop {#2}
       { \msg_error:nnn {tenkz}{string-unknown} {#2} }
     \seq_put_right:Nn \l__tenkz_string_join_seq { {#1} {#2} }
+  }
+
+% Two model wires may share a semantic port while their measured ink paths
+% overlap near the glyph border.  That attachment is topology, not a crossing.
+\cs_new_protected:Npn \__tenkz_string_touch:nn #1#2
+  {
+    \seq_put_right:Nn \l__tenkz_string_touch_seq { {#1} {#2} }
   }
 
 % intersection count of two saved paths through the pgf engine
@@ -1115,6 +1124,16 @@
       }
   }
 \cs_new_protected:Npn \__tenkz_string_police_pair:nn #1#2
+  {
+    \bool_set_false:N \l_tmpa_bool
+    \seq_if_in:NnT \l__tenkz_string_touch_seq { {#1} {#2} }
+      { \bool_set_true:N \l_tmpa_bool }
+    \seq_if_in:NnT \l__tenkz_string_touch_seq { {#2} {#1} }
+      { \bool_set_true:N \l_tmpa_bool }
+    \bool_if:NF \l_tmpa_bool
+      { \__tenkz_string_police_pair_cross:nn {#1} {#2} }
+  }
+\cs_new_protected:Npn \__tenkz_string_police_pair_cross:nn #1#2
   {
     \int_zero:N \l__tenkz_string_n_int
     \seq_map_inline:Nn \l__tenkz_string_cross_seq

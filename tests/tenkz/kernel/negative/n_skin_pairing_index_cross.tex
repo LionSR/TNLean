@@ -1,0 +1,21 @@
+\documentclass{standalone}
+\usepackage{tenkz}
+\makeatletter
+\ExplSyntaxOn
+\file_input:n { tenkz-kernel.code.tex }
+\ExplSyntaxOff
+\makeatother
+\begin{document}
+\tenkzkernel
+\tndeclare{species}{warm}{hue=source:red}
+\tndeclare{skin}{crossed}{
+  base=box,
+  pairings={w@1 > e@1 : warm}
+}
+\begin{tenkz}[rows={wire,wire,wire}, cols=1, bonds=none]
+  \tn[at=(2,1), skin=crossed]{}
+  \tn[at=(1,1), name=top, skin=none, void=sealed]{}
+  \tn[at=(3,1), name=bottom, skin=none, void=sealed]{}
+  \tnwire[name=index-probe]{top}{bottom}
+\end{tenkz}
+\end{document}

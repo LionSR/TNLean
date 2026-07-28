@@ -231,7 +231,7 @@ grep -Fq 'TENKZ-HULL-BOX-POOL=1' "$WORK/r_hull_live.tex.transcript" || {
 skin_pairing_count=$(
   grep -c '^wire.*|origin=skin|' "$WORK/k_skin_pairings.tnlog" || true
 )
-[ "$skin_pairing_count" -eq 24 ] || {
+[ "$skin_pairing_count" -eq 25 ] || {
   echo "FAIL: declared skin pairings were not materialized as WIRE records" >&2
   exit 1
 }
@@ -256,9 +256,14 @@ grep -Fq 'stringcross|under=skin-atom-1-1|over=probe-b|hits=1' \
   echo "FAIL: a second indexed crossing was split from its pairing" >&2
   exit 1
 }
-grep -Fq 'stringcross|under=skin-atom-1-1|over=turn-probe|hits=1' \
+grep -Eq 'stringcross\|under=skin-atom-1-1\|over=wire-[0-9]+\|hits=1' \
   "$WORK/k_skin_pairings.tnlog" || {
-  echo "FAIL: a string-owned crossing missed its turned pairing host" >&2
+  echo "FAIL: an unnamed string-owned crossing missed its turned pairing host" >&2
+  exit 1
+}
+grep -Fq 'stringcross|under=skin-atom-1-1|over=index-probe|hits=1' \
+  "$WORK/k_skin_pairings.tnlog" || {
+  echo "FAIL: an index/pairing crossing missed the shared path ledger" >&2
   exit 1
 }
 grep -Fq 'stringcross|under=skin-atom-1-1|over=skin-atom-1-3|hits=1' \
@@ -618,6 +623,7 @@ grep -Fq '[TKZ-SKIN-PAIRING-CLUSTER]' \
 
 for pairing_negative in \
   n_skin_pairings_parse \
+  n_skin_pairing_item_parse \
   n_skin_pairing_cross_parse \
   n_skin_pairing_cross_index; do
   source="$KERNEL/negative/$pairing_negative.tex"
@@ -632,6 +638,11 @@ done
 grep -Fq '[TKZ-SKIN-PAIRING-PARSE]' \
   "$WORK/n_skin_pairings_parse.transcript" || {
   echo "FAIL: malformed pairings= lacked TKZ-SKIN-PAIRING-PARSE" >&2
+  exit 1
+}
+grep -Fq '[TKZ-SKIN-PAIRING-PARSE]' \
+  "$WORK/n_skin_pairing_item_parse.transcript" || {
+  echo "FAIL: a malformed pairing item lacked TKZ-SKIN-PAIRING-PARSE" >&2
   exit 1
 }
 grep -Fq '[TKZ-SKIN-PAIRING-CROSS-PARSE]' \
@@ -659,6 +670,20 @@ grep -Fq '[TKZ-LANG-NAME-COLLISION]' \
   exit 1
 }
 
+reserved_self_negative="$KERNEL/negative/n_reserved_self.tex"
+if ( cd "$WORK" &&
+     TEXINPUTS="$REPO/tex/tenkz//:" \
+       timeout 120 xelatex -interaction=nonstopmode -halt-on-error \
+       "$reserved_self_negative" >"$WORK/n_reserved_self.transcript" 2>&1 ); then
+  echo "FAIL: the crossing keyword self was accepted as an author name" >&2
+  exit 1
+fi
+grep -Fq '[TKZ-LANG-NAME-RESERVED]' \
+  "$WORK/n_reserved_self.transcript" || {
+  echo "FAIL: reserved name=self lacked its grammar diagnostic" >&2
+  exit 1
+}
+
 skin_cross_negative="$KERNEL/negative/n_skin_pairing_cross.tex"
 if ( cd "$WORK" &&
      TEXINPUTS="$REPO/tex/tenkz//:" \
@@ -670,6 +695,21 @@ fi
 grep -Fq '[TKZ-CROSS-UNDECLARED]' \
   "$WORK/n_skin_pairing_cross.transcript" || {
   echo "FAIL: string/skin-pairing crossing lacked TKZ-CROSS-UNDECLARED" >&2
+  exit 1
+}
+
+skin_index_cross_negative="$KERNEL/negative/n_skin_pairing_index_cross.tex"
+if ( cd "$WORK" &&
+     TEXINPUTS="$REPO/tex/tenkz//:" \
+       timeout 120 xelatex -interaction=nonstopmode -halt-on-error \
+       "$skin_index_cross_negative" \
+       >"$WORK/n_skin_pairing_index_cross.transcript" 2>&1 ); then
+  echo "FAIL: an undeclared index/skin-pairing crossing was accepted" >&2
+  exit 1
+fi
+grep -Fq '[TKZ-CROSS-UNDECLARED]' \
+  "$WORK/n_skin_pairing_index_cross.transcript" || {
+  echo "FAIL: an index/pairing crossing lacked TKZ-CROSS-UNDECLARED" >&2
   exit 1
 }
 

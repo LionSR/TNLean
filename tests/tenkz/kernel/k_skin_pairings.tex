@@ -159,8 +159,21 @@
   \tn[at=1 s of turned-host, name=turn-bottom, skin=none, void=sealed]{}
   \tnwire[
     kind=string,
-    name=turn-probe,
     cross={over at crossing of self and pairing 1 of turned-host}
   ]{turn-top}{turn-bottom}
+\end{tenkz}
+\qquad
+\begin{tenkz}[rows={wire,wire,wire}, cols=1, bonds=none]
+  \tn[
+    at=(2,1),
+    name=index-host,
+    skin=crossed-box
+  ]{}
+  \tn[at=(1,1), name=index-top, skin=none, void=sealed]{}
+  \tn[at=(3,1), name=index-bottom, skin=none, void=sealed]{}
+  \tnwire[
+    name=index-probe,
+    cross={over at crossing of self and pairing 1 of index-host}
+  ]{index-top}{index-bottom}
 \end{tenkz}
 \end{document}
