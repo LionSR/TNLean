@@ -34,10 +34,10 @@
     \tnput[boundary,ports={south:physical}]{n}{(0mm,13mm)}{}
     \tnput[boundary,ports={north:physical}]{s}{(0mm,-13mm)}{}
     \tnjoin{w.east}{xi.west}
-    \tnjoin[route=arc,out=0,in=180]{xi.north east}{A.west}
-    \tnjoin[route=arc,out=0,in=180]{xi.south east}{Ab.west}
-    \tnjoin[route=arc,out=0,in=180]{A.east}{x.north west}
-    \tnjoin[route=arc,out=0,in=180]{Ab.east}{x.south west}
+    \tnjoin[route=arc]{xi.north east}{A.west}
+    \tnjoin[route=arc]{xi.south east}{Ab.west}
+    \tnjoin[route=arc]{A.east}{x.north west}
+    \tnjoin[route=arc]{Ab.east}{x.south west}
     \tnjoin{x.east}{e.west}
     \tnjoin{n.south}{A.north} \tnjoin{A.south}{Ab.north}
     \tnjoin{Ab.south}{s.north}

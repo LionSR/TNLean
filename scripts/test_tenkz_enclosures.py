@@ -392,7 +392,7 @@ DUPLICATE_RECOVERY = r"""
   \coordinate (rawA) at (0mm,10mm);
   \coordinate (rawB) at (20mm,10mm);
   \tnjoin[name=raw, label={\tenkzTestValidRawJoinInk}]{rawA}{rawB}
-  \tnjoin[name=badarc, route=arc, label={\tenkzTestBadArcInk}]
+  \tnjoin[name=badarc, route=arc, out=0, label={\tenkzTestBadArcInk}]
     {a.east}{b.west}
   \tnjoin[name=badtype, label={\tenkzTestBadTypeInk}]
     {a.east}{d.west}

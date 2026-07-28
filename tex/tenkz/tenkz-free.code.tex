@@ -402,7 +402,7 @@
 
 % \tnjoin[<keys>]{<name.anchor>}{<name.anchor>}
 %   keys: route=straight|hv|vh|arc (curve = 0.5 alias), label=,
-%   out=/in= (arc only), dir, fused, role=, species=
+%   paired legacy out=/in= (arc only), dir, fused, role=, species=
 \tl_new:N \l__tenkz_jroute_tl
 \tl_new:N \l__tenkz_jlabel_tl
 \tl_new:N \l__tenkz_jlabelnode_tl % on-path label node tokens (or empty)
@@ -423,6 +423,11 @@
 \bool_new:N \l__tenkz_jkeys_valid_bool
 \seq_new:N \l__tenkz_jendpoint_parts_seq
 \tl_new:N \l__tenkz_jendpoint_name_tl
+\seq_new:N \l__tenkz_jarc_endpoint_seq
+\tl_new:N \l__tenkz_jarc_from_name_tl
+\tl_new:N \l__tenkz_jarc_to_name_tl
+\tl_new:N \l__tenkz_jarc_from_anchor_tl
+\tl_new:N \l__tenkz_jarc_to_anchor_tl
 \clist_const:Nn \c__tenkz_jroutes_clist { straight, hv, vh, arc, curve }
 \pgfkeys{
   /tenkz/join/.is~family,
@@ -496,6 +501,93 @@
       }
   }
 
+\cs_new_protected:Npn \tenkz_free_anchor_angle:nN #1#2
+  {
+    \tl_set:Nn #2 {#1}
+    \tl_trim_spaces:N #2
+    \str_case:VnF #2
+      {
+        {east}       {\tl_set:Nn #2 {0}}
+        {north~east} {\tl_set:Nn #2 {45}}
+        {north}      {\tl_set:Nn #2 {90}}
+        {north~west} {\tl_set:Nn #2 {135}}
+        {west}       {\tl_set:Nn #2 {180}}
+        {south~west} {\tl_set:Nn #2 {225}}
+        {south}      {\tl_set:Nn #2 {270}}
+        {south~east} {\tl_set:Nn #2 {315}}
+      }
+      {
+        \regex_match:nVTF {\A [-+]? [0-9]+ (?: \. [0-9]+ )? \Z} #2
+          { }
+          {\tl_clear:N #2}
+      }
+  }
+
+% Named free-tier ports already carry their face in the anchor.  Recover that
+% canonical face only at the compatibility boundary: different atoms use
+% outward faces, while two ports of one atom use their inward faces, matching
+% the established skin-pairing geometry.  Raw TikZ coordinates fall through
+% to the renderer's automatic bend.
+\cs_new_protected:Npn \tenkz_free_infer_arc_angles:nn #1#2
+  {
+    \regex_extract_once:nnNTF
+      {\A \s* ([-A-Za-z0-9:_]+) \. ([^.]+) \s* \Z}
+      {#1} \l__tenkz_jarc_endpoint_seq
+      {
+        \tl_set:Ne \l__tenkz_jarc_from_name_tl
+          {\seq_item:Nn \l__tenkz_jarc_endpoint_seq {2}}
+        \tl_set:Ne \l__tenkz_jarc_from_anchor_tl
+          {\seq_item:Nn \l__tenkz_jarc_endpoint_seq {3}}
+      }
+      {\tl_clear:N \l__tenkz_jarc_from_anchor_tl}
+    \regex_extract_once:nnNTF
+      {\A \s* ([-A-Za-z0-9:_]+) \. ([^.]+) \s* \Z}
+      {#2} \l__tenkz_jarc_endpoint_seq
+      {
+        \tl_set:Ne \l__tenkz_jarc_to_name_tl
+          {\seq_item:Nn \l__tenkz_jarc_endpoint_seq {2}}
+        \tl_set:Ne \l__tenkz_jarc_to_anchor_tl
+          {\seq_item:Nn \l__tenkz_jarc_endpoint_seq {3}}
+      }
+      {\tl_clear:N \l__tenkz_jarc_to_anchor_tl}
+    \tl_if_empty:NF \l__tenkz_jarc_from_anchor_tl
+      {
+        \tl_if_empty:NF \l__tenkz_jarc_to_anchor_tl
+          {
+            \exp_args:NV \tenkz_free_anchor_angle:nN
+              \l__tenkz_jarc_from_anchor_tl \l__tenkz_jout_tl
+            \exp_args:NV \tenkz_free_anchor_angle:nN
+              \l__tenkz_jarc_to_anchor_tl \l__tenkz_jin_tl
+            \tl_if_eq:NNT \l__tenkz_jarc_from_name_tl
+              \l__tenkz_jarc_to_name_tl
+              {
+                \tl_if_empty:NF \l__tenkz_jout_tl
+                  {
+                    \tl_set:Ne \l__tenkz_jout_tl
+                      {
+                        \fp_eval:n
+                          {
+                            \l__tenkz_jout_tl + 180
+                            - 360 * floor((\l__tenkz_jout_tl + 180) / 360)
+                          }
+                      }
+                  }
+                \tl_if_empty:NF \l__tenkz_jin_tl
+                  {
+                    \tl_set:Ne \l__tenkz_jin_tl
+                      {
+                        \fp_eval:n
+                          {
+                            \l__tenkz_jin_tl + 180
+                            - 360 * floor((\l__tenkz_jin_tl + 180) / 360)
+                          }
+                      }
+                  }
+              }
+          }
+      }
+  }
+
 \NewDocumentCommand \tnjoin { O{} m m }
   {
     \tl_gclear:N \g__tenkz_free_wire_record_tl
@@ -529,19 +621,28 @@
           { \str_if_eq_p:Vn \l__tenkz_jroute_tl {arc} }
           { \str_if_eq_p:Vn \l__tenkz_jroute_tl {curve} }
           {
-            \bool_lazy_or:nnT
-              { \tl_if_empty_p:N \l__tenkz_jout_tl }
-              { \tl_if_empty_p:N \l__tenkz_jin_tl }
-              {
-                \bool_set_false:N \l__tenkz_jroute_valid_bool
-                \PackageError{tenkz}
-                  {Arc~route~requires~both~out=~and~in=}
-                  {Give~departure/arrival~angles,~e.g.~out=90,~in=90.}
-              }
+        \bool_xor:nnT
+          { \tl_if_empty_p:N \l__tenkz_jout_tl }
+          { \tl_if_empty_p:N \l__tenkz_jin_tl }
+          {
+            \bool_set_false:N \l__tenkz_jroute_valid_bool
+            \PackageError{tenkz}
+              {Arc~route~takes~both~out=~and~in=~or~neither}
+              {Remove~both~legacy~angles~for~the~automatic~arc.}
+          }
           }
       }
     \bool_if:NT \l__tenkz_jroute_valid_bool
       {
+        \bool_lazy_or:nnT
+          { \str_if_eq_p:Vn \l__tenkz_jroute_tl {arc} }
+          { \str_if_eq_p:Vn \l__tenkz_jroute_tl {curve} }
+          {
+            \bool_lazy_and:nnT
+              { \tl_if_empty_p:N \l__tenkz_jout_tl }
+              { \tl_if_empty_p:N \l__tenkz_jin_tl }
+              { \tenkz_free_infer_arc_angles:nn {#2} {#3} }
+          }
     \bool_set_true:N \l__tenkz_jcommit_bool
     \tenkz_free_join_endpoint:n {#2}
     \tenkz_free_join_endpoint:n {#3}
@@ -664,15 +765,22 @@
 \cs_new_protected:Npn \tenkz_free_join_draw:nnnn #1#2#3#4
   { \__tenkz_render_free_join:nnnn {#1}{#2}{#3}{#4} }
 
-% the arc route (DESIGN spells it `arc'; `curve' survives as the 0.5
-% alias): an out=/in= curve.  Public preflight has already rejected an
-% empty angle before any route ink can reach this renderer.
+% The compatibility renderer keeps explicit legacy angles byte-for-byte.
+% With neither angle present, the canonical arc chooses its curvature
+% internally; the public route no longer needs raw TikZ departure controls.
 \cs_new_protected:Npn \tenkz_free_arc_join:nn #1#2
   {
     \tenkz_free_label_node:n {0.5}
-    \tenkz_free_join_draw:nnnn {} {#1}
-      { to[out=\tl_use:N\l__tenkz_jout_tl,
-           in=\tl_use:N\l__tenkz_jin_tl] } {#2}
+    \tl_if_empty:NTF \l__tenkz_jout_tl
+      {
+        \tenkz_free_join_draw:nnnn {} {#1}
+          { to[bend~left] } {#2}
+      }
+      {
+        \tenkz_free_join_draw:nnnn {} {#1}
+          { to[out=\tl_use:N\l__tenkz_jout_tl,
+               in=\tl_use:N\l__tenkz_jin_tl] } {#2}
+      }
   }
 
 % A free-tier region is the same public grammatical class as a lattice

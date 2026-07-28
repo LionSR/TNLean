@@ -1110,3 +1110,25 @@ Census-correction: #5013
 | flag:consumers:key:kernel-atom:size | keep-because: #4931 records the condensation source's large endpoints and small intermediate beads, while #5013 makes the existing size-class answer reachable from canonical atoms; expiry 1.0 |
 | flag:consumers:key:kernel-mark:species | keep-because: #5013 implements the LANGUAGE-1.0 semantic-ink contract at mark scope and pins it in the focused kernel regression; the cited dyon, boundary-lasso, and injectivity-ring consumers migrate in the queued redraw waves; expiry 1.0 |
 | flag:sugar-shaped:command:tndeclare | keep-because: a species declaration binds one semantic identity to a cited palette across atoms, wires, and marks; it changes the document-scope descriptor table and cannot expand into picture records; expiry 1.0 |
+
+### 2026-07-28 — accepted arcs shed their angle escapes
+
+M3 falls from 254 to 88. Eighteen accepted cases remove 82 `out=`/`in=`
+pairs. The compatibility boundary now derives an arc from named port faces:
+ports on different atoms use their outward faces, two ports of one atom use
+the inward pairing, and coordinate endpoints use the automatic arc. Explicit
+legacy angles retain their former rendering for the three cases assigned to
+#5016. The signed-faithful MPU wrap is pixel-identical before and after the
+migration.
+
+The condensation case also retires its `row vector=` and `sheet vector=`
+escapes in favor of the named oblique frame. Its projection remains recorded
+as a cosmetic gap. M4 remains 18.20.
+
+The residue is concrete rather than near zero: 62 occurrences belong to the
+three blocked cases in #5016, and 26 were already outside this issue's arc and
+vector census.
+
+Census-correction: #5015
+
+No ledger row changes and no flag verdict is re-examined here.
