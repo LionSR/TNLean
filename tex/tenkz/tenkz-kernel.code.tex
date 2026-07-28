@@ -5225,6 +5225,10 @@
           \l__tenkz_kernel_r_species_tl #2
       }
   }
+% Resolve a species name for every ink consumer.  Declared hues win, hue-less
+% names share the house cycle, and the undeclared prelude roles keep their
+% semantic colors; wires and skin pairings therefore cannot color one species
+% through different lookup paths.
 \cs_new_protected:Npn \__tenkz_kernel_r_species_hue:nN #1#2
   {
     \prop_get:NnNTF \g__tenkz_kernel_species_prop
