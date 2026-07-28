@@ -109,6 +109,17 @@ theorem unitaryReindexLinearEquiv_mul
         Matrix.reindex e.symm e.symm (star U * B * U) :=
       (Matrix.reindexLinearEquiv_mul ℂ ℂ e.symm e.symm e.symm _ _).symm
 
+@[simp]
+theorem unitaryReindexLinearEquiv_star
+    {n H : Type*} [Fintype n] [DecidableEq n] [Fintype H] [DecidableEq H]
+    (e : H ≃ n) (U : Matrix n n ℂ) (hU : U ∈ Matrix.unitaryGroup n ℂ)
+    (A : Matrix n n ℂ) :
+    unitaryReindexLinearEquiv e U hU (star A) =
+      star (unitaryReindexLinearEquiv e U hU A) := by
+  rw [unitaryReindexLinearEquiv_apply, unitaryReindexLinearEquiv_apply]
+  simp only [Matrix.star_eq_conjTranspose, Matrix.conjTranspose_reindex,
+    Matrix.conjTranspose_mul, Matrix.conjTranspose_conjTranspose, Matrix.mul_assoc]
+
 /-- The inverse unitary block-coordinate change is adjoint to the forward
 change under the bilinear trace pairing:
 $\operatorname{tr}(\Phi^{-1}(X)A)=\operatorname{tr}(X\Phi(A))$. -/
@@ -209,6 +220,25 @@ theorem directSumBlockCompression_apply (k : Fin K)
     directSumBlockCompression (m := m) (d := d) k A i j = A ⟨k, i⟩ ⟨k, j⟩ :=
   rfl
 
+@[simp]
+theorem directSumBlockCompression_blockDiagonal'
+    (B : ∀ j, Matrix (Fin (m j) × Fin (d j))
+      (Fin (m j) × Fin (d j)) ℂ) (k : Fin K) :
+    directSumBlockCompression (m := m) (d := d) k
+        (Matrix.blockDiagonal' B) = B k := by
+  classical
+  ext i j
+  exact Matrix.blockDiagonal'_apply_eq B k i j
+
+@[simp]
+theorem directSumBlockCompression_one (k : Fin K) :
+    directSumBlockCompression (m := m) (d := d) k 1 = 1 := by
+  classical
+  ext i j
+  rcases i with ⟨a, b⟩
+  rcases j with ⟨c, f⟩
+  simp [directSumBlockCompression, Matrix.one_apply]
+
 /-- Embed a matrix as one diagonal block of a finite dependent direct sum.
 
 This is the inclusion of a single summand in Wolf, Proposition 1.5 and
@@ -232,6 +262,58 @@ theorem directSumBlockCompression_embedding (k : Fin K)
   ext i j
   simp [directSumBlockCompression, directSumBlockEmbedding,
     Matrix.blockDiagonal'_apply_eq]
+
+/-- Multiplication by block-diagonal matrices restricts on an embedded
+summand to multiplication by the corresponding diagonal blocks. -/
+theorem blockDiagonal'_mul_directSumBlockEmbedding_mul_blockDiagonal'
+    (P Q : ∀ j, Matrix (Fin (m j) × Fin (d j))
+      (Fin (m j) × Fin (d j)) ℂ)
+    (k : Fin K)
+    (A : Matrix (Fin (m k) × Fin (d k))
+      (Fin (m k) × Fin (d k)) ℂ) :
+    Matrix.blockDiagonal' P *
+        directSumBlockEmbedding (m := m) (d := d) k A *
+        Matrix.blockDiagonal' Q =
+      directSumBlockEmbedding (m := m) (d := d) k (P k * A * Q k) := by
+  classical
+  change Matrix.blockDiagonal' P * Matrix.blockDiagonal' (Pi.single k A) *
+      Matrix.blockDiagonal' Q =
+    Matrix.blockDiagonal' (Pi.single k (P k * A * Q k))
+  rw [← Matrix.blockDiagonal'_mul, ← Matrix.blockDiagonal'_mul]
+  congr 1
+  funext j
+  by_cases hjk : j = k
+  · subst j
+    simp
+  · simp [hjk]
+
+/-- A dependent block-diagonal matrix is the sum of its embedded diagonal
+blocks. -/
+theorem sum_directSumBlockEmbedding_eq_blockDiagonal'
+    (B : ∀ j, Matrix (Fin (m j) × Fin (d j))
+      (Fin (m j) × Fin (d j)) ℂ) :
+    ∑ j, directSumBlockEmbedding (m := m) (d := d) j (B j) =
+      Matrix.blockDiagonal' B := by
+  classical
+  ext ⟨k, a⟩ ⟨l, b⟩
+  change (∑ j, Matrix.blockDiagonal' (Pi.single j (B j))) ⟨k, a⟩ ⟨l, b⟩ =
+    Matrix.blockDiagonal' B ⟨k, a⟩ ⟨l, b⟩
+  by_cases hkl : k = l
+  · subst l
+    rw [Matrix.sum_apply]
+    simp only [Matrix.blockDiagonal'_apply_eq]
+    rw [Finset.sum_eq_single k]
+    · simp
+    · intro i _ hik
+      rw [Pi.single_eq_of_ne (Ne.symm hik)]
+      rfl
+    · simp
+  · rw [Matrix.blockDiagonal'_apply_ne B a b hkl, Matrix.sum_apply]
+    apply Finset.sum_eq_zero
+    intro j _
+    exact Matrix.blockDiagonal'_apply_ne
+      (Pi.single j (B j) : ∀ i, Matrix (Fin (m i) × Fin (d i))
+        (Fin (m i) × Fin (d i)) ℂ) a b hkl
 
 /-- Compression to a diagonal summand preserves positive semidefiniteness. -/
 theorem directSumBlockCompression_isPositiveMap (k : Fin K) :
