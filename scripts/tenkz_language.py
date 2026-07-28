@@ -239,6 +239,15 @@ def _declared_api() -> tuple[set[str], set[str]]:
     for path in (ROOT / "tex/tenkz").glob("*.code.tex"):
         text = path.read_text(encoding="utf-8")
         commands.update(re.findall(r"\\NewDocumentCommand\s+\\([A-Za-z]+)", text))
+        commands.update(
+            public
+            for public, implementation in re.findall(
+                r"\\cs_set_eq:NN\s+\\([A-Za-z]+)"
+                r"\s+\\(__tenkz_kernel_[A-Za-z_]+_cmd)",
+                text,
+            )
+            if "_env_" not in implementation
+        )
         environments.update(
             re.findall(r"\\NewDocumentEnvironment\s*\{\s*([A-Za-z]+)", text)
         )
