@@ -58,7 +58,7 @@ hash-pinned visual check required before changing a verdict.
 | `rmp-ii-boundary-state` | K2 | A brace versus a box is an equivalent house mark for the same region. |
 | `rmp-ii-zcl-mpdo` | K3 | Make the shared trace closure more compact than the current racetrack. |
 | `rmp-ii-channels-ts` | K2 | Straight double arrows versus curved source arcs are equivalent house routing. |
-| `rmp-ii-mpdo-ol` | K3 | Tighten the overly wide hooks through the shared hook metric. |
+| `rmp-ii-mpdo-ol` | K4 | Reconcile the ledger's finite `extra-element` defect with the note saying the contrast panel is gone, then re-review the hook spacing. |
 | `rmp-ii-peps-rg` | K2 | Rounded crossing hooks versus separated square hooks are house geometry. |
 | `rmp-ii-inverse-renormalization` | K3 | Remove the residual family-level spacing looseness. |
 | `rmp-iii-a-f-symbol` | K2 | Crossing order, directions, sectors, and all six labels are present. |
