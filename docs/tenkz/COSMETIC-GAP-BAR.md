@@ -53,13 +53,13 @@ hash-pinned visual check required before changing a verdict.
 | `rmp-ii-staircase` | X | Re-audit the vertically mirrored source orientation before treating the V-glyph aspect as cosmetic. |
 | `rmp-ii-circuit` | K2 | The compact doubling tree carries the complete eight-output identity. |
 | `rmp-ii-ortho-left` | K2 | Thin house wires versus bold source wires are intentional styling. |
-| `rmp-ii-boundary-lasso` | K1 | Species hue is a shared theme property, not a case-local colour patch. |
+| `rmp-ii-boundary-lasso` | X | The case does not record `species=`; migrate the semantic hue into the model before theme review. |
 | `rmp-ii-boundary-region` | K2 | The boundary is recorded as repaired; no residue is named. |
 | `rmp-ii-boundary-state` | K2 | A brace versus a box is an equivalent house mark for the same region. |
 | `rmp-ii-zcl-mpdo` | K3 | Make the shared trace closure more compact than the current racetrack. |
 | `rmp-ii-channels-ts` | K2 | Straight double arrows versus curved source arcs are equivalent house routing. |
 | `rmp-ii-mpdo-ol` | K4 | Reconcile the ledger's finite `extra-element` defect with the note saying the contrast panel is gone, then re-review the hook spacing. |
-| `rmp-ii-peps-rg` | K2 | Rounded crossing hooks versus separated square hooks are house geometry. |
+| `rmp-ii-peps-rg` | X | The current hooks cross where the source keeps them separated; restore the source crossing topology. |
 | `rmp-ii-inverse-renormalization` | K3 | Remove the residual family-level spacing looseness. |
 | `rmp-iii-a-f-symbol` | K2 | Crossing order, directions, sectors, and all six labels are present. |
 | `rmp-iii-a-pulling-through` | K3 | Normalize curve weight and panel spacing. |
@@ -74,7 +74,7 @@ hash-pinned visual check required before changing a verdict.
 | `rmp-iii-a-spt-intertwiner` | X | The open fusion map has no trace cyclicity; restore the source factor order before reviewing glyph scale. |
 | `rmp-iii-a-g-injective-projector` | X | Its ledger pairing is `wrong-source`; repair the projector source mapping before any verdict promotion. |
 | `rmp-iii-a-mpo-action` | K3 | Restore a graceful diagonal physical-leg route. |
-| `rmp-iii-a-mpo-injective` | K1 | Hatching and semantic hue are shared renderer/theme properties. |
+| `rmp-iii-a-mpo-injective` | K2 | Ring topology is preserved; unrecorded hatching and hue require house-style re-review, not a renderer promise. |
 | `rmp-iii-a-torus-one` | K2 | Wound cycles and inner bends are explicit; line weight is house style. |
 | `rmp-iii-a-torus-two` | K2 | Public-theme colour replaces vivid source ink without changing meaning. |
 | `rmp-iii-a-torus-three` | K2 | Outline versus solid fill on the enlarged crossing is house style. |
@@ -111,7 +111,7 @@ hash-pinned visual check required before changing a verdict.
 | `rmp-workbench-ii-peps-gauge-without-a` | K3 | Apply the same shared gauge-family geometry correction. |
 | `rmp-workbench-ii-mpu-wrap-second` | K2 | Both source-directed pairing rows are now in the correct order. |
 | `rmp-workbench-ii-boundary-a-old` | K4 | Restore the finite arrow and R-bar label details, then re-review the region. |
-| `rmp-workbench-ii-boundary-b-old` | K1 | Semantic colour coding belongs to the shared theme. |
+| `rmp-workbench-ii-boundary-b-old` | X | The case does not record `species=`; migrate the semantic colour coding into the model first. |
 | `rmp-workbench-ii-peps-fine-graining` | K2 | The structured-grid redraw already contains the required panel. |
 | `rmp-workbench-ii-historical-composite` | K2 | A flat tilted grid is the house equivalent of the source 3D cube. |
 | `rmp-workbench-iii-eq50` | K2 | All four source legs are present; no residue is named. |
@@ -124,15 +124,15 @@ hash-pinned visual check required before changing a verdict.
 | `rmp-workbench-iii-diagram-four` | K2 | Stadium versus circle is a house glyph difference. |
 | `rmp-workbench-iii-eq50-reduced` | K4 | Re-review and remove any labels not present in the source contract. |
 | `rmp-workbench-iii-dual-reduced` | X | Challenge the current cyclic-equivalence note: the manifest declares an open intertwiner, so repair the source factor order. |
-| `rmp-workbench-iii-mpo-representation` | K1 | Virtual-index hue is a shared semantic-theme property. |
+| `rmp-workbench-iii-mpo-representation` | K2 | The complete MPO word and labels are present; plain virtual-index ink requires house-style re-review. |
 | `rmp-workbench-iii-f-tensor` | K2 | An explicit F box faithfully replaces the source's boxless crossing. |
 | `rmp-workbench-iii-eq59-now` | K2 | Ring colour and stadium-versus-circle glyphs are house style. |
-| `rmp-workbench-iii-ghz-state-workbench` | K1 | This shares the lattice-genre limitation and fix with the GHZ twin. |
+| `rmp-workbench-iii-ghz-state-workbench` | K1 | The manifest records `staggered-sites`; route the fix through the cell basis, not the published GHZ lattice mechanism. |
 | `rmp-workbench-iii-ghz-up` | K3 | Improve glyph proportions and leg geometry as a family. |
 | `rmp-workbench-iii-g-injective-pull` | X | Re-audit the source pairing: the current diagonal `U_g` belongs to the SPT panel. |
 | `rmp-workbench-iii-intertwining-mpo` | K2 | Line weight alone is house style. |
 | `rmp-workbench-iii-mpo-injective-white` | K2 | Direct strings faithfully replace the source's substituted boxes. |
-| `rmp-workbench-iii-mpo-on-peps-definition` | K1 | Hatching and hue are shared properties; recheck centring after they land. |
+| `rmp-workbench-iii-mpo-on-peps-definition` | K3 | Treat unrecorded hatching and hue as house style; fix only the family-level centring residue. |
 | `rmp-workbench-iii-eq60-now` | K2 | Daggered insertions and genuinely diagonal legs are present. |
 | `rmp-workbench-iii-enlarged-mpo-black` | K2 | The closed five-box ring and marked site are complete. |
 | `rmp-workbench-iii-eq59` | K2 | Both windings, complete station counts, and joined resolution rails are present. |
