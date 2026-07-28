@@ -728,10 +728,9 @@ There is no independent nonzero-closing-matrix hypothesis.  The normalized
 four-site BNT closure supplies it from SAL, copy independence, and
 nonnilpotence.
 
-**Axiom boundary:** the Hayashi decomposition uses the existing forward
+The Hayashi decomposition uses the proved forward
 Hayashi--Ruskai--Hayden--Jozsa--Petz--Winter characterization of equality in
-strong subadditivity, isolated as
-`hayashi_ssa_equality_characterization_forward`.  No further axiom is used.
+strong subadditivity, `hayashi_ssa_equality_characterization_forward`.
 
 **Source hypothesis (biCF):** the one-letter simultaneous span is precisely
 the block-injective canonical-form assumption imposed at the start of Case II

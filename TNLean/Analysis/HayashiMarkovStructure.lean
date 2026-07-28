@@ -17,8 +17,9 @@ characterization. It carries no axiom: the structure and its building blocks
 (the middle-system unitary lift, the direct-sum reindexings, and the
 block-diagonal state) are plain finite-dimensional matrix data.
 
-The forward axiom and the proved reverse direction of the characterization live
-in `TNLean.Axioms.Entropy` and `TNLean.Analysis.EntropyMarkovReverse`.
+The two proved directions of the characterization live in
+`TNLean.Analysis.EntropyMarkovForward` and
+`TNLean.Analysis.EntropyMarkovReverse`.
 
 ## References
 
@@ -93,6 +94,37 @@ def blockState {dA dC : ℕ} {m : ℕ} (dL dR : Fin m → ℕ)
     (Matrix.blockDiagonal' fun j : Fin m =>
       (p j : ℂ) • Matrix.kroneckerMap (fun x y : ℂ => x * y)
         (ρ_left j) (ρ_right j))
+
+/-- Entrywise value of the block-diagonal quantum-Markov-chain state. The entry
+between two indices vanishes unless their block labels agree, in which case it is
+the weight times the product of the left and right component entries. -/
+theorem blockState_apply {dA dC : ℕ} {m : ℕ} {dL dR : Fin m → ℕ}
+    (p : Fin m → ℝ)
+    (ρ_left : (j : Fin m) → Matrix (Fin dA × Fin (dL j)) (Fin dA × Fin (dL j)) ℂ)
+    (ρ_right : (j : Fin m) → Matrix (Fin (dR j) × Fin dC) (Fin (dR j) × Fin dC) ℂ)
+    (a a' : Fin dA) (c c' : Fin dC)
+    (j j' : Fin m) (lr : Fin (dL j) × Fin (dR j)) (lr' : Fin (dL j') × Fin (dR j')) :
+    blockState (dA := dA) (dC := dC) dL dR p ρ_left ρ_right
+        (a, (⟨j, lr⟩, c)) (a', (⟨j', lr'⟩, c'))
+      = if h : j = j' then
+          (p j : ℂ) * ρ_left j (a, lr.1) (a', h ▸ lr'.1)
+            * ρ_right j (lr.2, c) (h ▸ lr'.2, c')
+        else 0 := by
+  classical
+  rw [blockState, Matrix.reindex_apply, Matrix.submatrix_apply]
+  have hidx1 : (sigmaAssoc (dA := dA) (dC := dC) dL dR).symm (a, (⟨j, lr⟩, c))
+      = (⟨j, ((a, lr.1), (lr.2, c))⟩ :
+        Σ j : Fin m, (Fin dA × Fin (dL j)) × (Fin (dR j) × Fin dC)) := rfl
+  have hidx2 : (sigmaAssoc (dA := dA) (dC := dC) dL dR).symm (a', (⟨j', lr'⟩, c'))
+      = (⟨j', ((a', lr'.1), (lr'.2, c'))⟩ :
+        Σ j : Fin m, (Fin dA × Fin (dL j)) × (Fin (dR j) × Fin dC)) := rfl
+  rw [hidx1, hidx2]
+  by_cases h : j = j'
+  · subst h
+    rw [Matrix.blockDiagonal'_apply_eq, dif_pos rfl]
+    simp only [Matrix.smul_apply, Matrix.kroneckerMap_apply, smul_eq_mul]
+    ring
+  · rw [Matrix.blockDiagonal'_apply_ne _ _ _ h, dif_neg h]
 
 end HayashiMarkov
 

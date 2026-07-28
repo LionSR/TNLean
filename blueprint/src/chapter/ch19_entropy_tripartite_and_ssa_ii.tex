@@ -2067,80 +2067,84 @@ algebra of a family of jointly invariant states.
     orientation $W^\dagger\rho_{ABC}W$.
 \end{proof}
 
-\begin{theorem}[Hayashi SSA-equality characterization]
-    \label{thm:hayashi_ssa_equality_characterization}
-    \lean{hayashi_ssa_equality_characterization}
+\begin{theorem}[SSA equality gives quantum Markov structure]
+    \label{thm:hayashi_ssa_equality_forward}
+    \lean{hayashi_ssa_equality_characterization_forward,
+        Matrix.hayashi_ssa_equality_characterization_forward}
     \leanok
-    \uses{def:ssa_equality, def:hayashi_markov_decomposition,
-        thm:hayashi_ssa_equality_reverse}
-    For a tripartite density matrix $\rho_{ABC}$,
+    \uses{def:ssa_equality, def:hayashi_markov_decomposition}
+    Let $\rho_{ABC}$ be a tripartite density matrix satisfying
     \begin{align}
         S(\rho_{ABC})+S(\rho_B)
         &=
-        S(\rho_{AB})+S(\rho_{BC})
+        S(\rho_{AB})+S(\rho_{BC}).
         \notag
     \end{align}
-    holds if and only if $\rho_{ABC}$ admits a quantum Markov decomposition on
-    the middle subsystem $B$.
-
-    The reverse implication, that a quantum Markov decomposition forces the
-    equality, is proved as
-    Theorem~\ref{thm:hayashi_ssa_equality_reverse}. For the forward implication,
-    the raw product-reference Petz map and its support behavior are given by
-    Theorems~\ref{thm:entropy_petz_product_tensor} and
-    \ref{thm:entropy_petz_product_tensor_corollaries}. At equality, HJPW
-    equation~(11), both for the supported raw map and for a completed local
-    channel, is Theorem~\ref{thm:ssa_equality_product_marginal_petz_recovery}.
-    Independently, the common invariant algebra, its block form, its finite
-    realization by a single preserving operation, and the projection onto it
-    (Definition~%
-    \ref{def:koashi_imoto_common_invariant_algebra},
-    Theorem~\ref{thm:koashi_imoto_common_invariant_algebra_block_form},
-    Theorem~\ref{thm:koashi_imoto_single_witness}, and
-    Definition~\ref{def:koashi_imoto_mean_ergodic_projection}) supply the
-    finite-dimensional operator-algebraic core of the Koashi--Imoto argument.
-    Theorems~\ref{thm:koashi_imoto_family_fixed_point_block_form} and
-    \ref{thm:koashi_imoto_normalized_family_block_form} give the simultaneous
-    algebraic tensor-block form and its probability-density normalization.
-    Theorem~\ref{thm:koashi_imoto_preserving_block_action} gives the action of
-    every preserving operation on those blocks. Together these give
-    Property~1 and the full-support specialization of Property~$2'$ under the
-    same explicit full-support hypothesis on the common average.
-    Theorem~\ref{thm:koashi_imoto_joint_support_compression} constructs the
-    faithful support coordinates for an arbitrary finite family and restricts
-    every preserving operation to them.
-    Theorem~\ref{thm:koashi_imoto_joint_support_block_action} packages the
-    state blocks and operation action on that minimum joint support.
-    Theorem~\ref{thm:hjpw_recovered_conditional_family} now constructs the
-    finite nonempty invariant density family from the SSA recovery channel,
-    while Theorem~\ref{thm:hjpw_finite_conditional_slice_separation} supplies
-    the finite replacement for varying all effects.
-    Theorem~\ref{thm:hjpw_recovered_conditional_joint_support_blocks} applies
-    the joint-support block form and preserving-operation action to this
-    recovered family.
-    Theorem~\ref{thm:hjpw_recovered_bipartite_joint_support_blocks}
-    reconstructs the bipartite marginal only in the same minimum-support
-    coordinates.
-    Theorem~\ref{thm:hjpw_recovered_bipartite_ambient_blocks} extends them to
-    all of $B$ and completes equations~(13)--(14).
-    Theorem~\ref{thm:hjpw_recovered_dilation_ambient_blocks} supplies
-    equation~(15), agreement with the Petz operation on the joint support,
-    and the recovered supported-sector states. Theorem~%
-    \ref{thm:hjpw_recovered_tripartite_ambient_blocks} combines equations~(11),
-    (14), and~(15) to prove the unnormalized ambient tripartite blocks in HJPW
-    factor order, including zero complementary blocks. Defining the sector
-    probabilities, normalizing the left factors when their weights are nonzero,
-    choosing harmless density factors at zero weight, and constructing the
-    quantum Markov decomposition remain open, so this forward implication
-    remains axiomatic. The biconditional combines the two directions.
-
-    This equality criterion is cited here as an input for the later MPDO arguments.
-    It is the equality criterion needed by Appendix~C of arXiv:1606.00608.
-    The equality conditions are reviewed in
-    \cite{Hayashi2006QuantumInformation, Ruskai2002Inequalities};
-    the structural block-decomposition formulation used for MPDOs appears in
-    \cite{Hayden2004Structure}.
+    Then there are a decomposition
+    \begin{align}
+        \mathcal H_B
+        &\cong
+        \bigoplus_j \mathcal H_{B_j^L}\otimes\mathcal H_{B_j^R},
+        \notag
+    \end{align}
+    a unitary $V_B$, probabilities $p_j$, and density matrices
+    $\rho_{A B_j^L}$ and $\rho_{B_j^R C}$ such that, for
+    $V=\mathbf 1_A\otimes V_B\otimes\mathbf 1_C$,
+    \begin{align}
+        V\rho_{ABC}V^\dagger
+        &=
+        \bigoplus_j p_j\,
+          \rho_{A B_j^L}\otimes\rho_{B_j^R C},
+        \notag\\
+        p_j&\geq0,
+        \notag\\
+        \sum_jp_j&=1.
+        \notag
+    \end{align}
 \end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:hjpw_recovered_tripartite_ambient_blocks}
+    By Theorem~\ref{thm:hjpw_recovered_tripartite_ambient_blocks}, put
+    $W=\mathbf 1_A\otimes(U_B\otimes\mathbf 1_C)$. Then
+    \begin{align}
+        W^\dagger\rho_{ABC}W
+        &=0_\perp\oplus
+          \bigoplus_j\omega_j\otimes\widehat\rho_j.
+        \notag
+    \end{align}
+    where $\omega_j\geq0$, each supported recovered state
+    $\widehat\rho_j$ is positive with trace one, and
+    $\sum_j\tr\omega_j=1$. Reindex every middle-system fibre from the
+    recovery order $B_j^R\otimes B_j^L$ to the Hayashi order
+    $B_j^L\otimes B_j^R$, and choose the Hayashi middle unitary
+    $V_B=U_B^\dagger$. This gives the required orientation
+    $V\rho_{ABC}V^\dagger=W^\dagger\rho_{ABC}W$.
+
+    For every ambient sector set
+    \begin{align}
+        p_j&=\re\tr\omega_j.
+        \notag
+    \end{align}
+    Positivity of $\omega_j$ gives $p_j\geq0$, and the total trace identity
+    gives $\sum_jp_j=1$. Total positive-semidefinite normalization gives a
+    density matrix $\overline\omega_j$ on $A B_j^L$ and a density matrix
+    $\overline\rho_j$ on $B_j^R C$ such that
+    \begin{align}
+        \omega_j\otimes\widehat\rho_j
+        &=p_j\,\overline\omega_j\otimes\overline\rho_j.
+        \notag
+    \end{align}
+    On every supported sector, $\overline\rho_j=\widehat\rho_j$, and
+    $\overline\omega_j=\omega_j/p_j$ whenever $p_j>0$. If a supported sector
+    has $p_j=0$, its left factor may be any density matrix because
+    $0\,\overline\omega_j\otimes\widehat\rho_j=0$. On a complementary sector,
+    where both raw factors vanish, either normalized factor may be chosen.
+    These choices are made only at this final boundary, and every weighted
+    summand is unchanged. The displayed direct sum is therefore a quantum Markov
+    decomposition in the sense of
+    Definition~\ref{def:hayashi_markov_decomposition}.
+\end{proof}
 
 \begin{theorem}[Quantum Markov structure attains SSA equality]
     \label{thm:hayashi_ssa_equality_reverse}
@@ -2224,4 +2228,30 @@ algebra of a family of jointly invariant states.
     $S(\rho_{ABC})+S(\rho_B)=S(\rho_{AB})+S(\rho_{BC})$.
     The basis change on $B$ and the direct-sum reindexing leave every entropy
     term unchanged.
+\end{proof}
+
+\begin{theorem}[Hayashi SSA-equality characterization]
+    \label{thm:hayashi_ssa_equality_characterization}
+    \lean{hayashi_ssa_equality_characterization}
+    \leanok
+    \uses{def:ssa_equality, def:hayashi_markov_decomposition,
+        thm:hayashi_ssa_equality_forward,
+        thm:hayashi_ssa_equality_reverse}
+    For a tripartite density matrix $\rho_{ABC}$,
+    \begin{align}
+        S(\rho_{ABC})+S(\rho_B)
+        &=
+        S(\rho_{AB})+S(\rho_{BC})
+        \notag
+    \end{align}
+    holds if and only if $\rho_{ABC}$ admits a quantum Markov decomposition on
+    the middle subsystem $B$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:hayashi_ssa_equality_forward,
+        thm:hayashi_ssa_equality_reverse}
+    The forward implication is
+    Theorem~\ref{thm:hayashi_ssa_equality_forward}; the reverse implication is
+    Theorem~\ref{thm:hayashi_ssa_equality_reverse}.
 \end{proof}

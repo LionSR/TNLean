@@ -9,19 +9,18 @@ import TNLean.MPS.MPDO.PhysicalSupportSALTransport
 /-!
 # Two-site bonds on a physical support
 
-The positive commuting bond obtained from Proposition C.8 after restricting an
-MPO tensor to an orthogonal one-site support is carried back to the ambient
-physical space by the tensor square of the support inclusion.  The resulting
-bond is positive and acts entirely within the prescribed two-site sector.
+Restrict an MPO tensor to an orthogonal one-site support and apply Proposition
+C.8 there. Conjugation by the tensor square of the support inclusion gives a
+positive commuting bond on the ambient physical space, acting entirely within
+the prescribed two-site sector.
 
 All chain statements used in this construction concern positive lengths.
 In particular, saturation of the area law itself excludes zero physical and
 virtual dimensions.  No empty periodic chain is introduced.
 
-The support transport is purely algebraic.  The final existence theorem uses
-the already formalized Proposition C.8 and hence inherits its sanctioned
-dependence on `hayashi_ssa_equality_characterization_forward`; it introduces
-no further axiom.
+The passage through the support inclusion is algebraic. The final existence
+theorem uses Proposition C.8 and the proved characterization
+`hayashi_ssa_equality_characterization_forward`.
 
 ## References
 

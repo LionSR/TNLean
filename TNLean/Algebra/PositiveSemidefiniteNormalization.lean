@@ -24,8 +24,8 @@ chosen to be the maximally mixed state; the original matrix then vanishes.
 
 This total normalization makes explicit the normalization implicit in HJPW,
 arXiv:quant-ph/0304007v2, Appendix A, lines 857--858; the zero-trace branch is a local
-total choice.  The same normalization is used in CPSV, arXiv:1606.00608,
-Appendix C.2, lines 1614--1617.
+total choice. CPSV, arXiv:1606.00608, Appendix C.2, lines 1614--1617, absorbs
+nonzero scalar weights but does not specify TNLean's total zero-trace convention.
 -/
 
 open scoped Matrix BigOperators ComplexOrder Kronecker
