@@ -158,10 +158,9 @@ in arXiv:1606.00608, line 1628.  It supplies the simultaneous inverse used in
 the source proof.  Its relation with finite physical blocking is recorded in
 `docs/paper-gaps/cpgsv17_bicf_block_separation.tex`.
 
-**Axiom boundary:** the projector construction uses the existing forward
+The projector construction uses the proved forward
 Hayashi--Ruskai--Hayden--Jozsa--Petz--Winter characterization of equality in
-strong subadditivity, isolated as
-`hayashi_ssa_equality_characterization_forward`.  No further axiom is used.
+strong subadditivity, `hayashi_ssa_equality_characterization_forward`.
 
 Source: arXiv:1606.00608, Appendix C.2, lines 1680--1759. -/
 theorem commonWeightAbsorbedBasisMPOTensor_isMPDO_of_sameMPV₂Pos_isSAL

@@ -7,8 +7,8 @@
 
 \input{command}
 
-\title{The Strong-Subadditivity Equality Characterization as an External
-Stand-In, and Its One-Directional Hygiene Split}
+\title{Closure Record for the Strong-Subadditivity Equality
+Characterization and Hayashi--Markov Decomposition}
 \author{}
 \date{2026-07-28}
 
@@ -43,155 +43,79 @@ $\rho_{A B_j^{L}}$, $\rho_{B_j^{R} C}$ on the indicated factors. This is the
 quantum-Markov-chain structure of the tripartite state
 \cite{Ruskai2002, HaydenJozsaPetzWinter2004, Hayashi2006}.
 
-In the present development the biconditional
-\eqref{eq:ssa-eq} $\Leftrightarrow$~\eqref{eq:qmc} is recovered by combining a
-forward-only external assumption with a proved reverse direction.\footnote{The
-forward-only external assumption is
-\leanid{hayashi_ssa_equality_characterization_forward} in
-\doclink{TNLean/Axioms/Entropy} (\path{TNLean/Axioms/Entropy.lean}); the proved
-reverse direction is
+The biconditional
+\eqref{eq:ssa-eq} $\Leftrightarrow$~\eqref{eq:qmc} is now proved in both
+directions.\footnote{The forward implication is
+\leanid{Matrix.hayashi_ssa_equality_characterization_forward} in
+\path{TNLean/Analysis/EntropyMarkovForward.lean}, with the established root
+name \leanid{hayashi_ssa_equality_characterization_forward} in
+\doclink{TNLean/Axioms/Entropy}. The reverse implication is
 \leanid{hayashi_ssa_equality_characterization_reverse} in
-\path{TNLean/Analysis/EntropyMarkovReverse.lean}; the biconditional
-\leanid{hayashi_ssa_equality_characterization} combines the two.
-The equality predicate is \leanid{IsSSAEquality} in
-\doclink{TNLean/Analysis/Entropy} (\path{TNLean/Analysis/Entropy.lean}),
-and the right-hand structure is recorded by
-\leanid{HayashiMarkovDecomposition}, whose fields store the
-finite decomposition, the unitary basis change, the weights $p_j$, the component
-density operators, and the block-diagonal equality.} The forward direction is an
-external stand-in: that implication is a theorem of Ruskai, of
-Hayden--Jozsa--Petz--Winter, and of Hayashi, but its proof rests on the full
-singular-support saturation-to-recovery theorem and the structural analysis of
-recovered states.  The singular-support saturation-to-raw-recovery implication,
-its positive-definite specialization, and the trace-preserving extension of the
-support Petz map are now available. The finite recovered conditional density
-family, its separating effects, and its common preserving channel are also
-formalized. The joint-support block theorem has now been applied and the
-bipartite marginal reconstructed in the same support coordinates. Those
-coordinates have now been extended to ambient $B$ by one-dimensional
-zero-weight complement sectors, completing HJPW equations~(13)--(14).
-The recovery-dilation block action of equation~(15) is now formalized by one
-chosen pure-ancilla unitary, including supported agreement with the Petz
-operation and normalized recovered states on the supported common-factor
-sectors. Combining equations~(11), (14), and~(15) now gives the unnormalized
-ambient tripartite identity
+\path{TNLean/Analysis/EntropyMarkovReverse.lean};
+\leanid{hayashi_ssa_equality_characterization} combines the two. The equality
+predicate is \leanid{IsSSAEquality} in
+\doclink{TNLean/Analysis/Entropy}, and the right-hand structure is
+\leanid{HayashiMarkovDecomposition}.}
+There are no axiom declarations in this characterization.
+
+The forward proof first obtains the ambient HJPW identity
 \begin{align}
   W^\dagger\rho_{ABC}W
   =0_\perp\oplus\bigoplus_j\omega_j\otimes\widehat\rho_j,
-\end{align}
-where $W=\mathbf 1_A\otimes(U_B\otimes\mathbf 1_C)$, each supported block is
-written in the HJPW order $(A B_j^L)\otimes(B_j^R C)$, and every complementary
-block is zero. This is formalized by
-\leanid{Matrix.RecoveredConditionalDilationBlockForm.ambient_tripartite_block_form}.
-The factors $\omega_j$ are still unnormalized. Their probability normalization,
-the zero-weight choices, and the final quantum-Markov decomposition remain
-open. The reverse direction is proved from the entropy-additivity sub-lemmas
-listed below.
-
-\section{The point at issue: only the forward direction is consumed}
-
-The biconditional has two directions of very different difficulty and very
-different usage.
-
-\paragraph{Forward direction (consumed).}
-The implication \eqref{eq:ssa-eq} $\Rightarrow$~\eqref{eq:qmc} --- equality
-forces the quantum-Markov-chain structure --- is the only direction used
-downstream. Its proof is the deep part of the characterization: it requires
-recovery-map theory and the Petz transpose channel, that is, the analysis of
-when the data-processing inequality for relative entropy is saturated and the
-reconstruction of the discarded subsystem from a recovery map. This recovery-map
-argument now includes the singular-support saturation-to-raw-recovery
-implication.  A simultaneous probability-density block form for the preserved
-family is also available under a positive-definite common-average hypothesis.
-In the same full-support setting, every preserving channel acts locally on the
-common summands and fixes their common density factors. The joint-support
-reduction is available, and the finite nonzero normalized conditional family
-fixed by the recovered middle-system channel is constructed. The joint-support
-block theorem has been applied to this family, and the bipartite marginal has
-been reconstructed in the same coordinates. The resulting blocks now extend
-to ambient $B$ and prove HJPW equations~(13)--(14), with one-dimensional
-zero-weight sectors on the complement. Equation~(15) is also formalized:
-one chosen pure-ancilla unitary is block diagonal in those coordinates,
-agrees with the Petz operation on the joint support, and produces normalized
-supported-sector states with the prescribed common-factor marginals. In HJPW
-factor order, the resulting tripartite state has zero complementary blocks and
-supported blocks $\omega_j\otimes\widehat\rho_j$. Thus only the probability
-normalization, the choices at zero weight, and the final quantum-Markov
-decomposition are missing. The family-level structural implication needed here
-remains open, which is why the forward direction is treated as an external
-assumption rather than proved. The recovery implication and the complementary
-trace-preserving extension of the support Petz map are no longer part of this
-gap.
-
-\paragraph{Reverse direction (tractable, currently unused).}
-The implication \eqref{eq:qmc} $\Rightarrow$~\eqref{eq:ssa-eq} --- a state of the
-block-diagonal product form attains equality --- is elementary by comparison and
-is computed directly from additivity properties of the entropy. For a state of
-the form~\eqref{eq:qmc} the von Neumann entropy decomposes as
-\begin{align}
-  S\!\left(\bigoplus_j p_j\, \omega_j\right)
-  = H(\{p_j\}) + \sum_j p_j\, S(\omega_j),
   \qquad
-  S(\omega \otimes \tau) = S(\omega) + S(\tau),
+  W=\mathbf 1_A\otimes(U_B\otimes\mathbf 1_C).
+  \label{eq:ambient-hjpw}
 \end{align}
-where $H(\{p_j\}) = -\sum_j p_j \log p_j$ is the Shannon entropy of the weights.
-Substituting~\eqref{eq:qmc} and its three marginals into both sides
-of~\eqref{eq:ssa-eq} and cancelling the matching terms gives the equality with no
-recovery-map input. The reverse direction is therefore provable from
-entropy-additivity sub-lemmas alone, but it is not at present consumed by any
-downstream result.
+The supported matrices $\widehat\rho_j$ are the recovered physical states:
+they are positive, have trace one, and have the prescribed common-factor
+marginals. The complementary blocks are zero. After reversing each middle
+fibre from the recovery order $B_j^R\otimes B_j^L$ to the HJPW order
+$B_j^L\otimes B_j^R$, the Hayashi unitary is chosen with the adjoint
+orientation $V_B=U_B^\dagger$, so
+$V\rho_{ABC}V^\dagger=W^\dagger\rho_{ABC}W$.
 
-\section{The one-directional hygiene split}
+For every ambient sector, including the one-dimensional complementary sectors,
+set
+\begin{align}
+  p_j=\operatorname{Re}\operatorname{tr}\omega_j.
+\end{align}
+Positivity gives $p_j\geq0$, and the ambient trace identity gives
+$\sum_jp_j=1$. On every supported sector, the right density operator is the
+recovered state $\widehat\rho_j$. When $p_j>0$, the left density operator is
+$\omega_j/p_j$. Total positive-semidefinite normalization is applied only when
+the final \leanid{HayashiMarkovDecomposition} is formed. If a supported sector
+has $p_j=0$, this normalization chooses a left filler while preserving
+$\widehat\rho_j$ on the right. On a complementary sector it may choose fillers
+on both sides. In either case the factor $p_j$ makes every filler invisible;
+fillers do not occur in the raw identity~\eqref{eq:ambient-hjpw}.
 
-Because only the forward direction is both deep and used, the assumption
-boundary is kept minimal: the external assumption states the single forward
-implication \eqref{eq:ssa-eq} $\Rightarrow$~\eqref{eq:qmc}, and the reverse
-implication \eqref{eq:qmc} $\Rightarrow$~\eqref{eq:ssa-eq} is a theorem. The full
-biconditional is recovered by combining the two, and the postulated content
-is reduced to exactly the part that genuinely needs the missing theory.
+\section{The two proved implications}
 
-The reverse half uses the following entropy-additivity sub-lemmas, all proved in
-\path{TNLean/Analysis/EntropyDecomposition.lean}:
+\paragraph{Forward direction.}
+Equality in strong subadditivity gives the product-reference recovery identity
+on the supported input, the recovered conditional family, its common invariant
+block form, the ambient bipartite decomposition, and the pure-ancilla block
+action. Equations~(11), (14), and~(15) then give
+\eqref{eq:ambient-hjpw}. The probability and normalization argument above
+converts that identity into the quantum-Markov decomposition
+\eqref{eq:qmc}. This implication is proved by
+\leanid{Matrix.hayashi_ssa_equality_characterization_forward}.
 
-\begin{itemize}
-  \item additivity over a finite weighted orthogonal direct sum:
-    $S\!\left(\bigoplus_j p_j\,\omega_j\right) = H(\{p_j\}) + \sum_j p_j
-    S(\omega_j)$, i.e.\ the entropy of a block-diagonal state with weights;
-  \item additivity over a tensor factorization:
-    $S(\omega \otimes \tau) = S(\omega) + S(\tau)$;
-  \item invariance of the entropy under a unitary basis change and under
-    reindexing of the underlying space, so that the basis change on $\mathcal
-    H_B$ and the direct-sum reindexing in~\eqref{eq:qmc} leave every entropy term
-    unchanged;
-  \item naturality of the partial trace under the same middle-system unitary:
-    for example,
-    \[
-      \tr_C\!\bigl((\mathbf 1_A\otimes U_B\otimes\mathbf 1_C)\rho
-      (\mathbf 1_A\otimes U_B^{\dagger}\otimes\mathbf 1_C)\bigr)
-      =
-      (\mathbf 1_A\otimes U_B)\rho_{AB}
-      (\mathbf 1_A\otimes U_B^{\dagger}),
-    \]
-    with the analogous formulas for the $BC$ and $B$ marginals. This is the
-    step that lets the marginals of the unitary-conjugated block-diagonal state
-    replace the four entropy terms of the original state;
-  \item identification of the three reduced states as partial traces of the
-    block-diagonal state~\eqref{eq:qmc}: tracing out $C$ gives
-    $\rho_{AB} \cong \bigoplus_j p_j\, \rho_{A B_j^{L}} \otimes \rho_{B_j^{R}}$,
-    tracing out $A$ gives
-    $\rho_{BC} \cong \bigoplus_j p_j\, \rho_{B_j^{L}} \otimes \rho_{B_j^{R} C}$,
-    and tracing out $AC$ gives
-    $\rho_{B} \cong \bigoplus_j p_j\, \rho_{B_j^{L}} \otimes \rho_{B_j^{R}}$,
-    where $\rho_{B_j^{L}} = \tr_{A}\rho_{A B_j^{L}}$ and
-    $\rho_{B_j^{R}} = \tr_{C}\rho_{B_j^{R} C}$. These marginal formulas carry the
-    weights and tensor factors through, and they are what feeds the four entropy
-    terms of~\eqref{eq:ssa-eq} into the two additivity lemmas above.
-\end{itemize}
+\paragraph{Reverse direction.}
+For a state of the form~\eqref{eq:qmc},
+\begin{align}
+  S\!\left(\bigoplus_j p_j\omega_j\right)
+  &=H(\{p_j\})+\sum_jp_jS(\omega_j),
+  \\
+  S(\omega\otimes\tau)&=S(\omega)+S(\tau).
+\end{align}
+Applying these identities to the state and its three marginals makes the four
+terms in~\eqref{eq:ssa-eq} cancel. This implication is proved by
+\leanid{hayashi_ssa_equality_characterization_reverse}.
 
-With these five facts the reverse implication is a finite computation, now
-carried out in \path{TNLean/Analysis/EntropyMarkovReverse.lean}; the
-forward implication remains an external assumption until the family-level
-structural analysis is available.
+The public biconditional
+\leanid{hayashi_ssa_equality_characterization} depends only on these two proved
+directions.
 
 \section{Trace-preserving Petz channel now available}
 
@@ -695,81 +619,49 @@ For singular $\rho_A$, this is a supported-input identity, not a global
 factorization of TNLean's generic completed product-reference channel.
 
 The full-support invariant-state decomposition and preserving-operation block
-action used in \cite[Theorem~6]{HaydenJozsaPetzWinter2004} are now available.
-The joint-support reduction now constructs faithful support coordinates,
-reconstructs every family member, and restricts each preserving operation to
-those coordinates. The normalized family blocks and preserving-operation
-action are packaged on the minimum joint support. Applying this theorem to
-the recovered conditional family begins with the finite informationally
-complete effect family and conditional slices
+action used in \cite[Theorem~6]{HaydenJozsaPetzWinter2004} are formalized, as
+are the joint-support reduction and its application to the recovered
+conditional family. The declarations
 \begin{center}
   \small
-  \leanid{Matrix.eq_of_conditionalSlice_informationallyCompleteEffect_eq}\\
-  \leanid{Matrix.idTensor_recoveredMiddleChannel_traceC_ABC_eq}\\
-  \leanid{Matrix.exists_recoveredConditionalPreservingKrausFamily}\\
-  \leanid{Matrix.exists_recoveredConditionalStateBlockForm_preservingBlockAction_jointSupport}\\
   \leanid{Matrix.exists_recoveredConditionalBipartiteBlockForm_jointSupport}\\
   \leanid{Matrix.exists_recoveredConditionalAmbientBipartiteBlockForm}\\
   \leanid{Matrix.exists_recoveredDilationBlockUnitary}\\
   \leanid{Matrix.RecoveredConditionalDilationBlockForm.ambient_tripartite_block_form}\\
-  \leanid{Matrix.exists_recoveredConditionalTripartiteBlockForm}.
+  \leanid{Matrix.exists_recoveredConditionalTripartiteBlockForm}
 \end{center}
-These declarations construct a finite nonempty family of nonzero normalized
-conditional states fixed by
-$\varphi=\operatorname{Tr}_C\circ\widehat{\mathcal R}$ and prove that the
-finite slices separate bipartite operators. They also apply the joint-support
-block form to this family and retain the support-intertwining and
-preserving-operation action of $\varphi$.
-\leanid{Matrix.exists_recoveredConditionalBipartiteBlockForm_jointSupport}
-rescales active slices, proves inactive positive slices vanish, and reconstructs
-$\rho_{AB}$ as $\bigoplus_j\sigma_j\otimes\omega_j$ on the same minimum joint
-support. This is a scope-restricted joint-support variant toward HJPW
-equation~(14).
-\leanid{Matrix.exists_recoveredConditionalAmbientBipartiteBlockForm} completes
-the support coordinates to all of $B$, adds one-dimensional zero-weight tensor
-sectors on the complement, and proves the ambient equation~(14) with positive
-factors whose conditional traces sum to one.
-\leanid{Matrix.exists_recoveredDilationBlockUnitary} proves the block-coordinate
-recovery dilation of equation~(15), supported agreement with the Petz
-operation, and the exact recovery identity. It also constructs positive
-trace-one recovered states on the supported common-factor sectors with the
-prescribed common-factor marginals.
-\leanid{Matrix.exists_recoveredConditionalTripartiteBlockForm} combines
-equations~(11), (14), and~(15) in the orientation
-$W^\dagger\rho_{ABC}W$ and gives zero complementary blocks together with
-supported blocks $\omega_j\otimes\widehat\rho_j$ in HJPW factor order.
-Defining the probabilities, normalizing the left factors, handling zero-weight
-sectors, and constructing the quantum-Markov decomposition remain necessary
-before the forward external assumption can be removed.
+produce the positive unnormalized factors $\omega_j$, prove that their traces
+sum to one, produce the trace-one supported recovered states
+$\widehat\rho_j$, and establish~\eqref{eq:ambient-hjpw} with zero complementary
+blocks. The theorem
+\leanid{Matrix.hayashi_ssa_equality_characterization_forward} then sets
+$p_j=\operatorname{Re}\operatorname{tr}\omega_j$, reverses the fibre order,
+uses the adjoint middle-system unitary, and performs the final total
+normalization. Every supported right factor remains its recovered physical
+state, including in a zero-weight supported sector. A zero-weight supported
+sector may use a filler only on the left, whereas a complementary sector may
+use fillers on both sides.
+
+The singular-support recovery scope is unchanged. Equality in data processing
+gives the raw support-Petz recovery identity, and on the recovered marginal the
+chosen completed local channel agrees with that raw map. No tensor-product
+factorization is claimed for the generic completed singular product-reference
+channel away from the supported input.
 
 \section{Verdict}
 
-The strong-subadditivity equality characterization is now split into a proved
-reverse direction and a postulated forward direction. For the forward
-direction, equality now gives the unnormalized ambient tripartite blocks in
-HJPW factor order. The remaining step is their probability normalization and
-inclusion in the quantum-Markov decomposition.
-The full-support invariant-family state decomposition and preserving-operation
-block action are formalized. Source-facing
-completed-channel recovery from equality in data processing is available on
-arbitrary finite tensor factors. Its exact HJPW product-reference
-specialization and identity-tensored local recovery channel are also
-formalized without invertibility assumptions. The finite recovered
-conditional density family and its common preserving channel are also
-formalized, with zero-probability effects omitted before normalization. The
-remaining forward structural direction alone is postulated. The reverse direction,
-a block-diagonal product state attains equality, is proved from entropy
-additivity over weighted direct sums and tensor factors together with unitary
-and reindexing invariance. The joint-support block form is now applied to the
-recovered conditional family, and the bipartite marginal is reconstructed in
-the same support coordinates. Those coordinates now extend to all of $B$ and
-prove the ambient HJPW equation~(14). The chosen block-coordinate dilation of
-equation~(15), its supported Petz agreement, and its normalized recovered
-supported-sector states are now formalized. Equations~(11), (14), and~(15) now
-also give zero complementary tripartite blocks and supported blocks
-$\omega_j\otimes\widehat\rho_j$ in HJPW factor order. Probability normalization,
-zero-weight sector choices, construction of the quantum-Markov decomposition,
-and removal of the forward external assumption remain open.
+\emph{Closed.} The forward and reverse implications of the
+strong-subadditivity equality characterization are proved, and their
+biconditional is axiom-free. The forward proof derives the ambient HJPW blocks,
+uses $p_j=\operatorname{Re}\operatorname{tr}\omega_j$ with nonnegative weights
+summing to one, preserves the recovered trace-one states on supported sectors,
+and introduces arbitrary normalized fillers only where the final weight is
+zero. The middle fibres are read in $B_j^L\otimes B_j^R$ order, and the Hayashi
+unitary has the adjoint orientation required by~\eqref{eq:ambient-hjpw}.
+
+The closure does not strengthen the completed Petz map off support. The proved
+source-facing claim remains the raw support-map recovery identity, together
+with agreement of the chosen completed local channel on the supported marginal.
 
 \begin{thebibliography}{9}
 

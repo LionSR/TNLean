@@ -12,8 +12,8 @@ import TNLean.Analysis.HayashiMarkovStructure
 This file proves that a quantum-Markov-chain (block-diagonal) state attains
 equality in strong subadditivity, the reverse direction of the Hayashi
 characterization. The forward direction (equality forces the block-diagonal
-structure) remains a sanctioned axiom resting on Petz-recovery theory; see
-`docs/paper-gaps/cpsv16_ssa_equality_hayashi_markov.tex`.
+structure) is proved in `TNLean.Analysis.EntropyMarkovForward` from the
+recovered conditional tripartite block form.
 
 ## Strategy
 
@@ -120,39 +120,6 @@ theorem liftB_mem_unitary (U_B : Matrix.unitaryGroup (Fin dB) ℂ) :
   unfold liftB
   exact Matrix.kronecker_mem_unitary (one_mem _)
     (Matrix.kronecker_mem_unitary U_B.2 (one_mem _))
-
-/-! ## Entrywise value of the block-diagonal state -/
-
-/-- Entrywise value of the block-diagonal quantum-Markov-chain state. The entry
-between two indices vanishes unless their block labels agree, in which case it is
-the weight times the product of the left and right component entries. -/
-theorem blockState_apply (p : Fin m → ℝ)
-    (ρ_left : (j : Fin m) → Matrix (Fin dA × Fin (dL j)) (Fin dA × Fin (dL j)) ℂ)
-    (ρ_right : (j : Fin m) → Matrix (Fin (dR j) × Fin dC) (Fin (dR j) × Fin dC) ℂ)
-    (a a' : Fin dA) (c c' : Fin dC)
-    (j j' : Fin m) (lr : Fin (dL j) × Fin (dR j)) (lr' : Fin (dL j') × Fin (dR j')) :
-    blockState (dA := dA) (dC := dC) dL dR p ρ_left ρ_right
-        (a, (⟨j, lr⟩, c)) (a', (⟨j', lr'⟩, c'))
-      = if h : j = j' then
-          (p j : ℂ) * ρ_left j (a, lr.1) (a', h ▸ lr'.1)
-            * ρ_right j (lr.2, c) (h ▸ lr'.2, c')
-        else 0 := by
-  classical
-  rw [blockState]
-  rw [Matrix.reindex_apply, Matrix.submatrix_apply]
-  have hidx1 : (sigmaAssoc (dA := dA) (dC := dC) dL dR).symm (a, (⟨j, lr⟩, c))
-      = (⟨j, ((a, lr.1), (lr.2, c))⟩ :
-        Σ j : Fin m, (Fin dA × Fin (dL j)) × (Fin (dR j) × Fin dC)) := rfl
-  have hidx2 : (sigmaAssoc (dA := dA) (dC := dC) dL dR).symm (a', (⟨j', lr'⟩, c'))
-      = (⟨j', ((a', lr'.1), (lr'.2, c'))⟩ :
-        Σ j : Fin m, (Fin dA × Fin (dL j)) × (Fin (dR j) × Fin dC)) := rfl
-  rw [hidx1, hidx2]
-  by_cases h : j = j'
-  · subst h
-    rw [Matrix.blockDiagonal'_apply_eq, dif_pos rfl]
-    simp only [Matrix.smul_apply, Matrix.kroneckerMap_apply, smul_eq_mul]
-    ring
-  · rw [Matrix.blockDiagonal'_apply_ne _ _ _ h, dif_neg h]
 
 /-! ## Partial-trace naturality of the lifted conjugation -/
 
@@ -632,8 +599,7 @@ term \(H(\{p_j\})\) plus a weighted sum of component entropies, and the four
 terms of strong subadditivity cancel.
 
 Source: Hayashi, *Quantum Information: An Introduction*, Springer 2006,
-Theorem 5.24; blueprint `thm:hayashi_ssa_equality_characterization` (reverse
-implication). -/
+Theorem 5.24; blueprint `thm:hayashi_ssa_equality_reverse`. -/
 theorem hayashi_ssa_equality_characterization_reverse {dA dB dC : ℕ}
     (ρ_ABC : Matrix (Fin dA × Fin dB × Fin dC) (Fin dA × Fin dB × Fin dC) ℂ)
     (hρ_dm : ρ_ABC.PosSemidef ∧ ρ_ABC.trace = 1) :

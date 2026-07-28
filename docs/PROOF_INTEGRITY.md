@@ -42,18 +42,20 @@ These patterns **must** be resolved before merging.
 
 | Pattern | Risk |
 |---------|------|
-| `axiom` declarations | Introduces unproven assumptions that could be inconsistent; must be explicitly justified |
+| `axiom` declarations | Introduces unproven assumptions that could be inconsistent; every new declaration is a blocker |
 
 #### Sanctioned axioms
 
-The following axioms are explicitly sanctioned in this repository. Each is
-isolated in a dedicated module under `TNLean/Axioms/` with a citation to its
-primary source and a formalization TODO. New axioms outside this list are
-treated as blockers.
+There are no sanctioned axiom declarations in this repository. Any new
+`axiom` declaration is a blocker.
 
-| Axiom | Module | Citation |
-|-------|--------|----------|
-| `hayashi_ssa_equality_characterization_forward` | `TNLean/Axioms/Entropy.lean` | **Forward** direction of the SSA-equality characterization: SSA equality forces the quantum-Markov-chain structure on the middle subsystem (rests on recovery-map / Petz theory). The biconditional `hayashi_ssa_equality_characterization` is now a **derived theorem** (`⟨forward, reverse⟩`); the reverse direction is proved in `TNLean/Analysis/EntropyMarkovReverse.lean`, so this forward axiom is the only remaining axiomatic content. Sanctioned for issue #632 / gate #236. Citations: Hayashi, *Quantum Information: An Introduction*, Springer 2006, Theorem 5.24; Ruskai, JMP 43, 4358 (2002); equivalent structural formulation also appears in Hayden–Jozsa–Petz–Winter, CMP 246, 359–374 (2004). Consumed (via the biconditional theorem) by the theorem wrappers in `TNLean/Entropy/MarkovChain.lean`. |
+Historically, `hayashi_ssa_equality_characterization_forward` in
+`TNLean/Axioms/Entropy.lean` was sanctioned for issue #632 / gate #236. It is
+now a theorem proved in `TNLean/Analysis/EntropyMarkovForward.lean`; the module
+under `TNLean/Axioms/` retains the established public name only for
+compatibility. The reverse direction is proved in
+`TNLean/Analysis/EntropyMarkovReverse.lean`, and the biconditional combines the
+two proved implications.
 
 `TNLean/Axioms/OperatorConvexity.lean` no longer declares any axioms: the operator
 Jensen inequalities for the concave real power, convex real power, and logarithm

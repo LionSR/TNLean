@@ -76,6 +76,20 @@ _DECL_DEFN_RE = re.compile(
     re.MULTILINE,
 )
 
+_ALIAS_DEFN_RE = re.compile(
+    r"^\s*(?:@\[[^\]]*\]\s*)?"
+    r"(?:(?:noncomputable|protected|private|local)\s+)*"
+    r"alias\s+([A-Za-z_][\w.']*)"
+)
+
+_ALIAS_HEADER_RE = re.compile(
+    r"^\s*(?:@\[[^\]]*\]\s*)?"
+    r"(?:(?:noncomputable|protected|private|local)\s+)*"
+    r"alias\s*$"
+)
+
+_ALIAS_NAME_RE = re.compile(r"^\s*([A-Za-z_][\w.']*)\s*:=")
+
 _STRUCTURE_DEFN_RE = re.compile(
     r"^\s*(?:@\[[^\]]*\]\s*)?"
     r"(?:(?:noncomputable|protected|private|local)\s+)*"
@@ -228,7 +242,23 @@ def build_decl_index(lean_root: Path) -> set[str]:
             continue
         namespace_stack: list[str] = []
         active_structure_names: list[str] = []
+        pending_alias_header = False
+
+        def add_alias(declared: str) -> None:
+            names.add(declared.rsplit(".", 1)[-1])
+            names.add(declared)
+            if namespace_stack:
+                names.add(".".join([*namespace_stack, declared]))
+
         for line in text.splitlines():
+            if pending_alias_header:
+                if not line.strip() or line.lstrip().startswith("--"):
+                    continue
+                pending_alias_header = False
+                if m := _ALIAS_NAME_RE.match(line):
+                    add_alias(m.group(1))
+                    active_structure_names = []
+                    continue
             if m := _NAMESPACE_RE.match(line):
                 namespace_stack.extend(m.group(1).split("."))
                 active_structure_names = []
@@ -246,6 +276,14 @@ def build_decl_index(lean_root: Path) -> set[str]:
                 # closes an unnamed ``section`` inside a namespace.  Do not pop
                 # the namespace stack unless Lean text explicitly names the
                 # namespace being closed.
+                continue
+            if m := _ALIAS_DEFN_RE.match(line):
+                add_alias(m.group(1))
+                active_structure_names = []
+                continue
+            if _ALIAS_HEADER_RE.match(line):
+                pending_alias_header = True
+                active_structure_names = []
                 continue
             if m := _DECL_DEFN_RE.match(line):
                 declared = m.group(1)
@@ -514,21 +552,21 @@ def _self_test(repo_root: Path) -> int:
     """Minimal credentials-free smoke test.
 
     Builds one synthetic issue whose body references this very script, a known
-    sanctioned axiom, a known structure-field projection, and a deliberately
-    bogus declaration, then confirms the audit emits the expected flags without
-    misclassifying the axiom or field.  Used by CI and by human reviewers to
-    verify the tool works on a fresh checkout without talking to GitHub.
+    proved alias, a known structure-field projection, and a deliberately bogus
+    declaration. It confirms that a citation to the proved line is stale while
+    both current declarations still resolve. Used by CI and by human reviewers
+    to verify the tool on a fresh checkout without talking to GitHub.
     """
     entropy_path = repo_root / "TNLean" / "Axioms" / "Entropy.lean"
-    entropy_line = 0
+    theorem_line = 0
     for idx, line in enumerate(entropy_path.read_text(errors="replace").splitlines(), start=1):
-        if re.match(r"\s*axiom\s+hayashi_ssa_equality_characterization_forward\b", line):
-            entropy_line = idx
+        if re.match(r"\s*alias\s+hayashi_ssa_equality_characterization_forward\b", line):
+            theorem_line = idx
             break
-    if entropy_line == 0:
+    if theorem_line == 0:
         print("self-test FAILED:", file=sys.stderr)
         print(
-            "  - could not locate hayashi_ssa_equality_characterization_forward axiom line",
+            "  - could not locate hayashi_ssa_equality_characterization_forward alias line",
             file=sys.stderr,
         )
         return 1
@@ -538,11 +576,13 @@ def _self_test(repo_root: Path) -> int:
         "title": "[self-test] synthetic audit fixture",
         "url": "https://example.invalid/issue/0",
         "body": (
-            f"Refers to `TNLean/Axioms/Entropy.lean:{entropy_line}`, "
+            f"Refers to `TNLean/Axioms/Entropy.lean:{theorem_line}`, "
             "`TNLean/Does/Not/Exist.lean:10`, and to "
             "`definitely_not_a_real_declaration`.\n"
-            "Also cites the sanctioned axiom "
+            "Also cites the proved compatibility alias "
             "`hayashi_ssa_equality_characterization_forward`.\n"
+            "Also cites the multiline deprecated alias "
+            "`Matrix.conjTranspose_inv_cfc_sqrt_mul_self_of_posDef`.\n"
             "Also cites the structure field "
             "`AppendixBProductPairExtraction.localProjectors`.\n"
             "Also mentions `scripts/audit_stale_issues.py` (should be ignored)."
@@ -559,13 +599,17 @@ def _self_test(repo_root: Path) -> int:
         problems.append(
             f"expected missing-decl flag, got: {r.missing_decls!r}"
         )
-    if ("TNLean/Axioms/Entropy.lean", entropy_line) in r.non_sorry_lines:
+    if ("TNLean/Axioms/Entropy.lean", theorem_line) not in r.non_sorry_lines:
         problems.append(
-            "axiom line was incorrectly flagged as no longer unproved"
+            "proved theorem line was not flagged as no longer unproved"
         )
     if "hayashi_ssa_equality_characterization_forward" in r.missing_decls:
         problems.append(
-            "sanctioned axiom was incorrectly flagged as a missing declaration"
+            "proved compatibility alias was incorrectly flagged as missing"
+        )
+    if "Matrix.conjTranspose_inv_cfc_sqrt_mul_self_of_posDef" in r.missing_decls:
+        problems.append(
+            "multiline deprecated alias was incorrectly flagged as missing"
         )
     if "AppendixBProductPairExtraction.localProjectors" in r.missing_decls:
         problems.append(
