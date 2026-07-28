@@ -1888,8 +1888,8 @@ algebra of a family of jointly invariant states.
     \begin{align}
         \mathcal H_B
         =
-        \bigoplus_j \mathcal H_{b_j^L}\otimes
-            \mathcal H_{b_j^R}.
+        \bigoplus_j \mathcal H_{b_j^R}\otimes
+            \mathcal H_{b_j^L}.
     \end{align}
     In unitary coordinates adapted to this decomposition there are density
     matrices $\sigma_j$ and positive, not necessarily normalized operators
@@ -1901,8 +1901,9 @@ algebra of a family of jointly invariant states.
         \sum_j\tr\omega_j
         &=1.
     \end{align}
-    The tensor factors are written in the reverse order from HJPW.
-    Directions complementary to the minimum joint support form
+    This is TNLean's stored factor order, reverse to HJPW's
+    $b_j^L\otimes b_j^R$ order. Directions complementary to the minimum
+    joint support form
     one-dimensional tensor sectors with zero $\omega_j$.
 
     This is
@@ -1927,6 +1928,9 @@ algebra of a family of jointly invariant states.
 \begin{theorem}[Recovered dilation in ambient block coordinates]
     \label{thm:hjpw_recovered_dilation_ambient_blocks}
     \lean{Matrix.exists_recoveredDilationBlockUnitary}
+    \lean{Matrix.RecoveredConditionalDilationBlockForm.recoveredSectorState_posSemidef}
+    \lean{Matrix.RecoveredConditionalDilationBlockForm.recoveredSectorState_trace}
+    \lean{Matrix.RecoveredConditionalDilationBlockForm.partialTraceRight_recoveredSectorState}
     \leanok
     \uses{thm:hjpw_recovered_bipartite_ambient_blocks,
         thm:hjpw_recovered_conditional_joint_support_blocks}
@@ -1935,8 +1939,8 @@ algebra of a family of jointly invariant states.
     \begin{align}
         \mathcal H_B
         =
-        \bigoplus_j \mathcal H_{b_j^L}\otimes
-            \mathcal H_{b_j^R}
+        \bigoplus_j \mathcal H_{b_j^R}\otimes
+            \mathcal H_{b_j^L}
     \end{align}
     from
     Theorem~\ref{thm:hjpw_recovered_bipartite_ambient_blocks}.
@@ -1945,15 +1949,14 @@ algebra of a family of jointly invariant states.
     \begin{align}
         U_{BCE}
         =
-        \bigoplus_j \mathbf 1_{b_j^L}\otimes U_j.
+        \bigoplus_j U_j\otimes\mathbf 1_{b_j^L}.
     \end{align}
     On every supported sector, $U_j$ dilates a trace-preserving completely
     positive map from $b_j^R$ to $b_j^R C$ that sends $\sigma_j$ to a state
     whose $b_j^R$ marginal is $\sigma_j$. The resulting state is positive and has
     trace one.
-    TNLean stores each sector in the reverse coordinate order from HJPW, so
-    the corresponding Lean block matrix is
-    $U_j\otimes\mathbf 1_{b_j^L}$.
+    This is TNLean's stored order. In HJPW's order the same block form is
+    $\mathbf 1_{b_j^L}\otimes U_j$.
 
     The recovery operation determined by the chosen unitary agrees with the
     Petz recovery operation on every operator supported by the minimum joint
