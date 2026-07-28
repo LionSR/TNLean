@@ -7677,13 +7677,25 @@
       \l__tenkz_kernel_r_tl
     \quark_if_no_value:NF \l__tenkz_kernel_r_tl
       {
+        % Cell coordinates contain the same comma that separates indexed
+        % crossing items.  Group them before the clist boundary, exactly as
+        % the ordinary cross= validator does.
+        \regex_replace_all:nnN
+          { \( \s* (\d+) \s* , \s* (\d+) \s* \) }
+          { \( \1 ; \2 \) }
+          \l__tenkz_kernel_r_tl
         \exp_args:NV \clist_map_inline:nn \l__tenkz_kernel_r_tl
           { \__tenkz_kernel_skin_pairing_cross:nn {#1} {##1} }
       }
   }
 \cs_new_protected:Npn \__tenkz_kernel_skin_pairing_cross:nn #1#2
   {
-    \regex_extract_once:nnNTF
+    \tl_set:Nn \l__tenkz_kernel_list_item_tl {#2}
+    \regex_replace_all:nnN
+      { \( \s* (\d+) \s* ; \s* (\d+) \s* \) }
+      { \( \1 , \2 \) }
+      \l__tenkz_kernel_list_item_tl
+    \exp_args:NnV \regex_extract_once:nnNTF
       {
         \A \s* ([1-9]\d*) \s* : \s*
         (
@@ -7692,7 +7704,7 @@
         )
         \s* \Z
       }
-      {#2} \l__tenkz_kernel_match_seq
+      \l__tenkz_kernel_list_item_tl \l__tenkz_kernel_match_seq
       {
         \tl_set:Ne \l__tenkz_kernel_r_b_tl
           { \seq_item:Nn \l__tenkz_kernel_match_seq {2} }
@@ -7805,7 +7817,8 @@
           }
       }
       {
-        \msg_error:nne {tenkz}{kernel-skin-pairings-parse} {#1}
+        \msg_error:nne {tenkz}{kernel-skin-pairings-parse}
+          { \tl_use:N \l__tenkz_kernel_r_skin_declared_tl }
       }
   }
 \cs_new_protected:Npn \__tenkz_kernel_skin_pairing_end:nnnn #1#2#3#4
