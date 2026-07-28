@@ -1858,8 +1858,8 @@ algebra of a family of jointly invariant states.
     subspace, whereas equation~(14), lines 499--502, decomposes the ambient
     subsystem $B$. This restriction is documented in
     \path{docs/paper-gaps/hjpw04_petz_factorization_maximally_mixed_scope.tex}.
-    % The next theorem performs the ambient extension; equation (15) remains
-    % the following sequential step.
+    % The next theorem performs the ambient extension; the subsequent
+    % recovered-dilation theorem supplies equation (15).
 \end{theorem}
 
 \begin{proof}
@@ -1888,8 +1888,8 @@ algebra of a family of jointly invariant states.
     \begin{align}
         \mathcal H_B
         =
-        \bigoplus_j \mathcal H_{b_j^L}\otimes
-            \mathcal H_{b_j^R}.
+        \bigoplus_j \mathcal H_{b_j^R}\otimes
+            \mathcal H_{b_j^L}.
     \end{align}
     In unitary coordinates adapted to this decomposition there are density
     matrices $\sigma_j$ and positive, not necessarily normalized operators
@@ -1901,8 +1901,10 @@ algebra of a family of jointly invariant states.
         \sum_j\tr\omega_j
         &=1.
     \end{align}
-    The tensor factors are written in the reverse order from HJPW.
-    Directions complementary to the minimum joint support form
+    The tensor factors appear here in the order $b_j^R\otimes b_j^L$,
+    the reverse of HJPW's $b_j^L\otimes b_j^R$ order. Directions
+    complementary to the minimum
+    joint support form
     one-dimensional tensor sectors with zero $\omega_j$.
 
     This is
@@ -1922,6 +1924,76 @@ algebra of a family of jointly invariant states.
     Lifting the unitary extension through subsystem $A$ and combining the
     complementary zero block with the supported direct sum gives the
     displayed ambient equation.
+\end{proof}
+
+\begin{theorem}[Recovered dilation in ambient block coordinates]
+    \label{thm:hjpw_recovered_dilation_ambient_blocks}
+    \lean{Matrix.exists_recoveredDilationBlockUnitary}
+    \lean{Matrix.RecoveredConditionalDilationBlockForm.recoveredSectorState_posSemidef}
+    \lean{Matrix.RecoveredConditionalDilationBlockForm.recoveredSectorState_trace}
+    \lean{Matrix.RecoveredConditionalDilationBlockForm.partialTraceRight_recoveredSectorState}
+    \leanok
+    \uses{thm:hjpw_recovered_bipartite_ambient_blocks,
+        thm:hjpw_recovered_conditional_joint_support_blocks}
+    Let $\rho_{ABC}$ be a tripartite density matrix attaining equality in
+    strong subadditivity, with the ambient decomposition
+    \begin{align}
+        \mathcal H_B
+        =
+        \bigoplus_j \mathcal H_{b_j^R}\otimes
+            \mathcal H_{b_j^L}
+    \end{align}
+    from
+    Theorem~\ref{thm:hjpw_recovered_bipartite_ambient_blocks}.
+    There are a finite-dimensional ancilla, a fixed pure ancilla vector,
+    and one unitary $U_{BCE}$ whose block-coordinate form is
+    \begin{align}
+        U_{BCE}
+        =
+        \bigoplus_j U_j\otimes\mathbf 1_{b_j^L}.
+    \end{align}
+    On every supported sector, $U_j$ dilates a trace-preserving completely
+    positive map from $b_j^R$ to $b_j^R C$ that sends $\sigma_j$ to a state
+    whose $b_j^R$ marginal is $\sigma_j$. The resulting state is positive and has
+    trace one.
+    The displayed block form uses the order
+    $U_j\otimes\mathbf 1_{b_j^L}$; in HJPW's order it is
+    $\mathbf 1_{b_j^L}\otimes U_j$.
+
+    The recovery operation determined by the chosen unitary agrees with the
+    Petz recovery operation on every operator supported by the minimum joint
+    supporting subspace, and
+    \begin{align}
+        (\operatorname{id}_A\otimes\widehat{\mathcal R})(\rho_{AB})
+        =
+        \rho_{ABC}.
+    \end{align}
+    No equality of the two operations is asserted on the complementary
+    ambient sectors.
+
+    This is \cite[Theorem~6, equation~(15)]{Hayden2004Structure},
+    lines~547--560, using Appendix~A, Theorem~10, Property~2,
+    lines~791--800, the equivalence with Property~$2'$ in lines~808--823,
+    and the operation-level proof in lines~853--882.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:hjpw_recovered_bipartite_ambient_blocks,
+        thm:ssa_equality_product_marginal_petz_recovery}
+    First obtain the ambient decomposition from
+    Theorem~\ref{thm:hjpw_recovered_bipartite_ambient_blocks}.
+    Choose rectangular Kraus operators for the Petz recovery operation and
+    slice them along subsystem $C$. On the minimum joint supporting
+    subspace, Property~$2'$ makes every slice block diagonal with the identity
+    on $b_j^L$, while the induced operation on $b_j^R$ fixes $\sigma_j$.
+    Extend each sector Stinespring isometry from the same fixed pure ancilla
+    vector to a unitary. Their direct sum gives the block-coordinate unitary;
+    conjugating by the ambient change of basis gives the physical unitary.
+    Equality of the two Stinespring isometries on the support proves agreement
+    with the Petz operation there. The supported reconstruction of
+    $\rho_{AB}$ then transports the Petz recovery identity to the chosen
+    unitary recovery.
 \end{proof}
 
 \begin{theorem}[Hayashi SSA-equality characterization]
@@ -1979,11 +2051,13 @@ algebra of a family of jointly invariant states.
     reconstructs the bipartite marginal only in the same minimum-support
     coordinates.
     Theorem~\ref{thm:hjpw_recovered_bipartite_ambient_blocks} extends them to
-    all of $B$ and completes equations~(13)--(14). Proving the
-    recovery-dilation block action of equation~(15) and assembling the
-    quantum-Markov decomposition remain open. This forward implication
-    therefore remains axiomatic. The biconditional combines the two
-    directions.
+    all of $B$ and completes equations~(13)--(14).
+    Theorem~\ref{thm:hjpw_recovered_dilation_ambient_blocks} supplies
+    equation~(15), agreement with the Petz operation on the joint support,
+    and the recovered supported-sector states. Only transporting those
+    sector states into the tripartite direct sum and assembling the
+    quantum-Markov decomposition remain open, so this forward implication
+    remains axiomatic. The biconditional combines the two directions.
 
     This equality criterion is cited here as an input for the later MPDO arguments.
     It is the equality criterion needed by Appendix~C of arXiv:1606.00608.
