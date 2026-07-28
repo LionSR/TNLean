@@ -231,7 +231,7 @@ grep -Fq 'TENKZ-HULL-BOX-POOL=1' "$WORK/r_hull_live.tex.transcript" || {
 skin_pairing_count=$(
   grep -c '^wire.*|origin=skin|' "$WORK/k_skin_pairings.tnlog" || true
 )
-[ "$skin_pairing_count" -eq 23 ] || {
+[ "$skin_pairing_count" -eq 24 ] || {
   echo "FAIL: declared skin pairings were not materialized as WIRE records" >&2
   exit 1
 }
@@ -254,6 +254,11 @@ grep -Fq 'stringcross|under=skin-atom-1-1|over=probe-a|hits=1' \
 grep -Fq 'stringcross|under=skin-atom-1-1|over=probe-b|hits=1' \
   "$WORK/k_skin_pairings.tnlog" || {
   echo "FAIL: a second indexed crossing was split from its pairing" >&2
+  exit 1
+}
+grep -Fq 'stringcross|under=skin-atom-1-1|over=turn-probe|hits=1' \
+  "$WORK/k_skin_pairings.tnlog" || {
+  echo "FAIL: a string-owned crossing missed its turned pairing host" >&2
   exit 1
 }
 grep -Fq 'stringcross|under=skin-atom-1-1|over=skin-atom-1-3|hits=1' \

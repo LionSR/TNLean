@@ -148,4 +148,19 @@
     name=probe-b
   ]{top-b}{bottom-b}
 \end{tenkz}
+\qquad
+\begin{tenkz}[rows={wire}, cols=3, frame=circle, bonds=none]
+  \tn[
+    at=(1,2),
+    name=turned-host,
+    skin=crossed-box
+  ]{}
+  \tn[at=1 n of turned-host, name=turn-top, skin=none, void=sealed]{}
+  \tn[at=1 s of turned-host, name=turn-bottom, skin=none, void=sealed]{}
+  \tnwire[
+    kind=string,
+    name=turn-probe,
+    cross={over at crossing of self and pairing 1 of turned-host}
+  ]{turn-top}{turn-bottom}
+\end{tenkz}
 \end{document}
