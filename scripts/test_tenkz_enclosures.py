@@ -368,6 +368,10 @@ DUPLICATE_RECOVERY = r"""
   \tnput[box, ports={west:virtual}]{b}{(2,0)}{B}
   \tnput[box]{c}{(4,0)}{\tenkzTestValidAtomInk}
   \tnput[box, ports={west:physical}]{d}{(2,-1)}{D}
+  \tnput[dot, ports={22.5:virtual}]{decimalA}{(0,2)}{}
+  \tnput[dot, ports={202.5:virtual}]{decimalB}{(2,2)}{}
+  \tnput[dot, frame={{rotate=90}}, ports={east:virtual}]{rotatedA}{(4,2)}{}
+  \tnput[dot, ports={west:virtual}]{rotatedB}{(4,4)}{}
   \tnput[box, label pos=sideways]{badpos}{(5,0)}{\tenkzTestRejectedInk}
   \tnput[box, mystery=1]{badputkey}{(6,0)}{\tenkzTestRejectedInk}
   \tnput[circle, size=xl]{badsize}{(6,1)}{\tenkzTestRejectedInk}
@@ -392,6 +396,9 @@ DUPLICATE_RECOVERY = r"""
   \coordinate (rawA) at (0mm,10mm);
   \coordinate (rawB) at (20mm,10mm);
   \tnjoin[name=raw, label={\tenkzTestValidRawJoinInk}]{rawA}{rawB}
+  \tnjoin[route=arc]{a.east}{b.center}
+  \tnjoin[route=arc]{decimalA.22.5}{decimalB.202.5}
+  \tnjoin[route=arc]{rotatedA.east}{rotatedB.west}
   \tnjoin[name=badarc, route=arc, out=0, label={\tenkzTestBadArcInk}]
     {a.east}{b.west}
   \tnjoin[name=badtype, label={\tenkzTestBadTypeInk}]

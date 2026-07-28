@@ -13,6 +13,7 @@
 \ExplSyntaxOn
 
 \prop_new:N \g__tenkz_ports_prop   % "pictureid/name.anchor" -> type
+\prop_new:N \g__tenkz_free_atom_angle_prop % "pictureid/name" -> local degrees
 
 \NewDocumentEnvironment { tenkzfree } { O{} }
   {
@@ -286,6 +287,9 @@
       }
     \bool_if:NT \l__tenkz_fcommit_bool
       {
+    \tl_set:Ne \l_tmpa_tl {\the\tenkz@pictureid/#2}
+    \prop_gput:NVV \g__tenkz_free_atom_angle_prop
+      \l_tmpa_tl \l__tenkz_fangle_tl
     \tl_gset:Ne \g__tenkz_free_atom_record_tl
       { kind={put}, name={\exp_not:n{#2}}, at={\exp_not:n{#3}},
         skin={\tl_use:N \l__tenkz_fshape_tl},
@@ -523,6 +527,15 @@
       }
   }
 
+\cs_new_protected:Npn \tenkz_free_angle_add:nN #1#2
+  {
+    \tl_set:Ne #2
+      {
+        \fp_eval:n
+          { #2 + (#1) - 360 * floor((#2 + (#1)) / 360) }
+      }
+  }
+
 % Named free-tier ports already carry their face in the anchor.  Recover that
 % canonical face only at the compatibility boundary: different atoms use
 % outward faces, while two ports of one atom use their inward faces, matching
@@ -530,8 +543,12 @@
 % to the renderer's automatic bend.
 \cs_new_protected:Npn \tenkz_free_infer_arc_angles:nn #1#2
   {
+    \tl_clear:N \l__tenkz_jarc_from_name_tl
+    \tl_clear:N \l__tenkz_jarc_to_name_tl
+    \tl_clear:N \l__tenkz_jarc_from_anchor_tl
+    \tl_clear:N \l__tenkz_jarc_to_anchor_tl
     \regex_extract_once:nnNTF
-      {\A \s* ([-A-Za-z0-9:_]+) \. ([^.]+) \s* \Z}
+      {\A \s* ([-A-Za-z0-9:_]+) \. (.+) \s* \Z}
       {#1} \l__tenkz_jarc_endpoint_seq
       {
         \tl_set:Ne \l__tenkz_jarc_from_name_tl
@@ -541,7 +558,7 @@
       }
       {\tl_clear:N \l__tenkz_jarc_from_anchor_tl}
     \regex_extract_once:nnNTF
-      {\A \s* ([-A-Za-z0-9:_]+) \. ([^.]+) \s* \Z}
+      {\A \s* ([-A-Za-z0-9:_]+) \. (.+) \s* \Z}
       {#2} \l__tenkz_jarc_endpoint_seq
       {
         \tl_set:Ne \l__tenkz_jarc_to_name_tl
@@ -558,30 +575,35 @@
               \l__tenkz_jarc_from_anchor_tl \l__tenkz_jout_tl
             \exp_args:NV \tenkz_free_anchor_angle:nN
               \l__tenkz_jarc_to_anchor_tl \l__tenkz_jin_tl
-            \tl_if_eq:NNT \l__tenkz_jarc_from_name_tl
-              \l__tenkz_jarc_to_name_tl
+            \bool_lazy_or:nnTF
+              { \tl_if_empty_p:N \l__tenkz_jout_tl }
+              { \tl_if_empty_p:N \l__tenkz_jin_tl }
               {
-                \tl_if_empty:NF \l__tenkz_jout_tl
+                \tl_clear:N \l__tenkz_jout_tl
+                \tl_clear:N \l__tenkz_jin_tl
+              }
+              {
+                \prop_get:NeNTF \g__tenkz_free_atom_angle_prop
+                  {\the\tenkz@pictureid/\l__tenkz_jarc_from_name_tl}
+                  \l_tmpa_tl
                   {
-                    \tl_set:Ne \l__tenkz_jout_tl
-                      {
-                        \fp_eval:n
-                          {
-                            \l__tenkz_jout_tl + 180
-                            - 360 * floor((\l__tenkz_jout_tl + 180) / 360)
-                          }
-                      }
+                    \exp_args:NV \tenkz_free_angle_add:nN
+                      \l_tmpa_tl \l__tenkz_jout_tl
                   }
-                \tl_if_empty:NF \l__tenkz_jin_tl
+                  { }
+                \prop_get:NeNTF \g__tenkz_free_atom_angle_prop
+                  {\the\tenkz@pictureid/\l__tenkz_jarc_to_name_tl}
+                  \l_tmpa_tl
                   {
-                    \tl_set:Ne \l__tenkz_jin_tl
-                      {
-                        \fp_eval:n
-                          {
-                            \l__tenkz_jin_tl + 180
-                            - 360 * floor((\l__tenkz_jin_tl + 180) / 360)
-                          }
-                      }
+                    \exp_args:NV \tenkz_free_angle_add:nN
+                      \l_tmpa_tl \l__tenkz_jin_tl
+                  }
+                  { }
+                \tl_if_eq:NNT \l__tenkz_jarc_from_name_tl
+                  \l__tenkz_jarc_to_name_tl
+                  {
+                    \tenkz_free_angle_add:nN {180} \l__tenkz_jout_tl
+                    \tenkz_free_angle_add:nN {180} \l__tenkz_jin_tl
                   }
               }
           }
@@ -621,15 +643,15 @@
           { \str_if_eq_p:Vn \l__tenkz_jroute_tl {arc} }
           { \str_if_eq_p:Vn \l__tenkz_jroute_tl {curve} }
           {
-        \bool_xor:nnT
-          { \tl_if_empty_p:N \l__tenkz_jout_tl }
-          { \tl_if_empty_p:N \l__tenkz_jin_tl }
-          {
-            \bool_set_false:N \l__tenkz_jroute_valid_bool
-            \PackageError{tenkz}
-              {Arc~route~takes~both~out=~and~in=~or~neither}
-              {Remove~both~legacy~angles~for~the~automatic~arc.}
-          }
+            \bool_xor:nnT
+              { \tl_if_empty_p:N \l__tenkz_jout_tl }
+              { \tl_if_empty_p:N \l__tenkz_jin_tl }
+              {
+                \bool_set_false:N \l__tenkz_jroute_valid_bool
+                \PackageError{tenkz}
+                  {Arc~route~takes~both~out=~and~in=~or~neither}
+                  {Remove~both~legacy~angles~for~the~automatic~arc.}
+              }
           }
       }
     \bool_if:NT \l__tenkz_jroute_valid_bool
@@ -643,9 +665,9 @@
               { \tl_if_empty_p:N \l__tenkz_jin_tl }
               { \tenkz_free_infer_arc_angles:nn {#2} {#3} }
           }
-    \bool_set_true:N \l__tenkz_jcommit_bool
-    \tenkz_free_join_endpoint:n {#2}
-    \tenkz_free_join_endpoint:n {#3}
+        \bool_set_true:N \l__tenkz_jcommit_bool
+        \tenkz_free_join_endpoint:n {#2}
+        \tenkz_free_join_endpoint:n {#3}
     % type assertion when both endpoints declared types
     \prop_get:NeNT \g__tenkz_ports_prop {\the\tenkz@pictureid/#2} \l_tmpa_tl
       {
