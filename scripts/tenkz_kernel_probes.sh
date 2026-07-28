@@ -231,7 +231,7 @@ grep -Fq 'TENKZ-HULL-BOX-POOL=1' "$WORK/r_hull_live.tex.transcript" || {
 skin_pairing_count=$(
   grep -c '^wire.*|origin=skin|' "$WORK/k_skin_pairings.tnlog" || true
 )
-[ "$skin_pairing_count" -eq 19 ] || {
+[ "$skin_pairing_count" -eq 21 ] || {
   echo "FAIL: declared skin pairings were not materialized as WIRE records" >&2
   exit 1
 }
@@ -244,6 +244,21 @@ grep -Eq \
 grep -Fq 'stringbead|id=skin-atom-1-1|t=0.5|' \
   "$WORK/k_skin_pairings.tnlog" || {
   echo "FAIL: an on-wire address did not follow the saved pairing route" >&2
+  exit 1
+}
+grep -Fq 'stringcross|under=probe|over=skin-atom-1-1|hits=1' \
+  "$WORK/k_skin_pairings.tnlog" || {
+  echo "FAIL: a declared string/skin-pairing crossing missed the shared ledger" >&2
+  exit 1
+}
+grep -Fq 'stringcross|under=skin-atom-1-1|over=skin-atom-1-3|hits=1' \
+  "$WORK/k_skin_pairings.tnlog" || {
+  echo "FAIL: ordered same-skin pairings missed their generated crossing order" >&2
+  exit 1
+}
+grep -Fq '|skin=slotted-dot|wide=2' \
+  "$WORK/k_skin_pairings.tnlog" || {
+  echo "FAIL: the span-aware paired-dot fixture disappeared" >&2
   exit 1
 }
 command -v pdftoppm >/dev/null 2>&1 || {
@@ -587,6 +602,20 @@ fi
 grep -Fq '[TKZ-LANG-NAME-COLLISION]' \
   "$WORK/n_skin_pairing_name.transcript" || {
   echo "FAIL: a generated pairing name collision lacked its diagnostic" >&2
+  exit 1
+}
+
+skin_cross_negative="$KERNEL/negative/n_skin_pairing_cross.tex"
+if ( cd "$WORK" &&
+     TEXINPUTS="$REPO/tex/tenkz//:" \
+       timeout 120 xelatex -interaction=nonstopmode -halt-on-error \
+       "$skin_cross_negative" >"$WORK/n_skin_pairing_cross.transcript" 2>&1 ); then
+  echo "FAIL: an undeclared string/skin-pairing crossing was accepted" >&2
+  exit 1
+fi
+grep -Fq '[TKZ-CROSS-UNDECLARED]' \
+  "$WORK/n_skin_pairing_cross.transcript" || {
+  echo "FAIL: string/skin-pairing crossing lacked TKZ-CROSS-UNDECLARED" >&2
   exit 1
 }
 

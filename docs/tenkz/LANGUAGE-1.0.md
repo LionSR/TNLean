@@ -353,10 +353,11 @@ A wire is one typed index line. `kind=index` is a bond: two typed-port
 endpoints, a straight route, and the type check `[TKZ-PORT-TYPE]` — a virtual
 port never meets a physical one. `kind=pairing` is a declared skin's curved
 own-port route: it belongs to one host, remains addressable by arclength, and
-its declared order controls the over-glyph ink. `kind=string` travels: it
-carries routes, crossings, winding, and beads, and its endpoints may be any
-address, cells included. The distinction is a field of the record; all three
-are one record class.
+its declared list order controls the over-glyph ink and supplies the crossing
+order between pairings of that same skin. `kind=string` travels: it carries
+routes, crossings, winding, and beads, and its endpoints may be any address,
+cells included. The distinction is a field of the record; all three are one
+record class.
 
 **The offset hull.** The offset hull of a selection is the support hull of
 the selected records' silhouettes, measured in the frame's own axes, expanded
@@ -398,7 +399,9 @@ the picture, including the wire being declared; references resolve at
 validation, not at reading order. A declared crossing whose paths do not
 intersect is `[TKZ-CROSS-NOT-FOUND]`. An undeclared geometric intersection
 of two wires is `[TKZ-CROSS-UNDECLARED]`. Both are hard errors: over/under
-order is mathematical content and the renderer never guesses it.
+order is mathematical content and the renderer never guesses it. Pairings in
+one skin inherit the order of their declared list; a pairing that meets any
+other wire still needs an ordinary `cross=` declaration.
 <!-- Consumers: rmp-iii-b-braid-one/-two/-three/-four,
      rmp-iii-b-self-braiding, rmp-iii-a-spt-mpo,
      rmp-iii-b-r-tensor-left/-right. -->
