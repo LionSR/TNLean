@@ -729,15 +729,14 @@ note = "marked region and open string remain drawn after route migration"
 
 [[verdict]]
 id = "rmp-iii-b-self-braiding"
-status = "blocked"
+status = "cosmetic-gap"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
-defects = ["wrong-contraction"]
-missing = ["crossing-order"]
-case_sha256 = "6e85b8d4e93e00149c42574181262836f5a50c6a836cc92fadc1782aef914ddf"
-reviewed = "2026-07-26"
-renderer = "fable-countersign-reading-2026-07-26-200dpi"
-note = "twist rendered without crossings"
+defects = []
+case_sha256 = "69ed59adcfa832770425b51918903b7d27f56d19805eeb8929fff9441a868235"
+reviewed = "2026-07-28"
+renderer = "codex-named-boundary-self-braiding-review-2026-07-28-120dpi"
+note = "the double winding carries eight tensors plus the source tail crossing and a named north boundary; the four-tensor single winding has an ordinary east-boundary tail"
 
 [[verdict]]
 id = "rmp-iii-b-r-tensor-left"
@@ -1052,15 +1051,14 @@ note = "same family"
 
 [[verdict]]
 id = "rmp-workbench-ii-mpu-wrap-second"
-status = "blocked"
+status = "cosmetic-gap"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
-defects = ["missing-element"]
-missing = ["skin-pairings"]
-case_sha256 = "4873ed41cd452d1413cb4e6a410e88d3c80705f837cf51301a35ba98001d0081"
+defects = []
+case_sha256 = "693506905ff355ac103097c1fde988f2b331f7cdca8970225896f357be1b8def"
 reviewed = "2026-07-28"
-renderer = "fable-countersign-reading-2026-07-26-200dpi"
-note = "the panel contains no string: the wrap is the tensor's own property. Three spellings were probed and refused -- a declared skin with pairings= raises TKZ-KERNEL-RENDER-TODO, strings through boxes are painted over by the glyph fill, and the free tier's arc route needs the tombstoned escape pair. Missing: renderer support for a declared skin's pairing ink over its own glyph"
+renderer = "codex-kernel-skin-pairing-source-review-2026-07-28-200dpi"
+note = "the first row uses north-to-east shift-right pairings and the second row uses their shift-left mirrors"
 
 [[verdict]]
 id = "rmp-workbench-ii-v-tensor-definition"
@@ -1352,15 +1350,14 @@ note = "ring closed with five boxes and the marked site, as the source draws con
 
 [[verdict]]
 id = "rmp-workbench-iii-eq59"
-status = "blocked"
+status = "cosmetic-gap"
 pairing = "verified"
 pairing_by = "codex-pairing-sweep-2026-07-24"
-defects = ["wrong-contraction"]
-missing = ["torus-cycle", "strings"]
-case_sha256 = "7db4fda71b564be5465f92bd10bf3c47e756e1327b6166b8d1050f07dcbc7ece"
+defects = []
+case_sha256 = "3500076c0b8b3a6d3316b03c64410cd13d3badecba4197cda06df7f9a685c0f6"
 reviewed = "2026-07-28"
-renderer = "maintainer-page-review-2026-07-23"
-note = "the kernel attempt drew one loop on a bare grid where the source draws a torus, an arrow to a lattice carrying O_g and O_h strings, and the equality panel with the g-inverse-g pair; refused at review as a different figure"
+renderer = "codex-centered-winding-ten-station-review-2026-07-28-120dpi"
+note = "the centered torus has both identified noncontractible cycles; each open 5x5 window keeps five independent O_g and O_h stations, and the two three-station g rails join above the marked tensor while O_h stays vertical"
 
 [[verdict]]
 id = "rmp-workbench-iii-g-injective-mpo"

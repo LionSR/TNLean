@@ -1,84 +1,34 @@
 % Target: rmp-workbench-ii-mpu-wrap-second
 % Formula: Two stacked MPU rows implement opposite local shift orientations.
-% Ink: Canonical public tenkzfree environment; no raw TikZ.
-% Boundary: Each row has four upper and four lower open legs and two open virtual
-%   endpoints; the turn orientation reverses between rows.
+% Ink: Kernel box skins carry the two opposite local port pairings.
+% Boundary: Each row has four upper and four lower open legs and two open
+%   virtual endpoints; the turn orientation reverses between rows.
 % Source: author source ImagesReview Section II/ImagesReview Section II.tex lines
 %   473-483; archival output sec2fig7c (b).pdf
-% Capabilities: free-graph, typed-ports
-%
-% One step throughout: sites two steps apart, every leg one step long,
-% the two rows three steps apart so the upper row's down legs and the
-% lower row's up legs read as four open indices rather than one wire.
-% The shift site is a SQUARE, as in the source; an unlabelled inscribed
-% glyph is strut-tall and glyphbox-wide, so its label carries a width pad.
+% Capabilities: kernel, typed-ports, skin-pairings
+\tenkzkernel
+\tndeclare{species}{shift}{hue=source:black}
+\tndeclare{skin}{shift-right}{
+  base=box,
+  pairings={n@1 > e@1 : shift, s@1 > w@1 : shift}
+}
+\tndeclare{skin}{shift-left}{
+  base=box,
+  pairings={n@1 > w@1 : shift, s@1 > e@1 : shift}
+}
 \[
-  \begin{tenkzfree}
-    \tnput[box,ports={north:virtual,south:virtual,east:virtual,west:virtual}]
-      {a1}{(0mm,0mm)}{\hphantom{W}}
-    \tnput[box,ports={north:virtual,south:virtual,east:virtual,west:virtual}]
-      {a2}{(12mm,0mm)}{\hphantom{W}}
-    \tnput[box,ports={north:virtual,south:virtual,east:virtual,west:virtual}]
-      {a3}{(24mm,0mm)}{\hphantom{W}}
-    \tnput[box,ports={north:virtual,south:virtual,east:virtual,west:virtual}]
-      {a4}{(36mm,0mm)}{\hphantom{W}}
-    \tnput[box,ports={north:virtual,south:virtual,east:virtual,west:virtual}]
-      {b1}{(0mm,18mm)}{\hphantom{W}}
-    \tnput[box,ports={north:virtual,south:virtual,east:virtual,west:virtual}]
-      {b2}{(12mm,18mm)}{\hphantom{W}}
-    \tnput[box,ports={north:virtual,south:virtual,east:virtual,west:virtual}]
-      {b3}{(24mm,18mm)}{\hphantom{W}}
-    \tnput[box,ports={north:virtual,south:virtual,east:virtual,west:virtual}]
-      {b4}{(36mm,18mm)}{\hphantom{W}}
-    \tnput[boundary,ports={east:virtual}]{aw}{(-6mm,0mm)}{}
-    \tnput[boundary,ports={west:virtual}]{ae}{(42mm,0mm)}{}
-    \tnput[boundary,ports={east:virtual}]{bw}{(-6mm,18mm)}{}
-    \tnput[boundary,ports={west:virtual}]{be}{(42mm,18mm)}{}
-    \tnput[boundary,ports={south:virtual}]{an1}{(0mm,6mm)}{}
-    \tnput[boundary,ports={south:virtual}]{an2}{(12mm,6mm)}{}
-    \tnput[boundary,ports={south:virtual}]{an3}{(24mm,6mm)}{}
-    \tnput[boundary,ports={south:virtual}]{an4}{(36mm,6mm)}{}
-    \tnput[boundary,ports={north:virtual}]{as1}{(0mm,-6mm)}{}
-    \tnput[boundary,ports={north:virtual}]{as2}{(12mm,-6mm)}{}
-    \tnput[boundary,ports={north:virtual}]{as3}{(24mm,-6mm)}{}
-    \tnput[boundary,ports={north:virtual}]{as4}{(36mm,-6mm)}{}
-    \tnput[boundary,ports={south:virtual}]{bn1}{(0mm,24mm)}{}
-    \tnput[boundary,ports={south:virtual}]{bn2}{(12mm,24mm)}{}
-    \tnput[boundary,ports={south:virtual}]{bn3}{(24mm,24mm)}{}
-    \tnput[boundary,ports={south:virtual}]{bn4}{(36mm,24mm)}{}
-    \tnput[boundary,ports={north:virtual}]{bs1}{(0mm,12mm)}{}
-    \tnput[boundary,ports={north:virtual}]{bs2}{(12mm,12mm)}{}
-    \tnput[boundary,ports={north:virtual}]{bs3}{(24mm,12mm)}{}
-    \tnput[boundary,ports={north:virtual}]{bs4}{(36mm,12mm)}{}
-    \tnjoin{aw.east}{a1.west} \tnjoin{a1.east}{a2.west}
-    \tnjoin{a2.east}{a3.west} \tnjoin{a3.east}{a4.west}
-    \tnjoin{a4.east}{ae.west}
-    \tnjoin{bw.east}{b1.west} \tnjoin{b1.east}{b2.west}
-    \tnjoin{b2.east}{b3.west} \tnjoin{b3.east}{b4.west}
-    \tnjoin{b4.east}{be.west}
-    \tnjoin{an1.south}{a1.north} \tnjoin{a1.south}{as1.north}
-    \tnjoin{an2.south}{a2.north} \tnjoin{a2.south}{as2.north}
-    \tnjoin{an3.south}{a3.north} \tnjoin{a3.south}{as3.north}
-    \tnjoin{an4.south}{a4.north} \tnjoin{a4.south}{as4.north}
-    \tnjoin{bn1.south}{b1.north} \tnjoin{b1.south}{bs1.north}
-    \tnjoin{bn2.south}{b2.north} \tnjoin{b2.south}{bs2.north}
-    \tnjoin{bn3.south}{b3.north} \tnjoin{b3.south}{bs3.north}
-    \tnjoin{bn4.south}{b4.north} \tnjoin{b4.south}{bs4.north}
-    \tnjoin[route=arc,out=-90,in=180]{a1.north}{a1.east}
-    \tnjoin[route=arc,out=90,in=0]{a1.south}{a1.west}
-    \tnjoin[route=arc,out=-90,in=180]{a2.north}{a2.east}
-    \tnjoin[route=arc,out=90,in=0]{a2.south}{a2.west}
-    \tnjoin[route=arc,out=-90,in=180]{a3.north}{a3.east}
-    \tnjoin[route=arc,out=90,in=0]{a3.south}{a3.west}
-    \tnjoin[route=arc,out=-90,in=180]{a4.north}{a4.east}
-    \tnjoin[route=arc,out=90,in=0]{a4.south}{a4.west}
-    \tnjoin[route=arc,out=-90,in=0]{b1.north}{b1.west}
-    \tnjoin[route=arc,out=90,in=180]{b1.south}{b1.east}
-    \tnjoin[route=arc,out=-90,in=0]{b2.north}{b2.west}
-    \tnjoin[route=arc,out=90,in=180]{b2.south}{b2.east}
-    \tnjoin[route=arc,out=-90,in=0]{b3.north}{b3.west}
-    \tnjoin[route=arc,out=90,in=180]{b3.south}{b3.east}
-    \tnjoin[route=arc,out=-90,in=0]{b4.north}{b4.west}
-    \tnjoin[route=arc,out=90,in=180]{b4.south}{b4.east}
-  \end{tenkzfree}
+  \begin{tenkz}[rows={wire,wire}, cols=4, bonds=none, physical=updown]
+    % The upper row turns right; the lower row turns left, exactly as the two
+    % local drawings at source lines 474-481.
+    \tn[at=(1,1), skin=shift-right]{} \tn[at=(1,2), skin=shift-right]{}
+    \tn[at=(1,3), skin=shift-right]{} \tn[at=(1,4), skin=shift-right]{}
+    \tn[at=(2,1), skin=shift-left]{} \tn[at=(2,2), skin=shift-left]{}
+    \tn[at=(2,3), skin=shift-left]{} \tn[at=(2,4), skin=shift-left]{}
+    \tnwire{open w}{(1,1)} \tnwire{(1,1)}{(1,2)}
+    \tnwire{(1,2)}{(1,3)} \tnwire{(1,3)}{(1,4)}
+    \tnwire{(1,4)}{open e}
+    \tnwire{open w}{(2,1)} \tnwire{(2,1)}{(2,2)}
+    \tnwire{(2,2)}{(2,3)} \tnwire{(2,3)}{(2,4)}
+    \tnwire{(2,4)}{open e}
+  \end{tenkz}
 \]

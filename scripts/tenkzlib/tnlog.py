@@ -134,7 +134,7 @@ FIELD_VALIDATORS: dict[str, dict[str, Callable[[str], bool]]] = {
     "wire": {
         "picture": _is_picture_id,
         "id": _is_kernel_record_id,
-        "kind": _enum("index", "string"),
+        "kind": _enum("index", "string", "pairing"),
         "from": _is_address_id,
         "to": _is_address_id,
         "from-open": _enum("n", "e", "s", "w", "route"),

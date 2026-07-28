@@ -59,6 +59,16 @@ grep -Fq '|name=wrap-1|origin=trace|row=1|' "$WORK/k_twoshift.tnlog" || {
   echo "FAIL: trace policy did not derive the per-row wrap-1 record" >&2
   exit 1
 }
+grep -Fq 'string|id=horizontal|kind=wind|class=1,0|pts=12' \
+    "$WORK/k_torus.tnlog" || {
+  echo "FAIL: the horizontal torus class did not reach the winding renderer" >&2
+  exit 1
+}
+grep -Fq 'string|id=vertical|kind=wind|class=0,1|pts=12' \
+    "$WORK/k_torus.tnlog" || {
+  echo "FAIL: the vertical torus class did not reach the winding renderer" >&2
+  exit 1
+}
 if grep -Eq 'name=(wrap|cup)-(west|east|north|south)' \
     "$WORK/k_twoshift.tnlog" "$WORK/r_cup.tnlog"; then
   echo "FAIL: a side-level closure survived normalization" >&2
@@ -352,6 +362,45 @@ grep -Fq '[TKZ-LANG-ADDRESS]' "$WORK/n_diagonal_port.transcript" || {
   tail -20 "$WORK/n_diagonal_port.transcript" >&2
   exit 1
 }
+
+for wind_case in n_wind_zero n_wind_via n_wind_shape; do
+  wind_negative="$KERNEL/negative/$wind_case.tex"
+  if ( cd "$WORK" &&
+       TEXINPUTS="$REPO/tex/tenkz//:" \
+         timeout 120 xelatex -interaction=nonstopmode -halt-on-error \
+         "$wind_negative" >"$WORK/$wind_case.transcript" 2>&1 ); then
+    echo "FAIL: $wind_case was accepted" >&2
+    exit 1
+  fi
+done
+grep -Fq '[TKZ-WIND-ZERO]' "$WORK/n_wind_zero.transcript" || {
+  echo "FAIL: the zero winding rejection lacked TKZ-WIND-ZERO" >&2
+  tail -20 "$WORK/n_wind_zero.transcript" >&2
+  exit 1
+}
+grep -Fq '[TKZ-WIND-VIA]' "$WORK/n_wind_via.transcript" || {
+  echo "FAIL: the winding-waypoint rejection lacked TKZ-WIND-VIA" >&2
+  tail -20 "$WORK/n_wind_via.transcript" >&2
+  exit 1
+}
+grep -Fq '[TKZ-WIND-SHAPE]' "$WORK/n_wind_shape.transcript" || {
+  echo "FAIL: the malformed winding rejection lacked TKZ-WIND-SHAPE" >&2
+  tail -20 "$WORK/n_wind_shape.transcript" >&2
+  exit 1
+}
+for wind_case in n_wind_via n_wind_shape; do
+  rm -f "$WORK/$wind_case".{aux,log,pdf,tnlog}
+  ( cd "$WORK" &&
+    TEXINPUTS="$REPO/tex/tenkz//:" \
+      timeout 120 xelatex -interaction=nonstopmode \
+      "$KERNEL/negative/$wind_case.tex" \
+      >"$WORK/$wind_case.recovery.transcript" 2>&1 ) || true
+  if [ -f "$WORK/$wind_case.tnlog" ] &&
+     grep -Eq '^string\|' "$WORK/$wind_case.tnlog"; then
+    echo "FAIL: $wind_case drew a string after its rejection" >&2
+    exit 1
+  fi
+done
 
 selector_negative="$KERNEL/negative/n_selector_mixed.tex"
 if ( cd "$WORK" &&

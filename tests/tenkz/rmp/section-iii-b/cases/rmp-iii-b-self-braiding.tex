@@ -1,45 +1,46 @@
 % Target: rmp-iii-b-self-braiding
 % Formula: ring_j wound twice = e^{i phi_j} ring_j — the anyon-j MPO
-% Ink: Canonical public tenkzfree environment; no raw TikZ.
-% Boundary: Resolved by the public environment; open indices remain explicit.
+% Ink: One declared self-crossing string carries eight tensors before resolving
+%   to the four-tensor ring.
+% Boundary: Both MPO cycles close; one marked j-string tail remains open in
+%   each panel.
 % Source: paper TN-Review-main.tex line 1662; author source ImagesReview Section
 %   III/ImagesReview Section III.tex lines 704-738
-% Capabilities: free-graph, typed-ports
+% Capabilities: kernel, self-braiding, crossing-order
+\tenkzkernel
+\tndeclare{species}{operator}{hue=source:red}
 \[
-  \begin{tenkzfree}
-    % outer winding: four MPO tensors
-    \tnput[mpo]{Wo}{(-17mm,0)}{} \tnput[mpo]{No}{(4mm,10mm)}{}
-    \tnput[mpo]{Eo}{(17mm,0)}{} \tnput[mpo]{So}{(0,-9mm)}{}
-    % inner winding: three MPO tensors and the marked tensor j
-    \tnput[mpo]{Wi}{(-9mm,0)}{} \tnput[mpo]{Ni}{(-4mm,5mm)}{}
-    \tnput[mpo]{Ei}{(9mm,0)}{} \tnput[mpo, role=marked]{J}{(4mm,-5mm)}{j}
-    % ONE strand, wound twice; every MPO tensor carries exactly two
-    % string legs.  Inner winding: J -> Wi -> Ni -> Ei ...
-    \tnjoin[role=operator, route=arc, out=180, in=-90]{J.west}{Wi.south}
-    \tnjoin[role=operator, route=arc, out=90, in=180]{Wi.north}{Ni.west}
-    \tnjoin[role=operator, route=arc, out=0, in=90]{Ni.east}{Ei.north}
-    % ... crossover down into the outer winding (SE sector) ...
-    \tnjoin[role=operator, route=arc, out=-90, in=0]{Ei.south}{So.east}
-    % ... outer winding: So -> Wo -> No -> Eo ...
-    \tnjoin[role=operator, route=arc, out=180, in=-90]{So.west}{Wo.south}
-    \tnjoin[role=operator, route=arc, out=90, in=180]{Wo.north}{No.west}
-    \tnjoin[role=operator, route=arc, out=0, in=90]{No.east}{Eo.north}
-    % ... crossover back into J: closes the doubly-wound ring, crossing
-    % the first SE connector once (the flattened self-braiding)
-    \tnjoin[role=operator, route=arc, out=-90, in=0]{Eo.south}{J.east}
-    % the free string end at the marked tensor
-    \tnjoin[role=operator, route=arc, out=-60, in=160]{J.south}{13mm,-14mm}
-  \end{tenkzfree}
+  \begin{tenkz}[rows={wire,wire,wire,wire,wire}, cols=5, bonds=none]
+    % One closed string follows the outer turn and then the inner turn.  The
+    % declared self-crossing is the flattened braid at the source's upper-right
+    % seam; the crossing police rejects the panel if that topology drifts.
+    \tnwire[kind=string, species=operator, name=double, closed,
+      via={(1,3), (1,5), (3,5), (5,5), (5,3), (5,1),
+           (3,1), (1,1), (2,2), (2,4), (4,4), (4,2)},
+      cross={under at crossing of double and double}]
+    \tn[skin=box, at=on double 0.04]{}
+    \tn[skin=box, at=on double 0.16]{}
+    \tn[skin=box, at=on double 0.29]{}
+    \tn[skin=box, at=on double 0.41]{}
+    \tn[skin=box, at=on double 0.54]{}
+    \tn[skin=box, role=marked, name=Jdouble, label pos=ne,
+        at=on double 0.66]{j}
+    \tn[skin=box, at=on double 0.79]{}
+    \tn[skin=box, at=on double 0.91]{}
+    \tnwire[kind=string, species=operator, name=tail-double,
+      cross={over at crossing of tail-double and double}]
+      {Jdouble.n}{n outside}
+  \end{tenkz}
   \;=\; e^{i\phi_j}\;
-  \begin{tenkzfree}
-    % single winding: three MPO tensors and the marked tensor j
-    \tnput[mpo]{W}{(-11mm,0)}{} \tnput[mpo]{N}{(0,6mm)}{}
-    \tnput[mpo]{E}{(11mm,0)}{} \tnput[mpo, role=marked]{J}{(3mm,-6mm)}{j}
-    \tnjoin[role=operator, route=arc, out=90, in=180]{W.north}{N.west}
-    \tnjoin[role=operator, route=arc, out=0, in=90]{N.east}{E.north}
-    \tnjoin[role=operator, route=arc, out=-90, in=0]{E.south}{J.east}
-    \tnjoin[role=operator, route=arc, out=180, in=-90]{J.west}{W.south}
-    % free string end
-    \tnjoin[role=operator]{J.south east}{9mm,-11mm}
-  \end{tenkzfree}
+  \begin{tenkz}[rows={wire,wire,wire,wire,wire}, cols=5, bonds=none]
+    \tnwire[kind=string, species=operator, name=single, closed,
+      via={(1,3), (2,5), (4,5), (5,3), (4,1), (2,1)}]
+    \tn[skin=box, at=on single 0.08]{}
+    \tn[skin=box, role=marked, name=Jsingle, label pos=ne,
+        at=on single 0.33]{j}
+    \tn[skin=box, at=on single 0.58]{}
+    \tn[skin=box, at=on single 0.83]{}
+    \tnwire[kind=string, species=operator, name=tail-single]
+      {Jsingle.e}{e outside}
+  \end{tenkz}
 \]
