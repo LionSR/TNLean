@@ -25,6 +25,7 @@ import TNLean.Channel.FixedPoint
 import TNLean.Channel.InformationallyCompleteEffects
 import TNLean.Channel.Irreducible
 import TNLean.Channel.KoashiImoto
+import TNLean.Channel.KrausBlockTransport
 import TNLean.Channel.KrausCPTP
 import TNLean.Channel.KrausFreedom
 import TNLean.Channel.KrausRank

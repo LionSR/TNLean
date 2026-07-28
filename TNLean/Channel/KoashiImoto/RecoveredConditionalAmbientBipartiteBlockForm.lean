@@ -230,30 +230,6 @@ private theorem recoveredAmbientBipartiteBlockEquiv_symm_apply_support
     (recoveredAmbientMiddleBlockEquiv e₀ e) a
       ⟨Sum.inr j, (u, v)⟩
 
-/-- Applying a conjugation to the second matrix factor is conjugation by the
-identity-tensored rectangular matrix. -/
-private theorem idTensorMap_conjugation
-    {δ : Type*} [Fintype δ] [DecidableEq δ]
-    {α β : Type*} [Fintype α]
-    (Z : Matrix β α ℂ)
-    (R : Matrix (δ × α) (δ × α) ℂ) :
-    let T : Matrix α α ℂ →ₗ[ℂ] Matrix β β ℂ :=
-      { toFun := fun X ↦ Z * X * Zᴴ
-        map_add' := by intro X Y; simp [Matrix.mul_add, Matrix.add_mul]
-        map_smul' := by intro c X; simp [Matrix.mul_smul, Matrix.smul_mul] }
-    idTensorMapLM T R =
-      ((1 : Matrix δ δ ℂ) ⊗ₖ Z) * R *
-        ((1 : Matrix δ δ ℂ) ⊗ₖ Z)ᴴ := by
-  dsimp only
-  ext ⟨a, k⟩ ⟨b, l⟩
-  simp only [idTensorMapLM_apply, idTensorMap_apply,
-    Matrix.mul_apply, Matrix.conjTranspose_kronecker,
-    Matrix.conjTranspose_one, Matrix.kroneckerMap_apply,
-    Matrix.one_apply]
-  simp_rw [Fintype.sum_prod_type]
-  simp
-  rfl
-
 /-- Applying the complementary zero embedding on the second factor produces
 the corresponding complementary zero block on the bipartite space. -/
 private theorem idTensorMap_zero_extension

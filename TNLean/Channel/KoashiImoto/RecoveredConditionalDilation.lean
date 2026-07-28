@@ -9,4 +9,5 @@ Authors: TNLean contributors
 -- Generated aggregator module: TNLean.Channel.KoashiImoto.RecoveredConditionalDilation
 
 import TNLean.Channel.KoashiImoto.RecoveredConditionalDilation.Basic
+import TNLean.Channel.KoashiImoto.RecoveredConditionalDilation.Covariance
 import TNLean.Channel.KoashiImoto.RecoveredConditionalDilation.SectorAction

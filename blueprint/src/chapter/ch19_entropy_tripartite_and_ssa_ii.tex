@@ -1996,6 +1996,59 @@ algebra of a family of jointly invariant states.
     unitary recovery.
 \end{proof}
 
+\begin{theorem}[Recovered tripartite blocks in ambient coordinates]
+    \label{thm:hjpw_recovered_tripartite_ambient_blocks}
+    \lean{Matrix.exists_recoveredConditionalTripartiteBlockForm}
+    \leanok
+    \uses{thm:hjpw_recovered_bipartite_ambient_blocks,
+        thm:hjpw_recovered_dilation_ambient_blocks}
+    Let $\rho_{ABC}$ be a tripartite density matrix attaining equality in
+    strong subadditivity. In the ambient decomposition
+    \begin{align}
+        \mathcal H_B
+        =
+        \bigoplus_j \mathcal H_{b_j^L}\otimes
+            \mathcal H_{b_j^R},
+    \end{align}
+    obtained by exchanging the two factors in
+    Theorem~\ref{thm:hjpw_recovered_bipartite_ambient_blocks}, the transformed
+    tripartite state has the direct-sum form
+    \begin{align}
+        \rho_{ABC}
+        =
+        \bigoplus_j
+            \omega_j^{A b_j^L}\otimes\eta_j^{b_j^R C}.
+    \end{align}
+    Here $\omega_j$ is the positive, not necessarily normalized conditional
+    factor from the bipartite marginal, and $\eta_j$ is the recovered
+    common-factor state. On the one-dimensional sectors complementary to the
+    minimum joint support, both sides vanish. No normalization or density
+    operator is chosen for these zero-weight sectors.
+
+    This is the final substitution in
+    \cite[Theorem~6, equations~(13)--(15)]{Hayden2004Structure},
+    lines~562--570, and the direct-sum identity in
+    \cite[Lemma~\textup{Lsigma3}, equation~\textup{eq:sigma3}]
+      {Cirac2016MPDO_arXiv}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:hjpw_recovered_bipartite_ambient_blocks,
+        thm:hjpw_recovered_dilation_ambient_blocks}
+    Express each $A$-matrix entry of the recovered bipartite state in the
+    ambient direct sum. The block-coordinate recovery acts independently on
+    every common factor and as the identity on its conditional factor, so
+    the $j$-th block becomes
+    $\eta_j^{b_j^R C}\otimes\omega_j^{A b_j^L}$ in the
+    $b_j^R\otimes b_j^L$ factor order.
+    Exchange the two middle-system factors and commute the scalar matrix
+    entries to obtain
+    $\omega_j^{A b_j^L}\otimes\eta_j^{b_j^R C}$.
+    Distinct sectors give zero matrix entries, including every complementary
+    sector.
+\end{proof}
+
 \begin{theorem}[Hayashi SSA-equality characterization]
     \label{thm:hayashi_ssa_equality_characterization}
     \lean{hayashi_ssa_equality_characterization}
@@ -2054,10 +2107,11 @@ algebra of a family of jointly invariant states.
     all of $B$ and completes equations~(13)--(14).
     Theorem~\ref{thm:hjpw_recovered_dilation_ambient_blocks} supplies
     equation~(15), agreement with the Petz operation on the joint support,
-    and the recovered supported-sector states. Only transporting those
-    sector states into the tripartite direct sum and assembling the
-    quantum-Markov decomposition remain open, so this forward implication
-    remains axiomatic. The biconditional combines the two directions.
+    and the recovered supported-sector states.
+    Theorem~\ref{thm:hjpw_recovered_tripartite_ambient_blocks} transports
+    these states into the raw tripartite direct sum. Only its normalized
+    quantum-Markov assembly and removal of the forward axiom remain open.
+    The biconditional combines the two directions.
 
     This equality criterion is cited here as an input for the later MPDO arguments.
     It is the equality criterion needed by Appendix~C of arXiv:1606.00608.

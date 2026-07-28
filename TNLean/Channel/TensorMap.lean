@@ -43,7 +43,7 @@ act trivially on an ancillary factor.
 * [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Chapter 2][Wolf2012QChannels]
 -/
 
-open scoped Matrix
+open scoped Matrix Kronecker
 open Matrix Finset BigOperators
 
 namespace Matrix
@@ -218,6 +218,30 @@ theorem idTensorMap_kronecker
       kroneckerMap (· * ·) A (T B) := by
   rw [idTensorMap, swapFactorsLinearEquiv_kronecker,
     tensorMapId_kronecker, swapFactorsLinearEquiv_kronecker]
+
+/-- Applying a rectangular conjugation to the second matrix factor is
+conjugation by the identity-tensored rectangular matrix. -/
+theorem idTensorMap_conjugation
+    {δ : Type*} [Fintype δ] [DecidableEq δ]
+    {α β : Type*} [Fintype α]
+    (Z : Matrix β α ℂ)
+    (R : Matrix (δ × α) (δ × α) ℂ) :
+    let T : Matrix α α ℂ →ₗ[ℂ] Matrix β β ℂ :=
+      { toFun := fun X ↦ Z * X * Zᴴ
+        map_add' := by intro X Y; simp [Matrix.mul_add, Matrix.add_mul]
+        map_smul' := by intro c X; simp [Matrix.mul_smul, Matrix.smul_mul] }
+    idTensorMapLM T R =
+      ((1 : Matrix δ δ ℂ) ⊗ₖ Z) * R *
+        ((1 : Matrix δ δ ℂ) ⊗ₖ Z)ᴴ := by
+  dsimp only
+  ext ⟨a, k⟩ ⟨b, l⟩
+  simp only [idTensorMapLM_apply, idTensorMap_apply,
+    Matrix.mul_apply, Matrix.conjTranspose_kronecker,
+    Matrix.conjTranspose_one, Matrix.kroneckerMap_apply,
+    Matrix.one_apply]
+  simp_rw [Fintype.sum_prod_type]
+  simp
+  rfl
 
 /-- Tensoring the identity map on the first factor with the identity map on the
 second gives the identity map on the product matrix algebra. -/

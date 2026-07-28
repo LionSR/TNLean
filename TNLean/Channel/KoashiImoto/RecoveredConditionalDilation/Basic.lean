@@ -43,8 +43,10 @@ private theorem ambientSupportEmbedding_apply
       if b = e₀ (Sum.inr s) then 1 else 0 := by
   simp [ambientSupportEmbedding, Matrix.one_apply]
 
+/-- Multiplication by the ambient support inclusion selects the corresponding
+supported column. -/
 @[simp]
-private theorem mul_ambientSupportEmbedding_apply
+theorem RecoveredConditionalDilationInternal.mul_ambientSupportEmbedding_apply
     {A : Type*} {dB n : ℕ}
     (W : Matrix A (Fin dB) ℂ)
     (e₀ : (Fin (dB - n) ⊕ Fin n) ≃ Fin dB) (a : A) (s : Fin n) :
@@ -56,8 +58,10 @@ private theorem mul_ambientSupportEmbedding_apply
     simp [ambientSupportEmbedding_apply, hne]
   · simp
 
+/-- On a supported ambient row, the support inclusion preserves matrix
+entries. -/
 @[simp]
-private theorem ambientSupportEmbedding_mul_apply_support
+theorem RecoveredConditionalDilationInternal.ambientSupportEmbedding_mul_apply_support
     {dB n : ℕ} (e₀ : (Fin (dB - n) ⊕ Fin n) ≃ Fin dB)
     (A : Matrix (Fin n) (Fin n) ℂ) (s t : Fin n) :
     (ambientSupportEmbedding e₀ * A) (e₀ (Sum.inr s)) t = A s t := by
@@ -71,8 +75,10 @@ private theorem ambientSupportEmbedding_mul_apply_support
     simp [ambientSupportEmbedding_apply, hne]
   · simp
 
+/-- On a complementary ambient row, the support inclusion has zero matrix
+entries. -/
 @[simp]
-private theorem ambientSupportEmbedding_mul_apply_complement
+theorem RecoveredConditionalDilationInternal.ambientSupportEmbedding_mul_apply_complement
     {dB n : ℕ} (e₀ : (Fin (dB - n) ⊕ Fin n) ≃ Fin dB)
     (A : Matrix (Fin n) (Fin n) ℂ) (z : Fin (dB - n)) (t : Fin n) :
     (ambientSupportEmbedding e₀ * A) (e₀ (Sum.inl z)) t = 0 := by

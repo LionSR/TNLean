@@ -76,7 +76,7 @@ dimensions.
   preparation.
 -/
 
-open scoped Matrix BigOperators ComplexOrder
+open scoped Matrix BigOperators ComplexOrder Kronecker
 
 /-- A **completely positive map** in rectangular Kraus form
 `S(X) = ∑ᵢ Aᵢ X Aᵢ†`.  Rectangular Kraus operators
