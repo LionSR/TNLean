@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Channel.KoashiImoto.SingleWitness
 import TNLean.Channel.FixedPoint.MeanErgodicAdjoint
+import TNLean.Channel.Schwarz.KadisonSchwarz
 
 /-!
 # A trace-adjoint projection onto HJPW's common invariant algebra
@@ -29,6 +30,8 @@ trace-adjoint projection; that source identity remains a separate analytic state
   action is a trace-preserving map.
 * `Kraus.traceAdjointMap_mapLM`: the trace-pairing adjoint of a Kraus family's Schrödinger
   action is its Heisenberg adjoint map.
+* `Kraus.isSchwarzMap_traceAdjointMap_mapLM_of_isTP`: the trace adjoint of a
+  trace-preserving Kraus map satisfies the Schwarz inequality.
 * `Kraus.commonInvariantMeanErgodicProjection`: the trace-adjoint projection associated with
   the single witness `F_0`, derived via
   `IsPositiveMap.traceAdjoint_meanErgodicProjection_isPositiveUnitalRetraction`.
@@ -104,6 +107,17 @@ theorem traceAdjointMap_mapLM (K : Fin d → Mat) :
     (A := Matrix.traceAdjointMap (mapLM K) ρ) (B := adjointMapLM K ρ)).2 fun X => ?_
   rw [Matrix.trace_traceAdjointMap_mul, mapLM_apply, adjointMapLM_apply,
     trace_mul_map_eq_trace_adjointMap_mul]
+
+/-- **The trace adjoint of a trace-preserving Kraus map satisfies the Schwarz inequality.**
+
+After `Kraus.traceAdjointMap_mapLM` identifies the trace adjoint with the
+Heisenberg Kraus map, this is `KadisonSchwarz.kadison_schwarz_adjoint`. -/
+theorem isSchwarzMap_traceAdjointMap_mapLM_of_isTP (K : Fin d → Mat) (h_tp : IsTP K) :
+    IsSchwarzMap (Matrix.traceAdjointMap (mapLM K)) := by
+  intro A
+  have hKS := KadisonSchwarz.kadison_schwarz_adjoint K h_tp A
+  change (adjointMap K (Aᴴ * A) - (adjointMap K A)ᴴ * adjointMap K A).PosSemidef at hKS
+  simpa only [traceAdjointMap_mapLM, adjointMapLM_apply, adjointMap_conjTranspose] using hKS
 
 end TraceAdjointHeisenbergIdentification
 

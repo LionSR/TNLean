@@ -1431,6 +1431,48 @@ algebra of a family of jointly invariant states.
     range equal to the fixed-point set of $F_0^*$, which is $A_{F_0}=A_0$.
 \end{proof}
 
+\begin{theorem}[Simultaneous algebraic block form of the invariant family]
+    \label{thm:koashi_imoto_family_fixed_point_block_form}
+    \lean{Kraus.exists_commonInvariant_fixedPointBlockForm}
+    \leanok
+    \uses{def:koashi_imoto_preserving_average,
+        thm:koashi_imoto_single_witness,
+        thm:mean_ergodic_projection_density_block_form}
+    Under the hypotheses of
+    Definition~\ref{def:koashi_imoto_common_invariant_algebra}, there are
+    $L\in\N$, positive dimensions $d_\ell,m_\ell$, a unitary $U$, and density
+    matrices $\sigma_\ell\in\MN{m_\ell}$ such that, for every member $\rho_k$
+    of the invariant family, there are matrices
+    $X_{\ell,k}\in\MN{d_\ell}$ satisfying
+    \begin{align}
+        U^\dagger\rho_kU
+        &=
+        \bigoplus_{\ell=0}^{L-1}\sigma_\ell\otimes X_{\ell,k}.
+        \label{eq:koashi_imoto_family_fixed_point_block_form}
+    \end{align}
+    The density matrices $\sigma_\ell$ and the decomposition are common to
+    the whole family.
+
+    No positivity or trace normalization is asserted for the matrices
+    $X_{\ell,k}$. Thus this is the full-support fixed-point block form
+    underlying HJPW Appendix~A, lines 853--856, not the normalized
+    decomposition of Property~1.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:koashi_imoto_single_witness,
+        thm:mean_ergodic_projection_density_block_form}
+    Apply
+    Theorem~\ref{thm:mean_ergodic_projection_density_block_form} to the
+    Schr\"odinger map of the single operation $F_0$ from
+    Theorem~\ref{thm:koashi_imoto_single_witness}. Its adjoint satisfies the
+    Schwarz inequality by the Kraus form and trace preservation, and it fixes
+    the positive-definite common average. Since $F_0\rho_k=\rho_k$ for every
+    $k$, each family member belongs to the one fixed-point space
+    $U(\bigoplus_\ell\sigma_\ell\otimes\MN{d_\ell})U^\dagger$.
+\end{proof}
+
 \begin{theorem}[Hayashi SSA-equality characterization]
     \label{thm:hayashi_ssa_equality_characterization}
     \lean{hayashi_ssa_equality_characterization}
@@ -1462,13 +1504,15 @@ algebra of a family of jointly invariant states.
     Theorem~\ref{thm:koashi_imoto_common_invariant_algebra_block_form},
     Theorem~\ref{thm:koashi_imoto_single_witness}, and
     Definition~\ref{def:koashi_imoto_mean_ergodic_projection}) supply the
-    finite-dimensional operator-algebraic core of the Koashi--Imoto argument,
-    under an explicit full-support hypothesis on the common average in place
-    of the joint-support reduction. The resulting family-level
-    tensor-product state decomposition and the action of the middle-system
-    channel on the common direct-sum factors remain open. This forward
-    implication therefore remains axiomatic. The biconditional combines the
-    two directions.
+    finite-dimensional operator-algebraic core of the Koashi--Imoto argument.
+    Theorem~\ref{thm:koashi_imoto_family_fixed_point_block_form} also gives a
+    simultaneous algebraic tensor-block form for the invariant family, under
+    the same explicit full-support hypothesis on the common average in place
+    of the joint-support reduction. Normalizing the member-dependent blocks
+    into probabilities and density matrices, and proving the action of the
+    middle-system channel on the common direct-sum factors, remain open. This
+    forward implication therefore remains axiomatic. The biconditional
+    combines the two directions.
 
     This equality criterion is cited here as an input for the later MPDO arguments.
     It is the equality criterion needed by Appendix~C of arXiv:1606.00608.
