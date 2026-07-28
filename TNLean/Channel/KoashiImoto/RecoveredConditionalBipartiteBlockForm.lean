@@ -8,12 +8,13 @@ import TNLean.Channel.KoashiImoto.RecoveredConditionalBlockForm
 /-!
 # Bipartite block form from recovered conditional states
 
-This file reconstructs the bipartite marginal from the block form of its
-recovered conditional states.  The reconstruction uses the finite
-informationally complete effects on the first subsystem.
+This file reconstructs the bipartite marginal in the minimum joint-support
+coordinates of its recovered conditional states.  The reconstruction uses the
+finite informationally complete effects on the first subsystem.
 
-Source: Hayden, Jozsa, Petz and Winter,
-arXiv:quant-ph/0304007v2, Theorem 6, equation (14), lines 499--502.
+This is a scope-restricted step toward Hayden, Jozsa, Petz and Winter,
+arXiv:quant-ph/0304007v2, Theorem 6, equation (14), lines 499--502; extending
+the coordinates to the ambient middle subsystem remains open.
 
 **Convention (factor order):** TNLean orders each middle-system summand as
 the common density factor followed by the conditional-state-dependent factor,
@@ -338,9 +339,16 @@ private theorem exists_bipartiteBlockForm_of_conditionalSlice_blockForm
 block form on their minimum joint support.
 
 This bundle retains the full preserving-family, density, and block-action
-package used to obtain the coordinates.  Its final fields add precisely the
-bipartite reconstruction in HJPW Theorem 6, equation (14), lines 499--502.
-The recovery-dilation action of equation (15) is not included. -/
+package used to obtain the coordinates.  Its final fields add the
+joint-support bipartite reconstruction toward HJPW Theorem 6, equation (14),
+lines 499--502.
+
+**Scope restriction (HJPW Theorem 6, equation (14)):** the direct-sum
+coordinates cover only the minimum joint support, not the ambient middle
+subsystem.  This is documented in
+`docs/paper-gaps/hjpw04_petz_factorization_maximally_mixed_scope.tex`.
+Elimination: extend the coordinates to the ambient middle subsystem before
+proving the recovery-dilation action of equation (15). -/
 structure RecoveredConditionalBipartiteBlockForm
     (ρ_ABC : Matrix (Fin dA × Fin dB × Fin dC)
       (Fin dA × Fin dB × Fin dC) ℂ)
@@ -445,8 +453,13 @@ TNLean uses the reverse tensor-factor order from HJPW.  The tensor equation is
 only on the minimum joint-support coordinates; no ambient equivalence on
 subsystem B or rectangular recovery action is claimed.
 
-Source: HJPW, arXiv:quant-ph/0304007v2, Theorem 6, equation (14),
-lines 499--502. -/
+**Scope restriction (HJPW Theorem 6, equation (14)):** the source states an
+ambient direct-sum equivalence on subsystem B, whereas this theorem supplies
+the block equation only after compression to the minimum joint support.  This
+is documented in
+`docs/paper-gaps/hjpw04_petz_factorization_maximally_mixed_scope.tex`.
+Elimination: extend the support coordinates to ambient B before proving the
+recovery-dilation action of equation (15). -/
 theorem exists_recoveredConditionalBipartiteBlockForm_jointSupport
     (ρ_ABC : Matrix (Fin dA × Fin dB × Fin dC)
       (Fin dA × Fin dB × Fin dC) ℂ)

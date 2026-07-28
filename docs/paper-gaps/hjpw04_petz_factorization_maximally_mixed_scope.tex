@@ -165,20 +165,22 @@ constructed by
 \leanid{Matrix.exists_recoveredConditionalPreservingKrausFamily}; the slices
 separate bipartite operators by
 \leanid{Matrix.eq_of_conditionalSlice_informationallyCompleteEffect_eq}.
-The remaining bridge must apply the joint-support block theorem to this family
-and assemble one common direct sum
+The joint-support block theorem is now applied to this family. The remaining
+bridge must extend its coordinates to one ambient direct sum
 \begin{align}
   H_B\cong\bigoplus_j H_{B_j^L}\otimes H_{B_j^R}
 \end{align}
-with the quantum-Markov form. The singular-support
+before proving the recovery-dilation block action and assembling the
+quantum-Markov form. The singular-support
 equality-to-raw-recovery implication is now formalized by the projected
 finite-Weyl argument and transported to arbitrary finite product coordinates.
 For density operators, support agreement upgrades this equality to the chosen
 completed partial-trace Petz channel on the recovered marginal. This does not
 give a tensor-product factorization of the generic completed singular channel.
-The joint-support block application and quantum-Markov assembly are the
-remaining structural obstructions to replacing the forward Hayashi
-strong-subadditivity equality assumption used in the CPSV16 argument.
+The ambient coordinate extension, recovery-dilation block action, and
+quantum-Markov assembly are the remaining structural obstructions to
+replacing the forward Hayashi strong-subadditivity equality assumption used in
+the CPSV16 argument.
 
 \section{Common invariant algebra: formalized under an explicit full-support hypothesis}
 
@@ -299,10 +301,12 @@ uses the same support isometry and block coordinates to reconstruct the
 bipartite marginal. It produces positive unnormalized factors $\omega_j$,
 proves that their traces sum to one, and establishes
 $\bigoplus_j\sigma_j\otimes\omega_j$ on the minimum joint support, with the
-tensor order reversed from HJPW. This is the bipartite statement in HJPW
-equation~(14). The recovery-dilation block action in equation~(15), the
-assembly of the generic quantum-Markov decomposition, and eliminating the
-external assumption for the
+tensor order reversed from HJPW. This is a scope-restricted joint-support
+variant toward HJPW equation~(14), not its ambient equivalence on $H_B$.
+Extending these coordinates to ambient $H_B$ to complete equation~(14),
+proving the recovery-dilation block action in equation~(15), assembling the
+generic quantum-Markov decomposition, and eliminating the external assumption
+for the
 forward Hayashi strong-subadditivity implication remain open.
 
 \section{Classification}
@@ -336,9 +340,11 @@ form on the minimum joint support. The finite recovered conditional family,
 its separating effects, and its preserving middle-system channel are
 formalized. The joint-support block form and preserving-operation action have
 also been applied to this family, and the bipartite marginal is reconstructed
-in those same support coordinates, completing HJPW equation~(14).
-The recovery-dilation block action of equation~(15) and the generic Hayashi
-forward implication remain open as separate later steps.
+in those same support coordinates. This is a scope-restricted joint-support
+variant toward HJPW equation~(14), not the ambient statement. Extending the
+coordinates to ambient $H_B$, the recovery-dilation block action of
+equation~(15), and the generic Hayashi forward implication remain open as
+separate sequential steps.
 
 \begin{thebibliography}{9}
 
