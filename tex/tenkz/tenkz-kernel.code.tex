@@ -92,6 +92,8 @@
 \int_new:N  \l__tenkz_kernel_node_int         % address node serial
 \prop_new:N \l__tenkz_kernel_node_prop        % "id/field" -> value
 \prop_new:N \l__tenkz_kernel_named_prop       % user name -> record id
+% Atoms whose labels need the silhouette / pairing / label render split.
+\prop_new:N \l__tenkz_kernel_skin_pairing_host_prop
 \prop_new:N \l__tenkz_kernel_policy_prop      % picture policy for late passes
 \prop_new:N \l__tenkz_kernel_eq_policy_prop   % tenkzeq policy inherited by panels
 \prop_new:N \l__tenkz_kernel_cell_prop        % "r-c" -> atom id (occupancy)
@@ -2470,7 +2472,19 @@
         {record}
           { \__tenkz_kernel_dep_add:e { \__tenkz_kernel_r_item:nn {#1} {name} } }
         {port}
-          { \__tenkz_kernel_dep_add:e { \__tenkz_kernel_r_item:nn {#1} {record} } }
+          {
+            \prop_get:NeN \l__tenkz_kernel_node_prop {#1/record-id}
+              \l__tenkz_kernel_dep_look_tl
+            \quark_if_no_value:NTF \l__tenkz_kernel_dep_look_tl
+              {
+                \__tenkz_kernel_dep_add:e
+                  { \__tenkz_kernel_r_item:nn {#1} {record} }
+              }
+              {
+                \tl_put_right:Ne \l__tenkz_kernel_dep_acc_tl
+                  { { \tl_use:N \l__tenkz_kernel_dep_look_tl } }
+              }
+          }
         {onwire}
           { \__tenkz_kernel_dep_add:e { \__tenkz_kernel_r_item:nn {#1} {wire} } }
         {leg}
@@ -3165,6 +3179,8 @@
         \__tenkz_model_get:nnN {#1} {skin} \l__tenkz_kernel_hull_skin_tl
         \quark_if_no_value:NT \l__tenkz_kernel_hull_skin_tl
           { \tl_set:Nn \l__tenkz_kernel_hull_skin_tl {dot} }
+        \exp_args:NV \__tenkz_kernel_skin_base:nN
+          \l__tenkz_kernel_hull_skin_tl \l__tenkz_kernel_hull_skin_tl
         \str_case:VnF \l__tenkz_kernel_hull_skin_tl
           {
             {dot}  { }
@@ -4135,8 +4151,14 @@
   }
 \cs_new_protected:Npn \__tenkz_kernel_r_port:n #1
   {
-    \prop_get:NeN \l__tenkz_kernel_named_prop
-      { \__tenkz_kernel_r_item:nn {#1} {record} } \l__tenkz_kernel_r_tl
+    \prop_get:NeN \l__tenkz_kernel_node_prop {#1/record-id}
+      \l__tenkz_kernel_r_tl
+    \quark_if_no_value:NT \l__tenkz_kernel_r_tl
+      {
+        \prop_get:NeN \l__tenkz_kernel_named_prop
+          { \__tenkz_kernel_r_item:nn {#1} {record} }
+          \l__tenkz_kernel_r_tl
+      }
     \quark_if_no_value:NTF \l__tenkz_kernel_r_tl
       {
         \msg_error:nnee {tenkz}{kernel-render-crossref}
@@ -4285,12 +4307,23 @@
                 {open}  { \__tenkz_kernel_r_wire_ends:n {#1} }
                 {trace} { \__tenkz_kernel_r_wire_trace:n {#1} }
                 {cup}   { \__tenkz_kernel_r_wire_cup:n {#1} }
+                % A skin wire settles here so its endpoint geometry is ready,
+                % but its ink belongs over the carrying glyph.
+                {skin}  { \__tenkz_kernel_r_skin_wire_prepare:n {#1} }
               }
               {
                 \msg_error:nnee {tenkz}{kernel-render-todo}
                   { origin = \tl_use:N \l__tenkz_kernel_r_tl } {#1}
               }
           }
+      }
+  }
+\cs_new_protected:Npn \__tenkz_kernel_r_skin_wire_prepare:n #1
+  {
+    \clist_map_inline:nn {from,to}
+      {
+        \__tenkz_model_get:nnN {#1} {##1} \l__tenkz_kernel_r_end_tl
+        \__tenkz_kernel_r_node:V \l__tenkz_kernel_r_end_tl
       }
   }
 
@@ -5910,9 +5943,15 @@
     \__tenkz_model_get:nnN {#1} {skin} \l__tenkz_kernel_r_tl
     \quark_if_no_value:NT \l__tenkz_kernel_r_tl
       { \tl_set:Nn \l__tenkz_kernel_r_tl { dot } }
+    \tl_set_eq:NN \l__tenkz_kernel_r_skin_declared_tl
+      \l__tenkz_kernel_r_tl
+    \exp_args:NV \__tenkz_kernel_skin_base:nN
+      \l__tenkz_kernel_r_tl \l__tenkz_kernel_r_tl
     \__tenkz_model_get:nnN {#1} {label} \l__tenkz_kernel_r_b_tl
     \quark_if_no_value:NT \l__tenkz_kernel_r_b_tl
       { \tl_clear:N \l__tenkz_kernel_r_b_tl }
+    \tl_set_eq:NN \l__tenkz_kernel_r_skin_label_tl
+      \l__tenkz_kernel_r_b_tl
     \str_case:VnF \l__tenkz_kernel_r_tl
       {
         {none} { }
@@ -5998,9 +6037,10 @@
                 \exp_args:NnnnV \__tenkz_render_atom_scaled:nnnn
                   { dot } {#1} { } \l__tenkz_kernel_r_atom_style_tl
               }
+            \__tenkz_kernel_r_skin_wires:n {#1}
             % a dot cannot inscribe text: its label sits in the label band,
             % on the side label pos names, default south
-            \tl_if_empty:NF \l__tenkz_kernel_r_b_tl
+            \tl_if_empty:NF \l__tenkz_kernel_r_skin_label_tl
               {
                 \__tenkz_model_get:nnN {#1} {label-pos} \l__tenkz_kernel_r_c_tl
                 \quark_if_no_value:NT \l__tenkz_kernel_r_c_tl
@@ -6050,7 +6090,7 @@
                   }
                   {
                     $ \use:c {tenkz@labelsize}
-                      \tl_use:N \l__tenkz_kernel_r_b_tl $
+                      \tl_use:N \l__tenkz_kernel_r_skin_label_tl $
                   }
               }
           }
@@ -6064,19 +6104,7 @@
   {
     \__tenkz_kernel_r_span:nNN {#1}
       \l__tenkz_kernel_r_row_tl \l__tenkz_kernel_r_col_tl
-    \tl_set:Nn \l__tenkz_kernel_r_skin_base_tl {#2}
-    \prop_get:NnNT \g__tenkz_kernel_skin_prop {#2}
-      \l__tenkz_kernel_r_skin_descriptor_tl
-      {
-        \exp_args:NnV \regex_extract_once:nnNT
-          { (?: \A | , ) \s* base \s* = \s* ([A-Za-z][A-Za-z0-9\-]*) }
-          \l__tenkz_kernel_r_skin_descriptor_tl
-          \l__tenkz_kernel_match_seq
-          {
-            \tl_set:Ne \l__tenkz_kernel_r_skin_base_tl
-              { \seq_item:Nn \l__tenkz_kernel_match_seq {2} }
-          }
-      }
+    \__tenkz_kernel_skin_base:nN {#2} \l__tenkz_kernel_r_skin_base_tl
     \str_case:VnF \l__tenkz_kernel_r_skin_base_tl
       {
         {box}  { \tl_set:Nn #3 { box~tensor } }
@@ -6123,109 +6151,200 @@
       }
   }
 \tl_new:N \l__tenkz_kernel_r_skin_base_tl
+\tl_new:N \l__tenkz_kernel_r_skin_declared_tl
 \tl_new:N \l__tenkz_kernel_r_skin_descriptor_tl
 \tl_new:N \l__tenkz_kernel_r_skin_pairings_tl
 \tl_new:N \l__tenkz_kernel_r_skin_from_tl
 \tl_new:N \l__tenkz_kernel_r_skin_to_tl
 \tl_new:N \l__tenkz_kernel_r_skin_species_tl
+\tl_new:N \l__tenkz_kernel_r_skin_host_tl
+\tl_new:N \l__tenkz_kernel_r_skin_label_tl
+\seq_new:N \l__tenkz_kernel_skin_base_seq
 
-% A declared skin's pairings are wires between its own ports.  They ink after
-% the silhouette, with the established paper halo, so the ordered stroke is
-% legible both over the glyph outline and where two pairings approach.
-\cs_new_protected:Npn \__tenkz_kernel_r_skin_pairings:nn #1#2
+% Resolve a declaration chain to one of the six primitive skins.  Resolution
+% is shared by hull measurement and ink, so a declared alias cannot acquire
+% the geometry of one primitive and the rendering of another.
+\cs_new_protected:Npn \__tenkz_kernel_skin_base:nN #1#2
   {
-    \prop_get:NnNT \g__tenkz_kernel_skin_prop {#2}
-      \l__tenkz_kernel_r_skin_descriptor_tl
+    \seq_clear:N \l__tenkz_kernel_skin_base_seq
+    \__tenkz_kernel_skin_base_aux:nN {#1} #2
+  }
+\cs_new_protected:Npn \__tenkz_kernel_skin_base_aux:nN #1#2
+  {
+    \str_case:nnF {#1}
       {
-        \exp_args:NnV \regex_extract_once:nnNT
-          { (?: \A | , ) \s* pairings \s* = \s* \{ ([^{}]*) \} }
-          \l__tenkz_kernel_r_skin_descriptor_tl
-          \l__tenkz_kernel_match_seq
+        {dot}  { \tl_set:Nn #2 {dot} }
+        {box}  { \tl_set:Nn #2 {box} }
+        {ring} { \tl_set:Nn #2 {ring} }
+        {tri}  { \tl_set:Nn #2 {tri} }
+        {dots} { \tl_set:Nn #2 {dots} }
+        {none} { \tl_set:Nn #2 {none} }
+      }
+      {
+        \seq_if_in:NnTF \l__tenkz_kernel_skin_base_seq {#1}
           {
-            \tl_set:Ne \l__tenkz_kernel_r_skin_pairings_tl
-              { \seq_item:Nn \l__tenkz_kernel_match_seq {2} }
-            \exp_args:NV \clist_map_inline:nn
-              \l__tenkz_kernel_r_skin_pairings_tl
-              { \__tenkz_kernel_r_skin_pairing:nn {#1} {##1} }
+            \msg_error:nnee {tenkz}{kernel-render-todo}
+              { cyclic~skin~base~'#1' } {skin}
+            \tl_set:Nn #2 {box}
+          }
+          {
+            \prop_get:NnNTF \g__tenkz_kernel_skin_prop {#1}
+              \l__tenkz_kernel_r_skin_descriptor_tl
+              {
+                \exp_args:NnV \regex_extract_once:nnNTF
+                  {
+                    (?: \A | , ) \s* base \s* = \s*
+                    \{? \s* ([A-Za-z][A-Za-z0-9\-]*) \s* \}?
+                  }
+                  \l__tenkz_kernel_r_skin_descriptor_tl
+                  \l__tenkz_kernel_match_seq
+                  {
+                    \seq_put_right:Nn \l__tenkz_kernel_skin_base_seq {#1}
+                    \exp_args:Ne \__tenkz_kernel_skin_base_aux:nN
+                      { \seq_item:Nn \l__tenkz_kernel_match_seq {2} } #2
+                  }
+                  {
+                    \msg_error:nnee {tenkz}{kernel-render-todo}
+                      { skin~without~base~'#1' } {skin}
+                    \tl_set:Nn #2 {box}
+                  }
+              }
+              {
+                \msg_error:nnee {tenkz}{kernel-render-todo}
+                  { unknown~skin~'#1' } {skin}
+                \tl_set:Nn #2 {box}
+              }
           }
       }
   }
-\cs_new_protected:Npn \__tenkz_kernel_r_skin_pairing:nn #1#2
+
+% Render a materialized skin WIRE.  Numeric anchors belong to the already
+% transformed glyph node, so they stay in local coordinates.  Only the curve
+% tangents receive the carrying frame's turn.  A non-first slot contributes
+% its settled transverse coordinate while the numeric anchor supplies the
+% coordinate normal to that face.
+\cs_new_protected:Npn \__tenkz_kernel_r_skin_wire:n #1
   {
-    \regex_extract_once:nnNTF
+    \__tenkz_model_get:nnN {#1} {host} \l__tenkz_kernel_r_c_tl
+    \__tenkz_model_get:nnN {#1} {species}
+      \l__tenkz_kernel_r_skin_species_tl
+    \exp_args:NV \__tenkz_kernel_r_species_hue:nN
+      \l__tenkz_kernel_r_skin_species_tl \l__tenkz_kernel_r_hue_tl
+    \__tenkz_model_get:nnN {#1} {from} \l__tenkz_kernel_r_skin_from_tl
+    \__tenkz_model_get:nnN {#1} {to} \l__tenkz_kernel_r_skin_to_tl
+    \__tenkz_kernel_r_skin_wire_end:VNN
+      \l__tenkz_kernel_r_skin_from_tl
+      \l__tenkz_kernel_r_skin_from_tl \l__tenkz_kernel_r_row_tl
+    \__tenkz_kernel_r_skin_wire_end:VNN
+      \l__tenkz_kernel_r_skin_to_tl
+      \l__tenkz_kernel_r_skin_to_tl \l__tenkz_kernel_r_col_tl
+    \tl_set:Ne \l__tenkz_kernel_scratch_tl
       {
-        \A \s*
-        ([-+]?(?:[0-9]+(?:\.[0-9]*)?|\.[0-9]+)) @ (\d+)
-        \s* > \s*
-        ([-+]?(?:[0-9]+(?:\.[0-9]*)?|\.[0-9]+)) @ (\d+)
-        \s* : \s* ([A-Za-z][A-Za-z0-9\-]*) \s* \Z
+        \tl_use:N \l__tenkz_kernel_r_skin_from_tl
+        to
+          [
+            out =
+              \fp_eval:n
+                {
+                  \l__tenkz_kernel_r_row_tl - 180
+                  + \l__tenkz_kernel_r_ink_turn_tl
+                } ,
+            in =
+              \fp_eval:n
+                {
+                  \l__tenkz_kernel_r_col_tl + 180
+                  + \l__tenkz_kernel_r_ink_turn_tl
+                }
+          ]
+        \tl_use:N \l__tenkz_kernel_r_skin_to_tl
       }
-      {#2} \l__tenkz_kernel_match_seq
+    \exp_args:NVV \__tenkz_render_skin_pairing:nn
+      \l__tenkz_kernel_r_hue_tl \l__tenkz_kernel_scratch_tl
+  }
+\cs_new_protected:Npn \__tenkz_kernel_r_skin_wire_end:nNN #1#2#3
+  {
+    \tl_set:Ne #3 { \__tenkz_kernel_node_item:nn {#1} {face} }
+    \exp_args:Ne \__tenkz_kernel_r_face_side:n { \tl_use:N #3 }
+    \exp_args:Ne \__tenkz_geom_xy:nNN {#1}
+      \l__tenkz_kernel_r_x_fp \l__tenkz_kernel_r_y_fp
+    \pgfextractx \l__tenkz_kernel_r_north_x_dim
       {
-        \bool_lazy_and:nnTF
+        \pgfpointanchor
+          {\tl_use:N \l__tenkz_kernel_r_c_tl}{\tl_use:N #3}
+      }
+    \pgfextracty \l__tenkz_kernel_r_north_y_dim
+      {
+        \pgfpointanchor
+          {\tl_use:N \l__tenkz_kernel_r_c_tl}{\tl_use:N #3}
+      }
+    \str_case:VnF \l__tenkz_kernel_r_face_side_tl
+      {
+        {n}
           {
-            \int_compare_p:nNn
-              { \seq_item:Nn \l__tenkz_kernel_match_seq {3} } = {1}
-          }
-          {
-            \int_compare_p:nNn
-              { \seq_item:Nn \l__tenkz_kernel_match_seq {5} } = {1}
-          }
-          {
-            \tl_set:Ne \l__tenkz_kernel_r_skin_from_tl
-              { \seq_item:Nn \l__tenkz_kernel_match_seq {2} }
-            \tl_set:Ne \l__tenkz_kernel_r_skin_to_tl
-              { \seq_item:Nn \l__tenkz_kernel_match_seq {4} }
-            \tl_set:Ne \l__tenkz_kernel_r_skin_species_tl
-              { \seq_item:Nn \l__tenkz_kernel_match_seq {6} }
-            \exp_args:NV \__tenkz_kernel_r_species_hue:nN
-              \l__tenkz_kernel_r_skin_species_tl
-              \l__tenkz_kernel_r_hue_tl
-            \exp_args:NV \__tenkz_render_skin_pairing:nn
-              \l__tenkz_kernel_r_hue_tl
+            \tl_set:Ne \l__tenkz_kernel_r_b_tl
               {
                 (
-                  #1.
-                  \fp_eval:n
-                    {
-                      \l__tenkz_kernel_r_skin_from_tl
-                      + \l__tenkz_kernel_r_ink_turn_tl
-                    }
-                )
-                to
-                  [
-                    out =
-                      \fp_eval:n
-                        {
-                          \l__tenkz_kernel_r_skin_from_tl - 180
-                          + \l__tenkz_kernel_r_ink_turn_tl
-                        } ,
-                    in =
-                      \fp_eval:n
-                        {
-                          \l__tenkz_kernel_r_skin_to_tl + 180
-                          + \l__tenkz_kernel_r_ink_turn_tl
-                        }
-                  ]
-                (
-                  #1.
-                  \fp_eval:n
-                    {
-                      \l__tenkz_kernel_r_skin_to_tl
-                      + \l__tenkz_kernel_r_ink_turn_tl
-                    }
+                  \__tenkz_kernel_r_pt:n { \l__tenkz_kernel_r_x_fp } ,
+                  \dim_use:N \l__tenkz_kernel_r_north_y_dim
                 )
               }
           }
+        {s}
           {
-            \msg_error:nnee {tenkz}{kernel-render-todo}
-              { skin~pairing~slot~other~than~1 } {#1}
+            \tl_set:Ne \l__tenkz_kernel_r_b_tl
+              {
+                (
+                  \__tenkz_kernel_r_pt:n { \l__tenkz_kernel_r_x_fp } ,
+                  \dim_use:N \l__tenkz_kernel_r_north_y_dim
+                )
+              }
+          }
+        {e}
+          {
+            \tl_set:Ne \l__tenkz_kernel_r_b_tl
+              {
+                (
+                  \dim_use:N \l__tenkz_kernel_r_north_x_dim ,
+                  \__tenkz_kernel_r_pt:n { \l__tenkz_kernel_r_y_fp }
+                )
+              }
+          }
+        {w}
+          {
+            \tl_set:Ne \l__tenkz_kernel_r_b_tl
+              {
+                (
+                  \dim_use:N \l__tenkz_kernel_r_north_x_dim ,
+                  \__tenkz_kernel_r_pt:n { \l__tenkz_kernel_r_y_fp }
+                )
+              }
           }
       }
       {
-        \msg_error:nnee {tenkz}{kernel-render-todo}
-          { malformed~skin~pairing~'#2' } {#1}
+        \tl_set:Ne \l__tenkz_kernel_r_b_tl
+          {
+            (
+              \dim_use:N \l__tenkz_kernel_r_north_x_dim ,
+              \dim_use:N \l__tenkz_kernel_r_north_y_dim
+            )
+          }
       }
+    \tl_set_eq:NN #2 \l__tenkz_kernel_r_b_tl
+  }
+\cs_generate_variant:Nn \__tenkz_kernel_r_skin_wire_end:nNN { VNN }
+\cs_new_protected:Npn \__tenkz_kernel_r_skin_wires:n #1
+  {
+    \tl_set:Nn \l__tenkz_kernel_r_skin_host_tl {#1}
+    \__tenkz_model_map_wires_origin:nN {skin}
+      \__tenkz_kernel_r_skin_wire_if_host:n
+  }
+\cs_new_protected:Npn \__tenkz_kernel_r_skin_wire_if_host:n #1
+  {
+    \__tenkz_model_get:nnN {#1} {host} \l__tenkz_kernel_r_b_tl
+    \str_if_eq:eeT
+      { \tl_use:N \l__tenkz_kernel_r_skin_host_tl }
+      { \tl_use:N \l__tenkz_kernel_r_b_tl }
+      { \__tenkz_kernel_r_skin_wire:n {#1} }
   }
 
 % box, ring, tri: the label is inscribed; spans grow the glyph so it
@@ -6266,11 +6385,25 @@
       {
         \prop_get:NnN \l__tenkz_kernel_hull_live_prop {#1/box}
           \l__tenkz_kernel_hull_box_tl
-        \__tenkz_render_atom_labelled:nen {#1}
-          { \l__tenkz_kernel_r_c_tl }
+        \prop_if_in:NnTF \l__tenkz_kernel_skin_pairing_host_prop {#1}
           {
-            \exp_args:Nc \tex_copy:D
-              { \tl_use:N \l__tenkz_kernel_hull_box_tl }
+            \__tenkz_render_atom_labelled:nen {#1}
+              { \l__tenkz_kernel_r_c_tl }
+              {
+                \phantom
+                  {
+                    \exp_args:Nc \tex_copy:D
+                      { \tl_use:N \l__tenkz_kernel_hull_box_tl }
+                  }
+              }
+          }
+          {
+            \__tenkz_render_atom_labelled:nen {#1}
+              { \l__tenkz_kernel_r_c_tl }
+              {
+                \exp_args:Nc \tex_copy:D
+                  { \tl_use:N \l__tenkz_kernel_hull_box_tl }
+              }
           }
       }
       {
@@ -6278,11 +6411,37 @@
           { \l__tenkz_kernel_r_c_tl }
           {
             \__tenkz_kernel_r_upright:n
-              { $ \use:c {tenkz@labelsize} \tl_use:N \l__tenkz_kernel_r_b_tl $ }
+              {
+                $ \use:c {tenkz@labelsize}
+                  \tl_use:N \l__tenkz_kernel_r_skin_label_tl $
+              }
           }
       }
-    \exp_args:NnV \__tenkz_kernel_r_skin_pairings:nn
-      {#1} \l__tenkz_kernel_r_tl
+    \__tenkz_kernel_r_skin_wires:n {#1}
+    \prop_if_in:NnT \l__tenkz_kernel_skin_pairing_host_prop {#1}
+      { \__tenkz_kernel_r_skin_label:n {#1} }
+  }
+\cs_new_protected:Npn \__tenkz_kernel_r_skin_label:n #1
+  {
+    \tl_if_empty:NF \l__tenkz_kernel_r_skin_label_tl
+      {
+        \tl_set:Nn \l__tenkz_kernel_r_atom_style_tl
+          { tenkz~audited~label , inner~sep = 0pt }
+        \quark_if_no_value:NF \l__tenkz_kernel_r_species_tl
+          {
+            \tl_put_right:Ne \l__tenkz_kernel_r_atom_style_tl
+              { , text = \tl_use:N \l__tenkz_kernel_r_hue_tl }
+          }
+        \prop_get:NnN \l__tenkz_kernel_hull_live_prop {#1/box}
+          \l__tenkz_kernel_hull_box_tl
+        \exp_args:NV \__tenkz_render_labelnode:nnn
+          \l__tenkz_kernel_r_atom_style_tl
+          { (#1.center) }
+          {
+            \exp_args:Nc \tex_copy:D
+              { \tl_use:N \l__tenkz_kernel_hull_box_tl }
+          }
+      }
   }
 \tl_new:N \l__tenkz_kernel_r_ink_turn_tl
 % #1 typeset by a record whose skin the frame has turned by the angle in
@@ -6652,6 +6811,100 @@
 
 % ---------- the environments ----------------------------------------------------------------
 
+% Skin pairings are model-owned wires, not renderer-private decoration.
+% Materialize them while the store is writable so event streams, selectors,
+% topology consumers, and rendering all observe the same records.
+\int_new:N \l__tenkz_kernel_skin_pairing_int
+\cs_new_protected:Npn \__tenkz_kernel_skin_pairings:
+  {
+    \__tenkz_model_map_ids:nn {atom}
+      { \__tenkz_kernel_skin_pairings_atom:n {##1} }
+  }
+\cs_new_protected:Npn \__tenkz_kernel_skin_pairings_atom:n #1
+  {
+    \__tenkz_model_get:nnN {#1} {skin} \l__tenkz_kernel_r_skin_declared_tl
+    \quark_if_no_value:NF \l__tenkz_kernel_r_skin_declared_tl
+      {
+        \prop_get:NVNT \g__tenkz_kernel_skin_prop
+          \l__tenkz_kernel_r_skin_declared_tl
+          \l__tenkz_kernel_r_skin_descriptor_tl
+          {
+            \exp_args:NnV \regex_extract_once:nnNT
+              { (?: \A | , ) \s* pairings \s* = \s* \{ ([^{}]*) \} }
+              \l__tenkz_kernel_r_skin_descriptor_tl
+              \l__tenkz_kernel_match_seq
+              {
+                \prop_put:Nnn
+                  \l__tenkz_kernel_skin_pairing_host_prop {#1} { }
+                \int_zero:N \l__tenkz_kernel_skin_pairing_int
+                \tl_set:Ne \l__tenkz_kernel_r_skin_pairings_tl
+                  { \seq_item:Nn \l__tenkz_kernel_match_seq {2} }
+                \exp_args:NV \clist_map_inline:nn
+                  \l__tenkz_kernel_r_skin_pairings_tl
+                  { \__tenkz_kernel_skin_pairing:nn {#1} {##1} }
+              }
+          }
+      }
+  }
+\cs_new_protected:Npn \__tenkz_kernel_skin_pairing:nn #1#2
+  {
+    \regex_extract_once:nnNTF
+      {
+        \A \s*
+        ([-+]?(?:[0-9]+(?:\.[0-9]*)?|\.[0-9]+)) @ ([1-9]\d*)
+        \s* > \s*
+        ([-+]?(?:[0-9]+(?:\.[0-9]*)?|\.[0-9]+)) @ ([1-9]\d*)
+        \s* : \s* ([A-Za-z][A-Za-z0-9\-]*) \s* \Z
+      }
+      {#2} \l__tenkz_kernel_match_seq
+      {
+        \int_incr:N \l__tenkz_kernel_skin_pairing_int
+        \tl_set:Ne \l__tenkz_kernel_r_skin_species_tl
+          { \seq_item:Nn \l__tenkz_kernel_match_seq {6} }
+        \tl_set:Ne \l__tenkz_kernel_r_b_tl
+          { skin-#1-\int_use:N \l__tenkz_kernel_skin_pairing_int }
+        \__tenkz_model_record_wire:e
+          {
+            kind = index ,
+            origin = skin ,
+            host = #1 ,
+            name = \tl_use:N \l__tenkz_kernel_r_b_tl ,
+            species = \tl_use:N \l__tenkz_kernel_r_skin_species_tl
+          }
+        \__tenkz_kernel_skin_pairing_end:nnnn {from} {#1}
+          { \seq_item:Nn \l__tenkz_kernel_match_seq {2} }
+          { \seq_item:Nn \l__tenkz_kernel_match_seq {3} }
+        \__tenkz_kernel_skin_pairing_end:nnnn {to} {#1}
+          { \seq_item:Nn \l__tenkz_kernel_match_seq {4} }
+          { \seq_item:Nn \l__tenkz_kernel_match_seq {5} }
+        \prop_put:Nee \l__tenkz_kernel_named_prop
+          { \tl_use:N \l__tenkz_kernel_r_b_tl }
+          { \tl_use:N \l__tenkz_model_last_tl }
+      }
+      {
+        \msg_error:nnee {tenkz}{kernel-render-todo}
+          { malformed~skin~pairing~'#2' } {#1}
+      }
+  }
+\cs_new_protected:Npn \__tenkz_kernel_skin_pairing_end:nnnn #1#2#3#4
+  {
+    \exp_args:Ne \__tenkz_kernel_node_new:nN {#2.#3@#4}
+      \l__tenkz_kernel_scratch_tl
+    \__tenkz_kernel_node_put:Nnn
+      \l__tenkz_kernel_scratch_tl {kind} {port}
+    \__tenkz_kernel_node_put:Nnn
+      \l__tenkz_kernel_scratch_tl {record} {#2}
+    \__tenkz_kernel_node_put:Nnn
+      \l__tenkz_kernel_scratch_tl {record-id} {#2}
+    \__tenkz_kernel_node_put:Nne
+      \l__tenkz_kernel_scratch_tl {face} {#3}
+    \__tenkz_kernel_node_put:Nne
+      \l__tenkz_kernel_scratch_tl {slot} {#4}
+    \__tenkz_model_complete:nnn
+      { \l__tenkz_model_last_tl } {#1}
+      { \tl_use:N \l__tenkz_kernel_scratch_tl }
+  }
+
 \cs_new_protected:Npn \__tenkz_kernel_begin:n #1
   {
     \group_begin:
@@ -6663,6 +6916,7 @@
     \__tenkz_geom_reset:
     \prop_clear:N \l__tenkz_kernel_node_prop
     \prop_clear:N \l__tenkz_kernel_named_prop
+    \prop_clear:N \l__tenkz_kernel_skin_pairing_host_prop
     \prop_clear:N \l__tenkz_kernel_policy_prop
     \prop_clear:N \l__tenkz_kernel_cell_prop
     \prop_clear:N \l__tenkz_kernel_stage_prop
@@ -6707,6 +6961,7 @@
 \cs_new_protected:Npn \__tenkz_kernel_end:
   {
     \__tenkz_kernel_populate:
+    \__tenkz_kernel_skin_pairings:
     \__tenkz_kernel_prepare_cell_policies:
     \__tenkz_kernel_bonds:
     \__tenkz_kernel_closures:

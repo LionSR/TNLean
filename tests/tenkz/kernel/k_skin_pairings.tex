@@ -19,9 +19,35 @@
   base=box,
   pairings={90@1 > 180@1 : cool, 270@1 > 0@1 : warm}
 }
-\begin{tenkz}[rows={wire}, cols=3, bonds=none]
+\tndeclare{skin}{slotted}{
+  base=shift-right,
+  pairings={
+    180@2 > 0@1 : warm,
+    90@2 > 270@1 : cool,
+    180@1 > 0@1 : cool
+  }
+}
+\tndeclare{skin}{alias-dot}{base=dot}
+\tndeclare{skin}{alias-ring}{base=ring}
+\tndeclare{skin}{alias-tri}{base=tri}
+\tndeclare{skin}{alias-dots}{base=dots}
+\tndeclare{skin}{alias-none}{base=none}
+\begin{tenkz}[rows={wire}, cols=3, frame=circle, bonds=none]
   \tn[at=(1,1), skin=shift-right]{}
   \tn[at=(1,2), skin=shift-left]{}
   \tn[at=(1,3), skin=shift-right]{}
+\end{tenkz}
+\qquad
+\begin{tenkz}[rows={top,bottom}, cols=2, bonds=none]
+  \tn[at=(1,1), skin=slotted, wires=2, wide=2]{X}
+\end{tenkz}
+\qquad
+\begin{tenkz}[rows={wire}, cols=6, bonds=none]
+  \tn[at=(1,1), skin=alias-dot]{}
+  \tn[at=(1,2), skin=shift-right]{}
+  \tn[at=(1,3), skin=alias-ring]{R}
+  \tn[at=(1,4), skin=alias-tri]{T}
+  \tn[at=(1,5), skin=alias-dots]{}
+  \tn[at=(1,6), skin=alias-none]{}
 \end{tenkz}
 \end{document}

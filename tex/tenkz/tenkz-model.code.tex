@@ -218,8 +218,11 @@
     \seq_map_inline:Nn \l__tenkz_model_wire_seq
       {
         \__tenkz_model_get:nnN {##1} {origin} \l__tenkz_model_origin_tl
-        \str_if_eq:eeT { \tl_use:N \l__tenkz_model_origin_tl } {#1}
-          { #2 {##1} }
+        \quark_if_no_value:NF \l__tenkz_model_origin_tl
+          {
+            \str_if_eq:eeT { \tl_use:N \l__tenkz_model_origin_tl } {#1}
+              { #2 {##1} }
+          }
       }
   }
 

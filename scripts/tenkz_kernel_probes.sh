@@ -228,6 +228,19 @@ grep -Fq 'TENKZ-HULL-BOX-POOL=1' "$WORK/r_hull_live.tex.transcript" || {
   echo "FAIL: live hull boxes were not reused across pictures" >&2
   exit 1
 }
+skin_pairing_count=$(
+  grep -c '^wire.*|origin=skin|' "$WORK/k_skin_pairings.tnlog" || true
+)
+[ "$skin_pairing_count" -eq 11 ] || {
+  echo "FAIL: declared skin pairings were not materialized as WIRE records" >&2
+  exit 1
+}
+grep -Eq \
+  '^wire.*\|host=atom-1\|.*\|name=skin-atom-1-3\|origin=skin\|species=cool' \
+  "$WORK/k_skin_pairings.tnlog" || {
+  echo "FAIL: a slotted skin WIRE lost its host, name, or species" >&2
+  exit 1
+}
 command -v pdftoppm >/dev/null 2>&1 || {
   echo "FAIL: kernel pixel gate requires pdftoppm" >&2
   exit 1
