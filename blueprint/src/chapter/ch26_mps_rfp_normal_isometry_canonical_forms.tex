@@ -384,7 +384,7 @@ ambient bond space.
     \label{lem:isometry_canonical_form_gauge_invariant}
     \lean{MPSTensor.GaugeEquiv.isIsometryCanonicalForm_iff}
     \leanok
-    \uses{def:is_isometry_canonical_form}
+    \uses{def:gauge_equiv, def:is_isometry_canonical_form}
     Gauge-equivalent tensors have the square-root fixed-point form
     simultaneously.
 \end{lemma}
@@ -526,10 +526,8 @@ ambient bond space.
     \label{thm:normal_rfp_iff_isometry_canonical_form}
     \lean{MPSTensor.IsNormalTensor.isTransferIdempotent_iff_isIsometryCanonicalForm}
     \leanok
-    \uses{thm:cpsv_normal_tp_gauge,
-        lem:isometry_canonical_form_gauge_invariant,
-        thm:isometry_canonical_form_of_rfp_nt,
-        thm:is_rfp_of_isometry_canonical_form}
+    \uses{def:nt_cpsv, def:mps_transfer_idempotence,
+        def:is_isometry_canonical_form}
     A normal tensor of positive bond dimension is a renormalization fixed point
     if and only if it has the square-root fixed-point form of
     Definition~\ref{def:is_isometry_canonical_form}. No left-canonical
@@ -537,6 +535,11 @@ ambient bond space.
     of Lemma~B.1 in \cite[Appendix~B, lines~1274--1301]{Cirac2016MPDO_arXiv}.
 \end{theorem}
 \begin{proof}\leanok
+    \uses{thm:cpsv_normal_tp_gauge, thm:cpsv_normal_eventually_injective,
+        thm:gauge_invariance_normal, lem:rfp_parent_gauge_invariance,
+        lem:isometry_canonical_form_gauge_invariant,
+        thm:isometry_canonical_form_of_rfp_nt,
+        thm:is_rfp_of_isometry_canonical_form}
     For the forward implication, choose the pure trace-preserving Perron gauge
     from Theorem~\ref{thm:cpsv_normal_tp_gauge}. Idempotence and algebraic
     normality are invariant under this gauge, so

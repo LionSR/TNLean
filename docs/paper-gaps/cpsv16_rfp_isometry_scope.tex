@@ -46,9 +46,24 @@ BNT elements.\footnote{Local source:
 
 \section{Formal boundary}
 
-The current formal theorem applies the single-block isometry form separately to
-each block of an indexed family.\footnote{Formal declaration:
-\leanid{MPSTensor.rfp_nt_structural_full_blocks} in
+The single-normal-tensor characterization is formalized under the exact source
+hypotheses.  If $A$ has positive bond dimension and is normal in the sense of
+CPSV16, then
+\begin{align}
+  A\text{ is a renormalization fixed point}
+  \quad\Longleftrightarrow\quad
+  A\text{ is in the square-root isometry canonical form}.
+\end{align}
+The forward implication passes to the trace-preserving Perron gauge, applies the
+left-canonical structural theorem there, and returns along the similarity; the
+reverse implication follows directly from the rank-one transfer formula.\footnote{Formal
+declarations: \leanid{MPSTensor.GaugeEquiv.isIsometryCanonicalForm_iff} in
+\doclink{TNLean/MPS/RFP/StructuralFull} and
+\leanid{MPSTensor.IsNormalTensor.isTransferIdempotent_iff_isIsometryCanonicalForm}
+in \doclink{TNLean/MPS/RFP/NormalIsometryCharacterization}.}
+
+The earlier per-block theorem remains useful for an indexed family.\footnote{Formal
+declaration: \leanid{MPSTensor.rfp_nt_structural_full_blocks} in
 \doclink{TNLean/MPS/RFP/StructuralFull}.  Introduced in \ghpr{2785}.}  For each
 block $k$ it gives
 \begin{align}
@@ -225,14 +240,10 @@ typographic simplification of the dressing.
 
 \section{Trace normalization (discharged)}
 
-The source trace-normalization $\tr(\Lambda)=1$ is now formalized for a single
-normal-tensor block.  A named predicate records the isometry canonical
-form,\footnote{Formal declaration: \leanid{MPSTensor.IsIsometryCanonicalForm}
-in \doclink{TNLean/MPS/RFP/StructuralFull}.} and a theorem proves it for a
-normal canonical-form-II RFP tensor.\footnote{Formal declarations:
-\leanid{MPSTensor.isIsometryCanonicalForm_of_rfp_nt} and the per-block
-\leanid{MPSTensor.isIsometryCanonicalForm_of_rfp_nt_blocks}.}  The predicate
-asserts the existence of an invertible $X$, a positive diagonal $\Lambda$ with
+A named predicate records the trace-normalized isometry canonical
+form.\footnote{Formal declaration: \leanid{MPSTensor.IsIsometryCanonicalForm}
+in \doclink{TNLean/MPS/RFP/StructuralFull}.}  The predicate asserts the
+existence of an invertible $X$, a positive diagonal $\Lambda$ with
 $\sum_\alpha\Lambda_\alpha=1$, and a unit pair-index isometry $U$ with
 \begin{align}
   A^i = X\,\sqrt\Lambda\,U^i\,X^{-1},\qquad
@@ -248,7 +259,16 @@ $\Lambda_\alpha=\rho_{\alpha,\alpha}/\tr\rho$.  The identity
 $\sum_\alpha\Lambda_\alpha=1$ is the trace identity
 $\sum_\alpha\rho_{\alpha,\alpha}=\tr\rho$ for the diagonal fixed point.
 
-This discharges the trace-normalization scope item.  The cross-block
+The left-canonical forward theorem
+\leanid{MPSTensor.isIsometryCanonicalForm_of_rfp_nt} proves this form for the
+Perron representative.  Gauge invariance then proves that every
+positive-bond-dimension normal tensor is a renormalization fixed point if and
+only if it admits the displayed square-root form, with no left-canonical
+hypothesis on the original tensor.  This is
+\leanid{MPSTensor.IsNormalTensor.isTransferIdempotent_iff_isIsometryCanonicalForm}.
+
+This discharges the single-normal-tensor statement and its trace-normalization
+scope item.  The cross-block
 $\delta_{j,j'}$ orthogonality between distinct normal-tensor blocks is treated in
 the next section.
 
@@ -465,13 +485,15 @@ unit pair-index convention the residual tensor satisfies
 \]
 while the contracted identity is instead
 $\sum_i (U_k^i)^\dagger U_k^i=D_k I$.  Thus the scalar normalization comparison
-is explicit.  The source trace-normalization $\tr(\Lambda)=1$ is now formalized
-for a single block by the named predicate
-\leanid{MPSTensor.isIsometryCanonicalForm_of_rfp_nt}, with the diagonal weight
-$\Lambda_\alpha=\rho_{\alpha,\alpha}/\tr\rho$ and the square-root dressing
-$\sqrt\Lambda$ of the unit isometry.  The cross-block $\delta_{j,j'}$
-orthogonality equations of \path{eq:III_isometry} are formalized at the
-normal-tensor-block level by
+is explicit.  For every positive-bond-dimension normal tensor, transfer
+idempotence is now equivalent to the trace-normalized square-root form by
+\leanid{MPSTensor.IsNormalTensor.isTransferIdempotent_iff_isIsometryCanonicalForm}.
+The diagonal weight is
+$\Lambda_\alpha=\rho_{\alpha,\alpha}/\tr\rho$, and $\sqrt\Lambda$ dresses the
+unit isometry.  This closes the single-normal-tensor lemma under its printed
+hypotheses while preserving the local square-root correction.  The cross-block
+$\delta_{j,j'}$ orthogonality equations of \path{eq:III_isometry} are formalized
+at the normal-tensor-block level by
 \leanid{MPSTensor.exists_residualIsometryFamily_of_isTransferIdempotent_directSum}.  For the
 multiplicity-one basis direct sum, the single BNT canonical-form predicate now
 supplies all blockwise hypotheses and the residual family.  The remaining part
