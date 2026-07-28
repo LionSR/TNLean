@@ -4,13 +4,14 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import Mathlib.Algebra.BigOperators.Group.Finset.Basic
-import Mathlib.Data.Fintype.Basic
+import Mathlib.Algebra.Module.BigOperators
+import Mathlib.Data.Complex.Basic
 import Mathlib.Order.Fin.Tuple
 
 /-!
 # Finite initial-segment sums
 
-This file collects small finite-sum identities for `Fin` index types.
+This file collects small finite-sum identities.
 -/
 
 open scoped BigOperators
@@ -50,3 +51,30 @@ theorem sum_castLE_extend_zero {r s : ℕ} {β : Type*} [AddCommMonoid β]
           by_cases hlt : α.val < r <;> simp [hlt]
 
 end Fin
+
+namespace MPSTensor
+
+/-- Re-index a sum over a finite family by collecting coefficients in the fibres
+of a finite map. -/
+lemma sum_fiber_smul
+    {ι κ V : Type*} [Fintype ι] [Fintype κ] [DecidableEq κ]
+    [AddCommMonoid V] [Module ℂ V]
+    (φ : ι → κ) (a : ι → ℂ) (v : κ → V) :
+    (∑ i : ι, a i • v (φ i)) =
+      ∑ k : κ, (∑ i : ι, if φ i = k then a i else 0) • v k := by
+  classical
+  calc
+    (∑ i : ι, a i • v (φ i)) =
+        ∑ k : κ, ∑ i with φ i = k, a i • v (φ i) := by
+      symm
+      simpa only [Finset.mem_univ, Finset.filter_true] using
+        Finset.sum_fiberwise_eq_sum_filter
+          (Finset.univ : Finset ι) (Finset.univ : Finset κ) φ
+          (fun i => a i • v (φ i))
+    _ = ∑ k : κ, (∑ i : ι, if φ i = k then a i else 0) • v k := by
+      refine Finset.sum_congr rfl fun k _ => ?_
+      rw [Finset.sum_smul, Finset.sum_filter]
+      refine Finset.sum_congr rfl fun i _ => ?_
+      by_cases h : φ i = k <;> simp only [h, ↓reduceIte, zero_smul]
+
+end MPSTensor
