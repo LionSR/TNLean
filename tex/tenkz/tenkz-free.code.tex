@@ -288,8 +288,17 @@
     \bool_if:NT \l__tenkz_fcommit_bool
       {
     \tl_set:Ne \l_tmpa_tl {\the\tenkz@pictureid/#2}
+    \tl_set:Ne \l_tmpb_tl
+      {
+        \fp_eval:n
+          {
+            \l__tenkz_frame_group_angle_tl + \l__tenkz_fangle_tl
+            - 360 * floor(
+                (\l__tenkz_frame_group_angle_tl + \l__tenkz_fangle_tl) / 360)
+          }
+      }
     \prop_gput:NVV \g__tenkz_free_atom_angle_prop
-      \l_tmpa_tl \l__tenkz_fangle_tl
+      \l_tmpa_tl \l_tmpb_tl
     \tl_gset:Ne \g__tenkz_free_atom_record_tl
       { kind={put}, name={\exp_not:n{#2}}, at={\exp_not:n{#3}},
         skin={\tl_use:N \l__tenkz_fshape_tl},
@@ -587,16 +596,22 @@
                   {\the\tenkz@pictureid/\l__tenkz_jarc_from_name_tl}
                   \l_tmpa_tl
                   {
-                    \exp_args:NV \tenkz_free_angle_add:nN
-                      \l_tmpa_tl \l__tenkz_jout_tl
+                    \tenkz_free_angle_add:nN
+                      {
+                        \l_tmpa_tl - \l__tenkz_frame_group_angle_tl
+                      }
+                      \l__tenkz_jout_tl
                   }
                   { }
                 \prop_get:NeNTF \g__tenkz_free_atom_angle_prop
                   {\the\tenkz@pictureid/\l__tenkz_jarc_to_name_tl}
                   \l_tmpa_tl
                   {
-                    \exp_args:NV \tenkz_free_angle_add:nN
-                      \l_tmpa_tl \l__tenkz_jin_tl
+                    \tenkz_free_angle_add:nN
+                      {
+                        \l_tmpa_tl - \l__tenkz_frame_group_angle_tl
+                      }
+                      \l__tenkz_jin_tl
                   }
                   { }
                 \tl_if_eq:NNT \l__tenkz_jarc_from_name_tl

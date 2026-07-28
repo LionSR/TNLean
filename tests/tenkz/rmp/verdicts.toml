@@ -666,10 +666,10 @@ status = "cosmetic-gap"
 pairing = "verified"
 pairing_by = "codex-three-cycle-source-review-2026-07-26"
 defects = ["weight-mismatch"]
-case_sha256 = "28d05639ab55bdedba764b5a8fab0da758dbdf55e88021ef9b185f233051ddd8"
+case_sha256 = "cfb7776e1078574dc8cd187235d80f546d8fa1ecc85c76284b8d164036c858f2"
 reviewed = "2026-07-28"
 renderer = "codex-route-form-source-review-2026-07-28-180dpi"
-note = "wound cycles remain explicit; automatic arcs retain the recorded torus cosmetic gap"
+note = "wound cycles and the opposite inner bends remain explicit; line weight remains a cosmetic gap"
 
 [[verdict]]
 id = "rmp-iii-a-torus-two"

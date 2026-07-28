@@ -372,6 +372,10 @@ DUPLICATE_RECOVERY = r"""
   \tnput[dot, ports={202.5:virtual}]{decimalB}{(2,2)}{}
   \tnput[dot, frame={{rotate=90}}, ports={east:virtual}]{rotatedA}{(4,2)}{}
   \tnput[dot, ports={west:virtual}]{rotatedB}{(4,4)}{}
+  \tngroup[frame={{rotate=90}}]{
+    \tnput[dot, ports={east:virtual}]{groupedA}{(6,2)}{}
+  }
+  \tnput[dot, ports={west:virtual}]{groupedB}{(6,4)}{}
   \tnput[box, label pos=sideways]{badpos}{(5,0)}{\tenkzTestRejectedInk}
   \tnput[box, mystery=1]{badputkey}{(6,0)}{\tenkzTestRejectedInk}
   \tnput[circle, size=xl]{badsize}{(6,1)}{\tenkzTestRejectedInk}
@@ -399,6 +403,7 @@ DUPLICATE_RECOVERY = r"""
   \tnjoin[route=arc]{a.east}{b.center}
   \tnjoin[route=arc]{decimalA.22.5}{decimalB.202.5}
   \tnjoin[route=arc]{rotatedA.east}{rotatedB.west}
+  \tnjoin[route=arc]{groupedA.east}{groupedB.west}
   \tnjoin[name=badarc, route=arc, out=0, label={\tenkzTestBadArcInk}]
     {a.east}{b.west}
   \tnjoin[name=badtype, label={\tenkzTestBadTypeInk}]
