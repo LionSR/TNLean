@@ -1354,10 +1354,10 @@ status = "cosmetic-gap"
 pairing = "verified"
 pairing_by = "codex-pairing-sweep-2026-07-24"
 defects = []
-case_sha256 = "00da4cdf9dcaa1b80f9750e4c1d38bad4a38846745429390b70e39d40104c12b"
+case_sha256 = "6e569113442e301e3e76aec50852d116c0f1ac177d1a654ae2424a3aacee3dac"
 reviewed = "2026-07-28"
-renderer = "codex-native-winding-lattice-source-review-2026-07-28-120dpi"
-note = "the torus has both identified noncontractible cycles; the 5x5 windows stay open, and the two three-station g rails join above the marked tensor while O_h stays vertical"
+renderer = "codex-centered-winding-ten-station-review-2026-07-28-120dpi"
+note = "the centered torus has both identified noncontractible cycles; the open 5x5 window keeps five separate tensors on each MPO, and the two three-station g rails join above the marked tensor while O_h stays vertical"
 
 [[verdict]]
 id = "rmp-workbench-iii-g-injective-mpo"

@@ -363,6 +363,27 @@ grep -Fq '[TKZ-LANG-ADDRESS]' "$WORK/n_diagonal_port.transcript" || {
   exit 1
 }
 
+for wind_case in n_wind_zero n_wind_via; do
+  wind_negative="$KERNEL/negative/$wind_case.tex"
+  if ( cd "$WORK" &&
+       TEXINPUTS="$REPO/tex/tenkz//:" \
+         timeout 120 xelatex -interaction=nonstopmode -halt-on-error \
+         "$wind_negative" >"$WORK/$wind_case.transcript" 2>&1 ); then
+    echo "FAIL: $wind_case was accepted" >&2
+    exit 1
+  fi
+done
+grep -Fq '[TKZ-WIND-ZERO]' "$WORK/n_wind_zero.transcript" || {
+  echo "FAIL: the zero winding rejection lacked TKZ-WIND-ZERO" >&2
+  tail -20 "$WORK/n_wind_zero.transcript" >&2
+  exit 1
+}
+grep -Fq '[TKZ-WIND-VIA]' "$WORK/n_wind_via.transcript" || {
+  echo "FAIL: the winding-waypoint rejection lacked TKZ-WIND-VIA" >&2
+  tail -20 "$WORK/n_wind_via.transcript" >&2
+  exit 1
+}
+
 selector_negative="$KERNEL/negative/n_selector_mixed.tex"
 if ( cd "$WORK" &&
      TEXINPUTS="$REPO/tex/tenkz//:" \

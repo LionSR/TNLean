@@ -50,6 +50,11 @@
 \msg_new:nnn {tenkz}{kernel-wire-arity}
   { [TKZ-LANG-WIRE-ARITY]~a~closed~wire~takes~no~positional~ends;~
     every~other~wire~takes~exactly~two~(record~#1). }
+\msg_new:nnn {tenkz}{kernel-wind-zero}
+  { [TKZ-WIND-ZERO]~wind=\{0,0\}~is~contractible;~
+    use~an~ordinary~closed~string~instead~(record~#1). }
+\msg_new:nnn {tenkz}{kernel-wind-via}
+  { [TKZ-WIND-VIA]~wind=~and~via=~cannot~be~combined~(record~#1). }
 \msg_new:nnn {tenkz}{kernel-strict-sugar}
   { [TKZ-LANG-STRICT]~'#1'~is~sugar~and~\tnset{strict}~is~active~(record~#2). }
 \msg_new:nnn {tenkz}{kernel-declare-class}
@@ -5800,22 +5805,44 @@
   }
 \cs_generate_variant:Nn \__tenkz_kernel_r_route_end_put:nn { nV }
 
+\cs_new:Npn \__tenkz_kernel_r_cm:n #1
+  {
+    \fp_eval:n
+      {
+        round(
+          (#1) * \dim_to_fp:n { \use:c {tenkz@pitch} }
+            / \dim_to_fp:n { 1cm },
+          5
+        )
+      }
+  }
+
 \cs_new_protected:Npn \__tenkz_kernel_r_declare_wind:n #1
   {
+    \__tenkz_kernel_r_frame_xy:nnNN
+      { ( 1 + \l__tenkz_kernel_r_rows_int ) / 2 }
+      { ( 1 + \l__tenkz_kernel_r_cols_int ) / 2 }
+      \l__tenkz_kernel_r_xc_fp \l__tenkz_kernel_r_yc_fp
     \__tenkz_string_declare_wind:nnnnnnn
       {#1}
-      { ( 1 + \l__tenkz_kernel_r_cols_int ) / 2 }
-      { - ( 1 + \l__tenkz_kernel_r_rows_int ) / 2 }
+      { \__tenkz_kernel_r_cm:n { \l__tenkz_kernel_r_xc_fp } }
+      { \__tenkz_kernel_r_cm:n { \l__tenkz_kernel_r_yc_fp } }
       {
-        ( max(
-            \l__tenkz_kernel_r_cols_int,
-            \l__tenkz_kernel_r_rows_int
-          ) - 1 ) / 2
-        + \__tenkz_metric_ratio:n {outsidegap}
+        \__tenkz_kernel_r_cm:n
+          {
+            ( max(
+                \l__tenkz_kernel_r_cols_int,
+                \l__tenkz_kernel_r_rows_int
+              ) - 1 ) / 2
+            + \__tenkz_metric_ratio:n {outsidegap}
+          }
       }
       { \seq_item:Nn \l__tenkz_kernel_match_seq {2} }
       { \seq_item:Nn \l__tenkz_kernel_match_seq {3} }
-      { \__tenkz_metric_ratio:n {outsidegap} / 2 }
+      {
+        \__tenkz_kernel_r_cm:n
+          { \__tenkz_metric_ratio:n {outsidegap} / 2 }
+      }
   }
 
 \cs_new_protected:Npn \__tenkz_kernel_r_string_free:n #1
@@ -5847,8 +5874,22 @@
               { \A \s* ([-+]?\d+) \s* , \s* ([-+]?\d+) \s* \Z }
               \l__tenkz_kernel_r_c_tl \l__tenkz_kernel_match_seq
               {
-                \exp_args:NV \__tenkz_kernel_r_declare_wind:n
-                  \l__tenkz_kernel_r_sid_tl
+                \bool_lazy_and:nnTF
+                  {
+                    \int_compare_p:nNn
+                      { \seq_item:Nn \l__tenkz_kernel_match_seq {2} } = {0}
+                  }
+                  {
+                    \int_compare_p:nNn
+                      { \seq_item:Nn \l__tenkz_kernel_match_seq {3} } = {0}
+                  }
+                  { \msg_error:nnn {tenkz}{kernel-wind-zero} {#1} }
+                  {
+                    \tl_if_empty:NF \l__tenkz_kernel_r_pts_tl
+                      { \msg_error:nnn {tenkz}{kernel-wind-via} {#1} }
+                    \exp_args:NV \__tenkz_kernel_r_declare_wind:n
+                      \l__tenkz_kernel_r_sid_tl
+                  }
               }
               {
                 \exp_args:NVV \__tenkz_string_declare_closed:nn

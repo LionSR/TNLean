@@ -1,0 +1,15 @@
+% Negative regression: a winding class and waypoint routing are distinct.
+\documentclass{standalone}
+\usepackage{tenkz}
+\makeatletter
+\ExplSyntaxOn
+\file_input:n { tenkz-kernel.code.tex }
+\ExplSyntaxOff
+\makeatother
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[lattice={3x3},
+              west=trace, east=trace, north=trace, south=trace]
+  \tnwire[kind=string, name=wound, closed, wind={1,0}, via={s outside}]
+\end{tenkz}
+\end{document}
