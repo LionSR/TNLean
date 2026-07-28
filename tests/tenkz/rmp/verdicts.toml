@@ -1035,10 +1035,10 @@ id = "rmp-workbench-ii-peps-gauge-old"
 status = "cosmetic-gap"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
-case_sha256 = "69cacad18d289c9bec8f6929ed5f19bb47362b7ddfe7a6606dd076ab092eef69"
+case_sha256 = "595c86edbdc2301f1798b9d5678d0bbd8594398a6b35642eb06572dd12e778ee"
 reviewed = "2026-07-28"
 renderer = "codex-route-form-source-review-2026-07-28-180dpi"
-note = "45-degree legs partially axis-aligned; wire routing"
+note = "45-degree legs partially axis-aligned; marked detour retains non-face tangents around the central tensor"
 
 [[verdict]]
 id = "rmp-workbench-ii-peps-gauge-without-a"

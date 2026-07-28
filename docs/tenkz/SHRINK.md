@@ -1113,7 +1113,7 @@ Census-correction: #5013
 
 ### 2026-07-28 — accepted arcs shed their angle escapes
 
-M3 falls from 254 to 89. Eighteen accepted cases remove 82 `out=`/`in=`
+M3 falls from 254 to 91. Eighteen accepted cases remove 81 `out=`/`in=`
 pairs. The compatibility boundary now derives an arc from named port faces:
 ports on different atoms use their outward faces, two ports of one atom use
 the inward pairing, and coordinate endpoints use the automatic arc. Explicit
@@ -1129,7 +1129,9 @@ gap. M4 remains 18.20.
 
 The residue is concrete rather than near zero: 62 occurrences belong to the
 three blocked cases in #5016, one is the intentional condensation sheet
-interleave, and 26 were already outside this issue's arc and vector census.
+interleave, two preserve a source-faithful detour whose north/south endpoints
+need east/west tangents, and 26 were already outside this issue's arc and
+vector census.
 
 Census-correction: #5015
 

@@ -50,7 +50,8 @@
     \tnput[boundary,ports={south:virtual}]{goutN}{(0mm,11mm)}{}
     \tnjoin[role=marked,route=vh]{gin.east}{gS.west}
     \tnjoin[role=marked,route=hv]{gS.east}{gE.west}
-    \tnjoin[role=marked,route=arc]{gS.north}{gN.south}
+    % The north/south endpoints need east/west tangents to detour around b.
+    \tnjoin[role=marked,route=arc,out=0,in=180]{gS.north}{gN.south}
     \tnjoin[role=marked]{gS.south}{goutS.north}
     \tnjoin[role=marked]{gE.east}{goutE.west}
     \tnjoin[role=marked]{gN.north}{goutN.south}
