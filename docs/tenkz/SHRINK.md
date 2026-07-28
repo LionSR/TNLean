@@ -1165,7 +1165,7 @@ self-crossing, the two MPU rows use reusable skin pairings, and the torus
 statement uses an identified lattice with closed `wind={1,0}` and
 `wind={0,1}` cycles before its complete two-panel lattice identity.
 
-M4 rises from 18.20 to 18.39 because the refused two-box torus sketch is
+M4 rises from 18.20 to 18.40 because the refused two-box torus sketch is
 replaced by all three source stages, including the pull arrow and the
 `g^{-1}`/`g` resolution. The two three-station resolution rails flank `O_h`
 and join each other above the marked tensor without terminating the vertical

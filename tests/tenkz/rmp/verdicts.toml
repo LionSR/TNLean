@@ -1354,10 +1354,10 @@ status = "cosmetic-gap"
 pairing = "verified"
 pairing_by = "codex-pairing-sweep-2026-07-24"
 defects = []
-case_sha256 = "6e569113442e301e3e76aec50852d116c0f1ac177d1a654ae2424a3aacee3dac"
+case_sha256 = "3500076c0b8b3a6d3316b03c64410cd13d3badecba4197cda06df7f9a685c0f6"
 reviewed = "2026-07-28"
 renderer = "codex-centered-winding-ten-station-review-2026-07-28-120dpi"
-note = "the centered torus has both identified noncontractible cycles; the open 5x5 window keeps five separate tensors on each MPO, and the two three-station g rails join above the marked tensor while O_h stays vertical"
+note = "the centered torus has both identified noncontractible cycles; each open 5x5 window keeps five independent O_g and O_h stations, and the two three-station g rails join above the marked tensor while O_h stays vertical"
 
 [[verdict]]
 id = "rmp-workbench-iii-g-injective-mpo"
