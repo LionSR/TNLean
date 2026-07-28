@@ -146,6 +146,12 @@ wire owned by the atom. The renderer then resolves the declared base and draws
 those records over its glyph. `strings` is simply the wrong need on this entry;
 the panel contains no string.
 
+Compass faces are the same parse-boundary sugar here as in ordinary port
+addresses. If a pairing meets a wire outside its own skin, its entry may append
+`; cross=under at crossing of self and pairing 1 of B`, where `B` is an
+author-named host. A cluster carrier cannot use a paired skin: it is a group
+with no glyph and therefore owns no skin ports.
+
 ### The wrong-source one does not belong here
 
 The projector's declared source is the pulling-through panel, which already

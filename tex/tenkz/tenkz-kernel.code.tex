@@ -84,6 +84,9 @@
 \msg_new:nnn {tenkz}{kernel-name-collision}
   { [TKZ-LANG-NAME-COLLISION]~generated~name~'#1'~already~belongs~to~
     record~#2 }
+\msg_new:nnn {tenkz}{kernel-skin-cluster}
+  { [TKZ-SKIN-PAIRING-CLUSTER]~declared~skin~'#1'~carries~pairings,~
+    but~cluster~carrier~#2~is~a~group~with~no~glyph~or~own~ports. }
 
 % ---------- kernel state -----------------------------------------------------
 
@@ -257,6 +260,18 @@
       \l__tenkz_kernel_match_seq
       { \__tenkz_kernel_addr_port:nN {#1} #2 }
       {
+    % Generated skin pairings have an author-facing crossing name.  `self'
+    % denotes the wire whose crossing field is being validated; the indexed
+    % spelling resolves through an author-named host.
+    \regex_extract_once:nnNTF
+      { \A pairing \s+ ([1-9]\d*) \s+ of \s+
+        ([A-Za-z][A-Za-z0-9\-]*) \Z } {#1}
+      \l__tenkz_kernel_match_seq
+      { \__tenkz_kernel_addr_pairing:N #2 }
+      {
+    \str_if_eq:nnTF {#1} {self}
+      { \__tenkz_kernel_addr_self:N #2 }
+      {
     % production 2: a -- named record
     \regex_match:nnTF { \A [A-Za-z][A-Za-z0-9\-]* \Z } {#1}
       { \__tenkz_kernel_addr_record:nN {#1} #2 }
@@ -265,7 +280,7 @@
           { \tl_use:N \l__tenkz_model_last_tl }
         \__tenkz_kernel_node_new:nN {#1} #2
       }
-      } } } } } } } } }
+      } } } } } } } } } } }
   }
 
 % capture groups sit at seq items 2..n; item 1 is the full match.
@@ -407,6 +422,27 @@
     \__tenkz_kernel_node_new:nN {#1} #2
     \__tenkz_kernel_node_put:Nne #2 {kind} {record}
     \__tenkz_kernel_node_put:Nnn #2 {name} {#1}
+  }
+
+\cs_new_protected:Npn \__tenkz_kernel_addr_pairing:N #1
+  {
+    \prop_get:NeN \l__tenkz_kernel_named_prop
+      { \seq_item:Nn \l__tenkz_kernel_match_seq {3} }
+      \l__tenkz_kernel_scratch_tl
+    \exp_args:Ne \__tenkz_kernel_addr_record:nN
+      {
+        skin-\l__tenkz_kernel_scratch_tl-
+        \seq_item:Nn \l__tenkz_kernel_match_seq {2}
+      }
+      #1
+  }
+
+\cs_new_protected:Npn \__tenkz_kernel_addr_self:N #1
+  {
+    \__tenkz_model_get:nnN
+      { \l__tenkz_model_last_tl } {name} \l__tenkz_kernel_scratch_tl
+    \exp_args:NV \__tenkz_kernel_addr_record:nN
+      \l__tenkz_kernel_scratch_tl #1
   }
 \cs_new_protected:Npn \__tenkz_kernel_addr_onwire:nN #1#2
   {
@@ -5773,8 +5809,8 @@
         \__tenkz_model_get:nnN {#1} {from} \l__tenkz_kernel_r_end_tl
         \quark_if_no_value:NF \l__tenkz_kernel_r_end_tl
           {
-            \__tenkz_kernel_r_node:V \l__tenkz_kernel_r_end_tl
-            \__tenkz_kernel_r_xy:nNN { \tl_use:N \l__tenkz_kernel_r_end_tl }
+            \__tenkz_kernel_r_wire_end_xy:VNN
+              \l__tenkz_kernel_r_end_tl
               \l__tenkz_kernel_r_xc_fp \l__tenkz_kernel_r_yc_fp
             \tl_set:Ne \l__tenkz_kernel_r_from_tl
               {
@@ -5785,8 +5821,8 @@
         \__tenkz_model_get:nnN {#1} {to} \l__tenkz_kernel_r_end_tl
         \quark_if_no_value:NF \l__tenkz_kernel_r_end_tl
           {
-            \__tenkz_kernel_r_node:V \l__tenkz_kernel_r_end_tl
-            \__tenkz_kernel_r_xy:nNN { \tl_use:N \l__tenkz_kernel_r_end_tl }
+            \__tenkz_kernel_r_wire_end_xy:VNN
+              \l__tenkz_kernel_r_end_tl
               \l__tenkz_kernel_r_xc_fp \l__tenkz_kernel_r_yc_fp
             \tl_set:Ne \l__tenkz_kernel_r_to_tl
               {
@@ -5944,21 +5980,40 @@
   }
 \cs_new_protected:Npn \__tenkz_kernel_r_crossid:nN #1#2
   {
-    \regex_extract_once:nnNTF
-      { \A leg \s+ ([nesw]) \s+ of \s+ \{? \s* \( \s* (\d+) \s* ,
-        \s* (\d+) \s* \) \s* \}? \Z }
-      {#1} \l__tenkz_kernel_match_seq
+    \str_if_eq:eeTF {#1} {self}
+      { \tl_set_eq:NN #2 \l__tenkz_kernel_r_sid_tl }
       {
-        \tl_set:Ne #2
+        \regex_extract_once:nnNTF
+          { \A pairing \s+ ([1-9]\d*) \s+ of \s+
+            ([A-Za-z][A-Za-z0-9\-]*) \Z }
+          {#1} \l__tenkz_kernel_match_seq
           {
-            leg - \seq_item:Nn \l__tenkz_kernel_match_seq {2}
-            - \seq_item:Nn \l__tenkz_kernel_match_seq {3}
-            - \seq_item:Nn \l__tenkz_kernel_match_seq {4}
+            \prop_get:NeN \l__tenkz_kernel_named_prop
+              { \seq_item:Nn \l__tenkz_kernel_match_seq {3} } #2
+            \tl_set:Ne #2
+              {
+                skin-\tl_use:N #2-
+                \seq_item:Nn \l__tenkz_kernel_match_seq {2}
+              }
           }
-      }
-      {
-        \tl_set:Nn #2 {#1}
-        \tl_trim_spaces:N #2
+          {
+            \regex_extract_once:nnNTF
+              { \A leg \s+ ([nesw]) \s+ of \s+ \{? \s* \( \s* (\d+) \s* ,
+                \s* (\d+) \s* \) \s* \}? \Z }
+              {#1} \l__tenkz_kernel_match_seq
+              {
+                \tl_set:Ne #2
+                  {
+                    leg - \seq_item:Nn \l__tenkz_kernel_match_seq {2}
+                    - \seq_item:Nn \l__tenkz_kernel_match_seq {3}
+                    - \seq_item:Nn \l__tenkz_kernel_match_seq {4}
+                  }
+              }
+              {
+                \tl_set:Nn #2 {#1}
+                \tl_trim_spaces:N #2
+              }
+          }
       }
   }
 
@@ -5970,6 +6025,8 @@
     \seq_map_inline:Nn \l__tenkz_kernel_r_strings_seq
       { \__tenkz_kernel_settle:n {##1} }
     \seq_map_inline:Nn \l__tenkz_kernel_r_strings_seq
+      { \__tenkz_kernel_r_crossings:n {##1} }
+    \seq_map_inline:Nn \l__tenkz_kernel_r_skin_routes_seq
       { \__tenkz_kernel_r_crossings:n {##1} }
     \bool_lazy_or:nnT
       { ! \seq_if_empty_p:N \l__tenkz_string_ids_seq }
@@ -7162,14 +7219,23 @@
               \l__tenkz_kernel_r_skin_descriptor_tl
               \l__tenkz_kernel_match_seq
               {
-                \prop_put:Nnn
-                  \l__tenkz_kernel_skin_pairing_host_prop {#1} { }
-                \int_zero:N \l__tenkz_kernel_skin_pairing_int
-                \tl_set:Ne \l__tenkz_kernel_r_skin_pairings_tl
-                  { \seq_item:Nn \l__tenkz_kernel_match_seq {2} }
-                \exp_args:NV \clist_map_inline:nn
-                  \l__tenkz_kernel_r_skin_pairings_tl
-                  { \__tenkz_kernel_skin_pairing:nn {#1} {##1} }
+                \__tenkz_model_get:nnN {#1} {cluster}
+                  \l__tenkz_kernel_r_tl
+                \quark_if_no_value:NTF \l__tenkz_kernel_r_tl
+                  {
+                    \prop_put:Nnn
+                      \l__tenkz_kernel_skin_pairing_host_prop {#1} { }
+                    \int_zero:N \l__tenkz_kernel_skin_pairing_int
+                    \tl_set:Ne \l__tenkz_kernel_r_skin_pairings_tl
+                      { \seq_item:Nn \l__tenkz_kernel_match_seq {2} }
+                    \exp_args:NV \clist_map_inline:nn
+                      \l__tenkz_kernel_r_skin_pairings_tl
+                      { \__tenkz_kernel_skin_pairing:nn {#1} {##1} }
+                  }
+                  {
+                    \msg_error:nnee {tenkz}{kernel-skin-cluster}
+                      { \tl_use:N \l__tenkz_kernel_r_skin_declared_tl } {#1}
+                  }
               }
           }
       }
@@ -7179,20 +7245,27 @@
     \regex_extract_once:nnNTF
       {
         \A \s*
-        ([-+]?(?:[0-9]+(?:\.[0-9]*)?|\.[0-9]+)) @ ([1-9]\d*)
+        ([-+]?(?:[0-9]+(?:\.[0-9]*)?|\.[0-9]+)|[nesw]) @ ([1-9]\d*)
         \s* > \s*
-        ([-+]?(?:[0-9]+(?:\.[0-9]*)?|\.[0-9]+)) @ ([1-9]\d*)
-        \s* : \s* ([A-Za-z][A-Za-z0-9\-]*) \s* \Z
+        ([-+]?(?:[0-9]+(?:\.[0-9]*)?|\.[0-9]+)|[nesw]) @ ([1-9]\d*)
+        \s* : \s* ([A-Za-z][A-Za-z0-9\-]*)
+        (?: \s* ; \s* cross \s* = \s* (.*) )? \s* \Z
       }
       {#2} \l__tenkz_kernel_match_seq
       {
         \int_incr:N \l__tenkz_kernel_skin_pairing_int
         \tl_set:Ne \l__tenkz_kernel_r_skin_from_face_tl
-          { \seq_item:Nn \l__tenkz_kernel_match_seq {2} }
+          {
+            \__tenkz_kernel_face_angle:n
+              { \seq_item:Nn \l__tenkz_kernel_match_seq {2} }
+          }
         \tl_set:Ne \l__tenkz_kernel_r_skin_from_slot_tl
           { \seq_item:Nn \l__tenkz_kernel_match_seq {3} }
         \tl_set:Ne \l__tenkz_kernel_r_skin_to_face_tl
-          { \seq_item:Nn \l__tenkz_kernel_match_seq {4} }
+          {
+            \__tenkz_kernel_face_angle:n
+              { \seq_item:Nn \l__tenkz_kernel_match_seq {4} }
+          }
         \tl_set:Ne \l__tenkz_kernel_r_skin_to_slot_tl
           { \seq_item:Nn \l__tenkz_kernel_match_seq {5} }
         \tl_set:Ne \l__tenkz_kernel_r_skin_species_tl
@@ -7212,6 +7285,17 @@
                 host = #1 ,
                 name = \tl_use:N \l__tenkz_kernel_r_skin_wire_name_tl ,
                 species = \tl_use:N \l__tenkz_kernel_r_skin_species_tl
+              }
+            \tl_set:Ne \l__tenkz_kernel_r_tl
+              { \seq_item:Nn \l__tenkz_kernel_match_seq {7} }
+            \tl_if_blank:VF \l__tenkz_kernel_r_tl
+              {
+                \use:e
+                  {
+                    \exp_not:N \__tenkz_model_complete:nnn
+                      { \l__tenkz_model_last_tl } {cross}
+                      { \tl_use:N \l__tenkz_kernel_r_tl }
+                  }
               }
             \__tenkz_kernel_skin_pairing_end:nnnn {from} {#1}
               { \tl_use:N \l__tenkz_kernel_r_skin_from_face_tl }
