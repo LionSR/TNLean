@@ -1829,8 +1829,7 @@ algebra of a family of jointly invariant states.
     \label{thm:hjpw_recovered_bipartite_joint_support_blocks}
     \lean{Matrix.exists_recoveredConditionalBipartiteBlockForm_jointSupport}
     \leanok
-    \uses{thm:hjpw_recovered_conditional_joint_support_blocks,
-        thm:hjpw_finite_conditional_slice_separation}
+    \uses{thm:hjpw_recovered_conditional_joint_support_blocks}
     Let $\rho_{ABC}$ be a tripartite density matrix attaining equality in
     strong subadditivity, and let $V$ be the support isometry and
     $(e,U,\sigma_j)$ the direct-sum coordinates of
@@ -1860,6 +1859,7 @@ algebra of a family of jointly invariant states.
 
 \begin{proof}
     \leanok
+    \uses{thm:hjpw_finite_conditional_slice_separation}
     Rescale the normalized equations for the active separating effects to
     their unnormalized conditional slices. A positive slice associated with
     an inactive effect has trace zero and therefore vanishes. The finite
