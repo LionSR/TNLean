@@ -232,7 +232,7 @@ command -v pdftoppm >/dev/null 2>&1 || {
   echo "FAIL: kernel pixel gate requires pdftoppm" >&2
   exit 1
 }
-for pixel_fixture in r_hull_live r_ink_semantics; do
+for pixel_fixture in k_skin_pairings r_hull_live r_ink_semantics; do
   if ! pdftoppm -singlefile -png -r 300 \
       "$WORK/$pixel_fixture.pdf" "$WORK/$pixel_fixture" >/dev/null 2>&1; then
     echo "FAIL: $pixel_fixture fixture could not be rasterized" >&2
@@ -283,7 +283,8 @@ python3 -c \
 for path in sys.argv[1:]:
     data = open(path, "rb").read()
     print(hashlib.sha256(data).hexdigest(), "", path.rsplit("/", 1)[-1])' \
-  "$WORK/r_hull_live.png" "$WORK/r_ink_semantics.png" >"$PIXEL_CURRENT"
+  "$WORK/k_skin_pairings.png" "$WORK/r_hull_live.png" \
+  "$WORK/r_ink_semantics.png" >"$PIXEL_CURRENT"
 
 negative="$KERNEL/negative/n_diagonal_port.tex"
 if ( cd "$WORK" &&
