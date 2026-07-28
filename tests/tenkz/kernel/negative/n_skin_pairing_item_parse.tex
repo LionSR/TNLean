@@ -1,0 +1,17 @@
+\documentclass{standalone}
+\usepackage{tenkz}
+\makeatletter
+\ExplSyntaxOn
+\file_input:n { tenkz-kernel.code.tex }
+\ExplSyntaxOff
+\makeatother
+\begin{document}
+\tenkzkernel
+\tndeclare{skin}{malformed-item}{
+  base=box,
+  pairings={not a port pairing}
+}
+\begin{tenkz}[rows={wire}, cols=1, bonds=none]
+  \tn[skin=malformed-item]{}
+\end{tenkz}
+\end{document}
