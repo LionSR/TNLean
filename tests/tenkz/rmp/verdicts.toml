@@ -811,10 +811,10 @@ status = "cosmetic-gap"
 pairing = "verified"
 pairing_by = "site-glyph-source-review-2026-07-27"
 defects = []
-case_sha256 = "f068da64b1006caba0aa3214de9b5eaaabae8010ed2d2245398734069e77dbe3"
+case_sha256 = "289161fa519a838e7f4a46f9dfe414ad69e94c6be5320c77e8f1e5adb23d0c36"
 reviewed = "2026-07-28"
 renderer = "codex-route-form-source-review-2026-07-28-180dpi"
-note = "named oblique frame preserves the source-facing doubled path; projection remains a cosmetic gap"
+note = "named oblique row frame and source-measured interleaved sheet offset preserve the doubled path; projection remains a cosmetic gap"
 
 [[verdict]]
 id = "rmp-iv-ground-space-1d"

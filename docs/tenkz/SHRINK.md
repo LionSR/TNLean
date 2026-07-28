@@ -1113,7 +1113,7 @@ Census-correction: #5013
 
 ### 2026-07-28 — accepted arcs shed their angle escapes
 
-M3 falls from 254 to 88. Eighteen accepted cases remove 82 `out=`/`in=`
+M3 falls from 254 to 89. Eighteen accepted cases remove 82 `out=`/`in=`
 pairs. The compatibility boundary now derives an arc from named port faces:
 ports on different atoms use their outward faces, two ports of one atom use
 the inward pairing, and coordinate endpoints use the automatic arc. Explicit
@@ -1121,13 +1121,15 @@ legacy angles retain their former rendering for the three cases assigned to
 #5016. The signed-faithful MPU wrap is pixel-identical before and after the
 migration.
 
-The condensation case also retires its `row vector=` and `sheet vector=`
-escapes in favor of the named oblique frame. Its projection remains recorded
-as a cosmetic gap. M4 remains 18.20.
+The condensation case retires its `row vector=` escape in favor of the named
+oblique frame. Its source-measured `sheet vector=` remains because the two
+paths intentionally interleave; the equivalent `sheet sep=` spelling emits
+the public interleave warning. Its projection remains recorded as a cosmetic
+gap. M4 remains 18.20.
 
 The residue is concrete rather than near zero: 62 occurrences belong to the
-three blocked cases in #5016, and 26 were already outside this issue's arc and
-vector census.
+three blocked cases in #5016, one is the intentional condensation sheet
+interleave, and 26 were already outside this issue's arc and vector census.
 
 Census-correction: #5015
 
