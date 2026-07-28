@@ -124,8 +124,11 @@ For MPDO renormalization fixed points:
   hypothesis on the common average. The corresponding Heisenberg Ces\`aro
   convergence identity remains open. The full-support family-level
   tensor-product state decomposition and HJPW Property~`2'` channel action are
-  formalized; the joint-support reduction and transport, together with the
-  generic Hayashi forward implication, remain open.
+  formalized. The joint-support coordinate reduction, state reconstruction,
+  and restriction of preserving operations are also formalized, together with
+  the combined block form on the minimum joint support. The recovered
+  conditional-family transport and the generic Hayashi forward implication
+  remain open.
 - `cpsv16_zcl_canonical_form_normalization.tex` records the corresponding
   normalization issue for mixed-state ZCL.
 

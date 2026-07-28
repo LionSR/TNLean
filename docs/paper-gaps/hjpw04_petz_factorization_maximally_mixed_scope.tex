@@ -156,10 +156,12 @@ Equation~\eqref{eq:hjpw-global-support-factorization} supplies the
 product-reference recovery factorization required before the structural part
 of the HJPW argument. Under a positive-definite common-average hypothesis, the
 Koashi--Imoto state decomposition and the action of every preserving operation
-on its diagonal summands are now formalized below. To apply this result to an
-arbitrary recovered family, the remaining bridge must pass to the joint
-support, transport the full-support decomposition back to the original
-coordinates, and assemble one common direct sum
+on its diagonal summands are now formalized below. The joint-support
+compression, state reconstruction, restriction of ambient preserving
+operations, and intertwining of their compressed and ambient actions are also
+formalized. To apply this result to an arbitrary recovered family, the
+remaining bridge must construct and transport the recovered conditional
+family and assemble one common direct sum
 \begin{align}
   H_B\cong\bigoplus_j H_{B_j^L}\otimes H_{B_j^R}
 \end{align}
@@ -169,8 +171,8 @@ finite-Weyl argument and transported to arbitrary finite product coordinates.
 For density operators, support agreement upgrades this equality to the chosen
 completed partial-trace Petz channel on the recovered marginal. This does not
 give a tensor-product factorization of the generic completed singular channel.
-The joint-support transport and quantum-Markov assembly are the remaining
-structural obstructions to replacing the forward Hayashi
+The recovered conditional-family transport and quantum-Markov assembly are the
+remaining structural obstructions to replacing the forward Hayashi
 strong-subadditivity equality assumption used in the CPSV16 argument.
 
 \section{Common invariant algebra: formalized under an explicit full-support hypothesis}
@@ -251,8 +253,8 @@ positive semidefinite, and normalizes them as
 \end{align}
 where each $\tau_{j|k}$ is a density matrix. Thus the full-support
 specialization of HJPW Property~1, lines 785--789 and 857--858, is formalized,
-with the two tensor factors written in the reverse order. The unrestricted
-property remains open pending the joint-support reduction.
+with the two tensor factors written in the reverse order. Its unrestricted
+joint-support form is supplied by the joint-support declaration below.
 
 The preserving-block-action declaration proves the full-support specialization
 of HJPW Property~$2'$, lines 808--816 and 860--882, in the same coordinates.
@@ -269,15 +271,21 @@ the Stinespring form of Property~2 or an action on off-diagonal coherences.
 
 HJPW's argument reduces to the case where the common average
 $(1/K)\sum_k\rho_k$ has full support, by shrinking the working Hilbert space to
-the joint support of the $\rho_k$ (lines 761--763). That reduction is not
-derived here: every declaration that builds $A_0$ instead takes positive
-definiteness of the common average as an explicit hypothesis. Beyond this
-scope restriction, none of the following are claimed: the joint-support
-reduction and transport to the unrestricted family; assembly of the recovered
-family into the generic quantum-Markov decomposition; or elimination of the
-external assumption for the forward Hayashi strong-subadditivity implication.
-These remain the open structural obstructions identified in the previous
-section.
+the joint support of the $\rho_k$ (lines 761--763). The declaration
+\leanid{Kraus.exists_commonAverageSupportCompression} now constructs this
+support coordinate space, proves that the compressed average is positive
+definite, reconstructs every family member, and restricts every preserving
+operation to a trace-preserving operation on the support. It also proves the
+intertwining identity that transports the compressed channel action back
+through the support isometry. The declaration
+\leanid{Kraus.exists_commonInvariant_normalizedStateBlockForm_preservingBlockAction_jointSupport}
+then packages the normalized state blocks and the action of every preserving
+operation on that minimum joint support; ambient preserving operations inherit
+this action by restriction and intertwining. Construction and transport of the
+recovered conditional family, assembly of the generic quantum-Markov
+decomposition, and elimination of the
+external assumption for the forward Hayashi strong-subadditivity implication
+remain open.
 
 \section{Classification}
 
@@ -303,9 +311,12 @@ and density matrices on both tensor factors. In the same coordinates, every
 preserving operation acts as a local trace-preserving completely positive
 operation fixing $\sigma_j$, tensored with the identity, on each diagonal
 summand. Thus full-support HJPW Property~$2'$ is also formalized. The
-Heisenberg Ces\`aro convergence identity for $P_0^*$, the joint-support
-reduction and transport, and the generic Hayashi forward implication remain
-open as separate later steps.
+Heisenberg Ces\`aro convergence identity for $P_0^*$ remains open. The
+joint-support coordinate reduction, density-family reconstruction, and
+restriction of preserving operations are formalized, as is the combined block
+form on the minimum joint support. The recovered conditional-family transport
+and the generic Hayashi forward implication remain open as separate later
+steps.
 
 \begin{thebibliography}{9}
 

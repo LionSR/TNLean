@@ -1562,6 +1562,88 @@ algebra of a family of jointly invariant states.
     $F_\ell(\sigma_\ell)=\sigma_\ell$.
 \end{proof}
 
+\begin{theorem}[Joint-support compression of an invariant state family]
+    \label{thm:koashi_imoto_joint_support_compression}
+    \lean{Kraus.exists_commonAverageSupportCompression}
+    \leanok
+    Let $\rho_1,\ldots,\rho_K$ be density operators and let $Q$ be the
+    support projection of their average. There are an integer $r$ and an
+    isometry $V:\mathbb C^r\to\mathcal H$ with
+    $VV^\dagger=Q$ such that the compressed states
+    $\widehat\rho_k=V^\dagger\rho_kV$ are density operators, their average is
+    positive definite, and
+    \begin{align}
+        \rho_k=V\widehat\rho_kV^\dagger.
+    \end{align}
+    Every trace-preserving completely positive operation preserving all
+    $\rho_k$ compresses along the same isometry to a trace-preserving
+    completely positive operation $\widehat F$ preserving all
+    $\widehat\rho_k$. Its ambient and compressed actions intertwine:
+    \begin{align}
+        F(VXV^\dagger)=V\widehat F(X)V^\dagger.
+    \end{align}
+
+    This is the reduction to the minimum joint supporting subspace in HJPW,
+    Appendix~A, lines 761--763.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The kernel of the average is the intersection of the kernels of the
+    positive summands. Hence $Q\rho_kQ=\rho_k$ for every $k$. Choose an
+    isometry onto the range of $Q$. Compression then preserves positivity and
+    trace, reconstructs each state, and makes the compressed average positive
+    definite. Invariance of the average implies that every Kraus operator
+    preserves its support. Compressing the Kraus operators therefore preserves
+    both trace and every compressed state. Expanding the two Kraus sums and
+    using support invariance gives the displayed intertwining identity.
+\end{proof}
+
+\begin{theorem}[Invariant-family blocks on the joint support]
+    \label{thm:koashi_imoto_joint_support_block_action}
+    \lean{Kraus.exists_commonInvariant_normalizedStateBlockForm_preservingBlockAction_jointSupport}
+    \leanok
+    \uses{thm:koashi_imoto_joint_support_compression,
+        thm:koashi_imoto_preserving_block_action}
+    Let $\rho_1,\ldots,\rho_K$ be density operators, without a faithfulness
+    assumption on their average. On their minimum joint supporting subspace
+    there is one direct-sum tensor decomposition in which
+    \begin{align}
+        \widehat\rho_k
+        =
+        \bigoplus_j q_{j|k}\sigma_j\otimes\tau_{j|k},
+    \end{align}
+    where the weights form probability distributions and all displayed
+    factors are density operators. Every trace-preserving completely positive
+    operation preserving the compressed family acts on each diagonal summand
+    as
+    \begin{align}
+        F_j\otimes\operatorname{id},
+        \qquad F_j(\sigma_j)=\sigma_j.
+    \end{align}
+    In particular, every operation preserving the original family restricts
+    to such an operation, and its action transports back through the support
+    isometry by the intertwining identity above.
+    The support isometry reconstructs every original $\rho_k$ from
+    $\widehat\rho_k$.
+
+    This is HJPW Properties~1 and~$2'$ after the joint-support reduction in
+    Appendix~A, lines 761--816 and 853--882. The tensor factors are written in
+    the reverse order from HJPW.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Apply Theorem~\ref{thm:koashi_imoto_joint_support_compression}. The common
+    average is positive definite in the resulting support coordinates, so
+    Theorem~\ref{thm:koashi_imoto_preserving_block_action} applies there.
+    Apply the full-support block-action theorem to every preserving operation
+    of the compressed family. Operations preserving the original family
+    restrict along the same support isometry, and the intertwining identity
+    transports their action back to the ambient space. Use the reconstruction
+    identity for the family members.
+\end{proof}
+
 \begin{theorem}[Hayashi SSA-equality characterization]
     \label{thm:hayashi_ssa_equality_characterization}
     \lean{hayashi_ssa_equality_characterization}
@@ -1600,11 +1682,15 @@ algebra of a family of jointly invariant states.
     Theorem~\ref{thm:koashi_imoto_preserving_block_action} gives the action of
     every preserving operation on those blocks. Together these give
     Property~1 and the full-support specialization of Property~$2'$ under the
-    same explicit full-support hypothesis on the common average. The reduction
-    to the joint support, transport of this result to the recovered family,
-    and assembly of the quantum-Markov decomposition remain open. This forward
-    implication therefore remains axiomatic. The biconditional combines the
-    two directions.
+    same explicit full-support hypothesis on the common average.
+    Theorem~\ref{thm:koashi_imoto_joint_support_compression} constructs the
+    faithful support coordinates for an arbitrary finite family and restricts
+    every preserving operation to them.
+    Theorem~\ref{thm:koashi_imoto_joint_support_block_action} packages the
+    state blocks and operation action on that minimum joint support. Transport
+    to the recovered conditional family and assembly of the quantum-Markov
+    decomposition remain open. This forward implication therefore remains
+    axiomatic. The biconditional combines the two directions.
 
     This equality criterion is cited here as an input for the later MPDO arguments.
     It is the equality criterion needed by Appendix~C of arXiv:1606.00608.
