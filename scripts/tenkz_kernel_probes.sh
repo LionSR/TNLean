@@ -231,7 +231,7 @@ grep -Fq 'TENKZ-HULL-BOX-POOL=1' "$WORK/r_hull_live.tex.transcript" || {
 skin_pairing_count=$(
   grep -c '^wire.*|origin=skin|' "$WORK/k_skin_pairings.tnlog" || true
 )
-[ "$skin_pairing_count" -eq 11 ] || {
+[ "$skin_pairing_count" -eq 16 ] || {
   echo "FAIL: declared skin pairings were not materialized as WIRE records" >&2
   exit 1
 }
@@ -556,6 +556,20 @@ for span_negative in n_nonpositive_span n_nonnumeric_span; do
     exit 1
   }
 done
+
+skin_slot_negative="$KERNEL/negative/n_skin_pairing_slot.tex"
+if ( cd "$WORK" &&
+     TEXINPUTS="$REPO/tex/tenkz//:" \
+       timeout 120 xelatex -interaction=nonstopmode -halt-on-error \
+       "$skin_slot_negative" >"$WORK/n_skin_pairing_slot.transcript" 2>&1 ); then
+  echo "FAIL: an out-of-range skin pairing slot was accepted" >&2
+  exit 1
+fi
+grep -Fq '[TKZ-SKIN-PAIRING-SLOT]' \
+  "$WORK/n_skin_pairing_slot.transcript" || {
+  echo "FAIL: an out-of-range skin pairing lacked TKZ-SKIN-PAIRING-SLOT" >&2
+  exit 1
+}
 
 weight_negative="$KERNEL/negative/n_malformed_weight.tex"
 if ( cd "$WORK" &&
