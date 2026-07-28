@@ -3,11 +3,6 @@ Copyright (c) 2025 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import Mathlib.Data.Matrix.Block
-import Mathlib.LinearAlgebra.Matrix.Kronecker
-import Mathlib.LinearAlgebra.UnitaryGroup
-import TNLean.Analysis.Entropy
-import TNLean.Analysis.HayashiMarkovStructure
 import TNLean.Analysis.EntropyMarkovForward
 import TNLean.Analysis.EntropyMarkovReverse
 
@@ -24,8 +19,9 @@ characterization under its established public names.
   `TNLean.Channel.Schwarz.StrongSubadditivityPosDef`, derived from Lieb
   concavity, and applied under the name `Entropy.strongSubadditivity`.
 * The Hayashi equality characterization is fully proved. The forward
-  implication is `hayashi_ssa_equality_characterization_forward` in
-  `TNLean.Analysis.EntropyMarkovForward`; the reverse implication is
+  implication is `Matrix.hayashi_ssa_equality_characterization_forward` in
+  `TNLean.Analysis.EntropyMarkovForward` and is re-exported below under its
+  established root name; the reverse implication is
   `hayashi_ssa_equality_characterization_reverse` in
   `TNLean.Analysis.EntropyMarkovReverse`. The biconditional
   `hayashi_ssa_equality_characterization` below combines them.
@@ -55,19 +51,11 @@ section SSAEqualityCharacterization
 
 variable {dA dB dC : ℕ}
 
-/-- **Forward direction of the Hayashi / Ruskai / Hayden--Jozsa--Petz--Winter
-characterization of strong-subadditivity equality.**
-
-Source: Hayashi, *Quantum Information: An Introduction*, Springer 2006,
-Theorem 5.24; Hayden--Jozsa--Petz--Winter, Commun. Math. Phys. 246,
-359--374 (2004), Theorem 6; arXiv:1606.00608 Appendix C. -/
-theorem hayashi_ssa_equality_characterization_forward
-    (ρ_ABC : Matrix (Fin dA × Fin dB × Fin dC)
-      (Fin dA × Fin dB × Fin dC) ℂ)
-    (hρ_dm : ρ_ABC.PosSemidef ∧ ρ_ABC.trace = 1) :
-    IsSSAEquality ρ_ABC hρ_dm.1.isHermitian
-      → Nonempty (HayashiMarkovDecomposition ρ_ABC) :=
-  Matrix.hayashi_ssa_equality_characterization_forward ρ_ABC hρ_dm
+/-- Compatibility alias for the forward direction of the Hayashi--Ruskai--
+Hayden--Jozsa--Petz--Winter characterization of strong-subadditivity equality.
+-/
+alias hayashi_ssa_equality_characterization_forward :=
+  Matrix.hayashi_ssa_equality_characterization_forward
 
 /-- **Hayashi / Ruskai / Hayden--Jozsa--Petz--Winter characterization of
 strong-subadditivity equality**.

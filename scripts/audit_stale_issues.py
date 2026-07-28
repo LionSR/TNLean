@@ -76,6 +76,11 @@ _DECL_DEFN_RE = re.compile(
     re.MULTILINE,
 )
 
+_ALIAS_DEFN_RE = re.compile(
+    r"^\s*(?:@\[[^\]]*\]\s*)?"
+    r"(?:protected\s+)?alias\s+([A-Za-z_][\w.']*)"
+)
+
 _STRUCTURE_DEFN_RE = re.compile(
     r"^\s*(?:@\[[^\]]*\]\s*)?"
     r"(?:(?:noncomputable|protected|private|local)\s+)*"
@@ -246,6 +251,14 @@ def build_decl_index(lean_root: Path) -> set[str]:
                 # closes an unnamed ``section`` inside a namespace.  Do not pop
                 # the namespace stack unless Lean text explicitly names the
                 # namespace being closed.
+                continue
+            if m := _ALIAS_DEFN_RE.match(line):
+                declared = m.group(1)
+                names.add(declared.rsplit(".", 1)[-1])
+                names.add(declared)
+                if namespace_stack:
+                    names.add(".".join([*namespace_stack, declared]))
+                active_structure_names = []
                 continue
             if m := _DECL_DEFN_RE.match(line):
                 declared = m.group(1)
@@ -514,21 +527,21 @@ def _self_test(repo_root: Path) -> int:
     """Minimal credentials-free smoke test.
 
     Builds one synthetic issue whose body references this very script, a known
-    sanctioned axiom, a known structure-field projection, and a deliberately
-    bogus declaration, then confirms the audit emits the expected flags without
-    misclassifying the axiom or field.  Used by CI and by human reviewers to
-    verify the tool works on a fresh checkout without talking to GitHub.
+    proved alias, a known structure-field projection, and a deliberately bogus
+    declaration. It confirms that a citation to the proved line is stale while
+    both current declarations still resolve. Used by CI and by human reviewers
+    to verify the tool on a fresh checkout without talking to GitHub.
     """
     entropy_path = repo_root / "TNLean" / "Axioms" / "Entropy.lean"
-    entropy_line = 0
+    theorem_line = 0
     for idx, line in enumerate(entropy_path.read_text(errors="replace").splitlines(), start=1):
-        if re.match(r"\s*axiom\s+hayashi_ssa_equality_characterization_forward\b", line):
-            entropy_line = idx
+        if re.match(r"\s*alias\s+hayashi_ssa_equality_characterization_forward\b", line):
+            theorem_line = idx
             break
-    if entropy_line == 0:
+    if theorem_line == 0:
         print("self-test FAILED:", file=sys.stderr)
         print(
-            "  - could not locate hayashi_ssa_equality_characterization_forward axiom line",
+            "  - could not locate hayashi_ssa_equality_characterization_forward alias line",
             file=sys.stderr,
         )
         return 1
@@ -538,10 +551,10 @@ def _self_test(repo_root: Path) -> int:
         "title": "[self-test] synthetic audit fixture",
         "url": "https://example.invalid/issue/0",
         "body": (
-            f"Refers to `TNLean/Axioms/Entropy.lean:{entropy_line}`, "
+            f"Refers to `TNLean/Axioms/Entropy.lean:{theorem_line}`, "
             "`TNLean/Does/Not/Exist.lean:10`, and to "
             "`definitely_not_a_real_declaration`.\n"
-            "Also cites the sanctioned axiom "
+            "Also cites the proved compatibility alias "
             "`hayashi_ssa_equality_characterization_forward`.\n"
             "Also cites the structure field "
             "`AppendixBProductPairExtraction.localProjectors`.\n"
@@ -559,13 +572,13 @@ def _self_test(repo_root: Path) -> int:
         problems.append(
             f"expected missing-decl flag, got: {r.missing_decls!r}"
         )
-    if ("TNLean/Axioms/Entropy.lean", entropy_line) in r.non_sorry_lines:
+    if ("TNLean/Axioms/Entropy.lean", theorem_line) not in r.non_sorry_lines:
         problems.append(
-            "axiom line was incorrectly flagged as no longer unproved"
+            "proved theorem line was not flagged as no longer unproved"
         )
     if "hayashi_ssa_equality_characterization_forward" in r.missing_decls:
         problems.append(
-            "sanctioned axiom was incorrectly flagged as a missing declaration"
+            "proved compatibility alias was incorrectly flagged as missing"
         )
     if "AppendixBProductPairExtraction.localProjectors" in r.missing_decls:
         problems.append(

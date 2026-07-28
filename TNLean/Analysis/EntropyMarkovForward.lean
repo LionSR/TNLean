@@ -3,7 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Analysis.EntropyMarkovReverse
+import TNLean.Algebra.PositiveSemidefiniteNormalization
+import TNLean.Analysis.HayashiMarkovStructure
 import TNLean.Channel.KoashiImoto.RecoveredConditionalTripartiteBlockForm
 
 /-!
@@ -130,32 +131,16 @@ private theorem ambientSector_factor_normalized
   rcases s with z | j
   · simp [ambientRecoveredConditionalState,
       RecoveredConditionalDilationBlockForm.ambientRecoveredOutputState]
-  · have hright := Matrix.trace_re_smul_normalizePosSemidef y₀
-      (D.recoveredSectorState_posSemidef j)
-    have hrightTrace := congrArg Complex.re
-      (D.recoveredSectorState_trace j)
-    simp only [Complex.one_re] at hrightTrace
-    have hrightTraceC :
-        ((D.recoveredSectorState j).trace.re : ℂ) = 1 := by
-      exact_mod_cast hrightTrace
-    have hright' :
-        Matrix.normalizePosSemidef y₀ (D.recoveredSectorState j) =
-          D.recoveredSectorState j := by
-      calc
-        Matrix.normalizePosSemidef y₀ (D.recoveredSectorState j) =
-            (1 : ℂ) • Matrix.normalizePosSemidef y₀
-              (D.recoveredSectorState j) := by simp
-        _ = ((D.recoveredSectorState j).trace.re : ℂ) •
-              Matrix.normalizePosSemidef y₀
-                (D.recoveredSectorState j) := by rw [hrightTraceC]
-        _ = D.recoveredSectorState j := hright
-    change F.jointSupport.ω j ⊗ₖ D.recoveredSectorState j =
-      ((F.jointSupport.ω j).trace.re : ℂ) •
-        (Matrix.normalizePosSemidef x₀ (F.jointSupport.ω j) ⊗ₖ
-          Matrix.normalizePosSemidef y₀ (D.recoveredSectorState j))
-    rw [hright']
-    exact D.recoveredSector_factor_normalized j (F.jointSupport.ω j)
-      (F.jointSupport.ω_pos j) x₀
+  · have htrace :
+        (D.ambientRecoveredOutputState (Sum.inr j)).trace.re = 1 := by
+      change (D.recoveredSectorState j).trace.re = 1
+      rw [D.recoveredSectorState_trace j]
+      exact Complex.one_re
+    have hfactor := Matrix.kronecker_eq_trace_re_mul_normalized x₀ y₀
+      (F.ambient_ω_pos (Sum.inr j))
+      (ambientRecoveredOutputState_posSemidef D (Sum.inr j))
+    rw [htrace, mul_one] at hfactor
+    exact hfactor
 
 private theorem ambientTripartiteBlockMatrix_eq_ambientStates
     {ρ_ABC : Matrix (Fin dA × Fin dB × Fin dC)
@@ -187,6 +172,33 @@ private theorem ambientTripartiteBlockMatrix_eq_ambientStates
   · simp [ambientRecoveredConditionalState,
       RecoveredConditionalDilationBlockForm.ambientRecoveredOutputState]
   · rfl
+
+private theorem hayashiAbcEquiv_symm_apply
+    {ρ_ABC : Matrix (Fin dA × Fin dB × Fin dC)
+      (Fin dA × Fin dB × Fin dC) ℂ}
+    {hρ_dm : ρ_ABC.PosSemidef ∧ ρ_ABC.trace = 1}
+    [Nonempty (RecoveredEffectIndex (traceC_ABC ρ_ABC))]
+    (F : RecoveredConditionalAmbientBipartiteBlockForm ρ_ABC hρ_dm)
+    (k : Fin ((dB - F.jointSupport.n) + F.jointSupport.K))
+    (a : Fin dA)
+    (v : Fin (recoveredAmbientHayashiLeftDim
+      (z := dB - F.jointSupport.n) F.jointSupport.d k))
+    (u : Fin (recoveredAmbientHayashiRightDim
+      (z := dB - F.jointSupport.n) F.jointSupport.m k))
+    (c : Fin dC) :
+    (HayashiMarkov.abcEquiv
+      (recoveredAmbientHayashiFinMiddleEquiv F.e₀ F.jointSupport.e)).symm
+        (a, (⟨k, (v, u)⟩, c)) =
+      recoveredTripartiteBlockEquiv
+        (recoveredAmbientMiddleBlockEquiv F.e₀ F.jointSupport.e)
+        ⟨finSumFinEquiv.symm k, ((a, v), (u, c))⟩ := by
+  apply (HayashiMarkov.abcEquiv
+    (recoveredAmbientHayashiFinMiddleEquiv F.e₀ F.jointSupport.e)).injective
+  rw [(HayashiMarkov.abcEquiv
+    (recoveredAmbientHayashiFinMiddleEquiv F.e₀ F.jointSupport.e)).apply_symm_apply]
+  simpa [HayashiMarkov.sigmaAssoc] using
+    (hayashi_sigmaAssoc_recoveredTripartiteBlockEquiv_apply
+      F.e₀ F.jointSupport.e k a u v c).symm
 
 private theorem hayashiLeftBlockState_density
     {ρ_ABC : Matrix (Fin dA × Fin dB × Fin dC)
@@ -306,34 +318,8 @@ theorem hayashi_ssa_equality_characterization_forward
     rw [hconj, ambientTripartiteBlockMatrix_eq_ambientStates D]
     ext ⟨a, ⟨⟨k, v, u⟩, c⟩⟩ ⟨a', ⟨⟨k', v', u'⟩, c'⟩⟩
     simp only [Matrix.reindex_apply, Matrix.submatrix_apply]
-    have hx :
-        (HayashiMarkov.abcEquiv
-          (recoveredAmbientHayashiFinMiddleEquiv F.e₀ F.jointSupport.e)).symm
-            (a, (⟨k, (v, u)⟩, c)) =
-          recoveredTripartiteBlockEquiv
-            (recoveredAmbientMiddleBlockEquiv F.e₀ F.jointSupport.e)
-            ⟨finSumFinEquiv.symm k, ((a, v), (u, c))⟩ := by
-      apply (HayashiMarkov.abcEquiv
-        (recoveredAmbientHayashiFinMiddleEquiv F.e₀ F.jointSupport.e)).injective
-      rw [(HayashiMarkov.abcEquiv
-        (recoveredAmbientHayashiFinMiddleEquiv F.e₀ F.jointSupport.e)).apply_symm_apply]
-      simpa [HayashiMarkov.sigmaAssoc] using
-        (hayashi_sigmaAssoc_recoveredTripartiteBlockEquiv_apply
-          F.e₀ F.jointSupport.e k a u v c).symm
-    have hy :
-        (HayashiMarkov.abcEquiv
-          (recoveredAmbientHayashiFinMiddleEquiv F.e₀ F.jointSupport.e)).symm
-            (a', (⟨k', (v', u')⟩, c')) =
-          recoveredTripartiteBlockEquiv
-            (recoveredAmbientMiddleBlockEquiv F.e₀ F.jointSupport.e)
-            ⟨finSumFinEquiv.symm k', ((a', v'), (u', c'))⟩ := by
-      apply (HayashiMarkov.abcEquiv
-        (recoveredAmbientHayashiFinMiddleEquiv F.e₀ F.jointSupport.e)).injective
-      rw [(HayashiMarkov.abcEquiv
-        (recoveredAmbientHayashiFinMiddleEquiv F.e₀ F.jointSupport.e)).apply_symm_apply]
-      simpa [HayashiMarkov.sigmaAssoc] using
-        (hayashi_sigmaAssoc_recoveredTripartiteBlockEquiv_apply
-          F.e₀ F.jointSupport.e k' a' u' v' c').symm
+    have hx := hayashiAbcEquiv_symm_apply F k a v u c
+    have hy := hayashiAbcEquiv_symm_apply F k' a' v' u' c'
     rw [hx, hy]
     simp only [Equiv.symm_apply_apply, HayashiMarkov.blockState_apply]
     by_cases hk : k = k'
