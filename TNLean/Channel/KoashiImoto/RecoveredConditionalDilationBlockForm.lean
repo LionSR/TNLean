@@ -249,8 +249,6 @@ theorem
       F.jointSupport.σ j :=
   D.sector_state_fixed j
 
-set_option maxHeartbeats 400000 in
--- The coordinate transport combines several nested linear-map identities.
 /-- In the ambient HJPW coordinates, the recovered tripartite state has zero
 complementary blocks and supported blocks in conditional--common-output order.
 
