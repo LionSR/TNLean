@@ -948,6 +948,69 @@ theorem RecoveredConditionalDilationInternal.pureAncillaRecovery_eq_rectangularK
     c₀ r₀ U K (1 : Matrix B B ℂ) hV X
   simpa [K] using h
 
+set_option maxHeartbeats 800000 in
+-- The entrywise Kraus-family conjugation requires a larger reduction budget.
+/-- Conjugating a block-coordinate pure-ancilla dilation by a system unitary
+conjugates both its input and retained system-output coordinates. -/
+theorem RecoveredConditionalDilationInternal.pureAncillaRecovery_physical_conjugation
+    {B C R : Type*} [Fintype B] [DecidableEq B]
+    [Fintype C] [DecidableEq C] [Fintype R] [DecidableEq R]
+    (c₀ : C) (r₀ : R)
+    (Q : Matrix B B ℂ)
+    (hQ : Q ∈ Matrix.unitaryGroup B ℂ)
+    (U : Matrix (B × (C × R)) (B × (C × R)) ℂ)
+    (X : Matrix B B ℂ) :
+    let lift := Q ⊗ₖ (1 : Matrix (C × R) (C × R) ℂ)
+    let Uphysical := lift * U * star lift
+    star (Q ⊗ₖ (1 : Matrix C C ℂ)) *
+        pureAncillaRecovery c₀ r₀ Uphysical X *
+          (Q ⊗ₖ (1 : Matrix C C ℂ)) =
+      pureAncillaRecovery c₀ r₀ U (star Q * X * Q) := by
+  dsimp only
+  rw [pureAncillaRecovery_eq_rectangularKrausMap,
+    pureAncillaRecovery_eq_rectangularKrausMap]
+  let J := fixedEnvEmbedding (S := B) (c₀, r₀)
+  let lift := Q ⊗ₖ (1 : Matrix (C × R) (C × R) ℂ)
+  let liftC := Q ⊗ₖ (1 : Matrix C C ℂ)
+  let Kphysical : R → Matrix (B × C) B ℂ := fun i bc b =>
+    ((lift * U * star lift) * J) (bc.1, (bc.2, i)) b
+  let Kblocks : R → Matrix (B × C) B ℂ := fun i bc b =>
+    (U * J) (bc.1, (bc.2, i)) b
+  change star liftC * rectangularKrausMap Kphysical X * liftC =
+    rectangularKrausMap Kblocks (star Q * X * Q)
+  have hQright : Q * star Q = 1 :=
+    Matrix.mem_unitaryGroup_iff.mp hQ
+  have hliftC : liftC ∈ Matrix.unitaryGroup (B × C) ℂ :=
+    Matrix.kronecker_mem_unitary hQ (Submonoid.one_mem _)
+  have hliftCleft : star liftC * liftC = 1 :=
+    Matrix.mem_unitaryGroup_iff'.mp hliftC
+  have hV : (lift * U * star lift) * J =
+      lift * (U * J * star Q) := by
+    have h := physicalDilation_mul_fixedEnvEmbedding_mul_support
+      (c₀, r₀) Q hQ U (star Q)
+    simpa only [lift, J, hQright, Matrix.mul_one] using h
+  have hK (i : R) :
+      Kphysical i = liftC * Kblocks i * star Q := by
+    apply Matrix.ext
+    rintro ⟨b, c⟩ b'
+    change (lift * U * star lift * J) (b, (c, i)) b' =
+      (liftC * Kblocks i * star Q) (b, c) b'
+    rw [hV]
+    rw [Matrix.mul_assoc liftC (Kblocks i) (star Q)]
+    change rightOutputSlice (lift * (U * J * star Q)) (c, i) b b' =
+      rightOutputSlice (liftC * (Kblocks i * star Q)) c b b'
+    rw [rightOutputSlice_kronecker_one_mul,
+      rightOutputSlice_kronecker_one_mul]
+    rfl
+  simp only [rectangularKrausMap, LinearMap.coe_mk, AddHom.coe_mk]
+  simp_rw [hK]
+  rw [Finset.mul_sum, Finset.sum_mul]
+  apply Finset.sum_congr rfl
+  intro i _
+  simp only [Matrix.conjTranspose_mul, ← Matrix.star_eq_conjTranspose,
+    star_star, Matrix.mul_assoc]
+  rw [← Matrix.mul_assoc, hliftCleft, Matrix.one_mul, Matrix.mul_one]
+
 /-- A supported entry of the named ambient block dilation is the local
 Stinespring entry tensored with the conditional identity. -/
 @[simp] private theorem blockDilationUnitary_fixedEnv_apply_support
