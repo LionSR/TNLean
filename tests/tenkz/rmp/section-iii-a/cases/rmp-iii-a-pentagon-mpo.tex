@@ -10,12 +10,12 @@
     % wire endpoints (paper: gray wedges), typed virtual on the used anchors
     \tnput[dot, label pos=west, ports={east:virtual}]{n}{(0,0)}{n}
     \tnput[dot, label pos=south,
-           ports={west:virtual, north:virtual, south:virtual}]{m}{(16mm,0)}{m}
-    \tnput[dot, label pos=east, ports={west:virtual}]{j}{(30mm,9mm)}{j}
-    \tnput[dot, label pos=east, ports={west:virtual}]{k}{(30mm,-9mm)}{k}
+           ports={west:virtual, 50:virtual, -50:virtual}]{m}{(16mm,0)}{m}
+    \tnput[dot, label pos=east, ports={195:virtual}]{j}{(30mm,9mm)}{j}
+    \tnput[dot, label pos=east, ports={165:virtual}]{k}{(30mm,-9mm)}{k}
     % c: n -> m (straight), then the split a: m -> j and b: m -> k (curved)
     \tnjoin[dir, label=c]{n.east}{m.west}
-    \tnjoin[dir, route=arc, out=50, in=195, label=a]{m.north}{j.west}
-    \tnjoin[dir, route=arc, out=-50, in=165, label=b]{m.south}{k.west}
+    \tnjoin[dir, route=arc, label=a]{m.50}{j.195}
+    \tnjoin[dir, route=arc, label=b]{m.-50}{k.165}
   \end{tenkzfree}
 \]

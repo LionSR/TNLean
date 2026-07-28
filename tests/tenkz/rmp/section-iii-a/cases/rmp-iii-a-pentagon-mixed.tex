@@ -8,19 +8,19 @@
 \[
   \begin{tenkzfree}
     % the splitting vertex: root in from below, two legs out the top
-    \tnput[dot, ports={south:physical}]{V}{(0,0)}{}
+    \tnput[dot, ports={south:physical, 130:virtual, 50:virtual}]{V}{(0,0)}{}
+    \tnput[boundary]{VnW}{(-8mm,14mm)}{} \tnput[boundary]{VnE}{(8mm,14mm)}{}
     \tnjoin[dir]{0mm,-16mm}{V.south}
-    \tnjoin[dir, route=arc, out=130, in=-90]{V.north west}{-8mm,14mm}
-    \tnjoin[dir, route=arc, out=50, in=-90]{V.north east}{8mm,14mm}
+    \tnjoin[dir, route=arc]{V.130}{VnW.south} \tnjoin[dir, route=arc]{V.50}{VnE.south}
     % the MPO string, below the vertex, crossing the root leg
     \tnjoin[dir]{-9mm,-9mm}{9mm,-9mm}
   \end{tenkzfree}
   \;=\;
   \begin{tenkzfree}
-    \tnput[dot, ports={south:physical}]{W}{(0,0)}{}
+    \tnput[dot, ports={south:physical, 130:virtual, 50:virtual}]{W}{(0,0)}{}
+    \tnput[boundary]{WnW}{(-8mm,18mm)}{} \tnput[boundary]{WnE}{(8mm,18mm)}{}
     \tnjoin[dir]{0mm,-12mm}{W.south}
-    \tnjoin[dir, route=arc, out=130, in=-90]{W.north west}{-8mm,18mm}
-    \tnjoin[dir, route=arc, out=50, in=-90]{W.north east}{8mm,18mm}
+    \tnjoin[dir, route=arc]{W.130}{WnW.south} \tnjoin[dir, route=arc]{W.50}{WnE.south}
     % the string, above the vertex, crossing BOTH split legs
     \tnjoin[dir]{-13mm,11mm}{13mm,11mm}
   \end{tenkzfree}

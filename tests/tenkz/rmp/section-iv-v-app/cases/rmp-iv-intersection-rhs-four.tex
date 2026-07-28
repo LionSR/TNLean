@@ -21,7 +21,7 @@
     \tnput[boundary, ports={south:virtual}]{cV}{(15mm,6mm)}{}
     \tnput[boundary, ports={south:physical}]{cP}{(19mm,6mm)}{}
     \tnjoin[route=vh]{r.120}{b.west}
-    \tnjoin[route=arc,out=0,in=0]{c.east}{r.east}
+    \tnjoin[route=arc]{c.east}{r.east}
     \tnjoin[route=hv]{b.east}{bV.south}
     \tnjoin[route=hv]{c.west}{cV.south}
     \tnjoin[route=vh]{r.160}{s.225}

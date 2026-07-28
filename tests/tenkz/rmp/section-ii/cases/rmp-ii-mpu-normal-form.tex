@@ -24,9 +24,9 @@
       {g2}{(1mm,5mm)}{}
     \tnput[boundary,ports={north east:virtual}]{gi}{(-10mm,-9mm)}{}
     \tnput[boundary,ports={south west:virtual}]{go}{(8mm,10mm)}{}
-    \tnjoin[role=marked,route=arc,out=45,in=225]{gi.north east}{g1.south west}
-    \tnjoin[role=marked,route=arc,out=45,in=225]{g1.north east}{g2.south west}
-    \tnjoin[role=marked,route=arc,out=45,in=225]{g2.north east}{go.south west}
+    \tnjoin[role=marked,route=arc]{gi.north east}{g1.south west}
+    \tnjoin[role=marked,route=arc]{g1.north east}{g2.south west}
+    \tnjoin[role=marked,route=arc]{g2.north east}{go.south west}
   \end{tenkzfree}
   \;=\;
   \begin{tenkzfree}
@@ -46,8 +46,8 @@
       {g2}{(5mm,2mm)}{}
     \tnput[boundary,ports={north east:virtual}]{gi}{(-9mm,-10mm)}{}
     \tnput[boundary,ports={south west:virtual}]{go}{(10mm,9mm)}{}
-    \tnjoin[role=marked,route=arc,out=45,in=225]{gi.north east}{g1.south west}
-    \tnjoin[role=marked,route=arc,out=45,in=225]{g1.north east}{g2.south west}
-    \tnjoin[role=marked,route=arc,out=45,in=225]{g2.north east}{go.south west}
+    \tnjoin[role=marked,route=arc]{gi.north east}{g1.south west}
+    \tnjoin[role=marked,route=arc]{g1.north east}{g2.south west}
+    \tnjoin[role=marked,route=arc]{g2.north east}{go.south west}
   \end{tenkzfree}
 \]

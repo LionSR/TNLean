@@ -10,26 +10,26 @@
 \[
   \begin{tenkzfree}
     % The two outer arcs represent the identified boundary of the torus.
-    \tnjoin[route=arc,out=90,in=180]{-26mm,0mm}{0mm,13mm}
-    \tnjoin[route=arc,out=0,in=90]{0mm,13mm}{26mm,0mm}
-    \tnjoin[route=arc,out=-90,in=0]{26mm,0mm}{0mm,-13mm}
-    \tnjoin[route=arc,out=180,in=-90]{0mm,-13mm}{-26mm,0mm}
+    \tnjoin[route=arc]{-26mm,0mm}{0mm,13mm}
+    \tnjoin[route=arc]{0mm,13mm}{26mm,0mm}
+    \tnjoin[route=arc]{26mm,0mm}{0mm,-13mm}
+    \tnjoin[route=arc]{0mm,-13mm}{-26mm,0mm}
     % The two inner arcs expose the opening of the torus.
-    \tnjoin[route=arc,out=25,in=155]{-12mm,1mm}{12mm,1mm}
-    \tnjoin[route=arc,out=-25,in=-155]{-14mm,2mm}{14mm,2mm}
+    \tnjoin[route=arc]{-12mm,1mm}{12mm,1mm}
+    \tnjoin[route=arc]{14mm,2mm}{-14mm,2mm}
     % The two red MPO cycles wind in the two torus directions and cross at i.
     \tnput[box, role=marked,
       ports={north:virtual,east:virtual,south:virtual,west:virtual}]
       {wi}{(0mm,-8mm)}{}
     \tnput[boundary, label pos=east]{ilabel}{(1.5mm,-8mm)}{i}
     % The horizontal cycle closes around the central opening.
-    \tnjoin[role=operator,route=arc,out=90,in=180]
+    \tnjoin[role=operator,route=arc]
       {-20mm,0mm}{0mm,9mm}
-    \tnjoin[role=operator,route=arc,out=0,in=90]
+    \tnjoin[role=operator,route=arc]
       {0mm,9mm}{20mm,0mm}
-    \tnjoin[role=operator,route=arc,out=-90,in=0]
+    \tnjoin[role=operator,route=arc]
       {20mm,0mm}{wi.east}
-    \tnjoin[role=operator,route=arc,out=180,in=-90]
+    \tnjoin[role=operator,route=arc]
       {wi.west}{-20mm,0mm}
     % The second cycle runs from the inner opening through i to the identified
     % outer boundary.

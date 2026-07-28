@@ -19,10 +19,10 @@
     \tnput[mpo]{N}{(0mm,10mm)}{}
     \tnput[mpo]{E}{(10mm,0mm)}{}
     \tnput[mpo]{S}{(0mm,-10mm)}{}
-    \tnjoin[route=arc, out=90, in=180]{W.north}{N.west}
-    \tnjoin[route=arc, out=0, in=90]{N.east}{E.north}
-    \tnjoin[route=arc, out=-90, in=0]{E.south}{S.east}
-    \tnjoin[route=arc, out=180, in=-90]{S.west}{W.south}
+    \tnjoin[route=arc]{W.north}{N.west}
+    \tnjoin[route=arc]{N.east}{E.north}
+    \tnjoin[route=arc]{E.south}{S.east}
+    \tnjoin[route=arc]{S.west}{W.south}
     \tnjoin{-18mm,0mm}{W.west} \tnjoin{E.east}{18mm,0mm}
     \tnjoin{0mm,-18mm}{S.south} \tnjoin{N.north}{0mm,18mm}
     \tnjoin{A}{0mm,7mm}
