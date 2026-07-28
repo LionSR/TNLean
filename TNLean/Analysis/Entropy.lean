@@ -604,17 +604,18 @@ end BipartiteHermiticity
 /-! ## SSA equality condition
 
 The Hayashi characterization of equality in strong subadditivity is defined as
-a predicate. The theorem (equality ↔ recovery map condition) is the sanctioned
-axiom `hayashi_ssa_equality_characterization` in
-`TNLean/Axioms/Entropy.lean`.
+a predicate. The forward implication from equality to a quantum-Markov
+decomposition is the sanctioned axiom
+`hayashi_ssa_equality_characterization_forward` in
+`TNLean/Axioms/Entropy.lean`; the reverse implication is proved.
 
 Source: Hayashi, *Quantum Information: An Introduction*, Springer 2006,
 Theorem 5.24; Hayden--Jozsa--Petz--Winter, Commun. Math. Phys. 246,
 359--374 (2004);
 blueprint `def:ssa_equality`.
 
-TODO: Replace with a proof following Hayashi, "Quantum Information: An
-Introduction", Springer 2006, Theorem 5.24. -/
+TODO: Apply the joint-support block theorem to the recovered conditional
+family and assemble the resulting quantum-Markov decomposition. -/
 
 section SSAEquality
 
