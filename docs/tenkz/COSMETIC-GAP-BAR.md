@@ -22,13 +22,15 @@ This distinction controls the verdict:
 - **K4 — small omission:** a finite source item such as a label, arrow, tensor,
   leg, or projection mark is absent or extra. Fix and re-review the individual
   case.
+- **X — not cosmetic:** the ledger itself contradicts the cosmetic status by
+  recording a topological, boundary, contraction, ordering, or crossing
+  defect. Move the case to the appropriate ordinary RMP verdict before any
+  cosmetic sweep.
 
 `cosmetic-gap` is reserved for K1, K3, and K4 while their stated residue is
 visible. K2 is not a permanent gap class: after a visual check confirms that
 the mathematical contract is intact, its verdict and note should become
-`faithful`. A case with a topological, boundary, contraction, ordering, or
-crossing error is not cosmetic and must be classified by the ordinary RMP
-verdict rules.
+`faithful`. X is an audit escalation, not a fifth cosmetic kind.
 
 ## Current classification
 
@@ -98,8 +100,8 @@ hash-pinned visual check required before changing a verdict.
 | `rmp-iv-intersection-rhs-four` | K2 | The five open ends match and the spurious crossing is absent. |
 | `rmp-iv-intersection-lhs-five` | K2 | Sideways stubs preserve the restored three-leg boundary. |
 | `rmp-iv-intersection-rhs-five` | K2 | Mirroring preserves the equivalent C--X contraction. |
-| `rmp-iv-intersection-lhs-six` | K4 | Remove the extra lattice from the nesting presentation. |
-| `rmp-iv-intersection-rhs-six` | K4 | Remove the extra lattice from the nesting presentation. |
+| `rmp-iv-intersection-lhs-six` | X | The ledger records `wrong-contraction`; move it out of `cosmetic-gap` before fixing the invented lattice. |
+| `rmp-iv-intersection-rhs-six` | X | The ledger records `wrong-contraction`; move it out of `cosmetic-gap` before fixing the invented lattice. |
 | `rmp-app-czx-state` | K2 | Lighter enclosure fill is a public-theme choice. |
 | `rmp-workbench-ii-newfig7` | K2 | Crossing-gadget styling is a house-form difference. |
 | `rmp-workbench-ii-projector-on-pta` | K4 | Restore the two missing source triangles. |
@@ -140,14 +142,16 @@ hash-pinned visual check required before changing a verdict.
 
 ## Sweep order
 
-1. Re-review K2 against the current hash-pinned renders and change only the
+1. Correct every X ledger contradiction and handle it under the ordinary RMP
+   structural verdict and repair process.
+2. Re-review K2 against the current hash-pinned renders and change only the
    verdict metadata where the contract is intact.
-2. Group K1 by the owning renderer/theme capability. Land one shared fix,
+3. Group K1 by the owning renderer/theme capability. Land one shared fix,
    rerender every consumer, and retire all residues it actually removes.
-3. Group K3 by closure, tail, hook, pitch, glyph, gauge-route, and spacing
+4. Group K3 by closure, tail, hook, pitch, glyph, gauge-route, and spacing
    families. Each family change must improve the default rather than merely
    move one case closer to legacy pixels.
-4. Fix K4 in small source-family batches with side-by-side visual review.
+5. Fix K4 in small source-family batches with side-by-side visual review.
 
 Every batch still runs the focused RMP check, the full RMP audit, the shrink
 ratchet, and the standalone tenkz corpus before its verdict hashes change.
