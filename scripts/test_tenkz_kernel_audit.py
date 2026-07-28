@@ -63,6 +63,56 @@ def main() -> int:
     ]
     assert good.pictures[0].kernel_boundary() == ("open:e", "open:w")
 
+    pairing_cross = audit_log(
+        """\
+picture|id=k1|lang=kernel
+atom|id=atom-1|kind=tn|name=host
+wire|id=wire-2|cross=under at crossing of self and probe|from=addr-1|host=atom-1|kind=pairing|name=skin-atom-1-1|origin=skin|to=addr-2
+wire|id=wire-3|from=addr-3|kind=string|name=probe|to=addr-4
+kernel-boundary|signature=
+string|id=probe|kind=open|pts=2
+stringcross|under=skin-atom-1-1|over=probe|hits=1
+"""
+    )
+    assert not pairing_cross.findings, pairing_cross.findings
+
+    pairing_operand = audit_log(
+        """\
+picture|id=k1|lang=kernel
+atom|id=atom-1|kind=tn|name=host
+wire|id=wire-2|from=addr-1|host=atom-1|kind=pairing|name=skin-atom-1-1|origin=skin|to=addr-2
+wire|id=wire-3|cross=over at crossing of self and pairing 1 of host|from=addr-3|kind=string|to=addr-4
+kernel-boundary|signature=
+string|id=wire-3|kind=open|pts=2
+stringcross|under=skin-atom-1-1|over=wire-3|hits=1
+"""
+    )
+    assert not pairing_operand.findings, pairing_operand.findings
+
+    inherited_pairing_cross = audit_log(
+        """\
+picture|id=k1|lang=kernel
+wire|id=wire-1|from=addr-1|host=atom-1|kind=pairing|name=skin-atom-1-1|origin=skin|to=addr-2
+wire|id=wire-2|from=addr-3|host=atom-1|kind=pairing|name=skin-atom-1-2|origin=skin|to=addr-4
+kernel-boundary|signature=
+stringcross|under=skin-atom-1-1|over=skin-atom-1-2|hits=1
+"""
+    )
+    assert not inherited_pairing_cross.findings, inherited_pairing_cross.findings
+
+    unrelated_pairing_cross = audit_log(
+        """\
+picture|id=k1|lang=kernel
+wire|id=wire-1|from=addr-1|host=atom-1|kind=pairing|name=skin-atom-1-1|origin=skin|to=addr-2
+wire|id=wire-2|from=addr-3|host=atom-2|kind=pairing|name=skin-atom-2-1|origin=skin|to=addr-4
+kernel-boundary|signature=
+stringcross|under=skin-atom-1-1|over=skin-atom-2-1|hits=1
+"""
+    )
+    assert "kernel-crossing" in [
+        finding.rule for finding in unrelated_pairing_cross.findings
+    ]
+
     missed = audit_log(
         GOOD_LOG.replace(
             "stringcross|under=b|over=a|hits=1",

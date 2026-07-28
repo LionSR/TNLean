@@ -1165,13 +1165,14 @@ self-crossing, the two MPU rows use reusable skin pairings, and the torus
 statement uses an identified lattice with `wind={1,0}` before its complete
 two-panel lattice identity.
 
-M4 rises from 18.20 to 18.39 because the refused two-box torus sketch is
+M4 rises from 18.20 to 18.40 because the refused two-box torus sketch is
 replaced by all three source stages, including the pull arrow and the
-`g^{-1}`/`g` resolution. The resolution rails flank and attach to `O_h`,
-rather than introducing a decorative rail crossing. The blocked count falls
-from three to zero. The shared event schema also accepts the `kind=pairing`
-WIRE records introduced by #5009; the focused audit regression pins that
-model-to-auditor contract.
+`g^{-1}`/`g` resolution. The two three-station resolution rails flank `O_h`
+and join each other above the marked tensor without terminating the vertical
+operator. The blocked count falls from three to zero. The shared event schema
+also accepts the `kind=pairing` WIRE records introduced by #5009; the focused
+audit regression pins that model-to-auditor contract, including author-facing
+pairing operands and inherited paint order between generated pairings.
 
 Census-correction: #5016
 

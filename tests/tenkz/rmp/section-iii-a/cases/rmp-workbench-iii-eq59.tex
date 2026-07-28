@@ -2,8 +2,8 @@
 % Formula: A wound torus cycle becomes the O_g/O_h lattice identity, where
 %   sliding O_g resolves the crossing into g^{-1} and g rails.
 % Ink: A traced 3x3 winding panel precedes the two complete 5x5 lattice panels.
-% Boundary: All three panels use identified lattice sides; the wound MPO and
-%   the two O_g/O_h cycles are closed by those identifications.
+% Boundary: The torus panel closes both noncontractible MPO cycles through
+%   identified sides; both 5x5 PEPS windows and their MPO strings remain open.
 % Source: author source ImagesReview Section III/ImagesReview Section III.tex
 %   lines 563-603; archival output Eq59.pdf
 % Capabilities: kernel, torus-cycle, winding, string-slide
@@ -14,20 +14,24 @@
   % homotopy class on a lattice with identified sides.
   \begin{tenkz}[lattice={3x3},
       west=trace, east=trace, north=trace, south=trace]
-    \tnwire[kind=string, species=operator, name=torus-cycle, closed,
+    \tnwire[kind=string, species=operator, name=torus-horizontal, closed,
       wind={1,0}, via={s outside}]
-    \tn[skin=box, role=marked, at=on torus-cycle 0.55]{i}
+    \tnwire[kind=string, species=operator, name=torus-vertical,
+      crossing=under,
+      cross={under at crossing of torus-vertical and torus-horizontal}]
+      {n outside}{s outside}
+    \tn[skin=box, role=marked,
+        at=crossing of torus-horizontal and torus-vertical]{i}
   \end{tenkz}
   \;\longrightarrow\;
-  \begin{tenkz}[lattice={5x5},
-      west=trace, east=trace, north=trace, south=trace]
+  \begin{tenkz}[lattice={5x5}]
     % O_g starts above the PEPS window and O_h crosses it vertically.  Their
     % policies also order each red MPO over the black lattice bonds.
     \tnwire[kind=string, species=operator, name=og-left, crossing=over]
       {0.5 w of 0.5 n of (1,1)}{0.5 e of 0.5 n of (1,5)}
-    \tnwire[kind=string, species=operator, name=oh-left, crossing=under,
+    \tnwire[kind=string, species=operator, name=oh-left, crossing=over,
       cross={under at crossing of oh-left and og-left}]
-      {0.5 n of (1,4)}{0.5 s of (5,4)}
+      {1 n of (1,4)}{0.5 s of (5,4)}
     \tn[skin=dot, role=extra,
         at=crossing of og-left and oh-left]{}
     \tn[skin=dot, role=extra, at=on og-left 0.15]{}
@@ -44,43 +48,41 @@
       {0.8 w of 0.5 n of (1,1)}{0.8 w of (3,1)}
   \end{tenkz}
   \;=\;
-  \begin{tenkz}[lattice={5x5},
-      west=trace, east=trace, north=trace, south=trace]
+  \begin{tenkz}[lattice={5x5}]
     % O_g has moved below the crossing.  O_h passes through the marked tensor,
-    % and the g^{-1}/g rails flank O_h before joining it above the tensor.
+    % and the g^{-1}/g rails flank O_h before joining each other above the
+    % tensor.
     \tn[skin=box, role=marked, name=marked,
         at=0.5 n of (3,4)]{}
-    \tn[skin=none, void=sealed, name=rail-junction,
-        at=0.5 n of (2,4)]{}
     \tnwire[kind=string, species=operator, name=og-right-west, crossing=over]
       {0.5 w of 0.5 n of (3,1)}{marked.w}
     \tnwire[kind=string, species=operator, name=og-right-east, crossing=over]
       {marked.e}{0.5 e of 0.5 n of (3,5)}
     \tnwire[kind=string, species=operator, name=oh-right-north, crossing=over]
-      {0.5 n of (1,4)}{rail-junction.n}
-    \tnwire[kind=string, species=operator, name=oh-right-middle, crossing=over]
-      {rail-junction.s}{marked.n}
+      {0.5 n of (1,4)}{marked.n}
     \tnwire[kind=string, species=operator, name=oh-right-south, crossing=over]
       {marked.s}{0.5 s of (5,4)}
-    \tnwire[kind=string, species=operator, name=rail-left, route=orth,
-      via={0.4 w of rail-junction}, crossing=over]
-      {0.4 w of (1,4)}{rail-junction.w}
-    \tnwire[kind=string, species=operator, name=rail-right, route=orth,
-      via={0.4 e of rail-junction}, crossing=over]
-      {rail-junction.e}{0.4 e of (1,4)}
-    \tn[skin=dot, role=extra, at=on rail-left 0.15,
+    \tnwire[kind=string, species=operator, name=rail-u, route=orth,
+      via={0.3 w of (2,4), 0.3 w of 0.3 n of marked,
+           0.3 e of 0.3 n of marked, 0.3 e of (2,4)}, crossing=over,
+      cross={over at crossing of rail-u and oh-right-north}]
+      {0.3 w of (1,4)}{0.3 e of (1,4)}
+    \tn[skin=dot, role=extra, at=on rail-u 0.08,
         label pos=nw]{g^{-1}}
-    \tn[skin=dot, role=extra, at=on rail-left 0.7]{}
-    \tn[skin=dot, role=extra, at=on rail-right 0.85,
+    \tn[skin=dot, role=extra, at=on rail-u 0.23]{}
+    \tn[skin=dot, role=extra, at=on rail-u 0.42]{}
+    \tn[skin=dot, role=extra, at=on rail-u 0.92,
         label pos=ne]{g}
-    \tn[skin=dot, role=extra, at=on rail-right 0.3]{}
+    \tn[skin=dot, role=extra, at=on rail-u 0.77]{}
+    \tn[skin=dot, role=extra, at=on rail-u 0.58]{}
     \tn[skin=dot, role=extra, at=on og-right-west 0.25]{}
     \tn[skin=dot, role=extra, at=on og-right-west 0.75]{}
     \tn[skin=dot, role=extra, at=on og-right-east 0.25]{}
     \tn[skin=dot, role=extra, at=on og-right-east 0.75,
         label pos=e]{O_g}
+    \tn[skin=dot, role=passive, at=on oh-right-north 0.25]{}
     \tn[skin=dot, role=passive, at=on oh-right-north 0.5]{}
-    \tn[skin=dot, role=passive, at=on oh-right-middle 0.5]{}
+    \tn[skin=dot, role=passive, at=on oh-right-north 0.75]{}
     \tn[skin=dot, role=passive, at=on oh-right-south 0.25]{}
     \tn[skin=dot, role=passive, at=on oh-right-south 0.75,
         label pos=s]{O_h}
