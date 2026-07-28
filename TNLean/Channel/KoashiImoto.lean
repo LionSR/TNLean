@@ -22,4 +22,5 @@ import TNLean.Channel.KoashiImoto.RecoveredConditionalBlockForm
 import TNLean.Channel.KoashiImoto.RecoveredConditionalDilation
 import TNLean.Channel.KoashiImoto.RecoveredConditionalDilationBlockForm
 import TNLean.Channel.KoashiImoto.RecoveredConditionalFamily
+import TNLean.Channel.KoashiImoto.RecoveredConditionalTripartiteBlockForm
 import TNLean.Channel.KoashiImoto.SingleWitness

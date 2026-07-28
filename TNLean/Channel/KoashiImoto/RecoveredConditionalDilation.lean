@@ -8,5 +8,6 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.Channel.KoashiImoto.RecoveredConditionalDilation
 
+import TNLean.Channel.KoashiImoto.RecoveredConditionalDilation.AmbientBlockAction
 import TNLean.Channel.KoashiImoto.RecoveredConditionalDilation.Basic
 import TNLean.Channel.KoashiImoto.RecoveredConditionalDilation.SectorAction

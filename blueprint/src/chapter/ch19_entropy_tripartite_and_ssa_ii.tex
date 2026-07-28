@@ -1991,9 +1991,80 @@ algebra of a family of jointly invariant states.
     vector to a unitary. Their direct sum gives the block-coordinate unitary;
     conjugating by the ambient change of basis gives the physical unitary.
     Equality of the two Stinespring isometries on the support proves agreement
-    with the Petz operation there. The supported reconstruction of
-    $\rho_{AB}$ then transports the Petz recovery identity to the chosen
-    unitary recovery.
+    with the Petz operation there. Combining this agreement with the supported
+    reconstruction of $\rho_{AB}$ gives the displayed recovery identity.
+\end{proof}
+
+\begin{theorem}[Ambient recovered tripartite blocks]
+    \label{thm:hjpw_recovered_tripartite_ambient_blocks}
+    \lean{Matrix.RecoveredConditionalDilationBlockForm.ambient_tripartite_block_form}
+    \lean{Matrix.exists_recoveredConditionalTripartiteBlockForm}
+    \leanok
+    \uses{thm:hjpw_recovered_bipartite_ambient_blocks,
+        thm:hjpw_recovered_dilation_ambient_blocks}
+    Let $\rho_{ABC}$ be a tripartite density matrix attaining equality in
+    strong subadditivity, and let $U_B$ and the factors $\omega_j$ be those of
+    Theorems~\ref{thm:hjpw_recovered_bipartite_ambient_blocks} and
+    \ref{thm:hjpw_recovered_dilation_ambient_blocks}. For each supported sector,
+    put
+    \begin{align}
+        \widehat\rho_j
+        &=\widehat{\mathcal R}_j(\sigma_j).
+        \notag
+    \end{align}
+    This is a density matrix on
+    $\mathcal H_{b_j^R}\otimes\mathcal H_C$, where
+    $\widehat{\mathcal R}_j$ is the sector recovery operation. Read each
+    middle-system summand in the HJPW order
+    $\mathcal H_{b_j^L}\otimes\mathcal H_{b_j^R}$, and set
+    $W=\mathbf 1_A\otimes(U_B\otimes\mathbf 1_C)$. Then
+    \begin{align}
+        W^\dagger\rho_{ABC}W
+        &=0_{\perp}\oplus
+          \bigoplus_j \omega_j\otimes\widehat\rho_j.
+        \label{eq:entropy_hjpw_ambient_tripartite_blocks}
+    \end{align}
+    Thus every complementary block is zero, while the supported $j$th block,
+    in the factor order
+    $(A b_j^L)\otimes(b_j^R C)$, is
+    $\omega_j\otimes\widehat\rho_j$. The factors $\omega_j$ remain
+    unnormalized; no probabilities or normalized left factors are asserted.
+
+    This is the final substitution in
+    \cite[Theorem~6, equations~(11), (14), and (15)]{Hayden2004Structure},
+    lines~562--570.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:hjpw_recovered_bipartite_ambient_blocks,
+        thm:hjpw_recovered_dilation_ambient_blocks}
+    Equations~(11) and~(14) give
+    \begin{align}
+        \rho_{ABC}
+        &=(\operatorname{id}_A\otimes\widehat{\mathcal R})(\rho_{AB}),
+        \notag\\
+        (\mathbf 1_A\otimes U_B)^\dagger\rho_{AB}
+          (\mathbf 1_A\otimes U_B)
+        &=0_{\perp}\oplus\bigoplus_j\sigma_j\otimes\omega_j.
+        \notag
+    \end{align}
+    The physical unitary in equation~(15) is the conjugate of its block
+    unitary by $U_B\otimes\mathbf 1_C$. Hence conjugation by $W$ changes the
+    first identity into the sectorwise action of the block recovery operation
+    on the second identity. In HJPW factor order the supported input block is
+    $\omega_j\otimes\sigma_j$. On the complement the input block is zero. On a
+    supported sector,
+    \begin{align}
+        (\operatorname{id}_{A b_j^L}\otimes\widehat{\mathcal R}_j)
+          (\omega_j\otimes\sigma_j)
+        &=\omega_j\otimes\widehat{\mathcal R}_j(\sigma_j)
+         =\omega_j\otimes\widehat\rho_j.
+        \notag
+    \end{align}
+    Taking the direct sum proves
+    (\ref{eq:entropy_hjpw_ambient_tripartite_blocks}) with the stated
+    orientation $W^\dagger\rho_{ABC}W$.
 \end{proof}
 
 \begin{theorem}[Hayashi SSA-equality characterization]
@@ -2054,9 +2125,13 @@ algebra of a family of jointly invariant states.
     all of $B$ and completes equations~(13)--(14).
     Theorem~\ref{thm:hjpw_recovered_dilation_ambient_blocks} supplies
     equation~(15), agreement with the Petz operation on the joint support,
-    and the recovered supported-sector states. Only transporting those
-    sector states into the tripartite direct sum and assembling the
-    quantum-Markov decomposition remain open, so this forward implication
+    and the recovered supported-sector states. Theorem~%
+    \ref{thm:hjpw_recovered_tripartite_ambient_blocks} combines equations~(11),
+    (14), and~(15) to prove the unnormalized ambient tripartite blocks in HJPW
+    factor order, including zero complementary blocks. Defining the sector
+    probabilities, normalizing the left factors when their weights are nonzero,
+    choosing harmless density factors at zero weight, and constructing the
+    quantum Markov decomposition remain open, so this forward implication
     remains axiomatic. The biconditional combines the two directions.
 
     This equality criterion is cited here as an input for the later MPDO arguments.
