@@ -67,7 +67,7 @@ hash-pinned visual check required before changing a verdict.
 | `rmp-iii-a-proof-one` | K2 | The invented boxes are gone and the copy dot is restored. |
 | `rmp-iii-a-proof-two` | K2 | Bond hue and box size are public-theme choices. |
 | `rmp-iii-a-proof-three` | K2 | The full fusion stack is present; red operator rails are the house semantic hue. |
-| `rmp-iii-a-ghz-state` | K1 | Masonry truncation belongs to the shared lattice-genre work tracked by #4931. |
+| `rmp-iii-a-ghz-state` | X | The free-form case records no lattice genre or truncation property; migrate it to the carrier-axis/lattice model first. |
 | `rmp-iii-a-ghz-tensor` | K2 | Copy dot versus labelled box and diagonal angle are equivalent house forms. |
 | `rmp-iii-a-hadamard` | X | Its ledger pairing is `wrong-source`; repair and verify the source mapping before judging the explicit label. |
 | `rmp-iii-a-spt-mpo` | K2 | The string, action boxes, and measured-leg crossings are complete. |
@@ -89,7 +89,7 @@ hash-pinned visual check required before changing a verdict.
 | `rmp-iii-b-braid-four` | K2 | Upright boxes replace source parallelograms without changing the identity. |
 | `rmp-iii-b-condensation` | K4 | Add the finite projection mark named by the verdict note. |
 | `rmp-iv-ground-space-1d` | K3 | Improve the small X glyph and overly tight placement. |
-| `rmp-iv-ground-space-2d` | K1 | Border hue and leg arrowheads are shared theme/string properties. |
+| `rmp-iv-ground-space-2d` | X | `physical=up` creates ports but records no wire direction; model the source arrowed legs before theme review. |
 | `rmp-iv-intersection-lhs-one` | K2 | Sideways virtual ends preserve the same boundary and contraction. |
 | `rmp-iv-intersection-rhs-one` | K2 | Sideways virtual ends preserve the same boundary and contraction. |
 | `rmp-iv-intersection-lhs-two` | K2 | Sideways virtual openings preserve the source boundary. |
