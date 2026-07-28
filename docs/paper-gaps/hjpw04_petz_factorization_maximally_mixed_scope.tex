@@ -150,46 +150,38 @@ formalized in \doclink{TNLean/Channel/Schwarz/SSAEqualityPetzRecovery} by
 No global identity-tensored factorization of TNLean's generic completed
 singular product-reference channel is claimed.
 
-\section{Remaining structural bridge}
+\section{Structural implication complete}
 
-Equation~\eqref{eq:hjpw-global-support-factorization} supplies the
-product-reference recovery factorization required before the structural part
-of the HJPW argument. Under a positive-definite common-average hypothesis, the
-Koashi--Imoto state decomposition and the action of every preserving operation
-on its diagonal summands are now formalized below. The joint-support
-compression, state reconstruction, restriction of ambient preserving
-operations, and intertwining of their compressed and ambient actions are also
-formalized. The finite informationally complete effect family, conditional
-slices, nonzero normalization, and their common preserving channel are now
-constructed by
-\leanid{Matrix.exists_recoveredConditionalPreservingKrausFamily}; the slices
-separate bipartite operators by
-\leanid{Matrix.eq_of_conditionalSlice_informationallyCompleteEffect_eq}.
-The joint-support block theorem is now applied to this family, and its
-coordinates extend to one ambient direct sum
+The product-reference recovery identity, the recovered conditional family, the
+joint-support block theorem, and the ambient extension now give
 \begin{align}
-  H_B\cong\bigoplus_j H_{B_j^L}\otimes H_{B_j^R}
-\end{align}
-with one-dimensional zero-weight complement sectors. One chosen
-pure-ancilla unitary now realizes the recovery-dilation block action of
-equation~(15), agrees with the Petz operation on the joint support, and
-produces normalized supported-sector states with the prescribed common-factor
-marginals. Equations~(11), (14), and~(15) now imply
-\begin{align}
+  H_B&\cong\bigoplus_j H_{B_j^L}\otimes H_{B_j^R},
+  \\
   W^\dagger\rho_{ABC}W
-  =0_\perp\oplus\bigoplus_j\omega_j\otimes\widehat\rho_j,
+  &=0_\perp\oplus\bigoplus_j\omega_j\otimes\widehat\rho_j,
+  \qquad
+  W=\mathbf 1_A\otimes(U_B\otimes\mathbf 1_C).
 \end{align}
-where $W=\mathbf 1_A\otimes(U_B\otimes\mathbf 1_C)$. The supported blocks are
-written in HJPW order $(A B_j^L)\otimes(B_j^R C)$, and every complementary
-block is zero. This identity is formalized by
-\leanid{Matrix.RecoveredConditionalDilationBlockForm.ambient_tripartite_block_form}.
-The singular-support equality-to-raw-recovery implication is now formalized by
-the projected finite-Weyl argument on arbitrary finite product coordinates.
-For density operators, support agreement upgrades this equality to the chosen
-completed partial-trace Petz channel on the recovered marginal. This does not
-give a tensor-product factorization of the generic completed singular channel.
-Probability normalization, zero-weight sector choices, the final quantum-Markov
-decomposition, and removal of the forward Hayashi assumption remain open.
+The supported matrices $\widehat\rho_j$ are the trace-one recovered physical
+states. The complementary blocks are zero. The forward characterization sets
+$p_j=\operatorname{Re}\operatorname{tr}\omega_j$, proves $p_j\geq0$ and
+$\sum_jp_j=1$, reverses each middle fibre to the order
+$B_j^L\otimes B_j^R$, and chooses the Hayashi unitary $U_B^\dagger$. Total
+positive-semidefinite normalization supplies the left density matrices and
+chooses arbitrary normalized matrices only in zero-weight or complementary
+sectors. Those fillers are not recovered physical states; their weighted
+contributions vanish.
+
+This completes the structural implication and is formalized by
+\leanid{Matrix.hayashi_ssa_equality_characterization_forward}, with the public
+root name \leanid{hayashi_ssa_equality_characterization_forward}.
+
+The singular-support scope remains unchanged. The raw support-Petz map factors
+as in~\eqref{eq:hjpw-global-support-factorization}, and the identity-tensored
+formula holds on supported inputs. For the SSA marginal, the chosen completed
+local channel agrees with the raw map on that supported input. No global
+identity-tensored factorization is claimed for TNLean's generic completed
+singular product-reference channel away from support.
 
 \section{Common invariant algebra: formalized under an explicit full-support hypothesis}
 
@@ -329,54 +321,30 @@ then combines equations~(11), (14), and~(15). With
 $W=\mathbf 1_A\otimes(U_B\otimes\mathbf 1_C)$, it proves
 \begin{align}
   W^\dagger\rho_{ABC}W
-  =0_\perp\oplus\bigoplus_j\omega_j\otimes\widehat\rho_j
+  =0_\perp\oplus\bigoplus_j\omega_j\otimes\widehat\rho_j.
 \end{align}
-in HJPW factor order. Probability normalization, zero-weight sector choices,
-the generic quantum-Markov decomposition, and removal of the external forward
-assumption remain open.
+The theorem \leanid{Matrix.hayashi_ssa_equality_characterization_forward}
+normalizes these blocks into the quantum-Markov decomposition. It keeps the
+supported recovered states as the positive-weight right factors and uses
+arbitrary normalized matrices only when the final weight is zero.
 
 \section{Classification}
 
-\emph{Product-reference recovery complete; structural implication open.} The general
-positive-semidefinite product reference, its marginal and support calculus, the
-global support-compressed raw formula, and the supported-input and
-positive-definite-left corollaries are formalized. The generic completed
-singular product-reference channel is outside this claim. The exact SSA
-specialization now proves HJPW equation (11), both for the identity-tensored
-raw support formula and for a completed local recovery channel on
-$\rho_{AB}$. Singular-support equality-to-recovery is formalized on arbitrary
-finite product coordinates, including the completed channel on the supported
-marginal. Independently, the common invariant Heisenberg-picture star-subalgebra
-$A_0$ of a finite family of jointly invariant states, its membership
-characterization, its generic block form, its finite realization by a single
-preserving operation $F_0$, and the positive unital idempotent projection
-$P_0^*$ onto it are formalized under an explicit full-support hypothesis on the
-common average, in place of HJPW's joint-support reduction. The simultaneous
-state decomposition
-$U^\dagger\rho_kU=\bigoplus_jq_{j|k}\sigma_j\otimes\tau_{j|k}$ for the whole
-invariant family is also formalized, with nonnegative weights summing to one
-and density matrices on both tensor factors. In the same coordinates, every
-preserving operation acts as a local trace-preserving completely positive
-operation fixing $\sigma_j$, tensored with the identity, on each diagonal
-summand. Thus full-support HJPW Property~$2'$ and the Heisenberg Ces\`aro
-convergence identity for $P_0^*$ are formalized. The joint-support coordinate
-reduction, density-family reconstruction, and
-restriction of preserving operations are formalized, as is the combined block
-form on the minimum joint support. The finite recovered conditional family,
-its separating effects, and its preserving middle-system channel are
-formalized. The joint-support block form and preserving-operation action have
-also been applied to this family, and the bipartite marginal is reconstructed
-in those same support coordinates. This is a scope-restricted joint-support
-variant toward HJPW equation~(14). The subsequent ambient extension now gives
-a direct sum of tensor factors on all of $H_B$, using one-dimensional
-zero-weight sectors on the orthogonal complement, and proves the full
-bipartite equation~(14). The chosen recovery-dilation block action of
-equation~(15), its supported Petz agreement, and normalized recovered
-supported-sector states are also formalized. The unnormalized ambient
-tripartite state now has zero complementary blocks and supported blocks
-$\omega_j\otimes\widehat\rho_j$ in HJPW factor order. Probability normalization,
-zero-weight sector choices, the quantum-Markov decomposition, and the generic
-Hayashi forward implication remain open.
+\emph{Product-reference recovery and the structural implication are complete.}
+The general positive-semidefinite product reference, its marginal and support
+calculus, the global support-compressed raw formula, and the supported-input
+and positive-definite-left corollaries are formalized. The exact SSA
+specialization proves HJPW equation~(11). The invariant-family decomposition,
+joint-support reduction, ambient equation~(14), and recovery-dilation action of
+equation~(15) give the ambient tripartite blocks. Their probability
+normalization and fibre reordering prove the Hayashi forward implication, so
+the SSA-equality characterization is axiom-free.
+
+The raw/completed singular boundary is preserved. The generic completed
+singular product-reference channel is not asserted to factor as an identity on
+the first subsystem tensored with a local channel. The completed local channel
+is used only through its proved agreement with the raw support map on the
+supported marginal.
 
 \begin{thebibliography}{9}
 

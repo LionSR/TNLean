@@ -113,24 +113,17 @@ For MPDO renormalization fixed points:
   identity, and the exact Hayden--Jozsa--Petz--Winter equality criterion are
   formalized. This note is now a closure record.
 - `hjpw04_petz_factorization_maximally_mixed_scope.tex` records the support
-  interpretation of HJPW equation (10). The general product-reference raw map
-  factors globally as first-factor support compression tensored with local raw
-  recovery; the identity-tensored formula holds on supported inputs and
-  globally for a positive-definite first factor. No factorization is claimed
-  for TNLean's generic completed singular channel. Independently, the common
-  invariant algebra of a finite jointly invariant family, its finite
-  realization by a single preserving operation, and a positive unital
-  idempotent projection onto it are formalized under an explicit full-support
-  hypothesis on the common average. The corresponding Heisenberg Ces\`aro
-  convergence identity remains open. The full-support family-level
-  tensor-product state decomposition and HJPW Property~`2'` channel action are
-  formalized. The joint-support coordinate reduction, state reconstruction,
-  and restriction of preserving operations are also formalized, together with
-  the combined block form on the minimum joint support. The finite
-  informationally complete effect family, conditional-slice separation, and
-  the nonzero normalized family fixed by the recovered middle-system channel
-  are formalized. Applying the joint-support block form to this recovered
-  family and completing the generic Hayashi forward implication remain open.
+  interpretation of HJPW equation (10) and the completed structural
+  implication. The general product-reference raw map factors globally as
+  first-factor support compression tensored with local raw recovery; the
+  identity-tensored formula holds on supported inputs and globally for a
+  positive-definite first factor. The recovered conditional family,
+  joint-support block form, ambient equations (14)--(15), and final
+  probability normalization now prove the Hayashi forward implication. The
+  supported recovered states remain the positive-weight physical factors;
+  arbitrary normalized fillers occur only in zero-weight or complementary
+  sectors. No factorization is claimed for TNLean's generic completed singular
+  channel away from the supported input.
 - `cpsv16_zcl_canonical_form_normalization.tex` records the corresponding
   normalization issue for mixed-state ZCL.
 

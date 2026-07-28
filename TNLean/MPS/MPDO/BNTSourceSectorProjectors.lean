@@ -51,9 +51,8 @@ theorem reducedBlockState_four_reindex_eq_submatrix (M : MPOTensor d D) :
 /-- SAL supplies a Hayashi--Markov decomposition in the same ordered-triple
 coordinates as the BNT family closure.
 
-This statement inherits the existing forward Hayashi equality-characterization
-axiom `hayashi_ssa_equality_characterization_forward` and introduces no new
-axiom.
+This statement uses the proved forward Hayashi equality characterization
+`hayashi_ssa_equality_characterization_forward`.
 
 Source: arXiv:1606.00608, Appendix C.2, Lemma `Lsigma3`, lines 1351--1363,
 and the Case II use at lines 1698--1737. -/
@@ -75,10 +74,9 @@ positive-weight Markov support.
 There is no independent nonzero-closing-matrix hypothesis: the normalized BNT
 closure supplies it from SAL, copy independence, and nonnilpotence.
 
-**Axiom boundary:** the Hayashi decomposition uses the existing forward
+The Hayashi decomposition uses the proved forward
 Hayashi--Ruskai--Hayden--Jozsa--Petz--Winter characterization of equality in
-strong subadditivity, isolated as
-`hayashi_ssa_equality_characterization_forward`.  No further axiom is used.
+strong subadditivity, `hayashi_ssa_equality_characterization_forward`.
 
 **Source hypothesis (biCF):** the one-letter simultaneous span is precisely
 the block-injective canonical-form assumption imposed at the start of Case II

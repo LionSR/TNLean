@@ -33,8 +33,9 @@ open Matrix
 open scoped Matrix ComplexOrder
 
 /-- The cast carrying a configuration on `a + b + c` contiguous spins onto the
-flat product `Fin (d^a) × Fin (d^b) × Fin (d^c)` used by the strong-subadditivity
-axiom: split into the three contiguous segments, then flatten each. -/
+flat product `Fin (d^a) × Fin (d^b) × Fin (d^c)` used by the
+strong-subadditivity theorem: split into the three contiguous segments, then
+flatten each. -/
 noncomputable def tripartiteSplitEquiv (d a b c : ℕ) :
     (Fin (a + b + c) → Fin d) ≃ Fin (d ^ a) × Fin (d ^ b) × Fin (d ^ c) :=
   (blockSplitEquiv d (a + b) c).trans
