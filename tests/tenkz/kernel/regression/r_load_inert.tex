@@ -1,0 +1,56 @@
+\documentclass[tikz,border=2pt]{standalone}
+\usepackage{tenkz}
+
+\ExplSyntaxOn
+\cs_new_eq:NN \tenkz_test_grid_begin: \tenkz
+\cs_new_eq:NN \tenkz_test_grid_end: \endtenkz
+\cs_new_eq:NN \tenkz_test_tnset: \tnset
+\cs_new_eq:NN \tenkz_test_tngroup: \tngroup
+
+\clist_map_inline:nn
+  {tnwire,tnmark,tndeclare,tnbond,tnprose,tenkzeq,endtenkzeq}
+  {
+    \cs_if_exist:cT {#1}
+      { \tex_errmessage:D { kernel~public~name~#1~leaked~at~package~load } }
+  }
+\ExplSyntaxOff
+
+\begin{document}
+\begingroup
+  \tenkzkernel
+  \ExplSyntaxOn
+  \clist_map_inline:nn
+    {tnwire,tnmark,tndeclare,tnbond,tnprose,tenkzeq,endtenkzeq}
+    {
+      \cs_if_exist:cF {#1}
+        { \tex_errmessage:D { kernel~switch~did~not~bind~#1 } }
+    }
+  \cs_if_eq:NNT \tenkz \tenkz_test_grid_begin:
+    { \tex_errmessage:D { kernel~switch~did~not~replace~tenkz } }
+  \ExplSyntaxOff
+  \begin{tenkz}[rows=1, cols=1]
+    \tn{A}
+  \end{tenkz}
+\endgroup
+
+\ExplSyntaxOn
+\cs_if_eq:NNF \tenkz \tenkz_test_grid_begin:
+  { \tex_errmessage:D { kernel~switch~leaked~the~tenkz~binding } }
+\cs_if_eq:NNF \endtenkz \tenkz_test_grid_end:
+  { \tex_errmessage:D { kernel~switch~leaked~the~endtenkz~binding } }
+\cs_if_eq:NNF \tnset \tenkz_test_tnset:
+  { \tex_errmessage:D { kernel~switch~leaked~the~tnset~binding } }
+\cs_if_eq:NNF \tngroup \tenkz_test_tngroup:
+  { \tex_errmessage:D { kernel~switch~leaked~the~tngroup~binding } }
+\clist_map_inline:nn
+  {tnwire,tnmark,tndeclare,tnbond,tnprose,tenkzeq,endtenkzeq}
+  {
+    \cs_if_exist:cT {#1}
+      { \tex_errmessage:D { kernel~public~name~#1~escaped~its~group } }
+  }
+\ExplSyntaxOff
+
+\begin{tenkz}
+  \tn{B}
+\end{tenkz}
+\end{document}

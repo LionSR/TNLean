@@ -2239,11 +2239,6 @@
     \fp_set:Nn #4 { \l__tenkz_kernel_r_y_tl + 0 }
   }
 
-\cs_generate_variant:Nn \__tenkz_render_stroke:nn { en }
-\cs_generate_variant:Nn \__tenkz_geom_place_rel:nnnn { nnee, nVee, neee }
-\cs_generate_variant:Nn \__tenkz_geom_place_mid:nnn { nVV, nee }
-\cs_generate_variant:Nn \__tenkz_render_atom_labelled:nnn { nen }
-
 % The turn of one atom, read after it is placed: the frame's own turn at the
 % cell it occupies, or -- for a spin that stands on a cluster's sub-frame --
 % the turn of the carrier it stands on.  Only a turned atom is recorded, so
@@ -6789,9 +6784,9 @@
   }
 
 % ---------- the public surface -----------------------------------------------------------------
-% \tnwire, \tnmark, \tngroup, and \tndeclare are new spellings and bind
-% globally; \tn and both environment command pairs rebind locally through
-% \tenkzkernel until the S4 swap deletes the switch and the 0.7 bindings.
+% Every body command is kernel-private at load.  \tenkzkernel installs the
+% public surface for the current group; until then the bridge changes no 0.7
+% command or environment binding.
 
 % A closed wire takes no positional ends, so both ends are peeked before the
 % command commits.  This preserves the dedicated arity diagnostic for a
@@ -6805,7 +6800,7 @@
           { \__tenkz_kernel_tnwire:nnnn {#1} {#2} { } {1} }
       }
   }
-\NewDocumentCommand \tnwire { O{} }
+\NewDocumentCommand \__tenkz_kernel_tnwire_cmd { O{} }
   {
     \peek_remove_spaces:n
       {
@@ -6814,7 +6809,7 @@
           { \__tenkz_kernel_tnwire:nnnn {#1} { } { } {0} }
       }
   }
-\NewDocumentCommand \tnmark { O{} m m }
+\NewDocumentCommand \__tenkz_kernel_tnmark_cmd { O{} m m }
   { \__tenkz_kernel_tnmark:nnn {#1} {#2} {#3} }
 % The dialect composition layer installs \tngroup first; the kernel switch
 % (\tenkzkernel, below) replaces that renderer-backed binding with the
@@ -6822,16 +6817,16 @@
 % group untouched for every document that does not ask for the kernel.
 \NewDocumentCommand \__tenkz_kernel_tngroup_cmd { O{} m }
   { \__tenkz_kernel_tngroup:nn {#1} {#2} }
-\NewDocumentCommand \tndeclare { m m m }
+\NewDocumentCommand \__tenkz_kernel_tndeclare_cmd { m m m }
   { \__tenkz_kernel_tndeclare:nnn {#1} {#2} {#3} }
 
 % sugar commands: one-line reassemblies of kernel calls
-\NewDocumentCommand \tnbond { O{} m m }
+\NewDocumentCommand \__tenkz_kernel_tnbond_cmd { O{} m m }
   {
     \__tenkz_kernel_sugar:n {tnbond}
     \__tenkz_kernel_tnwire:nnn { kind = index , #1 } {#2} {#3}
   }
-\NewDocumentCommand \tnprose { m }
+\NewDocumentCommand \__tenkz_kernel_tnprose_cmd { m }
   {
     \__tenkz_kernel_sugar:n {tnprose}
     \__tenkz_kernel_tnmark:nnn { form = prose } { panel } {#1}
@@ -6841,7 +6836,6 @@
   { \__tenkz_kernel_begin:n {#1} }
 \NewDocumentCommand \__tenkz_kernel_eq_env_begin_cmd { O{} }
   { \__tenkz_kernel_eq_begin:n {#1} }
-\ProvideDocumentEnvironment { tenkzeq } { O{} } { } { }
 \NewDocumentCommand \tenkzkernel { }
   {
     \cs_set_eq:NN \tenkz \__tenkz_kernel_env_begin_cmd
@@ -6850,6 +6844,11 @@
     \cs_set_eq:NN \endtenkzeq \__tenkz_kernel_eq_end:
     \cs_set_eq:NN \tnset \__tenkz_kernel_tnset:n
     \cs_set_eq:NN \tngroup \__tenkz_kernel_tngroup_cmd
+    \cs_set_eq:NN \tnwire \__tenkz_kernel_tnwire_cmd
+    \cs_set_eq:NN \tnmark \__tenkz_kernel_tnmark_cmd
+    \cs_set_eq:NN \tndeclare \__tenkz_kernel_tndeclare_cmd
+    \cs_set_eq:NN \tnbond \__tenkz_kernel_tnbond_cmd
+    \cs_set_eq:NN \tnprose \__tenkz_kernel_tnprose_cmd
   }
 
 \ExplSyntaxOff
