@@ -1,0 +1,18 @@
+\documentclass{standalone}
+\usepackage{tenkz}
+\makeatletter
+\ExplSyntaxOn
+\file_input:n { tenkz-kernel.code.tex }
+\ExplSyntaxOff
+\makeatother
+\begin{document}
+\tenkzkernel
+\tndeclare{species}{cool}{hue=source:blue}
+\tndeclare{skin}{paired-box}{
+  base=box,
+  pairings={n@1 > e@1 : cool}
+}
+\begin{tenkz}[rows={wire}, cols=1, bonds=none]
+  \tn[at=(1,1), name=C, cluster=1x1, skin=paired-box]{}
+\end{tenkz}
+\end{document}
