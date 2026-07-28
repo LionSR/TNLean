@@ -10,7 +10,7 @@
 \title{The Strong-Subadditivity Equality Characterization as an External
 Stand-In, and Its One-Directional Hygiene Split}
 \author{}
-\date{2026-07-18}
+\date{2026-07-28}
 
 \begin{document}
 \maketitle
@@ -73,9 +73,20 @@ zero-weight complement sectors, completing HJPW equations~(13)--(14).
 The recovery-dilation block action of equation~(15) is now formalized by one
 chosen pure-ancilla unitary, including supported agreement with the Petz
 operation and normalized recovered states on the supported common-factor
-sectors. Transporting those sector states into the tripartite direct sum and
-assembling the quantum-Markov decomposition remain open. The reverse direction
-is proved from the entropy-additivity sub-lemmas listed below.
+sectors. Combining equations~(11), (14), and~(15) now gives the unnormalized
+ambient tripartite identity
+\begin{align}
+  W^\dagger\rho_{ABC}W
+  =0_\perp\oplus\bigoplus_j\omega_j\otimes\widehat\rho_j,
+\end{align}
+where $W=\mathbf 1_A\otimes(U_B\otimes\mathbf 1_C)$, each supported block is
+written in the HJPW order $(A B_j^L)\otimes(B_j^R C)$, and every complementary
+block is zero. This is formalized by
+\leanid{Matrix.RecoveredConditionalDilationBlockForm.ambient_tripartite_block_form}.
+The factors $\omega_j$ are still unnormalized. Their probability normalization,
+the zero-weight choices, and the final quantum-Markov decomposition remain
+open. The reverse direction is proved from the entropy-additivity sub-lemmas
+listed below.
 
 \section{The point at issue: only the forward direction is consumed}
 
@@ -102,13 +113,15 @@ to ambient $B$ and prove HJPW equations~(13)--(14), with one-dimensional
 zero-weight sectors on the complement. Equation~(15) is also formalized:
 one chosen pure-ancilla unitary is block diagonal in those coordinates,
 agrees with the Petz operation on the joint support, and produces normalized
-supported-sector states with the prescribed common-factor marginals. The transport of
-those states into a tripartite direct sum and assembly of the quantum-Markov
-decomposition are still missing. Thus the family-level structural implication
-needed here remains open, which is why the forward direction is treated as an
-external assumption rather than proved. The recovery implication and the
-complementary trace-preserving extension of the support Petz map are no longer
-part of this gap.
+supported-sector states with the prescribed common-factor marginals. In HJPW
+factor order, the resulting tripartite state has zero complementary blocks and
+supported blocks $\omega_j\otimes\widehat\rho_j$. Thus only the probability
+normalization, the choices at zero weight, and the final quantum-Markov
+decomposition are missing. The family-level structural implication needed here
+remains open, which is why the forward direction is treated as an external
+assumption rather than proved. The recovery implication and the complementary
+trace-preserving extension of the support Petz map are no longer part of this
+gap.
 
 \paragraph{Reverse direction (tractable, currently unused).}
 The implication \eqref{eq:qmc} $\Rightarrow$~\eqref{eq:ssa-eq} --- a state of the
@@ -686,7 +699,7 @@ action used in \cite[Theorem~6]{HaydenJozsaPetzWinter2004} are now available.
 The joint-support reduction now constructs faithful support coordinates,
 reconstructs every family member, and restricts each preserving operation to
 those coordinates. The normalized family blocks and preserving-operation
-action are packaged on the minimum joint support. Transporting this theorem to
+action are packaged on the minimum joint support. Applying this theorem to
 the recovered conditional family begins with the finite informationally
 complete effect family and conditional slices
 \begin{center}
@@ -697,7 +710,8 @@ complete effect family and conditional slices
   \leanid{Matrix.exists_recoveredConditionalStateBlockForm_preservingBlockAction_jointSupport}\\
   \leanid{Matrix.exists_recoveredConditionalBipartiteBlockForm_jointSupport}\\
   \leanid{Matrix.exists_recoveredConditionalAmbientBipartiteBlockForm}\\
-  \leanid{Matrix.exists_recoveredDilationBlockUnitary}.
+  \leanid{Matrix.exists_recoveredDilationBlockUnitary}\\
+  \leanid{Matrix.RecoveredConditionalDilationBlockForm.ambient_tripartite_block_form}.
 \end{center}
 These declarations construct a finite nonempty family of nonzero normalized
 conditional states fixed by
@@ -715,16 +729,21 @@ traces sum to one. The final declaration proves the block-coordinate recovery
 dilation of equation~(15), supported agreement with the Petz operation, and
 the exact recovery identity. It also constructs positive trace-one recovered
 states on the supported common-factor sectors with the prescribed
-common-factor marginals. Transporting these states into the tripartite direct sum and
-assembling the quantum-Markov decomposition remain necessary before the
-forward external assumption can be removed.
+common-factor marginals. The last declaration combines equations~(11), (14),
+and~(15) in the orientation
+$W^\dagger\rho_{ABC}W$ and gives zero complementary blocks together with
+supported blocks $\omega_j\otimes\widehat\rho_j$ in HJPW factor order.
+Defining the probabilities, normalizing the left factors, handling zero-weight
+sectors, and constructing the quantum-Markov decomposition remain necessary
+before the forward external assumption can be removed.
 
 \section{Verdict}
 
 The strong-subadditivity equality characterization is now split into a proved
-reverse direction and a postulated forward direction. Only the forward
-direction, equality implies quantum-Markov-chain structure, still needs the
-tripartite sector-state transport and subsequent quantum-Markov assembly.
+reverse direction and a postulated forward direction. For the forward
+direction, equality now gives the unnormalized ambient tripartite blocks in
+HJPW factor order. The remaining step is their probability normalization and
+inclusion in the quantum-Markov decomposition.
 The full-support invariant-family state decomposition and preserving-operation
 block action are formalized. Source-facing
 completed-channel recovery from equality in data processing is available on
@@ -741,9 +760,11 @@ recovered conditional family, and the bipartite marginal is reconstructed in
 the same support coordinates. Those coordinates now extend to all of $B$ and
 prove the ambient HJPW equation~(14). The chosen block-coordinate dilation of
 equation~(15), its supported Petz agreement, and its normalized recovered
-supported-sector states are now formalized. Transporting those states to the
-tripartite sector blocks and assembling the quantum-Markov decomposition
-remain part of the irreducible unproved forward direction.
+supported-sector states are now formalized. Equations~(11), (14), and~(15) now
+also give zero complementary tripartite blocks and supported blocks
+$\omega_j\otimes\widehat\rho_j$ in HJPW factor order. Probability normalization,
+zero-weight sector choices, construction of the quantum-Markov decomposition,
+and removal of the forward external assumption remain open.
 
 \begin{thebibliography}{9}
 

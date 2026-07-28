@@ -16,7 +16,7 @@
   States: Theory and Applications*, arXiv:1708.00029 — used in
   `Periodic/FundamentalTheorem.lean`.
 
-**Scope**: This audit covers the MPS and MPDO results of CPSV16, the MPS / pure-state sections of PGVWC07, and a full Wielandt source-paper crosswalk (§9). The CPSV16 crosswalk was synchronized with the complete source audit on 2026-07-27.
+**Scope**: This audit covers the MPS and MPDO results of CPSV16, the MPS / pure-state sections of PGVWC07, and a full Wielandt source-paper crosswalk (§9). The CPSV16 crosswalk was synchronized with the complete source audit on 2026-07-28.
 
 **Maintainer note** (from #1498, 2026-05-08): "Please please follow CPSV16". For non-periodic FT work, prioritize source-faithful CPSV16 statement/prose and avoid implementation-driven reinterpretations.
 
@@ -48,23 +48,23 @@ theorem. This is tracked by issue #873 under the proposition-level tracker #81.
 
 ## 2. Coverage crosswalk: CPSV16 (arXiv:1606.00608)
 
-At revision `a483570b1bfd3f39eb9f6292e74d9df99a8c4df0`, the paper has 45 theorem-like occurrences and 40 distinct results. The occurrence-level count is 16 complete, 17 partial, and 12 not-ready; the distinct-result count is 15 complete, 14 partial, and 11 not-ready. Here **not-ready** means that the printed statement is false, ambiguous, or depends essentially on a formally refuted source lemma. It does not mean that every printed result has been formalized.
+At revision `e03ae23ef`, the paper has 45 theorem-like occurrences and 40 distinct results. The occurrence-level count is 15 complete, 18 partial, and 12 not-ready; the distinct-result count is 14 complete, 15 partial, and 11 not-ready. Here **not-ready** means that the printed statement is false, ambiguous, or depends essentially on a formally refuted source lemma. It does not mean that every printed result has been formalized.
 
 The distinct count is the 40 source `thm`, `prop`, `cor`, and `lem`
 environments. The occurrence count adds five Appendix A/D restatements.
 The following ledger makes the count reproducible from source line numbers:
 
-- **Complete (15 distinct):** 249, 253, 606, 945, 1080, 1121, 1130,
-  1351, 1406, 1510, 1569, 1647, 1680, 1835, and 2221.
-- **Partial (14 distinct):** 278, 342, 349, 398, 583, 801, 851, 972,
-  1013, 1274, 1333, 1597, 1786, and 1801.
+- **Complete (14 distinct):** 249, 253, 606, 945, 1080, 1121, 1130,
+  1406, 1510, 1569, 1647, 1680, 1835, and 2221.
+- **Partial (15 distinct):** 278, 342, 349, 398, 583, 801, 851, 972,
+  1013, 1274, 1333, 1351, 1597, 1786, and 1801.
 - **Not-ready (11 distinct):** 354, 500, 534, 543, 777, 1155, 1197,
   1484, 1503, 1740, and 1810.
 - **Additional occurrences:** the Appendix A restatements at 1137, 1167,
   and 1172 inherit partial, partial, and not-ready status, respectively; the
   Appendix D restatements at 1863 and 1929 inherit complete and partial status.
   Thus the five restatements add one complete, three partial, and one not-ready
-  occurrence, giving the displayed totals 16/17/12.
+  occurrence, giving the displayed totals 15/18/12.
 
 Definitions, equations, and explanatory proof-segment rows are not counted.
 In particular, Eq. `II_XAX` at 1072--1077 is excluded, while the purification
@@ -146,7 +146,7 @@ segments of Theorems 3.1 and 3.10, not additional theorem occurrences.
 | Paper label | Lines | Paper description | Lean location | Status |
 |---|---|---|---|---|
 | Prop `propsimple` | 1333–1336 | RFP implies source ZCL and SAL | `TNLean/MPS/MPDO/RFPViaTSSAL.lean` (`MPOTensor.isSourceZCL_and_isSAL_of_isRFPViaTS`); `docs/paper-gaps/cpsv16_rfp_sal_data_processing.tex` | **partial** — the theorem proves the conclusion under `IsHorizontalCF`, whose active BNT blocks fill the virtual space; literal CPSV canonical form permits an additional all-zero virtual summand, or zero tail, and transport from that literal surface to the active restriction is missing |
-| Lemma `Lsigma3` | 1351–1359 | SAL gives the three-site Markov decomposition | `TNLean/MPS/MPDO/SimpleLocalStructure.lean` | **complete** |
+| Lemma `Lsigma3` | 1351–1359 | SAL gives the three-site Markov decomposition | `TNLean/Channel/KoashiImoto/RecoveredConditionalDilationBlockForm.lean` (`Matrix.RecoveredConditionalDilationBlockForm.ambient_tripartite_block_form`); `TNLean/MPS/MPDO/SimpleLocalStructure.lean`; `docs/paper-gaps/cpsv16_ssa_equality_hayashi_markov.tex` | **partial** — equations (11), (14), and (15) now give the exact unnormalized ambient blocks, zero on the complement and $\omega_j\otimes\widehat\rho_j$ on supported sectors in HJPW factor order. Probability normalization, zero-weight sector choices, construction of `HayashiMarkovDecomposition`, and removal of the forward external assumption remain #5047 |
 | Lemma `propSN` | 1406–1411 | SAL gives a positive physical-sector factorization with primitive active trace matrix | `TNLean/MPS/MPDO/InverseMapActiveSectorPrimitivity.lean` (`exists_positive_physicalSectorFactorization_activeSectorTraceMatrix_isPrimitive_of_isSAL`) | **complete** |
 | Lemma `SALZCL` / Lemma C.5 | 1484–1502 | SAL and ZCL force the active trace matrix to have rank one | `TNLean/MPS/MPDO/ActiveSectorSpanningAreaLaw.lean` (`ActiveSectorSpanningCounterexample.tensor_refutes_printed_sal_zcl_rank_one_inference`); `docs/paper-gaps/cpgsv17_pf_rank_one.tex` | **not-ready** — an injective four-sector counterexample satisfies SAL and source ZCL but has no rank-one active trace factorization; #4270 closed by the formal counterexample |
 | Corollary | 1503–1506 | SAL and ZCL imply the displayed structural form | Conditional neighboring-factorization constructions in `TNLean/MPS/MPDO/BlockedRFPConstruction.lean` and related modules | **not-ready** — the only printed derivation uses false Lemma C.5 |
@@ -303,11 +303,12 @@ These are known oversized (documented in #1512/#1522) and do not block unrelated
 
 ## 7. Key remaining coverage gaps
 
-The 25 non-complete distinct CPSV16 results comprise 14 partial and 11
+The 26 non-complete distinct CPSV16 results comprise 15 partial and 11
 not-ready results. They are source-ambiguous, formally refuted, research-level,
-owner-held, or scope-restricted by the current formal interface. No important
-owner-free, source-faithful, implementation-ready slice remained at the
-synchronized revision.
+owner-held, or scope-restricted by the current formal interface. For Lemma
+`Lsigma3`, the remaining source-faithful leaf is #5047: normalize the ambient
+tripartite blocks, construct the Hayashi decomposition, and remove the forward
+external assumption.
 
 | Status | Paper | Result | Current certificate | Ownership |
 |---|---|---|---|---|
@@ -325,6 +326,7 @@ synchronized revision.
 | Partial | CPSV16 | Appendix B normal-tensor structural lemma | The forward theorem assumes an extra left-canonical equation, the converse is separate, and no source-hypothesis iff capstone is present | `docs/paper-gaps/cpsv16_rfp_isometry_scope.tex` |
 | Not-ready | CPSV16 | Purification RFP equivalence | Nilpotent hidden bond sectors refute the global-to-local implication | #3947 closed as not planned |
 | Partial | CPSV16 | Proposition 4.5 | Monotonicity is proved; the thermodynamic limit is refuted; the finite $4\log D$ bound remains open | #4169/#4242/#4295, assigned to `LionSR` |
+| Partial | CPSV16 | Lemma `Lsigma3` | The exact unnormalized ambient tripartite blocks are proved in HJPW factor order, with zero complement blocks | Probability normalization, zero-weight sector choices, the Hayashi decomposition, and axiom removal remain #5047; `docs/paper-gaps/cpsv16_ssa_equality_hayashi_markov.tex` |
 | Partial | CPSV16 | Proposition `propsimple` | Source ZCL and SAL are proved under `IsHorizontalCF`, which excludes a literal canonical-form all-zero virtual tail | Inactive-tail restriction and transport remain open; `docs/paper-gaps/cpsv16_rfp_sal_data_processing.tex` |
 | Partial | CPSV16 | Theorem 4.9 | The unrestricted \((i)\Rightarrow(ii)\) has the same inactive-tail gap; Lemma C.5 is false, and commuting-form-to-SAL and the recovery alternative remain incomplete | #4175/#4459 and #4228/#4405, assigned to `LionSR`; #4961/#4962 are dependent research follow-ups |
 | Partial | CPSV16 | Theorem 4.14 | Algebra⇒RFP still needs the tensor-attached Gram comparison, unitary normalization, and CPTP maps | #4648 → #4645 → #3949, assigned to `LionSR` |
