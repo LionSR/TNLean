@@ -351,10 +351,12 @@ Consumers, basis: `rmp-workbench-iii-cluster-state`, `rmp-app-czx-state`,
 
 A wire is one typed index line. `kind=index` is a bond: two typed-port
 endpoints, a straight route, and the type check `[TKZ-PORT-TYPE]` — a virtual
-port never meets a physical one. `kind=string` travels: it carries routes,
-crossings, winding, and beads, and its endpoints may be any address, cells
-included. The distinction is a field of the record; both are one record class
-and one command.
+port never meets a physical one. `kind=pairing` is a declared skin's curved
+own-port route: it belongs to one host, remains addressable by arclength, and
+its declared order controls the over-glyph ink. `kind=string` travels: it
+carries routes, crossings, winding, and beads, and its endpoints may be any
+address, cells included. The distinction is a field of the record; all three
+are one record class.
 
 **The offset hull.** The offset hull of a selection is the support hull of
 the selected records' silhouettes, measured in the frame's own axes, expanded

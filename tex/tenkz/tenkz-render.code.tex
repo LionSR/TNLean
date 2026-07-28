@@ -103,12 +103,14 @@
       { \msg_expandable_error:nnn {tenkz}{render-skin} {#1} tensor }
   }
 
-% A declared skin's own-port wire is drawn over its base glyph.  Its paper
-% halo both clears the glyph outline and keeps later ordered pairings distinct.
+% A declared skin's saved own-port route is drawn over its base glyph.  Its
+% paper halo both clears the glyph outline and keeps later ordered pairings
+% distinct.
 \cs_new_protected:Npn \__tenkz_render_skin_pairing:nn #1#2
   {
     \__tenkz_ink_path:nn
       {
+        spath/use = {#2} ,
         draw = #1 ,
         line~width = \__tenkz_dim:n {wirewidth} ,
         preaction =
@@ -117,7 +119,7 @@
             line~width = \__tenkz_dim:n {emphwidth}
           }
       }
-      {#2}
+      { }
   }
 
 % Draw one atom: #1 skin word, #2 placement id, #3 label.  Coordinates come
@@ -223,6 +225,11 @@
   }
 
 % ---------- strings -----------------------------------------------------------
+% Save route geometry at the sole TikZ path boundary.  The string/model owner
+% registers identity and semantics; this helper contributes no visible ink.
+\cs_new_protected:Npn \__tenkz_render_save_route:nn #1#2
+  { \path [ spath/save = {#1} ] #2 ; }
+
 % A string draws its saved spath3 route: after crossing surgery the saved
 % path already carries its gaps, so one stroke is the whole story.  #1 the
 % saved path id, #2 extra style tokens (species hue, emphasis).
