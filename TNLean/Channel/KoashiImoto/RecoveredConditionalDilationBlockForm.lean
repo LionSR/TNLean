@@ -219,20 +219,24 @@ theorem
       F.jointSupport.σ j :=
   D.sector_state_fixed j
 
-/-- At equality in strong subadditivity, the HJPW recovery has a
-block-coordinate dilation of equation (15), with a corresponding physical
-unitary and an exact realization of equation (11).
+/-- Relative to a chosen ambient recovered bipartite block form, the HJPW
+recovery has a block-coordinate dilation of equation (15), with a corresponding
+physical unitary and an exact realization of equation (11).
 
 The literal block-coordinate unitary and its physical conjugate are recorded
 separately.  Agreement with the Petz channel is asserted exactly on supported
 inputs, with no complementary-sector equality claim.
+
+This is the relative constructor used after the ambient block form has been
+chosen; `exists_recoveredDilationBlockUnitary` is the source-facing theorem
+that constructs that form from equality in strong subadditivity.
 
 Source: HJPW, arXiv:quant-ph/0304007v2, Theorem 6, equation (15),
 lines 547--560; Appendix A, Theorem 10, Property 2, lines 791--800;
 the equivalence 2 iff 2', lines 808--823; and the operation-level proof
 of 2', lines 853--882.  The theorem constructs one chosen pure-ancilla
 unitary, not every associated unitary. -/
-theorem exists_recoveredDilationBlockUnitary
+theorem exists_recoveredDilationBlockUnitary_of_ambientBlockForm
     (ρ_ABC : Matrix (Fin dA × Fin dB × Fin dC)
       (Fin dA × Fin dB × Fin dC) ℂ)
     (hρ_dm : ρ_ABC.PosSemidef ∧ ρ_ABC.trace = 1)
@@ -491,5 +495,43 @@ theorem exists_recoveredDilationBlockUnitary
   · intro z
     rfl
   · simpa only [Z] using hAgree
+
+/-- At equality in strong subadditivity, the HJPW recovery admits an ambient
+block-coordinate dilation of equation (15), with a corresponding physical
+unitary and an exact realization of equation (11).
+
+This source-facing theorem constructs the recovered effect index and ambient
+bipartite block form internally.  Its conclusion packages the chosen ambient
+form together with its dilation witness, so no hypothesis beyond the
+tripartite density-matrix and strong-subadditivity equality assumptions is
+added to HJPW Theorem 6.
+
+Source: HJPW, arXiv:quant-ph/0304007v2, Theorem 6, equation (15),
+lines 547--560; Appendix A, Theorem 10, Property 2, lines 791--800;
+the equivalence 2 iff 2', lines 808--823; and the operation-level proof
+of 2', lines 853--882. -/
+theorem exists_recoveredDilationBlockUnitary
+    (ρ_ABC : Matrix (Fin dA × Fin dB × Fin dC)
+      (Fin dA × Fin dB × Fin dC) ℂ)
+    (hρ_dm : ρ_ABC.PosSemidef ∧ ρ_ABC.trace = 1)
+    (hSSA : IsSSAEquality ρ_ABC hρ_dm.1.isHermitian) :
+    letI : Nonempty (RecoveredEffectIndex (traceC_ABC ρ_ABC)) :=
+      recoveredEffectIndex_nonempty (traceC_ABC ρ_ABC) (by
+        rw [← trace_eq_trace_traceC_ABC]
+        exact hρ_dm.2)
+    Nonempty
+      (Σ F : RecoveredConditionalAmbientBipartiteBlockForm ρ_ABC hρ_dm,
+        RecoveredConditionalDilationBlockForm ρ_ABC hρ_dm F) := by
+  classical
+  letI : Nonempty (RecoveredEffectIndex (traceC_ABC ρ_ABC)) :=
+    recoveredEffectIndex_nonempty (traceC_ABC ρ_ABC) (by
+      rw [← trace_eq_trace_traceC_ABC]
+      exact hρ_dm.2)
+  obtain ⟨F⟩ :=
+    exists_recoveredConditionalAmbientBipartiteBlockForm ρ_ABC hρ_dm hSSA
+  obtain ⟨D⟩ :=
+    exists_recoveredDilationBlockUnitary_of_ambientBlockForm
+      ρ_ABC hρ_dm hSSA F
+  exact ⟨⟨F, D⟩⟩
 
 end Matrix
