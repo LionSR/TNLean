@@ -12,8 +12,8 @@ import TNLean.Analysis.HayashiMarkovStructure
 This file proves that a quantum-Markov-chain (block-diagonal) state attains
 equality in strong subadditivity, the reverse direction of the Hayashi
 characterization. The forward direction (equality forces the block-diagonal
-structure) remains a sanctioned axiom resting on Petz-recovery theory; see
-`docs/paper-gaps/cpsv16_ssa_equality_hayashi_markov.tex`.
+structure) is proved in `TNLean.Analysis.EntropyMarkovForward` from the
+recovered conditional tripartite block form.
 
 ## Strategy
 
