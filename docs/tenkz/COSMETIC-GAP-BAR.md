@@ -72,7 +72,7 @@ hash-pinned visual check required before changing a verdict.
 | `rmp-iii-a-hadamard` | K2 | The explicit Hadamard label is a faithful clarification of the source's unlabeled node. |
 | `rmp-iii-a-spt-mpo` | K2 | The string, action boxes, and measured-leg crossings are complete. |
 | `rmp-iii-a-spt-intertwiner` | K2 | Mirrored equivalent ordering and glyph scale are house presentation. |
-| `rmp-iii-a-g-injective-projector` | K2 | Both crossing pairs, action boxes, and labels are complete. |
+| `rmp-iii-a-g-injective-projector` | X | Its ledger pairing is `wrong-source`; repair the projector source mapping before any verdict promotion. |
 | `rmp-iii-a-mpo-action` | K3 | Restore a graceful diagonal physical-leg route. |
 | `rmp-iii-a-mpo-injective` | K1 | Hatching and semantic hue are shared renderer/theme properties. |
 | `rmp-iii-a-torus-one` | K2 | Wound cycles and inner bends are explicit; line weight is house style. |
@@ -123,20 +123,20 @@ hash-pinned visual check required before changing a verdict.
 | `rmp-workbench-iii-historical-composite` | K3 | All mathematical parts are present; only placement nuance remains. |
 | `rmp-workbench-iii-diagram-four` | K2 | Stadium versus circle is a house glyph difference. |
 | `rmp-workbench-iii-eq50-reduced` | K4 | Re-review and remove any labels not present in the source contract. |
-| `rmp-workbench-iii-dual-reduced` | K2 | Glyph differences and cyclic factor order preserve the identity. |
+| `rmp-workbench-iii-dual-reduced` | X | The open intertwiner has no trace cyclicity; repair the source factor order. |
 | `rmp-workbench-iii-mpo-representation` | K1 | Virtual-index hue is a shared semantic-theme property. |
 | `rmp-workbench-iii-f-tensor` | K2 | An explicit F box faithfully replaces the source's boxless crossing. |
 | `rmp-workbench-iii-eq59-now` | K2 | Ring colour and stadium-versus-circle glyphs are house style. |
 | `rmp-workbench-iii-ghz-state-workbench` | K1 | This shares the lattice-genre limitation and fix with the GHZ twin. |
 | `rmp-workbench-iii-ghz-up` | K3 | Improve glyph proportions and leg geometry as a family. |
-| `rmp-workbench-iii-g-injective-pull` | K2 | Pull-through string, diagonal operator, and action boxes are complete. |
+| `rmp-workbench-iii-g-injective-pull` | X | Re-audit the source pairing: the current diagonal `U_g` belongs to the SPT panel. |
 | `rmp-workbench-iii-intertwining-mpo` | K2 | Line weight alone is house style. |
 | `rmp-workbench-iii-mpo-injective-white` | K2 | Direct strings faithfully replace the source's substituted boxes. |
 | `rmp-workbench-iii-mpo-on-peps-definition` | K1 | Hatching and hue are shared properties; recheck centring after they land. |
 | `rmp-workbench-iii-eq60-now` | K2 | Daggered insertions and genuinely diagonal legs are present. |
 | `rmp-workbench-iii-enlarged-mpo-black` | K2 | The closed five-box ring and marked site are complete. |
 | `rmp-workbench-iii-eq59` | K2 | Both windings, complete station counts, and joined resolution rails are present. |
-| `rmp-workbench-iii-g-injective-mpo` | K4 | Restore the dropped finite leg stubs; circle-versus-square remains house style. |
+| `rmp-workbench-iii-g-injective-mpo` | X | The dropped eight half-edges are the complete declared boundary, not a cosmetic omission. |
 | `rmp-workbench-iii-peps-renormalization-one` | K1 | Hatch ticks belong to the shared fused-side/lattice-genre work in #4931. |
 | `rmp-workbench-iii-peps-renormalization-two` | K2 | Effective tensor, corner blocks, and fused legs are complete. |
 
