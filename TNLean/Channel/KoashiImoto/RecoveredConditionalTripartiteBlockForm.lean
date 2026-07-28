@@ -12,7 +12,7 @@ import TNLean.Channel.KoashiImoto.RecoveredConditionalDilationBlockForm
 This module states the final sector substitution in the equality case of strong
 subadditivity.  It converts the recovered middle-system factors to the
 Hayden--Jozsa--Petz--Winter order, identifies the recovered output factor on
-each ambient sector, and packages the resulting tripartite direct sum without
+each ambient sector, and gives the resulting tripartite direct sum without
 normalizing the left factors.
 
 Source: Hayden--Jozsa--Petz--Winter, arXiv:quant-ph/0304007v2, Theorem 6,
