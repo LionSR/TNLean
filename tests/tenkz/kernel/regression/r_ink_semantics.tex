@@ -1,0 +1,42 @@
+%% Regression: recorded species, direction, and atom size reach kernel ink.
+\documentclass{standalone}
+\usepackage{tenkz}
+\makeatletter
+\ExplSyntaxOn
+\file_input:n { tenkz-kernel.code.tex }
+\ExplSyntaxOff
+\makeatother
+\begin{document}
+\tenkzkernel
+\tndeclare{species}{warm}{hue={source:red}}
+\tndeclare{species}{cool}{hue=source:blue}
+\tndeclare{species}{leaf}{hue=source:green}
+\tndeclare{species}{alpha}{}
+\tndeclare{species}{beta}{}
+\begin{tenkz}[rows={wire,wire,wire}, cols=5, bonds=none]
+  \tn[at=(1,1), name=small, skin=dot, size=s, species=warm]{}
+  \tn[at=(1,3), name=medium, skin=dot, size=m, species=cool]{}
+  \tn[at=(1,5), name=large, skin=dot, size=l, species=leaf]{}
+  \tn[at=(2,1), name=left, skin=box, size=s, species=warm]{L}
+  \tn[at=(2,3), name=middle, skin=box, size=m, species=cool]{M}
+  \tn[at=(2,5), name=right, skin=box, size=l, species=leaf]{R}
+  \tn[at=(3,1), name=intrinsic, skin=ring]{U}
+  \tn[at=(3,3), name=prelude, skin=box, role=operator]{O}
+  \tn[at=(3,5), name=cycle, skin=dot, species=alpha]{}
+  \tnwire[species=warm, dir=to]{small.0}{medium.180}
+  \tnwire[species=cool, dir=from]{medium.0}{large.180}
+  \tnwire[kind=string, species=leaf, dir=to]{(1,1)}{(2,1)}
+  \tnwire[species=beta]{intrinsic.0}{prelude.180}
+  % The live hull must follow the large non-dot silhouette.
+  \tnmark[form=enclosure, species=warm]{right}{}
+\end{tenkz}
+\quad
+% Reversing first use in a later picture must not exchange declared hues.
+\begin{tenkz}[rows={wire,wire}, cols=5, bonds=none]
+  \tn[at=(1,1), skin=box, species=beta]{B}
+  \tn[at=(1,3), skin=box, species=alpha]{A}
+  \tn[at=(1,5), skin=dots, species=gamma]{}
+  \tn[at=(2,1), skin=dot, species=warm]{D}
+  \tn[at=(2,3), name=quad, cluster=2x2, species=leaf]{}
+\end{tenkz}
+\end{document}
