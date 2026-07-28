@@ -246,9 +246,14 @@ grep -Fq 'stringbead|id=skin-atom-1-1|t=0.5|' \
   echo "FAIL: an on-wire address did not follow the saved pairing route" >&2
   exit 1
 }
-grep -Fq 'stringcross|under=probe|over=skin-atom-1-1|hits=1' \
+grep -Fq 'stringcross|under=skin-atom-1-1|over=probe-a|hits=1' \
   "$WORK/k_skin_pairings.tnlog" || {
   echo "FAIL: a declared string/skin-pairing crossing missed the shared ledger" >&2
+  exit 1
+}
+grep -Fq 'stringcross|under=skin-atom-1-1|over=probe-b|hits=1' \
+  "$WORK/k_skin_pairings.tnlog" || {
+  echo "FAIL: a second indexed crossing was split from its pairing" >&2
   exit 1
 }
 grep -Fq 'stringcross|under=skin-atom-1-1|over=skin-atom-1-3|hits=1' \
@@ -603,6 +608,35 @@ fi
 grep -Fq '[TKZ-SKIN-PAIRING-CLUSTER]' \
   "$WORK/n_skin_pairing_cluster.transcript" || {
   echo "FAIL: paired cluster lacked TKZ-SKIN-PAIRING-CLUSTER" >&2
+  exit 1
+}
+
+for pairing_negative in \
+  n_skin_pairings_parse \
+  n_skin_pairing_cross_parse \
+  n_skin_pairing_cross_index; do
+  source="$KERNEL/negative/$pairing_negative.tex"
+  if ( cd "$WORK" &&
+       TEXINPUTS="$REPO/tex/tenkz//:" \
+         timeout 120 xelatex -interaction=nonstopmode -halt-on-error \
+         "$source" >"$WORK/$pairing_negative.transcript" 2>&1 ); then
+    echo "FAIL: malformed pairing contract in $pairing_negative was accepted" >&2
+    exit 1
+  fi
+done
+grep -Fq '[TKZ-SKIN-PAIRING-PARSE]' \
+  "$WORK/n_skin_pairings_parse.transcript" || {
+  echo "FAIL: malformed pairings= lacked TKZ-SKIN-PAIRING-PARSE" >&2
+  exit 1
+}
+grep -Fq '[TKZ-SKIN-PAIRING-CROSS-PARSE]' \
+  "$WORK/n_skin_pairing_cross_parse.transcript" || {
+  echo "FAIL: malformed pairing cross lacked its parse diagnostic" >&2
+  exit 1
+}
+grep -Fq '[TKZ-SKIN-PAIRING-CROSS-INDEX]' \
+  "$WORK/n_skin_pairing_cross_index.transcript" || {
+  echo "FAIL: out-of-range pairing cross lacked its index diagnostic" >&2
   exit 1
 }
 

@@ -87,6 +87,15 @@
 \msg_new:nnn {tenkz}{kernel-skin-cluster}
   { [TKZ-SKIN-PAIRING-CLUSTER]~declared~skin~'#1'~carries~pairings,~
     but~cluster~carrier~#2~is~a~group~with~no~glyph~or~own~ports. }
+\msg_new:nnn {tenkz}{kernel-skin-pairings-parse}
+  { [TKZ-SKIN-PAIRING-PARSE]~pairings~on~declared~skin~'#1'~must~be~
+    one~braced~port-pair-list. }
+\msg_new:nnn {tenkz}{kernel-skin-pairing-cross-parse}
+  { [TKZ-SKIN-PAIRING-CROSS-PARSE]~pairing~cross~item~'#1'~on~atom~#2~
+    must~be~'<pairing-number>:~<crossing-declaration>'. }
+\msg_new:nnn {tenkz}{kernel-skin-pairing-cross-index}
+  { [TKZ-SKIN-PAIRING-CROSS-INDEX]~pairing~cross~on~atom~#1~names~
+    pairing~#2,~but~the~skin~declares~only~#3~pairing(s). }
 
 % ---------- kernel state -----------------------------------------------------
 
@@ -100,6 +109,7 @@
 \prop_new:N \l__tenkz_kernel_named_prop       % user name -> record id
 % Atoms whose labels need the silhouette / pairing / label render split.
 \prop_new:N \l__tenkz_kernel_skin_pairing_host_prop
+\prop_new:N \l__tenkz_kernel_skin_pairing_cross_prop
 \prop_new:N \l__tenkz_kernel_policy_prop      % picture policy for late passes
 \prop_new:N \l__tenkz_kernel_eq_policy_prop   % tenkzeq policy inherited by panels
 \prop_new:N \l__tenkz_kernel_cell_prop        % "r-c" -> atom id (occupancy)
@@ -742,6 +752,8 @@
 \__tenkz_kernel_value:nnn   { tenkz-kernel-atom } { up } { up }
 \__tenkz_kernel_value:nnn   { tenkz-kernel-atom } { down } { down }
 \__tenkz_kernel_value:nnn   { tenkz-kernel-atom } { species } { species }
+\__tenkz_kernel_value:nnn
+  { tenkz-kernel-atom } { pairing~cross } { pairing-cross }
 \__tenkz_kernel_choice:nnnn { tenkz-kernel-atom } { size }
   { s, m, l } { size }
 \__tenkz_kernel_value:nnn   { tenkz-kernel-atom } { label~pos } { label-pos }
@@ -2114,6 +2126,7 @@
 \prop_new:N \l__tenkz_kernel_r_legref_prop    % leg path id -> referencing wire id
 \prop_new:N \l__tenkz_kernel_r_legdrawn_prop  % leg path id -> deferred (saved)
 \prop_new:N \l__tenkz_kernel_r_species_prop   % species word -> hue
+\prop_new:N \l__tenkz_kernel_r_skin_over_string_prop
 \seq_new:N  \l__tenkz_kernel_r_strings_seq    % string wire record ids
 \seq_new:N  \l__tenkz_kernel_r_after_atom_seq % physical traces need glyph borders
 \int_new:N  \l__tenkz_kernel_r_rows_int
@@ -2125,6 +2138,7 @@
 \tl_new:N   \l__tenkz_kernel_r_col_tl
 \tl_new:N   \l__tenkz_kernel_r_pts_tl
 \tl_new:N   \l__tenkz_kernel_r_sid_tl
+\tl_new:N   \l__tenkz_kernel_r_cross_record_tl
 \tl_new:N   \l__tenkz_kernel_r_hue_tl
 \tl_new:N   \l__tenkz_kernel_r_species_tl
 \tl_new:N   \l__tenkz_kernel_r_species_descriptor_tl
@@ -5930,6 +5944,7 @@
 % several crossings, whether the author wrote them or the route derived them.
 \cs_new_protected:Npn \__tenkz_kernel_r_crossings:n #1
   {
+    \tl_set:Nn \l__tenkz_kernel_r_cross_record_tl {#1}
     \__tenkz_model_get:nnN {#1} {cross} \l__tenkz_kernel_r_tl
     \quark_if_no_value:NF \l__tenkz_kernel_r_tl
       {
@@ -5976,6 +5991,53 @@
       {
         \exp_args:NVV \__tenkz_string_under:nn
           \l__tenkz_kernel_r_sid_tl \l__tenkz_kernel_r_b_tl
+        \__tenkz_kernel_r_pairing_over_string:
+      }
+  }
+\cs_new_protected:Npn \__tenkz_kernel_r_pairing_over_string:
+  {
+    \__tenkz_model_get:nnN
+      { \l__tenkz_kernel_r_cross_record_tl } {kind}
+      \l__tenkz_kernel_r_c_tl
+    \str_if_eq:VnT \l__tenkz_kernel_r_c_tl {pairing}
+      {
+        \prop_get:NVN \l__tenkz_kernel_named_prop
+          \l__tenkz_kernel_r_b_tl \l__tenkz_kernel_r_c_tl
+        \quark_if_no_value:NF \l__tenkz_kernel_r_c_tl
+          {
+            \__tenkz_model_get:nnN
+              { \l__tenkz_kernel_r_c_tl } {kind}
+              \l__tenkz_kernel_scratch_tl
+            \str_if_eq:VnT \l__tenkz_kernel_scratch_tl {string}
+              {
+                \__tenkz_model_get:nnN
+                  { \l__tenkz_kernel_r_cross_record_tl } {host}
+                  \l__tenkz_kernel_scratch_tl
+                \prop_get:NVN \l__tenkz_kernel_r_skin_over_string_prop
+                  \l__tenkz_kernel_scratch_tl \l__tenkz_kernel_r_c_tl
+                \quark_if_no_value:NTF \l__tenkz_kernel_r_c_tl
+                  {
+                    \prop_put:NVV
+                      \l__tenkz_kernel_r_skin_over_string_prop
+                      \l__tenkz_kernel_scratch_tl
+                      \l__tenkz_kernel_r_b_tl
+                  }
+                  {
+                    \exp_args:NVV \clist_if_in:nnF
+                      \l__tenkz_kernel_r_c_tl
+                      \l__tenkz_kernel_r_b_tl
+                      {
+                        \prop_put:NVx
+                          \l__tenkz_kernel_r_skin_over_string_prop
+                          \l__tenkz_kernel_scratch_tl
+                          {
+                            \exp_not:V \l__tenkz_kernel_r_c_tl ,
+                            \exp_not:V \l__tenkz_kernel_r_b_tl
+                          }
+                      }
+                  }
+              }
+          }
       }
   }
 \cs_new_protected:Npn \__tenkz_kernel_r_crossid:nN #1#2
@@ -6019,6 +6081,7 @@
 
 \cs_new_protected:Npn \__tenkz_kernel_r_strings:
   {
+    \prop_clear:N \l__tenkz_kernel_r_skin_over_string_prop
     % The graph fixes the order in which curves are routed: one whose end is a
     % tensor waits for that tensor, and one whose end is a tensor standing on
     % another curve waits for that curve first.
@@ -6178,6 +6241,7 @@
                   }
                   { \phantom { $ \cdots $ } }
                 \__tenkz_kernel_r_skin_wires:n {#1}
+                \__tenkz_kernel_r_skin_over_strings:n {#1}
                 \__tenkz_kernel_r_dots_label:n {#1}
               }
               {
@@ -6258,6 +6322,7 @@
                   { dot } {#1} { } \l__tenkz_kernel_r_atom_style_tl
               }
             \__tenkz_kernel_r_skin_wires:n {#1}
+            \__tenkz_kernel_r_skin_over_strings:n {#1}
             \quark_if_no_value:NF \l__tenkz_kernel_r_species_tl
               {
                 \__tenkz_kernel_r_hue:nN {#1}
@@ -6722,6 +6787,33 @@
       { \tl_use:N \l__tenkz_kernel_r_b_tl }
       { \__tenkz_kernel_r_skin_wire:n {#1} }
   }
+\cs_new_protected:Npn \__tenkz_kernel_r_skin_over_strings:n #1
+  {
+    \prop_get:NnN \l__tenkz_kernel_r_skin_over_string_prop {#1}
+      \l__tenkz_kernel_r_tl
+    \quark_if_no_value:NF \l__tenkz_kernel_r_tl
+      {
+        % The opaque base is drawn after the ordinary string pass.  Redraw
+        % only the declared over-strand, clipped to this host's measured box,
+        % so its order at every unrelated atom on the same route is unchanged.
+        \begin{scope}
+          \clip (#1.south~west) rectangle (#1.north~east);
+          \exp_args:NV \clist_map_inline:nn \l__tenkz_kernel_r_tl
+            {
+              \prop_get:NnN \l__tenkz_kernel_named_prop {##1}
+                \l__tenkz_kernel_r_c_tl
+              \quark_if_no_value:NF \l__tenkz_kernel_r_c_tl
+                {
+                  \exp_args:NV \__tenkz_kernel_r_wire_ink:nN
+                    \l__tenkz_kernel_r_c_tl
+                    \l__tenkz_kernel_r_wire_ink_tl
+                  \exp_args:NnV \__tenkz_render_string:nn
+                    {##1} \l__tenkz_kernel_r_wire_ink_tl
+                }
+            }
+        \end{scope}
+      }
+  }
 
 % box, ring, tri: the label is inscribed; spans grow the glyph so it
 % visibly covers the wires it terminates (wide= spans columns, the page x
@@ -6800,6 +6892,7 @@
           }
       }
     \__tenkz_kernel_r_skin_wires:n {#1}
+    \__tenkz_kernel_r_skin_over_strings:n {#1}
     \prop_if_in:NnT \l__tenkz_kernel_skin_pairing_host_prop {#1}
       { \__tenkz_kernel_r_skin_label:n {#1} }
   }
@@ -7200,6 +7293,7 @@
 % Materialize them while the store is writable so event streams, selectors,
 % topology consumers, and rendering all observe the same records.
 \int_new:N \l__tenkz_kernel_skin_pairing_int
+\seq_new:N \l__tenkz_kernel_skin_pairing_cross_index_seq
 \cs_new_protected:Npn \__tenkz_kernel_skin_pairings:
   {
     \__tenkz_model_map_ids:nn {atom}
@@ -7207,6 +7301,7 @@
   }
 \cs_new_protected:Npn \__tenkz_kernel_skin_pairings_atom:n #1
   {
+    \__tenkz_kernel_skin_pairing_crosses:n {#1}
     \__tenkz_model_get:nnN {#1} {skin} \l__tenkz_kernel_r_skin_declared_tl
     \quark_if_no_value:NF \l__tenkz_kernel_r_skin_declared_tl
       {
@@ -7214,30 +7309,113 @@
           \l__tenkz_kernel_r_skin_declared_tl
           \l__tenkz_kernel_r_skin_descriptor_tl
           {
-            \exp_args:NnV \regex_extract_once:nnNT
-              { (?: \A | , ) \s* pairings \s* = \s* \{ ([^{}]*) \} }
+            \exp_args:NnV \regex_match:nnT
+              { (?: \A | , ) \s* pairings \s* = }
               \l__tenkz_kernel_r_skin_descriptor_tl
-              \l__tenkz_kernel_match_seq
               {
-                \__tenkz_model_get:nnN {#1} {cluster}
-                  \l__tenkz_kernel_r_tl
-                \quark_if_no_value:NTF \l__tenkz_kernel_r_tl
+                \exp_args:NnV \regex_extract_once:nnNTF
+                  { (?: \A | , ) \s* pairings \s* = \s* \{ ([^{}]*) \} }
+                  \l__tenkz_kernel_r_skin_descriptor_tl
+                  \l__tenkz_kernel_match_seq
                   {
-                    \prop_put:Nnn
-                      \l__tenkz_kernel_skin_pairing_host_prop {#1} { }
-                    \int_zero:N \l__tenkz_kernel_skin_pairing_int
-                    \tl_set:Ne \l__tenkz_kernel_r_skin_pairings_tl
-                      { \seq_item:Nn \l__tenkz_kernel_match_seq {2} }
-                    \exp_args:NV \clist_map_inline:nn
-                      \l__tenkz_kernel_r_skin_pairings_tl
-                      { \__tenkz_kernel_skin_pairing:nn {#1} {##1} }
+                    \__tenkz_model_get:nnN {#1} {cluster}
+                      \l__tenkz_kernel_r_tl
+                    \quark_if_no_value:NTF \l__tenkz_kernel_r_tl
+                      {
+                        \prop_put:Nnn
+                          \l__tenkz_kernel_skin_pairing_host_prop {#1} { }
+                        \int_zero:N \l__tenkz_kernel_skin_pairing_int
+                        \tl_set:Ne \l__tenkz_kernel_r_skin_pairings_tl
+                          { \seq_item:Nn \l__tenkz_kernel_match_seq {2} }
+                        \exp_args:NV \clist_map_inline:nn
+                          \l__tenkz_kernel_r_skin_pairings_tl
+                          { \__tenkz_kernel_skin_pairing:nn {#1} {##1} }
+                        \__tenkz_kernel_skin_pairing_cross_indices:nn
+                          {#1}
+                          { \int_use:N \l__tenkz_kernel_skin_pairing_int }
+                      }
+                      {
+                        \msg_error:nnee {tenkz}{kernel-skin-cluster}
+                          { \tl_use:N
+                              \l__tenkz_kernel_r_skin_declared_tl } {#1}
+                      }
                   }
                   {
-                    \msg_error:nnee {tenkz}{kernel-skin-cluster}
-                      { \tl_use:N \l__tenkz_kernel_r_skin_declared_tl } {#1}
+                    \msg_error:nne {tenkz}{kernel-skin-pairings-parse}
+                      { \tl_use:N \l__tenkz_kernel_r_skin_declared_tl }
                   }
               }
           }
+      }
+    \prop_if_in:NnF \l__tenkz_kernel_skin_pairing_host_prop {#1}
+      { \__tenkz_kernel_skin_pairing_cross_indices:nn {#1} {0} }
+  }
+\cs_new_protected:Npn \__tenkz_kernel_skin_pairing_cross_indices:nn #1#2
+  {
+    \seq_map_inline:Nn \l__tenkz_kernel_skin_pairing_cross_index_seq
+      {
+        \int_compare:nNnT {##1} > {#2}
+          {
+            \msg_error:nneee {tenkz}{kernel-skin-pairing-cross-index}
+              {#1} {##1} {#2}
+          }
+      }
+  }
+\cs_new_protected:Npn \__tenkz_kernel_skin_pairing_crosses:n #1
+  {
+    \seq_clear:N \l__tenkz_kernel_skin_pairing_cross_index_seq
+    \__tenkz_model_get:nnN {#1} {pairing-cross}
+      \l__tenkz_kernel_r_tl
+    \quark_if_no_value:NF \l__tenkz_kernel_r_tl
+      {
+        \exp_args:NV \clist_map_inline:nn \l__tenkz_kernel_r_tl
+          { \__tenkz_kernel_skin_pairing_cross:nn {#1} {##1} }
+      }
+  }
+\cs_new_protected:Npn \__tenkz_kernel_skin_pairing_cross:nn #1#2
+  {
+    \regex_extract_once:nnNTF
+      {
+        \A \s* ([1-9]\d*) \s* : \s*
+        (
+          (?: over | under ) \s+ at \s+ crossing \s+ of \s+
+          .+ \s+ and \s+ .+
+        )
+        \s* \Z
+      }
+      {#2} \l__tenkz_kernel_match_seq
+      {
+        \tl_set:Ne \l__tenkz_kernel_r_b_tl
+          { \seq_item:Nn \l__tenkz_kernel_match_seq {2} }
+        \seq_if_in:NVF \l__tenkz_kernel_skin_pairing_cross_index_seq
+          \l__tenkz_kernel_r_b_tl
+          {
+            \seq_put_right:NV
+              \l__tenkz_kernel_skin_pairing_cross_index_seq
+              \l__tenkz_kernel_r_b_tl
+          }
+        \tl_set:Ne \l__tenkz_kernel_r_c_tl
+          { #1 / \tl_use:N \l__tenkz_kernel_r_b_tl }
+        \prop_get:NVN \l__tenkz_kernel_skin_pairing_cross_prop
+          \l__tenkz_kernel_r_c_tl \l__tenkz_kernel_scratch_tl
+        \quark_if_no_value:NTF \l__tenkz_kernel_scratch_tl
+          {
+            \prop_put:NVx \l__tenkz_kernel_skin_pairing_cross_prop
+              \l__tenkz_kernel_r_c_tl
+              { \seq_item:Nn \l__tenkz_kernel_match_seq {3} }
+          }
+          {
+            \prop_put:NVx \l__tenkz_kernel_skin_pairing_cross_prop
+              \l__tenkz_kernel_r_c_tl
+              {
+                \exp_not:V \l__tenkz_kernel_scratch_tl ,
+                \seq_item:Nn \l__tenkz_kernel_match_seq {3}
+              }
+          }
+      }
+      {
+        \msg_error:nnee {tenkz}{kernel-skin-pairing-cross-parse}
+          {#2} {#1}
       }
   }
 \cs_new_protected:Npn \__tenkz_kernel_skin_pairing:nn #1#2
@@ -7249,7 +7427,7 @@
         \s* > \s*
         ([-+]?(?:[0-9]+(?:\.[0-9]*)?|\.[0-9]+)|[nesw]) @ ([1-9]\d*)
         \s* : \s* ([A-Za-z][A-Za-z0-9\-]*)
-        (?: \s* ; \s* cross \s* = \s* (.*) )? \s* \Z
+        \s* \Z
       }
       {#2} \l__tenkz_kernel_match_seq
       {
@@ -7286,9 +7464,13 @@
                 name = \tl_use:N \l__tenkz_kernel_r_skin_wire_name_tl ,
                 species = \tl_use:N \l__tenkz_kernel_r_skin_species_tl
               }
-            \tl_set:Ne \l__tenkz_kernel_r_tl
-              { \seq_item:Nn \l__tenkz_kernel_match_seq {7} }
-            \tl_if_blank:VF \l__tenkz_kernel_r_tl
+            \tl_set:Ne \l__tenkz_kernel_r_c_tl
+              {
+                #1 / \int_use:N \l__tenkz_kernel_skin_pairing_int
+              }
+            \prop_get:NVN \l__tenkz_kernel_skin_pairing_cross_prop
+              \l__tenkz_kernel_r_c_tl \l__tenkz_kernel_r_tl
+            \quark_if_no_value:NF \l__tenkz_kernel_r_tl
               {
                 \use:e
                   {
@@ -7383,6 +7565,7 @@
     \prop_clear:N \l__tenkz_kernel_node_prop
     \prop_clear:N \l__tenkz_kernel_named_prop
     \prop_clear:N \l__tenkz_kernel_skin_pairing_host_prop
+    \prop_clear:N \l__tenkz_kernel_skin_pairing_cross_prop
     \prop_clear:N \l__tenkz_kernel_policy_prop
     \prop_clear:N \l__tenkz_kernel_cell_prop
     \prop_clear:N \l__tenkz_kernel_stage_prop

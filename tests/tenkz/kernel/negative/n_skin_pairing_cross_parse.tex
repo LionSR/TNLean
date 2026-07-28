@@ -1,0 +1,18 @@
+\documentclass{standalone}
+\usepackage{tenkz}
+\makeatletter
+\ExplSyntaxOn
+\file_input:n { tenkz-kernel.code.tex }
+\ExplSyntaxOff
+\makeatother
+\begin{document}
+\tenkzkernel
+\tndeclare{species}{cool}{hue=source:blue}
+\tndeclare{skin}{paired}{
+  base=box,
+  pairings={n@1 > e@1 : cool}
+}
+\begin{tenkz}[rows={wire}, cols=1, bonds=none]
+  \tn[skin=paired, pairing cross={under at crossing of self and probe}]{}
+\end{tenkz}
+\end{document}

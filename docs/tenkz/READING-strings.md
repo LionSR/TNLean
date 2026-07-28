@@ -147,10 +147,13 @@ those records over its glyph. `strings` is simply the wrong need on this entry;
 the panel contains no string.
 
 Compass faces are the same parse-boundary sugar here as in ordinary port
-addresses. If a pairing meets a wire outside its own skin, its entry may append
-`; cross=under at crossing of self and pairing 1 of B`, where `B` is an
-author-named host. A cluster carrier cannot use a paired skin: it is a group
-with no glyph and therefore owns no skin ports.
+addresses. If a pairing meets a wire outside its own skin, the atom instance
+declares `pairing cross={1: under at crossing of self and pairing 1 of B}`,
+where the leading integer selects its pairing and `B` is an author-named host.
+Repeated comma-separated indexed items declare several crossings without
+putting picture-specific topology into the reusable skin. A cluster carrier
+cannot use a paired skin: it is a group with no glyph and therefore owns no
+skin ports.
 
 ### The wrong-source one does not belong here
 
