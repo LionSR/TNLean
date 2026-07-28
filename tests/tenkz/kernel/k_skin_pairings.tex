@@ -47,8 +47,12 @@
   \tn[at=(1,3), skin=shift-right]{}
 \end{tenkz}
 \qquad
-\begin{tenkz}[rows={top,bottom}, cols=2, bonds=none]
-  \tn[at=(1,1), skin=slotted, species=warm, wires=2, wide=2]{X}
+\begin{tenkz}[rows={top,bottom}, cols=4, frame=circle, bonds=none]
+  \tn[at=(1,2), skin=slotted, species=warm, wires=2, wide=2]{X}
+  \tn[at=(1,1), skin=none, void=sealed]{}
+  \tn[at=(1,4), skin=none, void=sealed]{}
+  \tn[at=(2,1), skin=none, void=sealed]{}
+  \tn[at=(2,4), skin=none, void=sealed]{}
 \end{tenkz}
 \qquad
 \begin{tenkz}[rows={wire}, cols=6, bonds=none]
@@ -63,5 +67,16 @@
 \begin{tenkz}[rows={wire}, cols=1, bonds=none]
   \tn[skin=dot, name=anchor]{}
   \tn[skin=shift-left, at=1 n of anchor]{}
+\end{tenkz}
+\qquad
+\begin{tenkz}[rows={wire}, cols=3, bonds=grid]
+  \tn[at=(1,1), skin=dot]{}
+  \tn[at=(1,2), skin=alias-none]{}
+  \tn[at=(1,3), skin=dot]{}
+\end{tenkz}
+\qquad
+\begin{tenkz}[rows={wire}, cols=1, bonds=none]
+  \tn[at=(1,1), skin=shift-right]{}
+  \tn[skin=dot, at=on skin-atom-1-1 0.5]{}
 \end{tenkz}
 \end{document}

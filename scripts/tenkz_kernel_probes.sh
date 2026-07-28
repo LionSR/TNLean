@@ -231,14 +231,19 @@ grep -Fq 'TENKZ-HULL-BOX-POOL=1' "$WORK/r_hull_live.tex.transcript" || {
 skin_pairing_count=$(
   grep -c '^wire.*|origin=skin|' "$WORK/k_skin_pairings.tnlog" || true
 )
-[ "$skin_pairing_count" -eq 16 ] || {
+[ "$skin_pairing_count" -eq 19 ] || {
   echo "FAIL: declared skin pairings were not materialized as WIRE records" >&2
   exit 1
 }
 grep -Eq \
-  '^wire.*\|host=atom-1\|.*\|name=skin-atom-1-3\|origin=skin\|species=cool' \
+  '^wire.*\|host=atom-1\|kind=pairing\|name=skin-atom-1-3\|origin=skin\|route=arc\|species=cool' \
   "$WORK/k_skin_pairings.tnlog" || {
-  echo "FAIL: a slotted skin WIRE lost its host, name, or species" >&2
+  echo "FAIL: a slotted skin WIRE lost its host, route, name, or species" >&2
+  exit 1
+}
+grep -Fq 'stringbead|id=skin-atom-1-1|t=0.5|' \
+  "$WORK/k_skin_pairings.tnlog" || {
+  echo "FAIL: an on-wire address did not follow the saved pairing route" >&2
   exit 1
 }
 command -v pdftoppm >/dev/null 2>&1 || {
@@ -568,6 +573,20 @@ fi
 grep -Fq '[TKZ-SKIN-PAIRING-SLOT]' \
   "$WORK/n_skin_pairing_slot.transcript" || {
   echo "FAIL: an out-of-range skin pairing lacked TKZ-SKIN-PAIRING-SLOT" >&2
+  exit 1
+}
+
+skin_name_negative="$KERNEL/negative/n_skin_pairing_name.tex"
+if ( cd "$WORK" &&
+     TEXINPUTS="$REPO/tex/tenkz//:" \
+       timeout 120 xelatex -interaction=nonstopmode -halt-on-error \
+       "$skin_name_negative" >"$WORK/n_skin_pairing_name.transcript" 2>&1 ); then
+  echo "FAIL: a generated skin pairing replaced an author name" >&2
+  exit 1
+fi
+grep -Fq '[TKZ-LANG-NAME-COLLISION]' \
+  "$WORK/n_skin_pairing_name.transcript" || {
+  echo "FAIL: a generated pairing name collision lacked its diagnostic" >&2
   exit 1
 }
 
