@@ -150,31 +150,33 @@ formalized in \doclink{TNLean/Channel/Schwarz/SSAEqualityPetzRecovery} by
 No global identity-tensored factorization of TNLean's generic completed
 singular product-reference channel is claimed.
 
-\section{Remaining structural theorem}
+\section{Remaining structural bridge}
 
 Equation~\eqref{eq:hjpw-global-support-factorization} supplies the
 product-reference recovery factorization required before the structural part
-of the HJPW argument. It does not prove the Koashi--Imoto decomposition for a
-family of recovered states. The remaining step must identify one common direct
-sum
+of the HJPW argument. Under a positive-definite common-average hypothesis, the
+Koashi--Imoto state decomposition and the action of every preserving operation
+on its diagonal summands are now formalized below. To apply this result to an
+arbitrary recovered family, the remaining bridge must pass to the joint
+support, transport the full-support decomposition back to the original
+coordinates, and assemble one common direct sum
 \begin{align}
   H_B\cong\bigoplus_j H_{B_j^L}\otimes H_{B_j^R}
 \end{align}
-and describe the action of the middle-system channel on every summand so that
-the full family has the quantum-Markov form. The singular-support
+with the quantum-Markov form. The singular-support
 equality-to-raw-recovery implication is now formalized by the projected
 finite-Weyl argument and transported to arbitrary finite product coordinates.
 For density operators, support agreement upgrades this equality to the chosen
 completed partial-trace Petz channel on the recovered marginal. This does not
 give a tensor-product factorization of the generic completed singular channel.
-The family-level invariant-state and channel-action theorem is the remaining
-structural obstruction to replacing the forward Hayashi
+The joint-support transport and quantum-Markov assembly are the remaining
+structural obstructions to replacing the forward Hayashi
 strong-subadditivity equality assumption used in the CPSV16 argument.
 
 \section{Common invariant algebra: formalized under an explicit full-support hypothesis}
 
 A full-support specialization of a slice of the operator-algebraic
-Koashi--Imoto appendix (HJPW, Appendix A, lines 755--858) is now formalized
+Koashi--Imoto appendix (HJPW, Appendix A, lines 755--882) is now formalized
 independently of the product-reference recovery step above. For a finite,
 nonempty family of states $\rho_1,\dots,\rho_K$,
 the set
@@ -219,14 +221,16 @@ corresponding declarations are
   \leanid{Kraus.commonInvariantMeanErgodicProjection_idempotent}\\
   \leanid{Kraus.mem_range_commonInvariantMeanErgodicProjection_iff}\\
   \leanid{Kraus.exists_commonInvariant_fixedPointBlockForm}\\
-  \leanid{Kraus.exists_commonInvariant_normalizedStateBlockForm}
+  \leanid{Kraus.exists_commonInvariant_normalizedStateBlockForm}\\
+  \leanid{Kraus.exists_commonInvariant_normalizedStateBlockForm_preservingBlockAction}
 \end{center}
 in \doclink{TNLean/Channel/KoashiImoto/CommonInvariantAlgebra},
 \doclink{TNLean/Channel/KoashiImoto/FiniteRealization},
 \doclink{TNLean/Channel/KoashiImoto/PooledKrausFamily},
-\doclink{TNLean/Channel/KoashiImoto/SingleWitness}, and
-\doclink{TNLean/Channel/KoashiImoto/MeanErgodicProjection}.  The penultimate
-declaration, in
+\doclink{TNLean/Channel/KoashiImoto/SingleWitness},
+\doclink{TNLean/Channel/KoashiImoto/MeanErgodicProjection}, and
+\doclink{TNLean/Channel/KoashiImoto/PreservingBlockAction}. The fixed-point
+block-form declaration, in
 \doclink{TNLean/Channel/KoashiImoto/FamilyFixedPointBlockForm}, specializes
 the full-support density-block classification to $F_0$: one unitary
 direct-sum tensor decomposition and one family of density factors
@@ -250,16 +254,30 @@ specialization of HJPW Property~1, lines 785--789 and 857--858, is formalized,
 with the two tensor factors written in the reverse order. The unrestricted
 property remains open pending the joint-support reduction.
 
+The preserving-block-action declaration proves the full-support specialization
+of HJPW Property~$2'$, lines 808--816 and 860--882, in the same coordinates.
+For every preserving operation $F$ and every block $j$, it produces a local
+trace-preserving completely positive operation $F_j$ such that
+\begin{align}
+  F_j(\sigma_j)&=\sigma_j,\\
+  \widetilde F\bigl(\iota_j(A\otimes B)\bigr)
+    &=\iota_j\bigl(F_j(A)\otimes B\bigr).
+\end{align}
+Here the factor order is reversed from HJPW, so the local operation acts on
+the first factor. This statement concerns diagonal summands; it does not claim
+the Stinespring form of Property~2 or an action on off-diagonal coherences.
+
 HJPW's argument reduces to the case where the common average
 $(1/K)\sum_k\rho_k$ has full support, by shrinking the working Hilbert space to
 the joint support of the $\rho_k$ (lines 761--763). That reduction is not
 derived here: every declaration that builds $A_0$ instead takes positive
 definiteness of the common average as an explicit hypothesis. Beyond this
 scope restriction, none of the following are claimed: the joint-support
-reduction itself; the middle-system block channel action on the summands; or
-elimination of the Hayashi
-strong-subadditivity forward-implication axiom. These remain the open
-structural obstructions identified in the previous section.
+reduction and transport to the unrestricted family; assembly of the recovered
+family into the generic quantum-Markov decomposition; or elimination of the
+external assumption for the forward Hayashi strong-subadditivity implication.
+These remain the open structural obstructions identified in the previous
+section.
 
 \section{Classification}
 
@@ -281,9 +299,13 @@ common average, in place of HJPW's joint-support reduction. The simultaneous
 state decomposition
 $U^\dagger\rho_kU=\bigoplus_jq_{j|k}\sigma_j\otimes\tau_{j|k}$ for the whole
 invariant family is also formalized, with nonnegative weights summing to one
-and density matrices on both tensor factors. The Heisenberg Ces\`aro
-convergence identity for $P_0^*$, the joint-support reduction itself, and the
-Koashi--Imoto channel-action theorem remain open as separate later steps.
+and density matrices on both tensor factors. In the same coordinates, every
+preserving operation acts as a local trace-preserving completely positive
+operation fixing $\sigma_j$, tensored with the identity, on each diagonal
+summand. Thus full-support HJPW Property~$2'$ is also formalized. The
+Heisenberg Ces\`aro convergence identity for $P_0^*$, the joint-support
+reduction and transport, and the generic Hayashi forward implication remain
+open as separate later steps.
 
 \begin{thebibliography}{9}
 

@@ -122,8 +122,10 @@ For MPDO renormalization fixed points:
   realization by a single preserving operation, and a positive unital
   idempotent projection onto it are formalized under an explicit full-support
   hypothesis on the common average. The corresponding Heisenberg Ces\`aro
-  convergence identity, the family-level tensor-product state decomposition,
-  and the Koashi--Imoto/Hayashi channel-action theorem remain open.
+  convergence identity remains open. The full-support family-level
+  tensor-product state decomposition and HJPW Property~`2'` channel action are
+  formalized; the joint-support reduction and transport, together with the
+  generic Hayashi forward implication, remain open.
 - `cpsv16_zcl_canonical_form_normalization.tex` records the corresponding
   normalization issue for mixed-state ZCL.
 

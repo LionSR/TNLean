@@ -1496,8 +1496,9 @@ algebra of a family of jointly invariant states.
     \end{align}
     The density matrix $\sigma_\ell$ is independent of $k$. The tensor factors
     are written in the reverse order from HJPW Property~1. This is the
-    full-support specialization of that state decomposition; no action of a
-    preserving operation on the summands is asserted.
+    full-support specialization of that state decomposition. No action of a
+    preserving operation on the summands is asserted in this theorem; the next
+    theorem supplies it under the same full-support hypothesis.
 \end{theorem}
 
 \begin{proof}
@@ -1515,6 +1516,50 @@ algebra of a family of jointly invariant states.
     $X_{\ell,k}=0$, so the maximally mixed density matrix may be chosen.
     In both cases
     $X_{\ell,k}=q_{\ell|k}\tau_{\ell|k}$.
+\end{proof}
+
+\begin{theorem}[Action of preserving operations on full-support invariant-family blocks]
+    \label{thm:koashi_imoto_preserving_block_action}
+    \lean{Kraus.exists_commonInvariant_normalizedStateBlockForm_preservingBlockAction}
+    \leanok
+    \uses{def:koashi_imoto_common_invariant_algebra,
+        thm:koashi_imoto_normalized_family_block_form}
+    Use the decomposition of
+    Theorem~\ref{thm:koashi_imoto_normalized_family_block_form}. For every
+    trace-preserving completely positive operation $F$ satisfying
+    $F(\rho_k)=\rho_k$ for all $k$, and every summand $\ell$, there is a
+    trace-preserving completely positive operation $F_\ell$ on
+    $\MN{m_\ell}$ such that $F_\ell(\sigma_\ell)=\sigma_\ell$. If
+    $\iota_\ell$ denotes inclusion of the $\ell$-th diagonal summand and
+    \begin{align}
+        \widetilde F(X)=U^\dagger F(UXU^\dagger)U,
+    \end{align}
+    then, for all $A\in\MN{m_\ell}$ and $B\in\MN{d_\ell}$,
+    \begin{align}
+        \widetilde F\bigl(\iota_\ell(A\otimes B)\bigr)
+        =
+        \iota_\ell\bigl(F_\ell(A)\otimes B\bigr).
+    \end{align}
+    This is the full-support specialization of HJPW Property~$2'$
+    (Appendix~A, lines 808--816 and 860--882), with the tensor factors
+    reversed. It does not include the joint-support reduction or the
+    Stinespring form of Property~2.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:koashi_imoto_common_invariant_algebra,
+        thm:koashi_imoto_normalized_family_block_form}
+    For a preserving operation $F$, every Kraus operator commutes with the
+    common invariant algebra. In the common direct-sum coordinates it
+    therefore has the form
+    $\bigoplus_\ell C_{i,\ell}\otimes\mathbf 1$. Compressing
+    $\sum_iC_{i,\ell}^\dagger C_{i,\ell}=\mathbf 1$ to a summand gives trace
+    preservation of $F_\ell$. The displayed action follows by multiplication.
+    Positive definiteness of the common average implies that every summand has
+    positive weight for some $\rho_k$. Compressing $F(\rho_k)=\rho_k$ and
+    tracing over the second factor then gives
+    $F_\ell(\sigma_\ell)=\sigma_\ell$.
 \end{proof}
 
 \begin{theorem}[Hayashi SSA-equality characterization]
@@ -1551,12 +1596,15 @@ algebra of a family of jointly invariant states.
     finite-dimensional operator-algebraic core of the Koashi--Imoto argument.
     Theorems~\ref{thm:koashi_imoto_family_fixed_point_block_form} and
     \ref{thm:koashi_imoto_normalized_family_block_form} give the simultaneous
-    algebraic tensor-block form and its probability-density normalization,
-    under the same explicit full-support hypothesis on the common average in
-    place of the joint-support reduction. The joint-support reduction and the
-    action of the middle-system channel on the common direct-sum factors remain
-    open. This forward implication therefore remains axiomatic. The
-    biconditional combines the two directions.
+    algebraic tensor-block form and its probability-density normalization.
+    Theorem~\ref{thm:koashi_imoto_preserving_block_action} gives the action of
+    every preserving operation on those blocks. Together these give
+    Property~1 and the full-support specialization of Property~$2'$ under the
+    same explicit full-support hypothesis on the common average. The reduction
+    to the joint support, transport of this result to the recovered family,
+    and assembly of the quantum-Markov decomposition remain open. This forward
+    implication therefore remains axiomatic. The biconditional combines the
+    two directions.
 
     This equality criterion is cited here as an input for the later MPDO arguments.
     It is the equality criterion needed by Appendix~C of arXiv:1606.00608.
