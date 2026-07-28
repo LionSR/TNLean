@@ -450,7 +450,8 @@ direct-sum tensor coordinates for the middle subsystem.
 Every complementary basis direction is a one-dimensional tensor sector.  Its
 common factor is the unique density matrix and its unnormalized conditional
 factor is zero.  Thus all sectors have positive factor dimensions, while the
-supported factors and their positivity and trace data are retained exactly.
+supported factors, positivity assertions, and trace identities are retained
+exactly.
 
 Source: HJPW, arXiv:quant-ph/0304007v2, Theorem 6, equations (13)--(14),
 lines 493--502.  TNLean writes the tensor factors in the reverse order from
