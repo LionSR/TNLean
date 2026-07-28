@@ -1354,10 +1354,10 @@ status = "cosmetic-gap"
 pairing = "verified"
 pairing_by = "codex-pairing-sweep-2026-07-24"
 defects = []
-case_sha256 = "d0b7fcc5362af7c77c1f43b0dc26e9f79eb63dfbfb41892d6e537768f0f46a22"
+case_sha256 = "e81407dadc26aefc7ace53bc16be8544496240346695447fca3717a0dd1eb659"
 reviewed = "2026-07-28"
-renderer = "codex-winding-lattice-source-review-2026-07-28-180dpi"
-note = "the torus surface is represented by identified lattice sides and wind={1,0}; the complete O_g/O_h pull and g-inverse-g equality panels follow"
+renderer = "codex-winding-lattice-topology-review-2026-07-28-180dpi"
+note = "the torus uses identified sides and wind={1,0}; the pull lattice has no spurious box, and the two g-inverse-g rails attach to O_h above the marked tensor"
 
 [[verdict]]
 id = "rmp-workbench-iii-g-injective-mpo"

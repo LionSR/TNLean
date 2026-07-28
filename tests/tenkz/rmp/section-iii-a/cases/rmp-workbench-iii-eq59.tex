@@ -28,7 +28,7 @@
     \tnwire[kind=string, species=operator, name=oh-left, crossing=under,
       cross={under at crossing of oh-left and og-left}]
       {0.5 n of (1,4)}{0.5 s of (5,4)}
-    \tn[skin=box, role=marked,
+    \tn[skin=dot, role=extra,
         at=crossing of og-left and oh-left]{}
     \tn[skin=dot, role=extra, at=on og-left 0.15]{}
     \tn[skin=dot, role=extra, at=on og-left 0.35]{}
@@ -46,34 +46,43 @@
   \;=\;
   \begin{tenkz}[lattice={5x5},
       west=trace, east=trace, north=trace, south=trace]
-    % O_g has moved below the crossing.  O_h stays vertical, and the paired
-    % auxiliary rails above the marked tensor are labelled g^{-1} and g.
-    \tnwire[kind=string, species=operator, name=og-right, crossing=over]
-      {0.5 w of 0.5 n of (3,1)}{0.5 e of 0.5 n of (3,5)}
-    \tnwire[kind=string, species=operator, name=oh-right, crossing=under,
-      cross={under at crossing of oh-right and og-right}]
-      {0.5 n of (1,4)}{0.5 s of (5,4)}
-    \tn[skin=box, role=marked,
-        at=crossing of og-right and oh-right]{}
-    \tnwire[kind=string, species=operator, name=rails, route=arc,
-      via={0.4 w of (2,4), 0.4 e of (2,4)}, crossing=over,
-      cross={over at crossing of rails and oh-right}]
-      {0.4 w of (1,4)}{0.4 e of (1,4)}
-    \tn[skin=dot, role=extra, at=on rails 0.1,
+    % O_g has moved below the crossing.  O_h passes through the marked tensor,
+    % and the g^{-1}/g rails flank O_h before joining it above the tensor.
+    \tn[skin=box, role=marked, name=marked,
+        at=0.5 n of (3,4)]{}
+    \tn[skin=none, void=sealed, name=rail-junction,
+        at=0.5 n of (2,4)]{}
+    \tnwire[kind=string, species=operator, name=og-right-west, crossing=over]
+      {0.5 w of 0.5 n of (3,1)}{marked.w}
+    \tnwire[kind=string, species=operator, name=og-right-east, crossing=over]
+      {marked.e}{0.5 e of 0.5 n of (3,5)}
+    \tnwire[kind=string, species=operator, name=oh-right-north, crossing=over]
+      {0.5 n of (1,4)}{rail-junction.n}
+    \tnwire[kind=string, species=operator, name=oh-right-middle, crossing=over]
+      {rail-junction.s}{marked.n}
+    \tnwire[kind=string, species=operator, name=oh-right-south, crossing=over]
+      {marked.s}{0.5 s of (5,4)}
+    \tnwire[kind=string, species=operator, name=rail-left, route=orth,
+      via={0.4 w of rail-junction}, crossing=over]
+      {0.4 w of (1,4)}{rail-junction.w}
+    \tnwire[kind=string, species=operator, name=rail-right, route=orth,
+      via={0.4 e of rail-junction}, crossing=over]
+      {rail-junction.e}{0.4 e of (1,4)}
+    \tn[skin=dot, role=extra, at=on rail-left 0.15,
         label pos=nw]{g^{-1}}
-    \tn[skin=dot, role=extra, at=on rails 0.35]{}
-    \tn[skin=dot, role=extra, at=on rails 0.9,
+    \tn[skin=dot, role=extra, at=on rail-left 0.7]{}
+    \tn[skin=dot, role=extra, at=on rail-right 0.85,
         label pos=ne]{g}
-    \tn[skin=dot, role=extra, at=on rails 0.65]{}
-    \tn[skin=dot, role=extra, at=on og-right 0.15]{}
-    \tn[skin=dot, role=extra, at=on og-right 0.35]{}
-    \tn[skin=dot, role=extra, at=on og-right 0.65]{}
-    \tn[skin=dot, role=extra, at=on og-right 0.85,
+    \tn[skin=dot, role=extra, at=on rail-right 0.3]{}
+    \tn[skin=dot, role=extra, at=on og-right-west 0.25]{}
+    \tn[skin=dot, role=extra, at=on og-right-west 0.75]{}
+    \tn[skin=dot, role=extra, at=on og-right-east 0.25]{}
+    \tn[skin=dot, role=extra, at=on og-right-east 0.75,
         label pos=e]{O_g}
-    \tn[skin=dot, role=passive, at=on oh-right 0.15]{}
-    \tn[skin=dot, role=passive, at=on oh-right 0.35]{}
-    \tn[skin=dot, role=passive, at=on oh-right 0.65]{}
-    \tn[skin=dot, role=passive, at=on oh-right 0.85,
+    \tn[skin=dot, role=passive, at=on oh-right-north 0.5]{}
+    \tn[skin=dot, role=passive, at=on oh-right-middle 0.5]{}
+    \tn[skin=dot, role=passive, at=on oh-right-south 0.25]{}
+    \tn[skin=dot, role=passive, at=on oh-right-south 0.75,
         label pos=s]{O_h}
   \end{tenkz}.
 \]
