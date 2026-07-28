@@ -16,6 +16,7 @@ import TNLean.Channel.KoashiImoto.MeanErgodicProjection
 import TNLean.Channel.KoashiImoto.NormalizedFamilyBlockForm
 import TNLean.Channel.KoashiImoto.PooledKrausFamily
 import TNLean.Channel.KoashiImoto.PreservingBlockAction
+import TNLean.Channel.KoashiImoto.RecoveredConditionalBipartiteBlockForm
 import TNLean.Channel.KoashiImoto.RecoveredConditionalBlockForm
 import TNLean.Channel.KoashiImoto.RecoveredConditionalFamily
 import TNLean.Channel.KoashiImoto.SingleWitness
