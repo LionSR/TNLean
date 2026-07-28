@@ -1846,7 +1846,7 @@ algebra of a family of jointly invariant states.
         W^\dagger\rho_{AB}W
         (\mathbf 1_A\otimes U)
         &={}\bigoplus_j\sigma_j\otimes\omega_j,
-        &
+        \\
         \sum_j\tr\omega_j&=1.
     \end{align}
     The tensor factors are written in the reverse order from HJPW. The block
@@ -1854,17 +1854,18 @@ algebra of a family of jointly invariant states.
     an ambient direct-sum equivalence on subsystem $B$.
 
     \textbf{Scope restriction (HJPW Theorem~6, equation~(14)):}
-    equation~(14), lines 499--502, states an ambient direct-sum equivalence on
-    subsystem $B$, whereas the displayed equation is only its joint-support
-    variant. This restriction is documented in
+    the displayed direct sum is restricted to the minimum joint supporting
+    subspace, whereas equation~(14), lines 499--502, decomposes the ambient
+    subsystem $B$. This restriction is documented in
     \path{docs/paper-gaps/hjpw04_petz_factorization_maximally_mixed_scope.tex}.
-    The next step is to extend these coordinates to ambient $B$; only after
-    that can one address the recovery-dilation block action of equation~(15).
+    % Roadmap: extend these coordinates to ambient B before addressing the
+    % recovery-dilation block action of equation (15).
 \end{theorem}
 
 \begin{proof}
     \leanok
-    \uses{thm:hjpw_finite_conditional_slice_separation}
+    \uses{thm:hjpw_recovered_conditional_joint_support_blocks,
+        thm:hjpw_finite_conditional_slice_separation}
     Rescale the normalized equations for the active separating effects to
     their unnormalized conditional slices. A positive slice associated with
     an inactive effect has trace zero and therefore vanishes. The finite

@@ -338,10 +338,10 @@ private theorem exists_bipartiteBlockForm_of_conditionalSlice_blockForm
 /-- The recovered conditional-family witnesses together with the bipartite
 block form on their minimum joint support.
 
-This bundle retains the full preserving-family, density, and block-action
-package used to obtain the coordinates.  Its final fields add the
-joint-support bipartite reconstruction toward HJPW Theorem 6, equation (14),
-lines 499--502.
+This structure retains the preserving family, density operators, support
+isometry, and block-action identities used to obtain the coordinates.  Its
+final fields add the joint-support bipartite reconstruction toward HJPW
+Theorem 6, equation (14), lines 499--502.
 
 **Scope restriction (HJPW Theorem 6, equation (14)):** the direct-sum
 coordinates cover only the minimum joint support, not the ambient middle
@@ -443,9 +443,9 @@ structure RecoveredConditionalBipartiteBlockForm
 At equality in strong subadditivity, the exact joint-support witnesses of
 `exists_recoveredConditionalStateBlockForm_preservingBlockAction_jointSupport`
 also reconstruct the bipartite marginal.  The result retains the complete
-preserving-family, density, and block-action package for the next recovery
-step.  With `W = 1_A ⊗ V`, the ambient state is recovered from its support
-compression.  After the same unitary `U`, that compression is
+preserving family, density operators, support isometry, and block-action
+identities.  With `W = 1_A ⊗ V`, the ambient state is recovered from its
+support compression.  After the same unitary `U`, that compression is
 `\bigoplus_j σ_j ⊗ ω_j`, where each unnormalized `ω j` is positive and their
 traces sum to one.
 
