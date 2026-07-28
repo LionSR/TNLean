@@ -234,8 +234,8 @@ characterization of strong-subadditivity equality.**
 
 Equality in strong subadditivity gives the ambient recovered HJPW direct sum.
 The real traces of its positive left factors are probabilities, and total PSD
-normalization gives density matrices even in zero-weight sectors.  The
-zero-weight filler blocks vanish in the weighted direct sum.
+normalization gives density matrices even in zero-weight sectors. The normalized
+density matrices chosen there contribute nothing because their weight is zero.
 
 Source: Hayashi, *Quantum Information: An Introduction*, Theorem 5.24;
 Hayden--Jozsa--Petz--Winter, Commun. Math. Phys. 246, 359--374 (2004),
