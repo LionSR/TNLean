@@ -140,10 +140,9 @@ and the declaration door takes them:
   pairings={90@1 > 0@1 : R, 270@1 > 180@1 : R}}
 ```
 
-That is the first row exactly; the mirrored declaration is the second. It does
-not draw — the renderer answers `TKZ-KERNEL-RENDER-TODO` for any declared
-skin — but no element is missing. `strings` is simply the wrong need on this
-entry; the panel contains no string.
+That is the first row exactly; the mirrored declaration is the second. The
+renderer resolves the declared base and draws the pairings over its glyph.
+`strings` is simply the wrong need on this entry; the panel contains no string.
 
 ### The wrong-source one does not belong here
 
@@ -252,4 +251,4 @@ symbols named above.
 | an atom at `on g 0.25` | draws through `\__tenkz_kernel_r_onwire:n` |
 | an atom at `on L 0.5` on a closed string | draws; pinned by `k_carried.tex` |
 | a curve depending on an atom carried by that curve | hard error `[TKZ-ADDR-CYCLE]`; pinned by `n_addr_cycle.tex` |
-| an atom with a declared skin carrying `pairings=` | `TKZ-KERNEL-RENDER-TODO` |
+| an atom with a declared skin carrying `pairings=` | draws the base glyph and own-port wires |
