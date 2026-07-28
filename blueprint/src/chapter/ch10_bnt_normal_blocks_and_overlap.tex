@@ -4,16 +4,31 @@ This section relates spectral normality to eventual block injectivity and
 records the overlap dichotomy that detects bond-dimension and gauge-phase
 matching between normal blocks.
 
+\begin{theorem}[Normality forces positive bond dimension]
+    \label{thm:cpsv_normal_bond_dim_pos}
+    \lean{MPSTensor.IsNormalTensor.bondDim_ne_zero}
+    \leanok
+    \uses{def:nt_cpsv}
+    Every normal tensor has positive bond dimension.
+\end{theorem}
+
+\begin{proof}\leanok
+    If the bond dimension were zero, the bond-matrix space and its endomorphism
+    algebra would each contain only zero. The transfer operator would therefore
+    have spectral radius zero, contradicting the spectral-radius-one clause in
+    the definition of a normal tensor.
+\end{proof}
+
 \begin{theorem}[Spectral normality gives a pure trace-preserving gauge]
     \label{thm:cpsv_normal_tp_gauge}
     \lean{MPSTensor.IsNormalTensor.exists_tpGauge}
     \leanok
-    \uses{def:nt_cpsv}
-    Let $A$ be a normal tensor of positive bond dimension in the sense of
-    \cite[Section~2.2]{Cirac2016MPDO_arXiv}. There is a positive definite
-    matrix $\sigma$ such that the gauge obtained from $\sigma$ is
-    trace-preserving, primitive, and irreducible. No scalar rescaling is
-    needed.
+    \uses{def:nt_cpsv, thm:cpsv_normal_bond_dim_pos}
+    Let $A$ be a normal tensor in the sense of
+    \cite[Section~2.2]{Cirac2016MPDO_arXiv}. Its bond dimension is necessarily
+    positive, and there is a positive definite matrix $\sigma$ such that the
+    gauge obtained from $\sigma$ is trace-preserving, primitive, and
+    irreducible. No scalar rescaling is needed.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -31,10 +46,10 @@ matching between normal blocks.
     \label{thm:cpsv_normal_eventually_injective}
     \lean{MPSTensor.IsNormalTensor.isNormal}
     \leanok
-    \uses{def:nt_cpsv, def:normal}
-    Every positive-bond-dimension normal tensor in the sense of
+    \uses{def:nt_cpsv, def:normal, thm:cpsv_normal_bond_dim_pos}
+    Every normal tensor in the sense of
     \cite[Section~2.2]{Cirac2016MPDO_arXiv} is injective after blocking by some
-    finite length.
+    finite length; its positive bond dimension follows from normality.
 \end{theorem}
 
 \begin{proof}\leanok

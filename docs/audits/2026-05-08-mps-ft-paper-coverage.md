@@ -48,23 +48,23 @@ theorem. This is tracked by issue #873 under the proposition-level tracker #81.
 
 ## 2. Coverage crosswalk: CPSV16 (arXiv:1606.00608)
 
-At revision `1285759c4`, the paper has 45 theorem-like occurrences and 40 distinct results. The occurrence-level count is 16 complete, 17 partial, and 12 not-ready; the distinct-result count is 15 complete, 14 partial, and 11 not-ready. Here **not-ready** means that the printed statement is false, ambiguous, or depends essentially on a formally refuted source lemma. It does not mean that every printed result has been formalized.
+At revision `7c83af68a`, the paper has 45 theorem-like occurrences and 40 distinct results. The occurrence-level count is 17 complete, 16 partial, and 12 not-ready; the distinct-result count is 16 complete, 13 partial, and 11 not-ready. Here **not-ready** means that the printed statement is false, ambiguous, or depends essentially on a formally refuted source lemma. It does not mean that every printed result has been formalized.
 
 The distinct count is the 40 source `thm`, `prop`, `cor`, and `lem`
 environments. The occurrence count adds five Appendix A/D restatements.
 The following ledger makes the count reproducible from source line numbers:
 
-- **Complete (15 distinct):** 249, 253, 606, 945, 1080, 1121, 1130,
-  1351, 1406, 1510, 1569, 1647, 1680, 1835, and 2221.
-- **Partial (14 distinct):** 278, 342, 349, 398, 583, 801, 851, 972,
-  1013, 1274, 1333, 1597, 1786, and 1801.
+- **Complete (16 distinct):** 249, 253, 606, 945, 1080, 1121, 1130,
+  1274, 1351, 1406, 1510, 1569, 1647, 1680, 1835, and 2221.
+- **Partial (13 distinct):** 278, 342, 349, 398, 583, 801, 851, 972,
+  1013, 1333, 1597, 1786, and 1801.
 - **Not-ready (11 distinct):** 354, 500, 534, 543, 777, 1155, 1197,
   1484, 1503, 1740, and 1810.
 - **Additional occurrences:** the Appendix A restatements at 1137, 1167,
   and 1172 inherit partial, partial, and not-ready status, respectively; the
   Appendix D restatements at 1863 and 1929 inherit complete and partial status.
   Thus the five restatements add one complete, three partial, and one not-ready
-  occurrence, giving the displayed totals 16/17/12.
+  occurrence, giving the displayed totals 17/16/12.
 
 Definitions, equations, and explanatory proof-segment rows are not counted.
 In particular, Eq. `II_XAX` at 1072--1077 is excluded, while the purification
@@ -137,7 +137,7 @@ segments of Theorems 3.1 and 3.10, not additional theorem occurrences.
 | Paper label | Lines | Paper description | Lean location | Status |
 |---|---|---|---|---|
 | Renormalization flow convergence | 1209–1244 | Renormalization flow from canonical form converges | `TNLean/MPS/RFP/Convergence.lean` (`rg_flow_converges_of_cf`) | **proof segment; counted with Theorem 3.1** — the current theorem gives convergence for each fixed canonical-form block \(k\); the source proves convergence of the full weighted canonical-form transfer, including the copy and mixed-block terms |
-| **Lemma `lem:charact-NT-pure-RFP`** | 1274–1289 | Normal-tensor RFP structural theorem | `TNLean/MPS/RFP/StructuralFull.lean` (`MPSTensor.rfp_nt_structural_full`); `docs/paper-gaps/cpsv16_rfp_isometry_scope.tex` | **partial** — the forward theorem assumes an extra left-canonical equation, the converse is separate, and no iff capstone under exactly the printed source hypotheses is present |
+| **Lemma `lem:charact-NT-pure-RFP`** | 1274–1301 | Normal-tensor RFP structural theorem | `TNLean/MPS/RFP/NormalIsometryCharacterization.lean` (`MPSTensor.IsNormalTensor.isTransferIdempotent_iff_isIsometryCanonicalForm`); `TNLean/MPS/RFP/StructuralFull.lean`; `docs/paper-gaps/cpsv16_rfp_isometry_scope.tex` | **complete, with documented local correction** — under exactly normality, which itself forces positive bond dimension, transfer idempotence is equivalent to the trace-normalized square-root isometry form. The factor $\sqrt{\Lambda}$ is required by the source reference tensor at line 1300 |
 | Theorem 3.10 reverse-proof step | 1246–1271 | The printed ZCL-to-RFP argument uses a nonzero subleading eigenvalue | `TNLean/MPS/RFP/ZCLReverse.lean`; `TNLean/MPS/RFP/PhysicalObservableRealization.lean` | **proof segment; counted with Theorem 3.10** — the printed argument is not ready: a non-idempotent map may have only a nilpotent Jordan defect at eigenvalue zero; corrected conditional work is tracked by owner-held #2633 |
 | Theorem 3.10 RFP⇒NNCPH | 1305–1307 | RFP gives a nearest-neighbor commuting parent Hamiltonian | Corrected representative-level theorems in `TNLean/MPS/ParentHamiltonian/Commuting.lean` and the conditional capstone merged by #4860 | **proof segment; counted with Theorem 3.10** — the printed unrestricted argument is not ready: raw repeated-copy insertions remain outside the proved representative theorem; #2633 is owner-held |
 
@@ -303,11 +303,12 @@ These are known oversized (documented in #1512/#1522) and do not block unrelated
 
 ## 7. Key remaining coverage gaps
 
-The 25 non-complete distinct CPSV16 results comprise 14 partial and 11
+The 24 non-complete distinct CPSV16 results comprise 13 partial and 11
 not-ready results. They are source-ambiguous, formally refuted, research-level,
 owner-held, or scope-restricted by the current formal interface. Lemma
-`Lsigma3` and the Hayashi strong-subadditivity equality characterization are
-complete and axiom-free.
+`Lsigma3`, the Hayashi strong-subadditivity equality characterization, and the
+Appendix B single-normal-tensor RFP/isometry characterization are complete and
+axiom-free.
 
 | Status | Paper | Result | Current certificate | Ownership |
 |---|---|---|---|---|
@@ -322,7 +323,6 @@ complete and axiom-free.
 | Not-ready | CPSV16 | Theorem 3.10 | Inherits Theorem 3.8 counterexamples; line 1250 also fails for nilpotent zero-Jordan defects | #2633, assigned to `LionSR` |
 | Not-ready | CPSV16 | Theorem 3.11 | The repeated-copy physical isometry lacks a copy index; the literal shared-map reading is false | #2598 closed as source obstruction |
 | Partial | CPSV16 | Corollary 3.12 | A residual-isometry family is constructed for packaged BNT basis-direct-sum transfer idempotence | The bridge from literal canonical-form whole-tensor RFP to the packaged BNT surface remains open; `docs/paper-gaps/cpsv16_rfp_isometry_scope.tex` |
-| Partial | CPSV16 | Appendix B normal-tensor structural lemma | The forward theorem assumes an extra left-canonical equation, the converse is separate, and no source-hypothesis iff capstone is present | `docs/paper-gaps/cpsv16_rfp_isometry_scope.tex` |
 | Not-ready | CPSV16 | Purification RFP equivalence | Nilpotent hidden bond sectors refute the global-to-local implication | #3947 closed as not planned |
 | Partial | CPSV16 | Proposition 4.5 | Monotonicity is proved; the thermodynamic limit is refuted; the finite $4\log D$ bound remains open | #4169/#4242/#4295, assigned to `LionSR` |
 | Partial | CPSV16 | Proposition `propsimple` | Source ZCL and SAL are proved under `IsHorizontalCF`, which excludes a literal canonical-form all-zero virtual tail | Inactive-tail restriction and transport remain open; `docs/paper-gaps/cpsv16_rfp_sal_data_processing.tex` |
