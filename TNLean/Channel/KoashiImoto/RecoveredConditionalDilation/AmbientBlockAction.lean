@@ -102,7 +102,7 @@ theorem RecoveredConditionalDilationInternal.pureAncillaRecovery_eq_rectangularK
     c₀ r₀ U K (1 : Matrix B B ℂ) hV X
   simpa [K] using h
 
-set_option maxHeartbeats 800000 in
+set_option maxHeartbeats 400000 in
 -- The entrywise Kraus-family conjugation requires a larger reduction budget.
 /-- Conjugating a block-coordinate pure-ancilla dilation by a system unitary
 conjugates both its input and retained system-output coordinates. -/
@@ -312,6 +312,7 @@ def RecoveredConditionalDilationInternal.ambientTripartiteBlockMatrix
       | Sum.inr j => ω j ⊗ₖ τ j)
 
 set_option linter.flexible false in
+-- The four dependent-sector cases intentionally simplify to different goals.
 /-- Taking an `A`-block of the ambient bipartite direct sum leaves a
 middle-system direct sum with the corresponding conditional matrix entries. -/
 theorem RecoveredConditionalDilationInternal.bipartiteBlock_ambientBipartiteBlockMatrix
@@ -347,10 +348,9 @@ theorem RecoveredConditionalDilationInternal.bipartiteBlock_ambientBipartiteBloc
       exact Or.inl rfl
     · simp [h]
 
-set_option linter.style.maxHeartbeats false in
-set_option linter.unusedSimpArgs false in
 set_option linter.flexible false in
-set_option maxHeartbeats 800000 in
+-- The four dependent-sector cases intentionally simplify to different goals.
+set_option maxHeartbeats 400000 in
 -- The entrywise direct-sum expansion requires a larger finite-sum reduction budget.
 /-- A dependent direct sum of pure-ancilla dilation blocks acts sectorwise on
 an ambient state whose complementary blocks vanish.  Supported blocks send
@@ -395,7 +395,7 @@ theorem RecoveredConditionalDilationInternal.blockDilation_fixedEnv_idTensorMap_
   rcases x with ⟨s, ⟨⟨a, v⟩, ⟨u, c⟩⟩⟩
   rcases y with ⟨t, ⟨⟨a', v'⟩, ⟨u', c'⟩⟩⟩
   simp only [recoveredTripartiteBlockEquiv_apply,
-    Matrix.reindex_apply, Matrix.submatrix_apply, Equiv.symm_apply_apply]
+    Matrix.reindex_apply, Matrix.submatrix_apply]
   have hx : (recoveredTripartiteBlockEquiv eB).symm
       (a, (eB ⟨s, (u, v)⟩, c)) =
       ⟨s, ((a, v), (u, c))⟩ := by
@@ -418,33 +418,9 @@ theorem RecoveredConditionalDilationInternal.blockDilation_fixedEnv_idTensorMap_
     Fintype.sum_sum_type]
   all_goals simp only [Matrix.reindex_apply, Matrix.submatrix_apply,
     Equiv.symm_apply_apply, Matrix.blockDiagonal'_apply,
-    Matrix.zero_apply, ite_self, Sum.inl_ne_inr, Sum.inr_ne_inl,
-    mul_zero, zero_mul, star_zero, Finset.sum_const_zero, add_zero,
-    zero_add]
+    Matrix.zero_apply, Sum.inl_ne_inr, Sum.inr_ne_inl]
   all_goals simp
-  case inl.inl =>
-    apply Finset.sum_eq_zero
-    intro i _
-    apply Finset.sum_eq_zero
-    intro k _
-    apply Finset.sum_eq_zero
-    intro x _
-    apply Finset.sum_eq_zero
-    intro y _
-    rw [blockDilationUnitary_fixedEnv_apply_complement_support]
-    simp
-  case inl.inr =>
-    apply Finset.sum_eq_zero
-    intro i _
-    apply Finset.sum_eq_zero
-    intro k _
-    apply Finset.sum_eq_zero
-    intro x _
-    apply Finset.sum_eq_zero
-    intro y _
-    rw [blockDilationUnitary_fixedEnv_apply_complement_support]
-    simp
-  case inr.inl =>
+  case inl.inl | inl.inr | inr.inl =>
     apply Finset.sum_eq_zero
     intro i _
     apply Finset.sum_eq_zero
@@ -458,7 +434,7 @@ theorem RecoveredConditionalDilationInternal.blockDilation_fixedEnv_idTensorMap_
   case inr.inr =>
     by_cases hj : j = j'
     · subst j'
-      simp only [if_pos rfl, cast_eq, Matrix.kroneckerMap_apply]
+      simp only [cast_eq]
       rw [rectangularKrausMap_apply_entry]
       simp_rw [Finset.mul_sum]
       apply Finset.sum_congr rfl
@@ -498,7 +474,7 @@ theorem RecoveredConditionalDilationInternal.blockDilation_fixedEnv_idTensorMap_
               if v' = q then 1 else 0 := by
           exact Matrix.one_apply
         simp_rw [Fintype.sum_prod_type, hOneLeft, hOneRight]
-        simp [apply_ite, Fintype.sum_ite_eq]
+        simp [apply_ite]
         apply Finset.sum_congr rfl
         intro x _
         apply Finset.sum_congr rfl

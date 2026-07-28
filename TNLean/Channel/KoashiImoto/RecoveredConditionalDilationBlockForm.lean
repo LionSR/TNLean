@@ -3,7 +3,6 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Algebra.PositiveSemidefiniteNormalization
 import TNLean.Channel.KoashiImoto.RecoveredConditionalDilation.AmbientBlockAction
 import TNLean.Channel.KoashiImoto.RecoveredConditionalDilation.SectorAction
 
@@ -197,36 +196,6 @@ theorem RecoveredConditionalDilationBlockForm.idTensorMap_recoveredSector
   rw [idTensorMapLM_apply, idTensorMap_kronecker]
   rfl
 
-/-- A positive, possibly zero-weight left factor separates into its trace
-weight and a normalized density matrix without changing the recovered
-supported-sector block.
-
-The total normalization chooses a harmless density matrix when the trace is
-zero. Its contribution still vanishes because the displayed scalar is then
-zero. No filler is introduced into the unnormalized recovery identity.
-
-Source: HJPW, arXiv:quant-ph/0304007v2, Theorem 6, final substitution,
-lines 562--570. -/
-theorem RecoveredConditionalDilationBlockForm.recoveredSector_factor_normalized
-    {ρ_ABC : Matrix (Fin dA × Fin dB × Fin dC)
-      (Fin dA × Fin dB × Fin dC) ℂ}
-    {hρ_dm : ρ_ABC.PosSemidef ∧ ρ_ABC.trace = 1}
-    [Nonempty (RecoveredEffectIndex (traceC_ABC ρ_ABC))]
-    {F : RecoveredConditionalAmbientBipartiteBlockForm ρ_ABC hρ_dm}
-    (D : RecoveredConditionalDilationBlockForm ρ_ABC hρ_dm F)
-    (j : Fin F.jointSupport.K)
-    (ω : Matrix
-      (Fin dA × Fin (F.jointSupport.d j))
-      (Fin dA × Fin (F.jointSupport.d j)) ℂ)
-    (hω : ω.PosSemidef)
-    (x₀ : Fin dA × Fin (F.jointSupport.d j)) :
-    ω ⊗ₖ D.recoveredSectorState j =
-      (ω.trace.re : ℂ) •
-        (Matrix.normalizePosSemidef x₀ ω ⊗ₖ
-          D.recoveredSectorState j) := by
-  rw [← Matrix.smul_kronecker]
-  rw [Matrix.trace_re_smul_normalizePosSemidef x₀ hω]
-
 /-- A recovered supported-sector state is positive semidefinite.
 
 Source: HJPW, arXiv:quant-ph/0304007v2, Theorem 6, equation (15),
@@ -280,7 +249,7 @@ theorem
       F.jointSupport.σ j :=
   D.sector_state_fixed j
 
-set_option maxHeartbeats 800000 in
+set_option maxHeartbeats 400000 in
 -- The coordinate transport combines several nested linear-map identities.
 /-- In the ambient HJPW coordinates, the recovered tripartite state has zero
 complementary blocks and supported blocks in conditional--common-output order.
