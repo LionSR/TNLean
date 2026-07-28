@@ -275,8 +275,10 @@
 \cs_generate_variant:Nn \__tenkz_geom_place_cell:nnnn { nnee }
 \cs_new_protected:Npn \__tenkz_geom_place_rel:nnnn #1#2#3#4
   { \prop_put:Nnn \l__tenkz_geom_req_prop {#1} { {rel}{#2}{#3}{#4} } }
+\cs_generate_variant:Nn \__tenkz_geom_place_rel:nnnn { nnee, nVee, neee }
 \cs_new_protected:Npn \__tenkz_geom_place_mid:nnn #1#2#3
   { \prop_put:Nnn \l__tenkz_geom_req_prop {#1} { {mid}{#2}{#3}{} } }
+\cs_generate_variant:Nn \__tenkz_geom_place_mid:nnn { nVV, nee }
 \cs_new_protected:Npn \__tenkz_geom_place_onseg:nnnn #1#2#3#4
   { \prop_put:Nnn \l__tenkz_geom_req_prop {#1} { {onseg}{#2}{#3}{#4} } }
 

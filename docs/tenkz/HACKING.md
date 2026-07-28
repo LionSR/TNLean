@@ -114,6 +114,10 @@ changes topology.  Public names come from the executable registry; private
 names follow `\__tenkz_<owner>_...:`.  Unsupported requested ink is a coded
 error, never a warning followed by omission.
 
+Until the S4 surface swap, kernel package loading is inert with respect to the
+0.7 surface. `KERNEL-LOAD-SWEEP.md` records the binding and key-tree audit and
+the regression that protects this boundary.
+
 ## expl3 and PGF traps
 
 These mistakes have shipped bugs here.
