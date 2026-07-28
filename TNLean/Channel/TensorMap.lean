@@ -239,9 +239,7 @@ theorem idTensorMap_conjugation
     Matrix.mul_apply, Matrix.conjTranspose_kronecker,
     Matrix.conjTranspose_one, Matrix.kroneckerMap_apply,
     Matrix.one_apply]
-  simp_rw [Fintype.sum_prod_type]
-  simp
-  rfl
+  simp [Fintype.sum_prod_type, Matrix.mul_apply, bipartiteBlock_apply]
 
 /-- Tensoring the identity map on the first factor with the identity map on the
 second gives the identity map on the product matrix algebra. -/
