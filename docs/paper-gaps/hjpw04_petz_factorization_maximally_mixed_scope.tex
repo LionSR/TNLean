@@ -173,9 +173,10 @@ strong-subadditivity equality assumption used in the CPSV16 argument.
 
 \section{Common invariant algebra: formalized under an explicit full-support hypothesis}
 
-A slice of the operator-algebraic Koashi--Imoto appendix (HJPW, Appendix A,
-lines 755--851) is now formalized independently of the product-reference
-recovery step above. For a finite, nonempty family of states $\rho_1,\dots,\rho_K$,
+A full-support specialization of a slice of the operator-algebraic
+Koashi--Imoto appendix (HJPW, Appendix A, lines 755--858) is now formalized
+independently of the product-reference recovery step above. For a finite,
+nonempty family of states $\rho_1,\dots,\rho_K$,
 the set
 \begin{align}
   {\bf F}=\bigl\{F:\forall k\ F\rho_k=\rho_k\bigr\}
@@ -217,13 +218,14 @@ corresponding declarations are
   \leanid{Kraus.commonInvariantMeanErgodicProjection_one}\\
   \leanid{Kraus.commonInvariantMeanErgodicProjection_idempotent}\\
   \leanid{Kraus.mem_range_commonInvariantMeanErgodicProjection_iff}\\
-  \leanid{Kraus.exists_commonInvariant_fixedPointBlockForm}
+  \leanid{Kraus.exists_commonInvariant_fixedPointBlockForm}\\
+  \leanid{Kraus.exists_commonInvariant_normalizedStateBlockForm}
 \end{center}
 in \doclink{TNLean/Channel/KoashiImoto/CommonInvariantAlgebra},
 \doclink{TNLean/Channel/KoashiImoto/FiniteRealization},
 \doclink{TNLean/Channel/KoashiImoto/PooledKrausFamily},
 \doclink{TNLean/Channel/KoashiImoto/SingleWitness}, and
-\doclink{TNLean/Channel/KoashiImoto/MeanErgodicProjection}.  The final
+\doclink{TNLean/Channel/KoashiImoto/MeanErgodicProjection}.  The penultimate
 declaration, in
 \doclink{TNLean/Channel/KoashiImoto/FamilyFixedPointBlockForm}, specializes
 the full-support density-block classification to $F_0$: one unitary
@@ -232,9 +234,21 @@ $\sigma_j$ work simultaneously for all $\rho_k$,
 \begin{align}
   U^\dagger\rho_kU=\bigoplus_j\sigma_j\otimes X_{j,k}.
 \end{align}
-No positivity or trace normalization is yet asserted for the matrices
-$X_{j,k}$. This is the unnormalized fixed-point step underlying HJPW
-Appendix~A, lines 853--856, not Property~1.
+The declaration in
+\doclink{TNLean/Channel/KoashiImoto/NormalizedFamilyBlockForm} assumes that
+the family members are density matrices, proves that the $X_{j,k}$ are
+positive semidefinite, and normalizes them as
+\begin{align}
+  X_{j,k}=q_{j|k}\tau_{j|k},
+  \qquad
+  q_{j|k}\geq 0,
+  \qquad
+  \sum_jq_{j|k}=1,
+\end{align}
+where each $\tau_{j|k}$ is a density matrix. Thus the full-support
+specialization of HJPW Property~1, lines 785--789 and 857--858, is formalized,
+with the two tensor factors written in the reverse order. The unrestricted
+property remains open pending the joint-support reduction.
 
 HJPW's argument reduces to the case where the common average
 $(1/K)\sum_k\rho_k$ has full support, by shrinking the working Hilbert space to
@@ -242,10 +256,8 @@ the joint support of the $\rho_k$ (lines 761--763). That reduction is not
 derived here: every declaration that builds $A_0$ instead takes positive
 definiteness of the common average as an explicit hypothesis. Beyond this
 scope restriction, none of the following are claimed: the joint-support
-reduction itself; positivity and normalization of the member-dependent
-matrices $X_{j,k}$ into the state decomposition
-$\rho_k=\bigoplus_j q_{j|k}\rho_{j|k}\otimes\omega_j$; the middle-system block
-channel action on the summands; or elimination of the Hayashi
+reduction itself; the middle-system block channel action on the summands; or
+elimination of the Hayashi
 strong-subadditivity forward-implication axiom. These remain the open
 structural obstructions identified in the previous section.
 
@@ -265,14 +277,13 @@ $A_0$ of a finite family of jointly invariant states, its membership
 characterization, its generic block form, its finite realization by a single
 preserving operation $F_0$, and the positive unital idempotent projection
 $P_0^*$ onto it are formalized under an explicit full-support hypothesis on the
-common average, in place of HJPW's joint-support reduction. A simultaneous
-algebraic block form
-$U^\dagger\rho_kU=\bigoplus_j\sigma_j\otimes X_{j,k}$ for the whole invariant
-family is also formalized. The Heisenberg Ces\`aro convergence identity for
-$P_0^*$, the joint-support reduction itself, normalization of the
-member-dependent matrices into the probability-density form of the
-Koashi--Imoto state decomposition, and the Koashi--Imoto channel-action
-theorem remain open as separate later steps.
+common average, in place of HJPW's joint-support reduction. The simultaneous
+state decomposition
+$U^\dagger\rho_kU=\bigoplus_jq_{j|k}\sigma_j\otimes\tau_{j|k}$ for the whole
+invariant family is also formalized, with nonnegative weights summing to one
+and density matrices on both tensor factors. The Heisenberg Ces\`aro
+convergence identity for $P_0^*$, the joint-support reduction itself, and the
+Koashi--Imoto channel-action theorem remain open as separate later steps.
 
 \begin{thebibliography}{9}
 
