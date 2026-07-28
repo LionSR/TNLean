@@ -711,26 +711,31 @@ complete effect family and conditional slices
   \leanid{Matrix.exists_recoveredConditionalBipartiteBlockForm_jointSupport}\\
   \leanid{Matrix.exists_recoveredConditionalAmbientBipartiteBlockForm}\\
   \leanid{Matrix.exists_recoveredDilationBlockUnitary}\\
-  \leanid{Matrix.RecoveredConditionalDilationBlockForm.ambient_tripartite_block_form}.
+  \leanid{Matrix.RecoveredConditionalDilationBlockForm.ambient_tripartite_block_form}\\
+  \leanid{Matrix.exists_recoveredConditionalTripartiteBlockForm}.
 \end{center}
 These declarations construct a finite nonempty family of nonzero normalized
 conditional states fixed by
 $\varphi=\operatorname{Tr}_C\circ\widehat{\mathcal R}$ and prove that the
 finite slices separate bipartite operators. They also apply the joint-support
 block form to this family and retain the support-intertwining and
-preserving-operation action of $\varphi$. The last declaration rescales active
-slices, proves inactive positive slices vanish, and reconstructs
+preserving-operation action of $\varphi$.
+\leanid{Matrix.exists_recoveredConditionalBipartiteBlockForm_jointSupport}
+rescales active slices, proves inactive positive slices vanish, and reconstructs
 $\rho_{AB}$ as $\bigoplus_j\sigma_j\otimes\omega_j$ on the same minimum joint
 support. This is a scope-restricted joint-support variant toward HJPW
-equation~(14). The ambient declaration completes the support coordinates to
-all of $B$, adds one-dimensional zero-weight tensor sectors on the complement,
-and proves the ambient equation~(14) with positive factors whose conditional
-traces sum to one. The final declaration proves the block-coordinate recovery
-dilation of equation~(15), supported agreement with the Petz operation, and
-the exact recovery identity. It also constructs positive trace-one recovered
-states on the supported common-factor sectors with the prescribed
-common-factor marginals. The last declaration combines equations~(11), (14),
-and~(15) in the orientation
+equation~(14).
+\leanid{Matrix.exists_recoveredConditionalAmbientBipartiteBlockForm} completes
+the support coordinates to all of $B$, adds one-dimensional zero-weight tensor
+sectors on the complement, and proves the ambient equation~(14) with positive
+factors whose conditional traces sum to one.
+\leanid{Matrix.exists_recoveredDilationBlockUnitary} proves the block-coordinate
+recovery dilation of equation~(15), supported agreement with the Petz
+operation, and the exact recovery identity. It also constructs positive
+trace-one recovered states on the supported common-factor sectors with the
+prescribed common-factor marginals.
+\leanid{Matrix.exists_recoveredConditionalTripartiteBlockForm} combines
+equations~(11), (14), and~(15) in the orientation
 $W^\dagger\rho_{ABC}W$ and gives zero complementary blocks together with
 supported blocks $\omega_j\otimes\widehat\rho_j$ in HJPW factor order.
 Defining the probabilities, normalizing the left factors, handling zero-weight

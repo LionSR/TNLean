@@ -283,8 +283,6 @@ def dilationBlockEquiv
     ((Equiv.sigmaProdDistrib (fun i => M i × D i) E).symm.trans
       (eB.prodCongr (Equiv.refl E)))
 
-
-
 @[simp]
 private theorem dilationBlockEquiv_apply
     {I B E : Type*} {M D : I → Type*}
@@ -864,7 +862,5 @@ theorem RecoveredConditionalDilationInternal.blockDilation_slice_support
         (fun j ↦ C (finProdFinEquiv (c, i)) j ⊗ₖ
           (1 : Matrix (Fin (d j)) (Fin (d j)) ℂ))
         (u, v) (u', v') hj).symm
-
-
 
 end Matrix
