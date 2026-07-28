@@ -6,7 +6,6 @@ Authors: TNLean contributors
 import Mathlib.Algebra.BigOperators.Group.Finset.Basic
 import Mathlib.Algebra.Module.BigOperators
 import Mathlib.Data.Complex.Basic
-import Mathlib.Data.Fintype.Basic
 import Mathlib.Order.Fin.Tuple
 
 /-!
@@ -68,13 +67,14 @@ lemma sum_fiber_smul
     (∑ i : ι, a i • v (φ i)) =
         ∑ k : κ, ∑ i with φ i = k, a i • v (φ i) := by
       symm
-      simpa using Finset.sum_fiberwise_eq_sum_filter
-        (Finset.univ : Finset ι) (Finset.univ : Finset κ) φ
-        (fun i => a i • v (φ i))
+      simpa only [Finset.mem_univ, Finset.filter_true] using
+        Finset.sum_fiberwise_eq_sum_filter
+          (Finset.univ : Finset ι) (Finset.univ : Finset κ) φ
+          (fun i => a i • v (φ i))
     _ = ∑ k : κ, (∑ i : ι, if φ i = k then a i else 0) • v k := by
       refine Finset.sum_congr rfl fun k _ => ?_
       rw [Finset.sum_smul, Finset.sum_filter]
       refine Finset.sum_congr rfl fun i _ => ?_
-      by_cases h : φ i = k <;> simp [h]
+      by_cases h : φ i = k <;> simp only [h, ↓reduceIte, zero_smul]
 
 end MPSTensor
