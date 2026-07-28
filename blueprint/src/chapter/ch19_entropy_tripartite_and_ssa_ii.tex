@@ -1473,6 +1473,50 @@ algebra of a family of jointly invariant states.
     $U(\bigoplus_\ell\sigma_\ell\otimes\MN{d_\ell})U^\dagger$.
 \end{proof}
 
+\begin{theorem}[Normalized state decomposition of a full-support invariant family]
+    \label{thm:koashi_imoto_normalized_family_block_form}
+    \lean{Kraus.exists_commonInvariant_normalizedStateBlockForm}
+    \leanok
+    \uses{thm:koashi_imoto_family_fixed_point_block_form}
+    Suppose in addition that every $\rho_k$ is positive semidefinite with
+    trace one. Under the explicit positive-definite common-average hypothesis
+    of Definition~\ref{def:koashi_imoto_common_invariant_algebra}, the common
+    decomposition of
+    Theorem~\ref{thm:koashi_imoto_family_fixed_point_block_form} admits
+    numbers $q_{\ell|k}\geq 0$ and density matrices
+    $\tau_{\ell|k}\in\MN{d_\ell}$ such that, for every $k$,
+    \begin{align}
+        \sum_{\ell=0}^{L-1}q_{\ell|k}&=1,
+        \label{eq:koashi_imoto_family_weights}\\
+        U^\dagger\rho_kU
+        &=
+        \bigoplus_{\ell=0}^{L-1}
+        q_{\ell|k}\,\sigma_\ell\otimes\tau_{\ell|k}.
+        \label{eq:koashi_imoto_normalized_family_block_form}
+    \end{align}
+    The density matrix $\sigma_\ell$ is independent of $k$. The tensor factors
+    are written in the reverse order from HJPW Property~1. This is the
+    full-support specialization of that state decomposition; no action of a
+    preserving operation on the summands is asserted.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:koashi_imoto_family_fixed_point_block_form}
+    Write the $\ell$-th block as
+    $\sigma_\ell\otimes X_{\ell,k}$. Positivity of $\rho_k$, compression to
+    this block, and the partial trace over the first factor show that
+    $X_{\ell,k}$ is positive semidefinite. Put
+    $q_{\ell|k}=\tr(X_{\ell,k})$. The trace-one identities for $\rho_k$ and
+    $\sigma_\ell$ give
+    $q_{\ell|k}\geq 0$ and
+    $\sum_\ell q_{\ell|k}=1$. For positive weight, divide
+    $X_{\ell,k}$ by its trace. At zero weight, positivity forces
+    $X_{\ell,k}=0$, so the maximally mixed density matrix may be chosen.
+    In both cases
+    $X_{\ell,k}=q_{\ell|k}\tau_{\ell|k}$.
+\end{proof}
+
 \begin{theorem}[Hayashi SSA-equality characterization]
     \label{thm:hayashi_ssa_equality_characterization}
     \lean{hayashi_ssa_equality_characterization}
@@ -1505,14 +1549,14 @@ algebra of a family of jointly invariant states.
     Theorem~\ref{thm:koashi_imoto_single_witness}, and
     Definition~\ref{def:koashi_imoto_mean_ergodic_projection}) supply the
     finite-dimensional operator-algebraic core of the Koashi--Imoto argument.
-    Theorem~\ref{thm:koashi_imoto_family_fixed_point_block_form} also gives a
-    simultaneous algebraic tensor-block form for the invariant family, under
-    the same explicit full-support hypothesis on the common average in place
-    of the joint-support reduction. Normalizing the member-dependent blocks
-    into probabilities and density matrices, and proving the action of the
-    middle-system channel on the common direct-sum factors, remain open. This
-    forward implication therefore remains axiomatic. The biconditional
-    combines the two directions.
+    Theorems~\ref{thm:koashi_imoto_family_fixed_point_block_form} and
+    \ref{thm:koashi_imoto_normalized_family_block_form} give the simultaneous
+    algebraic tensor-block form and its probability-density normalization,
+    under the same explicit full-support hypothesis on the common average in
+    place of the joint-support reduction. The joint-support reduction and the
+    action of the middle-system channel on the common direct-sum factors remain
+    open. This forward implication therefore remains axiomatic. The
+    biconditional combines the two directions.
 
     This equality criterion is cited here as an input for the later MPDO arguments.
     It is the equality criterion needed by Appendix~C of arXiv:1606.00608.
