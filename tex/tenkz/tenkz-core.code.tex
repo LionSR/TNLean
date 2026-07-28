@@ -305,6 +305,21 @@
   tenkz inscribed size l/.style={
       minimum width=\dimexpr
         \tenkz@r@glyphref\tenkz@pitch * 5 / 4\relax},
+  % Canonical atoms use the class reference on both axes.  Compatibility
+  % renderers retain the width-only styles above until their own migration.
+  tenkz canonical size s/.style={
+      minimum width=\dimexpr
+        \tenkz@r@glyphref\tenkz@pitch * 3 / 4\relax,
+      minimum height=\dimexpr
+        \tenkz@r@glyphref\tenkz@pitch * 3 / 4\relax},
+  tenkz canonical size m/.style={
+      minimum width=\tenkz@dim{\tenkz@r@glyphref},
+      minimum height=\tenkz@dim{\tenkz@r@glyphref}},
+  tenkz canonical size l/.style={
+      minimum width=\dimexpr
+        \tenkz@r@glyphref\tenkz@pitch * 5 / 4\relax,
+      minimum height=\dimexpr
+        \tenkz@r@glyphref\tenkz@pitch * 5 / 4\relax},
   tenkz dot size s/.style={
       minimum size=\tenkz@dim{\tenkz@r@clusterdot}},
   tenkz dot size m/.style={

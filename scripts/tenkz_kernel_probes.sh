@@ -229,16 +229,49 @@ grep -Fq 'TENKZ-HULL-BOX-POOL=1' "$WORK/r_hull_live.tex.transcript" || {
   exit 1
 }
 command -v pdftoppm >/dev/null 2>&1 || {
-  echo "FAIL: live-hull pixel gate requires pdftoppm" >&2
+  echo "FAIL: kernel pixel gate requires pdftoppm" >&2
   exit 1
 }
-if ! pdftoppm -singlefile -png -r 300 \
-    "$WORK/r_hull_live.pdf" "$WORK/r_hull_live" >/dev/null 2>&1; then
-  echo "FAIL: live-hull fixture could not be rasterized" >&2
+for pixel_fixture in r_hull_live r_ink_semantics; do
+  if ! pdftoppm -singlefile -png -r 300 \
+      "$WORK/$pixel_fixture.pdf" "$WORK/$pixel_fixture" >/dev/null 2>&1; then
+    echo "FAIL: $pixel_fixture fixture could not be rasterized" >&2
+    exit 1
+  fi
+  [ -f "$WORK/$pixel_fixture.png" ] || {
+    echo "FAIL: $pixel_fixture rasterizer produced no PNG" >&2
+    exit 1
+  }
+done
+grep -Eq '^atom.*\|size=s\|.*\|species=warm($|\|)' \
+  "$WORK/r_ink_semantics.tnlog" || {
+  echo "FAIL: small warm atom semantics were not recorded" >&2
   exit 1
-fi
-[ -f "$WORK/r_hull_live.png" ] || {
-  echo "FAIL: live-hull rasterizer produced no PNG" >&2
+}
+grep -Fq '|dir=to|' "$WORK/r_ink_semantics.tnlog" || {
+  echo "FAIL: forward direction semantics were not recorded" >&2
+  exit 1
+}
+grep -Fq '|dir=from|' "$WORK/r_ink_semantics.tnlog" || {
+  echo "FAIL: reverse direction semantics were not recorded" >&2
+  exit 1
+}
+grep -Eq '^mark.*\|form=enclosure\|.*\|species=warm($|\|)' \
+  "$WORK/r_ink_semantics.tnlog" || {
+  echo "FAIL: mark species semantics were not recorded" >&2
+  exit 1
+}
+grep -Eq '^atom.*\|skin=dots\|species=gamma($|\|)' \
+  "$WORK/r_ink_semantics.tnlog" || {
+  echo "FAIL: ellipsis species semantics were not recorded" >&2
+  exit 1
+}
+cluster_species_count=$(
+  grep -Ec '^atom.*\|cluster-of=quad\|.*\|species=leaf($|\|)' \
+    "$WORK/r_ink_semantics.tnlog" || true
+)
+[ "$cluster_species_count" -eq 4 ] || {
+  echo "FAIL: cluster species semantics did not reach all four child dots" >&2
   exit 1
 }
 PIXEL_CURRENT="$WORK/current-pixels.sha256"
@@ -247,9 +280,10 @@ PIXEL_CURRENT="$WORK/current-pixels.sha256"
 # this script with --snapshot to accept the new raster.
 python3 -c \
   'import hashlib,sys
-data = open(sys.argv[1], "rb").read()
-print(hashlib.sha256(data).hexdigest(), "", "r_hull_live.png")' \
-  "$WORK/r_hull_live.png" >"$PIXEL_CURRENT"
+for path in sys.argv[1:]:
+    data = open(path, "rb").read()
+    print(hashlib.sha256(data).hexdigest(), "", path.rsplit("/", 1)[-1])' \
+  "$WORK/r_hull_live.png" "$WORK/r_ink_semantics.png" >"$PIXEL_CURRENT"
 
 negative="$KERNEL/negative/n_diagonal_port.tex"
 if ( cd "$WORK" &&
@@ -626,7 +660,7 @@ if [ "$MODE" = "--snapshot" ]; then
   cp "$CURRENT" "$GOLDEN"
   cp "$PIXEL_CURRENT" "$PIXEL_GOLDEN"
   echo "PASS: froze $(wc -l <"$GOLDEN" | tr -d ' ') kernel record streams"
-  echo "PASS: froze live-hull pixel baseline"
+  echo "PASS: froze kernel pixel baselines"
   exit "$fail"
 fi
 if ! diff -u "$GOLDEN" "$CURRENT"; then
@@ -635,8 +669,8 @@ if ! diff -u "$GOLDEN" "$CURRENT"; then
 fi
 echo "PASS: $(wc -l <"$GOLDEN" | tr -d ' ') kernel record streams byte-identical"
 if ! diff -u "$PIXEL_GOLDEN" "$PIXEL_CURRENT"; then
-  echo "FAIL: live-hull pixels diverged from their pin" >&2
+  echo "FAIL: kernel pixels diverged from their pins" >&2
   exit 1
 fi
-echo "PASS: live-hull pixels byte-identical"
+echo "PASS: kernel pixels byte-identical"
 exit "$fail"

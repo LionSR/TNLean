@@ -147,10 +147,10 @@ status = "cosmetic-gap"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
 defects = []
-case_sha256 = "7210d80b33c212cf43812d1a89d581ba1571ca8bcd21937dff7e63973aa64a71"
-reviewed = "2026-07-27"
-renderer = "fable-wave-b-acceptance-2026-07-27-200dpi"
-note = "the kernel form LANGUAGE-1.0 section 12.4 fixes for this target: two traced rows, four inter-row shift strings, both crossings declared and rendered under; the author box-turn ink is the mpu-wrap-second skin-pairings property"
+case_sha256 = "f3ea5680b53f1787a563c81ac99ec951f718e9d6ea95fc3df83c0fcf3a5e2cec"
+reviewed = "2026-07-28"
+renderer = "codex-kernel-ink-2026-07-28-200dpi"
+note = "the kernel form LANGUAGE-1.0 section 12.4 fixes for this target: two traced rows, four source-blue/source-red inter-row shift strings, both crossings declared and rendered under; the author box-turn ink is the mpu-wrap-second skin-pairings property"
 
 [[verdict]]
 id = "rmp-ii-mpu-normal-form"
@@ -418,10 +418,10 @@ status = "cosmetic-gap"
 pairing = "verified"
 pairing_by = "codex-pairing-sweep-2026-07-24"
 defects = []
-case_sha256 = "95222124e362a3cd5cabdb41c708bede81c90a547f6264409773ad29c1559203"
-reviewed = "2026-07-27"
-renderer = "fable-wave-b-acceptance-2026-07-27-200dpi"
-note = "the author string realization: c over a at the declared crossing, four quadrant sectors, six labels at their stations; c blue in the sector species where the source paints black, arrowheads recorded as dir but not yet inked"
+case_sha256 = "f39fe6acc9f54a55c5a377f58426c1d5db73ff61532d0e3e8bc62466f5a80a74"
+reviewed = "2026-07-28"
+renderer = "codex-kernel-ink-2026-07-28-200dpi"
+note = "the author string realization: black c over red a at the declared crossing, both source-directed arrowheads, four quadrant sectors, and six labels at their stations"
 
 [[verdict]]
 id = "rmp-iii-a-boundary-algebra-n"
@@ -615,10 +615,10 @@ status = "cosmetic-gap"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
 defects = []
-case_sha256 = "f1e08b4c9dceddd32e2c2dab02db6b3a2706e9fac933cf7a0a8d1bcd341e42b2"
-reviewed = "2026-07-27"
-renderer = "fable-wave-b-acceptance-2026-07-27-200dpi"
-note = "the g string pulls through with its action boxes riding the string over the measured legs on both sides; hue conventions differ"
+case_sha256 = "7759bccc35322e75af52c778724e5bbff93131297b4c65c5e6245b44aa604bf6"
+reviewed = "2026-07-28"
+renderer = "codex-kernel-ink-2026-07-28-200dpi"
+note = "the source-red g string pulls through the black lattice with its action boxes riding the string over the measured legs on both sides"
 
 [[verdict]]
 id = "rmp-iii-a-spt-intertwiner"
@@ -635,9 +635,9 @@ id = "rmp-iii-a-g-injective-projector"
 status = "cosmetic-gap"
 pairing = "wrong-source"
 defects = []
-case_sha256 = "1e7f27cdde08b7f232b7cb497f1da84d31e0abf23450a5eeb061c46dd930aaa0"
-reviewed = "2026-07-27"
-renderer = "fable-wave-b-acceptance-2026-07-27-200dpi"
+case_sha256 = "20c7fa066c431da92e147a549e674fabfc5276e86e305b8c22ffe52f8ce34525"
+reviewed = "2026-07-28"
+renderer = "codex-kernel-ink-2026-07-28-200dpi"
 note = "the pulling-through equality with the g string crossing west/north then east/south and action boxes on the string; g and A labelled per panel at review"
 
 [[verdict]]
@@ -745,10 +745,10 @@ status = "cosmetic-gap"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
 defects = []
-case_sha256 = "43a1b039b03c2da88117f65bd366a77409df88b580ec1d6be39d3ab99d8e0524"
-reviewed = "2026-07-27"
-renderer = "fable-wave-b-acceptance-2026-07-27-200dpi"
-note = "the three strings wind from i down through the b, a, b stations with the under-i detour; hue and pitch differ"
+case_sha256 = "2f2af2e4ff27be82858156cb028510e6b40ba5c18bf11050ef8b90c47d9acc2c"
+reviewed = "2026-07-28"
+renderer = "codex-kernel-ink-2026-07-28-200dpi"
+note = "the three source-red strings wind from i down through the b, a, b stations with the under-i detour; pitch differs"
 
 [[verdict]]
 id = "rmp-iii-b-r-tensor-right"
@@ -767,9 +767,9 @@ status = "cosmetic-gap"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
 defects = []
-case_sha256 = "616c219d5c451894b19126188662978e398b279ae332b40d9ea6347a63f0a036"
-reviewed = "2026-07-27"
-renderer = "fable-wave-b-acceptance-2026-07-27-200dpi"
+case_sha256 = "d11ef6c19d6b1a9b292d2b445f6d0854b887e18dfe65b34c17dd6af8926cdf10"
+reviewed = "2026-07-28"
+renderer = "codex-kernel-ink-2026-07-28-200dpi"
 note = "winding strings restored to the lattice patch with j, b, i, a at their stations; the strands do not cross each other, as the source draws"
 
 [[verdict]]
@@ -778,9 +778,9 @@ status = "cosmetic-gap"
 pairing = "verified"
 pairing_by = "codex-pairing-sweep-2026-07-24"
 defects = []
-case_sha256 = "2f762e187d7fa340dcb72a43f286c157d400874248886c5f2dc3adacd9d9016f"
-reviewed = "2026-07-27"
-renderer = "fable-wave-b-acceptance-2026-07-27-200dpi"
+case_sha256 = "54937a3e9120c8f44d36626ed058ec13731196c311450ae84be2334ac32717f5"
+reviewed = "2026-07-28"
+renderer = "codex-kernel-ink-2026-07-28-200dpi"
 note = "the two strands nest through their bead stations without crossing each other -- the side-by-side against the flattened source shows every meeting occluded by a bead; the old crossing was the previous body's invention"
 
 [[verdict]]
@@ -789,10 +789,10 @@ status = "cosmetic-gap"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
 defects = []
-case_sha256 = "1b6b18c1485c32cb3f160b320601eabd25777912654278b6eeed809adffd711a"
+case_sha256 = "700f88a4f679ef5b9fa633ec57e527945704ea4631aa0b6c4d3a64800fdddbc2"
 reviewed = "2026-07-28"
-renderer = "fable-wave-b-acceptance-2026-07-28-200dpi"
-note = "the strings wind through their bead stations into R_{j,a} with j and i at their corners; hue and the source lattice slant differ"
+renderer = "codex-kernel-ink-2026-07-28-200dpi"
+note = "the source-red strings wind through their bead stations into R_{j,a} with j and i at their corners; the source lattice slant differs"
 
 [[verdict]]
 id = "rmp-iii-b-braid-four"
@@ -800,9 +800,9 @@ status = "cosmetic-gap"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
 defects = []
-case_sha256 = "d7a901828b21cfea11cc56becafee13d38fdacf4ed1de9d2b92e4c1731fba82c"
+case_sha256 = "f3d6d702e5be8e11ba6bae00c3d970172220c7c02eabf878e42860060b882930"
 reviewed = "2026-07-28"
-renderer = "fable-wave-b-acceptance-2026-07-28-200dpi"
+renderer = "codex-kernel-ink-2026-07-28-200dpi"
 note = "both R boxes stacked on the strings with i and j at the rails; the source slants its boxes as parallelograms"
 
 [[verdict]]
@@ -1292,9 +1292,9 @@ status = "cosmetic-gap"
 pairing = "verified"
 pairing_by = "codex-pairing-sweep-2026-07-24"
 defects = []
-case_sha256 = "5d063fdf7744179e73c015568338f3b20f6a92f2c4f52ea864c0588c37036c45"
+case_sha256 = "4ec5a8c617814008b9d70960e1be6f947d6e09263fbdf9ddc1c47b98cf78993a"
 reviewed = "2026-07-28"
-renderer = "fable-wave-b-acceptance-2026-07-28-200dpi"
+renderer = "codex-kernel-ink-2026-07-28-200dpi"
 note = "the g string pulls through and U_g appears on the diagonal, with the action boxes riding the string on both sides"
 
 [[verdict]]
@@ -1313,9 +1313,9 @@ status = "cosmetic-gap"
 pairing = "verified"
 pairing_by = "codex-pairing-sweep-2026-07-24"
 defects = []
-case_sha256 = "2eed9f1865380c16bc26b7979cd4560c188bbea8ba353d9e899a12fe1bed6899"
+case_sha256 = "76d95a3b9f032b696b9d406da4e669278da4e3a236baff6e2cc4f5c05588582d"
 reviewed = "2026-07-28"
-renderer = "fable-wave-b-acceptance-2026-07-28-200dpi"
+renderer = "codex-kernel-ink-2026-07-28-200dpi"
 note = "the g string crosses the site and pulls to the far side, drawn as strings rather than the substituted boxes"
 
 [[verdict]]
