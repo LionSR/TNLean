@@ -66,9 +66,11 @@ recovered states.  The singular-support saturation-to-raw-recovery implication,
 its positive-definite specialization, and the trace-preserving extension of the
 support Petz map are now available. The finite recovered conditional density
 family, its separating effects, and its common preserving channel are also
-formalized. The family-level structural step remains open at the application
-of the joint-support block theorem to that family and the subsequent
-quantum-Markov assembly. The reverse direction is proved from the
+formalized. The joint-support block theorem has now been applied and the
+bipartite marginal reconstructed in the same support coordinates; lifting
+those coordinates to ambient $B$ to complete HJPW equation~(14), proving the
+recovery-dilation block action of equation~(15), and the subsequent
+quantum-Markov assembly remain open. The reverse direction is proved from the
 entropy-additivity sub-lemmas listed below.
 
 \section{The point at issue: only the forward direction is consumed}
@@ -89,13 +91,16 @@ family is also available under a positive-definite common-average hypothesis.
 In the same full-support setting, every preserving channel acts locally on the
 common summands and fixes their common density factors. The joint-support
 reduction is available, and the finite nonzero normalized conditional family
-fixed by the recovered middle-system channel is constructed. Applying the
-joint-support block theorem to this family and assembling the quantum-Markov
-decomposition are still missing. Thus the family-level structural implication
-needed here remains open, which is why the forward direction is treated as an
-external assumption rather than proved. The recovery implication and the
-complementary trace-preserving extension of the support Petz map are no longer
-part of this gap.
+fixed by the recovered middle-system channel is constructed. The joint-support
+block theorem has been applied to this family, and the bipartite marginal has
+been reconstructed in the same coordinates. Lifting the resulting blocks
+to ambient $B$ to complete HJPW equation~(14), proving the recovery-dilation
+block action of equation~(15), and assembling the quantum-Markov decomposition
+are still missing. Thus the family-level structural implication needed here
+remains open, which is why the forward direction is treated as an external
+assumption rather than proved. The recovery implication and the complementary
+trace-preserving extension of the support Petz map are no longer part of this
+gap.
 
 \paragraph{Reverse direction (tractable, currently unused).}
 The implication \eqref{eq:qmc} $\Rightarrow$~\eqref{eq:ssa-eq} --- a state of the
@@ -681,25 +686,30 @@ complete effect family and conditional slices
   \leanid{Matrix.eq_of_conditionalSlice_informationallyCompleteEffect_eq}\\
   \leanid{Matrix.idTensor_recoveredMiddleChannel_traceC_ABC_eq}\\
   \leanid{Matrix.exists_recoveredConditionalPreservingKrausFamily}\\
-  \leanid{Matrix.exists_recoveredConditionalStateBlockForm_preservingBlockAction_jointSupport}.
+  \leanid{Matrix.exists_recoveredConditionalStateBlockForm_preservingBlockAction_jointSupport}\\
+  \leanid{Matrix.exists_recoveredConditionalBipartiteBlockForm_jointSupport}.
 \end{center}
 These declarations construct a finite nonempty family of nonzero normalized
 conditional states fixed by
 $\varphi=\operatorname{Tr}_C\circ\widehat{\mathcal R}$ and prove that the
 finite slices separate bipartite operators. They also apply the joint-support
 block form to this family and retain the support-intertwining and
-preserving-operation action of $\varphi$. Extending the finite block equations
-to the bipartite marginal, lifting them through the recovery channel, and
-assembling the quantum-Markov decomposition remain necessary before the
-forward external assumption can be removed.
+preserving-operation action of $\varphi$. The last declaration rescales active
+slices, proves inactive positive slices vanish, and reconstructs
+$\rho_{AB}$ as $\bigoplus_j\sigma_j\otimes\omega_j$ on the same minimum joint
+support. This is a scope-restricted joint-support variant toward HJPW
+equation~(14), not its ambient-$B$ statement. Extending the coordinates to
+ambient $B$ to complete equation~(14), proving the recovery-dilation block
+action of equation~(15), and the quantum-Markov assembly remain necessary
+before the forward external assumption can be removed.
 
 \section{Verdict}
 
 The strong-subadditivity equality characterization is now split into a proved
 reverse direction and a postulated forward direction. Only the forward
 direction, equality implies quantum-Markov-chain structure, still needs the
-bipartite reconstruction, recovery-channel lifting, and subsequent
-quantum-Markov assembly.
+ambient-$B$ coordinate extension, recovery-dilation block action, and
+subsequent quantum-Markov assembly.
 The full-support invariant-family state decomposition and preserving-operation
 block action are formalized. Source-facing
 completed-channel recovery from equality in data processing is available on
@@ -712,9 +722,11 @@ remaining forward structural direction alone is postulated. The reverse directio
 a block-diagonal product state attains equality, is proved from entropy
 additivity over weighted direct sums and tensor factors together with unitary
 and reindexing invariance. The joint-support block form is now applied to the
-recovered conditional family. Until the bipartite and recovered tripartite
-blocks are assembled into the quantum-Markov decomposition, the forward
-direction remains the irreducible unproved content of this characterization.
+recovered conditional family, and the bipartite marginal is reconstructed in
+the same support coordinates. Extending those coordinates to ambient $B$
+before constructing the recovered tripartite blocks and assembling the
+quantum-Markov decomposition remains part of the irreducible unproved forward
+direction.
 
 \begin{thebibliography}{9}
 
