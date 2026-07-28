@@ -1,0 +1,19 @@
+% Negative regression: a declared skin pairing cannot exceed its host face.
+\documentclass{standalone}
+\usepackage{tenkz}
+\makeatletter
+\ExplSyntaxOn
+\file_input:n { tenkz-kernel.code.tex }
+\ExplSyntaxOff
+\makeatother
+\begin{document}
+\tenkzkernel
+\tndeclare{species}{cool}{hue=source:blue}
+\tndeclare{skin}{bad-slot}{
+  base=box,
+  pairings={90@2 > 0@1 : cool}
+}
+\begin{tenkz}[rows={wire}, cols=1, bonds=none]
+  \tn[skin=bad-slot]{}
+\end{tenkz}
+\end{document}
