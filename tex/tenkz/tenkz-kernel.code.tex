@@ -5188,45 +5188,44 @@
     \quark_if_no_value:NTF \l__tenkz_kernel_r_species_tl
       { \tl_set:Nn #2 { tenkzInk } }
       {
-        \prop_get:NVNTF \g__tenkz_kernel_species_prop
-          \l__tenkz_kernel_r_species_tl
+        \exp_args:NV \__tenkz_kernel_r_species_hue:nN
+          \l__tenkz_kernel_r_species_tl #2
+      }
+  }
+\cs_new_protected:Npn \__tenkz_kernel_r_species_hue:nN #1#2
+  {
+    \prop_get:NnNTF \g__tenkz_kernel_species_prop
+      {#1} \l__tenkz_kernel_r_species_descriptor_tl
+      {
+        \exp_args:NnV \regex_extract_once:nnNTF
+          {
+            (?: \A | , ) \s* hue \s* = \s*
+            (?: \{ \s* )? (?: source: )?
+            ([^,{}\s]+) (?: \s* \} )?
+          }
           \l__tenkz_kernel_r_species_descriptor_tl
+          \l__tenkz_kernel_r_hue_match_seq
           {
-            \exp_args:NnV \regex_extract_once:nnNTF
-              {
-                (?: \A | , ) \s* hue \s* = \s*
-                (?: \{ \s* )? (?: source: )?
-                ([^,{}\s]+) (?: \s* \} )?
-              }
-              \l__tenkz_kernel_r_species_descriptor_tl
-              \l__tenkz_kernel_r_hue_match_seq
-              {
-                \tl_set:Ne #2
-                  { \seq_item:Nn \l__tenkz_kernel_r_hue_match_seq {2} }
-              }
-              {
-                \prop_get:NVNTF \g__tenkz_kernel_species_hue_prop
-                  \l__tenkz_kernel_r_species_tl #2
-                  { }
-                  {
-                    \exp_args:NV \__tenkz_kernel_r_cycle_hue:nN
-                      \l__tenkz_kernel_r_species_tl #2
-                  }
-              }
+            \tl_set:Ne #2
+              { \seq_item:Nn \l__tenkz_kernel_r_hue_match_seq {2} }
           }
           {
-            \str_case:VnF \l__tenkz_kernel_r_species_tl
+            \prop_get:NnNTF \g__tenkz_kernel_species_hue_prop {#1} #2
+              { }
               {
-                {operator} { \tl_set:Nn #2 {tenkzOperator} }
-                {marked}   { \tl_set:Nn #2 {tenkzMarked} }
-                {extra}    { \tl_set:Nn #2 {tenkzExtra} }
-                {passive}  { \tl_set:Nn #2 {tenkzPassive} }
-              }
-              {
-                \exp_args:NV \__tenkz_kernel_r_cycle_hue:nN
-                  \l__tenkz_kernel_r_species_tl #2
+                \__tenkz_kernel_r_cycle_hue:nN {#1} #2
               }
           }
+      }
+      {
+        \str_case:nnF {#1}
+          {
+            {operator} { \tl_set:Nn #2 {tenkzOperator} }
+            {marked}   { \tl_set:Nn #2 {tenkzMarked} }
+            {extra}    { \tl_set:Nn #2 {tenkzExtra} }
+            {passive}  { \tl_set:Nn #2 {tenkzPassive} }
+          }
+          { \__tenkz_kernel_r_cycle_hue:nN {#1} #2 }
       }
   }
 
@@ -6065,7 +6064,20 @@
   {
     \__tenkz_kernel_r_span:nNN {#1}
       \l__tenkz_kernel_r_row_tl \l__tenkz_kernel_r_col_tl
-    \str_case:nnF {#2}
+    \tl_set:Nn \l__tenkz_kernel_r_skin_base_tl {#2}
+    \prop_get:NnNT \g__tenkz_kernel_skin_prop {#2}
+      \l__tenkz_kernel_r_skin_descriptor_tl
+      {
+        \exp_args:NnV \regex_extract_once:nnNT
+          { (?: \A | , ) \s* base \s* = \s* ([A-Za-z][A-Za-z0-9\-]*) }
+          \l__tenkz_kernel_r_skin_descriptor_tl
+          \l__tenkz_kernel_match_seq
+          {
+            \tl_set:Ne \l__tenkz_kernel_r_skin_base_tl
+              { \seq_item:Nn \l__tenkz_kernel_match_seq {2} }
+          }
+      }
+    \str_case:VnF \l__tenkz_kernel_r_skin_base_tl
       {
         {box}  { \tl_set:Nn #3 { box~tensor } }
         {ring} { \tl_set:Nn #3 { on-wire~matrix } }
@@ -6108,6 +6120,111 @@
                   + 2 * \__tenkz_metric_ratio:n {tallover}
                 }
           }
+      }
+  }
+\tl_new:N \l__tenkz_kernel_r_skin_base_tl
+\tl_new:N \l__tenkz_kernel_r_skin_descriptor_tl
+\tl_new:N \l__tenkz_kernel_r_skin_pairings_tl
+\tl_new:N \l__tenkz_kernel_r_skin_from_tl
+\tl_new:N \l__tenkz_kernel_r_skin_to_tl
+\tl_new:N \l__tenkz_kernel_r_skin_species_tl
+
+% A declared skin's pairings are wires between its own ports.  They ink after
+% the silhouette, with the established paper halo, so the ordered stroke is
+% legible both over the glyph outline and where two pairings approach.
+\cs_new_protected:Npn \__tenkz_kernel_r_skin_pairings:nn #1#2
+  {
+    \prop_get:NnNT \g__tenkz_kernel_skin_prop {#2}
+      \l__tenkz_kernel_r_skin_descriptor_tl
+      {
+        \exp_args:NnV \regex_extract_once:nnNT
+          { (?: \A | , ) \s* pairings \s* = \s* \{ ([^{}]*) \} }
+          \l__tenkz_kernel_r_skin_descriptor_tl
+          \l__tenkz_kernel_match_seq
+          {
+            \tl_set:Ne \l__tenkz_kernel_r_skin_pairings_tl
+              { \seq_item:Nn \l__tenkz_kernel_match_seq {2} }
+            \exp_args:NV \clist_map_inline:nn
+              \l__tenkz_kernel_r_skin_pairings_tl
+              { \__tenkz_kernel_r_skin_pairing:nn {#1} {##1} }
+          }
+      }
+  }
+\cs_new_protected:Npn \__tenkz_kernel_r_skin_pairing:nn #1#2
+  {
+    \regex_extract_once:nnNTF
+      {
+        \A \s*
+        ([-+]?(?:[0-9]+(?:\.[0-9]*)?|\.[0-9]+)) @ (\d+)
+        \s* > \s*
+        ([-+]?(?:[0-9]+(?:\.[0-9]*)?|\.[0-9]+)) @ (\d+)
+        \s* : \s* ([A-Za-z][A-Za-z0-9\-]*) \s* \Z
+      }
+      {#2} \l__tenkz_kernel_match_seq
+      {
+        \bool_lazy_and:nnTF
+          {
+            \int_compare_p:nNn
+              { \seq_item:Nn \l__tenkz_kernel_match_seq {3} } = {1}
+          }
+          {
+            \int_compare_p:nNn
+              { \seq_item:Nn \l__tenkz_kernel_match_seq {5} } = {1}
+          }
+          {
+            \tl_set:Ne \l__tenkz_kernel_r_skin_from_tl
+              { \seq_item:Nn \l__tenkz_kernel_match_seq {2} }
+            \tl_set:Ne \l__tenkz_kernel_r_skin_to_tl
+              { \seq_item:Nn \l__tenkz_kernel_match_seq {4} }
+            \tl_set:Ne \l__tenkz_kernel_r_skin_species_tl
+              { \seq_item:Nn \l__tenkz_kernel_match_seq {6} }
+            \exp_args:NV \__tenkz_kernel_r_species_hue:nN
+              \l__tenkz_kernel_r_skin_species_tl
+              \l__tenkz_kernel_r_hue_tl
+            \exp_args:NV \__tenkz_render_skin_pairing:nn
+              \l__tenkz_kernel_r_hue_tl
+              {
+                (
+                  #1.
+                  \fp_eval:n
+                    {
+                      \l__tenkz_kernel_r_skin_from_tl
+                      + \l__tenkz_kernel_r_ink_turn_tl
+                    }
+                )
+                to
+                  [
+                    out =
+                      \fp_eval:n
+                        {
+                          \l__tenkz_kernel_r_skin_from_tl - 180
+                          + \l__tenkz_kernel_r_ink_turn_tl
+                        } ,
+                    in =
+                      \fp_eval:n
+                        {
+                          \l__tenkz_kernel_r_skin_to_tl + 180
+                          + \l__tenkz_kernel_r_ink_turn_tl
+                        }
+                  ]
+                (
+                  #1.
+                  \fp_eval:n
+                    {
+                      \l__tenkz_kernel_r_skin_to_tl
+                      + \l__tenkz_kernel_r_ink_turn_tl
+                    }
+                )
+              }
+          }
+          {
+            \msg_error:nnee {tenkz}{kernel-render-todo}
+              { skin~pairing~slot~other~than~1 } {#1}
+          }
+      }
+      {
+        \msg_error:nnee {tenkz}{kernel-render-todo}
+          { malformed~skin~pairing~'#2' } {#1}
       }
   }
 
@@ -6164,6 +6281,8 @@
               { $ \use:c {tenkz@labelsize} \tl_use:N \l__tenkz_kernel_r_b_tl $ }
           }
       }
+    \exp_args:NnV \__tenkz_kernel_r_skin_pairings:nn
+      {#1} \l__tenkz_kernel_r_tl
   }
 \tl_new:N \l__tenkz_kernel_r_ink_turn_tl
 % #1 typeset by a record whose skin the frame has turned by the angle in

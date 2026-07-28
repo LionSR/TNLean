@@ -87,8 +87,8 @@
   }
 
 % ---------- skins ------------------------------------------------------------
-% The six kernel skins resolve to the calibrated styles of tenkz-core; a
-% skin is a silhouette, never new ink semantics.
+% The six kernel base skins resolve to the calibrated styles of tenkz-core.
+% A declared skin adds only the own-port pairing primitive below.
 \cs_new:Npn \__tenkz_render_skin_style:n #1
   {
     \str_case:nnF {#1}
@@ -101,6 +101,23 @@
         {none} { draw = none , fill = none , inner~sep = 0pt , minimum~size = 0pt }
       }
       { \msg_expandable_error:nnn {tenkz}{render-skin} {#1} tensor }
+  }
+
+% A declared skin's own-port wire is drawn over its base glyph.  Its paper
+% halo both clears the glyph outline and keeps later ordered pairings distinct.
+\cs_new_protected:Npn \__tenkz_render_skin_pairing:nn #1#2
+  {
+    \__tenkz_ink_path:nn
+      {
+        draw = #1 ,
+        line~width = \__tenkz_dim:n {wirewidth} ,
+        preaction =
+          {
+            draw = tenkzPaper ,
+            line~width = \__tenkz_dim:n {emphwidth}
+          }
+      }
+      {#2}
   }
 
 % Draw one atom: #1 skin word, #2 placement id, #3 label.  Coordinates come

@@ -1,0 +1,27 @@
+%% Kernel fixture: declared skins resolve their base and ink ordered own-port
+%% pairings over the glyph with their declared species hues.
+\documentclass{standalone}
+\usepackage{tenkz}
+\makeatletter
+\ExplSyntaxOn
+\file_input:n { tenkz-kernel.code.tex }
+\ExplSyntaxOff
+\makeatother
+\begin{document}
+\tenkzkernel
+\tndeclare{species}{warm}{hue=source:red}
+\tndeclare{species}{cool}{hue=source:blue}
+\tndeclare{skin}{shift-right}{
+  base=box,
+  pairings={90@1 > 0@1 : cool, 270@1 > 180@1 : warm}
+}
+\tndeclare{skin}{shift-left}{
+  base=box,
+  pairings={90@1 > 180@1 : cool, 270@1 > 0@1 : warm}
+}
+\begin{tenkz}[rows={wire}, cols=3, bonds=none]
+  \tn[at=(1,1), skin=shift-right]{}
+  \tn[at=(1,2), skin=shift-left]{}
+  \tn[at=(1,3), skin=shift-right]{}
+\end{tenkz}
+\end{document}
