@@ -1825,6 +1825,52 @@ algebra of a family of jointly invariant states.
     the restriction and block-action clauses for the preserving operation.
 \end{proof}
 
+\begin{theorem}[Recovered bipartite blocks on the joint support]
+    \label{thm:hjpw_recovered_bipartite_joint_support_blocks}
+    \lean{Matrix.exists_recoveredConditionalBipartiteBlockForm_jointSupport}
+    \leanok
+    \uses{thm:hjpw_recovered_conditional_joint_support_blocks,
+        thm:hjpw_finite_conditional_slice_separation}
+    Let $\rho_{ABC}$ be a tripartite density matrix attaining equality in
+    strong subadditivity, and let $V$ be the support isometry and
+    $(e,U,\sigma_j)$ the direct-sum coordinates of
+    Theorem~\ref{thm:hjpw_recovered_conditional_joint_support_blocks}. Put
+    $W=\mathbf 1_A\otimes V$. Then
+    \begin{align}
+        W\bigl(W^\dagger\rho_{AB}W\bigr)W^\dagger
+        &={}\rho_{AB}.
+    \end{align}
+    In the same support coordinates there are positive, not necessarily
+    normalized operators $\omega_j$ such that
+    \begin{align}
+        (\mathbf 1_A\otimes U)^\dagger
+        W^\dagger\rho_{AB}W
+        (\mathbf 1_A\otimes U)
+        &={}\bigoplus_j\sigma_j\otimes\omega_j,
+        &
+        \sum_j\tr\omega_j&=1.
+    \end{align}
+    The tensor factors are written in the reverse order from HJPW. The block
+    equation is on the minimum joint supporting subspace; it does not assert
+    an ambient direct-sum equivalence on subsystem $B$.
+
+    This is HJPW Theorem~6, equation~(14), lines 499--502. Equation~(15),
+    which concerns the recovery-dilation block action, remains a later step.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Rescale the normalized equations for the active separating effects to
+    their unnormalized conditional slices. A positive slice associated with
+    an inactive effect has trace zero and therefore vanishes. The finite
+    separating family then reconstructs $\rho_{AB}$ through
+    $\mathbf 1_A\otimes V$. In the transformed support coordinates, take
+    $\omega_j$ to be the partial trace over the common factor of the
+    $j$-th principal block. Positivity follows from positivity of principal
+    blocks and of partial trace. Applying separation once more gives the
+    displayed direct-sum equation, and taking traces gives the normalization.
+\end{proof}
+
 \begin{theorem}[Hayashi SSA-equality characterization]
     \label{thm:hayashi_ssa_equality_characterization}
     \lean{hayashi_ssa_equality_characterization}
@@ -1875,11 +1921,12 @@ algebra of a family of jointly invariant states.
     the finite replacement for varying all effects.
     Theorem~\ref{thm:hjpw_recovered_conditional_joint_support_blocks} applies
     the joint-support block form and preserving-operation action to this
-    recovered family. Extending these block equations to the bipartite
-    marginal and lifting them through the recovery channel to assemble the
+    recovered family.
+    Theorem~\ref{thm:hjpw_recovered_bipartite_joint_support_blocks}
+    reconstructs the bipartite marginal in the same support coordinates.
+    Lifting these blocks through the recovery channel and assembling the
     quantum-Markov decomposition remain open. This forward implication
-    therefore remains axiomatic. The biconditional combines the two
-    directions.
+    therefore remains axiomatic. The biconditional combines the two directions.
 
     This equality criterion is cited here as an input for the later MPDO arguments.
     It is the equality criterion needed by Appendix~C of arXiv:1606.00608.
