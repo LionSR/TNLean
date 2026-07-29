@@ -67,10 +67,10 @@ For MPDO renormalization fixed points:
   can be assembled into the outer direct sum, and the BNT SAL construction
   supplies one such family under its projector, closure, inverse, word-span,
   and sectorwise-SAL hypotheses. The active factor supports now give the
-  canonical physical restriction without unused complementary directions.
-  Proposition `prop3to4` remains partial because positivity of the compressed
-  neighboring operators and the final assembly from exactly its five printed
-  blockwise identities have not yet been proved.
+  canonical physical restriction without unused complementary directions,
+  and the compressed neighboring operators remain positive by explicit
+  congruence. Proposition `prop3to4` remains partial because the final assembly
+  from exactly its five printed blockwise identities has not yet been proved.
 - `cpgsv17_mpdo_sal_zcl_eta_local_structure.tex` records the missing
   coherent positive choice for the inverse-map neighboring operators in
   Appendix C.2. The comparison with the conjugated Hayashi decomposition,
