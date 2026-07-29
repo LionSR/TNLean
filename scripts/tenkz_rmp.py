@@ -183,7 +183,7 @@ INK_SCOPE_TOKEN = re.compile(
     r"|\\end\s*\{(?P<end>[^{}]+)\}"
     r"|\\begingroup\b|\\endgroup\b|\\bgroup\b|\\egroup\b"
     r"|\\\[|\\\]|\\\(|\\\)"
-    r"|(?P<dollar>\${1,2})"
+    r"|(?P<dollar>\$+)"
     r"|\\tnpic\b|\\tntree\b"
     r"|(?P<cell>&)|[{}]"
 )
@@ -233,15 +233,23 @@ def used_ink_environment_families(body: str) -> set[str]:
         elif text in {r"\endgroup", r"\egroup", r"\]", r"\)", "}"}:
             pop_scope()
         elif (dollar := token.group("dollar")) is not None:
-            if dollar_scope[-1] is None:
-                push_scope(dollar=dollar)
-            elif dollar_scope[-1] == dollar:
-                pop_scope()
-            elif dollar_scope[-1] == "$" and dollar == "$$":
-                # In $a$$b$, the first dollar of the adjacent pair closes the
-                # first inline group and the second opens the next one.
-                pop_scope()
-                push_scope(dollar="$")
+            remaining = len(dollar)
+            while remaining:
+                if dollar_scope[-1] is None:
+                    delimiter = "$$" if remaining >= 2 else "$"
+                    push_scope(dollar=delimiter)
+                    remaining -= len(delimiter)
+                elif dollar_scope[-1] == "$":
+                    pop_scope()
+                    remaining -= 1
+                elif remaining >= 2:
+                    pop_scope()
+                    remaining -= 2
+                else:
+                    # A lone math shift inside display math is invalid TeX.
+                    # Consume it without corrupting the surrounding scope;
+                    # compilation reports the source error independently.
+                    remaining -= 1
         elif (
             token.group("cell") is not None
             or token.group("rowbreak") is not None
