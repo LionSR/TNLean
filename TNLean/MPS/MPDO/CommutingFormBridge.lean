@@ -25,12 +25,11 @@ Consequently, `MPOTensor.nonempty_etaLocalStructureData_of_isSAL` constructs
 the eta-local structure from injectivity and SAL alone. Zero correlation length
 is not used in Proposition C.8; it enters only in the later
 single-bond commuting-form-with-ZCL and RFP consequences. The source GSNNCH
-definition is recorded in `GSNNCHData`. Later modules construct orthogonal-sector
-direct sums with natural multiplicities and derive the sectors from projector
-selection and sectorwise SAL. What remains open is a theorem deriving these
-projections and supported bonds from the five printed blockwise identities of
-Proposition `prop3to4`. See
-docs/paper-gaps/cpsv16_gsnnch_sector_decomposition.tex.
+definition is recorded in `GSNNCHData`. Later results construct orthogonal-sector
+direct sums with natural multiplicities. Under the standing Case II positivity,
+positive-dimension, and simultaneous biCF assumptions, the five printed
+blockwise identities of Proposition `prop3to4` yield the required supported
+bonds; fixed-length rescaling then accommodates arbitrary BNT copy weights.
 
 ## Main declarations
 
@@ -232,12 +231,11 @@ single-bond commuting-product condition with ZCL.
 Source: arXiv:1606.00608, Appendix C.2, Proposition 3to4, lines 1571--1593:
 the neighboring operators give a commuting nearest-neighbor product form.
 
-**Scope restriction (single-bond presentation):** This file proves only the
-one-sector presentation. Later modules construct the direct sum from supplied
-orthogonal sectors with natural multiplicities, but no theorem derives those
-projections and supported bonds from exactly the five printed blockwise
-identities of Proposition `prop3to4`. See
-docs/paper-gaps/cpsv16_gsnnch_sector_decomposition.tex. -/
+**One-sector scope:** This theorem records only the single-bond presentation.
+Under the standing Case II assumptions, the five printed blockwise identities
+of Proposition `prop3to4` also determine the supported orthogonal sectors and,
+after fixed-length coefficient rescaling, the full direct sum with natural
+multiplicities. -/
 theorem hasCommutingBondProductWithZCL
     (data : EtaLocalStructureData M) (hZCL : IsZCL M) :
     HasCommutingBondProductWithZCL M :=
