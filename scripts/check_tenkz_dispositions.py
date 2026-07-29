@@ -61,6 +61,8 @@ DEAD_KEYS = (
     "label at",
     "poly",
     "bond dir",
+    "up",
+    "down",
 )
 SUGAR_COMMANDS = (
     "tnX",
@@ -93,9 +95,17 @@ def occurrences(path: Path) -> list[tuple[int, str]]:
 
 
 def normalized_environment_spacing(source: str) -> str:
-    """Normalize TeX whitespace that the shared construct scanner omits."""
-    source = re.sub(r"\\begin\s+\{", r"\\begin{", source)
-    return re.sub(r"\\end\s+\{", r"\\end{", source)
+    """Normalize tenkz tokens without changing source length or line count."""
+    pattern = re.compile(
+        r"\\(begin|end)(\s*)\{(\s*)"
+        r"(tenkz(?:eq|free|cd|lattice|planes)?)(\s*)\}"
+    )
+
+    def replace(match: re.Match[str]) -> str:
+        whitespace = match.group(2) + match.group(3) + match.group(5)
+        return rf"\{match.group(1)}{{{match.group(4)}}}" + whitespace
+
+    return pattern.sub(replace, source)
 
 
 def scan_inventory_constructs(source: str) -> list[Construct]:

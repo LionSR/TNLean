@@ -52,12 +52,12 @@ separate public-surface occurrence and therefore appears separately.
 
 | Source | Preserve | Codemod | Redraw |
 |---|---|---|---|
-| `ch02_mps.tex` | — | L24, 200, 272 `tenkz` → `C-policy+C-record` | L54, 171, 815, 941 `tenkz` → `C-policy+C-record+R-record` |
-| `ch03_single.tex` | — | L250 `tenkz` → `C-policy+C-record` | — |
+| `ch02_mps.tex` | — | L200 `tenkz` → `C-policy+C-record` | L24, 54, 171, 272, 815, 941 `tenkz` → `C-policy+C-record+R-record` |
+| `ch03_single.tex` | — | — | L250 `tenkz` → `C-policy+C-record+R-record` |
 | `ch04_channels_choi_foundations.tex` | — | — | L86 `tenkz` → `C-policy+C-record+R-record` |
-| `ch11_fundamental_theorem_core.tex` | — | L41, 45 `tenkz` → `C-policy+C-record` | — |
-| `ch12_symmetry_string_order.tex` | — | L367, 396, 410, 453, 468, 513, 549, 563, 871 `tenkz` → `C-policy+C-record` | L73 `tenkz` → `C-policy+C-record+C-species+R-record`<br>L39, 352, 499, 866 `tenkz` → `C-record+C-species+R-record` |
-| `ch12_symmetry_virtual_and_cohomology.tex` | — | L195, 328, 456, 469 `tenkz` → `C-policy+C-record` | L180 `tenkz` → `C-record+C-species+R-record` |
+| `ch11_fundamental_theorem_core.tex` | — | — | L41, 45 `tenkz` → `C-policy+C-record+R-record` |
+| `ch12_symmetry_string_order.tex` | — | L396, 410, 453, 468, 549, 563 `tenkz` → `C-policy+C-record` | L73 `tenkz` → `C-policy+C-record+C-species+R-record`<br>L367, 513, 871 `tenkz` → `C-policy+C-record+R-record`<br>L39, 352, 499, 866 `tenkz` → `C-record+C-species+R-record` |
+| `ch12_symmetry_virtual_and_cohomology.tex` | — | — | L195, 328, 456, 469 `tenkz` → `C-policy+C-record+R-record`<br>L180 `tenkz` → `C-record+C-species+R-record` |
 | `ch13_parent_hamiltonian_commuting_gap_appendix_b_commutation.tex` | — | — | L54 `tenkzfree` → `R-free+R-record` |
 | `ch13_parent_hamiltonian_commuting_gap_appendix_b_supports.tex` | — | — | L275 `tenkzfree` → `R-free+R-record` |
 | `ch13_parent_hamiltonian_injective_ground_spaces_intersection_property.tex` | — | — | L97 `tenkz` → `C-policy+C-record+R-record` |
@@ -65,31 +65,31 @@ separate public-surface occurrence and therefore appears separately.
 | `ch14_correlations.tex` | — | — | L67 `tenkz` → `C-policy+C-record+R-record` |
 | `ch16_channel_representations_choi_and_kraus.tex` | — | L290 `tenkz` → `C-policy+C-record` | — |
 | `ch16_channel_representations_dilations_and_ordered_cp.tex` | — | L20 `tenkz` → `C-policy+C-record` | — |
-| `ch20_mpdo_canonical_forms_first_site_contractions.tex` | — | L232, 238, 336 `tenkz` → `C-policy+C-record` | L153, 159, 433 `tenkz` → `C-policy+C-record+R-record`<br>L177, 182 `tenkz` → `R-record` |
+| `ch20_mpdo_canonical_forms_first_site_contractions.tex` | — | L232, 238 `tenkz` → `C-policy+C-record` | L153, 159, 336, 433 `tenkz` → `C-policy+C-record+R-record`<br>L177, 182 `tenkz` → `R-record` |
 | `ch20_mpdo_canonical_forms_intro_finite_separation.tex` | — | L104 `tenkz` → `C-policy`<br>L108 `tenkz` → `C-policy+C-record` | L218 `tenkz` → `C-record+R-record`<br>L224, 359, 391, 465 `tenkzfree` → `R-free+R-record` |
 | `ch20_mpdo_canonical_forms_positivity_gram_normalization.tex` | — | — | L605, 610 `tenkz` → `C-policy+C-record+R-record` |
-| `ch20_mpdo_foundations.tex` | — | L16, 124 `tenkz` → `C-policy+C-record` | L370 `tenkz` → `C-policy+C-record+R-record`<br>L374 `tenkz` → `C-record+R-record` |
+| `ch20_mpdo_foundations.tex` | — | — | L16, 124, 370 `tenkz` → `C-policy+C-record+R-record`<br>L374 `tenkz` → `C-record+R-record` |
 | `ch21_mpdo_rfp_algebra_tower.tex` | — | — | L78, 93 `tenkz` → `C-policy+C-record+R-record` |
 | `ch21_mpdo_rfp_blocked_rfp_positive_blocking_and_sector_algebra.tex` | — | — | L18, 21 `tnpic` → `C-picture+C-policy+C-record+R-record` |
 | `ch21_mpdo_rfp_foundations.tex` | — | L63, 67 `tenkz` → `C-policy+C-record` | — |
 | `ch21_mpdo_rfp_fusion_isometries_complete_zipper_coherence.tex` | — | L215, 219, 292, 293, 294, 295, 296 `tntree` → `C-tree` | L291 `tenkzcd` → `C-tree+R-cd+R-record`<br>L410 `tenkzcd` → `R-cd+R-record` |
 | `ch21_mpdo_rfp_fusion_isometries_fixed_final_comparison.tex` | — | L572, 577 `tntree` → `C-tree` | — |
-| `ch21_mpdo_rfp_fusion_isometries_foundations.tex` | — | L407 `tnpic` → `C-picture+C-policy+C-record`<br>L400, 641, 654, 669 `tnpic` → `C-picture+C-record` | L647, 661, 674 `tnpic` → `C-picture+C-record+R-record` |
+| `ch21_mpdo_rfp_fusion_isometries_foundations.tex` | — | — | L407 `tnpic` → `C-picture+C-policy+C-record+R-record`<br>L400, 641, 647, 654, 661, 669, 674 `tnpic` → `C-picture+C-record+R-record` |
 | `ch21_mpdo_rfp_fusion_isometries_product_laws.tex` | — | L420, 422 `tntree` → `C-tree` | L283 `tenkzfree` → `R-free+R-record`<br>L38, 50 `tnpic` → `C-picture+C-policy+C-record+R-record` |
 | `ch21_mpdo_rfp_renormalization.tex` | — | — | L734 `tenkzcd` → `C-picture+C-policy+C-record+R-cd+R-record`<br>L736, 739, 742, 745 `tnpic` → `C-picture+C-policy+C-record+R-record` |
-| `ch21_mpdo_rfp_simple_local_closed_sector_contractions.tex` | — | L284 `tenkz` → `C-policy+C-record` | L279 `tenkz` → `C-policy+C-record+R-record` |
-| `ch21_mpdo_rfp_simple_local_inverse_map_factorization.tex` | — | L131 `tenkz` → `C-policy+C-record`<br>L485 `tnpic` → `C-picture+C-policy+C-record` | L80, 265, 270, 275, 282, 287 `tenkz` → `C-policy+C-record+R-record`<br>L715, 719 `tenkz` → `C-policy+R-record`<br>L70, 709 `tenkz` → `C-record+R-record`<br>L43, 48, 53 `tenkz` → `R-record` |
+| `ch21_mpdo_rfp_simple_local_closed_sector_contractions.tex` | — | — | L279, 284 `tenkz` → `C-policy+C-record+R-record` |
+| `ch21_mpdo_rfp_simple_local_inverse_map_factorization.tex` | — | — | L80, 131, 265, 270, 275, 282, 287 `tenkz` → `C-policy+C-record+R-record`<br>L715, 719 `tenkz` → `C-policy+R-record`<br>L70, 709 `tenkz` → `C-record+R-record`<br>L43, 48, 53 `tenkz` → `R-record`<br>L485 `tnpic` → `C-picture+C-policy+C-record+R-record` |
 | `ch21_mpdo_rfp_simple_local_neighboring_bond_contractions.tex` | — | — | L731, 740, 747, 754, 827, 833 `tenkz` → `C-policy+C-record+R-record` |
 | `ch21_mpdo_rfp_simple_local_normalized_preparations_controlled_partial_traces.tex` | — | — | L427 `tenkzcd` → `R-cd+R-record` |
 | `ch21_mpdo_rfp_simple_local_primitivity_active_trace_matrix.tex` | — | — | L188 `tenkz` → `C-record+R-record` |
 | `ch21_mpdo_rfp_simple_local_refinement_channels_physical_coordinates.tex` | — | — | L324, 329, 334, 344, 352, 357 `tnpic` → `C-picture+C-policy+C-record+R-record` |
 | `ch21_mpdo_rfp_simple_local_refinement_channels_sector_coordinates.tex` | — | — | L160, 175 `tenkzcd` → `R-cd+R-record` |
 | `ch21_mpdo_rfp_simple_local_structure_capstone.tex` | — | L443 `tenkz` → `C-policy+C-record`<br>L259 `tenkz` → `C-record` | L447, 453, 458 `tenkz` → `C-record+R-record` |
-| `ch23_algebraic_ft_foundations.tex` | — | L47, 51, 167, 371, 375, 387, 391, 433, 437, 441, 450, 454 `tenkz` → `C-policy+C-record` | L171 `tenkz` → `C-record+R-record` |
+| `ch23_algebraic_ft_foundations.tex` | — | — | L47, 51, 167, 371, 375, 387, 391, 433, 437, 441, 450, 454 `tenkz` → `C-policy+C-record+R-record`<br>L171 `tenkz` → `C-record+R-record` |
 | `ch24_peps_ft.tex` | — | — | L53, 96 `tenkzfree` → `R-free+R-record`<br>L25 `tenkzlattice` → `C-policy+R-lattice+R-record` |
 | `ch24_peps_ft_balanced_edge_scalars.tex` | — | — | L18 `tenkzfree` → `C-species+R-free+R-record` |
 | `ch24_peps_ft_edge_kernel_gauges_absorption_scalar_comparison.tex` | — | — | L83, 115, 329, 347, 365, 623, 647 `tenkzfree` → `C-species+R-free+R-record`<br>L316 `tenkzfree` → `R-free+R-record` |
-| `ch24_peps_ft_edge_kernel_gauges_insertion_algebra_local_gauges.tex` | — | L52, 56 `tnpic` → `C-picture+C-policy+C-record` | — |
+| `ch24_peps_ft_edge_kernel_gauges_insertion_algebra_local_gauges.tex` | — | — | L52, 56 `tnpic` → `C-picture+C-policy+C-record+R-record` |
 | `ch24_peps_ft_edge_kernel_gauges_kernel_descent_recovery.tex` | — | — | L174, 196, 218, 445, 467, 489 `tenkzfree` → `C-species+R-free+R-record` |
 | `ch24_peps_ft_edge_middle.tex` | — | L278 `tnpic` → `C-picture+C-policy` | L242 `tenkzfree` → `R-free+R-record` |
 | `ch24_peps_ft_foundations.tex` | — | — | L48, 384 `tenkzfree` → `R-free+R-record` |
@@ -101,8 +101,8 @@ separate public-surface occurrence and therefore appears separately.
 | `ch24_peps_ft_normal_union.tex` | — | — | L213, 270, 301, 327, 358 `tenkzfree` → `R-free+R-record` |
 | `ch24_peps_ft_region_transfer_covariance.tex` | — | L350, 354, 358, 362 `tnpic` → `C-picture+C-policy` | — |
 | `ch24_peps_ft_torus_translation_and_reference_windows.tex` | — | — | L22 `tenkzlattice` → `C-species+R-lattice+R-record` |
-| `ch26_mps_rfp_normal_isometry_canonical_forms.tex` | — | L452, 456 `tenkz` → `C-policy+C-record` | L580 `tenkz` → `C-policy+R-record`<br>L585 `tenkzfree` → `R-free+R-record` |
-| `ch26_mps_rfp_physical_blocking.tex` | — | L130, 155 `tenkz` → `C-policy+C-record` | L134, 149 `tenkz` → `C-record+R-record` |
+| `ch26_mps_rfp_normal_isometry_canonical_forms.tex` | — | — | L452, 456 `tenkz` → `C-policy+C-record+R-record`<br>L580 `tenkz` → `C-policy+R-record`<br>L585 `tenkzfree` → `R-free+R-record` |
+| `ch26_mps_rfp_physical_blocking.tex` | — | — | L130, 155 `tenkz` → `C-policy+C-record+R-record`<br>L134, 149 `tenkz` → `C-record+R-record` |
 
 ### Blueprint reconciliation
 
@@ -121,8 +121,8 @@ separate public-surface occurrence and therefore appears separately.
 | Disposition | Occurrences |
 |---|---:|
 | preserve | 0 |
-| codemod | 74 |
-| redraw | 133 |
+| codemod | 33 |
+| redraw | 174 |
 | **Total** | **207** |
 
 The raw count is 166 environment openings plus 41 command occurrences,
@@ -142,8 +142,8 @@ top-level-source census so a shared input is not counted multiple times.
 | Disposition | Fixtures |
 |---|---:|
 | preserve | 10 |
-| codemod | 49 |
-| redraw | 205 |
+| codemod | 40 |
+| redraw | 214 |
 | **Total** | **264** |
 
 Of the 264 top-level fixtures, 246 directly or indirectly open a tenkz
@@ -155,15 +155,15 @@ consumers, and 5 contain no tenkz public-surface construct.
 - `P-grid`: `iso_h.tex` · `p3_probe_opop.tex` · `rv4061_flatonly.tex` · `trace_warn.tex` · `zz_wirescan.tex`
 - `P-none`: `geom.tex` · `plane_experiment.tex` · `zz_geomdag.tex` · `zz_geomframe.tex` · `zz_geomsupport.tex`
 
-### Codemod fixtures (49)
+### Codemod fixtures (40)
 
 - `C-declare`: `p_species.tex`
 - `C-policy`: `hdr.tex` · `iso_i.tex` · `iso_k.tex` · `p3_bisect_a.tex` · `p3_bisect_d.tex` · `p3_pitch_probe.tex` · `rv4061_ketptrace.tex`
-- `C-policy+C-record`: `audit3.tex` · `audit4.tex` · `channel_test.tex` · `g06_stageB.tex` · `hard01_v2.tex` · `hard02_v2.tex` · `iso_j.tex` · `lrbox_probe.tex` · `p3_bond_insertion.tex` · `p3_gauge.tex` · `p3_lemma1.tex` · `p3_trace_word.tex` · `p3_word.tex` · `p_newcup.tex` · `part_B1.tex` · `part_B2.tex` · `part_B3.tex` · `rv4061_cellset.tex` · `rv4061_cuporder.tex` · `rv4061_ex_canonical-channel.tex` · `t2_lassodef.tex` · `t2_lassodef_v2.tex` · `t2_twoshift.tex`
+- `C-policy+C-record`: `g06_stageB.tex` · `hard01_v2.tex` · `p3_bond_insertion.tex` · `p3_gauge.tex` · `p3_lemma1.tex` · `p3_trace_word.tex` · `p3_word.tex` · `p_newcup.tex` · `part_B3.tex` · `rv4061_cellset.tex` · `rv4061_cuporder.tex` · `t2_lassodef.tex` · `t2_lassodef_v2.tex` · `t2_twoshift.tex`
 - `C-record`: `hard11_v3.tex` · `hard11_v4.tex` · `iso_a.tex` · `iso_b.tex` · `iso_d.tex` · `iso_e.tex` · `iso_f.tex` · `iso_g.tex` · `iso_t.tex` · `t2_staircase.tex`
 - `C-tree`: `gr_t2_fsymbol.tex` · `hard11_v2.tex` · `p3_eq5_fsymbol.tex` · `p3_eq5_v2.tex` · `p4067_braced.tex` · `t2_fusion.tex` · `t2_pentagon5.tex` · `tree_test.tex`
 
-### Redraw fixtures (205)
+### Redraw fixtures (214)
 
 - `C-declare+C-picture+C-policy+C-record+R-free+R-record`: `adv_leak.tex`
 - `C-declare+C-policy+C-record+C-species+R-free+R-lattice+R-record`: `g06_stageC.tex`
@@ -177,7 +177,7 @@ consumers, and 5 contain no tenkz public-surface construct.
 - `C-policy+C-record+R-free+R-lattice+R-plane+R-record`: `planes_keys_test.tex`
 - `C-policy+C-record+R-free+R-record`: `gr_t1_fusion.tex` · `hard01_ortho.tex` · `hard02_ALdef.tex` · `hard03_rdm.tex` · `hard05_OL.tex` · `hard12_zcl.tex` · `rv4061_ex_atoms-keys.tex` · `t2_mpo.tex` · `zz_frame_rotation.tex`
 - `C-policy+C-record+R-lattice+R-record`: `g06_stageA.tex`
-- `C-policy+C-record+R-record`: `atoms_test.tex` · `audit1.tex` · `audit_open.tex` · `boundary_test.tex` · `cups_edge.tex` · `cups_test.tex` · `gr_t5_zipper.tex` · `gr_t8_sum.tex` · `hard01_v3.tex` · `hard03_v3.tex` · `hard04_v3.tex` · `hard05_v2.tex` · `hard05_v4.tex` · `hard06_v2.tex` · `hard06_v3.tex` · `hard06_v4.tex` · `hard08_mpu.tex` · `hard08_v2.tex` · `hard08_v3.tex` · `hard10_v2.tex` · `hard12_v2.tex` · `hard12_v3.tex` · `modes_dot_baseline.tex` · `modes_test.tex` · `p3_eq08.tex` · `p3_eq09.tex` · `p3_eq4_ortho.tex` · `p3_eq4_v2.tex` · `p3_multibond.tex` · `p3_multibond2.tex` · `part_B4.tex` · `regress_x_pbc.tex` · `rev4075_sig.tex` · `rv4061_ex_boundary-doctrine.tex` · `rv4061_ex_cups-channels.tex` · `rv4061_ex_grid-mpo-stress.tex` · `rv_probe.tex` · `stress.tex` · `t2_ared.tex` · `t2_ared_loop.tex` · `t2_mpublock.tex` · `t2_mpucond.tex` · `t2_mpuflow.tex` · `t2_olvert.tex` · `t2_purifyO.tex` · `t2_rhoR.tex` · `t2_sv17.tex`
+- `C-policy+C-record+R-record`: `atoms_test.tex` · `audit1.tex` · `audit3.tex` · `audit4.tex` · `audit_open.tex` · `boundary_test.tex` · `channel_test.tex` · `cups_edge.tex` · `cups_test.tex` · `gr_t5_zipper.tex` · `gr_t8_sum.tex` · `hard01_v3.tex` · `hard02_v2.tex` · `hard03_v3.tex` · `hard04_v3.tex` · `hard05_v2.tex` · `hard05_v4.tex` · `hard06_v2.tex` · `hard06_v3.tex` · `hard06_v4.tex` · `hard08_mpu.tex` · `hard08_v2.tex` · `hard08_v3.tex` · `hard10_v2.tex` · `hard12_v2.tex` · `hard12_v3.tex` · `iso_j.tex` · `lrbox_probe.tex` · `modes_dot_baseline.tex` · `modes_test.tex` · `p3_eq08.tex` · `p3_eq09.tex` · `p3_eq4_ortho.tex` · `p3_eq4_v2.tex` · `p3_multibond.tex` · `p3_multibond2.tex` · `part_B1.tex` · `part_B2.tex` · `part_B4.tex` · `regress_x_pbc.tex` · `rev4075_sig.tex` · `rv4061_ex_boundary-doctrine.tex` · `rv4061_ex_canonical-channel.tex` · `rv4061_ex_cups-channels.tex` · `rv4061_ex_grid-mpo-stress.tex` · `rv_probe.tex` · `stress.tex` · `t2_ared.tex` · `t2_ared_loop.tex` · `t2_mpublock.tex` · `t2_mpucond.tex` · `t2_mpuflow.tex` · `t2_olvert.tex` · `t2_purifyO.tex` · `t2_rhoR.tex` · `t2_sv17.tex`
 - `C-policy+R-free+R-lattice+R-record`: `hard07_peps.tex`
 - `C-policy+R-free+R-record`: `gr_t6_leftinv.tex`
 - `C-policy+R-lattice+R-plane+R-record`: `plane_test.tex` · `rmpfig2_test.tex`

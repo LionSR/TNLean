@@ -36,6 +36,8 @@ def main() -> int:
         r"\begin{tenkz}[frame={matrix={1,0,0,1}}]\end{tenkz}",
         r"\begin{tenkzcd}[maps]\end{tenkzcd}",
         r"\begin{tenkz}[bond dir=right]\end{tenkz}",
+        r"\begin{tenkz}[up={i}]\end{tenkz}",
+        r"\begin{tenkz}[down={j}]\end{tenkz}",
         r"\tnbond[none]{a}{b}",
     )
     for source in tombstones:
@@ -124,6 +126,16 @@ def main() -> int:
         spaced.write_text(r"\begin {tenkz}\tn{}\end {tenkz}")
         assert guard.occurrences(spaced) == [(1, "tenkz")]
         assert ("spaced.tex", 1, "tenkz") in guard.construct_sources(spaced)
+
+        multiline = root / "multiline.tex"
+        multiline.write_text(
+            r"\begin" "\n {tenkz}\n" r"\tn{}" "\n" r"\end" "\n {tenkz}"
+        )
+        normalized = guard.normalized_environment_spacing(multiline.read_text())
+        assert len(normalized) == len(multiline.read_text())
+        assert normalized.count("\n") == multiline.read_text().count("\n")
+        assert guard.occurrences(multiline) == [(1, "tenkz")]
+        assert ("multiline.tex", 1, "tenkz") in guard.construct_sources(multiline)
 
         equation = root / "equation.tex"
         equation.write_text(
