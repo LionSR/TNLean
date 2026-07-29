@@ -112,6 +112,11 @@ For MPDO renormalization fixed points:
   relation `AA=A` and its unrestricted equivalence with transfer-map
   idempotence are formalized; the physical-space meaning of the repeated-copy
   index remains open.
+- `cpsv16_renormalization_flow_index_typo.tex` records the local correction of
+  the malformed summation and output indices in the displayed equation of
+  CPSV16 Theorem 3.1. The preceding renormalization equation, the diagrams, and
+  the Appendix proof all determine the corrected blocking-isometry identity;
+  the correction changes no hypothesis or conclusion.
 - `cpsv16_rfp_sal_data_processing.tex` is the closure record for the source
   RFP-to-ZCL-and-SAL implication. The exact boundary is a positive semidefinite
   density family with nonzero trace at every positive length, together with the
