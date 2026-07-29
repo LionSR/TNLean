@@ -200,7 +200,7 @@
     assumption.
 \end{theorem}
 
-For $x\ne y$, the physical supports are locally orthogonal:
+For $x\ne y$, the two vertical MPO layers annihilate:
 \begin{center}
     % Formula: (\mathcal K_y\mathcal K_x)^{ij}_{a_y a_x;b_y b_x}
     % = \sum_q (\mathcal K_y)^{iq}_{a_y b_y}
@@ -219,12 +219,12 @@ For $x\ne y$, the physical supports are locally orthogonal:
     \end{tenkz}
     $ = 0$
 \end{center}
-In contraction notation, local orthogonality is the vertical product
+In contraction notation, the cross-sector layer identity is
 $\mathcal K_y\mathcal K_x=0$ whenever $x\ne y$.
 This is \cite[Theorem~4.9(iv), lines~863--868]{Cirac2016MPDO_arXiv}.
 
-Expanding $\sum_jP_j=\Id$ on both physical indices and using the local
-orthogonality relations leaves only the diagonal term:
+Expanding $\sum_jP_j=\Id$ on both physical indices and using the sector
+projector relations leaves only the diagonal term:
 \begin{align}
     \mathcal K_i
     &=\sum_{j,j'}P_j\,\mathcal K_i\,P_{j'}
