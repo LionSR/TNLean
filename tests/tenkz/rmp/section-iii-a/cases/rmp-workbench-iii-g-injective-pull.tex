@@ -3,14 +3,13 @@
 % Ink: Canonical public tenkzfree PEPS star with opposite g-string corners.
 % Boundary: Five PEPS legs and two g-string ends remain open on each side.
 % Source: author source ImagesReview Section III/ImagesReview Section III.tex
-%   lines 414-444; archival output Ginjpullt.pdf
+%   lines 468-497; archival output Ginjpullt.pdf
 % Capabilities: kernel, pulling-through, open-string
 \[
-  % Author panels (lines 414-444): the pulling-through equality for the
+  % Author panels (lines 468-497): the pulling-through equality for the
   % G-injective PEPS tensor A.  A virtual g-string crosses the west and
   % north legs, a group-action box at each crossing; pulled through, it
-  % crosses the east and south legs instead and the unitary U_g appears
-  % on the physical leg, drawn at the 45-degree face of the flat redraw.
+  % crosses the east and south legs instead.  Both physical legs stay short.
   \tenkzkernel
   \tndeclare{species}{g}{hue=source:red}
   \begin{tenkzeq}[size=m]
@@ -21,12 +20,13 @@
       \tnwire[kind=index]{A.0}{(3,5)}
       \tnwire[kind=index]{A.270}{(5,3)}
       \tnwire[kind=index]{A.90}{(1,3)}
-      \tnwire[kind=index]{A.45}{midway A and (2,4)}
-      \tnwire[kind=string, species=g, name=g, via={(3,2), (2,3)}]{(4,2)}{(2,5)}
+      \tnwire[kind=index]
+        {A.45}{midway A and (2,4)}
+      \tnwire[kind=string, species=g, name=g, via={(3,2), (2,3)}]
+        {(4,2)}{(2,5)}
       \tn[skin=box, at=on g 0.24]{}
       \tn[skin=box, at=on g 0.56]{}
       \tnmark[form=label]{(2,2)}{$g$}
-      \tnmark[form=label]{(4,4)}{$A$}
     \end{tenkz}
     =
     \begin{tenkz}[rows={wire,wire,wire,wire,wire}, cols=5, bonds=none]
@@ -36,12 +36,11 @@
       \tnwire[kind=index]{A.0}{(3,5)}
       \tnwire[kind=index]{A.270}{(5,3)}
       \tnwire[kind=index]{A.90}{(1,3)}
-      \tnwire[kind=index, name=p]{A.45}{(1,5)}
-      \tn[at=on p 0.5, name=U]{}
+      \tnwire[kind=index]
+        {A.45}{midway A and (2,4)}
       \tnwire[kind=string, species=g, name=g, via={(3,4), (4,3)}]{(2,5)}{(4,2)}
       \tn[skin=box, at=on g 0.37]{}
       \tn[skin=box, at=on g 0.74]{}
-      \tnmark[form=label, label pos=w]{U}{$U_g$}
       \tnmark[form=label]{(4,4)}{$g$}
     \end{tenkz}
   \end{tenkzeq}

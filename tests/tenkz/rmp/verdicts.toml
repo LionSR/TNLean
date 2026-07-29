@@ -2,7 +2,7 @@
 # Schema: scripts/tenkz_rmp.py (load_verdicts).  Any status may be
 # recorded, including failure; the check rejects lies, never gaps.
 schema_version = 1
-campaign_sha256 = "75ee5bbae378431847f00ff1ec53f04fd42163cdb03c93952560ff7c33b01949"
+campaign_sha256 = "76ad8f2d3caa8bb647fd43ae0f3bad0c9f7232fee878ec50f44de86b4bbb9cbe"
 
 [[verdict]]
 id = "rmp-ii-peps-projection"
@@ -633,12 +633,13 @@ note = "mirrored operator order; small glyphs"
 [[verdict]]
 id = "rmp-iii-a-g-injective-projector"
 status = "cosmetic-gap"
-pairing = "wrong-source"
+pairing = "verified"
+pairing_by = "codex-source-repair-2026-07-29"
 defects = []
-case_sha256 = "372b2c06604fb1467675b37cc4c818286f4dd912aa3cb35fb01c0626f2986f5d"
-reviewed = "2026-07-28"
-renderer = "codex-kernel-ink-2026-07-28-200dpi"
-note = "the pulling-through equality with the g string crossing west/north then east/south and action boxes on the string; g and A labelled per panel at review"
+case_sha256 = "733c5ac2790a0fd4b6f78839efda9b673c1a540223e03edad5ac4cf8da6de201"
+reviewed = "2026-07-29"
+renderer = "codex-source-repair-2026-07-29-300dpi"
+note = "the paper projector: a normalized average of four cardinal L_g actions equals the four-tensor red ring with the northwest black junction"
 
 [[verdict]]
 id = "rmp-iii-a-mpo-action"
@@ -1288,12 +1289,12 @@ note = "glyph and leg geometry"
 id = "rmp-workbench-iii-g-injective-pull"
 status = "cosmetic-gap"
 pairing = "verified"
-pairing_by = "codex-pairing-sweep-2026-07-24"
+pairing_by = "codex-source-repair-2026-07-29"
 defects = []
-case_sha256 = "46fcd1f6040013f2d2056126a009b867f3225e3c08930278539297ae0074e0a0"
-reviewed = "2026-07-28"
-renderer = "codex-kernel-ink-2026-07-28-200dpi"
-note = "the g string pulls through and U_g appears on the diagonal, with the action boxes riding the string on both sides"
+case_sha256 = "a986ed5baceb52d3b0bfcba69645a24652944d7d8b20d7a663d885ed20a75c9e"
+reviewed = "2026-07-29"
+renderer = "codex-source-repair-2026-07-29-300dpi"
+note = "the author-source G-injective pull at lines 468-497: the g string moves across the tensor while the short physical leg remains undecorated"
 
 [[verdict]]
 id = "rmp-workbench-iii-intertwining-mpo"
