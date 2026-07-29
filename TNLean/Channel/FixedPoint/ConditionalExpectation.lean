@@ -39,6 +39,8 @@ Theorem 6.14.
   `E_σ(X)` is always a fixed point of `T*`.
 * `scalarConditionalExpectation_isConditionalExpectation`:
   the scalar fixed-point algebra case.
+* `meanErgodicAdjoint_isConditionalExpectation`:
+  the mean-ergodic adjoint projection onto the full fixed-point algebra.
 
 ## Cross-references
 
