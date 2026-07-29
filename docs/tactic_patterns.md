@@ -36,6 +36,19 @@ abstracted — record why, so it is not re-proposed).
 - **Abstraction:** `@[mps_transfer]` simp set + `transfer_simp` macro
   (`TNLean/MPS/Tactic/Basic.lean`).
 
+### suffix marginal sector-block expansion — promoted
+- **Pattern:** reindex a normalized reduced state into physical-sector
+  coordinates, change the discarded-site sum to dependent sector fibers, and
+  identify equal retained-sector words with a dependent block-diagonal entry.
+- **Seen:** three suffix lengths in
+  `CyclicActiveFourthRegionContraction.lean` and
+  `CyclicActiveSuffixMarginal.lean` before promotion.
+- **Abstraction:**
+  `PhysicalSectorFactorization.reindex_reducedBlockState_add_eq_suffixSectorContraction`
+  in `TNLean/MPS/MPDO/CyclicActiveFourthRegionContraction.lean`.
+- **Notes:** the arbitrary suffix length is the mathematical parameter; the
+  source-facing one-, two-, and three-suffix theorems are specializations.
+
 ### partial trace under product reindexing — promoted
 - **Pattern:** split a simultaneous relabelling of both tensor factors into
   left- and right-factor submatrices, change the summation index in the traced
