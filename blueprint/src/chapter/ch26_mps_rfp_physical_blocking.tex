@@ -130,13 +130,13 @@
     \cite[lines~382--394 and 1205--1209]{Cirac2016MPDO_arXiv}.
 \end{definition}
 
-\begin{lemma}[A dyadic power limit is idempotent]
-    \label{lem:dyadic_power_limit_idempotent}
+\begin{theorem}[A dyadic power limit is idempotent]
+    \label{thm:dyadic_power_limit_idempotent}
     \lean{isIdempotentElem_of_tendsto_pow_two_pow}
     \leanok
     Let $R$ be a Hausdorff topological monoid with continuous multiplication.
     If $E^{2^n}\to P$, then $P^2=P$.
-\end{lemma}
+\end{theorem}
 \begin{proof}\leanok
     Continuity of multiplication gives
     $E^{2^n}E^{2^n}\to P^2$. On the other hand,
@@ -167,10 +167,10 @@
     391--394.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{lem:dyadic_power_limit_idempotent,
+    \uses{thm:dyadic_power_limit_idempotent,
         thm:physical_blocking_isometry_iff_transfer_idempotence}
     If $\widehat{\E}_B^{\,2^n}\to\widehat{\E}_A$, then
-    Lemma~\ref{lem:dyadic_power_limit_idempotent} gives
+    Theorem~\ref{thm:dyadic_power_limit_idempotent} gives
     $\E_A^2=\E_A$. Theorem~
     \ref{thm:physical_blocking_isometry_iff_transfer_idempotence} supplies the
     physical isometry. Conversely, if $A$ has such an isometry, its transfer
