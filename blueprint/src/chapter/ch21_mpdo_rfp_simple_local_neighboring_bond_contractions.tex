@@ -116,27 +116,159 @@
     this definition; it is a separate hypothesis in Proposition~C.7.
 \end{definition}
 
-\begin{theorem}[Virtual-gauge invariance of physical-sector factorizations]
-    \label{thm:mpdo_physical_sector_factorization_gauge}
-    \lean{MPOTensor.PhysicalSectorFactorization.ofGaugeEquiv,
-      MPOTensor.PhysicalSectorFactorization.ofGaugeEquiv_neighboringOperator,
-      MPOTensor.PhysicalSectorFactorization.ofGaugeEquiv_neighboringOperator_posSemidef}
+\begin{definition}[Matrix-weighted neighboring contraction]
+    \label{def:mpdo_matrix_weighted_neighboring_operator}
+    \lean{MPOTensor.PhysicalSectorFactorization.neighboringOperatorWithMatrix,
+      MPOTensor.PhysicalSectorFactorization.neighboringOperatorWithMatrix_apply,
+      MPOTensor.PhysicalSectorFactorization.neighboringOperatorWithMatrix_one}
     \leanok
     \uses{def:mpdo_physical_sector_factorization,
       def:mpdo_minimal_neighboring_operator}
-    Suppose that two MPO tensors of the same virtual dimension differ by an
-    invertible virtual gauge.  Every physical-sector factorization of the
-    first tensor induces one of the second tensor with the same physical
-    decomposition and the same neighboring operators.  In particular,
-    positive semidefiniteness of all neighboring operators is invariant under
-    the gauge.
+    For a virtual matrix $P$, define
+    \begin{align}
+        \eta_{k,h}(P)
+        &=\sum_{\delta,\gamma}P_{\delta,\gamma}
+          (r_k)_\delta\otimes(l_h)_\gamma.
+        \notag
+    \end{align}
+    The ordinary neighboring contraction is the case $P=I$.
+\end{definition}
+
+\begin{definition}[Virtual-matrix transport of a physical-sector factorization]
+    \label{def:mpdo_physical_sector_factorization_virtual_matrices}
+    \lean{MPOTensor.PhysicalSectorFactorization.ofVirtualMatrices}
+    \leanok
+    \uses{def:mpdo_physical_sector_factorization}
+    Let $K$ and $L$ have virtual dimensions $D$ and $E$, respectively.
+    Suppose that matrices $X\in M_{E\times D}(\C)$ and
+    $Y\in M_{D\times E}(\C)$ satisfy the following identity for every
+    physical index $i$:
+    \begin{align}
+        L^i&=XK^iY.
+        \notag
+    \end{align}
+    Every physical-sector factorization of $K$ induces one of $L$ with the
+    same physical decomposition.  Its virtual tensor families are
+    \begin{align}
+        (l_k^L)_\beta
+        &=\sum_\gamma X_{\beta,\gamma}(l_k^K)_\gamma,
+        &
+        (r_k^L)_\alpha
+        &=\sum_\delta Y_{\delta,\alpha}(r_k^K)_\delta.
+        \notag
+    \end{align}
+    This construction abstracts the virtual corner in
+    \cite[Section~2.3, lines~195--219]{Cirac2016MPDO_arXiv} and the
+    physical-sector factorization in
+    \cite[Appendix~C.2, lines~1381--1439]{Cirac2016MPDO_arXiv}.
+\end{definition}
+
+\begin{theorem}[Neighboring operators under virtual-matrix transport]
+    \label{thm:mpdo_physical_sector_factorization_virtual_matrices_neighbor}
+    \lean{MPOTensor.PhysicalSectorFactorization.ofVirtualMatrices_neighboringOperator}
+    \leanok
+    \uses{def:mpdo_minimal_neighboring_operator,
+      def:mpdo_matrix_weighted_neighboring_operator,
+      def:mpdo_physical_sector_factorization_virtual_matrices}
+    The neighboring operators of the transported factorization satisfy
+    \begin{align}
+        \eta^L_{k,h}
+        &=\eta^K_{k,h}(YX).
+        \notag
+    \end{align}
+    This identity combines the virtual corner in
+    \cite[Section~2.3, lines~195--219]{Cirac2016MPDO_arXiv} with the
+    neighboring contraction in
+    \cite[Appendix~C.2, lines~1441--1450]{Cirac2016MPDO_arXiv}.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    Absorb the gauge into each left sector tensor and its inverse into each
-    right sector tensor.  The two matrices cancel when the common virtual
-    index is contracted, so every neighboring operator is unchanged.
+    Replace each left factor by
+    $\sum_\gamma X_{\beta,\gamma}(l_k)_\gamma$ and each right factor by
+    $\sum_\delta Y_{\delta,\alpha}(r_k)_\delta$.  Contracting the common
+    virtual index gives
+    \begin{align}
+        \sum_\beta Y_{\delta,\beta}X_{\beta,\gamma}
+        &=(YX)_{\delta,\gamma},
+        \notag
+    \end{align}
+    which proves the neighboring-operator identity.
+\end{proof}
+
+\begin{definition}[Virtual compression of a physical-sector factorization]
+    \label{def:mpdo_physical_sector_factorization_virtual_compression}
+    \lean{MPOTensor.PhysicalSectorFactorization.ofVirtualCompression}
+    \leanok
+    \uses{def:mpdo_physical_sector_factorization_virtual_matrices}
+    Let $K$ and $L$ have virtual dimensions $D$ and $E$, respectively, and
+    suppose that a rectangular matrix $V\in M_{D\times E}(\C)$ satisfies the
+    following identity for every physical index $i$:
+    \begin{align}
+        L^i&=V^\dagger K^iV.
+        \notag
+    \end{align}
+    Every physical-sector factorization of $K$ induces one of $L$ with the
+    same physical decomposition.
+    This construction combines the virtual corner in
+    \cite[Section~2.3, lines~195--219]{Cirac2016MPDO_arXiv} with the
+    physical-sector factorization in
+    \cite[Appendix~C.2, lines~1381--1439]{Cirac2016MPDO_arXiv}.
+\end{definition}
+
+\begin{theorem}[Neighboring operators under virtual compression]
+    \label{thm:mpdo_physical_sector_factorization_virtual_compression_neighbor}
+    \lean{MPOTensor.PhysicalSectorFactorization.ofVirtualCompression_neighboringOperator}
+    \leanok
+    \uses{def:mpdo_minimal_neighboring_operator,
+      def:mpdo_matrix_weighted_neighboring_operator,
+      def:mpdo_physical_sector_factorization_virtual_compression}
+    The neighboring operators of the factorization obtained by virtual
+    compression satisfy
+    \begin{align}
+        \eta^L_{k,h}
+        &=\eta^K_{k,h}(VV^\dagger).
+        \notag
+    \end{align}
+    No positivity of the right-hand side is asserted.
+    This identity combines the virtual corner in
+    \cite[Section~2.3, lines~195--219]{Cirac2016MPDO_arXiv} with the
+    neighboring contraction in
+    \cite[Appendix~C.2, lines~1441--1450]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mpdo_physical_sector_factorization_virtual_matrices_neighbor}
+    Apply the virtual-matrix transport identity with $X=V^\dagger$ and $Y=V$.
+\end{proof}
+
+\begin{theorem}[Virtual-gauge invariance of physical-sector factorizations]
+    \label{thm:mpdo_physical_sector_factorization_gauge}
+    \lean{MPOTensor.PhysicalSectorFactorization.ofGaugeEquiv,
+      MPOTensor.PhysicalSectorFactorization.ofGaugeEquiv_eq_ofVirtualMatrices,
+      MPOTensor.PhysicalSectorFactorization.ofGaugeEquiv_neighboringOperator,
+      MPOTensor.PhysicalSectorFactorization.ofGaugeEquiv_neighboringOperator_posSemidef}
+    \leanok
+    \uses{def:mpdo_physical_sector_factorization,
+      def:mpdo_minimal_neighboring_operator,
+      def:mpdo_physical_sector_factorization_virtual_matrices}
+    Suppose that two MPO tensors of the same virtual dimension differ by an
+    invertible virtual gauge $X$.  The induced factorization is precisely the
+    virtual-matrix transport by $X$ and $X^{-1}$.  Thus every physical-sector
+    factorization of the first tensor induces one of the second tensor with
+    the same physical decomposition and the same neighboring operators.  In
+    particular, positive semidefiniteness of all neighboring operators is
+    invariant under the gauge.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:mpdo_matrix_weighted_neighboring_operator,
+      thm:mpdo_physical_sector_factorization_virtual_matrices_neighbor}
+    Specialize the virtual-matrix neighboring identity to a gauge and its
+    inverse.  Their product is the identity matrix, and contraction through
+    the identity matrix is the ordinary neighboring operator.
 \end{proof}
 
 \begin{definition}[One-site matrix spaces of sector sets]%
