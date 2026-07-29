@@ -4,7 +4,9 @@ This inventory is the migration ledger for issue #4748. It classifies the
 tracked tree at commit `c40b923493f29aa75799810ed297193526da51df`
 against the signed 1.0 contract in `LANGUAGE-1.0.md` §§9–12. The
 classification concerns the S4 surface switch, not whether a figure is
-mathematically or visually correct today.
+mathematically or visually correct today. The committed disposition checker
+keeps the line inventory, fixture lists, and reconciliation tables synchronized
+with the tracked TeX sources.
 
 ## Disposition rules
 
@@ -129,12 +131,12 @@ The source root for every file below is `tests/tenkz/`. Classification is
 whole-fixture so the list decides whether each top-level corpus file is
 retained, mechanically respelled, or redrawn/re-baselined at S4.
 
-| Disposition | Fixtures | Picture occurrences |
-|---|---:|---:|
-| preserve | 13 | 15 |
-| codemod | 51 | 256 |
-| redraw | 200 | 499 |
-| **Total** | **264** | **770** |
+| Disposition | Fixtures |
+|---|---:|
+| preserve | 13 |
+| codemod | 51 |
+| redraw | 200 |
+| **Total** | **264** |
 
 Of the 264 top-level fixtures, 245 open at least one tenkz
 environment, 11 are command-only consumers, and 8
@@ -202,12 +204,13 @@ The preserved list includes these eight non-consumers: `geom.tex`, `modes_dot_ba
 ## Retired-pipeline guard
 
 The retired TeX tensor-network directory contains zero tracked files. The
-demolition checker passes over 3,039 tracked files and reports zero retired
-catalogue calls, paths, or pipeline entry points. This inventory introduces
-no compatibility path and no implementation change.
+demolition checker passes over the complete tracked tree and reports zero
+retired catalogue calls, paths, or pipeline entry points. This inventory
+introduces no compatibility path and no implementation change.
 
-Reproduce the guard with:
+Reproduce the guards with:
 
 ```sh
+python3 scripts/check_tenkz_dispositions.py
 python3 scripts/check_tenkz_demolition.py
 ```
