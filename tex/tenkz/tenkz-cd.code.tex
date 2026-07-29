@@ -170,6 +170,15 @@
   /tenkz/cd/polygon/.code={\int_set:Nn \l__tenkzcd_ngon_int {#1}},
   /tenkz/cd/maps/.code={\bool_set_true:N \l__tenkzcd_maps_bool},
   /tenkz/cd/radius/.store~in=\l__tenkzcd_radius_tl,
+  % Extension-gate: #5085; Census-correction: #5085.  These two existing raw
+  % geometry spellings remain explicit, metered escapes until #4699 migrates
+  % the typed-map figures and retires tenkzcd.
+  /tenkz/cd/column~sep/.code={
+    \tl_put_right:Nn \l__tenkzcd_pass_tl { column~sep={#1}, }
+  },
+  /tenkz/cd/row~sep/.code={
+    \tl_put_right:Nn \l__tenkzcd_pass_tl { row~sep={#1}, }
+  },
   % unrecognized keys pass through to the underlying picture
   /tenkz/cd/.unknown/.code={
     \tl_if_eq:NNTF \pgfkeyscurrentvalue \pgfkeysnovalue@text
