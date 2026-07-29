@@ -1035,9 +1035,9 @@ id = "rmp-workbench-ii-peps-gauge-old"
 status = "cosmetic-gap"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
-case_sha256 = "93f588437d88e0ad6d78ab7ca73ebd3d165055b45a3c41d7de67008c9e0abf8f"
-reviewed = "2026-07-29"
-renderer = "codex-plane-frame-source-review-2026-07-29-180dpi"
+case_sha256 = "9d5bcf7880525a278360f49cfc46436217c85a22ab07a64572378e61031500c2"
+reviewed = "2026-07-30"
+renderer = "codex-plane-frame-source-review-2026-07-30-600dpi"
 note = "plane projection restored; marked detour curvature still differs from the archival hand-drawn path"
 
 [[verdict]]
@@ -1046,8 +1046,8 @@ status = "cosmetic-gap"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
 case_sha256 = "594f1a0fcade7bb6348940d4b1c3dd6e4f909d965e94b43add62e999b2d9b478"
-reviewed = "2026-07-29"
-renderer = "codex-plane-frame-source-review-2026-07-29-180dpi"
+reviewed = "2026-07-30"
+renderer = "codex-plane-frame-source-review-2026-07-30-600dpi"
 note = "plane projection restored; marked orthogonal bend remains less rounded than the archival path"
 
 [[verdict]]

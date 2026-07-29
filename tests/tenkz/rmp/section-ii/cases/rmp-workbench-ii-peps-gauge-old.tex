@@ -32,14 +32,14 @@
     \tnwire{B.270}{(5,3)}
     \tnwire{B.45}{midway B and (2,4)}
     \tn[at=(4,3), name=gS, skin=dot, species=gauge]{}
-    \tn[at=(3,5), name=gE, skin=dot, species=gauge]{}
+    \tn[at=(3,4), name=gE, skin=dot, species=gauge]{}
     \tn[at=(2,3), name=gN, skin=dot, species=gauge]{}
     \tnwire[kind=string, species=gauge, name=gInput,
       crossing=over, route=orth, via={(4,1)}]
       {(5,1)}{gS}
     \tnwire[kind=string, species=gauge, name=gEast,
-      route=orth, via={(4,5)}]
-      {gS}{gE}
+      route=orth, via={(4,4),(3,4)}]
+      {gS}{(3,5)}
     \tnwire[kind=string, species=gauge, name=gNorth, route=arc,
       cross={over at crossing of gNorth and gInput,
         over at crossing of gNorth and gEast}]{gS}{gN}
@@ -47,7 +47,6 @@
       cross={under at crossing of gInput and gSouth,
         under at crossing of gEast and gSouth,
         under at crossing of gNorth and gSouth}]{gS}{(5,3)}
-    \tnwire[kind=string, species=gauge]{gE}{(3,5)}
     \tnwire[kind=string, species=gauge]{gN}{(1,3)}
   \end{tenkz}}
 \]
