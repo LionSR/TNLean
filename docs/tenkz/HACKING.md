@@ -75,17 +75,19 @@ The event ledger is `tests/tenkz/golden-events.sha256`.
 scripts/tenkz_golden.sh --check
 ```
 
-The check recompiles every standalone fixture and requires each `.tnlog` event
-stream to be byte-identical to the stored SHA-256 baseline.  Run the command
-without an argument to take a new snapshot:
+The check recompiles every top-level `tests/tenkz/*.tex` standalone fixture and
+requires each `.tnlog` event stream to be byte-identical to the stored SHA-256
+baseline.  Nested suites such as `tests/tenkz/kernel/` have their own gates.
+Run the command without an argument to take a new snapshot:
 
 ```sh
 scripts/tenkz_golden.sh
 ```
 
-Re-pin only when fixture source changes and the new event stream has been
-reviewed as the intended contract.  Package-only changes must pass `--check`;
-they do not authorize a new baseline.
+Re-pin only when fixture source changes or a reviewed package contract change
+intentionally changes the emitted events, and the new streams have been
+reviewed as the intended contract.  Behavior-preserving package changes must
+pass `--check`; they do not authorize a new baseline.
 
 ## Same-session pixel pairs
 
@@ -99,7 +101,12 @@ The command creates a detached worktree at the base revision, renders the
 renderer-only source manifest against that true legacy package and the current
 package, rasterizes both at 300 dpi, and compares the paired pages byte for
 byte.  A copied package tree is not a legacy control.  Stored raster hashes are
-not evidence because raster bytes depend on the machine and TeX epoch.
+not cross-revision redraw evidence because raster bytes depend on the machine
+and TeX epoch.  The exact-toolchain pins in
+`tests/tenkz/kernel/golden-pixels.sha256` are a narrower regression gate:
+after an approved XeTeX, Poppler, font, or intentional render change, inspect
+the full-resolution fixtures and re-pin them with
+`scripts/tenkz_kernel_probes.sh --snapshot`.
 
 This command exists for the redraw campaign and expires at its close, no later
 than 1.0.  Do not turn it into a permanent raster manifest.
@@ -137,11 +144,14 @@ extension or census-correction procedure.
 ## Shared parsers
 
 `scripts/tenkzlib/tnlog.py` is the single parser for `.tnlog` event streams.
-`scripts/tenkzlib/texcase.py` owns TeX comment stripping, balanced-group
-matching, and picture-construct scanning.  Import these modules whenever a
-checker needs those answers.  RMP case-header extraction remains local to
-`scripts/tenkz_rmp.py`; do not claim it as shared until it moves into the
-library.  Never re-parse syntax already parsed by `scripts/tenkzlib/`.
+`scripts/tenkzlib/texcase.py` provides shared TeX comment stripping,
+balanced-group matching, and picture-construct scanning.  Import these modules
+when adding or modifying a checker that needs those answers.
+`scripts/tenkz_shrink.py` still carries the local `_group_payload` exception;
+keep its behavior aligned until it is migrated to `texcase.py`.  RMP case-header
+extraction remains local to `scripts/tenkz_rmp.py`; do not claim it as shared
+until it moves into the library.  Never add another parser for syntax already
+parsed by `scripts/tenkzlib/`.
 
 ## Stage ownership
 
