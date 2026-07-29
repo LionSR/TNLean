@@ -1178,3 +1178,23 @@ Census-correction: #5016
 
 No language-ledger row changes and no remaining flag verdict is re-examined
 here.
+
+### 2026-07-29 — typed-map spacing enters the escape ledger
+
+A complete blueprint scan found three existing raw geometry occurrences in
+`tenkzcd[maps]`: one `column sep=` and two `row sep=` spellings.  They had
+passed to the underlying matrix without a registry row and were therefore
+absent from M3.  Both spellings now enter the escape ledger, making the
+existing geometry debt visible: M1 gains two escape rows, M2 gains their two
+explicit parser leaves, and M3 rises from 29 to 32.  Their values preserve the
+present figures exactly; the four typed-map figures acquire their permanent
+pitch spelling when they leave `tenkzcd` in the chapter 21 migration of #4699.
+
+Extension-gate: #5085
+
+Census-correction: #5085
+
+| flag | verdict |
+|---|---|
+| flag:consumers:key:picture:column sep | dies with the `tenkzcd` chapter 21 migration in #4699, where typed-map column pitch receives its kernel spelling; expiry 0.8 |
+| flag:consumers:key:picture:row sep | dies with the `tenkzcd` chapter 21 migration in #4699, where typed-map row pitch receives its kernel spelling; expiry 0.8 |
