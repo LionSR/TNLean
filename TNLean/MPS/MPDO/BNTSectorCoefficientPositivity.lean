@@ -15,6 +15,10 @@ Global positivity and pairwise orthogonal two-sided physical supports force the
 coefficient of every nonzero BNT sector operator to be a nonnegative real
 number. A sector operator which vanishes at one fixed length may instead be
 given coefficient zero, without changing the decomposition at that length.
+
+This is the compression argument for the BNT sum in CPSV16, Appendix C.2,
+equation `sigmaNKj`, lines 1753--1760, used here to repair Proposition
+`prop3to4`, lines 1786--1796.
 -/
 
 open scoped Matrix BigOperators ComplexOrder
@@ -26,7 +30,10 @@ open PhysicalSectorFactorization
 variable {d : ℕ}
 
 /-- Compressing an orthogonally supported physical sector retains the matching
-tensor and kills every other tensor in the family. -/
+tensor and kills every other tensor in the family.
+
+Source: arXiv:1606.00608, Appendix C.2, equation `sigmaNKj`, lines
+1753--1760. -/
 theorem changePhysicalBasis_eq_ite_of_pairwise_orthogonal_twoSided_physicalSupport
     {g : ℕ} {dim : Fin g → ℕ}
     (K : (s : Fin g) → MPOTensor d (dim s))
@@ -56,7 +63,10 @@ theorem changePhysicalBasis_eq_ite_of_pairwise_orthogonal_twoSided_physicalSuppo
         rfl
 
 /-- Sitewise compression of an orthogonally supported sector sum isolates its
-matching scalar-weighted sector operator. -/
+matching scalar-weighted sector operator.
+
+Source: arXiv:1606.00608, Appendix C.2, equation `sigmaNKj`, lines
+1753--1760. -/
 theorem singleKrausMap_sitewise_eq_coefficient_smul_of_orthogonalSupport
     {g N : ℕ} {dim : Fin g → ℕ}
     (K : (s : Fin g) → MPOTensor d (dim s))
@@ -85,7 +95,11 @@ theorem singleKrausMap_sitewise_eq_coefficient_smul_of_orthogonalSupport
 /-- At one fixed chain length, global positivity turns a complex orthogonal
 sector expansion into an equal expansion with nonnegative real coefficients.
 The coefficient is set to zero when the corresponding sector operator
-vanishes. -/
+vanishes.
+
+Source: arXiv:1606.00608, Appendix C.2, Proposition `prop3to4`, lines
+1786--1796; the standing positive-MPDO hypothesis is stated at lines
+1626--1629. -/
 theorem exists_nonnegative_sectorCoefficient_of_orthogonalSupport
     {g N : ℕ} {dim : Fin g → ℕ}
     (K : (s : Fin g) → MPOTensor d (dim s))
@@ -128,7 +142,11 @@ theorem exists_nonnegative_sectorCoefficient_of_orthogonalSupport
   exact ⟨coefficientReal, hCoefficientReal, hTerm⟩
 
 /-- If every sector operator is nonzero, the original complex coefficients
-are themselves nonnegative real numbers. -/
+are themselves nonnegative real numbers.
+
+Source: arXiv:1606.00608, Appendix C.2, Proposition `prop3to4`, lines
+1786--1796; the standing positive-MPDO hypothesis is stated at lines
+1626--1629. -/
 theorem exists_nonnegative_real_eq_sectorCoefficient_of_orthogonalSupport
     {g N : ℕ} {dim : Fin g → ℕ}
     (K : (s : Fin g) → MPOTensor d (dim s))
