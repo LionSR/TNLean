@@ -7,15 +7,15 @@
 
 \input{command}
 
-\title{Deriving saturation of the area law from MPDO renormalization fixed
-points}
+\title{Closure record for saturation of the area law from MPDO
+renormalization fixed points}
 \author{}
 \date{2026-07-15}
 
 \begin{document}
 \maketitle
 
-\section{Source statement and proof}
+\section{Source statement and normalization boundary}
 
 Definition~4.1 of Cirac--P\'erez-Garc\'ia--Schuch--Verstraete defines a
 mixed-state renormalization fixed point by trace-preserving completely positive
@@ -27,154 +27,113 @@ maps $\mathcal S$ and $\mathcal T$ satisfying\footnote{Source label
   \qquad
   \mathcal T[M_1(X)]=M_2(X)
 \]
-for every virtual boundary operator $X$.
-
-Theorem~4.9, implication (i)$\Rightarrow$(ii), is stated for a simple tensor
-$\mathcal K$ in biCF generating density operators.\footnote{Source:
-\path{Papers/1606.00608/MPDO-22-12-17-2.tex:849--893}.}
-Its Appendix~C proof treats a bipartition of a ring into consecutive intervals
-$A$ and $B$.\footnote{Source:
+for every virtual boundary operator $X$. Proposition \texttt{propsimple} in
+Appendix~C states that this condition implies source zero correlation length
+and saturation of the area law.\footnote{Source:
 \path{Papers/1606.00608/MPDO-22-12-17-2.tex:1331--1341}.}
-It applies $\mathcal T$ to the first spin of $A$ and $\mathcal S$ to the first
-two spins of $B$.  The closure identities return the same tensor ring with one
-spin transferred from $B$ to $A$.  Since these are local channels, data
-processing gives
-\[
-  I_{L+1}\leq I_L.
-\]
-Proposition~4.5 supplies the reverse inequality $I_L\leq I_{L+1}$, hence
-equality and saturation of the area law.
 
-The entropic convention immediately preceding Definition~4.6 normalizes every
-operator by its trace.\footnote{Source:
+The entropic convention immediately preceding Definition~4.6 divides each
+finite-chain operator by its trace.\footnote{Source:
 \path{Papers/1606.00608/MPDO-22-12-17-2.tex:792--793}.}
-The source theorem therefore uses, as standing data,
-that the tensor generates nonzero density operators at the lengths under
-consideration; it does not add an independent nonvanishing hypothesis to the
-Appendix~C proposition.
+The precise boundary of the proposition is therefore:
+\begin{enumerate}
+  \item $\rho^{(N)}(M)$ is positive semidefinite for every $N\geq1$;
+  \item $\operatorname{tr}\rho^{(N)}(M)\neq0$ for every $N\geq1$;
+  \item $M$ satisfies the local renormalization equations of Definition~4.1.
+\end{enumerate}
+Positivity alone does not imply the second condition: the zero tensor generates
+zero positive semidefinite operators at every length. Thus the nonzero-trace
+clause is the normalization boundary implicit in the source's density-operator
+language, not a dispensable consequence of positivity.
 
-The formal predicate \leanid{MPOTensor.IsHorizontalCF} used below is a
-representative-grouped BNT decomposition: gauge-equivalent copies are grouped
-over one minimal normal representative, retain their nonzero weights, and
-exhaust the ambient virtual space.  In particular, it excludes an additional
-all-zero virtual summand.  The literal source canonical-form construction
-allows $\sum_k D_k\leq D$, explicitly noting that there can be zero
-blocks.\footnote{Source:
-\path{Papers/1606.00608/MPDO-22-12-17-2.tex:214--219}.}
-Thus \leanid{MPOTensor.IsHorizontalCF} is stronger than the literal
-canonical-form surface used by the source biCF assumption at lines 849--850.
-It is not the restricted per-copy predicate
-\leanid{MPOTensor.HorizontalCFData}, which demands
-separation of every copy individually and is strictly stronger than the
-source's grouped canonical form.
+\section{Area-law calculation}
 
-Definition~4.6 concerns positive-length spin chains.  The formal predicate now
-asks for nonzero trace only when $N\geq1$.  The bipartition argument below never
-invokes an empty-chain operator, since its interval lengths force $N\geq3$.
-
-\section{The established global identities}
-
-Let $N$ denote the number of spectator sites.  Tensoring the local maps with
-the identity on these sites gives trace-preserving completely positive maps
-$\widehat{\mathcal T}_N$ and $\widehat{\mathcal S}_N$.  The local closure
-identities imply, for every $N$ and every virtual operator $X$,
+For a bipartition of an $N$-site ring into consecutive intervals of lengths
+$a+1$ and $b+2$, the localized maps satisfy
 \[
-  \widehat{\mathcal T}_N[M_{N+1}(X)]=M_{N+2}(X),
-  \qquad
-  \widehat{\mathcal S}_N[M_{N+2}(X)]=M_{N+1}(X).
+  (\widehat{\mathcal T}_a\otimes\widehat{\mathcal S}_b)
+  (\sigma^{(N)}_{a+1:b+2})
+  =\sigma^{(N)}_{a+2:b+1},
 \]
-These identities, including the trace-preserving completely positive
-property, have been proved for arbitrary $N$.\footnote{Formal declarations:
-\leanid{MPOTensor.refineFirstSite_isKrausCPTP},
-\leanid{MPOTensor.coarsenFirstTwoSites_isKrausCPTP},
-\leanid{MPOTensor.refineFirstSite_physCloseN}, and
-\leanid{MPOTensor.coarsenFirstTwoSites_physCloseN} in
-\doclink{TNLean/MPS/MPDO/RFPViaTSGlobal}.}
-Taking $X=1$ gives the corresponding identities for every periodic tensor
-ring.  If $N=0$, the local map still acts from one site to two sites, or
-conversely; no operator on an empty ring is introduced.
-
-Strong subadditivity already gives the opposite inequality
+and the reverse pair satisfies
 \[
-  I_L\leq I_{L+1}
+  (\widehat{\mathcal S}_a\otimes\widehat{\mathcal T}_b)
+  (\sigma^{(N)}_{a+2:b+1})
+  =\sigma^{(N)}_{a+1:b+2}.
 \]
-by adjoining one physical site to an interval.\footnote{Formal declaration:
-\leanid{MPOTensor.mutualInfoChain_monotone}.}
-
-\section{The established data-processing inequality}
-
-For a bipartite density operator $\rho_{AB}$ and rectangular
-trace-preserving completely positive maps $\Phi_A$ and $\Psi_B$, the required
-inequality
+These are identities of normalized density operators because the corresponding
+ring trace is nonzero. Mutual-information data processing in the two directions
+gives
 \[
-  I(A':B')_{(\Phi_A\otimes\Psi_B)(\rho)}
-    \leq I(A:B)_\rho
+  I(\sigma^{(N)}_{a+2:b+1})
+  \leq I(\sigma^{(N)}_{a+1:b+2})
+  \leq I(\sigma^{(N)}_{a+2:b+1}).
 \]
-is now proved.\footnote{Formal declarations:
-\leanid{IsKrausCPTP.mutualInformation_tensorMapId_le},
-\leanid{IsKrausCPTP.mutualInformation_idTensorMap_le}, and
-\leanid{IsKrausCPTP.mutualInformation_tensorMapBoth_le} in
-\doclink{TNLean/Entropy/MutualInformationDataProcessing}.}
-The proof chooses a rectangular Stinespring isometry, uses invariance of
-entropy under that isometry, and then invokes monotonicity under discarding
-the environment.  Exchanging the two tensor factors and applying the
-one-sided inequality twice gives the two-channel form used by the source.
+Hence the two mutual informations are equal. The consecutive-cut
+identification turns this equality into $I_L=I_{L+1}$ for
+$1\leq L<\lfloor N/2\rfloor$.
 
-The two local maps have now also been assembled on a consecutive bipartition.
-After flattening each interval to a finite matrix index, applying the localized
-one-to-two map on the first interval and the localized two-to-one map on the
-second gives exactly the normalized state with one site transferred across the
-cut.  Applying the reverse pair recovers the original split state.  Data
-processing in the two directions therefore proves equality of the two
-bipartite mutual informations, conditional only on positivity and the
-nonzero trace needed for normalization.\footnote{Formal declarations:
+The primary formal declaration is
+\leanid{MPOTensor.isSAL_of_isRFPViaTS_of_trace_ne_zero} in
+\doclink{TNLean/MPS/MPDO/RFPViaTSSAL}. The channel identities and the
+bipartite-to-chain identification are supplied by
 \leanid{MPOTensor.tensorMapBoth_bipartitionedNormalizedMPO},
 \leanid{MPOTensor.tensorMapBoth_bipartitionedNormalizedMPO_reverse}, and
-\leanid{MPOTensor.mutualInformation_bipartition_eq_of_isRFPViaTS} in
-\doclink{TNLean/MPS/MPDO/RFPViaTSSAL}.}
+\leanid{MPOTensor.mutualInfoChain_eq_mutualInformation}.
 
-\section{Completion of the implication}
+\section{Source zero correlation length}
 
-The consecutive-cut correspondence is now proved.  The first marginal of the
-flattened bipartite state is the prefix reduced state on $L$ sites.  Translation
-invariance moves the second interval to the beginning of the periodic chain,
-so its marginal has the same entropy as the prefix reduced state on $N-L$
-sites.  Retaining all $N$ sites leaves the normalized state unchanged.  Hence
-the bipartite mutual information is exactly
-$S_L+S_{N-L}-S_N=I_L$.\footnote{Formal declarations:
-\leanid{MPOTensor.bipartitionedNormalizedMPO_traceRight},
-\leanid{MPOTensor.bipartitionedNormalizedMPO_traceLeft}, and
-\leanid{MPOTensor.mutualInfoChain_eq_mutualInformation} in
-\doclink{TNLean/MPS/MPDO/MutualInfoBridge}.}
+Trace preservation in the one-to-two renormalization equation gives, for every
+virtual matrix $X$,
+\[
+  \operatorname{tr}(\mathcal T_M^2X)
+  =\operatorname{tr}(M_2(X))
+  =\operatorname{tr}(M_1(X))
+  =\operatorname{tr}(\mathcal T_MX).
+\]
+Nondegeneracy of the trace pairing yields
+$\mathcal T_M^2=\mathcal T_M$. If $\mathcal T_M=0$, then
+\[
+  \operatorname{tr}\rho^{(1)}(M)
+  =\operatorname{tr}(\mathcal T_M)=0,
+\]
+contradicting the positive-length nonvanishing hypothesis. Therefore
+$\mathcal T_M\neq0$, and $M$ has source zero correlation length.
 
-Within the BNT-refined horizontal scope, nonvanishing is not an additional
-assumption in this implication.  Horizontal canonical form gives one nonzero
-positive-length ring, positivity makes its trace nonzero, and the
-renormalization equations make the physical-trace transfer idempotent.  The
-trace is therefore nonzero at every positive length.\footnote{Formal declaration:
-\leanid{MPOTensor.trace_mpo_ne_zero_of_isHorizontalCF_isMPDO_isRFPViaTS} in
-\doclink{TNLean/MPS/MPDO/RFPViaTSGlobal}.}
+Combining this argument with the area-law theorem gives the primary declaration
+\leanid{MPOTensor.isSourceZCL_and_isSAL_of_isRFPViaTS_of_trace_ne_zero} in
+\doclink{TNLean/MPS/MPDO/RFPViaTSSAL}. It states exactly that positive
+semidefinite rings, nonzero trace at every positive length, and the Definition
+4.1 local renormalization equations imply source ZCL and SAL.
 
-Combining the consecutive-cut correspondence, the two exact local-channel
-identities, data processing in both directions, and positive-length
-nonvanishing proves the SAL conclusion under
-\leanid{MPOTensor.IsHorizontalCF}.  At length one, the same nonvanishing rules
-out a zero physical-trace transfer.  Combining its idempotence with the SAL
-conclusion proves ZCL and SAL on this restricted surface.\footnote{Formal declarations:
+\section{Horizontal specialization}
+
+The declarations
 \leanid{MPOTensor.isSAL_of_isRFPViaTS} and
-\leanid{MPOTensor.isSourceZCL_and_isSAL_of_isRFPViaTS} in
-\doclink{TNLean/MPS/MPDO/RFPViaTSSAL}.}
+\leanid{MPOTensor.isSourceZCL_and_isSAL_of_isRFPViaTS} are specializations of
+the two explicit-trace theorems. Their normalized BNT-refined horizontal
+hypothesis is stronger than the density-family boundary above. It supplies
+\[
+  \operatorname{tr}\rho^{(N)}(M)\neq0
+\]
+for every $N\geq1$ through
+\leanid{MPOTensor.trace_mpo_ne_zero_of_isHorizontalCF_isMPDO_isRFPViaTS}.
+No horizontal decomposition is used in the mutual-information calculation
+itself.
 
-\paragraph{Classification: scope restriction.}
-The verdict is a scope restriction, and the gap is partially resolved.  Under
-\leanid{MPOTensor.IsHorizontalCF}, the normalized consecutive-cut state is
-identified with the existing prefix-entropy expression for $I_L$, and the RFP
-hypotheses imply normalization, source ZCL, and the equality
-$I_L=I_{L+1}$.  The remaining gap is the all-zero virtual summand permitted by
-the literal source canonical form at lines 214--219: no theorem yet restricts
-such a tensor to its active virtual subspace and transports the RFP, MPDO, ZCL,
-and SAL properties back to the original zero-tailed tensor.  Proposition
-\texttt{propsimple} is therefore only partially covered.  No simplicity
-hypothesis is used within the established BNT-refined scope.
+The literal source canonical-form construction permits an additional all-zero
+virtual summand because it allows $\sum_kD_k\leq D$.\footnote{Source:
+\path{Papers/1606.00608/MPDO-22-12-17-2.tex:214--219}.}
+That observation no longer leaves Proposition \texttt{propsimple} open: the
+proposition is stated and proved at its actual density-operator normalization
+boundary, while horizontal form gives a stronger sufficient condition for that
+boundary.
+
+\paragraph{Classification: closed.}
+Proposition \texttt{propsimple} is complete at the explicit nonzero-trace
+density-family boundary. Theorem~4.9 remains partial for independent reasons:
+the reverse and intermediate implications still include the commuting-form,
+selected-tensor comparison, and false Lemma~C.5 obstructions. No simplicity
+hypothesis is used in the completed forward implication.
 
 \end{document}
