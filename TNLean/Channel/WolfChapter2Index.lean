@@ -15,7 +15,7 @@ import TNLean.Channel.OrderedCP
 import TNLean.Channel.RadonNikodym
 import TNLean.Channel.OpenSystem
 import TNLean.Channel.POVM
-import TNLean.Channel.POVM.RankOneNeumark
+import TNLean.Channel.POVM.RankOneNaimark
 import TNLean.Channel.POVM.Uniqueness
 import TNLean.Channel.TransferMatrix
 import TNLean.Channel.WolfProps
@@ -230,7 +230,7 @@ project import.
 | POVM | `POVM.lean` | `POVM` |
 | Naimark isometry | `POVM.lean` | `POVM.naimarkIsometry` |
 | Naimark projector | `POVM.lean` | `POVM.naimarkProjection` |
-| Rank-one Neumark | `POVM/RankOneNeumark.lean` | `POVM.exists_orthonormal_basis_restriction` |
+| Rank-one Naimark | `POVM/RankOneNaimark.lean` | `POVM.exists_orthonormal_basis_restriction` |
 | Quantum instrument | `POVM.lean` | `Instrument` |
 | Transfer matrix | `TransferMatrix.lean` | `transferMatrix` |
 | Unitary conjugation | `TransferMatrix.lean` | `unitaryConjLM` |

@@ -8,9 +8,9 @@ import TNLean.Algebra.MatrixGramUnitary
 import TNLean.Channel.POVM
 
 /-!
-# Sharp rank-one Neumark extension (Wolf lines 480--499)
+# Sharp rank-one Naimark extension (Wolf lines 480--499)
 
-This file proves the sharp form of Neumark's theorem for rank-one POVM
+This file proves the sharp rank-one form of Naimark's theorem for POVM
 effects, following Wolf, *Quantum Channels & Operations*, lines 480--499
 of `Notes/WolfNoteTexSource/ch02_representations.tex`.
 
@@ -41,14 +41,14 @@ extension directly, without the tensor-product factor.
   Theorem "Neumark's theorem", lines 480--499][Wolf2012QChannels]
 -/
 
-open scoped Matrix
+open scoped Matrix ComplexOrder
 open Matrix Finset
 
 namespace POVM
 
 variable {d n : ℕ}
 
-section rankOneNeumarkSharp
+section rankOneNaimarkSharp
 
 /-- Given a family `ψᵢ : Fin d → ℂ` of `n` vectors satisfying the
 resolution of identity `∑_i |ψᵢ⟩⟨ψᵢ| = 1_d`, the `n×d` matrix
@@ -72,38 +72,7 @@ private lemma gram_eq_one_of_vecMulVec_sum_eq_one (ψ : Fin n → (Fin d → ℂ
     _ = star (if j = k then (1 : ℂ) else 0) := by rw [h_entry]
     _ = if j = k then (1 : ℂ) else 0 := by split <;> simp
 
-/-- The `n×d` inclusion matrix `J` with `J i j = 1` when `i` is the
-natural embedding of `j` into `Fin n` via `Fin.castLE hd` and `0`
-otherwise.  For `d ≤ n`, `J` is an isometry: `Jᴴ * J = 1_d`. -/
-private lemma inclusion_conjTranspose_mul_self (hd : d ≤ n) :
-    ((Matrix.of fun (i : Fin n) (j : Fin d) =>
-        if i = Fin.castLE hd j then (1 : ℂ) else 0)ᴴ *
-      (Matrix.of fun (i : Fin n) (j : Fin d) =>
-        if i = Fin.castLE hd j then (1 : ℂ) else 0)) = 1 := by
-  ext j k
-  simp only [Matrix.mul_apply, Matrix.conjTranspose_apply, Matrix.one_apply]
-  by_cases hjk : j = k
-  · subst hjk
-    rw [Finset.sum_eq_single (Fin.castLE hd j)]
-    · simp
-    · intro i _ hi
-      have hterm : (if i = Fin.castLE hd j then (1 : ℂ) else 0) = 0 := by
-        simp [hi]
-      simp [hterm]
-    · intro h; exact absurd (Finset.mem_univ _) h
-  · have hcast_ne : Fin.castLE hd j ≠ Fin.castLE hd k :=
-      fun h ↦ hjk ((Fin.castLE_injective hd) h)
-    rw [if_neg hjk]
-    apply Finset.sum_eq_zero
-    intro i _
-    simp only [Matrix.of_apply]
-    by_cases hij : i = Fin.castLE hd j
-    · subst hij; rw [if_neg hcast_ne]; simp
-    · by_cases hik : i = Fin.castLE hd k
-      · subst hik; rw [if_neg (Ne.symm hcast_ne)]; simp
-      · simp [hij, hik]
-
-/-- **Sharp rank-one Neumark extension** (Wolf, *Quantum Channels & Operations*,
+/-- **Sharp rank-one Naimark extension** (Wolf, *Quantum Channels & Operations*,
 Theorem "Neumark's theorem", lines 480--499).
 
 Given `n` vectors `ψᵢ : Fin d → ℂ` (`i = 1,…,n`) forming a rank-one resolution
@@ -128,39 +97,37 @@ theorem exists_orthonormal_basis_restriction (ψ : Fin n → (Fin d → ℂ))
     dsimp [Ψ]
     exact gram_eq_one_of_vecMulVec_sum_eq_one ψ h_sum
   have hinj : Function.Injective (Matrix.mulVecLin Ψ) := by
-    intro x y hxy
-    have hxy' : Ψ.mulVec x = Ψ.mulVec y := hxy
-    have h1 : (Ψᴴ * Ψ).mulVec x = (Ψᴴ * Ψ).mulVec y := by
-      rw [← Matrix.mulVec_mulVec, ← Matrix.mulVec_mulVec]
-      exact congrArg _ hxy'
-    simpa [hΨGram] using h1
+    rw [← LinearMap.ker_eq_bot,
+      ← Matrix.ker_mulVecLin_conjTranspose_mul_self Ψ, hΨGram]
+    simp
   have hd : d ≤ n := by
     simpa using LinearMap.finrank_le_finrank_of_injective hinj
   let J : Matrix (Fin n) (Fin d) ℂ :=
-    Matrix.of fun i j => if i = Fin.castLE hd j then (1 : ℂ) else 0
-  have hJGram : Jᴴ * J = 1 := inclusion_conjTranspose_mul_self hd
+    (1 : Matrix (Fin n) (Fin n) ℂ).submatrix id (Fin.castLE hd)
+  have hJGram : Jᴴ * J = 1 := by
+    rw [show Jᴴ = (1 : Matrix (Fin n) (Fin n) ℂ).submatrix (Fin.castLE hd) id by
+      simp [J]]
+    change
+      (1 : Matrix (Fin n) (Fin n) ℂ).submatrix (Fin.castLE hd) (Equiv.refl (Fin n)) *
+          (1 : Matrix (Fin n) (Fin n) ℂ).submatrix (Equiv.refl (Fin n)) (Fin.castLE hd) = 1
+    rw [Matrix.submatrix_mul_equiv]
+    simpa only [Matrix.one_mul] using
+      Matrix.submatrix_one (α := ℂ) (Fin.castLE hd) (Fin.castLE_injective hd)
   obtain ⟨U, hU⟩ :=
     Matrix.exists_unitary_mul_eq_of_conjTranspose_mul_eq Ψ J (hΨGram.trans hJGram.symm)
-  -- hU: Ψ = (U : Matrix (Fin n) (Fin n) ℂ) * J
+  have hUJ :
+      (U : Matrix (Fin n) (Fin n) ℂ) * J =
+        (U : Matrix (Fin n) (Fin n) ℂ).submatrix id (Fin.castLE hd) := by
+    simpa [J] using
+      Matrix.mul_submatrix_one (Equiv.refl (Fin n)) (Fin.castLE hd)
+        (U : Matrix (Fin n) (Fin n) ℂ)
   have h_restrict (i : Fin n) (j : Fin d) :
       (U : Matrix (Fin n) (Fin n) ℂ) i (Fin.castLE hd j) = ψ i j := by
-    calc
-      (U : Matrix (Fin n) (Fin n) ℂ) i (Fin.castLE hd j)
-          = (∑ k : Fin n, (U : Matrix (Fin n) (Fin n) ℂ) i k * J k j) := by
-        rw [Finset.sum_eq_single (Fin.castLE hd j)]
-        · simp [J]
-        · intro k _ hk
-          have hJzero : J k j = 0 := by
-            dsimp [J]
-            simp [hk]
-          simp [hJzero]
-        · intro h; exact absurd (Finset.mem_univ _) h
-      _ = ((U : Matrix (Fin n) (Fin n) ℂ) * J) i j := rfl
-      _ = Ψ i j := by rw [hU]
-      _ = ψ i j := rfl
+    simpa [Ψ] using
+      (congrArg (fun M ↦ M i j) (hU.trans hUJ)).symm
   exact ⟨hd, U, h_restrict⟩
 
-end rankOneNeumarkSharp
+end rankOneNaimarkSharp
 
 /-! ### The rank-one POVM corollary -/
 
