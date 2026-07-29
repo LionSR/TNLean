@@ -226,23 +226,20 @@
       MPSTensor.SectorDecomposition.flatWeight_smul_flatBasis_eq_compression}
     \leanok
     \uses{def:sector_weight_data}
-    Let
-    \[
-        A=\bigoplus_t \mu_t A_t
-    \]
-    be a weighted block-diagonal tensor in flattened virtual coordinates.
+    Let $A=\bigoplus_t \mu_t A_t$ be a weighted block-diagonal tensor in
+    flattened virtual coordinates.
     For every block $s$, the canonical inclusion $V_s$ of that block satisfies
-    \[
-        V_s^\dagger V_s=1,\qquad
-        V_sV_s^\dagger=P_s,\qquad
-        V_s^\dagger A^iV_s=\mu_s A_s^i.
-    \]
+    \begin{align}
+        V_s^\dagger V_s&=1, \notag\\
+        V_sV_s^\dagger&=P_s, \notag\\
+        V_s^\dagger A^iV_s&=\mu_s A_s^i. \notag
+    \end{align}
     Here $P_s$ is the corresponding block projection, transported to the
     flattened coordinates.  Moreover,
-    \[
-        A^iV_s=V_s(\mu_sA_s^i),\qquad
-        V_s^\dagger A^i=(\mu_sA_s^i)V_s^\dagger.
-    \]
+    \begin{align}
+        A^iV_s&=V_s(\mu_sA_s^i), \notag\\
+        V_s^\dagger A^i&=(\mu_sA_s^i)V_s^\dagger. \notag
+    \end{align}
     This is the exact blockwise virtual-corner identity from
     \cite[Section~2.3, equation \emph{II\_Aiplusk1},
       lines~195--219]{Cirac2016MPDO_arXiv}.  Appendix~C.2, Case~I,
