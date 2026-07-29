@@ -1,0 +1,44 @@
+% Regression: a circle-frame trace follows the frame arc, not its chord.
+\documentclass{standalone}
+\usepackage{tenkz}
+\makeatletter
+\ExplSyntaxOn
+\file_input:n { tenkz-kernel.code.tex }
+\tl_new:N \l__tenkz_test_trace_name_tl
+\int_new:N \l__tenkz_test_ring_cross_int
+\cs_new_eq:NN
+  \__tenkz_test_wire_stroke:nn
+  \__tenkz_kernel_r_wire_stroke:nn
+\cs_set_protected:Npn \__tenkz_kernel_r_wire_stroke:nn #1#2
+  {
+    \__tenkz_test_wire_stroke:nn {#1} {#2}
+    \__tenkz_model_get:nnN
+      { \l__tenkz_kernel_r_wire_record_tl } {name}
+      \l__tenkz_test_trace_name_tl
+    \str_if_eq:VnT \l__tenkz_test_trace_name_tl {wrap-1}
+      {
+        % For a two-station circle the closure sector is centred at (-0.5,0).
+        % A short radial probe there meets the frame arc once; the old chord
+        % lies strictly inside it and meets the probe zero times.
+        \path [ spath/save = tenkz-test-ring-probe ]
+          \__tenkz_kernel_r_pair:nn {-0.51} {0}
+          --
+          \__tenkz_kernel_r_pair:nn {-0.499} {0} ;
+        \__tenkz_string_count:nnN
+          {wrap-1} {tenkz-test-ring-probe}
+          \l__tenkz_test_ring_cross_int
+        \int_compare:nNnF { \l__tenkz_test_ring_cross_int } = {1}
+          {
+            \errmessage
+              {circle-frame~trace~did~not~follow~the~closing~frame~arc}
+          }
+      }
+  }
+\ExplSyntaxOff
+\makeatother
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[ring=2]
+  \tn[skin=box]{A} & \tn[skin=box]{B}
+\end{tenkz}
+\end{document}
