@@ -31,16 +31,27 @@ Source context: arXiv:1606.00608, Appendix C.2, equation `AppUkU=rl`, lines
 1381--1388. -/
 noncomputable def ofGaugeEquiv (F : PhysicalSectorFactorization K)
     (hGauge : MPSTensor.GaugeEquiv K.toMPSTensor L.toMPSTensor) :
-    PhysicalSectorFactorization L := by
-  classical
-  let X : GL (Fin D) ℂ := Classical.choose hGauge
-  have hX : ∀ i : Fin (d * d),
-      L.toMPSTensor i = X * K.toMPSTensor i * X⁻¹ :=
-    Classical.choose_spec hGauge
-  exact F.ofVirtualMatrices
-    (X : Matrix (Fin D) (Fin D) ℂ)
-    ((X⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)
-    hX
+    PhysicalSectorFactorization L :=
+  F.ofVirtualMatrices
+    ((Classical.choose hGauge : GL (Fin D) ℂ) :
+      Matrix (Fin D) (Fin D) ℂ)
+    (((Classical.choose hGauge : GL (Fin D) ℂ)⁻¹ : GL (Fin D) ℂ) :
+      Matrix (Fin D) (Fin D) ℂ)
+    (Classical.choose_spec hGauge)
+
+/-- Virtual-gauge transport is virtual-matrix transport by a gauge and its
+inverse. -/
+theorem ofGaugeEquiv_eq_ofVirtualMatrices
+    (F : PhysicalSectorFactorization K)
+    (hGauge : MPSTensor.GaugeEquiv K.toMPSTensor L.toMPSTensor) :
+    F.ofGaugeEquiv hGauge =
+      F.ofVirtualMatrices
+        ((Classical.choose hGauge : GL (Fin D) ℂ) :
+          Matrix (Fin D) (Fin D) ℂ)
+        (((Classical.choose hGauge : GL (Fin D) ℂ)⁻¹ : GL (Fin D) ℂ) :
+          Matrix (Fin D) (Fin D) ℂ)
+        (Classical.choose_spec hGauge) :=
+  rfl
 
 /-- Virtual-gauge transport leaves every neighboring operator unchanged. -/
 @[simp] theorem ofGaugeEquiv_neighboringOperator
@@ -63,10 +74,14 @@ noncomputable def ofGaugeEquiv (F : PhysicalSectorFactorization K)
         (X : Matrix (Fin D) (Fin D) ℂ)) = 1
     rw [← Units.val_mul]
     simp
-  change (F.ofVirtualMatrices x y hX).neighboringOperator k h =
-    F.neighboringOperator k h
-  rw [F.ofVirtualMatrices_neighboringOperator x y hX k h, hyx]
-  exact F.neighboringOperatorWithMatrix_one k h
+  calc
+    (F.ofGaugeEquiv hGauge).neighboringOperator k h =
+        F.neighboringOperatorWithMatrix k h (y * x) := by
+      simpa only [ofGaugeEquiv_eq_ofVirtualMatrices, X, x, y] using
+        F.ofVirtualMatrices_neighboringOperator x y hX k h
+    _ = F.neighboringOperator k h := by
+      rw [hyx]
+      exact F.neighboringOperatorWithMatrix_one k h
 
 /-- Positivity of the neighboring operators is preserved by virtual-gauge
 transport. -/

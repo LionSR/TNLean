@@ -148,7 +148,15 @@
         \notag
     \end{align}
     Every physical-sector factorization of $K$ induces one of $L$ with the
-    same physical decomposition.
+    same physical decomposition.  Its virtual tensor families are
+    \begin{align}
+        (l_k^L)_\beta
+        &=\sum_\gamma X_{\beta,\gamma}(l_k^K)_\gamma,
+        &
+        (r_k^L)_\alpha
+        &=\sum_\delta Y_{\delta,\alpha}(r_k^K)_\delta.
+        \notag
+    \end{align}
     This construction abstracts the virtual corner in
     \cite[Section~2.3, lines~195--219]{Cirac2016MPDO_arXiv} and the
     physical-sector factorization in
@@ -236,6 +244,7 @@
 \begin{theorem}[Virtual-gauge invariance of physical-sector factorizations]
     \label{thm:mpdo_physical_sector_factorization_gauge}
     \lean{MPOTensor.PhysicalSectorFactorization.ofGaugeEquiv,
+      MPOTensor.PhysicalSectorFactorization.ofGaugeEquiv_eq_ofVirtualMatrices,
       MPOTensor.PhysicalSectorFactorization.ofGaugeEquiv_neighboringOperator,
       MPOTensor.PhysicalSectorFactorization.ofGaugeEquiv_neighboringOperator_posSemidef}
     \leanok

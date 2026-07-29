@@ -55,7 +55,7 @@ Source context: arXiv:1606.00608, Section 2.3, equation `II_Aiplusk1`, lines
       L.toMPSTensor i = Vᴴ * K.toMPSTensor i * V)
     (k h : Fin F.sectorCount) :
     (F.ofVirtualCompression V hCompression).neighboringOperator k h =
-      F.neighboringOperatorWithMatrix (V * Vᴴ) k h :=
+      F.neighboringOperatorWithMatrix k h (V * Vᴴ) :=
   F.ofVirtualMatrices_neighboringOperator Vᴴ V hCompression k h
 
 end MPOTensor.PhysicalSectorFactorization

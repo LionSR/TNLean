@@ -39,8 +39,8 @@ For `P = 1`, this is the ordinary neighboring operator.
 Source context: arXiv:1606.00608, Appendix C.2, equation `etarl`, lines
 1441--1445. -/
 noncomputable def neighboringOperatorWithMatrix
-    (F : PhysicalSectorFactorization K) (P : Matrix (Fin D) (Fin D) ℂ)
-    (k h : Fin F.sectorCount) :
+    (F : PhysicalSectorFactorization K) (k h : Fin F.sectorCount)
+    (P : Matrix (Fin D) (Fin D) ℂ) :
     Matrix (NeighborIndex F k h) (NeighborIndex F k h) ℂ :=
   Matrix.of fun x y ↦
     ∑ delta, ∑ gamma,
@@ -50,9 +50,9 @@ noncomputable def neighboringOperatorWithMatrix
 /-- Entries of the matrix-weighted neighboring operator are the corresponding
 weighted contractions of the right and left sector tensors. -/
 @[simp] theorem neighboringOperatorWithMatrix_apply
-    (F : PhysicalSectorFactorization K) (P : Matrix (Fin D) (Fin D) ℂ)
-    (k h : Fin F.sectorCount) (x y : NeighborIndex F k h) :
-    F.neighboringOperatorWithMatrix P k h x y =
+    (F : PhysicalSectorFactorization K) (k h : Fin F.sectorCount)
+    (P : Matrix (Fin D) (Fin D) ℂ) (x y : NeighborIndex F k h) :
+    F.neighboringOperatorWithMatrix k h P x y =
       ∑ delta, ∑ gamma,
         P delta gamma * F.rightTensor k delta x.1 y.1 *
           F.leftTensor h gamma x.2 y.2 :=
@@ -62,7 +62,7 @@ weighted contractions of the right and left sector tensors. -/
 operator. -/
 @[simp] theorem neighboringOperatorWithMatrix_one
     (F : PhysicalSectorFactorization K) (k h : Fin F.sectorCount) :
-    F.neighboringOperatorWithMatrix 1 k h = F.neighboringOperator k h := by
+    F.neighboringOperatorWithMatrix k h 1 = F.neighboringOperator k h := by
   ext x y
   rw [neighboringOperatorWithMatrix_apply, neighboringOperator_apply]
   apply Finset.sum_congr rfl
@@ -169,7 +169,7 @@ Source context: arXiv:1606.00608, Section 2.3, equation `II_Aiplusk1`, lines
       L.toMPSTensor i = X * K.toMPSTensor i * Y)
     (k h : Fin F.sectorCount) :
     (F.ofVirtualMatrices X Y hTransport).neighboringOperator k h =
-      F.neighboringOperatorWithMatrix (Y * X) k h := by
+      F.neighboringOperatorWithMatrix k h (Y * X) := by
   classical
   ext x y
   simp only [neighboringOperator_apply, ofVirtualMatrices,
