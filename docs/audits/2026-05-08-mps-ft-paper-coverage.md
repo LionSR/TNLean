@@ -54,17 +54,17 @@ The distinct count is the 40 source `thm`, `prop`, `cor`, and `lem`
 environments. The occurrence count adds five Appendix A/D restatements.
 The following ledger makes the count reproducible from source line numbers:
 
-- **Complete (17 distinct):** 249, 253, 606, 945, 1080, 1121, 1130,
-  1274, 1333, 1351, 1406, 1510, 1569, 1647, 1680, 1835, and 2221.
-- **Partial (11 distinct):** 278, 342, 398, 583, 801, 851, 972, 1013,
-  1597, 1786, and 1801.
+- **Complete (18 distinct):** 249, 253, 606, 945, 1080, 1121, 1130,
+  1274, 1333, 1351, 1406, 1510, 1569, 1647, 1680, 1786, 1835, and 2221.
+- **Partial (10 distinct):** 278, 342, 398, 583, 801, 851, 972, 1013,
+  1597, and 1801.
 - **Not-ready (12 distinct):** 349, 354, 500, 534, 543, 777, 1155, 1197,
   1484, 1503, 1740, and 1810.
 - **Additional occurrences:** the Appendix A restatements at 1137, 1167,
   and 1172 inherit partial, not-ready, and not-ready status, respectively; the
   Appendix D restatements at 1863 and 1929 inherit complete and partial status.
   Thus the five restatements add one complete, two partial, and two not-ready
-  occurrences, giving the displayed totals 18/13/14.
+  occurrences, giving the displayed totals 19/12/14.
 
 Definitions, equations, and explanatory proof-segment rows are not counted.
 In particular, Eq. `II_XAX` at 1072--1077 is excluded, while the purification
@@ -314,7 +314,7 @@ These are known oversized (documented in #1512/#1522) and do not block unrelated
 
 ## 7. Key remaining coverage gaps
 
-The 23 non-complete distinct CPSV16 results comprise 11 partial and 12
+The 22 non-complete distinct CPSV16 results comprise 10 partial and 12
 not-ready results. They are source-ambiguous, formally refuted, research-level,
 owner-held, or scope-restricted by the current formal interface. Lemma
 `Lsigma3`, the Hayashi strong-subadditivity equality characterization, and the

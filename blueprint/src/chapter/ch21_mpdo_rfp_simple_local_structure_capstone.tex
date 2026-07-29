@@ -656,12 +656,9 @@
     \lean{MPOTensor.%
         hasGSNNCHForm_of_bntLayerOrthogonal_of_physicalSectorFactorization}
     \leanok
-    \uses{thm:mpdo_ambient_sector_factorization_supported_bond,
-        thm:mpdo_bnt_layer_orthogonal_supports,
-        thm:mpdo_nonnegative_orthogonal_commuting_sectors_gsnnch}
     Let $M$ generate positive semidefinite periodic operators and have a BNT
     decomposition with representatives $A_x$ of positive bond dimension,
-    copy numbers $n_x\geq1$, and arbitrary nonzero copy weights $\mu_{x,q}$.
+    copy numbers $n_x\geq1$, and arbitrary copy weights $\mu_{x,q}$.
     Suppose that the decomposition generates the same matrix product vectors
     as $M$ at every positive length.  Assume that the simultaneous one-site
     tuples $(A_x^i)_x$, as $i$ ranges over the physical labels, span the
@@ -692,6 +689,9 @@
 
 \begin{proof}
     \leanok
+    \uses{thm:mpdo_ambient_sector_factorization_supported_bond,
+        thm:mpdo_bnt_layer_orthogonal_supports,
+        thm:mpdo_nonnegative_orthogonal_commuting_sectors_gsnnch}
     The physical-sector identities make every $A_x$ an MPDO.  The unstarred
     layer identities and one-site spanning therefore give pairwise orthogonal
     projections $P_x$ supporting the raw representatives on both sides.
