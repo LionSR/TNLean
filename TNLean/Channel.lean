@@ -41,6 +41,7 @@ import TNLean.Channel.NormalForm
 import TNLean.Channel.OpenSystem
 import TNLean.Channel.OrderedCP
 import TNLean.Channel.POVM
+import TNLean.Channel.POVM.RankOneNeumark
 import TNLean.Channel.POVM.Uniqueness
 import TNLean.Channel.PartialTrace
 import TNLean.Channel.PartialTranspose

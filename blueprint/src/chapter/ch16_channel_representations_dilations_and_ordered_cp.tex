@@ -743,6 +743,45 @@ a common dilation space.
     $V=W\sum_iM_i\otimes\ket{i}=WV_0$.
 \end{proof}
 
+\begin{theorem}[Sharp rank-one Neumark extension]
+    \label{thm:sharp_rank_one_neumark}
+    \lean{POVM.exists_orthonormal_basis_restriction,
+        POVM.of_rank_one_povm}
+    \uses{def:povm, thm:exists_naimark_dilation}
+    Let $\{\ketbra{\psi_i}{\psi_i}\}_{i=0}^{n-1}$ be a rank-one POVM on
+    $\C^d$ with outcomes $n$ and $d\le n$, i.e.\
+    $\sum_i\ketbra{\psi_i}{\psi_i}=\Id_d$.  Then there exists an
+    orthonormal basis $\{\phi_i\}_{i=0}^{n-1}$ of $\C^n$ such that each
+    $\psi_i$ is the restriction of $\phi_i$ to the first $d$ coordinates.
+    Concretely, the rows of a unitary $U\in U(n)$ give the $\phi_i$, and
+    $\psi_i$ is recovered as $\psi_i(j)=U_{i,\,j}$ for
+    $j=0,\dots,d-1$.
+
+    Unlike \ref{thm:exists_naimark_dilation}, whose ambient Hilbert space
+    is $\C^D\otimes\C^n$ of dimension $D\cdot n$, this theorem yields the
+    sharp $n$-dimensional ambient space asserted by the source (Wolf,
+    Theorem ``Neumark's theorem'').
+
+    The bridge lemma \lean{POVM.of_rank_one_povm} starts from a
+    \lean{POVM} with an explicit rank-one decomposition and applies the
+    sharp extension.
+\end{theorem}
+
+\begin{proof}
+    Assemble the $n\times d$ matrix $\Psi_{i,j}:=\psi_i(j)$.  From the
+    resolution of identity one obtains $\Psi^\dagger\Psi=\Id_d$.
+    Let $J$ be the $n\times d$ inclusion matrix
+    $J_{i,j}=1$ if $i$ equals the embedding of $j$ into $\Fin_n$ and $0$
+    otherwise; for $d\le n$, $J^\dagger J=\Id_d$.
+    By \ref{thm:exists_unitary_zero_extension} via
+    \lean{Matrix.exists_unitary_mul_eq_of_conjTranspose_mul_eq}
+    there exists a unitary $U\in U(n)$ with $\Psi=UJ$, hence
+    $\psi_i(j)=U_{i,\iota(j)}$ where $\iota:\Fin_d\to\Fin_n$ is the
+    natural inclusion.  The rows of $U$ are the required orthonormal
+    basis.  The bridge lemma extracts the vectors from a POVM whose
+    effects are given in rank-one form and applies the main theorem.
+\end{proof}
+
 \begin{definition}[POVM from a PSD resolution of identity on a dilation]
     \label{def:povm_of_psd_resolution_of_identity}
     \lean{POVM.ofPSDResolutionOfIdentity}
