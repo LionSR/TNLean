@@ -19,14 +19,17 @@ with the tracked TeX sources.
   boundary and topology must be re-authored with the named §12-style shape;
   a compatibility-renderer transcription is not a migration.
 - A fixture receives its most demanding disposition: redraw outranks codemod,
-  which outranks preserve. A fixture with no picture construct is preserved
-  because it has no surface-switch consumer.
+  which outranks preserve. Classification follows local `\input`/`\include`
+  dependencies and setup commands, not only picture constructs in the
+  top-level file.
 
 ### Migration target codes
 
 | Code | Required 1.0 target |
 |---|---|
 | `P-grid` | Keep the existing pure-kernel `tenkz` grid spelling byte-compatible. |
+| `P-setup` | Keep setup that already uses signed 1.0 keys. |
+| `P-none` | Keep the fixture; it has no tenkz public-surface construct. |
 | `C-picture` | Expand `\tnpic` to a scoped `tenkz` picture term. |
 | `C-tree` | Expand `\tntree` to declared fuse atoms and `\tnwire` records. |
 | `C-policy` | Expand physical/boundary sugar to `rows=`, typed `ports=`, and explicit side policies. |
@@ -129,64 +132,67 @@ and 41 `\tnpic`/`\tntree` lines.
 
 The source root for every file below is `tests/tenkz/`. Classification is
 whole-fixture so the list decides whether each top-level corpus file is
-retained, mechanically respelled, or redrawn/re-baselined at S4.
+retained, mechanically respelled, or redrawn/re-baselined at S4. Each target
+code group applies to every fixture named on that row. Local input dependencies
+participate in disposition, while the raw-count table remains a direct
+top-level-source census so a shared input is not counted multiple times.
 
 | Disposition | Fixtures |
 |---|---:|
-| preserve | 13 |
-| codemod | 51 |
-| redraw | 200 |
+| preserve | 11 |
+| codemod | 50 |
+| redraw | 203 |
 | **Total** | **264** |
 
-Of the 264 top-level fixtures, 245 open at least one tenkz
-environment, 11 are command-only consumers, and 8
-contain no picture construct. Multiple pictures in one file account for the
-770 occurrence total.
+Of the 264 top-level fixtures, 246 directly or indirectly open a tenkz
+environment, 11 are picture-command-only consumers, 2 are setup-only
+consumers, and 5 contain no tenkz public-surface construct.
 
-### Preserve fixtures (13)
+### Preserve fixtures (11)
 
-- `geom.tex` · `iso_h.tex` · `modes_dot_baseline.tex` · `p3_probe_opop.tex` · `p_pitch.tex` · `p_species.tex` · `plane_experiment.tex` · `rv4061_flatonly.tex`
-- `trace_warn.tex` · `zz_geomdag.tex` · `zz_geomframe.tex` · `zz_geomsupport.tex` · `zz_wirescan.tex`
+- `P-grid`: `iso_h.tex` · `p3_probe_opop.tex` · `rv4061_flatonly.tex` · `trace_warn.tex` · `zz_wirescan.tex`
+- `P-none`: `geom.tex` · `plane_experiment.tex` · `zz_geomdag.tex` · `zz_geomframe.tex` · `zz_geomsupport.tex`
+- `P-setup`: `p_species.tex`
 
-### Codemod fixtures (51)
+### Codemod fixtures (50)
 
-- `audit3.tex` · `audit4.tex` · `channel_test.tex` · `g06_stageB.tex` · `gr_t2_fsymbol.tex` · `hard01_v2.tex` · `hard02_v2.tex` · `hard11_v2.tex`
-- `hard11_v3.tex` · `hard11_v4.tex` · `hdr.tex` · `iso_a.tex` · `iso_b.tex` · `iso_c.tex` · `iso_d.tex` · `iso_e.tex`
-- `iso_f.tex` · `iso_g.tex` · `iso_i.tex` · `iso_j.tex` · `iso_k.tex` · `iso_t.tex` · `lrbox_probe.tex` · `p3_bisect_a.tex`
-- `p3_bisect_d.tex` · `p3_bond_insertion.tex` · `p3_eq5_fsymbol.tex` · `p3_eq5_v2.tex` · `p3_gauge.tex` · `p3_lemma1.tex` · `p3_pitch_probe.tex` · `p3_trace_word.tex`
-- `p3_word.tex` · `p4067_braced.tex` · `p_newcup.tex` · `part_B1.tex` · `part_B2.tex` · `part_B3.tex` · `part_B7.tex` · `rev4075_alias.tex`
-- `rv4061_cellset.tex` · `rv4061_cuporder.tex` · `rv4061_ex_canonical-channel.tex` · `rv4061_ketptrace.tex` · `t2_fusion.tex` · `t2_lassodef.tex` · `t2_lassodef_v2.tex` · `t2_pentagon5.tex`
-- `t2_staircase.tex` · `t2_twoshift.tex` · `tree_test.tex`
+- `C-policy`: `hdr.tex` · `iso_i.tex` · `iso_k.tex` · `p3_bisect_a.tex` · `p3_bisect_d.tex` · `p3_pitch_probe.tex` · `rv4061_ketptrace.tex`
+- `C-policy+C-record`: `audit3.tex` · `audit4.tex` · `channel_test.tex` · `g06_stageB.tex` · `hard01_v2.tex` · `hard02_v2.tex` · `iso_j.tex` · `lrbox_probe.tex` · `p3_bond_insertion.tex` · `p3_gauge.tex` · `p3_lemma1.tex` · `p3_trace_word.tex` · `p3_word.tex` · `p_newcup.tex` · `part_B1.tex` · `part_B2.tex` · `rv4061_ex_canonical-channel.tex` · `t2_lassodef.tex` · `t2_lassodef_v2.tex` · `t2_twoshift.tex`
+- `C-record`: `hard11_v3.tex` · `hard11_v4.tex` · `iso_a.tex` · `iso_b.tex` · `iso_c.tex` · `iso_d.tex` · `iso_e.tex` · `iso_f.tex` · `iso_g.tex` · `iso_t.tex` · `part_B3.tex` · `part_B7.tex` · `rv4061_cellset.tex` · `rv4061_cuporder.tex` · `t2_staircase.tex`
+- `C-tree`: `gr_t2_fsymbol.tex` · `hard11_v2.tex` · `p3_eq5_fsymbol.tex` · `p3_eq5_v2.tex` · `p4067_braced.tex` · `t2_fusion.tex` · `t2_pentagon5.tex` · `tree_test.tex`
 
-### Redraw fixtures (200)
+### Redraw fixtures (203)
 
-- `adv_brace.tex` · `adv_conj.tex` · `adv_envs.tex` · `adv_leak.tex` · `adv_nested.tex` · `atoms_test.tex` · `audit1.tex` · `audit2.tex`
-- `audit_open.tex` · `boundary_test.tex` · `cd_edge.tex` · `cd_test.tex` · `chain.tex` · `cups_edge.tex` · `cups_test.tex` · `ease_test.tex`
-- `feat.tex` · `fig21d_cubic.tex` · `fig21d_cubic_v2.tex` · `fig21d_expect.tex` · `fig21d_pepo.tex` · `free.tex` · `free_modes.tex` · `free_test.tex`
-- `free_typed_joins_ex.tex` · `g06_stageA.tex` · `g06_stageC.tex` · `gallery.tex` · `gr_t1_fusion.tex` · `gr_t3_action.tex` · `gr_t4_lasso.tex` · `gr_t5_zipper.tex`
-- `gr_t6_leftinv.tex` · `gr_t7_coset.tex` · `gr_t8_sum.tex` · `grid_test.tex` · `hard01_ortho.tex` · `hard01_v3.tex` · `hard02_ALdef.tex` · `hard03_rdm.tex`
-- `hard03_v2.tex` · `hard03_v3.tex` · `hard04_eig.tex` · `hard04_v2.tex` · `hard04_v3.tex` · `hard05_OL.tex` · `hard05_v2.tex` · `hard05_v4.tex`
-- `hard06_gauge2layer.tex` · `hard06_v2.tex` · `hard06_v3.tex` · `hard06_v4.tex` · `hard07_peps.tex` · `hard07_v2.tex` · `hard08_mpu.tex` · `hard08_v2.tex`
-- `hard08_v3.tex` · `hard09_pull.tex` · `hard09_v2.tex` · `hard10_pta.tex` · `hard10_v2.tex` · `hard10_v3.tex` · `hard11_circuit.tex` · `hard12_v2.tex`
-- `hard12_v3.tex` · `hard12_zcl.tex` · `lattice_test.tex` · `lpos_probe.tex` · `modes_test.tex` · `notch.tex` · `p3_bisect_b.tex` · `p3_bisect_c.tex`
-- `p3_blocking.tex` · `p3_corner.tex` · `p3_eq08.tex` · `p3_eq09.tex` · `p3_eq10.tex` · `p3_eq12.tex` · `p3_eq32.tex` · `p3_eq3_fusion.tex`
-- `p3_eq3_v2.tex` · `p3_eq4_ortho.tex` · `p3_eq4_v2.tex` · `p3_eq8_action.tex` · `p3_eq8_v2.tex` · `p3_erase.tex` · `p3_ghostket_probe.tex` · `p3_inverse.tex`
-- `p3_inverse_identity.tex` · `p3_min1.tex` · `p3_min2.tex` · `p3_multibond.tex` · `p3_multibond2.tex` · `p3_probe_opmod.tex` · `p3_probe_opop2.tex` · `p3_probe_pitch2.tex`
-- `p3_reduce.tex` · `p3_regions.tex` · `p3_slidecd.tex` · `p3_sliding.tex` · `p3_wineq.tex` · `p4067_baseline.tex` · `p4067_gridbase.tex` · `p4067_pentagon.tex`
-- `p_arrowtn.tex` · `p_usagefree.tex` · `part_B4.tex` · `part_B8.tex` · `pentagon_corrected.tex` · `plane_mirror_probe.tex` · `plane_stress.tex` · `plane_sweep1.tex`
-- `plane_sweep2.tex` · `plane_sweep2_v2.tex` · `plane_sweep3.tex` · `plane_test.tex` · `planes_keys_test.tex` · `probe.tex` · `regress_x_pbc.tex` · `rem.tex`
-- `rev4075_sig.tex` · `rgn.tex` · `rmpfig2_test.tex` · `rv4061_ex_atoms-keys.tex` · `rv4061_ex_boundary-doctrine.tex` · `rv4061_ex_cups-channels.tex` · `rv4061_ex_grid-benchmarks.tex` · `rv4061_ex_grid-mpo-stress.tex`
-- `rv4061_vertlabel.tex` · `rv4061_vertonly.tex` · `rv_probe.tex` · `sheets_a_role.tex` · `sheets_test.tex` · `sheets_warn_smoke.tex` · `smoke.tex` · `stress.tex`
-- `t2_ared.tex` · `t2_ared_loop.tex` · `t2_blocking.tex` · `t2_braidpat1.tex` · `t2_condensanyon.tex` · `t2_czx.tex` · `t2_eigladder.tex` · `t2_eq50_pull.tex`
-- `t2_eq54_ginj.tex` · `t2_finegrain.tex` · `t2_gs1d.tex` · `t2_gs2d.tex` · `t2_gs2d_lasso.tex` · `t2_hamil_gate.tex` · `t2_hamilcommu.tex` · `t2_idempotent.tex`
-- `t2_isometry.tex` · `t2_lassoC.tex` · `t2_lhsrhs1.tex` · `t2_lhsrhs2.tex` · `t2_lhsrhs3.tex` · `t2_lhsrhs4.tex` · `t2_lhsrhs5.tex` · `t2_lhsrhs6.tex`
-- `t2_mpo.tex` · `t2_mpublock.tex` · `t2_mpubrick.tex` · `t2_mpucond.tex` · `t2_mpuflow.tex` · `t2_mpusplit.tex` · `t2_olvert.tex` · `t2_pairs.tex`
-- `t2_pentagon2.tex` · `t2_pentagon3.tex` · `t2_pentagon4.tex` · `t2_pepo5.tex` · `t2_peps.tex` · `t2_probe_pepoupdown.tex` · `t2_probe_sides.tex` · `t2_purifyO.tex`
-- `t2_renorm13.tex` · `t2_rgfp4.tex` · `t2_rhoR.tex` · `t2_seljbraid.tex` · `t2_sptgh_box.tex` · `t2_sptintertwin.tex` · `t2_sptmpo_cross.tex` · `t2_sv17.tex`
-- `t2_tands.tex` · `t2_tcdual.tex` · `t2_tcdual_v2.tex` · `t2_tcprimal.tex` · `t2_tcprimal_v2.tex` · `t2_triangle.tex` · `t2_wrap9a.tex` · `trace_probe.tex`
-- `xyz_a_lattice.tex` · `xyz_a_planes.tex` · `xyz_test.tex` · `zz_edgeprobe.tex` · `zz_frame_rotation.tex` · `zz_renderslice.tex` · `zz_siteprobe.tex` · `zz_vertprune.tex`
-
-The preserved list includes these eight non-consumers: `geom.tex`, `modes_dot_baseline.tex`, `p_pitch.tex`, `p_species.tex`, `plane_experiment.tex`, `zz_geomdag.tex`, `zz_geomframe.tex`, `zz_geomsupport.tex`.
+- `C-picture+C-policy+C-record+C-tree+R-cd+R-free+R-lattice+R-record`: `gallery.tex`
+- `C-picture+C-policy+C-record+R-record`: `adv_brace.tex` · `rv4061_ex_grid-benchmarks.tex` · `smoke.tex`
+- `C-picture+C-record+R-cd+R-record`: `adv_nested.tex`
+- `C-picture+C-record+R-free+R-record`: `adv_leak.tex`
+- `C-picture+C-record+R-record`: `adv_conj.tex`
+- `C-picture+R-cd+R-lattice+R-record`: `adv_envs.tex`
+- `C-picture+R-record`: `audit2.tex` · `part_B8.tex`
+- `C-policy+C-record+C-species+R-free+R-lattice+R-record`: `g06_stageC.tex`
+- `C-policy+C-record+R-free+R-lattice+R-plane+R-record`: `planes_keys_test.tex`
+- `C-policy+C-record+R-free+R-record`: `hard02_ALdef.tex` · `hard03_rdm.tex` · `hard05_OL.tex` · `rv4061_ex_atoms-keys.tex` · `t2_mpo.tex`
+- `C-policy+C-record+R-lattice+R-record`: `g06_stageA.tex`
+- `C-policy+C-record+R-record`: `atoms_test.tex` · `boundary_test.tex` · `cups_edge.tex` · `cups_test.tex` · `modes_dot_baseline.tex` · `part_B4.tex` · `regress_x_pbc.tex` · `rev4075_sig.tex` · `rv4061_ex_boundary-doctrine.tex` · `rv4061_ex_cups-channels.tex` · `rv4061_ex_grid-mpo-stress.tex` · `rv_probe.tex` · `stress.tex` · `zz_renderslice.tex`
+- `C-policy+R-lattice`: `t2_blocking.tex` · `t2_finegrain.tex` · `t2_renorm13.tex`
+- `C-policy+R-lattice+R-plane+R-record`: `rmpfig2_test.tex`
+- `C-policy+R-lattice+R-record`: `p3_blocking.tex` · `p3_reduce.tex` · `t2_gs2d_lasso.tex` · `t2_lassoC.tex` · `t2_rgfp4.tex`
+- `C-policy+R-record`: `p3_eq08.tex` · `p3_eq8_action.tex` · `p3_eq8_v2.tex` · `p3_inverse.tex` · `p3_inverse_identity.tex` · `p3_min2.tex` · `p3_probe_pitch2.tex` · `rv4061_vertlabel.tex` · `t2_probe_sides.tex` · `trace_probe.tex` · `zz_vertprune.tex`
+- `C-record+R-free+R-record`: `hard01_ortho.tex` · `hard04_eig.tex` · `hard06_gauge2layer.tex`
+- `C-record+R-record`: `modes_test.tex` · `rev4075_alias.tex`
+- `C-tree+R-cd`: `cd_edge.tex` · `grid_test.tex`
+- `C-tree+R-cd+R-record`: `cd_test.tex` · `p4067_baseline.tex` · `p4067_pentagon.tex` · `p_arrowtn.tex` · `pentagon_corrected.tex`
+- `R-cd`: `p4067_gridbase.tex`
+- `R-cd+R-lattice+R-record`: `p3_corner.tex` · `p3_slidecd.tex` · `p3_sliding.tex`
+- `R-free+R-lattice+R-record`: `hard07_peps.tex`
+- `R-free+R-record`: `free.tex` · `free_modes.tex` · `free_test.tex` · `free_typed_joins_ex.tex` · `gr_t1_fusion.tex` · `gr_t4_lasso.tex` · `gr_t6_leftinv.tex` · `gr_t7_coset.tex` · `hard09_pull.tex` · `hard11_circuit.tex` · `hard12_zcl.tex` · `lpos_probe.tex` · `p3_eq10.tex` · `p3_eq12.tex` · `p_usagefree.tex` · `plane_sweep3.tex` · `t2_eq50_pull.tex` · `t2_eq54_ginj.tex` · `t2_idempotent.tex` · `t2_pentagon2.tex` · `t2_pentagon3.tex` · `t2_pentagon4.tex` · `t2_peps.tex` · `t2_seljbraid.tex` · `t2_sptmpo_cross.tex` · `t2_triangle.tex` · `zz_frame_rotation.tex`
+- `R-lattice`: `fig21d_expect.tex` · `fig21d_pepo.tex` · `hard07_v2.tex` · `plane_mirror_probe.tex` · `sheets_a_role.tex` · `sheets_test.tex` · `sheets_warn_smoke.tex` · `t2_pairs.tex` · `t2_pepo5.tex` · `t2_probe_pepoupdown.tex` · `xyz_a_lattice.tex`
+- `R-lattice+R-plane+R-record`: `plane_stress.tex` · `plane_test.tex` · `xyz_test.tex`
+- `R-lattice+R-record`: `chain.tex` · `feat.tex` · `fig21d_cubic.tex` · `fig21d_cubic_v2.tex` · `lattice_test.tex` · `notch.tex` · `p3_erase.tex` · `p3_regions.tex` · `p3_wineq.tex` · `plane_sweep1.tex` · `probe.tex` · `rem.tex` · `rgn.tex` · `t2_braidpat1.tex` · `t2_czx.tex` · `t2_gs2d.tex` · `t2_lhsrhs6.tex` · `t2_tcdual.tex` · `t2_tcdual_v2.tex` · `t2_tcprimal.tex` · `t2_tcprimal_v2.tex` · `zz_edgeprobe.tex` · `zz_siteprobe.tex`
+- `R-plane`: `plane_sweep2.tex` · `plane_sweep2_v2.tex` · `t2_wrap9a.tex` · `xyz_a_planes.tex`
+- `R-plane+R-record`: `ease_test.tex` · `t2_condensanyon.tex`
+- `R-record`: `audit1.tex` · `audit_open.tex` · `gr_t3_action.tex` · `gr_t5_zipper.tex` · `gr_t8_sum.tex` · `hard01_v3.tex` · `hard03_v2.tex` · `hard03_v3.tex` · `hard04_v2.tex` · `hard04_v3.tex` · `hard05_v2.tex` · `hard05_v4.tex` · `hard06_v2.tex` · `hard06_v3.tex` · `hard06_v4.tex` · `hard08_mpu.tex` · `hard08_v2.tex` · `hard08_v3.tex` · `hard09_v2.tex` · `hard10_pta.tex` · `hard10_v2.tex` · `hard10_v3.tex` · `hard12_v2.tex` · `hard12_v3.tex` · `p3_bisect_b.tex` · `p3_bisect_c.tex` · `p3_eq09.tex` · `p3_eq32.tex` · `p3_eq3_fusion.tex` · `p3_eq3_v2.tex` · `p3_eq4_ortho.tex` · `p3_eq4_v2.tex` · `p3_ghostket_probe.tex` · `p3_min1.tex` · `p3_multibond.tex` · `p3_multibond2.tex` · `p3_probe_opmod.tex` · `p3_probe_opop2.tex` · `p_pitch.tex` · `rv4061_vertonly.tex` · `t2_ared.tex` · `t2_ared_loop.tex` · `t2_eigladder.tex` · `t2_gs1d.tex` · `t2_hamil_gate.tex` · `t2_hamilcommu.tex` · `t2_isometry.tex` · `t2_lhsrhs1.tex` · `t2_lhsrhs2.tex` · `t2_lhsrhs3.tex` · `t2_lhsrhs4.tex` · `t2_lhsrhs5.tex` · `t2_mpublock.tex` · `t2_mpubrick.tex` · `t2_mpucond.tex` · `t2_mpuflow.tex` · `t2_mpusplit.tex` · `t2_olvert.tex` · `t2_purifyO.tex` · `t2_rhoR.tex` · `t2_sptgh_box.tex` · `t2_sptintertwin.tex` · `t2_sv17.tex` · `t2_tands.tex`
 
 ### Fixture raw-count reconciliation
 
