@@ -27,7 +27,7 @@ local identity alone does not provide such support projections for arbitrary MPO
   equations `AppKxKy=0` and `PjKiPj`, lines 1634--1639 and 1680--1691
 -/
 
-open scoped Matrix ComplexOrder BigOperators Kronecker
+open scoped Matrix ComplexOrder BigOperators
 
 namespace MPOTensor
 
