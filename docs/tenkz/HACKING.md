@@ -128,15 +128,18 @@ debt: `alias(...; sunset=...)` reads old sources until its stated rewrite, and
 The gate compares the pinned meters with the base revision.  It passes when
 the public census decreases, or when the census is stable and every raised
 low-consumer, co-occurrence, lonely-type, or sugar-shaped flag has a verdict in
-the latest `docs/tenkz/SHRINK.md` session.  Meter growth requires the recorded
+the latest `docs/tenkz/SHRINK.md` session.  Alias-sunset flags require verdicts
+there as soon as their milestone is due.  Meter growth requires the recorded
 extension or census-correction procedure.
 
 ## Shared parsers
 
 `scripts/tenkzlib/tnlog.py` is the single parser for `.tnlog` event streams.
-`scripts/tenkzlib/texcase.py` owns TeX comment stripping and case-header
-extraction.  Import these modules whenever a checker needs those answers.
-Never re-parse syntax already parsed by `scripts/tenkzlib/`.
+`scripts/tenkzlib/texcase.py` owns TeX comment stripping, balanced-group
+matching, and picture-construct scanning.  Import these modules whenever a
+checker needs those answers.  RMP case-header extraction remains local to
+`scripts/tenkz_rmp.py`; do not claim it as shared until it moves into the
+library.  Never re-parse syntax already parsed by `scripts/tenkzlib/`.
 
 ## Stage ownership
 
