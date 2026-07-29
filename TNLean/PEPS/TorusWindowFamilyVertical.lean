@@ -21,9 +21,10 @@ In staircase coordinates `s = (a, b)`, the resulting windows are the cyclic
 * `W_{K+i} = [a + L - 1 - i, a + 2L - 1 - i) × [b, b + K)`.
 
 The first arm descends and the second shifts horizontally.  What is recorded
-below is the vertical family itself together with the two rectangle identities
-for its union: the union of the first `K` windows is the cyclic vertical
-rectangle, and the union of the remaining windows is the cyclic horizontal one.
+below is the vertical family itself, together with the union of two consecutive
+windows and the two rectangle identities it satisfies: on the descending arm,
+where `j < K`, that union is a cyclic `L × (K + 1)` rectangle, and on the
+shifting arm, where `K ≤ j`, it is a cyclic `(L + 1) × K` rectangle.
 
 ## References
 
