@@ -24,7 +24,84 @@ periodic chain of length at least two.
 
 namespace MPOTensor
 
+open scoped ComplexOrder
+
 variable {d D : ℕ}
+
+/-- Pairwise orthogonal physical restrictions carrying positive physical-sector
+factorizations determine an orthogonal family of positive commuting bonds. Each
+sector MPO is the exact periodic product of its bond.
+
+Source: arXiv:1606.00608, Appendix C.2, equations `AppUkU=rl`, `Appetakhetc`,
+`PjKiPj`, and `generateMPDO`, lines 1383--1450 and 1680--1770. -/
+theorem nonempty_orthogonalCommutingSectorFamily_of_restrictedPhysicalSectorFactorization
+    {g : ℕ} {dim : Fin g → ℕ}
+    (K : (s : Fin g) → MPOTensor d (dim s))
+    (P : Fin g → Matrix (Fin d) (Fin d) ℂ)
+    (hP : ∀ s, IsOrthogonalProjection (P s))
+    (hPorth : ∀ {s t}, s ≠ t → P s * P t = 0)
+    (restriction : (s : Fin g) → PhysicalSupportRestrictionData (P s) (K s))
+    (G : (s : Fin g) → PhysicalSectorFactorization
+      (PhysicalSectorFactorization.changePhysicalBasis
+        (Matrix.conjTranspose ((restriction s).inclusion)) (K s)))
+    (hη : ∀ s k h, ((G s).neighboringOperator k h).PosSemidef) :
+    Nonempty (OrthogonalCommutingSectorFamily K) := by
+  classical
+  let data : (s : Fin g) → EtaLocalStructureData (K s) :=
+    fun s ↦ Classical.choose
+      ((restriction s).exists_etaLocalStructureData_lifted_supported_of_physicalSectorFactorization
+        (G s) (hη s))
+  have hdata : ∀ s : Fin g,
+      twoSiteSectorProjection (P s) * (data s).bondData.bond *
+          twoSiteSectorProjection (P s) = (data s).bondData.bond ∧
+        ∀ N (hN : 2 ≤ N),
+          mpo (K s) N = ((data s).bondData.toCommutingFormData hN).product :=
+    fun s ↦ Classical.choose_spec
+      ((restriction s).exists_etaLocalStructureData_lifted_supported_of_physicalSectorFactorization
+        (G s) (hη s))
+  exact ⟨{
+    projection := P
+    projection_isOrthogonal := hP
+    projection_orthogonal := fun hst ↦ hPorth hst
+    bondData := fun s ↦ (data s).bondData
+    bond_supported := fun s ↦ (hdata s).1
+    realizes_mpo := fun s N hN ↦ (hdata s).2 N hN }⟩
+
+/-- Pairwise orthogonal projections that absorb each injective sector tensor on
+both sides give an orthogonal commuting sector family once the restricted
+tensors have positive physical-sector factorizations.
+
+Source: arXiv:1606.00608, Appendix C.2, equations `AppUkU=rl`, `Appetakhetc`,
+`PjKiPj`, and `generateMPDO`, lines 1383--1450 and 1680--1770.
+
+**Scope restriction (factorization after restriction):** The positive
+physical-sector factorization is assumed on the range of each projection. The
+remaining source-facing theorem must derive it from the ambient factorization
+in `AppUkU=rl`; see
+`docs/paper-gaps/cpsv16_gsnnch_sector_decomposition.tex`. -/
+theorem nonempty_orthogonalCommutingSectorFamily_of_twoSidedPhysicalSlice
+    {g : ℕ} {dim : Fin g → ℕ}
+    (K : (s : Fin g) → MPOTensor d (dim s))
+    (P : Fin g → Matrix (Fin d) (Fin d) ℂ)
+    (hP : ∀ s, IsOrthogonalProjection (P s))
+    (hPorth : ∀ {s t}, s ≠ t → P s * P t = 0)
+    (hInjective : ∀ s, (K s).IsInjective)
+    (hSupport : ∀ s β α,
+      P s * physicalSlice (K s) β α = physicalSlice (K s) β α ∧
+        physicalSlice (K s) β α * P s = physicalSlice (K s) β α)
+    (G : (s : Fin g) → PhysicalSectorFactorization
+      (PhysicalSectorFactorization.changePhysicalBasis
+        (Matrix.conjTranspose
+          ((physicalSupportRestrictionDataOfTwoSidedPhysicalSlice
+            (P s) (K s) (hP s) (hInjective s) (hSupport s)).inclusion))
+        (K s)))
+    (hη : ∀ s k h, ((G s).neighboringOperator k h).PosSemidef) :
+    Nonempty (OrthogonalCommutingSectorFamily K) := by
+  let restriction : (s : Fin g) → PhysicalSupportRestrictionData (P s) (K s) :=
+    fun s ↦ physicalSupportRestrictionDataOfTwoSidedPhysicalSlice
+      (P s) (K s) (hP s) (hInjective s) (hSupport s)
+  exact nonempty_orthogonalCommutingSectorFamily_of_restrictedPhysicalSectorFactorization
+    K P hP hPorth restriction G hη
 
 /-- Saturation of the area law for every absorbed BNT representative gives a
 family of positive commuting bond products supported on the corresponding
