@@ -73,6 +73,7 @@ import TNLean.MPS.MPDO.CPSVPeriodicExclusion
 import TNLean.MPS.MPDO.CPSVRepresentativeGroupedLemmaL
 import TNLean.MPS.MPDO.CPSVVerticalBNT
 import TNLean.MPS.MPDO.CPSVVerticalCanonicalForm
+import TNLean.MPS.MPDO.CommonWeightAbsorbedBNTSupport
 import TNLean.MPS.MPDO.CommonWeightAbsorption
 import TNLean.MPS.MPDO.CommutingBondEtaBoundaryTrace
 import TNLean.MPS.MPDO.CommutingBondEtaCyclicCore

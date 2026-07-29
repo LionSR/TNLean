@@ -3,10 +3,6 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Algebra.OrthogonalProjection
-import TNLean.Algebra.PosSemidefSupport
-import TNLean.MPS.FundamentalTheorem.Basic
-import TNLean.MPS.MPDO.HayashiSectorComparison
 import TNLean.MPS.MPDO.PhysicalSectorProductRealization
 import TNLean.MPS.MPDO.PhysicalSupportSALTransport
 import TNLean.MPS.MPDO.StackedLayers
@@ -67,6 +63,7 @@ lines 1634--1689. -/
 def physicalAdjointTensor (K : MPOTensor d D) : MPOTensor d D :=
   fun i j β α ↦ star (K j i β α)
 
+/-- Evaluating the physical adjoint swaps the physical indices and conjugates the entry. -/
 @[simp] theorem physicalAdjointTensor_apply (K : MPOTensor d D)
     (i j : Fin d) (β α : Fin D) :
     physicalAdjointTensor K i j β α = star (K j i β α) := rfl
@@ -181,6 +178,7 @@ noncomputable def physicalSupportProj (K : MPOTensor d D) : Matrix (Fin d) (Fin 
     (physicalSliceColumns K * (physicalSliceColumns K)ᴴ)
     (Matrix.posSemidef_self_mul_conjTranspose (physicalSliceColumns K))
 
+/-- The product index selects the corresponding virtual pair and physical column. -/
 @[simp] theorem physicalSliceColumns_apply_finProdFinEquiv (K : MPOTensor d D)
     (i j : Fin d) (β α : Fin D) :
     physicalSliceColumns K i (finProdFinEquiv (finProdFinEquiv (β, α), j)) = K i j β α := by
