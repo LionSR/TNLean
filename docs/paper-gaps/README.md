@@ -101,12 +101,12 @@ For MPDO renormalization fixed points:
   relation `AA=A` and its unrestricted equivalence with transfer-map
   idempotence are formalized; the physical-space meaning of the repeated-copy
   index remains open.
-- `cpsv16_rfp_sal_data_processing.tex` records the source proof that a mixed-state
-  renormalization fixed point satisfies saturation of the area law. The
-  localized trace-preserving completely positive maps and their tensor-ring
-  identities, mutual-information data processing, positive-length
-  nonvanishing, and the source-shaped ZCL-and-SAL conclusion are formalized.
-  This note is now a closure record.
+- `cpsv16_rfp_sal_data_processing.tex` is the closure record for the source
+  RFP-to-ZCL-and-SAL implication. The exact boundary is a positive semidefinite
+  density family with nonzero trace at every positive length, together with the
+  Definition 4.1 local renormalization equations. Positivity alone admits the
+  zero tensor. The horizontal-form theorems are stronger specializations that
+  derive the required nonvanishing.
 - `hjpw04_ssa_product_marginal_reference.tex` records the singular
   product-marginal evaluation in the relative-entropy form of strong
   subadditivity. The support-compressed tensor logarithm, the bipartite entropy
