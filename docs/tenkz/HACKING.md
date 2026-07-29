@@ -164,16 +164,24 @@ parser is their only dependency.
 `scripts/tenkzlib/texcase.py` provides shared TeX comment stripping,
 balanced-group matching, and picture-construct scanning.  Import these modules
 when adding or modifying a checker that needs those answers.
-`scripts/tenkz_shrink.py` still carries the local `_group_payload` exception;
-keep its behavior aligned until it is migrated to `texcase.py`.  RMP case-header
-extraction remains local to `scripts/tenkz_rmp.py`; do not claim it as shared
-until it moves into the library.  Never add another parser for syntax already
-parsed by `scripts/tenkzlib/`.
+Known local balanced-group parsers remain in
+`scripts/tenkz_shrink.py::_group_payload` and
+`scripts/tenkz_language.py::_group`; keep both aligned until they migrate to
+`texcase.py`.  RMP case-header extraction remains local to
+`scripts/tenkz_rmp.py`; do not claim it as shared until it moves into the
+library.  Never add another parser for syntax already parsed by
+`scripts/tenkzlib/`.
 
 ## Stage ownership
 
 Each stage file begins with its complete input, output, owned-state, invariant,
 and next-stage contract.
+
+These are normative ownership rules for new code and migration destinations,
+not a claim that every historical path has moved.  The live `tenkz-core`,
+`tenkz-grid`, `tenkz-cd`, `tenkz-lattice`, and `tenkz-free` files still combine
+some parsing, geometry, rendering, and event work; direct `\draw` or `\node`
+emission in those files remains migration debt.
 
 - `tenkz-model.code.tex` owns normalized semantic records and freezes topology
   after validation.
@@ -186,7 +194,8 @@ and next-stage contract.
 - `tenkz-string.code.tex` owns saved string paths and the crossing, join, and
   gap ledgers consumed by rendering.
 
-Until string/render integration is complete, string fixtures use the temporary
+The string stage has one further explicit exception: until string/render
+integration is complete, string fixtures use the temporary
 `\__tenkz_string_dev_draw:nn` primitive in `tenkz-string.code.tex`, which issues
 the development `\draw` directly.
 
