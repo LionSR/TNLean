@@ -23,6 +23,8 @@ primitive simultaneously.
 * `sameMPV₂_blockTensor_of_sameMPV₂_toTensorFromBlocks` — Blocking distributes over
   `toTensorFromBlocks`: if `SameMPV₂ A (toTensorFromBlocks μ blocks)`, then
   `SameMPV₂ (blockTensor A p) (toTensorFromBlocks (μ^p) (blockTensor blocks p))`.
+* `EventuallyNonzeroProportionalMPV₂.blockTensor` — Eventual nonzero proportionality
+  is preserved by positive physical blocking.
 
 ### Part B: Primitivity under multiples
 * `isPrimitive_pow_of_isPrimitive` — primitive channels remain primitive under positive powers.
@@ -175,6 +177,28 @@ theorem sameMPV₂Pos_blockTensor
     _ = mpv B σflat := hSame (N * p) (Nat.mul_pos hN hp) σflat
     _ = mpv (blockTensor (d := d) (D := D₂) B p) σ :=
           (mpv_blockTensor_eq_mpv_blockedFlatConfig (d := d) B p σ).symm
+
+/-- Eventual nonzero MPV proportionality is preserved by positive physical blocking. -/
+theorem EventuallyNonzeroProportionalMPV₂.blockTensor
+    {D₁ D₂ : ℕ} {A : MPSTensor d D₁} {B : MPSTensor d D₂}
+    (h : EventuallyNonzeroProportionalMPV₂ A B) (p : ℕ) (hp : 0 < p) :
+    EventuallyNonzeroProportionalMPV₂
+      (blockTensor (d := d) (D := D₁) A p)
+      (blockTensor (d := d) (D := D₂) B p) := by
+  unfold EventuallyNonzeroProportionalMPV₂ at h ⊢
+  rw [Filter.eventually_atTop] at h ⊢
+  rcases h with ⟨N₀, hN₀⟩
+  refine ⟨N₀, fun N hN => ?_⟩
+  have hNle : N ≤ N * p := le_mul_of_one_le_right (Nat.zero_le N) hp
+  rcases hN₀ (N * p) (hN.trans hNle) with ⟨c, hc, hEq⟩
+  refine ⟨c, hc, fun σ => ?_⟩
+  calc
+    mpv (MPSTensor.blockTensor (d := d) (D := D₁) A p) σ =
+        mpv A (blockedFlatConfig (d := d) p σ) :=
+      mpv_blockTensor_eq_mpv_blockedFlatConfig (d := d) A p σ
+    _ = c * mpv B (blockedFlatConfig (d := d) p σ) := hEq _
+    _ = c * mpv (MPSTensor.blockTensor (d := d) (D := D₂) B p) σ := by
+      rw [mpv_blockTensor_eq_mpv_blockedFlatConfig]
 
 /-- Positive-length equality with a weighted nonzero-block tensor is preserved by
 positive physical blocking, with each weight transported to the corresponding power. -/
