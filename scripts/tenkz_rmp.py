@@ -152,7 +152,7 @@ INK_EVENT_FAMILIES = {
 }
 
 
-def rendered_ink_environment_families(parsed: ParsedLog, body: str) -> set[str]:
+def rendered_ink_environment_families(parsed: ParsedLog) -> set[str]:
     """Return picture owners from the compiled model event stream."""
     languages = {
         event.attrs["lang"]
@@ -174,14 +174,22 @@ def rendered_ink_environment_families(parsed: ParsedLog, body: str) -> set[str]:
         # A command-scope \tntree is a complete public tenkz composition but
         # deliberately logs against picture 0 rather than opening a container.
         families.add("tenkz")
-    if "lattice" in languages:
-        lattice_families: set[str] = set()
-        for family in ("tenkzlattice", "tenkzplanes"):
-            if re.search(rf"\\begin\s*\{{{family}\}}", body):
-                lattice_families.add(family)
-        if not lattice_families:
-            fail("compiled lattice picture has no public lattice source spelling")
-        families.update(lattice_families)
+    lattice_pictures = {
+        event.attrs["id"]
+        for event in parsed.events
+        if event.kind == "picture" and event.attrs["lang"] == "lattice"
+    }
+    planes_pictures = {
+        event.attrs["picture"]
+        for event in parsed.events
+        if event.kind == "surface" and event.attrs["name"] == "tenkzplanes"
+    }
+    if planes_pictures.difference(lattice_pictures):
+        fail("tenkzplanes surface event has no matching lattice picture")
+    if planes_pictures:
+        families.add("tenkzplanes")
+    if lattice_pictures.difference(planes_pictures):
+        families.add("tenkzlattice")
     return families
 
 
@@ -873,8 +881,7 @@ def compile_one(target: Target, root: Path, env: dict[str, str]) -> BuildResult:
         (target_work / f"{target.id}.audit.txt").write_text(audit.stdout, encoding="utf-8")
         width, height, pages = pdf_dimensions(pdf)
         parsed = parse_log(tnlog.read_text(encoding="utf-8"), source_name=tnlog.name)
-        body = strip_comments((REPO / target.case).read_text(encoding="utf-8"))
-        used_families = rendered_ink_environment_families(parsed, body)
+        used_families = rendered_ink_environment_families(parsed)
         ink_problems = ink_environment_problems(
             target.id, target.ink, used_families
         )

@@ -71,6 +71,8 @@ def test_ink_environment_owner() -> None:
             "picture|id=2|lang=cd",
             "picture|id=3|lang=free",
             "picture|id=4|lang=lattice",
+            "picture|id=5|lang=lattice",
+            "surface|picture=5|name=tenkzplanes",
             "picture|id=k1|lang=kernel",
             "tree|picture=0|id=1|style=wire|leaves=2|vertices=1|"
             "topology=(1,2)|role=none|species=none",
@@ -78,11 +80,7 @@ def test_ink_environment_owner() -> None:
         )
     )
     parsed = parse_log(log, source_name="ink-owner-test.tnlog")
-    body = (
-        r"\begin{tenkzlattice}\end{tenkzlattice}"
-        r"\begin {tenkzplanes}\end {tenkzplanes}"
-    )
-    used = rendered_ink_environment_families(parsed, body)
+    used = rendered_ink_environment_families(parsed)
     expected = {"tenkz", "tenkzfree", "tenkzlattice", "tenkzplanes", "kernel"}
     if used != expected:
         raise AssertionError(f"compiled Ink owners disagree: {used!r}")
