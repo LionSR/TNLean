@@ -20,8 +20,9 @@ the conditional-expectation step in the proof of Theorem 6.14.
 When the fixed-point *-subalgebra is the scalar algebra `ℂ · 1` (as for
 primitive channels), the conditional expectation takes the explicit form
 `E_σ(X) = (tr(σ X) / tr(σ)) • 1`, where `σ` is the unique positive-definite
-stationary state. The general irreducible case (period > 1) requires the
-Wedderburn block decomposition from Wolf Theorem 6.14.
+stationary state. The explicit density-block formula for the general
+irreducible case requires the Wedderburn block decomposition from Wolf
+Theorem 6.14.
 
 ## Main results
 
