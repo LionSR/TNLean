@@ -4,15 +4,17 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.MPDO.CommonWeightAbsorbedBNTSupport
+import TNLean.MPS.MPDO.NeighboringPreparation
 import TNLean.MPS.MPDO.PhysicalSectorActiveBond
 
 /-!
-# GSNNCH form from the five BNT identities
+# GSNNCH form for common-weight BNT sectors
 
-The BNT decomposition of a simple matrix product density operator has the
-GSNNCH form when its distinct physical layers are orthogonal and each BNT
-representative has the physical-sector factorization and neighboring trace
-factorization of Appendix C.2.
+Suppose that the copy weights in each BNT sector agree.  The BNT decomposition
+of a simple matrix product density operator has the GSNNCH form when its
+distinct physical layers are orthogonal and each representative has the
+physical-sector factorization and neighboring trace factorization of
+Appendix C.2.
 
 ## References
 
@@ -26,14 +28,22 @@ namespace MPOTensor
 
 variable {d : ℕ}
 
-/-- The BNT decomposition has the GSNNCH form when the five identities of
-CPSV16 Proposition `prop3to4` hold for its representatives.
+/-- A BNT decomposition with copy-independent weights has the GSNNCH form when
+the five identities of CPSV16 Proposition `prop3to4` hold for its
+representatives.
 
 The orthogonality hypothesis is equation `AppKxKy=0`; the physical-sector
 factorizations are equation `AppUkU=rl`; and each neighboring trace
 factorization consists of `Appetakhetc`, `Apptralktrrk`, and `AppPsiPhi`.
 The copy numbers of the BNT decomposition are the multiplicities of the
 resulting GSNNCH sectors.
+
+**Scope restriction (common BNT copy weights):** Proposition `prop3to4` does
+not assume copy independence among its five printed identities.  Its proof
+invokes Lemma `lemmus`, which derives copy independence from source ZCL.
+Thus this theorem proves the common-weight case and does not establish the
+unrestricted printed proposition.  See
+`docs/paper-gaps/cpsv16_gsnnch_sector_decomposition.tex`.
 
 Source: arXiv:1606.00608, Appendix C.2, Proposition `prop3to4`, lines
 1786--1796. -/

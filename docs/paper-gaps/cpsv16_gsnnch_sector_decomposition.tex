@@ -191,7 +191,7 @@ and for a pairwise orthogonal family of sectors.
 
 The final printed proof of Proposition~\texttt{prop3to4} uses projector
 relations obtained earlier rather than deriving them in its last step.  The
-source-facing theorem now retains the joint five-identity package
+common-weight theorem retains the joint five-identity package
 \[
   \texttt{AppKxKy=0},\quad
   \texttt{AppUkU=rl},\quad
@@ -202,8 +202,7 @@ source-facing theorem now retains the joint five-identity package
 It combines the supported sector bonds with the positive-length BNT sum and
 its natural copy multiplicities to obtain the GSNNCH form.  The trace
 factorization and normalization remain explicit hypotheses, although only
-positivity is needed in this forward implication, exactly as suggested by the
-short source proof.
+positivity is needed in this forward implication.
 
 There is an independent common-copy-weight interface:
 \[
@@ -214,9 +213,10 @@ The five displayed identities do not imply this equality.  Appendix~C.2 invokes
 correlation length.  A standalone formulation must therefore retain common
 copy weights as standing BNT data or state the equality explicitly.
 
-The theorem derives the orthogonal commuting sector family from the printed
-identities before applying the general direct-sum result.  No reverse
-comparison with a single-bond predicate is needed.
+Under the additional common-weight hypothesis, the theorem derives the
+orthogonal commuting sector family from the printed identities before
+applying the general direct-sum result.  No reverse comparison with a
+single-bond predicate is needed.
 
 The local Markov labels in Appendix C.2 belong inside one injective BNT
 component.  They are not the outer labels $x$ of Definition~4.8 and must not
@@ -243,10 +243,14 @@ positive neighboring operators have now been derived from
 directions removed without a minimality hypothesis.  Together with the
 two-sided supports obtained from \texttt{AppKxKy=0}, this gives supported
 positive commuting bonds with exact periodic products on the printed
-projections.  The source-facing theorem combines these bonds with the BNT
+projections.  The common-weight theorem combines these bonds with the BNT
 copy-number identity while retaining \texttt{Apptralktrrk} and
-\texttt{AppPsiPhi} in its statement and the common copy weights from the
-preceding Case~II argument.  Proposition~\texttt{prop3to4} is therefore
-formalized under precisely its printed identities and standing BNT context.
+\texttt{AppPsiPhi} in its statement.
+
+Proposition~\texttt{prop3to4} nevertheless remains partial under its printed
+hypotheses.  Copy independence is absent from the five listed identities,
+and the proof invokes Lemma~\texttt{lemmus}, whose hypothesis includes source
+ZCL.  The formal theorem therefore carries an explicit scope restriction
+rather than treating that earlier lemma as an unstated assumption.
 
 \end{document}
