@@ -7326,6 +7326,30 @@
     \__tenkz_kernel_r_node:V \l__tenkz_kernel_r_node_tl
     \__tenkz_kernel_r_xy:nNN { \tl_use:N \l__tenkz_kernel_r_node_tl }
       \l__tenkz_kernel_r_x_fp \l__tenkz_kernel_r_y_fp
+    \tl_set:Nn \l__tenkz_kernel_r_tl { \q_no_value }
+    \str_case:en
+      { \__tenkz_kernel_node_item:Nn \l__tenkz_kernel_r_node_tl {kind} }
+      {
+        {record}
+          {
+            \prop_get:NeN \l__tenkz_kernel_named_prop
+              {
+                \__tenkz_kernel_node_item:Nn
+                  \l__tenkz_kernel_r_node_tl {name}
+              }
+              \l__tenkz_kernel_r_tl
+          }
+        {port}
+          {
+            \exp_args:NV \__tenkz_kernel_r_port_record:nN
+              \l__tenkz_kernel_r_node_tl \l__tenkz_kernel_r_tl
+          }
+      }
+    \quark_if_no_value:NF \l__tenkz_kernel_r_tl
+      {
+        \exp_args:NV \__tenkz_kernel_r_turn:nN
+          \l__tenkz_kernel_r_tl \l__tenkz_kernel_r_tau_tl
+      }
     \__tenkz_kernel_r_mark_label_ink:n {#1}
   }
 \cs_new_protected:Npn \__tenkz_kernel_r_mark_label_ink:n #1
