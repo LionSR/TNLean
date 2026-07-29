@@ -9,7 +9,12 @@ import subprocess
 import tempfile
 from pathlib import Path
 
-from tenkz_rmp import ink_environment_problems, structural_capability_problems
+from tenkz_rmp import (
+    ink_environment_problems,
+    rendered_ink_environment_families,
+    structural_capability_problems,
+)
+from tenkzlib.tnlog import parse_log
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -60,162 +65,37 @@ def test_kernel_capability_owner() -> None:
 
 
 def test_ink_environment_owner() -> None:
-    cases = (
-        ("Canonical public tenkzfree environment.", r"\begin{tenkzfree}"),
-        ("Canonical public tenkzlattice environment.", r"\begin{tenkzlattice}"),
-        ("Canonical public tenkzplanes environment.", r"\begin{tenkzplanes}"),
-        ("Canonical public tenkz composition.", r"\tntree{}"),
-        ("Canonical public tenkz diagram.", r"\begin{tenkzcd}"),
-        ("Canonical public kernel records.", r"\tenkzkernel\begin{tenkz}"),
+    log = "\n".join(
+        (
+            "picture|id=1|lang=grid",
+            "picture|id=2|lang=cd",
+            "picture|id=3|lang=free",
+            "picture|id=4|lang=lattice",
+            "picture|id=k1|lang=kernel",
+            "tree|picture=0|id=1|style=wire|leaves=2|vertices=1|"
+            "topology=(1,2)|role=none|species=none",
+            "",
+        )
     )
-    for ink, body in cases:
-        if ink_environment_problems("good", ink, body):
-            raise AssertionError(f"Ink family rejected its body: {ink!r}")
+    parsed = parse_log(log, source_name="ink-owner-test.tnlog")
+    body = (
+        r"\begin{tenkzlattice}\end{tenkzlattice}"
+        r"\begin {tenkzplanes}\end {tenkzplanes}"
+    )
+    used = rendered_ink_environment_families(parsed, body)
+    expected = {"tenkz", "tenkzfree", "tenkzlattice", "tenkzplanes", "kernel"}
+    if used != expected:
+        raise AssertionError(f"compiled Ink owners disagree: {used!r}")
+    ink = "Canonical tenkz, tenkzfree, tenkzlattice, tenkzplanes, and kernel."
+    if ink_environment_problems("good", ink, used):
+        raise AssertionError("accurate compiled Ink owners were rejected")
     mismatch = ink_environment_problems(
-        "wrong", "Canonical public tenkzfree environment.", r"\tenkzkernel"
+        "wrong", "Canonical tenkzfree environment.", {"kernel"}
     )
     if not any("Ink names tenkzfree" in problem for problem in mismatch):
         raise AssertionError("stale Ink family was accepted")
-    mismatch = ink_environment_problems(
-        "wrong", "Canonical public tenkzlattice environment.", r"\begin{tenkzfree}"
-    )
-    if not any("Ink names tenkzlattice" in problem for problem in mismatch):
-        raise AssertionError("wrong Ink environment family was accepted")
-    mismatch = ink_environment_problems(
-        "wrong", "Canonical public tenkz equation.", r"\begin{tenkzfree}"
-    )
-    if not any("Ink names tenkz" in problem for problem in mismatch):
-        raise AssertionError("plain tenkz Ink claim accepted a free body")
-    mismatch = ink_environment_problems(
-        "wrong",
-        "Canonical public tenkz composition.",
-        r"\tenkzkernel\begin{tenkz}",
-    )
     if not any("uses kernel but Ink does not name" in problem for problem in mismatch):
-        raise AssertionError("plain tenkz Ink claim accepted a kernel body")
-    mismatch = ink_environment_problems(
-        "wrong", "Canonical public composition.", r"\tenkzkernel\begin{tenkz}"
-    )
-    if not any("uses kernel but Ink does not name" in problem for problem in mismatch):
-        raise AssertionError("unlisted kernel owner was accepted")
-    mismatch = ink_environment_problems(
-        "wrong",
-        "Canonical public tenkzfree expression.",
-        r"\begin{tenkzfree}\end{tenkzfree}\begin{tenkz}\end{tenkz}",
-    )
-    if not any("uses tenkz but Ink does not name" in problem for problem in mismatch):
-        raise AssertionError("unlisted mixed-family owner was accepted")
-    mismatch = ink_environment_problems(
-        "wrong",
-        "Canonical public tenkz expression.",
-        "\\begin{tenkz}\\end{tenkz}\n"
-        "\\begin \n {tenkzfree}\\end \n {tenkzfree}",
-    )
-    if not any("uses tenkzfree but Ink does not name" in problem for problem in mismatch):
-        raise AssertionError("whitespace hid an unlisted mixed-family owner")
-    mismatch = ink_environment_problems(
-        "wrong", "Canonical public kernel records.", r"\begin{tenkz}"
-    )
-    if not any("Ink names kernel" in problem for problem in mismatch):
-        raise AssertionError("kernel Ink claim accepted the grid surface")
-    mixed = (
-        r"{\tenkzkernel\begin{tenkz}\end{tenkz}}"
-        r"\begin{tenkz}\end{tenkz}"
-    )
-    if ink_environment_problems(
-        "good", "Canonical public kernel and tenkz pictures.", mixed
-    ):
-        raise AssertionError("scoped mixed kernel and tenkz pictures were rejected")
-    mismatch = ink_environment_problems(
-        "wrong", "Canonical public kernel picture.", mixed
-    )
-    if not any("uses tenkz but Ink does not name" in problem for problem in mismatch):
-        raise AssertionError("unlisted plain picture after kernel scope was accepted")
-    escaped_scope_tokens = (
-        r"{\tenkzkernel\begin{tenkz}\{\end{tenkz}}"
-        "\\\\[1em]\n"
-        r"\begin{tenkz}\end{tenkz}"
-    )
-    if ink_environment_problems(
-        "good",
-        "Canonical public kernel and tenkz pictures.",
-        escaped_scope_tokens,
-    ):
-        raise AssertionError("escaped braces or line spacing corrupted Ink scope")
-    dollar_scopes = (
-        r"$\tenkzkernel\begin{tenkz}\end{tenkz}$"
-        r"\[\begin{tenkz}\end{tenkz}\]"
-        r"$$\tenkzkernel\begin{tenkz}\end{tenkz}$$"
-        r"\begin{tenkz}\end{tenkz}"
-    )
-    if ink_environment_problems(
-        "good", "Canonical public kernel and tenkz pictures.", dollar_scopes
-    ):
-        raise AssertionError("dollar-delimited math leaked the kernel owner")
-    adjacent_dollar_scopes = (
-        r"$\tenkzkernel\begin{tenkz}\end{tenkz}"
-        r"$$\begin{tenkz}\end{tenkz}$"
-    )
-    if ink_environment_problems(
-        "good",
-        "Canonical public kernel and tenkz pictures.",
-        adjacent_dollar_scopes,
-    ):
-        raise AssertionError("adjacent inline math groups leaked the kernel owner")
-    triple_dollar_transition = (
-        r"$x$$$\tenkzkernel\begin{tenkz}\end{tenkz}"
-        r"$$\begin{tenkz}\end{tenkz}"
-    )
-    if ink_environment_problems(
-        "good",
-        "Canonical public kernel and tenkz pictures.",
-        triple_dollar_transition,
-    ):
-        raise AssertionError("inline-to-display math leaked the kernel owner")
-    nested_dollar_scopes = (
-        r"$\text{$\tenkzkernel\begin{tenkz}\end{tenkz}$}"
-        r"\begin{tenkz}\end{tenkz}$"
-    )
-    if ink_environment_problems(
-        "good",
-        "Canonical public kernel and tenkz pictures.",
-        nested_dollar_scopes,
-    ):
-        raise AssertionError("nested dollar math leaked the kernel owner")
-    explicit_group_aliases = (
-        r"\bgroup\tenkzkernel\begin{tenkz}\end{tenkz}\egroup"
-        r"\begin{tenkz}\end{tenkz}"
-    )
-    if ink_environment_problems(
-        "good",
-        "Canonical public kernel and tenkz pictures.",
-        explicit_group_aliases,
-    ):
-        raise AssertionError("bgroup-delimited scope leaked the kernel owner")
-    alignment_cells = (
-        r"\begin{aligned}"
-        r"\tenkzkernel\begin{tenkz}\end{tenkz}"
-        r"&\begin{tenkz}\end{tenkz}\\[1em]"
-        r"\tenkzkernel\begin{tenkz}\end{tenkz}"
-        r"&\begin{tenkz}\end{tenkz}"
-        r"\end{aligned}"
-    )
-    if ink_environment_problems(
-        "good",
-        "Canonical public kernel and tenkz pictures.",
-        alignment_cells,
-    ):
-        raise AssertionError("alignment-cell scope leaked the kernel owner")
-    nested_alignment_tokens = (
-        r"\begin{aligned}"
-        r"\tenkzkernel\begin{tenkz}A&B\\C\end{tenkz}"
-        r"\begin{tenkz}\end{tenkz}"
-        r"\end{aligned}"
-    )
-    if ink_environment_problems(
-        "good", "Canonical public kernel pictures.", nested_alignment_tokens
-    ):
-        raise AssertionError("nested picture tokens reset an outer alignment cell")
+        raise AssertionError("compiled kernel owner was omitted")
 
 
 def main() -> int:

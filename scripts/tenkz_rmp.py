@@ -137,141 +137,55 @@ STRUCTURAL_CAPABILITY_PATTERNS = {
     "free-graph": re.compile(r"\\begin\{tenkzfree\}"),
     "fusion-tree": re.compile(r"\\tntree\b|\\begin\{tenkzcd\}"),
 }
-INK_ENVIRONMENT_PATTERNS = {
-    "tenkzfree": re.compile(r"\\begin\{tenkzfree\}"),
-    "tenkzlattice": re.compile(r"\\begin\{tenkzlattice\}"),
-    "tenkzplanes": re.compile(r"\\begin\{tenkzplanes\}"),
-    "tenkz": re.compile(r"\\begin\{tenkz(?:eq|cd)?\}|\\tnpic\b|\\tntree\b"),
-}
-INK_ALIGNMENT_ENVIRONMENTS = {
-    "align",
-    "align*",
-    "alignat",
-    "alignat*",
-    "aligned",
-    "alignedat",
-    "array",
-    "bmatrix",
-    "Bmatrix",
-    "cases",
-    "eqnarray",
-    "eqnarray*",
-    "flalign",
-    "flalign*",
-    "gather",
-    "gather*",
-    "gathered",
-    "longtable",
-    "matrix",
-    "multline",
-    "multline*",
-    "pmatrix",
-    "smallmatrix",
-    "split",
-    "tabular",
-    "tabular*",
-    "tabularx",
-    "vmatrix",
-    "Vmatrix",
-}
-INK_SCOPE_TOKEN = re.compile(
-    r"(?P<rowbreak>\\\\\*?(?:\s*\[[^\]]*\])?"
-    r"|\\(?:tabularnewline|crcr|cr)\b)"
-    r"|(?P<skip>\\[{}$&])"
-    r"|\\tenkzkernel\b"
-    r"|\\begin\s*\{(?P<begin>[^{}]+)\}"
-    r"|\\end\s*\{(?P<end>[^{}]+)\}"
-    r"|\\begingroup\b|\\endgroup\b|\\bgroup\b|\\egroup\b"
-    r"|\\\[|\\\]|\\\(|\\\)"
-    r"|(?P<dollar>\$+)"
-    r"|\\tnpic\b|\\tntree\b"
-    r"|(?P<cell>&)|[{}]"
+INK_ENVIRONMENT_FAMILIES = (
+    "tenkzfree",
+    "tenkzlattice",
+    "tenkzplanes",
+    "tenkz",
+    "kernel",
 )
+INK_EVENT_FAMILIES = {
+    "cd": "tenkz",
+    "free": "tenkzfree",
+    "grid": "tenkz",
+    "kernel": "kernel",
+}
 
 
-def used_ink_environment_families(body: str) -> set[str]:
-    """Return public picture families, respecting the scoped kernel switch."""
-    families: set[str] = set()
-    kernel_scope = [False]
-    dollar_scope: list[str | None] = [None]
-    alignment_scopes: list[tuple[str, int, bool]] = []
-
-    def push_scope(*, dollar: str | None = None) -> None:
-        kernel_scope.append(kernel_scope[-1])
-        dollar_scope.append(dollar)
-
-    def pop_scope() -> None:
-        if len(kernel_scope) > 1:
-            kernel_scope.pop()
-            dollar_scope.pop()
-
-    for token in INK_SCOPE_TOKEN.finditer(body):
-        text = token.group()
-        begin = token.group("begin")
-        if token.group("skip") is not None:
-            continue
-        if text == r"\tenkzkernel":
-            kernel_scope[-1] = True
-        elif begin is not None:
-            if begin in {"tenkz", "tenkzeq"}:
-                families.add("kernel" if kernel_scope[-1] else "tenkz")
-            elif begin == "tenkzcd":
-                families.add("tenkz")
-            elif begin in {"tenkzfree", "tenkzlattice", "tenkzplanes"}:
-                families.add(begin)
-            push_scope()
-            if begin in INK_ALIGNMENT_ENVIRONMENTS:
-                alignment_scopes.append(
-                    (begin, len(kernel_scope) - 1, kernel_scope[-1])
-                )
-        elif (end := token.group("end")) is not None:
-            pop_scope()
-            if alignment_scopes and alignment_scopes[-1][0] == end:
-                alignment_scopes.pop()
-        elif text in {r"\begingroup", r"\bgroup", r"\[", r"\(", "{"}:
-            push_scope()
-        elif text in {r"\endgroup", r"\egroup", r"\]", r"\)", "}"}:
-            pop_scope()
-        elif (dollar := token.group("dollar")) is not None:
-            remaining = len(dollar)
-            while remaining:
-                if dollar_scope[-1] is None:
-                    delimiter = "$$" if remaining >= 2 else "$"
-                    push_scope(dollar=delimiter)
-                    remaining -= len(delimiter)
-                elif dollar_scope[-1] == "$":
-                    pop_scope()
-                    remaining -= 1
-                elif remaining >= 2:
-                    pop_scope()
-                    remaining -= 2
-                else:
-                    # A lone math shift inside display math is invalid TeX.
-                    # Consume it without corrupting the surrounding scope;
-                    # compilation reports the source error independently.
-                    remaining -= 1
-        elif (
-            token.group("cell") is not None
-            or token.group("rowbreak") is not None
-        ) and alignment_scopes:
-            _, scope_index, inherited_kernel = alignment_scopes[-1]
-            if len(kernel_scope) == scope_index + 1:
-                kernel_scope[scope_index] = inherited_kernel
-        elif text in {r"\tnpic", r"\tntree"}:
-            families.add("tenkz")
+def rendered_ink_environment_families(parsed: ParsedLog, body: str) -> set[str]:
+    """Return picture owners from the compiled model event stream."""
+    languages = {
+        event.attrs["lang"]
+        for event in parsed.events
+        if event.kind == "picture"
+    }
+    families = {
+        INK_EVENT_FAMILIES[language]
+        for language in languages
+        if language in INK_EVENT_FAMILIES
+    }
+    if any(event.kind == "tree" for event in parsed.events):
+        # A command-scope \tntree is a complete public tenkz composition but
+        # deliberately logs against picture 0 rather than opening a container.
+        families.add("tenkz")
+    if "lattice" in languages:
+        for family in ("tenkzlattice", "tenkzplanes"):
+            if re.search(rf"\\begin\s*\{{{family}\}}", body):
+                families.add(family)
     return families
 
 
-def ink_environment_problems(target_id: str, ink: str, body: str) -> list[str]:
-    """Return contradictions between an Ink family claim and the case body."""
+def ink_environment_problems(
+    target_id: str, ink: str, used: set[str]
+) -> list[str]:
+    """Return contradictions between Ink claims and compiled picture owners."""
     problems: list[str] = []
     claimed = {
         family
-        for family in (*INK_ENVIRONMENT_PATTERNS, "kernel")
+        for family in INK_ENVIRONMENT_FAMILIES
         if re.search(rf"\b{family}\b", ink, flags=re.IGNORECASE)
     }
-    used = used_ink_environment_families(body)
-    for family in (*INK_ENVIRONMENT_PATTERNS, "kernel"):
+    for family in INK_ENVIRONMENT_FAMILIES:
         if family in claimed and family not in used:
             problems.append(
                 f"{target_id}: Ink names {family} but the case body does not "
@@ -795,12 +709,6 @@ def validate_case(target: Target) -> None:
         details = ", ".join(f"{number} ({width})" for number, width in wide[:8])
         fail(f"{target.case.as_posix()}: lines exceed 88 characters: {details}")
     syntax = strip_comments(text)
-    ink_problems = ink_environment_problems(target.id, target.ink, syntax)
-    if ink_problems:
-        fail(
-            f"{target.case.as_posix()}: Ink environment mismatch:\n"
-            + "\n".join(ink_problems)
-        )
     for pattern, reason in FORBIDDEN_CASE_PATTERNS:
         match = pattern.search(syntax)
         if match:
@@ -955,6 +863,16 @@ def compile_one(target: Target, root: Path, env: dict[str, str]) -> BuildResult:
         (target_work / f"{target.id}.audit.txt").write_text(audit.stdout, encoding="utf-8")
         width, height, pages = pdf_dimensions(pdf)
         parsed = parse_log(tnlog.read_text(encoding="utf-8"), source_name=tnlog.name)
+        body = strip_comments((REPO / target.case).read_text(encoding="utf-8"))
+        used_families = rendered_ink_environment_families(parsed, body)
+        ink_problems = ink_environment_problems(
+            target.id, target.ink, used_families
+        )
+        if ink_problems:
+            fail(
+                f"{target.case.as_posix()}: Ink environment mismatch:\n"
+                + "\n".join(ink_problems)
+            )
         signatures = event_signatures(parsed)
         return BuildResult(target, wrapper, pdf, tnlog, width, height, pages, signatures)
     except RMPError as exc:
