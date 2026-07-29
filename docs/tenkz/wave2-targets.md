@@ -76,17 +76,17 @@ Otherwise it is **unowned**. The scan finds 107 labelled blocks: 90 owned and
 | `Diagram4` | 198–210 | owned: `rmp-workbench-iii-diagram-four` |
 | `Eq new52` | 211–219 | owned: `rmp-workbench-iii-eq50-reduced` |
 | `Eq intertwiner` | 220–304 | owned: `rmp-iii-a-commuting-hamiltonian`, `rmp-iii-a-f-symbol`, `rmp-workbench-iii-dual-reduced`, `rmp-workbench-iii-f-symbol-simplified-a`, `rmp-workbench-iii-f-tensor`, `rmp-workbench-iii-mpo-representation` |
-| `Eq 59now56` | 305–328 | owned: `rmp-workbench-iii-eq59-now` |
+| `Eq 59now56` | 305–328 | owned: `rmp-iii-a-g-injective-projector`, `rmp-workbench-iii-eq59-now` |
 | `diagram of clusterstate` | 329–356 | owned: `rmp-iii-a-ghz-state`, `rmp-workbench-iii-ghz-state-workbench` |
 | `ghzupdownmatrix` | 357–362 | owned: `rmp-iii-a-ghz-tensor`, `rmp-iii-a-hadamard`, `rmp-workbench-iii-ghz-up` |
 | `Frank's proof of MPS invariant under MPO` | 363–363 | owned: `rmp-iii-a-proof-one` |
 | `proof1` | 364–375 | owned: `rmp-iii-a-proof-one` |
 | `proof2` | 376–385 | owned: `rmp-iii-a-proof-two` |
 | `proof3` | 386–413 | owned: `rmp-iii-a-proof-three` |
-| `eq55now (Fig8previously draw)` | 414–447 | owned: `rmp-iii-a-pulling-through`, `rmp-iii-a-spt-mpo`, `rmp-workbench-iii-g-injective-pull` |
+| `eq55now (Fig8previously draw)` | 414–447 | owned: `rmp-iii-a-pulling-through`, `rmp-iii-a-spt-mpo` |
 | `Dia. intertwiner for SPT` | 448–467 | owned: `rmp-iii-a-spt-intertwiner`, `rmp-workbench-iii-intertwining-mpo` |
-| `pullingthroughtforGinjective (Fig8previously draw)` | 468–500 | owned: `rmp-iii-a-g-injective-projector` |
-| `veryold` | 501–520 | owned: `rmp-iii-a-g-injective-projector`, `rmp-workbench-iii-mpo-injective-white` |
+| `pullingthroughtforGinjective (Fig8previously draw)` | 468–500 | owned: `rmp-workbench-iii-g-injective-pull` |
+| `veryold` | 501–520 | owned: `rmp-workbench-iii-mpo-injective-white` |
 | `Explaining the MPO-injective PEPS` | 521–537 | owned: `rmp-iii-a-mpo-injective`, `rmp-workbench-iii-mpo-on-peps-definition` |
 | `Eq.60now57` | 538–552 | owned: `rmp-iii-a-mpo-action`, `rmp-workbench-iii-eq60-now` |
 | `Eq63now59` | 553–562 | owned: `rmp-iii-a-torus-two`, `rmp-workbench-iii-enlarged-mpo-black` |

@@ -986,14 +986,14 @@ section = "section-iii-a"
 order = 59
 case = "tests/tenkz/rmp/section-iii-a/cases/rmp-iii-a-g-injective-projector.tex"
 formula = "P_G = |G|^-1 sum_g L_g on the four virtual legs."
-ink = "Canonical public tenkzfree environment; no raw TikZ."
-boundary = "Resolved by the public environment; open indices remain explicit."
-source = "paper TN-Review-main.tex line 1483; author source ImagesReview Section III/ImagesReview Section III.tex lines 468-520"
-capabilities = ["kernel", "typed-ports"]
+ink = "Canonical public kernel group-action cross and projector ring."
+boundary = "Four virtual lines pass through each side; only group actions are directed."
+source = "paper TN-Review-main.tex line 1483; author source ImagesReview Section III/ImagesReview Section III.tex lines 305-328"
+capabilities = ["kernel", "group-average", "ring-closure", "typed-ports"]
 paper_context_only = false
 fixture = "tests/tenkz/t2_eq54_ginj.tex"
 author_source = "ImagesReview Section III/ImagesReview Section III.tex"
-author_lines = "468-520"
+author_lines = "305-328"
 placements = [{ order = 59, line = 1483, asset = "fig3_fig3-pepe_Eq54Ginjred.pdf" }]
 
 [[target]]
@@ -2020,11 +2020,11 @@ case = "tests/tenkz/rmp/section-iii-a/cases/rmp-workbench-iii-g-injective-pull.t
 formula = "A virtual g-string pulls through a G-injective PEPS tensor."
 ink = "Canonical public tenkzfree PEPS star with opposite g-string corners."
 boundary = "Five PEPS legs and two g-string ends remain open on each side."
-source = "author source ImagesReview Section III/ImagesReview Section III.tex lines 414-444; archival output Ginjpullt.pdf"
+source = "author source ImagesReview Section III/ImagesReview Section III.tex lines 468-497; archival output Ginjpullt.pdf"
 capabilities = ["kernel", "pulling-through", "open-string"]
 paper_context_only = false
 author_source = "ImagesReview Section III/ImagesReview Section III.tex"
-author_lines = "414-444"
+author_lines = "468-497"
 placements = []
 fixture = "tests/tenkz/t2_eq50_pull.tex"
 
