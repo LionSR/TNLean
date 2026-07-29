@@ -2,7 +2,7 @@
 # Schema: scripts/tenkz_rmp.py (load_verdicts).  Any status may be
 # recorded, including failure; the check rejects lies, never gaps.
 schema_version = 1
-campaign_sha256 = "ec9466395efd0a9e42db78f30a6fc1a47001f8ee69dd09aa0d571d7037011735"
+campaign_sha256 = "75ee5bbae378431847f00ff1ec53f04fd42163cdb03c93952560ff7c33b01949"
 
 [[verdict]]
 id = "rmp-ii-peps-projection"
@@ -585,7 +585,7 @@ status = "cosmetic-gap"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
 defects = []
-case_sha256 = "e2b5df2b4ed6e773e2988e8fcd7ab4f300db7ebaaef8a7d6ecf5e1a0df485702"
+case_sha256 = "6d28f37dc9c4709d8f513c76e253a713d60c0fac566fba7d4c79669cd4468846"
 reviewed = "2026-07-26"
 renderer = "fable-countersign-reading-2026-07-26-200dpi"
 note = "masonry patch with diagonal stubs; truncated to the line cap (#4931 for the lattice-genre gaps)"
@@ -1269,7 +1269,7 @@ status = "cosmetic-gap"
 pairing = "verified"
 pairing_by = "codex-pairing-sweep-2026-07-24"
 defects = []
-case_sha256 = "79a14233161fe53d54bce99a1f6a77ba6f3da19a5c16bffb101bf4e8739e2901"
+case_sha256 = "9f1941da3694c489e3559f67f1b3bf01f54b79057e1ec10cfc53c4444b9876b0"
 reviewed = "2026-07-27"
 renderer = "fable-wave-a-acceptance-2026-07-27-200dpi"
 note = "the dense masonry checkerboard, transcribed as the equivalence twin of rmp-iii-a-ghz-state -- both targets cite author lines 329-356 -- with the twin declared in the manifest"

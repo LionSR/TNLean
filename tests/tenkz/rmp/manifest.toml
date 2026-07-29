@@ -901,7 +901,7 @@ section = "section-iii-a"
 order = 54
 case = "tests/tenkz/rmp/section-iii-a/cases/rmp-iii-a-ghz-state.tex"
 formula = "|CZX> = blocking of (x)_{i,j} |GHZ_ij> ,"
-ink = "Canonical public tenkzlattice environment; no raw TikZ."
+ink = "Canonical public tenkzfree masonry checkerboard with staggered GHZ dot nodes."
 boundary = "Resolved by the public environment; open indices remain explicit."
 source = "paper TN-Review-main.tex line 1446; author source ImagesReview Section III/ImagesReview Section III.tex lines 329-356"
 capabilities = ["free-graph", "typed-ports"]
@@ -1984,7 +1984,7 @@ section = "section-iii-a"
 order = 27
 case = "tests/tenkz/rmp/section-iii-a/cases/rmp-workbench-iii-ghz-state-workbench.tex"
 formula = "The cluster-state workbench alternates up and down GHZ copy tensors."
-ink = "Canonical public tenkzlattice 3x4 staggered GHZ pattern."
+ink = "Canonical public tenkzfree masonry checkerboard with staggered GHZ dot nodes."
 boundary = "Horizontal copy bonds are open at the left and right boundaries."
 source = "author source ImagesReview Section III/ImagesReview Section III.tex lines 329-356; archival output ghzstate.pdf"
 capabilities = ["free-graph", "staggered-sites", "copy-tensor"]
