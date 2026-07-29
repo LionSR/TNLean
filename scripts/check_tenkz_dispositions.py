@@ -5,14 +5,14 @@ from __future__ import annotations
 
 import re
 import sys
-from collections import Counter
+from collections import Counter, defaultdict
 from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 
-from tenkzlib.texcase import strip_comments
+from tenkzlib.texcase import scan_constructs, strip_comments
 
 
 DOCUMENT = ROOT / "docs/tenkz/DISPOSITIONS.md"
@@ -78,6 +78,19 @@ def occurrences(path: Path) -> list[tuple[int, str]]:
     ]
 
 
+def construct_sources(path: Path) -> dict[tuple[str, int, str], list[str]]:
+    """Return source slices for each picture construct in a TeX file."""
+    source = strip_comments(path.read_text(errors="replace"))
+    result: dict[tuple[str, int, str], list[str]] = defaultdict(list)
+    for construct in scan_constructs(source):
+        key = (path.name, construct.line, construct.name)
+        result[key].append(source[construct.start : construct.end])
+    for match in re.finditer(r"\\tntree\b[^\n]*", source):
+        line = source.count("\n", 0, match.start()) + 1
+        result[(path.name, line, "tntree")].append(match.group(0))
+    return result
+
+
 def expanded_source(path: Path, stack: tuple[Path, ...] = ()) -> str:
     """Expand local input files so fixture disposition includes dependencies."""
     if path in stack:
@@ -115,6 +128,10 @@ def uses_tombstone(source: str) -> bool:
     if re.search(r"rows\s*=\s*\{[^}\n]*:[^}\n]*\}", source):
         return True
     if re.search(r"\\tnfuse\s*\[[^\]]*\brows\s*=", source):
+        return True
+    if re.search(r"form\s*=\s*(?:brace-(?:below|above)|cut|band|prose)\b", source):
+        return True
+    if re.search(r"\\tnspan\s*\[[^\]]*\bbrace\s+(?:below|above)\b", source):
         return True
     for match in re.finditer(r"\\tn\*?\s*\[([^\]]*)\]", source):
         if re.search(
@@ -167,10 +184,15 @@ def parse_fixture_table(text: str) -> Counter[str]:
 
 def documented_blueprint(
     text: str,
-) -> tuple[Counter[tuple[str, int, str]], Counter[str]]:
+) -> tuple[
+    Counter[tuple[str, int, str]],
+    Counter[str],
+    dict[tuple[str, int, str], str],
+]:
     body = section(text, "## Blueprint inventory", "### Blueprint reconciliation")
     listed: Counter[tuple[str, int, str]] = Counter()
     dispositions: Counter[str] = Counter()
+    disposition_by_occurrence: dict[tuple[str, int, str], str] = {}
     for row in body.splitlines():
         cells = [cell.strip() for cell in row.split("|")[1:-1]]
         if len(cells) != 4 or not re.fullmatch(r"`[^`]+\.tex`", cells[0]):
@@ -179,9 +201,11 @@ def documented_blueprint(
         for disposition, cell in zip(DISPOSITIONS, cells[1:]):
             for use in re.finditer(r"L([0-9]+(?:, [0-9]+)*) `([^`]+)` →", cell):
                 for line in map(int, use.group(1).split(", ")):
-                    listed[(filename, line, use.group(2))] += 1
+                    key = (filename, line, use.group(2))
+                    listed[key] += 1
                     dispositions[disposition] += 1
-    return listed, dispositions
+                    disposition_by_occurrence[key] = disposition
+    return listed, dispositions, disposition_by_occurrence
 
 
 def documented_fixtures(text: str) -> dict[str, tuple[str, frozenset[str]]]:
@@ -236,12 +260,18 @@ def main() -> int:
 
     blueprint_occurrences: Counter[tuple[str, int, str]] = Counter()
     blueprint_raw: Counter[str] = Counter()
+    blueprint_sources: dict[tuple[str, int, str], list[str]] = {}
     for path in sorted(BLUEPRINT_ROOT.glob("*.tex")):
+        blueprint_sources.update(construct_sources(path))
         for line, name in occurrences(path):
             blueprint_occurrences[(path.name, line, name)] += 1
             blueprint_raw[name] += 1
 
-    listed_blueprint, blueprint_dispositions = documented_blueprint(text)
+    (
+        listed_blueprint,
+        blueprint_dispositions,
+        blueprint_occurrence_dispositions,
+    ) = documented_blueprint(text)
     if blueprint_occurrences != listed_blueprint:
         fail(
             "blueprint inventory mismatch: "
@@ -255,6 +285,14 @@ def main() -> int:
     )
     if blueprint_dispositions != documented_blueprint_dispositions:
         fail("blueprint disposition totals do not match the line inventory")
+    for key, disposition in blueprint_occurrence_dispositions.items():
+        if disposition != "redraw" and any(
+            uses_tombstone(source) for source in blueprint_sources[key]
+        ):
+            fail(
+                f"{key[0]}:{key[1]} {key[2]} uses a tombstone "
+                f"but is classified {disposition}"
+            )
 
     fixtures = documented_fixtures(text)
     expected_fixtures = {path.name for path in FIXTURE_ROOT.glob("*.tex")}

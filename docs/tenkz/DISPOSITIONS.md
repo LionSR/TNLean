@@ -51,7 +51,7 @@ separate public-surface occurrence and therefore appears separately.
 
 | Source | Preserve | Codemod | Redraw |
 |---|---|---|---|
-| `ch02_mps.tex` | — | L24, 54, 171, 200, 272, 941 `tenkz` → `C-policy+C-record` | L815 `tenkz` → `R-record` |
+| `ch02_mps.tex` | — | L24, 200, 272 `tenkz` → `C-policy+C-record` | L54, 171, 941 `tenkz` → `C-policy+C-record+R-record`<br>L815 `tenkz` → `R-record` |
 | `ch03_single.tex` | — | L250 `tenkz` → `C-policy+C-record` | — |
 | `ch04_channels_choi_foundations.tex` | — | — | L86 `tenkz` → `R-record` |
 | `ch11_fundamental_theorem_core.tex` | — | L41, 45 `tenkz` → `C-policy+C-record` | — |
@@ -59,8 +59,8 @@ separate public-surface occurrence and therefore appears separately.
 | `ch12_symmetry_virtual_and_cohomology.tex` | — | L195, 328, 456, 469 `tenkz` → `C-policy+C-record` | L180 `tenkz` → `R-record` |
 | `ch13_parent_hamiltonian_commuting_gap_appendix_b_commutation.tex` | — | — | L54 `tenkzfree` → `R-free+R-record` |
 | `ch13_parent_hamiltonian_commuting_gap_appendix_b_supports.tex` | — | — | L275 `tenkzfree` → `R-free+R-record` |
-| `ch13_parent_hamiltonian_injective_ground_spaces_intersection_property.tex` | — | L97 `tenkz` → `C-policy+C-record` | — |
-| `ch13_parent_hamiltonian_injective_ground_spaces_local_parent_interaction.tex` | — | L35, 489, 528 `tenkz` → `C-policy+C-record` | — |
+| `ch13_parent_hamiltonian_injective_ground_spaces_intersection_property.tex` | — | — | L97 `tenkz` → `C-policy+C-record+R-record` |
+| `ch13_parent_hamiltonian_injective_ground_spaces_local_parent_interaction.tex` | — | — | L35, 489, 528 `tenkz` → `C-policy+C-record+R-record` |
 | `ch14_correlations.tex` | — | — | L67 `tenkz` → `R-record` |
 | `ch16_channel_representations_choi_and_kraus.tex` | — | L290 `tenkz` → `C-policy+C-record` | — |
 | `ch16_channel_representations_dilations_and_ordered_cp.tex` | — | L20 `tenkz` → `C-policy+C-record` | — |
@@ -119,8 +119,8 @@ separate public-surface occurrence and therefore appears separately.
 | Disposition | Occurrences |
 |---|---:|
 | preserve | 0 |
-| codemod | 81 |
-| redraw | 126 |
+| codemod | 74 |
+| redraw | 133 |
 | **Total** | **207** |
 
 The raw count is 166 environment openings plus 41 command occurrences,
@@ -140,8 +140,8 @@ top-level-source census so a shared input is not counted multiple times.
 | Disposition | Fixtures |
 |---|---:|
 | preserve | 11 |
-| codemod | 50 |
-| redraw | 203 |
+| codemod | 48 |
+| redraw | 205 |
 | **Total** | **264** |
 
 Of the 264 top-level fixtures, 246 directly or indirectly open a tenkz
@@ -154,14 +154,14 @@ consumers, and 5 contain no tenkz public-surface construct.
 - `P-none`: `geom.tex` · `plane_experiment.tex` · `zz_geomdag.tex` · `zz_geomframe.tex` · `zz_geomsupport.tex`
 - `P-setup`: `p_species.tex`
 
-### Codemod fixtures (50)
+### Codemod fixtures (48)
 
 - `C-policy`: `hdr.tex` · `iso_i.tex` · `iso_k.tex` · `p3_bisect_a.tex` · `p3_bisect_d.tex` · `p3_pitch_probe.tex` · `rv4061_ketptrace.tex`
 - `C-policy+C-record`: `audit3.tex` · `audit4.tex` · `channel_test.tex` · `g06_stageB.tex` · `hard01_v2.tex` · `hard02_v2.tex` · `iso_j.tex` · `lrbox_probe.tex` · `p3_bond_insertion.tex` · `p3_gauge.tex` · `p3_lemma1.tex` · `p3_trace_word.tex` · `p3_word.tex` · `p_newcup.tex` · `part_B1.tex` · `part_B2.tex` · `rv4061_ex_canonical-channel.tex` · `t2_lassodef.tex` · `t2_lassodef_v2.tex` · `t2_twoshift.tex`
-- `C-record`: `hard11_v3.tex` · `hard11_v4.tex` · `iso_a.tex` · `iso_b.tex` · `iso_c.tex` · `iso_d.tex` · `iso_e.tex` · `iso_f.tex` · `iso_g.tex` · `iso_t.tex` · `part_B3.tex` · `part_B7.tex` · `rv4061_cellset.tex` · `rv4061_cuporder.tex` · `t2_staircase.tex`
+- `C-record`: `hard11_v3.tex` · `hard11_v4.tex` · `iso_a.tex` · `iso_b.tex` · `iso_d.tex` · `iso_e.tex` · `iso_f.tex` · `iso_g.tex` · `iso_t.tex` · `part_B3.tex` · `rv4061_cellset.tex` · `rv4061_cuporder.tex` · `t2_staircase.tex`
 - `C-tree`: `gr_t2_fsymbol.tex` · `hard11_v2.tex` · `p3_eq5_fsymbol.tex` · `p3_eq5_v2.tex` · `p4067_braced.tex` · `t2_fusion.tex` · `t2_pentagon5.tex` · `tree_test.tex`
 
-### Redraw fixtures (203)
+### Redraw fixtures (205)
 
 - `C-picture+C-policy+C-record+C-tree+R-cd+R-free+R-lattice+R-record`: `gallery.tex`
 - `C-picture+C-policy+C-record+R-record`: `adv_brace.tex` · `rv4061_ex_grid-benchmarks.tex` · `smoke.tex`
@@ -180,7 +180,7 @@ consumers, and 5 contain no tenkz public-surface construct.
 - `C-policy+R-lattice+R-record`: `p3_blocking.tex` · `p3_reduce.tex` · `t2_gs2d_lasso.tex` · `t2_lassoC.tex` · `t2_rgfp4.tex`
 - `C-policy+R-record`: `p3_eq08.tex` · `p3_eq8_action.tex` · `p3_eq8_v2.tex` · `p3_inverse.tex` · `p3_inverse_identity.tex` · `p3_min2.tex` · `p3_probe_pitch2.tex` · `rv4061_vertlabel.tex` · `t2_probe_sides.tex` · `trace_probe.tex` · `zz_vertprune.tex`
 - `C-record+R-free+R-record`: `hard01_ortho.tex` · `hard04_eig.tex` · `hard06_gauge2layer.tex`
-- `C-record+R-record`: `modes_test.tex` · `rev4075_alias.tex`
+- `C-record+R-record`: `iso_c.tex` · `modes_test.tex` · `part_B7.tex` · `rev4075_alias.tex`
 - `C-tree+R-cd`: `cd_edge.tex` · `grid_test.tex`
 - `C-tree+R-cd+R-record`: `cd_test.tex` · `p4067_baseline.tex` · `p4067_pentagon.tex` · `p_arrowtn.tex` · `pentagon_corrected.tex`
 - `R-cd`: `p4067_gridbase.tex`

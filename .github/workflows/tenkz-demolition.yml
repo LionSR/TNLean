@@ -26,4 +26,5 @@ jobs:
         run: |
           python3 scripts/test_check_tenkz_demolition.py
           python3 scripts/check_tenkz_demolition.py
+          python3 scripts/test_check_tenkz_dispositions.py
           python3 scripts/check_tenkz_dispositions.py
