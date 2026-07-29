@@ -33,8 +33,8 @@ extension directly, without the tensor-product factor.
 * `exists_orthonormal_basis_restriction` — the sharp rank-one extension:
   from `ψᵢ` on `ℂᵈ` with `d ≤ n` and `∑ |ψᵢ⟩⟨ψᵢ| = 1`, obtain a unitary
   `U ∈ U(n)` whose rows restrict to `ψᵢ`.
-* `of_rank_one_povm` — bridge lemma: given a `POVM d n` with an explicit
-  rank-one decomposition `E_i = |ψᵢ⟩⟨ψᵢ|`, apply the sharp extension.
+* `of_rank_one_povm` — the rank-one POVM corollary: given a `POVM d n` with
+  an explicit decomposition `E_i = |ψᵢ⟩⟨ψᵢ|`, apply the sharp extension.
 
 ## References
 
@@ -56,8 +56,8 @@ resolution of identity `∑_i |ψᵢ⟩⟨ψᵢ| = 1_d`, the `n×d` matrix
 `Ψ i j := ψ i j` satisfies `Ψᴴ * Ψ = 1_d`. -/
 private lemma gram_eq_one_of_vecMulVec_sum_eq_one (ψ : Fin n → (Fin d → ℂ))
     (h_sum : ∑ i : Fin n, Matrix.vecMulVec (ψ i) (star (ψ i)) = 1) :
-    ((fun (i : Fin n) (j : Fin d) => ψ i j)ᴴ *
-      (fun (i : Fin n) (j : Fin d) => ψ i j)) = 1 := by
+    ((Matrix.of fun (i : Fin n) (j : Fin d) => ψ i j)ᴴ *
+      (Matrix.of fun (i : Fin n) (j : Fin d) => ψ i j)) = 1 := by
   ext j k
   simp only [Matrix.mul_apply, Matrix.conjTranspose_apply, Matrix.one_apply]
   have h_entry := congrArg (fun M : Matrix (Fin d) (Fin d) ℂ => M j k) h_sum
@@ -76,8 +76,10 @@ private lemma gram_eq_one_of_vecMulVec_sum_eq_one (ψ : Fin n → (Fin d → ℂ
 natural embedding of `j` into `Fin n` via `Fin.castLE hd` and `0`
 otherwise.  For `d ≤ n`, `J` is an isometry: `Jᴴ * J = 1_d`. -/
 private lemma inclusion_conjTranspose_mul_self (hd : d ≤ n) :
-    ((fun (i : Fin n) (j : Fin d) => if i = Fin.castLE hd j then (1 : ℂ) else 0)ᴴ *
-      (fun (i : Fin n) (j : Fin d) => if i = Fin.castLE hd j then (1 : ℂ) else 0)) = 1 := by
+    ((Matrix.of fun (i : Fin n) (j : Fin d) =>
+        if i = Fin.castLE hd j then (1 : ℂ) else 0)ᴴ *
+      (Matrix.of fun (i : Fin n) (j : Fin d) =>
+        if i = Fin.castLE hd j then (1 : ℂ) else 0)) = 1 := by
   ext j k
   simp only [Matrix.mul_apply, Matrix.conjTranspose_apply, Matrix.one_apply]
   by_cases hjk : j = k
@@ -120,12 +122,12 @@ theorem exists_orthonormal_basis_restriction (ψ : Fin n → (Fin d → ℂ))
     (h_sum : ∑ i : Fin n, Matrix.vecMulVec (ψ i) (star (ψ i)) = 1) :
     ∃ (U : Matrix.unitaryGroup (Fin n) ℂ),
       (∀ i j, (U : Matrix (Fin n) (Fin n) ℂ) i (Fin.castLE hd j) = ψ i j) := by
-  let Ψ : Matrix (Fin n) (Fin d) ℂ := fun i j => ψ i j
+  let Ψ : Matrix (Fin n) (Fin d) ℂ := Matrix.of fun i j => ψ i j
   have hΨGram : Ψᴴ * Ψ = 1 := by
     dsimp [Ψ]
     exact gram_eq_one_of_vecMulVec_sum_eq_one ψ h_sum
   let J : Matrix (Fin n) (Fin d) ℂ :=
-    fun i j => if i = Fin.castLE hd j then (1 : ℂ) else 0
+    Matrix.of fun i j => if i = Fin.castLE hd j then (1 : ℂ) else 0
   have hJGram : Jᴴ * J = 1 := inclusion_conjTranspose_mul_self hd
   obtain ⟨U, hU⟩ :=
     Matrix.exists_unitary_mul_eq_of_conjTranspose_mul_eq Ψ J (hΨGram.trans hJGram.symm)
@@ -150,16 +152,16 @@ theorem exists_orthonormal_basis_restriction (ψ : Fin n → (Fin d → ℂ))
 
 end rankOneNeumarkSharp
 
-/-! ### Bridge lemma: rank-one POVM to sharp extension -/
+/-! ### The rank-one POVM corollary -/
 
-/-- **Bridge lemma**: start from a `POVM d n` whose effects are explicitly
-given as rank-one `|ψᵢ⟩⟨ψᵢ|`.  The POVM axioms guarantee the resolution
+/-- **Rank-one POVM corollary**: start from a `POVM d n` whose effects are
+explicitly given as rank-one `|ψᵢ⟩⟨ψᵢ|`.  The POVM axioms guarantee the resolution
 `∑ᵢ |ψᵢ⟩⟨ψᵢ| = 1`, so `exists_orthonormal_basis_restriction` applies and
 yields the sharp `n`-dimensional orthonormal-basis extension recorded in
 Wolf lines 480--499.
 
-This translates from the general POVM structure to the vector-level
-hypotheses required by the sharp theorem.  Unlike `exists_naimark_dilation`,
+This specializes the general POVM structure to the vector-level
+hypotheses of the sharp theorem.  Unlike `exists_naimark_dilation`,
 whose ambient Hilbert space is `ℂ^D ⊗ ℂ^n` (dimension `D·n`), this
 corollary gives the source's assertion of an `n`-dimensional ambient
 space under the rank-one hypothesis. -/
