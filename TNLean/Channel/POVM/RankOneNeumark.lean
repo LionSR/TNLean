@@ -68,7 +68,9 @@ private lemma gram_eq_one_of_vecMulVec_sum_eq_one (ψ : Fin n → (Fin d → ℂ
         = (∑ i : Fin n, star (ψ i j * star (ψ i k))) := by
       refine Finset.sum_congr rfl fun i _ => ?_
       rw [star_mul, star_star, mul_comm]
-    _ = star (∑ i : Fin n, ψ i j * star (ψ i k)) := by rw [map_sum]
+    _ = star (∑ i : Fin n, ψ i j * star (ψ i k)) := by
+      simpa using ((starRingEnd ℂ).map_sum (Finset.univ : Finset (Fin n))
+        (fun i ↦ ψ i j * star (ψ i k))).symm
     _ = star (if j = k then (1 : ℂ) else 0) := by rw [h_entry]
     _ = if j = k then (1 : ℂ) else 0 := by split <;> simp
 
@@ -92,7 +94,7 @@ private lemma inclusion_conjTranspose_mul_self (hd : d ≤ n) :
       simp [hterm]
     · intro h; exact absurd (Finset.mem_univ _) h
   · have hcast_ne : Fin.castLE hd j ≠ Fin.castLE hd k :=
-      mt (Fin.castLE_injective hd) hjk
+      fun h ↦ hjk ((Fin.castLE_injective hd) h)
     refine Finset.sum_eq_zero fun i _ => ?_
     by_cases hij : i = Fin.castLE hd j
     · subst hij; rw [if_neg hcast_ne]; simp
