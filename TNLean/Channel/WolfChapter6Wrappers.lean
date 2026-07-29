@@ -50,8 +50,7 @@ theorem wolf_theorem_6_15
     (hTstar_schwarz : IsSchwarzMap (Matrix.traceAdjointMap T))
     {ρ : Mat} (hρ : ρ.PosDef) (hρ_fix : T ρ = ρ) :
     IsConditionalExpectation
-      (Matrix.traceAdjointMap (LinearMap.meanErgodicProjection T
-        (hT_pos.hasBoundedOrbits_of_tracePreserving hT_tp)))
+      ((hT_pos.hasBoundedOrbits_of_tracePreserving hT_tp).traceAdjointMeanErgodicProjection)
       (SchwarzMap.fixedPointsStarSubalgebra (Matrix.traceAdjointMap T)
         hT_pos.traceAdjointMap
         (isTracePreservingMap_iff_traceAdjointMap_one.mp hT_tp)

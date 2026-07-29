@@ -27,6 +27,21 @@ open scoped Matrix Matrix.Norms.Frobenius
 
 variable {D : ℕ}
 
+/-- The trace-pairing adjoint of the mean-ergodic projection of `T`.
+
+This is the projection `P*` used in the proof of Wolf Theorem 6.14
+(see Equation 6.14 and lines 1488-1492 of the local source)
+`Notes/WolfNoteTexSource/ch06_spectral_properties.tex`.
+
+The explicit definition as a named function avoids typeclass instance diamonds
+in downstream modules that import additional matrix instances
+(e.g., `Mathlib.Analysis.Matrix.Order`). -/
+noncomputable def LinearMap.HasBoundedOrbits.traceAdjointMeanErgodicProjection
+    {T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ}
+    (hb : T.HasBoundedOrbits) :
+    Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ :=
+  Matrix.traceAdjointMap (LinearMap.meanErgodicProjection T hb)
+
 /-- A matrix endomorphism is trace-preserving if and only if its trace-pairing
 adjoint fixes the identity.
 

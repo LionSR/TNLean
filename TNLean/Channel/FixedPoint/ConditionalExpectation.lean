@@ -373,22 +373,19 @@ theorem meanErgodicAdjoint_isConditionalExpectation
     (T : Mat →ₗ[ℂ] Mat) (hT_pos : IsPositiveMap T) (hT_tp : IsTracePreservingMap T)
     (hTstar_schwarz : IsSchwarzMap (Matrix.traceAdjointMap T))
     {ρ : Mat} (hρ : ρ.PosDef) (hρ_fix : T ρ = ρ) :
-    IsConditionalExpectation
-      (Matrix.traceAdjointMap (LinearMap.meanErgodicProjection T
-        (hT_pos.hasBoundedOrbits_of_tracePreserving hT_tp)))
+    let Pstar : Mat →ₗ[ℂ] Mat :=
+      (hT_pos.hasBoundedOrbits_of_tracePreserving hT_tp).traceAdjointMeanErgodicProjection
+    IsConditionalExpectation Pstar
       (SchwarzMap.fixedPointsStarSubalgebra (Matrix.traceAdjointMap T)
         hT_pos.traceAdjointMap
         (isTracePreservingMap_iff_traceAdjointMap_one.mp hT_tp)
         hTstar_schwarz hρ (by
           simpa [Matrix.traceAdjointMap_traceAdjointMap] using hρ_fix)) := by
-  set Pstar := Matrix.traceAdjointMap (LinearMap.meanErgodicProjection T
-    (hT_pos.hasBoundedOrbits_of_tracePreserving hT_tp))
-  have hPstar_idemp : ∀ Y, Pstar (Pstar Y) = Pstar Y :=
-    (hT_pos.traceAdjoint_meanErgodicProjection_isPositiveUnitalRetraction hT_tp).2.2.1
-  have hPstar_one : Pstar 1 = 1 :=
-    (hT_pos.traceAdjoint_meanErgodicProjection_isPositiveUnitalRetraction hT_tp).2.1
-  have hPstar_fixed : ∀ Y, Pstar Y = Y ↔ Matrix.traceAdjointMap T Y = Y :=
-    (hT_pos.traceAdjoint_meanErgodicProjection_isPositiveUnitalRetraction hT_tp).2.2.2.2
+  intro Pstar
+  have hlemma := hT_pos.traceAdjoint_meanErgodicProjection_isPositiveUnitalRetraction hT_tp
+  have hPstar_idemp : ∀ Y, Pstar (Pstar Y) = Pstar Y := hlemma.2.2.1
+  have hPstar_one : Pstar 1 = 1 := hlemma.2.1
+  have hPstar_fixed : ∀ Y, Pstar Y = Y ↔ Matrix.traceAdjointMap T Y = Y := hlemma.2.2.2.2
   exact
   { idempotent := hPstar_idemp
     unital := hPstar_one
