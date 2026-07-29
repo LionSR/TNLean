@@ -58,7 +58,7 @@ def torusCoordinateSwapRegion {width height : ℕ}
   simp [torusCoordinateSwapRegion]
 
 /-- Coordinate swap preserves unions of finite regions. -/
-@[deprecated "Expand `torusCoordinateSwapRegion` and use `Finset.image_union`."
+@[deprecated "Expand `torusCoordinateSwapRegion` and use `Finset.map_union`."
   (since := "2026-07-30")]
 theorem torusCoordinateSwapRegion_union {width height : ℕ}
     (R S : Finset (TorusVertex width height)) :
