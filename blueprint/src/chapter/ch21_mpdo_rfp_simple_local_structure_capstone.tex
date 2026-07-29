@@ -311,6 +311,77 @@
     entries yields the displayed expansion.
 \end{proof}
 
+\begin{theorem}[Canonical supports of the active physical-sector factors]
+    \label{thm:mpdo_active_physical_sector_factor_supports}
+    \lean{MPOTensor.PhysicalSectorFactorization.sectorProductFamily,
+        MPOTensor.PhysicalSectorFactorization.IsActiveSector,
+        MPOTensor.PhysicalSectorFactorization.isActiveSector_iff_exists_sectorProductFamily_ne_zero,
+        MPOTensor.PhysicalSectorFactorization.not_isActiveSector_iff,
+        MPOTensor.PhysicalSectorFactorization.not_isActiveSector_iff_left_or_right_eq_zero,
+        MPOTensor.PhysicalSectorFactorization.not_isActiveSector_bondDim_zero,
+        MPOTensor.PhysicalSectorFactorization.sectorCoordinateTensor_isInjective,
+        MPOTensor.PhysicalSectorFactorization.sectorCoordinateTensor_isMPDO_of_neighboringOperator_pos,
+        MPOTensor.PhysicalSectorFactorization.sectorProductFamily_conjTranspose_mem_span,
+        MPOTensor.PhysicalSectorFactorization.leftTensor_conjTranspose_mem_span_of_isActiveSector,
+        MPOTensor.PhysicalSectorFactorization.rightTensor_conjTranspose_mem_span_of_isActiveSector,
+        MPOTensor.PhysicalSectorFactorization.leftFactorSupportProj,
+        MPOTensor.PhysicalSectorFactorization.rightFactorSupportProj,
+        MPOTensor.PhysicalSectorFactorization.activeSector_factorSupport_twoSided,
+        MPOTensor.PhysicalSectorFactorization.sectorProductFamily_supportProj,
+        MPOTensor.PhysicalSectorFactorization.exists_activeSector_factorSupportIsometries}
+    \leanok
+    \uses{thm:mpdo_injective_mpdo_adjoint_closure}
+    Let $K$ be injective and let
+    \[
+        UK[\beta,\alpha]U^*
+        =\bigoplus_k l_{k,\beta}\otimes r_{k,\alpha}
+    \]
+    be a physical-sector factorization whose neighboring operators are
+    positive semidefinite. Call $k$ active when both families
+    $\{l_{k,\beta}\}_\beta$ and $\{r_{k,\alpha}\}_\alpha$ contain a nonzero
+    member. For every active $k$, the two factor spans are closed under
+    conjugate transpose. If $P_k^L$ and $P_k^R$ are their respective joint
+    column-support projections, then
+    \begin{align}
+        P_k^L l_{k,\beta}
+        &=l_{k,\beta}
+         =l_{k,\beta}P_k^L,
+        &
+        P_k^R r_{k,\alpha}
+        &=r_{k,\alpha}
+         =r_{k,\alpha}P_k^R,
+        \notag\\
+        \operatorname{supp}
+        \{l_{k,\beta}\otimes r_{k,\alpha}\}_{\beta,\alpha}
+        &=P_k^L\otimes P_k^R.
+        \notag
+    \end{align}
+    Moreover, there are positive integers $p_k,q_k$ and isometries
+    \[
+        V_k^L:\C^{p_k}\longrightarrow\C^{d_k^L},
+        \qquad
+        V_k^R:\C^{q_k}\longrightarrow\C^{d_k^R}
+    \]
+    whose range projections are $P_k^L$ and $P_k^R$. If $k$ is inactive,
+    every product $l_{k,\beta}\otimes r_{k,\alpha}$ vanishes; in particular,
+    there is no active sector when the virtual dimension is zero.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The sector-coordinate tensor remains injective. Positivity of the
+    neighboring operators makes it a matrix product density operator, so
+    Theorem~\ref{thm:mpdo_injective_mpdo_adjoint_closure} closes its physical
+    slices under conjugate transpose. Restriction to one diagonal sector
+    closes the span of the products
+    $l_{k,\beta}\otimes r_{k,\alpha}$. Evaluating a nonzero matrix entry in
+    the opposite factor gives conjugate-transpose closure of each factor
+    span. The joint column-support projections then absorb the factors on
+    both sides. Their tensor product is the support projection of the
+    product family, and finite-dimensional range decompositions give the two
+    isometries.
+\end{proof}
+
 % **Partial coverage of CPSV16 Proposition `prop3to4`:** this theorem derives
 % pairwise two-sided supports from `AppKxKy=0` under the standing biCF
 % injectivity and the sectorwise positivity supplied by `AppUkU=rl` and
