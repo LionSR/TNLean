@@ -3,6 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import Mathlib.Algebra.Order.BigOperators.Ring.Finset
+import Mathlib.Analysis.Matrix.Normed
 import TNLean.MPS.Core.Correlations
 import TNLean.Spectral.QuantitativeGap
 
@@ -45,13 +47,15 @@ untouched.  That extraction of eigenvalues and coefficients from `E_A`
 this issue.
 -/
 
-open scoped Matrix BigOperators ComplexOrder
+open scoped Matrix BigOperators
 
 namespace MPSTensor
 
 variable {d D : ℕ}
 
 private abbrev Mat (D : ℕ) := Matrix (Fin D) (Fin D) ℂ
+
+attribute [local instance] Matrix.frobeniusNormedAddCommGroup
 
 /-! ### Reduction identity -/
 
@@ -101,11 +105,11 @@ theorem connectedCorrelator_eq_trace_transfer_traceless
     _ = Matrix.trace (Y * ((E ^ n) (X * ρ - (Matrix.trace (X * ρ)) • ρ))) := by
       simp [map_sub, map_smul, hE_ρ_n n]
 
-/-! ### Norm estimates via entrywise Frobenius norm
+/-! ### Norm estimates via the Frobenius (Hilbert–Schmidt) norm
 
 All norm estimates in this section use the Frobenius (Hilbert–Schmidt) norm
-`‖M‖² = ∑_{i,j} |M_{ij}|²`, which is the default `‖·‖` on
-`Matrix (Fin D) (Fin D) ℂ` via the `PiLp 2` instance. -/
+`‖M‖² = ∑_{i,j} |M_{ij}|²`, activated via the local instance
+`Matrix.frobeniusNormedAddCommGroup`. -/
 
 /-- The trace of a matrix product expanded entrywise:
 `tr(Y * M) = ∑_{i,j} Y_{ij} · M_{ji}`. -/
@@ -113,7 +117,7 @@ private lemma trace_mul_eq_sum_sum (Y M : Mat D) :
     Matrix.trace (Y * M) = ∑ i : Fin D, ∑ j : Fin D, (Y i j) * (M j i) := by
   simp [Matrix.trace, Matrix.mul_apply, Finset.sum_mul, Finset.mul_sum]
 
-/-- Finite-sum estimate: `|tr(Y * M)| ≤ ‖Y‖ · ‖M‖` for the Frobenius norm.
+/-- Finite-sum estimate: `‖tr(Y * M)‖ ≤ ‖Y‖ · ‖M‖` for the Frobenius norm.
 
 Proof: expand the trace entrywise, apply the triangle inequality to the
 double sum, then use the real Cauchy–Schwarz inequality
@@ -122,81 +126,71 @@ double sum, then use the real Cauchy–Schwarz inequality
 
 Reference: arXiv:2011.12127, Sec. II.B.3. -/
 private lemma abs_trace_mul_le_norm_mul_norm (Y M : Mat D) :
-    |Matrix.trace (Y * M)| ≤ ‖Y‖ * ‖M‖ := by
+    ‖Matrix.trace (Y * M)‖ ≤ ‖Y‖ * ‖M‖ := by
   rw [trace_mul_eq_sum_sum Y M]
-  -- Triangle inequality on the double sum.
-  have h_tri : |∑ i : Fin D, ∑ j : Fin D, (Y i j) * (M j i)| ≤
-      ∑ i : Fin D, ∑ j : Fin D, |(Y i j) * (M j i)| := by
-    -- For ℂ, ‖z‖ = |z|, so `norm_sum_le` gives the triangle inequality for sums.
-    simpa using le_trans (norm_sum_le (Finset.univ : Finset (Fin D))
-      (fun i => ∑ j : Fin D, (Y i j) * (M j i)))
-      (Finset.sum_le_sum fun i _ => norm_sum_le (Finset.univ : Finset (Fin D))
-        (fun j => (Y i j) * (M j i)))
-  have h_abs_mul : ∑ i : Fin D, ∑ j : Fin D, |(Y i j) * (M j i)| =
-      ∑ i : Fin D, ∑ j : Fin D, |Y i j| * |M j i| := by
-    simp_rw [abs_mul]
-  rw [h_abs_mul] at h_tri
+  -- Triangle inequality on the double sum, using `norm_sum_le`.
+  have h_tri : ‖∑ i : Fin D, ∑ j : Fin D, (Y i j) * (M j i)‖ ≤
+      ∑ i : Fin D, ∑ j : Fin D, ‖(Y i j) * (M j i)‖ := by
+    refine le_trans (norm_sum_le _ _)
+      (Finset.sum_le_sum fun i _ => norm_sum_le _ _)
+  have h_norm_mul : ∑ i : Fin D, ∑ j : Fin D, ‖(Y i j) * (M j i)‖ =
+      ∑ i : Fin D, ∑ j : Fin D, ‖Y i j‖ * ‖M j i‖ := by
+    simp_rw [norm_mul]
+  rw [h_norm_mul] at h_tri
   -- Cauchy–Schwarz on the product set.
-  have h_sq : ((∑ i : Fin D, ∑ j : Fin D, |Y i j| * |M j i| : ℝ) ^ 2) ≤
-      ((∑ i : Fin D, ∑ j : Fin D, (|Y i j| : ℝ) ^ 2) *
-       (∑ i : Fin D, ∑ j : Fin D, (|M j i| : ℝ) ^ 2)) := by
+  have h_sq : ((∑ i : Fin D, ∑ j : Fin D, ‖Y i j‖ * ‖M j i‖ : ℝ) ^ 2) ≤
+      ((∑ i : Fin D, ∑ j : Fin D, ‖Y i j‖ ^ 2) *
+       (∑ i : Fin D, ∑ j : Fin D, ‖M j i‖ ^ 2)) := by
     have h := sum_mul_sq_le_sq_mul_sq (Finset.univ : Finset (Fin D × Fin D))
-      (fun (p : Fin D × Fin D) => (|Y p.1 p.2| : ℝ))
-      (fun (p : Fin D × Fin D) => (|M p.2 p.1| : ℝ))
+      (fun (p : Fin D × Fin D) => ‖Y p.1 p.2‖)
+      (fun (p : Fin D × Fin D) => ‖M p.2 p.1‖)
     -- Rewrite product-set sums to double sums using Finset.sum_product.
-    have hL : (∑ p : Fin D × Fin D, (|Y p.1 p.2| : ℝ) * (|M p.2 p.1| : ℝ)) =
-        (∑ i : Fin D, ∑ j : Fin D, |Y i j| * |M j i| : ℝ) := by
+    have hL : (∑ p : Fin D × Fin D, ‖Y p.1 p.2‖ * ‖M p.2 p.1‖) =
+        (∑ i : Fin D, ∑ j : Fin D, ‖Y i j‖ * ‖M j i‖ : ℝ) := by
       simp [Finset.sum_product]
-    have hR1 : (∑ p : Fin D × Fin D, ((|Y p.1 p.2| : ℝ) ^ 2)) =
-        (∑ i : Fin D, ∑ j : Fin D, (|Y i j| : ℝ) ^ 2) := by
+    have hR1 : (∑ p : Fin D × Fin D, (‖Y p.1 p.2‖ ^ 2)) =
+        (∑ i : Fin D, ∑ j : Fin D, ‖Y i j‖ ^ 2) := by
       simp [Finset.sum_product]
-    have hR2 : (∑ p : Fin D × Fin D, ((|M p.2 p.1| : ℝ) ^ 2)) =
-        (∑ i : Fin D, ∑ j : Fin D, (|M j i| : ℝ) ^ 2) := by
+    have hR2 : (∑ p : Fin D × Fin D, (‖M p.2 p.1‖ ^ 2)) =
+        (∑ i : Fin D, ∑ j : Fin D, ‖M j i‖ ^ 2) := by
       simp [Finset.sum_product]
     simpa [hL, hR1, hR2] using h
-  have h_nonneg : 0 ≤ (∑ i : Fin D, ∑ j : Fin D, |Y i j| * |M j i| : ℝ) := by
+  have h_nonneg : 0 ≤ (∑ i : Fin D, ∑ j : Fin D, ‖Y i j‖ * ‖M j i‖ : ℝ) := by
     refine Finset.sum_nonneg fun i _ => Finset.sum_nonneg fun j _ => ?_
     positivity
   -- Take square roots.
-  have h_sqrt : (∑ i : Fin D, ∑ j : Fin D, |Y i j| * |M j i| : ℝ) ≤
-      Real.sqrt ((∑ i : Fin D, ∑ j : Fin D, (|Y i j| : ℝ) ^ 2) *
-        (∑ i : Fin D, ∑ j : Fin D, (|M j i| : ℝ) ^ 2)) := by
+  have h_sqrt : (∑ i : Fin D, ∑ j : Fin D, ‖Y i j‖ * ‖M j i‖ : ℝ) ≤
+      Real.sqrt ((∑ i : Fin D, ∑ j : Fin D, ‖Y i j‖ ^ 2) *
+        (∑ i : Fin D, ∑ j : Fin D, ‖M j i‖ ^ 2)) := by
     calc
-      (∑ i : Fin D, ∑ j : Fin D, |Y i j| * |M j i| : ℝ) =
-          Real.sqrt (((∑ i : Fin D, ∑ j : Fin D, |Y i j| * |M j i| : ℝ) ^ 2)) := by
+      (∑ i : Fin D, ∑ j : Fin D, ‖Y i j‖ * ‖M j i‖ : ℝ) =
+          Real.sqrt (((∑ i : Fin D, ∑ j : Fin D, ‖Y i j‖ * ‖M j i‖ : ℝ) ^ 2)) := by
         rw [Real.sqrt_sq h_nonneg]
-      _ ≤ Real.sqrt ((∑ i : Fin D, ∑ j : Fin D, (|Y i j| : ℝ) ^ 2) *
-          (∑ i : Fin D, ∑ j : Fin D, (|M j i| : ℝ) ^ 2)) :=
+      _ ≤ Real.sqrt ((∑ i : Fin D, ∑ j : Fin D, ‖Y i j‖ ^ 2) *
+          (∑ i : Fin D, ∑ j : Fin D, ‖M j i‖ ^ 2)) :=
         Real.sqrt_le_sqrt h_sq
-  have h_sqrt_mul : Real.sqrt ((∑ i : Fin D, ∑ j : Fin D, (|Y i j| : ℝ) ^ 2) *
-      (∑ i : Fin D, ∑ j : Fin D, (|M j i| : ℝ) ^ 2)) =
-    Real.sqrt (∑ i : Fin D, ∑ j : Fin D, (|Y i j| : ℝ) ^ 2) *
-    Real.sqrt (∑ i : Fin D, ∑ j : Fin D, (|M j i| : ℝ) ^ 2) := by
+  have h_sqrt_mul : Real.sqrt ((∑ i : Fin D, ∑ j : Fin D, ‖Y i j‖ ^ 2) *
+      (∑ i : Fin D, ∑ j : Fin D, ‖M j i‖ ^ 2)) =
+    Real.sqrt (∑ i : Fin D, ∑ j : Fin D, ‖Y i j‖ ^ 2) *
+    Real.sqrt (∑ i : Fin D, ∑ j : Fin D, ‖M j i‖ ^ 2) := by
     rw [Real.sqrt_mul (Finset.sum_nonneg fun _ _ => by positivity)]
-  have h_normY : Real.sqrt (∑ i : Fin D, ∑ j : Fin D, (|Y i j| : ℝ) ^ 2) = ‖Y‖ := by
-    -- ‖Y‖² = ∑_{i,j} |Y_{ij}|² via PiLp 2.
-    have h_norm_sq_eq : ‖Y‖ ^ 2 = ∑ i : Fin D, ∑ j : Fin D, (|Y i j| : ℝ) ^ 2 := by
-      calc
-        ‖Y‖ ^ 2 = ∑ i : Fin D, ‖Y i‖ ^ 2 :=
-          norm_sq_eq_of_L2 (β := fun _ : Fin D => PiLp 2 (fun _ : Fin D => ℂ)) Y
-        _ = ∑ i : Fin D, (∑ j : Fin D, ‖Y i j‖ ^ 2) := by
-          refine Finset.sum_congr rfl fun i _ => ?_
-          rw [norm_sq_eq_of_L2 (β := fun _ : Fin D => ℂ) (Y i)]
-        _ = ∑ i : Fin D, ∑ j : Fin D, (|Y i j| : ℝ) ^ 2 := by simp
+  have h_normY : Real.sqrt (∑ i : Fin D, ∑ j : Fin D, ‖Y i j‖ ^ 2) = ‖Y‖ := by
+    have h_norm_sq_eq : ‖Y‖ ^ 2 = ∑ i : Fin D, ∑ j : Fin D, ‖Y i j‖ ^ 2 := by
+      simpa [PiLp.norm_seminormedAddCommGroupToPi (p := 2)
+        (α := fun _ : Fin D => PiLp 2 (fun _ : Fin D => ℂ))]
+        using PiLp.norm_sq_eq_of_L2 (β := fun _ : Fin D =>
+          PiLp 2 (fun _ : Fin D => ℂ)) (WithLp.toLp 2 Y)
     simp [h_norm_sq_eq, Real.sqrt_sq (norm_nonneg _)]
-  have h_normM : Real.sqrt (∑ i : Fin D, ∑ j : Fin D, (|M j i| : ℝ) ^ 2) = ‖M‖ := by
+  have h_normM : Real.sqrt (∑ i : Fin D, ∑ j : Fin D, ‖M j i‖ ^ 2) = ‖M‖ := by
     -- Re-indexing (j,i) → (k,l) preserves the square sum.
-    have h_reindex : (∑ i : Fin D, ∑ j : Fin D, (|M j i| : ℝ) ^ 2) =
-        (∑ k : Fin D, ∑ l : Fin D, (|M k l| : ℝ) ^ 2) := by
+    have h_reindex : (∑ i : Fin D, ∑ j : Fin D, ‖M j i‖ ^ 2) =
+        (∑ k : Fin D, ∑ l : Fin D, ‖M k l‖ ^ 2) := by
       rw [Finset.sum_comm]
-    have h_norm_sq_eq : ‖M‖ ^ 2 = ∑ k : Fin D, ∑ l : Fin D, (|M k l| : ℝ) ^ 2 := by
-      calc
-        ‖M‖ ^ 2 = ∑ i : Fin D, ‖M i‖ ^ 2 :=
-          norm_sq_eq_of_L2 (β := fun _ : Fin D => PiLp 2 (fun _ : Fin D => ℂ)) M
-        _ = ∑ i : Fin D, (∑ j : Fin D, ‖M i j‖ ^ 2) := by
-          refine Finset.sum_congr rfl fun i _ => ?_
-          rw [norm_sq_eq_of_L2 (β := fun _ : Fin D => ℂ) (M i)]
-        _ = ∑ i : Fin D, ∑ j : Fin D, (|M i j| : ℝ) ^ 2 := by simp
+    have h_norm_sq_eq : ‖M‖ ^ 2 = ∑ k : Fin D, ∑ l : Fin D, ‖M k l‖ ^ 2 := by
+      simpa [PiLp.norm_seminormedAddCommGroupToPi (p := 2)
+        (α := fun _ : Fin D => PiLp 2 (fun _ : Fin D => ℂ))]
+        using PiLp.norm_sq_eq_of_L2 (β := fun _ : Fin D =>
+          PiLp 2 (fun _ : Fin D => ℂ)) (WithLp.toLp 2 M)
     simp [h_reindex, h_norm_sq_eq, Real.sqrt_sq (norm_nonneg _)]
   -- Assemble.
   refine le_trans h_tri (le_trans h_sqrt ?_)
@@ -213,42 +207,39 @@ private lemma norm_mul_le_norm_mul_norm (X ρ : Mat D) :
   -- Use the squared norm to avoid square roots.
   have h_sq : ‖X * ρ‖ ^ 2 ≤ (‖X‖ * ‖ρ‖) ^ 2 := by
     have h_norm_sq : ‖X * ρ‖ ^ 2 = ∑ i : Fin D, ∑ k : Fin D, ‖(X * ρ) i k‖ ^ 2 := by
-      calc
-        ‖X * ρ‖ ^ 2 = ∑ i : Fin D, ‖(X * ρ) i‖ ^ 2 :=
-          norm_sq_eq_of_L2 (β := fun _ : Fin D => PiLp 2 (fun _ : Fin D => ℂ)) (X * ρ)
-        _ = ∑ i : Fin D, (∑ k : Fin D, ‖(X * ρ) i k‖ ^ 2) := by
-          refine Finset.sum_congr rfl fun i _ => ?_
-          rw [norm_sq_eq_of_L2 (β := fun _ : Fin D => ℂ) ((X * ρ) i)]
+      simpa [PiLp.norm_seminormedAddCommGroupToPi (p := 2)
+        (α := fun _ : Fin D => PiLp 2 (fun _ : Fin D => ℂ))]
+        using PiLp.norm_sq_eq_of_L2 (β := fun _ : Fin D =>
+          PiLp 2 (fun _ : Fin D => ℂ)) (WithLp.toLp 2 (X * ρ))
     rw [h_norm_sq]
-    have h_entry : ∀ i k, ‖(X * ρ) i k‖ ^ 2 = |∑ j : Fin D, X i j * ρ j k| ^ 2 := by
+    have h_entry : ∀ i k, ‖(X * ρ) i k‖ ^ 2 = ‖∑ j : Fin D, X i j * ρ j k‖ ^ 2 := by
       intro i k; simp [Matrix.mul_apply]
     simp_rw [h_entry]
     have h_entry_bound : ∀ i k,
-        |∑ j : Fin D, X i j * ρ j k| ^ 2 ≤
+        ‖∑ j : Fin D, X i j * ρ j k‖ ^ 2 ≤
         (∑ j : Fin D, ‖X i j‖ ^ 2) * (∑ j : Fin D, ‖ρ j k‖ ^ 2) := by
       intro i k
       calc
-        |∑ j : Fin D, X i j * ρ j k| ^ 2 ≤ (∑ j : Fin D, |X i j * ρ j k|) ^ 2 := by
-          have h_sum_le : |∑ j : Fin D, X i j * ρ j k| ≤ ∑ j : Fin D, |X i j * ρ j k| := by
-            simpa using norm_sum_le (Finset.univ : Finset (Fin D))
-              (fun j => X i j * ρ j k)
+        ‖∑ j : Fin D, X i j * ρ j k‖ ^ 2 ≤ (∑ j : Fin D, ‖X i j * ρ j k‖) ^ 2 := by
+          have h_sum_le : ‖∑ j : Fin D, X i j * ρ j k‖ ≤ ∑ j : Fin D, ‖X i j * ρ j k‖ :=
+            norm_sum_le _ _
           nlinarith
-        _ ≤ (∑ j : Fin D, (|X i j| : ℝ) * (|ρ j k| : ℝ)) ^ 2 := by
-          refine pow_le_pow_left (by positivity) (Finset.sum_le_sum fun j _ => ?_) 2
-          rw [abs_mul]
-        _ ≤ (∑ j : Fin D, (|X i j| : ℝ) ^ 2) * (∑ j : Fin D, (|ρ j k| : ℝ) ^ 2) := by
+        _ ≤ (∑ j : Fin D, ‖X i j‖ * ‖ρ j k‖) ^ 2 := by
+          refine pow_le_pow_left₀ (by positivity) (Finset.sum_le_sum fun j _ => ?_) 2
+          rw [norm_mul]
+        _ ≤ (∑ j : Fin D, ‖X i j‖ ^ 2) * (∑ j : Fin D, ‖ρ j k‖ ^ 2) := by
           -- Cauchy–Schwarz
           have h_cs := sum_mul_sq_le_sq_mul_sq (Finset.univ : Finset (Fin D))
-            (fun j => (|X i j| : ℝ)) (fun j => (|ρ j k| : ℝ))
+            (fun j => ‖X i j‖) (fun j => ‖ρ j k‖)
           -- CS gives `(∑ ab)² ≤ (∑ a²) * (∑ b²)`.  We already have the square on the outside.
-          have h_cs' : (∑ j : Fin D, (|X i j| : ℝ) * (|ρ j k| : ℝ)) ^ 2 ≤
-            (∑ j : Fin D, ((|X i j| : ℝ) ^ 2)) * (∑ j : Fin D, ((|ρ j k| : ℝ) ^ 2)) := h_cs
+          have h_cs' : (∑ j : Fin D, ‖X i j‖ * ‖ρ j k‖) ^ 2 ≤
+            (∑ j : Fin D, (‖X i j‖ ^ 2)) * (∑ j : Fin D, (‖ρ j k‖ ^ 2)) := h_cs
           -- The goal is exactly this.
           exact h_cs'
         _ = (∑ j : Fin D, ‖X i j‖ ^ 2) * (∑ j : Fin D, ‖ρ j k‖ ^ 2) := by
           simp
     have h_sum_bound : (∑ i : Fin D, ∑ k : Fin D,
-        |∑ j : Fin D, X i j * ρ j k| ^ 2) ≤
+        ‖∑ j : Fin D, X i j * ρ j k‖ ^ 2) ≤
         (∑ i : Fin D, ∑ k : Fin D,
           (∑ j : Fin D, ‖X i j‖ ^ 2) * (∑ j : Fin D, ‖ρ j k‖ ^ 2)) := by
       refine Finset.sum_le_sum fun i _ => Finset.sum_le_sum fun k _ => h_entry_bound i k
@@ -259,21 +250,18 @@ private lemma norm_mul_le_norm_mul_norm (X ρ : Mat D) :
         (∑ j : Fin D, ∑ k : Fin D, ‖ρ j k‖ ^ 2) := by
       simp [Finset.sum_mul, Finset.mul_sum]
     have h_normX_sq : ∑ i : Fin D, ∑ j : Fin D, ‖X i j‖ ^ 2 = ‖X‖ ^ 2 := by
-      calc
-        ∑ i : Fin D, ∑ j : Fin D, ‖X i j‖ ^ 2 = ∑ i : Fin D, ‖X i‖ ^ 2 := by
-          simp_rw [norm_sq_eq_of_L2 (β := fun _ : Fin D => ℂ)]
-        _ = ‖X‖ ^ 2 :=
-          (norm_sq_eq_of_L2 (β := fun _ : Fin D => PiLp 2 (fun _ : Fin D => ℂ)) X).symm
+      simpa [PiLp.norm_seminormedAddCommGroupToPi (p := 2)
+        (α := fun _ : Fin D => PiLp 2 (fun _ : Fin D => ℂ))]
+        using (PiLp.norm_sq_eq_of_L2 (β := fun _ : Fin D =>
+          PiLp 2 (fun _ : Fin D => ℂ)) (WithLp.toLp 2 X)).symm
     have h_normρ_sq : ∑ j : Fin D, ∑ k : Fin D, ‖ρ j k‖ ^ 2 = ‖ρ‖ ^ 2 := by
-      calc
-        ∑ j : Fin D, ∑ k : Fin D, ‖ρ j k‖ ^ 2 = ∑ j : Fin D, ‖ρ j‖ ^ 2 := by
-          simp_rw [norm_sq_eq_of_L2 (β := fun _ : Fin D => ℂ)]
-        _ = ‖ρ‖ ^ 2 :=
-          (norm_sq_eq_of_L2 (β := fun _ : Fin D => PiLp 2 (fun _ : Fin D => ℂ)) ρ).symm
-    have h_goal : (‖X‖ * ‖ρ‖) ^ 2 = ‖X‖ ^ 2 * ‖ρ‖ ^ 2 := by ring
+      simpa [PiLp.norm_seminormedAddCommGroupToPi (p := 2)
+        (α := fun _ : Fin D => PiLp 2 (fun _ : Fin D => ℂ))]
+        using (PiLp.norm_sq_eq_of_L2 (β := fun _ : Fin D =>
+          PiLp 2 (fun _ : Fin D => ℂ)) (WithLp.toLp 2 ρ)).symm
     calc
       ‖X * ρ‖ ^ 2 = ∑ i : Fin D, ∑ k : Fin D, ‖(X * ρ) i k‖ ^ 2 := h_norm_sq
-      _ = ∑ i : Fin D, ∑ k : Fin D, |∑ j : Fin D, X i j * ρ j k| ^ 2 := by
+      _ = ∑ i : Fin D, ∑ k : Fin D, ‖∑ j : Fin D, X i j * ρ j k‖ ^ 2 := by
         refine Finset.sum_congr rfl fun i _ => Finset.sum_congr rfl fun k _ => ?_
         simp [Matrix.mul_apply]
       _ ≤ ∑ i : Fin D, ∑ k : Fin D,
@@ -295,12 +283,12 @@ private lemma norm_tracelessPart_le (ρ X : Mat D) :
     ‖tracelessPart ρ X‖ ≤ ‖ρ‖ * (1 + ‖ρ‖) * ‖X‖ := by
   dsimp [tracelessPart]
   have h_norm_mul : ‖X * ρ‖ ≤ ‖X‖ * ‖ρ‖ := norm_mul_le_norm_mul_norm X ρ
-  have h_abs_trace : |Matrix.trace (X * ρ)| ≤ ‖X‖ * ‖ρ‖ :=
+  have h_abs_trace : ‖Matrix.trace (X * ρ)‖ ≤ ‖X‖ * ‖ρ‖ :=
     abs_trace_mul_le_norm_mul_norm X ρ
   calc
     ‖X * ρ - (Matrix.trace (X * ρ)) • ρ‖ ≤ ‖X * ρ‖ + ‖(Matrix.trace (X * ρ)) • ρ‖ :=
       norm_sub_le _ _
-    _ ≤ ‖X * ρ‖ + |Matrix.trace (X * ρ)| * ‖ρ‖ := by simp
+    _ ≤ ‖X * ρ‖ + ‖Matrix.trace (X * ρ)‖ * ‖ρ‖ := by simp
     _ ≤ (‖X‖ * ‖ρ‖) + (‖X‖ * ‖ρ‖) * ‖ρ‖ := by gcongr
     _ = ‖X‖ * (‖ρ‖ + ‖ρ‖ * ‖ρ‖) := by ring
     _ = ‖ρ‖ * (1 + ‖ρ‖) * ‖X‖ := by ring
@@ -345,8 +333,12 @@ theorem connectedCorrelator_exp_decay [NeZero D]
   set C := C₀ * (‖ρ‖ * (1 + ‖ρ‖)) with hC_def
   have hC_pos : 0 < C := by
     dsimp [C]
-    have hρ_norm_nonneg : 0 ≤ ‖ρ‖ := norm_nonneg _
-    have h_one_plus_nonneg : 0 ≤ 1 + ‖ρ‖ := by positivity
+    have hρ_norm_pos : 0 < ‖ρ‖ := by
+      by_contra! h
+      have hρ_zero : ρ = 0 := norm_eq_zero.mp (by linarith)
+      rw [hρ_zero, Matrix.trace_zero] at hTr
+      linarith
+    have h_one_plus_pos : 0 < 1 + ‖ρ‖ := by linarith
     positivity
   refine ⟨C, ξ, hC_pos, hξ_pos, ?_⟩
   intro n X Y
@@ -359,8 +351,8 @@ theorem connectedCorrelator_exp_decay [NeZero D]
   have h_EnZ_norm : ‖(E ^ n) Z‖ ≤ C₀ * Real.exp (-(n : ℝ) / ξ) * ‖Z‖ := by
     simpa [E, Module.End.pow_apply] using h_bound n Z htrZ
   calc
-    ‖Matrix.trace (Y * ((E ^ n) Z))‖ = |Matrix.trace (Y * ((E ^ n) Z))| := rfl
-    _ ≤ ‖Y‖ * ‖(E ^ n) Z‖ := abs_trace_mul_le_norm_mul_norm Y ((E ^ n) Z)
+    ‖Matrix.trace (Y * ((E ^ n) Z))‖ ≤ ‖Y‖ * ‖(E ^ n) Z‖ :=
+      abs_trace_mul_le_norm_mul_norm Y ((E ^ n) Z)
     _ ≤ ‖Y‖ * (C₀ * Real.exp (-(n : ℝ) / ξ) * ‖Z‖) := by gcongr
     _ = C₀ * ‖Z‖ * ‖Y‖ * Real.exp (-(n : ℝ) / ξ) := by ring
     _ ≤ C₀ * (‖ρ‖ * (1 + ‖ρ‖) * ‖X‖) * ‖Y‖ * Real.exp (-(n : ℝ) / ξ) := by
