@@ -5,8 +5,9 @@ Authors: TNLean contributors
 -/
 import TNLean.Algebra.ComplexPhasePositivity
 import TNLean.MPS.MPDO.BNTThreeSiteReducedClosure
-import TNLean.MPS.MPDO.GSNNCHSectorRescaling
-import TNLean.MPS.MPDO.PhysicalSectorActiveBond
+import TNLean.MPS.MPDO.CommutingForm
+import TNLean.MPS.MPDO.PhysicalSupportRestriction
+import TNLean.MPS.MPDO.SitewisePhysicalMatrix
 
 /-!
 # Positivity of orthogonally supported BNT coefficients

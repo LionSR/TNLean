@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.MPDO.BNTSectorCoefficientPositivity
 import TNLean.MPS.MPDO.CommonWeightAbsorbedBNTSupport
+import TNLean.MPS.MPDO.GSNNCHSectorRescaling
 import TNLean.MPS.MPDO.NeighboringPreparation
 import TNLean.MPS.MPDO.PhysicalSectorActiveBond
 
