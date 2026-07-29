@@ -144,7 +144,8 @@ INK_ENVIRONMENT_PATTERNS = {
     "tenkz": re.compile(r"\\begin\{tenkz(?:eq|cd)?\}|\\tnpic\b|\\tntree\b"),
 }
 INK_SCOPE_TOKEN = re.compile(
-    r"\\tenkzkernel\b"
+    r"(?P<skip>\\\\(?:\s*\[[^\]]*\])?|\\[{}])"
+    r"|\\tenkzkernel\b"
     r"|\\begin\s*\{(?P<begin>[^{}]+)\}"
     r"|\\end\s*\{(?P<end>[^{}]+)\}"
     r"|\\begingroup\b|\\endgroup\b"
@@ -161,6 +162,8 @@ def used_ink_environment_families(body: str) -> set[str]:
     for token in INK_SCOPE_TOKEN.finditer(body):
         text = token.group()
         begin = token.group("begin")
+        if token.group("skip") is not None:
+            continue
         if text == r"\tenkzkernel":
             kernel_scope[-1] = True
         elif begin is not None:

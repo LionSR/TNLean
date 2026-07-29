@@ -131,6 +131,17 @@ def test_ink_environment_owner() -> None:
     )
     if not any("uses tenkz but Ink does not name" in problem for problem in mismatch):
         raise AssertionError("unlisted plain picture after kernel scope was accepted")
+    escaped_scope_tokens = (
+        r"{\tenkzkernel\begin{tenkz}\{\end{tenkz}}"
+        "\\\\[1em]\n"
+        r"\begin{tenkz}\end{tenkz}"
+    )
+    if ink_environment_problems(
+        "good",
+        "Canonical public kernel and tenkz pictures.",
+        escaped_scope_tokens,
+    ):
+        raise AssertionError("escaped braces or line spacing corrupted Ink scope")
 
 
 def main() -> int:
