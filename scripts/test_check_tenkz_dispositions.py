@@ -28,8 +28,12 @@ def main() -> int:
         r"\tnspan[brace above]{2}{}",
         r"\tn[pill]{}",
         r"\tn[cluster]{}",
+        r"\tn[enclosure]{}",
         r"\tn[poly=5]{}",
         r"\tnmark{(1,1)-(2,2)}{}",
+        r"\begin{tenkz}[boundary legs]\end{tenkz}",
+        r"\begin{tenkz}[frame={rotate=90}]\end{tenkz}",
+        r"\begin{tenkz}[frame={matrix={1,0,0,1}}]\end{tenkz}",
     )
     for source in tombstones:
         assert guard.uses_tombstone(source), source
@@ -39,8 +43,13 @@ def main() -> int:
         r"\tn[box]{}",
         r"\tnfuse[span=2]{}",
         r"\tnmark[form=bracket]{}{}",
+        r"\tnmark[form=enclosure]{{(1,1)}}{}",
         r"\tnwire[route=orth]{}{}",
         r"\tnset{species={left,right}}",
+        r"\begin{tenkz}[frame={plane, basis={ket at (0,0), bra at (2,2)}}]"
+        r"\end{tenkz}",
+        r"\begin{tenkz}[frame={flat, basis={wire at (0,0), wire at (2,0)}}]"
+        r"\end{tenkz}",
     )
     for source in accepted:
         assert not guard.uses_tombstone(source), source
@@ -54,6 +63,9 @@ def main() -> int:
         r"\begin{tenkzfree}\tnghost{}\end{tenkzfree}"
         r"\begin{tenkz}[physical=up]\tn{}\end{tenkz}"
     ) == frozenset({"R-free", "R-record", "C-policy"})
+    assert guard.fragment_target_codes(
+        r"\begin{tenkz}[physical=up]\tnspan[brace below]{2}{}\end{tenkz}"
+    ) == frozenset({"C-policy", "C-record", "R-record"})
 
     with tempfile.TemporaryDirectory() as directory:
         root = Path(directory)
@@ -64,6 +76,14 @@ def main() -> int:
         expanded = guard.expanded_source(fixture)
         assert r"\tncut" in expanded
         assert guard.uses_tombstone(expanded)
+
+        spaced_input = root / "spaced-input.tex"
+        spaced_input.write_text(r"\input {dependency.inc}")
+        assert r"\tncut" in guard.expanded_source(spaced_input)
+
+        unbraced_input = root / "unbraced-input.tex"
+        unbraced_input.write_text(r"\input dependency.inc")
+        assert r"\tncut" in guard.expanded_source(unbraced_input)
 
         blueprint = root / "blueprint.tex"
         blueprint.write_text(
@@ -86,6 +106,13 @@ def main() -> int:
         spaced.write_text(r"\begin {tenkz}\tn{}\end {tenkz}")
         assert guard.occurrences(spaced) == [(1, "tenkz")]
         assert ("spaced.tex", 1, "tenkz") in guard.construct_sources(spaced)
+
+        equation = root / "equation.tex"
+        equation.write_text(
+            r"\begin{tenkzeq}\begin{tenkz}\tn{}\end{tenkz}\end{tenkzeq}"
+        )
+        assert guard.occurrences(equation) == [(1, "tenkzeq"), (1, "tenkz")]
+        assert ("equation.tex", 1, "tenkzeq") in guard.construct_sources(equation)
 
     fixture_inventory = guard.documented_fixtures(guard.DOCUMENT.read_text())
     assert len(fixture_inventory) == 264

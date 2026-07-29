@@ -19,7 +19,7 @@ DOCUMENT = ROOT / "docs/tenkz/DISPOSITIONS.md"
 BLUEPRINT_ROOT = ROOT / "blueprint/src/chapter"
 FIXTURE_ROOT = ROOT / "tests/tenkz"
 ENVIRONMENT = re.compile(
-    r"\\begin\s*\{\s*(tenkz(?:free|cd|lattice|planes)?)\s*\}"
+    r"\\begin\s*\{\s*(tenkz(?:eq|free|cd|lattice|planes)?)\s*\}"
 )
 COMMAND = re.compile(r"\\(tnpic|tntree)\b")
 DISPOSITIONS = ("preserve", "codemod", "redraw")
@@ -118,14 +118,18 @@ def expanded_source(path: Path, stack: tuple[Path, ...] = ()) -> str:
     source = strip_comments(path.read_text(errors="replace"))
 
     def replace(match: re.Match[str]) -> str:
-        dependency = path.parent / match.group(1)
+        dependency = path.parent / (match.group(1) or match.group(2))
         if not dependency.suffix:
             dependency = dependency.with_suffix(".tex")
         if not dependency.is_file():
             return match.group(0)
         return expanded_source(dependency, stack + (path,))
 
-    return re.sub(r"\\(?:input|include)\{([^}]+)\}", replace, source)
+    return re.sub(
+        r"\\(?:input|include)\s*(?:\{\s*([^}]+?)\s*\}|([^\s%{}]+))",
+        replace,
+        source,
+    )
 
 
 def fragment_target_codes(source: str) -> frozenset[str]:
@@ -168,12 +172,13 @@ def fragment_target_codes(source: str) -> frozenset[str]:
     dead_patterns = (
         r"(?<![A-Za-z])(?:inline|compact|fused)(?=\s*[,}\]])",
         r"route\s*=\s*(?:\{\s*)?(?:hv|vh|curve|drop|hug)\b",
-        r"frame\s*=\s*(?:\{\s*)?(?:vertical|rotate\s*=|[^}\n]*[;,])",
+        r"frame\s*=\s*(?:\{\s*)?(?:vertical\b|rotate\s*=)",
+        r"frame\s*=\s*(?:\{\s*)?matrix\s*=",
         r"rows\s*=\s*\{[^}\n]*:[^}\n]*\}",
         r"\\tnfuse\s*\[[^\]]*\brows\s*=",
         r"form\s*=\s*(?:brace-(?:below|above)|cut|band|prose)\b",
         r"\\tnspan\s*\[[^\]]*\bbrace\s+(?:below|above)\b",
-        r"(?<![A-Za-z])(?:cluster|enclosure)(?=\s*[,}\]])",
+        r"skin\s*=\s*(?:cluster|enclosure)\b",
         r"weight\s*=\s*string\b",
         r"\([^)]+\)\s*-\s*\([^)]+\)",
         r"\bleg\s+(?:north|south|east|west)\s+of\b",
@@ -182,9 +187,18 @@ def fragment_target_codes(source: str) -> frozenset[str]:
     )
     dead_record |= any(re.search(pattern, source) for pattern in dead_patterns)
 
+    for match in ENVIRONMENT.finditer(source):
+        options = re.match(r"\s*\[([^\]]*)\]", source[match.end() :])
+        if options and re.search(
+            r"(?:^|,)\s*boundary\s+legs(?=\s*(?:,|$))",
+            options.group(1),
+        ):
+            dead_record = True
+
     for match in re.finditer(r"\\tn\*?\s*\[([^\]]*)\]", source):
         if re.search(
-            r"(?:^|,)\s*(?:pill|circle|boundary|removed)(?=\s*(?:,|$))"
+            r"(?:^|,)\s*(?:pill|circle|boundary|removed|cluster|enclosure)"
+            r"(?=\s*(?:,|$))"
             r"|(?:^|,)\s*tri\s*=",
             match.group(1),
         ):
@@ -232,11 +246,7 @@ def fragment_target_codes(source: str) -> frozenset[str]:
 
     redraw = {code for code in codes if code.startswith("R-")}
     if redraw:
-        if re.match(r"\s*\\tnpic\b", source):
-            redraw.add("C-picture")
-        if re.match(r"\s*\\tntree\b", source):
-            redraw.add("C-tree")
-        return frozenset(redraw)
+        return frozenset(codes)
     if codes:
         return frozenset(codes)
     return frozenset({"P-grid"})
