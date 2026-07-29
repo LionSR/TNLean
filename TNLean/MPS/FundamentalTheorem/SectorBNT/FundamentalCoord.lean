@@ -661,12 +661,17 @@ private theorem ft_sector_bnt_equal_mps_unitaryGauge_literal
 
 /-- **Restricted equal-case fundamental theorem.**
 
-This is the active, nonzero, converse-covered correction of CPSV16 Corollary II.2
-and CPSV21 Corollary 4.5.  Their literal BNT definitions permit an unrelated
-normal representative whose coefficient vanishes at every positive length.
-Consequently, inactive zero-weight summands can change the ambient bond
-dimension while preserving all positive-length MPVs, so the unrestricted
-dimension and global-conjugacy conclusions are false.
+This is the active, nonzero, converse-covered correction of CPSV16 Corollary
+II.2.  The CPSV16 convention permits an unrelated normal summand whose
+coefficient vanishes at every positive length; such a summand can change the
+ambient bond dimension while preserving all positive-length MPVs.
+
+The theorem is also a packaged SectorBNT analogue of CPSV21 Corollary 4.5,
+pending a bridge from the canonical tensors of that source to the SectorBNT
+surface.  In CPSV21 the actual canonical summands have positive coefficients.
+An extraneous zero-coefficient member allowed by its weak BNT definition is not
+an ambient canonical summand, so the unequal-cardinality counterexample to
+CPSV21 Theorem 4.4 does not refute Corollary 4.5.
 
 On the restricted BNT canonical-form class, two forms generating the same MPV
 family at every positive length are globally conjugate: their total bond
@@ -729,7 +734,11 @@ theorem fundamentalTheorem_equal_canonicalForm_unitary
 This is the active, nonzero, converse-covered correction of CPSV16 Theorem II.1
 and CPSV21 Theorem 4.4.  Their literal BNT definitions permit an unrelated
 normal representative whose coefficient vanishes at every length, so the
-unrestricted equality of BNT cardinalities is false.
+unrestricted equality of BNT cardinalities is false.  In the CPSV21
+counterexample, the extra representative belongs only to the chosen BNT; the
+underlying canonical tensor may still consist of an actual summand with
+coefficient one.  Thus this obstruction to Theorem 4.4 does not create a
+zero-coefficient ambient canonical summand.
 
 On the restricted BNT canonical-form class, eventual projective proportionality
 of the generated MPV families matches the normal-tensor sectors bijectively.

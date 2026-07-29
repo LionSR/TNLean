@@ -271,22 +271,31 @@ under #2633.
 
 ---
 
-## 5. Note on Theorem 4.4 (CPSV21) naming
+## 5. CPSV21 Theorem 4.4 and Corollary 4.5
 
-The sector-BNT theorems prove the corrected active, nonzero,
-converse-covered form of CPSV16 Theorem II.1 and its equal-MPV specialization.
-The literal BNT definition permits an unrelated normal representative with
-identically zero coefficient, so the printed cardinality conclusion is false
-without converse coverage. CPSV21 Definition 4.2 retains the same weak BNT
-clauses, so its printed Theorem 4.4 has the same obstruction. The sector-BNT
-proportional theorem is an explicitly restricted correction of both source
-statements, not complete coverage of either unrestricted reading.
+CPSV21 Definition 4.2 retains the weak BNT clauses of CPSV16: an unrelated
+normal representative may be added to the chosen BNT with coefficient zero at
+every length. The underlying canonical tensor may nevertheless have only its
+original summand, with actual coefficient one. Thus the formal one-versus-two
+BNT example literally refutes the equality of chosen-BNT cardinalities in
+CPSV21 Theorem 4.4. The sector-BNT proportional theorem is an explicitly
+restricted correction of CPSV16 Theorem II.1 and CPSV21 Theorem 4.4, not
+complete coverage of either unrestricted statement.
 
-| Lean declaration | Paper | CPSV16 relation |
+CPSV21 Corollary 4.5 has a different surface. It concerns the ambient canonical
+tensors themselves, and the standing construction at lines 1801--1808 gives
+their actual direct-sum summands positive coefficients. The extraneous BNT
+representative used in the unequal-cardinality counterexample is not an ambient
+canonical summand. Consequently that counterexample does not refute Corollary
+4.5 and does not impose a zero-weight correction on it. The current equal
+theorem is only a packaged SectorBNT analogue of Corollary 4.5 until a bridge
+from CPSV21 canonical form to the SectorBNT hypotheses is supplied.
+
+| Lean declaration | CPSV21 relation | CPSV16 relation |
 |---|---|---|
-| `MPSTensor.fundamentalTheorem_proportional_canonicalForm` | Restricted correction of CPSV21 Theorem 4.4 | Restricted correction of CPSV16 Theorem II.1 (`thm1`) |
-| `MPSTensor.fundamentalTheorem_equal_canonicalForm` | equal-MPV specialization | CPSV16 Corollary II.2 (`II_cor2`) |
-| `MPSTensor.fundamentalTheorem_equal_canonicalForm_unitary` | Active, nonzero BNT unitary refinement | CPSV16 `thm:Fundamental-CFII` |
+| `MPSTensor.fundamentalTheorem_proportional_canonicalForm` | Restricted correction of Theorem 4.4 | Restricted correction of Theorem II.1 (`thm1`) |
+| `MPSTensor.fundamentalTheorem_equal_canonicalForm` | Packaged SectorBNT analogue of Corollary 4.5; the unequal-cardinality counterexample does not refute the source corollary, and the canonical-form-to-SectorBNT bridge remains to be supplied | Restricted correction of Corollary II.2 (`II_cor2`) |
+| `MPSTensor.fundamentalTheorem_equal_canonicalForm_unitary` | No direct CPSV21 identification asserted | Active, nonzero BNT unitary refinement of `thm:Fundamental-CFII` |
 
 ---
 
