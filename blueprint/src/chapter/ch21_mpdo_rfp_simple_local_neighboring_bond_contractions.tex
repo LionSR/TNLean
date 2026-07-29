@@ -122,7 +122,8 @@
       MPOTensor.PhysicalSectorFactorization.neighboringOperatorWithMatrix_apply,
       MPOTensor.PhysicalSectorFactorization.neighboringOperatorWithMatrix_one}
     \leanok
-    \uses{def:mpdo_physical_sector_factorization}
+    \uses{def:mpdo_physical_sector_factorization,
+      def:mpdo_minimal_neighboring_operator}
     For a virtual matrix $P$, define
     \begin{align}
         \eta_{k,h}(P)
@@ -158,7 +159,8 @@
     \label{thm:mpdo_physical_sector_factorization_virtual_matrices_neighbor}
     \lean{MPOTensor.PhysicalSectorFactorization.ofVirtualMatrices_neighboringOperator}
     \leanok
-    \uses{def:mpdo_matrix_weighted_neighboring_operator,
+    \uses{def:mpdo_minimal_neighboring_operator,
+      def:mpdo_matrix_weighted_neighboring_operator,
       def:mpdo_physical_sector_factorization_virtual_matrices}
     The neighboring operators of the transported factorization satisfy
     \begin{align}
@@ -237,8 +239,9 @@
       MPOTensor.PhysicalSectorFactorization.ofGaugeEquiv_neighboringOperator,
       MPOTensor.PhysicalSectorFactorization.ofGaugeEquiv_neighboringOperator_posSemidef}
     \leanok
-    \uses{def:mpdo_physical_sector_factorization,
-      def:mpdo_minimal_neighboring_operator}
+    \uses{def:mpdo_matrix_weighted_neighboring_operator,
+      def:mpdo_physical_sector_factorization_virtual_matrices,
+      thm:mpdo_physical_sector_factorization_virtual_matrices_neighbor}
     Suppose that two MPO tensors of the same virtual dimension differ by an
     invertible virtual gauge.  Every physical-sector factorization of the
     first tensor induces one of the second tensor with the same physical
