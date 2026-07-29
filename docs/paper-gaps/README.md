@@ -70,9 +70,11 @@ For MPDO renormalization fixed points:
   canonical physical restriction without unused complementary directions,
   the compressed neighboring operators remain positive by explicit
   congruence, and the resulting positive commuting bonds are supported on the
-  printed absorbing projections. Proposition `prop3to4` remains partial
-  because the trace-factor, normalization, and common-copy-weight data have
-  not yet been assembled with these sector bonds.
+  printed absorbing projections. A common-copy-weight theorem combines these
+  bonds with all five printed identities and the natural BNT multiplicities.
+  Proposition `prop3to4` remains partial because copy independence is not one
+  of its five hypotheses: the paper obtains it earlier from `lemmus`, whose
+  hypothesis includes source ZCL.
 - `cpgsv17_mpdo_sal_zcl_eta_local_structure.tex` records the missing
   coherent positive choice for the inverse-map neighboring operators in
   Appendix C.2. The comparison with the conjugated Hayashi decomposition,

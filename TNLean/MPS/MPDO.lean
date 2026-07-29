@@ -32,6 +32,7 @@ import TNLean.MPS.MPDO.BNTLeftTripleFusion
 import TNLean.MPS.MPDO.BNTMarkovKeyFormula
 import TNLean.MPS.MPDO.BNTMarkovSectorProjectors
 import TNLean.MPS.MPDO.BNTMultiplicityNormalization
+import TNLean.MPS.MPDO.BNTPhysicalSectorGSNNCH
 import TNLean.MPS.MPDO.BNTProjectorSelection
 import TNLean.MPS.MPDO.BNTRightTripleFusion
 import TNLean.MPS.MPDO.BNTSectorAnalyticProperties
