@@ -277,13 +277,14 @@ The sector-BNT theorems prove the corrected active, nonzero,
 converse-covered form of CPSV16 Theorem II.1 and its equal-MPV specialization.
 The literal BNT definition permits an unrelated normal representative with
 identically zero coefficient, so the printed cardinality conclusion is false
-without converse coverage. CPSV21 Theorem 4.4 is represented by the corrected
-sector-BNT proportional theorem; it should not be confused with the false
-unrestricted CPSV16 reading or with older conditional sector matchers.
+without converse coverage. CPSV21 Definition 4.2 retains the same weak BNT
+clauses, so its printed Theorem 4.4 has the same obstruction. The sector-BNT
+proportional theorem is an explicitly restricted correction of both source
+statements, not complete coverage of either unrestricted reading.
 
 | Lean declaration | Paper | CPSV16 relation |
 |---|---|---|
-| `MPSTensor.fundamentalTheorem_proportional_canonicalForm` | CPSV21 Theorem 4.4 | CPSV16 Theorem II.1 (`thm1`) |
+| `MPSTensor.fundamentalTheorem_proportional_canonicalForm` | Restricted correction of CPSV21 Theorem 4.4 | Restricted correction of CPSV16 Theorem II.1 (`thm1`) |
 | `MPSTensor.fundamentalTheorem_equal_canonicalForm` | equal-MPV specialization | CPSV16 Corollary II.2 (`II_cor2`) |
 | `MPSTensor.fundamentalTheorem_equal_canonicalForm_unitary` | Active, nonzero BNT unitary refinement | CPSV16 `thm:Fundamental-CFII` |
 
