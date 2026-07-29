@@ -41,13 +41,12 @@ The equality in `realizes_mpo` has scalar one.  Hence the natural
 multiplicities in an outer direct sum are not absorbed into chain-length
 dependent rescalings of the bonds.
 
-This is sufficient data for the outer-sector assembly in arXiv:1606.00608,
+These hypotheses suffice for the outer-sector direct sum in arXiv:1606.00608,
 Definition 4.8, lines 829--850.
 
 **Scope restriction (supplied orthogonal sectors):** CPSV16 Appendix C.2,
 Proposition `prop3to4`, lines 1783--1792, starts from five blockwise
-identities; it does not assume this assembled family of orthogonal projections
-and supported bonds.  See
+identities; it does not assume this family of orthogonal projections and supported bonds.  See
 `docs/paper-gaps/cpsv16_gsnnch_sector_decomposition.tex`. -/
 structure OrthogonalCommutingSectorFamily
     (K : (s : Fin g) → MPOTensor d (dim s)) where
@@ -71,7 +70,7 @@ structure OrthogonalCommutingSectorFamily
   /-- Every sector MPO is exactly the periodic product of its translated bond.
 
   **Scope restriction (supplied exact sector products):** This field records the
-  product identity needed for the later outer-sector assembly; it is not derived
+  product identity needed for the later outer-sector direct sum; it is not derived
   here from the five hypotheses of CPSV16 Proposition `prop3to4`.  See
   `docs/paper-gaps/cpsv16_gsnnch_sector_decomposition.tex`. -/
   realizes_mpo : ∀ s N (hN : 2 ≤ N),
@@ -84,12 +83,13 @@ variable {K : (s : Fin g) → MPOTensor d (dim s)}
 /-- The finite-chain GSNNCH decomposition determined by orthogonally supported
 commuting sector bonds and their natural multiplicities.
 
-This packages supplied sector data into the form of arXiv:1606.00608,
+This constructs the finite-chain decomposition from the supplied sector bonds in
+arXiv:1606.00608,
 Definition 4.8, lines 829--850.
 
-**Scope restriction (assembly from supplied data):** This definition does not
-derive the orthogonal sectors from the five hypotheses of Proposition
-`prop3to4`.  See
+**Scope restriction (supplied orthogonal sectors):** This definition does not
+derive the orthogonal sectors from the five hypotheses of CPSV16 Appendix C.2,
+Proposition `prop3to4`, lines 1783--1792.  See
 `docs/paper-gaps/cpsv16_gsnnch_sector_decomposition.tex`. -/
 noncomputable def toGSNNCHData (F : OrthogonalCommutingSectorFamily K)
     (multiplicity : Fin g → ℕ) (N : ℕ) (hN : 2 ≤ N) : GSNNCHData d N where
@@ -145,9 +145,10 @@ chain length at least two.
 This is a sufficient-condition theorem once the orthogonal sectors, supported
 positive bonds, and exact sector-product identities have been supplied.
 
-**Scope restriction (later outer-sector assembly):** CPSV16 Appendix C.2,
+**Scope restriction (supplied outer sectors):** CPSV16 Appendix C.2,
 Proposition `prop3to4`, lines 1783--1792, starts from five blockwise
-identities and does not assume these assembled data.  See `docs/paper-gaps/cpsv16_gsnnch_sector_decomposition.tex`. -/
+identities and does not assume these projections and bonds.  See
+`docs/paper-gaps/cpsv16_gsnnch_sector_decomposition.tex`. -/
 theorem hasGSNNCHForm_of_orthogonalCommutingSectorFamily
     {D : ℕ} (M : MPOTensor d D) (K : (s : Fin g) → MPOTensor d (dim s))
     (multiplicity : Fin g → ℕ) (F : OrthogonalCommutingSectorFamily K)
@@ -166,7 +167,7 @@ copy numbers as its natural multiplicities.
 This is a sufficient-condition theorem using a supplied
 `OrthogonalCommutingSectorFamily` and the positive-length BNT sum.
 
-**Scope restriction (assembled BNT sector family):** The hypotheses are stronger
+**Scope restriction (supplied BNT sector family):** The hypotheses are stronger
 than the five blockwise identities printed in CPSV16 Appendix C.2,
 Proposition `prop3to4`, lines 1783--1792.  See
 `docs/paper-gaps/cpsv16_gsnnch_sector_decomposition.tex`. -/

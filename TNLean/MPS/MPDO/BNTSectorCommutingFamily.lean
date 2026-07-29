@@ -35,8 +35,7 @@ BNT physical projectors. The sectorwise SAL hypothesis is established from
 the simple-MPDO hypotheses in
 `commonWeightAbsorbedBasisMPOTensor_isSAL_of_sameMPV₂Pos`.
 
-This is a sufficient construction of the sector family used in the later
-GSNNCH assembly.
+This constructs the sector family used in the later GSNNCH direct sum.
 
 **Scope restriction (projector-selection and sectorwise-SAL hypotheses):** The
 theorem assumes more than the five blockwise identities printed in CPSV16
@@ -101,7 +100,7 @@ This is a sufficient-condition theorem obtained after the physical projectors,
 sectorwise SAL witnesses, supported bonds, and exact sector products have been
 constructed.
 
-**Scope restriction (later BNT-sector assembly):** The hypotheses are stronger
+**Scope restriction (supplied BNT sectors):** The hypotheses are stronger
 than the five blockwise identities printed in CPSV16 Appendix C.2,
 Proposition `prop3to4`, lines 1783--1792.  See
 `docs/paper-gaps/cpsv16_gsnnch_sector_decomposition.tex`. -/
