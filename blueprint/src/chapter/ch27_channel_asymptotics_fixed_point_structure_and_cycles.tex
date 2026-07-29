@@ -403,7 +403,8 @@ Theorem~6.2 appears in Theorem~\ref{thm:wolf_6_2_item_3}.
     \label{thm:scalar_fixed_point_conditional_expectation}
     \lean{Kraus.scalarConditionalExpectation_isConditionalExpectation}
     \leanok
-    \uses{def:channel}
+    \uses{def:channel,
+        thm:scalar_conditional_expectation_isConditionalExpectation}
     In the scalar fixed-point algebra setting, the weighted map
     $X\mapsto\tr(\rho X)\tr(\rho)^{-1}\Id$ is a conditional expectation
     onto the adjoint fixed-point $*$-subalgebra.
