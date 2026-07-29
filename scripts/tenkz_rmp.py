@@ -145,8 +145,8 @@ INK_ENVIRONMENT_PATTERNS = {
 }
 INK_SCOPE_TOKEN = re.compile(
     r"\\tenkzkernel\b"
-    r"|\\begin\{(?P<begin>[^{}]+)\}"
-    r"|\\end\{(?P<end>[^{}]+)\}"
+    r"|\\begin\s*\{(?P<begin>[^{}]+)\}"
+    r"|\\end\s*\{(?P<end>[^{}]+)\}"
     r"|\\begingroup\b|\\endgroup\b"
     r"|\\\[|\\\]|\\\(|\\\)"
     r"|\\tnpic\b|\\tntree\b"

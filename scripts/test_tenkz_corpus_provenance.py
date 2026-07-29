@@ -106,6 +106,14 @@ def test_ink_environment_owner() -> None:
     if not any("uses tenkz but Ink does not name" in problem for problem in mismatch):
         raise AssertionError("unlisted mixed-family owner was accepted")
     mismatch = ink_environment_problems(
+        "wrong",
+        "Canonical public tenkz expression.",
+        "\\begin{tenkz}\\end{tenkz}\n"
+        "\\begin \n {tenkzfree}\\end \n {tenkzfree}",
+    )
+    if not any("uses tenkzfree but Ink does not name" in problem for problem in mismatch):
+        raise AssertionError("whitespace hid an unlisted mixed-family owner")
+    mismatch = ink_environment_problems(
         "wrong", "Canonical public kernel records.", r"\begin{tenkz}"
     )
     if not any("Ink names kernel" in problem for problem in mismatch):
