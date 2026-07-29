@@ -1,0 +1,53 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb,amsthm}
+\title{Rectangular Choi–Jamio\l{}kowski — Scope restriction of the square development}
+\author{TNLean audit}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\section{Finding}
+
+Prior to the rectangular Choi–Jamio\l{}kowski module
+(\texttt{TNLean/Channel/ChoiRectangular.lean}), the TNLean formalization
+contained only a square Choi matrix
+\texttt{ChoiJamiolkowski.choiMatrix} for maps
+$T : M_D(\mathbb{C}) \to M_D(\mathbb{C})$.  Wolf's Proposition~2.1
+(lines~60--126 of \texttt{Notes/WolfNoteTexSource/ch02\_representations.tex})
+states the correspondence for maps $T : M_d \to M_{d'}$ with possibly
+distinct input and output dimensions.
+
+\section{Square-only declarations}
+
+The following declarations in
+\texttt{TNLean/Channel/ChoiJamiolkowski.lean} are scope-restricted to
+$d = d'$ and therefore do not faithfully represent the full Wolf
+Proposition~2.1:
+\begin{itemize}
+\item \texttt{ChoiJamiolkowski.choiMatrix} — only for $M_D \to M_D$
+\item \texttt{ChoiJamiolkowski.cp\_iff\_choi\_posSemidef} — only for square CP
+\item \texttt{ChoiJamiolkowski.traceLeft\_choiMatrix\_of\_tp} —
+  trace-preserving correspondence, square only
+\item \texttt{ChoiJamiolkowski.choiMatrix\_isHermitian\_iff\_hermiticityPreserving} —
+  Hermiticity, square only
+\item \texttt{ChoiJamiolkowski.trace\_choiMatrix\_of\_tp} — trace normalization, square only
+\item \texttt{ChoiJamiolkowski.choiMatrix\_id} — identity, square only
+\end{itemize}
+
+\section{Resolution}
+
+The rectangular module \texttt{TNLean/Channel/ChoiRectangular.lean}
+provides the full rectangular theory.  The square results follow as the
+specialization $d = d'$.  Bridge lemmas
+(\texttt{choiMatrixRect\_eq\_choiMatrix},
+\texttt{choiMatrixRect\_isHermitian\_iff\_hermiticityPreserving\_square})
+establish the reduction explicitly.
+
+\section{Blueprint status}
+
+The blueprint entry for Wolf Proposition~2.1 should point to the
+rectangular statements.  The square-only declarations carry
+\texttt{\textbackslash{}leanok} only with a scope-restriction note.
+
+\end{document}
