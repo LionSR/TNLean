@@ -15,6 +15,7 @@ import TNLean.Channel.OrderedCP
 import TNLean.Channel.RadonNikodym
 import TNLean.Channel.OpenSystem
 import TNLean.Channel.POVM
+import TNLean.Channel.POVM.RankOneNeumark
 import TNLean.Channel.POVM.Uniqueness
 import TNLean.Channel.TransferMatrix
 import TNLean.Channel.WolfProps
@@ -121,6 +122,9 @@ project import.
   - `POVM.exists_isometry_mul_naimarkIsometry_of_recovery`
     — concrete uniqueness: any dilation using the canonical projectors factors
       through the canonical Naimark isometry via a dilation isometry ✓
+  - `POVM.exists_orthonormal_basis_restriction` — a rank-one resolution
+    forces `d ≤ n` and extends to an orthonormal basis of `ℂⁿ` ✓
+  - `POVM.of_rank_one_povm` — sharp rank-one specialization for a POVM ✓
   - `POVM.ofPSDResolutionOfIdentity` — converse construction: PSD resolution
     of identity on a dilation pulls back to a POVM ✓
   - `Instrument` — quantum-instrument structure + `total_isChannel`,
@@ -226,6 +230,7 @@ project import.
 | POVM | `POVM.lean` | `POVM` |
 | Naimark isometry | `POVM.lean` | `POVM.naimarkIsometry` |
 | Naimark projector | `POVM.lean` | `POVM.naimarkProjection` |
+| Rank-one Neumark | `POVM/RankOneNeumark.lean` | `POVM.exists_orthonormal_basis_restriction` |
 | Quantum instrument | `POVM.lean` | `Instrument` |
 | Transfer matrix | `TransferMatrix.lean` | `transferMatrix` |
 | Unitary conjugation | `TransferMatrix.lean` | `unitaryConjLM` |
