@@ -84,7 +84,7 @@ separate public-surface occurrence and therefore appears separately.
 | `ch21_mpdo_rfp_simple_local_primitivity_active_trace_matrix.tex` | — | — | L188 `tenkz` → `C-record+R-record` |
 | `ch21_mpdo_rfp_simple_local_refinement_channels_physical_coordinates.tex` | — | — | L324, 329, 334, 344, 352, 357 `tnpic` → `C-picture+C-policy+C-record+R-record` |
 | `ch21_mpdo_rfp_simple_local_refinement_channels_sector_coordinates.tex` | — | — | L160, 175 `tenkzcd` → `R-cd+R-record` |
-| `ch21_mpdo_rfp_simple_local_structure_capstone.tex` | — | L259 `tenkz` → `C-record`<br>L443 `tenkz` → `C-policy+C-record` | L447, 453, 458 `tenkz` → `C-record+R-record` |
+| `ch21_mpdo_rfp_simple_local_structure_capstone.tex` | — | L259 `tenkz` → `C-record`<br>L514 `tenkz` → `C-policy+C-record` | L518, 524, 529 `tenkz` → `C-record+R-record` |
 | `ch23_algebraic_ft_foundations.tex` | — | — | L47, 51, 167, 371, 375, 387, 391, 433, 437, 441, 450, 454 `tenkz` → `C-policy+C-record+R-record`<br>L171 `tenkz` → `C-record+R-record` |
 | `ch24_peps_ft.tex` | — | — | L25 `tenkzlattice` → `C-policy+R-lattice+R-record`<br>L53, 96 `tenkzfree` → `R-free+R-record` |
 | `ch24_peps_ft_balanced_edge_scalars.tex` | — | — | L18 `tenkzfree` → `C-species+R-free+R-record` |
