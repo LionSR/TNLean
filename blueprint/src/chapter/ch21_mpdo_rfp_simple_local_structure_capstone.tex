@@ -469,6 +469,55 @@
     descends through the physical isometry.
 \end{proof}
 
+\begin{theorem}[Neighboring positivity on the canonical active restriction]
+    \label{thm:mpdo_active_physical_sector_neighboring_positivity}
+    \lean{MPOTensor.PhysicalSectorFactorization.FactorActiveSector,
+        MPOTensor.PhysicalSectorFactorization.%
+          activeRestrictedPhysicalSectorFactorization,
+        MPOTensor.PhysicalSectorFactorization.%
+          activeRestrictedPhysicalSectorFactorization_neighboringOperator_eq_congruence,
+        MPOTensor.PhysicalSectorFactorization.%
+          activeRestrictedPhysicalSectorFactorization_neighboringOperator_posSemidef,
+        MPOTensor.PhysicalSectorFactorization.ActivePhysicalCompressionWitness,
+        MPOTensor.PhysicalSectorFactorization.%
+          ActivePhysicalCompressionWitness.factorizationForRestrictionData}
+    \leanok
+    \uses{thm:mpdo_active_physical_sector_restriction}
+    In the setting of
+    Theorem~\ref{thm:mpdo_active_physical_sector_restriction}, the restricted
+    tensor $K_{\mathrm{act}}$ has a physical-sector factorization indexed
+    precisely by the active ambient sectors.  For active sectors $k,h$, put
+    \begin{align}
+        W_{k,h}=V_k^R\otimes V_h^L.
+        \notag
+    \end{align}
+    Its neighboring operator is
+    \begin{align}
+        \eta^{\mathrm{act}}_{k,h}
+        =W_{k,h}^*\eta_{k,h}W_{k,h}.
+        \notag
+    \end{align}
+    In particular, every $\eta^{\mathrm{act}}_{k,h}$ is positive
+    semidefinite.  If the active family is empty, the restricted
+    factorization has no sectors and the assertion is vacuous.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Remove the empty inactive fibers from the dependent direct sum and
+    enumerate the remaining sector subtype by a finite ordinal.  The
+    compressed right factor of $k$ and compressed left factor of $h$ give
+    \begin{align}
+        \sum_\alpha
+        \bigl((V_k^R)^*r_{k,\alpha}V_k^R\bigr)
+        \otimes
+        \bigl((V_h^L)^*l_{h,\alpha}V_h^L\bigr)
+        =W_{k,h}^*\eta_{k,h}W_{k,h}.
+        \notag
+    \end{align}
+    Positive semidefiniteness is preserved by this matrix congruence.
+\end{proof}
+
 % **Partial coverage of CPSV16 Proposition `prop3to4`:** this theorem derives
 % pairwise two-sided supports from `AppKxKy=0` under the standing biCF
 % injectivity and the sectorwise positivity supplied by `AppUkU=rl` and
