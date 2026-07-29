@@ -35,7 +35,7 @@ The source is CPGSV21, arXiv:2011.12127, Sec. II.B.3.
    the complementary spectral radius (see
    `docs/paper-gaps/correlator_decay_rate_above_spectral_radius.tex`).
    The exact rate `|λ₂|` requires explicit eigenvalue extraction, which is
-   the remaining half of Issue #1447.
+   not carried out here.
 
 ## Non-goals
 
