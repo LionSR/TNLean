@@ -3,7 +3,6 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import Mathlib.Data.Fin.SuccPred
 import TNLean.Algebra.MatrixGramUnitary
 import TNLean.Channel.POVM
 
@@ -32,8 +31,9 @@ extension directly, without the tensor-product factor.
 * `exists_orthonormal_basis_restriction` — the sharp rank-one extension:
   from `ψᵢ` on `ℂᵈ` with `∑ |ψᵢ⟩⟨ψᵢ| = 1`, derive `d ≤ n` and obtain a
   unitary `U ∈ U(n)` whose rows restrict to `ψᵢ`.
-* `of_rank_one_povm` — the rank-one POVM corollary: given a `POVM d n` with
-  an explicit decomposition `E_i = |ψᵢ⟩⟨ψᵢ|`, apply the sharp extension.
+* `exists_orthonormal_basis_restriction_of_rank_one` — the rank-one POVM
+  corollary: given a `POVM d n` with an explicit decomposition
+  `E_i = |ψᵢ⟩⟨ψᵢ|`, apply the sharp extension.
 
 ## References
 
@@ -142,7 +142,8 @@ hypotheses of the sharp theorem.  Unlike `exists_naimark_dilation`,
 whose ambient Hilbert space is `ℂ^D ⊗ ℂ^n` (dimension `D·n`), this
 corollary gives the source's assertion of an `n`-dimensional ambient
 space under the rank-one hypothesis. -/
-theorem of_rank_one_povm (E : POVM d n) (ψ : Fin n → (Fin d → ℂ))
+theorem exists_orthonormal_basis_restriction_of_rank_one
+    (E : POVM d n) (ψ : Fin n → (Fin d → ℂ))
     (h_ops : ∀ i, E.ops i = Matrix.vecMulVec (ψ i) (star (ψ i))) :
     ∃ (hd : d ≤ n) (U : Matrix.unitaryGroup (Fin n) ℂ),
       (∀ i j, (U : Matrix (Fin n) (Fin n) ℂ) i (Fin.castLE hd j) = ψ i j) := by

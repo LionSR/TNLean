@@ -124,7 +124,8 @@ project import.
       through the canonical Naimark isometry via a dilation isometry ✓
   - `POVM.exists_orthonormal_basis_restriction` — a rank-one resolution
     forces `d ≤ n` and extends to an orthonormal basis of `ℂⁿ` ✓
-  - `POVM.of_rank_one_povm` — sharp rank-one specialization for a POVM ✓
+  - `POVM.exists_orthonormal_basis_restriction_of_rank_one` — sharp
+    rank-one specialization for a POVM ✓
   - `POVM.ofPSDResolutionOfIdentity` — converse construction: PSD resolution
     of identity on a dilation pulls back to a POVM ✓
   - `Instrument` — quantum-instrument structure + `total_isChannel`,
