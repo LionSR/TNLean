@@ -116,6 +116,29 @@
     this definition; it is a separate hypothesis in Proposition~C.7.
 \end{definition}
 
+\begin{theorem}[Virtual-gauge invariance of physical-sector factorizations]
+    \label{thm:mpdo_physical_sector_factorization_gauge}
+    \lean{MPOTensor.PhysicalSectorFactorization.ofGaugeEquiv,
+      MPOTensor.PhysicalSectorFactorization.ofGaugeEquiv_neighboringOperator,
+      MPOTensor.PhysicalSectorFactorization.ofGaugeEquiv_neighboringOperator_posSemidef}
+    \leanok
+    \uses{def:mpdo_physical_sector_factorization,
+      def:mpdo_minimal_neighboring_operator}
+    Suppose that two MPO tensors of the same virtual dimension differ by an
+    invertible virtual gauge.  Every physical-sector factorization of the
+    first tensor induces one of the second tensor with the same physical
+    decomposition and the same neighboring operators.  In particular,
+    positive semidefiniteness of all neighboring operators is invariant under
+    the gauge.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Absorb the gauge into each left sector tensor and its inverse into each
+    right sector tensor.  The two matrices cancel when the common virtual
+    index is contracted, so every neighboring operator is unchanged.
+\end{proof}
+
 \begin{definition}[One-site matrix spaces of sector sets]%
     \label{def:mpdo_one_site_sector_matrix_space}
     \lean{MPOTensor.PhysicalSectorFactorization.oneSiteSectorMatrix,
