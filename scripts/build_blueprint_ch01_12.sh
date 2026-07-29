@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# Build the FT--MPS blueprint volume (ch01_intro through ch12_symmetry) as
-# blueprint/print/print12.pdf.
+# Build the FT--MPS blueprint volume (ch01_intro through ch12_symmetry, together
+# with the auxiliary channel-theory chapter) as blueprint/print/print12.pdf.
 #
 # Run after scripts/blueprint_bibtex.py (which refreshes src/references.bib).
 # The blueprint sources are copied to a temporary directory and the dedicated
@@ -27,12 +27,12 @@ cp -R "$REPO_ROOT/tex/tenkz" "$WORK_DIR/tex/tenkz"
 # that carries the channel-theory results the volume still cites.
 echo "==> Checking the FT--MPS chapter router..."
 expected="$(printf 'ch%02d\n' $(seq 1 12))
-ch12a"
+ch12"
 kept="$(grep '^[[:space:]]*\\input{chapter/' \
   "$WORK_DIR/blueprint/src/content_ft_mps.tex" \
-  | sed -E 's|.*chapter/(ch[0-9]{2}[a-z]?)_.*|\1|')"
+  | sed -E 's|.*chapter/(ch[0-9]{2})_.*|\1|')"
 if [ "$kept" != "$expected" ]; then
-  echo "::error::Active chapters are not the ch01..ch12 sequence followed by ch12a; got:"
+  echo "::error::Active chapters are not ch01..ch12 followed by auxiliary channel theory; got:"
   echo "$kept"
   exit 1
 fi
@@ -48,4 +48,4 @@ echo "==> Building with latexmk (XeLaTeX)..."
 mkdir -p "$REPO_ROOT/blueprint/print"
 cp "$WORK_DIR/blueprint/src/print_ft_mps.pdf" \
   "$REPO_ROOT/blueprint/print/print12.pdf"
-echo "==> Wrote blueprint/print/print12.pdf (Chapters 1--12 volume)"
+echo "==> Wrote blueprint/print/print12.pdf (Chapters 1--12 plus auxiliary channel theory)"
