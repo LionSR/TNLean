@@ -224,14 +224,20 @@ def used_ink_environment_families(body: str) -> set[str]:
         elif text in {r"\endgroup", r"\egroup", r"\]", r"\)", "}"}:
             if len(kernel_scope) > 1:
                 kernel_scope.pop()
-        elif token.group("dollar") is not None:
+        elif (dollar := token.group("dollar")) is not None:
             if dollar_scope is None:
-                dollar_scope = text
+                dollar_scope = dollar
                 kernel_scope.append(kernel_scope[-1])
-            elif dollar_scope == text:
+            elif dollar_scope == dollar:
                 dollar_scope = None
                 if len(kernel_scope) > 1:
                     kernel_scope.pop()
+            elif dollar_scope == "$" and dollar == "$$":
+                # In $a$$b$, the first dollar of the adjacent pair closes the
+                # first inline group and the second opens the next one.
+                if len(kernel_scope) > 1:
+                    kernel_scope.pop()
+                kernel_scope.append(kernel_scope[-1])
         elif (
             token.group("cell") is not None
             or token.group("rowbreak") is not None
