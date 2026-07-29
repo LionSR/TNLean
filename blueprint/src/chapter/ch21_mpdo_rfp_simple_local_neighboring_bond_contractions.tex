@@ -249,10 +249,30 @@
 
 \begin{proof}
     \leanok
-    Reindex the canonical inclusion of a summand in the dependent direct sum.
-    Its isometry and range identities give the first two equations.
-    The two intertwining identities follow from block diagonality, and their
-    composition with the isometry gives the compression formula.
+    Let $E_s$ be the canonical inclusion of the $s$-th summand in the
+    dependent direct sum, and let $e$ flatten the direct-sum coordinates.
+    Thus $V_s$ is the reindexing of $E_s$.  Multiplicativity of reindexing
+    transports
+    \begin{align}
+        E_s^\dagger E_s&=1, \notag\\
+        E_sE_s^\dagger&=P_s
+        \notag
+    \end{align}
+    to the two corresponding identities for $V_s$.  If
+    $B_t^i=\mu_tA_t^i$, block diagonality gives
+    \begin{align}
+        A^iV_s&=V_sB_s^i, \notag\\
+        V_s^\dagger A^i&=B_s^iV_s^\dagger.
+        \notag
+    \end{align}
+    Therefore
+    \begin{align}
+        V_s^\dagger A^iV_s
+        &=V_s^\dagger V_sB_s^i
+         =B_s^i
+         =\mu_sA_s^i.
+        \notag
+    \end{align}
 \end{proof}
 
 \begin{theorem}[Neighboring operators under virtual compression]
