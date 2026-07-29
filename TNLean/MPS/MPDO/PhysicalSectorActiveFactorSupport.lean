@@ -230,7 +230,7 @@ theorem leftTensor_conjTranspose_mem_span_of_isActiveSector
   calc
     star (F.leftTensor k β y x) =
         z⁻¹ * (star (F.leftTensor k β y x) * z) := by
-      field_simp
+      field_simp [hz]
     _ = z⁻¹ * ∑ μ, ∑ ν,
         c (μ, ν) * (F.leftTensor k μ x y * F.rightTensor k ν v u) := by
       rw [hEntry']
@@ -285,7 +285,7 @@ theorem rightTensor_conjTranspose_mem_span_of_isActiveSector
   calc
     star (F.rightTensor k α y x) =
         z⁻¹ * (z * star (F.rightTensor k α y x)) := by
-      field_simp
+      field_simp [hz]
     _ = z⁻¹ * ∑ ν, ∑ μ,
         c (μ, ν) * (F.leftTensor k μ v u * F.rightTensor k ν x y) := by
       rw [hEntry']
