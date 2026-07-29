@@ -48,23 +48,23 @@ theorem. This is tracked by issue #873 under the proposition-level tracker #81.
 
 ## 2. Coverage crosswalk: CPSV16 (arXiv:1606.00608)
 
-At this revision, after the normal-tensor RFP characterization, the trace-normalized RFP-to-ZCL-and-SAL result, and the unrestricted Proposition `prop3to4`, the paper has 45 theorem-like occurrences and 40 distinct results. The occurrence-level count is 19 complete, 12 partial, and 14 not-ready; the distinct-result count is 18 complete, 10 partial, and 12 not-ready. Here **not-ready** means that the printed statement is false, ambiguous, or depends essentially on a formally refuted source lemma. It does not mean that every printed result has been formalized.
+At this revision, after the normal-tensor RFP characterization, the trace-normalized RFP-to-ZCL-and-SAL result, and the unrestricted Proposition `prop3to4`, the paper has 45 theorem-like occurrences and 40 distinct results. The occurrence-level count is 20 complete, 11 partial, and 14 not-ready; the distinct-result count is 19 complete, 9 partial, and 12 not-ready. Here **not-ready** means that the printed statement is false, ambiguous, or depends essentially on a formally refuted source lemma. It does not mean that every printed result has been formalized.
 
 The distinct count is the 40 source `thm`, `prop`, `cor`, and `lem`
 environments. The occurrence count adds five Appendix A/D restatements.
 The following ledger makes the count reproducible from source line numbers:
 
-- **Complete (18 distinct):** 249, 253, 606, 945, 1080, 1121, 1130,
+- **Complete (19 distinct):** 249, 253, 398, 606, 945, 1080, 1121, 1130,
   1274, 1333, 1351, 1406, 1510, 1569, 1647, 1680, 1786, 1835, and 2221.
-- **Partial (10 distinct):** 278, 342, 398, 583, 801, 851, 972, 1013,
-  1597, and 1801.
+- **Partial (9 distinct):** 278, 342, 583, 801, 851, 972, 1013, 1597,
+  and 1801.
 - **Not-ready (12 distinct):** 349, 354, 500, 534, 543, 777, 1155, 1197,
   1484, 1503, 1740, and 1810.
 - **Additional occurrences:** the Appendix A restatements at 1137, 1167,
   and 1172 inherit partial, not-ready, and not-ready status, respectively; the
   Appendix D restatements at 1863 and 1929 inherit complete and partial status.
   Thus the five restatements add one complete, two partial, and two not-ready
-  occurrences, giving the displayed totals 19/12/14.
+  occurrences, giving the displayed totals 20/11/14.
 
 Definitions, equations, and explanatory proof-segment rows are not counted.
 In particular, Eq. `II_XAX` at 1072--1077 is excluded, while the purification
@@ -89,7 +89,7 @@ segments of Theorems 3.1 and 3.10, not additional theorem occurrences.
 
 | Paper label | Lines | Paper description | Lean location | Status |
 |---|---|---|---|---|
-| **Theorem 3.1** (l.398, `thm:renormalization-flow`) | 398–405 | A tensor appears as a renormalization-flow limit iff two blocked physical sites are related to one site by an isometry | `TNLean/MPS/RFP/Defs.lean` (`MPSTensor.isTransferIdempotent_iff_kraus_isometry`, `HasPhysicalBlockingIsometry`); `TNLean/MPS/RFP/Convergence.lean` (`rg_flow_converges_of_cf`) | **partial** — the blocking-isometry equation and convergence of each canonical-form block to an idempotent transfer map are proved, but no formal predicate identifies the original tensor itself as a flow limit or proves the printed iff with that predicate |
+| **Theorem 3.1** (l.398, `thm:renormalization-flow`) | 398–405 | A tensor appears as a renormalization-flow limit iff two blocked physical sites are related to one site by an isometry | `TNLean/MPS/RFP/FlowLimit.lean` (`MPSTensor.AppearsAsRenormalizationFlowLimit`, `MPSTensor.appearsAsRenormalizationFlowLimit_iff_hasPhysicalBlockingIsometry`); `TNLean/MPS/RFP/Defs.lean` (`HasPhysicalBlockingIsometry`) | **complete** — the flow-limit predicate quantifies the initial physical dimension and tensor, fixes the bond dimension, and uses convergence of the dyadic transfer matrices in their standard finite-dimensional matrix topology |
 | Defn RFP (l.420, `defRFP`) | 420–424 | Pure-state RFP condition | `TNLean/MPS/RFP/Defs.lean` (`HasPhysicalBlockingIsometry`) | `leanok` |
 | Defn CID (l.438) | 438–446 | Correlations independent of distance | `TNLean/MPS/RFP/ZeroCorrelationLength.lean` (`MPSTensor.IsPhysicalCID`) | `leanok` |
 | Defn LO (l.468, `DefLO`) | 468–474 | Local orthogonality | `TNLean/MPS/RFP/ZeroCorrelationLength.lean` (`MPSTensor.IsBNTLocallyOrthogonal`) | `leanok` |
@@ -136,7 +136,7 @@ segments of Theorems 3.1 and 3.10, not additional theorem occurrences.
 
 | Paper label | Lines | Paper description | Lean location | Status |
 |---|---|---|---|---|
-| Renormalization flow convergence | 1209–1244 | Renormalization flow from canonical form converges | `TNLean/MPS/RFP/Convergence.lean` (`rg_flow_converges_of_cf`) | **proof segment; counted with Theorem 3.1** — the current theorem gives convergence for each fixed canonical-form block \(k\); the source proves convergence of the full weighted canonical-form transfer, including the copy and mixed-block terms |
+| Renormalization flow convergence | 1209–1244 | Renormalization flow from canonical form converges | `TNLean/MPS/RFP/Convergence.lean` (`rg_flow_converges_of_cf`) | **partial proof segment; uncounted and distinct from the completed Theorem 3.1 equivalence** — the current theorem gives convergence for each fixed canonical-form block \(k\). The source assertion for the full weighted canonical-form transfer is not valid without further phase restrictions: repeated primitive cube-root phases can make the dyadic powers alternate rather than converge |
 | **Lemma `lem:charact-NT-pure-RFP`** | 1274–1301 | Normal-tensor RFP structural theorem | `TNLean/MPS/RFP/NormalIsometryCharacterization.lean` (`MPSTensor.IsNormalTensor.isTransferIdempotent_iff_isIsometryCanonicalForm`); `TNLean/MPS/RFP/StructuralFull.lean`; `docs/paper-gaps/cpsv16_rfp_isometry_scope.tex` | **complete, with documented local correction** — under exactly normality, which itself forces positive bond dimension, transfer idempotence is equivalent to the trace-normalized square-root isometry form. The factor $\sqrt{\Lambda}$ is required by the source reference tensor at line 1300 |
 | Theorem 3.10 reverse-proof step | 1246–1271 | The printed ZCL-to-RFP argument uses a nonzero subleading eigenvalue | `TNLean/MPS/RFP/ZCLReverse.lean`; `TNLean/MPS/RFP/PhysicalObservableRealization.lean` | **proof segment; counted with Theorem 3.10** — the printed argument is not ready: a non-idempotent map may have only a nilpotent Jordan defect at eigenvalue zero; corrected conditional work is tracked by owner-held #2633 |
 | Theorem 3.10 RFP⇒NNCPH | 1305–1307 | RFP gives a nearest-neighbor commuting parent Hamiltonian | Corrected representative-level theorems in `TNLean/MPS/ParentHamiltonian/Commuting.lean` and the conditional capstone merged by #4860 | **proof segment; counted with Theorem 3.10** — the printed unrestricted argument is not ready: raw repeated-copy insertions remain outside the proved representative theorem; #2633 is owner-held |
@@ -314,7 +314,7 @@ These are known oversized (documented in #1512/#1522) and do not block unrelated
 
 ## 7. Key remaining coverage gaps
 
-The 22 non-complete distinct CPSV16 results comprise 10 partial and 12
+The 21 non-complete distinct CPSV16 results comprise 9 partial and 12
 not-ready results. They are source-ambiguous, formally refuted, research-level,
 owner-held, or scope-restricted by the current formal interface. Lemma
 `Lsigma3`, the Hayashi strong-subadditivity equality characterization, and the
@@ -329,7 +329,7 @@ axiom-free.
 | Not-ready | CPSV16 | Corollary II.2 | Inactive zero-weight blocks can change the ambient dimension without changing any positive-length MPV | `docs/paper-gaps/cpsv16_bnt_characterization_active_blocks.tex` |
 | Not-ready | CPSV16 | Appendix A Lemma `Lem:app_simple` | \([1]\) and \([1,0]\) have identical positive-power sums but different multisets; the formal corrections require nonzero entries or filter zeros | `TNLean/Algebra/ScalarPowerSumIdentity.lean`; `docs/paper-gaps/power_sum_alternative_route.tex` |
 | Not-ready | CPSV16 | Appendix A CFII refinement | Literal CFII permits zero weights and inherits the false dimension/global-unitary conclusion; the Lean theorem covers active, nonzero BNT data | `docs/paper-gaps/cpsv16_bnt_characterization_active_blocks.tex`; `docs/paper-gaps/cpsv16_global_vs_persector_unit_witness.tex` |
-| Partial | CPSV16 | Theorem 3.1, renormalization-flow limit | The blocking-isometry equation and convergence for each fixed canonical-form block \(k\) are proved; the printed flow-limit iff and convergence of the full weighted transfer, including copy and mixed-block terms, are not formalized | No source-level flow-limit predicate is currently available; full-flow assembly remains open |
+| Partial | CPSV16 | Adjacent canonical-form convergence assertion after Theorem 3.1 | Convergence is proved for each fixed canonical-form block \(k\). Repeated primitive cube-root phases can make the full dyadic transfer sequence alternate rather than converge | This proof-segment claim is uncounted and is not part of the completed flow-limit equivalence |
 | Not-ready | CPSV16 | Theorem 3.8 | Raw weights and the Bell-pair adjacent-gap example refute the two unrestricted directions | Corrected branch #2633, assigned to `LionSR` |
 | Not-ready | CPSV16 | Theorem 3.10 | Inherits Theorem 3.8 counterexamples; line 1250 also fails for nilpotent zero-Jordan defects | #2633, assigned to `LionSR` |
 | Not-ready | CPSV16 | Theorem 3.11 | The repeated-copy physical isometry lacks a copy index; the literal shared-map reading is false | #2598 closed as source obstruction |

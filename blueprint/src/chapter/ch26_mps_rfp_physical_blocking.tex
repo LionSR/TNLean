@@ -108,13 +108,75 @@
     Definition~\ref{def:physical_blocking_isometry}.
 \end{proof}
 
+\begin{definition}[Limit of the renormalization flow]
+    \label{def:appears_as_renormalization_flow_limit}
+    \lean{MPSTensor.AppearsAsRenormalizationFlowLimit}
+    \leanok
+    \uses{def:transfer_map}
+    Let $A=(A^i)_{i=0}^{d-1}$ have bond dimension $D$. Its physical-isometry
+    class \emph{appears as a limit of the renormalization flow} if there are a
+    physical dimension $e$ and a tensor
+    $B=(B^a)_{a=0}^{e-1}$ of the same bond dimension $D$ such that
+    \begin{align}
+        \widehat{\E}_B^{\,2^n}
+        &\longrightarrow \widehat{\E}_A.
+        \notag
+    \end{align}
+    Here $\widehat{\E}_A$ and $\widehat{\E}_B$ are the transfer matrices, and
+    convergence is taken in the standard topology on the finite-dimensional
+    matrix space $\MN{D^2}$. The physical dimension is quantified because
+    blocking changes it, whereas the bond dimension remains fixed. Transfer
+    matrices represent the quotient by physical isometries described in
+    \cite[lines~382--394 and 1205--1209]{Cirac2016MPDO_arXiv}.
+\end{definition}
+
+\begin{lemma}[A dyadic power limit is idempotent]
+    \label{lem:dyadic_power_limit_idempotent}
+    \lean{isIdempotentElem_of_tendsto_pow_two_pow}
+    \leanok
+    Let $R$ be a Hausdorff topological monoid with continuous multiplication.
+    If $E^{2^n}\to P$, then $P^2=P$.
+\end{lemma}
+\begin{proof}\leanok
+    Continuity of multiplication gives
+    $E^{2^n}E^{2^n}\to P^2$. On the other hand,
+    $E^{2^n}E^{2^n}=E^{2^{n+1}}\to P$. Uniqueness of limits gives
+    $P^2=P$.
+\end{proof}
+
 \begin{theorem}[Limits of the renormalization flow]
     \label{thm:renormalization_flow}
-    \uses{def:physical_blocking_isometry}
-    A tensor appears as a limit of the two-site renormalization flow if and only
-    if it has a physical blocking isometry. This is
-    \cite[Theorem~3.1]{Cirac2016MPDO_arXiv}.
+    \lean{MPSTensor.IsTransferIdempotent.of_appearsAsRenormalizationFlowLimit,
+        MPSTensor.IsTransferIdempotent.appearsAsRenormalizationFlowLimit,
+        MPSTensor.appearsAsRenormalizationFlowLimit_iff_isTransferIdempotent,
+        MPSTensor.appearsAsRenormalizationFlowLimit_iff_hasPhysicalBlockingIsometry}
+    \leanok
+    \uses{def:appears_as_renormalization_flow_limit,
+        def:physical_blocking_isometry}
+    A tensor class appears as a limit of the two-site renormalization flow if
+    and only if it has a physical blocking isometry. Equivalently, there is an
+    isometry $V\colon\C^d\to\C^{d^2}$ such that
+    \begin{align}
+        A^{i_1}A^{i_2}
+        =\sum_{j=0}^{d-1}V_{(i_1,i_2),j}A^j
+        \notag
+    \end{align}
+    for every $i_1,i_2$. This is
+    \cite[Theorem~3.1 and lines~1205--1209]{Cirac2016MPDO_arXiv}, with the
+    corrected index notation of the renormalization equation at lines
+    391--394.
 \end{theorem}
+\begin{proof}\leanok
+    \uses{lem:dyadic_power_limit_idempotent,
+        thm:physical_blocking_isometry_iff_transfer_idempotence}
+    If $\widehat{\E}_B^{\,2^n}\to\widehat{\E}_A$, then
+    Lemma~\ref{lem:dyadic_power_limit_idempotent} gives
+    $\E_A^2=\E_A$. Theorem~
+    \ref{thm:physical_blocking_isometry_iff_transfer_idempotence} supplies the
+    physical isometry. Conversely, if $A$ has such an isometry, its transfer
+    map is idempotent. Taking $B=A$ makes the dyadic orbit constant:
+    $\widehat{\E}_A^{\,2^n}=\widehat{\E}_A$ for every $n$.
+\end{proof}
 
 \begin{figure}[ht]
     \centering
