@@ -89,7 +89,7 @@ def scan_constructs(source: str) -> list[Construct]:
     """Return picture-producing constructs in source order."""
     constructs: list[Construct] = []
     environment_pattern = re.compile(
-        r"\\begin\{(tenkz(?:eq|cd|lattice|free|planes)?)\}"
+        r"\\begin\{(tenkz(?:cd|lattice|free|planes)?)\}"
     )
     for match in environment_pattern.finditer(source):
         name = match.group(1)

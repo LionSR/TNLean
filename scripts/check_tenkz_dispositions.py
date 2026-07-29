@@ -12,7 +12,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 
-from tenkzlib.texcase import scan_constructs, strip_comments
+from tenkzlib.texcase import Construct, match_group, scan_constructs, strip_comments
 
 
 DOCUMENT = ROOT / "docs/tenkz/DISPOSITIONS.md"
@@ -22,6 +22,7 @@ ENVIRONMENT = re.compile(
     r"\\begin\s*\{\s*(tenkz(?:eq|free|cd|lattice|planes)?)\s*\}"
 )
 COMMAND = re.compile(r"\\(tnpic|tntree)\b")
+TENKZEQ_TOKEN = re.compile(r"\\(begin|end)\{tenkzeq\}")
 DISPOSITIONS = ("preserve", "codemod", "redraw")
 DEAD_COMMANDS = (
     "tnput",
@@ -59,6 +60,7 @@ DEAD_KEYS = (
     "boundary legs",
     "label at",
     "poly",
+    "bond dir",
 )
 SUGAR_COMMANDS = (
     "tnX",
@@ -70,6 +72,7 @@ SUGAR_COMMANDS = (
     "tnskip",
     "tndeclareatom",
 )
+BARE_DEAD_FLAGS = ("boundary legs", "maps")
 
 
 def fail(message: str) -> None:
@@ -96,13 +99,45 @@ def normalized_environment_spacing(source: str) -> str:
     return re.sub(r"\\end\s+\{", r"\\end{", source)
 
 
+def scan_inventory_constructs(source: str) -> list[Construct]:
+    """Scan picture constructs plus the non-picture `tenkzeq` wrapper."""
+    constructs = scan_constructs(source)
+    for match in re.finditer(r"\\begin\{tenkzeq\}", source):
+        depth = 1
+        end_match: re.Match[str] | None = None
+        for token in TENKZEQ_TOKEN.finditer(source, match.end()):
+            depth += 1 if token.group(1) == "begin" else -1
+            if depth == 0:
+                end_match = token
+                break
+        end = end_match.end() if end_match else len(source)
+        body_start = match.end()
+        if source[body_start : body_start + 1] == "[":
+            closed = match_group(source, body_start, "[", "]")
+            if closed != -1:
+                body_start = closed
+        body_end = end_match.start() if end_match else len(source)
+        constructs.append(
+            Construct(
+                "tenkzeq",
+                match.start(),
+                end,
+                source[body_start:body_end],
+                source.count("\n", 0, match.start()) + 1,
+                body_start,
+            )
+        )
+    constructs.sort(key=lambda construct: construct.start)
+    return constructs
+
+
 def construct_sources(path: Path) -> dict[tuple[str, int, str], list[str]]:
     """Return source slices for each picture construct in a TeX file."""
     source = normalized_environment_spacing(
         strip_comments(path.read_text(errors="replace"))
     )
     result: dict[tuple[str, int, str], list[str]] = defaultdict(list)
-    for construct in scan_constructs(source):
+    for construct in scan_inventory_constructs(source):
         key = (path.name, construct.line, construct.name)
         result[key].append(source[construct.start : construct.end])
     for match in re.finditer(r"\\tntree\b[^\n]*", source):
@@ -113,12 +148,13 @@ def construct_sources(path: Path) -> dict[tuple[str, int, str], list[str]]:
 
 def expanded_source(path: Path, stack: tuple[Path, ...] = ()) -> str:
     """Expand local input files so fixture disposition includes dependencies."""
+    path = path.resolve()
     if path in stack:
         fail(f"recursive fixture input: {' -> '.join(map(str, stack + (path,)))}")
     source = strip_comments(path.read_text(errors="replace"))
 
     def replace(match: re.Match[str]) -> str:
-        dependency = path.parent / (match.group(1) or match.group(2))
+        dependency = (path.parent / (match.group(1) or match.group(2))).resolve()
         if not dependency.suffix:
             dependency = dependency.with_suffix(".tex")
         if not dependency.is_file():
@@ -183,28 +219,31 @@ def fragment_target_codes(source: str) -> frozenset[str]:
         r"\([^)]+\)\s*-\s*\([^)]+\)",
         r"\bleg\s+(?:north|south|east|west)\s+of\b",
         r"\b(?:north|south|east|west)\s+outside\b",
-        r"(?:^|,)\s*none(?=\s*(?:,|\]))",
+        r"(?:^|[\[,])\s*none(?=\s*(?:,|\]))",
     )
     dead_record |= any(re.search(pattern, source) for pattern in dead_patterns)
 
     for match in ENVIRONMENT.finditer(source):
         options = re.match(r"\s*\[([^\]]*)\]", source[match.end() :])
-        if options and re.search(
-            r"(?:^|,)\s*boundary\s+legs(?=\s*(?:,|$))",
-            options.group(1),
+        if options and any(
+            re.search(
+                r"(?:^|,)\s*" + re.escape(flag) + r"(?=\s*(?:,|$))",
+                options.group(1),
+            )
+            for flag in BARE_DEAD_FLAGS
         ):
             dead_record = True
 
     for match in re.finditer(r"\\tn\*?\s*\[([^\]]*)\]", source):
         if re.search(
-            r"(?:^|,)\s*(?:pill|circle|boundary|removed|cluster|enclosure)"
+            r"(?:^|,)\s*(?:circle|boundary|removed|cluster|enclosure)"
             r"(?=\s*(?:,|$))"
             r"|(?:^|,)\s*tri\s*=",
             match.group(1),
         ):
             dead_record = True
         if re.search(
-            r"(?:^|,)\s*(?:box|dot|mpo|ring|no legs)(?=\s*(?:,|$))",
+            r"(?:^|,)\s*(?:box|dot|pill|mpo|ring|no legs)(?=\s*(?:,|$))",
             match.group(1),
         ):
             codes.add("C-record")
@@ -255,7 +294,7 @@ def fragment_target_codes(source: str) -> frozenset[str]:
 def source_target_codes(source: str) -> frozenset[str]:
     """Derive exact migration targets, preserving mixed-construct workloads."""
     source = normalized_environment_spacing(source)
-    constructs = scan_constructs(source)
+    constructs = scan_inventory_constructs(source)
     codes: set[str] = set()
     masked = list(source)
     for construct in constructs:

@@ -26,7 +26,6 @@ def main() -> int:
         r"\tnmark[form=brace-below]{}{}",
         r"\tnspan[brace below]{2}{}",
         r"\tnspan[brace above]{2}{}",
-        r"\tn[pill]{}",
         r"\tn[cluster]{}",
         r"\tn[enclosure]{}",
         r"\tn[poly=5]{}",
@@ -34,6 +33,9 @@ def main() -> int:
         r"\begin{tenkz}[boundary legs]\end{tenkz}",
         r"\begin{tenkz}[frame={rotate=90}]\end{tenkz}",
         r"\begin{tenkz}[frame={matrix={1,0,0,1}}]\end{tenkz}",
+        r"\begin{tenkzcd}[maps]\end{tenkzcd}",
+        r"\begin{tenkz}[bond dir=right]\end{tenkz}",
+        r"\tnbond[none]{a}{b}",
     )
     for source in tombstones:
         assert guard.uses_tombstone(source), source
@@ -41,6 +43,7 @@ def main() -> int:
     accepted = (
         r"\begin{tenkz}[rows={op}, cols=2]\tn{}\end{tenkz}",
         r"\tn[box]{}",
+        r"\tn[pill]{}",
         r"\tnfuse[span=2]{}",
         r"\tnmark[form=bracket]{}{}",
         r"\tnmark[form=enclosure]{{(1,1)}}{}",
@@ -59,6 +62,7 @@ def main() -> int:
     assert guard.source_target_codes(
         r"\tnset{species={alpha,beta}}"
     ) == frozenset({"C-declare"})
+    assert guard.source_target_codes(r"\tn[pill]{}") == frozenset({"C-record"})
     assert guard.source_target_codes(
         r"\begin{tenkzfree}\tnghost{}\end{tenkzfree}"
         r"\begin{tenkz}[physical=up]\tn{}\end{tenkz}"
@@ -102,6 +106,15 @@ def main() -> int:
         else:
             raise AssertionError("recursive input was not rejected")
 
+        alias_cycle = root / "alias-cycle.tex"
+        alias_cycle.write_text(r"\input{sub/../alias-cycle.tex}")
+        try:
+            guard.expanded_source(alias_cycle)
+        except SystemExit as error:
+            assert "recursive fixture input" in str(error)
+        else:
+            raise AssertionError("alias-path recursive input was not rejected")
+
         spaced = root / "spaced.tex"
         spaced.write_text(r"\begin {tenkz}\tn{}\end {tenkz}")
         assert guard.occurrences(spaced) == [(1, "tenkz")]
@@ -113,6 +126,14 @@ def main() -> int:
         )
         assert guard.occurrences(equation) == [(1, "tenkzeq"), (1, "tenkz")]
         assert ("equation.tex", 1, "tenkzeq") in guard.construct_sources(equation)
+        equation_source = equation.read_text()
+        assert [
+            construct.name for construct in guard.scan_constructs(equation_source)
+        ] == ["tenkz"]
+        assert [
+            construct.name
+            for construct in guard.scan_inventory_constructs(equation_source)
+        ] == ["tenkzeq", "tenkz"]
 
     fixture_inventory = guard.documented_fixtures(guard.DOCUMENT.read_text())
     assert len(fixture_inventory) == 264

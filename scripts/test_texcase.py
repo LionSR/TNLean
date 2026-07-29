@@ -16,7 +16,6 @@ def main() -> int:
         "  \\tn{A} % hidden atom\n"
         "  \\begin{tenkz}\\tn{B}\\end{tenkz}\n"
         "\\end{tenkz}\n"
-        "\\begin{tenkzeq}=\\end{tenkzeq}\n"
         "\\tnpic[label={x]y}]{\\tn{C}}\n"
     )
     stripped = strip_comments(source)
@@ -30,13 +29,11 @@ def main() -> int:
     assert [construct.name for construct in constructs] == [
         "tenkz",
         "tenkz",
-        "tenkzeq",
         "tnpic",
     ]
-    outer, inner, equation, inline = constructs
+    outer, inner, inline = constructs
     assert "\\tn{A}" in outer.body
     assert "\\tn{B}" in inner.body
-    assert equation.body == "="
     assert inline.body == "\\tn{C}"
     for construct in constructs:
         assert stripped[construct.body_start : construct.body_start + len(construct.body)] == (
