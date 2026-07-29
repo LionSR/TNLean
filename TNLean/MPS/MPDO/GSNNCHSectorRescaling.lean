@@ -33,7 +33,9 @@ variable {d g : ℕ} {dim : Fin g → ℕ}
 namespace OrthogonalCommutingSectorFamily
 
 /-- The positive `N`-th root used to absorb a nonnegative sector coefficient
-into a sector with the prescribed positive natural multiplicity. -/
+into a sector with the prescribed positive natural multiplicity.
+
+Source: arXiv:1606.00608, Definition 4.8, lines 829--850. -/
 noncomputable def coefficientRoot (multiplicity N : ℕ) (c : ℝ) : ℝ :=
   (c / multiplicity) ^ (N : ℝ)⁻¹
 
@@ -47,7 +49,9 @@ private theorem embedLocalOperator_smul
 
 /-- At a fixed chain length, rescale every sector bond so that its
 multiplicity-weighted periodic product acquires a prescribed nonnegative real
-coefficient. -/
+coefficient.
+
+Source: arXiv:1606.00608, Definition 4.8, lines 829--850. -/
 noncomputable def toCoefficientRescaledGSNNCHData
     (F : OrthogonalCommutingSectorFamily K)
     (multiplicity : Fin g → ℕ) (hMultiplicity : ∀ s, 0 < multiplicity s)
@@ -79,7 +83,9 @@ noncomputable def toCoefficientRescaledGSNNCHData
     rw [(F.bondData s).bond_comm hN ⟨0, by omega⟩ ⟨1, by omega⟩]
 
 /-- The rescaled periodic bond product is `coefficient / multiplicity` times
-the original sector MPO. -/
+the original sector MPO.
+
+Source: arXiv:1606.00608, Definition 4.8, lines 829--850. -/
 theorem toCoefficientRescaledGSNNCHData_sectorProduct
     (F : OrthogonalCommutingSectorFamily K)
     (multiplicity : Fin g → ℕ) (hMultiplicity : ∀ s, 0 < multiplicity s)
@@ -107,7 +113,9 @@ theorem toCoefficientRescaledGSNNCHData_sectorProduct
 
 /-- The state represented by the rescaled GSNNCH data is the prescribed
 nonnegative linear combination of the orthogonal sector MPOs. The natural
-multiplicities remain explicit in the data. -/
+multiplicities remain explicit in the data.
+
+Source: arXiv:1606.00608, Definition 4.8, lines 829--850. -/
 theorem toCoefficientRescaledGSNNCHData_unnormalizedState
     (F : OrthogonalCommutingSectorFamily K)
     (multiplicity : Fin g → ℕ) (hMultiplicity : ∀ s, 0 < multiplicity s)
@@ -136,7 +144,9 @@ commuting sector products has the GSNNCH form with any prescribed positive
 natural sector multiplicities.
 
 The coefficients and their bond rescalings may depend on the chain length,
-as permitted by Definition 4.8. -/
+as permitted by Definition 4.8.
+
+Source: arXiv:1606.00608, Definition 4.8, lines 829--850. -/
 theorem hasGSNNCHForm_of_nonnegative_orthogonalCommutingSectorFamily
     {D : ℕ} (M : MPOTensor d D)
     (K : (s : Fin g) → MPOTensor d (dim s))

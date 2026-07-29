@@ -36,6 +36,7 @@ import TNLean.MPS.MPDO.BNTPhysicalSectorGSNNCH
 import TNLean.MPS.MPDO.BNTProjectorSelection
 import TNLean.MPS.MPDO.BNTRightTripleFusion
 import TNLean.MPS.MPDO.BNTSectorAnalyticProperties
+import TNLean.MPS.MPDO.BNTSectorCoefficientPositivity
 import TNLean.MPS.MPDO.BNTSectorAreaLaw
 import TNLean.MPS.MPDO.BNTSectorCommutingFamily
 import TNLean.MPS.MPDO.BNTSeparatingProjectors
