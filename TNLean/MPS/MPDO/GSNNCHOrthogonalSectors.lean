@@ -44,9 +44,10 @@ dependent rescalings of the bonds.
 This is sufficient data for the outer-sector assembly in arXiv:1606.00608,
 Definition 4.8, lines 829--850.
 
-**Scope restriction (supplied orthogonal sectors):** Proposition `prop3to4`
-starts from five blockwise identities; it does not assume this assembled family
-of orthogonal projections and supported bonds.  See
+**Scope restriction (supplied orthogonal sectors):** CPSV16 Appendix C.2,
+Proposition `prop3to4`, lines 1783--1792, starts from five blockwise
+identities; it does not assume this assembled family of orthogonal projections
+and supported bonds.  See
 `docs/paper-gaps/cpsv16_gsnnch_sector_decomposition.tex`. -/
 structure OrthogonalCommutingSectorFamily
     (K : (s : Fin g) → MPOTensor d (dim s)) where
@@ -120,7 +121,8 @@ multiplicity-weighted sum of the sector MPOs.
 
 **Scope restriction (identity for supplied sector data):** This is an algebraic
 consequence of `OrthogonalCommutingSectorFamily`; it is not the implication from
-the five printed hypotheses of Proposition `prop3to4`.  See
+the five printed hypotheses of CPSV16 Appendix C.2, Proposition `prop3to4`,
+lines 1783--1792.  See
 `docs/paper-gaps/cpsv16_gsnnch_sector_decomposition.tex`. -/
 theorem toGSNNCHData_unnormalizedState
     (F : OrthogonalCommutingSectorFamily K) (multiplicity : Fin g → ℕ)
@@ -143,9 +145,9 @@ chain length at least two.
 This is a sufficient-condition theorem once the orthogonal sectors, supported
 positive bonds, and exact sector-product identities have been supplied.
 
-**Scope restriction (later outer-sector assembly):** Proposition `prop3to4`
-starts from five blockwise identities and does not assume these assembled data.
-See `docs/paper-gaps/cpsv16_gsnnch_sector_decomposition.tex`. -/
+**Scope restriction (later outer-sector assembly):** CPSV16 Appendix C.2,
+Proposition `prop3to4`, lines 1783--1792, starts from five blockwise
+identities and does not assume these assembled data.  See `docs/paper-gaps/cpsv16_gsnnch_sector_decomposition.tex`. -/
 theorem hasGSNNCHForm_of_orthogonalCommutingSectorFamily
     {D : ℕ} (M : MPOTensor d D) (K : (s : Fin g) → MPOTensor d (dim s))
     (multiplicity : Fin g → ℕ) (F : OrthogonalCommutingSectorFamily K)
@@ -165,7 +167,8 @@ This is a sufficient-condition theorem using a supplied
 `OrthogonalCommutingSectorFamily` and the positive-length BNT sum.
 
 **Scope restriction (assembled BNT sector family):** The hypotheses are stronger
-than the five blockwise identities printed in Proposition `prop3to4`.  See
+than the five blockwise identities printed in CPSV16 Appendix C.2,
+Proposition `prop3to4`, lines 1783--1792.  See
 `docs/paper-gaps/cpsv16_gsnnch_sector_decomposition.tex`. -/
 theorem hasGSNNCHForm_of_commonWeightAbsorbedBasisMPOTensor
     {D : ℕ} (M : MPOTensor d D)

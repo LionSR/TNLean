@@ -666,9 +666,9 @@ II.2.  The CPSV16 convention permits an unrelated normal summand whose
 coefficient vanishes at every positive length; such a summand can change the
 ambient bond dimension while preserving all positive-length MPVs.
 
-The theorem is also a packaged SectorBNT analogue of CPSV21 Corollary 4.5,
-pending a bridge from the canonical tensors of that source to the SectorBNT
-surface.  In CPSV21 the actual canonical summands have positive coefficients.
+The theorem is also a SectorBNT analogue of CPSV21 Corollary 4.5,
+pending a theorem connecting the canonical tensors of that source to the
+SectorBNT hypotheses.  In CPSV21 the actual canonical summands have positive coefficients.
 An extraneous zero-coefficient member allowed by its weak BNT definition is not
 an ambient canonical summand, so the unequal-cardinality counterexample to
 CPSV21 Theorem 4.4 does not refute Corollary 4.5.

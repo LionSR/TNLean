@@ -40,7 +40,7 @@ GSNNCH assembly.
 
 **Scope restriction (projector-selection and sectorwise-SAL hypotheses):** The
 theorem assumes more than the five blockwise identities printed in CPSV16
-Proposition `prop3to4`.  See
+Appendix C.2, Proposition `prop3to4`, lines 1783--1792.  See
 `docs/paper-gaps/cpsv16_gsnnch_sector_decomposition.tex`. -/
 theorem nonempty_orthogonalCommutingSectorFamily_of_bntSectorSAL
     (S : MPSTensor.SectorDecomposition (d * d))
@@ -102,8 +102,9 @@ sectorwise SAL witnesses, supported bonds, and exact sector products have been
 constructed.
 
 **Scope restriction (later BNT-sector assembly):** The hypotheses are stronger
-than the five blockwise identities printed in CPSV16 Proposition `prop3to4`.
-See `docs/paper-gaps/cpsv16_gsnnch_sector_decomposition.tex`. -/
+than the five blockwise identities printed in CPSV16 Appendix C.2,
+Proposition `prop3to4`, lines 1783--1792.  See
+`docs/paper-gaps/cpsv16_gsnnch_sector_decomposition.tex`. -/
 theorem hasGSNNCHForm_of_bntSectorSAL
     (M : MPOTensor d D) (S : MPSTensor.SectorDecomposition (d * d))
     (hM : MPSTensor.SameMPV₂Pos M.toMPSTensor S.toTensor)
