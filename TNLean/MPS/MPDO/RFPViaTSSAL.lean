@@ -19,7 +19,7 @@ horizontal-form specialization.
 The SAL proof first establishes the two exact finite-chain identities obtained
 by transferring one site across a bipartition, applies mutual-information data
 processing in both directions, and then identifies bipartite mutual information
-with the chain quantity `I_L`.  The one-site normalization condition and the
+with the chain quantity I_L.  The one-site normalization condition and the
 vertical-loop trace identities supply the nonzero transfer matrix needed for
 source ZCL.  Simplicity is not used in this implication.
 
@@ -390,7 +390,7 @@ MPO can be divided by its trace.  With this normalization available, the two
 local channels transfer one site across a consecutive bipartition.  Data
 processing in both directions gives equality of the bipartite mutual
 informations, and `mutualInfoChain_eq_mutualInformation` identifies these with
-the chain quantities `I_L` and `I_{L+1}`.  No empty-chain condition is used.
+the chain quantities I_L and I_{L+1}.  No empty-chain condition is used.
 
 Source: arXiv:1606.00608, Proposition `propsimple`, Appendix C,
 lines 1333--1341. -/

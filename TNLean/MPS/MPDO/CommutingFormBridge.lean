@@ -25,8 +25,11 @@ Consequently, `MPOTensor.nonempty_etaLocalStructureData_of_isSAL` constructs
 the eta-local structure from injectivity and SAL alone. Zero correlation length
 is not used in Proposition C.8; it enters only in the later
 single-bond commuting-form-with-ZCL and RFP consequences. The source GSNNCH
-definition is recorded in `GSNNCHData`; constructing its outer sectors and
-natural multiplicities from the BNT decomposition remains open. See
+definition is recorded in `GSNNCHData`. Later modules prove generic assembly
+of orthogonal sectors with natural multiplicities and a BNT construction from
+projector-selection and sectorwise-SAL data. What remains open is an exact
+capstone from the five printed blockwise identities of Proposition `prop3to4`
+to that assembled family. See
 docs/paper-gaps/cpsv16_gsnnch_sector_decomposition.tex.
 
 ## Main declarations
@@ -230,9 +233,10 @@ Source: arXiv:1606.00608, Appendix C.2, Proposition 3to4, lines 1571--1593:
 the assembled neighboring operators give a commuting nearest-neighbor product
 form.
 
-**Scope restriction (single-bond presentation):** No equivalence with the
-orthogonal sector sum and natural multiplicities in item (iii) of Theorem 4.9
-is proved here. See
+**Scope restriction (single-bond presentation):** This file proves only the
+one-sector presentation. Later modules assemble supplied orthogonal sectors
+with natural multiplicities, but no theorem derives that family from exactly
+the five printed blockwise identities of Proposition `prop3to4`. See
 docs/paper-gaps/cpsv16_gsnnch_sector_decomposition.tex. -/
 theorem hasCommutingBondProductWithZCL
     (data : EtaLocalStructureData M) (hZCL : IsZCL M) :

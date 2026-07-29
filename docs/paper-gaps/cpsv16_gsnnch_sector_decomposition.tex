@@ -83,6 +83,39 @@ through a one-sector witness.\footnote{\raggedright Formal declarations:
 one-sector form is the commuting product form in which Proposition~C.8 states
 its conclusion for an injective tensor.
 
+\section{The printed blockwise implication}
+
+Appendix C Proposition \texttt{prop3to4}, lines~1786--1796, assumes five
+blockwise identities.  Four are the physical-sector factorization
+\texttt{AppUkU=rl}, positivity of the neighboring operators
+\texttt{Appetakhetc}, their rank-one trace formula
+\texttt{Apptralktrrk}, and the scalar normalization
+\texttt{AppPsiPhi}.  These are represented by the physical-sector
+factorization and neighboring trace-factorization data.
+
+The fifth identity, \texttt{AppKxKy=0}, is the unstarred vertical product
+\[
+  \mathcal K_y\mathcal K_x=0 \qquad (x\ne y).
+\]
+Equivalently, if \texttt{layerMul} denotes vertical MPO composition, then
+\[
+  \operatorname{layerMul}(\mathcal K_y,\mathcal K_x)=0.
+\]
+The source diagram contains no adjoint or conjugation.  This identity is not
+the mixed-transfer condition used for pure-state BNTs.
+
+The current general GSNNCH theorem starts after pairwise orthogonal one-site
+sector projections and supported positive commuting bonds have been supplied.
+The available BNT construction obtains those projections from left-inverse,
+three-site closure, Markov-sector, nonzero-closing, one-site spanning, and
+sectorwise-SAL hypotheses.  No theorem presently derives the supported
+orthogonal sector family from exactly the five identities above.  In
+particular, ordinary products of non-Hermitian physical slices do not by
+themselves provide the cross-adjoint products needed to identify orthogonal
+two-sided supports.  Closing the literal proposition therefore requires either
+a derivation of that adjoint closure from the complete BNT and positivity
+context, or a corrected statement exposing the missing support hypothesis.
+
 \section{Elimination plan}
 
 The first part of the original plan---positivity and translation invariance
@@ -155,8 +188,9 @@ two-site sector, and all cyclic translates of that lift commute pairwise on
 every periodic chain of length at least two.  Their product realizes the
 ambient finite-chain operator exactly, with normalization scalar one.  The
 supported products are assembled into the BNT outer sectors with their
-natural multiplicities.  This direct construction proves the GSNNCH
-implication without a reverse comparison with the auxiliary single-bond
-predicate.
+natural multiplicities.  This proves the GSNNCH implication under the
+projector-selection and sectorwise-SAL hypotheses.  The literal
+\texttt{prop3to4} implication from its five displayed identities remains the
+separate support question described above.
 
 \end{document}

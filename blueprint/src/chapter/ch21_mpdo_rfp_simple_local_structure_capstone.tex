@@ -202,12 +202,12 @@
 
 For $x\ne y$, the physical supports are locally orthogonal:
 \begin{center}
-    % Formula: (\mathcal K_y^*\mathcal K_x)^{ij}_{a_y a_x;b_y b_x}
-    % = \sum_q (\mathcal K_y^*)^{iq}_{a_y b_y}
+    % Formula: (\mathcal K_y\mathcal K_x)^{ij}_{a_y a_x;b_y b_x}
+    % = \sum_q (\mathcal K_y)^{iq}_{a_y b_y}
     % (\mathcal K_x)^{qj}_{a_x b_x}=0 for x\ne y.
     % Source: Papers/1606.00608/MPDO_KxKy.png and source TeX lines 863--868.
-    % Source verdict: the upper source glyph is plain \mathcal K_y, without a
-    % conjugate skin; here it is the source's adjoint-oriented upper occurrence.
+    % The upper source glyph is plain \mathcal K_y: the vertical contraction is
+    % ordinary MPO-layer multiplication, with no adjoint or conjugation.
     % Ink-to-index: q is the sole contracted physical index; the free indices
     % are west (a_y,a_x), east (b_y,b_x), up i, and down j.
     % LHS paired signature: boundary|virtual-west=2|virtual-east=2|
@@ -219,8 +219,8 @@ For $x\ne y$, the physical supports are locally orthogonal:
     \end{tenkz}
     $ = 0$
 \end{center}
-In contraction notation, local orthogonality is
-$\mathcal K_y^*\mathcal K_x=0$ whenever $x\ne y$.
+In contraction notation, local orthogonality is the vertical product
+$\mathcal K_y\mathcal K_x=0$ whenever $x\ne y$.
 This is \cite[Theorem~4.9(iv), lines~863--868]{Cirac2016MPDO_arXiv}.
 
 Expanding $\sum_jP_j=\Id$ on both physical indices and using the local
