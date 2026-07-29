@@ -117,6 +117,7 @@
 \int_new:N  \l__tenkz_kernel_row_advance_int  % maximum implicit span on current row
 \int_new:N  \l__tenkz_kernel_node_int         % address node serial
 \prop_new:N \l__tenkz_kernel_node_prop        % "id/field" -> value
+\prop_new:N \l__tenkz_kernel_leg_addr_prop    % leg path ids named by addresses
 \prop_new:N \l__tenkz_kernel_named_prop       % user name -> record id
 % Atoms whose labels need the silhouette / pairing / label render split.
 \prop_new:N \l__tenkz_kernel_skin_pairing_host_prop
@@ -394,6 +395,17 @@
       {
         \__tenkz_kernel_node_put:NnV
           \l__tenkz_kernel_parent_tl {cell} \l__tenkz_kernel_child_tl
+        % A leg address names a generated path.  Record that demand at the
+        % grammar boundary so the leg pass saves the path whether this node
+        % is a crossing operand or a place in its own right.
+        \prop_put:Nen \l__tenkz_kernel_leg_addr_prop
+          {
+            leg - \__tenkz_kernel_node_item:Nn
+              \l__tenkz_kernel_parent_tl {face}
+            - \__tenkz_kernel_node_item:Nn \l__tenkz_kernel_child_tl {row}
+            - \__tenkz_kernel_node_item:Nn \l__tenkz_kernel_child_tl {col}
+          }
+          { }
       }
       {
         \msg_error:nneeee {tenkz}{kernel-address-operand}
@@ -2768,6 +2780,7 @@
           }
         {port}   { \__tenkz_kernel_r_port:n {#2} }
         {outside} { \__tenkz_kernel_r_outside:n {#2} }
+        {leg} { \__tenkz_kernel_r_leg_place:n {#2} }
         {crossing}
           {
             \__tenkz_kernel_r_opid:eN
@@ -2819,6 +2832,30 @@
   }
 \cs_generate_variant:Nn \__tenkz_kernel_r_opid:nN { eN }
 
+% A leg used as a place is its record-side endpoint.  Generated leg paths run
+% from the carrying record outwards, so this is arclength fraction zero of the
+% same saved path a crossing operand names.
+\cs_new_protected:Npn \__tenkz_kernel_r_leg_place:n #1
+  {
+    \__tenkz_kernel_r_opid:nN {#1} \l__tenkz_kernel_ow_sid_tl
+    \exp_args:NV \__tenkz_kernel_r_curve_point:nnn
+      \l__tenkz_kernel_ow_sid_tl {0} {#1}
+  }
+
+% Convert one arclength point of a saved path into placement geometry.
+\cs_new_protected:Npn \__tenkz_kernel_r_curve_point:nnn #1#2#3
+  {
+    \__tenkz_string_bead:nnn {#1} {#2} {tenkz-on-#3}
+    \pgfpointanchor {tenkz-on-#3} {center}
+    \__tenkz_geom_store:nnn {#3}
+      {
+        \dim_to_fp:n { \use:c {pgf@x} } / \dim_to_fp:n { \tenkz@pitch }
+      }
+      {
+        \dim_to_fp:n { \use:c {pgf@y} } / \dim_to_fp:n { \tenkz@pitch }
+      }
+  }
+
 % `on w t` is the point at fraction t of wire w.  A curve is measured along
 % itself, so the engine answers the arclength question on the route it saved
 % before any crossing cut it; a wire that is a straight run between two ends
@@ -2850,18 +2887,10 @@
   {
     \__tenkz_kernel_r_sid:nN { \tl_use:N \l__tenkz_kernel_ow_a_tl }
       \l__tenkz_kernel_ow_sid_tl
-    \exp_args:Nee \__tenkz_string_bead:nnn
+    \exp_args:Nee \__tenkz_kernel_r_curve_point:nnn
       { \tl_use:N \l__tenkz_kernel_ow_sid_tl }
       { \tl_use:N \l__tenkz_kernel_ow_t_tl }
-      { tenkz-on-#1 }
-    \pgfpointanchor {tenkz-on-#1} {center}
-    \__tenkz_geom_store:nnn {#1}
-      {
-        \dim_to_fp:n { \use:c {pgf@x} } / \dim_to_fp:n { \tenkz@pitch }
-      }
-      {
-        \dim_to_fp:n { \use:c {pgf@y} } / \dim_to_fp:n { \tenkz@pitch }
-      }
+      {#1}
   }
 % the same fraction of a wire that runs straight between its two ends
 \cs_new_protected:Npn \__tenkz_kernel_r_onwire_run:n #1
@@ -5201,7 +5230,21 @@
           \l__tenkz_kernel_r_b_tl
         \quark_if_no_value:NTF \l__tenkz_kernel_r_b_tl
           {
-            \__tenkz_kernel_r_leg_ink:nnn {#1} {#2} { }
+            \prop_get:NeN \l__tenkz_kernel_leg_addr_prop
+              {
+                leg - #2 - \tl_use:N \l__tenkz_kernel_leg_row_tl
+                - \tl_use:N \l__tenkz_kernel_leg_col_tl
+              }
+              \l__tenkz_kernel_leg_reach_tl
+            \quark_if_no_value:NTF \l__tenkz_kernel_leg_reach_tl
+              { \__tenkz_kernel_r_leg_ink:nnn {#1} {#2} { } }
+              {
+                \__tenkz_kernel_r_leg_ink:nnn {#1} {#2}
+                  {
+                    leg - #2 - \tl_use:N \l__tenkz_kernel_leg_row_tl
+                    - \tl_use:N \l__tenkz_kernel_leg_col_tl
+                  }
+              }
           }
           {
             % reach = distance to the referencing string's nearest waypoint
@@ -8029,6 +8072,7 @@
     \__tenkz_model_reset:
     \__tenkz_geom_reset:
     \prop_clear:N \l__tenkz_kernel_node_prop
+    \prop_clear:N \l__tenkz_kernel_leg_addr_prop
     \prop_clear:N \l__tenkz_kernel_named_prop
     \prop_clear:N \l__tenkz_kernel_skin_pairing_host_prop
     \prop_clear:N \l__tenkz_kernel_skin_pairing_cross_prop

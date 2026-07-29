@@ -1,0 +1,15 @@
+% Regression: a policy leg is a place at the record-side end of its saved path.
+\documentclass{standalone}
+\usepackage{tenkz}
+\makeatletter
+\ExplSyntaxOn
+\file_input:n { tenkz-kernel.code.tex }
+\ExplSyntaxOff
+\makeatother
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[rows={wire}, cols=1, bonds=none, physical=up]
+  \tn[skin=box, name=A]{}
+  \tn[skin=dot, at=leg n of (1,1), name=on-leg]{}
+\end{tenkz}
+\end{document}
