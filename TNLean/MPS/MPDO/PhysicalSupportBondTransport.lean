@@ -67,6 +67,68 @@ theorem sitewisePhysicalMatrix_two_mul_conjTranspose
   rw [sitewisePhysicalMatrix_mul_conjTranspose,
     sitewisePhysicalMatrix_two_eq_twoSiteSectorProjection]
 
+/-- A product identity between one-site matrices is preserved on the
+corresponding two-site spaces.
+
+This is an elementary support consequence used between equation `PjKiPj` and
+the construction `generateMPDO` in arXiv:1606.00608, Appendix C.2, lines
+1688--1750. -/
+theorem twoSiteSectorProjection_mul_eq_of_mul_eq
+    (P Q R : Matrix (Fin d) (Fin d) ℂ) (hPQR : P * Q = R) :
+    twoSiteSectorProjection P * twoSiteSectorProjection Q =
+      twoSiteSectorProjection R := by
+  change
+    (Matrix.reindexAlgEquiv ℂ ℂ (finTwoArrowEquiv (Fin d)).symm)
+          (Matrix.kroneckerMap (· * ·) P P) *
+        (Matrix.reindexAlgEquiv ℂ ℂ (finTwoArrowEquiv (Fin d)).symm)
+          (Matrix.kroneckerMap (· * ·) Q Q) =
+      (Matrix.reindexAlgEquiv ℂ ℂ (finTwoArrowEquiv (Fin d)).symm)
+        (Matrix.kroneckerMap (· * ·) R R)
+  rw [← map_mul, ← Matrix.mul_kronecker_mul, hPQR]
+
+/-- If two one-site matrices absorb in both orders, then their two-site
+matrices satisfy the same two absorption identities.
+
+This is an elementary support consequence used between equation `PjKiPj` and
+the construction `generateMPDO` in arXiv:1606.00608, Appendix C.2, lines
+1688--1750. -/
+theorem twoSiteSectorProjection_absorbs_of_absorbs
+    (P Q : Matrix (Fin d) (Fin d) ℂ)
+    (hPQ : P * Q = Q) (hQP : Q * P = Q) :
+    twoSiteSectorProjection P * twoSiteSectorProjection Q =
+        twoSiteSectorProjection Q ∧
+      twoSiteSectorProjection Q * twoSiteSectorProjection P =
+        twoSiteSectorProjection Q := by
+  constructor
+  · exact twoSiteSectorProjection_mul_eq_of_mul_eq P Q Q hPQ
+  · exact twoSiteSectorProjection_mul_eq_of_mul_eq Q P Q hQP
+
+/-- A two-site matrix supported on an absorbed one-site subspace is also
+supported on the larger one-site subspace.
+
+This is an elementary support consequence used between equation `PjKiPj` and
+the construction `generateMPDO` in arXiv:1606.00608, Appendix C.2, lines
+1688--1750. -/
+theorem twoSiteSectorProjection_supported_of_supported_of_absorbs
+    (P Q : Matrix (Fin d) (Fin d) ℂ)
+    (hPQ : P * Q = Q) (hQP : Q * P = Q)
+    (B : Matrix (Fin 2 → Fin d) (Fin 2 → Fin d) ℂ)
+    (hB : twoSiteSectorProjection Q * B * twoSiteSectorProjection Q = B) :
+    twoSiteSectorProjection P * B * twoSiteSectorProjection P = B := by
+  obtain ⟨hPQ₂, hQP₂⟩ :=
+    twoSiteSectorProjection_absorbs_of_absorbs P Q hPQ hQP
+  calc
+    twoSiteSectorProjection P * B * twoSiteSectorProjection P =
+        twoSiteSectorProjection P *
+          (twoSiteSectorProjection Q * B * twoSiteSectorProjection Q) *
+            twoSiteSectorProjection P := by rw [hB]
+    _ = (twoSiteSectorProjection P * twoSiteSectorProjection Q) * B *
+          (twoSiteSectorProjection Q * twoSiteSectorProjection P) := by
+        simp only [Matrix.mul_assoc]
+    _ = twoSiteSectorProjection Q * B * twoSiteSectorProjection Q := by
+        rw [hPQ₂, hQP₂]
+    _ = B := hB
+
 namespace PhysicalSupportRestrictionData
 
 variable {P : Matrix (Fin d) (Fin d) ℂ} {K : MPOTensor d D}
