@@ -13,7 +13,7 @@ corresponding Lean declarations with `\lean{...}` and `\leanok` tags.
   blueprint.
 - `src/content_ft_mps.tex` contains the separate Fundamental Theorem of Matrix
   Product States volume, comprising exactly Chapters 1--12 through Symmetries
-  and String Order.
+  and String Order, followed by an auxiliary channel-theory chapter.
 - `src/print_ft_mps.tex` is the PDF entry point for that FT--MPS volume.
 - `src/macros/` contains blueprint-specific macros and diagram commands.
 - `src/references.bib` is the blueprint bibliography.
@@ -42,7 +42,8 @@ Build the separate FT--MPS volume from the repository root:
 ```
 
 This writes `blueprint/print/print12.pdf`, containing the Chapters 1--12
-FT--MPS volume. The full build remains at `blueprint/print/print.pdf`.
+FT--MPS volume together with its auxiliary channel-theory chapter. The full
+build remains at `blueprint/print/print.pdf`.
 
 ## Writing Conventions
 

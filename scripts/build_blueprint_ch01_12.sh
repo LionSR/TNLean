@@ -22,17 +22,27 @@ rsync -a --exclude='.tenkz_svg_cache/' \
   "$REPO_ROOT/blueprint/src/" "$WORK_DIR/blueprint/src/"
 cp -R "$REPO_ROOT/tex/tenkz" "$WORK_DIR/tex/tenkz"
 
-# Verify that the dedicated router contains exactly the ch01_* through ch12_*
-# sequence, in order and without duplicates, followed by the auxiliary chapter
-# that carries the channel-theory results the volume still cites.
+# Verify that the dedicated router contains the exact focused-volume chapter
+# sequence, in order and without duplicates.
 echo "==> Checking the FT--MPS chapter router..."
-expected="$(printf 'ch%02d\n' $(seq 1 12))
-ch12"
+expected="ch01_intro
+ch02_mps
+ch03_single
+ch04_channels
+ch05_schwarz
+ch06_qpf
+ch07_spectral
+ch08_wielandt
+ch09_canonical
+ch10_bnt
+ch11_fundamental_theorem_proof
+ch12_symmetry
+ch12_auxiliary_channel_theory"
 kept="$(grep '^[[:space:]]*\\input{chapter/' \
   "$WORK_DIR/blueprint/src/content_ft_mps.tex" \
-  | sed -E 's|.*chapter/(ch[0-9]{2})_.*|\1|')"
+  | sed -E 's|.*chapter/([^}]+).*|\1|')"
 if [ "$kept" != "$expected" ]; then
-  echo "::error::Active chapters are not ch01..ch12 followed by auxiliary channel theory; got:"
+  echo "::error::Active chapters do not match the focused-volume router; got:"
   echo "$kept"
   exit 1
 fi
