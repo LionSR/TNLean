@@ -1,8 +1,8 @@
 # tenkz migration dispositions
 
 This inventory is the migration ledger for issue #4748. It classifies the
-tracked tree at commit `c40b923493f29aa75799810ed297193526da51df`
-against the signed 1.0 contract in `LANGUAGE-1.0.md` §§9–12. The
+tracked tree on the PR's current base against the signed 1.0 contract in
+`LANGUAGE-1.0.md` §§9–12. The
 classification concerns the S4 surface switch, not whether a figure is
 mathematically or visually correct today. The committed disposition checker
 keeps the line inventory, fixture lists, and reconciliation tables synchronized
@@ -79,7 +79,7 @@ separate public-surface occurrence and therefore appears separately.
 | `ch21_mpdo_rfp_renormalization.tex` | — | — | L734 `tenkzcd` → `C-picture+C-policy+C-record+R-cd+R-record`<br>L736, 739, 742, 745 `tnpic` → `C-picture+C-policy+C-record+R-record` |
 | `ch21_mpdo_rfp_simple_local_closed_sector_contractions.tex` | — | — | L279, 284 `tenkz` → `C-policy+C-record+R-record` |
 | `ch21_mpdo_rfp_simple_local_inverse_map_factorization.tex` | — | — | L80, 131, 265, 270, 275, 282, 287 `tenkz` → `C-policy+C-record+R-record`<br>L715, 719 `tenkz` → `C-policy+R-record`<br>L70, 709 `tenkz` → `C-record+R-record`<br>L43, 48, 53 `tenkz` → `R-record`<br>L485 `tnpic` → `C-picture+C-policy+C-record+R-record` |
-| `ch21_mpdo_rfp_simple_local_neighboring_bond_contractions.tex` | — | — | L731, 740, 747, 754, 827, 833 `tenkz` → `C-policy+C-record+R-record` |
+| `ch21_mpdo_rfp_simple_local_neighboring_bond_contractions.tex` | — | — | L792, 801, 808, 815, 888, 894 `tenkz` → `C-policy+C-record+R-record` |
 | `ch21_mpdo_rfp_simple_local_normalized_preparations_controlled_partial_traces.tex` | — | — | L427 `tenkzcd` → `R-cd+R-record` |
 | `ch21_mpdo_rfp_simple_local_primitivity_active_trace_matrix.tex` | — | — | L188 `tenkz` → `C-record+R-record` |
 | `ch21_mpdo_rfp_simple_local_refinement_channels_physical_coordinates.tex` | — | — | L324, 329, 334, 344, 352, 357 `tnpic` → `C-picture+C-policy+C-record+R-record` |
