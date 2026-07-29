@@ -39,7 +39,7 @@ This constructs the sector family used in the later GSNNCH direct sum.
 
 **Scope restriction (projector-selection and sectorwise-SAL hypotheses):** The
 theorem assumes more than the five blockwise identities printed in CPSV16
-Appendix C.2, Proposition `prop3to4`, lines 1783--1792.  See
+Appendix C.2, Proposition `prop3to4`, lines 1786--1796.  See
 `docs/paper-gaps/cpsv16_gsnnch_sector_decomposition.tex`. -/
 theorem nonempty_orthogonalCommutingSectorFamily_of_bntSectorSAL
     (S : MPSTensor.SectorDecomposition (d * d))
@@ -102,7 +102,7 @@ constructed.
 
 **Scope restriction (supplied BNT sectors):** The hypotheses are stronger
 than the five blockwise identities printed in CPSV16 Appendix C.2,
-Proposition `prop3to4`, lines 1783--1792.  See
+Proposition `prop3to4`, lines 1786--1796.  See
 `docs/paper-gaps/cpsv16_gsnnch_sector_decomposition.tex`. -/
 theorem hasGSNNCHForm_of_bntSectorSAL
     (M : MPOTensor d D) (S : MPSTensor.SectorDecomposition (d * d))
