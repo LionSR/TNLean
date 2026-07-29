@@ -1,0 +1,64 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+
+\input{command}
+
+\title{Correlator Exponential Decay: Rate Above the Complementary Spectral Radius}
+\author{}
+\date{2026-07-29}
+
+\begin{document}
+\maketitle
+
+\section{The gap}
+
+The source~\cite[Section~II.B.3]{Cirac2021Matrix} states the connected
+correlator decays as $|C(X,Y;n)|\le C_{XY}|\lambda_2|^n$, where
+$\lambda_2$ is the largest subleading eigenvalue of the transfer map
+$\E_A$.  This is the exact subleading spectral radius.
+
+The Lean formalization \leanid{MPSTensor.correlation_length_bound}
+(Theorem~\ref{thm:correlation_length_bound}) obtains exponential decay
+at a rate $\xi>0$ via Gelfand's formula applied to
+$\E_A-P$, the complementary part of the transfer map.  Gelfand's
+formula yields $\|(\E_A-P)^n\|\le Cr^n$ for any $r$ with
+$\rho(\E_A-P)<r<1$, but not for $r=\rho(\E_A-P)$ itself when the
+spectral radius is achieved by a non-diagonalizable Jordan block.
+Consequently the rate delivered by the Gelfand route is some value
+strictly above the complementary spectral radius, not the exact
+subleading eigenvalue modulus.
+
+The unconditional correlator bound proved in this issue
+(\leanid{MPSTensor.connectedCorrelator_exp_decay}) therefore carries a
+\textbf{scope restriction}: the rate is strictly above the
+complementary spectral radius, not exactly $|\lambda_2|$.
+
+\section{The exact rate}
+
+The exact rate $|\lambda_2|^n$ requires an eigendecomposition of
+$\E_A$ (or, more generally, a Jordan decomposition) extracting the
+coefficients $c_j$ and eigenvalues $\lambda_j$.  That extraction is
+the sum-of-exponentials half of Issue~\#1447 and is not delivered by
+the present lemmas, which use only the norm-geometric estimate from
+Gelfand's formula.
+
+\section{What is not a discrepancy}
+
+The softened rate is not a paper error.  The paper's derivation of the
+exact rate $|\lambda_2|$ assumes a spectral expansion
+$C(X,Y;n)=\sum_j c_{XY}(j)\lambda_j^n$, which the formalization has
+not yet extracted.  The present bound is mathematically correct as a
+consequence of the complementary transfer-map gap alone, without any
+diagonalizability hypothesis.  It is stronger than the source statement
+in the sense that it does not require the transfer map to be
+diagonalizable, and weaker in that the rate is not exactly the
+subleading spectral radius.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}

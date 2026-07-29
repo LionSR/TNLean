@@ -13,6 +13,7 @@ import TNLean.MPS.Core.BlockingInfrastructure
 import TNLean.MPS.Core.BlockingTransfer
 import TNLean.MPS.Core.CPPrimitive
 import TNLean.MPS.Core.CanonicalNormalization
+import TNLean.MPS.Core.CorrelationDecay
 import TNLean.MPS.Core.Correlations
 import TNLean.MPS.Core.CyclicTrace
 import TNLean.MPS.Core.MultiBlock

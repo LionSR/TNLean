@@ -196,6 +196,56 @@ on decay rates.
     (Issue~\#1447).
 \end{remark}
 
+\begin{theorem}[Unconditional exponential decay of connected correlations
+    (rate above the complementary spectral radius)]%
+    \label{thm:correlator_exp_decay}
+    \lean{MPSTensor.connectedCorrelator_exp_decay}
+    \leanok
+    \uses{def:connected_correlator, thm:correlation_length_bound,
+        def:injective, def:transfer_map}
+    Fix an injective, trace-preserving MPS tensor $A$ and a right fixed
+    point $\rho$ of its transfer map with $\tr(\rho)=1$.
+    There exist $C>0$ and $\xi>0$ such that, for all $n\ge0$ and
+    $X,Y\in\MD$,
+    \begin{align}
+        |C(X,Y;n)|
+        &\le C\,\|X\|_{\!F}\,\|Y\|_{\!F}\,
+        e^{-n/\xi},
+        \label{eq:correlator_unconditional_decay}
+    \end{align}
+    where $\|\cdot\|_F$ is the Frobenius (Hilbert--Schmidt) norm.
+
+    The rate $\xi$ is strictly above the complementary transfer-map spectral
+    radius $\rho(\E_A-P)$.  This is a softened rate compared to the source
+    \cite[Section~II.B.3]{Cirac2021Matrix}, which gives the exact subleading
+    eigenvalue modulus $|\lambda_2|$.  The Gelfand-formula argument in
+    Theorem~\ref{thm:correlation_length_bound} does not reach the spectral
+    radius itself when it is attained by a non-diagonalizable Jordan block;
+    see the scope-restriction note
+    \path{docs/paper-gaps/correlator_decay_rate_above_spectral_radius.tex}.
+
+    The estimate is unconditional: the hypotheses are structural
+    (injectivity, trace preservation, fixed point) and do not ask the
+    caller to supply a spectral decomposition or bound.  Extracting the
+    exact eigenvalues and coefficients to obtain a pure sum of exponentials
+    (Theorem~\ref{thm:correlator_sum_exponentials}) remains the other half
+    of Issue~\#1447.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The connected correlator reduces to $\tr(Y\cdot\E_A^n(Z))$ where
+    $Z=X\rho-(\tr X\rho)\rho$ has trace zero.  Injectivity gives a
+    transfer-map gap and
+    Theorem~\ref{thm:correlation_length_bound} supplies
+    $\|\E_A^n(Z)\|_F\le C_0 e^{-n/\xi}\|Z\|_F$.  The factor
+    $\|Z\|_F\le\|\rho\|_F(1+\|\rho\|_F)\|X\|_F$ follows from entrywise
+    Frobenius-norm estimates, and
+    $|\tr(Y\cdot\E_A^n(Z))|\le\|Y\|_F\|\E_A^n(Z)\|_F$ is the finite-sum
+    Cauchy--Schwarz estimate for the trace of a product.
+    Absorbing $\|\rho\|_F$ into the constant gives the stated bound.
+\end{proof}
+
 \begin{definition}[Correlation length]\label{def:correlation_length}
     \lean{MPSTensor.correlationLength}
     \leanok
