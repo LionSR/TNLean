@@ -66,7 +66,7 @@ The forward proof first obtains the ambient HJPW identity
   W=\mathbf 1_A\otimes(U_B\otimes\mathbf 1_C).
   \label{eq:ambient-hjpw}
 \end{align}
-The supported matrices $\widehat\rho_j$ are the recovered physical states:
+The supported matrices $\widehat\rho_j$ are the sector output states:
 they are positive, have trace one, and have the prescribed common-factor
 marginals. The complementary blocks are zero. After reversing each middle
 fibre from the recovery order $B_j^R\otimes B_j^L$ to the HJPW order
@@ -81,7 +81,7 @@ set
 \end{align}
 Positivity gives $p_j\geq0$, and the ambient trace identity gives
 $\sum_jp_j=1$. On every supported sector, the right density operator is the
-recovered state $\widehat\rho_j$. When $p_j>0$, the left density operator is
+sector output state $\widehat\rho_j$. When $p_j>0$, the left density operator is
 $\omega_j/p_j$. Total positive-semidefinite normalization is applied only when
 the final \leanid{HayashiMarkovDecomposition} is formed. If a supported sector
 has $p_j=0$, this normalization chooses a left filler while preserving
@@ -93,7 +93,7 @@ fillers do not occur in the raw identity~\eqref{eq:ambient-hjpw}.
 
 \paragraph{Forward direction.}
 Equality in strong subadditivity gives the product-reference recovery identity
-on the supported input, the recovered conditional family, its common invariant
+on the supported input, the invariant conditional family, its common invariant
 block form, the ambient bipartite decomposition, and the pure-ancilla block
 action. Equations~(11), (14), and~(15) then give
 \eqref{eq:ambient-hjpw}. The probability and normalization argument above
@@ -620,30 +620,30 @@ factorization of TNLean's generic completed product-reference channel.
 
 The full-support invariant-state decomposition and preserving-operation block
 action used in \cite[Theorem~6]{HaydenJozsaPetzWinter2004} are formalized, as
-are the joint-support reduction and its application to the recovered
+are the joint-support reduction and its application to the invariant
 conditional family. The declarations
 \begin{center}
   \small
-  \leanid{Matrix.exists_recoveredConditionalBipartiteBlockForm_jointSupport}\\
-  \leanid{Matrix.exists_recoveredConditionalAmbientBipartiteBlockForm}\\
-  \leanid{Matrix.exists_recoveredDilationBlockUnitary}\\
-  \leanid{Matrix.RecoveredConditionalDilationBlockForm.ambient_tripartite_block_form}\\
-  \leanid{Matrix.exists_recoveredConditionalTripartiteBlockForm}
+  \leanid{Matrix.exists_markovBipartiteBlockForm_jointSupport}\\
+  \leanid{Matrix.exists_ambientMarkovBipartiteBlockForm}\\
+  \leanid{Matrix.exists_markovDilationBlockForm}\\
+  \leanid{Matrix.MarkovDilationBlockForm.ambient_tripartite_block_form}\\
+  \leanid{Matrix.exists_markovTripartiteBlockForm}
 \end{center}
 produce the positive unnormalized factors $\omega_j$, prove that their traces
-sum to one, produce the trace-one supported recovered states
+sum to one, produce the trace-one supported sector output states
 $\widehat\rho_j$, and establish~\eqref{eq:ambient-hjpw} with zero complementary
 blocks. The theorem
 \leanid{Matrix.hayashi_ssa_equality_characterization_forward} then sets
 $p_j=\operatorname{Re}\operatorname{tr}\omega_j$, reverses the fibre order,
 uses the adjoint middle-system unitary, and performs the final total
-normalization. Every supported right factor remains its recovered physical
-state, including in a zero-weight supported sector. A zero-weight supported
+normalization. Every supported right factor remains its sector output state,
+including in a zero-weight supported sector. A zero-weight supported
 sector may use a filler only on the left, whereas a complementary sector may
 use fillers on both sides.
 
 The singular-support recovery scope is unchanged. Equality in data processing
-gives the raw support-Petz recovery identity, and on the recovered marginal the
+gives the raw support-Petz recovery identity, and on the Petz output marginal the
 chosen completed local channel agrees with that raw map. No tensor-product
 factorization is claimed for the generic completed singular product-reference
 channel away from the supported input.
@@ -654,7 +654,7 @@ channel away from the supported input.
 strong-subadditivity equality characterization are proved, and their
 biconditional is axiom-free. The forward proof derives the ambient HJPW blocks,
 uses $p_j=\operatorname{Re}\operatorname{tr}\omega_j$ with nonnegative weights
-summing to one, preserves the recovered trace-one states on supported sectors,
+summing to one, preserves the trace-one sector output states on supported sectors,
 and introduces arbitrary normalized fillers only where the final weight is
 zero. The middle fibres are read in $B_j^L\otimes B_j^R$ order, and the Hayashi
 unitary has the adjoint orientation required by~\eqref{eq:ambient-hjpw}.
