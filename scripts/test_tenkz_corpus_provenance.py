@@ -196,6 +196,16 @@ def test_ink_environment_owner() -> None:
         alignment_cells,
     ):
         raise AssertionError("alignment-cell scope leaked the kernel owner")
+    nested_alignment_tokens = (
+        r"\begin{aligned}"
+        r"\tenkzkernel\begin{tenkz}A&B\\C\end{tenkz}"
+        r"\begin{tenkz}\end{tenkz}"
+        r"\end{aligned}"
+    )
+    if ink_environment_problems(
+        "good", "Canonical public kernel pictures.", nested_alignment_tokens
+    ):
+        raise AssertionError("nested picture tokens reset an outer alignment cell")
 
 
 def main() -> int:

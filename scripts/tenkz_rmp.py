@@ -247,7 +247,8 @@ def used_ink_environment_families(body: str) -> set[str]:
             or token.group("rowbreak") is not None
         ) and alignment_scopes:
             _, scope_index, inherited_kernel = alignment_scopes[-1]
-            kernel_scope[scope_index] = inherited_kernel
+            if len(kernel_scope) == scope_index + 1:
+                kernel_scope[scope_index] = inherited_kernel
         elif text in {r"\tnpic", r"\tntree"}:
             families.add("tenkz")
     return families
