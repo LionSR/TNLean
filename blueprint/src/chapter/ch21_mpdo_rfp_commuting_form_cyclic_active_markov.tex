@@ -1,3 +1,119 @@
+\begin{theorem}[Finite-chain normalization under nonzero proportionality]
+    \label{thm:mpdo_finite_chain_normalized_proportionality}
+    \lean{MPOTensor.normalizedMPO_eq_of_nonzeroProportionalMPV₂_at}
+    \leanok
+    \uses{def:mpo_tensor, def:mpv}
+    Let $M$ and $C$ be MPO tensors, possibly of different bond dimensions,
+    and fix a chain length $N$. Write
+    \begin{align}
+        \widehat\rho^{(N)}(M)
+        &=
+        \tr\!\left[\rho^{(N)}(M)\right]^{-1}\rho^{(N)}(M),
+        \notag
+    \end{align}
+    with the inverse of zero understood to be zero. Suppose that, for some
+    $c\in\C\setminus\{0\}$, the doubled-index matrix-product vectors satisfy
+    $\ket{V^{(N)}(M)}=c\ket{V^{(N)}(C)}$. Then
+    \begin{align}
+        \widehat\rho^{(N)}(M)
+        &=
+        \widehat\rho^{(N)}(C).
+        \notag
+    \end{align}
+
+    The proportionality hypothesis is the finite-length form of the
+    hypothesis in \cite[Theorem~2.10]{Cirac2016MPDO_arXiv}. The conclusion is
+    an auxiliary cancellation used in the comparison preceding
+    \cite[Appendix~C.2, lines~1597--1619]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+
+\begin{proof}\leanok
+    Reading a doubled physical index as a ket--bra pair gives
+    $\rho^{(N)}(M)=c\rho^{(N)}(C)$, and hence
+    $\tr[\rho^{(N)}(M)]=c\tr[\rho^{(N)}(C)]$. Since $c\ne0$,
+    \begin{align}
+        \bigl(c\tr[\rho^{(N)}(C)]\bigr)^{-1}
+        c\rho^{(N)}(C)
+        &=
+        \tr[\rho^{(N)}(C)]^{-1}\rho^{(N)}(C).
+        \notag
+    \end{align}
+    This identity also holds when the two proportional traces vanish.
+\end{proof}
+
+\begin{theorem}[Finite-chain reduced marginals under nonzero proportionality]
+    \label{thm:mpdo_finite_chain_reduced_proportionality}
+    \lean{MPOTensor.reducedBlockState_eq_of_nonzeroProportionalMPV₂_at}
+    \leanok
+    \uses{def:block_entropy, def:mpv}
+    Under the hypotheses of
+    Theorem~\ref{thm:mpdo_finite_chain_normalized_proportionality}, for every
+    $L\leq N$ the reduced operators on the first $L$ sites agree:
+    \begin{align}
+        \tr_{N-L}\!\left[\widehat\rho^{(N)}(M)\right]
+        &=
+        \tr_{N-L}\!\left[\widehat\rho^{(N)}(C)\right].
+        \notag
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpdo_finite_chain_normalized_proportionality}
+    Apply the same finite-index identification and partial trace to both
+    sides of
+    Theorem~\ref{thm:mpdo_finite_chain_normalized_proportionality}.
+\end{proof}
+
+\begin{theorem}[Eventual equality of normalized finite-chain operators]
+    \label{thm:mpdo_eventual_normalized_proportionality}
+    \lean{MPSTensor.EventuallyNonzeroProportionalMPV₂.%
+      eventually_normalizedMPO_eq}
+    \leanok
+    \uses{def:eventually_nonzero_proportional_mpv, def:mpo_tensor}
+    If the doubled-index tensors of $M$ and $C$ are eventually nonzero
+    proportional, then, for every sufficiently large $N$,
+    \begin{align}
+        \widehat\rho^{(N)}(M)
+        &=
+        \widehat\rho^{(N)}(C).
+        \notag
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpdo_finite_chain_normalized_proportionality}
+    At each sufficiently large length, apply
+    Theorem~\ref{thm:mpdo_finite_chain_normalized_proportionality} to the
+    nonzero proportionality scalar at that length.
+\end{proof}
+
+\begin{theorem}[Eventual equality of fixed-size reduced marginals]
+    \label{thm:mpdo_eventual_reduced_proportionality}
+    \lean{MPSTensor.EventuallyNonzeroProportionalMPV₂.%
+      eventually_reducedBlockState_eq}
+    \leanok
+    \uses{def:eventually_nonzero_proportional_mpv, def:block_entropy}
+    If the doubled-index tensors of $M$ and $C$ are eventually nonzero
+    proportional, then for each fixed $L$ and every sufficiently large
+    $N\geq L$,
+    \begin{align}
+        \tr_{N-L}\!\left[\widehat\rho^{(N)}(M)\right]
+        &=
+        \tr_{N-L}\!\left[\widehat\rho^{(N)}(C)\right].
+        \notag
+    \end{align}
+    This equality alone does not identify the virtual sector families of
+    $M$ and $C$, and therefore does not prove the rank-one separation or the
+    Markov decomposition asserted in
+    \cite[Appendix~C.2, lines~1597--1619]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpdo_finite_chain_reduced_proportionality}
+    At each sufficiently large length, apply
+    Theorem~\ref{thm:mpdo_finite_chain_reduced_proportionality}.
+\end{proof}
+
 \begin{lemma}[Marginal stability under source zero correlation length]
     \label{lem:mpdo_source_zcl_marginal_stability}
     \lean{MPOTensor.%
