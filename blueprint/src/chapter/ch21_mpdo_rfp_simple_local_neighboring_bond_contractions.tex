@@ -133,14 +133,11 @@
     The ordinary neighboring contraction is the case $P=I$.
 \end{definition}
 
-\begin{theorem}[Virtual compression of a physical-sector factorization]
-    \label{thm:mpdo_physical_sector_factorization_virtual_compression}
-    \lean{MPOTensor.PhysicalSectorFactorization.ofVirtualCompression,
-      MPOTensor.PhysicalSectorFactorization.ofVirtualCompression_neighboringOperator}
+\begin{definition}[Virtual compression of a physical-sector factorization]
+    \label{def:mpdo_physical_sector_factorization_virtual_compression}
+    \lean{MPOTensor.PhysicalSectorFactorization.ofVirtualCompression}
     \leanok
-    \uses{def:mpdo_physical_sector_factorization,
-      def:mpdo_minimal_neighboring_operator,
-      def:mpdo_matrix_weighted_neighboring_operator}
+    \uses{def:mpdo_physical_sector_factorization}
     Let $K$ and $L$ have virtual dimensions $D$ and $E$, respectively, and
     suppose that a rectangular matrix $V\in M_{D\times E}(\C)$ satisfies the
     following identity for every physical index $i$:
@@ -149,17 +146,32 @@
         \notag
     \end{align}
     Every physical-sector factorization of $K$ induces one of $L$ with the
-    same physical decomposition.  Its neighboring operators satisfy
+    same physical decomposition.
+    This construction combines the virtual corner in
+    \cite[Section~2.3, lines~195--219]{Cirac2016MPDO_arXiv} with the
+    physical-sector factorization in
+    \cite[Appendix~C.2, lines~1381--1439]{Cirac2016MPDO_arXiv}.
+\end{definition}
+
+\begin{theorem}[Neighboring operators under virtual compression]
+    \label{thm:mpdo_physical_sector_factorization_virtual_compression_neighbor}
+    \lean{MPOTensor.PhysicalSectorFactorization.ofVirtualCompression_neighboringOperator}
+    \leanok
+    \uses{def:mpdo_minimal_neighboring_operator,
+      def:mpdo_matrix_weighted_neighboring_operator,
+      def:mpdo_physical_sector_factorization_virtual_compression}
+    The neighboring operators of the factorization obtained by virtual
+    compression satisfy
     \begin{align}
         \eta^L_{k,h}
         &=\eta^K_{k,h}(VV^\dagger).
         \notag
     \end{align}
     No positivity of the right-hand side is asserted.
-    The construction combines the virtual corner in
+    This identity combines the virtual corner in
     \cite[Section~2.3, lines~195--219]{Cirac2016MPDO_arXiv} with the
-    physical-sector factorization and neighboring contraction in
-    \cite[Appendix~C.2, lines~1381--1450]{Cirac2016MPDO_arXiv}.
+    neighboring contraction in
+    \cite[Appendix~C.2, lines~1441--1450]{Cirac2016MPDO_arXiv}.
 \end{theorem}
 
 \begin{proof}
