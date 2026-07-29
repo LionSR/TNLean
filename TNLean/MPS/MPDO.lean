@@ -37,6 +37,7 @@ import TNLean.MPS.MPDO.BNTProjectorSelection
 import TNLean.MPS.MPDO.BNTRightTripleFusion
 import TNLean.MPS.MPDO.BNTSectorAnalyticProperties
 import TNLean.MPS.MPDO.BNTSectorAreaLaw
+import TNLean.MPS.MPDO.BNTSectorCoefficientPositivity
 import TNLean.MPS.MPDO.BNTSectorCommutingFamily
 import TNLean.MPS.MPDO.BNTSeparatingProjectors
 import TNLean.MPS.MPDO.BNTSourceSectorProjectors
@@ -119,6 +120,7 @@ import TNLean.MPS.MPDO.FixedBondProductEtaTensor
 import TNLean.MPS.MPDO.FixedBondProductTensor
 import TNLean.MPS.MPDO.FusionIsometries
 import TNLean.MPS.MPDO.GSNNCHOrthogonalSectors
+import TNLean.MPS.MPDO.GSNNCHSectorRescaling
 import TNLean.MPS.MPDO.GSNNCHSectorSum
 import TNLean.MPS.MPDO.GroupedFigure8
 import TNLean.MPS.MPDO.GroupedGramNormalization

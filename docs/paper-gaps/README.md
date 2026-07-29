@@ -70,11 +70,13 @@ For MPDO renormalization fixed points:
   canonical physical restriction without unused complementary directions,
   the compressed neighboring operators remain positive by explicit
   congruence, and the resulting positive commuting bonds are supported on the
-  printed absorbing projections. A common-copy-weight theorem combines these
-  bonds with all five printed identities and the natural BNT multiplicities.
-  Proposition `prop3to4` remains partial because copy independence is not one
-  of its five hypotheses: the paper obtains it earlier from `lemmus`, whose
-  hypothesis includes source ZCL.
+  printed absorbing projections. Proposition `prop3to4` is complete under its
+  five printed identities and the standing Case II assumptions: orthogonal
+  compression makes every fixed-length sector coefficient nonnegative, and an
+  \(N\)-th-root rescaling of the supported bond preserves the natural BNT
+  multiplicity. This chainwise proof requires no copy independence. The note
+  also records that the printed invocation of `lemmus` is invalid because its
+  source-ZCL hypothesis is absent from the proposition.
 - `cpgsv17_mpdo_sal_zcl_eta_local_structure.tex` records the missing
   coherent positive choice for the inverse-map neighboring operators in
   Appendix C.2. The comparison with the conjugated Hayashi decomposition,
