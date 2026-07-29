@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.CanonicalForm.NormalTensorGauge
 import TNLean.MPS.FundamentalTheorem.SectorBNT.Basic
+import TNLean.MPS.Tactic.Basic
 
 /-!
 # Single-sector BNT canonical forms
@@ -103,10 +104,10 @@ theorem IsNormalTensor.exists_gaugeEquiv_singleSectorDecomposition
   have hBNT : IsBNTCanonicalForm (singleSectorDecomposition B) :=
     isBNTCanonicalForm_singleSectorDecomposition hIrr hLeft hSelf
   refine ⟨B, hGauge, hBNT, ?_⟩
-  intro N _hN τ
+  mpv_ext
   calc
-    mpv A τ = mpv B τ := GaugeEquiv.sameMPV hGauge N τ
-    _ = mpv (singleSectorDecomposition B).toTensor τ := by
+    mpv A σ = mpv B σ := GaugeEquiv.sameMPV hGauge N σ
+    _ = mpv (singleSectorDecomposition B).toTensor σ := by
       rw [(singleSectorDecomposition B).mpv_toTensor_eq_sum_coeff]
       simp [singleSectorDecomposition, SectorDecomposition.coeff, SectorWeightData.coeff]
 

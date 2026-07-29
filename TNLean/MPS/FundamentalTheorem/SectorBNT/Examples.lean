@@ -32,6 +32,14 @@ namespace SectorBNT.Examples
 
 variable {d D : ℕ}
 
+/-! ## Compatibility alias -/
+
+/-- Deprecated alias for `singleSectorDecomposition`. -/
+@[deprecated singleSectorDecomposition (since := "2026-07-29")]
+noncomputable abbrev singletonDecomp (C : MPSTensor d D) :
+    SectorDecomposition d :=
+  singleSectorDecomposition C
+
 /-! ## Example 1 — single sector, single copy -/
 
 /-- **Example 1**: a single BNT sector with a single copy and weight `1`. -/
