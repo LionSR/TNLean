@@ -48,24 +48,23 @@ theorem. This is tracked by issue #873 under the proposition-level tracker #81.
 
 ## 2. Coverage crosswalk: CPSV16 (arXiv:1606.00608)
 
-At Lean revision `dc475473a`, after the normal-tensor RFP characterization and the trace-normalized RFP-to-ZCL-and-SAL result, the paper has 45 theorem-like occurrences and 40 distinct results. The occurrence-level count is 22 complete, 11 partial, and 12 not-ready; the distinct-result count is 20 complete, 9 partial, and 11 not-ready. Here **not-ready** means that the printed statement is false, ambiguous, or depends essentially on a formally refuted source lemma. It does not mean that every printed result has been formalized.
+At Lean revision `3538c3f10`, after the normal-tensor RFP characterization and the trace-normalized RFP-to-ZCL-and-SAL result, the paper has 45 theorem-like occurrences and 40 distinct results. The occurrence-level count is 18 complete, 13 partial, and 14 not-ready; the distinct-result count is 17 complete, 11 partial, and 12 not-ready. Here **not-ready** means that the printed statement is false, ambiguous, or depends essentially on a formally refuted source lemma. It does not mean that every printed result has been formalized.
 
 The distinct count is the 40 source `thm`, `prop`, `cor`, and `lem`
 environments. The occurrence count adds five Appendix A/D restatements.
 The following ledger makes the count reproducible from source line numbers:
 
-- **Complete (20 distinct):** 249, 253, 342, 349, 606, 945, 1080, 1121,
-  1130, 1274, 1333, 1351, 1406, 1510, 1569, 1647, 1680, 1786, 1835, and
-  2221.
-- **Partial (9 distinct):** 278, 398, 583, 801, 851, 972, 1013, 1597,
-  and 1801.
-- **Not-ready (11 distinct):** 354, 500, 534, 543, 777, 1155, 1197,
+- **Complete (17 distinct):** 249, 253, 606, 945, 1080, 1121, 1130,
+  1274, 1333, 1351, 1406, 1510, 1569, 1647, 1680, 1835, and 2221.
+- **Partial (11 distinct):** 278, 342, 398, 583, 801, 851, 972, 1013,
+  1597, 1786, and 1801.
+- **Not-ready (12 distinct):** 349, 354, 500, 534, 543, 777, 1155, 1197,
   1484, 1503, 1740, and 1810.
 - **Additional occurrences:** the Appendix A restatements at 1137, 1167,
-  and 1172 inherit partial, complete, and not-ready status, respectively; the
+  and 1172 inherit partial, not-ready, and not-ready status, respectively; the
   Appendix D restatements at 1863 and 1929 inherit complete and partial status.
-  Thus the five restatements add two complete, two partial, and one not-ready
-  occurrence, giving the displayed totals 22/11/12.
+  Thus the five restatements add one complete, two partial, and two not-ready
+  occurrences, giving the displayed totals 18/13/14.
 
 Definitions, equations, and explanatory proof-segment rows are not counted.
 In particular, Eq. `II_XAX` at 1072--1077 is excluded, while the purification
@@ -82,8 +81,8 @@ segments of Theorems 3.1 and 3.10, not additional theorem occurrences.
 | Prop (l.253) | 253–255 | Projector criterion for canonical form | `TNLean/MPS/CanonicalForm/ProjectorClosureSpectral.lean` (`MPSTensor.exists_normalTensor_blockDecomp_with_isometry_of_hasInvariantProjectorClosure`) | **complete**; #2634 closed |
 | Prop 2.7 (l.278, `prop:char-BNT`) | 278–280 | BNT characterization: every active canonical-form normal tensor is gauge-phase-equivalent to a basis element | `TNLean/MPS/CanonicalForm/BNTCharacterization.lean` (`MPSTensor.isCPSVBasisOfNormalTensors_iff_canonicalForm_covered_and_minimal`) | **partial** — the active-block characterization is complete, but positive-length MPVs cannot determine listed zero-weight blocks; see `docs/paper-gaps/cpsv16_bnt_characterization_active_blocks.tex` |
 | Defn "injective" (l.317, `defnbi`) | 317–322 | A normal tensor is injective when its matrices span the full matrix algebra; biCF is block-injective canonical form | `TNLean/MPS/Defs.lean` (`MPSTensor.IsInjective`) and the biCF development under `TNLean/MPS/MPDO/BiCFDerivation/` | `leanok` |
-| Prop (l.342, `propblockinj`) | 342–345 | After blocking at most $3D^5$ spins, any canonical-form tensor becomes biCF | `TNLean/MPS/MPDO/BiCFDerivation/BNTDirectSum.lean` (`IsBNTCanonicalForm.exists_basis_wordTupleSpanTop_le_three_totalDim_pow_five`) with `MPSTensor.hasBiCF_of_wordTupleSpanTop` | **complete** — the theorem gives the simultaneous span, hence biCF, for the chosen BNT representatives at a positive length bounded by $3D^5$; inactive listed coordinates are not additional BNT representatives |
-| **Theorem II.1** (l.349, `thm1`) | 349–352 | Fundamental theorem of MPVs, proportional case | `TNLean/MPS/FundamentalTheorem/SectorBNT/FundamentalCoord.lean` (`MPSTensor.fundamentalTheorem_proportional_canonicalForm`) | **complete** — from proportional MPV families, the theorem gives exactly the source conclusion for the chosen BNTs: a sector bijection, matched bond dimensions, unit phases, and invertible block gauges |
+| Prop (l.342, `propblockinj`) | 342–345 | After blocking at most $3D^5$ spins, any canonical-form tensor becomes biCF | `TNLean/MPS/MPDO/BiCFDerivation/BNTDirectSum.lean` (`IsBNTCanonicalForm.exists_basis_wordTupleSpanTop_le_three_totalDim_pow_five`) with `MPSTensor.hasBiCF_of_wordTupleSpanTop` | **partial** — the bound is proved for the stronger packaged `IsBNTCanonicalForm` surface, but the printed proposition starts from literal canonical form; the zero-weight ambiguity in Proposition 2.7 prevents the missing unconditional conversion |
+| **Theorem II.1** (l.349, `thm1`) | 349–352 | Fundamental theorem of MPVs, proportional case | `TNLean/MPS/FundamentalTheorem/SectorBNT/FundamentalCoord.lean` (`MPSTensor.fundamentalTheorem_proportional_canonicalForm`); `TNLean/MPS/CanonicalForm/BNTUniqueness.lean`; `docs/paper-gaps/cpsv16_bnt_uniqueness_zero_coefficient.tex` | **not-ready** — the printed BNT definition permits adjoining an unrelated normal tensor with coefficient zero at every length. The formal one-versus-two-element BNT example for the same tensor refutes the asserted equality of BNT cardinalities. The Lean fundamental theorem proves the corrected active, nonzero, converse-covered BNT statement |
 | **Corollary II.2** (l.354, `II_cor2`) | 354–361 | Equal MPVs imply conjugacy by an invertible matrix | `TNLean/MPS/FundamentalTheorem/SectorBNT/FundamentalCoord.lean` (`MPSTensor.fundamentalTheorem_equal_canonicalForm`); `docs/paper-gaps/cpsv16_bnt_characterization_active_blocks.tex` | **not-ready** — literal canonical form permits inactive zero-weight blocks, which positive-length MPVs cannot detect; tensors with equal MPVs may therefore have different ambient dimensions, contradicting the printed dimension and global-conjugacy conclusion |
 
 ### 2.2 Section III — Pure States: Renormalization of MPS (RFP / ZCL / NNCPH)
@@ -129,7 +128,7 @@ segments of Theorems 3.1 and 3.10, not additional theorem occurrences.
 | **Corollary `Lem1`** (l.1130) | 1130–1133 | Orthogonal normal MPVs are eventually linearly independent | `TNLean/MPS/CanonicalForm/PhaseClassSectorData.lean`; `TNLean/MPS/BNT/Basic.lean` | **complete** |
 | Restatement of `prop:char-BNT` | 1137–1142 | BNT characterization | `TNLean/MPS/CanonicalForm/BNTCharacterization.lean` | **partial restatement** — inherits the zero-weight ambiguity at lines 278–280 |
 | **Lemma `Lem:app_simple`** (l.1155) | 1155–1163 | Equality of finite power sums implies equality of multisets | `TNLean/Algebra/ScalarPowerSumIdentity.lean`; `docs/paper-gaps/power_sum_alternative_route.tex` | **not-ready** — the positive-power sums of \([1]\) and \([1,0]\) agree although the multisets differ; the formal alternatives either assume nonzero entries or conclude equality only after filtering out zeros |
-| Restatement of `thm1` | 1167–1170 | Proportional fundamental theorem | `TNLean/MPS/FundamentalTheorem/SectorBNT/FundamentalCoord.lean` (`MPSTensor.fundamentalTheorem_proportional_canonicalForm`) | **complete restatement** — the Lean theorem gives the BNT bijection, dimensions, phases, and gauges asserted here |
+| Restatement of `thm1` | 1167–1170 | Proportional fundamental theorem | `TNLean/MPS/FundamentalTheorem/SectorBNT/FundamentalCoord.lean` (`MPSTensor.fundamentalTheorem_proportional_canonicalForm`); `TNLean/MPS/CanonicalForm/BNTUniqueness.lean`; `docs/paper-gaps/cpsv16_bnt_uniqueness_zero_coefficient.tex` | **not-ready restatement** — inherits the formal unequal-cardinality counterexample to the unrestricted printed BNT comparison |
 | Restatement of `II_cor2` | 1172–1179 | Equal-MPV fundamental theorem | `TNLean/MPS/FundamentalTheorem/SectorBNT/FundamentalCoord.lean` (`MPSTensor.fundamentalTheorem_equal_canonicalForm`); `docs/paper-gaps/cpsv16_bnt_characterization_active_blocks.tex` | **not-ready restatement** — mirrors the inactive zero-weight block obstruction to Corollary II.2 |
 | **Corollary `thm:Fundamental-CFII`** (l.1197) | 1197–1199 | CFII refinement with unitary global and block gauges | `TNLean/MPS/FundamentalTheorem/SectorBNT/FundamentalCoord.lean` (`MPSTensor.fundamentalTheorem_equal_canonicalForm_unitary`) and `SectorBNT/Unitary.lean`; `docs/paper-gaps/cpsv16_bnt_characterization_active_blocks.tex`; `docs/paper-gaps/cpsv16_global_vs_persector_unit_witness.tex` | **not-ready** — literal CFII still permits zero weights and therefore inherits Corollary II.2's false dimension and global-unitary conclusion; the Lean unitary theorem covers the active, nonzero BNT surface |
 
@@ -157,7 +156,7 @@ segments of Theorems 3.1 and 3.10, not additional theorem occurrences.
 | Lemma `lemmus` | 1647–1650 | ZCL makes repeated-copy weights independent of the copy index | `TNLean/MPS/MPDO/SimpleTensor.lean` (`MPOTensor.weight_copy_independent_of_isSourceZCL`) | **complete** |
 | Lemma | 1680–1691 | SAL gives separating orthogonal projectors | `TNLean/MPS/MPDO/BNTSeparatingProjectors.lean`; `BNTSourceSectorProjectors.lean` | **complete** |
 | Prop `prop2to3` | 1740–1743 | SAL and ZCL imply the blockwise structural form | `TNLean/MPS/MPDO/BNTSeparatingProjectors.lean`; `BNTSourceSectorProjectors.lean`; `docs/paper-gaps/cpgsv17_pf_rank_one.tex` | **not-ready** — the printed proof requires the false rank-one conclusion of Lemma C.5 |
-| Prop `prop3to4` | 1786–1789 | Blockwise structure gives the GSNNCH form | `TNLean/MPS/MPDO/BNTSectorCommutingFamily.lean` (`hasGSNNCHForm_of_bntSectorSAL`); `GSNNCHOrthogonalSectors.lean` | **complete** — the source-context assembly constructs the orthogonally supported positive commuting sector products and combines them with the natural BNT multiplicities to give the exact GSNNCH form for every periodic chain of length at least two |
+| Prop `prop3to4` | 1786–1796 | Blockwise structure gives the GSNNCH form | `TNLean/MPS/MPDO/CommutingFormBridge.lean` (`EtaLocalStructureData.hasGSNNCHForm`); `GSNNCHOrthogonalSectors.lean` (`hasGSNNCHForm_of_orthogonalCommutingSectorFamily`, `hasGSNNCHForm_of_commonWeightAbsorbedBasisMPOTensor`); `BNTSectorCommutingFamily.lean` (`hasGSNNCHForm_of_bntSectorSAL`) | **partial** — the one-sector positive commuting product is proved for every chain length $N\ge2$, and the generic orthogonal outer-sector sum is assembled with pairwise commuting translated bonds and natural multiplicities. The BNT construction obtains such a family from projector-selection, closure, inverse, word-span, and sectorwise-SAL data. No theorem currently takes exactly the printed hypotheses `AppKxKy=0`, `AppUkU=rl`, `Appetakhetc`, `Apptralktrrk`, and `AppPsiPhi` and returns the multi-sector GSNNCH conclusion |
 | Prop `prop4to2` | 1801–1804 | GSNNCH gives SAL | `TNLean/MPS/MPDO/OrthogonalSectorAreaLaw.lean`; `LocalOrthogonalSumAreaLaw.lean`; `PhysicalSectorFactorization.lean`; `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex` | **partial** — the statement omits the ZCL hypothesis used in its proof; the corrected sectorwise-ZCL result still depends on #4175/#4459 |
 | Prop `prop2to5` | 1810–1813 | SAL and ZCL give the two trace-preserving maps | `TNLean/MPS/MPDO/PhysicalSectorCoarseGrainingIdentity.lean`; `PhysicalSectorRefinementIdentity.lean`; `PhysicalSectorBlockedRFP.lean` | **not-ready** — the conditional maps are constructed, but deriving their neighboring trace factorization from the printed hypotheses uses false Lemma C.5 |
 
@@ -272,21 +271,31 @@ under #2633.
 
 ---
 
-## 5. Note on Theorem 4.4 (CPSV21) naming
+## 5. CPSV21 Theorem 4.4 and Corollary 4.5
 
-The sector-BNT proportional theorem is the source-faithful formalization of
-CPSV16 Theorem II.1: the source states its conclusion for the chosen BNT
-representatives. It does not discharge the inactive zero-weight ambiguity in
-the stronger ambient-dimension and global-conjugacy conclusion of Corollary
-II.2. CPSV21 Theorem 4.4 is the corresponding proportional fundamental
-theorem; it should not be confused with the older single-block or conditional
-sector-matching reductions.
+CPSV21 Definition 4.2 retains the weak BNT clauses of CPSV16: an unrelated
+normal representative may be added to the chosen BNT with coefficient zero at
+every length. The underlying canonical tensor may nevertheless have only its
+original summand, with actual coefficient one. Thus the formal one-versus-two
+BNT example literally refutes the equality of chosen-BNT cardinalities in
+CPSV21 Theorem 4.4. The sector-BNT proportional theorem is an explicitly
+restricted correction of CPSV16 Theorem II.1 and CPSV21 Theorem 4.4, not
+complete coverage of either unrestricted statement.
 
-| Lean declaration | Paper | CPSV16 relation |
+CPSV21 Corollary 4.5 has a different surface. It concerns the ambient canonical
+tensors themselves, and the standing construction at lines 1801--1808 gives
+their actual direct-sum summands positive coefficients. The extraneous BNT
+representative used in the unequal-cardinality counterexample is not an ambient
+canonical summand. Consequently that counterexample does not refute Corollary
+4.5 and does not impose a zero-weight correction on it. The current equal
+theorem is only a packaged SectorBNT analogue of Corollary 4.5 until a bridge
+from CPSV21 canonical form to the SectorBNT hypotheses is supplied.
+
+| Lean declaration | CPSV21 relation | CPSV16 relation |
 |---|---|---|
-| `MPSTensor.fundamentalTheorem_proportional_canonicalForm` | CPSV21 Theorem 4.4 | CPSV16 Theorem II.1 (`thm1`) |
-| `MPSTensor.fundamentalTheorem_equal_canonicalForm` | equal-MPV specialization | CPSV16 Corollary II.2 (`II_cor2`) |
-| `MPSTensor.fundamentalTheorem_equal_canonicalForm_unitary` | Active, nonzero BNT unitary refinement | CPSV16 `thm:Fundamental-CFII` |
+| `MPSTensor.fundamentalTheorem_proportional_canonicalForm` | Restricted correction of Theorem 4.4 | Restricted correction of Theorem II.1 (`thm1`) |
+| `MPSTensor.fundamentalTheorem_equal_canonicalForm` | Packaged SectorBNT analogue of Corollary 4.5; the unequal-cardinality counterexample does not refute the source corollary, and the canonical-form-to-SectorBNT bridge remains to be supplied | Restricted correction of Corollary II.2 (`II_cor2`) |
+| `MPSTensor.fundamentalTheorem_equal_canonicalForm_unitary` | No direct CPSV21 identification asserted | Active, nonzero BNT unitary refinement of `thm:Fundamental-CFII` |
 
 ---
 
@@ -305,7 +314,7 @@ These are known oversized (documented in #1512/#1522) and do not block unrelated
 
 ## 7. Key remaining coverage gaps
 
-The 20 non-complete distinct CPSV16 results comprise 9 partial and 11
+The 23 non-complete distinct CPSV16 results comprise 11 partial and 12
 not-ready results. They are source-ambiguous, formally refuted, research-level,
 owner-held, or scope-restricted by the current formal interface. Lemma
 `Lsigma3`, the Hayashi strong-subadditivity equality characterization, and the
@@ -315,6 +324,8 @@ axiom-free.
 | Status | Paper | Result | Current certificate | Ownership |
 |---|---|---|---|---|
 | Partial | CPSV16 | Prop. 2.7, BNT characterization | Active blocks are characterized; listed zero-weight blocks are invisible to positive-length MPVs | Source clarification required |
+| Partial | CPSV16 | Proposition `propblockinj` | The $3D^5$ bound is proved for packaged BNT data, not for every literal canonical-form tensor | Blocked by the same zero-weight ambiguity as Proposition 2.7 |
+| Not-ready | CPSV16 | Theorem II.1 | The printed BNT definition admits an unrelated normal representative with identically zero coefficient; the formal one-versus-two-element example refutes the claimed equality of BNT cardinalities | `TNLean/MPS/CanonicalForm/BNTUniqueness.lean`; `docs/paper-gaps/cpsv16_bnt_uniqueness_zero_coefficient.tex` |
 | Not-ready | CPSV16 | Corollary II.2 | Inactive zero-weight blocks can change the ambient dimension without changing any positive-length MPV | `docs/paper-gaps/cpsv16_bnt_characterization_active_blocks.tex` |
 | Not-ready | CPSV16 | Appendix A Lemma `Lem:app_simple` | \([1]\) and \([1,0]\) have identical positive-power sums but different multisets; the formal corrections require nonzero entries or filter zeros | `TNLean/Algebra/ScalarPowerSumIdentity.lean`; `docs/paper-gaps/power_sum_alternative_route.tex` |
 | Not-ready | CPSV16 | Appendix A CFII refinement | Literal CFII permits zero weights and inherits the false dimension/global-unitary conclusion; the Lean theorem covers active, nonzero BNT data | `docs/paper-gaps/cpsv16_bnt_characterization_active_blocks.tex`; `docs/paper-gaps/cpsv16_global_vs_persector_unit_witness.tex` |
@@ -331,6 +342,7 @@ axiom-free.
 | Not-ready | CPSV16 | Lemma C.5 (`SALZCL`) | A formal injective four-sector counterexample has SAL and source ZCL but no rank-one active trace factorization | #4270 closed by counterexample |
 | Not-ready | CPSV16 | Structural corollary, lines 1503–1506 | Its printed proof depends on false Lemma C.5 | No source-faithful replacement known |
 | Partial | CPSV16 | Proposition `4to2`, lines 1597–1601 | The selected tensor satisfies all-cut SAL; comparison with the original tensor is missing | #4175/#4459, assigned to `LionSR` |
+| Partial | CPSV16 | Proposition `prop3to4` | One-sector positive commuting products and generic orthogonal-sector assembly with natural multiplicities are proved, but no capstone derives the assembled family from exactly the five printed blockwise identities | #5065, assigned to `LionSR` |
 | Not-ready | CPSV16 | Proposition `prop2to3` | Its printed SAL+ZCL proof depends on false Lemma C.5 | No source-faithful replacement known |
 | Partial | CPSV16 | Proposition `prop4to2` | The statement omits the ZCL hypothesis used in the proof and shares the original-to-selected-tensor gap | #4175/#4459, assigned to `LionSR` |
 | Not-ready | CPSV16 | Proposition `prop2to5` | Conditional maps exist, but the printed derivation of their factorization uses false Lemma C.5 | No unconditional source theorem available |

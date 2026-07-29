@@ -386,10 +386,6 @@ Definition~\ref{def:mpdo_source_gsnnch}; the converse comparison is not used.
     \end{align}
     Then $M$ has the explicit GSNNCH sector form with outer sectors $x$ and
     natural multiplicities $n_x$.
-    This is the conclusion of
-    \cite[Proposition \texttt{prop3to4}, lines~1783--1792]
-    {Cirac2016MPDO_arXiv}; the rank-one trace identities used earlier in the
-    source argument are not needed for this implication.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -564,8 +560,8 @@ Definition~\ref{def:mpdo_source_gsnnch}; the converse comparison is not used.
         &=\sum_x n_x\rho^{(N)}(\mathcal K_x).
         \notag
     \end{align}
-    This gives the explicit GSNNCH form with the BNT copy numbers $n_x$ as its
-    natural multiplicities.
+    Hence the BNT copy numbers $n_x$ are the natural multiplicities of the
+    explicit GSNNCH form.
 \end{corollary}
 
 \begin{proof}\leanok
@@ -602,6 +598,11 @@ Definition~\ref{def:mpdo_source_gsnnch}; the converse comparison is not used.
     orthogonally supported commuting sector products. Apply
     Corollary~\ref{cor:mpdo_bnt_orthogonal_commuting_sectors_gsnnch}.
 \end{proof}
+
+% CPSV16 Proposition `prop3to4`, lines 1786--1796, instead starts from
+% `AppKxKy=0`, `AppUkU=rl`, `Appetakhetc`, `Apptralktrrk`, and `AppPsiPhi`.
+% The exact source-hypothesis capstone is tracked in
+% docs/paper-gaps/cpsv16_gsnnch_sector_decomposition.tex and issue #5065.
 
 \begin{lemma}[Cyclic-shift transport of an embedded local operator]
     \label{lem:mpdo_gsnnch_shift_transport}

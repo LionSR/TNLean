@@ -35,8 +35,12 @@ BNT physical projectors. The sectorwise SAL hypothesis is established from
 the simple-MPDO hypotheses in
 `commonWeightAbsorbedBasisMPOTensor_isSAL_of_sameMPV₂Pos`.
 
-Source: arXiv:1606.00608, Appendix C.2, equations `PjKiPj` and
-`generateMPDO`, and Proposition `prop3to4`, lines 1733--1792. -/
+This constructs the sector family used in the later GSNNCH direct sum.
+
+**Scope restriction (projector-selection and sectorwise-SAL hypotheses):** The
+theorem assumes more than the five blockwise identities printed in CPSV16
+Appendix C.2, Proposition `prop3to4`, lines 1786--1796.  See
+`docs/paper-gaps/cpsv16_gsnnch_sector_decomposition.tex`. -/
 theorem nonempty_orthogonalCommutingSectorFamily_of_bntSectorSAL
     (S : MPSTensor.SectorDecomposition (d * d))
     (hWeight : ∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),
@@ -90,10 +94,16 @@ theorem nonempty_orthogonalCommutingSectorFamily_of_bntSectorSAL
 
 /-- Once the absorbed BNT representatives satisfy SAL, their supported
 commuting products assemble with the natural BNT multiplicities to give the
-source GSNNCH form of the original tensor.
+GSNNCH form of the original tensor.
 
-Source: arXiv:1606.00608, Appendix C.2, equation `CFK` and Proposition
-`prop3to4`, lines 1660--1665 and 1733--1792. -/
+This is a sufficient-condition theorem obtained after the physical projectors,
+sectorwise SAL witnesses, supported bonds, and exact sector products have been
+constructed.
+
+**Scope restriction (supplied BNT sectors):** The hypotheses are stronger
+than the five blockwise identities printed in CPSV16 Appendix C.2,
+Proposition `prop3to4`, lines 1786--1796.  See
+`docs/paper-gaps/cpsv16_gsnnch_sector_decomposition.tex`. -/
 theorem hasGSNNCHForm_of_bntSectorSAL
     (M : MPOTensor d D) (S : MPSTensor.SectorDecomposition (d * d))
     (hM : MPSTensor.SameMPV₂Pos M.toMPSTensor S.toTensor)

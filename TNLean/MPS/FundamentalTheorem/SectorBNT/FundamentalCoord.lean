@@ -659,15 +659,28 @@ private theorem ft_sector_bnt_equal_mps_unitaryGauge_literal
           Matrix (Fin Q.totalDim) (Fin Q.totalDim) ℂ))
   simp only [Matrix.mul_assoc]
 
-/-- **Fundamental Theorem of MPS, equal case (CPSV16 Corollary II.2).**
+/-- **Restricted equal-case fundamental theorem.**
 
-Two BNT canonical forms generating the same MPV family at every positive length are
-globally conjugate: their total bond dimensions agree, and a single invertible
-gauge `Y` carries one total tensor to the other.  This is the literal
-equal-case source statement on the basis-of-normal-tensors canonical-form
-surface — no per-sector unit-modulus restriction and no one-site injectivity
-assumption (arXiv:1606.00608, Corollary II.2; Appendix MPV proof,
-lines 1189–1192). -/
+This is the active, nonzero, converse-covered correction of CPSV16 Corollary
+II.2.  The CPSV16 convention permits an unrelated normal summand whose
+coefficient vanishes at every positive length; such a summand can change the
+ambient bond dimension while preserving all positive-length MPVs.
+
+The theorem is also a SectorBNT analogue of CPSV21 Corollary 4.5,
+pending a theorem connecting the canonical tensors of that source to the
+SectorBNT hypotheses.  In CPSV21 the actual canonical summands have positive coefficients.
+An extraneous zero-coefficient member allowed by its weak BNT definition is not
+an ambient canonical summand, so the unequal-cardinality counterexample to
+CPSV21 Theorem 4.4 does not refute Corollary 4.5.
+
+On the restricted BNT canonical-form class, two forms generating the same MPV
+family at every positive length are globally conjugate: their total bond
+dimensions agree, and a single invertible gauge `Y` carries one total tensor to
+the other.
+
+**Scope restriction (active nonzero BNT data):** This theorem does not cover
+inactive zero-weight canonical-form summands.  See
+`docs/paper-gaps/canonical_bnt_ft_theorem_surface.tex`. -/
 theorem fundamentalTheorem_equal_canonicalForm
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
@@ -684,13 +697,20 @@ theorem fundamentalTheorem_equal_canonicalForm
               Matrix (Fin Q.totalDim) (Fin Q.totalDim) ℂ) :=
   ft_sector_bnt_equal_mps_gaugeEquiv_literal hP hQ hEqual
 
-/-- **Fundamental Theorem of MPS in Canonical Form II, equal case.**
+/-- **Restricted Canonical Form II unitary refinement, equal case.**
 
-Two BNT canonical forms generating the same MPV family at every positive
-length are related by one unitary global gauge after identifying their equal
-total bond dimensions.
+This is the active, nonzero, converse-covered correction of the equal case of
+CPSV16 Corollary A.6.  The literal statement permits inactive zero-weight
+summands, which can change the ambient bond dimension while preserving all
+positive-length MPVs.
 
-Source: Cirac et al., arXiv:1606.00608, Corollary A.6, lines 1197--1199. -/
+On the restricted BNT canonical-form class, two forms generating the same MPV
+family at every positive length are related by one unitary global gauge after
+identifying their equal total bond dimensions.
+
+**Scope restriction (active nonzero BNT data):** This theorem does not cover
+inactive zero-weight canonical-form summands.  See
+`docs/paper-gaps/canonical_bnt_ft_theorem_surface.tex`. -/
 theorem fundamentalTheorem_equal_canonicalForm_unitary
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
@@ -709,14 +729,26 @@ theorem fundamentalTheorem_equal_canonicalForm_unitary
               Matrix (Fin Q.totalDim) (Fin Q.totalDim) ℂ) :=
   ft_sector_bnt_equal_mps_unitaryGauge_literal hP hQ hEqual
 
-/-- **Fundamental Theorem of MPS, proportional multi-block case (CPSV16
-Theorem II.1) on the BNT canonical-form surface.**
+/-- **Restricted proportional multi-block fundamental theorem.**
 
-Eventual projective proportionality of the generated MPV families matches the
-normal-tensor sectors bijectively.  For each `Q`-sector `k`, the matched
-`P`-sector `β k` has the same bond dimension (`g_a = g_b` via the bijection
-`β`) and `Q.basis k` is obtained from `P.basis (β k)` by a per-normal-tensor
-unit phase and gauge conjugation. -/
+This is the active, nonzero, converse-covered correction of CPSV16 Theorem II.1
+and CPSV21 Theorem 4.4.  Their literal BNT definitions permit an unrelated
+normal representative whose coefficient vanishes at every length, so the
+unrestricted equality of BNT cardinalities is false.  In the CPSV21
+counterexample, the extra representative belongs only to the chosen BNT; the
+underlying canonical tensor may still consist of an actual summand with
+coefficient one.  Thus this obstruction to Theorem 4.4 does not create a
+zero-coefficient ambient canonical summand.
+
+On the restricted BNT canonical-form class, eventual projective proportionality
+of the generated MPV families matches the normal-tensor sectors bijectively.
+For each `Q`-sector `k`, the matched `P`-sector `β k` has the same bond dimension
+(`g_a = g_b` via the bijection `β`), and `Q.basis k` is obtained from
+`P.basis (β k)` by a unit phase and gauge conjugation.
+
+**Scope restriction (active nonzero BNT data):** This theorem does not compare
+BNT families containing representatives with identically zero coefficients.
+See `docs/paper-gaps/canonical_bnt_ft_theorem_surface.tex`. -/
 theorem fundamentalTheorem_proportional_canonicalForm
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)

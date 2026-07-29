@@ -25,7 +25,7 @@ multiplicity of each sector remains outside its bond product.
 ## References
 
 * [Cirac--Perez-Garcia--Schuch--Verstraete 2017] arXiv:1606.00608,
-  Definition 4.8 and Appendix C.2, Proposition `prop3to4`, lines 1783--1792
+  Definition 4.8 and Appendix C.2, Proposition `prop3to4`, lines 1786--1796
 -/
 
 open scoped ComplexOrder
@@ -41,12 +41,17 @@ The equality in `realizes_mpo` has scalar one.  Hence the natural
 multiplicities in an outer direct sum are not absorbed into chain-length
 dependent rescalings of the bonds.
 
-Source: arXiv:1606.00608, Definition 4.8, lines 829--850, and Appendix C.2,
-Proposition `prop3to4`, lines 1783--1792. -/
+These hypotheses suffice for the outer-sector direct sum in arXiv:1606.00608,
+Definition 4.8, lines 829--850.
+
+**Scope restriction (supplied orthogonal sectors):** CPSV16 Appendix C.2,
+Proposition `prop3to4`, lines 1786--1796, starts from five blockwise
+identities; it does not assume this family of orthogonal projections and supported bonds.  See
+`docs/paper-gaps/cpsv16_gsnnch_sector_decomposition.tex`. -/
 structure OrthogonalCommutingSectorFamily
     (K : (s : Fin g) → MPOTensor d (dim s)) where
   /-- The one-site projection of each outer sector.
-  Source: arXiv:1606.00608, lines 838--842 and 1783--1792. -/
+  Source: arXiv:1606.00608, lines 838--842 and 1786--1796. -/
   projection : Fin g → Matrix (Fin d) (Fin d) ℂ
   /-- Every outer-sector projection is orthogonal.
   Source: arXiv:1606.00608, lines 838--842. -/
@@ -55,7 +60,7 @@ structure OrthogonalCommutingSectorFamily
   Source: arXiv:1606.00608, lines 838--842. -/
   projection_orthogonal : ∀ {s t}, s ≠ t → projection s * projection t = 0
   /-- The positive translation-invariant bond of each sector.
-  Source: arXiv:1606.00608, lines 843--850 and 1783--1792. -/
+  Source: arXiv:1606.00608, lines 843--850 and 1786--1796. -/
   bondData : Fin g → TranslationInvariantBondData d
   /-- Each bond acts on the tensor square of its one-site sector.
   Source: arXiv:1606.00608, lines 838--850. -/
@@ -63,8 +68,11 @@ structure OrthogonalCommutingSectorFamily
     twoSiteSectorProjection (projection s) * (bondData s).bond *
       twoSiteSectorProjection (projection s) = (bondData s).bond
   /-- Every sector MPO is exactly the periodic product of its translated bond.
-  Source: arXiv:1606.00608, Appendix C.2, Proposition `prop3to4`, lines
-  1783--1792. -/
+
+  **Scope restriction (supplied exact sector products):** This field records the
+  product identity needed for the later outer-sector direct sum; it is not derived
+  here from the five hypotheses of CPSV16 Proposition `prop3to4`.  See
+  `docs/paper-gaps/cpsv16_gsnnch_sector_decomposition.tex`. -/
   realizes_mpo : ∀ s N (hN : 2 ≤ N),
     mpo (K s) N = ((bondData s).toCommutingFormData hN).product
 
@@ -75,8 +83,14 @@ variable {K : (s : Fin g) → MPOTensor d (dim s)}
 /-- The finite-chain GSNNCH decomposition determined by orthogonally supported
 commuting sector bonds and their natural multiplicities.
 
-Source: arXiv:1606.00608, Definition 4.8, lines 829--850, and Appendix C.2,
-Proposition `prop3to4`, lines 1783--1792. -/
+This constructs the finite-chain decomposition from the supplied sector bonds in
+arXiv:1606.00608,
+Definition 4.8, lines 829--850.
+
+**Scope restriction (supplied orthogonal sectors):** This definition does not
+derive the orthogonal sectors from the five hypotheses of CPSV16 Appendix C.2,
+Proposition `prop3to4`, lines 1786--1796.  See
+`docs/paper-gaps/cpsv16_gsnnch_sector_decomposition.tex`. -/
 noncomputable def toGSNNCHData (F : OrthogonalCommutingSectorFamily K)
     (multiplicity : Fin g → ℕ) (N : ℕ) (hN : 2 ≤ N) : GSNNCHData d N where
   hN := hN
@@ -105,8 +119,11 @@ Source: arXiv:1606.00608, equation `rhoNCommv2`, lines 843--850. -/
 /-- The unnormalized state of the induced GSNNCH decomposition is the
 multiplicity-weighted sum of the sector MPOs.
 
-Source: arXiv:1606.00608, Appendix C.2, Proposition `prop3to4`, lines
-1783--1792. -/
+**Scope restriction (identity for supplied sector data):** This is an algebraic
+consequence of `OrthogonalCommutingSectorFamily`; it is not the implication from
+the five printed hypotheses of CPSV16 Appendix C.2, Proposition `prop3to4`,
+lines 1786--1796.  See
+`docs/paper-gaps/cpsv16_gsnnch_sector_decomposition.tex`. -/
 theorem toGSNNCHData_unnormalizedState
     (F : OrthogonalCommutingSectorFamily K) (multiplicity : Fin g → ℕ)
     (N : ℕ) (hN : 2 ≤ N) :
@@ -122,10 +139,16 @@ theorem toGSNNCHData_unnormalizedState
 end OrthogonalCommutingSectorFamily
 
 /-- A multiplicity-weighted sum of orthogonally supported commuting sector
-products has the source GSNNCH form at every chain length at least two.
+products has the GSNNCH form of arXiv:1606.00608, Definition 4.8, at every
+chain length at least two.
 
-Source: arXiv:1606.00608, Appendix C.2, Proposition `prop3to4`, lines
-1783--1792, and Definition 4.8, lines 829--850. -/
+This is a sufficient-condition theorem once the orthogonal sectors, supported
+positive bonds, and exact sector-product identities have been supplied.
+
+**Scope restriction (supplied outer sectors):** CPSV16 Appendix C.2,
+Proposition `prop3to4`, lines 1786--1796, starts from five blockwise
+identities and does not assume these projections and bonds.  See
+`docs/paper-gaps/cpsv16_gsnnch_sector_decomposition.tex`. -/
 theorem hasGSNNCHForm_of_orthogonalCommutingSectorFamily
     {D : ℕ} (M : MPOTensor d D) (K : (s : Fin g) → MPOTensor d (dim s))
     (multiplicity : Fin g → ℕ) (F : OrthogonalCommutingSectorFamily K)
@@ -138,11 +161,16 @@ theorem hasGSNNCHForm_of_orthogonalCommutingSectorFamily
   rw [F.toGSNNCHData_unnormalizedState, hM N hN]
 
 /-- Once the absorbed BNT representatives have orthogonally supported
-commuting bond products, the original tensor has the source GSNNCH form with
-the BNT copy numbers as its natural multiplicities.
+commuting bond products, the original tensor has the GSNNCH form with the BNT
+copy numbers as its natural multiplicities.
 
-Source: arXiv:1606.00608, Appendix C.2, equation `CFK` and Proposition
-`prop3to4`, lines 1660--1665 and 1783--1792. -/
+This is a sufficient-condition theorem using a supplied
+`OrthogonalCommutingSectorFamily` and the positive-length BNT sum.
+
+**Scope restriction (supplied BNT sector family):** The hypotheses are stronger
+than the five blockwise identities printed in CPSV16 Appendix C.2,
+Proposition `prop3to4`, lines 1786--1796.  See
+`docs/paper-gaps/cpsv16_gsnnch_sector_decomposition.tex`. -/
 theorem hasGSNNCHForm_of_commonWeightAbsorbedBasisMPOTensor
     {D : ℕ} (M : MPOTensor d D)
     (S : MPSTensor.SectorDecomposition (d * d))

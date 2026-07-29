@@ -200,17 +200,16 @@ identified with one another.
     \path{MPSTensor.fundamentalTheorem_singleBlock} is the injective-block
     gauge theorem. It is a source-level theorem only for one injective block,
     not for the multi-block BNT comparison.
-  \item The proportional theorem
-    \path{MPSTensor.fundamentalTheorem_proportional_canonicalForm}
-    is the source-level BNT comparison: it derives the sector bijection,
-    matched dimensions, unit phases, and block gauges directly from eventual
-    nonzero proportionality of the total MPV families.
   \item The SectorBNT equal-MPV declarations
     \path{MPSTensor.ft_sector_bnt_equal_sector_data} and
-    \path{MPSTensor.ft_sector_bnt_equal_global_gauge} treat the additional
-    copy-weight comparison needed for a global equal-MPV gauge. They work with
-    raw sector weights and should not be identified with the proportional
-    theorem's per-BNT conclusion.
+    \path{MPSTensor.ft_sector_bnt_equal_global_gauge} are the current formal
+    statements closest to the BNT part of the source proof. They work with raw
+    sector weights and derive the sector matching, copy-count equalities, and
+    matched copy-weight identities on the SectorBNT surface. The corrected
+    active, nonzero SectorBNT equal-MPV theorem is obtained after the
+    canonical-form supplier has put the input tensors on this surface with the
+    required unit-modulus-copy normalization. The literal ambient source
+    corollary retains the separate zero-weight-coordinate obstruction.
   \item The sector-decomposition theorem
     \path{MPSTensor.fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_sectorMatching}
     is now an auxiliary rectangular comparison statement: from a supplied
@@ -220,53 +219,42 @@ identified with one another.
     paper-level equal-MPV corollary.
 \end{enumerate}
 
-The former strict canonical-form BNT equal-MPV declaration was only a strict
-representative form and is no longer part of the active Lean tree. Earlier
-one-shot proportional wrappers were also removed because their hypotheses did
-not supply the full BNT matching conclusion. The current sector-matching
-theorem\footnote{Formal declaration:
-  \path{MPSTensor.ft_sector_bnt_proportional_sector_match_witnesses}.}
-derives the matched sectors, dimensions, phases, and block gauges from the
-BNT canonical-form hypotheses and eventual nonzero proportionality. The
-paper-level declaration
-\path{MPSTensor.fundamentalTheorem_proportional_canonicalForm} exposes exactly
-this conclusion and is the formalization of CPSV16 Theorem~II.1. The
-conditional global-gauge
-theorem\footnote{Formal declaration:
-  \path{MPSTensor.ft_sector_bnt_proportional_global_gauge_of_coeff_identity}.}
-then assumes the eventual matched-sector coefficient identities for those same
-phases and derives copy-weight matching and a global gauge. That stronger
-copy-level conclusion belongs to the equal-MPV/global-gauge route; it is not a
-hypothesis or conclusion of Theorem~II.1.
+The current proportional theorem\footnote{Formal declaration:
+  \path{MPSTensor.fundamentalTheorem_proportional_canonicalForm}.}
+is complete on the SectorBNT surface.  Every representative there has a
+positive copy count, every stored copy weight is nonzero, and the BNT data
+includes the converse coverage needed to exclude extraneous representatives.
+From the proportional MPV hypothesis it obtains a bijection of sectors,
+matched bond dimensions, unit phases, and invertible block gauges.  Separate
+global-gauge declarations strengthen this sectorwise conclusion and should not
+be conflated with the source theorem.
 
-Thus there is no remaining theorem-level gap in the proportional BNT
-comparison. The unresolved boundary is the stronger equal-MPV corollary for
-literal ambient canonical-form tensors: positive-length MPVs do not detect
-inactive zero-weight coordinates, whereas the printed corollary asserts equal
-ambient dimensions and one global conjugating matrix. The conditional
-copy-weight declarations remain useful for faithful restricted versions of
-that stronger conclusion, but they are not additional paper theorems.
+\paragraph{Literal source obstruction.}
+The BNT definition in arXiv:1606.00608, lines~271--274, requires normality,
+spanning of the total MPV, and eventual linear independence, but it does not
+require every candidate to occur with a nonzero coefficient.  Consequently an
+unrelated normal tensor may be adjoined with coefficient zero at every length.
+The same tensor then has a one-element and a two-element BNT, so the equality
+of cardinalities asserted by Theorem~II.1 is false under the printed
+hypotheses.\footnote{Formal declaration:
+  \path{MPSTensor.exists_isCPSVBasisOfNormalTensors_unequal_card}; see
+  \path{docs/paper-gaps/cpsv16_bnt_uniqueness_zero_coefficient.tex}.}
 
-\paragraph{Paper-level targets.}
-The proportional canonical-form theorem and the equal-MPV corollary are the
-source targets. Their source proof is formulated after choosing BNT
-representatives and retaining the repeated-copy coefficients
-$\mu_{j,q}$ in the sums
-\[
-  \sum_q \mu_{j,q}^N.
-\]
-The declaration
-\path{fundamentalTheorem_proportional_canonicalForm} proves the proportional
-source target on the BNT surface directly from eventual nonzero proportional
-MPV families. The SectorBNT equal-MPV declarations
-\path{ft_sector_bnt_equal_sector_data} and
-\path{ft_sector_bnt_equal_global_gauge} address the repeated-copy data needed
-for global equal-MPV comparisons; they are not prerequisites for the
-proportional theorem. The equal-MPV common-block comparison assumes the
-repeated-copy structure has already been matched into common weights and
-dimensions. Rectangular variants that state weight matching or a global gauge
-for sector decompositions with different bases are legitimate theorem
-statements only when their hypotheses account for that repeated-copy data.
+Thus the exact missing hypothesis surface is converse coverage of the active
+canonical-form blocks, not a coefficient identity inside the proved
+SectorBNT theorem.  With this active, nonzero restriction, the proportional
+sector theorem is complete.  Without it, the printed theorem requires a
+source correction rather than another matching argument.  In CPSV16, the
+equal-MPV ambient conjugacy corollary has the additional zero-weight-coordinate
+and ambient-dimension obstruction recorded separately.
+
+CPSV21 uses the same weak BNT definition, so the extra zero-coefficient
+representative still refutes the chosen-BNT cardinality conclusion of
+Theorem~4.4.  It does not refute Corollary~4.5.  The latter concerns the ambient
+canonical tensors, whose actual direct-sum coefficients are positive in the
+standing construction.  The current equal SectorBNT theorem is an analogue of
+that corollary; identifying it with the source statement still requires a bridge
+from CPSV21 canonical form to the SectorBNT hypotheses.
 
 \paragraph{Conditional after-blocking statements.}
 The after-blocking comparison theorems are useful only after the source
@@ -369,17 +357,19 @@ paper-level theorems.
 \section{Statements to keep visibly conditional}
 
 Several declarations should stay in the development, but their statements
-should remain visibly conditional until the missing paper input is produced.
+must remain visibly conditional because they assert stronger conclusions or
+start from more explicit data than the source theorem.
 \begin{itemize}
   \item The conditional after-blocking Fundamental Theorem assumes the
     post-blocking sector hypotheses. It should not be cited as the unconditional
     canonical-form theorem.
   \item The explicit-coefficient equal case assumes coefficient arrays rather
     than deriving the BNT power-sum data from bare equality of MPVs.
-  \item The conditional proportional global-gauge theorem assumes the
-    matched-sector coefficient identities for the matched phases. It should
-    remain conditional until the CPSV16 Appendix MPV coefficient comparison at
-    line~1188 has been derived from proportional MPV equality.
+  \item The conditional proportional global-gauge theorem assumes scalar-free
+    matched-sector coefficient identities. Mere projective proportionality
+    instead carries a common length-dependent scalar $c_N$, which need not be
+    geometric. Thus the global-gauge conclusion is an intentionally stronger
+    result, not unfinished work for the sectorwise proportional theorem.
 \end{itemize}
 
 \section{Retirement criterion}
