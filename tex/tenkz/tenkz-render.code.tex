@@ -1,6 +1,6 @@
-% Input:       frozen model records, resolved geometry, metric access, and saved string paths.
-% Output:      ink -- nodes and paths on the current tikzpicture.
-% Owned state: none; rendering reads records and draws, remembering nothing.
+% Input:       frozen records, resolved geometry, metrics, route geometry, and saved paths.
+% Output:      ink and saved routes on the current tikzpicture.
+% Owned state: saved route paths; no semantic or topological state.
 % Invariants:  no parsing, no topology, no recovery; label text never rotates.
 % Next stage:  events serialize the same records this stage consumed.
 %

@@ -135,8 +135,9 @@ python3 scripts/tenkz_shrink.py flags
 python3 scripts/tenkz_shrink.py gate --base-ref origin/main
 ```
 
-When an intentional registry or demand-corpus change alters a meter, compute
-and review the new baseline before the gate:
+When any intentional change alters a computed meter—including a registry,
+demand-corpus, or parser-source identity change—compute and review the new
+baseline before the gate:
 
 ```sh
 python3 scripts/tenkz_shrink.py meters > /tmp/tenkz-census-baseline.json
