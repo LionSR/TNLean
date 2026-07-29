@@ -159,6 +159,12 @@ def rendered_ink_environment_families(parsed: ParsedLog, body: str) -> set[str]:
         for event in parsed.events
         if event.kind == "picture"
     }
+    unknown_languages = languages.difference((*INK_EVENT_FAMILIES, "lattice"))
+    if unknown_languages:
+        fail(
+            "compiled picture stream has unrecognized owners: "
+            + ", ".join(sorted(unknown_languages))
+        )
     families = {
         INK_EVENT_FAMILIES[language]
         for language in languages
@@ -169,9 +175,13 @@ def rendered_ink_environment_families(parsed: ParsedLog, body: str) -> set[str]:
         # deliberately logs against picture 0 rather than opening a container.
         families.add("tenkz")
     if "lattice" in languages:
+        lattice_families: set[str] = set()
         for family in ("tenkzlattice", "tenkzplanes"):
             if re.search(rf"\\begin\s*\{{{family}\}}", body):
-                families.add(family)
+                lattice_families.add(family)
+        if not lattice_families:
+            fail("compiled lattice picture has no public lattice source spelling")
+        families.update(lattice_families)
     return families
 
 
