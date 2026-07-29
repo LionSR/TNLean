@@ -405,6 +405,70 @@
     isometries.
 \end{proof}
 
+\begin{theorem}[Canonical restriction assembled from the active sector factors]
+    \label{thm:mpdo_active_physical_sector_restriction}
+    \lean{MPOTensor.PhysicalSectorFactorization.ActiveFactorSupportData,
+        MPOTensor.PhysicalSectorFactorization.physicalSupportInclusion,
+        MPOTensor.PhysicalSectorFactorization.physicalSupportInclusion_isometry,
+        MPOTensor.PhysicalSectorFactorization.%
+          physicalSupportInclusion_range_eq_physicalSupportProj,
+        MPOTensor.PhysicalSectorFactorization.%
+          reindex_physicalSlice_activePhysicalSupportRestriction,
+        MPOTensor.PhysicalSectorFactorization.%
+          changePhysicalBasis_physicalSupportInclusion_activePhysicalSupportRestriction,
+        MPOTensor.PhysicalSectorFactorization.%
+          activePhysicalSupportRestrictionData}
+    \leanok
+    \uses{def:mpdo_physical_support_restriction,
+        thm:mpdo_active_physical_sector_factor_supports}
+    Let $K$ be injective and let
+    \begin{align}
+        UK[\beta,\alpha]U^*
+        =\bigoplus_k l_{k,\beta}\otimes r_{k,\alpha}
+        \notag
+    \end{align}
+    be a physical-sector factorization whose neighboring operators are
+    positive semidefinite.  In every active sector choose isometries onto the
+    joint column supports of the left and right factor families, and retain
+    no coordinates in an inactive sector.  Their direct sum, transported
+    back by $U^*$, is an isometry
+    \begin{align}
+        V:\C^e\longrightarrow\C^d
+        \notag
+    \end{align}
+    whose range projection is the canonical joint column support
+    $P_K$ of the physical slices of $K$.  The restricted tensor
+    $K_{\mathrm{act}}=V^*KV$ is injective, satisfies
+    \begin{align}
+        VK_{\mathrm{act}}V^*&=K,
+        \notag
+    \end{align}
+    and, in the dependent sector coordinates, has physical slices
+    \begin{align}
+        K_{\mathrm{act}}[\beta,\alpha]
+        =\bigoplus_k
+        \bigl((V_k^L)^*l_{k,\beta}V_k^L\bigr)
+        \otimes
+        \bigl((V_k^R)^*r_{k,\alpha}V_k^R\bigr).
+        \notag
+    \end{align}
+    This construction also applies when every sector is inactive: then
+    $e=0$, with no complementary summand added.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Take the tensor product of the two support isometries in each active
+    sector and their dependent direct sum over all sectors, using an empty
+    coordinate space in every inactive sector.  Block multiplication gives
+    orthonormal columns and the displayed compressed factorization.  The
+    range projection absorbs every physical slice.  Conversely, every
+    projection that absorbs all physical slices also absorbs the direct sum
+    of their joint column supports.  Hence this range projection is $P_K$.
+    Two-sided absorption then gives exact re-embedding, and injectivity
+    descends through the physical isometry.
+\end{proof}
+
 % **Partial coverage of CPSV16 Proposition `prop3to4`:** this theorem derives
 % pairwise two-sided supports from `AppKxKy=0` under the standing biCF
 % injectivity and the sectorwise positivity supplied by `AppUkU=rl` and
