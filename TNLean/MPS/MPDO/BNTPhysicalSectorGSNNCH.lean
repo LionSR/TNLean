@@ -72,6 +72,8 @@ Global MPDO positivity is the standing Case II assumption at CPSV16 lines
 1626--1629. Positive BNT bond dimensions are stated explicitly because the
 bare `SectorDecomposition` type does not store this source-native condition;
 without it, algebraic injectivity is vacuous at bond dimension zero.
+The simultaneous one-letter span `hSpan` is the standing biCF assumption
+imposed at the start of Case II, after passing to the source's common blocking.
 
 The source proof's invocation of Lemma `lemmus` is not used: at each fixed
 length the actual coefficient `S.coeff N s` is shown to be nonnegative real
@@ -79,8 +81,8 @@ by sitewise compression onto its orthogonal physical support, then its
 positive `N`-th root divided by `S.copies s` is absorbed into the supported
 commuting bond.
 
-Source: arXiv:1606.00608, Appendix C.2, Proposition `prop3to4`, lines
-1786--1796. -/
+Source: arXiv:1606.00608, Appendix C.2, Case II and equation `biCFK`, lines
+1626--1639 and 1666--1676; Proposition `prop3to4`, lines 1786--1796. -/
 theorem hasGSNNCHForm_of_bntLayerOrthogonal_of_physicalSectorFactorization
     {D : ℕ} (M : MPOTensor d D)
     (S : MPSTensor.SectorDecomposition (d * d))
