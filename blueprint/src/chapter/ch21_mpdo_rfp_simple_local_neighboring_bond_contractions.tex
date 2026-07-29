@@ -186,8 +186,8 @@
     \leanok
     Replace each left factor by
     $\sum_\gamma X_{\beta,\gamma}(l_k)_\gamma$ and each right factor by
-    $\sum_\delta Y_{\delta,\alpha}(r_k)_\delta$.  Expanding a physical slice
-    gives the stated transport.  Contracting the common virtual index gives
+    $\sum_\delta Y_{\delta,\alpha}(r_k)_\delta$.  Contracting the common
+    virtual index gives
     \begin{align}
         \sum_\beta Y_{\delta,\beta}X_{\beta,\gamma}
         &=(YX)_{\delta,\gamma},
@@ -220,7 +220,8 @@
     \label{thm:mpdo_physical_sector_factorization_virtual_compression_neighbor}
     \lean{MPOTensor.PhysicalSectorFactorization.ofVirtualCompression_neighboringOperator}
     \leanok
-    \uses{thm:mpdo_physical_sector_factorization_virtual_matrices_neighbor,
+    \uses{def:mpdo_minimal_neighboring_operator,
+      def:mpdo_matrix_weighted_neighboring_operator,
       def:mpdo_physical_sector_factorization_virtual_compression}
     The neighboring operators of the factorization obtained by virtual
     compression satisfy
@@ -238,6 +239,7 @@
 
 \begin{proof}
     \leanok
+    \uses{thm:mpdo_physical_sector_factorization_virtual_matrices_neighbor}
     Apply the virtual-matrix transport identity with $X=V^\dagger$ and $Y=V$.
 \end{proof}
 
@@ -248,22 +250,25 @@
       MPOTensor.PhysicalSectorFactorization.ofGaugeEquiv_neighboringOperator,
       MPOTensor.PhysicalSectorFactorization.ofGaugeEquiv_neighboringOperator_posSemidef}
     \leanok
-    \uses{def:mpdo_matrix_weighted_neighboring_operator,
-      def:mpdo_physical_sector_factorization_virtual_matrices,
-      thm:mpdo_physical_sector_factorization_virtual_matrices_neighbor}
+    \uses{def:mpdo_physical_sector_factorization,
+      def:mpdo_minimal_neighboring_operator,
+      def:mpdo_physical_sector_factorization_virtual_matrices}
     Suppose that two MPO tensors of the same virtual dimension differ by an
-    invertible virtual gauge.  Every physical-sector factorization of the
-    first tensor induces one of the second tensor with the same physical
-    decomposition and the same neighboring operators.  In particular,
-    positive semidefiniteness of all neighboring operators is invariant under
-    the gauge.
+    invertible virtual gauge $X$.  The induced factorization is precisely the
+    virtual-matrix transport by $X$ and $X^{-1}$.  Thus every physical-sector
+    factorization of the first tensor induces one of the second tensor with
+    the same physical decomposition and the same neighboring operators.  In
+    particular, positive semidefiniteness of all neighboring operators is
+    invariant under the gauge.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    Absorb the gauge into each left sector tensor and its inverse into each
-    right sector tensor.  The two matrices cancel when the common virtual
-    index is contracted, so every neighboring operator is unchanged.
+    \uses{def:mpdo_matrix_weighted_neighboring_operator,
+      thm:mpdo_physical_sector_factorization_virtual_matrices_neighbor}
+    Specialize the virtual-matrix neighboring identity to a gauge and its
+    inverse.  Their product is the identity matrix, and contraction through
+    the identity matrix is the ordinary neighboring operator.
 \end{proof}
 
 \begin{definition}[One-site matrix spaces of sector sets]%
