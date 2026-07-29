@@ -216,6 +216,67 @@
     \cite[Appendix~C.2, lines~1381--1439]{Cirac2016MPDO_arXiv}.
 \end{definition}
 
+\begin{theorem}[Flattened sector as an isometric virtual corner]
+    \label{thm:mpdo_flattened_sector_virtual_compression}
+    \lean{Matrix.sigmaBlockInclusion_mul_conjTranspose_eq_blockProjection,
+      MPSTensor.SectorDecomposition.flatBlockInclusion,
+      MPSTensor.SectorDecomposition.flatBlockInclusion_isometry,
+      MPSTensor.SectorDecomposition.flatBlockInclusion_mul_conjTranspose,
+      MPSTensor.SectorDecomposition.toTensor_mul_flatBlockInclusion,
+      MPSTensor.SectorDecomposition.flatBlockInclusion_conjTranspose_mul_toTensor,
+      MPSTensor.SectorDecomposition.flatWeight_smul_flatBasis_eq_compression}
+    \leanok
+    \uses{def:sector_weight_data}
+    Let $A=\bigoplus_t \mu_t A_t$ be a weighted block-diagonal tensor in
+    flattened virtual coordinates.
+    For every block $s$, the canonical inclusion $V_s$ of that block satisfies
+    \begin{align}
+        V_s^\dagger V_s&=1, \notag\\
+        V_sV_s^\dagger&=P_s, \notag\\
+        V_s^\dagger A^iV_s&=\mu_s A_s^i. \notag
+    \end{align}
+    Here $P_s$ is the corresponding block projection, transported to the
+    flattened coordinates.  Moreover,
+    \begin{align}
+        A^iV_s&=V_s(\mu_sA_s^i), \notag\\
+        V_s^\dagger A^i&=(\mu_sA_s^i)V_s^\dagger. \notag
+    \end{align}
+    This is the exact blockwise virtual-corner identity from
+    \cite[Section~2.3, equation \emph{II\_Aiplusk1},
+      lines~195--219]{Cirac2016MPDO_arXiv}.  Appendix~C.2, Case~I,
+    lines~1374--1450 and 1571--1619 is the downstream application context;
+    no positivity after insertion of $P_s$ is asserted here.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Let $E_s$ be the canonical inclusion of the $s$-th summand in the
+    dependent direct sum, let $Q_s$ be the corresponding unflattened block
+    projection, and let $e$ flatten the direct-sum coordinates.  Thus $V_s$
+    is the reindexing of $E_s$, while $P_s$ is the reindexing of $Q_s$.
+    Multiplicativity of reindexing transports
+    \begin{align}
+        E_s^\dagger E_s&=1, \notag\\
+        E_sE_s^\dagger&=Q_s
+        \notag
+    \end{align}
+    to the two corresponding identities for $V_s$.  If
+    $B_t^i=\mu_tA_t^i$, block diagonality gives
+    \begin{align}
+        A^iV_s&=V_sB_s^i, \notag\\
+        V_s^\dagger A^i&=B_s^iV_s^\dagger.
+        \notag
+    \end{align}
+    Therefore
+    \begin{align}
+        V_s^\dagger A^iV_s
+        &=V_s^\dagger V_sB_s^i
+         =B_s^i
+         =\mu_sA_s^i.
+        \notag
+    \end{align}
+\end{proof}
+
 \begin{theorem}[Neighboring operators under virtual compression]
     \label{thm:mpdo_physical_sector_factorization_virtual_compression_neighbor}
     \lean{MPOTensor.PhysicalSectorFactorization.ofVirtualCompression_neighboringOperator}
