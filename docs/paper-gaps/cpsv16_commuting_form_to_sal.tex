@@ -489,7 +489,14 @@ constructed from the fixed commuting bond in equation \emph{sigmaNK2} at
 source lines~1581--1605.  The remaining work is structural: supply the
 normality and blocking comparison from the original normal MPDO block and
 proportional bond-product hypotheses of Proposition~\emph{4to2}, at source
-lines~1597--1605, to that selected fixed representative.  The explicit
+lines~1597--1605, to that selected fixed representative.  Once such a
+comparison gives an invertible virtual gauge,
+\leanid{MPOTensor.PhysicalSectorFactorization.ofGaugeEquiv} transports the
+factorization to the original tensor, and
+\leanid{MPOTensor.PhysicalSectorFactorization.%
+ofGaugeEquiv_neighboringOperator} shows that its positive neighboring
+operators are unchanged.  This gauge invariance does not construct the
+required comparison from closed-chain proportionality.  The explicit
 factorization and positivity assumptions of the proved corollary are marked
 scope restrictions, not additional hypotheses on the source proposition.
 
@@ -553,7 +560,8 @@ constructed non-circularly from the source-side commuting bond, as recorded by
 the fixed-tensor theorem identified above.
 \item Prove the normality and blocking comparison from the original normal
 MPDO block and the printed proportional commuting-bond hypotheses to the
-selected fixed representative.
+selected fixed representative.  The resulting virtual gauge then transports
+the fixed tensor's factorization without changing its neighboring operators.
 Only then may the source proposition receive a formal declaration and a
 \texttt{\string\leanok} marker.
 \end{enumerate}
