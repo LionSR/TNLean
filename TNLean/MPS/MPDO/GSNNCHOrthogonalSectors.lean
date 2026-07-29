@@ -41,8 +41,13 @@ The equality in `realizes_mpo` has scalar one.  Hence the natural
 multiplicities in an outer direct sum are not absorbed into chain-length
 dependent rescalings of the bonds.
 
-Source: arXiv:1606.00608, Definition 4.8, lines 829--850, and Appendix C.2,
-Proposition `prop3to4`, lines 1783--1792. -/
+This is sufficient data for the outer-sector assembly in arXiv:1606.00608,
+Definition 4.8, lines 829--850.
+
+**Scope restriction (supplied orthogonal sectors):** Proposition `prop3to4`
+starts from five blockwise identities; it does not assume this assembled family
+of orthogonal projections and supported bonds.  See
+`docs/paper-gaps/cpsv16_gsnnch_sector_decomposition.tex`. -/
 structure OrthogonalCommutingSectorFamily
     (K : (s : Fin g) → MPOTensor d (dim s)) where
   /-- The one-site projection of each outer sector.
@@ -63,8 +68,11 @@ structure OrthogonalCommutingSectorFamily
     twoSiteSectorProjection (projection s) * (bondData s).bond *
       twoSiteSectorProjection (projection s) = (bondData s).bond
   /-- Every sector MPO is exactly the periodic product of its translated bond.
-  Source: arXiv:1606.00608, Appendix C.2, Proposition `prop3to4`, lines
-  1783--1792. -/
+
+  **Scope restriction (supplied exact sector products):** This field records the
+  product identity needed for the later outer-sector assembly; it is not derived
+  here from the five hypotheses of CPSV16 Proposition `prop3to4`.  See
+  `docs/paper-gaps/cpsv16_gsnnch_sector_decomposition.tex`. -/
   realizes_mpo : ∀ s N (hN : 2 ≤ N),
     mpo (K s) N = ((bondData s).toCommutingFormData hN).product
 
@@ -75,8 +83,13 @@ variable {K : (s : Fin g) → MPOTensor d (dim s)}
 /-- The finite-chain GSNNCH decomposition determined by orthogonally supported
 commuting sector bonds and their natural multiplicities.
 
-Source: arXiv:1606.00608, Definition 4.8, lines 829--850, and Appendix C.2,
-Proposition `prop3to4`, lines 1783--1792. -/
+This packages supplied sector data into the form of arXiv:1606.00608,
+Definition 4.8, lines 829--850.
+
+**Scope restriction (assembly from supplied data):** This definition does not
+derive the orthogonal sectors from the five hypotheses of Proposition
+`prop3to4`.  See
+`docs/paper-gaps/cpsv16_gsnnch_sector_decomposition.tex`. -/
 noncomputable def toGSNNCHData (F : OrthogonalCommutingSectorFamily K)
     (multiplicity : Fin g → ℕ) (N : ℕ) (hN : 2 ≤ N) : GSNNCHData d N where
   hN := hN
@@ -105,8 +118,10 @@ Source: arXiv:1606.00608, equation `rhoNCommv2`, lines 843--850. -/
 /-- The unnormalized state of the induced GSNNCH decomposition is the
 multiplicity-weighted sum of the sector MPOs.
 
-Source: arXiv:1606.00608, Appendix C.2, Proposition `prop3to4`, lines
-1783--1792. -/
+**Scope restriction (identity for supplied sector data):** This is an algebraic
+consequence of `OrthogonalCommutingSectorFamily`; it is not the implication from
+the five printed hypotheses of Proposition `prop3to4`.  See
+`docs/paper-gaps/cpsv16_gsnnch_sector_decomposition.tex`. -/
 theorem toGSNNCHData_unnormalizedState
     (F : OrthogonalCommutingSectorFamily K) (multiplicity : Fin g → ℕ)
     (N : ℕ) (hN : 2 ≤ N) :
@@ -122,10 +137,15 @@ theorem toGSNNCHData_unnormalizedState
 end OrthogonalCommutingSectorFamily
 
 /-- A multiplicity-weighted sum of orthogonally supported commuting sector
-products has the source GSNNCH form at every chain length at least two.
+products has the GSNNCH form of arXiv:1606.00608, Definition 4.8, at every
+chain length at least two.
 
-Source: arXiv:1606.00608, Appendix C.2, Proposition `prop3to4`, lines
-1783--1792, and Definition 4.8, lines 829--850. -/
+This is a sufficient-condition theorem once the orthogonal sectors, supported
+positive bonds, and exact sector-product identities have been supplied.
+
+**Scope restriction (later outer-sector assembly):** Proposition `prop3to4`
+starts from five blockwise identities and does not assume these assembled data.
+See `docs/paper-gaps/cpsv16_gsnnch_sector_decomposition.tex`. -/
 theorem hasGSNNCHForm_of_orthogonalCommutingSectorFamily
     {D : ℕ} (M : MPOTensor d D) (K : (s : Fin g) → MPOTensor d (dim s))
     (multiplicity : Fin g → ℕ) (F : OrthogonalCommutingSectorFamily K)
@@ -138,11 +158,15 @@ theorem hasGSNNCHForm_of_orthogonalCommutingSectorFamily
   rw [F.toGSNNCHData_unnormalizedState, hM N hN]
 
 /-- Once the absorbed BNT representatives have orthogonally supported
-commuting bond products, the original tensor has the source GSNNCH form with
-the BNT copy numbers as its natural multiplicities.
+commuting bond products, the original tensor has the GSNNCH form with the BNT
+copy numbers as its natural multiplicities.
 
-Source: arXiv:1606.00608, Appendix C.2, equation `CFK` and Proposition
-`prop3to4`, lines 1660--1665 and 1783--1792. -/
+This is a sufficient-condition theorem using a supplied
+`OrthogonalCommutingSectorFamily` and the positive-length BNT sum.
+
+**Scope restriction (assembled BNT sector family):** The hypotheses are stronger
+than the five blockwise identities printed in Proposition `prop3to4`.  See
+`docs/paper-gaps/cpsv16_gsnnch_sector_decomposition.tex`. -/
 theorem hasGSNNCHForm_of_commonWeightAbsorbedBasisMPOTensor
     {D : ℕ} (M : MPOTensor d D)
     (S : MPSTensor.SectorDecomposition (d * d))

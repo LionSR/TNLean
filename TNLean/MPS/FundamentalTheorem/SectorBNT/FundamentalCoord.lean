@@ -671,7 +671,11 @@ dimension and global-conjugacy conclusions are false.
 On the restricted BNT canonical-form class, two forms generating the same MPV
 family at every positive length are globally conjugate: their total bond
 dimensions agree, and a single invertible gauge `Y` carries one total tensor to
-the other. -/
+the other.
+
+**Scope restriction (active nonzero BNT data):** This theorem does not cover
+inactive zero-weight canonical-form summands.  See
+`docs/paper-gaps/canonical_bnt_ft_theorem_surface.tex`. -/
 theorem fundamentalTheorem_equal_canonicalForm
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
@@ -697,7 +701,11 @@ positive-length MPVs.
 
 On the restricted BNT canonical-form class, two forms generating the same MPV
 family at every positive length are related by one unitary global gauge after
-identifying their equal total bond dimensions. -/
+identifying their equal total bond dimensions.
+
+**Scope restriction (active nonzero BNT data):** This theorem does not cover
+inactive zero-weight canonical-form summands.  See
+`docs/paper-gaps/canonical_bnt_ft_theorem_surface.tex`. -/
 theorem fundamentalTheorem_equal_canonicalForm_unitary
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
@@ -727,7 +735,11 @@ On the restricted BNT canonical-form class, eventual projective proportionality
 of the generated MPV families matches the normal-tensor sectors bijectively.
 For each `Q`-sector `k`, the matched `P`-sector `β k` has the same bond dimension
 (`g_a = g_b` via the bijection `β`), and `Q.basis k` is obtained from
-`P.basis (β k)` by a unit phase and gauge conjugation. -/
+`P.basis (β k)` by a unit phase and gauge conjugation.
+
+**Scope restriction (active nonzero BNT data):** This theorem does not compare
+BNT families containing representatives with identically zero coefficients.
+See `docs/paper-gaps/canonical_bnt_ft_theorem_surface.tex`. -/
 theorem fundamentalTheorem_proportional_canonicalForm
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
