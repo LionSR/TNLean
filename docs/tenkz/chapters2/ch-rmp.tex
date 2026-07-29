@@ -27,11 +27,12 @@ python3 scripts/tenkz_rmp.py check --section <section>
 python3 scripts/tenkz_rmp.py check --all
 python3 scripts/tenkz_rmp.py book --all
 python3 scripts/tenkz_rmp.py render --all
-python3 scripts/tenkz_rmp.py compare --all --source-root tex/RMP_TIKZ_SOURCE_CODE
+python3 scripts/tenkz_rmp.py compare --all --source-root /absolute/path/to/author-source-tree
 \end{Verbatim}
 
 The benchmark style controls typography only.  It does not extend tenkz.
-Reference comparisons are compiled temporarily from mapped author-source
-blocks; prebuilt PDFs are not design evidence.  Targets without author
-drawing source do not pretend that a reference implementation exists.  They
-carry the status \texttt{paper-context-}\allowbreak\texttt{only}.
+The separate author-source tree is not part of this repository.  Reference
+comparisons are compiled temporarily from its mapped source blocks; prebuilt
+PDFs are not design evidence.  Targets without author drawing source do not
+pretend that a reference implementation exists.  They carry the status
+\texttt{paper-context-}\allowbreak\texttt{only}.
