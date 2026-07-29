@@ -146,6 +146,7 @@ import TNLean.MPS.MPDO.MutualInfoMonotone
 import TNLean.MPS.MPDO.NeighboringPreparation
 import TNLean.MPS.MPDO.NormalizedGroupedSectorMaps
 import TNLean.MPS.MPDO.NormalizedGroupedSectors
+import TNLean.MPS.MPDO.NormalizedMPOProportionality
 import TNLean.MPS.MPDO.OperatorProduct
 import TNLean.MPS.MPDO.OrthogonalSectorAreaLaw
 import TNLean.MPS.MPDO.PRFP
