@@ -1,0 +1,84 @@
+% Regression: parallel routes on one turned hull edge are model-proven
+% disjoint, so the crossing police must not ask PGF's singular line
+% intersection arithmetic to weigh them.
+\documentclass{standalone}
+\usepackage{tenkz}
+\makeatletter
+\ExplSyntaxOn
+\file_input:n { tenkz-kernel.code.tex }
+\tl_new:N \l__tenkz_test_route_name_tl
+\cs_new_eq:NN \__tenkz_test_string_count:nnN \__tenkz_string_count:nnN
+\cs_new_eq:NN
+  \__tenkz_test_route_measure:n
+  \__tenkz_kernel_r_route_measure:n
+\cs_set_protected:Npn \__tenkz_kernel_r_route_measure:n #1
+  {
+    \__tenkz_test_route_measure:n {#1}
+    \__tenkz_model_get:nnN {#1} {name} \l__tenkz_test_route_name_tl
+    \str_if_eq:VnT \l__tenkz_test_route_name_tl {endpoint-route}
+      {
+        \prop_map_inline:Nn \l__tenkz_kernel_ro_family_prop
+          {
+            \clist_if_in:nnT {##2} {endpoint-route}
+              {
+                \errmessage
+                  {address-bearing~route~was~classified~as~fully~disjoint}
+              }
+          }
+      }
+  }
+\cs_set_protected:Npn \__tenkz_string_count:nnN #1#2#3
+  {
+    \str_if_eq:nnT {#1} {lane-a}
+      {
+        \str_if_eq:nnT {#2} {lane-b}
+          { \errmessage{parallel~lanes~were~sent~to~the~intersection~engine} }
+      }
+    \str_if_eq:nnT {#1} {lane-b}
+      {
+        \str_if_eq:nnT {#2} {lane-a}
+          { \errmessage{parallel~lanes~were~sent~to~the~intersection~engine} }
+      }
+    \str_if_eq:nnT {#1} {ring-a}
+      {
+        \str_if_eq:nnT {#2} {ring-b}
+          { \errmessage{closed~rings~were~sent~to~the~intersection~engine} }
+      }
+    \str_if_eq:nnT {#1} {ring-b}
+      {
+        \str_if_eq:nnT {#2} {ring-a}
+          { \errmessage{closed~rings~were~sent~to~the~intersection~engine} }
+      }
+    \__tenkz_test_string_count:nnN {#1} {#2} #3
+  }
+\ExplSyntaxOff
+\makeatother
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[rows={ket}, cols=6, frame=circle, physical=up]
+  \tn[skin=box, name=A]{A} & \tn[skin=box, name=B]{B}
+  & \tn[skin=box, name=C]{C} & \tn[skin=box, name=D]{D}
+  & \tn[skin=box, name=E]{E} & \tn[skin=box, name=F]{F}
+  \tnwire[name=lane-a, kind=string, species=g, crossing=over,
+          route={n of (1,1) .. (1,2)}]{open}{open}
+  \tnwire[name=lane-b, kind=string, species=h, crossing=under,
+          route={n of (1,1) .. (1,2)}]{open}{open}
+\end{tenkz}
+\quad
+\begin{tenkz}[rows={wire}, cols=6, frame=circle, bonds=none]
+  \tn[skin=box, name=G]{G} & \tn[skin=box, name=H]{H}
+  & \tn[skin=box]{I} & \tn[skin=box]{J}
+  & \tn[skin=box]{K} & \tn[skin=box]{L}
+  \tnwire[name=endpoint-route, kind=string,
+          route={n of (1,1) .. (1,2)}]{G}{H}
+\end{tenkz}
+\quad
+\begin{tenkz}[rows={wire}, cols=4, bonds=none]
+  \tn[skin=box]{M} & \tn[skin=box]{N}
+  & \tn[skin=box]{O} & \tn[skin=box]{Q}
+  \tnwire[name=ring-a, kind=string, closed,
+          route={all of (1,1) .. (1,4)}]
+  \tnwire[name=ring-b, kind=string, closed,
+          route={all of (1,1) .. (1,4)}]
+\end{tenkz}
+\end{document}

@@ -58,6 +58,12 @@
 \msg_new:nnnn {tenkz}{join-not-endpoint}
   { [TKZ-JOIN-NOT-ENDPOINT]~strings~'#1'~and~'#2'~do~not~share~an~endpoint }
   { A~join~only~exempts~a~meeting~at~the~end~of~at~least~one~saved~route. }
+\msg_new:nnnn {tenkz}{cross-disjoint}
+  { [TKZ-CROSS-DISJOINT]~strings~'#1'~and~'#2'~are~model-proven~disjoint }
+  { Remove~their~crossing~declaration~or~change~the~route~model. }
+\msg_new:nnnn {tenkz}{join-disjoint}
+  { [TKZ-JOIN-DISJOINT]~strings~'#1'~and~'#2'~are~model-proven~disjoint }
+  { Remove~their~join~declaration~or~change~the~route~model. }
 \msg_new:nnnn {tenkz}{string-library}
   { [TKZ-STRING-LIBRARY]~TikZ~library~'#1'~is~not~loaded }
   { The~string~engine~needs~hobby,~spath3,~and~intersections. }
@@ -69,6 +75,7 @@
 \seq_new:N \l__tenkz_string_cross_seq        % {under}{over} pairs
 \seq_new:N \l__tenkz_string_join_seq         % unordered endpoint joins
 \seq_new:N \l__tenkz_string_touch_seq        % shared semantic wire ports
+\seq_new:N \l__tenkz_string_disjoint_seq     % model-proven disjoint pairs
 \seq_new:N \l__tenkz_string_gap_ids_seq      % under paths awaiting one gap pass
 \seq_new:N \l__tenkz_string_self_gap_ids_seq % self paths awaiting branch gap
 \seq_new:N \l__tenkz_string_processed_seq    % directed crossing pairs split
@@ -143,6 +150,7 @@
     \seq_clear:N \l__tenkz_string_cross_seq
     \seq_clear:N \l__tenkz_string_join_seq
     \seq_clear:N \l__tenkz_string_touch_seq
+    \seq_clear:N \l__tenkz_string_disjoint_seq
     \seq_clear:N \l__tenkz_string_gap_ids_seq
     \seq_clear:N \l__tenkz_string_self_gap_ids_seq
     \seq_clear:N \l__tenkz_string_processed_seq
@@ -438,6 +446,14 @@
 \cs_new_protected:Npn \__tenkz_string_touch:nn #1#2
   {
     \seq_put_right:Nn \l__tenkz_string_touch_seq { {#1} {#2} }
+  }
+
+% Record a pair whose owning model proves cannot meet.  The crossing police
+% can answer zero without asking the drawing engine to rediscover topology
+% from potentially singular path arithmetic.
+\cs_new_protected:Npn \__tenkz_string_disjoint:nn #1#2
+  {
+    \seq_put_right:Nn \l__tenkz_string_disjoint_seq { {#1} {#2} }
   }
 
 % intersection count of two saved paths through the pgf engine
@@ -1126,12 +1142,37 @@
 \cs_new_protected:Npn \__tenkz_string_police_pair:nn #1#2
   {
     \bool_set_false:N \l_tmpa_bool
-    \seq_if_in:NnT \l__tenkz_string_touch_seq { {#1} {#2} }
+    \seq_if_in:NnT \l__tenkz_string_disjoint_seq { {#1} {#2} }
       { \bool_set_true:N \l_tmpa_bool }
-    \seq_if_in:NnT \l__tenkz_string_touch_seq { {#2} {#1} }
+    \seq_if_in:NnT \l__tenkz_string_disjoint_seq { {#2} {#1} }
       { \bool_set_true:N \l_tmpa_bool }
-    \bool_if:NF \l_tmpa_bool
-      { \__tenkz_string_police_pair_cross:nn {#1} {#2} }
+    \bool_if:NTF \l_tmpa_bool
+      { \__tenkz_string_police_pair_disjoint:nn {#1} {#2} }
+      {
+        \seq_if_in:NnT \l__tenkz_string_touch_seq { {#1} {#2} }
+          { \bool_set_true:N \l_tmpa_bool }
+        \seq_if_in:NnT \l__tenkz_string_touch_seq { {#2} {#1} }
+          { \bool_set_true:N \l_tmpa_bool }
+        \bool_if:NF \l_tmpa_bool
+          { \__tenkz_string_police_pair_cross:nn {#1} {#2} }
+      }
+  }
+\cs_new_protected:Npn \__tenkz_string_police_pair_disjoint:nn #1#2
+  {
+    \seq_map_inline:Nn \l__tenkz_string_cross_seq
+      {
+        \tl_if_eq:nnT { {#1} {#2} } {##1}
+          { \msg_error:nnnn {tenkz}{cross-disjoint} {#1} {#2} }
+        \tl_if_eq:nnT { {#2} {#1} } {##1}
+          { \msg_error:nnnn {tenkz}{cross-disjoint} {#1} {#2} }
+      }
+    \seq_map_inline:Nn \l__tenkz_string_join_seq
+      {
+        \tl_if_eq:nnT { {#1} {#2} } {##1}
+          { \msg_error:nnnn {tenkz}{join-disjoint} {#1} {#2} }
+        \tl_if_eq:nnT { {#2} {#1} } {##1}
+          { \msg_error:nnnn {tenkz}{join-disjoint} {#1} {#2} }
+      }
   }
 \cs_new_protected:Npn \__tenkz_string_police_pair_cross:nn #1#2
   {
