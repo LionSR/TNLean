@@ -162,7 +162,8 @@ theorem sectorCoordinateTensor_isMPDO_of_neighboringOperator_pos
 conjugate transpose.
 
 Source: arXiv:1606.00608, Appendix C.2, equations `AppUkU=rl` and
-`Appetakhetc`, lines 1381--1450 and 1680--1691. -/
+`Appetakhetc`, lines 1381--1450. This closure is a finite-dimensional
+consequence of the injective MPDO factorization stated there. -/
 theorem sectorProductFamily_conjTranspose_mem_span
     (F : PhysicalSectorFactorization K)
     (hK : MPSTensor.IsInjective K.toMPSTensor)
@@ -192,8 +193,9 @@ theorem sectorProductFamily_conjTranspose_mem_span
 /-- In an active sector, the left factor family is closed under conjugate
 transpose.
 
-Source: arXiv:1606.00608, Appendix C.2, equations `AppUkU=rl` and `PjKiPj`,
-lines 1381--1388 and 1680--1691. -/
+Source: arXiv:1606.00608, Appendix C.2, equations `AppUkU=rl` and
+`Appetakhetc`, lines 1381--1450. This is the left-factor consequence of the
+product-family closure. -/
 theorem leftTensor_conjTranspose_mem_span_of_isActiveSector
     (F : PhysicalSectorFactorization K)
     (hK : MPSTensor.IsInjective K.toMPSTensor)
@@ -245,8 +247,9 @@ theorem leftTensor_conjTranspose_mem_span_of_isActiveSector
 /-- In an active sector, the right factor family is closed under conjugate
 transpose.
 
-Source: arXiv:1606.00608, Appendix C.2, equations `AppUkU=rl` and `PjKiPj`,
-lines 1381--1388 and 1680--1691. -/
+Source: arXiv:1606.00608, Appendix C.2, equations `AppUkU=rl` and
+`Appetakhetc`, lines 1381--1450. This is the right-factor consequence of the
+product-family closure. -/
 theorem rightTensor_conjTranspose_mem_span_of_isActiveSector
     (F : PhysicalSectorFactorization K)
     (hK : MPSTensor.IsInjective K.toMPSTensor)
@@ -309,8 +312,9 @@ noncomputable abbrev rightFactorSupportProj
 /-- In an active sector, the factor support projections absorb every factor
 on both sides.
 
-Source: arXiv:1606.00608, Appendix C.2, equation `PjKiPj`, lines
-1680--1691. -/
+Source: arXiv:1606.00608, Appendix C.2, equations `AppUkU=rl` and
+`Appetakhetc`, lines 1381--1450. The support projections give a
+finite-dimensional normalization of the factors appearing there. -/
 theorem activeSector_factorSupport_twoSided
     (F : PhysicalSectorFactorization K)
     (hK : MPSTensor.IsInjective K.toMPSTensor)
@@ -349,8 +353,8 @@ theorem sectorProductFamily_supportProj
 /-- An active sector has positive-dimensional isometric parametrizations of
 both factor supports.
 
-These isometries realize the factor supports occurring in `PjKiPj`,
-arXiv:1606.00608, Appendix C.2, lines 1680--1691. -/
+These isometries give a finite-dimensional normalization of the factors in
+`AppUkU=rl`, arXiv:1606.00608, Appendix C.2, lines 1381--1450. -/
 theorem exists_activeSector_factorSupportIsometries
     (F : PhysicalSectorFactorization K)
     {k : Fin F.sectorCount} (hk : F.IsActiveSector k) :
