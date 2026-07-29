@@ -482,12 +482,13 @@ maximum-rank fixed-point density matrix satisfies the rank hypothesis, with
 unit trace of $\rho$ itself not needed for the conclusion
 (see `docs/paper-gaps/wolf_cor67_maximal_support_restriction.tex`).
 
-### Wolf Theorem 6.15 (Conditional expectation onto fixed-point algebra) — FORMALIZED
+### Conditional expectation used in Wolf Theorem 6.14 — FORMALIZED
 
 In `TNLean.Channel.FixedPoint.ConditionalExpectation`:
 
-* `Kraus.IsConditionalExpectation` — abstract predicate (generic over any
-  `StarAlgebra`): idempotent, unital, range ⊆ `S`, fixes `S` pointwise.
+* `Kraus.IsConditionalExpectation` — a positive, idempotent, unital matrix
+  map whose range is contained in a star-subalgebra and which fixes that
+  subalgebra pointwise, following Wolf Proposition 1.5 and Equation (1.40).
 * `Kraus.scalarConditionalExpectation` — the linear map
   `E_σ(X) = (tr(σ X) / tr(σ)) • 1` for the scalar fixed-point algebra case.
 * `Kraus.scalarConditionalExpectation_idempotent` — `E_σ² = E_σ`.
@@ -498,19 +499,23 @@ In `TNLean.Channel.FixedPoint.ConditionalExpectation`:
   `T*(E_σ(X)) = E_σ(X)` when `T` is TP.
 * `Kraus.scalarConditionalExpectation_isConditionalExpectation` —
   bundles everything into `IsConditionalExpectation` for the scalar case.
-* Numbered theorems:
-  `Kraus.wolf_theorem_6_15` (general case via mean-ergodic projection),
-  `Kraus.wolf_theorem_6_15_scalar` (scalar specialization) —
-  `TNLean.Channel.WolfChapter6Wrappers`.
+* `Kraus.meanErgodicAdjoint_isConditionalExpectation` — the trace adjoint of
+  the mean-ergodic projection is a conditional expectation onto the adjoint
+  fixed-point star-subalgebra.
 
 The general conditional expectation is the trace adjoint of the mean-ergodic
-projection, which is idempotent, unital, and fixes exactly the fixed points of
-`T*`; the star-algebra structure follows from Theorem 6.12.  This covers both
-the primitive (h = 1) and the irreducible period-h > 1 cases uniformly, since
-the period never enters the hypotheses.  The density-block decomposition of
-Theorem 6.14 is not required for the abstract statement; it supplies the
-explicit block formula for the retraction (see
-`TNLean.Channel.FixedPoint.FullSupportBlockRetraction`).
+projection, which is positive, idempotent, unital, and fixes exactly the fixed
+points of `T*`; the star-algebra structure follows from Theorem 6.12. This is
+the conditional-expectation step in the proof of Theorem 6.14. The theorem's
+explicit density-block formula is developed in
+`TNLean.Channel.FixedPoint.FullSupportBlockRetraction`.
+
+### Wolf Theorem 6.15 (Unique fixed point from full Kraus-word span) — NOT FORMALIZED
+
+The source assumes that the homogeneous words of some fixed length in the
+Kraus operators span the full matrix algebra. It concludes that the channel
+has a unique fixed density matrix and that this density matrix is positive
+definite. No Lean theorem currently has this hypothesis and conclusion.
 
 ---
 

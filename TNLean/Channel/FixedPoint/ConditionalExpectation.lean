@@ -11,23 +11,22 @@ import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Basic
 import Mathlib.Analysis.Matrix.Order
 
 /-!
-# Conditional expectation onto fixed-point algebra (Wolf Theorem 6.15)
+# Conditional expectations onto fixed-point algebras
 
-This file formalizes the conditional expectation projecting onto the
-fixed-point *-subalgebra of a quantum channel's Heisenberg-picture map,
-following Wolf Theorem 6.15.
+This file formalizes positive projections onto fixed-point *-subalgebras of
+Heisenberg-picture maps, following Wolf Proposition 1.5, Equation (1.40), and
+the conditional-expectation step in the proof of Theorem 6.14.
 
 When the fixed-point *-subalgebra is the scalar algebra `ℂ · 1` (as for
 primitive channels), the conditional expectation takes the explicit form
 `E_σ(X) = (tr(σ X) / tr(σ)) • 1`, where `σ` is the unique positive-definite
 stationary state. The general irreducible case (period > 1) requires the
-Wedderburn block decomposition from Wolf Theorem 6.14 (issue #27).
+Wedderburn block decomposition from Wolf Theorem 6.14.
 
 ## Main results
 
-* `IsConditionalExpectation`: predicate stating that a linear map is
+* `IsConditionalExpectation`: predicate stating that a matrix map is positive,
   idempotent, unital, maps into a `StarSubalgebra`, and fixes it pointwise.
-  Defined generically over any `StarAlgebra` for upstream compatibility.
 * `scalarConditionalExpectation`: the linear map `X ↦ (tr(σX)/tr(σ)) • 1`.
 * `scalarConditionalExpectation_idempotent`: `E_σ² = E_σ`.
 * `scalarConditionalExpectation_unital`: `E_σ(1) = 1`.
@@ -38,7 +37,7 @@ Wedderburn block decomposition from Wolf Theorem 6.14 (issue #27).
 * `scalarConditionalExpectation_mem_adjointFixedPoints`:
   `E_σ(X)` is always a fixed point of `T*`.
 * `scalarConditionalExpectation_isConditionalExpectation`:
-  **Wolf Theorem 6.15** for the scalar fixed-point algebra case.
+  the scalar fixed-point algebra case.
 
 ## Cross-references
 
@@ -52,10 +51,11 @@ Wedderburn block decomposition from Wolf Theorem 6.14 (issue #27).
 
 ## References
 
-* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Theorem 6.15, Section 6.4]
+* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Proposition 1.5,
+  Equation (1.40), and the proof of Theorem 6.14]
 -/
 
-open scoped Matrix ComplexOrder MatrixOrder BigOperators
+open scoped Matrix ComplexOrder MatrixOrder Matrix.Norms.Frobenius BigOperators
 open Matrix Finset Complex
 
 namespace Kraus
@@ -66,23 +66,25 @@ local notation "Mat" => Matrix (Fin D) (Fin D) ℂ
 
 /-! ## Abstract conditional expectation -/
 
-/-- A **conditional expectation** onto a `StarSubalgebra` `S ⊆ A` is a
-ℂ-linear map that is idempotent, unital, maps into `S`, and fixes every
-element of `S`. This is the abstract property from Wolf Theorem 6.15.
+/-- A **conditional expectation** onto a matrix `StarSubalgebra` `S` is a
+positive complex-linear map that is idempotent, unital, maps into `S`, and
+fixes every element of `S`.
 
-The definition is generic over any `StarAlgebra` so that it can be reused
-for non-matrix algebras (e.g., Wedderburn blocks) in future work. -/
-structure IsConditionalExpectation {A : Type*}
-    [Semiring A] [StarRing A] [Algebra ℂ A] [StarModule ℂ A]
-    (E : A →ₗ[ℂ] A) (S : StarSubalgebra ℂ A) : Prop where
+Source: Wolf, Proposition 1.5 and Equation (1.40), local source
+`Notes/WolfNoteTexSource/ch01_deconstructing_quantum.tex`, lines 545--570. -/
+structure IsConditionalExpectation {n : Type*} [Fintype n] [DecidableEq n]
+    (E : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ)
+    (S : StarSubalgebra ℂ (Matrix n n ℂ)) : Prop where
+  /-- Positivity: positive semidefinite matrices have positive semidefinite images. -/
+  positive : IsPositiveMap E
   /-- Idempotent: `E(E(X)) = E(X)`. -/
-  idempotent : ∀ X : A, E (E X) = E X
+  idempotent : ∀ X, E (E X) = E X
   /-- Unital: `E(1) = 1`. -/
   unital : E 1 = 1
   /-- Range contained in `S`. -/
-  range_subset : ∀ X : A, E X ∈ S
+  range_subset : ∀ X, E X ∈ S
   /-- Fixes `S` pointwise. -/
-  fixes : ∀ X : A, X ∈ S → E X = X
+  fixes : ∀ X, X ∈ S → E X = X
 
 /-! ## Scalar conditional expectation -/
 
@@ -90,9 +92,8 @@ structure IsConditionalExpectation {A : Type*}
 
 `E_σ(X) = (tr(σ X) / tr(σ)) • 1`.
 
-This is the conditional expectation from Wolf Theorem 6.15 in the case where
-the fixed-point *-subalgebra of the adjoint map is the scalar algebra `ℂ · 1`
-(i.e., the channel is primitive).
+This is the scalar-algebra specialization of Wolf Equation (1.40), where the
+fixed-point *-subalgebra of the adjoint map is `ℂ · 1`.
 
 The definition does not require `trace σ ≠ 0`; when `trace σ = 0` the map
 sends everything to zero. The nonzero-trace hypothesis is instead required
@@ -305,26 +306,24 @@ theorem scalarConditionalExpectation_preserves_weighted_trace
 
 /-! ## Conditional expectation onto the adjoint fixed-point *-subalgebra -/
 
-/-- **Wolf Theorem 6.15** (scalar fixed-point algebra case):
+/-- Scalar fixed-point algebra conditional expectation.
 
 When a TP Kraus family has `ρ` as a positive-definite fixed point of the
 Schrödinger map, and the adjoint fixed-point set consists only of scalar
 matrices, the scalar conditional expectation `E_ρ` is a conditional
 expectation onto the adjoint fixed-point `StarSubalgebra`.
 
-This covers the primitive channel case. In the general irreducible case
-with period `h > 1`, the fixed-point algebra is `h`-dimensional and the
-conditional expectation requires the Wedderburn block decomposition
-(Wolf Theorem 6.14, issue #27). -/
+Source: Wolf, Equation (1.40), specialized to the scalar algebra. -/
 theorem scalarConditionalExpectation_isConditionalExpectation
     [NeZero D]
     (K : Fin d → Mat) (h_tp : IsTP K)
     {ρ : Mat} (hρ : ρ.PosDef) (hρ_fix : map K ρ = ρ)
     (h_scalar : ∀ X : Mat, X ∈ adjointFixedPoints K →
       ∃ c : ℂ, X = c • (1 : Mat)) :
-    IsConditionalExpectation
+    IsConditionalExpectation (n := Fin D)
       (scalarConditionalExpectation ρ)
       (adjointFixedPointsStarSubalgebra K h_tp hρ hρ_fix) where
+  positive := (scalarConditionalExpectation_isCPMap ρ hρ.posSemidef).isPositiveMap
   idempotent := scalarConditionalExpectation_idempotent ρ
     (ne_of_gt hρ.trace_pos)
   unital := scalarConditionalExpectation_unital ρ
@@ -345,7 +344,7 @@ When the Heisenberg-picture map (the trace adjoint) is unital and Schwarz, and
 the Schrödinger-picture map has a positive definite fixed point, the trace
 adjoint of the mean-ergodic projection is a conditional expectation onto the
 fixed-point star-subalgebra of the Heisenberg map.  This is the general case
-of **Wolf Theorem 6.15**, uniform in the period `h`.
+used in the proof of Wolf Theorem 6.14.
 
 The formula follows from the finite-dimensional mean-ergodic theorem: the
 projection `P*` is idempotent, unital, and fixes exactly the fixed points of
@@ -353,7 +352,7 @@ projection `P*` is idempotent, unital, and fixes exactly the fixed points of
 abstract Schwarz-map algebra theorem (Wolf Theorem 6.12), so the target is a
 bona fide `StarSubalgebra`. -/
 
-/-- **Wolf Theorem 6.15** (general case, via the mean-ergodic projection).
+/-- Conditional expectation from the adjoint mean-ergodic projection.
 
 Let `T : M_D(ℂ) → M_D(ℂ)` be a positive trace-preserving linear map whose
 trace adjoint `T*` satisfies the Schwarz inequality.  If `T` has a positive
@@ -364,8 +363,8 @@ definite fixed point `ρ`, then the adjoint of the mean-ergodic projection of
 This generalizes `Kraus.scalarConditionalExpectation` from the scalar (h = 1)
 case to arbitrary dimension of the fixed-point algebra.
 
-Reference: Wolf, *Quantum Channels & Operations*, Theorem 6.15 and
-Equation (6.14); local source
+Reference: Wolf, *Quantum Channels & Operations*, Equation (6.14) and the
+proof of Theorem 6.14; local source
 `Notes/WolfNoteTexSource/ch06_spectral_properties.tex`,
 lines 226–269 and 1488–1492. -/
 theorem meanErgodicAdjoint_isConditionalExpectation
@@ -373,22 +372,27 @@ theorem meanErgodicAdjoint_isConditionalExpectation
     (T : Mat →ₗ[ℂ] Mat) (hT_pos : IsPositiveMap T) (hT_tp : IsTracePreservingMap T)
     (hTstar_schwarz : IsSchwarzMap (Matrix.traceAdjointMap T))
     {ρ : Mat} (hρ : ρ.PosDef) (hρ_fix : T ρ = ρ) :
-    IsConditionalExpectation
-      (Matrix.traceAdjointMap (LinearMap.meanErgodicProjection T
-        (hT_pos.hasBoundedOrbits_of_tracePreserving hT_tp)))
+    IsConditionalExpectation (n := Fin D)
+      (Matrix.traceAdjointMap
+        (LinearMap.meanErgodicProjection T
+          (hT_pos.hasBoundedOrbits_of_tracePreserving hT_tp)
+          (𝕜 := ℂ) (E := Mat)))
       (SchwarzMap.fixedPointsStarSubalgebra (Matrix.traceAdjointMap T)
         hT_pos.traceAdjointMap
         (isTracePreservingMap_iff_traceAdjointMap_one.mp hT_tp)
         hTstar_schwarz hρ (by
           simpa [Matrix.traceAdjointMap_traceAdjointMap] using hρ_fix)) := by
-  set Pstar := Matrix.traceAdjointMap (LinearMap.meanErgodicProjection T
-    (hT_pos.hasBoundedOrbits_of_tracePreserving hT_tp))
+  set Pstar := Matrix.traceAdjointMap
+    (LinearMap.meanErgodicProjection T
+      (hT_pos.hasBoundedOrbits_of_tracePreserving hT_tp)
+      (𝕜 := ℂ) (E := Mat))
   have hlemma := hT_pos.traceAdjoint_meanErgodicProjection_isPositiveUnitalRetraction hT_tp
   have hPstar_idemp : ∀ Y, Pstar (Pstar Y) = Pstar Y := hlemma.2.2.1
   have hPstar_one : Pstar 1 = 1 := hlemma.2.1
   have hPstar_fixed : ∀ Y, Pstar Y = Y ↔ Matrix.traceAdjointMap T Y = Y := hlemma.2.2.2.2
   exact
-  { idempotent := hPstar_idemp
+  { positive := hlemma.1
+    idempotent := hPstar_idemp
     unital := hPstar_one
     range_subset := fun Y ↦ by
       have hfix : Matrix.traceAdjointMap T (Pstar Y) = Pstar Y :=

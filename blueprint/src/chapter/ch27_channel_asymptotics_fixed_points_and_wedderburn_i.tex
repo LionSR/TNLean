@@ -16,8 +16,8 @@ uniform in $h$.
     \leanok
     Given a $*$-subalgebra $S\subseteq\MN{D}$, a linear map
     $P:\MN{D}\to\MN{D}$ is a conditional expectation onto $S$ if it is
-    idempotent and unital, has range contained in $S$, and satisfies
-    $P(X)=X$ for every $X\in S$.
+    positive, idempotent, and unital, has range contained in $S$, and
+    satisfies $P(X)=X$ for every $X\in S$.
 \end{definition}
 
 \begin{definition}[Scalar conditional expectation]\label{def:scalar_conditional_expectation}
@@ -109,25 +109,25 @@ uniform in $h$.
     \label{thm:meanErgodicAdjoint_isConditionalExpectation}
     \lean{Kraus.meanErgodicAdjoint_isConditionalExpectation}
     \leanok
-    \uses{def:is_conditional_expectation, thm:positive_unital_adjoint_mean_ergodic_retraction}
+    \uses{def:is_conditional_expectation}
     Let $T:\MN{D}\to\MN{D}$ be a positive trace-preserving linear map
     whose trace adjoint $T^*$ satisfies the Schwarz inequality.  If $T$ has a
     positive definite fixed point $\rho>0$, then the trace adjoint of the
     mean-ergodic projection of $T$ is a conditional expectation onto the
     fixed-point star-subalgebra of $T^*$.
-    This is the main formulation of Wolf Theorem~6.15;
-    the construction does not use irreducibility or a Kraus representation,
-    and the period $h$ never enters the hypotheses.
+    This is the conditional-expectation step used in the proof of
+    Wolf Theorem~6.14.
 \end{theorem}
 
-\begin{theorem}[Wolf Theorem~6.15, numbered wrapper]
-    \label{thm:wolf_theorem_6_15}
-    \lean{Kraus.wolf_theorem_6_15}
-    \leanok
-    \uses{thm:meanErgodicAdjoint_isConditionalExpectation}
-    The numbered wrapper for Wolf Theorem~6.15:
-    same statement as Theorem~\ref{thm:meanErgodicAdjoint_isConditionalExpectation}.
-\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:positive_unital_adjoint_mean_ergodic_retraction,
+        thm:fixedPointsStarSubalgebra}
+    The trace adjoint of the mean-ergodic projection is positive, unital, and
+    idempotent, and its fixed points are exactly the fixed points of $T^*$.
+    The Schwarz inequality and the faithful fixed point make this fixed-point
+    space a $*$-subalgebra. Hence the projection is a conditional expectation
+    onto that algebra.
+\end{proof}
 
 \begin{lemma}[Complete positivity of the scalar conditional expectation]
     \label{thm:scalar_conditional_expectation_isCPMap}
