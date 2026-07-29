@@ -137,6 +137,74 @@ STRUCTURAL_CAPABILITY_PATTERNS = {
     "free-graph": re.compile(r"\\begin\{tenkzfree\}"),
     "fusion-tree": re.compile(r"\\tntree\b|\\begin\{tenkzcd\}"),
 }
+INK_ENVIRONMENT_PATTERNS = {
+    "tenkzfree": re.compile(r"\\begin\{tenkzfree\}"),
+    "tenkzlattice": re.compile(r"\\begin\{tenkzlattice\}"),
+    "tenkzplanes": re.compile(r"\\begin\{tenkzplanes\}"),
+    "tenkz": re.compile(r"\\begin\{tenkz(?:eq|cd)?\}|\\tnpic\b|\\tntree\b"),
+}
+INK_SCOPE_TOKEN = re.compile(
+    r"\\tenkzkernel\b"
+    r"|\\begin\{(?P<begin>[^{}]+)\}"
+    r"|\\end\{(?P<end>[^{}]+)\}"
+    r"|\\begingroup\b|\\endgroup\b"
+    r"|\\\[|\\\]|\\\(|\\\)"
+    r"|\\tnpic\b|\\tntree\b"
+    r"|[{}]"
+)
+
+
+def used_ink_environment_families(body: str) -> set[str]:
+    """Return public picture families, respecting the scoped kernel switch."""
+    families: set[str] = set()
+    kernel_scope = [False]
+    for token in INK_SCOPE_TOKEN.finditer(body):
+        text = token.group()
+        begin = token.group("begin")
+        if text == r"\tenkzkernel":
+            kernel_scope[-1] = True
+        elif begin is not None:
+            if begin in {"tenkz", "tenkzeq"}:
+                families.add("kernel" if kernel_scope[-1] else "tenkz")
+            elif begin == "tenkzcd":
+                families.add("tenkz")
+            elif begin in {"tenkzfree", "tenkzlattice", "tenkzplanes"}:
+                families.add(begin)
+            kernel_scope.append(kernel_scope[-1])
+        elif token.group("end") is not None:
+            if len(kernel_scope) > 1:
+                kernel_scope.pop()
+        elif text in {r"\begingroup", r"\[", r"\(", "{"}:
+            kernel_scope.append(kernel_scope[-1])
+        elif text in {r"\endgroup", r"\]", r"\)", "}"}:
+            if len(kernel_scope) > 1:
+                kernel_scope.pop()
+        elif text in {r"\tnpic", r"\tntree"}:
+            families.add("tenkz")
+    return families
+
+
+def ink_environment_problems(target_id: str, ink: str, body: str) -> list[str]:
+    """Return contradictions between an Ink family claim and the case body."""
+    problems: list[str] = []
+    claimed = {
+        family
+        for family in (*INK_ENVIRONMENT_PATTERNS, "kernel")
+        if re.search(rf"\b{family}\b", ink, flags=re.IGNORECASE)
+    }
+    used = used_ink_environment_families(body)
+    for family in (*INK_ENVIRONMENT_PATTERNS, "kernel"):
+        if family in claimed and family not in used:
+            problems.append(
+                f"{target_id}: Ink names {family} but the case body does not "
+                "contain a picture owned by that family"
+            )
+        if family in used and family not in claimed:
+            problems.append(
+                f"{target_id}: case body uses {family} but Ink does not name "
+                "that family"
+            )
+    return problems
 
 
 def structural_capability_problems(
@@ -649,6 +717,12 @@ def validate_case(target: Target) -> None:
         details = ", ".join(f"{number} ({width})" for number, width in wide[:8])
         fail(f"{target.case.as_posix()}: lines exceed 88 characters: {details}")
     syntax = strip_comments(text)
+    ink_problems = ink_environment_problems(target.id, target.ink, syntax)
+    if ink_problems:
+        fail(
+            f"{target.case.as_posix()}: Ink environment mismatch:\n"
+            + "\n".join(ink_problems)
+        )
     for pattern, reason in FORBIDDEN_CASE_PATTERNS:
         match = pattern.search(syntax)
         if match:

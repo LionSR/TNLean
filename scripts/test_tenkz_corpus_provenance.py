@@ -9,7 +9,7 @@ import subprocess
 import tempfile
 from pathlib import Path
 
-from tenkz_rmp import structural_capability_problems
+from tenkz_rmp import ink_environment_problems, structural_capability_problems
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -59,8 +59,75 @@ def test_kernel_capability_owner() -> None:
         raise AssertionError("bare grid owner tag was rejected")
 
 
+def test_ink_environment_owner() -> None:
+    cases = (
+        ("Canonical public tenkzfree environment.", r"\begin{tenkzfree}"),
+        ("Canonical public tenkzlattice environment.", r"\begin{tenkzlattice}"),
+        ("Canonical public tenkzplanes environment.", r"\begin{tenkzplanes}"),
+        ("Canonical public tenkz composition.", r"\tntree{}"),
+        ("Canonical public tenkz diagram.", r"\begin{tenkzcd}"),
+        ("Canonical public kernel records.", r"\tenkzkernel\begin{tenkz}"),
+    )
+    for ink, body in cases:
+        if ink_environment_problems("good", ink, body):
+            raise AssertionError(f"Ink family rejected its body: {ink!r}")
+    mismatch = ink_environment_problems(
+        "wrong", "Canonical public tenkzfree environment.", r"\tenkzkernel"
+    )
+    if not any("Ink names tenkzfree" in problem for problem in mismatch):
+        raise AssertionError("stale Ink family was accepted")
+    mismatch = ink_environment_problems(
+        "wrong", "Canonical public tenkzlattice environment.", r"\begin{tenkzfree}"
+    )
+    if not any("Ink names tenkzlattice" in problem for problem in mismatch):
+        raise AssertionError("wrong Ink environment family was accepted")
+    mismatch = ink_environment_problems(
+        "wrong", "Canonical public tenkz equation.", r"\begin{tenkzfree}"
+    )
+    if not any("Ink names tenkz" in problem for problem in mismatch):
+        raise AssertionError("plain tenkz Ink claim accepted a free body")
+    mismatch = ink_environment_problems(
+        "wrong",
+        "Canonical public tenkz composition.",
+        r"\tenkzkernel\begin{tenkz}",
+    )
+    if not any("uses kernel but Ink does not name" in problem for problem in mismatch):
+        raise AssertionError("plain tenkz Ink claim accepted a kernel body")
+    mismatch = ink_environment_problems(
+        "wrong", "Canonical public composition.", r"\tenkzkernel\begin{tenkz}"
+    )
+    if not any("uses kernel but Ink does not name" in problem for problem in mismatch):
+        raise AssertionError("unlisted kernel owner was accepted")
+    mismatch = ink_environment_problems(
+        "wrong",
+        "Canonical public tenkzfree expression.",
+        r"\begin{tenkzfree}\end{tenkzfree}\begin{tenkz}\end{tenkz}",
+    )
+    if not any("uses tenkz but Ink does not name" in problem for problem in mismatch):
+        raise AssertionError("unlisted mixed-family owner was accepted")
+    mismatch = ink_environment_problems(
+        "wrong", "Canonical public kernel records.", r"\begin{tenkz}"
+    )
+    if not any("Ink names kernel" in problem for problem in mismatch):
+        raise AssertionError("kernel Ink claim accepted the grid surface")
+    mixed = (
+        r"{\tenkzkernel\begin{tenkz}\end{tenkz}}"
+        r"\begin{tenkz}\end{tenkz}"
+    )
+    if ink_environment_problems(
+        "good", "Canonical public kernel and tenkz pictures.", mixed
+    ):
+        raise AssertionError("scoped mixed kernel and tenkz pictures were rejected")
+    mismatch = ink_environment_problems(
+        "wrong", "Canonical public kernel picture.", mixed
+    )
+    if not any("uses tenkz but Ink does not name" in problem for problem in mismatch):
+        raise AssertionError("unlisted plain picture after kernel scope was accepted")
+
+
 def main() -> int:
     test_kernel_capability_owner()
+    test_ink_environment_owner()
     with PROVENANCE.open(encoding="utf-8", newline="") as stream:
         rows = list(csv.reader(stream, dialect="excel-tab"))
 
