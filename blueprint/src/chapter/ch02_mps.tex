@@ -374,23 +374,6 @@ boundary conditions (PBC).
     is the case $c_N = 1$.
 \end{proof}
 
-\begin{lemma}[Positive blocking preserves eventual nonzero proportionality]%
-    \label{lem:eventual_nonzero_proportional_mpv_blocking}
-    \lean{MPSTensor.EventuallyNonzeroProportionalMPV₂.blockTensor}
-    \leanok
-    \uses{def:eventually_nonzero_proportional_mpv, def:blocked_tensor}
-    Let $A$ and $B$ have eventually nonzero proportional MPV families, and let
-    $p>0$. Then the tensors obtained by blocking $p$ consecutive sites also have
-    eventually nonzero proportional MPV families.
-\end{lemma}
-
-\begin{proof}
-    \leanok
-    If proportionality holds from length $N_0$ onward, then a blocked chain of
-    length $N\ge N_0$ expands to an original chain of length $Np\ge N_0$. Use the
-    original proportionality scalar at length $Np$.
-\end{proof}
-
 \begin{lemma}[Scaling of word evaluation]\label{lem:eval_word_smul}
     \lean{MPSTensor.evalWord_smul}
     \leanok

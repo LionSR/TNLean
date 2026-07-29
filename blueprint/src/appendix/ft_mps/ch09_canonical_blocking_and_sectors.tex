@@ -226,6 +226,20 @@ through its own period agrees with the directly $p$-blocked block.
     so do their blocked tensors after any positive blocking length.
 \end{lemma}
 
+\begin{lemma}[Eventual nonzero proportionality survives blocking]%
+    \label{lem:eventual_nonzero_proportional_mpv_blocking}
+    \lean{MPSTensor.EventuallyNonzeroProportionalMPV₂.blockTensor}\leanok
+    \uses{def:blocked_tensor, def:eventually_nonzero_proportional_mpv}
+    If two tensors have eventually nonzero proportional MPV coefficients, then
+    so do their blocked tensors after any positive blocking length.
+\end{lemma}
+
+\begin{proof}\leanok
+    If proportionality holds from length $N_0$ onward, a blocked chain of length
+    $N\ge N_0$ expands to an original chain of length $Np\ge N_0$. Use the
+    original proportionality scalar at length $Np$.
+\end{proof}
+
 \begin{lemma}[Positive-length blocking of a weighted block sum]%
     \label{thm:same_mpv2_pos_block_tensor_to_tensor_from_blocks}
     \lean{MPSTensor.sameMPV₂Pos_blockTensor_toTensorFromBlocks}\leanok
