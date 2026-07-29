@@ -218,55 +218,34 @@ identified with one another.
     paper-level equal-MPV corollary.
 \end{enumerate}
 
-The former strict canonical-form BNT equal-MPV declaration was only a strict
-representative form and is no longer part of the active Lean tree. The former
-one-shot proportional wrappers have also been removed because their hypotheses
-did not supply the full BNT matching conclusion. The current proportional
-surface is instead split into conditional SectorBNT statements. The
-sector-matching theorem\footnote{Formal declaration:
-  \path{MPSTensor.ft_sector_bnt_proportional_sector_match_witnesses}.}
-supplies the matched sectors, phases, and block gauges under the present
-full-basis unit-copy hypotheses; the conditional global-gauge
-theorem\footnote{Formal declaration:
-  \path{MPSTensor.ft_sector_bnt_proportional_global_gauge_of_coeff_identity}.}
-then assumes the eventual matched-sector coefficient identities for those same
-phases and derives the copy-weight matching and global gauge. This is a
-conditional interface, not the unrestricted source theorem.
+The current proportional theorem\footnote{Formal declaration:
+  \path{MPSTensor.fundamentalTheorem_proportional_canonicalForm}.}
+is complete on the SectorBNT surface.  Every representative there has a
+positive copy count, every stored copy weight is nonzero, and the BNT data
+includes the converse coverage needed to exclude extraneous representatives.
+From the proportional MPV hypothesis it obtains a bijection of sectors,
+matched bond dimensions, unit phases, and invertible block gauges.  Separate
+global-gauge declarations strengthen this sectorwise conclusion and should not
+be conflated with the source theorem.
 
-Thus the proof gap is not that the paper has many hidden Fundamental Theorems.
-Rather, the paper suppresses the formal separation between deriving the BNT
-comparison data from the source hypotheses and applying the existing comparison
-theorems to that data. The remaining theorem-level work is to derive, from the
-source proportional MPV hypothesis, the eventual matched-sector coefficient
-identities used in the conditional global-gauge theorem,
-and to discharge any full-basis unit-copy hypotheses from the source
-normalization rather than assuming them separately. Once those inputs are
-available, the SectorBNT statements combine to give the paper-level theorem;
-they are not additional paper theorems.
+\paragraph{Literal source obstruction.}
+The BNT definition in arXiv:1606.00608, lines~271--274, requires normality,
+spanning of the total MPV, and eventual linear independence, but it does not
+require every candidate to occur with a nonzero coefficient.  Consequently an
+unrelated normal tensor may be adjoined with coefficient zero at every length.
+The same tensor then has a one-element and a two-element BNT, so the equality
+of cardinalities asserted by Theorem~II.1 is false under the printed
+hypotheses.\footnote{Formal declaration:
+  \path{MPSTensor.exists_isCPSVBasisOfNormalTensors_unequal_card}; see
+  \path{docs/paper-gaps/cpsv16_bnt_uniqueness_zero_coefficient.tex}.}
 
-\paragraph{Paper-level targets.}
-The proportional canonical-form theorem and the equal-MPV corollary are the
-source targets. Their source proof is formulated after choosing BNT
-representatives and retaining the repeated-copy coefficients
-$\mu_{j,q}$ in the sums
-\[
-  \sum_q \mu_{j,q}^N.
-\]
-The current SectorBNT equal-MPV declarations
-\path{ft_sector_bnt_equal_sector_data} and
-\path{ft_sector_bnt_equal_global_gauge} are therefore the relevant formal
-statements on the BNT surface, not the older one-copy \texttt{CFBNT} surface.
-The proportional theorem on the same surface is currently conditional: it
-assumes the matched-sector coefficient identities for the phases produced by
-the sector matching theorem. It should not be cited as the general
-arXiv:1606.00608
-theorem until those coefficient identities are derived from the proportional
-MPV hypothesis. The equal-MPV common-block comparison likewise assumes the
-repeated-copy structure has already been matched into common weights and
-dimensions. Rectangular variants that state the permutation, phases, gauges,
-and weight matching for sector decompositions with different bases are
-legitimate theorem statements only when their hypotheses are obtained from the
-same BNT comparison.
+Thus the exact missing hypothesis surface is converse coverage of the active
+canonical-form blocks, not a coefficient identity inside the proved
+SectorBNT theorem.  With this active, nonzero restriction, the proportional
+sector theorem is complete.  Without it, the printed theorem requires a
+source correction rather than another matching argument.  The equal-MPV
+ambient conjugacy corollary has the additional zero-weight-coordinate and
+ambient-dimension obstruction recorded separately.
 
 \paragraph{Conditional after-blocking statements.}
 The after-blocking comparison theorems are useful only after the source

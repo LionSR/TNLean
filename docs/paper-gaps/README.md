@@ -21,9 +21,14 @@ equal-modulus comparison has these current reference points.
   global-versus-per-sector unit-witness gap and its elimination by the exact
   linear-independence matcher, together with the unitary equal-case assembly
   of CPSV16 Corollary C.5. It is now a closure record, not a live restriction.
-- `blueprint/src/chapter/ch11_fundamental_theorem_proof.tex` records only how
-  the Chapter 10 comparison is used in the equal-MPV and proportional-MPV
+- `blueprint/src/chapter/ch11_fundamental_theorem_proof.tex` records how the
+  Chapter 10 comparison is used in the equal-MPV and proportional-MPV
   Fundamental Theorem arguments.
+- `cpsv16_bnt_uniqueness_zero_coefficient.tex` records the formal obstruction
+  to the unrestricted printed Theorem II.1: the literal BNT definition permits
+  a normal representative whose coefficient vanishes at every length. The
+  SectorBNT theorem proves the corrected active, nonzero, converse-covered
+  statement.
 - GitHub issue #2150 records the verification request. The outcome now
   recorded in the paper-gap note is that neither a strictly-decreasing-moduli
   hypothesis nor a per-sector unit-witness hypothesis survives in the SectorBNT
