@@ -98,6 +98,50 @@ theorem exists_physicalSupportRestrictionData
         (changePhysicalBasis Vᴴ K) K hreembed.symm hInjective
     reembed := hreembed }⟩
 
+/-- Two-sided absorption of every physical slice by an orthogonal projection
+implies invariance under compression by that projection.
+
+Source: arXiv:1606.00608, Appendix C.2, equation `PjKiPj`, lines 1680--1691. -/
+theorem changePhysicalBasis_eq_self_of_twoSided_physicalSlice
+    (P : Matrix (Fin d) (Fin d) ℂ) (K : MPOTensor d D)
+    (hP : IsOrthogonalProjection P)
+    (hSupport : ∀ β α, P * physicalSlice K β α = physicalSlice K β α ∧
+      physicalSlice K β α * P = physicalSlice K β α) :
+    changePhysicalBasis P K = K := by
+  ext i j β α
+  change (P * physicalSlice K β α * Pᴴ) i j = physicalSlice K β α i j
+  rw [hP.1.eq, (hSupport β α).1, (hSupport β α).2]
+
+/-- An injective tensor whose physical slices are absorbed on both sides by an
+orthogonal projection has an injective realization on the range of that projection.
+
+Source: arXiv:1606.00608, Appendix C.2, equations `PjKiPj` and `generateMPDO`,
+lines 1680--1691 and 1733--1770. -/
+theorem nonempty_physicalSupportRestrictionData_of_twoSided_physicalSlice
+    (P : Matrix (Fin d) (Fin d) ℂ) (K : MPOTensor d D)
+    (hP : IsOrthogonalProjection P) (hInjective : K.IsInjective)
+    (hSupport : ∀ β α, P * physicalSlice K β α = physicalSlice K β α ∧
+      physicalSlice K β α * P = physicalSlice K β α) :
+    Nonempty (PhysicalSupportRestrictionData P K) :=
+  exists_physicalSupportRestrictionData P K hP
+    (changePhysicalBasis_eq_self_of_twoSided_physicalSlice P K hP hSupport)
+    hInjective
+
+/-- The restriction of an injective tensor to an orthogonal projection that
+absorbs every physical slice on both sides.
+
+Source: arXiv:1606.00608, Appendix C.2, equations `PjKiPj` and `generateMPDO`,
+lines 1680--1691 and 1733--1770. -/
+noncomputable def physicalSupportRestrictionDataOfTwoSidedPhysicalSlice
+    (P : Matrix (Fin d) (Fin d) ℂ) (K : MPOTensor d D)
+    (hP : IsOrthogonalProjection P) (hInjective : K.IsInjective)
+    (hSupport : ∀ β α, P * physicalSlice K β α = physicalSlice K β α ∧
+      physicalSlice K β α * P = physicalSlice K β α) :
+    PhysicalSupportRestrictionData P K :=
+  Classical.choice
+    (nonempty_physicalSupportRestrictionData_of_twoSided_physicalSlice
+      P K hP hInjective hSupport)
+
 /-- The common-weight-absorbed BNT representative is injective after the
 source's common blocking.
 

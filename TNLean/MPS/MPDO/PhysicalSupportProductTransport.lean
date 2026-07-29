@@ -679,23 +679,24 @@ bond as its local bond. -/
     (F.liftedEtaLocalStructureData data).bondData.bond =
       F.liftedBond data.bondData.bond := rfl
 
-/-- Proposition C.8 on the injective physical support gives an eta-local
-commuting-product realization of the ambient tensor whose bond remains in the
-prescribed two-site sector.
+/-- A positive physical-sector factorization on the restricted physical space
+gives a positive commuting bond for the ambient tensor supported on the tensor
+square of the prescribed one-site projection. Its periodic product is exactly
+the ambient MPO at every length at least two.
 
-Source: arXiv:1606.00608, Appendix C.2, Proposition C.8 (`3to4`) and
-equations `PjKiPj` and `generateMPDO`, lines 1571--1593 and 1733--1770. -/
-theorem exists_etaLocalStructureData_lifted_supported
-    (F : PhysicalSupportRestrictionData P K) (hSAL : IsSAL K) :
+Source: arXiv:1606.00608, Appendix C.2, equations `AppUkU=rl`, `Appetakhetc`,
+`PjKiPj`, and `generateMPDO`, lines 1383--1450 and 1680--1770. -/
+theorem exists_etaLocalStructureData_lifted_supported_of_physicalSectorFactorization
+    (F : PhysicalSupportRestrictionData P K)
+    (G : PhysicalSectorFactorization
+      (PhysicalSectorFactorization.changePhysicalBasis F.inclusionᴴ K))
+    (hη : ∀ k h, (G.neighboringOperator k h).PosSemidef) :
     ∃ data : EtaLocalStructureData K,
       twoSiteSectorProjection P * data.bondData.bond *
           twoSiteSectorProjection P = data.bondData.bond ∧
       ∀ N (hN : 2 ≤ N),
         mpo K N = (data.bondData.toCommutingFormData hN).product := by
-  obtain ⟨G, hG⟩ := exists_positive_physicalSectorFactorization_of_isSAL
-    (PhysicalSectorFactorization.changePhysicalBasis F.inclusionᴴ K)
-    F.restricted_injective (F.restricted_isSAL hSAL)
-  let restrictedData := G.etaLocalStructureData hG
+  let restrictedData := G.etaLocalStructureData hη
   let data := F.liftedEtaLocalStructureData restrictedData
   refine ⟨data, F.liftedBond_supported restrictedData.bondData.bond, ?_⟩
   intro N hN
@@ -722,6 +723,25 @@ theorem exists_etaLocalStructureData_lifted_supported
     exact G.mpo_eq_product_physicalBond hN]
   exact F.singleKrausMap_bondProduct_eq_liftedBondProduct
     restrictedData.bondData hN
+
+/-- Proposition C.8 on the injective physical support gives an eta-local
+commuting-product realization of the ambient tensor whose bond remains in the
+prescribed two-site sector.
+
+Source: arXiv:1606.00608, Appendix C.2, Proposition C.8 (`3to4`) and
+equations `PjKiPj` and `generateMPDO`, lines 1571--1593 and 1733--1770. -/
+theorem exists_etaLocalStructureData_lifted_supported
+    (F : PhysicalSupportRestrictionData P K) (hSAL : IsSAL K) :
+    ∃ data : EtaLocalStructureData K,
+      twoSiteSectorProjection P * data.bondData.bond *
+          twoSiteSectorProjection P = data.bondData.bond ∧
+      ∀ N (hN : 2 ≤ N),
+        mpo K N = (data.bondData.toCommutingFormData hN).product := by
+  obtain ⟨G, hG⟩ := exists_positive_physicalSectorFactorization_of_isSAL
+    (PhysicalSectorFactorization.changePhysicalBasis F.inclusionᴴ K)
+    F.restricted_injective (F.restricted_isSAL hSAL)
+  exact F.exists_etaLocalStructureData_lifted_supported_of_physicalSectorFactorization
+    G hG
 
 end PhysicalSupportRestrictionData
 
