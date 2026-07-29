@@ -193,8 +193,18 @@ def used_ink_environment_families(body: str) -> set[str]:
     """Return public picture families, respecting the scoped kernel switch."""
     families: set[str] = set()
     kernel_scope = [False]
-    dollar_scope: str | None = None
+    dollar_scope: list[str | None] = [None]
     alignment_scopes: list[tuple[str, int, bool]] = []
+
+    def push_scope(*, dollar: str | None = None) -> None:
+        kernel_scope.append(kernel_scope[-1])
+        dollar_scope.append(dollar)
+
+    def pop_scope() -> None:
+        if len(kernel_scope) > 1:
+            kernel_scope.pop()
+            dollar_scope.pop()
+
     for token in INK_SCOPE_TOKEN.finditer(body):
         text = token.group()
         begin = token.group("begin")
@@ -209,35 +219,29 @@ def used_ink_environment_families(body: str) -> set[str]:
                 families.add("tenkz")
             elif begin in {"tenkzfree", "tenkzlattice", "tenkzplanes"}:
                 families.add(begin)
-            kernel_scope.append(kernel_scope[-1])
+            push_scope()
             if begin in INK_ALIGNMENT_ENVIRONMENTS:
                 alignment_scopes.append(
                     (begin, len(kernel_scope) - 1, kernel_scope[-1])
                 )
         elif (end := token.group("end")) is not None:
-            if len(kernel_scope) > 1:
-                kernel_scope.pop()
+            pop_scope()
             if alignment_scopes and alignment_scopes[-1][0] == end:
                 alignment_scopes.pop()
         elif text in {r"\begingroup", r"\bgroup", r"\[", r"\(", "{"}:
-            kernel_scope.append(kernel_scope[-1])
+            push_scope()
         elif text in {r"\endgroup", r"\egroup", r"\]", r"\)", "}"}:
-            if len(kernel_scope) > 1:
-                kernel_scope.pop()
+            pop_scope()
         elif (dollar := token.group("dollar")) is not None:
-            if dollar_scope is None:
-                dollar_scope = dollar
-                kernel_scope.append(kernel_scope[-1])
-            elif dollar_scope == dollar:
-                dollar_scope = None
-                if len(kernel_scope) > 1:
-                    kernel_scope.pop()
-            elif dollar_scope == "$" and dollar == "$$":
+            if dollar_scope[-1] is None:
+                push_scope(dollar=dollar)
+            elif dollar_scope[-1] == dollar:
+                pop_scope()
+            elif dollar_scope[-1] == "$" and dollar == "$$":
                 # In $a$$b$, the first dollar of the adjacent pair closes the
                 # first inline group and the second opens the next one.
-                if len(kernel_scope) > 1:
-                    kernel_scope.pop()
-                kernel_scope.append(kernel_scope[-1])
+                pop_scope()
+                push_scope(dollar="$")
         elif (
             token.group("cell") is not None
             or token.group("rowbreak") is not None

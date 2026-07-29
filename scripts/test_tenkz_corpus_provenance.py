@@ -162,6 +162,16 @@ def test_ink_environment_owner() -> None:
         adjacent_dollar_scopes,
     ):
         raise AssertionError("adjacent inline math groups leaked the kernel owner")
+    nested_dollar_scopes = (
+        r"$\text{$\tenkzkernel\begin{tenkz}\end{tenkz}$}"
+        r"\begin{tenkz}\end{tenkz}$"
+    )
+    if ink_environment_problems(
+        "good",
+        "Canonical public kernel and tenkz pictures.",
+        nested_dollar_scopes,
+    ):
+        raise AssertionError("nested dollar math leaked the kernel owner")
     explicit_group_aliases = (
         r"\bgroup\tenkzkernel\begin{tenkz}\end{tenkz}\egroup"
         r"\begin{tenkz}\end{tenkz}"
