@@ -114,6 +114,22 @@ abstracted — record why, so it is not re-proposed).
   are 30 and 44 declaration/proof lines. Including the dependency-neutral module split,
   the refactor removes 364 source lines overall (865 additions, 1229 deletions).
 
+### physical-sector virtual-matrix transport — promoted
+- **Pattern:** absorb two virtual matrices into the left and right tensor
+  families of a physical-sector factorization, expand the transported physical
+  slice, and discharge the equal- and unequal-sector blocks separately.
+- **Seen:** two implementations exceeding 70 proof lines each in
+  `PhysicalSectorGaugeTransport.lean` and
+  `PhysicalSectorVirtualCompression.lean`; both also expanded the same
+  neighboring contraction.
+- **Abstraction:** `MPOTensor.PhysicalSectorFactorization.ofVirtualMatrices`
+  and `ofVirtualMatrices_neighboringOperator` in
+  `TNLean/MPS/MPDO/PhysicalSectorVirtualTransport.lean`.
+- **Notes:** gauge transport specializes the two matrices to an invertible
+  gauge and its inverse; virtual compression specializes them to an adjoint
+  and its coordinate map.  The source-facing definitions and theorem
+  statements remain unchanged.
+
 ### list_ofFn_products — promoted
 - **Pattern:** induction on the length to distribute an ordered `List.ofFn` product over
   finite sums, or to extract scalar coefficients from such a product.
