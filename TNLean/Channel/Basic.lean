@@ -30,6 +30,8 @@ Chapters 3 and 6 of Wolf's lecture notes.
 * `IsTraceNonincreasingMap`: a linear endomorphism that does not increase the
   trace of positive semidefinite inputs
 * `IsCPMap`: a linear map that admits a Kraus representation
+* `IsKrausCP`: a linear map between possibly different matrix algebras that
+  admits a rectangular Kraus representation
 * `IsCompletelyCopositiveMap`: a map whose composition with transposition is CP
 * `IsDecomposablePositiveMap`: a sum of a CP map and a completely copositive map
 * `IsIndecomposablePositiveMap`: a positive map that is not decomposable
@@ -89,6 +91,22 @@ the formulation used in the Kadison–Schwarz and multiplicative-domain proofs. 
 def IsCPMap (E : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ) : Prop :=
   ∃ (r : ℕ) (K : Fin r → Matrix n n ℂ),
     ∀ X, E X = ∑ i : Fin r, K i * X * (K i)ᴴ
+
+/-- A **completely positive map** between possibly different matrix algebras,
+in rectangular Kraus form:
+`S(X) = ∑ᵢ Aᵢ X Aᵢ†`, where `Aᵢ : Matrix β α ℂ`.
+
+This is the dimension-changing Kraus notion in
+[M. Wolf, *Quantum Channels & Operations: Guided Tour*, Section 2.1,
+Theorem 2.1][Wolf2012QChannels].
+It is also the notion used for the support formula of the Petz transpose map
+in Hayden--Jozsa--Petz--Winter, arXiv:quant-ph/0304007v2, Theorem 3,
+equation (8). No trace-preservation condition is included. -/
+def IsKrausCP {α β : Type*} [Fintype α] [DecidableEq α]
+    [Fintype β] [DecidableEq β]
+    (S : Matrix α α ℂ →ₗ[ℂ] Matrix β β ℂ) : Prop :=
+  ∃ (r : ℕ) (A : Fin r → Matrix β α ℂ),
+    ∀ X, S X = ∑ i, A i * X * (A i)ᴴ
 
 /-- A **quantum channel** is a completely positive trace-preserving (CPTP) map.
 
