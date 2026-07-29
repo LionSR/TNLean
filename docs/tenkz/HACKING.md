@@ -107,8 +107,11 @@ and TeX epoch.  The exact-toolchain pins in
 after an approved XeTeX, Poppler, font, or intentional render change, inspect
 the full-resolution fixtures.  Before re-pinning, run
 `scripts/tenkz_kernel_probes.sh --check`: an expected pixel mismatch is
-acceptable, but its event-stream comparison must remain clean unless a separate
-event-contract change was also reviewed.  Then re-pin with
+acceptable, but every non-pixel probe must pass, including structural
+assertions, sugar-expansion parity, and the event-stream comparison.  If a
+separate reviewed contract change intentionally affects a non-pixel pin, review
+and update that contract first, then rerun until every non-pixel probe passes.
+Do not snapshot after any non-pixel failure.  Then re-pin with
 `scripts/tenkz_kernel_probes.sh --snapshot`, which updates both the pixel and
 event ledgers.
 
@@ -132,6 +135,21 @@ python3 scripts/tenkz_shrink.py flags
 python3 scripts/tenkz_shrink.py gate --base-ref origin/main
 ```
 
+When an intentional registry or demand-corpus change alters a meter, compute
+and review the new baseline before the gate:
+
+```sh
+python3 scripts/tenkz_shrink.py meters > /tmp/tenkz-census-baseline.json
+diff -u tests/tenkz/census-baseline.json /tmp/tenkz-census-baseline.json
+cp /tmp/tenkz-census-baseline.json tests/tenkz/census-baseline.json
+python3 scripts/tenkz_shrink.py gate --base-ref origin/main
+```
+
+At the start of a new 0.9 or 1.0 shrink session, advance
+`CURRENT_MILESTONE` in `scripts/tenkz_shrink.py` in the same change.  The
+`flags` and `gate` actions use that constant to decide which alias sunsets are
+due.
+
 The registry's implementation ledgers are `kernel` and `sugar(...)`: kernel
 rows are one-in-one-out vocabulary, while sugar rows must expand into kernel
 spellings and earn continued use.  The other status words record lifecycle
@@ -139,17 +157,20 @@ debt: `alias(...; sunset=...)` reads old sources until its stated rewrite, and
 `escape` names raw geometry whose uses count in meter M3.
 
 The gate first compares the pinned meters with the base revision.  M1 total or
-kernel growth requires an extension, or a census correction while parser
-identities are unchanged; command or environment growth requires an extension.
-M2 path-count growth and every parser-leaf identity change, including
-replacement or removal, require an `Extension-gate: #NNNN` citation.  M3 or M4
-growth requires a census correction.  M5 alias-count growth is rejected
-unconditionally, and every alias must have a valid sunset.  M6 component growth
-requires a census correction while parser identities are unchanged.
+kernel growth requires an `Extension-gate: #NNNN` citation, or a
+`Census-correction: #NNNN` citation while parser identities are unchanged;
+command or environment growth permits only the extension citation.  M2
+path-count growth and every parser-leaf identity change, including replacement
+or removal, require the extension citation.  M3 or M4 growth requires the
+census-correction citation.  M6 component growth also requires a census
+correction while parser identities are unchanged.  M5 alias-count growth is
+rejected unconditionally, and every alias must have a valid sunset.
 
 After that ratchet passes, a public-census decrease is accepted.  Otherwise,
 every raised low-consumer, co-occurrence, lonely-type, sugar-shaped, and due
 alias-sunset flag needs a verdict in the latest `docs/tenkz/SHRINK.md` session.
+The ledger is append-only: retain the entire pre-change file byte-for-byte as a
+prefix and add corrections and verdicts in a new final session section.
 
 ## Shared parsers
 
@@ -174,7 +195,7 @@ library.  Never add another parser for syntax already parsed by
 
 ## Stage ownership
 
-Each stage file begins with its complete input, output, owned-state, invariant,
+Each stage file begins with its declared input, output, owned-state, invariant,
 and next-stage contract.
 
 These are normative ownership rules for new code and migration destinations,
