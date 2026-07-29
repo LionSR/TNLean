@@ -179,7 +179,7 @@
   {
     \__tenkz_string_register:nn {#1} {route}
     \prop_put:Nnn \l__tenkz_string_source_prop {#1} {generated}
-    \__tenkz_render_save_route:nn {#1} {#2}
+    \path [ spath/save = {#1} ] #2 ;
   }
 \cs_generate_variant:Nn \__tenkz_string_save_route:nn { nV }
 

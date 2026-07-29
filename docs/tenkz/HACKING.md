@@ -173,6 +173,14 @@ alias-sunset flag needs a verdict in the latest `docs/tenkz/SHRINK.md` session.
 The ledger is append-only: retain the entire pre-change file byte-for-byte as a
 prefix and add corrections and verdicts in a new final session section.
 
+A verdict is a table row whose first cell is the exact `flag:*` ID printed by
+`flags` (escape an internal table pipe as `\|`).  Its second cell must begin
+with one of `keep-because`, `keep`, `dies`, `demoted`, `folds`, `respelled`,
+`becomes`, `moves`, `confirmed`, `confirmed merge`, `tombstoned`,
+`sugar preset`, or `executes`, and must include an unexpired
+`expiry <milestone>`, `permanent`, or `executes at the <milestone> freeze`
+lifetime.  Prose outside such a row is not a machine-readable verdict.
+
 ## Shared parsers
 
 `scripts/tenkzlib/tnlog.py` is the canonical schema-validating parser for
