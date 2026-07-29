@@ -148,11 +148,10 @@ and
 {\scriptsize\leanid{MPOTensor.exists_pairwise_orthogonal_twoSided_physicalSupport_commonWeightAbsorbedBasis}}.}
 
 This formalizes the pairwise support consequence of the earlier Case~II data.
-The two-sided slice equations now also give the injective restriction of each
-representative to the range of its projection.  If this restricted tensor is
-equipped with a physical-sector factorization whose neighboring operators are
-positive semidefinite, its positive commuting bond lifts to a bond $B_x$ on
-the original one-site space satisfying
+The ambient factorization \texttt{AppUkU=rl}, together with
+\texttt{Appetakhetc}, now supplies the canonical injective active restriction
+and its positive physical-sector factorization.  Its positive commuting bond
+lifts to a bond $B_x$ on the original one-site space satisfying
 \[
   (P_x\otimes P_x)B_x(P_x\otimes P_x)=B_x.
 \]
@@ -161,10 +160,9 @@ $\rho^{(N)}(\mathcal K_x)$ exactly for every $N\geq2$.  Applying this
 construction to pairwise orthogonal projections gives the orthogonal commuting
 sector family required for the outer GSNNCH sum.
 \footnote{\raggedright Formal declarations:
-{\scriptsize\leanid{MPOTensor.nonempty_physicalSupportRestrictionData_of_twoSided_physicalSlice}},
-{\scriptsize\leanid{MPOTensor.PhysicalSupportRestrictionData.exists_etaLocalStructureData_lifted_supported_of_physicalSectorFactorization}},
+{\scriptsize\leanid{MPOTensor.PhysicalSectorFactorization.exists_etaLocalStructureData_supported_of_twoSidedPhysicalSlice}},
 and
-{\scriptsize\leanid{MPOTensor.nonempty_orthogonalCommutingSectorFamily_of_twoSidedPhysicalSlice}}.}
+{\scriptsize\leanid{MPOTensor.nonempty_orthogonalCommutingSectorFamily_of_ambientPhysicalSectorFactorization}}.}
 
 The active factor supports in the displayed ambient factorization
 \texttt{AppUkU=rl} have now been assembled into the canonical physical
@@ -182,6 +180,14 @@ with the explicit congruence of the corresponding ambient operator from
 Consequently the canonical restriction has a positive physical-sector
 factorization indexed precisely by the active ambient sectors, including the
 vacuous empty-family case.
+
+The canonical joint physical support is contained in every orthogonal
+projection satisfying the two-sided equations \texttt{PjKiPj}.  Two-site
+support monotonicity therefore transports the positive commuting bond from
+the canonical support to the printed projection $P_x$.  Thus the local
+compatibility obligation between \texttt{AppUkU=rl},
+\texttt{Appetakhetc}, and \texttt{PjKiPj} is complete, both for one sector
+and for a pairwise orthogonal family of sectors.
 
 The final printed proof of Proposition~\texttt{prop3to4} uses projector
 relations obtained earlier rather than deriving them in its last step.  The
@@ -230,16 +236,15 @@ MPO tensors without those hypotheses.
 
 The construction from an already supplied orthogonal commuting sector family
 to the GSNNCH form is available, together with the natural BNT multiplicities.
-Two-sided physical-slice absorption now supplies the physical restrictions,
-and a positive physical-sector factorization on each restricted space supplies
-supported positive commuting bonds with exact periodic products.  The
-canonical restriction and its exact sectorwise factorization have now been
-derived from \texttt{AppUkU=rl}, with inactive factor directions removed
-without a minimality hypothesis.  The neighboring operators are the explicit
-congruences prescribed by \texttt{Appetakhetc}, and hence remain positive
-semidefinite.  This active compression must now be combined with
-\texttt{AppKxKy=0}, \texttt{Apptralktrrk}, and \texttt{AppPsiPhi}, with
-common copy weights retained from the preceding Case~II argument.
+The canonical restriction, its exact sectorwise factorization, and its
+positive neighboring operators have now been derived from
+\texttt{AppUkU=rl} and \texttt{Appetakhetc}, with inactive factor
+directions removed without a minimality hypothesis.  Together with the
+two-sided supports obtained from \texttt{AppKxKy=0}, this gives supported
+positive commuting bonds with exact periodic products on the printed
+projections.  The remaining capstone must combine these sector bonds with
+\texttt{Apptralktrrk} and \texttt{AppPsiPhi}, with common copy weights
+retained from the preceding Case~II argument.
 Proposition~\texttt{prop3to4} should therefore not yet be classified as
 complete.
 
