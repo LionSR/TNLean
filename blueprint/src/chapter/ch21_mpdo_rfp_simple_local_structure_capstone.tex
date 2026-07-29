@@ -332,10 +332,11 @@
     \leanok
     \uses{thm:mpdo_injective_mpdo_adjoint_closure}
     Let $K$ be injective and let
-    \[
+    \begin{align}
         UK[\beta,\alpha]U^*
         =\bigoplus_k l_{k,\beta}\otimes r_{k,\alpha}
-    \]
+        \notag
+    \end{align}
     be a physical-sector factorization whose neighboring operators are
     positive semidefinite. Call $k$ active when both families
     $\{l_{k,\beta}\}_\beta$ and $\{r_{k,\alpha}\}_\alpha$ contain a nonzero
@@ -357,11 +358,12 @@
         \notag
     \end{align}
     Moreover, there are positive integers $p_k,q_k$ and isometries
-    \[
+    \begin{align}
         V_k^L:\C^{p_k}\longrightarrow\C^{d_k^L},
-        \qquad
+        \qquad&
         V_k^R:\C^{q_k}\longrightarrow\C^{d_k^R}
-    \]
+        \notag
+    \end{align}
     whose range projections are $P_k^L$ and $P_k^R$. If $k$ is inactive,
     every product $l_{k,\beta}\otimes r_{k,\alpha}$ vanishes; in particular,
     there is no active sector when the virtual dimension is zero.
@@ -372,12 +374,34 @@
     The sector-coordinate tensor remains injective. Positivity of the
     neighboring operators makes it a matrix product density operator, so
     Theorem~\ref{thm:mpdo_injective_mpdo_adjoint_closure} closes its physical
-    slices under conjugate transpose. Restriction to one diagonal sector
-    closes the span of the products
-    $l_{k,\beta}\otimes r_{k,\alpha}$. Evaluating a nonzero matrix entry in
-    the opposite factor gives conjugate-transpose closure of each factor
-    span. The joint column-support projections then absorb the factors on
-    both sides. Their tensor product is the support projection of the
+    slices under conjugate transpose. Restriction to the $k$-th diagonal
+    sector gives coefficients $c_{k,\beta,\alpha}(\mu,\nu)$ such that
+    \begin{align}
+        (l_{k,\beta}\otimes r_{k,\alpha})^*
+        &=
+        \sum_{\mu,\nu}c_{k,\beta,\alpha}(\mu,\nu)\,
+        l_{k,\mu}\otimes r_{k,\nu}.
+        \label{eq:mpdo_active_sector_product_adjoint_closure}
+    \end{align}
+    Since $k$ is active, choose $\alpha,u,v$ for which
+    $r_{k,\alpha}(u,v)\ne0$, and put
+    $z=\overline{r_{k,\alpha}(u,v)}$. Evaluating
+    \eqref{eq:mpdo_active_sector_product_adjoint_closure} at the corresponding
+    matrix entry and dividing by $z$ yields
+    \begin{align}
+        l_{k,\beta}^*
+        &=
+        \sum_\mu
+        \left(
+            z^{-1}\sum_\nu
+            c_{k,\beta,\alpha}(\mu,\nu)r_{k,\nu}(v,u)
+        \right)l_{k,\mu}.
+        \label{eq:mpdo_active_sector_left_adjoint_closure}
+    \end{align}
+    Interchanging the two factors gives the corresponding identity for
+    $r_{k,\alpha}^*$. Thus both factor spans are closed under conjugate
+    transpose. The joint column-support projections then absorb the factors
+    on both sides. Their tensor product is the support projection of the
     product family, and finite-dimensional range decompositions give the two
     isometries.
 \end{proof}
