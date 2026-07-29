@@ -64,7 +64,7 @@ The following ledger makes the count reproducible from source line numbers:
   and 1172 inherit partial, partial, and not-ready status, respectively; the
   Appendix D restatements at 1863 and 1929 inherit complete and partial status.
   Thus the five restatements add one complete, three partial, and one not-ready
-  occurrence, giving the displayed totals 17/16/12.
+  occurrence, giving the displayed totals 18/15/12.
 
 Definitions, equations, and explanatory proof-segment rows are not counted.
 In particular, Eq. `II_XAX` at 1072--1077 is excluded, while the purification

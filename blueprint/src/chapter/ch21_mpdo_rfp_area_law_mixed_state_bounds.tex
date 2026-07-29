@@ -495,13 +495,11 @@
 
 \begin{theorem}[Trace-normalized renormalization fixed points saturate the area law]
     \label{thm:mpdo_rfp_implies_sal}
-    \lean{MPOTensor.isSAL_of_isRFPViaTS_of_trace_ne_zero,
-      MPOTensor.isSAL_of_isRFPViaTS}
+    \lean{MPOTensor.isSAL_of_isRFPViaTS_of_trace_ne_zero}
     \leanok
     \uses{lem:mpdo_chain_mutual_information_bipartition,
       lem:mpdo_rfp_transfer_across_cut,
-      thm:mpdo_rfp_split_mutual_information_eq,
-      lem:mpdo_rfp_positive_length_trace_nonzero}
+      thm:mpdo_rfp_split_mutual_information_eq}
     Let $M$ generate positive semidefinite ring operators with
     $\tr[\rho^{(N)}(M)]\neq0$ for every $N\geq1$. If $M$ satisfies the local
     renormalization fixed-point equations of Definition~4.1, then $M$ saturates
@@ -510,8 +508,7 @@
     $1\leq L<\lfloor N/2\rfloor$.
     Nonvanishing is the normalization boundary implicit in the density-operator
     language of \cite{Cirac2016MPDO_arXiv}. Positive semidefiniteness alone
-    admits the zero family. Normalized BNT-refined horizontal form is a stronger
-    specialization that derives the required nonvanishing.
+    admits the zero family.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -519,19 +516,32 @@
     processing give
     $I(\sigma^{(N)}_{a+2:b+1})\leq I(\sigma^{(N)}_{a+1:b+2})$ and
     $I(\sigma^{(N)}_{a+1:b+2})\leq I(\sigma^{(N)}_{a+2:b+1})$. Hence the two
-    quantities are equal. The consecutive-cut
-    identification gives $I_L(M)=I_{L+1}(M)$. In the horizontal specialization,
-    Lemma~\ref{lem:mpdo_rfp_positive_length_trace_nonzero} supplies
-    $\tr[\rho^{(N)}(M)]\neq0$ for every $N\geq1$.
+    quantities are equal. The consecutive-cut identification gives
+    $I_L(M)=I_{L+1}(M)$.
+\end{proof}
+
+\begin{corollary}[Horizontal renormalization fixed points saturate the area law]
+    \label{cor:mpdo_horizontal_rfp_implies_sal}
+    \lean{MPOTensor.isSAL_of_isRFPViaTS}
+    \leanok
+    \uses{lem:mpdo_rfp_positive_length_trace_nonzero,
+      thm:mpdo_rfp_implies_sal}
+    Let $M$ be in normalized BNT-refined horizontal form, generate positive
+    semidefinite ring operators, and satisfy the local renormalization
+    fixed-point equations of Definition~4.1. Then $M$ saturates the area law.
+\end{corollary}
+
+\begin{proof}\leanok
+    Lemma~\ref{lem:mpdo_rfp_positive_length_trace_nonzero} gives nonzero trace
+    at every positive length. Apply
+    Theorem~\ref{thm:mpdo_rfp_implies_sal}.
 \end{proof}
 
 \begin{theorem}[Trace-normalized renormalization fixed points have ZCL and SAL]
     \label{thm:mpdo_rfp_implies_zcl_and_sal}
-    \lean{MPOTensor.isSourceZCL_and_isSAL_of_isRFPViaTS_of_trace_ne_zero,
-      MPOTensor.isSourceZCL_and_isSAL_of_isRFPViaTS}
+    \lean{MPOTensor.isSourceZCL_and_isSAL_of_isRFPViaTS_of_trace_ne_zero}
     \leanok
     \uses{thm:rfp_via_ts_source_zcl,
-      lem:mpdo_rfp_positive_length_trace_nonzero,
       thm:mpdo_rfp_implies_sal}
     Let $M$ generate positive semidefinite ring operators with
     $\tr[\rho^{(N)}(M)]\neq0$ for every $N\geq1$. If $M$ satisfies the local
@@ -539,9 +549,8 @@
     source zero correlation length and saturates the area law. This is the
     forward implication proved in
     \cite[Appendix~C, lines~1333--1341]{Cirac2016MPDO_arXiv}, at the
-    normalization boundary implicit in its density-operator language. Positive semidefiniteness alone
-    admits the zero family. Normalized BNT-refined horizontal form is a stronger
-    specialization that derives nonvanishing at every positive length.
+    normalization boundary implicit in its density-operator language. Positive
+    semidefiniteness alone admits the zero family.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -551,8 +560,24 @@
     $\tr[\rho^{(1)}(M)]=\tr(\mathcal T_M)=0$, contradicting nonvanishing at
     length one. Thus $M$ has source zero correlation length, and
     Theorem~\ref{thm:mpdo_rfp_implies_sal} gives saturation of the area law.
-    The horizontal specialization obtains its nonvanishing hypothesis from
-    Lemma~\ref{lem:mpdo_rfp_positive_length_trace_nonzero}.
+\end{proof}
+
+\begin{corollary}[Horizontal renormalization fixed points have ZCL and SAL]
+    \label{cor:mpdo_horizontal_rfp_implies_zcl_and_sal}
+    \lean{MPOTensor.isSourceZCL_and_isSAL_of_isRFPViaTS}
+    \leanok
+    \uses{lem:mpdo_rfp_positive_length_trace_nonzero,
+      thm:mpdo_rfp_implies_zcl_and_sal}
+    Let $M$ be in normalized BNT-refined horizontal form, generate positive
+    semidefinite ring operators, and satisfy the local renormalization
+    fixed-point equations of Definition~4.1. Then $M$ has source zero
+    correlation length and saturates the area law.
+\end{corollary}
+
+\begin{proof}\leanok
+    Lemma~\ref{lem:mpdo_rfp_positive_length_trace_nonzero} gives nonzero trace
+    at every positive length. Apply
+    Theorem~\ref{thm:mpdo_rfp_implies_zcl_and_sal}.
 \end{proof}
 
 \begin{lemma}[Nonnegativity of block entropies]

@@ -106,7 +106,8 @@ For MPDO renormalization fixed points:
   density family with nonzero trace at every positive length, together with the
   Definition 4.1 local renormalization equations. Positivity alone admits the
   zero tensor. The horizontal-form theorems are stronger specializations that
-  derive the required nonvanishing.
+  derive the required nonvanishing. This closes only implication
+  $\mathrm{(i)}\Rightarrow\mathrm{(ii)}$; Theorem 4.9 remains partial.
 - `hjpw04_ssa_product_marginal_reference.tex` records the singular
   product-marginal evaluation in the relative-entropy form of strong
   subadditivity. The support-compressed tensor logarithm, the bipartite entropy
