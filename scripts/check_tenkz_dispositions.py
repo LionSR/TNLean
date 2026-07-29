@@ -70,7 +70,6 @@ SUGAR_COMMANDS = (
     "tnspan",
     "tndots",
     "tnskip",
-    "tndeclareatom",
 )
 BARE_DEAD_FLAGS = ("boundary legs", "maps")
 
@@ -177,6 +176,8 @@ def fragment_target_codes(source: str) -> frozenset[str]:
         "tngroup",
         "tnset",
         "tndeclare",
+        "tndeclareatom",
+        "tenkzkernel",
         *DEAD_COMMANDS,
         *SUGAR_COMMANDS,
     )
@@ -212,7 +213,7 @@ def fragment_target_codes(source: str) -> frozenset[str]:
         r"frame\s*=\s*(?:\{\s*)?matrix\s*=",
         r"rows\s*=\s*\{[^}\n]*:[^}\n]*\}",
         r"\\tnfuse\s*\[[^\]]*\brows\s*=",
-        r"form\s*=\s*(?:brace-(?:below|above)|cut|band|prose)\b",
+        r"form\s*=\s*(?:\{\s*)?(?:brace-(?:below|above)|cut|band|prose)\b",
         r"\\tnspan\s*\[[^\]]*\bbrace\s+(?:below|above)\b",
         r"skin\s*=\s*(?:cluster|enclosure)\b",
         r"weight\s*=\s*string\b",
@@ -282,6 +283,10 @@ def fragment_target_codes(source: str) -> frozenset[str]:
         codes.add("C-species")
     if re.search(r"\\tnset\s*\{[^}]*\bspecies\s*=", source):
         codes.add("C-declare")
+    if re.search(r"\\tndeclareatom\b", source):
+        codes.add("C-declare")
+    if re.search(r"\\tenkzkernel\b", source):
+        codes.add("C-switch")
 
     redraw = {code for code in codes if code.startswith("R-")}
     if redraw:

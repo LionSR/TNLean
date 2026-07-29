@@ -36,6 +36,7 @@ with the tracked TeX sources.
 | `C-frame` | Expand lattice/ring/surface/planes/cluster sugar to rows, columns, frame, basis members, and explicit closures. |
 | `C-record` | Expand atom, wire, span, skip, and port sugar; respell 0.7 atom flags as `skin=` and typed `ports=` on `\tn`, `\tnwire`, and `\tnmark` records. |
 | `C-species` | Replace `role=` with the corresponding declared `species=`. |
+| `C-switch` | Remove the temporary `\tenkzkernel` opt-in when the kernel becomes the public surface at S4. |
 | `R-free` | Redraw the free graph as addressed `\tn`, `\tnwire`, and `\tnmark` records; §12.7 is the canonical irregular addressed-graph shape. |
 | `R-cd` | Use external `tikz-cd` for a commutative map, or redraw tensor/fusion content as `tenkz` records and equation composition. |
 | `R-lattice` | Redraw as a flat-frame `tenkz` lattice: rows/columns for regular members, or a declared basis for staggered/cluster members (§12.5). |

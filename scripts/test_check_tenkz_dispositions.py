@@ -24,6 +24,7 @@ def main() -> int:
         r"\begin{tenkz}[rows={op:none}]\end{tenkz}",
         r"\tnfuse[rows=2]{}",
         r"\tnmark[form=brace-below]{}{}",
+        r"\tnmark[form={brace-below}]{}{}",
         r"\tnspan[brace below]{2}{}",
         r"\tnspan[brace above]{2}{}",
         r"\tn[cluster]{}",
@@ -62,6 +63,10 @@ def main() -> int:
     assert guard.source_target_codes(
         r"\tnset{species={alpha,beta}}"
     ) == frozenset({"C-declare"})
+    assert guard.source_target_codes(r"\tndeclareatom{pill}") == frozenset(
+        {"C-declare"}
+    )
+    assert guard.source_target_codes(r"\tenkzkernel") == frozenset({"C-switch"})
     assert guard.source_target_codes(r"\tn[pill]{}") == frozenset({"C-record"})
     assert guard.source_target_codes(
         r"\begin{tenkzfree}\tnghost{}\end{tenkzfree}"
