@@ -107,13 +107,17 @@ options:
 Option~1 is now in place. The predicate \texttt{IsZCL} remains documented as a
 doubled-index CP-transfer idempotence condition, while
 \texttt{IsSourceZCL} records Definition~4.2. For the renormalization condition
-of Definition~4.1, the forward implication to source ZCL is now proved under
-the explicit nonzero-transfer hypothesis above.  Under horizontal canonical
-form and the MPDO condition, this nonzero clause is now derived from the
-positive-length ring operators, and Proposition \texttt{propsimple} is proved
-with its full ZCL and SAL conclusion by
-\texttt{MPOTensor.isSourceZCL\_and\_isSAL\_of\_isRFPViaTS}.  The PRFP
-equivalence and the reverse implications in Theorem~4.9 remain open.
+of Definition~4.1, Proposition \texttt{propsimple} is now proved at the explicit
+normalization boundary: every positive-length ring is positive semidefinite and
+has nonzero trace.  The primary declarations are
+\texttt{MPOTensor.isSourceZCL\_and\_isSAL\_of\_isRFPViaTS\_of\_trace\_ne\_zero}
+and \texttt{MPOTensor.isSAL\_of\_isRFPViaTS\_of\_trace\_ne\_zero}.
+The existing horizontal-form declarations
+\texttt{MPOTensor.isSourceZCL\_and\_isSAL\_of\_isRFPViaTS} and
+\texttt{MPOTensor.isSAL\_of\_isRFPViaTS} are stronger specializations that
+derive positive-length nonvanishing.  Positivity by itself admits the zero
+tensor, so the trace condition cannot be omitted.  The PRFP equivalence and the
+reverse implications in Theorem~4.9 remain open.
 
 \section{The faithful definition and its consequences}
 
@@ -154,8 +158,12 @@ The theorem
 zero-correlation-length calculation in Appendix~C, Proposition
 \texttt{propsimple}, source lines 1333--1340. This proposition proves the first
 implication of Theorem~4.9 by establishing both ZCL and SAL.  The physical-trace
-theorem formalizes its ZCL calculation; the source-shaped capstone cited above
-combines it with positive-length nonvanishing and the SAL theorem.  For every
+theorem formalizes its ZCL calculation.  At the explicit density-family boundary,
+\texttt{MPOTensor.isSourceZCL\_and\_isSAL\_of\_isRFPViaTS\_of\_trace\_ne\_zero}
+combines it with positive-length nonvanishing and
+\texttt{MPOTensor.isSAL\_of\_isRFPViaTS\_of\_trace\_ne\_zero}.  The
+horizontal declarations are corollaries obtained by deriving that
+nonvanishing.  For every
 virtual matrix $X$,
 trace preservation of the one-to-two map gives
 \[
