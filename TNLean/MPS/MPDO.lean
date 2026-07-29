@@ -27,6 +27,7 @@ import TNLean.MPS.MPDO.BNTFusionCoisometries
 import TNLean.MPS.MPDO.BNTFusionIsometries
 import TNLean.MPS.MPDO.BNTFusionTensorClause
 import TNLean.MPS.MPDO.BNTFusionTensorClauseFromRFP
+import TNLean.MPS.MPDO.BNTLayerOrthogonality
 import TNLean.MPS.MPDO.BNTLeftTripleFusion
 import TNLean.MPS.MPDO.BNTMarkovKeyFormula
 import TNLean.MPS.MPDO.BNTMarkovSectorProjectors
@@ -72,6 +73,7 @@ import TNLean.MPS.MPDO.CPSVPeriodicExclusion
 import TNLean.MPS.MPDO.CPSVRepresentativeGroupedLemmaL
 import TNLean.MPS.MPDO.CPSVVerticalBNT
 import TNLean.MPS.MPDO.CPSVVerticalCanonicalForm
+import TNLean.MPS.MPDO.CommonWeightAbsorbedBNTSupport
 import TNLean.MPS.MPDO.CommonWeightAbsorption
 import TNLean.MPS.MPDO.CommutingBondEtaBoundaryTrace
 import TNLean.MPS.MPDO.CommutingBondEtaCyclicCore
