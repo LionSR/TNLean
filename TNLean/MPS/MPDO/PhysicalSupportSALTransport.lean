@@ -116,58 +116,11 @@ theorem vonNeumannEntropy_singleKraus_isometry
     _ = vonNeumannEntropy ρ hρ :=
       vonNeumannEntropy_congr hBAeq hBA hρ
 
-namespace Matrix
-
-/-- Positivity can be read back through an isometric single-Kraus
-conjugation. -/
-theorem posSemidef_of_singleKraus_isometry
-    {α β : Type*} [Fintype α] [DecidableEq α]
-    [Fintype β]
-    (V : Matrix β α ℂ) (hV : Vᴴ * V = 1) {X : Matrix α α ℂ}
-    (hX : (singleKrausMap V X).PosSemidef) : X.PosSemidef := by
-  classical
-  have hback := hX.mul_mul_conjTranspose_same Vᴴ
-  simp only [singleKrausMap_apply,
-    Matrix.conjTranspose_conjTranspose] at hback
-  have heq : Vᴴ * (V * X * Vᴴ) * V = X := by
-    calc
-      _ = (Vᴴ * V) * X * (Vᴴ * V) := by
-        simp only [← Matrix.mul_assoc]
-      _ = X := by rw [hV, Matrix.one_mul, Matrix.mul_one]
-  rw [heq] at hback
-  exact hback
-
-end Matrix
-
 namespace MPOTensor
 
 variable {d e D : ℕ}
 
 open PhysicalSectorFactorization
-
-/-- The sitewise tensor power of a one-site isometry is an isometry. -/
-theorem sitewisePhysicalMatrix_isometry
-    (V : Matrix (Fin e) (Fin d) ℂ) (hV : Vᴴ * V = 1) (N : ℕ) :
-    (sitewisePhysicalMatrix V N)ᴴ * sitewisePhysicalMatrix V N = 1 := by
-  classical
-  ext x y
-  simp only [Matrix.mul_apply, Matrix.conjTranspose_apply,
-    sitewisePhysicalMatrix]
-  simp_rw [star_prod, ← Finset.prod_mul_distrib]
-  rw [← Fintype.piFinset_univ]
-  rw [← Finset.prod_univ_sum
-    (fun _ : Fin N ↦ (Finset.univ : Finset (Fin e)))
-    (fun n a ↦ star (V a (x n)) * V a (y n))]
-  have hentry : ∀ n : Fin N,
-      (∑ a : Fin e, star (V a (x n)) * V a (y n)) =
-        if x n = y n then 1 else 0 := by
-    intro n
-    simpa only [Matrix.mul_apply, Matrix.conjTranspose_apply,
-      Matrix.one_apply] using congrFun (congrFun hV (x n)) (y n)
-  simp_rw [hentry]
-  rw [Fintype.prod_boole]
-  congr 1
-  exact propext funext_iff.symm
 
 /-- An isometric physical inclusion preserves the trace of every periodic
 MPO, including every positive-length chain used by SAL. -/
@@ -266,18 +219,6 @@ theorem reducedBlockState_changePhysicalBasis_of_isometry
   exact blockReducedState_singleKraus_sitewise V hV L (N - L)
     (Matrix.reindex (blockReindexEquiv d N L hL)
       (blockReindexEquiv d N L hL) (normalizedMPO M N))
-
-/-- If an MPO is positive after an isometric physical inclusion, then it was
-already positive before inclusion. -/
-theorem isMPDO_of_changePhysicalBasis_isMPDO_of_isometry
-    (V : Matrix (Fin e) (Fin d) ℂ) (hV : Vᴴ * V = 1)
-    (M : MPOTensor d D) (hM : IsMPDO (changePhysicalBasis V M)) :
-    IsMPDO M := by
-  intro N hN
-  apply Matrix.posSemidef_of_singleKraus_isometry
-    (sitewisePhysicalMatrix V N) (sitewisePhysicalMatrix_isometry V hV N)
-  rw [singleKrausMap_sitewisePhysicalMatrix_mpo]
-  exact hM N hN
 
 /-- An isometric physical inclusion does not change a contiguous block
 entropy. -/

@@ -42,6 +42,7 @@ Verstraete):
 * `MPOTensor.IsRFP`: renormalization fixed-point predicate.
 * `MPOTensor.toMPSTensor`: view an MPO tensor as an MPS tensor with doubled
   physical index `Fin (d * d)`.
+* `MPOTensor.physicalSlice`: the physical matrix at fixed virtual indices.
 
 ## References
 
@@ -87,6 +88,14 @@ identifying `Fin d × Fin d` with `Fin (d * d)` via the standard product encodin
 (`Fin.divNat` = ket, `Fin.modNat` = bra). -/
 def toMPSTensor (M : MPOTensor d D) : MPSTensor (d * d) D :=
   fun ij => M (ij.divNat) (ij.modNat)
+
+/-- The physical matrix obtained from a fixed pair of virtual indices of an
+MPO tensor.
+
+Source: arXiv:1606.00608, Appendix C.2, lines 1424--1438 and equation `formK`. -/
+def physicalSlice (K : MPOTensor d D) (β α : Fin D) :
+    Matrix (Fin d) (Fin d) ℂ :=
+  fun i j ↦ K i j β α
 
 /-! ### Word evaluation -/
 
