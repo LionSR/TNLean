@@ -102,7 +102,7 @@ separate public-surface occurrence and therefore appears separately.
 | `ch24_peps_ft_region_transfer_covariance.tex` | — | L350, 354, 358, 362 `tnpic` → `C-picture+C-policy` | — |
 | `ch24_peps_ft_torus_translation_and_reference_windows.tex` | — | — | L22 `tenkzlattice` → `C-species+R-lattice+R-record` |
 | `ch26_mps_rfp_normal_isometry_canonical_forms.tex` | — | — | L452, 456 `tenkz` → `C-policy+C-record+R-record`<br>L603 `tenkz` → `C-policy+R-record`<br>L608 `tenkzfree` → `R-free+R-record` |
-| `ch26_mps_rfp_physical_blocking.tex` | — | — | L130, 155 `tenkz` → `C-policy+C-record+R-record`<br>L134, 149 `tenkz` → `C-record+R-record` |
+| `ch26_mps_rfp_physical_blocking.tex` | — | — | L198, 223 `tenkz` → `C-policy+C-record+R-record`<br>L202, 217 `tenkz` → `C-record+R-record` |
 
 ### Blueprint reconciliation
 

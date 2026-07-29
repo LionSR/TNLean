@@ -1,0 +1,56 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+
+\input{command}
+
+\title{The Index Typo in the Pure-State Renormalization-Flow Equation}
+\author{}
+\date{2026-07-30}
+
+\begin{document}
+\maketitle
+
+\section{The malformed display}
+
+Theorem~3.1 of \cite{Cirac2016MPDO_arXiv} characterizes the limits of the
+pure-state renormalization flow.  Its displayed equation at lines~400--403 is
+printed as
+\[
+  A^{i_1}A^{i_2}
+  =\sum_{i_1,i_2,j}U_{(i_1,i_2),j}A^{j_1}.
+\]
+The indices \(i_1,i_2\) are free on the left but are summed on the right, and
+the index \(j_1\) has not been introduced.  Thus the display is not a
+well-formed component identity.
+
+\section{Intended equation}
+
+The renormalization step immediately preceding the theorem, at lines~389--394,
+blocks two physical indices and writes the resulting matrices as a physical
+isometry applied to a one-site family.  With a common physical dimension at a
+fixed point, this gives
+\[
+  A^{i_1}A^{i_2}
+  =\sum_j U_{(i_1,i_2),j}A^j
+\]
+for every \(i_1,i_2\).  The two diagrams at lines~407--410 express the same
+contraction: two fixed external physical legs enter \(U\), while only the
+one-site index \(j\) is summed.  The Appendix proof at lines~1205--1209 also
+identifies this equation through equality of the completely positive maps
+\(\mathcal E^2=\mathcal E\), followed by physical Kraus isometry.
+
+\section{Formal treatment}
+
+The formal theorem uses the well-formed equation above.  This is a local
+correction of the summation and output indices in the printed display.  It
+changes neither the hypothesis that the tensor is a limit of the
+renormalization flow nor the conclusion that the blocked tensor is related to
+the original tensor by a physical isometry.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}
