@@ -13,6 +13,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 
 from tenkzlib.texcase import Construct, match_group, scan_constructs, strip_comments
+from tenkz_language import load_registry
 
 
 DOCUMENT = ROOT / "docs/tenkz/DISPOSITIONS.md"
@@ -75,6 +76,75 @@ SUGAR_COMMANDS = (
     "tnskip",
 )
 BARE_DEAD_FLAGS = ("boundary legs", "maps")
+SIGNED_KEYS_BY_SCOPE = {
+    scope: {
+        entry.fields[1].replace("~", " ")
+        for entry in load_registry()
+        if entry.kind == "key" and entry.fields[0] == f"kernel-{scope}"
+    }
+    for scope in ("picture", "atom", "wire", "mark", "setup", "declare")
+}
+COMPATIBILITY_KEYS = {
+    "picture": {
+        "inline",
+        "compact",
+        "fused",
+        "periodic",
+        "west label",
+        "east label",
+        "north label",
+        "south label",
+        "bond label",
+        "planes",
+        *BARE_DEAD_FLAGS,
+    },
+    "atom": {
+        "box",
+        "dot",
+        "pill",
+        "mpo",
+        "ring",
+        "no legs",
+        "circle",
+        "boundary",
+        "removed",
+        "enclosure",
+        "tri",
+        "combined",
+        "span",
+        "up at",
+        "down at",
+        "west at",
+        "east at",
+        *DEAD_KEYS,
+    },
+    "wire": {"none", "bond dir", *DEAD_KEYS},
+    "mark": {"brace above", "brace below", *DEAD_KEYS},
+    "setup": {"species"},
+    "declare": set(),
+}
+OPTION_SCOPES = {
+    "tn": "atom",
+    "tnX": "atom",
+    "tnfuse": "atom",
+    "tntree": "atom",
+    "tnwire": "wire",
+    "tnbond": "wire",
+    "tnstring": "wire",
+    "tnmark": "mark",
+    "tngroup": "picture",
+    "tnspan": "mark",
+    "tnpic": "picture",
+    "tnput": "atom",
+    "tnsite": "atom",
+    "tnghost": "atom",
+    "tnjoin": "wire",
+    "tnedge": "wire",
+    "tnarrow": "wire",
+    "tncut": "mark",
+    "tnregion": "mark",
+    "tnprose": "mark",
+}
 
 
 def fail(message: str) -> None:
@@ -107,6 +177,139 @@ def normalized_environment_spacing(source: str) -> str:
         return rf"\{match.group(1)}{{{match.group(4)}}}" + whitespace
 
     return pattern.sub(replace, source)
+
+
+def top_level_options(options: str) -> list[tuple[str, str | None]]:
+    """Parse one comma-separated option group without splitting nested values."""
+    start = 0
+    depths = {"{": 0, "[": 0, "(": 0}
+    closing = {"}": "{", "]": "[", ")": "("}
+    parts: list[str] = []
+    index = 0
+    while index < len(options):
+        character = options[index]
+        if character == "\\":
+            index += 2
+            continue
+        if character in depths:
+            depths[character] += 1
+        elif character in closing:
+            opener = closing[character]
+            depths[opener] = max(0, depths[opener] - 1)
+        elif character == "," and not any(depths.values()):
+            parts.append(options[start:index])
+            start = index + 1
+        index += 1
+    parts.append(options[start:])
+    result: list[tuple[str, str | None]] = []
+    for part in parts:
+        key, separator, value = part.partition("=")
+        key = re.sub(r"\s+", " ", key.strip())
+        if key:
+            result.append((key, value.strip() if separator else None))
+    return result
+
+
+def following_group_span(
+    source: str, position: int, opener: str, closer: str
+) -> tuple[str, int] | None:
+    """Return a following group's contents and ending offset."""
+    while position < len(source) and source[position].isspace():
+        position += 1
+    if source[position : position + 1] != opener:
+        return None
+    end = match_group(source, position, opener, closer)
+    if end == -1:
+        return None
+    return source[position + 1 : end - 1], end
+
+
+def following_group(
+    source: str, position: int, opener: str, closer: str
+) -> str | None:
+    """Return the contents of a group following optional whitespace."""
+    group = following_group_span(source, position, opener, closer)
+    return group[0] if group is not None else None
+
+
+def encountered_option_groups(source: str) -> list[tuple[str, str]]:
+    """Return every public option group with its signed registry scope."""
+    groups: list[tuple[str, str]] = []
+    for match in ENVIRONMENT.finditer(source):
+        options = following_group(source, match.end(), "[", "]")
+        if options is not None:
+            groups.append(("picture", options))
+    commands = "|".join(sorted(OPTION_SCOPES, key=len, reverse=True))
+    for match in re.finditer(rf"\\({commands})\*?(?![A-Za-z])", source):
+        options = following_group(source, match.end(), "[", "]")
+        if options is not None:
+            groups.append((OPTION_SCOPES[match.group(1)], options))
+    for match in re.finditer(r"\\tnset\b", source):
+        options = following_group(source, match.end(), "{", "}")
+        if options is not None:
+            groups.append(("setup", options))
+    for match in re.finditer(r"\\tndeclare\b", source):
+        position = match.end()
+        arguments: list[str] = []
+        for _ in range(3):
+            group = following_group_span(source, position, "{", "}")
+            if group is None:
+                break
+            argument, position = group
+            arguments.append(argument)
+        if len(arguments) == 3:
+            groups.append(("declare", arguments[2]))
+    for match in re.finditer(r"\\tndeclareatom\b", source):
+        position = match.end()
+        arguments: list[str] = []
+        for _ in range(2):
+            group = following_group_span(source, position, "{", "}")
+            if group is None:
+                break
+            argument, position = group
+            arguments.append(argument)
+        if len(arguments) == 2:
+            groups.append(("atom", arguments[1]))
+    return groups
+
+
+def encountered_options(source: str) -> list[tuple[str, str, str | None]]:
+    """Return parsed public options as scope, key, and optional value."""
+    return [
+        (scope, key, value)
+        for scope, group in encountered_option_groups(source)
+        for key, value in top_level_options(group)
+    ]
+
+
+def unrecognized_option_keys(source: str) -> set[str]:
+    """Find option keys outside the signed 1.0 grammar and classified sugar."""
+    unknown: set[str] = set()
+
+    def check(options: str, scope: str) -> None:
+        allowed = SIGNED_KEYS_BY_SCOPE[scope] | COMPATIBILITY_KEYS[scope]
+        unknown.update(
+            key for key, _value in top_level_options(options) if key not in allowed
+        )
+
+    for scope, options in encountered_option_groups(source):
+        check(options, scope)
+    return unknown
+
+
+def tntree_invocations(source: str) -> list[tuple[int, int, str]]:
+    """Return complete tntree calls, including multiline options and argument."""
+    invocations: list[tuple[int, int, str]] = []
+    for match in re.finditer(r"\\tntree\b", source):
+        position = match.end()
+        options = following_group_span(source, position, "[", "]")
+        if options is not None:
+            _contents, position = options
+        argument = following_group_span(source, position, "{", "}")
+        if argument is not None:
+            _contents, position = argument
+        invocations.append((match.start(), position, source[match.start() : position]))
+    return invocations
 
 
 def scan_inventory_constructs(source: str) -> list[Construct]:
@@ -150,9 +353,9 @@ def construct_sources(path: Path) -> dict[tuple[str, int, str], list[str]]:
     for construct in scan_inventory_constructs(source):
         key = (path.name, construct.line, construct.name)
         result[key].append(source[construct.start : construct.end])
-    for match in re.finditer(r"\\tntree\b[^\n]*", source):
-        line = source.count("\n", 0, match.start()) + 1
-        result[(path.name, line, "tntree")].append(match.group(0))
+    for start, _end, invocation in tntree_invocations(source):
+        line = source.count("\n", 0, start) + 1
+        result[(path.name, line, "tntree")].append(invocation)
     return result
 
 
@@ -212,53 +415,89 @@ def fragment_target_codes(source: str) -> frozenset[str]:
         environment_codes[name] for name in environments if name in environment_codes
     )
 
+    options = encountered_options(source)
+    keys = {key for _scope, key, _value in options}
+    keys_by_scope = {
+        scope: {key for option_scope, key, _value in options if option_scope == scope}
+        for scope in SIGNED_KEYS_BY_SCOPE
+    }
+    tn_options: list[tuple[str, str | None]] = []
+    for match in re.finditer(r"\\tn\*?(?![A-Za-z])", source):
+        group = following_group(source, match.end(), "[", "]")
+        if group is not None:
+            tn_options.extend(top_level_options(group))
+    tn_keys = {key for key, _value in tn_options}
+    bare_tn_keys = {key for key, value in tn_options if value is None}
+
+    def values(key: str) -> list[str]:
+        return [
+            value.lstrip("{").strip()
+            for _scope, option_key, value in options
+            if option_key == key and value is not None
+        ]
+
     dead_record = any(re.search(rf"\\{name}\b", source) for name in DEAD_COMMANDS)
+    dead_record |= bool(keys & set(DEAD_KEYS))
+    dead_record |= bool(
+        keys
+        & {
+            "inline",
+            "compact",
+            "fused",
+            "none",
+            "brace above",
+            "brace below",
+            *BARE_DEAD_FLAGS,
+        }
+    )
     dead_record |= any(
-        re.search(r"(?<![A-Za-z])" + re.escape(key) + r"\s*=", source)
-        for key in DEAD_KEYS
+        re.match(r"(?:hv|vh|curve|drop|hug)\b", value)
+        for value in values("route")
     )
-    dead_patterns = (
-        r"(?<![A-Za-z])(?:inline|compact|fused)(?=\s*[,}\]])",
-        r"route\s*=\s*(?:\{\s*)?(?:hv|vh|curve|drop|hug)\b",
-        r"frame\s*=\s*(?:\{\s*)?(?:vertical\b|rotate\s*=)",
-        r"frame\s*=\s*(?:\{\s*)?matrix\s*=",
-        r"rows\s*=\s*\{[^}\n]*:[^}\n]*\}",
-        r"\\tnfuse\s*\[[^\]]*\brows\s*=",
-        r"form\s*=\s*(?:\{\s*)?(?:brace-(?:below|above)|cut|band|prose)\b",
-        r"\\tnspan\s*\[[^\]]*\bbrace\s+(?:below|above)\b",
-        r"skin\s*=\s*(?:cluster|enclosure)\b",
-        r"weight\s*=\s*string\b",
-        r"\([^)]+\)\s*-\s*\([^)]+\)",
-        r"\bleg\s+(?:north|south|east|west)\s+of\b",
-        r"\b(?:north|south|east|west)\s+outside\b",
-        r"(?:^|[\[,])\s*none(?=\s*(?:,|\]))",
+    dead_record |= any(
+        re.match(r"vertical\b|(?:rotate|matrix)\s*=", value)
+        for value in values("frame")
     )
-    dead_record |= any(re.search(pattern, source) for pattern in dead_patterns)
-
-    for match in ENVIRONMENT.finditer(source):
-        options = re.match(r"\s*\[([^\]]*)\]", source[match.end() :])
-        if options and any(
-            re.search(
-                r"(?:^|,)\s*" + re.escape(flag) + r"(?=\s*(?:,|$))",
-                options.group(1),
-            )
-            for flag in BARE_DEAD_FLAGS
-        ):
+    dead_record |= any(":" in value for value in values("rows"))
+    dead_record |= any(
+        re.match(r"(?:brace-(?:below|above)|cut|band|prose)\b", value)
+        for value in values("form")
+    )
+    dead_record |= any(
+        re.match(r"(?:cluster|enclosure)\b", value) for value in values("skin")
+    )
+    dead_record |= any(
+        re.match(r"string\b", value) for value in values("weight")
+    )
+    dead_record |= any(
+        re.search(
+            r"\bleg\s+(?:north|south|east|west)\s+of\b"
+            r"|\b(?:north|south|east|west)\s+outside\b",
+            value,
+        )
+        for _scope, _key, value in options
+        if value is not None
+    )
+    for match in re.finditer(r"\\tnmark\b", source):
+        position = match.end()
+        option_group = following_group_span(source, position, "[", "]")
+        if option_group is not None:
+            _contents, position = option_group
+        selector = following_group(source, position, "{", "}")
+        if selector and re.search(r"\([^)]+\)\s*-\s*\([^)]+\)", selector):
             dead_record = True
-
-    for match in re.finditer(r"\\tn\*?\s*\[([^\]]*)\]", source):
-        if re.search(
-            r"(?:^|,)\s*(?:circle|boundary|removed|cluster|enclosure)"
-            r"(?=\s*(?:,|$))"
-            r"|(?:^|,)\s*tri\s*=",
-            match.group(1),
-        ):
-            dead_record = True
-        if re.search(
-            r"(?:^|,)\s*(?:box|dot|pill|mpo|ring|no legs)(?=\s*(?:,|$))",
-            match.group(1),
-        ):
-            codes.add("C-record")
+    unknown_keys = unrecognized_option_keys(source)
+    dead_record |= bool(unknown_keys) and not any(
+        code.startswith("R-") for code in codes
+    )
+    dead_record |= bool(
+        bare_tn_keys & {"circle", "boundary", "removed", "cluster", "enclosure"}
+    )
+    dead_record |= "tri" in tn_keys
+    if tn_keys & {"box", "dot", "pill", "mpo", "ring", "no legs"}:
+        codes.add("C-record")
+    if any(key == "cluster" and value is not None for key, value in tn_options):
+        codes.add("C-record")
     if dead_record:
         codes.add("R-record")
 
@@ -266,33 +505,49 @@ def fragment_target_codes(source: str) -> frozenset[str]:
         codes.add("C-picture")
     if re.search(r"\\tntree\b", source):
         codes.add("C-tree")
-    policy_patterns = (
-        r"(?<![A-Za-z])(?:physical|boundary|west label|east label|"
-        r"north label|south label|bond label)\s*=",
-        r"(?<![A-Za-z])(?:sandwich|periodic)(?=\s*[,}\]])",
-        r"(?:west|east|north|south)\s*=\s*\{?\s*(?:cup|tail)\s*=",
-    )
-    if any(re.search(pattern, source) for pattern in policy_patterns):
-        codes.add("C-policy")
-    if re.search(
-        r"(?<![A-Za-z])(?:lattice|ring|surface|cluster)\s*=|"
-        r"(?<![A-Za-z])planes(?=\s*[,}\]])",
-        source,
+    if "physical" in keys or keys_by_scope["picture"] & {
+        "boundary",
+        "west label",
+        "east label",
+        "north label",
+        "south label",
+        "bond label",
+        "sandwich",
+        "periodic",
+    } or any(
+        re.match(r"(?:cup|tail)\s*=", value.lstrip("{").strip())
+        for scope, key, value in options
+        if scope == "picture"
+        and key in {"west", "east", "north", "south"}
+        and value is not None
     ):
+        codes.add("C-policy")
+    if keys_by_scope["picture"] & {
+        "lattice",
+        "ring",
+        "surface",
+        "cluster",
+        "planes",
+    }:
         codes.add("C-frame")
     if any(re.search(rf"\\{name}\b", source) for name in SUGAR_COMMANDS):
         codes.add("C-record")
     if re.search(r"\\tn\*", source):
         codes.add("C-record")
-    if re.search(
-        r"(?<![A-Za-z])(?:combined|span|up at|down at|west at|east at|"
-        r"up|down)\s*=",
-        source,
-    ):
+    if keys_by_scope["atom"] & {
+        "combined",
+        "span",
+        "up at",
+        "down at",
+        "west at",
+        "east at",
+        "up",
+        "down",
+    }:
         codes.add("C-record")
-    if re.search(r"(?<![A-Za-z])role\s*=", source):
+    if "role" in keys:
         codes.add("C-species")
-    if re.search(r"\\tnset\s*\{[^}]*\bspecies\s*=", source):
+    if "species" in keys_by_scope["setup"]:
         codes.add("C-declare")
     if re.search(r"\\tndeclareatom\b", source):
         codes.add("C-declare")
@@ -318,9 +573,9 @@ def source_target_codes(source: str) -> frozenset[str]:
         for index in range(construct.start, construct.end):
             if masked[index] != "\n":
                 masked[index] = " "
-    for match in re.finditer(r"\\tntree\b[^\n]*", source):
-        codes.update(fragment_target_codes(match.group(0)))
-        for index in range(match.start(), match.end()):
+    for start, end, invocation in tntree_invocations(source):
+        codes.update(fragment_target_codes(invocation))
+        for index in range(start, end):
             masked[index] = " "
     codes.update(fragment_target_codes("".join(masked)))
     if any(not code.startswith("P-") for code in codes):

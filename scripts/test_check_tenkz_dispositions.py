@@ -39,6 +39,17 @@ def main() -> int:
         r"\begin{tenkz}[up={i}]\end{tenkz}",
         r"\begin{tenkz}[down={j}]\end{tenkz}",
         r"\tnbond[none]{a}{b}",
+        r"\begin{tenkz}[layer sep=2]\tn{}\end{tenkz}",
+        r"\tntree[tree style=wire]{(a,b)}",
+        r"\begin{tenkz}[invented key=value]\tn{}\end{tenkz}",
+        r"\begin{tenkz}[invented-key=value]\tn{}\end{tenkz}",
+        r"\tn[invented key=value]{}",
+        r"\tndeclare{species}{x}{invented-key=}",
+        r"\tndeclareatom{\tnprojector}{invented-key=}",
+        r"\tngroup[form=label]{}",
+        r"\tnpic[maps]{}",
+        r"\tnpic[boundary legs]{}",
+        "\\tntree\n[invented-key=]{(a,b)}",
     )
     for source in tombstones:
         assert guard.uses_tombstone(source), source
@@ -56,6 +67,11 @@ def main() -> int:
         r"\end{tenkz}",
         r"\begin{tenkz}[frame={flat, basis={wire at (0,0), wire at (2,0)}}]"
         r"\end{tenkz}",
+        r"\begin{tenkz}[rows={wire}, cols=2]\tn[skin=box, wide=2]{}"
+        r"\tnwire[route=orth, dir=forward]{}{}\end{tenkz}",
+        r"\tndeclare{species}{x}{hue=blue, base=box, pairings={up:down}}",
+        r"\tngroup[frame=flat]{}",
+        r"\begin{tenkz}\tn{$in=x$}\tn{weight=2}\tn{role=x}\end{tenkz}",
     )
     for source in accepted:
         assert not guard.uses_tombstone(source), source
@@ -68,6 +84,9 @@ def main() -> int:
     assert guard.source_target_codes(r"\tndeclareatom{pill}") == frozenset(
         {"C-declare"}
     )
+    assert guard.source_target_codes(
+        r"\tndeclareatom{\tnprojector}{skin=box, ports={west:virtual}}"
+    ) == frozenset({"C-declare"})
     assert guard.source_target_codes(r"\tenkzkernel") == frozenset({"C-switch"})
     for source in (
         r"\tnset{}",
@@ -77,6 +96,20 @@ def main() -> int:
     ):
         assert guard.SETUP_COMMAND.search(source), source
     assert guard.source_target_codes(r"\tn[pill]{}") == frozenset({"C-record"})
+    assert guard.source_target_codes(r"\tn[cluster={2x3}]{}") == frozenset(
+        {"C-record"}
+    )
+    for source in (
+        r"\begin{tenkz}\tn{$in=x$}\end{tenkz}",
+        r"\begin{tenkz}\tn{weight=2}\end{tenkz}",
+        r"\begin{tenkz}\tn{role=x}\end{tenkz}",
+        r"\tngroup[frame=flat]{}",
+        r"\tndeclare{species}{x}{hue=blue, base=box, pairings={up:down}}",
+    ):
+        assert guard.source_target_codes(source) == frozenset({"P-grid"}), source
+    assert guard.source_target_codes("\\tntree\n[skin=box]{(a,b)}") == frozenset(
+        {"C-tree"}
+    )
     assert guard.source_target_codes(
         r"\begin{tenkzfree}\tnghost{}\end{tenkzfree}"
         r"\begin{tenkz}[physical=up]\tn{}\end{tenkz}"
