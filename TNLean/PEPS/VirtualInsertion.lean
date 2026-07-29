@@ -139,18 +139,6 @@ theorem localTensorMap_ker_eq_bot_of_linearIndependent {A : Tensor G d} {v : V}
     LinearMap.ker (localTensorMap A v) = ⊥ :=
   LinearMap.ker_eq_bot.mpr <| localTensorMap_injective_of_linearIndependent hv
 
-/-- Vertex injectivity makes the local tensor map injective. -/
-theorem IsVertexInjective.localTensorMap_injective {A : Tensor G d}
-    (hA : IsVertexInjective A) (v : V) :
-    Function.Injective (localTensorMap A v) :=
-  localTensorMap_injective_of_linearIndependent (hA v)
-
-/-- Kernel form of `IsVertexInjective.localTensorMap_injective`. -/
-theorem IsVertexInjective.localTensorMap_ker_eq_bot {A : Tensor G d}
-    (hA : IsVertexInjective A) (v : V) :
-    LinearMap.ker (localTensorMap A v) = ⊥ :=
-  localTensorMap_ker_eq_bot_of_linearIndependent (hA v)
-
 /-- A chosen left inverse of the local tensor map under per-vertex linear
 independence of the tensor family at `v`. -/
 noncomputable def localLeftInverseAt (A : Tensor G d) {v : V}
@@ -543,13 +531,6 @@ theorem physRealizeLocalOpAt_smul (A : Tensor G d) {v : V}
   ext x
   simp [physRealizeLocalOpAt]
 
-/-- Realization is compatible with composition of virtual operators. -/
-theorem physRealizeLocalOp_comp (A : Tensor G d) (hA : IsVertexInjective A)
-    (v : V) (S T : LocalVirtualOp A v) :
-    physRealizeLocalOp A hA v (S.comp T) =
-      (physRealizeLocalOp A hA v S).comp (physRealizeLocalOp A hA v T) :=
-  physRealizeLocalOpAt_comp A (hA v) S T
-
 /-- Virtual operators are determined by their physical realizations. -/
 theorem physRealizeLocalOpAt_injective (A : Tensor G d) {v : V}
     (hv : LinearIndependent ℂ (A.component v)) :
@@ -641,12 +622,6 @@ theorem localProjectorAt_idempotent (A : Tensor G d) {v : V}
   simpa [localProjectorAt] using
     (physRealizeLocalOpAt_comp A hv LinearMap.id LinearMap.id).symm
 
-theorem localProjector_idempotent (A : Tensor G d) (hA : IsVertexInjective A)
-    (v : V) :
-    (localProjector A hA v).comp (localProjector A hA v) =
-      localProjector A hA v :=
-  localProjectorAt_idempotent A (hA v)
-
 /-- The virtual pullback realizes the projected physical action on the image of
 the local tensor map. -/
 theorem localVirtualOpOfPhysicalOpAt_spec (A : Tensor G d) {v : V}
@@ -732,18 +707,6 @@ theorem localVirtualOpOfPhysicalOpAt_eq_of_projected_action_eq (A : Tensor G d)
   intro c
   apply localTensorMap_injective_of_linearIndependent hv
   rw [localVirtualOpOfPhysicalOpAt_spec, localVirtualOpOfPhysicalOpAt_spec, hOO']
-
-/-- Two physical endpoint operations have the same virtual pullback if their
-projected actions agree on the image of the local tensor map. -/
-theorem localVirtualOpOfPhysicalOp_eq_of_projected_action_eq (A : Tensor G d)
-    (hA : IsVertexInjective A) (v : V)
-    (O O' : (Fin d → ℂ) →ₗ[ℂ] (Fin d → ℂ))
-    (hOO' : ∀ c : LocalVirtualConfig A v → ℂ,
-      localProjector A hA v (O (localTensorMap A v c)) =
-        localProjector A hA v (O' (localTensorMap A v c))) :
-    localVirtualOpOfPhysicalOp A hA v O =
-      localVirtualOpOfPhysicalOp A hA v O' :=
-  localVirtualOpOfPhysicalOpAt_eq_of_projected_action_eq A (hA v) O O' hOO'
 
 /-- Equality of virtual pullbacks is equivalent to equality of the projected
 physical actions on the image of the local tensor map. -/

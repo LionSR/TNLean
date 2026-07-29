@@ -79,16 +79,6 @@ omit [Fintype V] in
   rw [Edge.ofAdj_of_lt e.2.2 e.2.1]
 
 omit [Fintype V] in
-/-- The image edge `Edge.ofAdj h` is independent of the incidence direction of the
-adjacency `h`: orienting the pair `(u, v)` and the pair `(v, u)` gives the same
-edge, since `Edge.ofAdj` places the smaller endpoint first either way. -/
-theorem Edge.ofAdj_symm {G : SimpleGraph V} {u v : V} (h : G.Adj u v) :
-    Edge.ofAdj h = Edge.ofAdj h.symm := by
-  rcases lt_or_gt_of_ne (G.ne_of_adj h) with huv | hvu
-  · rw [Edge.ofAdj_of_lt h huv, Edge.ofAdj_of_gt h.symm huv]
-  · rw [Edge.ofAdj_of_gt h hvu, Edge.ofAdj_of_lt h.symm hvu]
-
-omit [Fintype V] in
 /-- An edge is determined by its unordered endpoint pair: if `(u, v)` is, in some
 order, the ordered endpoint pair of `e`, then orienting `(u, v)` with `Edge.ofAdj`
 recovers `e`. This is the bookkeeping that makes edge constructions independent
