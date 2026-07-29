@@ -387,12 +387,10 @@ theorem meanErgodicAdjoint_isConditionalExpectation
     (LinearMap.meanErgodicProjection T
       (hT_pos.hasBoundedOrbits_of_tracePreserving hT_tp)
       (𝕜 := ℂ) (E := Mat))
-  have hlemma := hT_pos.traceAdjoint_meanErgodicProjection_isPositiveUnitalRetraction hT_tp
-  have hPstar_idemp : ∀ Y, Pstar (Pstar Y) = Pstar Y := hlemma.2.2.1
-  have hPstar_one : Pstar 1 = 1 := hlemma.2.1
-  have hPstar_fixed : ∀ Y, Pstar Y = Y ↔ Matrix.traceAdjointMap T Y = Y := hlemma.2.2.2.2
+  obtain ⟨hPstar_pos, hPstar_one, hPstar_idemp, _, hPstar_fixed⟩ :=
+    hT_pos.traceAdjoint_meanErgodicProjection_isPositiveUnitalRetraction hT_tp
   exact
-  { positive := hlemma.1
+  { positive := hPstar_pos
     idempotent := hPstar_idemp
     unital := hPstar_one
     range_subset := fun Y ↦ by
