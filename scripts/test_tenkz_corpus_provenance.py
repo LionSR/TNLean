@@ -152,6 +152,16 @@ def test_ink_environment_owner() -> None:
         "good", "Canonical public kernel and tenkz pictures.", dollar_scopes
     ):
         raise AssertionError("dollar-delimited math leaked the kernel owner")
+    explicit_group_aliases = (
+        r"\bgroup\tenkzkernel\begin{tenkz}\end{tenkz}\egroup"
+        r"\begin{tenkz}\end{tenkz}"
+    )
+    if ink_environment_problems(
+        "good",
+        "Canonical public kernel and tenkz pictures.",
+        explicit_group_aliases,
+    ):
+        raise AssertionError("bgroup-delimited scope leaked the kernel owner")
 
 
 def main() -> int:

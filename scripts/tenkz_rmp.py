@@ -148,7 +148,7 @@ INK_SCOPE_TOKEN = re.compile(
     r"|\\tenkzkernel\b"
     r"|\\begin\s*\{(?P<begin>[^{}]+)\}"
     r"|\\end\s*\{(?P<end>[^{}]+)\}"
-    r"|\\begingroup\b|\\endgroup\b"
+    r"|\\begingroup\b|\\endgroup\b|\\bgroup\b|\\egroup\b"
     r"|\\\[|\\\]|\\\(|\\\)"
     r"|(?P<dollar>\${1,2})"
     r"|\\tnpic\b|\\tntree\b"
@@ -179,9 +179,9 @@ def used_ink_environment_families(body: str) -> set[str]:
         elif token.group("end") is not None:
             if len(kernel_scope) > 1:
                 kernel_scope.pop()
-        elif text in {r"\begingroup", r"\[", r"\(", "{"}:
+        elif text in {r"\begingroup", r"\bgroup", r"\[", r"\(", "{"}:
             kernel_scope.append(kernel_scope[-1])
-        elif text in {r"\endgroup", r"\]", r"\)", "}"}:
+        elif text in {r"\endgroup", r"\egroup", r"\]", r"\)", "}"}:
             if len(kernel_scope) > 1:
                 kernel_scope.pop()
         elif token.group("dollar") is not None:
