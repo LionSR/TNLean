@@ -200,31 +200,195 @@
     assumption.
 \end{theorem}
 
-For $x\ne y$, the two vertical MPO layers annihilate:
+\begin{theorem}[Positive neighboring sectors generate positive periodic operators]
+    \label{thm:mpdo_neighboring_sector_positivity}
+    \lean{MPOTensor.PhysicalSectorFactorization.isMPDO_of_neighboringOperator_pos}
+    \leanok
+    \uses{def:mpdo_physical_sector_factorization}
+    Suppose that an MPO tensor $K$ admits a physical-sector factorization
+    through an isometry $U$, with neighboring operators
+    $\eta_{q,h}$. If $\eta_{q,h}\geq0$ for every pair $(q,h)$, then
+    \begin{align}
+        \rho^{(N)}(K)&\geq0
+        \qquad (N\geq1).
+        \notag
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    In sector coordinates, the periodic operator is a sum of cyclic products
+    of the positive neighboring operators. It is therefore positive
+    semidefinite. Conjugation by $U^{\otimes N}$ preserves positivity and
+    returns $\rho^{(N)}(K)$.
+\end{proof}
+
+\begin{definition}[Unstarred orthogonality of BNT layers]
+    \label{def:mpdo_bnt_layer_orthogonality}
+    \lean{MPOTensor.IsBNTLayerOrthogonal,
+        MPOTensor.isBNTLayerOrthogonal_iff_physicalSlice_mul_eq_zero,
+        MPOTensor.isBNTLayerOrthogonal_iff_physicalSlice_mul_apply_eq_zero}
+    \leanok
+    For a family $\{\mathcal K_x\}_{x=0}^{g-1}$, write
+    $\mathcal K_x[\beta,\alpha]\in M_d(\C)$ for the physical matrix obtained
+    by fixing the two virtual indices. The layers are orthogonal when, for
+    $x\ne y$,
+    \begin{align}
+        \mathcal K_y[\beta_y,\alpha_y]\,
+        \mathcal K_x[\beta_x,\alpha_x]&=0
+        \label{eq:mpdo_bnt_layer_unstarred}
+    \end{align}
+    for every choice of virtual indices. Equivalently, for all physical
+    indices $i,j$,
+    \begin{align}
+        \sum_{k=0}^{d-1}
+        (\mathcal K_y)^{ik}_{\beta_y\alpha_y}
+        (\mathcal K_x)^{kj}_{\beta_x\alpha_x}&=0.
+        \notag
+    \end{align}
+    The factor order is exactly $\mathcal K_y\mathcal K_x$; no adjoint occurs.
+    This is equation \texttt{AppKxKy=0} in
+    \cite[Appendix~C.2, lines~1634--1639]{Cirac2016MPDO_arXiv}.
+\end{definition}
+
 \begin{center}
-    % Formula: (\mathcal K_y\mathcal K_x)^{ij}_{a_y a_x;b_y b_x}
-    % = \sum_q (\mathcal K_y)^{iq}_{a_y b_y}
-    % (\mathcal K_x)^{qj}_{a_x b_x}=0 for x\ne y.
-    % Source: Papers/1606.00608/MPDO_KxKy.png and source TeX lines 863--868.
-    % The upper source glyph is plain \mathcal K_y: the vertical contraction is
-    % ordinary MPO-layer multiplication, with no adjoint or conjugation.
-    % Ink-to-index: q is the sole contracted physical index; the free indices
-    % are west (a_y,a_x), east (b_y,b_x), up i, and down j.
-    % LHS paired signature: boundary|virtual-west=2|virtual-east=2|
-    % physical-up=1|physical-down=1. The typed-zero RHS has that same boundary
-    % type, although the plain 0 carries no tensor-network ink.
+    % Exact source orientation: the upper layer is plain K_y and the lower
+    % layer is plain K_x.  There is no conjugation or adjoint in AppKxKy=0.
+    % Source: Papers/1606.00608/MPDO_KxKy.png and source TeX lines 1634--1639.
     \begin{tenkz}[rows={op,op}]
         \tn[mpo]{\mathcal K_y} \\
         \tn[mpo]{\mathcal K_x}
     \end{tenkz}
-    $ = 0$
+    $ = 0 \qquad (x\ne y)$
 \end{center}
-In contraction notation, the cross-sector layer identity is
-$\mathcal K_y\mathcal K_x=0$ whenever $x\ne y$.
-This is \cite[Theorem~4.9(iv), lines~863--868]{Cirac2016MPDO_arXiv}.
 
-Expanding $\sum_jP_j=\Id$ on both physical indices and using the sector
-projector relations leaves only the diagonal term:
+\begin{definition}[Physical adjoint]
+    \label{def:mpdo_physical_adjoint}
+    \lean{MPOTensor.physicalAdjointTensor,
+        MPOTensor.physicalSlice_physicalAdjointTensor,
+        MPOTensor.mpo_physicalAdjointTensor}
+    \leanok
+    For an MPO tensor $K$, define $K^\sharp$ by
+    \begin{align}
+        (K^\sharp)^{ij}_{\beta\alpha}
+        &=\overline{K^{ji}_{\beta\alpha}}.
+        \notag
+    \end{align}
+    Thus $K^\sharp[\beta,\alpha]=K[\beta,\alpha]^*$, while the virtual
+    indices retain their order. For every periodic chain,
+    \begin{align}
+        \rho^{(N)}(K^\sharp)_{\sigma,\tau}
+        &=\overline{\rho^{(N)}(K)_{\tau,\sigma}}.
+        \notag
+    \end{align}
+\end{definition}
+
+\begin{theorem}[Adjoint closure of the physical slices]
+    \label{thm:mpdo_injective_mpdo_adjoint_closure}
+    \lean{MPOTensor.IsMPDO.sameMPV₂Pos_physicalAdjointTensor,
+        MPOTensor.IsMPDO.sameMPV_physicalAdjointTensor,
+        MPOTensor.exists_physicalSlice_conjTranspose_eq_sum_of_isInjective_isMPDO}
+    \leanok
+    \uses{def:mpdo_physical_adjoint, thm:ft_single}
+    Let $K$ be injective and suppose that $\rho^{(N)}(K)\geq0$ for every
+    $N\geq1$. Then the linear span of its physical slices is closed under
+    conjugate transpose. More precisely, there is $X\in\GL_D(\C)$ such that
+    \begin{align}
+        K[\beta,\alpha]^*
+        &=\sum_{\nu,\mu=0}^{D-1}
+          X_{\beta\mu}(X^{-1})_{\nu\alpha}K[\mu,\nu]
+        \notag
+    \end{align}
+    for all virtual indices $\beta,\alpha$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Positivity makes every periodic operator Hermitian, so $K$ and
+    $K^\sharp$ generate the same matrix-product vectors. The single-block
+    fundamental theorem gives the inner gauge $X$. Taking its virtual matrix
+    entries yields the displayed expansion.
+\end{proof}
+
+\begin{theorem}[Orthogonal two-sided supports from unstarred layer orthogonality]
+    \label{thm:mpdo_bnt_layer_orthogonal_supports}
+    \lean{MPOTensor.physicalSliceColumns,
+        MPOTensor.physicalSupportProj,
+        MPOTensor.physicalSupportProj_mul_physicalSlice,
+        MPOTensor.physicalSlice_mul_physicalSupportProj_of_isInjective_isMPDO,
+        MPOTensor.physicalSliceColumns_conjTranspose_mul_eq_zero,
+        MPOTensor.exists_pairwise_orthogonal_twoSided_physicalSupport,
+        MPOTensor.isBNTLayerOrthogonal_of_pairwise_orthogonal_twoSided_support}
+    \leanok
+    \uses{def:mpdo_bnt_layer_orthogonality,
+        thm:mpdo_injective_mpdo_adjoint_closure}
+    Let $\{\mathcal K_x\}_{x=0}^{g-1}$ be injective MPO tensors, each of which
+    generates positive semidefinite periodic operators at every positive
+    length. If the unstarred identities
+    \begin{align}
+        \mathcal K_y[\beta_y,\alpha_y]\,
+        \mathcal K_x[\beta_x,\alpha_x]&=0
+        \qquad (x\ne y)
+        \notag
+    \end{align}
+    hold for all virtual indices, then there are pairwise orthogonal
+    projections $P_x\in M_d(\C)$ such that
+    \begin{align}
+        P_x\mathcal K_x[\beta,\alpha]
+        &=\mathcal K_x[\beta,\alpha]
+         =\mathcal K_x[\beta,\alpha]P_x
+        \notag
+    \end{align}
+    for every $x,\beta,\alpha$. Conversely, any pairwise annihilating family
+    with these two-sided support identities satisfies the unstarred layer
+    identities.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Stack the columns of all slices of $\mathcal K_x$ and let $P_x$ be the
+    orthogonal projection onto their span. The left support identity is
+    immediate. By Theorem~\ref{thm:mpdo_injective_mpdo_adjoint_closure}, the
+    slice span is closed under conjugate transpose, which gives the right
+    support identity. For $x\ne y$, equation~\eqref{eq:mpdo_bnt_layer_unstarred}
+    and adjoint closure imply that the two stacked column spaces are
+    orthogonal, hence $P_xP_y=0$.
+\end{proof}
+
+\begin{theorem}[Square-zero obstruction for arbitrary MPO tensors]
+    \label{thm:mpdo_bnt_layer_square_zero_obstruction}
+    \lean{MPOTensor.BNTLayerOrthogonalityCounterexample.squareZeroPhysicalMatrix_ne_zero,
+        MPOTensor.BNTLayerOrthogonalityCounterexample.squareZeroPhysicalMatrix_mul_self,
+        MPOTensor.BNTLayerOrthogonalityCounterexample.family_isBNTLayerOrthogonal,
+        MPOTensor.BNTLayerOrthogonalityCounterexample.no_pairwise_orthogonal_twoSided_support}
+    \leanok
+    \uses{def:mpdo_bnt_layer_orthogonality}
+    There is a two-label family of bond-dimension-one MPO tensors for which
+    the unstarred layer identities hold, but no pairwise orthogonal one-site
+    projections support both tensors on both sides. One may take both labels
+    to have the single physical slice
+    \begin{align}
+        A&=|0\rangle\langle1|,
+        &A\ne0,
+        &A^2=0.
+        \notag
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The equation $A^2=0$ gives both ordered layer products. If $P_0P_1=0$
+    and $P_xA=A$ for both labels, then
+    \begin{align}
+        A=P_0A=P_0P_1A=0,
+        \notag
+    \end{align}
+    contradicting $A\ne0$.
+\end{proof}
+
+If the projections also satisfy $\sum_jP_j=\Id$, then expanding this
+identity on both physical indices and using the sector projector relations
+leaves only the diagonal term:
 \begin{align}
     \mathcal K_i
     &=\sum_{j,j'}P_j\,\mathcal K_i\,P_{j'}
@@ -273,10 +437,18 @@ This is the calculation in
 % independence is given by
 % thm:simple_mpdo_local_structure_data_of_sal_zcl. Documented in
 % docs/paper-gaps/cpgsv17_pf_rank_one.tex.
-\begin{theorem}[BNT sector structure from SAL and ZCL (open)]
+% **Partial coverage:** the support implication is covered by
+% thm:mpdo_bnt_layer_orthogonal_supports under the standing biCF
+% injectivity and sectorwise MPDO positivity.  The exact five-identity
+% package AppKxKy=0, AppUkU=rl, Appetakhetc, Apptralktrrk, AppPsiPhi
+% The completeness identity sum_j P_j = Id is not a conclusion of the
+% pairwise-support theorem.  It and the final GSNNCH assembly remain pending.
+\begin{theorem}[BNT sector structure from SAL and ZCL]
     \label{thm:mpdo_sal_zcl_bnt_sector_structure}
     \notready
-    \uses{def:is_sal, def:mpo_source_zcl}
+    \uses{def:is_sal, def:mpo_source_zcl,
+        thm:mpdo_neighboring_sector_positivity,
+        thm:mpdo_bnt_layer_orthogonal_supports}
     Let $K$ be a simple tensor in block-injective canonical form (biCF),
     equipped with a basis-of-normal-tensors decomposition. If $K$ satisfies
     the strong area law and zero correlation length, then its basis tensors
@@ -291,7 +463,8 @@ This is the calculation in
     \cite[Theorem~4.9 and Appendix~C.2, lines~1740--1788]
       {Cirac2016MPDO_arXiv}. The separate standing biCF and BNT hypotheses are
     imposed at lines~849--850 and restated at line~1628 of the same source.
-    The proof at lines~1745--1785 applies the structural corollary after
-    establishing SAL and ZCL for each basis tensor. Since that corollary uses
-    the refuted Lemma~C.5, the printed proof does not establish this proposition.
+    The orthogonal-support conclusion uses the injectivity supplied by biCF,
+    the positive neighboring operators in each sector factorization, and the
+    unstarred layer identities. The remaining identities specify the local
+    factorization and its rank-one normalization.
 \end{theorem}
