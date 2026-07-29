@@ -166,6 +166,100 @@ noncomputable def legPair2 {cbd : Edge coarseGraph → ℕ} :
     (legs : (ie : IncidentEdge coarseGraph 2) → Fin (cbd ie.1)) :
     (legPair2 legs).2 = legs incidentBC2 := rfl
 
+/-! ### Crossing exclusivity at a super-site
+
+Under the partition the two crossing classes at a super-site are exclusive: a
+boundary edge crossing to one partner region does not cross to the other, because
+the two partner regions are disjoint. These lemmas make the boundary-edge
+partition of a region a genuine dichotomy. -/
+
+namespace CoarseBlockingFrame
+
+variable (F : CoarseBlockingFrame (G := G) (d := d) A)
+
+/-- A red boundary edge crossing to blue does not cross to the complement. -/
+@[deprecated "Use the pairwise-disjoint fields of `IsPartition` directly."
+  (since := "2026-07-30")]
+theorem not_crossing_rb_and_rc (hP : F.IsPartition) {g : Edge G}
+    (hrb : IsCrossingEdge (G := G) A F.red F.blue g) :
+    ¬ IsCrossingEdge (G := G) A F.red F.complement g := by
+  intro hrc
+  rcases hrb.1 with ⟨h1r, _⟩ | ⟨_, h2r⟩
+  · have hb2 : g.1.2 ∈ F.blue := by
+      rcases hrb.2 with ⟨ha, _⟩ | ⟨_, hb⟩
+      · exact absurd ha (Finset.disjoint_left.mp hP.red_disjoint_blue h1r)
+      · exact hb
+    have hc2 : g.1.2 ∈ F.complement := by
+      rcases hrc.2 with ⟨ha, _⟩ | ⟨_, hb⟩
+      · exact absurd ha (Finset.disjoint_left.mp hP.red_disjoint_complement h1r)
+      · exact hb
+    exact Finset.disjoint_left.mp hP.blue_disjoint_complement hb2 hc2
+  · have hb1 : g.1.1 ∈ F.blue := by
+      rcases hrb.2 with ⟨ha, _⟩ | ⟨_, hb⟩
+      · exact ha
+      · exact absurd hb (Finset.disjoint_left.mp hP.red_disjoint_blue h2r)
+    have hc1 : g.1.1 ∈ F.complement := by
+      rcases hrc.2 with ⟨ha, _⟩ | ⟨_, hb⟩
+      · exact ha
+      · exact absurd hb (Finset.disjoint_left.mp hP.red_disjoint_complement h2r)
+    exact Finset.disjoint_left.mp hP.blue_disjoint_complement hb1 hc1
+
+/-- A blue boundary edge crossing to red does not cross to the complement. -/
+@[deprecated "Use the pairwise-disjoint fields of `IsPartition` directly."
+  (since := "2026-07-30")]
+theorem not_crossing_rb_and_bc (hP : F.IsPartition) {g : Edge G}
+    (hrb : IsCrossingEdge (G := G) A F.red F.blue g) :
+    ¬ IsCrossingEdge (G := G) A F.blue F.complement g := by
+  intro hbc
+  rcases hrb.1 with ⟨h1r, _⟩ | ⟨_, h2r⟩
+  · have hb2 : g.1.2 ∈ F.blue := by
+      rcases hrb.2 with ⟨ha, _⟩ | ⟨_, hb⟩
+      · exact absurd ha (Finset.disjoint_left.mp hP.red_disjoint_blue h1r)
+      · exact hb
+    have hc2 : g.1.2 ∈ F.complement := by
+      rcases hbc.2 with ⟨ha, _⟩ | ⟨_, hb⟩
+      · exact absurd ha (Finset.disjoint_left.mp hP.red_disjoint_complement h1r)
+      · exact hb
+    exact Finset.disjoint_left.mp hP.blue_disjoint_complement hb2 hc2
+  · have hb1 : g.1.1 ∈ F.blue := by
+      rcases hrb.2 with ⟨ha, _⟩ | ⟨_, hb⟩
+      · exact ha
+      · exact absurd hb (Finset.disjoint_left.mp hP.red_disjoint_blue h2r)
+    have hc1 : g.1.1 ∈ F.complement := by
+      rcases hbc.2 with ⟨ha, _⟩ | ⟨_, hb⟩
+      · exact ha
+      · exact absurd hb (Finset.disjoint_left.mp hP.red_disjoint_complement h2r)
+    exact Finset.disjoint_left.mp hP.blue_disjoint_complement hb1 hc1
+
+/-- A complement boundary edge crossing to red does not cross to blue. -/
+@[deprecated "Use the pairwise-disjoint fields of `IsPartition` directly."
+  (since := "2026-07-30")]
+theorem not_crossing_rc_and_bc (hP : F.IsPartition) {g : Edge G}
+    (hrc : IsCrossingEdge (G := G) A F.red F.complement g) :
+    ¬ IsCrossingEdge (G := G) A F.blue F.complement g := by
+  intro hbc
+  rcases hrc.1 with ⟨h1r, _⟩ | ⟨_, h2r⟩
+  · have hc2 : g.1.2 ∈ F.complement := by
+      rcases hrc.2 with ⟨ha, _⟩ | ⟨_, hb⟩
+      · exact absurd ha (Finset.disjoint_left.mp hP.red_disjoint_complement h1r)
+      · exact hb
+    have hb2 : g.1.2 ∈ F.blue := by
+      rcases hbc.1 with ⟨ha, _⟩ | ⟨_, hb⟩
+      · exact absurd ha (Finset.disjoint_left.mp hP.red_disjoint_blue h1r)
+      · exact hb
+    exact Finset.disjoint_left.mp hP.blue_disjoint_complement hb2 hc2
+  · have hc1 : g.1.1 ∈ F.complement := by
+      rcases hrc.2 with ⟨ha, _⟩ | ⟨_, hb⟩
+      · exact ha
+      · exact absurd hb (Finset.disjoint_left.mp hP.red_disjoint_complement h2r)
+    have hb1 : g.1.1 ∈ F.blue := by
+      rcases hbc.1 with ⟨ha, _⟩ | ⟨_, hb⟩
+      · exact ha
+      · exact absurd hb (Finset.disjoint_left.mp hP.red_disjoint_blue h2r)
+    exact Finset.disjoint_left.mp hP.blue_disjoint_complement hb1 hc1
+
+end CoarseBlockingFrame
+
 /-! ### Region-level crossing classification
 
 The crossing classification of a region boundary edge depends only on the three
@@ -849,6 +943,19 @@ noncomputable def coherentFrameOfRegions
     (hcover : red ∪ blue ∪ complement = Finset.univ) :
     (coherentFrameOfRegions hRed hBlue hCompl hd hpos hrb hrc hbc hcover).frame.complement =
       complement := rfl
+
+/-- The coherent frame of three partitioned regions is partitioned. -/
+@[deprecated "Construct `CoarseBlockingFrame.IsPartition` directly from the supplied
+disjointness and covering hypotheses." (since := "2026-07-30")]
+theorem coherentFrameOfRegions_isPartition
+    (hRed : RegionBlockedTensorInjective (G := G) A red)
+    (hBlue : RegionBlockedTensorInjective (G := G) A blue)
+    (hCompl : RegionBlockedTensorInjective (G := G) A complement)
+    (hd : 0 < d) (hpos : ∀ e : Edge G, 0 < A.bondDim e)
+    (hrb : Disjoint red blue) (hrc : Disjoint red complement) (hbc : Disjoint blue complement)
+    (hcover : red ∪ blue ∪ complement = Finset.univ) :
+    (coherentFrameOfRegions hRed hBlue hCompl hd hpos hrb hrc hbc hcover).frame.IsPartition :=
+  ⟨hrb, hrc, hbc, hcover⟩
 
 end PEPS
 end TNLean

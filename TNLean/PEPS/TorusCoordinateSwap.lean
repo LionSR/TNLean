@@ -57,6 +57,16 @@ def torusCoordinateSwapRegion {width height : ℕ}
     v ∈ torusCoordinateSwapRegion R ↔ (v.2, v.1) ∈ R := by
   simp [torusCoordinateSwapRegion]
 
+/-- Coordinate swap preserves unions of finite regions. -/
+@[deprecated "Expand `torusCoordinateSwapRegion` and use `Finset.image_union`."
+  (since := "2026-07-30")]
+theorem torusCoordinateSwapRegion_union {width height : ℕ}
+    (R S : Finset (TorusVertex width height)) :
+    torusCoordinateSwapRegion (R ∪ S) =
+      torusCoordinateSwapRegion R ∪ torusCoordinateSwapRegion S := by
+  ext v
+  simp only [mem_torusCoordinateSwapRegion, Finset.mem_union]
+
 /-- Coordinate swap commutes with finite indexed unions. -/
 theorem torusCoordinateSwapRegion_biUnion {width height : ℕ} {ι : Type*}
     (s : Finset ι) (R : ι → Finset (TorusVertex width height)) :
@@ -111,6 +121,40 @@ def torusCoordinateSwap :
     (torusCoordinateSwap (width := width) (height := height)).symm =
       torusCoordinateSwap (width := height) (height := width) :=
   rfl
+
+/-- Coordinate swap sends horizontal edges to vertical edges. -/
+@[deprecated "Use `torusHorizontalNeighbor_coordinateSwap` together with
+`Edge.map_endpoints`." (since := "2026-07-30")]
+theorem torusCoordinateSwap_isVertical {e : Edge (torusGraph width height)}
+    (he : IsHorizontalTorusEdge e) :
+    IsVerticalTorusEdge (Edge.map torusCoordinateSwap e) := by
+  have h := (torusHorizontalNeighbor_coordinateSwap (v := e.1.1) (w := e.1.2)).mpr he
+  rcases Edge.map_endpoints torusCoordinateSwap e with hends | hends
+  · unfold IsVerticalTorusEdge
+    rw [show (Edge.map torusCoordinateSwap e).1.1 = torusCoordinateSwap e.1.1 from hends.1,
+      show (Edge.map torusCoordinateSwap e).1.2 = torusCoordinateSwap e.1.2 from hends.2]
+    exact h
+  · unfold IsVerticalTorusEdge
+    rw [show (Edge.map torusCoordinateSwap e).1.1 = torusCoordinateSwap e.1.2 from hends.1,
+      show (Edge.map torusCoordinateSwap e).1.2 = torusCoordinateSwap e.1.1 from hends.2]
+    exact torusVerticalNeighbor_symm h
+
+/-- Coordinate swap sends vertical edges to horizontal edges. -/
+@[deprecated "Use `torusVerticalNeighbor_coordinateSwap` together with
+`Edge.map_endpoints`." (since := "2026-07-30")]
+theorem torusCoordinateSwap_isHorizontal {e : Edge (torusGraph width height)}
+    (he : IsVerticalTorusEdge e) :
+    IsHorizontalTorusEdge (Edge.map torusCoordinateSwap e) := by
+  have h := (torusVerticalNeighbor_coordinateSwap (v := e.1.1) (w := e.1.2)).mpr he
+  rcases Edge.map_endpoints torusCoordinateSwap e with hends | hends
+  · unfold IsHorizontalTorusEdge
+    rw [show (Edge.map torusCoordinateSwap e).1.1 = torusCoordinateSwap e.1.1 from hends.1,
+      show (Edge.map torusCoordinateSwap e).1.2 = torusCoordinateSwap e.1.2 from hends.2]
+    exact h
+  · unfold IsHorizontalTorusEdge
+    rw [show (Edge.map torusCoordinateSwap e).1.1 = torusCoordinateSwap e.1.2 from hends.1,
+      show (Edge.map torusCoordinateSwap e).1.2 = torusCoordinateSwap e.1.1 from hends.2]
+    exact torusHorizontalNeighbor_symm h
 
 end PEPS
 end TNLean
