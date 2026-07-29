@@ -83,9 +83,8 @@ lemma pauli_expansion (M : Matrix (Fin 2) (Fin 2) ℂ) :
 /-! ### Pauli multiplication table
 
 The nine products `σᵢ σⱼ` are computed once as explicit `2×2` matrices so that
-every downstream consumer (`pauli_mul_pauli_trace`, trace-pairing identities,
-rotation-matrix entries) can reuse the table without re-doing the matrix
-multiplication. -/
+the trace pairings of Pauli matrices follow directly from their multiplication
+table. -/
 
 /-- The multiplication table of the three Pauli matrices, computed as explicit
 `2×2` matrices.

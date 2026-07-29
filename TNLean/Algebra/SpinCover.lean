@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Algebra.SpinCover.Basic
+import TNLean.Algebra.ComplexPhasePositivity
 import Mathlib.Analysis.SpecialFunctions.Complex.Circle
 import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
 
@@ -63,21 +64,26 @@ def rotZ (θ : ℝ) : Matrix (Fin 3) (Fin 3) ℝ :=
 def rotX (β : ℝ) : Matrix (Fin 3) (Fin 3) ℝ :=
   !![1, 0, 0; 0, Real.cos β, -Real.sin β; 0, Real.sin β, Real.cos β]
 
--- Star of the diagonal generator, precomputed to avoid repeated expansion in the
--- membership proof.
-private lemma star_su2Diag (θ : ℝ) : star (su2Diag θ) =
-    !![Complex.exp (θ / 2 * Complex.I), 0; 0, Complex.exp (-(θ / 2) * Complex.I)] := by
-  ext i j; fin_cases i <;> fin_cases j <;>
-    simp [su2Diag, Matrix.star_apply, Complex.star_def, Complex.exp_conj, map_div₀, map_neg]
-
 lemma su2Diag_mem_specialUnitaryGroup (θ : ℝ) :
     su2Diag θ ∈ Matrix.specialUnitaryGroup (Fin 2) ℂ := by
   rw [Matrix.mem_specialUnitaryGroup_iff]
   refine ⟨?_, ?_⟩
-  · rw [Matrix.mem_unitaryGroup_iff, star_su2Diag]
-    ext i j; fin_cases i <;> fin_cases j <;>
-      simp [su2Diag, Matrix.mul_apply, Fin.sum_univ_two, ← Complex.exp_add] <;> ring
-  · simp [su2Diag, Matrix.det_fin_two_of, mul_comm, ← Complex.exp_add]; ring
+  · rw [Matrix.mem_unitaryGroup_iff]
+    ext i j
+    fin_cases i <;> fin_cases j <;>
+      simp only [su2Diag, Matrix.mul_apply, Fin.sum_univ_two, Matrix.star_apply,
+        Matrix.one_apply, Complex.star_def, Fin.mk_zero, Fin.mk_one, Matrix.cons_val_zero,
+        Matrix.cons_val_one, Matrix.of_apply, Matrix.cons_val', Matrix.empty_val',
+        Matrix.cons_val_fin_one, ← Complex.exp_conj, ← Complex.exp_add, map_zero, mul_zero,
+        zero_mul, add_zero, zero_add, Fin.isValue, Fin.reduceEq, if_true, if_false] <;>
+      first
+        | rfl
+        | (rw [← Complex.exp_zero]; congr 1
+           simp only [map_mul, Complex.conj_I, Complex.conj_ofReal, map_div₀,
+             map_neg, map_ofNat]
+           ring)
+  · rw [su2Diag, Matrix.det_fin_two_of, mul_zero, sub_zero, ← Complex.exp_add]
+    rw [show -(θ / 2) * Complex.I + θ / 2 * Complex.I = 0 by ring, Complex.exp_zero]
 
 lemma su2Xrot_mem_specialUnitaryGroup (β : ℝ) :
     su2Xrot β ∈ Matrix.specialUnitaryGroup (Fin 2) ℂ := by
@@ -87,9 +93,14 @@ lemma su2Xrot_mem_specialUnitaryGroup (β : ℝ) :
   rw [Matrix.mem_specialUnitaryGroup_iff]
   refine ⟨?_, ?_⟩
   · rw [Matrix.mem_unitaryGroup_iff]
-    ext i j; fin_cases i <;> fin_cases j <;>
-      simp [su2Xrot, Matrix.mul_apply, Fin.sum_univ_two, Matrix.star_apply, Complex.star_def,
-        Complex.conj_I, Complex.conj_ofReal, map_mul, map_neg] <;>
+    ext i j
+    fin_cases i <;> fin_cases j <;>
+      simp only [su2Xrot, Matrix.mul_apply, Fin.sum_univ_two, Matrix.star_apply,
+        Matrix.one_apply, Fin.mk_zero, Fin.mk_one, Matrix.cons_val_zero, Matrix.cons_val_one,
+        Matrix.of_apply, Matrix.cons_val', Matrix.empty_val',
+        Matrix.cons_val_fin_one, Complex.star_def, map_neg, map_mul,
+        Complex.conj_I, Complex.conj_ofReal, Fin.isValue, Fin.reduceEq,
+        if_true, if_false] <;>
       first
         | linear_combination hp - (Real.sin (β / 2) : ℂ) ^ 2 * Complex.I_sq
         | ring
@@ -99,10 +110,7 @@ lemma su2Xrot_mem_specialUnitaryGroup (β : ℝ) :
 /-! ### The cover sends the chosen generators to the coordinate rotations -/
 
 /-- Conjugating the Pauli vector by the diagonal cover `su2Diag θ` realizes the
-rotation by `θ` about the `z`-axis.  Each of the nine entries is verified by
-computing `½ tr(σᵢ · su2Diag θ · σⱼ · (su2Diag θ)⁻¹)` with trigonometric
-simplification; the `simp only` list is minimal because explicit `!![…]` matrix
-literals make entry extraction definitional. -/
+rotation by `θ` about the `z`-axis. -/
 lemma R_su2Diag_eq_rotZ (θ : ℝ) :
     pauliConjAd (su2ToGL (su2Diag θ) (su2Diag_mem_specialUnitaryGroup θ))
       = (rotZ θ).map Complex.ofReal := by
@@ -134,16 +142,17 @@ lemma R_su2Diag_eq_rotZ (θ : ℝ) :
   fin_cases i <;> fin_cases j <;>
     simp only [pauliConjAd, su2ToGL_coe, su2ToGL_inv_coe, pauli, su2Diag, rotZ,
       Matrix.adjugate_fin_two_of, Matrix.trace_fin_two, Matrix.mul_apply, Fin.sum_univ_two,
-      Matrix.of_apply, Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.head_cons,
-      Matrix.cons_val', Matrix.empty_val', Matrix.cons_val_fin_one,
-      Matrix.map_apply, Complex.ofReal_zero, Complex.ofReal_one, Complex.ofReal_neg,
-      Fin.zero_eta, Fin.mk_one, Fin.isValue, Fin.reduceFinMk,
+      Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.head_cons, Matrix.of_apply,
+      Matrix.cons_val', Matrix.empty_val', Matrix.cons_val_fin_one, Matrix.head_fin_const,
+      Matrix.map_apply, Matrix.cons_val_two, Matrix.tail_cons, Fin.reduceFinMk, Fin.zero_eta,
+      Fin.mk_one, Fin.isValue, Complex.ofReal_zero, Complex.ofReal_one, Complex.ofReal_neg,
+      neg_mul, mul_neg, neg_zero, mul_zero, zero_mul, add_zero, zero_add, mul_one, one_mul,
       hexpP, hexpN, hcos, hsin] <;>
-    ring
+    (ring_nf; (try (simp only [Complex.I_sq, Complex.I_pow_four]; ring_nf));
+      (try linear_combination hpyth))
 
 /-- Conjugating the Pauli vector by the cover `su2Xrot β` realizes the rotation by
-`β` about the `x`-axis.  Same strategy as `R_su2Diag_eq_rotZ`: minimal `simp only`
-list plus `ring` closure. -/
+`β` about the `x`-axis. -/
 lemma R_su2Xrot_eq_rotX (β : ℝ) :
     pauliConjAd (su2ToGL (su2Xrot β) (su2Xrot_mem_specialUnitaryGroup β))
       = (rotX β).map Complex.ofReal := by
@@ -164,12 +173,14 @@ lemma R_su2Xrot_eq_rotX (β : ℝ) :
   fin_cases i <;> fin_cases j <;>
     simp only [pauliConjAd, su2ToGL_coe, su2ToGL_inv_coe, pauli, su2Xrot, rotX,
       Matrix.adjugate_fin_two_of, Matrix.trace_fin_two, Matrix.mul_apply, Fin.sum_univ_two,
-      Matrix.of_apply, Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.head_cons,
-      Matrix.cons_val', Matrix.empty_val', Matrix.cons_val_fin_one,
-      Matrix.map_apply, Complex.ofReal_zero, Complex.ofReal_one, Complex.ofReal_neg,
-      Fin.zero_eta, Fin.mk_one, Fin.isValue, Fin.reduceFinMk,
+      Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.head_cons, Matrix.of_apply,
+      Matrix.cons_val', Matrix.empty_val', Matrix.cons_val_fin_one, Matrix.head_fin_const,
+      Matrix.map_apply, Matrix.cons_val_two, Matrix.tail_cons, Fin.reduceFinMk, Fin.zero_eta,
+      Fin.mk_one, Fin.isValue, Complex.ofReal_zero, Complex.ofReal_one, Complex.ofReal_neg,
+      neg_mul, mul_neg, neg_zero, mul_zero, zero_mul, add_zero, zero_add, mul_one, one_mul,
       hcos, hsin] <;>
-    ring
+    (ring_nf; (try (simp only [Complex.I_sq, Complex.I_pow_four]; ring_nf));
+      (try linear_combination hpyth))
 
 /-! ### Surjectivity of the cover via the Euler-angle factorization -/
 
