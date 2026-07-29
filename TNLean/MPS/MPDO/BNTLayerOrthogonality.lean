@@ -207,6 +207,32 @@ theorem physicalSupportProj_mul_physicalSlice (K : MPOTensor d D) (β α : Fin D
       A i (finProdFinEquiv (finProdFinEquiv (β, α), j))) hColumns
   simpa [physicalSupportProj, Matrix.mul_apply, physicalSlice] using hEntry
 
+/-- Every matrix that fixes all physical slices on the left also fixes their
+canonical joint column support on the left. -/
+theorem mul_physicalSupportProj_eq_self_of_forall_mul_physicalSlice_eq
+    (K : MPOTensor d D) (P : Matrix (Fin d) (Fin d) ℂ)
+    (hP : ∀ β α, P * physicalSlice K β α = physicalSlice K β α) :
+    P * physicalSupportProj K = physicalSupportProj K := by
+  have hColumns : P * physicalSliceColumns K = physicalSliceColumns K := by
+    ext i q
+    have hEntry := congrFun
+      (congrFun (hP q.divNat.divNat q.divNat.modNat) i) q.modNat
+    simpa [physicalSliceColumns, physicalSlice, Matrix.mul_apply] using hEntry
+  have hGram :
+      P * (physicalSliceColumns K * (physicalSliceColumns K)ᴴ) =
+        physicalSliceColumns K * (physicalSliceColumns K)ᴴ := by
+    rw [← Matrix.mul_assoc, hColumns]
+  obtain ⟨W, hW⟩ := MPSTensor.exists_supportProj_eq_mul
+    (physicalSliceColumns K * (physicalSliceColumns K)ᴴ)
+    (Matrix.posSemidef_self_mul_conjTranspose (physicalSliceColumns K))
+  change P * MPSTensor.supportProj
+      (physicalSliceColumns K * (physicalSliceColumns K)ᴴ)
+      (Matrix.posSemidef_self_mul_conjTranspose (physicalSliceColumns K)) =
+    MPSTensor.supportProj
+      (physicalSliceColumns K * (physicalSliceColumns K)ᴴ)
+      (Matrix.posSemidef_self_mul_conjTranspose (physicalSliceColumns K))
+  rw [hW, ← Matrix.mul_assoc, hGram]
+
 /-- Adjoint closure makes the same physical support projection fix every slice on the right. -/
 theorem physicalSlice_mul_physicalSupportProj_of_isInjective_isMPDO
     (K : MPOTensor d D) (hInj : MPSTensor.IsInjective K.toMPSTensor) (hK : IsMPDO K)
