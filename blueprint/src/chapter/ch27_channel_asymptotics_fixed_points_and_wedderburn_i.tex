@@ -88,47 +88,6 @@ uniform in $h$.
     For every $X$, the matrix $E_\sigma(X)$ is fixed by $T^*$.
 \end{lemma}
 
-\begin{theorem}[Scalar map is a conditional expectation]
-    \label{thm:scalar_conditional_expectation_isConditionalExpectation}
-    \lean{Kraus.scalarConditionalExpectation_isConditionalExpectation}
-    \leanok
-    \uses{def:is_conditional_expectation, def:scalar_conditional_expectation,
-        def:tp_kraus,
-        thm:scalar_conditional_expectation_unital,
-        thm:scalar_conditional_expectation_idempotent,
-        lem:scalar_conditional_expectation_mem_adjointFixedPoints,
-        lem:scalar_conditional_expectation_fixes_scalar}
-    Let $K$ be a trace-preserving Kraus family, let $\rho>0$ satisfy
-    $T(\rho)=\rho$ for the associated channel
-    $T(\rho)=\sum_iK_i\rho K_i^\dagger$, and assume every adjoint fixed point
-    of $T^*$ is a scalar multiple of $\Id$. Then $E_\rho$ is a conditional
-    expectation onto the adjoint fixed-point $*$-subalgebra.
-\end{theorem}
-
-\begin{theorem}[Conditional expectation onto the fixed-point algebra]
-    \label{thm:meanErgodicAdjoint_isConditionalExpectation}
-    \lean{Kraus.meanErgodicAdjoint_isConditionalExpectation}
-    \leanok
-    \uses{def:is_conditional_expectation}
-    Let $T:\MN{D}\to\MN{D}$ be a positive trace-preserving linear map
-    whose trace adjoint $T^*$ satisfies the Schwarz inequality.  If $T$ has a
-    positive definite fixed point $\rho>0$, then the trace adjoint of the
-    mean-ergodic projection of $T$ is a conditional expectation onto the
-    fixed-point star-subalgebra of $T^*$.
-    This is the conditional-expectation step used in the proof of
-    Wolf Theorem~6.14.
-\end{theorem}
-
-\begin{proof}\leanok
-    \uses{thm:positive_unital_adjoint_mean_ergodic_retraction,
-        thm:fixedPointsStarSubalgebra}
-    The trace adjoint of the mean-ergodic projection is positive, unital, and
-    idempotent, and its fixed points are exactly the fixed points of $T^*$.
-    The Schwarz inequality and the faithful fixed point make this fixed-point
-    space a $*$-subalgebra. Hence the projection is a conditional expectation
-    onto that algebra.
-\end{proof}
-
 \begin{lemma}[Complete positivity of the scalar conditional expectation]
     \label{thm:scalar_conditional_expectation_isCPMap}
     \lean{Kraus.scalarConditionalExpectation_isCPMap}
@@ -154,6 +113,55 @@ uniform in $h$.
     $E_\sigma$ is the Kraus map in
     (\ref{eq:spectral_scalar_ce_kraus}) scaled by the non-negative real
     number $\tr(\sigma)^{-1}$, and is therefore completely positive.
+\end{proof}
+
+\begin{theorem}[Scalar map is a conditional expectation]
+    \label{thm:scalar_conditional_expectation_isConditionalExpectation}
+    \lean{Kraus.scalarConditionalExpectation_isConditionalExpectation}
+    \leanok
+    \uses{def:is_conditional_expectation, def:scalar_conditional_expectation,
+        def:tp_kraus}
+    Let $K$ be a trace-preserving Kraus family, let $\rho>0$ satisfy
+    $T(\rho)=\rho$ for the associated channel
+    $T(\rho)=\sum_iK_i\rho K_i^\dagger$, and assume every adjoint fixed point
+    of $T^*$ is a scalar multiple of $\Id$. Then $E_\rho$ is a conditional
+    expectation onto the adjoint fixed-point $*$-subalgebra.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:scalar_conditional_expectation_isCPMap,
+        thm:scalar_conditional_expectation_unital,
+        thm:scalar_conditional_expectation_idempotent,
+        lem:scalar_conditional_expectation_mem_adjointFixedPoints,
+        lem:scalar_conditional_expectation_fixes_scalar}
+    Complete positivity implies positivity. The evaluation formula gives
+    unitality and idempotence, while trace preservation places the range in
+    the adjoint fixed-point algebra. Every element of that algebra is scalar
+    by hypothesis, and $E_\rho$ fixes every scalar matrix.
+\end{proof}
+
+\begin{theorem}[Conditional expectation onto the fixed-point algebra]
+    \label{thm:meanErgodicAdjoint_isConditionalExpectation}
+    \lean{Kraus.meanErgodicAdjoint_isConditionalExpectation}
+    \leanok
+    \uses{def:is_conditional_expectation}
+    Let $T:\MN{D}\to\MN{D}$ be a positive trace-preserving linear map
+    whose trace adjoint $T^*$ satisfies the Schwarz inequality.  If $T$ has a
+    positive definite fixed point $\rho>0$, then the trace adjoint of the
+    mean-ergodic projection of $T$ is a conditional expectation onto the
+    fixed-point star-subalgebra of $T^*$.
+    This is the conditional-expectation step used in the proof of
+    Wolf Theorem~6.14.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:positive_unital_adjoint_mean_ergodic_retraction,
+        thm:fixedPointsStarSubalgebra}
+    The trace adjoint of the mean-ergodic projection is positive, unital, and
+    idempotent, and its fixed points are exactly the fixed points of $T^*$.
+    The Schwarz inequality and the faithful fixed point make this fixed-point
+    space a $*$-subalgebra. Hence the projection is a conditional expectation
+    onto that algebra.
 \end{proof}
 
 \begin{lemma}[$\sigma$-trace preservation of the scalar conditional expectation]
