@@ -18,8 +18,8 @@ basic algebraic properties (multiplicativity, orthogonality).  It also lifts spe
 unitary matrices into the general linear group and defines the real corestriction
 `spinHalfCoverSO3 : SU(2) →* SO(3)`.
 
-The Euler-angle factorization and surjectivity onto `SO(3)`, which rely on
-trigonometric imports, live in `TNLean.Algebra.SpinCover`.
+The Euler-angle factorization and surjectivity onto `SO(3)`, which use
+trigonometric functions and identities, are proved in `TNLean.Algebra.SpinCover`.
 
 ## Main definitions
 

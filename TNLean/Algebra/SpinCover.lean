@@ -22,9 +22,9 @@ Euler-angle (`ZXZ`) factorization.
 * `SpinCover.spinHalfCover_surjective_onto_SO3` : every `SO(3)` rotation is a
   Pauli conjugation by some `SU(2)` element
 
-The algebraic core (Pauli matrices, `spinHalfCover`, orthogonality,
-`spinHalfCoverSO3`) lives in `TNLean.Algebra.SpinCover.Basic` and does not
-import the trigonometric stack.
+The algebraic definitions and results about Pauli matrices, `spinHalfCover`,
+orthogonality, and `spinHalfCoverSO3` are proved in
+`TNLean.Algebra.SpinCover.Basic`.
 
 ## References
 
