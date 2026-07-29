@@ -31,6 +31,7 @@ import TNLean.Algebra.KroneckerFactorPositivity
 import TNLean.Algebra.ListProduct
 import TNLean.Algebra.MatrixAlgEquiv
 import TNLean.Algebra.MatrixAux
+import TNLean.Algebra.MatrixFamilySupport
 import TNLean.Algebra.MatrixGramUnitary
 import TNLean.Algebra.MatrixOperatorSpace
 import TNLean.Algebra.MatrixRankBaseChange
