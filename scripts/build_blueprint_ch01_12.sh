@@ -23,14 +23,16 @@ rsync -a --exclude='.tenkz_svg_cache/' \
 cp -R "$REPO_ROOT/tex/tenkz" "$WORK_DIR/tex/tenkz"
 
 # Verify that the dedicated router contains exactly the ch01_* through ch12_*
-# sequence, in order and without duplicates.
+# sequence, in order and without duplicates, followed by the auxiliary chapter
+# that carries the channel-theory results the volume still cites.
 echo "==> Checking the FT--MPS chapter router..."
-expected="$(printf 'ch%02d\n' $(seq 1 12))"
+expected="$(printf 'ch%02d\n' $(seq 1 12))
+ch12a"
 kept="$(grep '^[[:space:]]*\\input{chapter/' \
   "$WORK_DIR/blueprint/src/content_ft_mps.tex" \
-  | sed -E 's|.*chapter/(ch[0-9]{2})_.*|\1|')"
+  | sed -E 's|.*chapter/(ch[0-9]{2}[a-z]?)_.*|\1|')"
 if [ "$kept" != "$expected" ]; then
-  echo "::error::Active chapters are not exactly the ch01..ch12 sequence; got:"
+  echo "::error::Active chapters are not the ch01..ch12 sequence followed by ch12a; got:"
   echo "$kept"
   exit 1
 fi
