@@ -162,6 +162,20 @@ def test_ink_environment_owner() -> None:
         explicit_group_aliases,
     ):
         raise AssertionError("bgroup-delimited scope leaked the kernel owner")
+    alignment_cells = (
+        r"\begin{aligned}"
+        r"\tenkzkernel\begin{tenkz}\end{tenkz}"
+        r"&\begin{tenkz}\end{tenkz}\\[1em]"
+        r"\tenkzkernel\begin{tenkz}\end{tenkz}"
+        r"&\begin{tenkz}\end{tenkz}"
+        r"\end{aligned}"
+    )
+    if ink_environment_problems(
+        "good",
+        "Canonical public kernel and tenkz pictures.",
+        alignment_cells,
+    ):
+        raise AssertionError("alignment-cell scope leaked the kernel owner")
 
 
 def main() -> int:

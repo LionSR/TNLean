@@ -143,8 +143,41 @@ INK_ENVIRONMENT_PATTERNS = {
     "tenkzplanes": re.compile(r"\\begin\{tenkzplanes\}"),
     "tenkz": re.compile(r"\\begin\{tenkz(?:eq|cd)?\}|\\tnpic\b|\\tntree\b"),
 }
+INK_ALIGNMENT_ENVIRONMENTS = {
+    "align",
+    "align*",
+    "alignat",
+    "alignat*",
+    "aligned",
+    "alignedat",
+    "array",
+    "bmatrix",
+    "Bmatrix",
+    "cases",
+    "eqnarray",
+    "eqnarray*",
+    "flalign",
+    "flalign*",
+    "gather",
+    "gather*",
+    "gathered",
+    "longtable",
+    "matrix",
+    "multline",
+    "multline*",
+    "pmatrix",
+    "smallmatrix",
+    "split",
+    "tabular",
+    "tabular*",
+    "tabularx",
+    "vmatrix",
+    "Vmatrix",
+}
 INK_SCOPE_TOKEN = re.compile(
-    r"(?P<skip>\\\\(?:\s*\[[^\]]*\])?|\\[{}$])"
+    r"(?P<rowbreak>\\\\\*?(?:\s*\[[^\]]*\])?"
+    r"|\\(?:tabularnewline|crcr|cr)\b)"
+    r"|(?P<skip>\\[{}$&])"
     r"|\\tenkzkernel\b"
     r"|\\begin\s*\{(?P<begin>[^{}]+)\}"
     r"|\\end\s*\{(?P<end>[^{}]+)\}"
@@ -152,7 +185,7 @@ INK_SCOPE_TOKEN = re.compile(
     r"|\\\[|\\\]|\\\(|\\\)"
     r"|(?P<dollar>\${1,2})"
     r"|\\tnpic\b|\\tntree\b"
-    r"|[{}]"
+    r"|(?P<cell>&)|[{}]"
 )
 
 
@@ -161,6 +194,7 @@ def used_ink_environment_families(body: str) -> set[str]:
     families: set[str] = set()
     kernel_scope = [False]
     dollar_scope: str | None = None
+    alignment_scopes: list[tuple[str, int, bool]] = []
     for token in INK_SCOPE_TOKEN.finditer(body):
         text = token.group()
         begin = token.group("begin")
@@ -176,9 +210,15 @@ def used_ink_environment_families(body: str) -> set[str]:
             elif begin in {"tenkzfree", "tenkzlattice", "tenkzplanes"}:
                 families.add(begin)
             kernel_scope.append(kernel_scope[-1])
-        elif token.group("end") is not None:
+            if begin in INK_ALIGNMENT_ENVIRONMENTS:
+                alignment_scopes.append(
+                    (begin, len(kernel_scope) - 1, kernel_scope[-1])
+                )
+        elif (end := token.group("end")) is not None:
             if len(kernel_scope) > 1:
                 kernel_scope.pop()
+            if alignment_scopes and alignment_scopes[-1][0] == end:
+                alignment_scopes.pop()
         elif text in {r"\begingroup", r"\bgroup", r"\[", r"\(", "{"}:
             kernel_scope.append(kernel_scope[-1])
         elif text in {r"\endgroup", r"\egroup", r"\]", r"\)", "}"}:
@@ -192,6 +232,12 @@ def used_ink_environment_families(body: str) -> set[str]:
                 dollar_scope = None
                 if len(kernel_scope) > 1:
                     kernel_scope.pop()
+        elif (
+            token.group("cell") is not None
+            or token.group("rowbreak") is not None
+        ) and alignment_scopes:
+            _, scope_index, inherited_kernel = alignment_scopes[-1]
+            kernel_scope[scope_index] = inherited_kernel
         elif text in {r"\tnpic", r"\tntree"}:
             families.add("tenkz")
     return families
