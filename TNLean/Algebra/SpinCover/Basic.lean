@@ -19,7 +19,8 @@ unitary matrices into the general linear group and defines the real corestrictio
 `spinHalfCoverSO3 : SU(2) →* SO(3)`.
 
 The Euler-angle factorization and surjectivity onto `SO(3)`, which use
-trigonometric functions and identities, are proved in `TNLean.Algebra.SpinCover`.
+trigonometric functions and identities, are proved in
+`TNLean.Algebra.SpinCover.EulerAngles`.
 
 ## Main definitions
 
