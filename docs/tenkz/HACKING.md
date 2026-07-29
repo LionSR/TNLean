@@ -138,14 +138,18 @@ spellings and earn continued use.  The other status words record lifecycle
 debt: `alias(...; sunset=...)` reads old sources until its stated rewrite, and
 `escape` names raw geometry whose uses count in meter M3.
 
-The gate compares the pinned meters with the base revision.  It passes when
-the public census decreases, or when the census is stable and every raised
-low-consumer, co-occurrence, lonely-type, or sugar-shaped flag has a verdict in
-the latest `docs/tenkz/SHRINK.md` session.  Alias-sunset flags require verdicts
-there as soon as their milestone is due.  Meter growth requires the recorded
-extension or census-correction procedure.  Any parser-leaf identity change,
-including a one-for-one replacement or removal, requires an
-`Extension-gate: #NNNN` citation even when the M2 count is stable or decreases.
+The gate first compares the pinned meters with the base revision.  M1 total or
+kernel growth requires an extension, or a census correction while parser
+identities are unchanged; command or environment growth requires an extension.
+M2 path-count growth and every parser-leaf identity change, including
+replacement or removal, require an `Extension-gate: #NNNN` citation.  M3 or M4
+growth requires a census correction.  M5 alias-count growth is rejected
+unconditionally, and every alias must have a valid sunset.  M6 component growth
+requires a census correction while parser identities are unchanged.
+
+After that ratchet passes, a public-census decrease is accepted.  Otherwise,
+every raised low-consumer, co-occurrence, lonely-type, sugar-shaped, and due
+alias-sunset flag needs a verdict in the latest `docs/tenkz/SHRINK.md` session.
 
 ## Shared parsers
 
@@ -177,10 +181,14 @@ and next-stage contract.
   dimension accessor.
 - `tenkz-geometry.code.tex` owns frames, placement resolution, directions, and
   silhouette support distances; it emits no ink.
-- `tenkz-render.code.tex` owns mark emission from frozen records and resolved
-  geometry; it parses nothing and stores no topology.
+- `tenkz-render.code.tex` owns final mark and string emission from frozen
+  records and resolved geometry; it parses nothing and stores no topology.
 - `tenkz-string.code.tex` owns saved string paths and the crossing, join, and
   gap ledgers consumed by rendering.
+
+Until string/render integration is complete, string fixtures use the temporary
+`\__tenkz_string_dev_draw:nn` primitive in `tenkz-string.code.tex`, which issues
+the development `\draw` directly.
 
 Read the header before changing a stage, and keep new state in the stage that
 owns its answer.
