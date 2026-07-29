@@ -361,6 +361,34 @@
     orthogonal, hence $P_xP_y=0$.
 \end{proof}
 
+\begin{corollary}[Supports of common-weight BNT representatives]
+    \label{cor:mpdo_common_weight_bnt_layer_supports}
+    \lean{MPOTensor.exists_pairwise_orthogonal_twoSided_physicalSupport_commonWeightAbsorbedBasis}
+    \leanok
+    \uses{thm:mpdo_neighboring_sector_positivity,
+        thm:mpdo_bnt_layer_orthogonal_supports}
+    Let a BNT decomposition have a common nonzero weight within each sector,
+    and suppose that its one-site words span the product of the virtual matrix
+    algebras. For every sector $s$, assume a physical-sector factorization with
+    positive neighboring operators. If distinct absorbed representatives obey
+    the unstarred layer identities, then there are pairwise orthogonal
+    projections $P_s$ such that
+    \begin{align}
+        P_s\mathcal K_s[\beta,\alpha]
+        &=\mathcal K_s[\beta,\alpha]
+         =\mathcal K_s[\beta,\alpha]P_s
+        \notag
+    \end{align}
+    for every $s,\beta,\alpha$.
+\end{corollary}
+
+\begin{proof}
+    \leanok
+    One-site spanning makes every absorbed representative injective. The
+    positive neighboring operators make every representative an MPDO. Apply
+    Theorem~\ref{thm:mpdo_bnt_layer_orthogonal_supports}.
+\end{proof}
+
 \begin{theorem}[Square-zero obstruction for arbitrary MPO tensors]
     \label{thm:mpdo_bnt_layer_square_zero_obstruction}
     \lean{MPOTensor.BNTLayerOrthogonalityCounterexample.squareZeroPhysicalMatrix_ne_zero,

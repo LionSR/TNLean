@@ -122,9 +122,10 @@ and
 {\scriptsize\leanid{MPOTensor.PhysicalSupportRestrictionData.exists_etaLocalStructureData_lifted_supported}}.}
 Choosing supported products over all absorbed BNT representatives gives
 an orthogonal commuting sector family once the required one-site supports are
-available.  The previously missing support implication is now proved in the
-source setting relevant to Proposition~\texttt{prop3to4}.  The local identity
-is the unstarred ordered product
+available.  A source-context corollary now derives pairwise two-sided supports
+from common copy weights, one-site spanning, the positive neighboring-operator
+factorizations, and the unstarred layer identity.  The local identity is the
+ordered product
 \[
   {\cal K}_y[\beta_y,\alpha_y]\,
   {\cal K}_x[\beta_x,\alpha_x]=0
@@ -142,13 +143,16 @@ and their support projections fix every sector slice on both sides.
 {\scriptsize\leanid{MPOTensor.IsBNTLayerOrthogonal}},
 {\scriptsize\leanid{MPOTensor.PhysicalSectorFactorization.isMPDO_of_neighboringOperator_pos}},
 {\scriptsize\leanid{MPOTensor.exists_physicalSlice_conjTranspose_eq_sum_of_isInjective_isMPDO}},
+{\scriptsize\leanid{MPOTensor.exists_pairwise_orthogonal_twoSided_physicalSupport}},
 and
-{\scriptsize\leanid{MPOTensor.exists_pairwise_orthogonal_twoSided_physicalSupport}}.}
+{\scriptsize\leanid{MPOTensor.exists_pairwise_orthogonal_twoSided_physicalSupport_commonWeightAbsorbedBasis}}.}
 
-This closes the pairwise two-sided support implication used in the source
-argument.  It does not prove the completeness identity $\sum_xP_x=\Id$, and
-it does not complete Proposition~\texttt{prop3to4}.  The source hypothesis is the joint
-five-identity package
+This formalizes the pairwise support consequence of the earlier Case~II data.
+The final printed proof of Proposition~\texttt{prop3to4} uses projector
+relations obtained earlier rather than deriving them in its last step.  The
+support corollary does not prove the completeness identity $\sum_xP_x=\Id$,
+and it does not complete Proposition~\texttt{prop3to4}.  The printed hypothesis
+is the joint five-identity package
 \[
   \texttt{AppKxKy=0},\quad
   \texttt{AppUkU=rl},\quad
