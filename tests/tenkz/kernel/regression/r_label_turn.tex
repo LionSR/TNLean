@@ -1,0 +1,69 @@
+% Regression: label marks inherit a turned record's local axes while their
+% text stays upright.  Both a named record and one of its ports must carry
+% the same nonzero turn into the shared label-ink helper.
+\documentclass{standalone}
+\usepackage{tenkz}
+\makeatletter
+\ExplSyntaxOn
+\file_input:n { tenkz-kernel.code.tex }
+\int_new:N \l__tenkz_test_label_count_int
+\tl_new:N \l__tenkz_test_label_node_tl
+\tl_new:N \l__tenkz_test_label_record_tl
+\tl_new:N \l__tenkz_test_label_turn_tl
+\cs_new_eq:NN
+  \__tenkz_test_mark_label_ink:n
+  \__tenkz_kernel_r_mark_label_ink:n
+\cs_set_protected:Npn \__tenkz_kernel_r_mark_label_ink:n #1
+  {
+    \int_gincr:N \l__tenkz_test_label_count_int
+    \__tenkz_model_get:nnN {#1} {node} \l__tenkz_test_label_node_tl
+    \str_case:en
+      { \__tenkz_kernel_node_item:Nn \l__tenkz_test_label_node_tl {kind} }
+      {
+        {record}
+          {
+            \prop_get:NeN \l__tenkz_kernel_named_prop
+              {
+                \__tenkz_kernel_node_item:Nn
+                  \l__tenkz_test_label_node_tl {name}
+              }
+              \l__tenkz_test_label_record_tl
+          }
+        {port}
+          {
+            \exp_args:NV \__tenkz_kernel_r_port_record:nN
+              \l__tenkz_test_label_node_tl
+              \l__tenkz_test_label_record_tl
+          }
+      }
+    \exp_args:NV \__tenkz_kernel_r_turn:nN
+      \l__tenkz_test_label_record_tl \l__tenkz_test_label_turn_tl
+    \fp_compare:nNnF { abs(\l__tenkz_test_label_turn_tl) } > {0.000001}
+      { \errmessage{label~turn~fixture~did~not~choose~a~turned~carrier} }
+    \fp_compare:nNnF
+      {
+        abs
+          (
+            \l__tenkz_kernel_r_tau_tl
+            - \l__tenkz_test_label_turn_tl
+          )
+      }
+      < {0.000001}
+      { \errmessage{label~mark~did~not~inherit~its~carrier~turn} }
+    \__tenkz_test_mark_label_ink:n {#1}
+  }
+\ExplSyntaxOff
+\makeatother
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[rows={wire}, cols=6, frame=circle, bonds=none]
+  \tn[skin=box, name=A]{A} & \tn[skin=box, name=B]{B} & \tn[skin=box]{C}
+  & \tn[skin=box]{D} & \tn[skin=box]{E} & \tn[skin=box]{F}
+  \tnmark[form=label, label pos=e]{B}{$R$}
+  \tnmark[form=label, label pos=n]{B.0}{$P$}
+\end{tenkz}
+\ExplSyntaxOn
+\int_compare:nNnF { \l__tenkz_test_label_count_int } = {2}
+  { \errmessage{turned~label~fixture~did~not~render~both~marks} }
+\ExplSyntaxOff
+\end{document}
