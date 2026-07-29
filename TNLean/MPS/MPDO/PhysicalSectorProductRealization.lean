@@ -8,7 +8,7 @@ import TNLean.MPS.MPDO.PhysicalSectorChainDecomposition
 import TNLean.MPS.MPDO.PhysicalSectorPositiveBond
 import TNLean.MPS.MPDO.CommutingForm
 import TNLean.MPS.MPDO.CommutingBondEtaCyclicCore
-import TNLean.MPS.MPDO.PhysicalSupportSALTransport
+import TNLean.MPS.MPDO.SitewisePhysicalMatrix
 
 open scoped ComplexOrder Matrix
 

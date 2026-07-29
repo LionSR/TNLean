@@ -3,7 +3,9 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.MPDO.HayashiSectorComparison
+import TNLean.Algebra.PosSemidefSupport
+import TNLean.MPS.FundamentalTheorem.Basic
+import TNLean.MPS.MPDO.Defs
 import TNLean.MPS.MPDO.StackedLayers
 
 /-!

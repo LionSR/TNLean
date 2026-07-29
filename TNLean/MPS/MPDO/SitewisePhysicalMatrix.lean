@@ -74,6 +74,30 @@ theorem sitewisePhysicalMatrix_conjTranspose
   ext s t
   simp [Matrix.conjTranspose_apply, sitewisePhysicalMatrix, star_prod]
 
+/-- The sitewise tensor power of a one-site isometry is an isometry. -/
+theorem sitewisePhysicalMatrix_isometry
+    (V : Matrix (Fin e) (Fin d) ℂ) (hV : Vᴴ * V = 1) (N : ℕ) :
+    (sitewisePhysicalMatrix V N)ᴴ * sitewisePhysicalMatrix V N = 1 := by
+  classical
+  ext x y
+  simp only [Matrix.mul_apply, Matrix.conjTranspose_apply,
+    sitewisePhysicalMatrix]
+  simp_rw [star_prod, ← Finset.prod_mul_distrib]
+  rw [← Fintype.piFinset_univ]
+  rw [← Finset.prod_univ_sum
+    (fun _ : Fin N ↦ (Finset.univ : Finset (Fin e)))
+    (fun n a ↦ star (V a (x n)) * V a (y n))]
+  have hentry : ∀ n : Fin N,
+      (∑ a : Fin e, star (V a (x n)) * V a (y n)) =
+        if x n = y n then 1 else 0 := by
+    intro n
+    simpa only [Matrix.mul_apply, Matrix.conjTranspose_apply,
+      Matrix.one_apply] using congrFun (congrFun hV (x n)) (y n)
+  simp_rw [hentry]
+  rw [Fintype.prod_boole]
+  congr 1
+  exact propext funext_iff.symm
+
 /-- The product of a sitewise tensor power with its conjugate transpose is the
 sitewise tensor power of the corresponding one-site product. -/
 theorem sitewisePhysicalMatrix_mul_conjTranspose
@@ -196,6 +220,18 @@ theorem singleKrausMap_sitewisePhysicalMatrix_mpo
       ring)
   rw [Fintype.sum_prod_type] at h
   exact h
+
+/-- If an MPO is positive after an isometric physical inclusion, then it was
+already positive before inclusion. -/
+theorem isMPDO_of_changePhysicalBasis_isMPDO_of_isometry
+    (V : Matrix (Fin e) (Fin d) ℂ) (hV : Vᴴ * V = 1)
+    (M : MPOTensor d D) (hM : IsMPDO (changePhysicalBasis V M)) :
+    IsMPDO M := by
+  intro N hN
+  apply Matrix.posSemidef_of_singleKraus_isometry
+    (sitewisePhysicalMatrix V N) (sitewisePhysicalMatrix_isometry V hV N)
+  rw [singleKrausMap_sitewisePhysicalMatrix_mpo]
+  exact hM N hN
 
 /-- The sitewise tensor power of a Hermitian one-site matrix is Hermitian. -/
 theorem sitewisePhysicalMatrix_isHermitian

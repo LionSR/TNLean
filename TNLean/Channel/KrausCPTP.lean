@@ -43,6 +43,8 @@ dimensions.
   completely positive.
 * `singleKrausMap`: the linear map `X ↦ V X V†` associated with one rectangular
   matrix `V`.
+* `Matrix.posSemidef_of_singleKraus_isometry`: positivity can be read back
+  through an isometric single-Kraus conjugation.
 * `singleKrausMap_isKrausCP`: a single-Kraus map is completely positive.
 * `singleKrausMap_isKrausCPTP`: an isometric single-Kraus map is trace-preserving
   completely positive.
@@ -295,6 +297,25 @@ noncomputable alias sandwichMap := singleKrausMap
     (V : Matrix β α ℂ) (X : Matrix α α ℂ) :
     singleKrausMap V X = V * X * Vᴴ :=
   rfl
+
+/-- Positivity can be read back through an isometric single-Kraus
+conjugation. -/
+theorem Matrix.posSemidef_of_singleKraus_isometry
+    {α β : Type*} [Fintype α] [DecidableEq α]
+    [Fintype β]
+    (V : Matrix β α ℂ) (hV : Vᴴ * V = 1) {X : Matrix α α ℂ}
+    (hX : (singleKrausMap V X).PosSemidef) : X.PosSemidef := by
+  classical
+  have hback := hX.mul_mul_conjTranspose_same Vᴴ
+  simp only [singleKrausMap_apply,
+    Matrix.conjTranspose_conjTranspose] at hback
+  have heq : Vᴴ * (V * X * Vᴴ) * V = X := by
+    calc
+      _ = (Vᴴ * V) * X * (Vᴴ * V) := by
+        simp only [← Matrix.mul_assoc]
+      _ = X := by rw [hV, Matrix.one_mul, Matrix.mul_one]
+  rw [heq] at hback
+  exact hback
 
 /-- Conjugation by one rectangular matrix is completely positive. -/
 theorem singleKrausMap_isKrausCP {α β : Type*}

@@ -18,7 +18,6 @@ arXiv:1606.00608 (Cirac–Pérez-García–Schuch–Verstraete).
 
 - `MPOTensor.IsThreeSiteClosure`: closure of three local tensors against a
   virtual tail.
-- `MPOTensor.physicalSlice`: the physical matrix at fixed virtual indices.
 - `MPOTensor.hayashiInverseLeft` and `MPOTensor.hayashiInverseRight`: the two
   outer inverse-map factors in a fixed Hayashi sector.
 - `MPOTensor.inverseMap_threeSite_closure_collapse`: the outer inverse-map
@@ -54,14 +53,6 @@ def IsThreeSiteClosure {d D : ℕ} (K : MPOTensor d D)
   ∀ i₁ i₂ i₃ j₁ j₂ j₃,
     ρ (i₁, i₂, i₃) (j₁, j₂, j₃) =
       Matrix.trace (K i₁ j₁ * K i₂ j₂ * K i₃ j₃ * R)
-
-/-- The physical matrix obtained from a fixed pair of virtual indices of an
-MPO tensor.
-
-Source: arXiv:1606.00608, Appendix C.2, lines 1424--1438 and equation `formK`. -/
-def physicalSlice {d D : ℕ} (K : MPOTensor d D) (β α : Fin D) :
-    Matrix (Fin d) (Fin d) ℂ :=
-  fun i j ↦ K i j β α
 
 /-- The left outer factor obtained by applying the inverse tensor to the left
 density matrix in a Hayashi sector.
