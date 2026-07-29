@@ -2,7 +2,7 @@
     \label{thm:mpdo_finite_chain_normalized_proportionality}
     \lean{MPOTensor.normalizedMPO_eq_of_nonzeroProportionalMPV₂_at}
     \leanok
-    \uses{def:mpo_tensor, def:mpv}
+    \uses{def:mpo_tensor, def:mpo_to_mps, def:mpv}
     Let $M$ and $C$ be MPO tensors, possibly of different bond dimensions,
     and fix a chain length $N$. Write
     \begin{align}
@@ -45,7 +45,8 @@
     \label{thm:mpdo_finite_chain_reduced_proportionality}
     \lean{MPOTensor.reducedBlockState_eq_of_nonzeroProportionalMPV₂_at}
     \leanok
-    \uses{def:block_entropy, def:mpv}
+    \uses{thm:mpdo_finite_chain_normalized_proportionality,
+      def:mpo_to_mps}
     Under the hypotheses of
     Theorem~\ref{thm:mpdo_finite_chain_normalized_proportionality}, for every
     $L\leq N$ the reduced operators on the first $L$ sites agree:
@@ -69,7 +70,8 @@
     \lean{MPSTensor.EventuallyNonzeroProportionalMPV₂.%
       eventually_normalizedMPO_eq}
     \leanok
-    \uses{def:eventually_nonzero_proportional_mpv, def:mpo_tensor}
+    \uses{def:eventually_nonzero_proportional_mpv, def:mpo_tensor,
+      def:mpo_to_mps}
     If the doubled-index tensors of $M$ and $C$ are eventually nonzero
     proportional, then, for every sufficiently large $N$,
     \begin{align}
@@ -92,7 +94,7 @@
     \lean{MPSTensor.EventuallyNonzeroProportionalMPV₂.%
       eventually_reducedBlockState_eq}
     \leanok
-    \uses{def:eventually_nonzero_proportional_mpv, def:block_entropy}
+    \uses{def:eventually_nonzero_proportional_mpv, def:mpo_to_mps}
     If the doubled-index tensors of $M$ and $C$ are eventually nonzero
     proportional, then for each fixed $L$ and every sufficiently large
     $N\geq L$,
