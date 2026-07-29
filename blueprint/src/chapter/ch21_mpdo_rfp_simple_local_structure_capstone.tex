@@ -217,10 +217,11 @@
 
 \begin{proof}
     \leanok
-    In sector coordinates, the periodic operator is a sum of cyclic products
-    of the positive neighboring operators. It is therefore positive
-    semidefinite. Conjugation by $U^{\otimes N}$ preserves positivity and
-    returns $\rho^{(N)}(K)$.
+    In sector coordinates, the periodic operator is block diagonal, and each
+    block is a tensor product of positive neighboring operators. Hence every
+    block, and therefore the full operator, is positive semidefinite.
+    Conjugation by $U^{\otimes N}$ preserves positivity and returns
+    $\rho^{(N)}(K)$.
 \end{proof}
 
 \begin{definition}[Unstarred orthogonality of BNT layers]
@@ -310,6 +311,11 @@
     entries yields the displayed expansion.
 \end{proof}
 
+% **Partial coverage of CPSV16 Proposition `prop3to4`:** this theorem derives
+% pairwise two-sided supports from `AppKxKy=0` under the standing biCF
+% injectivity and the sectorwise positivity supplied by `AppUkU=rl` and
+% `Appetakhetc`.  It does not derive the common-copy-weight identity, a
+% supported commuting bond for each outer sector, or the final GSNNCH form.
 \begin{theorem}[Orthogonal two-sided supports from unstarred layer orthogonality]
     \label{thm:mpdo_bnt_layer_orthogonal_supports}
     \lean{MPOTensor.physicalSliceColumns,
@@ -437,18 +443,11 @@ This is the calculation in
 % independence is given by
 % thm:simple_mpdo_local_structure_data_of_sal_zcl. Documented in
 % docs/paper-gaps/cpgsv17_pf_rank_one.tex.
-% **Partial coverage:** the support implication is covered by
-% thm:mpdo_bnt_layer_orthogonal_supports under the standing biCF
-% injectivity and sectorwise MPDO positivity.  The exact five-identity
-% package AppKxKy=0, AppUkU=rl, Appetakhetc, Apptralktrrk, AppPsiPhi
-% The completeness identity sum_j P_j = Id is not a conclusion of the
-% pairwise-support theorem.  It and the final GSNNCH assembly remain pending.
 \begin{theorem}[BNT sector structure from SAL and ZCL]
     \label{thm:mpdo_sal_zcl_bnt_sector_structure}
     \notready
     \uses{def:is_sal, def:mpo_source_zcl,
-        thm:mpdo_neighboring_sector_positivity,
-        thm:mpdo_bnt_layer_orthogonal_supports}
+        cor:mpdo_sal_zcl_local_sector_structure}
     Let $K$ be a simple tensor in block-injective canonical form (biCF),
     equipped with a basis-of-normal-tensors decomposition. If $K$ satisfies
     the strong area law and zero correlation length, then its basis tensors
@@ -460,9 +459,9 @@ This is the calculation in
         \sum_k a_kb_k&=1. \notag
     \end{align}
     This is implication (ii)$\Rightarrow$(iv) of
-    \cite[Theorem~4.9 and Appendix~C.2, lines~1740--1788]
+    \cite[Theorem~4.9 and Appendix~C.2, lines~1740--1782]
       {Cirac2016MPDO_arXiv}. The separate standing biCF and BNT hypotheses are
-    imposed at lines~849--850 and restated at line~1628 of the same source.
+    imposed at line~849 and restated at line~1628 of the same source.
     The orthogonal-support conclusion uses the injectivity supplied by biCF,
     the positive neighboring operators in each sector factorization, and the
     unstarred layer identities. The remaining identities specify the local
