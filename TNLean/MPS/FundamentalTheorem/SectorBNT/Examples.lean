@@ -3,16 +3,15 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.FundamentalTheorem.SectorBNT.Basic
 import TNLean.MPS.FundamentalTheorem.SectorBNT.EqualModulus
+import TNLean.MPS.FundamentalTheorem.SectorBNT.SingleSector
 
 /-!
 # Concrete BNT canonical forms
 
 These examples present one-sector BNT canonical forms built from a normal block
-`C`.  The assumptions on `C` are the standard mathematical ones for such a
-block: positive bond dimension, irreducibility, left canonicity, normalized
-self-overlap, and eventual non-vanishing of the associated vector state.
+`C`. The single-copy construction is provided by `singleSectorDecomposition`;
+the remaining examples illustrate nontrivial copy weights.
 
 * A single normal block `C`, with coefficient `1`.
 * The sign-flip GHZ pair `C ⊕ (-C)`, with length-`N` coefficient
@@ -35,47 +34,14 @@ variable {d D : ℕ}
 
 /-! ## Example 1 — single sector, single copy -/
 
-/-- The trivial single-sector single-copy decomposition of `C`. -/
-@[reducible] noncomputable def singletonDecomp (C : MPSTensor d D) :
-    SectorDecomposition d where
-  basisCount := 1
-  basisDim := fun _ => D
-  basis := fun _ => C
-  sectors :=
-    { copies := fun _ => 1
-      copies_pos := fun _ => Nat.one_pos
-      weight := fun _ _ => 1
-      weight_ne_zero := fun _ _ => one_ne_zero }
-
 /-- **Example 1**: a single BNT sector with a single copy and weight `1`. -/
 noncomputable example
-    (C : MPSTensor d D) (hDpos : 0 < D)
+    (C : MPSTensor d D) [NeZero D]
     (hCIrr : IsIrreducibleTensor C)
     (hCLeft : IsLeftCanonical C)
-    (hCSelf : Tendsto (fun N : ℕ => mpvOverlap (d := d) C C N) atTop (𝓝 1))
-    (hCNonzero : ∃ N0 : ℕ, ∀ N > N0, mpvState C N ≠ 0) :
-    IsBNTCanonicalForm (singletonDecomp C) where
-  basis_dim_pos := fun _ => hDpos
-  basis_irreducible := fun _ => hCIrr
-  basis_left_canonical := fun _ => hCLeft
-  basis_normalized_self_overlap := fun _ => hCSelf
-  bnt_data := by
-    classical
-    obtain ⟨N0, hN0⟩ := hCNonzero
-    refine ⟨N0, fun N hN => ?_⟩
-    exact LinearIndependent.of_subsingleton (i := (0 : Fin 1)) (hN0 N hN)
-  basis_distinct := fun j k hjk _ =>
-    absurd (Subsingleton.elim j k) hjk
-  -- CPSV16 line 246: the unique weight `μ = 1` has `‖μ‖ = 1 ≤ 1`.
-  weight_norm_le_one := by
-    intro _ _
-    change ‖(1 : ℂ)‖ ≤ 1
-    simp
-  -- CPSV16 line 246: the unique weight is the global unit-modulus witness.
-  weight_unit_exists := by
-    refine ⟨0, 0, ?_⟩
-    change ‖(1 : ℂ)‖ = 1
-    simp
+    (hCSelf : Tendsto (fun N : ℕ => mpvOverlap (d := d) C C N) atTop (𝓝 1)) :
+    IsBNTCanonicalForm (singleSectorDecomposition C) :=
+  isBNTCanonicalForm_singleSectorDecomposition hCIrr hCLeft hCSelf
 
 /-! ## Example 2 — `C ⊕ (-C)` -/
 
