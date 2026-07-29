@@ -8,6 +8,7 @@ import TNLean.MPS.MPDO.PhysicalSectorChainDecomposition
 import TNLean.MPS.MPDO.PhysicalSectorPositiveBond
 import TNLean.MPS.MPDO.CommutingForm
 import TNLean.MPS.MPDO.CommutingBondEtaCyclicCore
+import TNLean.MPS.MPDO.PhysicalSupportSALTransport
 
 open scoped ComplexOrder Matrix
 
@@ -275,6 +276,22 @@ theorem mpo_sectorCoordinateTensor_posSemidef
     simp [Matrix.finKronecker_apply]
   rw [heq]
   exact Matrix.finKronecker_posSemidef _ fun n ↦ hpos _ _
+
+/-- Positivity of every neighbouring sector operator makes the original tensor an MPDO.  The
+sector-coordinate operators are positive by their cyclic product decomposition, and the
+physical isometry transports positivity back to the original physical space.
+
+Source: arXiv:1606.00608, Appendix C.2, equations `AppUkU=rl` and `Appetakhetc`,
+lines 1383--1450. -/
+theorem isMPDO_of_neighboringOperator_pos
+    (F : PhysicalSectorFactorization K)
+    (hpos : ∀ q h, (F.neighboringOperator q h).PosSemidef) : IsMPDO K := by
+  apply isMPDO_of_changePhysicalBasis_isMPDO_of_isometry
+    F.physicalCoordinateMatrix F.physicalCoordinateMatrix_isometry K
+  rw [← F.sectorCoordinateTensor_eq_changePhysicalBasis]
+  intro N hN
+  letI : NeZero N := ⟨Nat.ne_of_gt hN⟩
+  exact F.mpo_sectorCoordinateTensor_posSemidef hpos
 
 /-- The sector-coordinate bond indexed by two-site configurations. -/
 noncomputable def sectorBond (F : PhysicalSectorFactorization K) :
