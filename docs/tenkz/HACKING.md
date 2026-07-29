@@ -143,14 +143,20 @@ the public census decreases, or when the census is stable and every raised
 low-consumer, co-occurrence, lonely-type, or sugar-shaped flag has a verdict in
 the latest `docs/tenkz/SHRINK.md` session.  Alias-sunset flags require verdicts
 there as soon as their milestone is due.  Meter growth requires the recorded
-extension or census-correction procedure.
+extension or census-correction procedure.  A one-for-one parser-leaf change can
+leave the M2 count stable while changing its identity fingerprint; it still
+requires an `Extension-gate: #NNNN` citation.
 
 ## Shared parsers
 
 `scripts/tenkzlib/tnlog.py` is the canonical schema-validating parser for
 `.tnlog` event streams.  Use it whenever a checker needs structured event
-fields.  `scripts/test_tenkz_cd_map_labels.py` still has two direct field-parser
-exceptions; keep them aligned until they are migrated to `tnlog.py`.
+fields.  Some narrow regression tests still inspect raw lines directly,
+including `scripts/test_tenkz_cd_map_labels.py`,
+`scripts/test_tenkz_enclosures.py`, and `scripts/test_tenkz_peps_torus.py`.
+Before changing event syntax, field order, or validation, search every `.tnlog`
+consumer and update or migrate these exceptions; do not assume the canonical
+parser is their only dependency.
 `scripts/tenkzlib/texcase.py` provides shared TeX comment stripping,
 balanced-group matching, and picture-construct scanning.  Import these modules
 when adding or modifying a checker that needs those answers.
