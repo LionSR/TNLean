@@ -166,6 +166,7 @@ import TNLean.MPS.MPDO.PhysicalSectorCoordinateTransport
 import TNLean.MPS.MPDO.PhysicalSectorDirectedCut
 import TNLean.MPS.MPDO.PhysicalSectorEtaLocalStructure
 import TNLean.MPS.MPDO.PhysicalSectorFactorization
+import TNLean.MPS.MPDO.PhysicalSectorGaugeTransport
 import TNLean.MPS.MPDO.PhysicalSectorNormalProductRepresentative
 import TNLean.MPS.MPDO.PhysicalSectorOmegaPreparation
 import TNLean.MPS.MPDO.PhysicalSectorPhysicalMaps
