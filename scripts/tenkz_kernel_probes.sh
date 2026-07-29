@@ -69,6 +69,12 @@ grep -Fq 'string|id=vertical|kind=wind|class=0,1|pts=12' \
   echo "FAIL: the vertical torus class did not reach the winding renderer" >&2
   exit 1
 }
+grep -Eq \
+  '^frame\\|id=frame-[0-9]+\\|a=-0\\.45\\|b=1\\|c=-0\\.60\\|d=0\\|dx=-0\\.55\\|dy=0\\.60\\|map=plane\\|scope=picture$' \
+  "$WORK/k_plane.tnlog" || {
+  echo "FAIL: frame=plane did not record the fixed projected basis" >&2
+  exit 1
+}
 if grep -Eq 'name=(wrap|cup)-(west|east|north|south)' \
     "$WORK/k_twoshift.tnlog" "$WORK/r_cup.tnlog"; then
   echo "FAIL: a side-level closure survived normalization" >&2
@@ -363,6 +369,19 @@ fi
 grep -Fq '[TKZ-LANG-ADDRESS]' "$WORK/n_diagonal_port.transcript" || {
   echo "FAIL: the diagonal-port rejection lacked TKZ-LANG-ADDRESS" >&2
   tail -20 "$WORK/n_diagonal_port.transcript" >&2
+  exit 1
+}
+
+frame_negative="$KERNEL/negative/n_frame_word.tex"
+if ( cd "$WORK" &&
+     TEXINPUTS="$REPO/tex/tenkz//:" \
+       timeout 120 xelatex -interaction=nonstopmode -halt-on-error \
+       "$frame_negative" >"$WORK/n_frame_word.transcript" 2>&1 ); then
+  echo "FAIL: a word outside the frame alphabet was accepted" >&2
+  exit 1
+fi
+grep -Fq '[TKZ-LANG-CHOICE]' "$WORK/n_frame_word.transcript" || {
+  echo "FAIL: unknown frame word lacked TKZ-LANG-CHOICE" >&2
   exit 1
 }
 

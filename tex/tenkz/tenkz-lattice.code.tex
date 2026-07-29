@@ -726,21 +726,8 @@
 \def\tenkz@r@regionnest{0.075}  % per-inset-unit margin shrink: separates
                                 % nested/coincident region boundaries
 \def\tenkz@r@boundaryleg{0.30}  % dangling boundary-leg length
-\def\tenkz@r@planeslant{0.45}   % oblique depth step, x-run (of lattice pitch):
-                                % < 1/2, so a depth neighbour never reads as a
-                                % column neighbour (RMP sec2fig4b shear angle)
-\def\tenkz@r@planerise{0.60}    % oblique depth step, y-drop (of lattice pitch):
-                                % foreshortens depth so the sheet reads as
-                                % tilted, yet rows stay clearly separated.  It
-                                % must exceed physleg/latticepitch = 0.38/0.75
-                                % ~ 0.507 or a site's vertical physical leg
-                                % crosses the behind row's in-plane bond (a
-                                % false junction); at the old 0.55 the tips
-                                % ended 0.043 lp short of that bond -- a
-                                % near-touch that merges at compact pitch --
-                                % while 0.60 clears it by 0.093 lp and keeps
-                                % the foreshortened sheet read that 0.70 loses
-                                % (plane_sweep1 zcpt_55 vs zcpt_70, zsw_4570)
+% planeslant and planerise are registry-owned because the kernel plane and
+% this retiring lattice surface must use one tested projection.
 \def\tenkz@r@slabslant{0.60}    % frame=slab depth step, x-run: the full-pitch
                                 % RMP showcase geometry (sec2fig4b/GS2D read),
                                 % 47-degree leg/bond separation and the best

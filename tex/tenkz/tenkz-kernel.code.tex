@@ -715,7 +715,8 @@
 
 \__tenkz_kernel_value:nnn   { tenkz-kernel-picture } { rows } { rows }
 \__tenkz_kernel_value:nnn   { tenkz-kernel-picture } { cols } { cols }
-\__tenkz_kernel_value:nnn   { tenkz-kernel-picture } { frame } { frame }
+\__tenkz_kernel_choice:nnnn { tenkz-kernel-picture } { frame }
+  { flat, plane, circle } { frame }
 \__tenkz_kernel_choice:nnnn { tenkz-kernel-picture } { west }
   { open, none, trace, cup } { west }
 \__tenkz_kernel_choice:nnnn { tenkz-kernel-picture } { east }
@@ -2293,17 +2294,108 @@
   }
 \cs_new_protected:Npn \__tenkz_kernel_r_frame:
   {
-    \str_if_eq:eeTF { \__tenkz_kernel_r_frame_word: } {circle}
+    \str_case_e:nn { \__tenkz_kernel_r_frame_word: }
       {
-        \__tenkz_geom_frame_declare_circle:nnnn {kpic}
-          { \__tenkz_kernel_cols: }
+        {circle}
           {
-            \__tenkz_kernel_cols: < 2
-              ? 0 : 1 / ( 2 * sind( 180 / \__tenkz_kernel_cols: ) )
+            \__tenkz_geom_frame_declare_circle:nnnn {kpic}
+              { \__tenkz_kernel_cols: }
+              {
+                \__tenkz_kernel_cols: < 2
+                  ? 0 : 1 / ( 2 * sind( 180 / \__tenkz_kernel_cols: ) )
+              }
+              {90}
           }
-          {90}
+        {plane}
+          { \__tenkz_geom_frame_declare_plane:n {kpic} }
+        {flat}
+          {
+            \__tenkz_geom_frame_declare_affine:nnnnnnn
+              {kpic} {0}{1}{-1}{0} {-1}{1}
+          }
       }
-      { \__tenkz_geom_frame_declare_affine:nnnnnnn {kpic} {0}{1}{-1}{0} {-1}{1} }
+  }
+
+% A projected picture carries its map as model data.  This is recorded after
+% authored and derived topology, so enabling a frame cannot renumber atoms or
+% wires.  The fixed guard thresholds are still evaluated from named metrics:
+% a future metric retune therefore reports the same hazards as the lattice
+% sweep rather than silently changing the projection.
+\cs_new_protected:Npn \__tenkz_kernel_plane_model:
+  {
+    \str_if_eq:eeT { \__tenkz_kernel_r_frame_word: } {plane}
+      {
+        \__tenkz_model_record_frame:e
+          {
+            map = plane , scope = picture ,
+            a = -\__tenkz_metric_ratio:n {planeslant} , b = 1 ,
+            c = -\__tenkz_metric_ratio:n {planerise} , d = 0 ,
+            dx = \fp_eval:n { \__tenkz_metric_ratio:n {planeslant} - 1 } ,
+            dy = \__tenkz_metric_ratio:n {planerise}
+          }
+        \fp_compare:nNnF
+          { \__tenkz_metric_ratio:n {planerise} }
+          > { \__tenkz_metric_ratio:n {physleg} }
+          {
+            \msg_warning:nnee {tenkz}{plane-rise-low}
+              { \__tenkz_metric_ratio:n {planerise} }
+              { \__tenkz_metric_ratio:n {physleg} }
+            \__tenkz_kernel_event:n
+              {
+                warning|picture=k
+                \int_eval:n { \g__tenkz_kernel_picture_int + 1 }
+                |code=plane-rise-low
+                |rise=\__tenkz_metric_ratio:n {planerise}
+              }
+          }
+        \bool_lazy_and:nnF
+          {
+            \fp_compare_p:nNn
+              { \__tenkz_metric_ratio:n {planeslant} }
+              > { \__tenkz_metric_ratio:n {slantmin} }
+          }
+          {
+            \fp_compare_p:nNn
+              { \__tenkz_metric_ratio:n {planeslant} }
+              < { \__tenkz_metric_ratio:n {slantmax} }
+          }
+          {
+            \msg_warning:nnn {tenkz}{plane-slant-band}
+              { \__tenkz_metric_ratio:n {planeslant} }
+            \__tenkz_kernel_event:n
+              {
+                warning|picture=k
+                \int_eval:n { \g__tenkz_kernel_picture_int + 1 }
+                |code=plane-slant-band
+                |slant=\__tenkz_metric_ratio:n {planeslant}
+              }
+          }
+        \fp_compare:nNnT
+          {
+            ( \__tenkz_kernel_rows: - 1 )
+            * \__tenkz_metric_ratio:n {planeslant}
+          }
+          > { 0.5 * ( \__tenkz_kernel_cols: - 1 ) }
+          {
+            \msg_warning:nnee {tenkz}{plane-tall-window}
+              {
+                \fp_eval:n
+                  {
+                    ( \__tenkz_kernel_rows: - 1 )
+                    * \__tenkz_metric_ratio:n {planeslant}
+                  }
+              }
+              { \fp_eval:n { 0.5 * ( \__tenkz_kernel_cols: - 1 ) } }
+            \__tenkz_kernel_event:n
+              {
+                warning|picture=k
+                \int_eval:n { \g__tenkz_kernel_picture_int + 1 }
+                |code=plane-tall-window
+                |rows=\__tenkz_kernel_rows:
+                |cols=\__tenkz_kernel_cols:
+              }
+          }
+      }
   }
 
 % The turn a record's carrier gives it: the angle its own axes stand at on
@@ -8153,6 +8245,7 @@
     % crossing be written in the spelling a declaration uses.  The text is
     % generated, so it does not pass through address validation again.
     \__tenkz_kernel_route_crossings:
+    \__tenkz_kernel_plane_model:
     \__tenkz_model_validate:
     \__tenkz_kernel_emit:
     \__tenkz_kernel_render:

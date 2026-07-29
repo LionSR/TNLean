@@ -53,6 +53,19 @@
     \__tenkz_geom_frame_put:nnn {#1} {dx} {#6}
     \__tenkz_geom_frame_put:nnn {#1} {dy} {#7}
   }
+% The public plane word has one fixed projected basis.  Logical coordinates
+% arrive as (row, column), with (1,1) at the origin: C=(1,0) and
+% R=(-planeslant,-planerise).  Keeping this declaration beside the other
+% frame maps gives every front end the same projection and leaves rendering
+% responsible only for ink.
+\cs_new_protected:Npn \__tenkz_geom_frame_declare_plane:n #1
+  {
+    \__tenkz_geom_frame_declare_affine:nnnnnnn {#1}
+      { -\__tenkz_metric_ratio:n {planeslant} } {1}
+      { -\__tenkz_metric_ratio:n {planerise} } {0}
+      { \__tenkz_metric_ratio:n {planeslant} - 1 }
+      { \__tenkz_metric_ratio:n {planerise} }
+  }
 % flat is the identity; a rotation frame is one call with cosd/sind
 \cs_new_protected:Npn \__tenkz_geom_frame_declare_rotation:nnnn #1#2#3#4
   {
