@@ -20,11 +20,10 @@ In staircase coordinates `s = (a, b)`, the resulting windows are the cyclic
 * `W_j = [a + L - 1, a + 2L - 1) × [b + K - j, b + 2K - j)` for `j ≤ K`;
 * `W_{K+i} = [a + L - 1 - i, a + 2L - 1 - i) × [b, b + K)`.
 
-The first arm descends and the second shifts horizontally.  What is recorded
-below is the vertical family itself, together with the union of two consecutive
-windows and the two rectangle identities it satisfies: on the descending arm,
-where `j < K`, that union is a cyclic `L × (K + 1)` rectangle, and on the
-shifting arm, where `K ≤ j`, it is a cyclic `(L + 1) × K` rectangle.
+The first arm descends and the second shifts horizontally.  A union of two
+consecutive windows is again a cyclic rectangle: on the descending arm, where
+`j < K`, it is `L × (K + 1)`, and on the shifting arm, where `K ≤ j` and
+`j + 1 < L + K`, it is `(L + 1) × K`.
 
 ## References
 
