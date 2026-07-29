@@ -3,7 +3,9 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Channel.FixedPoint.AbstractAlgebra
 import TNLean.Channel.FixedPoint.Algebra
+import TNLean.Channel.FixedPoint.MeanErgodicAdjoint
 import TNLean.Channel.Semigroup.CPClosure
 import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Basic
 import Mathlib.Analysis.Matrix.Order
@@ -336,5 +338,67 @@ theorem scalarConditionalExpectation_isConditionalExpectation
     rw [hc]
     exact scalarConditionalExpectation_fixes_scalar ρ
       (ne_of_gt hρ.trace_pos) c
+
+/-! ## General conditional expectation via the mean-ergodic projection
+
+When the Heisenberg-picture map (the trace adjoint) is unital and Schwarz, and
+the Schrödinger-picture map has a positive definite fixed point, the trace
+adjoint of the mean-ergodic projection is a conditional expectation onto the
+fixed-point star-subalgebra of the Heisenberg map.  This is the general case
+of **Wolf Theorem 6.15**, uniform in the period `h`.
+
+The formula follows from the finite-dimensional mean-ergodic theorem: the
+projection `P*` is idempotent, unital, and fixes exactly the fixed points of
+`T*`.  The star-algebra structure of those fixed points is supplied by the
+abstract Schwarz-map algebra theorem (Wolf Theorem 6.12), so the target is a
+bona fide `StarSubalgebra`. -/
+
+/-- **Wolf Theorem 6.15** (general case, via the mean-ergodic projection).
+
+Let `T : M_D(ℂ) → M_D(ℂ)` be a positive trace-preserving linear map whose
+trace adjoint `T*` satisfies the Schwarz inequality.  If `T` has a positive
+definite fixed point `ρ`, then the adjoint of the mean-ergodic projection of
+`T` is a conditional expectation onto the fixed-point star-subalgebra of
+`T*`.  The construction is uniform in the period `h` of `T`.
+
+This generalizes `Kraus.scalarConditionalExpectation` from the scalar (h = 1)
+case to arbitrary dimension of the fixed-point algebra.
+
+Reference: Wolf, *Quantum Channels & Operations*, Theorem 6.15 and
+Equation (6.14); local source
+`Notes/WolfNoteTexSource/ch06_spectral_properties.tex`,
+lines 226–269 and 1488–1492. -/
+theorem meanErgodicAdjoint_isConditionalExpectation
+    [NeZero D]
+    (T : Mat →ₗ[ℂ] Mat) (hT_pos : IsPositiveMap T) (hT_tp : IsTracePreservingMap T)
+    (hTstar_schwarz : IsSchwarzMap (Matrix.traceAdjointMap T))
+    {ρ : Mat} (hρ : ρ.PosDef) (hρ_fix : T ρ = ρ) :
+    IsConditionalExpectation
+      (Matrix.traceAdjointMap (LinearMap.meanErgodicProjection T
+        (hT_pos.hasBoundedOrbits_of_tracePreserving hT_tp)))
+      (SchwarzMap.fixedPointsStarSubalgebra (Matrix.traceAdjointMap T)
+        hT_pos.traceAdjointMap
+        (isTracePreservingMap_iff_traceAdjointMap_one.mp hT_tp)
+        hTstar_schwarz hρ (by
+          simpa [Matrix.traceAdjointMap_traceAdjointMap] using hρ_fix)) := by
+  set Pstar := Matrix.traceAdjointMap (LinearMap.meanErgodicProjection T
+    (hT_pos.hasBoundedOrbits_of_tracePreserving hT_tp))
+  have hPstar_idemp : ∀ Y, Pstar (Pstar Y) = Pstar Y :=
+    (hT_pos.traceAdjoint_meanErgodicProjection_isPositiveUnitalRetraction hT_tp).2.2.1
+  have hPstar_one : Pstar 1 = 1 :=
+    (hT_pos.traceAdjoint_meanErgodicProjection_isPositiveUnitalRetraction hT_tp).2.1
+  have hPstar_fixed : ∀ Y, Pstar Y = Y ↔ Matrix.traceAdjointMap T Y = Y :=
+    (hT_pos.traceAdjoint_meanErgodicProjection_isPositiveUnitalRetraction hT_tp).2.2.2.2
+  exact
+  { idempotent := hPstar_idemp
+    unital := hPstar_one
+    range_subset := fun Y ↦ by
+      have hfix : Matrix.traceAdjointMap T (Pstar Y) = Pstar Y :=
+        ((hPstar_fixed (Pstar Y)).mp (hPstar_idemp Y))
+      rw [SchwarzMap.mem_fixedPointsStarSubalgebra]
+      exact hfix
+    fixes := fun Y hY ↦ by
+      rw [SchwarzMap.mem_fixedPointsStarSubalgebra] at hY
+      exact (hPstar_fixed Y).mpr hY }
 
 end Kraus

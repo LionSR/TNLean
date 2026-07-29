@@ -482,7 +482,7 @@ maximum-rank fixed-point density matrix satisfies the rank hypothesis, with
 unit trace of $\rho$ itself not needed for the conclusion
 (see `docs/paper-gaps/wolf_cor67_maximal_support_restriction.tex`).
 
-### Wolf Theorem 6.15 (Conditional expectation onto fixed-point algebra) — PARTIALLY FORMALIZED
+### Wolf Theorem 6.15 (Conditional expectation onto fixed-point algebra) — FORMALIZED
 
 In `TNLean.Channel.FixedPoint.ConditionalExpectation`:
 
@@ -498,12 +498,19 @@ In `TNLean.Channel.FixedPoint.ConditionalExpectation`:
   `T*(E_σ(X)) = E_σ(X)` when `T` is TP.
 * `Kraus.scalarConditionalExpectation_isConditionalExpectation` —
   bundles everything into `IsConditionalExpectation` for the scalar case.
-* Numbered theorem: `Kraus.wolf_theorem_6_15_scalar` —
+* Numbered theorems:
+  `Kraus.wolf_theorem_6_15` (general case via mean-ergodic projection),
+  `Kraus.wolf_theorem_6_15_scalar` (scalar specialization) —
   `TNLean.Channel.WolfChapter6Wrappers`.
 
-The density-block decomposition required for the general irreducible case with
-period `h > 1` is now supplied by Wolf Theorem 6.14.  The corresponding
-conditional-expectation construction remains to be assembled.
+The general conditional expectation is the trace adjoint of the mean-ergodic
+projection, which is idempotent, unital, and fixes exactly the fixed points of
+`T*`; the star-algebra structure follows from Theorem 6.12.  This covers both
+the primitive (h = 1) and the irreducible period-h > 1 cases uniformly, since
+the period never enters the hypotheses.  The density-block decomposition of
+Theorem 6.14 is not required for the abstract statement; it supplies the
+explicit block formula for the retraction (see
+`TNLean.Channel.FixedPoint.FullSupportBlockRetraction`).
 
 ---
 

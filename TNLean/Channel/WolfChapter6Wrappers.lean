@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Channel.FixedPoint.Cesaro
 import TNLean.Channel.FixedPoint.ConditionalExpectation
+import TNLean.Channel.FixedPoint.MeanErgodicAdjoint
 import TNLean.Channel.Irreducible.Similarity
 
 /-!
@@ -15,7 +16,7 @@ results already formalized elsewhere:
 
 * Proposition 6.6 (`isIrreducibleMap_full_similarity`)
 * Proposition 6.8 (`IsChannel.posSemidef_parts_of_hermitian_fixedPoint`)
-* Theorem 6.15 (`scalarConditionalExpectation_isConditionalExpectation`)
+* Theorem 6.15 (`wolf_theorem_6_15`, `wolf_theorem_6_15_scalar`)
 -/
 
 open scoped Matrix ComplexOrder MatrixOrder BigOperators
@@ -36,7 +37,34 @@ theorem wolf_prop_6_6
     IsIrreducibleMap ((c : ℂ) • similarityMap (D := D) C E) :=
   isIrreducibleMap_full_similarity (D := D) hc hC hIrr
 
-/-- Wolf Theorem 6.15: scalar fixed-point conditional expectation. -/
+/-- A positive trace-preserving map whose adjoint is Schwarz and which has a
+positive-definite fixed point admits a conditional expectation onto the adjoint
+fixed-point star-subalgebra via the adjoint of the mean-ergodic projection.
+
+This is the general formulation of **Wolf Theorem 6.15**; it does not require
+irreducibility or a Kraus representation.  The period `h` never enters the
+hypotheses, so the argument is uniform in `h`. -/
+theorem wolf_theorem_6_15
+    [NeZero D]
+    (T : Mat →ₗ[ℂ] Mat) (hT_pos : IsPositiveMap T) (hT_tp : IsTracePreservingMap T)
+    (hTstar_schwarz : IsSchwarzMap (Matrix.traceAdjointMap T))
+    {ρ : Mat} (hρ : ρ.PosDef) (hρ_fix : T ρ = ρ) :
+    IsConditionalExpectation
+      (Matrix.traceAdjointMap (LinearMap.meanErgodicProjection T
+        (hT_pos.hasBoundedOrbits_of_tracePreserving hT_tp)))
+      (SchwarzMap.fixedPointsStarSubalgebra (Matrix.traceAdjointMap T)
+        hT_pos.traceAdjointMap
+        (isTracePreservingMap_iff_traceAdjointMap_one.mp hT_tp)
+        hTstar_schwarz hρ (by
+          simpa [Matrix.traceAdjointMap_traceAdjointMap] using hρ_fix)) :=
+  meanErgodicAdjoint_isConditionalExpectation T hT_pos hT_tp hTstar_schwarz hρ hρ_fix
+
+/-- Wolf Theorem 6.15 (scalar case).
+
+When the adjoint fixed-point set consists only of scalar matrices, the
+general mean-ergodic construction specialises to a scalar conditional
+expectation.  This is a corollary of `wolf_theorem_6_15`; the present
+wrapper is retained as a convenience for the primitive (h = 1) case. -/
 theorem wolf_theorem_6_15_scalar
     [NeZero D]
     (K : Fin d → Mat) (h_tp : IsTP K)
