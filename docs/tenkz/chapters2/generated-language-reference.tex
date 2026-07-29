@@ -120,6 +120,8 @@ picture & \texttt{sheet \allowbreak{}vector} & dimension-\allowbreak{}pair & fra
 picture & \texttt{maps} & flag & false & Typed-\allowbreak{}map \allowbreak{}layout. \\
 picture & \texttt{polygon} & positive-\allowbreak{}integer & empty & Coherence \allowbreak{}polygon \allowbreak{}layout. \\
 picture & \texttt{radius} & length & metric & Coherence \allowbreak{}polygon \allowbreak{}radius. \\
+picture & \texttt{column \allowbreak{}sep} & matrix-\allowbreak{}separation & metric & General \allowbreak{}tenkzcd \allowbreak{}column \allowbreak{}separation: \allowbreak{}a \allowbreak{}length \allowbreak{}or \allowbreak{}a \allowbreak{}tikz-\allowbreak{}cd \allowbreak{}preset \allowbreak{}(\allowbreak{}huge,\allowbreak{} \allowbreak{}large,\allowbreak{} \allowbreak{}normal,\allowbreak{} \allowbreak{}scriptsize,\allowbreak{} \allowbreak{}small,\allowbreak{} \allowbreak{}or \allowbreak{}tiny). \\
+picture & \texttt{row \allowbreak{}sep} & matrix-\allowbreak{}separation & metric & General \allowbreak{}tenkzcd \allowbreak{}row \allowbreak{}separation: \allowbreak{}a \allowbreak{}length \allowbreak{}or \allowbreak{}a \allowbreak{}tikz-\allowbreak{}cd \allowbreak{}preset \allowbreak{}(\allowbreak{}huge,\allowbreak{} \allowbreak{}large,\allowbreak{} \allowbreak{}normal,\allowbreak{} \allowbreak{}scriptsize,\allowbreak{} \allowbreak{}small,\allowbreak{} \allowbreak{}or \allowbreak{}tiny). \\
 object & \texttt{dot} & flag & policy & Dot \allowbreak{}silhouette. \\
 object & \texttt{box} & flag & policy & Box \allowbreak{}silhouette. \\
 object & \texttt{pill} & flag & policy & Pill \allowbreak{}silhouette. \\
@@ -205,6 +207,7 @@ kernel-\allowbreak{}atom & \texttt{ports} & typed-\allowbreak{}port-\allowbreak{
 kernel-\allowbreak{}atom & \texttt{up} & math-\allowbreak{}list & empty & Outward \allowbreak{}physical \allowbreak{}labels,\allowbreak{} \allowbreak{}page-\allowbreak{}up. \\
 kernel-\allowbreak{}atom & \texttt{down} & math-\allowbreak{}list & empty & Outward \allowbreak{}physical \allowbreak{}labels,\allowbreak{} \allowbreak{}page-\allowbreak{}down. \\
 kernel-\allowbreak{}atom & \texttt{species} & declared-\allowbreak{}name & empty & Semantic \allowbreak{}species. \\
+kernel-\allowbreak{}atom & \texttt{pairing~cross} & indexed-\allowbreak{}crossing-\allowbreak{}list & empty & Per-\allowbreak{}instance \allowbreak{}crossings \allowbreak{}of \allowbreak{}generated \allowbreak{}skin \allowbreak{}pairings. \\
 kernel-\allowbreak{}atom & \texttt{size} & size-\allowbreak{}class & m & Per-\allowbreak{}atom \allowbreak{}metric \allowbreak{}size \allowbreak{}class. \\
 kernel-\allowbreak{}atom & \texttt{label~pos} & angle & auto & Label \allowbreak{}quadrant. \\
 kernel-\allowbreak{}atom & \texttt{nudge} & pair & zero & Quarter-\allowbreak{}pitch \allowbreak{}displacement. \\
@@ -212,7 +215,7 @@ kernel-\allowbreak{}atom & \texttt{void} & void-\allowbreak{}policy & unset & Ho
 kernel-\allowbreak{}atom & \texttt{conjugate} & flag & false & Conjugate \allowbreak{}glyph \allowbreak{}orientation. \\
 kernel-\allowbreak{}atom & \texttt{cluster} & pair & empty & Expander: \allowbreak{}RxC \allowbreak{}addressable \allowbreak{}sub-\allowbreak{}atom \allowbreak{}group. \\
 kernel-\allowbreak{}atom & \texttt{role} & semantic-\allowbreak{}role & empty & Prelude \allowbreak{}species \allowbreak{}spelling. \\
-kernel-\allowbreak{}wire & \texttt{kind} & enum(\allowbreak{}index\textbar{}\allowbreak{}string) & index & Bond \allowbreak{}or \allowbreak{}travelling \allowbreak{}string. \\
+kernel-\allowbreak{}wire & \texttt{kind} & enum(\allowbreak{}index\textbar{}\allowbreak{}string\textbar{}\allowbreak{}pairing) & index & Bond,\allowbreak{} \allowbreak{}travelling \allowbreak{}string,\allowbreak{} \allowbreak{}or \allowbreak{}generated \allowbreak{}skin \allowbreak{}pairing. \\
 kernel-\allowbreak{}wire & \texttt{route} & enum(\allowbreak{}straight\textbar{}\allowbreak{}orth\textbar{}\allowbreak{}arc) & straight & Path \allowbreak{}family. \\
 kernel-\allowbreak{}wire & \texttt{via} & address-\allowbreak{}list & empty & Waypoints. \\
 kernel-\allowbreak{}wire & \texttt{bend} & number & metric & Arc \allowbreak{}bend \allowbreak{}factor. \\
