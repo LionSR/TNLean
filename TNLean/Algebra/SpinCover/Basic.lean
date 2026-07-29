@@ -7,6 +7,7 @@ import Mathlib.LinearAlgebra.UnitaryGroup
 import Mathlib.LinearAlgebra.Matrix.GeneralLinearGroup.Basic
 import Mathlib.Algebra.BigOperators.Field
 import Mathlib.Data.Complex.BigOperators
+import Mathlib.Tactic.LinearCombination
 
 /-!
 # The spin-`½` double cover `SU(2) → SO(3)` — algebraic core
@@ -111,7 +112,7 @@ lemma pauli_mul_eq (i j : Fin 3) : pauli i * pauli j =
     | 2, 1 => !![0, -Complex.I; -Complex.I, 0]
     | 2, 2 => (1 : Matrix (Fin 2) (Fin 2) ℂ) := by
   fin_cases i <;> fin_cases j <;> ext a b <;> fin_cases a <;> fin_cases b <;>
-    simp [pauli, Matrix.mul_apply, Fin.sum_univ_two] <;> ring
+    simp [pauli, Matrix.mul_apply, Fin.sum_univ_two]
 
 /-- The trace pairing of two Pauli matrices: `tr(σᵢ σⱼ) = 2 δᵢⱼ`.
 Uses the precomputed multiplication table to avoid re-deriving the products. -/
@@ -119,7 +120,7 @@ lemma pauli_mul_pauli_trace (i j : Fin 3) :
     (pauli i * pauli j).trace = if i = j then 2 else 0 := by
   rw [pauli_mul_eq]
   fin_cases i <;> fin_cases j <;>
-    simp [Matrix.trace_fin_two] <;> norm_num
+    simp [Matrix.trace_fin_two]
 
 /-! ### The spin-`½` rotation `R(U)` -/
 
