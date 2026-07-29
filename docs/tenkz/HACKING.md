@@ -177,9 +177,10 @@ A verdict is a table row whose first cell is the exact `flag:*` ID printed by
 `flags` (escape an internal table pipe as `\|`).  Its second cell must begin
 with one of `keep-because`, `keep`, `dies`, `demoted`, `folds`, `respelled`,
 `becomes`, `moves`, `confirmed`, `confirmed merge`, `tombstoned`,
-`sugar preset`, or `executes`, and must include an unexpired
-`expiry <milestone>`, `permanent`, or `executes at the <milestone> freeze`
-lifetime.  Prose outside such a row is not a machine-readable verdict.
+or `sugar preset` and include an unexpired `expiry <milestone>` or `permanent`
+lifetime.  The alternative execution form must begin exactly
+`executes at the <milestone> freeze`.  Prose outside such a row is not a
+machine-readable verdict.
 
 ## Shared parsers
 
