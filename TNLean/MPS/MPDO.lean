@@ -184,6 +184,7 @@ import TNLean.MPS.MPDO.PhysicalSectorSubspinMaps
 import TNLean.MPS.MPDO.PhysicalSectorSupportRecurrence
 import TNLean.MPS.MPDO.PhysicalSectorTraceActions
 import TNLean.MPS.MPDO.PhysicalSectorTraceMatrix
+import TNLean.MPS.MPDO.PhysicalSectorVirtualCompression
 import TNLean.MPS.MPDO.PhysicalSectorVirtualSpanning
 import TNLean.MPS.MPDO.PhysicalSupportBondCommutativity
 import TNLean.MPS.MPDO.PhysicalSupportBondTransport

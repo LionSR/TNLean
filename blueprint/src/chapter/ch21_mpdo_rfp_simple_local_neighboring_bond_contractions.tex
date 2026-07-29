@@ -116,6 +116,67 @@
     this definition; it is a separate hypothesis in Proposition~C.7.
 \end{definition}
 
+\begin{definition}[Matrix-weighted neighboring contraction]
+    \label{def:mpdo_matrix_weighted_neighboring_operator}
+    \lean{MPOTensor.PhysicalSectorFactorization.neighboringOperatorWithMatrix,
+      MPOTensor.PhysicalSectorFactorization.neighboringOperatorWithMatrix_apply,
+      MPOTensor.PhysicalSectorFactorization.neighboringOperatorWithMatrix_one}
+    \leanok
+    \uses{def:mpdo_physical_sector_factorization}
+    For a virtual matrix $P$, define
+    \begin{align}
+        \eta_{k,h}(P)
+        &=\sum_{\delta,\gamma}P_{\delta,\gamma}
+          (r_k)_\delta\otimes(l_h)_\gamma.
+        \notag
+    \end{align}
+    The ordinary neighboring contraction is the case $P=I$.
+\end{definition}
+
+\begin{theorem}[Virtual compression of a physical-sector factorization]
+    \label{thm:mpdo_physical_sector_factorization_virtual_compression}
+    \lean{MPOTensor.PhysicalSectorFactorization.ofVirtualCompression,
+      MPOTensor.PhysicalSectorFactorization.ofVirtualCompression_neighboringOperator}
+    \leanok
+    \uses{def:mpdo_physical_sector_factorization,
+      def:mpdo_minimal_neighboring_operator,
+      def:mpdo_matrix_weighted_neighboring_operator}
+    Let $K$ and $L$ have virtual dimensions $D$ and $E$, respectively, and
+    suppose that a rectangular matrix $V\in M_{D\times E}(\C)$ satisfies the
+    following identity for every physical index $i$:
+    \begin{align}
+        L^i&=V^\dagger K^iV.
+        \notag
+    \end{align}
+    Every physical-sector factorization of $K$ induces one of $L$ with the
+    same physical decomposition.  Its neighboring operators satisfy
+    \begin{align}
+        \eta^L_{k,h}
+        &=\eta^K_{k,h}(VV^\dagger).
+        \notag
+    \end{align}
+    No positivity of the right-hand side is asserted.
+    The construction combines the virtual corner in
+    \cite[Section~2.3, lines~195--219]{Cirac2016MPDO_arXiv} with the
+    physical-sector factorization and neighboring contraction in
+    \cite[Appendix~C.2, lines~1381--1450]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Replace each left factor by
+    $\sum_\gamma\overline{V_{\gamma,\beta}}(l_k)_\gamma$ and each right
+    factor by $\sum_\delta V_{\delta,\alpha}(r_k)_\delta$.  Expanding a
+    physical slice gives the stated compression.  Contracting the common
+    virtual index gives
+    \begin{align}
+        \sum_\beta V_{\delta,\beta}\overline{V_{\gamma,\beta}}
+        &=(VV^\dagger)_{\delta,\gamma},
+        \notag
+    \end{align}
+    which proves the neighboring-operator identity.
+\end{proof}
+
 \begin{theorem}[Virtual-gauge invariance of physical-sector factorizations]
     \label{thm:mpdo_physical_sector_factorization_gauge}
     \lean{MPOTensor.PhysicalSectorFactorization.ofGaugeEquiv,

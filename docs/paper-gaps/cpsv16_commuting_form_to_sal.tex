@@ -500,6 +500,21 @@ required comparison from closed-chain proportionality.  The explicit
 factorization and positivity assumptions of the proved corollary are marked
 scope restrictions, not additional hypotheses on the source proposition.
 
+\leanid{MPOTensor.PhysicalSectorFactorization.ofVirtualCompression} records
+the corresponding algebraic construction for a rectangular virtual
+compression $L^i=V^*K^iV$.  The physical decomposition is unchanged, but the
+neighboring operator is no longer the original contraction.  By
+\leanid{MPOTensor.PhysicalSectorFactorization.%
+ofVirtualCompression_neighboringOperator}, it is the contraction with
+$VV^*$ inserted between the right and left virtual factors.  Thus positivity
+of the original contraction, which concerns the identity matrix, does not by
+itself establish positivity after compression.  The canonical-form projection
+at source lines~195--219 supplies the virtual corner but does not assert this
+projected positivity.  Moreover, the present proportional canonical-form
+comparison does not retain a compression map from the selected fixed tensor
+to its matched trace-visible sector.  Both the map and positivity of the
+projected contraction remain necessary.
+
 \paragraph{Local fix (the later orthogonal-sector statement).}
 The proposition labelled \emph{prop4to2} at source lines~1801--1808 states
 that the GSNNCH form alone implies SAL.  Its proof applies Proposition
@@ -543,8 +558,12 @@ the all-cut entropy argument, and transport to the original physical basis are
 complete under an explicit positive physical-sector factorization.  The exact
 fixed tensor selected from the source-side commuting bond now has such a
 factorization, with positive neighboring operators and the original physical
-bond.  The remaining gap is the normality and blocking comparison between the
-original source tensor and that selected fixed tensor.  The later
+bond.  Rectangular virtual compression now transports the algebraic
+factorization and identifies its neighboring contraction exactly.  The
+remaining gap is to retain the selected trace-visible sector as an exact
+virtual corner, prove positivity after inserting its range projection, and
+relate the resulting blocked sector back to the original source tensor.
+The later
 orthogonal direct-sum implication is likewise formalized only as a
 scope-restricted theorem assuming sectorwise SAL.  It neither supplies that
 sectorwise premise nor proves the printed assertion that the GSNNCH form alone
@@ -558,12 +577,15 @@ The gap can be removed in the following stages.
 \item The selected fixed tensor has a positive physical-sector factorization
 constructed non-circularly from the source-side commuting bond, as recorded by
 the fixed-tensor theorem identified above.
-\item Prove the normality and blocking comparison from the original normal
-MPDO block and the printed proportional commuting-bond hypotheses to the
-selected fixed representative.  The resulting virtual gauge then transports
-the fixed tensor's factorization without changing its neighboring operators.
-Only then may the source proposition receive a formal declaration and a
-\texttt{\string\leanok} marker.
+\item Retain an exact virtual compression map when selecting the
+trace-visible canonical sector of the fixed tensor.  Prove that the
+neighboring contraction remains positive after inserting the range
+projection of this map.
+\item Use the proportional canonical-form theorem and its virtual gauge to
+transport the positive compressed factorization to the matching normal
+sector, then remove any blocking without adding a hypothesis absent from
+Proposition~\emph{4to2}.  Only then may the source proposition receive a
+formal declaration and a \texttt{\string\leanok} marker.
 \end{enumerate}
 
 \bibliographystyle{alpha}
