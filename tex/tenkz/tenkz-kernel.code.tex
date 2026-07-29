@@ -4953,15 +4953,81 @@
                 + \__tenkz_metric_ratio:n {wrapreach}
               }
               \l__tenkz_kernel_r_xb_fp \l__tenkz_kernel_r_yb_fp
-            \__tenkz_kernel_r_wire_stroke:nn { bond }
+            \bool_lazy_and:nnTF
               {
-                \__tenkz_kernel_r_pair:nn
-                  { \l__tenkz_kernel_r_x_fp }
-                  { \l__tenkz_kernel_r_y_fp }
-                --
-                \__tenkz_kernel_r_pair:nn
-                  { \l__tenkz_kernel_r_xb_fp }
-                  { \l__tenkz_kernel_r_yb_fp }
+                \str_if_eq_p:ee
+                  { \__tenkz_kernel_r_frame_word: } {circle}
+              }
+              { \int_compare_p:nNn { \l__tenkz_kernel_r_cols_int } > {1} }
+              {
+                % The two reach points straddle the frame's closing sector.
+                % Follow that short sector at the frame radius; joining them
+                % directly cuts a chord through the ring.
+                \fp_set:Nn \l__tenkz_kernel_r_reach_fp
+                  {
+                    sqrt
+                      (
+                        \l__tenkz_kernel_r_x_fp ^ 2
+                        + \l__tenkz_kernel_r_y_fp ^ 2
+                      )
+                  }
+                \fp_set:Nn \l__tenkz_kernel_r_xc_fp
+                  {
+                    atand
+                      (
+                        \l__tenkz_kernel_r_y_fp ,
+                        \l__tenkz_kernel_r_x_fp
+                      )
+                  }
+                \fp_set:Nn \l__tenkz_kernel_r_yc_fp
+                  {
+                    atand
+                      (
+                        \l__tenkz_kernel_r_yb_fp ,
+                        \l__tenkz_kernel_r_xb_fp
+                      )
+                  }
+                % PGF reads the numeric difference literally.  Unwrap the
+                % second frame answer to the nearest copy of its angle, so a
+                % closure crossing -180 degrees takes the short sector.
+                \fp_sub:Nn \l__tenkz_kernel_r_yc_fp
+                  {
+                    360
+                    * round
+                      (
+                        (
+                          \l__tenkz_kernel_r_yc_fp
+                          - \l__tenkz_kernel_r_xc_fp
+                        ) / 360 ,
+                        0
+                      )
+                  }
+                \__tenkz_kernel_r_wire_stroke:nn { bond }
+                  {
+                    \__tenkz_kernel_r_pair:nn
+                      { \l__tenkz_kernel_r_x_fp }
+                      { \l__tenkz_kernel_r_y_fp }
+                    arc
+                      [
+                        start~angle = \fp_use:N \l__tenkz_kernel_r_xc_fp ,
+                        end~angle = \fp_use:N \l__tenkz_kernel_r_yc_fp ,
+                        radius =
+                          \__tenkz_kernel_r_pt:n
+                            { \l__tenkz_kernel_r_reach_fp }
+                      ]
+                  }
+              }
+              {
+                \__tenkz_kernel_r_wire_stroke:nn { bond }
+                  {
+                    \__tenkz_kernel_r_pair:nn
+                      { \l__tenkz_kernel_r_x_fp }
+                      { \l__tenkz_kernel_r_y_fp }
+                    --
+                    \__tenkz_kernel_r_pair:nn
+                      { \l__tenkz_kernel_r_xb_fp }
+                      { \l__tenkz_kernel_r_yb_fp }
+                  }
               }
           }
         {north-south}
