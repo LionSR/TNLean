@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.DependentBlockDiagonal
 import Mathlib.Data.Complex.Basic
 import Mathlib.Data.Matrix.Basis
 import Mathlib.Data.Matrix.Block
@@ -109,6 +110,36 @@ block decomposition. -/
 def blockProjection {R : Type*} [Zero R] [One R] [(i : ι) → DecidableEq (n i)]
     (k : ι) : Matrix ((i : ι) × n i) ((i : ι) × n i) R :=
   Matrix.blockDiagonal' fun i => if i = k then (1 : Matrix (n i) (n i) R) else 0
+
+/-- The range projection of a canonical summand inclusion is the block
+projection onto that summand. -/
+theorem sigmaBlockInclusion_mul_conjTranspose_eq_blockProjection
+    [Fintype ι] [(i : ι) → Fintype (n i)] [(i : ι) → DecidableEq (n i)]
+    (k : ι) :
+    sigmaBlockInclusion n k * (sigmaBlockInclusion n k)ᴴ =
+      blockProjection (n := n) (R := ℂ) k := by
+  ext x y
+  rcases x with ⟨i, a⟩
+  rcases y with ⟨j, b⟩
+  unfold blockProjection
+  by_cases hi : i = k
+  · subst i
+    by_cases hj : j = k
+    · subst j
+      simp [sigmaBlockInclusion, Matrix.mul_apply,
+        Matrix.blockDiagonal'_apply_eq, Matrix.one_apply]
+    · rw [Matrix.blockDiagonal'_apply_ne _ _ _ (Ne.symm hj)]
+      simp [sigmaBlockInclusion, Matrix.mul_apply, hj]
+  · by_cases hj : j = k
+    · subst j
+      rw [Matrix.blockDiagonal'_apply_ne _ _ _ hi]
+      simp [sigmaBlockInclusion, Matrix.mul_apply, hi]
+    · by_cases hij : i = j
+      · subst j
+        simp [sigmaBlockInclusion, Matrix.mul_apply,
+          Matrix.blockDiagonal'_apply_eq, hi]
+      · rw [Matrix.blockDiagonal'_apply_ne _ _ _ hij]
+        simp [sigmaBlockInclusion, Matrix.mul_apply, hi, hj]
 
 /-- A matrix on a dependent direct sum is block diagonal when it is a dependent
 `Matrix.blockDiagonal'` of its diagonal blocks. -/
