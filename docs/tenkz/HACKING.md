@@ -105,8 +105,12 @@ not cross-revision redraw evidence because raster bytes depend on the machine
 and TeX epoch.  The exact-toolchain pins in
 `tests/tenkz/kernel/golden-pixels.sha256` are a narrower regression gate:
 after an approved XeTeX, Poppler, font, or intentional render change, inspect
-the full-resolution fixtures and re-pin them with
-`scripts/tenkz_kernel_probes.sh --snapshot`.
+the full-resolution fixtures.  Before re-pinning, run
+`scripts/tenkz_kernel_probes.sh --check`: an expected pixel mismatch is
+acceptable, but its event-stream comparison must remain clean unless a separate
+event-contract change was also reviewed.  Then re-pin with
+`scripts/tenkz_kernel_probes.sh --snapshot`, which updates both the pixel and
+event ledgers.
 
 This command exists for the redraw campaign and expires at its close, no later
 than 1.0.  Do not turn it into a permanent raster manifest.
@@ -143,7 +147,10 @@ extension or census-correction procedure.
 
 ## Shared parsers
 
-`scripts/tenkzlib/tnlog.py` is the single parser for `.tnlog` event streams.
+`scripts/tenkzlib/tnlog.py` is the canonical schema-validating parser for
+`.tnlog` event streams.  Use it whenever a checker needs structured event
+fields.  `scripts/test_tenkz_cd_map_labels.py` still has two direct field-parser
+exceptions; keep them aligned until they are migrated to `tnlog.py`.
 `scripts/tenkzlib/texcase.py` provides shared TeX comment stripping,
 balanced-group matching, and picture-construct scanning.  Import these modules
 when adding or modifying a checker that needs those answers.
@@ -182,8 +189,9 @@ scripts/tenkz_golden.sh --check
 scripts/tenkz_pixelpair.sh origin/main
 ```
 
-The golden gate proves event-stream parity.  The same-session pixel pair proves
-render parity only for the fixtures listed in
+The golden gate proves event-stream parity for the top-level corpus fixtures.
+Run the applicable suite-specific semantic gates for affected nested fixtures.
+The same-session pixel pair proves render parity only for the fixtures listed in
 `tests/tenkz/pixelpair-sources.txt`.  If a change can affect a fixture outside
 that manifest, add the affected fixture to the comparison or attach reviewed
 replacement render evidence.  If a reviewed contract or drawing intentionally
