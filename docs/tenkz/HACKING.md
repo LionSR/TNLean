@@ -143,9 +143,9 @@ the public census decreases, or when the census is stable and every raised
 low-consumer, co-occurrence, lonely-type, or sugar-shaped flag has a verdict in
 the latest `docs/tenkz/SHRINK.md` session.  Alias-sunset flags require verdicts
 there as soon as their milestone is due.  Meter growth requires the recorded
-extension or census-correction procedure.  A one-for-one parser-leaf change can
-leave the M2 count stable while changing its identity fingerprint; it still
-requires an `Extension-gate: #NNNN` citation.
+extension or census-correction procedure.  Any parser-leaf identity change,
+including a one-for-one replacement or removal, requires an
+`Extension-gate: #NNNN` citation even when the M2 count is stable or decreases.
 
 ## Shared parsers
 
