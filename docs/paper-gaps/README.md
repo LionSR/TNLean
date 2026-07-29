@@ -24,11 +24,6 @@ equal-modulus comparison has these current reference points.
 - `blueprint/src/chapter/ch11_fundamental_theorem_proof.tex` records how the
   Chapter 10 comparison is used in the equal-MPV and proportional-MPV
   Fundamental Theorem arguments.
-- `cpsv16_bnt_uniqueness_zero_coefficient.tex` records the formal obstruction
-  to the unrestricted printed Theorem II.1: the literal BNT definition permits
-  a normal representative whose coefficient vanishes at every length. The
-  SectorBNT theorem proves the corrected active, nonzero, converse-covered
-  statement.
 - GitHub issue #2150 records the verification request. The outcome now
   recorded in the paper-gap note is that neither a strictly-decreasing-moduli
   hypothesis nor a per-sector unit-witness hypothesis survives in the SectorBNT

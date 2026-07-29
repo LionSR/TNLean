@@ -205,10 +205,11 @@ identified with one another.
     \path{MPSTensor.ft_sector_bnt_equal_global_gauge} are the current formal
     statements closest to the BNT part of the source proof. They work with raw
     sector weights and derive the sector matching, copy-count equalities, and
-    matched copy-weight identities on the SectorBNT surface. The source-level
-    equal-MPV corollary is obtained after the canonical-form supplier has put
-    the input tensors on this surface with the required unit-modulus-copy
-    normalization.
+    matched copy-weight identities on the SectorBNT surface. The corrected
+    active, nonzero SectorBNT equal-MPV theorem is obtained after the
+    canonical-form supplier has put the input tensors on this surface with the
+    required unit-modulus-copy normalization. The literal ambient source
+    corollary retains the separate zero-weight-coordinate obstruction.
   \item The sector-decomposition theorem
     \path{MPSTensor.fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_sectorMatching}
     is now an auxiliary rectangular comparison statement: from a supplied
@@ -348,17 +349,19 @@ paper-level theorems.
 \section{Statements to keep visibly conditional}
 
 Several declarations should stay in the development, but their statements
-should remain visibly conditional until the missing paper input is produced.
+must remain visibly conditional because they assert stronger conclusions or
+start from more explicit data than the source theorem.
 \begin{itemize}
   \item The conditional after-blocking Fundamental Theorem assumes the
     post-blocking sector hypotheses. It should not be cited as the unconditional
     canonical-form theorem.
   \item The explicit-coefficient equal case assumes coefficient arrays rather
     than deriving the BNT power-sum data from bare equality of MPVs.
-  \item The conditional proportional global-gauge theorem assumes the
-    matched-sector coefficient identities for the matched phases. It should
-    remain conditional until the CPSV16 Appendix MPV coefficient comparison at
-    line~1188 has been derived from proportional MPV equality.
+  \item The conditional proportional global-gauge theorem assumes scalar-free
+    matched-sector coefficient identities. Mere projective proportionality
+    instead carries a common length-dependent scalar $c_N$, which need not be
+    geometric. Thus the global-gauge conclusion is an intentionally stronger
+    result, not unfinished work for the sectorwise proportional theorem.
 \end{itemize}
 
 \section{Retirement criterion}
