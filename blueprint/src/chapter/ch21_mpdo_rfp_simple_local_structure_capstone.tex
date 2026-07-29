@@ -207,10 +207,10 @@
     \uses{def:mpdo_physical_sector_factorization}
     Suppose that an MPO tensor $K$ admits a physical-sector factorization
     through an isometry $U$, with neighboring operators
-    $\eta_{q,h}$. If $\eta_{q,h}\geq0$ for every pair $(q,h)$, then
+    $\eta_{q,h}$. If $\eta_{q,h}\geq0$ for every pair $(q,h)$, then for every
+    $N\geq1$,
     \begin{align}
-        \rho^{(N)}(K)&\geq0
-        \qquad (N\geq1).
+        \rho^{(N)}(K)&\geq0.
         \notag
     \end{align}
 \end{theorem}
@@ -260,7 +260,7 @@
         \tn[mpo]{\mathcal K_y} \\
         \tn[mpo]{\mathcal K_x}
     \end{tenkz}
-    $ = 0 \qquad (x\ne y)$
+    $ = 0$
 \end{center}
 
 \begin{definition}[Physical adjoint]
@@ -330,11 +330,10 @@
         thm:mpdo_injective_mpdo_adjoint_closure}
     Let $\{\mathcal K_x\}_{x=0}^{g-1}$ be injective MPO tensors, each of which
     generates positive semidefinite periodic operators at every positive
-    length. If the unstarred identities
+    length. If, for every pair $x\ne y$, the unstarred identities
     \begin{align}
         \mathcal K_y[\beta_y,\alpha_y]\,
         \mathcal K_x[\beta_x,\alpha_x]&=0
-        \qquad (x\ne y)
         \notag
     \end{align}
     hold for all virtual indices, then there are pairwise orthogonal
@@ -352,13 +351,17 @@
 
 \begin{proof}
     \leanok
-    Stack the columns of all slices of $\mathcal K_x$ and let $P_x$ be the
-    orthogonal projection onto their span. The left support identity is
-    immediate. By Theorem~\ref{thm:mpdo_injective_mpdo_adjoint_closure}, the
-    slice span is closed under conjugate transpose, which gives the right
-    support identity. For $x\ne y$, equation~\eqref{eq:mpdo_bnt_layer_unstarred}
-    and adjoint closure imply that the two stacked column spaces are
-    orthogonal, hence $P_xP_y=0$.
+    Let $C_x$ be the matrix obtained by stacking the columns of all slices of
+    $\mathcal K_x$, and let $P_x$ be the orthogonal projection onto its column
+    space. The left support identity is immediate.
+    Theorem~\ref{thm:mpdo_injective_mpdo_adjoint_closure} gives the right
+    support identity. For $x\ne y$, (\ref{eq:mpdo_bnt_layer_unstarred}) and
+    adjoint closure give
+    \begin{align}
+        C_x^*C_y&=0,
+        &P_xP_y&=0.
+        \notag
+    \end{align}
 \end{proof}
 
 \begin{corollary}[Supports of common-weight BNT representatives]
