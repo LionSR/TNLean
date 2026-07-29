@@ -709,14 +709,18 @@ theorem fundamentalTheorem_equal_canonicalForm_unitary
               Matrix (Fin Q.totalDim) (Fin Q.totalDim) ℂ) :=
   ft_sector_bnt_equal_mps_unitaryGauge_literal hP hQ hEqual
 
-/-- **Fundamental Theorem of MPS, proportional multi-block case (CPSV16
-Theorem II.1) on the BNT canonical-form surface.**
+/-- **Restricted proportional multi-block fundamental theorem.**
 
-Eventual projective proportionality of the generated MPV families matches the
-normal-tensor sectors bijectively.  For each `Q`-sector `k`, the matched
-`P`-sector `β k` has the same bond dimension (`g_a = g_b` via the bijection
-`β`) and `Q.basis k` is obtained from `P.basis (β k)` by a per-normal-tensor
-unit phase and gauge conjugation. -/
+This is the active, nonzero, converse-covered correction of CPSV16 Theorem II.1
+and CPSV21 Theorem 4.4.  Their literal BNT definitions permit an unrelated
+normal representative whose coefficient vanishes at every length, so the
+unrestricted equality of BNT cardinalities is false.
+
+On the restricted BNT canonical-form class, eventual projective proportionality
+of the generated MPV families matches the normal-tensor sectors bijectively.
+For each `Q`-sector `k`, the matched `P`-sector `β k` has the same bond dimension
+(`g_a = g_b` via the bijection `β`), and `Q.basis k` is obtained from
+`P.basis (β k)` by a unit phase and gauge conjugation. -/
 theorem fundamentalTheorem_proportional_canonicalForm
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
