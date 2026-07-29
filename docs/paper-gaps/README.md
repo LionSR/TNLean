@@ -68,9 +68,11 @@ For MPDO renormalization fixed points:
   supplies one such family under its projector, closure, inverse, word-span,
   and sectorwise-SAL hypotheses. The active factor supports now give the
   canonical physical restriction without unused complementary directions,
-  and the compressed neighboring operators remain positive by explicit
-  congruence. Proposition `prop3to4` remains partial because the final assembly
-  from exactly its five printed blockwise identities has not yet been proved.
+  the compressed neighboring operators remain positive by explicit
+  congruence, and the resulting positive commuting bonds are supported on the
+  printed absorbing projections. Proposition `prop3to4` remains partial
+  because the trace-factor, normalization, and common-copy-weight data have
+  not yet been assembled with these sector bonds.
 - `cpgsv17_mpdo_sal_zcl_eta_local_structure.tex` records the missing
   coherent positive choice for the inverse-map neighboring operators in
   Appendix C.2. The comparison with the conjugated Hayashi decomposition,

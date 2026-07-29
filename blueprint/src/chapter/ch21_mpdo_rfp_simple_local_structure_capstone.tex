@@ -599,6 +599,56 @@
     Theorem~\ref{thm:mpdo_bnt_layer_orthogonal_supports}.
 \end{proof}
 
+\begin{theorem}[Positive sector bonds on the printed physical supports]
+    \label{thm:mpdo_ambient_sector_factorization_supported_bond}
+    \lean{MPOTensor.PhysicalSectorFactorization.%
+        exists_etaLocalStructureData_supported_of_twoSidedPhysicalSlice,
+        MPOTensor.%
+          nonempty_orthogonalCommutingSectorFamily_of_ambientPhysicalSectorFactorization}
+    \leanok
+    \uses{thm:mpdo_active_physical_sector_neighboring_positivity}
+    Let $K$ be injective and admit a physical-sector factorization with
+    positive semidefinite neighboring operators.  If an orthogonal projection
+    $P$ satisfies
+    \begin{align}
+        PK[\beta,\alpha]
+        &=K[\beta,\alpha]
+         =K[\beta,\alpha]P
+        \notag
+    \end{align}
+    for every $\beta,\alpha$, then there is a positive two-site operator $B$
+    whose periodic translates commute and such that
+    \begin{align}
+        (P\otimes P)B(P\otimes P)&=B,
+        \notag\\
+        \operatorname{mpo}(K,N)
+        &=\prod_{j=0}^{N-1}\tau_j(B)
+        \qquad (N\geq2).
+        \notag
+    \end{align}
+    Applied to pairwise orthogonal projections $P_s$, this construction gives
+    an orthogonal family of positive commuting sector bonds for the tensors
+    $K_s$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Restrict $K$ to its canonical joint physical support $Q$ by
+    Theorems~\ref{thm:mpdo_active_physical_sector_restriction}
+    and~\ref{thm:mpdo_active_physical_sector_neighboring_positivity}.
+    The positive neighboring operators on the restriction give a positive
+    commuting bond supported on $Q\otimes Q$, with the displayed periodic
+    product.  Minimality of the joint column support and the two-sided
+    absorption by $P$ give
+    \begin{align}
+        PQ=Q=QP.
+        \notag
+    \end{align}
+    Hence support of the bond on $Q\otimes Q$ implies support on
+    $P\otimes P$.  Performing this construction in every orthogonal sector
+    gives the final assertion.
+\end{proof}
+
 \begin{theorem}[Square-zero obstruction for arbitrary MPO tensors]
     \label{thm:mpdo_bnt_layer_square_zero_obstruction}
     \lean{MPOTensor.BNTLayerOrthogonalityCounterexample.squareZeroPhysicalMatrix_ne_zero,
