@@ -18,10 +18,11 @@ from tenkzlib.texcase import scan_constructs, strip_comments
 DOCUMENT = ROOT / "docs/tenkz/DISPOSITIONS.md"
 BLUEPRINT_ROOT = ROOT / "blueprint/src/chapter"
 FIXTURE_ROOT = ROOT / "tests/tenkz"
-ENVIRONMENT = re.compile(r"\\begin\{(tenkz(?:free|cd|lattice|planes)?)\}")
+ENVIRONMENT = re.compile(
+    r"\\begin\s*\{\s*(tenkz(?:free|cd|lattice|planes)?)\s*\}"
+)
 COMMAND = re.compile(r"\\(tnpic|tntree)\b")
 DISPOSITIONS = ("preserve", "codemod", "redraw")
-DEAD_ENVIRONMENTS = ("tenkzfree", "tenkzcd", "tenkzlattice", "tenkzplanes")
 DEAD_COMMANDS = (
     "tnput",
     "tnjoin",
@@ -57,6 +58,17 @@ DEAD_KEYS = (
     "legs at",
     "boundary legs",
     "label at",
+    "poly",
+)
+SUGAR_COMMANDS = (
+    "tnX",
+    "tnbond",
+    "tnstring",
+    "tnfuse",
+    "tnspan",
+    "tndots",
+    "tnskip",
+    "tndeclareatom",
 )
 
 
@@ -78,9 +90,17 @@ def occurrences(path: Path) -> list[tuple[int, str]]:
     ]
 
 
+def normalized_environment_spacing(source: str) -> str:
+    """Normalize TeX whitespace that the shared construct scanner omits."""
+    source = re.sub(r"\\begin\s+\{", r"\\begin{", source)
+    return re.sub(r"\\end\s+\{", r"\\end{", source)
+
+
 def construct_sources(path: Path) -> dict[tuple[str, int, str], list[str]]:
     """Return source slices for each picture construct in a TeX file."""
-    source = strip_comments(path.read_text(errors="replace"))
+    source = normalized_environment_spacing(
+        strip_comments(path.read_text(errors="replace"))
+    )
     result: dict[tuple[str, int, str], list[str]] = defaultdict(list)
     for construct in scan_constructs(source):
         key = (path.name, construct.line, construct.name)
@@ -108,39 +128,155 @@ def expanded_source(path: Path, stack: tuple[Path, ...] = ()) -> str:
     return re.sub(r"\\(?:input|include)\{([^}]+)\}", replace, source)
 
 
-def uses_tombstone(source: str) -> bool:
-    """Return whether source uses a spelling tombstoned by LANGUAGE-1.0 §10."""
-    if any(re.search(rf"\\begin\{{{name}\}}", source) for name in DEAD_ENVIRONMENTS):
-        return True
-    if any(re.search(rf"\\{name}\b", source) for name in DEAD_COMMANDS):
-        return True
-    if any(
+def fragment_target_codes(source: str) -> frozenset[str]:
+    """Classify one construct or construct-free source fragment."""
+    public_commands = (
+        "tn",
+        "tnwire",
+        "tnmark",
+        "tngroup",
+        "tnset",
+        "tndeclare",
+        *DEAD_COMMANDS,
+        *SUGAR_COMMANDS,
+    )
+    public = bool(
+        ENVIRONMENT.search(source)
+        or COMMAND.search(source)
+        or any(re.search(rf"\\{name}\b", source) for name in public_commands)
+    )
+    if not public:
+        return frozenset({"P-none"})
+
+    codes: set[str] = set()
+    environments = set(ENVIRONMENT.findall(source))
+    environment_codes = {
+        "tenkzfree": "R-free",
+        "tenkzcd": "R-cd",
+        "tenkzlattice": "R-lattice",
+        "tenkzplanes": "R-plane",
+    }
+    codes.update(
+        environment_codes[name] for name in environments if name in environment_codes
+    )
+
+    dead_record = any(re.search(rf"\\{name}\b", source) for name in DEAD_COMMANDS)
+    dead_record |= any(
         re.search(r"(?<![A-Za-z])" + re.escape(key) + r"\s*=", source)
         for key in DEAD_KEYS
-    ):
-        return True
-    if re.search(r"(?<![A-Za-z])(?:inline|compact|fused)(?=\s*[,}\]])", source):
-        return True
-    if re.search(r"route\s*=\s*(?:\{\s*)?(?:hv|vh|curve|drop|hug)\b", source):
-        return True
-    if re.search(r"frame\s*=\s*(?:\{\s*)?(?:vertical|rotate\s*=)", source):
-        return True
-    if re.search(r"rows\s*=\s*\{[^}\n]*:[^}\n]*\}", source):
-        return True
-    if re.search(r"\\tnfuse\s*\[[^\]]*\brows\s*=", source):
-        return True
-    if re.search(r"form\s*=\s*(?:brace-(?:below|above)|cut|band|prose)\b", source):
-        return True
-    if re.search(r"\\tnspan\s*\[[^\]]*\bbrace\s+(?:below|above)\b", source):
-        return True
+    )
+    dead_patterns = (
+        r"(?<![A-Za-z])(?:inline|compact|fused)(?=\s*[,}\]])",
+        r"route\s*=\s*(?:\{\s*)?(?:hv|vh|curve|drop|hug)\b",
+        r"frame\s*=\s*(?:\{\s*)?(?:vertical|rotate\s*=|[^}\n]*[;,])",
+        r"rows\s*=\s*\{[^}\n]*:[^}\n]*\}",
+        r"\\tnfuse\s*\[[^\]]*\brows\s*=",
+        r"form\s*=\s*(?:brace-(?:below|above)|cut|band|prose)\b",
+        r"\\tnspan\s*\[[^\]]*\bbrace\s+(?:below|above)\b",
+        r"(?<![A-Za-z])(?:cluster|enclosure)(?=\s*[,}\]])",
+        r"weight\s*=\s*string\b",
+        r"\([^)]+\)\s*-\s*\([^)]+\)",
+        r"\bleg\s+(?:north|south|east|west)\s+of\b",
+        r"\b(?:north|south|east|west)\s+outside\b",
+        r"(?:^|,)\s*none(?=\s*(?:,|\]))",
+    )
+    dead_record |= any(re.search(pattern, source) for pattern in dead_patterns)
+
     for match in re.finditer(r"\\tn\*?\s*\[([^\]]*)\]", source):
         if re.search(
             r"(?:^|,)\s*(?:pill|circle|boundary|removed)(?=\s*(?:,|$))"
             r"|(?:^|,)\s*tri\s*=",
             match.group(1),
         ):
-            return True
-    return False
+            dead_record = True
+        if re.search(
+            r"(?:^|,)\s*(?:box|dot|mpo|ring|no legs)(?=\s*(?:,|$))",
+            match.group(1),
+        ):
+            codes.add("C-record")
+    if dead_record:
+        codes.add("R-record")
+
+    if COMMAND.search(source) and re.search(r"\\tnpic\b", source):
+        codes.add("C-picture")
+    if re.search(r"\\tntree\b", source):
+        codes.add("C-tree")
+    policy_patterns = (
+        r"(?<![A-Za-z])(?:physical|boundary|west label|east label|"
+        r"north label|south label|bond label)\s*=",
+        r"(?<![A-Za-z])(?:sandwich|periodic)(?=\s*[,}\]])",
+        r"(?:west|east|north|south)\s*=\s*\{?\s*(?:cup|tail)\s*=",
+    )
+    if any(re.search(pattern, source) for pattern in policy_patterns):
+        codes.add("C-policy")
+    if re.search(
+        r"(?<![A-Za-z])(?:lattice|ring|surface|cluster)\s*=|"
+        r"(?<![A-Za-z])planes(?=\s*[,}\]])",
+        source,
+    ):
+        codes.add("C-frame")
+    if any(re.search(rf"\\{name}\b", source) for name in SUGAR_COMMANDS):
+        codes.add("C-record")
+    if re.search(r"\\tn\*", source):
+        codes.add("C-record")
+    if re.search(
+        r"(?<![A-Za-z])(?:combined|span|up at|down at|west at|east at|"
+        r"up|down)\s*=",
+        source,
+    ):
+        codes.add("C-record")
+    if re.search(r"(?<![A-Za-z])role\s*=", source):
+        codes.add("C-species")
+    if re.search(r"\\tnset\s*\{[^}]*\bspecies\s*=", source):
+        codes.add("C-declare")
+
+    redraw = {code for code in codes if code.startswith("R-")}
+    if redraw:
+        if re.match(r"\s*\\tnpic\b", source):
+            redraw.add("C-picture")
+        if re.match(r"\s*\\tntree\b", source):
+            redraw.add("C-tree")
+        return frozenset(redraw)
+    if codes:
+        return frozenset(codes)
+    return frozenset({"P-grid"})
+
+
+def source_target_codes(source: str) -> frozenset[str]:
+    """Derive exact migration targets, preserving mixed-construct workloads."""
+    source = normalized_environment_spacing(source)
+    constructs = scan_constructs(source)
+    codes: set[str] = set()
+    masked = list(source)
+    for construct in constructs:
+        codes.update(fragment_target_codes(source[construct.start : construct.end]))
+        for index in range(construct.start, construct.end):
+            if masked[index] != "\n":
+                masked[index] = " "
+    for match in re.finditer(r"\\tntree\b[^\n]*", source):
+        codes.update(fragment_target_codes(match.group(0)))
+        for index in range(match.start(), match.end()):
+            masked[index] = " "
+    codes.update(fragment_target_codes("".join(masked)))
+    if any(not code.startswith("P-") for code in codes):
+        codes = {code for code in codes if not code.startswith("P-")}
+    elif "P-grid" in codes:
+        codes.discard("P-none")
+    return frozenset(codes)
+
+
+def uses_tombstone(source: str) -> bool:
+    """Return whether source uses a spelling tombstoned by LANGUAGE-1.0 §10."""
+    return any(code.startswith("R-") for code in source_target_codes(source))
+
+
+def target_disposition(codes: frozenset[str]) -> str:
+    """Return the workload disposition implied by a target-code set."""
+    if any(code.startswith("R-") for code in codes):
+        return "redraw"
+    if any(code.startswith("C-") for code in codes):
+        return "codemod"
+    return "preserve"
 
 
 def section(text: str, heading: str, next_heading: str | None = None) -> str:
@@ -153,8 +289,9 @@ def section(text: str, heading: str, next_heading: str | None = None) -> str:
     return result
 
 
-def parse_counter_table(text: str, heading: str) -> Counter[str]:
+def parse_counter_table(text: str, heading: str) -> tuple[Counter[str], int]:
     result: Counter[str] = Counter()
+    total: int | None = None
     started = False
     for row in section(text, heading).splitlines():
         if started and not row.strip():
@@ -162,24 +299,34 @@ def parse_counter_table(text: str, heading: str) -> Counter[str]:
         match = re.match(r"\| `?([^|`]+?)`? \| \**([0-9]+)\** \|$", row)
         started |= bool(match)
         label = match.group(1).strip().strip("*") if match else ""
-        if match and label.lower() != "total":
+        if match and label.lower() == "total":
+            total = int(match.group(2))
+        elif match:
             result[label] = int(match.group(2))
     if not result:
         fail(f"could not parse counter table below {heading}")
-    return result
+    if total is None or total != sum(result.values()):
+        fail(f"invalid total below {heading}: {total} != {sum(result.values())}")
+    return result, total
 
 
-def parse_fixture_table(text: str) -> Counter[str]:
+def parse_fixture_table(text: str) -> tuple[Counter[str], int]:
     body = section(text, "| Disposition | Fixtures |")
     body = body.split("\n\n", 1)[0]
     files: Counter[str] = Counter()
+    total: int | None = None
     for row in body.splitlines():
         match = re.match(r"\| ([a-z]+) \| ([0-9]+) \|$", row)
         if match and match.group(1) in DISPOSITIONS:
             files[match.group(1)] = int(match.group(2))
+        total_match = re.match(r"\| \*\*Total\*\* \| \*\*([0-9]+)\*\* \|$", row)
+        if total_match:
+            total = int(total_match.group(1))
     if set(files) != set(DISPOSITIONS):
         fail("could not parse standalone fixture reconciliation table")
-    return files
+    if total is None or total != sum(files.values()):
+        fail(f"invalid standalone fixture total: {total} != {sum(files.values())}")
+    return files, total
 
 
 def documented_blueprint(
@@ -188,24 +335,37 @@ def documented_blueprint(
     Counter[tuple[str, int, str]],
     Counter[str],
     dict[tuple[str, int, str], str],
+    dict[tuple[str, int, str], frozenset[str]],
 ]:
     body = section(text, "## Blueprint inventory", "### Blueprint reconciliation")
     listed: Counter[tuple[str, int, str]] = Counter()
     dispositions: Counter[str] = Counter()
     disposition_by_occurrence: dict[tuple[str, int, str], str] = {}
+    targets_by_occurrence: dict[tuple[str, int, str], frozenset[str]] = {}
     for row in body.splitlines():
         cells = [cell.strip() for cell in row.split("|")[1:-1]]
         if len(cells) != 4 or not re.fullmatch(r"`[^`]+\.tex`", cells[0]):
             continue
         filename = cells[0].strip("`")
         for disposition, cell in zip(DISPOSITIONS, cells[1:]):
-            for use in re.finditer(r"L([0-9]+(?:, [0-9]+)*) `([^`]+)` →", cell):
+            for use in re.finditer(
+                r"L([0-9]+(?:, [0-9]+)*) `([^`]+)` → `([^`]+)`",
+                cell,
+            ):
                 for line in map(int, use.group(1).split(", ")):
                     key = (filename, line, use.group(2))
                     listed[key] += 1
                     dispositions[disposition] += 1
                     disposition_by_occurrence[key] = disposition
-    return listed, dispositions, disposition_by_occurrence
+                    targets_by_occurrence[key] = frozenset(
+                        use.group(3).split("+")
+                    )
+    return (
+        listed,
+        dispositions,
+        disposition_by_occurrence,
+        targets_by_occurrence,
+    )
 
 
 def documented_fixtures(text: str) -> dict[str, tuple[str, frozenset[str]]]:
@@ -271,6 +431,7 @@ def main() -> int:
         listed_blueprint,
         blueprint_dispositions,
         blueprint_occurrence_dispositions,
+        blueprint_occurrence_targets,
     ) = documented_blueprint(text)
     if blueprint_occurrences != listed_blueprint:
         fail(
@@ -278,20 +439,33 @@ def main() -> int:
             f"missing={blueprint_occurrences - listed_blueprint}, "
             f"extra={listed_blueprint - blueprint_occurrences}"
         )
-    if blueprint_raw != parse_counter_table(text, "| Raw construct | Occurrences |"):
+    documented_blueprint_raw, blueprint_total = parse_counter_table(
+        text, "| Raw construct | Occurrences |"
+    )
+    if blueprint_raw != documented_blueprint_raw:
         fail("blueprint raw-count table does not match the source inventory")
-    documented_blueprint_dispositions = parse_counter_table(
+    documented_blueprint_dispositions, disposition_total = parse_counter_table(
         text, "| Disposition | Occurrences |"
     )
     if blueprint_dispositions != documented_blueprint_dispositions:
         fail("blueprint disposition totals do not match the line inventory")
-    for key, disposition in blueprint_occurrence_dispositions.items():
-        if disposition != "redraw" and any(
-            uses_tombstone(source) for source in blueprint_sources[key]
-        ):
+    if blueprint_total != disposition_total:
+        fail("blueprint reconciliation tables have different totals")
+    for key, documented_disposition in blueprint_occurrence_dispositions.items():
+        actual_targets = frozenset().union(
+            *(fragment_target_codes(source) for source in blueprint_sources[key])
+        )
+        if actual_targets != blueprint_occurrence_targets[key]:
             fail(
-                f"{key[0]}:{key[1]} {key[2]} uses a tombstone "
-                f"but is classified {disposition}"
+                f"{key[0]}:{key[1]} {key[2]} target mismatch: "
+                f"documented={sorted(blueprint_occurrence_targets[key])}, "
+                f"actual={sorted(actual_targets)}"
+            )
+        actual_disposition = target_disposition(actual_targets)
+        if actual_disposition != documented_disposition:
+            fail(
+                f"{key[0]}:{key[1]} {key[2]} disposition mismatch: "
+                f"documented={documented_disposition}, actual={actual_disposition}"
             )
 
     fixtures = documented_fixtures(text)
@@ -329,14 +503,29 @@ def main() -> int:
         setup_only_files += has_setup and not has_environment and not has_command
         no_surface_files += not has_environment and not has_command and not has_setup
         disposition, _ = fixtures[path.name]
-        if disposition != "redraw" and uses_tombstone(expanded):
-            fail(f"{path.name} uses a tombstone but is classified {disposition}")
+        _, documented_targets = fixtures[path.name]
+        actual_targets = source_target_codes(expanded)
+        if actual_targets != documented_targets:
+            fail(
+                f"{path.name} target mismatch: "
+                f"documented={sorted(documented_targets)}, "
+                f"actual={sorted(actual_targets)}"
+            )
+        actual_disposition = target_disposition(actual_targets)
+        if actual_disposition != disposition:
+            fail(
+                f"{path.name} disposition mismatch: "
+                f"documented={disposition}, actual={actual_disposition}"
+            )
 
-    documented_files = parse_fixture_table(text)
+    documented_files, _fixture_total = parse_fixture_table(text)
     if fixture_files != documented_files:
         fail("fixture disposition totals do not match the fixture lists")
     fixture_heading = "### Fixture raw-count reconciliation"
-    if fixture_raw != parse_counter_table(text, fixture_heading):
+    documented_fixture_raw, _fixture_raw_total = parse_counter_table(
+        text, fixture_heading
+    )
+    if fixture_raw != documented_fixture_raw:
         fail("fixture raw-count table does not match the source inventory")
 
     census = re.search(

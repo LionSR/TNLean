@@ -27,6 +27,9 @@ def main() -> int:
         r"\tnspan[brace below]{2}{}",
         r"\tnspan[brace above]{2}{}",
         r"\tn[pill]{}",
+        r"\tn[cluster]{}",
+        r"\tn[poly=5]{}",
+        r"\tnmark{(1,1)-(2,2)}{}",
     )
     for source in tombstones:
         assert guard.uses_tombstone(source), source
@@ -41,6 +44,16 @@ def main() -> int:
     )
     for source in accepted:
         assert not guard.uses_tombstone(source), source
+    assert guard.source_target_codes(
+        r"\begin{tenkz}[physical=up]\tn[box]{}\end{tenkz}"
+    ) == frozenset({"C-policy", "C-record"})
+    assert guard.source_target_codes(
+        r"\tnset{species={alpha,beta}}"
+    ) == frozenset({"C-declare"})
+    assert guard.source_target_codes(
+        r"\begin{tenkzfree}\tnghost{}\end{tenkzfree}"
+        r"\begin{tenkz}[physical=up]\tn{}\end{tenkz}"
+    ) == frozenset({"R-free", "R-record", "C-policy"})
 
     with tempfile.TemporaryDirectory() as directory:
         root = Path(directory)
@@ -69,15 +82,36 @@ def main() -> int:
         else:
             raise AssertionError("recursive input was not rejected")
 
+        spaced = root / "spaced.tex"
+        spaced.write_text(r"\begin {tenkz}\tn{}\end {tenkz}")
+        assert guard.occurrences(spaced) == [(1, "tenkz")]
+        assert ("spaced.tex", 1, "tenkz") in guard.construct_sources(spaced)
+
     fixture_inventory = guard.documented_fixtures(guard.DOCUMENT.read_text())
     assert len(fixture_inventory) == 264
     assert fixture_inventory["modes_dot_baseline.tex"][0] == "redraw"
     assert fixture_inventory["p_pitch.tex"][0] == "redraw"
     assert fixture_inventory["rev4075_alias.tex"][0] == "redraw"
-    _, _, blueprint_inventory = guard.documented_blueprint(
+    assert fixture_inventory["p_species.tex"] == (
+        "codemod",
+        frozenset({"C-declare"}),
+    )
+    _, _, blueprint_inventory, _ = guard.documented_blueprint(
         guard.DOCUMENT.read_text()
     )
     assert blueprint_inventory[("ch02_mps.tex", 54, "tenkz")] == "redraw"
+
+    broken_total = guard.DOCUMENT.read_text().replace(
+        "| **Total** | **207** |", "| **Total** | **999** |", 1
+    )
+    try:
+        guard.parse_counter_table(
+            broken_total, "| Raw construct | Occurrences |"
+        )
+    except SystemExit as error:
+        assert "invalid total" in str(error)
+    else:
+        raise AssertionError("stale reconciliation total was not rejected")
 
     print("PASS: disposition checker detects contract and dependency regressions")
     return 0
