@@ -280,8 +280,9 @@ _INK_TOKEN = re.compile(
 # Saving geometry for later string surgery creates no visible ink.  Keep this
 # state-owner operation out of the raw-rendering debt meter.
 _SAVED_PATH_CAPTURE = re.compile(r"\\path\s*\[([^]]*\bspath/save\s*=[^]]*)\]")
-_VISIBLE_PATH_OPTION = re.compile(
-    r"(?:^|,)\s*(?:draw|fill|shade|pattern|preaction|postaction)\b"
+_CAPTURE_ONLY_OPTIONS = re.compile(
+    r"^\s*spath/save\s*=\s*(?:\{[^{}]*\}|[^,\]]+)\s*"
+    r"(?:,\s*use~Hobby~shortcut\s*)?$"
 )
 _DECIMAL = re.compile(r"(?<![\w@.])\d*\.\d+")
 # Only metric-table DEFINITIONS are exempt; a stray literal multiplying a
@@ -292,7 +293,7 @@ _RENDER_PRIMITIVE_REF = re.compile(r"\\__tenkz_ink_[A-Za-z@:_]+")
 
 def ink_token_count(line: str) -> int:
     captures = sum(
-        _VISIBLE_PATH_OPTION.search(match.group(1)) is None
+        _CAPTURE_ONLY_OPTIONS.fullmatch(match.group(1)) is not None
         for match in _SAVED_PATH_CAPTURE.finditer(line)
     )
     return len(_INK_TOKEN.findall(line)) - captures
