@@ -20,8 +20,13 @@ from tenkz_language import (  # noqa: E402
     parse_alias_payload,
     parse_status,
 )
-from tenkz_lint import registry_alias_patterns  # noqa: E402
+from tenkz_lint import ink_token_count, registry_alias_patterns  # noqa: E402
 import tenkz_shrink  # noqa: E402
+
+
+def test_saved_path_capture_is_not_rendering_debt() -> None:
+    assert ink_token_count(r"\path [ spath/save = {route} ] (0,0) -- (1,0) ;") == 0
+    assert ink_token_count(r"\draw (0,0) -- (1,0) ;") == 1
 
 
 def test_parse_status_ledgers() -> None:
