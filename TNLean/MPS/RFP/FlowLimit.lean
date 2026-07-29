@@ -17,8 +17,7 @@ Theorem 3.1.
 
 The initial physical dimension is allowed to vary, while the bond dimension
 stays fixed. The neighboring source sentence asserting convergence for all
-canonical forms is separate and is not claimed here; repeated cube-root phases
-can prevent that convergence.
+canonical forms is separate and is not claimed here.
 
 ## Main results
 
