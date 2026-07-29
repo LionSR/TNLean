@@ -329,6 +329,53 @@ Definition~\ref{def:mpdo_source_gsnnch}; the converse comparison is not used.
     Definition~\ref{def:mpdo_source_gsnnch}.
 \end{definition}
 
+\begin{theorem}[Positive factorizations on orthogonal physical restrictions]
+    \label{thm:mpdo_restricted_positive_factorizations_commuting_family}
+    \lean{MPOTensor.nonempty_physicalSupportRestrictionData_of_twoSided_physicalSlice,
+        MPOTensor.PhysicalSupportRestrictionData.exists_etaLocalStructureData_lifted_supported_of_physicalSectorFactorization,
+        MPOTensor.nonempty_orthogonalCommutingSectorFamily_of_twoSidedPhysicalSlice}
+    \leanok
+    \uses{def:mpdo_physical_support_restriction,
+        def:mpdo_physical_sector_factorization,
+        def:mpdo_orthogonal_commuting_sector_family}
+    Let $\{\mathcal K_x\}_{x=0}^{g-1}$ be injective MPO tensors and let
+    $\{P_x\}_{x=0}^{g-1}$ be pairwise orthogonal projections. Suppose that
+    every physical slice is absorbed on both sides:
+    \begin{align}
+        P_x\mathcal K_x[\beta,\alpha]
+        &=\mathcal K_x[\beta,\alpha]
+        =\mathcal K_x[\beta,\alpha]P_x.
+        \notag
+    \end{align}
+    Write $\mathcal K_x=V_x\mathcal K_{x,P_x}V_x^*$ for the restriction to
+    the range of $P_x$. If every $\mathcal K_{x,P_x}$ admits a physical-sector
+    factorization whose neighboring operators are positive semidefinite, then
+    there are positive bonds $B^{(x)}$ such that
+    \begin{align}
+        (P_x\otimes P_x)B^{(x)}(P_x\otimes P_x)
+        &=B^{(x)}
+        \notag
+    \end{align}
+    and all translates of each $B^{(x)}$ commute pairwise. For every
+    $N\geq2$,
+    \begin{align}
+        \rho^{(N)}(\mathcal K_x)
+        &=\prod_{i=0}^{N-1}\tau_i(B^{(x)}).
+        \notag
+    \end{align}
+    Thus these bonds form an orthogonally supported family of commuting
+    sector products.
+\end{theorem}
+
+\begin{proof}\leanok
+    The two-sided equations identify each tensor with its compression to
+    $\operatorname{ran}(P_x)$ and give an injective restricted tensor.
+    The positive neighboring operators determine the positive commuting bond
+    on this restricted space. Conjugating by $V_x^{\otimes2}$ preserves
+    positivity and commutativity, gives the displayed support equation, and
+    transports every nonempty periodic product exactly.
+\end{proof}
+
 \begin{theorem}[SAL supplies orthogonally supported BNT sector products]
     \label{thm:mpdo_bnt_sector_sal_commuting_family}
     \lean{MPOTensor.nonempty_orthogonalCommutingSectorFamily_of_bntSectorSAL}
