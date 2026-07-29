@@ -40,6 +40,8 @@ python3 scripts/tenkz_rmp.py check --section <section>
 python3 scripts/tenkz_rmp.py check --all
 python3 scripts/tenkz_rmp.py book --all
 python3 scripts/tenkz_rmp.py render --all
+python3 scripts/tenkz_rmp.py compare --all \
+  --source-root /absolute/path/to/author-source-tree
 ```
 
 The comparison command requires a separate author-source tree supplied through
@@ -170,10 +172,13 @@ scripts/tenkz_golden.sh --check
 scripts/tenkz_pixelpair.sh origin/main
 ```
 
-The golden gate proves event-stream parity; the same-session pixel pair proves
-render parity.  If a reviewed contract or drawing intentionally changes, state
-the affected fixtures and attach the reviewed replacement evidence instead of
-claiming parity.
+The golden gate proves event-stream parity.  The same-session pixel pair proves
+render parity only for the fixtures listed in
+`tests/tenkz/pixelpair-sources.txt`.  If a change can affect a fixture outside
+that manifest, add the affected fixture to the comparison or attach reviewed
+replacement render evidence.  If a reviewed contract or drawing intentionally
+changes, state the affected fixtures and attach the reviewed replacement
+evidence instead of claiming parity.
 
 The demolition checker remains a temporary guard against restoring retired
 catalogue paths and expires at the 0.8 close, after branches predating the
