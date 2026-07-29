@@ -139,6 +139,12 @@ theorem localTensorMap_ker_eq_bot_of_linearIndependent {A : Tensor G d} {v : V}
     LinearMap.ker (localTensorMap A v) = ⊥ :=
   LinearMap.ker_eq_bot.mpr <| localTensorMap_injective_of_linearIndependent hv
 
+/-- Vertex injectivity makes the local tensor map injective. -/
+theorem IsVertexInjective.localTensorMap_injective {A : Tensor G d}
+    (hA : IsVertexInjective A) (v : V) :
+    Function.Injective (localTensorMap A v) :=
+  localTensorMap_injective_of_linearIndependent (hA v)
+
 /-- A chosen left inverse of the local tensor map under per-vertex linear
 independence of the tensor family at `v`. -/
 noncomputable def localLeftInverseAt (A : Tensor G d) {v : V}
