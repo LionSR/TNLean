@@ -3,8 +3,9 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.MPDO.PhysicalSectorProductRealization
-import TNLean.MPS.MPDO.PhysicalSupportSALTransport
+import TNLean.Algebra.PosSemidefSupport
+import TNLean.MPS.FundamentalTheorem.Basic
+import TNLean.MPS.MPDO.Defs
 import TNLean.MPS.MPDO.StackedLayers
 
 /-!
@@ -32,22 +33,6 @@ open scoped Matrix ComplexOrder BigOperators
 namespace MPOTensor
 
 variable {d g : ℕ} {bondDim : Fin g → ℕ}
-
-/-- Positivity of every neighbouring sector operator makes the original tensor an MPDO.  The
-sector-coordinate operators are positive by their cyclic product decomposition, and the
-physical isometry transports positivity back to the original physical space.
-
-Source: arXiv:1606.00608, Appendix C.2, equations `AppUkU=rl` and `Appetakhetc`,
-lines 1383--1450. -/
-theorem PhysicalSectorFactorization.isMPDO_of_neighboringOperator_pos
-    {K : MPOTensor d D} (F : PhysicalSectorFactorization K)
-    (hpos : ∀ q h, (F.neighboringOperator q h).PosSemidef) : IsMPDO K := by
-  apply isMPDO_of_changePhysicalBasis_isMPDO_of_isometry
-    F.physicalCoordinateMatrix F.physicalCoordinateMatrix_isometry K
-  rw [← F.sectorCoordinateTensor_eq_changePhysicalBasis]
-  intro N hN
-  letI : NeZero N := ⟨Nat.ne_of_gt hN⟩
-  exact F.mpo_sectorCoordinateTensor_posSemidef hpos
 
 /-! ### Physical adjoint -/
 
