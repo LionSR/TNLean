@@ -659,15 +659,19 @@ private theorem ft_sector_bnt_equal_mps_unitaryGauge_literal
           Matrix (Fin Q.totalDim) (Fin Q.totalDim) ℂ))
   simp only [Matrix.mul_assoc]
 
-/-- **Fundamental Theorem of MPS, equal case (CPSV16 Corollary II.2).**
+/-- **Restricted equal-case fundamental theorem.**
 
-Two BNT canonical forms generating the same MPV family at every positive length are
-globally conjugate: their total bond dimensions agree, and a single invertible
-gauge `Y` carries one total tensor to the other.  This is the literal
-equal-case source statement on the basis-of-normal-tensors canonical-form
-surface — no per-sector unit-modulus restriction and no one-site injectivity
-assumption (arXiv:1606.00608, Corollary II.2; Appendix MPV proof,
-lines 1189–1192). -/
+This is the active, nonzero, converse-covered correction of CPSV16 Corollary II.2
+and CPSV21 Corollary 4.5.  Their literal BNT definitions permit an unrelated
+normal representative whose coefficient vanishes at every positive length.
+Consequently, inactive zero-weight summands can change the ambient bond
+dimension while preserving all positive-length MPVs, so the unrestricted
+dimension and global-conjugacy conclusions are false.
+
+On the restricted BNT canonical-form class, two forms generating the same MPV
+family at every positive length are globally conjugate: their total bond
+dimensions agree, and a single invertible gauge `Y` carries one total tensor to
+the other. -/
 theorem fundamentalTheorem_equal_canonicalForm
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
@@ -684,13 +688,16 @@ theorem fundamentalTheorem_equal_canonicalForm
               Matrix (Fin Q.totalDim) (Fin Q.totalDim) ℂ) :=
   ft_sector_bnt_equal_mps_gaugeEquiv_literal hP hQ hEqual
 
-/-- **Fundamental Theorem of MPS in Canonical Form II, equal case.**
+/-- **Restricted Canonical Form II unitary refinement, equal case.**
 
-Two BNT canonical forms generating the same MPV family at every positive
-length are related by one unitary global gauge after identifying their equal
-total bond dimensions.
+This is the active, nonzero, converse-covered correction of the equal case of
+CPSV16 Corollary A.6.  The literal statement permits inactive zero-weight
+summands, which can change the ambient bond dimension while preserving all
+positive-length MPVs.
 
-Source: Cirac et al., arXiv:1606.00608, Corollary A.6, lines 1197--1199. -/
+On the restricted BNT canonical-form class, two forms generating the same MPV
+family at every positive length are related by one unitary global gauge after
+identifying their equal total bond dimensions. -/
 theorem fundamentalTheorem_equal_canonicalForm_unitary
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
