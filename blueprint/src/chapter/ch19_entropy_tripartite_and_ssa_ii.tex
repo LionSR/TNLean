@@ -1174,19 +1174,19 @@
     slice maps.
 \end{proof}
 
-\begin{theorem}[Finite recovered conditional family at SSA equality]
-    \label{thm:hjpw_recovered_conditional_family}
-    \lean{Matrix.recoveredMiddleChannel,
-        Matrix.recoveredMiddleChannel_isKrausCPTP,
-        Matrix.idTensor_recoveredMiddleChannel_traceC_ABC_eq,
-        Matrix.RecoveredEffectIndex,
-        Matrix.recoveredEffectIndex_nonempty,
-        Matrix.recoveredConditionalState,
-        Matrix.recoveredConditionalState_posSemidef,
-        Matrix.recoveredConditionalState_trace,
+\begin{theorem}[Finite invariant conditional family at SSA equality]
+    \label{thm:hjpw_invariant_conditional_family}
+    \lean{Matrix.petzMiddleChannel,
+        Matrix.petzMiddleChannel_isKrausCPTP,
+        Matrix.idTensor_petzMiddleChannel_traceC_ABC_eq,
+        Matrix.ActiveConditionalEffectIndex,
+        Matrix.activeConditionalEffectIndex_nonempty,
+        Matrix.normalizedConditionalSlice,
+        Matrix.normalizedConditionalSlice_posSemidef,
+        Matrix.normalizedConditionalSlice_trace,
         Matrix.map_conditionalSlice_eq_self_of_idTensorMap_eq_self,
-        Matrix.recoveredMiddleChannel_recoveredConditionalState,
-        Matrix.exists_recoveredConditionalPreservingKrausFamily}
+        Matrix.petzMiddleChannel_normalizedConditionalSlice,
+        Matrix.exists_preservingKrausFamily_normalizedConditionalSlice}
     \leanok
     \uses{thm:ssa_equality_product_marginal_petz_recovery,
         def:hjpw_finite_separating_effects}
@@ -1777,11 +1777,11 @@ algebra of a family of jointly invariant states.
     identity for the family members.
 \end{proof}
 
-\begin{theorem}[Recovered conditional blocks on the joint support]
-    \label{thm:hjpw_recovered_conditional_joint_support_blocks}
-    \lean{Matrix.exists_recoveredConditionalStateBlockForm_preservingBlockAction_jointSupport}
+\begin{theorem}[Invariant conditional blocks on the joint support]
+    \label{thm:hjpw_invariant_conditional_joint_support_blocks}
+    \lean{Matrix.exists_normalizedConditionalSliceBlockForm_preservingBlockAction_jointSupport}
     \leanok
-    \uses{thm:hjpw_recovered_conditional_family,
+    \uses{thm:hjpw_invariant_conditional_family,
         thm:koashi_imoto_joint_support_block_action}
     Let $\rho_{ABC}$ be a tripartite density matrix attaining equality in
     strong subadditivity, and let $\mu_s$ be the finite nonempty family of
@@ -1817,7 +1817,7 @@ algebra of a family of jointly invariant states.
 
 \begin{proof}
     \leanok
-    Theorem~\ref{thm:hjpw_recovered_conditional_family} supplies a finite
+    Theorem~\ref{thm:hjpw_invariant_conditional_family} supplies a finite
     nonempty density family together with a trace-preserving completely
     positive operation fixing every member. Apply
     Theorem~\ref{thm:koashi_imoto_joint_support_block_action} to this family.
@@ -1825,15 +1825,15 @@ algebra of a family of jointly invariant states.
     the restriction and block-action clauses for the preserving operation.
 \end{proof}
 
-\begin{theorem}[Recovered bipartite blocks on the joint support]
-    \label{thm:hjpw_recovered_bipartite_joint_support_blocks}
-    \lean{Matrix.exists_recoveredConditionalBipartiteBlockForm_jointSupport}
+\begin{theorem}[Markov bipartite blocks on the joint support]
+    \label{thm:hjpw_markov_bipartite_joint_support_blocks}
+    \lean{Matrix.exists_markovBipartiteBlockForm_jointSupport}
     \leanok
-    \uses{thm:hjpw_recovered_conditional_joint_support_blocks}
+    \uses{thm:hjpw_invariant_conditional_joint_support_blocks}
     Let $\rho_{ABC}$ be a tripartite density matrix attaining equality in
     strong subadditivity, and let $V$ be the support isometry and
     $(e,U,\sigma_j)$ the direct-sum coordinates of
-    Theorem~\ref{thm:hjpw_recovered_conditional_joint_support_blocks}. Put
+    Theorem~\ref{thm:hjpw_invariant_conditional_joint_support_blocks}. Put
     $W=\mathbf 1_A\otimes V$. Then
     \begin{align}
         W\bigl(W^\dagger\rho_{AB}W\bigr)W^\dagger
@@ -1859,12 +1859,12 @@ algebra of a family of jointly invariant states.
     subsystem $B$. This restriction is documented in
     \path{docs/paper-gaps/hjpw04_petz_factorization_maximally_mixed_scope.tex}.
     % The next theorem performs the ambient extension; the subsequent
-    % recovered-dilation theorem supplies equation (15).
+    % The Markov-dilation theorem supplies equation (15).
 \end{theorem}
 
 \begin{proof}
     \leanok
-    \uses{thm:hjpw_recovered_conditional_joint_support_blocks,
+    \uses{thm:hjpw_invariant_conditional_joint_support_blocks,
         thm:hjpw_finite_conditional_slice_separation}
     Rescale the normalized equations for the active separating effects to
     their unnormalized conditional slices. A positive slice associated with
@@ -1877,11 +1877,11 @@ algebra of a family of jointly invariant states.
     displayed direct-sum equation, and taking traces gives the normalization.
 \end{proof}
 
-\begin{theorem}[Ambient recovered bipartite blocks]
-    \label{thm:hjpw_recovered_bipartite_ambient_blocks}
-    \lean{Matrix.exists_recoveredConditionalAmbientBipartiteBlockForm}
+\begin{theorem}[Ambient Markov bipartite blocks]
+    \label{thm:hjpw_ambient_markov_bipartite_blocks}
+    \lean{Matrix.exists_ambientMarkovBipartiteBlockForm}
     \leanok
-    \uses{thm:hjpw_recovered_bipartite_joint_support_blocks}
+    \uses{thm:hjpw_markov_bipartite_joint_support_blocks}
     Let $\rho_{ABC}$ be a tripartite density matrix attaining equality in
     strong subadditivity. Then the ambient middle subsystem has a direct-sum
     tensor decomposition
@@ -1914,27 +1914,27 @@ algebra of a family of jointly invariant states.
 
 \begin{proof}
     \leanok
-    \uses{thm:hjpw_recovered_bipartite_joint_support_blocks}
+    \uses{thm:hjpw_markov_bipartite_joint_support_blocks}
     Extend the support isometry, after composing it with the support block
     unitary, to a unitary on the ambient middle subsystem. Split the
     orthogonal complement into one-dimensional tensor sectors. Give each
     such sector its unique density matrix and the zero unnormalized
     conditional factor. The supported sectors retain the factors from
-    Theorem~\ref{thm:hjpw_recovered_bipartite_joint_support_blocks}.
+    Theorem~\ref{thm:hjpw_markov_bipartite_joint_support_blocks}.
     Lifting the unitary extension through subsystem $A$ and combining the
     complementary zero block with the supported direct sum gives the
     displayed ambient equation.
 \end{proof}
 
-\begin{theorem}[Recovered dilation in ambient block coordinates]
-    \label{thm:hjpw_recovered_dilation_ambient_blocks}
-    \lean{Matrix.exists_recoveredDilationBlockUnitary}
-    \lean{Matrix.RecoveredConditionalDilationBlockForm.recoveredSectorState_posSemidef}
-    \lean{Matrix.RecoveredConditionalDilationBlockForm.recoveredSectorState_trace}
-    \lean{Matrix.RecoveredConditionalDilationBlockForm.partialTraceRight_recoveredSectorState}
+\begin{theorem}[Markov dilation in ambient block coordinates]
+    \label{thm:hjpw_markov_dilation_ambient_blocks}
+    \lean{Matrix.exists_markovDilationBlockForm}
+    \lean{Matrix.MarkovDilationBlockForm.sectorOutputState_posSemidef}
+    \lean{Matrix.MarkovDilationBlockForm.sectorOutputState_trace}
+    \lean{Matrix.MarkovDilationBlockForm.partialTraceRight_sectorOutputState}
     \leanok
-    \uses{thm:hjpw_recovered_bipartite_ambient_blocks,
-        thm:hjpw_recovered_conditional_joint_support_blocks}
+    \uses{thm:hjpw_ambient_markov_bipartite_blocks,
+        thm:hjpw_invariant_conditional_joint_support_blocks}
     Let $\rho_{ABC}$ be a tripartite density matrix attaining equality in
     strong subadditivity, with the ambient decomposition
     \begin{align}
@@ -1944,7 +1944,7 @@ algebra of a family of jointly invariant states.
             \mathcal H_{b_j^L}
     \end{align}
     from
-    Theorem~\ref{thm:hjpw_recovered_bipartite_ambient_blocks}.
+    Theorem~\ref{thm:hjpw_ambient_markov_bipartite_blocks}.
     There are a finite-dimensional ancilla, a fixed pure ancilla vector,
     and one unitary $U_{BCE}$ whose block-coordinate form is
     \begin{align}
@@ -1979,10 +1979,10 @@ algebra of a family of jointly invariant states.
 
 \begin{proof}
     \leanok
-    \uses{thm:hjpw_recovered_bipartite_ambient_blocks,
+    \uses{thm:hjpw_ambient_markov_bipartite_blocks,
         thm:ssa_equality_product_marginal_petz_recovery}
     First obtain the ambient decomposition from
-    Theorem~\ref{thm:hjpw_recovered_bipartite_ambient_blocks}.
+    Theorem~\ref{thm:hjpw_ambient_markov_bipartite_blocks}.
     Choose rectangular Kraus operators for the Petz recovery operation and
     slice them along subsystem $C$. On the minimum joint supporting
     subspace, Property~$2'$ makes every slice block diagonal with the identity
@@ -1995,17 +1995,17 @@ algebra of a family of jointly invariant states.
     reconstruction of $\rho_{AB}$ gives the displayed recovery identity.
 \end{proof}
 
-\begin{theorem}[Ambient recovered tripartite blocks]
-    \label{thm:hjpw_recovered_tripartite_ambient_blocks}
-    \lean{Matrix.RecoveredConditionalDilationBlockForm.ambient_tripartite_block_form}
-    \lean{Matrix.exists_recoveredConditionalTripartiteBlockForm}
+\begin{theorem}[Ambient Markov tripartite blocks]
+    \label{thm:hjpw_markov_tripartite_ambient_blocks}
+    \lean{Matrix.MarkovDilationBlockForm.ambient_tripartite_block_form}
+    \lean{Matrix.exists_markovTripartiteBlockForm}
     \leanok
-    \uses{thm:hjpw_recovered_bipartite_ambient_blocks,
-        thm:hjpw_recovered_dilation_ambient_blocks}
+    \uses{thm:hjpw_ambient_markov_bipartite_blocks,
+        thm:hjpw_markov_dilation_ambient_blocks}
     Let $\rho_{ABC}$ be a tripartite density matrix attaining equality in
     strong subadditivity, and let $U_B$ and the factors $\omega_j$ be those of
-    Theorems~\ref{thm:hjpw_recovered_bipartite_ambient_blocks} and
-    \ref{thm:hjpw_recovered_dilation_ambient_blocks}. For each supported sector,
+    Theorems~\ref{thm:hjpw_ambient_markov_bipartite_blocks} and
+    \ref{thm:hjpw_markov_dilation_ambient_blocks}. For each supported sector,
     put
     \begin{align}
         \widehat\rho_j
@@ -2037,8 +2037,8 @@ algebra of a family of jointly invariant states.
 
 \begin{proof}
     \leanok
-    \uses{thm:hjpw_recovered_bipartite_ambient_blocks,
-        thm:hjpw_recovered_dilation_ambient_blocks}
+    \uses{thm:hjpw_ambient_markov_bipartite_blocks,
+        thm:hjpw_markov_dilation_ambient_blocks}
     Equations~(11) and~(14) give
     \begin{align}
         \rho_{ABC}
@@ -2104,8 +2104,8 @@ algebra of a family of jointly invariant states.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:hjpw_recovered_tripartite_ambient_blocks}
-    By Theorem~\ref{thm:hjpw_recovered_tripartite_ambient_blocks}, put
+    \uses{thm:hjpw_markov_tripartite_ambient_blocks}
+    By Theorem~\ref{thm:hjpw_markov_tripartite_ambient_blocks}, put
     $W=\mathbf 1_A\otimes(U_B\otimes\mathbf 1_C)$. Then
     \begin{align}
         W^\dagger\rho_{ABC}W
@@ -2113,7 +2113,7 @@ algebra of a family of jointly invariant states.
           \bigoplus_j\omega_j\otimes\widehat\rho_j.
         \notag
     \end{align}
-    where $\omega_j\geq0$, each supported recovered state
+    where $\omega_j\geq0$, each supported sector output state
     $\widehat\rho_j$ is positive with trace one, and
     $\sum_j\tr\omega_j=1$. Reindex every middle-system fibre from the
     recovery order $B_j^R\otimes B_j^L$ to the Hayashi order

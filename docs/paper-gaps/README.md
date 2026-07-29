@@ -118,10 +118,10 @@ For MPDO renormalization fixed points:
   implication. The general product-reference raw map factors globally as
   first-factor support compression tensored with local raw recovery; the
   identity-tensored formula holds on supported inputs and globally for a
-  positive-definite first factor. The recovered conditional family,
+  positive-definite first factor. The invariant conditional family,
   joint-support block form, ambient equations (14)--(15), and final
   probability normalization now prove the Hayashi forward implication. Every
-  supported right factor remains its recovered physical state, including at
+  supported right factor remains its sector output state, including at
   zero weight; only the left factor may then be a filler. Complementary sectors
   may use fillers on both sides. No factorization is claimed for TNLean's
   generic completed singular channel away from the supported input.

@@ -3,13 +3,13 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Channel.KoashiImoto.RecoveredConditionalBlockForm
+import TNLean.Channel.KoashiImoto.InvariantConditionalBlockForm
 
 /-!
-# Bipartite block form from recovered conditional states
+# Bipartite block form from normalized conditional slices
 
 This file reconstructs the bipartite marginal in the minimum joint-support
-coordinates of its recovered conditional states.  The reconstruction uses the
+coordinates of its normalized conditional slices.  The reconstruction uses the
 finite informationally complete effects on the first subsystem.
 
 This is a scope-restricted step toward Hayden, Jozsa, Petz and Winter,
@@ -107,15 +107,15 @@ private theorem conditionalSlice_eq_zero_of_trace_re_eq_zero
 
 /-- Rescaling an active normalized conditional state recovers its
 unnormalized conditional slice. -/
-private theorem trace_re_smul_recoveredConditionalState
+private theorem trace_re_smul_normalizedConditionalSlice
     (ρ : Matrix (Fin dA × Fin dB) (Fin dA × Fin dB) ℂ)
-    (s : RecoveredEffectIndex ρ) :
+    (s : ActiveConditionalEffectIndex ρ) :
     ((conditionalSlice ρ
         (informationallyCompleteEffect (s : ICEffectIndex dA))).trace.re : ℂ) •
-      recoveredConditionalState ρ s =
+      normalizedConditionalSlice ρ s =
     conditionalSlice ρ
       (informationallyCompleteEffect (s : ICEffectIndex dA)) := by
-  rw [recoveredConditionalState, smul_smul]
+  rw [normalizedConditionalSlice, smul_smul]
   rw [show
     ((conditionalSlice ρ
         (informationallyCompleteEffect (s : ICEffectIndex dA))).trace.re : ℂ) *
@@ -126,12 +126,12 @@ private theorem trace_re_smul_recoveredConditionalState
 
 /-- Reconstruction from normalized active conditional states and vanishing
 inactive conditional slices. -/
-private theorem one_kronecker_reconstructs_of_recoveredConditionalState
+private theorem one_kronecker_reconstructs_of_normalizedConditionalSlice
     (ρ : Matrix (Fin dA × Fin dB) (Fin dA × Fin dB) ℂ)
     (hρ : ρ.PosSemidef) (V : Matrix (Fin dB) (Fin n) ℂ)
-    (hrec : ∀ s : RecoveredEffectIndex ρ,
-      V * (Vᴴ * recoveredConditionalState ρ s * V) * Vᴴ =
-        recoveredConditionalState ρ s) :
+    (hrec : ∀ s : ActiveConditionalEffectIndex ρ,
+      V * (Vᴴ * normalizedConditionalSlice ρ s * V) * Vᴴ =
+        normalizedConditionalSlice ρ s) :
     ((1 : Matrix (Fin dA) (Fin dA) ℂ) ⊗ₖ V) *
           (((1 : Matrix (Fin dA) (Fin dA) ℂ) ⊗ₖ V)ᴴ * ρ *
             ((1 : Matrix (Fin dA) (Fin dA) ℂ) ⊗ₖ V)) *
@@ -144,26 +144,26 @@ private theorem one_kronecker_reconstructs_of_recoveredConditionalState
       (conditionalSlice ρ (informationallyCompleteEffect s)).trace.re = 0
   · rw [conditionalSlice_eq_zero_of_trace_re_eq_zero hρ s hs]
     simp
-  · let x : RecoveredEffectIndex ρ := ⟨s, hs⟩
+  · let x : ActiveConditionalEffectIndex ρ := ⟨s, hs⟩
     let p : ℂ :=
       (conditionalSlice ρ (informationallyCompleteEffect s)).trace.re
     have hscale :
-        p • recoveredConditionalState ρ x =
+        p • normalizedConditionalSlice ρ x =
           conditionalSlice ρ (informationallyCompleteEffect s) :=
-      trace_re_smul_recoveredConditionalState ρ x
+      trace_re_smul_normalizedConditionalSlice ρ x
     calc
       V * (Vᴴ * conditionalSlice ρ (informationallyCompleteEffect s) * V) * Vᴴ =
-          p • (V * (Vᴴ * recoveredConditionalState ρ x * V) * Vᴴ) := by
+          p • (V * (Vᴴ * normalizedConditionalSlice ρ x * V) * Vᴴ) := by
             rw [← hscale]
             simp [Matrix.mul_smul, Matrix.smul_mul]
-      _ = p • recoveredConditionalState ρ x := by rw [hrec x]
+      _ = p • normalizedConditionalSlice ρ x := by rw [hrec x]
       _ = conditionalSlice ρ (informationallyCompleteEffect s) := hscale
 
 /-- Reassociate subsystem A with the joint-support direct-sum coordinates.
 
 The target order is the one used by TNLean in HJPW Theorem 6, equation (14):
 the common factor precedes the joint A--conditional factor. -/
-def recoveredBipartiteBlockEquiv
+def markovBipartiteBlockEquiv
     {ι : Type*} {d m : ι → ℕ}
     (e : ((j : ι) × (Fin (m j) × Fin (d j))) ≃ Fin n) :
     ((j : ι) × (Fin (m j) × (Fin dA × Fin (d j)))) ≃
@@ -178,25 +178,25 @@ def recoveredBipartiteBlockEquiv
     |>.trans (Equiv.prodComm (Fin n) (Fin dA))
 
 @[simp]
-theorem recoveredBipartiteBlockEquiv_apply
+theorem markovBipartiteBlockEquiv_apply
     {ι : Type*} {d m : ι → ℕ}
     (e : ((j : ι) × (Fin (m j) × Fin (d j))) ≃ Fin n)
     (a : Fin dA)
     (z : (j : ι) × (Fin (m j) × Fin (d j))) :
-    recoveredBipartiteBlockEquiv (dA := dA) e
+    markovBipartiteBlockEquiv (dA := dA) e
         ⟨z.1, (z.2.1, (a, z.2.2))⟩ =
       (a, e z) := by
-  simp [recoveredBipartiteBlockEquiv]
+  simp [markovBipartiteBlockEquiv]
 
 @[simp]
-theorem recoveredBipartiteBlockEquiv_symm_apply
+theorem markovBipartiteBlockEquiv_symm_apply
     {ι : Type*} {d m : ι → ℕ}
     (e : ((j : ι) × (Fin (m j) × Fin (d j))) ≃ Fin n)
     (a : Fin dA)
     (z : (j : ι) × (Fin (m j) × Fin (d j))) :
-    (recoveredBipartiteBlockEquiv (dA := dA) e).symm (a, e z) =
+    (markovBipartiteBlockEquiv (dA := dA) e).symm (a, e z) =
       ⟨z.1, (z.2.1, (a, z.2.2))⟩ := by
-  simp [recoveredBipartiteBlockEquiv]
+  simp [markovBipartiteBlockEquiv]
   rfl
 
 /-- Conditional-slice block equations reconstruct a positive bipartite
@@ -216,12 +216,12 @@ private theorem exists_bipartiteBlockForm_of_conditionalSlice_blockForm
     ∃ ω : ∀ j,
         Matrix (Fin dA × Fin (d j)) (Fin dA × Fin (d j)) ℂ,
       (∀ j, (ω j).PosSemidef) ∧
-      R = Matrix.reindex (recoveredBipartiteBlockEquiv e)
-        (recoveredBipartiteBlockEquiv e)
+      R = Matrix.reindex (markovBipartiteBlockEquiv e)
+        (markovBipartiteBlockEquiv e)
         (Matrix.blockDiagonal' fun j ↦ σ j ⊗ₖ ω j) ∧
       ∑ j, (ω j).trace = R.trace := by
   classical
-  let g := recoveredBipartiteBlockEquiv (dA := dA) e
+  let g := markovBipartiteBlockEquiv (dA := dA) e
   let S := Matrix.reindex g.symm g.symm R
   let ω : ∀ j,
       Matrix (Fin dA × Fin (d j)) (Fin dA × Fin (d j)) ℂ :=
@@ -232,8 +232,8 @@ private theorem exists_bipartiteBlockForm_of_conditionalSlice_blockForm
   have hωpos : ∀ j, (ω j).PosSemidef := by
     intro j
     exact (hS.submatrix (fun z ↦ ⟨j, z⟩)).partialTraceLeft
-  have hform : R = Matrix.reindex (recoveredBipartiteBlockEquiv e)
-      (recoveredBipartiteBlockEquiv e)
+  have hform : R = Matrix.reindex (markovBipartiteBlockEquiv e)
+      (markovBipartiteBlockEquiv e)
       (Matrix.blockDiagonal' fun j ↦ σ j ⊗ₖ ω j) := by
     apply eq_of_conditionalSlice_informationallyCompleteEffect_eq
     intro s
@@ -307,15 +307,15 @@ private theorem exists_bipartiteBlockForm_of_conditionalSlice_blockForm
             conditionalSlice (ω j) (informationallyCompleteEffect s)
               zk.2 zl.2 := by rw [hωslice]
         _ = conditionalSlice
-            (Matrix.reindex (recoveredBipartiteBlockEquiv e)
-              (recoveredBipartiteBlockEquiv e)
+            (Matrix.reindex (markovBipartiteBlockEquiv e)
+              (markovBipartiteBlockEquiv e)
               (Matrix.blockDiagonal' fun j ↦ σ j ⊗ₖ ω j))
             (informationallyCompleteEffect s)
             (e ⟨j, zk⟩) (e ⟨j, zl⟩) := by
               simp only [conditionalSlice, Matrix.reindex_apply,
                 Matrix.submatrix_apply, Matrix.blockDiagonal'_apply_eq,
                 Matrix.kroneckerMap_apply,
-                recoveredBipartiteBlockEquiv_symm_apply]
+                markovBipartiteBlockEquiv_symm_apply]
               rw [Finset.mul_sum]
               apply Finset.sum_congr rfl
               intro a _
@@ -331,8 +331,8 @@ private theorem exists_bipartiteBlockForm_of_conditionalSlice_blockForm
             Equiv.symm_apply_apply,
             Matrix.blockDiagonal'_apply_ne _ _ _ hj] using hentry
         _ = conditionalSlice
-            (Matrix.reindex (recoveredBipartiteBlockEquiv e)
-              (recoveredBipartiteBlockEquiv e)
+            (Matrix.reindex (markovBipartiteBlockEquiv e)
+              (markovBipartiteBlockEquiv e)
               (Matrix.blockDiagonal' fun j ↦ σ j ⊗ₖ ω j))
             (informationallyCompleteEffect s)
             (e ⟨j, zk⟩) (e ⟨j', zl⟩) := by
@@ -340,13 +340,13 @@ private theorem exists_bipartiteBlockForm_of_conditionalSlice_blockForm
                 Matrix.submatrix_apply,
                 Matrix.blockDiagonal'_apply_ne _ _ _ hj,
                 zero_mul, Finset.sum_const_zero,
-                recoveredBipartiteBlockEquiv_symm_apply]
+                markovBipartiteBlockEquiv_symm_apply]
   refine ⟨ω, hωpos, hform, ?_⟩
   have htrace := congrArg Matrix.trace hform
   rw [Matrix.trace_reindex, Matrix.trace_blockDiagonal'] at htrace
   simpa only [Matrix.trace_kronecker, hσtrace, one_mul] using htrace.symm
 
-/-- The recovered conditional-family witnesses together with the bipartite
+/-- The invariant conditional-family witnesses together with the bipartite
 block form on their minimum joint support.
 
 This structure retains the preserving family, density operators, support
@@ -360,34 +360,34 @@ subsystem.  This is documented in
 `docs/paper-gaps/hjpw04_petz_factorization_maximally_mixed_scope.tex`.
 Elimination: extend the coordinates to the ambient middle subsystem before
 proving the recovery-dilation action of equation (15). -/
-structure RecoveredConditionalBipartiteBlockForm
+structure MarkovBipartiteBlockForm
     (ρ_ABC : Matrix (Fin dA × Fin dB × Fin dC)
       (Fin dA × Fin dB × Fin dC) ℂ)
     (hρ_dm : ρ_ABC.PosSemidef ∧ ρ_ABC.trace = 1)
-    [Nonempty (RecoveredEffectIndex (traceC_ABC ρ_ABC))] where
+    [Nonempty (ActiveConditionalEffectIndex (traceC_ABC ρ_ABC))] where
   F : Kraus.PreservingKrausFamily
-    (recoveredConditionalState (traceC_ABC ρ_ABC))
+    (normalizedConditionalSlice (traceC_ABC ρ_ABC))
   n : ℕ
   V : Matrix (Fin dB) (Fin n) ℂ
-  recoveredMiddleChannel_eq : ∀ X, Kraus.map F.Kfam X =
-    recoveredMiddleChannel ρ_ABC hρ_dm.1 X
+  petzMiddleChannel_eq : ∀ X, Kraus.map F.Kfam X =
+    petzMiddleChannel ρ_ABC hρ_dm.1 X
   V_isometry : Vᴴ * V = 1
   V_range : V * Vᴴ = (Kraus.commonAverage_posSemidef
-      (recoveredConditionalState (traceC_ABC ρ_ABC))
-        (recoveredConditionalState_posSemidef
+      (normalizedConditionalSlice (traceC_ABC ρ_ABC))
+        (normalizedConditionalSlice_posSemidef
           (SSAPosDef.traceC_ABC_posSemidef hρ_dm.1))).supportProj
-  V_recovers : ∀ x,
+  support_reconstruction : ∀ x,
     V * Kraus.supportCompressedFamily V
-      (recoveredConditionalState (traceC_ABC ρ_ABC)) x * Vᴴ =
-      recoveredConditionalState (traceC_ABC ρ_ABC) x
+      (normalizedConditionalSlice (traceC_ABC ρ_ABC)) x * Vᴴ =
+      normalizedConditionalSlice (traceC_ABC ρ_ABC) x
   K : ℕ
   d : Fin K → ℕ
   m : Fin K → ℕ
   e : ((j : Fin K) × (Fin (m j) × Fin (d j))) ≃ Fin n
   U : Matrix (Fin n) (Fin n) ℂ
   σ : ∀ j, Matrix (Fin (m j)) (Fin (m j)) ℂ
-  q : RecoveredEffectIndex (traceC_ABC ρ_ABC) → Fin K → ℝ
-  τ : RecoveredEffectIndex (traceC_ABC ρ_ABC) → ∀ j,
+  q : ActiveConditionalEffectIndex (traceC_ABC ρ_ABC) → Fin K → ℝ
+  τ : ActiveConditionalEffectIndex (traceC_ABC ρ_ABC) → ∀ j,
     Matrix (Fin (d j)) (Fin (d j)) ℂ
   U_unitary : U ∈ Matrix.unitaryGroup (Fin n) ℂ
   d_pos : ∀ j, 0 < d j
@@ -398,25 +398,25 @@ structure RecoveredConditionalBipartiteBlockForm
   q_sum : ∀ x, ∑ j, q x j = 1
   τ_pos : ∀ x j, (τ x j).PosSemidef
   τ_trace : ∀ x j, (τ x j).trace = 1
-  recoveredConditionalState_eq : ∀ x,
+  normalizedConditionalSlice_eq : ∀ x,
     star U * Kraus.supportCompressedFamily V
-        (recoveredConditionalState (traceC_ABC ρ_ABC)) x * U =
+        (normalizedConditionalSlice (traceC_ABC ρ_ABC)) x * U =
       Matrix.reindex e e
         (Matrix.blockDiagonal' fun j ↦
           (q x j : ℂ) • (σ j ⊗ₖ τ x j))
   preserving_support_action :
     ∀ G : Kraus.PreservingKrausFamily
-        (recoveredConditionalState (traceC_ABC ρ_ABC)),
+        (normalizedConditionalSlice (traceC_ABC ρ_ABC)),
       Kraus.IsPreserving
           (Kraus.supportCompressedFamily V
-            (recoveredConditionalState (traceC_ABC ρ_ABC)))
+            (normalizedConditionalSlice (traceC_ABC ρ_ABC)))
           (Kraus.supportCompressedKraus V G.Kfam) ∧
         ∀ X, Kraus.map G.Kfam (V * X * Vᴴ) =
           V * Kraus.map (Kraus.supportCompressedKraus V G.Kfam) X * Vᴴ
   preserving_block_action :
     ∀ G : Kraus.PreservingKrausFamily
         (Kraus.supportCompressedFamily V
-          (recoveredConditionalState (traceC_ABC ρ_ABC))),
+          (normalizedConditionalSlice (traceC_ABC ρ_ABC))),
       ∃ C : (i : Fin G.numKraus) → ∀ j,
           Matrix (Fin (m j)) (Fin (m j)) ℂ,
         (∀ i,
@@ -444,18 +444,18 @@ structure RecoveredConditionalBipartiteBlockForm
     let R := ((1 : Matrix (Fin dA) (Fin dA) ℂ) ⊗ₖ U)ᴴ *
       (Wᴴ * traceC_ABC ρ_ABC * W) *
       ((1 : Matrix (Fin dA) (Fin dA) ℂ) ⊗ₖ U)
-    R = Matrix.reindex (recoveredBipartiteBlockEquiv e)
-      (recoveredBipartiteBlockEquiv e)
+    R = Matrix.reindex (markovBipartiteBlockEquiv e)
+      (markovBipartiteBlockEquiv e)
       (Matrix.blockDiagonal' fun j ↦ σ j ⊗ₖ ω j)
   ω_trace_sum : ∑ j, (ω j).trace = 1
 
-/-- **Recovered bipartite block form on the minimum joint support.**
+/-- **Markov bipartite block form on the minimum joint support.**
 
 At equality in strong subadditivity, the exact joint-support witnesses of
-`exists_recoveredConditionalStateBlockForm_preservingBlockAction_jointSupport`
+`exists_normalizedConditionalSliceBlockForm_preservingBlockAction_jointSupport`
 also reconstruct the bipartite marginal.  The result retains the complete
 preserving family, density operators, support isometry, and block-action
-identities.  With `W = 1_A ⊗ V`, the ambient state is recovered from its
+identities.  With `W = 1_A ⊗ V`, the ambient state is reconstructed from its
 support compression.  After the same unitary `U`, that compression is
 `\bigoplus_j σ_j ⊗ ω_j`, where each unnormalized `ω j` is positive and their
 traces sum to one.
@@ -471,33 +471,33 @@ is documented in
 `docs/paper-gaps/hjpw04_petz_factorization_maximally_mixed_scope.tex`.
 Elimination: extend the support coordinates to ambient B before proving the
 recovery-dilation action of equation (15). -/
-theorem exists_recoveredConditionalBipartiteBlockForm_jointSupport
+theorem exists_markovBipartiteBlockForm_jointSupport
     (ρ_ABC : Matrix (Fin dA × Fin dB × Fin dC)
       (Fin dA × Fin dB × Fin dC) ℂ)
     (hρ_dm : ρ_ABC.PosSemidef ∧ ρ_ABC.trace = 1)
     (hSSA : IsSSAEquality ρ_ABC hρ_dm.1.isHermitian) :
-    letI : Nonempty (RecoveredEffectIndex (traceC_ABC ρ_ABC)) :=
-      recoveredEffectIndex_nonempty (traceC_ABC ρ_ABC) (by
+    letI : Nonempty (ActiveConditionalEffectIndex (traceC_ABC ρ_ABC)) :=
+      activeConditionalEffectIndex_nonempty (traceC_ABC ρ_ABC) (by
         rw [← trace_eq_trace_traceC_ABC]
         exact hρ_dm.2)
-    Nonempty (RecoveredConditionalBipartiteBlockForm ρ_ABC hρ_dm) := by
+    Nonempty (MarkovBipartiteBlockForm ρ_ABC hρ_dm) := by
   classical
-  letI : Nonempty (RecoveredEffectIndex (traceC_ABC ρ_ABC)) :=
-    recoveredEffectIndex_nonempty (traceC_ABC ρ_ABC) (by
+  letI : Nonempty (ActiveConditionalEffectIndex (traceC_ABC ρ_ABC)) :=
+    activeConditionalEffectIndex_nonempty (traceC_ABC ρ_ABC) (by
       rw [← trace_eq_trace_traceC_ABC]
       exact hρ_dm.2)
   obtain ⟨F, n, V, hFmap, hV, hVrange, hrec, K, d, m, e, U, σ, q, τ,
       hU, hd, hm, hσpos, hσtrace, hqnonneg, hqsum, hτpos, hτtrace,
       hfamily, hpres, haction⟩ :=
-    exists_recoveredConditionalStateBlockForm_preservingBlockAction_jointSupport
+    exists_normalizedConditionalSliceBlockForm_preservingBlockAction_jointSupport
       ρ_ABC hρ_dm hSSA
   let ρ_AB := traceC_ABC ρ_ABC
-  let μ := recoveredConditionalState ρ_AB
+  let μ := normalizedConditionalSlice ρ_AB
   let W := (1 : Matrix (Fin dA) (Fin dA) ℂ) ⊗ₖ V
   have hABpos : ρ_AB.PosSemidef :=
     SSAPosDef.traceC_ABC_posSemidef hρ_dm.1
   have hambient : W * (Wᴴ * ρ_AB * W) * Wᴴ = ρ_AB :=
-    one_kronecker_reconstructs_of_recoveredConditionalState
+    one_kronecker_reconstructs_of_normalizedConditionalSlice
       ρ_AB hABpos V (by
         intro x
         simpa only [Kraus.supportCompressedFamily] using hrec x)
@@ -526,7 +526,7 @@ theorem exists_recoveredConditionalBipartiteBlockForm_jointSupport
         conditionalSlice_eq_zero_of_trace_re_eq_zero hABpos s hs]
       ext z w
       simp [Matrix.blockDiagonal'_apply]
-    · let x : RecoveredEffectIndex ρ_AB := ⟨s, hs⟩
+    · let x : ActiveConditionalEffectIndex ρ_AB := ⟨s, hs⟩
       let p : ℂ :=
         (conditionalSlice ρ_AB (informationallyCompleteEffect s)).trace.re
       refine ⟨fun j ↦ (p * q x j) • τ x j, ?_⟩
@@ -534,12 +534,12 @@ theorem exists_recoveredConditionalBipartiteBlockForm_jointSupport
       rw [conditionalSlice_one_kronecker_compression,
         conditionalSlice_one_kronecker_compression]
       have hscale :
-          p • recoveredConditionalState ρ_AB x =
+          p • normalizedConditionalSlice ρ_AB x =
             conditionalSlice ρ_AB (informationallyCompleteEffect s) :=
-        trace_re_smul_recoveredConditionalState ρ_AB x
+        trace_re_smul_normalizedConditionalSlice ρ_AB x
       rw [← hscale]
       simp only [Matrix.mul_smul, Matrix.smul_mul]
-      rw [show Vᴴ * recoveredConditionalState ρ_AB x * V =
+      rw [show Vᴴ * normalizedConditionalSlice ρ_AB x * V =
         Kraus.supportCompressedFamily V μ x by rfl]
       change p • (star U * Kraus.supportCompressedFamily V μ x * U) = _
       rw [hfamily x]
@@ -604,10 +604,10 @@ theorem exists_recoveredConditionalBipartiteBlockForm_jointSupport
     F := F
     n := n
     V := V
-    recoveredMiddleChannel_eq := hFmap
+    petzMiddleChannel_eq := hFmap
     V_isometry := hV
     V_range := hVrange
-    V_recovers := hrec
+    support_reconstruction := hrec
     K := K
     d := d
     m := m
@@ -625,7 +625,7 @@ theorem exists_recoveredConditionalBipartiteBlockForm_jointSupport
     q_sum := hqsum
     τ_pos := hτpos
     τ_trace := hτtrace
-    recoveredConditionalState_eq := hfamily
+    normalizedConditionalSlice_eq := hfamily
     preserving_support_action := hpres
     preserving_block_action := haction
     ambient_reconstruction := hambient

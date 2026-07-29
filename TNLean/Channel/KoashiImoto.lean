@@ -8,19 +8,19 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.Channel.KoashiImoto
 
+import TNLean.Channel.KoashiImoto.AmbientMarkovBipartiteBlockForm
 import TNLean.Channel.KoashiImoto.CommonInvariantAlgebra
 import TNLean.Channel.KoashiImoto.FamilyFixedPointBlockForm
 import TNLean.Channel.KoashiImoto.FiniteRealization
+import TNLean.Channel.KoashiImoto.InvariantConditionalBlockForm
+import TNLean.Channel.KoashiImoto.InvariantConditionalFamily
 import TNLean.Channel.KoashiImoto.JointSupport
+import TNLean.Channel.KoashiImoto.MarkovBipartiteBlockForm
+import TNLean.Channel.KoashiImoto.MarkovDilation
+import TNLean.Channel.KoashiImoto.MarkovDilationBlockForm
+import TNLean.Channel.KoashiImoto.MarkovTripartiteBlockForm
 import TNLean.Channel.KoashiImoto.MeanErgodicProjection
 import TNLean.Channel.KoashiImoto.NormalizedFamilyBlockForm
 import TNLean.Channel.KoashiImoto.PooledKrausFamily
 import TNLean.Channel.KoashiImoto.PreservingBlockAction
-import TNLean.Channel.KoashiImoto.RecoveredConditionalAmbientBipartiteBlockForm
-import TNLean.Channel.KoashiImoto.RecoveredConditionalBipartiteBlockForm
-import TNLean.Channel.KoashiImoto.RecoveredConditionalBlockForm
-import TNLean.Channel.KoashiImoto.RecoveredConditionalDilation
-import TNLean.Channel.KoashiImoto.RecoveredConditionalDilationBlockForm
-import TNLean.Channel.KoashiImoto.RecoveredConditionalFamily
-import TNLean.Channel.KoashiImoto.RecoveredConditionalTripartiteBlockForm
 import TNLean.Channel.KoashiImoto.SingleWitness

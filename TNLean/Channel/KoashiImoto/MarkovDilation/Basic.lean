@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Channel.KoashiImoto.RecoveredConditionalAmbientBipartiteBlockForm
+import TNLean.Channel.KoashiImoto.AmbientMarkovBipartiteBlockForm
 import TNLean.Channel.Stinespring
 
 /-!
@@ -11,7 +11,7 @@ import TNLean.Channel.Stinespring
 
 This file develops the generic fixed-environment embeddings, pure-ancilla
 unitary dilations, block-coordinate matrix identities, and supported
-reconstruction lemmas used by the recovered conditional dilation.
+reconstruction lemmas used by the Markov dilation.
 
 Source: Hayden--Jozsa--Petz--Winter,
 arXiv:quant-ph/0304007v2, Theorem 6, equation (15), lines 547--560;
@@ -19,8 +19,8 @@ Appendix A, Theorem 10, Property 2, lines 791--800; the equivalence
 2 iff 2', lines 808--823; and the operation-level proof of 2',
 lines 853--882.
 
-The source-facing recovered-sector structure is defined in
-`RecoveredConditionalDilationBlockForm`.
+The source-facing sector structure is defined in
+`MarkovDilationBlockForm`.
 -/
 
 open scoped Matrix ComplexOrder MatrixOrder BigOperators Kronecker
@@ -28,12 +28,12 @@ open scoped Matrix ComplexOrder MatrixOrder BigOperators Kronecker
 namespace Matrix
 
 /-- Fix the right output coordinate of a rectangular matrix. -/
-def RecoveredConditionalDilationInternal.rightOutputSlice
+def MarkovDilation.rightOutputSlice
     {A B C : Type*} (R : Matrix (B × C) A ℂ) (c : C) :
     Matrix B A ℂ :=
   fun b a => R (b, c) a
 
-open RecoveredConditionalDilationInternal
+open MarkovDilation
 
 @[simp]
 private theorem ambientSupportEmbedding_apply
@@ -86,7 +86,7 @@ private theorem ambientSupportEmbedding_mul_apply_complement
 
 /-- Tracing the right output of a rectangular Kraus map is the Kraus map of
 all right-output slices. -/
-theorem RecoveredConditionalDilationInternal.partialTraceRight_rectangularKrausMap_eq_slices
+theorem MarkovDilation.partialTraceRight_rectangularKrausMap_eq_slices
     {κ A B C : Type*} [Fintype κ] [Fintype A] [Fintype C]
     (R : κ → Matrix (B × C) A ℂ) (X : Matrix A A ℂ) :
     partialTraceRight (rectangularKrausMap R X) =
@@ -98,7 +98,7 @@ theorem RecoveredConditionalDilationInternal.partialTraceRight_rectangularKrausM
     Matrix.conjTranspose_apply, Fintype.sum_prod_type, rightOutputSlice]
 
 /-- A system-only left multiplication acts on every right-output slice. -/
-theorem RecoveredConditionalDilationInternal.rightOutputSlice_kronecker_one_mul
+theorem MarkovDilation.rightOutputSlice_kronecker_one_mul
     {A B E : Type*} [Fintype B]
     [Fintype E] [DecidableEq E]
     (U : Matrix B B ℂ) (W : Matrix (B × E) A ℂ) (e₀ : E) :
@@ -119,7 +119,7 @@ theorem RecoveredConditionalDilationInternal.rightOutputSlice_kronecker_one_mul
 
 /-- A slice of the reassociated rectangular Stinespring matrix is the
 corresponding right-output slice of its Kraus operator. -/
-theorem RecoveredConditionalDilationInternal.rightOutputSlice_reindex_stinespringV_mul
+theorem MarkovDilation.rightOutputSlice_reindex_stinespringV_mul
     {A B C N : Type*} {r : ℕ} [Fintype A]
     (R : Fin r → Matrix (B × C) A ℂ) (Z : Matrix A N ℂ)
     (c : C) (i : Fin r) :
@@ -191,7 +191,7 @@ private theorem fixedEnvEmbedding_mul
 
 /-- Conjugating a block-coordinate dilation by a system unitary gives the
 same supported isometry in physical coordinates. -/
-theorem RecoveredConditionalDilationInternal.physicalDilation_mul_fixedEnvEmbedding_mul_support
+theorem MarkovDilation.physicalDilation_mul_fixedEnvEmbedding_mul_support
     {S E N : Type*} [Fintype S] [DecidableEq S]
     [Fintype E] [DecidableEq E]
     (e₀ : E) (U_S : Matrix S S ℂ)
@@ -243,7 +243,7 @@ private theorem exists_unitary_mul_fixedEnvEmbedding_eq
 
 /-- A normalized rectangular Kraus family has a unitary Stinespring
 extension from any fixed pure environment coordinate. -/
-theorem RecoveredConditionalDilationInternal.exists_unitary_stinespringV_mul_fixedEnvEmbedding_eq
+theorem MarkovDilation.exists_unitary_stinespringV_mul_fixedEnvEmbedding_eq
     {S C : Type*} {r : ℕ}
     [Fintype S] [DecidableEq S] [Fintype C] [DecidableEq C]
     (c₀ : C) (k₀ : Fin r) (K : Fin r → Matrix (S × C) S ℂ)
@@ -294,7 +294,7 @@ private theorem dilationBlockEquiv_apply
 
 /-- A dependent block diagonal of unitary matrices remains unitary after an
 ambient reindexing. -/
-theorem RecoveredConditionalDilationInternal.reindex_blockDiagonal'_mem_unitary
+theorem MarkovDilation.reindex_blockDiagonal'_mem_unitary
     {I N : Type*} [Finite I] [DecidableEq I]
     {D : I → Type*} [∀ i, Fintype (D i)] [∀ i, DecidableEq (D i)]
     [Fintype N] [DecidableEq N]
@@ -324,7 +324,7 @@ theorem RecoveredConditionalDilationInternal.reindex_blockDiagonal'_mem_unitary
 
 /-- Transport a unitary from middle-system block coordinates to physical
 middle-system coordinates. -/
-theorem RecoveredConditionalDilationInternal.physicalDilationUnitary_spec
+theorem MarkovDilation.physicalDilationUnitary_spec
     {B E : Type*} [Fintype B] [DecidableEq B]
     [Fintype E] [DecidableEq E]
     (U_B : Matrix B B ℂ)
@@ -358,7 +358,7 @@ theorem RecoveredConditionalDilationInternal.physicalDilationUnitary_spec
 
 /-- The Schrödinger isometry obtained by applying a system-environment
 unitary to one fixed pure environment coordinate, with output regrouped as
-`(system × recovered) × dilation`. -/
+`(system × output) × dilation`. -/
 noncomputable def pureAncillaDilationIsometry
     {B C R : Type*} [Fintype B] [DecidableEq B]
     [Fintype C] [DecidableEq C] [Fintype R] [DecidableEq R]
@@ -380,7 +380,7 @@ noncomputable def pureAncillaRecovery
     singleKrausMap (pureAncillaDilationIsometry c₀ r₀ U)
 
 /-- A unitary pure-ancilla recovery is CPTP. -/
-theorem RecoveredConditionalDilationInternal.pureAncillaRecovery_isKrausCPTP
+theorem MarkovDilation.pureAncillaRecovery_isKrausCPTP
     {B C R : Type*} [Fintype B] [DecidableEq B]
     [Fintype C] [DecidableEq C] [Fintype R] [DecidableEq R]
     (c₀ : C) (r₀ : R)
@@ -414,7 +414,7 @@ theorem RecoveredConditionalDilationInternal.pureAncillaRecovery_isKrausCPTP
 
 /-- Equality of dilation isometries after a support inclusion implies
 agreement of their recovery channels on every supported input. -/
-theorem RecoveredConditionalDilationInternal.pureAncillaRecovery_eq_rectangularKrausMap_on_support
+theorem MarkovDilation.pureAncillaRecovery_eq_rectangularKrausMap_on_support
     {B C R S : Type*} [Fintype B] [DecidableEq B]
     [Fintype C] [DecidableEq C] [Fintype R] [DecidableEq R]
     [Fintype S]
@@ -476,7 +476,7 @@ private theorem bipartiteBlock_right_rectangular_sandwich
 
 /-- Maps agreeing on every matrix supported by an isometry have equal
 identity extensions on a bipartite matrix reconstructed from that support. -/
-theorem RecoveredConditionalDilationInternal.idTensorMap_eq_of_isometry_reconstruction
+theorem MarkovDilation.idTensorMap_eq_of_isometry_reconstruction
     {A B C N : Type*} [Fintype A] [DecidableEq A]
     [Fintype B] [Fintype N]
     (T₁ T₂ : Matrix B B ℂ →ₗ[ℂ] Matrix C C ℂ)
@@ -505,7 +505,7 @@ theorem RecoveredConditionalDilationInternal.idTensorMap_eq_of_isometry_reconstr
 
 /-- A unitary change of coordinates on the support leg preserves the
 ambient reconstruction identity. -/
-theorem RecoveredConditionalDilationInternal.supportReconstruction_mul_unitary
+theorem MarkovDilation.supportReconstruction_mul_unitary
     {A B N : Type*} [Fintype A] [DecidableEq A]
     [Fintype B] [Fintype N] [DecidableEq N]
     (ρ : Matrix (A × B) (A × B) ℂ)
@@ -547,29 +547,29 @@ theorem RecoveredConditionalDilationInternal.supportReconstruction_mul_unitary
 
 /-- Entrywise supported-sector action of a dependent block dilation on a
 fixed pure environment input. -/
-theorem RecoveredConditionalDilationInternal.blockDilation_fixedEnv_apply_support
+theorem MarkovDilation.blockDilation_fixedEnv_apply_support
     {z K dB dC r : ℕ} {m d : Fin K → ℕ}
-    (eB : ((s : AmbientRecoveredBlockIndex z K) ×
-      (Fin (ambientRecoveredCommonDim m s) ×
-        Fin (ambientRecoveredConditionalDim d s))) ≃ Fin dB)
+    (eB : ((s : AmbientMarkovBlockIndex z K) ×
+      (Fin (ambientMarkovCommonDim m s) ×
+        Fin (ambientMarkovConditionalDim d s))) ≃ Fin dB)
     (c₀ : Fin dC) (k₀ : Fin r)
     (L : Fin r → ∀ j : Fin K,
       Matrix (Fin (m j) × Fin dC) (Fin (m j)) ℂ)
-    (Ulocal : ∀ s : AmbientRecoveredBlockIndex z K,
+    (Ulocal : ∀ s : AmbientMarkovBlockIndex z K,
       Matrix
-        (Fin (ambientRecoveredCommonDim m s) × (Fin dC × Fin r))
-        (Fin (ambientRecoveredCommonDim m s) × (Fin dC × Fin r)) ℂ)
+        (Fin (ambientMarkovCommonDim m s) × (Fin dC × Fin r))
+        (Fin (ambientMarkovCommonDim m s) × (Fin dC × Fin r)) ℂ)
     (hUlocal : ∀ j,
       Matrix.reindex (Equiv.prodAssoc (Fin (m j)) (Fin dC) (Fin r))
           (Equiv.refl (Fin (m j))) (stinespringV (fun i ↦ L i j)) =
-        (by simpa only [ambientRecoveredCommonDim] using Ulocal (Sum.inr j)) *
+        (by simpa only [ambientMarkovCommonDim] using Ulocal (Sum.inr j)) *
           fixedEnvEmbedding (S := Fin (m j)) (c₀, k₀)) :
     let eD := dilationBlockEquiv (E := Fin dC × Fin r) eB
     let Ublocks := Matrix.reindex eD eD
       (Matrix.blockDiagonal' fun s ↦
         Ulocal s ⊗ₖ
-          (1 : Matrix (Fin (ambientRecoveredConditionalDim d s))
-            (Fin (ambientRecoveredConditionalDim d s)) ℂ))
+          (1 : Matrix (Fin (ambientMarkovConditionalDim d s))
+            (Fin (ambientMarkovConditionalDim d s)) ℂ))
     ∀ (j : Fin K) (u : Fin (m j)) (v : Fin (d j))
       (c : Fin dC) (i : Fin r) (u' : Fin (m j)) (v' : Fin (d j)),
       (Ublocks * fixedEnvEmbedding (S := Fin dB) (c₀, k₀))
@@ -614,16 +614,16 @@ theorem RecoveredConditionalDilationInternal.blockDilation_fixedEnv_apply_suppor
 
 /-- Different supported sectors do not mix under the dependent block
 dilation. -/
-theorem RecoveredConditionalDilationInternal.blockDilation_fixedEnv_apply_support_ne
+theorem MarkovDilation.blockDilation_fixedEnv_apply_support_ne
     {z K dB dC r : ℕ} {m d : Fin K → ℕ}
-    (eB : ((s : AmbientRecoveredBlockIndex z K) ×
-      (Fin (ambientRecoveredCommonDim m s) ×
-        Fin (ambientRecoveredConditionalDim d s))) ≃ Fin dB)
+    (eB : ((s : AmbientMarkovBlockIndex z K) ×
+      (Fin (ambientMarkovCommonDim m s) ×
+        Fin (ambientMarkovConditionalDim d s))) ≃ Fin dB)
     (c₀ : Fin dC) (k₀ : Fin r)
-    (Ulocal : ∀ s : AmbientRecoveredBlockIndex z K,
+    (Ulocal : ∀ s : AmbientMarkovBlockIndex z K,
       Matrix
-        (Fin (ambientRecoveredCommonDim m s) × (Fin dC × Fin r))
-        (Fin (ambientRecoveredCommonDim m s) × (Fin dC × Fin r)) ℂ)
+        (Fin (ambientMarkovCommonDim m s) × (Fin dC × Fin r))
+        (Fin (ambientMarkovCommonDim m s) × (Fin dC × Fin r)) ℂ)
     {j j' : Fin K} (hjj' : j ≠ j')
     (u : Fin (m j)) (v : Fin (d j)) (c : Fin dC) (i : Fin r)
     (u' : Fin (m j')) (v' : Fin (d j')) :
@@ -631,8 +631,8 @@ theorem RecoveredConditionalDilationInternal.blockDilation_fixedEnv_apply_suppor
     let Ublocks := Matrix.reindex eD eD
       (Matrix.blockDiagonal' fun s ↦
         Ulocal s ⊗ₖ
-          (1 : Matrix (Fin (ambientRecoveredConditionalDim d s))
-            (Fin (ambientRecoveredConditionalDim d s)) ℂ))
+          (1 : Matrix (Fin (ambientMarkovConditionalDim d s))
+            (Fin (ambientMarkovConditionalDim d s)) ℂ))
     (Ublocks * fixedEnvEmbedding (S := Fin dB) (c₀, k₀))
         (eB ⟨Sum.inr j, (u, v)⟩, (c, i))
         (eB ⟨Sum.inr j', (u', v')⟩) = 0 := by
@@ -664,24 +664,24 @@ theorem RecoveredConditionalDilationInternal.blockDilation_fixedEnv_apply_suppor
 
 /-- Supported rows do not receive a complementary input under the dependent
 block dilation. -/
-theorem RecoveredConditionalDilationInternal.blockDilation_fixedEnv_apply_support_complement
+theorem MarkovDilation.blockDilation_fixedEnv_apply_support_complement
     {z K dB dC r : ℕ} {m d : Fin K → ℕ}
-    (eB : ((s : AmbientRecoveredBlockIndex z K) ×
-      (Fin (ambientRecoveredCommonDim m s) ×
-        Fin (ambientRecoveredConditionalDim d s))) ≃ Fin dB)
+    (eB : ((s : AmbientMarkovBlockIndex z K) ×
+      (Fin (ambientMarkovCommonDim m s) ×
+        Fin (ambientMarkovConditionalDim d s))) ≃ Fin dB)
     (c₀ : Fin dC) (k₀ : Fin r)
-    (Ulocal : ∀ s : AmbientRecoveredBlockIndex z K,
+    (Ulocal : ∀ s : AmbientMarkovBlockIndex z K,
       Matrix
-        (Fin (ambientRecoveredCommonDim m s) × (Fin dC × Fin r))
-        (Fin (ambientRecoveredCommonDim m s) × (Fin dC × Fin r)) ℂ)
+        (Fin (ambientMarkovCommonDim m s) × (Fin dC × Fin r))
+        (Fin (ambientMarkovCommonDim m s) × (Fin dC × Fin r)) ℂ)
     (j : Fin K) (u : Fin (m j)) (v : Fin (d j))
     (c : Fin dC) (i : Fin r) (z₀ : Fin z) (u' v' : Fin 1) :
     let eD := dilationBlockEquiv (E := Fin dC × Fin r) eB
     let Ublocks := Matrix.reindex eD eD
       (Matrix.blockDiagonal' fun s ↦
         Ulocal s ⊗ₖ
-          (1 : Matrix (Fin (ambientRecoveredConditionalDim d s))
-            (Fin (ambientRecoveredConditionalDim d s)) ℂ))
+          (1 : Matrix (Fin (ambientMarkovConditionalDim d s))
+            (Fin (ambientMarkovConditionalDim d s)) ℂ))
     (Ublocks * fixedEnvEmbedding (S := Fin dB) (c₀, k₀))
         (eB ⟨Sum.inr j, (u, v)⟩, (c, i))
         (eB ⟨Sum.inl z₀, (u', v')⟩) = 0 := by
@@ -703,27 +703,27 @@ theorem RecoveredConditionalDilationInternal.blockDilation_fixedEnv_apply_suppor
 
 /-- Complement rows do not receive a supported input under the dependent
 block dilation. -/
-theorem RecoveredConditionalDilationInternal.blockDilation_fixedEnv_apply_complement_support
+theorem MarkovDilation.blockDilation_fixedEnv_apply_complement_support
     {z K dB dC r : ℕ} {m d : Fin K → ℕ}
-    (eB : ((s : AmbientRecoveredBlockIndex z K) ×
-      (Fin (ambientRecoveredCommonDim m s) ×
-        Fin (ambientRecoveredConditionalDim d s))) ≃ Fin dB)
+    (eB : ((s : AmbientMarkovBlockIndex z K) ×
+      (Fin (ambientMarkovCommonDim m s) ×
+        Fin (ambientMarkovConditionalDim d s))) ≃ Fin dB)
     (c₀ : Fin dC) (k₀ : Fin r)
-    (Ulocal : ∀ s : AmbientRecoveredBlockIndex z K,
+    (Ulocal : ∀ s : AmbientMarkovBlockIndex z K,
       Matrix
-        (Fin (ambientRecoveredCommonDim m s) × (Fin dC × Fin r))
-        (Fin (ambientRecoveredCommonDim m s) × (Fin dC × Fin r)) ℂ)
+        (Fin (ambientMarkovCommonDim m s) × (Fin dC × Fin r))
+        (Fin (ambientMarkovCommonDim m s) × (Fin dC × Fin r)) ℂ)
     (z₀ : Fin z)
-    (u : Fin (ambientRecoveredCommonDim m (Sum.inl z₀)))
-    (v : Fin (ambientRecoveredConditionalDim d (Sum.inl z₀)))
+    (u : Fin (ambientMarkovCommonDim m (Sum.inl z₀)))
+    (v : Fin (ambientMarkovConditionalDim d (Sum.inl z₀)))
     (c : Fin dC) (i : Fin r)
     (j : Fin K) (u' : Fin (m j)) (v' : Fin (d j)) :
     let eD := dilationBlockEquiv (E := Fin dC × Fin r) eB
     let Ublocks := Matrix.reindex eD eD
       (Matrix.blockDiagonal' fun s ↦
         Ulocal s ⊗ₖ
-          (1 : Matrix (Fin (ambientRecoveredConditionalDim d s))
-            (Fin (ambientRecoveredConditionalDim d s)) ℂ))
+          (1 : Matrix (Fin (ambientMarkovConditionalDim d s))
+            (Fin (ambientMarkovConditionalDim d s)) ℂ))
     (Ublocks * fixedEnvEmbedding (S := Fin dB) (c₀, k₀))
         (eB ⟨Sum.inl z₀, (u, v)⟩, (c, i))
         (eB ⟨Sum.inr j, (u', v')⟩) = 0 := by
@@ -754,7 +754,7 @@ theorem RecoveredConditionalDilationInternal.blockDilation_fixedEnv_apply_comple
 
 /-- Each environment slice of the block dilation on the joint-support
 inclusion is the corresponding adapted block Kraus operator. -/
-theorem RecoveredConditionalDilationInternal.blockDilation_slice_support
+theorem MarkovDilation.blockDilation_slice_support
     {dB n K dC r : ℕ} {m d : Fin K → ℕ}
     (e₀ : (Fin (dB - n) ⊕ Fin n) ≃ Fin dB)
     (e : ((j : Fin K) × (Fin (m j) × Fin (d j))) ≃ Fin n)
@@ -765,22 +765,22 @@ theorem RecoveredConditionalDilationInternal.blockDilation_slice_support
       Matrix (Fin (m j) × Fin dC) (Fin (m j)) ℂ)
     (hL : ∀ i j u c u', L i j (u, c) u' =
       C (finProdFinEquiv (c, i)) j u u')
-    (Ulocal : ∀ s : AmbientRecoveredBlockIndex (dB - n) K,
+    (Ulocal : ∀ s : AmbientMarkovBlockIndex (dB - n) K,
       Matrix
-        (Fin (ambientRecoveredCommonDim m s) × (Fin dC × Fin r))
-        (Fin (ambientRecoveredCommonDim m s) × (Fin dC × Fin r)) ℂ)
+        (Fin (ambientMarkovCommonDim m s) × (Fin dC × Fin r))
+        (Fin (ambientMarkovCommonDim m s) × (Fin dC × Fin r)) ℂ)
     (hUlocal : ∀ j,
       Matrix.reindex (Equiv.prodAssoc (Fin (m j)) (Fin dC) (Fin r))
           (Equiv.refl (Fin (m j))) (stinespringV (fun i ↦ L i j)) =
-        (by simpa only [ambientRecoveredCommonDim] using Ulocal (Sum.inr j)) *
+        (by simpa only [ambientMarkovCommonDim] using Ulocal (Sum.inr j)) *
           fixedEnvEmbedding (S := Fin (m j)) (c₀, k₀)) :
-    let eB := recoveredAmbientMiddleBlockEquiv e₀ e
+    let eB := ambientMarkovMiddleBlockEquiv e₀ e
     let eD := dilationBlockEquiv (E := Fin dC × Fin r) eB
     let Ublocks := Matrix.reindex eD eD
       (Matrix.blockDiagonal' fun s ↦
         Ulocal s ⊗ₖ
-          (1 : Matrix (Fin (ambientRecoveredConditionalDim d s))
-            (Fin (ambientRecoveredConditionalDim d s)) ℂ))
+          (1 : Matrix (Fin (ambientMarkovConditionalDim d s))
+            (Fin (ambientMarkovConditionalDim d s)) ℂ))
     ∀ c i,
       rightOutputSlice
           ((Ublocks * fixedEnvEmbedding (S := Fin dB) (c₀, k₀)) *
@@ -795,19 +795,19 @@ theorem RecoveredConditionalDilationInternal.blockDilation_slice_support
   intro c i
   ext b x
   simp only [rightOutputSlice]
-  rw [← (recoveredAmbientMiddleBlockEquiv e₀ e).apply_symm_apply b,
+  rw [← (ambientMarkovMiddleBlockEquiv e₀ e).apply_symm_apply b,
     ← e.apply_symm_apply x]
-  generalize (recoveredAmbientMiddleBlockEquiv e₀ e).symm b = sb
+  generalize (ambientMarkovMiddleBlockEquiv e₀ e).symm b = sb
   generalize e.symm x = sx
   rcases sb with ⟨s, u, v⟩
   rcases sx with ⟨j', u', v'⟩
   rcases s with z | j
   · have hcol :
         e₀ (Sum.inr (e ⟨j', (u', v')⟩)) =
-          recoveredAmbientMiddleBlockEquiv e₀ e
+          ambientMarkovMiddleBlockEquiv e₀ e
             ⟨Sum.inr j', (u', v')⟩ := rfl
     have hrow :
-        recoveredAmbientMiddleBlockEquiv e₀ e
+        ambientMarkovMiddleBlockEquiv e₀ e
             ⟨Sum.inl z, (u, v)⟩ = e₀ (Sum.inl z) := by
       change Fin 1 at u v
       fin_cases u
@@ -816,7 +816,7 @@ theorem RecoveredConditionalDilationInternal.blockDilation_slice_support
     rw [mul_ambientSupportEmbedding_apply]
     rw [hcol]
     rw [blockDilation_fixedEnv_apply_complement_support
-      (recoveredAmbientMiddleBlockEquiv e₀ e) c₀ k₀ Ulocal
+      (ambientMarkovMiddleBlockEquiv e₀ e) c₀ k₀ Ulocal
       z u v c i j' u' v']
     rw [hrow]
     exact (ambientSupportEmbedding_mul_apply_complement e₀ _ z _).symm
@@ -827,14 +827,14 @@ theorem RecoveredConditionalDilationInternal.blockDilation_slice_support
       rw [mul_ambientSupportEmbedding_apply]
       have hcol :
           e₀ (Sum.inr (e ⟨j, (u', v')⟩)) =
-            recoveredAmbientMiddleBlockEquiv e₀ e
+            ambientMarkovMiddleBlockEquiv e₀ e
               ⟨Sum.inr j, (u', v')⟩ := rfl
       rw [hcol]
       rw [blockDilation_fixedEnv_apply_support
-        (recoveredAmbientMiddleBlockEquiv e₀ e) c₀ k₀ L Ulocal hUlocal
+        (ambientMarkovMiddleBlockEquiv e₀ e) c₀ k₀ L Ulocal hUlocal
         j u v c i u' v']
       have hrow :
-          recoveredAmbientMiddleBlockEquiv e₀ e
+          ambientMarkovMiddleBlockEquiv e₀ e
               ⟨Sum.inr j, (u, v)⟩ =
             e₀ (Sum.inr (e ⟨j, (u, v)⟩)) := rfl
       rw [hrow, ambientSupportEmbedding_mul_apply_support]
@@ -845,14 +845,14 @@ theorem RecoveredConditionalDilationInternal.blockDilation_slice_support
     · rw [mul_ambientSupportEmbedding_apply]
       have hcol :
           e₀ (Sum.inr (e ⟨j', (u', v')⟩)) =
-            recoveredAmbientMiddleBlockEquiv e₀ e
+            ambientMarkovMiddleBlockEquiv e₀ e
               ⟨Sum.inr j', (u', v')⟩ := rfl
       rw [hcol]
       rw [blockDilation_fixedEnv_apply_support_ne
-        (recoveredAmbientMiddleBlockEquiv e₀ e) c₀ k₀ Ulocal
+        (ambientMarkovMiddleBlockEquiv e₀ e) c₀ k₀ Ulocal
         hj u v c i u' v']
       have hrow :
-          recoveredAmbientMiddleBlockEquiv e₀ e
+          ambientMarkovMiddleBlockEquiv e₀ e
               ⟨Sum.inr j, (u, v)⟩ =
             e₀ (Sum.inr (e ⟨j, (u, v)⟩)) := rfl
       rw [hrow, ambientSupportEmbedding_mul_apply_support]

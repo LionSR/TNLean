@@ -152,7 +152,7 @@ singular product-reference channel is claimed.
 
 \section{Structural implication complete}
 
-The product-reference recovery identity, the recovered conditional family, the
+The product-reference recovery identity, the invariant conditional family, the
 joint-support block theorem, and the ambient extension now give
 \begin{align}
   H_B&\cong\bigoplus_j H_{B_j^L}\otimes H_{B_j^R},
@@ -162,12 +162,12 @@ joint-support block theorem, and the ambient extension now give
   \qquad
   W=\mathbf 1_A\otimes(U_B\otimes\mathbf 1_C).
 \end{align}
-The supported matrices $\widehat\rho_j$ are the trace-one recovered physical
+The supported matrices $\widehat\rho_j$ are the trace-one sector output
 states. The complementary blocks are zero. The forward characterization sets
 $p_j=\operatorname{Re}\operatorname{tr}\omega_j$, proves $p_j\geq0$ and
 $\sum_jp_j=1$, reverses each middle fibre to the order
 $B_j^L\otimes B_j^R$, and chooses the Hayashi unitary $U_B^\dagger$. Every
-supported right factor remains its recovered state. Total positive-semidefinite
+supported right factor remains its sector output state. Total positive-semidefinite
 normalization supplies the left density matrices; at zero weight it may choose
 a left filler, and on a complementary sector it may choose fillers on both
 sides. Their weighted contributions vanish.
@@ -290,14 +290,14 @@ through the support isometry. The declaration
 \leanid{Kraus.exists_commonInvariant_normalizedStateBlockForm_preservingBlockAction_jointSupport}
 then packages the normalized state blocks and the action of every preserving
 operation on that minimum joint support; ambient preserving operations inherit
-this action by restriction and intertwining. The finite recovered conditional
+this action by restriction and intertwining. The finite invariant conditional
 family and one preserving Kraus realization are now constructed from SSA
 equality. The declaration
-\leanid{Matrix.exists_recoveredConditionalStateBlockForm_preservingBlockAction_jointSupport}
-applies the block theorem to this family and retains the recovered
-middle-system channel together with the support intertwining and diagonal
+\leanid{Matrix.exists_normalizedConditionalSliceBlockForm_preservingBlockAction_jointSupport}
+applies the block theorem to this family and retains the Petz middle-system
+channel together with the support intertwining and diagonal
 block action. The declaration
-\leanid{Matrix.exists_recoveredConditionalBipartiteBlockForm_jointSupport}
+\leanid{Matrix.exists_markovBipartiteBlockForm_jointSupport}
 uses the same support isometry and block coordinates to reconstruct the
 bipartite marginal. It produces positive unnormalized factors $\omega_j$,
 proves that their traces sum to one, and establishes
@@ -305,18 +305,18 @@ $\bigoplus_j\sigma_j\otimes\omega_j$ on the minimum joint support, with the
 tensor order reversed from HJPW. This is a scope-restricted joint-support
 variant toward HJPW equation~(14), not its ambient equivalence on $H_B$.
 The declaration
-\leanid{Matrix.exists_recoveredConditionalAmbientBipartiteBlockForm}
+\leanid{Matrix.exists_ambientMarkovBipartiteBlockForm}
 completes the support isometry to an ambient middle-system unitary and splits
 its orthogonal complement into one-dimensional zero-weight tensor sectors.
 It retains the supported positive factors, proves positivity on every ambient
 sector, and proves the total conditional trace is one. Thus HJPW
 equations~(13)--(14), lines 493--502, now hold on the ambient $H_B$ without an
 extra source hypothesis. The declaration
-\leanid{Matrix.exists_recoveredDilationBlockUnitary} proves equation~(15)
+\leanid{Matrix.exists_markovDilationBlockForm} proves equation~(15)
 for one chosen pure-ancilla unitary, together with supported Petz agreement,
-the exact recovery identity, and normalized recovered states on the supported
+the exact recovery identity, and normalized sector output states on the supported
 common-factor sectors. The declaration
-\leanid{Matrix.RecoveredConditionalDilationBlockForm.ambient_tripartite_block_form}
+\leanid{Matrix.MarkovDilationBlockForm.ambient_tripartite_block_form}
 then combines equations~(11), (14), and~(15). With
 $W=\mathbf 1_A\otimes(U_B\otimes\mathbf 1_C)$, it proves
 \begin{align}
@@ -325,7 +325,7 @@ $W=\mathbf 1_A\otimes(U_B\otimes\mathbf 1_C)$, it proves
 \end{align}
 The theorem \leanid{Matrix.hayashi_ssa_equality_characterization_forward}
 normalizes these blocks into the quantum-Markov decomposition. Every supported
-right factor remains its recovered state, even when its weight is zero. A
+right factor remains its sector output state, even when its weight is zero. A
 zero-weight supported sector may use a filler only on the left; a complementary
 sector may use fillers on both sides.
 

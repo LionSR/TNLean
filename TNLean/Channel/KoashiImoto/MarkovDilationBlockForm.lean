@@ -3,11 +3,11 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Channel.KoashiImoto.RecoveredConditionalDilation.AmbientBlockAction
-import TNLean.Channel.KoashiImoto.RecoveredConditionalDilation.SectorAction
+import TNLean.Channel.KoashiImoto.MarkovDilation.AmbientBlockAction
+import TNLean.Channel.KoashiImoto.MarkovDilation.SectorAction
 
 /-!
-# Recovered conditional dilation block form
+# Markov dilation block form
 
 This file provides the source-facing ambient block-coordinate dilation at
 equality in strong subadditivity.  It records one chosen pure-ancilla physical
@@ -26,7 +26,7 @@ open scoped Matrix ComplexOrder MatrixOrder BigOperators Kronecker
 
 namespace Matrix
 
-open RecoveredConditionalDilationInternal
+open MarkovDilation
 
 variable {dA dB dC : ℕ}
 
@@ -45,12 +45,12 @@ lines 547--560; Appendix A, Theorem 10, Property 2, lines 791--800;
 the equivalence 2 iff 2', lines 808--823; and the operation-level proof
 of 2', lines 853--882.  This structure records one chosen pure-ancilla
 unitary, not every unitary associated with the operation. -/
-structure RecoveredConditionalDilationBlockForm
+structure MarkovDilationBlockForm
     (ρ_ABC : Matrix (Fin dA × Fin dB × Fin dC)
       (Fin dA × Fin dB × Fin dC) ℂ)
     (hρ_dm : ρ_ABC.PosSemidef ∧ ρ_ABC.trace = 1)
-    [Nonempty (RecoveredEffectIndex (traceC_ABC ρ_ABC))]
-    (F : RecoveredConditionalAmbientBipartiteBlockForm ρ_ABC hρ_dm) where
+    [Nonempty (ActiveConditionalEffectIndex (traceC_ABC ρ_ABC))]
+    (F : AmbientMarkovBipartiteBlockForm ρ_ABC hρ_dm) where
   r : ℕ
   c₀ : Fin dC
   k₀ : Fin r
@@ -58,12 +58,12 @@ structure RecoveredConditionalDilationBlockForm
   L : Fin r → ∀ j : Fin F.jointSupport.K,
     Matrix (Fin (F.jointSupport.m j) × Fin dC)
       (Fin (F.jointSupport.m j)) ℂ
-  Ulocal : ∀ s : AmbientRecoveredBlockIndex
+  Ulocal : ∀ s : AmbientMarkovBlockIndex
       (dB - F.jointSupport.n) F.jointSupport.K,
     Matrix
-      (Fin (ambientRecoveredCommonDim F.jointSupport.m s) ×
+      (Fin (ambientMarkovCommonDim F.jointSupport.m s) ×
         (Fin dC × Fin r))
-      (Fin (ambientRecoveredCommonDim F.jointSupport.m s) ×
+      (Fin (ambientMarkovCommonDim F.jointSupport.m s) ×
         (Fin dC × Fin r)) ℂ
   U_BCE_blocks : Matrix (Fin dB × (Fin dC × Fin r))
     (Fin dB × (Fin dC × Fin r)) ℂ
@@ -90,25 +90,25 @@ structure RecoveredConditionalDilationBlockForm
           (Equiv.prodAssoc (Fin (F.jointSupport.m j)) (Fin dC) (Fin r))
           (Equiv.refl (Fin (F.jointSupport.m j)))
           (stinespringV (fun i ↦ L i j)) =
-        (by simpa only [ambientRecoveredCommonDim] using Ulocal (Sum.inr j)) *
+        (by simpa only [ambientMarkovCommonDim] using Ulocal (Sum.inr j)) *
           fixedEnvEmbedding
             (S := Fin (F.jointSupport.m j)) (c₀, k₀)
   local_unitary :
     ∀ s, Ulocal s ∈ Matrix.unitaryGroup
-      (Fin (ambientRecoveredCommonDim F.jointSupport.m s) ×
+      (Fin (ambientMarkovCommonDim F.jointSupport.m s) ×
         (Fin dC × Fin r)) ℂ
   block_coordinate_unitary_eq :
     U_BCE_blocks =
       Matrix.reindex
         (dilationBlockEquiv
-          (recoveredAmbientMiddleBlockEquiv F.e₀ F.jointSupport.e))
+          (ambientMarkovMiddleBlockEquiv F.e₀ F.jointSupport.e))
         (dilationBlockEquiv
-          (recoveredAmbientMiddleBlockEquiv F.e₀ F.jointSupport.e))
+          (ambientMarkovMiddleBlockEquiv F.e₀ F.jointSupport.e))
         (Matrix.blockDiagonal' fun s ↦
           Ulocal s ⊗ₖ
             (1 : Matrix
-              (Fin (ambientRecoveredConditionalDim F.jointSupport.d s))
-              (Fin (ambientRecoveredConditionalDim F.jointSupport.d s)) ℂ))
+              (Fin (ambientMarkovConditionalDim F.jointSupport.d s))
+              (Fin (ambientMarkovConditionalDim F.jointSupport.d s)) ℂ))
   block_coordinate_unitary :
     U_BCE_blocks ∈ Matrix.unitaryGroup (Fin dB × (Fin dC × Fin r)) ℂ
   physical_unitary_eq :
@@ -147,7 +147,7 @@ structure RecoveredConditionalDilationBlockForm
         (traceC_ABC ρ_ABC) =
       ρ_ABC
 
-/-- The recovered state on one supported common-factor sector together with
+/-- The sector output state on one supported common-factor sector together with
 the output subsystem.
 
 Its common-factor, or first-factor, marginal is the original common-factor
@@ -155,36 +155,35 @@ state; no state is assigned to an ambient complementary sector.
 
 Source: HJPW, arXiv:quant-ph/0304007v2, Theorem 6, equation (15),
 lines 547--560. -/
-noncomputable def RecoveredConditionalDilationBlockForm.recoveredSectorState
+noncomputable def MarkovDilationBlockForm.sectorOutputState
     {ρ_ABC : Matrix (Fin dA × Fin dB × Fin dC)
       (Fin dA × Fin dB × Fin dC) ℂ}
     {hρ_dm : ρ_ABC.PosSemidef ∧ ρ_ABC.trace = 1}
-    [Nonempty (RecoveredEffectIndex (traceC_ABC ρ_ABC))]
-    {F : RecoveredConditionalAmbientBipartiteBlockForm ρ_ABC hρ_dm}
-    (D : RecoveredConditionalDilationBlockForm ρ_ABC hρ_dm F)
+    [Nonempty (ActiveConditionalEffectIndex (traceC_ABC ρ_ABC))]
+    {F : AmbientMarkovBipartiteBlockForm ρ_ABC hρ_dm}
+    (D : MarkovDilationBlockForm ρ_ABC hρ_dm F)
     (j : Fin F.jointSupport.K) :
     Matrix (Fin (F.jointSupport.m j) × Fin dC)
       (Fin (F.jointSupport.m j) × Fin dC) ℂ :=
   rectangularKrausMap (fun i ↦ D.L i j) (F.jointSupport.σ j)
 
 /-- Applying one supported-sector recovery to an unnormalized left factor
-and the common recovered state gives the tripartite tensor product of that
-left factor with the recovered common-output state.
+and the common sector output state gives the tripartite tensor product of that
+left factor with the sector output state.
 
 This is the local block-action substitution used in the final lines of HJPW
 Theorem 6. The left factor is deliberately not normalized: its trace may be
-zero, and normalization belongs only to the final Markov-decomposition
-assembly.
+zero, and normalization is performed only in the final Markov decomposition.
 
 Source: HJPW, arXiv:quant-ph/0304007v2, Theorem 6, equations (14)--(15),
 lines 547--570. -/
-theorem RecoveredConditionalDilationBlockForm.idTensorMap_recoveredSector
+theorem MarkovDilationBlockForm.idTensorMap_sectorOutput
     {ρ_ABC : Matrix (Fin dA × Fin dB × Fin dC)
       (Fin dA × Fin dB × Fin dC) ℂ}
     {hρ_dm : ρ_ABC.PosSemidef ∧ ρ_ABC.trace = 1}
-    [Nonempty (RecoveredEffectIndex (traceC_ABC ρ_ABC))]
-    {F : RecoveredConditionalAmbientBipartiteBlockForm ρ_ABC hρ_dm}
-    (D : RecoveredConditionalDilationBlockForm ρ_ABC hρ_dm F)
+    [Nonempty (ActiveConditionalEffectIndex (traceC_ABC ρ_ABC))]
+    {F : AmbientMarkovBipartiteBlockForm ρ_ABC hρ_dm}
+    (D : MarkovDilationBlockForm ρ_ABC hρ_dm F)
     (j : Fin F.jointSupport.K)
     (ω : Matrix
       (Fin dA × Fin (F.jointSupport.d j))
@@ -192,86 +191,86 @@ theorem RecoveredConditionalDilationBlockForm.idTensorMap_recoveredSector
     idTensorMapLM (δ := Fin dA × Fin (F.jointSupport.d j))
         (rectangularKrausMap (fun i ↦ D.L i j))
         (ω ⊗ₖ F.jointSupport.σ j) =
-      ω ⊗ₖ D.recoveredSectorState j := by
+      ω ⊗ₖ D.sectorOutputState j := by
   rw [idTensorMapLM_apply, idTensorMap_kronecker]
   rfl
 
-/-- A recovered supported-sector state is positive semidefinite.
+/-- A supported sector output state is positive semidefinite.
 
 Source: HJPW, arXiv:quant-ph/0304007v2, Theorem 6, equation (15),
 lines 547--560. -/
-theorem RecoveredConditionalDilationBlockForm.recoveredSectorState_posSemidef
+theorem MarkovDilationBlockForm.sectorOutputState_posSemidef
     {ρ_ABC : Matrix (Fin dA × Fin dB × Fin dC)
       (Fin dA × Fin dB × Fin dC) ℂ}
     {hρ_dm : ρ_ABC.PosSemidef ∧ ρ_ABC.trace = 1}
-    [Nonempty (RecoveredEffectIndex (traceC_ABC ρ_ABC))]
-    {F : RecoveredConditionalAmbientBipartiteBlockForm ρ_ABC hρ_dm}
-    (D : RecoveredConditionalDilationBlockForm ρ_ABC hρ_dm F)
+    [Nonempty (ActiveConditionalEffectIndex (traceC_ABC ρ_ABC))]
+    {F : AmbientMarkovBipartiteBlockForm ρ_ABC hρ_dm}
+    (D : MarkovDilationBlockForm ρ_ABC hρ_dm F)
     (j : Fin F.jointSupport.K) :
-    (D.recoveredSectorState j).PosSemidef := by
+    (D.sectorOutputState j).PosSemidef := by
   exact (rectangularKrausMap_isKrausCPTP
     (fun i ↦ D.L i j) (D.sector_tp j)).map_posSemidef
       (F.jointSupport.σ_pos j)
 
-/-- A recovered supported-sector state has trace one.
+/-- A supported sector output state has trace one.
 
 Source: HJPW, arXiv:quant-ph/0304007v2, Theorem 6, equation (15),
 lines 547--560. -/
-theorem RecoveredConditionalDilationBlockForm.recoveredSectorState_trace
+theorem MarkovDilationBlockForm.sectorOutputState_trace
     {ρ_ABC : Matrix (Fin dA × Fin dB × Fin dC)
       (Fin dA × Fin dB × Fin dC) ℂ}
     {hρ_dm : ρ_ABC.PosSemidef ∧ ρ_ABC.trace = 1}
-    [Nonempty (RecoveredEffectIndex (traceC_ABC ρ_ABC))]
-    {F : RecoveredConditionalAmbientBipartiteBlockForm ρ_ABC hρ_dm}
-    (D : RecoveredConditionalDilationBlockForm ρ_ABC hρ_dm F)
+    [Nonempty (ActiveConditionalEffectIndex (traceC_ABC ρ_ABC))]
+    {F : AmbientMarkovBipartiteBlockForm ρ_ABC hρ_dm}
+    (D : MarkovDilationBlockForm ρ_ABC hρ_dm F)
     (j : Fin F.jointSupport.K) :
-    (D.recoveredSectorState j).trace = 1 := by
-  rw [RecoveredConditionalDilationBlockForm.recoveredSectorState,
+    (D.sectorOutputState j).trace = 1 := by
+  rw [MarkovDilationBlockForm.sectorOutputState,
     (rectangularKrausMap_isKrausCPTP
       (fun i ↦ D.L i j) (D.sector_tp j)).trace_map,
     F.jointSupport.σ_trace]
 
-/-- The common-factor, or first-factor, marginal of a recovered supported-sector
+/-- The common-factor, or first-factor, marginal of a supported sector output
 state is the original common-factor state.
 
 Source: HJPW, arXiv:quant-ph/0304007v2, Theorem 6, equation (15),
 lines 547--560. -/
 theorem
-    RecoveredConditionalDilationBlockForm.partialTraceRight_recoveredSectorState
+    MarkovDilationBlockForm.partialTraceRight_sectorOutputState
     {ρ_ABC : Matrix (Fin dA × Fin dB × Fin dC)
       (Fin dA × Fin dB × Fin dC) ℂ}
     {hρ_dm : ρ_ABC.PosSemidef ∧ ρ_ABC.trace = 1}
-    [Nonempty (RecoveredEffectIndex (traceC_ABC ρ_ABC))]
-    {F : RecoveredConditionalAmbientBipartiteBlockForm ρ_ABC hρ_dm}
-    (D : RecoveredConditionalDilationBlockForm ρ_ABC hρ_dm F)
+    [Nonempty (ActiveConditionalEffectIndex (traceC_ABC ρ_ABC))]
+    {F : AmbientMarkovBipartiteBlockForm ρ_ABC hρ_dm}
+    (D : MarkovDilationBlockForm ρ_ABC hρ_dm F)
     (j : Fin F.jointSupport.K) :
-    partialTraceRight (D.recoveredSectorState j) =
+    partialTraceRight (D.sectorOutputState j) =
       F.jointSupport.σ j :=
   D.sector_state_fixed j
 
-/-- In the ambient HJPW coordinates, the recovered tripartite state has zero
+/-- In the ambient HJPW coordinates, the Markov tripartite state has zero
 complementary blocks and supported blocks in conditional--common-output order.
 
 Source: HJPW, arXiv:quant-ph/0304007v2, Theorem 6, equations (11), (14), and
 (15), lines 470--570. -/
-theorem RecoveredConditionalDilationBlockForm.ambient_tripartite_block_form
+theorem MarkovDilationBlockForm.ambient_tripartite_block_form
     {ρ_ABC : Matrix (Fin dA × Fin dB × Fin dC)
       (Fin dA × Fin dB × Fin dC) ℂ}
     {hρ_dm : ρ_ABC.PosSemidef ∧ ρ_ABC.trace = 1}
-    [Nonempty (RecoveredEffectIndex (traceC_ABC ρ_ABC))]
-    {F : RecoveredConditionalAmbientBipartiteBlockForm ρ_ABC hρ_dm}
-    (D : RecoveredConditionalDilationBlockForm ρ_ABC hρ_dm F) :
-    let eB := recoveredAmbientMiddleBlockEquiv F.e₀ F.jointSupport.e
+    [Nonempty (ActiveConditionalEffectIndex (traceC_ABC ρ_ABC))]
+    {F : AmbientMarkovBipartiteBlockForm ρ_ABC hρ_dm}
+    (D : MarkovDilationBlockForm ρ_ABC hρ_dm F) :
+    let eB := ambientMarkovMiddleBlockEquiv F.e₀ F.jointSupport.e
     star ((1 : Matrix (Fin dA) (Fin dA) ℂ) ⊗ₖ
         (F.U_B ⊗ₖ (1 : Matrix (Fin dC) (Fin dC) ℂ))) *
         ρ_ABC *
       ((1 : Matrix (Fin dA) (Fin dA) ℂ) ⊗ₖ
         (F.U_B ⊗ₖ (1 : Matrix (Fin dC) (Fin dC) ℂ))) =
       ambientTripartiteBlockMatrix eB F.jointSupport.ω
-        D.recoveredSectorState := by
+        D.sectorOutputState := by
   classical
   dsimp only
-  let eB := recoveredAmbientMiddleBlockEquiv F.e₀ F.jointSupport.e
+  let eB := ambientMarkovMiddleBlockEquiv F.e₀ F.jointSupport.e
   let liftC := F.U_B ⊗ₖ (1 : Matrix (Fin dC) (Fin dC) ℂ)
   let TOut : Matrix (Fin dB × Fin dC) (Fin dB × Fin dC) ℂ →ₗ[ℂ]
       Matrix (Fin dB × Fin dC) (Fin dB × Fin dC) ℂ :=
@@ -358,13 +357,13 @@ theorem RecoveredConditionalDilationBlockForm.ambient_tripartite_block_form
     apply Matrix.ext
     intro x y
     simp only [Matrix.reindex_apply, Matrix.submatrix_apply]
-    generalize (recoveredBipartiteBlockEquiv eB).symm x = p
-    generalize (recoveredBipartiteBlockEquiv eB).symm y = q
+    generalize (markovBipartiteBlockEquiv eB).symm x = p
+    generalize (markovBipartiteBlockEquiv eB).symm y = q
     rcases p with ⟨s, u, av⟩
     rcases q with ⟨t, u', av'⟩
     rcases s with z | j <;> rcases t with z' | j' <;>
-      simp [Matrix.blockDiagonal'_apply, ambientRecoveredCommonState,
-        ambientRecoveredConditionalState, Matrix.kroneckerMap_apply]
+      simp [Matrix.blockDiagonal'_apply, ambientMarkovCommonState,
+        ambientConditionalFactor, Matrix.kroneckerMap_apply]
   have hgeneric := blockDilation_fixedEnv_idTensorMap_blockDiagonal
     eB D.c₀ D.k₀ D.L D.Ulocal D.sector_pure_ancilla_extension
       F.jointSupport.σ F.jointSupport.ω
@@ -375,17 +374,17 @@ theorem RecoveredConditionalDilationBlockForm.ambient_tripartite_block_form
           (ambientBipartiteBlockMatrix eB F.jointSupport.σ
             F.jointSupport.ω) =
         ambientTripartiteBlockMatrix eB F.jointSupport.ω
-          D.recoveredSectorState := by
+          D.sectorOutputState := by
     change idTensorMapLM (δ := Fin dA)
         (pureAncillaRecovery D.c₀ D.k₀ D.U_BCE_blocks)
           (ambientBipartiteBlockMatrix eB F.jointSupport.σ
             F.jointSupport.ω) = _
     rw [hUB]
-    have hRecovered : D.recoveredSectorState =
+    have hSlice : D.sectorOutputState =
         (fun j => rectangularKrausMap (fun i => D.L i j)
           (F.jointSupport.σ j)) := by
       rfl
-    rw [hRecovered]
+    rw [hSlice]
     exact hgeneric
   calc
     _ = star ((1 : Matrix (Fin dA) (Fin dA) ℂ) ⊗ₖ liftC) *
@@ -405,7 +404,7 @@ theorem RecoveredConditionalDilationBlockForm.ambient_tripartite_block_form
             F.jointSupport.ω) := by rw [hinput]
     _ = _ := hblockAction
 
-/-- Relative to a chosen ambient recovered bipartite block form, the HJPW
+/-- Relative to a chosen ambient Markov bipartite block form, the HJPW
 recovery has a block-coordinate dilation of equation (15), with a corresponding
 physical unitary and an exact realization of equation (11).
 
@@ -414,7 +413,7 @@ separately.  Agreement with the Petz channel is asserted exactly on supported
 inputs, with no complementary-sector equality claim.
 
 This is the relative constructor used after the ambient block form has been
-chosen; `exists_recoveredDilationBlockUnitary` is the source-facing theorem
+chosen; `exists_markovDilationBlockForm` is the source-facing theorem
 that constructs that form from equality in strong subadditivity.
 
 Source: HJPW, arXiv:quant-ph/0304007v2, Theorem 6, equation (15),
@@ -422,18 +421,18 @@ lines 547--560; Appendix A, Theorem 10, Property 2, lines 791--800;
 the equivalence 2 iff 2', lines 808--823; and the operation-level proof
 of 2', lines 853--882.  The theorem constructs one chosen pure-ancilla
 unitary, not every associated unitary. -/
-theorem exists_recoveredDilationBlockUnitary_of_ambientBlockForm
+theorem exists_markovDilationBlockForm_of_ambientBipartiteBlockForm
     (ρ_ABC : Matrix (Fin dA × Fin dB × Fin dC)
       (Fin dA × Fin dB × Fin dC) ℂ)
     (hρ_dm : ρ_ABC.PosSemidef ∧ ρ_ABC.trace = 1)
     (hSSA : IsSSAEquality ρ_ABC hρ_dm.1.isHermitian)
-    [Nonempty (RecoveredEffectIndex (traceC_ABC ρ_ABC))]
-    (F : RecoveredConditionalAmbientBipartiteBlockForm ρ_ABC hρ_dm) :
-    Nonempty (RecoveredConditionalDilationBlockForm ρ_ABC hρ_dm F) := by
+    [Nonempty (ActiveConditionalEffectIndex (traceC_ABC ρ_ABC))]
+    (F : AmbientMarkovBipartiteBlockForm ρ_ABC hρ_dm) :
+    Nonempty (MarkovDilationBlockForm ρ_ABC hρ_dm F) := by
   classical
   obtain ⟨r, R, S, C, L, hRmap, hRtp, hS, hSmap, hSsupport, hCblock,
       hSblock, hCtp, hL, hLtp, hLfix⟩ :=
-    exists_recoveredSliceSectorBlocks ρ_ABC hρ_dm hSSA F
+    exists_normalizedSliceSectorBlocks ρ_ABC hρ_dm hSSA F
   have hBne : NeZero dB := by
     refine ⟨fun h ↦ ?_⟩
     subst dB
@@ -468,12 +467,12 @@ theorem exists_recoveredDilationBlockUnitary_of_ambientBlockForm
     exact exists_unitary_stinespringV_mul_fixedEnvEmbedding_eq
       c₀ k₀ (fun i ↦ L i j) (hLtp j)
   choose Us hUs using hUsector
-  let Ulocal : ∀ s : AmbientRecoveredBlockIndex
+  let Ulocal : ∀ s : AmbientMarkovBlockIndex
       (dB - F.jointSupport.n) F.jointSupport.K,
       Matrix
-        (Fin (ambientRecoveredCommonDim F.jointSupport.m s) ×
+        (Fin (ambientMarkovCommonDim F.jointSupport.m s) ×
           (Fin dC × Fin r))
-        (Fin (ambientRecoveredCommonDim F.jointSupport.m s) ×
+        (Fin (ambientMarkovCommonDim F.jointSupport.m s) ×
           (Fin dC × Fin r)) ℂ
     | Sum.inl _ => 1
     | Sum.inr j => by
@@ -484,7 +483,7 @@ theorem exists_recoveredDilationBlockUnitary_of_ambientBlockForm
           (Fin (F.jointSupport.m j) × (Fin dC × Fin r))
           (Fin (F.jointSupport.m j) × (Fin dC × Fin r)) ℂ)
   have hUlocal : ∀ s, Ulocal s ∈ Matrix.unitaryGroup
-      (Fin (ambientRecoveredCommonDim F.jointSupport.m s) ×
+      (Fin (ambientMarkovCommonDim F.jointSupport.m s) ×
         (Fin dC × Fin r)) ℂ := by
     intro s
     rcases s with z | j
@@ -492,24 +491,24 @@ theorem exists_recoveredDilationBlockUnitary_of_ambientBlockForm
     · convert (Us j).property using 1 <;> rfl
   let eD := dilationBlockEquiv
     (E := Fin dC × Fin r)
-    (recoveredAmbientMiddleBlockEquiv F.e₀ F.jointSupport.e)
+    (ambientMarkovMiddleBlockEquiv F.e₀ F.jointSupport.e)
   let U_BCE : Matrix (Fin dB × (Fin dC × Fin r))
       (Fin dB × (Fin dC × Fin r)) ℂ :=
     Matrix.reindex eD eD
       (Matrix.blockDiagonal' fun s ↦
         Ulocal s ⊗ₖ
           (1 : Matrix
-            (Fin (ambientRecoveredConditionalDim F.jointSupport.d s))
-            (Fin (ambientRecoveredConditionalDim F.jointSupport.d s)) ℂ))
+            (Fin (ambientMarkovConditionalDim F.jointSupport.d s))
+            (Fin (ambientMarkovConditionalDim F.jointSupport.d s)) ℂ))
   have hUblocks : ∀ s,
       Ulocal s ⊗ₖ
           (1 : Matrix
-            (Fin (ambientRecoveredConditionalDim F.jointSupport.d s))
-            (Fin (ambientRecoveredConditionalDim F.jointSupport.d s)) ℂ) ∈
+            (Fin (ambientMarkovConditionalDim F.jointSupport.d s))
+            (Fin (ambientMarkovConditionalDim F.jointSupport.d s)) ℂ) ∈
         Matrix.unitaryGroup
-          ((Fin (ambientRecoveredCommonDim F.jointSupport.m s) ×
+          ((Fin (ambientMarkovCommonDim F.jointSupport.m s) ×
               (Fin dC × Fin r)) ×
-            Fin (ambientRecoveredConditionalDim F.jointSupport.d s)) ℂ := by
+            Fin (ambientMarkovConditionalDim F.jointSupport.d s)) ℂ := by
     intro s
     exact Matrix.kronecker_mem_unitary (hUlocal s) (Submonoid.one_mem _)
   have hUBCE : U_BCE ∈
@@ -527,11 +526,11 @@ theorem exists_recoveredDilationBlockUnitary_of_ambientBlockForm
           (Equiv.prodAssoc (Fin (F.jointSupport.m j)) (Fin dC) (Fin r))
           (Equiv.refl (Fin (F.jointSupport.m j)))
           (stinespringV (fun i ↦ L i j)) =
-        (by simpa only [ambientRecoveredCommonDim] using Ulocal (Sum.inr j)) *
+        (by simpa only [ambientMarkovCommonDim] using Ulocal (Sum.inr j)) *
           fixedEnvEmbedding
             (S := Fin (F.jointSupport.m j)) (c₀, k₀) := by
     intro j
-    simpa [Ulocal, ambientRecoveredCommonDim] using hUs j
+    simpa [Ulocal, ambientMarkovCommonDim] using hUs j
   let J := ambientSupportEmbedding F.e₀
   let Z := F.jointSupport.V * F.jointSupport.U
   have hblockSlices := blockDilation_slice_support F.e₀ F.jointSupport.e
@@ -686,7 +685,7 @@ theorem exists_recoveredDilationBlockUnitary_of_ambientBlockForm
 block-coordinate dilation of equation (15), with a corresponding physical
 unitary and an exact realization of equation (11).
 
-This source-facing theorem constructs the recovered effect index and ambient
+This source-facing theorem constructs the active conditional-effect index and ambient
 bipartite block form internally.  Its conclusion combines the chosen ambient
 form with its dilation witness, so no hypothesis beyond the
 tripartite density-matrix and strong-subadditivity equality assumptions is
@@ -696,27 +695,27 @@ Source: HJPW, arXiv:quant-ph/0304007v2, Theorem 6, equation (15),
 lines 547--560; Appendix A, Theorem 10, Property 2, lines 791--800;
 the equivalence 2 iff 2', lines 808--823; and the operation-level proof
 of 2', lines 853--882. -/
-theorem exists_recoveredDilationBlockUnitary
+theorem exists_markovDilationBlockForm
     (ρ_ABC : Matrix (Fin dA × Fin dB × Fin dC)
       (Fin dA × Fin dB × Fin dC) ℂ)
     (hρ_dm : ρ_ABC.PosSemidef ∧ ρ_ABC.trace = 1)
     (hSSA : IsSSAEquality ρ_ABC hρ_dm.1.isHermitian) :
-    letI : Nonempty (RecoveredEffectIndex (traceC_ABC ρ_ABC)) :=
-      recoveredEffectIndex_nonempty (traceC_ABC ρ_ABC) (by
+    letI : Nonempty (ActiveConditionalEffectIndex (traceC_ABC ρ_ABC)) :=
+      activeConditionalEffectIndex_nonempty (traceC_ABC ρ_ABC) (by
         rw [← trace_eq_trace_traceC_ABC]
         exact hρ_dm.2)
     Nonempty
-      (Σ F : RecoveredConditionalAmbientBipartiteBlockForm ρ_ABC hρ_dm,
-        RecoveredConditionalDilationBlockForm ρ_ABC hρ_dm F) := by
+      (Σ F : AmbientMarkovBipartiteBlockForm ρ_ABC hρ_dm,
+        MarkovDilationBlockForm ρ_ABC hρ_dm F) := by
   classical
-  letI : Nonempty (RecoveredEffectIndex (traceC_ABC ρ_ABC)) :=
-    recoveredEffectIndex_nonempty (traceC_ABC ρ_ABC) (by
+  letI : Nonempty (ActiveConditionalEffectIndex (traceC_ABC ρ_ABC)) :=
+    activeConditionalEffectIndex_nonempty (traceC_ABC ρ_ABC) (by
       rw [← trace_eq_trace_traceC_ABC]
       exact hρ_dm.2)
   obtain ⟨F⟩ :=
-    exists_recoveredConditionalAmbientBipartiteBlockForm ρ_ABC hρ_dm hSSA
+    exists_ambientMarkovBipartiteBlockForm ρ_ABC hρ_dm hSSA
   obtain ⟨D⟩ :=
-    exists_recoveredDilationBlockUnitary_of_ambientBlockForm
+    exists_markovDilationBlockForm_of_ambientBipartiteBlockForm
       ρ_ABC hρ_dm hSSA F
   exact ⟨⟨F, D⟩⟩
 
