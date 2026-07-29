@@ -21,8 +21,8 @@ equal-modulus comparison has these current reference points.
   global-versus-per-sector unit-witness gap and its elimination by the exact
   linear-independence matcher, together with the unitary equal-case assembly
   of CPSV16 Corollary C.5. It is now a closure record, not a live restriction.
-- `blueprint/src/chapter/ch11_fundamental_theorem_proof.tex` records only how
-  the Chapter 10 comparison is used in the equal-MPV and proportional-MPV
+- `blueprint/src/chapter/ch11_fundamental_theorem_proof.tex` records how the
+  Chapter 10 comparison is used in the equal-MPV and proportional-MPV
   Fundamental Theorem arguments.
 - GitHub issue #2150 records the verification request. The outcome now
   recorded in the paper-gap note is that neither a strictly-decreasing-moduli
@@ -62,11 +62,13 @@ For MPDO renormalization fixed points:
   chosen blocked canonical form; independence of the choices is not presently
   needed.
 - `cpsv16_gsnnch_sector_decomposition.tex` records that
-  `MPOTensor.GSNNCHData` now retains the source orthogonal sectors and natural
-  multiplicities. The separate single-bond presentation gives its one-sector
-  case, while the orthogonal BNT-sector construction and source-context
-  assembly prove Proposition `prop3to4`. Reverse implications used elsewhere
-  remain separate.
+  `MPOTensor.GSNNCHData` retains the source orthogonal sectors and natural
+  multiplicities. Positive commuting products on supplied orthogonal sectors
+  can be assembled into the outer direct sum, and the BNT SAL construction
+  supplies one such family under its projector, closure, inverse, word-span,
+  and sectorwise-SAL hypotheses. Proposition `prop3to4` remains partial because
+  no theorem starts from exactly its five printed blockwise identities and
+  produces that assembled family.
 - `cpgsv17_mpdo_sal_zcl_eta_local_structure.tex` records the missing
   coherent positive choice for the inverse-map neighboring operators in
   Appendix C.2. The comparison with the conjugated Hayashi decomposition,
