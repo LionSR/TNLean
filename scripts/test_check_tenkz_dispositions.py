@@ -69,6 +69,13 @@ def main() -> int:
         {"C-declare"}
     )
     assert guard.source_target_codes(r"\tenkzkernel") == frozenset({"C-switch"})
+    for source in (
+        r"\tnset{}",
+        r"\tndeclare{}{}{}",
+        r"\tndeclareatom{}",
+        r"\tenkzkernel",
+    ):
+        assert guard.SETUP_COMMAND.search(source), source
     assert guard.source_target_codes(r"\tn[pill]{}") == frozenset({"C-record"})
     assert guard.source_target_codes(
         r"\begin{tenkzfree}\tnghost{}\end{tenkzfree}"

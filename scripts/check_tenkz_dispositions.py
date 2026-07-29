@@ -23,6 +23,7 @@ ENVIRONMENT = re.compile(
 )
 COMMAND = re.compile(r"\\(tnpic|tntree)\b")
 TENKZEQ_TOKEN = re.compile(r"\\(begin|end)\{tenkzeq\}")
+SETUP_COMMAND = re.compile(r"\\(?:tnset|tndeclare(?:atom)?|tenkzkernel)\b")
 DISPOSITIONS = ("preserve", "codemod", "redraw")
 DEAD_COMMANDS = (
     "tnput",
@@ -561,7 +562,7 @@ def main() -> int:
         ]
         has_environment = any(name.startswith("tenkz") for name in expanded_names)
         has_command = any(name in {"tnpic", "tntree"} for name in expanded_names)
-        has_setup = re.search(r"\\(?:tnset|tndeclare)\b", expanded) is not None
+        has_setup = SETUP_COMMAND.search(expanded) is not None
         environment_files += has_environment
         command_only_files += has_command and not has_environment
         setup_only_files += has_setup and not has_environment and not has_command
