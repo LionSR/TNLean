@@ -7,15 +7,15 @@
       "tenkz-free.code.tex": 0,
       "tenkz-geometry.code.tex": 0,
       "tenkz-grid.code.tex": 7,
-      "tenkz-kernel.code.tex": 1,
+      "tenkz-kernel.code.tex": 0,
       "tenkz-language.code.tex": 0,
       "tenkz-lattice.code.tex": 0,
       "tenkz-metric.code.tex": 0,
       "tenkz-model.code.tex": 0,
       "tenkz-render.code.tex": 0,
-      "tenkz-string.code.tex": 7
+      "tenkz-string.code.tex": 2
     },
-    "total": 44
+    "total": 38
   },
   "decimal_literals": {
     "by_file": {

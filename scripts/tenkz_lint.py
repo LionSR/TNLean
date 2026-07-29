@@ -277,11 +277,18 @@ _INK_TOKEN = re.compile(
     r"|pgf(?:path|usepath|text|node|setlinewidth|setstrokecolor"
     r"|setfillcolor|stroke|fill|transform)[a-z@]*)\b"
 )
+# Saving geometry for later string surgery creates no visible ink.  Keep this
+# state-owner operation out of the raw-rendering debt meter.
+_SAVED_PATH_CAPTURE = re.compile(r"\\path\s*\[[^]]*\bspath/save\s*=")
 _DECIMAL = re.compile(r"(?<![\w@.])\d*\.\d+")
 # Only metric-table DEFINITIONS are exempt; a stray literal multiplying a
 # metric macro in drawing code is exactly the debt this meter measures.
 _METRIC_LINE = re.compile(r"\\def\\tenkz@(?:r@[a-z]+|basepitch|pitch)\b|\\tenkz@pitch=")
 _RENDER_PRIMITIVE_REF = re.compile(r"\\__tenkz_ink_[A-Za-z@:_]+")
+
+
+def ink_token_count(line: str) -> int:
+    return len(_INK_TOKEN.findall(line)) - len(_SAVED_PATH_CAPTURE.findall(line))
 
 
 def census(repo: Path) -> int:
@@ -303,7 +310,7 @@ def census(repo: Path) -> int:
         ):
             if not is_renderer:
                 if is_census_source:
-                    ink += len(_INK_TOKEN.findall(line))
+                    ink += ink_token_count(line)
                 primitive_violations.extend(
                     (path, lineno, match.group())
                     for match in _RENDER_PRIMITIVE_REF.finditer(line)
