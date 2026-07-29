@@ -142,6 +142,16 @@ def test_ink_environment_owner() -> None:
         escaped_scope_tokens,
     ):
         raise AssertionError("escaped braces or line spacing corrupted Ink scope")
+    dollar_scopes = (
+        r"$\tenkzkernel\begin{tenkz}\end{tenkz}$"
+        r"\[\begin{tenkz}\end{tenkz}\]"
+        r"$$\tenkzkernel\begin{tenkz}\end{tenkz}$$"
+        r"\begin{tenkz}\end{tenkz}"
+    )
+    if ink_environment_problems(
+        "good", "Canonical public kernel and tenkz pictures.", dollar_scopes
+    ):
+        raise AssertionError("dollar-delimited math leaked the kernel owner")
 
 
 def main() -> int:

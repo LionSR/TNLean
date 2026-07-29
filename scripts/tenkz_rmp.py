@@ -144,12 +144,13 @@ INK_ENVIRONMENT_PATTERNS = {
     "tenkz": re.compile(r"\\begin\{tenkz(?:eq|cd)?\}|\\tnpic\b|\\tntree\b"),
 }
 INK_SCOPE_TOKEN = re.compile(
-    r"(?P<skip>\\\\(?:\s*\[[^\]]*\])?|\\[{}])"
+    r"(?P<skip>\\\\(?:\s*\[[^\]]*\])?|\\[{}$])"
     r"|\\tenkzkernel\b"
     r"|\\begin\s*\{(?P<begin>[^{}]+)\}"
     r"|\\end\s*\{(?P<end>[^{}]+)\}"
     r"|\\begingroup\b|\\endgroup\b"
     r"|\\\[|\\\]|\\\(|\\\)"
+    r"|(?P<dollar>\${1,2})"
     r"|\\tnpic\b|\\tntree\b"
     r"|[{}]"
 )
@@ -159,6 +160,7 @@ def used_ink_environment_families(body: str) -> set[str]:
     """Return public picture families, respecting the scoped kernel switch."""
     families: set[str] = set()
     kernel_scope = [False]
+    dollar_scope: str | None = None
     for token in INK_SCOPE_TOKEN.finditer(body):
         text = token.group()
         begin = token.group("begin")
@@ -182,6 +184,14 @@ def used_ink_environment_families(body: str) -> set[str]:
         elif text in {r"\endgroup", r"\]", r"\)", "}"}:
             if len(kernel_scope) > 1:
                 kernel_scope.pop()
+        elif token.group("dollar") is not None:
+            if dollar_scope is None:
+                dollar_scope = text
+                kernel_scope.append(kernel_scope[-1])
+            elif dollar_scope == text:
+                dollar_scope = None
+                if len(kernel_scope) > 1:
+                    kernel_scope.pop()
         elif text in {r"\tnpic", r"\tntree"}:
             families.add("tenkz")
     return families
