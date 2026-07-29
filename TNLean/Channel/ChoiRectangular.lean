@@ -688,25 +688,13 @@ Wolf §2.1, Proposition 2.1, applied to `T = id`. -/
 theorem traceLeft_choiMatrixRect_id :
     Matrix.traceLeft (choiMatrixRect (LinearMap.id (M := Matrix (Fin d) (Fin d) ℂ))) =
       (1 / (d : ℂ)) • (1 : Matrix (Fin d) (Fin d) ℂ) := by
-  rw [choiMatrixRect_id]
-  have hdpos_or : 0 < d ∨ d = 0 := Nat.eq_zero_or_pos d
-  rcases hdpos_or with (hdpos | hdzero)
-  · ext i j
-    rw [Matrix.traceLeft_apply, Matrix.smul_apply, smul_eq_mul]
-    by_cases hij : i = j
-    · subst hij
-      simp [Matrix.omegaProj_apply, Matrix.omegaVec_apply]
-      have hcoeff := omegaCoeff_eq_inv hdpos
-      field_simp
-      calc
-        ∑ k : Fin d, ((1 : ℂ) / ((d : ℝ).sqrt : ℂ)) *
-            star ((1 : ℂ) / ((d : ℝ).sqrt : ℂ)) = _ := by
-          simp [hcoeff]
-        _ = 1 / (d : ℂ) := by
-          simp [hcoeff]
-    · simp [Matrix.omegaProj_apply, Matrix.omegaVec_apply, hij, Matrix.smul_apply, smul_eq_mul]
-  · subst hdzero
-    apply Subsingleton.elim
+  ext i j
+  rw [traceLeft_choiMatrixRect_apply (LinearMap.id _) i j,
+    Matrix.smul_apply, smul_eq_mul]
+  by_cases hij : i = j
+  · subst hij
+    simp [Matrix.trace_single_eq_same]
+  · simp [hij, Matrix.trace_single_eq_of_ne hij]
 
 end PartialTraceCorrespondences
 
@@ -733,7 +721,7 @@ theorem trace_choiMatrixRect_normalization
         = ∑ i : Fin d, (Matrix.traceLeft (choiMatrixRect T)) i i := by
       simp [Matrix.trace]
     _ = ∑ i : Fin d, (1 / (d : ℂ)) * (T (Matrix.single i i (1 : ℂ))).trace := by
-      simp [traceLeft_choiMatrixRect_apply T]
+      simp_rw [traceLeft_choiMatrixRect_apply T]
     _ = (1 / (d : ℂ)) * (∑ i : Fin d, (T (Matrix.single i i (1 : ℂ))).trace) := by
       rw [Finset.mul_sum]
 
