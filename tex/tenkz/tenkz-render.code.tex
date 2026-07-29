@@ -1,6 +1,6 @@
-% Input:       frozen records, resolved geometry, metrics, route geometry, and saved paths.
-% Output:      ink and saved routes on the current tikzpicture.
-% Owned state: saved route paths; no semantic or topological state.
+% Input:       frozen model records, resolved geometry, metric access, and saved string paths.
+% Output:      ink -- nodes and paths on the current tikzpicture.
+% Owned state: none; rendering reads records and draws, remembering nothing.
 % Invariants:  no parsing, no topology, no recovery; label text never rotates.
 % Next stage:  events serialize the same records this stage consumed.
 %
@@ -225,11 +225,6 @@
   }
 
 % ---------- strings -----------------------------------------------------------
-% Save route geometry at the sole TikZ path boundary.  The string/model owner
-% registers identity and semantics; this helper contributes no visible ink.
-\cs_new_protected:Npn \__tenkz_render_save_route:nn #1#2
-  { \path [ spath/save = {#1} ] #2 ; }
-
 % A string draws its saved spath3 route: after crossing surgery the saved
 % path already carries its gaps, so one stroke is the whole story.  #1 the
 % saved path id, #2 extra style tokens (species hue, emphasis).
