@@ -40,8 +40,12 @@ python3 scripts/tenkz_rmp.py check --section <section>
 python3 scripts/tenkz_rmp.py check --all
 python3 scripts/tenkz_rmp.py book --all
 python3 scripts/tenkz_rmp.py render --all
-python3 scripts/tenkz_rmp.py compare --all --source-root tex/RMP_TIKZ_SOURCE_CODE
 ```
+
+The comparison command requires a separate author-source tree supplied through
+`--source-root`.  That tree is not part of this repository, so comparison is not
+a clean-checkout build command.  Run it only in a source-pairing session with an
+explicit external tree.
 
 Per-target verdicts are stored in `tests/tenkz/rmp/verdicts.toml`, one
 stanza per target.  Any status may be recorded, including failure; the check
@@ -60,6 +64,118 @@ scripts/tenkz_corpus.sh --render
 
 Both suites may share lower-level helpers; neither frontend changes the
 other's defaults.
+
+## Golden event streams
+
+The event ledger is `tests/tenkz/golden-events.sha256`.
+
+```sh
+scripts/tenkz_golden.sh --check
+```
+
+The check recompiles every standalone fixture and requires each `.tnlog` event
+stream to be byte-identical to the stored SHA-256 baseline.  Run the command
+without an argument to take a new snapshot:
+
+```sh
+scripts/tenkz_golden.sh
+```
+
+Re-pin only when fixture source changes and the new event stream has been
+reviewed as the intended contract.  Package-only changes must pass `--check`;
+they do not authorize a new baseline.
+
+## Same-session pixel pairs
+
+Pixel evidence compares two package revisions in one session:
+
+```sh
+scripts/tenkz_pixelpair.sh origin/main
+```
+
+The command creates a detached worktree at the base revision, renders the
+renderer-only source manifest against that true legacy package and the current
+package, rasterizes both at 300 dpi, and compares the paired pages byte for
+byte.  A copied package tree is not a legacy control.  Stored raster hashes are
+not evidence because raster bytes depend on the machine and TeX epoch.
+
+This command exists for the redraw campaign and expires at its close, no later
+than 1.0.  Do not turn it into a permanent raster manifest.
+
+## Shrink sessions
+
+The shrink checker reports six meters:
+
+1. public vocabulary census;
+2. parser-leaf paths;
+3. escape-spelling use in the demand corpus;
+4. mean non-comment lines across the 130 RMP cases;
+5. aliases and their sunsets;
+6. overloaded names, union types, and shared enum words.
+
+```sh
+python3 scripts/tenkz_shrink.py meters
+python3 scripts/tenkz_shrink.py flags
+python3 scripts/tenkz_shrink.py gate --base-ref origin/main
+```
+
+The registry's implementation ledgers are `kernel` and `sugar(...)`: kernel
+rows are one-in-one-out vocabulary, while sugar rows must expand into kernel
+spellings and earn continued use.  The other status words record lifecycle
+debt: `alias(...; sunset=...)` reads old sources until its stated rewrite, and
+`escape` names raw geometry whose uses count in meter M3.
+
+The gate compares the pinned meters with the base revision.  It passes when
+the public census decreases, or when the census is stable and every raised
+low-consumer, co-occurrence, lonely-type, or sugar-shaped flag has a verdict in
+the latest `docs/tenkz/SHRINK.md` session.  Meter growth requires the recorded
+extension or census-correction procedure.
+
+## Shared parsers
+
+`scripts/tenkzlib/tnlog.py` is the single parser for `.tnlog` event streams.
+`scripts/tenkzlib/texcase.py` owns TeX comment stripping and case-header
+extraction.  Import these modules whenever a checker needs those answers.
+Never re-parse syntax already parsed by `scripts/tenkzlib/`.
+
+## Stage ownership
+
+Each stage file begins with its complete input, output, owned-state, invariant,
+and next-stage contract.
+
+- `tenkz-model.code.tex` owns normalized semantic records and freezes topology
+  after validation.
+- `tenkz-metric.code.tex` owns the motivated metric registry and its sole
+  dimension accessor.
+- `tenkz-geometry.code.tex` owns frames, placement resolution, directions, and
+  silhouette support distances; it emits no ink.
+- `tenkz-render.code.tex` owns mark emission from frozen records and resolved
+  geometry; it parses nothing and stores no topology.
+- `tenkz-string.code.tex` owns saved string paths and the crossing, join, and
+  gap ledgers consumed by rendering.
+
+Read the header before changing a stage, and keep new state in the stage that
+owns its answer.
+
+## Pull-request evidence
+
+Every change under `tex/tenkz/` records both semantic and visual evidence in
+the pull-request body:
+
+```sh
+scripts/tenkz_golden.sh --check
+scripts/tenkz_pixelpair.sh origin/main
+```
+
+The golden gate proves event-stream parity; the same-session pixel pair proves
+render parity.  If a reviewed contract or drawing intentionally changes, state
+the affected fixtures and attach the reviewed replacement evidence instead of
+claiming parity.
+
+The demolition checker remains a temporary guard against restoring retired
+catalogue paths and expires at the 0.8 close, after branches predating the
+demolition have landed or died.  The pixel-pair command expires with the redraw
+campaign at 1.0.
 
 ## Audit and visual review
 
