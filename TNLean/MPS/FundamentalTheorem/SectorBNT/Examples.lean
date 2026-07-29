@@ -34,7 +34,7 @@ variable {d D : ℕ}
 
 /-! ## Compatibility alias -/
 
-/-- Deprecated alias for `singleSectorDecomposition`. -/
+/-- Compatibility alias for `singleSectorDecomposition`. -/
 @[deprecated singleSectorDecomposition (since := "2026-07-29")]
 noncomputable abbrev singletonDecomp (C : MPSTensor d D) :
     SectorDecomposition d :=

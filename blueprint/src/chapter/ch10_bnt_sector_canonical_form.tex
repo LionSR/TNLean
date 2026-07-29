@@ -405,10 +405,16 @@ single family.
 \end{theorem}
 
 \begin{proof}\leanok
-    Since the self-overlap is eventually nonzero, the matrix product vector
-    of $A$ is eventually nonzero. A family consisting of one nonzero vector
-    is linearly independent. All remaining conditions are immediate from the
-    hypotheses and the unit weight.
+    The identity
+    \[
+        O_{AA}(N)
+        =\left\lVert V^{(N)}(A)\right\rVert^2
+        \longrightarrow 1\ne0
+    \]
+    shows that $V^{(N)}(A)$ is nonzero for all sufficiently large $N$.
+    A family consisting of one nonzero vector is linearly independent. All
+    remaining conditions are immediate from the hypotheses and the unit
+    weight.
 \end{proof}
 
 \begin{theorem}[Normal tensors have single-sector BNT presentations]
@@ -431,8 +437,16 @@ single family.
         lem:paper_decomp_formula}
     Choose the pure trace-preserving Perron gauge. Its tensor is irreducible
     and left-canonical, and primitivity gives self-overlap converging to one.
-    The preceding theorem supplies the BNT canonical form. Gauge invariance
-    and the unit weight identify the positive-length matrix product vectors.
+    The preceding theorem supplies the BNT canonical form. If $P$ denotes
+    the total tensor of its single-sector decomposition, then gauge invariance
+    and the sector-decomposition formula give, for every $N>0$ and word
+    $\sigma$,
+    \[
+        V^{(N)}(A)_\sigma
+        =V^{(N)}(B)_\sigma
+        =1^N V^{(N)}(B)_\sigma
+        =V^{(N)}(P)_\sigma.
+    \]
 \end{proof}
 
 \begin{lemma}[Unit-modulus weight witness from the canonical-form normalization]%
