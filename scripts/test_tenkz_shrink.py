@@ -26,6 +26,15 @@ import tenkz_shrink  # noqa: E402
 
 def test_saved_path_capture_is_not_rendering_debt() -> None:
     assert ink_token_count(r"\path [ spath/save = {route} ] (0,0) -- (1,0) ;") == 0
+    assert ink_token_count(
+        r"\path [ spath/save = {route} , use~Hobby~shortcut ] (0,0) -- (1,0) ;"
+    ) == 0
+    assert ink_token_count(
+        r"\path [ spath/save = {route} , draw ] (0,0) -- (1,0) ;"
+    ) == 1
+    assert ink_token_count(
+        r"\path [ fill , spath/save = {route} ] (0,0) rectangle (1,1) ;"
+    ) == 1
     assert ink_token_count(r"\draw (0,0) -- (1,0) ;") == 1
 
 
