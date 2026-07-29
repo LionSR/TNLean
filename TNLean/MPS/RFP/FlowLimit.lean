@@ -133,7 +133,14 @@ flow if and only if two physical sites can be blocked into one through a
 physical isometry.
 
 Source: arXiv:1606.00608, Theorem 3.1, equation `AA=A`, lines 398--405, and
-the completely positive map argument at lines 1205--1209. -/
+the completely positive map argument at lines 1205--1209.
+
+**Local fix (renormalization-flow indices):** The displayed source equation
+sums the free indices `i₁, i₂` and writes an undefined output index `j₁`. The
+renormalization equation at lines 389--394, the source diagrams, and the
+Appendix argument give the well-formed equation used here. This correction
+changes no hypothesis or conclusion; see
+`docs/paper-gaps/cpsv16_renormalization_flow_index_typo.tex`. -/
 theorem appearsAsRenormalizationFlowLimit_iff_hasPhysicalBlockingIsometry
     (A : MPSTensor d D) :
     AppearsAsRenormalizationFlowLimit A ↔ HasPhysicalBlockingIsometry A := by
