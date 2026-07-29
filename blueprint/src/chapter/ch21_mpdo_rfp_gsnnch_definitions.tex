@@ -448,6 +448,46 @@ Definition~\ref{def:mpdo_source_gsnnch}; the converse comparison is not used.
     Definition~\ref{def:mpdo_source_gsnnch} is one.
 \end{proof}
 
+\begin{theorem}[Nonnegative sector coefficients give the GSNNCH form]
+    \label{thm:mpdo_nonnegative_orthogonal_commuting_sectors_gsnnch}
+    \lean{MPOTensor.OrthogonalCommutingSectorFamily.coefficientRoot}
+    \lean{MPOTensor.OrthogonalCommutingSectorFamily.toCoefficientRescaledGSNNCHData}
+    \lean{MPOTensor.OrthogonalCommutingSectorFamily.toCoefficientRescaledGSNNCHData_sectorProduct}
+    \lean{MPOTensor.OrthogonalCommutingSectorFamily.toCoefficientRescaledGSNNCHData_unnormalizedState}
+    \lean{MPOTensor.hasGSNNCHForm_of_nonnegative_orthogonalCommutingSectorFamily}
+    \leanok
+    \uses{def:mpdo_source_gsnnch,
+        def:mpdo_orthogonal_commuting_sector_family}
+    Suppose that $\{K_x\}_{x=0}^{g-1}$ has an orthogonally supported family
+    of commuting sector products, and let $n_x\geq1$ be natural numbers.
+    For every $N\geq2$, let $c_x(N)\geq0$ and suppose that
+    \begin{align}
+        \rho^{(N)}(M)
+        &=\sum_{x=0}^{g-1}c_x(N)\rho^{(N)}(K_x).
+        \notag
+    \end{align}
+    Then $M$ has the explicit GSNNCH sector form.
+\end{theorem}
+
+\begin{proof}\leanok
+    Fix $N\geq2$. Replace the bond in sector $x$ by
+    \begin{align}
+        \widetilde B^{(x)}_N
+        &=\left(\frac{c_x(N)}{n_x}\right)^{1/N}B^{(x)}.
+        \notag
+    \end{align}
+    This bond is positive, has the same support, and its translates commute.
+    Its periodic product is
+    \begin{align}
+        n_x\prod_{i=0}^{N-1}\tau_i(\widetilde B^{(x)}_N)
+        &=c_x(N)\prod_{i=0}^{N-1}\tau_i(B^{(x)})
+         =c_x(N)\rho^{(N)}(K_x).
+        \notag
+    \end{align}
+    Taking $n_x$ as the sector multiplicity gives the required decomposition,
+    with positive proportionality constant one.
+\end{proof}
+
 \begin{theorem}[Local orthogonal sums preserve SAL]
     \label{thm:mpdo_local_orthogonal_sum_sal}
     \lean{MPOTensor.isSAL_of_localOrthogonalSum}

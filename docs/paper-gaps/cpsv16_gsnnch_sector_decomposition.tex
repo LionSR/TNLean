@@ -189,9 +189,7 @@ compatibility obligation between \texttt{AppUkU=rl},
 \texttt{Appetakhetc}, and \texttt{PjKiPj} is complete, both for one sector
 and for a pairwise orthogonal family of sectors.
 
-The final printed proof of Proposition~\texttt{prop3to4} uses projector
-relations obtained earlier rather than deriving them in its last step.  The
-common-weight theorem retains the joint five-identity package
+The source-facing theorem retains the joint five-identity package
 \[
   \texttt{AppKxKy=0},\quad
   \texttt{AppUkU=rl},\quad
@@ -199,24 +197,33 @@ common-weight theorem retains the joint five-identity package
   \texttt{Apptralktrrk},\quad
   \texttt{AppPsiPhi}.
 \]
-It combines the supported sector bonds with the positive-length BNT sum and
-its natural copy multiplicities to obtain the GSNNCH form.  The trace
-factorization and normalization remain explicit hypotheses, although only
-positivity is needed in this forward implication.
+It also states the standing Case~II assumption that the full tensor generates
+positive semidefinite operators and the source-native positivity of every BNT
+bond dimension.  The latter is not stored by the bare sector-decomposition
+type and is necessary because algebraic injectivity is vacuous in dimension
+zero.
 
-There is an independent common-copy-weight interface:
+The five displayed identities do not imply common copy weights.  Appendix~C.2
+invokes \texttt{lemmus} to obtain that equality from zero correlation length,
+but zero correlation length is absent from Proposition~\texttt{prop3to4}.
+The formal proof therefore does not use \texttt{lemmus}.  At each fixed length
+$N\geq2$, sitewise compression by the pairwise orthogonal physical supports
+isolates
 \[
-  \mu_{s,q}=\mu_{s,q'}\qquad\text{for all copies }q,q'.
+  q_s(N)\rho^{(N)}(A_s),
+  \qquad
+  q_s(N)=\sum_q\mu_{s,q}^N.
 \]
-The five displayed identities do not imply this equality.  Appendix~C.2 invokes
-\texttt{lemmus} earlier in the Case~II argument to obtain it from zero
-correlation length.  A standalone formulation must therefore retain common
-copy weights as standing BNT data or state the equality explicitly.
-
-Under the additional common-weight hypothesis, the theorem derives the
-orthogonal commuting sector family from the printed identities before
-applying the general direct-sum result.  No reverse comparison with a
-single-bond predicate is needed.
+Global positivity makes this compression positive.  The sector operator is
+positive and nonzero, so uniqueness of its positive scalar phase shows that
+$q_s(N)$ is a nonnegative real number.  Rescaling the supported commuting bond
+by
+\[
+  \left(\frac{q_s(N)}{n_s}\right)^{1/N}
+\]
+then preserves the natural copy multiplicity $n_s$ and reproduces the exact
+unnormalized sector term.  Since Definition~4.8 chooses its data separately at
+each length, this proves the proposition without copy independence.
 
 The local Markov labels in Appendix C.2 belong inside one injective BNT
 component.  They are not the outer labels $x$ of Definition~4.8 and must not
@@ -243,14 +250,16 @@ positive neighboring operators have now been derived from
 directions removed without a minimality hypothesis.  Together with the
 two-sided supports obtained from \texttt{AppKxKy=0}, this gives supported
 positive commuting bonds with exact periodic products on the printed
-projections.  The common-weight theorem combines these bonds with the BNT
-copy-number identity while retaining \texttt{Apptralktrrk} and
+projections.  Fixed-length orthogonal compression proves that the actual BNT
+power-sum coefficients are nonnegative real numbers, and positive-root bond
+rescaling absorbs each coefficient while retaining the natural BNT copy
+number.  The source-facing theorem keeps \texttt{Apptralktrrk} and
 \texttt{AppPsiPhi} in its statement.
 
-Proposition~\texttt{prop3to4} nevertheless remains partial under its printed
-hypotheses.  Copy independence is absent from the five listed identities,
-and the proof invokes Lemma~\texttt{lemmus}, whose hypothesis includes source
-ZCL.  The formal theorem therefore carries an explicit scope restriction
-rather than treating that earlier lemma as an unstated assumption.
+Proposition~\texttt{prop3to4} is therefore complete under its printed five
+identities together with the standing Case~II MPDO assumption and positive BNT
+bond dimensions.  This repairs the proposition by a chainwise argument; it
+does not validate the printed invocation of Lemma~\texttt{lemmus} and does not
+prove copy independence.
 
 \end{document}
