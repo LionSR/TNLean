@@ -3797,6 +3797,7 @@
 \prop_new:N \l__tenkz_kernel_ro_box_prop     % wire id -> {x}{xb}{y}{yb}{tau}
 \prop_new:N \l__tenkz_kernel_ro_legs_prop    % leg path id -> {{lane}{tau}},...
 \prop_new:N \l__tenkz_kernel_ro_taken_prop   % side | selector -> next lane
+\prop_new:N \l__tenkz_kernel_ro_family_prop  % side | selector -> string ids
 
 % A route stands in the axes of the selection it travels, which is the rule a
 % contour over that same selection already obeys: a quantity measured against
@@ -4125,6 +4126,26 @@
       }
   }
 
+\cs_new_protected:Npn \__tenkz_kernel_r_route_lane_enrol:nn #1#2
+  {
+    \prop_get:NeN \l__tenkz_kernel_ro_family_prop
+      { #1 | \tl_use:N \l__tenkz_kernel_ro_sel_tl }
+      \l__tenkz_kernel_ro_tl
+    \quark_if_no_value:NTF \l__tenkz_kernel_ro_tl
+      {
+        \prop_put:Nen \l__tenkz_kernel_ro_family_prop
+          { #1 | \tl_use:N \l__tenkz_kernel_ro_sel_tl } {#2}
+      }
+      {
+        \exp_args:NV \clist_map_inline:nn \l__tenkz_kernel_ro_tl
+          { \__tenkz_string_disjoint:nn {##1} {#2} }
+        \tl_put_right:Nn \l__tenkz_kernel_ro_tl {,#2}
+        \prop_put:NeV \l__tenkz_kernel_ro_family_prop
+          { #1 | \tl_use:N \l__tenkz_kernel_ro_sel_tl }
+          \l__tenkz_kernel_ro_tl
+      }
+  }
+
 \cs_new_protected:Npn \__tenkz_kernel_r_route_measure:n #1
   {
     \__tenkz_kernel_route_of:nNN {#1}
@@ -4139,6 +4160,46 @@
           \l__tenkz_kernel_ro_mem_seq \l__tenkz_kernel_ro_scale_tl
         \__tenkz_kernel_hull_turn:NN
           \l__tenkz_kernel_ro_mem_seq \l__tenkz_kernel_ro_tau_tl
+        % Only the complete generated lane is model-proven disjoint from its
+        % siblings.  An address-bearing route adds arbitrary segments between
+        % its endpoints and the hull, and those segments still need geometric
+        % crossing checks.
+        \bool_set_false:N \l__tenkz_kernel_ro_bool
+        \prop_if_in:NeTF \l__tenkz_model_record_prop { #1 / closed }
+          { \bool_set_true:N \l__tenkz_kernel_ro_bool }
+          {
+            \bool_set_true:N \l__tenkz_kernel_ro_bool
+            \clist_map_inline:nn {from, to}
+              {
+                \__tenkz_model_get:nnN {#1} {##1} \l__tenkz_kernel_r_end_tl
+                \quark_if_no_value:NF \l__tenkz_kernel_r_end_tl
+                  { \bool_set_false:N \l__tenkz_kernel_ro_bool }
+                \__tenkz_model_get:nnN
+                  {#1} {##1-open} \l__tenkz_kernel_r_end_tl
+                \quark_if_no_value:NTF \l__tenkz_kernel_r_end_tl
+                  { \bool_set_false:N \l__tenkz_kernel_ro_bool }
+                  {
+                    \str_if_eq:VnF \l__tenkz_kernel_r_end_tl {route}
+                      { \bool_set_false:N \l__tenkz_kernel_ro_bool }
+                  }
+              }
+          }
+        \bool_if:NT \l__tenkz_kernel_ro_bool
+          {
+            \__tenkz_kernel_r_sid:nN {#1} \l__tenkz_kernel_r_sid_tl
+            \str_if_eq:VnTF \l__tenkz_kernel_ro_side_tl {all}
+              {
+                \clist_map_inline:nn {n,s,e,w}
+                  {
+                    \exp_args:NnV \__tenkz_kernel_r_route_lane_enrol:nn {##1}
+                      \l__tenkz_kernel_r_sid_tl
+                  }
+              }
+              {
+                \exp_args:NVV \__tenkz_kernel_r_route_lane_enrol:nn
+                  \l__tenkz_kernel_ro_side_tl \l__tenkz_kernel_r_sid_tl
+              }
+          }
         \__tenkz_kernel_r_route_lane_take:
         \__tenkz_kernel_r_route_edge:nnN
           { \l__tenkz_kernel_ro_tau_tl       } { } \l__tenkz_kernel_ro_xb_fp
@@ -5323,6 +5384,7 @@
     \prop_clear:N \l__tenkz_kernel_ro_box_prop
     \prop_clear:N \l__tenkz_kernel_ro_legs_prop
     \prop_clear:N \l__tenkz_kernel_ro_taken_prop
+    \prop_clear:N \l__tenkz_kernel_ro_family_prop
     \__tenkz_model_map_ids:nn {wire}
       {
         \__tenkz_kernel_r_route_measure:n {##1}
