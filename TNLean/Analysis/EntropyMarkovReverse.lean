@@ -13,7 +13,7 @@ This file proves that a quantum-Markov-chain (block-diagonal) state attains
 equality in strong subadditivity, the reverse direction of the Hayashi
 characterization. The forward direction (equality forces the block-diagonal
 structure) is proved in `TNLean.Analysis.EntropyMarkovForward` from the
-recovered conditional tripartite block form.
+ambient Markov tripartite block form.
 
 ## Strategy
 

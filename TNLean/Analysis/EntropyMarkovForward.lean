@@ -5,15 +5,15 @@ Authors: TNLean contributors
 -/
 import TNLean.Algebra.PositiveSemidefiniteNormalization
 import TNLean.Analysis.HayashiMarkovStructure
-import TNLean.Channel.KoashiImoto.RecoveredConditionalTripartiteBlockForm
+import TNLean.Channel.KoashiImoto.MarkovTripartiteBlockForm
 
 /-!
 # Equality in strong subadditivity implies quantum-Markov structure
 
 This module proves the forward direction of the Hayashi--Ruskai--
-Hayden--Jozsa--Petz--Winter characterization.  The recovered conditional
-tripartite block form supplies positive, unnormalized left factors and
-normalized recovered right factors.  Their traces are the sector
+Hayden--Jozsa--Petz--Winter characterization.  The Markov tripartite block
+form supplies positive, unnormalized left factors and
+normalized sector output factors.  Their traces are the sector
 probabilities.  Total positive-semidefinite normalization is used only while
 constructing the final `HayashiMarkovDecomposition`; zero-weight sectors then
 make the chosen density fillers invisible.
@@ -28,7 +28,7 @@ open Matrix Finset
 
 namespace Matrix
 
-open RecoveredConditionalDilationInternal
+open MarkovDilation
 
 variable {dA dB dC : ℕ}
 
@@ -36,10 +36,10 @@ private noncomputable def hayashiLeftBasepoint
     {ρ_ABC : Matrix (Fin dA × Fin dB × Fin dC)
       (Fin dA × Fin dB × Fin dC) ℂ}
     {hρ_dm : ρ_ABC.PosSemidef ∧ ρ_ABC.trace = 1}
-    [Nonempty (RecoveredEffectIndex (traceC_ABC ρ_ABC))]
-    (F : RecoveredConditionalAmbientBipartiteBlockForm ρ_ABC hρ_dm)
+    [Nonempty (ActiveConditionalEffectIndex (traceC_ABC ρ_ABC))]
+    (F : AmbientMarkovBipartiteBlockForm ρ_ABC hρ_dm)
     (hA : Nonempty (Fin dA)) (k : Fin ((dB - F.jointSupport.n) + F.jointSupport.K)) :
-    Fin dA × Fin (recoveredAmbientHayashiLeftDim
+    Fin dA × Fin (ambientHayashiLeftDim
       (z := dB - F.jointSupport.n) F.jointSupport.d k) :=
   ⟨Classical.choice hA,
     ⟨0, F.ambient_d_pos (finSumFinEquiv.symm k)⟩⟩
@@ -48,10 +48,10 @@ private noncomputable def hayashiRightBasepoint
     {ρ_ABC : Matrix (Fin dA × Fin dB × Fin dC)
       (Fin dA × Fin dB × Fin dC) ℂ}
     {hρ_dm : ρ_ABC.PosSemidef ∧ ρ_ABC.trace = 1}
-    [Nonempty (RecoveredEffectIndex (traceC_ABC ρ_ABC))]
-    (F : RecoveredConditionalAmbientBipartiteBlockForm ρ_ABC hρ_dm)
+    [Nonempty (ActiveConditionalEffectIndex (traceC_ABC ρ_ABC))]
+    (F : AmbientMarkovBipartiteBlockForm ρ_ABC hρ_dm)
     (hC : Nonempty (Fin dC)) (k : Fin ((dB - F.jointSupport.n) + F.jointSupport.K)) :
-    Fin (recoveredAmbientHayashiRightDim
+    Fin (ambientHayashiRightDim
       (z := dB - F.jointSupport.n) F.jointSupport.m k) × Fin dC :=
   ⟨⟨0, F.ambient_m_pos (finSumFinEquiv.symm k)⟩, Classical.choice hC⟩
 
@@ -59,86 +59,86 @@ private noncomputable def hayashiSectorProbability
     {ρ_ABC : Matrix (Fin dA × Fin dB × Fin dC)
       (Fin dA × Fin dB × Fin dC) ℂ}
     {hρ_dm : ρ_ABC.PosSemidef ∧ ρ_ABC.trace = 1}
-    [Nonempty (RecoveredEffectIndex (traceC_ABC ρ_ABC))]
-    (F : RecoveredConditionalAmbientBipartiteBlockForm ρ_ABC hρ_dm)
+    [Nonempty (ActiveConditionalEffectIndex (traceC_ABC ρ_ABC))]
+    (F : AmbientMarkovBipartiteBlockForm ρ_ABC hρ_dm)
     (k : Fin ((dB - F.jointSupport.n) + F.jointSupport.K)) : ℝ :=
-  (ambientRecoveredConditionalState F.jointSupport.ω
+  (ambientConditionalFactor F.jointSupport.ω
     (finSumFinEquiv.symm k)).trace.re
 
 private noncomputable def hayashiLeftBlockState
     {ρ_ABC : Matrix (Fin dA × Fin dB × Fin dC)
       (Fin dA × Fin dB × Fin dC) ℂ}
     {hρ_dm : ρ_ABC.PosSemidef ∧ ρ_ABC.trace = 1}
-    [Nonempty (RecoveredEffectIndex (traceC_ABC ρ_ABC))]
-    (F : RecoveredConditionalAmbientBipartiteBlockForm ρ_ABC hρ_dm)
+    [Nonempty (ActiveConditionalEffectIndex (traceC_ABC ρ_ABC))]
+    (F : AmbientMarkovBipartiteBlockForm ρ_ABC hρ_dm)
     (hA : Nonempty (Fin dA))
     (k : Fin ((dB - F.jointSupport.n) + F.jointSupport.K)) :
     Matrix
-      (Fin dA × Fin (recoveredAmbientHayashiLeftDim
+      (Fin dA × Fin (ambientHayashiLeftDim
         (z := dB - F.jointSupport.n) F.jointSupport.d k))
-      (Fin dA × Fin (recoveredAmbientHayashiLeftDim
+      (Fin dA × Fin (ambientHayashiLeftDim
         (z := dB - F.jointSupport.n) F.jointSupport.d k)) ℂ :=
   Matrix.normalizePosSemidef (hayashiLeftBasepoint F hA k)
-    (ambientRecoveredConditionalState F.jointSupport.ω
+    (ambientConditionalFactor F.jointSupport.ω
       (finSumFinEquiv.symm k))
 
 private noncomputable def hayashiRightBlockState
     {ρ_ABC : Matrix (Fin dA × Fin dB × Fin dC)
       (Fin dA × Fin dB × Fin dC) ℂ}
     {hρ_dm : ρ_ABC.PosSemidef ∧ ρ_ABC.trace = 1}
-    [Nonempty (RecoveredEffectIndex (traceC_ABC ρ_ABC))]
-    {F : RecoveredConditionalAmbientBipartiteBlockForm ρ_ABC hρ_dm}
-    (D : RecoveredConditionalDilationBlockForm ρ_ABC hρ_dm F)
+    [Nonempty (ActiveConditionalEffectIndex (traceC_ABC ρ_ABC))]
+    {F : AmbientMarkovBipartiteBlockForm ρ_ABC hρ_dm}
+    (D : MarkovDilationBlockForm ρ_ABC hρ_dm F)
     (hC : Nonempty (Fin dC))
     (k : Fin ((dB - F.jointSupport.n) + F.jointSupport.K)) :
     Matrix
-      (Fin (recoveredAmbientHayashiRightDim
+      (Fin (ambientHayashiRightDim
         (z := dB - F.jointSupport.n) F.jointSupport.m k) × Fin dC)
-      (Fin (recoveredAmbientHayashiRightDim
+      (Fin (ambientHayashiRightDim
         (z := dB - F.jointSupport.n) F.jointSupport.m k) × Fin dC) ℂ :=
   Matrix.normalizePosSemidef (hayashiRightBasepoint F hC k)
-    (D.ambientRecoveredOutputState (finSumFinEquiv.symm k))
+    (D.ambientSectorOutputFactor (finSumFinEquiv.symm k))
 
-private theorem ambientRecoveredOutputState_posSemidef
+private theorem ambientSectorOutputFactor_posSemidef
     {ρ_ABC : Matrix (Fin dA × Fin dB × Fin dC)
       (Fin dA × Fin dB × Fin dC) ℂ}
     {hρ_dm : ρ_ABC.PosSemidef ∧ ρ_ABC.trace = 1}
-    [Nonempty (RecoveredEffectIndex (traceC_ABC ρ_ABC))]
-    {F : RecoveredConditionalAmbientBipartiteBlockForm ρ_ABC hρ_dm}
-    (D : RecoveredConditionalDilationBlockForm ρ_ABC hρ_dm F)
-    (s : AmbientRecoveredBlockIndex (dB - F.jointSupport.n) F.jointSupport.K) :
-    (D.ambientRecoveredOutputState s).PosSemidef := by
+    [Nonempty (ActiveConditionalEffectIndex (traceC_ABC ρ_ABC))]
+    {F : AmbientMarkovBipartiteBlockForm ρ_ABC hρ_dm}
+    (D : MarkovDilationBlockForm ρ_ABC hρ_dm F)
+    (s : AmbientMarkovBlockIndex (dB - F.jointSupport.n) F.jointSupport.K) :
+    (D.ambientSectorOutputFactor s).PosSemidef := by
   rcases s with z | j
   · exact Matrix.PosSemidef.zero
-  · exact D.recoveredSectorState_posSemidef j
+  · exact D.sectorOutputState_posSemidef j
 
 private theorem ambientSector_factor_normalized
     {ρ_ABC : Matrix (Fin dA × Fin dB × Fin dC)
       (Fin dA × Fin dB × Fin dC) ℂ}
     {hρ_dm : ρ_ABC.PosSemidef ∧ ρ_ABC.trace = 1}
-    [Nonempty (RecoveredEffectIndex (traceC_ABC ρ_ABC))]
-    {F : RecoveredConditionalAmbientBipartiteBlockForm ρ_ABC hρ_dm}
-    (D : RecoveredConditionalDilationBlockForm ρ_ABC hρ_dm F)
-    (s : AmbientRecoveredBlockIndex (dB - F.jointSupport.n) F.jointSupport.K)
-    (x₀ : Fin dA × Fin (ambientRecoveredConditionalDim F.jointSupport.d s))
-    (y₀ : Fin (ambientRecoveredCommonDim F.jointSupport.m s) × Fin dC) :
-    ambientRecoveredConditionalState F.jointSupport.ω s ⊗ₖ
-        D.ambientRecoveredOutputState s =
-      ((ambientRecoveredConditionalState F.jointSupport.ω s).trace.re : ℂ) •
+    [Nonempty (ActiveConditionalEffectIndex (traceC_ABC ρ_ABC))]
+    {F : AmbientMarkovBipartiteBlockForm ρ_ABC hρ_dm}
+    (D : MarkovDilationBlockForm ρ_ABC hρ_dm F)
+    (s : AmbientMarkovBlockIndex (dB - F.jointSupport.n) F.jointSupport.K)
+    (x₀ : Fin dA × Fin (ambientMarkovConditionalDim F.jointSupport.d s))
+    (y₀ : Fin (ambientMarkovCommonDim F.jointSupport.m s) × Fin dC) :
+    ambientConditionalFactor F.jointSupport.ω s ⊗ₖ
+        D.ambientSectorOutputFactor s =
+      ((ambientConditionalFactor F.jointSupport.ω s).trace.re : ℂ) •
         (Matrix.normalizePosSemidef x₀
-            (ambientRecoveredConditionalState F.jointSupport.ω s) ⊗ₖ
-          Matrix.normalizePosSemidef y₀ (D.ambientRecoveredOutputState s)) := by
+            (ambientConditionalFactor F.jointSupport.ω s) ⊗ₖ
+          Matrix.normalizePosSemidef y₀ (D.ambientSectorOutputFactor s)) := by
   rcases s with z | j
-  · simp [ambientRecoveredConditionalState,
-      RecoveredConditionalDilationBlockForm.ambientRecoveredOutputState]
+  · simp [ambientConditionalFactor,
+      MarkovDilationBlockForm.ambientSectorOutputFactor]
   · have htrace :
-        (D.ambientRecoveredOutputState (Sum.inr j)).trace.re = 1 := by
-      change (D.recoveredSectorState j).trace.re = 1
-      rw [D.recoveredSectorState_trace j]
+        (D.ambientSectorOutputFactor (Sum.inr j)).trace.re = 1 := by
+      change (D.sectorOutputState j).trace.re = 1
+      rw [D.sectorOutputState_trace j]
       exact Complex.one_re
     have hfactor := Matrix.kronecker_eq_trace_re_mul_normalized x₀ y₀
       (F.ambient_ω_pos (Sum.inr j))
-      (ambientRecoveredOutputState_posSemidef D (Sum.inr j))
+      (ambientSectorOutputFactor_posSemidef D (Sum.inr j))
     rw [htrace, mul_one] at hfactor
     exact hfactor
 
@@ -146,66 +146,66 @@ private theorem ambientTripartiteBlockMatrix_eq_ambientStates
     {ρ_ABC : Matrix (Fin dA × Fin dB × Fin dC)
       (Fin dA × Fin dB × Fin dC) ℂ}
     {hρ_dm : ρ_ABC.PosSemidef ∧ ρ_ABC.trace = 1}
-    [Nonempty (RecoveredEffectIndex (traceC_ABC ρ_ABC))]
-    {F : RecoveredConditionalAmbientBipartiteBlockForm ρ_ABC hρ_dm}
-    (D : RecoveredConditionalDilationBlockForm ρ_ABC hρ_dm F) :
+    [Nonempty (ActiveConditionalEffectIndex (traceC_ABC ρ_ABC))]
+    {F : AmbientMarkovBipartiteBlockForm ρ_ABC hρ_dm}
+    (D : MarkovDilationBlockForm ρ_ABC hρ_dm F) :
     ambientTripartiteBlockMatrix
-        (recoveredAmbientMiddleBlockEquiv F.e₀ F.jointSupport.e)
-        F.jointSupport.ω D.recoveredSectorState =
+        (ambientMarkovMiddleBlockEquiv F.e₀ F.jointSupport.e)
+        F.jointSupport.ω D.sectorOutputState =
       Matrix.reindex
-        (recoveredTripartiteBlockEquiv
-          (recoveredAmbientMiddleBlockEquiv F.e₀ F.jointSupport.e))
-        (recoveredTripartiteBlockEquiv
-          (recoveredAmbientMiddleBlockEquiv F.e₀ F.jointSupport.e))
+        (tripartiteBlockEquiv
+          (ambientMarkovMiddleBlockEquiv F.e₀ F.jointSupport.e))
+        (tripartiteBlockEquiv
+          (ambientMarkovMiddleBlockEquiv F.e₀ F.jointSupport.e))
         (Matrix.blockDiagonal' fun s =>
-          ambientRecoveredConditionalState F.jointSupport.ω s ⊗ₖ
-            D.ambientRecoveredOutputState s) := by
+          ambientConditionalFactor F.jointSupport.ω s ⊗ₖ
+            D.ambientSectorOutputFactor s) := by
   unfold ambientTripartiteBlockMatrix
   apply congrArg (Matrix.reindex
-    (recoveredTripartiteBlockEquiv
-      (recoveredAmbientMiddleBlockEquiv F.e₀ F.jointSupport.e))
-    (recoveredTripartiteBlockEquiv
-      (recoveredAmbientMiddleBlockEquiv F.e₀ F.jointSupport.e)))
+    (tripartiteBlockEquiv
+      (ambientMarkovMiddleBlockEquiv F.e₀ F.jointSupport.e))
+    (tripartiteBlockEquiv
+      (ambientMarkovMiddleBlockEquiv F.e₀ F.jointSupport.e)))
   apply congrArg Matrix.blockDiagonal'
   funext s
   rcases s with z | j
-  · simp [ambientRecoveredConditionalState,
-      RecoveredConditionalDilationBlockForm.ambientRecoveredOutputState]
+  · simp [ambientConditionalFactor,
+      MarkovDilationBlockForm.ambientSectorOutputFactor]
   · rfl
 
 private theorem hayashiAbcEquiv_symm_apply
     {ρ_ABC : Matrix (Fin dA × Fin dB × Fin dC)
       (Fin dA × Fin dB × Fin dC) ℂ}
     {hρ_dm : ρ_ABC.PosSemidef ∧ ρ_ABC.trace = 1}
-    [Nonempty (RecoveredEffectIndex (traceC_ABC ρ_ABC))]
-    (F : RecoveredConditionalAmbientBipartiteBlockForm ρ_ABC hρ_dm)
+    [Nonempty (ActiveConditionalEffectIndex (traceC_ABC ρ_ABC))]
+    (F : AmbientMarkovBipartiteBlockForm ρ_ABC hρ_dm)
     (k : Fin ((dB - F.jointSupport.n) + F.jointSupport.K))
     (a : Fin dA)
-    (v : Fin (recoveredAmbientHayashiLeftDim
+    (v : Fin (ambientHayashiLeftDim
       (z := dB - F.jointSupport.n) F.jointSupport.d k))
-    (u : Fin (recoveredAmbientHayashiRightDim
+    (u : Fin (ambientHayashiRightDim
       (z := dB - F.jointSupport.n) F.jointSupport.m k))
     (c : Fin dC) :
     (HayashiMarkov.abcEquiv
-      (recoveredAmbientHayashiFinMiddleEquiv F.e₀ F.jointSupport.e)).symm
+      (ambientHayashiFinMiddleEquiv F.e₀ F.jointSupport.e)).symm
         (a, (⟨k, (v, u)⟩, c)) =
-      recoveredTripartiteBlockEquiv
-        (recoveredAmbientMiddleBlockEquiv F.e₀ F.jointSupport.e)
+      tripartiteBlockEquiv
+        (ambientMarkovMiddleBlockEquiv F.e₀ F.jointSupport.e)
         ⟨finSumFinEquiv.symm k, ((a, v), (u, c))⟩ := by
   apply (HayashiMarkov.abcEquiv
-    (recoveredAmbientHayashiFinMiddleEquiv F.e₀ F.jointSupport.e)).injective
+    (ambientHayashiFinMiddleEquiv F.e₀ F.jointSupport.e)).injective
   rw [(HayashiMarkov.abcEquiv
-    (recoveredAmbientHayashiFinMiddleEquiv F.e₀ F.jointSupport.e)).apply_symm_apply]
+    (ambientHayashiFinMiddleEquiv F.e₀ F.jointSupport.e)).apply_symm_apply]
   simpa [HayashiMarkov.sigmaAssoc] using
-    (hayashi_sigmaAssoc_recoveredTripartiteBlockEquiv_apply
+    (hayashi_sigmaAssoc_tripartiteBlockEquiv_apply
       F.e₀ F.jointSupport.e k a u v c).symm
 
 private theorem hayashiLeftBlockState_density
     {ρ_ABC : Matrix (Fin dA × Fin dB × Fin dC)
       (Fin dA × Fin dB × Fin dC) ℂ}
     {hρ_dm : ρ_ABC.PosSemidef ∧ ρ_ABC.trace = 1}
-    [Nonempty (RecoveredEffectIndex (traceC_ABC ρ_ABC))]
-    (F : RecoveredConditionalAmbientBipartiteBlockForm ρ_ABC hρ_dm)
+    [Nonempty (ActiveConditionalEffectIndex (traceC_ABC ρ_ABC))]
+    (F : AmbientMarkovBipartiteBlockForm ρ_ABC hρ_dm)
     (hA : Nonempty (Fin dA))
     (k : Fin ((dB - F.jointSupport.n) + F.jointSupport.K)) :
     (hayashiLeftBlockState F hA k).PosSemidef ∧
@@ -218,21 +218,21 @@ private theorem hayashiRightBlockState_density
     {ρ_ABC : Matrix (Fin dA × Fin dB × Fin dC)
       (Fin dA × Fin dB × Fin dC) ℂ}
     {hρ_dm : ρ_ABC.PosSemidef ∧ ρ_ABC.trace = 1}
-    [Nonempty (RecoveredEffectIndex (traceC_ABC ρ_ABC))]
-    {F : RecoveredConditionalAmbientBipartiteBlockForm ρ_ABC hρ_dm}
-    (D : RecoveredConditionalDilationBlockForm ρ_ABC hρ_dm F)
+    [Nonempty (ActiveConditionalEffectIndex (traceC_ABC ρ_ABC))]
+    {F : AmbientMarkovBipartiteBlockForm ρ_ABC hρ_dm}
+    (D : MarkovDilationBlockForm ρ_ABC hρ_dm F)
     (hC : Nonempty (Fin dC))
     (k : Fin ((dB - F.jointSupport.n) + F.jointSupport.K)) :
     (hayashiRightBlockState D hC k).PosSemidef ∧
       (hayashiRightBlockState D hC k).trace = 1 := by
-  let hτ := ambientRecoveredOutputState_posSemidef D (finSumFinEquiv.symm k)
+  let hτ := ambientSectorOutputFactor_posSemidef D (finSumFinEquiv.symm k)
   exact ⟨Matrix.normalizePosSemidef_posSemidef _ hτ,
     Matrix.normalizePosSemidef_trace _ hτ⟩
 
 /-- **Forward direction of the Hayashi / Ruskai / Hayden--Jozsa--Petz--Winter
 characterization of strong-subadditivity equality.**
 
-Equality in strong subadditivity gives the ambient recovered HJPW direct sum.
+Equality in strong subadditivity gives the ambient Markov HJPW direct sum.
 The real traces of its positive left factors are probabilities, and total PSD
 normalization gives density matrices even in zero-weight sectors. The normalized
 density matrices chosen there contribute nothing because their weight is zero.
@@ -248,20 +248,20 @@ theorem hayashi_ssa_equality_characterization_forward
       Nonempty (HayashiMarkovDecomposition ρ_ABC) := by
   classical
   intro hSSA
-  letI : Nonempty (RecoveredEffectIndex (traceC_ABC ρ_ABC)) :=
-    recoveredEffectIndex_nonempty (traceC_ABC ρ_ABC) (by
+  letI : Nonempty (ActiveConditionalEffectIndex (traceC_ABC ρ_ABC)) :=
+    activeConditionalEffectIndex_nonempty (traceC_ABC ρ_ABC) (by
       rw [← trace_eq_trace_traceC_ABC]
       exact hρ_dm.2)
   obtain ⟨⟨F, D, htripartite⟩⟩ :=
-    exists_recoveredConditionalTripartiteBlockForm ρ_ABC hρ_dm hSSA
+    exists_markovTripartiteBlockForm ρ_ABC hρ_dm hSSA
   have hABC : Nonempty (Fin dA × Fin dB × Fin dC) :=
     Matrix.nonempty_of_trace_eq_one ρ_ABC hρ_dm.2
   have hA : Nonempty (Fin dA) := ⟨hABC.some.1⟩
   have hC : Nonempty (Fin dC) := ⟨hABC.some.2.2⟩
   let m := (dB - F.jointSupport.n) + F.jointSupport.K
-  let dL := recoveredAmbientHayashiLeftDim
+  let dL := ambientHayashiLeftDim
     (z := dB - F.jointSupport.n) F.jointSupport.d
-  let dR := recoveredAmbientHayashiRightDim
+  let dR := ambientHayashiRightDim
     (z := dB - F.jointSupport.n) F.jointSupport.m
   let p := hayashiSectorProbability F
   let ρ_left := hayashiLeftBlockState F hA
@@ -270,7 +270,7 @@ theorem hayashi_ssa_equality_characterization_forward
     m := m
     dL := dL
     dR := dR
-    decompB := recoveredAmbientHayashiFinMiddleEquiv F.e₀ F.jointSupport.e
+    decompB := ambientHayashiFinMiddleEquiv F.e₀ F.jointSupport.e
     U_B := F.hayashiMiddleUnitary
     p := p
     hp_nonneg := ?_
@@ -284,18 +284,18 @@ theorem hayashi_ssa_equality_characterization_forward
     exact (Complex.nonneg_iff.mp
       (F.ambient_ω_pos (finSumFinEquiv.symm k)).trace_nonneg).1
   · rw [show (∑ k, p k) =
-      ∑ s, (ambientRecoveredConditionalState F.jointSupport.ω s).trace.re by
+      ∑ s, (ambientConditionalFactor F.jointSupport.ω s).trace.re by
         exact Equiv.sum_comp finSumFinEquiv.symm
-          (fun s => (ambientRecoveredConditionalState
+          (fun s => (ambientConditionalFactor
             F.jointSupport.ω s).trace.re)]
     have hsum :
-        (∑ s : AmbientRecoveredBlockIndex
+        (∑ s : AmbientMarkovBlockIndex
             (dB - F.jointSupport.n) F.jointSupport.K,
-          ((ambientRecoveredConditionalState
+          ((ambientConditionalFactor
             F.jointSupport.ω s).trace.re : ℂ)) = 1 := by
       rw [Finset.sum_congr rfl fun s _ => (show
-        ((ambientRecoveredConditionalState F.jointSupport.ω s).trace.re : ℂ) =
-          (ambientRecoveredConditionalState F.jointSupport.ω s).trace by
+        ((ambientConditionalFactor F.jointSupport.ω s).trace.re : ℂ) =
+          (ambientConditionalFactor F.jointSupport.ω s).trace by
         apply Complex.ext
         · simp
         · simpa using (Complex.nonneg_iff.mp
@@ -311,8 +311,8 @@ theorem hayashi_ssa_equality_characterization_forward
           (HayashiMarkov.liftB (dA := dA) (dB := dB) (dC := dC)
             (F.hayashiMiddleUnitary : Matrix (Fin dB) (Fin dB) ℂ))ᴴ =
         ambientTripartiteBlockMatrix
-          (recoveredAmbientMiddleBlockEquiv F.e₀ F.jointSupport.e)
-          F.jointSupport.ω D.recoveredSectorState := by
+          (ambientMarkovMiddleBlockEquiv F.e₀ F.jointSupport.e)
+          F.jointSupport.ω D.sectorOutputState := by
       simpa [HayashiMarkov.liftB, Matrix.star_eq_conjTranspose,
         Matrix.conjTranspose_kronecker] using htripartite
     rw [hconj, ambientTripartiteBlockMatrix_eq_ambientStates D]

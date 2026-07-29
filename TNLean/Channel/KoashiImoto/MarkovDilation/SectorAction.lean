@@ -3,15 +3,14 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Channel.KoashiImoto.RecoveredConditionalDilation.Basic
+import TNLean.Channel.KoashiImoto.MarkovDilation.Basic
 
 /-!
-# Recovered conditional sector action
+# Markov sector action
 
 This file derives the dependent block and output-slice data for the HJPW
-recovery operation.  It bridges the generic fixed-environment dilation
-machinery to the supported sectors supplied by the recovered conditional
-block form.
+recovery operation. The generic fixed-environment dilation restricts to the
+supported sectors supplied by the invariant conditional block form.
 
 Source: Hayden--Jozsa--Petz--Winter,
 arXiv:quant-ph/0304007v2, Theorem 6, equation (15), lines 547--560;
@@ -24,19 +23,19 @@ open scoped Matrix ComplexOrder MatrixOrder BigOperators Kronecker
 
 namespace Matrix
 
-open RecoveredConditionalDilationInternal
+open MarkovDilation
 
 variable {dA dB dC : ℕ}
 
 /-- Source-specific square slices and local rectangular Kraus blocks for the
 HJPW recovery operation. -/
-theorem RecoveredConditionalDilationInternal.exists_recoveredSliceSectorBlocks
+theorem MarkovDilation.exists_normalizedSliceSectorBlocks
     (ρ_ABC : Matrix (Fin dA × Fin dB × Fin dC)
       (Fin dA × Fin dB × Fin dC) ℂ)
     (hρ_dm : ρ_ABC.PosSemidef ∧ ρ_ABC.trace = 1)
     (hSSA : IsSSAEquality ρ_ABC hρ_dm.1.isHermitian)
-    [Nonempty (RecoveredEffectIndex (traceC_ABC ρ_ABC))]
-    (F : RecoveredConditionalAmbientBipartiteBlockForm ρ_ABC hρ_dm) :
+    [Nonempty (ActiveConditionalEffectIndex (traceC_ABC ρ_ABC))]
+    (F : AmbientMarkovBipartiteBlockForm ρ_ABC hρ_dm) :
     ∃ (r : ℕ)
       (R : Fin r → Matrix (Fin dB × Fin dC) (Fin dB) ℂ)
       (S : Fin (dC * r) → Matrix (Fin dB) (Fin dB) ℂ)
@@ -51,7 +50,7 @@ theorem RecoveredConditionalDilationInternal.exists_recoveredSliceSectorBlocks
       (∑ i, (R i)ᴴ * R i = (1 : Matrix (Fin dB) (Fin dB) ℂ)) ∧
       (∀ k, S k = rightOutputSlice
         (R (finProdFinEquiv.symm k).2) (finProdFinEquiv.symm k).1) ∧
-      (∀ X, Kraus.map S X = recoveredMiddleChannel ρ_ABC hρ_dm.1 X) ∧
+      (∀ X, Kraus.map S X = petzMiddleChannel ρ_ABC hρ_dm.1 X) ∧
       (∀ k, S k * F.jointSupport.V =
         F.jointSupport.V *
           (Kraus.supportCompressedKraus F.jointSupport.V S) k) ∧
@@ -88,9 +87,9 @@ theorem RecoveredConditionalDilationInternal.exists_recoveredSliceSectorBlocks
     fun k ↦ rightOutputSlice
       (R (finProdFinEquiv.symm k).2) (finProdFinEquiv.symm k).1
   have hSmap :
-      ∀ X, Kraus.map S X = recoveredMiddleChannel ρ_ABC hρ_dm.1 X := by
+      ∀ X, Kraus.map S X = petzMiddleChannel ρ_ABC hρ_dm.1 X := by
     intro X
-    rw [recoveredMiddleChannel, LinearMap.comp_apply]
+    rw [petzMiddleChannel, LinearMap.comp_apply]
     calc
       rectangularKrausMap S X =
           rectangularKrausMap
@@ -106,24 +105,24 @@ theorem RecoveredConditionalDilationInternal.exists_recoveredSliceSectorBlocks
         congrArg partialTraceRight (hRmap X).symm
   have hStp : Kraus.IsTP S := by
     apply kraus_sum_conjTranspose_mul_of_tp S
-      (recoveredMiddleChannel ρ_ABC hρ_dm.1)
+      (petzMiddleChannel ρ_ABC hρ_dm.1)
     · exact fun X ↦ (hSmap X).symm
     · exact
-        (recoveredMiddleChannel_isKrausCPTP ρ_ABC hρ_dm).trace_map
+        (petzMiddleChannel_isKrausCPTP ρ_ABC hρ_dm).trace_map
   let G : Kraus.PreservingKrausFamily
-      (recoveredConditionalState (traceC_ABC ρ_ABC)) :=
+      (normalizedConditionalSlice (traceC_ABC ρ_ABC)) :=
     { numKraus := dC * r
       Kfam := S
       isPreserving := ⟨hStp, fun x ↦ by
         rw [hSmap]
-        exact recoveredMiddleChannel_recoveredConditionalState
+        exact petzMiddleChannel_normalizedConditionalSlice
           ρ_ABC hρ_dm hSSA x⟩ }
   have hSsupport : ∀ k, S k * F.jointSupport.V =
       F.jointSupport.V *
         (Kraus.supportCompressedKraus F.jointSupport.V S) k := by
-    let μ := recoveredConditionalState (traceC_ABC ρ_ABC)
+    let μ := normalizedConditionalSlice (traceC_ABC ρ_ABC)
     let hμbar := Kraus.commonAverage_posSemidef μ
-      (recoveredConditionalState_posSemidef
+      (normalizedConditionalSlice_posSemidef
         (SSAPosDef.traceC_ABC_posSemidef hρ_dm.1))
     have hInv : ∀ k,
         (1 - hμbar.supportProj) * S k * hμbar.supportProj = 0 := by
@@ -153,7 +152,7 @@ theorem RecoveredConditionalDilationInternal.exists_recoveredSliceSectorBlocks
     F.jointSupport.preserving_support_action G
   let Gsupport : Kraus.PreservingKrausFamily
       (Kraus.supportCompressedFamily F.jointSupport.V
-        (recoveredConditionalState (traceC_ABC ρ_ABC))) :=
+        (normalizedConditionalSlice (traceC_ABC ρ_ABC))) :=
     { numKraus := dC * r
       Kfam := Kraus.supportCompressedKraus F.jointSupport.V S
       isPreserving := hGsupport }

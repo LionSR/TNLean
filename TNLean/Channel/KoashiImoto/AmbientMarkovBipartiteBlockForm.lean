@@ -4,12 +4,12 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Algebra.MatrixGramUnitary
-import TNLean.Channel.KoashiImoto.RecoveredConditionalBipartiteBlockForm
+import TNLean.Channel.KoashiImoto.MarkovBipartiteBlockForm
 
 /-!
-# Ambient recovered bipartite block coordinates
+# Ambient Markov bipartite block coordinates
 
-This file extends the recovered bipartite block form from the minimum joint
+This file extends the Markov bipartite block form from the minimum joint
 support to the whole middle subsystem.  Each basis direction in the orthogonal
 complement is represented by a one-dimensional tensor sector with zero
 unnormalized conditional factor.
@@ -33,7 +33,7 @@ basis direction, followed by the joint-support sectors.
 
 Source: HJPW, arXiv:quant-ph/0304007v2, Theorem 6, equation (13),
 lines 493--496. -/
-abbrev AmbientRecoveredBlockIndex (z K : ℕ) := Fin z ⊕ Fin K
+abbrev AmbientMarkovBlockIndex (z K : ℕ) := Fin z ⊕ Fin K
 
 /-- Canonical inclusion of the joint-support coordinates into the right
 summand of the ambient middle subsystem.
@@ -46,48 +46,48 @@ def ambientSupportEmbedding
   (1 : Matrix (Fin dB) (Fin dB) ℂ).submatrix id
     (fun s ↦ e₀ (Sum.inr s))
 
-/-- The common-factor dimension of an ambient recovered block. -/
-def ambientRecoveredCommonDim {z K : ℕ} (m : Fin K → ℕ) :
-    AmbientRecoveredBlockIndex z K → ℕ
+/-- The common-factor dimension of an ambient Markov block. -/
+def ambientMarkovCommonDim {z K : ℕ} (m : Fin K → ℕ) :
+    AmbientMarkovBlockIndex z K → ℕ
   | Sum.inl _ => 1
   | Sum.inr j => m j
 
-/-- The conditional-factor dimension of an ambient recovered block. -/
-def ambientRecoveredConditionalDim {z K : ℕ} (d : Fin K → ℕ) :
-    AmbientRecoveredBlockIndex z K → ℕ
+/-- The conditional-factor dimension of an ambient Markov block. -/
+def ambientMarkovConditionalDim {z K : ℕ} (d : Fin K → ℕ) :
+    AmbientMarkovBlockIndex z K → ℕ
   | Sum.inl _ => 1
   | Sum.inr j => d j
 
-/-- The common density factor on an ambient recovered block.
+/-- The common density factor on an ambient Markov block.
 
 Complementary one-dimensional sectors carry the unique density matrix.
 Source: HJPW, arXiv:quant-ph/0304007v2, Theorem 6, equations (13)--(14),
 lines 493--502. -/
-def ambientRecoveredCommonState {z K : ℕ} {m : Fin K → ℕ}
+def ambientMarkovCommonState {z K : ℕ} {m : Fin K → ℕ}
     (σ : ∀ j, Matrix (Fin (m j)) (Fin (m j)) ℂ) :
-    (j : AmbientRecoveredBlockIndex z K) →
-      Matrix (Fin (ambientRecoveredCommonDim m j))
-        (Fin (ambientRecoveredCommonDim m j)) ℂ
+    (j : AmbientMarkovBlockIndex z K) →
+      Matrix (Fin (ambientMarkovCommonDim m j))
+        (Fin (ambientMarkovCommonDim m j)) ℂ
   | Sum.inl _ => 1
   | Sum.inr j => σ j
 
-/-- The unnormalized conditional factor on an ambient recovered block.
+/-- The unnormalized conditional factor on an ambient Markov block.
 
 Complementary one-dimensional sectors have zero weight.  This is a zero
 unnormalized factor, not an additional normalized physical state.
 Source: HJPW, arXiv:quant-ph/0304007v2, Theorem 6, equation (14),
 lines 499--502. -/
-def ambientRecoveredConditionalState {z K dA : ℕ} {d : Fin K → ℕ}
+def ambientConditionalFactor {z K dA : ℕ} {d : Fin K → ℕ}
     (ω : ∀ j, Matrix (Fin dA × Fin (d j)) (Fin dA × Fin (d j)) ℂ) :
-    (_j : AmbientRecoveredBlockIndex z K) →
-      Matrix (Fin dA × Fin (ambientRecoveredConditionalDim d _j))
-        (Fin dA × Fin (ambientRecoveredConditionalDim d _j)) ℂ
+    (_j : AmbientMarkovBlockIndex z K) →
+      Matrix (Fin dA × Fin (ambientMarkovConditionalDim d _j))
+        (Fin dA × Fin (ambientMarkovConditionalDim d _j)) ℂ
   | Sum.inl _ => 0
   | Sum.inr j => ω j
 
 /-- Collapse the dependent sum of one-dimensional complementary sectors to
 its complement index. -/
-def ambientRecoveredComplementEquiv (z : ℕ) :
+def ambientMarkovComplementEquiv (z : ℕ) :
     ((_ : Fin z) × (Fin 1 × Fin 1)) ≃ Fin z where
   toFun x := x.1
   invFun j := ⟨j, (0, 0)⟩
@@ -105,28 +105,28 @@ zero-weight sectors on the ambient complement.
 
 This is the direct-sum tensor equivalence for the ambient middle subsystem in
 HJPW, arXiv:quant-ph/0304007v2, Theorem 6, equation (13), lines 493--496. -/
-def recoveredAmbientMiddleBlockEquiv
+def ambientMarkovMiddleBlockEquiv
     {dB n K : ℕ} {d m : Fin K → ℕ}
     (e₀ : (Fin (dB - n) ⊕ Fin n) ≃ Fin dB)
     (e : ((j : Fin K) × (Fin (m j) × Fin (d j))) ≃ Fin n) :
-    ((j : AmbientRecoveredBlockIndex (dB - n) K) ×
-      (Fin (ambientRecoveredCommonDim m j) ×
-        Fin (ambientRecoveredConditionalDim d j))) ≃ Fin dB :=
-  (Equiv.sumSigmaDistrib fun j : AmbientRecoveredBlockIndex (dB - n) K ↦
-      Fin (ambientRecoveredCommonDim m j) ×
-        Fin (ambientRecoveredConditionalDim d j))
-    |>.trans (Equiv.sumCongr (ambientRecoveredComplementEquiv (dB - n)) e)
+    ((j : AmbientMarkovBlockIndex (dB - n) K) ×
+      (Fin (ambientMarkovCommonDim m j) ×
+        Fin (ambientMarkovConditionalDim d j))) ≃ Fin dB :=
+  (Equiv.sumSigmaDistrib fun j : AmbientMarkovBlockIndex (dB - n) K ↦
+      Fin (ambientMarkovCommonDim m j) ×
+        Fin (ambientMarkovConditionalDim d j))
+    |>.trans (Equiv.sumCongr (ambientMarkovComplementEquiv (dB - n)) e)
     |>.trans e₀
 
 @[simp]
-private theorem recoveredAmbientMiddleBlockEquiv_apply_complement
+private theorem ambientMarkovMiddleBlockEquiv_apply_complement
     {d m : Fin K → ℕ}
     (e₀ : (Fin (dB - n) ⊕ Fin n) ≃ Fin dB)
     (e : ((j : Fin K) × (Fin (m j) × Fin (d j))) ≃ Fin n)
     (j : Fin (dB - n))
-    (u : Fin (ambientRecoveredCommonDim m (Sum.inl j)))
-    (v : Fin (ambientRecoveredConditionalDim d (Sum.inl j))) :
-    recoveredAmbientMiddleBlockEquiv e₀ e ⟨Sum.inl j, (u, v)⟩ =
+    (u : Fin (ambientMarkovCommonDim m (Sum.inl j)))
+    (v : Fin (ambientMarkovConditionalDim d (Sum.inl j))) :
+    ambientMarkovMiddleBlockEquiv e₀ e ⟨Sum.inl j, (u, v)⟩ =
       e₀ (Sum.inl j) := by
   change Fin 1 at u v
   fin_cases u
@@ -134,17 +134,17 @@ private theorem recoveredAmbientMiddleBlockEquiv_apply_complement
   rfl
 
 @[simp]
-private theorem recoveredAmbientMiddleBlockEquiv_apply_support
+private theorem ambientMarkovMiddleBlockEquiv_apply_support
     {d m : Fin K → ℕ}
     (e₀ : (Fin (dB - n) ⊕ Fin n) ≃ Fin dB)
     (e : ((j : Fin K) × (Fin (m j) × Fin (d j))) ≃ Fin n)
     (j : Fin K) (u : Fin (m j)) (v : Fin (d j)) :
-    recoveredAmbientMiddleBlockEquiv e₀ e ⟨Sum.inr j, (u, v)⟩ =
+    ambientMarkovMiddleBlockEquiv e₀ e ⟨Sum.inr j, (u, v)⟩ =
       e₀ (Sum.inr (e ⟨j, (u, v)⟩)) := rfl
 
 /-- Reassociate subsystem `A` with the complement/support split of subsystem
 `B`. -/
-private def recoveredBipartiteComplementEquiv
+private def markovBipartiteComplementEquiv
     (e₀ : (Fin (dB - n) ⊕ Fin n) ≃ Fin dB) :
     ((Fin dA × Fin (dB - n)) ⊕ (Fin dA × Fin n)) ≃
       Fin dA × Fin dB :=
@@ -152,87 +152,87 @@ private def recoveredBipartiteComplementEquiv
     |>.trans ((Equiv.refl (Fin dA)).prodCongr e₀)
 
 @[simp]
-private theorem recoveredBipartiteComplementEquiv_symm_apply_complement
+private theorem markovBipartiteComplementEquiv_symm_apply_complement
     (e₀ : (Fin (dB - n) ⊕ Fin n) ≃ Fin dB)
     (a : Fin dA) (j : Fin (dB - n)) :
-    (recoveredBipartiteComplementEquiv (dA := dA) e₀).symm
+    (markovBipartiteComplementEquiv (dA := dA) e₀).symm
         (a, e₀ (Sum.inl j)) =
       Sum.inl (a, j) := by
-  simp [recoveredBipartiteComplementEquiv]
+  simp [markovBipartiteComplementEquiv]
 
 @[simp]
-private theorem recoveredBipartiteComplementEquiv_symm_apply_support
+private theorem markovBipartiteComplementEquiv_symm_apply_support
     (e₀ : (Fin (dB - n) ⊕ Fin n) ≃ Fin dB)
     (a : Fin dA) (j : Fin n) :
-    (recoveredBipartiteComplementEquiv (dA := dA) e₀).symm
+    (markovBipartiteComplementEquiv (dA := dA) e₀).symm
         (a, e₀ (Sum.inr j)) =
       Sum.inr (a, j) := by
-  simp [recoveredBipartiteComplementEquiv]
+  simp [markovBipartiteComplementEquiv]
 
 @[simp]
-private theorem recoveredAmbientBipartiteBlockEquiv_apply_complement
+private theorem ambientMarkovBipartiteBlockEquiv_apply_complement
     {d m : Fin K → ℕ}
     (e₀ : (Fin (dB - n) ⊕ Fin n) ≃ Fin dB)
     (e : ((j : Fin K) × (Fin (m j) × Fin (d j))) ≃ Fin n)
     (j : Fin (dB - n))
-    (u : Fin (ambientRecoveredCommonDim m (Sum.inl j)))
+    (u : Fin (ambientMarkovCommonDim m (Sum.inl j)))
     (a : Fin dA)
-    (v : Fin (ambientRecoveredConditionalDim d (Sum.inl j))) :
-    recoveredBipartiteBlockEquiv
-        (recoveredAmbientMiddleBlockEquiv e₀ e)
+    (v : Fin (ambientMarkovConditionalDim d (Sum.inl j))) :
+    markovBipartiteBlockEquiv
+        (ambientMarkovMiddleBlockEquiv e₀ e)
         ⟨Sum.inl j, (u, (a, v))⟩ =
       (a, e₀ (Sum.inl j)) := by
   change
-    (a, recoveredAmbientMiddleBlockEquiv e₀ e ⟨Sum.inl j, (u, v)⟩) =
+    (a, ambientMarkovMiddleBlockEquiv e₀ e ⟨Sum.inl j, (u, v)⟩) =
       (a, e₀ (Sum.inl j))
-  rw [recoveredAmbientMiddleBlockEquiv_apply_complement]
+  rw [ambientMarkovMiddleBlockEquiv_apply_complement]
 
 @[simp]
-private theorem recoveredAmbientBipartiteBlockEquiv_apply_support
+private theorem ambientMarkovBipartiteBlockEquiv_apply_support
     {d m : Fin K → ℕ}
     (e₀ : (Fin (dB - n) ⊕ Fin n) ≃ Fin dB)
     (e : ((j : Fin K) × (Fin (m j) × Fin (d j))) ≃ Fin n)
     (j : Fin K) (u : Fin (m j)) (a : Fin dA) (v : Fin (d j)) :
-    recoveredBipartiteBlockEquiv
-        (recoveredAmbientMiddleBlockEquiv e₀ e)
+    markovBipartiteBlockEquiv
+        (ambientMarkovMiddleBlockEquiv e₀ e)
         ⟨Sum.inr j, (u, (a, v))⟩ =
       (a, e₀ (Sum.inr (e ⟨j, (u, v)⟩))) := by
   change
-    (a, recoveredAmbientMiddleBlockEquiv e₀ e ⟨Sum.inr j, (u, v)⟩) =
+    (a, ambientMarkovMiddleBlockEquiv e₀ e ⟨Sum.inr j, (u, v)⟩) =
       (a, e₀ (Sum.inr (e ⟨j, (u, v)⟩)))
-  rw [recoveredAmbientMiddleBlockEquiv_apply_support]
+  rw [ambientMarkovMiddleBlockEquiv_apply_support]
 
 @[simp]
-private theorem recoveredAmbientBipartiteBlockEquiv_symm_apply_complement
+private theorem ambientMarkovBipartiteBlockEquiv_symm_apply_complement
     {d m : Fin K → ℕ}
     (e₀ : (Fin (dB - n) ⊕ Fin n) ≃ Fin dB)
     (e : ((j : Fin K) × (Fin (m j) × Fin (d j))) ≃ Fin n)
     (a : Fin dA) (j : Fin (dB - n)) :
-    (recoveredBipartiteBlockEquiv
-        (recoveredAmbientMiddleBlockEquiv e₀ e)).symm
+    (markovBipartiteBlockEquiv
+        (ambientMarkovMiddleBlockEquiv e₀ e)).symm
         (a, e₀ (Sum.inl j)) =
       ⟨Sum.inl j, ((0 : Fin 1), (a, (0 : Fin 1)))⟩ := by
-  exact recoveredBipartiteBlockEquiv_symm_apply
-    (recoveredAmbientMiddleBlockEquiv e₀ e) a
+  exact markovBipartiteBlockEquiv_symm_apply
+    (ambientMarkovMiddleBlockEquiv e₀ e) a
       ⟨Sum.inl j, ((0 : Fin 1), (0 : Fin 1))⟩
 
 @[simp]
-private theorem recoveredAmbientBipartiteBlockEquiv_symm_apply_support
+private theorem ambientMarkovBipartiteBlockEquiv_symm_apply_support
     {d m : Fin K → ℕ}
     (e₀ : (Fin (dB - n) ⊕ Fin n) ≃ Fin dB)
     (e : ((j : Fin K) × (Fin (m j) × Fin (d j))) ≃ Fin n)
     (a : Fin dA) (j : Fin K) (u : Fin (m j)) (v : Fin (d j)) :
-    (recoveredBipartiteBlockEquiv
-        (recoveredAmbientMiddleBlockEquiv e₀ e)).symm
+    (markovBipartiteBlockEquiv
+        (ambientMarkovMiddleBlockEquiv e₀ e)).symm
         (a, e₀ (Sum.inr (e ⟨j, (u, v)⟩))) =
       ⟨Sum.inr j, (u, (a, v))⟩ := by
-  exact recoveredBipartiteBlockEquiv_symm_apply
-    (recoveredAmbientMiddleBlockEquiv e₀ e) a
+  exact markovBipartiteBlockEquiv_symm_apply
+    (ambientMarkovMiddleBlockEquiv e₀ e) a
       ⟨Sum.inr j, (u, v)⟩
 
 /-- Applying a conjugation to the second matrix factor is conjugation by the
 identity-tensored rectangular matrix. -/
-theorem RecoveredConditionalDilationInternal.idTensorMap_conjugation
+theorem MarkovDilation.idTensorMap_conjugation
     {δ : Type*} [Fintype δ] [DecidableEq δ]
     {α β : Type*} [Fintype α]
     (Z : Matrix β α ℂ)
@@ -278,8 +278,8 @@ private theorem idTensorMap_zero_extension
           generalize e₀.symm j = j'
           rcases i' with i' | i' <;> rcases j' with j' | j' <;> simp }
     idTensorMapLM E R =
-      Matrix.reindex (recoveredBipartiteComplementEquiv e₀)
-        (recoveredBipartiteComplementEquiv e₀)
+      Matrix.reindex (markovBipartiteComplementEquiv e₀)
+        (markovBipartiteComplementEquiv e₀)
         (Matrix.fromBlocks 0 0 0 R) := by
   dsimp only
   ext ⟨a, b⟩ ⟨a', b'⟩
@@ -288,7 +288,7 @@ private theorem idTensorMap_zero_extension
   generalize e₀.symm b' = i'
   rcases i with i | i <;> rcases i' with i' | i' <;>
     simp [idTensorMapLM_apply, idTensorMap_apply,
-      recoveredBipartiteComplementEquiv]
+      markovBipartiteComplementEquiv]
 
 /-- Unitary zero extension on subsystem `B` lifts through a spectator
 subsystem `A`. -/
@@ -305,8 +305,8 @@ private theorem one_kronecker_zero_extension_eq
         (((1 : Matrix (Fin dA) (Fin dA) ℂ) ⊗ₖ Z) * R *
           ((1 : Matrix (Fin dA) (Fin dA) ℂ) ⊗ₖ Z)ᴴ) *
         ((1 : Matrix (Fin dA) (Fin dA) ℂ) ⊗ₖ U_B) =
-      Matrix.reindex (recoveredBipartiteComplementEquiv e₀)
-        (recoveredBipartiteComplementEquiv e₀)
+      Matrix.reindex (markovBipartiteComplementEquiv e₀)
+        (markovBipartiteComplementEquiv e₀)
         (Matrix.fromBlocks 0 0 0 R) := by
   let E : Matrix (Fin n) (Fin n) ℂ →ₗ[ℂ]
       Matrix (Fin dB) (Fin dB) ℂ :=
@@ -343,14 +343,14 @@ private theorem one_kronecker_zero_extension_eq
       idTensorMapLM T_Z R =
         ((1 : Matrix (Fin dA) (Fin dA) ℂ) ⊗ₖ Z) * R *
           ((1 : Matrix (Fin dA) (Fin dA) ℂ) ⊗ₖ Z)ᴴ := by
-    simpa only [T_Z] using RecoveredConditionalDilationInternal.idTensorMap_conjugation Z R
+    simpa only [T_Z] using MarkovDilation.idTensorMap_conjugation Z R
   have hconjU :
       idTensorMapLM T_U (idTensorMapLM E R) =
         ((1 : Matrix (Fin dA) (Fin dA) ℂ) ⊗ₖ U_B) *
           idTensorMapLM E R *
           ((1 : Matrix (Fin dA) (Fin dA) ℂ) ⊗ₖ U_B)ᴴ := by
     simpa only [T_U] using
-      RecoveredConditionalDilationInternal.idTensorMap_conjugation
+      MarkovDilation.idTensorMap_conjugation
         U_B (idTensorMapLM E R)
   have htensorComp :
       idTensorMapLM (T_U.comp E) R =
@@ -404,23 +404,23 @@ private theorem reindex_fromBlocks_support_eq_ambientBlockForm
     (σ : ∀ j, Matrix (Fin (m j)) (Fin (m j)) ℂ)
     (ω : ∀ j,
       Matrix (Fin dA × Fin (d j)) (Fin dA × Fin (d j)) ℂ) :
-    Matrix.reindex (recoveredBipartiteComplementEquiv e₀)
-        (recoveredBipartiteComplementEquiv e₀)
+    Matrix.reindex (markovBipartiteComplementEquiv e₀)
+        (markovBipartiteComplementEquiv e₀)
         (Matrix.fromBlocks 0 0 0
-          (Matrix.reindex (recoveredBipartiteBlockEquiv e)
-            (recoveredBipartiteBlockEquiv e)
+          (Matrix.reindex (markovBipartiteBlockEquiv e)
+            (markovBipartiteBlockEquiv e)
             (Matrix.blockDiagonal' fun j ↦ σ j ⊗ₖ ω j))) =
       Matrix.reindex
-        (recoveredBipartiteBlockEquiv
-          (recoveredAmbientMiddleBlockEquiv e₀ e))
-        (recoveredBipartiteBlockEquiv
-          (recoveredAmbientMiddleBlockEquiv e₀ e))
+        (markovBipartiteBlockEquiv
+          (ambientMarkovMiddleBlockEquiv e₀ e))
+        (markovBipartiteBlockEquiv
+          (ambientMarkovMiddleBlockEquiv e₀ e))
         (Matrix.blockDiagonal' fun j ↦
-          ambientRecoveredCommonState σ j ⊗ₖ
-            ambientRecoveredConditionalState ω j) := by
+          ambientMarkovCommonState σ j ⊗ₖ
+            ambientConditionalFactor ω j) := by
   classical
-  let g := recoveredBipartiteBlockEquiv (dA := dA)
-    (recoveredAmbientMiddleBlockEquiv e₀ e)
+  let g := markovBipartiteBlockEquiv (dA := dA)
+    (ambientMarkovMiddleBlockEquiv e₀ e)
   ext x y
   rw [← g.apply_symm_apply x, ← g.apply_symm_apply y]
   generalize g.symm x = x'
@@ -433,31 +433,31 @@ private theorem reindex_fromBlocks_support_eq_ambientBlockForm
     fin_cases v
     fin_cases u'
     fin_cases v'
-    simp [g, ambientRecoveredCommonState,
-      ambientRecoveredConditionalState, Matrix.blockDiagonal'_apply]
+    simp [g, ambientMarkovCommonState,
+      ambientConditionalFactor, Matrix.blockDiagonal'_apply]
   · change Fin 1 at u v
     change Fin (m j') at u'
     change Fin (d j') at v'
     fin_cases u
     fin_cases v
-    simp [g, ambientRecoveredCommonState,
-      ambientRecoveredConditionalState, Matrix.blockDiagonal'_apply]
+    simp [g, ambientMarkovCommonState,
+      ambientConditionalFactor, Matrix.blockDiagonal'_apply]
   · change Fin (m j) at u
     change Fin (d j) at v
     change Fin 1 at u' v'
     fin_cases u'
     fin_cases v'
-    simp [g, ambientRecoveredCommonState,
-      ambientRecoveredConditionalState, Matrix.blockDiagonal'_apply]
+    simp [g, ambientMarkovCommonState,
+      ambientConditionalFactor, Matrix.blockDiagonal'_apply]
   · change Fin (m j) at u
     change Fin (d j) at v
     change Fin (m j') at u'
     change Fin (d j') at v'
-    simp [g, ambientRecoveredCommonState,
-      ambientRecoveredConditionalState, Matrix.blockDiagonal'_apply]
+    simp [g, ambientMarkovCommonState,
+      ambientConditionalFactor, Matrix.blockDiagonal'_apply]
     rfl
 
-/-- The exact recovered conditional-family witnesses together with ambient
+/-- The exact invariant conditional-family witnesses together with ambient
 direct-sum tensor coordinates for the middle subsystem.
 
 Every complementary basis direction is a one-dimensional tensor sector.  Its
@@ -469,12 +469,12 @@ exactly.
 Source: HJPW, arXiv:quant-ph/0304007v2, Theorem 6, equations (13)--(14),
 lines 493--502.  TNLean writes the tensor factors in the reverse order from
 HJPW. -/
-structure RecoveredConditionalAmbientBipartiteBlockForm
+structure AmbientMarkovBipartiteBlockForm
     (ρ_ABC : Matrix (Fin dA × Fin dB × Fin dC)
       (Fin dA × Fin dB × Fin dC) ℂ)
     (hρ_dm : ρ_ABC.PosSemidef ∧ ρ_ABC.trace = 1)
-    [Nonempty (RecoveredEffectIndex (traceC_ABC ρ_ABC))] where
-  jointSupport : RecoveredConditionalBipartiteBlockForm ρ_ABC hρ_dm
+    [Nonempty (ActiveConditionalEffectIndex (traceC_ABC ρ_ABC))] where
+  jointSupport : MarkovBipartiteBlockForm ρ_ABC hρ_dm
   e₀ : (Fin (dB - jointSupport.n) ⊕ Fin jointSupport.n) ≃ Fin dB
   U_B : Matrix (Fin dB) (Fin dB) ℂ
   U_B_unitary : U_B ∈ Matrix.unitaryGroup (Fin dB) ℂ
@@ -497,35 +497,35 @@ structure RecoveredConditionalAmbientBipartiteBlockForm
           (jointSupport.V * jointSupport.U)ᴴ =
         U_B * Matrix.reindex e₀ e₀ (Matrix.fromBlocks 0 0 0 A) * star U_B
   ambient_d_pos :
-    ∀ j : AmbientRecoveredBlockIndex (dB - jointSupport.n) jointSupport.K,
-      0 < ambientRecoveredConditionalDim jointSupport.d j
+    ∀ j : AmbientMarkovBlockIndex (dB - jointSupport.n) jointSupport.K,
+      0 < ambientMarkovConditionalDim jointSupport.d j
   ambient_m_pos :
-    ∀ j : AmbientRecoveredBlockIndex (dB - jointSupport.n) jointSupport.K,
-      0 < ambientRecoveredCommonDim jointSupport.m j
+    ∀ j : AmbientMarkovBlockIndex (dB - jointSupport.n) jointSupport.K,
+      0 < ambientMarkovCommonDim jointSupport.m j
   ambient_σ_pos :
-    ∀ j : AmbientRecoveredBlockIndex (dB - jointSupport.n) jointSupport.K,
-      (ambientRecoveredCommonState jointSupport.σ j).PosSemidef
+    ∀ j : AmbientMarkovBlockIndex (dB - jointSupport.n) jointSupport.K,
+      (ambientMarkovCommonState jointSupport.σ j).PosSemidef
   ambient_σ_trace :
-    ∀ j : AmbientRecoveredBlockIndex (dB - jointSupport.n) jointSupport.K,
-      (ambientRecoveredCommonState jointSupport.σ j).trace = 1
+    ∀ j : AmbientMarkovBlockIndex (dB - jointSupport.n) jointSupport.K,
+      (ambientMarkovCommonState jointSupport.σ j).trace = 1
   ambient_ω_pos :
-    ∀ j : AmbientRecoveredBlockIndex (dB - jointSupport.n) jointSupport.K,
-      (ambientRecoveredConditionalState jointSupport.ω j).PosSemidef
+    ∀ j : AmbientMarkovBlockIndex (dB - jointSupport.n) jointSupport.K,
+      (ambientConditionalFactor jointSupport.ω j).PosSemidef
   ambient_ω_trace_sum :
-    ∑ j : AmbientRecoveredBlockIndex (dB - jointSupport.n) jointSupport.K,
-      (ambientRecoveredConditionalState jointSupport.ω j).trace = 1
+    ∑ j : AmbientMarkovBlockIndex (dB - jointSupport.n) jointSupport.K,
+      (ambientConditionalFactor jointSupport.ω j).trace = 1
   ambient_bipartite_block_form :
-    let eB := recoveredAmbientMiddleBlockEquiv e₀ jointSupport.e
+    let eB := ambientMarkovMiddleBlockEquiv e₀ jointSupport.e
     star ((1 : Matrix (Fin dA) (Fin dA) ℂ) ⊗ₖ U_B) *
         traceC_ABC ρ_ABC *
         ((1 : Matrix (Fin dA) (Fin dA) ℂ) ⊗ₖ U_B) =
-      Matrix.reindex (recoveredBipartiteBlockEquiv eB)
-        (recoveredBipartiteBlockEquiv eB)
+      Matrix.reindex (markovBipartiteBlockEquiv eB)
+        (markovBipartiteBlockEquiv eB)
         (Matrix.blockDiagonal' fun j ↦
-          ambientRecoveredCommonState jointSupport.σ j ⊗ₖ
-            ambientRecoveredConditionalState jointSupport.ω j)
+          ambientMarkovCommonState jointSupport.σ j ⊗ₖ
+            ambientConditionalFactor jointSupport.ω j)
 
-/-- **Ambient recovered bipartite block form.**
+/-- **Ambient Markov bipartite block form.**
 
 At equality in strong subadditivity, subsystem `B` admits an ambient
 direct-sum tensor decomposition.  In the corresponding unitary coordinates,
@@ -539,24 +539,24 @@ This is the ambient middle-system decomposition and equation (14) in HJPW,
 arXiv:quant-ph/0304007v2, Theorem 6, equations (13)--(14), lines 493--502.
 TNLean writes the tensor factors in the reverse order from HJPW.  No statement
 about the recovery-dilation action in equation (15) is made here. -/
-theorem exists_recoveredConditionalAmbientBipartiteBlockForm
+theorem exists_ambientMarkovBipartiteBlockForm
     (ρ_ABC : Matrix (Fin dA × Fin dB × Fin dC)
       (Fin dA × Fin dB × Fin dC) ℂ)
     (hρ_dm : ρ_ABC.PosSemidef ∧ ρ_ABC.trace = 1)
     (hSSA : IsSSAEquality ρ_ABC hρ_dm.1.isHermitian) :
-    letI : Nonempty (RecoveredEffectIndex (traceC_ABC ρ_ABC)) :=
-      recoveredEffectIndex_nonempty (traceC_ABC ρ_ABC) (by
+    letI : Nonempty (ActiveConditionalEffectIndex (traceC_ABC ρ_ABC)) :=
+      activeConditionalEffectIndex_nonempty (traceC_ABC ρ_ABC) (by
         rw [← trace_eq_trace_traceC_ABC]
         exact hρ_dm.2)
     Nonempty
-      (RecoveredConditionalAmbientBipartiteBlockForm ρ_ABC hρ_dm) := by
+      (AmbientMarkovBipartiteBlockForm ρ_ABC hρ_dm) := by
   classical
-  letI : Nonempty (RecoveredEffectIndex (traceC_ABC ρ_ABC)) :=
-    recoveredEffectIndex_nonempty (traceC_ABC ρ_ABC) (by
+  letI : Nonempty (ActiveConditionalEffectIndex (traceC_ABC ρ_ABC)) :=
+    activeConditionalEffectIndex_nonempty (traceC_ABC ρ_ABC) (by
       rw [← trace_eq_trace_traceC_ABC]
       exact hρ_dm.2)
   obtain ⟨support⟩ :=
-    exists_recoveredConditionalBipartiteBlockForm_jointSupport
+    exists_markovBipartiteBlockForm_jointSupport
       ρ_ABC hρ_dm hSSA
   let Z : Matrix (Fin dB) (Fin support.n) ℂ := support.V * support.U
   have hUleft : star support.U * support.U = 1 :=
@@ -672,8 +672,8 @@ theorem exists_recoveredConditionalAmbientBipartiteBlockForm
       star ((1 : Matrix (Fin dA) (Fin dA) ℂ) ⊗ₖ U_B) *
           traceC_ABC ρ_ABC *
           ((1 : Matrix (Fin dA) (Fin dA) ℂ) ⊗ₖ U_B) =
-        Matrix.reindex (recoveredBipartiteComplementEquiv e₀)
-          (recoveredBipartiteComplementEquiv e₀)
+        Matrix.reindex (markovBipartiteComplementEquiv e₀)
+          (markovBipartiteComplementEquiv e₀)
           (Matrix.fromBlocks 0 0 0 R) := by
     exact (congrArg (fun X ↦
       star ((1 : Matrix (Fin dA) (Fin dA) ℂ) ⊗ₖ U_B) * X *
@@ -682,8 +682,8 @@ theorem exists_recoveredConditionalAmbientBipartiteBlockForm
             U_B_group.property (by
               simpa only [Z] using hambientSupportExtension) R)
   have hR :
-      R = Matrix.reindex (recoveredBipartiteBlockEquiv support.e)
-          (recoveredBipartiteBlockEquiv support.e)
+      R = Matrix.reindex (markovBipartiteBlockEquiv support.e)
+          (markovBipartiteBlockEquiv support.e)
           (Matrix.blockDiagonal' fun j ↦ support.σ j ⊗ₖ support.ω j) :=
     support.bipartite_block_form
   have hambient :
@@ -691,13 +691,13 @@ theorem exists_recoveredConditionalAmbientBipartiteBlockForm
           traceC_ABC ρ_ABC *
           ((1 : Matrix (Fin dA) (Fin dA) ℂ) ⊗ₖ U_B) =
         Matrix.reindex
-          (recoveredBipartiteBlockEquiv
-            (recoveredAmbientMiddleBlockEquiv e₀ support.e))
-          (recoveredBipartiteBlockEquiv
-            (recoveredAmbientMiddleBlockEquiv e₀ support.e))
+          (markovBipartiteBlockEquiv
+            (ambientMarkovMiddleBlockEquiv e₀ support.e))
+          (markovBipartiteBlockEquiv
+            (ambientMarkovMiddleBlockEquiv e₀ support.e))
           (Matrix.blockDiagonal' fun j ↦
-            ambientRecoveredCommonState support.σ j ⊗ₖ
-              ambientRecoveredConditionalState support.ω j) := by
+            ambientMarkovCommonState support.σ j ⊗ₖ
+              ambientConditionalFactor support.ω j) := by
     rw [hnested, hR]
     exact reindex_fromBlocks_support_eq_ambientBlockForm
       e₀ support.e support.σ support.ω
