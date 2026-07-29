@@ -140,10 +140,20 @@ private lemma abs_trace_mul_le_norm_mul_norm (Y M : Mat D) :
   have h_sq : ((∑ i : Fin D, ∑ j : Fin D, |Y i j| * |M j i| : ℝ) ^ 2) ≤
       ((∑ i : Fin D, ∑ j : Fin D, (|Y i j| : ℝ) ^ 2) *
        (∑ i : Fin D, ∑ j : Fin D, (|M j i| : ℝ) ^ 2)) := by
-    have := sum_mul_sq_le_sq_mul_sq (Finset.univ : Finset (Fin D × Fin D))
+    have h := sum_mul_sq_le_sq_mul_sq (Finset.univ : Finset (Fin D × Fin D))
       (fun (p : Fin D × Fin D) => (|Y p.1 p.2| : ℝ))
       (fun (p : Fin D × Fin D) => (|M p.2 p.1| : ℝ))
-    simpa [Finset.sum_product] using this
+    -- Rewrite product-set sums to double sums using Finset.sum_product.
+    have hL : (∑ p : Fin D × Fin D, (|Y p.1 p.2| : ℝ) * (|M p.2 p.1| : ℝ)) =
+        (∑ i : Fin D, ∑ j : Fin D, |Y i j| * |M j i| : ℝ) := by
+      simp [Finset.sum_product]
+    have hR1 : (∑ p : Fin D × Fin D, ((|Y p.1 p.2| : ℝ) ^ 2)) =
+        (∑ i : Fin D, ∑ j : Fin D, (|Y i j| : ℝ) ^ 2) := by
+      simp [Finset.sum_product]
+    have hR2 : (∑ p : Fin D × Fin D, ((|M p.2 p.1| : ℝ) ^ 2)) =
+        (∑ i : Fin D, ∑ j : Fin D, (|M j i| : ℝ) ^ 2) := by
+      simp [Finset.sum_product]
+    simpa [hL, hR1, hR2] using h
   have h_nonneg : 0 ≤ (∑ i : Fin D, ∑ j : Fin D, |Y i j| * |M j i| : ℝ) := by
     refine Finset.sum_nonneg fun i _ => Finset.sum_nonneg fun j _ => ?_
     positivity
@@ -247,7 +257,7 @@ private lemma norm_mul_le_norm_mul_norm (X ρ : Mat D) :
         (∑ j : Fin D, ‖X i j‖ ^ 2) * (∑ j : Fin D, ‖ρ j k‖ ^ 2)) =
         (∑ i : Fin D, ∑ j : Fin D, ‖X i j‖ ^ 2) *
         (∑ j : Fin D, ∑ k : Fin D, ‖ρ j k‖ ^ 2) := by
-      simp [Finset.sum_mul, Finset.mul_sum, Finset.sum_product]
+      simp [Finset.sum_mul, Finset.mul_sum]
     have h_normX_sq : ∑ i : Fin D, ∑ j : Fin D, ‖X i j‖ ^ 2 = ‖X‖ ^ 2 := by
       calc
         ∑ i : Fin D, ∑ j : Fin D, ‖X i j‖ ^ 2 = ∑ i : Fin D, ‖X i‖ ^ 2 := by
@@ -336,7 +346,7 @@ theorem connectedCorrelator_exp_decay [NeZero D]
   have hC_pos : 0 < C := by
     dsimp [C]
     have hρ_norm_nonneg : 0 ≤ ‖ρ‖ := norm_nonneg _
-    have h_one_plus_nonneg : 0 ≤ 1 + ‖ρ‖ := by nlinarith
+    have h_one_plus_nonneg : 0 ≤ 1 + ‖ρ‖ := by positivity
     positivity
   refine ⟨C, ξ, hC_pos, hξ_pos, ?_⟩
   intro n X Y
