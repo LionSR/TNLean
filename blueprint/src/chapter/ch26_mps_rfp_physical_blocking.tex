@@ -162,16 +162,17 @@
         \notag
     \end{align}
     for every $i_1,i_2$. This is
-    \cite[Theorem~3.1 and lines~1205--1209]{Cirac2016MPDO_arXiv}, with the
-    corrected index notation of the renormalization equation at lines
-    391--394.
+    \cite[Theorem~3.1 and lines~1205--1209]{Cirac2016MPDO_arXiv}.
+    % We use the corrected index notation for the renormalization equation
+    % at lines 391--394.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:dyadic_power_limit_idempotent,
         thm:physical_blocking_isometry_iff_transfer_idempotence}
     If $\widehat{\E}_B^{\,2^n}\to\widehat{\E}_A$, then
     Theorem~\ref{thm:dyadic_power_limit_idempotent} gives
-    $\E_A^2=\E_A$. Theorem~
+    $\widehat{\E}_A^2=\widehat{\E}_A$. Since the transfer-matrix
+    representation is injective, $\E_A^2=\E_A$. Theorem~
     \ref{thm:physical_blocking_isometry_iff_transfer_idempotence} supplies the
     physical isometry. Conversely, if $A$ has such an isometry, its transfer
     map is idempotent. Taking $B=A$ makes the dyadic orbit constant:
