@@ -24,8 +24,7 @@ statement is asserted.
 ## References
 
 * arXiv:1606.00608, Appendix C.2, equation `sigmaNK2`, lines 1581--1605.
-* S. Beigi, arXiv:1105.1019v2, Lemma 2.1 and Section III, lines 395--415 and
-  456--476.
+* S. Beigi, J. Phys. A 45 (2012) 025306, Lemma 2.1 and Section III.
 -/
 
 open scoped ComplexOrder
@@ -48,8 +47,7 @@ comparison is recorded in
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`.
 
 Source: arXiv:1606.00608, Appendix C.2, equation `sigmaNK2`, lines
-1581--1605; Beigi, arXiv:1105.1019v2, Lemma 2.1 and Section III, lines
-395--415 and 456--476. -/
+1581--1605; Beigi, J. Phys. A 45 (2012) 025306, Lemma 2.1 and Section III. -/
 theorem exists_positive_physicalSectorFactorization_fixedProductTensorData
     (data : TranslationInvariantBondData d) :
     ∃ F : PhysicalSectorFactorization data.fixedProductTensorData.tensor,

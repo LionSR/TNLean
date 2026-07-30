@@ -404,7 +404,7 @@ normal-family span argument therefore matches the original tensor to one loop te
 phase and an invertible virtual gauge, which transports transfer idempotence.
 
 Source: CPSV16, proof of Theorem 3.10 at line 1307; Beigi,
-arXiv:1105.1019v2, Sections III--IV; algebraic-to-spectral normality uses quantum Wielandt
+J. Phys. A 45 (2012) 025306, Sections III--IV; algebraic-to-spectral normality uses quantum Wielandt
 Proposition 3 (arXiv:0909.5347) and Wolf, Theorem 6.3.
 
 **Scope restriction (normal representative):** CPSV16, Theorem 3.10 is stated for a tensor in

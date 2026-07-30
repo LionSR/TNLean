@@ -33,7 +33,7 @@ the two matrices are not identified here.
 
 ## References
 
-* Beigi, arXiv:1105.1019v2, Lemma 2.1 and lines 449--514.
+* Beigi, J. Phys. A 45 (2012) 025306, Lemma 2.1 and Section III.
 * arXiv:1606.00608, Appendix C.2, equations `formK` and `etarl`, lines
   1434--1450.
 -/
@@ -53,8 +53,8 @@ Equivalently, it has an outgoing nonzero neighboring operator whose target
 can return through a possibly empty directed path.  The explicit outgoing
 edge excludes the empty reflexive walk.
 
-Source: Beigi, arXiv:1105.1019v2, directed-cycle discussion at lines
-449--514; arXiv:1606.00608, Appendix C.2, lines 1441--1450.
+Source: Beigi, J. Phys. A 45 (2012) 025306, directed-cycle discussion in
+Section III; arXiv:1606.00608, Appendix C.2, lines 1441--1450.
 
 **Scope restriction (cyclic-active restriction):** This definition isolates the
 nonzero cyclic support missing from the SAL-dependent primitive-matrix step
@@ -70,8 +70,8 @@ def IsCyclicActiveSector (F : PhysicalSectorFactorization K)
 /-- The indicator weight of the sectors lying on a positive-length closed
 directed walk.
 
-Source: Beigi, arXiv:1105.1019v2, directed-cycle discussion at lines
-449--514; arXiv:1606.00608, Appendix C.2, lines 1441--1450.
+Source: Beigi, J. Phys. A 45 (2012) 025306, directed-cycle discussion in
+Section III; arXiv:1606.00608, Appendix C.2, lines 1441--1450.
 
 **Scope restriction (cyclic-active restriction):** This indicator vanishes outside
 the positive-length cyclic support, rather than ranging over every source
@@ -85,8 +85,7 @@ noncomputable def cyclicActiveWeight (F : PhysicalSectorFactorization K)
 /-- The cyclic-active indicator is nonzero precisely on sectors which lie on
 a positive-length closed walk.
 
-Source: Beigi, arXiv:1105.1019v2, directed-cycle discussion at lines
-449--514. -/
+Source: Beigi, J. Phys. A 45 (2012) 025306, directed-cycle discussion in Section III. -/
 @[simp] theorem cyclicActiveWeight_ne_zero_iff
     (F : PhysicalSectorFactorization K) (k : Fin F.sectorCount) :
     F.cyclicActiveWeight k ≠ 0 ↔ F.IsCyclicActiveSector k := by
@@ -95,8 +94,7 @@ Source: Beigi, arXiv:1105.1019v2, directed-cycle discussion at lines
 
 /-- The subtype of sectors lying on a positive-length closed directed walk.
 
-Source: Beigi, arXiv:1105.1019v2, directed-cycle discussion at lines
-449--514.
+Source: Beigi, J. Phys. A 45 (2012) 025306, directed-cycle discussion in Section III.
 
 **Scope restriction (cyclic-active restriction):** This subtype contains only the
 positive-length cyclic support, rather than every source sector.  See
@@ -162,7 +160,7 @@ private theorem exists_leftTensor_entry_ne_zero_of_neighboringOperator_ne_zero
 
 /-- Every cyclic-active sector contains a nonzero virtual matrix.
 
-Source: Beigi, arXiv:1105.1019v2, Lemma 2.1 and lines 449--514. -/
+Source: Beigi, J. Phys. A 45 (2012) 025306, Lemma 2.1 and Section III. -/
 theorem exists_sectorVirtualMatrix_ne_zero_of_isCyclicActiveSector
     (F : PhysicalSectorFactorization K) {k : Fin F.sectorCount}
     (hk : F.IsCyclicActiveSector k) :
@@ -601,7 +599,7 @@ trace pairing supplies closed walks of lengths two and three, hence
 aperiodicity.
 
 Source: arXiv:1606.00608, Appendix C.2, Lemma `propSN`, lines 1451--1471;
-Beigi, arXiv:1105.1019v2, lines 449--514.
+Beigi, J. Phys. A 45 (2012) 025306, Section III.
 
 **Scope restriction (cyclic-active restriction):** This proves primitivity only after
 deleting sectors absent from nonzero cyclic products.  It is not the
@@ -807,7 +805,7 @@ Thus deleting all non-cyclic-active sector blocks leaves every finite cyclic
 bond product unchanged: precisely the deleted blocks vanish.
 
 Source: arXiv:1606.00608, Appendix C.2, lines 1441--1450; Beigi,
-arXiv:1105.1019v2, directed-cycle discussion at lines 449--514.
+J. Phys. A 45 (2012) 025306, directed-cycle discussion in Section III.
 
 **Scope restriction (cyclic-active restriction):** This deletion concerns the
 restricted cyclic support and makes no primitivity claim about the full trace

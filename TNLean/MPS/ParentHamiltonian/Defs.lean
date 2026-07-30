@@ -210,8 +210,8 @@ noncomputable def parentHamiltonian (A : MPSTensor d D) (L N : ℕ) :
 /-- The two-site parent Hamiltonian on a one-site periodic chain is zero under
 the project's convention for a local interaction larger than the chain.
 
-**Scope restriction (one-site chain):** Beigi, arXiv:1105.1019v2, Section III,
-source lines 451--514, defines each interaction on two neighboring sites but
+**Scope restriction (one-site chain):** Beigi, J. Phys. A 45 (2012) 025306,
+Section III, defines each interaction on two neighboring sites but
 does not specify its action when those sites coincide. The zero value here is
 the convention in `localTerm`, not a one-site case of Beigi's ordered-cycle
 formula. CPSV16, arXiv:1606.00608, Theorem 3.10(iii), source lines 534--540,

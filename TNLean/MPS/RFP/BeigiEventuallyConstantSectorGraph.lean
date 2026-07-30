@@ -20,8 +20,7 @@ the parent formula equals the number of loops.
 ## References
 
 * S. Beigi, *Classification of the phases of 1D spin chains with commuting
-  Hamiltonians*, arXiv:1105.1019v2, Section IV, equations (7)--(13), source
-  lines 561--606.
+  Hamiltonians*, J. Phys. A 45 (2012) 025306, Section IV, equations (7)--(13).
 -/
 
 open scoped BigOperators
@@ -34,8 +33,7 @@ variable {d D : ℕ} {A : MPSTensor d D}
 
 /-- The dimension of the ground space carried by a directed sector edge.
 
-Source: Beigi, arXiv:1105.1019v2, equation (4) and Section IV, source lines
-561--606. -/
+Source: Beigi, J. Phys. A 45 (2012) 025306, equation (4) and Section IV. -/
 noncomputable def edgeWeight (F : BeigiSectorGraphData A)
     (a b : Fin F.sectorCount) : ℕ :=
   Module.finrank ℂ (F.edgeGroundSpace a b)
@@ -43,8 +41,7 @@ noncomputable def edgeWeight (F : BeigiSectorGraphData A)
 /-- A sector edge is present exactly when its edge-ground-space dimension is
 nonzero.
 
-Source: Beigi, arXiv:1105.1019v2, equation (4) and Section IV, source lines
-561--606. -/
+Source: Beigi, J. Phys. A 45 (2012) 025306, equation (4) and Section IV. -/
 theorem isEdge_iff_edgeWeight_ne_zero (F : BeigiSectorGraphData A)
     (a b : Fin F.sectorCount) :
     F.IsEdge a b ↔ F.edgeWeight a b ≠ 0 := by
@@ -62,8 +59,7 @@ private theorem next_eq_add_one {N : ℕ} [NeZero N] (hN : 0 < N) (i : Fin N) :
 /-- The abstract weighted-cycle sum agrees with Beigi's sum over ordered
 sector cycles.
 
-Source: Beigi, arXiv:1105.1019v2, equation (4) and Section IV, source lines
-561--606. -/
+Source: Beigi, J. Phys. A 45 (2012) 025306, equation (4) and Section IV. -/
 theorem cycleWeightSum_edgeWeight_eq (F : BeigiSectorGraphData A)
     {N : ℕ} (hN : 0 < N) :
     letI : NeZero N := ⟨Nat.ne_of_gt hN⟩
@@ -98,7 +94,7 @@ theorem cycleWeightSum_edgeWeight_eq (F : BeigiSectorGraphData A)
 /-- Eventual constancy of the actual parent-ground-space dimension implies
 eventual constancy of the numerical weighted-cycle sum.
 
-Source: Beigi, arXiv:1105.1019v2, Section IV, source lines 561--568. -/
+Source: Beigi, J. Phys. A 45 (2012) 025306, Section IV. -/
 theorem hasEventuallyConstantCycleWeightSum_of_parentGroundSpace
     (F : BeigiSectorGraphData A)
     (hparent : ∃ c N₀ : ℕ, ∀ N : ℕ, N₀ < N →
@@ -117,7 +113,7 @@ theorem hasEventuallyConstantCycleWeightSum_of_parentGroundSpace
 /-- If the parent-ground-space dimension is eventually constant, then at
 every length greater than two it equals the number of positive sector loops.
 
-Source: Beigi, arXiv:1105.1019v2, equation (13), source lines 600--606. -/
+Source: Beigi, J. Phys. A 45 (2012) 025306, equation (13). -/
 theorem parentHamiltonianGroundSpaceES_finrank_eq_card_loop
     (F : BeigiSectorGraphData A)
     (hparent : ∃ c N₀ : ℕ, ∀ N : ℕ, N₀ < N →
@@ -154,7 +150,7 @@ dimension covered by Beigi's cycle formula equals the number of positive
 sector loops.
 
 Source: CPSV16, Definition 3.9 and Theorem 3.10, lines 517--540; Beigi,
-arXiv:1105.1019v2, Section IV, source lines 561--606. -/
+J. Phys. A 45 (2012) 025306, Section IV. -/
 theorem parentHamiltonianGroundSpaceES_finrank_eq_card_loop_of_hasBNTSectorData
     {P : SectorDecomposition d} (F : BeigiSectorGraphData P.toTensor)
     (hBNT : HasBNTSectorData P)

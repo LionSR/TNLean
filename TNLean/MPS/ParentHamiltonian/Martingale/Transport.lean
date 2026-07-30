@@ -151,8 +151,8 @@ noncomputable def parentHamiltonianGroundSpaceES (A : MPSTensor d D)
 one-site Hilbert space under the project's zero convention.
 
 **Scope restriction (one-site chain):** This is a consequence of
-`parentHamiltonian_two_one_eq_zero`. Beigi, arXiv:1105.1019v2, Section III,
-source lines 451--514, does not specify a one-site action for its two-site
+`parentHamiltonian_two_one_eq_zero`. Beigi, J. Phys. A 45 (2012) 025306,
+Section III, does not specify a one-site action for its two-site
 interaction, while CPSV16, arXiv:1606.00608, Theorem 3.10(iii), source lines
 534--540, only uses chain lengths greater than two. This restriction is documented
 in `docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex`. -/
