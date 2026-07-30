@@ -12,12 +12,12 @@ a retract. The physical fusion isometries of
 section, together with the derivation of the same-length product law from
 them.
 
-\begin{definition}[Transfer-map fusion-isometry datum]%
+\begin{definition}[Transfer-retract datum]%
     \label{def:mpdo_fusion_isometry}
     \lean{MPOTensor.TransferRetractData}
     \leanok
     \uses{def:mpo_tensor}
-    A \emph{transfer-map fusion-isometry datum} at blocked size $n$ for an
+    A \emph{transfer-retract datum} at blocked size $n$ for an
     MPO tensor consists of a subspace $\mathcal{A}_n \subseteq \MN{D}$
     together with linear maps
     \begin{align}
@@ -33,24 +33,24 @@ them.
     where $E_n$ denotes the blocked transfer map.
 \end{definition}
 
-\begin{definition}[Fusion-isometry RFP predicate]%
+\begin{definition}[Transfer-retract RFP predicate]%
     \label{def:mpdo_rfp_via_fusion}
     \lean{MPOTensor.IsRFP_MPDO_via_transferRetract}
     \leanok
     \uses{def:mpdo_fusion_isometry, def:mpo_tensor}
-    An MPO tensor $M$ satisfies the \emph{fusion-isometry formulation} of the
+    An MPO tensor $M$ satisfies the \emph{transfer-retract formulation} of the
     renormalization fixed-point condition when for every blocked size $n \ge 1$
-    there exists transfer-map fusion-isometry data for the blocked transfer
+    there exists transfer-retract data for the blocked transfer
     map $E_n$.
 \end{definition}
 
-\begin{theorem}[Fusion-isometry data imply transfer-map idempotence]%
+\begin{theorem}[Transfer-retract data imply transfer-map idempotence]%
     \label{thm:mpdo_rfp_of_fusion}
     \lean{MPOTensor.TransferRetractData.isRFP, MPOTensor.isRFP_of_isRFP_MPDO_via_transferRetract}
     \leanok
     \uses{def:mpdo_rfp_via_fusion}
-    A one-site fusion-isometry datum implies transfer-map idempotence. Hence the
-    fusion-isometry formulation, which supplies such data at every positive
+    A one-site transfer-retract datum implies transfer-map idempotence. Hence the
+    transfer-retract formulation, which supplies such data at every positive
     blocked size, implies the same condition.
 \end{theorem}
 \begin{proof}\leanok
@@ -73,7 +73,7 @@ them.
     \lean{MPOTensor.transferRetractData_one_iff_isRFP}
     \leanok
     \uses{def:mpdo_fusion_isometry}
-    A one-site transfer-map fusion-isometry datum exists if and only if the MPO
+    A one-site transfer-retract datum exists if and only if the MPO
     transfer map is idempotent.
 \end{theorem}
 \begin{proof}\leanok
@@ -82,18 +82,18 @@ them.
     it factors through its range, giving the required one-site datum.
 \end{proof}
 
-\begin{theorem}[Transfer-map fusion criterion for idempotence]%
+\begin{theorem}[Transfer-retract criterion for idempotence]%
     \label{thm:mpdo_rfp_via_fusion_iff}
     \lean{MPOTensor.isRFP_MPDO_via_transferRetract_iff_isRFP}
     \leanok
     \uses{def:mpdo_rfp_via_fusion}
-    The fusion-isometry formulation is equivalent to transfer-map idempotence.
+    The transfer-retract formulation is equivalent to transfer-map idempotence.
 \end{theorem}
 \begin{proof}\leanok\uses{thm:mpdo_rfp_of_fusion}
     The forward implication is Theorem~\ref{thm:mpdo_rfp_of_fusion}.
     Conversely, if the transfer map $E$ is idempotent, then every positive blocked
     transfer map equals $E$ and therefore factors through its range.
-    This range-factorization gives the required fusion-isometry data.
+    This range-factorization gives the required transfer-retract data.
 \end{proof}
 
 \begin{corollary}[Pure-state recovery]%
@@ -101,7 +101,7 @@ them.
     \lean{MPSTensor.toMPOTensor_isRFP_MPDO_via_transferRetract_iff_isTransferIdempotent}
     \leanok
     \uses{thm:mpdo_rfp_via_fusion_iff}
-    For the diagonal MPO associated to a pure MPS tensor, the fusion-isometry
+    For the diagonal MPO associated to a pure MPS tensor, the transfer-retract
     formulation reduces to the usual pure-state RFP condition.
 \end{corollary}
 \begin{proof}\leanok
@@ -109,19 +109,19 @@ them.
     recovery theorem for the MPO predicate.
 \end{proof}
 
-\begin{theorem}[All-blocked fusion reduces to one-site fusion]%
+\begin{theorem}[All-blocked transfer retracts reduce to one site]%
     \label{thm:mpdo_fusion_iff_one_site_fusion}
     \lean{MPOTensor.isRFP_MPDO_via_transferRetract_iff_transferRetractData_one}
     \leanok
     \uses{def:mpdo_rfp_via_fusion, thm:mpdo_one_site_fusion_iff_rfp,
         thm:mpdo_rfp_via_fusion_iff}
-    The fusion-isometry formulation for all positive blocked sizes is
-    equivalent to the existence of a one-site transfer-map fusion-isometry
+    The transfer-retract formulation for all positive blocked sizes is
+    equivalent to the existence of a one-site transfer-retract
     datum.
 \end{theorem}
 \begin{proof}\leanok
     Combine the one-site criterion with the equivalence between the all-blocked
-    fusion formulation and transfer-map idempotence.
+    transfer-retract formulation and transfer-map idempotence.
 \end{proof}
 
 \begin{definition}[Operator product of MPO tensors]%

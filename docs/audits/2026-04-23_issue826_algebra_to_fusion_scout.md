@@ -8,7 +8,7 @@ Target issue: #826
 
 Issue #826 asks for the converse direction of the MPDO §4.5 equivalence:
 
-given the algebra-structure formulation, derive the transfer-map fusion
+given the algebra-structure formulation, derive the transfer-retract
 formulation under the same trace-preserving and positive-definite fixed-point
 side hypotheses used by the forward implication.
 

@@ -21,7 +21,7 @@ transfer map `Eₙ` acting on bond-space matrices, and the support algebra is
 modeled by a subspace through which `Eₙ` factors as a retract.
 
 Concretely, `TransferRetractData M n` specifies a support subspace `𝒜ₙ`, a
-forward map `Tₙ : phys → 𝒜ₙ`, and a backward map `Sₙ : 𝒜ₙ → phys` with
+forward map `Tₙ : M_D(ℂ) → 𝒜ₙ`, and a backward map `Sₙ : 𝒜ₙ → M_D(ℂ)` with
 `Tₙ ∘ Sₙ = id_{𝒜ₙ}` and `Sₙ ∘ Tₙ = Eₙ`. The retract identity forces
 `Eₙ² = Eₙ`; conversely any idempotent blocked transfer map factors through its
 range. This yields an equivalence between `MPOTensor.IsRFP` and the
@@ -40,8 +40,8 @@ The physical fusion isometries of Theorem 4.14(iii) are the object
 * `IsRFP_MPDO_via_transferRetract`: existence of such structures for every positive blocked
   size.
 * `isRFP_MPDO_via_transferRetract_iff_isRFP`: equivalence with the MPDO RFP predicate.
-* `MPSTensor.toMPOTensor_isRFP_MPDO_via_transferRetract_iff_isTransferIdempotent`: pure-state recovery
-  for the diagonal MPO embedding.
+* `MPSTensor.toMPOTensor_isRFP_MPDO_via_transferRetract_iff_isTransferIdempotent`:
+  pure-state recovery for the diagonal MPO embedding.
 
 ## References
 
@@ -55,10 +55,7 @@ namespace MPOTensor
 
 variable {d D : ℕ}
 
-/-- The *physical space at blocked size `n`*.
-
-In the present transfer-map formulation this is the bond-space matrix algebra on
-which the blocked transfer map acts. -/
+/-- The bond-space matrix algebra on which the blocked transfer map acts. -/
 abbrev FusionBondSpace (D : ℕ) : Type :=
   Matrix (Fin D) (Fin D) ℂ
 
@@ -93,9 +90,9 @@ physical fusion isometry (see `BNTFusionIsometryFamily` for those). -/
 structure TransferRetractData (M : MPOTensor d D) (n : ℕ) where
   /-- The support subspace through which the blocked transfer map factors. -/
   supportAlgebra : Submodule ℂ (FusionBondSpace D)
-  /-- Forward map `T_n : phys → 𝒜_n`. -/
+  /-- Forward map `T_n : M_D(ℂ) → 𝒜_n`. -/
   T : FusionBondSpace D →ₗ[ℂ] supportAlgebra
-  /-- Backward map `S_n : 𝒜_n → phys`. -/
+  /-- Backward map `S_n : 𝒜_n → M_D(ℂ)`. -/
   S : supportAlgebra →ₗ[ℂ] FusionBondSpace D
   /-- The retract identity `T_n ∘ S_n = id_{𝒜_n}`. -/
   hTS : T ∘ₗ S = LinearMap.id
@@ -232,6 +229,7 @@ variable {d D : ℕ}
 formulation recovers the original pure-state RFP condition. -/
 theorem toMPOTensor_isRFP_MPDO_via_transferRetract_iff_isTransferIdempotent (A : MPSTensor d D) :
     MPOTensor.IsRFP_MPDO_via_transferRetract A.toMPOTensor ↔ IsTransferIdempotent A := by
-  rw [MPOTensor.isRFP_MPDO_via_transferRetract_iff_isRFP, toMPOTensor_isRFP_iff_isTransferIdempotent]
+  rw [MPOTensor.isRFP_MPDO_via_transferRetract_iff_isRFP,
+    toMPOTensor_isRFP_iff_isTransferIdempotent]
 
 end MPSTensor

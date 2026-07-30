@@ -178,8 +178,8 @@ private theorem phaseFlipMPO_isRFP_MPDO_via_algebra :
 
 private theorem phaseFlipMPO_not_isRFP_MPDO_via_transferRetract :
     ¬IsRFP_MPDO_via_transferRetract phaseFlipTensor.toMPOTensor := by
-  intro hFusion
-  have hRFP := isRFP_of_isRFP_MPDO_via_transferRetract hFusion
+  intro hRetract
+  have hRFP := isRFP_of_isRFP_MPDO_via_transferRetract hRetract
   change MPOTensor.transferMap phaseFlipTensor.toMPOTensor ∘ₗ
       MPOTensor.transferMap phaseFlipTensor.toMPOTensor =
         MPOTensor.transferMap phaseFlipTensor.toMPOTensor at hRFP

@@ -35,13 +35,13 @@ coincides with the fixed-point algebra of the adjoint blocked transfer map
 
 Under a trace-preserving normalization and a positive-definite fixed point of the
 MPO transfer map, an RFP tensor yields a **stationary** algebra tower. Combined
-with the transfer-map fusion criterion from `FusionIsometries.lean`, this gives a
+with the transfer-retract criterion from `FusionIsometries.lean`, this gives a
 one-way implication
 
 * `isRFP_MPDO_via_algebra_of_isRFP_of_isTP_of_posDef_fixed`
 * `isRFP_MPDO_via_algebra_of_isRFP_MPDO_via_transferRetract_of_isTP_of_posDef_fixed`
 
-from the current fusion formulation to the algebra formulation, under the same
+from the current transfer-retract formulation to the algebra formulation, under the same
 side hypotheses. The `IsRFP` assumption is essential here: without idempotence,
 the adjoint fixed-point algebras of the blocked transfer maps need not stabilize
 with the blocking length.
@@ -281,7 +281,7 @@ theorem isRFP_MPDO_via_algebra_of_isRFP_of_isTP_of_posDef_fixed
    AlgebraStructureData.stationaryOfFaithfulFixedPoint_compatible
      (M := M) (h_tp := h_tp) hρ hρ_fix hRFP⟩
 
-/-- Under the same side hypotheses, the transfer-map fusion formulation implies
+/-- Under the same side hypotheses, the transfer-retract formulation implies
 this algebra formulation.
 
 **Scope restriction:** the side hypotheses `h_tp`/`hρ`/`hρ_fix` (trace
@@ -289,17 +289,17 @@ preservation and a positive-definite fixed point, used to invoke Wolf Theorem
 6.12) are absent from Theorem IV.13, which assumes only that `M` is in canonical
 form generating an MPDO; see `docs/paper-gaps/cpgsv17_blocked_chi_uniformity.tex`. -/
 theorem isRFP_MPDO_via_algebra_of_isRFP_MPDO_via_transferRetract_of_isTP_of_posDef_fixed
-    {M : MPOTensor d D} (hFusion : IsRFP_MPDO_via_transferRetract M)
+    {M : MPOTensor d D} (hRetract : IsRFP_MPDO_via_transferRetract M)
     (h_tp : Kraus.IsTP M.toMPSTensor) {ρ : Mat} (hρ : ρ.PosDef)
     (hρ_fix : transferMap M ρ = ρ) :
     IsRFP_MPDO_via_algebra M :=
   isRFP_MPDO_via_algebra_of_isRFP_of_isTP_of_posDef_fixed
-    (M := M) (isRFP_of_isRFP_MPDO_via_transferRetract hFusion) h_tp hρ hρ_fix
+    (M := M) (isRFP_of_isRFP_MPDO_via_transferRetract hRetract) h_tp hρ hρ_fix
 
 /-- The current algebra-side predicate also holds whenever the blocked adjoint
 fixed-point spaces stabilize across all positive powers. This extracts exactly
-what the present compatibility relation can see, without asserting the fusion /
-idempotence conclusion. -/
+what the present compatibility relation can see, without asserting the
+transfer-retract, equivalently idempotence, conclusion. -/
 theorem isRFP_MPDO_via_algebra_of_adjointFixedPoints_eq_of_isTP_of_posDef_fixed
     {M : MPOTensor d D} (h_tp : Kraus.IsTP M.toMPSTensor)
     {ρ : Mat} (hρ : ρ.PosDef) (hρ_fix : transferMap M ρ = ρ)
@@ -536,7 +536,7 @@ with eigenvalue `λ^n`.
 Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and Appendix C.4,
 lines 2046--2085 of `Papers/1606.00608/MPDO-22-12-17-2.tex`. This is the
 spectral fixed-point calculation underlying the obstruction to deriving the
-fusion formulation from the present support-algebra predicate alone. -/
+transfer-retract formulation from the present support-algebra predicate alone. -/
 theorem adjoint_blockedTransferMap_apply_of_adjoint_transferMap_eigenvector
     {M : MPOTensor d D} (n : ℕ) {lam : ℂ} {X : Mat}
     (hX : (transferMap M).adjoint X = lam • X) :
@@ -555,7 +555,7 @@ More explicitly, let `E` be the one-site transfer map. If
 `E† X = λ X`, and `λ^n = 1` for some `n > 0`, then `λ = 1`. This is exactly the
 finite-order consequence of the fixed-point equality
 $\operatorname{Fix}((E^n)^\dagger)=\operatorname{Fix}(E^\dagger)$. It is not
-the fusion-side idempotence statement $E^2=E$; the latter is the paper's
+the transfer-retract idempotence statement $E^2=E$; the latter is the paper's
 coefficient-comparison argument in Appendix C.4.
 
 Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and Appendix C.4,
@@ -583,9 +583,9 @@ the unblocked transfer map.
 
 Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and Appendix C.4,
 lines 2015--2067. This equality is only the fixed-point consequence of the
-present algebra-tower predicate. It is not the converse
-from the algebra formulation to the fusion formulation; the latter requires
-the positive trace-power coefficient comparison used in Appendix C.4. -/
+present algebra-tower predicate. It is not the converse from the algebra
+formulation to the paper's physical fusion-isometry formulation; the latter
+requires the positive trace-power coefficient comparison used in Appendix C.4. -/
 theorem adjoint_blockedTransferMap_apply_iff_of_isRFP_MPDO_via_algebra
     {M : MPOTensor d D} (hAlg : IsRFP_MPDO_via_algebra M)
     {n : ℕ} (hn : 0 < n) {X : Mat} :
