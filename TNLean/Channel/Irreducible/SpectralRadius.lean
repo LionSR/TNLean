@@ -85,7 +85,9 @@ private noncomputable def sandwichLinearEquiv
   simp [sandwichUnit, Matrix.star_eq_conjTranspose, Matrix.conjTranspose_nonsing_inv,
     Matrix.mul_assoc]
 
-private lemma spectralRadius_similarity_eq
+/-- Spectral radius is invariant under the congruence similarity
+`X ↦ C⁻¹ * E (C * X * Cᴴ) * (Cᴴ)⁻¹`. -/
+theorem spectralRadius_similarityMap_eq
     (C : Matrix (Fin D) (Fin D) ℂ) (hC : C.det ≠ 0)
     (E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ) :
     spectralRadius ℂ
@@ -408,7 +410,7 @@ theorem spectralRadius_eq_of_posDef_eigenvector_of_irreducible_cp
         (similarityMap (D := D) S⁻¹ E)) =
       spectralRadius ℂ
         ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ)) E) :=
-    spectralRadius_similarity_eq (D := D) S⁻¹ hSinv_det E
+    spectralRadius_similarityMap_eq (D := D) S⁻¹ hSinv_det E
   have hscale : spectralRadius ℂ
       ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ)) E') =
       (‖((↑r : ℂ)⁻¹)‖₊ : ℝ≥0∞) *

@@ -16,6 +16,7 @@ import TNLean.MPS.CanonicalForm.BNTTransport
 import TNLean.MPS.CanonicalForm.BNTUniqueness
 import TNLean.MPS.CanonicalForm.BlockingViaAdjoint
 import TNLean.MPS.CanonicalForm.CPSVAfterBlocking
+import TNLean.MPS.CanonicalForm.CPSVBlocking
 import TNLean.MPS.CanonicalForm.CPSVCanonicalFormII
 import TNLean.MPS.CanonicalForm.CPSVPhysicalReindex
 import TNLean.MPS.CanonicalForm.CommonPeriodCyclicSectors
