@@ -414,6 +414,110 @@
     explicit constant is positive because $L>1$ implies $4L>0$.
 \end{proof}
 
+\begin{definition}[Friedrichs overlap bound]
+    \label{def:friedrichs_overlap_bound}
+    \lean{Submodule.IsFriedrichsBound}
+    \leanok
+    Let $U$ and $V$ be subspaces of a finite-dimensional complex Hilbert space.
+    Their Friedrichs overlap is at most $\eta$ when
+    \begin{align}
+        |\langle x,y\rangle|
+        &\le \eta\|x\|\|y\| \notag
+    \end{align}
+    for every
+    $x\in U\cap(U\cap V)^\perp$ and
+    $y\in V\cap(U\cap V)^\perp$.
+\end{definition}
+
+\begin{lemma}[Projection compression from a Friedrichs overlap bound]
+    \label{lem:two_projection_friedrichs_compression}
+    \lean{Submodule.norm_starProjection_le_of_friedrichs_bound}
+    \leanok
+    \uses{def:friedrichs_overlap_bound}
+    Let $P_U$ be the orthogonal projection onto $U$. If the Friedrichs overlap
+    of $U$ and $V$ is at most $\eta$, where $\eta\ge0$, then
+    \begin{align}
+        \|P_Uv\|
+        &\le \eta\|v\| \notag
+    \end{align}
+    for every $v\in V\cap(U\cap V)^\perp$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Put $x=P_Uv$. Since the common intersection is contained in $U$, the
+    projection preserves orthogonality to $U\cap V$. Thus
+    $x\in U\cap(U\cap V)^\perp$. Moreover,
+    $\langle x,v\rangle=\langle x,x\rangle=\|x\|^2$. The Friedrichs bound gives
+    $\|x\|^2\le\eta\|x\|\|v\|$, and cancellation proves the result when
+    $x\ne0$; the case $x=0$ is immediate.
+\end{proof}
+
+\begin{lemma}[Two-projection compression on the reduced space]
+    \label{lem:two_projection_friedrichs_product}
+    \lean{Submodule.norm_starProjection_starProjection_le_of_friedrichs_bound}
+    \leanok
+    \uses{def:friedrichs_overlap_bound,
+        lem:two_projection_friedrichs_compression}
+    Let $P_U$ and $P_V$ be the orthogonal projections onto $U$ and $V$. If the
+    Friedrichs overlap of $U$ and $V$ is at most $\eta$, where $\eta\ge0$, then
+    every $v\in(U\cap V)^\perp$ satisfies
+    \begin{align}
+        \|P_UP_Vv\|
+        &\le\eta\|P_Vv\|. \notag
+    \end{align}
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    The vector $P_Vv$ belongs to $V$ and remains orthogonal to $U\cap V$.
+    Apply Lemma~\ref{lem:two_projection_friedrichs_compression}.
+\end{proof}
+
+\begin{lemma}[Directional compression on a reduced projection range]
+    \label{lem:two_projection_friedrichs_directional}
+    \lean{Submodule.norm_starProjection_starProjection_le_of_friedrichs_bound_of_mem}
+    \leanok
+    \uses{def:friedrichs_overlap_bound,
+        lem:two_projection_friedrichs_product}
+    Under the hypotheses of
+    Lemma~\ref{lem:two_projection_friedrichs_product}, every
+    $v\in U\cap(U\cap V)^\perp$ satisfies
+    \begin{align}
+        \|P_UP_Vv\|
+        &\le\eta\|P_Uv\|. \notag
+    \end{align}
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Orthogonal projection onto $V$ does not increase the norm, while
+    $P_Uv=v$. Hence
+    $\|P_UP_Vv\|\le\eta\|P_Vv\|\le\eta\|v\|=\eta\|P_Uv\|$.
+\end{proof}
+
+\begin{lemma}[Directional compression for kernel-complement projections]
+    \label{lem:two_projection_kernel_complement_compression}
+    \lean{Submodule.norm_starProjection_orthogonal_comp_le_of_friedrichs_bound}
+    \leanok
+    \uses{def:friedrichs_overlap_bound,
+        lem:two_projection_friedrichs_directional}
+    Let $P$ and $Q$ be the orthogonal projections onto $K^\perp$ and
+    $L^\perp$. If the Friedrichs overlap of these two ranges is at most
+    $\eta\ge0$, then every
+    $v\in K^\perp\cap(K^\perp\cap L^\perp)^\perp$ satisfies
+    \begin{align}
+        \|PQv\|
+        &\le\eta\|Pv\|. \notag
+    \end{align}
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Apply Lemma~\ref{lem:two_projection_friedrichs_directional} to the two
+    subspaces $K^\perp$ and $L^\perp$.
+\end{proof}
+
 \begin{remark}[Projection-geometry identities for row-sum arguments]
     \label{rem:projection_geometry_rowsum_identities}
     \lean{LinearMap.IsSymmetricProjection.re_inner_apply_apply_self}
