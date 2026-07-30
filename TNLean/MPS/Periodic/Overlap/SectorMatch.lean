@@ -1884,6 +1884,57 @@ lemma sectorTensor_proportional_of_blockedMatch
         abel
       _ = P (k + 1) := by
         rw [hU_Q (k + 1), hU'_U_star]
+  have hc'_ne : ∀ k, c' k ≠ 0 :=
+    fun k => norm_ne_zero_iff.mp (by rw [hc'_norm k]; exact one_ne_zero)
+  have ha_ne : ∀ k, a k ≠ 0 := by
+    intro k
+    exact inv_ne_zero (pow_ne_zero _ (hc'_ne (k + 1)))
+  have hz : z ≠ 0 := by
+    apply mul_ne_zero
+    · exact pow_ne_zero _ (hc'_ne 0)
+    · exact Finset.prod_ne_zero_iff.mpr (fun k _ => ha_ne k)
+  obtain ⟨ξ, hξ_pow⟩ :=
+    IsAlgClosed.exists_pow_nat_eq (k := ℂ) z (NeZero.pos m)
+  have hP_ne : ∀ k, P k ≠ 0 := by
+    intro k hPk
+    haveI : NeZero (dimA' k) := ⟨hNondeg (-k)⟩
+    have hsupp := (φA' k (1 : MatrixAlg (dimA' k))).2
+    have hval : (φA' k (1 : MatrixAlg (dimA' k))).1 = 0 := by
+      simpa only [hPk, zero_mul, mul_zero] using hsupp.symm
+    have hφ :
+        φA' k (1 : MatrixAlg (dimA' k)) = 0 := Subtype.ext hval
+    have hφ' :
+        φA' k (1 : MatrixAlg (dimA' k)) =
+          φA' k (0 : MatrixAlg (dimA' k)) := by
+      simpa using hφ
+    have hone : (1 : MatrixAlg (dimA' k)) = 0 := (φA' k).injective hφ'
+    exact one_ne_zero hone
+  have hT_nonzero : ∀ k, ∃ i, T k i ≠ 0 := by
+    intro k
+    by_contra h
+    have hzeroT : ∀ i, T k i = 0 :=
+      fun i => not_ne_iff.mp ((not_exists.mp h) i)
+    have hzero : P (k + 1) = 0 := by
+      symm
+      simpa [hzeroT] using hT_norm k
+    exact hP_ne (k + 1) hzero
+  let ref : Fin m → Fin d := fun k => (hT_nonzero k).choose
+  have href_ne : ∀ k, T k (ref k) ≠ 0 :=
+    fun k => (hT_nonzero k).choose_spec
+  have hentry : ∀ k, ∃ r c : Fin D, T k (ref k) r c ≠ 0 := by
+    intro k
+    by_contra h
+    have hzeroEntry : ∀ r c, T k (ref k) r c = 0 :=
+      fun r c => not_ne_iff.mp ((not_exists.mp (not_exists.mp h r)) c)
+    exact href_ne k (Matrix.ext fun r c => hzeroEntry r c)
+  let r : Fin m → Fin D := fun k => (hentry k).choose
+  let s : Fin m → Fin D := fun k => (hentry k).choose_spec.choose
+  have href_entry : ∀ k, T k (ref k) (r k) (s k) ≠ 0 :=
+    fun k => (hentry k).choose_spec.choose_spec
+  obtain ⟨κ, hκ_prod, hκ⟩ :=
+    TNLean.Algebra.PiTensorProductPhase.exists_kappa_product_one_of_piTensorProduct_eq_root_smul
+        (fun k i => cornerLetter P A k i) T z ξ hz hξ_pow
+        ref r s href_entry hresult
   -- Remaining obligation (arXiv:1708.00029 lines 1023--1117): an `m`-factor cyclic
   -- contraction theorem built from the common `L` and the sum-form right inverses
   -- `Ω u` satisfying `hΩ`; after producing the uniform product-tensor identity,
