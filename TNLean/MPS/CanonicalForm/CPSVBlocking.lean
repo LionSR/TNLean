@@ -255,7 +255,10 @@ end CPSVCanonicalFormData
 
 namespace IsCPSVCanonicalForm
 
-/-- Positive physical blocking preserves literal CPSV canonical form. -/
+/-- Positive physical blocking preserves literal CPSV canonical form.
+
+Source: arXiv:1606.00608, lines 227--244 define blocking, normal tensors, and
+canonical form; lines 259--301 give the weight-power expansion under products. -/
 theorem blockTensor {A : MPSTensor d D} (hA : IsCPSVCanonicalForm A)
     (p : ℕ) (hp : 0 < p) :
     IsCPSVCanonicalForm (MPSTensor.blockTensor (d := d) (D := D) A p) := by

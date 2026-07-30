@@ -30,7 +30,11 @@ namespace MPOTensor
 variable {d D : ℕ}
 
 /-- Literal CPSV canonical form is preserved by arbitrary positive MPO physical
-blocking after passing to the doubled-index MPS tensor. -/
+blocking after passing to the doubled-index MPS tensor.
+
+Source: arXiv:1606.00608, lines 636--659 define MPDO coarse graining by
+physical blocking and its two-site tensor maps; arbitrary positive blocking is
+the iterated form of the same operation. -/
 theorem IsCPSVCanonicalForm_toMPSTensor_blockTensor {M : MPOTensor d D}
     (hM : MPSTensor.IsCPSVCanonicalForm M.toMPSTensor) (p : ℕ) (hp : 0 < p) :
     MPSTensor.IsCPSVCanonicalForm (blockTensor M p).toMPSTensor := by
@@ -38,7 +42,10 @@ theorem IsCPSVCanonicalForm_toMPSTensor_blockTensor {M : MPOTensor d D}
   exact (hM.blockTensor p hp).reindexPhysical (blockedDoubledIndexEquiv d p)
 
 /-- Literal CPSV canonical form is preserved by concrete two-site MPO
-blocking after passing to the doubled-index MPS tensor. -/
+blocking after passing to the doubled-index MPS tensor.
+
+Source: arXiv:1606.00608, lines 636--659, especially the two-site maps
+`M_2(X)` and equations `eq:Smap`--`eq:Tmap`. -/
 theorem IsCPSVCanonicalForm_toMPSTensor_blockTwo {M : MPOTensor d D}
     (hM : MPSTensor.IsCPSVCanonicalForm M.toMPSTensor) :
     MPSTensor.IsCPSVCanonicalForm (blockTwo M).toMPSTensor := by
