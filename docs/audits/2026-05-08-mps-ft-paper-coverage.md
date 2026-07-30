@@ -48,7 +48,7 @@ theorem. This is tracked by issue #873 under the proposition-level tracker #81.
 
 ## 2. Coverage crosswalk: CPSV16 (arXiv:1606.00608)
 
-At this revision, after the normal-tensor RFP characterization, the trace-normalized RFP-to-ZCL-and-SAL result, the unrestricted Proposition `prop3to4`, the normal-sector blocking result for Theorem 4.9, and the literal sharp `propblockinj` theorem, the paper has 45 theorem-like occurrences and 40 distinct results. The occurrence-level count is 22 complete, 9 partial, and 14 not-ready; the distinct-result count is 21 complete, 7 partial, and 12 not-ready. Here **not-ready** means that the printed statement is false, ambiguous, or depends essentially on a formally refuted source lemma. It does not mean that every printed result has been formalized.
+At this revision, after the normal-tensor RFP characterization, the trace-normalized RFP-to-ZCL-and-SAL result, the unrestricted Proposition `prop3to4`, the fixed-bond/source-ZCL SAL theorem, and the literal sharp `propblockinj` theorem, the paper has 45 theorem-like occurrences and 40 distinct results. The occurrence-level count is 22 complete, 9 partial, and 14 not-ready; the distinct-result count is 21 complete, 7 partial, and 12 not-ready. Here **not-ready** means that the printed statement is false, ambiguous, or depends essentially on a formally refuted source lemma. It does not mean that every printed result has been formalized.
 
 The distinct count is the 40 source `thm`, `prop`, `cor`, and `lem`
 environments. The occurrence count adds five Appendix A/D restatements.
