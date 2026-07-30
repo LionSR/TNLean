@@ -31,7 +31,7 @@ coefficient.
 Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
 1614--1617.
 
-**Local fix (cyclic-active restriction):** The sum is restricted to
+**Scope restriction (cyclic-active restriction):** The sum is restricted to
 cyclic-active sectors. See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 noncomputable def cyclicActiveLeftBoundary
@@ -47,7 +47,7 @@ coefficient.
 Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
 1614--1617.
 
-**Local fix (cyclic-active restriction):** The sum is restricted to
+**Scope restriction (cyclic-active restriction):** The sum is restricted to
 cyclic-active sectors. See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 noncomputable def cyclicActiveRightBoundary
@@ -63,7 +63,7 @@ positive semidefinite.
 Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
 1614--1617.
 
-**Local fix (cyclic-active restriction):** Positivity is proved after
+**Scope restriction (cyclic-active restriction):** Positivity is proved after
 restricting the boundary sum to cyclic-active sectors. See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 theorem cyclicActiveLeftBoundary_posSemidef
@@ -84,7 +84,7 @@ positive semidefinite.
 Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
 1614--1617.
 
-**Local fix (cyclic-active restriction):** Positivity is proved after
+**Scope restriction (cyclic-active restriction):** Positivity is proved after
 restricting the boundary sum to cyclic-active sectors. See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 theorem cyclicActiveRightBoundary_posSemidef
@@ -105,7 +105,7 @@ right and left factors.
 Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
 1614--1617.
 
-**Local fix (cyclic-active restriction):** Both factors come from the
+**Scope restriction (cyclic-active restriction):** Both factors come from the
 restricted two-step coefficient. See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 theorem cyclicActiveSeparatedBoundary_eq_right_kronecker_left
@@ -122,7 +122,7 @@ theorem cyclicActiveSeparatedBoundary_eq_right_kronecker_left
 Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
 1614--1617.
 
-**Local fix (cyclic-active restriction):** These coordinates describe the
+**Scope restriction (cyclic-active restriction):** These coordinates describe the
 retained left path in the restricted decomposition. See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 abbrev LeftOpenEdgeIndex (F : PhysicalSectorFactorization K) {A : ℕ}
@@ -136,7 +136,7 @@ left boundary coordinate and the intervening neighboring edges.
 Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
 1614--1617.
 
-**Local fix (cyclic-active restriction):** This identification is used for
+**Scope restriction (cyclic-active restriction):** This identification is used for
 the retained left path in the restricted decomposition. See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 def leftFiberOpenEdgeEquiv (F : PhysicalSectorFactorization K) {A : ℕ}
@@ -192,7 +192,7 @@ def leftFiberOpenEdgeEquiv (F : PhysicalSectorFactorization K) {A : ℕ}
 Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
 1614--1617.
 
-**Local fix (cyclic-active restriction):** These coordinates describe the
+**Scope restriction (cyclic-active restriction):** These coordinates describe the
 retained right path in the restricted decomposition. See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 abbrev RightOpenEdgeIndex (F : PhysicalSectorFactorization K) {C : ℕ}
@@ -206,7 +206,7 @@ intervening neighboring edges and its right boundary coordinate.
 Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
 1614--1617.
 
-**Local fix (cyclic-active restriction):** This identification is used for
+**Scope restriction (cyclic-active restriction):** This identification is used for
 the retained right path in the restricted decomposition. See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 def rightFiberOpenEdgeEquiv (F : PhysicalSectorFactorization K) {C : ℕ}
@@ -263,7 +263,7 @@ basis.
 Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
 1614--1617.
 
-**Local fix (cyclic-active restriction):** The middle-site coordinates are
+**Scope restriction (cyclic-active restriction):** The middle-site coordinates are
 those of the retained sector decomposition. See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 noncomputable def sectorCoordinateMiddleEquiv
@@ -279,7 +279,7 @@ the corresponding physical coordinate.
 Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
 1614--1617.
 
-**Local fix (cyclic-active restriction):** This identity supplies the sector
+**Scope restriction (cyclic-active restriction):** This identity supplies the sector
 coordinates for the retained decomposition. See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 @[simp] theorem sectorCoordinateChainEquiv_apply_fst
@@ -299,7 +299,7 @@ of the corresponding physical coordinate.
 Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
 1614--1617.
 
-**Local fix (cyclic-active restriction):** This identity supplies the
+**Scope restriction (cyclic-active restriction):** This identity supplies the
 dependent fiber coordinates for the retained decomposition. See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 theorem sectorCoordinateChainEquiv_apply_snd_heq
@@ -322,7 +322,7 @@ theorem sectorCoordinateChainEquiv_apply_snd_heq
 Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
 1614--1617.
 
-**Local fix (cyclic-active restriction):** The resulting word indexes a
+**Scope restriction (cyclic-active restriction):** The resulting word indexes a
 retained left path in the restricted decomposition. See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 def leftSectorWord (F : PhysicalSectorFactorization K) {A : ℕ}
@@ -335,7 +335,7 @@ def leftSectorWord (F : PhysicalSectorFactorization K) {A : ℕ}
 Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
 1614--1617.
 
-**Local fix (cyclic-active restriction):** The resulting word indexes a
+**Scope restriction (cyclic-active restriction):** The resulting word indexes a
 retained right path in the restricted decomposition. See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 def rightSectorWord (F : PhysicalSectorFactorization K) {C : ℕ}
@@ -349,7 +349,7 @@ into left open-edge coordinates.
 Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
 1614--1617.
 
-**Local fix (cyclic-active restriction):** This is the left fiber
+**Scope restriction (cyclic-active restriction):** This is the left fiber
 identification for the retained decomposition. See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 def leftFixedFiberOpenEdgeEquiv
@@ -369,7 +369,7 @@ fiber into right open-edge coordinates.
 Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
 1614--1617.
 
-**Local fix (cyclic-active restriction):** This is the right fiber
+**Scope restriction (cyclic-active restriction):** This is the right fiber
 identification for the retained decomposition. See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 def rightFixedFiberOpenEdgeEquiv
@@ -387,7 +387,7 @@ as a direct sum of left open-edge configurations.
 Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
 1614--1617.
 
-**Local fix (cyclic-active restriction):** The direct sum is the left side of
+**Scope restriction (cyclic-active restriction):** The direct sum is the left side of
 the retained cut decomposition. See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 noncomputable def leftSectorOpenEdgeEquiv
@@ -408,7 +408,7 @@ a direct sum of right open-edge configurations.
 Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
 1614--1617.
 
-**Local fix (cyclic-active restriction):** The direct sum is the right side
+**Scope restriction (cyclic-active restriction):** The direct sum is the right side
 of the retained cut decomposition. See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 noncomputable def rightSectorOpenEdgeEquiv
@@ -432,7 +432,7 @@ of the left physical chain.
 Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
 1614--1617.
 
-**Local fix (cyclic-active restriction):** This projection identifies the
+**Scope restriction (cyclic-active restriction):** This projection identifies the
 left retained-sector word. See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 @[simp] theorem leftSectorOpenEdgeEquiv_apply_fst
@@ -448,7 +448,7 @@ of the right physical chain.
 Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
 1614--1617.
 
-**Local fix (cyclic-active restriction):** This projection identifies the
+**Scope restriction (cyclic-active restriction):** This projection identifies the
 right retained-sector word. See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 @[simp] theorem rightSectorOpenEdgeEquiv_apply_fst
@@ -464,7 +464,7 @@ and the middle-left boundary coordinate.
 Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
 1614--1617.
 
-**Local fix (cyclic-active restriction):** This dependent-coordinate identity
+**Scope restriction (cyclic-active restriction):** This dependent-coordinate identity
 is used in the retained cut decomposition. See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 theorem leftSectorOpenEdgeEquiv_symm_fiber_heq
@@ -495,7 +495,7 @@ boundary coordinate and the right chain fiber.
 Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
 1614--1617.
 
-**Local fix (cyclic-active restriction):** This dependent-coordinate identity
+**Scope restriction (cyclic-active restriction):** This dependent-coordinate identity
 is used in the retained cut decomposition. See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 theorem rightSectorOpenEdgeEquiv_symm_fiber_heq
@@ -527,7 +527,7 @@ middle-left boundary coordinate.
 Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
 1614--1617.
 
-**Local fix (cyclic-active restriction):** This endpoint identity belongs to
+**Scope restriction (cyclic-active restriction):** This endpoint identity belongs to
 the retained cut decomposition. See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 theorem leftSectorOpenEdgeEquiv_symm_last_eq
@@ -560,7 +560,7 @@ middle-right boundary coordinate.
 Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
 1614--1617.
 
-**Local fix (cyclic-active restriction):** This endpoint identity belongs to
+**Scope restriction (cyclic-active restriction):** This endpoint identity belongs to
 the retained cut decomposition. See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 theorem rightSectorOpenEdgeEquiv_symm_first_eq
@@ -594,7 +594,7 @@ coordinate recovered in the fixed-sector fiber.
 Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
 1614--1617.
 
-**Local fix (cyclic-active restriction):** This dependent-coordinate identity
+**Scope restriction (cyclic-active restriction):** This dependent-coordinate identity
 is used for retained left paths. See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 theorem leftFiberOpenEdgeEquiv_symm_fst_heq
@@ -613,7 +613,7 @@ the boundary coordinate in the fixed-sector fiber.
 Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
 1614--1617.
 
-**Local fix (cyclic-active restriction):** This dependent-coordinate identity
+**Scope restriction (cyclic-active restriction):** This dependent-coordinate identity
 is used for retained left paths. See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 theorem leftFiberOpenEdgeEquiv_symm_snd_heq
@@ -632,7 +632,7 @@ with the boundary coordinate in the fixed-sector fiber.
 Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
 1614--1617.
 
-**Local fix (cyclic-active restriction):** This dependent-coordinate identity
+**Scope restriction (cyclic-active restriction):** This dependent-coordinate identity
 is used for retained right paths. See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 theorem rightFiberOpenEdgeEquiv_symm_fst_heq
@@ -651,7 +651,7 @@ coordinate recovered in the fixed-sector fiber.
 Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
 1614--1617.
 
-**Local fix (cyclic-active restriction):** This dependent-coordinate identity
+**Scope restriction (cyclic-active restriction):** This dependent-coordinate identity
 is used for retained right paths. See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 theorem rightFiberOpenEdgeEquiv_symm_snd_heq
@@ -670,7 +670,7 @@ coordinate at the same position.
 Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
 1614--1617.
 
-**Local fix (cyclic-active restriction):** This projection describes retained
+**Scope restriction (cyclic-active restriction):** This projection describes retained
 left-path coordinates. See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 @[simp] theorem leftFiberOpenEdgeEquiv_symm_edge_fst
@@ -688,7 +688,7 @@ coordinate.
 Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
 1614--1617.
 
-**Local fix (cyclic-active restriction):** This endpoint identity covers the
+**Scope restriction (cyclic-active restriction):** This endpoint identity covers the
 empty retained left path. See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 @[simp] theorem leftFiberOpenEdgeEquiv_symm_boundary_zero
@@ -703,7 +703,7 @@ coordinate.
 Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
 1614--1617.
 
-**Local fix (cyclic-active restriction):** This endpoint identity describes a
+**Scope restriction (cyclic-active restriction):** This endpoint identity describes a
 retained left path. See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 @[simp] theorem leftFiberOpenEdgeEquiv_symm_boundary_succ
@@ -718,7 +718,7 @@ next left site coordinate.
 Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
 1614--1617.
 
-**Local fix (cyclic-active restriction):** This projection describes retained
+**Scope restriction (cyclic-active restriction):** This projection describes retained
 left-path coordinates. See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 @[simp] theorem leftFiberOpenEdgeEquiv_symm_edge_snd_castSucc
@@ -735,7 +735,7 @@ the middle-left boundary coordinate.
 Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
 1614--1617.
 
-**Local fix (cyclic-active restriction):** This endpoint identity describes a
+**Scope restriction (cyclic-active restriction):** This endpoint identity describes a
 retained left path. See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 @[simp] theorem leftFiberOpenEdgeEquiv_symm_edge_snd_last
@@ -752,7 +752,7 @@ the middle-right boundary coordinate.
 Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
 1614--1617.
 
-**Local fix (cyclic-active restriction):** This endpoint identity describes a
+**Scope restriction (cyclic-active restriction):** This endpoint identity describes a
 retained right path. See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 @[simp] theorem rightFiberOpenEdgeEquiv_symm_edge_fst_zero
@@ -768,7 +768,7 @@ coordinate.
 Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
 1614--1617.
 
-**Local fix (cyclic-active restriction):** This endpoint identity covers the
+**Scope restriction (cyclic-active restriction):** This endpoint identity covers the
 empty retained right path. See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 @[simp] theorem rightFiberOpenEdgeEquiv_symm_boundary_zero
@@ -783,7 +783,7 @@ coordinate.
 Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
 1614--1617.
 
-**Local fix (cyclic-active restriction):** This endpoint identity describes a
+**Scope restriction (cyclic-active restriction):** This endpoint identity describes a
 retained right path. See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 @[simp] theorem rightFiberOpenEdgeEquiv_symm_boundary_succ
@@ -798,7 +798,7 @@ preceding right site coordinate.
 Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
 1614--1617.
 
-**Local fix (cyclic-active restriction):** This projection describes retained
+**Scope restriction (cyclic-active restriction):** This projection describes retained
 right-path coordinates. See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 @[simp] theorem rightFiberOpenEdgeEquiv_symm_edge_fst_succ
@@ -815,7 +815,7 @@ coordinate at the same position.
 Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
 1614--1617.
 
-**Local fix (cyclic-active restriction):** This projection describes retained
+**Scope restriction (cyclic-active restriction):** This projection describes retained
 right-path coordinates. See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 @[simp] theorem rightFiberOpenEdgeEquiv_symm_edge_snd

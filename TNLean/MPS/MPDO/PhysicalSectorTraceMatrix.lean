@@ -234,7 +234,7 @@ theorem exists_active_neighboringOperator_ne_zero
 /-- The real trace matrix of the neighboring operators, restricted to the
 nonzero-weight sector subtype.
 
-**Local fix (inactive sectors):** the full physical sector decomposition is
+**Scope restriction (inactive sectors):** the full physical sector decomposition is
 unchanged. Only this auxiliary matrix is restricted, because every row and
 column incident to a zero-weight sector vanishes after the source-faithful
 reparameterization. See
@@ -284,7 +284,7 @@ operators from `k` to `h` and from `h` to `k` are nonzero.
 This is the length-two closed-walk input in the primitivity argument of
 arXiv:1606.00608, Appendix C.2, Lemma C.4 (`propSN`), lines 1452--1470.
 
-**Local fix (periodicity):** the source removes periodic components by
+**Scope restriction (periodicity):** the source removes periodic components by
 blocking. Here the trace pairing instead supplies a closed walk of length two;
 it is an auxiliary replacement to be paired with the length-three walk from
 triangle closure. See

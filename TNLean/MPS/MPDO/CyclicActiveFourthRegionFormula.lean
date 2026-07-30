@@ -59,7 +59,7 @@ vanishes unless every retained sector is cyclic-active.
 Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
 1606--1617.
 
-**Local fix (cyclic-active restriction):** The boundary factors come from
+**Scope restriction (cyclic-active restriction):** The boundary factors come from
 $(\lambda^{-1}T_C)^2$ on the cyclic-active support.  Sectors outside that
 support contribute zero rather than being identified with cyclic-active
 sectors.  See `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
@@ -83,7 +83,7 @@ contraction.
 Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
 1606--1617.
 
-**Local fix (cyclic-active restriction):** The vanishing follows from
+**Scope restriction (cyclic-active restriction):** The vanishing follows from
 deleting sector words outside positive-length cyclic support.  See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 theorem threeSuffixSectorContraction_eq_zero_of_not_isCyclicActiveRetainedWord
@@ -115,7 +115,7 @@ contraction.
 Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
 1606--1617.
 
-**Local fix (cyclic-active restriction):** The coefficient is the square of
+**Scope restriction (cyclic-active restriction):** The coefficient is the square of
 the restricted cyclic-active trace matrix.  See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 theorem reindex_threeSuffixSectorContraction_eq_cyclicActiveUnnormalized
@@ -247,7 +247,7 @@ to zero.
 Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
 1606--1617.
 
-**Local fix (cyclic-active restriction):** The two boundary factors arise
+**Scope restriction (cyclic-active restriction):** The two boundary factors arise
 from the normalized square of the restricted trace matrix.  See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 theorem reindex_threeSuffixSectorContraction_eq_cyclicActiveFourthRegionBlock
@@ -284,7 +284,7 @@ left and right boundary factors.
 Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
 1606--1617.
 
-**Local fix (cyclic-active restriction):** The block formula uses the
+**Scope restriction (cyclic-active restriction):** The block formula uses the
 normalized square of the restricted cyclic-active trace matrix.  See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 theorem reindex_reducedBlockState_add_three_eq_cyclicActiveFourthRegionBlock
@@ -328,7 +328,7 @@ the three-site representative of the same marginal.
 Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
 1606--1617.
 
-**Local fix (cyclic-active restriction):** One additional source-ZCL
+**Scope restriction (cyclic-active restriction):** One additional source-ZCL
 marginal replacement is used, so the separated coefficient is the normalized
 square of the restricted cyclic-active trace matrix.  See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
