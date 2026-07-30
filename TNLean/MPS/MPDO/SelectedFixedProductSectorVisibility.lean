@@ -404,6 +404,16 @@ theorem cyclicActiveOriginalOneSiteMatrixFamily_span_eq_top
       hK c hmpo hkh x y]
     exact Submodule.zero_mem _
 
+/-- If matrix families indexed by the vertices span the full matrix algebra,
+each family is nonzero, and every missing directed edge forces the
+corresponding ordered products to vanish, then the directed graph is strongly
+connected.
+
+The proof is the abstract directed-cut argument underlying the recurrent
+sector reduction in CPSV16, arXiv:1606.00608, Appendix C.2, lines
+1463--1470. A proper reachability cut would give two nonzero matrix subspaces
+whose sum is the full matrix algebra and whose products in one order vanish.
+-/
 private theorem reflTransGen_of_matrix_family
     {Q : Type*} {ι : Q → Type*}
     (A : (q : Q) → ι q → Matrix (Fin D) (Fin D) ℂ)
