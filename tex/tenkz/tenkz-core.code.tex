@@ -178,7 +178,7 @@
       draw=tenkzInk, fill=tenkzPaper,
       rectangle,
       rounded corners=\tenkz@pillcap,
-      inner xsep=\tenkz@pillxinset, inner ysep=\tenkz@pillcap,
+      inner xsep=\tenkz@pillxinset, inner ysep=\tenkz@pillyinset,
       minimum height=\tenkz@dim{\tenkz@r@glyphbox},
       minimum width=\tenkz@dim{\tenkz@r@glyphref},
       line width=\tenkz@wirewidth, text=tenkzInk},
@@ -365,7 +365,7 @@
       text=tenkzInk, inner sep=\tenkz@labelinset, font=\scriptsize},
   cd arrow/.style={draw=tenkzInk, line width=\tenkz@annwidth,
       -{Straight Barb[length=\tenkz@cdbarblen]},
-      shorten <=\tenkz@cdarrowshorten, shorten >=\tenkz@cdarrowshorten},
+      shorten <=\tenkz@cdsourceshorten, shorten >=\tenkz@cdtargetshorten},
   % regions
   region selected/.style={draw=tenkzAction, fill=tenkzAction!12!tenkzPaper,
       line width=\tenkz@emphwidth},

@@ -206,9 +206,11 @@
 \__tenkz_metric_declare_length:nnn {boxinset} {1.6pt}
   { inscribed-label~padding~that~keeps~a~box~compact~at~the~glyph~floor }
 \__tenkz_metric_declare_length:nnn {pillcap} {2.2pt}
-  { a~pill's~vertical~inset~and~corner~radius~share~one~cap~scale }
+  { the~corner~radius~rounds~a~pill's~ends~without~making~it~a~circle }
 \__tenkz_metric_declare_length:nnn {pillxinset} {3.2pt}
   { a~pill~leaves~more~horizontal~than~vertical~room~around~its~label }
+\__tenkz_metric_declare_length:nnn {pillyinset} {2.2pt}
+  { a~pill's~vertical~label~padding~keeps~the~skin~flatter~than~a~box }
 \__tenkz_metric_declare_length:nnn {wireglyphxinset} {1.8pt}
   { an~on-wire~capsule~keeps~its~label~off~the~rounded~end~caps }
 \__tenkz_metric_declare_length:nnn {wireglyphyinset} {1.4pt}
@@ -223,8 +225,10 @@
   { the~house~label~skin~keeps~script~text~clear~of~its~anchor~ink }
 \__tenkz_metric_declare_length:nnn {cdbarblen} {3.4pt}
   { a~commutative-diagram~arrowhead~remains~legible~on~annotation-weight~shafts }
-\__tenkz_metric_declare_length:nnn {cdarrowshorten} {3.5pt}
-  { a~commutative-diagram~shaft~stops~just~behind~its~arrowhead~at~both~ends }
+\__tenkz_metric_declare_length:nnn {cdsourceshorten} {3.5pt}
+  { source-side~shortening~keeps~the~path~start~clear~of~its~source~node }
+\__tenkz_metric_declare_length:nnn {cdtargetshorten} {3.5pt}
+  { target-side~shortening~seats~the~arrowhead~before~the~target~node }
 
 % ---------- one truth, two spellings: assert agreement with the legacy ----
 \cs_new_protected:Npn \__tenkz_metric_assert:nn #1#2
