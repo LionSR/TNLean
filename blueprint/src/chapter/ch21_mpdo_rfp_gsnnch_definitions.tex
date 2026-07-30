@@ -695,10 +695,31 @@ firstSiteMatrix_mul_normalizedMPO}
 \end{theorem}
 
 \begin{proof}\leanok
-    The first translated bond is fixed by multiplication by $P_x$ on its
-    first tensor factor, so the entire commuting product is fixed. Factoring
-    $a_{x,N}$ through this first-site action proves the corresponding
-    unnormalized identity, and trace normalization preserves it.
+    Since $P_x$ is a projection and $B^{(x)}$ is supported on
+    $P_x\otimes P_x$,
+    \begin{align}
+        (P_x\otimes\Id)B^{(x)}
+        &=B^{(x)}.
+        \notag
+    \end{align}
+    Thus the first translated bond, and hence the full product, satisfy
+    \begin{align}
+        (P_x\otimes\Id^{\otimes(N-1)})\tau_0(B^{(x)})
+        &=\tau_0(B^{(x)}),
+        \notag\\
+        (P_x\otimes\Id^{\otimes(N-1)})
+          \prod_{i=0}^{N-1}\tau_i(B^{(x)})
+        &=\prod_{i=0}^{N-1}\tau_i(B^{(x)}).
+        \notag
+    \end{align}
+    Multiplying the second identity by $a_{x,N}$ gives
+    \begin{align}
+        (P_x\otimes\Id^{\otimes(N-1)})\rho^{(N)}(K_x)
+        &=\rho^{(N)}(K_x).
+        \notag
+    \end{align}
+    Division by the trace of $\rho^{(N)}(K_x)$ gives the claimed normalized
+    identity.
 \end{proof}
 
 \begin{theorem}[Proportional commuting sector products have prefix-marginal support]
@@ -721,8 +742,32 @@ firstSiteMatrix_mul_reducedBlockState}
 
 \begin{proof}\leanok
     \uses{thm:mpdo_proportional_orthogonal_commuting_sector_normalized_support}
-    Take the partial trace of the normalized-chain support identity over the
-    final $N-L$ sites.
+    Write $\operatorname{Tr}_{L+1,\ldots,N}$ for the partial trace over the
+    final $N-L$ sites. By definition,
+    \begin{align}
+        \widehat\rho_{x,N,L}
+        &=\operatorname{Tr}_{L+1,\ldots,N}
+          \bigl(\widehat\rho_{x,N,N}\bigr).
+        \notag
+    \end{align}
+    The first-site action commutes with this partial trace. The preceding
+    theorem therefore gives
+    \begin{align}
+        &(P_x\otimes\Id^{\otimes(L-1)})\widehat\rho_{x,N,L}
+        \notag\\
+        &\quad=
+        \operatorname{Tr}_{L+1,\ldots,N}
+        \left(
+          (P_x\otimes\Id^{\otimes(N-1)})
+          \widehat\rho_{x,N,N}
+        \right)
+        \notag\\
+        &\quad=
+        \operatorname{Tr}_{L+1,\ldots,N}
+          \bigl(\widehat\rho_{x,N,N}\bigr)
+        =\widehat\rho_{x,N,L}.
+        \notag
+    \end{align}
 \end{proof}
 
 \begin{lemma}[Commuting sector products have local marginal support]
@@ -779,8 +824,7 @@ firstSiteMatrix_mul_reducedBlockState}
     \label{cor:mpdo_orthogonal_commuting_sector_sum_sal}
     \lean{MPOTensor.isSAL_of_orthogonalCommutingSectorFamily}
     \leanok
-    \uses{thm:mpdo_local_orthogonal_sum_sal,
-        lem:mpdo_orthogonal_commuting_sector_marginal_support,
+    \uses{thm:mpdo_proportional_orthogonal_commuting_sector_sum_sal,
         def:mpdo_orthogonal_commuting_sector_family}
     Let $K_x$ be a nonempty finite family, let an orthogonally supported
     commuting sector family realize the tensors $K_x$, and let $n_x$ be
