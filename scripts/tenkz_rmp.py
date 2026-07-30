@@ -987,8 +987,9 @@ def verify_author_source_tree(
     source_root: Path,
     *,
     hashes_path: Path = AUTHOR_SOURCE_HASHES,
+    snapshot_root: Path | None = None,
 ) -> int:
-    """Prove that comparison reads the authority reviewed by the verdicts."""
+    """Verify the external authority and optionally snapshot the exact bytes."""
     if not source_root.is_dir():
         fail(f"source root does not exist: {source_root}")
     hashes = load_author_source_hashes(hashes_path)
@@ -1014,17 +1015,40 @@ def verify_author_source_tree(
     for source in sorted(cited, key=lambda item: item.as_posix()):
         candidate = source_root / source
         try:
-            actual = sha256(candidate)
+            payload = candidate.read_bytes()
         except FileNotFoundError:
             fail(f"author source does not exist: {candidate}")
         except OSError as exc:
-            fail(f"cannot hash author source {candidate}: {exc}")
+            fail(f"cannot read author source {candidate}: {exc}")
+        actual = hashlib.sha256(payload).hexdigest()
         if actual != hashes[source]:
             fail(
                 f"author source hash mismatch: {source} "
                 f"(expected {hashes[source]}, got {actual})"
             )
+        if snapshot_root is not None:
+            snapshot = snapshot_root / source
+            snapshot.parent.mkdir(parents=True, exist_ok=True)
+            snapshot.write_bytes(payload)
     return len(cited)
+
+
+def pairing_digest(targets: Sequence[Target]) -> str:
+    """Bind pairing judgments to source identities and extraction boundaries."""
+    digest = hashlib.sha256()
+    digest.update(sha256(AUTHOR_SOURCE_HASHES).encode("ascii"))
+    digest.update(b"\n")
+    for target in sorted(targets, key=lambda item: item.id):
+        fields = (
+            target.id,
+            target.author_source.as_posix() if target.author_source else "",
+            target.author_lines or "",
+            target.extraction_override or "",
+            "context-only" if target.paper_context_only else "paired",
+        )
+        digest.update("\0".join(fields).encode("utf-8"))
+        digest.update(b"\n")
+    return digest.hexdigest()
 
 
 def campaign_digest(targets: Sequence[Target]) -> str:
@@ -1099,7 +1123,12 @@ def load_verdicts(targets: Sequence[Target]) -> dict[str, TargetVerdict]:
         raw = tomllib.loads(DEFAULT_VERDICT.read_text(encoding="utf-8"))
     except (OSError, UnicodeError, tomllib.TOMLDecodeError) as exc:
         fail(f"cannot read verdict ledger {DEFAULT_VERDICT}: {exc}")
-    allowed_top = {"schema_version", "campaign_sha256", "verdict"}
+    allowed_top = {
+        "schema_version",
+        "pairing_sha256",
+        "campaign_sha256",
+        "verdict",
+    }
     if not set(raw) <= allowed_top:
         fail(f"verdict ledger top-level keys must be within {sorted(allowed_top)}")
     if raw.get("schema_version") != 1:
@@ -1185,6 +1214,16 @@ def load_verdicts(targets: Sequence[Target]) -> dict[str, TargetVerdict]:
     missing_ids = sorted(set(by_target) - set(verdicts))
     if missing_ids:
         fail("targets without a verdict stanza: " + ", ".join(missing_ids))
+    recorded_pairing = raw.get("pairing_sha256")
+    if not isinstance(recorded_pairing, str):
+        fail("verdict ledger pairing_sha256 must be a string")
+    current_pairing = pairing_digest(targets)
+    if recorded_pairing != current_pairing:
+        fail(
+            "stale pairing verdicts; author-source identities or extraction "
+            "boundaries changed since review "
+            f"(recorded {recorded_pairing[:12]}, current {current_pairing[:12]})"
+        )
     recorded_campaign = raw.get("campaign_sha256")
     if isinstance(recorded_campaign, str):
         current_campaign = campaign_digest(targets)
@@ -1850,14 +1889,20 @@ def main() -> int:
         validate_verdict_consistency(targets, verdicts)
         if args.command == "compare":
             source_root = args.source_root.resolve()
-            verified = verify_author_source_tree(targets, source_root)
-            print(
-                "PASS: verified "
-                f"{verified} author-source authority file(s) against "
-                f"{AUTHOR_SOURCE_HASHES.relative_to(REPO)}"
-            )
         with tempfile.TemporaryDirectory(prefix="tenkz-rmp-") as temporary:
             work = Path(temporary)
+            if args.command == "compare":
+                source_snapshot = work / "author-source"
+                verified = verify_author_source_tree(
+                    targets,
+                    source_root,
+                    snapshot_root=source_snapshot,
+                )
+                print(
+                    "PASS: snapshotted "
+                    f"{verified} verified author-source authority file(s) against "
+                    f"{AUTHOR_SOURCE_HASHES.relative_to(REPO)}"
+                )
             results = compile_targets(selected, work, jobs)
             if args.command == "check":
                 counts = verdict_histogram(verdicts)
@@ -1888,7 +1933,7 @@ def main() -> int:
                 print(f"PASS: rendered {png_count} target/book page(s) to {destination}")
                 print(f"Checksums: {destination / 'SHA256SUMS'}")
                 return 0
-            comparison = compile_comparison(results, source_root, work, jobs)
+            comparison = compile_comparison(results, source_snapshot, work, jobs)
             install_pdf(comparison, COMPARE_OUTPUT)
             print(f"PASS: wrote source-only comparison book to {COMPARE_OUTPUT}")
             return 0

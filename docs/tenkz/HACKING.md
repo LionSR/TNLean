@@ -53,12 +53,14 @@ drop used to establish the `author_source` and `author_lines` pairings in
 repository.
 
 The four cited section files are identified by
-`tests/tenkz/rmp/author-source.sha256`.  `compare` verifies that manifest before
-compiling any corpus target, so a missing, edited, or different source drop
-fails quickly instead of producing a comparison book against unreviewed
-evidence.  Generated PDFs, auxiliary files, logs, and filesystem metadata are
-not provenance: only the section sources cited by the pairing manifest define
-the external authority.  A source tree in another local directory is acceptable
+`tests/tenkz/rmp/author-source.sha256`.  `compare` verifies and snapshots those
+files before compiling any corpus target, so a missing, edited, or different
+source drop fails quickly and later filesystem changes cannot alter the
+comparison.  Pairing verdicts are also bound to the source identities and
+extraction ranges by `pairing_sha256` in `tests/tenkz/rmp/verdicts.toml`.
+Generated PDFs, auxiliary files, logs, and filesystem metadata are not
+provenance: only the section sources cited by the pairing manifest define the
+external authority.  A source tree in another local directory is acceptable
 only when it matches the committed hashes.
 
 Per-target verdicts are stored in `tests/tenkz/rmp/verdicts.toml`, one

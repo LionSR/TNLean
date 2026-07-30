@@ -5,14 +5,17 @@ from __future__ import annotations
 
 import csv
 import os
+import re
 import subprocess
 import tempfile
 from pathlib import Path
 
+import tenkz_rmp
 from tenkz_audit import Audit
 from tenkz_rmp import (
     AUTHOR_SOURCE_HASHES,
     DEFAULT_MANIFEST,
+    DEFAULT_VERDICT,
     RMPError,
     ink_environment_problems,
     load_author_source_hashes,
@@ -195,15 +198,24 @@ def test_rmp_author_source_identity() -> None:
             ),
             encoding="utf-8",
         )
+        snapshot_root = work / "verified-snapshot"
         verified = verify_author_source_tree(
-            targets, source_root, hashes_path=hashes
+            targets,
+            source_root,
+            hashes_path=hashes,
+            snapshot_root=snapshot_root,
         )
         if verified != len(cited):
             raise AssertionError("author-source verifier lost a cited source")
 
         changed = source_root / cited[0]
         original = changed.read_text(encoding="utf-8")
+        snapshotted = snapshot_root / cited[0]
+        if snapshotted.read_text(encoding="utf-8") != original:
+            raise AssertionError("author-source snapshot changed the verified bytes")
         changed.write_text("different authority\n", encoding="utf-8")
+        if snapshotted.read_text(encoding="utf-8") != original:
+            raise AssertionError("author-source snapshot followed the live tree")
         try:
             verify_author_source_tree(targets, source_root, hashes_path=hashes)
         except RMPError as exc:
@@ -231,10 +243,40 @@ def test_rmp_author_source_identity() -> None:
             raise AssertionError("uncited author-source hash entry was accepted")
 
 
+def test_rmp_pairing_identity() -> None:
+    targets = load_manifest(DEFAULT_MANIFEST)
+    with tempfile.TemporaryDirectory(prefix="tenkz-rmp-pairing-") as tmp:
+        stale = Path(tmp) / "verdicts.toml"
+        text = DEFAULT_VERDICT.read_text(encoding="utf-8")
+        stale.write_text(
+            re.sub(
+                r'(?m)^pairing_sha256 = "[0-9a-f]{64}"$',
+                f'pairing_sha256 = "{"0" * 64}"',
+                text,
+                count=1,
+            ),
+            encoding="utf-8",
+        )
+        original = tenkz_rmp.DEFAULT_VERDICT
+        tenkz_rmp.DEFAULT_VERDICT = stale
+        try:
+            tenkz_rmp.load_verdicts(targets)
+        except RMPError as exc:
+            if "stale pairing verdicts" not in str(exc):
+                raise AssertionError(
+                    f"stale pairing digest produced the wrong failure: {exc}"
+                ) from exc
+        else:
+            raise AssertionError("stale pairing digest was accepted")
+        finally:
+            tenkz_rmp.DEFAULT_VERDICT = original
+
+
 def main() -> int:
     test_kernel_capability_owner()
     test_ink_environment_owner()
     test_rmp_author_source_identity()
+    test_rmp_pairing_identity()
     with PROVENANCE.open(encoding="utf-8", newline="") as stream:
         rows = list(csv.reader(stream, dialect="excel-tab"))
 
