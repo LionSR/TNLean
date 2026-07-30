@@ -1,0 +1,10 @@
+%% Negative regression: inverse carrier coordinates require two independent
+%% basis vectors.
+\documentclass{standalone}
+\usepackage{tenkz}
+\begin{document}
+\ExplSyntaxOn
+\__tenkz_geom_basis_unapply:nnnnnnNN
+  {1}{2}{2}{4}{3}{6} \l_tmpa_tl \l_tmpb_tl
+\ExplSyntaxOff
+\end{document}
