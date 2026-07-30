@@ -456,9 +456,9 @@ noncomputable def blockedInclusionCoefficients
 
 end AlgebraStructureData
 
-/-- One-site peeling of the blocked transfer map, $\mathbb{E}^{n+1} = \mathbb{E}^n \circ
-\mathbb{E}$, used in the spectral fixed-point calculation of arXiv:1606.00608,
-Appendix C.4, lines 2046--2085 of `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
+/-- One-site peeling of the blocked transfer map,
+$\mathbb{E}^{n+1} = \mathbb{E}^n \circ \mathbb{E}$, used in the local spectral
+argument below. -/
 private theorem blockedTransferMap_succ (M : MPOTensor d D) (n : ℕ) :
     blockedTransferMap M (n + 1) = blockedTransferMap M n ∘ₗ transferMap M := by
   simp only [blockedTransferMap_eq_pow, pow_succ, Module.End.mul_eq_comp]
