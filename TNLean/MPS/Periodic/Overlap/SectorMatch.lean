@@ -1993,16 +1993,99 @@ lemma sectorTensor_proportional_of_blockedMatch
     intro k
     have h := hγ_norm k
     simpa only [γ, norm_mul, hξ_norm, mul_one] using h
-  -- Remaining obligation (arXiv:1708.00029 lines 1023--1117): an `m`-factor cyclic
-  -- contraction theorem built from the common `L` and the sum-form right inverses
-  -- `Ω u` satisfying `hΩ`; after producing the uniform product-tensor identity,
-  -- it applies `PiTensorProductPhase.exists_kappa_product_one_of_piTensorProduct_eq_root_smul`
-  -- and the unit-modulus argument from left-canonical normalization, then uses
-  -- `TNLean.Algebra.exists_fin_complex_unit_cyclic_coboundary_shift_of_prod_eq_one`
-  -- for the offset-indexed κ/θ/φ telescoping (lines 1093--1102). This upgrades the
-  -- per-sector blocked gauge-phase equivalences in `hBlockMatch` to one global
-  -- phase and one global gauge. The available two-site theorem is `tensor_proportional`.
-  sorry
+  have hP_sum : ∑ k, P k = 1 := by
+    change (∑ k, PA (-k)) = 1
+    convert (Equiv.sum_comp (Equiv.neg (Fin m)) PA).trans hPA_sum using 1 <;> rfl
+  have hQ_sum : ∑ k, Q k = 1 := by
+    change (∑ k, PB (-k)) = 1
+    convert (Equiv.sum_comp (Equiv.neg (Fin m)) PB).trans hPB_sum using 1 <;> rfl
+  have hA_cyclic : ∀ i, A i = ∑ k, P k * A i * P (k + 1) := by
+    intro i
+    calc
+      A i = (∑ k, P k) * A i := by rw [hP_sum, Matrix.one_mul]
+      _ = ∑ k, P k * A i := by rw [Finset.sum_mul]
+      _ = ∑ k, P k * A i * P (k + 1) := by
+        apply Finset.sum_congr rfl
+        intro k _
+        rw [hP_shift k i, Matrix.mul_assoc, (hP_proj (k + 1)).2]
+  have hB_cyclic : ∀ i, B i = ∑ k, Q k * B i * Q (k + 1) := by
+    intro i
+    calc
+      B i = (∑ k, Q k) * B i := by rw [hQ_sum, Matrix.one_mul]
+      _ = ∑ k, Q k * B i := by rw [Finset.sum_mul]
+      _ = ∑ k, Q k * B i * Q (k + 1) := by
+        apply Finset.sum_congr rfl
+        intro k _
+        rw [hQ_shift k i, Matrix.mul_assoc, (hQ_proj (k + 1)).2]
+  let κB : Fin m → ℂ := fun v => κ (v - q')
+  have hκB_norm : ∀ v, ‖κB v‖ = 1 := fun v => hκ_norm (v - q')
+  have hκB_prod : ∏ v, κB v = 1 := by
+    change (∏ v, κ (v - q')) = 1
+    convert (Equiv.prod_comp (Equiv.subRight q') κ).trans hκ_prod using 1 <;> rfl
+  obtain ⟨φ, hφ_norm, hφ⟩ :=
+    TNLean.Algebra.exists_fin_complex_unit_cyclic_coboundary_shift_of_prod_eq_one
+      κB hκB_norm hκB_prod q'
+  have hφ_ne : ∀ v, φ v ≠ 0 := by
+    intro v
+    exact norm_ne_zero_iff.mp (by rw [hφ_norm v]; exact one_ne_zero)
+  have hφ_star : ∀ v, star (φ v) = (φ v)⁻¹ := by
+    intro v
+    apply mul_right_cancel₀ (hφ_ne v)
+    rw [inv_mul_cancel₀ (hφ_ne v)]
+    have hnormSq := Complex.normSq_eq_conj_mul_self (z := φ v)
+    rw [Complex.normSq_eq_norm_sq, hφ_norm v, one_pow] at hnormSq
+    convert hnormSq.symm using 1 <;> norm_num [Complex.star_def]
+  let V : Fin m → MatrixAlg D := fun v => φ v • U' (v - q')
+  have hV_corner : ∀ v, V v = P (v - q') * V v * Q v := by
+    intro v
+    have hindex : v - q' + q' = v := by abel
+    simp only [V, Matrix.mul_smul, Matrix.smul_mul]
+    congr 1
+    calc
+      U' (v - q') = P (v - q') * U' (v - q') * Q (v - q' + q') :=
+        hU'_corner (v - q')
+      _ = P (v - q') * U' (v - q') * Q v := by rw [hindex]
+  have hV_star_V : ∀ v, (V v)ᴴ * V v = Q v := by
+    intro v
+    have hindex : v - q' + q' = v := by abel
+    simp only [V, Matrix.conjTranspose_smul, smul_mul_smul_comm, smul_smul,
+      hφ_star, inv_mul_cancel₀ (hφ_ne v), one_smul]
+    rw [hU'_star_U, hindex]
+  have hV_V_star : ∀ v, V v * (V v)ᴴ = P (v - q') := by
+    intro v
+    simp only [V, Matrix.conjTranspose_smul, smul_mul_smul_comm, smul_smul]
+    have hunit : φ v * star (φ v) = 1 := by
+      rw [hφ_star, mul_inv_cancel₀ (hφ_ne v)]
+    rw [hunit, one_smul, hU'_U_star]
+  have hphase : ∀ u,
+      φ (u + q') * star (φ (u + q' + 1)) = κ u := by
+    intro u
+    rw [hφ_star]
+    have hcob := hφ u
+    change κ (u + q' - q') =
+      φ (u + q') * (φ (u + q' + 1))⁻¹ at hcob
+    convert hcob.symm using 1 <;> abel
+  have hVprod : ∀ (u : Fin m) (i : Fin d),
+      V (u + q') * cornerLetter Q B (u + q') i * (V (u + q' + 1))ᴴ =
+        κ u • T u i := by
+    intro u i
+    have hindex₀ : u + q' - q' = u := by abel
+    have hindex₁ : u + q' + 1 - q' = u + 1 := by abel
+    simp only [V, Matrix.conjTranspose_smul, Matrix.smul_mul, Matrix.mul_smul,
+      smul_smul, hindex₀, hindex₁, T]
+    rw [mul_comm (star (φ (u + q' + 1))) (φ (u + q')), hphase]
+  have hprop : ∀ (u : Fin m) (i : Fin d),
+      P u * A i * P (u + 1) =
+        ξ • (V (u + q') * (Q (u + q') * B i * Q (u + q' + 1)) *
+          (V (u + q' + 1))ᴴ) := by
+    intro u i
+    change cornerLetter P A u i =
+      ξ • (V (u + q') * cornerLetter Q B (u + q') i * (V (u + q' + 1))ᴴ)
+    rw [hκ u i, hVprod, smul_smul]
+    congr 1
+    ring
+  exact repeatedBlocks_of_globalGauge hP_proj hP_sum hQ_proj hQ_sum
+    hV_corner hV_star_V hV_V_star hA_cyclic hB_cyclic hprop hξ_norm
 
 /-- **Case 3: a matching sector implies gauge equivalence**. If two periodic tensors have
 the same period and a compressed sector match exists, then they are related by a gauge
