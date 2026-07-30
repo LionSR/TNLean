@@ -135,6 +135,17 @@ def test_ink_environment_owner() -> None:
     tree_used = rendered_ink_environment_families(tree_only)
     if tree_used != {"tenkz"}:
         raise AssertionError(f"standalone tree lost its tenkz owner: {tree_used!r}")
+    cd_tree = parse_log(
+        "picture|id=1|lang=cd\n"
+        "tree|picture=1|id=1|style=wire|leaves=2|vertices=1|"
+        "topology=(1,2)|role=none|species=none\n",
+        source_name="ink-cd-tree-owner-test.tnlog",
+    )
+    cd_tree_used = rendered_ink_environment_families(cd_tree)
+    if cd_tree_used != {"tenkzcd"}:
+        raise AssertionError(
+            f"tree inside tenkzcd gained a second owner: {cd_tree_used!r}"
+        )
     mismatch = ink_environment_problems(
         "wrong", "Canonical tenkzfree environment.", {"kernel"}
     )

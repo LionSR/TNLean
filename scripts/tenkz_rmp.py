@@ -171,7 +171,10 @@ def rendered_ink_environment_families(parsed: ParsedLog) -> set[str]:
         for language in languages
         if language in INK_EVENT_FAMILIES
     }
-    if any(event.kind == "tree" for event in parsed.events):
+    if any(
+        event.kind == "tree" and event.attrs["picture"] == "0"
+        for event in parsed.events
+    ):
         # A command-scope \tntree is a complete public tenkz composition but
         # deliberately logs against picture 0 rather than opening a container.
         families.add("tenkz")
