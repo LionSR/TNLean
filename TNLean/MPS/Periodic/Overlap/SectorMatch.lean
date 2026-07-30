@@ -4,8 +4,15 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Periodic.Overlap.SectorOverlapTransport
+import TNLean.Algebra.CornerSkolemNoether
+import TNLean.Algebra.FiniteCycleCoboundary
+import TNLean.Algebra.PiTensorProductPhase
 import TNLean.MPS.CanonicalForm.SectorComparison.NormalityChain
+import TNLean.MPS.CanonicalForm.NormalTensorGauge
 import TNLean.MPS.Chain.OneSidedInverse
+import TNLean.MPS.FundamentalTheorem.UnitaryGauge
+import TNLean.MPS.Periodic.GlobalGauge
+import TNLean.MPS.Periodic.SectorContraction
 
 /-!
 # Periodic overlap dichotomy: Case 3
@@ -553,6 +560,36 @@ private lemma exists_common_sectorDecompositionMaps_of_isNormal_leftCanonical
   refine ⟨L, hL_pos, fun k => blockDecompositionMap (hL k), ?_⟩
   intro k X
   exact blockDecompositionMap_sum (hL k) X
+
+/-- Nonzero scalar multiplication preserves injectivity at a fixed blocking length.
+
+This is used when normalizing the matched sector tensors in arXiv:1708.00029,
+Appendix A, lines 985--1002. -/
+private lemma isNBlkInjective_smul_of_ne
+    {e n N : ℕ} (C : MPSTensor e n) (z : ℂ) (hz : z ≠ 0)
+    (hC : IsNBlkInjective C N) :
+    IsNBlkInjective (fun i => z • C i) N := by
+  rw [IsNBlkInjective, eq_top_iff] at hC ⊢
+  intro X hXtop
+  clear hXtop
+  have hX : X ∈ Submodule.span ℂ
+      (Set.range fun σ : Fin N → Fin e => evalWord C (List.ofFn σ)) :=
+    hC (Submodule.mem_top : X ∈ (⊤ : Submodule ℂ (MatrixAlg n)))
+  induction hX using Submodule.span_induction with
+  | mem X hX =>
+      obtain ⟨σ, rfl⟩ := hX
+      change evalWord C (List.ofFn σ) ∈ _
+      rw [← inv_smul_smul₀ (pow_ne_zero N hz)
+        (evalWord C (List.ofFn σ))]
+      apply Submodule.smul_mem
+      have hscaled : evalWord (fun i => z • C i) (List.ofFn σ) ∈
+          Submodule.span ℂ (Set.range fun τ : Fin N → Fin e =>
+            evalWord (fun i => z • C i) (List.ofFn τ)) :=
+        Submodule.subset_span (Set.mem_range_self σ)
+      simpa only [evalWord_smul, List.length_ofFn] using hscaled
+  | zero => exact Submodule.zero_mem _
+  | add X Y _ _ hX hY => exact Submodule.add_mem _ hX hY
+  | smul z X _ hX => exact Submodule.smul_mem _ z hX
 
 /-- Full-cycle contraction step for periodic-overlap Case 3.
 
