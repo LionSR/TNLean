@@ -12,6 +12,11 @@ A virtual similarity mixes the left and right virtual indices by inverse
 matrices.  These changes can be absorbed separately into the two tensor
 factors of a physical-sector factorization.  Their contraction cancels the
 gauge, so the neighboring operators are unchanged.
+
+## References
+
+* Cirac--Perez-Garcia--Schuch--Verstraete, arXiv:1606.00608, Appendix C.2,
+  equation `AppUkU=rl`, lines 1381--1388.
 -/
 
 open scoped ComplexOrder Matrix

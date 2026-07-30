@@ -410,8 +410,10 @@ Proposition 3 (arXiv:0909.5347) and Wolf, Theorem 6.3.
 **Scope restriction (normal representative):** CPSV16, Theorem 3.10 is stated for a tensor in
 canonical form. This theorem proves its reverse implication for one explicitly normal and
 left-canonical representative, together with an explicit BNT relation and the all-chain
-ground-space condition. It does not assert the unrestricted canonical-form theorem. This
-restriction is documented in `docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex`.
+ground-space condition. In the source canonical decomposition, normality selects the
+one-sector case \(g=1\), where Beigi's finite-degeneracy classification is unnecessary.
+The multi-sector case \(g>1\), which motivates that classification, remains unproved.
+This restriction is documented in `docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex`.
 -/
 theorem nncph_implies_rfp
     (B : MPSTensor d D) [NeZero D]
