@@ -449,6 +449,22 @@ abstracted — record why, so it is not re-proposed).
 Seeded from `scripts/tactic_pattern_scan.py` (2026-07-18 scan; re-run for
 current counts and full location lists).
 
+### stationary-sector rank-one physical probes — candidate
+- **Pattern:** choose the trace-one stationary state of an irreducible
+  left-canonical sector, realize rank-one inserted maps by physical
+  observables, identify them by linear-map extensionality, and remove a
+  complementary transfer gap by the stationary-state fixed-point equation.
+- **Seen:** two occurrences in `TNLean/MPS/RFP/ZCLReverse.lean`, in
+  `not_isPositiveGapPhysicalCID_basisDirectSum_of_basis_spectral_pair` and
+  `exists_basis_physicalObservables_expectation_eq_trace_mul_transferMap_pow`
+  (pattern scan and review on 2026-07-30).
+- **Abstraction:** proposed helper lemma returning the two physical
+  observables together with the composed direct-sum rank-one-map identity.
+- **Notes:** this remains below the rule-of-three promotion threshold. The
+  two callers use different terminal data: a spectral eigenmatrix in the
+  contradiction argument and arbitrary trace-pairing probes in the
+  zero-Jordan repair.
+
 ### positive-map resolvent distribution — candidate
 - **Pattern:** distribute a positive linear map and a nonnegative real scalar
   through the shifted-resolvent difference, commute the scalar identity shift,

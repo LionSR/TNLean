@@ -215,10 +215,47 @@ $|\lambda|<1$.  This implication is false for a non-idempotent operator whose
 only subleading spectral value is zero but whose generalized zero-eigenspace
 has a nontrivial nilpotent Jordan part.  Consequently the unconditional reverse
 direction is not obtained from the printed proof, even for the multiplicity-one
-unit-weight representative.  A source-faithful conditional statement would
-have to assume or derive exactly the nonzero subleading left and right
-eigenvectors used in lines 1250--1262; replacing that step by a different
-trace-nondegeneracy argument would not formalize the cited proof.
+unit-weight representative.  The conditional theorems with suffix
+\path{of_spectral_pair} therefore retain exactly the nonzero subleading left
+and right eigenvectors used in lines 1250--1262 and remain the formal record of
+the cited proof.
+
+\paragraph{Local fix at line 1250.}
+For the multiplicity-one, unit-weight representative, the false spectral
+inference can be bypassed without an additional hypothesis.  Fix a BNT sector
+$j$, let $\rho_j$ be its trace-one stationary state, and choose arbitrary
+$u,v\in M_{D_j}(\mathbb C)$.  The simultaneous physical-observable realization
+gives two sector-supported rank-one insertions
+\[
+  \mathbb E_{O_1}=|\rho_j)(u|,
+  \qquad
+  \mathbb E_{O_2}=|v)(1|.
+\]
+Sector compression, stationarity of $\rho_j$, and the operator trace of a
+rank-one map give, for all complementary gap lengths $n_1,n_2$,
+\[
+  \operatorname{Tr}_{M_D(\mathbb C)}
+    \left(\mathbb E_{O_2}\mathbb E_A^{n_2}
+      \mathbb E_{O_1}\mathbb E_A^{n_1}\right)
+  =\operatorname{tr}\left(u\mathbb E_j^{n_1}(v)\right).
+\]
+There is no transpose in this identity, and the right-hand side is independent
+of $n_2$.  Positive-gap CID at $(n_1,n_2)=(1,2)$ and $(2,1)$ therefore gives
+\[
+  \operatorname{tr}\left(u\mathbb E_j(v)\right)
+  =\operatorname{tr}\left(u\mathbb E_j^2(v)\right)
+\]
+for every $u,v$.  Nondegeneracy of the trace pairing yields
+$\mathbb E_j^2=\mathbb E_j$.  Local orthogonality eliminates the off-diagonal
+mixed transfer maps, so the multiplicity-one direct sum is idempotent.
+
+This repair requires no diagonalizability, semisimplicity at zero, or
+nonzero subleading eigenvalue.  It is formalized by
+\leanid{MPSTensor.IsBNTCanonicalForm.%
+isTransferIdempotent_basisDirectSum_of_isPositiveGapBNTZCL}.  It is a local
+correction to line 1250 rather than a formalization of the printed spectral
+argument.  It does not alter the raw-weight counterexample or the adjacent-gap
+scope restriction.
 
 Since the older predicate universally quantifies over positive definite fixed
 points, it is also vacuous for a tensor without such a fixed point.  The
