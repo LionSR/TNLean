@@ -526,13 +526,43 @@ It uses only source ZCL and injectivity of the original tensor, not of the
 selected fixed-product tensor.  This closes the adjacent coefficient-extraction
 step tracked in issue~\#5129.
 
-The remaining step is to combine this square--cube identity with the
-strictly positive two-step coefficient in the Markov reconstruction and
-thereby obtain the source's rank-one conclusion for the selected
-factorization.  Until that assembly is proved, the commuting-form-to-SAL
-implication remains open.  The explicit factorization and positivity
-assumptions of the proved SAL corollary remain scope restrictions, not
-additional hypotheses on Proposition~\emph{4to2}.
+This square--cube identity has now been assembled with the strictly positive
+two-step coefficient.  Nonemptiness of the cyclic-active sector set follows
+from the spanning family of original one-site matrices: if the sector set
+were empty, that family would have zero span rather than the full auxiliary
+matrix algebra.  The normalized trace matrix is therefore primitive, with
+its second power as a strictly positive power, and
+\leanid{Matrix.IsPrimitive.%
+exists_pos_pow_two_eq_vecMulVec_of_pow_two_eq_pow_three}
+gives strictly positive vectors $a,b$ satisfying
+\[
+  (\lambda^{-1}T_C)^2=a b^{\mathsf T}.
+\]
+
+The one-step and iterated marginal identities, and the positive selected
+traces, are transported separately by
+\leanid{MPOTensor.EtaLocalStructureData.%
+selectedFixedProduct_reducedBlockState_succ_succ_eq_succ_of_isSourceZCL},
+\leanid{MPOTensor.EtaLocalStructureData.%
+selectedFixedProduct_reducedBlockState_add_three_eq_succ_of_isSourceZCL},
+and
+\leanid{MPOTensor.EtaLocalStructureData.%
+exists_pos_trace_mpo_selectedFixedProduct_of_isSourceZCL}.
+Substituting the positive factorization into the three-suffix formula and
+regrouping at an arbitrary distinguished site produces the Hayashi direct
+sum.  Positive proportionality then identifies the selected normalized
+marginal with that of the original source tensor in the same one-site
+physical coordinates.  This is
+\leanid{MPOTensor.EtaLocalStructureData.%
+exists_hayashiMarkovDecomposition_selectedPhysicalCut_of_isSourceZCL}.
+It assumes exactly the hypotheses of Proposition~\emph{4to2} together with
+the standing MPDO and normal-block hypotheses; it assumes no injectivity,
+normality, or zero correlation length for the selected fixed-product tensor.
+
+Thus the source-facing Markov-cut construction is complete.  The remaining
+step in the commuting-form-to-SAL implication is the entropy-theoretic
+assembly: apply the all-cut Markov criterion to these physical-coordinate
+marginals and transport saturation through the one-site isometry.
 
 \paragraph{Local fix (the later orthogonal-sector statement).}
 The proposition labelled \emph{prop4to2} at source lines~1801--1808 states
@@ -572,16 +602,15 @@ uses ZCL.
 
 \paragraph{Verdict.}
 Proposition~\emph{4to2} is classified as a structural-bridge gap.  The
-fourth-region factorization, the Markov decomposition at every admissible cut,
-the all-cut entropy argument, and transport to the original physical basis are
-complete under an explicit positive physical-sector factorization.  The exact
-fixed tensor selected from the source-side commuting bond now has such a
-factorization, with positive neighboring operators and the original physical
-bond.  Rectangular virtual compression now transports the algebraic
-factorization and identifies its neighboring contraction exactly.  The
-remaining gap is to retain the selected trace-visible sector as an exact
-virtual corner, prove positivity after inserting its range projection, and
-relate the resulting blocked sector back to the original source tensor.
+positive fixed-product representative, its cyclic-active recurrent component,
+the normalized square--cube identity, and the positive rank-one factorization
+of the two-step coefficient are now obtained from the source tensor without a
+virtual comparison between the two tensors.  The resulting Hayashi
+decomposition holds at every one-site cut of the original source tensor in the
+selected physical coordinates.  The remaining gap is only to pass from these
+all-cut decompositions to SAL and then transport SAL through the one-site
+physical isometry.
+
 The later
 orthogonal direct-sum implication is likewise formalized only as a
 scope-restricted theorem assuming sectorwise SAL.  It neither supplies that
@@ -590,22 +619,18 @@ implies SAL.
 
 \section{Elimination plan}
 
-The gap can be removed in the following stages.
+The remaining gap can be removed in the following stages.
 
 \begin{enumerate}
-\item The selected fixed tensor has a positive physical-sector factorization
-constructed non-circularly from the source-side commuting bond, as recorded by
-the fixed-tensor theorem identified above.
-\item The canonical inclusion and exact compression identity for every
-flattened sector are formalized.  Use this certificate when selecting the
-trace-visible canonical sector of the fixed tensor, and prove that the
-neighboring contraction remains positive after inserting its range
-projection.
-\item Use the proportional canonical-form theorem and its virtual gauge to
-transport the positive compressed factorization to the matching normal
-sector, then remove any blocking without adding a hypothesis absent from
-Proposition~\emph{4to2}.  Only then may the source proposition receive a
-formal declaration and a \texttt{\string\leanok} marker.
+\item Apply the all-cut Markov criterion to the decompositions supplied by
+\leanid{MPOTensor.EtaLocalStructureData.%
+exists_hayashiMarkovDecomposition_selectedPhysicalCut_of_isSourceZCL}.
+Positivity and nonvanishing of the physical-coordinate periodic operators
+follow from the MPDO and source-ZCL hypotheses.
+\item Transport SAL back through the selected one-site physical isometry.
+Only after this conclusion is stated under exactly the source hypotheses may
+Proposition~\emph{4to2} receive a formal declaration and a
+\texttt{\string\leanok} marker.
 \end{enumerate}
 
 \bibliographystyle{alpha}

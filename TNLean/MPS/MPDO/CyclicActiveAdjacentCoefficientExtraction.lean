@@ -784,6 +784,146 @@ namespace MPOTensor.EtaLocalStructureData
 
 variable {d D : ℕ} {K : MPOTensor d D}
 
+/-- At every realized chain length, the selected fixed-product tensor and
+the source tensor in the selected physical coordinates have the same
+normalized reduced states.
+
+Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
+1597--1613. -/
+theorem selectedFixedProduct_reducedBlockState_eq_changePhysicalBasis
+    (data : EtaLocalStructureData K)
+    (N L : ℕ) (hN : 2 ≤ N) (hL : L ≤ N) :
+    let F :=
+      data.bondData.fixedProductTensorDataPhysicalSectorFactorization
+    F.sectorCoordinateTensor.reducedBlockState N L hL =
+      (PhysicalSectorFactorization.changePhysicalBasis
+        F.physicalCoordinateMatrix K).reducedBlockState N L hL := by
+  let F :=
+    data.bondData.fixedProductTensorDataPhysicalSectorFactorization
+  let M :=
+    PhysicalSectorFactorization.changePhysicalBasis
+      F.physicalCoordinateMatrix K
+  obtain ⟨c, hc, hclosed⟩ :=
+    data.exists_positive_scalar_mpo_changePhysicalBasis_eq_smul_selected N hN
+  exact (PhysicalSectorFactorization.reducedBlockState_eq_of_mpo_eq_smul
+    M F.sectorCoordinateTensor N L hL (c : ℂ)
+    (Complex.ofReal_ne_zero.mpr (ne_of_gt hc)) hclosed).symm
+
+private theorem selectedFixedProduct_reducedBlockState_eq_of_source_eq
+    (data : EtaLocalStructureData K)
+    (N₁ N₂ L : ℕ) (hN₁ : 2 ≤ N₁) (hN₂ : 2 ≤ N₂)
+    (hL₁ : L ≤ N₁) (hL₂ : L ≤ N₂)
+    (hsource :
+      K.reducedBlockState N₁ L hL₁ =
+        K.reducedBlockState N₂ L hL₂) :
+    let F :=
+      data.bondData.fixedProductTensorDataPhysicalSectorFactorization
+    F.sectorCoordinateTensor.reducedBlockState N₁ L hL₁ =
+      F.sectorCoordinateTensor.reducedBlockState N₂ L hL₂ := by
+  let F :=
+    data.bondData.fixedProductTensorDataPhysicalSectorFactorization
+  let U := F.physicalCoordinateMatrix
+  let M := PhysicalSectorFactorization.changePhysicalBasis U K
+  calc
+    F.sectorCoordinateTensor.reducedBlockState N₁ L hL₁ =
+        M.reducedBlockState N₁ L hL₁ :=
+      data.selectedFixedProduct_reducedBlockState_eq_changePhysicalBasis
+        N₁ L hN₁ hL₁
+    _ = singleKrausMap (sitewisePhysicalMatrix U L)
+        (K.reducedBlockState N₁ L hL₁) :=
+      reducedBlockState_changePhysicalBasis_of_isometry
+        U F.physicalCoordinateMatrix_isometry K N₁ L hL₁
+    _ = singleKrausMap (sitewisePhysicalMatrix U L)
+        (K.reducedBlockState N₂ L hL₂) := by rw [hsource]
+    _ = M.reducedBlockState N₂ L hL₂ := by
+      symm
+      exact reducedBlockState_changePhysicalBasis_of_isometry
+        U F.physicalCoordinateMatrix_isometry K N₂ L hL₂
+    _ = F.sectorCoordinateTensor.reducedBlockState N₂ L hL₂ :=
+      (data.selectedFixedProduct_reducedBlockState_eq_changePhysicalBasis
+        N₂ L hN₂ hL₂).symm
+
+/-- Source zero correlation length transports adjacent normalized marginal
+stability to the selected fixed-product tensor in its physical-sector
+coordinates.
+
+Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
+1603--1613. -/
+theorem selectedFixedProduct_reducedBlockState_succ_succ_eq_succ_of_isSourceZCL
+    (data : EtaLocalStructureData K) (hZCL : K.IsSourceZCL)
+    (L : ℕ) (hL : 0 < L) :
+    let F :=
+      data.bondData.fixedProductTensorDataPhysicalSectorFactorization
+    F.sectorCoordinateTensor.reducedBlockState (L + 2) L (by omega) =
+      F.sectorCoordinateTensor.reducedBlockState (L + 1) L (by omega) := by
+  apply data.selectedFixedProduct_reducedBlockState_eq_of_source_eq
+      (hN₁ := by omega) (hN₂ := by omega)
+  exact K.reducedBlockState_succ_succ_eq_succ_of_isSourceZCL hZCL L
+
+/-- Source zero correlation length transports the three-suffix/one-suffix
+normalized marginal identity to the selected fixed-product tensor.
+
+Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
+1606--1613.
+
+**Local fix (cyclic-active restriction):** This is the additional marginal
+replacement used to expose the two-step cyclic-active coefficient. See
+`docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
+theorem selectedFixedProduct_reducedBlockState_add_three_eq_succ_of_isSourceZCL
+    (data : EtaLocalStructureData K) (hZCL : K.IsSourceZCL)
+    (L : ℕ) (hL : 0 < L) :
+    let F :=
+      data.bondData.fixedProductTensorDataPhysicalSectorFactorization
+    F.sectorCoordinateTensor.reducedBlockState (L + 3) L (by omega) =
+      F.sectorCoordinateTensor.reducedBlockState (L + 1) L (by omega) := by
+  apply data.selectedFixedProduct_reducedBlockState_eq_of_source_eq
+      (hN₁ := by omega) (hN₂ := by omega)
+  exact K.reducedBlockState_add_three_eq_succ_of_isSourceZCL hZCL L
+
+/-- Every selected fixed-product periodic operator of length at least two has
+a strictly positive real trace under source zero correlation length.
+
+Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
+1597--1613. -/
+theorem exists_pos_trace_mpo_selectedFixedProduct_of_isSourceZCL
+    (data : EtaLocalStructureData K) (hZCL : K.IsSourceZCL)
+    (N : ℕ) (hN : 2 ≤ N) :
+    let F :=
+      data.bondData.fixedProductTensorDataPhysicalSectorFactorization
+    ∃ z : ℝ, 0 < z ∧
+      Matrix.trace (mpo F.sectorCoordinateTensor N) = (z : ℂ) := by
+  let F :=
+    data.bondData.fixedProductTensorDataPhysicalSectorFactorization
+  let U := F.physicalCoordinateMatrix
+  let M := PhysicalSectorFactorization.changePhysicalBasis U K
+  letI : NeZero N := ⟨by omega⟩
+  have hpos : ∀ q h, (F.neighboringOperator q h).PosSemidef :=
+    data.bondData.fixedProductTensorDataPhysicalSectorFactorization_neighboring_pos
+  obtain ⟨c, _, hclosed⟩ :=
+    data.exists_positive_scalar_mpo_changePhysicalBasis_eq_smul_selected N hN
+  have hsourceTraceNe : Matrix.trace (mpo K N) ≠ 0 :=
+    trace_mpo_ne_zero_of_isSourceZCL K hZCL (by omega)
+  have hchangeTraceNe : Matrix.trace (mpo M N) ≠ 0 := by
+    rw [trace_mpo_changePhysicalBasis_of_isometry
+      U F.physicalCoordinateMatrix_isometry K N]
+    exact hsourceTraceNe
+  have hclosedTrace := congrArg Matrix.trace hclosed
+  rw [Matrix.trace_smul] at hclosedTrace
+  have hselectedTraceNe :
+      Matrix.trace (mpo F.sectorCoordinateTensor N) ≠ 0 := by
+    intro hzero
+    apply hchangeTraceNe
+    rw [hclosedTrace, hzero, smul_eq_mul, mul_zero]
+  have hselectedPos :
+      0 < Matrix.trace (mpo F.sectorCoordinateTensor N) :=
+    (F.mpo_sectorCoordinateTensor_posSemidef hpos).trace_pos_of_ne_zero
+      (fun hzero ↦ hselectedTraceNe (by rw [hzero, Matrix.trace_zero]))
+  obtain ⟨hre, him⟩ := Complex.pos_iff.mp hselectedPos
+  refine ⟨(Matrix.trace (mpo F.sectorCoordinateTensor N)).re, hre, ?_⟩
+  apply Complex.ext
+  · rfl
+  · simpa using him.symm
+
 /-- For the selected fixed-product realization of an eta-local source-ZCL
 tensor, the cyclic-active trace matrix admits a positive normalization whose
 square equals its cube.
@@ -808,8 +948,6 @@ theorem exists_normalized_selectedFixedProduct_cyclicActiveSectorTraceMatrix_pow
   classical
   let F :=
     data.bondData.fixedProductTensorDataPhysicalSectorFactorization
-  let U := F.physicalCoordinateMatrix
-  let M := PhysicalSectorFactorization.changePhysicalBasis U K
   have hpos : ∀ q h, (F.neighboringOperator q h).PosSemidef :=
     data.bondData.fixedProductTensorDataPhysicalSectorFactorization_neighboring_pos
   have hreach : ∀ q h : F.CyclicActiveSector,
@@ -822,63 +960,12 @@ theorem exists_normalized_selectedFixedProduct_cyclicActiveSectorTraceMatrix_pow
       F.sectorCoordinateTensor.reducedBlockState (L + 2) L (by omega) =
         F.sectorCoordinateTensor.reducedBlockState (L + 1) L (by omega) := by
     intro L hL
-    obtain ⟨c₂, hc₂, hclosed₂⟩ :=
-      data.exists_positive_scalar_mpo_changePhysicalBasis_eq_smul_selected
-        (L + 2) (by omega)
-    obtain ⟨c₁, hc₁, hclosed₁⟩ :=
-      data.exists_positive_scalar_mpo_changePhysicalBasis_eq_smul_selected
-        (L + 1) (by omega)
-    calc
-      F.sectorCoordinateTensor.reducedBlockState (L + 2) L (by omega) =
-          M.reducedBlockState (L + 2) L (by omega) :=
-        (PhysicalSectorFactorization.reducedBlockState_eq_of_mpo_eq_smul
-          M F.sectorCoordinateTensor
-          (L + 2) L (by omega) (c₂ : ℂ)
-          (Complex.ofReal_ne_zero.mpr (ne_of_gt hc₂)) hclosed₂).symm
-      _ = singleKrausMap (sitewisePhysicalMatrix U L)
-          (K.reducedBlockState (L + 2) L (by omega)) := by
-        exact reducedBlockState_changePhysicalBasis_of_isometry
-          U F.physicalCoordinateMatrix_isometry K (L + 2) L (by omega)
-      _ = singleKrausMap (sitewisePhysicalMatrix U L)
-          (K.reducedBlockState (L + 1) L (by omega)) := by
-        rw [K.reducedBlockState_succ_succ_eq_succ_of_isSourceZCL hZCL L]
-      _ = M.reducedBlockState (L + 1) L (by omega) := by
-        symm
-        exact reducedBlockState_changePhysicalBasis_of_isometry
-          U F.physicalCoordinateMatrix_isometry K (L + 1) L (by omega)
-      _ = F.sectorCoordinateTensor.reducedBlockState (L + 1) L (by omega) :=
-        PhysicalSectorFactorization.reducedBlockState_eq_of_mpo_eq_smul
-          M F.sectorCoordinateTensor
-          (L + 1) L (by omega) (c₁ : ℂ)
-          (Complex.ofReal_ne_zero.mpr (ne_of_gt hc₁)) hclosed₁
+    exact data.selectedFixedProduct_reducedBlockState_succ_succ_eq_succ_of_isSourceZCL
+      hZCL L hL
   have htrace : ∀ N, 2 ≤ N → ∃ z : ℝ, 0 < z ∧
       Matrix.trace (mpo F.sectorCoordinateTensor N) = (z : ℂ) := by
     intro N hN
-    letI : NeZero N := ⟨by omega⟩
-    obtain ⟨c, hc, hclosed⟩ :=
-      data.exists_positive_scalar_mpo_changePhysicalBasis_eq_smul_selected N hN
-    have hsourceTraceNe : Matrix.trace (mpo K N) ≠ 0 :=
-      trace_mpo_ne_zero_of_isSourceZCL K hZCL (by omega)
-    have hchangeTraceNe : Matrix.trace (mpo M N) ≠ 0 := by
-      rw [trace_mpo_changePhysicalBasis_of_isometry
-        U F.physicalCoordinateMatrix_isometry K N]
-      exact hsourceTraceNe
-    have hclosedTrace := congrArg Matrix.trace hclosed
-    rw [Matrix.trace_smul] at hclosedTrace
-    have hselectedTraceNe :
-        Matrix.trace (mpo F.sectorCoordinateTensor N) ≠ 0 := by
-      intro hzero
-      apply hchangeTraceNe
-      rw [hclosedTrace, hzero, smul_eq_mul, mul_zero]
-    have hselectedPos :
-        0 < Matrix.trace (mpo F.sectorCoordinateTensor N) :=
-      (F.mpo_sectorCoordinateTensor_posSemidef hpos).trace_pos_of_ne_zero
-        (fun hzero ↦ hselectedTraceNe (by rw [hzero, Matrix.trace_zero]))
-    obtain ⟨hre, him⟩ := Complex.pos_iff.mp hselectedPos
-    refine ⟨(Matrix.trace (mpo F.sectorCoordinateTensor N)).re, hre, ?_⟩
-    apply Complex.ext
-    · simp
-    · simpa using him.symm
+    exact data.exists_pos_trace_mpo_selectedFixedProduct_of_isSourceZCL hZCL N hN
   exact F.exists_normalized_cyclicActiveSectorTraceMatrix_pow_two_eq_pow_three_of_adjacent_marginals
     hpos hreach hmarg htrace
 
