@@ -11,9 +11,11 @@ from pathlib import Path
 
 from tenkz_audit import Audit
 from tenkz_rmp import (
+    AUTHOR_SOURCE_HASHES,
     DEFAULT_MANIFEST,
     RMPError,
     ink_environment_problems,
+    load_author_source_hashes,
     load_manifest,
     rendered_ink_environment_families,
     sha256,
@@ -170,6 +172,14 @@ def test_rmp_author_source_identity() -> None:
         },
         key=lambda path: path.as_posix(),
     )
+    committed = sorted(
+        load_author_source_hashes(AUTHOR_SOURCE_HASHES),
+        key=lambda path: path.as_posix(),
+    )
+    if committed != cited:
+        raise AssertionError(
+            "committed author-source hashes disagree with manifest.toml"
+        )
     with tempfile.TemporaryDirectory(prefix="tenkz-rmp-author-source-") as tmp:
         work = Path(tmp)
         source_root = work / "RMP_TIKZ_SOURCE_CODE"
