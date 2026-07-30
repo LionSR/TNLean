@@ -17,6 +17,9 @@ multiplicity of each sector remains outside its bond product.
 
 * `MPOTensor.OrthogonalCommutingSectorFamily`: orthogonally supported commuting
   bond products for a finite family of MPO tensors.
+* `MPOTensor.ProportionalOrthogonalCommutingSectorFamily`: the corresponding
+  family when each sector operator is a positive scalar multiple of its bond
+  product.
 * `MPOTensor.OrthogonalCommutingSectorFamily.toGSNNCHData`: the corresponding
   finite-chain GSNNCH sector decomposition.
 * `MPOTensor.hasGSNNCHForm_of_orthogonalCommutingSectorFamily`: the outer-sector
@@ -76,9 +79,62 @@ structure OrthogonalCommutingSectorFamily
   realizes_mpo : ∀ s N (hN : 2 ≤ N),
     mpo (K s) N = ((bondData s).toCommutingFormData hN).product
 
+/-- A finite family of positive commuting bond products supported on pairwise
+orthogonal one-site subspaces, with positive proportional realization of each
+sector operator.
+
+This is the proportional sector form in arXiv:1606.00608, equation
+`ApprhoNComm`, lines 1641--1665. The sector scalar may depend on the sector and
+the chain length.
+
+**Scope restriction (supplied orthogonal sectors):** CPSV16 Appendix C.2,
+Proposition `prop3to4`, lines 1786--1796, starts from five blockwise identities;
+it does not assume this family of orthogonal projections and supported bonds.
+See `docs/paper-gaps/cpsv16_gsnnch_sector_decomposition.tex`. -/
+structure ProportionalOrthogonalCommutingSectorFamily
+    (K : (s : Fin g) → MPOTensor d (dim s)) where
+  /-- The one-site projection of each outer sector.
+  Source: arXiv:1606.00608, lines 838--842 and 1641--1665. -/
+  projection : Fin g → Matrix (Fin d) (Fin d) ℂ
+  /-- Every outer-sector projection is orthogonal.
+  Source: arXiv:1606.00608, lines 838--842. -/
+  projection_isOrthogonal : ∀ s, IsOrthogonalProjection (projection s)
+  /-- Distinct outer sectors have orthogonal one-site spaces.
+  Source: arXiv:1606.00608, lines 838--842. -/
+  projection_orthogonal : ∀ {s t}, s ≠ t → projection s * projection t = 0
+  /-- The positive translation-invariant bond of each sector.
+  Source: arXiv:1606.00608, lines 843--850 and 1641--1665. -/
+  bondData : Fin g → TranslationInvariantBondData d
+  /-- Each bond acts on the tensor square of its one-site sector.
+  Source: arXiv:1606.00608, lines 838--850. -/
+  bond_supported : ∀ s,
+    twoSiteSectorProjection (projection s) * (bondData s).bond *
+      twoSiteSectorProjection (projection s) = (bondData s).bond
+  /-- Every sector MPO is a positive scalar multiple of the periodic product
+  of its translated bond.
+  Source: arXiv:1606.00608, equation `ApprhoNComm`, lines 1641--1665. -/
+  realizes_mpo : ∀ s N (hN : 2 ≤ N),
+    ((bondData s).toCommutingFormData hN).Realizes (mpo (K s) N)
+
 namespace OrthogonalCommutingSectorFamily
 
 variable {K : (s : Fin g) → MPOTensor d (dim s)}
+
+/-- An exact orthogonal commuting sector family is a proportional family with
+normalization scalar one.
+
+Source: arXiv:1606.00608, equation `ApprhoNComm`, lines 1641--1665. -/
+noncomputable def toProportional (F : OrthogonalCommutingSectorFamily K) :
+    ProportionalOrthogonalCommutingSectorFamily K where
+  projection := F.projection
+  projection_isOrthogonal := F.projection_isOrthogonal
+  projection_orthogonal := fun hst ↦ F.projection_orthogonal hst
+  bondData := F.bondData
+  bond_supported := F.bond_supported
+  realizes_mpo := by
+    intro s N hN
+    refine ⟨1, zero_lt_one, ?_⟩
+    simpa using F.realizes_mpo s N hN
 
 /-- The finite-chain GSNNCH decomposition determined by orthogonally supported
 commuting sector bonds and their natural multiplicities.

@@ -96,9 +96,9 @@ private theorem firstSiteMatrix_mul_embed_twoSiteSectorProjection_zero
     rw [if_neg hAgree]
     simp
 
-private theorem OrthogonalCommutingSectorFamily.firstSiteMatrix_mul_mpo
+private theorem ProportionalOrthogonalCommutingSectorFamily.firstSiteMatrix_mul_mpo
     {K : (s : Fin g) → MPOTensor d (dim s)}
-    (F : OrthogonalCommutingSectorFamily K) (s : Fin g)
+    (F : ProportionalOrthogonalCommutingSectorFamily K) (s : Fin g)
     (n : ℕ) (hn : 0 < n) :
     firstSiteMatrix (F.projection s) n * mpo (K s) (n + 1) =
       mpo (K s) (n + 1) := by
@@ -123,20 +123,66 @@ private theorem OrthogonalCommutingSectorFamily.firstSiteMatrix_mul_mpo
         simp only [Matrix.mul_assoc]
       _ = Q₀ * B₀ * Q₀ := by rw [hP₀Q₀]
       _ = B₀ := hQ₀B₀Q₀
-  simp only [F.realizes_mpo s (n + 1) hN, CommutingFormData.product,
-    TranslationInvariantBondData.toCommutingFormData_bondAt]
-  change firstSiteMatrix (F.projection s) n *
-      (List.ofFn fun i : Fin (n + 1) ↦
-        embedLocalOperator (d := d) 2 (n + 1) hN i B).prod = _
-  rw [List.ofFn_succ, List.prod_cons, ← Matrix.mul_assoc]
-  change firstSiteMatrix (F.projection s) n * B₀ *
+  obtain ⟨c, _, hreal⟩ := F.realizes_mpo s (n + 1) hN
+  have hproduct :
+      firstSiteMatrix (F.projection s) n *
+          ((F.bondData s).toCommutingFormData hN).product =
+        ((F.bondData s).toCommutingFormData hN).product := by
+    simp only [CommutingFormData.product,
+      TranslationInvariantBondData.toCommutingFormData_bondAt]
+    change firstSiteMatrix (F.projection s) n *
+        (List.ofFn fun i : Fin (n + 1) ↦
+          embedLocalOperator (d := d) 2 (n + 1) hN i B).prod = _
+    rw [List.ofFn_succ, List.prod_cons, ← Matrix.mul_assoc]
+    change firstSiteMatrix (F.projection s) n * B₀ *
+        (List.ofFn fun i : Fin n ↦
+          embedLocalOperator (d := d) 2 (n + 1) hN i.succ B).prod =
+      B₀ * (List.ofFn fun i : Fin n ↦
+        embedLocalOperator (d := d) 2 (n + 1) hN i.succ B).prod
+    exact congrArg (fun X ↦ X *
       (List.ofFn fun i : Fin n ↦
-        embedLocalOperator (d := d) 2 (n + 1) hN i.succ B).prod =
-    B₀ * (List.ofFn fun i : Fin n ↦
-      embedLocalOperator (d := d) 2 (n + 1) hN i.succ B).prod
-  exact congrArg (fun X ↦ X *
-    (List.ofFn fun i : Fin n ↦
-      embedLocalOperator (d := d) 2 (n + 1) hN i.succ B).prod) hP₀B₀
+        embedLocalOperator (d := d) 2 (n + 1) hN i.succ B).prod) hP₀B₀
+  rw [hreal, Matrix.mul_smul, hproduct]
+
+/-- A proportionally realized commuting bond product supported on a one-site
+sector remains supported on that sector after normalization.
+
+The positive scalar in the sector realization cancels from the normalized
+operator.
+
+Source: arXiv:1606.00608, equation `ApprhoNComm`, lines 1641--1665. -/
+theorem
+    ProportionalOrthogonalCommutingSectorFamily.firstSiteMatrix_mul_normalizedMPO
+    {K : (s : Fin g) → MPOTensor d (dim s)}
+    (F : ProportionalOrthogonalCommutingSectorFamily K) (s : Fin g)
+    (n : ℕ) (hn : 0 < n) :
+    firstSiteMatrix (F.projection s) n * normalizedMPO (K s) (n + 1) =
+      normalizedMPO (K s) (n + 1) := by
+  simp only [normalizedMPO, Matrix.mul_smul,
+    F.firstSiteMatrix_mul_mpo s n hn]
+
+/-- A proportionally realized bond product supported on a one-site sector
+remains supported on that sector after taking any nonempty prefix marginal of
+a chain of length at least two.
+
+The proof uses only projection idempotence, bond support, and positive
+proportional realization. It does not use the saturated area law or zero
+correlation length.
+
+Local consequence of the proportional sector form in arXiv:1606.00608,
+equation `ApprhoNComm`, lines 1641--1665, used in the final direct-sum
+inference at lines 1801--1808. -/
+theorem
+    ProportionalOrthogonalCommutingSectorFamily.firstSiteMatrix_mul_reducedBlockState
+    {K : (s : Fin g) → MPOTensor d (dim s)}
+    (F : ProportionalOrthogonalCommutingSectorFamily K) (s : Fin g)
+    {N L : ℕ} (hN : 2 ≤ N) (hL : L + 1 ≤ N) :
+    firstSiteMatrix (F.projection s) L *
+        reducedBlockState (K s) N (L + 1) hL =
+      reducedBlockState (K s) N (L + 1) hL := by
+  obtain ⟨n, rfl⟩ := Nat.exists_eq_succ_of_ne_zero (by omega : N ≠ 0)
+  apply firstSiteMatrix_mul_reducedBlockState_of_mul_normalizedMPO
+  exact F.firstSiteMatrix_mul_normalizedMPO s n (by omega)
 
 /-- A bond product supported on a one-site sector remains supported on that
 sector after taking any nonempty prefix marginal of a chain of length at least
@@ -158,10 +204,38 @@ theorem OrthogonalCommutingSectorFamily.firstSiteMatrix_mul_reducedBlockState
     firstSiteMatrix (F.projection s) L *
         reducedBlockState (K s) N (L + 1) hL =
       reducedBlockState (K s) N (L + 1) hL := by
-  obtain ⟨n, rfl⟩ := Nat.exists_eq_succ_of_ne_zero (by omega : N ≠ 0)
-  apply firstSiteMatrix_mul_reducedBlockState_of_mul_normalizedMPO
-  simp only [normalizedMPO, Matrix.mul_smul,
-    F.firstSiteMatrix_mul_mpo s n (by omega)]
+  exact F.toProportional.firstSiteMatrix_mul_reducedBlockState s hN hL
+
+/-- A positive proportional finite sum of proportionally realized orthogonal
+commuting sectors satisfies the saturated area law when every sector does.
+
+This is the final local direct-sum argument in CPSV16, Appendix C.2. Sectorwise
+SAL is an explicit hypothesis: this theorem neither derives it from the
+commuting-bond form nor invokes zero correlation length.
+
+Source: CPSV16, equation `ApprhoNComm`, lines 1641--1665, and Appendix C.2,
+Proposition `prop4to2`, lines 1801--1808.
+
+**Local fix (proportional sector products):** The positive scalar in each
+sector-product realization cancels from the normalized chain and its
+marginals. This is documented in
+`docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
+theorem isSAL_of_proportionalOrthogonalCommutingSectorFamily
+    (M : MPOTensor d D) (K : (s : Fin g) → MPOTensor d (dim s))
+    (multiplicity : Fin g → ℕ) [Nonempty (Fin g)]
+    (hmultiplicity : ∀ s, 0 < multiplicity s)
+    (F : ProportionalOrthogonalCommutingSectorFamily K)
+    (hM : ∀ (N : ℕ), 0 < N → ∃ c : ℝ, 0 < c ∧
+      mpo M N =
+        (c : ℂ) • ∑ s : Fin g, (multiplicity s : ℂ) • mpo (K s) N)
+    (hSectorSAL : ∀ s, IsSAL (K s)) :
+    IsSAL M := by
+  exact isSAL_of_proportionalLocalOrthogonalSum M K multiplicity F.projection
+    hmultiplicity F.projection_isOrthogonal
+    (fun hst ↦ F.projection_orthogonal hst) hM
+    (fun s _ _ hN hL ↦
+      F.firstSiteMatrix_mul_reducedBlockState s hN hL)
+    hSectorSAL
 
 /-- The exact finite sum of orthogonally supported commuting sectors satisfies
 the saturated area law when every sector does.
@@ -188,12 +262,48 @@ theorem isSAL_of_orthogonalCommutingSectorFamily
       mpo M N = ∑ s : Fin g, (multiplicity s : ℂ) • mpo (K s) N)
     (hSectorSAL : ∀ s, IsSAL (K s)) :
     IsSAL M := by
-  exact isSAL_of_localOrthogonalSum M K multiplicity F.projection
-    hmultiplicity F.projection_isOrthogonal
-    (fun hst ↦ F.projection_orthogonal hst) hM
-    (fun s _ _ hN hL ↦
-      F.firstSiteMatrix_mul_reducedBlockState s hN hL)
-    hSectorSAL
+  apply isSAL_of_proportionalOrthogonalCommutingSectorFamily M K multiplicity
+    hmultiplicity F.toProportional
+  · intro N hN
+    exact ⟨1, zero_lt_one, by simpa using hM N hN⟩
+  · exact hSectorSAL
+
+/-- A positive proportional sum of proportionally realized orthogonal
+fixed-bond sectors satisfies the saturated area law when every sector is an
+injective normal MPDO tensor with source zero correlation length.
+
+Source: CPSV16, equation `ApprhoNComm`, lines 1641--1665, and Appendix C.2,
+Proposition `prop4to2`, lines 1801--1808.
+
+**Scope restriction (sectorwise hypotheses):** The printed proposition omits
+the sectorwise source-ZCL hypothesis used by its proof. This theorem assumes
+separately that every sector generates MPDOs, is one-site injective and normal,
+and has source ZCL. One-site injectivity does not follow merely from BNT
+normality, leaving an injectivity-versus-blocking gap in the source
+application. The global outer sum and every sector product may carry the
+positive length-dependent scalars present in the source. See
+`docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
+theorem
+    isSAL_of_proportionalOrthogonalCommutingSectorFamily_of_sectorwise_isSourceZCL
+    (M : MPOTensor d D) (K : (s : Fin g) → MPOTensor d (dim s))
+    (multiplicity : Fin g → ℕ) [Nonempty (Fin g)]
+    (hmultiplicity : ∀ s, 0 < multiplicity s)
+    (F : ProportionalOrthogonalCommutingSectorFamily K)
+    (hM : ∀ (N : ℕ), 0 < N → ∃ c : ℝ, 0 < c ∧
+      mpo M N =
+        (c : ℂ) • ∑ s : Fin g, (multiplicity s : ℂ) • mpo (K s) N)
+    (hMPDO : ∀ s, IsMPDO (K s))
+    (hK : ∀ s, (K s).IsInjective)
+    (hNormal : ∀ s, MPSTensor.IsNormalTensor (K s).toMPSTensor)
+    (hZCL : ∀ s, (K s).IsSourceZCL) :
+    IsSAL M := by
+  apply isSAL_of_proportionalOrthogonalCommutingSectorFamily M K multiplicity
+    hmultiplicity F hM
+  intro s
+  let data : EtaLocalStructureData (K s) := by
+    exact ⟨F.bondData s, F.realizes_mpo s⟩
+  exact EtaLocalStructureData.isSAL_of_isSourceZCL
+    (hMPDO s) (hK s) (hNormal s) data (hZCL s)
 
 /-- An exact positive-multiplicity sum of orthogonally supported fixed-bond
 sectors satisfies the saturated area law when every sector is an injective
@@ -224,16 +334,15 @@ theorem isSAL_of_orthogonalCommutingSectorFamily_of_sectorwise_isSourceZCL
     (hNormal : ∀ s, MPSTensor.IsNormalTensor (K s).toMPSTensor)
     (hZCL : ∀ s, (K s).IsSourceZCL) :
     IsSAL M := by
-  apply isSAL_of_orthogonalCommutingSectorFamily M K multiplicity
-    hmultiplicity F hM
-  intro s
-  let data : EtaLocalStructureData (K s) := by
-    refine ⟨F.bondData s, ?_⟩
-    intro N hN
-    refine ⟨1, zero_lt_one, ?_⟩
-    simpa using F.realizes_mpo s N hN
-  exact EtaLocalStructureData.isSAL_of_isSourceZCL
-    (hMPDO s) (hK s) (hNormal s) data (hZCL s)
+  apply
+    isSAL_of_proportionalOrthogonalCommutingSectorFamily_of_sectorwise_isSourceZCL
+      M K multiplicity hmultiplicity F.toProportional
+  · intro N hN
+    exact ⟨1, zero_lt_one, by simpa using hM N hN⟩
+  · exact hMPDO
+  · exact hK
+  · exact hNormal
+  · exact hZCL
 
 /-- The BNT all-positive-length decomposition satisfies the saturated area law
 when its absorbed normal representatives do and an independently constructed
