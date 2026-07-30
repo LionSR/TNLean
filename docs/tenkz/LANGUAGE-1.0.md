@@ -71,7 +71,7 @@ declared. The generated reference prints this test beside every row.
 |---|---|---|---|---|---|
 | `rows=` | row-list | — | `{wire}` | picture | `TKZ-PIC-*` |
 | `cols=` | integer | — | 3 | picture | `TKZ-PIC-*` |
-| `frame=` | small-enum | `flat` `plane` `circle`, with `basis=` | `flat` | picture, group, atom | `TKZ-FRAME-*` |
+| `frame=` | frame-spec | `flat` `plane` `circle`; a picture-level `flat` or `plane` may carry `basis=` | `flat` | picture, group, atom | `TKZ-FRAME-*` |
 | `west=` `east=` `north=` `south=` | small-enum | `open` `none` `trace` `cup` | `open` | picture | `TKZ-SIDE-*` |
 | `trace=` | trace-spec | selector or `physical` | empty | picture | `TKZ-SELECT-*` |
 | `open=` | selector | — | empty | picture | `TKZ-SELECT-*` |
@@ -79,9 +79,11 @@ declared. The generated reference prints this test beside every row.
 | `align=` | row | row number or `midline` | `midline` | picture | `TKZ-PIC-*` |
 | `size=` | small-enum | `s` `m` `l` | from math style | picture, equation | `TKZ-SIZE-*` |
 
-Every frame contracts adjacent compatible cells by default: `bonds=grid`
-holds in chain and lattice frames alike, and `bonds=none` suppresses the
-frame-generated bonds.
+With the default single-member basis, every frame contracts adjacent
+compatible cells by default: `bonds=grid` holds in chain and lattice frames
+alike, and `bonds=none` suppresses those frame-generated bonds. A
+multi-member basis does not make connectivity follow coordinate coincidence;
+it uses `bonds=none` and explicit wires.
 
 ### 2.3 Atom keys (13)
 
@@ -165,20 +167,17 @@ cited paper's palette reaches a contour and the string that ends in it alike.
 | `strict` | flag | false; benchmark and CI set it |
 | `theme=` | identifier | `house` |
 
-### 2.7 Value types (22)
+### 2.7 Value types (24)
 
 flag · integer · length · pair · angle · identifier · small-enum · row-list ·
 row · selector · route-spec · address · address-list · typed-port-list ·
 crossing-list · port-pair-list · trace-spec · size-table · hue-source ·
-bond-policy · size-class · void-policy.
+bond-policy · size-class · void-policy · frame-spec · basis-spec.
 
-Five types left and three arrived. The audit specification left with
-`check=`; the frame specification became a three-word enum with no
-parameters; the plain number lost both its consumers with `bend=` and
-`inset=`; the mathematics list lost both its consumers with the two
-page-relative atom keys; and the cell set is the selector, which every key
-that names a set of records now takes. Arriving: the selector, the route's
-side-of-a-selection family, and the angle.
+These are semantic types, not aliases for TeX argument shapes. A `frame-spec`
+pairs one of the three carrier words with its frame-owned subkeys.
+`basis-spec` is separate because it is an ordered table of row kinds and
+signed two-axis offsets, not a row list, selector, or untyped number.
 
 The angle is minted rather than borrowed, and the reason is worth stating
 because it is the only new type here that could have been avoided on paper.
@@ -319,17 +318,36 @@ unchanged.
 **The basis.** A frame takes a subkey naming what each cell carries:
 
 ```
-frame={flat, basis={<row kind> at (<q>,<q>), ...}}
+frame={flat, basis={<row kind> at (<east q>,<north q>), ...}}
 ```
 
-Members are drawn from the row alphabet, offsets are quarter-pitch pairs, and
-a frame with no basis has a basis of one at the origin, so every existing
-picture is unchanged. Frame population creates one atom per cell per member;
-the model records each atom's cell and member index, so the boundary
-signature sees basis members as the distinct entries they are. Adjacency is
-declared by the offsets, so contraction stays a fact and not a measurement. A
-bilayer is a lattice with a basis of two and its pairing legs are intra-cell
-bonds; as a basis it is one frame and cannot collapse under nesting.
+Members are drawn from the row alphabet. Each integer pair is an eastward,
+then northward offset in quarter pitches; negative values point west or
+south. Member indices are one-based in declaration order. Thus `(r,c)`
+selects every member of a cell, while `(r,c,k)` selects member `k`. Equal
+offsets remain distinct members: coordinate coincidence neither identifies
+records nor creates an edge.
+
+A frame with no explicit basis retains the existing single site at the
+origin, so existing pictures are unchanged. Frame population creates one
+atom per cell per declared member, and the model records both the cell and
+member index. Offsets declare placement only. They never infer an edge:
+multi-member bases use `bonds=none`, and their intra-cell and inter-cell
+connections are ordinary declared wires. Cell-level `trace=`, `open=`,
+physical, and side policies are rejected for such a basis because they do
+not identify a member. A bilayer is consequently one frame with two basis
+members and explicit intra-cell pairing wires; nesting cannot collapse it
+into two unrelated frames.
+
+An authored atom at `(r,c,k)` replaces that member. An authored atom at
+`(r,c)` replaces the whole populated cell, so every member address in that
+cell resolves to the authored record rather than creating coincident
+population underneath it. Member indices are strictly one-based.
+
+In the current kernel stage an explicit `basis=` belongs to a picture-level
+`flat` or `plane` frame. Group-local, atom-local, and circular bases are
+rejected with `TKZ-FRAME-*` diagnostics until those carriers have a declared
+composition or tangent-offset contract.
 
 **One clause travels with the circle frame and only with it:** adjacent
 stations are one pitch apart. That fixes a radius the contract otherwise
@@ -338,10 +356,12 @@ seven tenths, which is what the authors wrote. It must not be generalized: in
 the projected plane the receding row is foreshortened by construction, and
 that foreshortening is what the plane's ratios are.
 
-`frame=` acts at picture scope, at group scope, and at atom scope.
-`\tngroup` transforms a sub-diagram as one object: its records keep their
-names, its boundary signature transforms with it, and the transform has its
-own model record — the audit compares networks, never silhouettes.
+The full `frame=` contract acts at picture, group, and atom scope. The current
+kernel stage exposes carrier words at picture and group scope; atom-local
+frames remain tracked work. `\tngroup` transforms a sub-diagram as one
+object: its records keep their names, its boundary signature transforms with
+it, and the transform has its own model record — the audit compares networks,
+never silhouettes.
 
 Consumers, carrier axes: `rmp-iii-a-pulling-through`, `rmp-iii-a-mpo-action`,
 `rmp-iii-a-ghz-tensor`, `rmp-workbench-ii-peps-gauge-old`.
@@ -808,8 +828,8 @@ had nothing to refuse.
 
 ```tex
 \[\begin{tenkz}[lattice={2x2}, bonds=none,   % sugar: rows={wire,wire}, cols=2
-              frame={flat, basis={wire at (0,0), wire at (2,0),
-                                  wire at (0,2), wire at (2,2)}}]
+              frame={flat, basis={wire at (-1,1), wire at (1,1),
+                                  wire at (-1,-1), wire at (1,-1)}}]
   % four members per cell; a member is the ordinary address (r,c,k)
   \tnmark[form=enclosure, species=marked]{{(1,1,4), (1,2,3), (2,1,2), (2,2,1)}}{$X$}
 \end{tenkz}\]

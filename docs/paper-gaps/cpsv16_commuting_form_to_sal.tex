@@ -579,7 +579,7 @@ exactly the source tensor, its MPDO, injectivity, and normality hypotheses, the
 fixed eta-local structure, and source ZCL.  It assumes no injectivity,
 normality, ZCL, or SAL property of the selected fixed-product tensor.
 
-\paragraph{Local fix (the later orthogonal-sector statement).}
+\paragraph{Scope restriction (sectorwise source ZCL).}
 The proposition labelled \emph{prop4to2} at source lines~1801--1808 states
 that the GSNNCH form alone implies SAL.  Its proof applies Proposition
 \emph{4to2} to each summand, although Proposition \emph{4to2} assumes ZCL at
@@ -614,29 +614,29 @@ decomposition.  Consequently
 outer sum and sectorwise SAL, and proves only the non-circular final local
 direct-sum implication.  It neither derives the sectorwise SAL premise nor
 uses ZCL.
-The corrected theorem
-\leanid{MPOTensor.isSAL_of_orthogonalCommutingSectorFamily_of_isSourceZCL}
-has several explicit restrictions.  For each sector it assumes MPDO
-positivity, one-site injectivity, normality, proportional fixed positive
-commuting-bond data, and source ZCL.  The proportional fixed-bond data encode
-the \emph{ApprhoNComm} sector form at source lines~1641--1665, while source ZCL
-is the hypothesis omitted by the printed proposition.  Normality is inherited
-in the BNT setting, but one-site injectivity is not a consequence of BNT
-normality alone: a normal tensor becomes injective only after blocking.  The
-source application therefore leaves an injectivity-versus-blocking step
-unaddressed.  The MPDO hypothesis is also explicit in the Lean theorem.
+The restricted specialization
+\leanid{MPOTensor.%
+isSAL_of_orthogonalCommutingSectorFamily_of_sectorwise_isSourceZCL}
+assumes that every sector generates MPDOs, is one-site injective and normal,
+and has source ZCL.  Source ZCL is omitted by the printed proposition.
+Normality is inherited in the BNT setting, but one-site injectivity is not a
+consequence of BNT normality alone: a normal tensor becomes injective only
+after blocking.  The source application therefore leaves an
+injectivity-versus-blocking step unaddressed.
 
-In addition, the orthogonal commuting sector family is independent of the
-proportional fixed-bond data.  It supplies pairwise orthogonal one-site
-projections and a positive commuting bond whose cyclic product equals each
-sector with scalar one at every length at least two.  This exact realization
-is stronger than the proportional \emph{ApprhoNComm} identity.  Finally, the
-theorem assumes at every positive length that the outer tensor is exactly the
-positive-natural-multiplicity sum of the sectors.
-The single-sector implication
-\leanid{MPOTensor.EtaLocalStructureData.isSAL_of_isSourceZCL} supplies SAL for
-each sector, after which the orthogonal direct-sum theorem applies.  Thus the
-corrected sectorwise statement has no SAL hypothesis.
+The supplied orthogonal commuting sector family has pairwise orthogonal
+one-site projections and a positive commuting bond whose periodic product is
+exactly the sector operator, with scalar one, at every length at least two.
+This exact identity is stronger than the proportional \emph{ApprhoNComm}
+sector form at source lines~1641--1665.  It yields proportional fixed-bond data
+with constant one inside the proof.  The theorem also assumes at every
+positive length that the outer tensor is exactly the
+positive-natural-multiplicity sum of the sectors.  Applying
+\leanid{MPOTensor.EtaLocalStructureData.isSAL_of_isSourceZCL} to each sector
+supplies the sectorwise SAL premise, after which the preceding direct-sum
+theorem gives SAL for the full tensor.  This is a scope-restricted
+specialization rather than a formalization of the printed GSNNCH-only
+proposition.
 
 \paragraph{Verdict.}
 Proposition~\emph{4to2} is formalized by
@@ -652,14 +652,13 @@ tensor.
 
 For the later orthogonal direct-sum implication, the final entropy argument is
 formalized both conditionally on sectorwise SAL and under the explicit
-sectorwise MPDO, one-site injectivity, normality, proportional fixed-bond, and
-source-ZCL hypotheses, together with an independent exact scalar-one
-orthogonal realization and an exact positive-multiplicity outer sum.  The
-latter theorem derives sectorwise SAL rather than assuming it.  It is a
-restricted theorem rather than a formalization of the printed assertion:
-sectorwise source ZCL is omitted in print, one-site injectivity requires an
-unaddressed blocking argument, and the exact realization hypotheses are
-stronger than the proportional source data.
+sectorwise MPDO, one-site injectivity, normality, and source-ZCL hypotheses,
+together with an exact scalar-one orthogonal realization and an exact
+positive-multiplicity outer sum.  The latter theorem derives sectorwise SAL
+rather than assuming it.  It is a restricted theorem rather than a
+formalization of the printed assertion: sectorwise source ZCL is omitted in
+print, one-site injectivity requires an unaddressed blocking argument, and the
+exact realization is stronger than the proportional source data.
 
 \section{Completed proof}
 

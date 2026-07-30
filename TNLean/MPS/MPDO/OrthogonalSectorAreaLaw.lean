@@ -195,43 +195,45 @@ theorem isSAL_of_orthogonalCommutingSectorFamily
       F.firstSiteMatrix_mul_reducedBlockState s hN hL)
     hSectorSAL
 
-/-- An exact positive sum of orthogonally supported commuting sectors satisfies
-the saturated area law when every sector is injective and normal, generates
-matrix-product density operators, has a fixed positive commuting-bond
-presentation, and has source zero correlation length.
+/-- An exact positive-multiplicity sum of orthogonally supported fixed-bond
+sectors satisfies the saturated area law when every sector is an injective
+normal MPDO tensor with source zero correlation length.
 
-**Scope restriction (sectorwise hypotheses and exact realization):** CPSV16,
-Proposition `prop4to2`, lines 1801--1808, assumes the proportional
-`ApprhoNComm` sector form, but omits the sectorwise source-ZCL hypothesis used
-by its proof. This theorem also assumes that every sector generates MPDOs, is
-one-site injective and normal, and carries source ZCL and explicit proportional
-fixed-bond data. One-site injectivity does not follow merely from BNT
-normality, leaving an injectivity-versus-blocking gap in the source
-application. Moreover, the independently supplied orthogonal commuting sector
-family realizes each sector with scalar one, and the full tensor is its exact
-positive-multiplicity sum. The proportional fixed-bond data match the source
-sector form, but the independent exact realization is stronger. Thus this
-theorem does not formalize the printed proposition verbatim. This is
-documented in
+Source: CPSV16, Appendix C.2, Proposition `prop4to2`, lines 1801--1808.
+
+**Scope restriction (sectorwise hypotheses and exact realization):** The
+printed proposition assumes the proportional `ApprhoNComm` sector form, but
+omits the sectorwise source-ZCL hypothesis used by its proof. This theorem
+assumes separately that every sector generates MPDOs, is one-site injective
+and normal, and has source ZCL. One-site injectivity does not follow merely
+from BNT normality, leaving an injectivity-versus-blocking gap in the source
+application. The supplied orthogonal commuting sector family realizes every
+sector with scalar one, which is stronger than the proportional source form,
+and the full tensor is assumed to be its exact positive-multiplicity sum.
+Thus this theorem does not formalize the printed proposition verbatim. See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
-theorem isSAL_of_orthogonalCommutingSectorFamily_of_isSourceZCL
+theorem isSAL_of_orthogonalCommutingSectorFamily_of_sectorwise_isSourceZCL
     (M : MPOTensor d D) (K : (s : Fin g) → MPOTensor d (dim s))
     (multiplicity : Fin g → ℕ) [Nonempty (Fin g)]
     (hmultiplicity : ∀ s, 0 < multiplicity s)
     (F : OrthogonalCommutingSectorFamily K)
     (hM : ∀ (N : ℕ), 0 < N →
       mpo M N = ∑ s : Fin g, (multiplicity s : ℂ) • mpo (K s) N)
-    (hSectorMPDO : ∀ s, IsMPDO (K s))
-    (hSectorInjective : ∀ s, (K s).IsInjective)
-    (hSectorNormal : ∀ s, MPSTensor.IsNormalTensor (K s).toMPSTensor)
-    (data : ∀ s, EtaLocalStructureData (K s))
-    (hSectorZCL : ∀ s, (K s).IsSourceZCL) :
+    (hMPDO : ∀ s, IsMPDO (K s))
+    (hK : ∀ s, (K s).IsInjective)
+    (hNormal : ∀ s, MPSTensor.IsNormalTensor (K s).toMPSTensor)
+    (hZCL : ∀ s, (K s).IsSourceZCL) :
     IsSAL M := by
   apply isSAL_of_orthogonalCommutingSectorFamily M K multiplicity
     hmultiplicity F hM
   intro s
-  exact (data s).isSAL_of_isSourceZCL
-    (hSectorMPDO s) (hSectorInjective s) (hSectorNormal s) (hSectorZCL s)
+  let data : EtaLocalStructureData (K s) := by
+    refine ⟨F.bondData s, ?_⟩
+    intro N hN
+    refine ⟨1, zero_lt_one, ?_⟩
+    simpa using F.realizes_mpo s N hN
+  exact EtaLocalStructureData.isSAL_of_isSourceZCL
+    (hMPDO s) (hK s) (hNormal s) data (hZCL s)
 
 /-- The BNT all-positive-length decomposition satisfies the saturated area law
 when its absorbed normal representatives do and an independently constructed

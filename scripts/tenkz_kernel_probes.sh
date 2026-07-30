@@ -86,6 +86,88 @@ grep -Fq '|from=addr-13|kind=index|to-open=n' "$WORK/k_plane.tnlog" || {
   echo "FAIL: the plane fixture lost its projected open physical port" >&2
   exit 1
 }
+basis_atom_count=$(grep -c '^atom|' "$WORK/r_basis_plane.tnlog" || true)
+[ "$basis_atom_count" -eq 3 ] || {
+  echo "FAIL: the declared basis did not populate three member atoms" >&2
+  exit 1
+}
+grep -Eq '^mark.*[|]members=atom-[0-9]+,atom-[0-9]+,atom-[0-9]+([|]|$)' \
+    "$WORK/r_basis_plane.tnlog" || {
+  echo "FAIL: selecting one basis cell did not select all three members" >&2
+  exit 1
+}
+grep -Eq '^mark.*[|]members=atom-[0-9]+([|]|$)' \
+    "$WORK/r_basis_plane.tnlog" || {
+  echo "FAIL: a three-coordinate address did not select one basis member" >&2
+  exit 1
+}
+basis_override_atoms=$(grep -c '^atom|' "$WORK/r_basis_override.tnlog" || true)
+[ "$basis_override_atoms" -eq 2 ] || {
+  echo "FAIL: an authored basis member did not override population" >&2
+  exit 1
+}
+grep -Eq '^mark.*[|]members=atom-[0-9]+([|]|$)' \
+    "$WORK/r_basis_override_selection.tnlog" || {
+  echo "FAIL: a whole-cell override was selected more than once" >&2
+  exit 1
+}
+if ! grep -F '|addr=(1,1,1)|' "$WORK/r_basis_override.tnlog" |
+     grep -F '|member=1|' | grep -Eq '[|]name=X([|]|$)'; then
+  echo "FAIL: an authored member lost its normalized basis address" >&2
+  exit 1
+fi
+grep -Fq '|name=bond-1-1-1-2|origin=grid|' \
+    "$WORK/r_basis_override.tnlog" || {
+  echo "FAIL: an explicit origin singleton lost ordinary grid bonds" >&2
+  exit 1
+}
+replacement_atoms=$(grep -c '^atom|' "$WORK/r_basis_frame_replace.tnlog" || true)
+[ "$replacement_atoms" -eq 1 ] || {
+  echo "FAIL: a replaced frame retained its earlier basis population" >&2
+  exit 1
+}
+if grep -Eq '^atom.*[|]member=' "$WORK/r_basis_frame_replace.tnlog"; then
+  echo "FAIL: a replaced frame retained basis member metadata" >&2
+  exit 1
+fi
+equation_basis_atoms=$(grep -c '^atom|' "$WORK/r_basis_equation.tnlog" || true)
+[ "$equation_basis_atoms" -eq 4 ] || {
+  echo "FAIL: an inherited equation basis was not populated in both panels" >&2
+  exit 1
+}
+[ "$(grep -Ec '^atom.*[|]member=[12]([|]|$)' \
+      "$WORK/r_basis_equation.tnlog" || true)" -eq 4 ] || {
+  echo "FAIL: an inherited equation basis lost its member indices" >&2
+  exit 1
+}
+if grep -Eq '^atom.*[|]member=' "$WORK/r_basis_equation_replace.tnlog"; then
+  echo "FAIL: an outer bare frame retained a panel basis" >&2
+  exit 1
+fi
+grep -Eq '^mark.*[|]members=atom-[0-9]+([|]|$)' \
+    "$WORK/r_default_basis_member.tnlog" || {
+  echo "FAIL: default basis member one did not resolve to the ordinary cell" >&2
+  exit 1
+}
+grep -Eq '^mark.*[|]members=atom-[0-9]+,atom-[0-9]+([|]|$)' \
+    "$WORK/r_basis_range_empty.tnlog" || {
+  echo "FAIL: a range over an empty row did not retain both populated rows" >&2
+  exit 1
+}
+grep -Eq '^mark.*[|]members=atom-[0-9]+([|]|$)' \
+    "$WORK/r_basis_range_explicit_empty.tnlog" || {
+  echo "FAIL: an explicit-basis range did not skip an empty cell" >&2
+  exit 1
+}
+grep -Eq '^mark.*[|]members=atom-[0-9]+([|]|$)' \
+    "$WORK/r_basis_padded_address.tnlog" || {
+  echo "FAIL: a padded member address did not resolve canonically" >&2
+  exit 1
+}
+[ "$(grep -c '^atom|' "$WORK/r_basis_member_wide.tnlog" || true)" -eq 1 ] || {
+  echo "FAIL: a displaced member span did not suppress slot population" >&2
+  exit 1
+}
 awk '
   /^picture[|]id=k1[|]/ { picture = NR }
   /^warning[|]picture=k1[|]code=plane-tall-window[|]/ { warning = NR }
@@ -405,8 +487,132 @@ if ( cd "$WORK" &&
   echo "FAIL: a word outside the frame alphabet was accepted" >&2
   exit 1
 fi
-grep -Fq '[TKZ-LANG-CHOICE]' "$WORK/n_frame_word.transcript" || {
-  echo "FAIL: unknown frame word lacked TKZ-LANG-CHOICE" >&2
+grep -Fq '[TKZ-FRAME-WORD]' "$WORK/n_frame_word.transcript" || {
+  echo "FAIL: unknown frame word lacked TKZ-FRAME-WORD" >&2
+  exit 1
+}
+
+for basis_case in \
+  n_frame_basis_parse n_frame_basis_semicolon n_frame_basis_kind \
+  n_frame_basis_member \
+  n_frame_basis_member_zero \
+  n_frame_basis_cell_member n_frame_basis_member_cell \
+  n_frame_basis_displaced_policy n_frame_basis_invalid_word \
+  n_frame_basis_grid n_frame_basis_group n_frame_basis_circle \
+  n_frame_basis_policy
+do
+  basis_negative="$KERNEL/negative/$basis_case.tex"
+  if ( cd "$WORK" &&
+       TEXINPUTS="$REPO/tex/tenkz//:" \
+         timeout 120 xelatex -interaction=nonstopmode -halt-on-error \
+         "$basis_negative" >"$WORK/$basis_case.transcript" 2>&1 ); then
+    echo "FAIL: malformed basis case $basis_case was accepted" >&2
+    exit 1
+  fi
+done
+grep -Fq '[TKZ-FRAME-BASIS-PARSE]' \
+  "$WORK/n_frame_basis_parse.transcript" || {
+  echo "FAIL: malformed basis member lacked TKZ-FRAME-BASIS-PARSE" >&2
+  exit 1
+}
+grep -Fq '[TKZ-FRAME-BASIS-PARSE]' \
+  "$WORK/n_frame_basis_semicolon.transcript" || {
+  echo "FAIL: semicolon basis coordinate lacked TKZ-FRAME-BASIS-PARSE" >&2
+  exit 1
+}
+grep -Fq '[TKZ-FRAME-BASIS-KIND]' \
+  "$WORK/n_frame_basis_kind.transcript" || {
+  echo "FAIL: unknown basis kind lacked TKZ-FRAME-BASIS-KIND" >&2
+  exit 1
+}
+[ "$(grep -Fc '[TKZ-FRAME-BASIS-PARSE]' \
+    "$WORK/n_frame_basis_parse.transcript" || true)" -eq 1 ] || {
+  echo "FAIL: malformed basis emitted duplicate parse diagnostics" >&2
+  exit 1
+}
+[ "$(grep -Fc '[TKZ-FRAME-BASIS-KIND]' \
+    "$WORK/n_frame_basis_kind.transcript" || true)" -eq 1 ] || {
+  echo "FAIL: unknown basis kind emitted duplicate diagnostics" >&2
+  exit 1
+}
+grep -Fq '[TKZ-FRAME-MEMBER-RANGE]' \
+  "$WORK/n_frame_basis_member.transcript" || {
+  echo "FAIL: missing basis member lacked TKZ-FRAME-MEMBER-RANGE" >&2
+  exit 1
+}
+for overlap_case in n_frame_basis_cell_member n_frame_basis_member_cell; do
+  grep -Eq '\[TKZ-(LANG-OCCUPANCY|CELL-OCCUPIED|FRAME-MEMBER-OCCUPIED)\]' \
+    "$WORK/$overlap_case.transcript" || {
+    echo "FAIL: $overlap_case lacked an occupancy diagnostic" >&2
+    exit 1
+  }
+done
+if ( cd "$WORK" &&
+     TEXINPUTS="$REPO/tex/tenkz//:" \
+       timeout 120 xelatex -interaction=nonstopmode \
+       "$KERNEL/negative/n_frame_basis_cell_member.tex" \
+       >"$WORK/n_frame_basis_cell_member.recovery.transcript" 2>&1 ); then
+  :
+fi
+if grep -Eq '^atom.*[|]member=' \
+    "$WORK/n_frame_basis_cell_member.tnlog"; then
+  echo "FAIL: a rejected aligned member acquired valid member fields" >&2
+  exit 1
+fi
+grep -Fq '[TKZ-FRAME-BASIS-POLICY]' \
+  "$WORK/n_frame_basis_displaced_policy.transcript" || {
+  echo "FAIL: displaced singleton policy lacked TKZ-FRAME-BASIS-POLICY" >&2
+  exit 1
+}
+grep -Fq '[TKZ-FRAME-WORD]' \
+  "$WORK/n_frame_basis_invalid_word.transcript" || {
+  echo "FAIL: invalid basis frame lacked TKZ-FRAME-WORD" >&2
+  exit 1
+}
+grep -Fq '[TKZ-FRAME-MEMBER-RANGE]' \
+  "$WORK/n_frame_basis_member_zero.transcript" || {
+  echo "FAIL: zero basis member lacked TKZ-FRAME-MEMBER-RANGE" >&2
+  exit 1
+}
+grep -Fq '[TKZ-FRAME-BASIS-GRID]' \
+  "$WORK/n_frame_basis_grid.transcript" || {
+  echo "FAIL: implicit multi-member topology lacked TKZ-FRAME-BASIS-GRID" >&2
+  exit 1
+}
+grep -Fq '[TKZ-FRAME-BASIS-SCOPE]' \
+  "$WORK/n_frame_basis_group.transcript" || {
+  echo "FAIL: group basis lacked TKZ-FRAME-BASIS-SCOPE" >&2
+  exit 1
+}
+grep -Fq '[TKZ-FRAME-BASIS-CIRCLE]' \
+  "$WORK/n_frame_basis_circle.transcript" || {
+  echo "FAIL: circle basis lacked TKZ-FRAME-BASIS-CIRCLE" >&2
+  exit 1
+}
+grep -Fq '[TKZ-FRAME-BASIS-POLICY]' \
+  "$WORK/n_frame_basis_policy.transcript" || {
+  echo "FAIL: cell-level basis policy lacked TKZ-FRAME-BASIS-POLICY" >&2
+  exit 1
+}
+( cd "$WORK" &&
+  TEXINPUTS="$REPO/tex/tenkz//:" \
+    timeout 120 xelatex -interaction=nonstopmode \
+    "$KERNEL/negative/n_frame_basis_grid.tex" \
+    >"$WORK/n_frame_basis_grid.recovery.transcript" 2>&1 ) || true
+if grep -Fq '|origin=grid|' "$WORK/n_frame_basis_grid.tnlog"; then
+  echo "FAIL: rejected multi-member grid topology polluted recovery output" >&2
+  exit 1
+fi
+( cd "$WORK" &&
+  TEXINPUTS="$REPO/tex/tenkz//:" \
+    timeout 120 xelatex -interaction=nonstopmode \
+    "$KERNEL/negative/n_frame_basis_group.tex" \
+    >"$WORK/n_frame_basis_group.recovery.transcript" 2>&1 ) || true
+group_recovery_atoms=$(
+  grep -c '^atom|' "$WORK/n_frame_basis_group.tnlog" || true
+)
+[ "$group_recovery_atoms" -eq 2 ] || {
+  echo "FAIL: a rejected group basis changed outer picture population" >&2
   exit 1
 }
 

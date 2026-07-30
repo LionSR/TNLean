@@ -650,72 +650,53 @@ Definition~\ref{def:mpdo_source_gsnnch}; the converse comparison is not used.
     multiplicities, and sectorwise SAL.
 \end{proof}
 
-\begin{theorem}[Orthogonal fixed-bond sector sums with ZCL satisfy SAL]
-    \label{thm:mpdo_orthogonal_fixed_bond_sector_sum_zcl_sal}
-    \lean{MPOTensor.isSAL_of_orthogonalCommutingSectorFamily_of_isSourceZCL}
+\begin{theorem}[Orthogonal commuting-bond sectors with ZCL satisfy SAL]
+    \label{thm:mpdo_orthogonal_commuting_sector_zcl_sal}
+    \lean{MPOTensor.isSAL_of_orthogonalCommutingSectorFamily_of_sectorwise_isSourceZCL}
     \leanok
-    \uses{def:mpdo_orthogonal_commuting_sector_family,
-        def:mpdo_eta_local_structure_data, def:mpo_source_zcl,
-        def:is_sal, def:mpdo, def:injective, def:normal}
-    Let $K_x$ be a nonempty finite family and let $n_x$ be positive natural
-    numbers. For each $x$, suppose that there is a positive two-site bond
-    $C_x$, supported on $P_x\otimes P_x$, such that the projections $P_x$ are
-    pairwise orthogonal, the translates of $C_x$ commute, and, for every
-    $N\geq2$,
-    \begin{align}
-        \rho^{(N)}(K_x)
-        &=\prod_{i=0}^{N-1}(C_x)_{i,i+1}.
-        \notag
-    \end{align}
-    Suppose also that, for every $N>0$,
+    \uses{def:mpdo_orthogonal_commuting_sector_family, def:mpdo,
+        def:injective, def:normal, def:mpo_source_zcl, def:is_sal}
+    Let $K_x$ be a nonempty finite family of injective normal tensors
+    generating MPDOs. Suppose that there are pairwise orthogonal one-site
+    projections $P_x$ and fixed translation-invariant positive commuting
+    bonds $B^{(x)}$, supported on $P_x\otimes P_x$, whose periodic products
+    equal $\rho^{(N)}(K_x)$ for every $N\geq2$. Suppose also that every $K_x$
+    has source zero correlation length. Let $n_x$ be positive natural numbers
+    and suppose that, for every $N>0$,
     \begin{align}
         \rho^{(N)}(M)
         &=\sum_x n_x\rho^{(N)}(K_x).
         \notag
     \end{align}
-    Assume that every $K_x$ is injective and normal and generates MPDOs.
-    For each $x$, suppose that there is a positive two-site bond $B_x$ whose
-    translates commute and, for every $N\geq2$, a constant $c_{x,N}>0$ such
-    that
-    \begin{align}
-        \rho^{(N)}(K_x)
-        &=c_{x,N}\prod_{i=0}^{N-1}(B_x)_{i,i+1}.
-        \notag
-    \end{align}
-    If the physical-trace transfer of every $K_x$ has zero correlation
-    length, then $M$ saturates the area law.
+    Then $M$ satisfies SAL.
 
-    This is a scope-restricted result associated with the proposition at
+    This is a restricted result associated with the proposition at
     \cite[Appendix~C.2, lines~1801--1808]{Cirac2016MPDO_arXiv}. The source
-    sector premise supplies the proportional fixed-bond form displayed using
-    $B_x$, while the printed statement omits the sectorwise
-    zero-correlation-length hypothesis used by its proof. The present theorem
-    additionally assumes MPDO positivity,
-    one-site injectivity, normality, and source zero correlation length for
-    every sector. One-site injectivity is not a consequence of BNT normality
-    alone, so the source application requires an additional blocking
-    argument. The bonds $C_x$ give a separate scalar-one realization, stronger
-    than the proportional realization by $B_x$, and the outer
-    positive-multiplicity sum is assumed exactly.
+    sector premise gives a proportional fixed-bond identity, whereas the
+    identity assumed here has scalar one. The theorem also assumes MPDO
+    positivity, one-site injectivity, normality, and source zero correlation
+    length for every sector, as well as the exact positive-multiplicity outer
+    sum. One-site injectivity does not follow from BNT normality alone, so the
+    source application requires an additional blocking argument.
 
     % **Scope restriction (sectorwise hypotheses and exact realization):**
-    % The source has proportional ApprhoNComm data, whereas this theorem also
-    % assumes per-sector MPDO, one-site injectivity, normality, source ZCL,
-    % proportional fixed-bond data, an independent orthogonal commuting
-    % sector family with exact scalar-one realization, and an exact positive-
+    % The printed proposition has proportional ApprhoNComm data and omits
+    % sectorwise source ZCL. This theorem assumes per-sector MPDO, one-site
+    % injectivity, normality, and source ZCL, an orthogonal commuting sector
+    % family with exact scalar-one realization, and the exact positive-
     % multiplicity outer sum. One-site injectivity is not supplied merely by
-    % BNT normality, leaving a blocking gap in the source application.
+    % BNT normality, leaving a blocking gap in the source application. The
+    % exact realization is stronger than the proportional source identity.
     % Documented in docs/paper-gaps/cpsv16_commuting_form_to_sal.tex.
 \end{theorem}
 
-\begin{proof}\leanok
+\begin{proof}
     \uses{thm:mpdo_translation_invariant_commuting_form_zcl_sal,
         cor:mpdo_orthogonal_commuting_sector_sum_sal}
-    Apply
-    Theorem~\ref{thm:mpdo_translation_invariant_commuting_form_zcl_sal}
-    to every $K_x$. Each sector therefore satisfies SAL. The conclusion
-    follows from
-    Corollary~\ref{cor:mpdo_orthogonal_commuting_sector_sum_sal}.
+    \leanok
+    For every $x$, use the fixed sector bond and its exact periodic-product
+    identity in the single-sector commuting-bond theorem to obtain SAL for
+    $K_x$. The preceding orthogonal-sum corollary then gives SAL for $M$.
 \end{proof}
 
 \begin{corollary}[Orthogonal BNT sector sums preserve SAL]

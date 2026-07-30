@@ -1,0 +1,10 @@
+%% Negative regression: basis member indices are one-based.
+\documentclass{standalone}
+\usepackage{tenkz}
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[rows={wire}, cols=1, bonds=none,
+              frame={flat,basis={wire at (0,0)}}]
+  \tn[at=(1,1,0)]{zero}
+\end{tenkz}
+\end{document}

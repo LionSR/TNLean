@@ -1,0 +1,17 @@
+%% Regression: authored member and whole-cell atoms override population, and
+%% an explicit origin singleton retains ordinary grid-bond semantics.
+\documentclass{standalone}
+\usepackage{tenkz}
+\makeatletter
+\ExplSyntaxOn
+\file_input:n { tenkz-kernel.code.tex }
+\ExplSyntaxOff
+\makeatother
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[lattice={1x2},
+              frame={flat,basis={wire at (0,0)}}]
+  \tn[at=(1,1,1), skin=box, name=X]{X}
+  \tn[at=(1,2), skin=box, name=Y]{Y}
+\end{tenkz}
+\end{document}

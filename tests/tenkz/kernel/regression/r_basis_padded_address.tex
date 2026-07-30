@@ -1,0 +1,10 @@
+%% Regression: numeric address components are canonical before basis lookup.
+\documentclass{standalone}
+\usepackage{tenkz}
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[rows={ket}, cols=1, bonds=none,
+              frame={flat,basis={ket at (0,0)}}]
+  \tnmark[form=enclosure]{(01,01,01)}{}
+\end{tenkz}
+\end{document}
