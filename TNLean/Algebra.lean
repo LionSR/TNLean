@@ -17,6 +17,8 @@ import TNLean.Algebra.CommutingOverlappingDecomp
 import TNLean.Algebra.CommutingProjectionProduct
 import TNLean.Algebra.ComplexPhasePositivity
 import TNLean.Algebra.ConstantPowerSums
+import TNLean.Algebra.CornerCompression
+import TNLean.Algebra.CornerSkolemNoether
 import TNLean.Algebra.DependentBlockDiagonal
 import TNLean.Algebra.DirectedWalkCoboundary
 import TNLean.Algebra.EigenvectorProjection
