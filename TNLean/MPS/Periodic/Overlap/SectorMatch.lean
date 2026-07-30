@@ -921,6 +921,24 @@ private lemma cyclic_partial_isometry_prod_succ
         hU_star_U (u + 1),
         ← Matrix.mul_assoc (R u) (Q (u + 1 + q)), hR_right u]
 
+/-- Translating the projection labels translates the starting label of a
+corner product.
+
+This is the fixed sector offset in arXiv:1708.00029, Appendix A,
+equation `eq:vprop` and lines 1041--1056. -/
+private lemma cornerProd_add_shift
+    {m : ℕ} [NeZero m]
+    (Q : Fin m → MatrixAlg D) (B : MPSTensor d D)
+    (q u : Fin m) (w : List (Fin d)) :
+    cornerProd (fun k => Q (k + q)) B u w =
+      cornerProd Q B (u + q) w := by
+  induction w generalizing u with
+  | nil => rfl
+  | cons i w ih =>
+      simp only [cornerProd_cons, ih]
+      congr 2
+      abel
+
 /-- Full-cycle contraction step for periodic-overlap Case 3.
 
 At this point the sector transport has already been abstracted into
@@ -1169,6 +1187,37 @@ lemma sectorTensor_proportional_of_blockedMatch
     funext k
     simp only [segments, cornerProd_cons, cornerLetter, Matrix.mul_assoc,
       corner_mul_cornerProd P A (k + 1) (List.ofFn (ρ k)) (hP_proj (k + 1))]
+  have hcombinedMatch :
+      ∀ (σ : Fin m → Fin d) (ρ : Fin m → (Fin (m * L) → Fin d)),
+        (List.ofFn (fun k => cornerLetter P A k (σ k) *
+          cornerProd P A (k + 1) (List.ofFn (ρ k)))).prod =
+            (c' 0) ^ (m * L + 1) •
+              (U' 0 * cornerProd Q B q' (combinedWord σ ρ) * (U' 0)ᴴ) := by
+    intro σ ρ
+    rw [← hcombinedWord_corner σ ρ]
+    simpa only [zero_add] using
+      cornerProd_blockMatch_partial_isometry_pow P Q A B q' U' c'
+        hP_proj hQ_proj hQ_shift hU'_star_U hBC 0 (m * L)
+        (combinedWord σ ρ) (hcombinedWord_length σ ρ)
+  let Ω' : (u : Fin m) →
+      MatrixAlg (dimA' u) →ₗ[ℂ]
+        ((Fin L → Fin (blockPhysDim d m)) → ℂ) :=
+    fun u => Ω (-u)
+  have hΩ' : ∀ (u : Fin m) (X : MatrixAlg (dimA' u)),
+      ∑ σ : Fin L → Fin (blockPhysDim d m),
+        Ω' u X σ • evalWord (blocksA' u) (List.ofFn σ) = X :=
+    fun u X => hΩ (-u) X
+  have hφA'_mul : ∀ (u : Fin m) (X Y : MatrixAlg (dimA' u)),
+      (φA' u (X * Y)).1 = (φA' u X).1 * (φA' u Y).1 :=
+    fun u X Y => hφA_mul (-u) X Y
+  have hA'_letter : ∀ (u : Fin m) (i : Fin (blockPhysDim d m)),
+      (φA' u (blocksA' u i)).1 =
+        P u * (blockTensor A m) i * P u :=
+    fun u i => hA_letter (-u) i
+  obtain ⟨Ωhat, hΩhat⟩ :=
+    exists_ambientCornerRightInverse_of_sectorRightInverse
+      P A blocksA' φA' hP_proj hP_shift hφA'_mul hA'_letter
+      L hL_pos Ω' hΩ'
   -- Remaining obligation (arXiv:1708.00029 lines 1023--1117): an `m`-factor cyclic
   -- contraction theorem built from the common `L` and the sum-form right inverses
   -- `Ω u` satisfying `hΩ`; after producing the uniform product-tensor identity,
