@@ -7,26 +7,27 @@ import TNLean.PiAlgebra.CanonicalFormSepAux
 import TNLean.Spectral.QuantitativeGap
 
 /-!
-# RG flow convergence for canonical-form MPS tensors
+# Transfer-map convergence for primitive canonical-form blocks
 
-This file proves the convergence result for the renormalization-group (RG) flow
-applied to MPS tensors in canonical form. The proof follows the transfer-map gap
-argument from arXiv:1606.00608, Appendix B, lines 1211--1244; see also the
-transfer-matrix and RGFP discussion in arXiv:2011.12127, lines 433--442 and
-870--892.
+This file proves convergence of the transfer-map powers for each primitive block
+in an auxiliary canonical-form family. The proof follows the primitive-block
+part of the transfer-map gap argument from arXiv:1606.00608, Appendix B,
+lines 1211--1244; see also the transfer-matrix and RGFP discussion in
+arXiv:2011.12127, lines 433--442 and 870--892.
 
-For a CF tensor, the transfer matrix decomposes as
-`E' = ⊕_{j,j'} μ_{j,q} μ'_{j',q'} E_{j,j'}`.
-Off-diagonal blocks `E_{j,j'}` (j ≠ j') have spectral radius < 1 and decay.
-Diagonal blocks `E_{j,j}` have a unique magnitude-1 eigenvalue. So `E'^N`
-converges to an idempotent (the RFP).
+For one primitive block, the transfer map has a unique peripheral eigenvalue
+and its powers converge to the fixed-point projection. This does not imply
+convergence for the full weighted repeated-copy assembly: relative phases can
+oscillate under repeated squaring. That obstruction is formalized in
+`cubePhaseTensor_not_tendsto_dyadic_transferMap`.
 
 ## Main result
 
-* `rg_flow_converges_of_cf`: the sequence of blocked transfer maps converges
-  pointwise to an idempotent for any canonical-form tensor. The proof uses the
-  exponential transfer-map gap bound to squeeze the difference
-  `E^n X - P X` to zero, then composes with the subsequence `2^n → ∞`.
+* `rg_flow_converges_of_cf`: for each primitive block in an auxiliary
+  canonical-form family, the dyadic transfer-map powers converge pointwise to
+  an idempotent. The proof uses the exponential transfer-map gap bound to
+  squeeze the difference `E^n X - P X` to zero, then composes with the
+  subsequence `2^n → ∞`.
 
 ## References
 
@@ -39,8 +40,8 @@ converges to an idempotent (the RFP).
 * [CPSV16] Cirac, Pérez-García, Schuch, Verstraete,
   *Matrix Product Density Operators: Renormalization Fixed Points
   and Boundary Theories*, arXiv:1606.00608.
-  Appendix B, lines 1211--1244 (RFP as idempotent limit for canonical-form
-  tensors) and lines 1264--1268 (finite power-sum nonvanishing estimate).
+  Appendix B, lines 1211--1244 (the printed canonical-form convergence
+  argument) and lines 1264--1268 (finite power-sum nonvanishing estimate).
   Source: `Papers/1606.00608/`
 -/
 
@@ -50,19 +51,23 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
-/-- **Appendix B** (arXiv:1606.00608, lines 1211--1244): For a tensor in
-canonical form, the iterated blocking `E^{2^n}` converges to an idempotent
-transfer map.
+/-- For each primitive block in an auxiliary canonical-form family, the
+iterated transfer map `E^{2^n}` converges to an idempotent.
 
-The convergence is entry-wise on the `D² × D²` transfer matrix space:
+The convergence is pointwise on the block's matrix space:
 `∀ ρ, (E^{2^n}) ρ → E_∞ ρ` where `E_∞ ∘ E_∞ = E_∞`.
 
-The proof uses the transfer-map gap: for each block `k`, injectivity implies
-primitivity of the transfer map, giving `E^n = P + N^n` where `P` is the
-fixed-point projection (idempotent) and `N = E - P` has spectral radius `< 1`.
-The exponential bound `‖E^n X - P X‖ ≤ C(1-δ)^n ‖X‖` from
+The proof uses the transfer-map gap: injectivity of block `k` implies
+primitivity of its transfer map. The exponential bound
+`‖E^n X - P X‖ ≤ C(1-δ)^n ‖X‖` from
 `exponential_convergence_of_primitive` then gives pointwise convergence
-`E^n X → P X`, and composing with `2^n → ∞` yields the result. -/
+`E^n X → P X`, and composing with `2^n → ∞` yields the result.
+
+**Scope restriction (CPSV16 Appendix B):** This is the primitive single-block
+part of the argument at arXiv:1606.00608, lines 1211--1244, not the printed
+full weighted canonical-form convergence assertion. The latter is refuted by
+relative-phase oscillation; see
+`docs/paper-gaps/cpsv16_canonical_form_renormalization_flow_phase_gap.tex`. -/
 theorem rg_flow_converges_of_cf {r : ℕ} {dim : Fin r → ℕ}
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
     (hCF : IsCanonicalForm μ A) (k : Fin r) :
