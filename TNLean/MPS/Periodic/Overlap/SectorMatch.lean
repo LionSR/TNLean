@@ -851,6 +851,23 @@ lemma sectorTensor_proportional_of_blockedMatch
       (φA u) (φB (u + q)) (hPA_proj u) (hPB_proj (u + q))
       (hφA_mul u) (hφB_mul (u + q)) (hφA_star u) (hφB_star (u + q))
       (hA_blocks_lc u) (hB_blocks_lc (u + q)) (hNormal u) hMatch
+  let U : Fin m → MatrixAlg D := fun u => (hCornerData u).choose
+  let c : Fin m → ℂ := fun u => (hCornerData u).choose_spec.choose
+  have hU_corner : ∀ u, U u = PA u * U u * PB (u + q) :=
+    fun u => (hCornerData u).choose_spec.choose_spec.1
+  have hU_star_U : ∀ u, (U u)ᴴ * U u = PB (u + q) :=
+    fun u => (hCornerData u).choose_spec.choose_spec.2.1
+  have hU_U_star : ∀ u, U u * (U u)ᴴ = PA u :=
+    fun u => (hCornerData u).choose_spec.choose_spec.2.2.1
+  have hc_norm : ∀ u, ‖c u‖ = 1 :=
+    fun u => (hCornerData u).choose_spec.choose_spec.2.2.2.1
+  have hBlockAmbient : ∀ (u : Fin m) (i : Fin (blockPhysDim d m)),
+      PA u * (blockTensor A m) i * PA u =
+        c u • (U u * (PB (u + q) * (blockTensor B m) i * PB (u + q)) *
+          (U u)ᴴ) := by
+    intro u i
+    rw [← hA_letter u i, ← hB_letter (u + q) i]
+    exact (hCornerData u).choose_spec.choose_spec.2.2.2.2 i
   -- Remaining obligation (arXiv:1708.00029 lines 1023--1117): an `m`-factor cyclic
   -- contraction theorem built from the common `L` and the sum-form right inverses
   -- `Ω u` satisfying `hΩ`; after producing the uniform product-tensor identity,
