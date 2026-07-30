@@ -190,6 +190,212 @@ noncomputable def retainedBulkProduct
       (k ((Fin.last n).succAbove j))
       (k ((Fin.last n).succAbove j + 1)) (x j) (y j)
 
+/-- A finite retained path of nonzero positive neighboring operators has a
+nonzero diagonal bulk coefficient.
+
+Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
+1606--1617.
+
+**Scope restriction (cyclic-active visibility):** Positivity supplies a nonzero
+diagonal coefficient on every edge of the retained path. See
+`docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
+theorem exists_retainedBulkProduct_diag_ne_zero_of_neighboringOperator_ne_zero
+    (F : PhysicalSectorFactorization K)
+    (hpos : ∀ k h, (F.neighboringOperator k h).PosSemidef)
+    {n : ℕ} (k : Fin (n + 1) → Fin F.sectorCount)
+    (hedge : ∀ j : Fin n,
+      F.neighboringOperator
+        (k ((Fin.last n).succAbove j))
+        (k ((Fin.last n).succAbove j + 1)) ≠ 0) :
+    ∃ x, F.retainedBulkProduct k x x ≠ 0 := by
+  classical
+  have hdiag : ∀ j : Fin n, ∃ x : F.NeighborIndex
+      (k ((Fin.last n).succAbove j))
+      (k ((Fin.last n).succAbove j + 1)),
+      F.neighboringOperator
+        (k ((Fin.last n).succAbove j))
+        (k ((Fin.last n).succAbove j + 1)) x x ≠ 0 := by
+    intro j
+    have htrace : Matrix.trace (F.neighboringOperator
+        (k ((Fin.last n).succAbove j))
+        (k ((Fin.last n).succAbove j + 1))) ≠ 0 :=
+      ne_of_gt ((hpos _ _).trace_pos_of_ne_zero (hedge j))
+    rw [Matrix.trace] at htrace
+    obtain ⟨x, -, hx⟩ := Finset.exists_ne_zero_of_sum_ne_zero htrace
+    exact ⟨x, hx⟩
+  choose x hx using hdiag
+  refine ⟨x, ?_⟩
+  rw [retainedBulkProduct]
+  exact Finset.prod_ne_zero_iff.mpr fun j _ ↦ hx j
+
+/-- A finite cyclic word of nonzero positive neighboring operators has a
+nonzero diagonal cyclic coefficient.
+
+Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
+1606--1617.
+
+**Scope restriction (cyclic-active visibility):** Positivity supplies one nonzero
+diagonal coordinate on every cyclic edge. See
+`docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
+theorem exists_cyclicNeighboringProduct_diag_ne_zero_of_neighboringOperator_ne_zero
+    (F : PhysicalSectorFactorization K)
+    (hpos : ∀ k h, (F.neighboringOperator k h).PosSemidef)
+    {N : ℕ} [NeZero N] (k : Fin N → Fin F.sectorCount)
+    (hedge : ∀ i : Fin N, F.neighboringOperator (k i) (k (i + 1)) ≠ 0) :
+    ∃ x, F.cyclicNeighboringProduct k x x ≠ 0 := by
+  classical
+  have hdiag : ∀ i : Fin N, ∃ z : F.NeighborIndex (k i) (k (i + 1)),
+      F.neighboringOperator (k i) (k (i + 1)) z z ≠ 0 := by
+    intro i
+    have htrace : Matrix.trace (F.neighboringOperator (k i) (k (i + 1))) ≠ 0 :=
+      ne_of_gt ((hpos _ _).trace_pos_of_ne_zero (hedge i))
+    rw [Matrix.trace] at htrace
+    obtain ⟨z, -, hz⟩ := Finset.exists_ne_zero_of_sum_ne_zero htrace
+    exact ⟨z, hz⟩
+  choose z hz using hdiag
+  refine ⟨(F.cyclicEdgeEquiv k).symm z, ?_⟩
+  rw [cyclicNeighboringProduct]
+  exact Finset.prod_ne_zero_iff.mpr fun i _ ↦ by
+    simpa using hz i
+
+/-- Every cyclic-active sector lies at both ends of a positive-length retained
+path with a nonzero diagonal bulk coefficient.
+
+Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
+1606--1617.
+
+**Scope restriction (cyclic-active visibility):** The explicit first nonzero edge and
+its return path give the retained path; positivity makes its diagonal bulk
+coefficient visible. See
+`docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
+theorem exists_retainedBulkProduct_diag_ne_zero_of_isCyclicActiveSector
+    (F : PhysicalSectorFactorization K)
+    (hpos : ∀ k h, (F.neighboringOperator k h).PosSemidef)
+    {q : Fin F.sectorCount} (hq : F.IsCyclicActiveSector q) :
+    ∃ n : ℕ, 0 < n ∧ ∃ k : Fin (n + 1) → Fin F.sectorCount,
+      k 0 = q ∧ k (Fin.last n) = q ∧
+      ∃ x, F.retainedBulkProduct k x x ≠ 0 := by
+  classical
+  obtain ⟨h, hqh, hreturn⟩ := hq
+  obtain ⟨l, hchain, hlast⟩ :=
+    List.exists_isChain_cons_of_relationReflTransGen hreturn
+  let tail := h :: l
+  let n := tail.length
+  let k : Fin (n + 1) → Fin F.sectorCount := fun i ↦ (q :: tail).get i
+  have hcycle : List.IsChain
+      (fun a b ↦ F.neighboringOperator a b ≠ 0) (q :: tail) := by
+    exact hchain.cons_cons hqh
+  have hn : 0 < n := by simp [n, tail]
+  have hk0 : k 0 = q := by simp [k]
+  have hklast : k (Fin.last n) = q := by
+    change (q :: tail).get (Fin.last n) = q
+    simpa [n, tail, List.get_eq_getElem, List.getLast_eq_getElem] using hlast
+  have hedge : ∀ j : Fin n,
+      F.neighboringOperator
+        (k ((Fin.last n).succAbove j))
+        (k ((Fin.last n).succAbove j + 1)) ≠ 0 := by
+    intro j
+    rw [Fin.succAbove_last_apply]
+    have hidx : j.castSucc + 1 = j.succ := by
+      ext
+      simp
+    rw [hidx]
+    have hj0 : (j : ℕ) < (q :: tail).length := by
+      simp [n]
+    have hj1 : (j : ℕ) + 1 < (q :: tail).length := by
+      simp [n]
+    have hj := (List.isChain_iff_getElem.mp hcycle) (j : ℕ) hj1
+    have hleft : k j.castSucc = (q :: tail)[(j : ℕ)]'hj0 := by
+      simp [k, List.get_eq_getElem]
+    have hright : k j.succ = (q :: tail)[(j : ℕ) + 1]'hj1 := by
+      simp [k, List.get_eq_getElem]
+    rw [hleft, hright]
+    exact hj
+  exact ⟨n, hn, k, hk0, hklast,
+    F.exists_retainedBulkProduct_diag_ne_zero_of_neighboringOperator_ne_zero
+      hpos k hedge⟩
+
+/-- Every cyclic-active sector occurs in a cyclic sector word with a nonzero
+diagonal coefficient.
+
+Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
+1606--1617.
+
+**Scope restriction (cyclic-active visibility):** The terminal copy of the initial
+sector is removed from the retained return path, so that the remaining word
+is read cyclically. See
+`docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
+theorem exists_cyclicNeighboringProduct_diag_ne_zero_of_isCyclicActiveSector
+    (F : PhysicalSectorFactorization K)
+    (hpos : ∀ k h, (F.neighboringOperator k h).PosSemidef)
+    {q : Fin F.sectorCount} (hq : F.IsCyclicActiveSector q) :
+    ∃ N : ℕ, ∃ _ : NeZero N, 2 ≤ N ∧ ∃ k : Fin N → Fin F.sectorCount,
+      k 0 = q ∧ ∃ x, F.cyclicNeighboringProduct k x x ≠ 0 := by
+  classical
+  obtain ⟨n, hn, k, hk0, hklast, x, hx⟩ :=
+    F.exists_retainedBulkProduct_diag_ne_zero_of_isCyclicActiveSector hpos hq
+  obtain ⟨m, rfl⟩ :=
+    Nat.exists_eq_succ_of_ne_zero (Nat.ne_of_gt hn)
+  letI : NeZero m.succ := ⟨Nat.succ_ne_zero m⟩
+  have hedge : ∀ j : Fin m.succ,
+      F.neighboringOperator
+        (k ((Fin.last m.succ).succAbove j))
+        (k ((Fin.last m.succ).succAbove j + 1)) ≠ 0 := by
+    intro j hzero
+    rw [retainedBulkProduct] at hx
+    have hfactor :
+        F.neighboringOperator
+          (k ((Fin.last m.succ).succAbove j))
+          (k ((Fin.last m.succ).succAbove j + 1))
+          (x j) (x j) = 0 := by
+      rw [hzero]
+      rfl
+    exact hx (Finset.prod_eq_zero (Finset.mem_univ j) hfactor)
+  let w : Fin m.succ → Fin F.sectorCount := fun i ↦ k i.castSucc
+  have hw0 : w 0 = q := by simp [w, hk0]
+  have hwedge : ∀ i : Fin m.succ,
+      F.neighboringOperator (w i) (w (i + 1)) ≠ 0 := by
+    intro i
+    rw [show w i = k ((Fin.last m.succ).succAbove i) by
+      simp [w, Fin.succAbove_last_apply]]
+    have hnext : w (i + 1) =
+        k ((Fin.last m.succ).succAbove i + 1) := by
+      simp only [w, Fin.succAbove_last_apply]
+      by_cases hi : (i : ℕ) + 1 = m.succ
+      · have hilast : i = Fin.last m := by
+          ext
+          simp
+          omega
+        subst i
+        simp [hk0, hklast]
+      · have hil : (i : ℕ) + 1 < m.succ := by omega
+        apply congrArg k
+        ext
+        change ((i + 1 : Fin m.succ) : ℕ) =
+          ((i.castSucc + 1 : Fin (m.succ + 1)) : ℕ)
+        exact (Fin.val_add_one_of_lt
+          (Fin.mk_lt_mk.mpr (by omega))).trans
+            (Fin.val_add_one_of_lt (Fin.mk_lt_mk.mpr i.isLt)).symm
+    rw [hnext]
+    exact hedge i
+  by_cases hm : m = 0
+  · subst m
+    let w₂ : Fin 2 → Fin F.sectorCount := fun _ ↦ q
+    have hw₂edge : ∀ i : Fin 2,
+        F.neighboringOperator (w₂ i) (w₂ (i + 1)) ≠ 0 := by
+      intro i
+      change F.neighboringOperator q q ≠ 0
+      rw [← hk0]
+      have h := hwedge 0
+      change F.neighboringOperator (k 0) (k 0) ≠ 0 at h
+      exact h
+    exact ⟨2, inferInstance, le_rfl, w₂, rfl,
+      F.exists_cyclicNeighboringProduct_diag_ne_zero_of_neighboringOperator_ne_zero
+        hpos w₂ hw₂edge⟩
+  · exact ⟨m.succ, inferInstance, by omega, w, hw0,
+      F.exists_cyclicNeighboringProduct_diag_ne_zero_of_neighboringOperator_ne_zero
+        hpos w hwedge⟩
+
 /-- Concatenate two fixed-sector fiber configurations along a concatenated
 sector word.
 
