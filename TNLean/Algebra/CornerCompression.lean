@@ -58,41 +58,6 @@ def cornerSubmodule {D : ℕ} (P : MatrixAlg D) : Submodule ℂ (MatrixAlg D) wh
         rw [Matrix.mul_smul, smul_mul_assoc, Matrix.mul_assoc]
       _ = c • X := by simp only [hX']
 
-section CornerMul
-
-variable {D : ℕ} {P : MatrixAlg D}
-
-/-- The product of two elements in the corner submodule stays in the corner when `P` is
-idempotent.  This is the multiplicative-closure lemma for the corner algebra. -/
-lemma cornerSubmodule_mul_mem [Fact (P * P = P)] {X Y : MatrixAlg D}
-    (hX : X ∈ cornerSubmodule P) (hY : Y ∈ cornerSubmodule P) :
-    X * Y ∈ cornerSubmodule P := by
-  have hP2 : P * P = P := Fact.out
-  have hX' : P * X * P = X := by simpa [cornerSubmodule] using hX
-  have hY' : P * Y * P = Y := by simpa [cornerSubmodule] using hY
-  -- From idempotence and corner membership: P * X = X and Y * P = Y
-  have hPX : P * X = X := by
-    calc
-      P * X = P * (P * X * P) := by rw [hX']
-      _ = (P * P) * X * P := by simp [Matrix.mul_assoc]
-      _ = X := by rw [hP2, hX']
-  have hYP : Y * P = Y := by
-    calc
-      Y * P = (P * Y * P) * P := by rw [hY']
-      _ = P * Y * (P * P) := by simp [Matrix.mul_assoc]
-      _ = Y := by rw [hP2, hY']
-  dsimp [cornerSubmodule]
-  calc
-    P * (X * Y) * P = (P * X) * (Y * P) := by simp [Matrix.mul_assoc]
-    _ = X * Y := by rw [hPX, hYP]
-
-/-- Multiplication on elements of a corner submodule, using the ambient matrix multiplication.
-Requires `P` to be idempotent so the product stays in the corner. -/
-instance instMulCornerSubmodule [Fact (P * P = P)] : Mul (cornerSubmodule P) where
-  mul X Y := ⟨X.1 * Y.1, cornerSubmodule_mul_mem X.2 Y.2⟩
-
-end CornerMul
-
 /-- Rectangular inclusion of the support coordinates into the ambient split
 coordinates: identity on the support block and zero on the complementary block. -/
 def cornerCompressionInclusion
