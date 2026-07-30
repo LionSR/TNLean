@@ -718,8 +718,22 @@ firstSiteMatrix_mul_normalizedMPO}
         &=\rho^{(N)}(K_x).
         \notag
     \end{align}
-    Division by the trace of $\rho^{(N)}(K_x)$ gives the claimed normalized
-    identity.
+    Multiplying this identity by the scalar
+    $\bigl(\operatorname{tr}\rho^{(N)}(K_x)\bigr)^{-1}$ gives
+    \begin{align}
+        &(P_x\otimes\Id^{\otimes(N-1)})
+          \left[
+            \bigl(\operatorname{tr}\rho^{(N)}(K_x)\bigr)^{-1}
+            \rho^{(N)}(K_x)
+          \right]
+        \notag\\
+        &\quad=
+          \bigl(\operatorname{tr}\rho^{(N)}(K_x)\bigr)^{-1}
+          \rho^{(N)}(K_x).
+        \notag
+    \end{align}
+    The scalar multiples on both sides are the normalized chain states. This
+    remains valid when the trace is zero, with the convention $0^{-1}=0$.
 \end{proof}
 
 \begin{theorem}[Proportional commuting sector products have prefix-marginal support]
@@ -839,7 +853,8 @@ firstSiteMatrix_mul_reducedBlockState}
 \end{corollary}
 
 \begin{proof}\leanok
-    \uses{thm:mpdo_proportional_orthogonal_commuting_sector_sum_sal}
+    \uses{def:mpdo_orthogonal_commuting_sector_family_to_proportional,
+        thm:mpdo_proportional_orthogonal_commuting_sector_sum_sal}
     Take $a_{x,N}=c_N=1$ in
     Theorem~\ref{thm:mpdo_proportional_orthogonal_commuting_sector_sum_sal}.
 \end{proof}
