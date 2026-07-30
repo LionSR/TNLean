@@ -99,13 +99,13 @@ closed by $\tr$; the physical legs remain open. Their spans are the
 fixed-point algebras compared in
 \cite[Appendix~C.4, lines~1974--1980]{Cirac2016MPDO_arXiv}.
 
-\begin{theorem}[Fusion yields a stationary algebra tower under a faithful fixed point]%
+\begin{theorem}[A transfer retract yields a stationary algebra tower under a faithful fixed point]%
     \label{thm:mpdo_rfp_via_algebra_from_fusion}
-    \lean{MPOTensor.isRFP_MPDO_via_algebra_of_isRFP_MPDO_via_fusion_of_isTP_of_posDef_fixed}
+    \lean{MPOTensor.isRFP_MPDO_via_algebra_of_isRFP_MPDO_via_transferRetract_of_isTP_of_posDef_fixed}
     \leanok
     \uses{thm:mpdo_rfp_of_fusion, thm:mpdo_rfp_via_algebra_from_rfp}
     Assume the doubled tensor is trace-preserving and the transfer map admits a
-    positive-definite fixed point. If the transfer-map fusion criterion holds,
+    positive-definite fixed point. If the transfer-retract criterion holds,
     then the MPO satisfies the algebra-structure formulation of the
     renormalization fixed-point condition.
 \end{theorem}
@@ -344,9 +344,9 @@ family, and the corresponding multiplication / inclusion coefficient arrays.
     $\Fix(E_1^\dagger)=\Fix(E_n^\dagger)$.
 \end{theorem}
 
-\begin{theorem}[The support-algebra condition does not imply fusion]%
+\begin{theorem}[The support-algebra condition does not imply a transfer retract]%
     \label{thm:mpdo_algebra_not_imply_fusion}
-    \lean{MPOTensor.exists_isRFP_MPDO_via_algebra_not_isRFP_MPDO_via_fusion}
+    \lean{MPOTensor.exists_isRFP_MPDO_via_algebra_not_isRFP_MPDO_via_transferRetract}
     \leanok
     \uses{def:mpdo_rfp_via_algebra, def:mpdo_rfp_via_fusion,
         thm:mpdo_rfp_of_fusion,
@@ -354,7 +354,7 @@ family, and the corresponding multiplication / inclusion coefficient arrays.
     There exists an MPO tensor of physical and bond dimension two such that the
     doubled tensor is trace-preserving, the transfer map has a
     positive-definite fixed point, and the support-algebra condition holds, but
-    the fusion condition does not hold.
+    the transfer-retract condition does not hold.
 \end{theorem}
 \begin{proof}\leanok
     Take the phase-flip channel with Kraus operators
@@ -374,10 +374,10 @@ family, and the corresponding multiplication / inclusion coefficient arrays.
     $\Fix((E^n)^\dagger)=\Fix(E^\dagger)$. Thus the support-algebra condition
     holds. On the other hand,
     $E^2(X)_{01}=\frac{49}{625}X_{01}\neq-\frac7{25}X_{01}=E(X)_{01}$.
-    Therefore $E^2\neq E$, so the fusion condition fails.
+    Therefore $E^2\neq E$, so the transfer-retract condition fails.
 \end{proof}
 
-\begin{remark}[Why algebra data do not imply fusion data]%
+\begin{remark}[Why algebra data do not imply transfer-retract data]%
     \label{rem:mpdo_algebra_to_fusion_gap}
     \uses{def:mpdo_rfp_via_algebra, def:mpdo_rfp_via_fusion,
         thm:mpdo_algebra_not_imply_fusion, thm:newton_girard}

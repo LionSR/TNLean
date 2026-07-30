@@ -11,7 +11,7 @@ import TNLean.MPS.MPDO.FusionIsometries
 
 This file gives an explicit trace-preserving MPO tensor with a positive-definite
 fixed point which satisfies `MPOTensor.IsRFP_MPDO_via_algebra` but not
-`MPOTensor.IsRFP_MPDO_via_fusion`.
+`MPOTensor.IsRFP_MPDO_via_transferRetract`.
 
 ## References
 
@@ -176,10 +176,10 @@ private theorem phaseFlipMPO_isRFP_MPDO_via_algebra :
     phaseFlipMPO_isTP (Matrix.PosDef.one (n := Fin 2) (R := ℂ))
       phaseFlipMPO_one_fixed phaseFlipMPO_adjointFixedPoints_eq
 
-private theorem phaseFlipMPO_not_isRFP_MPDO_via_fusion :
-    ¬IsRFP_MPDO_via_fusion phaseFlipTensor.toMPOTensor := by
-  intro hFusion
-  have hRFP := isRFP_of_isRFP_MPDO_via_fusion hFusion
+private theorem phaseFlipMPO_not_isRFP_MPDO_via_transferRetract :
+    ¬IsRFP_MPDO_via_transferRetract phaseFlipTensor.toMPOTensor := by
+  intro hRetract
+  have hRFP := isRFP_of_isRFP_MPDO_via_transferRetract hRetract
   change MPOTensor.transferMap phaseFlipTensor.toMPOTensor ∘ₗ
       MPOTensor.transferMap phaseFlipTensor.toMPOTensor =
         MPOTensor.transferMap phaseFlipTensor.toMPOTensor at hRFP
@@ -190,7 +190,7 @@ private theorem phaseFlipMPO_not_isRFP_MPDO_via_fusion :
     phaseFlipTensor_transferMap_apply] at hEntry
   norm_num [X] at hEntry
 
-/-- The support-algebra predicate does not imply the fusion predicate, even
+/-- The support-algebra predicate does not imply the transfer-retract predicate, even
 under trace preservation and the existence of a positive-definite fixed point.
 
 The witness is the qubit phase-flip channel with Kraus operators
@@ -202,12 +202,12 @@ This does not contradict arXiv:1606.00608, Theorem 4.14(ii). The converse in
 Appendix C.4, lines 2046--2085, assumes the positive BNT-label coefficient
 formula and the length-one idempotent trace identity, neither of which is part
 of `IsRFP_MPDO_via_algebra`. -/
-theorem exists_isRFP_MPDO_via_algebra_not_isRFP_MPDO_via_fusion :
+theorem exists_isRFP_MPDO_via_algebra_not_isRFP_MPDO_via_transferRetract :
     ∃ (M : MPOTensor 2 2) (ρ : Matrix (Fin 2) (Fin 2) ℂ),
       Kraus.IsTP M.toMPSTensor ∧ ρ.PosDef ∧ MPOTensor.transferMap M ρ = ρ ∧
-        IsRFP_MPDO_via_algebra M ∧ ¬IsRFP_MPDO_via_fusion M :=
+        IsRFP_MPDO_via_algebra M ∧ ¬IsRFP_MPDO_via_transferRetract M :=
   ⟨phaseFlipTensor.toMPOTensor, 1, phaseFlipMPO_isTP,
     Matrix.PosDef.one (n := Fin 2) (R := ℂ), phaseFlipMPO_one_fixed,
-    phaseFlipMPO_isRFP_MPDO_via_algebra, phaseFlipMPO_not_isRFP_MPDO_via_fusion⟩
+    phaseFlipMPO_isRFP_MPDO_via_algebra, phaseFlipMPO_not_isRFP_MPDO_via_transferRetract⟩
 
 end MPOTensor
