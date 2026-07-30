@@ -868,6 +868,68 @@ lemma sectorTensor_proportional_of_blockedMatch
     intro u i
     rw [← hA_letter u i, ← hB_letter (u + q) i]
     exact (hCornerData u).choose_spec.choose_spec.2.2.2.2 i
+  let P : Fin m → MatrixAlg D := fun u => PA (-u)
+  let Q : Fin m → MatrixAlg D := fun v => PB (-v)
+  let q' : Fin m := -q
+  let U' : Fin m → MatrixAlg D := fun u => U (-u)
+  let c' : Fin m → ℂ := fun u => c (-u)
+  let dimA' : Fin m → ℕ := fun u => dimA (-u)
+  let blocksA' : (u : Fin m) → MPSTensor (blockPhysDim d m) (dimA' u) :=
+    fun u => blocksA (-u)
+  let φA' : (u : Fin m) →
+      MatrixAlg (dimA' u) ≃ₗ[ℂ] cornerSubmodule (P u) :=
+    fun u => φA (-u)
+  have hP_proj : ∀ u, IsOrthogonalProjection (P u) := fun u => hPA_proj (-u)
+  have hQ_proj : ∀ v, IsOrthogonalProjection (Q v) := fun v => hPB_proj (-v)
+  have hA_offDiag :
+      ∀ (k : Fin m) (i : Fin d), PA (k + 1) * A i = A i * PA k :=
+    offDiag_shift_of_adjoint_cyclic_shift A hA_lc hPA_proj hPA_shift
+  have hB_offDiag :
+      ∀ (k : Fin m) (i : Fin d), PB (k + 1) * B i = B i * PB k :=
+    offDiag_shift_of_adjoint_cyclic_shift B hB_lc hPB_proj hPB_shift
+  have hP_shift : ∀ (u : Fin m) (i : Fin d), P u * A i = A i * P (u + 1) := by
+    intro u i
+    have h := hA_offDiag (-(u + 1)) i
+    have hindex : -(u + 1) + 1 = -u := by abel
+    rw [hindex] at h
+    exact h
+  have hQ_shift : ∀ (v : Fin m) (i : Fin d), Q v * B i = B i * Q (v + 1) := by
+    intro v i
+    have h := hB_offDiag (-(v + 1)) i
+    have hindex : -(v + 1) + 1 = -v := by abel
+    rw [hindex] at h
+    exact h
+  have hU'_corner : ∀ u, U' u = P u * U' u * Q (u + q') := by
+    intro u
+    have h := hU_corner (-u)
+    have hindex : -(u + q') = -u + q := by simp only [q']; abel
+    change U (-u) = PA (-u) * U (-u) * PB (-(u + q'))
+    rw [hindex]
+    exact h
+  have hU'_star_U : ∀ u, (U' u)ᴴ * U' u = Q (u + q') := by
+    intro u
+    have h := hU_star_U (-u)
+    have hindex : -(u + q') = -u + q := by simp only [q']; abel
+    change (U (-u))ᴴ * U (-u) = PB (-(u + q'))
+    rw [hindex]
+    exact h
+  have hU'_U_star : ∀ u, U' u * (U' u)ᴴ = P u := by
+    intro u
+    exact hU_U_star (-u)
+  have hc'_norm : ∀ u, ‖c' u‖ = 1 := fun u => hc_norm (-u)
+  have hBlockAmbient' : ∀ (u : Fin m) (i : Fin (blockPhysDim d m)),
+      P u * (blockTensor A m) i * P u =
+        c' u • (U' u * (Q (u + q') * (blockTensor B m) i * Q (u + q')) *
+          (U' u)ᴴ) := by
+    intro u i
+    have h := hBlockAmbient (-u) i
+    have hindex : -(u + q') = -u + q := by simp only [q']; abel
+    change PA (-u) * (blockTensor A m) i * PA (-u) =
+      c (-u) • (U (-u) *
+        (PB (-(u + q')) * (blockTensor B m) i * PB (-(u + q'))) *
+          (U (-u))ᴴ)
+    rw [hindex]
+    exact h
   -- Remaining obligation (arXiv:1708.00029 lines 1023--1117): an `m`-factor cyclic
   -- contraction theorem built from the common `L` and the sum-form right inverses
   -- `Ω u` satisfying `hΩ`; after producing the uniform product-tensor identity,
