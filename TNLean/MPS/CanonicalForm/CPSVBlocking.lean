@@ -142,7 +142,11 @@ The proof puts the tensor into its trace-preserving Perron gauge.  Positive
 blocking preserves trace preservation, transfer-map primitivity, and tensor
 irreducibility for that gauge; hence the blocked gauge is a normal tensor.  A
 blocked gauge equivalence then transports the result back to the original
-blocked tensor. -/
+blocked tensor.
+
+Source: arXiv:1606.00608, lines 227--235 define physical blocking and normal
+tensors; the closure under reblocking is used in the normal-block arguments at
+lines 332--345. -/
 theorem blockTensor {A : MPSTensor d D} (hA : IsNormalTensor A) (p : ℕ) (hp : 0 < p) :
     IsNormalTensor (MPSTensor.blockTensor (d := d) (D := D) A p) := by
   letI : NeZero D := ⟨hA.bondDim_ne_zero⟩
