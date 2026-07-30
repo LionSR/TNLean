@@ -229,6 +229,7 @@ import TNLean.MPS.MPDO.SectorFactorization
 import TNLean.MPS.MPDO.SectorPairingTransfer
 import TNLean.MPS.MPDO.SectorRecurrence
 import TNLean.MPS.MPDO.SectorTrace
+import TNLean.MPS.MPDO.SelectedFixedProductSectorVisibility
 import TNLean.MPS.MPDO.SimpleLocalStructure
 import TNLean.MPS.MPDO.SimpleTensor
 import TNLean.MPS.MPDO.SitewisePhysicalMatrix

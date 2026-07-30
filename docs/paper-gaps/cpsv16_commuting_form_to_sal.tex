@@ -486,42 +486,42 @@ is not yet formalized and must not carry a \texttt{\string\leanok} marker.
 The target-side construction recorded above is now complete for the exact
 selected fixed tensor: its positive physical-sector factorization is
 constructed from the fixed commuting bond in equation \emph{sigmaNK2} at
-source lines~1581--1605.  The remaining work is structural: supply the
-normality and blocking comparison from the original normal MPDO block and
-proportional bond-product hypotheses of Proposition~\emph{4to2}, at source
-lines~1597--1605, to that selected fixed representative.  Once such a
-comparison gives an invertible virtual gauge,
-\leanid{MPOTensor.PhysicalSectorFactorization.ofGaugeEquiv} transports the
-factorization to the original tensor, and
-\leanid{MPOTensor.PhysicalSectorFactorization.%
-ofGaugeEquiv_neighboringOperator} shows that its positive neighboring
-operators are unchanged.  This gauge invariance does not construct the
-required comparison from closed-chain proportionality.  The explicit
-factorization and positivity assumptions of the proved corollary are marked
-scope restrictions, not additional hypotheses on the source proposition.
+source lines~1581--1605.
 
-\leanid{MPOTensor.PhysicalSectorFactorization.ofVirtualCompression} records
-the corresponding algebraic construction for a rectangular virtual
-compression $L^i=V^*K^iV$.  The physical decomposition is unchanged, but the
-neighboring operator is no longer the original contraction.  By
-\leanid{MPOTensor.PhysicalSectorFactorization.%
-ofVirtualCompression_neighboringOperator}, it is the contraction with
-$VV^*$ inserted between the right and left virtual factors.  Thus positivity
-of the original contraction, which concerns the identity matrix, does not by
-itself establish positivity after compression.  The canonical-form projection
-at source lines~195--219 supplies the virtual corner but does not assert this
-projected positivity.  Moreover, the present proportional canonical-form
-comparison does not retain a compression map from the selected fixed tensor
-to its matched trace-visible sector.  For a supplied flattened sector
-decomposition,
-\leanid{MPSTensor.SectorDecomposition.flatBlockInclusion} now gives the
-canonical isometry, while
-\leanid{MPSTensor.SectorDecomposition.%
-flatWeight_smul_flatBasis_eq_compression} identifies its exact weighted
-virtual corner.  The accompanying range-projection and intertwining identities
-are also formalized.  This algebraic certificate does not select the
-trace-visible sector of the fixed tensor and does not prove positivity of the
-projected contraction.  Those two source-specific steps remain necessary.
+The recurrent-sector comparison no longer requires a normality or blocking
+comparison with that selected representative.  Express the original injective
+tensor in the physical coordinates of the selected factorization.  The
+length-two closed-operator identity removes all cross-sector matrices and all
+matrices outside the positive-length cyclic support.  The remaining matrices
+still span the full auxiliary matrix algebra.  Positivity gives a nonzero
+closed coefficient through every cyclic-active sector, while the length-three
+identity sends every zero neighboring operator to a zero ordered product of
+the corresponding two sector spaces.  A proper reachability cut would
+therefore split the full matrix algebra into two nonzero subspaces whose
+products in one order vanish, which is impossible.  This is
+\leanid{MPOTensor.EtaLocalStructureData.%
+selectedFixedProduct_cyclicActive_reflTransGen_neighboringOperator_ne_zero}.
+It proves that the cyclic-active sectors of the selected factorization form
+one recurrent component without asserting injectivity, normality, or a
+virtual gauge for the selected fixed tensor.
+
+The remaining step is the coefficient comparison at source lines~1606--1617.
+One must expand the normalized reduced state after tracing one suffix site and
+after tracing two suffix sites.  The two surviving boundary contractions have
+coefficients $\widehat T^2$ and $\widehat T^3$, respectively.  Recurrence
+supplies a nonzero retained path between every pair of cyclic-active sectors,
+so equality of the two reduced states permits entrywise cancellation and
+yields
+\[
+  \widehat T^2=\widehat T^3.
+\]
+This relation must then be combined with the recurrent support to obtain the
+strictly positive rank-one two-step coefficient used by the already
+formalized Markov decomposition.  Until this coefficient extraction and its
+application to the original source marginal identity are proved, the
+commuting-form-to-SAL implication remains open.  The explicit factorization
+and positivity assumptions of the proved SAL corollary remain scope
+restrictions, not additional hypotheses on Proposition~\emph{4to2}.
 
 \paragraph{Local fix (the later orthogonal-sector statement).}
 The proposition labelled \emph{prop4to2} at source lines~1801--1808 states
