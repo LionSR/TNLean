@@ -112,7 +112,10 @@ namespace IsNormalTensor
 
 The transfer maps are similar, hence have the same spectral radius and
 peripheral spectrum; irreducibility is transported through the corresponding
-irreducible-map similarity. -/
+irreducible-map similarity.
+
+Source: arXiv:1606.00608, lines 233--235 define normal tensors and lines
+264--268 give the invertible gauge relation between normal representatives. -/
 theorem of_gaugeEquiv {A B : MPSTensor d D} (hB : IsNormalTensor B)
     (hGauge : GaugeEquiv A B) :
     IsNormalTensor A := by
