@@ -190,6 +190,101 @@ noncomputable def retainedBulkProduct
       (k ((Fin.last n).succAbove j))
       (k ((Fin.last n).succAbove j + 1)) (x j) (y j)
 
+/-- A finite retained path of nonzero positive neighboring operators has a
+nonzero diagonal bulk coefficient.
+
+Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
+1606--1617.
+
+**Local fix (cyclic-active visibility):** Positivity supplies a nonzero
+diagonal coefficient on every edge of the retained path. See
+`docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
+theorem exists_retainedBulkProduct_diag_ne_zero_of_neighboringOperator_ne_zero
+    (F : PhysicalSectorFactorization K)
+    (hpos : ∀ k h, (F.neighboringOperator k h).PosSemidef)
+    {n : ℕ} (k : Fin (n + 1) → Fin F.sectorCount)
+    (hedge : ∀ j : Fin n,
+      F.neighboringOperator
+        (k ((Fin.last n).succAbove j))
+        (k ((Fin.last n).succAbove j + 1)) ≠ 0) :
+    ∃ x, F.retainedBulkProduct k x x ≠ 0 := by
+  classical
+  have hdiag : ∀ j : Fin n, ∃ x : F.NeighborIndex
+      (k ((Fin.last n).succAbove j))
+      (k ((Fin.last n).succAbove j + 1)),
+      F.neighboringOperator
+        (k ((Fin.last n).succAbove j))
+        (k ((Fin.last n).succAbove j + 1)) x x ≠ 0 := by
+    intro j
+    have htrace : Matrix.trace (F.neighboringOperator
+        (k ((Fin.last n).succAbove j))
+        (k ((Fin.last n).succAbove j + 1))) ≠ 0 :=
+      ne_of_gt ((hpos _ _).trace_pos_of_ne_zero (hedge j))
+    rw [Matrix.trace] at htrace
+    obtain ⟨x, -, hx⟩ := Finset.exists_ne_zero_of_sum_ne_zero htrace
+    exact ⟨x, hx⟩
+  choose x hx using hdiag
+  refine ⟨x, ?_⟩
+  rw [retainedBulkProduct]
+  exact Finset.prod_ne_zero_iff.mpr fun j _ ↦ hx j
+
+/-- Every cyclic-active sector lies at both ends of a positive-length retained
+path with a nonzero diagonal bulk coefficient.
+
+Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
+1606--1617.
+
+**Local fix (cyclic-active visibility):** The explicit first nonzero edge and
+its return path give the retained path; positivity makes its diagonal bulk
+coefficient visible. See
+`docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
+theorem exists_retainedBulkProduct_diag_ne_zero_of_isCyclicActiveSector
+    (F : PhysicalSectorFactorization K)
+    (hpos : ∀ k h, (F.neighboringOperator k h).PosSemidef)
+    {q : Fin F.sectorCount} (hq : F.IsCyclicActiveSector q) :
+    ∃ n : ℕ, 0 < n ∧ ∃ k : Fin (n + 1) → Fin F.sectorCount,
+      k 0 = q ∧ k (Fin.last n) = q ∧
+      ∃ x, F.retainedBulkProduct k x x ≠ 0 := by
+  classical
+  obtain ⟨h, hqh, hreturn⟩ := hq
+  obtain ⟨l, hchain, hlast⟩ :=
+    List.exists_isChain_cons_of_relationReflTransGen hreturn
+  let tail := h :: l
+  let n := tail.length
+  let k : Fin (n + 1) → Fin F.sectorCount := fun i ↦ (q :: tail).get i
+  have hcycle : List.IsChain
+      (fun a b ↦ F.neighboringOperator a b ≠ 0) (q :: tail) := by
+    exact hchain.cons_cons hqh
+  have hn : 0 < n := by simp [n, tail]
+  have hk0 : k 0 = q := by simp [k]
+  have hklast : k (Fin.last n) = q := by
+    change (q :: tail).get (Fin.last n) = q
+    simpa [n, tail, List.get_eq_getElem, List.getLast_eq_getElem] using hlast
+  have hedge : ∀ j : Fin n,
+      F.neighboringOperator
+        (k ((Fin.last n).succAbove j))
+        (k ((Fin.last n).succAbove j + 1)) ≠ 0 := by
+    intro j
+    rw [Fin.succAbove_last_apply]
+    have hidx : j.castSucc + 1 = j.succ := by
+      ext
+      simp
+    rw [hidx]
+    have hj0 : (j : ℕ) < (q :: tail).length := by
+      simp [n]
+    have hj1 : (j : ℕ) + 1 < (q :: tail).length := by
+      simp [n]
+    have hj := (List.isChain_iff_getElem.mp hcycle) (j : ℕ) hj1
+    have hleft : k j.castSucc = (q :: tail)[(j : ℕ)]'hj0 := by
+      simp [k, List.get_eq_getElem]
+    have hright : k j.succ = (q :: tail)[(j : ℕ) + 1]'hj1 := by
+      simp [k, List.get_eq_getElem]
+    rw [hleft, hright]
+    exact hj
+  exact ⟨n, hn, k, hk0, hklast,
+    F.exists_retainedBulkProduct_diag_ne_zero_of_neighboringOperator_ne_zero
+      hpos k hedge⟩
+
 /-- Concatenate two fixed-sector fiber configurations along a concatenated
 sector word.
 
