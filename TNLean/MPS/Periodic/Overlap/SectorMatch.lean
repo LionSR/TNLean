@@ -1463,6 +1463,48 @@ lemma sectorTensor_proportional_of_blockedMatch
           (U' (k + 1))ᴴ)
     exact transported_cornerProd_cons Q B q' U' hQ_proj hU'_star_U k
       (σ k) (List.ofFn (ρ k))
+  have hGapMatch :
+      ∀ (k : Fin m) (ρ : Fin (m * L) → Fin d),
+        cornerProd P A k (List.ofFn ρ) = (c' k) ^ L • G k ρ := by
+    intro k ρ
+    have hL : L.pred + 1 = L := Nat.succ_pred_eq_of_pos hL_pos
+    have hword : (List.ofFn ρ).length = (L.pred + 1) * m := by
+      rw [List.length_ofFn, hL, Nat.mul_comm]
+    simpa only [G, hL] using
+      cornerProd_blockMatch_partial_isometry_pow P Q A B q' U' c'
+        hP_proj hQ_proj hQ_shift hU'_star_U hBC k L.pred
+        (List.ofFn ρ) hword
+  have hc'_pow_ne : ∀ k : Fin m, (c' k) ^ L ≠ 0 := by
+    intro k
+    exact pow_ne_zero _ (norm_ne_zero_iff.mp (by rw [hc'_norm k]; exact one_ne_zero))
+  have hG_contraction :
+      ∀ (k : Fin m) (X : MatrixAlg D), P k * X * P k = X →
+        ∑ ρ, Ωhat k X ρ • G k ρ = ((c' k) ^ L)⁻¹ • X := by
+    intro k X hX
+    have hsolve : ∀ ρ, G k ρ =
+        ((c' k) ^ L)⁻¹ • cornerProd P A k (List.ofFn ρ) := by
+      intro ρ
+      calc
+        G k ρ = 1 • G k ρ := (one_smul ℂ _).symm
+        _ = (((c' k) ^ L)⁻¹ * (c' k) ^ L) • G k ρ := by
+          rw [inv_mul_cancel₀ (hc'_pow_ne k)]
+        _ = ((c' k) ^ L)⁻¹ • ((c' k) ^ L • G k ρ) := by
+          rw [smul_smul]
+        _ = ((c' k) ^ L)⁻¹ • cornerProd P A k (List.ofFn ρ) := by
+          rw [hGapMatch k ρ]
+    simp_rw [hsolve, smul_smul]
+    calc
+      ∑ ρ, (Ωhat k X ρ * ((c' k) ^ L)⁻¹) •
+          cornerProd P A k (List.ofFn ρ) =
+          ((c' k) ^ L)⁻¹ •
+            ∑ ρ, Ωhat k X ρ • cornerProd P A k (List.ofFn ρ) := by
+              rw [Finset.smul_sum]
+              apply Finset.sum_congr rfl
+              intro ρ _
+              rw [smul_smul]
+              congr 1
+              ring
+      _ = ((c' k) ^ L)⁻¹ • X := by rw [hΩhat k X hX]
   -- Remaining obligation (arXiv:1708.00029 lines 1023--1117): an `m`-factor cyclic
   -- contraction theorem built from the common `L` and the sum-form right inverses
   -- `Ω u` satisfying `hΩ`; after producing the uniform product-tensor identity,
