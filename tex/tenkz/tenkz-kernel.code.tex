@@ -86,6 +86,30 @@
 \msg_new:nnn {tenkz}{kernel-check-scope}
   { [TKZ-EQ-CHECK-SCOPE]~check=#1~belongs~to~tenkzeq~options,~
     not~a~picture~(record~picture). }
+\msg_new:nnn {tenkz}{kernel-frame-word}
+  { [TKZ-FRAME-WORD]~frame~word~'#1'~is~not~flat|plane|circle. }
+\msg_new:nnn {tenkz}{kernel-frame-basis-parse}
+  { [TKZ-FRAME-BASIS-PARSE]~basis~member~'#1'~must~be~
+    '<row~kind>~at~(<integer>,<integer>)'. }
+\msg_new:nnn {tenkz}{kernel-frame-basis-kind}
+  { [TKZ-FRAME-BASIS-KIND]~basis~member~kind~'#1'~is~not~
+    wire|ket|op|bra. }
+\msg_new:nnn {tenkz}{kernel-frame-member-range}
+  { [TKZ-FRAME-MEMBER-RANGE]~member~#3~of~cell~(#1,#2)~does~not~exist. }
+\msg_new:nnn {tenkz}{kernel-frame-basis-grid}
+  { [TKZ-FRAME-BASIS-GRID]~bonds=grid~requires~the~origin~singleton~basis;~
+    use~bonds=none~and~declare~multi-member~topology~with~wires. }
+\msg_new:nnn {tenkz}{kernel-frame-basis-scope}
+  { [TKZ-FRAME-BASIS-SCOPE]~basis=~is~picture-scoped~in~this~kernel~stage. }
+\msg_new:nnn {tenkz}{kernel-frame-basis-circle}
+  { [TKZ-FRAME-BASIS-CIRCLE]~basis=~currently~requires~flat~or~plane;~
+    a~circle~basis~needs~a~declared~tangent-offset~contract. }
+\msg_new:nnn {tenkz}{kernel-frame-basis-policy}
+  { [TKZ-FRAME-BASIS-POLICY]~displaced~or~multi-member~bases~require~
+    explicit~wires;~picture~policy~'#1'~has~no~member-level~meaning. }
+\msg_new:nnn {tenkz}{kernel-frame-member-occupied}
+  { [TKZ-FRAME-MEMBER-OCCUPIED]~member~(#1,#2,#3)~is~already~claimed~
+    by~record~#4. }
 \msg_new:nnn {tenkz}{kernel-atom-positive}
   { [TKZ-ATOM-POSITIVE-INTEGER]~#1=#2~must~be~a~positive~integer~
     (record~#3). }
@@ -124,6 +148,11 @@
 \prop_new:N \l__tenkz_kernel_policy_prop      % picture policy for late passes
 \prop_new:N \l__tenkz_kernel_eq_policy_prop   % tenkzeq policy inherited by panels
 \prop_new:N \l__tenkz_kernel_cell_prop        % "r-c" -> atom id (occupancy)
+\prop_new:N \l__tenkz_kernel_basis_cell_prop  % "r-c-k" -> basis atom id
+\prop_new:N \l__tenkz_kernel_basis_claim_prop % "r-c-k" -> authored atom id
+\prop_new:N \l__tenkz_kernel_basis_kind_prop  % member -> row kind
+\prop_new:N \l__tenkz_kernel_basis_east_prop  % member -> quarter-pitch east
+\prop_new:N \l__tenkz_kernel_basis_north_prop % member -> quarter-pitch north
 \prop_new:N \l__tenkz_kernel_trace_cell_prop  % "interface-col" -> traced segment
 \prop_new:N \l__tenkz_kernel_open_cell_prop   % "interface-col" -> opened segment
 \prop_new:N \g__tenkz_kernel_setup_prop       % setup inherited by later pictures
@@ -132,6 +161,10 @@
 \bool_new:N \l__tenkz_kernel_ineq_bool        % inside tenkzeq
 \bool_new:N \l__tenkz_kernel_check_bundles_bool
 \bool_new:N \l__tenkz_kernel_claim_collision_bool
+\bool_new:N \l__tenkz_kernel_basis_valid_bool
+\bool_new:N \l__tenkz_kernel_frame_valid_bool
+\bool_new:N \l__tenkz_kernel_group_keys_bool
+\int_new:N  \l__tenkz_kernel_basis_count_int
 \clist_new:N \l__tenkz_kernel_check_off_clist % relations opted out of check=
 \tl_new:N   \l__tenkz_kernel_scratch_tl
 \tl_new:N   \l__tenkz_kernel_sig_tl
@@ -156,9 +189,10 @@
 \cs_new_protected:Npn \__tenkz_kernel_stage_put:ne #1#2
   { \prop_put:Nne \l__tenkz_kernel_stage_prop {#1} {#2} }
 
-% The contract writes cell addresses unbraced (at=(1,2)); a keyval comma
-% splitter would tear them, so every option list passes through this door,
-% which braces each parenthesized pair before l3keys reads it.
+% The contract writes cell addresses unbraced (`at=(1,2)` and
+% `at=(1,2,3)`).  A keyval comma splitter would tear them, so every option
+% list passes through this door, which braces each address before l3keys
+% reads it.  Members go first: the pair pattern must not consume their prefix.
 \tl_new:N \l__tenkz_kernel_opts_tl
 \cs_new_protected:Npn \__tenkz_kernel_keys:nn #1#2
   {
@@ -168,6 +202,10 @@
     \regex_replace_all:nnN
       { weight \s* = \s* bundle \s* = \s* ([A-Za-z0-9]+) }
       { weight = \cB\{ bundle = \1 \cE\} }
+      \l__tenkz_kernel_opts_tl
+    \regex_replace_all:nnN
+      { \( \s* (\d+) \s* , \s* (\d+) \s* , \s* (\d+) \s* \) }
+      { \cB\{ \( \1 , \2 , \3 \) \cE\} }
       \l__tenkz_kernel_opts_tl
     \regex_replace_all:nnN
       { \( \s* (\d+) \s* , \s* (\d+) \s* \) }
@@ -220,6 +258,12 @@
 \seq_new:N \l__tenkz_kernel_match_seq
 \cs_new_protected:Npn \__tenkz_kernel_addr_try:nN #1#2
   {
+    % production 1b: (r,c,k) -- member k of one frame cell
+    \regex_extract_once:nnNTF
+      { \A \( \s* (\d+) \s* , \s* (\d+) \s* , \s* (\d+) \s* \) \Z } {#1}
+      \l__tenkz_kernel_match_seq
+      { \__tenkz_kernel_addr_member:N #2 }
+      {
     % production 1: (r,c) -- cell of the current frame
     \regex_extract_once:nnNTF
       { \A \( \s* (\d+) \s* , \s* (\d+) \s* \) \Z } {#1}
@@ -301,7 +345,7 @@
           { \tl_use:N \l__tenkz_model_last_tl }
         \__tenkz_kernel_node_new:nN {#1} #2
       }
-      } } } } } } } } } } }
+      } } } } } } } } } } } }
   }
 
 % capture groups sit at seq items 2..n; item 1 is the full match.
@@ -309,13 +353,32 @@
 \cs_new_protected:Npn \__tenkz_kernel_addr_cell:N #1
   {
     \__tenkz_kernel_node_new:nN
-      { ( \seq_item:Nn \l__tenkz_kernel_match_seq {2} ,
-          \seq_item:Nn \l__tenkz_kernel_match_seq {3} ) } #1
+      {
+        ( \int_eval:n { \seq_item:Nn \l__tenkz_kernel_match_seq {2} } ,
+          \int_eval:n { \seq_item:Nn \l__tenkz_kernel_match_seq {3} } )
+      } #1
     \__tenkz_kernel_node_put:Nne #1 {kind} {cell}
     \__tenkz_kernel_node_put:Nne #1 {row}
-      { \seq_item:Nn \l__tenkz_kernel_match_seq {2} }
+      { \int_eval:n { \seq_item:Nn \l__tenkz_kernel_match_seq {2} } }
     \__tenkz_kernel_node_put:Nne #1 {col}
-      { \seq_item:Nn \l__tenkz_kernel_match_seq {3} }
+      { \int_eval:n { \seq_item:Nn \l__tenkz_kernel_match_seq {3} } }
+  }
+
+\cs_new_protected:Npn \__tenkz_kernel_addr_member:N #1
+  {
+    \__tenkz_kernel_node_new:nN
+      {
+        ( \int_eval:n { \seq_item:Nn \l__tenkz_kernel_match_seq {2} } ,
+          \int_eval:n { \seq_item:Nn \l__tenkz_kernel_match_seq {3} } ,
+          \int_eval:n { \seq_item:Nn \l__tenkz_kernel_match_seq {4} } )
+      } #1
+    \__tenkz_kernel_node_put:Nne #1 {kind} {member}
+    \__tenkz_kernel_node_put:Nne #1 {row}
+      { \int_eval:n { \seq_item:Nn \l__tenkz_kernel_match_seq {2} } }
+    \__tenkz_kernel_node_put:Nne #1 {col}
+      { \int_eval:n { \seq_item:Nn \l__tenkz_kernel_match_seq {3} } }
+    \__tenkz_kernel_node_put:Nne #1 {member}
+      { \int_eval:n { \seq_item:Nn \l__tenkz_kernel_match_seq {4} } }
   }
 
 % Relative placement: the compass word converts to a page direction once,
@@ -511,6 +574,8 @@
 \tl_new:N \l__tenkz_kernel_list_tl
 \tl_new:N \l__tenkz_kernel_list_item_tl
 \clist_new:N \l__tenkz_kernel_address_clist
+\clist_new:N \l__tenkz_kernel_frame_clist
+\tl_new:N \l__tenkz_kernel_frame_tl
 
 % Address-valued fields retain the author's spelling in their record, but
 % every member is parsed now.  Picture option parsing has already grouped
@@ -520,6 +585,10 @@
     \tl_set:Nn \l__tenkz_kernel_list_tl {#1}
     \tl_trim_spaces:N \l__tenkz_kernel_list_tl
     \__tenkz_kernel_strip_outer_groups:N \l__tenkz_kernel_list_tl
+    \regex_replace_all:nnN
+      { \( \s* (\d+) \s* , \s* (\d+) \s* , \s* (\d+) \s* \) }
+      { \cB\{ \( \1 , \2 , \3 \) \cE\} }
+      \l__tenkz_kernel_list_tl
     \regex_replace_all:nnN
       { \( \s* (\d+) \s* , \s* (\d+) \s* \) }
       { \cB\{ \( \1 , \2 \) \cE\} }
@@ -537,6 +606,10 @@
   {
     \tl_set:Nn \l__tenkz_kernel_list_tl {#1}
     \tl_trim_spaces:N \l__tenkz_kernel_list_tl
+    \regex_replace_all:nnN
+      { \( \s* (\d+) \s* , \s* (\d+) \s* , \s* (\d+) \s* \) }
+      { \cB\{ \( \1 , \2 , \3 \) \cE\} }
+      \l__tenkz_kernel_list_tl
     \regex_replace_all:nnN
       { \( \s* (\d+) \s* , \s* (\d+) \s* \) }
       { \cB\{ \( \1 , \2 \) \cE\} }
@@ -710,13 +783,199 @@
       }
   }
 
+% A frame value is one word followed by its own subkeys.  Keeping `basis`
+% inside this value preserves the one picture-level frame leaf while giving
+% every consumer the same parsed member table.
+\cs_new_protected:Npn \__tenkz_kernel_basis_clear:
+  {
+    \int_zero:N \l__tenkz_kernel_basis_count_int
+    \prop_clear:N \l__tenkz_kernel_basis_kind_prop
+    \prop_clear:N \l__tenkz_kernel_basis_east_prop
+    \prop_clear:N \l__tenkz_kernel_basis_north_prop
+  }
+\cs_new_protected:Npn \__tenkz_kernel_frame_basis_parse:n #1
+  {
+    \tl_set:Nn \l__tenkz_kernel_frame_tl {#1}
+    \tl_trim_spaces:N \l__tenkz_kernel_frame_tl
+    \__tenkz_kernel_strip_outer_groups:N \l__tenkz_kernel_frame_tl
+    \regex_replace_all:nnN
+      {
+        \( \s* ([-+]?\d+) \s* , \s* ([-+]?\d+) \s* \)
+      }
+      { ( \1 ; \2 ) }
+      \l__tenkz_kernel_frame_tl
+    \exp_args:NNV \clist_set:Nn
+      \l__tenkz_kernel_frame_clist \l__tenkz_kernel_frame_tl
+    \__tenkz_kernel_basis_clear:
+    \bool_set_true:N \l__tenkz_kernel_basis_valid_bool
+    \clist_map_inline:Nn \l__tenkz_kernel_frame_clist
+      {
+        \regex_extract_once:nnNTF
+          {
+            \A \s* ([A-Za-z]+) \s+ at \s*
+            (?: \cB\{ )? \s*
+            \( \s* ([-+]?\d+) \s* ; \s* ([-+]?\d+) \s* \)
+            \s* (?: \cE\} )? \s* \Z
+          }
+          {##1}
+          \l__tenkz_kernel_match_seq
+          {
+            \tl_set:Ne \l__tenkz_kernel_frame_tl
+              { \seq_item:Nn \l__tenkz_kernel_match_seq {2} }
+            \str_case:VnF \l__tenkz_kernel_frame_tl
+              {
+                {wire}{}
+                {ket}{}
+                {op}{}
+                {bra}{}
+              }
+              {
+                \bool_set_false:N \l__tenkz_kernel_basis_valid_bool
+                \msg_error:nne {tenkz}{kernel-frame-basis-kind}
+                  { \tl_use:N \l__tenkz_kernel_frame_tl }
+              }
+            \bool_if:NT \l__tenkz_kernel_basis_valid_bool
+              {
+                \int_incr:N \l__tenkz_kernel_basis_count_int
+                \prop_put:Nee \l__tenkz_kernel_basis_kind_prop
+                  { \int_use:N \l__tenkz_kernel_basis_count_int }
+                  { \tl_use:N \l__tenkz_kernel_frame_tl }
+                \prop_put:Nee \l__tenkz_kernel_basis_east_prop
+                  { \int_use:N \l__tenkz_kernel_basis_count_int }
+                  { \seq_item:Nn \l__tenkz_kernel_match_seq {3} }
+                \prop_put:Nee \l__tenkz_kernel_basis_north_prop
+                  { \int_use:N \l__tenkz_kernel_basis_count_int }
+                  { \seq_item:Nn \l__tenkz_kernel_match_seq {4} }
+              }
+          }
+          {
+            \bool_set_false:N \l__tenkz_kernel_basis_valid_bool
+            \msg_error:nnn {tenkz}{kernel-frame-basis-parse} {##1}
+          }
+      }
+    \bool_if:NT \l__tenkz_kernel_basis_valid_bool
+      {
+        \int_compare:nNnT { \l__tenkz_kernel_basis_count_int } = {0}
+          {
+            \bool_set_false:N \l__tenkz_kernel_basis_valid_bool
+            \msg_error:nnn {tenkz}{kernel-frame-basis-parse} {#1}
+          }
+      }
+    \bool_if:NTF \l__tenkz_kernel_basis_valid_bool
+      { \__tenkz_kernel_stage_put:nn {basis} {#1} }
+      {
+        \__tenkz_kernel_basis_clear:
+        \prop_remove:Nn \l__tenkz_kernel_stage_prop {basis}
+      }
+  }
+\cs_new_protected:Npn \__tenkz_kernel_frame_basis:n #1
+  {
+    \tl_if_in:nnTF {#1} {;}
+      {
+        \__tenkz_kernel_basis_clear:
+        \prop_remove:Nn \l__tenkz_kernel_stage_prop {basis}
+        \msg_error:nnn {tenkz}{kernel-frame-basis-parse} {#1}
+      }
+      { \__tenkz_kernel_frame_basis_parse:n {#1} }
+  }
+
+\keys_define:nn {tenkz-kernel-frame}
+  {
+    basis .code:n =
+      {
+        \bool_if:NTF \l__tenkz_kernel_group_keys_bool
+          { \msg_error:nn {tenkz}{kernel-frame-basis-scope} }
+          { \__tenkz_kernel_frame_basis:n {#1} }
+      },
+    unknown .code:n =
+      {
+        \msg_error:nneee {tenkz}{kernel-unknown-key}
+          { \l_keys_key_str } {frame} {picture}
+      }
+  }
+
+\cs_new_protected:Npn \__tenkz_kernel_frame:n #1
+  {
+    % A later frame= replaces the whole earlier frame, including its basis.
+    % Group-local frame parsing must not mutate the enclosing picture table.
+    \bool_if:NF \l__tenkz_kernel_group_keys_bool
+      {
+        \__tenkz_kernel_basis_clear:
+        \prop_remove:Nn \l__tenkz_kernel_stage_prop {basis}
+        \prop_remove:Nn \l__tenkz_kernel_stage_prop {frame}
+      }
+    \clist_set:Nn \l__tenkz_kernel_frame_clist {#1}
+    \clist_pop:NN \l__tenkz_kernel_frame_clist \l__tenkz_kernel_frame_tl
+    \tl_trim_spaces:N \l__tenkz_kernel_frame_tl
+    \bool_set_true:N \l__tenkz_kernel_frame_valid_bool
+    \str_case:VnF \l__tenkz_kernel_frame_tl
+      {
+        {flat}{}
+        {plane}{}
+        {circle}{}
+      }
+      {
+        \bool_set_false:N \l__tenkz_kernel_frame_valid_bool
+        \msg_error:nne {tenkz}{kernel-frame-word}
+          { \tl_use:N \l__tenkz_kernel_frame_tl }
+      }
+    \bool_if:NT \l__tenkz_kernel_frame_valid_bool
+      {
+        \__tenkz_kernel_stage_put:ne
+          {frame} { \tl_use:N \l__tenkz_kernel_frame_tl }
+        \clist_if_empty:NF \l__tenkz_kernel_frame_clist
+          {
+            \str_if_eq:VnTF \l__tenkz_kernel_frame_tl {circle}
+              { \msg_error:nn {tenkz}{kernel-frame-basis-circle} }
+              {
+                \exp_args:NnV \keys_set:nn
+                  {tenkz-kernel-frame} \l__tenkz_kernel_frame_clist
+              }
+          }
+      }
+  }
+
+% Setup and equation policy merge as raw picture fields after the panel's own
+% key parser has run.  Rebuild the derived member table from that final policy
+% so every panel sees the same effective basis.
+\cs_new_protected:Npn \__tenkz_kernel_basis_rehydrate:
+  {
+    \__tenkz_kernel_basis_clear:
+    \prop_get:NnN
+      \l__tenkz_kernel_stage_prop {basis} \l__tenkz_kernel_scratch_tl
+    \quark_if_no_value:NF \l__tenkz_kernel_scratch_tl
+      {
+        \prop_get:NnN
+          \l__tenkz_kernel_stage_prop {frame} \l__tenkz_kernel_frame_tl
+        \str_if_eq:VnTF \l__tenkz_kernel_frame_tl {circle}
+          {
+            \msg_error:nn {tenkz}{kernel-frame-basis-circle}
+            \prop_remove:Nn \l__tenkz_kernel_stage_prop {basis}
+          }
+          {
+            \exp_args:NV \__tenkz_kernel_frame_basis:n
+              \l__tenkz_kernel_scratch_tl
+          }
+      }
+  }
+
+% A frame and its nested basis are one policy value.  When an outer policy
+% replaces the frame with a bare word, no basis from the inner policy survives.
+\cs_new_protected:Npn \__tenkz_kernel_policy_merge:NN #1#2
+  {
+    \prop_if_in:NnT #1 {frame} { \prop_remove:Nn #2 {basis} }
+    \prop_map_inline:Nn #1 { \prop_put:Nnn #2 {##1} {##2} }
+  }
+
 % ---------- picture keys -------------------------------------------------------
 % "Picture options declare topology and policy; they create no hidden atoms."
 
 \__tenkz_kernel_value:nnn   { tenkz-kernel-picture } { rows } { rows }
 \__tenkz_kernel_value:nnn   { tenkz-kernel-picture } { cols } { cols }
-\__tenkz_kernel_choice:nnnn { tenkz-kernel-picture } { frame }
-  { flat, plane, circle } { frame }
+\keys_define:nn {tenkz-kernel-picture}
+  {
+    frame .code:n = { \__tenkz_kernel_frame:n {#1} }
+  }
 \__tenkz_kernel_choice:nnnn { tenkz-kernel-picture } { west }
   { open, none, trace, cup } { west }
 \__tenkz_kernel_choice:nnnn { tenkz-kernel-picture } { east }
@@ -1276,6 +1535,22 @@
 \int_new:N \l__tenkz_kernel_claim_col_int
 \int_new:N \l__tenkz_kernel_claim_rows_int
 \int_new:N \l__tenkz_kernel_claim_cols_int
+\cs_new_protected:Npn \__tenkz_kernel_any_cell_claim:nnN #1#2#3
+  {
+    \prop_get:NnN \l__tenkz_kernel_cell_prop {#1-#2} #3
+    \quark_if_no_value:NT #3
+      {
+        \int_step_inline:nn { \l__tenkz_kernel_basis_count_int }
+          {
+            \quark_if_no_value:NT #3
+              {
+                \prop_get:NnN
+                  \l__tenkz_kernel_basis_claim_prop {#1-#2-##1} #3
+              }
+          }
+      }
+  }
+\cs_generate_variant:Nn \__tenkz_kernel_any_cell_claim:nnN { eeN }
 \cs_new_protected:Npn \__tenkz_kernel_claim_span:nnN #1#2#3
   {
     \int_set:Nn \l__tenkz_kernel_claim_row_int {#1}
@@ -1293,11 +1568,12 @@
       {
         \int_step_inline:nn { \l__tenkz_kernel_claim_cols_int }
           {
-            \prop_get:NeN \l__tenkz_kernel_cell_prop
+            \__tenkz_kernel_any_cell_claim:eeN
               {
                 \int_eval:n
                   { \l__tenkz_kernel_claim_row_int + ##1 - 1 }
-                -
+              }
+              {
                 \int_eval:n
                   { \l__tenkz_kernel_claim_col_int + ####1 - 1 }
               }
@@ -1340,13 +1616,158 @@
   }
 \cs_new_protected:Npn \__tenkz_kernel_claim_cell:NN #1#2
   {
-    \str_if_eq:eeT
-      { \__tenkz_kernel_node_item:Nn #1 {kind} } {cell}
+    \str_case:en
+      { \__tenkz_kernel_node_item:Nn #1 {kind} }
       {
-        \__tenkz_kernel_claim_span:nnN
-          { \__tenkz_kernel_node_item:Nn #1 {row} }
-          { \__tenkz_kernel_node_item:Nn #1 {col} }
-          #2
+        {cell}
+          {
+            \__tenkz_kernel_claim_span:nnN
+              { \__tenkz_kernel_node_item:Nn #1 {row} }
+              { \__tenkz_kernel_node_item:Nn #1 {col} }
+              #2
+          }
+        {member}
+          { \__tenkz_kernel_claim_member:NN #1#2 }
+      }
+  }
+
+\cs_new_protected:Npn \__tenkz_kernel_complete_member:Nnn #1#2#3
+  {
+    \__tenkz_model_normalize_field:nnnn
+      { \tl_use:N #1 } {node} {addr}
+      {
+        ( \int_use:N \l__tenkz_kernel_claim_row_int,
+          \int_use:N \l__tenkz_kernel_claim_col_int,
+          \int_use:N \l__tenkz_kernel_pop_int )
+      }
+    \__tenkz_model_complete:nnn { \tl_use:N #1 } {cell-row}
+      { \int_use:N \l__tenkz_kernel_claim_row_int }
+    \__tenkz_model_complete:nnn { \tl_use:N #1 } {cell-col}
+      { \int_use:N \l__tenkz_kernel_claim_col_int }
+    \__tenkz_model_complete:nnn { \tl_use:N #1 } {member}
+      { \int_use:N \l__tenkz_kernel_pop_int }
+    \__tenkz_model_complete:nnn { \tl_use:N #1 } {basis-east} {#2}
+    \__tenkz_model_complete:nnn { \tl_use:N #1 } {basis-north} {#3}
+  }
+
+\cs_new_protected:Npn \__tenkz_kernel_claim_member_span:N #1
+  {
+    \int_set:Nn \l__tenkz_kernel_claim_rows_int {1}
+    \int_set:Nn \l__tenkz_kernel_claim_cols_int {1}
+    \prop_get:NnN \l__tenkz_kernel_stage_prop {wires} \l_tmpa_tl
+    \quark_if_no_value:NF \l_tmpa_tl
+      { \int_set:Nn \l__tenkz_kernel_claim_rows_int {\l_tmpa_tl} }
+    \prop_get:NnN \l__tenkz_kernel_stage_prop {wide} \l_tmpa_tl
+    \quark_if_no_value:NF \l_tmpa_tl
+      { \int_set:Nn \l__tenkz_kernel_claim_cols_int {\l_tmpa_tl} }
+    \bool_set_false:N \l__tenkz_kernel_claim_collision_bool
+    \int_step_inline:nn { \l__tenkz_kernel_claim_rows_int }
+      {
+        \int_step_inline:nn { \l__tenkz_kernel_claim_cols_int }
+          {
+            \prop_get:NeN \l__tenkz_kernel_cell_prop
+              {
+                \int_eval:n { \l__tenkz_kernel_claim_row_int + ##1 - 1 }
+                -
+                \int_eval:n { \l__tenkz_kernel_claim_col_int + ####1 - 1 }
+              }
+              \l__tenkz_kernel_claim_owner_tl
+            \quark_if_no_value:NT \l__tenkz_kernel_claim_owner_tl
+              {
+                \prop_get:NeN \l__tenkz_kernel_basis_claim_prop
+                  {
+                    \int_eval:n { \l__tenkz_kernel_claim_row_int + ##1 - 1 }
+                    -
+                    \int_eval:n { \l__tenkz_kernel_claim_col_int + ####1 - 1 }
+                    -\int_use:N \l__tenkz_kernel_pop_int
+                  }
+                  \l__tenkz_kernel_claim_owner_tl
+              }
+            \quark_if_no_value:NF \l__tenkz_kernel_claim_owner_tl
+              {
+                \bool_set_true:N \l__tenkz_kernel_claim_collision_bool
+                \msg_error:nneeee {tenkz}{kernel-frame-member-occupied}
+                  { \int_eval:n { \l__tenkz_kernel_claim_row_int + ##1 - 1 } }
+                  { \int_eval:n { \l__tenkz_kernel_claim_col_int + ####1 - 1 } }
+                  { \int_use:N \l__tenkz_kernel_pop_int }
+                  { \l__tenkz_kernel_claim_owner_tl }
+              }
+          }
+      }
+    \bool_if:NF \l__tenkz_kernel_claim_collision_bool
+      {
+        \int_step_inline:nn { \l__tenkz_kernel_claim_rows_int }
+          {
+            \int_step_inline:nn { \l__tenkz_kernel_claim_cols_int }
+              {
+                \prop_put:Nee \l__tenkz_kernel_basis_claim_prop
+                  {
+                    \int_eval:n { \l__tenkz_kernel_claim_row_int + ##1 - 1 }
+                    -
+                    \int_eval:n { \l__tenkz_kernel_claim_col_int + ####1 - 1 }
+                    -\int_use:N \l__tenkz_kernel_pop_int
+                  }
+                  { \tl_use:N #1 }
+              }
+          }
+      }
+  }
+
+\cs_new_protected:Npn \__tenkz_kernel_claim_member:NN #1#2
+  {
+    \int_set:Nn \l__tenkz_kernel_claim_row_int
+      { \__tenkz_kernel_node_item:Nn #1 {row} }
+    \int_set:Nn \l__tenkz_kernel_claim_col_int
+      { \__tenkz_kernel_node_item:Nn #1 {col} }
+    \int_set:Nn \l__tenkz_kernel_pop_int
+      { \__tenkz_kernel_node_item:Nn #1 {member} }
+    \__tenkz_kernel_basis_cell_aligned:TF
+      {
+        \int_compare:nNnTF { \l__tenkz_kernel_pop_int } = {1}
+          {
+            \__tenkz_kernel_claim_span:nnN
+              { \l__tenkz_kernel_claim_row_int }
+              { \l__tenkz_kernel_claim_col_int }
+              #2
+            \bool_if:NF \l__tenkz_kernel_claim_collision_bool
+              { \__tenkz_kernel_complete_member:Nnn #2 {0}{0} }
+          }
+          {
+            \msg_error:nnnnn {tenkz}{kernel-frame-member-range}
+              { \int_use:N \l__tenkz_kernel_claim_row_int }
+              { \int_use:N \l__tenkz_kernel_claim_col_int }
+              { \int_use:N \l__tenkz_kernel_pop_int }
+          }
+      }
+      {
+        \bool_lazy_or:nnTF
+          { \int_compare_p:nNn { \l__tenkz_kernel_pop_int } < {1} }
+          {
+            \int_compare_p:nNn
+              { \l__tenkz_kernel_pop_int }
+              > { \l__tenkz_kernel_basis_count_int }
+          }
+          {
+            \msg_error:nnnnn {tenkz}{kernel-frame-member-range}
+              { \int_use:N \l__tenkz_kernel_claim_row_int }
+              { \int_use:N \l__tenkz_kernel_claim_col_int }
+              { \int_use:N \l__tenkz_kernel_pop_int }
+          }
+          {
+            \__tenkz_kernel_claim_member_span:N #2
+            \bool_if:NF \l__tenkz_kernel_claim_collision_bool
+              {
+                \prop_get:NeN \l__tenkz_kernel_basis_east_prop
+                  { \int_use:N \l__tenkz_kernel_pop_int }
+                  \l__tenkz_kernel_claim_owner_tl
+                \prop_get:NeN \l__tenkz_kernel_basis_north_prop
+                  { \int_use:N \l__tenkz_kernel_pop_int }
+                  \l__tenkz_kernel_frame_tl
+                \__tenkz_kernel_complete_member:Nnn #2
+                  { \l__tenkz_kernel_claim_owner_tl }
+                  { \l__tenkz_kernel_frame_tl }
+              }
+          }
       }
   }
 
@@ -1496,7 +1917,9 @@
     \__tenkz_model_record_frame:e
       { map = group , group = g \int_use:N \g__tenkz_kernel_group_int }
     \prop_clear:N \l__tenkz_kernel_stage_prop
+    \bool_set_true:N \l__tenkz_kernel_group_keys_bool
     \__tenkz_kernel_keys:nn { tenkz-kernel-picture } {#1}
+    \bool_set_false:N \l__tenkz_kernel_group_keys_bool
     \__tenkz_kernel_commit:
     #2
   }
@@ -1506,8 +1929,8 @@
   {
     \prop_clear:N \l__tenkz_kernel_stage_prop
     \__tenkz_kernel_keys:nn { tenkz-kernel-setup } {#1}
-    \prop_map_inline:Nn \l__tenkz_kernel_stage_prop
-      { \prop_put:Nnn \g__tenkz_kernel_setup_prop {##1} {##2} }
+    \__tenkz_kernel_policy_merge:NN
+      \l__tenkz_kernel_stage_prop \g__tenkz_kernel_setup_prop
     \prop_clear:N \l__tenkz_kernel_stage_prop
   }
 
@@ -1598,31 +2021,140 @@
 % with origin fields, before the freeze.  The physical= expander completes
 % every chain atom's outward port here, at the same pre-freeze moment.
 
-% "The frame populates and the body overrides": each non-wire row of a
-% chain frame yields one atom per cell the body left unclaimed.  A wire row
-% is a rail and populates nothing.
+% "The frame populates and the body overrides": an explicit basis creates one
+% ordinary addressed atom per cell per member.  Without a basis, each
+% non-wire row yields one atom per cell the body left unclaimed; a wire row is
+% a rail and populates nothing.
 \int_new:N \l__tenkz_kernel_pop_int
+\cs_new_protected:Npn \__tenkz_kernel_populate_basis_member:nnn #1#2#3
+  {
+    \prop_get:NnN \l__tenkz_kernel_basis_claim_prop {#1-#2-#3}
+      \l__tenkz_kernel_scratch_tl
+    \quark_if_no_value:NT \l__tenkz_kernel_scratch_tl
+      {
+        \prop_get:NnN \l__tenkz_kernel_cell_prop {#1-#2}
+          \l__tenkz_kernel_scratch_tl
+        \quark_if_no_value:NT \l__tenkz_kernel_scratch_tl
+          {
+            \__tenkz_model_record_atom:e
+              {
+                kind = tn ,
+                populated = \prop_item:Nn \l__tenkz_kernel_basis_kind_prop {#3} ,
+                addr = { (#1,#2,#3) } ,
+                cell-row = #1 , cell-col = #2 , member = #3 ,
+                basis-east = \prop_item:Nn \l__tenkz_kernel_basis_east_prop {#3} ,
+                basis-north = \prop_item:Nn \l__tenkz_kernel_basis_north_prop {#3}
+              }
+            \tl_set:NV \l__tenkz_kernel_scratch_tl \l__tenkz_model_last_tl
+          }
+      }
+    \prop_put:NnV \l__tenkz_kernel_basis_cell_prop {#1-#2-#3}
+      \l__tenkz_kernel_scratch_tl
+    \int_compare:nNnT { \l__tenkz_kernel_basis_count_int } = {1}
+      {
+        \prop_put:NnV \l__tenkz_kernel_cell_prop {#1-#2}
+          \l__tenkz_kernel_scratch_tl
+      }
+  }
+\prg_new_protected_conditional:Npnn
+  \__tenkz_kernel_basis_cell_aligned: { T, F, TF }
+  {
+    \int_compare:nNnTF { \l__tenkz_kernel_basis_count_int } = {0}
+      { \prg_return_true: }
+      {
+        \int_compare:nNnTF { \l__tenkz_kernel_basis_count_int } = {1}
+          {
+            \prop_get:NnN
+              \l__tenkz_kernel_basis_east_prop {1} \l_tmpa_tl
+            \prop_get:NnN
+              \l__tenkz_kernel_basis_north_prop {1} \l_tmpb_tl
+            \bool_lazy_and:nnTF
+              { \int_compare_p:nNn { \l_tmpa_tl } = {0} }
+              { \int_compare_p:nNn { \l_tmpb_tl } = {0} }
+              { \prg_return_true: }
+              { \prg_return_false: }
+          }
+          { \prg_return_false: }
+      }
+  }
+\cs_new_protected:Npn \__tenkz_kernel_basis_policy_validate:
+  {
+    \__tenkz_kernel_basis_cell_aligned:F
+      {
+        \clist_map_inline:nn {trace,open}
+          {
+            \prop_if_in:NnT \l__tenkz_kernel_policy_prop {##1}
+              {
+                \msg_error:nnn {tenkz}{kernel-frame-basis-policy} {##1}
+                \prop_remove:Nn \l__tenkz_kernel_policy_prop {##1}
+              }
+          }
+        \prop_get:NnN
+          \l__tenkz_kernel_policy_prop {physical} \l__tenkz_kernel_scratch_tl
+        \quark_if_no_value:NF \l__tenkz_kernel_scratch_tl
+          {
+            \str_if_eq:VnF \l__tenkz_kernel_scratch_tl {none}
+              {
+                \msg_error:nnn {tenkz}{kernel-frame-basis-policy} {physical}
+                \prop_put:Nnn \l__tenkz_kernel_policy_prop {physical} {none}
+              }
+          }
+        \clist_map_inline:nn {west,east,north,south}
+          {
+            \prop_get:NnN
+              \l__tenkz_kernel_policy_prop {##1} \l__tenkz_kernel_scratch_tl
+            \quark_if_no_value:NF \l__tenkz_kernel_scratch_tl
+              {
+                \str_if_eq:VnF \l__tenkz_kernel_scratch_tl {none}
+                  {
+                    \msg_error:nnn {tenkz}{kernel-frame-basis-policy} {##1}
+                    \prop_put:Nnn \l__tenkz_kernel_policy_prop {##1} {none}
+                  }
+              }
+          }
+      }
+  }
 \cs_new_protected:Npn \__tenkz_kernel_populate:
   {
-    \prop_get:NnN \l__tenkz_kernel_policy_prop {rows} \l__tenkz_kernel_scratch_tl
-    \quark_if_no_value:NF \l__tenkz_kernel_scratch_tl
+    \int_compare:nNnTF { \l__tenkz_kernel_basis_count_int } > {0}
       {
-        \int_zero:N \l__tenkz_kernel_pop_int
-        \clist_map_inline:Vn \l__tenkz_kernel_scratch_tl
+        \int_step_inline:nn { \__tenkz_kernel_rows: }
           {
-            \int_incr:N \l__tenkz_kernel_pop_int
-            \str_if_eq:nnF {##1} {wire}
+            \int_step_inline:nn { \__tenkz_kernel_cols: }
               {
-                \int_step_inline:nn { \__tenkz_kernel_cols: }
+                \int_step_inline:nn { \l__tenkz_kernel_basis_count_int }
                   {
-                    \prop_if_in:NeF \l__tenkz_kernel_cell_prop
-                      { \int_use:N \l__tenkz_kernel_pop_int - ####1 }
+                    \__tenkz_kernel_populate_basis_member:nnn
+                      {##1}{####1}{########1}
+                  }
+              }
+          }
+      }
+      {
+        \prop_get:NnN
+          \l__tenkz_kernel_policy_prop {rows} \l__tenkz_kernel_scratch_tl
+        \quark_if_no_value:NF \l__tenkz_kernel_scratch_tl
+          {
+            \int_zero:N \l__tenkz_kernel_pop_int
+            \clist_map_inline:Vn \l__tenkz_kernel_scratch_tl
+              {
+                \int_incr:N \l__tenkz_kernel_pop_int
+                \str_if_eq:nnF {##1} {wire}
+                  {
+                    \int_step_inline:nn { \__tenkz_kernel_cols: }
                       {
-                        \__tenkz_model_record_atom:e
+                        \prop_if_in:NeF \l__tenkz_kernel_cell_prop
+                          { \int_use:N \l__tenkz_kernel_pop_int - ####1 }
                           {
-                            kind = tn , populated = ##1 ,
-                            addr = { ( \int_use:N \l__tenkz_kernel_pop_int ,
-                                       ####1 ) }
+                            \__tenkz_model_record_atom:e
+                              {
+                                kind = tn , populated = ##1 ,
+                                addr =
+                                  {
+                                    ( \int_use:N \l__tenkz_kernel_pop_int ,
+                                      ####1 )
+                                  }
+                              }
                           }
                       }
                   }
@@ -1783,6 +2315,8 @@
       { \tl_set:Nn \l__tenkz_kernel_scratch_tl {grid} }
     \str_if_eq:VnT \l__tenkz_kernel_scratch_tl {grid}
       {
+        \__tenkz_kernel_basis_cell_aligned:TF
+          {
         \int_step_inline:nn { \__tenkz_kernel_rows: }
           {
             \int_step_inline:nn { \__tenkz_kernel_cols: - 1 }
@@ -1829,6 +2363,8 @@
                   }
               }
           }
+          }
+          { \msg_error:nn {tenkz}{kernel-frame-basis-grid} }
       }
   }
 
@@ -2237,6 +2773,25 @@
     \tl_set:Ne #3 { \seq_item:Nn \l__tenkz_kernel_match_seq {3} }
   }
 
+\cs_new_protected:Npn \__tenkz_kernel_basis_record_maybe:nnnN #1#2#3#4
+  {
+    \int_compare:nNnTF { \l__tenkz_kernel_basis_count_int } = {0}
+      {
+        \int_compare:nNnTF {#3} = {1}
+          { \__tenkz_kernel_select_cell:nnN {#1}{#2} #4 }
+          { \tl_set:Nn #4 { \q_no_value } }
+      }
+      { \prop_get:NnN \l__tenkz_kernel_basis_cell_prop {#1-#2-#3} #4 }
+  }
+\cs_new_protected:Npn \__tenkz_kernel_basis_record:nnnN #1#2#3#4
+  {
+    \__tenkz_kernel_basis_record_maybe:nnnN {#1}{#2}{#3} #4
+    \quark_if_no_value:NT #4
+      { \msg_error:nnnnn {tenkz}{kernel-frame-member-range} {#1}{#2}{#3} }
+  }
+\cs_generate_variant:Nn \__tenkz_kernel_basis_record_maybe:nnnN { eeeN }
+\cs_generate_variant:Nn \__tenkz_kernel_basis_record:nnnN { eeeN }
+
 % The grid cell an atom occupies, whichever way the author placed it: the
 % body's implicit cell arrives as address TEXT, an "at=" or named placement
 % as an address NODE.  Ports and physical legs are offsets from that cell,
@@ -2519,6 +3074,54 @@
       }
   }
 
+\cs_new_protected:Npn \__tenkz_kernel_r_atom_place_span:n #1
+  {
+    \__tenkz_kernel_r_span:nNN {#1}
+      \l__tenkz_kernel_r_b_tl \l__tenkz_kernel_r_c_tl
+    \__tenkz_geom_place_cell:nnee {#1} {kpic}
+      {
+        \fp_eval:n
+          {
+            \l__tenkz_kernel_r_row_tl
+            + ( \l__tenkz_kernel_r_c_tl - 1 ) / 2
+          }
+      }
+      {
+        \fp_eval:n
+          {
+            \l__tenkz_kernel_r_col_tl
+            + ( \l__tenkz_kernel_r_b_tl - 1 ) / 2
+          }
+      }
+  }
+
+\cs_new_protected:Npn \__tenkz_kernel_r_atom_place_member_span:n #1
+  {
+    \__tenkz_model_get:nnN
+      {#1} {basis-east} \l__tenkz_kernel_r_x_tl
+    \__tenkz_model_get:nnN
+      {#1} {basis-north} \l__tenkz_kernel_r_y_tl
+    \__tenkz_kernel_r_span:nNN {#1}
+      \l__tenkz_kernel_r_b_tl \l__tenkz_kernel_r_c_tl
+    \__tenkz_geom_place_cell:nnee {#1} {kpic}
+      {
+        \fp_eval:n
+          {
+            \l__tenkz_kernel_r_row_tl
+            + ( \l__tenkz_kernel_r_c_tl - 1 ) / 2
+            - \l__tenkz_kernel_r_y_tl / 4
+          }
+      }
+      {
+        \fp_eval:n
+          {
+            \l__tenkz_kernel_r_col_tl
+            + ( \l__tenkz_kernel_r_b_tl - 1 ) / 2
+            + \l__tenkz_kernel_r_x_tl / 4
+          }
+      }
+  }
+
 \cs_new_protected:Npn \__tenkz_kernel_r_atom_place:n #1
   {
     \__tenkz_model_get:nnN {#1} {addr} \l__tenkz_kernel_r_tl
@@ -2542,22 +3145,13 @@
       {
         \exp_args:NV \__tenkz_kernel_r_rc:nNN \l__tenkz_kernel_r_tl
           \l__tenkz_kernel_r_row_tl \l__tenkz_kernel_r_col_tl
-        \__tenkz_kernel_r_span:nNN {#1}
-          \l__tenkz_kernel_r_b_tl \l__tenkz_kernel_r_c_tl
-        \__tenkz_geom_place_cell:nnee {#1} {kpic}
+        \__tenkz_model_get:nnN {#1} {member} \l__tenkz_kernel_r_b_tl
+        \quark_if_no_value:NTF \l__tenkz_kernel_r_b_tl
+          { \__tenkz_kernel_r_atom_place_span:n {#1} }
           {
-            \fp_eval:n
-              {
-                \l__tenkz_kernel_r_row_tl
-                + ( \l__tenkz_kernel_r_c_tl - 1 ) / 2
-              }
-          }
-          {
-            \fp_eval:n
-              {
-                \l__tenkz_kernel_r_col_tl
-                + ( \l__tenkz_kernel_r_b_tl - 1 ) / 2
-              }
+            \__tenkz_kernel_basis_cell_aligned:TF
+              { \__tenkz_kernel_r_atom_place_span:n {#1} }
+              { \__tenkz_kernel_r_atom_place_member_span:n {#1} }
           }
       }
   }
@@ -2707,6 +3301,19 @@
           }
         {record}
           { \__tenkz_kernel_dep_add:e { \__tenkz_kernel_r_item:nn {#1} {name} } }
+        {member}
+          {
+            \__tenkz_kernel_basis_record:eeeN
+              { \__tenkz_kernel_r_item:nn {#1} {row} }
+              { \__tenkz_kernel_r_item:nn {#1} {col} }
+              { \__tenkz_kernel_r_item:nn {#1} {member} }
+              \l__tenkz_kernel_dep_look_tl
+            \quark_if_no_value:NF \l__tenkz_kernel_dep_look_tl
+              {
+                \tl_put_right:Ne \l__tenkz_kernel_dep_acc_tl
+                  { { \tl_use:N \l__tenkz_kernel_dep_look_tl } }
+              }
+          }
         {port}
           {
             \prop_get:NeN \l__tenkz_kernel_node_prop {#1/record-id}
@@ -2885,6 +3492,19 @@
             \__tenkz_geom_place_cell:nnee {#2} {kpic}
               { \__tenkz_kernel_r_item:nn {#2} {row} }
               { \__tenkz_kernel_r_item:nn {#2} {col} }
+          }
+        {member}
+          {
+            \__tenkz_kernel_basis_record:eeeN
+              { \__tenkz_kernel_r_item:nn {#2} {row} }
+              { \__tenkz_kernel_r_item:nn {#2} {col} }
+              { \__tenkz_kernel_r_item:nn {#2} {member} }
+              \l__tenkz_kernel_r_tl
+            \quark_if_no_value:NF \l__tenkz_kernel_r_tl
+              {
+                \__tenkz_geom_place_rel:nVee {#2}
+                  \l__tenkz_kernel_r_tl {0}{0}
+              }
           }
         {rel}
           {
@@ -3165,6 +3785,14 @@
         % a braced list: every member is an address in its own right
         \tl_set:Ne \l__tenkz_kernel_sel_tl
           { \exp_args:NV \tl_head:n \l__tenkz_kernel_sel_tl }
+        \regex_replace_all:nnN
+          { \( \s* (\d+) \s* , \s* (\d+) \s* , \s* (\d+) \s* \) }
+          { \cB\{ \( \1 , \2 , \3 \) \cE\} }
+          \l__tenkz_kernel_sel_tl
+        \regex_replace_all:nnN
+          { \( \s* (\d+) \s* , \s* (\d+) \s* \) }
+          { \cB\{ \( \1 , \2 \) \cE\} }
+          \l__tenkz_kernel_sel_tl
         \exp_args:NV \clist_map_inline:nn \l__tenkz_kernel_sel_tl
           {
             \__tenkz_kernel_select_addr:nN
@@ -3229,9 +3857,17 @@
           {
             {cell}
               {
-                \exp_args:Nee \__tenkz_kernel_select_cell:nnN
+                \exp_args:Nee \__tenkz_kernel_select_cell_records:nnN
                   { \__tenkz_kernel_node_item:Nn \l_tmpb_tl {row} }
                   { \__tenkz_kernel_node_item:Nn \l_tmpb_tl {col} }
+                  #2
+              }
+            {member}
+              {
+                \__tenkz_kernel_basis_record:eeeN
+                  { \__tenkz_kernel_node_item:Nn \l_tmpb_tl {row} }
+                  { \__tenkz_kernel_node_item:Nn \l_tmpb_tl {col} }
+                  { \__tenkz_kernel_node_item:Nn \l_tmpb_tl {member} }
                   \l_tmpb_tl
                 \quark_if_no_value:NTF \l_tmpb_tl
                   { \__tenkz_kernel_selector_reject:n {#1} }
@@ -3324,15 +3960,8 @@
                       { \l__tenkz_kernel_sel_col_b_tl }
                   }
                   {
-                    \__tenkz_kernel_select_cell:nnN
-                      {##1} {####1} \l_tmpb_tl
-                    \quark_if_no_value:NF \l_tmpb_tl
-                      {
-                        \__tenkz_kernel_select_record:VnN
-                          \l_tmpb_tl
-                          { \__tenkz_kernel_node_item:nn {#1} {text} }
-                          #2
-                      }
+                    \__tenkz_kernel_select_cell_records_maybe:nnN
+                      {##1} {####1} #2
                   }
               }
           }
@@ -3369,6 +3998,40 @@
               }
           }
       }
+  }
+\cs_new_protected:Npn \__tenkz_kernel_select_cell_records_maybe:nnN #1#2#3
+  {
+    \int_compare:nNnTF { \l__tenkz_kernel_basis_count_int } > {0}
+      {
+        \int_step_inline:nn { \l__tenkz_kernel_basis_count_int }
+          {
+            \__tenkz_kernel_basis_record_maybe:nnnN
+              {#1}{#2}{##1} \l_tmpb_tl
+            \quark_if_no_value:NF \l_tmpb_tl
+              {
+                \seq_if_in:NVF #3 \l_tmpb_tl
+                  {
+                    \__tenkz_kernel_select_record:VnN
+                      \l_tmpb_tl {(#1,#2)} #3
+                  }
+              }
+          }
+      }
+      {
+        \__tenkz_kernel_select_cell:nnN {#1}{#2} \l_tmpb_tl
+        \quark_if_no_value:NF \l_tmpb_tl
+          {
+            \__tenkz_kernel_select_record:VnN
+              \l_tmpb_tl {(#1,#2)} #3
+          }
+      }
+  }
+\cs_new_protected:Npn \__tenkz_kernel_select_cell_records:nnN #1#2#3
+  {
+    \int_set:Nn \l_tmpa_int { \seq_count:N #3 }
+    \__tenkz_kernel_select_cell_records_maybe:nnN {#1}{#2} #3
+    \int_compare:nNnT { \seq_count:N #3 } = { \l_tmpa_int }
+      { \__tenkz_kernel_selector_reject:n {(#1,#2)} }
   }
 \tl_new:N \l__tenkz_kernel_sel_row_tl
 \tl_new:N \l__tenkz_kernel_sel_col_tl
@@ -8432,12 +9095,19 @@
     \prop_clear:N \l__tenkz_kernel_skin_pairing_cross_prop
     \prop_clear:N \l__tenkz_kernel_policy_prop
     \prop_clear:N \l__tenkz_kernel_cell_prop
+    \prop_clear:N \l__tenkz_kernel_basis_cell_prop
+    \prop_clear:N \l__tenkz_kernel_basis_claim_prop
+    \prop_clear:N \l__tenkz_kernel_basis_kind_prop
+    \prop_clear:N \l__tenkz_kernel_basis_east_prop
+    \prop_clear:N \l__tenkz_kernel_basis_north_prop
     \prop_clear:N \l__tenkz_kernel_stage_prop
     \seq_clear:N \l__tenkz_kernel_stack_seq
     \int_set:Nn \l__tenkz_kernel_row_int { 1 }
     \int_set:Nn \l__tenkz_kernel_col_int { 1 }
     \int_set:Nn \l__tenkz_kernel_row_advance_int { 1 }
     \int_zero:N \l__tenkz_kernel_node_int
+    \int_zero:N \l__tenkz_kernel_basis_count_int
+    \bool_set_false:N \l__tenkz_kernel_group_keys_bool
     \__tenkz_kernel_keys:nn { tenkz-kernel-picture } {#1}
     % check= belongs to the equation wrapper.  A valid tenkzeq consumes it
     % before any panel begins, so seeing it here always means picture scope.
@@ -8449,16 +9119,17 @@
           { \tl_use:N \l__tenkz_kernel_scratch_tl }
         \prop_remove:Nn \l__tenkz_kernel_stage_prop {check}
       }
-    \prop_map_inline:Nn \g__tenkz_kernel_setup_prop
-      { \prop_put:Nnn \l__tenkz_kernel_stage_prop {##1} {##2} }
+    \__tenkz_kernel_policy_merge:NN
+      \g__tenkz_kernel_setup_prop \l__tenkz_kernel_stage_prop
     % Equation policy is the shared outer context, so it overrides a
     % conflicting panel spelling.  `check` was removed by eq_begin and never
     % becomes a picture field.
     \bool_if:NT \l__tenkz_kernel_ineq_bool
       {
-        \prop_map_inline:Nn \l__tenkz_kernel_eq_policy_prop
-          { \prop_put:Nnn \l__tenkz_kernel_stage_prop {##1} {##2} }
+        \__tenkz_kernel_policy_merge:NN
+          \l__tenkz_kernel_eq_policy_prop \l__tenkz_kernel_stage_prop
       }
+    \__tenkz_kernel_basis_rehydrate:
     % the staged picture keys become the picture record and the policy the
     % closure pass reads after the body ran
     \prop_set_eq:NN \l__tenkz_kernel_policy_prop \l__tenkz_kernel_stage_prop
@@ -8473,6 +9144,7 @@
   }
 \cs_new_protected:Npn \__tenkz_kernel_end:
   {
+    \__tenkz_kernel_basis_policy_validate:
     \__tenkz_kernel_populate:
     \__tenkz_kernel_skin_pairings:
     \__tenkz_kernel_prepare_cell_policies:

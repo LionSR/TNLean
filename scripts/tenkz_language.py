@@ -59,6 +59,7 @@ _PARSER_FAMILY_SCOPE = {
     "declare atom": "atom-declaration",
     # the 1.0 kernel trees (l3keys); scopes mirror LANGUAGE-1.0.md section 2
     "kernel-picture": "kernel-picture",
+    "kernel-frame": "kernel-frame",
     "kernel-atom": "kernel-atom",
     "kernel-wire": "kernel-wire",
     "kernel-mark": "kernel-mark",

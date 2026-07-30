@@ -1,0 +1,13 @@
+%% Regression: an outer bare frame replaces a panel frame and its basis.
+\documentclass{standalone}
+\usepackage{tenkz}
+\begin{document}
+\tenkzkernel
+\begin{tenkzeq}[frame=circle, bonds=none, west=none, east=none,
+                north=none, south=none, check={signature}]
+  \begin{tenkz}[rows={wire}, cols=1,
+                frame={flat,basis={ket at (0,0),bra at (2,0)}}]\end{tenkz}
+  =
+  \begin{tenkz}[rows={wire}, cols=1]\end{tenkz}
+\end{tenkzeq}
+\end{document}

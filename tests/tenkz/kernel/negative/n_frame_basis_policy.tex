@@ -1,0 +1,10 @@
+%% Negative regression: cell-level topology policy has no multi-member
+%% interpretation; authors declare the intended member wires explicitly.
+\documentclass{standalone}
+\usepackage{tenkz}
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[lattice={1x1}, bonds=none, physical=up,
+              frame={flat,basis={ket at (-1,0),ket at (1,0)}}]
+\end{tenkz}
+\end{document}

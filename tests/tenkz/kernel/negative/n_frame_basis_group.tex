@@ -1,0 +1,11 @@
+%% Negative regression: the foundation does not mutate picture basis state
+%% from a nested group.
+\documentclass{standalone}
+\usepackage{tenkz}
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[lattice={1x1}, bonds=none,
+              frame={flat,basis={wire at (0,0),wire at (1,0)}}]
+  \tngroup[frame={plane,basis={wire at (0,0)}}]{}
+\end{tenkz}
+\end{document}
