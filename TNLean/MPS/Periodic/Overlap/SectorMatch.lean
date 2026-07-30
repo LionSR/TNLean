@@ -1758,6 +1758,46 @@ lemma sectorTensor_proportional_of_blockedMatch
         List.prod_ofFn_smul a (fun k => T k (σ k) * X k)
     rw [hfactor] at hweighted
     simpa only [z, smul_smul] using hweighted
+  have hP_U : ∀ k, P k * U' k = U' k := by
+    intro k
+    calc
+      P k * U' k = P k * (P k * U' k * Q (k + q')) := by
+        rw [← hU'_corner k]
+      _ = P k * U' k * Q (k + q') := by
+        rw [← Matrix.mul_assoc (P k) (P k * U' k) (Q (k + q')),
+          ← Matrix.mul_assoc (P k) (P k) (U' k), (hP_proj k).2]
+      _ = U' k := (hU'_corner k).symm
+  have hUstar_P : ∀ k, (U' k)ᴴ * P k = (U' k)ᴴ := by
+    intro k
+    have h := congrArg (fun M : MatrixAlg D => Mᴴ) (hP_U k)
+    simpa only [Matrix.conjTranspose_mul, (hP_proj k).1.eq] using h
+  have hAcorner_left : ∀ k i,
+      P k * cornerLetter P A k i = cornerLetter P A k i := by
+    intro k i
+    simp only [cornerLetter, ← Matrix.mul_assoc, (hP_proj k).2]
+  have hAcorner_right : ∀ k i,
+      cornerLetter P A k i * P (k + 1) = cornerLetter P A k i := by
+    intro k i
+    simp only [cornerLetter, Matrix.mul_assoc, (hP_proj (k + 1)).2]
+  have hT_left : ∀ k i, P k * T k i = T k i := by
+    intro k i
+    simp only [T, ← Matrix.mul_assoc, hP_U]
+  have hT_right : ∀ k i, T k i * P (k + 1) = T k i := by
+    intro k i
+    simp only [T, Matrix.mul_assoc, hUstar_P]
+  have hresult :
+      ∀ σ : Fin m → Fin d,
+        (⨂ₜ[ℂ] k : Fin m, cornerLetter P A k (σ k)) =
+          z • (⨂ₜ[ℂ] k : Fin m, T k (σ k)) := by
+    intro σ
+    exact piTensorProduct_eq_smul_of_corner_cyclic_products
+      P (fun k => cornerLetter P A k (σ k)) (fun k => T k (σ k)) z
+      hP_proj
+      (fun k => hAcorner_left k (σ k))
+      (fun k => hAcorner_right k (σ k))
+      (fun k => hT_left k (σ k))
+      (fun k => hT_right k (σ k))
+      (fun X hX => hInsertedProduct σ X hX)
   -- Remaining obligation (arXiv:1708.00029 lines 1023--1117): an `m`-factor cyclic
   -- contraction theorem built from the common `L` and the sum-form right inverses
   -- `Ω u` satisfying `hΩ`; after producing the uniform product-tensor identity,
