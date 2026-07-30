@@ -1430,6 +1430,39 @@ lemma sectorTensor_proportional_of_blockedMatch
     exists_ambientCornerRightInverse_of_sectorRightInverse
       P A blocksA' φA' hP_proj hP_shift hφA'_mul hA'_letter
       L hL_pos Ω' hΩ'
+  let T : Fin m → Fin d → MatrixAlg D :=
+    fun k i => U' k * cornerLetter Q B (k + q') i * (U' (k + 1))ᴴ
+  let G : Fin m → (Fin (m * L) → Fin d) → MatrixAlg D :=
+    fun k ρ =>
+      U' k * cornerProd Q B (k + q') (List.ofFn ρ) * (U' k)ᴴ
+  have hBcombined :
+      ∀ (σ : Fin m → Fin d) (ρ : Fin m → (Fin (m * L) → Fin d)),
+        U' 0 * cornerProd Q B q' (combinedWord σ ρ) * (U' 0)ᴴ =
+          (List.ofFn (fun k => T k (σ k) * G (k + 1) (ρ k))).prod := by
+    intro σ ρ
+    have hm : m.pred + 1 = m := Nat.succ_pred_eq_of_pos (NeZero.pos m)
+    have hchain :=
+      cyclic_transport_cornerProd_segments Q B q' U' hQ_proj hQ_shift
+        hU'_star_U (segments σ ρ) (hsegments σ ρ) 0 m.pred
+    rw [hm, nsmul_card_one_fin, zero_add] at hchain
+    have hchain' :
+        U' 0 * cornerProd Q B q' (combinedWord σ ρ) * (U' 0)ᴴ =
+          (cyclicList
+            (fun k => U' k * cornerProd Q B (k + q') (segments σ ρ k) *
+              (U' (k + 1))ᴴ) 0 m).prod := by
+      simpa only [combinedWord, zero_add] using hchain.symm
+    rw [hchain']
+    rw [cyclicList_zero_card_eq_ofFn]
+    apply congrArg List.prod
+    apply List.ofFn_inj.mpr
+    funext k
+    change U' k * cornerProd Q B (k + q') (σ k :: List.ofFn (ρ k)) *
+        (U' (k + 1))ᴴ =
+      (U' k * cornerLetter Q B (k + q') (σ k) * (U' (k + 1))ᴴ) *
+        (U' (k + 1) * cornerProd Q B (k + 1 + q') (List.ofFn (ρ k)) *
+          (U' (k + 1))ᴴ)
+    exact transported_cornerProd_cons Q B q' U' hQ_proj hU'_star_U k
+      (σ k) (List.ofFn (ρ k))
   -- Remaining obligation (arXiv:1708.00029 lines 1023--1117): an `m`-factor cyclic
   -- contraction theorem built from the common `L` and the sum-form right inverses
   -- `Ω u` satisfying `hΩ`; after producing the uniform product-tensor identity,
