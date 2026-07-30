@@ -40,7 +40,7 @@ project import.
 
 ### Section 2.1 Choi–Jamiolkowski and Kraus
 
-* **Proposition 2.1** (CJ isomorphism):
+* **Proposition 2.1** (CJ isomorphism, square specialization only):
   - `ChoiJamiolkowski.choiMatrix` — Choi matrix `τ = (T ⊗ id)(|Ω⟩⟨Ω|)` ✓
   - `ChoiJamiolkowski.cp_iff_choi_posSemidef` — CP ↔ `τ ≥ 0` ✓
   - `ChoiJamiolkowski.traceLeft_choiMatrix_of_tp` — TP ⟹ `tr_A(τ) = 𝟙/D` ✓
@@ -55,8 +55,13 @@ project import.
     `Channel.hasKrausRankLE_choiRank_of_cp` /
     `Channel.hasKrausRankLE_choiRank_of_cptp`
     — minimal Kraus constructions from the Choi spectral decomposition ✓
+  - The different-dimension Choi correspondence, general adjoint
+    partial-trace and trace-normalization identities, converse partial-trace
+    clauses, and doubly-stochastic clause are not yet formalized, so
+    Proposition 2.1 is not marked complete; see
+    `docs/paper-gaps/choi_rectangular_scope.tex`.
 
-* **Theorem 2.1** (Kraus representation):
+* **Theorem 2.1** (Kraus representation, square development):
   - `kraus_tp_of_sum_conjTranspose_mul` — `∑Kᵢ†Kᵢ = 𝟙` ⟹ TP ✓
   - `kraus_sum_conjTranspose_mul_of_tp` — TP ⟹ `∑Kᵢ†Kᵢ = 𝟙` ✓
   - `kraus_sum_mul_conjTranspose_of_unital` — unital ⟹ `∑KᵢKᵢ† = 𝟙` ✓
@@ -73,6 +78,9 @@ project import.
     — Wolf Theorem 2.18 in isometric form, including zero-padding of the smaller family ✓
   - `kraus_unitary_freedom_iff`
     — Wolf Theorem 2.18 in same-size unitary form ✓
+  - The full rectangular existence, minimal-rank, orthogonal-family, and
+    padded-unitary statement is not yet formalized; see
+    `docs/paper-gaps/choi_rectangular_scope.tex`.
 
 * **Theorem 2.2** (Stinespring dilation):
   - `stinespring_dual_representation` — `T*(A) = V†(A ⊗ 𝟙)V` ✓

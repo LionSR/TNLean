@@ -78,19 +78,6 @@ dimensions.
 
 open scoped Matrix BigOperators ComplexOrder
 
-/-- A **completely positive map** in rectangular Kraus form
-`S(X) = ∑ᵢ Aᵢ X Aᵢ†`.  Rectangular Kraus operators
-`Aᵢ : Matrix β α ℂ` allow different input and output dimensions.
-
-This is the dimension-changing Kraus notion used for the support formula of
-the Petz transpose map in Hayden--Jozsa--Petz--Winter,
-arXiv:quant-ph/0304007v2, Theorem 3, equation (8).  No trace-preservation
-condition is included. -/
-def IsKrausCP {α β : Type*} [Fintype α] [DecidableEq α] [Fintype β] [DecidableEq β]
-    (S : Matrix α α ℂ →ₗ[ℂ] Matrix β β ℂ) : Prop :=
-  ∃ (r : ℕ) (A : Fin r → Matrix β α ℂ),
-    ∀ X, S X = ∑ i, A i * X * (A i)ᴴ
-
 /-- For maps between the same matrix algebra, rectangular Kraus complete
 positivity is exactly the existing square-map predicate `IsCPMap`. -/
 theorem isKrausCP_iff_isCPMap

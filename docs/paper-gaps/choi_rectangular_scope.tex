@@ -1,0 +1,127 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+
+\input{command}
+
+\title{The Square-Dimensional Scope of the Choi--Jamiolkowski Correspondence}
+\author{}
+\date{2026-07-30}
+
+\begin{document}
+\maketitle
+
+\section{The source statement}
+
+Let $T:\MN{d}\to\MN{d'}$ be linear and let
+$\Omega_d\in\C^d\otimes\C^d$ be maximally entangled.  Wolf
+Proposition~2.1 associates to $T$ the operator
+\begin{align}
+    \tau_T
+      &= (T\otimes\operatorname{id}_d)
+         \bigl(\ketbra{\Omega_d}{\Omega_d}\bigr)
+       \in \MN{d'}\otimes\MN{d},
+    \tag{Wolf 2.1}\\
+    \tr\!\bigl(A\,T(B)\bigr)
+      &= d\,\tr\!\bigl(\tau_T(A\otimes B^{T})\bigr)
+    \qquad
+    (A\in\MN{d'},\ B\in\MN{d}).
+    \tag{Wolf 2.1}
+\end{align}
+These two formulas give mutually inverse correspondences between linear maps
+and bipartite operators.  They identify Hermiticity preservation with
+$\tau_T=\tau_T^\dagger$, complete positivity with $\tau_T\geq0$, unitality
+with
+\begin{align}
+    \tr_B(\tau_T)&=\frac{\Id_{d'}}{d},
+\end{align}
+and trace preservation with
+\begin{align}
+    \tr_A(\tau_T)&=\frac{\Id_d}{d}.
+\end{align}
+More generally, without assuming trace preservation, the source gives
+\begin{align}
+    \tr_A(\tau_T)
+      &= \frac{\bigl(T^*(\Id_{d'})\bigr)^T}{d},
+    &
+    \tr(\tau_T)
+      &= \frac{\tr\!\bigl(T^*(\Id_{d'})\bigr)}{d}.
+\end{align}
+It also gives the corresponding proportional-identity criterion for a
+doubly-stochastic map \cite[Proposition~2.1]{Wolf2012Quantum}.
+
+\section{The square specialization}
+
+The present Choi matrix takes a linear endomorphism
+$T:\MN{D}\to\MN{D}$ and produces an operator on
+$\C^D\otimes\C^D$.\footnote{Formal definition:
+\leanid{ChoiJamiolkowski.choiMatrix} in
+\doclink{TNLean/Channel/ChoiJamiolkowski}.}
+Within this specialization, the development proves the complete-positivity
+equivalence, the Hermiticity-preservation equivalence, and the implication
+from trace preservation to
+\begin{align}
+    \tr_A(\tau_T)&=\frac{\Id_D}{D}.
+\end{align}
+It consequently proves $\tr(\tau_T)=1$ for trace-preserving maps.  It does not
+yet prove the general adjoint partial-trace identity or the general trace
+normalization identity displayed above.
+Thus these results agree with Wolf Proposition~2.1 after imposing $d=d'$,
+but they do not constitute its different-dimension statement.
+
+\section{Missing clauses}
+
+For arbitrary $d$ and $d'$, the remaining work is to construct both directions
+of the correspondence, prove the trace-pairing formula, and derive the
+Hermiticity, complete-positivity, unitality, trace-preservation, and
+doubly-stochastic equivalences.  In particular, the converse partial-trace
+implications, the general adjoint partial-trace identity, the general trace
+normalization identity, and the proportional-identity clauses should be
+established rather than inferred from the square specialization.
+
+The natural complete-positivity predicate is the existence of rectangular
+Kraus operators $A_i\in M_{d'\times d}(\C)$ satisfying
+\begin{align}
+    T(X)&=\sum_i A_i X A_i^\dagger.
+\end{align}
+Using this predicate keeps the Choi correspondence compatible with the
+rectangular Kraus representation already used elsewhere in the development.
+
+\section{The related Kraus-representation restriction}
+
+Wolf Theorem~2.1 states that a map
+$T:\MN{d}\to\MN{d'}$ is completely positive if and only if it has a
+rectangular Kraus representation
+\begin{align}
+    T(X)&=\sum_{j=1}^{r}K_jXK_j^\dagger,
+    &K_j&\in M_{d'\times d}(\C).
+    \tag{Wolf 2.8}
+\end{align}
+It further identifies the trace-preserving and unital normalizations, the
+minimal value $r=\operatorname{rank}(\tau_T)\leq dd'$, an orthogonal minimal
+family, and the unitary freedom after padding the smaller family with zero
+operators \cite[Theorem~2.1]{Wolf2012Quantum}.
+
+The present development contains rectangular Kraus predicates and several
+normalization and freedom results, but not this full arbitrary-dimensional
+package.  The missing work is the rectangular existence equivalence together
+with the minimal-rank and orthogonal-family conclusions, followed by the
+padded-unitary classification in the source's stated generality.
+
+\section{Verdict}
+
+These are \emph{scope restrictions}: the proved Choi and Kraus results are
+mathematically correct in their stated settings, while Wolf Proposition~2.1
+and Theorem~2.1 allow independent input and output dimensions and include the
+additional clauses above.  The source-labelled blueprint entries therefore
+state the restrictions explicitly.  The restrictions can be removed once the
+different-dimension statements have been proved.\footnote{Formal follow-up:
+\ghissue{3987}.}
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}
