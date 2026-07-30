@@ -600,6 +600,68 @@
     vanish. This contradicts the one-sided matrix-space obstruction.
 \end{proof}
 
+% Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
+% 1606--1617.
+% **Scope restriction (coefficient extraction):** this proves the normalized
+% square--cube identity preceding the source's rank-one conclusion. See
+% docs/paper-gaps/cpsv16_commuting_form_to_sal.tex.
+\begin{theorem}[Adjacent-marginal coefficient extraction]
+    \label{thm:mpdo_selected_fixed_product_square_cube}
+    \lean{Matrix.IsIrreducible.%
+      pow_two_pos_of_pow_two_support_eq_pow_three_support}
+    \lean{MPOTensor.PhysicalSectorFactorization.%
+      cyclicActiveSectorTraceMatrix_pow_two_pos_of_adjacent_marginals}
+    \lean{MPOTensor.PhysicalSectorFactorization.%
+      exists_normalized_cyclicActiveSectorTraceMatrix_pow_two_eq_pow_three_of_adjacent_marginals}
+    \lean{MPOTensor.EtaLocalStructureData.%
+      exists_normalized_selectedFixedProduct_cyclicActiveSectorTraceMatrix_pow_two_eq_pow_three}
+    \leanok
+    \uses{def:mpdo, def:injective, def:normal, def:mpo_source_zcl,
+      def:mpdo_eta_local_structure_data,
+      lem:mpdo_source_zcl_marginal_stability,
+      def:mpdo_suffix_sector_contraction,
+      thm:mpdo_suffix_marginal_block_expansion,
+      def:mpdo_physical_sector_factorization,
+      thm:mpdo_selected_fixed_product_cyclic_recurrence,
+      thm:mpdo_eta_fixed_bond_product_tensor,
+      thm:mpdo_fixed_bond_positive_physical_sector_representative,
+      def:mpdo_cyclic_active_sector}
+    Let $K$ be an injective normal matrix-product density tensor with source
+    zero correlation length and an eta-local structure. Let $F$ be the
+    positive physical-sector factorization of the selected fixed-product
+    tensor, and let $T_C$ be its trace matrix on cyclic-active sectors. There
+    is a number $\lambda>0$ such that
+    \[
+        (\lambda^{-1}T_C)^2=(\lambda^{-1}T_C)^3.
+    \]
+\end{theorem}
+
+\begin{proof}\leanok
+    Trace one suffix site and then two suffix sites from adjacent normalized
+    marginals. On a retained sector path from $h$ to $q$, the corresponding
+    coefficients are respectively
+    \[
+        P_{h,q}(T_C^2)_{q,h}
+        \quad\text{and}\quad
+        P_{h,q}(T_C^3)_{q,h},
+    \]
+    where $P_{h,q}\ne0$ is the product of the retained edge traces.
+    Recurrence supplies such a path for every ordered pair. Cancellation
+    shows that $T_C^2$ and $T_C^3$ have the same positive support.
+    Irreducibility then implies that every entry of $T_C^2$ is positive.
+
+    For fixed $q,h$, choose a positive summand
+    $(T_C)_{h,r}(T_C)_{r,q}$ of $(T_C^2)_{h,q}$. The three-site retained word
+    $h,r,q$ is visible. Thus the adjacent marginal identity at the single
+    retained length three gives
+    \[
+        (T_C^3)_{q,h}=\frac{Z_5}{Z_4}(T_C^2)_{q,h},
+    \]
+    where $Z_N$ is the positive normalization of the selected tensor at
+    length $N$. The ratio is independent of $q,h$; taking
+    $\lambda=Z_5/Z_4$ proves the assertion.
+\end{proof}
+
 % **Local fix (cyclic-active restriction):** this is a restricted replacement for
 % the primitive-matrix step of the SAL-dependent CPSV16 Lemma `propSN`. See
 % docs/paper-gaps/cpsv16_commuting_form_to_sal.tex.
