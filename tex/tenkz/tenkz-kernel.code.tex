@@ -805,6 +805,7 @@
     \exp_args:NNV \clist_set:Nn
       \l__tenkz_kernel_frame_clist \l__tenkz_kernel_frame_tl
     \__tenkz_kernel_basis_clear:
+    \bool_set_true:N \l__tenkz_kernel_basis_valid_bool
     \clist_map_inline:Nn \l__tenkz_kernel_frame_clist
       {
         \regex_extract_once:nnNTF
@@ -819,7 +820,6 @@
           {
             \tl_set:Ne \l__tenkz_kernel_frame_tl
               { \seq_item:Nn \l__tenkz_kernel_match_seq {2} }
-            \bool_set_true:N \l__tenkz_kernel_basis_valid_bool
             \str_case:VnF \l__tenkz_kernel_frame_tl
               {
                 {wire}{}
@@ -846,11 +846,25 @@
                   { \seq_item:Nn \l__tenkz_kernel_match_seq {4} }
               }
           }
-          { \msg_error:nnn {tenkz}{kernel-frame-basis-parse} {##1} }
+          {
+            \bool_set_false:N \l__tenkz_kernel_basis_valid_bool
+            \msg_error:nnn {tenkz}{kernel-frame-basis-parse} {##1}
+          }
       }
-    \int_compare:nNnT { \l__tenkz_kernel_basis_count_int } = {0}
-      { \msg_error:nnn {tenkz}{kernel-frame-basis-parse} {#1} }
-    \__tenkz_kernel_stage_put:nn {basis} {#1}
+    \bool_if:NT \l__tenkz_kernel_basis_valid_bool
+      {
+        \int_compare:nNnT { \l__tenkz_kernel_basis_count_int } = {0}
+          {
+            \bool_set_false:N \l__tenkz_kernel_basis_valid_bool
+            \msg_error:nnn {tenkz}{kernel-frame-basis-parse} {#1}
+          }
+      }
+    \bool_if:NTF \l__tenkz_kernel_basis_valid_bool
+      { \__tenkz_kernel_stage_put:nn {basis} {#1} }
+      {
+        \__tenkz_kernel_basis_clear:
+        \prop_remove:Nn \l__tenkz_kernel_stage_prop {basis}
+      }
   }
 
 \keys_define:nn {tenkz-kernel-frame}

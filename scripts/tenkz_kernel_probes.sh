@@ -500,6 +500,16 @@ grep -Fq '[TKZ-FRAME-BASIS-KIND]' \
   echo "FAIL: unknown basis kind lacked TKZ-FRAME-BASIS-KIND" >&2
   exit 1
 }
+[ "$(grep -Fc '[TKZ-FRAME-BASIS-PARSE]' \
+    "$WORK/n_frame_basis_parse.transcript" || true)" -eq 1 ] || {
+  echo "FAIL: malformed basis emitted duplicate parse diagnostics" >&2
+  exit 1
+}
+[ "$(grep -Fc '[TKZ-FRAME-BASIS-KIND]' \
+    "$WORK/n_frame_basis_kind.transcript" || true)" -eq 1 ] || {
+  echo "FAIL: unknown basis kind emitted duplicate diagnostics" >&2
+  exit 1
+}
 grep -Fq '[TKZ-FRAME-MEMBER-RANGE]' \
   "$WORK/n_frame_basis_member.transcript" || {
   echo "FAIL: missing basis member lacked TKZ-FRAME-MEMBER-RANGE" >&2
