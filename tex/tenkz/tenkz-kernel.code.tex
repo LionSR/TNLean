@@ -1646,7 +1646,7 @@
       { \__tenkz_kernel_node_item:Nn #1 {col} }
     \int_set:Nn \l__tenkz_kernel_pop_int
       { \__tenkz_kernel_node_item:Nn #1 {member} }
-    \int_compare:nNnTF { \l__tenkz_kernel_basis_count_int } = {0}
+    \__tenkz_kernel_basis_cell_aligned:TF
       {
         \int_compare:nNnTF { \l__tenkz_kernel_pop_int } = {1}
           {
@@ -3034,6 +3034,27 @@
       }
   }
 
+\cs_new_protected:Npn \__tenkz_kernel_r_atom_place_span:n #1
+  {
+    \__tenkz_kernel_r_span:nNN {#1}
+      \l__tenkz_kernel_r_b_tl \l__tenkz_kernel_r_c_tl
+    \__tenkz_geom_place_cell:nnee {#1} {kpic}
+      {
+        \fp_eval:n
+          {
+            \l__tenkz_kernel_r_row_tl
+            + ( \l__tenkz_kernel_r_c_tl - 1 ) / 2
+          }
+      }
+      {
+        \fp_eval:n
+          {
+            \l__tenkz_kernel_r_col_tl
+            + ( \l__tenkz_kernel_r_b_tl - 1 ) / 2
+          }
+      }
+  }
+
 \cs_new_protected:Npn \__tenkz_kernel_r_atom_place:n #1
   {
     \__tenkz_model_get:nnN {#1} {addr} \l__tenkz_kernel_r_tl
@@ -3058,46 +3079,30 @@
         \exp_args:NV \__tenkz_kernel_r_rc:nNN \l__tenkz_kernel_r_tl
           \l__tenkz_kernel_r_row_tl \l__tenkz_kernel_r_col_tl
         \__tenkz_model_get:nnN {#1} {member} \l__tenkz_kernel_r_b_tl
-        \bool_lazy_or:nnTF
-          { \quark_if_no_value_p:N \l__tenkz_kernel_r_b_tl }
-          { \int_compare_p:nNn { \l__tenkz_kernel_basis_count_int } = {0} }
+        \quark_if_no_value:NTF \l__tenkz_kernel_r_b_tl
+          { \__tenkz_kernel_r_atom_place_span:n {#1} }
           {
-            \__tenkz_kernel_r_span:nNN {#1}
-              \l__tenkz_kernel_r_b_tl \l__tenkz_kernel_r_c_tl
-            \__tenkz_geom_place_cell:nnee {#1} {kpic}
+            \__tenkz_kernel_basis_cell_aligned:TF
+              { \__tenkz_kernel_r_atom_place_span:n {#1} }
               {
-                \fp_eval:n
+                \__tenkz_model_get:nnN
+                  {#1} {basis-east} \l__tenkz_kernel_r_c_tl
+                \__tenkz_model_get:nnN
+                  {#1} {basis-north} \l__tenkz_kernel_r_b_tl
+                \__tenkz_geom_place_cell:nnee {#1} {kpic}
                   {
-                    \l__tenkz_kernel_r_row_tl
-                    + ( \l__tenkz_kernel_r_c_tl - 1 ) / 2
+                    \fp_eval:n
+                      {
+                        \l__tenkz_kernel_r_row_tl
+                        - \l__tenkz_kernel_r_b_tl / 4
+                      }
                   }
-              }
-              {
-                \fp_eval:n
                   {
-                    \l__tenkz_kernel_r_col_tl
-                    + ( \l__tenkz_kernel_r_b_tl - 1 ) / 2
-                  }
-              }
-          }
-          {
-            \__tenkz_model_get:nnN
-              {#1} {basis-east} \l__tenkz_kernel_r_c_tl
-            \__tenkz_model_get:nnN
-              {#1} {basis-north} \l__tenkz_kernel_r_b_tl
-            \__tenkz_geom_place_cell:nnee {#1} {kpic}
-              {
-                \fp_eval:n
-                  {
-                    \l__tenkz_kernel_r_row_tl
-                    - \l__tenkz_kernel_r_b_tl / 4
-                  }
-              }
-              {
-                \fp_eval:n
-                  {
-                    \l__tenkz_kernel_r_col_tl
-                    + \l__tenkz_kernel_r_c_tl / 4
+                    \fp_eval:n
+                      {
+                        \l__tenkz_kernel_r_col_tl
+                        + \l__tenkz_kernel_r_c_tl / 4
+                      }
                   }
               }
           }
