@@ -841,6 +841,28 @@ private lemma cyclicList_eq_ofFn
         rw [show (j.succ).1 = j.1 + 1 from rfl, add_nsmul, one_nsmul]
         abel
 
+/-- One complete cyclic list starting at zero is the standard finite list. -/
+private lemma cyclicList_zero_card_eq_ofFn
+    {m : ℕ} [NeZero m] {α : Type*} (f : Fin m → α) :
+    cyclicList f 0 m = List.ofFn f := by
+  rw [cyclicList_eq_ofFn]
+  congr 1
+  funext j
+  congr 1
+  rw [zero_add]
+  have hnsmul : ∀ (n : ℕ) (hn : n < m),
+      n • (1 : Fin m) = ⟨n, hn⟩ := by
+    intro n hn
+    induction n with
+    | zero => simp
+    | succ n ih =>
+        rw [succ_nsmul, ih (Nat.lt_of_succ_lt hn)]
+        apply Fin.ext
+        simp only [Fin.val_add, Fin.val_one']
+        rw [Nat.mod_eq_of_lt (by omega : 1 < m)]
+        exact Nat.mod_eq_of_lt hn
+  exact hnsmul j.1 j.2
+
 /-- Concatenating cyclic word segments multiplies their corner products in
 cyclic order.
 
@@ -863,6 +885,41 @@ private lemma cornerProd_cyclicList_flatten_succ
         List.prod_cons]
       rw [cyclicList, cyclicList]
       simp only [List.prod_cons]
+
+/-- Supported corner implementers telescope across a cyclic ordered product.
+
+This is the adjacent cancellation \(U_{v+1}^\dagger U_{v+1}=Q_{v+1}\)
+in arXiv:1708.00029, Appendix A, lines 1041--1056. -/
+private lemma cyclic_partial_isometry_prod_succ
+    {m : ℕ} [NeZero m]
+    (Q : Fin m → MatrixAlg D) (q : Fin m)
+    (U R : Fin m → MatrixAlg D)
+    (hU_star_U : ∀ u, (U u)ᴴ * U u = Q (u + q))
+    (hR_right : ∀ u, R u * Q (u + 1 + q) = R u)
+    (u : Fin m) (n : ℕ) :
+    (cyclicList (fun k => U k * R k * (U (k + 1))ᴴ) u (n + 1)).prod =
+      U u * (cyclicList R u (n + 1)).prod *
+        (U (u + (n + 1) • (1 : Fin m)))ᴴ := by
+  induction n generalizing u with
+  | zero => simp [cyclicList]
+  | succ n ih =>
+      change
+        (U u * R u * (U (u + 1))ᴴ ::
+          cyclicList (fun k => U k * R k * (U (k + 1))ᴴ) (u + 1) (n + 1)).prod =
+        U u * (R u :: cyclicList R (u + 1) (n + 1)).prod *
+          (U (u + (n + 1 + 1) • (1 : Fin m)))ᴴ
+      simp only [List.prod_cons]
+      rw [ih (u + 1)]
+      have hindex :
+          u + (n + 1 + 1) • (1 : Fin m) =
+            u + 1 + (n + 1) • (1 : Fin m) := by
+        rw [add_nsmul, one_nsmul]
+        abel
+      rw [hindex]
+      simp only [Matrix.mul_assoc]
+      rw [← Matrix.mul_assoc (U (u + 1))ᴴ (U (u + 1)),
+        hU_star_U (u + 1),
+        ← Matrix.mul_assoc (R u) (Q (u + 1 + q)), hR_right u]
 
 /-- Full-cycle contraction step for periodic-overlap Case 3.
 
@@ -1069,6 +1126,49 @@ lemma sectorTensor_proportional_of_blockedMatch
           cornerProd_eq_blockDiagCorner P A hP_proj hP_shift,
           cornerProd_eq_blockDiagCorner Q B hQ_proj hQ_shift]
         exact hBlockAmbient' u i
+  let segments
+      (σ : Fin m → Fin d) (ρ : Fin m → (Fin (m * L) → Fin d))
+      (k : Fin m) : List (Fin d) :=
+    σ k :: List.ofFn (ρ k)
+  let combinedWord
+      (σ : Fin m → Fin d) (ρ : Fin m → (Fin (m * L) → Fin d)) :
+      List (Fin d) :=
+    (cyclicList (segments σ ρ) 0 m).flatten
+  have hsegments :
+      ∀ (σ : Fin m → Fin d) (ρ : Fin m → (Fin (m * L) → Fin d))
+        (k : Fin m),
+        (segments σ ρ k).length • (1 : Fin m) = 1 := by
+    intro σ ρ k
+    simp only [segments, List.length_cons, List.length_ofFn, add_nsmul, one_nsmul,
+      mul_nsmul, nsmul_card_one_fin, nsmul_zero, zero_add]
+  have hcombinedWord_length :
+      ∀ (σ : Fin m → Fin d) (ρ : Fin m → (Fin (m * L) → Fin d)),
+        (combinedWord σ ρ).length = (m * L + 1) * m := by
+    intro σ ρ
+    simp only [combinedWord, cyclicList_zero_card_eq_ofFn, List.length_flatten,
+      List.map_ofFn, List.sum_ofFn, segments]
+    simp only [Function.comp_apply, List.length_cons, List.length_ofFn]
+    simp
+    exact Nat.mul_comm m (m * L + 1)
+  have hcombinedWord_corner :
+      ∀ (σ : Fin m → Fin d) (ρ : Fin m → (Fin (m * L) → Fin d)),
+        cornerProd P A 0 (combinedWord σ ρ) =
+          (List.ofFn (fun k => cornerLetter P A k (σ k) *
+            cornerProd P A (k + 1) (List.ofFn (ρ k)))).prod := by
+    intro σ ρ
+    have hm : m.pred + 1 = m := Nat.succ_pred_eq_of_pos (NeZero.pos m)
+    have hconcat :=
+      cornerProd_cyclicList_flatten_succ P A hP_proj (segments σ ρ)
+        (hsegments σ ρ) 0 m.pred
+    rw [hm, cyclicList_zero_card_eq_ofFn] at hconcat
+    rw [cyclicList_zero_card_eq_ofFn] at hconcat
+    change cornerProd P A 0 (cyclicList (segments σ ρ) 0 m).flatten = _
+    rw [cyclicList_zero_card_eq_ofFn, hconcat]
+    apply congrArg List.prod
+    apply List.ofFn_inj.mpr
+    funext k
+    simp only [segments, cornerProd_cons, cornerLetter, Matrix.mul_assoc,
+      corner_mul_cornerProd P A (k + 1) (List.ofFn (ρ k)) (hP_proj (k + 1))]
   -- Remaining obligation (arXiv:1708.00029 lines 1023--1117): an `m`-factor cyclic
   -- contraction theorem built from the common `L` and the sum-form right inverses
   -- `Ω u` satisfying `hΩ`; after producing the uniform product-tensor identity,
