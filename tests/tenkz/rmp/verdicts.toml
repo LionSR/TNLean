@@ -2,7 +2,7 @@
 # Schema: scripts/tenkz_rmp.py (load_verdicts).  Any status may be
 # recorded, including failure; the check rejects lies, never gaps.
 schema_version = 1
-campaign_sha256 = "547794ca94ac655a698cee018afb463920d493ef51f1e089fa63aaf694b94136"
+campaign_sha256 = "5f60e42525c4208ea6bf9689183e03a3193bf8a3f3a29f125b592b79508c756a"
 
 [[verdict]]
 id = "rmp-ii-peps-projection"
@@ -1035,10 +1035,10 @@ id = "rmp-workbench-ii-peps-gauge-old"
 status = "cosmetic-gap"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
-case_sha256 = "9d5bcf7880525a278360f49cfc46436217c85a22ab07a64572378e61031500c2"
-reviewed = "2026-07-30"
-renderer = "codex-plane-frame-source-review-2026-07-30-600dpi"
-note = "plane projection restored; marked detour curvature still differs from the archival hand-drawn path"
+case_sha256 = "cee4731115fee5bbc125b105af98031fa8235d2510e8239a20465daaf7928f6f"
+reviewed = "2026-07-29"
+renderer = "codex-plane-frame-route-review-2026-07-29-600dpi"
+note = "plane projection restored; the marked route is cell-orthogonal rather than hand-rounded"
 
 [[verdict]]
 id = "rmp-workbench-ii-peps-gauge-without-a"
