@@ -140,6 +140,112 @@ apply it to coefficient-form and sector BNTs.
     statement.
 \end{proof}
 
+% Source anchors: CPSV16 lines 317--345.
+\begin{theorem}[Sharp simultaneous span under a total-dimension bound]
+    \label{thm:cpsv_bnt_sharp_span_ambient_cap}
+    \lean{MPSTensor.IsCPSVBasisOfNormalTensors.%
+        exists_positive_wordTupleSpanTop_le_three_cap_pow_five}
+    \leanok
+    \uses{def:bnt_cpsv, def:blockwise_product_word_span}
+    Let $(A_j)_{j=1}^{g}$ be a basis of normal tensors with bond dimensions
+    $D_j$. If $K>0$ and $\sum_jD_j\leq K$, then there is a positive integer
+    $L\leq3K^5$ such that
+    \begin{align}
+        \spn_{\C}\{(A_1^\omega,\ldots,A_g^\omega):|\omega|=L\}
+         & =\prod_{j=1}^{g}\MN{D_j}.
+        \notag
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{lem:cpsv_bnt_block_dimensions_positive,
+        thm:cpsv_bnt_blocks_not_gaugePhaseEquiv,
+        thm:cpsv_normal_tp_gauge,
+        thm:normal_tp_primitive_irred,
+        thm:exact_pow_four_block_injectivity_normal_left_canonical,
+        thm:wordspan_blk_inj_succ,
+        lem:bnt_direct_sum_block_separation_word_span,
+        lem:gauge_invariance_block_injective}
+    Put every representative in its trace-preserving Perron gauge. Since
+    $D_j\leq\sum_kD_k\leq K$, quantum Wielandt and homogeneous-span
+    propagation make every representative block-injective at $K^4$,
+    $K^4+1$, and $3(K^4+1)$. Conjugation preserves the simultaneous word
+    span.
+
+    For $g=0$, take $L=1$; the product algebra has only its zero element. For
+    $g=1$, take $L=K^4$. If $g\geq2$, the three-block separation theorem gives
+    \begin{align}
+        L&=3(g-1)(K^4+1).
+        \notag
+    \end{align}
+    Positivity of the $D_j$ gives
+    $g=\sum_j1\leq\sum_jD_j\leq K$, and hence
+    $L\leq3(K-1)(K^4+1)\leq3K^5$.
+\end{proof}
+
+% Source anchors: CPSV16 lines 219--225 and 265--301.
+\begin{theorem}[Total dimension of the active BNT representatives]
+    \label{thm:cpsv_active_bnt_dimension_bound}
+    \lean{MPSTensor.CPSVCanonicalFormData.sum_activeRepresentative_dim_le}
+    \leanok
+    \uses{def:cpsv_canonical_form,
+        thm:cpsv_canonical_form_active_bnt_refinement}
+    Let literal canonical-form data of ambient bond dimension $D$ have active
+    phase classes $j$ and chosen representatives of dimensions $D_j$. Then
+    \begin{align}
+        \sum_jD_j&\leq D.
+        \notag
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:cpsv_canonical_form_active_bnt_refinement}
+    In every active phase class, choose its first copy. The class-copy
+    equivalence sends these choices to distinct displayed block indices, and
+    the first copy is the chosen representative. Thus the sum of the
+    representative dimensions is bounded by the sum over all displayed
+    blocks, which is at most $D$ by the canonical-form dimension bound.
+\end{proof}
+
+% Source anchor: CPSV16 Proposition propblockinj, lines 342--345.
+\begin{theorem}[Sharp block-injective form for literal CPSV canonical form]
+    \label{thm:cpsv_literal_propblockinj}
+    \lean{MPSTensor.IsCPSVCanonicalForm.%
+        exists_bnt_biCF_after_blocking_le_three_bondDim_pow_five}
+    \leanok
+    \uses{def:cpsv_canonical_form, def:bnt_cpsv,
+        def:blocked_tensor, def:blockwise_product_word_span}
+    Let $A$ be in literal CPSV canonical form with positive ambient bond
+    dimension $D$. There is a basis of normal tensors
+    $(A_j)_{j=1}^{g}$ and a positive integer $L\leq3D^5$ such that
+    \begin{align}
+        \spn_{\C}\left\{((A_1^{[L]})^i,\ldots,(A_g^{[L]})^i):
+        0\leq i<d^L\right\}
+         & =\prod_{j=1}^{g}\MN{D_j}.
+        \notag
+    \end{align}
+    Hence $A$ is in block-injective canonical form after blocking at most
+    $3D^5$ sites. This is the proposition at
+    \cite[lines~342--345]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:cpsv_canonical_form_active_bnt_refinement,
+        thm:cpsv_active_bnt_dimension_bound,
+        thm:cpsv_bnt_sharp_span_ambient_cap,
+        thm:cpsv_bnt_blocked_simultaneous_span}
+    Choose one representative from every active matrix-product-vector phase
+    class. These representatives form a basis of normal tensors, and their
+    total bond dimension is at most $D$ by
+    Theorem~\ref{thm:cpsv_active_bnt_dimension_bound}. Apply
+    Theorem~\ref{thm:cpsv_bnt_sharp_span_ambient_cap} with $K=D$. A word of
+    length $L$ in $A_j$ is a one-letter evaluation of $A_j^{[L]}$, so the
+    resulting length-$L$ span is exactly the asserted one-letter span.
+\end{proof}
+
 Let $A$ be a tensor in canonical form, and let $A_1,\ldots,A_g$ be a basis of
 normal tensors of $A$. For suitable coefficients $\mu_{j,q}$ and invertible
 matrices $X_{j,q}$, write
