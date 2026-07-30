@@ -1935,6 +1935,64 @@ lemma sectorTensor_proportional_of_blockedMatch
     TNLean.Algebra.PiTensorProductPhase.exists_kappa_product_one_of_piTensorProduct_eq_root_smul
         (fun k i => cornerLetter P A k i) T z ξ hz hξ_pow
         ref r s href_entry hresult
+  let γ : Fin m → ℂ := fun k => κ k * ξ
+  have hnorm_matrix : ∀ k, P (k + 1) =
+      (star (γ k) * γ k) • P (k + 1) := by
+    intro k
+    calc
+      P (k + 1) =
+          ∑ i, (cornerLetter P A k i)ᴴ * cornerLetter P A k i :=
+        (hAcorner_norm k).symm
+      _ = ∑ i, (γ k • T k i)ᴴ * (γ k • T k i) := by
+        apply Finset.sum_congr rfl
+        intro i _
+        rw [hκ k i]
+      _ = (star (γ k) * γ k) • ∑ i, (T k i)ᴴ * T k i := by
+        rw [Finset.smul_sum]
+        apply Finset.sum_congr rfl
+        intro i _
+        simp only [Matrix.conjTranspose_smul, smul_mul_smul_comm, smul_smul]
+      _ = (star (γ k) * γ k) • P (k + 1) := by rw [hT_norm]
+  have hP_entry : ∀ k, ∃ r c : Fin D, P k r c ≠ 0 := by
+    intro k
+    by_contra h
+    have hzeroEntry : ∀ r c, P k r c = 0 :=
+      fun r c => not_ne_iff.mp ((not_exists.mp (not_exists.mp h r)) c)
+    exact hP_ne k (Matrix.ext fun r c => hzeroEntry r c)
+  have hγ_star_mul : ∀ k, star (γ k) * γ k = 1 := by
+    intro k
+    obtain ⟨rk, ck, hPk⟩ := hP_entry (k + 1)
+    have heq := congrArg (fun M : MatrixAlg D => M rk ck) (hnorm_matrix k)
+    simp only [Matrix.smul_apply, smul_eq_mul] at heq
+    apply mul_right_cancel₀ hPk
+    simpa only [one_mul] using heq.symm
+  have hγ_norm : ∀ k, ‖γ k‖ = 1 := by
+    intro k
+    have hnorm := congrArg norm (hγ_star_mul k)
+    simp only [norm_mul, norm_star, norm_one] at hnorm
+    nlinarith [norm_nonneg (γ k)]
+  have ha_norm : ∀ k, ‖a k‖ = 1 := by
+    intro k
+    simp only [a, norm_inv, norm_pow, hc'_norm, one_pow, inv_one]
+  have hz_norm : ‖z‖ = 1 := by
+    change ‖(c' 0) ^ (m * L + 1) * ∏ k, a k‖ = 1
+    rw [norm_mul, norm_pow, hc'_norm, one_pow, one_mul]
+    have hprod : ∀ t : Finset (Fin m), ‖∏ k ∈ t, a k‖ = 1 := by
+      intro t
+      induction t using Finset.induction_on with
+      | empty => simp
+      | @insert k t hk ih =>
+        rw [Finset.prod_insert hk, norm_mul, ha_norm k, one_mul]
+        exact ih
+    simpa using hprod Finset.univ
+  have hξ_norm : ‖ξ‖ = 1 := by
+    have hpow_norm := congrArg norm hξ_pow
+    rw [norm_pow, hz_norm] at hpow_norm
+    exact (pow_eq_one_iff_of_nonneg (norm_nonneg ξ) (NeZero.ne m)).mp hpow_norm
+  have hκ_norm : ∀ k, ‖κ k‖ = 1 := by
+    intro k
+    have h := hγ_norm k
+    simpa only [γ, norm_mul, hξ_norm, mul_one] using h
   -- Remaining obligation (arXiv:1708.00029 lines 1023--1117): an `m`-factor cyclic
   -- contraction theorem built from the common `L` and the sum-form right inverses
   -- `Ω u` satisfying `hΩ`; after producing the uniform product-tensor identity,
