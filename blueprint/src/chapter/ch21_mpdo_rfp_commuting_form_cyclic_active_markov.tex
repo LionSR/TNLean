@@ -600,6 +600,157 @@
     vanish. This contradicts the one-sided matrix-space obstruction.
 \end{proof}
 
+\begin{theorem}[Stabilization of the support of an irreducible square]
+    \label{thm:matrix_irreducible_square_support_stabilization}
+    \lean{Matrix.IsIrreducible.%
+      pow_two_pos_of_pow_two_support_eq_pow_three_support}
+    \leanok
+    Let $T$ be a nonnegative irreducible real matrix on a finite index set.
+    Suppose that
+    \begin{align}
+        (T^2)_{i,j}>0
+        \quad\Longleftrightarrow\quad
+        (T^3)_{i,j}>0
+        \notag
+    \end{align}
+    for every pair $i,j$. Then $(T^2)_{i,j}>0$ for every pair $i,j$.
+\end{theorem}
+
+\begin{proof}\leanok
+    Right multiplication by $T$ propagates equality of the positive supports
+    of two consecutive powers. Hence all powers from the second onward have
+    the same positive support. Irreducibility supplies a positive path from
+    $i$ to $j$. If its length is one, append a positive return path at $j$.
+    The resulting path has length at least two, so support stabilization
+    reduces it to a positive path of length two from $i$ to $j$.
+\end{proof}
+
+% Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
+% 1606--1617.
+% **Scope restriction (coefficient extraction):** recurrence, adjacent
+% marginal equality, and positive finite-chain normalizations are explicit
+% hypotheses. See docs/paper-gaps/cpsv16_commuting_form_to_sal.tex.
+\begin{theorem}[Strict positivity from adjacent cyclic-sector marginals]
+    \label{thm:mpdo_cyclic_active_square_positive_adjacent_marginals}
+    \lean{MPOTensor.PhysicalSectorFactorization.%
+      cyclicActiveSectorTraceMatrix_pow_two_pos_of_adjacent_marginals}
+    \leanok
+    \uses{def:mpdo_physical_sector_factorization,
+      def:mpdo_cyclic_active_sector}
+    Let $F$ be a physical-sector factorization whose neighboring operators are
+    positive semidefinite, and let $T_C$ be the trace matrix on its
+    cyclic-active sectors. Assume that every ordered pair of cyclic-active
+    sectors is joined by a path of nonzero neighboring operators. Assume also
+    that, for every $L>0$, the normalized $L$-site marginals obtained from
+    chain lengths $L+2$ and $L+1$ are equal, and that the closed operator has
+    a positive real trace at every length $N\geq2$. Then
+    $(T_C^2)_{q,h}>0$ for every pair of cyclic-active sectors $q,h$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpdo_suffix_sector_contraction,
+      thm:mpdo_suffix_marginal_block_expansion,
+      thm:matrix_irreducible_square_support_stabilization}
+    Fix $q,h$ and choose a retained sector path from $h$ to $q$. Positivity
+    makes its retained trace product $P_{h,q}$ nonzero. Tracing one suffix
+    site and two suffix sites gives the respective block-trace coefficients
+    $P_{h,q}(T_C^2)_{q,h}$ and $P_{h,q}(T_C^3)_{q,h}$. Equality of the
+    normalized marginals and positivity of their normalizations show that
+    $(T_C^2)_{q,h}$ vanishes exactly when $(T_C^3)_{q,h}$ vanishes.
+    Recurrence makes $T_C$ irreducible, so
+    Theorem~\ref{thm:matrix_irreducible_square_support_stabilization} applies.
+\end{proof}
+
+% Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
+% 1606--1617.
+% **Scope restriction (coefficient extraction):** recurrence, adjacent
+% marginal equality, and positive finite-chain normalizations are explicit
+% hypotheses. See docs/paper-gaps/cpsv16_commuting_form_to_sal.tex.
+\begin{theorem}[Normalization from adjacent cyclic-sector marginals]
+    \label{thm:mpdo_cyclic_active_square_cube_adjacent_marginals}
+    \lean{MPOTensor.PhysicalSectorFactorization.%
+      exists_normalized_cyclicActiveSectorTraceMatrix_pow_two_eq_pow_three_of_adjacent_marginals}
+    \leanok
+    \uses{def:mpdo_physical_sector_factorization,
+      def:mpdo_cyclic_active_sector}
+    Let $F$ be a physical-sector factorization whose neighboring operators are
+    positive semidefinite, and let $T_C$ be the trace matrix on its
+    cyclic-active sectors. Assume that every ordered pair of cyclic-active
+    sectors is joined by a path of nonzero neighboring operators. Assume also
+    that, for every $L>0$, the normalized $L$-site marginals obtained from
+    chain lengths $L+2$ and $L+1$ are equal, and that the closed operator has
+    a positive real trace $Z_N$ at every length $N\geq2$. Then there is a
+    number $\lambda>0$ such that
+    \begin{align}
+        (\lambda^{-1}T_C)^2
+        &=(\lambda^{-1}T_C)^3.
+        \notag
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpdo_suffix_sector_contraction,
+      thm:mpdo_suffix_marginal_block_expansion,
+      thm:mpdo_cyclic_active_square_positive_adjacent_marginals}
+    By
+    Theorem~\ref{thm:mpdo_cyclic_active_square_positive_adjacent_marginals},
+    every entry of $T_C^2$ is positive. For fixed $q,h$, choose a positive
+    summand $(T_C)_{h,r}(T_C)_{r,q}$ of $(T_C^2)_{h,q}$. The retained
+    three-sector word $h,r,q$ has nonzero trace product. Comparing the two
+    adjacent marginals at retained length three gives
+    \begin{align}
+        (T_C^3)_{q,h}
+        &=\frac{Z_5}{Z_4}(T_C^2)_{q,h}.
+        \notag
+    \end{align}
+    The ratio is independent of $q,h$. Taking $\lambda=Z_5/Z_4$ proves the
+    assertion.
+\end{proof}
+
+% Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
+% 1597--1619.
+% **Scope restriction (coefficient extraction):** this proves the normalized
+% square--cube identity preceding the source's rank-one conclusion. See
+% docs/paper-gaps/cpsv16_commuting_form_to_sal.tex.
+\begin{theorem}[Selected fixed-product square--cube identity]
+    \label{thm:mpdo_selected_fixed_product_square_cube}
+    \lean{MPOTensor.EtaLocalStructureData.%
+      exists_normalized_selectedFixedProduct_cyclicActiveSectorTraceMatrix_pow_two_eq_pow_three}
+    \leanok
+    \uses{def:mpdo, def:injective, def:normal, def:mpo_source_zcl,
+      def:mpdo_eta_local_structure_data,
+      def:mpdo_physical_sector_factorization,
+      thm:mpdo_eta_fixed_bond_product_tensor,
+      thm:mpdo_fixed_bond_positive_physical_sector_representative,
+      def:mpdo_cyclic_active_sector}
+    Let $K$ be an injective normal matrix-product density tensor with source
+    zero correlation length and an eta-local structure. Let $F$ be the
+    positive physical-sector factorization of the selected fixed-product
+    tensor, and let $T_C$ be its trace matrix on cyclic-active sectors. There
+    is a number $\lambda>0$ such that
+    \begin{align}
+        (\lambda^{-1}T_C)^2=(\lambda^{-1}T_C)^3.
+        \notag
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:mpdo_source_zcl_marginal_stability,
+      thm:mpdo_eta_fixed_bond_product_tensor,
+      thm:mpdo_fixed_bond_positive_physical_sector_representative,
+      thm:mpdo_selected_fixed_product_cyclic_recurrence,
+      thm:mpdo_cyclic_active_square_cube_adjacent_marginals}
+    Express the original tensor in the physical coordinates of $F$. At every
+    length $N\geq2$, its closed operator is a positive scalar multiple of the
+    selected closed operator. Source zero correlation length therefore gives
+    the adjacent marginal equality for the selected tensor, and positivity
+    gives positive selected traces.
+    Theorem~\ref{thm:mpdo_selected_fixed_product_cyclic_recurrence} supplies
+    recurrence.
+    Theorem~\ref{thm:mpdo_cyclic_active_square_cube_adjacent_marginals} now
+    gives the required normalization.
+\end{proof}
+
 % **Local fix (cyclic-active restriction):** this is a restricted replacement for
 % the primitive-matrix step of the SAL-dependent CPSV16 Lemma `propSN`. See
 % docs/paper-gaps/cpsv16_commuting_form_to_sal.tex.

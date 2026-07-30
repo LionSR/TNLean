@@ -503,25 +503,36 @@ products in one order vanish, which is impossible.  This is
 selectedFixedProduct_cyclicActive_reflTransGen_neighboringOperator_ne_zero}.
 It proves that the cyclic-active sectors of the selected factorization form
 one recurrent component without asserting injectivity, normality, or a
-virtual gauge for the selected fixed tensor.
+virtual gauge for the selected fixed tensor.  This closes the selected-sector
+visibility step tracked in issue~\#5128.
 
-The remaining step is the coefficient comparison at source lines~1606--1617.
-One must expand the normalized reduced state after tracing one suffix site and
-after tracing two suffix sites.  The two surviving boundary contractions have
-coefficients $\widehat T^2$ and $\widehat T^3$, respectively.  Recurrence
-supplies a nonzero retained path between every pair of cyclic-active sectors,
-so equality of the two reduced states permits entrywise cancellation and
-yields
+The coefficient comparison at source lines~1606--1617 is now formalized.
+Expanding the normalized reduced state after tracing one suffix site and after
+tracing two suffix sites gives surviving boundary contractions with
+coefficients $T_C^2$ and $T_C^3$, respectively.  Recurrence supplies a
+nonzero retained path between every pair of cyclic-active sectors, so equality
+of the two reduced states first shows that these two powers have the same
+positive support.  Irreducibility then makes every entry of $T_C^2$ strictly
+positive.  A positive two-edge summand gives a retained word of the common
+length three for every ordered pair; comparison at that fixed length yields
 \[
   \widehat T^2=\widehat T^3.
 \]
-This relation must then be combined with the recurrent support to obtain the
-strictly positive rank-one two-step coefficient used by the already
-formalized Markov decomposition.  Until this coefficient extraction and its
-application to the original source marginal identity are proved, the
-commuting-form-to-SAL implication remains open.  The explicit factorization
-and positivity assumptions of the proved SAL corollary remain scope
-restrictions, not additional hypotheses on Proposition~\emph{4to2}.
+Here $\widehat T=\lambda^{-1}T_C$ and the common normalization is the ratio
+of the selected length-five and length-four traces.  This is
+\leanid{MPOTensor.EtaLocalStructureData.%
+exists_normalized_selectedFixedProduct_cyclicActiveSectorTraceMatrix_pow_two_eq_pow_three}.
+It uses only source ZCL and injectivity of the original tensor, not of the
+selected fixed-product tensor.  This closes the adjacent coefficient-extraction
+step tracked in issue~\#5129.
+
+The remaining step is to combine this square--cube identity with the
+strictly positive two-step coefficient in the Markov reconstruction and
+thereby obtain the source's rank-one conclusion for the selected
+factorization.  Until that assembly is proved, the commuting-form-to-SAL
+implication remains open.  The explicit factorization and positivity
+assumptions of the proved SAL corollary remain scope restrictions, not
+additional hypotheses on Proposition~\emph{4to2}.
 
 \paragraph{Local fix (the later orthogonal-sector statement).}
 The proposition labelled \emph{prop4to2} at source lines~1801--1808 states
