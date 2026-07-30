@@ -450,10 +450,15 @@ the coefficient argument of Chapter~\ref{ch:bnt}.
         \label{eq:cpsv_transfer_similarity}
     \end{align}
     Similarity preserves the spectral radius and the peripheral spectrum.
-    The same conjugation carries invariant orthogonal projections for one
-    tensor to invariant orthogonal projections for the other. Thus the two
-    conditions in Definition~\ref{def:nt_cpsv} are transported across the
-    gauge.
+    For irreducibility, start with an invariant orthogonal projection $Q$ for
+    one transfer map and form the support projection of the corresponding
+    positive congruence $XQX^\dagger$ (using $X^{-1}$ in the reverse
+    direction).  The intertwining in
+    Formula~(\ref{eq:cpsv_transfer_similarity}) makes this support projection
+    invariant for the other transfer map.  Irreducibility forces its support
+    to be zero or full, and invertibility of $X$ then forces $Q=0$ or
+    $Q=\Id$.  Thus both conditions in Definition~\ref{def:nt_cpsv} are
+    transported across the gauge.
 \end{proof}
 
 \begin{theorem}[Positive blocking preserves CPSV normal tensors]
