@@ -1505,6 +1505,71 @@ lemma sectorTensor_proportional_of_blockedMatch
               congr 1
               ring
       _ = ((c' k) ^ L)⁻¹ • X := by rw [hΩhat k X hX]
+  let a : Fin m → ℂ := fun k => ((c' (k + 1)) ^ L)⁻¹
+  let z : ℂ := (c' 0) ^ (m * L + 1) * ∏ k, a k
+  have hInsertedProduct :
+      ∀ (σ : Fin m → Fin d) (X : Fin m → MatrixAlg D),
+        (∀ k, P (k + 1) * X k * P (k + 1) = X k) →
+        (List.ofFn (fun k => cornerLetter P A k (σ k) * X k)).prod =
+          z • (List.ofFn (fun k => T k (σ k) * X k)).prod := by
+    intro σ X hX
+    let weight : (Fin m → (Fin (m * L) → Fin d)) → ℂ :=
+      fun ρ => ∏ k, Ωhat (k + 1) (X k) (ρ k)
+    have hweighted :
+        ∑ ρ, weight ρ •
+            (List.ofFn (fun k => cornerLetter P A k (σ k) *
+              cornerProd P A (k + 1) (List.ofFn (ρ k)))).prod =
+          (c' 0) ^ (m * L + 1) •
+            ∑ ρ, weight ρ •
+              (List.ofFn (fun k => T k (σ k) * G (k + 1) (ρ k))).prod := by
+      calc
+        ∑ ρ, weight ρ •
+            (List.ofFn (fun k => cornerLetter P A k (σ k) *
+              cornerProd P A (k + 1) (List.ofFn (ρ k)))).prod =
+            ∑ ρ, weight ρ •
+              ((c' 0) ^ (m * L + 1) •
+                (List.ofFn (fun k => T k (σ k) * G (k + 1) (ρ k))).prod) := by
+                  apply Finset.sum_congr rfl
+                  intro ρ _
+                  rw [hcombinedMatch σ ρ, hBcombined σ ρ]
+        _ = (c' 0) ^ (m * L + 1) •
+            ∑ ρ, weight ρ •
+              (List.ofFn (fun k => T k (σ k) * G (k + 1) (ρ k))).prod := by
+                rw [Finset.smul_sum]
+                apply Finset.sum_congr rfl
+                intro ρ _
+                exact smul_comm (weight ρ) ((c' 0) ^ (m * L + 1))
+                  (List.ofFn
+                    (fun k => T k (σ k) * G (k + 1) (ρ k))).prod
+    have hleft :=
+      cornerProd_contraction P A (m * L) Ωhat σ X
+        (fun k => hΩhat (k + 1) (X k) (hX k))
+    have hright :=
+      ofFn_contraction
+        (fun k => T k (σ k))
+        (fun k => a k • X k)
+        (fun k ρ => G (k + 1) ρ)
+        (fun k _ ρ => Ωhat (k + 1) (X k) ρ)
+        (fun k => by
+          change ∑ ρ, Ωhat (k + 1) (X k) ρ • G (k + 1) ρ = a k • X k
+          exact hG_contraction (k + 1) (X k) (hX k))
+    change
+      ∑ ρ, weight ρ •
+          (List.ofFn (fun k => cornerLetter P A k (σ k) *
+            cornerProd P A (k + 1) (List.ofFn (ρ k)))).prod =
+        (List.ofFn (fun k => cornerLetter P A k (σ k) * X k)).prod at hleft
+    change
+      ∑ ρ, weight ρ •
+          (List.ofFn (fun k => T k (σ k) * G (k + 1) (ρ k))).prod =
+        (List.ofFn (fun k => T k (σ k) * (a k • X k))).prod at hright
+    rw [hleft, hright] at hweighted
+    have hfactor :
+        (List.ofFn (fun k => T k (σ k) * (a k • X k))).prod =
+          (∏ k, a k) • (List.ofFn (fun k => T k (σ k) * X k)).prod := by
+      simpa only [mul_smul_comm] using
+        List.prod_ofFn_smul a (fun k => T k (σ k) * X k)
+    rw [hfactor] at hweighted
+    simpa only [z, smul_smul] using hweighted
   -- Remaining obligation (arXiv:1708.00029 lines 1023--1117): an `m`-factor cyclic
   -- contraction theorem built from the common `L` and the sum-form right inverses
   -- `Ω u` satisfying `hΩ`; after producing the uniform product-tensor identity,
