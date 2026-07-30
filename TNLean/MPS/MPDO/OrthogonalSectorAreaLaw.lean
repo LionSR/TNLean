@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.MPDO.LocalOrthogonalSumAreaLaw
 import TNLean.MPS.MPDO.GSNNCHOrthogonalSectors
+import TNLean.MPS.MPDO.CyclicActiveAreaLaw
 
 /-!
 # Saturated area law for orthogonal commuting sectors
@@ -193,6 +194,44 @@ theorem isSAL_of_orthogonalCommutingSectorFamily
     (fun s _ _ hN hL ↦
       F.firstSiteMatrix_mul_reducedBlockState s hN hL)
     hSectorSAL
+
+/-- An exact positive sum of orthogonally supported commuting sectors satisfies
+the saturated area law when every sector is injective and normal, generates
+matrix-product density operators, has a fixed positive commuting-bond
+presentation, and has source zero correlation length.
+
+**Scope restriction (sectorwise hypotheses and exact realization):** CPSV16,
+Proposition `prop4to2`, lines 1801--1808, assumes the proportional
+`ApprhoNComm` sector form, but omits the sectorwise source-ZCL hypothesis used
+by its proof. This theorem also assumes that every sector generates MPDOs, is
+one-site injective and normal, and carries source ZCL and explicit proportional
+fixed-bond data. One-site injectivity does not follow merely from BNT
+normality, leaving an injectivity-versus-blocking gap in the source
+application. Moreover, the independently supplied orthogonal commuting sector
+family realizes each sector with scalar one, and the full tensor is its exact
+positive-multiplicity sum. The proportional fixed-bond data match the source
+sector form, but the independent exact realization is stronger. Thus this
+theorem does not formalize the printed proposition verbatim. This is
+documented in
+`docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
+theorem isSAL_of_orthogonalCommutingSectorFamily_of_isSourceZCL
+    (M : MPOTensor d D) (K : (s : Fin g) → MPOTensor d (dim s))
+    (multiplicity : Fin g → ℕ) [Nonempty (Fin g)]
+    (hmultiplicity : ∀ s, 0 < multiplicity s)
+    (F : OrthogonalCommutingSectorFamily K)
+    (hM : ∀ (N : ℕ), 0 < N →
+      mpo M N = ∑ s : Fin g, (multiplicity s : ℂ) • mpo (K s) N)
+    (hSectorMPDO : ∀ s, IsMPDO (K s))
+    (hSectorInjective : ∀ s, (K s).IsInjective)
+    (hSectorNormal : ∀ s, MPSTensor.IsNormalTensor (K s).toMPSTensor)
+    (data : ∀ s, EtaLocalStructureData (K s))
+    (hSectorZCL : ∀ s, (K s).IsSourceZCL) :
+    IsSAL M := by
+  apply isSAL_of_orthogonalCommutingSectorFamily M K multiplicity
+    hmultiplicity F hM
+  intro s
+  exact (data s).isSAL_of_isSourceZCL
+    (hSectorMPDO s) (hSectorInjective s) (hSectorNormal s) (hSectorZCL s)
 
 /-- The BNT all-positive-length decomposition satisfies the saturated area law
 when its absorbed normal representatives do and an independently constructed
