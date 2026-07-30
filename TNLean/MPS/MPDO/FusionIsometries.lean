@@ -9,26 +9,27 @@ import TNLean.MPS.MPDO.PureRecovery
 import TNLean.MPS.MPDO.RFP
 
 /-!
-# Fusion-isometry formulations of the MPDO renormalization fixed point
+# Transfer-retract formulations of the MPDO renormalization fixed point
 
-This file gives the **fusion-isometry** side of the equivalence stated in
-arXiv:1606.00608 Section 4.5 (Cirac–Pérez-García–Schuch–Verstraete). In the notation
-of the paper, a fusion isometry at blocked size `n` is a pair of linear maps
-`T`, `S` between the physical space of `n` blocked sites and the corresponding
-support algebra of the tensor, with `T ∘ S = id` on the support algebra and
-`S ∘ T` the orthogonal projection onto its image in the physical space.
-Iterated applications of `T` and `S` reproduce the doubled-tensor transfer-map
-dynamics described by `MPOTensor.IsRFP` in `TNLean/MPS/MPDO/RFP.lean`. This file
-develops the transfer-map side of the fusion-isometry picture: a
-fusion-isometry witness at blocked size `n` is a retract factorization of the
-blocked transfer map through a support subspace of bond-space matrices.
-Concretely, if `Eₙ` denotes the blocked transfer map of `M`, then
-`FusionIsometryData M n` specifies a support subspace `𝒜ₙ`, a forward map
-`Tₙ : phys → 𝒜ₙ`, and a backward map `Sₙ : 𝒜ₙ → phys` with
+These definitions isolate the transfer-map content underlying the
+fusion-isometry picture of arXiv:1606.00608 Section 4.5
+(Cirac–Pérez-García–Schuch–Verstraete): they record when the blocked transfer
+map factors through its support algebra as a retract, which is the idempotence
+criterion, not the physical fusion isometry of two tensors into one. For each
+blocked size `n ≥ 1`, the doubled-index blocked tensor of an MPO has a blocked
+transfer map `Eₙ` acting on bond-space matrices, and the support algebra is
+modeled by a subspace through which `Eₙ` factors as a retract.
+
+Concretely, `FusionIsometryData M n` specifies a support subspace `𝒜ₙ`, a
+forward map `Tₙ : phys → 𝒜ₙ`, and a backward map `Sₙ : 𝒜ₙ → phys` with
 `Tₙ ∘ Sₙ = id_{𝒜ₙ}` and `Sₙ ∘ Tₙ = Eₙ`. The retract identity forces
-`Eₙ^2 = Eₙ`; conversely any idempotent blocked transfer map factors through its
+`Eₙ² = Eₙ`; conversely any idempotent blocked transfer map factors through its
 range. This yields an equivalence between `MPOTensor.IsRFP` and the
-transfer-map-level fusion formulation.
+transfer-retract formulation.
+
+The physical fusion isometries of Theorem 4.14(iii) are the object
+`BNTFusionIsometryFamily`, recorded in
+`TNLean/MPS/MPDO/BNTFusionIsometries.lean`.
 
 ## Main declarations
 
@@ -44,7 +45,7 @@ transfer-map-level fusion formulation.
 
 ## References
 
-* [Cirac--Perez-Garcia--Schuch--Verstraete 2017] arXiv:1606.00608, Section 4.5 and Appendix C.4
+* [Cirac--Perez-Garcia--Schuch--Verstraete 2017] arXiv:1606.00608, Section 4.5
   (Cirac–Pérez-García–Schuch–Verstraete, Ann. Phys. 378, 100–149).
 -/
 
