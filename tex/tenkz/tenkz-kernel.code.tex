@@ -4641,23 +4641,6 @@
   }
 \tl_new:N \l__tenkz_kernel_r_tau_tl
 \tl_new:N \l__tenkz_kernel_r_turnopt_tl
-\fp_new:N \l__tenkz_kernel_r_unturn_fp
-% A pair held in the axes of \l__tenkz_kernel_r_tau_tl, carried back to the
-% page in place.  At zero turn it is the identity, token for token.
-\cs_new_protected:Npn \__tenkz_kernel_r_unturn:NN #1#2
-  {
-    \fp_set:Nn \l__tenkz_kernel_r_unturn_fp
-      {
-        #1 * cosd( \l__tenkz_kernel_r_tau_tl )
-        - #2 * sind( \l__tenkz_kernel_r_tau_tl )
-      }
-    \fp_set:Nn #2
-      {
-        #1 * sind( \l__tenkz_kernel_r_tau_tl )
-        + #2 * cosd( \l__tenkz_kernel_r_tau_tl )
-      }
-    \fp_set_eq:NN #1 \l__tenkz_kernel_r_unturn_fp
-  }
 
 % the hull's support along #2 degrees, padded by #3, over the obstacle seq #1
 \cs_new_protected:Npn \__tenkz_kernel_hull_reach:NnnN #1#2#3#4
