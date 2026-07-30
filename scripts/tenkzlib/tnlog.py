@@ -141,8 +141,8 @@ FIELD_VALIDATORS: dict[str, dict[str, Callable[[str], bool]]] = {
         "kind": _enum("index", "string", "pairing"),
         "from": _is_address_id,
         "to": _is_address_id,
-        "from-open": _enum("n", "e", "s", "w", "route"),
-        "to-open": _enum("n", "e", "s", "w", "route"),
+        "from-open": _enum("n", "ne", "e", "se", "s", "sw", "w", "nw", "route"),
+        "to-open": _enum("n", "ne", "e", "se", "s", "sw", "w", "nw", "route"),
     },
     "mark": {
         "picture": _is_picture_id,

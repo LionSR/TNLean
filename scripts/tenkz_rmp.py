@@ -803,7 +803,9 @@ def pdf_dimensions(pdf: Path) -> tuple[str, str, int]:
 def event_signatures(parsed: ParsedLog) -> tuple[str, ...]:
     """Return concise signatures from a parsed render event stream."""
     boundaries = tuple(
-        event.raw for event in parsed.events if event.kind == "boundary"
+        event.raw
+        for event in parsed.events
+        if event.kind in {"boundary", "kernel-boundary"}
     )
     if boundaries:
         return boundaries

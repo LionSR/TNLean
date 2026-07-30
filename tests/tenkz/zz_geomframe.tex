@@ -23,6 +23,17 @@
 \__tenkz_geom_port_angle:nnN {rotA} {n} \l_probe_ta_tl
 \__tenkz_geom_probe:nn {rot-port-n}
   { angle = \__tenkz_geom_round:n { \l_probe_ta_tl } }
+% kernel-local plane directions use east=column and north=negative row
+\__tenkz_geom_frame_declare_plane:n {planeC}
+\__tenkz_geom_local_dir:nnN {planeC} {0} \l_probe_ta_tl
+\__tenkz_geom_probe:nn {plane-local-east}
+  { angle = \__tenkz_geom_round:n { \l_probe_ta_tl } }
+\__tenkz_geom_local_dir:nnN {planeC} {45} \l_probe_ta_tl
+\__tenkz_geom_probe:nn {plane-local-ne}
+  { angle = \__tenkz_geom_round:n { \l_probe_ta_tl } }
+\__tenkz_geom_local_dir:nnN {planeC} {90} \l_probe_ta_tl
+\__tenkz_geom_probe:nn {plane-local-north}
+  { angle = \__tenkz_geom_round:n { \l_probe_ta_tl } }
 % four stations on a unit circle starting north: east-going tangents
 \__tenkz_geom_frame_declare_circle:nnnn {ringB} {4} {1} {90}
 \__tenkz_geom_station:nnNNN {ringB} {2} \l_probe_xa_tl \l_probe_ya_tl \l_probe_ta_tl

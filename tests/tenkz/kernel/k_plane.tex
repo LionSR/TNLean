@@ -1,0 +1,19 @@
+% Kernel fixture: a plane frame projects the default one-member basis.
+% Expected: four named atoms and their declared bonds form a projected
+% parallelogram; the model records the fixed map after the topology records.
+\documentclass{standalone}
+\usepackage{tenkz}
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[rows={ket,ket}, cols=2, bonds=none, frame=plane]
+  \tn[at=(1,1), name=A, ports={0:virtual,90:physical,270:virtual}]{}
+  \tn[at=(1,2), name=B, ports={180:virtual,270:virtual}]{}
+  \tn[at=(2,1), name=C, ports={0:virtual,90:virtual}]{}
+  \tn[at=(2,2), name=D, ports={180:virtual,90:virtual}]{}
+  \tnwire{A.0}{B.180}
+  \tnwire{C.0}{D.180}
+  \tnwire{A.270}{C.90}
+  \tnwire{B.270}{D.90}
+  \tnwire{A.90}{open n}
+\end{tenkz}
+\end{document}
