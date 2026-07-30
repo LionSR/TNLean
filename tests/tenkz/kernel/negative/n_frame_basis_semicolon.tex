@@ -1,0 +1,9 @@
+%% Negative regression: semicolons are not public basis-coordinate syntax.
+\documentclass{standalone}
+\usepackage{tenkz}
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[lattice={1x1}, bonds=none,
+              frame={flat,basis={wire at (1;2)}}]
+\end{tenkz}
+\end{document}
