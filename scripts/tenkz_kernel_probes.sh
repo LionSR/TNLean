@@ -149,6 +149,11 @@ grep -Eq '^mark.*[|]members=atom-[0-9]+,atom-[0-9]+([|]|$)' \
   echo "FAIL: a range over an empty row did not retain both populated rows" >&2
   exit 1
 }
+grep -Eq '^mark.*[|]members=atom-[0-9]+([|]|$)' \
+    "$WORK/r_basis_range_explicit_empty.tnlog" || {
+  echo "FAIL: an explicit-basis range did not skip an empty cell" >&2
+  exit 1
+}
 awk '
   /^picture[|]id=k1[|]/ { picture = NR }
   /^warning[|]picture=k1[|]code=plane-tall-window[|]/ { warning = NR }

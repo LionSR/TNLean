@@ -1,0 +1,35 @@
+%% Regression: default member addressing retains ordinary span placement.
+\documentclass{standalone}
+\usepackage{tenkz}
+\makeatletter
+\ExplSyntaxOn
+\file_input:n { tenkz-kernel.code.tex }
+\tl_new:N \l__tenkz_test_default_member_x_tl
+\tl_new:N \l__tenkz_test_default_member_y_tl
+\cs_new_eq:NN \__tenkz_test_default_member_atoms: \__tenkz_kernel_r_atoms:
+\cs_set_protected:Npn \__tenkz_kernel_r_atoms:
+  {
+    \__tenkz_model_map_ids:nn {atom}
+      {
+        \__tenkz_geom_xy:nNN {##1}
+          \l__tenkz_test_default_member_x_tl
+          \l__tenkz_test_default_member_y_tl
+        \fp_compare:nNnF
+          { abs ( \l__tenkz_test_default_member_x_tl - 0.5 ) }
+          < {0.000001}
+          { \errmessage{default~member~lost~its~span~midpoint} }
+        \fp_compare:nNnF
+          { abs ( \l__tenkz_test_default_member_y_tl ) }
+          < {0.000001}
+          { \errmessage{default~member~left~its~cell~row} }
+      }
+    \__tenkz_test_default_member_atoms:
+  }
+\ExplSyntaxOff
+\makeatother
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[rows={ket}, cols=2, bonds=none]
+  \tn[at=(1,1,1), wide=2, name=W]{W}
+\end{tenkz}
+\end{document}

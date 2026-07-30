@@ -2733,7 +2733,7 @@
     \tl_set:Ne #3 { \seq_item:Nn \l__tenkz_kernel_match_seq {3} }
   }
 
-\cs_new_protected:Npn \__tenkz_kernel_basis_record:nnnN #1#2#3#4
+\cs_new_protected:Npn \__tenkz_kernel_basis_record_maybe:nnnN #1#2#3#4
   {
     \int_compare:nNnTF { \l__tenkz_kernel_basis_count_int } = {0}
       {
@@ -2742,9 +2742,14 @@
           { \tl_set:Nn #4 { \q_no_value } }
       }
       { \prop_get:NnN \l__tenkz_kernel_basis_cell_prop {#1-#2-#3} #4 }
+  }
+\cs_new_protected:Npn \__tenkz_kernel_basis_record:nnnN #1#2#3#4
+  {
+    \__tenkz_kernel_basis_record_maybe:nnnN {#1}{#2}{#3} #4
     \quark_if_no_value:NT #4
       { \msg_error:nnnnn {tenkz}{kernel-frame-member-range} {#1}{#2}{#3} }
   }
+\cs_generate_variant:Nn \__tenkz_kernel_basis_record_maybe:nnnN { eeeN }
 \cs_generate_variant:Nn \__tenkz_kernel_basis_record:nnnN { eeeN }
 
 % The grid cell an atom occupies, whichever way the author placed it: the
@@ -3053,7 +3058,9 @@
         \exp_args:NV \__tenkz_kernel_r_rc:nNN \l__tenkz_kernel_r_tl
           \l__tenkz_kernel_r_row_tl \l__tenkz_kernel_r_col_tl
         \__tenkz_model_get:nnN {#1} {member} \l__tenkz_kernel_r_b_tl
-        \quark_if_no_value:NTF \l__tenkz_kernel_r_b_tl
+        \bool_lazy_or:nnTF
+          { \quark_if_no_value_p:N \l__tenkz_kernel_r_b_tl }
+          { \int_compare_p:nNn { \l__tenkz_kernel_basis_count_int } = {0} }
           {
             \__tenkz_kernel_r_span:nNN {#1}
               \l__tenkz_kernel_r_b_tl \l__tenkz_kernel_r_c_tl
@@ -3946,7 +3953,8 @@
       {
         \int_step_inline:nn { \l__tenkz_kernel_basis_count_int }
           {
-            \__tenkz_kernel_basis_record:nnnN {#1}{#2}{##1} \l_tmpb_tl
+            \__tenkz_kernel_basis_record_maybe:nnnN
+              {#1}{#2}{##1} \l_tmpb_tl
             \quark_if_no_value:NF \l_tmpb_tl
               {
                 \__tenkz_kernel_select_record:VnN
