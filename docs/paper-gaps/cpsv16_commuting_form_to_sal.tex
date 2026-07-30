@@ -595,12 +595,19 @@ local orthogonal-sum identity at every positive chain length, supplied one-site
 projections supporting every nonempty sector marginal, and positive natural
 multiplicities.  It must not be presented as a proof that GSNNCH alone implies
 SAL.  The structure
-\leanid{MPOTensor.OrthogonalCommutingSectorFamily} records fixed one-site
-projections and commuting sector products.  Projection idempotence together
-with its bond-support and exact sector-product fields implies that every
-nonempty sector marginal on a chain of length at least two is supported on the
-matching projection at its first site; this is
-\leanid{MPOTensor.OrthogonalCommutingSectorFamily.firstSiteMatrix_mul_reducedBlockState}.
+\leanid{MPOTensor.ProportionalOrthogonalCommutingSectorFamily} records fixed
+one-site projections and commuting sector products whose periodic products
+realize the sector operators up to positive scalars.  Projection idempotence,
+bond support, and positive proportional realization imply that the normalized
+sector chain and every nonempty sector marginal on a chain of length at least
+two are supported on the matching projection at the first site; these are
+\leanid{MPOTensor.ProportionalOrthogonalCommutingSectorFamily.%
+firstSiteMatrix_mul_normalizedMPO} and
+\leanid{MPOTensor.ProportionalOrthogonalCommutingSectorFamily.%
+firstSiteMatrix_mul_reducedBlockState}.  The scalar factors through the
+first-site action and then cancels under trace normalization.  The earlier
+\leanid{MPOTensor.OrthogonalCommutingSectorFamily} is the scalar-one
+specialization.
 The chain-length restriction is sufficient here, since the mutual-information
 comparison in SAL only uses chains of length at least four.
 
@@ -628,7 +635,7 @@ outer sum and sectorwise SAL, although exactness of the global outer sum is no
 longer required by the entropy argument.
 The restricted specialization
 \leanid{MPOTensor.%
-isSAL_of_orthogonalCommutingSectorFamily_of_sectorwise_isSourceZCL}
+isSAL_of_proportionalOrthogonalCommutingSectorFamily_of_sectorwise_isSourceZCL}
 assumes that every sector generates MPDOs, is one-site injective and normal,
 and has source ZCL.  Source ZCL is omitted by the printed proposition.
 Normality is inherited in the BNT setting, but one-site injectivity is not a
@@ -636,21 +643,22 @@ consequence of BNT normality alone: a normal tensor becomes injective only
 after blocking.  The source application therefore leaves an
 injectivity-versus-blocking step unaddressed.
 
-The supplied orthogonal commuting sector family has pairwise orthogonal
+The proportional orthogonal commuting sector family has pairwise orthogonal
 one-site projections and a positive commuting bond whose periodic product is
-exactly the sector operator, with scalar one, at every length at least two.
-This exact identity is stronger than the proportional \emph{ApprhoNComm}
-sector form at source lines~1641--1665.  It yields proportional fixed-bond data
-with constant one inside the proof.  The theorem also assumes at every
-positive length that the outer tensor is the positive-natural-multiplicity sum
-of the sectors.  The proportional local orthogonal-sum theorem shows that a
-further positive length-dependent scalar would not change the conclusion.
-Applying
+proportional to the sector operator by a positive scalar at every length at
+least two.  This matches the proportional \emph{ApprhoNComm} sector form at
+source lines~1641--1665.  The full tensor may also differ from the
+positive-natural-multiplicity sector sum by a positive length-dependent
+scalar.  Applying
 \leanid{MPOTensor.EtaLocalStructureData.isSAL_of_isSourceZCL} to each sector
 supplies the sectorwise SAL premise, after which the preceding direct-sum
-theorem gives SAL for the full tensor.  This is a scope-restricted
-specialization rather than a formalization of the printed GSNNCH-only
-proposition.
+theorem
+\leanid{MPOTensor.isSAL_of_proportionalOrthogonalCommutingSectorFamily}
+gives SAL for the full tensor.  Thus neither global nor sectorwise positive
+proportionality remains a restriction.  The exact theorem
+\leanid{MPOTensor.%
+isSAL_of_orthogonalCommutingSectorFamily_of_sectorwise_isSourceZCL}
+is the specialization in which all these scalars equal one.
 
 \paragraph{Verdict.}
 Proposition~\emph{4to2} is formalized by
@@ -669,10 +677,12 @@ formalized under a positive proportional outer sum, conditionally on
 sectorwise SAL.  The global proportionality scalar is therefore no longer a
 restriction.  A further theorem derives sectorwise SAL from explicit
 sectorwise MPDO, one-site injectivity, normality, and source-ZCL hypotheses,
-together with an exact scalar-one orthogonal realization.  It remains
-restricted relative to the printed assertion: sectorwise source ZCL is omitted
-in print, one-site injectivity requires an unaddressed blocking argument, and
-the exact sector realization is stronger than the proportional source data.
+together with positive proportional orthogonal sector realizations.  The
+sector-product proportionality is therefore no longer a restriction.  The
+printed proposition still omits sectorwise source ZCL, and its application to
+normal BNT sectors still requires an unaddressed argument passing from
+injectivity after blocking to the one-site injectivity used by the
+single-sector theorem.
 
 \section{Completed proof}
 

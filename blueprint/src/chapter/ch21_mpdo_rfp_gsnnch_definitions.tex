@@ -339,12 +339,40 @@ Definition~\ref{def:mpdo_source_gsnnch}; the converse comparison is not used.
     normalization scalar one.
 \end{proof}
 
-\begin{definition}[Orthogonally supported commuting sector products]
+\begin{definition}[Proportionally realized orthogonal commuting sector products]
+    \label{def:mpdo_proportional_orthogonal_commuting_sector_family}
+    \lean{MPOTensor.ProportionalOrthogonalCommutingSectorFamily}
+    \leanok
+    \uses{def:mpdo_commuting_form_data}
+    Let $\{K_x\}_{x=0}^{g-1}$ be MPO tensors on a common one-site space.
+    A proportionally realized orthogonal commuting sector family consists of
+    pairwise orthogonal one-site projections $P_x$ and positive two-site
+    operators $B^{(x)}$ such that
+    \begin{align}
+        (P_x\otimes P_x)B^{(x)}(P_x\otimes P_x)
+        &=B^{(x)},
+        \notag\\
+        [\tau_i(B^{(x)}),\tau_j(B^{(x)})]
+        &=0.
+        \notag
+    \end{align}
+    For every sector $x$ and every $N\geq2$, there is a number
+    $a_{x,N}>0$ such that
+    \begin{align}
+        \rho^{(N)}(K_x)
+        &=a_{x,N}\prod_{i=0}^{N-1}\tau_i(B^{(x)}).
+        \notag
+    \end{align}
+\end{definition}
+
+\begin{definition}[Exactly realized orthogonal commuting sector products]
     \label{def:mpdo_orthogonal_commuting_sector_family}
     \lean{MPOTensor.OrthogonalCommutingSectorFamily}
+    \lean{MPOTensor.OrthogonalCommutingSectorFamily.toProportional}
     \lean{MPOTensor.OrthogonalCommutingSectorFamily.toGSNNCHData}
     \leanok
-    \uses{def:mpdo_source_gsnnch, def:mpdo_commuting_form_data}
+    \uses{def:mpdo_source_gsnnch,
+        def:mpdo_proportional_orthogonal_commuting_sector_family}
     Let $\{K_x\}_{x=0}^{g-1}$ be MPO tensors on a common one-site space.
     An orthogonally supported family of commuting sector products consists of
     pairwise orthogonal one-site projections $P_x$ and positive two-site
@@ -366,6 +394,7 @@ Definition~\ref{def:mpdo_source_gsnnch}; the converse comparison is not used.
     Together with natural multiplicities $n_x$, these objects determine the
     corresponding finite-chain sector decomposition in
     Definition~\ref{def:mpdo_source_gsnnch}.
+    They form a proportionally realized family by taking $a_{x,N}=1$.
 \end{definition}
 
 \begin{theorem}[Positive factorizations on orthogonal physical restrictions]
@@ -636,6 +665,66 @@ Definition~\ref{def:mpdo_source_gsnnch}; the converse comparison is not used.
     Theorem~\ref{thm:mpdo_proportional_local_orthogonal_sum_sal}.
 \end{proof}
 
+\begin{theorem}[Proportional commuting sector products have normalized-chain support]
+    \label{thm:mpdo_proportional_orthogonal_commuting_sector_normalized_support}
+    \lean{MPOTensor.ProportionalOrthogonalCommutingSectorFamily.%
+firstSiteMatrix_mul_normalizedMPO}
+    \leanok
+    \uses{def:mpdo_proportional_orthogonal_commuting_sector_family,
+        def:mpdo_vertical_one_site_actions}
+    For $N\geq2$, suppose that
+    \begin{align}
+        \rho^{(N)}(K_x)
+        &=a_{x,N}\prod_{i=0}^{N-1}\tau_i(B^{(x)}),
+        &
+        a_{x,N}&>0,
+        \notag
+    \end{align}
+    where $B^{(x)}$ is supported on $P_x\otimes P_x$. Then
+    \begin{align}
+        (P_x\otimes\Id^{\otimes(N-1)})\widehat\rho_{x,N,N}
+        &=\widehat\rho_{x,N,N}.
+        \notag
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    The first translated bond is fixed by multiplication by $P_x$ on its
+    first tensor factor, so the entire commuting product is fixed. Factoring
+    $a_{x,N}$ through this first-site action proves the corresponding
+    unnormalized identity, and trace normalization preserves it.
+\end{proof}
+
+\begin{theorem}[Proportional commuting sector products have prefix-marginal support]
+    \label{thm:mpdo_proportional_orthogonal_commuting_sector_marginal_support}
+    \lean{MPOTensor.ProportionalOrthogonalCommutingSectorFamily.%
+firstSiteMatrix_mul_reducedBlockState}
+    \leanok
+    \uses{def:mpdo_proportional_orthogonal_commuting_sector_family,
+        def:mpdo_vertical_one_site_actions}
+    Suppose that, for $N\geq2$,
+    \begin{align}
+        \rho^{(N)}(K_x)
+        &=a_{x,N}\prod_{i=0}^{N-1}\tau_i(B^{(x)}),
+        &
+        a_{x,N}&>0,
+        \notag
+    \end{align}
+    where $B^{(x)}$ is supported on $P_x\otimes P_x$. Then, for
+    $1\leq L\leq N$,
+    \begin{align}
+        (P_x\otimes\Id^{\otimes(L-1)})\widehat\rho_{x,N,L}
+        &=\widehat\rho_{x,N,L}.
+        \notag
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpdo_proportional_orthogonal_commuting_sector_normalized_support}
+    Take the partial trace of the normalized-chain support identity over the
+    final $N-L$ sites.
+\end{proof}
+
 \begin{lemma}[Commuting sector products have local marginal support]
     \label{lem:mpdo_orthogonal_commuting_sector_marginal_support}
     \lean{MPOTensor.OrthogonalCommutingSectorFamily.firstSiteMatrix_mul_reducedBlockState}
@@ -655,10 +744,35 @@ Definition~\ref{def:mpdo_source_gsnnch}; the converse comparison is not used.
 \end{lemma}
 
 \begin{proof}\leanok
-    The first translated bond is fixed by multiplication by $P_x$ on its
-    first tensor factor. Hence the full periodic product is fixed by the
-    corresponding one-site action. Taking the partial trace over the final
-    $N-L$ sites preserves this identity.
+    \uses{thm:mpdo_proportional_orthogonal_commuting_sector_marginal_support}
+    Apply the preceding theorem with $a_{x,N}=1$.
+\end{proof}
+
+\begin{theorem}[Proportional orthogonal commuting sector sums preserve SAL]
+    \label{thm:mpdo_proportional_orthogonal_commuting_sector_sum_sal}
+    \lean{MPOTensor.isSAL_of_proportionalOrthogonalCommutingSectorFamily}
+    \leanok
+    \uses{thm:mpdo_proportional_local_orthogonal_sum_sal,
+        thm:mpdo_proportional_orthogonal_commuting_sector_marginal_support,
+        def:mpdo_proportional_orthogonal_commuting_sector_family}
+    Let $K_x$ be a nonempty finite family with a proportionally realized
+    orthogonal commuting sector family, and let $n_x$ be positive natural
+    numbers. Suppose that, for every $N>0$, there is a number $c_N>0$ such
+    that
+    \begin{align}
+        \rho^{(N)}(M)
+        &=c_N\sum_x n_x\rho^{(N)}(K_x).
+        \notag
+    \end{align}
+    If every $K_x$ satisfies SAL, then $M$ satisfies SAL.
+\end{theorem}
+
+\begin{proof}\leanok
+    The proportional sector-product support lemma supplies the support of
+    every nonempty marginal. Apply
+    Theorem~\ref{thm:mpdo_proportional_local_orthogonal_sum_sal}; its
+    sector weights contain the outer scalar $c_N$, while the inner scalars
+    $a_{x,N}$ have already disappeared under sector normalization.
 \end{proof}
 
 \begin{corollary}[Orthogonal commuting sector sums preserve SAL]
@@ -681,10 +795,54 @@ Definition~\ref{def:mpdo_source_gsnnch}; the converse comparison is not used.
 \end{corollary}
 
 \begin{proof}\leanok
-    The preceding lemma supplies the marginal-support hypothesis of
-    Theorem~\ref{thm:mpdo_local_orthogonal_sum_sal}; the remaining hypotheses
-    are precisely the assumed outer-sector equality, positivity of the
-    multiplicities, and sectorwise SAL.
+    \uses{thm:mpdo_proportional_orthogonal_commuting_sector_sum_sal}
+    Take $a_{x,N}=c_N=1$ in
+    Theorem~\ref{thm:mpdo_proportional_orthogonal_commuting_sector_sum_sal}.
+\end{proof}
+
+\begin{theorem}[Proportional orthogonal commuting-bond sectors with ZCL satisfy SAL]
+    \label{thm:mpdo_proportional_orthogonal_commuting_sector_zcl_sal}
+    \lean{MPOTensor.isSAL_of_proportionalOrthogonalCommutingSectorFamily_of_sectorwise_isSourceZCL}
+    \leanok
+    \uses{def:mpdo_proportional_orthogonal_commuting_sector_family, def:mpdo,
+        def:injective, def:normal, def:mpo_source_zcl, def:is_sal}
+    Let $K_x$ be a nonempty finite family of injective normal tensors
+    generating MPDOs. Suppose that there are pairwise orthogonal one-site
+    projections $P_x$ and fixed translation-invariant positive commuting
+    bonds $B^{(x)}$, supported on $P_x\otimes P_x$. For every sector $x$ and
+    every $N\geq2$, suppose that there is a number $a_{x,N}>0$ such that
+    \begin{align}
+        \rho^{(N)}(K_x)
+        &=a_{x,N}\prod_{i=0}^{N-1}\tau_i(B^{(x)}).
+        \notag
+    \end{align}
+    Suppose also that every $K_x$ has source zero correlation length. Let
+    $n_x$ be positive natural numbers and suppose that, for every $N>0$,
+    there is a number $c_N>0$ such that
+    \begin{align}
+        \rho^{(N)}(M)
+        &=c_N\sum_x n_x\rho^{(N)}(K_x).
+        \notag
+    \end{align}
+    Then $M$ satisfies SAL.
+
+    % **Scope restriction (sectorwise hypotheses):** The printed proposition
+    % omits sectorwise source ZCL. The theorem retains per-sector MPDO,
+    % one-site injectivity, normality, and source ZCL. BNT normality supplies
+    % injectivity only after blocking, so the source application still needs
+    % an injectivity-versus-blocking argument. The global outer sum and sector
+    % products now have the positive proportionality allowed by ApprhoNComm.
+    % Documented in docs/paper-gaps/cpsv16_commuting_form_to_sal.tex.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpdo_translation_invariant_commuting_form_zcl_sal,
+        thm:mpdo_proportional_orthogonal_commuting_sector_sum_sal}
+    For each $x$, the fixed bond $B^{(x)}$ and the positive proportional
+    product identities form the single-sector commuting-bond hypothesis.
+    The single-sector theorem therefore gives SAL for every $K_x$.
+    Theorem~\ref{thm:mpdo_proportional_orthogonal_commuting_sector_sum_sal}
+    then gives SAL for $M$.
 \end{proof}
 
 \begin{theorem}[Orthogonal commuting-bond sectors with ZCL satisfy SAL]
@@ -719,12 +877,10 @@ Definition~\ref{def:mpdo_source_gsnnch}; the converse comparison is not used.
 \end{theorem}
 
 \begin{proof}
-    \uses{thm:mpdo_translation_invariant_commuting_form_zcl_sal,
-        cor:mpdo_orthogonal_commuting_sector_sum_sal}
+    \uses{thm:mpdo_proportional_orthogonal_commuting_sector_zcl_sal}
     \leanok
-    For every $x$, use the fixed sector bond and its exact periodic-product
-    identity in the single-sector commuting-bond theorem to obtain SAL for
-    $K_x$. The preceding orthogonal-sum corollary then gives SAL for $M$.
+    Take $a_{x,N}=c_N=1$ in
+    Theorem~\ref{thm:mpdo_proportional_orthogonal_commuting_sector_zcl_sal}.
 \end{proof}
 
 \begin{corollary}[Orthogonal BNT sector sums preserve SAL]
