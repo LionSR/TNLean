@@ -50,9 +50,6 @@ supplied by strong irreducibility, i.e. peripheral spectrum `{1}`.
 * `isNormal_of_algSpan_eq_top_of_aperiodic`:
   If `algSpan A = ⊤` and `1 ∈ wordSpan A 1`, then `IsNormal A`.
 
-* `isNormal_of_isIrreducibleAction_of_aperiodic`:
-  If `IsIrreducibleAction A`, `1 ∈ wordSpan A 1`, and `NeZero D`, then `IsNormal A`.
-
 ## References
 
 * arXiv:0909.5347, Proposition 3
@@ -260,23 +257,6 @@ theorem isNormal_of_algSpan_eq_top_of_aperiodic
     IsNormal A := by
   obtain ⟨N, hN⟩ := exists_cumulativeSpan_eq_top_of_algSpan_eq_top A halg
   exact isNormal_of_cumulativeSpan_eq_top_of_aperiodic A hN hone
-
-/-- If `IsIrreducibleAction A`, `1 ∈ wordSpan A 1`, and `NeZero D`, then `IsNormal A`.
-
-The full chain:
-```
-IsIrreducibleAction A
-  →  algSpan A = ⊤           (Burnside's theorem)
-  →  ∃ N, cumulativeSpan = ⊤  (Noetherian chain stabilization)
-  →  wordSpan A N = ⊤         (aperiodicity: 1 ∈ wordSpan A 1)
-  =  IsNormal A
-``` -/
-theorem isNormal_of_isIrreducibleAction_of_aperiodic [NeZero D]
-    (A : MPSTensor d D)
-    (hIrr : IsIrreducibleAction A)
-    (hone : (1 : Matrix (Fin D) (Fin D) ℂ) ∈ wordSpan A 1) :
-    IsNormal A := by
-  exact isNormal_of_algSpan_eq_top_of_aperiodic A (burnside_matrix A hIrr) hone
 
 /-! ## Part 5: Eigenvector extraction from a nonzero-trace word -/
 

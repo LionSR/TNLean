@@ -15,8 +15,8 @@ import Mathlib.Data.Fin.Tuple.Basic
 
 This module contains the foundational rectangular-span theory used in the Wielandt
 bound: blocking preserves normality, blocked eigenvector transfer, the basic
-one-sided and cumulative rectangular spans, and the conditional and blocked
-fixed-length matrix spanning theorems for Lemma 2(b).
+one-sided rectangular span, and the conditional and blocked fixed-length matrix
+spanning theorems for Lemma 2(b).
 
 The later growth, stabilization, universality, and sharp quantitative theorems
 live in `TNLean.Wielandt.RectangularSpan.Growth` and
@@ -27,7 +27,7 @@ live in `TNLean.Wielandt.RectangularSpan.Growth` and
 - `isNormal_blockTensor`
 - `blockTensor_single_eigenvector`
 - `encodeBlock`, `blockTensor_apply_encodeBlock`
-- `rectSpan`, `cumulativeRectSpan`
+- `rectSpan`
 - `wielandt_lemma2b_conditional`
 - `wielandt_blocked_assembly`
 -/
@@ -197,43 +197,6 @@ theorem rectSpan_le_wordSpan (A : MPSTensor d D) {m n : ℕ}
   obtain ⟨Q, hQ, rfl⟩ := Submodule.mem_map.mp hM
   simp only [LinearMap.mulLeft_apply]
   exact (wordSpan_mul_le A m n) (Submodule.mul_mem_mul hP hQ)
-
-/-! ## Section 4: Cumulative rectangular span -/
-
-/-- The **cumulative rectangular span**: image of `cumulativeSpan` under left-mult by P. -/
-noncomputable def cumulativeRectSpan (P : Matrix (Fin D) (Fin D) ℂ)
-    (A : MPSTensor d D) (n : ℕ) :
-    Submodule ℂ (Matrix (Fin D) (Fin D) ℂ) :=
-  Submodule.map (LinearMap.mulLeft ℂ P) (cumulativeSpan A n)
-
-/-- Monotonicity of cumulative rectangular span. -/
-theorem cumulativeRectSpan_mono
-    (P : Matrix (Fin D) (Fin D) ℂ) (A : MPSTensor d D) (n : ℕ) :
-    cumulativeRectSpan P A n ≤ cumulativeRectSpan P A (n + 1) :=
-  Submodule.map_mono (cumulativeSpan_mono A n)
-
-/-- Dimension bound for cumulative rectangular span. -/
-theorem cumulativeRectSpan_finrank_le
-    (P : Matrix (Fin D) (Fin D) ℂ) (A : MPSTensor d D) (n : ℕ) :
-    Module.finrank ℂ (cumulativeRectSpan P A n) ≤ D ^ 2 := by
-  calc Module.finrank ℂ (cumulativeRectSpan P A n)
-      ≤ Module.finrank ℂ (Matrix (Fin D) (Fin D) ℂ) := Submodule.finrank_le _
-    _ = D ^ 2 := by
-          rw [Module.finrank_matrix, Fintype.card_fin, Module.finrank_self, mul_one]; ring
-
-/-- When `cumulativeSpan A n = ⊤`, the cumulative rectangular span equals `range(mulLeft P)`. -/
-theorem cumulativeRectSpan_eq_range_of_cumulativeSpan_eq_top
-    (P : Matrix (Fin D) (Fin D) ℂ) (A : MPSTensor d D) {n : ℕ}
-    (htop : cumulativeSpan A n = ⊤) :
-    cumulativeRectSpan P A n = LinearMap.range (LinearMap.mulLeft ℂ P) := by
-  simp [cumulativeRectSpan, htop, Submodule.map_top]
-
-/-- Under `IsNormal`, cumulative rectangular span = range at level D². -/
-theorem cumulativeRectSpan_eq_range_of_isNormal [NeZero D]
-    (P : Matrix (Fin D) (Fin D) ℂ) (A : MPSTensor d D) (hN : IsNormal A) :
-    cumulativeRectSpan P A (D ^ 2) = LinearMap.range (LinearMap.mulLeft ℂ P) :=
-  cumulativeRectSpan_eq_range_of_cumulativeSpan_eq_top P A
-    (cumulativeSpan_eq_top A hN)
 
 /-! ## Section 5: Conditional fixed-length matrix spanning (Lemma 2(b)) -/
 
