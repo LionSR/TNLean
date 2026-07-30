@@ -54,7 +54,7 @@ theorem WordTupleSpanTop.exists_one_letter_identity_coefficients
 right-canonical normalization in the restriction argument of
 arXiv:quant-ph/0608197, Theorem 12, proof lines 1442--1452.
 
-**Local fix (common identity coefficients):** The source uses
+**Scope restriction (common identity coefficients):** The source uses
 \(\sum_i A_i A_i^\dagger=1\) and the adjoint-corrected boundary matrix
 \(E=\sum_i C_i A_i^\dagger\). This theorem instead assumes common coefficients
 \(c_i\) with \(\sum_i c_i A_i=1\) and sets \(E=\sum_i c_i C_i\).
