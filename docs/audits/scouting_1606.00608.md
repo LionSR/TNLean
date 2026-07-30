@@ -28,7 +28,7 @@
 |------|-------------|-----------------|------------|
 | **Def 3.2: RFP (pure)** `defRFP` | Tensor A s.t. A^{i₁}A^{i₂} = Σ_j U_{(i₁,i₂),j} A^j for isometry U. Equivalently: E = E² where E is the CPM. | Medium | **Not formalized**. We have CPM composition infrastructure (`Channel/Basic.lean`) and idempotent projection theory (`Channel/FixedPoint/`). |
 | **Thm 3.1** `thm:renormalization-flow` | A appears as RG limit ⟺ A^{i₁}A^{i₂} = Σ U A^j (the idempotent condition) | Medium | Not formalized. Proof uses: two Kraus sets give same CPM ⟺ related by physical-index isometry (Stinespring). We have Stinespring in `Channel/Stinespring.lean`. |
-| **Convergence of RG flow** (App B) | Starting from CF tensor, blocking always converges | Medium | Not formalized. Uses BNT decomposition + spectral gap (both available). |
+| **Convergence of RG flow** (App B) | Starting from CF tensor, blocking always converges | Obstructed as printed | Refuted by a repeated-copy phase oscillation: for \(A^1=\operatorname{diag}(1,\omega)\), with \(\omega\) a primitive cube root of unity, the dyadic transfer powers alternate on \(e_{21}\). Per-block primitive convergence is formalized by `rg_flow_converges_of_cf`; see `docs/paper-gaps/cpsv16_canonical_form_renormalization_flow_phase_gap.tex`. |
 
 ### §3.2 Zero Correlation Length (Defs 3.3–3.7, Thm 3.8)
 
@@ -285,7 +285,7 @@ TNLean/MPS/RFP/
 ├── Defs.lean                    -- §3.1: IsTransferIdempotent, IsIdempotentCPM
 ├── ZeroCorrelationLength.lean   -- §3.2: IsCID, IsLocallyOrthogonal, IsZCL, Thm 3.8 (ZCL ⟺ E²=E)
 ├── StructuralForm.lean          -- §3.4 + Lem B.1: NT RFP ⟹ A^i = XΛU^iX^{-1}; full CF structural char
-├── Convergence.lean             -- App B: RG flow convergence from CF (E^N → idempotent)
+├── Convergence.lean             -- App B: primitive-block transfer convergence
 └── Assembly.lean                -- Thm 3.10 partial: RFP ⟺ ZCL (two-way; NNCPH direction deferred)
 ```
 
@@ -317,7 +317,7 @@ TNLean/MPS/RFP/
 | `Defs.lean` | Def 3.2 | `IsTransferIdempotent (A : MPSTensor d D)`, `IsIdempotentCPM` (E²=E), equivalence with the physical blocking definition via Stinespring | ~80 | `MPS/Defs`, `MPS/Core/Transfer`, `Channel/Stinespring` |
 | `ZeroCorrelationLength.lean` | Defs 3.3–3.7, Thm 3.8 | `IsCID`, `IsLocallyOrthogonal`, `IsZCL`, `zcl_iff_idempotent_transfer` | ~250 | `MPS/Core/Transfer`, `MPS/BNT/*`, `Spectral/SpectralGap`, `Algebra/ScalarPowerSumIdentity` |
 | `StructuralForm.lean` | Thm 3.11, Lem B.1, Cor 3.12 | `rfp_nt_structural` (A^i = XΛU^iX^{-1}), `rfp_cf_structural` (full block form), `rfp_bnt_structural` | ~200 | `RFP/Defs`, `RFP/ZeroCorrelationLength`, `Channel/FixedPoint/*`, `MPS/BNT/*` |
-| `Convergence.lean` | App B (RG convergence) | `rg_flow_converges_of_cf` | ~120 | `MPS/Core/Transfer`, `MPS/BNT/*`, `Spectral/SpectralGap` |
+| `Convergence.lean` | App B (primitive-block convergence; full CF flow obstructed) | `rg_flow_converges_of_cf` | ~120 | `MPS/Core/Transfer`, `MPS/BNT/*`, `Spectral/SpectralGap` |
 | `Assembly.lean` | Thm 3.10 (partial) | `rfp_iff_zcl` (bidirectional), placeholder for NNCPH | ~80 | `RFP/Defs`, `RFP/ZeroCorrelationLength`, `RFP/StructuralForm` |
 
 ### Tier 2 — Parent Hamiltonian infrastructure (extend `MPS/ParentHamiltonian/`)
