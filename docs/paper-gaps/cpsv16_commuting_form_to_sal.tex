@@ -8,7 +8,7 @@
 
 \title{The Commuting-Form-to-SAL Implication for Simple MPDOs}
 \author{}
-\date{2026-07-18}
+\date{2026-07-29}
 
 \begin{document}
 \maketitle
@@ -85,7 +85,7 @@ the physical-trace transfer.  The predicate \leanid{MPOTensor.IsZCL} concerns
 the doubled-index completely positive transfer map and is not a faithful
 substitute for the proposition labelled \emph{4to2}.
 
-\section{Unformalized implication}
+\section{Resolution of the implication}
 
 The finite-dimensional $C^*$-algebra part of the Bravyi--Vyalyi argument is
 now available.  For a star-subalgebra $S\subseteq\mathbf L(H_B)$, one
@@ -208,15 +208,17 @@ $a^2=2$ and $a^4=2$, which is impossible.  Thus a fixed local rescaling does
 not follow from the displayed proportionality data.
 
 The example is not a normal injective block.  It therefore does not contradict
-the source setting, but shows exactly which source hypothesis the missing
-argument must use.  For a normal injective single block, one must compare the
-matrix-product family with the fixed bond-product family and prove that its
+the source setting, but shows why a scalar-rescaling route would have needed
+to use normal injectivity.  Pursuing that route would require a comparison of
+the matrix-product family with the fixed bond-product family proving that its
 proportionality constants have the form
 \[
   c_N=a^N
 \]
 for one $a>0$.  Only then can $a$ be absorbed once into the bond, or
-equivalently into the neighboring operators, independently of $N$.
+equivalently into the neighboring operators, independently of $N$.  The
+completed proof does not use this route: it compares the normalized marginals
+of the selected fixed-product tensor with those of the source tensor directly.
 
 The finite-state part of this comparison is now isolated.  The tensor
 \leanid{MPOTensor.cyclicEdgeWeightTensor} has virtual dimension $d^2$ and
@@ -370,8 +372,10 @@ matrix is not idempotent.  The capstone theorem
 tensor_refutes_printed_sal_zcl_rank_one_inference}
 adds SAL, source ZCL, and the source-selected inverse-map factorization, and
 proves that its active trace matrix is not rank one.  Thus neither inverse-map
-provenance nor the finite-chain cyclic form supplies the missing rectangular
-vanishing.
+provenance nor the finite-chain cyclic form supplies the rectangular
+vanishing asserted by that one-step inference.  This conclusion is unavailable
+and is not used in the completed proof, which instead obtains a positive
+rank-one factorization of the two-step coefficient.
 
 Primitivity cannot be assumed for an arbitrary selected Beigi factorization.
 The theorem
@@ -476,17 +480,23 @@ explicit positive physical-sector factorization.  The older conditional theorem
 a one-step rank-one coefficient; it is not used to identify $T_C$ with
 $T_C^2$.
 
-Consequently the source implication
+The explicit-factorization theorem
+\leanid{MPOTensor.PhysicalSectorFactorization.isSAL_of_isSourceZCL} remains a
+conditional scope-restricted result: by itself it does not prove the source
+implication
 \[
   \text{one translation-invariant commuting bond}
   +\text{source ZCL}
   \Longrightarrow \text{SAL}
 \]
-is not yet formalized and must not carry a \texttt{\string\leanok} marker.
-The target-side construction recorded above is now complete for the exact
-selected fixed tensor: its positive physical-sector factorization is
-constructed from the fixed commuting bond in equation \emph{sigmaNK2} at
-source lines~1581--1605.
+because it applies to the tensor carrying the factorization.  For the source
+theorem, now formalized by
+\leanid{MPOTensor.EtaLocalStructureData.isSAL_of_isSourceZCL}, the required
+positive physical-sector factorization is instead constructed on the selected
+fixed tensor from the bond in equation
+\emph{sigmaNK2} at source lines~1581--1605.  The following comparison transfers
+the resulting normalized marginals, rather than assuming injectivity,
+normality, or zero correlation length for the selected tensor.
 
 The recurrent-sector comparison no longer requires a normality or blocking
 comparison with that selected representative.  Express the original injective
@@ -559,10 +569,15 @@ It assumes exactly the hypotheses of Proposition~\emph{4to2} together with
 the standing MPDO and normal-block hypotheses; it assumes no injectivity,
 normality, or zero correlation length for the selected fixed-product tensor.
 
-Thus the source-facing Markov-cut construction is complete.  The remaining
-step in the commuting-form-to-SAL implication is the entropy-theoretic
-assembly: apply the all-cut Markov criterion to these physical-coordinate
-marginals and transport saturation through the one-site isometry.
+Applying the all-cut Markov criterion to these physical-coordinate marginals
+and transporting saturation through the one-site isometry gives
+\leanid{MPOTensor.EtaLocalStructureData.isSAL_of_isSourceZCL}.  Positivity of
+the physical-coordinate periodic operators follows from the MPDO hypothesis
+by isometric conjugation, and their traces agree with the original traces,
+which are nonzero at every positive length by source ZCL.  The theorem assumes
+exactly the source tensor, its MPDO, injectivity, and normality hypotheses, the
+fixed eta-local structure, and source ZCL.  It assumes no injectivity,
+normality, ZCL, or SAL property of the selected fixed-product tensor.
 
 \paragraph{Local fix (the later orthogonal-sector statement).}
 The proposition labelled \emph{prop4to2} at source lines~1801--1808 states
@@ -601,15 +616,16 @@ direct-sum implication.  It neither derives the sectorwise SAL premise nor
 uses ZCL.
 
 \paragraph{Verdict.}
-Proposition~\emph{4to2} is classified as a structural-bridge gap.  The
+Proposition~\emph{4to2} is formalized by
+\leanid{MPOTensor.EtaLocalStructureData.isSAL_of_isSourceZCL}.  The
 positive fixed-product representative, its cyclic-active recurrent component,
 the normalized square--cube identity, and the positive rank-one factorization
 of the two-step coefficient are now obtained from the source tensor without a
 virtual comparison between the two tensors.  The resulting Hayashi
 decomposition holds at every one-site cut of the original source tensor in the
-selected physical coordinates.  The remaining gap is only to pass from these
-all-cut decompositions to SAL and then transport SAL through the one-site
-physical isometry.
+selected physical coordinates.  The all-cut Markov criterion proves SAL in
+those coordinates, and isometric invariance transports SAL back to the source
+tensor.
 
 The later
 orthogonal direct-sum implication is likewise formalized only as a
@@ -617,9 +633,7 @@ scope-restricted theorem assuming sectorwise SAL.  It neither supplies that
 sectorwise premise nor proves the printed assertion that the GSNNCH form alone
 implies SAL.
 
-\section{Elimination plan}
-
-The remaining gap can be removed in the following stages.
+\section{Completed proof}
 
 \begin{enumerate}
 \item Apply the all-cut Markov criterion to the decompositions supplied by
@@ -628,9 +642,9 @@ exists_hayashiMarkovDecomposition_selectedPhysicalCut_of_isSourceZCL}.
 Positivity and nonvanishing of the physical-coordinate periodic operators
 follow from the MPDO and source-ZCL hypotheses.
 \item Transport SAL back through the selected one-site physical isometry.
-Only after this conclusion is stated under exactly the source hypotheses may
-Proposition~\emph{4to2} receive a formal declaration and a
-\texttt{\string\leanok} marker.
+These two steps are
+\leanid{MPOTensor.EtaLocalStructureData.isSAL_of_isSourceZCL}, whose blueprint
+entry now carries a \texttt{\string\leanok} marker.
 \end{enumerate}
 
 \bibliographystyle{alpha}

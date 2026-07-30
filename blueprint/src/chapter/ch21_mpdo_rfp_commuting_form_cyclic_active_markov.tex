@@ -1266,7 +1266,7 @@
     \leanok
     \uses{thm:mpdo_cyclic_active_markov_all_cuts,
       thm:mpdo_all_cut_markov_implies_sal,
-      thm:mpdo_physical_support_restriction_sal}
+      thm:mpdo_sal_physical_isometry_transport}
     Let $\mathcal K$ have positive bond dimension and be injective, and let
     $F$ be a physical-sector factorization of $\mathcal K$. Suppose every
     neighboring operator $\eta^F_{q,h}$ is positive semidefinite. If the
@@ -1275,15 +1275,10 @@
 
     % **Scope restriction (physical-sector factorization):** The theorem
     % assumes the factorization F and positivity of every neighboring
-    % operator.  CPSV16 Proposition 4to2, lines 1597--1619, starts instead
-    % from a translation-invariant commuting bond and the original source
-    % tensor.  The selected fixed tensor has the required positive
-    % factorization, and
-    % Theorem~\ref{thm:mpdo_selected_fixed_product_cyclic_recurrence}
-    % establishes recurrence through the auxiliary space of the original
-    % tensor.  It remains to derive the rank-one Markov conclusion for the
-    % original source without imposing source zero correlation length on the
-    % selected tensor; see docs/paper-gaps/cpsv16_commuting_form_to_sal.tex.
+    % operator, so it remains a conditional explicit-factorization result.
+    % The source-faithful CPSV16 Proposition 4to2 is
+    % Theorem~\ref{thm:mpdo_translation_invariant_commuting_form_zcl_sal};
+    % see docs/paper-gaps/cpsv16_commuting_form_to_sal.tex.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -1297,9 +1292,10 @@
 
 \begin{theorem}[A translation-invariant commuting bond and ZCL imply SAL]
     \label{thm:mpdo_translation_invariant_commuting_form_zcl_sal}
-    \notready
+    \lean{MPOTensor.EtaLocalStructureData.isSAL_of_isSourceZCL}
+    \leanok
     \uses{def:mpdo_eta_local_structure_data, def:mpo_source_zcl,
-        def:is_sal, def:mpdo, def:mpdo_injective_inverse_layer}
+        def:is_sal, def:mpdo, def:injective, def:normal}
     Let $\mathcal K$ be an injective normal tensor generating MPDOs. Suppose
     that there is one
     positive two-site bond $B$ whose translates commute and, for every
@@ -1314,11 +1310,35 @@
 
     This is the proposition at
     \cite[Appendix~C.2, lines~1597--1619]{Cirac2016MPDO_arXiv}.
-    % The local positive neighboring operators are constructed.  The printed
-    % rank-one inference at source line 1613 is obstructed by Lemma C.5. Gap
-    % documented in
+
+    % **Local fix (cyclic-active two-step coefficient):** Source lines
+    % 1613--1616 use an invalid one-step rank-one inference. The proof instead
+    % uses the positive rank-one factorization of the cyclic-active two-step
+    % coefficient and transports the normalized marginals from the selected
+    % fixed-product tensor to the source tensor. Documented in
     % docs/paper-gaps/cpsv16_commuting_form_to_sal.tex.
 \end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpdo_selected_fixed_product_markov_cuts,
+        thm:mpdo_all_cut_markov_implies_sal,
+        thm:mpdo_sal_physical_isometry_transport,
+        lem:mpdo_sitewise_physical_coordinate_congruence,
+        thm:mpdo_source_zcl_strict_positive_length_normalization}
+    Express $\mathcal K$ in the one-site physical coordinates selected by
+    the fixed bond. Positivity of every periodic operator is preserved by
+    this isometry, and its trace is unchanged, hence nonzero at every
+    positive length by source zero correlation length.
+
+    For every $1\leq m\leq\lfloor N/2\rfloor$, apply
+    Theorem~\ref{thm:mpdo_selected_fixed_product_markov_cuts} with
+    $A=m-1$ and $C=N-m-1$. Since
+    $A+C+2=N$, the resulting decomposition is the quantum Markov
+    decomposition required at the $m$-th cut. The all-cut criterion gives
+    saturation of the area law in the selected physical coordinates.
+    Finally, isometric invariance of the chain and marginal entropies
+    transports saturation back to $\mathcal K$.
+\end{proof}
 
 \begin{theorem}[$\eta$-local structure gives the one-sector GSNNCH form]
     \label{thm:mpdo_eta_local_structure_has_gsnnch_form}
