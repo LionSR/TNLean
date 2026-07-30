@@ -467,6 +467,8 @@ the coefficient argument of Chapter~\ref{ch:bnt}.
     \lean{MPSTensor.IsNormalTensor.blockTensor}
     \leanok
     \uses{def:nt_cpsv, def:blocked_tensor,
+        thm:cpsv_normal_tp_gauge,
+        thm:tp_primitive_irreducible_extra_blocking,
         thm:cpsv_normal_tensor_gauge_transport,
         thm:is_normal_tensor_of_is_normal_left_canonical}
     Let $A$ be a CPSV normal tensor and let $L\geq1$. Then the blocked tensor
@@ -474,7 +476,8 @@ the coefficient argument of Chapter~\ref{ch:bnt}.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{def:nt_cpsv, def:blocked_tensor,
+    \uses{thm:cpsv_normal_tp_gauge,
+        thm:tp_primitive_irreducible_extra_blocking,
         thm:cpsv_normal_tensor_gauge_transport,
         thm:is_normal_tensor_of_is_normal_left_canonical}
     Choose a trace-preserving gauge $B^i=XA^iX^{-1}$. Positive blocking gives

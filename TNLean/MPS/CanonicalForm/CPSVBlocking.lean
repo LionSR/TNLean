@@ -177,7 +177,13 @@ theorem blockTensor {A : MPSTensor d D} (hA : IsNormalTensor A) (p : ℕ) (hp : 
 end IsNormalTensor
 
 /-- Exact word-level transport through a coisometric reconstruction, for
-nonempty words. -/
+nonempty words.
+
+Source: arXiv:1606.00608, equation `II_CF1` at lines 237--244 gives the
+one-site canonical-form reconstruction, and Proposition 4.13 at lines
+1917--1921 uses the corresponding coisometric reconstruction.  This theorem is
+its nonempty-word iteration, with intermediate coisometries cancelled by
+\(UU^*=1\). -/
 theorem evalWord_eq_coisometry_reconstruction_of_ne_nil
     {s d n : ℕ} {A : MPSTensor s d} {B : MPSTensor s n}
     (U : Matrix (Fin n) (Fin d) ℂ)

@@ -86,7 +86,14 @@ private noncomputable def sandwichLinearEquiv
     Matrix.mul_assoc]
 
 /-- Spectral radius is invariant under the congruence similarity
-`X ↦ C⁻¹ * E (C * X * Cᴴ) * (Cᴴ)⁻¹`. -/
+`X ↦ C⁻¹ * E (C * X * Cᴴ) * (Cᴴ)⁻¹`.
+
+Source context: arXiv:1606.00608, lines 214--235, fixes the transfer-map
+spectral radius when passing to normal blocks.  The equality here is the
+finite-dimensional similarity identity used to transport that normalization
+through a bond-space gauge.  See also M. Wolf, *Quantum Channels & Operations:
+Guided Tour*, Section 6.2, the similarity step in the proof of Theorem 6.3
+[Wolf2012QChannels]. -/
 theorem spectralRadius_similarityMap_eq
     (C : Matrix (Fin D) (Fin D) ℂ) (hC : C.det ≠ 0)
     (E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ) :
