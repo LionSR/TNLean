@@ -42,7 +42,10 @@ variable {d D : ℕ}
 
 namespace GaugeEquiv
 
-/-- Gauge equivalence is preserved by blocking the physical alphabet. -/
+/-- Gauge equivalence is preserved by blocking the physical alphabet.
+
+Source: arXiv:1606.00608, line 227 defines blocking by matrix products and
+lines 264--268 give the invertible gauge relation. -/
 theorem blockTensor {A B : MPSTensor d D} (h : GaugeEquiv A B) (p : ℕ) :
     GaugeEquiv (blockTensor (d := d) (D := D) A p)
       (blockTensor (d := d) (D := D) B p) := by
@@ -52,7 +55,10 @@ theorem blockTensor {A B : MPSTensor d D} (h : GaugeEquiv A B) (p : ℕ) :
     evalWord_gauge (A := A) (B := B) X hX (wordOfBlock d p i)
 
 /-- The transfer maps of gauge-equivalent tensors are related by the standard
-congruence similarity of completely positive maps. -/
+congruence similarity of completely positive maps.
+
+Source: arXiv:1606.00608, lines 219--223 define the transfer map and lines
+264--268 give the invertible gauge relation. -/
 theorem transferMap_eq_similarityMap {A B : MPSTensor d D} (h : GaugeEquiv A B) :
     ∃ C : Matrix (Fin D) (Fin D) ℂ, C.det ≠ 0 ∧
       transferMap (d := d) (D := D) B =
@@ -192,7 +198,10 @@ theorem evalWord_eq_coisometry_reconstruction_of_ne_nil
           rw [← Matrix.mul_assoc U Uᴴ, hU, Matrix.one_mul]
 
 /-- Blocking a weighted direct sum is exactly the weighted direct sum of the
-blocked summands, with every weight raised to the blocking length. -/
+blocked summands, with every weight raised to the blocking length.
+
+Source: arXiv:1606.00608, lines 259--301, especially equations `II_Psi_k`,
+`II_ABasicTensors`, and `decBSV`. -/
 theorem blockTensor_toTensorFromBlocks_apply {r : ℕ} {dim : Fin r → ℕ}
     (μ : Fin r → ℂ) (blocks : (k : Fin r) → MPSTensor d (dim k))
     (p : ℕ) (i : Fin (blockPhysDim d p)) :
