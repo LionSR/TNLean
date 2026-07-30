@@ -4,12 +4,14 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.MPDO.CyclicActiveRetainedCoordinates
+import TNLean.MPS.MPDO.SectorChainFiberContraction
 
 /-!
-# Contraction of the three discarded sites
+# Contraction of a nonempty discarded suffix
 
-This file evaluates the contraction over the three discarded sites in
-retained open-edge coordinates and specializes it to cyclic-active sectors.
+This file evaluates the contraction over an arbitrary nonempty discarded
+suffix in retained open-edge coordinates. It also records the three-site
+specialization used for cyclic-active sectors.
 
 ## Reference
 
@@ -22,61 +24,81 @@ namespace MPOTensor.PhysicalSectorFactorization
 
 variable {d D : ℕ} {K : MPOTensor d D}
 
-private theorem fourthRegion_internal_index {n : ℕ} (i : Fin n) :
-    Fin.castAdd 3 (Fin.castAdd 1 i) =
-      Fin.castAdd 3 ((Fin.last n).succAbove i) := by
+private theorem suffixContraction_internal_index {n N : ℕ} (i : Fin n) :
+    Fin.castAdd N (Fin.castAdd 1 i) =
+      Fin.castAdd N ((Fin.last n).succAbove i) := by
   ext
   simp [Fin.succAbove_last]
+
+private theorem suffixContraction_internal_succ_index {n N : ℕ} (i : Fin n) :
+    Fin.castAdd N (Fin.castAdd 1 i) + 1 =
+      Fin.castAdd N ((Fin.last n).succAbove i + 1) := by
+  rw [Fin.succAbove_last]
+  apply Fin.ext
+  have hn : 0 < n := lt_of_le_of_lt (Nat.zero_le i.val) i.isLt
+  have honeBig : ((1 : Fin (n + 1 + N)) : ℕ) = 1 := by
+    change 1 % (n + 1 + N) = 1
+    exact Nat.mod_eq_of_lt <| lt_of_lt_of_le (Nat.succ_lt_succ hn) <| by omega
+  have honeSmall : ((1 : Fin (n + 1)) : ℕ) = 1 := by
+    change 1 % (n + 1) = 1
+    exact Nat.mod_eq_of_lt (Nat.succ_lt_succ hn)
+  simp only [Fin.val_castAdd, Fin.val_add, Fin.val_castSucc,
+    honeBig, honeSmall]
+  rw [Nat.mod_eq_of_lt (by omega), Nat.mod_eq_of_lt (by omega)]
+
+private theorem suffixContraction_last_retained_index {n N : ℕ} :
+    Fin.castAdd N (Fin.natAdd n (0 : Fin 1)) =
+      Fin.castAdd N (Fin.last n) := by
+  ext
+  rfl
+
+private theorem suffixContraction_first_suffix_index {n m : ℕ} :
+    Fin.castAdd (m + 1) (Fin.natAdd n (0 : Fin 1)) + 1 =
+      Fin.natAdd (n + 1) (0 : Fin (m + 1)) := by
+  apply Fin.ext
+  have hone : ((1 : Fin (n + 1 + (m + 1))) : ℕ) = 1 := by
+    change 1 % (n + 1 + (m + 1)) = 1
+    exact Nat.mod_eq_of_lt (by omega)
+  simp only [Fin.val_add, Fin.val_castAdd, Fin.val_natAdd, Fin.val_zero, hone]
+  rw [Nat.mod_eq_of_lt (by omega)]
+
+private theorem suffixContraction_suffix_succ {n m : ℕ} (i : Fin m) :
+    Fin.natAdd (n + 1) (Fin.castAdd 1 i) + 1 =
+      Fin.natAdd (n + 1) i.succ := by
+  apply Fin.ext
+  have hone : ((1 : Fin (n + 1 + (m + 1))) : ℕ) = 1 := by
+    change 1 % (n + 1 + (m + 1)) = 1
+    exact Nat.mod_eq_of_lt (by omega)
+  simp only [Fin.val_add, Fin.val_natAdd, Fin.val_castAdd, Fin.val_succ, hone]
+  rw [Nat.mod_eq_of_lt (by omega)]
+  omega
+
+private theorem suffixContraction_suffix_last_succ {n m : ℕ} :
+    Fin.natAdd (n + 1) (Fin.natAdd m (0 : Fin 1)) + 1 =
+      Fin.castAdd (m + 1) (Fin.last n + 1) := by
+  apply Fin.ext
+  have hone : ((1 : Fin (n + 1 + (m + 1))) : ℕ) = 1 := by
+    change 1 % (n + 1 + (m + 1)) = 1
+    exact Nat.mod_eq_of_lt (by omega)
+  simp only [Fin.val_add, Fin.val_natAdd, Fin.val_zero, Fin.last_add_one,
+    Fin.val_castAdd, hone]
+  simp only [Nat.add_zero]
+  rw [show n + 1 + m + 1 = n + 1 + (m + 1) by omega, Nat.mod_self]
+
+private theorem suffixContraction_last_suffix_index {m : ℕ} :
+    Fin.natAdd m (0 : Fin 1) = Fin.last m := by
+  ext
+  rfl
+
+private theorem suffixContraction_castAdd_one_eq_castSucc {m : ℕ} (i : Fin m) :
+    Fin.castAdd 1 i = i.castSucc := by
+  ext
+  rfl
 
 private theorem fourthRegion_retained_internal_index {n : ℕ} (i : Fin n) :
     Fin.castAdd 1 i = (Fin.last n).succAbove i := by
   ext
   simp [Fin.succAbove_last]
-
-private theorem fourthRegion_internal_succ_index {n : ℕ} (i : Fin n) :
-    Fin.castAdd 3 (Fin.castAdd 1 i) + 1 =
-      Fin.castAdd 3 ((Fin.last n).succAbove i + 1) := by
-  rw [Fin.succAbove_last]
-  apply Fin.ext
-  have hn : 0 < n := lt_of_le_of_lt (Nat.zero_le i.val) i.isLt
-  have honeBig : ((1 : Fin (n + 1 + 3)) : ℕ) = 1 := by
-    simp
-  have honeSmall : ((1 : Fin (n + 1)) : ℕ) = 1 := by
-    change 1 % (n + 1) = 1
-    exact Nat.mod_eq_of_lt (by omega)
-  simp only [Fin.val_castAdd, Fin.val_add, Fin.val_castSucc,
-    honeBig, honeSmall]
-  rw [Nat.mod_eq_of_lt (by omega), Nat.mod_eq_of_lt (by omega)]
-
-private theorem fourthRegion_last_retained_index {n : ℕ} :
-    Fin.castAdd 3 (Fin.natAdd n (0 : Fin 1)) =
-      Fin.castAdd 3 (Fin.last n) := by
-  ext
-  rfl
-
-private theorem fourthRegion_first_suffix_index {n : ℕ} :
-    Fin.castAdd 3 (Fin.natAdd n (0 : Fin 1)) + 1 =
-      Fin.natAdd (n + 1) (0 : Fin 3) := by
-  ext
-  simp [Fin.add_def]
-
-private theorem fourthRegion_suffix_zero_succ {n : ℕ} :
-    Fin.natAdd (n + 1) (0 : Fin 3) + 1 =
-      Fin.natAdd (n + 1) (1 : Fin 3) := by
-  ext
-  simp [Fin.add_def]
-
-private theorem fourthRegion_suffix_one_succ {n : ℕ} :
-    Fin.natAdd (n + 1) (1 : Fin 3) + 1 =
-      Fin.natAdd (n + 1) (2 : Fin 3) := by
-  ext
-  simp [Fin.add_def]
-
-private theorem fourthRegion_suffix_two_succ {n : ℕ} :
-    Fin.natAdd (n + 1) (2 : Fin 3) + 1 =
-      Fin.castAdd 3 (Fin.last n + 1) := by
-  ext
-  simp [Fin.add_def]
 
 private theorem rightTensor_eq_of_heq
     (F : PhysicalSectorFactorization K) {k h : Fin F.sectorCount}
@@ -215,23 +237,23 @@ private theorem appendSectorFiber_snd_natAdd_heq
   exact sectorIndex_snd_heq_of_heq F (by simp)
     (F.appendSectorFiber_natAdd_heq x z i)
 
-private theorem fourthRegion_internal_neighboring_entry
-    (F : PhysicalSectorFactorization K) {n : ℕ}
+private theorem suffixContraction_retained_neighboring_entry
+    (F : PhysicalSectorFactorization K) {n N : ℕ}
     (k : Fin (n + 1) → Fin F.sectorCount)
-    (t : Fin 3 → Fin F.sectorCount)
+    (t : Fin N → Fin F.sectorCount)
     (x y : F.RetainedOpenEdgeIndex k)
     (z : F.SectorChainFiber t) (i : Fin n) :
     F.neighboringOperator
-        (Fin.append k t (Fin.castAdd 3 (Fin.castAdd 1 i)))
-        (Fin.append k t (Fin.castAdd 3 (Fin.castAdd 1 i) + 1))
+        (Fin.append k t (Fin.castAdd N (Fin.castAdd 1 i)))
+        (Fin.append k t (Fin.castAdd N (Fin.castAdd 1 i) + 1))
         ((F.appendSectorFiber ((F.retainedOpenEdgeEquiv k).symm x) z
-            (Fin.castAdd 3 (Fin.castAdd 1 i))).2,
+            (Fin.castAdd N (Fin.castAdd 1 i))).2,
           (F.appendSectorFiber ((F.retainedOpenEdgeEquiv k).symm x) z
-            (Fin.castAdd 3 (Fin.castAdd 1 i) + 1)).1)
+            (Fin.castAdd N (Fin.castAdd 1 i) + 1)).1)
         ((F.appendSectorFiber ((F.retainedOpenEdgeEquiv k).symm y) z
-            (Fin.castAdd 3 (Fin.castAdd 1 i))).2,
+            (Fin.castAdd N (Fin.castAdd 1 i))).2,
           (F.appendSectorFiber ((F.retainedOpenEdgeEquiv k).symm y) z
-            (Fin.castAdd 3 (Fin.castAdd 1 i) + 1)).1) =
+            (Fin.castAdd N (Fin.castAdd 1 i) + 1)).1) =
       F.neighboringOperator
         (k ((Fin.last n).succAbove i))
         (k ((Fin.last n).succAbove i + 1)) (x.1 i) (y.1 i) := by
@@ -239,7 +261,7 @@ private theorem fourthRegion_internal_neighboring_entry
   apply Finset.sum_congr rfl
   intro a ha
   congr 1
-  · apply rightTensor_eq_of_heq F (by simp [fourthRegion_internal_index]) a
+  · apply rightTensor_eq_of_heq F (by simp [suffixContraction_internal_index]) a
     · refine (F.appendSectorFiber_snd_castAdd_heq _ _ (Fin.castAdd 1 i) rfl).trans ?_
       refine (dependent_prod_snd_heq ((F.retainedOpenEdgeEquiv k).symm x)
         (fourthRegion_retained_internal_index i)).trans ?_
@@ -250,137 +272,132 @@ private theorem fourthRegion_internal_neighboring_entry
         (fourthRegion_retained_internal_index i)).trans ?_
       exact heq_of_eq (congrArg Prod.fst
         (F.retainedOpenEdgeEquiv_symm_internal_edge k y i))
-  · apply leftTensor_eq_of_heq F (by simp [fourthRegion_internal_succ_index]) a
+  · apply leftTensor_eq_of_heq F (by simp [suffixContraction_internal_succ_index]) a
     · refine (F.appendSectorFiber_fst_castAdd_heq _ _
-        ((Fin.last n).succAbove i + 1) (fourthRegion_internal_succ_index i)).trans ?_
+        ((Fin.last n).succAbove i + 1)
+          (suffixContraction_internal_succ_index i)).trans ?_
       exact heq_of_eq (congrArg Prod.snd
         (F.retainedOpenEdgeEquiv_symm_internal_edge k x i))
     · refine (F.appendSectorFiber_fst_castAdd_heq _ _
-        ((Fin.last n).succAbove i + 1) (fourthRegion_internal_succ_index i)).trans ?_
+        ((Fin.last n).succAbove i + 1)
+          (suffixContraction_internal_succ_index i)).trans ?_
       exact heq_of_eq (congrArg Prod.snd
         (F.retainedOpenEdgeEquiv_symm_internal_edge k y i))
 
-private theorem fourthRegion_last_to_suffix_neighboring_entry
-    (F : PhysicalSectorFactorization K) {n : ℕ}
+private theorem suffixContraction_leftBoundary_neighboring_entry
+    (F : PhysicalSectorFactorization K) {n m : ℕ}
     (k : Fin (n + 1) → Fin F.sectorCount)
-    (t : Fin 3 → Fin F.sectorCount)
+    (t : Fin (m + 1) → Fin F.sectorCount)
     (x y : F.RetainedOpenEdgeIndex k)
     (z : F.SectorChainFiber t) :
     F.neighboringOperator
-        (Fin.append k t (Fin.castAdd 3 (Fin.natAdd n (0 : Fin 1))))
-        (Fin.append k t (Fin.castAdd 3 (Fin.natAdd n (0 : Fin 1)) + 1))
+        (Fin.append k t (Fin.castAdd (m + 1) (Fin.natAdd n (0 : Fin 1))))
+        (Fin.append k t
+          (Fin.castAdd (m + 1) (Fin.natAdd n (0 : Fin 1)) + 1))
         ((F.appendSectorFiber ((F.retainedOpenEdgeEquiv k).symm x) z
-            (Fin.castAdd 3 (Fin.natAdd n (0 : Fin 1)))).2,
+            (Fin.castAdd (m + 1) (Fin.natAdd n (0 : Fin 1)))).2,
           (F.appendSectorFiber ((F.retainedOpenEdgeEquiv k).symm x) z
-            (Fin.castAdd 3 (Fin.natAdd n (0 : Fin 1)) + 1)).1)
+            (Fin.castAdd (m + 1) (Fin.natAdd n (0 : Fin 1)) + 1)).1)
         ((F.appendSectorFiber ((F.retainedOpenEdgeEquiv k).symm y) z
-            (Fin.castAdd 3 (Fin.natAdd n (0 : Fin 1)))).2,
+            (Fin.castAdd (m + 1) (Fin.natAdd n (0 : Fin 1)))).2,
           (F.appendSectorFiber ((F.retainedOpenEdgeEquiv k).symm y) z
-            (Fin.castAdd 3 (Fin.natAdd n (0 : Fin 1)) + 1)).1) =
+            (Fin.castAdd (m + 1) (Fin.natAdd n (0 : Fin 1)) + 1)).1) =
       F.neighboringOperator (k (Fin.last n)) (t 0)
         (x.2.1, (z 0).1) (y.2.1, (z 0).1) := by
   simp only [PhysicalSectorFactorization.neighboringOperator_apply]
   apply Finset.sum_congr rfl
   intro a ha
   congr 1
-  · apply rightTensor_eq_of_heq F (by simp [fourthRegion_last_retained_index]) a
+  · apply rightTensor_eq_of_heq F
+      (by simp [suffixContraction_last_retained_index]) a
     · refine (F.appendSectorFiber_snd_castAdd_heq _ _ (Fin.last n)
-        fourthRegion_last_retained_index).trans ?_
+        suffixContraction_last_retained_index).trans ?_
       exact heq_of_eq (F.retainedOpenEdgeEquiv_symm_last_right k x)
     · refine (F.appendSectorFiber_snd_castAdd_heq _ _ (Fin.last n)
-        fourthRegion_last_retained_index).trans ?_
+        suffixContraction_last_retained_index).trans ?_
       exact heq_of_eq (F.retainedOpenEdgeEquiv_symm_last_right k y)
-  · apply leftTensor_eq_of_heq F (by simp [fourthRegion_first_suffix_index]) a
-    · exact F.appendSectorFiber_fst_natAdd_heq _ _ 0 fourthRegion_first_suffix_index
-    · exact F.appendSectorFiber_fst_natAdd_heq _ _ 0 fourthRegion_first_suffix_index
+  · apply leftTensor_eq_of_heq F
+      (by simp [suffixContraction_first_suffix_index]) a
+    · exact F.appendSectorFiber_fst_natAdd_heq _ _ 0
+        suffixContraction_first_suffix_index
+    · exact F.appendSectorFiber_fst_natAdd_heq _ _ 0
+        suffixContraction_first_suffix_index
 
-private theorem fourthRegion_suffix_zero_neighboring_entry
-    (F : PhysicalSectorFactorization K) {n : ℕ}
+private theorem suffixContraction_internalSuffix_neighboring_entry
+    (F : PhysicalSectorFactorization K) {n m : ℕ}
     (k : Fin (n + 1) → Fin F.sectorCount)
-    (t : Fin 3 → Fin F.sectorCount)
+    (t : Fin (m + 1) → Fin F.sectorCount)
     (x y : F.RetainedOpenEdgeIndex k)
-    (z : F.SectorChainFiber t) :
+    (z : F.SectorChainFiber t) (i : Fin m) :
     F.neighboringOperator
-        (Fin.append k t (Fin.natAdd (n + 1) (0 : Fin 3)))
-        (Fin.append k t (Fin.natAdd (n + 1) (0 : Fin 3) + 1))
+        (Fin.append k t (Fin.natAdd (n + 1) (Fin.castAdd 1 i)))
+        (Fin.append k t (Fin.natAdd (n + 1) (Fin.castAdd 1 i) + 1))
         ((F.appendSectorFiber ((F.retainedOpenEdgeEquiv k).symm x) z
-            (Fin.natAdd (n + 1) (0 : Fin 3))).2,
+            (Fin.natAdd (n + 1) (Fin.castAdd 1 i))).2,
           (F.appendSectorFiber ((F.retainedOpenEdgeEquiv k).symm x) z
-            (Fin.natAdd (n + 1) (0 : Fin 3) + 1)).1)
+            (Fin.natAdd (n + 1) (Fin.castAdd 1 i) + 1)).1)
         ((F.appendSectorFiber ((F.retainedOpenEdgeEquiv k).symm y) z
-            (Fin.natAdd (n + 1) (0 : Fin 3))).2,
+            (Fin.natAdd (n + 1) (Fin.castAdd 1 i))).2,
           (F.appendSectorFiber ((F.retainedOpenEdgeEquiv k).symm y) z
-            (Fin.natAdd (n + 1) (0 : Fin 3) + 1)).1) =
-      F.neighboringOperator (t 0) (t 1)
-        ((z 0).2, (z 1).1) ((z 0).2, (z 1).1) := by
+            (Fin.natAdd (n + 1) (Fin.castAdd 1 i) + 1)).1) =
+      F.neighboringOperator (t (Fin.castAdd 1 i)) (t i.succ)
+        ((z (Fin.castAdd 1 i)).2, (z i.succ).1)
+        ((z (Fin.castAdd 1 i)).2, (z i.succ).1) := by
   simp only [PhysicalSectorFactorization.neighboringOperator_apply]
   apply Finset.sum_congr rfl
   intro a ha
   congr 1
   · apply rightTensor_eq_of_heq F (by simp) a <;>
-      exact F.appendSectorFiber_snd_natAdd_heq _ _ 0 rfl
-  · apply leftTensor_eq_of_heq F (by simp [fourthRegion_suffix_zero_succ]) a <;>
-      exact F.appendSectorFiber_fst_natAdd_heq _ _ 1 fourthRegion_suffix_zero_succ
+      exact F.appendSectorFiber_snd_natAdd_heq _ _ (Fin.castAdd 1 i) rfl
+  · apply leftTensor_eq_of_heq F
+      (by simp [suffixContraction_suffix_succ]) a <;>
+      exact F.appendSectorFiber_fst_natAdd_heq _ _ i.succ
+        (suffixContraction_suffix_succ i)
 
-private theorem fourthRegion_suffix_one_neighboring_entry
-    (F : PhysicalSectorFactorization K) {n : ℕ}
+private theorem suffixContraction_rightBoundary_neighboring_entry
+    (F : PhysicalSectorFactorization K) {n m : ℕ}
     (k : Fin (n + 1) → Fin F.sectorCount)
-    (t : Fin 3 → Fin F.sectorCount)
+    (t : Fin (m + 1) → Fin F.sectorCount)
     (x y : F.RetainedOpenEdgeIndex k)
     (z : F.SectorChainFiber t) :
     F.neighboringOperator
-        (Fin.append k t (Fin.natAdd (n + 1) (1 : Fin 3)))
-        (Fin.append k t (Fin.natAdd (n + 1) (1 : Fin 3) + 1))
+        (Fin.append k t
+          (Fin.natAdd (n + 1) (Fin.natAdd m (0 : Fin 1))))
+        (Fin.append k t
+          (Fin.natAdd (n + 1) (Fin.natAdd m (0 : Fin 1)) + 1))
         ((F.appendSectorFiber ((F.retainedOpenEdgeEquiv k).symm x) z
-            (Fin.natAdd (n + 1) (1 : Fin 3))).2,
+            (Fin.natAdd (n + 1) (Fin.natAdd m (0 : Fin 1)))).2,
           (F.appendSectorFiber ((F.retainedOpenEdgeEquiv k).symm x) z
-            (Fin.natAdd (n + 1) (1 : Fin 3) + 1)).1)
+            (Fin.natAdd (n + 1) (Fin.natAdd m (0 : Fin 1)) + 1)).1)
         ((F.appendSectorFiber ((F.retainedOpenEdgeEquiv k).symm y) z
-            (Fin.natAdd (n + 1) (1 : Fin 3))).2,
+            (Fin.natAdd (n + 1) (Fin.natAdd m (0 : Fin 1)))).2,
           (F.appendSectorFiber ((F.retainedOpenEdgeEquiv k).symm y) z
-            (Fin.natAdd (n + 1) (1 : Fin 3) + 1)).1) =
-      F.neighboringOperator (t 1) (t 2)
-        ((z 1).2, (z 2).1) ((z 1).2, (z 2).1) := by
+            (Fin.natAdd (n + 1) (Fin.natAdd m (0 : Fin 1)) + 1)).1) =
+      F.neighboringOperator (t (Fin.last m)) (k (Fin.last n + 1))
+        ((z (Fin.last m)).2, x.2.2) ((z (Fin.last m)).2, y.2.2) := by
   simp only [PhysicalSectorFactorization.neighboringOperator_apply]
   apply Finset.sum_congr rfl
   intro a ha
   congr 1
-  · apply rightTensor_eq_of_heq F (by simp) a <;>
-      exact F.appendSectorFiber_snd_natAdd_heq _ _ 1 rfl
-  · apply leftTensor_eq_of_heq F (by simp [fourthRegion_suffix_one_succ]) a <;>
-      exact F.appendSectorFiber_fst_natAdd_heq _ _ 2 fourthRegion_suffix_one_succ
-
-private theorem fourthRegion_suffix_two_neighboring_entry
-    (F : PhysicalSectorFactorization K) {n : ℕ}
-    (k : Fin (n + 1) → Fin F.sectorCount)
-    (t : Fin 3 → Fin F.sectorCount)
-    (x y : F.RetainedOpenEdgeIndex k)
-    (z : F.SectorChainFiber t) :
-    F.neighboringOperator
-        (Fin.append k t (Fin.natAdd (n + 1) (2 : Fin 3)))
-        (Fin.append k t (Fin.natAdd (n + 1) (2 : Fin 3) + 1))
-        ((F.appendSectorFiber ((F.retainedOpenEdgeEquiv k).symm x) z
-            (Fin.natAdd (n + 1) (2 : Fin 3))).2,
-          (F.appendSectorFiber ((F.retainedOpenEdgeEquiv k).symm x) z
-            (Fin.natAdd (n + 1) (2 : Fin 3) + 1)).1)
-        ((F.appendSectorFiber ((F.retainedOpenEdgeEquiv k).symm y) z
-            (Fin.natAdd (n + 1) (2 : Fin 3))).2,
-          (F.appendSectorFiber ((F.retainedOpenEdgeEquiv k).symm y) z
-            (Fin.natAdd (n + 1) (2 : Fin 3) + 1)).1) =
-      F.neighboringOperator (t 2) (k (Fin.last n + 1))
-        ((z 2).2, x.2.2) ((z 2).2, y.2.2) := by
-  simp only [PhysicalSectorFactorization.neighboringOperator_apply]
-  apply Finset.sum_congr rfl
-  intro a ha
-  congr 1
-  · apply rightTensor_eq_of_heq F (by simp) a <;>
-      exact F.appendSectorFiber_snd_natAdd_heq _ _ 2 rfl
-  · apply leftTensor_eq_of_heq F (by simp [fourthRegion_suffix_two_succ]) a
+  · apply rightTensor_eq_of_heq F (by
+      rw [Fin.append_right, suffixContraction_last_suffix_index]) a
+    · refine (F.appendSectorFiber_snd_natAdd_heq _ _
+        (Fin.natAdd m (0 : Fin 1)) rfl).trans ?_
+      exact dependent_prod_snd_heq z suffixContraction_last_suffix_index
+    · refine (F.appendSectorFiber_snd_natAdd_heq _ _
+        (Fin.natAdd m (0 : Fin 1)) rfl).trans ?_
+      exact dependent_prod_snd_heq z suffixContraction_last_suffix_index
+  · have hsector :
+        Fin.append k t
+            (Fin.natAdd (n + 1) (Fin.natAdd m (0 : Fin 1)) + 1) =
+          k (Fin.last n + 1) := by
+      rw [suffixContraction_suffix_last_succ, Fin.append_left]
+    apply leftTensor_eq_of_heq F hsector a
     · refine (F.appendSectorFiber_fst_castAdd_heq _ _ (Fin.last n + 1)
-        fourthRegion_suffix_two_succ).trans ?_
+        suffixContraction_suffix_last_succ).trans ?_
       exact heq_of_eq (F.retainedOpenEdgeEquiv_symm_first_left k x)
     · refine (F.appendSectorFiber_fst_castAdd_heq _ _ (Fin.last n + 1)
-        fourthRegion_suffix_two_succ).trans ?_
+        suffixContraction_suffix_last_succ).trans ?_
       exact heq_of_eq (F.retainedOpenEdgeEquiv_symm_first_left k y)
 
 /-- Trace a suffix of fixed length from a retained sector block of the cyclic
@@ -418,6 +435,65 @@ noncomputable abbrev threeSuffixSectorContraction
     Matrix (F.SectorChainFiber k) (F.SectorChainFiber k) ℂ :=
   F.suffixSectorContraction 3 k
 
+/-- Contracting a nonempty suffix fiber in retained open-edge coordinates
+leaves the retained bulk product, the two boundary partial traces, and the
+product of the internal suffix-edge traces.
+
+Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
+1606--1617. -/
+theorem sum_suffixFiber_cyclicNeighboringProduct
+    (F : PhysicalSectorFactorization K) {n m : ℕ}
+    (k : Fin (n + 1) → Fin F.sectorCount)
+    (t : Fin (m + 1) → Fin F.sectorCount)
+    (x y : F.RetainedOpenEdgeIndex k) :
+    (∑ z : F.SectorChainFiber t,
+        F.cyclicNeighboringProduct (Fin.append k t)
+          (F.appendSectorFiber ((F.retainedOpenEdgeEquiv k).symm x) z)
+          (F.appendSectorFiber ((F.retainedOpenEdgeEquiv k).symm y) z)) =
+      F.retainedBulkProduct k x.1 y.1 *
+        (Matrix.partialTraceRight
+            (F.neighboringOperator (k (Fin.last n)) (t 0)) ⊗ₖ
+          Matrix.partialTraceLeft
+            (F.neighboringOperator (t (Fin.last m)) (k (Fin.last n + 1))))
+          x.2 y.2 *
+        ∏ i : Fin m,
+          (F.neighboringOperator (t i.castSucc) (t i.succ)).trace := by
+  classical
+  simp only [cyclicNeighboringProduct]
+  simp_rw [Fin.prod_univ_add]
+  simp_rw [Fin.prod_univ_one]
+  simp_rw [suffixContraction_retained_neighboring_entry]
+  simp_rw [suffixContraction_leftBoundary_neighboring_entry]
+  simp_rw [suffixContraction_internalSuffix_neighboring_entry]
+  simp_rw [suffixContraction_rightBoundary_neighboring_entry]
+  simp_rw [mul_assoc]
+  rw [← Finset.mul_sum]
+  simp only [retainedBulkProduct, Matrix.kroneckerMap_apply,
+    Matrix.partialTraceRight_apply, Matrix.partialTraceLeft_apply]
+  congr 1
+  convert F.sum_sectorChainFiber_neighboringOperator_diag t
+    (fun a ↦ F.neighboringOperator (k (Fin.last n)) (t 0)
+      (x.2.1, a) (y.2.1, a))
+    (fun b ↦ F.neighboringOperator (t (Fin.last m)) (k (Fin.last n + 1))
+      (b, x.2.2) (b, y.2.2)) using 1
+  · apply Finset.sum_congr rfl
+    intro z hz
+    have hprod :
+        (∏ i : Fin m,
+          F.neighboringOperator (t (Fin.castAdd 1 i)) (t i.succ)
+            ((z (Fin.castAdd 1 i)).2, (z i.succ).1)
+            ((z (Fin.castAdd 1 i)).2, (z i.succ).1)) =
+          ∏ i : Fin m,
+            F.neighboringOperator (t i.castSucc) (t i.succ)
+              ((z i.castSucc).2, (z i.succ).1)
+              ((z i.castSucc).2, (z i.succ).1) := by
+      apply Finset.prod_congr rfl
+      intro i hi
+      rw [suffixContraction_castAdd_one_eq_castSucc]
+    rw [hprod]
+    ring
+  · ring
+
 private theorem sum_threeSuffixFiber_cyclicNeighboringProduct
     (F : PhysicalSectorFactorization K) {n : ℕ}
     (k : Fin (n + 1) → Fin F.sectorCount)
@@ -435,94 +511,23 @@ private theorem sum_threeSuffixFiber_cyclicNeighboringProduct
           x.2 y.2 *
         (F.neighboringOperator (t 0) (t 1)).trace *
         (F.neighboringOperator (t 1) (t 2)).trace := by
-  classical
   calc
-    _ = ∑ z : F.SectorIndex (t 0) ×
-          (F.SectorIndex (t 1) × F.SectorIndex (t 2)),
-        F.cyclicNeighboringProduct (Fin.append k t)
-          (F.appendSectorFiber ((F.retainedOpenEdgeEquiv k).symm x)
-            ((F.threeSectorFiberEquiv t).symm z))
-          (F.appendSectorFiber ((F.retainedOpenEdgeEquiv k).symm y)
-            ((F.threeSectorFiberEquiv t).symm z)) := by
-      apply Fintype.sum_equiv (F.threeSectorFiberEquiv t)
-      intro z
-      rw [Equiv.symm_apply_apply]
-    _ = _ := by
-      simp only [Fintype.sum_prod_type, cyclicNeighboringProduct]
-      simp_rw [Fin.prod_univ_add]
-      simp_rw [Fin.prod_univ_one, Fin.prod_univ_three]
-      simp only [retainedBulkProduct, Matrix.kroneckerMap_apply,
-        Matrix.partialTraceRight_apply, Matrix.partialTraceLeft_apply,
-        Matrix.trace, Matrix.diag_apply]
-      simp_rw [fourthRegion_internal_neighboring_entry,
-        fourthRegion_last_to_suffix_neighboring_entry,
-        fourthRegion_suffix_zero_neighboring_entry,
-        fourthRegion_suffix_one_neighboring_entry,
-        fourthRegion_suffix_two_neighboring_entry]
-      simp only [
-        threeSectorFiberEquiv_symm_apply_zero,
-        threeSectorFiberEquiv_symm_apply_one,
-        threeSectorFiberEquiv_symm_apply_two]
-      simp only [Fintype.sum_prod_type]
-      simp_rw [Finset.mul_sum, Finset.sum_mul]
-      have sum_permute
-          (g : Fin (F.leftDim (t 0)) → Fin (F.rightDim (t 0)) →
-            Fin (F.leftDim (t 1)) → Fin (F.rightDim (t 1)) →
-            Fin (F.leftDim (t 2)) → Fin (F.rightDim (t 2)) → ℂ) :
-          (∑ a, ∑ b, ∑ c, ∑ d, ∑ e, ∑ f, g a b c d e f) =
-            ∑ d, ∑ e, ∑ b, ∑ c, ∑ f, ∑ a, g a b c d e f := by
-        calc
-          _ = ∑ a, ∑ b, ∑ d, ∑ c, ∑ e, ∑ f, g a b c d e f := by
-            congr 1 with a
-            congr 1 with b
-            rw [Finset.sum_comm]
-          _ = ∑ a, ∑ d, ∑ b, ∑ c, ∑ e, ∑ f, g a b c d e f := by
-            congr 1 with a
-            rw [Finset.sum_comm]
-          _ = ∑ d, ∑ a, ∑ b, ∑ c, ∑ e, ∑ f, g a b c d e f :=
-            Finset.sum_comm
-          _ = ∑ d, ∑ a, ∑ b, ∑ e, ∑ c, ∑ f, g a b c d e f := by
-            congr 1 with d
-            congr 1 with a
-            congr 1 with b
-            rw [Finset.sum_comm]
-          _ = ∑ d, ∑ a, ∑ e, ∑ b, ∑ c, ∑ f, g a b c d e f := by
-            congr 1 with d
-            congr 1 with a
-            rw [Finset.sum_comm]
-          _ = ∑ d, ∑ e, ∑ a, ∑ b, ∑ c, ∑ f, g a b c d e f := by
-            congr 1 with d
-            rw [Finset.sum_comm]
-          _ = ∑ d, ∑ e, ∑ b, ∑ a, ∑ c, ∑ f, g a b c d e f := by
-            congr 1 with d
-            congr 1 with e
-            rw [Finset.sum_comm]
-          _ = ∑ d, ∑ e, ∑ b, ∑ c, ∑ a, ∑ f, g a b c d e f := by
-            congr 1 with d
-            congr 1 with e
-            congr 1 with b
-            rw [Finset.sum_comm]
-          _ = _ := by
-            congr 1 with d
-            congr 1 with e
-            congr 1 with b
-            congr 1 with c
-            rw [Finset.sum_comm]
-      rw [sum_permute]
-      apply Finset.sum_congr rfl
-      intro d hd
-      apply Finset.sum_congr rfl
-      intro e he
-      apply Finset.sum_congr rfl
-      intro b hb
-      apply Finset.sum_congr rfl
-      intro c hc
-      apply Finset.sum_congr rfl
-      intro f hf
-      simp_rw [Finset.mul_sum, Finset.sum_mul]
-      apply Finset.sum_congr rfl
-      intro a ha
-      ring
+    _ = F.retainedBulkProduct k x.1 y.1 *
+          (Matrix.partialTraceRight
+              (F.neighboringOperator (k (Fin.last n)) (t 0)) ⊗ₖ
+            Matrix.partialTraceLeft
+              (F.neighboringOperator (t 2) (k (Fin.last n + 1))))
+            x.2 y.2 *
+          ((F.neighboringOperator (t 0) (t 1)).trace *
+            (F.neighboringOperator (t 1) (t 2)).trace) := by
+      convert F.sum_suffixFiber_cyclicNeighboringProduct k t x y using 1
+      rw [Fin.prod_univ_two]
+      rw [show Fin.last 2 = (2 : Fin 3) by rfl,
+        show Fin.castSucc (0 : Fin 2) = (0 : Fin 3) by rfl,
+        show Fin.succ (0 : Fin 2) = (1 : Fin 3) by rfl,
+        show Fin.castSucc (1 : Fin 2) = (1 : Fin 3) by rfl,
+        show Fin.succ (1 : Fin 2) = (2 : Fin 3) by rfl]
+    _ = _ := by ring
 
 
 /-- A retained sector word is cyclic-active when every one of its sectors
