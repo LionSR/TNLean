@@ -1823,6 +1823,67 @@ lemma sectorTensor_proportional_of_blockedMatch
       (fun k => hT_left k (σ k))
       (fun k => hT_right k (σ k))
       (fun X hX => hInsertedProduct σ X hX)
+  have hP_transfer : ∀ k, ∑ i, (A i)ᴴ * P k * A i = P (k + 1) := by
+    intro k
+    have h := hPA_shift (-(k + 1))
+    have hsource : -(k + 1) + 1 = -k := by abel
+    change
+      transferMap (fun i => (A i)ᴴ) (PA (-(k + 1) + 1)) = PA (-(k + 1)) at h
+    rw [hsource] at h
+    simpa only [transferMap_apply, Matrix.conjTranspose_conjTranspose, P] using h
+  have hQ_transfer : ∀ k, ∑ i, (B i)ᴴ * Q k * B i = Q (k + 1) := by
+    intro k
+    have h := hPB_shift (-(k + 1))
+    have hsource : -(k + 1) + 1 = -k := by abel
+    change
+      transferMap (fun i => (B i)ᴴ) (PB (-(k + 1) + 1)) = PB (-(k + 1)) at h
+    rw [hsource] at h
+    simpa only [transferMap_apply, Matrix.conjTranspose_conjTranspose, Q] using h
+  have hAcorner_norm : ∀ k,
+      ∑ i, (cornerLetter P A k i)ᴴ * cornerLetter P A k i = P (k + 1) :=
+    fun k => sum_cornerLetter_star_mul P A hP_proj hP_transfer k
+  have hQcorner_norm : ∀ k,
+      ∑ i, (cornerLetter Q B k i)ᴴ * cornerLetter Q B k i = Q (k + 1) :=
+    fun k => sum_cornerLetter_star_mul Q B hQ_proj hQ_transfer k
+  have hU_Q : ∀ k, U' k * Q (k + q') = U' k := by
+    intro k
+    calc
+      U' k * Q (k + q') =
+          (P k * U' k * Q (k + q')) * Q (k + q') := by
+            rw [← hU'_corner k]
+      _ = P k * U' k * Q (k + q') := by
+        rw [Matrix.mul_assoc, (hQ_proj (k + q')).2]
+      _ = U' k := (hU'_corner k).symm
+  have hQcorner_left : ∀ k i,
+      Q k * cornerLetter Q B k i = cornerLetter Q B k i := by
+    intro k i
+    simp only [cornerLetter, ← Matrix.mul_assoc, (hQ_proj k).2]
+  have hT_norm : ∀ k, ∑ i, (T k i)ᴴ * T k i = P (k + 1) := by
+    intro k
+    calc
+      ∑ i, (T k i)ᴴ * T k i =
+          ∑ i, U' (k + 1) *
+            ((cornerLetter Q B (k + q') i)ᴴ *
+              cornerLetter Q B (k + q') i) * (U' (k + 1))ᴴ := by
+                apply Finset.sum_congr rfl
+                intro i _
+                simp only [T, Matrix.conjTranspose_mul,
+                  Matrix.conjTranspose_conjTranspose, Matrix.mul_assoc]
+                rw [← Matrix.mul_assoc (U' k)ᴴ (U' k),
+                  hU'_star_U k]
+                rw [← Matrix.mul_assoc (Q (k + q'))
+                  (cornerLetter Q B (k + q') i) (U' (k + 1))ᴴ,
+                  hQcorner_left (k + q') i]
+      _ = U' (k + 1) *
+          (∑ i, (cornerLetter Q B (k + q') i)ᴴ *
+            cornerLetter Q B (k + q') i) * (U' (k + 1))ᴴ := by
+              rw [Finset.mul_sum, Finset.sum_mul]
+      _ = U' (k + 1) * Q (k + 1 + q') * (U' (k + 1))ᴴ := by
+        rw [hQcorner_norm]
+        congr 2
+        abel
+      _ = P (k + 1) := by
+        rw [hU_Q (k + 1), hU'_U_star]
   -- Remaining obligation (arXiv:1708.00029 lines 1023--1117): an `m`-factor cyclic
   -- contraction theorem built from the common `L` and the sum-form right inverses
   -- `Ω u` satisfying `hΩ`; after producing the uniform product-tensor identity,
