@@ -324,6 +324,30 @@
       }
   }
 
+% Distance from the centre of an axis-aligned rectangle to its boundary along
+% a ray.  The half-extents #2,#3 and result #4 share one coordinate system;
+% #1 is the ray angle in that system.
+\cs_new_protected:Npn \__tenkz_geom_rect_ray_reach:nnnN #1#2#3#4
+  {
+    \fp_compare:nNnTF { cosd(#1) } = {0}
+      { \tl_set:Ne #4 { \fp_eval:n { (#3) / abs(sind(#1)) } } }
+      {
+        \fp_compare:nNnTF { sind(#1) } = {0}
+          { \tl_set:Ne #4 { \fp_eval:n { (#2) / abs(cosd(#1)) } } }
+          {
+            \tl_set:Ne #4
+              {
+                \fp_eval:n
+                  {
+                    min(
+                      (#2) / abs(cosd(#1)) ,
+                      (#3) / abs(sind(#1)) )
+                  }
+              }
+          }
+      }
+  }
+
 % The local east/north basis supplied by one frame address.  Affine frames
 % use E=(b,d), N=(-a,-c); circle frames retain their orthonormal tangent and
 % outward-normal basis at the named station.

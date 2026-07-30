@@ -29,6 +29,12 @@
         \fp_compare:nNnF { abs(\l__tenkz_kernel_ro_ny_tl - 0.60) }
           < {0.000001}
           { \errmessage{an~affine~route~lost~the~plane~rise} }
+        \fp_compare:nNnF
+          { \l__tenkz_kernel_ro_x_fp } < { \l__tenkz_kernel_ro_xb_fp }
+          { \errmessage{an~affine~route~lost~its~ordered~east~bounds} }
+        \fp_compare:nNnF
+          { \l__tenkz_kernel_ro_y_fp } < { \l__tenkz_kernel_ro_yb_fp }
+          { \errmessage{an~affine~route~lost~its~ordered~north~bounds} }
       }
   }
 \cs_new_eq:NN
@@ -77,6 +83,35 @@
       { \errmessage{the~north~dual~does~not~annihilate~east} }
     \fp_compare:nNnF { abs(\l_tmpd_tl - 1.6666666666667) } < {0.000001}
       { \errmessage{the~north~dual~does~not~read~the~north~basis} }
+    \__tenkz_geom_rect_ray_reach:nnnN {30}{2}{1} \l_tmpa_tl
+    \fp_compare:nNnF { abs(\l_tmpa_tl - 2) } < {0.000001}
+      { \errmessage{a~numeric~label~ray~did~not~meet~the~rectangle~edge} }
+  }
+\cs_new_protected:Npn \__tenkz_test_leg_lane:
+  {
+    \fp_zero:N \l__tenkz_kernel_r_x_fp
+    \fp_zero:N \l__tenkz_kernel_r_y_fp
+    \fp_zero:N \l__tenkz_kernel_r_reach_fp
+    \tl_set:Nn \l__tenkz_kernel_leg_dir_tl {90}
+    \__tenkz_kernel_r_leg_lane:nnn {2}{0}{1.6666666666667}
+    \fp_compare:nNnF
+      {
+        abs(
+          \l__tenkz_kernel_r_reach_fp
+          - 1.2 - \__tenkz_metric_ratio:n {legcrossclear} )
+      }
+      < {0.000001}
+      { \errmessage{a~sheared~leg~did~not~reach~its~route~lane} }
+    \tl_set:Nn \l__tenkz_kernel_leg_dir_tl {0}
+    \__tenkz_kernel_r_leg_lane:nnn {20}{0}{1.6666666666667}
+    \fp_compare:nNnF
+      {
+        abs(
+          \l__tenkz_kernel_r_reach_fp
+          - 1.2 - \__tenkz_metric_ratio:n {legcrossclear} )
+      }
+      < {0.000001}
+      { \errmessage{a~parallel~leg~was~extended~toward~an~unreachable~lane} }
   }
 \ExplSyntaxOff
 \makeatother
@@ -84,13 +119,14 @@
 \tenkzkernel
 \ExplSyntaxOn
 \__tenkz_test_basis_round_trip:
+\__tenkz_test_leg_lane:
 \ExplSyntaxOff
 \begin{tenkz}[rows={wire,wire}, cols=2, frame=plane, bonds=none]
   \tn[at=(1,1), skin=box]{A}
   \tn[at=(1,2), skin=box]{B}
   \tn[at=(2,1), skin=box]{C}
   \tn[at=(2,2), skin=box]{D}
-  \tnmark[form=enclosure]{(1,1)..(2,2)}{$H$}
+  \tnmark[form=enclosure, label pos=30]{(1,1)..(2,2)}{$H$}
   \tnwire[name=affine-north, closed,
           route={n of (1,1) .. (2,2)}]
 \end{tenkz}

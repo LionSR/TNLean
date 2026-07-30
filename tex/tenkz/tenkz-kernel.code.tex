@@ -2752,8 +2752,9 @@
 \cs_new:Npn \__tenkz_kernel_r_compass:n #1
   {
     % the argument may arrive as an unexpanded register: compare its string
-    \str_case:en {#1}
+    \str_case:enF {#1}
       { {n}{90} {ne}{45} {e}{0} {se}{315} {s}{270} {sw}{225} {w}{180} {nw}{135} }
+      {#1}
   }
 
 \cs_new_protected:Npn \__tenkz_kernel_r_xy:nNN #1#2#3
@@ -8820,17 +8821,22 @@
       {
     \tl_set:Ne \l__tenkz_kernel_r_tl
       { \__tenkz_kernel_r_compass:n { \tl_use:N \l__tenkz_kernel_r_tl } }
-    % the side a label speaks from is a side OF THE CONTOUR, so the step out
-    % to it is taken in the contour's axes and then carried to the page
+    % A label bearing is a ray from the contour centre.  Meet the local
+    % rectangle boundary first, then carry that boundary point to the page.
+    \__tenkz_geom_rect_ray_reach:nnnN
+      { \l__tenkz_kernel_r_tl }
+      { ( \l__tenkz_kernel_r_xb_tl - \l__tenkz_kernel_r_x_tl ) / 2 }
+      { ( \l__tenkz_kernel_r_yb_tl - \l__tenkz_kernel_r_y_tl ) / 2 }
+      \l__tenkz_kernel_r_reach_tl
     \fp_set:Nn \l__tenkz_kernel_r_xc_fp
       {
         cosd( \l__tenkz_kernel_r_tl )
-        * ( \l__tenkz_kernel_r_xb_tl - \l__tenkz_kernel_r_x_tl ) / 2
+        * \l__tenkz_kernel_r_reach_tl
       }
     \fp_set:Nn \l__tenkz_kernel_r_yc_fp
       {
         sind( \l__tenkz_kernel_r_tl )
-        * ( \l__tenkz_kernel_r_yb_tl - \l__tenkz_kernel_r_y_tl ) / 2
+        * \l__tenkz_kernel_r_reach_tl
       }
     \__tenkz_geom_basis_apply:nnnnnnNN
       { \l__tenkz_kernel_hull_ex_tl }
