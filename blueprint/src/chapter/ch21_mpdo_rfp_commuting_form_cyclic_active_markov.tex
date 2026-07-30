@@ -197,6 +197,55 @@
     $\Gamma_k^{(1)}$, $\Gamma_k^{(2)}$, and $\Gamma_k^{(3)}$.
 \end{definition}
 
+\begin{theorem}[Contraction of a sector-chain fiber]
+    \label{thm:mpdo_sector_chain_fiber_contraction}
+    \lean{MPOTensor.PhysicalSectorFactorization.%
+      sum_sectorChainFiber_neighboringOperator_diag}
+    \leanok
+    \uses{def:mpdo_physical_sector_chain_coordinates}
+    Let $t=(t_0,\ldots,t_m)$ be a nonempty sector word. For functions
+    $a$ on the left coordinate of $t_0$ and $b$ on the right coordinate of
+    $t_m$,
+    \begin{align}
+      &\sum_{z\in I_t}
+        a(z_0^{\mathrm L})
+        \prod_{i=0}^{m-1}
+          \eta_{t_i,t_{i+1}}
+          \bigl((z_i^{\mathrm R},z_{i+1}^{\mathrm L}),
+                (z_i^{\mathrm R},z_{i+1}^{\mathrm L})\bigr)
+        b(z_m^{\mathrm R})
+        \notag\\
+      &\qquad=
+        \left(\sum_u a(u)\right)
+        \left(\prod_{i=0}^{m-1}\tr(\eta_{t_i,t_{i+1}})\right)
+        \left(\sum_v b(v)\right).
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    Write $z_i=(\ell_i,r_i)$. Finite distributivity separates the left and
+    right coordinates:
+    \begin{align}
+      &\sum_{\ell,r}
+        a(\ell_0)
+        \prod_{i=0}^{m-1}
+          \eta_{t_i,t_{i+1}}
+          \bigl((r_i,\ell_{i+1}),(r_i,\ell_{i+1})\bigr)
+        b(r_m)
+        \notag\\
+      &\qquad=
+        \left(\sum_{\ell_0}a(\ell_0)\right)
+        \prod_{i=0}^{m-1}
+          \left(\sum_{r_i,\ell_{i+1}}
+            \eta_{t_i,t_{i+1}}
+            \bigl((r_i,\ell_{i+1}),(r_i,\ell_{i+1})\bigr)\right)
+        \left(\sum_{r_m}b(r_m)\right).
+    \end{align}
+    The internal double sum is
+    $\tr(\eta_{t_i,t_{i+1}})$ for each $i$, which gives the asserted
+    factorization.
+\end{proof}
+
 % Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
 % 1606--1617.
 % **Local fix (adjacent marginal comparison):** the cases R=1 and R=2 give
