@@ -368,11 +368,9 @@ Definition~\ref{def:mpdo_source_gsnnch}; the converse comparison is not used.
 \begin{definition}[Exactly realized orthogonal commuting sector products]
     \label{def:mpdo_orthogonal_commuting_sector_family}
     \lean{MPOTensor.OrthogonalCommutingSectorFamily}
-    \lean{MPOTensor.OrthogonalCommutingSectorFamily.toProportional}
     \lean{MPOTensor.OrthogonalCommutingSectorFamily.toGSNNCHData}
     \leanok
-    \uses{def:mpdo_source_gsnnch,
-        def:mpdo_proportional_orthogonal_commuting_sector_family}
+    \uses{def:mpdo_source_gsnnch}
     Let $\{K_x\}_{x=0}^{g-1}$ be MPO tensors on a common one-site space.
     An orthogonally supported family of commuting sector products consists of
     pairwise orthogonal one-site projections $P_x$ and positive two-site
@@ -394,8 +392,22 @@ Definition~\ref{def:mpdo_source_gsnnch}; the converse comparison is not used.
     Together with natural multiplicities $n_x$, these objects determine the
     corresponding finite-chain sector decomposition in
     Definition~\ref{def:mpdo_source_gsnnch}.
-    They form a proportionally realized family by taking $a_{x,N}=1$.
 \end{definition}
+
+\begin{definition}[Exact sector products as proportionally realized products]
+    \label{def:mpdo_orthogonal_commuting_sector_family_to_proportional}
+    \lean{MPOTensor.OrthogonalCommutingSectorFamily.toProportional}
+    \leanok
+    \uses{def:mpdo_orthogonal_commuting_sector_family,
+        def:mpdo_proportional_orthogonal_commuting_sector_family}
+    Every exactly realized orthogonal commuting sector family determines a
+    proportionally realized orthogonal commuting sector family with the same
+    one-site projections and two-site bonds.
+\end{definition}
+
+\begin{proof}\leanok
+    Take $a_{x,N}=1$ for every sector $x$ and every $N\geq2$.
+\end{proof}
 
 \begin{theorem}[Positive factorizations on orthogonal physical restrictions]
     \label{thm:mpdo_restricted_positive_factorizations_commuting_family}
@@ -672,15 +684,9 @@ firstSiteMatrix_mul_normalizedMPO}
     \leanok
     \uses{def:mpdo_proportional_orthogonal_commuting_sector_family,
         def:mpdo_vertical_one_site_actions}
-    For $N\geq2$, suppose that
-    \begin{align}
-        \rho^{(N)}(K_x)
-        &=a_{x,N}\prod_{i=0}^{N-1}\tau_i(B^{(x)}),
-        &
-        a_{x,N}&>0,
-        \notag
-    \end{align}
-    where $B^{(x)}$ is supported on $P_x\otimes P_x$. Then
+    Let $\{K_x\}_{x=0}^{g-1}$ have a proportionally realized orthogonal
+    commuting sector family with one-site projections $P_x$ and two-site
+    bonds $B^{(x)}$. Then, for every sector $x$ and every $N\geq2$,
     \begin{align}
         (P_x\otimes\Id^{\otimes(N-1)})\widehat\rho_{x,N,N}
         &=\widehat\rho_{x,N,N}.
@@ -702,15 +708,9 @@ firstSiteMatrix_mul_reducedBlockState}
     \leanok
     \uses{def:mpdo_proportional_orthogonal_commuting_sector_family,
         def:mpdo_vertical_one_site_actions}
-    Suppose that, for $N\geq2$,
-    \begin{align}
-        \rho^{(N)}(K_x)
-        &=a_{x,N}\prod_{i=0}^{N-1}\tau_i(B^{(x)}),
-        &
-        a_{x,N}&>0,
-        \notag
-    \end{align}
-    where $B^{(x)}$ is supported on $P_x\otimes P_x$. Then, for
+    Let $\{K_x\}_{x=0}^{g-1}$ have a proportionally realized orthogonal
+    commuting sector family with one-site projections $P_x$ and two-site
+    bonds $B^{(x)}$. Then, for every sector $x$, every $N\geq2$, and every
     $1\leq L\leq N$,
     \begin{align}
         (P_x\otimes\Id^{\otimes(L-1)})\widehat\rho_{x,N,L}
