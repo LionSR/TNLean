@@ -80,6 +80,17 @@ def test_core_style_length_ratchet_covers_tex_units() -> None:
     ]
 
 
+def test_direction_marks_share_one_named_station() -> None:
+    source = (ROOT / "tex/tenkz/tenkz-core.code.tex").read_text(encoding="utf-8")
+    direction_styles = source.split(
+        "% directionality marks", maxsplit=1
+    )[1].split(
+        "% annotation ink", maxsplit=1
+    )[0]
+    assert direction_styles.count(r"position \tenkz@r@dirmarkstation") == 4
+    assert "position 0.55" not in direction_styles
+
+
 def test_saved_path_capture_is_not_rendering_debt() -> None:
     assert ink_token_count(r"\path [ spath/save = {route} ] (0,0) -- (1,0) ;") == 0
     assert ink_token_count(
