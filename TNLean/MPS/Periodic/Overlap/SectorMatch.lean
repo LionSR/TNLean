@@ -1117,6 +1117,40 @@ private lemma cyclic_transport_cornerProd_segments
             (U (u + (n + 1) • (1 : Fin m)))ᴴ := by
               rw [cornerProd_add_shift]
 
+/-- Splitting a transported corner segment at its first letter inserts the
+adjacent partial isometry and cancels it at the internal corner.
+
+This is one local cancellation in arXiv:1708.00029, Appendix A,
+lines 1041--1056. -/
+private lemma transported_cornerProd_cons
+    {m : ℕ} [NeZero m]
+    (Q : Fin m → MatrixAlg D) (B : MPSTensor d D) (q : Fin m)
+    (U : Fin m → MatrixAlg D)
+    (hQ : ∀ k, IsOrthogonalProjection (Q k))
+    (hU_star_U : ∀ k, (U k)ᴴ * U k = Q (k + q))
+    (u : Fin m) (i : Fin d) (w : List (Fin d)) :
+    U u * cornerProd Q B (u + q) (i :: w) * (U (u + 1))ᴴ =
+      (U u * cornerLetter Q B (u + q) i * (U (u + 1))ᴴ) *
+        (U (u + 1) * cornerProd Q B (u + 1 + q) w * (U (u + 1))ᴴ) := by
+  have hindex : u + q + 1 = u + 1 + q := by abel
+  have hcorner :
+      Q (u + 1 + q) * cornerProd Q B (u + 1 + q) w =
+        cornerProd Q B (u + 1 + q) w :=
+    corner_mul_cornerProd Q B (u + 1 + q) w (hQ (u + 1 + q))
+  have hcorner' :
+      Q (u + 1 + q) *
+          (Q (u + 1 + q) *
+            (cornerProd Q B (u + 1 + q) w * (U (u + 1))ᴴ)) =
+        cornerProd Q B (u + 1 + q) w * (U (u + 1))ᴴ := by
+    rw [← Matrix.mul_assoc, (hQ (u + 1 + q)).2]
+    rw [← Matrix.mul_assoc, hcorner]
+  simp only [cornerProd_cons, cornerLetter, Matrix.mul_assoc]
+  rw [hindex]
+  rw [← Matrix.mul_assoc (U (u + 1))ᴴ (U (u + 1))
+    (cornerProd Q B (u + 1 + q) w * (U (u + 1))ᴴ)]
+  rw [hU_star_U (u + 1)]
+  rw [hcorner']
+
 /-- Full-cycle contraction step for periodic-overlap Case 3.
 
 At this point the sector transport has already been abstracted into
