@@ -411,8 +411,10 @@ Proposition 3 (arXiv:0909.5347) and Wolf, Theorem 6.3.
 canonical form. This theorem proves its reverse implication for one explicitly normal and
 left-canonical representative, together with an explicit BNT relation and the all-chain
 ground-space condition. In the source canonical decomposition, normality selects the
-one-sector case \(g=1\), where Beigi's finite-degeneracy classification is unnecessary.
-The multi-sector case \(g>1\), which motivates that classification, remains unproved.
+one-sector case \(g=1\), for which a source-level proof need not use Beigi's
+finite-degeneracy classification. The present formal proof nevertheless uses the finite
+sector graph and its loop-span theorem as an intermediate route to the gauge-phase match.
+The multi-sector case \(g>1\), which motivates the classification, remains unproved.
 This restriction is documented in `docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex`.
 -/
 theorem nncph_implies_rfp
