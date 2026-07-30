@@ -1,11 +1,7 @@
 \begin{lemma}[Cyclic $\Omega_u$-contraction for blocked sector gauges]%
     \label{lem:sector_tensor_proportional_blocked_match}
     \lean{MPSTensor.sectorTensor_proportional_of_blockedMatch}
-    % The source conclusion below is unitary. The tagged Lean declaration currently
-    % concludes `RepeatedBlocks`, which records an invertible gauge with inverse;
-    % upgrading that statement to a unitary gauge is part of the remaining Case-3
-    % gap in docs/paper-gaps/1708_periodic_overlap_route_alignment.tex.
-    \notready
+    \leanok
     \uses{lem:sector_match_propagation, def:cyclic_sector_decomp,
         def:periodic_corner_letter, def:periodic_corner_product,
         lem:periodic_corner_product_append,
