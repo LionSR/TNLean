@@ -30,7 +30,7 @@ coordinates.
 Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
 1614--1617.
 
-**Local fix (cyclic-active restriction):** This factor uses the left boundary
+**Scope restriction (cyclic-active restriction):** This factor uses the left boundary
 of the restricted two-step coefficient. See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 noncomputable def cyclicActiveLeftOpenBlock
@@ -53,7 +53,7 @@ coordinates.
 Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
 1614--1617.
 
-**Local fix (cyclic-active restriction):** This factor uses the right
+**Scope restriction (cyclic-active restriction):** This factor uses the right
 boundary of the restricted two-step coefficient. See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 noncomputable def cyclicActiveRightOpenBlock
@@ -75,7 +75,7 @@ operators and left boundary weights are nonnegative.
 Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
 1614--1617.
 
-**Local fix (cyclic-active restriction):** This is the left positive factor
+**Scope restriction (cyclic-active restriction):** This is the left positive factor
 for the restricted two-step coefficient. See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 theorem cyclicActiveLeftOpenBlock_posSemidef
@@ -101,7 +101,7 @@ operators and right boundary weights are nonnegative.
 Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
 1614--1617.
 
-**Local fix (cyclic-active restriction):** This is the right positive factor
+**Scope restriction (cyclic-active restriction):** This is the right positive factor
 for the restricted two-step coefficient. See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 theorem cyclicActiveRightOpenBlock_posSemidef
@@ -123,7 +123,7 @@ theorem cyclicActiveRightOpenBlock_posSemidef
 Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
 1614--1617.
 
-**Local fix (cyclic-active restriction):** The direct sum ranges over left
+**Scope restriction (cyclic-active restriction):** The direct sum ranges over left
 paths retained by the cyclic-active restriction. See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 noncomputable def cyclicActiveLeftCutRaw
@@ -143,7 +143,7 @@ noncomputable def cyclicActiveLeftCutRaw
 Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
 1614--1617.
 
-**Local fix (cyclic-active restriction):** The direct sum ranges over right
+**Scope restriction (cyclic-active restriction):** The direct sum ranges over right
 paths retained by the cyclic-active restriction. See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 noncomputable def cyclicActiveRightCutRaw
@@ -164,7 +164,7 @@ the standard left-cut coordinates.
 Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
 1614--1617.
 
-**Local fix (cyclic-active restriction):** The sum ranges over the retained
+**Scope restriction (cyclic-active restriction):** The sum ranges over the retained
 cyclic-active sectors. See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 theorem cyclicActiveLeftCutRaw_posSemidef
@@ -183,7 +183,7 @@ the standard right-cut coordinates.
 Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
 1614--1617.
 
-**Local fix (cyclic-active restriction):** The sum ranges over the retained
+**Scope restriction (cyclic-active restriction):** The sum ranges over the retained
 cyclic-active sectors. See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 theorem cyclicActiveRightCutRaw_posSemidef
@@ -202,7 +202,7 @@ every positive length under source zero correlation length.
 Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
 1614--1617.
 
-**Local fix (cyclic-active restriction):** This positivity normalizes the
+**Scope restriction (cyclic-active restriction):** This positivity normalizes the
 restricted cut probabilities after the additional marginal replacement. See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 theorem trace_mpo_sectorCoordinateTensor_pos_of_isSourceZCL
@@ -225,7 +225,7 @@ left cut block.
 Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
 1614--1617.
 
-**Local fix (cyclic-active restriction):** Positive block traces make the
+**Scope restriction (cyclic-active restriction):** Positive block traces make the
 fallback mathematically inactive; it makes normalization total.  See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 noncomputable def cyclicActiveLeftCutFallback
@@ -243,7 +243,7 @@ right cut block.
 Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
 1614--1617.
 
-**Local fix (cyclic-active restriction):** Positive block traces make the
+**Scope restriction (cyclic-active restriction):** Positive block traces make the
 fallback mathematically inactive; it makes normalization total.  See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 noncomputable def cyclicActiveRightCutFallback
@@ -260,7 +260,7 @@ noncomputable def cyclicActiveRightCutFallback
 Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
 1614--1617.
 
-**Local fix (cyclic-active restriction):** The state normalizes the positive
+**Scope restriction (cyclic-active restriction):** The state normalizes the positive
 left factor of the restricted two-step coefficient.  See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 noncomputable def cyclicActiveLeftCutState
@@ -274,7 +274,7 @@ noncomputable def cyclicActiveLeftCutState
 Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
 1614--1617.
 
-**Local fix (cyclic-active restriction):** The state normalizes the positive
+**Scope restriction (cyclic-active restriction):** The state normalizes the positive
 right factor of the restricted two-step coefficient.  See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 noncomputable def cyclicActiveRightCutState
@@ -288,7 +288,7 @@ noncomputable def cyclicActiveRightCutState
 Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
 1606--1617.
 
-**Local fix (cyclic-active restriction):** Its length includes the additional
+**Scope restriction (cyclic-active restriction):** Its length includes the additional
 marginal replacement.  See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 noncomputable def cyclicActiveCutNormalization
@@ -301,7 +301,7 @@ decomposition.
 Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
 1614--1617.
 
-**Local fix (cyclic-active restriction):** The weight uses the normalized
+**Scope restriction (cyclic-active restriction):** The weight uses the normalized
 restricted two-step coefficient.  See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 noncomputable def cyclicActiveCutProbability
@@ -317,7 +317,7 @@ the dependent blocks of the Hayashi decomposition.
 Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
 1614--1617.
 
-**Local fix (cyclic-active restriction):** This identification separates the
+**Scope restriction (cyclic-active restriction):** This identification separates the
 retained cyclic-active chain at its distinguished middle site. See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 noncomputable def retainedCutEquiv
@@ -346,7 +346,7 @@ site is the prescribed cut sector.
 Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
 1614--1617.
 
-**Local fix (cyclic-active restriction):** This identity describes the
+**Scope restriction (cyclic-active restriction):** This identity describes the
 sector coordinates of the restricted decomposition. See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 @[simp] theorem retainedCutEquiv_symm_middle_sector
@@ -368,7 +368,7 @@ cut is the corresponding sector in the left chain.
 Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
 1614--1617.
 
-**Local fix (cyclic-active restriction):** This identity describes the
+**Scope restriction (cyclic-active restriction):** This identity describes the
 sector coordinates of the restricted decomposition. See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 @[simp] theorem retainedCutEquiv_symm_left_sector
@@ -392,7 +392,7 @@ cut is the corresponding sector in the right chain.
 Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
 1614--1617.
 
-**Local fix (cyclic-active restriction):** This identity describes the
+**Scope restriction (cyclic-active restriction):** This identity describes the
 sector coordinates of the restricted decomposition. See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 @[simp] theorem retainedCutEquiv_symm_right_sector
@@ -417,7 +417,7 @@ agrees with the corresponding coordinate of the left open chain.
 Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
 1614--1617.
 
-**Local fix (cyclic-active restriction):** This is the dependent-coordinate
+**Scope restriction (cyclic-active restriction):** This is the dependent-coordinate
 identity for the restricted decomposition. See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 theorem retainedCutEquiv_symm_left_fiber_heq
@@ -504,7 +504,7 @@ agrees with the corresponding coordinate of the right open chain.
 Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
 1614--1617.
 
-**Local fix (cyclic-active restriction):** This is the dependent-coordinate
+**Scope restriction (cyclic-active restriction):** This is the dependent-coordinate
 identity for the restricted decomposition. See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 theorem retainedCutEquiv_symm_right_fiber_heq
@@ -593,7 +593,7 @@ left and right boundary indices.
 Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
 1614--1617.
 
-**Local fix (cyclic-active restriction):** This is the middle
+**Scope restriction (cyclic-active restriction):** This is the middle
 dependent-coordinate identity for the restricted decomposition. See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 theorem retainedCutEquiv_symm_middle_fiber_heq

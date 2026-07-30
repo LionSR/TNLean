@@ -866,7 +866,7 @@ normalized marginal identity to the selected fixed-product tensor.
 Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
 1606--1613.
 
-**Local fix (cyclic-active restriction):** This is the additional marginal
+**Scope restriction (cyclic-active restriction):** This is the additional marginal
 replacement used to expose the two-step cyclic-active coefficient. See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 theorem selectedFixedProduct_reducedBlockState_add_three_eq_succ_of_isSourceZCL

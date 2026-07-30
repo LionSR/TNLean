@@ -170,7 +170,7 @@ give SAL.
 **Scope restriction (Markov decomposition assumed):** Proposition 4to2 of
 arXiv:1606.00608 assumes instead a single translation-invariant commuting bond
 and ZCL. Deriving the decompositions below from those hypotheses requires the
-Bravyi--Vyalyi spatial decomposition (Beigi, arXiv:1105.1019v2, Lemma 2.1),
+Bravyi--Vyalyi spatial decomposition (Beigi, J. Phys. A 45 (2012) 025306, Lemma 2.1),
 and the subsequent ZCL trace factorization. This missing implication is documented in
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`.
 

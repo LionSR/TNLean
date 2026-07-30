@@ -633,7 +633,13 @@ imply
   \psi\in \bigvee_j G_{n+2}(A^j).
 \]
 This is the local membership step in
-Theorem 12 of arXiv:quant-ph/0608197, proof lines 1446--1452. -/
+Theorem 12 of arXiv:quant-ph/0608197, proof lines 1446--1452.
+
+**Local fix (missing adjoint):** The printed definition
+\(E^j=\sum_a C_a^jA_a^j\) at line 1449 omits the adjoint required by the
+right-canonical identity used in the calculation. Here
+\(E^j=\sum_a C_a^jA_a^{j\dagger}\). See
+`docs/paper-gaps/pgvwc07_common_identity_coefficients.tex`. -/
 theorem pgvwc07_mem_iSup_groundSpace_of_trace_decomposition
     {r : ℕ} {dim : Fin r → ℕ}
     (A : (j : Fin r) → MPSTensor d (dim j))

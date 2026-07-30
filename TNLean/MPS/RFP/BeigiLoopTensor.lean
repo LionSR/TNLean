@@ -27,7 +27,7 @@ from a product over disjoint pairs of physical sites.
 ## References
 
 * S. Beigi, *Classification of the phases of 1D spin chains with commuting
-  Hamiltonians*, arXiv:1105.1019v2, Section IV, source lines 602--606.
+  Hamiltonians*, J. Phys. A 45 (2012) 025306, Section IV.
 -/
 
 open scoped BigOperators Kronecker Matrix
@@ -40,7 +40,7 @@ variable {d D : ℕ} {A : MPSTensor d D}
 
 /-- A nonzero vector in the edge ground space carried by a positive loop.
 
-Source: Beigi, arXiv:1105.1019v2, Section IV, source lines 602--606. -/
+Source: Beigi, J. Phys. A 45 (2012) 025306, Section IV. -/
 noncomputable def loopBondVector (F : BeigiSectorGraphData A)
     (l : Loop F.edgeWeight) :
     Matrix.EtaEdgeIndex F.leftDim F.rightDim l.1 l.1 → ℂ :=
@@ -68,7 +68,7 @@ left factor and the column index is contracted with the next site's left
 factor.  The matrix entry is the corresponding component of the loop bond
 vector.  Coordinates in every other sector give the zero matrix.
 
-Source: Beigi, arXiv:1105.1019v2, Section IV, source lines 602--606. -/
+Source: Beigi, J. Phys. A 45 (2012) 025306, Section IV. -/
 noncomputable def loopCoordinateTensor (F : BeigiSectorGraphData A)
     (l : Loop F.edgeWeight) : MPSTensor d (F.leftDim l.1) :=
   fun i a b ↦
@@ -82,7 +82,7 @@ noncomputable def loopCoordinateTensor (F : BeigiSectorGraphData A)
 /-- The physical loop tensor obtained by applying the spatial-decomposition
 unitary to the sector-coordinate tensor.
 
-Source: Beigi, arXiv:1105.1019v2, Section IV, source lines 602--606. -/
+Source: Beigi, J. Phys. A 45 (2012) 025306, Section IV. -/
 noncomputable def loopTensor (F : BeigiSectorGraphData A)
     (l : Loop F.edgeWeight) : MPSTensor d (F.leftDim l.1) :=
   rotatePhysical F.unitary (F.loopCoordinateTensor l)
@@ -110,7 +110,7 @@ private def loopRightIndex (F : BeigiSectorGraphData A)
 The right factor at site `n` is paired with the left factor at site `n + 1`.
 The value is zero unless every site belongs to the chosen loop sector.
 
-Source: Beigi, arXiv:1105.1019v2, Section IV, source lines 602--606. -/
+Source: Beigi, J. Phys. A 45 (2012) 025306, Section IV. -/
 noncomputable def loopCyclicProduct (F : BeigiSectorGraphData A)
     (l : Loop F.edgeWeight) {N : ℕ} [NeZero N]
     (s : Fin N → Fin d) : ℂ :=
@@ -124,7 +124,7 @@ noncomputable def loopCyclicProduct (F : BeigiSectorGraphData A)
 It is the sitewise unitary image of the cyclic product whose bonds join the
 right factor at site `n` to the left factor at site `n + 1`.
 
-Source: Beigi, arXiv:1105.1019v2, Section IV, source lines 602--606. -/
+Source: Beigi, J. Phys. A 45 (2012) 025306, Section IV. -/
 noncomputable def loopProductState (F : BeigiSectorGraphData A)
     (l : Loop F.edgeWeight) {N : ℕ} [NeZero N] : NSiteSpace d N :=
   fun s ↦ ∑ t : Fin N → Fin d,
@@ -132,7 +132,7 @@ noncomputable def loopProductState (F : BeigiSectorGraphData A)
 
 /-- The Euclidean-space realization of a positive-loop product state.
 
-Source: Beigi, arXiv:1105.1019v2, Section IV, source lines 602--606. -/
+Source: Beigi, J. Phys. A 45 (2012) 025306, Section IV. -/
 noncomputable def loopProductStateES (F : BeigiSectorGraphData A)
     (l : Loop F.edgeWeight) {N : ℕ} [NeZero N] :
     EuclideanSpace ℂ (Fin N → Fin d) :=
@@ -214,7 +214,7 @@ private theorem loopCyclicProduct_etaCyclicEdgeEquiv_symm_of_ne
 /-- The cyclic product belonging to a positive loop is nonzero at every
 positive chain length.
 
-Source: Beigi, arXiv:1105.1019v2, Section IV, source lines 602--606. -/
+Source: Beigi, J. Phys. A 45 (2012) 025306, Section IV. -/
 theorem loopCyclicProduct_ne_zero (F : BeigiSectorGraphData A)
     (l : Loop F.edgeWeight) {N : ℕ} [NeZero N] :
     F.loopCyclicProduct l ≠ (0 : NSiteSpace d N) := by
@@ -240,7 +240,7 @@ theorem loopCyclicProduct_ne_zero (F : BeigiSectorGraphData A)
 /-- Cyclic products belonging to distinct positive loops have disjoint sector
 support and hence zero inner product.
 
-Source: Beigi, arXiv:1105.1019v2, Section IV, source lines 602--606. -/
+Source: Beigi, J. Phys. A 45 (2012) 025306, Section IV. -/
 theorem loopCyclicProduct_inner_eq_zero_of_ne
     (F : BeigiSectorGraphData A) {l m : Loop F.edgeWeight}
     {N : ℕ} [NeZero N] (hlm : l ≠ m) :
@@ -364,7 +364,7 @@ private theorem loopProductState_eq_sitewisePhysicalMatrix_mulVec
 
 /-- A positive-loop product state is nonzero at every positive chain length.
 
-Source: Beigi, arXiv:1105.1019v2, Section IV, source lines 602--606. -/
+Source: Beigi, J. Phys. A 45 (2012) 025306, Section IV. -/
 theorem loopProductState_ne_zero (F : BeigiSectorGraphData A)
     (l : Loop F.edgeWeight) {N : ℕ} [NeZero N] :
     F.loopProductState (N := N) l ≠ 0 := by
@@ -386,7 +386,7 @@ theorem loopProductState_ne_zero (F : BeigiSectorGraphData A)
 /-- The Euclidean realization of a positive-loop product state is nonzero at
 every positive chain length.
 
-Source: Beigi, arXiv:1105.1019v2, Section IV, source lines 602--606. -/
+Source: Beigi, J. Phys. A 45 (2012) 025306, Section IV. -/
 theorem loopProductStateES_ne_zero (F : BeigiSectorGraphData A)
     (l : Loop F.edgeWeight) {N : ℕ} [NeZero N] :
     F.loopProductStateES (N := N) l ≠ 0 := by
@@ -396,7 +396,7 @@ theorem loopProductStateES_ne_zero (F : BeigiSectorGraphData A)
 /-- Euclidean positive-loop product states belonging to distinct loops are
 orthogonal at every positive chain length.
 
-Source: Beigi, arXiv:1105.1019v2, Section IV, source lines 602--606. -/
+Source: Beigi, J. Phys. A 45 (2012) 025306, Section IV. -/
 theorem loopProductStateES_inner_eq_zero_of_ne
     (F : BeigiSectorGraphData A) {l m : Loop F.edgeWeight}
     {N : ℕ} [NeZero N] (hlm : l ≠ m) :
@@ -423,7 +423,7 @@ theorem loopProductStateES_inner_eq_zero_of_ne
 /-- The Euclidean positive-loop product states are linearly independent at
 every positive chain length.
 
-Source: Beigi, arXiv:1105.1019v2, Section IV, source lines 602--606. -/
+Source: Beigi, J. Phys. A 45 (2012) 025306, Section IV. -/
 theorem loopProductStateES_linearIndependent
     (F : BeigiSectorGraphData A) {N : ℕ} [NeZero N] :
     LinearIndependent ℂ
@@ -491,8 +491,7 @@ nondegenerate range of the two-site periodic parent Hamiltonian used here.
 The length-one convention is recorded in
 `docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex`.
 
-Source: Beigi, arXiv:1105.1019v2, Section III, source lines 487--500, and
-Section IV, source lines 602--606. -/
+Source: Beigi, J. Phys. A 45 (2012) 025306, Sections III--IV. -/
 theorem loopProductState_mem_ker_parentHamiltonian
     (F : BeigiSectorGraphData A) (l : Loop F.edgeWeight)
     {N : ℕ} (hN : 2 ≤ N) :
@@ -513,8 +512,7 @@ nondegenerate range of the two-site periodic parent Hamiltonian used here.
 The length-one convention is recorded in
 `docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex`.
 
-Source: Beigi, arXiv:1105.1019v2, Section III, source lines 487--500, and
-Section IV, source lines 602--606. -/
+Source: Beigi, J. Phys. A 45 (2012) 025306, Sections III--IV. -/
 theorem loopProductState_mem_parentHamiltonianGroundSpaceES
     (F : BeigiSectorGraphData A) (l : Loop F.edgeWeight)
     {N : ℕ} (hN : 2 ≤ N) :
@@ -554,8 +552,7 @@ covered by the ordered-cycle ground-space dimension formula used here.  The
 short-chain conventions are recorded in
 `docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex`.
 
-Source: Beigi, arXiv:1105.1019v2, Section III, source lines 487--500, and
-Section IV, source lines 602--606. -/
+Source: Beigi, J. Phys. A 45 (2012) 025306, Sections III--IV. -/
 theorem span_loopProductStateES_eq_parentHamiltonianGroundSpaceES
     (F : BeigiSectorGraphData A)
     (hparent : ∃ c N₀ : ℕ, ∀ M : ℕ, N₀ < M →
@@ -577,8 +574,7 @@ short-chain conventions are recorded in
 `docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex`.
 
 Source: CPSV16, Definition 3.9 and Theorem 3.10, source lines 517--540;
-Beigi, arXiv:1105.1019v2, Section III, source lines 487--500, and Section IV,
-source lines 602--606. -/
+Beigi, J. Phys. A 45 (2012) 025306, Sections III--IV. -/
 theorem span_loopProductStateES_eq_parentHamiltonianGroundSpaceES_of_hasBNTSectorData
     {P : SectorDecomposition d} (F : BeigiSectorGraphData P.toTensor)
     (hBNT : HasBNTSectorData P)
@@ -595,7 +591,7 @@ theorem span_loopProductStateES_eq_parentHamiltonianGroundSpaceES_of_hasBNTSecto
 /-- The sector-coordinate loop tensor closes to the cyclic product of loop
 bond vectors at every positive length.
 
-Source: Beigi, arXiv:1105.1019v2, Section IV, source lines 602--606. -/
+Source: Beigi, J. Phys. A 45 (2012) 025306, Section IV. -/
 theorem mpv_loopCoordinateTensor (F : BeigiSectorGraphData A)
     (l : Loop F.edgeWeight) {N : ℕ} [NeZero N] (s : Fin N → Fin d) :
     mpv (F.loopCoordinateTensor l) s = F.loopCyclicProduct l s := by
@@ -633,7 +629,7 @@ theorem mpv_loopCoordinateTensor (F : BeigiSectorGraphData A)
 /-- The periodic matrix product vector of `loopTensor` is exactly Beigi's
 physical product-of-pairs state at every positive chain length.
 
-Source: Beigi, arXiv:1105.1019v2, Section IV, source lines 602--606. -/
+Source: Beigi, J. Phys. A 45 (2012) 025306, Section IV. -/
 theorem mpv_loopTensor (F : BeigiSectorGraphData A)
     (l : Loop F.edgeWeight) {N : ℕ} [NeZero N] (s : Fin N → Fin d) :
     mpv (F.loopTensor l) s = F.loopProductState l s := by

@@ -21,7 +21,7 @@ tensor.
 ## References
 
 * S. Beigi, *Classification of the phases of 1D spin chains with commuting
-  Hamiltonians*, arXiv:1105.1019v2, Section III, p. 4 (MPS observation), and
+  Hamiltonians*, J. Phys. A 45 (2012) 025306, Section III, p. 4 (MPS observation), and
   Section IV, equation (10) and the paragraph following it.
 -/
 
@@ -152,7 +152,7 @@ The rank factors have maximal possible rank on their common Schmidt index.
 Their columns and rows therefore span that index space, so their outer
 products span the full matrix algebra.
 
-Source context: Beigi, arXiv:1105.1019v2, Section III, p. 4 (MPS observation),
+Source context: Beigi, J. Phys. A 45 (2012) 025306, Section III, p. 4 (MPS observation),
 and Section IV, equation (10) and the paragraph following it.  The
 Schmidt-support consequence is recorded in
 `docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex`. -/
@@ -196,7 +196,7 @@ theorem minimalLoopCoordinateTensor_isInjective
 
 /-- The physical loop tensor is injective on its Schmidt support.
 
-Source context: Beigi, arXiv:1105.1019v2, Section III, p. 4 (MPS observation),
+Source context: Beigi, J. Phys. A 45 (2012) 025306, Section III, p. 4 (MPS observation),
 and Section IV, equation (10) and the paragraph following it.  The physical
 unitary preserves the one-site spanning property. -/
 theorem minimalLoopTensor_isInjective
@@ -210,7 +210,7 @@ theorem minimalLoopTensor_isInjective
 
 /-- The physical loop tensor is normal on its Schmidt support.
 
-Source context: Beigi, arXiv:1105.1019v2, Section III, p. 4 (MPS observation),
+Source context: Beigi, J. Phys. A 45 (2012) 025306, Section III, p. 4 (MPS observation),
 and Section IV, equation (10) and the paragraph following it.  This is the
 one-site-injective consequence only; no normalization or transfer identity is
 asserted. -/

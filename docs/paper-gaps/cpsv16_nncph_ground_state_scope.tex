@@ -325,16 +325,16 @@ Its period-two specialization
 \leanid{MPSTensor.BeigiSectorGraphData.}
 \hspace{0pt}\leanid{parentHamiltonianGroundSpaceES_finrank_eq_two}
 retains the two orientations: if $a\ne b$, then $(a,b)$ and $(b,a)$ are
-distinct ordered cycles, exactly as stated in Beigi, arXiv:1105.1019v2,
-Section~III, equations~(2)--(4), source lines 509--512.  No chain-level
+distinct ordered cycles, exactly as stated in Beigi, J. Phys. A 45 (2012) 025306,
+Section~III, equations~(2)--(4).  No chain-level
 ground-space equation, eventual degeneracy, or canonical-form datum is assumed
 in these sector-graph theorems.
 
 At $N=1$, Beigi's two-site interaction has no specified action.  The source
 defines $P_{j,j+1}$ on sites $j,j+1$ and then separates the actions of
 $P_{j-1,j}$ and $P_{j,j+1}$ on the middle site; see
-arXiv:1105.1019v2, Section~III, source lines 451--476.  When $N=1$, these site
-labels all coincide, and lines 477--514 do not add a rule for turning the
+J. Phys. A 45 (2012) 025306, Section~III.  When $N=1$, these site
+labels all coincide, and the remainder of that section does not add a rule for turning the
 two-site operator into a one-site operator.  CPSV16 does not impose such a
 rule: Theorem~3.10(iii), local source lines 534--540, only concerns $N>2$.
 
@@ -405,7 +405,7 @@ product
 \]
 For a positive loop $a\to a$, denote the resulting physical state on a chain
 of length $N$ by $\Psi_a^{(N)}$.
-This is the construction in Beigi, arXiv:1105.1019v2, source lines 602--606.
+This is the construction in Beigi, J. Phys. A 45 (2012) 025306, Section IV, equation (13).
 The ambient left factor need not be the minimal virtual space: Beigi assumes
 only that the selected bond vector is nonzero, not that its coefficient matrix
 has full rank.  Writing that matrix as
@@ -461,8 +461,8 @@ now proves that this vector belongs to the kernel of the length-two periodic
 parent Hamiltonian.  Its Euclidean-space form is recorded by
 \leanid{MPSTensor.BeigiSectorGraphData.}
 \hspace{0pt}\leanid{loopProductState_mem_parentHamiltonianGroundSpaceES}.
-The proof uses Beigi's local edge-ground-space condition from source
-lines 487--500 and the positive-loop specialization at lines 602--606.  The
+The proof uses Beigi's local edge-ground-space condition in Section~III
+and the positive-loop specialization in Section~IV.  The
 restriction $N\geq2$ is the source-defined range of the two-site periodic
 parent Hamiltonian used here.  As recorded by the resolved clarification in
 \ghissue{4400}, no source-defined coincident-edge convention extends this
@@ -506,7 +506,10 @@ lines 534--541 and its proof at line 1307: the formal theorem assumes explicitly
 that the chosen representative is normal and left-canonical, as well as an
 explicit BNT relation and the all-chain ground-space condition.  It does not
 state the unrestricted three-way equivalence for an arbitrary tensor in
-canonical form.
+canonical form.  In the source canonical decomposition, the normality
+hypothesis selects the one-sector case \(g=1\).  Thus this theorem does not
+establish the multi-sector case \(g>1\), for which Beigi's finite-degeneracy
+classification is the essential input.
 
 The auxiliary declaration
 \leanid{MPSTensor.BeigiSectorGraphData.}

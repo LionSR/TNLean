@@ -27,7 +27,7 @@ matrices in the commuting-bond decomposition.
 ## References
 
 * arXiv:1606.00608, Appendix C.2, equation `sigmaNK2`, lines 1581--1605.
-* S. Beigi, arXiv:1105.1019v2, Lemma 2.1 and Section III.
+* S. Beigi, J. Phys. A 45 (2012) 025306, Lemma 2.1 and Section III.
 -/
 
 open scoped BigOperators ComplexOrder Kronecker Matrix
@@ -208,7 +208,7 @@ private theorem positiveEtaPhysicalSectorFactorization_neighboringOperator
 /-- The two-site physical coordinate matrix is the reindexed tensor square
 of the Beigi unitary.
 
-Source: Beigi, arXiv:1105.1019v2, Section III. -/
+Source: Beigi, J. Phys. A 45 (2012) 025306, Section III. -/
 private theorem positiveEtaPhysicalSectorFactorization_coordinateTwo
     {K : ℕ} (dl dr : Fin K → ℕ)
     (e : Matrix.EtaSiteIndex K dl dr ≃ Fin d)
@@ -231,7 +231,7 @@ private theorem positiveEtaPhysicalSectorFactorization_coordinateTwo
 /-- Conjugating the input pair bond by the retained physical coordinates is
 the reindexed Beigi-conjugated bond.
 
-Source: Beigi, arXiv:1105.1019v2, Section III, and arXiv:1606.00608,
+Source: Beigi, J. Phys. A 45 (2012) 025306, Section III; arXiv:1606.00608,
 equation `sigmaNK2`, lines 1581--1589. -/
 private theorem positiveEtaPhysicalSectorFactorization_conjugate_pairBond
     (data : TranslationInvariantBondData d)
@@ -311,7 +311,7 @@ private theorem positiveEtaPhysicalSectorFactorization_etaPairEquiv
 the physical-sector coordinates.
 
 Source: arXiv:1606.00608, equation `sigmaNK2`, lines 1581--1589; Beigi,
-arXiv:1105.1019v2, Section III. -/
+J. Phys. A 45 (2012) 025306, Section III. -/
 private theorem positiveEtaPhysicalSectorFactorization_sectorBond_eq
     (data : TranslationInvariantBondData d)
     {K : ℕ} (dl dr : Fin K → ℕ)
@@ -465,7 +465,7 @@ The factorization belongs to the exact tensor stored in `repr`; it is not
 transported from a second tensor with the same closed MPOs.
 
 Source: arXiv:1606.00608, equation `sigmaNK2`, lines 1581--1589; Beigi,
-arXiv:1105.1019v2, Lemma 2.1 and Section III. -/
+J. Phys. A 45 (2012) 025306, Lemma 2.1 and Section III. -/
 structure PositivePhysicalSectorFixedProductTensorData
     (data : TranslationInvariantBondData d) where
   /-- The exact fixed-product representative. -/
@@ -515,7 +515,7 @@ No nonempty-physical-space hypothesis is needed.  When `d = 0`, a separate
 one-dimensional virtual tensor carries the zero-sector factorization.
 
 Source: arXiv:1606.00608, equation `sigmaNK2`, lines 1581--1605; Beigi,
-arXiv:1105.1019v2, Lemma 2.1 and Section III. -/
+J. Phys. A 45 (2012) 025306, Lemma 2.1 and Section III. -/
 theorem nonempty_positivePhysicalSectorFixedProductTensorData
     (data : TranslationInvariantBondData d) :
     Nonempty (PositivePhysicalSectorFixedProductTensorData data) := by
@@ -556,7 +556,7 @@ theorem nonempty_positivePhysicalSectorFixedProductTensorData
 physical-sector witness.
 
 Source: arXiv:1606.00608, equation `sigmaNK2`, lines 1581--1605; Beigi,
-arXiv:1105.1019v2, Lemma 2.1 and Section III. -/
+J. Phys. A 45 (2012) 025306, Lemma 2.1 and Section III. -/
 noncomputable def positivePhysicalSectorFixedProductTensorData
     (data : TranslationInvariantBondData d) :
     PositivePhysicalSectorFixedProductTensorData data :=

@@ -31,7 +31,7 @@ indices.
 ## References
 
 * S. Beigi, *Classification of the phases of 1D spin chains with commuting Hamiltonians*,
-  arXiv:1105.1019v2, Lemma 2.1 (`lem:comm`) and its proof on pages 2--3.
+  J. Phys. A 45 (2012) 025306, Lemma 2.1 (`lem:comm`) and its proof on pages 2--3.
 -/
 
 open scoped InnerProductSpace Kronecker
@@ -107,7 +107,7 @@ variable [DecidableEq a] [DecidableEq b] [DecidableEq c]
 /-- The natural embedding of an operator on the first two factors into the three-factor
 space.
 
-Source: Beigi, arXiv:1105.1019v2, Lemma 2.1 (`lem:comm`). -/
+Source: Beigi, J. Phys. A 45 (2012) 025306, Lemma 2.1 (`lem:comm`). -/
 def leftOverlappingLift (X : Matrix (a × b) (a × b) ℂ) :
     Matrix ((a × b) × c) ((a × b) × c) ℂ :=
   fun p q ↦ X p.1 q.1 * (1 : Matrix c c ℂ) p.2 q.2
@@ -115,7 +115,7 @@ def leftOverlappingLift (X : Matrix (a × b) (a × b) ℂ) :
 /-- The natural embedding of an operator on the last two factors into the three-factor
 space.
 
-Source: Beigi, arXiv:1105.1019v2, Lemma 2.1 (`lem:comm`). -/
+Source: Beigi, J. Phys. A 45 (2012) 025306, Lemma 2.1 (`lem:comm`). -/
 def rightOverlappingLift (Y : Matrix (b × c) (b × c) ℂ) :
     Matrix ((a × b) × c) ((a × b) × c) ℂ :=
   fun p q ↦ (1 : Matrix a a ℂ) p.1.1 q.1.1 * Y (p.1.2, p.2) (q.1.2, q.2)
@@ -124,14 +124,14 @@ def rightOverlappingLift (Y : Matrix (b × c) (b × c) ℂ) :
 the two first-factor indices fixed. It is the complex specialization of
 `operatorBlock`.
 
-Source: Beigi, arXiv:1105.1019v2, proof of Lemma 2.1 (`lem:comm`). -/
+Source: Beigi, J. Phys. A 45 (2012) 025306, proof of Lemma 2.1 (`lem:comm`). -/
 abbrev leftMiddleSlice (X : Matrix (a × b) (a × b) ℂ) (i i' : a) : Matrix b b ℂ :=
   operatorBlock X i i'
 
 /-- The middle-factor coefficient matrix of an operator on the last two factors, with
 the two last-factor indices fixed.
 
-Source: Beigi, arXiv:1105.1019v2, proof of Lemma 2.1 (`lem:comm`). -/
+Source: Beigi, J. Phys. A 45 (2012) 025306, proof of Lemma 2.1 (`lem:comm`). -/
 def rightMiddleSlice (Y : Matrix (b × c) (b × c) ℂ) (k k' : c) : Matrix b b ℂ :=
   fun j j' ↦ Y (j, k) (j', k')
 
@@ -139,7 +139,7 @@ def rightMiddleSlice (Y : Matrix (b × c) (b × c) ℂ) (k k' : c) : Matrix b b 
 right factor when adjoining the first outer space. It sends
 `(q, ((i, s), r))` to `(i, e (q, (r, s)))`.
 
-Source: Beigi, arXiv:1105.1019v2, Lemma 2.1 (`lem:comm`), decomposition and first block
+Source: Beigi, J. Phys. A 45 (2012) 025306, Lemma 2.1 (`lem:comm`), decomposition and first block
 identity on pages 2--3. -/
 def leftSpatialBlockEquiv {K : ℕ} {d m : Fin K → ℕ}
     (e : ((q : Fin K) × (Fin (m q) × Fin (d q))) ≃ b) :
@@ -161,7 +161,7 @@ def leftSpatialBlockEquiv {K : ℕ} {d m : Fin K → ℕ}
 right factor when adjoining the last outer space. It sends
 `(q, (s, (r, k)))` to `(e (q, (r, s)), k)`.
 
-Source: Beigi, arXiv:1105.1019v2, Lemma 2.1 (`lem:comm`), decomposition and second block
+Source: Beigi, J. Phys. A 45 (2012) 025306, Lemma 2.1 (`lem:comm`), decomposition and second block
 identity on pages 2--3. -/
 def rightSpatialBlockEquiv {K : ℕ} {d m : Fin K → ℕ}
     (e : ((q : Fin K) × (Fin (m q) × Fin (d q))) ≃ b) :
@@ -204,7 +204,7 @@ private theorem conj_right_tensor_apply (Y : Matrix (b × c) (b × c) ℂ)
 omit [Fintype b] [Fintype c] [DecidableEq b] [DecidableEq c] in
 /-- Hermiticity exchanges the two outer indices of a middle-factor coefficient matrix.
 
-Source: Beigi, arXiv:1105.1019v2, proof of Lemma 2.1 (`lem:comm`). -/
+Source: Beigi, J. Phys. A 45 (2012) 025306, proof of Lemma 2.1 (`lem:comm`). -/
 theorem star_rightMiddleSlice (Y : Matrix (b × c) (b × c) ℂ) (hY : Y.IsHermitian)
     (k k' : c) : star (rightMiddleSlice Y k k') = rightMiddleSlice Y k' k := by
   ext i j
@@ -218,7 +218,7 @@ operator commutes with every middle-factor coefficient matrix of the second oper
 
 This is the coefficientwise consequence of
 `[X_{AB} \otimes \mathbf 1_C, \mathbf 1_A \otimes Y_{BC}] = 0` used before the
-finite-dimensional star-algebra decomposition in S. Beigi, arXiv:1105.1019v2,
+finite-dimensional star-algebra decomposition in S. Beigi, J. Phys. A 45 (2012) 025306,
 proof of Lemma 2.1 (`lem:comm`), pages 2--3. Hermiticity is not needed for this
 coefficientwise implication. -/
 theorem middleSlices_commute_of_overlappingLifts_commute
@@ -248,7 +248,7 @@ two tensor factors, the basis realizes
 operator families.
 
 This is the middle-space conclusion of the Bravyi--Vyalyi decomposition in S. Beigi,
-arXiv:1105.1019v2, Lemma 2.1 (`lem:comm`). The source assumes both `X` and `Y` Hermitian;
+J. Phys. A 45 (2012) 025306, Lemma 2.1 (`lem:comm`). The source assumes both `X` and `Y` Hermitian;
 the proof below uses Hermiticity only for `Y`, because it applies the star-subalgebra
 decomposition to the commutant of the coefficient matrices of `Y`. -/
 theorem exists_middle_spatial_decomposition_of_overlappingLifts_commute
@@ -362,7 +362,7 @@ $A\otimes(H_{q,l}\otimes H_{q,r})$ and
 $(H_{q,l}\otimes H_{q,r})\otimes C$, respectively.
 
 This is the explicit coordinate form of the two block-action identities in S. Beigi,
-arXiv:1105.1019v2, Lemma 2.1 (`lem:comm`), pages 2--3. Its hypotheses agree with the
+J. Phys. A 45 (2012) 025306, Lemma 2.1 (`lem:comm`), pages 2--3. Its hypotheses agree with the
 source: both overlapping operators are Hermitian and their natural lifts commute. -/
 theorem exists_unitary_blockActions_of_overlappingLifts_commute
     (X : Matrix (a × b) (a × b) ℂ) (Y : Matrix (b × c) (b × c) ℂ)
@@ -483,8 +483,8 @@ The reindexings in the formal statement express the two dependent direct sums in
 original product coordinates. The block operators are Hermitian; no unitarity assertion
 is made about them.
 
-Source: Beigi, arXiv:1105.1019v2, Lemma 2.1 (`lem:comm`), TeX lines 398--422,
-especially the two displayed equalities on page 3. -/
+Source: Beigi, J. Phys. A 45 (2012) 025306, Lemma 2.1 (`lem:comm`),
+especially the two displayed equalities in the lemma. -/
 theorem exists_unitary_blockSum_equalities_of_overlappingLifts_commute
     (X : Matrix (a × b) (a × b) ℂ) (Y : Matrix (b × c) (b × c) ℂ)
     (hX : X.IsHermitian) (hY : Y.IsHermitian)

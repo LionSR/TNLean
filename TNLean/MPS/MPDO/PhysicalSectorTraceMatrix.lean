@@ -234,7 +234,7 @@ theorem exists_active_neighboringOperator_ne_zero
 /-- The real trace matrix of the neighboring operators, restricted to the
 nonzero-weight sector subtype.
 
-**Local fix (inactive sectors):** the full physical sector decomposition is
+**Scope restriction (inactive sectors):** the full physical sector decomposition is
 unchanged. Only this auxiliary matrix is restricted, because every row and
 column incident to a zero-weight sector vanishes after the source-faithful
 reparameterization. See
@@ -284,7 +284,7 @@ operators from `k` to `h` and from `h` to `k` are nonzero.
 This is the length-two closed-walk input in the primitivity argument of
 arXiv:1606.00608, Appendix C.2, Lemma C.4 (`propSN`), lines 1452--1470.
 
-**Local fix (periodicity):** the source removes periodic components by
+**Scope restriction (periodicity):** the source removes periodic components by
 blocking. Here the trace pairing instead supplies a closed walk of length two;
 it is an auxiliary replacement to be paired with the length-three walk from
 triangle closure. See
@@ -355,9 +355,9 @@ The positive summand is supplied by the directed two-cycle through the given
 sector. This is one of two coprime-period inputs; it does not assert that the
 diagonal entry of the trace matrix itself is positive.
 
-**Local fix (periodicity):** this length-two return is an auxiliary substitute
-for the source's blocking of periodic components and must be combined with
-the length-three return from triangle closure. See
+**Scope restriction (periodicity):** this length-two return is an auxiliary
+substitute for the source's blocking of periodic components and must be
+combined with the length-three return from triangle closure. See
 `docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex`. -/
 theorem activeSectorTraceMatrix_pow_two_diag_pos
     (F : PhysicalSectorFactorization K) (p : Fin F.sectorCount → ℝ)
@@ -416,7 +416,7 @@ theorem activeSectorTraceMatrix_isIrreducible
 /-- If every active nonzero edge closes through a third active sector, then
 every diagonal entry of the cube of the active trace matrix is positive.
 
-**Local fix (periodicity):** this length-three return is an auxiliary
+**Scope restriction (periodicity):** this length-three return is an auxiliary
 substitute for the source's blocking of periodic components and is combined
 with the length-two return above. See
 `docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex`.
@@ -461,8 +461,9 @@ theorem activeSectorTraceMatrix_pow_three_diag_pos
 /-- Active-sector spanning, sector nonvanishing, positive neighboring
 operators, and triangle closure imply primitivity of the active trace matrix.
 
-**Local fix (periodicity):** the common positive power is obtained from
-closed walks of lengths two and three in place of the source's blocking
+**Scope restriction (periodicity and triangle closure):** the common positive
+power is obtained from closed walks of lengths two and three, under the
+source-absent triangle-closure hypothesis, in place of the source's blocking
 argument. See
 `docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex`.
 

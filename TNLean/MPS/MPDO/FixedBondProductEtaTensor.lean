@@ -127,7 +127,7 @@ product.  This is the representative whose positive physical sectors are
 exposed by `fixedProductTensorDataPhysicalSectorFactorization`.
 
 Source: arXiv:1606.00608, Appendix C.2, equation `sigmaNK2` and Proposition
-`4to2`, lines 1581--1605; Beigi, arXiv:1105.1019v2, Lemma 2.1. -/
+`4to2`, lines 1581--1605; Beigi, J. Phys. A 45 (2012) 025306, Lemma 2.1. -/
 noncomputable def fixedProductTensorData (data : TranslationInvariantBondData d) :
     FixedProductTensorData data :=
   data.positivePhysicalSectorFixedProductTensorData.repr
@@ -146,7 +146,7 @@ that the representing tensor is normal and does not constrain the positive
 realization scalar of the source MPO.
 
 Source: arXiv:1606.00608, Appendix C.2, equation `sigmaNK2` and Proposition
-`4to2`, lines 1581--1605; Beigi, arXiv:1105.1019v2, Lemma 2.1. -/
+`4to2`, lines 1581--1605; Beigi, J. Phys. A 45 (2012) 025306, Lemma 2.1. -/
 theorem nonempty_fixedProductTensorData (data : TranslationInvariantBondData d) :
     Nonempty (FixedProductTensorData data) :=
   ⟨data.fixedProductTensorData⟩
@@ -155,7 +155,7 @@ theorem nonempty_fixedProductTensorData (data : TranslationInvariantBondData d) 
 fixed-product tensor.
 
 Source: arXiv:1606.00608, Appendix C.2, equation `sigmaNK2`, lines
-1581--1589; Beigi, arXiv:1105.1019v2, Lemma 2.1 and Section III. -/
+1581--1589; Beigi, J. Phys. A 45 (2012) 025306, Lemma 2.1 and Section III. -/
 noncomputable def fixedProductTensorDataPhysicalSectorFactorization
     (data : TranslationInvariantBondData d) :
     PhysicalSectorFactorization data.fixedProductTensorData.tensor :=
@@ -165,7 +165,7 @@ noncomputable def fixedProductTensorDataPhysicalSectorFactorization
 factorization is the input commuting bond.
 
 Source: arXiv:1606.00608, Appendix C.2, equation `sigmaNK2`, lines
-1581--1589; Beigi, arXiv:1105.1019v2, Lemma 2.1 and Section III. -/
+1581--1589; Beigi, J. Phys. A 45 (2012) 025306, Lemma 2.1 and Section III. -/
 theorem fixedProductTensorDataPhysicalSectorFactorization_physicalBond_eq
     (data : TranslationInvariantBondData d) :
     data.fixedProductTensorDataPhysicalSectorFactorization.physicalBond =
@@ -176,7 +176,7 @@ theorem fixedProductTensorDataPhysicalSectorFactorization_physicalBond_eq
 factorization are positive semidefinite.
 
 Source: arXiv:1606.00608, Appendix C.2, equation `sigmaNK2`, lines
-1581--1589; Beigi, arXiv:1105.1019v2, Lemma 2.1 and Section III. -/
+1581--1589; Beigi, J. Phys. A 45 (2012) 025306, Lemma 2.1 and Section III. -/
 theorem fixedProductTensorDataPhysicalSectorFactorization_neighboring_pos
     (data : TranslationInvariantBondData d) :
     ∀ q h,

@@ -383,7 +383,7 @@ fourth-region block into a direct sum of left and right path factors.
 Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
 1614--1617.
 
-**Local fix (cyclic-active restriction):** The blocks are those of the
+**Scope restriction (cyclic-active restriction):** The blocks are those of the
 restricted two-step cyclic-active coefficient. See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 theorem reindex_cyclicActiveFourthRegionBlock_eq_cutRaw
