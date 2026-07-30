@@ -2375,7 +2375,7 @@
             ( \__tenkz_kernel_rows: - 1 )
             * \__tenkz_metric_ratio:n {planeslant}
           }
-          > { 0.5 * ( \__tenkz_kernel_cols: - 1 ) }
+          > { ( \__tenkz_kernel_cols: - 1 ) / 2 }
           {
             \msg_warning:nnee {tenkz}{plane-tall-window}
               {
@@ -2385,7 +2385,7 @@
                     * \__tenkz_metric_ratio:n {planeslant}
                   }
               }
-              { \fp_eval:n { 0.5 * ( \__tenkz_kernel_cols: - 1 ) } }
+              { \fp_eval:n { ( \__tenkz_kernel_cols: - 1 ) / 2 } }
             \__tenkz_kernel_event:n
               {
                 warning|picture=k
