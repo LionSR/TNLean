@@ -5288,6 +5288,76 @@
       }
   }
 
+% The affine carrier of a label target, when it has one.  A cell and one of
+% its basis members share the frame chart at (row, column).  Named records
+% answer through the atom they name; a cluster child inherits the chart of
+% its named parent, and a port inherits the chart of its host.  Composite and
+% curve addresses deliberately answer false: relative, midway, crossing, and
+% on-wire nodes are page-space points rather than local-frame carriers.
+\tl_new:N \l__tenkz_kernel_carrier_parent_tl
+\tl_new:N \l__tenkz_kernel_carrier_record_tl
+\cs_new_protected:Npn \__tenkz_kernel_r_record_carrier:nNNN #1#2#3#4
+  {
+    \__tenkz_kernel_r_atom_rc:nNNN {#1} #2#3#4
+    \bool_if:NF #4
+      {
+        \__tenkz_model_get:nnN {#1} {cluster-of}
+          \l__tenkz_kernel_carrier_parent_tl
+        \quark_if_no_value:NF \l__tenkz_kernel_carrier_parent_tl
+          {
+            \prop_get:NVN \l__tenkz_kernel_named_prop
+              \l__tenkz_kernel_carrier_parent_tl
+              \l__tenkz_kernel_carrier_record_tl
+            \quark_if_no_value:NF \l__tenkz_kernel_carrier_record_tl
+              {
+                \exp_args:NV \__tenkz_kernel_r_record_carrier:nNNN
+                  \l__tenkz_kernel_carrier_record_tl #2#3#4
+              }
+          }
+      }
+  }
+\cs_new_protected:Npn \__tenkz_kernel_r_node_carrier:nNNN #1#2#3#4
+  {
+    \bool_set_false:N #4
+    \str_case:en
+      { \__tenkz_kernel_r_item:nn {#1} {kind} }
+      {
+        {cell}
+          {
+            \tl_set:Ne #2 { \__tenkz_kernel_r_item:nn {#1} {row} }
+            \tl_set:Ne #3 { \__tenkz_kernel_r_item:nn {#1} {col} }
+            \bool_set_true:N #4
+          }
+        {member}
+          {
+            \tl_set:Ne #2 { \__tenkz_kernel_r_item:nn {#1} {row} }
+            \tl_set:Ne #3 { \__tenkz_kernel_r_item:nn {#1} {col} }
+            \bool_set_true:N #4
+          }
+        {record}
+          {
+            \prop_get:NeN \l__tenkz_kernel_named_prop
+              { \__tenkz_kernel_r_item:nn {#1} {name} }
+              \l__tenkz_kernel_carrier_record_tl
+            \quark_if_no_value:NF \l__tenkz_kernel_carrier_record_tl
+              {
+                \exp_args:NV \__tenkz_kernel_r_record_carrier:nNNN
+                  \l__tenkz_kernel_carrier_record_tl #2#3#4
+              }
+          }
+        {port}
+          {
+            \__tenkz_kernel_r_port_record:nN {#1}
+              \l__tenkz_kernel_carrier_record_tl
+            \quark_if_no_value:NF \l__tenkz_kernel_carrier_record_tl
+              {
+                \exp_args:NV \__tenkz_kernel_r_record_carrier:nNNN
+                  \l__tenkz_kernel_carrier_record_tl #2#3#4
+              }
+          }
+      }
+  }
+
 % Resolve a live glyph anchor in the host's local axes and carry it to the
 % page.  Non-cell pairing ink and ordinary wires share this face boundary;
 % the placed address node remains only dependency geometry.
@@ -8626,26 +8696,11 @@
     \__tenkz_kernel_r_node:V \l__tenkz_kernel_r_node_tl
     \__tenkz_kernel_r_xy:nNN { \tl_use:N \l__tenkz_kernel_r_node_tl }
       \l__tenkz_kernel_r_x_fp \l__tenkz_kernel_r_y_fp
-    \tl_set:Nn \l__tenkz_kernel_r_tl { \q_no_value }
-    \str_case:en
-      { \__tenkz_kernel_node_item:Nn \l__tenkz_kernel_r_node_tl {kind} }
-      {
-        {record}
-          {
-            \prop_get:NeN \l__tenkz_kernel_named_prop
-              {
-                \__tenkz_kernel_node_item:Nn
-                  \l__tenkz_kernel_r_node_tl {name}
-              }
-              \l__tenkz_kernel_r_tl
-          }
-        {port}
-          {
-            \exp_args:NV \__tenkz_kernel_r_port_record:nN
-              \l__tenkz_kernel_r_node_tl \l__tenkz_kernel_r_tl
-          }
-      }
-    \quark_if_no_value:NF \l__tenkz_kernel_r_tl
+    \exp_args:NV \__tenkz_kernel_r_node_carrier:nNNN
+      \l__tenkz_kernel_r_node_tl
+      \l__tenkz_kernel_r_row_tl \l__tenkz_kernel_r_col_tl
+      \l__tenkz_kernel_turn_bool
+    \bool_if:NT \l__tenkz_kernel_turn_bool
       {
         \__tenkz_model_get:nnN {#1} {label-pos} \l__tenkz_kernel_r_c_tl
         \quark_if_no_value:NT \l__tenkz_kernel_r_c_tl
@@ -8658,8 +8713,10 @@
         % A label bearing is a carrier-local direction, just like a port
         % face.  Subtract its local angle again because the shared ink helper
         % below adds that angle to the carrier contribution.
-        \exp_args:NVV \__tenkz_kernel_r_page_face:nnN
-          \l__tenkz_kernel_r_tl \l__tenkz_kernel_r_c_tl
+        \__tenkz_geom_local_bearing:nnnnN {kpic}
+          { \l__tenkz_kernel_r_row_tl }
+          { \l__tenkz_kernel_r_col_tl }
+          { \l__tenkz_kernel_r_c_tl }
           \l__tenkz_kernel_r_tau_tl
         \tl_set:Ne \l__tenkz_kernel_r_tau_tl
           {
