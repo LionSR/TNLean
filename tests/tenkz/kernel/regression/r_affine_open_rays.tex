@@ -1,0 +1,91 @@
+%% Regression: diagonal affine open ends follow their logical ray to the
+%% first picture margin instead of snapping to a projected corner.
+\documentclass{standalone}
+\usepackage{tenkz}
+\makeatletter
+\ExplSyntaxOn
+\file_input:n { tenkz-kernel.code.tex }
+\tl_new:N \l__tenkz_test_ray_end_row_tl
+\tl_new:N \l__tenkz_test_ray_end_col_tl
+\cs_new_protected:Npn \__tenkz_test_affine_open_ray:nnn #1#2#3
+  {
+    \__tenkz_kernel_r_frame_xy:nnNN {#2}{#3}
+      \l__tenkz_kernel_r_xc_fp \l__tenkz_kernel_r_yc_fp
+    \__tenkz_kernel_r_open_tip_affine_xy:nNN {#1}
+      \l__tenkz_kernel_r_x_fp \l__tenkz_kernel_r_y_fp
+    \__tenkz_geom_unapply:nnnNN {kpic}
+      { \l__tenkz_kernel_r_x_fp } { \l__tenkz_kernel_r_y_fp }
+      \l__tenkz_test_ray_end_row_tl \l__tenkz_test_ray_end_col_tl
+    \str_case:nn {#1}
+      {
+        {ne}
+          {
+            \fp_compare:nNnF
+              {
+                abs(
+                  \l__tenkz_test_ray_end_row_tl
+                  - (1 - \__tenkz_metric_ratio:n {stub}) )
+              }
+              < {0.000001}
+              { \errmessage{the~northeast~ray~missed~the~north~margin} }
+            \fp_compare:nNnF
+              {
+                abs(
+                  \l__tenkz_test_ray_end_col_tl - (#3)
+                  - (#2) + \l__tenkz_test_ray_end_row_tl )
+              }
+              < {0.000001}
+              { \errmessage{the~northeast~open~end~left~its~logical~ray} }
+            \fp_compare:nNnF
+              { \l__tenkz_test_ray_end_col_tl }
+              < { \l__tenkz_kernel_r_cols_int
+                  + \__tenkz_metric_ratio:n {stub} }
+              { \errmessage{the~northeast~open~end~snapped~to~a~corner} }
+          }
+        {sw}
+          {
+            \fp_compare:nNnF
+              {
+                abs(
+                  \l__tenkz_test_ray_end_row_tl
+                  - \l__tenkz_kernel_r_rows_int
+                  - \__tenkz_metric_ratio:n {stub} )
+              }
+              < {0.000001}
+              { \errmessage{the~southwest~ray~missed~the~south~margin} }
+            \fp_compare:nNnF
+              {
+                abs(
+                  (#3) - \l__tenkz_test_ray_end_col_tl
+                  - \l__tenkz_test_ray_end_row_tl + (#2) )
+              }
+              < {0.000001}
+              { \errmessage{the~southwest~open~end~left~its~logical~ray} }
+            \fp_compare:nNnF
+              { \l__tenkz_test_ray_end_col_tl }
+              > { 1 - \__tenkz_metric_ratio:n {stub} }
+              { \errmessage{the~southwest~open~end~snapped~to~a~corner} }
+          }
+      }
+  }
+\cs_new_protected:Npn \__tenkz_test_affine_open_rays:
+  {
+    \int_set:Nn \l__tenkz_kernel_r_rows_int {3}
+    \int_set:Nn \l__tenkz_kernel_r_cols_int {5}
+    \__tenkz_geom_frame_declare_plane:n {kpic}
+    \__tenkz_test_affine_open_ray:nnn {ne}{2}{2}
+    \__tenkz_test_affine_open_ray:nnn {sw}{2}{4}
+  }
+\ExplSyntaxOff
+\makeatother
+\begin{document}
+\tenkzkernel
+\ExplSyntaxOn
+\__tenkz_test_affine_open_rays:
+\ExplSyntaxOff
+\begin{tenkz}[rows={wire,wire,wire}, cols=5, frame=plane, bonds=none]
+  \tn[at=(2,2), skin=box]{A}
+  \tn[at=(2,4), skin=box]{B}
+  \tnwire[kind=string, route=orth, via={(2,2),(2,4)}]{open ne}{open sw}
+\end{tenkz}
+\end{document}

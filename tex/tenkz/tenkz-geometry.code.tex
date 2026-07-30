@@ -34,6 +34,8 @@
   { [TKZ-GEOM-COMPASS]~no~compass~face~named~'#1';~expected~n,~e,~s,~or~w }
 \msg_new:nnn {tenkz}{geom-singular-basis}
   { [TKZ-GEOM-SINGULAR-BASIS]~a~carrier~basis~must~have~nonzero~determinant }
+\msg_new:nnn {tenkz}{geom-zero-ray}
+  { [TKZ-GEOM-ZERO-RAY]~a~boundary~ray~must~have~a~nonzero~direction }
 
 % ---------- frames ----------------------------------------------------------
 % A frame record is six fp fields (row-major matrix a b / c d, offset dx dy)
@@ -345,6 +347,76 @@
                   }
               }
           }
+      }
+  }
+
+% The first intersection of a ray from an interior point with an
+% axis-aligned rectangle.  Positions and bounds are expressed in one local
+% coordinate system; #3 is the ray angle in that system.
+\tl_new:N \l__tenkz_geom_ray_tx_tl
+\tl_new:N \l__tenkz_geom_ray_ty_tl
+\tl_new:N \l__tenkz_geom_ray_t_tl
+\cs_new_protected:Npn \__tenkz_geom_rect_ray_intersect:nnnnnnnNN
+    #1#2#3#4#5#6#7#8#9
+  {
+    \tl_clear:N \l__tenkz_geom_ray_tx_tl
+    \tl_clear:N \l__tenkz_geom_ray_ty_tl
+    \tl_clear:N \l__tenkz_geom_ray_t_tl
+    \fp_compare:nNnTF { cosd(#3) } > {0}
+      {
+        \tl_set:Ne \l__tenkz_geom_ray_tx_tl
+          { \fp_eval:n { ((#5) - (#1)) / cosd(#3) } }
+      }
+      {
+        \fp_compare:nNnT { cosd(#3) } < {0}
+          {
+            \tl_set:Ne \l__tenkz_geom_ray_tx_tl
+              { \fp_eval:n { ((#4) - (#1)) / cosd(#3) } }
+          }
+      }
+    \fp_compare:nNnTF { sind(#3) } > {0}
+      {
+        \tl_set:Ne \l__tenkz_geom_ray_ty_tl
+          { \fp_eval:n { ((#7) - (#2)) / sind(#3) } }
+      }
+      {
+        \fp_compare:nNnT { sind(#3) } < {0}
+          {
+            \tl_set:Ne \l__tenkz_geom_ray_ty_tl
+              { \fp_eval:n { ((#6) - (#2)) / sind(#3) } }
+          }
+      }
+    \tl_if_empty:NTF \l__tenkz_geom_ray_tx_tl
+      {
+        \tl_if_empty:NTF \l__tenkz_geom_ray_ty_tl
+          {
+            \tl_clear:N #8
+            \tl_clear:N #9
+            \msg_error:nn {tenkz}{geom-zero-ray}
+          }
+          { \tl_set_eq:NN \l__tenkz_geom_ray_t_tl \l__tenkz_geom_ray_ty_tl }
+      }
+      {
+        \tl_if_empty:NTF \l__tenkz_geom_ray_ty_tl
+          { \tl_set_eq:NN \l__tenkz_geom_ray_t_tl \l__tenkz_geom_ray_tx_tl }
+          {
+            \tl_set:Ne \l__tenkz_geom_ray_t_tl
+              {
+                \fp_eval:n
+                  {
+                    min(
+                      \l__tenkz_geom_ray_tx_tl ,
+                      \l__tenkz_geom_ray_ty_tl )
+                  }
+              }
+          }
+      }
+    \tl_if_empty:NF \l__tenkz_geom_ray_t_tl
+      {
+        \tl_set:Ne #8
+          { \fp_eval:n { (#1) + \l__tenkz_geom_ray_t_tl * cosd(#3) } }
+        \tl_set:Ne #9
+          { \fp_eval:n { (#2) + \l__tenkz_geom_ray_t_tl * sind(#3) } }
       }
   }
 
