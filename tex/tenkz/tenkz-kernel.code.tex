@@ -2998,11 +2998,9 @@
 \prop_new:N \l__tenkz_kernel_r_turn_prop
 
 % Carry one of an atom's logical face directions to the page.  Kernel cell
-% coordinates are (row, column), whereas geometry direction angles are
-% measured from the first affine input.  Thus a face angle theta enters the
-% matrix as 90 + theta: east follows the column vector and north follows the
-% negative row vector.  A circle or a carrier-local atom retains the turn
-% model because its axes vary by station rather than by one affine matrix.
+% coordinates are (row, column), whereas the face is measured from local east.
+% Geometry owns the complete east/north basis at that address and carries the
+% direction through it.  A non-cell atom retains its carrier-local turn model.
 \cs_new_protected:Npn \__tenkz_kernel_r_page_face:nnN #1#2#3
   {
     \__tenkz_kernel_r_atom_rc:nNNN {#1}
@@ -3010,13 +3008,10 @@
       \l__tenkz_kernel_turn_bool
     \bool_if:NTF \l__tenkz_kernel_turn_bool
       {
-        \__tenkz_geom_frame_if_affine:nTF {kpic}
-          { \__tenkz_geom_local_dir:nnN {kpic} {#2} #3 }
-          {
-            \__tenkz_kernel_r_turn:nN {#1} \l__tenkz_kernel_turn_tl
-            \tl_set:Ne #3
-              { \fp_eval:n { (#2) + \l__tenkz_kernel_turn_tl } }
-          }
+        \__tenkz_geom_local_bearing:nnnnN {kpic}
+          { \l__tenkz_kernel_turn_a_tl }
+          { \l__tenkz_kernel_turn_b_tl }
+          {#2} #3
       }
       {
         \__tenkz_kernel_r_turn:nN {#1} \l__tenkz_kernel_turn_tl
@@ -8908,21 +8903,18 @@
       {
         \l__tenkz_kernel_r_y_fp + \l__tenkz_kernel_ro_apply_y_tl
       }
-    \__tenkz_geom_basis_apply:nnnnnnNN
+    \__tenkz_geom_basis_bearing:nnnnnN
       { \l__tenkz_kernel_hull_ex_tl }
       { \l__tenkz_kernel_hull_ey_tl }
       { \l__tenkz_kernel_hull_nx_tl }
       { \l__tenkz_kernel_hull_ny_tl }
-      { cosd(\l__tenkz_kernel_r_tl) }
-      { sind(\l__tenkz_kernel_r_tl) }
-      \l__tenkz_kernel_ro_apply_x_tl \l__tenkz_kernel_ro_apply_y_tl
+      { \l__tenkz_kernel_r_tl }
+      \l__tenkz_kernel_r_tau_tl
     \tl_set:Ne \l__tenkz_kernel_r_tau_tl
       {
         \fp_eval:n
           {
-            atand(
-              \l__tenkz_kernel_ro_apply_y_tl ,
-              \l__tenkz_kernel_ro_apply_x_tl )
+            \l__tenkz_kernel_r_tau_tl
             - \l__tenkz_kernel_r_tl
           }
       }
