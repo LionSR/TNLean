@@ -87,6 +87,74 @@ on decay rates.
     \end{align}
 \end{definition}
 
+\begin{definition}[Fixed-point-centered auxiliary insertion]%
+    \label{def:correlator_traceless_part}
+    \lean{MPSTensor.tracelessPart}
+    \leanok
+    For a matrix $\rho\in\MN{D}$ and an auxiliary insertion
+    $X\in\MN{D}$, define
+    \begin{align}
+        Z_\rho(X)
+        &= X\rho-\tr(X\rho)\rho.
+        \label{eq:correlator_traceless_part}
+    \end{align}
+    When $\tr(\rho)=1$, this removes the trace component of $X\rho$.
+\end{definition}
+
+\begin{lemma}[Trace of the centered insertion]%
+    \label{lem:trace_correlator_traceless_part}
+    \lean{MPSTensor.trace_tracelessPart}
+    \leanok
+    \uses{def:correlator_traceless_part}
+    If $\tr(\rho)=1$, then
+    \begin{align}
+        \tr\!\bigl(Z_\rho(X)\bigr)&=0.
+    \end{align}
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{def:correlator_traceless_part}
+    By linearity of the trace,
+    \begin{align}
+        \tr\!\bigl(Z_\rho(X)\bigr)
+        &=\tr(X\rho)-\tr(X\rho)\tr(\rho)
+         =0.
+    \end{align}
+\end{proof}
+
+\begin{theorem}[Fixed-point centering identity for connected correlators]%
+    \label{thm:connected_correlator_traceless_reduction}
+    \lean{MPSTensor.connectedCorrelator_eq_trace_transfer_tracelessPart}
+    \leanok
+    \uses{def:connected_correlator, def:correlator_traceless_part,
+        def:transfer_map}
+    Suppose that $\rho$ is a right fixed point of the transfer map,
+    $\E_A(\rho)=\rho$.  Then, for every $n\geq0$,
+    \begin{align}
+        C(X,Y;n)
+        &=\tr\!\left(Y\,\E_A^n\bigl(Z_\rho(X)\bigr)\right).
+        \label{eq:connected_correlator_traceless_reduction}
+    \end{align}
+    When moreover $\tr(\rho)=1$, the preceding lemma shows that
+    $Z_\rho(X)$ is traceless.  The identity isolates the fixed-point
+    contribution before the remaining transfer iterates are analysed.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:connected_correlator, def:correlator_traceless_part}
+    Since $\E_A(\rho)=\rho$, one has $\E_A^n(\rho)=\rho$ for every $n$.
+    Linearity therefore gives
+    \begin{align}
+        \tr\!\left(Y\,\E_A^n\bigl(Z_\rho(X)\bigr)\right)
+        &=
+        \tr\!\left(Y\,\E_A^n(X\rho)\right)
+        -\tr(X\rho)\tr(Y\rho),
+    \end{align}
+    which is the definition of $C(X,Y;n)$.
+\end{proof}
+
 \section{Spectral expansion and exponential decay}
 
 \begin{theorem}[Sum of exponentials (spectral expansion interface)]%
@@ -161,9 +229,6 @@ on decay rates.
     the triangle inequality and using
     $|\lambda_j|\le|\lambda_2|$ for all subleading eigenvalues; when the
     transfer-map gap gives $|\lambda_2|<1$, this is a decaying bound.
-    In the presence of nontrivial Jordan blocks, an exponential estimate
-    still follows at any rate strictly larger than the complementary
-    spectral radius, as made explicit below.
     % Deriving the bound from the eigendecomposition of $\E_A$
     % is tracked in Issue~\#1447.
 \end{proof}
@@ -186,14 +251,13 @@ on decay rates.
     single-tensor transfer-map bounds for injective tensors are recorded in
     Theorem~\ref{thm:transfer_map_gap_wielandt}.
 
-    These transfer-map gap results suffice for unconditional exponential
-    convergence at every rate strictly larger than the complementary
-    spectral radius. A pure sum of exponentials, or a bound with the exact
-    rate given by the largest subleading eigenvalue modulus, additionally
-    requires control of the relevant Jordan blocks. The remaining
-    formalization task is to extract the spectral coefficients and, where
-    necessary, the generalized spectral terms from $\E_A$
-    (Issue~\#1447).
+    These transfer-map gap results give exponential convergence of the
+    complementary transfer map at every rate strictly larger than its
+    spectral radius. Deriving a connected-correlator bound still requires
+    extracting the spectral coefficients and, in the presence of nontrivial
+    Jordan blocks, the generalized spectral terms from $\E_A$. This
+    derivation is not included here.
+    % Tracked by Issue~\#1447.
 \end{remark}
 
 \begin{definition}[Correlation length]\label{def:correlation_length}
