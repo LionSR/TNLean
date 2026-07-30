@@ -5847,7 +5847,7 @@ code=label-pos|pos=\tl_to_str:N \l_tmpa_tl}
         preaction={draw,
           line~width=\dimexpr \tenkz@wirewidth
                     + \tenkz@dim{\tenkz@r@crossgap} \relax,
-          white} }
+          tenkzPaper} }
       {
         (\l__tenkz_pa_tl.north) --
         (\dim_use:N \l__tenkz_tallx_dim, \dim_use:N \l__tenkz_tmp_dim)
@@ -6129,7 +6129,7 @@ code=periodic-face-ports|row=\int_eval:n{#1}}
           { trace, preaction={draw,
               line~width=\dimexpr \tenkz@wirewidth
                         + \tenkz@dim{\tenkz@r@crossgap} \relax,
-              white},
+              tenkzPaper},
             \tl_use:N \l__tenkz_cell_tl,
             \tl_use:N \l__tenkz_dirmarks_tl }
           { \l_tmpa_tl -- \l__tenkz_pb_tl }
