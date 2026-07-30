@@ -209,8 +209,10 @@ coefficients, the positive $\chi_{\alpha,\beta,\gamma}$, or the length-one
 idempotent trace identity.  It proves the fixed-point-space equation above, not
 the displayed BNT coefficient comparison.  Thus a source-faithful construction
 must first obtain the BNT-label theorem witness from the MPDO tensor and then use
-the one-site retract criterion
-\leanid{MPOTensor.transferRetractData_one_iff_isRFP}.
+the trace identity to construct the physical trace-preserving completely
+positive maps of Appendix~C.4.  The one-site transfer-retract criterion
+\leanid{MPOTensor.transferRetractData_one_iff_isRFP} concerns the separate
+transfer-map idempotence predicate and cannot supply these physical maps.
 
 The scalar normalization step is now isolated independently of the still
 missing channel construction.  The structure
