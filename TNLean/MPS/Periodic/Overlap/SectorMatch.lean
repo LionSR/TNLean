@@ -36,8 +36,8 @@ forces repeated blocks.
   arXiv:1708.00029, Appendix A.
 -/
 
-open scoped Matrix BigOperators ComplexOrder InnerProductSpace
-open Filter Matrix
+open scoped Matrix BigOperators ComplexOrder InnerProductSpace TensorProduct
+open Filter Matrix Module
 
 namespace MPSTensor
 
@@ -862,6 +862,120 @@ private lemma cyclicList_zero_card_eq_ofFn
         rw [Nat.mod_eq_of_lt (by omega : 1 < m)]
         exact Nat.mod_eq_of_lt hn
   exact hnsmul j.1 j.2
+
+/-- Matrix units separate a cyclic product into its individual matrix
+coefficients.
+
+This is the coordinate form of applying the tensor of the inverses in
+arXiv:1708.00029, Appendix A, lines 1048--1067. -/
+private lemma cyclic_matrix_single_chain_apply
+    {m : ℕ} [NeZero m] {D : ℕ}
+    (M : Fin m → MatrixAlg D) (p : Fin m → Fin D × Fin D)
+    (u : Fin m) (n : ℕ) (r s : Fin D) :
+    ((cyclicList
+        (fun k => M k * Matrix.single (p k).2 (p (k + 1)).1 (1 : ℂ))
+        u (n + 1)).prod : MatrixAlg D) r s =
+      if s = (p (u + (n + 1) • (1 : Fin m))).1 then
+        M u r (p u).2 *
+          (cyclicList (fun k => M k (p k).1 (p k).2) (u + 1) n).prod
+      else 0 := by
+  induction n generalizing u r with
+  | zero =>
+    simp only [cyclicList, List.prod_cons, List.prod_nil, mul_one]
+    norm_num
+    by_cases hs : s = (p (u + 1)).1
+    · subst s
+      simp
+    · rw [if_neg hs,
+        Matrix.mul_single_apply_of_ne (1 : ℂ) (p u).2 (p (u + 1)).1 r
+          s hs]
+  | succ n ih =>
+    simp only [cyclicList, List.prod_cons]
+    rw [Matrix.mul_assoc, Matrix.mul_apply]
+    rw [Finset.sum_eq_single (p u).2]
+    · simp only [Matrix.single_mul_apply_same, one_mul]
+      change M u r (p u).2 *
+          ((cyclicList
+            (fun k => M k * Matrix.single (p k).2 (p (k + 1)).1 (1 : ℂ))
+            (u + 1) (n + 1)).prod : MatrixAlg D) (p (u + 1)).1 s = _
+      rw [ih]
+      have hindex :
+          u + 1 + (n + 1) • (1 : Fin m) =
+            u + (n + 1 + 1) • (1 : Fin m) := by
+        have hsmul :
+            (1 + (n + 1)) • (1 : Fin m) =
+              1 + (n + 1) • (1 : Fin m) := by
+          calc
+            (1 + (n + 1)) • (1 : Fin m) =
+                1 • (1 : Fin m) + (n + 1) • (1 : Fin m) :=
+              add_nsmul (1 : Fin m) 1 (n + 1)
+            _ = 1 + (n + 1) • (1 : Fin m) := by rw [one_nsmul]
+        rw [show n + 1 + 1 = 1 + (n + 1) by omega, hsmul, add_assoc]
+      rw [hindex]
+      split_ifs with hs
+      · rfl
+      · rw [mul_zero]
+    · intro a _ ha
+      rw [Matrix.single_mul_apply_of_ne (1 : ℂ) (p u).2
+        (p (u + 1)).1 a s ha]
+      rw [mul_zero]
+    · simp
+
+/-- Arbitrary inserted matrices separate a cyclic matrix-product identity into
+an identity of product tensors.
+
+This is the algebraic passage from the inverse contraction at lines 1048--1062
+to `eq:resultprop` at lines 1063--1067 of arXiv:1708.00029, Appendix A. -/
+private lemma piTensorProduct_eq_smul_of_cyclic_products
+    {m : ℕ} [NeZero m] {D : ℕ} [NeZero D]
+    (A B : Fin m → MatrixAlg D) (z : ℂ)
+    (h : ∀ X : Fin m → MatrixAlg D,
+      (List.ofFn (fun k => A k * X k)).prod =
+        z • (List.ofFn (fun k => B k * X k)).prod) :
+    (⨂ₜ[ℂ] k : Fin m, A k) = z • (⨂ₜ[ℂ] k : Fin m, B k) := by
+  classical
+  let b : (k : Fin m) → Basis (Fin D × Fin D) ℂ (MatrixAlg D) :=
+    fun _ => Matrix.stdBasis ℂ (Fin D) (Fin D)
+  apply (Basis.piTensorProduct b).repr.injective
+  ext p
+  simp only [Basis.piTensorProduct_repr_tprod_apply, map_smul,
+    Finsupp.smul_apply, smul_eq_mul]
+  let X : Fin m → MatrixAlg D :=
+    fun k => Matrix.single (p k).2 (p (k + 1)).1 1
+  have hentry := congrArg (fun M : MatrixAlg D => M (p 0).1 (p 0).1) (h X)
+  have hfull :
+      ∀ M : Fin m → MatrixAlg D,
+        (List.ofFn (fun k => M k * X k)).prod (p 0).1 (p 0).1 =
+          ∏ k, M k (p k).1 (p k).2 := by
+    intro M
+    have hm : m.pred + 1 = m := Nat.succ_pred_eq_of_pos (NeZero.pos m)
+    have hchain :=
+      cyclic_matrix_single_chain_apply M p 0 m.pred (p 0).1 (p 0).1
+    rw [hm, nsmul_card_one_fin, zero_add, if_pos rfl] at hchain
+    calc
+      (List.ofFn (fun k => M k * X k)).prod (p 0).1 (p 0).1 =
+          M 0 (p 0).1 (p 0).2 *
+            (cyclicList (fun k => M k (p k).1 (p k).2) (0 + 1) m.pred).prod := by
+              rw [← cyclicList_zero_card_eq_ofFn]
+              exact hchain
+      _ = (cyclicList (fun k => M k (p k).1 (p k).2) 0 m).prod := by
+        have hcycle :
+            cyclicList (fun k => M k (p k).1 (p k).2) 0 m =
+              M 0 (p 0).1 (p 0).2 ::
+                cyclicList (fun k => M k (p k).1 (p k).2) (0 + 1) m.pred := by
+          calc
+            cyclicList (fun k => M k (p k).1 (p k).2) 0 m =
+                cyclicList (fun k => M k (p k).1 (p k).2) 0 (m.pred + 1) :=
+              congrArg _ hm.symm
+            _ = _ := rfl
+        rw [hcycle, List.prod_cons]
+      _ = (List.ofFn (fun k => M k (p k).1 (p k).2)).prod := by
+        rw [cyclicList_zero_card_eq_ofFn]
+      _ = ∏ k, M k (p k).1 (p k).2 := List.prod_ofFn
+  change (List.ofFn (fun k => A k * X k)).prod (p 0).1 (p 0).1 =
+    z * (List.ofFn (fun k => B k * X k)).prod (p 0).1 (p 0).1 at hentry
+  rw [hfull A, hfull B] at hentry
+  simpa [b, Matrix.stdBasis] using hentry
 
 /-- Concatenating cyclic word segments multiplies their corner products in
 cyclic order.
