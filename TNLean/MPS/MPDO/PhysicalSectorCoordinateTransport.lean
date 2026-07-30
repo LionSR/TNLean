@@ -17,6 +17,15 @@ corresponding closures in the original physical coordinates.
 * [Cirac--Perez-Garcia--Schuch--Verstraete 2017] arXiv:1606.00608,
   Theorem 4.9, direction (iv) implies (v), and Appendix C.2, lines 1510--1563
   and 1821--1825
+
+**Scope restriction (active physical support compression):** the explicit
+`changePhysicalBasis` operation and the two-site/four-site closure transport
+identities do not appear as standalone constructions in CPSV16.  The source
+uses the physical isometry $U$ from Lemma `propSN` to transport closures
+implicitly inside the proof of Theorem 4.9; this file isolates the transport
+as a reusable algebraic gadget.  It participates in the bridge from `propSN`
+to `prop3to4`.  Recorded in
+`docs/paper-gaps/cpsv16_active_physical_support_compression.tex`.
 -/
 
 open scoped Matrix Kronecker
