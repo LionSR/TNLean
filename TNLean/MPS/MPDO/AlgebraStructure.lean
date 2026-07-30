@@ -554,12 +554,13 @@ More explicitly, let `E` be the one-site transfer map. If
 `IsRFP_MPDO_via_algebra M` holds, `X ≠ 0`,
 `E† X = λ X`, and `λ^n = 1` for some `n > 0`, then `λ = 1`. This is exactly the
 finite-order consequence of the fixed-point equality
-$\operatorname{Fix}((E^n)^\dagger)=\operatorname{Fix}(E^\dagger)$. It is not
-the transfer-retract idempotence statement $E^2=E$; the latter is the paper's
-coefficient-comparison argument in Appendix C.4.
+$\operatorname{Fix}((E^n)^\dagger)=\operatorname{Fix}(E^\dagger)$. It does not
+imply the transfer-retract idempotence statement $E^2=E$. Appendix C.4 instead
+constructs physical trace-preserving completely positive maps between blocked
+tensors.
 
 Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and Appendix C.4,
-lines 2046--2085 of `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
+lines 2065--2085 of `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
 theorem adjoint_transferMap_eigenvalue_eq_one_of_isRFP_MPDO_via_algebra
     {M : MPOTensor d D} (hAlg : IsRFP_MPDO_via_algebra M)
     {n : ℕ} (hn : 0 < n) {lam : ℂ} {X : Mat} (hX_ne : X ≠ 0)

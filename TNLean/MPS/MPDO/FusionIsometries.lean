@@ -27,9 +27,9 @@ forward map `Tₙ : M_D(ℂ) → 𝒜ₙ`, and a backward map `Sₙ : 𝒜ₙ �
 range. This yields an equivalence between `MPOTensor.IsRFP` and the
 transfer-retract formulation.
 
-The physical fusion isometries of Theorem 4.14(iii) are the object
-`BNTFusionIsometryFamily`, recorded in
-`TNLean/MPS/MPDO/BNTFusionIsometries.lean`.
+The source-faithful active-support fusion maps of Theorem 4.14(iii) are recorded
+by `BNTFusionCoisometryFamily`. Their stronger full-support specialization is
+recorded by `BNTFusionIsometryFamily`.
 
 ## Main declarations
 
@@ -86,7 +86,8 @@ map to the corresponding power. -/
 A support subspace of bond-space matrices together with a retract whose
 characteristic map is the blocked transfer map.  This is the
 transfer-map-level content of the idempotence criterion, not the paper's
-physical fusion isometry (see `BNTFusionIsometryFamily` for those). -/
+physical fusion map (see `BNTFusionCoisometryFamily` for the active-support
+family and `BNTFusionIsometryFamily` for its full-support specialization). -/
 structure TransferRetractData (M : MPOTensor d D) (n : ℕ) where
   /-- The support subspace through which the blocked transfer map factors. -/
   supportAlgebra : Submodule ℂ (FusionBondSpace D)
