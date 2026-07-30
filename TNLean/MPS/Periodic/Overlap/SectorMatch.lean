@@ -1053,6 +1053,70 @@ private lemma cornerProd_add_shift
       congr 2
       abel
 
+/-- A cyclic chain of corner products transported by adjacent partial
+isometries is the transport of the concatenated corner product.
+
+This is the cancellation of adjacent implementers in arXiv:1708.00029,
+Appendix A, lines 1041--1056. -/
+private lemma cyclic_transport_cornerProd_segments
+    {m : ℕ} [NeZero m]
+    (Q : Fin m → MatrixAlg D) (B : MPSTensor d D) (q : Fin m)
+    (U : Fin m → MatrixAlg D)
+    (hQ : ∀ k, IsOrthogonalProjection (Q k))
+    (hQ_shift : ∀ k (i : Fin d), Q k * B i = B i * Q (k + 1))
+    (hU_star_U : ∀ k, (U k)ᴴ * U k = Q (k + q))
+    (segments : Fin m → List (Fin d))
+    (hsegments : ∀ k, (segments k).length • (1 : Fin m) = 1)
+    (u : Fin m) (n : ℕ) :
+    (cyclicList
+        (fun k => U k * cornerProd Q B (k + q) (segments k) * (U (k + 1))ᴴ)
+        u (n + 1)).prod =
+      U u *
+        cornerProd Q B (u + q) (cyclicList segments u (n + 1)).flatten *
+          (U (u + (n + 1) • (1 : Fin m)))ᴴ := by
+  let S : Fin m → MatrixAlg D := fun k => Q (k + q)
+  have hS : ∀ k, IsOrthogonalProjection (S k) := fun k => hQ (k + q)
+  have hS_shift : ∀ k (i : Fin d), S k * B i = B i * S (k + 1) := by
+    intro k i
+    change Q (k + q) * B i = B i * Q (k + 1 + q)
+    rw [show k + 1 + q = k + q + 1 by abel]
+    exact hQ_shift (k + q) i
+  let R : Fin m → MatrixAlg D := fun k => cornerProd S B k (segments k)
+  have hR_right : ∀ k, R k * S (k + 1) = R k := by
+    intro k
+    simpa only [R, hsegments k] using
+      cornerProd_mul_finalCorner S B hS hS_shift k (segments k)
+  have hconcat :=
+    cornerProd_cyclicList_flatten_succ S B hS segments hsegments u n
+  have hU_star_U' : ∀ k, (U k)ᴴ * U k = S (k + 0) := by
+    intro k
+    simpa only [S, add_zero] using hU_star_U k
+  have hR_right' : ∀ k, R k * S (k + 1 + 0) = R k := by
+    intro k
+    simpa only [add_zero] using hR_right k
+  have htransport :=
+    cyclic_partial_isometry_prod_succ S (0 : Fin m) U R
+      hU_star_U' hR_right' u n
+  calc
+    (cyclicList
+        (fun k => U k * cornerProd Q B (k + q) (segments k) * (U (k + 1))ᴴ)
+        u (n + 1)).prod =
+        (cyclicList (fun k => U k * R k * (U (k + 1))ᴴ) u (n + 1)).prod := by
+          apply congrArg List.prod
+          apply congrArg (fun f => cyclicList f u (n + 1))
+          funext k
+          change U k * cornerProd Q B (k + q) (segments k) * (U (k + 1))ᴴ =
+            U k * cornerProd S B k (segments k) * (U (k + 1))ᴴ
+          rw [cornerProd_add_shift]
+    _ = U u * (cyclicList R u (n + 1)).prod *
+          (U (u + (n + 1) • (1 : Fin m)))ᴴ := htransport
+    _ = U u * cornerProd S B u (cyclicList segments u (n + 1)).flatten *
+          (U (u + (n + 1) • (1 : Fin m)))ᴴ := by rw [hconcat]
+    _ = U u *
+          cornerProd Q B (u + q) (cyclicList segments u (n + 1)).flatten *
+            (U (u + (n + 1) • (1 : Fin m)))ᴴ := by
+              rw [cornerProd_add_shift]
+
 /-- Full-cycle contraction step for periodic-overlap Case 3.
 
 At this point the sector transport has already been abstracted into
