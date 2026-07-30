@@ -261,7 +261,7 @@
 % 90 + theta.  Keeping that convention here prevents row/column details from
 % leaking into each port, leg, and open-end consumer.
 \cs_new_protected:Npn \__tenkz_geom_local_dir:nnN #1#2#3
-  { \__tenkz_geom_dir:nnN {#1} { 90 + (#2) } #3 }
+  { \__tenkz_geom_local_bearing:nnnnN {#1}{1}{1}{#2} #3 }
 
 % A carrier basis is the complete local east/north pair on the page.  Keeping
 % both vectors, rather than one turn angle, preserves shear and unequal scale.
@@ -272,6 +272,28 @@
   {
     \tl_set:Ne #7 { \fp_eval:n { (#1) * (#5) + (#3) * (#6) } }
     \tl_set:Ne #8 { \fp_eval:n { (#2) * (#5) + (#4) * (#6) } }
+  }
+% Carry a local direction through a complete carrier basis and read its page
+% bearing.  A scalar turn cannot answer this question under shear or unequal
+% axis scale; the two basis vectors are the one source of direction geometry.
+\tl_new:N \l__tenkz_geom_bearing_x_tl
+\tl_new:N \l__tenkz_geom_bearing_y_tl
+\cs_new_protected:Npn \__tenkz_geom_basis_bearing:nnnnnN
+    #1#2#3#4#5#6
+  {
+    \__tenkz_geom_basis_apply:nnnnnnNN
+      {#1}{#2}{#3}{#4}
+      { cosd(#5) } { sind(#5) }
+      \l__tenkz_geom_bearing_x_tl \l__tenkz_geom_bearing_y_tl
+    \tl_set:Ne #6
+      {
+        \fp_eval:n
+          {
+            atand(
+              \l__tenkz_geom_bearing_y_tl ,
+              \l__tenkz_geom_bearing_x_tl )
+          }
+      }
   }
 \cs_new_protected:Npn \__tenkz_geom_basis_unapply:nnnnnnNN
     #1#2#3#4#5#6#7#8
@@ -486,6 +508,26 @@
             \tl_set:Ne #7 { \fp_eval:n { -\__tenkz_geom_field:nn{#1}{c} } }
           }
       }
+  }
+
+% The page bearing of one direction in the local east/north axes of a frame
+% address.  Both affine and circular carriers answer through the same complete
+% basis; consumers do not inspect frame kinds or reproduce projection formulae.
+\tl_new:N \l__tenkz_geom_bearing_ex_tl
+\tl_new:N \l__tenkz_geom_bearing_ey_tl
+\tl_new:N \l__tenkz_geom_bearing_nx_tl
+\tl_new:N \l__tenkz_geom_bearing_ny_tl
+\cs_new_protected:Npn \__tenkz_geom_local_bearing:nnnnN #1#2#3#4#5
+  {
+    \__tenkz_geom_local_basis:nnnNNNN {#1}{#2}{#3}
+      \l__tenkz_geom_bearing_ex_tl \l__tenkz_geom_bearing_ey_tl
+      \l__tenkz_geom_bearing_nx_tl \l__tenkz_geom_bearing_ny_tl
+    \__tenkz_geom_basis_bearing:nnnnnN
+      { \l__tenkz_geom_bearing_ex_tl }
+      { \l__tenkz_geom_bearing_ey_tl }
+      { \l__tenkz_geom_bearing_nx_tl }
+      { \l__tenkz_geom_bearing_ny_tl }
+      {#4} #5
   }
 
 % The axes a frame gives a record.  An address on a carrier is read in the
