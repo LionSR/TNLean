@@ -170,7 +170,7 @@ noncomputable def legPair2 {cbd : Edge coarseGraph → ℕ} :
 
 Under the partition the two crossing classes at a super-site are exclusive: a
 boundary edge crossing to one partner region does not cross to the other, because
-the two partner regions are disjoint.  These lemmas make the boundary-edge
+the two partner regions are disjoint. These lemmas make the boundary-edge
 partition of a region a genuine dichotomy. -/
 
 namespace CoarseBlockingFrame
@@ -178,6 +178,8 @@ namespace CoarseBlockingFrame
 variable (F : CoarseBlockingFrame (G := G) (d := d) A)
 
 /-- A red boundary edge crossing to blue does not cross to the complement. -/
+@[deprecated "Use the pairwise-disjoint fields of `IsPartition` directly."
+  (since := "2026-07-30")]
 theorem not_crossing_rb_and_rc (hP : F.IsPartition) {g : Edge G}
     (hrb : IsCrossingEdge (G := G) A F.red F.blue g) :
     ¬ IsCrossingEdge (G := G) A F.red F.complement g := by
@@ -203,6 +205,8 @@ theorem not_crossing_rb_and_rc (hP : F.IsPartition) {g : Edge G}
     exact Finset.disjoint_left.mp hP.blue_disjoint_complement hb1 hc1
 
 /-- A blue boundary edge crossing to red does not cross to the complement. -/
+@[deprecated "Use the pairwise-disjoint fields of `IsPartition` directly."
+  (since := "2026-07-30")]
 theorem not_crossing_rb_and_bc (hP : F.IsPartition) {g : Edge G}
     (hrb : IsCrossingEdge (G := G) A F.red F.blue g) :
     ¬ IsCrossingEdge (G := G) A F.blue F.complement g := by
@@ -228,6 +232,8 @@ theorem not_crossing_rb_and_bc (hP : F.IsPartition) {g : Edge G}
     exact Finset.disjoint_left.mp hP.blue_disjoint_complement hb1 hc1
 
 /-- A complement boundary edge crossing to red does not cross to blue. -/
+@[deprecated "Use the pairwise-disjoint fields of `IsPartition` directly."
+  (since := "2026-07-30")]
 theorem not_crossing_rc_and_bc (hP : F.IsPartition) {g : Edge G}
     (hrc : IsCrossingEdge (G := G) A F.red F.complement g) :
     ¬ IsCrossingEdge (G := G) A F.blue F.complement g := by
@@ -251,12 +257,6 @@ theorem not_crossing_rc_and_bc (hP : F.IsPartition) {g : Edge G}
       · exact ha
       · exact absurd hb (Finset.disjoint_left.mp hP.red_disjoint_blue h2r)
     exact Finset.disjoint_left.mp hP.blue_disjoint_complement hb1 hc1
-
-/-! ### Boundary-edge split of a region
-
-Every boundary edge of a region crosses to exactly one partner region
-(`isCrossingEdge_red_blue_or_red_complement` and its siblings), so a region
-boundary configuration splits into its two crossing configurations. -/
 
 end CoarseBlockingFrame
 
@@ -945,6 +945,8 @@ noncomputable def coherentFrameOfRegions
       complement := rfl
 
 /-- The coherent frame of three partitioned regions is partitioned. -/
+@[deprecated "Construct `CoarseBlockingFrame.IsPartition` directly from the supplied
+disjointness and covering hypotheses." (since := "2026-07-30")]
 theorem coherentFrameOfRegions_isPartition
     (hRed : RegionBlockedTensorInjective (G := G) A red)
     (hBlue : RegionBlockedTensorInjective (G := G) A blue)

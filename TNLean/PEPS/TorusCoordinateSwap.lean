@@ -58,6 +58,8 @@ def torusCoordinateSwapRegion {width height : ℕ}
   simp [torusCoordinateSwapRegion]
 
 /-- Coordinate swap preserves unions of finite regions. -/
+@[deprecated "Expand `torusCoordinateSwapRegion` and use `Finset.map_union`."
+  (since := "2026-07-30")]
 theorem torusCoordinateSwapRegion_union {width height : ℕ}
     (R S : Finset (TorusVertex width height)) :
     torusCoordinateSwapRegion (R ∪ S) =
@@ -121,6 +123,8 @@ def torusCoordinateSwap :
   rfl
 
 /-- Coordinate swap sends horizontal edges to vertical edges. -/
+@[deprecated "Use `torusHorizontalNeighbor_coordinateSwap` together with
+`Edge.map_endpoints`." (since := "2026-07-30")]
 theorem torusCoordinateSwap_isVertical {e : Edge (torusGraph width height)}
     (he : IsHorizontalTorusEdge e) :
     IsVerticalTorusEdge (Edge.map torusCoordinateSwap e) := by
@@ -136,6 +140,8 @@ theorem torusCoordinateSwap_isVertical {e : Edge (torusGraph width height)}
     exact torusVerticalNeighbor_symm h
 
 /-- Coordinate swap sends vertical edges to horizontal edges. -/
+@[deprecated "Use `torusVerticalNeighbor_coordinateSwap` together with
+`Edge.map_endpoints`." (since := "2026-07-30")]
 theorem torusCoordinateSwap_isHorizontal {e : Edge (torusGraph width height)}
     (he : IsVerticalTorusEdge e) :
     IsHorizontalTorusEdge (Edge.map torusCoordinateSwap e) := by
@@ -149,14 +155,6 @@ theorem torusCoordinateSwap_isHorizontal {e : Edge (torusGraph width height)}
     rw [show (Edge.map torusCoordinateSwap e).1.1 = torusCoordinateSwap e.1.2 from hends.1,
       show (Edge.map torusCoordinateSwap e).1.2 = torusCoordinateSwap e.1.1 from hends.2]
     exact torusHorizontalNeighbor_symm h
-
-/-- Coordinate swap transposes a cyclic rectangle and exchanges its side lengths. -/
-theorem Region_map_torusCoordinateSwap_torusArcRectangle
-    (s : TorusVertex width height) (xLen yLen : ℕ) :
-    Region.map torusCoordinateSwap (torusArcRectangle s xLen yLen) =
-      torusArcRectangle (s.2, s.1) yLen xLen := by
-  change torusCoordinateSwapRegion (torusArcRectangle s xLen yLen) = _
-  exact torusCoordinateSwapRegion_torusArcRectangle s xLen yLen
 
 end PEPS
 end TNLean
