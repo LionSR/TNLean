@@ -69,9 +69,16 @@ grep -Fq 'string|id=vertical|kind=wind|class=0,1|pts=12' \
   echo "FAIL: the vertical torus class did not reach the winding renderer" >&2
   exit 1
 }
-grep -Eq \
-  '^frame\\|id=frame-[0-9]+\\|a=-0\\.45\\|b=1\\|c=-0\\.60\\|d=0\\|dx=-0\\.55\\|dy=0\\.60\\|map=plane\\|scope=picture$' \
-  "$WORK/k_plane.tnlog" || {
+plane_frame=$(grep '^frame|' "$WORK/k_plane.tnlog") || {
+  echo "FAIL: frame=plane emitted no frame record" >&2
+  exit 1
+}
+plane_frame_canonical=$(
+  printf '%s\n' "$plane_frame" |
+    sed -E 's/^frame\|id=frame-[0-9]+\|/frame|/'
+)
+[ "$plane_frame_canonical" = \
+  'frame|a=-0.45|b=1|c=-0.60|d=0|dx=-0.55|dy=0.60|map=plane|scope=picture' ] || {
   echo "FAIL: frame=plane did not record the fixed projected basis" >&2
   exit 1
 }
