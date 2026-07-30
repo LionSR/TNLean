@@ -1198,3 +1198,28 @@ Census-correction: #5085
 |---|---|
 | flag:consumers:key:picture:column sep | dies with the `tenkzcd` chapter 21 migration in #4699, where typed-map column pitch receives its kernel spelling; expiry 0.8 |
 | flag:consumers:key:picture:row sep | dies with the `tenkzcd` chapter 21 migration in #4699, where typed-map row pitch receives its kernel spelling; expiry 0.8 |
+
+### 2026-07-30 — declared cell bases replace measured sub-sites
+
+The frame grammar gains one nested kernel leaf, `basis=`, so M1 kernel rows
+rise from 139 to 140 and M2 parser leaves rise from 226 to 227. The leaf is
+the shared replacement for off-cell sites expressed through raw millimetres:
+it declares an ordered row-kind member table in east/north quarter pitches,
+and the existing frame map transports every member through flat and projected
+geometry.
+
+This is deliberately placement without invented topology. Selecting `(r,c)`
+returns every member, `(r,c,k)` returns one member, and a multi-member basis
+requires explicit wires rather than treating coordinate coincidence as a
+connection. The CZX contract fixture consumes the leaf immediately, while
+the GHZ and PEPS cases remain assigned to the generic motif/topology work;
+no case-specific expander is introduced here.
+
+Extension-gate: #5086
+
+Census-correction: #5086
+
+| flag | verdict |
+|---|---|
+| flag:consumers:key:kernel-frame:basis | keep-because: the CZX fixture consumes the member table now; the GHZ, cluster-state, bilayer, and condensation consumers named by LANGUAGE-1.0 migrate through #5086; expiry 1.0 |
+| flag:lonely-type:basis-spec | keep-because: this type alone combines an ordered row-kind list with signed two-axis quarter-pitch offsets; ordinary row-list and selector grammars cannot express that frame-owned structure; expiry 1.0 |

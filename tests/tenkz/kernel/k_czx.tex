@@ -1,7 +1,6 @@
 %% Kernel fixture: LANGUAGE-1.0.md 12.5 (rmp-app-czx-state).
-%% Expected: four cluster atoms each expanding to a subframe group of four
-%% named dot sub-atoms (a-1-1..d-2-2); one enclosure mark over the braced
-%% address set of the four inner spins.
+%% Expected: four ordinary basis members per cell, addressed as (r,c,k), and
+%% one enclosure mark over the four inner spins.
 \documentclass{standalone}
 \usepackage{tenkz}
 \makeatletter
@@ -11,9 +10,10 @@
 \makeatother
 \begin{document}
 \tenkzkernel
-\begin{tenkz}[lattice={2x2}, bonds=none]
-  \tn[cluster={2x2}, name=a]{} & \tn[cluster={2x2}, name=b]{} \\
-  \tn[cluster={2x2}, name=c]{} & \tn[cluster={2x2}, name=d]{}
-  \tnmark[form=enclosure, slot=selected]{{a-2-2, b-2-1, c-1-2, d-1-1}}{$X$}
+\begin{tenkz}[lattice={2x2}, bonds=none,
+              frame={flat, basis={wire at (-1,1), wire at (1,1),
+                                  wire at (-1,-1), wire at (1,-1)}}]
+  \tnmark[form=enclosure, slot=selected]
+    {{(1,1,4), (1,2,3), (2,1,2), (2,2,1)}}{$X$}
 \end{tenkz}
 \end{document}
