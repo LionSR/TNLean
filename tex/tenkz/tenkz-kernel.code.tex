@@ -6756,7 +6756,50 @@
       { \l__tenkz_kernel_r_cols_int + \__tenkz_metric_ratio:n {stub} }
       { 1 - \__tenkz_metric_ratio:n {stub} }
       { \l__tenkz_kernel_r_rows_int + \__tenkz_metric_ratio:n {stub} }
-      \l__tenkz_kernel_r_col_tl \l__tenkz_kernel_r_row_tl
+      \l__tenkz_kernel_r_x_tl \l__tenkz_kernel_r_y_tl
+    \tl_if_empty:NTF \l__tenkz_kernel_r_x_tl
+      {
+        % A point already outside the picture can face farther outward, so
+        % its forward ray need not meet the rectangle.  Preserve the
+        % established named-margin fallback in that case; this matters for
+        % off-cell relative waypoints in flat pictures.
+        \fp_compare:nNnT { cosd(\l__tenkz_kernel_r_b_tl) } < {0}
+          {
+            \tl_set:Ne \l__tenkz_kernel_r_col_tl
+              { \fp_eval:n { 1 - \__tenkz_metric_ratio:n {stub} } }
+          }
+        \fp_compare:nNnT { cosd(\l__tenkz_kernel_r_b_tl) } > {0}
+          {
+            \tl_set:Ne \l__tenkz_kernel_r_col_tl
+              {
+                \fp_eval:n
+                  {
+                    \l__tenkz_kernel_r_cols_int
+                    + \__tenkz_metric_ratio:n {stub}
+                  }
+              }
+          }
+        \fp_compare:nNnT { sind(\l__tenkz_kernel_r_b_tl) } < {0}
+          {
+            \tl_set:Ne \l__tenkz_kernel_r_row_tl
+              { \fp_eval:n { 1 - \__tenkz_metric_ratio:n {stub} } }
+          }
+        \fp_compare:nNnT { sind(\l__tenkz_kernel_r_b_tl) } > {0}
+          {
+            \tl_set:Ne \l__tenkz_kernel_r_row_tl
+              {
+                \fp_eval:n
+                  {
+                    \l__tenkz_kernel_r_rows_int
+                    + \__tenkz_metric_ratio:n {stub}
+                  }
+              }
+          }
+      }
+      {
+        \tl_set_eq:NN \l__tenkz_kernel_r_col_tl \l__tenkz_kernel_r_x_tl
+        \tl_set_eq:NN \l__tenkz_kernel_r_row_tl \l__tenkz_kernel_r_y_tl
+      }
     \__tenkz_kernel_r_frame_xy:nnNN
       { \l__tenkz_kernel_r_row_tl } { \l__tenkz_kernel_r_col_tl }
       #2 #3
