@@ -533,10 +533,11 @@ If `X` is an eigenvector of the unblocked adjoint transfer map with eigenvalue
 `λ`, then it is an eigenvector of the adjoint blocked transfer map at size `n`
 with eigenvalue `λ^n`.
 
-Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and Appendix C.4,
-lines 2046--2085 of `Papers/1606.00608/MPDO-22-12-17-2.tex`. This is the
-spectral fixed-point calculation underlying the obstruction to deriving the
-transfer-retract formulation from the present support-algebra predicate alone. -/
+Comparison: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and Appendix
+C.4, lines 2046--2085 of `Papers/1606.00608/MPDO-22-12-17-2.tex`. The cited
+passages do not state this elementary power calculation; it records the
+spectral obstruction to deriving the transfer-retract formulation from the
+present support-algebra predicate alone. -/
 theorem adjoint_blockedTransferMap_apply_of_adjoint_transferMap_eigenvector
     {M : MPOTensor d D} (n : ℕ) {lam : ℂ} {X : Mat}
     (hX : (transferMap M).adjoint X = lam • X) :
@@ -559,8 +560,9 @@ imply the transfer-retract idempotence statement $E^2=E$. Appendix C.4 instead
 constructs physical trace-preserving completely positive maps between blocked
 tensors.
 
-Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and Appendix C.4,
-lines 2065--2085 of `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
+Comparison: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and Appendix
+C.4, lines 2065--2085 of `Papers/1606.00608/MPDO-22-12-17-2.tex`. The cited
+passages do not state this spectral consequence. -/
 theorem adjoint_transferMap_eigenvalue_eq_one_of_isRFP_MPDO_via_algebra
     {M : MPOTensor d D} (hAlg : IsRFP_MPDO_via_algebra M)
     {n : ℕ} (hn : 0 < n) {lam : ℂ} {X : Mat} (hX_ne : X ≠ 0)
@@ -582,11 +584,12 @@ theorem adjoint_transferMap_eigenvalue_eq_one_of_isRFP_MPDO_via_algebra
 every positive blocked transfer map coincide with the adjoint fixed points of
 the unblocked transfer map.
 
-Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and Appendix C.4,
-lines 2015--2067. This equality is only the fixed-point consequence of the
-present algebra-tower predicate. It is not the converse from the algebra
-formulation to the paper's physical fusion-isometry formulation; the latter
-requires the positive trace-power coefficient comparison used in Appendix C.4. -/
+Comparison: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and Appendix
+C.4, lines 2015--2067. The cited passages do not state this equality. It is
+only the fixed-point consequence of the present algebra-tower predicate, not
+the converse from the algebra formulation to the paper's physical
+active-support fusion-coisometry formulation; the latter requires the positive
+trace-power coefficient comparison used in Appendix C.4. -/
 theorem adjoint_blockedTransferMap_apply_iff_of_isRFP_MPDO_via_algebra
     {M : MPOTensor d D} (hAlg : IsRFP_MPDO_via_algebra M)
     {n : ℕ} (hn : 0 < n) {X : Mat} :
@@ -602,9 +605,12 @@ with the MPO tensor.
 Applying the fixed-point equality above to the stationary tower constructed
 from the faithful fixed point yields compatibility with the MPO tensor.  It is
 still only a consequence of the present algebra-tower predicate, not the source
-converse from Theorem IV.13(ii) to the fusion-isometry formulation.
-Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and Appendix C.4,
-lines 2015--2067 of `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
+converse from Theorem IV.13(ii) to the active-support fusion-coisometry
+formulation.
+
+Comparison: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and Appendix
+C.4, lines 2015--2067 of `Papers/1606.00608/MPDO-22-12-17-2.tex`. The cited
+passages do not state this stationary-tower consequence. -/
 theorem stationaryOfFaithfulFixedPoint_compatible_of_isRFP_MPDO_via_algebra
     {M : MPOTensor d D} (hAlg : IsRFP_MPDO_via_algebra M)
     (h_tp : Kraus.IsTP M.toMPSTensor)
