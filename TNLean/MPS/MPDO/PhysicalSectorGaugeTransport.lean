@@ -12,6 +12,12 @@ A virtual similarity mixes the left and right virtual indices by inverse
 matrices.  These changes can be absorbed separately into the two tensor
 factors of a physical-sector factorization.  Their contraction cancels the
 gauge, so the neighboring operators are unchanged.
+
+## Background
+
+* Cirac--Perez-Garcia--Schuch--Verstraete, arXiv:1606.00608, Appendix C.2,
+  equation `AppUkU=rl`, lines 1381--1388, for the physical-sector
+  factorization transported here.
 -/
 
 open scoped ComplexOrder Matrix
@@ -27,8 +33,10 @@ The physical-sector decomposition and physical isometry are unchanged.  The
 gauge and its inverse are absorbed into the left and right virtual tensor
 families, respectively.
 
-Source context: arXiv:1606.00608, Appendix C.2, equation `AppUkU=rl`, lines
-1381--1388. -/
+Background for the factorization: arXiv:1606.00608, Appendix C.2, equation
+`AppUkU=rl`, lines 1381--1388. That passage does not state the virtual-gauge
+transport; the present construction is the direct algebraic transport of its
+two virtual factors. -/
 noncomputable def ofGaugeEquiv (F : PhysicalSectorFactorization K)
     (hGauge : MPSTensor.GaugeEquiv K.toMPSTensor L.toMPSTensor) :
     PhysicalSectorFactorization L :=

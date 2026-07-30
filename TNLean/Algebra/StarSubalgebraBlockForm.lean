@@ -278,7 +278,7 @@ Thus the same orthonormal identification realizes the complementary block algebr
 `\bigoplus_k (M_{m_k} \otimes \mathbf 1_{d_k})`.
 
 This is the finite-dimensional star-algebra step in the proof of the Bravyi--Vyalyi
-spatial decomposition; see S. Beigi, arXiv:1105.1019v2, Lemma 2.1 (`lem:comm`), proof on
+spatial decomposition; see S. Beigi, J. Phys. A 45 (2012) 025306, Lemma 2.1 (`lem:comm`), proof on
 pages 2--3. -/
 theorem exists_complementary_action_orthonormalBasis :
     ∃ (K : ℕ) (d m : Fin K → ℕ)

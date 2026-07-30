@@ -37,8 +37,14 @@ The normalization scalar at every chain length is one.
 Source: arXiv:1606.00608, Appendix C.2, Proposition C.8 (`3to4`), lines
 1571--1593.
 
-The source-faithful existence theorem from SAL is
-`MPOTensor.nonempty_etaLocalStructureData_of_isSAL`. -/
+**Scope restriction (given physical-sector factorization):** Proposition
+`3to4` assumes SAL (arXiv:1606.00608, Appendix C.2, Proposition C.8, lines
+1571--1593); positivity of the neighboring operators is obtained in the
+preceding Lemma `propSN`, lines 1441--1450. The present declaration instead
+takes both the physical-sector factorization and this positivity as
+hypotheses. The source-faithful implication is
+`MPOTensor.nonempty_etaLocalStructureData_of_isSAL`; see
+`docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex`. -/
 noncomputable def etaLocalStructureData
     (F : PhysicalSectorFactorization K)
     (hη : ∀ k h, (F.neighboringOperator k h).PosSemidef) :

@@ -538,7 +538,7 @@ neighboring-operator decomposition.  This is the local-to-global commutation
 consequence of the same cyclic edge coordinates used in Beigi's finite-chain
 decomposition.
 
-Source: Beigi, arXiv:1105.1019v2, Section III, equations (2)--(3), pages 3--4. -/
+Source: Beigi, J. Phys. A 45 (2012) 025306, Section III, equations (2)--(3), pages 3--4. -/
 theorem embedLocalOperator_commute_of_etaPair_decomposition
     {K N : ℕ} [NeZero N] (hN : 2 ≤ N) (dl dr : Fin K → ℕ)
     (e : Matrix.EtaSiteIndex K dl dr ≃ Fin d)

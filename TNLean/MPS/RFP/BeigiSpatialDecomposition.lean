@@ -28,7 +28,7 @@ commute.  Beigi's spatial decomposition therefore applies directly.
 ## References
 
 * S. Beigi, *Classification of the phases of 1D spin chains with commuting
-  Hamiltonians*, arXiv:1105.1019v2, Lemma 2.1 and Sections II--IV.
+  Hamiltonians*, J. Phys. A 45 (2012) 025306, Lemma 2.1 and Sections II--IV.
 * Cirac--Perez-Garcia--Schuch--Verstraete, arXiv:1606.00608,
   Theorem 3.10, lines 534--540.
 -/
@@ -44,7 +44,7 @@ variable {d D : ℕ}
 /-- The common left-associated coordinates for three consecutive physical sites.
 The equivalence sends a configuration `x` to `((x 0, x 1), x 2)`.
 
-Source: Beigi, arXiv:1105.1019v2, Lemma 2.1 (`lem:comm`), pages 2--3. -/
+Source: Beigi, J. Phys. A 45 (2012) 025306, Lemma 2.1 (`lem:comm`), pages 2--3. -/
 def threeSiteParentInteractionEquiv (n : Type*) :
     (Fin 3 → n) ≃ ((n × n) × n) :=
   (finThreeArrowEquiv n).trans (Equiv.prodAssoc n n n).symm
@@ -52,7 +52,7 @@ def threeSiteParentInteractionEquiv (n : Type*) :
 /-- In common left-associated three-site coordinates, the first-pair lift of a
 two-site operator is its left overlapping matrix lift.
 
-Source: Beigi, arXiv:1105.1019v2, Lemma 2.1 (`lem:comm`), pages 2--3. -/
+Source: Beigi, J. Phys. A 45 (2012) 025306, Lemma 2.1 (`lem:comm`), pages 2--3. -/
 theorem leftPairLift_toMatrix_reindex_leftAssociated
     (Q : NSiteSpace d 2 →ₗ[ℂ] NSiteSpace d 2) :
     Matrix.reindex (threeSiteParentInteractionEquiv (Fin d))
@@ -76,7 +76,7 @@ theorem leftPairLift_toMatrix_reindex_leftAssociated
 /-- In common left-associated three-site coordinates, the final-pair lift of a
 two-site operator is its right overlapping matrix lift.
 
-Source: Beigi, arXiv:1105.1019v2, Lemma 2.1 (`lem:comm`), pages 2--3. -/
+Source: Beigi, J. Phys. A 45 (2012) 025306, Lemma 2.1 (`lem:comm`), pages 2--3. -/
 theorem rightPairLift_toMatrix_reindex_leftAssociated
     (Q : NSiteSpace d 2 →ₗ[ℂ] NSiteSpace d 2) :
     Matrix.reindex (threeSiteParentInteractionEquiv (Fin d))
@@ -136,7 +136,7 @@ theorem twoSiteParentInteractionMatrix_isHermitian (A : MPSTensor d D) :
 the two natural overlapping lifts of the canonical two-site interaction.
 
 Source: arXiv:1606.00608, Theorem 3.10, lines 534--540; Beigi,
-arXiv:1105.1019v2, Lemma 2.1 (`lem:comm`), pages 2--3. -/
+J. Phys. A 45 (2012) 025306, Lemma 2.1 (`lem:comm`), pages 2--3. -/
 theorem IsNNCPH.twoSiteParentInteractionMatrix_overlappingLifts_commute
     {A : MPSTensor d D} (hNNCPH : IsNNCPH A 3) :
     Matrix.leftOverlappingLift (twoSiteParentInteractionMatrix A) *
@@ -168,7 +168,7 @@ theorem IsNNCPH.twoSiteParentInteractionMatrix_overlappingLifts_commute
 lifts commute on three sites.
 
 This is exactly the local input to the spatial decomposition of Beigi,
-arXiv:1105.1019v2, Lemma 2.1 (`lem:comm`), pages 2--3. -/
+J. Phys. A 45 (2012) 025306, Lemma 2.1 (`lem:comm`), pages 2--3. -/
 theorem IsNNCPH.twoSiteParentInteractionMatrix_isHermitian_and_overlappingLifts_commute
     {A : MPSTensor d D} (hNNCPH : IsNNCPH A 3) :
     (twoSiteParentInteractionMatrix A).IsHermitian ∧
@@ -184,7 +184,7 @@ theorem IsNNCPH.twoSiteParentInteractionMatrix_isHermitian_and_overlappingLifts_
 /-- The canonical two-site parent interaction admits Beigi's explicit unitary
 block-action decomposition on the middle physical site.
 
-Source: Beigi, arXiv:1105.1019v2, Lemma 2.1 (`lem:comm`), pages 2--3;
+Source: Beigi, J. Phys. A 45 (2012) 025306, Lemma 2.1 (`lem:comm`), pages 2--3;
 arXiv:1606.00608, Theorem 3.10, lines 534--540. -/
 theorem IsNNCPH.exists_unitary_blockActions_of_twoSiteParentInteractionMatrix
     {A : MPSTensor d D} (hNNCPH : IsNNCPH A 3) :

@@ -26,8 +26,7 @@ periods `N` and `N+1`, hence period one, so every cycle is constant.
 ## References
 
 * S. Beigi, *Classification of the phases of 1D spin chains with commuting
-  Hamiltonians*, arXiv:1105.1019v2, Section IV, equations (7)--(13), source
-  lines 561--606.
+  Hamiltonians*, J. Phys. A 45 (2012) 025306, Section IV, equations (7)--(13).
 -/
 
 open scoped BigOperators
@@ -38,14 +37,13 @@ variable {V : Type*} [Fintype V]
 
 /-- The successor of an index on a nonempty finite cycle.
 
-Source: Beigi, arXiv:1105.1019v2, Section IV, source lines 561--606. -/
+Source: Beigi, J. Phys. A 45 (2012) 025306, Section IV. -/
 def next {N : ℕ} (hN : 0 < N) (i : Fin N) : Fin N :=
   ⟨(i.val + 1) % N, Nat.mod_lt _ hN⟩
 
 /-- The product of the directed-edge weights around an ordered cycle.
 
-Source: Beigi, arXiv:1105.1019v2, equation (4) and Section IV, source lines
-561--606. -/
+Source: Beigi, J. Phys. A 45 (2012) 025306, equation (4) and Section IV. -/
 def cycleWeight (w : V → V → ℕ) {N : ℕ} (hN : 0 < N)
     (x : Fin N → V) : ℕ :=
   ∏ i, w (x i) (x (next hN i))
@@ -55,15 +53,14 @@ def cycleWeight (w : V → V → ℕ) {N : ℕ} (hN : 0 < N)
 Cycles are ordered: cyclic rotations are counted separately, exactly as in
 Beigi's dimension formula.
 
-Source: Beigi, arXiv:1105.1019v2, equation (4) and Section IV, source lines
-561--606. -/
+Source: Beigi, J. Phys. A 45 (2012) 025306, equation (4) and Section IV. -/
 def cycleWeightSum (w : V → V → ℕ) {N : ℕ} (hN : 0 < N) : ℕ :=
   ∑ x : Fin N → V, cycleWeight w hN x
 
 /-- The numerical cycle sum is constant at all sufficiently large positive
 lengths.
 
-Source: Beigi, arXiv:1105.1019v2, Section IV, source lines 561--568. -/
+Source: Beigi, J. Phys. A 45 (2012) 025306, Section IV. -/
 def HasEventuallyConstantCycleWeightSum (w : V → V → ℕ) : Prop :=
   ∃ c N₀ : ℕ, ∀ N : ℕ, N₀ < N → ∀ hN : 0 < N, cycleWeightSum w hN = c
 
@@ -71,7 +68,7 @@ omit [Fintype V] in
 /-- Repeating a finite word a positive number of times is injective as a
 function of the original word.
 
-Source: Beigi, arXiv:1105.1019v2, equations (7)--(10), source lines 570--586. -/
+Source: Beigi, J. Phys. A 45 (2012) 025306, equations (7)--(10). -/
 theorem repeat_injective {N m : ℕ} (hm : 0 < m) :
     Function.Injective (Fin.repeat m : (Fin N → V) → Fin (m * N) → V) := by
   intro x y hxy
@@ -102,7 +99,7 @@ omit [Fintype V] in
 This is the product identity underlying Beigi's comparisons at lengths `N`,
 `N+1`, and `N(N+1)`.
 
-Source: Beigi, arXiv:1105.1019v2, equations (7)--(10), source lines 570--586. -/
+Source: Beigi, J. Phys. A 45 (2012) 025306, equations (7)--(10). -/
 theorem cycleWeight_repeat (w : V → V → ℕ) {N m : ℕ}
     (hN : 0 < N) (hm : 0 < m) (x : Fin N → V) :
     cycleWeight w (Nat.mul_pos hm hN) (Fin.repeat m x) = cycleWeight w hN x ^ m := by
@@ -116,7 +113,7 @@ theorem cycleWeight_repeat (w : V → V → ℕ) {N m : ℕ}
 /-- The total weight of repeated cycles is bounded by the total weight of all
 cycles at the repeated length.
 
-Source: Beigi, arXiv:1105.1019v2, equations (7)--(10), source lines 570--586. -/
+Source: Beigi, J. Phys. A 45 (2012) 025306, equations (7)--(10). -/
 theorem sum_cycleWeight_pow_le (w : V → V → ℕ) {N m : ℕ}
     (hN : 0 < N) (hm : 0 < m) :
     (∑ x : Fin N → V, cycleWeight w hN x ^ m) ≤
@@ -157,7 +154,7 @@ weight sum is eventually constant.
 
 In particular, every edge that occurs in a directed cycle has weight one.
 
-Source: Beigi, arXiv:1105.1019v2, equations (7)--(11), source lines 570--593. -/
+Source: Beigi, J. Phys. A 45 (2012) 025306, equations (7)--(11). -/
 theorem cycleWeight_eq_one {w : V → V → ℕ}
     (hconst : HasEventuallyConstantCycleWeightSum w) {K : ℕ}
     (hK : 0 < K) (x : Fin K → V) (hx : cycleWeight w hK x ≠ 0) :
@@ -192,7 +189,7 @@ theorem cycleWeight_eq_one {w : V → V → ℕ}
 
 /-- Every edge belonging to a positive-weight directed cycle has weight one.
 
-Source: Beigi, arXiv:1105.1019v2, equation (11), source lines 587--593. -/
+Source: Beigi, J. Phys. A 45 (2012) 025306, equation (11). -/
 theorem cyclicEdgeWeight_eq_one {w : V → V → ℕ}
     (hconst : HasEventuallyConstantCycleWeightSum w) {N : ℕ}
     (hN : 0 < N) (x : Fin N → V) (hx : cycleWeight w hN x ≠ 0)
@@ -204,7 +201,7 @@ theorem cyclicEdgeWeight_eq_one {w : V → V → ℕ}
 
 /-- Positive-weight ordered cycles at a fixed positive length.
 
-Source: Beigi, arXiv:1105.1019v2, Section IV, source lines 561--606. -/
+Source: Beigi, J. Phys. A 45 (2012) 025306, Section IV. -/
 private def PositiveCycle (w : V → V → ℕ) {N : ℕ} (hN : 0 < N) :=
   {x : Fin N → V // cycleWeight w hN x ≠ 0}
 
@@ -230,7 +227,7 @@ private theorem positiveCycle_card_eq_cycleWeightSum {w : V → V → ℕ}
 /-- Repetition sends a positive-weight ordered cycle to a positive-weight
 ordered cycle.
 
-Source: Beigi, arXiv:1105.1019v2, equations (7)--(10), source lines 570--586. -/
+Source: Beigi, J. Phys. A 45 (2012) 025306, equations (7)--(10). -/
 private noncomputable def repeatPositiveCycle (w : V → V → ℕ) {N m : ℕ}
     (hN : 0 < N) (hm : 0 < m) :
     PositiveCycle w hN → PositiveCycle w (Nat.mul_pos hm hN) :=
@@ -313,7 +310,7 @@ cycle to a sufficiently large length `N`, compares the exhaustive repetition
 maps from lengths `N` and `N+1` into their common multiple, and uses the two
 consecutive periods.
 
-Source: Beigi, arXiv:1105.1019v2, equations (12)--(13), source lines 594--606. -/
+Source: Beigi, J. Phys. A 45 (2012) 025306, equations (12)--(13). -/
 theorem cycle_eq_constant {w : V → V → ℕ}
     (hconst : HasEventuallyConstantCycleWeightSum w) {K : ℕ}
     (hK : 0 < K) (x : Fin K → V) (hx : cycleWeight w hK x ≠ 0) :
@@ -363,7 +360,7 @@ theorem cycle_eq_constant {w : V → V → ℕ}
 
 /-- Vertices carrying a positive-weight loop.
 
-Source: Beigi, arXiv:1105.1019v2, equation (13), source lines 600--606. -/
+Source: Beigi, J. Phys. A 45 (2012) 025306, equation (13). -/
 def Loop (w : V → V → ℕ) := {v : V // w v v ≠ 0}
 
 noncomputable instance (w : V → V → ℕ) : Fintype (Loop w) := by
@@ -391,7 +388,7 @@ private noncomputable def positiveCycleEquivLoop {w : V → V → ℕ}
 /-- At every positive length, the ordered-cycle weight sum is the number of
 positive-weight loops.
 
-Source: Beigi, arXiv:1105.1019v2, equation (13), source lines 600--606. -/
+Source: Beigi, J. Phys. A 45 (2012) 025306, equation (13). -/
 theorem cycleWeightSum_eq_card_loop {w : V → V → ℕ}
     (hconst : HasEventuallyConstantCycleWeightSum w) {N : ℕ} (hN : 0 < N) :
     cycleWeightSum w hN = Fintype.card (Loop w) := by

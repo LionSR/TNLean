@@ -19,7 +19,7 @@ realization at every positive length.
 ## References
 
 * S. Beigi, *Classification of the phases of 1D spin chains with commuting
-  Hamiltonians*, arXiv:1105.1019v2, Section III, p. 4 (MPS observation), and
+  Hamiltonians*, J. Phys. A 45 (2012) 025306, Section III, p. 4 (MPS observation), and
   Section IV, equation (10) and the paragraph following it.
 -/
 
@@ -39,7 +39,7 @@ ambient left and right factors.  The minimal virtual space is therefore its
 Schmidt support.  This point is recorded in
 `docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex`.
 
-Source: Beigi, arXiv:1105.1019v2, Section III, p. 4 (MPS observation), and
+Source: Beigi, J. Phys. A 45 (2012) 025306, Section III, p. 4 (MPS observation), and
 Section IV, equation (10) and the paragraph following it. -/
 noncomputable def loopSchmidtRank (F : BeigiSectorGraphData A)
     (l : Loop F.edgeWeight) : ℕ :=
@@ -53,25 +53,25 @@ rank rather than either ambient tensor-factor dimension.  This removes
 unused virtual directions when the chosen loop vector has deficient Schmidt
 rank; see `docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex`.
 
-Source: Beigi, arXiv:1105.1019v2, Section III, p. 4 (MPS observation), and
+Source: Beigi, J. Phys. A 45 (2012) 025306, Section III, p. 4 (MPS observation), and
 Section IV, equation (10) and the paragraph following it. -/
 structure LoopSchmidtFactorization (F : BeigiSectorGraphData A)
     (l : Loop F.edgeWeight) where
   /-- The right/Schmidt-indexed factor of the loop bond coefficient matrix.
 
-  Source: Beigi, arXiv:1105.1019v2, Section III, p. 4 (MPS observation), and
+  Source: Beigi, J. Phys. A 45 (2012) 025306, Section III, p. 4 (MPS observation), and
   Section IV, equation (10) and the paragraph following it. -/
   rightFactor :
     Matrix (Fin (F.rightDim l.1)) (Fin (F.loopSchmidtRank l)) ℂ
   /-- The Schmidt/left-indexed factor of the loop bond coefficient matrix.
 
-  Source: Beigi, arXiv:1105.1019v2, Section III, p. 4 (MPS observation), and
+  Source: Beigi, J. Phys. A 45 (2012) 025306, Section III, p. 4 (MPS observation), and
   Section IV, equation (10) and the paragraph following it. -/
   leftFactor :
     Matrix (Fin (F.loopSchmidtRank l)) (Fin (F.leftDim l.1)) ℂ
   /-- The two factors multiply to the loop bond coefficient matrix.
 
-  Source: Beigi, arXiv:1105.1019v2, Section III, p. 4 (MPS observation), and
+  Source: Beigi, J. Phys. A 45 (2012) 025306, Section III, p. 4 (MPS observation), and
   Section IV, equation (10) and the paragraph following it. -/
   mul_eq : rightFactor * leftFactor =
     Matrix.schmidtCoeffMatrix (F.loopBondVector l)
@@ -83,7 +83,7 @@ Schmidt support.
 rank rather than an ambient tensor-factor dimension; see
 `docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex`.
 
-Source: Beigi, arXiv:1105.1019v2, Section III, p. 4 (MPS observation), and
+Source: Beigi, J. Phys. A 45 (2012) 025306, Section III, p. 4 (MPS observation), and
 Section IV, equation (10) and the paragraph following it. -/
 noncomputable def loopSchmidtFactorization (F : BeigiSectorGraphData A)
     (l : Loop F.edgeWeight) : LoopSchmidtFactorization F l := by
@@ -104,7 +104,7 @@ dimension.
 bond vector after restricting to its Schmidt support; see
 `docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex`.
 
-Source: Beigi, arXiv:1105.1019v2, Section III, p. 4 (MPS observation), and
+Source: Beigi, J. Phys. A 45 (2012) 025306, Section III, p. 4 (MPS observation), and
 Section IV, equation (10) and the paragraph following it. -/
 theorem loopSchmidtRank_pos (F : BeigiSectorGraphData A)
     (l : Loop F.edgeWeight) : 0 < F.loopSchmidtRank l := by
@@ -127,7 +127,7 @@ theorem loopSchmidtRank_pos (F : BeigiSectorGraphData A)
 /-- The rectangular letter whose product with the left Schmidt factor gives
 the ambient loop tensor letter.
 
-Source: Beigi, arXiv:1105.1019v2, Section III, p. 4 (MPS observation), and
+Source: Beigi, J. Phys. A 45 (2012) 025306, Section III, p. 4 (MPS observation), and
 Section IV, equation (10) and the paragraph following it, with the
 Schmidt-support refinement recorded in
 `docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex`. -/
@@ -155,7 +155,7 @@ the chosen bond vector, not the full left-factor dimension.  This is the
 minimal realization compatible with Beigi's product-of-pairs state; see
 `docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex`.
 
-Source: Beigi, arXiv:1105.1019v2, Section III, p. 4 (MPS observation), and
+Source: Beigi, J. Phys. A 45 (2012) 025306, Section III, p. 4 (MPS observation), and
 Section IV, equation (10) and the paragraph following it. -/
 noncomputable def minimalLoopCoordinateTensor (F : BeigiSectorGraphData A)
     (l : Loop F.edgeWeight) : MPSTensor d (F.loopSchmidtRank l) :=
@@ -169,7 +169,7 @@ tensor on the minimal Schmidt support.
 Schmidt support as documented in
 `docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex`.
 
-Source: Beigi, arXiv:1105.1019v2, Section III, p. 4 (MPS observation), and
+Source: Beigi, J. Phys. A 45 (2012) 025306, Section III, p. 4 (MPS observation), and
 Section IV, equation (10) and the paragraph following it. -/
 noncomputable def minimalLoopTensor (F : BeigiSectorGraphData A)
     (l : Loop F.edgeWeight) : MPSTensor d (F.loopSchmidtRank l) :=
@@ -179,7 +179,7 @@ noncomputable def minimalLoopTensor (F : BeigiSectorGraphData A)
 outer product of a column of the left rank factor and a row of the right rank
 factor.
 
-Source context: Beigi, arXiv:1105.1019v2, Section III, p. 4 (MPS observation),
+Source context: Beigi, J. Phys. A 45 (2012) 025306, Section III, p. 4 (MPS observation),
 and Section IV, equation (10) and the paragraph following it.  The
 Schmidt-support refinement is recorded in
 `docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex`. -/
@@ -216,7 +216,7 @@ theorem minimalLoopCoordinateTensor_sector_apply
 /-- Outside the chosen loop sector, every letter of the minimal coordinate
 tensor vanishes.
 
-Source context: Beigi, arXiv:1105.1019v2, Section IV, equation (10) and the
+Source context: Beigi, J. Phys. A 45 (2012) 025306, Section IV, equation (10) and the
 paragraph following it.  The Schmidt-support refinement is recorded in
 `docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex`. -/
 theorem minimalLoopCoordinateTensor_sector_ne
@@ -231,7 +231,7 @@ theorem minimalLoopCoordinateTensor_sector_ne
 /-- Each ambient loop letter is the rectangular Schmidt-support letter
 followed by the left factor of the bond coefficient matrix.
 
-Source: Beigi, arXiv:1105.1019v2, Section III, p. 4 (MPS observation), and
+Source: Beigi, J. Phys. A 45 (2012) 025306, Section III, p. 4 (MPS observation), and
 Section IV, equation (10) and the paragraph following it, with the
 Schmidt-support refinement recorded in
 `docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex`. -/
@@ -279,7 +279,7 @@ private theorem exists_schmidtWordCore {r L : ℕ}
 /-- The ambient and Schmidt-support loop tensors have equal traces on every
 nonempty word.
 
-Source: Beigi, arXiv:1105.1019v2, Section III, p. 4 (MPS observation), and
+Source: Beigi, J. Phys. A 45 (2012) 025306, Section III, p. 4 (MPS observation), and
 Section IV, equation (10) and the paragraph following it, with the
 Schmidt-support refinement recorded in
 `docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex`. -/
@@ -308,7 +308,7 @@ support leaves every positive-length periodic vector unchanged.  The role of
 this restriction is recorded in
 `docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex`.
 
-Source: Beigi, arXiv:1105.1019v2, Section III, p. 4 (MPS observation), and
+Source: Beigi, J. Phys. A 45 (2012) 025306, Section III, p. 4 (MPS observation), and
 Section IV, equation (10) and the paragraph following it. -/
 theorem mpv_minimalLoopCoordinateTensor (F : BeigiSectorGraphData A)
     (l : Loop F.edgeWeight) {N : ℕ} [NeZero N] (s : Fin N → Fin d) :
@@ -328,7 +328,7 @@ product-of-pairs state as its periodic vector at every positive chain length.
 virtual directions does not alter the physical loop state; see
 `docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex`.
 
-Source: Beigi, arXiv:1105.1019v2, Section III, p. 4 (MPS observation), and
+Source: Beigi, J. Phys. A 45 (2012) 025306, Section III, p. 4 (MPS observation), and
 Section IV, equation (10) and the paragraph following it. -/
 theorem mpv_minimalLoopTensor (F : BeigiSectorGraphData A)
     (l : Loop F.edgeWeight) {N : ℕ} [NeZero N] (s : Fin N → Fin d) :

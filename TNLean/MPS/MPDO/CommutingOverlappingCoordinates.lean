@@ -36,7 +36,7 @@ commutation through the common equivalence gives the remaining hypothesis of
 
 * [Cirac--Perez-Garcia--Schuch--Verstraete 2017] arXiv:1606.00608,
   Appendix C.2, Proposition `4to2`, lines 1599--1605
-* [Beigi 2012] arXiv:1105.1019v2, Lemma 2.1 (`lem:comm`), pages 2--3
+* [Beigi 2012] J. Phys. A 45 (2012) 025306, Lemma 2.1 (`lem:comm`), pages 2--3
 -/
 
 open scoped Matrix ComplexOrder
@@ -52,7 +52,7 @@ equivalence sends a configuration `x` to `((x 0, x 1), x 2)`, which is the index
 used simultaneously by `Matrix.leftOverlappingLift` and `Matrix.rightOverlappingLift`.
 
 Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines 1599--1605;
-Beigi, arXiv:1105.1019v2, Lemma 2.1 (`lem:comm`), pages 2--3. -/
+Beigi, J. Phys. A 45 (2012) 025306, Lemma 2.1 (`lem:comm`), pages 2--3. -/
 def threeSiteOverlappingEquiv (n : Type*) :
     (Fin 3 → n) ≃ ((n × n) × n) :=
   (_root_.finThreeArrowEquiv n).trans (Equiv.prodAssoc n n n).symm
@@ -69,7 +69,7 @@ def pairBondMatrix (B : Matrix (Fin 2 → Fin d) (Fin 2 → Fin d) ℂ) :
 at site zero is its left overlapping lift.
 
 Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines 1599--1605;
-Beigi, arXiv:1105.1019v2, Lemma 2.1 (`lem:comm`), pages 2--3. -/
+Beigi, J. Phys. A 45 (2012) 025306, Lemma 2.1 (`lem:comm`), pages 2--3. -/
 theorem reindex_embedLocalOperator_zero_eq_leftOverlappingLift
     (B : Matrix (Fin 2 → Fin d) (Fin 2 → Fin d) ℂ) :
     Matrix.reindex (threeSiteOverlappingEquiv (Fin d))
@@ -129,7 +129,7 @@ theorem reindex_embedLocalOperator_zero_eq_leftOverlappingLift
 embedded at site one is its right overlapping lift.
 
 Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines 1599--1605;
-Beigi, arXiv:1105.1019v2, Lemma 2.1 (`lem:comm`), pages 2--3. -/
+Beigi, J. Phys. A 45 (2012) 025306, Lemma 2.1 (`lem:comm`), pages 2--3. -/
 theorem reindex_embedLocalOperator_one_eq_rightOverlappingLift
     (B : Matrix (Fin 2 → Fin d) (Fin 2 → Fin d) ℂ) :
     Matrix.reindex (threeSiteOverlappingEquiv (Fin d))
@@ -208,7 +208,7 @@ theorem pairBond_isHermitian (data : TranslationInvariantBondData d) :
 equivalence.
 
 Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines 1599--1605;
-Beigi, arXiv:1105.1019v2, Lemma 2.1 (`lem:comm`), pages 2--3. -/
+Beigi, J. Phys. A 45 (2012) 025306, Lemma 2.1 (`lem:comm`), pages 2--3. -/
 theorem reindex_bondAt_zero_eq_leftOverlappingLift
     (data : TranslationInvariantBondData d) :
     Matrix.reindex (threeSiteOverlappingEquiv (Fin d))
@@ -221,7 +221,7 @@ theorem reindex_bondAt_zero_eq_leftOverlappingLift
 equivalence.
 
 Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines 1599--1605;
-Beigi, arXiv:1105.1019v2, Lemma 2.1 (`lem:comm`), pages 2--3. -/
+Beigi, J. Phys. A 45 (2012) 025306, Lemma 2.1 (`lem:comm`), pages 2--3. -/
 theorem reindex_bondAt_one_eq_rightOverlappingLift
     (data : TranslationInvariantBondData d) :
     Matrix.reindex (threeSiteOverlappingEquiv (Fin d))
@@ -234,7 +234,7 @@ theorem reindex_bondAt_one_eq_rightOverlappingLift
 with Hermiticity, they satisfy the hypotheses of Beigi's spatial decomposition.
 
 Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines 1599--1605;
-Beigi, arXiv:1105.1019v2, Lemma 2.1 (`lem:comm`), pages 2--3. -/
+Beigi, J. Phys. A 45 (2012) 025306, Lemma 2.1 (`lem:comm`), pages 2--3. -/
 theorem overlappingLifts_pairBond_comm (data : TranslationInvariantBondData d) :
     Matrix.leftOverlappingLift data.pairBond *
         Matrix.rightOverlappingLift data.pairBond =
@@ -288,7 +288,7 @@ theorem pairBond_isHermitian (data : EtaLocalStructureData M) :
 the common three-site equivalence.
 
 Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines 1599--1605;
-Beigi, arXiv:1105.1019v2, Lemma 2.1 (`lem:comm`), pages 2--3. -/
+Beigi, J. Phys. A 45 (2012) 025306, Lemma 2.1 (`lem:comm`), pages 2--3. -/
 theorem reindex_bondAt_zero_eq_leftOverlappingLift
     (data : EtaLocalStructureData M) :
     Matrix.reindex (threeSiteOverlappingEquiv (Fin d))
@@ -301,7 +301,7 @@ theorem reindex_bondAt_zero_eq_leftOverlappingLift
 under the same three-site equivalence.
 
 Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines 1599--1605;
-Beigi, arXiv:1105.1019v2, Lemma 2.1 (`lem:comm`), pages 2--3. -/
+Beigi, J. Phys. A 45 (2012) 025306, Lemma 2.1 (`lem:comm`), pages 2--3. -/
 theorem reindex_bondAt_one_eq_rightOverlappingLift
     (data : EtaLocalStructureData M) :
     Matrix.reindex (threeSiteOverlappingEquiv (Fin d))
@@ -315,7 +315,7 @@ together with `pairBond_isHermitian`, they satisfy exactly the hypotheses of
 `Matrix.exists_unitary_blockActions_of_overlappingLifts_commute`.
 
 Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines 1599--1605;
-Beigi, arXiv:1105.1019v2, Lemma 2.1 (`lem:comm`), pages 2--3. -/
+Beigi, J. Phys. A 45 (2012) 025306, Lemma 2.1 (`lem:comm`), pages 2--3. -/
 theorem overlappingLifts_pairBond_comm (data : EtaLocalStructureData M) :
     Matrix.leftOverlappingLift data.pairBond *
         Matrix.rightOverlappingLift data.pairBond =
