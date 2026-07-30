@@ -148,7 +148,17 @@ support algebra. The fields `m_apply` and `iota_apply` require that these maps
 are realized by the ambient matrix product and ambient inclusion.
 
 This structure contains only this realization data. It does **not** yet include
-the full Section 4.5 coherence / coefficient / BNT layer from the paper. -/
+the full Section 4.5 coherence / coefficient / BNT layer from the paper.
+
+**Scope restriction (blocked support-algebra tower):** arXiv:1606.00608,
+Theorem `thm:IV.13` (Theorem 4.14(ii), lines 972--985), is stated using one
+fixed BNT-label coefficient family
+$c_{\alpha,\beta,\gamma}^{(L)}
+  = \operatorname{tr}(\chi_{\alpha,\beta,\gamma}^L)$
+and its idempotent law. The present structure instead records blocked support
+algebras and their ambient multiplication and inclusion maps; it does not
+contain the source coefficient family. See
+`docs/paper-gaps/cpgsv17_blocked_chi_uniformity.tex`. -/
 structure AlgebraStructureData (d D : ℕ) where
   /-- Support algebra at blocked size `n`. -/
   A : ℕ → StarSubalgebra ℂ (Matrix (Fin D) (Fin D) ℂ)
@@ -174,7 +184,14 @@ variable {d D : ℕ}
 The current compatibility condition says that, for every positive blocked size
 `n`, the support algebra `A n` is exactly the fixed-point algebra of the
 adjoint blocked transfer map. This is a non-vacuous algebra-side condition, but
-it is still weaker than the full coefficient statement of Theorem IV.13(ii). -/
+it is still weaker than the full coefficient statement of Theorem IV.13(ii).
+
+**Scope restriction (blocked adjoint fixed points):** arXiv:1606.00608,
+Theorem `thm:IV.13` (Theorem 4.14(ii), lines 972--985), does not formulate
+compatibility by the equalities
+$\mathcal A_n = \operatorname{Fix}(E_n^\dagger)$. This local condition omits
+the uniform BNT-label coefficient family and the idempotent coefficient law in
+the source. See `docs/paper-gaps/cpgsv17_blocked_chi_uniformity.tex`. -/
 def CompatibleWith (data : AlgebraStructureData d D) (M : MPOTensor d D) : Prop :=
   ∀ n : ℕ, 0 < n → ∀ X : Matrix (Fin D) (Fin D) ℂ,
     X ∈ data.A n ↔ (blockedTransferMap M n).adjoint X = X
@@ -267,12 +284,27 @@ end AlgebraStructureData
 /-- The algebra-structure formulation of MPDO RFP used in this file.
 
 An MPO tensor satisfies `IsRFP_MPDO_via_algebra` when it admits algebra-structure
-support data compatible with its blocked adjoint transfer maps. -/
+support data compatible with its blocked adjoint transfer maps.
+
+**Scope restriction (blocked fixed-point-algebra predicate):** This predicate
+packages the preceding blocked support-algebra tower and adjoint-fixed-point
+compatibility. It is weaker than, and is not the formalization of,
+arXiv:1606.00608, Theorem `thm:IV.13` (Theorem 4.14(ii), lines 972--985), which
+also requires the uniform BNT-label coefficient family and its idempotent law.
+See `docs/paper-gaps/cpgsv17_blocked_chi_uniformity.tex`. -/
 def IsRFP_MPDO_via_algebra (M : MPOTensor d D) : Prop :=
   ∃ data : AlgebraStructureData d D, data.CompatibleWith M
 
 /-- A trace-preserving MPO with a positive-definite fixed point admits a
-stationary algebra tower as soon as it is an RFP. -/
+stationary algebra tower as soon as it is an RFP.
+
+**Scope restriction (trace preservation and faithful fixed point):** The
+hypotheses `h_tp`, `hρ`, and `hρ_fix`, used to invoke Wolf Theorem 6.12, are
+absent from arXiv:1606.00608, Theorem `thm:IV.13` (Theorem 4.14), which assumes
+only that $M$ is in canonical form and generates an MPDO. Moreover, the
+conclusion is the blocked fixed-point-algebra predicate above, not the full
+coefficient statement in part (ii). See
+`docs/paper-gaps/cpgsv17_blocked_chi_uniformity.tex`. -/
 theorem isRFP_MPDO_via_algebra_of_isRFP_of_isTP_of_posDef_fixed
     {M : MPOTensor d D} (hRFP : IsRFP M) (h_tp : Kraus.IsTP M.toMPSTensor)
     {ρ : Mat} (hρ : ρ.PosDef) (hρ_fix : transferMap M ρ = ρ) :
