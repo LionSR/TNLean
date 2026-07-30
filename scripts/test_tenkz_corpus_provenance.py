@@ -82,7 +82,14 @@ def test_ink_environment_owner() -> None:
     )
     parsed = parse_log(log, source_name="ink-owner-test.tnlog")
     used = rendered_ink_environment_families(parsed)
-    expected = {"tenkz", "tenkzfree", "tenkzlattice", "tenkzplanes", "kernel"}
+    expected = {
+        "tenkz",
+        "tenkzcd",
+        "tenkzfree",
+        "tenkzlattice",
+        "tenkzplanes",
+        "kernel",
+    }
     if used != expected:
         raise AssertionError(f"compiled Ink owners disagree: {used!r}")
     with tempfile.TemporaryDirectory(prefix="tenkz-ink-owner-") as tmp:
@@ -100,9 +107,34 @@ def test_ink_environment_owner() -> None:
                 "compiled Ink owner metadata was foreign to its picture dialect: "
                 + "; ".join(finding.msg for finding in mismatches)
             )
-    ink = "Canonical tenkz, tenkzfree, tenkzlattice, tenkzplanes, and kernel."
+    ink = (
+        "Canonical tenkz, tenkzcd, tenkzfree, tenkzlattice, tenkzplanes, "
+        "and kernel."
+    )
     if ink_environment_problems("good", ink, used):
         raise AssertionError("accurate compiled Ink owners were rejected")
+    cd_only = parse_log(
+        "picture|id=1|lang=cd\n", source_name="ink-cd-owner-test.tnlog"
+    )
+    cd_used = rendered_ink_environment_families(cd_only)
+    if cd_used != {"tenkzcd"}:
+        raise AssertionError(f"tenkzcd was collapsed into another owner: {cd_used!r}")
+    cd_mismatch = ink_environment_problems(
+        "cd-as-tenkz", "Canonical public tenkz environment.", cd_used
+    )
+    if not (
+        any("Ink names tenkz" in problem for problem in cd_mismatch)
+        and any("uses tenkzcd" in problem for problem in cd_mismatch)
+    ):
+        raise AssertionError("plain tenkz Ink was accepted for a tenkzcd picture")
+    tree_only = parse_log(
+        "tree|picture=0|id=1|style=wire|leaves=2|vertices=1|"
+        "topology=(1,2)|role=none|species=none\n",
+        source_name="ink-tree-owner-test.tnlog",
+    )
+    tree_used = rendered_ink_environment_families(tree_only)
+    if tree_used != {"tenkz"}:
+        raise AssertionError(f"standalone tree lost its tenkz owner: {tree_used!r}")
     mismatch = ink_environment_problems(
         "wrong", "Canonical tenkzfree environment.", {"kernel"}
     )

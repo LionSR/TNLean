@@ -138,6 +138,7 @@ STRUCTURAL_CAPABILITY_PATTERNS = {
     "fusion-tree": re.compile(r"\\tntree\b|\\begin\{tenkzcd\}"),
 }
 INK_ENVIRONMENT_FAMILIES = (
+    "tenkzcd",
     "tenkzfree",
     "tenkzlattice",
     "tenkzplanes",
@@ -145,7 +146,7 @@ INK_ENVIRONMENT_FAMILIES = (
     "kernel",
 )
 INK_EVENT_FAMILIES = {
-    "cd": "tenkz",
+    "cd": "tenkzcd",
     "free": "tenkzfree",
     "grid": "tenkz",
     "kernel": "kernel",
@@ -206,13 +207,13 @@ def ink_environment_problems(
     for family in INK_ENVIRONMENT_FAMILIES:
         if family in claimed and family not in used:
             problems.append(
-                f"{target_id}: Ink names {family} but the case body does not "
-                "contain a picture owned by that family"
+                f"{target_id}: Ink names {family} but the compiled render model "
+                "has no owner in that family"
             )
         if family in used and family not in claimed:
             problems.append(
-                f"{target_id}: case body uses {family} but Ink does not name "
-                "that family"
+                f"{target_id}: compiled render model uses {family} but Ink does "
+                "not name that family"
             )
     return problems
 
