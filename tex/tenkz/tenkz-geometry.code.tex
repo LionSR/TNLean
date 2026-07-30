@@ -34,6 +34,8 @@
   { [TKZ-GEOM-COMPASS]~no~compass~face~named~'#1';~expected~n,~e,~s,~or~w }
 \msg_new:nnn {tenkz}{geom-singular-basis}
   { [TKZ-GEOM-SINGULAR-BASIS]~a~carrier~basis~must~have~nonzero~determinant }
+\msg_new:nnn {tenkz}{geom-zero-ray}
+  { [TKZ-GEOM-ZERO-RAY]~a~boundary~ray~must~have~a~nonzero~direction }
 
 % ---------- frames ----------------------------------------------------------
 % A frame record is six fp fields (row-major matrix a b / c d, offset dx dy)
@@ -348,6 +350,76 @@
       }
   }
 
+% The first intersection of a ray from an interior point with an
+% axis-aligned rectangle.  Positions and bounds are expressed in one local
+% coordinate system; #3 is the ray angle in that system.
+\tl_new:N \l__tenkz_geom_ray_tx_tl
+\tl_new:N \l__tenkz_geom_ray_ty_tl
+\tl_new:N \l__tenkz_geom_ray_t_tl
+\cs_new_protected:Npn \__tenkz_geom_rect_ray_intersect:nnnnnnnNN
+    #1#2#3#4#5#6#7#8#9
+  {
+    \tl_clear:N \l__tenkz_geom_ray_tx_tl
+    \tl_clear:N \l__tenkz_geom_ray_ty_tl
+    \tl_clear:N \l__tenkz_geom_ray_t_tl
+    \fp_compare:nNnTF { cosd(#3) } > {0}
+      {
+        \tl_set:Ne \l__tenkz_geom_ray_tx_tl
+          { \fp_eval:n { ((#5) - (#1)) / cosd(#3) } }
+      }
+      {
+        \fp_compare:nNnT { cosd(#3) } < {0}
+          {
+            \tl_set:Ne \l__tenkz_geom_ray_tx_tl
+              { \fp_eval:n { ((#4) - (#1)) / cosd(#3) } }
+          }
+      }
+    \fp_compare:nNnTF { sind(#3) } > {0}
+      {
+        \tl_set:Ne \l__tenkz_geom_ray_ty_tl
+          { \fp_eval:n { ((#7) - (#2)) / sind(#3) } }
+      }
+      {
+        \fp_compare:nNnT { sind(#3) } < {0}
+          {
+            \tl_set:Ne \l__tenkz_geom_ray_ty_tl
+              { \fp_eval:n { ((#6) - (#2)) / sind(#3) } }
+          }
+      }
+    \tl_if_empty:NTF \l__tenkz_geom_ray_tx_tl
+      {
+        \tl_if_empty:NTF \l__tenkz_geom_ray_ty_tl
+          {
+            \tl_clear:N #8
+            \tl_clear:N #9
+            \msg_error:nn {tenkz}{geom-zero-ray}
+          }
+          { \tl_set_eq:NN \l__tenkz_geom_ray_t_tl \l__tenkz_geom_ray_ty_tl }
+      }
+      {
+        \tl_if_empty:NTF \l__tenkz_geom_ray_ty_tl
+          { \tl_set_eq:NN \l__tenkz_geom_ray_t_tl \l__tenkz_geom_ray_tx_tl }
+          {
+            \tl_set:Ne \l__tenkz_geom_ray_t_tl
+              {
+                \fp_eval:n
+                  {
+                    min(
+                      \l__tenkz_geom_ray_tx_tl ,
+                      \l__tenkz_geom_ray_ty_tl )
+                  }
+              }
+          }
+      }
+    \tl_if_empty:NF \l__tenkz_geom_ray_t_tl
+      {
+        \tl_set:Ne #8
+          { \fp_eval:n { (#1) + \l__tenkz_geom_ray_t_tl * cosd(#3) } }
+        \tl_set:Ne #9
+          { \fp_eval:n { (#2) + \l__tenkz_geom_ray_t_tl * sind(#3) } }
+      }
+  }
+
 % The local east/north basis supplied by one frame address.  Affine frames
 % use E=(b,d), N=(-a,-c); circle frames retain their orthonormal tangent and
 % outward-normal basis at the named station.
@@ -477,6 +549,9 @@
 \cs_new_protected:Npn \__tenkz_geom_place_rel:nnnn #1#2#3#4
   { \prop_put:Nnn \l__tenkz_geom_req_prop {#1} { {rel}{#2}{#3}{#4} } }
 \cs_generate_variant:Nn \__tenkz_geom_place_rel:nnnn { nnee, nVee, neee }
+\cs_new_protected:Npn \__tenkz_geom_place_offset:nnnn #1#2#3#4
+  { \prop_put:Nnn \l__tenkz_geom_req_prop {#1} { {offset}{#2}{#3}{#4} } }
+\cs_generate_variant:Nn \__tenkz_geom_place_offset:nnnn { nVee }
 \cs_new_protected:Npn \__tenkz_geom_place_mid:nnn #1#2#3
   { \prop_put:Nnn \l__tenkz_geom_req_prop {#1} { {mid}{#2}{#3}{} } }
 \cs_generate_variant:Nn \__tenkz_geom_place_mid:nnn { nVV, nee }
@@ -542,6 +617,16 @@
                 \__tenkz_geom_store:nnn {#5}
                   { \prop_item:Nn \l__tenkz_geom_x_prop {#2} + (#4) * cosd(#3) }
                   { \prop_item:Nn \l__tenkz_geom_y_prop {#2} + (#4) * sind(#3) }
+              }
+          }
+        {offset}
+          {
+            \__tenkz_geom_need:nN {#2} #6
+            \bool_if:NT #6
+              {
+                \__tenkz_geom_store:nnn {#5}
+                  { \prop_item:Nn \l__tenkz_geom_x_prop {#2} + (#3) }
+                  { \prop_item:Nn \l__tenkz_geom_y_prop {#2} + (#4) }
               }
           }
         {mid}
