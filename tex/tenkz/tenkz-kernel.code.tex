@@ -3161,7 +3161,14 @@
 % own name carries its (r, c) inside the cluster by construction.  The
 % sub-frame is the parent's, so the step from the parent to the member is
 % taken in the parent's axes: four spins on a turned carrier turn with it
-% rather than staying square to the page.
+% rather than staying square to the page.  The complete basis carries that
+% step: a scalar turn would discard shear and unequal axis scale.
+\tl_new:N \l__tenkz_kernel_cluster_ex_tl
+\tl_new:N \l__tenkz_kernel_cluster_ey_tl
+\tl_new:N \l__tenkz_kernel_cluster_nx_tl
+\tl_new:N \l__tenkz_kernel_cluster_ny_tl
+\tl_new:N \l__tenkz_kernel_cluster_dx_tl
+\tl_new:N \l__tenkz_kernel_cluster_dy_tl
 \cs_new_protected:Npn \__tenkz_kernel_r_cluster_place:n #1
   {
     % parent record id
@@ -3189,20 +3196,39 @@
             - ( \l__tenkz_kernel_r_row_tl + 1 ) / 2 )
         * \__tenkz_metric_ratio:n {clusterstep}
       }
-    \__tenkz_geom_place_rel:nVee {#1} \l__tenkz_kernel_r_b_tl
+    \exp_args:NV \__tenkz_kernel_r_atom_rc:nNNN
+      \l__tenkz_kernel_r_b_tl
+      \l__tenkz_kernel_r_row_tl \l__tenkz_kernel_r_col_tl
+      \l__tenkz_kernel_turn_bool
+    \bool_if:NTF \l__tenkz_kernel_turn_bool
       {
-        \fp_eval:n
-          {
-            atand( \l__tenkz_kernel_r_y_fp , \l__tenkz_kernel_r_x_fp )
-            + \l__tenkz_kernel_turn_tl
-          }
+        \__tenkz_geom_local_basis:nnnNNNN {kpic}
+          { \l__tenkz_kernel_r_row_tl } { \l__tenkz_kernel_r_col_tl }
+          \l__tenkz_kernel_cluster_ex_tl
+          \l__tenkz_kernel_cluster_ey_tl
+          \l__tenkz_kernel_cluster_nx_tl
+          \l__tenkz_kernel_cluster_ny_tl
       }
       {
-        \fp_eval:n
-          {
-            sqrt( \l__tenkz_kernel_r_x_fp ^ 2 + \l__tenkz_kernel_r_y_fp ^ 2 )
-          }
+        \tl_set:Ne \l__tenkz_kernel_cluster_ex_tl
+          { \fp_eval:n { cosd(\l__tenkz_kernel_turn_tl) } }
+        \tl_set:Ne \l__tenkz_kernel_cluster_ey_tl
+          { \fp_eval:n { sind(\l__tenkz_kernel_turn_tl) } }
+        \tl_set:Ne \l__tenkz_kernel_cluster_nx_tl
+          { \fp_eval:n { -sind(\l__tenkz_kernel_turn_tl) } }
+        \tl_set:Ne \l__tenkz_kernel_cluster_ny_tl
+          { \fp_eval:n { cosd(\l__tenkz_kernel_turn_tl) } }
       }
+    \__tenkz_geom_basis_apply:nnnnnnNN
+      { \l__tenkz_kernel_cluster_ex_tl }
+      { \l__tenkz_kernel_cluster_ey_tl }
+      { \l__tenkz_kernel_cluster_nx_tl }
+      { \l__tenkz_kernel_cluster_ny_tl }
+      { \l__tenkz_kernel_r_x_fp } { \l__tenkz_kernel_r_y_fp }
+      \l__tenkz_kernel_cluster_dx_tl \l__tenkz_kernel_cluster_dy_tl
+    \__tenkz_geom_place_offset:nVee {#1} \l__tenkz_kernel_r_b_tl
+      { \l__tenkz_kernel_cluster_dx_tl }
+      { \l__tenkz_kernel_cluster_dy_tl }
   }
 
 % ---------- the address dependency graph --------------------------------------
@@ -6708,93 +6734,29 @@
     \__tenkz_geom_unapply:nnnNN {kpic}
       { \l__tenkz_kernel_r_xc_fp } { \l__tenkz_kernel_r_yc_fp }
       \l__tenkz_kernel_r_row_tl \l__tenkz_kernel_r_col_tl
+    % A compass word is a logical ray, not a request for a picture corner.
+    % Intersect that ray with the first expanded row/column margin, then
+    % carry the resulting logical point through the complete affine frame.
     \str_case:nn {#1}
       {
-        {n}
-          {
-            \tl_set:Ne \l__tenkz_kernel_r_row_tl
-              { \fp_eval:n { 1 - \__tenkz_metric_ratio:n {stub} } }
-          }
-        {s}
-          {
-            \tl_set:Ne \l__tenkz_kernel_r_row_tl
-              {
-                \fp_eval:n
-                  {
-                    \l__tenkz_kernel_r_rows_int
-                    + \__tenkz_metric_ratio:n {stub}
-                  }
-              }
-          }
-        {w}
-          {
-            \tl_set:Ne \l__tenkz_kernel_r_col_tl
-              { \fp_eval:n { 1 - \__tenkz_metric_ratio:n {stub} } }
-          }
-        {e}
-          {
-            \tl_set:Ne \l__tenkz_kernel_r_col_tl
-              {
-                \fp_eval:n
-                  {
-                    \l__tenkz_kernel_r_cols_int
-                    + \__tenkz_metric_ratio:n {stub}
-                  }
-              }
-          }
-        {nw}
-          {
-            \tl_set:Ne \l__tenkz_kernel_r_row_tl
-              { \fp_eval:n { 1 - \__tenkz_metric_ratio:n {stub} } }
-            \tl_set:Ne \l__tenkz_kernel_r_col_tl
-              { \fp_eval:n { 1 - \__tenkz_metric_ratio:n {stub} } }
-          }
-        {ne}
-          {
-            \tl_set:Ne \l__tenkz_kernel_r_row_tl
-              { \fp_eval:n { 1 - \__tenkz_metric_ratio:n {stub} } }
-            \tl_set:Ne \l__tenkz_kernel_r_col_tl
-              {
-                \fp_eval:n
-                  {
-                    \l__tenkz_kernel_r_cols_int
-                    + \__tenkz_metric_ratio:n {stub}
-                  }
-              }
-          }
-        {sw}
-          {
-            \tl_set:Ne \l__tenkz_kernel_r_row_tl
-              {
-                \fp_eval:n
-                  {
-                    \l__tenkz_kernel_r_rows_int
-                    + \__tenkz_metric_ratio:n {stub}
-                  }
-              }
-            \tl_set:Ne \l__tenkz_kernel_r_col_tl
-              { \fp_eval:n { 1 - \__tenkz_metric_ratio:n {stub} } }
-          }
-        {se}
-          {
-            \tl_set:Ne \l__tenkz_kernel_r_row_tl
-              {
-                \fp_eval:n
-                  {
-                    \l__tenkz_kernel_r_rows_int
-                    + \__tenkz_metric_ratio:n {stub}
-                  }
-              }
-            \tl_set:Ne \l__tenkz_kernel_r_col_tl
-              {
-                \fp_eval:n
-                  {
-                    \l__tenkz_kernel_r_cols_int
-                    + \__tenkz_metric_ratio:n {stub}
-                  }
-              }
-          }
+        {n}  { \tl_set:Nn \l__tenkz_kernel_r_b_tl {-90} }
+        {s}  { \tl_set:Nn \l__tenkz_kernel_r_b_tl { 90} }
+        {w}  { \tl_set:Nn \l__tenkz_kernel_r_b_tl {180} }
+        {e}  { \tl_set:Nn \l__tenkz_kernel_r_b_tl {  0} }
+        {nw} { \tl_set:Nn \l__tenkz_kernel_r_b_tl {-135} }
+        {ne} { \tl_set:Nn \l__tenkz_kernel_r_b_tl { -45} }
+        {sw} { \tl_set:Nn \l__tenkz_kernel_r_b_tl { 135} }
+        {se} { \tl_set:Nn \l__tenkz_kernel_r_b_tl {  45} }
       }
+    \__tenkz_geom_rect_ray_intersect:nnnnnnnNN
+      { \l__tenkz_kernel_r_col_tl }
+      { \l__tenkz_kernel_r_row_tl }
+      { \l__tenkz_kernel_r_b_tl }
+      { 1 - \__tenkz_metric_ratio:n {stub} }
+      { \l__tenkz_kernel_r_cols_int + \__tenkz_metric_ratio:n {stub} }
+      { 1 - \__tenkz_metric_ratio:n {stub} }
+      { \l__tenkz_kernel_r_rows_int + \__tenkz_metric_ratio:n {stub} }
+      \l__tenkz_kernel_r_col_tl \l__tenkz_kernel_r_row_tl
     \__tenkz_kernel_r_frame_xy:nnNN
       { \l__tenkz_kernel_r_row_tl } { \l__tenkz_kernel_r_col_tl }
       #2 #3

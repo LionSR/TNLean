@@ -1,0 +1,66 @@
+% Regression: cluster-member offsets pass through both vectors of an affine
+% carrier basis.  A scalar parent turn cannot reproduce the plane shear.
+\documentclass{standalone}
+\usepackage{tenkz}
+\makeatletter
+\ExplSyntaxOn
+\file_input:n { tenkz-kernel.code.tex }
+\bool_new:N \l__tenkz_test_cluster_checked_bool
+\tl_new:N \l__tenkz_test_cluster_name_tl
+\tl_new:N \l__tenkz_test_cluster_parent_tl
+\fp_new:N \l__tenkz_test_cluster_x_fp
+\fp_new:N \l__tenkz_test_cluster_y_fp
+\fp_new:N \l__tenkz_test_cluster_parent_x_fp
+\fp_new:N \l__tenkz_test_cluster_parent_y_fp
+\cs_new_eq:NN
+  \__tenkz_test_cluster_atom_ink:n
+  \__tenkz_kernel_r_atom_ink:n
+\cs_set_protected:Npn \__tenkz_kernel_r_atom_ink:n #1
+  {
+    \__tenkz_model_get:nnN {#1} {cluster-of} \l__tenkz_test_cluster_name_tl
+    \bool_lazy_and:nnT
+      { ! \quark_if_no_value_p:N \l__tenkz_test_cluster_name_tl }
+      { ! \bool_if_p:N \l__tenkz_test_cluster_checked_bool }
+      {
+        \prop_get:NnN \l__tenkz_kernel_named_prop {g}
+          \l__tenkz_test_cluster_parent_tl
+        \__tenkz_kernel_r_xy:nNN {#1}
+          \l__tenkz_test_cluster_x_fp \l__tenkz_test_cluster_y_fp
+        \__tenkz_kernel_r_xy:nNN
+          { \l__tenkz_test_cluster_parent_tl }
+          \l__tenkz_test_cluster_parent_x_fp
+          \l__tenkz_test_cluster_parent_y_fp
+        \fp_compare:nNnF
+          {
+            abs(
+              \l__tenkz_test_cluster_x_fp
+              - \l__tenkz_test_cluster_parent_x_fp
+              + 0.275 * \__tenkz_metric_ratio:n {clusterstep} )
+          }
+          < {0.000001}
+          { \errmessage{cluster~member~lost~the~plane~shear} }
+        \fp_compare:nNnF
+          {
+            abs(
+              \l__tenkz_test_cluster_y_fp
+              - \l__tenkz_test_cluster_parent_y_fp
+              - 0.3 * \__tenkz_metric_ratio:n {clusterstep} )
+          }
+          < {0.000001}
+          { \errmessage{cluster~member~lost~the~plane~rise} }
+        \bool_gset_true:N \l__tenkz_test_cluster_checked_bool
+      }
+    \__tenkz_test_cluster_atom_ink:n {#1}
+  }
+\ExplSyntaxOff
+\makeatother
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[rows={wire}, cols=1, frame=plane, bonds=none]
+  \tn[name=g, cluster=2x2]{}
+\end{tenkz}
+\ExplSyntaxOn
+\bool_if:NF \l__tenkz_test_cluster_checked_bool
+  { \errmessage{affine~cluster~fixture~did~not~inspect~its~member} }
+\ExplSyntaxOff
+\end{document}

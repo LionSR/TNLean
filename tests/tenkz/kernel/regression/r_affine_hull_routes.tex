@@ -87,6 +87,12 @@
     \__tenkz_geom_rect_ray_reach:nnnN {30}{2}{1} \l_tmpa_tl
     \fp_compare:nNnF { abs(\l_tmpa_tl - 2) } < {0.000001}
       { \errmessage{a~numeric~label~ray~did~not~meet~the~rectangle~edge} }
+    \__tenkz_geom_rect_ray_intersect:nnnnnnnNN
+      {1}{1}{45}{0}{4}{0}{3} \l_tmpa_tl \l_tmpb_tl
+    \fp_compare:nNnF { abs(\l_tmpa_tl - 3) } < {0.000001}
+      { \errmessage{a~diagonal~ray~snapped~to~a~rectangle~corner} }
+    \fp_compare:nNnF { abs(\l_tmpb_tl - 3) } < {0.000001}
+      { \errmessage{a~diagonal~ray~missed~the~first~rectangle~margin} }
     \seq_clear:N \l__tenkz_test_support_seq
     \seq_put_right:Nn \l__tenkz_test_support_seq
       { {circle}{0}{0}{0}{0}{0}{0} }
