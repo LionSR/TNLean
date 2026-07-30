@@ -465,26 +465,6 @@ theorem legEquivRed_eq_legEquivBlue_on_rb_single
   F.legEquivRed_eq_legEquivBlue_on_rb (fun ie => η ie.1) (fun ie => η ie.1)
     incidentRB0 rfl incidentRB1 rfl rfl g hf
 
-/-- For a single `η`, the red and complement boundary configurations agree on
-every red-to-complement crossing edge. -/
-theorem legEquivRed_eq_legEquivComplement_on_rc_single
-    (η : VirtualConfig (F.frame.coarseTensor)) (g : Edge G)
-    (hf : IsCrossingEdge (G := G) A F.frame.red F.frame.complement g) :
-    (F.frame.legEquivRed (fun ie => η ie.1) ⟨g, hf.1⟩ : Fin (A.bondDim g)) =
-      (F.frame.legEquivComplement (fun ie => η ie.1) ⟨g, hf.2⟩ : Fin (A.bondDim g)) :=
-  F.legEquivRed_eq_legEquivComplement_on_rc (fun ie => η ie.1) (fun ie => η ie.1)
-    incidentRC0 rfl incidentRC2 rfl rfl g hf
-
-/-- For a single `η`, the blue and complement boundary configurations agree on
-every blue-to-complement crossing edge. -/
-theorem legEquivBlue_eq_legEquivComplement_on_bc_single
-    (η : VirtualConfig (F.frame.coarseTensor)) (g : Edge G)
-    (hf : IsCrossingEdge (G := G) A F.frame.blue F.frame.complement g) :
-    (F.frame.legEquivBlue (fun ie => η ie.1) ⟨g, hf.1⟩ : Fin (A.bondDim g)) =
-      (F.frame.legEquivComplement (fun ie => η ie.1) ⟨g, hf.2⟩ : Fin (A.bondDim g)) :=
-  F.legEquivBlue_eq_legEquivComplement_on_bc (fun ie => η ie.1) (fun ie => η ie.1)
-    incidentBC1 rfl incidentBC2 rfl rfl g hf
-
 end CoherentCoarseBlockingFrame
 
 end PEPS

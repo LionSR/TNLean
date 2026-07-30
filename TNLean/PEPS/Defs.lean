@@ -82,6 +82,8 @@ omit [Fintype V] in
 /-- The image edge `Edge.ofAdj h` is independent of the incidence direction of the
 adjacency `h`: orienting the pair `(u, v)` and the pair `(v, u)` gives the same
 edge, since `Edge.ofAdj` places the smaller endpoint first either way. -/
+@[deprecated "Use `Edge.ofAdj_of_lt` and `Edge.ofAdj_of_gt` for the required orientation."
+  (since := "2026-07-30")]
 theorem Edge.ofAdj_symm {G : SimpleGraph V} {u v : V} (h : G.Adj u v) :
     Edge.ofAdj h = Edge.ofAdj h.symm := by
   rcases lt_or_gt_of_ne (G.ne_of_adj h) with huv | hvu
