@@ -45,9 +45,10 @@ cyclic neighboring product, summing over both discarded sector labels.
 Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
 1606--1617.
 
-**Local fix (adjacent marginal comparison):** Two suffix sites, rather than
-one, give the coefficient adjacent to the existing three-suffix coefficient.
-See `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
+**Local fix (adjacent marginal comparison):** The two-suffix contraction is
+paired with the one-suffix contraction. After tracing the two surviving outer
+boundary factors, their coefficients are respectively \(T_C^3\) and
+\(T_C^2\). See `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 noncomputable abbrev twoSuffixSectorContraction
     (F : PhysicalSectorFactorization K) {L : ℕ}
     (k : Fin L → Fin F.sectorCount) :
