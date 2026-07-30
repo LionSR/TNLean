@@ -8,12 +8,17 @@ import TNLean.MPS.RFP.BNTDirectSumBasis
 import TNLean.MPS.RFP.PhysicalObservableRealization
 
 /-!
-# Conditional converse from zero correlation length to a renormalization fixed point
+# Converse from zero correlation length to a renormalization fixed point
 
 This file formalizes the multiplicity-one correlation contradiction in the proof of
 arXiv:1606.00608, Theorem 3.8, lines 1250--1268. The converse is conditional on the
 spectral assertion made at line 1250: every non-idempotent normal block has a nonzero
 subleading eigenvalue with normalized left and right eigenvectors.
+
+It also gives an eigenvalue-free local repair of line 1250 at the multiplicity-one,
+unit-weight representative. The repair uses arbitrary sector-supported rank-one
+observables and trace-pairing nondegeneracy, and does not alter the conditional
+theorems recording the printed spectral argument.
 -/
 
 open scoped Matrix BigOperators ComplexOrder
@@ -439,6 +444,183 @@ theorem isTransferIdempotent_basisDirectSum_of_isPhysicalBNTZCL_of_spectral_pair
     IsTransferIdempotent (directSumTensor P.basis) :=
   hCF.isTransferIdempotent_basisDirectSum_of_isPositiveGapBNTZCL_of_spectral_pair
     hspectral (isPositiveGapBNTZCL_of_isPhysicalBNTZCL _ _ hZCL)
+
+/-- Arbitrary virtual matrices on one BNT sector can be tested by two physical
+observables whose two-point expectation is the corresponding transfer-map
+trace pairing.
+
+For the first observable use the rank-one map $|\rho_j)(u|$, where $\rho_j$ is
+the trace-one stationary state of the sector transfer map. For the second use
+$|v)(1|$. Stationarity removes the second complementary gap, and the operator
+trace of the resulting rank-one map is
+$\operatorname{tr}(u\mathbb E_j^{n_1}(v))$.
+
+**Local fix (arXiv:1606.00608, line 1250):** this eigenvalue-free probe identity
+replaces the source's unjustified passage from non-idempotence to a nonzero
+subleading eigenvalue. It applies only to the multiplicity-one, unit-weight
+direct sum. The source's printed spectral argument remains formalized by the
+theorems with suffix `_of_spectral_pair`. See
+`docs/paper-gaps/cpsv16_pure_zcl_local_orthogonality_scope.tex`. -/
+theorem exists_basis_physicalObservables_expectation_eq_trace_mul_transferMap_pow
+    (hCF : IsBNTCanonicalForm P) (j : Fin P.basisCount)
+    (u v : Matrix (Fin (P.basisDim j)) (Fin (P.basisDim j)) ℂ) :
+    ∃ (L : ℕ)
+      (O₁ O₂ : Matrix (Fin L → Fin d) (Fin L → Fin d) ℂ),
+      0 < L ∧ ∀ n₁ n₂ : ℕ,
+        physicalTwoPointExpectation (directSumTensor P.basis) L L O₁ O₂ n₁ n₂ =
+          Matrix.trace (u * ((transferMap (P.basis j)) ^ n₁) v) := by
+  classical
+  letI : NeZero (P.basisDim j) := ⟨(hCF.basis_dim_pos j).ne'⟩
+  let E := transferMap (P.basis j)
+  have hCh : IsChannel E :=
+    transferMap_isChannel (P.basis j) (hCF.basis_left_canonical j)
+  have hIrr : IsIrreducibleMap E :=
+    isIrreducibleCP_transferMap_of_isIrreducibleTensor
+      (P.basis j) (hCF.basis_irreducible j)
+  let ρ := Channel.stationaryState E hCh hIrr (hCF.basis_dim_pos j)
+  have hρ := Channel.stationaryState_spec hCh hIrr (hCF.basis_dim_pos j)
+  have hρ_trace : Matrix.trace ρ = 1 := hρ.1.2
+  have hρ_fixed : E ρ = ρ := hρ.2.2
+  obtain ⟨L, hL_pos, _, hObs⟩ :=
+    hCF.exists_basis_physicalObservableTransfer_rankOne_le_three_totalDim_pow_five
+  obtain ⟨O₁, hO₁⟩ := hObs j ρ u
+  obtain ⟨O₂, hO₂⟩ := hObs j v 1
+  have hO₁_map : physicalObservableTransfer (directSumTensor P.basis) L O₁ =
+      directSumSectorRankOne P.basisDim j ρ u := by
+    apply LinearMap.ext
+    intro X
+    rw [hO₁ X, directSumSectorRankOne_apply]
+  have hO₂_map : physicalObservableTransfer (directSumTensor P.basis) L O₂ =
+      directSumSectorRankOne P.basisDim j v 1 := by
+    apply LinearMap.ext
+    intro X
+    rw [hO₂ X, directSumSectorRankOne_apply]
+  refine ⟨L, O₁, O₂, hL_pos, ?_⟩
+  intro n₁ n₂
+  unfold physicalTwoPointExpectation
+  rw [hO₁_map, hO₂_map]
+  have hcomp : directSumSectorRankOne P.basisDim j v 1 ∘ₗ
+        ((transferMap (directSumTensor P.basis)) ^ n₂) ∘ₗ
+        directSumSectorRankOne P.basisDim j ρ u ∘ₗ
+        ((transferMap (directSumTensor P.basis)) ^ n₁) =
+      directSumSectorRankOne P.basisDim j v
+        (Matrix.traceAdjointMap (E ^ n₁) u) := by
+    apply LinearMap.ext
+    intro X
+    let c := Matrix.trace (u * directSumSectorCompression P.basisDim j
+      (((transferMap (directSumTensor P.basis)) ^ n₁) X))
+    have hc : c = Matrix.trace
+        (Matrix.traceAdjointMap (E ^ n₁) u *
+          directSumSectorCompression P.basisDim j X) := by
+      change Matrix.trace (u * directSumSectorCompression P.basisDim j
+          (((transferMap (directSumTensor P.basis)) ^ n₁) X)) = _
+      rw [show directSumSectorCompression P.basisDim j
+          (((transferMap (directSumTensor P.basis)) ^ n₁) X) =
+        (E ^ n₁) (directSumSectorCompression P.basisDim j X) from
+          directSumSectorCompression_transferMap_pow (dim := P.basisDim)
+            (B := P.basis) (j := j) n₁ X]
+      exact (Matrix.trace_traceAdjointMap_mul (E ^ n₁) u _).symm
+    have hρ_pow : (E ^ n₂) ρ = ρ := by
+      rw [Module.End.pow_apply]
+      exact Function.IsFixedPt.iterate hρ_fixed n₂
+    have hmid : directSumSectorCompression P.basisDim j
+        (((transferMap (directSumTensor P.basis)) ^ n₂)
+          (c • directSumSectorInclusion P.basisDim j ρ)) = c • ρ := by
+      calc
+        _ = (E ^ n₂) (directSumSectorCompression P.basisDim j
+              (c • directSumSectorInclusion P.basisDim j ρ)) :=
+          directSumSectorCompression_transferMap_pow (dim := P.basisDim)
+            (B := P.basis) (j := j) n₂ _
+        _ = (E ^ n₂) (c • ρ) := by
+          rw [map_smul, directSumSectorCompression_inclusion]
+        _ = c • (E ^ n₂) ρ := by rw [map_smul]
+        _ = c • ρ := by rw [hρ_pow]
+    change Matrix.trace (1 * directSumSectorCompression P.basisDim j
+        (((transferMap (directSumTensor P.basis)) ^ n₂)
+          (c • directSumSectorInclusion P.basisDim j ρ))) •
+        directSumSectorInclusion P.basisDim j v =
+      Matrix.trace (Matrix.traceAdjointMap (E ^ n₁) u *
+          directSumSectorCompression P.basisDim j X) •
+        directSumSectorInclusion P.basisDim j v
+    rw [hmid, Matrix.one_mul, Matrix.trace_smul, hρ_trace, hc]
+    simp
+  rw [hcomp, trace_directSumSectorRankOne,
+    Matrix.trace_traceAdjointMap_mul]
+
+/-- Positive-gap BNT zero correlation length implies transfer idempotence for
+the multiplicity-one, unit-weight direct sum of the BNT basis sectors.
+
+**Local fix (arXiv:1606.00608, line 1250):** instead of assuming that every
+non-idempotent sector has a nonzero subleading eigenvalue, the proof tests
+arbitrary trace pairings of $\mathbb E_j$ and $\mathbb E_j^2$ using the
+physical observables above. Positive-gap CID at complementary gaps $(1,2)$
+and $(2,1)$ makes these pairings equal. This does not cover raw weighted
+repeated copies. See
+`docs/paper-gaps/cpsv16_pure_zcl_local_orthogonality_scope.tex`. -/
+theorem isTransferIdempotent_basisDirectSum_of_isPositiveGapBNTZCL
+    (hCF : IsBNTCanonicalForm P)
+    (hZCL : IsPositiveGapBNTZCL (directSumTensor P.basis) P.basis) :
+    IsTransferIdempotent (directSumTensor P.basis) := by
+  classical
+  letI : ∀ j : Fin P.basisCount, NeZero (P.basisDim j) :=
+    fun j ↦ ⟨(hCF.basis_dim_pos j).ne'⟩
+  apply (isTransferIdempotent_directSumTensor_iff_pairwise_mixedTransferMap₂_isIdempotentElem
+    P.basis).2
+  intro j j'
+  by_cases hEq : j = j'
+  · subst j'
+    rw [mixedTransferMap₂_self]
+    change transferMap (P.basis j) ∘ₗ transferMap (P.basis j) =
+      transferMap (P.basis j)
+    apply LinearMap.ext
+    intro v
+    apply (Matrix.ext_iff_trace_mul_left).2
+    intro u
+    obtain ⟨L, O₁, O₂, hL_pos, hExpectation⟩ :=
+      hCF.exists_basis_physicalObservables_expectation_eq_trace_mul_transferMap_pow
+        j u v
+    have hEq := hZCL.2.1 L L O₁ O₂ 1 2 2 1 hL_pos hL_pos
+      (by norm_num) (by norm_num) (by norm_num) (by norm_num) (by norm_num)
+    rw [hExpectation 1 2, hExpectation 2 1] at hEq
+    simpa [pow_one, pow_two, Module.End.mul_apply] using hEq.symm
+  · rw [hZCL.2.2 j j' hEq]
+    exact IsIdempotentElem.zero
+
+/-- Positive-gap BNT zero correlation length is equivalent to transfer
+idempotence for the multiplicity-one, unit-weight direct sum.
+
+**Local fix (arXiv:1606.00608, line 1250):** the forward implication uses the
+eigenvalue-free trace-pairing repair above. The reverse implication is the
+existing positive-gap consequence of transfer idempotence. Raw weighted
+repeated copies and adjacent complementary gaps remain outside the statement.
+See `docs/paper-gaps/cpsv16_pure_zcl_local_orthogonality_scope.tex`. -/
+theorem isPositiveGapBNTZCL_basisDirectSum_iff_isTransferIdempotent
+    (hCF : IsBNTCanonicalForm P) :
+    IsPositiveGapBNTZCL (directSumTensor P.basis) P.basis ↔
+      IsTransferIdempotent (directSumTensor P.basis) := by
+  constructor
+  · exact hCF.isTransferIdempotent_basisDirectSum_of_isPositiveGapBNTZCL
+  · intro hRFP
+    letI : ∀ j : Fin P.basisCount, NeZero (P.basisDim j) :=
+      fun j ↦ ⟨(hCF.basis_dim_pos j).ne'⟩
+    exact isPositiveGapBNTZCL_of_isTransferIdempotent_directSum P.basis
+      hCF.isCPSVBasisOfNormalTensors_basisDirectSum hCF.basis_irreducible
+      hCF.basis_left_canonical hCF.basis_distinct hRFP
+
+/-- Source physical BNT zero correlation length implies transfer idempotence
+for the multiplicity-one, unit-weight representative.
+
+**Local fix (arXiv:1606.00608, line 1250):** source physical CID is first
+restricted to positive complementary gaps, after which the eigenvalue-free
+trace-pairing repair proves idempotence. This does not restore the false
+raw-weight statement of Theorem 3.8. See
+`docs/paper-gaps/cpsv16_pure_zcl_local_orthogonality_scope.tex`. -/
+theorem isTransferIdempotent_basisDirectSum_of_isPhysicalBNTZCL
+    (hCF : IsBNTCanonicalForm P)
+    (hZCL : IsPhysicalBNTZCL (directSumTensor P.basis) P.basis) :
+    IsTransferIdempotent (directSumTensor P.basis) :=
+  hCF.isTransferIdempotent_basisDirectSum_of_isPositiveGapBNTZCL
+    (isPositiveGapBNTZCL_of_isPhysicalBNTZCL _ _ hZCL)
 
 end IsBNTCanonicalForm
 

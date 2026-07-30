@@ -7,7 +7,7 @@ import TNLean.MPS.RFP.NNCPHGroundSpacesMultiSector
 import TNLean.MPS.RFP.ZCLReverse
 
 /-!
-# Conditional zero-correlation-length implication for commuting parent ground spaces
+# Zero-correlation-length implications for commuting parent ground spaces
 
 This file proves the corrected positive-gap implication from zero correlation
 length to nearest-neighbor commuting parent-Hamiltonian ground spaces for the
@@ -57,6 +57,23 @@ theorem isPositiveGapBNTZCL_implies_hasNNCPHGroundSpaces_basisDirectSum_of_spect
   hCF.rfp_implies_hasNNCPHGroundSpaces_basisDirectSum
     (hCF.isTransferIdempotent_basisDirectSum_of_isPositiveGapBNTZCL_of_spectral_pair
       hspectral hZCL)
+
+/-- Positive-gap BNT zero correlation length implies the all-chain
+nearest-neighbor commuting parent-Hamiltonian ground-space condition at the
+multiplicity-one, unit-weight representative.
+
+**Local fix (arXiv:1606.00608, line 1250):** the implication first uses the
+eigenvalue-free trace-pairing repair to obtain transfer idempotence and then
+applies the multiplicity-one fixed-point ground-space theorem. It does not
+establish the printed three-way equivalence, treat raw weighted repeated
+copies, or include adjacent complementary gaps. See
+`docs/paper-gaps/cpsv16_pure_zcl_local_orthogonality_scope.tex`. -/
+theorem isPositiveGapBNTZCL_implies_hasNNCPHGroundSpaces_basisDirectSum
+    (hCF : IsBNTCanonicalForm P)
+    (hZCL : IsPositiveGapBNTZCL (directSumTensor P.basis) P.basis) :
+    HasNNCPHGroundSpaces (directSumTensor P.basis) P.basis :=
+  hCF.rfp_implies_hasNNCPHGroundSpaces_basisDirectSum
+    (hCF.isTransferIdempotent_basisDirectSum_of_isPositiveGapBNTZCL hZCL)
 
 end IsBNTCanonicalForm
 
