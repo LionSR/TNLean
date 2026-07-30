@@ -12,8 +12,8 @@ import TNLean.Wielandt.RankOne.SpanGrowth
 This module develops the one-sided rectangular-span growth argument used in
 Wielandt Lemma 2(b). It proves that left-multiplication by `A i₀`
 induces an injective step map on `rectSpan ((A i₀)^D) A n`, deduces monotonicity
-of the associated finrank sequence, and proves the stabilization criteria that
-identify `rectSpan` and `cumulativeRectSpan` with `range (mulLeft P)`.
+of the associated finrank sequence, and proves criteria that identify `rectSpan`
+with `range (mulLeft P)`.
 
 `TNLean.Wielandt.RectangularSpan.Universality` builds on this file to turn stabilized
 rectangular spans into rank-one universality and the later sharp D²-D+1 theorems.
@@ -32,30 +32,6 @@ given `P = (A i₀)^D` (which kills the nilpotent block of `A i₀`), the subspa
 `rectSpan P A n` grow in dimension with each step, because left-multiplication by
 `A i₀` is injective on the range of `mulLeft P`.
 -/
-
-/-- Generic pigeonhole: a monotone function `ℕ → ℕ` bounded by `B` has a consecutive
-equality within the first `B` values (i.e., `∃ n ≤ B, a n = a (n + 1)`). -/
-theorem exists_consecutive_eq_of_monotone_bounded'
-    {B : ℕ} {a : ℕ → ℕ}
-    (ha_mono : ∀ n, a n ≤ a (n + 1))
-    (ha_bound : ∀ n, a n ≤ B) :
-    ∃ n ≤ B, a n = a (n + 1) := by
-  by_contra h
-  push Not at h
-  have hstrict : ∀ n ≤ B, a n < a (n + 1) := by
-    intro n hn
-    exact lt_of_le_of_ne (ha_mono n) (h n hn)
-  have hgrow : ∀ k, k ≤ B + 1 → a k ≥ a 0 + k := by
-    intro k hk
-    induction k with
-    | zero => omega
-    | succ k ih =>
-      have hih : a k ≥ a 0 + k := ih (by omega)
-      have hstep : a k < a (k + 1) := hstrict k (by omega)
-      omega
-  have : a (B + 1) ≥ a 0 + (B + 1) := hgrow (B + 1) le_rfl
-  have : a (B + 1) ≤ B := ha_bound (B + 1)
-  omega
 
 namespace RectSpanGrowth
 
@@ -167,24 +143,13 @@ end RectSpanGrowth
 
 /-! ## Section 8b: Stabilization — rectSpan meets full range
 
-This section provides the connection between `rectSpan`/`cumulativeRectSpan` and
+This section provides the connection between `rectSpan` and
 `LinearMap.range (mulLeft ℂ P)`:
 
-- `rectSpan_le_range` / `cumulativeRectSpan_le_range` : basic containment
+- `rectSpan_le_range`: basic containment
 - `rectSpan_eq_range_of_wordSpan_eq_top` : rectSpan = range when wordSpan = ⊤
 - `exists_rectSpan_eq_range_of_isNormal` : under `IsNormal`, some level reaches range
 - `rectSpan_eq_range_of_finrank_eq_range` : finrank criterion for rectSpan = range
-- `cumulativeRectSpan_eq_of_finrank_eq` : consecutive finrank eq → subspace equality
-- `cumulativeRectSpan_eq_range_of_finrank_eq_range_finrank` : finrank criterion (cumulative)
-- `cumulativeRectSpan_finrank_mono` : finrank is non-decreasing
-- `exists_cumulativeRectSpan_finrank_eq_succ` : pigeonhole stabilization within D² steps
-
-The cumulative-stabilization cluster (the five `cumulativeRectSpan_*` results
-above together with the pigeonhole helper
-`exists_consecutive_eq_of_monotone_bounded'` and the `cumulativeRectSpan_mono` /
-`cumulativeRectSpan_finrank_le` bounds in `RectangularSpan/Basic.lean`)
-currently has no callers outside the cluster; it is retained as advertised
-stabilization API while the keep/delete question is tracked separately.
 -/
 
 section RectSpanStabilization
@@ -228,55 +193,6 @@ theorem rectSpan_eq_range_of_finrank_eq_range
   haveI : FiniteDimensional ℂ (LinearMap.range (LinearMap.mulLeft ℂ P)) :=
     FiniteDimensional.finiteDimensional_submodule _
   exact Submodule.eq_of_le_of_finrank_eq (rectSpan_le_range P A n) hfin
-
-/-! ### Cumulative rectangular span: stabilization and full range -/
-
-/-- `cumulativeRectSpan P A n` is always contained in the range of `mulLeft P`. -/
-theorem cumulativeRectSpan_le_range (P : Matrix (Fin D) (Fin D) ℂ)
-    (A : MPSTensor d D) (n : ℕ) :
-    cumulativeRectSpan P A n ≤ LinearMap.range (LinearMap.mulLeft ℂ P) := by
-  rw [cumulativeRectSpan, ← Submodule.map_top (f := LinearMap.mulLeft ℂ P)]
-  exact Submodule.map_mono le_top
-
-/-- If finrank of consecutive cumulative rectangular spans are equal, they coincide
-as submodules. This uses monotonicity + `Submodule.eq_of_le_of_finrank_eq`. -/
-theorem cumulativeRectSpan_eq_of_finrank_eq
-    (P : Matrix (Fin D) (Fin D) ℂ) (A : MPSTensor d D) {n : ℕ}
-    (hfin : finrank ℂ (cumulativeRectSpan P A n) =
-            finrank ℂ (cumulativeRectSpan P A (n + 1))) :
-    cumulativeRectSpan P A n = cumulativeRectSpan P A (n + 1) := by
-  haveI : FiniteDimensional ℂ (cumulativeRectSpan P A (n + 1)) :=
-    FiniteDimensional.finiteDimensional_submodule _
-  exact Submodule.eq_of_le_of_finrank_eq (cumulativeRectSpan_mono P A n) hfin
-
-/-- If `finrank (cumulativeRectSpan P A n)` equals `finrank (range (mulLeft P))`, then
-`cumulativeRectSpan P A n = range (mulLeft P)`. -/
-theorem cumulativeRectSpan_eq_range_of_finrank_eq_range_finrank
-    (P : Matrix (Fin D) (Fin D) ℂ) (A : MPSTensor d D) {n : ℕ}
-    (hfin : finrank ℂ (cumulativeRectSpan P A n) =
-            finrank ℂ (LinearMap.range (LinearMap.mulLeft ℂ P))) :
-    cumulativeRectSpan P A n = LinearMap.range (LinearMap.mulLeft ℂ P) := by
-  haveI : FiniteDimensional ℂ (LinearMap.range (LinearMap.mulLeft ℂ P)) :=
-    FiniteDimensional.finiteDimensional_submodule _
-  exact Submodule.eq_of_le_of_finrank_eq (cumulativeRectSpan_le_range P A n) hfin
-
-/-- Finrank of the cumulative rectangular span is non-decreasing. -/
-theorem cumulativeRectSpan_finrank_mono
-    (P : Matrix (Fin D) (Fin D) ℂ) (A : MPSTensor d D) (n : ℕ) :
-    finrank ℂ (cumulativeRectSpan P A n) ≤
-      finrank ℂ (cumulativeRectSpan P A (n + 1)) :=
-  Submodule.finrank_mono (cumulativeRectSpan_mono P A n)
-
-/-- Pigeonhole: the non-decreasing bounded sequence
-`n ↦ finrank(cumulativeRectSpan P A n)` has a consecutive equality within `D²` steps. -/
-theorem exists_cumulativeRectSpan_finrank_eq_succ
-    (P : Matrix (Fin D) (Fin D) ℂ) (A : MPSTensor d D) :
-    ∃ n ≤ D ^ 2,
-      finrank ℂ (cumulativeRectSpan P A n) =
-      finrank ℂ (cumulativeRectSpan P A (n + 1)) :=
-  exists_consecutive_eq_of_monotone_bounded'
-    (fun n => cumulativeRectSpan_finrank_mono P A n)
-    (fun n => cumulativeRectSpan_finrank_le P A n)
 
 end RectSpanStabilization
 
