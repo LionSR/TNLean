@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.MPDO.LocalOrthogonalSumAreaLaw
 import TNLean.MPS.MPDO.GSNNCHOrthogonalSectors
+import TNLean.MPS.MPDO.CyclicActiveAreaLaw
 
 /-!
 # Saturated area law for orthogonal commuting sectors
@@ -193,6 +194,43 @@ theorem isSAL_of_orthogonalCommutingSectorFamily
     (fun s _ _ hN hL ↦
       F.firstSiteMatrix_mul_reducedBlockState s hN hL)
     hSectorSAL
+
+/-- An exact positive-multiplicity sum of orthogonally supported fixed-bond
+sectors satisfies the saturated area law when every sector is an injective
+normal MPDO tensor with source zero correlation length.
+
+Source: CPSV16, Appendix C.2, Proposition `prop4to2`, lines 1801--1808.
+
+**Scope restriction (sectorwise source ZCL):** The printed proposition states
+the conclusion from the orthogonal GSNNCH form alone, but its proof applies
+Proposition `4to2`, which assumes zero correlation length at lines 1597--1600.
+Theorem 4.9(iii), lines 851--893 assumes zero correlation length for the full
+tensor. This theorem instead assumes MPDO positivity, injectivity, normality,
+and source zero correlation length separately for every orthogonal sector. It
+proves this sectorwise-ZCL specialization, not the printed GSNNCH-only
+proposition. See `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
+theorem isSAL_of_orthogonalCommutingSectorFamily_of_sectorwise_isSourceZCL
+    (M : MPOTensor d D) (K : (s : Fin g) → MPOTensor d (dim s))
+    (multiplicity : Fin g → ℕ) [Nonempty (Fin g)]
+    (hmultiplicity : ∀ s, 0 < multiplicity s)
+    (F : OrthogonalCommutingSectorFamily K)
+    (hM : ∀ (N : ℕ), 0 < N →
+      mpo M N = ∑ s : Fin g, (multiplicity s : ℂ) • mpo (K s) N)
+    (hMPDO : ∀ s, IsMPDO (K s))
+    (hK : ∀ s, (K s).IsInjective)
+    (hNormal : ∀ s, MPSTensor.IsNormalTensor (K s).toMPSTensor)
+    (hZCL : ∀ s, (K s).IsSourceZCL) :
+    IsSAL M := by
+  apply isSAL_of_orthogonalCommutingSectorFamily M K multiplicity
+    hmultiplicity F hM
+  intro s
+  let data : EtaLocalStructureData (K s) := by
+    refine ⟨F.bondData s, ?_⟩
+    intro N hN
+    refine ⟨1, zero_lt_one, ?_⟩
+    simpa using F.realizes_mpo s N hN
+  exact EtaLocalStructureData.isSAL_of_isSourceZCL
+    (hMPDO s) (hK s) (hNormal s) data (hZCL s)
 
 /-- The BNT all-positive-length decomposition satisfies the saturated area law
 when its absorbed normal representatives do and an independently constructed

@@ -579,7 +579,7 @@ exactly the source tensor, its MPDO, injectivity, and normality hypotheses, the
 fixed eta-local structure, and source ZCL.  It assumes no injectivity,
 normality, ZCL, or SAL property of the selected fixed-product tensor.
 
-\paragraph{Local fix (the later orthogonal-sector statement).}
+\paragraph{Scope restriction (sectorwise source ZCL).}
 The proposition labelled \emph{prop4to2} at source lines~1801--1808 states
 that the GSNNCH form alone implies SAL.  Its proof applies Proposition
 \emph{4to2} to each summand, although Proposition \emph{4to2} assumes ZCL at
@@ -615,6 +615,18 @@ outer sum and sectorwise SAL, and proves only the non-circular final local
 direct-sum implication.  It neither derives the sectorwise SAL premise nor
 uses ZCL.
 
+The corrected specialization
+\leanid{MPOTensor.%
+isSAL_of_orthogonalCommutingSectorFamily_of_sectorwise_isSourceZCL}
+assumes that every sector generates MPDOs, is injective and normal, and has
+source ZCL.  The fixed bond and its exact periodic-product identity come from
+the same orthogonal commuting sector family used in the outer sum.  Applying
+\leanid{MPOTensor.EtaLocalStructureData.isSAL_of_isSourceZCL} to each sector
+supplies the sectorwise SAL premise, after which the preceding direct-sum
+theorem gives SAL for the full tensor.  Since sectorwise source ZCL is explicit,
+this is a scope-restricted specialization rather than a formalization of the
+printed GSNNCH-only proposition.
+
 \paragraph{Verdict.}
 Proposition~\emph{4to2} is formalized by
 \leanid{MPOTensor.EtaLocalStructureData.isSAL_of_isSourceZCL}.  The
@@ -627,11 +639,11 @@ selected physical coordinates.  The all-cut Markov criterion proves SAL in
 those coordinates, and isometric invariance transports SAL back to the source
 tensor.
 
-The later
-orthogonal direct-sum implication is likewise formalized only as a
-scope-restricted theorem assuming sectorwise SAL.  It neither supplies that
-sectorwise premise nor proves the printed assertion that the GSNNCH form alone
-implies SAL.
+The later orthogonal direct-sum implication is formalized both as a general
+scope-restricted theorem assuming sectorwise SAL and as a specialization
+deriving that premise from sectorwise MPDO positivity, injectivity, normality,
+a fixed commuting bond, and source ZCL.  Neither theorem proves the printed
+assertion that the GSNNCH form alone implies SAL.
 
 \section{Completed proof}
 
