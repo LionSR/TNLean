@@ -527,11 +527,81 @@ Definition~\ref{def:mpdo_source_gsnnch}; the converse comparison is not used.
     with positive proportionality constant one.
 \end{proof}
 
-\begin{theorem}[Local orthogonal sums preserve SAL]
+\begin{theorem}[Proportional local orthogonal sums preserve SAL]
+    \label{thm:mpdo_proportional_local_orthogonal_sum_sal}
+    \lean{MPOTensor.isSAL_of_proportionalLocalOrthogonalSum}
+    \leanok
+    \uses{def:is_sal, def:mpdo_vertical_one_site_actions}
+    Let $\{K_x\}_{x=0}^{g-1}$ be a nonempty finite family of MPO tensors,
+    let $n_x$ be positive natural numbers, and let $P_x$ be pairwise
+    orthogonal one-site projections. Suppose that, for every $N>0$, there is
+    a number $c_N>0$ such that
+    \begin{align}
+        \rho^{(N)}(M)
+        &=c_N\sum_{x=0}^{g-1}n_x\rho^{(N)}(K_x).
+        \notag
+    \end{align}
+    For $N\geq2$ and $1\leq L\leq N$, write
+    $\widehat\rho_{x,N,L}$ for the normalized marginal of
+    $\rho^{(N)}(K_x)$ on the first $L$ sites. Assume that
+    \begin{align}
+        (P_x\otimes\Id^{\otimes(L-1)})
+          \widehat\rho_{x,N,L}
+        &=\widehat\rho_{x,N,L}.
+        \notag
+    \end{align}
+    If every $K_x$ satisfies SAL, then $M$ satisfies SAL.
+
+    % **Local fix (global proportionality):** Equation ApprhoNComm at source
+    % lines 1641--1665 is proportional rather than exact. The positive
+    % length-dependent scalar cancels upon normalization. This does not supply
+    % the sectorwise ZCL hypothesis omitted by the printed proposition.
+    % Documented in docs/paper-gaps/cpsv16_commuting_form_to_sal.tex.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:entropy_smul, thm:entropy_pairwise_annihilating_support}
+    For fixed $N$, put
+    \begin{align}
+        S_N&=\sum_x n_x\rho^{(N)}(K_x),
+        \notag\\
+        p_x&=\frac{c_N n_x\tr(\rho^{(N)}(K_x))}
+          {\tr(\rho^{(N)}(M))}.
+        \notag
+    \end{align}
+    Trace linearity and $\rho^{(N)}(M)=c_NS_N$ give
+    \begin{align}
+        \tr(\rho^{(N)}(M))^{-1}\rho^{(N)}(M)
+        &=\tr(S_N)^{-1}S_N
+         =\sum_x p_x\widehat\rho_{x,N,N}.
+        \notag
+    \end{align}
+    Thus the common positive scalar cancels from the normalized chain and from
+    every marginal.
+
+    Put $Q_x=P_x\otimes\Id^{\otimes(L-1)}$. The support identity gives
+    $Q_x\widehat\rho_{x,N,L}=\widehat\rho_{x,N,L}$, while $P_xP_y=0$ for
+    $x\ne y$ gives $Q_xQ_y=0$. The entropy of a nonempty marginal is therefore
+    \begin{align}
+        S_L(M)
+        &=\sum_x\bigl(-p_x\log p_x+p_xS_L(K_x)\bigr).
+        \notag
+    \end{align}
+    Substitution in $I_L=S_L+S_{N-L}-S_N$ gives
+    \begin{align}
+        I_L(M)
+        &=-\sum_x p_x\log p_x+\sum_x p_xI_L(K_x).
+        \notag
+    \end{align}
+    The probabilities depend on $N$ but not on $L$. Sectorwise SAL therefore
+    gives $I_L(M)=I_{L+1}(M)$ throughout the required range.
+\end{proof}
+
+\begin{theorem}[Exact local orthogonal sums preserve SAL]
     \label{thm:mpdo_local_orthogonal_sum_sal}
     \lean{MPOTensor.isSAL_of_localOrthogonalSum}
     \leanok
-    \uses{def:is_sal}
+    \uses{def:is_sal, def:mpdo_vertical_one_site_actions}
     Let $\{K_x\}_{x=0}^{g-1}$ be a nonempty finite family of MPO tensors,
     let $n_x$ be positive natural numbers, and let $P_x$ be pairwise
     orthogonal one-site projections. Suppose that, for every $N>0$,
@@ -561,42 +631,9 @@ Definition~\ref{def:mpdo_source_gsnnch}; the converse comparison is not used.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:entropy_smul, thm:entropy_pairwise_annihilating_support,
-        def:mpdo_vertical_one_site_actions,
-        lem:mpdo_orthogonal_commuting_sector_marginal_support}
-    For fixed $N$, put
-    \begin{align}
-        p_x
-        &=\frac{n_x\tr(\rho^{(N)}(K_x))}
-          {\tr(\rho^{(N)}(M))}.
-        \notag
-    \end{align}
-    Positivity of the chain operators, positivity of $n_x$, and nonemptiness
-    of the family give $p_x>0$ and a nonzero normalization for $M$. Every
-    nonempty normalized marginal decomposes as
-    \begin{align}
-        \widehat\rho_{N,L}(M)
-        &=\sum_x p_x\widehat\rho_{x,N,L}.
-        \notag
-    \end{align}
-    Put $Q_x=P_x\otimes\Id^{\otimes(L-1)}$. The support identity gives
-    $Q_x\widehat\rho_{x,N,L}=\widehat\rho_{x,N,L}$, while $P_xP_y=0$ for
-    $x\ne y$ gives $Q_xQ_y=0$. Thus the summands have pairwise annihilating
-    supports. Hence
-    \begin{align}
-        S_L(M)
-        &=\sum_x(-p_x\log p_x+p_xS_L(K_x)).
-        \notag
-    \end{align}
-    Substitution in $I_L=S_L+S_{N-L}-S_N$ gives
-    \begin{align}
-        I_L(M)
-        &=-\sum_xp_x\log p_x+\sum_xp_xI_L(K_x).
-        \notag
-    \end{align}
-    The first sum is independent of $L$, while sectorwise SAL gives
-    $I_L(K_x)=I_{L+1}(K_x)$ for every $x$. Therefore
-    $I_L(M)=I_{L+1}(M)$ throughout the SAL range.
+    \uses{thm:mpdo_proportional_local_orthogonal_sum_sal}
+    Take $c_N=1$ in
+    Theorem~\ref{thm:mpdo_proportional_local_orthogonal_sum_sal}.
 \end{proof}
 
 \begin{lemma}[Commuting sector products have local marginal support]
