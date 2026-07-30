@@ -31,7 +31,7 @@ that the compatibility relation is trivial.
 
 PR #665 (#611) added the transfer-map-level fusion formulation in
 `TNLean/MPS/MPDO/FusionIsometries.lean`. For each blocked size `n`, it provides
-`MPOTensor.FusionIsometryData M n` consisting of:
+`MPOTensor.TransferRetractData M n` consisting of:
 
 - a support subspace
   `supportAlgebra : Submodule ℂ (Matrix (Fin D) (Fin D) ℂ)`;
@@ -45,7 +45,7 @@ PR #665 (#611) added the transfer-map-level fusion formulation in
   `S ∘ₗ T = blockedTransferMap M n`.
 
 This is strong enough to prove
-`MPOTensor.isRFP_MPDO_via_fusion_iff_isRFP`, because an idempotent blocked
+`MPOTensor.isRFP_MPDO_via_transferRetract_iff_isRFP`, because an idempotent blocked
 transfer map factors through its range and conversely any such retract makes the
 blocked transfer map idempotent.
 
@@ -60,7 +60,7 @@ on the range of `blockedTransferMap M n` by
 
 `a ⋆ b := T (S a * S b)`.
 
-However, the current `supportAlgebra` in `FusionIsometryData` is only a
+However, the current `supportAlgebra` in `TransferRetractData` is only a
 `Submodule`, not a `Subalgebra` / `StarSubalgebra`, and the existing API does not
 prove that this projected product is associative or unital.
 
@@ -102,7 +102,7 @@ support-algebra structure carrying:
 - associativity and unit laws;
 - the relation to `E_n` as the corresponding projection / conditional expectation.
 
-At present, `FusionIsometryData.supportAlgebra` is only a `Submodule`, so the
+At present, `TransferRetractData.supportAlgebra` is only a `Submodule`, so the
 necessary algebraic laws cannot even be stated in the right form.
 
 ### 3. Basis-coordinate extraction for the coefficients
@@ -137,6 +137,6 @@ Suggested scope:
    identities needed on `range(E_n)`.
 2. Package `range(E_n)` as a `StarSubalgebra`-like support algebra with projected
    multiplication.
-3. Expose the bridge from `FusionIsometryData` to that support algebra.
+3. Expose the bridge from `TransferRetractData` to that support algebra.
 4. Only after this, return to issue #612 and define the algebra-structure
    coefficients and compatibility predicate in a non-vacuous way.

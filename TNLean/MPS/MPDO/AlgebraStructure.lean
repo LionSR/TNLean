@@ -39,7 +39,7 @@ with the transfer-map fusion criterion from `FusionIsometries.lean`, this gives 
 one-way implication
 
 * `isRFP_MPDO_via_algebra_of_isRFP_of_isTP_of_posDef_fixed`
-* `isRFP_MPDO_via_algebra_of_isRFP_MPDO_via_fusion_of_isTP_of_posDef_fixed`
+* `isRFP_MPDO_via_algebra_of_isRFP_MPDO_via_transferRetract_of_isTP_of_posDef_fixed`
 
 from the current fusion formulation to the algebra formulation, under the same
 side hypotheses. The `IsRFP` assumption is essential here: without idempotence,
@@ -288,13 +288,13 @@ this algebra formulation.
 preservation and a positive-definite fixed point, used to invoke Wolf Theorem
 6.12) are absent from Theorem IV.13, which assumes only that `M` is in canonical
 form generating an MPDO; see `docs/paper-gaps/cpgsv17_blocked_chi_uniformity.tex`. -/
-theorem isRFP_MPDO_via_algebra_of_isRFP_MPDO_via_fusion_of_isTP_of_posDef_fixed
-    {M : MPOTensor d D} (hFusion : IsRFP_MPDO_via_fusion M)
+theorem isRFP_MPDO_via_algebra_of_isRFP_MPDO_via_transferRetract_of_isTP_of_posDef_fixed
+    {M : MPOTensor d D} (hFusion : IsRFP_MPDO_via_transferRetract M)
     (h_tp : Kraus.IsTP M.toMPSTensor) {ρ : Mat} (hρ : ρ.PosDef)
     (hρ_fix : transferMap M ρ = ρ) :
     IsRFP_MPDO_via_algebra M :=
   isRFP_MPDO_via_algebra_of_isRFP_of_isTP_of_posDef_fixed
-    (M := M) (isRFP_of_isRFP_MPDO_via_fusion hFusion) h_tp hρ hρ_fix
+    (M := M) (isRFP_of_isRFP_MPDO_via_transferRetract hFusion) h_tp hρ hρ_fix
 
 /-- The current algebra-side predicate also holds whenever the blocked adjoint
 fixed-point spaces stabilize across all positive powers. This extracts exactly

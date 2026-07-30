@@ -138,7 +138,7 @@ This rules out root-of-unity peripheral eigenvalues of $E^\dagger$, but it does
 not imply the fusion-side idempotence equation $E^2=E$.
 
 This failure is formalized by
-\leanid{MPOTensor.exists_isRFP_MPDO_via_algebra_not_isRFP_MPDO_via_fusion}.
+\leanid{MPOTensor.exists_isRFP_MPDO_via_algebra_not_isRFP_MPDO_via_transferRetract}.
 The counterexample is the phase-flip channel with Kraus operators
 $K_0=\frac35 I$ and $K_1=\frac45 Z$.  It is trace-preserving, fixes the
 positive-definite matrix $I$, and has off-diagonal eigenvalue $-\frac7{25}$.
@@ -210,7 +210,7 @@ idempotent trace identity.  It proves the fixed-point-space equation above, not
 the displayed BNT coefficient comparison.  Thus the source-faithful route to the
 fusion formulation must construct the BNT-label theorem witness from the MPDO
 tensor and then use the one-site retract criterion
-\leanid{MPOTensor.fusionIsometryData_one_iff_isRFP}.
+\leanid{MPOTensor.transferRetractData_one_iff_isRFP}.
 
 The scalar normalization step is now isolated independently of the still
 missing channel construction.  The structure

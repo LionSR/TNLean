@@ -101,7 +101,7 @@ fixed-point algebras compared in
 
 \begin{theorem}[Fusion yields a stationary algebra tower under a faithful fixed point]%
     \label{thm:mpdo_rfp_via_algebra_from_fusion}
-    \lean{MPOTensor.isRFP_MPDO_via_algebra_of_isRFP_MPDO_via_fusion_of_isTP_of_posDef_fixed}
+    \lean{MPOTensor.isRFP_MPDO_via_algebra_of_isRFP_MPDO_via_transferRetract_of_isTP_of_posDef_fixed}
     \leanok
     \uses{thm:mpdo_rfp_of_fusion, thm:mpdo_rfp_via_algebra_from_rfp}
     Assume the doubled tensor is trace-preserving and the transfer map admits a
@@ -346,7 +346,7 @@ family, and the corresponding multiplication / inclusion coefficient arrays.
 
 \begin{theorem}[The support-algebra condition does not imply fusion]%
     \label{thm:mpdo_algebra_not_imply_fusion}
-    \lean{MPOTensor.exists_isRFP_MPDO_via_algebra_not_isRFP_MPDO_via_fusion}
+    \lean{MPOTensor.exists_isRFP_MPDO_via_algebra_not_isRFP_MPDO_via_transferRetract}
     \leanok
     \uses{def:mpdo_rfp_via_algebra, def:mpdo_rfp_via_fusion,
         thm:mpdo_rfp_of_fusion,

@@ -78,6 +78,6 @@ of the blocked transfer maps.
 
 So the branch now gives an honest forward theorem and updated blueprint text,
 but it does **not** prove the requested converse
-`IsRFP_MPDO_via_algebra → IsRFP_MPDO_via_fusion`.
+`IsRFP_MPDO_via_algebra → IsRFP_MPDO_via_transferRetract`.
 The remaining gap is still the stronger coefficient/BNT layer from
 Appendix C.3–C.4.

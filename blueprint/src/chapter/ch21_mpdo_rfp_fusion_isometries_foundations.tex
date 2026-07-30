@@ -14,7 +14,7 @@ them.
 
 \begin{definition}[Transfer-map fusion-isometry datum]%
     \label{def:mpdo_fusion_isometry}
-    \lean{MPOTensor.FusionIsometryData}
+    \lean{MPOTensor.TransferRetractData}
     \leanok
     \uses{def:mpo_tensor}
     A \emph{transfer-map fusion-isometry datum} at blocked size $n$ for an
@@ -35,7 +35,7 @@ them.
 
 \begin{definition}[Fusion-isometry RFP predicate]%
     \label{def:mpdo_rfp_via_fusion}
-    \lean{MPOTensor.IsRFP_MPDO_via_fusion}
+    \lean{MPOTensor.IsRFP_MPDO_via_transferRetract}
     \leanok
     \uses{def:mpdo_fusion_isometry, def:mpo_tensor}
     An MPO tensor $M$ satisfies the \emph{fusion-isometry formulation} of the
@@ -46,7 +46,7 @@ them.
 
 \begin{theorem}[Fusion-isometry data imply transfer-map idempotence]%
     \label{thm:mpdo_rfp_of_fusion}
-    \lean{MPOTensor.FusionIsometryData.isRFP, MPOTensor.isRFP_of_isRFP_MPDO_via_fusion}
+    \lean{MPOTensor.TransferRetractData.isRFP, MPOTensor.isRFP_of_isRFP_MPDO_via_transferRetract}
     \leanok
     \uses{def:mpdo_rfp_via_fusion}
     A one-site fusion-isometry datum implies transfer-map idempotence. Hence the
@@ -70,7 +70,7 @@ them.
 
 \begin{theorem}[One-site fusion retract criterion]%
     \label{thm:mpdo_one_site_fusion_iff_rfp}
-    \lean{MPOTensor.fusionIsometryData_one_iff_isRFP}
+    \lean{MPOTensor.transferRetractData_one_iff_isRFP}
     \leanok
     \uses{def:mpdo_fusion_isometry}
     A one-site transfer-map fusion-isometry datum exists if and only if the MPO
@@ -84,7 +84,7 @@ them.
 
 \begin{theorem}[Transfer-map fusion criterion for idempotence]%
     \label{thm:mpdo_rfp_via_fusion_iff}
-    \lean{MPOTensor.isRFP_MPDO_via_fusion_iff_isRFP}
+    \lean{MPOTensor.isRFP_MPDO_via_transferRetract_iff_isRFP}
     \leanok
     \uses{def:mpdo_rfp_via_fusion}
     The fusion-isometry formulation is equivalent to transfer-map idempotence.
@@ -98,7 +98,7 @@ them.
 
 \begin{corollary}[Pure-state recovery]%
     \label{cor:mpdo_fusion_pure_recovery}
-    \lean{MPSTensor.toMPOTensor_isRFP_MPDO_via_fusion_iff_isTransferIdempotent}
+    \lean{MPSTensor.toMPOTensor_isRFP_MPDO_via_transferRetract_iff_isTransferIdempotent}
     \leanok
     \uses{thm:mpdo_rfp_via_fusion_iff}
     For the diagonal MPO associated to a pure MPS tensor, the fusion-isometry
@@ -111,7 +111,7 @@ them.
 
 \begin{theorem}[All-blocked fusion reduces to one-site fusion]%
     \label{thm:mpdo_fusion_iff_one_site_fusion}
-    \lean{MPOTensor.isRFP_MPDO_via_fusion_iff_fusionIsometryData_one}
+    \lean{MPOTensor.isRFP_MPDO_via_transferRetract_iff_transferRetractData_one}
     \leanok
     \uses{def:mpdo_rfp_via_fusion, thm:mpdo_one_site_fusion_iff_rfp,
         thm:mpdo_rfp_via_fusion_iff}
