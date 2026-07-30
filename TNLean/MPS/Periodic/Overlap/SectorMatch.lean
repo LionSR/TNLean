@@ -7,6 +7,7 @@ import TNLean.MPS.Periodic.Overlap.SectorOverlapTransport
 import TNLean.Algebra.CornerSkolemNoether
 import TNLean.Algebra.FiniteCycleCoboundary
 import TNLean.Algebra.PiTensorProductPhase
+import TNLean.Channel.PositiveConditionalExpectationDirectSum
 import TNLean.MPS.CanonicalForm.SectorComparison.NormalityChain
 import TNLean.MPS.CanonicalForm.NormalTensorGauge
 import TNLean.MPS.Chain.OneSidedInverse
@@ -590,6 +591,17 @@ private lemma isNBlkInjective_smul_of_ne
   | zero => exact Submodule.zero_mem _
   | add X Y _ _ hX hY => exact Submodule.add_mem _ hX hY
   | smul z X _ hX => exact Submodule.smul_mem _ z hX
+
+/-- Nonzero scalar multiplication preserves algebraic normality.
+
+This is used when normalizing the matched sector tensors in arXiv:1708.00029,
+Appendix A, lines 985--1002. -/
+private lemma isNormal_smul_of_ne
+    {e n : ℕ} (C : MPSTensor e n) (z : ℂ) (hz : z ≠ 0)
+    (hC : IsNormal C) :
+    IsNormal (fun i => z • C i) := by
+  obtain ⟨N, hN, hC⟩ := hC
+  exact ⟨N, hN, isNBlkInjective_smul_of_ne C z hz hC⟩
 
 /-- Full-cycle contraction step for periodic-overlap Case 3.
 
