@@ -1,0 +1,16 @@
+%% Regression: a whole-cell override is selected once after basis expansion.
+\documentclass{standalone}
+\usepackage{tenkz}
+\makeatletter
+\ExplSyntaxOn
+\file_input:n { tenkz-kernel.code.tex }
+\ExplSyntaxOff
+\makeatother
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[rows={ket}, cols=1, bonds=none,
+              frame={flat,basis={wire at (0,0), wire at (2,0)}}]
+  \tn[at=(1,1), name=X]{X}
+  \tnmark[form=enclosure]{(1,1)}{}
+\end{tenkz}
+\end{document}

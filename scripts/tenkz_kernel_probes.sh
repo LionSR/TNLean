@@ -106,6 +106,11 @@ basis_override_atoms=$(grep -c '^atom|' "$WORK/r_basis_override.tnlog" || true)
   echo "FAIL: an authored basis member did not override population" >&2
   exit 1
 }
+grep -Eq '^mark.*[|]members=atom-[0-9]+([|]|$)' \
+    "$WORK/r_basis_override_selection.tnlog" || {
+  echo "FAIL: a whole-cell override was selected more than once" >&2
+  exit 1
+}
 if ! grep -F '|addr=(1,1,1)|' "$WORK/r_basis_override.tnlog" |
      grep -F '|member=1|' | grep -Eq '[|]name=X([|]|$)'; then
   echo "FAIL: an authored member lost its normalized basis address" >&2
@@ -488,7 +493,8 @@ grep -Fq '[TKZ-FRAME-WORD]' "$WORK/n_frame_word.transcript" || {
 }
 
 for basis_case in \
-  n_frame_basis_parse n_frame_basis_kind n_frame_basis_member \
+  n_frame_basis_parse n_frame_basis_semicolon n_frame_basis_kind \
+  n_frame_basis_member \
   n_frame_basis_member_zero \
   n_frame_basis_cell_member n_frame_basis_member_cell \
   n_frame_basis_displaced_policy n_frame_basis_invalid_word \
@@ -507,6 +513,11 @@ done
 grep -Fq '[TKZ-FRAME-BASIS-PARSE]' \
   "$WORK/n_frame_basis_parse.transcript" || {
   echo "FAIL: malformed basis member lacked TKZ-FRAME-BASIS-PARSE" >&2
+  exit 1
+}
+grep -Fq '[TKZ-FRAME-BASIS-PARSE]' \
+  "$WORK/n_frame_basis_semicolon.transcript" || {
+  echo "FAIL: semicolon basis coordinate lacked TKZ-FRAME-BASIS-PARSE" >&2
   exit 1
 }
 grep -Fq '[TKZ-FRAME-BASIS-KIND]' \

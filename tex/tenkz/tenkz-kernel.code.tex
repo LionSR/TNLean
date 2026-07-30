@@ -793,7 +793,7 @@
     \prop_clear:N \l__tenkz_kernel_basis_east_prop
     \prop_clear:N \l__tenkz_kernel_basis_north_prop
   }
-\cs_new_protected:Npn \__tenkz_kernel_frame_basis:n #1
+\cs_new_protected:Npn \__tenkz_kernel_frame_basis_parse:n #1
   {
     \tl_set:Nn \l__tenkz_kernel_frame_tl {#1}
     \tl_trim_spaces:N \l__tenkz_kernel_frame_tl
@@ -867,6 +867,16 @@
         \__tenkz_kernel_basis_clear:
         \prop_remove:Nn \l__tenkz_kernel_stage_prop {basis}
       }
+  }
+\cs_new_protected:Npn \__tenkz_kernel_frame_basis:n #1
+  {
+    \tl_if_in:nnTF {#1} {;}
+      {
+        \__tenkz_kernel_basis_clear:
+        \prop_remove:Nn \l__tenkz_kernel_stage_prop {basis}
+        \msg_error:nnn {tenkz}{kernel-frame-basis-parse} {#1}
+      }
+      { \__tenkz_kernel_frame_basis_parse:n {#1} }
   }
 
 \keys_define:nn {tenkz-kernel-frame}
@@ -3999,8 +4009,11 @@
               {#1}{#2}{##1} \l_tmpb_tl
             \quark_if_no_value:NF \l_tmpb_tl
               {
-                \__tenkz_kernel_select_record:VnN
-                  \l_tmpb_tl {(#1,#2)} #3
+                \seq_if_in:NVF #3 \l_tmpb_tl
+                  {
+                    \__tenkz_kernel_select_record:VnN
+                      \l_tmpb_tl {(#1,#2)} #3
+                  }
               }
           }
       }
