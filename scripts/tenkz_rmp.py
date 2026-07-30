@@ -31,6 +31,9 @@ from tenkzlib.tnlog import ParsedLog, parse_log
 REPO = Path(__file__).resolve().parent.parent
 DEFAULT_MANIFEST = REPO / "tests" / "tenkz" / "rmp" / "manifest.toml"
 DEFAULT_VERDICT = REPO / "tests" / "tenkz" / "rmp" / "verdicts.toml"
+AUTHOR_SOURCE_HASHES = (
+    REPO / "tests" / "tenkz" / "rmp" / "author-source.sha256"
+)
 PAPER_SOURCE = REPO / "Papers" / "2011.12127" / "TN-Review-main.tex"
 FROZEN_TARGET_COUNT = 130
 BOOK_SOURCE = REPO / "docs" / "tenkz" / "rmp-benchmark.tex"
@@ -944,10 +947,115 @@ def sha256(path: Path) -> str:
     return digest.hexdigest()
 
 
+def load_author_source_hashes(path: Path) -> dict[Path, str]:
+    """Read the committed identity of the external author-source authority."""
+    try:
+        lines = path.read_text(encoding="utf-8").splitlines()
+    except FileNotFoundError:
+        fail(f"author-source hash manifest does not exist: {path}")
+    except (OSError, UnicodeError) as exc:
+        fail(f"cannot read author-source hash manifest {path}: {exc}")
+
+    hashes: dict[Path, str] = {}
+    order: list[str] = []
+    for line_number, line in enumerate(lines, 1):
+        if not line or line.startswith("#"):
+            continue
+        match = re.fullmatch(r"([0-9a-f]{64})  (.+)", line)
+        if match is None:
+            fail(
+                f"{path}:{line_number}: expected '<sha256>  <relative .tex path>'"
+            )
+        source = relative_repo_path(
+            match.group(2),
+            field=f"{path}:{line_number}",
+            suffix=".tex",
+        )
+        if source in hashes:
+            fail(f"{path}:{line_number}: duplicate author source {source}")
+        hashes[source] = match.group(1)
+        order.append(source.as_posix())
+    if order != sorted(order):
+        fail(f"author-source hash manifest is not path-sorted: {path}")
+    if not hashes:
+        fail(f"author-source hash manifest is empty: {path}")
+    return hashes
+
+
+def verify_author_source_tree(
+    targets: Sequence[Target],
+    source_root: Path,
+    *,
+    hashes_path: Path = AUTHOR_SOURCE_HASHES,
+    snapshot_root: Path | None = None,
+) -> int:
+    """Verify the external authority and optionally snapshot the exact bytes."""
+    if not source_root.is_dir():
+        fail(f"source root does not exist: {source_root}")
+    hashes = load_author_source_hashes(hashes_path)
+    cited = {
+        target.author_source
+        for target in targets
+        if target.author_source is not None
+    }
+    recorded = set(hashes)
+    if recorded != cited:
+        missing = sorted(path.as_posix() for path in cited - recorded)
+        extra = sorted(path.as_posix() for path in recorded - cited)
+        details: list[str] = []
+        if missing:
+            details.append("missing: " + ", ".join(missing))
+        if extra:
+            details.append("uncited: " + ", ".join(extra))
+        fail(
+            "author-source hash manifest disagrees with manifest.toml ("
+            + "; ".join(details)
+            + ")"
+        )
+    for source in sorted(cited, key=lambda item: item.as_posix()):
+        candidate = source_root / source
+        try:
+            payload = candidate.read_bytes()
+        except FileNotFoundError:
+            fail(f"author source does not exist: {candidate}")
+        except OSError as exc:
+            fail(f"cannot read author source {candidate}: {exc}")
+        actual = hashlib.sha256(payload).hexdigest()
+        if actual != hashes[source]:
+            fail(
+                f"author source hash mismatch: {source} "
+                f"(expected {hashes[source]}, got {actual})"
+            )
+        if snapshot_root is not None:
+            snapshot = snapshot_root / source
+            snapshot.parent.mkdir(parents=True, exist_ok=True)
+            snapshot.write_bytes(payload)
+    return len(cited)
+
+
+def pairing_digest(targets: Sequence[Target]) -> str:
+    """Bind pairing judgments to source identities and extraction boundaries."""
+    digest = hashlib.sha256()
+    digest.update(sha256(AUTHOR_SOURCE_HASHES).encode("ascii"))
+    digest.update(b"\n")
+    for target in sorted(targets, key=lambda item: item.id):
+        fields = (
+            target.id,
+            target.author_source.as_posix() if target.author_source else "",
+            target.author_lines or "",
+            target.extraction_override or "",
+            "context-only" if target.paper_context_only else "paired",
+        )
+        digest.update("\0".join(fields).encode("utf-8"))
+        digest.update(b"\n")
+    return digest.hexdigest()
+
+
 def campaign_digest(targets: Sequence[Target]) -> str:
     """Hash every committed input whose change invalidates visual verdicts."""
     paths = {
         DEFAULT_MANIFEST,
+        AUTHOR_SOURCE_HASHES,
         PAPER_SOURCE,
         BOOK_SOURCE,
         REPO / "docs" / "tenkz" / "tenkzrmpbenchmark.sty",
@@ -1015,7 +1123,12 @@ def load_verdicts(targets: Sequence[Target]) -> dict[str, TargetVerdict]:
         raw = tomllib.loads(DEFAULT_VERDICT.read_text(encoding="utf-8"))
     except (OSError, UnicodeError, tomllib.TOMLDecodeError) as exc:
         fail(f"cannot read verdict ledger {DEFAULT_VERDICT}: {exc}")
-    allowed_top = {"schema_version", "campaign_sha256", "verdict"}
+    allowed_top = {
+        "schema_version",
+        "pairing_sha256",
+        "campaign_sha256",
+        "verdict",
+    }
     if not set(raw) <= allowed_top:
         fail(f"verdict ledger top-level keys must be within {sorted(allowed_top)}")
     if raw.get("schema_version") != 1:
@@ -1101,6 +1214,16 @@ def load_verdicts(targets: Sequence[Target]) -> dict[str, TargetVerdict]:
     missing_ids = sorted(set(by_target) - set(verdicts))
     if missing_ids:
         fail("targets without a verdict stanza: " + ", ".join(missing_ids))
+    recorded_pairing = raw.get("pairing_sha256")
+    if not isinstance(recorded_pairing, str):
+        fail("verdict ledger pairing_sha256 must be a string")
+    current_pairing = pairing_digest(targets)
+    if recorded_pairing != current_pairing:
+        fail(
+            "stale pairing verdicts; author-source identities or extraction "
+            "boundaries changed since review "
+            f"(recorded {recorded_pairing[:12]}, current {current_pairing[:12]})"
+        )
     recorded_campaign = raw.get("campaign_sha256")
     if isinstance(recorded_campaign, str):
         current_campaign = campaign_digest(targets)
@@ -1764,10 +1887,22 @@ def main() -> int:
         # fail in seconds, not after 130 builds.
         verdicts = load_verdicts(targets)
         validate_verdict_consistency(targets, verdicts)
-        if args.command == "compare" and not args.source_root.is_dir():
-            fail(f"source root does not exist: {args.source_root}")
+        if args.command == "compare":
+            source_root = args.source_root.resolve()
         with tempfile.TemporaryDirectory(prefix="tenkz-rmp-") as temporary:
             work = Path(temporary)
+            if args.command == "compare":
+                source_snapshot = work / "author-source"
+                verified = verify_author_source_tree(
+                    targets,
+                    source_root,
+                    snapshot_root=source_snapshot,
+                )
+                print(
+                    "PASS: snapshotted "
+                    f"{verified} verified author-source authority file(s) against "
+                    f"{AUTHOR_SOURCE_HASHES.relative_to(REPO)}"
+                )
             results = compile_targets(selected, work, jobs)
             if args.command == "check":
                 counts = verdict_histogram(verdicts)
@@ -1798,7 +1933,7 @@ def main() -> int:
                 print(f"PASS: rendered {png_count} target/book page(s) to {destination}")
                 print(f"Checksums: {destination / 'SHA256SUMS'}")
                 return 0
-            comparison = compile_comparison(results, args.source_root.resolve(), work, jobs)
+            comparison = compile_comparison(results, source_snapshot, work, jobs)
             install_pdf(comparison, COMPARE_OUTPUT)
             print(f"PASS: wrote source-only comparison book to {COMPARE_OUTPUT}")
             return 0

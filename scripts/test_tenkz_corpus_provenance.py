@@ -5,15 +5,25 @@ from __future__ import annotations
 
 import csv
 import os
+import re
 import subprocess
 import tempfile
 from pathlib import Path
 
+import tenkz_rmp
 from tenkz_audit import Audit
 from tenkz_rmp import (
+    AUTHOR_SOURCE_HASHES,
+    DEFAULT_MANIFEST,
+    DEFAULT_VERDICT,
+    RMPError,
     ink_environment_problems,
+    load_author_source_hashes,
+    load_manifest,
     rendered_ink_environment_families,
+    sha256,
     structural_capability_problems,
+    verify_author_source_tree,
 )
 from tenkzlib.tnlog import parse_log
 
@@ -155,9 +165,118 @@ def test_ink_environment_owner() -> None:
         raise AssertionError("compiled kernel owner was omitted")
 
 
+def test_rmp_author_source_identity() -> None:
+    targets = load_manifest(DEFAULT_MANIFEST)
+    cited = sorted(
+        {
+            target.author_source
+            for target in targets
+            if target.author_source is not None
+        },
+        key=lambda path: path.as_posix(),
+    )
+    committed = sorted(
+        load_author_source_hashes(AUTHOR_SOURCE_HASHES),
+        key=lambda path: path.as_posix(),
+    )
+    if committed != cited:
+        raise AssertionError(
+            "committed author-source hashes disagree with manifest.toml"
+        )
+    with tempfile.TemporaryDirectory(prefix="tenkz-rmp-author-source-") as tmp:
+        work = Path(tmp)
+        source_root = work / "RMP_TIKZ_SOURCE_CODE"
+        for index, source in enumerate(cited, 1):
+            candidate = source_root / source
+            candidate.parent.mkdir(parents=True, exist_ok=True)
+            candidate.write_text(f"author source {index}\n", encoding="utf-8")
+        hashes = work / "author-source.sha256"
+        hashes.write_text(
+            "".join(
+                f"{sha256(source_root / source)}  {source.as_posix()}\n"
+                for source in cited
+            ),
+            encoding="utf-8",
+        )
+        snapshot_root = work / "verified-snapshot"
+        verified = verify_author_source_tree(
+            targets,
+            source_root,
+            hashes_path=hashes,
+            snapshot_root=snapshot_root,
+        )
+        if verified != len(cited):
+            raise AssertionError("author-source verifier lost a cited source")
+
+        changed = source_root / cited[0]
+        original = changed.read_text(encoding="utf-8")
+        snapshotted = snapshot_root / cited[0]
+        if snapshotted.read_text(encoding="utf-8") != original:
+            raise AssertionError("author-source snapshot changed the verified bytes")
+        changed.write_text("different authority\n", encoding="utf-8")
+        if snapshotted.read_text(encoding="utf-8") != original:
+            raise AssertionError("author-source snapshot followed the live tree")
+        try:
+            verify_author_source_tree(targets, source_root, hashes_path=hashes)
+        except RMPError as exc:
+            if "author source hash mismatch" not in str(exc):
+                raise AssertionError(
+                    f"changed author source produced the wrong failure: {exc}"
+                ) from exc
+        else:
+            raise AssertionError("changed author source passed identity verification")
+
+        changed.write_text(original, encoding="utf-8")
+        hashes.write_text(
+            hashes.read_text(encoding="utf-8")
+            + f"{'0' * 64}  uncited.tex\n",
+            encoding="utf-8",
+        )
+        try:
+            verify_author_source_tree(targets, source_root, hashes_path=hashes)
+        except RMPError as exc:
+            if "uncited: uncited.tex" not in str(exc):
+                raise AssertionError(
+                    f"uncited hash entry produced the wrong failure: {exc}"
+                ) from exc
+        else:
+            raise AssertionError("uncited author-source hash entry was accepted")
+
+
+def test_rmp_pairing_identity() -> None:
+    targets = load_manifest(DEFAULT_MANIFEST)
+    with tempfile.TemporaryDirectory(prefix="tenkz-rmp-pairing-") as tmp:
+        stale = Path(tmp) / "verdicts.toml"
+        text = DEFAULT_VERDICT.read_text(encoding="utf-8")
+        stale.write_text(
+            re.sub(
+                r'(?m)^pairing_sha256 = "[0-9a-f]{64}"$',
+                f'pairing_sha256 = "{"0" * 64}"',
+                text,
+                count=1,
+            ),
+            encoding="utf-8",
+        )
+        original = tenkz_rmp.DEFAULT_VERDICT
+        tenkz_rmp.DEFAULT_VERDICT = stale
+        try:
+            tenkz_rmp.load_verdicts(targets)
+        except RMPError as exc:
+            if "stale pairing verdicts" not in str(exc):
+                raise AssertionError(
+                    f"stale pairing digest produced the wrong failure: {exc}"
+                ) from exc
+        else:
+            raise AssertionError("stale pairing digest was accepted")
+        finally:
+            tenkz_rmp.DEFAULT_VERDICT = original
+
+
 def main() -> int:
     test_kernel_capability_owner()
     test_ink_environment_owner()
+    test_rmp_author_source_identity()
+    test_rmp_pairing_identity()
     with PROVENANCE.open(encoding="utf-8", newline="") as stream:
         rows = list(csv.reader(stream, dialect="excel-tab"))
 
