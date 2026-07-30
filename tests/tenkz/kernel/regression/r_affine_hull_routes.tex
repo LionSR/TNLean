@@ -1,0 +1,115 @@
+%% Regression: hull enclosures and side routes retain both vectors of a
+%% sheared plane carrier, rather than reducing the carrier to one turn angle.
+\documentclass{standalone}
+\usepackage{tenkz}
+\makeatletter
+\ExplSyntaxOn
+\file_input:n { tenkz-kernel.code.tex }
+\fp_new:N \l__tenkz_test_route_x_fp
+\fp_new:N \l__tenkz_test_route_y_fp
+\tl_new:N \l__tenkz_test_route_name_tl
+\cs_new_eq:NN
+  \__tenkz_test_route_measure:n
+  \__tenkz_kernel_r_route_measure:n
+\cs_set_protected:Npn \__tenkz_kernel_r_route_measure:n #1
+  {
+    \__tenkz_test_route_measure:n {#1}
+    \__tenkz_model_get:nnN {#1} {name} \l__tenkz_test_route_name_tl
+    \tl_if_in:VnT \l__tenkz_test_route_name_tl {affine-}
+      {
+        \fp_compare:nNnF { abs(\l__tenkz_kernel_ro_ex_tl - 1) }
+          < {0.000001}
+          { \errmessage{an~affine~route~lost~its~east~basis~vector} }
+        \fp_compare:nNnF { abs(\l__tenkz_kernel_ro_ey_tl) }
+          < {0.000001}
+          { \errmessage{an~affine~route~tilted~its~east~basis~vector} }
+        \fp_compare:nNnF { abs(\l__tenkz_kernel_ro_nx_tl - 0.45) }
+          < {0.000001}
+          { \errmessage{an~affine~route~lost~the~plane~shear} }
+        \fp_compare:nNnF { abs(\l__tenkz_kernel_ro_ny_tl - 0.60) }
+          < {0.000001}
+          { \errmessage{an~affine~route~lost~the~plane~rise} }
+      }
+  }
+\cs_new_eq:NN
+  \__tenkz_test_route_point:nn
+  \__tenkz_kernel_r_route_pt:nn
+\cs_set_protected:Npn \__tenkz_kernel_r_route_pt:nn #1#2
+  {
+    \fp_set:Nn \l__tenkz_test_route_x_fp
+      {
+        \l__tenkz_kernel_ro_ex_tl * (#1)
+        + \l__tenkz_kernel_ro_nx_tl * (#2)
+      }
+    \fp_set:Nn \l__tenkz_test_route_y_fp
+      {
+        \l__tenkz_kernel_ro_ey_tl * (#1)
+        + \l__tenkz_kernel_ro_ny_tl * (#2)
+      }
+    \__tenkz_test_route_point:nn {#1}{#2}
+    \fp_compare:nNnF
+      { abs(\l__tenkz_kernel_ro_u_fp - \l__tenkz_test_route_x_fp) }
+      < {0.000001}
+      { \errmessage{a~route~point~lost~its~affine~x~projection} }
+    \fp_compare:nNnF
+      { abs(\l__tenkz_kernel_ro_v_fp - \l__tenkz_test_route_y_fp) }
+      < {0.000001}
+      { \errmessage{a~route~point~lost~its~affine~y~projection} }
+  }
+\cs_new_protected:Npn \__tenkz_test_basis_round_trip:
+  {
+    \__tenkz_geom_basis_apply:nnnnnnNN
+      {1}{0}{0.45}{0.60}{2.25}{-1.5} \l_tmpa_tl \l_tmpb_tl
+    \__tenkz_geom_basis_unapply:nnnnnnNN
+      {1}{0}{0.45}{0.60}{\l_tmpa_tl}{\l_tmpb_tl}
+      \l_tmpc_tl \l_tmpd_tl
+    \fp_compare:nNnF { abs(\l_tmpc_tl - 2.25) } < {0.000001}
+      { \errmessage{the~affine~basis~lost~the~east~coordinate} }
+    \fp_compare:nNnF { abs(\l_tmpd_tl + 1.5) } < {0.000001}
+      { \errmessage{the~affine~basis~lost~the~north~coordinate} }
+    \__tenkz_geom_basis_dual:nnnnNNNN
+      {1}{0}{0.45}{0.60} \l_tmpa_tl \l_tmpb_tl \l_tmpc_tl \l_tmpd_tl
+    \fp_compare:nNnF { abs(\l_tmpa_tl - 1) } < {0.000001}
+      { \errmessage{the~east~dual~does~not~read~the~east~basis} }
+    \fp_compare:nNnF { abs(\l_tmpb_tl + 0.75) } < {0.000001}
+      { \errmessage{the~east~dual~lost~the~plane~shear} }
+    \fp_compare:nNnF { abs(\l_tmpc_tl) } < {0.000001}
+      { \errmessage{the~north~dual~does~not~annihilate~east} }
+    \fp_compare:nNnF { abs(\l_tmpd_tl - 1.6666666666667) } < {0.000001}
+      { \errmessage{the~north~dual~does~not~read~the~north~basis} }
+  }
+\ExplSyntaxOff
+\makeatother
+\begin{document}
+\tenkzkernel
+\ExplSyntaxOn
+\__tenkz_test_basis_round_trip:
+\ExplSyntaxOff
+\begin{tenkz}[rows={wire,wire}, cols=2, frame=plane, bonds=none]
+  \tn[at=(1,1), skin=box]{A}
+  \tn[at=(1,2), skin=box]{B}
+  \tn[at=(2,1), skin=box]{C}
+  \tn[at=(2,2), skin=box]{D}
+  \tnmark[form=enclosure]{(1,1)..(2,2)}{$H$}
+  \tnwire[name=affine-north, closed,
+          route={n of (1,1) .. (2,2)}]
+\end{tenkz}
+\quad
+\begin{tenkz}[rows={wire,wire}, cols=2, frame=plane, bonds=none]
+  \tn[at=(1,1), skin=box]{A}
+  \tn[at=(1,2), skin=box]{B}
+  \tn[at=(2,1), skin=box]{C}
+  \tn[at=(2,2), skin=box]{D}
+  \tnwire[name=affine-east, closed,
+          route={e of (1,1) .. (2,2)}]
+\end{tenkz}
+\quad
+\begin{tenkz}[rows={wire,wire}, cols=2, frame=plane, bonds=none]
+  \tn[at=(1,1), skin=box]{A}
+  \tn[at=(1,2), skin=box]{B}
+  \tn[at=(2,1), skin=box]{C}
+  \tn[at=(2,2), skin=box]{D}
+  \tnwire[name=affine-all, closed,
+          route={all of (1,1) .. (2,2)}]
+\end{tenkz}
+\end{document}

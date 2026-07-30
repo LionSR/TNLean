@@ -12,10 +12,12 @@
 \ExplSyntaxOn
 \prop_clear:N \l__tenkz_kernel_ro_legs_prop
 \tl_set:Nn \l__tenkz_kernel_ro_lane_tl {2}
-\tl_set:Nn \l__tenkz_kernel_ro_tau_tl {0}
+\tl_set:Nn \l__tenkz_kernel_ro_vx_tl {0}
+\tl_set:Nn \l__tenkz_kernel_ro_vy_tl {1}
 \__tenkz_kernel_r_route_leg:nn {{n}{1}{1}} {wire-1}
 \tl_set:Nn \l__tenkz_kernel_ro_lane_tl {-1}
-\tl_set:Nn \l__tenkz_kernel_ro_tau_tl {90}
+\tl_set:Nn \l__tenkz_kernel_ro_vx_tl {-1}
+\tl_set:Nn \l__tenkz_kernel_ro_vy_tl {0}
 \__tenkz_kernel_r_route_leg:nn {{n}{1}{1}} {wire-2}
 \prop_map_inline:Nn \l__tenkz_kernel_ro_legs_prop
   {

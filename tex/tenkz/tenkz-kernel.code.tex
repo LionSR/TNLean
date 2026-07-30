@@ -4518,6 +4518,20 @@
 % is what keeps a page-axis contour a page-axis contour.
 \fp_new:N \l__tenkz_kernel_hull_cos_fp
 \fp_new:N \l__tenkz_kernel_hull_sin_fp
+\tl_new:N \l__tenkz_kernel_hull_ex_tl
+\tl_new:N \l__tenkz_kernel_hull_ey_tl
+\tl_new:N \l__tenkz_kernel_hull_nx_tl
+\tl_new:N \l__tenkz_kernel_hull_ny_tl
+\tl_new:N \l__tenkz_kernel_hull_ux_tl
+\tl_new:N \l__tenkz_kernel_hull_uy_tl
+\tl_new:N \l__tenkz_kernel_hull_vx_tl
+\tl_new:N \l__tenkz_kernel_hull_vy_tl
+\tl_new:N \l__tenkz_kernel_hull_basis_row_tl
+\tl_new:N \l__tenkz_kernel_hull_basis_col_tl
+\tl_new:N \l__tenkz_kernel_hull_basis_parent_tl
+\tl_new:N \l__tenkz_kernel_hull_basis_record_tl
+\bool_new:N \l__tenkz_kernel_hull_chart_bool
+\bool_new:N \l__tenkz_kernel_hull_basis_at_bool
 \cs_new_protected:Npn \__tenkz_kernel_hull_turn:NN #1#2
   {
     \fp_zero:N \l__tenkz_kernel_hull_cos_fp
@@ -4536,6 +4550,87 @@
           { atand( \l__tenkz_kernel_hull_sin_fp ,
                    \l__tenkz_kernel_hull_cos_fp ) }
       }
+  }
+
+% The complete east/north basis of a selection.  Affine pictures have one
+% global linear part.  Circle selections retain the established mean tangent,
+% represented here as an orthonormal pair so all downstream consumers use the
+% same state shape.
+\cs_new_protected:Npn \__tenkz_kernel_hull_basis:NNNNN #1#2#3#4#5
+  {
+    \bool_set_true:N \l__tenkz_kernel_hull_chart_bool
+    \seq_map_inline:Nn #1
+      {
+        \__tenkz_kernel_r_atom_rc:nNNN {##1}
+          \l__tenkz_kernel_hull_basis_row_tl
+          \l__tenkz_kernel_hull_basis_col_tl
+          \l__tenkz_kernel_hull_basis_at_bool
+        \bool_if:NF \l__tenkz_kernel_hull_basis_at_bool
+          {
+            \__tenkz_model_get:nnN {##1} {cluster-of}
+              \l__tenkz_kernel_hull_basis_parent_tl
+            \quark_if_no_value:NTF \l__tenkz_kernel_hull_basis_parent_tl
+              { \bool_set_false:N \l__tenkz_kernel_hull_chart_bool }
+              {
+                \prop_get:NVN \l__tenkz_kernel_named_prop
+                  \l__tenkz_kernel_hull_basis_parent_tl
+                  \l__tenkz_kernel_hull_basis_record_tl
+                \quark_if_no_value:NTF \l__tenkz_kernel_hull_basis_record_tl
+                  { \bool_set_false:N \l__tenkz_kernel_hull_chart_bool }
+                  {
+                    \exp_args:NV \__tenkz_kernel_r_atom_rc:nNNN
+                      \l__tenkz_kernel_hull_basis_record_tl
+                      \l__tenkz_kernel_hull_basis_row_tl
+                      \l__tenkz_kernel_hull_basis_col_tl
+                      \l__tenkz_kernel_hull_basis_at_bool
+                    \bool_if:NF \l__tenkz_kernel_hull_basis_at_bool
+                      { \bool_set_false:N \l__tenkz_kernel_hull_chart_bool }
+                  }
+              }
+          }
+      }
+    \__tenkz_geom_frame_if_affine:nTF {kpic}
+      {
+        \bool_if:NTF \l__tenkz_kernel_hull_chart_bool
+          { \__tenkz_geom_local_basis:nnnNNNN {kpic}{1}{1} #2#3#4#5 }
+          { \__tenkz_kernel_hull_basis_orthogonal:NNNNN #1#2#3#4#5 }
+      }
+      { \__tenkz_kernel_hull_basis_orthogonal:NNNNN #1#2#3#4#5 }
+  }
+\cs_new_protected:Npn \__tenkz_kernel_hull_basis_orthogonal:NNNNN
+    #1#2#3#4#5
+  {
+    \__tenkz_kernel_hull_turn:NN #1 \l__tenkz_kernel_hull_turn_tl
+    \tl_set:Ne #2
+      { \fp_eval:n { cosd(\l__tenkz_kernel_hull_turn_tl) } }
+    \tl_set:Ne #3
+      { \fp_eval:n { sind(\l__tenkz_kernel_hull_turn_tl) } }
+    \tl_set:Ne #4
+      { \fp_eval:n { -sind(\l__tenkz_kernel_hull_turn_tl) } }
+    \tl_set:Ne #5
+      { \fp_eval:n { cosd(\l__tenkz_kernel_hull_turn_tl) } }
+  }
+
+\cs_new_protected:Npn \__tenkz_kernel_hull_basis_dual:
+  {
+    \__tenkz_geom_basis_dual:nnnnNNNN
+      { \l__tenkz_kernel_hull_ex_tl }
+      { \l__tenkz_kernel_hull_ey_tl }
+      { \l__tenkz_kernel_hull_nx_tl }
+      { \l__tenkz_kernel_hull_ny_tl }
+      \l__tenkz_kernel_hull_ux_tl
+      \l__tenkz_kernel_hull_uy_tl
+      \l__tenkz_kernel_hull_vx_tl
+      \l__tenkz_kernel_hull_vy_tl
+  }
+
+% Maximum local coordinate against one row of the dual basis, padded in the
+% same carrier-local units.
+\cs_new_protected:Npn \__tenkz_kernel_hull_reach_linear:NnnnN #1#2#3#4#5
+  {
+    \__tenkz_geom_support_max_linear:nnnN
+      { \cs_to_str:N #1 } {#2} {#3} #5
+    \tl_set:Ne #5 { \fp_eval:n { #5 + (#4) } }
   }
 \tl_new:N \l__tenkz_kernel_r_tau_tl
 \tl_new:N \l__tenkz_kernel_r_turnopt_tl
@@ -4608,31 +4703,48 @@
 \fp_new:N \l__tenkz_kernel_ro_yb_fp
 \fp_new:N \l__tenkz_kernel_ro_u_fp
 \fp_new:N \l__tenkz_kernel_ro_v_fp
-\tl_new:N \l__tenkz_kernel_ro_tau_tl
+\tl_new:N \l__tenkz_kernel_ro_gx_tl
+\tl_new:N \l__tenkz_kernel_ro_gy_tl
+\tl_new:N \l__tenkz_kernel_ro_ex_tl
+\tl_new:N \l__tenkz_kernel_ro_ey_tl
+\tl_new:N \l__tenkz_kernel_ro_nx_tl
+\tl_new:N \l__tenkz_kernel_ro_ny_tl
+\tl_new:N \l__tenkz_kernel_ro_ux_tl
+\tl_new:N \l__tenkz_kernel_ro_uy_tl
+\tl_new:N \l__tenkz_kernel_ro_vx_tl
+\tl_new:N \l__tenkz_kernel_ro_vy_tl
+\tl_new:N \l__tenkz_kernel_ro_apply_x_tl
+\tl_new:N \l__tenkz_kernel_ro_apply_y_tl
 \prop_new:N \l__tenkz_kernel_ro_lane_prop    % wire id -> lane coordinate
-\prop_new:N \l__tenkz_kernel_ro_box_prop     % wire id -> {x}{xb}{y}{yb}{tau}
-\prop_new:N \l__tenkz_kernel_ro_legs_prop    % leg path id -> {{lane}{tau}},...
+\prop_new:N \l__tenkz_kernel_ro_box_prop     % id -> {u}{ub}{v}{vb}{E}{N}
+\prop_new:N \l__tenkz_kernel_ro_legs_prop    % leg id -> {{lane}{gx}{gy}},...
 \prop_new:N \l__tenkz_kernel_ro_taken_prop   % side | selector -> next lane
 \prop_new:N \l__tenkz_kernel_ro_family_prop  % side | selector -> string ids
 
-% A route stands in the axes of the selection it travels, which is the rule a
-% contour over that same selection already obeys: a quantity measured against
-% a record is measured in that record's axes.  Its box, its lane and the ends
-% it compares against them are therefore held in those axes and carried to the
-% page at the last moment, through the one carry the axes rule owns -- taken
-% forward here and backward below.  At zero turn either is the identity, token
-% for token, which is why a flat picture does not know this section exists.
-\cs_new_protected:Npn \__tenkz_kernel_ro_unturn:NN #1#2
+% A route stands in the complete E,N basis of the selection it travels.  Its
+% box, lane, and endpoint comparisons stay in those coordinates until the
+% final carry to the page.  This state boundary preserves shear; a scalar turn
+% cannot.
+\cs_new_protected:Npn \__tenkz_kernel_ro_basis_apply:NN #1#2
   {
-    \tl_set_eq:NN \l__tenkz_kernel_r_tau_tl \l__tenkz_kernel_ro_tau_tl
-    \__tenkz_kernel_r_unturn:NN #1#2
+    \__tenkz_geom_basis_apply:nnnnnnNN
+      { \l__tenkz_kernel_ro_ex_tl } { \l__tenkz_kernel_ro_ey_tl }
+      { \l__tenkz_kernel_ro_nx_tl } { \l__tenkz_kernel_ro_ny_tl }
+      {#1}{#2}
+      \l__tenkz_kernel_ro_apply_x_tl \l__tenkz_kernel_ro_apply_y_tl
+    \fp_set:Nn #1 { \l__tenkz_kernel_ro_apply_x_tl }
+    \fp_set:Nn #2 { \l__tenkz_kernel_ro_apply_y_tl }
   }
 % a pair already on the page, read in the route's axes
-\cs_new_protected:Npn \__tenkz_kernel_ro_turn:NN #1#2
+\cs_new_protected:Npn \__tenkz_kernel_ro_basis_unapply:NN #1#2
   {
-    \tl_set:Ne \l__tenkz_kernel_r_tau_tl
-      { \fp_eval:n { - \l__tenkz_kernel_ro_tau_tl } }
-    \__tenkz_kernel_r_unturn:NN #1#2
+    \__tenkz_geom_basis_unapply:nnnnnnNN
+      { \l__tenkz_kernel_ro_ex_tl } { \l__tenkz_kernel_ro_ey_tl }
+      { \l__tenkz_kernel_ro_nx_tl } { \l__tenkz_kernel_ro_ny_tl }
+      {#1}{#2}
+      \l__tenkz_kernel_ro_apply_x_tl \l__tenkz_kernel_ro_apply_y_tl
+    \fp_set:Nn #1 { \l__tenkz_kernel_ro_apply_x_tl }
+    \fp_set:Nn #2 { \l__tenkz_kernel_ro_apply_y_tl }
   }
 
 \msg_new:nnn {tenkz}{kernel-route-noroute}
@@ -4974,8 +5086,15 @@
           \l__tenkz_kernel_ro_mem_seq \l__tenkz_kernel_ro_obst_seq
         \__tenkz_kernel_hull_scale:NN
           \l__tenkz_kernel_ro_mem_seq \l__tenkz_kernel_ro_scale_tl
-        \__tenkz_kernel_hull_turn:NN
-          \l__tenkz_kernel_ro_mem_seq \l__tenkz_kernel_ro_tau_tl
+        \__tenkz_kernel_hull_basis:NNNNN
+          \l__tenkz_kernel_ro_mem_seq
+          \l__tenkz_kernel_ro_ex_tl \l__tenkz_kernel_ro_ey_tl
+          \l__tenkz_kernel_ro_nx_tl \l__tenkz_kernel_ro_ny_tl
+        \__tenkz_geom_basis_dual:nnnnNNNN
+          { \l__tenkz_kernel_ro_ex_tl } { \l__tenkz_kernel_ro_ey_tl }
+          { \l__tenkz_kernel_ro_nx_tl } { \l__tenkz_kernel_ro_ny_tl }
+          \l__tenkz_kernel_ro_ux_tl \l__tenkz_kernel_ro_uy_tl
+          \l__tenkz_kernel_ro_vx_tl \l__tenkz_kernel_ro_vy_tl
         % Only the complete generated lane is model-proven disjoint from its
         % siblings.  An address-bearing route adds arbitrary segments between
         % its endpoints and the hull, and those segments still need geometric
@@ -5017,21 +5136,28 @@
               }
           }
         \__tenkz_kernel_r_route_lane_take:
-        \__tenkz_kernel_r_route_edge:nnN
-          { \l__tenkz_kernel_ro_tau_tl       } { } \l__tenkz_kernel_ro_xb_fp
-        \__tenkz_kernel_r_route_edge:nnN
-          { \l__tenkz_kernel_ro_tau_tl + 90  } { } \l__tenkz_kernel_ro_yb_fp
-        \__tenkz_kernel_r_route_edge:nnN
-          { \l__tenkz_kernel_ro_tau_tl + 180 } {-} \l__tenkz_kernel_ro_x_fp
-        \__tenkz_kernel_r_route_edge:nnN
-          { \l__tenkz_kernel_ro_tau_tl + 270 } {-} \l__tenkz_kernel_ro_y_fp
+        \__tenkz_kernel_r_route_edge:nnnN
+          { \l__tenkz_kernel_ro_ux_tl }
+          { \l__tenkz_kernel_ro_uy_tl } { } \l__tenkz_kernel_ro_xb_fp
+        \__tenkz_kernel_r_route_edge:nnnN
+          { \l__tenkz_kernel_ro_vx_tl }
+          { \l__tenkz_kernel_ro_vy_tl } { } \l__tenkz_kernel_ro_yb_fp
+        \__tenkz_kernel_r_route_edge:nnnN
+          { -\l__tenkz_kernel_ro_ux_tl }
+          { -\l__tenkz_kernel_ro_uy_tl } {-} \l__tenkz_kernel_ro_x_fp
+        \__tenkz_kernel_r_route_edge:nnnN
+          { -\l__tenkz_kernel_ro_vx_tl }
+          { -\l__tenkz_kernel_ro_vy_tl } {-} \l__tenkz_kernel_ro_y_fp
         \prop_put:Nne \l__tenkz_kernel_ro_box_prop {#1}
           {
             { \fp_eval:n { \l__tenkz_kernel_ro_x_fp  } }
             { \fp_eval:n { \l__tenkz_kernel_ro_xb_fp } }
             { \fp_eval:n { \l__tenkz_kernel_ro_y_fp  } }
             { \fp_eval:n { \l__tenkz_kernel_ro_yb_fp } }
-            { \tl_use:N  \l__tenkz_kernel_ro_tau_tl  }
+            { \tl_use:N  \l__tenkz_kernel_ro_ex_tl  }
+            { \tl_use:N  \l__tenkz_kernel_ro_ey_tl  }
+            { \tl_use:N  \l__tenkz_kernel_ro_nx_tl  }
+            { \tl_use:N  \l__tenkz_kernel_ro_ny_tl  }
           }
         \prop_put:Nne \l__tenkz_kernel_ro_lane_prop {#1}
           {
@@ -5050,17 +5176,18 @@
       }
   }
 % one edge of the offset hull, pushed out by the lanes already standing there
-\cs_new_protected:Npn \__tenkz_kernel_r_route_edge:nnN #1#2#3
+\cs_new_protected:Npn \__tenkz_kernel_r_route_edge:nnnN #1#2#3#4
   {
     % one clearance is the hull's own, the next is this route's, and one more
     % for every route already standing over the same selection
-    \__tenkz_kernel_hull_reach:NnnN \l__tenkz_kernel_ro_obst_seq {#1}
+    \__tenkz_kernel_hull_reach_linear:NnnnN
+      \l__tenkz_kernel_ro_obst_seq {#1}{#2}
       {
         ( \l__tenkz_kernel_ro_lane_tl + 2 )
         * \__tenkz_metric_ratio:n {daylight} * \l__tenkz_kernel_ro_scale_tl
       }
       \l__tenkz_kernel_ro_reach_tl
-    \fp_set:Nn #3 { #2 \l__tenkz_kernel_ro_reach_tl }
+    \fp_set:Nn #4 { #3 \l__tenkz_kernel_ro_reach_tl }
   }
 
 % `crossing of a and b` is where the two strings actually meet, so the
@@ -6088,7 +6215,7 @@
             \clist_map_inline:Vn \l__tenkz_kernel_leg_reach_tl
               {
                 \tl_set:Nn \l__tenkz_kernel_ro_row_tl {##1}
-                \exp_last_unbraced:NV \__tenkz_kernel_r_leg_lane:nn
+                \exp_last_unbraced:NV \__tenkz_kernel_r_leg_lane:nnn
                   \l__tenkz_kernel_ro_row_tl
               }
           }
@@ -6137,18 +6264,18 @@
           }
       }
   }
-% How far along its own direction a leg must run to meet a route's lane: #1
-% the lane, #2 the axes it was measured in.  The lane is a coordinate along
-% the route's north, so the gap between this atom and it is measured across
-% that same north, and the leg spends only as much of its length crossing that
-% gap as its direction lies along it.  Down the page, over a flat selection,
-% both readings are the old vertical delta.  A leg lying in the lane's own
-% line never meets it however far it runs, and is left at its natural length
-% for the crossing police to refuse.
-\cs_new_protected:Npn \__tenkz_kernel_r_leg_lane:nn #1#2
+% How far along its own page direction a leg must run to meet a route lane.
+% #1 is the lane coordinate and (#2,#3) is the dual-basis covector which reads
+% that coordinate.  This line/covector intersection is valid for rotation,
+% shear, and unequal scale alike.
+\cs_new_protected:Npn \__tenkz_kernel_r_leg_lane:nnn #1#2#3
   {
     \fp_compare:nNnF
-      { cosd( \l__tenkz_kernel_leg_dir_tl - (#2) - 90 ) } = {0}
+      {
+        (#2) * cosd( \l__tenkz_kernel_leg_dir_tl )
+        + (#3) * sind( \l__tenkz_kernel_leg_dir_tl )
+      }
+      = {0}
       {
         \fp_set:Nn \l__tenkz_kernel_r_reach_fp
           {
@@ -6156,9 +6283,13 @@
                  abs
                    (
                      ( (#1)
-                       - \l__tenkz_kernel_r_x_fp * cosd( (#2) + 90 )
-                       - \l__tenkz_kernel_r_y_fp * sind( (#2) + 90 ) )
-                     / cosd( \l__tenkz_kernel_leg_dir_tl - (#2) - 90 )
+                       - (#2) * \l__tenkz_kernel_r_x_fp
+                       - (#3) * \l__tenkz_kernel_r_y_fp )
+                     /
+                     (
+                       (#2) * cosd( \l__tenkz_kernel_leg_dir_tl )
+                       + (#3) * sind( \l__tenkz_kernel_leg_dir_tl )
+                     )
                    )
                  + \__tenkz_metric_ratio:n {legcrossclear} )
           }
@@ -6299,7 +6430,7 @@
             % a south leg chase its north edge.
             \prop_get:NnN \l__tenkz_kernel_ro_box_prop {##1}
               \l__tenkz_kernel_ro_b_tl
-            \exp_last_unbraced:NV \__tenkz_kernel_r_route_box:nnnnn
+            \exp_last_unbraced:NV \__tenkz_kernel_r_route_box:nnnnnnnn
               \l__tenkz_kernel_ro_b_tl
             \seq_map_inline:Nn \l__tenkz_kernel_ro_leg_seq
               { \__tenkz_kernel_r_route_leg:nn {####1} {##1} }
@@ -6336,12 +6467,40 @@
             \tl_set:Ne \l__tenkz_kernel_ro_lane_tl
               { \fp_eval:n { \l__tenkz_kernel_ro_y_fp } }
           }
+        {e}
+          {
+            \tl_set:Ne \l__tenkz_kernel_ro_lane_tl
+              { \fp_eval:n { \l__tenkz_kernel_ro_xb_fp } }
+          }
+        {w}
+          {
+            \tl_set:Ne \l__tenkz_kernel_ro_lane_tl
+              { \fp_eval:n { \l__tenkz_kernel_ro_x_fp } }
+          }
+      }
+    \str_case:VnTF \l__tenkz_kernel_ro_side_tl
+      {
+        {n}{}
+        {s}{}
+      }
+      {
+        \tl_set_eq:NN \l__tenkz_kernel_ro_gx_tl
+          \l__tenkz_kernel_ro_vx_tl
+        \tl_set_eq:NN \l__tenkz_kernel_ro_gy_tl
+          \l__tenkz_kernel_ro_vy_tl
+      }
+      {
+        \tl_set_eq:NN \l__tenkz_kernel_ro_gx_tl
+          \l__tenkz_kernel_ro_ux_tl
+        \tl_set_eq:NN \l__tenkz_kernel_ro_gy_tl
+          \l__tenkz_kernel_ro_uy_tl
       }
     \tl_set:Ne \l__tenkz_kernel_ro_row_tl
       {
         {
           { \tl_use:N \l__tenkz_kernel_ro_lane_tl }
-          { \tl_use:N \l__tenkz_kernel_ro_tau_tl  }
+          { \tl_use:N \l__tenkz_kernel_ro_gx_tl }
+          { \tl_use:N \l__tenkz_kernel_ro_gy_tl }
         }
       }
     \prop_get:NVN \l__tenkz_kernel_ro_legs_prop
@@ -6677,7 +6836,7 @@
     \prop_get:NnN \l__tenkz_kernel_ro_lane_prop {#1}
       \l__tenkz_kernel_ro_lane_tl
     \prop_get:NnN \l__tenkz_kernel_ro_box_prop {#1} \l__tenkz_kernel_ro_b_tl
-    \exp_last_unbraced:NV \__tenkz_kernel_r_route_box:nnnnn
+    \exp_last_unbraced:NV \__tenkz_kernel_r_route_box:nnnnnnnn
       \l__tenkz_kernel_ro_b_tl
     \tl_clear:N \l__tenkz_kernel_r_from_tl
     \tl_clear:N \l__tenkz_kernel_r_to_tl
@@ -6711,20 +6870,28 @@
   }
 % the measured hull box, and the axes it was measured in, back into the route
 % registers
-\cs_new_protected:Npn \__tenkz_kernel_r_route_box:nnnnn #1#2#3#4#5
+\cs_new_protected:Npn \__tenkz_kernel_r_route_box:nnnnnnnn
+    #1#2#3#4#5#6#7#8
   {
     \fp_set:Nn \l__tenkz_kernel_ro_x_fp  {#1}
     \fp_set:Nn \l__tenkz_kernel_ro_xb_fp {#2}
     \fp_set:Nn \l__tenkz_kernel_ro_y_fp  {#3}
     \fp_set:Nn \l__tenkz_kernel_ro_yb_fp {#4}
-    \tl_set:Nn \l__tenkz_kernel_ro_tau_tl {#5}
+    \tl_set:Nn \l__tenkz_kernel_ro_ex_tl {#5}
+    \tl_set:Nn \l__tenkz_kernel_ro_ey_tl {#6}
+    \tl_set:Nn \l__tenkz_kernel_ro_nx_tl {#7}
+    \tl_set:Nn \l__tenkz_kernel_ro_ny_tl {#8}
+    \__tenkz_geom_basis_dual:nnnnNNNN
+      {#5}{#6}{#7}{#8}
+      \l__tenkz_kernel_ro_ux_tl \l__tenkz_kernel_ro_uy_tl
+      \l__tenkz_kernel_ro_vx_tl \l__tenkz_kernel_ro_vy_tl
   }
 % one point of the arc, named in the route's axes and carried to the page
 \cs_new_protected:Npn \__tenkz_kernel_r_route_pt:nn #1#2
   {
     \fp_set:Nn \l__tenkz_kernel_ro_u_fp {#1}
     \fp_set:Nn \l__tenkz_kernel_ro_v_fp {#2}
-    \__tenkz_kernel_ro_unturn:NN
+    \__tenkz_kernel_ro_basis_apply:NN
       \l__tenkz_kernel_ro_u_fp \l__tenkz_kernel_ro_v_fp
     \tl_put_right:Ne \l__tenkz_kernel_r_pts_tl
       {
@@ -6821,7 +6988,7 @@
       { \tl_set:Nn #2 {0} }
       {
         \exp_args:Ne \__tenkz_kernel_r_point_fp:n { \tl_item:Nn #1 {1} }
-        \__tenkz_kernel_ro_turn:NN
+        \__tenkz_kernel_ro_basis_unapply:NN
           \l__tenkz_kernel_r_xc_fp \l__tenkz_kernel_r_yc_fp
         \tl_set:Ne #2
           {
@@ -8516,6 +8683,25 @@
       }
   }
 
+\cs_new_protected:Npn \__tenkz_kernel_r_hull_point_add:nn #1#2
+  {
+    \__tenkz_geom_basis_apply:nnnnnnNN
+      { \l__tenkz_kernel_hull_ex_tl }
+      { \l__tenkz_kernel_hull_ey_tl }
+      { \l__tenkz_kernel_hull_nx_tl }
+      { \l__tenkz_kernel_hull_ny_tl }
+      {#1}{#2}
+      \l__tenkz_kernel_ro_apply_x_tl \l__tenkz_kernel_ro_apply_y_tl
+    \tl_if_empty:NF \l__tenkz_kernel_r_pts_tl
+      { \tl_put_right:Nn \l__tenkz_kernel_r_pts_tl { -- } }
+    \tl_put_right:Ne \l__tenkz_kernel_r_pts_tl
+      {
+        \__tenkz_kernel_r_pair:nn
+          { \l__tenkz_kernel_ro_apply_x_tl }
+          { \l__tenkz_kernel_ro_apply_y_tl }
+      }
+  }
+
 % An enclosure strokes the offset hull of what it selects, in the axes its
 % selection stands in.  The four supports are taken along those axes and the
 % contour is stroked in them, so a mark over turned records is turned with
@@ -8526,8 +8712,11 @@
     \__tenkz_kernel_mark_members:nN {#1} \l__tenkz_kernel_sel_seq
     \__tenkz_kernel_hull_obstacles:NN
       \l__tenkz_kernel_sel_seq \l__tenkz_kernel_sel_obst_seq
-    \__tenkz_kernel_hull_turn:NN \l__tenkz_kernel_sel_seq
-      \l__tenkz_kernel_r_tau_tl
+    \__tenkz_kernel_hull_basis:NNNNN
+      \l__tenkz_kernel_sel_seq
+      \l__tenkz_kernel_hull_ex_tl \l__tenkz_kernel_hull_ey_tl
+      \l__tenkz_kernel_hull_nx_tl \l__tenkz_kernel_hull_ny_tl
+    \__tenkz_kernel_hull_basis_dual:
     % A contour clears its members by one clearance.  It is one clearance for
     % every selection: what differs between a row of labelled sites and four
     % bare spins is the members' own silhouettes, which already carry their
@@ -8535,59 +8724,56 @@
     \__tenkz_kernel_hull_scale:NN \l__tenkz_kernel_sel_seq \l__tenkz_kernel_sel_tl
     \fp_set:Nn \l__tenkz_kernel_r_reach_fp
       { \__tenkz_metric_ratio:n {daylight} * \l__tenkz_kernel_sel_tl }
-    \__tenkz_kernel_hull_reach:NnnN \l__tenkz_kernel_sel_obst_seq
-      { \l__tenkz_kernel_r_tau_tl }
+    \__tenkz_kernel_hull_reach_linear:NnnnN
+      \l__tenkz_kernel_sel_obst_seq
+      { \l__tenkz_kernel_hull_ux_tl }
+      { \l__tenkz_kernel_hull_uy_tl }
       { \l__tenkz_kernel_r_reach_fp } \l__tenkz_kernel_r_xb_tl
-    \__tenkz_kernel_hull_reach:NnnN \l__tenkz_kernel_sel_obst_seq
-      { \l__tenkz_kernel_r_tau_tl + 180 }
+    \__tenkz_kernel_hull_reach_linear:NnnnN
+      \l__tenkz_kernel_sel_obst_seq
+      { -\l__tenkz_kernel_hull_ux_tl }
+      { -\l__tenkz_kernel_hull_uy_tl }
       { \l__tenkz_kernel_r_reach_fp } \l__tenkz_kernel_r_x_tl
-    \__tenkz_kernel_hull_reach:NnnN \l__tenkz_kernel_sel_obst_seq
-      { \l__tenkz_kernel_r_tau_tl + 90 }
+    \tl_set:Ne \l__tenkz_kernel_r_x_tl
+      { \fp_eval:n { -\l__tenkz_kernel_r_x_tl } }
+    \__tenkz_kernel_hull_reach_linear:NnnnN
+      \l__tenkz_kernel_sel_obst_seq
+      { \l__tenkz_kernel_hull_vx_tl }
+      { \l__tenkz_kernel_hull_vy_tl }
       { \l__tenkz_kernel_r_reach_fp } \l__tenkz_kernel_r_yb_tl
-    \__tenkz_kernel_hull_reach:NnnN \l__tenkz_kernel_sel_obst_seq
-      { \l__tenkz_kernel_r_tau_tl + 270 }
+    \__tenkz_kernel_hull_reach_linear:NnnnN
+      \l__tenkz_kernel_sel_obst_seq
+      { -\l__tenkz_kernel_hull_vx_tl }
+      { -\l__tenkz_kernel_hull_vy_tl }
       { \l__tenkz_kernel_r_reach_fp } \l__tenkz_kernel_r_y_tl
-    % the contour's own centre, carried back to the page through its axes
+    \tl_set:Ne \l__tenkz_kernel_r_y_tl
+      { \fp_eval:n { -\l__tenkz_kernel_r_y_tl } }
+    % The centre is formed in local coordinates and carried through both
+    % basis vectors.
     \fp_set:Nn \l__tenkz_kernel_r_xc_fp
-      { ( \l__tenkz_kernel_r_xb_tl - \l__tenkz_kernel_r_x_tl ) / 2 }
+      { ( \l__tenkz_kernel_r_xb_tl + \l__tenkz_kernel_r_x_tl ) / 2 }
     \fp_set:Nn \l__tenkz_kernel_r_yc_fp
-      { ( \l__tenkz_kernel_r_yb_tl - \l__tenkz_kernel_r_y_tl ) / 2 }
-    \__tenkz_kernel_r_unturn:NN
-      \l__tenkz_kernel_r_xc_fp \l__tenkz_kernel_r_yc_fp
+      { ( \l__tenkz_kernel_r_yb_tl + \l__tenkz_kernel_r_y_tl ) / 2 }
+    \__tenkz_geom_basis_apply:nnnnnnNN
+      { \l__tenkz_kernel_hull_ex_tl }
+      { \l__tenkz_kernel_hull_ey_tl }
+      { \l__tenkz_kernel_hull_nx_tl }
+      { \l__tenkz_kernel_hull_ny_tl }
+      { \l__tenkz_kernel_r_xc_fp } { \l__tenkz_kernel_r_yc_fp }
+      \l__tenkz_kernel_ro_apply_x_tl \l__tenkz_kernel_ro_apply_y_tl
     \fp_set:Nn \l__tenkz_kernel_r_x_fp
-      {
-        \l__tenkz_kernel_r_xc_fp
-        - ( \l__tenkz_kernel_r_xb_tl + \l__tenkz_kernel_r_x_tl ) / 2
-      }
-    \fp_set:Nn \l__tenkz_kernel_r_xb_fp
-      {
-        \l__tenkz_kernel_r_xc_fp
-        + ( \l__tenkz_kernel_r_xb_tl + \l__tenkz_kernel_r_x_tl ) / 2
-      }
+      { \l__tenkz_kernel_ro_apply_x_tl }
     \fp_set:Nn \l__tenkz_kernel_r_y_fp
-      {
-        \l__tenkz_kernel_r_yc_fp
-        - ( \l__tenkz_kernel_r_yb_tl + \l__tenkz_kernel_r_y_tl ) / 2
-      }
-    \fp_set:Nn \l__tenkz_kernel_r_yb_fp
-      {
-        \l__tenkz_kernel_r_yc_fp
-        + ( \l__tenkz_kernel_r_yb_tl + \l__tenkz_kernel_r_y_tl ) / 2
-      }
-    % the turn is an option on the stroke, not a second path spelling
-    \tl_clear:N \l__tenkz_kernel_r_turnopt_tl
-    \fp_compare:nNnF { \l__tenkz_kernel_r_tau_tl } = {0}
-      {
-        \tl_set:Ne \l__tenkz_kernel_r_turnopt_tl
-          {
-            % the engine's own separator is a catcode-12 colon, which this
-            % syntax spells only through the string constant
-            , rotate~around = {
-              \fp_eval:n { \l__tenkz_kernel_r_tau_tl } \c_colon_str
-              \__tenkz_kernel_r_pair:nn
-                { \l__tenkz_kernel_r_xc_fp } { \l__tenkz_kernel_r_yc_fp } }
-          }
-      }
+      { \l__tenkz_kernel_ro_apply_y_tl }
+    \tl_clear:N \l__tenkz_kernel_r_pts_tl
+    \__tenkz_kernel_r_hull_point_add:nn
+      { \l__tenkz_kernel_r_x_tl } { \l__tenkz_kernel_r_y_tl }
+    \__tenkz_kernel_r_hull_point_add:nn
+      { \l__tenkz_kernel_r_xb_tl } { \l__tenkz_kernel_r_y_tl }
+    \__tenkz_kernel_r_hull_point_add:nn
+      { \l__tenkz_kernel_r_xb_tl } { \l__tenkz_kernel_r_yb_tl }
+    \__tenkz_kernel_r_hull_point_add:nn
+      { \l__tenkz_kernel_r_x_tl } { \l__tenkz_kernel_r_yb_tl }
     \__tenkz_model_get:nnN {#1} {species} \l__tenkz_kernel_r_species_tl
     \quark_if_no_value:NTF \l__tenkz_kernel_r_species_tl
       {
@@ -8610,6 +8796,104 @@
           }
       }
       { \__tenkz_kernel_r_hue:nN {#1} \l__tenkz_kernel_r_hue_tl }
+    \__tenkz_geom_frame_if_affine:nTF {kpic}
+      {
+        \bool_if:NTF \l__tenkz_kernel_hull_chart_bool
+          {
+            \__tenkz_render_stroke:en
+              {
+                draw = \tl_use:N \l__tenkz_kernel_r_hue_tl ,
+                line~width = \__tenkz_dim:n {annwidth} ,
+                rounded~corners = \__tenkz_dim:n {corner}
+              }
+              { \tl_use:N \l__tenkz_kernel_r_pts_tl -- cycle }
+          }
+          { \__tenkz_kernel_r_mark_enclosure_orthogonal: }
+      }
+      { \__tenkz_kernel_r_mark_enclosure_orthogonal: }
+    % A label that names no side stands in the middle of what it encloses --
+    % which is where an operator acting on a region belongs.  A label that
+    % names one stands on the contour there.
+    \__tenkz_model_get:nnN {#1} {label-pos} \l__tenkz_kernel_r_tl
+    \quark_if_no_value:NTF \l__tenkz_kernel_r_tl
+      { \__tenkz_kernel_r_mark_label_centre:n {#1} }
+      {
+    \tl_set:Ne \l__tenkz_kernel_r_tl
+      { \__tenkz_kernel_r_compass:n { \tl_use:N \l__tenkz_kernel_r_tl } }
+    % the side a label speaks from is a side OF THE CONTOUR, so the step out
+    % to it is taken in the contour's axes and then carried to the page
+    \fp_set:Nn \l__tenkz_kernel_r_xc_fp
+      {
+        cosd( \l__tenkz_kernel_r_tl )
+        * ( \l__tenkz_kernel_r_xb_tl - \l__tenkz_kernel_r_x_tl ) / 2
+      }
+    \fp_set:Nn \l__tenkz_kernel_r_yc_fp
+      {
+        sind( \l__tenkz_kernel_r_tl )
+        * ( \l__tenkz_kernel_r_yb_tl - \l__tenkz_kernel_r_y_tl ) / 2
+      }
+    \__tenkz_geom_basis_apply:nnnnnnNN
+      { \l__tenkz_kernel_hull_ex_tl }
+      { \l__tenkz_kernel_hull_ey_tl }
+      { \l__tenkz_kernel_hull_nx_tl }
+      { \l__tenkz_kernel_hull_ny_tl }
+      { \l__tenkz_kernel_r_xc_fp } { \l__tenkz_kernel_r_yc_fp }
+      \l__tenkz_kernel_ro_apply_x_tl \l__tenkz_kernel_ro_apply_y_tl
+    \fp_set:Nn \l__tenkz_kernel_r_x_fp
+      {
+        \l__tenkz_kernel_r_x_fp + \l__tenkz_kernel_ro_apply_x_tl
+      }
+    \fp_set:Nn \l__tenkz_kernel_r_y_fp
+      {
+        \l__tenkz_kernel_r_y_fp + \l__tenkz_kernel_ro_apply_y_tl
+      }
+    \__tenkz_geom_basis_apply:nnnnnnNN
+      { \l__tenkz_kernel_hull_ex_tl }
+      { \l__tenkz_kernel_hull_ey_tl }
+      { \l__tenkz_kernel_hull_nx_tl }
+      { \l__tenkz_kernel_hull_ny_tl }
+      { cosd(\l__tenkz_kernel_r_tl) }
+      { sind(\l__tenkz_kernel_r_tl) }
+      \l__tenkz_kernel_ro_apply_x_tl \l__tenkz_kernel_ro_apply_y_tl
+    \tl_set:Ne \l__tenkz_kernel_r_tau_tl
+      {
+        \fp_eval:n
+          {
+            atand(
+              \l__tenkz_kernel_ro_apply_y_tl ,
+              \l__tenkz_kernel_ro_apply_x_tl )
+            - \l__tenkz_kernel_r_tl
+          }
+      }
+    \__tenkz_kernel_r_mark_label_ink:n {#1}
+      }
+  }
+% The non-affine fallback deliberately retains the established rotated
+% rectangle spelling.  Circle hulls have an orthonormal mean tangent rather
+% than one affine chart, and preserving their path spelling also keeps their
+% antialiasing stable under the affine refactor.
+\cs_new_protected:Npn \__tenkz_kernel_r_mark_enclosure_orthogonal:
+  {
+    \tl_set:Ne \l__tenkz_kernel_r_tau_tl
+      {
+        \fp_eval:n
+          {
+            atand(
+              \l__tenkz_kernel_hull_ey_tl ,
+              \l__tenkz_kernel_hull_ex_tl )
+          }
+      }
+    \tl_clear:N \l__tenkz_kernel_r_turnopt_tl
+    \fp_compare:nNnF { \l__tenkz_kernel_r_tau_tl } = {0}
+      {
+        \tl_set:Ne \l__tenkz_kernel_r_turnopt_tl
+          {
+            , rotate~around = {
+              \fp_eval:n { \l__tenkz_kernel_r_tau_tl } \c_colon_str
+              \__tenkz_kernel_r_pair:nn
+                { \l__tenkz_kernel_r_x_fp } { \l__tenkz_kernel_r_y_fp } }
+          }
+      }
     \__tenkz_render_stroke:en
       {
         draw = \tl_use:N \l__tenkz_kernel_r_hue_tl ,
@@ -8619,51 +8903,24 @@
       }
       {
         \__tenkz_kernel_r_pair:nn
-          { \l__tenkz_kernel_r_x_fp } { \l__tenkz_kernel_r_y_fp }
+          {
+            \l__tenkz_kernel_r_x_fp
+            - ( \l__tenkz_kernel_r_xb_tl - \l__tenkz_kernel_r_x_tl ) / 2
+          }
+          {
+            \l__tenkz_kernel_r_y_fp
+            - ( \l__tenkz_kernel_r_yb_tl - \l__tenkz_kernel_r_y_tl ) / 2
+          }
         rectangle
         \__tenkz_kernel_r_pair:nn
-          { \l__tenkz_kernel_r_xb_fp } { \l__tenkz_kernel_r_yb_fp }
-      }
-    % A label that names no side stands in the middle of what it encloses --
-    % which is where an operator acting on a region belongs.  A label that
-    % names one stands on the contour there.
-    \__tenkz_model_get:nnN {#1} {label-pos} \l__tenkz_kernel_r_tl
-    \quark_if_no_value:NTF \l__tenkz_kernel_r_tl
-      {
-        \fp_set:Nn \l__tenkz_kernel_r_x_fp
-          { ( \l__tenkz_kernel_r_x_fp + \l__tenkz_kernel_r_xb_fp ) / 2 }
-        \fp_set:Nn \l__tenkz_kernel_r_y_fp
-          { ( \l__tenkz_kernel_r_y_fp + \l__tenkz_kernel_r_yb_fp ) / 2 }
-        \__tenkz_kernel_r_mark_label_centre:n {#1}
-      }
-      {
-    \tl_set:Ne \l__tenkz_kernel_r_tl
-      { \__tenkz_kernel_r_compass:n { \tl_use:N \l__tenkz_kernel_r_tl } }
-    % the side a label speaks from is a side OF THE CONTOUR, so the step out
-    % to it is taken in the contour's axes and then carried to the page
-    \fp_set:Nn \l__tenkz_kernel_r_xc_fp
-      {
-        cosd( \l__tenkz_kernel_r_tl )
-        * ( \l__tenkz_kernel_r_xb_fp - \l__tenkz_kernel_r_x_fp ) / 2
-      }
-    \fp_set:Nn \l__tenkz_kernel_r_yc_fp
-      {
-        sind( \l__tenkz_kernel_r_tl )
-        * ( \l__tenkz_kernel_r_yb_fp - \l__tenkz_kernel_r_y_fp ) / 2
-      }
-    \__tenkz_kernel_r_unturn:NN
-      \l__tenkz_kernel_r_xc_fp \l__tenkz_kernel_r_yc_fp
-    \fp_set:Nn \l__tenkz_kernel_r_x_fp
-      {
-        ( \l__tenkz_kernel_r_x_fp + \l__tenkz_kernel_r_xb_fp ) / 2
-        + \l__tenkz_kernel_r_xc_fp
-      }
-    \fp_set:Nn \l__tenkz_kernel_r_y_fp
-      {
-        ( \l__tenkz_kernel_r_y_fp + \l__tenkz_kernel_r_yb_fp ) / 2
-        + \l__tenkz_kernel_r_yc_fp
-      }
-    \__tenkz_kernel_r_mark_label_ink:n {#1}
+          {
+            \l__tenkz_kernel_r_x_fp
+            + ( \l__tenkz_kernel_r_xb_tl - \l__tenkz_kernel_r_x_tl ) / 2
+          }
+          {
+            \l__tenkz_kernel_r_y_fp
+            + ( \l__tenkz_kernel_r_yb_tl - \l__tenkz_kernel_r_y_tl ) / 2
+          }
       }
   }
 % a centred mark label sits on the paper, not against an edge

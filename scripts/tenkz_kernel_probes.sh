@@ -809,6 +809,21 @@ grep -Fq '(record picture)' "$WORK/n_malformed_physical.transcript" || {
   exit 1
 }
 
+singular_basis_negative="$KERNEL/negative/n_geom_singular_basis.tex"
+if ( cd "$WORK" &&
+     TEXINPUTS="$REPO/tex/tenkz//:" \
+       timeout 120 xelatex -interaction=nonstopmode -halt-on-error \
+       "$singular_basis_negative" \
+       >"$WORK/n_geom_singular_basis.transcript" 2>&1 ); then
+  echo "FAIL: a singular carrier basis was accepted" >&2
+  exit 1
+fi
+grep -Fq '[TKZ-GEOM-SINGULAR-BASIS]' \
+    "$WORK/n_geom_singular_basis.transcript" || {
+  echo "FAIL: singular basis rejection lacked TKZ-GEOM-SINGULAR-BASIS" >&2
+  exit 1
+}
+
 for strict_negative in \
   n_strict_sandwich \
   n_strict_role \
