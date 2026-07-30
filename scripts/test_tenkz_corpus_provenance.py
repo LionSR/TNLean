@@ -9,6 +9,7 @@ import subprocess
 import tempfile
 from pathlib import Path
 
+from tenkz_audit import Audit
 from tenkz_rmp import (
     ink_environment_problems,
     rendered_ink_environment_families,
@@ -84,6 +85,21 @@ def test_ink_environment_owner() -> None:
     expected = {"tenkz", "tenkzfree", "tenkzlattice", "tenkzplanes", "kernel"}
     if used != expected:
         raise AssertionError(f"compiled Ink owners disagree: {used!r}")
+    with tempfile.TemporaryDirectory(prefix="tenkz-ink-owner-") as tmp:
+        log_path = Path(tmp) / "ink-owner-test.tnlog"
+        log_path.write_text(log, encoding="utf-8")
+        audit = Audit(log_path, None)
+        audit.parse_log()
+        audit.check_dialects()
+        mismatches = [
+            finding for finding in audit.findings
+            if finding.rule == "dialect-mismatch"
+        ]
+        if mismatches:
+            raise AssertionError(
+                "compiled Ink owner metadata was foreign to its picture dialect: "
+                + "; ".join(finding.msg for finding in mismatches)
+            )
     ink = "Canonical tenkz, tenkzfree, tenkzlattice, tenkzplanes, and kernel."
     if ink_environment_problems("good", ink, used):
         raise AssertionError("accurate compiled Ink owners were rejected")
