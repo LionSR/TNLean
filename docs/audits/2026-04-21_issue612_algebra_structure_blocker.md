@@ -55,7 +55,7 @@ The paper's algebra-structure formulation is not just a retract through a subspa
 It needs a genuine algebra object at each blocked size, together with multiplication
 coefficients `c_{αβγ}^{(L)}` and compatibility across blocking levels.
 
-The natural route from the merged fusion API would be to define a projected product
+The natural route from the merged transfer-retract API would be to define a projected product
 on the range of `blockedTransferMap M n` by
 
 `a ⋆ b := T (S a * S b)`.
@@ -87,7 +87,7 @@ Equivalently, one wants the standard form
 `E_n (E_n x * E_n y) = E_n (x * y)`.
 
 Without these identities there is no sound route to an associative multiplication
-on the support object extracted from the fusion datum.
+on the support object extracted from the transfer-retract datum.
 
 ### 2. Packaging the range as an algebra / support-algebra object
 
@@ -121,7 +121,7 @@ actually reflects the paper.
 ## Conclusion
 
 Issue #612 is blocked not by a local proof gap in `AlgebraStructure.lean`, but by a
-missing layer between the current fusion retracts and the paper's support-algebra
+missing layer between the current transfer retracts and the paper's support-algebra
 formulation. The correct next step is to build that missing layer first, and only
 then return to the algebra-structure coefficients themselves.
 

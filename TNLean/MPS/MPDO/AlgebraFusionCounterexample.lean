@@ -190,7 +190,7 @@ private theorem phaseFlipMPO_not_isRFP_MPDO_via_transferRetract :
     phaseFlipTensor_transferMap_apply] at hEntry
   norm_num [X] at hEntry
 
-/-- The support-algebra predicate does not imply the fusion predicate, even
+/-- The support-algebra predicate does not imply the transfer-retract predicate, even
 under trace preservation and the existence of a positive-definite fixed point.
 
 The witness is the qubit phase-flip channel with Kraus operators

@@ -1,4 +1,4 @@
-# Issue #826 scouting report — algebra ⇒ fusion converse
+# Issue #826 scouting report — algebra ⇒ transfer-retract converse
 
 Date: 2026-04-23; rebased on current `main` on 2026-04-25
 Branch: `feat/826-algebra-to-fusion-v2`
