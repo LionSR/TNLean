@@ -8,6 +8,7 @@
 \fp_new:N \l__tenkz_test_route_x_fp
 \fp_new:N \l__tenkz_test_route_y_fp
 \tl_new:N \l__tenkz_test_route_name_tl
+\seq_new:N \l__tenkz_test_support_seq
 \cs_new_eq:NN
   \__tenkz_test_route_measure:n
   \__tenkz_kernel_r_route_measure:n
@@ -86,6 +87,13 @@
     \__tenkz_geom_rect_ray_reach:nnnN {30}{2}{1} \l_tmpa_tl
     \fp_compare:nNnF { abs(\l_tmpa_tl - 2) } < {0.000001}
       { \errmessage{a~numeric~label~ray~did~not~meet~the~rectangle~edge} }
+    \seq_clear:N \l__tenkz_test_support_seq
+    \seq_put_right:Nn \l__tenkz_test_support_seq
+      { {circle}{0}{0}{0}{0}{0}{0} }
+    \__tenkz_kernel_hull_reach_linear:NnnnN
+      \l__tenkz_test_support_seq {0}{1.6666666666667}{0.3} \l_tmpa_tl
+    \fp_compare:nNnF { abs(\l_tmpa_tl - 0.5) } < {0.000001}
+      { \errmessage{page~daylight~was~not~lifted~into~dual~units} }
   }
 \cs_new_protected:Npn \__tenkz_test_leg_lane:
   {
@@ -121,7 +129,8 @@
 \__tenkz_test_basis_round_trip:
 \__tenkz_test_leg_lane:
 \ExplSyntaxOff
-\begin{tenkz}[rows={wire,wire}, cols=2, frame=plane, bonds=none]
+\begin{tenkz}[
+    rows={wire,wire}, cols=2, frame=plane, bonds=none, physical=up]
   \tn[at=(1,1), skin=box]{A}
   \tn[at=(1,2), skin=box]{B}
   \tn[at=(2,1), skin=box]{C}

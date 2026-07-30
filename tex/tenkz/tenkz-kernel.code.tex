@@ -3696,6 +3696,8 @@
 \tl_new:N \l__tenkz_kernel_leg_tl
 \tl_new:N \l__tenkz_kernel_leg_reach_tl
 \tl_new:N \l__tenkz_kernel_leg_dir_tl
+\tl_new:N \l__tenkz_kernel_leg_gx_tl
+\tl_new:N \l__tenkz_kernel_leg_gy_tl
 % A leg asks every contour whether it holds the site the leg grew from, and
 % that question resolves a range through the shared cell registers.  The leg
 % therefore keeps its own cell in registers of its own: read from the shared
@@ -4625,13 +4627,17 @@
       \l__tenkz_kernel_hull_vy_tl
   }
 
-% Maximum local coordinate against one row of the dual basis, padded in the
-% same carrier-local units.
+% Maximum coordinate against one row of the dual basis.  The pad is a page
+% distance, so lift it into covector units by the dual row's Euclidean norm.
 \cs_new_protected:Npn \__tenkz_kernel_hull_reach_linear:NnnnN #1#2#3#4#5
   {
     \__tenkz_geom_support_max_linear:nnnN
       { \cs_to_str:N #1 } {#2} {#3} #5
-    \tl_set:Ne #5 { \fp_eval:n { #5 + (#4) } }
+    \tl_set:Ne #5
+      {
+        \fp_eval:n
+          { #5 + (#4) * sqrt( (#2) ^ 2 + (#3) ^ 2 ) }
+      }
   }
 \tl_new:N \l__tenkz_kernel_r_tau_tl
 \tl_new:N \l__tenkz_kernel_r_turnopt_tl
@@ -6176,27 +6182,65 @@
                         \__tenkz_kernel_hull_scale:NN
                           \l__tenkz_kernel_leg_sel_seq
                           \l__tenkz_kernel_leg_tl
-                        \__tenkz_kernel_hull_reach:NnnN
-                          \l__tenkz_kernel_leg_obst_seq
-                          { \l__tenkz_kernel_leg_dir_tl }
+                        \__tenkz_kernel_hull_basis:NNNNN
+                          \l__tenkz_kernel_leg_sel_seq
+                          \l__tenkz_kernel_hull_ex_tl
+                          \l__tenkz_kernel_hull_ey_tl
+                          \l__tenkz_kernel_hull_nx_tl
+                          \l__tenkz_kernel_hull_ny_tl
+                        \__tenkz_geom_frame_if_affine:nTF {kpic}
                           {
-                            2 * \__tenkz_metric_ratio:n {daylight}
-                            * \l__tenkz_kernel_leg_tl
+                            \bool_if:NTF \l__tenkz_kernel_hull_chart_bool
+                              {
+                                \__tenkz_kernel_hull_basis_dual:
+                                \str_if_eq:nnTF {#2} {n}
+                                  {
+                                    \tl_set_eq:NN
+                                      \l__tenkz_kernel_leg_gx_tl
+                                      \l__tenkz_kernel_hull_vx_tl
+                                    \tl_set_eq:NN
+                                      \l__tenkz_kernel_leg_gy_tl
+                                      \l__tenkz_kernel_hull_vy_tl
+                                  }
+                                  {
+                                    \tl_set:Ne \l__tenkz_kernel_leg_gx_tl
+                                      { -\l__tenkz_kernel_hull_vx_tl }
+                                    \tl_set:Ne \l__tenkz_kernel_leg_gy_tl
+                                      { -\l__tenkz_kernel_hull_vy_tl }
+                                  }
+                                \__tenkz_kernel_hull_reach_linear:NnnnN
+                                  \l__tenkz_kernel_leg_obst_seq
+                                  { \l__tenkz_kernel_leg_gx_tl }
+                                  { \l__tenkz_kernel_leg_gy_tl }
+                                  {
+                                    2 * \__tenkz_metric_ratio:n {daylight}
+                                    * \l__tenkz_kernel_leg_tl
+                                  }
+                                  \l__tenkz_kernel_leg_reach_tl
+                                \fp_set:Nn \l__tenkz_kernel_r_reach_fp
+                                  {
+                                    max(
+                                      \l__tenkz_kernel_r_reach_fp ,
+                                      (
+                                        \l__tenkz_kernel_leg_reach_tl
+                                        - \l__tenkz_kernel_leg_gx_tl
+                                          * \l__tenkz_kernel_r_x_fp
+                                        - \l__tenkz_kernel_leg_gy_tl
+                                          * \l__tenkz_kernel_r_y_fp )
+                                      /
+                                      (
+                                        \l__tenkz_kernel_leg_gx_tl
+                                          * cosd(
+                                              \l__tenkz_kernel_leg_dir_tl )
+                                        + \l__tenkz_kernel_leg_gy_tl
+                                          * sind(
+                                              \l__tenkz_kernel_leg_dir_tl )
+                                      ) )
+                                  }
+                              }
+                              { \__tenkz_kernel_r_leg_enclosure_orthogonal: }
                           }
-                          \l__tenkz_kernel_leg_reach_tl
-                        % how far the contour stands from this atom ALONG THE
-                        % LEG: the hull's reach that way less the atom's own
-                        % reach that way, which is the projection of where it
-                        % stands onto the direction it leaves in
-                        \fp_set:Nn \l__tenkz_kernel_r_reach_fp
-                          {
-                            max( \l__tenkz_kernel_r_reach_fp ,
-                                 \l__tenkz_kernel_leg_reach_tl
-                                 - ( \l__tenkz_kernel_r_x_fp
-                                       * cosd( \l__tenkz_kernel_leg_dir_tl )
-                                     + \l__tenkz_kernel_r_y_fp
-                                       * sind( \l__tenkz_kernel_leg_dir_tl ) ) )
-                          }
+                          { \__tenkz_kernel_r_leg_enclosure_orthogonal: }
                       }
                   }
               }
@@ -6263,6 +6307,29 @@
               }
               { \tl_use:N \l__tenkz_kernel_r_b_tl }
           }
+      }
+  }
+% Circle and mixed-carrier contours retain their established orthogonal
+% support reach; they do not claim one common affine chart.
+\cs_new_protected:Npn \__tenkz_kernel_r_leg_enclosure_orthogonal:
+  {
+    \__tenkz_kernel_hull_reach:NnnN
+      \l__tenkz_kernel_leg_obst_seq
+      { \l__tenkz_kernel_leg_dir_tl }
+      {
+        2 * \__tenkz_metric_ratio:n {daylight}
+        * \l__tenkz_kernel_leg_tl
+      }
+      \l__tenkz_kernel_leg_reach_tl
+    \fp_set:Nn \l__tenkz_kernel_r_reach_fp
+      {
+        max(
+          \l__tenkz_kernel_r_reach_fp ,
+          \l__tenkz_kernel_leg_reach_tl
+          - \l__tenkz_kernel_r_x_fp
+            * cosd( \l__tenkz_kernel_leg_dir_tl )
+          - \l__tenkz_kernel_r_y_fp
+            * sind( \l__tenkz_kernel_leg_dir_tl ) )
       }
   }
 % How far along its own page direction a leg must run to meet a route lane.
