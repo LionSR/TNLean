@@ -442,6 +442,7 @@ grep -Fq '[TKZ-FRAME-WORD]' "$WORK/n_frame_word.transcript" || {
 
 for basis_case in \
   n_frame_basis_parse n_frame_basis_kind n_frame_basis_member \
+  n_frame_basis_member_zero \
   n_frame_basis_grid n_frame_basis_group n_frame_basis_circle \
   n_frame_basis_policy
 do
@@ -467,6 +468,11 @@ grep -Fq '[TKZ-FRAME-BASIS-KIND]' \
 grep -Fq '[TKZ-FRAME-MEMBER-RANGE]' \
   "$WORK/n_frame_basis_member.transcript" || {
   echo "FAIL: missing basis member lacked TKZ-FRAME-MEMBER-RANGE" >&2
+  exit 1
+}
+grep -Fq '[TKZ-FRAME-MEMBER-RANGE]' \
+  "$WORK/n_frame_basis_member_zero.transcript" || {
+  echo "FAIL: zero basis member lacked TKZ-FRAME-MEMBER-RANGE" >&2
   exit 1
 }
 grep -Fq '[TKZ-FRAME-BASIS-GRID]' \

@@ -1541,9 +1541,13 @@
       { \__tenkz_kernel_node_item:Nn #1 {col} }
     \int_set:Nn \l__tenkz_kernel_pop_int
       { \__tenkz_kernel_node_item:Nn #1 {member} }
-    \int_compare:nNnTF
-      { \l__tenkz_kernel_pop_int }
-      > { \l__tenkz_kernel_basis_count_int }
+    \bool_lazy_or:nnTF
+      { \int_compare_p:nNn { \l__tenkz_kernel_pop_int } < {1} }
+      {
+        \int_compare_p:nNn
+          { \l__tenkz_kernel_pop_int }
+          > { \l__tenkz_kernel_basis_count_int }
+      }
       {
         \msg_error:nnnnn {tenkz}{kernel-frame-member-range}
           { \int_use:N \l__tenkz_kernel_claim_row_int }
@@ -1862,16 +1866,21 @@
       \l__tenkz_kernel_scratch_tl
     \quark_if_no_value:NT \l__tenkz_kernel_scratch_tl
       {
-        \__tenkz_model_record_atom:e
+        \prop_get:NnN \l__tenkz_kernel_cell_prop {#1-#2}
+          \l__tenkz_kernel_scratch_tl
+        \quark_if_no_value:NT \l__tenkz_kernel_scratch_tl
           {
-            kind = tn ,
-            populated = \prop_item:Nn \l__tenkz_kernel_basis_kind_prop {#3} ,
-            addr = { (#1,#2,#3) } ,
-            cell-row = #1 , cell-col = #2 , member = #3 ,
-            basis-east = \prop_item:Nn \l__tenkz_kernel_basis_east_prop {#3} ,
-            basis-north = \prop_item:Nn \l__tenkz_kernel_basis_north_prop {#3}
+            \__tenkz_model_record_atom:e
+              {
+                kind = tn ,
+                populated = \prop_item:Nn \l__tenkz_kernel_basis_kind_prop {#3} ,
+                addr = { (#1,#2,#3) } ,
+                cell-row = #1 , cell-col = #2 , member = #3 ,
+                basis-east = \prop_item:Nn \l__tenkz_kernel_basis_east_prop {#3} ,
+                basis-north = \prop_item:Nn \l__tenkz_kernel_basis_north_prop {#3}
+              }
+            \tl_set:NV \l__tenkz_kernel_scratch_tl \l__tenkz_model_last_tl
           }
-        \tl_set:NV \l__tenkz_kernel_scratch_tl \l__tenkz_model_last_tl
       }
     \prop_put:NnV \l__tenkz_kernel_basis_cell_prop {#1-#2-#3}
       \l__tenkz_kernel_scratch_tl

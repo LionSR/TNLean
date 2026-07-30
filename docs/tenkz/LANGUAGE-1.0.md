@@ -339,6 +339,11 @@ not identify a member. A bilayer is consequently one frame with two basis
 members and explicit intra-cell pairing wires; nesting cannot collapse it
 into two unrelated frames.
 
+An authored atom at `(r,c,k)` replaces that member. An authored atom at
+`(r,c)` replaces the whole populated cell, so every member address in that
+cell resolves to the authored record rather than creating coincident
+population underneath it. Member indices are strictly one-based.
+
 In the current kernel stage an explicit `basis=` belongs to a picture-level
 `flat` or `plane` frame. Group-local, atom-local, and circular bases are
 rejected with `TKZ-FRAME-*` diagnostics until those carriers have a declared
