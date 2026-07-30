@@ -603,12 +603,12 @@ note = "box-G vs copy-dot; diagonal leg angle"
 
 [[verdict]]
 id = "rmp-iii-a-hadamard"
-status = "cosmetic-gap"
+status = "structural-gap"
 pairing = "wrong-source"
 case_sha256 = "ae3e69b02f579b42925b116697b02e2c5d0988578db1b0e41bb334576171b106"
-reviewed = "2026-07-24"
+reviewed = "2026-07-30"
 renderer = "source-split-page-review-2026-07-24"
-note = "Author panel shows an unlabeled black bond node, not the declared Hadamard matrix."
+note = "paired author panel is an unlabeled black bond node, not the declared Hadamard matrix"
 
 [[verdict]]
 id = "rmp-iii-a-spt-mpo"
@@ -939,25 +939,27 @@ note = "Boundary types match; the equivalent C--X contraction is mirrored."
 
 [[verdict]]
 id = "rmp-iv-intersection-lhs-six"
-status = "cosmetic-gap"
+status = "blocked"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
 defects = ["extra-element", "wrong-contraction"]
+missing = ["nested-regions"]
 case_sha256 = "90b54689d81f976c919bcea414d0754342133c7f521e7c8e013fa5e80d1e4114"
-reviewed = "2026-07-26"
+reviewed = "2026-07-30"
 renderer = "codex-region-label-math-review-2026-07-26"
-note = "nesting drawn as overlap plus an invented lattice"
+note = "nested source regions are drawn as overlap plus an invented lattice"
 
 [[verdict]]
 id = "rmp-iv-intersection-rhs-six"
-status = "cosmetic-gap"
+status = "blocked"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
 defects = ["extra-element", "wrong-contraction"]
+missing = ["nested-regions"]
 case_sha256 = "597e03c401223fbad66083892235c28c7a7fe6f12e204367adcf55806a062210"
-reviewed = "2026-07-26"
+reviewed = "2026-07-30"
 renderer = "codex-region-label-math-review-2026-07-26"
-note = "same"
+note = "nested source regions are drawn as overlap plus an invented lattice"
 
 [[verdict]]
 id = "rmp-app-toric-primal"
@@ -1002,14 +1004,14 @@ note = "crossing-gadget styling"
 
 [[verdict]]
 id = "rmp-workbench-ii-projector-on-pta"
-status = "cosmetic-gap"
+status = "structural-gap"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
 defects = ["missing-element"]
 case_sha256 = "3afa8ab06f286b75e13326b974d6a6dde1fd3454a689a405bc2c07fc6986acdc"
-reviewed = "2026-07-26"
+reviewed = "2026-07-30"
 renderer = "fable-countersign-reading-2026-07-26-200dpi"
-note = "east cup draws; two triangles where the source has four"
+note = "east cup draws; the second sandwich sum has two triangles where the source has four"
 
 [[verdict]]
 id = "rmp-workbench-ii-peps-rg-workbench"
