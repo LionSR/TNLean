@@ -59,7 +59,7 @@ variable {d D : ℕ}
 
 In the present transfer-map formulation this is the bond-space matrix algebra on
 which the blocked transfer map acts. -/
-abbrev FusionPhysicalSpace (D : ℕ) : Type :=
+abbrev FusionBondSpace (D : ℕ) : Type :=
   Matrix (Fin D) (Fin D) ℂ
 
 /-! ## Transfer-map-level retract data -/
@@ -67,7 +67,7 @@ abbrev FusionPhysicalSpace (D : ℕ) : Type :=
 /-- The blocked transfer map of an MPO tensor, obtained by viewing `M` as a
 Doubled-index MPS tensor and blocking `n` physical sites. -/
 noncomputable def blockedTransferMap (M : MPOTensor d D) (n : ℕ) :
-    FusionPhysicalSpace D →ₗ[ℂ] FusionPhysicalSpace D :=
+    FusionBondSpace D →ₗ[ℂ] FusionBondSpace D :=
   MPSTensor.transferMap
     (d := MPSTensor.blockPhysDim (d * d) n) (D := D)
     (MPSTensor.blockTensor (d := d * d) (D := D) M.toMPSTensor n)
@@ -92,11 +92,11 @@ transfer-map-level content of the idempotence criterion, not the paper's
 physical fusion isometry (see `BNTFusionIsometryFamily` for those). -/
 structure FusionIsometryData (M : MPOTensor d D) (n : ℕ) where
   /-- The support subspace through which the blocked transfer map factors. -/
-  supportAlgebra : Submodule ℂ (FusionPhysicalSpace D)
+  supportAlgebra : Submodule ℂ (FusionBondSpace D)
   /-- Forward map `T_n : phys → 𝒜_n`. -/
-  T : FusionPhysicalSpace D →ₗ[ℂ] supportAlgebra
+  T : FusionBondSpace D →ₗ[ℂ] supportAlgebra
   /-- Backward map `S_n : 𝒜_n → phys`. -/
-  S : supportAlgebra →ₗ[ℂ] FusionPhysicalSpace D
+  S : supportAlgebra →ₗ[ℂ] FusionBondSpace D
   /-- The retract identity `T_n ∘ S_n = id_{𝒜_n}`. -/
   hTS : T ∘ₗ S = LinearMap.id
   /-- The characteristic identity `S_n ∘ T_n = E_n` for the blocked transfer
