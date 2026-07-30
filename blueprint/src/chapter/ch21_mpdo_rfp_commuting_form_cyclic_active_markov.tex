@@ -600,6 +600,91 @@
     vanish. This contradicts the one-sided matrix-space obstruction.
 \end{proof}
 
+\begin{theorem}[Selected fixed-product reduced states]
+    \label{thm:mpdo_selected_fixed_product_reduced_states}
+    \lean{MPOTensor.EtaLocalStructureData.%
+      selectedFixedProduct_reducedBlockState_eq_changePhysicalBasis}
+    \leanok
+    \uses{def:mpdo_eta_local_structure_data,
+      thm:mpdo_fixed_bond_positive_physical_sector_representative}
+    Let $K$ have an eta-local structure, let $F$ be the positive
+    physical-sector factorization of its selected fixed-product tensor, and
+    express $K$ in the physical coordinates of $F$. For every $N\geq2$ and
+    $L\leq N$, the selected sector-coordinate tensor and the transformed
+    source tensor have the same normalized $L$-site reduced state.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpdo_finite_chain_normalized_proportionality}
+    At length $N$, the unnormalized periodic operators satisfy
+    \[
+      \rho^{(N)}(K_F)=c_N\,\rho^{(N)}(C_F),
+      \qquad c_N>0.
+    \]
+    The scalar cancels under trace normalization, and taking the prescribed
+    partial trace preserves the equality.
+\end{proof}
+
+\begin{theorem}[Adjacent selected fixed-product marginals]
+    \label{thm:mpdo_selected_fixed_product_adjacent_marginals}
+    \lean{MPOTensor.EtaLocalStructureData.%
+      selectedFixedProduct_reducedBlockState_succ_succ_eq_succ_of_isSourceZCL}
+    \leanok
+    \uses{def:mpo_source_zcl, def:mpdo_eta_local_structure_data,
+      thm:mpdo_selected_fixed_product_reduced_states}
+    Let $K$ have an eta-local structure and source zero correlation length,
+    and let $C$ be the selected fixed-product tensor in its physical-sector
+    coordinates. For every $L>0$, the normalized $L$-site reduced states of
+    $C$ obtained from chain lengths $L+2$ and $L+1$ are equal.
+\end{theorem}
+
+\begin{proof}\leanok
+    In the selected physical coordinates, the periodic operators of $K$ at
+    both lengths are positive nonzero scalar multiples of those of $C$.
+    Cancel these scalars by
+    Theorem~\ref{thm:mpdo_selected_fixed_product_reduced_states}, transport
+    through the physical isometry, and apply source marginal stability.
+\end{proof}
+
+\begin{theorem}[Iterated selected fixed-product marginals]
+    \label{thm:mpdo_selected_fixed_product_iterated_marginals}
+    \lean{MPOTensor.EtaLocalStructureData.%
+      selectedFixedProduct_reducedBlockState_add_three_eq_succ_of_isSourceZCL}
+    \leanok
+    \uses{def:mpo_source_zcl, def:mpdo_eta_local_structure_data,
+      thm:mpdo_selected_fixed_product_reduced_states,
+      thm:mpdo_source_zcl_iterated_marginal_stability}
+    Under the preceding hypotheses, for every $L>0$, the normalized
+    $L$-site reduced states of the selected fixed-product tensor obtained
+    from chain lengths $L+3$ and $L+1$ are equal.
+\end{theorem}
+
+\begin{proof}\leanok
+    Apply the two-step source marginal identity to $K$, transport both sides
+    through the selected physical isometry, and cancel the two positive
+    realization scalars.
+\end{proof}
+
+\begin{theorem}[Positive traces of the selected fixed product]
+    \label{thm:mpdo_selected_fixed_product_positive_traces}
+    \lean{MPOTensor.EtaLocalStructureData.%
+      exists_pos_trace_mpo_selectedFixedProduct_of_isSourceZCL}
+    \leanok
+    \uses{def:mpo_source_zcl, def:mpdo_eta_local_structure_data,
+      thm:mpdo_fixed_bond_positive_physical_sector_representative}
+    Let $K$ have an eta-local structure and source zero correlation length.
+    For every $N\geq2$, the trace of the selected fixed-product periodic
+    operator is a strictly positive real number.
+\end{theorem}
+
+\begin{proof}\leanok
+    The selected neighboring operators are positive semidefinite, so their
+    cyclic product is positive semidefinite. Its trace cannot vanish:
+    positive proportionality would then force the trace of the source
+    periodic operator to vanish, contrary to source zero correlation length.
+    A nonzero positive semidefinite matrix has strictly positive real trace.
+\end{proof}
+
 \begin{theorem}[Stabilization of the support of an irreducible square]
     \label{thm:matrix_irreducible_square_support_stabilization}
     \lean{Matrix.IsIrreducible.%
@@ -739,6 +824,8 @@
       thm:mpdo_eta_fixed_bond_product_tensor,
       thm:mpdo_fixed_bond_positive_physical_sector_representative,
       thm:mpdo_selected_fixed_product_cyclic_recurrence,
+      thm:mpdo_selected_fixed_product_adjacent_marginals,
+      thm:mpdo_selected_fixed_product_positive_traces,
       thm:mpdo_cyclic_active_square_cube_adjacent_marginals}
     Express the original tensor in the physical coordinates of $F$. At every
     length $N\geq2$, its closed operator is a positive scalar multiple of the
@@ -749,6 +836,53 @@
     recurrence.
     Theorem~\ref{thm:mpdo_cyclic_active_square_cube_adjacent_marginals} now
     gives the required normalization.
+\end{proof}
+
+\begin{theorem}[Markov cuts from the selected fixed product]
+    \label{thm:mpdo_selected_fixed_product_markov_cuts}
+    \lean{MPOTensor.EtaLocalStructureData.%
+      exists_hayashiMarkovDecomposition_selectedPhysicalCut_of_isSourceZCL}
+    \leanok
+    \uses{def:mpdo, def:injective, def:normal, def:mpo_source_zcl,
+      def:mpdo_eta_local_structure_data,
+      thm:mpdo_fixed_bond_positive_physical_sector_representative,
+      def:hayashi_markov_decomposition}
+    Let $K$ be an injective normal tensor generating matrix-product density
+    operators, with an eta-local structure and source zero correlation
+    length. Express $K$ in the one-site physical coordinates of the positive
+    fixed-product factorization selected by the eta-local structure. For
+    arbitrary $A,C\geq0$, the normalized marginal on consecutive regions of
+    lengths $A$, $1$, and $C$, obtained from the periodic chain of length
+    $A+C+2$, admits a Hayashi Markov decomposition.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpdo_selected_fixed_product_cyclic_recurrence,
+      thm:mpdo_selected_fixed_product_adjacent_marginals,
+      thm:mpdo_selected_fixed_product_iterated_marginals,
+      thm:mpdo_selected_fixed_product_positive_traces,
+      thm:mpdo_selected_fixed_product_reduced_states,
+      thm:mpdo_selected_fixed_product_square_cube,
+      thm:mpdo_cyclic_active_square_positive_adjacent_marginals,
+      thm:mpdo_cyclic_active_explicit_fourth_region_blocks,
+      thm:mpdo_cyclic_active_markov_of_fourth_region,
+      thm:matrix_primitive_pow_two_rank_one}
+    The selected trace matrix is recurrent, and its square is strictly
+    positive. After the positive normalization of
+    Theorem~\ref{thm:mpdo_selected_fixed_product_square_cube}, its square and
+    cube agree. Thus the normalized matrix is primitive, with its second
+    power as a positive power, and the latter factors as
+    $a b^{\mathsf T}$ for strictly positive vectors $a,b$.
+
+    Transport the three-suffix/one-suffix marginal identity from the source
+    tensor to the selected fixed product. In cyclic-active coordinates, its
+    retained blocks are the unchanged interior neighboring products tensored
+    with the boundary factors determined by $a$ and $b$. Regrouping at the
+    distinguished middle site gives the direct sum of normalized positive
+    left and right path states. Their trace products are nonnegative and sum
+    to one. Finally, positive proportionality identifies this selected
+    normalized marginal with the marginal of $K$ in the same physical
+    coordinates.
 \end{proof}
 
 % **Local fix (cyclic-active restriction):** this is a restricted replacement for
@@ -918,12 +1052,46 @@
     two trace factors by $\lambda^{-1}$ gives the normalized identity.
 \end{proof}
 
+\begin{theorem}[Fourth-region blocks from an explicit factorization]
+    \label{thm:mpdo_cyclic_active_explicit_fourth_region_blocks}
+    \lean{MPOTensor.PhysicalSectorFactorization.%
+      reindex_reducedBlockState_add_three_eq_cyclicActiveFourthRegionBlock}
+    \leanok
+    \uses{def:mpdo_physical_sector_factorization,
+      def:mpdo_cyclic_active_sector}
+    Let $F$ be a physical-sector factorization with positive semidefinite
+    neighboring operators. Suppose that $\lambda>0$ and that functions
+    $a,b$ on the cyclic-active sectors satisfy
+    \[
+        (\lambda^{-1}T_C)^2=a b^{\mathsf T}.
+    \]
+    For every $n\geq0$, reindex the $(n+1)$-site reduced state obtained from
+    the periodic chain of length $n+4$ by its retained open-edge coordinates.
+    The result is the inverse trace of the length-$(n+4)$ periodic operator
+    times the direct sum over retained sector words. A word outside cyclic
+    support contributes zero; every cyclic-active word contributes its
+    unchanged interior neighboring product tensored with the separated
+    boundary factors determined by $\lambda,a,b$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpdo_cyclic_active_three_boundary_trace,
+      thm:mpdo_cyclic_active_deletion}
+    Expand the reduced state as a direct sum of three-suffix contractions.
+    Terms outside positive-length cyclic support vanish. For a retained
+    cyclic-active word, the three traced suffix sites leave the interior
+    product and the two-step boundary contraction. Substitute
+    $(\lambda^{-1}T_C)^2=a b^{\mathsf T}$ to separate its two boundary
+    factors, retaining the normalization by the length-$(n+4)$ trace.
+\end{proof}
+
 \begin{theorem}[Cyclic-active fourth-region factorization]
     \label{thm:mpdo_cyclic_active_fourth_region_factorization}
     \lean{MPOTensor.PhysicalSectorFactorization.%
       exists_cyclicActiveFourthRegion_formula_of_isSourceZCL}
     \leanok
     \uses{thm:mpdo_source_zcl_iterated_marginal_stability,
+      thm:mpdo_cyclic_active_explicit_fourth_region_blocks,
       thm:mpdo_cyclic_active_three_boundary_trace,
       thm:mpdo_cyclic_active_deletion}
     Let $\mathcal K$ be injective and have source zero correlation length,
@@ -949,12 +1117,42 @@
     before the two outer partial traces are evaluated.
 \end{proof}
 
+\begin{theorem}[Markov decomposition from an explicit fourth-region formula]
+    \label{thm:mpdo_cyclic_active_markov_of_fourth_region}
+    \lean{MPOTensor.PhysicalSectorFactorization.%
+      exists_hayashiMarkovDecomposition_cyclicActiveCut_of_fourthRegion}
+    \leanok
+    \uses{def:mpdo_physical_sector_factorization,
+      def:mpdo_cyclic_active_sector,
+      def:hayashi_markov_decomposition}
+    Let $F$ be a positive-dimensional physical-sector factorization whose
+    neighboring operators are positive semidefinite. Fix $A,C\geq0$,
+    $\lambda\in\mathbb R$, and strictly positive functions $a,b$ on the
+    cyclic-active sectors. Suppose that the length-$(A+C+4)$ periodic
+    operator has positive trace, the length-$(A+C+2)$ periodic operator has
+    nonzero trace, and the normalized $(A+C+1)$-site reduced state at length
+    $A+C+2$ has the explicit fourth-region block formula determined by
+    $\lambda,a,b$. Then its tripartite form on regions of lengths
+    $A$, $1$, and $C$ admits a Hayashi Markov decomposition.
+\end{theorem}
+
+\begin{proof}\leanok
+    Regroup every retained fourth-region block at the distinguished middle
+    sector. Its positive left and right path factors are normalized by their
+    traces, with fixed density matrices used only when a factor vanishes.
+    The positive long-chain trace makes all block weights nonnegative. The
+    nonzero short-chain trace makes the reduced state trace one, so these
+    weights sum to one. The resulting direct sum is exactly the Hayashi
+    decomposition in the sector-coordinate middle-site splitting.
+\end{proof}
+
 \begin{theorem}[Cyclic-active Markov decomposition at every cut]
     \label{thm:mpdo_cyclic_active_markov_all_cuts}
     \lean{MPOTensor.PhysicalSectorFactorization.%
       exists_hayashiMarkovDecomposition_cyclicActiveCut_of_isSourceZCL}
     \leanok
     \uses{thm:mpdo_cyclic_active_fourth_region_factorization,
+      thm:mpdo_cyclic_active_markov_of_fourth_region,
       def:hayashi_markov_decomposition}
     Under the hypotheses of
     Theorem~\ref{thm:mpdo_cyclic_active_fourth_region_factorization}, for
