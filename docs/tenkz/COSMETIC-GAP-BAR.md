@@ -69,7 +69,7 @@ hash-pinned visual check required before changing a verdict.
 | `rmp-iii-a-proof-three` | K2 | The full fusion stack is present; red operator rails are the house semantic hue. |
 | `rmp-iii-a-ghz-state` | X | The free-form case records no lattice genre or truncation property; migrate it to the carrier-axis/lattice model first. |
 | `rmp-iii-a-ghz-tensor` | K2 | Copy dot versus labelled box and diagonal angle are equivalent house forms. |
-| `rmp-iii-a-hadamard` | X | Its ledger pairing is `wrong-source`; repair and verify the source mapping before judging the explicit label. |
+| `rmp-iii-a-hadamard` | X | Promoted to `structural-gap`: its pairing is `wrong-source`; repair and verify the source mapping before judging the explicit label. |
 | `rmp-iii-a-spt-mpo` | K2 | The string, action boxes, and measured-leg crossings are complete. |
 | `rmp-iii-a-spt-intertwiner` | X | The open fusion map has no trace cyclicity; restore the source factor order before reviewing glyph scale. |
 | `rmp-iii-a-g-injective-projector` | X | Its ledger pairing is `wrong-source`; repair the projector source mapping before any verdict promotion. |
@@ -100,11 +100,11 @@ hash-pinned visual check required before changing a verdict.
 | `rmp-iv-intersection-rhs-four` | K2 | The five open ends match and the spurious crossing is absent. |
 | `rmp-iv-intersection-lhs-five` | K2 | Sideways stubs preserve the restored three-leg boundary. |
 | `rmp-iv-intersection-rhs-five` | X | Re-audit the mirrored open C--X contraction before accepting it as equivalent routing. |
-| `rmp-iv-intersection-lhs-six` | X | The ledger records `wrong-contraction`; move it out of `cosmetic-gap` before fixing the invented lattice. |
-| `rmp-iv-intersection-rhs-six` | X | The ledger records `wrong-contraction`; move it out of `cosmetic-gap` before fixing the invented lattice. |
+| `rmp-iv-intersection-lhs-six` | X | Promoted to `blocked`: the missing `nested-regions` capability leaves an invented lattice and the wrong contraction. |
+| `rmp-iv-intersection-rhs-six` | X | Promoted to `blocked`: the missing `nested-regions` capability leaves an invented lattice and the wrong contraction. |
 | `rmp-app-czx-state` | K2 | Lighter enclosure fill is a public-theme choice. |
 | `rmp-workbench-ii-newfig7` | K2 | Crossing-gadget styling is a house-form difference. |
-| `rmp-workbench-ii-projector-on-pta` | K4 | Restore the two missing source triangles. |
+| `rmp-workbench-ii-projector-on-pta` | X | Promoted to `structural-gap`: omitting two of four source triangles changes the multiplicity of the sandwich sum. |
 | `rmp-workbench-ii-peps-rg-workbench` | X | Its ledger pairing is `wrong-source`; repair and verify the source mapping before judging the U-application idiom. |
 | `rmp-workbench-ii-positive-mpo-old` | K2 | The ledger already records equal X sizes; re-review the hash-pinned render as faithful. |
 | `rmp-workbench-ii-peps-gauge-old` | K3 | Preserve diagonal leg flow and smooth the marked detour tangents. |
