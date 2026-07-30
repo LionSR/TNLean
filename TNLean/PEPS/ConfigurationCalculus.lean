@@ -27,6 +27,7 @@ namespace PEPS
 
 variable {V : Type*} [Fintype V] [LinearOrder V]
 variable {G : SimpleGraph V} [DecidableRel G.Adj] {d : ℕ}
+variable {A : Tensor G d}
 
 /-! ### Split and reindex equivalences -/
 
@@ -233,6 +234,129 @@ theorem complementProd_eq_merge (A : Tensor G d) (R : Finset V)
     · exact Or.inr ⟨(Finset.mem_sdiff.mp hc1).2, hR2⟩
     · exact absurd hR2 (Finset.mem_sdiff.mp hc2).2
   exact congrFun hp ⟨e, hbdry⟩
+
+/-! ### Boundary-label and product-subset transfer
+
+These lemmas transfer boundary labels and vertex products through a region merge
+`regionMerge A T p`.  When a region `H` is contained in the merge region `T`, its
+boundary label and vertex product read `p.1` through the merge.  When a region
+is disjoint from `T`, they read `p.2`, provided the pair agrees on the `T`-boundary.
+-/
+
+omit [Fintype V] in
+/-- A boundary edge of a region `H` with `H ⊆ T`, read off the merge `regionMerge A T p`,
+equals the value of `p.1`: such an edge touches `H ⊆ T`, hence is `T`-incident, where the
+merge reads `p.1`. -/
+theorem regionBoundaryLabel_regionMerge_of_subset_left {T H : Finset V} (hHT : H ⊆ T)
+    (p : VirtualConfig A × VirtualConfig A) :
+    regionBoundaryLabel (G := G) A H (regionMerge (G := G) A T p) =
+      regionBoundaryLabel (G := G) A H p.1 := by
+  funext f
+  simp only [regionBoundaryLabel_apply]
+  have hinc : IsRegionIncidentEdge (G := G) T f.1 := by
+    rcases isRegionBoundaryEdge_touches (G := G) H f.2 with h1 | h2
+    · exact Or.inl (hHT h1)
+    · exact Or.inr (hHT h2)
+  rw [regionMerge_of_incident (G := G) A _ p hinc]
+
+/-- A boundary edge of the host `univ \ K` with `K ⊆ univ \ T`, read off the merge
+`regionMerge A T p`, equals the value of `p.2`, provided the pair agrees on the `T`-boundary.
+Such an edge has its `K`-endpoint in `univ \ T` (so not in `T`); if `T`-incident, its other
+endpoint is in `T`, making it a `T`-boundary edge where the agreement pins the value, and
+otherwise the merge reads `p.2` directly. -/
+theorem regionBoundaryLabel_regionMerge_compl_of_subset {T K : Finset V}
+    (hKT : K ⊆ Finset.univ \ T) (p : VirtualConfig A × VirtualConfig A)
+    (hp : regionBoundaryLabel (G := G) A T p.1 = regionBoundaryLabel (G := G) A T p.2) :
+    regionBoundaryLabel (G := G) A (Finset.univ \ K) (regionMerge (G := G) A T p) =
+      regionBoundaryLabel (G := G) A (Finset.univ \ K) p.2 := by
+  classical
+  funext f
+  simp only [regionBoundaryLabel_apply]
+  by_cases hinc : IsRegionIncidentEdge (G := G) T f.1
+  · -- `f` is a boundary edge of `univ \ K` and `T`-incident: it is a `T`-boundary edge.
+    have hbdry : IsRegionBoundaryEdge (G := G) T f.1 := by
+      rcases f.2 with ⟨h1host, h2nothost⟩ | ⟨h1nothost, h2host⟩
+      · have h2K : f.1.1.2 ∈ K := by
+          by_contra hk; exact h2nothost (Finset.mem_sdiff.mpr ⟨Finset.mem_univ _, hk⟩)
+        have h2notT : f.1.1.2 ∉ T := by
+          have := hKT h2K; rw [Finset.mem_sdiff] at this; exact this.2
+        rcases hinc with hc1 | hc2
+        · exact Or.inl ⟨hc1, h2notT⟩
+        · exact absurd hc2 h2notT
+      · have h1K : f.1.1.1 ∈ K := by
+          by_contra hk; exact h1nothost (Finset.mem_sdiff.mpr ⟨Finset.mem_univ _, hk⟩)
+        have h1notT : f.1.1.1 ∉ T := by
+          have := hKT h1K; rw [Finset.mem_sdiff] at this; exact this.2
+        rcases hinc with hc1 | hc2
+        · exact absurd hc1 h1notT
+        · exact Or.inr ⟨h1notT, hc2⟩
+    rw [regionMerge_of_incident (G := G) A _ p hinc]
+    have := congrFun hp ⟨f.1, hbdry⟩
+    simpa [regionBoundaryLabel] using this
+  · rw [regionMerge_of_not_incident (G := G) A _ p hinc]
+
+omit [Fintype V] in
+/-- A vertex product over `B ⊆ T` reads `p.1` through the merge `regionMerge A T p`: edges
+incident to `B ⊆ T` are `T`-incident, where the merge reads `p.1`. -/
+theorem regionProd_p1_eq_merge_of_subset {T B : Finset V} (hBT : B ⊆ T)
+    (σ : RegionPhysicalConfig (V := V) (d := d) B) (p : VirtualConfig A × VirtualConfig A) :
+    (∏ w : {w : V // w ∈ B}, A.component w.1 (fun ie => p.1 ie.1) (σ w)) =
+      ∏ w : {w : V // w ∈ B},
+        A.component w.1 (fun ie => regionMerge (G := G) A T p ie.1) (σ w) := by
+  apply regionProd_subtype_congr
+  intro ie hie
+  have hinc : IsRegionIncidentEdge (G := G) T ie :=
+    hie.elim (fun h => Or.inl (hBT h)) (fun h => Or.inr (hBT h))
+  rw [regionMerge_of_incident (G := G) A _ p hinc]
+
+/-- A vertex product over `B ⊆ univ \ T` reads `p.2` through the merge `regionMerge A T p`, given
+the pair agrees on the `T`-boundary: an edge incident to `B` either misses `T` (where the merge
+reads `p.2`) or, being `T`-incident with an endpoint in `B ⊆ univ \ T`, is a `T`-boundary edge
+where the agreement pins it. -/
+theorem regionProd_p2_eq_merge_of_compl {T B : Finset V} (hBT : B ⊆ Finset.univ \ T)
+    (σ : RegionPhysicalConfig (V := V) (d := d) B) (p : VirtualConfig A × VirtualConfig A)
+    (hp : regionBoundaryLabel (G := G) A T p.1 = regionBoundaryLabel (G := G) A T p.2) :
+    (∏ w : {w : V // w ∈ B}, A.component w.1 (fun ie => p.2 ie.1) (σ w)) =
+      ∏ w : {w : V // w ∈ B},
+        A.component w.1 (fun ie => regionMerge (G := G) A T p ie.1) (σ w) := by
+  classical
+  apply regionProd_subtype_congr
+  intro ie hie
+  have hcompl : IsRegionIncidentEdge (G := G) (Finset.univ \ T) ie :=
+    hie.elim (fun h => Or.inl (hBT h)) (fun h => Or.inr (hBT h))
+  by_cases hinc : IsRegionIncidentEdge (G := G) T ie
+  · have hbdry : IsRegionBoundaryEdge (G := G) T ie :=
+      isRegionBoundaryEdge_of_disjoint_incident (G := G) (Finset.univ \ T) T
+        Finset.sdiff_disjoint hcompl hinc
+    rw [regionMerge_of_incident (G := G) A _ p hinc]
+    have := congrFun hp ⟨ie, hbdry⟩
+    simpa [regionBoundaryLabel] using this.symm
+  · rw [regionMerge_of_not_incident (G := G) A _ p hinc]
+
+/-! ### Blocked-weight config-sum expansion -/
+
+open scoped Classical in
+/-- The blocked-region weight grouped over the configurations realizing a boundary label: a
+boundary-indicator config sum collapses the blocked-region weight to a sum over the global
+configurations, grouping by the boundary label. -/
+theorem blockedWeight_as_configSum (R : Finset V)
+    (σ : RegionPhysicalConfig (V := V) (d := d) R)
+    (f : RegionBoundaryConfig (G := G) A R → ℂ) :
+    (∑ μ : RegionBoundaryConfig (G := G) A R,
+        f μ * regionBlockedWeight (G := G) A R μ σ) =
+      ∑ ζ : VirtualConfig A,
+        f (regionBoundaryLabel (G := G) A R ζ) *
+          ∏ w : {w : V // w ∈ R}, A.component w.1 (fun ie => ζ ie.1) (σ w) := by
+  classical
+  rw [← Finset.sum_fiberwise (Finset.univ : Finset (VirtualConfig A))
+    (fun ζ => regionBoundaryLabel (G := G) A R ζ)
+    (fun ζ => f (regionBoundaryLabel (G := G) A R ζ) *
+      ∏ w : {w : V // w ∈ R}, A.component w.1 (fun ie => ζ ie.1) (σ w))]
+  refine Finset.sum_congr rfl (fun μ _ => ?_)
+  rw [regionBlockedWeight, Finset.mul_sum]
+  refine Finset.sum_congr ?_ (fun ζ hζ => ?_)
+  · ext ζ; simp only [Finset.mem_filter, Finset.mem_univ, true_and]
+  · rw [Finset.mem_filter] at hζ; rw [hζ.2]
 
 /-! ### Constant-cardinality fiber sums -/
 
