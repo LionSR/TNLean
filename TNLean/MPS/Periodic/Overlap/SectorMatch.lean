@@ -603,6 +603,139 @@ private lemma isNormal_smul_of_ne
   obtain ⟨N, hN, hC⟩ := hC
   exact ⟨N, hN, isNBlkInjective_smul_of_ne C z hz hC⟩
 
+/-- A matched pair of compressed sectors has an ambient corner implementation.
+
+This is equation `eq:blockedABprop` in ambient form, hence the input to
+`eq:BCmprop`, in arXiv:1708.00029, Appendix A, lines 985--1024. -/
+private lemma exists_ambient_corner_gauge_of_gaugePhase
+    {e n : ℕ} [NeZero n]
+    (CA CB : MPSTensor e n)
+    (P Q : MatrixAlg D)
+    (φP : MatrixAlg n ≃ₗ[ℂ] cornerSubmodule P)
+    (φQ : MatrixAlg n ≃ₗ[ℂ] cornerSubmodule Q)
+    (hP : IsOrthogonalProjection P) (hQ : IsOrthogonalProjection Q)
+    (hφP_mul : ∀ X Y : MatrixAlg n,
+      (φP (X * Y)).1 = (φP X).1 * (φP Y).1)
+    (hφQ_mul : ∀ X Y : MatrixAlg n,
+      (φQ (X * Y)).1 = (φQ X).1 * (φQ Y).1)
+    (hφP_star : ∀ X : MatrixAlg n, (φP Xᴴ).1 = (φP X).1ᴴ)
+    (hφQ_star : ∀ X : MatrixAlg n, (φQ Xᴴ).1 = (φQ X).1ᴴ)
+    (hCA_lc : IsLeftCanonical CA) (hCB_lc : IsLeftCanonical CB)
+    (hCA_normal : IsNormal CA)
+    (hMatch : GaugePhaseEquiv CA CB) :
+    ∃ (U : MatrixAlg D) (c : ℂ),
+      U = P * U * Q ∧
+      Uᴴ * U = Q ∧
+      U * Uᴴ = P ∧
+      ‖c‖ = 1 ∧
+      ∀ i : Fin e, (φP (CA i)).1 =
+        c • (U * (φQ (CB i)).1 * Uᴴ) := by
+  classical
+  obtain ⟨X, z, hz, hCB⟩ := hMatch
+  let CB' : MPSTensor e n := fun i => z⁻¹ • CB i
+  have hGauge : GaugeEquiv CA CB' := by
+    refine ⟨X, fun i => ?_⟩
+    simp only [CB', hCB i, smul_smul, inv_mul_cancel₀ hz, one_smul]
+  have hCB'_normal : IsNormal CB' :=
+    isNormal_of_gaugeEquiv hCA_normal hGauge
+  have hCB_eq : CB = fun i => z • CB' i := by
+    funext i
+    simp [CB', hz]
+  have hCB_normal : IsNormal CB := by
+    rw [hCB_eq]
+    exact isNormal_smul_of_ne CB' z hz hCB'_normal
+  have hCA_irr : IsIrreducibleTensor CA :=
+    (isNormalTensor_of_isNormal_leftCanonical CA hCA_normal hCA_lc).no_invariant_proj
+  have hCB_irr : IsIrreducibleTensor CB :=
+    (isNormalTensor_of_isNormal_leftCanonical CB hCB_normal hCB_lc).no_invariant_proj
+  obtain ⟨W, c₀, hc₀, hW⟩ :=
+    exists_unitaryConj_gaugePhase_of_leftCanonical_irreducible
+      (show GaugePhaseEquiv CA CB from ⟨X, z, hz, hCB⟩)
+      hCA_lc hCB_lc hCA_irr hCB_irr
+  let g : MatrixAlg n ≃ₗ[ℂ] MatrixAlg n :=
+    Matrix.unitaryReindexLinearEquiv (Equiv.refl (Fin n)) W W.prop
+  let f : cornerSubmodule Q ≃ₗ[ℂ] cornerSubmodule P :=
+    φQ.symm.trans (g.trans φP)
+  let mulQ (A B : cornerSubmodule Q) : cornerSubmodule Q :=
+    ⟨A.1 * B.1, by
+      have hQA : Q * A.1 = A.1 := by
+        calc
+          Q * A.1 = Q * (Q * A.1 * Q) := by rw [A.2]
+          _ = (Q * Q) * A.1 * Q := by simp only [Matrix.mul_assoc]
+          _ = A.1 := by rw [hQ.2, A.2]
+      have hBQ : B.1 * Q = B.1 := by
+        calc
+          B.1 * Q = (Q * B.1 * Q) * Q := by rw [B.2]
+          _ = Q * B.1 * (Q * Q) := by simp only [Matrix.mul_assoc]
+          _ = B.1 := by rw [hQ.2, B.2]
+      calc
+        Q * (A.1 * B.1) * Q = (Q * A.1) * (B.1 * Q) := by
+          simp only [Matrix.mul_assoc]
+        _ = A.1 * B.1 := by rw [hQA, hBQ]⟩
+  have hφQ_symm_mul (A B : cornerSubmodule Q) :
+      φQ.symm (mulQ A B) = φQ.symm A * φQ.symm B := by
+    apply φQ.injective
+    apply Subtype.ext
+    rw [LinearEquiv.apply_symm_apply, hφQ_mul,
+      LinearEquiv.apply_symm_apply, LinearEquiv.apply_symm_apply]
+  have hf_mul (A B : cornerSubmodule Q) :
+      (f (mulQ A B)).1 = (f A).1 * (f B).1 := by
+    simp only [f, LinearEquiv.trans_apply]
+    rw [hφQ_symm_mul, show g (φQ.symm A * φQ.symm B) =
+      g (φQ.symm A) * g (φQ.symm B) by
+        exact Matrix.unitaryReindexLinearEquiv_mul
+          (Equiv.refl (Fin n)) W W.prop (φQ.symm A) (φQ.symm B)]
+    exact hφP_mul _ _
+  let starQ (A : cornerSubmodule Q) : cornerSubmodule Q :=
+    ⟨A.1ᴴ, by
+      change Q * A.1ᴴ * Q = A.1ᴴ
+      rw [Matrix.mul_assoc]
+      simpa only [Matrix.conjTranspose_mul, hQ.1.eq,
+        Matrix.conjTranspose_conjTranspose] using congrArg Matrix.conjTranspose A.2⟩
+  have hφQ_symm_star (A : cornerSubmodule Q) :
+      φQ.symm (starQ A) = (φQ.symm A)ᴴ := by
+    apply φQ.injective
+    apply Subtype.ext
+    rw [LinearEquiv.apply_symm_apply, hφQ_star, LinearEquiv.apply_symm_apply]
+  have hf_star (A : cornerSubmodule Q) :
+      (f (starQ A)).1 = (f A).1ᴴ := by
+    simp only [f, LinearEquiv.trans_apply]
+    rw [hφQ_symm_star, show g ((φQ.symm A)ᴴ) = (g (φQ.symm A))ᴴ by
+      simpa only [Matrix.star_eq_conjTranspose] using
+        Matrix.unitaryReindexLinearEquiv_star
+          (Equiv.refl (Fin n)) W W.prop (φQ.symm A)]
+    exact hφP_star _
+  obtain ⟨U, hU_corner, hU_star_U, hU_U_star, hU_transport⟩ :=
+    exists_partial_isometry_implementing_corner_linearEquiv P Q hP hQ f
+      (by
+        intro A B
+        simpa only [mulQ] using hf_mul A B)
+      (by
+        intro A
+        simpa only [starQ] using hf_star A)
+  have hW_star_W : (W : MatrixAlg n)ᴴ * (W : MatrixAlg n) = 1 := by
+    simpa only [Matrix.star_eq_conjTranspose] using
+      Matrix.UnitaryGroup.star_mul_self W
+  have hgCB (i : Fin e) : g (CB i) = c₀ • CA i := by
+    simp [g, hW i, Matrix.unitaryReindexLinearEquiv_apply,
+      Matrix.mul_assoc, hW_star_W]
+    rw [Matrix.star_eq_conjTranspose, ← Matrix.mul_assoc,
+      hW_star_W, Matrix.one_mul]
+  have htransport (i : Fin e) :
+      c₀ • (φP (CA i)).1 = U * (φQ (CB i)).1 * Uᴴ := by
+    calc
+      c₀ • (φP (CA i)).1 = (φP (c₀ • CA i)).1 := by
+        rw [map_smul]
+        rfl
+      _ = (f (φQ (CB i))).1 := by
+        simp only [f, LinearEquiv.trans_apply, LinearEquiv.symm_apply_apply, hgCB]
+      _ = U * (φQ (CB i)).1 * Uᴴ := hU_transport (φQ (CB i))
+  have hc₀_ne : c₀ ≠ 0 := Complex.ne_zero_of_norm_eq_one hc₀
+  refine ⟨U, c₀⁻¹, hU_corner, hU_star_U, hU_U_star, ?_, ?_⟩
+  · simp [norm_inv, hc₀]
+  · intro i
+    rw [← htransport i, smul_smul, inv_mul_cancel₀ hc₀_ne, one_smul]
+
 /-- Full-cycle contraction step for periodic-overlap Case 3.
 
 At this point the sector transport has already been abstracted into
