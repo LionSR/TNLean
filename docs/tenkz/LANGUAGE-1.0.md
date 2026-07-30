@@ -307,9 +307,11 @@ no millimetres.
 Ink the frame measures lies in the frame; ink the frame only places stays
 upright. Skins, contours and wires are measured; label text is placed and
 never turns. Orientation is a consequence of where a record sits and is never
-an authored quantity: a port's page direction is its angle plus its record's
-accumulated turn, so the type check and the boundary signature are computed
-in the axes the ports actually point along. Contraction is unaffected —
+an authored quantity: a port's page direction is its local direction
+transported through its carrier's basis. Labels use that direction for
+placement while their text remains upright, so the type check and the
+boundary signature are computed in the axes the ports actually point along.
+Contraction is unaffected —
 turning an atom changes no bond, only which way its faces look. Under a flat
 frame the local axes are the global axes, so the flat corpus resolves
 unchanged.

@@ -69,6 +69,37 @@ grep -Fq 'string|id=vertical|kind=wind|class=0,1|pts=12' \
   echo "FAIL: the vertical torus class did not reach the winding renderer" >&2
   exit 1
 }
+plane_frame=$(grep '^frame|' "$WORK/k_plane.tnlog") || {
+  echo "FAIL: frame=plane emitted no frame record" >&2
+  exit 1
+}
+plane_frame_canonical=$(
+  printf '%s\n' "$plane_frame" |
+    sed -E 's/^frame\|id=frame-[0-9]+\|/frame|/'
+)
+[ "$plane_frame_canonical" = \
+  'frame|a=-0.45|b=1|c=-0.60|d=0|dx=-0.55|dy=0.60|map=plane|scope=picture' ] || {
+  echo "FAIL: frame=plane did not record the fixed projected basis" >&2
+  exit 1
+}
+grep -Fq '|from=addr-13|kind=index|to-open=n' "$WORK/k_plane.tnlog" || {
+  echo "FAIL: the plane fixture lost its projected open physical port" >&2
+  exit 1
+}
+awk '
+  /^picture[|]id=k1[|]/ { picture = NR }
+  /^warning[|]picture=k1[|]code=plane-tall-window[|]/ { warning = NR }
+  END { exit !(picture && warning && picture < warning) }
+' "$WORK/r_plane_warning.tnlog" || {
+  echo "FAIL: the plane guard warning did not follow its picture header" >&2
+  exit 1
+}
+python3 "$REPO/scripts/tenkz_audit.py" \
+  "$WORK/r_plane_warning.tnlog" "$KERNEL/regression/r_plane_warning.tex" \
+  >/dev/null || {
+  echo "FAIL: the plane warning stream did not pass the one-pass audit" >&2
+  exit 1
+}
 if grep -Eq 'name=(wrap|cup)-(west|east|north|south)' \
     "$WORK/k_twoshift.tnlog" "$WORK/r_cup.tnlog"; then
   echo "FAIL: a side-level closure survived normalization" >&2
@@ -296,8 +327,8 @@ command -v pdftoppm >/dev/null 2>&1 || {
   exit 1
 }
 for pixel_fixture in \
-    k_skin_pairings r_hull_live r_ink_semantics r_label_turn r_parallel_lanes \
-    r_ring_closure; do
+    k_plane k_skin_pairings r_hull_live r_ink_semantics r_label_turn \
+    r_parallel_lanes r_ring_closure; do
   if ! pdftoppm -singlefile -png -r 300 \
       "$WORK/$pixel_fixture.pdf" "$WORK/$pixel_fixture" >/dev/null 2>&1; then
     echo "FAIL: $pixel_fixture fixture could not be rasterized" >&2
@@ -349,7 +380,7 @@ for path in sys.argv[1:]:
     data = open(path, "rb").read()
     print(hashlib.sha256(data).hexdigest(), "", path.rsplit("/", 1)[-1])' \
   "$WORK/k_skin_pairings.png" "$WORK/r_hull_live.png" \
-  "$WORK/r_ink_semantics.png" "$WORK/r_label_turn.png" \
+  "$WORK/k_plane.png" "$WORK/r_ink_semantics.png" "$WORK/r_label_turn.png" \
   "$WORK/r_parallel_lanes.png" "$WORK/r_ring_closure.png" >"$PIXEL_CURRENT"
 
 negative="$KERNEL/negative/n_diagonal_port.tex"
@@ -363,6 +394,19 @@ fi
 grep -Fq '[TKZ-LANG-ADDRESS]' "$WORK/n_diagonal_port.transcript" || {
   echo "FAIL: the diagonal-port rejection lacked TKZ-LANG-ADDRESS" >&2
   tail -20 "$WORK/n_diagonal_port.transcript" >&2
+  exit 1
+}
+
+frame_negative="$KERNEL/negative/n_frame_word.tex"
+if ( cd "$WORK" &&
+     TEXINPUTS="$REPO/tex/tenkz//:" \
+       timeout 120 xelatex -interaction=nonstopmode -halt-on-error \
+       "$frame_negative" >"$WORK/n_frame_word.transcript" 2>&1 ); then
+  echo "FAIL: a word outside the frame alphabet was accepted" >&2
+  exit 1
+fi
+grep -Fq '[TKZ-LANG-CHOICE]' "$WORK/n_frame_word.transcript" || {
+  echo "FAIL: unknown frame word lacked TKZ-LANG-CHOICE" >&2
   exit 1
 }
 

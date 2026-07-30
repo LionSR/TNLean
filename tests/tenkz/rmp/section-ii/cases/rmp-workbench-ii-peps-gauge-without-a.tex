@@ -1,53 +1,42 @@
 % Target: rmp-workbench-ii-peps-gauge-without-a
 % Formula: The unlabeled PEPS relation carries two marked virtual legs across B.
-% Ink: Canonical public tenkzfree environment; no raw TikZ.
+% Ink: Kernel plane frame with projected PEPS stars and marked gauge paths.
 % Boundary: Each PEPS atom has four virtual and one physical open leg; each marked
 %   route has two open virtual endpoints.
 % Source: author source ImagesReview Section II/ImagesReview Section II.tex lines
 %   374-389; archival output newfig7woa.pdf
-% Capabilities: free-graph, typed-ports
+% Capabilities: kernel, plane-frame, typed-ports, open-string
 \[
-  \begin{tenkzfree}
-    \tnput[dot,ports={north:virtual,south:virtual,east:virtual,west:virtual,
-      north east:physical}]{a}{(0mm,0mm)}{}
-    \tnput[boundary,ports={east:virtual}]{aw}{(-8mm,0mm)}{}
-    \tnput[boundary,ports={west:virtual}]{ae}{(8mm,0mm)}{}
-    \tnput[boundary,ports={south:virtual}]{an}{(0mm,8mm)}{}
-    \tnput[boundary,ports={north:virtual}]{as}{(0mm,-8mm)}{}
-    \tnput[boundary,ports={south west:physical}]{ap}{(5mm,7mm)}{}
-    \tnjoin{aw.east}{a.west} \tnjoin{a.east}{ae.west}
-    \tnjoin{an.south}{a.north} \tnjoin{a.south}{as.north}
-    \tnjoin{a.north east}{ap.south west}
-    \tnput[dot,role=marked,ports={north:virtual,south:virtual}]
-      {gW}{(-5mm,0mm)}{}
-    \tnput[dot,role=marked,ports={north:virtual,east:virtual}]
-      {gS}{(0mm,-5mm)}{}
-    \tnput[boundary,ports={south:virtual}]{gin}{(-5mm,9mm)}{}
-    \tnput[boundary,ports={west:virtual}]{gout}{(9mm,-5mm)}{}
-    \tnjoin[role=marked]{gin.south}{gW.north}
-    \tnjoin[role=marked,route=vh]{gW.south}{gS.north}
-    \tnjoin[role=marked]{gS.east}{gout.west}
-  \end{tenkzfree}
-  \;=\;
-  \underset{B}{\begin{tenkzfree}
-    \tnput[dot,ports={north:virtual,south:virtual,east:virtual,west:virtual,
-      north east:physical}]{b}{(0mm,0mm)}{}
-    \tnput[boundary,ports={east:virtual}]{bw}{(-8mm,0mm)}{}
-    \tnput[boundary,ports={west:virtual}]{be}{(8mm,0mm)}{}
-    \tnput[boundary,ports={south:virtual}]{bn}{(0mm,8mm)}{}
-    \tnput[boundary,ports={north:virtual}]{bs}{(0mm,-8mm)}{}
-    \tnput[boundary,ports={south west:physical}]{bp}{(5mm,7mm)}{}
-    \tnjoin{bw.east}{b.west} \tnjoin{b.east}{be.west}
-    \tnjoin{bn.south}{b.north} \tnjoin{b.south}{bs.north}
-    \tnjoin{b.north east}{bp.south west}
-    \tnput[dot,role=marked,ports={south:virtual,north:virtual}]
-      {gE}{(5mm,0mm)}{}
-    \tnput[dot,role=marked,ports={east:virtual,west:virtual}]
-      {gN}{(0mm,5mm)}{}
-    \tnput[boundary,ports={north:virtual}]{gin}{(5mm,-9mm)}{}
-    \tnput[boundary,ports={east:virtual}]{gout}{(-9mm,5mm)}{}
-    \tnjoin[role=marked]{gin.north}{gE.south}
-    \tnjoin[role=marked,route=vh]{gE.north}{gN.east}
-    \tnjoin[role=marked]{gN.west}{gout.east}
-  \end{tenkzfree}}
+  \tenkzkernel
+  \tndeclare{species}{gauge}{hue=source:blue}
+  \begin{tenkz}[
+      rows={wire,wire,wire,wire,wire}, cols=5, bonds=none, frame=plane]
+    \tn[at=(3,3), name=A,
+      ports={0:virtual,90:virtual,180:virtual,270:virtual,45:physical}]{}
+    \tnwire{A.180}{open w}
+    \tnwire{A.0}{open e}
+    \tnwire{A.90}{open n}
+    \tnwire{A.270}{open s}
+    \tnwire{A.45}{open ne}
+    \tn[at=(3,2), name=gW, skin=dot, species=gauge]{}
+    \tn[at=(4,3), name=gS, skin=dot, species=gauge]{}
+    \tnwire[kind=string, species=gauge]{open n}{gW}
+    \tnwire[kind=string, species=gauge, route=orth, via={(4,2)}]{gW}{gS}
+    \tnwire[kind=string, species=gauge]{gS}{open e}
+  \end{tenkz}\;=\;
+  \underset{B}{\begin{tenkz}[
+      rows={wire,wire,wire,wire,wire}, cols=5, bonds=none, frame=plane]
+    \tn[at=(3,3), name=B,
+      ports={0:virtual,90:virtual,180:virtual,270:virtual,45:physical}]{}
+    \tnwire{B.180}{open w}
+    \tnwire{B.0}{open e}
+    \tnwire{B.90}{open n}
+    \tnwire{B.270}{open s}
+    \tnwire{B.45}{open ne}
+    \tn[at=(3,4), name=gE, skin=dot, species=gauge]{}
+    \tn[at=(2,3), name=gN, skin=dot, species=gauge]{}
+    \tnwire[kind=string, species=gauge]{open s}{gE}
+    \tnwire[kind=string, species=gauge, route=orth, via={(2,4)}]{gE}{gN}
+    \tnwire[kind=string, species=gauge]{gN}{open w}
+  \end{tenkz}}
 \]

@@ -715,7 +715,8 @@
 
 \__tenkz_kernel_value:nnn   { tenkz-kernel-picture } { rows } { rows }
 \__tenkz_kernel_value:nnn   { tenkz-kernel-picture } { cols } { cols }
-\__tenkz_kernel_value:nnn   { tenkz-kernel-picture } { frame } { frame }
+\__tenkz_kernel_choice:nnnn { tenkz-kernel-picture } { frame }
+  { flat, plane, circle } { frame }
 \__tenkz_kernel_choice:nnnn { tenkz-kernel-picture } { west }
   { open, none, trace, cup } { west }
 \__tenkz_kernel_choice:nnnn { tenkz-kernel-picture } { east }
@@ -2293,17 +2294,141 @@
   }
 \cs_new_protected:Npn \__tenkz_kernel_r_frame:
   {
-    \str_if_eq:eeTF { \__tenkz_kernel_r_frame_word: } {circle}
+    \str_case_e:nn { \__tenkz_kernel_r_frame_word: }
       {
-        \__tenkz_geom_frame_declare_circle:nnnn {kpic}
-          { \__tenkz_kernel_cols: }
+        {circle}
           {
-            \__tenkz_kernel_cols: < 2
-              ? 0 : 1 / ( 2 * sind( 180 / \__tenkz_kernel_cols: ) )
+            \__tenkz_geom_frame_declare_circle:nnnn {kpic}
+              { \__tenkz_kernel_cols: }
+              {
+                \__tenkz_kernel_cols: < 2
+                  ? 0 : 1 / ( 2 * sind( 180 / \__tenkz_kernel_cols: ) )
+              }
+              {90}
           }
-          {90}
+        {plane}
+          { \__tenkz_geom_frame_declare_plane:n {kpic} }
+        {flat}
+          {
+            \__tenkz_geom_frame_declare_affine:nnnnnnn
+              {kpic} {0}{1}{-1}{0} {-1}{1}
+          }
       }
-      { \__tenkz_geom_frame_declare_affine:nnnnnnn {kpic} {0}{1}{-1}{0} {-1}{1} }
+  }
+
+% A projected picture carries its map as model data.  This is recorded after
+% authored and derived topology, so enabling a frame cannot renumber atoms or
+% wires.  The fixed guard thresholds are still evaluated from named metrics:
+% a future metric retune therefore reports the same hazards as the lattice
+% sweep rather than silently changing the projection.
+\cs_new_protected:Npn \__tenkz_kernel_plane_model:
+  {
+    \str_if_eq:eeT { \__tenkz_kernel_r_frame_word: } {plane}
+      {
+        \__tenkz_model_record_frame:e
+          {
+            map = plane , scope = picture ,
+            a = -\__tenkz_metric_ratio:n {planeslant} , b = 1 ,
+            c = -\__tenkz_metric_ratio:n {planerise} , d = 0 ,
+            dx = \fp_eval:n { \__tenkz_metric_ratio:n {planeslant} - 1 } ,
+            dy = \__tenkz_metric_ratio:n {planerise}
+          }
+        \fp_compare:nNnF
+          { \__tenkz_metric_ratio:n {planerise} }
+          > { \__tenkz_metric_ratio:n {physleg} }
+          {
+            \msg_warning:nnee {tenkz}{plane-rise-low}
+              { \__tenkz_metric_ratio:n {planerise} }
+              { \__tenkz_metric_ratio:n {physleg} }
+          }
+        \bool_lazy_and:nnF
+          {
+            \fp_compare_p:nNn
+              { \__tenkz_metric_ratio:n {planeslant} }
+              > { \__tenkz_metric_ratio:n {slantmin} }
+          }
+          {
+            \fp_compare_p:nNn
+              { \__tenkz_metric_ratio:n {planeslant} }
+              < { \__tenkz_metric_ratio:n {slantmax} }
+          }
+          {
+            \msg_warning:nnn {tenkz}{plane-slant-band}
+              { \__tenkz_metric_ratio:n {planeslant} }
+          }
+        \fp_compare:nNnT
+          {
+            ( \__tenkz_kernel_rows: - 1 )
+            * \__tenkz_metric_ratio:n {planeslant}
+          }
+          > { ( \__tenkz_kernel_cols: - 1 ) / 2 }
+          {
+            \msg_warning:nnee {tenkz}{plane-tall-window}
+              {
+                \fp_eval:n
+                  {
+                    ( \__tenkz_kernel_rows: - 1 )
+                    * \__tenkz_metric_ratio:n {planeslant}
+                  }
+              }
+              { \fp_eval:n { ( \__tenkz_kernel_cols: - 1 ) / 2 } }
+          }
+      }
+  }
+
+% Warning diagnostics are evaluated with the model, but their audit events
+% must follow the picture header.  The parser is intentionally one-pass and
+% rejects a warning that names a picture not yet declared.
+\cs_new_protected:Npn \__tenkz_kernel_plane_events:
+  {
+    \str_if_eq:eeT { \__tenkz_kernel_r_frame_word: } {plane}
+      {
+        \fp_compare:nNnF
+          { \__tenkz_metric_ratio:n {planerise} }
+          > { \__tenkz_metric_ratio:n {physleg} }
+          {
+            \__tenkz_kernel_event:n
+              {
+                warning|picture=k\int_use:N \g__tenkz_kernel_picture_int
+                |code=plane-rise-low
+                |rise=\__tenkz_metric_ratio:n {planerise}
+              }
+          }
+        \bool_lazy_and:nnF
+          {
+            \fp_compare_p:nNn
+              { \__tenkz_metric_ratio:n {planeslant} }
+              > { \__tenkz_metric_ratio:n {slantmin} }
+          }
+          {
+            \fp_compare_p:nNn
+              { \__tenkz_metric_ratio:n {planeslant} }
+              < { \__tenkz_metric_ratio:n {slantmax} }
+          }
+          {
+            \__tenkz_kernel_event:n
+              {
+                warning|picture=k\int_use:N \g__tenkz_kernel_picture_int
+                |code=plane-slant-band
+                |slant=\__tenkz_metric_ratio:n {planeslant}
+              }
+          }
+        \fp_compare:nNnT
+          {
+            ( \__tenkz_kernel_rows: - 1 )
+            * \__tenkz_metric_ratio:n {planeslant}
+          }
+          > { ( \__tenkz_kernel_cols: - 1 ) / 2 }
+          {
+            \__tenkz_kernel_event:n
+              {
+                warning|picture=k\int_use:N \g__tenkz_kernel_picture_int
+                |code=plane-tall-window
+                |rows=\__tenkz_kernel_rows:
+                |cols=\__tenkz_kernel_cols:
+              }
+          }
+      }
   }
 
 % The turn a record's carrier gives it: the angle its own axes stand at on
@@ -2315,6 +2440,34 @@
     \quark_if_no_value:NT #2 { \tl_set:Nn #2 {0} }
   }
 \prop_new:N \l__tenkz_kernel_r_turn_prop
+
+% Carry one of an atom's logical face directions to the page.  Kernel cell
+% coordinates are (row, column), whereas geometry direction angles are
+% measured from the first affine input.  Thus a face angle theta enters the
+% matrix as 90 + theta: east follows the column vector and north follows the
+% negative row vector.  A circle or a carrier-local atom retains the turn
+% model because its axes vary by station rather than by one affine matrix.
+\cs_new_protected:Npn \__tenkz_kernel_r_page_face:nnN #1#2#3
+  {
+    \__tenkz_kernel_r_atom_rc:nNNN {#1}
+      \l__tenkz_kernel_turn_a_tl \l__tenkz_kernel_turn_b_tl
+      \l__tenkz_kernel_turn_bool
+    \bool_if:NTF \l__tenkz_kernel_turn_bool
+      {
+        \__tenkz_geom_frame_if_affine:nTF {kpic}
+          { \__tenkz_geom_local_dir:nnN {kpic} {#2} #3 }
+          {
+            \__tenkz_kernel_r_turn:nN {#1} \l__tenkz_kernel_turn_tl
+            \tl_set:Ne #3
+              { \fp_eval:n { (#2) + \l__tenkz_kernel_turn_tl } }
+          }
+      }
+      {
+        \__tenkz_kernel_r_turn:nN {#1} \l__tenkz_kernel_turn_tl
+        \tl_set:Ne #3
+          { \fp_eval:n { (#2) + \l__tenkz_kernel_turn_tl } }
+      }
+  }
 
 \cs_new_protected:Npn \__tenkz_kernel_r_frame_xy:nnNN #1#2#3#4
   {
@@ -4804,19 +4957,31 @@
         \__tenkz_model_get:nnN {#1} {from-open} \l__tenkz_kernel_r_end_tl
         \quark_if_no_value:NF \l__tenkz_kernel_r_end_tl
           {
-            \fp_set:Nn \l__tenkz_kernel_r_x_fp
+            \str_if_eq:eeTF { \__tenkz_kernel_r_frame_word: } {plane}
               {
-                \l__tenkz_kernel_r_xb_fp
-                + \__tenkz_metric_ratio:n {stub}
-                  * cosd(\__tenkz_kernel_r_compass:n
-                      {\l__tenkz_kernel_r_end_tl})
+                \fp_set_eq:NN \l__tenkz_kernel_r_xc_fp
+                  \l__tenkz_kernel_r_xb_fp
+                \fp_set_eq:NN \l__tenkz_kernel_r_yc_fp
+                  \l__tenkz_kernel_r_yb_fp
+                \exp_args:NV \__tenkz_kernel_r_open_tip_affine_xy:nNN
+                  \l__tenkz_kernel_r_end_tl
+                  \l__tenkz_kernel_r_x_fp \l__tenkz_kernel_r_y_fp
               }
-            \fp_set:Nn \l__tenkz_kernel_r_y_fp
               {
-                \l__tenkz_kernel_r_yb_fp
-                + \__tenkz_metric_ratio:n {stub}
-                  * sind(\__tenkz_kernel_r_compass:n
-                      {\l__tenkz_kernel_r_end_tl})
+                \fp_set:Nn \l__tenkz_kernel_r_x_fp
+                  {
+                    \l__tenkz_kernel_r_xb_fp
+                    + \__tenkz_metric_ratio:n {stub}
+                      * cosd(\__tenkz_kernel_r_compass:n
+                          {\l__tenkz_kernel_r_end_tl})
+                  }
+                \fp_set:Nn \l__tenkz_kernel_r_y_fp
+                  {
+                    \l__tenkz_kernel_r_yb_fp
+                    + \__tenkz_metric_ratio:n {stub}
+                      * sind(\__tenkz_kernel_r_compass:n
+                          {\l__tenkz_kernel_r_end_tl})
+                  }
               }
             \bool_set_true:N \l__tenkz_kernel_r_from_bool
           }
@@ -4826,19 +4991,31 @@
         \__tenkz_model_get:nnN {#1} {to-open} \l__tenkz_kernel_r_end_tl
         \quark_if_no_value:NF \l__tenkz_kernel_r_end_tl
           {
-            \fp_set:Nn \l__tenkz_kernel_r_xb_fp
+            \str_if_eq:eeTF { \__tenkz_kernel_r_frame_word: } {plane}
               {
-                \l__tenkz_kernel_r_x_fp
-                + \__tenkz_metric_ratio:n {stub}
-                  * cosd(\__tenkz_kernel_r_compass:n
-                      {\l__tenkz_kernel_r_end_tl})
+                \fp_set_eq:NN \l__tenkz_kernel_r_xc_fp
+                  \l__tenkz_kernel_r_x_fp
+                \fp_set_eq:NN \l__tenkz_kernel_r_yc_fp
+                  \l__tenkz_kernel_r_y_fp
+                \exp_args:NV \__tenkz_kernel_r_open_tip_affine_xy:nNN
+                  \l__tenkz_kernel_r_end_tl
+                  \l__tenkz_kernel_r_xb_fp \l__tenkz_kernel_r_yb_fp
               }
-            \fp_set:Nn \l__tenkz_kernel_r_yb_fp
               {
-                \l__tenkz_kernel_r_y_fp
-                + \__tenkz_metric_ratio:n {stub}
-                  * sind(\__tenkz_kernel_r_compass:n
-                      {\l__tenkz_kernel_r_end_tl})
+                \fp_set:Nn \l__tenkz_kernel_r_xb_fp
+                  {
+                    \l__tenkz_kernel_r_x_fp
+                    + \__tenkz_metric_ratio:n {stub}
+                      * cosd(\__tenkz_kernel_r_compass:n
+                          {\l__tenkz_kernel_r_end_tl})
+                  }
+                \fp_set:Nn \l__tenkz_kernel_r_yb_fp
+                  {
+                    \l__tenkz_kernel_r_y_fp
+                    + \__tenkz_metric_ratio:n {stub}
+                      * sind(\__tenkz_kernel_r_compass:n
+                          {\l__tenkz_kernel_r_end_tl})
+                  }
               }
             \bool_set_true:N \l__tenkz_kernel_r_to_bool
           }
@@ -5181,15 +5358,9 @@
         \__tenkz_kernel_r_xy:nNN {#1}
           \l__tenkz_kernel_r_x_fp \l__tenkz_kernel_r_y_fp
         % the leg's outward direction: its face read in the atom's own axes
-        \__tenkz_kernel_r_turn:nN {#1} \l__tenkz_kernel_r_leg_turn_tl
-        \tl_set:Ne \l__tenkz_kernel_leg_dir_tl
-          {
-            \fp_eval:n
-              {
-                \str_if_eq:nnTF {#2} {n} {90} {270}
-                + \l__tenkz_kernel_r_leg_turn_tl
-              }
-          }
+        \__tenkz_kernel_r_page_face:nnN {#1}
+          { \str_if_eq:nnTF {#2} {n} {90} {270} }
+          \l__tenkz_kernel_leg_dir_tl
         \fp_set:Nn \l__tenkz_kernel_r_reach_fp
           { \__tenkz_metric_ratio:n {physleg} }
         % A reach is the maximum over everything declared to meet it.  A leg
@@ -5370,21 +5541,21 @@
 \tl_new:N \l__tenkz_kernel_r_leg_turn_tl
 \cs_new_protected:Npn \__tenkz_kernel_r_leg_ink:nnn #1#2#3
   {
-    \str_if_eq:nnTF {#2} {n}
-      { \fp_set:Nn \l__tenkz_kernel_r_yc_fp { \l__tenkz_kernel_r_reach_fp } }
-      { \fp_set:Nn \l__tenkz_kernel_r_yc_fp { - \l__tenkz_kernel_r_reach_fp } }
-    \__tenkz_kernel_r_turn:nN {#1} \l__tenkz_kernel_r_leg_turn_tl
+    \fp_set:Nn \l__tenkz_kernel_r_yc_fp { \l__tenkz_kernel_r_reach_fp }
+    \__tenkz_kernel_r_page_face:nnN {#1}
+      { \str_if_eq:nnTF {#2} {n} {90} {270} }
+      \l__tenkz_kernel_r_leg_turn_tl
     \fp_set:Nn \l__tenkz_kernel_r_tipx_fp
       {
         \l__tenkz_kernel_r_x_fp
         + \l__tenkz_kernel_r_yc_fp
-          * cosd( 90 + \l__tenkz_kernel_r_leg_turn_tl )
+          * cosd( \l__tenkz_kernel_r_leg_turn_tl )
       }
     \fp_set:Nn \l__tenkz_kernel_r_tipy_fp
       {
         \l__tenkz_kernel_r_y_fp
         + \l__tenkz_kernel_r_yc_fp
-          * sind( 90 + \l__tenkz_kernel_r_leg_turn_tl )
+          * sind( \l__tenkz_kernel_r_leg_turn_tl )
       }
     \tl_if_blank:nTF {#3}
       {
@@ -5636,9 +5807,129 @@
       }
   }
 
-% an open end projects to the margin of its side, at the transverse
-% coordinate of the nearest routed point (held in the xc/yc registers)
+% An affine open end first returns its routed neighbour to logical
+% coordinates, fixes the named row/column margin there, and applies the whole
+% frame again.  This preserves the transverse logical coordinate under a
+% shear; mixing the neighbour's page x with a separately projected margin y
+% would silently turn every projected frame back into an axis-aligned one.
 \cs_new_protected:Npn \__tenkz_kernel_r_open_tip:nN #1#2
+  {
+    \__tenkz_geom_frame_if_affine:nTF {kpic}
+      { \__tenkz_kernel_r_open_tip_affine:nN {#1} #2 }
+      { \__tenkz_kernel_r_open_tip_circle:nN {#1} #2 }
+  }
+
+\cs_new_protected:Npn \__tenkz_kernel_r_open_tip_affine:nN #1#2
+  {
+    \__tenkz_kernel_r_open_tip_affine_xy:nNN {#1}
+      \l__tenkz_kernel_r_xb_fp \l__tenkz_kernel_r_yb_fp
+    \tl_set:Ne #2
+      {
+        \__tenkz_kernel_r_ppt:nn
+          { \l__tenkz_kernel_r_xb_fp } { \l__tenkz_kernel_r_yb_fp }
+      }
+  }
+
+\cs_new_protected:Npn \__tenkz_kernel_r_open_tip_affine_xy:nNN #1#2#3
+  {
+    \__tenkz_geom_unapply:nnnNN {kpic}
+      { \l__tenkz_kernel_r_xc_fp } { \l__tenkz_kernel_r_yc_fp }
+      \l__tenkz_kernel_r_row_tl \l__tenkz_kernel_r_col_tl
+    \str_case:nn {#1}
+      {
+        {n}
+          {
+            \tl_set:Ne \l__tenkz_kernel_r_row_tl
+              { \fp_eval:n { 1 - \__tenkz_metric_ratio:n {stub} } }
+          }
+        {s}
+          {
+            \tl_set:Ne \l__tenkz_kernel_r_row_tl
+              {
+                \fp_eval:n
+                  {
+                    \l__tenkz_kernel_r_rows_int
+                    + \__tenkz_metric_ratio:n {stub}
+                  }
+              }
+          }
+        {w}
+          {
+            \tl_set:Ne \l__tenkz_kernel_r_col_tl
+              { \fp_eval:n { 1 - \__tenkz_metric_ratio:n {stub} } }
+          }
+        {e}
+          {
+            \tl_set:Ne \l__tenkz_kernel_r_col_tl
+              {
+                \fp_eval:n
+                  {
+                    \l__tenkz_kernel_r_cols_int
+                    + \__tenkz_metric_ratio:n {stub}
+                  }
+              }
+          }
+        {nw}
+          {
+            \tl_set:Ne \l__tenkz_kernel_r_row_tl
+              { \fp_eval:n { 1 - \__tenkz_metric_ratio:n {stub} } }
+            \tl_set:Ne \l__tenkz_kernel_r_col_tl
+              { \fp_eval:n { 1 - \__tenkz_metric_ratio:n {stub} } }
+          }
+        {ne}
+          {
+            \tl_set:Ne \l__tenkz_kernel_r_row_tl
+              { \fp_eval:n { 1 - \__tenkz_metric_ratio:n {stub} } }
+            \tl_set:Ne \l__tenkz_kernel_r_col_tl
+              {
+                \fp_eval:n
+                  {
+                    \l__tenkz_kernel_r_cols_int
+                    + \__tenkz_metric_ratio:n {stub}
+                  }
+              }
+          }
+        {sw}
+          {
+            \tl_set:Ne \l__tenkz_kernel_r_row_tl
+              {
+                \fp_eval:n
+                  {
+                    \l__tenkz_kernel_r_rows_int
+                    + \__tenkz_metric_ratio:n {stub}
+                  }
+              }
+            \tl_set:Ne \l__tenkz_kernel_r_col_tl
+              { \fp_eval:n { 1 - \__tenkz_metric_ratio:n {stub} } }
+          }
+        {se}
+          {
+            \tl_set:Ne \l__tenkz_kernel_r_row_tl
+              {
+                \fp_eval:n
+                  {
+                    \l__tenkz_kernel_r_rows_int
+                    + \__tenkz_metric_ratio:n {stub}
+                  }
+              }
+            \tl_set:Ne \l__tenkz_kernel_r_col_tl
+              {
+                \fp_eval:n
+                  {
+                    \l__tenkz_kernel_r_cols_int
+                    + \__tenkz_metric_ratio:n {stub}
+                  }
+              }
+          }
+      }
+    \__tenkz_kernel_r_frame_xy:nnNN
+      { \l__tenkz_kernel_r_row_tl } { \l__tenkz_kernel_r_col_tl }
+      #2 #3
+  }
+
+% A circle has no global affine inverse.  Its established margin projection
+% remains station-based; affine pictures take the exact branch above.
+\cs_new_protected:Npn \__tenkz_kernel_r_open_tip_circle:nN #1#2
   {
     \str_case:nn {#1}
       {
@@ -7475,8 +7766,28 @@
       }
     \quark_if_no_value:NF \l__tenkz_kernel_r_tl
       {
-        \exp_args:NV \__tenkz_kernel_r_turn:nN
-          \l__tenkz_kernel_r_tl \l__tenkz_kernel_r_tau_tl
+        \__tenkz_model_get:nnN {#1} {label-pos} \l__tenkz_kernel_r_c_tl
+        \quark_if_no_value:NT \l__tenkz_kernel_r_c_tl
+          { \tl_set:Nn \l__tenkz_kernel_r_c_tl { n } }
+        \tl_set:Ne \l__tenkz_kernel_r_c_tl
+          {
+            \__tenkz_kernel_r_compass:n
+              { \tl_use:N \l__tenkz_kernel_r_c_tl }
+          }
+        % A label bearing is a carrier-local direction, just like a port
+        % face.  Subtract its local angle again because the shared ink helper
+        % below adds that angle to the carrier contribution.
+        \exp_args:NVV \__tenkz_kernel_r_page_face:nnN
+          \l__tenkz_kernel_r_tl \l__tenkz_kernel_r_c_tl
+          \l__tenkz_kernel_r_tau_tl
+        \tl_set:Ne \l__tenkz_kernel_r_tau_tl
+          {
+            \fp_eval:n
+              {
+                \l__tenkz_kernel_r_tau_tl
+                - \l__tenkz_kernel_r_c_tl
+              }
+          }
       }
     \__tenkz_kernel_r_mark_label_ink:n {#1}
   }
@@ -7729,8 +8040,28 @@
           { \fp_eval:n { ( \__tenkz_kernel_rows: + 1 ) / 2 } }
       }
   }
+\cs_new_protected:Npn \__tenkz_kernel_r_axis_place:
+  {
+    \__tenkz_geom_frame_if_affine:nTF {kpic}
+      {
+        % The baseline is the selected logical row after the frame map, not
+        % the flat-frame ordinate.  Column one is sufficient: an affine row
+        % has one common page y exactly when it can serve as a TikZ baseline.
+        \__tenkz_geom_apply:nnnNN {kpic}
+          { \l__tenkz_kernel_r_axis_tl } {1}
+          \l__tenkz_kernel_r_x_tl \l__tenkz_kernel_r_y_tl
+        \tl_set_eq:NN
+          \l__tenkz_kernel_r_axis_tl \l__tenkz_kernel_r_y_tl
+      }
+      {
+        % A circular row is not a line; retain the established tangent-frame
+        % convention for that non-affine carrier.
+        \tl_set:Ne \l__tenkz_kernel_r_axis_tl
+          { \fp_eval:n { 1 - \l__tenkz_kernel_r_axis_tl } }
+      }
+  }
 \cs_new:Npn \__tenkz_kernel_r_axis:
-  { 1 - \l__tenkz_kernel_r_axis_tl }
+  { \l__tenkz_kernel_r_axis_tl }
 
 \cs_new_protected:Npn \__tenkz_kernel_render:
   {
@@ -7761,6 +8092,7 @@
     \__tenkz_geom_reset:
     \prop_clear:N \l__tenkz_kernel_r_turn_prop
     \__tenkz_kernel_r_frame:
+    \__tenkz_kernel_r_axis_place:
     \__tenkz_kernel_dep_reset:
     % Every place the frame alone answers for settles here, in the order the
     % addresses themselves ask for.  A place that names a curve does not, and
@@ -8153,8 +8485,10 @@
     % crossing be written in the spelling a declaration uses.  The text is
     % generated, so it does not pass through address validation again.
     \__tenkz_kernel_route_crossings:
+    \__tenkz_kernel_plane_model:
     \__tenkz_model_validate:
     \__tenkz_kernel_emit:
+    \__tenkz_kernel_plane_events:
     \__tenkz_kernel_render:
     \bool_if:NT \l__tenkz_kernel_ineq_bool
       {
