@@ -481,7 +481,6 @@ term is the host label itself: any configuration realizing `b₂` with `P₀`-ou
 same union host label as `q₀` by the partition determinacy, so the fiber coefficient at the host
 label is forced to vanish. -/
 
-set_option linter.unusedSectionVars false in
 omit [DecidableEq V] in
 open scoped Classical in
 /-- Transport of host annihilation along a region-set equality: if a coefficient family `c`
@@ -503,7 +502,6 @@ theorem hc_transport {S R : Finset V} (h : S = R)
   simp only []
   rw [hb]
 
-set_option linter.unusedSectionVars false in
 omit [Fintype V] in
 open scoped Classical in
 /-- **Union host-boundary surjectivity.** With positive bond dimensions, every union `R₁ ∪ R₂`
