@@ -335,16 +335,19 @@
   % a barb is the dual/inverse representation -- so `reversed` variants flip
   % the barb, never the wire.  The barb rides mid-wire and inherits the wire's
   % colour; the `fused` variants size the barb to span the doubled wire.
-  dir marks/.style={decoration={markings, mark=at position 0.55 with
+  dir marks/.style={decoration={markings,
+      mark=at position \tenkz@r@dirmarkstation with
       {\arrow{Straight Barb[length=\tenkz@barblen]}}}, postaction=decorate},
-  dir marks reversed/.style={decoration={markings, mark=at position 0.55 with
+  dir marks reversed/.style={decoration={markings,
+      mark=at position \tenkz@r@dirmarkstation with
       {\arrow{Straight Barb[length=\tenkz@barblen, reversed]}}},
       postaction=decorate},
-  fused dir marks/.style={decoration={markings, mark=at position 0.55 with
+  fused dir marks/.style={decoration={markings,
+      mark=at position \tenkz@r@dirmarkstation with
       {\arrow{Straight Barb[length=\tenkz@fusedbarblen]}}},
       postaction=decorate},
   fused dir marks reversed/.style={decoration={markings,
-      mark=at position 0.55 with
+      mark=at position \tenkz@r@dirmarkstation with
       {\arrow{Straight Barb[length=\tenkz@fusedbarblen, reversed]}}},
       postaction=decorate},
   % annotation ink (never confusable with 0.55pt wires)
