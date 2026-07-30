@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.MPDO.CyclicActiveCutRegrouping
+import TNLean.MPS.MPDO.CyclicActiveAdjacentCoefficientExtraction
 
 /-!
 # Hayashi decomposition in cyclic-active coordinates
@@ -102,9 +103,11 @@ See `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 private theorem reindex_reducedBlockState_eq_cyclicActiveCut
     (F : PhysicalSectorFactorization K) [NeZero D]
     (hpos : ∀ q h, (F.neighboringOperator q h).PosSemidef)
-    (hZCL : K.IsSourceZCL) (A C : ℕ) (lam : ℝ)
+    (A C : ℕ) (lam : ℝ)
     (a b : F.CyclicActiveSector → ℝ)
     (ha : ∀ q, 0 < a q) (hb : ∀ h, 0 < b h)
+    (htC : 0 < Matrix.trace
+      (mpo F.sectorCoordinateTensor (A + C + 4)))
     (hfour :
       Matrix.reindex (F.retainedOpenEdgeChainEquiv (A + C))
           (F.retainedOpenEdgeChainEquiv (A + C))
@@ -134,9 +137,6 @@ private theorem reindex_reducedBlockState_eq_cyclicActiveCut
   let ρL := F.cyclicActiveLeftCutState A lam b
   let ρR := F.cyclicActiveRightCutState C a
   let t := F.cyclicActiveCutNormalization A C
-  have htC : 0 < Matrix.trace
-      (mpo F.sectorCoordinateTensor (A + C + 4)) :=
-    F.trace_mpo_sectorCoordinateTensor_pos_of_isSourceZCL hpos hZCL (by omega)
   have htEq : Matrix.trace (mpo F.sectorCoordinateTensor (A + C + 4)) =
       (t : ℂ) := by
     apply Complex.ext
@@ -282,14 +282,13 @@ Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
 private theorem cyclicActiveCutProbability_nonneg
     (F : PhysicalSectorFactorization K) [NeZero D]
     (hpos : ∀ q h, (F.neighboringOperator q h).PosSemidef)
-    (hZCL : K.IsSourceZCL) (A C : ℕ) (lam : ℝ)
+    (A C : ℕ) (lam : ℝ)
     (a b : F.CyclicActiveSector → ℝ)
     (ha : ∀ q, 0 < a q) (hb : ∀ h, 0 < b h)
+    (htC : 0 < Matrix.trace
+      (mpo F.sectorCoordinateTensor (A + C + 4)))
     (j : Fin F.sectorCount) :
     0 ≤ F.cyclicActiveCutProbability A C lam a b j := by
-  have htC : 0 < Matrix.trace
-      (mpo F.sectorCoordinateTensor (A + C + 4)) :=
-    F.trace_mpo_sectorCoordinateTensor_pos_of_isSourceZCL hpos hZCL (by omega)
   have ht : 0 < F.cyclicActiveCutNormalization A C := by
     simpa [cyclicActiveCutNormalization] using (Complex.lt_def.mp htC).1
   have hL := F.cyclicActiveLeftCutRaw_posSemidef
@@ -312,9 +311,11 @@ the fourth-region marginal before the final restriction.  See
 private theorem sum_cyclicActiveCutProbability_eq_one
     (F : PhysicalSectorFactorization K) [NeZero D]
     (hpos : ∀ q h, (F.neighboringOperator q h).PosSemidef)
-    (hZCL : K.IsSourceZCL) (A C : ℕ) (lam : ℝ)
+    (A C : ℕ) (lam : ℝ)
     (a b : F.CyclicActiveSector → ℝ)
     (ha : ∀ q, 0 < a q) (hb : ∀ h, 0 < b h)
+    (htraceShort : Matrix.trace
+      (mpo F.sectorCoordinateTensor (A + C + 2)) ≠ 0)
     (hnormalized :
       Matrix.reindex (F.cyclicActiveHayashiCutEquiv A C)
           (F.cyclicActiveHayashiCutEquiv A C)
@@ -326,11 +327,6 @@ private theorem sum_cyclicActiveCutProbability_eq_one
               F.cyclicActiveRightCutState C a j))) :
     ∑ j : Fin F.sectorCount,
       F.cyclicActiveCutProbability A C lam a b j = 1 := by
-  have htraceShort : Matrix.trace
-      (mpo F.sectorCoordinateTensor (A + C + 2)) ≠ 0 := by
-    have hposShort := F.trace_mpo_sectorCoordinateTensor_pos_of_isSourceZCL
-      hpos hZCL (N := A + C + 2) (by omega)
-    exact ne_of_gt hposShort
   have hstateTrace : Matrix.trace
       (F.sectorCoordinateTensor.reducedBlockState
         (A + C + 2) (A + 1 + C) (by omega)) = 1 :=
@@ -412,6 +408,70 @@ private theorem cyclicActiveCut_transported_state_eq
   rw [hx, hy] at hxy
   simpa [HayashiMarkov.blockState, HayashiMarkov.abcEquiv] using hxy
 
+/-- Assemble a Hayashi decomposition from an explicit positive factorization
+of the normalized two-step cyclic-active coefficient and the corresponding
+fourth-region formula.
+
+Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
+1606--1617.
+
+**Local fix (cyclic-active restriction):** The separating coefficient is the
+square of the trace matrix restricted to positive-length cyclic sectors,
+after one additional marginal replacement. See
+`docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
+theorem exists_hayashiMarkovDecomposition_cyclicActiveCut_of_fourthRegion
+    (F : PhysicalSectorFactorization K) [NeZero D]
+    (hpos : ∀ q h, (F.neighboringOperator q h).PosSemidef)
+    (A C : ℕ) (lam : ℝ)
+    (a b : F.CyclicActiveSector → ℝ)
+    (ha : ∀ q, 0 < a q) (hb : ∀ h, 0 < b h)
+    (htC : 0 < Matrix.trace
+      (mpo F.sectorCoordinateTensor (A + C + 4)))
+    (htraceShort : Matrix.trace
+      (mpo F.sectorCoordinateTensor (A + C + 2)) ≠ 0)
+    (hfour :
+      Matrix.reindex (F.retainedOpenEdgeChainEquiv (A + C))
+          (F.retainedOpenEdgeChainEquiv (A + C))
+          (F.sectorCoordinateTensor.reducedBlockState
+            (A + C + 2) (A + C + 1) (by omega)) =
+        ((Matrix.trace
+          (mpo F.sectorCoordinateTensor (A + C + 4)))⁻¹ : ℂ) •
+          Matrix.blockDiagonal' (fun k ↦
+            F.cyclicActiveFourthRegionBlock lam a b k)) :
+    let ρ_ABC :=
+      (F.sectorCoordinateTensor.reducedBlockState
+        (A + C + 2) (A + 1 + C) (by omega)).submatrix
+          (tripartiteSplitEquiv
+            (Fintype.card F.SectorSiteIndex) A 1 C).symm
+          (tripartiteSplitEquiv
+            (Fintype.card F.SectorSiteIndex) A 1 C).symm
+    Nonempty (HayashiMarkovDecomposition ρ_ABC) := by
+  classical
+  dsimp only
+  have hnormalized :=
+    F.reindex_reducedBlockState_eq_cyclicActiveCut
+      hpos A C lam a b ha hb htC hfour
+  have hp_sum :=
+    F.sum_cyclicActiveCutProbability_eq_one
+      hpos A C lam a b ha hb htraceShort hnormalized
+  refine ⟨{
+    m := F.sectorCount
+    dL := F.leftDim
+    dR := F.rightDim
+    decompB := F.sectorCoordinateMiddleEquiv
+    U_B := 1
+    p := F.cyclicActiveCutProbability A C lam a b
+    hp_nonneg := F.cyclicActiveCutProbability_nonneg
+      hpos A C lam a b ha hb htC
+    hp_sum := hp_sum
+    ρ_left := F.cyclicActiveLeftCutState A lam b
+    ρ_right := F.cyclicActiveRightCutState C a
+    hρ_left_dm := F.cyclicActiveLeftCutState_isDensity hpos A lam b hb
+    hρ_right_dm := F.cyclicActiveRightCutState_isDensity hpos C a ha
+    h_state := ?_ }⟩
+  simpa [HayashiMarkov.liftB] using
+    F.cyclicActiveCut_transported_state_eq A C lam a b hnormalized
+
 /-- Source zero correlation length gives an explicit quantum-Markov
 decomposition at every one-site cut of the fourth-region marginal.
 
@@ -440,28 +500,157 @@ theorem exists_hayashiMarkovDecomposition_cyclicActiveCut_of_isSourceZCL
   obtain ⟨lam, _, a, b, ha, hb, _, hfour⟩ :=
     F.exists_cyclicActiveFourthRegion_formula_of_isSourceZCL
       hK hpos hZCL (A + C)
-  have hnormalized :=
-    F.reindex_reducedBlockState_eq_cyclicActiveCut
-      hpos hZCL A C lam a b ha hb hfour
-  have hp_sum :=
-    F.sum_cyclicActiveCutProbability_eq_one
-      hpos hZCL A C lam a b ha hb hnormalized
-  refine ⟨{
-    m := F.sectorCount
-    dL := F.leftDim
-    dR := F.rightDim
-    decompB := F.sectorCoordinateMiddleEquiv
-    U_B := 1
-    p := F.cyclicActiveCutProbability A C lam a b
-    hp_nonneg := F.cyclicActiveCutProbability_nonneg
-      hpos hZCL A C lam a b ha hb
-    hp_sum := hp_sum
-    ρ_left := F.cyclicActiveLeftCutState A lam b
-    ρ_right := F.cyclicActiveRightCutState C a
-    hρ_left_dm := F.cyclicActiveLeftCutState_isDensity hpos A lam b hb
-    hρ_right_dm := F.cyclicActiveRightCutState_isDensity hpos C a ha
-    h_state := ?_ }⟩
-  simpa [HayashiMarkov.liftB] using
-    F.cyclicActiveCut_transported_state_eq A C lam a b hnormalized
+  have htC : 0 < Matrix.trace
+      (mpo F.sectorCoordinateTensor (A + C + 4)) :=
+    F.trace_mpo_sectorCoordinateTensor_pos_of_isSourceZCL hpos hZCL (by omega)
+  have htraceShort : Matrix.trace
+      (mpo F.sectorCoordinateTensor (A + C + 2)) ≠ 0 :=
+    ne_of_gt (F.trace_mpo_sectorCoordinateTensor_pos_of_isSourceZCL
+      hpos hZCL (by omega))
+  exact F.exists_hayashiMarkovDecomposition_cyclicActiveCut_of_fourthRegion
+    hpos A C lam a b ha hb htC htraceShort hfour
 
 end MPOTensor.PhysicalSectorFactorization
+
+namespace MPOTensor.EtaLocalStructureData
+
+variable {d D : ℕ} {K : MPOTensor d D}
+
+/-- The fixed positive-bond representative selected from an injective normal
+source with zero correlation length yields a Hayashi decomposition at every
+one-site cut of the source tensor in the selected physical coordinates.
+
+Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
+1597--1619.
+
+**Local fix (cyclic-active restriction):** The proof factors the normalized
+square of the trace matrix on positive-length cyclic sectors after one
+additional marginal replacement. It assumes no injectivity, normality, or
+zero-correlation-length property of the selected fixed-product tensor. See
+`docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
+theorem exists_hayashiMarkovDecomposition_selectedPhysicalCut_of_isSourceZCL
+    (hMPDO : IsMPDO K) (hK : K.IsInjective)
+    (hNormal : MPSTensor.IsNormalTensor K.toMPSTensor)
+    (data : EtaLocalStructureData K) (hZCL : K.IsSourceZCL)
+    (A C : ℕ) :
+    let F :=
+      data.bondData.fixedProductTensorDataPhysicalSectorFactorization
+    let M :=
+      PhysicalSectorFactorization.changePhysicalBasis
+        F.physicalCoordinateMatrix K
+    let ρ_ABC :=
+      (M.reducedBlockState
+        (A + C + 2) (A + 1 + C) (by omega)).submatrix
+          (tripartiteSplitEquiv
+            (Fintype.card F.SectorSiteIndex) A 1 C).symm
+          (tripartiteSplitEquiv
+            (Fintype.card F.SectorSiteIndex) A 1 C).symm
+    Nonempty (HayashiMarkovDecomposition ρ_ABC) := by
+  classical
+  let F :=
+    data.bondData.fixedProductTensorDataPhysicalSectorFactorization
+  let U := F.physicalCoordinateMatrix
+  let M := PhysicalSectorFactorization.changePhysicalBasis U K
+  have hpos : ∀ q h, (F.neighboringOperator q h).PosSemidef :=
+    data.bondData.fixedProductTensorDataPhysicalSectorFactorization_neighboring_pos
+  have hreach : ∀ q h : F.CyclicActiveSector,
+      Relation.ReflTransGen
+        (fun a b : F.CyclicActiveSector ↦ F.neighboringOperator a b ≠ 0) q h := by
+    intro q h
+    exact data.selectedFixedProduct_cyclicActive_reflTransGen_neighboringOperator_ne_zero
+      hMPDO hK hNormal hZCL q h
+  have hmarg : ∀ L, 0 < L →
+      F.sectorCoordinateTensor.reducedBlockState (L + 2) L (by omega) =
+        F.sectorCoordinateTensor.reducedBlockState (L + 1) L (by omega) := by
+    intro L hL
+    exact data.selectedFixedProduct_reducedBlockState_succ_succ_eq_succ_of_isSourceZCL
+      hZCL L hL
+  have htrace : ∀ N, 2 ≤ N → ∃ z : ℝ, 0 < z ∧
+      Matrix.trace (mpo F.sectorCoordinateTensor N) = (z : ℂ) := by
+    intro N hN
+    exact data.exists_pos_trace_mpo_selectedFixedProduct_of_isSourceZCL hZCL N hN
+  obtain ⟨lam, hlam, hpow⟩ :=
+    data.exists_normalized_selectedFixedProduct_cyclicActiveSectorTraceMatrix_pow_two_eq_pow_three
+      hMPDO hK hNormal hZCL
+  have hTtwo : ∀ q h, 0 < (F.cyclicActiveSectorTraceMatrix ^ 2) q h :=
+    F.cyclicActiveSectorTraceMatrix_pow_two_pos_of_adjacent_marginals
+      hpos hreach hmarg htrace
+  letI : NeZero D := ⟨hNormal.bondDim_ne_zero⟩
+  letI : Nonempty F.CyclicActiveSector := by
+    obtain ⟨c₂, _, h₂⟩ :=
+      data.exists_positive_scalar_mpo_changePhysicalBasis_eq_smul_selected 2 (by omega)
+    have hspan :=
+      F.cyclicActiveOriginalOneSiteMatrixFamily_span_eq_top hK (c₂ : ℂ) h₂
+    cases isEmpty_or_nonempty F.CyclicActiveSector with
+    | inr hnonempty => exact hnonempty
+    | inl hempty =>
+        letI : IsEmpty F.CyclicActiveSector := hempty
+        have hbot :
+            Submodule.span ℂ
+                (Set.range (F.cyclicActiveOriginalOneSiteMatrixFamily K)) =
+              (⊥ : Submodule ℂ (Matrix (Fin D) (Fin D) ℂ)) := by
+          rw [Set.range_eq_empty, Submodule.span_empty]
+        have htopbot :
+            (⊤ : Submodule ℂ (Matrix (Fin D) (Fin D) ℂ)) = ⊥ := by
+          rw [← hspan, hbot]
+        have hone :
+            (1 : Matrix (Fin D) (Fin D) ℂ) ∈
+              (⊥ : Submodule ℂ (Matrix (Fin D) (Fin D) ℂ)) := by
+          rw [← htopbot]
+          exact Submodule.mem_top
+        simp at hone
+  have hprimitive :
+      Matrix.IsPrimitive (lam⁻¹ • F.cyclicActiveSectorTraceMatrix) := by
+    refine ⟨?_, 2, by omega, ?_⟩
+    · intro q h
+      rw [Matrix.smul_apply]
+      exact mul_nonneg (inv_nonneg.mpr hlam.le)
+        (F.activeSectorTraceMatrix_nonneg F.cyclicActiveWeight hpos q h)
+    · intro q h
+      rw [smul_pow, Matrix.smul_apply]
+      exact mul_pos (pow_pos (inv_pos.mpr hlam) 2) (hTtwo q h)
+  obtain ⟨a, b, ha, hb, hab, _⟩ :=
+    hprimitive.exists_pos_pow_two_eq_vecMulVec_of_pow_two_eq_pow_three hpow
+  have hthree :=
+    F.reindex_reducedBlockState_add_three_eq_cyclicActiveFourthRegionBlock
+      (A + C) hpos lam hlam a b hab
+  have hmargThree :=
+    data.selectedFixedProduct_reducedBlockState_add_three_eq_succ_of_isSourceZCL
+      hZCL (A + C + 1) (by omega)
+  have hfour :
+      Matrix.reindex (F.retainedOpenEdgeChainEquiv (A + C))
+          (F.retainedOpenEdgeChainEquiv (A + C))
+          (F.sectorCoordinateTensor.reducedBlockState
+            (A + C + 2) (A + C + 1) (by omega)) =
+        ((Matrix.trace
+          (mpo F.sectorCoordinateTensor (A + C + 4)))⁻¹ : ℂ) •
+          Matrix.blockDiagonal' (fun k ↦
+            F.cyclicActiveFourthRegionBlock lam a b k) := by
+    rw [← hmargThree]
+    exact hthree
+  obtain ⟨zLong, hzLong, htraceLong⟩ := htrace (A + C + 4) (by omega)
+  obtain ⟨zShort, hzShort, htraceShort⟩ := htrace (A + C + 2) (by omega)
+  have htC : 0 < Matrix.trace
+      (mpo F.sectorCoordinateTensor (A + C + 4)) := by
+    rw [htraceLong]
+    exact_mod_cast hzLong
+  have htShort : Matrix.trace
+      (mpo F.sectorCoordinateTensor (A + C + 2)) ≠ 0 := by
+    rw [htraceShort]
+    exact Complex.ofReal_ne_zero.mpr (ne_of_gt hzShort)
+  have hselectedMarkov :=
+    letI : NeZero data.bondData.fixedProductTensorData.bondDim :=
+      ⟨Nat.ne_of_gt data.bondData.fixedProductTensorData.bondDim_pos⟩
+    F.exists_hayashiMarkovDecomposition_cyclicActiveCut_of_fourthRegion
+      hpos A C lam a b ha hb htC htShort hfour
+  have hstate :
+      M.reducedBlockState (A + C + 2) (A + 1 + C) (by omega) =
+        F.sectorCoordinateTensor.reducedBlockState
+          (A + C + 2) (A + 1 + C) (by omega) :=
+    (data.selectedFixedProduct_reducedBlockState_eq_changePhysicalBasis
+      (A + C + 2) (A + 1 + C) (by omega) (by omega)).symm
+  dsimp only
+  rw [hstate]
+  exact hselectedMarkov
+
+end MPOTensor.EtaLocalStructureData
