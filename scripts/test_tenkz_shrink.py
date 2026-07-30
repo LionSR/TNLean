@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import copy
 import json
+import re
 import subprocess
 import sys
 from pathlib import Path
@@ -22,6 +23,30 @@ from tenkz_language import (  # noqa: E402
 )
 from tenkz_lint import ink_token_count, registry_alias_patterns  # noqa: E402
 import tenkz_shrink  # noqa: E402
+
+
+def test_core_style_lengths_are_metric_owned() -> None:
+    source = (ROOT / "tex/tenkz/tenkz-core.code.tex").read_text(encoding="utf-8")
+    style_table = source.split(
+        "% ---------- style table", maxsplit=1
+    )[1].split(
+        "% ---------- event stream", maxsplit=1
+    )[0]
+    uncommented = "\n".join(
+        line.split("%", maxsplit=1)[0] for line in style_table.splitlines()
+    )
+    absolute_literals = re.findall(
+        r"(?<![\w@.])(?:\d+(?:\.\d*)?|\.\d+)(?:pt|mm)\b",
+        uncommented,
+    )
+    nonzero_literals = [
+        literal for literal in absolute_literals
+        if float(literal.removesuffix("pt").removesuffix("mm")) != 0
+    ]
+    assert not nonzero_literals, (
+        "nonzero core style lengths belong in tenkz-metric.code.tex: "
+        f"{nonzero_literals}"
+    )
 
 
 def test_saved_path_capture_is_not_rendering_debt() -> None:

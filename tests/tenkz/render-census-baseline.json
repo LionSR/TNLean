@@ -20,7 +20,7 @@
   "decimal_literals": {
     "by_file": {
       "tenkz-cd.code.tex": 1,
-      "tenkz-core.code.tex": 18,
+      "tenkz-core.code.tex": 5,
       "tenkz-frame.code.tex": 0,
       "tenkz-free.code.tex": 4,
       "tenkz-geometry.code.tex": 0,
@@ -33,6 +33,6 @@
       "tenkz-render.code.tex": 0,
       "tenkz-string.code.tex": 0
     },
-    "total": 42
+    "total": 29
   }
 }

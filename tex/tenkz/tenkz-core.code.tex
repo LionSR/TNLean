@@ -163,7 +163,8 @@
   box tensor/.style={tenkz audited glyph={rect}{0pt},
       draw=tenkzInk, fill=tenkzPaper,
       rectangle,
-      inner sep=1.6pt, minimum size=\tenkz@dim{\tenkz@r@glyphbox},
+      inner sep=\tenkz@boxinset,
+      minimum size=\tenkz@dim{\tenkz@r@glyphbox},
       minimum width=\tenkz@dim{\tenkz@r@glyphref},
       line width=\tenkz@wirewidth, text=tenkzInk},
   % A labelled circle is distinct from the filled dot and the on-wire
@@ -173,10 +174,11 @@
   circle tensor/.style={box tensor,
       tenkz audited glyph={circle}{0pt}, circle},
   mpo tensor/.style={box tensor},
-  pill tensor/.style={tenkz audited glyph={roundrect}{2.2pt},
+  pill tensor/.style={tenkz audited glyph={roundrect}{\tenkz@pillcap},
       draw=tenkzInk, fill=tenkzPaper,
       rectangle,
-      rounded corners=2.2pt, inner xsep=3.2pt, inner ysep=2.2pt,
+      rounded corners=\tenkz@pillcap,
+      inner xsep=\tenkz@pillxinset, inner ysep=\tenkz@pillcap,
       minimum height=\tenkz@dim{\tenkz@r@glyphbox},
       minimum width=\tenkz@dim{\tenkz@r@glyphref},
       line width=\tenkz@wirewidth, text=tenkzInk},
@@ -191,7 +193,8 @@
       draw=tenkzAction,
       fill=tenkzPaper, rectangle,
       rounded corners=\tenkz@dim{\tenkz@r@wireglyphcap},
-      inner xsep=1.8pt, inner ysep=1.4pt,
+      inner xsep=\tenkz@wireglyphxinset,
+      inner ysep=\tenkz@wireglyphyinset,
       minimum size=\tenkz@dim{\tenkz@r@wireglyph},
       minimum width=\tenkz@dim{\tenkz@r@glyphref},
       line width=\tenkz@wirewidth, text=tenkzInk},
@@ -201,7 +204,7 @@
   % side receives the isometry's domain and whose APEX emits its codomain --
   % the A_L / A_R glyphs of canonical-form MPS (sum_s A_L^s{}^dagger A_L^s = 1).
   % Wires meet the flat side's midpoint and the apex, both on the wire axis.
-  % inner sep is tight (0.6pt): a triangle must CIRCUMSCRIBE its text box,
+  % triangleinset is tight: a triangle must CIRCUMSCRIBE its text box,
   % so every point of padding costs ~triple in glyph height; the inscribed
   % label also drops the glyph strut (see \tenkz_tri_node:nnn) or two
   % triangle rows would collide across the default layer gap
@@ -212,8 +215,8 @@
       draw=tenkzInk,
       fill=tenkzPaper,
       isosceles triangle, isosceles triangle apex angle=55,
-      isosceles triangle stretches, inner sep=0.6pt,
-      minimum width=\tenkz@dim{0.34},
+      isosceles triangle stretches, inner sep=\tenkz@triangleinset,
+      minimum width=\tenkz@dim{\tenkz@r@canonicalwidth},
       minimum height=\tenkz@dim{\tenkz@r@wireglyph},
       line width=\tenkz@wirewidth, text=tenkzInk},
   left canonical tensor/.style={canonical tensor, shape border rotate=0},
@@ -239,7 +242,8 @@
   % without touching the grid renderer itself; see
   % scripts/test_tenkz_face_ports.py.
   tenkz combined stub/.style={},
-  fused bond/.style={bond, double=tenkzPaper, double distance=1.1pt},
+  fused bond/.style={bond, double=tenkzPaper,
+      double distance=\tenkz@fusedwiregap},
   physical leg/.style={bond},
   operator bond/.style={bond, draw=tenkzOperator},
   trace/.style={bond, rounded corners=\tenkz@dim{\tenkz@r@corner}},
@@ -352,16 +356,16 @@
   % and K7 free regions consume this same style and the same measured-box
   % renderer below.
   group region/.style={draw=tenkzPassive, fill=none, densely dashed,
-      rounded corners=2pt, line width=\tenkz@annwidth},
+      rounded corners=\tenkz@groupcorner, line width=\tenkz@annwidth},
   % the package's label skin.  Named `tn label`, NOT `label`: a bare
   % `label/.style` would clobber TikZ's built-in /tikz/label key
   % document-wide, silently swallowing `label=above:$x$` on every node of
   % every picture that merely loads tenkz.
   tn label/.style={tenkz audited label, shape=rectangle, rounded corners=0pt,
-      text=tenkzInk, inner sep=1pt, font=\scriptsize},
+      text=tenkzInk, inner sep=\tenkz@labelinset, font=\scriptsize},
   cd arrow/.style={draw=tenkzInk, line width=\tenkz@annwidth,
-      -{Straight Barb[length=3.4pt]},
-      shorten <=3.5pt, shorten >=3.5pt},
+      -{Straight Barb[length=\tenkz@cdbarblen]},
+      shorten <=\tenkz@cdarrowshorten, shorten >=\tenkz@cdarrowshorten},
   % regions
   region selected/.style={draw=tenkzAction, fill=tenkzAction!12!tenkzPaper,
       line width=\tenkz@emphwidth},
