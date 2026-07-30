@@ -335,6 +335,31 @@ a block embedding of a mixed-transfer eigenvector.
     $D_1=D_2$, contradicting the hypothesis.
 \end{proof}
 
+\begin{theorem}[Rectangular transfer powers below unit spectral radius]%
+    \label{thm:rectangular_transfer_pow_zero}
+    \lean{MPSTensor.mixedTransferMap₂_pow_tendsto_zero_of_spectralRadius_lt_one}
+    \leanok
+    \uses{def:mixed_transfer_rect}
+    Let $A$ and $B$ have bond dimensions $D_1$ and $D_2$, respectively. If
+    $\rho_{\spec}(F_{AB}^{\mathrm{rect}})<1$, then, for every
+    $X\in M_{D_1\times D_2}(\C)$,
+    \begin{align}
+        (F_{AB}^{\mathrm{rect}})^n(X)\longrightarrow0.
+        \notag
+    \end{align}
+    This is the decay mechanism for the off-diagonal transfer operators in
+    \cite[Appendix~B, equations~(B.3)--(B.4) and the paragraph following
+    equation~(B.6)]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:spectral_radius_pow_zero}
+    The Gelfand formula implies convergence of
+    $(F_{AB}^{\mathrm{rect}})^n$ to zero in operator norm. Evaluation at a
+    fixed rectangular matrix is continuous, and therefore preserves this
+    limit.
+\end{proof}
+
 \begin{theorem}[Rectangular overlap decay]\label{thm:overlap_decay_rect}
     \lean{MPSTensor.mpvOverlap_tendsto_zero_of_dim_ne}
     \leanok
@@ -344,9 +369,11 @@ a block embedding of a mixed-transfer eigenvector.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:transfer_operator_gap_rect, thm:overlap_trace_rect}
+    \uses{thm:transfer_operator_gap_rect, lem:spectral_radius_pow_zero,
+        thm:overlap_trace_rect}
     The gap $\rho_{\spec}(F_{AB}^{\mathrm{rect}})<1$ from
-    Theorem~\ref{thm:transfer_operator_gap_rect} implies
+    Theorem~\ref{thm:transfer_operator_gap_rect} and
+    Lemma~\ref{lem:spectral_radius_pow_zero} imply operator-norm convergence
     $(F_{AB}^{\mathrm{rect}})^N\to0$, so its operator trace tends to zero.
     The identity (\ref{eq:spectral_overlap_trace_rect}) therefore gives
     $O_{AB}(N)\to0$.
@@ -383,12 +410,11 @@ proved in Section~\ref{sec:app_spectral_decay}.
 
 \begin{proof}
     \leanok
-    \uses{thm:transfer_operator_gap, lem:spectral_radius_pow_zero}
+    \uses{thm:transfer_operator_gap, thm:rectangular_transfer_pow_zero}
     The gap $\rho_{\spec}(F_{AB})<1$ from
-    Theorem~\ref{thm:transfer_operator_gap} and the Gelfand-formula
-    convergence of Lemma~\ref{lem:spectral_radius_pow_zero} give
-    $\|F_{AB}^n\|_{\mathrm{op}}\to0$. Hence $F_{AB}^n(X)\to0$ for every
-    $X$.
+    Theorem~\ref{thm:transfer_operator_gap} and the equal-bond-dimension case
+    of Theorem~\ref{thm:rectangular_transfer_pow_zero} give
+    $F_{AB}^n(X)\to0$ for every $X$.
 \end{proof}
 
 \begin{theorem}[Overlap decay]\label{thm:overlap_decay}
