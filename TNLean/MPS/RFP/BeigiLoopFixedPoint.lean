@@ -181,6 +181,72 @@ private theorem normalizedMinimalLoopTensor_eq_rotatePhysical
     minimalLoopTensor, rotatePhysical_apply, Finset.smul_sum, smul_smul]
   simp [mul_comm]
 
+/-- Distinct normalized minimal loop tensors have zero mixed transfer map in
+sector coordinates. -/
+private theorem normalizedMinimalLoopCoordinateTensor_mixedTransferMap₂_eq_zero_of_ne
+    (F : BeigiSectorGraphData A) {l m : Loop F.edgeWeight} (hlm : l ≠ m) :
+    mixedTransferMap₂ (F.normalizedMinimalLoopCoordinateTensor l)
+      (F.normalizedMinimalLoopCoordinateTensor m) = 0 := by
+  classical
+  apply LinearMap.ext
+  intro Z
+  simp only [mixedTransferMap₂_apply, LinearMap.zero_apply]
+  calc
+    (∑ i : Fin d, F.normalizedMinimalLoopCoordinateTensor l i * Z *
+        (F.normalizedMinimalLoopCoordinateTensor m i)ᴴ) =
+        ∑ z : Σ k, Fin (F.rightDim k) × Fin (F.leftDim k),
+          F.normalizedMinimalLoopCoordinateTensor l (F.sectorEquiv z) * Z *
+            (F.normalizedMinimalLoopCoordinateTensor m (F.sectorEquiv z))ᴴ := by
+      exact Fintype.sum_equiv F.sectorEquiv.symm
+        (fun i : Fin d ↦ F.normalizedMinimalLoopCoordinateTensor l i * Z *
+          (F.normalizedMinimalLoopCoordinateTensor m i)ᴴ)
+        (fun z ↦ F.normalizedMinimalLoopCoordinateTensor l (F.sectorEquiv z) * Z *
+          (F.normalizedMinimalLoopCoordinateTensor m (F.sectorEquiv z))ᴴ)
+        (fun i ↦ by rw [Equiv.apply_symm_apply])
+    _ = ∑ k : Fin F.sectorCount,
+        ∑ qa : Fin (F.rightDim k) × Fin (F.leftDim k),
+          F.normalizedMinimalLoopCoordinateTensor l (F.sectorEquiv ⟨k, qa⟩) * Z *
+            (F.normalizedMinimalLoopCoordinateTensor m (F.sectorEquiv ⟨k, qa⟩))ᴴ := by
+      rw [Fintype.sum_sigma]
+    _ = 0 := by
+      apply Finset.sum_eq_zero
+      intro k _
+      apply Finset.sum_eq_zero
+      rintro ⟨q, a⟩ _
+      by_cases hkl : k = l.1
+      · subst k
+        have hlmSector : l.1 ≠ m.1 := by
+          intro h
+          exact hlm (Subtype.ext h)
+        simp only [normalizedMinimalLoopCoordinateTensor]
+        rw [F.minimalLoopCoordinateTensor_sector_ne m l.1 hlmSector q a]
+        simp
+      · simp only [normalizedMinimalLoopCoordinateTensor]
+        rw [F.minimalLoopCoordinateTensor_sector_ne l k hkl q a]
+        simp
+
+/-- Distinct normalized minimal Beigi loop tensors are locally orthogonal:
+their rectangular mixed transfer map vanishes.
+
+Source: CPSV16, proof of Theorem 3.10 at line 1307; Beigi,
+J. Phys. A 45 (2012) 025306, Sections III--IV.
+
+**Local fix (Schmidt support and normalization):** The formal loop tensors use
+their Schmidt supports and the fixed-point normalization documented in
+`docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex`. The common physical
+unitary preserves the mixed transfer map, so disjoint loop-sector support gives
+the stated local orthogonality. -/
+theorem normalizedMinimalLoopTensor_mixedTransferMap₂_eq_zero_of_ne
+    (F : BeigiSectorGraphData A) {l m : Loop F.edgeWeight} (hlm : l ≠ m) :
+    mixedTransferMap₂ (F.normalizedMinimalLoopTensor l)
+      (F.normalizedMinimalLoopTensor m) = 0 := by
+  have hunitary : F.unitary * F.unitaryᴴ = 1 :=
+    Unitary.mul_star_self_of_mem F.unitary_mem
+  rw [F.normalizedMinimalLoopTensor_eq_rotatePhysical l,
+    F.normalizedMinimalLoopTensor_eq_rotatePhysical m,
+    mixedTransferMap₂_rotatePhysical _ _ F.unitary hunitary]
+  exact F.normalizedMinimalLoopCoordinateTensor_mixedTransferMap₂_eq_zero_of_ne hlm
+
 /-- The transfer map of the minimal loop tensor in sector coordinates is a
 rank-one map on the virtual matrix algebra.
 
