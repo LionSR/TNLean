@@ -590,10 +590,11 @@ hypothesis used by its proof.
 The final sentence of the proof is nevertheless a separate mathematical
 claim: a finite orthogonal direct sum on fixed one-site subspaces satisfies
 SAL whenever every summand satisfies SAL.  The present scope-restricted theorem
-therefore assumes SAL for the summands, the exact local orthogonal-sum identity
-at every positive chain length, supplied one-site projections supporting every
-nonempty sector marginal, and positive natural multiplicities.  It must not be
-presented as a proof that GSNNCH alone implies SAL.  The structure
+therefore assumes SAL for the summands, a positive proportional
+local orthogonal-sum identity at every positive chain length, supplied one-site
+projections supporting every nonempty sector marginal, and positive natural
+multiplicities.  It must not be presented as a proof that GSNNCH alone implies
+SAL.  The structure
 \leanid{MPOTensor.OrthogonalCommutingSectorFamily} records fixed one-site
 projections and commuting sector products.  Projection idempotence together
 with its bond-support and exact sector-product fields implies that every
@@ -604,16 +605,27 @@ The chain-length restriction is sufficient here, since the mutual-information
 comparison in SAL only uses chains of length at least four.
 
 The sector-family structure does not contain the outer tensor or its
-multiplicities, and therefore cannot by itself supply the exact outer sum at
-every positive length.  In the BNT specialization that equality is already
-provided by
+multiplicities, and therefore cannot by itself supply the proportional outer
+sum at every positive length.  The theorem
+\leanid{MPOTensor.isSAL_of_proportionalLocalOrthogonalSum} assumes numbers
+$c_N>0$ such that
+\[
+  \sigma^{(N)}(M)
+  =c_N\sum_s n_s\sigma^{(N)}(K_s)
+\]
+and cancels $c_N$ from the normalized chain and all its marginals.  It assumes
+sectorwise SAL and proves the non-circular final local direct-sum implication;
+it neither derives the sectorwise SAL premise nor uses ZCL.  The earlier exact
+theorem \leanid{MPOTensor.isSAL_of_localOrthogonalSum} is its specialization
+with $c_N=1$.
+
+In the BNT specialization the exact outer equality is already provided by
 \leanid{MPOTensor.mpo_eq_sum_copies_smul_commonWeightAbsorbedBasisMPOTensor},
 while positivity of the natural multiplicities is part of the sector
-decomposition.  Consequently
+decomposition.  Consequently the corollary
 \leanid{MPOTensor.isSAL_of_orthogonalCommutingSectorFamily} assumes the exact
-outer sum and sectorwise SAL, and proves only the non-circular final local
-direct-sum implication.  It neither derives the sectorwise SAL premise nor
-uses ZCL.
+outer sum and sectorwise SAL, although exactness of the global outer sum is no
+longer required by the entropy argument.
 The restricted specialization
 \leanid{MPOTensor.%
 isSAL_of_orthogonalCommutingSectorFamily_of_sectorwise_isSourceZCL}
@@ -630,8 +642,10 @@ exactly the sector operator, with scalar one, at every length at least two.
 This exact identity is stronger than the proportional \emph{ApprhoNComm}
 sector form at source lines~1641--1665.  It yields proportional fixed-bond data
 with constant one inside the proof.  The theorem also assumes at every
-positive length that the outer tensor is exactly the
-positive-natural-multiplicity sum of the sectors.  Applying
+positive length that the outer tensor is the positive-natural-multiplicity sum
+of the sectors.  The proportional local orthogonal-sum theorem shows that a
+further positive length-dependent scalar would not change the conclusion.
+Applying
 \leanid{MPOTensor.EtaLocalStructureData.isSAL_of_isSourceZCL} to each sector
 supplies the sectorwise SAL premise, after which the preceding direct-sum
 theorem gives SAL for the full tensor.  This is a scope-restricted
@@ -651,14 +665,14 @@ those coordinates, and isometric invariance transports SAL back to the source
 tensor.
 
 For the later orthogonal direct-sum implication, the final entropy argument is
-formalized both conditionally on sectorwise SAL and under the explicit
+formalized under a positive proportional outer sum, conditionally on
+sectorwise SAL.  The global proportionality scalar is therefore no longer a
+restriction.  A further theorem derives sectorwise SAL from explicit
 sectorwise MPDO, one-site injectivity, normality, and source-ZCL hypotheses,
-together with an exact scalar-one orthogonal realization and an exact
-positive-multiplicity outer sum.  The latter theorem derives sectorwise SAL
-rather than assuming it.  It is a restricted theorem rather than a
-formalization of the printed assertion: sectorwise source ZCL is omitted in
-print, one-site injectivity requires an unaddressed blocking argument, and the
-exact realization is stronger than the proportional source data.
+together with an exact scalar-one orthogonal realization.  It remains
+restricted relative to the printed assertion: sectorwise source ZCL is omitted
+in print, one-site injectivity requires an unaddressed blocking argument, and
+the exact sector realization is stronger than the proportional source data.
 
 \section{Completed proof}
 
