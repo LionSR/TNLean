@@ -113,7 +113,9 @@
       {#1} {#2} {#3}
       {
         \__tenkz_frame_upright:n
-          {$\tenkz@labelsize \tenkz@glyphstrut #4$}
+          {$\tenkz@labelsize
+            \tl_if_blank:nF {#4} { \tenkz@glyphstrut }
+            #4$}
       }
   }
 \tl_new:N \l__tenkz_fbound_tl    % measured glyph + external-label box
