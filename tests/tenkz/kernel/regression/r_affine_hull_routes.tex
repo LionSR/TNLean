@@ -8,6 +8,8 @@
 \fp_new:N \l__tenkz_test_route_x_fp
 \fp_new:N \l__tenkz_test_route_y_fp
 \tl_new:N \l__tenkz_test_route_name_tl
+\tl_new:N \l__tenkz_test_enclosure_bearing_tl
+\int_new:N \l__tenkz_test_enclosure_label_int
 \seq_new:N \l__tenkz_test_support_seq
 \cs_new_eq:NN
   \__tenkz_test_route_measure:n
@@ -137,6 +139,35 @@
       < {0.000001}
       { \errmessage{a~parallel~leg~was~extended~toward~an~unreachable~lane} }
   }
+\cs_new_eq:NN
+  \__tenkz_test_enclosure_label_ink:n
+  \__tenkz_kernel_r_mark_label_ink:n
+\cs_set_protected:Npn \__tenkz_kernel_r_mark_label_ink:n #1
+  {
+    \int_gincr:N \l__tenkz_test_enclosure_label_int
+    \__tenkz_model_get:nnN {#1} {label-pos}
+      \l__tenkz_test_enclosure_bearing_tl
+    \tl_set:Ne \l__tenkz_test_enclosure_bearing_tl
+      {
+        \fp_eval:n
+          {
+            \l__tenkz_test_enclosure_bearing_tl
+            + \l__tenkz_kernel_r_tau_tl
+          }
+      }
+    \fp_compare:nNnF
+      {
+        abs(
+          \l__tenkz_test_enclosure_bearing_tl
+          - atand(
+              0.5 * \__tenkz_metric_ratio:n {planerise},
+              cosd(30) + 0.5 * \__tenkz_metric_ratio:n {planeslant} )
+        )
+      }
+      < {0.000001}
+      { \errmessage{the~enclosure~label~lost~its~projected~bearing} }
+    \__tenkz_test_enclosure_label_ink:n {#1}
+  }
 \ExplSyntaxOff
 \makeatother
 \begin{document}
@@ -173,4 +204,8 @@
   \tnwire[name=affine-all, closed,
           route={all of (1,1) .. (2,2)}]
 \end{tenkz}
+\ExplSyntaxOn
+\int_compare:nNnF { \l__tenkz_test_enclosure_label_int } = {1}
+  { \errmessage{the~enclosure~fixture~did~not~render~its~label} }
+\ExplSyntaxOff
 \end{document}
