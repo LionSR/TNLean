@@ -86,6 +86,20 @@ grep -Fq '|from=addr-13|kind=index|to-open=n' "$WORK/k_plane.tnlog" || {
   echo "FAIL: the plane fixture lost its projected open physical port" >&2
   exit 1
 }
+awk '
+  /^picture[|]id=k1[|]/ { picture = NR }
+  /^warning[|]picture=k1[|]code=plane-tall-window[|]/ { warning = NR }
+  END { exit !(picture && warning && picture < warning) }
+' "$WORK/r_plane_warning.tnlog" || {
+  echo "FAIL: the plane guard warning did not follow its picture header" >&2
+  exit 1
+}
+python3 "$REPO/scripts/tenkz_audit.py" \
+  "$WORK/r_plane_warning.tnlog" "$KERNEL/regression/r_plane_warning.tex" \
+  >/dev/null || {
+  echo "FAIL: the plane warning stream did not pass the one-pass audit" >&2
+  exit 1
+}
 if grep -Eq 'name=(wrap|cup)-(west|east|north|south)' \
     "$WORK/k_twoshift.tnlog" "$WORK/r_cup.tnlog"; then
   echo "FAIL: a side-level closure survived normalization" >&2

@@ -2340,13 +2340,6 @@
             \msg_warning:nnee {tenkz}{plane-rise-low}
               { \__tenkz_metric_ratio:n {planerise} }
               { \__tenkz_metric_ratio:n {physleg} }
-            \__tenkz_kernel_event:n
-              {
-                warning|picture=k
-                \int_eval:n { \g__tenkz_kernel_picture_int + 1 }
-                |code=plane-rise-low
-                |rise=\__tenkz_metric_ratio:n {planerise}
-              }
           }
         \bool_lazy_and:nnF
           {
@@ -2362,13 +2355,6 @@
           {
             \msg_warning:nnn {tenkz}{plane-slant-band}
               { \__tenkz_metric_ratio:n {planeslant} }
-            \__tenkz_kernel_event:n
-              {
-                warning|picture=k
-                \int_eval:n { \g__tenkz_kernel_picture_int + 1 }
-                |code=plane-slant-band
-                |slant=\__tenkz_metric_ratio:n {planeslant}
-              }
           }
         \fp_compare:nNnT
           {
@@ -2386,10 +2372,57 @@
                   }
               }
               { \fp_eval:n { ( \__tenkz_kernel_cols: - 1 ) / 2 } }
+          }
+      }
+  }
+
+% Warning diagnostics are evaluated with the model, but their audit events
+% must follow the picture header.  The parser is intentionally one-pass and
+% rejects a warning that names a picture not yet declared.
+\cs_new_protected:Npn \__tenkz_kernel_plane_events:
+  {
+    \str_if_eq:eeT { \__tenkz_kernel_r_frame_word: } {plane}
+      {
+        \fp_compare:nNnF
+          { \__tenkz_metric_ratio:n {planerise} }
+          > { \__tenkz_metric_ratio:n {physleg} }
+          {
             \__tenkz_kernel_event:n
               {
-                warning|picture=k
-                \int_eval:n { \g__tenkz_kernel_picture_int + 1 }
+                warning|picture=k\int_use:N \g__tenkz_kernel_picture_int
+                |code=plane-rise-low
+                |rise=\__tenkz_metric_ratio:n {planerise}
+              }
+          }
+        \bool_lazy_and:nnF
+          {
+            \fp_compare_p:nNn
+              { \__tenkz_metric_ratio:n {planeslant} }
+              > { \__tenkz_metric_ratio:n {slantmin} }
+          }
+          {
+            \fp_compare_p:nNn
+              { \__tenkz_metric_ratio:n {planeslant} }
+              < { \__tenkz_metric_ratio:n {slantmax} }
+          }
+          {
+            \__tenkz_kernel_event:n
+              {
+                warning|picture=k\int_use:N \g__tenkz_kernel_picture_int
+                |code=plane-slant-band
+                |slant=\__tenkz_metric_ratio:n {planeslant}
+              }
+          }
+        \fp_compare:nNnT
+          {
+            ( \__tenkz_kernel_rows: - 1 )
+            * \__tenkz_metric_ratio:n {planeslant}
+          }
+          > { ( \__tenkz_kernel_cols: - 1 ) / 2 }
+          {
+            \__tenkz_kernel_event:n
+              {
+                warning|picture=k\int_use:N \g__tenkz_kernel_picture_int
                 |code=plane-tall-window
                 |rows=\__tenkz_kernel_rows:
                 |cols=\__tenkz_kernel_cols:
@@ -8414,6 +8447,7 @@
     \__tenkz_kernel_plane_model:
     \__tenkz_model_validate:
     \__tenkz_kernel_emit:
+    \__tenkz_kernel_plane_events:
     \__tenkz_kernel_render:
     \bool_if:NT \l__tenkz_kernel_ineq_bool
       {
