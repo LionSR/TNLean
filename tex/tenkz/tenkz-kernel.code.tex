@@ -353,30 +353,32 @@
 \cs_new_protected:Npn \__tenkz_kernel_addr_cell:N #1
   {
     \__tenkz_kernel_node_new:nN
-      { ( \seq_item:Nn \l__tenkz_kernel_match_seq {2} ,
-          \seq_item:Nn \l__tenkz_kernel_match_seq {3} ) } #1
+      {
+        ( \int_eval:n { \seq_item:Nn \l__tenkz_kernel_match_seq {2} } ,
+          \int_eval:n { \seq_item:Nn \l__tenkz_kernel_match_seq {3} } )
+      } #1
     \__tenkz_kernel_node_put:Nne #1 {kind} {cell}
     \__tenkz_kernel_node_put:Nne #1 {row}
-      { \seq_item:Nn \l__tenkz_kernel_match_seq {2} }
+      { \int_eval:n { \seq_item:Nn \l__tenkz_kernel_match_seq {2} } }
     \__tenkz_kernel_node_put:Nne #1 {col}
-      { \seq_item:Nn \l__tenkz_kernel_match_seq {3} }
+      { \int_eval:n { \seq_item:Nn \l__tenkz_kernel_match_seq {3} } }
   }
 
 \cs_new_protected:Npn \__tenkz_kernel_addr_member:N #1
   {
     \__tenkz_kernel_node_new:nN
       {
-        ( \seq_item:Nn \l__tenkz_kernel_match_seq {2} ,
-          \seq_item:Nn \l__tenkz_kernel_match_seq {3} ,
-          \seq_item:Nn \l__tenkz_kernel_match_seq {4} )
+        ( \int_eval:n { \seq_item:Nn \l__tenkz_kernel_match_seq {2} } ,
+          \int_eval:n { \seq_item:Nn \l__tenkz_kernel_match_seq {3} } ,
+          \int_eval:n { \seq_item:Nn \l__tenkz_kernel_match_seq {4} } )
       } #1
     \__tenkz_kernel_node_put:Nne #1 {kind} {member}
     \__tenkz_kernel_node_put:Nne #1 {row}
-      { \seq_item:Nn \l__tenkz_kernel_match_seq {2} }
+      { \int_eval:n { \seq_item:Nn \l__tenkz_kernel_match_seq {2} } }
     \__tenkz_kernel_node_put:Nne #1 {col}
-      { \seq_item:Nn \l__tenkz_kernel_match_seq {3} }
+      { \int_eval:n { \seq_item:Nn \l__tenkz_kernel_match_seq {3} } }
     \__tenkz_kernel_node_put:Nne #1 {member}
-      { \seq_item:Nn \l__tenkz_kernel_match_seq {4} }
+      { \int_eval:n { \seq_item:Nn \l__tenkz_kernel_match_seq {4} } }
   }
 
 % Relative placement: the compass word converts to a page direction once,
@@ -1638,6 +1640,69 @@
     \__tenkz_model_complete:nnn { \tl_use:N #1 } {basis-north} {#3}
   }
 
+\cs_new_protected:Npn \__tenkz_kernel_claim_member_span:N #1
+  {
+    \int_set:Nn \l__tenkz_kernel_claim_rows_int {1}
+    \int_set:Nn \l__tenkz_kernel_claim_cols_int {1}
+    \prop_get:NnN \l__tenkz_kernel_stage_prop {wires} \l_tmpa_tl
+    \quark_if_no_value:NF \l_tmpa_tl
+      { \int_set:Nn \l__tenkz_kernel_claim_rows_int {\l_tmpa_tl} }
+    \prop_get:NnN \l__tenkz_kernel_stage_prop {wide} \l_tmpa_tl
+    \quark_if_no_value:NF \l_tmpa_tl
+      { \int_set:Nn \l__tenkz_kernel_claim_cols_int {\l_tmpa_tl} }
+    \bool_set_false:N \l__tenkz_kernel_claim_collision_bool
+    \int_step_inline:nn { \l__tenkz_kernel_claim_rows_int }
+      {
+        \int_step_inline:nn { \l__tenkz_kernel_claim_cols_int }
+          {
+            \prop_get:NeN \l__tenkz_kernel_cell_prop
+              {
+                \int_eval:n { \l__tenkz_kernel_claim_row_int + ##1 - 1 }
+                -
+                \int_eval:n { \l__tenkz_kernel_claim_col_int + ####1 - 1 }
+              }
+              \l__tenkz_kernel_claim_owner_tl
+            \quark_if_no_value:NT \l__tenkz_kernel_claim_owner_tl
+              {
+                \prop_get:NeN \l__tenkz_kernel_basis_claim_prop
+                  {
+                    \int_eval:n { \l__tenkz_kernel_claim_row_int + ##1 - 1 }
+                    -
+                    \int_eval:n { \l__tenkz_kernel_claim_col_int + ####1 - 1 }
+                    -\int_use:N \l__tenkz_kernel_pop_int
+                  }
+                  \l__tenkz_kernel_claim_owner_tl
+              }
+            \quark_if_no_value:NF \l__tenkz_kernel_claim_owner_tl
+              {
+                \bool_set_true:N \l__tenkz_kernel_claim_collision_bool
+                \msg_error:nneeee {tenkz}{kernel-frame-member-occupied}
+                  { \int_eval:n { \l__tenkz_kernel_claim_row_int + ##1 - 1 } }
+                  { \int_eval:n { \l__tenkz_kernel_claim_col_int + ####1 - 1 } }
+                  { \int_use:N \l__tenkz_kernel_pop_int }
+                  { \l__tenkz_kernel_claim_owner_tl }
+              }
+          }
+      }
+    \bool_if:NF \l__tenkz_kernel_claim_collision_bool
+      {
+        \int_step_inline:nn { \l__tenkz_kernel_claim_rows_int }
+          {
+            \int_step_inline:nn { \l__tenkz_kernel_claim_cols_int }
+              {
+                \prop_put:Nee \l__tenkz_kernel_basis_claim_prop
+                  {
+                    \int_eval:n { \l__tenkz_kernel_claim_row_int + ##1 - 1 }
+                    -
+                    \int_eval:n { \l__tenkz_kernel_claim_col_int + ####1 - 1 }
+                    -\int_use:N \l__tenkz_kernel_pop_int
+                  }
+                  { \tl_use:N #1 }
+              }
+          }
+      }
+  }
+
 \cs_new_protected:Npn \__tenkz_kernel_claim_member:NN #1#2
   {
     \int_set:Nn \l__tenkz_kernel_claim_row_int
@@ -1654,7 +1719,8 @@
               { \l__tenkz_kernel_claim_row_int }
               { \l__tenkz_kernel_claim_col_int }
               #2
-            \__tenkz_kernel_complete_member:Nnn #2 {0}{0}
+            \bool_if:NF \l__tenkz_kernel_claim_collision_bool
+              { \__tenkz_kernel_complete_member:Nnn #2 {0}{0} }
           }
           {
             \msg_error:nnnnn {tenkz}{kernel-frame-member-range}
@@ -1678,54 +1744,18 @@
               { \int_use:N \l__tenkz_kernel_pop_int }
           }
           {
-            \prop_get:NeN \l__tenkz_kernel_cell_prop
+            \__tenkz_kernel_claim_member_span:N #2
+            \bool_if:NF \l__tenkz_kernel_claim_collision_bool
               {
-                \int_use:N \l__tenkz_kernel_claim_row_int
-                -\int_use:N \l__tenkz_kernel_claim_col_int
-              }
-              \l__tenkz_kernel_claim_owner_tl
-            \quark_if_no_value:NTF \l__tenkz_kernel_claim_owner_tl
-              {
-                \prop_get:NeN \l__tenkz_kernel_basis_claim_prop
-                  {
-                    \int_use:N \l__tenkz_kernel_claim_row_int
-                    -\int_use:N \l__tenkz_kernel_claim_col_int
-                    -\int_use:N \l__tenkz_kernel_pop_int
-                  }
-                  \l__tenkz_kernel_claim_owner_tl
-                \quark_if_no_value:NTF \l__tenkz_kernel_claim_owner_tl
-                  {
-                    \prop_put:Nee \l__tenkz_kernel_basis_claim_prop
-                      {
-                        \int_use:N \l__tenkz_kernel_claim_row_int
-                        -\int_use:N \l__tenkz_kernel_claim_col_int
-                        -\int_use:N \l__tenkz_kernel_pop_int
-                      }
-                      { \tl_use:N #2 }
-                    \prop_get:NeN \l__tenkz_kernel_basis_east_prop
-                      { \int_use:N \l__tenkz_kernel_pop_int }
-                      \l__tenkz_kernel_claim_owner_tl
-                    \prop_get:NeN \l__tenkz_kernel_basis_north_prop
-                      { \int_use:N \l__tenkz_kernel_pop_int }
-                      \l__tenkz_kernel_frame_tl
-                    \__tenkz_kernel_complete_member:Nnn #2
-                      { \l__tenkz_kernel_claim_owner_tl }
-                      { \l__tenkz_kernel_frame_tl }
-                  }
-                  {
-                    \msg_error:nneeee {tenkz}{kernel-frame-member-occupied}
-                      { \int_use:N \l__tenkz_kernel_claim_row_int }
-                      { \int_use:N \l__tenkz_kernel_claim_col_int }
-                      { \int_use:N \l__tenkz_kernel_pop_int }
-                      { \l__tenkz_kernel_claim_owner_tl }
-                  }
-              }
-              {
-                \msg_error:nneeee {tenkz}{kernel-frame-member-occupied}
-                  { \int_use:N \l__tenkz_kernel_claim_row_int }
-                  { \int_use:N \l__tenkz_kernel_claim_col_int }
+                \prop_get:NeN \l__tenkz_kernel_basis_east_prop
                   { \int_use:N \l__tenkz_kernel_pop_int }
+                  \l__tenkz_kernel_claim_owner_tl
+                \prop_get:NeN \l__tenkz_kernel_basis_north_prop
+                  { \int_use:N \l__tenkz_kernel_pop_int }
+                  \l__tenkz_kernel_frame_tl
+                \__tenkz_kernel_complete_member:Nnn #2
                   { \l__tenkz_kernel_claim_owner_tl }
+                  { \l__tenkz_kernel_frame_tl }
               }
           }
       }
@@ -3055,6 +3085,33 @@
       }
   }
 
+\cs_new_protected:Npn \__tenkz_kernel_r_atom_place_member_span:n #1
+  {
+    \__tenkz_model_get:nnN
+      {#1} {basis-east} \l__tenkz_kernel_r_x_tl
+    \__tenkz_model_get:nnN
+      {#1} {basis-north} \l__tenkz_kernel_r_y_tl
+    \__tenkz_kernel_r_span:nNN {#1}
+      \l__tenkz_kernel_r_b_tl \l__tenkz_kernel_r_c_tl
+    \__tenkz_geom_place_cell:nnee {#1} {kpic}
+      {
+        \fp_eval:n
+          {
+            \l__tenkz_kernel_r_row_tl
+            + ( \l__tenkz_kernel_r_c_tl - 1 ) / 2
+            - \l__tenkz_kernel_r_y_tl / 4
+          }
+      }
+      {
+        \fp_eval:n
+          {
+            \l__tenkz_kernel_r_col_tl
+            + ( \l__tenkz_kernel_r_b_tl - 1 ) / 2
+            + \l__tenkz_kernel_r_x_tl / 4
+          }
+      }
+  }
+
 \cs_new_protected:Npn \__tenkz_kernel_r_atom_place:n #1
   {
     \__tenkz_model_get:nnN {#1} {addr} \l__tenkz_kernel_r_tl
@@ -3084,27 +3141,7 @@
           {
             \__tenkz_kernel_basis_cell_aligned:TF
               { \__tenkz_kernel_r_atom_place_span:n {#1} }
-              {
-                \__tenkz_model_get:nnN
-                  {#1} {basis-east} \l__tenkz_kernel_r_c_tl
-                \__tenkz_model_get:nnN
-                  {#1} {basis-north} \l__tenkz_kernel_r_b_tl
-                \__tenkz_geom_place_cell:nnee {#1} {kpic}
-                  {
-                    \fp_eval:n
-                      {
-                        \l__tenkz_kernel_r_row_tl
-                        - \l__tenkz_kernel_r_b_tl / 4
-                      }
-                  }
-                  {
-                    \fp_eval:n
-                      {
-                        \l__tenkz_kernel_r_col_tl
-                        + \l__tenkz_kernel_r_c_tl / 4
-                      }
-                  }
-              }
+              { \__tenkz_kernel_r_atom_place_member_span:n {#1} }
           }
       }
   }

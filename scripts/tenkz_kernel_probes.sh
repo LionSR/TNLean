@@ -154,6 +154,15 @@ grep -Eq '^mark.*[|]members=atom-[0-9]+([|]|$)' \
   echo "FAIL: an explicit-basis range did not skip an empty cell" >&2
   exit 1
 }
+grep -Eq '^mark.*[|]members=atom-[0-9]+([|]|$)' \
+    "$WORK/r_basis_padded_address.tnlog" || {
+  echo "FAIL: a padded member address did not resolve canonically" >&2
+  exit 1
+}
+[ "$(grep -c '^atom|' "$WORK/r_basis_member_wide.tnlog" || true)" -eq 1 ] || {
+  echo "FAIL: a displaced member span did not suppress slot population" >&2
+  exit 1
+}
 awk '
   /^picture[|]id=k1[|]/ { picture = NR }
   /^warning[|]picture=k1[|]code=plane-tall-window[|]/ { warning = NR }
@@ -527,6 +536,18 @@ for overlap_case in n_frame_basis_cell_member n_frame_basis_member_cell; do
     exit 1
   }
 done
+if ( cd "$WORK" &&
+     TEXINPUTS="$REPO/tex/tenkz//:" \
+       timeout 120 xelatex -interaction=nonstopmode \
+       "$KERNEL/negative/n_frame_basis_cell_member.tex" \
+       >"$WORK/n_frame_basis_cell_member.recovery.transcript" 2>&1 ); then
+  :
+fi
+if grep -Eq '^atom.*[|]member=' \
+    "$WORK/n_frame_basis_cell_member.tnlog"; then
+  echo "FAIL: a rejected aligned member acquired valid member fields" >&2
+  exit 1
+fi
 grep -Fq '[TKZ-FRAME-BASIS-POLICY]' \
   "$WORK/n_frame_basis_displaced_policy.transcript" || {
   echo "FAIL: displaced singleton policy lacked TKZ-FRAME-BASIS-POLICY" >&2
