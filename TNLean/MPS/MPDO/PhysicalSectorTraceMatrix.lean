@@ -355,9 +355,9 @@ The positive summand is supplied by the directed two-cycle through the given
 sector. This is one of two coprime-period inputs; it does not assert that the
 diagonal entry of the trace matrix itself is positive.
 
-**Local fix (periodicity):** this length-two return is an auxiliary substitute
-for the source's blocking of periodic components and must be combined with
-the length-three return from triangle closure. See
+**Scope restriction (periodicity):** this length-two return is an auxiliary
+substitute for the source's blocking of periodic components and must be
+combined with the length-three return from triangle closure. See
 `docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex`. -/
 theorem activeSectorTraceMatrix_pow_two_diag_pos
     (F : PhysicalSectorFactorization K) (p : Fin F.sectorCount → ℝ)
@@ -416,7 +416,7 @@ theorem activeSectorTraceMatrix_isIrreducible
 /-- If every active nonzero edge closes through a third active sector, then
 every diagonal entry of the cube of the active trace matrix is positive.
 
-**Local fix (periodicity):** this length-three return is an auxiliary
+**Scope restriction (periodicity):** this length-three return is an auxiliary
 substitute for the source's blocking of periodic components and is combined
 with the length-two return above. See
 `docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex`.
@@ -461,8 +461,9 @@ theorem activeSectorTraceMatrix_pow_three_diag_pos
 /-- Active-sector spanning, sector nonvanishing, positive neighboring
 operators, and triangle closure imply primitivity of the active trace matrix.
 
-**Local fix (periodicity):** the common positive power is obtained from
-closed walks of lengths two and three in place of the source's blocking
+**Scope restriction (periodicity and triangle closure):** the common positive
+power is obtained from closed walks of lengths two and three, under the
+source-absent triangle-closure hypothesis, in place of the source's blocking
 argument. See
 `docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex`.
 

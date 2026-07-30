@@ -298,12 +298,14 @@ def IsRFP_MPDO_via_algebra (M : MPOTensor d D) : Prop :=
 /-- A trace-preserving MPO with a positive-definite fixed point admits a
 stationary algebra tower as soon as it is an RFP.
 
-**Scope restriction (trace preservation and faithful fixed point):** The
-hypotheses `h_tp`, `hρ`, and `hρ_fix`, used to invoke Wolf Theorem 6.12, are
-absent from arXiv:1606.00608, Theorem `thm:IV.13` (Theorem 4.14), which assumes
-only that $M$ is in canonical form and generates an MPDO. Moreover, the
-conclusion is the blocked fixed-point-algebra predicate above, not the full
-coefficient statement in part (ii). See
+**Scope restriction (RFP premise, trace preservation, and faithful fixed
+point):** The local premise `hRFP : IsRFP M` is doubled-index transfer-map
+idempotence, not the source MPDO RFP condition of arXiv:1606.00608,
+Definition 4.1 (`IsRFPViaTS`). The hypotheses `h_tp`, `hρ`, and `hρ_fix`, used
+to invoke Wolf Theorem 6.12, are also absent from Theorem `thm:IV.13`
+(Theorem 4.14), which assumes only that $M$ is in canonical form and generates
+an MPDO. Moreover, the conclusion is the blocked fixed-point-algebra predicate
+above, not the full coefficient statement in part (ii). See
 `docs/paper-gaps/cpgsv17_blocked_chi_uniformity.tex`. -/
 theorem isRFP_MPDO_via_algebra_of_isRFP_of_isTP_of_posDef_fixed
     {M : MPOTensor d D} (hRFP : IsRFP M) (h_tp : Kraus.IsTP M.toMPSTensor)
