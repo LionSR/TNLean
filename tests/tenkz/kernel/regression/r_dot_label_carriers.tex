@@ -1,0 +1,221 @@
+% Regression: a dot's own label side is carried through the complete basis
+% of a flat, projected, or circular carrier.  A dot placed relative to the
+% frame remains page-space.  The displacement and anchor follow the projected
+% bearing while the label text itself remains upright.
+\documentclass{standalone}
+\usepackage{tenkz}
+\makeatletter
+\ExplSyntaxOn
+\file_input:n { tenkz-kernel.code.tex }
+\int_new:N \l__tenkz_test_dot_label_count_int
+\tl_new:N \l__tenkz_test_dot_record_tl
+\tl_new:N \l__tenkz_test_dot_label_tl
+\tl_new:N \l__tenkz_test_dot_style_tl
+\tl_new:N \l__tenkz_test_dot_anchor_tl
+\fp_new:N \l__tenkz_test_dot_centre_x_fp
+\fp_new:N \l__tenkz_test_dot_centre_y_fp
+\fp_new:N \l__tenkz_test_dot_actual_x_fp
+\fp_new:N \l__tenkz_test_dot_actual_y_fp
+\fp_new:N \l__tenkz_test_dot_unit_x_fp
+\fp_new:N \l__tenkz_test_dot_unit_y_fp
+\fp_new:N \l__tenkz_test_dot_actual_bearing_fp
+\fp_new:N \l__tenkz_test_dot_expected_bearing_fp
+\fp_new:N \l__tenkz_test_dot_norm_fp
+
+\cs_new_eq:NN
+  \__tenkz_test_dot_atom_glyph_ink:n
+  \__tenkz_kernel_r_atom_glyph_ink:n
+\cs_set_protected:Npn \__tenkz_kernel_r_atom_glyph_ink:n #1
+  {
+    \tl_set:Nn \l__tenkz_test_dot_record_tl {#1}
+    \__tenkz_test_dot_atom_glyph_ink:n {#1}
+    \tl_clear:N \l__tenkz_test_dot_record_tl
+  }
+
+\cs_new_eq:NN
+  \__tenkz_test_dot_labelnode:nnn
+  \__tenkz_render_labelnode:nnn
+\cs_set_protected:Npn \__tenkz_render_labelnode:nnn #1#2#3
+  {
+    \tl_if_empty:NF \l__tenkz_test_dot_record_tl
+      {
+        \__tenkz_model_get:nnN
+          { \l__tenkz_test_dot_record_tl } {label}
+          \l__tenkz_test_dot_label_tl
+        \quark_if_no_value:NF \l__tenkz_test_dot_label_tl
+          {
+            \tl_set:Ne \l__tenkz_test_dot_style_tl {#1}
+            \tl_if_in:VnT \l__tenkz_test_dot_style_tl {anchor}
+              { \__tenkz_test_dot_label:nn {#1}{#2} }
+          }
+      }
+    \__tenkz_test_dot_labelnode:nnn {#1}{#2}{#3}
+  }
+
+\cs_new_protected:Npn \__tenkz_test_dot_label:nn #1#2
+  {
+    \int_gincr:N \l__tenkz_test_dot_label_count_int
+    \str_case:VnF \l__tenkz_test_dot_label_tl
+      {
+        {F}
+          {
+            \fp_set:Nn \l__tenkz_test_dot_unit_x_fp {0}
+            \fp_set:Nn \l__tenkz_test_dot_unit_y_fp {-1}
+            \tl_set:Nn \l__tenkz_test_dot_anchor_tl {anchor = north ,}
+          }
+        {P} { \__tenkz_test_dot_plane_expected: }
+        {N} { \__tenkz_test_dot_plane_expected: }
+        {Q}
+          { \__tenkz_test_dot_plane_expected: }
+        {R}
+          {
+            \fp_set:Nn \l__tenkz_test_dot_unit_x_fp {0}
+            \fp_set:Nn \l__tenkz_test_dot_unit_y_fp {-1}
+            \tl_set:Nn \l__tenkz_test_dot_anchor_tl {anchor = north ,}
+          }
+        {C}
+          {
+            \fp_set:Nn \l__tenkz_test_dot_unit_x_fp {-1}
+            \fp_set:Nn \l__tenkz_test_dot_unit_y_fp {0}
+            \tl_set:Nn \l__tenkz_test_dot_anchor_tl {anchor = east ,}
+          }
+      }
+      { \errmessage{unexpected~label~in~dot-carrier~fixture} }
+    \__tenkz_kernel_r_xy:nNN
+      { \l__tenkz_test_dot_record_tl }
+      \l__tenkz_test_dot_centre_x_fp
+      \l__tenkz_test_dot_centre_y_fp
+    \path coordinate (tenkz-test-dot-label) at #2;
+    \pgfpointanchor {tenkz-test-dot-label} {center}
+    \fp_set:Nn \l__tenkz_test_dot_actual_x_fp
+      {
+        \dim_to_fp:n { \use:c {pgf@x} }
+        / \dim_to_fp:n { \use:c {tenkz@pitch} }
+      }
+    \fp_set:Nn \l__tenkz_test_dot_actual_y_fp
+      {
+        \dim_to_fp:n { \use:c {pgf@y} }
+        / \dim_to_fp:n { \use:c {tenkz@pitch} }
+      }
+    \fp_compare:nNnF
+      {
+        abs
+          (
+            \l__tenkz_test_dot_actual_x_fp
+            - \l__tenkz_test_dot_centre_x_fp
+            - \l__tenkz_test_dot_unit_x_fp
+              * \__tenkz_metric_ratio:n {dotlabelband}
+          )
+      }
+      < {0.00001}
+      { \errmessage{dot~label~lost~its~carrier-x~displacement} }
+    \fp_compare:nNnF
+      {
+        abs
+          (
+            \l__tenkz_test_dot_actual_y_fp
+            - \l__tenkz_test_dot_centre_y_fp
+            - \l__tenkz_test_dot_unit_y_fp
+              * \__tenkz_metric_ratio:n {dotlabelband}
+          )
+      }
+      < {0.00001}
+      { \errmessage{dot~label~lost~its~carrier-y~displacement} }
+    \fp_set:Nn \l__tenkz_test_dot_actual_bearing_fp
+      {
+        atand
+          (
+            \l__tenkz_test_dot_actual_y_fp
+              - \l__tenkz_test_dot_centre_y_fp,
+            \l__tenkz_test_dot_actual_x_fp
+              - \l__tenkz_test_dot_centre_x_fp
+          )
+      }
+    \fp_set:Nn \l__tenkz_test_dot_expected_bearing_fp
+      {
+        atand
+          (
+            \l__tenkz_test_dot_unit_y_fp,
+            \l__tenkz_test_dot_unit_x_fp
+          )
+      }
+    \bool_lazy_or:nnT
+      {
+        \fp_compare_p:nNn
+          {
+            abs
+              (
+                sind
+                  (
+                    \l__tenkz_test_dot_actual_bearing_fp
+                    - \l__tenkz_test_dot_expected_bearing_fp
+                  )
+              )
+          }
+          > {0.00001}
+      }
+      {
+        \fp_compare_p:nNn
+          {
+            cosd
+              (
+                \l__tenkz_test_dot_actual_bearing_fp
+                - \l__tenkz_test_dot_expected_bearing_fp
+              )
+          }
+          < {0.99999}
+      }
+      { \errmessage{dot~label~lost~its~effective~bearing} }
+    \tl_if_in:NVF
+      \l__tenkz_test_dot_style_tl \l__tenkz_test_dot_anchor_tl
+      { \errmessage{dot~label~chose~the~wrong~anchor~sector} }
+    \tl_if_in:VnT \l__tenkz_test_dot_style_tl {rotate}
+      { \errmessage{dot~label~text~did~not~stay~upright} }
+  }
+
+\cs_new_protected:Npn \__tenkz_test_dot_plane_expected:
+  {
+    \fp_set:Nn \l__tenkz_test_dot_norm_fp
+      {
+        sqrt
+          (
+            \__tenkz_metric_ratio:n {planeslant} ^ 2
+            + \__tenkz_metric_ratio:n {planerise} ^ 2
+          )
+      }
+    \fp_set:Nn \l__tenkz_test_dot_unit_x_fp
+      {
+        -\__tenkz_metric_ratio:n {planeslant}
+        / \l__tenkz_test_dot_norm_fp
+      }
+    \fp_set:Nn \l__tenkz_test_dot_unit_y_fp
+      {
+        -\__tenkz_metric_ratio:n {planerise}
+        / \l__tenkz_test_dot_norm_fp
+      }
+    \tl_set:Nn \l__tenkz_test_dot_anchor_tl {anchor = north~east ,}
+  }
+\ExplSyntaxOff
+\makeatother
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[lattice={1x1}, bonds=none, frame=flat]
+  \tn[at=(1,1), skin=dot]{F}
+\end{tenkz}
+\begin{tenkz}[
+    lattice={1x2}, bonds=none,
+    frame={plane,basis={wire at (0,0), wire at (4,0)}}]
+  \tn[at=(1,1,2), skin=dot]{P}
+  \tn[at=(1,2), name=A, ports={90:virtual}]{}
+  \tn[at=A, skin=dot]{N}
+  \tn[at=A.90, skin=dot]{Q}
+  \tn[at=1 e of (1,2), skin=dot]{R}
+\end{tenkz}
+\begin{tenkz}[rows={wire}, cols=4, bonds=none, frame=circle]
+  \tn[at=(1,2), skin=dot]{C}
+\end{tenkz}
+\ExplSyntaxOn
+\int_compare:nNnF { \l__tenkz_test_dot_label_count_int } = {6}
+  { \errmessage{dot-carrier~fixture~did~not~inspect~six~labels} }
+\ExplSyntaxOff
+\end{document}
