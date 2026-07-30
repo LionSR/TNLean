@@ -1,0 +1,95 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+
+\input{command}
+
+\title{A Phase Obstruction to Canonical-Form Renormalization-Flow Convergence}
+\author{}
+\date{2026-07-30}
+
+\begin{document}
+\maketitle
+
+\section{The source assertion}
+
+Around Theorem~3.1, \cite[lines~382 and 417]{Cirac2016MPDO_arXiv} asserts that
+the renormalization flow starting from a tensor in canonical form always
+converges.  Appendix~B identifies one renormalization step with
+\(\mathcal E\mapsto\mathcal E^2\) at lines~1205--1209 and gives the
+canonical-form transfer decomposition at lines~1211--1243.  The conclusion at
+line~1244 is that the normalization
+\[
+  |\mu_{j,q}|\leq 1
+\]
+implies convergence of the transfer powers.
+
+This conclusion overlooks relative phases between repeated copies of the same
+normal tensor.  In the decomposition at lines~1220--1226, the corresponding
+summands carry the factors
+\[
+  \mu_{j,q}\overline{\mu_{j,q'}}\,\mathbb E_{j,j}.
+\]
+When both weights have modulus one, normalization does not force the relative
+phase to converge under repeated squaring.
+
+\section{Phase-oscillation counterexample}
+
+Let
+\[
+  \omega=e^{2\pi i/3}
+\]
+and consider the tensor with one physical component and bond dimension two
+given by
+\[
+  A^1=
+  \begin{pmatrix}
+    1&0\\
+    0&\omega
+  \end{pmatrix}.
+\]
+It is in the literal canonical form of
+\cite[lines~238--246]{Cirac2016MPDO_arXiv}: its two one-dimensional blocks are
+normal tensors with normalized weights \(1\) and \(\omega\).
+
+For the matrix unit \(e_{21}\), the transfer map satisfies
+\[
+  \mathcal E_A(e_{21})
+  =A^1e_{21}(A^1)^\dagger
+  =\omega e_{21}.
+\]
+Consequently,
+\[
+  \mathcal E_A^{\,2^n}(e_{21})
+  =\omega^{2^n}e_{21}.
+\]
+The residue of \(2^n\) modulo \(3\) alternates between \(1\) and \(2\).
+Hence this sequence alternates between
+\(\omega e_{21}\) and \(\omega^2 e_{21}\), and the dyadic
+renormalization flow does not converge.  The unrestricted sequence
+\(\mathcal E_A^N\) is likewise three-periodic.
+
+\section{Faithful boundary}
+
+Theorem~3.1 itself is unaffected: it characterizes tensor classes that
+\emph{do} appear as limits, and does not assert that every canonical-form
+initial tensor has a limit.  Primitive-transfer convergence for each individual
+normal block also remains valid.
+
+For the full repeated-copy canonical form, convergence requires control of the
+relative phases.  A sufficient condition is that all unit-modulus weights
+belonging to one normal tensor have the same phase.  More precisely, dyadic
+convergence requires each sequence
+\[
+  \left(\mu_{j,q}\overline{\mu_{j,q'}}\right)^{2^n}
+\]
+arising from two unit-modulus repeated-copy weights to converge.  Without such
+a condition, the universal convergence assertion at lines~1211--1244 is
+refuted rather than an unproved formalization target.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}

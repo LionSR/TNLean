@@ -43,6 +43,48 @@
     which is idempotent.
 \end{proof}
 
+% Source-gap record:
+% docs/paper-gaps/cpsv16_canonical_form_renormalization_flow_phase_gap.tex.
+% The source assertion is refuted; the declaration named below formalizes the
+% counterexample rather than the universal convergence claim.
+\begin{theorem}[Phase obstruction to canonical-form flow convergence]
+    \label{thm:cpsv_canonical_form_flow_phase_obstruction}
+    \lean{MPSTensor.cubePhaseTensor_not_tendsto_dyadic_transferMap}
+    \leanok
+    \uses{def:cpsv_canonical_form, def:transfer_map}
+    Let $\omega=e^{2\pi i/3}$ and consider the tensor with one physical
+    component
+    \begin{align}
+        A^1&=
+        \begin{pmatrix}
+            1&0\\
+            0&\omega
+        \end{pmatrix}.
+        \notag
+    \end{align}
+    This tensor is in canonical form, with two one-dimensional normal
+    components of weights $1$ and $\omega$. For the matrix unit $e_{21}$,
+    \begin{align}
+        \E_A^{2^n}(e_{21})
+        &=\omega^{2^n}e_{21}.
+        \notag
+    \end{align}
+    The right-hand side alternates between
+    $\omega e_{21}$ and $\omega^2 e_{21}$. Hence the dyadic
+    renormalization flow does not converge. This refutes the unrestricted
+    canonical-form convergence assertion in
+    \cite[lines~417 and 1211--1244]{Cirac2016MPDO_arXiv}; it does not affect the
+    primitive single-component convergence above.
+\end{theorem}
+\begin{proof}
+    \leanok
+    The two one-dimensional components are normal and both weights have
+    modulus one. Direct multiplication gives
+    $\E_A(e_{21})=\omega e_{21}$. Since $2^n$ is congruent alternately
+    to $1$ and $2$ modulo $3$, the displayed sequence has the two distinct
+    values claimed.
+\end{proof}
+
 \begin{remark}\label{rem:zero_correlation_length}
     \uses{thm:spectral_radius_le_one, def:correlation_length,
         def:mps_transfer_idempotence}
