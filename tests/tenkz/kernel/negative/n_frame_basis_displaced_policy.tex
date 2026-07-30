@@ -1,0 +1,8 @@
+%% Negative regression: displaced singleton topology needs explicit wires.
+\documentclass{standalone}
+\usepackage{tenkz}
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[rows={wire}, cols=2, bonds=none, west=trace, east=trace,
+              frame={flat,basis={wire at (0,1)}}]\end{tenkz}
+\end{document}

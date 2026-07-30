@@ -135,6 +135,20 @@ equation_basis_atoms=$(grep -c '^atom|' "$WORK/r_basis_equation.tnlog" || true)
   echo "FAIL: an inherited equation basis lost its member indices" >&2
   exit 1
 }
+if grep -Eq '^atom.*[|]member=' "$WORK/r_basis_equation_replace.tnlog"; then
+  echo "FAIL: an outer bare frame retained a panel basis" >&2
+  exit 1
+fi
+grep -Eq '^mark.*[|]members=atom-[0-9]+([|]|$)' \
+    "$WORK/r_default_basis_member.tnlog" || {
+  echo "FAIL: default basis member one did not resolve to the ordinary cell" >&2
+  exit 1
+}
+grep -Eq '^mark.*[|]members=atom-[0-9]+,atom-[0-9]+([|]|$)' \
+    "$WORK/r_basis_range_empty.tnlog" || {
+  echo "FAIL: a range over an empty row did not retain both populated rows" >&2
+  exit 1
+}
 awk '
   /^picture[|]id=k1[|]/ { picture = NR }
   /^warning[|]picture=k1[|]code=plane-tall-window[|]/ { warning = NR }
@@ -462,6 +476,8 @@ grep -Fq '[TKZ-FRAME-WORD]' "$WORK/n_frame_word.transcript" || {
 for basis_case in \
   n_frame_basis_parse n_frame_basis_kind n_frame_basis_member \
   n_frame_basis_member_zero \
+  n_frame_basis_cell_member n_frame_basis_member_cell \
+  n_frame_basis_displaced_policy n_frame_basis_invalid_word \
   n_frame_basis_grid n_frame_basis_group n_frame_basis_circle \
   n_frame_basis_policy
 do
@@ -487,6 +503,23 @@ grep -Fq '[TKZ-FRAME-BASIS-KIND]' \
 grep -Fq '[TKZ-FRAME-MEMBER-RANGE]' \
   "$WORK/n_frame_basis_member.transcript" || {
   echo "FAIL: missing basis member lacked TKZ-FRAME-MEMBER-RANGE" >&2
+  exit 1
+}
+for overlap_case in n_frame_basis_cell_member n_frame_basis_member_cell; do
+  grep -Eq '\[TKZ-(LANG-OCCUPANCY|CELL-OCCUPIED|FRAME-MEMBER-OCCUPIED)\]' \
+    "$WORK/$overlap_case.transcript" || {
+    echo "FAIL: $overlap_case lacked an occupancy diagnostic" >&2
+    exit 1
+  }
+done
+grep -Fq '[TKZ-FRAME-BASIS-POLICY]' \
+  "$WORK/n_frame_basis_displaced_policy.transcript" || {
+  echo "FAIL: displaced singleton policy lacked TKZ-FRAME-BASIS-POLICY" >&2
+  exit 1
+}
+grep -Fq '[TKZ-FRAME-WORD]' \
+  "$WORK/n_frame_basis_invalid_word.transcript" || {
+  echo "FAIL: invalid basis frame lacked TKZ-FRAME-WORD" >&2
   exit 1
 }
 grep -Fq '[TKZ-FRAME-MEMBER-RANGE]' \
