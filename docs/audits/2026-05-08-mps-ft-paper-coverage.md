@@ -48,23 +48,22 @@ theorem. This is tracked by issue #873 under the proposition-level tracker #81.
 
 ## 2. Coverage crosswalk: CPSV16 (arXiv:1606.00608)
 
-At this revision, after the normal-tensor RFP characterization, the trace-normalized RFP-to-ZCL-and-SAL result, and the unrestricted Proposition `prop3to4`, the paper has 45 theorem-like occurrences and 40 distinct results. The occurrence-level count is 20 complete, 11 partial, and 14 not-ready; the distinct-result count is 19 complete, 9 partial, and 12 not-ready. Here **not-ready** means that the printed statement is false, ambiguous, or depends essentially on a formally refuted source lemma. It does not mean that every printed result has been formalized.
+At this revision, after the normal-tensor RFP characterization, the trace-normalized RFP-to-ZCL-and-SAL result, the unrestricted Proposition `prop3to4`, the normal-sector blocking result for Theorem 4.9, and the literal sharp `propblockinj` theorem, the paper has 45 theorem-like occurrences and 40 distinct results. The occurrence-level count is 22 complete, 9 partial, and 14 not-ready; the distinct-result count is 21 complete, 7 partial, and 12 not-ready. Here **not-ready** means that the printed statement is false, ambiguous, or depends essentially on a formally refuted source lemma. It does not mean that every printed result has been formalized.
 
 The distinct count is the 40 source `thm`, `prop`, `cor`, and `lem`
 environments. The occurrence count adds five Appendix A/D restatements.
 The following ledger makes the count reproducible from source line numbers:
 
-- **Complete (19 distinct):** 249, 253, 398, 606, 945, 1080, 1121, 1130,
-  1274, 1333, 1351, 1406, 1510, 1569, 1647, 1680, 1786, 1835, and 2221.
-- **Partial (9 distinct):** 278, 342, 583, 801, 851, 972, 1013, 1597,
-  and 1801.
+- **Complete (21 distinct):** 249, 253, 342, 398, 606, 945, 1080, 1121, 1130,
+  1274, 1333, 1351, 1406, 1510, 1569, 1597, 1647, 1680, 1786, 1835, and 2221.
+- **Partial (7 distinct):** 278, 583, 801, 851, 972, 1013, and 1801.
 - **Not-ready (12 distinct):** 349, 354, 500, 534, 543, 777, 1155, 1197,
   1484, 1503, 1740, and 1810.
 - **Additional occurrences:** the Appendix A restatements at 1137, 1167,
   and 1172 inherit partial, not-ready, and not-ready status, respectively; the
   Appendix D restatements at 1863 and 1929 inherit complete and partial status.
   Thus the five restatements add one complete, two partial, and two not-ready
-  occurrences, giving the displayed totals 20/11/14.
+  occurrences, giving the displayed totals 22/9/14.
 
 Definitions, equations, and explanatory proof-segment rows are not counted.
 In particular, Eq. `II_XAX` at 1072--1077 is excluded, while the purification
@@ -81,7 +80,7 @@ segments of Theorems 3.1 and 3.10, not additional theorem occurrences.
 | Prop (l.253) | 253–255 | Projector criterion for canonical form | `TNLean/MPS/CanonicalForm/ProjectorClosureSpectral.lean` (`MPSTensor.exists_normalTensor_blockDecomp_with_isometry_of_hasInvariantProjectorClosure`) | **complete**; #2634 closed |
 | Prop 2.7 (l.278, `prop:char-BNT`) | 278–280 | BNT characterization: every active canonical-form normal tensor is gauge-phase-equivalent to a basis element | `TNLean/MPS/CanonicalForm/BNTCharacterization.lean` (`MPSTensor.isCPSVBasisOfNormalTensors_iff_canonicalForm_covered_and_minimal`) | **partial** — the active-block characterization is complete, but positive-length MPVs cannot determine listed zero-weight blocks; see `docs/paper-gaps/cpsv16_bnt_characterization_active_blocks.tex` |
 | Defn "injective" (l.317, `defnbi`) | 317–322 | A normal tensor is injective when its matrices span the full matrix algebra; biCF is block-injective canonical form | `TNLean/MPS/Defs.lean` (`MPSTensor.IsInjective`) and the biCF development under `TNLean/MPS/MPDO/BiCFDerivation/` | `leanok` |
-| Prop (l.342, `propblockinj`) | 342–345 | After blocking at most $3D^5$ spins, any canonical-form tensor becomes biCF | `TNLean/MPS/MPDO/BiCFDerivation/BNTDirectSum.lean` (`IsBNTCanonicalForm.exists_basis_wordTupleSpanTop_le_three_totalDim_pow_five`) with `MPSTensor.hasBiCF_of_wordTupleSpanTop` | **partial** — the bound is proved for the stronger packaged `IsBNTCanonicalForm` surface, but the printed proposition starts from literal canonical form; the zero-weight ambiguity in Proposition 2.7 prevents the missing unconditional conversion |
+| Prop (l.342, `propblockinj`) | 342–345 | After blocking at most $3D^5$ spins, any canonical-form tensor becomes biCF | `TNLean/MPS/MPDO/CPSVSharpBlocking.lean` (`MPSTensor.IsCPSVCanonicalForm.exists_bnt_biCF_after_blocking_le_three_bondDim_pow_five`) | **complete** — literal canonical-form data supply an active BNT whose representative dimensions sum to at most the ambient bond dimension $D$; for $D>0$, blocking at a positive length $L\leq3D^5$ gives the simultaneous one-letter span of the full product matrix algebra |
 | **Theorem II.1** (l.349, `thm1`) | 349–352 | Fundamental theorem of MPVs, proportional case | `TNLean/MPS/FundamentalTheorem/SectorBNT/FundamentalCoord.lean` (`MPSTensor.fundamentalTheorem_proportional_canonicalForm`); `TNLean/MPS/CanonicalForm/BNTUniqueness.lean`; `docs/paper-gaps/cpsv16_bnt_uniqueness_zero_coefficient.tex` | **not-ready** — the printed BNT definition permits adjoining an unrelated normal tensor with coefficient zero at every length. The formal one-versus-two-element BNT example for the same tensor refutes the asserted equality of BNT cardinalities. The Lean fundamental theorem proves the corrected active, nonzero, converse-covered BNT statement |
 | **Corollary II.2** (l.354, `II_cor2`) | 354–361 | Equal MPVs imply conjugacy by an invertible matrix | `TNLean/MPS/FundamentalTheorem/SectorBNT/FundamentalCoord.lean` (`MPSTensor.fundamentalTheorem_equal_canonicalForm`); `docs/paper-gaps/cpsv16_bnt_characterization_active_blocks.tex` | **not-ready** — literal canonical form permits inactive zero-weight blocks, which positive-length MPVs cannot detect; tensors with equal MPVs may therefore have different ambient dimensions, contradicting the printed dimension and global-conjugacy conclusion |
 
@@ -314,7 +313,7 @@ These are known oversized (documented in #1512/#1522) and do not block unrelated
 
 ## 7. Key remaining coverage gaps
 
-The 21 non-complete distinct CPSV16 results comprise 9 partial and 12
+The 19 non-complete distinct CPSV16 results comprise 7 partial and 12
 not-ready results. They are source-ambiguous, formally refuted, research-level,
 owner-held, or scope-restricted by the current formal interface. Lemma
 `Lsigma3`, the Hayashi strong-subadditivity equality characterization, and the
@@ -324,7 +323,6 @@ axiom-free.
 | Status | Paper | Result | Current certificate | Ownership |
 |---|---|---|---|---|
 | Partial | CPSV16 | Prop. 2.7, BNT characterization | Active blocks are characterized; listed zero-weight blocks are invisible to positive-length MPVs | Source clarification required |
-| Partial | CPSV16 | Proposition `propblockinj` | The $3D^5$ bound is proved for packaged BNT data, not for every literal canonical-form tensor | Blocked by the same zero-weight ambiguity as Proposition 2.7 |
 | Not-ready | CPSV16 | Theorem II.1 | The printed BNT definition admits an unrelated normal representative with identically zero coefficient; the formal one-versus-two-element example refutes the claimed equality of BNT cardinalities | `TNLean/MPS/CanonicalForm/BNTUniqueness.lean`; `docs/paper-gaps/cpsv16_bnt_uniqueness_zero_coefficient.tex` |
 | Not-ready | CPSV16 | Corollary II.2 | Inactive zero-weight blocks can change the ambient dimension without changing any positive-length MPV | `docs/paper-gaps/cpsv16_bnt_characterization_active_blocks.tex` |
 | Not-ready | CPSV16 | Appendix A Lemma `Lem:app_simple` | \([1]\) and \([1,0]\) have identical positive-power sums but different multisets; the formal corrections require nonzero entries or filter zeros | `TNLean/Algebra/ScalarPowerSumIdentity.lean`; `docs/paper-gaps/power_sum_alternative_route.tex` |
