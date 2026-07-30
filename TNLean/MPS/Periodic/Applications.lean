@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.FundamentalTheorem.Basic
 import TNLean.MPS.Periodic.Defs
 import TNLean.Channel.KrausRepresentation
+import TNLean.Spectral.MixedTransfer
 
 /-!
 Copyright (c) 2026 TNLean contributors. All rights reserved.
@@ -166,6 +167,52 @@ theorem transferMap_rotatePhysical (A : MPSTensor d D) (u : Matrix (Fin d) (Fin 
   ext X : 1
   simp only [transferMap_apply, rotatePhysical_apply]
   exact kraus_same_map_of_unitary_combination _ A u (mul_eq_one_comm.mp hu) (fun _ => rfl) X
+
+/-- A common unitary rotation of the physical index leaves the rectangular
+mixed transfer map unchanged. -/
+theorem mixedTransferMap₂_rotatePhysical {D₁ D₂ : ℕ}
+    (A : MPSTensor d D₁) (B : MPSTensor d D₂)
+    (u : Matrix (Fin d) (Fin d) ℂ) (hu : u * uᴴ = 1) :
+    mixedTransferMap₂ (rotatePhysical u A) (rotatePhysical u B) =
+      mixedTransferMap₂ A B := by
+  ext X : 1
+  simp only [mixedTransferMap₂_apply, rotatePhysical_apply]
+  have hu' : uᴴ * u = 1 := mul_eq_one_comm.mp hu
+  have hU : ∀ j k : Fin d,
+      ∑ i : Fin d, starRingEnd ℂ (u i j) * u i k = if j = k then 1 else 0 := by
+    intro j k
+    have h := congrArg (fun M : Matrix (Fin d) (Fin d) ℂ => M j k) hu'
+    simpa [Matrix.mul_apply, Matrix.one_apply, Matrix.conjTranspose_apply] using h
+  have star_eq : ∀ (c : ℂ), star c = starRingEnd ℂ c := fun _ => rfl
+  simp_rw [Matrix.conjTranspose_sum, Matrix.conjTranspose_smul, star_eq,
+    Matrix.sum_mul, Matrix.mul_sum]
+  rw [Finset.sum_comm]
+  apply Finset.sum_congr rfl
+  intro j _
+  rw [Finset.sum_comm]
+  have factor : ∀ k : Fin d,
+      ∑ i : Fin d, (u i j * starRingEnd ℂ (u i k)) •
+          (A j * X * (B k)ᴴ) =
+        (if k = j then (1 : ℂ) else 0) • (A j * X * (B k)ᴴ) := by
+    intro k
+    rw [← Finset.sum_smul]
+    convert congrArg (fun c : ℂ => c • (A j * X * (B k)ᴴ)) (hU k j) using 1
+    simp [mul_comm]
+  have hExpand :
+      (∑ k : Fin d, ∑ i : Fin d,
+        u i j • A j * X * starRingEnd ℂ (u i k) • (B k)ᴴ) =
+      ∑ k : Fin d, ∑ i : Fin d,
+        (u i j * starRingEnd ℂ (u i k)) • (A j * X * (B k)ᴴ) := by
+    apply Finset.sum_congr rfl
+    intro k _
+    apply Finset.sum_congr rfl
+    intro i _
+    ext a b
+    simp only [Matrix.smul_mul, Matrix.mul_smul, Matrix.smul_apply, smul_eq_mul]
+    ring
+  rw [hExpand]
+  simp only [factor, ite_smul, one_smul, zero_smul]
+  simp [Finset.mem_univ]
 
 /-! ### Left-canonical preservation under rotation -/
 
