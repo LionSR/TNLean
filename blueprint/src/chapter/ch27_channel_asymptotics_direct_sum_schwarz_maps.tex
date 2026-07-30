@@ -237,6 +237,77 @@
     unitary and implements the same automorphism.
 \end{proof}
 
+\begin{theorem}[Transport between spatial compressions]%
+    \label{thm:corner_compression_partial_isometry_transport}
+    \lean{MPSTensor.exists_partial_isometry_transporting_compressions}
+    \leanok
+    Let $P,Q\in\MN D$ be matrices, and suppose that
+    $V_P,V_Q:\mathbb C^n\to\mathbb C^D$ satisfy
+    \[
+        V_P^*V_P=I,\qquad V_PV_P^*=P,\qquad
+        V_Q^*V_Q=I,\qquad V_QV_Q^*=Q.
+    \]
+    Write $\Phi_P(X)=V_PXV_P^*$ and $\Phi_Q(X)=V_QXV_Q^*$ for the
+    corresponding linear isomorphisms onto the two corners. For every unitary
+    $W\in\MN n$, there is a matrix $U\in\MN D$ such that
+    \[
+        U=PUQ,\qquad U^*U=Q,\qquad UU^*=P,
+    \]
+    and, for every $X\in\MN n$,
+    \[
+        \Phi_P(WXW^*)=U\Phi_Q(X)U^*.
+    \]
+\end{theorem}
+
+\begin{proof}\leanok
+    Take $U=V_PWV_Q^*$. The four isometry identities give the three support
+    identities by direct multiplication. Substitution of the two formulas
+    for $\Phi_P$ and $\Phi_Q$ gives
+    \[
+        U\Phi_Q(X)U^*
+        =V_PW(V_Q^*V_Q)X(V_Q^*V_Q)W^*V_P^*
+        =\Phi_P(WXW^*).
+    \]
+\end{proof}
+
+\begin{theorem}[Spatial implementation of an isomorphism between corners]%
+    \label{thm:corner_star_isomorphism_partial_isometry}
+    \lean{MPSTensor.exists_partial_isometry_implementing_corner_linearEquiv}
+    \leanok
+    Let $P,Q\in\MN D$ be orthogonal projections. If
+    \[
+        \Psi:Q\MN DQ\longrightarrow P\MN DP
+    \]
+    is a bijective complex-linear map preserving multiplication and the
+    adjoint, then there is a matrix $U\in\MN D$ such that
+    \[
+        U=PUQ,\qquad U^*U=Q,\qquad UU^*=P,
+    \]
+    and
+    \[
+        \Psi(X)=UXU^*
+    \]
+    for every $X\in Q\MN DQ$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:unitary_skolem_noether_matrix,
+        thm:corner_compression_partial_isometry_transport}
+    Choose spatial compressions
+    \[
+        \Phi_Q:\MN{n_Q}\simeq Q\MN DQ,\qquad
+        \Phi_P:\MN{n_P}\simeq P\MN DP.
+    \]
+    The composite $\Phi_P^{-1}\Psi\Phi_Q$ is a linear isomorphism, so equality
+    of dimensions gives $n_Q^2=n_P^2$, and hence $n_Q=n_P$. If this common
+    rank is zero, both projections vanish and the conclusion holds with
+    $U=0$. Otherwise the composite is a star-algebra automorphism of
+    $\MN{n_Q}$. The unitary Skolem--Noether theorem writes it as
+    $X\mapsto WXW^*$ for a unitary $W$. Applying
+    Theorem~\ref{thm:corner_compression_partial_isometry_transport} to $W$
+    gives the required matrix $U$.
+\end{proof}
+
 \begin{theorem}[Unitary action within matched simple summands]%
     \label{thm:direct_sum_star_equiv_block_unitary}
     \lean{MPSTensor.blockComponentStarAlgEquiv}
