@@ -21,7 +21,7 @@ range. Thus such data exist at a fixed size precisely when `Eₙ` is idempotent;
 existence at every positive size is equivalent to idempotence of `E₁`.
 
 This range-subspace factorization is not the physical renormalization
-fixed-point condition of arXiv:1606.00608, Definition `RFPMixedTS`, lines
+fixed-point condition of arXiv:1606.00608, Definition RFPMixedTS, lines
 638--660. That definition requires trace-preserving completely positive maps
 on the physical indices; its Appendix C.4 construction appears at lines
 1974--2085. The predicate `IsRFPViaTS` records this physical-map condition.
@@ -46,7 +46,7 @@ recorded by `BNTFusionIsometryFamily`.
 ## References
 
 * [Cirac--Perez-Garcia--Schuch--Verstraete 2017] arXiv:1606.00608, Definition
-  `RFPMixedTS`, lines 638--660, and Appendix C.4, lines 1974--2085, for the
+  RFPMixedTS, lines 638--660, and Appendix C.4, lines 1974--2085, for the
   distinct physical-map RFP condition.
 * [Cirac--Perez-Garcia--Schuch--Verstraete 2017] arXiv:1606.00608, Theorem
   4.14(ii)--(iii), lines 972--991, for the BNT fusion maps.
@@ -156,7 +156,7 @@ transfer-map idempotence.
 The forward direction is the retract calculation
 \(E_1^2 = S_1T_1S_1T_1 = S_1T_1\).  The reverse direction factors the
 idempotent transfer map through its range.  This is a definitional unfolding:
-arXiv:1606.00608, Definition `RFPMixedTS`, lines 638--660, and Appendix C.4,
+arXiv:1606.00608, Definition RFPMixedTS, lines 638--660, and Appendix C.4,
 lines 1974--2085 construct physical trace-preserving CP maps, not this
 bond-space retract. -/
 theorem transferRetractData_one_iff_isRFP (M : MPOTensor d D) :
