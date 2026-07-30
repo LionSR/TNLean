@@ -549,6 +549,9 @@
 \cs_new_protected:Npn \__tenkz_geom_place_rel:nnnn #1#2#3#4
   { \prop_put:Nnn \l__tenkz_geom_req_prop {#1} { {rel}{#2}{#3}{#4} } }
 \cs_generate_variant:Nn \__tenkz_geom_place_rel:nnnn { nnee, nVee, neee }
+\cs_new_protected:Npn \__tenkz_geom_place_offset:nnnn #1#2#3#4
+  { \prop_put:Nnn \l__tenkz_geom_req_prop {#1} { {offset}{#2}{#3}{#4} } }
+\cs_generate_variant:Nn \__tenkz_geom_place_offset:nnnn { nVee }
 \cs_new_protected:Npn \__tenkz_geom_place_mid:nnn #1#2#3
   { \prop_put:Nnn \l__tenkz_geom_req_prop {#1} { {mid}{#2}{#3}{} } }
 \cs_generate_variant:Nn \__tenkz_geom_place_mid:nnn { nVV, nee }
@@ -614,6 +617,16 @@
                 \__tenkz_geom_store:nnn {#5}
                   { \prop_item:Nn \l__tenkz_geom_x_prop {#2} + (#4) * cosd(#3) }
                   { \prop_item:Nn \l__tenkz_geom_y_prop {#2} + (#4) * sind(#3) }
+              }
+          }
+        {offset}
+          {
+            \__tenkz_geom_need:nN {#2} #6
+            \bool_if:NT #6
+              {
+                \__tenkz_geom_store:nnn {#5}
+                  { \prop_item:Nn \l__tenkz_geom_x_prop {#2} + (#3) }
+                  { \prop_item:Nn \l__tenkz_geom_y_prop {#2} + (#4) }
               }
           }
         {mid}
