@@ -383,6 +383,26 @@ private theorem fourthRegion_suffix_two_neighboring_entry
         fourthRegion_suffix_two_succ).trans ?_
       exact heq_of_eq (F.retainedOpenEdgeEquiv_symm_first_left k y)
 
+/-- Trace a suffix of fixed length from a retained sector block of the cyclic
+neighboring product, summing over all discarded sector labels and fibers.
+
+Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
+1606--1617.
+
+**Local fix (adjacent marginal comparison):** The source argument uses
+adjacent suffix lengths; the length-three specialization is later restricted
+to cyclic-active sector labels. See
+`docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
+noncomputable def suffixSectorContraction
+    (F : PhysicalSectorFactorization K) (R : ℕ) [NeZero R] {L : ℕ}
+    (k : Fin L → Fin F.sectorCount) :
+    Matrix (F.SectorChainFiber k) (F.SectorChainFiber k) ℂ :=
+  fun x y ↦
+    ∑ t : Fin R → Fin F.sectorCount,
+      ∑ z : F.SectorChainFiber t,
+        F.cyclicNeighboringProduct (Fin.append k t)
+          (F.appendSectorFiber x z) (F.appendSectorFiber y z)
+
 /-- Trace the last three site fibers of a fixed retained sector block of the
 cyclic neighboring product, summing over all three discarded sector labels.
 
@@ -392,15 +412,11 @@ Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
 **Local fix (cyclic-active restriction):** The suffix sum is later restricted
 to cyclic-active sector labels, producing the restricted two-step
 coefficient. See `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
-noncomputable def threeSuffixSectorContraction
+noncomputable abbrev threeSuffixSectorContraction
     (F : PhysicalSectorFactorization K) {L : ℕ}
     (k : Fin L → Fin F.sectorCount) :
     Matrix (F.SectorChainFiber k) (F.SectorChainFiber k) ℂ :=
-  fun x y ↦
-    ∑ t : Fin 3 → Fin F.sectorCount,
-      ∑ z : F.SectorChainFiber t,
-        F.cyclicNeighboringProduct (Fin.append k t)
-          (F.appendSectorFiber x z) (F.appendSectorFiber y z)
+  F.suffixSectorContraction 3 k
 
 private theorem sum_threeSuffixFiber_cyclicNeighboringProduct
     (F : PhysicalSectorFactorization K) {n : ℕ}
@@ -542,6 +558,112 @@ def cyclicActiveRetainedWord
 
 
 /-- In complete physical-sector coordinates, the marginal obtained by
+discarding a suffix of arbitrary length is the direct sum of the corresponding
+suffix contractions of the cyclic neighboring products.
+
+Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
+1606--1617.
+
+**Local fix (adjacent marginal comparison):** The arbitrary suffix length
+simultaneously covers the adjacent source marginals and the later
+three-suffix cyclic-active restriction. See
+`docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
+theorem reindex_reducedBlockState_add_eq_suffixSectorContraction
+    (F : PhysicalSectorFactorization K) (L R : ℕ) [NeZero R] :
+    Matrix.reindex (F.sectorCoordinateChainEquiv L)
+        (F.sectorCoordinateChainEquiv L)
+        (F.sectorCoordinateTensor.reducedBlockState (L + R) L (by omega)) =
+      ((Matrix.trace (mpo F.sectorCoordinateTensor (L + R)))⁻¹ : ℂ) •
+        Matrix.blockDiagonal' (fun k ↦ F.suffixSectorContraction R k) := by
+  classical
+  have hblock :
+      F.sectorCoordinateTensor.reducedBlockState (L + R) L (by omega) =
+        blockReducedState (Fintype.card (SectorSiteIndex F)) L R
+          (F.sectorCoordinateTensor.normalizedMPO (L + R)) := by
+    rw [MPOTensor.reducedBlockState]
+    simpa only [blockReindexEquiv] using
+      blockReducedState_submatrix_finCongr
+        (show L + R = L + (L + R - L) by omega)
+        (F.sectorCoordinateTensor.normalizedMPO (L + R))
+  rw [hblock]
+  ext s t
+  obtain ⟨k, x⟩ := s
+  obtain ⟨h, y⟩ := t
+  simp only [Matrix.reindex_apply, Matrix.submatrix_apply,
+    blockReducedState, Matrix.partialTraceRight_apply,
+    normalizedMPO, Matrix.smul_apply, smul_eq_mul]
+  rw [← Finset.mul_sum]
+  congr 1
+  simp only [blockSplitEquiv_symm_apply]
+  change (∑ i : Fin R → Fin (Fintype.card (SectorSiteIndex F)),
+      mpo F.sectorCoordinateTensor (L + R)
+        (Fin.append ((F.sectorCoordinateChainEquiv L).symm ⟨k, x⟩) i)
+        (Fin.append ((F.sectorCoordinateChainEquiv L).symm ⟨h, y⟩) i)) = _
+  have hconfig
+      (p : Fin L → Fin F.sectorCount) (u : F.SectorChainFiber p)
+      (q : Fin R → Fin F.sectorCount) (z : F.SectorChainFiber q) :
+      Fin.append ((F.sectorCoordinateChainEquiv L).symm ⟨p, u⟩)
+          ((F.sectorCoordinateChainEquiv R).symm ⟨q, z⟩) =
+        (F.sectorCoordinateChainEquiv (L + R)).symm
+          ⟨Fin.append p q, F.appendSectorFiber u z⟩ := by
+    funext i
+    refine Fin.addCases (motive := fun i' : Fin (L + R) ↦
+      Fin.append ((F.sectorCoordinateChainEquiv L).symm ⟨p, u⟩)
+          ((F.sectorCoordinateChainEquiv R).symm ⟨q, z⟩) i' =
+        (F.sectorCoordinateChainEquiv (L + R)).symm
+          ⟨Fin.append p q, F.appendSectorFiber u z⟩ i')
+      (fun j ↦ ?_) (fun j ↦ ?_) i
+    · simp [F.sectorCoordinateChainEquiv_symm_apply, appendSectorFiber]
+    · simp [F.sectorCoordinateChainEquiv_symm_apply, appendSectorFiber]
+  calc
+    _ = ∑ s : F.SectorChainIndex R,
+        mpo F.sectorCoordinateTensor (L + R)
+          (Fin.append ((F.sectorCoordinateChainEquiv L).symm ⟨k, x⟩)
+            ((F.sectorCoordinateChainEquiv R).symm s))
+          (Fin.append ((F.sectorCoordinateChainEquiv L).symm ⟨h, y⟩)
+            ((F.sectorCoordinateChainEquiv R).symm s)) := by
+      apply Fintype.sum_equiv (F.sectorCoordinateChainEquiv R)
+      intro i
+      rw [Equiv.symm_apply_apply]
+    _ = _ := by
+      rw [Fintype.sum_sigma]
+      by_cases hkh : k = h
+      · subst h
+        rw [Matrix.blockDiagonal'_apply_eq]
+        simp only [suffixSectorContraction]
+        apply Finset.sum_congr rfl
+        intro q _
+        apply Finset.sum_congr rfl
+        intro z _
+        rw [hconfig k x q z, hconfig k y q z]
+        have hentry := congrFun (congrFun
+          (F.reindex_mpo_sectorCoordinateTensor_eq_blockDiagonal
+            (N := L + R))
+          ⟨Fin.append k q, F.appendSectorFiber x z⟩)
+          ⟨Fin.append k q, F.appendSectorFiber y z⟩
+        simpa only [Matrix.reindex_apply, Matrix.submatrix_apply,
+          Matrix.blockDiagonal'_apply_eq] using hentry
+      · rw [Matrix.blockDiagonal'_apply_ne _ _ _ hkh]
+        apply Finset.sum_eq_zero
+        intro q _
+        apply Finset.sum_eq_zero
+        intro z _
+        rw [hconfig k x q z, hconfig h y q z]
+        have happend_ne : Fin.append k q ≠ Fin.append h q := by
+          intro heq
+          apply hkh
+          funext i
+          have hi := congrFun heq (Fin.castAdd R i)
+          simpa using hi
+        have hentry := congrFun (congrFun
+          (F.reindex_mpo_sectorCoordinateTensor_eq_blockDiagonal
+            (N := L + R))
+          ⟨Fin.append k q, F.appendSectorFiber x z⟩)
+          ⟨Fin.append h q, F.appendSectorFiber y z⟩
+        simpa only [Matrix.reindex_apply, Matrix.submatrix_apply,
+          Matrix.blockDiagonal'_apply_ne _ _ _ happend_ne] using hentry
+
+/-- In complete physical-sector coordinates, the marginal obtained by
 discarding three suffix sites is the direct sum of the corresponding
 three-suffix contractions of the cyclic neighboring products.
 
@@ -557,95 +679,8 @@ theorem reindex_reducedBlockState_add_three_eq_threeSuffixSectorContraction
         (F.sectorCoordinateChainEquiv L)
         (F.sectorCoordinateTensor.reducedBlockState (L + 3) L (by omega)) =
       ((Matrix.trace (mpo F.sectorCoordinateTensor (L + 3)))⁻¹ : ℂ) •
-        Matrix.blockDiagonal' (fun k ↦ F.threeSuffixSectorContraction k) := by
-  classical
-  letI : NeZero (L + 3) := ⟨by omega⟩
-  have hblock :
-      F.sectorCoordinateTensor.reducedBlockState (L + 3) L (by omega) =
-        blockReducedState (Fintype.card (SectorSiteIndex F)) L 3
-          (F.sectorCoordinateTensor.normalizedMPO (L + 3)) := by
-    rw [MPOTensor.reducedBlockState]
-    simpa only [blockReindexEquiv] using
-      blockReducedState_submatrix_finCongr
-        (show L + 3 = L + (L + 3 - L) by omega)
-        (F.sectorCoordinateTensor.normalizedMPO (L + 3))
-  rw [hblock]
-  ext s t
-  obtain ⟨k, x⟩ := s
-  obtain ⟨h, y⟩ := t
-  simp only [Matrix.reindex_apply, Matrix.submatrix_apply,
-    blockReducedState, Matrix.partialTraceRight_apply,
-    normalizedMPO, Matrix.smul_apply, smul_eq_mul]
-  rw [← Finset.mul_sum]
-  congr 1
-  simp only [blockSplitEquiv_symm_apply]
-  change (∑ i : Fin 3 → Fin (Fintype.card (SectorSiteIndex F)),
-      mpo F.sectorCoordinateTensor (L + 3)
-        (Fin.append ((F.sectorCoordinateChainEquiv L).symm ⟨k, x⟩) i)
-        (Fin.append ((F.sectorCoordinateChainEquiv L).symm ⟨h, y⟩) i)) = _
-  have hconfig
-      (p : Fin L → Fin F.sectorCount) (u : F.SectorChainFiber p)
-      (q : Fin 3 → Fin F.sectorCount) (z : F.SectorChainFiber q) :
-      Fin.append ((F.sectorCoordinateChainEquiv L).symm ⟨p, u⟩)
-          ((F.sectorCoordinateChainEquiv 3).symm ⟨q, z⟩) =
-        (F.sectorCoordinateChainEquiv (L + 3)).symm
-          ⟨Fin.append p q, F.appendSectorFiber u z⟩ := by
-    funext i
-    refine Fin.addCases (motive := fun i' : Fin (L + 3) ↦
-      Fin.append ((F.sectorCoordinateChainEquiv L).symm ⟨p, u⟩)
-          ((F.sectorCoordinateChainEquiv 3).symm ⟨q, z⟩) i' =
-        (F.sectorCoordinateChainEquiv (L + 3)).symm
-          ⟨Fin.append p q, F.appendSectorFiber u z⟩ i')
-      (fun j ↦ ?_) (fun j ↦ ?_) i
-    · simp [F.sectorCoordinateChainEquiv_symm_apply, appendSectorFiber]
-    · simp [F.sectorCoordinateChainEquiv_symm_apply, appendSectorFiber]
-  calc
-    _ = ∑ s : F.SectorChainIndex 3,
-        mpo F.sectorCoordinateTensor (L + 3)
-          (Fin.append ((F.sectorCoordinateChainEquiv L).symm ⟨k, x⟩)
-            ((F.sectorCoordinateChainEquiv 3).symm s))
-          (Fin.append ((F.sectorCoordinateChainEquiv L).symm ⟨h, y⟩)
-            ((F.sectorCoordinateChainEquiv 3).symm s)) := by
-      apply Fintype.sum_equiv (F.sectorCoordinateChainEquiv 3)
-      intro i
-      rw [Equiv.symm_apply_apply]
-    _ = _ := by
-      rw [Fintype.sum_sigma]
-      by_cases hkh : k = h
-      · subst h
-        rw [Matrix.blockDiagonal'_apply_eq]
-        simp only [threeSuffixSectorContraction]
-        apply Finset.sum_congr rfl
-        intro q _
-        apply Finset.sum_congr rfl
-        intro z _
-        rw [hconfig k x q z, hconfig k y q z]
-        have hentry := congrFun (congrFun
-          (F.reindex_mpo_sectorCoordinateTensor_eq_blockDiagonal
-            (N := L + 3))
-          ⟨Fin.append k q, F.appendSectorFiber x z⟩)
-          ⟨Fin.append k q, F.appendSectorFiber y z⟩
-        simpa only [Matrix.reindex_apply, Matrix.submatrix_apply,
-          Matrix.blockDiagonal'_apply_eq] using hentry
-      · rw [Matrix.blockDiagonal'_apply_ne _ _ _ hkh]
-        apply Finset.sum_eq_zero
-        intro q _
-        apply Finset.sum_eq_zero
-        intro z _
-        rw [hconfig k x q z, hconfig h y q z]
-        have happend_ne : Fin.append k q ≠ Fin.append h q := by
-          intro heq
-          apply hkh
-          funext i
-          have hi := congrFun heq (Fin.castAdd 3 i)
-          simpa using hi
-        have hentry := congrFun (congrFun
-          (F.reindex_mpo_sectorCoordinateTensor_eq_blockDiagonal
-            (N := L + 3))
-          ⟨Fin.append k q, F.appendSectorFiber x z⟩)
-          ⟨Fin.append h q, F.appendSectorFiber y z⟩
-        simpa only [Matrix.reindex_apply, Matrix.submatrix_apply,
-          Matrix.blockDiagonal'_apply_ne _ _ _ happend_ne] using hentry
+        Matrix.blockDiagonal' (fun k ↦ F.threeSuffixSectorContraction k) :=
+  F.reindex_reducedBlockState_add_eq_suffixSectorContraction L 3
 
 /-- Source ZCL marginal replacement is preserved by the physical coordinate
 isometry defining the sector-coordinate tensor.

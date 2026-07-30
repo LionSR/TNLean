@@ -93,7 +93,7 @@ theorem threeSuffixSectorContraction_eq_zero_of_not_isCyclicActiveRetainedWord
     F.threeSuffixSectorContraction k = 0 := by
   classical
   ext x y
-  simp only [threeSuffixSectorContraction, Matrix.zero_apply]
+  simp only [threeSuffixSectorContraction, suffixSectorContraction, Matrix.zero_apply]
   apply Finset.sum_eq_zero
   intro t _
   apply Finset.sum_eq_zero
@@ -132,7 +132,7 @@ theorem reindex_threeSuffixSectorContraction_eq_cyclicActiveUnnormalized
   classical
   ext x y
   simp only [Matrix.reindex_apply, Matrix.submatrix_apply, threeSuffixSectorContraction,
-    Matrix.kroneckerMap_apply]
+    suffixSectorContraction, Matrix.kroneckerMap_apply]
   have hrestrict :
       (∑ t : Fin 3 → Fin F.sectorCount,
           ∑ z : F.SectorChainFiber t,

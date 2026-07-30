@@ -166,6 +166,91 @@
     sites.
 \end{proof}
 
+% Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
+% 1606--1617.
+% **Local fix (adjacent marginal comparison):** the arbitrary positive suffix
+% length includes the one-, two-, and three-site contractions used below. See
+% docs/paper-gaps/cpsv16_commuting_form_to_sal.tex.
+\begin{definition}[Fixed-sector suffix contraction]
+    \label{def:mpdo_suffix_sector_contraction}
+    \lean{MPOTensor.PhysicalSectorFactorization.suffixSectorContraction}
+    \lean{MPOTensor.PhysicalSectorFactorization.%
+      oneSuffixSectorContraction}
+    \lean{MPOTensor.PhysicalSectorFactorization.%
+      twoSuffixSectorContraction}
+    \lean{MPOTensor.PhysicalSectorFactorization.%
+      threeSuffixSectorContraction}
+    \leanok
+    \uses{def:mpdo_physical_sector_chain_coordinates}
+    Let $S$ be the finite set of physical sectors and let
+    $k=(k_0,\ldots,k_{L-1})\in S^L$ be a retained sector word. For
+    $R\geq1$ and $x,y\in I_k$, define
+    \begin{align}
+        \Gamma_k^{(R)}(x,y)
+        &=
+        \sum_{t\in S^R}\ \sum_{z\in I_t}
+        \Omega_{kt}(xz,yz),
+        \notag
+    \end{align}
+    where $kt$ and $xz$ denote concatenation of sector words and their
+    corresponding fiber coordinates. The cases $R=1,2,3$ are denoted by
+    $\Gamma_k^{(1)}$, $\Gamma_k^{(2)}$, and $\Gamma_k^{(3)}$.
+\end{definition}
+
+% Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
+% 1606--1617.
+% **Local fix (adjacent marginal comparison):** the cases R=1 and R=2 give
+% the adjacent marginals whose boundary traces have coefficients T_C^2 and
+% T_C^3. See docs/paper-gaps/cpsv16_commuting_form_to_sal.tex.
+\begin{theorem}[Sector decomposition of a suffix marginal]
+    \label{thm:mpdo_suffix_marginal_block_expansion}
+    \lean{MPOTensor.PhysicalSectorFactorization.%
+      reindex_reducedBlockState_add_eq_suffixSectorContraction}
+    \lean{MPOTensor.PhysicalSectorFactorization.%
+      reindex_reducedBlockState_add_one_eq_oneSuffixSectorContraction}
+    \lean{MPOTensor.PhysicalSectorFactorization.%
+      reindex_reducedBlockState_add_two_eq_twoSuffixSectorContraction}
+    \lean{MPOTensor.PhysicalSectorFactorization.%
+      reindex_reducedBlockState_add_three_eq_threeSuffixSectorContraction}
+    \leanok
+    \uses{def:mpdo_suffix_sector_contraction,
+      def:mpdo_physical_sector_chain_coordinates}
+    Let $\widetilde{\mathcal K}$ be the tensor in physical-sector
+    coordinates. For $L\geq0$ and $R\geq1$, the normalized $L$-site
+    marginal obtained from a chain of length $L+R$ satisfies
+    \begin{align}
+        \reindex_{\Phi_L}\!
+        \left(
+          \tr_R\!\left[\widehat\rho^{(L+R)}
+          (\widetilde{\mathcal K})\right]
+        \right)
+        &=
+        \tr\!\left[\rho^{(L+R)}
+          (\widetilde{\mathcal K})\right]^{-1}
+        \bigoplus_{k\in S^L}\Gamma_k^{(R)}.
+        \notag
+    \end{align}
+    In particular, this identity holds for $R=1$, $R=2$, and $R=3$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpdo_physical_sector_chain_decomposition}
+    Decompose each discarded physical configuration uniquely as a suffix
+    sector word $t\in S^R$ and a fiber coordinate $z\in I_t$. By
+    Theorem~\ref{thm:mpdo_physical_sector_chain_decomposition}, matrix
+    elements with distinct retained sector words vanish. For a fixed
+    retained word $k$, summing the diagonal entries of the discarded fiber
+    gives
+    \begin{align}
+        \sum_{t\in S^R}\ \sum_{z\in I_t}
+        \Omega_{kt}(xz,yz)
+        &=\Gamma_k^{(R)}(x,y).
+        \notag
+    \end{align}
+    Multiplication by the inverse trace of the length-$L+R$ operator gives
+    the stated normalization.
+\end{proof}
+
 \begin{definition}[Rank-one trace factorization for neighboring operators]
     \label{def:mpdo_generic_eta_rank_one_trace_factorization}
     \lean{Matrix.EtaRankOneTraceFactorization}
