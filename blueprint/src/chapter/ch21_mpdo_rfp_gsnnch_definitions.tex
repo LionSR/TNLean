@@ -227,6 +227,44 @@ Definition~\ref{def:mpdo_source_gsnnch}; the converse comparison is not used.
     injective. The two isometry identities give the exact reconstruction.
 \end{proof}
 
+\begin{theorem}[SAL descends through an isometric physical inclusion]
+    \label{thm:mpdo_sal_physical_isometry_transport}
+    \lean{MPOTensor.isMPDO_of_changePhysicalBasis_isMPDO_of_isometry}
+    \lean{MPOTensor.trace_mpo_changePhysicalBasis_of_isometry}
+    \lean{MPOTensor.mutualInfoChain_changePhysicalBasis_of_isometry}
+    \lean{MPOTensor.isSAL_of_changePhysicalBasis_isSAL_of_isometry}
+    \leanok
+    \uses{def:is_sal, def:mpdo}
+    Let $V:\C^d\to\C^e$ be an isometry, and let $K^V$ be obtained from an MPO
+    tensor $K$ by conjugating each physical matrix by $V$. For every $N\geq1$,
+    \begin{align}
+        \tr\bigl(\sigma^{(N)}(K^V)\bigr)
+        &=\tr\bigl(\sigma^{(N)}(K)\bigr).
+        \notag
+    \end{align}
+    If the periodic operators of $K^V$ are positive semidefinite, then those
+    of $K$ are positive semidefinite. Their mutual informations agree at
+    every contiguous cut. Consequently, if $K^V$ satisfies saturation of the
+    area law, then so does $K$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:mpdo_sitewise_physical_coordinate_congruence}
+    At length $N$, Lemma~\ref{lem:mpdo_sitewise_physical_coordinate_congruence}
+    identifies the changed periodic operator with conjugation by
+    $V^{\otimes N}$. Since $(V^{\otimes N})^*V^{\otimes N}=\Id$, cyclicity
+    of the trace gives the displayed equality, and compression by
+    $(V^{\otimes N})^*$ preserves positivity.
+
+    The same trace equality shows that normalized periodic operators obey the
+    same conjugation identity. After a chain is divided into a retained
+    interval and its complement, the isometry on the traced-out factor
+    disappears under the partial trace. The retained marginal is therefore
+    conjugated by the corresponding tensor power of $V$, so its nonzero
+    spectrum and entropy are unchanged. Thus the mutual informations, and
+    hence the consecutive equalities defining SAL, agree.
+\end{proof}
+
 \begin{theorem}[SAL passes to the physical support restriction]
     \label{thm:mpdo_physical_support_restriction_sal}
     \lean{MPOTensor.PhysicalSupportRestrictionData.restricted_isSAL}
@@ -238,6 +276,7 @@ Definition~\ref{def:mpdo_source_gsnnch}; the converse comparison is not used.
 \end{theorem}
 
 \begin{proof}\leanok
+    \uses{thm:mpdo_sal_physical_isometry_transport}
     On a chain of every positive length, the sitewise inclusion
     $V^{\otimes N}$ is an isometry and
     \begin{align}
