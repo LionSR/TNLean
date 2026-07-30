@@ -7766,8 +7766,28 @@
       }
     \quark_if_no_value:NF \l__tenkz_kernel_r_tl
       {
-        \exp_args:NV \__tenkz_kernel_r_turn:nN
-          \l__tenkz_kernel_r_tl \l__tenkz_kernel_r_tau_tl
+        \__tenkz_model_get:nnN {#1} {label-pos} \l__tenkz_kernel_r_c_tl
+        \quark_if_no_value:NT \l__tenkz_kernel_r_c_tl
+          { \tl_set:Nn \l__tenkz_kernel_r_c_tl { n } }
+        \tl_set:Ne \l__tenkz_kernel_r_c_tl
+          {
+            \__tenkz_kernel_r_compass:n
+              { \tl_use:N \l__tenkz_kernel_r_c_tl }
+          }
+        % A label bearing is a carrier-local direction, just like a port
+        % face.  Subtract its local angle again because the shared ink helper
+        % below adds that angle to the carrier contribution.
+        \exp_args:NVV \__tenkz_kernel_r_page_face:nnN
+          \l__tenkz_kernel_r_tl \l__tenkz_kernel_r_c_tl
+          \l__tenkz_kernel_r_tau_tl
+        \tl_set:Ne \l__tenkz_kernel_r_tau_tl
+          {
+            \fp_eval:n
+              {
+                \l__tenkz_kernel_r_tau_tl
+                - \l__tenkz_kernel_r_c_tl
+              }
+          }
       }
     \__tenkz_kernel_r_mark_label_ink:n {#1}
   }
@@ -8020,8 +8040,28 @@
           { \fp_eval:n { ( \__tenkz_kernel_rows: + 1 ) / 2 } }
       }
   }
+\cs_new_protected:Npn \__tenkz_kernel_r_axis_place:
+  {
+    \__tenkz_geom_frame_if_affine:nTF {kpic}
+      {
+        % The baseline is the selected logical row after the frame map, not
+        % the flat-frame ordinate.  Column one is sufficient: an affine row
+        % has one common page y exactly when it can serve as a TikZ baseline.
+        \__tenkz_geom_apply:nnnNN {kpic}
+          { \l__tenkz_kernel_r_axis_tl } {1}
+          \l__tenkz_kernel_r_x_tl \l__tenkz_kernel_r_y_tl
+        \tl_set_eq:NN
+          \l__tenkz_kernel_r_axis_tl \l__tenkz_kernel_r_y_tl
+      }
+      {
+        % A circular row is not a line; retain the established tangent-frame
+        % convention for that non-affine carrier.
+        \tl_set:Ne \l__tenkz_kernel_r_axis_tl
+          { \fp_eval:n { 1 - \l__tenkz_kernel_r_axis_tl } }
+      }
+  }
 \cs_new:Npn \__tenkz_kernel_r_axis:
-  { 1 - \l__tenkz_kernel_r_axis_tl }
+  { \l__tenkz_kernel_r_axis_tl }
 
 \cs_new_protected:Npn \__tenkz_kernel_render:
   {
@@ -8052,6 +8092,7 @@
     \__tenkz_geom_reset:
     \prop_clear:N \l__tenkz_kernel_r_turn_prop
     \__tenkz_kernel_r_frame:
+    \__tenkz_kernel_r_axis_place:
     \__tenkz_kernel_dep_reset:
     % Every place the frame alone answers for settles here, in the order the
     % addresses themselves ask for.  A place that names a curve does not, and
