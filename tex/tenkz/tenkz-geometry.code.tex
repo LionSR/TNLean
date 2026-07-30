@@ -32,6 +32,8 @@
   { [TKZ-GEOM-FAMILY]~no~silhouette~family~named~'#1' }
 \msg_new:nnn {tenkz}{geom-compass}
   { [TKZ-GEOM-COMPASS]~no~compass~face~named~'#1';~expected~n,~e,~s,~or~w }
+\msg_new:nnn {tenkz}{geom-singular-basis}
+  { [TKZ-GEOM-SINGULAR-BASIS]~a~carrier~basis~must~have~nonzero~determinant }
 
 % ---------- frames ----------------------------------------------------------
 % A frame record is six fp fields (row-major matrix a b / c d, offset dx dy)
@@ -260,6 +262,123 @@
 % leaking into each port, leg, and open-end consumer.
 \cs_new_protected:Npn \__tenkz_geom_local_dir:nnN #1#2#3
   { \__tenkz_geom_dir:nnN {#1} { 90 + (#2) } #3 }
+
+% A carrier basis is the complete local east/north pair on the page.  Keeping
+% both vectors, rather than one turn angle, preserves shear and unequal scale.
+% The generic apply/unapply pair below is shared by every consumer which
+% stores geometry in carrier-local coordinates.
+\cs_new_protected:Npn \__tenkz_geom_basis_apply:nnnnnnNN
+    #1#2#3#4#5#6#7#8
+  {
+    \tl_set:Ne #7 { \fp_eval:n { (#1) * (#5) + (#3) * (#6) } }
+    \tl_set:Ne #8 { \fp_eval:n { (#2) * (#5) + (#4) * (#6) } }
+  }
+\cs_new_protected:Npn \__tenkz_geom_basis_unapply:nnnnnnNN
+    #1#2#3#4#5#6#7#8
+  {
+    \fp_compare:nNnTF { (#1) * (#4) - (#2) * (#3) } = {0}
+      {
+        \tl_clear:N #7
+        \tl_clear:N #8
+        \msg_error:nn {tenkz}{geom-singular-basis}
+      }
+      {
+        \tl_set:Ne #7
+          {
+            \fp_eval:n
+              { ( (#4) * (#5) - (#3) * (#6) )
+                  / ( (#1) * (#4) - (#2) * (#3) ) }
+          }
+        \tl_set:Ne #8
+          {
+            \fp_eval:n
+              { ( -(#2) * (#5) + (#1) * (#6) )
+                  / ( (#1) * (#4) - (#2) * (#3) ) }
+          }
+      }
+  }
+
+% The dual basis reads page vectors as local coordinates.  These covectors
+% also let support folds measure a rendered silhouette directly in local
+% coordinates without first replacing it by an axis-aligned page box.
+\cs_new_protected:Npn \__tenkz_geom_basis_dual:nnnnNNNN
+    #1#2#3#4#5#6#7#8
+  {
+    \fp_compare:nNnTF { (#1) * (#4) - (#2) * (#3) } = {0}
+      {
+        \tl_clear:N #5
+        \tl_clear:N #6
+        \tl_clear:N #7
+        \tl_clear:N #8
+        \msg_error:nn {tenkz}{geom-singular-basis}
+      }
+      {
+        \tl_set:Ne #5
+          { \fp_eval:n { (#4) / ( (#1) * (#4) - (#2) * (#3) ) } }
+        \tl_set:Ne #6
+          { \fp_eval:n { -(#3) / ( (#1) * (#4) - (#2) * (#3) ) } }
+        \tl_set:Ne #7
+          { \fp_eval:n { -(#2) / ( (#1) * (#4) - (#2) * (#3) ) } }
+        \tl_set:Ne #8
+          { \fp_eval:n { (#1) / ( (#1) * (#4) - (#2) * (#3) ) } }
+      }
+  }
+
+% Distance from the centre of an axis-aligned rectangle to its boundary along
+% a ray.  The half-extents #2,#3 and result #4 share one coordinate system;
+% #1 is the ray angle in that system.
+\cs_new_protected:Npn \__tenkz_geom_rect_ray_reach:nnnN #1#2#3#4
+  {
+    \fp_compare:nNnTF { cosd(#1) } = {0}
+      { \tl_set:Ne #4 { \fp_eval:n { (#3) / abs(sind(#1)) } } }
+      {
+        \fp_compare:nNnTF { sind(#1) } = {0}
+          { \tl_set:Ne #4 { \fp_eval:n { (#2) / abs(cosd(#1)) } } }
+          {
+            \tl_set:Ne #4
+              {
+                \fp_eval:n
+                  {
+                    min(
+                      (#2) / abs(cosd(#1)) ,
+                      (#3) / abs(sind(#1)) )
+                  }
+              }
+          }
+      }
+  }
+
+% The local east/north basis supplied by one frame address.  Affine frames
+% use E=(b,d), N=(-a,-c); circle frames retain their orthonormal tangent and
+% outward-normal basis at the named station.
+\cs_new_protected:Npn \__tenkz_geom_local_basis:nnnNNNN #1#2#3#4#5#6#7
+  {
+    \prop_get:NnN \l__tenkz_geom_framekind_prop {#1} \l__tenkz_geom_kind_tl
+    \quark_if_no_value:NTF \l__tenkz_geom_kind_tl
+      {
+        \msg_error:nnn {tenkz}{geom-unknown-frame} {#1}
+        \tl_set:Nn #4 {1}
+        \tl_set:Nn #5 {0}
+        \tl_set:Nn #6 {0}
+        \tl_set:Nn #7 {1}
+      }
+      {
+        \str_if_eq:VnTF \l__tenkz_geom_kind_tl {circle}
+          {
+            \__tenkz_geom_turn:nnnN {#1}{#2}{#3} \l__tenkz_geom_tmp_tl
+            \tl_set:Ne #4 { \fp_eval:n { cosd(\l__tenkz_geom_tmp_tl) } }
+            \tl_set:Ne #5 { \fp_eval:n { sind(\l__tenkz_geom_tmp_tl) } }
+            \tl_set:Ne #6 { \fp_eval:n { -sind(\l__tenkz_geom_tmp_tl) } }
+            \tl_set:Ne #7 { \fp_eval:n { cosd(\l__tenkz_geom_tmp_tl) } }
+          }
+          {
+            \tl_set:Ne #4 { \__tenkz_geom_field:nn{#1}{b} }
+            \tl_set:Ne #5 { \__tenkz_geom_field:nn{#1}{d} }
+            \tl_set:Ne #6 { \fp_eval:n { -\__tenkz_geom_field:nn{#1}{a} } }
+            \tl_set:Ne #7 { \fp_eval:n { -\__tenkz_geom_field:nn{#1}{c} } }
+          }
+      }
+  }
 
 % The axes a frame gives a record.  An address on a carrier is read in the
 % carrier's axes, and the ink the frame measures is measured in them, so
@@ -532,6 +651,47 @@
                  (#6) * cosd(#8) + (#7) * sind(#8)
                  + \__tenkz_geom_support:nnnnnn
                      {#1}{#2}{#3}{#4}{#5}{#8} ) } }
+  }
+
+% Fold support against an arbitrary page covector (gx,gy).  The result is in
+% the covector's coordinate units, so a dual-basis row returns an exact local
+% coordinate even when the carrier is sheared or scaled.
+\tl_new:N \l__tenkz_geom_support_gx_tl
+\tl_new:N \l__tenkz_geom_support_gy_tl
+\cs_new_protected:Npn \__tenkz_geom_support_max_linear:nnnN #1#2#3#4
+  {
+    \tl_set:Nn \l__tenkz_geom_support_gx_tl {#2}
+    \tl_set:Nn \l__tenkz_geom_support_gy_tl {#3}
+    \tl_set:Nn #4 { -10000 }
+    \seq_map_inline:cn {#1}
+      {
+        \__tenkz_geom_support_max_linear_one:nnnnnnnN ##1 #4
+      }
+  }
+\cs_new_protected:Npn \__tenkz_geom_support_max_linear_one:nnnnnnnN
+    #1#2#3#4#5#6#7#8
+  {
+    \tl_set:Ne #8
+      {
+        \fp_eval:n
+          {
+            max(
+              #8 ,
+              (#6) * \l__tenkz_geom_support_gx_tl
+                + (#7) * \l__tenkz_geom_support_gy_tl
+              + sqrt(
+                  ( \l__tenkz_geom_support_gx_tl ) ^ 2
+                  + ( \l__tenkz_geom_support_gy_tl ) ^ 2 )
+                * \__tenkz_geom_support:nnnnnn
+                    {#1}{#2}{#3}{#4}{#5}
+                    {
+                      atand(
+                        \l__tenkz_geom_support_gy_tl ,
+                        \l__tenkz_geom_support_gx_tl )
+                    }
+            )
+          }
+      }
   }
 
 % ---------- corridors --------------------------------------------------------
