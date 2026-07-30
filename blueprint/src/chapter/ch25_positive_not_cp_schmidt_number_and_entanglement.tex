@@ -30,29 +30,8 @@ of its weight scales its coefficient matrix and so leaves the Schmidt rank uncha
     \end{align}
 \end{definition}
 
-\begin{theorem}[Basic properties of bounded Schmidt number]
-    \label{thm:has_schmidt_number_le_basic}
-    \lean{Matrix.HasSchmidtNumberLE.posSemidef, Matrix.HasSchmidtNumberLE.add,
-        Matrix.HasSchmidtNumberLE.mono, Matrix.HasSchmidtNumberLE.smul}
-    \leanok
-    \uses{def:has_schmidt_number_le}
-    A matrix of Schmidt number at most $n$ is positive semidefinite. States of
-    Schmidt number at most $n$ are closed under addition and under multiplication by a
-    non-negative real scalar, and a bound on the Schmidt number relaxes to any larger
-    bound.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    Each summand $\ket{\psi_i}\bra{\psi_i}$ is a rank-one positive semidefinite
-    matrix, and a finite sum of positive semidefinite matrices is positive
-    semidefinite. Concatenating two pure-state families realizes a sum as a single
-    finite sum of pure-state projectors of Schmidt rank at most $n$, and a pure
-    summand of Schmidt rank at most $n$ also has Schmidt rank at most any larger
-    bound. Multiplication by a non-negative real $a$ rescales each pure summand
-    $\psi_i$ to $\sqrt a\,\psi_i$, which leaves its Schmidt rank unchanged and
-    reproduces $a$ times the original state.
-\end{proof}
+The closure and compactness properties of the Schmidt-number sets are proved
+in Section~\ref{sec:app_positive_not_cp_schmidt_number_geometry}.
 
 \begin{theorem}[Schmidt number one is separability]
     \label{thm:has_schmidt_number_le_one_iff_separable}
@@ -74,50 +53,6 @@ of its weight scales its coefficient matrix and so leaves the Schmidt rank uncha
     after expanding each factor into rank-one projectors, is a double sum of
     product-vector projectors, each of Schmidt rank at most one, so it has Schmidt
     number at most one; a separable matrix is a finite sum of such products.
-\end{proof}
-
-\begin{theorem}[Convexity of the Schmidt-number set]
-    \label{thm:convex_setOf_has_schmidt_number_le}
-    \lean{Matrix.convex_setOf_hasSchmidtNumberLE}
-    \leanok
-    \uses{def:has_schmidt_number_le}
-    For each $n$ the set $S_n$ of bipartite states of Schmidt number at most $n$ is
-    convex.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    A convex combination $a x + b y$ with $a,b\ge 0$ is a sum of two non-negatively
-    scaled states of Schmidt number at most $n$, and that bound is preserved under
-    non-negative scaling and under addition; rescaling a vector by a non-negative
-    scalar scales its coefficient matrix and so does not increase the Schmidt rank.
-\end{proof}
-
-\begin{theorem}[Compactness of the Schmidt-number state set]
-    \label{thm:compact_setOf_has_schmidt_number_le_trace_one}
-    \lean{Matrix.isCompact_setOf_hasSchmidtNumberLE_trace_one}
-    \leanok
-    \uses{def:has_schmidt_number_le, def:schmidt_rank,
-        thm:convex_setOf_has_schmidt_number_le}
-    For each $n$ the set $S_n$ of trace-one bipartite states of Schmidt number at most
-    $n$ is compact.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    A trace-one state of Schmidt number at most $n$ is a convex combination of pure
-    states $\ket{\psi}\bra{\psi}$ whose vector $\psi$ has unit norm and Schmidt rank
-    at most $n$, so $S_n$ is the convex hull of the set $P_n$ of those pure states.
-    The set $P_n$ is the image, under the continuous projector map
-    $\psi\mapsto\ket{\psi}\bra{\psi}$, of the unit vectors of Schmidt rank at most
-    $n$. In the Euclidean norm those unit vectors form the unit sphere, which is
-    compact in finite dimension, intersected with the closed set on which the Schmidt
-    rank is at most $n$ (the coefficient matrix depends continuously on the vector and
-    the matrices of rank at most $n$ form a closed set); hence $P_n$ is compact. The
-    trace of $\ket{\psi}\bra{\psi}$ is the squared Euclidean norm of $\psi$, so the
-    trace-one constraint is exactly the unit-norm constraint and the weights of the
-    convex decomposition are the squared norms, summing to the trace. The convex hull
-    of a compact set is compact in a finite-dimensional real normed space.
 \end{proof}
 
 \begin{theorem}[Pure-state step of the reduction criterion]
@@ -273,65 +208,8 @@ of its weight scales its coefficient matrix and so leaves the Schmidt rank uncha
 \end{proof}
 
 
-\begin{theorem}[Trace-form representation of a real-linear functional]
-    \label{thm:exists_isHermitian_trace_form_re}
-    \lean{Matrix.exists_isHermitian_trace_form_re}
-    \leanok
-    Every real-linear functional $g$ on the space of square complex matrices is the
-    trace form of a Hermitian matrix: there is a Hermitian $H_0$ with
-    $g(X)=\re\tr(X H_0)$ for every Hermitian $X$.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    The real bilinear pairing $(X,H)\mapsto\re\tr(X H)$ is nondegenerate,
-    because on the diagonal pair $(H,H^{\dagger})$ it equals the squared Frobenius norm
-    $\re\tr(H H^{\dagger})=\sum_{i,j}\lvert H_{ij}\rvert^2$, which is positive
-    unless $H=0$. Hence the map sending $H$ to the functional
-    $X\mapsto\re\tr(X H)$ is an injective real-linear map from the matrix
-    space to its real dual. These two spaces have the same finite real dimension, so the
-    map is also surjective, and every $g$ is represented by some $H$. Replacing $H$ by
-    its Hermitian part $\tfrac12(H+H^{\dagger})$ keeps the value on Hermitian inputs,
-    since $\tr(X H^{\dagger})=\overline{\tr(X H)}$ when $X$ is Hermitian, and produces a
-    Hermitian representing matrix.
-\end{proof}
-
-\begin{theorem}[Entanglement witness from a separating hyperplane]
-    \label{thm:exists_entanglement_witness}
-    \lean{Matrix.exists_isHermitian_witness}
-    \leanok
-    \uses{def:has_schmidt_number_le, def:schmidt_rank,
-        thm:convex_setOf_has_schmidt_number_le,
-        thm:compact_setOf_has_schmidt_number_le_trace_one,
-        thm:exists_isHermitian_trace_form_re}
-    Let $\rho$ be a trace-one Hermitian bipartite state whose Schmidt number exceeds $n$.
-    Then there is a Hermitian operator $W$ such that, for every $\psi$ of Schmidt rank
-    at most $n$,
-    \begin{align}
-        \re\tr(W\rho)            & <0,
-        \notag                            \\
-        \re\bra{\psi}W\ket{\psi} & \ge 0.
-        \notag
-    \end{align}
-    This is the only-if direction of Wolf's Proposition~3.3
-    \cite[Chapter~3, Proposition~3.3]{Wolf2012Quantum}: a state of Schmidt number larger
-    than $n$ is detected by an entanglement witness for $S_n$.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    The set $S_n$ of trace-one states of Schmidt number at most $n$ is convex and
-    compact, and $\rho\notin S_n$. The geometric Hahn--Banach theorem separates the
-    closed convex set $\{\rho\}$ from the compact convex set $S_n$ by a continuous
-    real-linear functional $f$ and a constant $c$ with $f(\rho)<c<f(\sigma)$ for every
-    $\sigma\in S_n$. Representing $f$ as the trace form of a Hermitian $H_0$ and setting
-    $W=H_0-c\,\Id$ gives $\re\tr(W\rho)=f(\rho)-c<0$. For a vector $\psi$
-    of Schmidt rank at most $n$ the projector $\ket{\psi}\bra{\psi}$, after
-    normalization by $\lVert\psi\rVert^2$, is a trace-one state of $S_n$, so its value
-    under $f$ is at least $c$; multiplying back by the squared norm gives
-    $\re\bra{\psi}W\ket{\psi}\ge 0$, with the zero vector giving the value
-    $0$ directly.
-\end{proof}
+The separating-hyperplane construction and its trace-form representation are
+proved in Section~\ref{sec:app_positive_not_cp_schmidt_number_geometry}.
 
 \begin{theorem}[Witness criterion for Schmidt number]
     \label{thm:not_has_schmidt_number_le_iff_exists_witness}
@@ -364,72 +242,8 @@ of its weight scales its coefficient matrix and so leaves the Schmidt rank uncha
     converse uses no density-matrix hypotheses on $\rho$.
 \end{proof}
 
-\begin{theorem}[Surjectivity of the Choi correspondence]
-    \label{thm:exists_choiMatrix_eq}
-    \lean{ChoiJamiolkowski.exists_choiMatrix_eq}
-    \leanok
-    \uses{thm:cp_iff_choi_posSemidef}
-    Assume $D>0$. Every bipartite matrix $W$ on $\C^D\otimes\C^D$ is the Choi matrix
-    $\tau_T=(T\otimes\Id)(\ket{\Omega}\bra{\Omega})$ of some linear map
-    $T\colon\MN{D}\to\MN{D}$.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    The Choi correspondence $T\mapsto\tau_T$ is complex-linear and injective. Its domain,
-    the space of linear maps on $\MN{D}$, and its codomain, the bipartite matrix space on
-    $\C^D\otimes\C^D$, both have complex dimension $D^4$, so the injective map is also
-    surjective. Hence every $W$ is a Choi matrix.
-\end{proof}
-
-\begin{theorem}[A witness is the Choi matrix of an $n$-positive map]
-    \label{thm:exists_isNPositiveMap_choiMatrix_eq}
-    \lean{ChoiJamiolkowski.exists_isNPositiveMap_choiMatrix_eq_of_witness}
-    \leanok
-    \uses{def:k_positive_map, def:schmidt_rank, thm:exists_choiMatrix_eq,
-        thm:schmidt_rank_choi_test_iff, thm:exists_entanglement_witness}
-    Assume $D>0$. Let $W$ be a Hermitian operator on $\C^D\otimes\C^D$ with
-    $\re\bra{\psi}W\ket{\psi}\ge 0$ for every $\psi$ of Schmidt rank at most $n$.
-    Then $W$ is the Choi matrix of an $n$-positive map $T$. This is the
-    Choi--Jamio\l kowski translation of the entanglement witness of Wolf's Proposition~3.3
-    into the $n$-positive map of Wolf's Proposition~3.4
-    \cite[Chapter~3, Proposition~3.4]{Wolf2012Quantum}.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    By the surjectivity of the Choi correspondence (\ref{thm:exists_choiMatrix_eq}) there
-    is a linear map $T$ with $\tau_T=W$. Because $W$ is Hermitian, the Choi quadratic form
-    $\bra{\psi}W\ket{\psi}$ is real, and it equals the witness expectation
-    $\tr(W\ket{\psi}\bra{\psi})$; the witness condition makes it non-negative on every
-    vector of Schmidt rank at most $n$. This is exactly the Schmidt-rank Choi criterion
-    (\ref{thm:schmidt_rank_choi_test_iff}) for $n$-positivity of $T$.
-\end{proof}
-
-\begin{theorem}[Choi trace pairing through the trace-pairing adjoint]
-    \label{thm:trace_choiMatrix_omega_quadratic_adjoint}
-    \lean{ChoiJamiolkowski.trace_choiMatrix_mul_eq_omegaVec_quadraticForm_traceAdjointMap}
-    \leanok
-    \uses{def:trace_pairing_adjoint, thm:trace_pairing_adjoint_ampliation}
-    For a linear map $T\colon\MN{D}\to\MN{D}$ with Choi matrix $\tau_T$ and any bipartite
-    matrix $\rho$ on $\C^D\otimes\C^D$,
-    \begin{align}
-        \tr(\tau_T\,\rho)
-         & =\bra{\Omega}(T^{*}\otimes\Id)(\rho)\ket{\Omega},
-        \notag
-    \end{align}
-    where $T^{*}$ is the trace-pairing adjoint of $T$.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    Since $\tau_T=(T\otimes\Id)(\ket{\Omega}\bra{\Omega})$, cyclicity of the trace gives
-    $\tr(\tau_T\rho)=\tr(\rho\,(T\otimes\Id)(\ket{\Omega}\bra{\Omega}))$. The
-    $\Id$-ampliation of the trace-pairing adjoint is the trace-pairing adjoint of the
-    ampliation, so moving $T$ across the trace pairing replaces
-    $(T\otimes\Id)$ by $(T^{*}\otimes\Id)$ acting on $\rho$ and turns the pairing against
-    $\ket{\Omega}\bra{\Omega}$ into the quadratic form $\bra{\Omega} \cdot\,\ket{\Omega}$.
-\end{proof}
+The Choi correspondence and trace-pairing identities used below are proved in
+Section~\ref{sec:app_positive_not_cp_witness_choi}.
 
 \begin{theorem}[Positive maps detect high Schmidt number]
     \label{thm:exists_isNPositiveMap_detects}
@@ -454,69 +268,4 @@ of its weight scales its coefficient matrix and so leaves the Schmidt rank uncha
     $\bra{\Omega}(T\otimes\Id)(\rho)\ket{\Omega}=\tr(W\rho)$, whose real part is
     negative. A positive semidefinite matrix has non-negative quadratic forms, so
     $(T\otimes\Id)(\rho)$ is not positive semidefinite.
-\end{proof}
-
-\section{Positive Schwarz maps outside complete positivity}
-
-The following example shows that the Schwarz inequality does not force complete
-positivity.
-
-\subsection{A positive Schwarz map that is not completely positive}
-
-\begin{example}[Transpose-trace map on $\MN{2}$]\label{def:wolf_example53}
-    \lean{wolfExample53}
-    \leanok
-    Consider the linear map $T : \MN{2} \to \MN{2}$ defined by
-    \begin{align}
-        T(A) & =\frac{1}{2} A^T+\frac{1}{4}\tr(A)\Id.
-        \notag
-    \end{align}
-    This is the map from \cite[Example~5.3]{Wolf2012Quantum}.
-\end{example}
-
-\begin{theorem}[The transpose-trace map is positive]\label{thm:wolf_example53_positive}
-    \lean{wolfExample53_isPositive}
-    \leanok
-    \uses{def:wolf_example53, def:positive_map}
-    The map from Example~\ref{def:wolf_example53} is positive.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    It is a non-negative linear combination of the transpose map and the map
-    $A \mapsto \tr(A) \Id$, and both of these maps send positive
-    semidefinite matrices to positive semidefinite matrices.
-\end{proof}
-
-\begin{theorem}[The transpose-trace map satisfies the Schwarz inequality]\label{thm:wolf_example53_schwarz}
-    \lean{wolfExample53_satisfies_schwarz}
-    \leanok
-    \uses{def:wolf_example53}
-    For every $A \in \MN{2}$,
-    $T(A^\dagger A)-T(A^\dagger)T(A)\ge 0$, where $T$ is the map from
-    Example~\ref{def:wolf_example53}.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    Write the Schwarz gap as $F(A)$.
-    One checks that $F(A + \lambda \Id) = F(A)$ for every scalar $\lambda$,
-    so it is enough to treat the case $\tr(A) = 0$.
-    In that case a direct $2 \times 2$ computation shows that
-    $F(A)$ dominates $\frac{1}{2} (A^\dagger A)^T$, hence is positive semidefinite.
-\end{proof}
-
-\begin{theorem}[The transpose-trace map is not completely positive]\label{thm:wolf_example53_not_cp}
-    \lean{wolfExample53_not_cp}
-    \leanok
-    \uses{def:wolf_example53, def:cp_map}
-    The map from Example~\ref{def:wolf_example53} is not completely positive.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    Compute the Choi matrix of $T$ and test it on the antisymmetric vector
-    $\ket{01} - \ket{10}$.
-    The resulting expectation value is negative, so the Choi matrix is not
-    positive semidefinite.
 \end{proof}
