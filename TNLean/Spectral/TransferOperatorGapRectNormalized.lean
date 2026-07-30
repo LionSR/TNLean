@@ -11,13 +11,25 @@ import Mathlib.LinearAlgebra.Eigenspace.Basic
 # Normalized rectangular transfer-operator bounds
 
 This module proves the normalized bound $ρ(F_{AB}) ≤ 1$ for the rectangular mixed
-transfer operator. The strict dimension-mismatch and overlap-decay theorems are
-proved separately from this normalized estimate.
+transfer operator and pointwise decay of its powers when the spectral radius is
+strictly below one. The strict dimension-mismatch and overlap-decay theorems are
+proved separately from the normalized estimate.
+
+## Main results
+
+* `spectralRadius_mixedTransfer₂_le_one`: the rectangular mixed transfer
+  operator of normalized tensors has spectral radius at most one.
+* `mixedTransferMap₂_pow_tendsto_zero_of_spectralRadius_lt_one`: a rectangular
+  mixed transfer operator with spectral radius below one has pointwise-vanishing
+  powers.
 
 ## References
 
 * [PerezGarcia2007String] Pérez-García, Verstraete, Wolf, Cirac,
   *Matrix Product State Representations*, 2007, Lemma 5.
+* CPSV16: Cirac, Pérez-García, Schuch, Verstraete,
+  *Matrix Product Density Operators: Renormalization Fixed Points and Boundary
+  Theories*, arXiv:1606.00608, Appendix B, equations `EasEkk`--`Ekk`.
 -/
 
 open scoped Matrix MatrixOrder ComplexOrder BigOperators NNReal ENNReal Matrix.Norms.Operator
@@ -164,10 +176,61 @@ theorem spectralRadius_mixedTransfer₂_le_one
 
 end EigenvalueBound
 
+/-! ## Power decay -/
+
+/--
+If the rectangular mixed transfer operator has spectral radius strictly below one, then its
+powers converge pointwise to zero.
+
+This is the decay step for the off-diagonal operators in CPSV16, Appendix B,
+equations `EasEkk`--`Ekk` and line 1243.
+-/
+theorem mixedTransferMap₂_pow_tendsto_zero_of_spectralRadius_lt_one
+    (A : MPSTensor d D₁) (B : MPSTensor d D₂)
+    (h : mixedTransferSpectralRadius₂ A B < 1)
+    (X : Matrix (Fin D₁) (Fin D₂) ℂ) :
+    Filter.Tendsto (fun n => ((mixedTransferMap₂ A B) ^ n) X)
+      Filter.atTop (nhds 0) := by
+  let V := Matrix (Fin D₁) (Fin D₂) ℂ
+  let Φ : (V →ₗ[ℂ] V) ≃ₐ[ℂ] (V →L[ℂ] V) := Module.End.toContinuousLinearMap V
+  let F : V →L[ℂ] V := Φ (mixedTransferMap₂ A B)
+  letI : NormedAddCommGroup (V →L[ℂ] V) := ContinuousLinearMap.toNormedAddCommGroup
+  letI : SeminormedRing (V →L[ℂ] V) := ContinuousLinearMap.toSeminormedRing
+  letI : NormedRing (V →L[ℂ] V) := ContinuousLinearMap.toNormedRing
+  letI : NormedSpace ℂ (V →L[ℂ] V) := ContinuousLinearMap.toNormedSpace
+  letI : NormedAlgebra ℂ (V →L[ℂ] V) := ContinuousLinearMap.toNormedAlgebra
+  haveI : FiniteDimensional ℂ (V →L[ℂ] V) := Φ.toLinearEquiv.finiteDimensional
+  have hComplete : CompleteSpace (V →L[ℂ] V) :=
+    FiniteDimensional.complete ℂ (V →L[ℂ] V)
+  letI : CompleteSpace (V →L[ℂ] V) := hComplete
+  have hSpectralRadius : spectralRadius ℂ F < 1 := by
+    change spectralRadius ℂ
+      (((Module.End.toContinuousLinearMap (Matrix (Fin D₁) (Fin D₂) ℂ))
+        (mixedTransferMap₂ A B)) :
+          Matrix (Fin D₁) (Fin D₂) ℂ →L[ℂ] Matrix (Fin D₁) (Fin D₂) ℂ) < 1
+    simpa only [mixedTransferSpectralRadius₂] using h
+  have hF : Filter.Tendsto (fun n => F ^ n) Filter.atTop (nhds 0) :=
+    @pow_tendsto_zero_of_spectralRadius_lt_one (V →L[ℂ] V)
+      (ContinuousLinearMap.toNormedRing : NormedRing (V →L[ℂ] V)) hComplete
+      (ContinuousLinearMap.toNormedAlgebra : NormedAlgebra ℂ (V →L[ℂ] V))
+      F hSpectralRadius
+  have hEval : Filter.Tendsto (fun n => (F ^ n) X) Filter.atTop (nhds 0) := by
+    apply squeeze_zero_norm' (a := fun n => ‖F ^ n‖ * ‖X‖)
+    · exact Filter.Eventually.of_forall fun n => (F ^ n).le_opNorm X
+    · simpa using (tendsto_norm_zero.comp hF).mul_const ‖X‖
+  have hApply : ∀ n, (F ^ n) X = ((mixedTransferMap₂ A B) ^ n) X := by
+    intro n
+    have hPow :
+        (F ^ n : V →L[ℂ] V) = Φ ((mixedTransferMap₂ A B) ^ n) := by
+      simp [V, Φ, F, map_pow]
+    rw [hPow]
+    rfl
+  exact hEval.congr hApply
+
 /-!
 Strict dimension-mismatch consequences are intentionally downstream in
 `TransferOperatorGapNT` and `TransferOperatorGapInjective`.  This module contains
-only the shared rectangular spectral-radius bound.
+only the shared rectangular spectral-radius bound and its analytic decay consequence.
 -/
 
 end MPSTensor
