@@ -188,9 +188,10 @@
 \cs_new_protected:Npn \__tenkz_kernel_stage_put:ne #1#2
   { \prop_put:Nne \l__tenkz_kernel_stage_prop {#1} {#2} }
 
-% The contract writes cell addresses unbraced (at=(1,2)); a keyval comma
-% splitter would tear them, so every option list passes through this door,
-% which braces each parenthesized pair before l3keys reads it.
+% The contract writes cell addresses unbraced (`at=(1,2)` and
+% `at=(1,2,3)`).  A keyval comma splitter would tear them, so every option
+% list passes through this door, which braces each address before l3keys
+% reads it.  Members go first: the pair pattern must not consume their prefix.
 \tl_new:N \l__tenkz_kernel_opts_tl
 \cs_new_protected:Npn \__tenkz_kernel_keys:nn #1#2
   {
@@ -200,6 +201,10 @@
     \regex_replace_all:nnN
       { weight \s* = \s* bundle \s* = \s* ([A-Za-z0-9]+) }
       { weight = \cB\{ bundle = \1 \cE\} }
+      \l__tenkz_kernel_opts_tl
+    \regex_replace_all:nnN
+      { \( \s* (\d+) \s* , \s* (\d+) \s* , \s* (\d+) \s* \) }
+      { \cB\{ \( \1 , \2 , \3 \) \cE\} }
       \l__tenkz_kernel_opts_tl
     \regex_replace_all:nnN
       { \( \s* (\d+) \s* , \s* (\d+) \s* \) }
@@ -778,6 +783,13 @@
 % A frame value is one word followed by its own subkeys.  Keeping `basis`
 % inside this value preserves the one picture-level frame leaf while giving
 % every consumer the same parsed member table.
+\cs_new_protected:Npn \__tenkz_kernel_basis_clear:
+  {
+    \int_zero:N \l__tenkz_kernel_basis_count_int
+    \prop_clear:N \l__tenkz_kernel_basis_kind_prop
+    \prop_clear:N \l__tenkz_kernel_basis_east_prop
+    \prop_clear:N \l__tenkz_kernel_basis_north_prop
+  }
 \cs_new_protected:Npn \__tenkz_kernel_frame_basis:n #1
   {
     \tl_set:Nn \l__tenkz_kernel_frame_tl {#1}
@@ -791,10 +803,7 @@
       \l__tenkz_kernel_frame_tl
     \exp_args:NNV \clist_set:Nn
       \l__tenkz_kernel_frame_clist \l__tenkz_kernel_frame_tl
-    \int_zero:N \l__tenkz_kernel_basis_count_int
-    \prop_clear:N \l__tenkz_kernel_basis_kind_prop
-    \prop_clear:N \l__tenkz_kernel_basis_east_prop
-    \prop_clear:N \l__tenkz_kernel_basis_north_prop
+    \__tenkz_kernel_basis_clear:
     \clist_map_inline:Nn \l__tenkz_kernel_frame_clist
       {
         \regex_extract_once:nnNTF
@@ -860,6 +869,13 @@
 
 \cs_new_protected:Npn \__tenkz_kernel_frame:n #1
   {
+    % A later frame= replaces the whole earlier frame, including its basis.
+    % Group-local frame parsing must not mutate the enclosing picture table.
+    \bool_if:NF \l__tenkz_kernel_group_keys_bool
+      {
+        \__tenkz_kernel_basis_clear:
+        \prop_remove:Nn \l__tenkz_kernel_stage_prop {basis}
+      }
     \clist_set:Nn \l__tenkz_kernel_frame_clist {#1}
     \clist_pop:NN \l__tenkz_kernel_frame_clist \l__tenkz_kernel_frame_tl
     \tl_trim_spaces:N \l__tenkz_kernel_frame_tl
@@ -882,6 +898,30 @@
           {
             \exp_args:NnV \keys_set:nn
               {tenkz-kernel-frame} \l__tenkz_kernel_frame_clist
+          }
+      }
+  }
+
+% Setup and equation policy merge as raw picture fields after the panel's own
+% key parser has run.  Rebuild the derived member table from that final policy
+% so every panel sees the same effective basis.
+\cs_new_protected:Npn \__tenkz_kernel_basis_rehydrate:
+  {
+    \__tenkz_kernel_basis_clear:
+    \prop_get:NnN
+      \l__tenkz_kernel_stage_prop {basis} \l__tenkz_kernel_scratch_tl
+    \quark_if_no_value:NF \l__tenkz_kernel_scratch_tl
+      {
+        \prop_get:NnN
+          \l__tenkz_kernel_stage_prop {frame} \l__tenkz_kernel_frame_tl
+        \str_if_eq:VnTF \l__tenkz_kernel_frame_tl {circle}
+          {
+            \msg_error:nn {tenkz}{kernel-frame-basis-circle}
+            \prop_remove:Nn \l__tenkz_kernel_stage_prop {basis}
+          }
+          {
+            \exp_args:NV \__tenkz_kernel_frame_basis:n
+              \l__tenkz_kernel_scratch_tl
           }
       }
   }
@@ -8919,6 +8959,7 @@
         \prop_map_inline:Nn \l__tenkz_kernel_eq_policy_prop
           { \prop_put:Nnn \l__tenkz_kernel_stage_prop {##1} {##2} }
       }
+    \__tenkz_kernel_basis_rehydrate:
     % the staged picture keys become the picture record and the policy the
     % closure pass reads after the body ran
     \prop_set_eq:NN \l__tenkz_kernel_policy_prop \l__tenkz_kernel_stage_prop

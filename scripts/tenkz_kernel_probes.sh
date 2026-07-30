@@ -116,6 +116,25 @@ grep -Fq '|name=bond-1-1-1-2|origin=grid|' \
   echo "FAIL: an explicit origin singleton lost ordinary grid bonds" >&2
   exit 1
 }
+replacement_atoms=$(grep -c '^atom|' "$WORK/r_basis_frame_replace.tnlog" || true)
+[ "$replacement_atoms" -eq 1 ] || {
+  echo "FAIL: a replaced frame retained its earlier basis population" >&2
+  exit 1
+}
+if grep -Eq '^atom.*[|]member=' "$WORK/r_basis_frame_replace.tnlog"; then
+  echo "FAIL: a replaced frame retained basis member metadata" >&2
+  exit 1
+fi
+equation_basis_atoms=$(grep -c '^atom|' "$WORK/r_basis_equation.tnlog" || true)
+[ "$equation_basis_atoms" -eq 4 ] || {
+  echo "FAIL: an inherited equation basis was not populated in both panels" >&2
+  exit 1
+}
+[ "$(grep -Ec '^atom.*[|]member=[12]([|]|$)' \
+      "$WORK/r_basis_equation.tnlog" || true)" -eq 4 ] || {
+  echo "FAIL: an inherited equation basis lost its member indices" >&2
+  exit 1
+}
 awk '
   /^picture[|]id=k1[|]/ { picture = NR }
   /^warning[|]picture=k1[|]code=plane-tall-window[|]/ { warning = NR }
