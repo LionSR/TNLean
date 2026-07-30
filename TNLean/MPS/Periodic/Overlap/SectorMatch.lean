@@ -1339,6 +1339,31 @@ private lemma transported_cornerProd_cons
   rw [hU_star_U (u + 1)]
   rw [hcorner']
 
+/-- Left-canonical normalization restricts to each one-site corner transition.
+
+This is the norm identity used in arXiv:1708.00029, Appendix A,
+lines 1082--1084. -/
+private lemma sum_cornerLetter_star_mul
+    {m : ℕ} [NeZero m]
+    (P : Fin m → MatrixAlg D) (A : MPSTensor d D)
+    (hP : ∀ k, IsOrthogonalProjection (P k))
+    (htransfer : ∀ k, ∑ i, (A i)ᴴ * P k * A i = P (k + 1))
+    (k : Fin m) :
+    ∑ i, (cornerLetter P A k i)ᴴ * cornerLetter P A k i = P (k + 1) := by
+  calc
+    ∑ i, (cornerLetter P A k i)ᴴ * cornerLetter P A k i =
+        ∑ i, P (k + 1) * ((A i)ᴴ * P k * A i) * P (k + 1) := by
+          apply Finset.sum_congr rfl
+          intro i _
+          simp only [cornerLetter, Matrix.conjTranspose_mul, (hP k).1.eq,
+            (hP (k + 1)).1.eq, Matrix.mul_assoc]
+          rw [← Matrix.mul_assoc (P k) (P k) (A i * P (k + 1)), (hP k).2]
+    _ = P (k + 1) * (∑ i, (A i)ᴴ * P k * A i) * P (k + 1) := by
+      rw [Finset.mul_sum, Finset.sum_mul]
+    _ = P (k + 1) := by
+      rw [htransfer k, (hP (k + 1)).2]
+      exact (hP (k + 1)).2
+
 /-- Full-cycle contraction step for periodic-overlap Case 3.
 
 At this point the sector transport has already been abstracted into
