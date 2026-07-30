@@ -1450,6 +1450,7 @@ lemma sectorTensor_proportional_of_blockedMatch
     (hNondeg : ∀ u, dimA u ≠ 0)
     (hNormal : ∀ u, IsNormal (blocksA u)) :
     RepeatedBlocks A B := by
+  clear hA_mpv hB_mpv
   obtain ⟨L, hL_pos, Ω, hΩ⟩ :=
     exists_common_sectorDecompositionMaps_of_isNormal_leftCanonical
       blocksA hA_blocks_lc hNondeg hNormal
@@ -1906,7 +1907,7 @@ lemma sectorTensor_proportional_of_blockedMatch
     have hφ' :
         φA' k (1 : MatrixAlg (dimA' k)) =
           φA' k (0 : MatrixAlg (dimA' k)) := by
-      simpa using hφ
+      simpa only [map_zero] using hφ
     have hone : (1 : MatrixAlg (dimA' k)) = 0 := (φA' k).injective hφ'
     exact one_ne_zero hone
   have hT_nonzero : ∀ k, ∃ i, T k i ≠ 0 := by
@@ -1951,7 +1952,7 @@ lemma sectorTensor_proportional_of_blockedMatch
         rw [Finset.smul_sum]
         apply Finset.sum_congr rfl
         intro i _
-        simp only [Matrix.conjTranspose_smul, smul_mul_smul_comm, smul_smul]
+        simp only [Matrix.conjTranspose_smul, smul_mul_smul_comm]
       _ = (star (γ k) * γ k) • P (k + 1) := by rw [hT_norm]
   have hP_entry : ∀ k, ∃ r c : Fin D, P k r c ≠ 0 := by
     intro k
@@ -1995,10 +1996,12 @@ lemma sectorTensor_proportional_of_blockedMatch
     simpa only [γ, norm_mul, hξ_norm, mul_one] using h
   have hP_sum : ∑ k, P k = 1 := by
     change (∑ k, PA (-k)) = 1
-    convert (Equiv.sum_comp (Equiv.neg (Fin m)) PA).trans hPA_sum using 1 <;> rfl
+    convert (Equiv.sum_comp (Equiv.neg (Fin m)) PA).trans hPA_sum using 1 <;>
+      rfl
   have hQ_sum : ∑ k, Q k = 1 := by
     change (∑ k, PB (-k)) = 1
-    convert (Equiv.sum_comp (Equiv.neg (Fin m)) PB).trans hPB_sum using 1 <;> rfl
+    convert (Equiv.sum_comp (Equiv.neg (Fin m)) PB).trans hPB_sum using 1 <;>
+      rfl
   have hA_cyclic : ∀ i, A i = ∑ k, P k * A i * P (k + 1) := by
     intro i
     calc
@@ -2021,7 +2024,8 @@ lemma sectorTensor_proportional_of_blockedMatch
   have hκB_norm : ∀ v, ‖κB v‖ = 1 := fun v => hκ_norm (v - q')
   have hκB_prod : ∏ v, κB v = 1 := by
     change (∏ v, κ (v - q')) = 1
-    convert (Equiv.prod_comp (Equiv.subRight q') κ).trans hκ_prod using 1 <;> rfl
+    convert (Equiv.prod_comp (Equiv.subRight q') κ).trans hκ_prod using 1 <;>
+      rfl
   obtain ⟨φ, hφ_norm, hφ⟩ :=
     TNLean.Algebra.exists_fin_complex_unit_cyclic_coboundary_shift_of_prod_eq_one
       κB hκB_norm hκB_prod q'
@@ -2048,12 +2052,12 @@ lemma sectorTensor_proportional_of_blockedMatch
   have hV_star_V : ∀ v, (V v)ᴴ * V v = Q v := by
     intro v
     have hindex : v - q' + q' = v := by abel
-    simp only [V, Matrix.conjTranspose_smul, smul_mul_smul_comm, smul_smul,
+    simp only [V, Matrix.conjTranspose_smul, smul_mul_smul_comm,
       hφ_star, inv_mul_cancel₀ (hφ_ne v), one_smul]
     rw [hU'_star_U, hindex]
   have hV_V_star : ∀ v, V v * (V v)ᴴ = P (v - q') := by
     intro v
-    simp only [V, Matrix.conjTranspose_smul, smul_mul_smul_comm, smul_smul]
+    simp only [V, Matrix.conjTranspose_smul, smul_mul_smul_comm]
     have hunit : φ v * star (φ v) = 1 := by
       rw [hφ_star, mul_inv_cancel₀ (hφ_ne v)]
     rw [hunit, one_smul, hU'_U_star]
