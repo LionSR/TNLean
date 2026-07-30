@@ -9,23 +9,22 @@ import TNLean.MPS.MPDO.PureRecovery
 import TNLean.MPS.MPDO.RFP
 
 /-!
-# Transfer-retract formulations of the MPDO renormalization fixed point
+# Transfer retracts and fusion coisometries
 
-These definitions isolate the transfer-map content underlying the
-fusion-isometry picture of arXiv:1606.00608 Section 4.5
-(Cirac–Pérez-García–Schuch–Verstraete): they record when the blocked transfer
-map factors through its support algebra as a retract, which is the idempotence
-criterion, not the physical fusion isometry of two tensors into one. For each
-blocked size `n ≥ 1`, the doubled-index blocked tensor of an MPO has a blocked
-transfer map `Eₙ` acting on bond-space matrices, and the support algebra is
-modeled by a subspace through which `Eₙ` factors as a retract.
+The first definitions record a linear-algebraic factorization of a
+doubled-index blocked transfer map. At a fixed blocked size `n ≥ 1`,
+`TransferRetractData M n` specifies a subspace `𝒜ₙ`, a forward map
+`Tₙ : M_D(ℂ) → 𝒜ₙ`, and a backward map `Sₙ : 𝒜ₙ → M_D(ℂ)` with
+`Tₙ ∘ Sₙ = id_{𝒜ₙ}` and `Sₙ ∘ Tₙ = Eₙ`. These identities force `Eₙ² = Eₙ`;
+conversely any idempotent blocked transfer map factors canonically through its
+range. Thus such data exist at a fixed size precisely when `Eₙ` is idempotent;
+existence at every positive size is equivalent to idempotence of `E₁`.
 
-Concretely, `TransferRetractData M n` specifies a support subspace `𝒜ₙ`, a
-forward map `Tₙ : M_D(ℂ) → 𝒜ₙ`, and a backward map `Sₙ : 𝒜ₙ → M_D(ℂ)` with
-`Tₙ ∘ Sₙ = id_{𝒜ₙ}` and `Sₙ ∘ Tₙ = Eₙ`. The retract identity forces
-`Eₙ² = Eₙ`; conversely any idempotent blocked transfer map factors through its
-range. This yields an equivalence between `MPOTensor.IsRFP` and the
-transfer-retract formulation.
+This range-subspace factorization is not the physical renormalization
+fixed-point condition of arXiv:1606.00608, Definition RFPMixedTS, lines
+638--660. That definition requires trace-preserving completely positive maps
+on the physical indices; its Appendix C.4 construction appears at lines
+1974--2085. The predicate `IsRFPViaTS` records this physical-map condition.
 
 The source-faithful active-support fusion maps of Theorem 4.14(iii) are recorded
 by `BNTFusionCoisometryFamily`. Their stronger full-support specialization is
@@ -37,16 +36,20 @@ recorded by `BNTFusionIsometryFamily`.
   MPS tensor.
 * `TransferRetractData`: retract structure whose characteristic identity is the
   blocked transfer map.
-* `IsRFP_MPDO_via_transferRetract`: existence of such structures for every positive blocked
-  size.
-* `isRFP_MPDO_via_transferRetract_iff_isRFP`: equivalence with the MPDO RFP predicate.
+* `IsRFP_MPDO_via_transferRetract`: existence of such structures for every
+  positive blocked size.
+* `isRFP_MPDO_via_transferRetract_iff_isRFP`: equivalence with doubled-index
+  transfer-map idempotence.
 * `MPSTensor.toMPOTensor_isRFP_MPDO_via_transferRetract_iff_isTransferIdempotent`:
   pure-state recovery for the diagonal MPO embedding.
 
 ## References
 
-* [Cirac--Perez-Garcia--Schuch--Verstraete 2017] arXiv:1606.00608, Section 4.5
-  (Cirac–Pérez-García–Schuch–Verstraete, Ann. Phys. 378, 100–149).
+* [Cirac--Perez-Garcia--Schuch--Verstraete 2017] arXiv:1606.00608, Definition
+  RFPMixedTS, lines 638--660, and Appendix C.4, lines 1974--2085, for the
+  distinct physical-map RFP condition.
+* [Cirac--Perez-Garcia--Schuch--Verstraete 2017] arXiv:1606.00608, Theorem
+  4.14(ii)--(iii), lines 972--991, for the BNT fusion maps.
 -/
 
 open scoped Matrix BigOperators
@@ -83,13 +86,13 @@ map to the corresponding power. -/
 
 /-- Transfer-retract datum at blocked size `n`.
 
-A support subspace of bond-space matrices together with a retract whose
-characteristic map is the blocked transfer map.  This is the
-transfer-map-level content of the idempotence criterion, not the paper's
-physical fusion map (see `BNTFusionCoisometryFamily` for the active-support
-family and `BNTFusionIsometryFamily` for its full-support specialization). -/
+A subspace of bond-space matrices together with a retract whose characteristic
+map is the blocked transfer map. This is a range-subspace factorization of the
+doubled-index idempotence criterion, not the paper's physical RFP map (see
+`IsRFPViaTS`) or its BNT fusion coisometries (see
+`BNTFusionCoisometryFamily`). -/
 structure TransferRetractData (M : MPOTensor d D) (n : ℕ) where
-  /-- The support subspace through which the blocked transfer map factors. -/
+  /-- The subspace through which the blocked transfer map factors. -/
   supportAlgebra : Submodule ℂ (FusionBondSpace D)
   /-- Forward map `T_n : M_D(ℂ) → 𝒜_n`. -/
   T : FusionBondSpace D →ₗ[ℂ] supportAlgebra
@@ -141,19 +144,21 @@ noncomputable def ofBlockedTransferMapIdempotent
       (blockedTransferMap M n).range
       (fun x => ⟨x, rfl⟩)
 
-/-- A level-`1` transfer-retract witness implies the MPDO RFP condition. -/
+/-- A level-`1` transfer retract implies doubled-index transfer-map idempotence. -/
 theorem isRFP (F : TransferRetractData M 1) : IsRFP M := by
   simpa only [IsRFP, blockedTransferMap_one] using F.blockedTransferMap_idempotent
 
 end TransferRetractData
 
-/-- A one-site transfer-retract datum is equivalent to the MPDO RFP condition.
+/-- A one-site transfer-retract datum is equivalent to doubled-index
+transfer-map idempotence.
 
 The forward direction is the retract calculation
 \(E_1^2 = S_1T_1S_1T_1 = S_1T_1\).  The reverse direction factors the
 idempotent transfer map through its range.  This is a definitional unfolding:
-the source's Appendix C.4 constructs physical trace-preserving CP maps on the
-physical indices, not this bond-space retract. -/
+arXiv:1606.00608, Definition RFPMixedTS, lines 638--660, and Appendix C.4,
+lines 1974--2085 construct physical trace-preserving CP maps, not this
+bond-space retract. -/
 theorem transferRetractData_one_iff_isRFP (M : MPOTensor d D) :
     Nonempty (TransferRetractData M 1) ↔ IsRFP M := by
   constructor
@@ -163,37 +168,37 @@ theorem transferRetractData_one_iff_isRFP (M : MPOTensor d D) :
     exact ⟨TransferRetractData.ofBlockedTransferMapIdempotent
       (M := M) (n := 1) (by simpa only [IsRFP, blockedTransferMap_one] using hM)⟩
 
-/-- If `M` is already an MPDO renormalization fixed point, then every positive
-blocked transfer map coincides with the original transfer map. -/
+/-- Under doubled-index transfer-map idempotence, every positive blocked
+transfer map coincides with the original transfer map. -/
 theorem blockedTransferMap_eq_transferMap_of_isRFP {M : MPOTensor d D}
     (hM : IsRFP M) {n : ℕ} (hn : 0 < n) :
     blockedTransferMap M n = transferMap M := by
   have hIdem : IsIdempotentElem (transferMap M) := hM
   simpa only [blockedTransferMap_eq_pow] using hIdem.pow_eq (Nat.ne_of_gt hn)
 
-/-- Under the MPDO RFP condition, every positive blocked transfer map is
-idempotent. -/
+/-- Under doubled-index transfer-map idempotence, every positive blocked
+transfer map is idempotent. -/
 theorem blockedTransferMap_idempotent_of_isRFP {M : MPOTensor d D}
     (hM : IsRFP M) {n : ℕ} (hn : 0 < n) :
     blockedTransferMap M n ∘ₗ blockedTransferMap M n = blockedTransferMap M n := by
   rw [blockedTransferMap_eq_transferMap_of_isRFP hM hn]
   exact hM
 
-/-- Transfer-retract formulation of the MPDO RFP condition.
+/-- All-positive-blocking transfer-retract predicate.
 
 For every positive blocked size `n`, the blocked transfer map of `M` factors as
-`S_n ∘ T_n` through some support subspace `𝒜_n`, with `T_n ∘ S_n = id_{𝒜_n}`. -/
+`S_n ∘ T_n` through a subspace `𝒜_n`, with `T_n ∘ S_n = id_{𝒜_n}`. -/
 def IsRFP_MPDO_via_transferRetract (M : MPOTensor d D) : Prop :=
   ∀ n : ℕ, 0 < n → Nonempty (TransferRetractData M n)
 
-/-- The transfer-retract formulation implies the MPDO RFP condition. -/
+/-- The transfer-retract predicate implies doubled-index transfer-map idempotence. -/
 theorem isRFP_of_isRFP_MPDO_via_transferRetract {M : MPOTensor d D}
     (hM : IsRFP_MPDO_via_transferRetract M) : IsRFP M := by
   obtain ⟨F⟩ := hM 1 Nat.one_pos
   exact F.isRFP
 
-/-- An MPDO renormalization fixed point admits transfer-retract structures at
-every positive blocking size. -/
+/-- Doubled-index transfer-map idempotence gives transfer retracts at every
+positive blocking size. -/
 theorem isRFP_MPDO_via_transferRetract_of_isRFP {M : MPOTensor d D}
     (hM : IsRFP M) : IsRFP_MPDO_via_transferRetract M := by
   intro n hn
@@ -202,8 +207,8 @@ theorem isRFP_MPDO_via_transferRetract_of_isRFP {M : MPOTensor d D}
     (n := n)
     (blockedTransferMap_idempotent_of_isRFP hM hn)⟩
 
-/-- The transfer-retract formulation is equivalent to the current mixed-state
-RFP predicate. -/
+/-- The transfer-retract predicate is equivalent to doubled-index transfer-map
+idempotence. -/
 theorem isRFP_MPDO_via_transferRetract_iff_isRFP (M : MPOTensor d D) :
     IsRFP_MPDO_via_transferRetract M ↔ IsRFP M := by
   constructor
@@ -226,8 +231,8 @@ open MPOTensor
 
 variable {d D : ℕ}
 
-/-- For a pure MPS embedded diagonally as an MPO, the transfer-retract
-formulation recovers the original pure-state RFP condition. -/
+/-- For a pure MPS embedded diagonally as an MPO, transfer retracts are
+equivalent to transfer-map idempotence. -/
 theorem toMPOTensor_isRFP_MPDO_via_transferRetract_iff_isTransferIdempotent (A : MPSTensor d D) :
     MPOTensor.IsRFP_MPDO_via_transferRetract A.toMPOTensor ↔ IsTransferIdempotent A := by
   rw [MPOTensor.isRFP_MPDO_via_transferRetract_iff_isRFP,

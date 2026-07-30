@@ -1,16 +1,19 @@
-\section{Fusion isometries}
+\section{Transfer retracts and fusion coisometries}
 
-The next definitions isolate the transfer-map content underlying the
-fusion-isometry picture of \cite[Section~4.5]{Cirac2016MPDO_arXiv}: they record
-when the blocked transfer map factors through its support algebra as a retract,
-which is the idempotence criterion, not the physical fusion isometry of two
-tensors into one. For each blocked size $n \ge 1$, the doubled-index blocked
-tensor of an MPO has a blocked transfer map $E_n$ acting on bond-space matrices,
-and the support algebra is modeled by a subspace through which $E_n$ factors as
-a retract. The active-support fusion coisometries of
-\cite[Theorem~4.14(iii)]{Cirac2016MPDO_arXiv}, and their stronger full-support
-specialization, are recorded at the end of this section, together with the
-derivation of the same-length product law from them.
+The first definitions concern a linear-algebraic factorization of a
+doubled-index blocked transfer map. At a fixed blocked size $n \ge 1$, such a
+factorization exists precisely when $E_n$ is idempotent. Requiring it at every
+positive blocked size is equivalent to idempotence of $E_1$. This is distinct
+from the physical renormalization fixed-point condition in
+Definition~\ref{def:is_rfp_via_ts} and
+\cite[Definition~4.1, lines 638--660]{Cirac2016MPDO_arXiv}, which requires
+trace-preserving completely positive maps on the physical indices. The
+physical maps constructed in Appendix~C.4 likewise act on physical indices
+\cite[lines 1974--2085]{Cirac2016MPDO_arXiv}. The active-support fusion
+coisometries of
+\cite[Theorem~4.14(ii)--(iii), lines 972--991]{Cirac2016MPDO_arXiv}, and their
+stronger full-support specialization, are recorded at the end of this section,
+together with the derivation of the same-length product law from them.
 
 \begin{definition}[Transfer-retract datum]%
     \label{def:mpdo_fusion_isometry}
@@ -33,15 +36,14 @@ derivation of the same-length product law from them.
     where $E_n$ denotes the blocked transfer map.
 \end{definition}
 
-\begin{definition}[Transfer-retract RFP predicate]%
+\begin{definition}[All-positive-blocking transfer-retract predicate]%
     \label{def:mpdo_rfp_via_fusion}
     \lean{MPOTensor.IsRFP_MPDO_via_transferRetract}
     \leanok
     \uses{def:mpdo_fusion_isometry, def:mpo_tensor}
-    An MPO tensor $M$ satisfies the \emph{transfer-retract formulation} of the
-    renormalization fixed-point condition when for every blocked size $n \ge 1$
-    there exists transfer-retract data for the blocked transfer
-    map $E_n$.
+    An MPO tensor $M$ satisfies the \emph{all-positive-blocking
+    transfer-retract predicate} when for every blocked size $n \ge 1$ there
+    exists transfer-retract data for the blocked transfer map $E_n$.
 \end{definition}
 
 \begin{theorem}[Transfer-retract data imply transfer-map idempotence]%
@@ -102,7 +104,7 @@ derivation of the same-length product law from them.
     \leanok
     \uses{thm:mpdo_rfp_via_fusion_iff}
     For the diagonal MPO associated to a pure MPS tensor, the transfer-retract
-    formulation reduces to the usual pure-state RFP condition.
+    predicate is equivalent to transfer-map idempotence.
 \end{corollary}
 \begin{proof}\leanok
     Combine Theorem~\ref{thm:mpdo_rfp_via_fusion_iff} with the diagonal pure-state
