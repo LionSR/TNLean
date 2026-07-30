@@ -75,15 +75,8 @@ note = "the sixteen boundary legs it claimed are drawn"
 
 [[verdict]]
 id = "rmp-ii-local-purification"
-status = "faithful"
-pairing = "verified"
-pairing_by = "pairing-sweep-two-viewers-2026-07-23"
-defects = []
-case_sha256 = "a32c36171b592ea0921ba90ab68e908ee5b7372f25019cb3ba39eaa15d1d6787"
-second_viewer = "LionSR-delegated-fable-countersign-2026-07-26"
-reviewed = "2026-07-26"
-renderer = "fable-countersign-reading-2026-07-26-200dpi"
-note = "X and X^-1 at one reference width"
+status = "unreviewed"
+note = "X and X^-1 at one reference width; \hphantom removed after library fix"
 
 [[verdict]]
 id = "rmp-ii-mpu-unitarity"
@@ -132,15 +125,8 @@ note = "both sides now expose the same twelve legs; the type advisory (operator 
 
 [[verdict]]
 id = "rmp-ii-mpu-wrap"
-status = "faithful"
-pairing = "verified"
-pairing_by = "pairing-sweep-two-viewers-2026-07-23"
-defects = []
-case_sha256 = "ad26b067b4ef23535b32f067b1f32b11609531cbafe7d05d283ed0991beb215b"
-second_viewer = "LionSR-delegated-fable-countersign-2026-07-26"
-reviewed = "2026-07-28"
-renderer = "codex-route-form-source-review-2026-07-28-180dpi"
-note = "square sites and congruent quarter turns are pixel-identical after route migration"
+status = "unreviewed"
+note = "square sites are pixel-identical after route migration; \hphantom removed after library fix"
 
 [[verdict]]
 id = "rmp-ii-mpu-two-shift"
@@ -1025,13 +1011,8 @@ note = "the unitary is asserted as math-mode application U(...) around the plaqu
 
 [[verdict]]
 id = "rmp-workbench-ii-positive-mpo-old"
-status = "cosmetic-gap"
-pairing = "verified"
-pairing_by = "pairing-sweep-two-viewers-2026-07-23"
-case_sha256 = "ca857041cb7cbbbd6c29edd60f54537cb9c3d878406922949b3c4c953a00938e"
-reviewed = "2026-07-28"
-renderer = "codex-route-form-source-review-2026-07-28-180dpi"
-note = "X sizes equal"
+status = "unreviewed"
+note = "X sizes equal; \hphantom removed after library fix"
 
 [[verdict]]
 id = "rmp-workbench-ii-peps-gauge-old"
