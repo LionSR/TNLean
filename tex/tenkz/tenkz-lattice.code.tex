@@ -573,7 +573,8 @@
 % measurement; the leg threshold is COMPUTED from physleg/latticepitch so
 % a metric retune moves it automatically.
 \msg_new:nnn { tenkz } { plane-rise-low }
-  { plane~rise=#1~is~at~or~below~physleg/latticepitch~=~#2:~vertical~
+  { plane~rise=#1~is~at~or~below~the~normalized~physical-leg~clearance~
+    threshold~#2:~vertical~
     physical~legs~cross~the~behind~row's~in-plane~bond~(false~junctions;~
     the~worst~sweep~cell~0.30/0.40~produced~false~5-valent~junctions).~
     Keep~plane~rise~above~#2. }
